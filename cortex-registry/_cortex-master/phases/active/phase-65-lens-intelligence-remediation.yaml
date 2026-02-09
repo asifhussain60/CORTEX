@@ -1063,9 +1063,268 @@ success_metrics:
     - metric: "E2E partner readiness"
       baseline: "3/10"
       target: "7/10"
+    - metric: "Cross-layer cohesion tests"
+      baseline: "0 tests"
+      target: "7 tests (all E2E categories)"
   
   qualitative:
     - "InteractionOrchestrator challenges are domain-aware"
     - "MasterOrchestrator routes with cited knowledge rules"
     - "Turn-over-turn context enrichment observable"
     - "Onboarded repo context feeds every intelligence query"
+    - "Full-stack architectural awareness (data → business → API)"
+    - "Security boundaries enforced (password_hash, api_key isolation)"
+    - "Principal Engineer-level validation complete"
+
+# ============================================================================
+# PATTERN LEARNING FOUNDATION & FUTURE EVOLUTION
+# ============================================================================
+
+pattern_learning_analysis:
+  current_state:
+    phase_65_provides: |
+      Phase 65 establishes the INFRASTRUCTURE for intelligent pattern 
+      learning but does NOT implement autonomous learning itself. The 
+      phase creates essential building blocks:
+      
+      ✅ Pattern Application (not learning):
+         - KnowledgeSynthesisEngine applies curated 40+ YAML patterns
+         - LENS analyzes code for violations and best practices
+         - Guidance generation cites existing patterns
+      
+      ✅ Data Collection Infrastructure:
+         - UnifiedIntelligenceContext captures synthesis operations
+         - Phase65AuditTraceLogger tracks intelligence pipeline metrics
+         - IntelligenceSynthesisTrace records what guidance was applied
+         - CrossTurnAccumulationTrace preserves session context
+         - Performance metrics track cache hits, synthesis duration
+      
+      ✅ Context Accumulation:
+         - TurnContext accumulates entities/patterns/standards per session
+         - File-specific context caching (avoid re-analysis)
+         - Related file dependency tracking
+         - Repo profile integration (onboarded context)
+      
+      ❌ Missing for True Learning:
+         - Pattern discovery (extract new patterns from analyzed code)
+         - Outcome tracking (did guidance lead to passing tests?)
+         - Pattern confidence scoring (which patterns work?)
+         - Self-improvement loops (update knowledge base automatically)
+         - Pattern generalization (abstract specific code to reusable patterns)
+
+  why_phase_65_stops_here: |
+    Phase 65 focuses on making CORTEX operationally excellent with 
+    existing knowledge (40+ curated YAML best practices). Learning new 
+    patterns requires:
+    
+    1. Feedback Loop Infrastructure
+       - Test result correlation (guidance_id → test outcomes)
+       - Success/failure attribution (which pattern helped/harmed?)
+       - Confidence scoring algorithms (Bayesian updates)
+    
+    2. Pattern Extraction Pipeline
+       - AST-based pattern mining from user code
+       - Semantic similarity detection (cluster patterns)
+       - Quality validation (avoid noise/anti-patterns)
+    
+    3. Knowledge Base Evolution
+       - Auto-generation of new YAML entries
+       - Pattern deprecation workflows (low-confidence removal)
+       - Human-in-the-loop validation for novel patterns
+    
+    These capabilities are PHASE 66+ scope to avoid feature creep.
+
+  recommended_evolution:
+    phase_66_outcome_based_reinforcement:
+      title: "Phase 66: Outcome-Based Pattern Reinforcement"
+      duration: "3-4 weeks"
+      priority: "P1"
+      rationale: |
+        Start with reinforcement learning (not pattern mining) because:
+        - Requires less infrastructure (reuse Phase 65 audit trails)
+        - Provides immediate value (pattern quality improvement)
+        - Validates feedback loop needed for mining
+        - No risk of pattern explosion (works with existing 40+ YAMLs)
+      
+      architecture: |
+        1. Test Result Correlation Pipeline
+           - Trace guidance_id from synthesis → implementation
+           - Capture test results (pass/fail, coverage %, performance)
+           - Store in PatternOutcomeDatabase (guidance_id, test_result, timestamp)
+        
+        2. Pattern Confidence Scoring
+           - Score formula: confidence = (successes / total_applications) * recency_weight
+           - Update confidence after each application
+           - Confidence range: [0.0, 1.0]
+        
+        3. Guidance Prioritization
+           - KnowledgeSynthesisEngine sorts patterns by confidence DESC
+           - High-confidence patterns appear first in guidance
+           - Low-confidence patterns (< 0.3) demoted to appendix
+        
+        4. Pattern Deprecation Workflow
+           - Archive (don't delete) patterns with confidence < 0.2 after 100 applications
+           - Human review required for archival
+           - Archived patterns not loaded by synthesis engine
+      
+      stages:
+        - "S1: Test result correlation infrastructure (5 days)"
+        - "S2: Pattern confidence scoring engine (4 days)"
+        - "S3: Synthesis engine confidence integration (3 days)"
+        - "S4: Pattern deprecation workflow + audit dashboard (3 days)"
+      
+      success_metrics:
+        - "Confidence scores tracked for all 40+ patterns"
+        - "High-confidence patterns (>0.7) prioritized in synthesis"
+        - "Low-confidence patterns (<0.3) auto-flagged for review"
+        - "Pattern application success rate improves 15-25%"
+      
+      extensibility: "High — foundation for Phase 67 pattern mining"
+      scalability: "High — confidence filtering prevents pattern explosion"
+      accuracy: "High — feedback-validated, not assumption-based"
+      efficiency: "Medium — requires test result tracking overhead"
+
+    phase_67_pattern_mining:
+      title: "Phase 67: Intelligent Pattern Extraction from Code"
+      duration: "4-5 weeks"
+      priority: "P2"
+      depends_on: ["phase-66"]
+      rationale: |
+        Add pattern mining AFTER reinforcement proves valuable. Why:
+        - Reinforcement validates feedback loop effectiveness
+        - Mining without feedback = pattern noise accumulation
+        - Confidence scoring (Phase 66) filters mined patterns
+      
+      architecture: |
+        1. Post-Implementation Analyzer
+           - Scans committed code after AC_COMPLETE marker
+           - AST diff analysis (before → after implementation)
+           - Semantic pattern extraction (not just syntax)
+        
+        2. Pattern Extraction Engine
+           - Identifies novel code structures (classes, functions, decorators)
+           - Compares against existing 40+ YAML patterns
+           - Similarity detection prevents duplicates (cosine similarity > 0.8)
+        
+        3. Pattern Validator
+           - Initial confidence = 0.5 (neutral)
+           - Requires 10+ successful applications before promotion
+           - Human-in-the-loop validation for high-impact patterns
+        
+        4. Knowledge Base Updater
+           - Auto-generates YAML entry for validated patterns
+           - Appends to cortex/knowledge/best-practices/learned-patterns.yaml
+           - Pattern metadata: source_file, extraction_date, confidence, applications
+      
+      stages:
+        - "S1: AST-based pattern extraction (6 days)"
+        - "S2: Similarity detection + deduplication (5 days)"
+        - "S3: Auto-generation of pattern YAMLs (4 days)"
+        - "S4: Human-in-the-loop validation workflow (3 days)"
+        - "S5: Integration with synthesis engine (3 days)"
+      
+      success_metrics:
+        - "10+ new patterns extracted per 100 implementations"
+        - "Pattern duplication rate < 5% (similarity > 0.8)"
+        - "Extracted patterns achieve confidence > 0.6 within 20 applications"
+        - "Human validation approval rate > 80%"
+      
+      extensibility: "Very High — enables continuous knowledge growth"
+      scalability: "Medium — pattern volume management required"
+      accuracy: "Medium — requires feedback from Phase 66"
+      efficiency: "Low — mining overhead per implementation"
+
+    phase_68_federated_learning:
+      title: "Phase 68: Federated Pattern Library (Enterprise Scale)"
+      duration: "8-10 weeks"
+      priority: "P3"
+      depends_on: ["phase-66", "phase-67"]
+      rationale: |
+        Federated learning for multi-tenant CORTEX installations. Why last:
+        - Requires SaaS infrastructure (central pattern registry)
+        - Needs pattern quality validation (Phase 66 + 67)
+        - Privacy-preserving aggregation complexity
+        - Enterprise customer concerns about pattern sharing
+      
+      architecture: |
+        1. Central Pattern Registry (SaaS)
+           - REST API for pattern upload/download
+           - Pattern metadata: source_tenant, domain, language, confidence
+           - Voting system: upvotes/downvotes from instances
+        
+        2. Privacy-Preserving Sync
+           - Only pattern AST structures shared (not proprietary code)
+           - Tenant-level opt-in/opt-out controls
+           - Domain-specific pattern filtering (security, fintech, healthcare)
+        
+        3. Crowd Wisdom Filtering
+           - Pattern confidence = weighted average across all instances
+           - Downvotes reduce confidence (harmful pattern detection)
+           - Cross-domain validation (pattern works in multiple contexts)
+        
+        4. Periodic Sync Protocol
+           - Each CORTEX instance downloads high-confidence patterns (>0.7)
+           - Daily sync (configurable frequency)
+           - Diff-based updates (only new/changed patterns)
+      
+      stages:
+        - "S1: Central pattern registry API (10 days)"
+        - "S2: Privacy-preserving pattern extraction (7 days)"
+        - "S3: Voting and confidence aggregation (6 days)"
+        - "S4: Pattern sync protocol (client-side) (5 days)"
+        - "S5: Enterprise privacy controls (5 days)"
+        - "S6: Cross-domain pattern categorization (5 days)"
+      
+      success_metrics:
+        - "100+ instances sharing patterns successfully"
+        - "Pattern library grows 50+ patterns/month"
+        - "Cross-domain confidence correlation > 0.6"
+        - "Enterprise adoption rate > 40%"
+        - "Privacy breach incidents = 0"
+      
+      extensibility: "Maximum — distributed learning across N installations"
+      scalability: "Maximum — crowd wisdom scales naturally"
+      accuracy: "High — cross-validated by multiple instances"
+      efficiency: "Low — SaaS infrastructure cost"
+
+  hybrid_approach_recommendation: |
+    RECOMMENDED STRATEGY: Hybrid Approach (Curation + Reinforcement + Selective Mining)
+    
+    Why NOT pure pattern mining:
+      ❌ Pattern explosion without quality filter (1000+ low-value patterns)
+      ❌ No feedback = accumulate patterns without knowing which work
+      ❌ Context loss (pattern extracted without understanding why it worked)
+      ❌ Maintenance burden (manual curation still required)
+    
+    Why NOT pure LLM fine-tuning:
+      ❌ Black-box models conflict with CORTEX transparency goals
+      ❌ Cannot explain "why this guidance?" (violates audit trail requirements)
+      ❌ Catastrophic forgetting (model forgets old patterns during retraining)
+      ❌ GPU infrastructure cost (retraining requires compute)
+      ❌ Latency (batch updates, not real-time learning)
+    
+    Why HYBRID (Phase 65 → 66 → 67 → 68):
+      ✅ Start with curated baseline (Phase 65: 40+ high-quality YAMLs)
+      ✅ Add feedback loop (Phase 66: outcome-based reinforcement)
+      ✅ Validate learning effectiveness before scaling
+      ✅ Then add pattern mining (Phase 67: selective extraction)
+      ✅ Finally federated learning (Phase 68: enterprise scale)
+      ✅ Maintains transparency (explicit patterns, not black-box)
+      ✅ Quality-first (confidence scoring prevents noise)
+      ✅ Scalability when ready (federated after local proves valuable)
+    
+    This order balances:
+      - Transparency (explicit patterns > black-box models)
+      - Quality (feedback-validated > just extracted)
+      - Scalability (confidence scoring prevents explosion)
+      - Efficiency (passive learning from natural usage)
+    
+    CORTEX's value proposition = explainability + governance.
+    Pattern learning must preserve this, not replace it with ML black boxes.
+
+  implementation_priority:
+    immediate: "Phase 65 (current) — operational intelligence foundation"
+    next: "Phase 66 (Q2 2026) — outcome-based reinforcement"
+    future: "Phase 67 (Q3 2026) — selective pattern mining"
+    enterprise: "Phase 68 (Q4 2026+) — federated learning"
+
