@@ -13,6 +13,7 @@ from .base import (
     PatternCategory,
 )
 from .catalog import PatternCatalog
+from .classification import ArchitectureClassifier, ArchitectureClassification, ArchitectureType
 
 __all__ = [
     "BasePatternDetector",
@@ -21,4 +22,7 @@ __all__ = [
     "SignatureMatcher",
     "PatternCategory",
     "PatternCatalog",
+    "ArchitectureClassifier",
+    "ArchitectureClassification",
+    "ArchitectureType",
 ]
