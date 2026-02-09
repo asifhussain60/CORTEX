@@ -51,27 +51,9 @@ class SynthesisPhase(Enum):
     SYNTHESIS = "synthesis"
 
 
-@dataclass
-class LENSContext:
-    """
-    Complete LENS processing context.
-    
-    Attributes:
-        operation: Operation name/identifier
-        language_analysis: Phase 1 output (language understanding)
-        code_examination: Phase 2 output (code analysis)
-        domain_navigation: Phase 3 output (knowledge traversal)
-        synthesis_output: Phase 4 output (synthesis - generated)
-        timestamp: Context creation time
-        turn_number: Multi-turn conversation tracking
-    """
-    operation: str
-    language_analysis: Optional[Dict[str, Any]] = None
-    code_examination: Optional[Dict[str, Any]] = None
-    domain_navigation: Optional[Dict[str, Any]] = None
-    synthesis_output: Optional[Dict[str, Any]] = None
-    timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
-    turn_number: int = 0
+# Phase 65 S6: Use canonical LENSContext (CORE-035 compliance)
+# Import from canonical location and re-export for backward compatibility
+from cortex.lens.models.context import LENSContext  # noqa: F401
 
 
 @dataclass
