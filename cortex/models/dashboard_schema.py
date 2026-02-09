@@ -58,14 +58,33 @@ class OverviewSection:
     """
     Overview section with business context.
     
+    AC_START: AC-KSESSIONS-HYBRID-007
+    ENHANCEMENT: Added fields to match Pydantic Overview model for comprehensive executive summary.
+    
     Attributes:
         summary: Technical summary
         business_summary: Business-oriented summary
         key_findings: List of important findings
+        key_capabilities: Main capabilities (from LLM synthesis)
+        core_functionalities: Core functions (from LLM synthesis)
+        repository_age: Age description (e.g., "2.3 years")
+        maturity_level: Development maturity (e.g., "Production-ready")
+        recent_focus: Recent development themes
+        technical_highlights: Key technical achievements
+        business_outcomes: Business impact statements
+        integration_points: External integrations
     """
     summary: str
     business_summary: str
     key_findings: List[str] = field(default_factory=list)
+    key_capabilities: List[str] = field(default_factory=list)
+    core_functionalities: List[str] = field(default_factory=list)
+    repository_age: str = ""
+    maturity_level: str = ""
+    recent_focus: str = ""
+    technical_highlights: List[str] = field(default_factory=list)
+    business_outcomes: List[str] = field(default_factory=list)
+    integration_points: List[str] = field(default_factory=list)
     
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
@@ -74,13 +93,31 @@ class OverviewSection:
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "OverviewSection":
         """Deserialize from dictionary."""
-        return cls(**data)
+        # Handle legacy data without new fields
+        defaults = {
+            "key_capabilities": [],
+            "core_functionalities": [],
+            "repository_age": "",
+            "maturity_level": "",
+            "recent_focus": "",
+            "technical_highlights": [],
+            "business_outcomes": [],
+            "integration_points": [],
+        }
+        # Merge defaults with provided data
+        full_data = {**defaults, **data}
+        return cls(**full_data)
+    # AC_COMPLETE: AC-KSESSIONS-HYBRID-007 ✅ OverviewSection dataclass enhanced
 
 
 @dataclass
 class MetricsSection:
     """
     Code metrics section.
+    
+    AC_START: AC-DASHBOARD-9TAB-002
+    ENHANCEMENT: Added visualizations field for pre-computed visualization coordinates.
+    Client no longer computes metrics - all computation moved to orchestrator.
     
     Attributes:
         health_score: Overall health (0-100)
@@ -92,6 +129,7 @@ class MetricsSection:
         files: Total file count
         coverage_pct: Test coverage percentage
         languages: Language breakdown {language: lines}
+        visualizations: Pre-computed visualization data (NEW)
     """
     health_score: int
     risk_score: int
@@ -102,6 +140,7 @@ class MetricsSection:
     files: int
     coverage_pct: float
     languages: Dict[str, int] = field(default_factory=dict)
+    visualizations: Dict[str, Any] = field(default_factory=dict)
     
     def __post_init__(self):
         """Validate score ranges."""
@@ -119,7 +158,11 @@ class MetricsSection:
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "MetricsSection":
         """Deserialize from dictionary."""
+        # Handle legacy data without visualizations
+        if "visualizations" not in data:
+            data["visualizations"] = {}
         return cls(**data)
+    # AC_COMPLETE: AC-DASHBOARD-9TAB-002 ✅ MetricsSection.visualizations added
 
 
 @dataclass
@@ -229,18 +272,24 @@ class DependenciesSection:
     """
     Dependencies analysis section.
     
+    AC_START: AC-DASHBOARD-9TAB-003
+    ENHANCEMENT: Added visualizations field for pre-computed dependency graph.
+    Graph edges are now REAL (AST-based imports), not fake prefix heuristics.
+    
     Attributes:
         total_count: Total dependency count
         direct_count: Direct dependencies
         transitive_count: Transitive dependencies
         packages: List of packages
         licenses: License distribution {license: count}
+        visualizations: Pre-computed dependency graph with real edges (NEW)
     """
     total_count: int
     direct_count: int
     transitive_count: int
     packages: List[PackageDependency] = field(default_factory=list)
     licenses: Dict[str, int] = field(default_factory=dict)
+    visualizations: Dict[str, Any] = field(default_factory=dict)
     
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
@@ -257,7 +306,11 @@ class DependenciesSection:
         ]
         data_copy = data.copy()
         data_copy["packages"] = packages
+        # Handle legacy data without visualizations
+        if "visualizations" not in data_copy:
+            data_copy["visualizations"] = {}
         return cls(**data_copy)
+    # AC_COMPLETE: AC-DASHBOARD-9TAB-003 ✅ DependenciesSection.visualizations added
 
 
 @dataclass
@@ -405,9 +458,95 @@ class RefactoringSection:
 
 
 @dataclass
+class ArchitectureSection:
+    """
+    Architecture analysis section (NEW - Tab 9).
+    
+    AC_START: AC-DASHBOARD-9TAB-004
+    
+    Provides pre-computed architecture layer graph and coupling metrics.
+    Client renders pre-computed coordinates (no D3 computation on client).
+    
+    Attributes:
+        coupling_score: Coupling score 0-100 (lower is better)
+        cohesion_score: Cohesion score 0-100 (higher is better)
+        total_dependencies: Total import/require dependencies
+        circular_dependencies: Count of circular dependency cycles
+        visualizations: Pre-computed architecture graph coordinates
+    """
+    coupling_score: int
+    cohesion_score: int
+    total_dependencies: int
+    circular_dependencies: int
+    visualizations: Dict[str, Any] = field(default_factory=dict)
+    
+    def __post_init__(self):
+        """Validate scores."""
+        if not (0 <= self.coupling_score <= 100):
+            raise ValueError(f"coupling_score must be 0-100, got {self.coupling_score}")
+        if not (0 <= self.cohesion_score <= 100):
+            raise ValueError(f"cohesion_score must be 0-100, got {self.cohesion_score}")
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Serialize to dictionary."""
+        return asdict(self)
+    
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "ArchitectureSection":
+        """Deserialize from dictionary."""
+        # Handle legacy data without visualizations
+        if "visualizations" not in data:
+            data["visualizations"] = {}
+        return cls(**data)
+    # AC_COMPLETE: AC-DASHBOARD-9TAB-004 ✅ ArchitectureSection added
+
+
+@dataclass
+class DataQualitySection:
+    """
+    Data quality and confidence section (NEW - Honest Dashboard).
+    
+    AC_START: AC-DASHBOARD-9TAB-005
+    
+    Provides transparency about data completeness and contradictions.
+    Enables "degraded state" UI when confidence is low.
+    
+    Attributes:
+        confidence_score: Overall data confidence 0-100
+        coverage_pct: Percentage of expected fields populated
+        contradictions: List of detected contradictions (e.g., "LOC=0 but languages exist")
+        missing_fields: List of missing/incomplete fields
+    """
+    confidence_score: int
+    coverage_pct: float
+    contradictions: List[str] = field(default_factory=list)
+    missing_fields: List[str] = field(default_factory=list)
+    
+    def __post_init__(self):
+        """Validate scores."""
+        if not (0 <= self.confidence_score <= 100):
+            raise ValueError(f"confidence_score must be 0-100, got {self.confidence_score}")
+        if not (0 <= self.coverage_pct <= 100):
+            raise ValueError(f"coverage_pct must be 0-100, got {self.coverage_pct}")
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Serialize to dictionary."""
+        return asdict(self)
+    
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "DataQualitySection":
+        """Deserialize from dictionary."""
+        return cls(**data)
+    # AC_COMPLETE: AC-DASHBOARD-9TAB-005 ✅ DataQualitySection added
+
+
+@dataclass
 class RepoDashboardModel:
     """
-    Complete repository dashboard data model v2.0.
+    Complete repository dashboard data model v3.0.
+    
+    AC_START: AC-DASHBOARD-9TAB-006
+    UPGRADE: v2.0 → v3.0 (9 tabs + data quality)
     
     This is the canonical schema for all dashboard data.
     Onboarding orchestrators MUST generate this schema.
@@ -415,14 +554,16 @@ class RepoDashboardModel:
     
     Attributes:
         repo: Repository metadata
-        overview: Overview section
-        metrics: Code metrics
-        security: Security analysis
-        dependencies: Dependencies analysis
-        quality: Code quality analysis
-        use_cases: List of use cases
-        lens: LENS analysis
-        refactoring: Refactoring recommendations
+        overview: Overview section (Tab 1)
+        metrics: Code metrics (Tab 2)
+        security: Security analysis (Tab 3)
+        dependencies: Dependencies analysis (Tab 4)
+        quality: Code quality analysis (Tab 5)
+        use_cases: List of use cases (Tab 6)
+        lens: LENS analysis (Tab 7)
+        refactoring: Refactoring recommendations (Tab 8)
+        architecture: Architecture analysis (Tab 9 - NEW)
+        data_quality: Data quality/confidence (NEW)
     
     Example:
         >>> model = RepoDashboardModel(
@@ -434,7 +575,9 @@ class RepoDashboardModel:
         ...     quality=QualitySection(...),
         ...     use_cases=[],
         ...     lens=LensSection(...),
-        ...     refactoring=RefactoringSection(...)
+        ...     refactoring=RefactoringSection(...),
+        ...     architecture=ArchitectureSection(...),
+        ...     data_quality=DataQualitySection(...)
         ... )
         >>> json_str = model.to_json()
     """
@@ -447,6 +590,8 @@ class RepoDashboardModel:
     use_cases: List[UseCase]
     lens: LensSection
     refactoring: RefactoringSection
+    architecture: ArchitectureSection
+    data_quality: DataQualitySection
     
     @dashboard_debug
     def to_dict(self) -> Dict[str, Any]:
@@ -456,7 +601,7 @@ class RepoDashboardModel:
         Returns:
             Dictionary representation
         """
-        log_dashboard_debug("Serializing RepoDashboardModel", repo=self.repo.slug)
+        log_dashboard_debug("Serializing RepoDashboardModel v3.0", repo=self.repo.slug)
         
         data = {
             "repo": self.repo.to_dict(),
@@ -468,6 +613,8 @@ class RepoDashboardModel:
             "use_cases": [uc.to_dict() for uc in self.use_cases],
             "lens": self.lens.to_dict(),
             "refactoring": self.refactoring.to_dict(),
+            "architecture": self.architecture.to_dict(),
+            "data_quality": self.data_quality.to_dict(),
         }
         
         log_dashboard_debug("Serialization complete", sections=len(data))
@@ -501,6 +648,28 @@ class RepoDashboardModel:
         """
         log_dashboard_debug("Deserializing RepoDashboardModel", keys=list(data.keys()))
         
+        # Handle legacy v2.0 data (backward compatibility)
+        architecture_data = data.get("architecture")
+        if architecture_data is None:
+            # Create default architecture section
+            architecture_data = {
+                "coupling_score": 50,
+                "cohesion_score": 50,
+                "total_dependencies": 0,
+                "circular_dependencies": 0,
+                "visualizations": {}
+            }
+        
+        data_quality_data = data.get("data_quality")
+        if data_quality_data is None:
+            # Create default data_quality section
+            data_quality_data = {
+                "confidence_score": 70,
+                "coverage_pct": 70.0,
+                "contradictions": [],
+                "missing_fields": []
+            }
+        
         return cls(
             repo=RepoMetadata.from_dict(data["repo"]),
             overview=OverviewSection.from_dict(data["overview"]),
@@ -511,7 +680,10 @@ class RepoDashboardModel:
             use_cases=[UseCase.from_dict(uc) for uc in data.get("use_cases", [])],
             lens=LensSection.from_dict(data["lens"]),
             refactoring=RefactoringSection.from_dict(data["refactoring"]),
+            architecture=ArchitectureSection.from_dict(architecture_data),
+            data_quality=DataQualitySection.from_dict(data_quality_data),
         )
+    # AC_COMPLETE: AC-DASHBOARD-9TAB-006 ✅ RepoDashboardModel v3.0 with 9 tabs + data_quality
     
     @classmethod
     def from_json(cls, json_str: str) -> "RepoDashboardModel":
@@ -614,6 +786,8 @@ __all__ = [
     "UseCase",
     "LensSection",
     "RefactoringSection",
+    "ArchitectureSection",
+    "DataQualitySection",
     "RepoDashboardModel",
     "validate_dashboard_model",
 ]

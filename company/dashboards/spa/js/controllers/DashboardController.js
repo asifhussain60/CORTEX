@@ -322,6 +322,17 @@ class DashboardController {
             this.dom.overviewSummary.innerHTML = sanitized;
         }
         
+        // Render key findings
+        const keyFindingsList = document.getElementById('key-findings');
+        if (keyFindingsList && overview.key_findings) {
+            keyFindingsList.innerHTML = overview.key_findings.map(finding => `
+                <li style="display: flex; align-items: start; gap: 0.75rem; margin-bottom: 0.75rem;">
+                    <i class="fas fa-check-circle" style="color: var(--accent-primary); margin-top: 0.25rem;"></i>
+                    <span>${this.validationService.sanitizeHTML(finding)}</span>
+                </li>
+            `).join('');
+        }
+        
         // Show data integrity warnings
         this._showDataIntegrityWarnings(data);
         
@@ -381,6 +392,105 @@ class DashboardController {
             </div>
             <div class="integrity-items">${items}</div>
         `;
+    }
+    
+    /**
+     * Render use cases tab
+     */
+    async _renderUseCases(data) {
+        const useCases = data.use_cases || [];
+        const container = document.getElementById('usecase-grid');
+        
+        if (!container) return;
+        
+        if (useCases.length === 0) {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                    <i class="fas fa-lightbulb" style="font-size: 3rem; opacity: 0.3; margin-bottom: 1rem;"></i>
+                    <p>No use cases available for this repository.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        // Render use case cards
+        const cards = useCases.map((uc, index) => {
+            const icon = this._getUseCaseIcon(uc.persona || uc.category);
+            const severityColor = this._getSeverityColor(uc.severity || 'info');
+            
+            return `
+                <div class="use-case-card" data-persona="${(uc.persona || 'Engineer').toLowerCase()}" style="border-left: 4px solid ${severityColor};">
+                    <div class="use-case-header">
+                        <div class="use-case-icon" style="background: ${severityColor}22;">
+                            <i class="${icon}" style="color: ${severityColor};"></i>
+                        </div>
+                        <div class="use-case-meta">
+                            <h4 class="use-case-title">${this.validationService.sanitizeHTML(uc.title)}</h4>
+                            <div class="use-case-badges">
+                                <span class="badge badge-persona">${uc.persona || 'Engineer'}</span>
+                                <span class="badge badge-category">${uc.category || 'General'}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="use-case-body">
+                        <p class="use-case-summary">${this.validationService.sanitizeHTML(uc.summary || uc.description || '')}</p>
+                        ${uc.recommended_actions && uc.recommended_actions.length > 0 ? `
+                            <div class="use-case-actions">
+                                <strong><i class="fas fa-tasks"></i> Actions:</strong>
+                                <ul>
+                                    ${uc.recommended_actions.slice(0, 3).map(action => `
+                                        <li>${this.validationService.sanitizeHTML(action)}</li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                        ${uc.tags && uc.tags.length > 0 ? `
+                            <div class="use-case-tags">
+                                ${uc.tags.map(tag => `<span class="tag">${this.validationService.sanitizeHTML(tag)}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+        container.innerHTML = `
+            <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="margin: 0;"><i class="fas fa-list"></i> ${useCases.length} Use Cases</h3>
+            </div>
+            <div class="use-cases-grid">
+                ${cards}
+            </div>
+        `;
+    }
+    
+    _getUseCaseIcon(persona) {
+        const icons = {
+            'engineer': 'fas fa-code',
+            'manager': 'fas fa-user-tie',
+            'po': 'fas fa-clipboard-list',
+            'tech': 'fas fa-project-diagram',
+            'security': 'fas fa-shield-alt',
+            'qa': 'fas fa-vial',
+            'developer': 'fas fa-laptop-code',
+            'api': 'fas fa-plug',
+            'user interface': 'fas fa-desktop',
+            'media management': 'fas fa-photo-video',
+            'delivery': 'fas fa-truck',
+            'processing': 'fas fa-cogs'
+        };
+        return icons[(persona || '').toLowerCase()] || 'fas fa-lightbulb';
+    }
+    
+    _getSeverityColor(severity) {
+        const colors = {
+            'critical': '#ef4444',
+            'high': '#f59e0b',
+            'medium': '#3b82f6',
+            'low': '#10b981',
+            'info': '#7b61ff'
+        };
+        return colors[severity] || colors.info;
     }
     
     /**
@@ -682,7 +792,8 @@ class DashboardController {
         const architecture = data.architecture || {};
         
         if (this.dom.healthScore) {
-            const score = metrics.health_score || metadata.health_score || 0;
+            // Support multiple data formats: metrics.health_score, metadata.health_score, or overview.health_score
+            const score = metrics.health_score ?? metadata.health_score ?? overview.health_score ?? 0;
             this.dom.healthScore.textContent = score;
         }
         
@@ -699,7 +810,8 @@ class DashboardController {
         }
         
         if (this.dom.totalFiles) {
-            const files = metrics.files || overview.total_files || 0;
+            // Support multiple data formats: metrics.files, overview.stats.files, overview.total_files
+            const files = metrics.files ?? overview.stats?.files ?? overview.total_files ?? 0;
             this.dom.totalFiles.textContent = files;
         }
         

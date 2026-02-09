@@ -103,13 +103,33 @@ class Repository(BaseModel):
 # OVERVIEW & SUMMARY MODELS
 # ============================================================================
 
+class UseCase(BaseModel):
+    """Business use case extracted from repository analysis"""
+    id: str = Field(..., description="Unique use case identifier (e.g., uc-001)")
+    title: str = Field(..., description="Business-friendly use case title")
+    category: str = Field(..., description="Category: API, Database, Integration, etc.")
+    description: str = Field(..., description="2-3 sentence business description")
+    actors: List[str] = Field(default_factory=list, description="Participants (User, Admin, System, etc.)")
+    business_flows: List[str] = Field(default_factory=list, description="Workflow descriptions")
+    technical_details: Dict[str, List[str]] = Field(default_factory=dict, description="endpoints, data_stores, integrations")
+    business_value: str = Field("", description="Why this use case matters")
+    confidence_score: float = Field(0.5, ge=0.0, le=1.0, description="Detection confidence 0-1")
+    
+    class Config:
+        title = "Use Case"
+        description = "Business use case with actors, flows, and value proposition"
+
+
 class Overview(BaseModel):
     """High-level repository overview"""
     summary: str = Field(..., description="Technical summary of the repository")
-    business_summary: Optional[str] = Field(None, description="Business-friendly summary")
+    business_summary: Optional[str] = Field(None, description="Business-friendly narrative")
     key_features: Optional[List[str]] = Field(None, description="Top 3-5 features")
+    key_capabilities: Optional[List[str]] = Field(None, description="Main capabilities")
+    core_functionalities: Optional[List[str]] = Field(None, description="Core functions")
     critical_issues: Optional[List[str]] = Field(None, description="Active critical issues")
     upcoming_maintenance: Optional[List[str]] = Field(None, description="Scheduled maintenance")
+    use_cases: Optional[List[UseCase]] = Field(None, description="Business use cases")
     
     class Config:
         title = "Overview"
