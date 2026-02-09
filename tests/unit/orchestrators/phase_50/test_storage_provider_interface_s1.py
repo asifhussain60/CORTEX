@@ -6,9 +6,12 @@ AC-PHASE50-S1-003: Error handling covers all failure modes
 """
 
 import pytest
+import tempfile
+import os
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 from abc import ABC, abstractmethod
+from unittest import mock
 
 
 # S1 Test Suite - Storage Provider Interface Design (12 tests)
@@ -80,9 +83,11 @@ class TestStorageProviderFactory:
         from cortex.storage.config import StorageConfig
         from cortex.storage.providers.local import LocalFileSystemProvider
         
-        config = StorageConfig(backend="local", endpoint=None, credentials=None)
-        provider = StorageProviderFactory.get_provider(config)
-        assert isinstance(provider, LocalFileSystemProvider)
+        # Create a temporary directory for testing
+        with tempfile.TemporaryDirectory() as tmpdir:
+            config = StorageConfig(backend="local", endpoint=tmpdir, credentials=None)
+            provider = StorageProviderFactory.get_provider(config)
+            assert isinstance(provider, LocalFileSystemProvider)
     
     def test_factory_returns_s3_provider_for_s3_backend(self):
         """get_provider(backend='s3') returns S3StorageProvider"""
@@ -90,9 +95,15 @@ class TestStorageProviderFactory:
         from cortex.storage.config import StorageConfig
         from cortex.storage.providers.s3 import S3StorageProvider
         
-        config = StorageConfig(backend="s3", endpoint="https://s3.amazonaws.com", credentials={"bucket": "cortex-knowledge"})
-        provider = StorageProviderFactory.get_provider(config)
-        assert isinstance(provider, S3StorageProvider)
+        # Mock boto3 to avoid dependency requirement
+        with mock.patch('cortex.storage.providers.s3.boto3'):
+            config = StorageConfig(
+                backend="s3", 
+                endpoint="https://s3.amazonaws.com", 
+                credentials={"bucket": "cortex-knowledge"}
+            )
+            provider = StorageProviderFactory.get_provider(config)
+            assert isinstance(provider, S3StorageProvider)
     
     def test_factory_returns_azure_provider_for_azure_backend(self):
         """get_provider(backend='azure') returns AzureBlobProvider"""
@@ -100,9 +111,20 @@ class TestStorageProviderFactory:
         from cortex.storage.config import StorageConfig
         from cortex.storage.providers.azure import AzureBlobProvider
         
-        config = StorageConfig(backend="azure", endpoint="https://account.blob.core.windows.net", credentials={"container": "cortex-knowledge"})
-        provider = StorageProviderFactory.get_provider(config)
-        assert isinstance(provider, AzureBlobProvider)
+        # Mock azure SDK to avoid dependency requirement
+        # We need to mock it at the module level before import
+        with mock.patch('cortex.storage.providers.azure.BlobServiceClient') as mock_blob_client:
+            # Mock the BlobServiceClient to return something
+            mock_instance = mock.MagicMock()
+            mock_blob_client.return_value = mock_instance
+            
+            config = StorageConfig(
+                backend="azure", 
+                endpoint="https://account.blob.core.windows.net/container", 
+                credentials={"account_key": "test-key"}
+            )
+            provider = StorageProviderFactory.get_provider(config)
+            assert isinstance(provider, AzureBlobProvider)
 
 
 class TestStorageErrorHandling:
