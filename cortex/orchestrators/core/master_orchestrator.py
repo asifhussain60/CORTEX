@@ -1963,7 +1963,7 @@ class MasterOrchestrator(IOrchestrator):
             
             try:
                 # Build LENS context using LENS analyzers (Tier 2 - Quick Analysis)
-                from cortex.lens import LENSOrchestrator
+                from cortex.lens.orchestrator import LENSOrchestrator
                 from pathlib import Path
                 
                 # Get file path from parameters or use current working directory

@@ -313,6 +313,55 @@ class LensOrchestratorTierSelection:
             },
         }
         return characteristics.get(tier, {})
+    
+    @staticmethod
+    def select_tier_with_escalation(
+        initial_tier: str,
+        tier_2_result: Optional[Dict] = None,
+        context: Optional[Dict] = None,
+    ) -> str:
+        """
+        AC-PHASE64-S2-001: Select tier with intelligent escalation.
+        
+        Escalation triggers:
+        1. Critical findings detected → Escalate to Tier 3
+        2. Ambiguous results (confidence < 0.7) → Escalate to Tier 3
+        3. Clear results → Stay with default tier
+        
+        Args:
+            initial_tier: Starting tier (usually tier_2_quick)
+            tier_2_result: Results from Tier 2 analysis
+            context: Orchestrator context
+        
+        Returns:
+            Selected tier after escalation evaluation
+        """
+        if tier_2_result is None:
+            return initial_tier
+        
+        # Check for critical findings (security, performance issues)
+        findings = tier_2_result.get("findings", [])
+        has_critical = any(
+            f.get("severity", "info").lower() == "critical"
+            for f in findings
+        )
+        
+        if has_critical:
+            # Critical findings found → escalate to Tier 3
+            return "tier_3_targeted"
+        
+        # Check for ambiguous results (confidence < 0.7)
+        avg_confidence = 0.0
+        if findings:
+            confidences = [f.get("confidence", 0.5) for f in findings]
+            avg_confidence = sum(confidences) / len(confidences)
+        
+        if avg_confidence < 0.7:
+            # Ambiguous results → escalate to Tier 3
+            return "tier_3_targeted"
+        
+        # Clear results → stay with initial tier
+        return initial_tier
 
 
 class LensIntegrationOrchestrator:
