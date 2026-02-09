@@ -1480,6 +1480,51 @@ orchestrators:
         phase: "55"
         stage: "4-9"
 
+    - name: "DashboardOrchestrator"
+      module: "cortex.orchestrators.domain.dashboard_orchestrator"
+      class: "DashboardOrchestrator"
+      tier: 2
+      priority: 85
+      dependencies: ["IntegrationOrchestrator"]
+      capabilities: [dashboard_generation, dashboard_sync, dashboard_caching, audit_trail, mcp_tool_registration]
+      mcp_tools: [cortex_generate_dashboard, cortex_sync_dashboard_data]
+      governance: [CORE-035, CORE-049]
+      version: "1.0.0"
+      metadata:
+        icon: "📊"
+        phase: "53"
+        stage: "1-3"
+
+    - name: "IntelligenceOrchestrator"
+      module: "cortex.orchestrators.domain.intelligence_orchestrator"
+      class: "IntelligenceOrchestrator"
+      tier: 3
+      priority: 84
+      dependencies: ["ContextCrystallizationLayer", "IntentRouter"]
+      capabilities: [knowledge_synthesis, intelligence_caching, precedence_resolution, violation_detection, unified_context_building]
+      mcp_tools: [cortex_synthesize_intelligence, cortex_get_cached_intelligence, cortex_resolve_precedence, cortex_detect_violations]
+      governance: [CORE-035, CORE-049]
+      version: "1.0.0"
+      metadata:
+        icon: "🧠"
+        phase: "53"
+        stage: "4-6"
+
+    - name: "DashboardIntegrationOrchestrator"
+      module: "cortex.orchestrators.domain.dashboard_integration"
+      class: "DashboardIntegrationOrchestrator"
+      tier: 2
+      priority: 83
+      dependencies: ["DashboardOrchestrator", "MasterOrchestrator", "PlanningOrchestrator"]
+      capabilities: [dashboard_routing, dashboard_artifact_registration, dashboard_action_listing, dashboard_auto_generation, dashboard_evidence_sourcing, dashboard_testing]
+      mcp_tools: [cortex_route_dashboard_generation, cortex_register_dashboard_artifact, cortex_list_dashboard_actions, cortex_generate_dashboard_on_onboard]
+      governance: [CORE-035, CORE-049]
+      version: "1.0.0"
+      metadata:
+        icon: "🔗"
+        phase: "53"
+        stage: "7-9"
+
 # -------------------------------------------------------------------------
 # DEPENDENCY VALIDATION RULES
 # -------------------------------------------------------------------------
