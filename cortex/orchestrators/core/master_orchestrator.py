@@ -126,6 +126,27 @@ except ImportError:
     AutonomousPlanExecutor = None
     ASCIIProgressBar = None
 
+# WIRING: Unified Response Composer System (User Response Template System)
+# AC-RESP-CONS-008: Consolidates 5 response composition systems into unified interface
+# Provides: response generation, multi-mode formatting, template composition, optimization, challenges
+try:
+    from cortex.orchestrators.response.unified_response_composer import (
+        UnifiedResponseComposer,
+        ResponseComposerConfig,
+        ResponseMode,
+        ResponseTone,
+        FormattingProfile,
+    )
+    UNIFIED_RESPONSE_COMPOSER_AVAILABLE = True
+except ImportError:
+    # Fallback if modules not accessible
+    UnifiedResponseComposer = None
+    ResponseComposerConfig = None
+    ResponseMode = None
+    ResponseTone = None
+    FormattingProfile = None
+    UNIFIED_RESPONSE_COMPOSER_AVAILABLE = False
+
 # Note: GracefulDegradationFramework imported lazily in __init__ to avoid circular imports
 
 # AC-IKP-002-02: Import IntelligentKnowledgeRouter for knowledge backend coordination
@@ -377,6 +398,55 @@ class MasterOrchestrator(IOrchestrator):
         self._component_health_tracker.register_component(
             "KnowledgeRepository", ComponentType.OPTIONAL
         )
+        
+        # WIRING: Initialize UnifiedResponseComposer for user response template system
+        # AC-RESP-CONS-008: Consolidates 5 response composition systems
+        # Provides: response generation, multi-mode formatting, template composition, optimization, challenges
+        self._response_composer = None
+        if UNIFIED_RESPONSE_COMPOSER_AVAILABLE:
+            try:
+                # Create composer with enhanced configuration
+                composer_config = ResponseComposerConfig(
+                    enable_caching=True,
+                    cache_ttl=3600,
+                    enable_optimization=True,
+                    optimization_threshold=0.7,
+                    enable_challenge_injection=True,
+                    challenge_confidence_threshold=0.7,
+                    audit_logging_enabled=True,
+                    enable_formatting_stats=True,
+                    max_cache_size=1000
+                )
+                self._response_composer = UnifiedResponseComposer(config=composer_config)
+                self.logger.log_operation_complete(
+                    ac_id="AC-RESP-CONS-008",
+                    operation="UNIFIED_RESPONSE_COMPOSER_INIT",
+                    success=True,
+                    details={
+                        "system": "UnifiedResponseComposer",
+                        "features": [
+                            "response_generation",
+                            "multi_mode_formatting",
+                            "template_composition",
+                            "response_optimization",
+                            "challenge_injection"
+                        ],
+                        "config": {
+                            "caching_enabled": True,
+                            "optimization_enabled": True,
+                            "challenge_injection_enabled": True,
+                            "audit_logging_enabled": True
+                        }
+                    }
+                )
+            except Exception as composer_err:
+                # Log but don't fail - response composer is enhancement, not blocking
+                self.logger.log_operation_complete(
+                    ac_id="AC-RESP-CONS-008",
+                    operation="UNIFIED_RESPONSE_COMPOSER_INIT",
+                    success=False,
+                    details={"error": f"Failed to initialize UnifiedResponseComposer: {str(composer_err)}"}
+                )
         self.logger.log_operation_complete(
             ac_id="AC-PHASE-2-5-WIRE-001",
             operation="COMPONENT_HEALTH_TRACKER_INIT",
@@ -1725,6 +1795,169 @@ class MasterOrchestrator(IOrchestrator):
                 details={"error": f"Header injection failed: {str(e)}"}
             )
             return response
+    
+    def generate_response(self, content: str, mode: str = "chat", tone: str = "technical") -> str:
+        """
+        Generate response using UnifiedResponseComposer.
+        
+        Integrates with Phase 52.5: User Response Template System
+        AC-RESP-CONS-009: Generate user-facing responses with mode/tone/profile
+        
+        Args:
+            content: Response content to generate
+            mode: ResponseMode (chat, command, visualization, json_api, markdown, stream)
+            tone: ResponseTone (formal, casual, technical, executive, educational)
+            
+        Returns:
+            Generated response text
+        """
+        if not UNIFIED_RESPONSE_COMPOSER_AVAILABLE or self._response_composer is None:
+            # Graceful degradation: return content unchanged
+            self.logger.log_operation_complete(
+                ac_id="AC-RESP-CONS-009",
+                operation="GENERATE_RESPONSE",
+                success=False,
+                details={"reason": "UnifiedResponseComposer not available"}
+            )
+            return content
+        
+        try:
+            import uuid
+            import time
+            
+            operation_id = str(uuid.uuid4())
+            turn_number = int(time.time() * 1000) % 10000
+            
+            response_obj = self._response_composer.generate_response(
+                operation_id=operation_id,
+                turn_number=turn_number,
+                content=content,
+                mode=ResponseMode[mode.upper()],
+                tone=ResponseTone[tone.upper()]
+            )
+            self.logger.log_operation_complete(
+                ac_id="AC-RESP-CONS-009",
+                operation="GENERATE_RESPONSE",
+                success=True,
+                details={"mode": mode, "tone": tone, "length": len(response_obj.formatted_content)}
+            )
+            return response_obj.formatted_content
+        except Exception as gen_err:
+            self.logger.log_operation_complete(
+                ac_id="AC-RESP-CONS-009",
+                operation="GENERATE_RESPONSE",
+                success=False,
+                details={"error": str(gen_err)}
+            )
+            return content
+    
+    def format_response(self, content: str, profile: str = "standard", mode: str = "chat") -> str:
+        """
+        Format response using UnifiedResponseComposer.
+        
+        Integrates with Phase 52.5: User Response Template System
+        AC-RESP-CONS-010: Format responses with profile (compact, standard, verbose, minimal, rich)
+        
+        Args:
+            content: Response content to format
+            profile: FormattingProfile (compact, standard, verbose, minimal, rich)
+            mode: Formatting mode (chat, command, visualization, json_api, markdown, stream)
+            
+        Returns:
+            Formatted response text
+        """
+        if not UNIFIED_RESPONSE_COMPOSER_AVAILABLE or self._response_composer is None:
+            # Graceful degradation: return content unchanged
+            self.logger.log_operation_complete(
+                ac_id="AC-RESP-CONS-010",
+                operation="FORMAT_RESPONSE",
+                success=False,
+                details={"reason": "UnifiedResponseComposer not available"}
+            )
+            return content
+        
+        try:
+            formatted = self._response_composer.format_response(
+                response=content,
+                mode=mode,
+                profile=FormattingProfile[profile.upper()]
+            )
+            self.logger.log_operation_complete(
+                ac_id="AC-RESP-CONS-010",
+                operation="FORMAT_RESPONSE",
+                success=True,
+                details={"profile": profile, "mode": mode, "length": len(str(formatted))}
+            )
+            return str(formatted)
+        except Exception as fmt_err:
+            self.logger.log_operation_complete(
+                ac_id="AC-RESP-CONS-010",
+                operation="FORMAT_RESPONSE",
+                success=False,
+                details={"error": str(fmt_err)}
+            )
+            return content
+    
+    def compose_from_template(self, template_name: str, variables: dict = None) -> str:
+        """
+        Compose response from template using UnifiedResponseComposer.
+        
+        Integrates with Phase 52.5: User Response Template System
+        AC-RESP-CONS-011: Compose responses from registered templates with variable substitution
+        
+        Args:
+            template_name: Name of registered template (used as template_id)
+            variables: Dictionary of template variables
+            
+        Returns:
+            Composed response text
+        """
+        if not UNIFIED_RESPONSE_COMPOSER_AVAILABLE or self._response_composer is None:
+            # Graceful degradation: return empty string
+            self.logger.log_operation_complete(
+                ac_id="AC-RESP-CONS-011",
+                operation="COMPOSE_FROM_TEMPLATE",
+                success=False,
+                details={"reason": "UnifiedResponseComposer not available"}
+            )
+            return ""
+        
+        try:
+            if variables is None:
+                variables = {}
+            
+            response = self._response_composer.compose_from_template(
+                template_id=template_name,
+                variables=variables
+            )
+            self.logger.log_operation_complete(
+                ac_id="AC-RESP-CONS-011",
+                operation="COMPOSE_FROM_TEMPLATE",
+                success=True,
+                details={"template": template_name, "vars_count": len(variables), "length": len(response)}
+            )
+            return response
+        except Exception as comp_err:
+            self.logger.log_operation_complete(
+                ac_id="AC-RESP-CONS-011",
+                operation="COMPOSE_FROM_TEMPLATE",
+                success=False,
+                details={"error": str(comp_err), "template": template_name}
+            )
+            return ""
+    
+    def get_response_composer(self) -> Any:
+        """
+        Get UnifiedResponseComposer instance for direct use.
+        
+        AC-RESP-CONS-012: Provide access to response composer for orchestrators
+        
+        Returns:
+            UnifiedResponseComposer instance or None if unavailable
+        """
+        if UNIFIED_RESPONSE_COMPOSER_AVAILABLE:
+            return self._response_composer
+        return None
     
     def get_mcp_tools(self) -> Result[Dict[str, Any]]:
         """AC-AR-011-02: Get exposed MCP tools."""
