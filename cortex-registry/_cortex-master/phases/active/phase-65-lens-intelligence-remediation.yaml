@@ -9,10 +9,10 @@ metadata:
   status: "planned"
   priority: "P0"
   created: "2026-02-09"
-  estimated_duration: "8 days"
+  estimated_duration: "10 days"
   roi_score: 0.95
   execution_order: 16
-  test_target: 120
+  test_target: 155
   coverage_target: 90
   autonomous_execution: true
   approval_required: false
@@ -26,6 +26,10 @@ overview:
     disconnected intelligence system into a production-grade end-to-end 
     knowledge pipeline that enables CORTEX to function as a software 
     engineering partner (implementer, tester, reviewer, architect).
+    
+    ENHANCED (2026-02-09): Add comprehensive E2E testing with audit trail 
+    validation to verify CORTEX operates at Principal Engineer level with 
+    domain knowledge synthesis, TDD enforcement, and complete observability.
 
   problem_statement: |
     Holistic review (2026-02-09) revealed that the LENS intelligence 
@@ -43,6 +47,8 @@ overview:
        profiles, domain brain, or knowledge graph
     8. MasterOrchestrator._stage_2_routing() passes empty LENSIntelligence 
        and CompanyKnowledge structs to synthesis engine
+    9. No end-to-end tests validating complete intelligence pipeline workflows
+    10. No audit trail validation for knowledge synthesis operations
 
   expected_outcomes:
     - "40+ YAML best practices loaded dynamically at runtime (not hardcoded)"
@@ -53,6 +59,8 @@ overview:
     - "Tiered MCP API capabilities execute real analysis"
     - "Single canonical LENSContext data class"
     - "Single canonical cache implementation"
+    - "Comprehensive E2E tests for TDD, refactoring, code review workflows"
+    - "Complete audit trail with performance metrics and violation tracking"
 
 roi_analysis:
   cost: "8 developer-days across 8 stages"
@@ -776,6 +784,184 @@ stages:
       - "Zero regressions in existing test suite"
       - "LENS intelligence readiness score: ≥7/10 (up from 3/10)"
 
+  # --------------------------------------------------------------------------
+  # STAGE 9: E2E Testing with Audit Trail Validation (NEW - Enhanced)
+  # --------------------------------------------------------------------------
+  - id: "S9"
+    name: "E2E Testing with Audit Trail Validation"
+    status: "planned"
+    effort: "2 days"
+    priority: "P0"
+    tests_expected: 35
+    depends_on: ["S8"]
+    description: |
+      Comprehensive end-to-end tests validating CORTEX as an intelligent 
+      coding partner executing at Principal Engineer level. Tests cover 
+      full workflows (TDD, refactoring, code review) with domain knowledge 
+      synthesis and complete audit trail validation.
+      
+      This stage validates Phase 65's core goal: transforming CORTEX from 
+      architecturally sound but operationally hollow into a production-grade 
+      engineering partner.
+
+    tasks:
+      - id: "S9-T1"
+        name: "Implement TDD workflow E2E test"
+        description: |
+          Test full RED → GREEN → REFACTOR cycle with:
+          - User request → Knowledge synthesis → Test generation
+          - Implementation with best practices enforcement
+          - Audit trail validation (AC_START → AC_COMPLETE)
+          - Verify CORE-008 TDD enforcement
+        file: "tests/integration/test_phase65_intelligence_e2e.py"
+        test_class: "TestE2ETDDWorkflow"
+
+      - id: "S9-T2"
+        name: "Implement domain knowledge synthesis E2E test"
+        description: |
+          Test company rules override CORTEX defaults:
+          - Load company domain knowledge (security, performance, testing)
+          - Synthesize with CORTEX best practices (Company > CORTEX)
+          - Verify precedence resolution
+          - Validate compliance standards enforcement
+        file: "tests/integration/test_phase65_intelligence_e2e.py"
+        test_class: "TestE2EDomainKnowledgeSynthesis"
+
+      - id: "S9-T3"
+        name: "Implement refactoring with pattern detection E2E test"
+        description: |
+          Test architectural pattern detection and refactoring guidance:
+          - LENS detects code smells (god class, long method, high complexity)
+          - Synthesis engine provides SOLID principle guidance
+          - Refactoring patterns suggested (extract class, strategy pattern)
+          - Verify pattern citations in guidance
+        file: "tests/integration/test_phase65_intelligence_e2e.py"
+        test_class: "TestE2ERefactoringWithPatterns"
+
+      - id: "S9-T4"
+        name: "Implement code review with security checks E2E test"
+        description: |
+          Test security vulnerability detection using OWASP knowledge:
+          - LENS detects SQL injection, XSS, hardcoded secrets
+          - Synthesis includes OWASP Top 10 patterns
+          - Guidance provides remediation steps
+          - Critical violations block execution
+        file: "tests/integration/test_phase65_intelligence_e2e.py"
+        test_class: "TestE2ECodeReviewWithIntelligence"
+
+      - id: "S9-T5"
+        name: "Implement cross-turn intelligence accumulation E2E test"
+        description: |
+          Test Phase 65 S5 goal: intelligence accumulation across turns:
+          - Turn 1: Initial implementation with LENS analysis
+          - Turn 2: Refactoring with cached context from Turn 1
+          - Turn 3: Extension with accumulated knowledge
+          - Verify session state management
+        file: "tests/integration/test_phase65_intelligence_e2e.py"
+        test_class: "TestE2ECrossTurnAccumulation"
+
+      - id: "S9-T6"
+        name: "Implement audit trail validation E2E test"
+        description: |
+          Test complete audit trail through intelligence pipeline:
+          - Knowledge synthesis logged with AC markers
+          - LENS analysis logged with file context
+          - Violation detection logged with severity
+          - Guidance generation logged with rule citations
+          - Performance metrics tracked
+        file: "tests/integration/test_phase65_intelligence_e2e.py"
+        test_class: "TestE2EAuditTraceValidation"
+
+      - id: "S9-T7"
+        name: "Implement performance validation E2E test"
+        description: |
+          Test synthesis performance meets Phase 49 CCL SLA:
+          - Full synthesis completes under 500ms
+          - YAML loading cached (5-min TTL)
+          - LENS analysis cached (session TTL)
+          - Context synthesis cached (per-intent TTL)
+        file: "tests/integration/test_phase65_intelligence_e2e.py"
+        test_class: "TestE2EPerformanceValidation"
+
+      - id: "S9-T8"
+        name: "Implement Phase65AuditTraceLogger integration"
+        description: |
+          Integrate enhanced audit trace logger into intelligence pipeline:
+          - KnowledgeSynthesisEngine logs YAML operations
+          - LENSWarmer logs analysis operations
+          - ChallengeEngine logs violation detection
+          - Generate audit report with performance metrics
+        file: "cortex/orchestrators/phase65/audit_trace_logger.py"
+
+      - id: "S9-T9"
+        name: "Wire audit logger into synthesis engine"
+        description: |
+          Add audit logging calls to KnowledgeSynthesisEngine:
+          - Log YAML load operations with cache metrics
+          - Log rule merging with precedence resolution
+          - Log violation detection with severity
+          - Log guidance generation with citations
+        file: "cortex/brain/knowledge/knowledge_synthesis_engine.py"
+
+      - id: "S9-T10"
+        name: "Wire audit logger into LENS warmer"
+        description: |
+          Add audit logging calls to LENSWarmer:
+          - Log each analyzer invocation (AST, git, comments)
+          - Track analysis times and cache hit rates
+          - Log security/performance findings
+          - Generate per-file analysis summary
+        file: "cortex/orchestrators/context_crystallization/lens_warmer.py"
+
+    test_requirements:
+      - "test_tdd_workflow_red_green_refactor_complete"
+      - "test_tdd_tests_before_implementation_enforced"
+      - "test_tdd_audit_trail_ac_markers_present"
+      - "test_domain_company_rules_override_cortex"
+      - "test_domain_multi_domain_synthesis"
+      - "test_domain_compliance_standards_enforced"
+      - "test_refactor_code_smell_detection"
+      - "test_refactor_solid_principle_guidance"
+      - "test_refactor_pattern_citation_in_guidance"
+      - "test_review_sql_injection_detection"
+      - "test_review_xss_detection"
+      - "test_review_hardcoded_secret_detection"
+      - "test_review_owasp_pattern_application"
+      - "test_review_critical_violation_blocks"
+      - "test_accumulation_turn1_initial_context"
+      - "test_accumulation_turn2_cached_reuse"
+      - "test_accumulation_turn3_knowledge_growth"
+      - "test_accumulation_session_state_maintained"
+      - "test_audit_trail_yaml_load_logged"
+      - "test_audit_trail_lens_analysis_logged"
+      - "test_audit_trail_violation_logged"
+      - "test_audit_trail_guidance_logged"
+      - "test_audit_trail_performance_metrics"
+      - "test_audit_report_generation"
+      - "test_performance_synthesis_under_500ms"
+      - "test_performance_yaml_cache_hit"
+      - "test_performance_lens_cache_hit"
+      - "test_phase65_logger_singleton"
+      - "test_phase65_logger_yaml_trace"
+      - "test_phase65_logger_lens_trace"
+      - "test_phase65_logger_violation_trace"
+      - "test_phase65_logger_synthesis_trace"
+      - "test_phase65_logger_performance_summary"
+      - "test_phase65_logger_audit_report"
+      - "test_integration_logger_in_synthesis_engine"
+
+    acceptance_criteria:
+      - "All 7 E2E test suites pass (35 test cases total)"
+      - "TDD workflow enforces tests-before-code (CORE-008)"
+      - "Company rules override CORTEX defaults (verified)"
+      - "SOLID principles applied in refactoring guidance"
+      - "OWASP patterns detect SQL injection, XSS, secrets"
+      - "Cross-turn accumulation verified across 3+ turns"
+      - "Complete audit trail with AC markers and performance metrics"
+      - "Synthesis performance meets 500ms SLA (95th percentile)"
+      - "Audit report generation works end-to-end"
+      - "Phase65AuditTraceLogger integrated in all pipeline stages"
+
 # ============================================================================
 # EXECUTION CONSTRAINTS
 # ============================================================================
@@ -788,7 +974,7 @@ execution:
   rollback_strategy: "git revert to pre-stage commit"
 
   stage_order:
-    critical_path: "S1 → S3 → S4 → S5 → S8"
+    critical_path: "S1 → S3 → S4 → S5 → S8 → S9"
     parallel_safe: ["S2 (parallel with S1)", "S6 (parallel with S5)", "S7 (after S6)"]
     
   execution_sequence:
@@ -816,6 +1002,10 @@ execution:
         stages: ["S8"]
         parallel: false
         description: "Integration testing — depends on everything"
+    - batch_7:
+        stages: ["S9"]
+        parallel: false
+        description: "E2E testing with audit trail validation — final verification"
 
 # ============================================================================
 # RISK ASSESSMENT
