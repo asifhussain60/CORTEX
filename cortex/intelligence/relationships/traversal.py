@@ -11,14 +11,11 @@ import ast
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple, Union
 import logging
 
-from cortex.intelligence.base import (
-    BaseIntelligenceEngine,
-    AnalysisContext,
-    AnalysisResult,
-)
+from cortex.intelligence.base_engine import BaseIntelligenceEngine
+from cortex.brain.core.result import Ok, Err
 
 logger = logging.getLogger(__name__)
 
@@ -165,49 +162,49 @@ class RelationshipTraversalEngine(BaseIntelligenceEngine):
     
     def __init__(self):
         """Initialize RelationshipTraversal engine."""
-        super().__init__("RelationshipTraversal")
+        super().__init__(
+            name="RelationshipTraversal",
+            version="2.0.0",
+            description="Analyzes code relationships and builds dependency graphs",
+            cache_ttl=600
+        )
     
-    def validate_context(self, context: AnalysisContext) -> bool:
+    def _execute(self, context: Dict[str, Any]) -> Union[Ok, Err]:
         """
-        Validate analysis context.
+        Execute relationship analysis on code context
         
         Args:
-            context: Analysis context
-            
+            context: Code structure with optional 'source' code to analyze
+        
         Returns:
-            True if valid
-            
-        Raises:
-            ValueError: If context invalid
-        """
-        if not context.file_path.exists():
-            raise ValueError(f"File does not exist: {context.file_path}")
-        
-        if not context.file_path.suffix == ".py":
-            raise ValueError(f"File must be Python: {context.file_path}")
-        
-        return True
-    
-    def analyze(self, context: AnalysisContext) -> AnalysisResult:
-        """
-        Analyze relationships in Python code.
-        
-        Args:
-            context: Analysis context with file_path
-            
-        Returns:
-            AnalysisResult with relationship data
+            Analysis results or error
         """
         try:
-            self.validate_context(context)
+            # If source code provided, analyze it
+            if "source" in context:
+                source = context["source"]
+                relationships = self._analyze_source(source)
+                return Ok(relationships.to_dict())
             
-            content = context.file_path.read_text(encoding="utf-8")
-            relationships = self._analyze_source(content)
+            # If nodes/edges provided, analyze graph structure
+            if "nodes" in context or "edges" in context:
+                nodes = context.get("nodes", [])
+                edges = context.get("edges", [])
+                
+                return Ok({
+                    "relationships": [],
+                    "traversal": [],
+                    "graph": {"nodes": nodes, "edges": edges}
+                })
             
-            return self._create_result(relationships.to_dict())
+            return Ok({
+                "relationships": [],
+                "traversal": [],
+                "graph": {"nodes": [], "edges": []}
+            })
         
         except Exception as e:
-            return self._error_result(e)
+            return Err(f"Relationship analysis failed: {str(e)}")
     
     def _analyze_source(self, source: str) -> RelationshipAnalysisResult:
         """
@@ -352,3 +349,68 @@ class RelationshipTraversalEngine(BaseIntelligenceEngine):
                     columns.append(item.target.id)
         
         return columns
+    def build_graph(self, dependencies: Dict[str, List[str]]) -> Union[Ok, Err]:
+        """
+        Build a relationship graph from dependency map
+        
+        Args:
+            dependencies: Dict of node -> [dependency nodes]
+        
+        Returns:
+            Graph structure with nodes and edges
+        """
+        try:
+            nodes = [{"id": node} for node in dependencies.keys()]
+            edges = []
+            
+            for source, targets in dependencies.items():
+                for target in targets:
+                    edges.append({"from": source, "to": target})
+            
+            return Ok({
+                "nodes": nodes,
+                "edges": edges,
+                "node_count": len(nodes),
+                "edge_count": len(edges)
+            })
+        
+        except Exception as e:
+            return Err(f"Graph building failed: {str(e)}")
+    
+    def transitive_closure(self, dependencies: Dict[str, List[str]]) -> Union[Ok, Err]:
+        """
+        Compute transitive closure of dependencies
+        
+        Args:
+            dependencies: Dict of node -> [direct dependencies]
+        
+        Returns:
+            Closure with all direct and indirect relationships
+        """
+        try:
+            closure = {}
+            
+            for source in dependencies:
+                closure[source] = self._compute_reachable(source, dependencies)
+            
+            return Ok(closure)
+        
+        except Exception as e:
+            return Err(f"Closure computation failed: {str(e)}")
+    
+    def _compute_reachable(self, node: str, adj_map: Dict[str, List[str]]) -> Set[str]:
+        """Compute all nodes reachable from a given node"""
+        visited = set()
+        stack = [node]
+        
+        while stack:
+            current = stack.pop()
+            if current in visited:
+                continue
+            
+            visited.add(current)
+            for neighbor in adj_map.get(current, []):
+                if neighbor not in visited:
+                    stack.append(neighbor)
+        
+        return visited
