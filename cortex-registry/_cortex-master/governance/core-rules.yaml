@@ -36,6 +36,9 @@ core_rules:
       EXCEPTION: docs/, .github/, README.md (legitimate documentation)
     enforcement: "BLOCKED"
     violation_action: "Halt execution + regenerate response"
+    applicable_contexts:  # Phase 52: Universal rule (all contexts)
+      - "cortex_internal"
+      - "production_repo"
     detection_patterns:
       - "cat > .*\\.md"
       - "create_file.*\\.md"
@@ -61,6 +64,9 @@ core_rules:
       All IMPLEMENT intents MUST route through TDDOrchestrator.
     enforcement: "PRE-EXECUTION"
     violation_action: "Route through TDDOrchestrator"
+    applicable_contexts:  # Phase 52: Context-aware applicability
+      - "cortex_internal"
+      - "production_repo"
     detection_patterns:
       - "New .py files without corresponding test_*.py"
       - "Code changes without test changes"
@@ -83,6 +89,9 @@ core_rules:
           ...
     enforcement: "WARNING"
     violation_action: "Warn + log"
+    applicable_contexts:  # Phase 52: Stricter for CORTEX internal
+      - "cortex_internal"
+      - "production_repo"
     detection_patterns:
       - "def \\w+\\([^:)]*\\):"  # Function without type hints
     auto_fix: false
@@ -118,6 +127,9 @@ core_rules:
       '''
     enforcement: "WARNING"
     violation_action: "Warn + log"
+    applicable_contexts:  # Phase 52: Stricter for CORTEX internal
+      - "cortex_internal"
+      - "production_repo"
     detection_patterns:
       - "def \\w+.*:\\s*$"  # Function without docstring
       - "class \\w+.*:\\s*$"  # Class without docstring
@@ -252,6 +264,9 @@ core_rules:
       Modes: Architect, Audit, Design, Plan, Digest, Interactive, Meta-Audit
     enforcement: "WARNING"
     violation_action: "Warn (not blocking)"
+    applicable_contexts:  # Phase 52: Universal rule (all contexts)
+      - "cortex_internal"
+      - "production_repo"
     detection_patterns:
       - "Response without ## 🧠 CORTEX header"
     auto_fix: false
@@ -296,6 +311,9 @@ core_rules:
       Use: cortex_detect_duplicates tool to validate
     enforcement: "BLOCKED"
     violation_action: "Block + require consolidation"
+    applicable_contexts:  # Phase 52: Stricter for CORTEX internal
+      - "cortex_internal"
+      - "production_repo"
     detection_patterns:
       - ".*_v\\d+\\.py"
       - ".*_old\\.py"
@@ -624,3 +642,66 @@ usage_examples:
       p0_rules = loader.get_rules_by_priority("P0")
       
       print(f"Found {len(p0_rules)} P0 rules")
+
+# Phase 52: Rules-Driven Validation Migration
+# ═══════════════════════════════════════════════════════════════════════════
+phase_52_migration:
+  status: "ACTIVE"
+  version: "1.3"
+  updated: "2026-02-09"
+  description: |
+    Phase 52: Orchestrator Integration - Migrating to rules-driven validation
+    
+    5 Core rules migrated to rules-driven execution:
+    1. CORE-008: TDD Mandatory - applied during TDDOrchestrator execution
+    2. CORE-002: No Markdown - applied universally
+    3. CORE-029: Response Header - applied universally
+    4. CORE-011: Type Hints - applied during LENSSynthesis analysis
+    5. CORE-035: Single Implementation - applied during architecture validation
+    
+    New capability: applicable_contexts field enables context-specific validation
+    - cortex_internal: Stricter rules for CORTEX self-development
+    - production_repo: Standard rules for user repositories
+  
+  migrated_rules:
+    - rule_id: "CORE-008"
+      migration_type: "TDDOrchestrator integration"
+      enforcement_point: "_execute_domain_logic()"
+      validation_level: "PRE_EXECUTION"
+      
+    - rule_id: "CORE-002"
+      migration_type: "MarkdownSuppressionAgent integration"
+      enforcement_point: "MasterOrchestrator.execute_operation()"
+      validation_level: "BLOCKED"
+      
+    - rule_id: "CORE-029"
+      migration_type: "ResponseTemplate integration"
+      enforcement_point: "MasterOrchestrator.get_response_with_headers()"
+      validation_level: "WARNING"
+      
+    - rule_id: "CORE-011"
+      migration_type: "LENSSynthesis context-aware"
+      enforcement_point: "LENSSynthesis.synthesize_with_execution_context()"
+      validation_level: "WARNING"
+      
+    - rule_id: "CORE-035"
+      migration_type: "Architecture validation"
+      enforcement_point: "LENSSynthesis.synthesize_with_execution_context()"
+      validation_level: "BLOCKED"
+  
+  benefits:
+    - No duplicate validation logic across agents
+    - Context-aware enforcement (stricter for CORTEX internal)
+    - Centralized rule updates (single YAML file)
+    - Agent-agnostic rule evaluation
+    - Foundation for Alternative 2 (pure orchestrator path)
+  
+  next_phase:
+    description: "Phase 53: Complete orchestrator separation"
+    tasks:
+      - Migrate remaining 10 CORE rules to rules-driven validation
+      - Remove agent-level validation logic
+      - Enable true multi-agent orchestration
+      - Support Alternative 2 pure-orchestrator architecture
+
+```
