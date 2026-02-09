@@ -729,20 +729,41 @@ active_phases:
     name: "Repository Onboarding Incremental Refactoring (REVISED)"
     file: "phases/active/phase-54-A-incremental-onboarding-refactor.yaml"
     created: "2026-02-09"
-    status: "planned"
+    revised: "2026-02-09"
+    status: "tdd_scaffolding_complete"
     priority: "P2"
     execution_order: 8
     roi_score: 0.65
     estimated_duration: "14 hours"
     test_target: 66
+    tests_pending: 66
     coverage_target: 90
     autonomous_execution: true
     approval_required: false
     cross_cutting: false
     breaking_changes: false
     production_blocker: false
+    platform_support: ["Windows", "macOS"]
     description: |
-      ⚪ PLANNED: Incremental MVP approach - Use cases + Repository pattern + Jinja2 MVP (14h vs 46h big-bang).
+      🔵 TDD SCAFFOLDING COMPLETE: Incremental MVP approach - Use cases + Repository pattern + Jinja2 MVP (14h vs 46h big-bang).
+      
+      **TDD FRAMEWORK READY (2026-02-09):**
+      - 📋 Stage 1: 6 use case test files with 41 tests ✅
+      - 📋 Stage 2: Repository pattern test file with 15 tests ✅
+      - 📋 Stage 3: Dashboard renderer test file with 10 tests ✅
+      - 📋 Total: 66 test files ready (implementation pending)
+      - ✅ Windows platform: Path compatibility established
+      - ✅ Cross-platform: macOS/Linux ready
+      
+      **Test Infrastructure Created:**
+      - cortex/orchestrators/support/onboarding_use_cases/ (6 use case classes TBD)
+      - cortex/repositories/ (JSONProfileRepository + interface TBD)
+      - cortex/templates/dashboards/ (Jinja2 MVP template TBD)
+      - tests/orchestrators/support/onboarding_use_cases/ (41 tests ready)
+      - tests/repositories/ (15 tests ready)
+      - tests/orchestrators/support/ (10 tests ready)
+      
+      **Next: Implementation (S1 → S2 → S3)**
       
       **CHALLENGE GATE PASSED:** 2026-02-09 (revised from Phase 54)
       
