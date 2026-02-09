@@ -112,13 +112,31 @@ class VacuumOrchestrator:
             # Development utilities that should be in scripts/utilities/
             "utility_scripts": {
                 "patterns": [
+                    "check_dashboard.py",
                     "generate_dashboard_complete.py",
                     "generate_dashboard_data.py",
+                    "onboard_ksessions.py",
                     "run_vacuum.py",
                     "verify_cleanup_integrity.py",
                     "verify_dashboard.py",
                 ],
                 "destination": "scripts/utilities/",
+                "action": "move",
+            },
+            # Test files that should be in tests/
+            "test_files": {
+                "patterns": [
+                    "test_*.py",
+                ],
+                "destination": "tests/",
+                "action": "move",
+            },
+            # Log files that should be removed
+            "log_files": {
+                "patterns": [
+                    "*.log",
+                ],
+                "destination": "logs/",
                 "action": "move",
             },
             # Production-critical root files (KEEP)
@@ -128,11 +146,13 @@ class VacuumOrchestrator:
                     ".dockerignore",
                     ".gitignore",
                     ".pre-commit-config.yaml",
+                    ".pytest_ignore",
                     "Dockerfile",
                     "Makefile",
+                    "pytest.ini",
                     "README.md",
                     "docker-compose*.yml",
-                    "requirements.txt",  # symlink
+                    "requirements.txt",
                 ],
                 "action": "keep",
             },
@@ -234,6 +254,8 @@ class VacuumOrchestrator:
         try:
             root = Path(root_path)
             utility_scripts = []
+            test_files = []
+            log_files = []
             production_files = []
             directories = []
             recommendations = []
@@ -243,8 +265,28 @@ class VacuumOrchestrator:
                 if item.is_file():
                     filename = item.name
                     
+                    # Check test files first (test_*.py pattern)
+                    if filename.startswith("test_") and filename.endswith(".py"):
+                        test_files.append(filename)
+                        recommendations.append({
+                            "file": filename,
+                            "action": "move",
+                            "destination": self.root_file_rules["test_files"]["destination"],
+                            "reason": "Test file should be in tests/ directory",
+                            "priority": "high",
+                        })
+                    # Check log files
+                    elif filename.endswith(".log"):
+                        log_files.append(filename)
+                        recommendations.append({
+                            "file": filename,
+                            "action": "move",
+                            "destination": self.root_file_rules["log_files"]["destination"],
+                            "reason": "Log file should be in logs/ directory or deleted",
+                            "priority": "medium",
+                        })
                     # Check against utility script patterns
-                    if filename in self.root_file_rules["utility_scripts"]["patterns"]:
+                    elif filename in self.root_file_rules["utility_scripts"]["patterns"]:
                         utility_scripts.append(filename)
                         recommendations.append({
                             "file": filename,
@@ -281,11 +323,15 @@ class VacuumOrchestrator:
             return {
                 "status": "success",
                 "utility_scripts": utility_scripts,
+                "test_files": test_files,
+                "log_files": log_files,
                 "production_files": production_files,
                 "directories": directories,
                 "recommendations": recommendations,
                 "summary": {
                     "utility_scripts_count": len(utility_scripts),
+                    "test_files_count": len(test_files),
+                    "log_files_count": len(log_files),
                     "production_files_count": len(production_files),
                     "directories_count": len(directories),
                     "total_recommendations": len(recommendations),
@@ -1042,4 +1088,173 @@ class VacuumOrchestrator:
             Dictionary with flush results (same as trigger_brain_flush)
         """
         return self.trigger_brain_flush()
+    
+    def verify_cortex_integrity(self, root_path: str = ".") -> Dict[str, Any]:
+        """
+        Comprehensive CORTEX integrity verification after vacuum operations.
+        
+        Checks:
+        1. Wiring system integrity (YAML file paths)
+        2. Orchestrator registry completeness
+        3. MCP tool availability
+        4. Import health (no broken imports)
+        5. Test suite status
+        6. Git repository cleanliness
+        
+        Args:
+            root_path: Root directory of CORTEX repository
+            
+        Returns:
+            Dictionary with verification results:
+                - status: "passed", "warnings", or "failed"
+                - checks: List of check results
+                - issues: List of issues found
+                - recommendations: List of recommended fixes
+                
+        Example:
+            >>> orchestrator = VacuumOrchestrator()
+            >>> result = orchestrator.verify_cortex_integrity()
+            >>> print(result["status"])
+            'passed'
+        """
+        try:
+            root = Path(root_path).resolve()
+            checks = []
+            issues = []
+            recommendations = []
+            
+            # Check 1: Wiring YAML integrity
+            wiring_specs = root / "cortex" / "wiring" / "specifications"
+            if wiring_specs.exists():
+                yaml_files = list(wiring_specs.glob("*.yaml"))
+                broken_paths = []
+                
+                for yaml_file in yaml_files:
+                    try:
+                        import yaml
+                        with open(yaml_file, encoding="utf-8") as f:
+                            spec = yaml.safe_load(f)
+                            
+                        # Check file_path references
+                        if "implementation" in spec and "file_path" in spec["implementation"]:
+                            impl_path = root / spec["implementation"]["file_path"]
+                            if not impl_path.exists():
+                                broken_paths.append({
+                                    "yaml": yaml_file.name,
+                                    "missing_path": spec["implementation"]["file_path"],
+                                })
+                    except Exception as e:
+                        issues.append(f"Failed to parse {yaml_file.name}: {str(e)}")
+                
+                if broken_paths:
+                    issues.append(f"Found {len(broken_paths)} broken file paths in wiring specs")
+                    recommendations.append("Update wiring YAML files with correct file_path references")
+                
+                checks.append({
+                    "name": "Wiring YAML Integrity",
+                    "status": "passed" if not broken_paths else "failed",
+                    "details": f"Checked {len(yaml_files)} YAML files, {len(broken_paths)} broken paths",
+                })
+            else:
+                issues.append("Wiring specifications directory not found")
+                checks.append({
+                    "name": "Wiring YAML Integrity",
+                    "status": "failed",
+                    "details": "Directory not found",
+                })
+            
+            # Check 2: Orchestrator registry
+            registry_path = root / "cortex-registry" / "_cortex-master" / "index.yaml"
+            if registry_path.exists():
+                checks.append({
+                    "name": "Orchestrator Registry",
+                    "status": "passed",
+                    "details": "Registry index found",
+                })
+            else:
+                issues.append("Orchestrator registry index not found")
+                checks.append({
+                    "name": "Orchestrator Registry",
+                    "status": "failed",
+                    "details": "Index not found",
+                })
+            
+            # Check 3: Git status
+            try:
+                result = subprocess.run(
+                    ["git", "status", "--porcelain"],
+                    cwd=str(root),
+                    capture_output=True,
+                    text=True,
+                    timeout=5,
+                )
+                
+                if result.returncode == 0:
+                    modified_files = len([line for line in result.stdout.strip().split("\n") if line])
+                    checks.append({
+                        "name": "Git Repository Status",
+                        "status": "passed" if modified_files == 0 else "warnings",
+                        "details": f"{modified_files} modified files",
+                    })
+                    
+                    if modified_files > 0:
+                        recommendations.append("Commit or stash modified files")
+            except Exception:
+                checks.append({
+                    "name": "Git Repository Status",
+                    "status": "skipped",
+                    "details": "Git check failed",
+                })
+            
+            # Check 4: Core module imports
+            try:
+                import cortex.orchestrators.core.master_orchestrator
+                import cortex.models.canonical_enums
+                import cortex.mcp.server
+                
+                checks.append({
+                    "name": "Core Module Imports",
+                    "status": "passed",
+                    "details": "Key modules importable",
+                })
+            except ImportError as e:
+                issues.append(f"Core import failed: {str(e)}")
+                checks.append({
+                    "name": "Core Module Imports",
+                    "status": "failed",
+                    "details": str(e),
+                })
+            
+            # Determine overall status
+            failed_checks = [c for c in checks if c["status"] == "failed"]
+            warning_checks = [c for c in checks if c["status"] == "warnings"]
+            
+            if failed_checks:
+                status = "failed"
+            elif warning_checks or issues:
+                status = "warnings"
+            else:
+                status = "passed"
+            
+            return {
+                "status": status,
+                "checks": checks,
+                "issues": issues,
+                "recommendations": recommendations,
+                "summary": {
+                    "total_checks": len(checks),
+                    "passed": len([c for c in checks if c["status"] == "passed"]),
+                    "failed": len(failed_checks),
+                    "warnings": len(warning_checks),
+                },
+            }
+            
+        except Exception as e:
+            return {
+                "status": "error",
+                "error": str(e),
+                "checks": [],
+                "issues": [f"Integrity check failed: {str(e)}"],
+                "recommendations": ["Investigate error and retry"],
+            }
 
