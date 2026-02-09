@@ -1736,6 +1736,31 @@ governance:
 
 # Autonomous Execution Queue (Phase 56 Enhancement)
 # Authority: CORTEX Architect Instructions - Silent Autonomous Execution
+# REPRIORITIZATION (2026-02-09): Machine-Specific Execution Strategy
+
+execution_strategy_2026_02_09:
+  authority: "Intelligent Cross-Machine Architecture Review"
+  status: "READY FOR DEPLOYMENT"
+  windows_primary:
+    - "Phase 53: LENS Pipeline Wiring & Optimization (8 days)"
+    - "Phase 54: Intelligence Enforcement Validation (5 days)"
+    - "Focus: Python AST analysis, Git mining, intelligence caching"
+    - "Output: <50ms LENS latency, 95% intent accuracy"
+    - "Timeline: Weeks 1-2 (Feb 9-21)"
+  mac_primary:
+    - "Phase 52: Enterprise Orchestrator Suite S2-S7 (16 days)"
+    - "Phase 48: Registry Isolation & Multi-Tenant (6 days)"
+    - "Focus: Enterprise APIs, cloud-native patterns"
+    - "Output: Multi-tenant isolation, GitBackedRegistry"
+    - "Timeline: Weeks 1-3 (Feb 9-28)"
+  shared_prerequisites:
+    - "Phase 43-51: ✅ ALL COMPLETE"
+    - "Phase 47 (Registry consolidation): ✅"
+    - "Phase 51 (MCP-FIRST): ✅"
+    - "CCL async pre-warming: ✅"
+  conflict_analysis: "Zero conflicts (separate namespaces: phase-53-* vs phase-52-*)"
+  documentation: "REPRIORITIZATION-WINDOWS-MAC-2026-02-09.md"
+
 # New Feature: Machine/OS continuity tracking, auto-teardown→next-phase sequencing
 execution_queue:
   version: "1.0"
