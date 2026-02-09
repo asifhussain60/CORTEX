@@ -4710,22 +4710,31 @@ if not validate_design_boundary(current_mode="DESIGN", file_path="cortex/feature
 
 **Trigger Detection:** Before standard Design Flow, check for autonomous continuation intent.
 
-### Trigger Patterns
-- User says: "proceed", "continue", "autonomously", "bypass challenge", "immediately"
-- AND: Active plan exists in cortex-registry/_cortex-master/index.yaml with status IN_PROGRESS or PLANNED
-- AND: Next phase is clearly defined in plan file
+### Trigger Patterns (STRICT - Must Meet ALL Criteria)
+1. **Explicit Phase Reference:** User says "continue phase N" or "phase N stage X"
+   - AND: Phase N exists in cortex-registry/_cortex-master/index.yaml
+   - AND: Phase status is IN_PROGRESS or PLANNED
+   - AND: Next stage is clearly defined in phase file
+2. **Post-Challenge Confirmation:** User says "proceed" AFTER Challenge Gate displayed
+   - AND: challenge_shown_for_request = True (session state)
+   - AND: Same request hash as previously challenged request
+
+**FORBIDDEN Autonomous Triggers (Must Show Challenge First):**
+- ❌ "proceed with implementing..." (NEW exploratory work)
+- ❌ "implement feature X" (NEW implementation)
+- ❌ "autonomously implement..." (NEW work disguised as continuation)
 
 ### Autonomous Flow (CONDENSED)
 ```
-User: "proceed" / "continue"
+User: "continue phase 54" OR "proceed" (after challenge shown)
          ↓
-Load index.yaml → Find next phase (in-progress or planned)
+Validate: Explicit phase + registry check OR post-challenge confirmation
          ↓
-[AUTONOMOUS CONTINUATION DETECTED]
+[AUTONOMOUS CONTINUATION VALID]
          ↓
 Generate CONDENSED header (no verbose analysis)
          ↓
-Execute immediately (skip DoR, skip challenge, skip approval)
+Execute immediately (skip re-challenge, skip re-DoR)
          ↓
 Report results only
 ```
@@ -5106,20 +5115,40 @@ Response to user (via templates)
 
 **CRITICAL:** Must be the **FIRST STEP** in response output after LENS context gathering. Challenge appears BEFORE enhanced request, BEFORE solution planning, BEFORE any implementation discussion.
 
-**EXCEPTION:** Challenge is **AUTOMATICALLY BYPASSED** when AutonomousPlanExecutor detects continuation intent:
-- Patterns: "continue", "proceed", "phase N", "autonomously", "bypass challenge", "immediately"
-- Registry check: Next phase exists in _cortex-master/index.yaml
-- Output: Minimal autonomous header + immediate execution
+**EXCEPTION:** Challenge is **AUTOMATICALLY BYPASSED** in these SPECIFIC cases ONLY:
+1. **Phase Continuation:** User explicitly references existing phase ("continue phase 54", "phase 54 next stage")
+   - Registry check: Phase exists in _cortex-master/index.yaml with status IN_PROGRESS
+   - Evidence: Phase file shows incomplete stages
+2. **Post-Challenge Confirmation:** User says "proceed" AFTER Challenge Gate was displayed THIS SESSION
+   - Session state: challenge_shown_for_request = True
+   - Evidence: Challenge alternatives were presented in previous response
+
+**FORBIDDEN BYPASS PATTERNS (Must Show Challenge):**
+- ❌ "proceed with implementing..." (NEW exploratory request)
+- ❌ "implement feature X" (NEW implementation request)
+- ❌ "proceed with refactoring..." (NEW architectural change)
+- ❌ First-time "proceed" without prior Challenge Gate display
 
 **Flow Decision:**
 ```
 LENS Context Gathered
          ↓
-Check AutonomousPlanExecutor.should_bypass_challenge(user_request)
+Check Bypass Eligibility:
+  - Is this a phase continuation? (phase-N keywords + registry check)
+  - Was Challenge Gate already shown THIS SESSION for THIS request?
          ↓
-[BYPASS=True] → Generate autonomous header → Execute immediately (NO challenge, NO DoR)
-[BYPASS=False] → Continue to challenge generation (exploratory request)
+[BYPASS=True] → Generate autonomous header → Execute immediately (NO re-challenge)
+[BYPASS=False] → Generate Challenge Gate → Display → Await "proceed" confirmation
+         ↓
+After Challenge Displayed:
+  - Mark: challenge_shown_for_request = True
+  - Store: request_hash, alternatives_presented
+  - Await: User "proceed" trigger
+         ↓
+User says "proceed" → NOW execute (second "proceed" = confirmation)
 ```
+
+**KEY RULE:** First "proceed" with NEW request → Show Challenge. Second "proceed" after Challenge → Execute.
 
 ---
 
