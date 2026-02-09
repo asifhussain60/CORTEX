@@ -1,7 +1,31 @@
-# CORTEX Response Format Standards
-**Version:** 1.3 | **Updated:** 2026-02-08 | **Authority:** ENH-028 + ENH-032 + CORE-049 (Silent Autonomous)
+# 🎨 CORTEX Response Format Standards
+
+> **Version:** 1.4 | **Updated:** 2026-02-09 | **Authority:** ENH-028 + ENH-032 + CORE-049 + Concise Decision Mode
+
 
 ---
+
+
+## 📋 Document Purpose
+
+Unified response format for **all CORTEX operations** across modes: PRE-FLIGHT, AUDIT, DESIGN, DIGEST, META-AUDIT, PLAN.
+
+
+**Core Principles:**
+
+| Principle | Implementation |
+|-----------|----------------|
+| 🤫 **Silent by Default** | Progress bars only during execution |
+| 💬 **Chat Optimized** | Renders properly in GitHub Copilot Chat |
+| 📐 **Visual Hierarchy** | Generous spacing, semantic headings, emoji icons |
+| 📊 **Progressive Disclosure** | Executive → Tactical → Technical layering |
+| 🎯 **Icon Consistency** | Precise visual status indicators |
+| 🔢 **Numbered Actions** | Easy decision-making format |
+| ⚖️ **Adaptive Density** | Complexity matches request scope |
+
+
+---
+
 
 ## 🤖 SILENT AUTONOMOUS MODE (DEFAULT)
 
@@ -63,55 +87,40 @@ Fix: {fix_suggestion}
 
 ---
 
-## 🎯 Purpose
 
-This document defines the unified response format for all CORTEX operations across all modes (PRE-FLIGHT, AUDIT, DESIGN, DIGEST, META-AUDIT).
+## 🖥️ Chat UI Rendering Rules
 
-**Core Principles:**
-- **Silent by Default** — Progress bars only during execution
-- **Chat UI Compatibility** — Formats render properly in GitHub Copilot Chat panel
-- **Visual Hierarchy** — Generous spacing, H2/H3 headings, color-coded icons
-- **Semantic Layering** — Progressive disclosure (Executive → Tactical → Technical)
-- **Icon Consistency** — Visual status indicators with precise meaning
-- **Numbered Actions** — All user prompts use numbered format for ease
-- **Adaptive Density** — Response complexity matches request complexity
-- **Professional Presentation** — Clean, scannable, accessible
+### 📏 Spacing Guidelines
 
----
+| Context | Rule | Example |
+|---------|------|---------|
+| **Major Sections** | 3 blank lines before `##` | See section breaks in this doc |
+| **Subsections** | 2 blank lines before `###` | See subsection breaks |
+| **Lists** | 1 blank line before/after | See any bulleted list |
+| **Horizontal Rules** | 2 blank lines before/after | `---` separators |
+| **Paragraphs** | 1 blank line between | Standard spacing |
 
-## 🖥️ Chat UI Rendering Rules (CRITICAL)
 
-**GitHub Copilot Chat has specific rendering requirements:**
+### 📐 Heading Hierarchy
 
-### **1. Spacing for Readability**
+```markdown
+# 🎨 Document Title
+## 🔥 Major Section (##)
+### 📊 Subsection (###)
+#### 🔹 Sub-subsection (####)
+```
 
-- **2 blank lines** between major sections (H2 headings)
-- **1 blank line** before and after numbered lists
-- **1 blank line** before and after horizontal rules (`---`)
-- **1 blank line** between list items for visual breathing room
+**Rules:**
+- Always include emoji + space before text
+- 1 blank line before AND after all headings
+- Use semantic emoji matching section purpose
 
-### **2. Heading Structure**
 
-- Use `##` for major sections (renders as H2)
-- Use `###` for subsections (renders as H3)
-- Always include icon + space before heading text: `## 🔥 Section Title`
-- Blank line before AND after all headings
+### 🎨 Icon System (Semantic)
 
-### **3. Color-Coded Icons (Semantic)**
+| Ic📝 List Formatting
 
-| Icon | Purpose | Usage |
-|------|---------|-------|
-| 🔥 | **Critical/Urgent** | P0 issues, blocking problems |
-| ⚠️ | **Engineering Analysis** | Challenge sections, warnings |
-| 🎯 | **Decision Points** | User action required, next steps |
-| ✅ | **Success/Complete** | Completion confirmations, verified items |
-| 🔍 | **Analysis/Context** | Investigation results, findings |
-| 📊 | **Metrics/Data** | Tables, statistics, measurements |
-| 🚀 | **Implementation** | Execution, deployment, action items |
-
-### **4. List Formatting**
-
-**Numbered Lists:**
+#### Numbered Lists (Decision Points)
 ```markdown
 1️⃣ **`command`** — Description ✨ **Badge**
    └─ **Impact:** What happens next
@@ -120,53 +129,53 @@ This document defines the unified response format for all CORTEX operations acro
    └─ **Impact:** What happens next
 ```
 
-**Bullet Lists:**
+#### Bullet Lists (Information)
 ```markdown
 - 🟢 **Item 1** — Details here
-
 - 🔵 **Item 2** — Details here
-
 - ⚪ **Item 3** — Details here
 ```
 
-### **5. Horizontal Rules**
 
-Always surround with blank lines:
-```markdown
-[Content above]
+### 📊 Tables (Maximum 4 Columns)
 
-
----
-
-
-[Content below]
-```
-
-### **6. Tables**
-
-Keep tables simple (≤4 columns) for Chat UI:
 ```markdown
 | Column 1 | Column 2 | Column 3 |
 |----------|----------|----------|
 | Value    | Value    | Value    |
 ```
 
-### **7. Code Blocks**
+**Best Practices:**
+- ≤4 columns for Chat UI readability
+- Bold headers for emphasis
+- Use emoji in first column for visual scanning
 
-Use sparingly, prefer inline code (`backticks`) for commands:
+
+### 💻 Code Blocks (Use Sparingly)
+
+**Prefer:** `inline code` with backticks  
+**Avoid:** Large code blocks in chat responses
+
+```markdown
+**Command:** `cortex_process_request`
+**Not:** Triple-backtick blocks (breaks flow)
+```
+
+
+---
+
+
+## 🎨 Icon System
+
+### 🔵 Status Iconsr inline code (`backticks`) for commands:
 ```markdown
 **Command:** `cortex_process_request`
 **Not:** ```python code block here ```
 ```
 
 ---
-
-## 🎨 Icon System (MANDATORY)
-
-### **Status Icons**
-
-| Icon | Meaning | Usage | Never Use For |
-|------|---------|-------|---------------|
+✅ Use For | ❌ Never Use For |
+|------|---------|-----------|-----------------|
 | 🟢 | **Completed** | Work finished, verified, tests passing | Planned work, in-progress |
 | 🔵 | **In Progress** | Actively executing (async operations) | Completed or planned |
 | ⚪ | **Planned** | Approved, not yet started | Completed work |
@@ -175,37 +184,48 @@ Use sparingly, prefer inline code (`backticks`) for commands:
 | ⚫ | **Skipped** | Intentionally bypassed with justification | Unintentional omissions |
 | ⏳ | **Pending** | Waiting for user input or dependency | Active work |
 
-### **Severity Prefixes**
+
+### 🚨 Severity Levels
 
 Use in section headers and issue lists:
 
-```markdown
-> **🔴 P0 — CRITICAL**  
-> System security or data integrity at risk
+| Priority | Icon | Meaning | Usage |
+|----------|------|---------|-------|
+| **P0** | 🔴 | **CRITICAL** | System security or data integrity at risk |
+| **P1** | 🟡 | **HIGH** | Production readiness blocked |
+| **P2** | 🔵 | **MEDIUM** | Quality or performance degradation |
+| **P3** | ⚪ | **LOW** | Cleanup or optimization opportunity |
 
-> **🟡 P1 — HIGH**  
-> Production readiness blocked
 
-> **🔵 P2 — MEDIUM**  
-> Quality or performance degradation
+### 📂 Operation Icons
 
-> **⚪ P3 — LOW**  
-> Cleanup or optimization opportunity
-```
+| Icon | Purpose | When to Use |
+|------|---------|-------------|
+| 🔥 | **Critical/Urgent** | P0 issues, blocking problems |
+| ⚠️ | **Engineering Analysis** | Challenge sections, warnings |
+| 🎯 | **Decision Points** | User action required, next steps |
+| ✅ | **Success/Complete** | Completion confirmations, verified items |
+| 🔍 | **Analysis/Context** | Investigation results, findings |
+| 📊 | **Metrics/Data** | Tables, statistics, measurements |
+| 🚀 | **Implementation** | Execution, deployment, action items |
+
 
 ---
 
-## 🔢 Numbered Action Prompts (MANDATORY)
 
-### **When to Show "Next Steps"**
+## 🔢 Numbered Action Prompts
+```
 
-**SHOW numbered options when:**
-- User must make a decision between alternative approaches
-- Analysis complete, awaiting implementation approval
-- Critical branching point in workflow
+---✅ When to Show Options
 
-**DO NOT SHOW when:**
-- ✅ Work is complete (use completion confirmation instead)
+| Show Options | Don't Show Options |
+|--------------|-------------------|
+| ✅ Decision between alternative approaches | ❌ Work is complete (use completion confirmation) |
+| ✅ Analysis complete, awaiting approval | ❌ During holistic implementation (no exit options) |
+| ✅ Critical branching point in workflow | ❌ Only one logical path forward (proceed automatically) |
+
+
+### 🎉 Completion Confirmation Formatonfirmation instead)
 - ❌ During holistic implementation (no exit options mid-flow)
 - ❌ Only one logical path forward (just proceed automatically)
 
@@ -226,7 +246,7 @@ When all work is done, use this instead of "Next Steps":
 - [Verification method 2]
 
 **Status:** All requested changes implemented and validated. No further action required.
-
+🎯 Standard Decision Format
 ---
 
 *Ready for your next request.*
@@ -244,20 +264,23 @@ When all work is done, use this instead of "Next Steps":
    └─ **Impact:** [What happens next]
 
 3️⃣ **`[command]`** — [Action description]
-   └─ **Impact:** [What happens next]
+   └🏗️ Holistic Implementation Principle
 
-**Quick Select:** Reply with number (1-3) or full command  
-**Need Help?** Type `explain` for detailed option comparison
-```
-
-### **Holistic Implementation Principle**
-
-During implementation:
-- ❌ **NO "cancel" or "stop" options** — Implementation runs to completion
-- ❌ **NO "skip" options** — All steps executed holistically
-- ✅ **Progress indicators only** — Show what's happening, not exit choices
+| Rule | Rationale |
+|------|-----------|
+| ❌ NO "cancel" or "stop" options | Implementation runs to completion |
+| ❌ NO "skip" options | All steps executed holistically |
+| ✅ Progress indicators only | Show what's happening, not exit choices |
 
 **Why:** Partial implementations create technical debt and inconsistent state
+
+
+---
+
+
+## 📊 ASCII Progress Bar Standards
+
+### 📈 Visual Progress Formatns create technical debt and inconsistent state
 
 ---
 
@@ -267,18 +290,19 @@ During implementation:
 
 For multi-step implementations, use visual ASCII progress bars:
 
-```markdown
-**Implementation Progress:**
+```m📏 Format Rules
 
-[██████████] 100% ✅ Task 1: Core implementation complete
-[████████░░]  80% 🔵 Task 2: Tests passing (8/10)
-[████░░░░░░]  40% 🔵 Task 3: Documentation in progress
-[░░░░░░░░░░]   0% ⚪ Task 4: Integration pending
-```
+| Element | Specification | Example |
+|---------|---------------|---------|
+| **Width** | 10 blocks fixed | `[██████████]` |
+| **Filled** | `█` character | Completed portions |
+| **Empty** | `░` character | Remaining work |
+| **Percentage** | Right-aligned, 3 chars | ` 0%`, ` 40%`, `100%` |
+| **Status Icon** | Before description | ✅🔵⚪🔴 |
+| **Description** | Clear task name + context | `S1: Core implementation complete` |
 
-### **Format Rules**
 
-| Element | Specification |
+### 🎚️ Phase Progress Hierarchy
 |---------|---------------|
 | **Width** | 10 blocks fixed `[██████████]` |
 | **Filled** | `█` character for completed |
@@ -319,21 +343,17 @@ For multi-step implementations, use visual ASCII progress bars:
 
 **Progress:** [████░░░░░░] 40%
 ```
+✅ When to Use Progress Bars
 
-### **When to Use Progress Bars**
+| ✅ Use For | ❌ Don't Use For |
+|-----------|-----------------|
+| Multi-step implementations (>3 steps) | Single-step operations |
+| Long-running operations | Analysis/audit results (use tables) |
+| Phase/sprint tracking | Conversational responses |
+| TDD cycles (RED→GREEN→REFACTOR) | Quick confirmations |
 
-✅ **Use progress bars for:**
-- Multi-step implementations (>3 steps)
-- Long-running operations
-- Phase/sprint tracking
-- TDD cycles (RED→GREEN→REFACTOR)
 
-❌ **Do NOT use for:**
-- Single-step operations
-- Analysis/audit results (use tables)
-- Conversational responses
-- Quick confirmations
-
+### 🏷️ Badge Types
 ### **Badge Types**
 
 | Badge | When to Use |
@@ -347,18 +367,23 @@ For multi-step implementations, use visual ASCII progress bars:
 ### **Maximum Options Rule**
 - **Limit:** 5 numbered choices per decision point
 - **Rationale:** Beyond 5, users face decision paralysis
-- **Overflow Solution:** Use categorization or phased decisions
+- **⚖️ Maximum Options Rule
+
+| Aspect | Guideline |
+|--------|-----------|
+| **Limit** | 5 numbered choices per decision point |
+| **Rationale** | Beyond 5, users face decision paralysis |
+| **Overflow Solution** | Use categorization or phased decisions |
+
 
 ---
 
+
 ## 📐 Semantic Layering Structure
 
-### **Layer 1: EXECUTIVE (Always Visible)**
-
-Must fit in one screen without scrolling.
-
+### 📋 Layer 1: EXECUTIVE (Always Visible)
 ```markdown
-## 🧠 CORTEX [Operation]
+## {icon} {title} [Operation]
 **Author:** Asif Hussain | **Orchestrator:** [Name] ✅
 
 ---
@@ -367,21 +392,22 @@ Must fit in one screen without scrolling.
 
 **Status:** [Status with icon]  
 **Scope:** [What was analyzed/modified]  
-**Critical Actions:** [0-3 items requiring immediate attention]
+**Cr📝 Narrative Flow Principle
 
-**Details:** [Expand sections below or type `full-report`]
-```
+Every response follows this linear structure:
 
-### **Narrative Flow Principle (MANDATORY)**
+| Step | Purpose | Rule |
+|------|---------|------|
+| 1️⃣ **CONTEXT** | What was requested | State the question/task |
+| 2️⃣ **ANALYSIS** | What was discovered | No repetition of context |
+| 3️⃣ **ACTION** | What was done | New information only |
+| 4️⃣ **RESULT** | Final state | Next steps OR completion confirmation |
 
-Every response MUST follow linear narrative structure:
+**❌ Anti-Pattern:** Repeating the same information in multiple sections  
+**✅ Correct Pattern:** Each section adds new information building on previous
 
-```
-1. CONTEXT — What was requested
-2. ANALYSIS — What was discovered (no repetition of context)
-3. ACTION — What was done (new information only)
-4. RESULT — Final state + next steps OR completion confirmation
-```
+
+### 📂 Layer 2: TACTICAL (Collapsible)
 
 **Anti-Pattern:** Repeating the same information in multiple sections  
 **Correct Pattern:** Each section adds new information building on previous sections
@@ -410,6 +436,91 @@ Use `<details>` tags for non-critical information:
 ---
 
 ## 🎭 Response Templates by Mode
+
+### **CONCISE DECISION Mode (NEW)**
+
+**Trigger:** User asks for review, verification, assessment, synthesis, or "does this address my concerns?"
+
+**Purpose:** Produce executive decision memos (NOT verbose audit logs) for review requests.
+
+**Output Structure (Fixed Order):**
+
+```markdown
+## [Decision Title]
+
+### ✅ Verdict
+[Yes|No|Partially|Verified with critical gaps] — [one-line reason]
+
+
+### 🧾 Key Findings
+- [Theme 1: highest-impact finding]
+- [Theme 2: critical insight]
+- [Theme 3: key observation]
+
+[3-6 bullets max, single-sentence preferred]
+
+
+### 🚨 Gaps & Risks *(only if they exist)*
+- [Gap 1: specific issue]
+- [Gap 2: specific issue]
+
+
+### 🧭 Recommendations
+**Primary:** [One recommended approach]
+
+**Alternative:** [One viable alternative] *(only if realistic)*
+
+[Brief comparison: extensibility, scalability, accuracy, efficiency]
+
+
+### 🎯 DoD Confidence
+DoD confidence: [X%] — [short reason].
+
+
+### ⚡ Execute now vs later
+
+**Execute now:**
+- [Highest-impact immediate action 1]
+- [Highest-impact immediate action 2]
+
+**Plan for later:**
+- [Structural/optimization work 1]
+- [Structural/optimization work 2]
+
+---
+
+**What was asked:** [brief]  
+**What was done:** [brief]  
+**What's next:** [brief]
+```
+
+**Format Rules:**
+- **Verdict:** One line, one of four options (Yes|No|Partially|Verified with critical gaps)
+- **Section Headers:** Use h3 headings (`###`) with emoji for Copilot Chat compatibility
+- **3-6 Bullets Max:** Per section, prefer single-sentence
+- **No Code Blocks:** Decision memos only
+- **No Questions:** End with closure, not open questions
+- **Themes Over Inventories:** Report highest-impact item per theme
+- **Smooth Memo Tone:** Not stitched audit fragments
+- **Generous Spacing:** 2 blank lines between sections for readability
+
+**Suppression List (FORBIDDEN):**
+- ❌ Tool usage narration ("searched", "read", "ran", "checked")
+- ❌ Log dumps, long inventories, exhaustive tables
+- ❌ Repeated facts across sections
+- ❌ Timelines, hour estimates, theatrical plans
+- ❌ Code blocks
+- ❌ Ending with questions
+
+**When to Use:**
+- Review/verify/assess intents
+- "Does this address concerns?" questions
+- Synthesis of analysis results
+- Final solution validation
+
+**Key Principle:** Decision memos for humans, not engineering diaries for machines.
+
+---
 
 ### **PRE-FLIGHT Mode**
 

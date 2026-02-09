@@ -211,7 +211,119 @@ Tests: 50/60 | Coverage: 89%
 
 **CORTEX** — **CO**gnitive **R**eal-**T**ime **EX**ecution System
 
-**Primary Prompt:** CORTEX.prompt.md in ## 📋 Quick Commands
+---
+
+## 🔀 INTELLIGENT PROMPT ROUTING (AUTO-DETECT)
+
+**Authority:** Strategy Pattern — Repository context determines prompt mode  
+**Detection:** Automatic on session start  
+**Enforcement:** Explicit mode selection based on repository structure
+
+### Detection Logic (MANDATORY)
+
+**Execute at session start:**
+
+```python
+# Step 1: Detect repository context
+import os
+from pathlib import Path
+
+workspace_root = Path(os.getcwd())
+cortex_marker = workspace_root / ".cortex"
+registry_marker = workspace_root / "cortex-registry"
+cortex_package = workspace_root / "cortex" / "__init__.py"
+
+# Step 2: Determine mode
+if cortex_marker.exists() or registry_marker.exists() or cortex_package.exists():
+    mode = "ARCHITECT"  # CORTEX repository development
+    prompt_file = ".github/prompts/cortex-architect.prompt.md"
+    header_icon = "🏛️"
+    header_title = "CORTEX Architect"
+else:
+    mode = "PRODUCTION"  # User's production repository
+    prompt_file = ".github/prompts/CORTEX.prompt.md"
+    header_icon = "🧠"
+    header_title = "CORTEX"
+
+# Step 3: Set environment variable for MCP tools
+os.environ["CORTEX_MODE"] = mode.lower()
+os.environ["CORTEX_HEADER_ICON"] = header_icon
+os.environ["CORTEX_HEADER_TITLE"] = header_title
+
+print(f"🔧 CORTEX Mode: {mode}")
+print(f"📄 Prompt: {prompt_file}")
+print(f"🎭 Header: {header_icon} {header_title}")
+```
+
+### Mode Characteristics
+
+| Aspect | ARCHITECT Mode 🏛️ | PRODUCTION Mode 🧠 |
+|--------|-------------------|--------------------|
+| **Trigger** | .cortex/ or cortex-registry/ or cortex/__init__.py detected | None of the above markers |
+| **Prompt File** | cortex-architect.prompt.md | CORTEX.prompt.md |
+| **Header** | 🏛️ CORTEX Architect | 🧠 CORTEX |
+| **Context** | CORTEX internal (registry, wiring, phases) | User domain (business logic, APIs) |
+| **Orchestrators** | Same (MasterOrchestrator, TDD, LENS, etc.) | Same (MasterOrchestrator, TDD, LENS, etc.) |
+| **MCP Tools** | Same (cortex_process_request, etc.) | Same (cortex_process_request, etc.) |
+| **Purpose** | Build/enhance CORTEX system | Implement user features |
+
+### Header Template (Both Modes)
+
+**Standard format for ALL responses:**
+
+```markdown
+## {icon} {title} {mode}
+**Author:** Asif Hussain | **Orchestrator:** {orchestrator_name} ✅
+
+---
+```
+
+**Examples:**
+```markdown
+# ARCHITECT Mode
+## 🏛️ CORTEX Architect IMPLEMENT
+**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
+
+---
+
+# PRODUCTION Mode
+## 🧠 CORTEX ANALYZE
+**Author:** Asif Hussain | **Orchestrator:** LENSSynthesis ✅
+
+---
+```
+
+### Shared Orchestration
+
+**Both modes use identical orchestration:**
+- MasterOrchestrator → IntentRouter
+- TDDOrchestrator (IMPLEMENT/FIX)
+- LENSSynthesis (ANALYZE)
+- EnforcementOrchestrator (Governance)
+- PlanOrchestrator (PLAN mode)
+- RefactoringOrchestrator (REFACTOR)
+
+**Only difference:** Context loading strategy
+- ARCHITECT: Load CORTEX-internal specs (registry, wiring)
+- PRODUCTION: Load user domain knowledge (business logic)
+
+### Verification
+
+**Session start output:**
+```
+🔧 CORTEX Session Initialization
+✅ Repository: d:\PROJECTS\CORTEX
+✅ Mode: ARCHITECT
+✅ Prompt: .github/prompts/cortex-architect.prompt.md
+✅ Header: 🏛️ CORTEX Architect
+✅ MCP Tools: 10 available
+
+🟢 CORTEX ready for ARCHITECT operations
+```
+
+---
+
+## 📋 Quick Commands
 
 | Command | Action |
 |---------|--------|

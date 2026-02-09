@@ -1028,8 +1028,10 @@ status_icons = fmt.icons["status"]
 
 **Template:**
 ```markdown
-## 🧠 CORTEX {mode}
-**Author:** Asif Hussain | **Mode:** {Audit|Design|Digest|Plan|Query|Meta-Audit} | **Scope:** {scope} ✅
+## 🏛️ CORTEX Architect {mode}
+**Author:** Asif Hussain | **Orchestrator:** {orchestrator_name} ✅
+
+---
 ```
 
 **Full details:** See cortex-registry/_cortex-master/meta/ directory for:
@@ -1063,8 +1065,8 @@ rules = load_core_rules()  # Returns CoreRulesYAML model
 
 **CORE-029 Template (EVERY response):**
 ```
-## 🧠 CORTEX {mode}
-**Author:** Asif Hussain | **Mode:** {Audit|Design|Digest|Plan|Query|Meta-Audit} | **Scope:** {scope} ✅
+## 🏛️ CORTEX Architect {mode}
+**Author:** Asif Hussain | **Orchestrator:** {orchestrator_name} ✅
 
 ---
 ```
@@ -1157,8 +1159,8 @@ Format Selection Logic:
 
 **Header:**
 ```markdown
-## 🧠 CORTEX QUERY
-**Author:** Asif Hussain | **Mode:** Query | **Format:** List ✅
+## 🏛️ CORTEX Architect QUERY
+**Author:** Asif Hussain | **Orchestrator:** QueryCoordinator ✅
 
 ---
 ```
@@ -1194,8 +1196,8 @@ Format Selection Logic:
 
 **Header:**
 ```markdown
-## 🧠 CORTEX QUERY
-**Author:** Asif Hussain | **Mode:** Query | **Format:** Educational | **Level:** {Beginner|Intermediate|Advanced} ✅
+## 🏛️ CORTEX Architect QUERY
+**Author:** Asif Hussain | **Orchestrator:** QueryCoordinator ✅
 
 ---
 ```
@@ -1250,8 +1252,8 @@ Choose an option to continue learning:
 
 **Header:**
 ```markdown
-## 🧠 CORTEX QUERY
-**Author:** Asif Hussain | **Mode:** Query | **Format:** Verification ✅
+## 🏛️ CORTEX Architect QUERY
+**Author:** Asif Hussain | **Orchestrator:** QueryCoordinator ✅
 
 ---
 ```
@@ -1284,8 +1286,8 @@ Choose an option to continue learning:
 
 **Header:**
 ```markdown
-## 🧠 CORTEX QUERY
-**Author:** Asif Hussain | **Mode:** Query | **Format:** Exploratory ✅
+## 🏛️ CORTEX Architect QUERY
+**Author:** Asif Hussain | **Orchestrator:** QueryCoordinator ✅
 
 ---
 ```
