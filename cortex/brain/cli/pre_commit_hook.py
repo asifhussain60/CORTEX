@@ -19,8 +19,8 @@ class PreCommitValidator:
     # Common references to AC-IDs in code
     REFERENCE_PATTERNS = [
         r'@pytest\.mark\.ac\(["\'](' + AC_ID_PATTERN + r')["\']',  # @pytest.mark.ac("AR-001")
-        r'#\s*(?Union[AC, GV]|AR|FR|ENH|NFR)[-_]?[0-9]{3}(?:[-_]?[0-9]{2})?',  # # AC-001
-        r'/\*.*?(?Union[AC, GV]|AR|FR|ENH|NFR)[-_]?[0-9]{3}(?:[-_]?[0-9]{2})?.*?\*/',  # /* AC-001 */
+        r'#\s*(?:AC|GV)|AR|FR|ENH|NFR)[-_]?[0-9]{3}(?:[-_]?[0-9]{2})?',  # # AC-001
+        r'/\*.*?(?:AC|GV)|AR|FR|ENH|NFR)[-_]?[0-9]{3}(?:[-_]?[0-9]{2})?.*?\*/',  # /* AC-001 */
     ]
     
     def __init__(self):

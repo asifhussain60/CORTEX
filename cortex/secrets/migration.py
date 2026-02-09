@@ -10,9 +10,9 @@ class SecretsMigrationDetector:
     """Detect secrets in configuration files"""
     
     SECRET_PATTERNS = {
-        "password": r"(?Union[password, passwd]|pwd)\s*[=:]\s*[\"']?([^\"'\s]+)[\"']?",
+        "password": r"(?:password|passwd)|pwd)\s*[=:]\s*[\"']?([^\"'\s]+)[\"']?",
         "api_key": r"(?:api[_-]?key|apikey)\s*[=:]\s*[\"']?([^\"'\s]+)[\"']?",
-        "aws_secret": r"(?Union[aws_secret, aws_key])\s*[=:]\s*[\"']?([^\"'\s]{40,})[\"']?",
+        "aws_secret": r"(?:aws_secret|aws_key))\s*[=:]\s*[\"']?([^\"'\s]{40,})[\"']?",
         "db_url": r"(?:database[_-]?url|db[_-]?url)\s*[=:]\s*[\"']?([^\"'\s]+)[\"']?"
     }
     

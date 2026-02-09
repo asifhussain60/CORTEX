@@ -293,7 +293,7 @@ class APIDiscovery(DiscoveryPlugin):
                 
                 # Flask @app.route or @router.route
                 flask_routes = re.findall(
-                    r'@(?Union[app, router])\.route\([\'"]([^\'"]+)[\'"](?:,\s*methods=\[([^\]]+)\])?\)',
+                    r'@(?:app|router))\.route\([\'"]([^\'"]+)[\'"](?:,\s*methods=\[([^\]]+)\])?\)',
                     content
                 )
                 for path, methods_str in flask_routes:

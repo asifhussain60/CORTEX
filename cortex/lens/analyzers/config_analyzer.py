@@ -127,7 +127,7 @@ class ConfigAnalyzer:
             "Store passwords in secure secret management system or use environment variables"
         ),
         "private_key": (
-            r"-----BEGIN (?Union[RSA, DSA] |EC )?PRIVATE KEY-----",
+            r"-----BEGIN (?:RSA|DSA) |EC )?PRIVATE KEY-----",
             "Private key embedded in config file",
             "Store private keys in secure key management system"
         ),

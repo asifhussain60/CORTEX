@@ -37,17 +37,13 @@ class OnboardAndDashboardResult:
     """
     status: OperationStatus
     repo_name: str
-    
-    # Onboarding results
     profile_created: bool
-    profile_path: Optional[str] = None
-    
-    # Dashboard results
     dashboard_created: bool
-    dashboard_path: Optional[str] = None
-    
-    # Registration results
     registry_updated: bool
+    
+    # Optional result paths
+    profile_path: Optional[str] = None
+    dashboard_path: Optional[str] = None
     
     # Execution metadata
     total_duration_seconds: float = 0.0
@@ -61,7 +57,7 @@ class OnboardAndDashboardResult:
     registration_error: Optional[str] = None
     
     # Audit trail
-    audit_trail: List[str] = None
+    audit_trail: List[str] = None  # type: ignore
     
     def __post_init__(self):
         if self.audit_trail is None:

@@ -110,7 +110,7 @@ class IntentCanonicalizer:
     
     # Scope extraction patterns
     SCOPE_PATTERNS = {
-        'file': r'(?Union[in, from]|at)\s+([a-zA-Z0-9_/\-]+\.py)',
+        'file': r'(?:in|from)|at)\s+([a-zA-Z0-9_/\-]+\.py)',
         'class': r'(?:the\s+)?([A-Z][a-zA-Z0-9_]+)\s+class',
         'function': r'(?:the\s+)?([a-z_][a-z0-9_]*)\s+function',
         'ac_id': r'AC[-_]?ID\s+([A-Z]{2,3}-\d{3}-\d{2})',

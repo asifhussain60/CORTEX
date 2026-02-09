@@ -144,7 +144,7 @@ class DebugAnalyzer:
             "severity": IssueSeverity.CRITICAL,
             "fix_template": "Ensure {0} is loaded before this script. Check script loading order in HTML.",
         },
-        r"Cannot read propert(?Union[y, ies]) ['\"](\w+)['\"] of (null|undefined)": {
+        r"Cannot read propert(?:y|ies)) ['\"](\w+)['\"] of (null|undefined)": {
             "type": IssueType.DOM_ERROR,
             "severity": IssueSeverity.HIGH,
             "fix_template": "Element is null/undefined when accessing '{0}'. Add null check or wait for DOM ready.",

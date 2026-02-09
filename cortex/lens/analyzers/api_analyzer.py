@@ -766,7 +766,7 @@ class APIAnalyzer:
                 content = py_file.read_text(encoding="utf-8")
                 
                 # Match @app.get("/path"), @router.post("/path"), etc.
-                route_pattern = r'@(?Union[app, router])\.(get|post|put|patch|delete)\(["\']([^"\']+)["\']\)'
+                route_pattern = r'@(?:app|router))\.(get|post|put|patch|delete)\(["\']([^"\']+)["\']\)'
                 matches = re.findall(route_pattern, content)
                 
                 for method, path in matches:
@@ -791,7 +791,7 @@ class APIAnalyzer:
                 content = py_file.read_text(encoding="utf-8")
                 
                 # Match @app.route("/path", methods=["GET"])
-                route_pattern = r'@(?Union[app, bp]|blueprint)\.route\(["\']([^"\']+)["\']\)'
+                route_pattern = r'@(?:app|bp)|blueprint)\.route\(["\']([^"\']+)["\']\)'
                 matches = re.findall(route_pattern, content)
                 
                 for path in matches:

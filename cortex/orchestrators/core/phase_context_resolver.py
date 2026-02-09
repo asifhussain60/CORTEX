@@ -67,7 +67,7 @@ class PhaseContextResolver:
     # Regex patterns for phase detection
     PHASE_PATTERNS = [
         (r"##\s+🚀\s+(?:Next\s+)?Phase\s+(?:Preview)?:?\s+Phase\s+(\d+)[:\s]+(.+?)(?:\n|$)", "numbered_section"),
-        (r"##\s+(?Union[Phase, PHASE])\s+(\d+)(?:/[A-Z])?:\s+(.+?)(?:\n|$)", "phase_header"),
+        (r"##\s+(?:Phase|PHASE))\s+(\d+)(?:/[A-Z])?:\s+(.+?)(?:\n|$)", "phase_header"),
         (r"\*\*Phase\s+(\d+)\*\*\s+\|\s+([^|]+)\s+\|", "table_row"),
         (r"\|\s+\*\*(\d+)\*\*\s+\|\s+(.+?)\s+\|", "alt_table_row"),
         (r"Phase\s+([A-Z])(?:\s|:|$)\s*(.+?)(?:\n|$)", "letter_phase"),
@@ -167,7 +167,7 @@ class PhaseContextResolver:
         """
         completion_patterns = [
             r"✅\s+Phase\s+(\d+)\s+GREEN",
-            r"Phase\s+(\d+).*?✅.*?(?Union[passing, complete])",
+            r"Phase\s+(\d+).*?✅.*?(?:passing|complete))",
             r"Phase\s+([A-Z])\s+.*?✅",
         ]
         
@@ -199,7 +199,7 @@ class PhaseContextResolver:
         
         # Look for "Remaining Phases" or "Queued" sections
         queued_section = re.search(
-            r"(?Union[Remaining, Queued]|Next)\s+Phases.*?\n(.*?)(?:\n\n|\n###|\Z)",
+            r"(?:Remaining|Queued)|Next)\s+Phases.*?\n(.*?)(?:\n\n|\n###|\Z)",
             content,
             re.IGNORECASE | re.DOTALL
         )

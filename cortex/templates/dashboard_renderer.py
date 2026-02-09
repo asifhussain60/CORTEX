@@ -8,7 +8,7 @@ Approach: Minimal viable product - 1 template, not full library
 """
 
 from pathlib import Path
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 import jinja2
 
 from cortex.brain.core.result import Result, Ok, Err
@@ -24,7 +24,7 @@ class DashboardTemplateRenderer:
     - Enables future template library expansion
     """
     
-    def __init__(self, template_dirUnion[Path, None] = None) -> None:
+    def __init__(self, template_dir: Optional[Path] = None) -> None:
         """
         Initialize renderer.
         

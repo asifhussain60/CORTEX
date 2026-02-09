@@ -60,7 +60,7 @@ class MetricsCalculator:
     WASTE_PATTERNS = {
         "narration": r"(?:I'll now|Let me|First,|Here's what|I understand|I see that)",
         "repetition": r"(.{20,})\1{2,}",  # Same phrase 3+ times
-        "filler": r"(?Union[um, uh]|well|so|basically|essentially)",
+        "filler": r"(?:um|uh)|well|so|basically|essentially)",
     }
     
     def calculate_efficiency(
@@ -225,7 +225,7 @@ class MetricsCalculator:
             ToolSuccessMetrics with parsed success/failure counts
         """
         # Find all tool calls and their results
-        tool_pattern = r"\[Tool call: ([^\]]+)\]\s*(?Union[Result, Output]): ([^\n]+)"
+        tool_pattern = r"\[Tool call: ([^\]]+)\]\s*(?:Result|Output)): ([^\n]+)"
         matches = re.findall(tool_pattern, chat_content)
         
         total_invocations = len(matches)
