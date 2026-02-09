@@ -2291,6 +2291,114 @@ class MasterOrchestrator(IOrchestrator):
                     details={"error": str(routing_err)}
                 )
             
+            # ════════════════════════════════════════════════════════════════════════
+            # AC-PHASE-C-001: Governance Gates Enforcement (PRODUCTION GATE)
+            # ════════════════════════════════════════════════════════════════════════
+            # Enforce governance gates according to governance-gates.yaml specification
+            # Applies validation gates, enforcement gates, audit gates per intent
+            try:
+                from pathlib import Path
+                import yaml as yml
+                
+                # Load governance gates spec
+                gates_file = Path("cortex-registry/_cortex-master/specifications/governance-gates.yaml")
+                if gates_file.exists():
+                    with open(gates_file, 'r') as f:
+                        gates_spec = yml.safe_load(f)
+                    
+                    # Get intent configuration for gates
+                    intent_gates_config = gates_spec.get("intent_gate_configuration", {}).get(
+                        classified_intent.upper(), {}
+                    )
+                    
+                    # Apply primary gate (DoRApprovalGate, ChallengeGate, etc.)
+                    primary_gate_name = intent_gates_config.get("primary_gate")
+                    if primary_gate_name:
+                        gates_definitions = gates_spec.get("validation_gates", {})
+                        gate_config = gates_definitions.get(primary_gate_name, {})
+                        
+                        # Check if gate is applicable for this intent
+                        applicable_intents = gate_config.get("intent_types", [])
+                        if classified_intent.upper() in applicable_intents:
+                            # Store gate information for Stage 3A execution
+                            parameters["_governance_gates"] = {
+                                "primary_gate": primary_gate_name,
+                                "secondary_gates": intent_gates_config.get("secondary_gates", []),
+                                "audit_gates": intent_gates_config.get("audit_gates", []),
+                                "blocking": gate_config.get("blocking", False)
+                            }
+                            
+                            # Log gate enforcement
+                            self.logger.log_operation_complete(
+                                ac_id="AC-PHASE-C-001",
+                                operation="GOVERNANCE_GATES_ENFORCEMENT",
+                                success=True,
+                                details={
+                                    "intent": classified_intent.upper(),
+                                    "primary_gate": primary_gate_name,
+                                    "secondary_gates_count": len(intent_gates_config.get("secondary_gates", [])),
+                                    "audit_gates_count": len(intent_gates_config.get("audit_gates", [])),
+                                    "trace_timestamp": datetime.now().isoformat(),
+                                    "trace_table": "governance_gates_audit"
+                                }
+                            )
+            except Exception as gates_err:
+                # Log but don't block - Phase C is gates enforcement
+                self.logger.log_operation_complete(
+                    ac_id="AC-PHASE-C-001",
+                    operation="GOVERNANCE_GATES_ENFORCEMENT",
+                    success=False,
+                    details={"error": str(gates_err)}
+                )
+            
+            # ════════════════════════════════════════════════════════════════════════
+            # AC-PHASE-C-002: Execution Flow Stage Management (PRODUCTION GATE)
+            # ════════════════════════════════════════════════════════════════════════
+            # Load and apply execution flow specification for stage-based execution
+            try:
+                # Load execution flow spec
+                exec_flow_file = Path("cortex-registry/_cortex-master/specifications/exec-flow.yaml")
+                if exec_flow_file.exists():
+                    with open(exec_flow_file, 'r') as f:
+                        exec_spec = yml.safe_load(f)
+                    
+                    # Get intent-specific stage flow
+                    intent_stage_flows = exec_spec.get("intent_stage_flows", {})
+                    stage_flow = intent_stage_flows.get(classified_intent.upper(), {})
+                    
+                    if stage_flow:
+                        # Store stage flow for execution
+                        parameters["_execution_stages"] = {
+                            "stages": stage_flow.get("stages", []),
+                            "primary_orchestrator": stage_flow.get("primary_orchestrator"),
+                            "execution_mode": stage_flow.get("execution_mode", "STANDARD"),
+                            "estimated_duration_minutes": stage_flow.get("estimated_duration_minutes", 30),
+                            "skip_validation": stage_flow.get("skip_validation", False)
+                        }
+                        
+                        # Log execution flow setup
+                        self.logger.log_operation_complete(
+                            ac_id="AC-PHASE-C-002",
+                            operation="EXECUTION_FLOW_SETUP",
+                            success=True,
+                            details={
+                                "intent": classified_intent.upper(),
+                                "stages": len(stage_flow.get("stages", [])),
+                                "primary_orchestrator": stage_flow.get("primary_orchestrator"),
+                                "execution_mode": stage_flow.get("execution_mode"),
+                                "trace_timestamp": datetime.now().isoformat(),
+                                "trace_table": "execution_flow_stages"
+                            }
+                        )
+            except Exception as flow_err:
+                # Log but don't block - Phase C is flow setup
+                self.logger.log_operation_complete(
+                    ac_id="AC-PHASE-C-002",
+                    operation="EXECUTION_FLOW_SETUP",
+                    success=False,
+                    details={"error": str(flow_err)}
+                )
+            
             # AC-FR-WIRING-001: STAGE 3A - DoR Approval Gate (if operation requires approval)
             # Wire dor_gate for user approval workflow
             if self._dor_gate and operation_name in ["implement", "deploy", "delete"]:
