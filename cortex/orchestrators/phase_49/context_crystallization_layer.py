@@ -139,8 +139,25 @@ class ContextCrystallizationLayer(IOrchestrator):
         self._result: Optional[CrystallizedContext] = None
         self._pending_file_path: Optional[str] = None
         self._request_id: Optional[str] = None
+        self._intelligence_cache: Dict[str, Any] = {}  # Phase 54 S5 integration
 
         logger.info("AC_START: AC-PHASE49-S1-001 ContextCrystallizationLayer initialized")
+
+    def get_intelligence_cache(self) -> Dict[str, Any]:
+        """
+        Get pre-warmed intelligence context cache (Phase 54 S5 integration).
+        
+        Returns dict of unified intelligence contexts keyed by intent type:
+        {
+            "IMPLEMENT": UnifiedIntelligenceContext(...),
+            "FIX": UnifiedIntelligenceContext(...),
+            "ANALYZE": UnifiedIntelligenceContext(...),
+            "GENERIC": UnifiedIntelligenceContext(...),
+        }
+        
+        Authority: Phase 54 S5 - CCL Intelligence Integration
+        """
+        return self._intelligence_cache
 
     def prefetch_async(
         self,
@@ -215,13 +232,14 @@ class ContextCrystallizationLayer(IOrchestrator):
         - Phase A: Rules cache (50ms)
         - Phase B: LENS warmer (100-200ms if file given)
         - Phase C: Infrastructure detection (50ms)
+        - Phase D: Intelligence warming (Phase 54 S5 integration, <50ms)
         
         Returns:
             CrystallizedContext with all pre-warmed data
         """
         start_time = asyncio.get_event_loop().time()
 
-        logger.info(f"[CCL._run_prefetch_phases] Starting Phase A/B/C parallel execution")
+        logger.info(f"[CCL._run_prefetch_phases] Starting Phase A/B/C/D parallel execution")
 
         # Run phases in parallel
         tasks = []
@@ -235,6 +253,9 @@ class ContextCrystallizationLayer(IOrchestrator):
         if self.enable_infra_detection:
             tasks.append(self._phase_c_infra_detection())
 
+        # Phase D: Intelligence warming (Phase 54 S5)
+        tasks.append(self._phase_d_intelligence_warming())
+
         # Wait for all phases (or timeout individually)
         results = await asyncio.gather(*tasks, return_exceptions=True)
 
@@ -243,10 +264,18 @@ class ContextCrystallizationLayer(IOrchestrator):
 
         logger.info(f"[CCL._run_prefetch_phases] All phases complete (latency: {latency_ms}ms)")
 
-        # Unpack results
-        rules_cache_result = results[0] if len(results) > 0 else {}
-        lens_result = results[1] if len(results) > 1 else LENSContext(False, False)
-        infra_result = results[2] if len(results) > 2 else InfrastructureContext("dev", [])
+        # Unpack results (Phase D is always last now)
+        result_idx = 0
+        rules_cache_result = results[result_idx] if self.enable_rules_cache else {}
+        result_idx += 1 if self.enable_rules_cache else 0
+        
+        lens_result = results[result_idx] if self.enable_lens_warmer else LENSContext(False, False)
+        result_idx += 1 if self.enable_lens_warmer else 0
+        
+        infra_result = results[result_idx] if self.enable_infra_detection else InfrastructureContext("dev", [])
+        result_idx += 1 if self.enable_infra_detection else 0
+        
+        intelligence_result = results[result_idx] if len(results) > result_idx else {}
 
         # Handle exceptions gracefully
         if isinstance(rules_cache_result, Exception):
@@ -261,17 +290,32 @@ class ContextCrystallizationLayer(IOrchestrator):
             logger.warning(f"[CCL] Phase C failed: {infra_result}")
             infra_result = InfrastructureContext("dev", [])
 
-        # Create crystallized context
+        if isinstance(intelligence_result, Exception):
+            logger.warning(f"[CCL] Phase D failed: {intelligence_result}")
+            intelligence_result = {}
+
+        # Store intelligence cache for MCP tool access
+        self._intelligence_cache = intelligence_result.get("intelligence_cache", {})
+        
+        # Create crystallized context (store intelligence in rules_cache for now)
+        rules_cache_with_intelligence = {
+            **rules_cache_result,
+            "_intelligence_context": intelligence_result,
+        }
+        
         ctx = CrystallizedContext(
             timestamp=datetime.now(),
-            rules_cache=rules_cache_result,
+            rules_cache=rules_cache_with_intelligence,
             lens_context=lens_result,
             infrastructure_context=infra_result,
             prefetch_latency_ms=latency_ms,
             cache_hit=False,  # Will be determined by Phase A
         )
 
-        logger.info(f"AC_COMPLETE: AC-PHASE49-S1-001 ✅ CrystallizedContext ready")
+        logger.info(
+            f"AC_COMPLETE: AC-PHASE54-S5-001 + AC-PHASE49-S1-001 ✅ "
+            f"CrystallizedContext ready with {len(self._intelligence_cache)} cached intents"
+        )
         return ctx
 
     async def _phase_a_rules_cache(self) -> Dict[str, Any]:
@@ -326,6 +370,66 @@ class ContextCrystallizationLayer(IOrchestrator):
 
         logger.info("[CCL.Phase_C] Infrastructure context ready")
         return infra
+
+    async def _phase_d_intelligence_warming(self) -> Dict[str, Any]:
+        """
+        Phase D: Pre-warm unified intelligence context (Phase 54 S5 integration).
+        
+        Authority: Phase 54 S5 - CCL Integration enhancement
+        Purpose: Cache unified intelligence context for MCP tool calls
+        Target: <50ms latency, 70% cache hit rate on repeat calls
+        
+        Returns:
+            Dict with synthesized intelligence context + cache metadata
+        """
+        try:
+            logger.info("[CCL.Phase_D] Pre-warming unified intelligence context...")
+            
+            from cortex.brain.knowledge.knowledge_synthesis_engine import get_synthesis_engine
+            from cortex.mcp.middleware.intelligence_gate import IntelligenceGate
+            
+            start = asyncio.get_event_loop().time()
+            
+            # Create synthesis engine and gate
+            synthesis_engine = get_synthesis_engine()
+            gate = IntelligenceGate(synthesis_engine)
+            
+            # Synthesize context for common intents
+            intelligence_cache = {}
+            for intent in ["IMPLEMENT", "FIX", "ANALYZE", "GENERIC"]:
+                try:
+                    context = synthesis_engine.synthesize_unified_context(
+                        intent_type=intent,
+                        file_path=self._pending_file_path,
+                    )
+                    intelligence_cache[intent] = context
+                    logger.debug(f"[CCL.Phase_D] Pre-warmed intelligence for intent: {intent}")
+                except Exception as e:
+                    logger.warning(f"[CCL.Phase_D] Failed to warm {intent}: {e}")
+            
+            # Calculate latency
+            latency_ms = int((asyncio.get_event_loop().time() - start) * 1000)
+            
+            logger.info(
+                f"AC_PHASE54-S5-001: Intelligence warming complete | "
+                f"Latency={latency_ms}ms | Cached_intents={len(intelligence_cache)}"
+            )
+            
+            return {
+                "intelligence_cache": intelligence_cache,
+                "warmup_latency_ms": latency_ms,
+                "cache_hit_count": 0,  # Will be updated during requests
+                "request_id": self._request_id,
+            }
+            
+        except Exception as e:
+            logger.error(f"[CCL.Phase_D] Intelligence warming failed: {e}", exc_info=True)
+            return {
+                "intelligence_cache": {},
+                "warmup_latency_ms": 0,
+                "cache_hit_count": 0,
+                "error": str(e),
+            }
 
     # ========================================================================
     # IOrchestrator Implementation
