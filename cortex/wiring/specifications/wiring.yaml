@@ -1250,6 +1250,41 @@ orchestrators:
         phase: "48"
         stage: "5"
 
+    # Phase 49 S1: Context Crystallization Layer (CCL)
+    - name: "ContextCrystallizationLayer"
+      module: "cortex.orchestrators.phase_49.context_crystallization_layer"
+      class: "ContextCrystallizationLayer"
+      tier: 3
+      priority: 89
+      dependencies:
+        - "PromptEnhancementOrchestrator"
+        - "HolisticValidationOrchestrator"
+      capabilities:
+        - async_context_prefetch
+        - rules_cache_warming
+        - lens_context_preparation
+        - infrastructure_detection
+        - non_blocking_execution
+      health_check: "validate"
+      mcp_adapter: "ContextCrystallizationLayerAdapter"
+      description: "Async context pre-warming layer with 300ms SLA timeout (Phase 49 S1)"
+      mcp_tools:
+        - "cortex_ccl_prefetch"
+        - "cortex_ccl_get_crystallized_context"
+        - "cortex_ccl_get_rules"
+      governance:
+        - "CORE-035"
+        - "CORE-049"
+      version: "1.0.0"
+      metadata:
+        icon: "⚡"
+        stages: 4
+        intelligence: ["lens", "knowledge", "infrastructure"]
+        phase: "49"
+        stage: "1"
+        sla_target_ms: 300
+        fallback_timeout_ms: 500
+
 # -------------------------------------------------------------------------
 # DEPENDENCY VALIDATION RULES
 # -------------------------------------------------------------------------
