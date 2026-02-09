@@ -102,6 +102,18 @@ except ImportError:
     Role = None
     PHASE_34_AVAILABLE = False
 
+# Phase 51-52: Import AgentRulesInterpreter for rules-driven orchestrator routing
+# AC-PHASE52-001: Rules-driven ExecutionDirective generation and routing
+try:
+    from cortex.agents.core.agent_rules_interpreter import (
+        AgentRulesInterpreter,
+        ExecutionDirective,
+    )
+except ImportError:
+    # Fallback if module not accessible
+    AgentRulesInterpreter = None
+    ExecutionDirective = None
+
 # Phase 35: Import autonomous execution components for continuation detection & progress bars
 # AC-PHASE-35-001: Autonomous continuation detection (R1)
 # AC-PHASE-35-002: ASCII progress bar integration (R2)
@@ -2020,6 +2032,71 @@ class MasterOrchestrator(IOrchestrator):
                         operation="INTENT_CLASSIFICATION_FAILED",
                         success=False,
                         details={"error": str(intent_err)}
+                    )
+            
+            # ═══════════════════════════════════════════════════════════════════════
+            # AC-PHASE52-001: Agent Rules Interpreter Integration
+            # Generate ExecutionDirective with rules-driven constraints before delegation
+            # ═══════════════════════════════════════════════════════════════════════
+            execution_directive = None
+            if AgentRulesInterpreter is not None:
+                try:
+                    from pathlib import Path
+                    registry_path = Path("cortex-registry/_cortex-master")
+                    
+                    interpreter = AgentRulesInterpreter(registry_path)
+                    
+                    # Determine agent ID from operation context
+                    agent_id = parameters.get("agent_id", "cortex-architect")
+                    request_text = f"{operation_name}: {str(parameters.get('request', ''))}"
+                    
+                    # Detect execution context
+                    from cortex.agents.core.agent_rules_interpreter import ExecutionContext
+                    context = ExecutionContext.PRODUCTION_REPO
+                    if parameters.get("cortex_internal", False):
+                        context = ExecutionContext.CORTEX_INTERNAL
+                    
+                    # Interpret request and generate directive
+                    directive_result = interpreter.interpret_agent_request(
+                        agent_id=agent_id,
+                        request=request_text,
+                        context=context,
+                    )
+                    
+                    if directive_result.is_ok():
+                        execution_directive = directive_result.unwrap()
+                        
+                        # Log directive generation
+                        self.logger.log_operation_complete(
+                            ac_id="AC-PHASE52-001",
+                            operation="EXECUTION_DIRECTIVE_GENERATED",
+                            success=True,
+                            details={
+                                "agent_id": execution_directive.agent_id,
+                                "target_orchestrator": execution_directive.target_orchestrator,
+                                "rules": execution_directive.rule_id,
+                                "constraints_count": len(execution_directive.constraints),
+                                "context": execution_directive.context.value,
+                            }
+                        )
+                        
+                        # Store directive in parameters for downstream use
+                        parameters["_execution_directive"] = execution_directive
+                    else:
+                        # Log but don't block - fall back to standard routing
+                        self.logger.log_operation_complete(
+                            ac_id="AC-PHASE52-001",
+                            operation="EXECUTION_DIRECTIVE_FAILED",
+                            success=False,
+                            details={"error": directive_result.error}
+                        )
+                except Exception as directive_err:
+                    # Log but don't block - fall back to standard routing
+                    self.logger.log_operation_complete(
+                        ac_id="AC-PHASE52-001",
+                        operation="EXECUTION_DIRECTIVE_ERROR",
+                        success=False,
+                        details={"error": str(directive_err)}
                     )
             
             # CORE-002: Pre-execution artifact validation gate

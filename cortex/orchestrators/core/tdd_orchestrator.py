@@ -251,6 +251,65 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
             f"StandardsResolver (Phase 27)"
         )
 
+    def execute_with_directive(
+        self,
+        directive: 'ExecutionDirective',
+        context: Dict[str, Any]
+    ) -> Result:
+        """
+        Execute TDD workflow with ExecutionDirective from Phase 52.
+        
+        AC-PHASE52-002: TDDOrchestrator accepts ExecutionDirective
+        
+        Applies constraints from directive during RED→GREEN→REFACTOR:
+        - RED phase: Apply pattern constraints from directive.constraints
+        - GREEN phase: Implement minimal code to pass tests
+        - REFACTOR phase: Validate against rules from directive.rule_id
+        
+        Args:
+            directive: ExecutionDirective from AgentRulesInterpreter
+            context: Execution context with module_path, etc.
+        
+        Returns:
+            Result with TDD execution outcome
+        """
+        try:
+            # Log directive application
+            logger.info(
+                f"TDD executing with directive: "
+                f"agent={directive.agent_id}, "
+                f"rules={directive.rule_id}, "
+                f"context={directive.context.value if hasattr(directive.context, 'value') else str(directive.context)}"
+            )
+            
+            # Store directive in context for phase methods to access
+            context["_execution_directive"] = directive
+            context["_rule_constraints"] = directive.constraints
+            
+            # Apply pattern constraints from directive
+            for constraint in directive.constraints:
+                if constraint.constraint_type == "pattern":
+                    context.setdefault("_patterns_to_enforce", []).append(constraint.value)
+            
+            # Log constraint application
+            if context.get("_patterns_to_enforce"):
+                logger.debug(
+                    f"Applied {len(context['_patterns_to_enforce'])} pattern constraints from directive"
+                )
+            
+            # Execute TDD cycle through base protocol
+            # This will run: LENS → Security → Challenge → DoR → TDD domain logic
+            result = self.execute_with_protocol(
+                user_request=context.get("request", ""),
+                context=context
+            )
+            
+            return result
+            
+        except Exception as e:
+            logger.error(f"TDD execution with directive failed: {str(e)}")
+            return Err(f"TDD execution failed: {str(e)}")
+
     def _run_pre_execution_brittleness_scan(self, context: Dict[str, Any]) -> None:
         """
         Run BrittlenessScanner before TDD execution (AC-PHASE24-005).
