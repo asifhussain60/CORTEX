@@ -1107,6 +1107,149 @@ orchestrators:
           - "ENH-056"
           - "ENH-057"
 
+    # Phase 48 S1: Holistic Validation Orchestrator
+    - name: "HolisticValidationOrchestrator"
+      module: "cortex.orchestrators.holistic.holistic_validation_orchestrator"
+      class: "HolisticValidationOrchestrator"
+      tier: 3
+      priority: 84
+      dependencies:
+        - "LENSSynthesis"
+        - "MasterOrchestrator"
+      capabilities:
+        - holistic_validation
+        - registry_analysis
+        - architectural_drift_detection
+        - orchestrator_consistency_check
+      health_check: "validate_phase"
+      mcp_adapter: "HolisticValidationAdapter"
+      description: "Cross-system validation to prevent regressions and ensure architectural coherence (Phase 48 S1)"
+      mcp_tools:
+        - "cortex_validate_holistic"
+      governance:
+        - "CORE-035"
+        - "CORE-048"
+      version: "1.0.0"
+      metadata:
+        icon: "🔍"
+        stages: 3
+        intelligence: ["lens", "knowledge"]
+        phase: "48"
+        stage: "1"
+
+    # Phase 48 S2: Dependency Graph Generator
+    - name: "DependencyGraphGenerator"
+      module: "cortex.orchestrators.holistic.dependency_graph"
+      class: "DependencyGraphGenerator"
+      tier: 3
+      priority: 85
+      dependencies:
+        - "HolisticValidationOrchestrator"
+      capabilities:
+        - dependency_analysis
+        - impact_assessment
+        - circular_dependency_detection
+        - duplication_detection
+      health_check: "generate_graph"
+      mcp_adapter: "DependencyGraphAdapter"
+      description: "Analyzes orchestrator dependencies for CORE-035 compliance (Phase 48 S2)"
+      mcp_tools:
+        - "cortex_dependency_graph"
+      governance:
+        - "CORE-035"
+      version: "1.0.0"
+      metadata:
+        icon: "🔗"
+        stages: 3
+        intelligence: ["lens"]
+        phase: "48"
+        stage: "2"
+
+    # Phase 48 S3: Challenge Gate Orchestrator
+    - name: "ChallengeGateOrchestrator"
+      module: "cortex.orchestrators.holistic.challenge_gate"
+      class: "ChallengeGateOrchestrator"
+      tier: 3
+      priority: 86
+      dependencies:
+        - "DependencyGraphGenerator"
+      capabilities:
+        - challenge_generation
+        - alternative_analysis
+        - decision_gating
+        - mandatory_approval_enforcement
+      health_check: "generate_challenges"
+      mcp_adapter: "ChallengeGateAdapter"
+      description: "Pre-implementation challenge generation with alternatives (Phase 48 S3, CORE-048 MANDATORY)"
+      mcp_tools:
+        - "cortex_challenge_gate"
+      governance:
+        - "CORE-048"
+      version: "1.0.0"
+      metadata:
+        icon: "🛡️"
+        stages: 4
+        intelligence: ["lens", "knowledge"]
+        phase: "48"
+        stage: "3"
+
+    # Phase 48 S4: CORTEX Brain Integration
+    - name: "CortexBrainIntegrationOrchestrator"
+      module: "cortex.orchestrators.holistic.cortex_brain_integration"
+      class: "CortexBrainIntegrationOrchestrator"
+      tier: 3
+      priority: 87
+      dependencies:
+        - "ChallengeGateOrchestrator"
+      capabilities:
+        - brain_health_check
+        - context_injection
+        - knowledge_synthesis
+        - multi_session_coordination
+      health_check: "check_brain_health"
+      mcp_adapter: "BrainIntegrationAdapter"
+      description: "Integrates CORTEX brain state with validation pipeline (Phase 48 S4)"
+      mcp_tools:
+        - "cortex_brain_health"
+      governance:
+        - "CORE-035"
+      version: "1.0.0"
+      metadata:
+        icon: "🧠"
+        stages: 3
+        intelligence: ["lens", "knowledge"]
+        phase: "48"
+        stage: "4"
+
+    # Phase 48 S5: Prompt Enhancement Orchestrator
+    - name: "PromptEnhancementOrchestrator"
+      module: "cortex.orchestrators.holistic.prompt_enhancement"
+      class: "PromptEnhancementOrchestrator"
+      tier: 3
+      priority: 88
+      dependencies:
+        - "CortexBrainIntegrationOrchestrator"
+      capabilities:
+        - prompt_injection
+        - context_optimization
+        - response_template_selection
+        - dynamic_guidance_generation
+      health_check: "enhance_prompts"
+      mcp_adapter: "PromptEnhancementAdapter"
+      description: "Enhances prompts with context from validation and challenge gates (Phase 48 S5)"
+      mcp_tools:
+        - "cortex_enhance_prompt"
+      governance:
+        - "CORE-029"
+        - "CORE-048"
+      version: "1.0.0"
+      metadata:
+        icon: "📝"
+        stages: 3
+        intelligence: ["lens", "knowledge"]
+        phase: "48"
+        stage: "5"
+
 # -------------------------------------------------------------------------
 # DEPENDENCY VALIDATION RULES
 # -------------------------------------------------------------------------
