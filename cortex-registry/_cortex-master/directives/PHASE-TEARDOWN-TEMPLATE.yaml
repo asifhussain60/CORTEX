@@ -1,0 +1,254 @@
+---
+# Phase Teardown Template
+# Authority: Autonomous Execution with Machine Continuity (Phase 56 Enhancement)
+# Usage: Include this template in all phase YAML files
+
+# Example: In phase-52-enterprise-orchestrator-suite.yaml, add:
+
+teardown:
+  version: "1.0"
+  enabled: true
+  auto_chain_next_phase: true
+  
+  # On successful completion, execute teardown sequence
+  on_success:
+    - checkpoint_preservation: |
+        # Save final state for potential resume/inspection
+        - Export test results (JUnit XML, JSON)
+        - Export coverage report (lcov.info, HTML)
+        - Export artifacts (built packages, generated code)
+        - Export execution metrics (duration, token usage, etc.)
+        - Compress and archive to execution/checkpoints/{phase_id}/
+        - Note: Don't delete anything - might be needed for troubleshooting
+    
+    - metrics_collection: |
+        # Collect execution metrics for observability
+        - Total duration: recorded from initiated_timestamp to now
+        - Test statistics: passed/failed/skipped counts
+        - Coverage delta: compare to baseline
+        - Performance: average stage duration vs estimate
+        - Token usage (if available from MCP)
+        - Artifact sizes: before/after phase
+        - Machine info: hostname, OS, Python version
+        - Execution environment: pytest markers, warnings
+    
+    - next_phase_detection: |
+        # Determine what to execute next
+        - Load phase metadata: next_phase_on_completion
+        - If null: This is final phase, exit
+        - Else: next_phase_id = phase.next_phase_on_completion
+    
+    - machine_compatibility_check: |
+        # Verify next phase can run on current machine
+        - Load next phase execution record
+        - Get next_phase.machine_should_continue_on
+        - Compare to current_machine_identity()
+        - If matches (or null): Can execute
+        - Else: Flag "waiting_for_machine" in queue
+    
+    - parallel_phases_check: |
+        # If next phase has parallel siblings, queue them too
+        - Load phase.parallel_phases list
+        - For each parallel_phase_id:
+            - Check if compatible with current machine
+            - If yes: Add to parallel execution queue
+            - If no: Mark waiting_for_machine
+    
+    - immediate_chain_trigger: |
+        # CRITICAL: Don't just save state, actually trigger next execution
+        - Call AutonomousPhaseExecutor.mark_phase_completed(phase_id, next_phase_id)
+        - Call AutonomousPhaseExecutor.get_next_executable_phase()
+        - If returns next_phase_id:
+            - Execute immediately OR
+            - Queue for next agent invocation (depending on async/sync mode)
+        - For parallel phases:
+            - Execute in background threads/processes
+            - Continue monitoring via heartbeat
+    
+    - git_commit: |
+        # Audit trail
+        - Stage all checkpoint/artifact files
+        - Commit with message: AC-PHASE{N}-{FULL}: Autonomous completion (17d, 450/450 tests)
+        - Push to origin/CORTEX branch
+        - Tag: phase-{N}-complete-{timestamp}
+  
+  # If phase fails (non-critical error)
+  on_failure_recoverable:
+    - checkpoint_save: |
+        # Save current state for resume
+        - Export latest checkpoint (current stage, line number in test suite)
+        - Mark last successful stage
+        - Note failure reason
+        - Keep workspace intact (don't clean up)
+    
+    - mark_waiting_for_fix: |
+        # Update execution queue
+        - phase.status = "failed"
+        - phase.checkpoint = {last_successful_stage}
+        - Next agent on same machine can resume from checkpoint
+        - Or developer can fix and restart
+    
+    - halt_execution_chain: |
+        # Stop auto-chaining - need human intervention
+        - Don't trigger next_phase_on_completion
+        - Leave execution_queue in paused state
+        - Alert: "Phase-52 failed at S4, checkpoint saved at S3-end"
+  
+  # If phase fails (critical error)
+  on_failure_critical:
+    - dump_diagnostics: |
+        - Export full error trace (stdout, stderr, exception)
+        - Export environment snapshot (pip list, git status, etc.)
+        - Export system metrics at time of failure
+        - Create DEBUG_REPORT.txt with all context
+    
+    - halt_execution_chain: |
+        - phase.status = "failed_critical"
+        - Entire execution_queue paused
+        - Alert infrastructure team
+        - Prevent any further auto-chaining
+    
+    - preserve_for_debugging: |
+        - Don't clean up workspace
+        - Keep all generated files
+        - Keep virtual environment intact
+
+# Machine-specific teardown considerations
+
+machine_specifics:
+  darwin_arm64:
+    # macOS M1/M2/M3
+    skip_before_next_phase: |
+      - Flush disk caches (optional: `purge` command)
+      - Check free disk space
+      - Verify temp directory cleanup
+  
+  linux_x86_64:
+    # Linux servers/VMs
+    skip_before_next_phase: |
+      - Check ulimit settings
+      - Verify /tmp space
+      - Check for orphaned processes
+  
+  docker_container:
+    # If running in Docker
+    skip_before_next_phase: |
+      - Check container resource usage
+      - Verify docker volume mounts still accessible
+      - Check network connectivity
+
+# Parallel execution teardown coordination
+
+parallel_phase_teardown:
+  enabled: true
+  scenario: |
+    Phase-52 → phase-56-A (parallel with phase-49)
+    
+    Machine topology:
+    - MacBook-M3 (started phase-52, will continue phase-56-A)
+    - AWS-EC2-Linux (will run phase-49 in parallel)
+    
+    Teardown sequence:
+    1. Phase-52 completes on MacBook-M3 at 2026-02-26T10:00:00Z
+    2. Triggers phase-56-A on same machine (MacBook-M3)
+    3. Triggers phase-49 on AWS-EC2 (no restriction)
+    4. Both phase-56-A and phase-49 run in parallel
+    5. Whichever completes first waits for sibling
+    6. When BOTH complete: phase-48 is queued for MacBook-M3
+  
+  sibling_wait_logic: |
+    # In phase-56-A teardown
+    if phase.parallel_phases is non-empty:
+      siblings = [ph for ph in execution_queue if ph started with me]
+      for sibling in siblings:
+        wait_until(sibling.status == "completed", timeout=PHASE_DURATION*2)
+      # Now safe to proceed to next_phase_on_completion
+  
+  cross_machine_coordination: |
+    # If parallel phases on different machines
+    # Use git as coordination point (no shared state)
+    # - Each phase writes completion marker to git
+    # - Next phase polls git to check sibling status
+    # - Race-free via git's locking
+
+# Observability: Teardown logging
+
+teardown_logging:
+  output_file: "execution/logs/teardown-{phase_id}-{timestamp}.log"
+  
+  log_entries:
+    - "TEARDOWN_START: phase-{id} @ {timestamp}"
+    - "CHECKPOINT_SAVED: {checkpoints_dir}"
+    - "METRICS_COLLECTED: tests={pass}/{total}, coverage={pct}%, duration={hours}h"
+    - "NEXT_PHASE: phase-{next_id} on {machine}"
+    - "PARALLEL_PHASES: [{phases}] (compatible={count})"
+    - "GIT_COMMIT: AC-PHASE{N}-FULL ✅"
+    - "NEXT_PHASE_TRIGGERED: Executing immediately"
+    - "TEARDOWN_COMPLETE: {total_duration}ms"
+  
+  error_entries:
+    - "TEARDOWN_ERROR: {error_description}"
+    - "CHECKPOINT_PARTIAL: Saved at S{N}-end"
+    - "EXECUTION_CHAIN_HALTED: Manual fix required"
+    - "ALERT_SENT: infrastructure@cortex"
+
+# Example full teardown for phase-52
+
+example_phase_52_teardown:
+  on_completion: |
+    TEARDOWN_START: phase-52 @ 2026-02-26T10:00:00Z
+    
+    ✅ Checkpoint preservation
+       - Saved 450 test results
+       - Exported coverage: 96.2%
+       - Compressed artifacts: 245 MB
+       - Location: execution/checkpoints/phase-52-20260226/
+    
+    ✅ Metrics collection
+       - Duration: 17 days, 3 hours, 42 minutes
+       - Tests: 450/450 passed, 0 failed ✅
+       - Coverage: 96.2% (target 95%) ✅
+       - Performance: S1=4h, S2=12h, S3=18h, S4=24h, S5=48h, S6=36h
+       - Token usage: ~125K tokens
+       - Machine: MacBook-M3 (Darwin/arm64)
+    
+    ✅ Next phase detection
+       - next_phase_on_completion: "phase-56-A"
+       - parallel_phases: ["phase-56-A", "phase-49"]
+    
+    ✅ Machine compatibility check
+       - phase-56-A.machine_should_continue_on: null (first run)
+       - Current machine: MacBook-M3 (Darwin/arm64)
+       - Verdict: CAN EXECUTE ✅
+       - phase-49.machine_should_continue_on: null (first run)
+       - Verdict: CAN EXECUTE ON ANY MACHINE ✅
+    
+    ✅ Immediate chain trigger
+       - Executing phase-56-A on MacBook-M3 IMMEDIATELY
+       - Queuing phase-49 for parallel execution
+       - Both start: 2026-02-26T13:42:00Z
+    
+    ✅ Git commit
+       - Message: "AC-PHASE52-FULL: Autonomous execution (17d, 450/450 tests, 96.2% coverage)"
+       - Files: +10 artifacts, +1 metrics.json
+       - Tag: phase-52-complete-20260226T134200Z
+    
+    TEARDOWN_COMPLETE: 3.2 seconds
+    
+    🚀 NEXT PHASES TRIGGERED
+       → phase-56-A (on MacBook-M3)
+       → phase-49 (on any compatible machine)
+
+# How to use this template
+
+usage_instructions: |
+  1. Copy this file to phase YAML metadata.teardown section
+  2. Customize on_success/on_failure for phase-specific logic
+  3. Update next_phase_on_completion based on phase execution order
+  4. Add machine_specifics if phase has OS/platform requirements
+  5. Ensure next phases exist in execution_queue with same machine rules
+  6. Test teardown in dev: 
+     - python -c "from cortex.phase_management import PhaseExecutor; 
+                  exec = PhaseExecutor(); 
+                  exec.run_teardown('phase-52', simulate=True)"
+

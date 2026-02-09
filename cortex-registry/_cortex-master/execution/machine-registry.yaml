@@ -1,0 +1,198 @@
+---
+# CORTEX Machine Registry for Phase Continuity Tracking
+# Authority: Autonomous Phase Execution with Machine Continuity (Phase 56)
+# Updated: 2026-02-09
+
+version: "1.0"
+last_updated: "2026-02-09"
+description: "Machine/OS tracking for continuous phase execution enforcement"
+
+# Machine inventory discovered on first autonomous execution run
+machines: {}
+  # Will be populated dynamically based on which machines execute phases
+  # Example entry (once phase starts on a machine):
+  # MacBook-M3:
+  #   hostname: "MacBook-M3.local"
+  #   machine_hash: "a1b2c3d4e5f6"
+  #   os_type: "Darwin"
+  #   os_version: "14.2"
+  #   arch: "arm64"
+  #   python_version: "3.11.6"
+  #   first_phase_started: "2026-02-09T10:00:00Z"
+  #   status: "active"
+
+# Phase-machine assignments (locks)
+# Ensures once a phase starts on a machine, it continues on that machine
+
+phase_machine_locks:
+  phase-52:
+    machine_hash: null
+    machine_hostname: null
+    machine_os: null
+    executor_agent_id: null
+    lock_acquired_at: null
+    locked: false
+    allow_resume_on_other_machine: false
+    allow_parallel_on_other_machine: true
+
+  phase-56-A:
+    machine_hash: null
+    locked: false
+    allow_resume_on_other_machine: false
+    allow_parallel_on_other_machine: false
+
+  phase-49:
+    machine_hash: null
+    locked: false
+    allow_resume_on_other_machine: true
+    allow_parallel_on_other_machine: true
+
+  phase-48:
+    machine_hash: null
+    locked: false
+    allow_resume_on_other_machine: false
+    allow_parallel_on_other_machine: false
+
+  phase-50:
+    machine_hash: null
+    locked: false
+    allow_resume_on_other_machine: false
+    allow_parallel_on_other_machine: true
+
+  phase-51:
+    machine_hash: null
+    locked: false
+    allow_resume_on_other_machine: false
+    allow_parallel_on_other_machine: false
+
+# Executor agents registered with this registry
+agents: {}
+  # agent_id -> machine_hash mapping
+  # Example:
+  # agent-001-phase52:
+  #   machine_hash: "a1b2c3d4e5f6"
+  #   status: "running"
+  #   phases_claimed: ["phase-52"]
+  #   heartbeat_last_seen: "2026-02-09T10:05:00Z"
+
+# Heartbeat mechanism for stale detection
+heartbeat:
+  interval_seconds: 60
+  timeout_seconds: 300
+  stale_detection: "If heartbeat not seen for 300s, phase marked as waiting_for_machine"
+  stale_recovery: "Allow same machine to resume from checkpoint, or other machine if allow_resume_on_other_machine=true"
+
+# Lock constraints
+constraints:
+  max_phases_per_machine: 2
+  max_machines_per_phase: 1
+  max_concurrent_parallel_phases: 4
+
+# Status dashboard (real-time view)
+status_dashboard:
+  phase_52_status: "PENDING"
+  phase_52_machine: null
+  phase_56_a_status: "QUEUED"
+  phase_49_status: "QUEUED"
+  phase_48_status: "BLOCKED_BY_PREVIOUS"
+  phase_50_status: "BLOCKED_BY_PREVIOUS"
+  phase_51_status: "BLOCKED_BY_PREVIOUS"
+
+# Monitoring and alerts
+monitoring:
+  enabled: true
+  collect_metrics: true
+  anomaly_thresholds:
+    stale_phase_timeout_seconds: 300
+    max_failed_phases: 2
+    min_test_coverage_percent: 85
+
+# Rollback procedures
+rollback:
+  on_phase_failure: "Mark checkpoint, log diagnostics, await manual resolution"
+  on_lock_conflict: "Log conflict, mark waiting_for_machine, retry in 30 seconds"
+  on_os_mismatch: "Log mismatch, mark waiting_for_machine, await resume on matching OS"
+
+# Example execution scenario (MacBook-M3)
+example_execution_darwin_arm64:
+  timestamp_start: "2026-02-09T09:00:00Z"
+  machine: "Asifs-MacBook-Air.local"
+  machine_hash: "00d496e3ed69"
+  os_type: "Darwin"
+  arch: "arm64"
+  python_version: "3.9.6"
+  
+  execution_steps:
+    - step: 1
+      action: "phase-52 starts, acquires lock on MacBook"
+      lock_state: "phase-52.locked = true, phase-52.machine_hash = 00d496e3ed69"
+      timestamp: "2026-02-09T09:00:00Z"
+    
+    - step: 2
+      action: "heartbeat sent every 60 seconds"
+      lock_state: "lock still held, heartbeat_last_seen = current_time"
+      timestamp: "every 60s for 17 days"
+    
+    - step: 3
+      action: "phase-52 completes 17 days later"
+      lock_state: "phase-52.locked = false, lock released"
+      timestamp: "2026-02-26T09:00:00Z"
+    
+    - step: 4
+      action: "teardown hook detects next phases (56-A and 49)"
+      lock_state: "phase-56-A and phase-49 queued for execution"
+      timestamp: "2026-02-26T09:00:01Z"
+    
+    - step: 5
+      action: "phase-56-A acquires lock (phase-49 can also run - parallel)"
+      lock_state: "phase-56-A.locked = true, phase-56-A.machine_hash = 00d496e3ed69"
+      timestamp: "2026-02-26T09:00:02Z"
+
+# Git coordination backbone (atomic operations)
+git_coordination:
+  enabled: true
+  
+  workflow_1_phase_starts:
+    operations:
+      - "Write execution record to cortex-registry/_cortex-master/execution/phase-{id}-execution.json"
+      - "Commit to git: AC-PHASE{id}-START"
+      - "Push to origin"
+    purpose: "Atomic start marker for compliance"
+  
+  workflow_2_phase_running:
+    operations:
+      - "Update heartbeat timestamp in machine-registry.yaml"
+      - "Commit to git: AC-PHASE{id}-HB (if at checkpoint boundaries)"
+      - "Push to origin"
+    purpose: "Continuous heartbeat proof"
+  
+  workflow_3_phase_completes:
+    operations:
+      - "Release lock, write final execution record"
+      - "Commit to git: AC-PHASE{id}-COMPLETE"
+      - "Push to origin"
+    purpose: "Atomic completion marker"
+  
+  workflow_4_next_phase_queue:
+    operations:
+      - "Queue next phase(s), set status = QUEUED"
+      - "Commit to git: AC-PHASE{next-id}-QUEUED"
+      - "Push to origin"
+    purpose: "Track queue progression"
+  
+  workflow_5_parallel_coordination:
+    operations:
+      - "Both phase-56-A and phase-49 update machine-registry.yaml"
+      - "Whichever completes first waits for sibling"
+      - "Commit to git: AC-PHASE{id}-WAITING-FOR-SIBLING"
+      - "When both done, queue phase-48"
+    purpose: "Ensure parallel synchronization"
+
+# Execution statistics
+statistics:
+  total_phases: 6
+  total_duration_days: 48
+  total_tests: 1037
+  target_coverage_percent: 93.3
+  parallel_groups: 2
+  sequential_chains: 1
