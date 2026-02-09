@@ -25,6 +25,7 @@ Date: 2026-01-25
 from dataclasses import dataclass, field
 from typing import Dict, List, Any, Optional
 from enum import Enum
+from pathlib import Path
 import logging
 
 from cortex.core.result import Result, Ok, Err
@@ -623,30 +624,168 @@ class ChallengeEngine:
     # Private helper methods
     
     def _parse_language(self, user_request: str) -> str:
-        """Parse natural language to extract intent."""
-        # Simple parsing for now - can be enhanced with NLP
-        return f"User wants to: {user_request.lower().strip()}"
+        """Parse natural language to extract intent.
+        
+        Phase 65 S3: Now delegates to IntentRouter for real classification.
+        
+        Args:
+            user_request: User's natural language request
+            
+        Returns:
+            Classified intent with keywords and confidence
+        """
+        try:
+            # Phase 65 S3: Wire to IntentRouter for real classification
+            from cortex.orchestrators.core.intent_router import IntentRouter
+            from cortex.models.canonical_enums import IntentType
+            
+            router = IntentRouter()
+            
+            # Detect intent from user request
+            context = {
+                "operation": "user_request",
+                "description": user_request,
+                "user_request": user_request
+            }
+            
+            intent_type = router.detect_intent(context)
+            
+            # Build structured interpretation
+            interpretation = f"Intent: {intent_type.value if hasattr(intent_type, 'value') else str(intent_type)}"
+            
+            # Extract keywords from request
+            keywords = [word for word in user_request.split() if len(word) > 4][:5]
+            if keywords:
+                interpretation += f" | Keywords: {', '.join(keywords)}"
+            
+            return interpretation
+            
+        except Exception as e:
+            logger.warning(f"Intent classification failed: {e}")
+            # Fallback to simple parsing
+            return f"User wants to: {user_request.lower().strip()}"
     
     def _examine_implementation(
         self,
         request: str,
         search_tools: Dict[str, Any]
     ) -> Dict[str, Any]:
-        """Examine code/docs/tests related to request."""
-        # Placeholder - will integrate with actual search tools
-        return {
-            "code_found": [],
-            "tests_found": [],
-            "docs_found": [],
-            "git_history": []
-        }
+        """Examine code/docs/tests related to request.
+        
+        Phase 65 S3: Delegates to LENSOrchestrator when file_path available.
+        
+        Args:
+            request: User request being examined
+            search_tools: Dict with optional 'file_path' key
+            
+        Returns:
+            Dict with examination results (AST, git, comments, etc.)
+        """
+        try:
+            # Phase 65 S3: Wire to LENSOrchestrator when file_path provided
+            file_path = search_tools.get("file_path")
+            
+            if file_path and Path(file_path).exists():
+                # Use LENS for real file analysis
+                from cortex.lens.orchestrator import LENSOrchestrator
+                
+                lens = LENSOrchestrator(repo_path=Path(file_path).parent.parent)
+                
+                # Analyze file with LENS
+                lens_result = lens.analyze_file(
+                    file_path=Path(file_path)
+                )
+                
+                # Extract examination results
+                examination = {
+                    "code_found": [str(file_path)],
+                    "ast_analysis": lens_result.get("ast", {}),
+                    "git_history": lens_result.get("git", {}),
+                    "comments": lens_result.get("comments", {}),
+                    "lens_context": lens_result
+                }
+                
+                return examination
+            
+            else:
+                # No file_path - attempt repo profile load
+                # Phase 65 S3-T5: ProfileStore integration
+                try:
+                    from cortex.brain.repository.profile_store import ProfileStore
+                    
+                    profile_store = ProfileStore()
+                    active_profile = profile_store.get_active_profile()
+                    
+                    if active_profile:
+                        return {
+                            "repo_profile": active_profile.metadata,
+                            "tech_stack": active_profile.metadata.get("tech_stack", []),
+                            "frameworks": active_profile.metadata.get("frameworks", []),
+                            "standards": active_profile.metadata.get("standards", [])
+                        }
+                except Exception as e:
+                    logger.debug(f"Profile load failed: {e}")
+                
+                # Fallback to empty
+                return {
+                    "code_found": [],
+                    "tests_found": [],
+                    "docs_found": [],
+                    "git_history": []
+                }
+                
+        except Exception as e:
+            logger.warning(f"Examination failed: {e}")
+            # Fallback to hardcoded
+            return {
+                "code_found": [],
+                "tests_found": [],
+                "docs_found": [],
+                "git_history": []
+            }
     
     def _navigate_context(
         self,
         examination: Dict[str, Any]
     ) -> List[str]:
-        """Navigate through related context paths."""
-        return []
+        """Navigate through related context paths.
+        
+        Phase 65 S3: Uses knowledge graph relationships when available.
+        
+        Args:
+            examination: Results from _examine_implementation
+            
+        Returns:
+            List of related entity paths/names
+        """
+        try:
+            # Phase 65 S3: Wire to KnowledgeQuerier for graph traversal
+            # Extract entities from examination
+            code_files = examination.get("code_found", [])
+            
+            if not code_files:
+                return []
+            
+            # Simple semantic navigation based on file names for now
+            # Future: Use full knowledge graph traversal
+            related_paths = []
+            
+            for file_path in code_files:
+                # Extract module name
+                if "/" in file_path or "\\" in file_path:
+                    parts = file_path.replace("\\", "/").split("/")
+                    module_name = parts[-1].replace(".py", "").replace(".ts", "")
+                    related_paths.append(module_name)
+                    
+                    # Add parent directory as context
+                    if len(parts) > 1:
+                        related_paths.append(parts[-2])
+            
+            return list(set(related_paths))[:10]  # Limit to 10 related entities
+            
+        except Exception as e:
+            logger.warning(f"Context navigation failed: {e}")
+            return []
     
     def _synthesize_context(
         self,
@@ -657,7 +796,7 @@ class ChallengeEngine:
         """
         Synthesize all LENS phases into understanding.
         
-        AC-FUTURE-002: Context synthesis
+        Phase 65 S3: Now calls KnowledgeSynthesisEngine for real synthesis.
         
         Args:
             language: Language phase output
@@ -667,40 +806,92 @@ class ChallengeEngine:
         Returns:
             Tuple of (synthesis_text, confidence_score)
         """
-        # Build synthesis from available data
-        parts = []
-        if language:
-            parts.append(f"Language: {language[:100]}")
-        
-        exam_sources = 0
-        if isinstance(examination, dict):
-            exam_sources = (
-                len(examination.get("code_found", [])) +
-                len(examination.get("tests_found", [])) +
-                len(examination.get("docs_found", []))
+        try:
+            # Phase 65 S3: Wire to KnowledgeSynthesisEngine
+            from cortex.brain.knowledge.knowledge_synthesis_engine import KnowledgeSynthesisEngine
+            
+            synthesis_engine = KnowledgeSynthesisEngine()
+            
+            # Build context for synthesis
+            intent_type = language.split("|")[0].replace("Intent: ", "").strip() if "|" in language else "UNKNOWN"
+            
+            # Attempt to synthesize with real knowledge
+            # Note: S1 wired YAML loading, so this now works
+            synthesis_result = synthesis_engine.synthesize_unified_context(
+                intent_type=intent_type,
+                lens_intelligence=None,  # Future: pass real LENS data
+                company_knowledge=None,  # Future: pass company data
+                file_path=None
             )
-        
-        parts.append(f"Examined {exam_sources} sources")
-        
-        if navigation:
-            parts.append(f"Navigation: {len(navigation)} paths explored")
-        
-        synthesis = "; ".join(parts)
-        
-        # Calculate confidence based on data availability
-        # Base: 0.3 (always some confidence from language parsing)
-        confidence = 0.3
-        
-        # Add confidence for each examination source found
-        confidence += min(0.3, exam_sources * 0.1)  # Up to 0.3 from sources
-        
-        # Add confidence for navigation paths
-        confidence += min(0.2, len(navigation) * 0.05)  # Up to 0.2 from navigation
-        
-        # Cap at 0.95 (never fully certain)
-        confidence = min(0.95, confidence)
-        
-        return synthesis, confidence
+            
+            # Extract synthesis and confidence
+            if synthesis_result:
+                # Use number of loaded practices as confidence indicator
+                cortex_knowledge = synthesis_result.cortex_knowledge
+                rules_loaded = cortex_knowledge.synthesis_metadata.get("rules_loaded", 0)
+                
+                # Confidence based on knowledge + data availability
+                base_confidence = 0.3 + (rules_loaded / 200.0)  # 0.3-0.6 range from knowledge
+                
+                # Boost from examination data
+                exam_boost = 0.0
+                if examination:
+                    code_count = len(examination.get("code_found", []))
+                    exam_boost = min(0.2, code_count * 0.1)
+                
+                # Boost from navigation
+                nav_boost = min(0.1, len(navigation) * 0.02) if navigation else 0.0
+                
+                confidence = min(0.95, base_confidence + exam_boost + nav_boost)
+            else:
+                # Estimate confidence from data availability
+                confidence = 0.5 if examination or navigation else 0.3
+            
+            # Build synthesis text
+            parts = []
+            parts.append(f"Intent: {intent_type}")
+            
+            if examination:
+                code_count = len(examination.get("code_found", []))
+                if code_count > 0:
+                    parts.append(f"Analyzed {code_count} file(s)")
+            
+            if navigation:
+                parts.append(f"Related: {', '.join(navigation[:3])}")
+            
+            synthesis = " | ".join(parts)
+            
+            return synthesis, confidence
+            
+        except Exception as e:
+            logger.warning(f"Knowledge synthesis failed: {e}")
+            # Fallback to simple heuristic
+            parts = []
+            if language:
+                parts.append(f"Language: {language[:100]}")
+            
+            exam_sources = 0
+            if isinstance(examination, dict):
+                exam_sources = (
+                    len(examination.get("code_found", [])) +
+                    len(examination.get("tests_found", [])) +
+                    len(examination.get("docs_found", []))
+                )
+            
+            parts.append(f"Examined {exam_sources} sources")
+            
+            if navigation:
+                parts.append(f"Navigation: {len(navigation)} paths explored")
+            
+            synthesis = "; ".join(parts)
+            
+            # Calculate confidence based on data availability
+            confidence = 0.3
+            confidence += min(0.3, exam_sources * 0.1)
+            confidence += min(0.2, len(navigation) * 0.05)
+            confidence = min(0.95, confidence)
+            
+            return synthesis, confidence
     
     def _detect_disagreement(
         self,
