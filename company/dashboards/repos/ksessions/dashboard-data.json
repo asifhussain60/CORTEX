@@ -6,7 +6,7 @@
     "owner": "Unknown",
     "primary_language": "JavaScript",
     "version": "1.0",
-    "last_analyzed_at": "2026-02-09T09:44:34.453471"
+    "last_analyzed_at": "2026-02-09T09:47:06.449575"
   },
   "overview": {
     "summary": "A sophisticated repository management system with advanced analytics capabilities, designed for automated code analysis and onboarding orchestration across multiple programming languages.",
@@ -106,218 +106,236 @@
     "transitive_count": 8351,
     "packages": [
       {
-        "name": "basic-ftp",
-        "version": "5.0.2",
+        "name": "@commitlint/cli",
+        "version": "17.6.7",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "data-uri-to-buffer",
-        "version": "6.0.2",
+        "name": "@commitlint/config-conventional",
+        "version": "17.6.7",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "debug",
-        "version": "4.3.4",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@types/debug",
-        "version": "4.1.7",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@types/ftpd",
-        "version": "0.2.35",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@types/jest",
-        "version": "29.5.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@types/node",
-        "version": "14.18.45",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "async-listen",
-        "version": "3.0.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "ftpd",
-        "version": "https://files-jg1s1zt9l.n8.io/ftpd-v0.2.14.tgz",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "jest",
-        "version": "29.5.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "st",
-        "version": "3.0.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "ts-jest",
-        "version": "29.1.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "typescript",
-        "version": "5.0.4",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "tsconfig",
-        "version": "0.0.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@percy/config",
-        "version": "1.31.4",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@percy/env",
-        "version": "1.31.4",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@percy/logger",
-        "version": "1.31.4",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "pac-proxy-agent",
-        "version": "7.0.2",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "pako",
-        "version": "2.1.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "prelude-ls",
-        "version": "1.2.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "deep-is",
-        "version": "0.1.3",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "word-wrap",
-        "version": "1.2.5",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "type-check",
-        "version": "0.4.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "levn",
-        "version": "0.4.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "fast-levenshtein",
-        "version": "2.0.6",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "livescript",
-        "version": "1.6.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "mocha",
-        "version": "10.4.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "call-bind",
-        "version": "1.0.8",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "call-bound",
+        "name": "@istanbuljs/nyc-config-typescript",
         "version": "1.0.2",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "define-properties",
-        "version": "1.2.1",
+        "name": "@semantic-release/changelog",
+        "version": "6.0.3",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "es-object-atoms",
-        "version": "1.0.0",
+        "name": "@semantic-release/commit-analyzer",
+        "version": "10.0.1",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "@es-shims/api",
-        "version": "2.5.1",
+        "name": "@semantic-release/git",
+        "version": "10.0.1",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "@ljharb/eslint-config",
-        "version": "21.1.1",
+        "name": "@semantic-release/github",
+        "version": "9.0.4",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "auto-changelog",
-        "version": "2.5.0",
+        "name": "@semantic-release/npm",
+        "version": "10.0.4",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "encoding",
-        "version": "0.1.13",
+        "name": "@semantic-release/release-notes-generator",
+        "version": "11.0.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@tsconfig/node10",
+        "version": "1.0.8",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/chai",
+        "version": "4.3.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/mocha",
+        "version": "10.0.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/node",
+        "version": "10.17.60",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@typescript-eslint/eslint-plugin",
+        "version": "6.2.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@typescript-eslint/parser",
+        "version": "6.2.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "chai",
+        "version": "4.2.0",
         "license": null,
         "is_direct": false
       },
       {
         "name": "eslint",
-        "version": "8.8.0",
+        "version": "8.46.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "mocha",
+        "version": "10.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "nyc",
+        "version": "15.1.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "semantic-release",
+        "version": "21.0.7",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "ts-node",
+        "version": "10.7.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "typescript",
+        "version": "4.1.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@azure/abort-controller",
+        "version": "2.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@azure/core-auth",
+        "version": "1.9.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@azure/core-rest-pipeline",
+        "version": "1.5.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@azure/core-tracing",
+        "version": "1.0.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@typespec/ts-http-runtime",
+        "version": "0.3.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "tslib",
+        "version": "2.6.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@azure/dev-tool",
+        "version": "1.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@azure/eslint-plugin-azure-sdk",
+        "version": "3.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/node",
+        "version": "20.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@vitest/browser",
+        "version": "3.0.9",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@vitest/coverage-istanbul",
+        "version": "3.0.9",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "eslint",
+        "version": "9.9.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "playwright",
+        "version": "1.41.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "typescript",
+        "version": "5.8.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "vitest",
+        "version": "3.0.9",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "define-data-property",
+        "version": "1.1.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "es-errors",
+        "version": "1.3.0",
         "license": null,
         "is_direct": false
       },
@@ -328,8 +346,134 @@
         "is_direct": false
       },
       {
-        "name": "has-strict-mode",
-        "version": "1.0.1",
+        "name": "has-property-descriptors",
+        "version": "1.0.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@ljharb/eslint-config",
+        "version": "21.1.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/call-bind",
+        "version": "1.0.5",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/define-properties",
+        "version": "1.1.5",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/es-value-fixtures",
+        "version": "1.4.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/for-each",
+        "version": "0.3.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/function.prototype.name",
+        "version": "1.1.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/functions-have-names",
+        "version": "1.2.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/has-property-descriptors",
+        "version": "1.0.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/make-arrow-function",
+        "version": "1.2.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/make-async-function",
+        "version": "1.0.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/make-async-generator-function",
+        "version": "1.0.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/make-generator-function",
+        "version": "2.0.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/object-inspect",
+        "version": "1.8.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/tape",
+        "version": "5.6.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "aud",
+        "version": "2.0.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "auto-changelog",
+        "version": "2.4.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "es-value-fixtures",
+        "version": "1.4.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "eslint",
+        "version": "8.8.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "evalmd",
+        "version": "0.0.19",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "for-each",
+        "version": "0.3.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "function.prototype.name",
+        "version": "1.1.6",
         "license": null,
         "is_direct": false
       },
@@ -340,14 +484,38 @@
         "is_direct": false
       },
       {
+        "name": "make-arrow-function",
+        "version": "1.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "make-async-function",
+        "version": "1.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "make-async-generator-function",
+        "version": "1.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "make-generator-function",
+        "version": "2.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
         "name": "npmignore",
         "version": "0.3.1",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "nyc",
-        "version": "10.3.2",
+        "name": "object-inspect",
+        "version": "1.13.1",
         "license": null,
         "is_direct": false
       },
@@ -359,349 +527,181 @@
       },
       {
         "name": "tape",
-        "version": "5.9.0",
+        "version": "5.7.5",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "@azure/msal-common",
-        "version": "14.16.1",
+        "name": "typescript",
+        "version": "next",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "@azure/storage-blob",
-        "version": "12.2.1",
+        "name": "@azure/abort-controller",
+        "version": "2.0.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "@babel/core",
-        "version": "7.7.2",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@babel/plugin-proposal-class-properties",
-        "version": "7.7.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@babel/plugin-proposal-object-rest-spread",
-        "version": "7.6.2",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@babel/preset-env",
-        "version": "7.7.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@babel/preset-typescript",
-        "version": "7.7.2",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@microsoft/api-extractor",
-        "version": "7.43.4",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@rollup/plugin-node-resolve",
-        "version": "15.0.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@rollup/plugin-terser",
-        "version": "0.4.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@rollup/plugin-typescript",
-        "version": "11.0.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@types/jest",
-        "version": "29.5.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@types/node",
-        "version": "20.3.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "dotenv",
-        "version": "8.2.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "eslint-config-msal",
-        "version": "file:../../shared-configs/eslint-config-msal",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "fake-indexeddb",
-        "version": "3.1.3",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "jest",
-        "version": "29.5.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "jest-environment-jsdom",
-        "version": "29.5.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "msal-test-utils",
-        "version": "file:../../shared-test-utils",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "prettier",
-        "version": "2.8.7",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "rimraf",
-        "version": "3.0.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "rollup",
-        "version": "4.22.4",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "rollup-msal",
-        "version": "file:../../shared-configs/rollup-msal",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "shx",
-        "version": "0.3.2",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "ssri",
-        "version": "8.0.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "ts-jest",
-        "version": "29.2.5",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "ts-jest-resolver",
-        "version": "2.0.1",
+        "name": "@typespec/ts-http-runtime",
+        "version": "0.3.0",
         "license": null,
         "is_direct": false
       },
       {
         "name": "tslib",
-        "version": "1.10.0",
+        "version": "2.6.2",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "typescript",
-        "version": "4.9.5",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "is-wsl",
-        "version": "3.1.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "ava",
-        "version": "6.3.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "typescript",
-        "version": "5.8.3",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "xo",
+        "name": "@azure-tools/vite-plugin-browser-test-map",
         "version": "1.0.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "tedious",
-        "version": "file:..",
+        "name": "@azure/dev-tool",
+        "version": "1.0.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "eslint-visitor-keys",
-        "version": "3.4.3",
+        "name": "@azure/eslint-plugin-azure-sdk",
+        "version": "3.0.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "@eslint-community/eslint-plugin-mysticatea",
-        "version": "15.6.1",
+        "name": "@types/node",
+        "version": "20.0.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "@types/eslint",
-        "version": "9.6.1",
+        "name": "@vitest/browser",
+        "version": "3.0.9",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "@types/estree",
-        "version": "1.0.7",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@typescript-eslint/parser",
-        "version": "5.62.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@typescript-eslint/types",
-        "version": "5.62.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "c8",
-        "version": "8.0.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "dot-prop",
-        "version": "7.2.0",
+        "name": "@vitest/coverage-istanbul",
+        "version": "3.0.9",
         "license": null,
         "is_direct": false
       },
       {
         "name": "eslint",
-        "version": "8.57.1",
+        "version": "9.9.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "installed-check",
-        "version": "8.0.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "knip",
-        "version": "5.33.3",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "mocha",
-        "version": "9.2.2",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "npm-run-all2",
-        "version": "6.2.3",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "opener",
-        "version": "1.5.2",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "prettier",
-        "version": "2.8.8",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "rimraf",
-        "version": "3.0.2",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "rollup",
-        "version": "2.79.2",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "rollup-plugin-dts",
-        "version": "4.2.3",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "rollup-plugin-sourcemaps",
-        "version": "0.6.3",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "semver",
-        "version": "7.6.3",
+        "name": "playwright",
+        "version": "1.41.2",
         "license": null,
         "is_direct": false
       },
       {
         "name": "typescript",
-        "version": "4.9.5",
+        "version": "5.8.2",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "vitepress",
-        "version": "1.4.1",
+        "name": "vitest",
+        "version": "3.0.9",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "warun",
+        "name": "concat-stream",
+        "version": "2.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "eslint",
+        "version": "5.16.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "express",
+        "version": "4.16.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "lolex",
+        "version": "3.1.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "mocha",
+        "version": "6.0.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "nyc",
+        "version": "14.1.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "tslib",
+        "version": "2.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@azure/dev-tool",
         "version": "1.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@azure/eslint-plugin-azure-sdk",
+        "version": "3.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@microsoft/api-extractor",
+        "version": "7.18.11",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/chai",
+        "version": "4.1.6",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/mocha",
+        "version": "7.0.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/node",
+        "version": "12.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "chai",
+        "version": "4.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "cross-env",
+        "version": "7.0.2",
         "license": null,
         "is_direct": false
       }
@@ -713,332 +713,359 @@
       "dependency_graph": {
         "nodes": [
           {
-            "id": "basic-ftp",
+            "id": "@commitlint/cli",
             "x": 550.0,
             "y": 250.0,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "5.0.2"
+            "version": "17.6.7"
           },
           {
-            "id": "data-uri-to-buffer",
+            "id": "@commitlint/config-conventional",
             "x": 548.8172051971717,
             "y": 268.79998503464566,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "6.0.2"
+            "version": "17.6.7"
           },
           {
-            "id": "debug",
+            "id": "@istanbuljs/nyc-config-typescript",
             "x": 545.2874741692947,
             "y": 287.3034830747282,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "4.3.4"
-          },
-          {
-            "id": "@types/debug",
-            "x": 539.4664728832377,
-            "y": 305.2186829027017,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "4.1.7"
-          },
-          {
-            "id": "@types/ftpd",
-            "x": 531.4460020065795,
-            "y": 322.2630511152573,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "0.2.35"
-          },
-          {
-            "id": "@types/jest",
-            "x": 521.3525491562422,
-            "y": 338.167787843871,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "29.5.1"
-          },
-          {
-            "id": "@types/node",
-            "x": 509.3452941132117,
-            "y": 352.6820658893033,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "14.18.45"
-          },
-          {
-            "id": "async-listen",
-            "x": 495.61359846230346,
-            "y": 365.5769864163684,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "3.0.0"
-          },
-          {
-            "id": "ftpd",
-            "x": 480.37401924684946,
-            "y": 376.64918882530225,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "https://files-jg1s1zt9l.n8.io/ftpd-v0.2.14.tgz"
-          },
-          {
-            "id": "jest",
-            "x": 463.8668937347609,
-            "y": 385.72405786990294,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "29.5.0"
-          },
-          {
-            "id": "st",
-            "x": 446.3525491562421,
-            "y": 392.658477444273,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "3.0.0"
-          },
-          {
-            "id": "ts-jest",
-            "x": 428.10719718785873,
-            "y": 397.3430876093033,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "29.1.0"
-          },
-          {
-            "id": "typescript",
-            "x": 409.41857792939703,
-            "y": 399.70400926424077,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "5.0.4"
-          },
-          {
-            "id": "tsconfig",
-            "x": 390.58142207060297,
-            "y": 399.70400926424077,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "0.0.0"
-          },
-          {
-            "id": "@percy/config",
-            "x": 371.89280281214127,
-            "y": 397.3430876093033,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "1.31.4"
-          },
-          {
-            "id": "@percy/env",
-            "x": 353.6474508437579,
-            "y": 392.65847744427305,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "1.31.4"
-          },
-          {
-            "id": "@percy/logger",
-            "x": 336.1331062652391,
-            "y": 385.72405786990294,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "1.31.4"
-          },
-          {
-            "id": "pac-proxy-agent",
-            "x": 319.6259807531505,
-            "y": 376.64918882530225,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "7.0.2"
-          },
-          {
-            "id": "pako",
-            "x": 304.38640153769654,
-            "y": 365.5769864163684,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "2.1.0"
-          },
-          {
-            "id": "prelude-ls",
-            "x": 290.6547058867883,
-            "y": 352.6820658893033,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "1.2.1"
-          },
-          {
-            "id": "deep-is",
-            "x": 278.6474508437579,
-            "y": 338.167787843871,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "0.1.3"
-          },
-          {
-            "id": "word-wrap",
-            "x": 268.55399799342047,
-            "y": 322.2630511152573,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "1.2.5"
-          },
-          {
-            "id": "type-check",
-            "x": 260.5335271167623,
-            "y": 305.21868290270174,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "0.4.0"
-          },
-          {
-            "id": "levn",
-            "x": 254.71252583070535,
-            "y": 287.3034830747282,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "0.4.1"
-          },
-          {
-            "id": "fast-levenshtein",
-            "x": 251.18279480282834,
-            "y": 268.79998503464566,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "2.0.6"
-          },
-          {
-            "id": "livescript",
-            "x": 250.0,
-            "y": 250.00000000000003,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "1.6.0"
-          },
-          {
-            "id": "mocha",
-            "x": 251.1827948028283,
-            "y": 231.20001496535434,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "10.4.0"
-          },
-          {
-            "id": "call-bind",
-            "x": 254.71252583070535,
-            "y": 212.69651692527174,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "1.0.8"
-          },
-          {
-            "id": "call-bound",
-            "x": 260.53352711676234,
-            "y": 194.78131709729826,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
             "version": "1.0.2"
           },
           {
-            "id": "define-properties",
-            "x": 268.55399799342047,
-            "y": 177.73694888474273,
+            "id": "@semantic-release/changelog",
+            "x": 539.4664728832377,
+            "y": 305.2186829027017,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "1.2.1"
+            "version": "6.0.3"
           },
           {
-            "id": "es-object-atoms",
+            "id": "@semantic-release/commit-analyzer",
+            "x": 531.4460020065795,
+            "y": 322.2630511152573,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "10.0.1"
+          },
+          {
+            "id": "@semantic-release/git",
+            "x": 521.3525491562422,
+            "y": 338.167787843871,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "10.0.1"
+          },
+          {
+            "id": "@semantic-release/github",
+            "x": 509.3452941132117,
+            "y": 352.6820658893033,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "9.0.4"
+          },
+          {
+            "id": "@semantic-release/npm",
+            "x": 495.61359846230346,
+            "y": 365.5769864163684,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "10.0.4"
+          },
+          {
+            "id": "@semantic-release/release-notes-generator",
+            "x": 480.37401924684946,
+            "y": 376.64918882530225,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "11.0.4"
+          },
+          {
+            "id": "@tsconfig/node10",
+            "x": 463.8668937347609,
+            "y": 385.72405786990294,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "1.0.8"
+          },
+          {
+            "id": "@types/chai",
+            "x": 446.3525491562421,
+            "y": 392.658477444273,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "4.3.1"
+          },
+          {
+            "id": "@types/mocha",
+            "x": 428.10719718785873,
+            "y": 397.3430876093033,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "10.0.1"
+          },
+          {
+            "id": "@types/node",
+            "x": 409.41857792939703,
+            "y": 399.70400926424077,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "10.17.60"
+          },
+          {
+            "id": "@typescript-eslint/eslint-plugin",
+            "x": 390.58142207060297,
+            "y": 399.70400926424077,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "6.2.1"
+          },
+          {
+            "id": "@typescript-eslint/parser",
+            "x": 371.89280281214127,
+            "y": 397.3430876093033,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "6.2.1"
+          },
+          {
+            "id": "chai",
+            "x": 353.6474508437579,
+            "y": 392.65847744427305,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "4.2.0"
+          },
+          {
+            "id": "eslint",
+            "x": 336.1331062652391,
+            "y": 385.72405786990294,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "8.46.0"
+          },
+          {
+            "id": "mocha",
+            "x": 319.6259807531505,
+            "y": 376.64918882530225,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "10.2.0"
+          },
+          {
+            "id": "nyc",
+            "x": 304.38640153769654,
+            "y": 365.5769864163684,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "15.1.0"
+          },
+          {
+            "id": "semantic-release",
+            "x": 290.6547058867883,
+            "y": 352.6820658893033,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "21.0.7"
+          },
+          {
+            "id": "ts-node",
             "x": 278.6474508437579,
-            "y": 161.83221215612906,
+            "y": 338.167787843871,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "10.7.0"
+          },
+          {
+            "id": "typescript",
+            "x": 268.55399799342047,
+            "y": 322.2630511152573,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "4.1.3"
+          },
+          {
+            "id": "@azure/abort-controller",
+            "x": 260.5335271167623,
+            "y": 305.21868290270174,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "2.0.0"
+          },
+          {
+            "id": "@azure/core-auth",
+            "x": 254.71252583070535,
+            "y": 287.3034830747282,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "1.9.0"
+          },
+          {
+            "id": "@azure/core-rest-pipeline",
+            "x": 251.18279480282834,
+            "y": 268.79998503464566,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "1.5.0"
+          },
+          {
+            "id": "@azure/core-tracing",
+            "x": 250.0,
+            "y": 250.00000000000003,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "1.0.1"
+          },
+          {
+            "id": "@typespec/ts-http-runtime",
+            "x": 251.1827948028283,
+            "y": 231.20001496535434,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "0.3.0"
+          },
+          {
+            "id": "tslib",
+            "x": 254.71252583070535,
+            "y": 212.69651692527174,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "2.6.2"
+          },
+          {
+            "id": "@azure/dev-tool",
+            "x": 260.53352711676234,
+            "y": 194.78131709729826,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
             "version": "1.0.0"
           },
           {
-            "id": "@es-shims/api",
+            "id": "@azure/eslint-plugin-azure-sdk",
+            "x": 268.55399799342047,
+            "y": 177.73694888474273,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "3.0.0"
+          },
+          {
+            "id": "@types/node",
+            "x": 278.6474508437579,
+            "y": 161.83221215612906,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "20.0.0"
+          },
+          {
+            "id": "@vitest/browser",
             "x": 290.6547058867883,
             "y": 147.31793411069668,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "2.5.1"
+            "version": "3.0.9"
           },
           {
-            "id": "@ljharb/eslint-config",
+            "id": "@vitest/coverage-istanbul",
             "x": 304.38640153769654,
             "y": 134.4230135836316,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "21.1.1"
+            "version": "3.0.9"
           },
           {
-            "id": "auto-changelog",
+            "id": "eslint",
             "x": 319.62598075315054,
             "y": 123.35081117469771,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "2.5.0"
+            "version": "9.9.0"
           },
           {
-            "id": "encoding",
+            "id": "playwright",
             "x": 336.1331062652392,
             "y": 114.27594213009704,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "0.1.13"
+            "version": "1.41.2"
           },
           {
-            "id": "eslint",
+            "id": "typescript",
             "x": 353.64745084375784,
             "y": 107.34152255572698,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "8.8.0"
+            "version": "5.8.2"
+          },
+          {
+            "id": "vitest",
+            "x": 371.8928028121413,
+            "y": 102.6569123906967,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "3.0.9"
+          },
+          {
+            "id": "define-data-property",
+            "x": 390.581422070603,
+            "y": 100.29599073575926,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "1.1.4"
+          },
+          {
+            "id": "es-errors",
+            "x": 409.4185779293969,
+            "y": 100.29599073575926,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "1.3.0"
           },
           {
             "id": "functions-have-names",
-            "x": 371.8928028121413,
+            "x": 428.1071971878586,
             "y": 102.6569123906967,
             "radius": 6,
             "color": "#7b61ff",
@@ -1046,151 +1073,124 @@
             "version": "1.2.3"
           },
           {
-            "id": "has-strict-mode",
-            "x": 390.581422070603,
-            "y": 100.29599073575926,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "1.0.1"
-          },
-          {
-            "id": "in-publish",
-            "x": 409.4185779293969,
-            "y": 100.29599073575926,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "2.0.1"
-          },
-          {
-            "id": "npmignore",
-            "x": 428.1071971878586,
-            "y": 102.6569123906967,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "0.3.1"
-          },
-          {
-            "id": "nyc",
+            "id": "has-property-descriptors",
             "x": 446.3525491562421,
             "y": 107.34152255572695,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "10.3.2"
+            "version": "1.0.2"
           },
           {
-            "id": "safe-publish-latest",
+            "id": "@ljharb/eslint-config",
             "x": 463.86689373476077,
             "y": 114.27594213009701,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "2.0.0"
+            "version": "21.1.0"
           },
           {
-            "id": "tape",
+            "id": "@types/call-bind",
             "x": 480.3740192468494,
             "y": 123.35081117469767,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "5.9.0"
+            "version": "1.0.5"
           },
           {
-            "id": "@azure/msal-common",
+            "id": "@types/define-properties",
             "x": 495.6135984623034,
             "y": 134.42301358363156,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "14.16.1"
+            "version": "1.1.5"
           },
           {
-            "id": "@azure/storage-blob",
+            "id": "@types/es-value-fixtures",
             "x": 509.3452941132117,
             "y": 147.31793411069665,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "12.2.1"
+            "version": "1.4.4"
           },
           {
-            "id": "@babel/core",
+            "id": "@types/for-each",
             "x": 521.352549156242,
             "y": 161.832212156129,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "7.7.2"
+            "version": "0.3.3"
           },
           {
-            "id": "@babel/plugin-proposal-class-properties",
+            "id": "@types/function.prototype.name",
             "x": 531.4460020065795,
             "y": 177.7369488847427,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "7.7.0"
+            "version": "1.1.3"
           },
           {
-            "id": "@babel/plugin-proposal-object-rest-spread",
+            "id": "@types/functions-have-names",
             "x": 539.4664728832377,
             "y": 194.7813170972982,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "7.6.2"
+            "version": "1.2.2"
           },
           {
-            "id": "@babel/preset-env",
+            "id": "@types/has-property-descriptors",
             "x": 545.2874741692947,
             "y": 212.69651692527168,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "7.7.1"
+            "version": "1.0.3"
           },
           {
-            "id": "@babel/preset-typescript",
+            "id": "@types/make-arrow-function",
             "x": 548.8172051971717,
             "y": 231.2000149653543,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "7.7.2"
+            "version": "1.2.2"
           }
         ],
         "edges": [
           {
-            "source": "basic-ftp",
-            "target": "data-uri-to-buffer",
+            "source": "@commitlint/cli",
+            "target": "@commitlint/config-conventional",
             "import_type": "inferred",
             "weight": 0.5
           },
           {
-            "source": "data-uri-to-buffer",
-            "target": "debug",
+            "source": "@commitlint/config-conventional",
+            "target": "@istanbuljs/nyc-config-typescript",
             "import_type": "inferred",
             "weight": 0.5
           },
           {
-            "source": "debug",
-            "target": "@types/debug",
+            "source": "@istanbuljs/nyc-config-typescript",
+            "target": "@semantic-release/changelog",
             "import_type": "inferred",
             "weight": 0.5
           },
           {
-            "source": "@types/debug",
-            "target": "@types/ftpd",
+            "source": "@semantic-release/changelog",
+            "target": "@semantic-release/commit-analyzer",
             "import_type": "inferred",
             "weight": 0.5
           },
           {
-            "source": "@types/ftpd",
-            "target": "@types/jest",
+            "source": "@semantic-release/commit-analyzer",
+            "target": "@semantic-release/git",
             "import_type": "inferred",
             "weight": 0.5
           }
