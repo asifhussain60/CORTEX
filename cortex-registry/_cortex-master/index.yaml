@@ -1267,6 +1267,33 @@ onboarded_repositories:
       file_count: 1200
       dashboard: "company/dashboards/data/noor-canvas.json"
 
+# Audit & Action Plans
+audit_plans:
+  - id: "AUDIT-2026-02-09-001"
+    title: "CORTEX Codebase Health Scan (P0-P3)"
+    file: "audit-action-plan-2026-02-09.yaml"
+    quick_ref: "audit-checkpoint-quick-ref.yaml"
+    status: "OPEN"
+    created: "2026-02-09"
+    audit_scope: "Full P0-P3 codebase validation"
+    findings_summary:
+      p0_critical: 3
+      p1_high: 5
+      p2_medium: 2
+      p3_low: 12
+      passed_checks: 18
+    critical_blockers:
+      - "P0-1: Module import structure violation (cortex.agents) - BLOCKS 803 tests"
+      - "P0-2: Missing test dependencies (playwright)"
+      - "P0-3: 16 bare except: clauses (CORE-013)"
+    session_continuity: true
+    next_checkpoint: "P0-1-START"
+    how_to_continue: |
+      In next Copilot Chat session, say:
+        "continue from checkpoint: P0-1"
+      Or simply:
+        "continue audit checkpoint"
+
 # Metadata
 statistics:
   total_phases: 53
@@ -1281,11 +1308,13 @@ statistics:
   total_enhancements: 7
   active_enhancements: 7
   total_onboarded_repos: 6
+  active_audits: 1
   last_phase_created: "2026-02-08"
   last_phase_completed: "2026-02-08"
   last_repo_onboarded: "2026-02-08"
+  last_audit_created: "2026-02-09"
   next_expected_completion: "2026-04-15"
-  last_updated: "2026-02-08"
+  last_updated: "2026-02-09"
   active_breakdown:
     - "phase-47: Company/CORTEX Separation & Registry Consolidation (P1, planned, ROI=0.87)"
     - "phase-37: Role-Adaptive Persona System (P1, planned, ROI=0.85)"

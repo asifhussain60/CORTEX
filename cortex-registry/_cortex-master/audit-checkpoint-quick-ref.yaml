@@ -1,0 +1,130 @@
+# CORTEX Audit Checkpoint Quick Reference
+# Updated: 2026-02-09
+# Purpose: Fast lookup for session continuity across Copilot Chat sessions
+# 
+# HOW TO USE:
+# 1. In your next Copilot Chat, paste: "continue audit checkpoint"
+# 2. Copilot will reference this file automatically
+# 3. Follow the checkpoint you're on
+# 4. Update status as you progress
+
+---
+
+current_status: "OPEN"
+last_updated: "2026-02-09T00:00:00Z"
+audit_id: "AUDIT-2026-02-09-001"
+full_plan: "audit-action-plan-2026-02-09.yaml"
+
+# ============================================================================
+# QUICK CHECKPOINT REFERENCE
+# ============================================================================
+
+checkpoints:
+  P0-1:
+    title: "🔴 Fix cortex.agents module import (BLOCKING)"
+    status: "OPEN"
+    duration: "15 min"
+    commands:
+      - "mkdir -p cortex/agents/core"
+      - "touch cortex/agents/__init__.py"
+      - "touch cortex/agents/core/__init__.py"
+      - "cp .github/agents/core/response-template-generator.py cortex/agents/core/"
+    verify:
+      - "/Users/asifhussain/PROJECTS/CORTEX/.venv/bin/python -c 'from cortex.agents.core.response_template_generator import ResponseTemplate; print(\"✅ Import OK\")'"
+      - "/Users/asifhussain/PROJECTS/CORTEX/.venv/bin/python -m pytest tests/ --ignore=tests/e2e --ignore=tests/integration --ignore=tests/_legacy_broken --co -q 2>&1 | tail -3"
+    commit: "AC-AUDIT-2026-02-09-001-P0-1: Fix cortex.agents module import structure"
+    next_checkpoint: "P0-2"
+
+  P0-2:
+    title: "🔴 Install missing test dependencies"
+    status: "OPEN"
+    duration: "10 min"
+    depends_on: "P0-1"
+    commands:
+      - "/Users/asifhussain/PROJECTS/CORTEX/.venv/bin/pip install playwright pytest-asyncio"
+    verify:
+      - "/Users/asifhussain/PROJECTS/CORTEX/.venv/bin/python -c 'import playwright; print(f\"✅ playwright available\")'"
+    commit: "AC-AUDIT-2026-02-09-001-P0-2: Install missing test environment dependencies"
+    next_checkpoint: "P0-3"
+
+  P0-3:
+    title: "🔴 Fix CORE-013 bare except clauses (16 instances)"
+    status: "OPEN"
+    duration: "30 min"
+    depends_on: "P0-1"
+    steps:
+      - "grep -rn 'except:' cortex/ --include='*.py' | grep -v 'except.*(' | tee /tmp/bare-except.txt"
+      - "wc -l /tmp/bare-except.txt  # Shows count"
+      - "For each line: replace bare 'except:' with specific exception type"
+      - "Add logging for each exception handler"
+      - "Test to verify behavior preserved"
+    commit: "AC-AUDIT-2026-02-09-001-P0-3: Fix CORE-013 bare except clauses"
+    next_checkpoint: "P1-1"
+
+  P1-1:
+    title: "⚠️ Review audit trail compliance (CORE-027)"
+    status: "OPEN"
+    duration: "30 min"
+    depends_on: "P0-1"
+    steps:
+      - "Review: cortex/orchestrators/support/phase_completion_orchestrator.py"
+      - "Check: Recent 10 commits for AC marker patterns"
+      - "Document: Audit trail injection patterns"
+      - "Recommend: Patterns for new implementations"
+    commit: "AC-AUDIT-2026-02-09-001-P1-1: Document audit trail compliance patterns"
+    next_checkpoint: "P2-1"
+
+  P2-1:
+    title: "🟡 Resolve TODO/FIXME markers (18 instances)"
+    status: "OPEN"
+    duration: "25 min"
+    depends_on: []
+    steps:
+      - "Extract TODO/FIXME markers to GitHub issues"
+      - "Update code with issue numbers for traceability"
+      - "Close this item"
+    commit: "AC-AUDIT-2026-02-09-001-P2-1: Track TODO markers as GitHub issues"
+    next_checkpoint: "COMPLETE"
+
+# ============================================================================
+# PROGRESS TRACKING
+# ============================================================================
+
+progress:
+  p0_1_status: "⏳ PENDING"
+  p0_1_completed_at: null
+  p0_2_status: "⏳ PENDING"
+  p0_2_completed_at: null
+  p0_3_status: "⏳ PENDING"
+  p0_3_completed_at: null
+  p1_1_status: "⏳ PENDING"
+  p1_1_completed_at: null
+  p2_1_status: "⏳ PENDING"
+  p2_1_completed_at: null
+
+# ============================================================================
+# CONTINUATION COMMANDS FOR NEXT SESSION
+# ============================================================================
+
+next_session_commands:
+  option_1: "continue from checkpoint: P0-1"
+  option_2: "continue audit checkpoint P0-2"
+  option_3: "/audit checkpoint"
+  
+  example_prompt: |
+    "continue from checkpoint: P0-1
+     Show the remediation steps for fixing cortex.agents module import
+     I'll implement the first step"
+
+# ============================================================================
+# SESSION LOG
+# ============================================================================
+
+session_log:
+  - session_id: "INITIAL-AUDIT-2026-02-09"
+    timestamp: "2026-02-09T00:00:00Z"
+    action: "Audit completed, action plan created"
+    checkpoint_at_end: "P0-1-START"
+    next_action: "Begin P0-1 remediation in next session"
+
+# Updated by session: [TO BE FILLED IN DURING CONTINUATION]
