@@ -3,10 +3,11 @@
 # Authority: cortex-architect.prompt.md v15.1
 # Updated: 2026-02-08
 
-version: "1.0"
+version: "1.1"
 registry_name: "_cortex-master"
 description: "CORTEX self-development planning with phase tracking and enhancement pipeline"
-last_updated: "2026-02-08"
+last_updated: "2026-02-09"
+revision: "Strategic analysis cleanup - Phase 56 pilot, LENS enhancement roadmap, legacy cleanup"
 
 # Active Phases (Current Development)
 active_phases:
@@ -484,8 +485,81 @@ active_phases:
     breaking_changes: false
     production_blocker: false
     description: |
-      � IN PROGRESS: Phase 55 S1 Complete - .NET Parser foundation (13/51 tests)
+      🔵 IN PROGRESS: Phase 55 S1 Complete - .NET Parser foundation (13/51 tests)
       Comprehensive .NET monolith onboarding capabilities for LENS.
+  
+  - id: "phase-56-A"
+    name: "LENS/Intelligence Hybrid Architecture (PILOT)"
+    file: "phases/active/phase-56-lens-intelligence-hybrid-architecture.yaml"
+    created: "2026-02-09"
+    revised: "2026-02-09"
+    status: "approved_pilot"
+    priority: "P1"
+    execution_order: 8
+    roi_score: 0.75
+    estimated_duration: "3-5 days"
+    test_target: 43
+    coverage_target: 90
+    autonomous_execution: true
+    approval_required: false
+    cross_cutting: true
+    breaking_changes: false
+    production_blocker: false
+    description: |
+      ✅ APPROVED (PILOT): Relationship traversal migration only (3-5 days).
+      Proves hybrid architecture before full rollout.
+      
+      **STRATEGIC REVISION:**
+      - Original: All 6 engines, 2-3 weeks, ROI 0.95
+      - Pilot: 1 engine (relationships), 3-5 days, ROI 0.75
+      - Rationale: Validate architecture viability first
+      
+      **PILOT SCOPE:**
+      - Migrate RelationshipTraversal to cortex/intelligence/relationships/
+      - Create BaseIntelligenceEngine abstract class
+      - Update LENS to use new engine
+      - Validate zero circular dependencies
+      - Document patterns for phases 56-B/C/D/E
+      
+      VISION:
+      - LENS: Thin orchestration layer (coordination, caching, MCP interface)
+      - Intelligence: Deep computation layer (AST, Git, relationships, patterns)
+      - Clear one-way flow: LENS → Intelligence (no circular deps)
+      
+      BENEFITS:
+      ✅ Zero circular dependencies (lens ↔ brain eliminated)
+      ✅ Single canonical implementation (no duplication)
+      ✅ Intelligence engines reusable beyond LENS
+      ✅ Future-proof for ML/AI integration
+      ✅ Improved testability (engines unit-testable standalone)
+      ✅ Scalable to 50+ intelligence engines
+      
+      PHASES (4 stages, 2-3 weeks):
+      - S1: Foundation + Relationship Migration (3 days, 43 tests)
+      - S2: AST & Git Engine Migration (4 days, 67 tests)
+      - S3: Pattern & Comment Intelligence (3 days, 50 tests)
+      - S4: Semantic Foundation & Cleanup (3 days, 48 tests)
+      
+      SUCCESS METRICS:
+      - Zero circular dependencies (import graph verified)
+      - Test coverage ≥ 90% for intelligence layer
+      - Code duplication eliminated (100%)
+      - Performance < 5% latency increase
+      - All 515+ existing tests passing
+      - MCP tool signatures unchanged (backward compatible)
+      
+      RISKS MITIGATED:
+      - Phased migration with backward compatibility
+      - Feature flags for gradual rollout
+      - Aliases for deprecated imports (removal Phase 57)
+      - Comprehensive test suite before each phase
+    depends_on:
+      - "phase-49"  # CCL async pattern compatibility
+      - "phase-48"  # Challenge gate uses LENS
+    unblocks:
+      - "ML/AI-based code intelligence (Phase 58)"
+      - "Multi-language LENS support (Phase 60)"
+      - "Advanced semantic analysis (Phase 59)"
       
       S1 Deliverables:
       - SolutionFileParser: Parse .sln files, detect project types, extract projects
@@ -650,23 +724,129 @@ active_phases:
     depends_on:
       - "phase-43"
 
+  - id: "phase-54-A"
+    name: "Repository Onboarding Incremental Refactoring (REVISED)"
+    file: "phases/active/phase-54-A-incremental-onboarding-refactor.yaml"
+    created: "2026-02-09"
+    status: "planned"
+    priority: "P2"
+    execution_order: 8
+    roi_score: 0.65
+    estimated_duration: "14 hours"
+    test_target: 66
+    coverage_target: 90
+    autonomous_execution: true
+    approval_required: false
+    cross_cutting: false
+    breaking_changes: false
+    production_blocker: false
+    description: |
+      ⚪ PLANNED: Incremental MVP approach - Use cases + Repository pattern + Jinja2 MVP (14h vs 46h big-bang).
+      
+      **CHALLENGE GATE PASSED:** 2026-02-09 (revised from Phase 54)
+      
+      **Archive CORTEX-4.0 Analysis:**
+      - ❌ INVALIDATED: Archive had user onboarding (journey state), NOT repository onboarding
+      - ❌ INVALIDATED: No LENS caching in archive (simple dict only)
+      - ✅ VALIDATED: Current production HAS ENH-042 cache (TTL + LRU eviction)
+      - ⚠️ PARTIAL: Archive patterns not directly applicable (different domain)
+      
+      **3 STAGES (MVP-Focused):**
+      - S1: Extract 6 Use Cases (6h, 41 tests) — SOLID compliance
+      - S2: Repository Pattern (3h, 15 tests) — Storage abstraction
+      - S3: Jinja2 MVP (5h, 10 tests) — Single template (not full library)
+      
+      **DEFERRED TO FUTURE (Phase 54-B/C/D):**
+      - ⏸️ LENS cache restoration (ENH-042 already exists)
+      - ⏸️ 500 LOC orchestrator refactor (working fine at 2,418)
+      - ⏸️ TDD state machine (YAGNI - no pain evident)
+      - ⏸️ Plugin registry (YAGNI - 3 languages sufficient)
+      - ⏸️ Performance benchmarks (no user complaints)
+      
+      **ROI REVISION:**
+      - Original Phase 54: 0.87 (claimed IMMEDIATE)
+      - Revised Phase 54-A: 0.65 (DEFER tier)
+      - Reasoning: Implementation Truth (CORE-030) invalidated cache claims
+      
+      **Git References (Archive CORTEX-4.0):**
+      - Branch: origin/archive/CORTEX-4.0
+      - Last Commit: 5bdd559cf (2026-02-08)
+      - User Onboarding: src/orchestrators/onboarding/orchestrator.py
+      - LENS Synthesis: cortex/orchestrators/core/lens_synthesis.py
+      - NOT FOUND: Repository onboarding, LENS cache, Jinja2 templates
+      
+      **Key Deliverables:**
+      - cortex/orchestrators/support/onboarding_use_cases/ (6 use cases)
+      - cortex/repositories/json_profile_repository.py
+      - cortex/templates/dashboards/onboarding_dashboard.html.j2
+      - 66+ tests (use cases + repository + renderer)
+      
+      **Success = Foundation Ready:**
+      - Use case extraction proves SOLID compliance
+      - Repository pattern enables future SQLite/API migration
+      - Jinja2 MVP proves template system works
+      - Zero regression (all current features maintained)
+    depends_on:
+      - "phase-28"
+    unblocks:
+      - "Future SQLite migration (repository ready)"
+      - "Dashboard customization (template system ready)"
+      - "Better unit testing (use case isolation)"
+    
+    challenge_analysis:
+      date: "2026-02-09"
+      verdict: "REVISED - Incremental approach recommended"
+      key_findings:
+        - "Archive claims invalidated via CORE-030"
+        - "ENH-042 cache exists (10x gain already achieved)"
+        - "ROI 0.87 → 0.65 (evidence-based)"
+        - "Duration 46h → 14h (MVP focus)"
+      deferred_work:
+        - "Phase 54-B: Template expansion (8h)"
+        - "Phase 54-C: Performance optimization (12h)"
+        - "Phase 54-D: Orchestrator coordinator (8h)"
+        - "Phase 54-E: Advanced patterns (20h)"
+
   - id: "phase-24"
     name: "External Refactoring Tools Integration"
     file: "phases/active/phase-24-external-refactoring-tools.yaml"
     started: null
-    status: "planned"
+    status: "superseded"
+    superseded_by: "phase-43"
     priority: "P2"
     execution_order: 11
+    archive_date: "2026-02-09"
     description: |
-      ⚪ PLANNED: Partially superseded by Phase 43 stages S5-S6 (refactoring bridge).
-      Remaining scope: advanced multi-language refactoring patterns.
+      ❌ SUPERSEDED: Phase 43 S5-S6 (refactoring bridge) replaced this.
+      Advanced multi-language patterns integrated into RefactoringOrchestrator.
 
-  - id: "phase-48"
-    name: "Intelligent Code Review Orchestrator"
+  - id: "phase-48-code-review"
+    name: "Intelligent Code Review Orchestrator (REJECTED)"
     file: "phases/active/phase-48-code-review-orchestrator.yaml"
     created: "2026-02-08"
-    status: "pending_approval"
+    revised: "2026-02-09"
+    status: "rejected"
+    rejection_reason: "Orchestrator purpose violation + 90% duplication with existing capabilities"
     priority: "P0"
+    replacement_approach: "PR Review Integration Service (not orchestrator)"
+    archive_date: "2026-02-09"
+    description: |
+      ❌ REJECTED: Violates orchestrator design pattern.
+      
+      **REJECTION RATIONALE (Strategic Analysis 2026-02-09):**
+      1. Orchestrator Purpose Violation: PR review is domain operation, not coordination
+      2. 90% Duplication: LENS + ChallengeEngine + TDDOrchestrator already provide capabilities
+      3. MCP-FIRST Violation: Should extend cortex_process_request, not create new tool
+      
+      **RECOMMENDED ALTERNATIVE:**
+      - Name: "PR Review Integration Service" (service layer, not orchestrator)
+      - Approach: Extend IntentRouter with REVIEW intent + ReviewAnalysisService
+      - Duration: 3 days (not 7 days)
+      - ROI: 0.95 (higher due to reuse)
+      - Integration: GitHub Actions → cortex_process_request(mode="REVIEW")
+      
+      **ACTION:** Archive phase file, create phase-48-pr-review-service.yaml instead.
+    replacement_phase: "phase-48-pr-review-service"
     execution_order: 6
     roi_score: 0.92
     estimated_duration: "7 days"
@@ -1011,6 +1191,188 @@ completed_phases_2025:
     - "phase-17-documentation-architecture.yaml"
     - "phase-18-enterprise-dashboard-system.yaml"
 
+  # NEW PHASES: LENS Enhancement Roadmap (2026-02-09)
+  
+  - id: "phase-57"
+    name: "Architectural Pattern Detection"
+    file: "phases/active/phase-57-architectural-pattern-detection.yaml"
+    created: "2026-02-09"
+    status: "planned"
+    priority: "P1"
+    execution_order: 9
+    roi_score: 0.88
+    estimated_duration: "4 days"
+    test_target: 45
+    coverage_target: 90
+    description: |
+      🟡 PLANNED: LENS Layer 5 - Detect microservices, monolith, event-driven patterns.
+      Fills architectural analysis gap identified in strategic LENS review.
+      
+      **SCOPE:**
+      - Microservices vs monolith detection
+      - Event-driven pattern identification
+      - Database-per-service analysis
+      - Service boundary detection
+      
+      **OUTPUT:**
+      - company/domains/{domain}/architecture.yaml
+      - Pattern confidence scores
+      - Architectural recommendations
+      
+      **INTEGRATION:**
+      - Extends LENSOrchestrator (no new orchestrator)
+      - Uses existing AST + Git intelligence
+      - Tiered analysis: Tier 3 (Intelligence)
+    
+  - id: "phase-58"
+    name: "Async Crawler Framework"
+    file: "phases/active/phase-58-async-crawler-framework.yaml"
+    created: "2026-02-09"
+    status: "planned"
+    priority: "P1"
+    execution_order: 10
+    roi_score: 0.82
+    estimated_duration: "5 days"
+    test_target: 55
+    coverage_target: 90
+    description: |
+      🟡 PLANNED: Replace threading with async/await crawler pattern (CORTEX async-first).
+      
+      **SCOPE:**
+      - AsyncCrawlerEngine base class
+      - 4 tech-stack crawlers (Python, TypeScript, C#, SQL)
+      - Typed ExtractedKnowledge contracts (Pydantic)
+      - Graceful error handling
+      
+      **BENEFITS:**
+      - No GIL contention (async vs threads)
+      - Token budget control (queued synthesis)
+      - Backward compatible
+      - Scalable to 1000+ repositories
+    
+  - id: "phase-59"
+    name: "Tiered LLM Synthesis"
+    file: "phases/active/phase-59-tiered-llm-synthesis.yaml"
+    created: "2026-02-09"
+    status: "planned"
+    priority: "P0"
+    execution_order: 11
+    roi_score: 0.91
+    estimated_duration: "3 days"
+    test_target: 35
+    coverage_target: 90
+    description: |
+      🟡 PLANNED: 90% cost reduction via tiered synthesis (no-LLM, local, cloud batch).
+      
+      **TIERS:**
+      - Tier 1: NO LLM (AST parsing, dependency graphs) → Direct write
+      - Tier 2: LOCAL LLM (pattern detection, heuristics) → Write to domains
+      - Tier 3: CLOUD LLM (business logic, concepts) → Batch processing
+      
+      **COST REDUCTION:**
+      - Before: $0.30 per repository
+      - After: $0.03 per repository (90% savings)
+      - 1000 repos: $300 → $30
+    
+  - id: "phase-60"
+    name: "Knowledge Lifecycle Manager"
+    file: "phases/active/phase-60-knowledge-lifecycle-manager.yaml"
+    created: "2026-02-09"
+    status: "planned"
+    priority: "P1"
+    execution_order: 12
+    roi_score: 0.86
+    estimated_duration: "4 days"
+    test_target: 40
+    coverage_target: 90
+    description: |
+      🟡 PLANNED: 4-stage lifecycle (Discovery → Validation → Consolidation → Synthesis).
+      
+      **STAGES:**
+      1. DISCOVERY: Build (additive, no flush)
+      2. VALIDATION: Reconcile (detect conflicts)
+      3. CONSOLIDATION: Selective flush (user-approved)
+      4. SYNTHESIS: Merge (versioned archives)
+      
+      **BENEFITS:**
+      - Audit trail (never lose data)
+      - User control (no surprise flushes)
+      - Rollback capability (versioned)
+      - Conflict detection with review
+    
+  - id: "phase-61"
+    name: "Legacy Code Audit"
+    file: "phases/active/phase-61-legacy-code-audit.yaml"
+    created: "2026-02-09"
+    status: "planned"
+    priority: "P2"
+    execution_order: 13
+    roi_score: 0.72
+    estimated_duration: "2 days"
+    test_target: 25
+    coverage_target: 85
+    description: |
+      🟡 PLANNED: Categorize legacy code (deprecated, duplicate, orphaned, superseded).
+      
+      **CATEGORIES:**
+      1. DEPRECATED: Safe to remove
+      2. DUPLICATE: Consolidate (CORE-035)
+      3. ORPHANED: No imports (investigate)
+      4. SUPERSEDED: Archive to git
+      
+      **OUTPUT:**
+      - Removal candidates list
+      - User approval workflow
+      - No auto-deletion
+    
+  - id: "phase-62"
+    name: "Safe Deprecation"
+    file: "phases/active/phase-62-safe-deprecation.yaml"
+    created: "2026-02-09"
+    status: "planned"
+    priority: "P2"
+    execution_order: 14
+    roi_score: 0.68
+    estimated_duration: "3 days"
+    test_target: 30
+    coverage_target: 85
+    description: |
+      🟡 PLANNED: Mark deprecated code with migration guides (30-day notice).
+      
+      **SCOPE:**
+      - Add deprecation warnings
+      - Create migration guides
+      - Set removal dates
+      - Update documentation
+    
+  - id: "phase-63"
+    name: "LENS Tiered MCP API"
+    file: "phases/active/phase-63-lens-tiered-mcp-api.yaml"
+    created: "2026-02-09"
+    status: "planned"
+    priority: "P0"
+    execution_order: 15
+    roi_score: 0.89
+    estimated_duration: "4 days"
+    test_target: 50
+    coverage_target: 90
+    description: |
+      🟡 PLANNED: Add cortex_lens_quick, cortex_lens_targeted, cortex_lens_stream MCP tools.
+      
+      **NEW MCP TOOLS:**
+      - cortex_lens_quick: Tier 2 (<200ms) → InteractionOrchestrator
+      - cortex_lens_targeted: Custom capabilities → Selective analysis
+      - cortex_lens_stream: Progressive results → Large repositories
+      
+      **BACKWARD COMPATIBLE:**
+      - cortex_lens_analyze unchanged (Tier 4)
+      
+      **ORCHESTRATOR WIRING:**
+      - InteractionOrchestrator: async Tier 2
+      - TDDOrchestrator: Tier 2 context
+      - PlanOrchestrator: Tier 3 validation
+      - RepositoryOnboardingOrchestrator: Tier 4 (unchanged)
+
 # Active Enhancements
 active_enhancements:
   - id: "enh-029"
@@ -1191,11 +1553,25 @@ onboarded_repositories:
 
 # Metadata
 statistics:
-  total_phases: 53
-  active_phases: 7
+  total_phases: 63
+  active_phases: 19
   completed_phases: 45
+  planned_phases: 12
+  rejected_phases: 1
+  superseded_phases: 1
   completed_2026: 42
   completed_2025: 11
+  
+  # Phase Categories
+  lens_enhancement_phases: 7  # Phases 57-63
+  pilot_phases: 1  # Phase 56-A
+  
+  # Strategic Analysis
+  last_strategic_review: "2026-02-09"
+  phases_added: 7
+  phases_rejected: 1
+  phases_superseded: 1
+  roi_improvements: "Phase 54-A (0.87→0.65), Phase 56 (0.95→0.75)"
   in_progress_phases: 0
   planned_phases: 8
   pending_approval_phases: 0
