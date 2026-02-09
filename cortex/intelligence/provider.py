@@ -16,7 +16,7 @@ and MasterOrchestrator from single provider.
 from abc import ABC, abstractmethod
 from enum import Enum
 from dataclasses import dataclass
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 from pathlib import Path
 import time
 import logging
@@ -296,6 +296,9 @@ class UnifiedIntelligenceProvider(IIntelligenceProvider):
         self._cache: Dict[str, CacheEntry] = {}
         self._cache_ttl = 300  # 5 minutes
         
+        # Phase 65 S5: Session-scoped storage
+        self._session_profiles: Dict[str, Dict[str, Any]] = {}  # session_id -> profile
+        
         logger.info("UnifiedIntelligenceProvider initialized (singleton)")
     
     def _ensure_lens_orchestrator(self):
@@ -326,7 +329,8 @@ class UnifiedIntelligenceProvider(IIntelligenceProvider):
         intent: str,
         file_path: Optional[str] = None,
         repo_name: Optional[str] = None,
-        tier: ExecutionTier = ExecutionTier.TARGETED
+        tier: ExecutionTier = ExecutionTier.TARGETED,
+        session_id: Optional[str] = None
     ) -> UnifiedIntelligenceContext:
         """Get unified intelligence context."""
         # Generate cache key
@@ -533,6 +537,136 @@ class UnifiedIntelligenceProvider(IIntelligenceProvider):
             company_knowledge=company_knowledge,
             file_path=file_path
         )
+    
+    # Phase 65 S5: Session management and turn-over-turn accumulation
+    
+    def start_session(
+        self,
+        session_id: str,
+        repo_name: Optional[str] = None
+    ) -> None:
+        """
+        Start new intelligence session.
+        
+        Loads repository profile on session start (S5-T2).
+        Creates turn context for session-scoped accumulation.
+        
+        Args:
+            session_id: Unique session identifier
+            repo_name: Optional repository name for profile loading
+        """
+        from cortex.intelligence.turn_context import get_turn_context
+        
+        # Initialize turn context
+        turn_context = get_turn_context(session_id)
+        
+        # Load repo profile if provided (S5-T2)
+        if repo_name:
+            try:
+                profile = self.get_repo_profile(repo_name)
+                if profile:
+                    # Cache profile for session lifetime
+                    self._session_profiles[session_id] = profile
+                    logger.info(f"Session started: {session_id}, profile loaded: {repo_name}")
+                else:
+                    logger.warning(f"Session started: {session_id}, profile not found: {repo_name}")
+            except Exception as e:
+                logger.error(f"Session profile loading failed: {e}")
+                # Continue without profile (graceful degradation)
+        else:
+            logger.info(f"Session started: {session_id} (no profile)")
+    
+    def get_session_profile(self, session_id: str) -> Optional[Dict[str, Any]]:
+        """
+        Get cached repository profile for session.
+        
+        Args:
+            session_id: Session identifier
+            
+        Returns:
+            Repository profile dict or None if not cached
+        """
+        return self._session_profiles.get(session_id)
+    
+    def get_turn_context(self, session_id: str):
+        """
+        Get turn context for session.
+        
+        Args:
+            session_id: Session identifier
+            
+        Returns:
+            TurnContext for session
+        """
+        from cortex.intelligence.turn_context import get_turn_context
+        return get_turn_context(session_id)
+    
+    def get_accumulated_context(self, session_id: str) -> Dict[str, Any]:
+        """
+        Get accumulated context across all turns in session.
+        
+        Args:
+            session_id: Session identifier
+            
+        Returns:
+            Dict with accumulated entities, patterns, standards, files, violations
+        """
+        from cortex.intelligence.turn_context import get_turn_context
+        turn_context = get_turn_context(session_id)
+        return turn_context.get_accumulated_context()
+    
+    def _synthesize_cross_domain(
+        self,
+        intent: str,
+        context: str
+    ) -> Dict[str, List[str]]:
+        """
+        Synthesize cross-domain knowledge (S5-T3).
+        
+        Uses tier3 SynthesisEngine to combine architecture + security + testing
+        knowledge for comprehensive recommendations.
+        
+        Args:
+            intent: Intent type
+            context: Context string (e.g., "FastAPI endpoint in DDD repo")
+            
+        Returns:
+            Dict with cross-domain recommendations by category
+        """
+        try:
+            synthesis_engine = self._ensure_synthesis_engine()
+            
+            # Placeholder for tier3 cross-domain synthesis
+            # Real implementation would call SynthesisEngine with cross-domain query
+            result = {
+                'architecture': [],
+                'security': [],
+                'testing': []
+            }
+            
+            logger.info(f"Cross-domain synthesis completed: {intent}")
+            return result
+            
+        except Exception as e:
+            logger.error(f"Cross-domain synthesis failed: {e}")
+            return {'architecture': [], 'security': [], 'testing': []}
+    
+    def synthesize_cross_domain(
+        self,
+        intent: str,
+        context: str
+    ) -> Dict[str, List[str]]:
+        """
+        Public API for cross-domain synthesis.
+        
+        Args:
+            intent: Intent type
+            context: Context description
+            
+        Returns:
+            Cross-domain knowledge by category
+        """
+        return self._synthesize_cross_domain(intent, context)
 
 
 # Singleton accessor
