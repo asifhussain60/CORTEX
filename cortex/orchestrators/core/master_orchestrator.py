@@ -1955,6 +1955,74 @@ class MasterOrchestrator(IOrchestrator):
                 )
             
             # ═══════════════════════════════════════════════════════════════════════
+            # PHASE 64 S1: STAGE 1 - LENS Comprehension
+            # AC-PHASE64-S1-001: Build LENS context for holistic orchestration
+            # ═══════════════════════════════════════════════════════════════════════
+            # NEW: Stage 1 LENS Comprehension - Build LENS context before intent routing
+            lens_context = {}
+            
+            try:
+                # Build LENS context using LENS analyzers (Tier 2 - Quick Analysis)
+                from cortex.lens import LENSOrchestrator
+                from pathlib import Path
+                
+                # Get file path from parameters or use current working directory
+                repo_path = Path(parameters.get("repo_path", "."))
+                if not repo_path.is_absolute():
+                    repo_path = Path.cwd() / repo_path
+                
+                # Create LENS orchestrator with repo path
+                lens_orchestrator = LENSOrchestrator(repo_path=repo_path)
+                
+                # Get file path from parameters for targeted analysis
+                file_path = Path(parameters.get("target_file", str(repo_path)))
+                
+                # Analyze file using LENS (Language → Examination → Navigation → Synthesis)
+                lens_result = lens_orchestrator.analyze_file(file_path)
+                
+                # Extract LENS context for downstream stages
+                if isinstance(lens_result, dict):
+                    lens_context = lens_result
+                else:
+                    # Convert LENSContext dataclass to dict
+                    if hasattr(lens_result, 'to_dict'):
+                        lens_context = lens_result.to_dict()
+                    else:
+                        lens_context = {
+                            "git_analysis": getattr(lens_result, 'git_analysis', {}),
+                            "ast_analysis": getattr(lens_result, 'ast_analysis', {}),
+                            "comment_analysis": getattr(lens_result, 'comment_analysis', {}),
+                            "metadata": getattr(lens_result, 'metadata', {})
+                        }
+                
+                # Log Stage 1 completion
+                self.logger.log_operation_complete(
+                    ac_id="AC-PHASE64-S1-001",
+                    operation="STAGE_1_LENS_COMPREHENSION",
+                    success=True,
+                    details={
+                        "turn_number": self._turn_number,
+                        "lens_context_keys": list(lens_context.keys()) if isinstance(lens_context, dict) else [],
+                        "file_analyzed": str(file_path),
+                        "repo_path": str(repo_path)
+                    }
+                )
+                
+                # Store LENS context for downstream use
+                parameters["_lens_context"] = lens_context
+                    
+            except Exception as stage_1_err:
+                # Log Stage 1 failure but don't block - proceed with fallback
+                self.logger.log_operation_complete(
+                    ac_id="AC-PHASE64-S1-001",
+                    operation="STAGE_1_LENS_COMPREHENSION_FAILED",
+                    success=False,
+                    details={"error": str(stage_1_err), "will_fallback": True}
+                )
+                # Fallback: empty LENS context, proceed to Stage 2
+                lens_context = {}
+            
+            # ═══════════════════════════════════════════════════════════════════════
             # Phase 38 Stage 10: EXIT GATE - Deployment Validation
             # ═══════════════════════════════════════════════════════════════════════
             # Validate deployment readiness BEFORE execution (production gate)
