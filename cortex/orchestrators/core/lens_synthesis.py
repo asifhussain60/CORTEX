@@ -33,15 +33,6 @@ from cortex.orchestrators.decorators import inject_orchestrator_context
 # Phase 51: Enhanced response template with semantic color coding
 from cortex.agents.core.response_template_generator import ResponseTemplate
 
-# Phase 52: ExecutionContext support (context-aware scoped analysis)
-try:
-    from cortex.agents.core.agent_rules_interpreter import (
-        ExecutionContext,
-    )
-    PHASE_52_EXECUTION_CONTEXT_AVAILABLE = True
-except ImportError:
-    PHASE_52_EXECUTION_CONTEXT_AVAILABLE = False
-
 
 
 class SynthesisPhase(Enum):
@@ -448,105 +439,6 @@ class LENSSynthesis:
             "average_confidence": total_confidence / len(self.synthesis_history),
             "phase_usage": phase_counts
         }
-    
-    # Phase 52: ExecutionContext-aware analysis scoping
-    def synthesize_with_execution_context(
-        self,
-        context: LENSContext,
-        execution_context: Optional[str] = None,
-        directive_dict: Optional[Dict[str, Any]] = None,
-    ) -> Result[Dict[str, Any]]:
-        """
-        Synthesize LENS analysis with execution context awareness.
-        
-        Phase 52: Determines analysis scope based on ExecutionContext:
-        - CORTEX_INTERNAL: Stricter rules (CORTEX self-development)
-        - PRODUCTION_REPO: Standard rules (user repositories)
-        - HYBRID: Both contexts
-        
-        Args:
-            context: LENSContext with LENS phases
-            execution_context: "cortex_internal", "production_repo", or "hybrid"
-            directive_dict: ExecutionDirective constraints (optional)
-        
-        Returns:
-            Result with context-scoped analysis output
-        """
-        try:
-            # Determine applicable context
-            exec_ctx = None
-            if PHASE_52_EXECUTION_CONTEXT_AVAILABLE and execution_context:
-                try:
-                    exec_ctx = ExecutionContext(execution_context)
-                except ValueError:
-                    exec_ctx = ExecutionContext.PRODUCTION_REPO
-            
-            # Log context-aware synthesis start
-            self.logger.log_operation_complete(
-                ac_id="AC-PHASE52-003",
-                operation="LENS_CONTEXT_AWARE_SYNTHESIS_START",
-                success=True,
-                details={
-                    "context": context.operation,
-                    "execution_context": exec_ctx.value if exec_ctx else "default",
-                    "has_directive": directive_dict is not None,
-                }
-            )
-            
-            # Perform standard synthesis first
-            synthesis_result = self.synthesize(context)
-            
-            # Extract output assuming synthesize returns Result-wrapped dict
-            synthesis_output = synthesis_result if isinstance(synthesis_result, dict) else {}
-            
-            # Phase 52: Apply context-specific rules
-            if exec_ctx == ExecutionContext.CORTEX_INTERNAL:
-                # CORTEX self-development: Stricter validation
-                synthesis_output["analysis_scope"] = "CORTEX_INTERNAL"
-                synthesis_output["rule_strictness"] = "STRICT"
-                synthesis_output["applicable_rules"] = [
-                    "CORE-008", "CORE-011", "CORE-012", "CORE-035", "CORE-048"
-                ]
-                synthesis_output["security_level"] = "HIGH"
-            
-            else:
-                # Production repo: Standard validation
-                synthesis_output["analysis_scope"] = "PRODUCTION_REPO"
-                synthesis_output["rule_strictness"] = "STANDARD"
-                synthesis_output["applicable_rules"] = [
-                    "CORE-011", "CORE-012", "CORE-036"
-                ]
-                synthesis_output["security_level"] = "MEDIUM"
-            
-            # Phase 52: Apply directive constraints if available
-            if directive_dict:
-                violations = directive_dict.get("violations", [])
-                synthesis_output["directive_violations"] = violations
-                synthesis_output["directive_enforced"] = True
-            
-            # Log completion
-            self.logger.log_operation_complete(
-                ac_id="AC-PHASE52-003",
-                operation="LENS_CONTEXT_AWARE_SYNTHESIS",
-                success=True,
-                details={
-                    "context": context.operation,
-                    "execution_context": exec_ctx.value if exec_ctx else "default",
-                    "recommendations_count": len(synthesis_output.get("recommendations", [])),
-                    "directive_applied": directive_dict is not None,
-                }
-            )
-            
-            return Ok(synthesis_output)
-        
-        except Exception as e:
-            self.logger.log_operation_complete(
-                ac_id="AC-PHASE52-003",
-                operation="LENS_CONTEXT_AWARE_SYNTHESIS_ERROR",
-                success=False,
-                details={"error": str(e)}
-            )
-            return Err(f"Context-aware synthesis failed: {str(e)}")
 
 
 # Module exports

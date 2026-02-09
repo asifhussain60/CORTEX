@@ -32,6 +32,13 @@ from cortex.lens.analyzers.api_analyzer import get_api_analyzer
 from cortex.orchestrators.mixins.security_advisor_mixin import SecurityAdvisorMixin
 from cortex.lens.cache import LENSCache, get_lens_cache
 
+# Phase 56: Intelligence layer integration (NEW)
+from cortex.intelligence.base import AnalysisContext
+from cortex.intelligence.relationships.traversal import RelationshipTraversalEngine
+
+# Backward compatibility aliases (deprecated, use intelligence layer)
+_LegacyRelationshipTraversalEngine = None  # Will be imported if legacy code exists
+
 
 @dataclass
 class LENSContext:
@@ -411,53 +418,85 @@ class LENSOrchestrator:
     
     def _build_relationship_findings(self, file_path: Path, ast_result: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Build relationship findings using CallGraphBuilder.
+        Build relationship findings using RelationshipTraversalEngine (Phase 56).
         
-        Constructs call graph from AST analysis to populate relationship_findings
-        with caller/callee relationships and dependency information.
+        Constructs relationship analysis (API endpoints, database models, dependencies)
+        from the analyzed file using the new intelligence layer.
         
         Args:
             file_path: Path to analyzed file
-            ast_result: AST analysis result from _analyze_ast
+            ast_result: AST analysis result from _analyze_ast (for fallback)
         
         Returns:
-            Dict with relationship_findings containing call_graph and dependencies
+            Dict with relationship_findings from intelligence layer
         """
         try:
-            # Check if ast_result has the parsed AST tree
-            if not ast_result or "error" in ast_result:
-                return {
-                    "call_graph": {
-                        "nodes": [],
-                        "edges": {},
-                        "reverse_edges": {},
-                    },
-                    "dependencies": [],
-                    "error": "No AST result available",
-                }
+            # Phase 56: Use new intelligence layer for relationship analysis
+            engine = RelationshipTraversalEngine()
+            context = AnalysisContext(
+                file_path=file_path,
+                workspace_root=self.repo_path if hasattr(self, 'repo_path') else Path.cwd(),
+            )
             
-            # For now, return minimal relationship_findings structure
-            # Will be enriched in Phase 43 S5 with actual CallGraphBuilder integration
-            return {
-                "call_graph": {
-                    "nodes": ast_result.get("function_count", 0) + ast_result.get("class_count", 0),
-                    "edges": {},
-                    "reverse_edges": {},
-                },
-                "dependencies": [],
-                "source": "CallGraphBuilder",
-                "file_path": str(file_path),
-            }
+            # Validate context before analysis
+            if not engine.validate_context(context):
+                return self._build_relationship_findings_fallback(ast_result)
+            
+            # Execute intelligence analysis
+            result = engine.analyze(context)
+            
+            # Convert to LENS-compatible format
+            if result and result.data:
+                return {
+                    "api_endpoints": result.data.get("api_endpoints", []),
+                    "database_models": result.data.get("database_models", []),
+                    "dependencies": result.data.get("dependencies", []),
+                    "dependency_graph": result.data.get("dependency_graph", {}),
+                    "source": "RelationshipTraversalEngine (Phase 56)",
+                    "file_path": str(file_path),
+                    "metadata": result.metadata,
+                }
+            else:
+                return self._build_relationship_findings_fallback(ast_result)
+                
         except Exception as e:
-            return {
-                "call_graph": {
-                    "nodes": [],
-                    "edges": {},
-                    "reverse_edges": {},
-                },
-                "dependencies": [],
-                "error": str(e),
-            }
+            # Fallback to simple structure if intelligence analysis fails
+            return self._build_relationship_findings_fallback(ast_result, str(e))
+    
+    def _build_relationship_findings_fallback(
+        self,
+        ast_result: Dict[str, Any],
+        error: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """
+        Fallback relationship findings for compatibility.
+        
+        Used when RelationshipTraversalEngine unavailable or fails.
+        Maintains compatibility with LENS pipeline.
+        
+        Args:
+            ast_result: AST analysis result for fallback data
+            error: Optional error message from primary analysis
+        
+        Returns:
+            Minimal relationship_findings structure
+        """
+        result = {
+            "api_endpoints": [],
+            "database_models": [],
+            "dependencies": [],
+            "dependency_graph": {
+                "nodes": ast_result.get("function_count", 0) + ast_result.get("class_count", 0),
+                "edges": {},
+                "reverse_edges": {},
+            },
+            "source": "Fallback (AST-derived)",
+        }
+        
+        if error:
+            result["error"] = error
+        
+        return result
     
     def _build_dependency_findings(self, file_path: Path, ast_result: Dict[str, Any]) -> Dict[str, Any]:
         """

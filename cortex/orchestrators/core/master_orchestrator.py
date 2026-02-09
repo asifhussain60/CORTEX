@@ -46,19 +46,6 @@ from cortex.core.orchestrator.holistic_context_builder import HolisticContextBui
 # Phase 51: Enhanced response template with semantic color coding
 from cortex.agents.core.response_template_generator import ResponseTemplate
 
-# Phase 52: AgentRulesInterpreter integration (rules-driven orchestration)
-try:
-    from cortex.agents.core.agent_rules_interpreter import (
-        AgentRulesInterpreter,
-        ExecutionContext,
-        ExecutionDirective,
-        RuleEnforcementLevel,
-        OrchestratorInvocationHelper,
-    )
-    PHASE_52_AGENT_RULES_AVAILABLE = True
-except ImportError:
-    PHASE_52_AGENT_RULES_AVAILABLE = False
-
 # AC-UX-VISIBILITY-001: Import orchestrator context decorator
 from cortex.orchestrators.decorators import inject_orchestrator_context
 
@@ -125,27 +112,6 @@ except ImportError:
     # Fallback if modules not accessible
     AutonomousPlanExecutor = None
     ASCIIProgressBar = None
-
-# WIRING: Unified Response Composer System (User Response Template System)
-# AC-RESP-CONS-008: Consolidates 5 response composition systems into unified interface
-# Provides: response generation, multi-mode formatting, template composition, optimization, challenges
-try:
-    from cortex.orchestrators.response.unified_response_composer import (
-        UnifiedResponseComposer,
-        ResponseComposerConfig,
-        ResponseMode,
-        ResponseTone,
-        FormattingProfile,
-    )
-    UNIFIED_RESPONSE_COMPOSER_AVAILABLE = True
-except ImportError:
-    # Fallback if modules not accessible
-    UnifiedResponseComposer = None
-    ResponseComposerConfig = None
-    ResponseMode = None
-    ResponseTone = None
-    FormattingProfile = None
-    UNIFIED_RESPONSE_COMPOSER_AVAILABLE = False
 
 # Note: GracefulDegradationFramework imported lazily in __init__ to avoid circular imports
 
@@ -270,28 +236,6 @@ class MasterOrchestrator(IOrchestrator):
             details={"manager": "StateManager initialized for cross-phase consistency"}
         )
         
-        # Phase 52: Initialize AgentRulesInterpreter for rules-driven orchestration
-        # Bridges agent behavior (Markdown) with machine-readable rules (YAML) and orchestrator execution
-        self._agent_rules_interpreter: Optional[AgentRulesInterpreter] = None
-        if PHASE_52_AGENT_RULES_AVAILABLE:
-            try:
-                registry_path = Path(__file__).parent.parent.parent.parent / "cortex-registry" / "_cortex-master" / "governance"
-                self._agent_rules_interpreter = AgentRulesInterpreter(registry_path)
-                self.logger.log_operation_complete(
-                    ac_id="AC-PHASE52-001",
-                    operation="AGENT_RULES_INTERPRETER_INIT",
-                    success=True,
-                    details={"registry_path": str(registry_path), "phase": "52_rules_driven"}
-                )
-            except Exception as ari_err:
-                # Log but don't fail - Phase 52 is enhancement, not blocking
-                self.logger.log_operation_complete(
-                    ac_id="AC-PHASE52-001",
-                    operation="AGENT_RULES_INTERPRETER_INIT",
-                    success=False,
-                    details={"error": f"Failed to initialize AgentRulesInterpreter: {str(ari_err)}"}
-                )
-        
         # AC-REM-011-01: Initialize stage orchestrators for E2E workflow
         # Stage 1: Interaction Orchestrator (Comprehension)
         self.interaction_orchestrator: Optional[IOrchestrator] = None
@@ -398,55 +342,6 @@ class MasterOrchestrator(IOrchestrator):
         self._component_health_tracker.register_component(
             "KnowledgeRepository", ComponentType.OPTIONAL
         )
-        
-        # WIRING: Initialize UnifiedResponseComposer for user response template system
-        # AC-RESP-CONS-008: Consolidates 5 response composition systems
-        # Provides: response generation, multi-mode formatting, template composition, optimization, challenges
-        self._response_composer = None
-        if UNIFIED_RESPONSE_COMPOSER_AVAILABLE:
-            try:
-                # Create composer with enhanced configuration
-                composer_config = ResponseComposerConfig(
-                    enable_caching=True,
-                    cache_ttl=3600,
-                    enable_optimization=True,
-                    optimization_threshold=0.7,
-                    enable_challenge_injection=True,
-                    challenge_confidence_threshold=0.7,
-                    audit_logging_enabled=True,
-                    enable_formatting_stats=True,
-                    max_cache_size=1000
-                )
-                self._response_composer = UnifiedResponseComposer(config=composer_config)
-                self.logger.log_operation_complete(
-                    ac_id="AC-RESP-CONS-008",
-                    operation="UNIFIED_RESPONSE_COMPOSER_INIT",
-                    success=True,
-                    details={
-                        "system": "UnifiedResponseComposer",
-                        "features": [
-                            "response_generation",
-                            "multi_mode_formatting",
-                            "template_composition",
-                            "response_optimization",
-                            "challenge_injection"
-                        ],
-                        "config": {
-                            "caching_enabled": True,
-                            "optimization_enabled": True,
-                            "challenge_injection_enabled": True,
-                            "audit_logging_enabled": True
-                        }
-                    }
-                )
-            except Exception as composer_err:
-                # Log but don't fail - response composer is enhancement, not blocking
-                self.logger.log_operation_complete(
-                    ac_id="AC-RESP-CONS-008",
-                    operation="UNIFIED_RESPONSE_COMPOSER_INIT",
-                    success=False,
-                    details={"error": f"Failed to initialize UnifiedResponseComposer: {str(composer_err)}"}
-                )
         self.logger.log_operation_complete(
             ac_id="AC-PHASE-2-5-WIRE-001",
             operation="COMPONENT_HEALTH_TRACKER_INIT",
@@ -1796,169 +1691,6 @@ class MasterOrchestrator(IOrchestrator):
             )
             return response
     
-    def generate_response(self, content: str, mode: str = "chat", tone: str = "technical") -> str:
-        """
-        Generate response using UnifiedResponseComposer.
-        
-        Integrates with Phase 52.5: User Response Template System
-        AC-RESP-CONS-009: Generate user-facing responses with mode/tone/profile
-        
-        Args:
-            content: Response content to generate
-            mode: ResponseMode (chat, command, visualization, json_api, markdown, stream)
-            tone: ResponseTone (formal, casual, technical, executive, educational)
-            
-        Returns:
-            Generated response text
-        """
-        if not UNIFIED_RESPONSE_COMPOSER_AVAILABLE or self._response_composer is None:
-            # Graceful degradation: return content unchanged
-            self.logger.log_operation_complete(
-                ac_id="AC-RESP-CONS-009",
-                operation="GENERATE_RESPONSE",
-                success=False,
-                details={"reason": "UnifiedResponseComposer not available"}
-            )
-            return content
-        
-        try:
-            import uuid
-            import time
-            
-            operation_id = str(uuid.uuid4())
-            turn_number = int(time.time() * 1000) % 10000
-            
-            response_obj = self._response_composer.generate_response(
-                operation_id=operation_id,
-                turn_number=turn_number,
-                content=content,
-                mode=ResponseMode[mode.upper()],
-                tone=ResponseTone[tone.upper()]
-            )
-            self.logger.log_operation_complete(
-                ac_id="AC-RESP-CONS-009",
-                operation="GENERATE_RESPONSE",
-                success=True,
-                details={"mode": mode, "tone": tone, "length": len(response_obj.formatted_content)}
-            )
-            return response_obj.formatted_content
-        except Exception as gen_err:
-            self.logger.log_operation_complete(
-                ac_id="AC-RESP-CONS-009",
-                operation="GENERATE_RESPONSE",
-                success=False,
-                details={"error": str(gen_err)}
-            )
-            return content
-    
-    def format_response(self, content: str, profile: str = "standard", mode: str = "chat") -> str:
-        """
-        Format response using UnifiedResponseComposer.
-        
-        Integrates with Phase 52.5: User Response Template System
-        AC-RESP-CONS-010: Format responses with profile (compact, standard, verbose, minimal, rich)
-        
-        Args:
-            content: Response content to format
-            profile: FormattingProfile (compact, standard, verbose, minimal, rich)
-            mode: Formatting mode (chat, command, visualization, json_api, markdown, stream)
-            
-        Returns:
-            Formatted response text
-        """
-        if not UNIFIED_RESPONSE_COMPOSER_AVAILABLE or self._response_composer is None:
-            # Graceful degradation: return content unchanged
-            self.logger.log_operation_complete(
-                ac_id="AC-RESP-CONS-010",
-                operation="FORMAT_RESPONSE",
-                success=False,
-                details={"reason": "UnifiedResponseComposer not available"}
-            )
-            return content
-        
-        try:
-            formatted = self._response_composer.format_response(
-                response=content,
-                mode=mode,
-                profile=FormattingProfile[profile.upper()]
-            )
-            self.logger.log_operation_complete(
-                ac_id="AC-RESP-CONS-010",
-                operation="FORMAT_RESPONSE",
-                success=True,
-                details={"profile": profile, "mode": mode, "length": len(str(formatted))}
-            )
-            return str(formatted)
-        except Exception as fmt_err:
-            self.logger.log_operation_complete(
-                ac_id="AC-RESP-CONS-010",
-                operation="FORMAT_RESPONSE",
-                success=False,
-                details={"error": str(fmt_err)}
-            )
-            return content
-    
-    def compose_from_template(self, template_name: str, variables: dict = None) -> str:
-        """
-        Compose response from template using UnifiedResponseComposer.
-        
-        Integrates with Phase 52.5: User Response Template System
-        AC-RESP-CONS-011: Compose responses from registered templates with variable substitution
-        
-        Args:
-            template_name: Name of registered template (used as template_id)
-            variables: Dictionary of template variables
-            
-        Returns:
-            Composed response text
-        """
-        if not UNIFIED_RESPONSE_COMPOSER_AVAILABLE or self._response_composer is None:
-            # Graceful degradation: return empty string
-            self.logger.log_operation_complete(
-                ac_id="AC-RESP-CONS-011",
-                operation="COMPOSE_FROM_TEMPLATE",
-                success=False,
-                details={"reason": "UnifiedResponseComposer not available"}
-            )
-            return ""
-        
-        try:
-            if variables is None:
-                variables = {}
-            
-            response = self._response_composer.compose_from_template(
-                template_id=template_name,
-                variables=variables
-            )
-            self.logger.log_operation_complete(
-                ac_id="AC-RESP-CONS-011",
-                operation="COMPOSE_FROM_TEMPLATE",
-                success=True,
-                details={"template": template_name, "vars_count": len(variables), "length": len(response)}
-            )
-            return response
-        except Exception as comp_err:
-            self.logger.log_operation_complete(
-                ac_id="AC-RESP-CONS-011",
-                operation="COMPOSE_FROM_TEMPLATE",
-                success=False,
-                details={"error": str(comp_err), "template": template_name}
-            )
-            return ""
-    
-    def get_response_composer(self) -> Any:
-        """
-        Get UnifiedResponseComposer instance for direct use.
-        
-        AC-RESP-CONS-012: Provide access to response composer for orchestrators
-        
-        Returns:
-            UnifiedResponseComposer instance or None if unavailable
-        """
-        if UNIFIED_RESPONSE_COMPOSER_AVAILABLE:
-            return self._response_composer
-        return None
-    
     def get_mcp_tools(self) -> Result[Dict[str, Any]]:
         """AC-AR-011-02: Get exposed MCP tools."""
         try:
@@ -2209,95 +1941,6 @@ class MasterOrchestrator(IOrchestrator):
                     success=False,
                     details={"error": str(exit_gate_err)}
                 )
-            
-            # ═══════════════════════════════════════════════════════════════════════
-            # Phase 52: Agent Rules Interpretation (NEW)
-            # ═══════════════════════════════════════════════════════════════════════
-            # Transform operation request into ExecutionDirective using agent rules
-            # Determines applicable rules, constraints, and orchestrator routing
-            execution_directive: Optional[ExecutionDirective] = None
-            if self._agent_rules_interpreter and PHASE_52_AGENT_RULES_AVAILABLE:
-                try:
-                    # Determine agent ID from operation context
-                    agent_id = parameters.get("agent_id", "cortex-executor")
-                    execution_context_str = parameters.get("execution_context", "production_repo")
-                    
-                    # Map string context to ExecutionContext enum
-                    try:
-                        exec_context = ExecutionContext(execution_context_str)
-                    except ValueError:
-                        exec_context = ExecutionContext.PRODUCTION_REPO
-                    
-                    # Interpret agent request to get ExecutionDirective
-                    directive_result = self._agent_rules_interpreter.interpret_agent_request(
-                        agent_id=agent_id,
-                        request=f"{operation_name}: {str(parameters)}",
-                        context=exec_context,
-                        target_orchestrator=parameters.get("target_orchestrator")
-                    )
-                    
-                    if directive_result.is_ok():
-                        execution_directive = directive_result.unwrap()
-                        
-                        # Log interpreted directive
-                        self.logger.log_operation_complete(
-                            ac_id="AC-PHASE52-002",
-                            operation="AGENT_INTERPRETATION",
-                            success=True,
-                            details={
-                                "agent_id": execution_directive.agent_id,
-                                "target_orchestrator": execution_directive.target_orchestrator,
-                                "rule_id": execution_directive.rule_id,
-                                "context": execution_directive.context.value,
-                                "constraints_count": len(execution_directive.constraints),
-                                "phase": "52_directive_generation"
-                            }
-                        )
-                        
-                        # Store directive in parameters for downstream orchestrators
-                        parameters["_execution_directive"] = {
-                            "agent_id": execution_directive.agent_id,
-                            "rule_id": execution_directive.rule_id,
-                            "rule_version": execution_directive.rule_version,
-                            "context": execution_directive.context.value,
-                            "action": execution_directive.action,
-                            "target_orchestrator": execution_directive.target_orchestrator,
-                            "constraints": [
-                                {"type": c.constraint_type, "value": c.value}
-                                for c in execution_directive.constraints
-                            ],
-                            "metadata": execution_directive.metadata,
-                        }
-                        
-                        # Override target_orchestrator if directive specified one
-                        if execution_directive.target_orchestrator:
-                            parameters["_directive_orchestrator"] = execution_directive.target_orchestrator
-                    
-                    else:
-                        # Log interpretation failure but continue
-                        self.logger.log_operation_complete(
-                            ac_id="AC-PHASE52-002",
-                            operation="AGENT_INTERPRETATION_FAILED",
-                            success=False,
-                            details={
-                                "error": directive_result.error,
-                                "agent_id": agent_id,
-                                "operation": operation_name
-                            }
-                        )
-                
-                except Exception as phase52_err:
-                    # Log but don't block - Phase 52 is enhancement
-                    self.logger.log_operation_complete(
-                        ac_id="AC-PHASE52-002",
-                        operation="AGENT_INTERPRETATION_ERROR",
-                        success=False,
-                        details={
-                            "error": str(phase52_err),
-                            "operation": operation_name,
-                            "phase": "52_directive_generation"
-                        }
-                    )
             
             # ═══════════════════════════════════════════════════════════════════════
             # Phase 38 Stage 10: EXIT GATE - Deployment Validation
