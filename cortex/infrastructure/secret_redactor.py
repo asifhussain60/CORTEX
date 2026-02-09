@@ -54,17 +54,17 @@ class SecretRedactor:
     DEFAULT_RULES: List[RedactionRule] = [
         RedactionRule(
             id="api_key_aws",
-            pattern=r'(?:aws_access_key_id|AKIA[0-9A-Z]{16})',
+            pattern=r'(?:aws_access_key_id|AKIA)[0-9A-Z]{16})',
             description="AWS Access Key ID",
         ),
         RedactionRule(
             id="api_key_azure",
-            pattern=r'(?:azure_key|access_key)[\s]*[:=][\s]*[a-zA-Z0-9+/]{20,}',
+            pattern=r'(?:azure_key|access_key))[\s]*[:=][\s]*[a-zA-Z0-9+/]{20,}',
             description="Azure Access Key",
         ),
         RedactionRule(
             id="bearer_token",
-            pattern=r'(?:Authorization|authorization)[\s]*[:=][\s]*Bearer\s+[a-zA-Z0-9\-._~+/]+=*',
+            pattern=r'(?:Authorization|authorization))[\s]*[:=][\s]*Bearer\s+[a-zA-Z0-9\-._~+/]+=*',
             description="Bearer Token",
         ),
         RedactionRule(
@@ -74,17 +74,17 @@ class SecretRedactor:
         ),
         RedactionRule(
             id="password_field",
-            pattern=r'(?:password|passwd|pwd)[\s]*[:=][\s]*[^\s\n,}]+',
+            pattern=r'(?:password|passwd)|pwd)[\s]*[:=][\s]*[^\s\n,}]+',
             description="Password Field",
         ),
         RedactionRule(
             id="connection_string",
-            pattern=r'(?:connection.?string|connection)[\s]*[:=][\s]*.*(?:password|pwd)=([^\s;]+)',
+            pattern=r'(?:connection.?string|connection)[\s]*[:=][\s]*.*(?:password|pwd))=([^\s;]+)',
             description="Database Connection String",
         ),
         RedactionRule(
             id="private_key",
-            pattern=r'-----BEGIN (?:RSA |EC |DSA )?PRIVATE KEY-----[\s\S]+?-----END (?:RSA |EC |DSA )?PRIVATE KEY-----',
+            pattern=r'-----BEGIN (?:RSA|EC) |DSA )?PRIVATE KEY-----[\s\S]+?-----END (?:RSA|EC) |DSA )?PRIVATE KEY-----',
             description="Private Key",
         ),
         RedactionRule(
@@ -99,7 +99,7 @@ class SecretRedactor:
         ),
         RedactionRule(
             id="github_token",
-            pattern=r'(?:github|gh)_[a-zA-Z0-9_]{36,}',
+            pattern=r'(?:github|gh))_[a-zA-Z0-9_]{36,}',
             description="GitHub Token",
         ),
     ]

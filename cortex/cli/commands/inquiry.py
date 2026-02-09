@@ -8,7 +8,7 @@ AC-ID: INQUIRY-015
 Author: Asif Hussain
 Date: 2026-01-27
 
-Type Hints: Complete | Docstrings: Google-style | Error Handling: Comprehensive
+Type HintsUnion[Complete, Docstrings]: Google-style | Error Handling: Comprehensive
 """
 
 from dataclasses import dataclass

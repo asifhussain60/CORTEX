@@ -29,7 +29,7 @@ def cortex_capture_metrics(
     operation_name: str,
     duration_ms: int,
     success: bool,
-    metadata: dict[str, Any] | None = None,
+    metadata: Union[dict[str, Any], None] = None,
 ) -> dict[str, Any]:
     """
     Record development metrics for evidence-driven tool enhancement.

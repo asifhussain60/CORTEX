@@ -167,7 +167,7 @@ class SecurityThreatAnalyzer:
         
         # CWE-89: SQL Injection (string concatenation in SQL)
         self._cwe89_patterns = [
-            r'(?:SELECT|INSERT|UPDATE|DELETE).*[f"\'].*{',
+            r'(?:SELECT|INSERT)|UPDATE|DELETE).*[f"\'].*{',
             r'db\.execute\s*\(\s*f["\']',
             r'cursor\.execute\s*\(\s*f["\']',
             r'connection\.execute\s*\(\s*f["\']',

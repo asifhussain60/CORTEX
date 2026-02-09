@@ -38,8 +38,7 @@ def cortex_refactor(
     operation: str,
     file_path: str,
     language: str,
-    parameters: Optional[Dict[str, Any]] = None,
-) -> Dict[str, Any]:
+    parameters: Optional[Dict[str, Any]] = None,    unified_intelligence: Optional[Any] = None,) -> Dict[str, Any]:
     """
     Execute a refactoring operation on a source file.
     
@@ -54,6 +53,7 @@ def cortex_refactor(
         file_path: Path to source file to refactor
         language: Language identifier (python, csharp, typescript, javascript)
         parameters: Operation-specific parameters (offset, new_name, etc.)
+        unified_intelligence: Optional UnifiedIntelligenceContext (Phase 54 S4 injection)
         
     Returns:
         Dict with status, modified_files, description, or error

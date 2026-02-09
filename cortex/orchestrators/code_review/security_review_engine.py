@@ -75,9 +75,9 @@ class SecurityReviewEngine:
         """Initialize regex patterns for CWE detection"""
         return {
             CWEType.CWE_89: [
-                re.compile(r'f["\'].*\{.*\}.*(?:SELECT|INSERT|UPDATE|DELETE|DROP)["\']', re.IGNORECASE | re.MULTILINE),
-                re.compile(r'(?:SELECT|INSERT|UPDATE|DELETE|DROP).*["\'].*\+.*["\']', re.IGNORECASE | re.MULTILINE),
-                re.compile(r'\.format\(.*\).*(?:SELECT|INSERT|UPDATE|DELETE|DROP)', re.IGNORECASE | re.MULTILINE),
+                re.compile(r'f["\'].*\{.*\}.*(?:SELECT|INSERT)|UPDATE|DELETE|DROP)["\']', re.IGNORECASE | re.MULTILINE),
+                re.compile(r'(?:SELECT|INSERT)|UPDATE|DELETE|DROP).*["\'].*\+.*["\']', re.IGNORECASE | re.MULTILINE),
+                re.compile(r'\.format\(.*\).*(?:SELECT|INSERT)|UPDATE|DELETE|DROP)', re.IGNORECASE | re.MULTILINE),
             ],
             CWEType.CWE_78: [
                 re.compile(r'os\.system\s*\(\s*f["\']', re.MULTILINE),
@@ -90,22 +90,22 @@ class SecurityReviewEngine:
                 re.compile(r'cryptography.*algorithms\.(MD5|SHA1|DES|RC4)', re.MULTILINE),
             ],
             CWEType.CWE_22: [
-                re.compile(r'os\.path\.join\s*\(\s*[^,]*,\s*(?:request|user|input|args)', re.MULTILINE),
-                re.compile(r'open\s*\(\s*(?:request|user|input|args)(?:\.get)?\s*\(', re.MULTILINE),
+                re.compile(r'os\.path\.join\s*\(\s*[^,]*,\s*(?:request|user)|input|args)', re.MULTILINE),
+                re.compile(r'open\s*\(\s*(?:request|user)|input|args)(?:\.get)?\s*\(', re.MULTILINE),
             ],
             CWEType.CWE_79: [
-                re.compile(r'\.innerHTML\s*=\s*(?:request|user|input|args)', re.MULTILINE),
-                re.compile(r'\.append\s*\(\s*(?:request|user|input|args)', re.MULTILINE),
-                re.compile(r'document\.write\s*\(\s*(?:request|user|input|args)', re.MULTILINE),
+                re.compile(r'\.innerHTML\s*=\s*(?:request|user)|input|args)', re.MULTILINE),
+                re.compile(r'\.append\s*\(\s*(?:request|user)|input|args)', re.MULTILINE),
+                re.compile(r'document\.write\s*\(\s*(?:request|user)|input|args)', re.MULTILINE),
             ],
             CWEType.CWE_502: [
-                re.compile(r'pickle\.loads\s*\(\s*(?:request|user|input|args|untrusted)', re.MULTILINE),
-                re.compile(r'json\.loads\s*\(\s*(?:request|user|input|args)', re.MULTILINE),
+                re.compile(r'pickle\.loads\s*\(\s*(?:request|user)|input|args|untrusted)', re.MULTILINE),
+                re.compile(r'json\.loads\s*\(\s*(?:request|user)|input|args)', re.MULTILINE),
             ],
             CWEType.CWE_94: [
-                re.compile(r'eval\s*\(\s*(?:request|user|input|args)', re.MULTILINE),
+                re.compile(r'eval\s*\(\s*(?:request|user)|input|args)', re.MULTILINE),
                 re.compile(r'exec\s*\(\s*f["\']', re.MULTILINE),
-                re.compile(r'compile\s*\(\s*(?:request|user|input|args)', re.MULTILINE),
+                re.compile(r'compile\s*\(\s*(?:request|user)|input|args)', re.MULTILINE),
             ],
         }
 

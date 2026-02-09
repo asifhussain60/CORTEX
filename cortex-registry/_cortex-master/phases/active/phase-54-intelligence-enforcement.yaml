@@ -311,22 +311,29 @@ stages:
           - "Target: <300ms for full intelligence synthesis"
       
       - task_id: "S5.T2"
-        description: "Update IntelligenceGate to use CCL cache"
+        description: "Update IntelligenceGate to use CCL cache with timeout fallback"
         file: "cortex/mcp/middleware/intelligence_gate.py"
         acceptance_criteria:
           - "Check CCL CrystallizedContext.unified_intelligence first"
-          - "If present + fresh (<5 min): Use cached context"
-          - "If missing/stale: Synthesize fresh (fallback)"
-          - "Log cache hit/miss for observability"
+          - "If present + fresh (<5 min): Use cached context (fast path)"
+          - "If missing/stale: Synthesize fresh (slower fallback)"
+          - "TIMEOUT HANDLING: If CCL prefetch timeout after 300ms, fall back to direct synthesis"
+          - "Non-blocking design: Tool execution proceeds even if CCL not ready"
+          - "Log cache hit/miss + timeout events for observability"
     
     tests:
       - "tests/unit/orchestrators/ccl/test_intelligence_warming.py"
+      - "tests/unit/mcp/middleware/test_intelligence_gate_ccl_timeout.py"
       - "tests/integration/ccl/test_ccl_intelligence_e2e.py"
+      - "tests/integration/mcp/test_intelligence_gate_with_ccl_timeout.py"
       - "tests/performance/intelligence/benchmark_synthesis.py"
     
     validation:
-      - "P95 latency <300ms with CCL cache"
+      - "P95 latency <300ms with CCL cache (fast path)"
+      - "P95 latency <400ms with CCL timeout (fallback)"
       - "Cache hit rate ≥70% after warmup"
+      - "Timeout recovery success rate 100%"
+      - "Zero tool failures due to timeout"
 
 # ============================================================================
 # GOVERNANCE & QUALITY

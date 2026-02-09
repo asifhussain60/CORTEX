@@ -11,7 +11,7 @@ Implements 8 CLI commands for documentation orchestration:
   - /doc-maintenance: Run full maintenance cycle
   - /doc-report: Generate documentation report
 
-Type Hints: Complete | Docstrings: Google-style | Error Handling: Comprehensive
+Type HintsUnion[Complete, Docstrings]: Google-style | Error Handling: Comprehensive
 """
 
 from dataclasses import dataclass

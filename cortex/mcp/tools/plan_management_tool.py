@@ -185,7 +185,7 @@ def cortex_plan_resolve(
         Dict with resolution result:
         - success: bool
         - operation: str (CREATE/UPDATE/DEPRECATE/COMPLETE)
-        - matched_phase_id: str | None
+        - matched_phase_idUnion[str, None]
         - match_score: float
         - rationale: str
         - confidence: float

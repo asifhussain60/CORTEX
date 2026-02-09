@@ -297,7 +297,7 @@ class RoutingOptimizer:
         Args:
             api_id: API identifier
             constraints: Routing constraints dict with optional keys:
-                - optimize_for: latency|reliability|cost (default: latency)
+                - optimize_forUnion[latency, reliability]|cost (default: latency)
                 - max_tier: maximum service tier
                 - required_capabilities: list of required capabilities
                 - max_latency_ms: maximum latency in milliseconds

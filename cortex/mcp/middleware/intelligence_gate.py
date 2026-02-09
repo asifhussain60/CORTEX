@@ -178,7 +178,7 @@ class IntelligenceGate:
             self.logger.error(error_msg, exc_info=True)
 
             self.logger.error(
-                f"AC_PHASE54-S1-003: BLOCKED | Tool={tool_name} | "
+                f"AC_PHASE54-S1-003Union[BLOCKED, Tool]={tool_name} | "
                 f"Error={str(synthesis_error)[:100]}"
             )
 

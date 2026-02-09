@@ -18,7 +18,7 @@ Authority: LENS-MULTI-LANGUAGE-ENHANCEMENT.yaml Phase 1
 from pathlib import Path
 from typing import List, Optional, Dict, Any
 from tree_sitter import Parser, Language, Node
-import tree_sitter_c_sharp as ts_csharp
+from tree_sitter_languages import get_language
 
 from cortex.lens.adapters.language_adapter import LanguageAdapter
 from cortex.lens.models.polyglot_ast_result import (
@@ -52,8 +52,9 @@ class CSharpAdapter(LanguageAdapter):
     
     def __init__(self):
         """Initialize CSharpAdapter with tree-sitter parser."""
-        self.language = Language(ts_csharp.language())
-        self.parser = Parser(self.language)
+        self.language = get_language("c_sharp")
+        self.parser = Parser()
+        self.parser.set_language(self.language)
     
     def parse_file(self, file_path: Path) -> PolyglotASTResult:
         """

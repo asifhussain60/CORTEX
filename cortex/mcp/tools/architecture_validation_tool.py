@@ -67,7 +67,7 @@ def cortex_validate_architecture(
     - Untracked significant changes
     - Contradictions with completed phases
     
-    Returns verdict: PROCEED | CREATE_PHASE | BLOCK
+    Returns verdictUnion[PROCEED, CREATE_PHASE] | BLOCK
     
     Args:
         request_description: Description of requested change

@@ -1,0 +1,221 @@
+# ============================================================================
+# Custom Pattern Schema Definition
+# ============================================================================
+# Authority: Phase 60 S1 - Enterprise Pattern Registry & Schema
+# Purpose: Define YAML/JSON schema for custom pattern definitions
+# ============================================================================
+
+version: "1.0"
+metadata:
+  title: "Custom Pattern Schema"
+  description: "YAML/JSON schema for defining custom architectural patterns"
+  created: "2026-02-09"
+
+# ============================================================================
+# JSON Schema for Custom Patterns
+# ============================================================================
+
+json_schema:
+  $schema: "http://json-schema.org/draft-07/schema#"
+  type: "object"
+  title: "Custom Pattern Definition"
+  description: "Schema for custom architectural pattern definitions"
+  
+  required:
+    - "id"
+    - "name"
+    - "category"
+  
+  properties:
+    id:
+      type: "string"
+      pattern: "^[a-z0-9_]+$"
+      description: "Unique pattern identifier (lowercase, underscores)"
+      examples:
+        - "microservices_saga"
+        - "event_sourcing_cqrs"
+    
+    name:
+      type: "string"
+      minLength: 1
+      maxLength: 100
+      description: "Human-readable pattern name"
+      examples:
+        - "Microservices with Saga Pattern"
+        - "Event Sourcing + CQRS"
+    
+    category:
+      type: "string"
+      enum:
+        - "creational"
+        - "structural"
+        - "behavioral"
+        - "concurrency"
+        - "architectural"
+        - "enterprise"
+        - "custom"
+      description: "Pattern category classification"
+    
+    description:
+      type: "string"
+      description: "Detailed pattern description"
+    
+    use_cases:
+      type: "array"
+      items:
+        type: "string"
+      description: "Recommended use cases"
+    
+    constraints:
+      type: "array"
+      items:
+        type: "string"
+      description: "Known constraints or limitations"
+    
+    detection_rules:
+      type: ["object", "null"]
+      description: "Rules for detecting this pattern in code"
+      properties:
+        type:
+          type: "string"
+          enum:
+            - "ast"
+            - "semantic"
+            - "structural"
+          description: "Type of detection rule"
+        
+        ast_patterns:
+          type: "array"
+          items:
+            type: "object"
+            properties:
+              node_type:
+                type: "string"
+              attributes:
+                type: "object"
+          description: "AST node patterns to match"
+        
+        semantic_rules:
+          type: "array"
+          items:
+            type: "object"
+          description: "Semantic analysis rules"
+        
+        confidence_threshold:
+          type: "number"
+          minimum: 0
+          maximum: 1.0
+          default: 0.75
+          description: "Minimum confidence for detection"
+    
+    impact_score:
+      type: "number"
+      minimum: 0
+      maximum: 10
+      description: "Impact on architecture (0=low, 10=critical)"
+    
+    effort_score:
+      type: "number"
+      minimum: 0
+      maximum: 10
+      description: "Effort to implement (0=trivial, 10=very complex)"
+    
+    tags:
+      type: "array"
+      items:
+        type: "string"
+      description: "Searchable tags"
+    
+    related_patterns:
+      type: "array"
+      items:
+        type: "string"
+      description: "Related pattern IDs"
+    
+    custom_metadata:
+      type: "object"
+      additionalProperties: true
+      description: "Custom metadata (key-value pairs)"
+
+# ============================================================================
+# YAML Template Example
+# ============================================================================
+
+yaml_template: |
+  # Custom Pattern Definition
+  id: "saga_pattern"
+  name: "Saga Pattern for Distributed Transactions"
+  category: "architectural"
+  
+  description: |
+    Saga pattern coordinates multiple services in a distributed transaction.
+    Uses choreography or orchestration to manage workflow.
+  
+  use_cases:
+    - "Distributed transactions across microservices"
+    - "Long-running processes"
+    - "Compensation-based error handling"
+  
+  constraints:
+    - "Requires event system or orchestrator"
+    - "Complex error handling and compensation"
+    - "Eventual consistency model"
+  
+  detection_rules:
+    type: "semantic"
+    confidence_threshold: 0.80
+    semantic_rules:
+      - rule_type: "service_coordination"
+        description: "Multiple services coordinating workflow"
+      - rule_type: "compensation_logic"
+        description: "Compensation transactions for rollback"
+  
+  impact_score: 9
+  effort_score: 8
+  
+  tags:
+    - "microservices"
+    - "distributed-transactions"
+    - "resilience"
+  
+  related_patterns:
+    - "eventual_consistency"
+    - "event_sourcing"
+  
+  custom_metadata:
+    team: "platform"
+    approved_by: "architecture-council"
+    compliance_frameworks:
+      - "SOC2"
+      - "HIPAA"
+
+# ============================================================================
+# Validation Rules
+# ============================================================================
+
+validation_rules:
+  id:
+    - required: true
+    - format: "^[a-z0-9_]{3,50}$"
+    - unique: true
+  
+  name:
+    - required: true
+    - length: [1, 100]
+  
+  category:
+    - required: true
+    - allowed_values: ["creational", "structural", "behavioral", "concurrency", "architectural", "enterprise", "custom"]
+  
+  detection_rules:
+    - required: true
+    - type: "object"
+    - contains_key: "type"
+  
+  impact_score:
+    - type: "number"
+    - range: [0, 10]
+  
+  effort_score:
+    - type: "number"
+    - range: [0, 10]

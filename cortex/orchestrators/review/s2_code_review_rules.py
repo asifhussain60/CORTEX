@@ -221,7 +221,7 @@ class CodeStandardsValidator:
         
         # Extract imports with their type
         imports = []
-        for match in re.finditer(r"^(?:import|from)\s+(\S+)", code, re.MULTILINE):
+        for match in re.finditer(r"^(?:import|from))\s+(\S+)", code, re.MULTILINE):
             module = match.group(1).split(".")[0]
             if module in stdlib:
                 imports.append(("stdlib", module))

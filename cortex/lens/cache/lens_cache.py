@@ -103,4 +103,36 @@ class LENSCache:
         }
 
 
-__all__ = ["LENSCache", "CacheEntry", "CacheKey"]
+# Phase 65 S6: Canonical LENSCache singleton accessor
+_lens_cache_instance: Optional['LENSCache'] = None
+
+
+def get_lens_cache(backend_type: str = "memory", **kwargs) -> 'LENSCache':
+    """
+    Get singleton LENSCache instance.
+    
+    Ensures single canonical cache across all LENS consumers (CORE-035).
+    
+    Args:
+        backend_type: "memory" (development) or "redis" (production)
+        **kwargs: Backend-specific configuration
+        
+    Returns:
+        Singleton LENSCache instance
+    """
+    global _lens_cache_instance
+    
+    if _lens_cache_instance is None:
+        # Import concrete implementation
+        from cortex.lens.cache.memory_backend import MemoryBackend
+        
+        if backend_type == "memory":
+            _lens_cache_instance = MemoryBackend(**kwargs)
+        else:
+            # Redis backend (future)
+            raise NotImplementedError(f"Backend '{backend_type}' not yet implemented")
+    
+    return _lens_cache_instance
+
+
+__all__ = ["LENSCache", "CacheEntry", "CacheKey", "get_lens_cache"]

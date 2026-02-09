@@ -167,13 +167,13 @@ INTENT_PATTERNS: Dict[str, List[tuple]] = {
 
 # Scope extraction patterns
 SCOPE_PATTERNS = {
-    "file": r"\b(?:in|from|file)\s+([a-zA-Z_][a-zA-Z0-9_]*(?:\.py)?)\b",
-    "function": r"\b(?:function|func|method|def)\s+([a-zA-Z_][a-zA-Z0-9_]*)\b",
-    "function_in_file": r"\b([a-zA-Z_][a-zA-Z0-9_]*)\s+(?:function|method)?\s*(?:in|from)\s+([a-zA-Z_][a-zA-Z0-9_]*\.py)\b",
-    "class": r"\b(?:class|Class)\s+([A-Z][a-zA-Z0-9_]*)\b",
+    "file": r"\b(?:in|from)|file)\s+([a-zA-Z_][a-zA-Z0-9_]*(?:\.py)?)\b",
+    "function": r"\b(?:function|func)|method|def)\s+([a-zA-Z_][a-zA-Z0-9_]*)\b",
+    "function_in_file": r"\b([a-zA-Z_][a-zA-Z0-9_]*)\s+(?:function|method))?\s*(?:in|from))\s+([a-zA-Z_][a-zA-Z0-9_]*\.py)\b",
+    "class": r"\b(?:class|Class))\s+([A-Z][a-zA-Z0-9_]*)\b",
     "ac_id": r"\bAC-ID\s*([A-Z]{2,3}-\d{3}-\d{2})\b",
     "py_file": r"\b([a-zA-Z_][a-zA-Z0-9_]*\.py)\b",
-    "class_mention": r"\b([A-Z][a-zA-Z0-9_]*(?:Model|Service|Controller|Handler|Manager|Builder|Factory|Repository))\b",
+    "class_mention": r"\b([A-Z][a-zA-Z0-9_]*(?:Model|Service)|Controller|Handler|Manager|Builder|Factory|Repository))\b",
 }
 
 

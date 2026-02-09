@@ -102,6 +102,18 @@ except ImportError:
     Role = None
     PHASE_34_AVAILABLE = False
 
+# Phase 51-52: Import AgentRulesInterpreter for rules-driven orchestrator routing
+# AC-PHASE52-001: Rules-driven ExecutionDirective generation and routing
+try:
+    from cortex.agents.core.agent_rules_interpreter import (
+        AgentRulesInterpreter,
+        ExecutionDirective,
+    )
+except ImportError:
+    # Fallback if module not accessible
+    AgentRulesInterpreter = None
+    ExecutionDirective = None
+
 # Phase 35: Import autonomous execution components for continuation detection & progress bars
 # AC-PHASE-35-001: Autonomous continuation detection (R1)
 # AC-PHASE-35-002: ASCII progress bar integration (R2)
@@ -243,6 +255,18 @@ class MasterOrchestrator(IOrchestrator):
         self.intent_router: Optional[IOrchestrator] = None
         # Stage 2.5: Knowledge Synthesis Engine (Phase 20.5)
         self._synthesis_engine: KnowledgeSynthesisEngine = get_synthesis_engine()
+        
+        # Phase 65 S4: Initialize UnifiedIntelligenceProvider (CORE-035)
+        # Single provider serves both InteractionOrchestrator and MasterOrchestrator
+        from cortex.intelligence.provider import get_intelligence_provider
+        self._intelligence_provider = get_intelligence_provider()
+        self.logger.log_operation_complete(
+            ac_id="AC-PHASE65-S4-001",
+            operation="UNIFIED_INTELLIGENCE_PROVIDER_INIT",
+            success=True,
+            details={"provider": "UnifiedIntelligenceProvider singleton initialized (CORE-035)"}
+        )
+        
         # Stage 3 Registry: Orchestrator registry for delegation
         self.orchestrator_registry: Dict[str, IOrchestrator] = {}
         
@@ -1943,6 +1967,74 @@ class MasterOrchestrator(IOrchestrator):
                 )
             
             # ═══════════════════════════════════════════════════════════════════════
+            # PHASE 64 S1: STAGE 1 - LENS Comprehension
+            # AC-PHASE64-S1-001: Build LENS context for holistic orchestration
+            # ═══════════════════════════════════════════════════════════════════════
+            # NEW: Stage 1 LENS Comprehension - Build LENS context before intent routing
+            lens_context = {}
+            
+            try:
+                # Build LENS context using LENS analyzers (Tier 2 - Quick Analysis)
+                from cortex.lens.orchestrator import LENSOrchestrator
+                from pathlib import Path
+                
+                # Get file path from parameters or use current working directory
+                repo_path = Path(parameters.get("repo_path", "."))
+                if not repo_path.is_absolute():
+                    repo_path = Path.cwd() / repo_path
+                
+                # Create LENS orchestrator with repo path
+                lens_orchestrator = LENSOrchestrator(repo_path=repo_path)
+                
+                # Get file path from parameters for targeted analysis
+                file_path = Path(parameters.get("target_file", str(repo_path)))
+                
+                # Analyze file using LENS (Language → Examination → Navigation → Synthesis)
+                lens_result = lens_orchestrator.analyze_file(file_path)
+                
+                # Extract LENS context for downstream stages
+                if isinstance(lens_result, dict):
+                    lens_context = lens_result
+                else:
+                    # Convert LENSContext dataclass to dict
+                    if hasattr(lens_result, 'to_dict'):
+                        lens_context = lens_result.to_dict()
+                    else:
+                        lens_context = {
+                            "git_analysis": getattr(lens_result, 'git_analysis', {}),
+                            "ast_analysis": getattr(lens_result, 'ast_analysis', {}),
+                            "comment_analysis": getattr(lens_result, 'comment_analysis', {}),
+                            "metadata": getattr(lens_result, 'metadata', {})
+                        }
+                
+                # Log Stage 1 completion
+                self.logger.log_operation_complete(
+                    ac_id="AC-PHASE64-S1-001",
+                    operation="STAGE_1_LENS_COMPREHENSION",
+                    success=True,
+                    details={
+                        "turn_number": self._turn_number,
+                        "lens_context_keys": list(lens_context.keys()) if isinstance(lens_context, dict) else [],
+                        "file_analyzed": str(file_path),
+                        "repo_path": str(repo_path)
+                    }
+                )
+                
+                # Store LENS context for downstream use
+                parameters["_lens_context"] = lens_context
+                    
+            except Exception as stage_1_err:
+                # Log Stage 1 failure but don't block - proceed with fallback
+                self.logger.log_operation_complete(
+                    ac_id="AC-PHASE64-S1-001",
+                    operation="STAGE_1_LENS_COMPREHENSION_FAILED",
+                    success=False,
+                    details={"error": str(stage_1_err), "will_fallback": True}
+                )
+                # Fallback: empty LENS context, proceed to Stage 2
+                lens_context = {}
+            
+            # ═══════════════════════════════════════════════════════════════════════
             # Phase 38 Stage 10: EXIT GATE - Deployment Validation
             # ═══════════════════════════════════════════════════════════════════════
             # Validate deployment readiness BEFORE execution (production gate)
@@ -2020,6 +2112,71 @@ class MasterOrchestrator(IOrchestrator):
                         operation="INTENT_CLASSIFICATION_FAILED",
                         success=False,
                         details={"error": str(intent_err)}
+                    )
+            
+            # ═══════════════════════════════════════════════════════════════════════
+            # AC-PHASE52-001: Agent Rules Interpreter Integration
+            # Generate ExecutionDirective with rules-driven constraints before delegation
+            # ═══════════════════════════════════════════════════════════════════════
+            execution_directive = None
+            if AgentRulesInterpreter is not None:
+                try:
+                    from pathlib import Path
+                    registry_path = Path("cortex-registry/_cortex-master")
+                    
+                    interpreter = AgentRulesInterpreter(registry_path)
+                    
+                    # Determine agent ID from operation context
+                    agent_id = parameters.get("agent_id", "cortex-architect")
+                    request_text = f"{operation_name}: {str(parameters.get('request', ''))}"
+                    
+                    # Detect execution context
+                    from cortex.agents.core.agent_rules_interpreter import ExecutionContext
+                    context = ExecutionContext.PRODUCTION_REPO
+                    if parameters.get("cortex_internal", False):
+                        context = ExecutionContext.CORTEX_INTERNAL
+                    
+                    # Interpret request and generate directive
+                    directive_result = interpreter.interpret_agent_request(
+                        agent_id=agent_id,
+                        request=request_text,
+                        context=context,
+                    )
+                    
+                    if directive_result.is_ok():
+                        execution_directive = directive_result.unwrap()
+                        
+                        # Log directive generation
+                        self.logger.log_operation_complete(
+                            ac_id="AC-PHASE52-001",
+                            operation="EXECUTION_DIRECTIVE_GENERATED",
+                            success=True,
+                            details={
+                                "agent_id": execution_directive.agent_id,
+                                "target_orchestrator": execution_directive.target_orchestrator,
+                                "rules": execution_directive.rule_id,
+                                "constraints_count": len(execution_directive.constraints),
+                                "context": execution_directive.context.value,
+                            }
+                        )
+                        
+                        # Store directive in parameters for downstream use
+                        parameters["_execution_directive"] = execution_directive
+                    else:
+                        # Log but don't block - fall back to standard routing
+                        self.logger.log_operation_complete(
+                            ac_id="AC-PHASE52-001",
+                            operation="EXECUTION_DIRECTIVE_FAILED",
+                            success=False,
+                            details={"error": directive_result.error}
+                        )
+                except Exception as directive_err:
+                    # Log but don't block - fall back to standard routing
+                    self.logger.log_operation_complete(
+                        ac_id="AC-PHASE52-001",
+                        operation="EXECUTION_DIRECTIVE_ERROR",
+                        success=False,
+                        details={"error": str(directive_err)}
                     )
             
             # CORE-002: Pre-execution artifact validation gate
