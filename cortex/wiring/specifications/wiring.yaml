@@ -1573,6 +1573,38 @@ orchestrators:
         stage: "7-9"
         authority: "AC-PHASE54-S7-S9-001"
 
+    - name: "IntelligenceEngineOrchestrator"
+      module: "cortex.intelligence.relationships.traversal"
+      class: "RelationshipTraversalEngine"
+      tier: 3
+      priority: 86
+      dependencies: []
+      capabilities: [api_endpoint_extraction, database_model_detection, file_dependency_analysis, dependency_graph_building, relationship_detection, code_relationship_traversal]
+      mcp_tools: [cortex_extract_api_endpoints, cortex_detect_database_models, cortex_analyze_dependencies, cortex_build_dependency_graph]
+      governance: [CORE-008, CORE-011, CORE-012, CORE-035, CORE-049]
+      version: "1.0.0"
+      metadata:
+        icon: "🔗"
+        phase: "56"
+        stage: "1-5"
+        authority: "AC-PHASE56-001 (RelationshipTraversal migration)"
+
+    - name: "IntelligenceIntegrationOrchestrator"
+      module: "cortex.intelligence.relationships"
+      class: "IntelligenceIntegrationOrchestrator"
+      tier: 2
+      priority: 85
+      dependencies: ["IntelligenceEngineOrchestrator", "LENSOrchestrator"]
+      capabilities: [intelligence_layer_integration, lens_orchestrator_wiring, circular_dependency_validation, backward_compatibility_maintenance, production_readiness_validation]
+      mcp_tools: [cortex_register_intelligence_engine, cortex_validate_lens_integration, cortex_check_circular_dependencies]
+      governance: [CORE-008, CORE-035, CORE-049]
+      version: "1.0.0"
+      metadata:
+        icon: "🧠"
+        phase: "56"
+        stage: "6-9"
+        authority: "AC-PHASE56-S7-S9-001"
+
 # -------------------------------------------------------------------------
 # DEPENDENCY VALIDATION RULES
 # -------------------------------------------------------------------------
