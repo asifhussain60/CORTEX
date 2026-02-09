@@ -1,31 +1,42 @@
 # ============================================================================
-# PHASE-36: UNIFIED RESPONSE LANGUAGE ENGINE + SECURITY-FIRST INTELLIGENCE
+# PHASE-36: UNIFIED RESPONSE LANGUAGE ENGINE + ORCHESTRATOR PROFILES
 # ============================================================================
-# Purpose: Dual header system, modular template blocks, security-first analysis,
-#          intelligent comments, FLUFF detection, business context generation,
-#          multi-role response engine, and comprehensive template migration
-# Authority: cortex-architect.prompt.md v15.0, chat01.txt decisions
-# Approach: TDD-First, Incremental Delivery, Template Block Architecture
+# Purpose: Modular template blocks, security-first analysis, intelligent comments,
+#          orchestrator-specific profiles (config-based composition, NOT inheritance),
+#          FLUFF detection, business context generation, multi-role response engine
+# Authority: cortex-architect.prompt.md v15.0, Strategic Analysis 2026-02-09
+# Approach: TDD-First, Block Composition (not template proliferation)
 # Status: PLANNED | Target Start: 2026-02-10
+# Revision: 2026-02-09 - Added orchestrator profile system (260 LOC vs 5,600 LOC alternative)
 # ============================================================================
 
-version: "1.0"
+version: "1.1"
 created: "2026-02-07"
+updated: "2026-02-09"
 status: "planned"
 priority: "P0"
 execution_order: 6
 
 metadata:
   phase_id: "phase-36"
-  title: "Unified Response Language Engine + Security-First Intelligence"
-  subtitle: "Complete template system refactor with security-first orchestrator enhancement"
+  title: "Unified Response Language Engine + Orchestrator Profiles"
+  subtitle: "Block composition system with 28 orchestrator profiles (config-based, not inheritance)"
   author: "Asif Hussain"
   created_date: "2026-02-07T00:00:00Z"
+  revised_date: "2026-02-09T00:00:00Z"
   target_start: "2026-02-10"
-  estimated_duration: "18.5 days"
-  test_target: 260
+  estimated_duration: "19 days"
+  test_target: 280
   coverage_target: 85
-  roi_score: 0.91
+  roi_score: 0.93
+  revision_notes: |
+    STRATEGIC ANALYSIS (2026-02-09):
+    - Added orchestrator profile system
+    - Rejected template inheritance (5,600 LOC bloat)
+    - Approved block composition (260 LOC config)
+    - 28 orchestrator profiles via YAML (5 lines each)
+    - BlockComposer.compose_for_orchestrator() method
+    - 90% block reuse across orchestrators
   
 governance:
   core_rules:
@@ -49,32 +60,33 @@ overview:
   vision: |
     Create a unified, role-aware, modular response language engine that:
     
-    1. **Differentiates Headers** — CORTEX.prompt.md vs cortex-architect.prompt.md
-    2. **Enables Modular Templates** — Lego-like blocks for composable responses
-    3. **Adds Security-First Analysis** — Proactive P0-P2 threat detection
-    4. **Injects Intelligent Comments** — Engineer-level "why" explanations
-    5. **Detects FLUFF Tests** — Zero-value test identification
-    6. **Surfaces Hidden Issues** — Performance, memory, concurrency problems
-    7. **Generates Business Context** — PM/leader-focused summaries
-    8. **Adapts to Roles** — ENGINEER, PM, BUSINESS, ARCHITECT, SECURITY
-    9. **Migrates Legacy Code** — Consolidate 5 response systems into 1
-    10. **Cleans Up Obsolete Code** — Remove redundant implementations
+    1. **Orchestrator Profiles** — Config-based composition (NOT inheritance, 28 × 5 lines = 140 LOC)
+    2. **Modular Template Blocks** — 12 atomic Lego-like blocks for composable responses
+    3. **Security-First Analysis** — Proactive P0-P2 threat detection on every response
+    4. **Intelligent Comments** — Engineer-level "why" explanations in code
+    5. **FLUFF Test Detection** — Zero-value test identification
+    6. **Hidden Issue Surfacing** — Performance, memory, concurrency problems
+    7. **Business Context Generation** — PM/leader-focused summaries
+    8. **Multi-Role Adaptation** — 15 IT roles (ENGINEER, PM, BUSINESS, ARCHITECT, etc.)
+    9. **Legacy Migration** — Consolidate 5 response systems into 1
+    10. **Obsolete Code Cleanup** — Remove redundant implementations
   
   business_impact: |
-    - 🎯 **DX Improvement**: Role-specific responses reduce context switching
+    - 🎯 **DX Improvement**: Orchestrator-specific blocks reduce context switching
     - 🔒 **Security Hardening**: Proactive threat detection on every request
     - 🧪 **Quality Assurance**: FLUFF test detection prevents false confidence
     - 📊 **Business Intelligence**: Non-engineers understand technical impact
-    - 🏗️ **Maintainability**: Modular blocks simplify template maintenance
-    - ⚡ **Performance**: Template caching + block reuse improve response time
+    - 🏗️ **Maintainability**: 140 LOC config vs 5,600 LOC template files
+    - ⚡ **Performance**: Block-level caching + 90% reuse across orchestrators
   
   expected_outcomes:
-    - 14 role-task response templates (vs current scattered implementations)
-    - 12 atomic template blocks (composable, reusable)
-    - 260+ tests (85% coverage)
+    - 28 orchestrator profiles (5-line YAML configs, NOT 200-line template files)
+    - 12 atomic template blocks (composable, reusable, cacheable)
+    - 280+ tests (85% coverage, +20 for orchestrator profiles)
     - 0 legacy response implementations remaining
     - 5 MCP tools exposed
     - 40% template code reduction via modular blocks
+    - 95% reduction in orchestrator-specific template LOC (260 vs 5,600)
     - Action-first AUDIT format (60% token reduction)
 
 # ============================================================================

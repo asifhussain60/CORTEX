@@ -1,0 +1,832 @@
+# ============================================================================
+# PHASE-56: LENS/Intelligence Hybrid Architecture (Option D)
+# ============================================================================
+# Purpose: Refactor LENS and Intelligence modules into clean hybrid architecture
+#          with LENS as thin orchestration layer and Intelligence as deep engine layer.
+#          Eliminates circular dependencies, clarifies boundaries, enables scalability.
+# Authority: cortex-architect.prompt.md, Strategic LENS Analysis 2026-02-09
+# Approach: TDD-First, Phased Migration, Backward Compatible, Zero-Downtime
+# Status: PLANNED | Target Start: 2026-02-15
+# ============================================================================
+
+version: "1.1"
+created: "2026-02-09"
+updated: "2026-02-09"
+status: "approved_pilot"
+priority: "P1"
+execution_order: 8
+
+metadata:
+  phase_id: "phase-56-A"
+  title: "LENS/Intelligence Hybrid Architecture (PILOT)"
+  subtitle: "Proof-of-Concept: Relationship traversal engine migration only"
+  author: "Asif Hussain"
+  created_date: "2026-02-09T00:00:00Z"
+  revised_date: "2026-02-09T12:00:00Z"
+  target_start: "2026-02-15"
+  estimated_duration: "3-5 days"
+  test_target: 43
+  coverage_target: 90
+  roi_score: 0.75
+  pilot_phase: true
+  full_rollout_phases: ["56-B", "56-C", "56-D", "56-E"]
+  cross_cutting: true
+  breaking_changes: false
+  production_blocker: false
+  autonomous_execution: true
+  approval_required: true
+  reason: "Pilot migration validates architecture before full rollout"
+  pilot_success_criteria:
+    - "Zero circular dependencies (verified)"
+    - "Backward compatibility maintained (all MCP tools work)"
+    - "Performance: No regression (< 5% latency increase)"
+    - "Test coverage ≥ 90% for pilot engine"
+  autonomous_config:
+    silent_execution: true
+    user_notification: true
+    progress_visualization: "ascii_bar"
+    report_generation: "completion_report"
+    token_aware: true
+    continuation_prompt: true
+    visual_updates: "copilot_chat_inline"
+  revision_notes: |
+    STRATEGIC CHALLENGE APPLIED (2026-02-09):
+    - Original scope: All 6 intelligence engines (2-3 weeks)
+    - Pilot scope: Relationship traversal only (3-5 days)
+    - Rationale: Prove architecture viability before full commitment
+    - Risk reduction: Lower migration complexity, easier rollback
+    - ROI adjustment: 0.95 → 0.75 (realistic vs optimistic)
+
+governance:
+  core_rules:
+    - "CORE-002: NO markdown file generation (inline chat only)"
+    - "CORE-008: TDD-first (tests BEFORE code)"
+    - "CORE-011: Type hints mandatory"
+    - "CORE-012: Google-style docstrings"
+    - "CORE-027: Audit trail (AC_START → AC_COMPLETE)"
+    - "CORE-030: Implementation Truth — verify code, not docs"
+    - "CORE-035: Single canonical implementation"
+    - "CORE-036: Industry standards compliance"
+    - "CORE-048: Holistic Validation Gate (Phase 48)"
+    - "MCP-FIRST: All functionality via MCP tools"
+  en**PHASE 56-A: PILOT VALIDATION (3-5 days)**
+    
+    Prove hybrid architecture viability by migrating ONE engine:
+    - RelationshipTraversal: brain/core/intelligence/ → intelligence/relationships/
+    - Establish BaseIntelligenceEngine pattern
+    - Validate zero circular dependencies
+    - Confirm backward compatibility
+    - Document migration patterns for future phases
+    
+    **DEFERRED TO PHASES 56-B/C/D/E:**
+    - 56-B: AST & Git engines (4 days)
+    - 56-C: Pattern & Comment engines (3 days)
+    - 56-D: Semantic foundation (3 days)
+    - 56-E: Deprecation cleanup (2 days)
+    
+    **FULL VISION (after pilot success):**
+    - LENS: Thin orchestration (coordination, caching, MCP)
+    - Intelligence: Deep computation (AST, Git, relationships, patterns)
+    - Clear one-way flow: LENS → Intelligence (no circular deps)
+    
+    **Pilot Benefits:**
+    1. ✅ Lower risk: Single engine vs 6
+    2. ✅ Faster validation: 3-5 days vs 2-3 weeks
+    3. ✅ Easier rollback: Minimal code changes
+    4. ✅ Pattern establishment: Reusable for 56-B/C/D/E
+    5. ✅ Honest ROI: 0.75 realistic vs 0.95 optimistic
+    - Git intelligence and history analysis
+    - Relationship traversal and graph building
+    - Pattern detection and semantic analysis
+    - Future: ML/embedding-based insights
+    
+    **Benefits:**
+    1. ✅ Eliminates circular dependencies (lens ↔ brain)
+    2. ✅ Clear separation of concerns (orchestration vs computation)
+    3. ✅ Intelligence engines reusable beyond LENS
+    4. ✅ Future-proof for AI/ML integration
+    5. ✅ Improved testability (unit test engines standalone)
+    6. ✅ Scalable to 50+ intelligence engines
+
+  problem_statement: |
+    **Current Architecture Issues:**
+    
+    1. **Circular Dependencies:**
+       - cortex/lens/orchestrator.py → imports from cortex.brain.analysis.*
+       - cortex/brain/core/intelligence/__init__.py → imports from cortex.lens.analyzers.*
+       - Violates clean architecture principles
+    
+    2. **Duplication of Responsibilities:**
+       - AST Analysis: ast_analyzer.py (lens) AND ast_intelligence.py (brain)
+       - Git History: Both packages import GitHistoryAnalyzer
+       - Relationship Traversal: Lives in brain/core/intelligence/ but LENS needs it
+       - Comment Analysis: comment_extractor.py vs brain/core/intelligence/comment_analyzer.py
+    
+    3. **Unclear Boundaries:**
+       - When to use LENSOrchestrator vs RelationshipEngine?
+       - When to use ASTAnalyzer (lens) vs ASTIntelligenceEngine (brain)?
+       - Discovery plugins scattered across both packages
+    
+    4. **Scalability Challenges:**
+       - Adding new analyzers requires coordination across 2 packages
+       - No clear place for advanced ML/AI-based intelligence
+       - Monolithic lens package becoming maintenance burden
+
+  success_criteria:
+    - "Zero circular dependencies (verified via import graph analysis)"
+    - "Single canonical implementation for each intelligence capability"
+    - "All 515+ existing tests passing"
+    - "MCP tool signatures unchanged (backward compatible)"
+    - "Test coverage ≥ 90% for all intelligence engines"
+    - "Documentation: Migration guide + architecture diagrams"
+    - "Performance: No regression in LENS operation latency"
+    - "Extensibility: New intelligence engines pluggable in <30 minutes"
+
+# ============================================================================
+# ARCHITECTURAL DESIGN
+# ============================================================================
+architecture:
+  target_structure: |
+    cortex/
+      lens/                           # THIN ORCHESTRATION LAYER
+        __init__.py
+        orchestrator.py               # Main coordinator (LENSOrchestrator)
+        cache.py                      # Result caching layer
+        context.py                    # Context management
+        interfaces.py                 # Intelligence engine contracts
+        
+      intelligence/                   # DEEP COMPUTATION LAYER (NEW)
+        __init__.py
+        base.py                       # BaseIntelligenceEngine (abstract)
+        
+        ast/                          # AST Analysis Engines
+          __init__.py
+          analyzer.py                 # Main AST analyzer
+          extractor.py                # Code extraction
+          parser.py                   # AST parsing utilities
+          
+        git/                          # Git Intelligence
+          __init__.py
+          history_analyzer.py         # Git history analysis
+          blame_analyzer.py           # Git blame tracking
+          commit_analyzer.py          # Commit intelligence
+          
+        relationships/                # Relationship & Graph Analysis
+          __init__.py
+          traversal.py                # Relationship traversal engine
+          call_graph.py               # Call graph builder
+          dependency_graph.py         # Dependency analysis
+          
+        patterns/                     # Pattern Detection
+          __init__.py
+          detector.py                 # Pattern detection engine
+          anti_patterns.py            # Anti-pattern detection
+          best_practices.py           # Best practice validation
+          
+        semantic/                     # Semantic Analysis (Future)
+          __init__.py
+          analyzer.py                 # Semantic code analysis
+          embeddings.py               # (Future) ML-based embeddings
+          similarity.py               # (Future) Code similarity
+          
+        comments/                     # Comment Intelligence
+          __init__.py
+          extractor.py                # Comment extraction
+          analyzer.py                 # Comment quality analysis
+          
+      mcp/
+        tools/
+          lens_tools.py               # MCP exposes via LENS orchestrator
+
+  flow_diagram: |
+    User Request
+        ↓
+    MCP Tool (cortex_lens_analyze)
+        ↓
+    LENSOrchestrator (lens/orchestrator.py)
+        ↓
+    ┌─────────────────────────────────┐
+    │   Intelligence Engine Selection  │
+    └─────────────────────────────────┘
+        ↓
+    ┌─────────────────────────────────┐
+    │   Parallel Engine Execution     │
+    ├─────────────────────────────────┤
+    │ • ASTAnalyzer                   │
+    │ • GitHistoryAnalyzer            │
+    │ • RelationshipTraversal         │
+    │ • PatternDetector               │
+    └─────────────────────────────────┘
+        ↓
+    ┌─────────────────────────────────┐
+    │   Result Aggregation & Caching  │
+    └─────────────────────────────────┘
+        ↓
+    Return to User
+
+  key_design_decisions:
+    - decision: "Intelligence engines are stateless and reusable"
+      rationale: "Enables parallel execution and unit testing"
+      
+    - decision: "LENS orchestrator maintains all caching logic"
+      rationale: "Single source of truth for cached intelligence"
+      
+    - decision: "Intelligence engines expose async interfaces"
+      rationale: "Supports Phase 49 CCL async prefetch pattern"
+      
+    - decision: "Base class enforces contract via abstract methods"
+      rationale: "Guarantees consistency across all engines"
+      
+    - decision: "No intelligence engine imports from LENS"
+      rationale: "Eliminates circular dependencies permanently"
+
+# ============================================================================
+# MIGRATION PLAN (4 PHASES)
+# ============================================================================
+stages:
+  # ============================================================================
+  # PHASE 1: Foundation & Relationship Traversal (Week 1)
+  # ============================================================================
+  - stage_id: "S1"
+    name: "Foundation & Relationship Migration"
+    duration: "3 days"
+    status: "planned"
+    description: |
+      Create intelligence layer foundation and migrate relationship traversal
+      as proof-of-concept for the hybrid architecture pattern.
+    
+    tasks:
+      - task_id: "S1-T1"
+        name: "Create cortex/intelligence/ package structure"
+        description: |
+          Create new package with base classes and interfaces:
+          - cortex/intelligence/__init__.py
+          - cortex/intelligence/base.py (BaseIntelligenceEngine)
+          - cortex/intelligence/interfaces.py (type definitions)
+        tests_required: 5
+        effort: "2 hours"
+        
+      - task_id: "S1-T2"
+        name: "Define BaseIntelligenceEngine abstract class"
+        description: |
+          Abstract base class with contract:
+          - analyze(context: AnalysisContext) -> AnalysisResult
+          - async analyze_async() support
+          - validate_context() enforcement
+          - error handling patterns
+        tests_required: 8
+        effort: "3 hours"
+        
+      - task_id: "S1-T3"
+        name: "Migrate relationship_traversal.py to intelligence/relationships/"
+        description: |
+          Move and refactor:
+          - FROM: cortex/brain/core/intelligence/relationship_traversal.py
+          - TO: cortex/intelligence/relationships/traversal.py
+          - Update to use BaseIntelligenceEngine
+          - Add async support
+        tests_required: 15
+        effort: "4 hours"
+        
+      - task_id: "S1-T4"
+        name: "Update LENS to use intelligence.relationships"
+        description: |
+          Update lens/orchestrator.py:
+          - Import from cortex.intelligence.relationships
+          - Update call sites
+          - Maintain backward compatibility via aliases
+        tests_required: 10
+        effort: "3 hours"
+        
+      - task_id: "S1-T5"
+        name: "Validate zero circular dependencies"
+        description: |
+          Create import graph analysis script:
+          - Scan all imports in lens/ and intelligence/
+          - Detect circular dependencies
+          - Assert zero violations
+        tests_required: 5
+        effort: "2 hours"
+    
+    tests:
+      unit: 30
+      integration: 8
+      e2e: 5
+    
+    validation:
+      - "BaseIntelligenceEngine enforces contract via abstract methods"
+      - "RelationshipTraversal migrated with zero test failures"
+      - "LENS orchestrator successfully uses intelligence.relationships"
+      - "Import graph analysis shows zero circular dependencies"
+      - "All existing LENS MCP tools still functional"
+
+  # ============================================================================
+  # PHASE 2: AST & Git Engine Migration (Week 2)
+  # ============================================================================
+  - stage_id: "S2"
+    name: "AST & Git Intelligence Migration"
+    duration: "4 days"
+    status: "planned"
+    description: |
+      Migrate AST analysis and Git intelligence to new intelligence layer.
+      Eliminate duplication between lens and brain packages.
+    
+    tasks:
+      - task_id: "S2-T1"
+        name: "Create intelligence/ast/ package"
+        description: |
+          Consolidate AST analysis:
+          - Merge ast_analyzer.py (lens) + ast_intelligence.py (brain)
+          - Single canonical AST analyzer
+          - Inherit from BaseIntelligenceEngine
+          - Support sync and async modes
+        tests_required: 25
+        effort: "6 hours"
+        
+      - task_id: "S2-T2"
+        name: "Create intelligence/git/ package"
+        description: |
+          Consolidate git intelligence:
+          - Migrate GitHistoryAnalyzer
+          - Add GitBlameAnalyzer
+          - Add CommitIntelligenceEngine
+          - All inherit from BaseIntelligenceEngine
+        tests_required: 20
+        effort: "5 hours"
+        
+      - task_id: "S2-T3"
+        name: "Update LENS to use new AST/Git engines"
+        description: |
+          Update lens/orchestrator.py:
+          - Replace old ast_analyzer imports
+          - Replace old git analyzer imports
+          - Update all call sites
+          - Maintain backward compatibility
+        tests_required: 15
+        effort: "4 hours"
+        
+      - task_id: "S2-T4"
+        name: "Remove duplicate implementations"
+        description: |
+          Clean up old files:
+          - Mark old files as deprecated
+          - Add deprecation warnings
+          - Create migration guide
+          - Plan removal timeline (Phase 57)
+        tests_required: 5
+        effort: "2 hours"
+        
+      - task_id: "S2-T5"
+        name: "Update MCP tools to use new engines"
+        description: |
+          Update mcp/tools/lens_tools.py:
+          - Use intelligence engines directly
+          - Verify tool signatures unchanged
+          - Test all cortex_lens_* tools
+        tests_required: 12
+        effort: "3 hours"
+    
+    tests:
+      unit: 45
+      integration: 12
+      e2e: 10
+    
+    validation:
+      - "Single canonical AST analyzer (no duplication)"
+      - "Git intelligence consolidated in intelligence/git/"
+      - "All LENS operations use new engines"
+      - "MCP tool signatures unchanged (backward compatible)"
+      - "Performance: No regression in analysis latency"
+
+  # ============================================================================
+  # PHASE 3: Pattern Detection & Comment Intelligence (Week 3)
+  # ============================================================================
+  - stage_id: "S3"
+    name: "Pattern & Comment Intelligence Migration"
+    duration: "3 days"
+    status: "planned"
+    description: |
+      Migrate pattern detection and comment analysis to intelligence layer.
+      Add anti-pattern detection and best practice validation.
+    
+    tasks:
+      - task_id: "S3-T1"
+        name: "Create intelligence/patterns/ package"
+        description: |
+          Pattern detection engines:
+          - PatternDetectionEngine (base patterns)
+          - AntiPatternDetector (code smells)
+          - BestPracticeValidator (standards check)
+        tests_required: 20
+        effort: "5 hours"
+        
+      - task_id: "S3-T2"
+        name: "Create intelligence/comments/ package"
+        description: |
+          Comment intelligence:
+          - Consolidate comment_extractor (lens) + comment_analyzer (brain)
+          - CommentQualityAnalyzer
+          - TODODetector
+        tests_required: 15
+        effort: "4 hours"
+        
+      - task_id: "S3-T3"
+        name: "Integrate with LENS orchestrator"
+        description: |
+          Update lens/orchestrator.py:
+          - Add pattern detection to analysis flow
+          - Add comment intelligence to results
+          - Support selective engine execution
+        tests_required: 10
+        effort: "3 hours"
+        
+      - task_id: "S3-T4"
+        name: "Create intelligence engine catalog"
+        description: |
+          Documentation and discovery:
+          - List all available intelligence engines
+          - Document engine capabilities
+          - Add to cortex_tools_catalog
+        tests_required: 5
+        effort: "2 hours"
+    
+    tests:
+      unit: 30
+      integration: 10
+      e2e: 10
+    
+    validation:
+      - "Pattern detection engines operational"
+      - "Comment intelligence consolidated"
+      - "LENS orchestrator uses all new engines"
+      - "Intelligence engine catalog complete"
+      - "Documentation updated"
+
+  # ============================================================================
+  # PHASE 4: Semantic Foundation & Future-Proofing (Week 3)
+  # ============================================================================
+  - stage_id: "S4"
+    name: "Semantic Layer & Cleanup"
+    duration: "3 days"
+    status: "planned"
+    description: |
+      Create semantic analysis foundation for future ML/AI integration.
+      Complete migration, cleanup deprecated code, finalize documentation.
+    
+    tasks:
+      - task_id: "S4-T1"
+        name: "Create intelligence/semantic/ package skeleton"
+        description: |
+          Future-proof semantic layer:
+          - SemanticAnalyzer (basic semantic analysis)
+          - Placeholders for embeddings (future)
+          - Placeholders for similarity (future)
+          - Design interfaces for ML integration
+        tests_required: 10
+        effort: "3 hours"
+        
+      - task_id: "S4-T2"
+        name: "Update lens/interfaces.py with engine contracts"
+        description: |
+          Formalize interfaces:
+          - AnalysisContext type definition
+          - AnalysisResult type definition
+          - Engine capability declarations
+          - Async pattern contracts
+        tests_required: 8
+        effort: "2 hours"
+        
+      - task_id: "S4-T3"
+        name: "Deprecate old brain/core/intelligence/"
+        description: |
+          Clean up old code:
+          - Add deprecation warnings to all old files
+          - Create aliases for backward compatibility
+          - Set removal date (Phase 57)
+          - Update all internal imports
+        tests_required: 5
+        effort: "2 hours"
+        
+      - task_id: "S4-T4"
+        name: "Performance optimization & caching"
+        description: |
+          Optimize intelligence layer:
+          - Add result caching to engines
+          - Optimize parallel execution
+          - Add performance metrics
+          - Validate no latency regression
+        tests_required: 12
+        effort: "4 hours"
+        
+      - task_id: "S4-T5"
+        name: "Create migration guide & architecture docs"
+        description: |
+          Documentation:
+          - Migration guide for users
+          - Architecture diagrams
+          - Engine development guide
+          - Update CORTEX.prompt.md
+        tests_required: 3
+        effort: "3 hours"
+        
+      - task_id: "S4-T6"
+        name: "Final validation & test suite"
+        description: |
+          Comprehensive validation:
+          - Run full test suite (515+ tests)
+          - Import graph analysis (zero circular deps)
+          - Performance benchmarks
+          - MCP tool regression testing
+        tests_required: 10
+        effort: "4 hours"
+    
+    tests:
+      unit: 25
+      integration: 10
+      e2e: 13
+    
+    validation:
+      - "Semantic layer foundation ready for future ML integration"
+      - "All deprecated code marked with removal timeline"
+      - "Performance: Zero regression in LENS operations"
+      - "Documentation: Migration guide complete"
+      - "All 515+ tests passing"
+      - "Import graph: Zero circular dependencies"
+
+# ============================================================================
+# TESTING STRATEGY
+# ============================================================================
+testing:
+  approach: "TDD-first with comprehensive coverage across all layers"
+  
+  unit_tests:
+    total: 100
+    categories:
+      - "BaseIntelligenceEngine: 10 tests"
+      - "AST engines: 20 tests"
+      - "Git engines: 15 tests"
+      - "Relationship engines: 15 tests"
+      - "Pattern engines: 15 tests"
+      - "Comment engines: 10 tests"
+      - "Semantic engines: 8 tests"
+      - "Interface contracts: 7 tests"
+  
+  integration_tests:
+    total: 30
+    categories:
+      - "LENS → Intelligence integration: 10 tests"
+      - "Multi-engine coordination: 8 tests"
+      - "Caching behavior: 7 tests"
+      - "Error handling & fallback: 5 tests"
+  
+  e2e_tests:
+    total: 20
+    categories:
+      - "MCP tool end-to-end: 8 tests"
+      - "Full analysis workflow: 7 tests"
+      - "Performance benchmarks: 5 tests"
+  
+  regression_tests:
+    - "All 515+ existing tests must pass"
+    - "No MCP tool signature changes"
+    - "No performance degradation (< 5% latency increase acceptable)"
+  
+  validation_criteria:
+    - "Test coverage ≥ 90% for intelligence layer"
+    - "Zero circular dependencies (verified via import graph)"
+    - "All MCP tools backward compatible"
+    - "Performance benchmarks within tolerance"
+
+# ============================================================================
+# RISKS & MITIGATION
+# ============================================================================
+risks:
+  - risk: "Migration breaks existing LENS functionality"
+    severity: "HIGH"
+    probability: "LOW"
+    mitigation: |
+      - Phased migration with backward compatibility
+      - Comprehensive test suite before each phase
+      - Aliases for deprecated imports (removal in Phase 57)
+      - Rollback plan: Keep old code until Phase 4 complete
+  
+  - risk: "Performance regression during transition"
+    severity: "MEDIUM"
+    probability: "MEDIUM"
+    mitigation: |
+      - Performance benchmarks before/after each phase
+      - Caching optimization in Phase 4
+      - Parallel execution for intelligence engines
+      - Alert if latency increases > 5%
+  
+  - risk: "Incomplete migration leaves orphaned code"
+    severity: "MEDIUM"
+    probability: "LOW"
+    mitigation: |
+      - Import graph analysis at end of each phase
+      - Deprecated code tracking list
+      - Phase 57: Final cleanup and removal
+      - Documentation of migration status
+  
+  - risk: "Third-party integrations break"
+    severity: "LOW"
+    probability: "LOW"
+    mitigation: |
+      - MCP tool signatures remain unchanged
+      - Internal refactoring invisible to external consumers
+      - Deprecation warnings for direct imports
+      - Migration guide for advanced users
+
+# ============================================================================
+# SUCCESS METRICS
+# ============================================================================
+success_metrics:
+  quantitative:
+    - metric: "Zero circular dependencies"
+      target: "0 violations"
+      measurement: "Import graph analysis script"
+      
+    - metric: "Test coverage"
+      target: "≥ 90%"
+      measurement: "pytest --cov=cortex.intelligence"
+      
+    - metric: "Code duplication elimination"
+      target: "100% duplicate analyzers removed"
+      measurement: "cortex_detect_duplicates"
+      
+    - metric: "Performance"
+      target: "< 5% latency increase"
+      measurement: "Performance benchmarks"
+      
+    - metric: "Backward compatibility"
+      target: "100% MCP tool signatures unchanged"
+      measurement: "MCP tool regression tests"
+  
+  qualitative:
+    - "Clear architectural boundaries (LENS vs Intelligence)"
+    - "Extensibility: New engines pluggable in < 30 minutes"
+    - "Maintainability: Reduced cognitive load for contributors"
+    - "Future-proof: Foundation for ML/AI integration ready"
+    - "Documentation: Comprehensive migration guide"
+
+# ============================================================================
+# DEPENDENCIES & INTEGRATION
+# ============================================================================
+dependencies:
+  required_phases:
+    - phase_id: "phase-49"
+      reason: "CCL async prefetch pattern should work with new architecture"
+      status: "completed"
+      
+    - phase_id: "phase-48"
+      reason: "Challenge gate uses LENS intelligence"
+      status: "completed"
+  
+  blocking_phases: []
+  
+  related_phases:
+    - phase_id: "phase-51"
+      reason: "MCP-FIRST enforcement applies to intelligence engines"
+      
+    - phase_id: "phase-53"
+      reason: "Dashboard uses LENS intelligence for visualizations"
+
+integration_points:
+  - component: "MasterOrchestrator"
+    impact: "Uses LENS, no direct changes needed"
+    
+  - component: "IntentRouter"
+    impact: "Routes to LENS, no direct changes needed"
+    
+  - component: "cortex_lens_analyze (MCP tool)"
+    impact: "Signature unchanged, internal implementation updated"
+    
+  - component: "Phase 49 CCL"
+    impact: "Async prefetch works with new intelligence engines"
+    
+  - component: "Challenge Engine"
+    impact: "Uses LENS intelligence, no changes needed"
+
+# ============================================================================
+# ROLLOUT PLAN
+# ============================================================================
+rollout:
+  strategy: "Phased migration with feature flags and backward compatibility"
+  
+  phase_1:
+    duration: "3 days"
+    feature_flag: "CORTEX_INTELLIGENCE_HYBRID_ENABLED"
+    default: false
+    tasks:
+      - "Create intelligence package foundation"
+      - "Migrate relationship traversal"
+      - "Enable via feature flag for testing"
+  
+  phase_2:
+    duration: "4 days"
+    feature_flag: "CORTEX_INTELLIGENCE_HYBRID_ENABLED"
+    default: false
+    tasks:
+      - "Migrate AST and Git engines"
+      - "Expand feature flag coverage"
+      - "Internal testing and validation"
+  
+  phase_3:
+    duration: "3 days"
+    feature_flag: "CORTEX_INTELLIGENCE_HYBRID_ENABLED"
+    default: false
+    tasks:
+      - "Migrate pattern and comment engines"
+      - "Prepare for default enablement"
+  
+  phase_4:
+    duration: "3 days"
+    feature_flag: "CORTEX_INTELLIGENCE_HYBRID_ENABLED"
+    default: true
+    tasks:
+      - "Enable by default"
+      - "Mark old code as deprecated"
+      - "Finalize documentation"
+      - "Monitor for issues"
+  
+  monitoring:
+    - "Error rates for intelligence operations"
+    - "Latency metrics for LENS operations"
+    - "Test failure rates"
+    - "Import error tracking"
+    - "Feature flag usage statistics"
+
+# ============================================================================
+# COMPLETION CRITERIA
+# ============================================================================
+completion_checklist:
+  architecture:
+    - "✅ cortex/intelligence/ package created"
+    - "✅ BaseIntelligenceEngine abstract class implemented"
+    - "✅ All intelligence engines migrated to new package"
+    - "✅ Zero circular dependencies (verified)"
+    - "✅ LENS orchestrator updated to use new engines"
+  
+  testing:
+    - "✅ 150 new tests written (100 unit, 30 integration, 20 e2e)"
+    - "✅ All 515+ existing tests passing"
+    - "✅ Test coverage ≥ 90% for intelligence layer"
+    - "✅ Performance benchmarks show < 5% latency increase"
+    - "✅ MCP tool regression tests passing"
+  
+  documentation:
+    - "✅ Migration guide created"
+    - "✅ Architecture diagrams updated"
+    - "✅ Engine development guide written"
+    - "✅ CORTEX.prompt.md updated"
+    - "✅ Deprecation warnings in old code"
+  
+  cleanup:
+    - "✅ Old duplicate code marked deprecated"
+    - "✅ Backward compatibility aliases in place"
+    - "✅ Phase 57 cleanup plan documented"
+    - "✅ Import graph analysis passing"
+  
+  validation:
+    - "✅ Zero circular dependencies"
+    - "✅ No performance regression"
+    - "✅ All MCP tools backward compatible"
+    - "✅ Feature flag monitoring active"
+    - "✅ Production readiness confirmed"
+
+# ============================================================================
+# NOTES & REFERENCES
+# ============================================================================
+notes: |
+  This phase implements Option D from the Strategic LENS Analysis:
+  
+  **Design Philosophy:**
+  - LENS = Thin orchestration layer (coordination, caching, routing)
+  - Intelligence = Deep computation layer (analysis, extraction, detection)
+  - Clear one-way dependency: LENS → Intelligence (never reversed)
+  
+  **Key Innovations:**
+  1. BaseIntelligenceEngine enforces consistent contracts
+  2. Async-first design supports Phase 49 CCL prefetch
+  3. Semantic layer foundation ready for future ML integration
+  4. Zero breaking changes for external consumers
+  
+  **Future Extensions (Post-Phase 56):**
+  - Phase 57: Remove deprecated brain/core/intelligence/ code
+  - Phase 58: ML/embedding-based semantic analysis
+  - Phase 59: LLM-enhanced code intelligence
+  - Phase 60: Multi-language LENS support (.NET, Java, etc.)
+
+references:
+  - "cortex-architect.prompt.md v15.3"
+  - "Strategic LENS Analysis 2026-02-09"
+  - "Phase 49: Context Crystallization Layer"
+  - "Phase 48: Holistic Validation Challenge Gate"
+  - "Phase 51: MCP-FIRST Enforcement"
+  - ".github/prompts/CORTEX.prompt.md"
+
+audit_trail:
+  - timestamp: "2026-02-09T00:00:00Z"
+    action: "Phase 56 plan created"
+    author: "Asif Hussain"
+    reason: "Strategic LENS refactoring based on holistic architecture review"
