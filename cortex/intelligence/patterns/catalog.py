@@ -6,7 +6,7 @@ Stage: S1 - Pattern Recognition Foundation
 AC Marker: AC-PHASE57-S1-003
 """
 
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, Union
 from dataclasses import dataclass
 
 from .base import PatternInfo, PatternCategory
@@ -273,7 +273,7 @@ class PatternCatalog:
         """
         return self.registry.get(name)
 
-    def get_by_category(self, category: PatternCategory | str) -> List[PatternInfo]:
+    def get_by_category(self, category: Union[PatternCategory, str]) -> List[PatternInfo]:
         """
         Retrieve all patterns in a category.
         

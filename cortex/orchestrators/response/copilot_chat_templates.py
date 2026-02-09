@@ -530,7 +530,7 @@ class CopilotChatTemplateEngine:
             weaknesses: Weaknesses table
             fix_plans: Fix plans sections
             best_practices: Best practices table
-            verdict: PROCEED | PIVOT | HYBRID
+            verdictUnion[PROCEED, PIVOT] | HYBRID
             next_steps: Next actions
             counter_proposal: Optional alternative approach
             

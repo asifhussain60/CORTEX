@@ -34,7 +34,7 @@ class IntentClassifier:
     PATTERNS = {
         UserIntent.ANALYZE: [
             r'\b(analyze|review|examine|inspect|understand|explain)\b',
-            r'\b(why|how|what)\b(?:\s+.*)?(?:work|fail|cause|is)',
+            r'\b(why|how|what)\b(?:\s+.*)?(?Union[work, fail]|cause|is)',
             r'\b(audit|scan)\b(?!\s+code)',
         ],
         UserIntent.IMPLEMENT: [

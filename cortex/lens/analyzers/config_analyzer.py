@@ -18,7 +18,7 @@ import re
 import json
 import yaml
 from pathlib import Path
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Union
 from dataclasses import dataclass, field
 from enum import Enum
 import logging
@@ -127,7 +127,7 @@ class ConfigAnalyzer:
             "Store passwords in secure secret management system or use environment variables"
         ),
         "private_key": (
-            r"-----BEGIN (?:RSA |DSA |EC )?PRIVATE KEY-----",
+            r"-----BEGIN (?Union[RSA, DSA] |EC )?PRIVATE KEY-----",
             "Private key embedded in config file",
             "Store private keys in secure key management system"
         ),

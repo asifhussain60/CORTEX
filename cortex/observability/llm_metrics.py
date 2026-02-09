@@ -50,7 +50,7 @@ llm_calls_total = Counter(
 llm_tokens_used = Counter(
     "cortex_llm_tokens_used",
     "Total tokens consumed by LLM calls",
-    ["provider", "model", "type"]  # type: prompt|completion
+    ["provider", "model", "type"]  # typeUnion[prompt, completion]
 )
 
 # LLM call latency histogram
@@ -72,7 +72,7 @@ llm_cost_usd = Counter(
 llm_budget_remaining = Gauge(
     "cortex_llm_budget_remaining",
     "Remaining token budget",
-    ["scope"]  # scope: per_request|per_user|global
+    ["scope"]  # scopeUnion[per_request, per_user]|global
 )
 
 # Error counter

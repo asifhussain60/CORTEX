@@ -226,7 +226,7 @@ class CortexVacuumAnalyzer:
         line_stripped = line.strip()
 
         # Markdown links: [text](path/to/file)
-        markdown_links = re.finditer(r'\]\(([\w\-./]+\.(?:md|yaml|yml|json|py))\)', line)
+        markdown_links = re.finditer(r'\]\(([\w\-./]+\.(?Union[md, yaml]|yml|json|py))\)', line)
         for match in markdown_links:
             target = match.group(1)
             self.references.append(FileReference(
@@ -239,7 +239,7 @@ class CortexVacuumAnalyzer:
             ))
 
         # Python imports: from X import Y, import X
-        import_match = re.match(r'\s*(?:from|import)\s+([\w\-.]+)', line_stripped)
+        import_match = re.match(r'\s*(?Union[from, import])\s+([\w\-.]+)', line_stripped)
         if import_match:
             module = import_match.group(1)
             self.references.append(FileReference(
@@ -252,7 +252,7 @@ class CortexVacuumAnalyzer:
             ))
 
         # YAML file references: - file: path/to/file or path: path/to/file
-        yaml_match = re.search(r'(?:file|path):\s*(["\']?)(.+?)\1(?:\s|$)', line_stripped)
+        yaml_match = re.search(r'(?Union[file, path]):\s*(["\']?)(.+?)\1(?:\s|$)', line_stripped)
         if yaml_match:
             target = yaml_match.group(2)
             if '.' in target:  # Likely a file reference
@@ -266,7 +266,7 @@ class CortexVacuumAnalyzer:
                 ))
 
         # Code comments referencing files: # See: path/to/file
-        comment_match = re.search(r'#\s*(?:See|see|Ref|ref):\s*([\w\-./]+)', line_stripped)
+        comment_match = re.search(r'#\s*(?Union[See, see]|Ref|ref):\s*([\w\-./]+)', line_stripped)
         if comment_match:
             target = comment_match.group(1)
             self.references.append(FileReference(

@@ -8,7 +8,7 @@ AC Marker: AC-PHASE57-S1-002
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Union
 from enum import Enum
 
 
@@ -38,7 +38,7 @@ class PatternInfo:
     """
 
     name: str
-    category: PatternCategory | str
+    category: Union[PatternCategory, str]
     signatures: List[str]
     description: str
     confidence: float = 0.75

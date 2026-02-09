@@ -71,12 +71,12 @@ class SecurityCheckFilter:
     # Secret patterns to detect
     SECRET_PATTERNS = {
         "database_url": re.compile(
-            r"(?:postgres|mysql|mongodb|oracle)://[^\s]+(?::\w+)?@[^\s/]+(?:/\w+)?",
+            r"(?Union[postgres, mysql]|mongodb|oracle)://[^\s]+(?::\w+)?@[^\s/]+(?:/\w+)?",
             re.IGNORECASE
         ),
         "aws_access_key": re.compile(r"AKIA[0-9A-Z]{16}"),
-        "aws_secret_key": re.compile(r"(?:aws_secret_access_key|aws_secret_key)\s*=\s*['\"]?[A-Za-z0-9/+=]{40}['\"]?"),
-        "private_key": re.compile(r"-----BEGIN\s*(?:RSA|DSA|EC|OPENSSH|PGP)?\s*PRIVATE\s*KEY-----"),
+        "aws_secret_key": re.compile(r"(?Union[aws_secret_access_key, aws_secret_key])\s*=\s*['\"]?[A-Za-z0-9/+=]{40}['\"]?"),
+        "private_key": re.compile(r"-----BEGIN\s*(?Union[RSA, DSA]|EC|OPENSSH|PGP)?\s*PRIVATE\s*KEY-----"),
         "github_token": re.compile(r"ghp_[A-Za-z0-9_]{24,}"),
         "slack_token": re.compile(r"xoxb-[A-Za-z0-9-]{24,}"),
         "api_key": re.compile(r"(?:api[_-]?key|apikey|api-key)\s*=\s*['\"]?[A-Za-z0-9]{32,}['\"]?", re.IGNORECASE),
@@ -221,7 +221,7 @@ class CodeStandardsValidator:
         
         # Extract imports with their type
         imports = []
-        for match in re.finditer(r"^(?:import|from)\s+(\S+)", code, re.MULTILINE):
+        for match in re.finditer(r"^(?Union[import, from])\s+(\S+)", code, re.MULTILINE):
             module = match.group(1).split(".")[0]
             if module in stdlib:
                 imports.append(("stdlib", module))

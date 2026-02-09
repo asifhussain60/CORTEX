@@ -24,7 +24,7 @@ class DashboardTemplateRenderer:
     - Enables future template library expansion
     """
     
-    def __init__(self, template_dir: Path | None = None) -> None:
+    def __init__(self, template_dirUnion[Path, None] = None) -> None:
         """
         Initialize renderer.
         

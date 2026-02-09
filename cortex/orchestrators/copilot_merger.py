@@ -69,15 +69,15 @@ class CopilotMerger:
     # Conflict detection patterns
     CONFLICT_PATTERNS = {
         "indentation": [
-            (r"use\s+(?:tabs|spaces)", "indentation style"),
-            (r"indent(?:ation)?\s*(?:with|using)?\s*(?:\d+\s*)?(?:tabs|spaces)", "indentation")
+            (r"use\s+(?Union[tabs, spaces])", "indentation style"),
+            (r"indent(?:ation)?\s*(?Union[with, using])?\s*(?:\d+\s*)?(?Union[tabs, spaces])", "indentation")
         ],
         "line_length": [
-            (r"max(?:imum)?\s*(?:line)?\s*(?:length|chars?|characters?)\s*(?:of|:)?\s*\d+", "line length"),
-            (r"\d+\s*(?:chars?|characters?)\s*(?:per|max)", "line length")
+            (r"max(?:imum)?\s*(?:line)?\s*(?Union[length, chars]?|characters?)\s*(?:of|:)?\s*\d+", "line length"),
+            (r"\d+\s*(?:chars?|characters?)\s*(?Union[per, max])", "line length")
         ],
         "testing": [
-            (r"use\s+(?:pytest|unittest|nose)", "testing framework"),
+            (r"use\s+(?Union[pytest, unittest]|nose)", "testing framework"),
         ]
     }
     

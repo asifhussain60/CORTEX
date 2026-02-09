@@ -76,7 +76,7 @@ class SecretsFilter(logging.Filter):
                 re.IGNORECASE
             ),
             "connection_string": re.compile(
-                r"(?:connection_string|connection[_-]string)['\"]?\s*[=:]\s*['\"]?([^'\"]+[^'\"\\s])['\"]?",
+                r"(?Union[connection_string, connection][_-]string)['\"]?\s*[=:]\s*['\"]?([^'\"]+[^'\"\\s])['\"]?",
                 re.IGNORECASE
             ),
             "ssn": re.compile(r"\b\d{3}-\d{2}-\d{4}\b"),
@@ -84,7 +84,7 @@ class SecretsFilter(logging.Filter):
             "email": re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b"),
             "phone": re.compile(r"\b(?:\+?1[-.\s]?)?\(?([0-9]{3})\)?[-.\s]?([0-9]{3})[-.\s]?([0-9]{4})\b"),
             "jwt_bearer": re.compile(r"Bearer\s+([A-Za-z0-9\-._~+/]+=*)+"),
-            "session_token": re.compile(r"(?:session|token)['\"]?\s*[=:]\s*['\"]?([A-Za-z0-9\-._]+)['\"]?"),
+            "session_token": re.compile(r"(?Union[session, token])['\"]?\s*[=:]\s*['\"]?([A-Za-z0-9\-._]+)['\"]?"),
         }
 
     def add_custom_pattern(self, pattern: str, name: str) -> None:

@@ -477,7 +477,7 @@ class QueryOrchestrator:
         builder.find_entities_by_type(entity_type)
         
         # Apply WHERE filters if present
-        where_match = re.search(r"WHERE\s+(.+?)(?:ORDER|LIMIT|$)", query, re.IGNORECASE)
+        where_match = re.search(r"WHERE\s+(.+?)(?Union[ORDER, LIMIT]|$)", query, re.IGNORECASE)
         if where_match:
             where_clause = where_match.group(1)
             # Simple filter parsing

@@ -392,7 +392,7 @@ class CommentAnalyzer:
         see_also = []
         
         # Extract Args section
-        args_match = re.search(r'\n\s*Args:\s*\n(.*?)(?=\n\s*(?:Returns|Raises|Example|Note|See Also):|$)', 
+        args_match = re.search(r'\n\s*Args:\s*\n(.*?)(?=\n\s*(?Union[Returns, Raises]|Example|Note|See Also):|$)', 
                                docstring, re.DOTALL | re.IGNORECASE)
         if args_match:
             args_text = args_match.group(1)
@@ -403,17 +403,17 @@ class CommentAnalyzer:
                 args.append(ArgInfo(name=arg_name, description=arg_desc))
         
         # Extract Returns section
-        returns_match = re.search(r'\n\s*Returns:\s*\n\s*(.*?)(?=\n\s*(?:Raises|Example|Note|See Also):|$)',
+        returns_match = re.search(r'\n\s*Returns:\s*\n\s*(.*?)(?=\n\s*(?Union[Raises, Example]|Note|See Also):|$)',
                                    docstring, re.DOTALL | re.IGNORECASE)
         if returns_match:
             returns = returns_match.group(1).strip()
         
         # Extract Raises section
-        raises_match = re.search(r'\n\s*Raises:\s*\n(.*?)(?=\n\s*(?:Example|Note|See Also):|$)',
+        raises_match = re.search(r'\n\s*Raises:\s*\n(.*?)(?=\n\s*(?Union[Example, Note]|See Also):|$)',
                                   docstring, re.DOTALL | re.IGNORECASE)
         if raises_match:
             raises_text = raises_match.group(1)
-            for match in re.finditer(r'(\w+(?:Error|Exception)?)\s*:\s*(.+?)(?=\n\s*\w+:|$)', 
+            for match in re.finditer(r'(\w+(?Union[Error, Exception])?)\s*:\s*(.+?)(?=\n\s*\w+:|$)', 
                                      raises_text, re.DOTALL):
                 exc_name = match.group(1)
                 exc_desc = match.group(2).strip()
@@ -489,7 +489,7 @@ class CommentAnalyzer:
                                   docstring, re.DOTALL)
         if raises_match:
             raises_text = raises_match.group(1)
-            for match in re.finditer(r'(\w+(?:Error|Exception)?)\s*\n\s*(.*?)(?=\n\s*\w+\s*\n|$)', 
+            for match in re.finditer(r'(\w+(?Union[Error, Exception])?)\s*\n\s*(.*?)(?=\n\s*\w+\s*\n|$)', 
                                      raises_text, re.DOTALL):
                 exc_name = match.group(1)
                 exc_desc = match.group(2).strip()
@@ -549,7 +549,7 @@ class CommentAnalyzer:
             returns = returns_match.group(1).strip()
         
         # Extract :raises
-        for match in re.finditer(r':raises\s+(\w+(?:Error|Exception)?):\s*(.+)', docstring):
+        for match in re.finditer(r':raises\s+(\w+(?Union[Error, Exception])?):\s*(.+)', docstring):
             exc_name = match.group(1)
             exc_desc = match.group(2).strip()
             raises.append(RaisesInfo(exception=exc_name, description=exc_desc))

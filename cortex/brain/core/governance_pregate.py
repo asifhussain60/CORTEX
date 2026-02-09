@@ -53,7 +53,7 @@ class PreGateDecision:
     """Human-readable explanation of the decision."""
     
     violation_type: Optional[str] = None
-    """Type of violation if blocked: RESOURCE_QUOTA | AUTHORIZATION | TIER_ACCESS | None."""
+    """Type of violation if blockedUnion[RESOURCE_QUOTA, AUTHORIZATION] | TIER_ACCESS | None."""
     
     audit_context: Dict[str, Any] = field(default_factory=dict)
     """Context for audit logging (timestamp, actor_id, checks_performed, etc.)."""

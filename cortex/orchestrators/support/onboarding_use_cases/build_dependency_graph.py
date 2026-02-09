@@ -7,7 +7,7 @@ Authority: phase-54-A-incremental-onboarding-refactor.yaml, S1 task 4
 """
 
 from pathlib import Path
-from typing import Dict, List, Set
+from typing import Dict, List, Set, Union, Optional
 from dataclasses import dataclass, field
 
 from cortex.brain.core.result import Result, Ok, Err
@@ -139,7 +139,7 @@ class BuildDependencyGraphUseCase:
         
         return deps
     
-    def _parse_requirement(self, line: str, source: str, category: str) -> PackageDependency | None:
+    def _parse_requirement(self, line: str, source: str, category: str) -> Optional[PackageDependency]:
         """Parse single requirement line."""
         try:
             # Handle version specifiers: package==1.0.0, package>=1.0, etc.
