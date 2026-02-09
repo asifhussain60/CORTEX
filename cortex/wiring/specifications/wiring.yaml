@@ -1360,6 +1360,66 @@ orchestrators:
         phase: "49"
         stage: "6"
 
+    - name: "GitHubClientOrchestrator"
+      module: "cortex.orchestrators.phase_52.github_client"
+      class: "GitHubClientOrchestrator"
+      tier: 3
+      priority: 83
+      dependencies: ["IncrementalUpdater"]
+      capabilities: [github_api_integration, pr_operations, review_management, webhook_handling]
+      mcp_tools: [cortex_github_client, cortex_create_review, cortex_fetch_pr_data]
+      governance: [CORE-035, CORE-049]
+      version: "1.0.0"
+      metadata:
+        icon: "🐙"
+        phase: "52"
+        stage: "1"
+
+    - name: "SecurityAnalyzerOrchestrator"
+      module: "cortex.orchestrators.phase_52.security_analyzer"
+      class: "SecurityAnalyzerOrchestrator"
+      tier: 3
+      priority: 82
+      dependencies: ["GitHubClientOrchestrator"]
+      capabilities: [vulnerability_detection, cwe_scanning, security_classification, risk_assessment]
+      mcp_tools: [cortex_analyze_security, cortex_detect_cwe, cortex_assess_risk]
+      governance: [CORE-035, CORE-049]
+      version: "1.0.0"
+      metadata:
+        icon: "🔐"
+        phase: "52"
+        stage: "1.2"
+
+    - name: "ReviewEngineOrchestrator"
+      module: "cortex.orchestrators.phase_52.review_engine"
+      class: "ReviewEngineOrchestrator"
+      tier: 3
+      priority: 81
+      dependencies: ["SecurityAnalyzerOrchestrator"]
+      capabilities: [code_review, quality_assessment, recommendation_generation, feedback_composition]
+      mcp_tools: [cortex_review_code, cortex_assess_quality, cortex_generate_recommendation]
+      governance: [CORE-035, CORE-049]
+      version: "1.0.0"
+      metadata:
+        icon: "✏️"
+        phase: "52"
+        stage: "1.3"
+
+    - name: "IntegrationOrchestrator"
+      module: "cortex.orchestrators.phase_52.integration"
+      class: "IntegrationOrchestrator"
+      tier: 3
+      priority: 80
+      dependencies: ["ReviewEngineOrchestrator"]
+      capabilities: [orchestrator_coordination, workflow_execution, result_aggregation, event_handling]
+      mcp_tools: [cortex_coordinate_review, cortex_execute_workflow, cortex_aggregate_results]
+      governance: [CORE-035, CORE-049]
+      version: "1.0.0"
+      metadata:
+        icon: "🔗"
+        phase: "52"
+        stage: "1.4"
+
 # -------------------------------------------------------------------------
 # DEPENDENCY VALIDATION RULES
 # -------------------------------------------------------------------------
