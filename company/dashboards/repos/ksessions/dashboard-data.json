@@ -6,7 +6,7 @@
     "owner": "Unknown",
     "primary_language": "JavaScript",
     "version": "1.0",
-    "last_analyzed_at": "2026-02-09T11:59:21.821542"
+    "last_analyzed_at": "2026-02-09T12:02:34.500518"
   },
   "overview": {
     "summary": "A sophisticated repository management system with advanced analytics capabilities, designed for automated code analysis and onboarding orchestration across multiple programming languages.",
@@ -106,164 +106,110 @@
     "transitive_count": 8351,
     "packages": [
       {
-        "name": "inherits",
-        "version": "2.0.3",
+        "name": "grunt",
+        "version": "0.4.5",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "string_decoder",
-        "version": "1.1.1",
+        "name": "grunt-contrib-clean",
+        "version": "0.6.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "util-deprecate",
-        "version": "1.0.1",
+        "name": "grunt-contrib-concat",
+        "version": "0.5.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "@babel/cli",
-        "version": "7.2.0",
+        "name": "grunt-contrib-copy",
+        "version": "0.7.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "@babel/core",
-        "version": "7.2.0",
+        "name": "grunt-contrib-jshint",
+        "version": "0.10.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "@babel/polyfill",
-        "version": "7.0.0",
+        "name": "grunt-contrib-less",
+        "version": "0.12.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "@babel/preset-env",
-        "version": "7.2.0",
+        "name": "grunt-contrib-sass",
+        "version": "0.8.1",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "airtap",
-        "version": "0.0.9",
+        "name": "grunt-contrib-stylus",
+        "version": "0.20.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "assert",
-        "version": "1.4.0",
+        "name": "grunt-contrib-uglify",
+        "version": "0.6.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "bl",
-        "version": "2.0.0",
+        "name": "grunt-contrib-watch",
+        "version": "0.6.1",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "deep-strict-equal",
+        "name": "grunt-execute",
+        "version": "0.2.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "grunt-sass-convert",
         "version": "0.2.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "events.once",
-        "version": "2.0.2",
+        "name": "less2stylus",
+        "version": "0.1.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "glob",
-        "version": "7.1.2",
+        "name": "ava",
+        "version": "6.0.1",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "gunzip-maybe",
-        "version": "1.4.1",
+        "name": "tsd",
+        "version": "0.30.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "hyperquest",
-        "version": "2.1.3",
+        "name": "xo",
+        "version": "0.56.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "lolex",
-        "version": "2.6.0",
+        "name": "es-errors",
+        "version": "1.3.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "nyc",
-        "version": "11.0.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "pump",
-        "version": "3.0.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "rimraf",
-        "version": "2.6.2",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "tap",
-        "version": "12.0.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "tape",
-        "version": "4.9.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "tar-fs",
-        "version": "1.16.2",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "util-promisify",
-        "version": "2.1.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "call-bound",
-        "version": "1.0.3",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "has-bigints",
-        "version": "1.0.2",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "has-symbols",
-        "version": "1.1.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "which-boxed-primitive",
-        "version": "1.1.1",
+        "name": "isarray",
+        "version": "2.0.5",
         "license": null,
         "is_direct": false
       },
@@ -286,26 +232,14 @@
         "is_direct": false
       },
       {
-        "name": "@types/for-each",
-        "version": "0.3.3",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@types/object-inspect",
-        "version": "1.13.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@types/object-is",
-        "version": "1.1.0",
+        "name": "@types/isarray",
+        "version": "2.0.3",
         "license": null,
         "is_direct": false
       },
       {
         "name": "@types/tape",
-        "version": "5.7.0",
+        "version": "5.6.5",
         "license": null,
         "is_direct": false
       },
@@ -322,20 +256,14 @@
         "is_direct": false
       },
       {
-        "name": "es-value-fixtures",
-        "version": "1.5.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
         "name": "eslint",
         "version": "8.8.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "for-each",
-        "version": "0.3.3",
+        "name": "evalmd",
+        "version": "0.0.19",
         "license": null,
         "is_direct": false
       },
@@ -358,18 +286,6 @@
         "is_direct": false
       },
       {
-        "name": "object-inspect",
-        "version": "1.13.3",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "object-is",
-        "version": "1.1.6",
-        "license": null,
-        "is_direct": false
-      },
-      {
         "name": "safe-publish-latest",
         "version": "2.0.0",
         "license": null,
@@ -388,146 +304,26 @@
         "is_direct": false
       },
       {
-        "name": "@types/estree",
-        "version": "0.0.51",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@types/estree-jsx",
-        "version": "0.0.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@typescript-eslint/parser",
-        "version": "8.7.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "eslint-release",
-        "version": "3.2.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "esquery",
-        "version": "1.4.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "json-diff",
-        "version": "0.7.3",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "opener",
-        "version": "1.5.2",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "rollup",
-        "version": "4.22.4",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "rollup-plugin-dts",
-        "version": "6.1.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "tsd",
-        "version": "0.31.2",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "typescript",
-        "version": "5.6.2",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "acorn",
-        "version": "8.11.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@types/end-of-stream",
-        "version": "1.4.2",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@types/node",
-        "version": "20.1.2",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "end-of-stream",
-        "version": "1.4.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "node-abort-controller",
-        "version": "3.1.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "prettier",
-        "version": "2.6.2",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "tap",
-        "version": "19.0.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "through2",
+        "name": "@cacheable/utils",
         "version": "2.0.3",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "tshy",
-        "version": "1.14.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "typedoc",
-        "version": "0.25.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
         "name": "@biomejs/biome",
-        "version": "2.2.6",
+        "version": "2.2.4",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "@monstermann/tinybench-pretty-printer",
-        "version": "0.2.0",
+        "name": "@faker-js/faker",
+        "version": "10.0.0",
         "license": null,
         "is_direct": false
       },
       {
         "name": "@types/node",
-        "version": "24.7.2",
+        "version": "24.5.2",
         "license": null,
         "is_direct": false
       },
@@ -538,44 +334,8 @@
         "is_direct": false
       },
       {
-        "name": "docula",
-        "version": "0.30.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "emittery",
-        "version": "1.2.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "eventemitter3",
-        "version": "5.0.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "hookable",
-        "version": "5.5.3",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "pino",
-        "version": "10.0.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
         "name": "rimraf",
         "version": "6.0.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "tinybench",
-        "version": "5.0.1",
         "license": null,
         "is_direct": false
       },
@@ -586,14 +346,8 @@
         "is_direct": false
       },
       {
-        "name": "tsx",
-        "version": "4.20.6",
-        "license": null,
-        "is_direct": false
-      },
-      {
         "name": "typescript",
-        "version": "5.9.3",
+        "version": "5.9.2",
         "license": null,
         "is_direct": false
       },
@@ -604,86 +358,290 @@
         "is_direct": false
       },
       {
+        "name": "@babel/core",
+        "version": "7.2.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@babel/plugin-transform-modules-commonjs",
+        "version": "7.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@babel/preset-env",
+        "version": "7.2.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@babel/register",
+        "version": "7.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@mysticatea/eslint-plugin",
+        "version": "8.0.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@mysticatea/spy",
+        "version": "0.1.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "assert",
+        "version": "1.4.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "codecov",
+        "version": "3.1.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "eslint",
+        "version": "5.12.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "karma",
+        "version": "3.1.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "karma-chrome-launcher",
+        "version": "2.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "karma-coverage",
+        "version": "1.1.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "karma-firefox-launcher",
+        "version": "1.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "karma-growl-reporter",
+        "version": "1.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "karma-ie-launcher",
+        "version": "1.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "karma-mocha",
+        "version": "1.3.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "karma-rollup-preprocessor",
+        "version": "7.0.0-rc.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
         "name": "mocha",
-        "version": "4.0.1",
+        "version": "5.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "npm-run-all",
+        "version": "4.1.5",
         "license": null,
         "is_direct": false
       },
       {
         "name": "nyc",
-        "version": "11.3.0",
+        "version": "13.1.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "string-width",
-        "version": "5.1.2",
+        "name": "opener",
+        "version": "1.5.1",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "string-width-cjs",
-        "version": "npm:string-width@^4.2.0",
+        "name": "rimraf",
+        "version": "2.6.3",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "strip-ansi",
-        "version": "7.0.1",
+        "name": "rollup",
+        "version": "1.1.1",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "strip-ansi-cjs",
-        "version": "npm:strip-ansi@^6.0.1",
+        "name": "rollup-plugin-babel",
+        "version": "4.3.2",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "wrap-ansi",
-        "version": "8.1.0",
+        "name": "rollup-plugin-babel-minify",
+        "version": "7.0.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "wrap-ansi-cjs",
-        "version": "npm:wrap-ansi@^7.0.0",
+        "name": "rollup-plugin-commonjs",
+        "version": "9.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "rollup-plugin-json",
+        "version": "3.1.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "rollup-plugin-node-resolve",
+        "version": "4.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "rollup-watch",
+        "version": "4.3.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "type-tester",
+        "version": "1.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "typescript",
+        "version": "3.2.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "buildman",
+        "version": "*",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "testman",
+        "version": "*",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@azure/abort-controller",
+        "version": "2.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@azure/core-auth",
+        "version": "1.3.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@azure/core-client",
+        "version": "1.5.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@azure/core-rest-pipeline",
+        "version": "1.8.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@azure/core-tracing",
+        "version": "1.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@azure/logger",
+        "version": "1.1.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "tslib",
+        "version": "2.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@azure/core-util",
+        "version": "1.10.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@azure-tools/test-utils-vitest",
+        "version": "1.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@azure/dev-tool",
+        "version": "1.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@azure/eslint-plugin-azure-sdk",
+        "version": "3.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@microsoft/api-extractor",
+        "version": "7.31.1",
         "license": null,
         "is_direct": false
       },
       {
         "name": "@types/node",
-        "version": "14.0.27",
+        "version": "18.0.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "@typescript-eslint/eslint-plugin",
-        "version": "4.0.0",
+        "name": "@vitest/browser",
+        "version": "2.0.5",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "@typescript-eslint/parser",
-        "version": "4.0.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "c8",
-        "version": "7.3.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "chai",
-        "version": "4.2.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "chalk",
-        "version": "4.1.0",
+        "name": "@vitest/coverage-istanbul",
+        "version": "2.0.5",
         "license": null,
         "is_direct": false
       },
@@ -695,13 +653,55 @@
       },
       {
         "name": "eslint",
-        "version": "7.6.0",
+        "version": "9.9.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "eslint-plugin-import",
-        "version": "2.22.0",
+        "name": "playwright",
+        "version": "1.46.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "rimraf",
+        "version": "5.0.5",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "typescript",
+        "version": "5.6.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "vitest",
+        "version": "2.0.5",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "dunder-proto",
+        "version": "1.0.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "es-object-atoms",
+        "version": "1.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@arethetypeswrong/cli",
+        "version": "0.17.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@ljharb/eslint-config",
+        "version": "21.1.1",
         "license": null,
         "is_direct": false
       }
@@ -713,252 +713,171 @@
       "dependency_graph": {
         "nodes": [
           {
-            "id": "inherits",
+            "id": "grunt",
             "x": 550.0,
             "y": 250.0,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "2.0.3"
+            "version": "0.4.5"
           },
           {
-            "id": "string_decoder",
+            "id": "grunt-contrib-clean",
             "x": 548.8172051971717,
             "y": 268.79998503464566,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "1.1.1"
+            "version": "0.6.0"
           },
           {
-            "id": "util-deprecate",
+            "id": "grunt-contrib-concat",
             "x": 545.2874741692947,
             "y": 287.3034830747282,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "1.0.1"
+            "version": "0.5.0"
           },
           {
-            "id": "@babel/cli",
+            "id": "grunt-contrib-copy",
             "x": 539.4664728832377,
             "y": 305.2186829027017,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "7.2.0"
+            "version": "0.7.0"
           },
           {
-            "id": "@babel/core",
+            "id": "grunt-contrib-jshint",
             "x": 531.4460020065795,
             "y": 322.2630511152573,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "7.2.0"
+            "version": "0.10.0"
           },
           {
-            "id": "@babel/polyfill",
+            "id": "grunt-contrib-less",
             "x": 521.3525491562422,
             "y": 338.167787843871,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "7.0.0"
+            "version": "0.12.0"
           },
           {
-            "id": "@babel/preset-env",
+            "id": "grunt-contrib-sass",
             "x": 509.3452941132117,
             "y": 352.6820658893033,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "7.2.0"
+            "version": "0.8.1"
           },
           {
-            "id": "airtap",
+            "id": "grunt-contrib-stylus",
             "x": 495.61359846230346,
             "y": 365.5769864163684,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "0.0.9"
+            "version": "0.20.0"
           },
           {
-            "id": "assert",
+            "id": "grunt-contrib-uglify",
             "x": 480.37401924684946,
             "y": 376.64918882530225,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "1.4.0"
+            "version": "0.6.0"
           },
           {
-            "id": "bl",
+            "id": "grunt-contrib-watch",
             "x": 463.8668937347609,
             "y": 385.72405786990294,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "2.0.0"
+            "version": "0.6.1"
           },
           {
-            "id": "deep-strict-equal",
+            "id": "grunt-execute",
             "x": 446.3525491562421,
             "y": 392.658477444273,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "0.2.2"
+          },
+          {
+            "id": "grunt-sass-convert",
+            "x": 428.10719718785873,
+            "y": 397.3430876093033,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
             "version": "0.2.0"
           },
           {
-            "id": "events.once",
-            "x": 428.10719718785873,
-            "y": 397.3430876093033,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "2.0.2"
-          },
-          {
-            "id": "glob",
+            "id": "less2stylus",
             "x": 409.41857792939703,
             "y": 399.70400926424077,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "7.1.2"
+            "version": "0.1.0"
           },
           {
-            "id": "gunzip-maybe",
+            "id": "ava",
             "x": 390.58142207060297,
             "y": 399.70400926424077,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "1.4.1"
+            "version": "6.0.1"
           },
           {
-            "id": "hyperquest",
+            "id": "tsd",
             "x": 371.89280281214127,
             "y": 397.3430876093033,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "2.1.3"
+            "version": "0.30.0"
           },
           {
-            "id": "lolex",
+            "id": "xo",
             "x": 353.6474508437579,
             "y": 392.65847744427305,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "2.6.0"
+            "version": "0.56.0"
           },
           {
-            "id": "nyc",
+            "id": "es-errors",
             "x": 336.1331062652391,
             "y": 385.72405786990294,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "11.0.0"
+            "version": "1.3.0"
           },
           {
-            "id": "pump",
+            "id": "isarray",
             "x": 319.6259807531505,
             "y": 376.64918882530225,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "3.0.0"
-          },
-          {
-            "id": "rimraf",
-            "x": 304.38640153769654,
-            "y": 365.5769864163684,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "2.6.2"
-          },
-          {
-            "id": "tap",
-            "x": 290.6547058867883,
-            "y": 352.6820658893033,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "12.0.0"
-          },
-          {
-            "id": "tape",
-            "x": 278.6474508437579,
-            "y": 338.167787843871,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "4.9.0"
-          },
-          {
-            "id": "tar-fs",
-            "x": 268.55399799342047,
-            "y": 322.2630511152573,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "1.16.2"
-          },
-          {
-            "id": "util-promisify",
-            "x": 260.5335271167623,
-            "y": 305.21868290270174,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "2.1.0"
-          },
-          {
-            "id": "call-bound",
-            "x": 254.71252583070535,
-            "y": 287.3034830747282,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "1.0.3"
-          },
-          {
-            "id": "has-bigints",
-            "x": 251.18279480282834,
-            "y": 268.79998503464566,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "1.0.2"
-          },
-          {
-            "id": "has-symbols",
-            "x": 250.0,
-            "y": 250.00000000000003,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "1.1.0"
-          },
-          {
-            "id": "which-boxed-primitive",
-            "x": 251.1827948028283,
-            "y": 231.20001496535434,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "1.1.1"
+            "version": "2.0.5"
           },
           {
             "id": "@arethetypeswrong/cli",
-            "x": 254.71252583070535,
-            "y": 212.69651692527174,
+            "x": 304.38640153769654,
+            "y": 365.5769864163684,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
@@ -966,8 +885,8 @@
           },
           {
             "id": "@ljharb/eslint-config",
-            "x": 260.53352711676234,
-            "y": 194.78131709729826,
+            "x": 290.6547058867883,
+            "y": 352.6820658893033,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
@@ -975,53 +894,35 @@
           },
           {
             "id": "@ljharb/tsconfig",
-            "x": 268.55399799342047,
-            "y": 177.73694888474273,
+            "x": 278.6474508437579,
+            "y": 338.167787843871,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
             "version": "0.2.2"
           },
           {
-            "id": "@types/for-each",
-            "x": 278.6474508437579,
-            "y": 161.83221215612906,
+            "id": "@types/isarray",
+            "x": 268.55399799342047,
+            "y": 322.2630511152573,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "0.3.3"
-          },
-          {
-            "id": "@types/object-inspect",
-            "x": 290.6547058867883,
-            "y": 147.31793411069668,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "1.13.0"
-          },
-          {
-            "id": "@types/object-is",
-            "x": 304.38640153769654,
-            "y": 134.4230135836316,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "1.1.0"
+            "version": "2.0.3"
           },
           {
             "id": "@types/tape",
-            "x": 319.62598075315054,
-            "y": 123.35081117469771,
+            "x": 260.5335271167623,
+            "y": 305.21868290270174,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "5.7.0"
+            "version": "5.6.5"
           },
           {
             "id": "auto-changelog",
-            "x": 336.1331062652392,
-            "y": 114.27594213009704,
+            "x": 254.71252583070535,
+            "y": 287.3034830747282,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
@@ -1029,44 +930,35 @@
           },
           {
             "id": "encoding",
-            "x": 353.64745084375784,
-            "y": 107.34152255572698,
+            "x": 251.18279480282834,
+            "y": 268.79998503464566,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
             "version": "0.1.13"
           },
           {
-            "id": "es-value-fixtures",
-            "x": 371.8928028121413,
-            "y": 102.6569123906967,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "1.5.0"
-          },
-          {
             "id": "eslint",
-            "x": 390.581422070603,
-            "y": 100.29599073575926,
+            "x": 250.0,
+            "y": 250.00000000000003,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
             "version": "8.8.0"
           },
           {
-            "id": "for-each",
-            "x": 409.4185779293969,
-            "y": 100.29599073575926,
+            "id": "evalmd",
+            "x": 251.1827948028283,
+            "y": 231.20001496535434,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "0.3.3"
+            "version": "0.0.19"
           },
           {
             "id": "in-publish",
-            "x": 428.1071971878586,
-            "y": 102.6569123906967,
+            "x": 254.71252583070535,
+            "y": 212.69651692527174,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
@@ -1074,8 +966,8 @@
           },
           {
             "id": "npmignore",
-            "x": 446.3525491562421,
-            "y": 107.34152255572695,
+            "x": 260.53352711676234,
+            "y": 194.78131709729826,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
@@ -1083,35 +975,17 @@
           },
           {
             "id": "nyc",
-            "x": 463.86689373476077,
-            "y": 114.27594213009701,
+            "x": 268.55399799342047,
+            "y": 177.73694888474273,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
             "version": "10.3.2"
           },
           {
-            "id": "object-inspect",
-            "x": 480.3740192468494,
-            "y": 123.35081117469767,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "1.13.3"
-          },
-          {
-            "id": "object-is",
-            "x": 495.6135984623034,
-            "y": 134.42301358363156,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "1.1.6"
-          },
-          {
             "id": "safe-publish-latest",
-            "x": 509.3452941132117,
-            "y": 147.31793411069665,
+            "x": 278.6474508437579,
+            "y": 161.83221215612906,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
@@ -1119,8 +993,8 @@
           },
           {
             "id": "tape",
-            "x": 521.352549156242,
-            "y": 161.832212156129,
+            "x": 290.6547058867883,
+            "y": 147.31793411069668,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
@@ -1128,69 +1002,195 @@
           },
           {
             "id": "typescript",
-            "x": 531.4460020065795,
-            "y": 177.7369488847427,
+            "x": 304.38640153769654,
+            "y": 134.4230135836316,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
             "version": "next"
           },
           {
-            "id": "@types/estree",
+            "id": "@cacheable/utils",
+            "x": 319.62598075315054,
+            "y": 123.35081117469771,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "2.0.3"
+          },
+          {
+            "id": "@biomejs/biome",
+            "x": 336.1331062652392,
+            "y": 114.27594213009704,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "2.2.4"
+          },
+          {
+            "id": "@faker-js/faker",
+            "x": 353.64745084375784,
+            "y": 107.34152255572698,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "10.0.0"
+          },
+          {
+            "id": "@types/node",
+            "x": 371.8928028121413,
+            "y": 102.6569123906967,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "24.5.2"
+          },
+          {
+            "id": "@vitest/coverage-v8",
+            "x": 390.581422070603,
+            "y": 100.29599073575926,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "3.2.4"
+          },
+          {
+            "id": "rimraf",
+            "x": 409.4185779293969,
+            "y": 100.29599073575926,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "6.0.1"
+          },
+          {
+            "id": "tsup",
+            "x": 428.1071971878586,
+            "y": 102.6569123906967,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "8.5.0"
+          },
+          {
+            "id": "typescript",
+            "x": 446.3525491562421,
+            "y": 107.34152255572695,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "5.9.2"
+          },
+          {
+            "id": "vitest",
+            "x": 463.86689373476077,
+            "y": 114.27594213009701,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "3.2.4"
+          },
+          {
+            "id": "@babel/core",
+            "x": 480.3740192468494,
+            "y": 123.35081117469767,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "7.2.2"
+          },
+          {
+            "id": "@babel/plugin-transform-modules-commonjs",
+            "x": 495.6135984623034,
+            "y": 134.42301358363156,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "7.2.0"
+          },
+          {
+            "id": "@babel/preset-env",
+            "x": 509.3452941132117,
+            "y": 147.31793411069665,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "7.2.3"
+          },
+          {
+            "id": "@babel/register",
+            "x": 521.352549156242,
+            "y": 161.832212156129,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "7.0.0"
+          },
+          {
+            "id": "@mysticatea/eslint-plugin",
+            "x": 531.4460020065795,
+            "y": 177.7369488847427,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "8.0.1"
+          },
+          {
+            "id": "@mysticatea/spy",
             "x": 539.4664728832377,
             "y": 194.7813170972982,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "0.0.51"
+            "version": "0.1.2"
           },
           {
-            "id": "@types/estree-jsx",
+            "id": "assert",
             "x": 545.2874741692947,
             "y": 212.69651692527168,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "0.0.1"
+            "version": "1.4.1"
           },
           {
-            "id": "@typescript-eslint/parser",
+            "id": "codecov",
             "x": 548.8172051971717,
             "y": 231.2000149653543,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "8.7.0"
+            "version": "3.1.0"
           }
         ],
         "edges": [
           {
-            "source": "inherits",
-            "target": "string_decoder",
+            "source": "grunt",
+            "target": "grunt-contrib-clean",
             "import_type": "inferred",
             "weight": 0.5
           },
           {
-            "source": "string_decoder",
-            "target": "util-deprecate",
+            "source": "grunt-contrib-clean",
+            "target": "grunt-contrib-concat",
             "import_type": "inferred",
             "weight": 0.5
           },
           {
-            "source": "util-deprecate",
-            "target": "@babel/cli",
+            "source": "grunt-contrib-concat",
+            "target": "grunt-contrib-copy",
             "import_type": "inferred",
             "weight": 0.5
           },
           {
-            "source": "@babel/cli",
-            "target": "@babel/core",
+            "source": "grunt-contrib-copy",
+            "target": "grunt-contrib-jshint",
             "import_type": "inferred",
             "weight": 0.5
           },
           {
-            "source": "@babel/core",
-            "target": "@babel/polyfill",
+            "source": "grunt-contrib-jshint",
+            "target": "grunt-contrib-less",
             "import_type": "inferred",
             "weight": 0.5
           }
