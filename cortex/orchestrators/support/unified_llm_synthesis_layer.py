@@ -392,7 +392,7 @@ RESPOND WITH VALID JSON ONLY. No markdown, no explanation. Structure:
         if patterns_match:
             try:
                 request_data["lens_patterns"] = json.loads(patterns_match.group(1))
-            except:
+            except (json.JSONDecodeError, ValueError, TypeError):
                 request_data["lens_patterns"] = []
         
         # Extract API contracts (generic JSON parsing)
@@ -400,7 +400,7 @@ RESPOND WITH VALID JSON ONLY. No markdown, no explanation. Structure:
         if api_match:
             try:
                 request_data["api_contracts"] = json.loads(api_match.group(1))
-            except:
+            except (json.JSONDecodeError, ValueError, TypeError):
                 request_data["api_contracts"] = []
         
         # Extract Git data (generic field extraction)
@@ -417,14 +417,14 @@ RESPOND WITH VALID JSON ONLY. No markdown, no explanation. Structure:
         if lang_match:
             try:
                 request_data["languages"] = json.loads(lang_match.group(1))
-            except:
+            except (json.JSONDecodeError, ValueError, TypeError):
                 request_data["languages"] = []
         
         frameworks_match = re.search(r'Frameworks:\s*(\[.*?\])', prompt)
         if frameworks_match:
             try:
                 request_data["frameworks"] = json.loads(frameworks_match.group(1))
-            except:
+            except (json.JSONDecodeError, ValueError, TypeError):
                 request_data["frameworks"] = []
         
         # Set defaults for missing fields (generic)

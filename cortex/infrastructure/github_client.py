@@ -344,7 +344,7 @@ class GitHubClient:
                         latest_version="v1.0.0",
                     )
                 )
-            except:
+            except (AttributeError, KeyError, TypeError):
                 pass
 
             return actions
@@ -405,7 +405,7 @@ class GitHubClient:
                 # GitHub doesn't expose environments directly in PyGithub
                 # Would need to use raw REST calls
                 pass
-            except:
+            except (AttributeError, NotImplementedError):
                 pass
 
             return environments
