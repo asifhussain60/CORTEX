@@ -1,0 +1,253 @@
+# CORTEX Holistic Validation Gate Specification
+# Authority: cortex-architect.prompt.md v15.3 (CORE-048)
+# Purpose: Define Phase 48 holistic validation and challenge generation
+# Status: ACTIVE (Phase D - Agent Consolidation)
+
+version: "1.0"
+created_at: 2026-02-09
+updated_at: 2026-02-09
+authority: "CORTEX Validation Team"
+
+# Holistic Validation Framework
+holistic_validation:
+  
+  definition: "NO SHORTCUTS - Complete, systematic, coherent work regardless of token budget"
+  
+  mandate:
+    - verify_code_quality: "TDD, coverage, no lint errors"
+    - verify_tests: "Unit + integration + e2e (as needed)"
+    - verify_governance: "CORE rules + audit trail"
+    - verify_documentation: "Code, inline, architecture"
+    - verify_integration: "All layers connected"
+    - verify_implementation_truth: "Code verified, not docs"
+    - verify_cleanup: "No debug markers, no markdown files"
+
+# Pre-Implementation Validation (BEFORE coding)
+pre_implementation_validation:
+  
+  requirement_clarity:
+    checks:
+      - user_request_unambiguous: "Clear what user wants"
+      - acceptance_criteria_defined: "Success measured by specific criteria"
+      - edge_cases_identified: "Known boundaries + constraints"
+    gate: "BLOCKING if any check fails"
+    
+  architecture_review:
+    checks:
+      - solution_fits_architecture: "Aligns with CORTEX design"
+      - no_duplicate_implementations: "CORE-035 no duplicates"
+      - standards_compliance: "45+ knowledge YAMLs checked"
+    gate: "BLOCKING if any check fails"
+    
+  security_review:
+    checks:
+      - no_secrets_in_code: "No credentials hardcoded"
+      - injection_prevention: "Input validation included"
+      - authentication_required: "Where appropriate"
+    gate: "BLOCKING if any check fails"
+    
+  dependency_review:
+    checks:
+      - no_circular_dependencies: "Dependency tree valid"
+      - cross_layer_validation: "MCP, orchestrators, gates"
+      - external_deps_available: "Required packages accessible"
+    gate: "BLOCKING if any check fails"
+
+# During-Implementation Validation (TEST FIRST)
+during_implementation_validation:
+  
+  tdd_enforcement:
+    stage: "RED → GREEN → REFACTOR"
+    red_phase:
+      - write_failing_tests: "Test the feature first"
+      - verify_tests_fail: "Red state confirmed"
+      - coverage_target: "80%+ coverage tracked"
+    
+    green_phase:
+      - implement_minimum: "Simplest code to pass tests"
+      - verify_tests_pass: "All tests green"
+      - coverage_maintained: "80%+ still achieved"
+    
+    refactor_phase:
+      - improve_code_quality: "Clean up, optimize"
+      - keep_tests_passing: "Green state maintained"
+      - verify_no_regressions: "New tests still pass"
+
+# Post-Implementation Validation (GATE)
+post_implementation_validation:
+  
+  code_quality_gate:
+    checks:
+      - test_coverage: "≥80% code coverage"
+      - lint_compliance: "Zero pylint violations"
+      - type_hints: "CORE-011 compliance"
+      - docstrings: "CORE-012 Google-style"
+    action: "BLOCK if any check fails"
+    
+  integration_gate:
+    checks:
+      - orchestrator_integration: "All layers connected"
+      - mcp_wiring: "Tools properly exposed"
+      - configuration_applied: "Settings loaded + active"
+      - no_import_errors: "All imports resolve"
+    action: "BLOCK if any check fails"
+    
+  governance_gate:
+    checks:
+      - ac_markers_present: "AC_START → AC_COMPLETE"
+      - git_committed: "Changes in version control"
+      - audit_trail_logged: "SQLite traces created"
+      - core_rules_passed: "All 25+ CORE rules met"
+    action: "BLOCK if any check fails"
+    
+  security_gate:
+    checks:
+      - bandit_scan: "No high+ severity issues"
+      - dependency_scan: "No known vulnerabilities"
+      - secrets_scan: "No credentials detected"
+    action: "BLOCK if any check fails"
+    
+  performance_gate:
+    checks:
+      - no_regression: "<20% performance regression"
+      - memory_usage: "Within expected bounds"
+      - execution_time: "Meets baseline expectations"
+    action: "WARN if check fails (not blocking)"
+
+# Challenge Generation (Disagreement Detection)
+challenge_generation:
+  
+  architecture_challenges:
+    description: "Alternative design approaches"
+    count: 1
+    triggering_conditions:
+      - novel_architecture: "New design pattern introduced"
+      - scaling_concerns: "Potential scalability issues"
+      - dependency_changes: "New external dependencies"
+    
+  edge_case_detection:
+    description: "Potentially missed scenarios"
+    count: 2
+    triggering_conditions:
+      - boundary_conditions: "Off-by-one, empty input, etc."
+      - error_paths: "What happens when operation fails?"
+      - concurrent_access: "Race conditions, locks, etc."
+    
+  security_challenges:
+    description: "Security implications"
+    count: 1
+    triggering_conditions:
+      - user_input_handling: "Injection opportunities"
+      - data_exposure: "Sensitive data access patterns"
+      - privilege_escalation: "Permission elevation risks"
+    
+  performance_challenges:
+    description: "Performance implications"
+    count: 1
+    triggering_conditions:
+      - algorithmic_complexity: "O(n²) or worse?"
+      - database_queries: "N+1 queries?"
+      - caching_opportunities: "Can we cache this?"
+
+# Token Budget Management
+token_budget_protocol:
+  
+  budget_tracking:
+    total_budget: 200000
+    warning_point: 150000  # 75%
+    critical_point: 190000  # 95%
+    
+  when_75_percent_used:
+    action: "Continue execution + log checkpoint"
+    include_in_checkpoint:
+      - phases_completed
+      - test_results
+      - key_files
+      - next_phases
+    
+  when_95_percent_used:
+    action: "Prepare continuation prompt"
+    format: "200-400 tokens with clear handoff point"
+    delivery: "Display to user for next session"
+    
+  never_skip_for_tokens:
+    forbidden:
+      - "Skip tests to save tokens"
+      - "Defer refactoring"
+      - "Leave broken code"
+      - "Miss governance"
+
+# Holistic Completion Checklist
+completion_checklist:
+  
+  code_checklist:
+    - "✅ TDD: Tests written before code"
+    - "✅ Coverage: ≥80% test coverage"
+    - "✅ Lint: Zero lint violations"
+    - "✅ Types: CORE-011 type hints"
+    - "✅ Docs: CORE-012 docstrings"
+    - "✅ Headers: CORE-029 response headers"
+    
+  testing_checklist:
+    - "✅ Unit tests: Core functionality"
+    - "✅ Integration tests: Cross-layer"
+    - "✅ Edge cases: Boundary conditions"
+    - "✅ Error paths: Failure scenarios"
+    - "✅ Performance: No regressions"
+    
+  governance_checklist:
+    - "✅ CORE rules: All 25+ passed"
+    - "✅ AC markers: Start/complete present"
+    - "✅ Audit trail: SQLite entries"
+    - "✅ Git: Changes committed"
+    - "✅ Documentation: Updated"
+    
+  integration_checklist:
+    - "✅ MCP: Tools exposed"
+    - "✅ Orchestrators: Registered"
+    - "✅ Gates: Wired"
+    - "✅ Traces: SQLite configured"
+    - "✅ No import errors"
+    
+  cleanup_checklist:
+    - "✅ No CORTEX_DEBUG markers"
+    - "✅ No *-summary.md files"
+    - "✅ No test.md artifacts"
+    - "✅ No trailing debug code"
+    - "✅ Markdown vacuumed"
+
+# Definition of Done (DoD)
+definition_of_done:
+  
+  requirement_met:
+    - "Feature implemented per acceptance criteria"
+    - "All code paths tested"
+    - "No known bugs or issues"
+    
+  quality_met:
+    - "Code review passed"
+    - "80%+ test coverage"
+    - "Zero lint violations"
+    - "Performance acceptable"
+    
+  governance_met:
+    - "CORE rules passed"
+    - "Audit trail complete"
+    - "Git history clean"
+    - "Documentation updated"
+    
+  security_met:
+    - "No security vulnerabilities"
+    - "No exposed secrets"
+    - "Input validation included"
+    
+  integration_met:
+    - "All layers connected"
+    - "MCP tools exposed"
+    - "Orchestrators registered"
+    - "No import errors"
+
+metadata:
+  phase: "Phase D - Agent Consolidation"
+  status: "ACTIVE"
+  coverage: "Holistic validation framework (Phase 48)"

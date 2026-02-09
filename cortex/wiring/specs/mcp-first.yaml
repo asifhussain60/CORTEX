@@ -1,0 +1,224 @@
+# CORTEX MCP-First Architecture Specification
+# Authority: cortex-architect.prompt.md v15.3
+# Purpose: Define MCP-first principles and enforcement
+# Status: ACTIVE (Phase D - Agent Consolidation)
+
+version: "1.0"
+created_at: 2026-02-09
+updated_at: 2026-02-09
+authority: "CORTEX Architecture Team"
+
+# MCP-First Principles
+mcp_first_principles:
+  
+  principle_1_all_operations_mcp:
+    name: "All Functionality Exposed via MCP Tools"
+    description: "CORTEX operates exclusively through MCP server endpoints"
+    enforcement: "BLOCKING"
+    violation_action: "HALT - No direct implementation allowed"
+    
+  principle_2_no_direct_imports:
+    name: "No Direct Python Imports in Production"
+    description: "All functionality accessed through MCP tools, not direct module imports"
+    enforcement: "BLOCKING"
+    violation_action: "HALT - Direct import detected"
+    
+  principle_3_tdd_mandatory:
+    name: "Test-Driven Development Mandatory"
+    core_rule: "CORE-008"
+    description: "Tests BEFORE code - RED → GREEN → REFACTOR cycle"
+    enforcement: "BLOCKING"
+    violation_action: "HALT - No code without tests first"
+    
+  principle_4_audit_trail:
+    name: "Immutable Audit Trail"
+    core_rule: "CORE-027"
+    description: "AC_START → AC_COMPLETE markers embedded in all code changes"
+    enforcement: "BLOCKING"
+    violation_action: "HALT - Missing audit markers"
+    
+  principle_5_no_bypasses:
+    name: "No Governance Bypasses"
+    description: "All CORE rules enforced via EnforcementOrchestrator (7-agent system)"
+    enforcement: "BLOCKING"
+    violation_action: "HALT - Governance violation detected"
+
+# MCP Tool Categories
+mcp_tools:
+  
+  core_tools:
+    - cortex_process_request
+    - cortex_challenge
+    - cortex_total_recall
+    - cortex_lens_analyze
+    - cortex_git_history
+    - cortex_ast_analyze
+    - cortex_detect_duplicates
+    
+  support_tools:
+    - cortex_tools_catalog
+    - cortex_onboard_repository
+    - cortex_plan_setup
+    - cortex_plan_teardown
+    - cortex_plan_resolve
+    - cortex_plan_sync
+
+# Intent-to-MCP Routing
+intent_routing_mcp:
+  
+  IMPLEMENT:
+    required_tool: cortex_process_request
+    operation: "test_driven_implementation"
+    tdd_flow: "RED → GREEN → REFACTOR"
+    
+  FIX:
+    required_tool: cortex_process_request
+    operation: "bug_fixing"
+    scope: "Bug fix with root cause analysis"
+    
+  REFACTOR:
+    required_tool: cortex_process_request
+    operation: "code_refactoring"
+    principles: ["SOLID", "Clean Code", "Design Patterns"]
+    
+  ANALYZE:
+    required_tool: cortex_lens_analyze
+    operation: "unified_code_analysis"
+    scope: "Code intelligence, metrics, duplication"
+    
+  AUDIT:
+    required_tool: cortex_process_request
+    operation: "governance_audit"
+    checks: ["CORE rules", "Security", "Performance", "Architecture"]
+    
+  PLAN:
+    required_tool: cortex_plan_setup
+    operation: "phase_planning"
+    phases: ["Discover", "Structure", "Validate"]
+    
+  ONBOARD:
+    required_tool: cortex_onboard_repository
+    operation: "repository_onboarding"
+    scope: "Full repo scan + security baseline"
+    
+  DEBUG:
+    required_tool: cortex_process_request
+    operation: "debug_analysis"
+    flow: ["Capture", "Analyze", "Fix Plan"]
+
+# Enforcement Checkpoints
+enforcement_checkpoints:
+  
+  checkpoint_pre_intent:
+    name: "Pre-Intent Validation"
+    checks:
+      - mcp_availability: "MCP server running"
+      - environment_integrity: "Python environment valid"
+      - git_status: "Repository clean"
+    action_on_failure: "HALT"
+    
+  checkpoint_pre_implementation:
+    name: "Pre-Implementation Gate"
+    checks:
+      - tests_before_code: "TDD compliance"
+      - audit_markers: "AC_START marker present"
+      - governance_rules: "CORE rules verified"
+    action_on_failure: "HALT"
+    
+  checkpoint_post_completion:
+    name: "Post-Completion Validation"
+    checks:
+      - tests_passing: "80%+ coverage"
+      - lint_clean: "Zero violations"
+      - ac_marker_complete: "AC_COMPLETE marker present"
+      - git_committed: "Changes committed"
+    action_on_failure: "BLOCK_DEPLOYMENT"
+
+# MCP-First Architecture Benefits
+benefits:
+  benefit_1_single_quality_level:
+    title: "One Quality Level - Production"
+    description: "No degradation path - everything meets production standards"
+    
+  benefit_2_unified_governance:
+    title: "Unified Governance"
+    description: "All operations subject to same 25+ CORE rules"
+    
+  benefit_3_auditability:
+    title: "Complete Auditability"
+    description: "All operations traced with AC markers + SQLite logs"
+    
+  benefit_4_reproducibility:
+    title: "Reproducible Execution"
+    description: "MCP server ensures consistent orchestrator behavior"
+    
+  benefit_5_scalability:
+    title: "Enterprise Scalability"
+    description: "SaaS-ready architecture supporting multiple users"
+
+# Anti-Patterns (Forbidden)
+anti_patterns:
+  
+  anti_pattern_direct_file_ops:
+    forbidden: "Direct create_file for IMPLEMENT intents"
+    reason: "Bypasses TDD and governance gates"
+    enforcement: "BLOCKED at EnvironmentIntegrityAgent"
+    
+  anti_pattern_simple_fix:
+    forbidden: "Claiming 'simple fix' to skip MCP"
+    reason: "No quality degradation allowed"
+    enforcement: "BLOCKED at EnforcementOrchestrator"
+    
+  anti_pattern_skip_tests:
+    forbidden: "Skip tests to save tokens"
+    reason: "CORE-008 TDD mandatory"
+    enforcement: "BLOCKED at TDDOrchestrator"
+    
+  anti_pattern_direct_imports:
+    forbidden: "from cortex.orchestrators import X (direct)"
+    reason: "MCP-FIRST architecture requires tool routing"
+    enforcement: "BLOCKED at IntentRouter"
+
+# Migration Path (from Copilot Native to MCP)
+migration:
+  phase_1_audit:
+    description: "Identify direct file operations"
+    tools: ["cortex_lens_analyze", "cortex_detect_duplicates"]
+    
+  phase_2_rewrite:
+    description: "Rewrite as MCP tools operations"
+    pattern: "create_file → cortex_process_request(operation=implement)"
+    
+  phase_3_validate:
+    description: "Validate with TDD + governance gates"
+    validation: "100% test coverage + audit trail"
+    
+  phase_4_cleanup:
+    description: "Remove Copilot native tool fallbacks"
+    finalization: "Production-ready MCP-only"
+
+# SaaS Deployment Architecture
+saas_architecture:
+  server:
+    type: "MCP Server (Python FastAPI)"
+    port: 8000
+    endpoints:
+      - /tools
+      - /tools/{name}
+      - /health
+      - /metrics
+      
+  scalability:
+    - "Horizontal scaling via container orchestration"
+    - "Multi-tenant support (future enhancement)"
+    - "Rate limiting per user/org"
+    
+  observability:
+    - "Prometheus metrics at /metrics"
+    - "SQLite audit trail for all operations"
+    - "OpenTelemetry tracing (future)"
+
+metadata:
+  phase: "Phase D - Agent Consolidation"
+  status: "ACTIVE"
+  coverage: "MCP-first architecture principles"
