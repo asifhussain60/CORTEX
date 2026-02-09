@@ -255,6 +255,18 @@ class MasterOrchestrator(IOrchestrator):
         self.intent_router: Optional[IOrchestrator] = None
         # Stage 2.5: Knowledge Synthesis Engine (Phase 20.5)
         self._synthesis_engine: KnowledgeSynthesisEngine = get_synthesis_engine()
+        
+        # Phase 65 S4: Initialize UnifiedIntelligenceProvider (CORE-035)
+        # Single provider serves both InteractionOrchestrator and MasterOrchestrator
+        from cortex.intelligence.provider import get_intelligence_provider
+        self._intelligence_provider = get_intelligence_provider()
+        self.logger.log_operation_complete(
+            ac_id="AC-PHASE65-S4-001",
+            operation="UNIFIED_INTELLIGENCE_PROVIDER_INIT",
+            success=True,
+            details={"provider": "UnifiedIntelligenceProvider singleton initialized (CORE-035)"}
+        )
+        
         # Stage 3 Registry: Orchestrator registry for delegation
         self.orchestrator_registry: Dict[str, IOrchestrator] = {}
         

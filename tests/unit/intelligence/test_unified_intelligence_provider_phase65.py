@@ -242,30 +242,51 @@ class TestUnifiedIntelligenceProviderImplementation:
 class TestInteractionOrchestratorIntegration:
     """Test InteractionOrchestrator integration with provider (S4-T3)."""
     
-    @pytest.mark.skip(reason="S4-T3: Orchestrator wiring deferred - will wire after provider tests pass")
     def test_interaction_orchestrator_uses_provider(self):
         """Test 14: InteractionOrchestrator uses provider for intelligence."""
-        # TODO: Wire InteractionOrchestrator to use get_intelligence_provider()
-        # This test validates S4-T3 task
-        pass
+        from cortex.orchestrators.core.interaction_orchestrator import InteractionOrchestrator
+        from cortex.intelligence.provider import IIntelligenceProvider
+        from unittest.mock import MagicMock
+        
+        # Create InteractionOrchestrator with mocked protocol
+        protocol = MagicMock()
+        orchestrator = InteractionOrchestrator(conversation_protocol=protocol)
+        
+        # Verify provider is wired
+        assert hasattr(orchestrator, '_intelligence_provider')
+        assert orchestrator._intelligence_provider is not None
+        assert isinstance(orchestrator._intelligence_provider, IIntelligenceProvider)
 
 
 class TestMasterOrchestratorIntegration:
     """Test MasterOrchestrator integration with provider (S4-T4)."""
     
-    @pytest.mark.skip(reason="S4-T4: Orchestrator wiring deferred - will wire after provider tests pass")
     def test_master_orchestrator_uses_provider(self):
         """Test 15: MasterOrchestrator uses provider for Stage 2 routing."""
-        # TODO: Wire MasterOrchestrator to use get_intelligence_provider()
-        # This test validates S4-T4 task
-        pass
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+        from cortex.intelligence.provider import IIntelligenceProvider
+        
+        # Create MasterOrchestrator
+        orchestrator = MasterOrchestrator()
+        
+        # Verify provider is wired
+        assert hasattr(orchestrator, '_intelligence_provider')
+        assert orchestrator._intelligence_provider is not None
+        assert isinstance(orchestrator._intelligence_provider, IIntelligenceProvider)
     
-    @pytest.mark.skip(reason="S4-T4: Orchestrator wiring deferred - will wire after provider tests pass")
     def test_both_orchestrators_share_same_provider_instance(self):
         """Test 16: Both orchestrators share same provider instance (CORE-035)."""
-        # TODO: Validate both orchestrators use same provider singleton
-        # This test validates CORE-035 compliance
-        pass
+        from cortex.orchestrators.core.interaction_orchestrator import InteractionOrchestrator
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+        from unittest.mock import MagicMock
+        
+        # Create both orchestrators
+        protocol = MagicMock()
+        interaction = InteractionOrchestrator(conversation_protocol=protocol)
+        master = MasterOrchestrator()
+        
+        # Both should use same provider instance (singleton)
+        assert interaction._intelligence_provider is master._intelligence_provider
 
 
 class TestProviderDeduplication:

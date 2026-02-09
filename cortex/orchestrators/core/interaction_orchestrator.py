@@ -116,6 +116,11 @@ class InteractionOrchestrator:
         self.patterns: Dict[str, CommunicationPattern] = {}
         self._load_patterns()
         
+        # Phase 65 S4: Initialize UnifiedIntelligenceProvider (CORE-035)
+        from cortex.intelligence.provider import get_intelligence_provider
+        self._intelligence_provider = get_intelligence_provider()
+        logger.info("UnifiedIntelligenceProvider initialized (singleton)")
+        
         # Initialize challenge engine (AC-PERMANENT-FIX-006) - MANDATORY
         self.challenge_engine = get_challenge_engine()
         logger.info("CORTEX Protocol ACTIVE: LENS + Challenge + Protocol on every turn (CORE-029, AC-PERMANENT-FIX-006)")
