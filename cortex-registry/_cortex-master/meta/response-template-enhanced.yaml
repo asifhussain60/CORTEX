@@ -1,39 +1,98 @@
-# Enhanced Response Template with Status Color Coding
-# Purpose: Semantic header coloring for quick status assessment
-# Version: 1.0
-# Authority: CORTEX-ARCH-014: Enhanced Response Templates
-# Effective: 2026-02-08
+# 🎨 Enhanced Response Template with Visual Hierarchy
+# Purpose: GitHub Copilot Chat optimized response formatting with visual distinction
+# Version: 2.0
+# Authority: CORTEX-ARCH-014 + Visual Enhancement Pattern Analysis (2026-02-09)
+# Effective: 2026-02-09
 
-# Color Coding Standards for Section Headers (## H2)
-# ✅ GREEN (#00AA00): Completion, success, PASSED, READY
-# 🟠 ORANGE (#FF8800): In Progress, PENDING, NEXT, TODO
-# 🔴 RED (#FF0000): Critical, BLOCKED, FAILED, ERROR, Blocker
-# 🟢 BRIGHT GREEN (#00FF00): Complete, EXCELLENT, OPTIMAL
-# 🔵 BLUE (#0055FF): Information, ANALYSIS, DESIGN (neutral)
+# ============================================================================
+# VISUAL HIERARCHY PRINCIPLES (GitHub Copilot Chat Optimized)
+# ============================================================================
 
+# Based on analysis of effective Copilot Chat patterns:
+# 1. Large emoji headers (🔧 🔨 📋) for major sections
+# 2. Bold text for subsection titles
+# 3. Code blocks with syntax highlighting for commands
+# 4. Clear numbered options for decision points
+# 5. Consistent spacing (blank lines between sections)
+# 6. Status-aware emoji prefixes (no HTML color - not supported)
+
+# EMOJI STATUS CODES (Visual Hierarchy)
 color_codes:
-  complete: "🟢"           # ✅ Green - EXCELLENT/COMPLETE
-  success: "✅"             # ✅ Green - SUCCESS/PASSED
-  in_progress: "🔵"         # 🔵 Orange - IN PROGRESS/PENDING
-  pending: "🟠"             # 🟠 Orange - PENDING/NEXT
-  blocked: "🔴"             # 🔴 Red - BLOCKED/CRITICAL
-  failed: "❌"              # 🔴 Red - FAILED/ERROR
-  warning: "⚠️"             # 🟡 Yellow - WARNING/CAUTION
-  critical: "🚨"            # 🔴 Red - CRITICAL BLOCKER
-  design: "🎨"              # 🔵 Blue - DESIGN/ANALYSIS
-  information: "ℹ️"         # 🔵 Blue - INFORMATION
-  next: "➡️"                # 🟠 Orange - NEXT STEPS
+  complete: "✅"           # SUCCESS/PASSED/READY
+  excellent: "🟢"          # EXCELLENT/OPTIMAL
+  in_progress: "🔵"        # IN PROGRESS/ACTIVE
+  pending: "🟠"            # PENDING/NEXT/TODO
+  blocked: "🔴"            # BLOCKED/CRITICAL
+  failed: "❌"             # FAILED/ERROR
+  warning: "⚠️"            # WARNING/CAUTION
+  critical: "🚨"           # CRITICAL BLOCKER
+  danger: "🔴"             # DANGER/ALERT
+  design: "🎨"             # DESIGN/ANALYSIS
+  information: "ℹ️"        # INFORMATION
+  next: "➡️"               # NEXT STEPS
+  
+  # Large Section Headers (Primary Visual Anchors)
+  remediation: "🔧"        # REMEDIATION PLAN
+  action: "📋"             # NEXT ACTIONS
+  implementation: "🔨"     # IMPLEMENTATION PLAN
+  progress: "📊"           # PROGRESS REPORT
+  analysis: "🔍"           # ANALYSIS RESULTS
 
-# Template Structure: Standard sections with status-aware headers
+# ============================================================================
+# RESPONSE TEMPLATES (GitHub Copilot Chat Format)
+# ============================================================================
+
 templates:
+  # Large Header Pattern (Primary Visual Anchor)
+  large_section_header:
+    format: |
+      # {emoji} {TITLE_UPPERCASE}
+      
+      {subtitle_or_status}
+    examples:
+      - "# 🔧 REMEDIATION PLAN"
+      - "# 📋 NEXT ACTIONS"
+      - "# 🔨 IMPLEMENTATION PLAN"
+  
+  # Standard Response with Visual Hierarchy
   standard_response:
     header: |
-      ## {emoji} {title}
+      ## 🧠 CORTEX {mode}
       **Author:** {author} | **Mode:** {mode} {status_badge}
+      
+      ---
+      
     sections:
+      - name: "remediation_plan"
+        emoji: "🔧"
+        size: "large"
+        format: |
+          # 🔧 REMEDIATION PLAN
+          
+          {priority_level}
+          
+          ## {numbered_item}. {action_title} ({impact_badge})
+          
+          ```{language}
+          {code_block}
+          ```
+          
+      - name: "next_actions"
+        emoji: "📋"
+        size: "large"
+        format: |
+          # 📋 NEXT ACTIONS
+          
+          **Option {number}: {action_title}** ({time_estimate})
+          
+          ```{language}
+          # {comment}
+          {command}
+          ```
+          
       - name: "progress"
         emoji: "📊"
-        color: "neutral"
+        size: "medium"
         format: |
           ## 📊 Progress Summary
           
@@ -41,7 +100,7 @@ templates:
           
       - name: "completed_items"
         emoji: "✅"
-        color: "green"
+        status: "complete"
         format: |
           ## ✅ COMPLETED WORK
           **Status:** 🟢 COMPLETE
@@ -49,10 +108,11 @@ templates:
           ### {item_name}
           - ✅ {achievement1}
           - ✅ {achievement2}
+          - ✅ {achievement3}
           
       - name: "in_progress_items"
         emoji: "🔵"
-        color: "orange"
+        status: "in_progress"
         format: |
           ## 🔵 IN PROGRESS WORK
           **Status:** 🟠 PENDING
@@ -60,10 +120,11 @@ templates:
           ### {item_name}
           - 🔵 {current_task}
           - ⚪ {next_task}
+          - ⚪ {future_task}
           
       - name: "blocked_items"
         emoji: "🔴"
-        color: "red"
+        status: "blocked"
         format: |
           ## 🔴 BLOCKED / CRITICAL
           **Status:** 🚨 BLOCKER
@@ -71,32 +132,135 @@ templates:
           ### {item_name}
           - ❌ {blocker_reason}
           - 📋 {resolution_path}
+          - ⏱️ {estimated_unblock_time}
           
-      - name: "next_steps"
-        emoji: "➡️"
-        color: "orange"
+      - name: "next_steps_with_options"
+        emoji: "📋"
+        status: "pending"
         format: |
-          ## ➡️ NEXT STEPS
-          **Status:** 🟠 PENDING
+          # 📋 NEXT ACTIONS
           
-          1. {next_action1}
-          2. {next_action2}
+          **Option {number}: {action_title}** ({time_estimate})
+          
+          ```{language}
+          # {description}
+          {command_or_code}
+          ```
 
-# Semantic Status Badges (Use in headers)
-status_badges:
-  complete: " ✅"
-  success: " ✅"
-  in_progress: " 🔵"
-  pending: " 🟠"
-  blocked: " 🔴"
-  critical: " 🚨"
-  warning: " ⚠️"
+# ============================================================================
+# VISUAL FORMATTING RULES (Copilot Chat Best Practices)
+# ============================================================================
 
-# Header Color Mapping (Markdown - Text only, simulated with emojis)
-# NOTE: Pure Markdown doesn't support inline colors, so we use:
-# - Emoji prefixes for quick visual scanning
-# - Status-aware section headers with emojis
-# - Bold/italics for emphasis
+visual_hierarchy:
+  font_sizes:
+    large_header: "# {emoji} {UPPERCASE_TITLE}"
+    medium_header: "## {emoji} {Title Case}"
+    small_header: "### {Title Case}"
+    emphasis: "**Bold Text**"
+    code: "`inline_code`"
+    
+  spacing:
+    after_large_header: 2  # blank lines
+    after_medium_header: 1  # blank line
+    before_code_block: 1  # blank line
+    after_code_block: 1  # blank line
+    between_options: 1  # blank line
+    
+  status_badges:
+    complete: " ✅"
+    success: " ✅"
+    in_progress: " 🔵"
+    pending: " 🟠"
+    blocked: " 🔴"
+    critical: " 🚨"
+    warning: " ⚠️"
+    danger: " 🔴"
+    
+  code_blocks:
+    - language: "bash"
+      use_for: "Shell commands"
+    - language: "python"
+      use_for: "Python code"
+    - language: "yaml"
+      use_for: "Configuration"
+    - language: "json"
+      use_for: "Structured data"
+
+# ============================================================================
+# PATTERN EXAMPLES (From Effective Copilot Chat Responses)
+# ============================================================================
+
+pattern_examples:
+  large_remediation_plan:
+    pattern: |
+      # 🔧 REMEDIATION PLAN
+      
+      {priority_section}
+      
+      ## 1. {Action Title} ({HIGHEST IMPACT})
+      
+      ```yaml
+      # {Description}
+      {code_content}
+      ```
+    
+  next_actions_with_options:
+    pattern: |
+      # 📋 NEXT ACTIONS
+      
+      **Option 1: {Action Title}** ({time_estimate})
+      
+      ```bash
+      # {Ready to implement}
+      {command}
+      ```
+      
+      **Option 2: {Alternative Action}**
+      
+      ```bash
+      # {Alternative approach}
+      {alternative_command}
+      ```
+      
+  progress_with_status:
+    pattern: |
+      ## 📊 PROGRESS SUMMARY
+      
+      [{progress_bar}] {percent}%
+      
+      ### ✅ Completed
+      - Item 1
+      - Item 2
+      
+      ### 🔵 In Progress
+      - Current item
+      
+      ### ⚪ Pending
+      - Future item
+
+# Markdown Rendering Notes (GitHub Copilot Chat Limitations)
+rendering_notes:
+  supported:
+    - "# H1 headers (large font)"
+    - "## H2 headers (medium font)"
+    - "**Bold text**"
+    - "`inline code`"
+    - "```language code blocks```"
+    - "Emoji prefixes"
+    - "Numbered lists"
+    - "Bullet lists"
+    
+  not_supported:
+    - "HTML <span> with inline styles (renders as text)"
+    - "CSS color codes (ignored)"
+    - "Custom fonts (default only)"
+    - "Background colors"
+    
+  workarounds:
+    color_indication: "Use status emoji (✅🔵🔴🟠) instead of HTML colors"
+    emphasis: "Use **bold**, *italic*, `code` formatting"
+    hierarchy: "Use # ## ### heading levels for font size"
+    sections: "Use horizontal rules --- for separation"
 
 header_patterns:
   # Pattern 1: Completion
@@ -317,7 +481,162 @@ quick_reference: |
   ❌ = FAILED/ERROR (red)
   ℹ️ = INFORMATION (blue)
 
+# ============================================================================
+# ORCHESTRATOR-SPECIFIC TEMPLATES (Phase 53 Integration)
+# ============================================================================
+
+orchestrator_templates:
+  # Base template (inherited by all)
+  base:
+    custom_blocks: []
+    section_icons:
+      analysis: "🔍"
+      findings: "📋"
+      recommendations: "🚀"
+      implementation: "🔨"
+      testing: "🧪"
+      metrics: "📊"
+      next_steps: "⏭️"
+      verdict: "✅"
+    enable_challenge_box: true
+    enable_problem_solution: true
+  
+  # TDD Orchestrator
+  TDDOrchestrator:
+    custom_blocks:
+      - test_results
+      - coverage_metrics
+      - tdd_workflow_diagram
+      - red_green_refactor_status
+    section_icons:
+      red_phase: "🔴"
+      green_phase: "🟢"
+      refactor_phase: "🔵"
+      test_results: "🧪"
+      coverage: "📊"
+    enable_challenge_box: true
+    enable_problem_solution: true
+    metadata:
+      default_operation: "IMPLEMENT"
+      tdd_workflow_required: true
+  
+  # LENS Synthesis
+  LENSSynthesis:
+    custom_blocks:
+      - language_phase_results
+      - examination_matrix
+      - synthesis_reasoning
+      - knowledge_recommendations
+      - confidence_scoring
+    section_icons:
+      language: "🗣️"
+      examination: "🔬"
+      navigation: "🧭"
+      synthesis: "⚡"
+      knowledge: "📚"
+    enable_challenge_box: true
+    enable_problem_solution: true
+    metadata:
+      default_operation: "ANALYZE"
+      intelligence_layer_enabled: true
+  
+  # Plan Orchestrator
+  PlanOrchestrator:
+    custom_blocks:
+      - phase_summary
+      - stage_breakdown
+      - dependency_graph
+      - acceptance_criteria_checklist
+      - success_metrics_dashboard
+    section_icons:
+      phase: "📋"
+      stages: "🔨"
+      dependencies: "🔗"
+      acceptance: "✅"
+      metrics: "📊"
+    enable_challenge_box: true
+    enable_problem_solution: true
+    metadata:
+      default_operation: "PLAN"
+      phase_lifecycle_support: true
+  
+  # Refactoring Orchestrator
+  RefactoringOrchestrator:
+    custom_blocks:
+      - code_smell_analysis
+      - refactoring_strategy
+      - before_after_comparison
+      - impact_assessment
+    section_icons:
+      smells: "👃"
+      strategy: "🎯"
+      before: "❌"
+      after: "✅"
+      impact: "📊"
+    enable_challenge_box: true
+    enable_problem_solution: true
+    metadata:
+      default_operation: "REFACTOR"
+      safe_refactoring_required: true
+  
+  # Challenge Engine
+  ChallengeEngine:
+    custom_blocks:
+      - challenge_generation
+      - disagreement_analysis
+      - alternative_proposals
+      - decision_matrix
+    section_icons:
+      challenge: "⚠️"
+      disagreement: "🔴"
+      alternatives: "🔄"
+      decision: "✅"
+    enable_challenge_box: true
+    enable_problem_solution: true
+    metadata:
+      default_operation: "CHALLENGE"
+      disagreement_threshold: 0.3
+  
+  # Master Orchestrator
+  MasterOrchestrator:
+    custom_blocks:
+      - intent_routing
+      - orchestrator_selection
+      depth_analysis
+      - coordination_status
+    section_icons:
+      intent: "🎯"
+      routing: "🧭"
+      coordination: "🤝"
+    enable_challenge_box: true
+    enable_problem_solution: true
+    metadata:
+      default_operation: "COORDINATE"
+      multi_orchestrator_support: true
+
+# Integration Rules (Phase 53)
+integration:
+  loading:
+    - "Load orchestrator_templates section on BaseResponseTemplate initialization"
+    - "Merge with base template for inheritance"
+    - "Apply orchestrator-specific overrides"
+  
+  validation:
+    - "Validate section_icons are valid emoji"
+    - "Validate custom_blocks are registered in BlockRegistry"
+    - "Validate metadata follows schema"
+  
+  caching:
+    - "Cache loaded configurations per orchestrator"
+    - "TTL: 3600 seconds (1 hour)"
+    - "Invalidate on YAML file change"
+
 # AC_COMPLETE: AC-RESPONSE-TEMPLATE-ENHANCEMENT-001 ✅
 # Description: Enhanced response template with status color coding
 # Status: READY FOR INTEGRATION
 # Next: Update response-format.yaml to reference this template
+
+# AC_COMPLETE: AC-ENH064-006 ✅
+# Description: Orchestrator-specific template configurations
+# Status: COMPLETE
+# Integration: BaseResponseTemplate._load_config() reads this section
