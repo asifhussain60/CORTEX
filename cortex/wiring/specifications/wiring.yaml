@@ -750,6 +750,66 @@ orchestrators:
         phase: "45"
         stage: "2"
 
+    # Phase 48: Holistic Validation & Challenge Gate
+    - name: "HolisticValidationOrchestrator"
+      module: "cortex.orchestrators.holistic.holistic_validation_orchestrator"
+      class: "HolisticValidationOrchestrator"
+      tier: 3
+      priority: 70
+      dependencies:
+        - "EnforcementOrchestrator"
+      capabilities:
+        - cross_system_validation
+        - regression_risk_scoring
+        - impact_radius_analysis
+        - dependency_conflict_detection
+        - architecture_drift_detection
+      health_check: "validate"
+      mcp_adapter: "cortex.mcp.adapters.holistic_validation_adapter"
+      description: "Pre-implementation validation gate to prevent regressions and ensure holistic system consistency (Phase 48 § S1)"
+      mcp_tools:
+        - "cortex_validate_holistically"
+        - "cortex_analyze_dependency_graph"
+      governance:
+        - "CORE-048"
+        - "CORE-035"
+        - "CORE-030"
+      metadata:
+        icon: "🔍"
+        stages: 6
+        intelligence: ["lens", "registry", "wiring"]
+        phase: "48"
+        stage: "1"
+
+    # Phase 49: Context Crystallization Layer (CCL)
+    - name: "ContextCrystallizationLayer"
+      module: "cortex.orchestrators.phase_49.context_crystallization_layer"
+      class: "ContextCrystallizationLayer"
+      tier: 3
+      priority: 70
+      dependencies:
+        - "LENSSynthesis"
+      capabilities:
+        - async_context_prefetch
+        - rules_cache_warming
+        - lens_preload
+        - infrastructure_cache
+        - pre_warmed_context_delivery
+      health_check: "prefetch_async"
+      mcp_adapter: "cortex.mcp.adapters.ccl_adapter"
+      description: "Asynchronous context pre-warming layer for Stage 2 acceleration (Phase 49)"
+      mcp_tools:
+        - "cortex_ccl_prefetch"
+        - "cortex_ccl_status"
+      governance:
+        - "CORE-008"
+        - "CORE-035"
+      metadata:
+        icon: "⚡"
+        stages: 6
+        intelligence: ["lens", "rules", "infrastructure"]
+        phase: "49"
+
     - name: "ChallengeEngine"
       module: "cortex.orchestrators.core.challenge_engine"
       class: "ChallengeEngine"
