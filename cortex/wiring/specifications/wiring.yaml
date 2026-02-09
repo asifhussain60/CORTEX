@@ -1525,6 +1525,54 @@ orchestrators:
         phase: "53"
         stage: "7-9"
 
+    - name: "ContextCrystallizationLayerEnhanced"
+      module: "cortex.orchestrators.phase_49.context_crystallization_layer"
+      class: "ContextCrystallizationLayer"
+      tier: 2
+      priority: 90
+      dependencies: ["MasterOrchestrator"]
+      capabilities: [rules_cache_warming, layered_knowledge_synthesis, pre_flight_context_enrichment, unified_intelligence_synthesis, intelligence_caching, phase_d_integration]
+      mcp_tools: [cortex_get_crystallized_context, cortex_get_intelligence_cache]
+      governance: [CORE-008, CORE-035, CORE-049]
+      version: "1.1.0"
+      metadata:
+        icon: "💎"
+        phase: "54"
+        stage: "1-6"
+        enhancement: "Phase 54 S1-S6: CCL Enhancement + Intelligence Warming"
+
+    - name: "CCLIntelligenceWarmingOrchestrator"
+      module: "cortex.orchestrators.phase_49.context_crystallization_layer"
+      class: "IntelligenceWarmingLayer"
+      tier: 3
+      priority: 88
+      dependencies: ["ContextCrystallizationLayerEnhanced", "KnowledgeSynthesisEngine"]
+      capabilities: [unified_intelligence_synthesis, lens_knowledge_integration, company_knowledge_integration, cortex_rules_integration, violation_detection, citation_generation, intelligent_caching]
+      mcp_tools: [cortex_synthesize_unified_intelligence, cortex_get_cached_intelligence, cortex_detect_violations]
+      governance: [CORE-008, CORE-035, CORE-049]
+      version: "1.0.0"
+      metadata:
+        icon: "🌡️"
+        phase: "54"
+        stage: "4-6"
+        authority: "AC-PHASE54-S4-S6-001"
+
+    - name: "CCLIntegrationOrchestrator"
+      module: "cortex.orchestrators.phase_49.context_crystallization_layer"
+      class: "CCLIntegrationOrchestrator"
+      tier: 2
+      priority: 87
+      dependencies: ["ContextCrystallizationLayerEnhanced", "IntentRouter", "TDDOrchestrator", "RefactoringOrchestrator", "LENSOrchestrator"]
+      capabilities: [ccl_enhancement_registration, orchestrator_context_enrichment, circular_dependency_validation, governance_enforcement, production_readiness_validation]
+      mcp_tools: [cortex_register_ccl_enhancement, cortex_validate_orchestrator_integration, cortex_enforce_governance]
+      governance: [CORE-008, CORE-035, CORE-049]
+      version: "1.0.0"
+      metadata:
+        icon: "🔗"
+        phase: "54"
+        stage: "7-9"
+        authority: "AC-PHASE54-S7-S9-001"
+
 # -------------------------------------------------------------------------
 # DEPENDENCY VALIDATION RULES
 # -------------------------------------------------------------------------
