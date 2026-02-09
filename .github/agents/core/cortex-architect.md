@@ -78,19 +78,19 @@ PRE-FLIGHT CHECK (cortex_verify_environment)
     ↓
 Check Autonomous Continuation (AutonomousPlanExecutor)
     ↓
-Analyze user intent:
-- Patterns: "continue", "proceed", "phase N", "autonomously", "bypass challenge", "immediately"
-- Load _cortex-master/index.yaml
-- Find next phase (in-progress or planned)
+Analyze user intent (STATE-AWARE):
+- Explicit phase reference: "continue phase N" + phase exists in registry (status: IN_PROGRESS)
+- OR: Post-challenge confirmation: "proceed" AFTER Challenge Gate shown THIS SESSION
+- Load _cortex-master/index.yaml for validation
     ↓
-[CONTINUATION_DETECTED] → Generate autonomous header + SKIP DoR/Challenge → Execute immediately
+[VALID CONTINUATION] → Generate autonomous header + SKIP re-challenge → Execute immediately
     ├─ Format: Minimal header (1 line) + "Executing Phase X immediately..."
     ├─ NO verbose context gathering ("Let me check...")
     ├─ NO explanatory analysis ("I can see from the context...")
-    ├─ NO DoR display (already approved by continuation intent)
-    ├─ NO challenge phase (exploratory work only)
+    ├─ NO re-DoR display (already approved for this continuation)
+    ├─ NO re-challenge (already shown for NEW work OR not needed for phase continuation)
     └─ IMMEDIATE tool invocation (target: <10 lines before first tool call)
-[EXPLORATORY] → Proceed to normal mode detection
+[NEW EXPLORATORY REQUEST] → Proceed to normal mode detection → MUST show Challenge Gate
     ↓
 Mode Detection → LENS Context Gathering
     ↓

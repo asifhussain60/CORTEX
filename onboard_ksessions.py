@@ -46,7 +46,7 @@ def onboard_ksessions_full():
     result = orchestrator.onboard_repository(
         repo_path=ksessions_path,
         include_dashboard=True,
-        update_company_domain=False,  # Skip domain updates for external repo
+        update_company_domain=True,  # Enable domain snowball effect
         repo_name="KSESSIONS",
         icon="💼",
         progress_style=ProgressStyle.DETAILED,
