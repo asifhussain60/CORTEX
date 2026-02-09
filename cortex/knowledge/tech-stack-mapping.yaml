@@ -1,0 +1,109 @@
+# Tech Stack Mapping Configuration
+# Maps import names to knowledge categories for CORTEX intelligence synthesis
+# Authority: Phase 54 Stage 3 (TechStackMapper integration)
+# Precedence: Company > Domain > CORTEX (this file = CORTEX defaults)
+
+mappings:
+  # Web Frameworks
+  - import: fastapi
+    categories: [fastapi, python-web, rest-api, async]
+    confidence: 0.95
+    description: "Fast, modern web framework for building APIs"
+
+  - import: flask
+    categories: [flask, python-web, rest-api, synchronous]
+    confidence: 0.95
+    description: "Lightweight Python web framework"
+
+  - import: django
+    categories: [django, python-web, full-stack, orm]
+    confidence: 0.95
+    description: "Full-featured web framework with ORM and admin"
+
+  - import: starlette
+    categories: [starlette, python-web, asgi, lightweight]
+    confidence: 0.95
+    description: "Lightweight ASGI framework (FastAPI foundation)"
+
+  # Data Validation
+  - import: pydantic
+    categories: [pydantic, data-validation, serialization, type-hints]
+    confidence: 0.95
+    description: "Data validation and settings management using Python type annotations"
+
+  # Database/ORM
+  - import: sqlalchemy
+    categories: [sqlalchemy, orm, database, sql]
+    confidence: 0.95
+    description: "Python SQL toolkit and Object-Relational Mapping library"
+
+  - import: alembic
+    categories: [alembic, database-migrations, sql-alchemy]
+    confidence: 0.95
+    description: "Lightweight database migration tool for SQLAlchemy"
+
+  # Testing
+  - import: pytest
+    categories: [pytest, testing, tdd, unit-testing]
+    confidence: 0.95
+    description: "Powerful testing framework for Python"
+
+  - import: unittest
+    categories: [unittest, testing, python-standard, unit-testing]
+    confidence: 0.95
+    description: "Python standard library testing framework"
+
+  - import: mock
+    categories: [mock, testing, mocking, unit-testing]
+    confidence: 0.95
+    description: "Mocking library for testing (unittest.mock in stdlib)"
+
+  # Async/Concurrency
+  - import: asyncio
+    categories: [asyncio, python-standard, async, concurrency]
+    confidence: 0.95
+    description: "Python standard library for asynchronous I/O"
+
+  - import: concurrent
+    categories: [concurrent, python-standard, threading, multiprocessing]
+    confidence: 0.95
+    description: "Python standard library for concurrent execution"
+
+  # Logging/Monitoring
+  - import: logging
+    categories: [logging, python-standard, observability, debugging]
+    confidence: 0.95
+    description: "Python standard library for logging"
+
+  - import: structlog
+    categories: [structlog, structured-logging, logging, observability]
+    confidence: 0.95
+    description: "Structured logging library for Python"
+
+  # Configuration
+  - import: yaml
+    categories: [yaml, configuration, serialization]
+    confidence: 0.95
+    description: "YAML parser and emitter for Python"
+
+  - import: python_dotenv
+    categories: [dotenv, configuration, environment-variables]
+    confidence: 0.95
+    description: "Load environment variables from .env files"
+
+  # Type Checking
+  - import: typing
+    categories: [typing, python-standard, type-hints]
+    confidence: 0.95
+    description: "Python standard library type hints support"
+
+# Confidence thresholds
+thresholds:
+  fuzzy_match_minimum: 0.7  # Fuzzy match confidence threshold
+  documentation_required_minimum: 0.8  # Require YAML for knowledge base
+
+# Feature flags
+features:
+  enable_fuzzy_matching: true
+  enable_submodule_mapping: true
+  enable_confidence_scoring: true

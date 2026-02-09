@@ -1,49 +1,64 @@
 phase_id: "phase-53"
-phase_name: "LENS Intelligence Upgrade"
-version: "2.0.0"
+phase_name: "LENS Pipeline Wiring & Optimization"
+version: "3.0.0"
 status: "planned"
-priority: "P0"
+priority: "P1"
 created_date: "2026-02-09"
 updated_date: "2026-02-09"
-target_completion: "2026-03-06"
+target_completion: "2026-02-24"
 
 # ============================================================================
-# PHASE OVERVIEW
+# PHASE OVERVIEW (REVISED - chat01.md ALIGNMENT)
+# ============================================================================
+# Authority: chat01.md Copilot Evaluation (2026-02-09)
+# Change: v2.0 → v3.0 (scope realignment with production reality)
+#
+# WHAT CHANGED:
+# ❌ REMOVED: IntelligenceOrchestrator (duplicates UnifiedIntelligenceContext Phase 20.5)
+# ❌ REMOVED: Intelligence Layer implementation (exists in Phase 20.5 + Phase 54)
+# ✅ REFOCUSED: LENS Pipeline wiring (connect existing components)
+# ✅ REFOCUSED: Performance optimization (adaptive routing, caching)
+# ✅ REFOCUSED: Cleanup obsolete implementations (mandatory migration)
+#
+# WHY THIS CHANGE:
+# - UnifiedIntelligenceContext already in production (Phase 20.5)
+# - KnowledgeSynthesisEngine operational (layered knowledge synthesis)
+# - Intelligence enforcement addressed in Phase 54 (MCP Gateway)
+# - Phase 53 should focus on LENS-specific wiring, not general intelligence
 # ============================================================================
 
 description: |
-  Comprehensive upgrade of CORTEX LENS (Language→Examination→Navigation→Synthesis)
-  from rule-based stubs to production-grade intelligent system with real codebase
-  analysis, layered knowledge integration, adaptive routing, and mandatory cleanup/migration.
+  REVISED SCOPE: Wire existing LENS components into unified pipeline, optimize
+  performance, and cleanup obsolete implementations. Intelligence layer integration
+  moved to Phase 54 (MCP-level enforcement, not LENS-specific).
   
-  Current State: 5.0/10 - Good foundation, critical intelligence gaps
-  Target State: 9.5/10 - Production-ready adaptive intelligence with intelligent orchestration
+  Production Reality (VERIFIED):
+  - ✅ LENSOrchestrator EXISTS (AST + Git + Comments analysis)
+  - ✅ KnowledgeSynthesisEngine EXISTS (45+ YAMLs loaded dynamically)
+  - ✅ UnifiedIntelligenceContext EXISTS (Phase 20.5 - layered synthesis)
+  - ✅ CCL EXISTS (Phase 49 - async prefetch)
+  - ⚠️ GAP: LENS Pipeline Phase 2 uses stubs (not wired to LENSOrchestrator)
+  - ⚠️ GAP: LENS Pipeline Phase 4 knowledge retrieval incomplete wiring
+  - ⚠️ GAP: No adaptive routing (static 1:1 intent → orchestrator)
+  - ⚠️ GAP: Obsolete implementations (lens_synthesis.py, lens_analysis_extractor.py)
   
-  Critical Blockers:
-  - Phase 2: Stub examination (no real codebase analysis)
-  - Phase 4: Empty knowledge retrieval (45+ YAML files unused)
-  - Phase 3: Static 1:1 routing (no adaptive workflows)
-  - No integration between cortex/brain/lens/pipeline.py and cortex/lens/orchestrator.py
-  - Missing intelligence layer for layered knowledge synthesis and staleness detection
-  
-  NEW (v2.0): Intelligence Layer Integration
-  - Adds IntelligenceOrchestrator between Phase 2 and Phase 3
-  - Implements Company → Domain → CORTEX layered knowledge loading
-  - Staleness detection and auto-refresh for missing tech stacks
-  - Rich instruction synthesis for downstream orchestrators
-  - Lightweight YAML summary layer for performance optimization
+  Revised Target State:
+  - ✅ LENS Pipeline Phase 2 → LENSOrchestrator (real analysis)
+  - ✅ LENS Pipeline Phase 4 → KnowledgeSynthesisEngine (YAML loading)
+  - ✅ Adaptive routing with confidence gating (multi-orchestrator workflows)
+  - ✅ Performance optimized (caching, parallel phases)
+  - ✅ Obsolete code removed (mandatory cleanup)
+  - ✅ Intelligence layer via Phase 54 (MCP enforcement, not LENS-internal)
 
 objectives:
-  - "Connect LENS Pipeline Phase 2 to LENSOrchestrator for real AST/Git analysis"
-  - "Integrate Phase 4 knowledge retrieval with cortex/knowledge/ YAML repository"
+  - "Wire LENS Pipeline Phase 2 to LENSOrchestrator (real AST/Git analysis)"
+  - "Wire LENS Pipeline Phase 4 to KnowledgeSynthesisEngine (YAML loading)"
   - "Implement semantic intent classification (replace pattern matching)"
-  - "Build multi-orchestrator adaptive routing with confidence gating"
+  - "Build adaptive routing with confidence gating (multi-orchestrator workflows)"
   - "Add dynamic confidence scoring with historical success tracking"
-  - "⭐ NEW: Implement Intelligence Layer with layered knowledge synthesis"
-  - "⭐ NEW: Build staleness detection and auto-refresh mechanism"
-  - "⭐ NEW: Create instruction synthesizer for orchestrator enrichment"
-  - "⭐ NEW: Add lightweight YAML summary layer for performance"
-  - "Cleanup obsolete implementations and migrate to unified LENS system"
+  - "Optimize performance (caching, parallel execution, lazy loading)"
+  - "Cleanup obsolete implementations (lens_synthesis.py, etc.)"
+  - "Migrate consumers to unified LENS Pipeline (backward compatibility)"
 
 success_metrics:
   - intent_accuracy: "95% (from 60%)"

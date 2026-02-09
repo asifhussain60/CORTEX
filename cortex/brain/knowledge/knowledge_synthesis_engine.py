@@ -517,6 +517,143 @@ class KnowledgeSynthesisEngine:
                 synthesis_confidence=0.0,
             )
 
+    def calculate_coverage(
+        self,
+        intent: str,
+        loaded_yamls: List[str],
+    ) -> float:
+        """
+        Calculate knowledge base coverage for intent.
+
+        Measures percentage of applicable patterns/rules available in knowledge
+        base for given intent. Returns 0.0-1.0 where 1.0 = complete coverage.
+
+        Args:
+            intent: Intent type (IMPLEMENT, FIX, REFACTOR, etc.)
+            loaded_yamls: Knowledge YAML files already loaded
+
+        Returns:
+            Coverage percentage (0.0-1.0), 1.0 = 100% coverage
+        
+        Authority: Phase 54 S2 - Gap-filling enhancement
+        """
+        try:
+            # Load all applicable patterns for intent
+            cortex_practices = self._load_cortex_best_practices(intent)
+            applicable_patterns = self._extract_applicable_patterns(intent, cortex_practices)
+
+            if not applicable_patterns:
+                logger.warning(f"No applicable patterns found for intent: {intent}")
+                return 0.0
+
+            # Extract covered tech from loaded YAMLs
+            loaded_tech = set()
+            for yaml_path in loaded_yamls:
+                path = Path(yaml_path)
+                stem = path.stem
+                if stem and stem not in ["index", "readme", "config"]:
+                    loaded_tech.add(stem)
+
+            # Extract tech from patterns
+            pattern_tech = set()
+            for pattern in applicable_patterns:
+                # Heuristic: extract tech from pattern description/sources
+                if hasattr(pattern, 'keywords'):
+                    pattern_tech.update(pattern.keywords)
+                if hasattr(pattern, 'domain'):
+                    pattern_tech.add(pattern.domain.lower())
+
+            if not pattern_tech:
+                # No identifiable tech in patterns, assume covered
+                return 1.0
+
+            # Calculate coverage as intersection / union
+            covered = len(loaded_tech & pattern_tech)
+            total = len(pattern_tech)
+
+            coverage = covered / total if total > 0 else 1.0
+            logger.info(
+                f"AC_PHASE54-S2-001: Coverage calculated | "
+                f"Intent={intent} | Coverage={coverage:.2%} | "
+                f"Covered={covered}/{total}"
+            )
+
+            return max(0.0, min(1.0, coverage))  # Clamp to [0.0, 1.0]
+
+        except Exception as e:
+            logger.error(f"Failed to calculate coverage: {e}", exc_info=True)
+            return 0.5  # Return mid-range on failure
+
+    def fill_gaps(
+        self,
+        coverage: float,
+        intent: str,
+        threshold: float = 0.8,
+    ) -> List[str]:
+        """
+        Identify missing YAMLs to reach coverage threshold.
+
+        Analyzes knowledge base gaps and recommends which YAML files should be
+        created/loaded to reach desired coverage level. Follows layered approach:
+        Company > Domain > CORTEX.
+
+        Args:
+            coverage: Current coverage (0.0-1.0) from calculate_coverage()
+            intent: Intent type (IMPLEMENT, FIX, REFACTOR, etc.)
+            threshold: Target coverage threshold (default 0.8 = 80%)
+
+        Returns:
+            List of recommended YAML file paths to fill gaps
+        
+        Authority: Phase 54 S2 - Gap-filling enhancement
+        """
+        try:
+            if coverage >= threshold:
+                logger.info(
+                    f"AC_PHASE54-S2-002: Coverage adequate | "
+                    f"Current={coverage:.2%} >= Target={threshold:.2%}"
+                )
+                return []
+
+            # Load all CORTEX best practices
+            cortex_practices = self._load_cortex_best_practices(intent)
+            applicable_patterns = self._extract_applicable_patterns(intent, cortex_practices)
+
+            # Extract tech from patterns
+            pattern_tech = set()
+            for pattern in applicable_patterns:
+                if hasattr(pattern, 'keywords'):
+                    pattern_tech.update(pattern.keywords)
+                if hasattr(pattern, 'domain'):
+                    pattern_tech.add(pattern.domain.lower())
+
+            # Recommended YAMLs (layered precedence)
+            recommendations = []
+
+            # Layer 1: Company domains (highest priority)
+            for tech in sorted(pattern_tech):
+                recommendations.append(f"company/domains/{tech}/best-practices.yaml")
+
+            # Layer 2: Domain-specific CORTEX
+            for tech in sorted(pattern_tech):
+                recommendations.append(f"cortex/knowledge/domains/{tech}/{tech}-best-practices.yaml")
+
+            # Layer 3: CORTEX generic
+            for tech in sorted(pattern_tech):
+                recommendations.append(f"cortex/knowledge/{tech}.yaml")
+
+            logger.info(
+                f"AC_PHASE54-S2-003: Gap-filling recommendations | "
+                f"Intent={intent} | Current={coverage:.2%} | "
+                f"Target={threshold:.2%} | Recommended={len(recommendations)} files"
+            )
+
+            return recommendations
+
+        except Exception as e:
+            logger.error(f"Failed to fill gaps: {e}", exc_info=True)
+            return []
+
     def get_for_operation(
         self,
         operation_id: str,

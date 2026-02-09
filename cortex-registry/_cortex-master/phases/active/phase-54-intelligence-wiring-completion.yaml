@@ -1,0 +1,547 @@
+phase_id: "phase-54"
+phase_name: "Intelligence Layer Wiring & Enforcement"
+version: "1.0.0"
+status: "planned"
+priority: "P0"
+created_date: "2026-02-09"
+updated_date: "2026-02-09"
+target_completion: "2026-02-17"
+
+# ============================================================================
+# CRITICAL REMEDIATION PHASE
+# ============================================================================
+# Authority: chat01.md Copilot Evaluation (2026-02-09)
+# Purpose: Address 3 critical gaps in intelligence layer architecture
+#
+# WHY THIS PHASE EXISTS:
+# - Gap #1: Intelligence layer exists but not enforced at MCP boundary
+# - Gap #2: No gap-filling mechanism in KnowledgeSynthesisEngine
+# - Gap #3: No staleness detection or tech stack awareness
+# - Gap #4: Phase 53 plan misaligned with production reality
+#
+# WHAT WE'RE NOT DOING:
+# ❌ Building IntelligenceOrchestrator (duplicates UnifiedIntelligenceContext)
+# ❌ Replacing CCL (working system, Phase 49)
+# ❌ Replacing KnowledgeSynthesisEngine (enhance, not replace)
+#
+# WHAT WE'RE DOING:
+# ✅ Add IntelligenceGate middleware (MCP enforcement)
+# ✅ Enhance KnowledgeSynthesisEngine (gap-filling)
+# ✅ Add StalenessChecker (new capability)
+# ✅ Add TechStackMapper (import → knowledge)
+# ✅ Enhance @mcp_tool decorator (inject intelligence)
+# ============================================================================
+
+description: |
+  Complete intelligence layer wiring and enforcement to make UnifiedIntelligenceContext
+  UNAVOIDABLE for all MCP tool invocations. Enhance existing production systems
+  (KnowledgeSynthesisEngine, CCL) with gap-filling, staleness detection, and
+  tech stack awareness. Follow proven OnboardingGate pattern for MCP enforcement.
+  
+  Current State (PRODUCTION):
+  - ✅ UnifiedIntelligenceContext (Phase 20.5)
+  - ✅ KnowledgeSynthesisEngine (layered knowledge synthesis)
+  - ✅ ContextCrystallizationLayer (Phase 49 async prefetch)
+  - ❌ No MCP enforcement (tools can bypass intelligence)
+  - ❌ No gap-filling (coverage not calculated)
+  - ❌ No staleness detection (outdated patterns not flagged)
+  - ❌ No tech stack awareness (AST imports not mapped to knowledge)
+  
+  Target State:
+  - ✅ IntelligenceGate enforces synthesis at MCP boundary (MANDATORY)
+  - ✅ KnowledgeSynthesisEngine calculates coverage + auto-fills gaps (≥98%)
+  - ✅ StalenessChecker detects missing/outdated documentation
+  - ✅ TechStackMapper routes AST imports → relevant YAMLs
+  - ✅ @mcp_tool decorator injects UnifiedIntelligenceContext automatically
+  - ✅ All 10 MCP tools gain intelligence layer (zero bypass)
+
+objectives:
+  - "Add IntelligenceGate middleware following OnboardingGate pattern"
+  - "Enhance KnowledgeSynthesisEngine with coverage calculation + gap-filling"
+  - "Implement StalenessChecker for tech stack version awareness"
+  - "Create TechStackMapper for import → knowledge category routing"
+  - "Enhance @mcp_tool decorator to inject UnifiedIntelligenceContext"
+  - "Integrate IntelligenceGate with all 10 production MCP tools"
+  - "Add intelligent caching layer (CCL pre-warming integration)"
+  - "Zero breaking changes (backward compatibility mandatory)"
+
+success_metrics:
+  - enforcement_coverage: "100% (all 10 MCP tools gated)"
+  - gap_filling_accuracy: "≥98% knowledge coverage"
+  - staleness_detection_rate: "100% (detect all missing tech)"
+  - tech_stack_mapping_accuracy: "≥95% (correct YAML routing)"
+  - synthesis_latency_p95: "<300ms (with CCL caching)"
+  - bypass_prevention: "0% (no tool can skip intelligence)"
+  - backward_compatibility: "100% (existing consumers unaffected)"
+  - test_coverage: "≥90% for all new components"
+
+dependencies:
+  required_before:
+    - "Phase 20.5: UnifiedIntelligenceContext (COMPLETE)"
+    - "Phase 49: Context Crystallization Layer (COMPLETE)"
+    - "Phase 51: MCP-FIRST Enforcement (COMPLETE)"
+  unlocks_phases:
+    - "Phase 53: LENS Intelligence Upgrade (revised scope)"
+    - "Phase 55: Multi-Tenant Intelligence Scaling"
+
+# ============================================================================
+# STAGE 1: INTELLIGENCE GATE MIDDLEWARE (MCP ENFORCEMENT)
+# ============================================================================
+
+stages:
+  - stage_id: "S1"
+    stage_name: "IntelligenceGate Middleware Implementation"
+    duration_days: 2
+    priority: "P0"
+    
+    description: |
+      Implement IntelligenceGate middleware following proven OnboardingGate pattern.
+      Enforce intelligence synthesis at MCP boundary - ALL tools MUST pass through
+      this gate. No bypasses allowed. Uses UnifiedIntelligenceContext from Phase 20.5.
+    
+    tasks:
+      - task_id: "S1.T1"
+        description: "Create IntelligenceGate middleware class"
+        file: "cortex/mcp/middleware/intelligence_gate.py"
+        tests: "tests/unit/mcp/middleware/test_intelligence_gate.py"
+        acceptance_criteria:
+          - "Follows OnboardingGate pattern (same interface)"
+          - "Check if UnifiedIntelligenceContext exists in kwargs"
+          - "If missing: synthesize via KnowledgeSynthesisEngine"
+          - "Inject into kwargs['unified_intelligence']"
+          - "Cache synthesized context (request_id key)"
+          - "Performance: <50ms for cache miss, <5ms for cache hit"
+          - "100% test coverage"
+      
+      - task_id: "S1.T2"
+        description: "Integrate IntelligenceGate with MCP server"
+        file: "cortex/mcp/server.py"
+        tests: "tests/integration/mcp/test_intelligence_gate_integration.py"
+        acceptance_criteria:
+          - "Register IntelligenceGate as middleware (priority=1, before tools)"
+          - "All cortex_* tools pass through gate"
+          - "Middleware execution order: IntelligenceGate → OnboardingGate → Tool"
+          - "Verify injection for cortex_process_request"
+          - "Verify injection for cortex_lens_analyze"
+      
+      - task_id: "S1.T3"
+        description: "Add gate bypass prevention"
+        file: "cortex/mcp/middleware/intelligence_gate.py"
+        tests: "tests/unit/mcp/middleware/test_gate_bypass_prevention.py"
+        acceptance_criteria:
+          - "Tool execution BLOCKED if UnifiedIntelligenceContext missing after gate"
+          - "Error message: 'Intelligence synthesis required'"
+          - "Provide clear resolution steps"
+          - "Log bypass attempts for audit trail"
+      
+      - task_id: "S1.T4"
+        description: "Integration test: End-to-end enforcement"
+        file: "tests/integration/mcp/test_e2e_intelligence_enforcement.py"
+        acceptance_criteria:
+          - "Call cortex_process_request → verify intelligence injected"
+          - "Call cortex_lens_analyze → verify intelligence injected"
+          - "Attempt direct tool call (bypass) → BLOCKED"
+          - "Verify all 10 MCP tools have intelligence context"
+          - "Performance: Gate adds <10ms overhead per request"
+    
+    validation:
+      - "pytest tests/unit/mcp/middleware/test_intelligence_gate.py -v"
+      - "pytest tests/integration/mcp/test_intelligence_gate_integration.py -v"
+      - "pytest tests/integration/mcp/test_e2e_intelligence_enforcement.py -v"
+      - "Coverage ≥90% for intelligence_gate.py"
+      - "Audit trail: 0 bypass attempts in production logs"
+
+  # ========================================================================
+  # STAGE 2: KNOWLEDGE SYNTHESIS ENGINE ENHANCEMENT
+  # ========================================================================
+
+  - stage_id: "S2"
+    stage_name: "Gap-Filling & Coverage Calculation"
+    duration_days: 2
+    priority: "P0"
+    
+    description: |
+      Enhance existing KnowledgeSynthesisEngine (Phase 20.5) with coverage
+      calculation and automatic gap-filling. Implements Company → Domain → CORTEX
+      layered fallback to achieve ≥98% knowledge coverage for every request.
+    
+    tasks:
+      - task_id: "S2.T1"
+        description: "Add coverage calculation to KnowledgeSynthesisEngine"
+        file: "cortex/brain/knowledge/knowledge_synthesis_engine.py"
+        tests: "tests/unit/brain/knowledge/test_coverage_calculation.py"
+        acceptance_criteria:
+          - "calculate_coverage(intent, loaded_yamls) → float [0.0-1.0]"
+          - "Expected categories for intent (from intent → category mapping)"
+          - "Actual categories from loaded YAMLs (parse metadata)"
+          - "Coverage = (actual ∩ expected) / expected"
+          - "Example: IMPLEMENT needs [TDD, clean-code, security] → 3 categories"
+          - "If only TDD loaded → coverage = 0.33"
+      
+      - task_id: "S2.T2"
+        description: "Implement gap-filling algorithm"
+        file: "cortex/brain/knowledge/knowledge_synthesis_engine.py"
+        tests: "tests/unit/brain/knowledge/test_gap_filling.py"
+        acceptance_criteria:
+          - "fill_gaps(coverage, intent) → List[yaml_paths]"
+          - "If coverage < 0.8: Load domain-specific YAMLs"
+          - "If coverage < 0.98: Load CORTEX base YAMLs"
+          - "Precedence: Company (loaded first) → Domain → CORTEX"
+          - "Deduplication: Higher precedence wins (company overrides cortex)"
+          - "Performance: <100ms for gap-filling operation"
+      
+      - task_id: "S2.T3"
+        description: "Integrate coverage + gap-filling into synthesis"
+        file: "cortex/brain/knowledge/knowledge_synthesis_engine.py"
+        tests: "tests/unit/brain/knowledge/test_synthesis_with_gaps.py"
+        acceptance_criteria:
+          - "synthesize_unified_context calls calculate_coverage"
+          - "If coverage < 0.98: Auto-trigger fill_gaps"
+          - "Log gap-filling operations (AC marker)"
+          - "Final coverage ≥98% or log warning"
+          - "Backward compatible (existing calls unaffected)"
+      
+      - task_id: "S2.T4"
+        description: "Integration test: Full gap-filling workflow"
+        file: "tests/integration/brain/knowledge/test_gap_filling_e2e.py"
+        acceptance_criteria:
+          - "Request IMPLEMENT with only company YAMLs (60% coverage)"
+          - "Auto-fill from domain (85% coverage)"
+          - "Auto-fill from CORTEX (98% coverage)"
+          - "Verify precedence: Company rules override CORTEX"
+          - "Performance: <200ms for full gap-filling"
+    
+    validation:
+      - "pytest tests/unit/brain/knowledge/test_coverage_calculation.py -v"
+      - "pytest tests/unit/brain/knowledge/test_gap_filling.py -v"
+      - "pytest tests/integration/brain/knowledge/test_gap_filling_e2e.py -v"
+      - "Coverage ≥90% for enhanced methods"
+      - "Gap-filling success rate ≥98%"
+
+  # ========================================================================
+  # STAGE 3: STALENESS DETECTION & TECH STACK AWARENESS
+  # ========================================================================
+
+  - stage_id: "S3"
+    stage_name: "StalenessChecker & TechStackMapper"
+    duration_days: 2
+    priority: "P1"
+    
+    description: |
+      Add NEW capabilities: StalenessChecker detects when codebase uses tech
+      not documented in knowledge YAMLs. TechStackMapper routes AST imports
+      to relevant knowledge categories. Enables adaptive knowledge loading.
+    
+    tasks:
+      - task_id: "S3.T1"
+        description: "Create TechStackMapper for import → knowledge routing"
+        file: "cortex/brain/knowledge/tech_stack_mapper.py"
+        tests: "tests/unit/brain/knowledge/test_tech_stack_mapper.py"
+        acceptance_criteria:
+          - "map_imports(ast_imports) → List[knowledge_categories]"
+          - "Config file: cortex/knowledge/tech-stack-mapping.yaml"
+          - "Example: 'fastapi' → ['fastapi', 'python-web', 'async']"
+          - "Example: 'pytest' → ['pytest', 'testing', 'tdd']"
+          - "Fuzzy matching for partial imports (e.g., 'from fastapi.security')"
+          - "Return confidence score [0.0-1.0] per mapping"
+      
+      - task_id: "S3.T2"
+        description: "Implement StalenessChecker"
+        file: "cortex/brain/knowledge/staleness_checker.py"
+        tests: "tests/unit/brain/knowledge/test_staleness_checker.py"
+        acceptance_criteria:
+          - "check_staleness(ast_imports, loaded_yamls) → StalenessReport"
+          - "Use TechStackMapper to detect tech from imports"
+          - "Compare detected_tech vs documented_tech (from YAML metadata)"
+          - "Missing tech: List[tech] (e.g., ['fastapi', 'sqlalchemy'])"
+          - "Outdated tech: List[{tech, detected_version, doc_version}]"
+          - "Recommendations: Suggest YAMLs to add/update"
+      
+      - task_id: "S3.T3"
+        description: "Integrate staleness detection into synthesis"
+        file: "cortex/brain/knowledge/knowledge_synthesis_engine.py"
+        tests: "tests/unit/brain/knowledge/test_synthesis_with_staleness.py"
+        acceptance_criteria:
+          - "synthesize_unified_context calls StalenessChecker"
+          - "Requires LENS context (AST imports) - graceful degradation if missing"
+          - "Attach StalenessReport to UnifiedIntelligenceContext"
+          - "Log staleness warnings (non-blocking)"
+          - "Performance: <50ms for staleness check"
+      
+      - task_id: "S3.T4"
+        description: "Integration test: Tech stack detection workflow"
+        file: "tests/integration/brain/knowledge/test_tech_stack_detection_e2e.py"
+        acceptance_criteria:
+          - "Analyze file with FastAPI imports → Detect 'fastapi' category"
+          - "Load relevant YAMLs (fastapi security patterns)"
+          - "Detect missing docs: File uses SQLAlchemy, no sqlalchemy YAMLs"
+          - "Generate staleness warning with recommendations"
+          - "Performance: <100ms for full detection + loading"
+    
+    validation:
+      - "pytest tests/unit/brain/knowledge/test_tech_stack_mapper.py -v"
+      - "pytest tests/unit/brain/knowledge/test_staleness_checker.py -v"
+      - "pytest tests/integration/brain/knowledge/test_tech_stack_detection_e2e.py -v"
+      - "Tech stack detection accuracy ≥95%"
+      - "Staleness detection recall ≥90% (catches missing tech)"
+
+  # ========================================================================
+  # STAGE 4: MCP TOOL DECORATOR ENHANCEMENT
+  # ========================================================================
+
+  - stage_id: "S4"
+    stage_name: "@mcp_tool Decorator Intelligence Injection"
+    duration_days: 1
+    priority: "P1"
+    
+    description: |
+      Enhance existing @mcp_tool decorator to automatically inject
+      UnifiedIntelligenceContext. Works in conjunction with IntelligenceGate
+      for defense-in-depth enforcement.
+    
+    tasks:
+      - task_id: "S4.T1"
+        description: "Enhance @mcp_tool decorator"
+        file: "cortex/mcp/decorators.py"
+        tests: "tests/unit/mcp/test_decorators_enhanced.py"
+        acceptance_criteria:
+          - "Check if 'unified_intelligence' in kwargs"
+          - "If missing: Call IntelligenceGate.get_context(kwargs)"
+          - "Inject into kwargs['unified_intelligence']"
+          - "Fallback: Return error if synthesis fails (don't execute tool)"
+          - "Backward compatible: Existing tools unaffected"
+      
+      - task_id: "S4.T2"
+        description: "Update all 10 MCP tools to use injected context"
+        file: "cortex/mcp/cortex_tools.py"
+        tests: "tests/integration/mcp/test_tools_use_intelligence.py"
+        acceptance_criteria:
+          - "Add 'unified_intelligence: UnifiedIntelligenceContext' parameter to all tools"
+          - "Optional parameter (for backward compat): unified_intelligence = None"
+          - "Tools use context if provided (rich orchestrator instructions)"
+          - "Verify all 10 tools: cortex_process_request, cortex_lens_analyze, etc."
+      
+      - task_id: "S4.T3"
+        description: "Add decorator test coverage"
+        file: "tests/unit/mcp/test_decorator_intelligence_injection.py"
+        acceptance_criteria:
+          - "Test: Decorator injects context when missing"
+          - "Test: Decorator skips injection when context exists"
+          - "Test: Decorator fails gracefully if synthesis fails"
+          - "Test: Performance overhead <5ms per tool call"
+      
+      - task_id: "S4.T4"
+        description: "Integration test: All tools receive intelligence"
+        file: "tests/integration/mcp/test_all_tools_intelligence.py"
+        acceptance_criteria:
+          - "Invoke all 10 MCP tools"
+          - "Verify unified_intelligence injected (not None)"
+          - "Verify context has expected fields (coverage, staleness, etc.)"
+          - "Performance: No regression vs baseline (gate + decorator < 15ms)"
+    
+    validation:
+      - "pytest tests/unit/mcp/test_decorators_enhanced.py -v"
+      - "pytest tests/integration/mcp/test_tools_use_intelligence.py -v"
+      - "pytest tests/integration/mcp/test_all_tools_intelligence.py -v"
+      - "All 10 tools passing with intelligence context"
+
+  # ========================================================================
+  # STAGE 5: CCL INTEGRATION & CACHING OPTIMIZATION
+  # ========================================================================
+
+  - stage_id: "S5"
+    stage_name: "CCL Integration & Performance Optimization"
+    duration_days: 1
+    priority: "P2"
+    
+    description: |
+      Integrate IntelligenceGate with Phase 49 CCL for performance optimization.
+      CCL pre-warms intelligence context async, IntelligenceGate uses cached
+      result. Target: <300ms P95 synthesis latency (vs <500ms without cache).
+    
+    tasks:
+      - task_id: "S5.T1"
+        description: "Add intelligence pre-warming to CCL"
+        file: "cortex/orchestrators/context_crystallization/ccl_core.py"
+        tests: "tests/unit/orchestrators/ccl/test_intelligence_warming.py"
+        acceptance_criteria:
+          - "Add intelligence_warmer.py component"
+          - "Call KnowledgeSynthesisEngine.synthesize_unified_context"
+          - "Cache result in CrystallizedContext.unified_intelligence"
+          - "Async execution (parallel with rules + LENS warming)"
+          - "Target: <300ms for full intelligence synthesis"
+      
+      - task_id: "S5.T2"
+        description: "Update IntelligenceGate to use CCL cache"
+        file: "cortex/mcp/middleware/intelligence_gate.py"
+        tests: "tests/unit/mcp/middleware/test_gate_ccl_integration.py"
+        acceptance_criteria:
+          - "Check CCL CrystallizedContext.unified_intelligence first"
+          - "If present + fresh (<5 min old): Use cached context"
+          - "If missing/stale: Synthesize fresh (fallback)"
+          - "Log cache hit/miss for observability"
+          - "Performance: Cache hit = <5ms, Cache miss = <300ms"
+      
+      - task_id: "S5.T3"
+        description: "Performance benchmarking"
+        file: "tests/performance/intelligence/benchmark_synthesis.py"
+        acceptance_criteria:
+          - "Measure P50, P95, P99 latencies"
+          - "Benchmark: With CCL cache vs without"
+          - "Target: P95 <300ms with cache, <500ms without"
+          - "Cache hit rate ≥70% after warmup"
+          - "Generate performance report (JSON)"
+      
+      - task_id: "S5.T4"
+        description: "Integration test: Full CCL + IntelligenceGate flow"
+        file: "tests/integration/ccl/test_ccl_intelligence_e2e.py"
+        acceptance_criteria:
+          - "CCL prefetches intelligence async"
+          - "IntelligenceGate uses cached context"
+          - "cortex_process_request receives pre-warmed intelligence"
+          - "Performance: End-to-end <350ms (CCL + Gate + Tool)"
+    
+    validation:
+      - "pytest tests/unit/orchestrators/ccl/test_intelligence_warming.py -v"
+      - "pytest tests/integration/ccl/test_ccl_intelligence_e2e.py -v"
+      - "python tests/performance/intelligence/benchmark_synthesis.py"
+      - "P95 latency <300ms with CCL cache"
+      - "Cache hit rate ≥70%"
+
+# ============================================================================
+# GOVERNANCE & QUALITY ASSURANCE
+# ============================================================================
+
+governance:
+  core_rules:
+    - "CORE-008: TDD MANDATORY (tests before implementation)"
+    - "CORE-011: Type hints required"
+    - "CORE-012: Google-style docstrings"
+    - "CORE-027: Audit trail (AC_START → AC_COMPLETE)"
+    - "CORE-030: Implementation Truth (verify code, not docs)"
+    - "CORE-035: Single canonical implementation (no duplication)"
+    - "CORE-048: Holistic validation gate"
+  
+  test_coverage_targets:
+    unit: "≥90%"
+    integration: "≥85%"
+    performance: "≥3 benchmarks per stage"
+  
+  backward_compatibility:
+    - "Existing MCP tool consumers unaffected"
+    - "UnifiedIntelligenceContext structure unchanged"
+    - "KnowledgeSynthesisEngine existing methods backward compatible"
+    - "Optional parameters for new features"
+  
+  rollback_strategy:
+    - "Feature flag: CORTEX_INTELLIGENCE_GATE_ENABLED (default: true)"
+    - "Rollback: Set flag to false → Gate becomes no-op"
+    - "Zero downtime rollback"
+    - "Monitoring: Track gate execution time, bypass attempts"
+
+# ============================================================================
+# DEPLOYMENT & ROLLOUT
+# ============================================================================
+
+deployment:
+  phased_rollout:
+    - phase: "S1-S2"
+      description: "Internal testing (feature flag off)"
+      duration: "3 days"
+      validation: "Manual testing + unit tests"
+    
+    - phase: "S3-S4"
+      description: "Beta users (opt-in via flag)"
+      duration: "3 days"
+      validation: "Performance monitoring + user feedback"
+    
+    - phase: "S5"
+      description: "50% canary deployment"
+      duration: "3 days"
+      validation: "P95 latency < 300ms, zero errors"
+    
+    - phase: "Production"
+      description: "100% rollout"
+      duration: "Gradual over 7 days"
+      validation: "Full observability, rollback ready"
+  
+  feature_flags:
+    - "CORTEX_INTELLIGENCE_GATE_ENABLED" # Master switch
+    - "CORTEX_GAP_FILLING_ENABLED" # Gap-filling feature
+    - "CORTEX_STALENESS_DETECTION_ENABLED" # Staleness checker
+    - "CORTEX_CCL_INTELLIGENCE_CACHING_ENABLED" # CCL caching
+
+# ============================================================================
+# SUCCESS CRITERIA (ACCEPTANCE)
+# ============================================================================
+
+acceptance_criteria:
+  - id: "AC-001"
+    description: "IntelligenceGate enforces all 10 MCP tools"
+    validation: "pytest tests/integration/mcp/test_e2e_intelligence_enforcement.py"
+  
+  - id: "AC-002"
+    description: "Gap-filling achieves ≥98% coverage"
+    validation: "pytest tests/integration/brain/knowledge/test_gap_filling_e2e.py"
+  
+  - id: "AC-003"
+    description: "Staleness detection identifies missing tech"
+    validation: "pytest tests/integration/brain/knowledge/test_tech_stack_detection_e2e.py"
+  
+  - id: "AC-004"
+    description: "TechStackMapper accuracy ≥95%"
+    validation: "pytest tests/unit/brain/knowledge/test_tech_stack_mapper.py"
+  
+  - id: "AC-005"
+    description: "CCL integration reduces P95 latency to <300ms"
+    validation: "python tests/performance/intelligence/benchmark_synthesis.py"
+  
+  - id: "AC-006"
+    description: "Zero bypass attempts in production"
+    validation: "Audit trail analysis (AC markers)"
+  
+  - id: "AC-007"
+    description: "Backward compatibility maintained"
+    validation: "pytest tests/integration/mcp/test_backward_compatibility.py"
+  
+  - id: "AC-008"
+    description: "Test coverage ≥90%"
+    validation: "pytest --cov=cortex --cov-report=term-missing"
+
+# ============================================================================
+# RELATED DOCUMENTATION
+# ============================================================================
+
+references:
+  - "chat01.md: Copilot Evaluation (Authority for this phase)"
+  - "Phase 20.5: UnifiedIntelligenceContext (Foundation)"
+  - "Phase 49: Context Crystallization Layer (Performance)"
+  - "Phase 51: MCP-FIRST Enforcement (Pattern)"
+  - "OnboardingGate: Proven middleware pattern"
+  - "cortex/brain/knowledge/knowledge_synthesis_engine.py"
+  - "cortex/orchestrators/context_crystallization/ccl_core.py"
+
+notes: |
+  This phase addresses critical gaps identified in chat01.md Copilot evaluation.
+  Key insight: ENHANCE existing production systems, don't rebuild.
+  
+  Rationale for Option D (Enhance Existing):
+  - UnifiedIntelligenceContext already production-ready (Phase 20.5)
+  - KnowledgeSynthesisEngine operational, needs enhancement
+  - CCL proven async pattern (Phase 49)
+  - OnboardingGate shows MCP enforcement pattern
+  - 8 days vs 25 days (67% faster)
+  - Zero breaking changes (backward compatible)
+  
+  What we're NOT doing (from conversation):
+  - IntelligenceOrchestrator (duplicates UnifiedIntelligenceContext)
+  - Replacing CCL (working system)
+  - Replacing KnowledgeSynthesisEngine (enhance only)
+  - Prompt-level integration (brittle coupling)
+  
+  Architectural Alignment:
+  - MCP-FIRST enforcement at gateway (not prompt)
+  - Separation of concerns preserved (orchestrators unchanged)
+  - Universal benefit (all tools gain intelligence)
+  - Performance optimized (CCL caching)
+  - Extensibility maintained (add new capabilities without disruption)

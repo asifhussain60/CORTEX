@@ -11,8 +11,10 @@ from cortex.mcp.middleware.onboarding_gate import (
     OnboardingGate,
     create_onboarding_gate,
 )
+from cortex.mcp.middleware.intelligence_gate import IntelligenceGate
 
 __all__ = [
     "OnboardingGate",
     "create_onboarding_gate",
+    "IntelligenceGate",
 ]
