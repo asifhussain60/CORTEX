@@ -135,14 +135,26 @@ AI: [On completion: Summary + git hash]
 
 ### FORBIDDEN Outputs (Silent Mode Violations)
 
-❌ "I'll now proceed to implement..."
-❌ "Let me first check the registry..."
-❌ "Here's my plan for implementing this..."
-❌ "Should I continue with the next stage?"
-❌ "I've completed Stage 1. Moving to Stage 2..."
+❌ "I'll now proceed to implement..." (after user said "proceed")
+❌ "Let me first check the registry..." (during execution)
+❌ "Here's my plan for implementing this..." (after approval)
+❌ "Should I continue with the next stage?" (mid-execution)
+❌ "I've completed Stage 1. Moving to Stage 2..." (progress bar shows this)
 ❌ "Would you like me to proceed?" (after user already said "proceed")
-❌ Multi-paragraph explanations before/during work
-❌ Asking for approval between stages or after analysis phase
+❌ Multi-paragraph explanations during silent execution
+❌ Asking for approval between stages (except on ERROR)
+
+✅ **ALLOWED Narration (Before Execution):**
+- Initial analysis before Challenge Gate display
+- Explanation of discovered context/risks
+- Challenge alternatives presentation
+- Discovery report ("Found 3 existing implementations...")
+
+✅ **ALLOWED Narration (After Completion):**
+- Completion summary with metrics
+- Test results and coverage
+- Files modified and git commit hash
+- Next steps or blockers encountered
 
 ### Override: Verbose Mode
 
@@ -2460,8 +2472,13 @@ User Request → PRE-FLIGHT CHECK
          - Load _cortex-master/index.yaml
          - Find next phase (in-progress or planned)
                     ↓
-         [CONTINUATION_DETECTED] → Generate autonomous header + SKIP DoR/Challenge → Execute immediately
-         [EXPLORATORY] → Proceed to normal AUDIT/DESIGN flow with challenge
+         [VALID CONTINUATION] → Generate autonomous header + SKIP re-challenge → Execute immediately
+            ├─ Explicit phase continuation: "continue phase N" + registry validation
+            ├─ OR: Post-challenge confirmation (challenge_shown_for_request=True)
+            └─ Skip re-DoR and re-challenge (already completed)
+         [NEW EXPLORATORY REQUEST] → Proceed to AUDIT/DESIGN flow → MUST show Challenge Gate
+            ├─ Patterns: "proceed with...", "implement...", "refactor..."
+            └─ Challenge required for NEW architectural work
                     ↓
          [BEHIND/DIVERGED] → Detect Ecosystem Changes:
                              - .github/prompts/*.md modified?

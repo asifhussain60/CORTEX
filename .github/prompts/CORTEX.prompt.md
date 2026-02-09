@@ -300,7 +300,9 @@ Synthesis   → Generate DoR classification
 
 **CRITICAL:** Before generating DoR, ALWAYS check for existing implementations.
 
-**Enforcement:** ENH-047 Pre-Execution Discovery Protocol
+**Enforcement:** ENH-047 Pre-Execution Discovery Protocol  
+**Applies To:** IMPLEMENT, DESIGN, REFACTOR intents ONLY (skip for ANALYZE, AUDIT, QUERY)  
+**State-Aware:** NOT required for phase continuations (already completed during first "proceed")
 
 #### Discovery Checklist
 
