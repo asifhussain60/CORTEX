@@ -1420,6 +1420,66 @@ orchestrators:
         phase: "52"
         stage: "1.4"
 
+    - name: "DotNetLensOrchestrator"
+      module: "cortex.orchestrators.phase_55.dotnet_lens"
+      class: "DotNetLensOrchestrator"
+      tier: 3
+      priority: 79
+      dependencies: ["IntegrationOrchestrator"]
+      capabilities: [dotnet_project_analysis, framework_detection, dependency_resolution, code_complexity]
+      mcp_tools: [cortex_analyze_dotnet, cortex_detect_framework, cortex_resolve_dependencies]
+      governance: [CORE-035, CORE-049]
+      version: "1.0.0"
+      metadata:
+        icon: ".NET"
+        phase: "55"
+        stage: "1"
+
+    - name: "MSBuildResolverOrchestrator"
+      module: "cortex.orchestrators.phase_55.msbuild_resolver"
+      class: "MSBuildResolverOrchestrator"
+      tier: 3
+      priority: 78
+      dependencies: ["DotNetLensOrchestrator"]
+      capabilities: [msbuild_parsing, project_graph_analysis, build_config_extraction, target_identification]
+      mcp_tools: [cortex_parse_msbuild, cortex_analyze_project_graph, cortex_extract_build_config]
+      governance: [CORE-035, CORE-049]
+      version: "1.0.0"
+      metadata:
+        icon: "🔨"
+        phase: "55"
+        stage: "2"
+
+    - name: "CentralizedPackageManagerOrchestrator"
+      module: "cortex.orchestrators.phase_55.centralized_packages"
+      class: "CentralizedPackageManagerOrchestrator"
+      tier: 3
+      priority: 77
+      dependencies: ["MSBuildResolverOrchestrator"]
+      capabilities: [package_version_management, dependency_graph_consolidation, version_conflict_resolution, nuget_integration]
+      mcp_tools: [cortex_manage_packages, cortex_consolidate_versions, cortex_resolve_conflicts]
+      governance: [CORE-035, CORE-049]
+      version: "1.0.0"
+      metadata:
+        icon: "📦"
+        phase: "55"
+        stage: "3"
+
+    - name: "EnterpriseAnalysisOrchestrator"
+      module: "cortex.orchestrators.phase_55.enterprise_analysis"
+      class: "EnterpriseAnalysisOrchestrator"
+      tier: 3
+      priority: 76
+      dependencies: ["CentralizedPackageManagerOrchestrator"]
+      capabilities: [database_analysis, entity_framework_detection, wcf_service_analysis, azure_devops_integration, architecture_visualization]
+      mcp_tools: [cortex_analyze_database, cortex_detect_ef, cortex_analyze_wcf, cortex_integrate_azure, cortex_visualize_architecture]
+      governance: [CORE-035, CORE-049]
+      version: "1.0.0"
+      metadata:
+        icon: "🏗️"
+        phase: "55"
+        stage: "4-9"
+
 # -------------------------------------------------------------------------
 # DEPENDENCY VALIDATION RULES
 # -------------------------------------------------------------------------
