@@ -9,7 +9,7 @@ AC_START: AC-PHASE63-001
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Optional, Set, AsyncIterator, Callable
+from typing import Dict, List, Optional, Set, AsyncIterator, Callable, Any
 from pathlib import Path
 from datetime import datetime
 import asyncio
@@ -197,6 +197,163 @@ class LensQuickTier2:
     def clear_cache(self) -> None:
         """Clear analysis cache"""
         self.cache.clear()
+    
+    # Phase 65 S7: Wire Tier 2 capabilities to real analyzers
+    
+    def syntax_check(self, file_path: str) -> Dict:
+        """
+        Check Python syntax using AST parser.
+        
+        Args:
+            file_path: Path to Python file
+            
+        Returns:
+            Dict with syntax validation results
+        """
+        try:
+            from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer
+            
+            analyzer = ASTAnalyzer()
+            path = Path(file_path)
+            
+            # Try to parse the file
+            try:
+                result = analyzer.analyze_file(path)
+                return {
+                    "status": "valid",
+                    "is_valid": True,
+                    "file": str(path)
+                }
+            except SyntaxError as e:
+                return {
+                    "status": "error",
+                    "is_valid": False,
+                    "errors": [str(e)],
+                    "file": str(path)
+                }
+        except Exception as e:
+            return {
+                "status": "error",
+                "is_valid": False,
+                "errors": [f"Analysis failed: {str(e)}"],
+                "file": file_path
+            }
+    
+    def type_hints_analysis(self, file_path: str) -> Dict:
+        """
+        Analyze type hints in Python file.
+        
+        Args:
+            file_path: Path to Python file
+            
+        Returns:
+            Dict with type hint statistics
+        """
+        try:
+            from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer
+            
+            analyzer = ASTAnalyzer()
+            path = Path(file_path)
+            result = analyzer.analyze_file(path)
+            
+            # Count functions with type hints
+            functions = result.functions
+            annotated = sum(1 for f in functions if f.return_type or f.parameters)
+            total = len(functions)
+            coverage = (annotated / total * 100) if total > 0 else 0
+            
+            return {
+                "annotated_functions": annotated,
+                "total_functions": total,
+                "coverage": round(coverage, 2),
+                "file": str(path)
+            }
+        except Exception as e:
+            return {
+                "annotated_functions": 0,
+                "total_functions": 0,
+                "coverage": 0.0,
+                "error": str(e),
+                "file": file_path
+            }
+    
+    def import_analysis(self, file_path: str) -> Dict:
+        """
+        Analyze imports in Python file.
+        
+        Args:
+            file_path: Path to Python file
+            
+        Returns:
+            Dict with import information
+        """
+        try:
+            from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer
+            
+            analyzer = ASTAnalyzer()
+            path = Path(file_path)
+            result = analyzer.analyze_file(path)
+            
+            # Extract imports
+            imports = [imp.module for imp in result.imports]
+            
+            return {
+                "imports": imports,
+                "count": len(imports),
+                "file": str(path)
+            }
+        except Exception as e:
+            return {
+                "imports": [],
+                "count": 0,
+                "error": str(e),
+                "file": file_path
+            }
+    
+    def function_complexity(self, file_path: str) -> Dict:
+        """
+        Calculate function complexity metrics.
+        
+        Args:
+            file_path: Path to Python file
+            
+        Returns:
+            Dict with complexity metrics
+        """
+        try:
+            from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer
+            
+            analyzer = ASTAnalyzer()
+            path = Path(file_path)
+            result = analyzer.analyze_file(path)
+            
+            # Calculate complexity (use simple heuristic based on function count)
+            functions = result.functions
+            # Estimate complexity: 1 + number of parameters
+            complexities = [1 + len(f.parameters) for f in functions]
+            
+            if complexities:
+                max_complexity = max(complexities)
+                avg_complexity = sum(complexities) / len(complexities)
+            else:
+                max_complexity = 0
+                avg_complexity = 0
+            
+            return {
+                "functions": len(functions),
+                "max_complexity": max_complexity,
+                "average": round(avg_complexity, 2),
+                "complexities": complexities,
+                "file": str(path)
+            }
+        except Exception as e:
+            return {
+                "functions": 0,
+                "max_complexity": 0,
+                "average": 0.0,
+                "error": str(e),
+                "file": file_path
+            }
 
 
 class LensTargetedTier3:
@@ -262,6 +419,176 @@ class LensTargetedTier3:
         
         return result
     
+    # Phase 65 S7: Wire Tier 3 capabilities to real analyzers
+    
+    def security_scan(self, file_path: str) -> Dict:
+        """
+        Scan for security vulnerabilities.
+        
+        Args:
+            file_path: Path to Python file
+            
+        Returns:
+            Dict with security findings
+        """
+        try:
+            path = Path(file_path)
+            content = path.read_text()
+            
+            issues = []
+            
+            # Check for hardcoded passwords/secrets
+            dangerous_patterns = [
+                'password', 'secret', 'api_key', 'token', 'credential'
+            ]
+            
+            for i, line in enumerate(content.split('\n'), 1):
+                line_lower = line.lower()
+                for pattern in dangerous_patterns:
+                    if pattern in line_lower and '=' in line:
+                        # Check if it looks like a hardcoded value
+                        if '"' in line or "'" in line:
+                            issues.append({
+                                'line': i,
+                                'pattern': pattern,
+                                'severity': 'high',
+                                'message': f'Potential hardcoded {pattern}'
+                            })
+            
+            return {
+                "issues": issues,
+                "count": len(issues),
+                "file": str(path)
+            }
+        except Exception as e:
+            return {
+                "issues": [],
+                "count": 0,
+                "error": str(e),
+                "file": file_path
+            }
+    
+    def performance_analysis(self, file_path: str) -> Dict:
+        """
+        Analyze performance issues (deep nesting, etc.).
+        
+        Args:
+            file_path: Path to Python file
+            
+        Returns:
+            Dict with performance findings
+        """
+        try:
+            path = Path(file_path)
+            content = path.read_text()
+            
+            max_nesting = 0
+            current_nesting = 0
+            issues = []
+            
+            for i, line in enumerate(content.split('\n'), 1):
+                # Count indentation level
+                indent = len(line) - len(line.lstrip())
+                nesting_level = indent // 4  # Assuming 4-space indents
+                
+                if nesting_level > current_nesting:
+                    current_nesting = nesting_level
+                    if current_nesting > max_nesting:
+                        max_nesting = current_nesting
+                    
+                    if current_nesting > 3:
+                        issues.append({
+                            'line': i,
+                            'nesting': current_nesting,
+                            'message': 'Deep nesting detected'
+                        })
+            
+            return {
+                "max_depth": max_nesting,
+                "issues": issues,
+                "count": len(issues),
+                "file": str(path)
+            }
+        except Exception as e:
+            return {
+                "max_depth": 0,
+                "issues": [],
+                "count": 0,
+                "error": str(e),
+                "file": file_path
+            }
+    
+    def documentation_analysis(self, file_path: str) -> Dict:
+        """
+        Analyze documentation coverage (docstrings).
+        
+        Args:
+            file_path: Path to Python file
+            
+        Returns:
+            Dict with documentation metrics
+        """
+        try:
+            from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer
+            
+            analyzer = ASTAnalyzer()
+            path = Path(file_path)
+            result = analyzer.analyze_file(path)
+            
+            # Count functions with docstrings
+            functions = result.functions
+            documented = sum(1 for f in functions if f.docstring)
+            total = len(functions)
+            coverage = (documented / total * 100) if total > 0 else 0
+            
+            missing = [f.name for f in functions if not f.docstring]
+            
+            return {
+                "documented": documented,
+                "undocumented": total - documented,
+                "total": total,
+                "coverage": round(coverage, 2),
+                "missing": missing,
+                "file": str(path)
+            }
+        except Exception as e:
+            return {
+                "documented": 0,
+                "undocumented": 0,
+                "total": 0,
+                "coverage": 0.0,
+                "missing": [],
+                "error": str(e),
+                "file": file_path
+            }
+    
+    def analyze_with_capabilities(
+        self,
+        file_path: str,
+        capabilities: List[str]
+    ) -> Dict:
+        """
+        Analyze file with custom capability selection.
+        
+        Args:
+            file_path: Path to analyze
+            capabilities: List of capability names
+            
+        Returns:
+            Dict with analysis results
+        """
+        results = {}
+        
+        for capability in capabilities:
+            if capability == 'security_scan':
+                results['security'] = self.security_scan(file_path)
+            elif capability == 'performance_analysis':
+                results['performance'] = self.performance_analysis(file_path)
+            elif capability == 'documentation_analysis':
+                results['documentation'] = self.documentation_analysis(file_path)
+        
+        return results
+    
     def resolve_dependencies(self, capabilities: List[str]) -> List[str]:
         """
         Resolve capability dependencies.
@@ -290,74 +617,66 @@ class LensStreamTier3:
         self.batch_size = batch_size
         self.registry = LensCapabilityRegistry()
     
-    async def stream_analysis(
+    def stream_analysis(
         self,
-        repo_path: Path,
-        capabilities: Optional[List[str]] = None,
-    ) -> AsyncIterator[StreamEvent]:
+        file_paths: List[str],
+        batch_size: int = 10,
+    ):
         """
-        Stream analysis results for repository.
+        Stream analysis results for batch of files.
+        
+        S7 Wire: Batch process files through LENSOrchestrator.
         
         Args:
-            repo_path: Repository path to analyze
-            capabilities: Capabilities to execute
+            file_paths: List of file paths to analyze
+            batch_size: Number of files per batch
         
         Yields:
-            StreamEvent objects as analysis progresses
+            Dict with batch results and real findings
         """
-        # AC_START: AC-PHASE63-STREAM-001 Streaming analysis
-        if capabilities is None:
-            capabilities = [c.name for c in self.registry.get_by_priority(max_priority=6)]
+        # AC_START: AC-PHASE65-S7-STREAM-001 Real batch streaming
+        from pathlib import Path
         
-        # Find Python files
-        files = list(repo_path.rglob("*.py"))[:100]  # Limit for demo
-        
-        # Send progress event
-        yield StreamEvent(
-            event_type="progress",
-            data={
-                "stage": "initialized",
-                "total_files": len(files),
-                "batch_size": self.batch_size,
-            },
-        )
-        
-        # Batch and stream results
-        for i in range(0, len(files), self.batch_size):
-            batch = files[i : i + self.batch_size]
-            batch_results = []
+        # Process in batches (even if orchestrator fails, still yield per batch)
+        for i in range(0, len(file_paths), batch_size):
+            batch = file_paths[i : i + batch_size]
+            batch_findings = []
             
             for file_path in batch:
-                result = LensAnalysisResult(
-                    tier=LensTier.TIER_3_STREAM,
-                    file_path=file_path,
-                    timestamp=datetime.utcnow().isoformat(),
-                    findings=[{"capability": c, "status": "analyzed"} for c in capabilities],
-                    capabilities_used=capabilities,
-                    analysis_time_ms=50.0,
-                )
-                batch_results.append(result.to_dict())
+                try:
+                    # Lazy import to handle missing dependencies gracefully
+                    from cortex.lens.orchestrator import LENSOrchestrator
+                    
+                    # Initialize orchestrator per file
+                    path_obj = Path(file_path)
+                    repo_path = path_obj.parent
+                    orchestrator = LENSOrchestrator(repo_path=repo_path)
+                    
+                    # Call real LENSOrchestrator
+                    result = orchestrator.analyze_file(path_obj)
+                    batch_findings.append({
+                        "file": file_path,
+                        "analysis": result,
+                        "status": "success",
+                    })
+                except Exception as e:
+                    batch_findings.append({
+                        "file": file_path,
+                        "error": str(e),
+                        "status": "error",
+                    })
             
-            yield StreamEvent(
-                event_type="result",
-                data={
-                    "batch": i // self.batch_size,
-                    "results": batch_results,
+            # Yield batch result
+            yield {
+                "files": batch,
+                "findings": batch_findings,
+                "analysis": {
+                    "batch_number": i // batch_size + 1,
+                    "batch_size": len(batch),
+                    "total_batches": (len(file_paths) + batch_size - 1) // batch_size,
                 },
-            )
-            
-            # Small delay to simulate streaming
-            await asyncio.sleep(0.01)
-        
-        # Send completion event
-        yield StreamEvent(
-            event_type="complete",
-            data={
-                "total_files_analyzed": len(files),
-                "capabilities_used": capabilities,
-            },
-        )
-        # AC_COMPLETE: AC-PHASE63-STREAM-001
+            }
+        # AC_COMPLETE: AC-PHASE65-S7-STREAM-001
     
     async def cancel_analysis(self) -> None:
         """Cancel ongoing streaming analysis"""
@@ -365,56 +684,54 @@ class LensStreamTier3:
 
 
 class LensAnalyzerTier4:
-    """Tier 4: Full analysis (unchanged from Phase 62)"""
+    """Tier 4: Full analysis (S7 wired to LENSOrchestrator)"""
     
     def __init__(self):
         """Initialize Tier 4 full analyzer"""
         self.registry = LensCapabilityRegistry()
     
-    async def analyze(self, file_path: Path) -> LensAnalysisResult:
+    def full_analysis(self, file_path: str) -> Dict[str, Any]:
         """
-        Full analysis of all capabilities.
+        Full comprehensive analysis using LENSOrchestrator.
+        
+        S7 Wire: Delegate to LENSOrchestrator.analyze_file() for complete analysis.
         
         Args:
-            file_path: Path to analyze
+            file_path: Path to file to analyze
         
         Returns:
-            LensAnalysisResult with complete findings
+            Complete analysis result dict
         """
-        # AC_START: AC-PHASE63-T4-001 Full comprehensive analysis
-        start_time = datetime.utcnow()
-        
-        # Run all capabilities
-        all_capabilities = self.registry.get_all()
-        findings = []
-        
-        for capability in all_capabilities:
-            finding = {
-                "capability": capability.name,
-                "status": "analyzed",
-                "priority": capability.priority,
-                "cost_ms": capability.cost_ms,
+        # AC_START: AC-PHASE65-S7-TIER4-001 Full analysis wiring
+        try:
+            from cortex.lens.orchestrator import LENSOrchestrator
+            from pathlib import Path
+            
+            # Initialize orchestrator
+            path_obj = Path(file_path)
+            repo_path = path_obj.parent
+            orchestrator = LENSOrchestrator(repo_path=repo_path)
+            
+            # Run full analysis
+            result = orchestrator.analyze_file(path_obj)
+            
+            return {
+                "file": file_path,
+                "analysis": result,
+                "status": "success",
             }
-            findings.append(finding)
         
-        end_time = datetime.utcnow()
-        analysis_time_ms = (end_time - start_time).total_seconds() * 1000
-        
-        result = LensAnalysisResult(
-            tier=LensTier.TIER_4_FULL,
-            file_path=file_path,
-            timestamp=datetime.utcnow().isoformat(),
-            findings=findings,
-            capabilities_used=[c.name for c in all_capabilities],
-            analysis_time_ms=analysis_time_ms,
-        )
-        # AC_COMPLETE: AC-PHASE63-T4-001
-        
-        return result
+        except Exception as e:
+            return {
+                "file": file_path,
+                "error": f"Full analysis failed: {e}",
+                "status": "error",
+            }
+        # AC_COMPLETE: AC-PHASE65-S7-TIER4-001
 
 
 class LensOrchestratorIntegration:
-    """Integration with orchestrators"""
+    """Integration with orchestrators (S7 wired to real tiers)"""
     
     def __init__(self):
         """Initialize orchestrator integration"""
@@ -423,59 +740,91 @@ class LensOrchestratorIntegration:
         self.tier3_stream = LensStreamTier3()
         self.tier4 = LensAnalyzerTier4()
     
-    async def interaction_orchestrator_quick_analysis(
+    def interaction_orchestrator_quick_analysis(
         self,
         file_path: Path,
-    ) -> LensAnalysisResult:
+    ) -> Dict[str, Any]:
         """
         Quick analysis for InteractionOrchestrator.
         
-        Args:
-            file_path: Path to analyze
-        
-        Returns:
-            Tier 2 analysis result
-        """
-        return await self.tier2.analyze(file_path)
-    
-    async def tdd_orchestrator_context_enrichment(
-        self,
-        file_path: Path,
-    ) -> LensAnalysisResult:
-        """
-        Context enrichment for TDDOrchestrator.
+        S7 Wire: Delegate to Tier 2 fast methods.
         
         Args:
             file_path: Path to analyze
         
         Returns:
-            Tier 2 analysis result for context
+            Combined Tier 2 analysis results
         """
-        return await self.tier2.analyze(file_path)
+        # AC_START: AC-PHASE65-S7-INT-001
+        try:
+            file_str = str(file_path)
+            return {
+                "syntax": self.tier2.syntax_check(file_str),
+                "type_hints": self.tier2.type_hints_analysis(file_str),
+                "imports": self.tier2.import_analysis(file_str),
+                "complexity": self.tier2.function_complexity(file_str),
+                "file": file_str,
+                "tier": "tier_2_quick",
+            }
+        except Exception as e:
+            return {
+                "error": f"Quick analysis failed: {e}",
+                "file": str(file_path),
+                "tier": "tier_2_quick",
+            }
+        # AC_COMPLETE: AC-PHASE65-S7-INT-001
     
-    async def plan_orchestrator_validation(
+    def plan_orchestrator_validation(
         self,
         file_path: Path,
         capabilities: Optional[List[str]] = None,
-    ) -> LensAnalysisResult:
+    ) -> Dict[str, Any]:
         """
         Validation analysis for PlanOrchestrator.
+        
+        S7 Wire: Delegate to Tier 3 targeted capabilities.
         
         Args:
             file_path: Path to analyze
             capabilities: Custom capabilities for validation
         
         Returns:
-            Tier 3 targeted analysis result
+            Tier 3 targeted analysis results
         """
-        return await self.tier3_targeted.analyze(file_path, capabilities)
+        # AC_START: AC-PHASE65-S7-INT-002
+        try:
+            file_str = str(file_path)
+            
+            # Default to security, performance, documentation
+            if capabilities is None:
+                capabilities = ["security", "performance", "documentation"]
+            
+            # Use analyze_with_capabilities for custom selection
+            result = self.tier3_targeted.analyze_with_capabilities(file_str, capabilities)
+            
+            return {
+                "analysis": result,
+                "file": file_str,
+                "tier": "tier_3_targeted",
+                "capabilities": capabilities,
+            }
+        
+        except Exception as e:
+            return {
+                "error": f"Validation failed: {e}",
+                "file": str(file_path),
+                "tier": "tier_3_targeted",
+            }
+        # AC_COMPLETE: AC-PHASE65-S7-INT-002
     
-    async def onboarding_orchestrator_full_analysis(
+    def onboarding_orchestrator_full_analysis(
         self,
         file_path: Path,
-    ) -> LensAnalysisResult:
+    ) -> Dict[str, Any]:
         """
         Full analysis for RepositoryOnboardingOrchestrator.
+        
+        S7 Wire: Delegate to Tier 4 full LENSOrchestrator.
         
         Args:
             file_path: Path to analyze
@@ -483,7 +832,16 @@ class LensOrchestratorIntegration:
         Returns:
             Tier 4 full analysis result
         """
-        return await self.tier4.analyze(file_path)
+        # AC_START: AC-PHASE65-S7-INT-003
+        try:
+            return self.tier4.full_analysis(str(file_path))
+        except Exception as e:
+            return {
+                "error": f"Full analysis failed: {e}",
+                "file": str(file_path),
+                "tier": "tier_4_full",
+            }
+        # AC_COMPLETE: AC-PHASE65-S7-INT-003
 
 
 # AC_COMPLETE: AC-PHASE63-001 (EOF)

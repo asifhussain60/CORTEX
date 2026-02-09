@@ -1,165 +1,382 @@
-Analysis of the CORTEX Application and Phase 65
-Overview of CORTEX’s Intelligence Layer
+Reverse-engineering a real codebase into UML + object relationships + actual domain knowledge is less “run a magic tool” and more “build a pipeline that triangulates truth from code, runtime, and data.” Here’s the best way to do it for a C# / .NET MVC + Angular + SQL/Oracle stack, without wasting weeks generating pretty-but-useless diagrams.
 
-The CORTEX architecture is designed around a cognitive execution system. The intelligence layer is built on multiple components:
+The winning approach: three lenses, one model
+1) Static structure (what the code says)
 
-Brain Tiers (Tier 0–3) – Documentation in the repository shows a four‑tier brain that governs all behaviour:
+Goal: classes, interfaces, dependencies, call graph hints, layering.
 
-Tier 0 – Immutable Core Rules: This layer contains ~29 CORE rules governing incremental execution, strict TDD, governance and naming standards. These rules are immutable and enforced across all operations. Tier 0 is enforced by the EnforcementOrchestrator, which blocks any execution when critical violations are detected.
+C# / .NET
 
-Tier 1 – Acceptance Criteria and Tracking: Tier 1 defines the AC‑ID (Acceptance Criteria ID) state machine, auditing and evidence tracking. It prescribes how acceptance criteria are created, tracked, and locked per phase.
+Parse the solution with Roslyn (this is the grown-up way). Extract:
 
-Tier 2 – Response Templates and Token Optimisation: This layer provides structured response templates and token optimisation strategies for different tasks. It supports adaptive verbosity and semantic deduplication.
+type graph (inheritance, interface impl)
 
-Tier 3 – Knowledge Library: Tier 3 hosts best practices, coding patterns, rules and domain knowledge; it defines indexing, retrieval and caching strategies.
+composition/aggregation (fields, properties)
 
-LENS Pipeline – LENS (Language → Examination → Navigation → Synthesis) analyses repository files via AST and git diff analysis to build file‑level context. The LENSContextProvider caches these insights and warms LENS contexts for subsequent requests. Stage 1 of the MasterOrchestrator’s execute_operation constructs a LENS context before routing; this ensures that the orchestrators have relevant file context to reason about code.
+references between assemblies/namespaces
 
-Unified Intelligence Context – The KnowledgeSynthesisEngine synthesises LENS insights, Tier 3 knowledge and company‑specific knowledge into a UnifiedIntelligenceContext. The MasterOrchestrator’s _stage_2_routing method pre‑synthesises an intelligence context and passes it to the IntentRouter. After routing, it re‑synthesises the intelligence context with updated LENS data and attaches it to the routing result, including guidance and rule citations. Critical violations discovered in this context are filtered and can block execution.
+method call edges (best-effort; dynamic dispatch complicates)
 
-TechIntelligenceOrchestrator – This orchestrator monitors the tech ecosystem, calculates readiness scores (best‑practices coverage, TDD support, security tooling and cross‑repo usage) and synthesises best practices. It is integrated into the MasterOrchestrator (priority 82) and invoked for implementation pre‑flight checks. Its skeleton demonstrates an ability to detect a tech stack, compute readiness and trigger learning when scores are low (e.g., < 0.5). The orchestrator emphasises TDD and best‑practice adherence but still requires implementation for scanning functions.
+Generate UML-ish class diagrams selectively, not for the whole solution. Whole-solution class diagrams become “spaghetti art” fast.
 
-Knowledge Repositories (Tech & Business) – The MasterOrchestrator initialises a KnowledgeRepository and BusinessKnowledgeRepository. These repositories expose query and get_relevant_knowledge methods to provide guidance tailored to domains (security, architecture, testing, performance). The IntelligentKnowledgeRouter coordinates between tech and business knowledge providers and routes queries based on confidence thresholds.
+Identify architectural boundaries:
 
-Evaluation of the Intelligence Layer
-Strengths
+MVC: Controllers → Services → Repositories → DbContext (or DAL)
 
-Deep Governance and Safety: The brain tiers enforce governance from immutable core rules to acceptance criteria and knowledge templates. By integrating Tier 0 enforcement through the EnforcementOrchestrator, the system prevents dangerous operations (e.g., bypassing tests, insecure patterns). This ensures any autonomous intelligence respects strict rules.
+.NET layers by assembly naming + dependency direction (enforce “no upward references”)
 
-Contextual Awareness via LENS: Stage 1 of the pipeline builds a LENS context of the target code; Stage 2 routes the request using this context. This allows the system to reason about the user’s codebase (AST structure, git history, comments). Caching and warming ensure quick retrieval for subsequent requests.
+Angular
 
-Unified Intelligence Synthesis: The KnowledgeSynthesisEngine merges LENS insights, company rules and CORTEX’s best practices into a single context. This unified context is used for intent routing, violation detection and guidance. Violations can block execution, and guidance includes recommended remediation and cited rules.
+Parse TypeScript AST (or use tooling) to extract:
 
-Role‑aware Response Optimisation: Response templates (Tier 2) and policies (Phase 33–34) enforce three‑section responses, adaptive verbosity, semantic deduplication and role‑specific formatting. This improves readability and reduces token usage.
+module boundaries, component/service dependencies
 
-Proactive Tech Readiness: The TechIntelligenceOrchestrator calculates readiness scores to determine if it is safe to proceed, whether learning should be triggered, and which best practices or TDD frameworks to apply. It emphasises cross‑repo usage and security tooling, which helps maintain quality across the company.
+DI graph (providers)
 
-Cognitive Orchestration: The MasterOrchestrator coordinates 4 stages – comprehension (interaction & LENS), intent routing, governance enforcement and execution. It wraps results with context synthesis, progress bars and challenge systems, ensuring a closed loop from user request to execution.
+routing map → feature areas (this is often closer to domain than folder names)
 
-Weaknesses & Gaps
+Don’t try to UML every component. Use it to map feature slices and state/data flows.
 
-Incomplete Implementation of Intelligence Components: Several orchestrators (e.g., TechIntelligenceOrchestrator, KnowledgeSynthesizer, LearningTrigger) have placeholder implementations or stubs. The LENS pipeline is referenced but not fully integrated with live analyzers (Phase 65 aims to connect the LENS warmer to real analyzers and unify the pipeline). Without working analyzers, the intelligence layer may not accurately detect code issues or tech stacks.
+2) Runtime truth (what actually happens)
 
-Dependence on Static Rules: Tier 0–3 rules and knowledge repository rely on pre‑defined YAML files. While comprehensive, they may not cover all new technologies, languages or company‑specific patterns. The unified intelligence context emphasises CORTEX best practices but may under‑represent dynamic or emergent practices.
+Goal: confirm real call paths, object lifetimes, and cross-layer flows that static analysis misses.
 
-Limited Cross‑Turn Memory: Although the StateManager supports cross‑phase state, there is no persistent memory across multiple chat sessions beyond phase‑context resolution. The system resets context at the start of a new operation, limiting the ability to accumulate long‑term intelligence about a project or developer’s preferences.
+Instrument / trace:
 
-Complexity and Performance: The MasterOrchestrator orchestrates numerous components and cross‑checks: challenge generation, LENS analysis, unified intelligence synthesis, enforcement, DoR approval, TDD orchestration, knowledge retrieval, deployment validation and context synthesis. This complexity may lead to latency issues and failure points. Phase 65 emphasises “single unified intelligence provider” and eliminating multiple sources to improve performance.
+.NET: OpenTelemetry traces (or APM) to capture request → controller → service → db calls
 
-Edge Cases and Language Support: The existing pipeline is oriented toward Python/JavaScript code and may not support multi‑language projects or binary artefacts. It depends on AST analysis, which fails for languages without proper parsers. The knowledge repository also may not have domain‑specific patterns for new frameworks.
+Log correlation IDs; capture endpoint, service method, SQL text hash, latency
 
-Autonomy vs. Human Oversight: The system emphasises governance and user approval (DoR gate), but the challenge system can become intrusive, requiring user confirmation even for trivial operations. Balancing autonomy and oversight is still under research; default thresholds may need tuning.
+Dependency injection (DI) container graph:
 
-Can CORTEX Serve as an Intelligent Context‑Aware Helper for PO, Tech Leaders and Engineers?
+Export registrations (interfaces → concrete types) at startup
 
-Pros:
+This is gold for “what implementations are actually used”
 
-End‑to‑End Pipeline: The 4‑stage orchestration (comprehension → routing → governance → execution) covers requirement gathering, planning, TDD writing, implementation and deployment. With integrated TDD and PlanOrchestrators, CORTEX can generate acceptance criteria, test scaffolding, and code modifications across layers.
+This is how you avoid diagrams based on dead code, old interfaces, or “intended architecture.”
 
-Best‑Practice Enforcement: The TDDOrchestrator routes all implementation through an incremental, test‑driven path; knowledge synthesis injects best practices; enforcement checks ensure naming conventions, incremental changes and security. This fosters coherence and consistency.
+3) Data model (what the domain really is)
 
-Role‑Aware Communication: Tier 2 templates and role‑based formatting allow the system to tailor outputs to product owners (high‑level), tech leaders (architectural details) or engineers (code‑level specifics). The MasterOrchestrator supports planning, execution and review modes.
+Goal: domain entities, relationships, cardinality, aggregates, invariants (as much as code+DB reveals).
 
-Contextual Adaptation: LENS and unified intelligence provide code‑specific context, enabling the system to reference relevant modules, functions or patterns. Challenge generation prompts the user when conflicting interpretations arise.
+Reverse engineer the DB (SQL Server/Oracle):
 
-Cons and Risks:
+ERD from foreign keys, unique constraints, check constraints
 
-Incomplete Tech‑Stack Intelligence: The TechIntelligenceOrchestrator is conceptual; readiness scoring and learning triggers rely on accurate detection of languages and frameworks, which is currently stubbed. Without robust detectors and real usage analytics, the system may misreport readiness.
+stored procs/views as “domain operations” (often where business logic hides)
 
-Knowledge Gaps: If the knowledge repository lacks company‑specific guidelines, the system may propose generic solutions that conflict with internal standards. Integration with corporate policies (via BusinessKnowledgeRepository) is still limited.
+Map ORM models ↔ tables:
 
-Scalability: The orchestrator pipeline may struggle with large monorepos or multi‑repo operations. Phase 65 identifies the need for end‑to‑end knowledge pipeline integration to handle such cases.
+Entity Framework: mappings, navigation properties, fluent config
 
-User Experience: Frequent challenge interactions, DoR gates and autonomy detection can be onerous for users. Product owners may desire high‑level guidance without deep technical details, whereas engineers may find the challenge system intrusive.
+Legacy: hand-written SQL → infer entity boundaries via query patterns
 
-Conclusion: With proper implementation of Phase 65 (connecting LENS analyzers, unifying intelligence providers and improving caching), CORTEX could act as an intelligent, context‑aware helper for POs, tech leaders and engineers, enabling end‑to‑end development using company best practices. However, success depends on completing the intelligence components, integrating corporate knowledge, and addressing performance and UX trade‑offs.
+Read the “names”:
 
-Orchestrator Control and Intelligence Integration
+table/column names, enum tables, reference data tables
 
-The MasterOrchestrator is the nucleus of the system:
+these often encode domain language more reliably than code comments
 
-It follows a four‑stage pipeline: Stage 1 builds LENS context via the LENS orchestrator; Stage 2 routes the request using the IntentRouter with unified intelligence context; Stage 3 enforces governance (EnforcementOrchestrator, DoR approval, TDD orchestrator) and synthesises knowledge; Stage 4 delegates to domain orchestrators. It also logs all operations for an audit trail and wraps responses with headers and policies.
+Then unify this into a single Domain Knowledge Graph:
 
-Initialization code shows that the MasterOrchestrator registers multiple orchestrators (core, domain, support). It initialises the StateManager for cross‑phase consistency, knowledge repositories, the IntelligentKnowledgeRouter, ChallengeGenerator, HolisticContextBuilder, health tracker, graceful degradation framework, TDD orchestrator, PlanOrchestrator, TechIntelligenceOrchestrator, autonomous executor and progress bar. It logs whether each component initializes successfully..
+nodes: types, tables, endpoints, UI routes
 
-During _stage_2_routing, the MasterOrchestrator pre‑synthesises a unified intelligence context (CORTEX rules only), calls the IntentRouter with auto‑fetch of LENS data, re‑synthesises the unified intelligence context with updated LENS and company data, attaches the context to the routing result, and filters critical violations. If critical violations (e.g., missing tests, security issues, injection risk) are found, it blocks the request and returns remediation guidance.
+edges: “calls”, “reads/writes”, “maps to”, “depends on”, “contains”
 
-The orchestrator includes hooks for knowledge evaluation and business knowledge evaluation when coordinating operations; it queries the knowledge repository to retrieve relevant best practices and includes them in the composite request.
+attributes: namespaces, assemblies, module, ownership, last changed, usage frequency
 
-Is the MasterOrchestrator in full control? The code demonstrates that it coordinates all stages and delegates operations only after governance checks. However, coordinate_operation may call domain orchestrators directly without always passing the unified intelligence context; some domain orchestrators may not integrate the intelligence layer on their own. For example, domain orchestrators may rely on static logic, and intelligence injection is primarily handled in Stage 2 within the MasterOrchestrator.
+That graph becomes the source-of-truth; UML is just one view of it.
 
-Integration of Intelligence across Orchestrators: The wiring YAML and initialization code show that intelligence is plugged into multiple orchestrators via the IntelligentKnowledgeRouter, KnowledgeSynthesisEngine and LENS pipeline. However, not all orchestrators actively query these components. Examples:
+Practical workflow (what I’d do on a real team)
+Step 0 — Stop the bleeding: define the outputs you want
 
-TDDOrchestrator focuses on incremental execution and may not leverage unified intelligence beyond best‑practice YAMLs. Similarly, the PlanOrchestrator processes high‑level plans and relies on knowledge evaluation at coordination time.
+You want usable artifacts, not “a 600-page PDF class diagram.”
+Target these:
 
-Orchestrators like InquiryOrchestrator, AuditOrchestrator or domain‑specific orchestrators may not integrate LENS or unified intelligence; they may simply perform their domain function.
+C4-style maps (Context → Container → Component) for “how it hangs together”
 
-The CortexBrainIntegration orchestrator is designed to perform self‑analysis but contains stub functions; it is not fully wired into the main pipeline.
+3–10 domain diagrams (bounded contexts / modules)
 
-Phase 65 (LENS Intelligence Remediation – End‑to‑End Knowledge Pipeline)
+Key sequence diagrams for critical flows (top 10 endpoints or business processes)
 
-The registry index shows Phase 65 as “LENS Intelligence Remediation – End‑to‑End Knowledge Pipeline”. It is currently marked planned with ROI 0.95 and eight stages:
+ERD with mappings to domain entities
 
-Wire YAMLs for all LENS best practices and ensure no violations of CORE‑035. This addresses inconsistent wiring and ensures that best‑practice YAMLs are correctly loaded.
+Glossary (ubiquitous language): nouns (entities), verbs (use cases), rules (invariants)
 
-Connect LENSWarmer to real analyzers and integrate them into LENS asynchronous pipelines, eliminating placeholder or dummy analyzers.
+Step 1 — Discover boundaries fast
 
-Integrate ChallengeEngine into LENS pipeline to unify comprehension and challenge generation.
+List assemblies/projects and dependencies
 
-Unify the intelligence provider by consolidating scattered intelligence modules (LENS, knowledge repository, third‑party analyzers) into a single provider with consistent APIs.
+List Angular routes and lazy-loaded modules
 
-Accumulate intelligence across turns so that the system learns from previous operations and improves context, rather than starting from scratch each time. This involves stateful caching and cross‑turn memory.
+List DB schemas and top tables by usage (from query logs if possible)
 
-Unify LENS context and caching to avoid separate caches and ensure that warmers, analyzers and providers share a common context and TTL strategy.
+This produces your first “map of the city.”
 
-Provide a simple MCP API for retrieving unified intelligence, eliminating the need for orchestrators to call multiple sources individually.
+Step 2 — Extract relationships automatically (but only keep what matters)
 
-Conduct end‑to‑end integration testing and update the phase checklist to ensure that performance and ROI improvements are realised.
+From C#: type graph + DI graph + controller/service/repo call edges
 
-Gaps and Blind Spots Highlighted by Phase 65:
+From Angular: route → component → service → API client mapping
 
-Many intelligence components are currently disconnected (LENS warmers vs. analyzers; multiple caches; separate knowledge routers). This creates inconsistent context and duplication.
+From DB: FK graph + view/proc dependencies
 
-There is no single unified intelligence provider or API; orchestrators call LENS, knowledge synthesis and company knowledge individually.
+Now you have raw material.
 
-LENS warmers are not wired to real analyzers, so context may be shallow. The LENS pipeline must unify AST, git and comment analyzers and return consistent insights.
+Step 3 — Build “domain slices”
 
-Intelligence is not accumulated across turns or sessions; each request starts fresh. Phase 65 aims to maintain a persistent intelligence context that grows as the conversation progresses.
+Pick a business capability (e.g., Claims, Billing, Scheduling) and trace it end-to-end:
 
-Identified Gaps, Edge Cases and Blind Spots
+Angular route/module → API endpoint → service → repository → tables/procs
+For each slice, create:
 
-Unified Intelligence Provider Needed: Orchestrators currently fetch context from LENS, unify it with knowledge synthesis and then individually query knowledge repositories. A single unified intelligence provider (planned for Phase 65) would simplify this process and ensure consistent context across orchestrators.
+a small class diagram (only the relevant types)
 
-Incomplete LENS and Tech Intelligence Implementation: Many functions in the LENS orchestration and TechIntelligenceOrchestrator are stubbed. Without fully implemented analyzers and scanners, code comprehension may be superficial.
+a sequence diagram (actual call chain)
 
-Cross‑Turn Memory and Learning: The current pipeline resets context each operation. Accumulating intelligence across turns or sessions (e.g., caching knowledge about a project, developer preferences) would improve coherence and reduce duplication.
+a data diagram (tables + relationships used)
 
-Language and Framework Coverage: LENS and knowledge repositories are biased toward languages with available AST parsers (Python, JavaScript). A fallback mechanism or plugin system is needed for new languages or frameworks.
+Repeat until you’ve covered the core capabilities.
 
-Domain Orchestrators Without Intelligence Hooks: Some domain orchestrators may not leverage the unified intelligence context, relying on static logic. Each orchestrator should have optional hooks for injecting context, retrieving relevant knowledge and applying best practices.
+Step 4 — Validate with humans (because code lies by omission)
 
-Performance and User Experience: The challenge system and DoR gates might slow down workflows, especially for experienced engineers. Adaptive policies (e.g., skipping challenges for high‑confidence low‑risk requests) and dynamic gating thresholds could improve user experience.
+Interview product/SMEs with your diagrams in hand:
 
-Governance vs. Flexibility: The system’s strict governance may hinder exploratory or prototyping work. Mechanisms to relax certain rules (with warnings) under controlled conditions would provide flexibility while preserving safety.
+“Which of these entities are real business concepts vs technical artifacts?”
 
-Monitoring and Feedback Loops: While the system logs operations extensively, there is limited feedback on the quality of generated code or plans. Integrating user feedback and automated code analysis (e.g., static analysis) could refine the knowledge base and improve intelligence over time.
+“Which relationships are actually enforced vs ‘we hope’?”
 
-Recommendations
+“Where do rules live: UI, API, DB, batch jobs?”
 
-Complete Phase 65: Implement real analyzers in the LENS pipeline, unify caches and create a single intelligence provider API. This will streamline Stage 2 routing and make context retrieval efficient.
+Update glossary + bounded contexts accordingly.
 
-Enhance Tech Intelligence Scanner: Implement robust language and framework detectors, build a curated dataset of cross‑repo usage patterns and tie readiness scoring to actual code metrics (coverage, test flakiness, vulnerability count).
+Tooling that actually works (stack-specific)
+C#/.NET
 
-Introduce Persistent Intelligence Caching: Extend the StateManager or create a long‑term memory layer that accumulates unified intelligence across turns. Provide functions to fetch and update this memory to maintain context across sessions.
+Roslyn for extraction (custom or existing analyzers)
 
-Define Intelligence Hooks for Domain Orchestrators: Expose unified intelligence retrieval methods in the IOrchestrator interface so each orchestrator can access context and knowledge relevant to its domain. Encourage orchestrators to incorporate guidance and rules from the unified context.
+NDepend for dependency graphs and architectural rule checks (very effective for .NET layering)
 
-Expand Knowledge Repository Coverage: Continuously import company‑specific guidelines, architecture decisions and domain patterns into the knowledge repository. Provide tools for engineers and architects to contribute new best practices.
+Visual Studio Architecture / DGML (still useful for dependency graphs)
 
-Improve User Experience: Allow adjustable challenge thresholds and DoR gate policies based on user role, intent complexity and confidence scores. Provide succinct high‑level summaries for product owners and deep technical details for engineers.
+OpenTelemetry + Jaeger/Zipkin/APM for runtime traces
 
-Support More Languages and Frameworks: Invest in language‑agnostic analysis methods (e.g., tree‑sitter) and plugin architecture for LENS to handle new languages. Expand domain knowledge to cover emerging frameworks and cross‑platform architectures.
+Angular
 
-Feedback‑Driven Learning: Integrate static analysis and user feedback loops to refine the knowledge base. Use metrics from deployment and code reviews to update best practices and rules automatically.
+Compodoc (quick DI + module/component documentation)
 
-This analysis synthesises the current state of the CORTEX application, the design of its intelligence layer, and the planned improvements in Phase 65. It highlights strengths in governance and context synthesis while identifying gaps in implementation, context accumulation and domain integration. Addressing these gaps will be key to realising CORTEX’s vision of a self‑learning, context‑aware development companion.
+Dependency Cruiser (TS dependency rules/graphs)
+
+Route map extraction (Angular Router config)
+
+DB (SQL Server / Oracle)
+
+ERD tools (Oracle SQL Developer Data Modeler for Oracle; many options for SQL Server)
+
+Query logging / AWR (Oracle) / Query Store (SQL Server) to see actual usage
+
+Dependency extraction for views/procs/packages
+
+Cross-cutting diagram outputs
+
+PlantUML (best “diagram as code” for versioning)
+
+Structurizr (C4 diagrams; excellent for architecture-as-code)
+
+Mermaid (good for lightweight docs, less precise for UML)
+
+The trap to avoid
+
+Auto-generated full UML of the entire system is almost always garbage.
+It’s technically “accurate” and practically useless. The best reverse-engineering is curated: generate everything, keep only what answers questions.
+
+If you want a “best single strategy”
+
+Build a graph-based model (types + endpoints + routes + tables + runtime traces) and generate:
+
+C4 maps (architecture)
+
+curated UML per domain slice (structure)
+
+sequence diagrams from traces (behavior)
+
+ERD + entity mappings (data)
+
+glossary (language)
+
+That’s how you get domain knowledge, not just diagrams.
+
+
+Best way: treat it like building a knowledge graph + a few “truthy” diagrams, not like drawing UML by hand from vibes. Reverse-engineering succeeds when you automate extraction, then curate the few models that matter.
+
+1) Start with an automated structural map (fast, low drama)
+
+C# / .NET
+
+Build + index the solution: restore, build, run tests. This ensures analyzers see real types.
+
+Use Roslyn-based analysis (or tools built on it) to extract:
+
+Class/interface inheritance
+
+Method call graph (at least per assembly)
+
+Dependency graph between projects/namespaces
+
+Attributes/annotations (often encode domain meaning)
+
+Practical tools:
+
+NDepend (excellent dependency graphs, coupling, layering, cycle detection; great “architecture x-ray”)
+
+ReSharper / Rider: diagrams, type hierarchy, call hierarchy, “find usages” at scale
+
+dotnet-depends / dependency graph outputs (quick project-level view)
+
+Angular / TypeScript
+
+Generate dependency/call/module graphs:
+
+Madge (module dependency graph)
+
+Compodoc (Angular docs + dependency views)
+
+Extract:
+
+Modules → components/services relationships
+
+Injectable service usage
+
+Route graph (often a domain workflow map)
+
+2) Extract “domain nouns” from the edges, not just the nodes
+
+UML class diagrams alone are usually too literal. Domain knowledge is hiding in:
+
+Database schema (tables, columns, constraints, FK graph)
+
+API contracts (OpenAPI/Swagger, controllers, routes, DTOs)
+
+Business rules (validation layers, “specification” classes, policy engines, stored procedures/packages)
+
+Workflows (state machines, status fields, routing, background jobs)
+
+So do this early:
+
+DB-first ERD:
+
+For SQL Server: SSMS database diagrams (basic), or better: SchemaSpy, dbdiagram.io, Redgate SQL Doc
+
+For Oracle: SQL Developer Data Modeler, SchemaSpy (works with Oracle too)
+
+Then map Entities ↔ Tables ↔ DTOs ↔ API endpoints. That mapping is where “domain truth” lives.
+
+3) Build a “thin UML set” that people actually use
+
+Instead of 200-class diagrams, generate/maintain 5–8 diagrams max, each answering a question:
+
+Context diagram: system boundaries + integrations (Oracle/other services/auth/jobs)
+
+Container diagram: Angular app, .NET services, DB(s), queues, batch jobs
+
+Component diagram: major modules (Auth, Orders, Billing…) and their dependencies
+
+Key domain model: only core aggregates/entities (20–40 types, not 400)
+
+Sequence diagram: top 3 user flows end-to-end (UI → API → DB → external)
+
+State diagram: for key lifecycle entities (OrderStatus, CaseStatus…)
+
+ERD: for core schema areas
+
+Deployment diagram (optional): environments, hosting, network boundaries
+
+4) Use “runtime truth” to validate the static analysis
+
+Static graphs lie by omission (reflection, DI, dynamic SQL). Add runtime evidence:
+
+ASP.NET MVC / Web API
+
+Enable request logging and inspect routing + middleware pipeline
+
+OpenTelemetry tracing (or Application Insights) to capture call chains
+
+DI container inspection
+
+Dump service registrations at startup → actual wiring graph
+
+SQL observation
+
+SQL Server Extended Events / Profiler; Oracle tracing/AWR (careful in prod)
+
+Identify top queries and which endpoints trigger them
+
+5) Produce a knowledge graph you can query (this is the power move)
+
+If you want “ask anything about the codebase” capability, store extracted facts as triples:
+
+Nodes: Type, Method, Route, Table, Column, StoredProc, Module, Component
+
+Edges: calls, depends_on, maps_to, reads, writes, returns, validates, owns
+
+Implementation options:
+
+Neo4j (classic; great for relationship queries)
+
+Datomic / RDF if you’re feeling philosophical
+
+Or simplest: JSON + SQLite with good indexing
+
+Example queries you’ll want:
+
+“Which endpoints write to TABLE_X?”
+
+“Which UI components call endpoint /api/orders?”
+
+“What classes enforce rule ‘cannot close case if balance > 0’?”
+
+“Where is OrderStatus transitioned to ‘Approved’?”
+
+6) Toolchain suggestion by stack (pragmatic picks)
+
+C#/.NET
+
+NDepend (architecture + dependency truth)
+
+Rider/ReSharper (navigation + diagrams)
+
+Roslyn analyzer script (custom extraction)
+
+PlantUML / Mermaid for curated diagrams
+
+Angular
+
+Compodoc (docs + graph)
+
+Madge (module graph)
+
+ESLint rules + TS compiler API for extraction if needed
+
+SQL Server / Oracle
+
+SchemaSpy (ERD + HTML docs)
+
+Oracle SQL Developer Data Modeler (best native)
+
+Store schema metadata + FK graph into your knowledge graph
+
+7) A recommended workflow that actually works
+
+Inventory: solutions/projects, apps, DBs, integrations, scheduled jobs
+
+Auto-extract: dependency graphs + schema ERD + route map
+
+Identify bounded contexts: cluster by dependency + schema areas + namespaces
+
+Curate diagrams (thin set)
+
+Add runtime traces for top flows
+
+Build the queryable knowledge graph
+
+Write a “Domain Glossary”: nouns + lifecycles + invariants + owners
