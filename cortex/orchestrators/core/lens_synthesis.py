@@ -147,6 +147,99 @@ class LENSSynthesis:
             details={"phase_weights": self.phase_weights}
         )
     
+    def analyze_with_directive(
+        self,
+        code: str,
+        directive: 'ExecutionDirective',
+        context: Optional[Dict[str, Any]] = None
+    ) -> Result[Dict[str, Any]]:
+        """
+        Execute LENS analysis with ExecutionDirective from Phase 52.
+        
+        AC-PHASE52-003: LENSSynthesis accepts ExecutionDirective
+        
+        Uses directive.context to scope analysis:
+        - CORTEX_INTERNAL context → stricter rules
+        - PRODUCTION_REPO context → standard rules
+        
+        Applies directive.rule_id to determine which rules to check.
+        
+        Args:
+            code: Code to analyze
+            directive: ExecutionDirective from AgentRulesInterpreter
+            context: Optional execution context
+        
+        Returns:
+            Result with analysis findings including:
+                - security_results: Security analysis output
+                - rule_violations: Violations by rule_id
+                - context: Directive context used for scoping
+        """
+        try:
+            # Log directive application
+            self.logger.log_operation_start(
+                ac_id="AC-PHASE52-003",
+                operation="LENS_ANALYSIS_WITH_DIRECTIVE",
+                details={
+                    "agent_id": directive.agent_id,
+                    "rules": directive.rule_id,
+                    "context": directive.context.value if hasattr(directive.context, 'value') else str(directive.context),
+                    "target_orchestrator": directive.target_orchestrator,
+                }
+            )
+            
+            # Store directive in context for analysis phases
+            if context is None:
+                context = {}
+            context["_execution_directive"] = directive
+            context["_rule_id_list"] = directive.rule_id.split("|") if directive.rule_id else []
+            
+            # Scope analysis based on context
+            scope_rules = []
+            if directive.context.value == "CORTEX_INTERNAL" if hasattr(directive.context, 'value') else False:
+                # Stricter rules for CORTEX self-development
+                scope_rules = ["CORE-008", "CORE-011", "CORE-012", "CORE-035"]
+            else:
+                # Standard rules for production
+                scope_rules = directive.rule_id.split("|") if directive.rule_id else []
+            
+            # Execute LENS analysis (existing synthesize method)
+            lens_context = LENSContext(
+                operation="analysis_with_directive",
+                language_analysis={"scope": directive.context.value if hasattr(directive.context, 'value') else str(directive.context)},
+                code_examination={"rules_to_check": scope_rules},
+            )
+            
+            synthesis_result = self.synthesize(lens_context)
+            
+            if synthesis_result.is_ok():
+                result = synthesis_result.unwrap()
+                result["directive_context"] = directive.context.value if hasattr(directive.context, 'value') else str(directive.context)
+                result["rules_applied"] = scope_rules
+                
+                self.logger.log_operation_complete(
+                    ac_id="AC-PHASE52-003",
+                    operation="LENS_ANALYSIS_WITH_DIRECTIVE",
+                    success=True,
+                    details={
+                        "rules_checked": len(scope_rules),
+                        "scope": directive.context.value if hasattr(directive.context, 'value') else str(directive.context),
+                    }
+                )
+                
+                return Ok(result)
+            else:
+                return synthesis_result
+        
+        except Exception as e:
+            self.logger.log_operation_complete(
+                ac_id="AC-PHASE52-003",
+                operation="LENS_ANALYSIS_WITH_DIRECTIVE",
+                success=False,
+                details={"error": str(e)}
+            )
+            return Err(f"LENS analysis with directive failed: {str(e)}")
+    
     @inject_orchestrator_context
     def synthesize(
         self,
