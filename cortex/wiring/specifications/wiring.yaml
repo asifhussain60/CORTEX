@@ -1,26 +1,6 @@
-# =========================================================================
-# CORTEX UNIFIED WIRING SPECIFICATION
-# =========================================================================
-# Authority: CORE-035 (Single Canonical Implementation)
-# 
-# This is the SINGLE SOURCE OF TRUTH for ALL orchestrator wiring.
-# Changes require review. This file is Git-tracked and diff-able.
-#
-# Structure:
-#   orchestrators:
-#     core: [...]      # 8 core orchestrators (includes IncrementalTaskDecomposer)
-#     domain: [...]    # 6 domain orchestrators
-#     support: [...]   # 22 support orchestrators (includes DebuggingOrchestrator, InstrumentationOrchestrator, OrchestratorVisibility, TechIntelligenceOrchestrator, DigestEnhancementOrchestrator)
-#   Total: 36 orchestrators + 4 LENS analyzers
-# =========================================================================
-
-version: "2.0"
-specification_date: "2026-02-04"
+version: '2.0'
+specification_date: '2026-02-04'
 git_safe: true
-
-# -------------------------------------------------------------------------
-# GLOBAL CONFIGURATION
-# -------------------------------------------------------------------------
 config:
   lazy_initialization: true
   max_dependency_depth: 5
@@ -28,1616 +8,1841 @@ config:
   health_check_timeout_seconds: 5
   health_check_retry_count: 3
   fail_fast_on_wiring_error: true
-
-# -------------------------------------------------------------------------
-# LENS ANALYZERS (Phase 7.1 + 8.2)
-# -------------------------------------------------------------------------
 analyzers:
-  - name: "GitHistoryAnalyzer"
-    module: "cortex.lens.analyzers.git_history_analyzer"
-    class: "GitHistoryAnalyzer"
-    purpose: "Extract commit history, blame, author patterns"
-    phase: "7.1"
-    priority: 1
-
-  - name: "ASTAnalyzer"
-    module: "cortex.brain.analysis.ast_analyzer"
-    class: "ASTAnalyzer"
-    purpose: "Extract code structure, functions, classes, imports"
-    phase: "7.1"
-    priority: 2
-
-  - name: "CommentExtractor"
-    module: "cortex.brain.analysis.comment_extractor"
-    class: "CommentExtractor"
-    purpose: "Extract TODOs, FIXMEs, intent hints from comments"
-    phase: "7.1"
-    priority: 3
-
-  - name: "SecurityThreatAnalyzer"
-    module: "cortex.brain.analysis.security_threat_analyzer"
-    class: "SecurityThreatAnalyzer"
-    purpose: "Detect CWE vulnerabilities (Code Injection, Deserialization, Command Injection, SQL Injection, Weak Crypto, Path Traversal)"
-    phase: "8.2"
-    priority: 4
-    cwe_coverage:
-      - "CWE-94"   # Code Injection
-      - "CWE-95"   # Deserialization
-      - "CWE-78"   # Command Injection
-      - "CWE-89"   # SQL Injection
-      - "CWE-327"  # Weak Cryptography
-      - "CWE-22"   # Path Traversal
-
-# -------------------------------------------------------------------------
-# CORE ORCHESTRATORS (8 - Phase 8.1)
-# -------------------------------------------------------------------------
+- name: GitHistoryAnalyzer
+  module: cortex.lens.analyzers.git_history_analyzer
+  class: GitHistoryAnalyzer
+  purpose: Extract commit history, blame, author patterns
+  phase: '7.1'
+  priority: 1
+- name: ASTAnalyzer
+  module: cortex.brain.analysis.ast_analyzer
+  class: ASTAnalyzer
+  purpose: Extract code structure, functions, classes, imports
+  phase: '7.1'
+  priority: 2
+- name: CommentExtractor
+  module: cortex.brain.analysis.comment_extractor
+  class: CommentExtractor
+  purpose: Extract TODOs, FIXMEs, intent hints from comments
+  phase: '7.1'
+  priority: 3
+- name: SecurityThreatAnalyzer
+  module: cortex.brain.analysis.security_threat_analyzer
+  class: SecurityThreatAnalyzer
+  purpose: Detect CWE vulnerabilities (Code Injection, Deserialization, Command Injection,
+    SQL Injection, Weak Crypto, Path Traversal)
+  phase: '8.2'
+  priority: 4
+  cwe_coverage:
+  - CWE-94
+  - CWE-95
+  - CWE-78
+  - CWE-89
+  - CWE-327
+  - CWE-22
 orchestrators:
   core:
-    # STAGE 1: Comprehension (LENS Protocol)
-    - name: "InteractionOrchestrator"
-      module: "cortex.orchestrators.core.interaction_orchestrator"
-      class: "InteractionOrchestrator"
-      tier: 1
-      priority: 10
-      dependencies: []
-      capabilities:
-        - comprehension
-        - lens_protocol
-        - challenge_generation
-        - pattern_enforcement
-      health_check: "execute_turn"
-      mcp_adapter: "cortex.mcp.adapters.interaction_adapter"
-      metadata:
-        icon: "💬"
-        stages: 4
-        intelligence: ["lens", "knowledge"]
-      requires_params:
-        conversation_protocol:
-          type: "ConversationProtocol"
-          source: "cortex.brain.core.orchestrator.conversation_protocol"
-          lazy_create: true
-          init_params:
-            orchestrator: null  # Will be set by wiring system
-            max_turns: 10
-            token_limit: 20000
-            adaptive_turn_limit: true
-            memoization_enabled: true
-      mcp_tools:
-        - "cortex_interactive_mode"
-
-    # STAGE 1.5: Architecture Validation Gate (Phase 24)
-    - name: "ArchitectureGuard"
-      module: "cortex.orchestrators.core.architecture_guard"
-      class: "ArchitectureGuard"
-      tier: 1
-      priority: 15
-      dependencies: []
-      capabilities:
-        - architecture_validation
-        - regression_prevention
-        - phase_alignment
-        - brittleness_detection
-      health_check: "validate_request"
-      mcp_adapter: "cortex.mcp.adapters.architecture_guard_adapter"
-      metadata:
-        icon: "🛡️"
-        stages: 1
-        intelligence: ["plan_registry"]
-      description: "Pre-implementation validation gate to prevent architectural regression and master plan drift"
-      mcp_tools:
-        - "cortex_validate_architecture"
-
-    # STAGE 2: Intent Classification
-    - name: "IntentRouter"
-      module: "cortex.orchestrators.core.intent_router"
-      class: "IntentRouter"
-      tier: 1
-      priority: 20
-      dependencies:
-        - "InteractionOrchestrator"
-      capabilities:
-        - intent_classification
-        - confidence_scoring
-        - domain_routing
-        - fuzzy_matching
-      health_check: "classify_intent"
-      mcp_adapter: "cortex.mcp.adapters.intent_router_adapter"
-      metadata:
-        icon: "🎯"
-        stages: 3
-        intelligence: ["lens"]
-
-    # STAGE 2.3: Complexity Classification (Phase 2)
-    - name: "ComplexityClassifier"
-      module: "cortex.orchestrators.core.complexity_classifier"
-      class: "ComplexityClassifier"
-      tier: 1
-      priority: 23
-      dependencies:
-        - "IntentRouter"
-      capabilities:
-        - complexity_classification
-        - orchestrator_routing
-        - complexity_analysis
-      health_check: "classify_complexity"
-      description: "Classifies task complexity (TRIVIAL/SIMPLE/MODERATE/COMPLEX/CRITICAL) and routes to appropriate orchestrator"
-      mcp_adapter: "cortex.mcp.adapters.complexity_adapter"
-      metadata:
-        icon: "📊"
-        stages: 3
-        intelligence: ["lens"]
-      phase: "2"
-
-    # STAGE 2.5: LENS Synthesis & DoR Gate
-    - name: "LENSSynthesis"
-      module: "cortex.orchestrators.core.lens_synthesis"
-      class: "LENSSynthesis"
-      tier: 1
-      priority: 25
-      dependencies:
-        - "IntentRouter"
-        - "ComplexityClassifier"
-      capabilities:
-        - dor_generation
-        - approval_gate
-        - synthesis
-      health_check: "synthesize"
-      mcp_adapter: "cortex.mcp.adapters.lens_adapter"
-      metadata:
-        icon: "🔬"
-        stages: 4
-        intelligence: ["lens", "knowledge", "synthesis"]
-
-    # STAGE 2.7: Governance Enforcement (Phase 8.1)
-    - name: "EnforcementOrchestrator"
-      module: "cortex.orchestrators.core.enforcement_orchestrator"
-      class: "EnforcementOrchestrator"
-      tier: 1
-      priority: 27
-      dependencies:
-        - "LENSSynthesis"
-      capabilities:
-        - governance_enforcement
-        - tier0_blocking
-        - tier1_escalation
-        - parallel_validation
-      health_check: "validate_operation"
-      mcp_adapter: "cortex.mcp.adapters.enforcement_adapter"
-      metadata:
-        icon: "🛡️"
-        stages: 3
-        intelligence: ["lens", "knowledge"]
-      requires_params:
-        governance_registry:
-          type: "GovernanceRegistry"
-          source: "cortex.brain.core.governance_registry"
-          lazy_create: true
-        audit_logger:
-          type: "EnhancedAuditLogger"
-          source: "cortex.infrastructure.enhanced_audit_logger"
-          lazy_create: true
-
-    # STAGE 3: TDD Execution
-    - name: "TDDOrchestrator"
-      module: "cortex.orchestrators.core.tdd_orchestrator"
-      class: "TDDOrchestrator"
-      tier: 1
-      priority: 30
-      dependencies:
-        - "InteractionOrchestrator"
-        - "IntentRouter"
-      capabilities:
-        - test_generation
-        - tdd_workflow
-        - test_execution
-      health_check: "generate_tests"
-      mcp_adapter: "cortex.mcp.adapters.tdd_adapter"
-      metadata:
-        icon: "🧪"
-        stages: 4
-        intelligence: ["lens", "knowledge"]
-
-    # STAGE 3B: Incremental Task Decomposition (NEW)
-    - name: "IncrementalTaskDecomposer"
-      module: "cortex.orchestrators.planning.incremental_task_decomposer"
-      class: "IncrementalTaskDecomposer"
-      tier: 1
-      priority: 31
-      dependencies: []
-      capabilities:
-        - task_decomposition
-        - token_budget_estimation
-        - evidence_based_sizing
-        - pert_estimation
-      health_check: "decompose_into_subtasks"
-      mcp_adapter: "ComposedOrchestratorAdapter"
-      description: "Decomposes large tasks into token-budget-constrained subtasks using CAP framework"
-      governance:
-        - "CORE-008"
-        - "CORE-011"
-        - "CORE-012"
-      version: "1.0"
-      metadata:
-        icon: "🧩"
-        stages: 3
-        intelligence: ["lens", "knowledge"]
-
-    # Workflow Management
-    - name: "WorkflowOrchestrator"
-      module: "cortex.orchestrators.core.workflow_orchestrator"
-      class: "WorkflowOrchestrator"
-      tier: 1
-      priority: 35
-      dependencies:
-        - "TDDOrchestrator"
-      capabilities:
-        - workflow_management
-        - step_orchestration
-      health_check: "execute_workflow"
-      mcp_adapter: "cortex.mcp.adapters.workflow_adapter"
-      metadata:
-        icon: "⚙️"
-        stages: 4
-        intelligence: ["lens"]
-
-    # STAGE 4: Master Coordination
-    - name: "MasterOrchestrator"
-      module: "cortex.orchestrators.core.master_orchestrator"
-      class: "MasterOrchestrator"
-      tier: 1
-      priority: 100
-      dependencies:
-        - "InteractionOrchestrator"
-        - "IntentRouter"
-        - "LENSSynthesis"
-        - "TDDOrchestrator"
-      capabilities:
-        - coordination
-        - stage_management
-        - orchestrator_routing
-      health_check: "coordinate_operation"
-      mcp_adapter: "cortex.mcp.adapters.master_adapter"
-      metadata:
-        icon: "🧠"
-        stages: 4
-        intelligence: ["lens", "knowledge", "synthesis"]
-
-    # STAGE 4.5: Implementation Review & Gating (Phase 5)
-    - name: "ReviewOrchestrator"
-      module: "cortex.orchestrators.core.review_orchestrator"
-      class: "ReviewOrchestrator"
-      tier: 1
-      priority: 99
-      dependencies:
-        - "MasterOrchestrator"
-      capabilities:
-        - implementation_review
-        - plan_verification
-        - coherence_verification
-        - phase_gating
-      health_check: "execute_final_review"
-      description: "Holistic implementation verification using git analysis (Phase 5)"
-      mcp_adapter: "cortex.mcp.adapters.review_adapter"
-      metadata:
-        icon: "✅"
-        stages: 4
-        intelligence: ["lens", "knowledge"]
-      phase: "5"
-
-  # -----------------------------------------------------------------------
-  # DOMAIN ORCHESTRATORS (8 - was 6, added Phases 3-4)
-  # -----------------------------------------------------------------------
+  - name: InteractionOrchestrator
+    module: cortex.orchestrators.core.interaction_orchestrator
+    class: InteractionOrchestrator
+    tier: 1
+    priority: 10
+    dependencies: []
+    capabilities:
+    - comprehension
+    - lens_protocol
+    - challenge_generation
+    - pattern_enforcement
+    health_check: execute_turn
+    mcp_adapter: cortex.mcp.adapters.interaction_adapter
+    metadata:
+      icon: "\U0001F4AC"
+      stages: 4
+      intelligence:
+      - lens
+      - knowledge
+    requires_params:
+      conversation_protocol:
+        type: ConversationProtocol
+        source: cortex.brain.core.orchestrator.conversation_protocol
+        lazy_create: true
+        init_params:
+          orchestrator: null
+          max_turns: 10
+          token_limit: 20000
+          adaptive_turn_limit: true
+          memoization_enabled: true
+    mcp_tools:
+    - cortex_interactive_mode
+  - name: ArchitectureGuard
+    module: cortex.orchestrators.core.architecture_guard
+    class: ArchitectureGuard
+    tier: 1
+    priority: 15
+    dependencies: []
+    capabilities:
+    - architecture_validation
+    - regression_prevention
+    - phase_alignment
+    - brittleness_detection
+    health_check: validate_request
+    mcp_adapter: cortex.mcp.adapters.architecture_guard_adapter
+    metadata:
+      icon: "\U0001F6E1\uFE0F"
+      stages: 1
+      intelligence:
+      - plan_registry
+    description: Pre-implementation validation gate to prevent architectural regression
+      and master plan drift
+    mcp_tools:
+    - cortex_validate_architecture
+  - name: IntentRouter
+    module: cortex.orchestrators.core.intent_router
+    class: IntentRouter
+    tier: 1
+    priority: 20
+    dependencies:
+    - InteractionOrchestrator
+    capabilities:
+    - intent_classification
+    - confidence_scoring
+    - domain_routing
+    - fuzzy_matching
+    health_check: classify_intent
+    mcp_adapter: cortex.mcp.adapters.intent_router_adapter
+    metadata:
+      icon: "\U0001F3AF"
+      stages: 3
+      intelligence:
+      - lens
+  - name: ComplexityClassifier
+    module: cortex.orchestrators.core.complexity_classifier
+    class: ComplexityClassifier
+    tier: 1
+    priority: 23
+    dependencies:
+    - IntentRouter
+    capabilities:
+    - complexity_classification
+    - orchestrator_routing
+    - complexity_analysis
+    health_check: classify_complexity
+    description: Classifies task complexity (TRIVIAL/SIMPLE/MODERATE/COMPLEX/CRITICAL)
+      and routes to appropriate orchestrator
+    mcp_adapter: cortex.mcp.adapters.complexity_adapter
+    metadata:
+      icon: "\U0001F4CA"
+      stages: 3
+      intelligence:
+      - lens
+    phase: '2'
+  - name: LENSSynthesis
+    module: cortex.orchestrators.core.lens_synthesis
+    class: LENSSynthesis
+    tier: 1
+    priority: 25
+    dependencies:
+    - IntentRouter
+    - ComplexityClassifier
+    capabilities:
+    - dor_generation
+    - approval_gate
+    - synthesis
+    health_check: synthesize
+    mcp_adapter: cortex.mcp.adapters.lens_adapter
+    metadata:
+      icon: "\U0001F52C"
+      stages: 4
+      intelligence:
+      - lens
+      - knowledge
+      - synthesis
+  - name: EnforcementOrchestrator
+    module: cortex.orchestrators.core.enforcement_orchestrator
+    class: EnforcementOrchestrator
+    tier: 1
+    priority: 27
+    dependencies:
+    - LENSSynthesis
+    capabilities:
+    - governance_enforcement
+    - tier0_blocking
+    - tier1_escalation
+    - parallel_validation
+    health_check: validate_operation
+    mcp_adapter: cortex.mcp.adapters.enforcement_adapter
+    metadata:
+      icon: "\U0001F6E1\uFE0F"
+      stages: 3
+      intelligence:
+      - lens
+      - knowledge
+    requires_params:
+      governance_registry:
+        type: GovernanceRegistry
+        source: cortex.brain.core.governance_registry
+        lazy_create: true
+      audit_logger:
+        type: EnhancedAuditLogger
+        source: cortex.infrastructure.enhanced_audit_logger
+        lazy_create: true
+  - name: TDDOrchestrator
+    module: cortex.orchestrators.core.tdd_orchestrator
+    class: TDDOrchestrator
+    tier: 1
+    priority: 30
+    dependencies:
+    - InteractionOrchestrator
+    - IntentRouter
+    capabilities:
+    - test_generation
+    - tdd_workflow
+    - test_execution
+    health_check: generate_tests
+    mcp_adapter: cortex.mcp.adapters.tdd_adapter
+    metadata:
+      icon: "\U0001F9EA"
+      stages: 4
+      intelligence:
+      - lens
+      - knowledge
+  - name: IncrementalTaskDecomposer
+    module: cortex.orchestrators.planning.incremental_task_decomposer
+    class: IncrementalTaskDecomposer
+    tier: 1
+    priority: 31
+    dependencies: []
+    capabilities:
+    - task_decomposition
+    - token_budget_estimation
+    - evidence_based_sizing
+    - pert_estimation
+    health_check: decompose_into_subtasks
+    mcp_adapter: ComposedOrchestratorAdapter
+    description: Decomposes large tasks into token-budget-constrained subtasks using
+      CAP framework
+    governance:
+    - CORE-008
+    - CORE-011
+    - CORE-012
+    version: '1.0'
+    metadata:
+      icon: "\U0001F9E9"
+      stages: 3
+      intelligence:
+      - lens
+      - knowledge
+  - name: WorkflowOrchestrator
+    module: cortex.orchestrators.core.workflow_orchestrator
+    class: WorkflowOrchestrator
+    tier: 1
+    priority: 35
+    dependencies:
+    - TDDOrchestrator
+    capabilities:
+    - workflow_management
+    - step_orchestration
+    health_check: execute_workflow
+    mcp_adapter: cortex.mcp.adapters.workflow_adapter
+    metadata:
+      icon: "\u2699\uFE0F"
+      stages: 4
+      intelligence:
+      - lens
+  - name: MasterOrchestrator
+    module: cortex.orchestrators.core.master_orchestrator
+    class: MasterOrchestrator
+    tier: 1
+    priority: 100
+    dependencies:
+    - InteractionOrchestrator
+    - IntentRouter
+    - LENSSynthesis
+    - TDDOrchestrator
+    capabilities:
+    - coordination
+    - stage_management
+    - orchestrator_routing
+    health_check: coordinate_operation
+    mcp_adapter: cortex.mcp.adapters.master_adapter
+    metadata:
+      icon: "\U0001F9E0"
+      stages: 4
+      intelligence:
+      - lens
+      - knowledge
+      - synthesis
+  - name: ReviewOrchestrator
+    module: cortex.orchestrators.core.review_orchestrator
+    class: ReviewOrchestrator
+    tier: 1
+    priority: 99
+    dependencies:
+    - MasterOrchestrator
+    capabilities:
+    - implementation_review
+    - plan_verification
+    - coherence_verification
+    - phase_gating
+    health_check: execute_final_review
+    description: Holistic implementation verification using git analysis (Phase 5)
+    mcp_adapter: cortex.mcp.adapters.review_adapter
+    metadata:
+      icon: "\u2705"
+      stages: 4
+      intelligence:
+      - lens
+      - knowledge
+    phase: '5'
   domain:
-    # Phase 3: Code-Level Planning
-    - name: "CodeLevelPlanner"
-      module: "cortex.orchestrators.domain.code_level_planner"
-      class: "CodeLevelPlanner"
-      tier: 2
-      priority: 48
-      dependencies:
-        - "ComplexityClassifier"
-      capabilities:
-        - code_planning
-        - file_specification
-        - function_specification
-        - interface_contracts
-      health_check: "analyze_task_scope"
-      description: "Generates detailed implementation plans without code generation (Phase 3)"
-      mcp_adapter: "cortex.mcp.adapters.planning_adapter"
-      metadata:
-        icon: "📐"
-        stages: 3
-        intelligence: ["lens", "knowledge"]
-      phase: "3"
-
-    # Phase 4: Cross-Layer Coherence Validation
-    - name: "CoherenceValidator"
-      module: "cortex.orchestrators.domain.coherence_validator"
-      class: "CoherenceValidator"
-      tier: 2
-      priority: 49
-      dependencies:
-        - "CodeLevelPlanner"
-      capabilities:
-        - enum_alignment_validation
-        - field_naming_validation
-        - type_compatibility_validation
-        - contract_test_generation
-      health_check: "validate"
-      description: "Validates Python↔JavaScript cross-layer alignment (Phase 4)"
-      mcp_adapter: "cortex.mcp.adapters.coherence_adapter"
-      metadata:
-        icon: "🔗"
-        stages: 3
-        intelligence: ["lens"]
-      phase: "4"
-
-    - name: "RefactoringOrchestrator"
-      module: "cortex.orchestrators.domain.enhanced_refactoring_orchestrator"
-      class: "EnhancedRefactoringOrchestrator"
-      tier: 2
-      priority: 50
-      dependencies:
-        - "MasterOrchestrator"
-      capabilities:
-        - code_refactoring
-        - pattern_application
-        - smell_detection
-      health_check: "analyze_refactoring"
-      mcp_adapter: "cortex.mcp.adapters.refactoring_adapter"
-      metadata:
-        icon: "♻️"
-        stages: 7
-        intelligence: ["lens", "knowledge"]
-
-    - name: "PlanningOrchestrator"
-      module: "cortex.orchestrators.domain.enhanced_planning_orchestrator"
-      class: "EnhancedPlanningOrchestrator"
-      tier: 2
-      priority: 51
-      dependencies:
-        - "MasterOrchestrator"
-      capabilities:
-        - plan_generation
-        - phase_management
-        - milestone_tracking
-      health_check: "generate_plan"
-      mcp_adapter: "cortex.mcp.adapters.planning_adapter"
-      metadata:
-        icon: "📋"
-        stages: 4
-        intelligence: ["lens", "knowledge"]
-
-    - name: "DocumentationOrchestrator"
-      module: "cortex.orchestrators.domain.enhanced_documentation_orchestrator"
-      class: "EnhancedDocumentationOrchestrator"
-      tier: 2
-      priority: 52
-      dependencies:
-        - "MasterOrchestrator"
-      capabilities:
-        - doc_generation
-        - api_documentation
-        - changelog_management
-      health_check: "generate_documentation"
-      mcp_adapter: "cortex.mcp.adapters.documentation_adapter"
-      metadata:
-        icon: "📝"
-        stages: 4
-        intelligence: ["lens"]
-
-    - name: "PhaseExecutor"
-      module: "cortex.orchestrators.domain.phase_executor"
-      class: "PhaseExecutor"
-      tier: 2
-      priority: 53
-      dependencies:
-        - "PlanningOrchestrator"
-      capabilities:
-        - phase_execution
-        - checkpoint_management
-      health_check: "execute_phase"
-      mcp_adapter: "PhaseExecutorAdapter"
-      metadata:
-        icon: "▶️"
-        stages: 4
-        intelligence: ["lens"]
-
-    - name: "AutonomousExecutionEngine"
-      module: "cortex.orchestrators.domain.autonomous_execution_engine"
-      class: "AutonomousExecutionEngine"
-      tier: 2
-      priority: 54
-      dependencies:
-        - "MasterOrchestrator"
-        - "TDDOrchestrator"
-      capabilities:
-        - autonomous_execution
-        - multi_step_operations
-      health_check: "execute_autonomous"
-      mcp_adapter: "AutonomousExecutionEngineAdapter"
-      metadata:
-        icon: "🤖"
-        stages: 4
-        intelligence: ["lens", "knowledge"]
-
-    - name: "ConversationOrchestrator"
-      module: "cortex.orchestrators.conversation_orchestrator"
-      class: "ConversationOrchestrator"
-      tier: 2
-      priority: 55
-      dependencies:
-        - "InteractionOrchestrator"
-      capabilities:
-        - conversation_management
-        - context_tracking
-      health_check: "manage_conversation"
-      mcp_adapter: "ConversationOrchestratorAdapter"
-      metadata:
-        icon: "🤝"
-        stages: 4
-        intelligence: ["lens", "knowledge"]
-
-  # -----------------------------------------------------------------------
-  # SUPPORT ORCHESTRATORS (16 - Added Phase 1, Phase 6, Phase 7 components)
-  # -----------------------------------------------------------------------
+  - name: CodeLevelPlanner
+    module: cortex.orchestrators.domain.code_level_planner
+    class: CodeLevelPlanner
+    tier: 2
+    priority: 48
+    dependencies:
+    - ComplexityClassifier
+    capabilities:
+    - code_planning
+    - file_specification
+    - function_specification
+    - interface_contracts
+    health_check: analyze_task_scope
+    description: Generates detailed implementation plans without code generation (Phase
+      3)
+    mcp_adapter: cortex.mcp.adapters.planning_adapter
+    metadata:
+      icon: "\U0001F4D0"
+      stages: 3
+      intelligence:
+      - lens
+      - knowledge
+    phase: '3'
+  - name: CoherenceValidator
+    module: cortex.orchestrators.domain.coherence_validator
+    class: CoherenceValidator
+    tier: 2
+    priority: 49
+    dependencies:
+    - CodeLevelPlanner
+    capabilities:
+    - enum_alignment_validation
+    - field_naming_validation
+    - type_compatibility_validation
+    - contract_test_generation
+    health_check: validate
+    description: "Validates Python\u2194JavaScript cross-layer alignment (Phase 4)"
+    mcp_adapter: cortex.mcp.adapters.coherence_adapter
+    metadata:
+      icon: "\U0001F517"
+      stages: 3
+      intelligence:
+      - lens
+    phase: '4'
+  - name: RefactoringOrchestrator
+    module: cortex.orchestrators.domain.enhanced_refactoring_orchestrator
+    class: EnhancedRefactoringOrchestrator
+    tier: 2
+    priority: 50
+    dependencies:
+    - MasterOrchestrator
+    capabilities:
+    - code_refactoring
+    - pattern_application
+    - smell_detection
+    health_check: analyze_refactoring
+    mcp_adapter: cortex.mcp.adapters.refactoring_adapter
+    metadata:
+      icon: "\u267B\uFE0F"
+      stages: 7
+      intelligence:
+      - lens
+      - knowledge
+  - name: PlanningOrchestrator
+    module: cortex.orchestrators.domain.enhanced_planning_orchestrator
+    class: EnhancedPlanningOrchestrator
+    tier: 2
+    priority: 51
+    dependencies:
+    - MasterOrchestrator
+    capabilities:
+    - plan_generation
+    - phase_management
+    - milestone_tracking
+    health_check: generate_plan
+    mcp_adapter: cortex.mcp.adapters.planning_adapter
+    metadata:
+      icon: "\U0001F4CB"
+      stages: 4
+      intelligence:
+      - lens
+      - knowledge
+  - name: DocumentationOrchestrator
+    module: cortex.orchestrators.domain.enhanced_documentation_orchestrator
+    class: EnhancedDocumentationOrchestrator
+    tier: 2
+    priority: 52
+    dependencies:
+    - MasterOrchestrator
+    capabilities:
+    - doc_generation
+    - api_documentation
+    - changelog_management
+    health_check: generate_documentation
+    mcp_adapter: cortex.mcp.adapters.documentation_adapter
+    metadata:
+      icon: "\U0001F4DD"
+      stages: 4
+      intelligence:
+      - lens
+  - name: PhaseExecutor
+    module: cortex.orchestrators.domain.phase_executor
+    class: PhaseExecutor
+    tier: 2
+    priority: 53
+    dependencies:
+    - PlanningOrchestrator
+    capabilities:
+    - phase_execution
+    - checkpoint_management
+    health_check: execute_phase
+    mcp_adapter: PhaseExecutorAdapter
+    metadata:
+      icon: "\u25B6\uFE0F"
+      stages: 4
+      intelligence:
+      - lens
+  - name: AutonomousExecutionEngine
+    module: cortex.orchestrators.domain.autonomous_execution_engine
+    class: AutonomousExecutionEngine
+    tier: 2
+    priority: 54
+    dependencies:
+    - MasterOrchestrator
+    - TDDOrchestrator
+    capabilities:
+    - autonomous_execution
+    - multi_step_operations
+    health_check: execute_autonomous
+    mcp_adapter: AutonomousExecutionEngineAdapter
+    metadata:
+      icon: "\U0001F916"
+      stages: 4
+      intelligence:
+      - lens
+      - knowledge
+  - name: ConversationOrchestrator
+    module: cortex.orchestrators.conversation_orchestrator
+    class: ConversationOrchestrator
+    tier: 2
+    priority: 55
+    dependencies:
+    - InteractionOrchestrator
+    capabilities:
+    - conversation_management
+    - context_tracking
+    health_check: manage_conversation
+    mcp_adapter: ConversationOrchestratorAdapter
+    metadata:
+      icon: "\U0001F91D"
+      stages: 4
+      intelligence:
+      - lens
+      - knowledge
   support:
-    # Phase 1: Event-Driven Communication Backbone
-    - name: "OrchestratorEventBus"
-      module: "cortex.infrastructure.orchestrator_event_bus"
-      class: "OrchestratorEventBus"
-      tier: 3
-      priority: 1
-      dependencies: []
-      capabilities:
-        - event_publishing
-        - event_subscription
-        - event_history
-        - event_replay
-        - dead_letter_management
-      health_check: "health_check"
-      mcp_adapter: "OrchestratorEventBusAdapter"
-      description: "Event-driven communication backbone enabling decoupled orchestrator communication (Phase 1)"
-      mcp_tools: []
-      governance:
-        - "CORE-008"
-        - "CORE-011"
-      metadata:
-        icon: "📡"
-        stages: 1
-        intelligence: []
-      phase: "1"
-      singleton: true
-
-    # Phase 6: InteractionOrchestrator Enhancement
-    - name: "InteractionOrchestratorEnhancement"
-      module: "cortex.orchestrators.core.interaction_orchestrator_enhancement"
-      class: "InteractionOrchestratorEnhancement"
-      tier: 3
-      priority: 2
-      dependencies:
-        - "OrchestratorEventBus"
-        - "CodeLevelPlanner"
-      capabilities:
-        - event_subscription
-        - planning_integration
-        - multi_layer_coordination
-        - dor_enhancement
-        - challenge_extension
-      health_check: "health_check"
-      mcp_adapter: "InteractionOrchestratorEnhancementAdapter"
-      description: "Enhances InteractionOrchestrator with event subscription and planning integration (Phase 6)"
-      metadata:
-        icon: "🔌"
-        stages: 1
-        intelligence: []
-      phase: "6"
-
-    - name: "OnboardingOrchestrator"
-      module: "cortex.orchestrators.onboarding.orchestrator"
-      class: "OnboardingOrchestrator"
-      tier: 3
-      priority: 60
-      dependencies: []
-      capabilities:
-        - user_onboarding
-        - tutorial_guidance
-      health_check: "start_onboarding"
-      mcp_adapter: "OnboardingOrchestratorAdapter"
-      metadata:
-        icon: "🎓"
-        stages: 3
-        intelligence: ["knowledge"]
-
-    - name: "ToolDiscoveryOrchestrator"
-      module: "cortex.orchestrators.core.tool_discovery_orchestrator"
-      class: "ToolDiscoveryOrchestrator"
-      tier: 3
-      priority: 61
-      dependencies: []
-      capabilities:
-        - tool_discovery
-        - capability_enumeration
-      health_check: "discover_tools"
-      mcp_adapter: "ToolDiscoveryOrchestratorAdapter"
-      metadata:
-        icon: "🔍"
-        stages: 2
-        intelligence: ["lens"]
-
-    - name: "UpgradeOrchestrator"
-      module: "cortex.orchestrators.support.upgrade_orchestrator"
-      class: "UpgradeOrchestrator"
-      tier: 3
-      priority: 62
-      dependencies: []
-      capabilities:
-        - version_upgrade
-        - migration_assistance
-      health_check: "check_upgrade"
-      mcp_adapter: "UpgradeOrchestratorAdapter"
-      metadata:
-        icon: "⬆️"
-        stages: 4
-        intelligence: ["knowledge"]
-
-    - name: "RollbackOrchestrator"
-      module: "cortex.orchestrators.support.rollback_orchestrator"
-      class: "RollbackOrchestrator"
-      tier: 3
-      priority: 63
-      dependencies: []
-      capabilities:
-        - rollback_execution
-        - checkpoint_restore
-      health_check: "check_rollback"
-      mcp_adapter: "RollbackOrchestratorAdapter"
-      metadata:
-        icon: "⏪"
-        stages: 3
-        intelligence: ["knowledge"]
-
-    - name: "SetupOrchestrator"
-      module: "cortex.orchestrators.support.setup_orchestrator"
-      class: "SetupOrchestrator"
-      tier: 3
-      priority: 64
-      dependencies: []
-      capabilities:
-        - environment_setup
-        - dependency_installation
-      health_check: "check_setup"
-      mcp_adapter: "SetupOrchestratorAdapter"
-      metadata:
-        icon: "🔧"
-        stages: 3
-        intelligence: ["knowledge"]
-
-    - name: "GovernanceRegistry"
-      module: "cortex.brain.core.governance_registry"
-      class: "GovernanceRegistry"
-      tier: 3
-      priority: 66
-      dependencies: []
-      capabilities:
-        - governance_enforcement
-        - rule_management
-      health_check: "get_rules"
-      mcp_adapter: "GovernanceRegistryAdapter"
-      metadata:
-        icon: "⚖️"
-        stages: 2
-        intelligence: ["knowledge"]
-
-    - name: "KnowledgeRepository"
-      module: "cortex.brain.core.knowledge.knowledge_repository"
-      class: "KnowledgeRepository"
-      tier: 3
-      priority: 67
-      dependencies: []
-      capabilities:
-        - knowledge_retrieval
-        - relationship_mapping
-      health_check: "query_knowledge"
-      mcp_adapter: "KnowledgeRepositoryAdapter"
-      metadata:
-        icon: "📚"
-        stages: 3
-        intelligence: ["knowledge"]
-
-    - name: "WrappedTDDOrchestrator"
-      module: "cortex.orchestrators.core.wrapped_tdd_orchestrator"
-      class: "WrappedTDDOrchestrator"
-      tier: 3
-      priority: 65
-      dependencies:
-        - "TDDOrchestrator"
-      capabilities:
-        - wrapped_tdd
-        - enhanced_testing
-      health_check: "generate_wrapped_tests"
-      mcp_adapter: "WrappedTDDOrchestratorAdapter"
-      metadata:
-        icon: "🧬"
-        stages: 4
-        intelligence: ["lens", "knowledge"]
-
-    - name: "FuzzyIntentMatcher"
-      module: "cortex.orchestrators.core.fuzzy_intent_matcher"
-      class: "FuzzyIntentMatcher"
-      tier: 3
-      priority: 69
-      dependencies:
-        - "IntentRouter"
-      capabilities:
-        - fuzzy_matching
-        - intent_disambiguation
-      health_check: "match_intent"
-      mcp_adapter: "FuzzyIntentMatcherAdapter"
-      metadata:
-        icon: "🎲"
-        stages: 2
-        intelligence: ["lens"]
-
-    - name: "ComprehensionSession"
-      module: "cortex.orchestrators.core.comprehension_session"
-      class: "ComprehensionSession"
-      tier: 3
-      priority: 70
-      dependencies:
-        - "InteractionOrchestrator"
-      capabilities:
-        - session_management
-        - comprehension_tracking
-      health_check: "get_session"
-      mcp_adapter: "ComprehensionSessionAdapter"
-      metadata:
-        icon: "💭"
-        stages: 2
-        intelligence: ["lens", "knowledge"]
-
-    - name: "DoRApprovalGate"
-      module: "cortex.orchestrators.core.dor_approval_gate"
-      class: "DoRApprovalGate"
-      tier: 3
-      priority: 68
-      dependencies:
-        - "LENSSynthesis"
-      capabilities:
-        - approval_gating
-        - dor_validation
-      health_check: "validate_dor"
-      mcp_adapter: "DoRApprovalGateAdapter"
-      metadata:
-        icon: "✅"
-        stages: 2
-        intelligence: ["lens", "knowledge"]
-
-    # Phase 45: Enhanced Planning System — Plan Orchestrator (Stage 2)
-    - name: "PlanOrchestrator"
-      module: "cortex.orchestrators.support.plan_orchestrator"
-      class: "PlanOrchestrator"
-      tier: 3
-      priority: 70
-      dependencies:
-        - "OrchestratorEventBus"
-      capabilities:
-        - plan_lifecycle_management
-        - event_driven_coordination
-        - plan_status_updates
-        - plan_archival
-        - dashboard_synchronization
-      health_check: "sync_dashboard"
-      mcp_adapter: "cortex.mcp.adapters.plan_orchestrator_adapter"
-      description: "Plan lifecycle orchestration with EventBus integration, SSOT registry, and dashboard sync (Phase 45 § Stage 2)"
-      mcp_tools:
-        - "cortex_create_plan"
-        - "cortex_update_plan"
-        - "cortex_list_plans"
-        - "cortex_archive_plan"
-      governance:
-        - "CORE-008"
-        - "CORE-011"
-        - "CORE-012"
-        - "CORE-026"
-        - "CORE-027"
-        - "CORE-035"
-        - "CORE-041"
-      metadata:
-        icon: "📋"
-        stages: 5
-        intelligence: ["lens", "knowledge"]
-        phase: "45"
-        stage: "2"
-
-    # Phase 48: Holistic Validation & Challenge Gate
-    - name: "HolisticValidationOrchestrator"
-      module: "cortex.orchestrators.holistic.holistic_validation_orchestrator"
-      class: "HolisticValidationOrchestrator"
-      tier: 3
-      priority: 70
-      dependencies:
-        - "EnforcementOrchestrator"
-      capabilities:
-        - cross_system_validation
-        - regression_risk_scoring
-        - impact_radius_analysis
-        - dependency_conflict_detection
-        - architecture_drift_detection
-      health_check: "validate"
-      mcp_adapter: "cortex.mcp.adapters.holistic_validation_adapter"
-      description: "Pre-implementation validation gate to prevent regressions and ensure holistic system consistency (Phase 48 § S1)"
-      mcp_tools:
-        - "cortex_validate_holistically"
-        - "cortex_analyze_dependency_graph"
-      governance:
-        - "CORE-048"
-        - "CORE-035"
-        - "CORE-030"
-      metadata:
-        icon: "🔍"
-        stages: 6
-        intelligence: ["lens", "registry", "wiring"]
-        phase: "48"
-        stage: "1"
-
-    # Phase 49: Context Crystallization Layer (CCL)
-    - name: "ContextCrystallizationLayer"
-      module: "cortex.orchestrators.phase_49.context_crystallization_layer"
-      class: "ContextCrystallizationLayer"
-      tier: 3
-      priority: 70
-      dependencies:
-        - "LENSSynthesis"
-      capabilities:
-        - async_context_prefetch
-        - rules_cache_warming
-        - lens_preload
-        - infrastructure_cache
-        - pre_warmed_context_delivery
-      health_check: "prefetch_async"
-      mcp_adapter: "cortex.mcp.adapters.ccl_adapter"
-      description: "Asynchronous context pre-warming layer for Stage 2 acceleration (Phase 49)"
-      mcp_tools:
-        - "cortex_ccl_prefetch"
-        - "cortex_ccl_status"
-      governance:
-        - "CORE-008"
-        - "CORE-035"
-      metadata:
-        icon: "⚡"
-        stages: 6
-        intelligence: ["lens", "rules", "infrastructure"]
-        phase: "49"
-
-    - name: "ChallengeEngine"
-      module: "cortex.orchestrators.core.challenge_engine"
-      class: "ChallengeEngine"
-      tier: 3
-      priority: 71
-      dependencies:
-        - "EnforcementOrchestrator"
-      capabilities:
-        - hard_security_gates
-        - threat_blocking
-        - challenge_enforcement
-      health_check: "evaluate_threat"
-      mcp_adapter: "ChallengeEngineAdapter"
-      description: "Security gates enforcement preventing critical vulnerabilities from progressing (Phase 8.3)"
-      metadata:
-        icon: "🛡️"
-        stages: 3
-        intelligence: ["lens", "knowledge"]
-
-    - name: "EducationalOrchestrator"
-      module: "cortex.orchestrators.education.educational_orchestrator"
-      class: "EducationalOrchestrator"
-      tier: 3
-      priority: 74
-      dependencies:
-        - "KnowledgeRepository"
-        - "LENSSynthesis"
-      capabilities:
-        - educational_interaction
-        - knowledge_level_detection
-        - progressive_disclosure
-        - next_step_generation
-        - fault_detection
-        - truth_verification
-      health_check: "execute"
-      mcp_adapter: "EducationalOrchestratorAdapter"
-      description: "ASK Mode orchestrator for implementation-truth-based educational interaction (Phase 22)"
-      mcp_tools:
-        - "cortex_ask"
-        - "cortex_verify_claim"
-      metadata:
-        icon: "🎓"
-        stages: 4
-        intelligence: ["lens", "knowledge", "synthesis"]
-
-    - name: "DuplicationDetector"
-      module: "cortex.orchestrators.support.duplication_detector_orchestrator"
-      class: "DuplicationDetector"
-      tier: 3
-      priority: 77
-      dependencies: []
-      capabilities:
-        - exact_duplication_detection
-        - semantic_duplication_detection
-        - copy_paste_pattern_detection
-        - severity_scoring
-        - consolidation_suggestions
-        - duplication_reporting
-      health_check: "generate_duplication_report"
-      mcp_adapter: "DuplicationDetectorAdapter"
-      description: "Detects code duplications using LENS analyzers (Phase 8.3A)"
-      lens_analyzers:
-        - "GitHistoryAnalyzer"
-        - "ASTAnalyzer"
-        - "CommentExtractor"
-      metadata:
-        icon: "🔍"
-        stages: 3
-        intelligence: ["lens"]
-
-    - name: "RecommendationEngine"
-      module: "cortex.orchestrators.support.recommendation_engine"
-      class: "RecommendationEngine"
-      tier: 3
-      priority: 72
-      dependencies:
-        - "ChallengeEngine"
-      capabilities:
-        - security_recommendations
-        - solid_recommendations
-        - performance_recommendations
-        - compliance_recommendations
-        - best_practice_advisory
-      health_check: "recommend_for_security"
-      mcp_adapter: "cortex.mcp.adapters.recommendation_adapter"
-      description: "Advisory layer providing contextualized best practice recommendations (Phase 8.4)"
-      metadata:
-        icon: "💡"
-        stages: 3
-        intelligence: ["lens", "knowledge"]
-
-    - name: "RecommendationGate"
-      module: "cortex.orchestrators.core.recommendation_gate"
-      class: "RecommendationGate"
-      tier: 3
-      priority: 79
-      dependencies:
-        - "RecommendationEngine"
-      capabilities:
-        - regression_prevention
-        - rejection_history_check
-        - risk_scoring
-        - test_health_check
-        - duplication_check
-      health_check: "evaluate"
-      mcp_adapter: "RecommendationGateAdapter"
-      description: "Regression prevention layer that validates recommendations before emission (Self-Enhancement)"
-      governance:
-        - "CORE-030"
-        - "CORE-035"
-      metadata:
-        icon: "🚦"
-        stages: 2
-        intelligence: ["knowledge"]
-
-    - name: "VacuumOrchestrator"
-      module: "cortex.orchestrators.support.vacuum_orchestrator"
-      class: "VacuumOrchestrator"
-      tier: 3
-      priority: 75
-      dependencies: []
-      capabilities:
-        - markdown_cleanup
-        - file_archival
-        - verification_workflow
-        - audit_offering
-      health_check: "scan_repository"
-      mcp_adapter: "VacuumOrchestratorAdapter"
-      description: "Markdown cleanup with post-cleanup validation workflow (CORE-002 enforcement)"
-      mcp_tools:
-        - "cortex_vacuum"
-      workflow_stages:
-        - "scan"
-        - "plan"
-        - "cleanup"
-        - "verify"
-        - "audit_offer"
-      metadata:
-        icon: "🧹"
-        stages: 5
-        intelligence: ["lens", "knowledge"]
-
-    - name: "InstrumentationOrchestrator"
-      module: "cortex.orchestrators.support.instrumentation_orchestrator"
-      class: "InstrumentationOrchestrator"
-      tier: 3
-      priority: 76
-      dependencies: []
-      capabilities:
-        - tdd_metrics_capture
-        - debug_metrics_capture
-        - codegen_metrics_capture
-        - orchestrator_metrics_capture
-        - threshold_monitoring
-        - enhancement_recommendations
-      health_check: "get_metrics_summary"
-      mcp_adapter: "InstrumentationOrchestratorAdapter"
-      description: "Metrics instrumentation for evidence-driven tool enhancement (Phase 20.9)"
-      mcp_tools:
-        - "cortex_capture_metrics"
-        - "cortex_get_enhancement_recommendations"
-      thresholds:
-        tdd_cycle_time_p90: 300
-        debugger_failure_rate: 0.05
-        codegen_customization_rate: 0.10
-        orchestrator_latency_p95: 2000
-
-    - name: "DebuggingOrchestrator"
-      module: "cortex.orchestrators.support.debugging_orchestrator"
-      class: "DebuggingOrchestrator"
-      tier: 3
-      priority: 80
-      dependencies: []
-      capabilities:
-        - smart_debug_injection
-        - marker_based_cleanup
-        - session_management
-        - ast_based_analysis
-        - sensitive_value_exclusion
-        - correlation_id_tracking
-      health_check: "execute_operation"
-      mcp_adapter: "DebuggingOrchestratorAdapter"
-      description: "Smart Debug Injection System for CORTEX-assisted debugging with surgical cleanup"
-      mcp_tools:
-        - "cortex_debug_inject"
-        - "cortex_debug_cleanup"
-        - "cortex_debug_status"
-      governance:
-        - "CORE-008"
-        - "CORE-011"
-        - "CORE-012"
-        - "CORE-027"
-      metadata:
-        icon: "🐛"
-        stages: 4
-        intelligence: ["lens", "knowledge"]
-
-    - name: "OrchestratorVisibility"
-      module: "cortex.orchestrators.support.orchestrator_visibility"
-      class: "OrchestratorVisibility"
-      tier: 3
-      priority: 81
-      dependencies: []
-      capabilities:
-        - visibility_generation
-        - training_wheels
-        - badge_rendering
-        - stage_progress
-        - intelligence_indicators
-      health_check: "health_check"
-      mcp_adapter: "OrchestratorVisibilityAdapter"
-      description: "Training wheels visibility system for orchestrator activity (Phase 20.2)"
-      mcp_tools: []
-      governance:
-        - "CORE-008"
-        - "CORE-011"
-        - "CORE-012"
-      version: "1.0"
-      metadata:
-        icon: "👁️"
-        stages: 1
-        intelligence: []
-        toggle: "CORTEX_ORCHESTRATOR_VISIBILITY"
-
-    # Phase 34B: Continuous Tech Intelligence System
-    - name: "TechIntelligenceOrchestrator"
-      module: "cortex.orchestrators.intelligence.tech_intelligence_orchestrator"
-      class: "TechIntelligenceOrchestrator"
-      tier: 3
-      priority: 82
-      dependencies: []
-      capabilities:
-        - readiness_scoring
-        - tech_detection
-        - knowledge_synthesis
-        - proactive_learning
-        - cross_repo_analysis
-      health_check: "initialize"
-      mcp_adapter: "cortex.mcp.adapters.tech_intelligence_adapter"
-      description: "Central knowledge hub monitoring tech ecosystems and providing readiness verification (Phase 34B)"
-      mcp_tools:
-        - "get_tech_readiness"
-        - "detect_tech_stack"
-        - "synthesize_best_practices"
-      governance:
-        - "CORE-008"
-        - "CORE-011"
-        - "CORE-012"
-        - "CORE-036"
-      version: "1.0.0-week1"
-      metadata:
-        icon: "🧠"
-        stages: 3
-        intelligence: ["knowledge", "lens"]
-        phase: "34B"
-        increment: "week1"
-
-    # Phase 41: DIGEST Mode Enhancement System
-    - name: "DigestEnhancementOrchestrator"
-      module: "cortex.orchestrators.learning.digest_enhancement_orchestrator"
-      class: "DigestEnhancementOrchestrator"
-      tier: 3
-      priority: 83
-      dependencies:
-        - "RecommendationGate"
-      capabilities:
-        - digest_automation
-        - enhancement_generation
-        - similarity_checking
-        - metrics_calculation
-        - governance_scanning
-      health_check: "process_digest"
-      mcp_adapter: "DigestEnhancementOrchestratorAdapter"
-      description: "Automated DIGEST mode with MCP tools, quantitative metrics, and AST governance scanning (Phase 41)"
-      mcp_tools:
-        - "cortex_digest_session"
-        - "cortex_digest_generate_enhancements"
-        - "cortex_digest_check_duplicates"
-        - "cortex_digest_apply_enhancements"
-      governance:
-        - "CORE-002"
-        - "CORE-008"
-        - "CORE-028"
-        - "CORE-035"
-      version: "1.0.0"
-      metadata:
-        icon: "🔬"
-        stages: 5
-        intelligence: ["lens", "knowledge", "learning"]
-        phase: "41"
-        enhancements:
-          - "ENH-053"
-          - "ENH-054"
-          - "ENH-055"
-          - "ENH-056"
-          - "ENH-057"
-
-    # Phase 48 S1: Holistic Validation Orchestrator
-    - name: "HolisticValidationOrchestrator"
-      module: "cortex.orchestrators.holistic.holistic_validation_orchestrator"
-      class: "HolisticValidationOrchestrator"
-      tier: 3
-      priority: 84
-      dependencies:
-        - "LENSSynthesis"
-        - "MasterOrchestrator"
-      capabilities:
-        - holistic_validation
-        - registry_analysis
-        - architectural_drift_detection
-        - orchestrator_consistency_check
-      health_check: "validate_phase"
-      mcp_adapter: "HolisticValidationAdapter"
-      description: "Cross-system validation to prevent regressions and ensure architectural coherence (Phase 48 S1)"
-      mcp_tools:
-        - "cortex_validate_holistic"
-      governance:
-        - "CORE-035"
-        - "CORE-048"
-      version: "1.0.0"
-      metadata:
-        icon: "🔍"
-        stages: 3
-        intelligence: ["lens", "knowledge"]
-        phase: "48"
-        stage: "1"
-
-    # Phase 48 S2: Dependency Graph Generator
-    - name: "DependencyGraphGenerator"
-      module: "cortex.orchestrators.holistic.dependency_graph"
-      class: "DependencyGraphGenerator"
-      tier: 3
-      priority: 85
-      dependencies:
-        - "HolisticValidationOrchestrator"
-      capabilities:
-        - dependency_analysis
-        - impact_assessment
-        - circular_dependency_detection
-        - duplication_detection
-      health_check: "generate_graph"
-      mcp_adapter: "DependencyGraphAdapter"
-      description: "Analyzes orchestrator dependencies for CORE-035 compliance (Phase 48 S2)"
-      mcp_tools:
-        - "cortex_dependency_graph"
-      governance:
-        - "CORE-035"
-      version: "1.0.0"
-      metadata:
-        icon: "🔗"
-        stages: 3
-        intelligence: ["lens"]
-        phase: "48"
-        stage: "2"
-
-    # Phase 48 S3: Challenge Gate Orchestrator
-    - name: "ChallengeGateOrchestrator"
-      module: "cortex.orchestrators.holistic.challenge_gate"
-      class: "ChallengeGateOrchestrator"
-      tier: 3
-      priority: 86
-      dependencies:
-        - "DependencyGraphGenerator"
-      capabilities:
-        - challenge_generation
-        - alternative_analysis
-        - decision_gating
-        - mandatory_approval_enforcement
-      health_check: "generate_challenges"
-      mcp_adapter: "ChallengeGateAdapter"
-      description: "Pre-implementation challenge generation with alternatives (Phase 48 S3, CORE-048 MANDATORY)"
-      mcp_tools:
-        - "cortex_challenge_gate"
-      governance:
-        - "CORE-048"
-      version: "1.0.0"
-      metadata:
-        icon: "🛡️"
-        stages: 4
-        intelligence: ["lens", "knowledge"]
-        phase: "48"
-        stage: "3"
-
-    # Phase 48 S4: CORTEX Brain Integration
-    - name: "CortexBrainIntegrationOrchestrator"
-      module: "cortex.orchestrators.holistic.cortex_brain_integration"
-      class: "CortexBrainIntegrationOrchestrator"
-      tier: 3
-      priority: 87
-      dependencies:
-        - "ChallengeGateOrchestrator"
-      capabilities:
-        - brain_health_check
-        - context_injection
-        - knowledge_synthesis
-        - multi_session_coordination
-      health_check: "check_brain_health"
-      mcp_adapter: "BrainIntegrationAdapter"
-      description: "Integrates CORTEX brain state with validation pipeline (Phase 48 S4)"
-      mcp_tools:
-        - "cortex_brain_health"
-      governance:
-        - "CORE-035"
-      version: "1.0.0"
-      metadata:
-        icon: "🧠"
-        stages: 3
-        intelligence: ["lens", "knowledge"]
-        phase: "48"
-        stage: "4"
-
-    # Phase 48 S5: Prompt Enhancement Orchestrator
-    - name: "PromptEnhancementOrchestrator"
-      module: "cortex.orchestrators.holistic.prompt_enhancement"
-      class: "PromptEnhancementOrchestrator"
-      tier: 3
-      priority: 88
-      dependencies:
-        - "CortexBrainIntegrationOrchestrator"
-      capabilities:
-        - prompt_injection
-        - context_optimization
-        - response_template_selection
-        - dynamic_guidance_generation
-      health_check: "enhance_prompts"
-      mcp_adapter: "PromptEnhancementAdapter"
-      description: "Enhances prompts with context from validation and challenge gates (Phase 48 S5)"
-      mcp_tools:
-        - "cortex_enhance_prompt"
-      governance:
-        - "CORE-029"
-        - "CORE-048"
-      version: "1.0.0"
-      metadata:
-        icon: "📝"
-        stages: 3
-        intelligence: ["lens", "knowledge"]
-        phase: "48"
-        stage: "5"
-
-    # Phase 49 S1: Context Crystallization Layer (CCL)
-    - name: "ContextCrystallizationLayer"
-      module: "cortex.orchestrators.phase_49.context_crystallization_layer"
-      class: "ContextCrystallizationLayer"
-      tier: 3
-      priority: 89
-      dependencies:
-        - "PromptEnhancementOrchestrator"
-        - "HolisticValidationOrchestrator"
-      capabilities:
-        - async_context_prefetch
-        - rules_cache_warming
-        - lens_context_preparation
-        - infrastructure_detection
-        - non_blocking_execution
-      health_check: "validate"
-      mcp_adapter: "ContextCrystallizationLayerAdapter"
-      description: "Async context pre-warming layer with 300ms SLA timeout (Phase 49 S1)"
-      mcp_tools:
-        - "cortex_ccl_prefetch"
-        - "cortex_ccl_get_crystallized_context"
-        - "cortex_ccl_get_rules"
-      governance:
-        - "CORE-035"
-        - "CORE-049"
-      version: "1.0.0"
-      metadata:
-        icon: "⚡"
-        stages: 4
-        intelligence: ["lens", "knowledge", "infrastructure"]
-        phase: "49"
-        stage: "1"
-        sla_target_ms: 300
-        fallback_timeout_ms: 500
-
-    - name: "ContentExtractionEngine"
-      module: "cortex.orchestrators.phase_49.content_extraction_engine"
-      class: "ContentExtractionEngine"
-      tier: 3
-      priority: 88
-      dependencies: ["ContextCrystallizationLayer"]
-      capabilities: [document_parsing, text_extraction, semantic_chunking, metadata_enrichment]
-      mcp_tools: [cortex_extract_content, cortex_parse_document, cortex_extract_metadata]
-      governance: [CORE-035, CORE-049]
-      version: "1.0.0"
-      metadata:
-        icon: "📄"
-        phase: "49"
-        stage: "2"
-
-    - name: "KnowledgeParser"
-      module: "cortex.orchestrators.phase_49.knowledge_parser"
-      class: "KnowledgeParser"
-      tier: 3
-      priority: 87
-      dependencies: ["ContentExtractionEngine"]
-      capabilities: [entity_recognition, relationship_extraction, knowledge_graph_construction, semantic_analysis]
-      mcp_tools: [cortex_parse_knowledge, cortex_extract_entities, cortex_build_graph]
-      governance: [CORE-035, CORE-049]
-      version: "1.0.0"
-      metadata:
-        icon: "🧠"
-        phase: "49"
-        stage: "3"
-
-    - name: "YAMLGenerator"
-      module: "cortex.orchestrators.phase_49.yaml_generator"
-      class: "YAMLGenerator"
-      tier: 3
-      priority: 86
-      dependencies: ["KnowledgeParser"]
-      capabilities: [schema_validation, yaml_generation, format_enforcement, completeness_checking]
-      mcp_tools: [cortex_generate_yaml, cortex_validate_schema, cortex_enforce_format]
-      governance: [CORE-035, CORE-049]
-      version: "1.0.0"
-      metadata:
-        icon: "📋"
-        phase: "49"
-        stage: "4"
-
-    - name: "ApprovalWorkflow"
-      module: "cortex.orchestrators.phase_49.approval_workflow"
-      class: "ApprovalWorkflow"
-      tier: 3
-      priority: 85
-      dependencies: ["YAMLGenerator"]
-      capabilities: [approval_routing, stakeholder_notification, version_tracking, publication_gating]
-      mcp_tools: [cortex_route_approval, cortex_notify_stakeholder, cortex_track_version]
-      governance: [CORE-035, CORE-049]
-      version: "1.0.0"
-      metadata:
-        icon: "✅"
-        phase: "49"
-        stage: "5"
-
-    - name: "IncrementalUpdater"
-      module: "cortex.orchestrators.phase_49.incremental_updater"
-      class: "IncrementalUpdater"
-      tier: 3
-      priority: 84
-      dependencies: ["ApprovalWorkflow"]
-      capabilities: [delta_detection, incremental_sync, version_control, rollback_support]
-      mcp_tools: [cortex_detect_delta, cortex_sync_incremental, cortex_manage_versions]
-      governance: [CORE-035, CORE-049]
-      version: "1.0.0"
-      metadata:
-        icon: "🔄"
-        phase: "49"
-        stage: "6"
-
-    - name: "GitHubClientOrchestrator"
-      module: "cortex.orchestrators.phase_52.github_client"
-      class: "GitHubClientOrchestrator"
-      tier: 3
-      priority: 83
-      dependencies: ["IncrementalUpdater"]
-      capabilities: [github_api_integration, pr_operations, review_management, webhook_handling]
-      mcp_tools: [cortex_github_client, cortex_create_review, cortex_fetch_pr_data]
-      governance: [CORE-035, CORE-049]
-      version: "1.0.0"
-      metadata:
-        icon: "🐙"
-        phase: "52"
-        stage: "1"
-
-    - name: "SecurityAnalyzerOrchestrator"
-      module: "cortex.orchestrators.phase_52.security_analyzer"
-      class: "SecurityAnalyzerOrchestrator"
-      tier: 3
-      priority: 82
-      dependencies: ["GitHubClientOrchestrator"]
-      capabilities: [vulnerability_detection, cwe_scanning, security_classification, risk_assessment]
-      mcp_tools: [cortex_analyze_security, cortex_detect_cwe, cortex_assess_risk]
-      governance: [CORE-035, CORE-049]
-      version: "1.0.0"
-      metadata:
-        icon: "🔐"
-        phase: "52"
-        stage: "1.2"
-
-    - name: "ReviewEngineOrchestrator"
-      module: "cortex.orchestrators.phase_52.review_engine"
-      class: "ReviewEngineOrchestrator"
-      tier: 3
-      priority: 81
-      dependencies: ["SecurityAnalyzerOrchestrator"]
-      capabilities: [code_review, quality_assessment, recommendation_generation, feedback_composition]
-      mcp_tools: [cortex_review_code, cortex_assess_quality, cortex_generate_recommendation]
-      governance: [CORE-035, CORE-049]
-      version: "1.0.0"
-      metadata:
-        icon: "✏️"
-        phase: "52"
-        stage: "1.3"
-
-    - name: "IntegrationOrchestrator"
-      module: "cortex.orchestrators.phase_52.integration"
-      class: "IntegrationOrchestrator"
-      tier: 3
-      priority: 80
-      dependencies: ["ReviewEngineOrchestrator"]
-      capabilities: [orchestrator_coordination, workflow_execution, result_aggregation, event_handling]
-      mcp_tools: [cortex_coordinate_review, cortex_execute_workflow, cortex_aggregate_results]
-      governance: [CORE-035, CORE-049]
-      version: "1.0.0"
-      metadata:
-        icon: "🔗"
-        phase: "52"
-        stage: "1.4"
-
-    - name: "DotNetLensOrchestrator"
-      module: "cortex.orchestrators.phase_55.dotnet_lens"
-      class: "DotNetLensOrchestrator"
-      tier: 3
-      priority: 79
-      dependencies: ["IntegrationOrchestrator"]
-      capabilities: [dotnet_project_analysis, framework_detection, dependency_resolution, code_complexity]
-      mcp_tools: [cortex_analyze_dotnet, cortex_detect_framework, cortex_resolve_dependencies]
-      governance: [CORE-035, CORE-049]
-      version: "1.0.0"
-      metadata:
-        icon: ".NET"
-        phase: "55"
-        stage: "1"
-
-    - name: "MSBuildResolverOrchestrator"
-      module: "cortex.orchestrators.phase_55.msbuild_resolver"
-      class: "MSBuildResolverOrchestrator"
-      tier: 3
-      priority: 78
-      dependencies: ["DotNetLensOrchestrator"]
-      capabilities: [msbuild_parsing, project_graph_analysis, build_config_extraction, target_identification]
-      mcp_tools: [cortex_parse_msbuild, cortex_analyze_project_graph, cortex_extract_build_config]
-      governance: [CORE-035, CORE-049]
-      version: "1.0.0"
-      metadata:
-        icon: "🔨"
-        phase: "55"
-        stage: "2"
-
-    - name: "CentralizedPackageManagerOrchestrator"
-      module: "cortex.orchestrators.phase_55.centralized_packages"
-      class: "CentralizedPackageManagerOrchestrator"
-      tier: 3
-      priority: 77
-      dependencies: ["MSBuildResolverOrchestrator"]
-      capabilities: [package_version_management, dependency_graph_consolidation, version_conflict_resolution, nuget_integration]
-      mcp_tools: [cortex_manage_packages, cortex_consolidate_versions, cortex_resolve_conflicts]
-      governance: [CORE-035, CORE-049]
-      version: "1.0.0"
-      metadata:
-        icon: "📦"
-        phase: "55"
-        stage: "3"
-
-    - name: "EnterpriseAnalysisOrchestrator"
-      module: "cortex.orchestrators.phase_55.enterprise_analysis"
-      class: "EnterpriseAnalysisOrchestrator"
-      tier: 3
-      priority: 76
-      dependencies: ["CentralizedPackageManagerOrchestrator"]
-      capabilities: [database_analysis, entity_framework_detection, wcf_service_analysis, azure_devops_integration, architecture_visualization]
-      mcp_tools: [cortex_analyze_database, cortex_detect_ef, cortex_analyze_wcf, cortex_integrate_azure, cortex_visualize_architecture]
-      governance: [CORE-035, CORE-049]
-      version: "1.0.0"
-      metadata:
-        icon: "🏗️"
-        phase: "55"
-        stage: "4-9"
-
-    - name: "DashboardOrchestrator"
-      module: "cortex.orchestrators.domain.dashboard_orchestrator"
-      class: "DashboardOrchestrator"
-      tier: 2
-      priority: 85
-      dependencies: ["IntegrationOrchestrator"]
-      capabilities: [dashboard_generation, dashboard_sync, dashboard_caching, audit_trail, mcp_tool_registration]
-      mcp_tools: [cortex_generate_dashboard, cortex_sync_dashboard_data]
-      governance: [CORE-035, CORE-049]
-      version: "1.0.0"
-      metadata:
-        icon: "📊"
-        phase: "53"
-        stage: "1-3"
-
-    - name: "IntelligenceOrchestrator"
-      module: "cortex.orchestrators.domain.intelligence_orchestrator"
-      class: "IntelligenceOrchestrator"
-      tier: 3
-      priority: 84
-      dependencies: ["ContextCrystallizationLayer", "IntentRouter"]
-      capabilities: [knowledge_synthesis, intelligence_caching, precedence_resolution, violation_detection, unified_context_building]
-      mcp_tools: [cortex_synthesize_intelligence, cortex_get_cached_intelligence, cortex_resolve_precedence, cortex_detect_violations]
-      governance: [CORE-035, CORE-049]
-      version: "1.0.0"
-      metadata:
-        icon: "🧠"
-        phase: "53"
-        stage: "4-6"
-
-    - name: "DashboardIntegrationOrchestrator"
-      module: "cortex.orchestrators.domain.dashboard_integration"
-      class: "DashboardIntegrationOrchestrator"
-      tier: 2
-      priority: 83
-      dependencies: ["DashboardOrchestrator", "MasterOrchestrator", "PlanningOrchestrator"]
-      capabilities: [dashboard_routing, dashboard_artifact_registration, dashboard_action_listing, dashboard_auto_generation, dashboard_evidence_sourcing, dashboard_testing]
-      mcp_tools: [cortex_route_dashboard_generation, cortex_register_dashboard_artifact, cortex_list_dashboard_actions, cortex_generate_dashboard_on_onboard]
-      governance: [CORE-035, CORE-049]
-      version: "1.0.0"
-      metadata:
-        icon: "🔗"
-        phase: "53"
-        stage: "7-9"
-
-    - name: "ContextCrystallizationLayerEnhanced"
-      module: "cortex.orchestrators.phase_49.context_crystallization_layer"
-      class: "ContextCrystallizationLayer"
-      tier: 2
-      priority: 90
-      dependencies: ["MasterOrchestrator"]
-      capabilities: [rules_cache_warming, layered_knowledge_synthesis, pre_flight_context_enrichment, unified_intelligence_synthesis, intelligence_caching, phase_d_integration]
-      mcp_tools: [cortex_get_crystallized_context, cortex_get_intelligence_cache]
-      governance: [CORE-008, CORE-035, CORE-049]
-      version: "1.1.0"
-      metadata:
-        icon: "💎"
-        phase: "54"
-        stage: "1-6"
-        enhancement: "Phase 54 S1-S6: CCL Enhancement + Intelligence Warming"
-
-    - name: "CCLIntelligenceWarmingOrchestrator"
-      module: "cortex.orchestrators.phase_49.context_crystallization_layer"
-      class: "IntelligenceWarmingLayer"
-      tier: 3
-      priority: 88
-      dependencies: ["ContextCrystallizationLayerEnhanced", "KnowledgeSynthesisEngine"]
-      capabilities: [unified_intelligence_synthesis, lens_knowledge_integration, company_knowledge_integration, cortex_rules_integration, violation_detection, citation_generation, intelligent_caching]
-      mcp_tools: [cortex_synthesize_unified_intelligence, cortex_get_cached_intelligence, cortex_detect_violations]
-      governance: [CORE-008, CORE-035, CORE-049]
-      version: "1.0.0"
-      metadata:
-        icon: "🌡️"
-        phase: "54"
-        stage: "4-6"
-        authority: "AC-PHASE54-S4-S6-001"
-
-    - name: "CCLIntegrationOrchestrator"
-      module: "cortex.orchestrators.phase_49.context_crystallization_layer"
-      class: "CCLIntegrationOrchestrator"
-      tier: 2
-      priority: 87
-      dependencies: ["ContextCrystallizationLayerEnhanced", "IntentRouter", "TDDOrchestrator", "RefactoringOrchestrator", "LENSOrchestrator"]
-      capabilities: [ccl_enhancement_registration, orchestrator_context_enrichment, circular_dependency_validation, governance_enforcement, production_readiness_validation]
-      mcp_tools: [cortex_register_ccl_enhancement, cortex_validate_orchestrator_integration, cortex_enforce_governance]
-      governance: [CORE-008, CORE-035, CORE-049]
-      version: "1.0.0"
-      metadata:
-        icon: "🔗"
-        phase: "54"
-        stage: "7-9"
-        authority: "AC-PHASE54-S7-S9-001"
-
-    - name: "IntelligenceEngineOrchestrator"
-      module: "cortex.intelligence.relationships.traversal"
-      class: "RelationshipTraversalEngine"
-      tier: 3
-      priority: 86
-      dependencies: []
-      capabilities: [api_endpoint_extraction, database_model_detection, file_dependency_analysis, dependency_graph_building, relationship_detection, code_relationship_traversal]
-      mcp_tools: [cortex_extract_api_endpoints, cortex_detect_database_models, cortex_analyze_dependencies, cortex_build_dependency_graph]
-      governance: [CORE-008, CORE-011, CORE-012, CORE-035, CORE-049]
-      version: "1.0.0"
-      metadata:
-        icon: "🔗"
-        phase: "56"
-        stage: "1-5"
-        authority: "AC-PHASE56-001 (RelationshipTraversal migration)"
-
-    - name: "IntelligenceIntegrationOrchestrator"
-      module: "cortex.intelligence.relationships"
-      class: "IntelligenceIntegrationOrchestrator"
-      tier: 2
-      priority: 85
-      dependencies: ["IntelligenceEngineOrchestrator", "LENSOrchestrator"]
-      capabilities: [intelligence_layer_integration, lens_orchestrator_wiring, circular_dependency_validation, backward_compatibility_maintenance, production_readiness_validation]
-      mcp_tools: [cortex_register_intelligence_engine, cortex_validate_lens_integration, cortex_check_circular_dependencies]
-      governance: [CORE-008, CORE-035, CORE-049]
-      version: "1.0.0"
-      metadata:
-        icon: "🧠"
-        phase: "56"
-        stage: "6-9"
-        authority: "AC-PHASE56-S7-S9-001"
-
-# -------------------------------------------------------------------------
-# DEPENDENCY VALIDATION RULES
-# -------------------------------------------------------------------------
+  - name: OrchestratorEventBus
+    module: cortex.infrastructure.orchestrator_event_bus
+    class: OrchestratorEventBus
+    tier: 3
+    priority: 1
+    dependencies: []
+    capabilities:
+    - event_publishing
+    - event_subscription
+    - event_history
+    - event_replay
+    - dead_letter_management
+    health_check: health_check
+    mcp_adapter: OrchestratorEventBusAdapter
+    description: Event-driven communication backbone enabling decoupled orchestrator
+      communication (Phase 1)
+    mcp_tools: []
+    governance:
+    - CORE-008
+    - CORE-011
+    metadata:
+      icon: "\U0001F4E1"
+      stages: 1
+      intelligence: []
+    phase: '1'
+    singleton: true
+  - name: InteractionOrchestratorEnhancement
+    module: cortex.orchestrators.core.interaction_orchestrator_enhancement
+    class: InteractionOrchestratorEnhancement
+    tier: 3
+    priority: 2
+    dependencies:
+    - OrchestratorEventBus
+    - CodeLevelPlanner
+    capabilities:
+    - event_subscription
+    - planning_integration
+    - multi_layer_coordination
+    - dor_enhancement
+    - challenge_extension
+    health_check: health_check
+    mcp_adapter: InteractionOrchestratorEnhancementAdapter
+    description: Enhances InteractionOrchestrator with event subscription and planning
+      integration (Phase 6)
+    metadata:
+      icon: "\U0001F50C"
+      stages: 1
+      intelligence: []
+    phase: '6'
+  - name: OnboardingOrchestrator
+    module: cortex.orchestrators.onboarding.orchestrator
+    class: OnboardingOrchestrator
+    tier: 3
+    priority: 60
+    dependencies: []
+    capabilities:
+    - user_onboarding
+    - tutorial_guidance
+    health_check: start_onboarding
+    mcp_adapter: OnboardingOrchestratorAdapter
+    metadata:
+      icon: "\U0001F393"
+      stages: 3
+      intelligence:
+      - knowledge
+  - name: ToolDiscoveryOrchestrator
+    module: cortex.orchestrators.core.tool_discovery_orchestrator
+    class: ToolDiscoveryOrchestrator
+    tier: 3
+    priority: 61
+    dependencies: []
+    capabilities:
+    - tool_discovery
+    - capability_enumeration
+    health_check: discover_tools
+    mcp_adapter: ToolDiscoveryOrchestratorAdapter
+    metadata:
+      icon: "\U0001F50D"
+      stages: 2
+      intelligence:
+      - lens
+  - name: UpgradeOrchestrator
+    module: cortex.orchestrators.support.upgrade_orchestrator
+    class: UpgradeOrchestrator
+    tier: 3
+    priority: 62
+    dependencies: []
+    capabilities:
+    - version_upgrade
+    - migration_assistance
+    health_check: check_upgrade
+    mcp_adapter: UpgradeOrchestratorAdapter
+    metadata:
+      icon: "\u2B06\uFE0F"
+      stages: 4
+      intelligence:
+      - knowledge
+  - name: RollbackOrchestrator
+    module: cortex.orchestrators.support.rollback_orchestrator
+    class: RollbackOrchestrator
+    tier: 3
+    priority: 63
+    dependencies: []
+    capabilities:
+    - rollback_execution
+    - checkpoint_restore
+    health_check: check_rollback
+    mcp_adapter: RollbackOrchestratorAdapter
+    metadata:
+      icon: "\u23EA"
+      stages: 3
+      intelligence:
+      - knowledge
+  - name: SetupOrchestrator
+    module: cortex.orchestrators.support.setup_orchestrator
+    class: SetupOrchestrator
+    tier: 3
+    priority: 64
+    dependencies: []
+    capabilities:
+    - environment_setup
+    - dependency_installation
+    health_check: check_setup
+    mcp_adapter: SetupOrchestratorAdapter
+    metadata:
+      icon: "\U0001F527"
+      stages: 3
+      intelligence:
+      - knowledge
+  - name: GovernanceRegistry
+    module: cortex.brain.core.governance_registry
+    class: GovernanceRegistry
+    tier: 3
+    priority: 66
+    dependencies: []
+    capabilities:
+    - governance_enforcement
+    - rule_management
+    health_check: get_rules
+    mcp_adapter: GovernanceRegistryAdapter
+    metadata:
+      icon: "\u2696\uFE0F"
+      stages: 2
+      intelligence:
+      - knowledge
+  - name: KnowledgeRepository
+    module: cortex.brain.core.knowledge.knowledge_repository
+    class: KnowledgeRepository
+    tier: 3
+    priority: 67
+    dependencies: []
+    capabilities:
+    - knowledge_retrieval
+    - relationship_mapping
+    health_check: query_knowledge
+    mcp_adapter: KnowledgeRepositoryAdapter
+    metadata:
+      icon: "\U0001F4DA"
+      stages: 3
+      intelligence:
+      - knowledge
+  - name: WrappedTDDOrchestrator
+    module: cortex.orchestrators.core.wrapped_tdd_orchestrator
+    class: WrappedTDDOrchestrator
+    tier: 3
+    priority: 65
+    dependencies:
+    - TDDOrchestrator
+    capabilities:
+    - wrapped_tdd
+    - enhanced_testing
+    health_check: generate_wrapped_tests
+    mcp_adapter: WrappedTDDOrchestratorAdapter
+    metadata:
+      icon: "\U0001F9EC"
+      stages: 4
+      intelligence:
+      - lens
+      - knowledge
+  - name: FuzzyIntentMatcher
+    module: cortex.orchestrators.core.fuzzy_intent_matcher
+    class: FuzzyIntentMatcher
+    tier: 3
+    priority: 69
+    dependencies:
+    - IntentRouter
+    capabilities:
+    - fuzzy_matching
+    - intent_disambiguation
+    health_check: match_intent
+    mcp_adapter: FuzzyIntentMatcherAdapter
+    metadata:
+      icon: "\U0001F3B2"
+      stages: 2
+      intelligence:
+      - lens
+  - name: ComprehensionSession
+    module: cortex.orchestrators.core.comprehension_session
+    class: ComprehensionSession
+    tier: 3
+    priority: 70
+    dependencies:
+    - InteractionOrchestrator
+    capabilities:
+    - session_management
+    - comprehension_tracking
+    health_check: get_session
+    mcp_adapter: ComprehensionSessionAdapter
+    metadata:
+      icon: "\U0001F4AD"
+      stages: 2
+      intelligence:
+      - lens
+      - knowledge
+  - name: DoRApprovalGate
+    module: cortex.orchestrators.core.dor_approval_gate
+    class: DoRApprovalGate
+    tier: 3
+    priority: 68
+    dependencies:
+    - LENSSynthesis
+    capabilities:
+    - approval_gating
+    - dor_validation
+    health_check: validate_dor
+    mcp_adapter: DoRApprovalGateAdapter
+    metadata:
+      icon: "\u2705"
+      stages: 2
+      intelligence:
+      - lens
+      - knowledge
+  - name: PlanOrchestrator
+    module: cortex.orchestrators.support.plan_orchestrator
+    class: PlanOrchestrator
+    tier: 3
+    priority: 70
+    dependencies:
+    - OrchestratorEventBus
+    capabilities:
+    - plan_lifecycle_management
+    - event_driven_coordination
+    - plan_status_updates
+    - plan_archival
+    - dashboard_synchronization
+    health_check: sync_dashboard
+    mcp_adapter: cortex.mcp.adapters.plan_orchestrator_adapter
+    description: "Plan lifecycle orchestration with EventBus integration, SSOT registry,\
+      \ and dashboard sync (Phase 45 \xA7 Stage 2)"
+    mcp_tools:
+    - cortex_create_plan
+    - cortex_update_plan
+    - cortex_list_plans
+    - cortex_archive_plan
+    governance:
+    - CORE-008
+    - CORE-011
+    - CORE-012
+    - CORE-026
+    - CORE-027
+    - CORE-035
+    - CORE-041
+    metadata:
+      icon: "\U0001F4CB"
+      stages: 5
+      intelligence:
+      - lens
+      - knowledge
+      phase: '45'
+      stage: '2'
+  - name: HolisticValidationOrchestrator
+    module: cortex.orchestrators.holistic.holistic_validation_orchestrator
+    class: HolisticValidationOrchestrator
+    tier: 3
+    priority: 70
+    dependencies:
+    - EnforcementOrchestrator
+    capabilities:
+    - cross_system_validation
+    - regression_risk_scoring
+    - impact_radius_analysis
+    - dependency_conflict_detection
+    - architecture_drift_detection
+    health_check: validate
+    mcp_adapter: cortex.mcp.adapters.holistic_validation_adapter
+    description: "Pre-implementation validation gate to prevent regressions and ensure\
+      \ holistic system consistency (Phase 48 \xA7 S1)"
+    mcp_tools:
+    - cortex_validate_holistically
+    - cortex_analyze_dependency_graph
+    governance:
+    - CORE-048
+    - CORE-035
+    - CORE-030
+    metadata:
+      icon: "\U0001F50D"
+      stages: 6
+      intelligence:
+      - lens
+      - registry
+      - wiring
+      phase: '48'
+      stage: '1'
+  - name: ContextCrystallizationLayer
+    module: cortex.orchestrators.phase_49.context_crystallization_layer
+    class: ContextCrystallizationLayer
+    tier: 3
+    priority: 70
+    dependencies:
+    - LENSSynthesis
+    capabilities:
+    - async_context_prefetch
+    - rules_cache_warming
+    - lens_preload
+    - infrastructure_cache
+    - pre_warmed_context_delivery
+    health_check: prefetch_async
+    mcp_adapter: cortex.mcp.adapters.ccl_adapter
+    description: Asynchronous context pre-warming layer for Stage 2 acceleration (Phase
+      49)
+    mcp_tools:
+    - cortex_ccl_prefetch
+    - cortex_ccl_status
+    governance:
+    - CORE-008
+    - CORE-035
+    metadata:
+      icon: "\u26A1"
+      stages: 6
+      intelligence:
+      - lens
+      - rules
+      - infrastructure
+      phase: '49'
+  - name: ChallengeEngine
+    module: cortex.orchestrators.core.challenge_engine
+    class: ChallengeEngine
+    tier: 3
+    priority: 71
+    dependencies:
+    - EnforcementOrchestrator
+    capabilities:
+    - hard_security_gates
+    - threat_blocking
+    - challenge_enforcement
+    health_check: evaluate_threat
+    mcp_adapter: ChallengeEngineAdapter
+    description: Security gates enforcement preventing critical vulnerabilities from
+      progressing (Phase 8.3)
+    metadata:
+      icon: "\U0001F6E1\uFE0F"
+      stages: 3
+      intelligence:
+      - lens
+      - knowledge
+  - name: EducationalOrchestrator
+    module: cortex.orchestrators.education.educational_orchestrator
+    class: EducationalOrchestrator
+    tier: 3
+    priority: 74
+    dependencies:
+    - KnowledgeRepository
+    - LENSSynthesis
+    capabilities:
+    - educational_interaction
+    - knowledge_level_detection
+    - progressive_disclosure
+    - next_step_generation
+    - fault_detection
+    - truth_verification
+    health_check: execute
+    mcp_adapter: EducationalOrchestratorAdapter
+    description: ASK Mode orchestrator for implementation-truth-based educational
+      interaction (Phase 22)
+    mcp_tools:
+    - cortex_ask
+    - cortex_verify_claim
+    metadata:
+      icon: "\U0001F393"
+      stages: 4
+      intelligence:
+      - lens
+      - knowledge
+      - synthesis
+  - name: DuplicationDetector
+    module: cortex.orchestrators.support.duplication_detector_orchestrator
+    class: DuplicationDetector
+    tier: 3
+    priority: 77
+    dependencies: []
+    capabilities:
+    - exact_duplication_detection
+    - semantic_duplication_detection
+    - copy_paste_pattern_detection
+    - severity_scoring
+    - consolidation_suggestions
+    - duplication_reporting
+    health_check: generate_duplication_report
+    mcp_adapter: DuplicationDetectorAdapter
+    description: Detects code duplications using LENS analyzers (Phase 8.3A)
+    lens_analyzers:
+    - GitHistoryAnalyzer
+    - ASTAnalyzer
+    - CommentExtractor
+    metadata:
+      icon: "\U0001F50D"
+      stages: 3
+      intelligence:
+      - lens
+  - name: RecommendationEngine
+    module: cortex.orchestrators.support.recommendation_engine
+    class: RecommendationEngine
+    tier: 3
+    priority: 72
+    dependencies:
+    - ChallengeEngine
+    capabilities:
+    - security_recommendations
+    - solid_recommendations
+    - performance_recommendations
+    - compliance_recommendations
+    - best_practice_advisory
+    health_check: recommend_for_security
+    mcp_adapter: cortex.mcp.adapters.recommendation_adapter
+    description: Advisory layer providing contextualized best practice recommendations
+      (Phase 8.4)
+    metadata:
+      icon: "\U0001F4A1"
+      stages: 3
+      intelligence:
+      - lens
+      - knowledge
+  - name: RecommendationGate
+    module: cortex.orchestrators.core.recommendation_gate
+    class: RecommendationGate
+    tier: 3
+    priority: 79
+    dependencies:
+    - RecommendationEngine
+    capabilities:
+    - regression_prevention
+    - rejection_history_check
+    - risk_scoring
+    - test_health_check
+    - duplication_check
+    health_check: evaluate
+    mcp_adapter: RecommendationGateAdapter
+    description: Regression prevention layer that validates recommendations before
+      emission (Self-Enhancement)
+    governance:
+    - CORE-030
+    - CORE-035
+    metadata:
+      icon: "\U0001F6A6"
+      stages: 2
+      intelligence:
+      - knowledge
+  - name: VacuumOrchestrator
+    module: cortex.orchestrators.support.vacuum_orchestrator
+    class: VacuumOrchestrator
+    tier: 3
+    priority: 75
+    dependencies: []
+    capabilities:
+    - markdown_cleanup
+    - file_archival
+    - verification_workflow
+    - audit_offering
+    health_check: scan_repository
+    mcp_adapter: VacuumOrchestratorAdapter
+    description: Markdown cleanup with post-cleanup validation workflow (CORE-002
+      enforcement)
+    mcp_tools:
+    - cortex_vacuum
+    workflow_stages:
+    - scan
+    - plan
+    - cleanup
+    - verify
+    - audit_offer
+    metadata:
+      icon: "\U0001F9F9"
+      stages: 5
+      intelligence:
+      - lens
+      - knowledge
+  - name: InstrumentationOrchestrator
+    module: cortex.orchestrators.support.instrumentation_orchestrator
+    class: InstrumentationOrchestrator
+    tier: 3
+    priority: 76
+    dependencies: []
+    capabilities:
+    - tdd_metrics_capture
+    - debug_metrics_capture
+    - codegen_metrics_capture
+    - orchestrator_metrics_capture
+    - threshold_monitoring
+    - enhancement_recommendations
+    health_check: get_metrics_summary
+    mcp_adapter: InstrumentationOrchestratorAdapter
+    description: Metrics instrumentation for evidence-driven tool enhancement (Phase
+      20.9)
+    mcp_tools:
+    - cortex_capture_metrics
+    - cortex_get_enhancement_recommendations
+    thresholds:
+      tdd_cycle_time_p90: 300
+      debugger_failure_rate: 0.05
+      codegen_customization_rate: 0.1
+      orchestrator_latency_p95: 2000
+  - name: DebuggingOrchestrator
+    module: cortex.orchestrators.support.debugging_orchestrator
+    class: DebuggingOrchestrator
+    tier: 3
+    priority: 80
+    dependencies: []
+    capabilities:
+    - smart_debug_injection
+    - marker_based_cleanup
+    - session_management
+    - ast_based_analysis
+    - sensitive_value_exclusion
+    - correlation_id_tracking
+    health_check: execute_operation
+    mcp_adapter: DebuggingOrchestratorAdapter
+    description: Smart Debug Injection System for CORTEX-assisted debugging with surgical
+      cleanup
+    mcp_tools:
+    - cortex_debug_inject
+    - cortex_debug_cleanup
+    - cortex_debug_status
+    governance:
+    - CORE-008
+    - CORE-011
+    - CORE-012
+    - CORE-027
+    metadata:
+      icon: "\U0001F41B"
+      stages: 4
+      intelligence:
+      - lens
+      - knowledge
+  - name: OrchestratorVisibility
+    module: cortex.orchestrators.support.orchestrator_visibility
+    class: OrchestratorVisibility
+    tier: 3
+    priority: 81
+    dependencies: []
+    capabilities:
+    - visibility_generation
+    - training_wheels
+    - badge_rendering
+    - stage_progress
+    - intelligence_indicators
+    health_check: health_check
+    mcp_adapter: OrchestratorVisibilityAdapter
+    description: Training wheels visibility system for orchestrator activity (Phase
+      20.2)
+    mcp_tools: []
+    governance:
+    - CORE-008
+    - CORE-011
+    - CORE-012
+    version: '1.0'
+    metadata:
+      icon: "\U0001F441\uFE0F"
+      stages: 1
+      intelligence: []
+      toggle: CORTEX_ORCHESTRATOR_VISIBILITY
+  - name: TechIntelligenceOrchestrator
+    module: cortex.orchestrators.intelligence.tech_intelligence_orchestrator
+    class: TechIntelligenceOrchestrator
+    tier: 3
+    priority: 82
+    dependencies: []
+    capabilities:
+    - readiness_scoring
+    - tech_detection
+    - knowledge_synthesis
+    - proactive_learning
+    - cross_repo_analysis
+    health_check: initialize
+    mcp_adapter: cortex.mcp.adapters.tech_intelligence_adapter
+    description: Central knowledge hub monitoring tech ecosystems and providing readiness
+      verification (Phase 34B)
+    mcp_tools:
+    - get_tech_readiness
+    - detect_tech_stack
+    - synthesize_best_practices
+    governance:
+    - CORE-008
+    - CORE-011
+    - CORE-012
+    - CORE-036
+    version: 1.0.0-week1
+    metadata:
+      icon: "\U0001F9E0"
+      stages: 3
+      intelligence:
+      - knowledge
+      - lens
+      phase: 34B
+      increment: week1
+  - name: DigestEnhancementOrchestrator
+    module: cortex.orchestrators.learning.digest_enhancement_orchestrator
+    class: DigestEnhancementOrchestrator
+    tier: 3
+    priority: 83
+    dependencies:
+    - RecommendationGate
+    capabilities:
+    - digest_automation
+    - enhancement_generation
+    - similarity_checking
+    - metrics_calculation
+    - governance_scanning
+    health_check: process_digest
+    mcp_adapter: DigestEnhancementOrchestratorAdapter
+    description: Automated DIGEST mode with MCP tools, quantitative metrics, and AST
+      governance scanning (Phase 41)
+    mcp_tools:
+    - cortex_digest_session
+    - cortex_digest_generate_enhancements
+    - cortex_digest_check_duplicates
+    - cortex_digest_apply_enhancements
+    governance:
+    - CORE-002
+    - CORE-008
+    - CORE-028
+    - CORE-035
+    version: 1.0.0
+    metadata:
+      icon: "\U0001F52C"
+      stages: 5
+      intelligence:
+      - lens
+      - knowledge
+      - learning
+      phase: '41'
+      enhancements:
+      - ENH-053
+      - ENH-054
+      - ENH-055
+      - ENH-056
+      - ENH-057
+  - name: HolisticValidationOrchestrator
+    module: cortex.orchestrators.holistic.holistic_validation_orchestrator
+    class: HolisticValidationOrchestrator
+    tier: 3
+    priority: 84
+    dependencies:
+    - LENSSynthesis
+    - MasterOrchestrator
+    capabilities:
+    - holistic_validation
+    - registry_analysis
+    - architectural_drift_detection
+    - orchestrator_consistency_check
+    health_check: validate_phase
+    mcp_adapter: HolisticValidationAdapter
+    description: Cross-system validation to prevent regressions and ensure architectural
+      coherence (Phase 48 S1)
+    mcp_tools:
+    - cortex_validate_holistic
+    governance:
+    - CORE-035
+    - CORE-048
+    version: 1.0.0
+    metadata:
+      icon: "\U0001F50D"
+      stages: 3
+      intelligence:
+      - lens
+      - knowledge
+      phase: '48'
+      stage: '1'
+  - name: DependencyGraphGenerator
+    module: cortex.orchestrators.holistic.dependency_graph
+    class: DependencyGraphGenerator
+    tier: 3
+    priority: 85
+    dependencies:
+    - HolisticValidationOrchestrator
+    capabilities:
+    - dependency_analysis
+    - impact_assessment
+    - circular_dependency_detection
+    - duplication_detection
+    health_check: generate_graph
+    mcp_adapter: DependencyGraphAdapter
+    description: Analyzes orchestrator dependencies for CORE-035 compliance (Phase
+      48 S2)
+    mcp_tools:
+    - cortex_dependency_graph
+    governance:
+    - CORE-035
+    version: 1.0.0
+    metadata:
+      icon: "\U0001F517"
+      stages: 3
+      intelligence:
+      - lens
+      phase: '48'
+      stage: '2'
+  - name: ChallengeGateOrchestrator
+    module: cortex.orchestrators.holistic.challenge_gate
+    class: ChallengeGateOrchestrator
+    tier: 3
+    priority: 86
+    dependencies:
+    - DependencyGraphGenerator
+    capabilities:
+    - challenge_generation
+    - alternative_analysis
+    - decision_gating
+    - mandatory_approval_enforcement
+    health_check: generate_challenges
+    mcp_adapter: ChallengeGateAdapter
+    description: Pre-implementation challenge generation with alternatives (Phase
+      48 S3, CORE-048 MANDATORY)
+    mcp_tools:
+    - cortex_challenge_gate
+    governance:
+    - CORE-048
+    version: 1.0.0
+    metadata:
+      icon: "\U0001F6E1\uFE0F"
+      stages: 4
+      intelligence:
+      - lens
+      - knowledge
+      phase: '48'
+      stage: '3'
+  - name: CortexBrainIntegrationOrchestrator
+    module: cortex.orchestrators.holistic.cortex_brain_integration
+    class: CortexBrainIntegrationOrchestrator
+    tier: 3
+    priority: 87
+    dependencies:
+    - ChallengeGateOrchestrator
+    capabilities:
+    - brain_health_check
+    - context_injection
+    - knowledge_synthesis
+    - multi_session_coordination
+    health_check: check_brain_health
+    mcp_adapter: BrainIntegrationAdapter
+    description: Integrates CORTEX brain state with validation pipeline (Phase 48
+      S4)
+    mcp_tools:
+    - cortex_brain_health
+    governance:
+    - CORE-035
+    version: 1.0.0
+    metadata:
+      icon: "\U0001F9E0"
+      stages: 3
+      intelligence:
+      - lens
+      - knowledge
+      phase: '48'
+      stage: '4'
+  - name: PromptEnhancementOrchestrator
+    module: cortex.orchestrators.holistic.prompt_enhancement
+    class: PromptEnhancementOrchestrator
+    tier: 3
+    priority: 88
+    dependencies:
+    - CortexBrainIntegrationOrchestrator
+    capabilities:
+    - prompt_injection
+    - context_optimization
+    - response_template_selection
+    - dynamic_guidance_generation
+    health_check: enhance_prompts
+    mcp_adapter: PromptEnhancementAdapter
+    description: Enhances prompts with context from validation and challenge gates
+      (Phase 48 S5)
+    mcp_tools:
+    - cortex_enhance_prompt
+    governance:
+    - CORE-029
+    - CORE-048
+    version: 1.0.0
+    metadata:
+      icon: "\U0001F4DD"
+      stages: 3
+      intelligence:
+      - lens
+      - knowledge
+      phase: '48'
+      stage: '5'
+  - name: ContextCrystallizationLayer
+    module: cortex.orchestrators.phase_49.context_crystallization_layer
+    class: ContextCrystallizationLayer
+    tier: 3
+    priority: 89
+    dependencies:
+    - PromptEnhancementOrchestrator
+    - HolisticValidationOrchestrator
+    capabilities:
+    - async_context_prefetch
+    - rules_cache_warming
+    - lens_context_preparation
+    - infrastructure_detection
+    - non_blocking_execution
+    health_check: validate
+    mcp_adapter: ContextCrystallizationLayerAdapter
+    description: Async context pre-warming layer with 300ms SLA timeout (Phase 49
+      S1)
+    mcp_tools:
+    - cortex_ccl_prefetch
+    - cortex_ccl_get_crystallized_context
+    - cortex_ccl_get_rules
+    governance:
+    - CORE-035
+    - CORE-049
+    version: 1.0.0
+    metadata:
+      icon: "\u26A1"
+      stages: 4
+      intelligence:
+      - lens
+      - knowledge
+      - infrastructure
+      phase: '49'
+      stage: '1'
+      sla_target_ms: 300
+      fallback_timeout_ms: 500
+  - name: ContentExtractionEngine
+    module: cortex.orchestrators.phase_49.content_extraction_engine
+    class: ContentExtractionEngine
+    tier: 3
+    priority: 88
+    dependencies:
+    - ContextCrystallizationLayer
+    capabilities:
+    - document_parsing
+    - text_extraction
+    - semantic_chunking
+    - metadata_enrichment
+    mcp_tools:
+    - cortex_extract_content
+    - cortex_parse_document
+    - cortex_extract_metadata
+    governance:
+    - CORE-035
+    - CORE-049
+    version: 1.0.0
+    metadata:
+      icon: "\U0001F4C4"
+      phase: '49'
+      stage: '2'
+  - name: KnowledgeParser
+    module: cortex.orchestrators.phase_49.knowledge_parser
+    class: KnowledgeParser
+    tier: 3
+    priority: 87
+    dependencies:
+    - ContentExtractionEngine
+    capabilities:
+    - entity_recognition
+    - relationship_extraction
+    - knowledge_graph_construction
+    - semantic_analysis
+    mcp_tools:
+    - cortex_parse_knowledge
+    - cortex_extract_entities
+    - cortex_build_graph
+    governance:
+    - CORE-035
+    - CORE-049
+    version: 1.0.0
+    metadata:
+      icon: "\U0001F9E0"
+      phase: '49'
+      stage: '3'
+  - name: YAMLGenerator
+    module: cortex.orchestrators.phase_49.yaml_generator
+    class: YAMLGenerator
+    tier: 3
+    priority: 86
+    dependencies:
+    - KnowledgeParser
+    capabilities:
+    - schema_validation
+    - yaml_generation
+    - format_enforcement
+    - completeness_checking
+    mcp_tools:
+    - cortex_generate_yaml
+    - cortex_validate_schema
+    - cortex_enforce_format
+    governance:
+    - CORE-035
+    - CORE-049
+    version: 1.0.0
+    metadata:
+      icon: "\U0001F4CB"
+      phase: '49'
+      stage: '4'
+  - name: ApprovalWorkflow
+    module: cortex.orchestrators.phase_49.approval_workflow
+    class: ApprovalWorkflow
+    tier: 3
+    priority: 85
+    dependencies:
+    - YAMLGenerator
+    capabilities:
+    - approval_routing
+    - stakeholder_notification
+    - version_tracking
+    - publication_gating
+    mcp_tools:
+    - cortex_route_approval
+    - cortex_notify_stakeholder
+    - cortex_track_version
+    governance:
+    - CORE-035
+    - CORE-049
+    version: 1.0.0
+    metadata:
+      icon: "\u2705"
+      phase: '49'
+      stage: '5'
+  - name: IncrementalUpdater
+    module: cortex.orchestrators.phase_49.incremental_updater
+    class: IncrementalUpdater
+    tier: 3
+    priority: 84
+    dependencies:
+    - ApprovalWorkflow
+    capabilities:
+    - delta_detection
+    - incremental_sync
+    - version_control
+    - rollback_support
+    mcp_tools:
+    - cortex_detect_delta
+    - cortex_sync_incremental
+    - cortex_manage_versions
+    governance:
+    - CORE-035
+    - CORE-049
+    version: 1.0.0
+    metadata:
+      icon: "\U0001F504"
+      phase: '49'
+      stage: '6'
+  - name: GitHubClientOrchestrator
+    module: cortex.orchestrators.phase_52.github_client
+    class: GitHubClientOrchestrator
+    tier: 3
+    priority: 83
+    dependencies:
+    - IncrementalUpdater
+    capabilities:
+    - github_api_integration
+    - pr_operations
+    - review_management
+    - webhook_handling
+    mcp_tools:
+    - cortex_github_client
+    - cortex_create_review
+    - cortex_fetch_pr_data
+    governance:
+    - CORE-035
+    - CORE-049
+    version: 1.0.0
+    metadata:
+      icon: "\U0001F419"
+      phase: '52'
+      stage: '1'
+  - name: SecurityAnalyzerOrchestrator
+    module: cortex.orchestrators.phase_52.security_analyzer
+    class: SecurityAnalyzerOrchestrator
+    tier: 3
+    priority: 82
+    dependencies:
+    - GitHubClientOrchestrator
+    capabilities:
+    - vulnerability_detection
+    - cwe_scanning
+    - security_classification
+    - risk_assessment
+    mcp_tools:
+    - cortex_analyze_security
+    - cortex_detect_cwe
+    - cortex_assess_risk
+    governance:
+    - CORE-035
+    - CORE-049
+    version: 1.0.0
+    metadata:
+      icon: "\U0001F510"
+      phase: '52'
+      stage: '1.2'
+  - name: ReviewEngineOrchestrator
+    module: cortex.orchestrators.phase_52.review_engine
+    class: ReviewEngineOrchestrator
+    tier: 3
+    priority: 81
+    dependencies:
+    - SecurityAnalyzerOrchestrator
+    capabilities:
+    - code_review
+    - quality_assessment
+    - recommendation_generation
+    - feedback_composition
+    mcp_tools:
+    - cortex_review_code
+    - cortex_assess_quality
+    - cortex_generate_recommendation
+    governance:
+    - CORE-035
+    - CORE-049
+    version: 1.0.0
+    metadata:
+      icon: "\u270F\uFE0F"
+      phase: '52'
+      stage: '1.3'
+  - name: IntegrationOrchestrator
+    module: cortex.orchestrators.phase_52.integration
+    class: IntegrationOrchestrator
+    tier: 3
+    priority: 80
+    dependencies:
+    - ReviewEngineOrchestrator
+    capabilities:
+    - orchestrator_coordination
+    - workflow_execution
+    - result_aggregation
+    - event_handling
+    mcp_tools:
+    - cortex_coordinate_review
+    - cortex_execute_workflow
+    - cortex_aggregate_results
+    governance:
+    - CORE-035
+    - CORE-049
+    version: 1.0.0
+    metadata:
+      icon: "\U0001F517"
+      phase: '52'
+      stage: '1.4'
+  - name: DotNetLensOrchestrator
+    module: cortex.orchestrators.phase_55.dotnet_lens
+    class: DotNetLensOrchestrator
+    tier: 3
+    priority: 79
+    dependencies:
+    - IntegrationOrchestrator
+    capabilities:
+    - dotnet_project_analysis
+    - framework_detection
+    - dependency_resolution
+    - code_complexity
+    mcp_tools:
+    - cortex_analyze_dotnet
+    - cortex_detect_framework
+    - cortex_resolve_dependencies
+    governance:
+    - CORE-035
+    - CORE-049
+    version: 1.0.0
+    metadata:
+      icon: .NET
+      phase: '55'
+      stage: '1'
+  - name: MSBuildResolverOrchestrator
+    module: cortex.orchestrators.phase_55.msbuild_resolver
+    class: MSBuildResolverOrchestrator
+    tier: 3
+    priority: 78
+    dependencies:
+    - DotNetLensOrchestrator
+    capabilities:
+    - msbuild_parsing
+    - project_graph_analysis
+    - build_config_extraction
+    - target_identification
+    mcp_tools:
+    - cortex_parse_msbuild
+    - cortex_analyze_project_graph
+    - cortex_extract_build_config
+    governance:
+    - CORE-035
+    - CORE-049
+    version: 1.0.0
+    metadata:
+      icon: "\U0001F528"
+      phase: '55'
+      stage: '2'
+  - name: CentralizedPackageManagerOrchestrator
+    module: cortex.orchestrators.phase_55.centralized_packages
+    class: CentralizedPackageManagerOrchestrator
+    tier: 3
+    priority: 77
+    dependencies:
+    - MSBuildResolverOrchestrator
+    capabilities:
+    - package_version_management
+    - dependency_graph_consolidation
+    - version_conflict_resolution
+    - nuget_integration
+    mcp_tools:
+    - cortex_manage_packages
+    - cortex_consolidate_versions
+    - cortex_resolve_conflicts
+    governance:
+    - CORE-035
+    - CORE-049
+    version: 1.0.0
+    metadata:
+      icon: "\U0001F4E6"
+      phase: '55'
+      stage: '3'
+  - name: EnterpriseAnalysisOrchestrator
+    module: cortex.orchestrators.phase_55.enterprise_analysis
+    class: EnterpriseAnalysisOrchestrator
+    tier: 3
+    priority: 76
+    dependencies:
+    - CentralizedPackageManagerOrchestrator
+    capabilities:
+    - database_analysis
+    - entity_framework_detection
+    - wcf_service_analysis
+    - azure_devops_integration
+    - architecture_visualization
+    mcp_tools:
+    - cortex_analyze_database
+    - cortex_detect_ef
+    - cortex_analyze_wcf
+    - cortex_integrate_azure
+    - cortex_visualize_architecture
+    governance:
+    - CORE-035
+    - CORE-049
+    version: 1.0.0
+    metadata:
+      icon: "\U0001F3D7\uFE0F"
+      phase: '55'
+      stage: 4-9
+  - name: DashboardOrchestrator
+    module: cortex.orchestrators.domain.dashboard_orchestrator
+    class: DashboardOrchestrator
+    tier: 2
+    priority: 85
+    dependencies:
+    - IntegrationOrchestrator
+    capabilities:
+    - dashboard_generation
+    - dashboard_sync
+    - dashboard_caching
+    - audit_trail
+    - mcp_tool_registration
+    mcp_tools:
+    - cortex_generate_dashboard
+    - cortex_sync_dashboard_data
+    governance:
+    - CORE-035
+    - CORE-049
+    version: 1.0.0
+    metadata:
+      icon: "\U0001F4CA"
+      phase: '53'
+      stage: 1-3
+  - name: IntelligenceOrchestrator
+    module: cortex.orchestrators.domain.intelligence_orchestrator
+    class: IntelligenceOrchestrator
+    tier: 3
+    priority: 84
+    dependencies:
+    - ContextCrystallizationLayer
+    - IntentRouter
+    capabilities:
+    - knowledge_synthesis
+    - intelligence_caching
+    - precedence_resolution
+    - violation_detection
+    - unified_context_building
+    mcp_tools:
+    - cortex_synthesize_intelligence
+    - cortex_get_cached_intelligence
+    - cortex_resolve_precedence
+    - cortex_detect_violations
+    governance:
+    - CORE-035
+    - CORE-049
+    version: 1.0.0
+    metadata:
+      icon: "\U0001F9E0"
+      phase: '53'
+      stage: 4-6
+  - name: DashboardIntegrationOrchestrator
+    module: cortex.orchestrators.domain.dashboard_integration
+    class: DashboardIntegrationOrchestrator
+    tier: 2
+    priority: 83
+    dependencies:
+    - DashboardOrchestrator
+    - MasterOrchestrator
+    - PlanningOrchestrator
+    capabilities:
+    - dashboard_routing
+    - dashboard_artifact_registration
+    - dashboard_action_listing
+    - dashboard_auto_generation
+    - dashboard_evidence_sourcing
+    - dashboard_testing
+    mcp_tools:
+    - cortex_route_dashboard_generation
+    - cortex_register_dashboard_artifact
+    - cortex_list_dashboard_actions
+    - cortex_generate_dashboard_on_onboard
+    governance:
+    - CORE-035
+    - CORE-049
+    version: 1.0.0
+    metadata:
+      icon: "\U0001F517"
+      phase: '53'
+      stage: 7-9
+  - name: ContextCrystallizationLayerEnhanced
+    module: cortex.orchestrators.phase_49.context_crystallization_layer
+    class: ContextCrystallizationLayer
+    tier: 2
+    priority: 90
+    dependencies:
+    - MasterOrchestrator
+    capabilities:
+    - rules_cache_warming
+    - layered_knowledge_synthesis
+    - pre_flight_context_enrichment
+    - unified_intelligence_synthesis
+    - intelligence_caching
+    - phase_d_integration
+    mcp_tools:
+    - cortex_get_crystallized_context
+    - cortex_get_intelligence_cache
+    governance:
+    - CORE-008
+    - CORE-035
+    - CORE-049
+    version: 1.1.0
+    metadata:
+      icon: "\U0001F48E"
+      phase: '54'
+      stage: 1-6
+      enhancement: 'Phase 54 S1-S6: CCL Enhancement + Intelligence Warming'
+  - name: CCLIntelligenceWarmingOrchestrator
+    module: cortex.orchestrators.phase_49.context_crystallization_layer
+    class: IntelligenceWarmingLayer
+    tier: 3
+    priority: 88
+    dependencies:
+    - ContextCrystallizationLayerEnhanced
+    - KnowledgeSynthesisEngine
+    capabilities:
+    - unified_intelligence_synthesis
+    - lens_knowledge_integration
+    - company_knowledge_integration
+    - cortex_rules_integration
+    - violation_detection
+    - citation_generation
+    - intelligent_caching
+    mcp_tools:
+    - cortex_synthesize_unified_intelligence
+    - cortex_get_cached_intelligence
+    - cortex_detect_violations
+    governance:
+    - CORE-008
+    - CORE-035
+    - CORE-049
+    version: 1.0.0
+    metadata:
+      icon: "\U0001F321\uFE0F"
+      phase: '54'
+      stage: 4-6
+      authority: AC-PHASE54-S4-S6-001
+  - name: CCLIntegrationOrchestrator
+    module: cortex.orchestrators.phase_49.context_crystallization_layer
+    class: CCLIntegrationOrchestrator
+    tier: 2
+    priority: 87
+    dependencies:
+    - ContextCrystallizationLayerEnhanced
+    - IntentRouter
+    - TDDOrchestrator
+    - RefactoringOrchestrator
+    - LENSOrchestrator
+    capabilities:
+    - ccl_enhancement_registration
+    - orchestrator_context_enrichment
+    - circular_dependency_validation
+    - governance_enforcement
+    - production_readiness_validation
+    mcp_tools:
+    - cortex_register_ccl_enhancement
+    - cortex_validate_orchestrator_integration
+    - cortex_enforce_governance
+    governance:
+    - CORE-008
+    - CORE-035
+    - CORE-049
+    version: 1.0.0
+    metadata:
+      icon: "\U0001F517"
+      phase: '54'
+      stage: 7-9
+      authority: AC-PHASE54-S7-S9-001
+  - name: IntelligenceEngineOrchestrator
+    module: cortex.intelligence.relationships.traversal
+    class: RelationshipTraversalEngine
+    tier: 3
+    priority: 86
+    dependencies: []
+    capabilities:
+    - api_endpoint_extraction
+    - database_model_detection
+    - file_dependency_analysis
+    - dependency_graph_building
+    - relationship_detection
+    - code_relationship_traversal
+    mcp_tools:
+    - cortex_extract_api_endpoints
+    - cortex_detect_database_models
+    - cortex_analyze_dependencies
+    - cortex_build_dependency_graph
+    governance:
+    - CORE-008
+    - CORE-011
+    - CORE-012
+    - CORE-035
+    - CORE-049
+    version: 1.0.0
+    metadata:
+      icon: "\U0001F517"
+      phase: '56'
+      stage: 1-5
+      authority: AC-PHASE56-001 (RelationshipTraversal migration)
+  - name: IntelligenceIntegrationOrchestrator
+    module: cortex.intelligence.relationships
+    class: IntelligenceIntegrationOrchestrator
+    tier: 2
+    priority: 85
+    dependencies:
+    - IntelligenceEngineOrchestrator
+    - LENSOrchestrator
+    capabilities:
+    - intelligence_layer_integration
+    - lens_orchestrator_wiring
+    - circular_dependency_validation
+    - backward_compatibility_maintenance
+    - production_readiness_validation
+    mcp_tools:
+    - cortex_register_intelligence_engine
+    - cortex_validate_lens_integration
+    - cortex_check_circular_dependencies
+    governance:
+    - CORE-008
+    - CORE-035
+    - CORE-049
+    version: 1.0.0
+    metadata:
+      icon: "\U0001F9E0"
+      phase: '56'
+      stage: 6-9
+      authority: AC-PHASE56-S7-S9-001
 validation:
   rules:
-    - name: "no_circular_dependencies"
-      check: "dependency_graph_is_dag"
-      severity: "ERROR"
-      
-    - name: "all_dependencies_exist"
-      check: "all_dependency_names_in_orchestrator_list"
-      severity: "ERROR"
-      
-    - name: "tier_ordering"
-      check: "lower_tier_cannot_depend_on_higher_tier"
-      severity: "WARNING"
-      
-    - name: "health_check_defined"
-      check: "all_orchestrators_have_health_check"
-      severity: "WARNING"
-
-# -------------------------------------------------------------------------
-# FALLBACK / DEGRADATION ROUTES
-# -------------------------------------------------------------------------
+  - name: no_circular_dependencies
+    check: dependency_graph_is_dag
+    severity: ERROR
+  - name: all_dependencies_exist
+    check: all_dependency_names_in_orchestrator_list
+    severity: ERROR
+  - name: tier_ordering
+    check: lower_tier_cannot_depend_on_higher_tier
+    severity: WARNING
+  - name: health_check_defined
+    check: all_orchestrators_have_health_check
+    severity: WARNING
 fallback_routes:
-  - orchestrator: "RefactoringOrchestrator"
-    fallback_to: "TDDOrchestrator"
-    condition: "health_check_fails"
-    
-  - orchestrator: "PlanningOrchestrator"
-    fallback_to: "MasterOrchestrator"
-    condition: "health_check_fails"
-    
-  - orchestrator: "DocumentationOrchestrator"
-    fallback_to: "MasterOrchestrator"
-    condition: "health_check_fails"
+- orchestrator: RefactoringOrchestrator
+  fallback_to: TDDOrchestrator
+  condition: health_check_fails
+- orchestrator: PlanningOrchestrator
+  fallback_to: MasterOrchestrator
+  condition: health_check_fails
+- orchestrator: DocumentationOrchestrator
+  fallback_to: MasterOrchestrator
+  condition: health_check_fails
