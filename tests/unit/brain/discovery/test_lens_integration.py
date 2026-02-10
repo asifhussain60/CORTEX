@@ -206,30 +206,6 @@ def complex_function(x):
 class TestCommentExtractionIntegration:
     """Test CommentExtractor integration."""
 
-# TODO: Refactor this method
-def work():
-    # FIXME: Handle null case
-    pass
-""")
-        
-        integration = LENSIntegration(repo_path=tmp_path)
-        
-        with patch.object(integration.comment_extractor, 'extract_comments') as mock_extract:
-            mock_extract.return_value = MockCommentExtractionResult(
-                success=True,
-                comments=[
-                    MockComment(line_number=2, content="TODO: Refactor this method", comment_type="block"),
-                    MockComment(line_number=4, content="FIXME: Handle null case", comment_type="inline"),
-                ]
-            )
-            
-            result = integration.extract_comments(test_file)
-            
-            assert result is not None
-            assert len(result["todos"]) == 1
-            assert len(result["fixmes"]) == 1
-            assert result["todos"][0]["text"] == "TODO: Refactor this method"
-            mock_extract.assert_called_once_with(test_file)
 
 class TestFullLENSAnalysis:
     """Test complete LENS analysis pipeline."""

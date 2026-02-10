@@ -271,6 +271,8 @@ class TestMetrics:
         metrics = state_machine.get_metrics()
         assert metrics["total_transitions"] >= 5
     
+    def test_invalid_transition_counter(
+        self, state_machine: PhaseStateMachine
     ) -> None:
         """Test invalid transition counter."""
         state_machine.create_phase("test-phase")
