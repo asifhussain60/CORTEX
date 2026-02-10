@@ -1,0 +1,73 @@
+phase_id: phase-71
+name: Universal Learning Loop Architecture
+status: active
+priority: P0
+created: '2026-02-10T11:51:24.430839'
+description: Implement unified learning loop across all orchestrators
+gaps_addressed:
+- 'GAP-1: TDDOrchestrator test learning'
+- 'GAP-2: RefactoringOrchestrator code smell learning'
+- 'GAP-3: InteractionOrchestrator conversation learning'
+- 'GAP-4: EnforcementOrchestrator violation learning'
+- 'GAP-5: MasterOrchestrator business knowledge integration'
+- 'GAP-6: RepositoryOnboardingOrchestrator pattern learning'
+- 'GAP-7: PlanOrchestrator phase learning'
+- 'GAP-8: ChallengeEngine effectiveness tracking'
+- 'GAP-9: KnowledgeSynthesisEngine synthesis learning'
+- 'GAP-10: IncrementalContextLoader load pattern learning'
+stages:
+- stage_id: S1
+  name: Universal Learning Infrastructure
+  effort_hours: 12
+  tasks:
+  - Create cortex/learning/universal_learning_loop.py
+  - Create cortex/learning/pattern_extractor.py
+  - Create cortex/learning/knowledge_merger.py
+  - Create cortex/learning/confidence_scorer.py
+  - Write 20+ tests for learning infrastructure
+- stage_id: S2
+  name: Orchestrator Integration (Batch 1)
+  effort_hours: 16
+  depends_on:
+  - S1
+  orchestrators:
+  - InteractionOrchestrator
+  - TDDOrchestrator
+  - RefactoringOrchestrator
+  - MasterOrchestrator
+- stage_id: S3
+  name: Orchestrator Integration (Batch 2)
+  effort_hours: 12
+  depends_on:
+  - S2
+  orchestrators:
+  - EnforcementOrchestrator
+  - RepositoryOnboardingOrchestrator
+  - PlanOrchestrator
+- stage_id: S4
+  name: Intelligence System Integration
+  effort_hours: 8
+  depends_on:
+  - S2
+  systems:
+  - ChallengeEngine
+  - KnowledgeSynthesisEngine
+  - IncrementalContextLoader
+- stage_id: S5
+  name: E2E Validation + Dashboard
+  effort_hours: 6
+  depends_on:
+  - S3
+  - S4
+  tasks:
+  - "E2E tests: 10+ interactions \u2192 5+ learnings"
+  - 'Dashboard: Learning metrics visualization'
+  - 'Performance: <10ms learning capture overhead'
+total_effort_hours: 54
+acceptance_criteria:
+- All 10 orchestrators have learning loops integrated
+- 90%+ test coverage for learning infrastructure
+- Learning capture <10ms overhead per operation
+- Knowledge repositories incrementally enriched
+- Dashboard shows learning metrics
+- "E2E validation: 10 interactions \u2192 5+ patterns learned"
