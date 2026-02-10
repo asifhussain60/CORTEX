@@ -243,9 +243,9 @@ class InteractionOrchestrator:
         # STEP 2.5: Security Threat Assessment (Phase 8.3 - AC-SECURITY-FRAMEWORK-001)
         # If user request contains code context, run security analysis
         security_assessment = None
-        if "code" in round_context.data or "file_path" in round_context.data:
-            code_context = round_context.data.get("code", "")
-            file_path = round_context.data.get("file_path", "user_code.py")
+        if "code" in round_context.previous_context or "file_path" in round_context.previous_context:
+            code_context = round_context.previous_context.get("code", "")
+            file_path = round_context.previous_context.get("file_path", "user_code.py")
             
             if code_context:
                 security_assessment = self.challenge_engine.assess_security_threats(
