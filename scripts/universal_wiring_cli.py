@@ -24,7 +24,7 @@ from typing import Dict, Any
 # Add CORTEX to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from cortex.learning.registry_intelligence_agent import RegistryIntelligenceAgent
+from cortex.learning.registry_intelligence_agent_simple import RegistryIntelligenceAgent
 
 
 def print_banner():
@@ -48,7 +48,7 @@ def format_discovery_table(discoveries):
         if len(discovery.keywords) > 4:
             keywords_str += "..."
         
-        status = "✅ YES" if discovery.is_registered else "❌ NO"
+        status = "❓ UNKNOWN"  # Simple version doesn't check registry
         confidence = f"{discovery.confidence:.2f}"
         
         print(f"{discovery.name:<25} {keywords_str:<30} {status:<12} {confidence:<10}")
@@ -58,11 +58,14 @@ def format_validation_report(report):
     """Format validation report."""
     print("📊 UNIVERSAL VALIDATION REPORT")
     print("-" * 50)
-    print(f"Total Orchestrators: {report['total_orchestrators']}")
-    print(f"Registered: {report['registered_count']}")
-    print(f"Unregistered: {report['unregistered_count']}")
-    print(f"Health Score: {report['health_score']:.1f}%")
-    print(f"Overall Status: {report['overall_status'].upper()}")
+    print(f"Total Orchestrators: {report['discovered_orchestrators']}")
+    print(f"Registry Gaps: {report['registry_gaps']}")
+    print(f"Coverage: {report['coverage_percentage']:.1f}%")
+    
+    print("\\n🎯 Intent Coverage:")
+    for intent, info in report['intent_coverage'].items():
+        status = "✅" if info['covered'] else "❌"
+        print(f"  {intent}: {status} {info['count']} orchestrators")
     
     # Intent coverage
     print("\\n🎯 INTENT COVERAGE:")
@@ -117,8 +120,8 @@ def cmd_scan(args):
     """Scan for orchestrators."""
     print("🔍 Scanning for orchestrators...")
     
-    agent = RegistryIntelligenceAgent(enable_learning=False)
-    discoveries = agent.scan_for_orchestrators(force_rescan=True)
+    agent = RegistryIntelligenceAgent()
+    discoveries = agent.scan_for_orchestrators()
     
     print(f"\\n📋 Found {len(discoveries)} orchestrators:")
     format_discovery_table(discoveries)
@@ -141,7 +144,7 @@ def cmd_validate(args):
     """Validate orchestrator wiring."""
     print("✅ Validating universal orchestrator wiring...")
     
-    agent = RegistryIntelligenceAgent(enable_learning=False)
+    agent = RegistryIntelligenceAgent()
     report = agent.validate_universal_wiring()
     
     format_validation_report(report)
@@ -156,7 +159,7 @@ def cmd_fix(args):
     else:
         print("🔧 Running universal auto-fix...")
     
-    agent = RegistryIntelligenceAgent(enable_learning=False)
+    agent = RegistryIntelligenceAgent()
     
     # First validate to get issues
     print("Step 1: Validating current state...")
@@ -175,8 +178,8 @@ def cmd_test(args):
     
     print(f"🧪 Testing orchestrator: {orchestrator_name}")
     
-    agent = RegistryIntelligenceAgent(enable_learning=False)
-    discoveries = agent.scan_for_orchestrators(force_rescan=True)
+    agent = RegistryIntelligenceAgent()
+    discoveries = agent.scan_for_orchestrators()
     
     # Find the orchestrator
     target = None

@@ -473,6 +473,8 @@ class RegistryIntelligenceAgent:
                 dependencies[discovery.name] = []
         
         return dependencies
+    
+    def detect_registry_gaps(
         self,
         discoveries: Optional[List[OrchestratorDiscovery]] = None
     ) -> List[RegistryGap]:
@@ -711,6 +713,8 @@ class RegistryIntelligenceAgent:
             fix_results["overall_status"] = "error"
         
         return fix_results
+    
+    def universal_auto_fix(
         self,
         gaps: List[RegistryGap],
         dry_run: bool = False
