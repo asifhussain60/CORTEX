@@ -2,7 +2,7 @@
 CORTEX Registry Module
 
 Handles cortex-registry/ management including dashboard generation,
-tenant isolation, and multi-tenant support.
+tenant isolation, multi-tenant support, and workspace management.
 """
 
 from cortex.registry.cortex_master_dashboard_generator import (
@@ -18,6 +18,10 @@ from cortex.registry.tenant_context import (
 from cortex.registry.tenant_aware_git_backed_registry import (
     TenantAwareGitBackedRegistry,
 )
+from cortex.registry.workspace_manager import (
+    WorkspaceManager,
+    Workspace,
+)
 
 __all__ = [
     "CortexMasterDashboardGenerator",
@@ -27,4 +31,6 @@ __all__ = [
     "require_permission",
     "require_admin",
     "TenantAwareGitBackedRegistry",
+    "WorkspaceManager",
+    "Workspace",
 ]
