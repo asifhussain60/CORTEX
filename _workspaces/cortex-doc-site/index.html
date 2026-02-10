@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CORTEX — Visual Documentation</title>
+  <link rel="stylesheet" href="assets/css/theme.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/tabs.css" />
+  <link rel="stylesheet" href="assets/css/viz.css" />
+  <link rel="stylesheet" href="assets/css/animations.css" />
+  <link rel="stylesheet" href="assets/css/utils.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>CORTEX • Documentation</h1>
+          <p>Offline-ready, role-guided, evidence-aware</p>
+        </div>
+      </div>
+
+      <div id="roleBox"></div>
+
+      <div id="progressWrap" class="progress">
+        <div class="row">
+          <div>
+            <div id="progressTitle" class="kicker">Role Tour</div>
+            <div id="progressStep" class="small">Choose a role to begin</div>
+          </div>
+          <div class="badge implemented"><span class="badgeDot"></span>Guided</div>
+        </div>
+        <div class="progressBar"><div id="progressFill" class="progressFill"></div></div>
+        <div class="btnRow mt10">
+          <button id="btnPrev" class="btn" type="button">Previous</button>
+          <button id="btnNext" class="btn primary" type="button">Next</button>
+        </div>
+      </div>
+
+      <div class="sectionTitle">Navigate</div>
+      <div id="tabList" class="tabs" aria-label="Sidebar tabs"></div>
+      <hr class="sep" />
+      <div class="small">
+        <div class="kicker">Truth policy</div>
+        <div class="p">This site uses truth badges to avoid overcommitment. Where wiring is partial or assumption-heavy, the UI is explicit.</div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div id="roleTiles"></div>
+
+      <div class="glass-card-display">
+        <div class="cardTop">
+          <div>
+            <div class="kicker">You are here</div>
+            <div id="breadcrumb" class="h2">CORTEX Documentation • Overview</div>
+            <div class="p">A visual, role-guided tour of CORTEX architecture, LENS intelligence, wiring integrity, and deployment readiness.</div>
+          </div>
+          <span class="badge implemented"><span class="badgeDot"></span>Evidence-aware</span>
+        </div>
+        <div id="topTabs" class="tabs mt12" aria-label="Top tabs"></div>
+      </div>
+
+      <section class="panel active mt14" data-panel="overview">
+        <div class="grid cols2">
+          <div class="glass-card-display">
+            <div class="kicker">Executive narrative</div>
+            <div class="h2" id="ovHeadline"></div>
+            <div class="glass-panel mt12">
+              <div class="kicker">Truth statement</div>
+              <div class="p" id="ovTruth"></div>
+            </div>
+            <div class="glass-panel mt12">
+              <div class="kicker">What stakeholders get</div>
+              <ul class="p" id="ovList"></ul>
+            </div>
+          </div>
+          <div class="glass-card-display">
+            <div class="kicker">Brain analogy</div>
+            <div class="h2">CORTEX behaves like a brain</div>
+            <div class="p">Reflexes (Tier 0) prevent unsafe actions. Acceptance (Tier 1) defines success. Templates (Tier 2) keep outputs structured. Memory (Tier 3) improves reuse.</div>
+            <div class="vizBox mt12" id="vizBrain"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel mt14" data-panel="capabilities">
+        <div class="grid cols2">
+          <div class="glass-card-display">
+            <div class="kicker">Capability catalog</div>
+            <div class="h2">High-value CORTEX capabilities</div>
+            <div class="p">Curated for decision-making: what it enables, who benefits, and implementation maturity.</div>
+            <div id="capGrid" class="grid mt12"></div>
+          </div>
+          <div class="glass-card-display">
+            <div class="kicker">Visualization</div>
+            <div class="h2">Capability map</div>
+            <div class="p">A stakeholder-first summary view — useful in briefings and onboarding.</div>
+            <div class="vizBox mt12" id="vizCaps"><div class="vizFallback">(Capability map placeholder — can be extended.)</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel mt14" data-panel="journeys">
+        <div class="grid cols2">
+          <div class="glass-card-display">
+            <div class="kicker">Role-based learning</div>
+            <div class="h2">Journeys that build understanding</div>
+            <div class="p">Each role receives a recommended progression through the content to prevent overload and build confidence.</div>
+            <div id="journeyGrid" class="grid mt12"></div>
+          </div>
+          <div class="glass-card-display">
+            <div class="kicker">Pipeline</div>
+            <div class="h2">Shared workflow model</div>
+            <div class="p">Intent → evidence → gates → execution → validation. This is the backbone for collaboration.</div>
+            <div class="vizBox mt12" id="vizPipeline"><div class="vizFallback">(Pipeline diagram placeholder — can be extended.)</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel mt14" data-panel="architecture">
+        <div class="grid cols2">
+          <div class="glass-card-display">
+            <div class="kicker">C4-style view</div>
+            <div class="h2">Architecture: how work flows</div>
+            <div class="p">This view will become fully interactive once the architecture graph renderer is enabled.</div>
+            <div class="vizBox mt12" id="vizArch"><div class="vizFallback">(Architecture graph placeholder — can be extended.)</div></div>
+          </div>
+          <div class="glass-card-display">
+            <div class="kicker">Maturity</div>
+            <div class="h2">Implemented vs partial vs planned</div>
+            <div class="p">Business leaders see what’s real today; engineers see what to harden next.</div>
+            <div class="glass-panel mt12">
+              <table class="table"><thead><tr><th>Capability</th><th>Maturity</th><th>Business value</th></tr></thead><tbody id="archTable"></tbody></table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel mt14" data-panel="intelligence">
+        <div class="grid cols2">
+          <div class="glass-card-display">
+            <div class="kicker">CORTEX LENS</div>
+            <div class="h2">Evidence-backed intelligence</div>
+            <div class="p">LENS builds decision-grade context so orchestrators can act coherently. Consistency comes from wiring and enforced invariants.</div>
+            <div class="glass-panel mt12"><div class="kicker">Crystallization (honest framing)</div><div class="p">Crystallization turns repo signals into structured artifacts that can be reused, diffed, and visualized.</div></div>
+          </div>
+          <div class="glass-card-display">
+            <div class="kicker">Layers</div>
+            <div class="h2">Brain layers as architecture</div>
+            <div class="p">A practical mental model: reflexes, acceptance, reasoning patterns, and memory.</div>
+            <div class="vizBox mt12" id="vizTiers"><div class="vizFallback">(Tier diagram placeholder — can be extended.)</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel mt14" data-panel="wiring">
+        <div class="grid cols2">
+          <div class="glass-card-display">
+            <div class="kicker">Brittleness spotlight</div>
+            <div class="h2">Wiring & registry integrity</div>
+            <div class="p">Permanent deployment requires boring reliability: validators, tests, and drift detection.</div>
+            <div class="vizBox mt12" id="vizWiring"><div class="vizFallback">(Wiring matrix placeholder — can be extended.)</div></div>
+          </div>
+          <div class="glass-card-display">
+            <div class="kicker">Truth table</div>
+            <div class="h2">Wiring integrity table</div>
+            <div class="glass-panel mt12"><table class="table" id="wiringTable"></table></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel mt14" data-panel="quality">
+        <div class="grid cols2">
+          <div class="glass-card-display"><div class="kicker">Confidence engine</div><div class="h2">Quality & testing posture</div><div class="vizBox mt12" id="vizPyramid"><div class="vizFallback">(Test pyramid placeholder — can be extended.)</div></div></div>
+          <div class="glass-card-display"><div class="kicker">High-value tests</div><div class="h2">What to test (and why)</div><div class="glass-panel mt12"><ul class="p" id="testList"></ul></div></div>
+        </div>
+      </section>
+
+      <section class="panel mt14" data-panel="risk">
+        <div class="grid cols2">
+          <div class="glass-card-display"><div class="kicker">Security and brittleness</div><div class="h2">Risk constellation</div><div class="vizBox mt12" id="vizRisk"><div class="vizFallback">(Risk heatmap placeholder — can be extended.)</div></div></div>
+          <div class="glass-card-display"><div class="kicker">Details</div><div class="h2">Top risks</div><div id="riskList" class="mt12"></div></div>
+        </div>
+      </section>
+
+      <section class="panel mt14" data-panel="ops">
+        <div class="grid cols2">
+          <div class="glass-card-display"><div class="kicker">Permanent deployment</div><div class="h2">Assumptions to validate</div><div class="glass-panel mt12"><ul class="p" id="opsAssumptions"></ul></div></div>
+          <div class="glass-card-display"><div class="kicker">Observability</div><div class="h2">Debuggability is a feature</div><div class="glass-panel mt12"><ul class="p" id="opsObs"></ul></div></div>
+        </div>
+      </section>
+
+      <section class="panel mt14" data-panel="next">
+        <div class="glass-card-display"><div class="kicker">Actionable roadmap</div><div class="h2">Next steps</div><div id="nextBlocks" class="grid cols2 mt12"></div></div>
+      </section>
+
+      <footer class="small mt16"><div class="glass-panel"><div class="kicker">Offline notes</div><div class="p">Runs in <span class="mono">file://</span> mode with embedded data.</div></div></footer>
+    </main>
+  </div>
+
+  <script src="assets/data/cortex-doc-data.js"></script>
+  <script src="assets/js/vendor/d3.v7.min.js"></script>
+  <script src="assets/js/deployment-mode.js"></script>
+  <script src="assets/js/viz.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
