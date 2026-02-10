@@ -401,17 +401,23 @@ class GlossaryGenerator:
             domain_name = domain_dict["name"]
             
             for entity_name in domain_dict["entities"]:
-                # Query graph for entity details
+                # Try to find matching node by converting PascalCase to snake_case
+                # UserRepository → user_repository.py
+                snake_case_name = "".join(["_" + c.lower() if c.isupper() else c for c in entity_name]).lstrip("_")
+                file_name = f"{snake_case_name}.py"
+                
+                # Query graph for entity details (try exact match, then file name)
                 conn = self.storage._get_connection()
                 cursor = conn.cursor()
                 cursor.execute("""
-                    SELECT node_type, properties FROM nodes WHERE name = ?
-                """, (entity_name,))
+                    SELECT node_type, properties, name FROM nodes 
+                    WHERE name IN (?, ?)
+                """, (entity_name, file_name))
                 
                 row = cursor.fetchone()
                 if row:
                     entity = DomainEntity(
-                        name=entity_name,
+                        name=entity_name,  # Use the PascalCase name
                         domain=domain_name,
                         description=f"{entity_name} entity in {domain_name} domain"
                     )
@@ -421,7 +427,7 @@ class GlossaryGenerator:
         from cortex_lens.knowledge_graph.graph_query import GraphQuery
         query = GraphQuery(self.storage)
         
-        # Get all edges to build relationships
+        # Get all edges to build relationships (accept Class or File nodes)
         conn = self.storage._get_connection()
         cursor = conn.cursor()
         cursor.execute("""
@@ -432,7 +438,7 @@ class GlossaryGenerator:
             FROM edges e
             JOIN nodes n1 ON e.source_id = n1.id
             JOIN nodes n2 ON e.target_id = n2.id
-            WHERE n1.node_type = 'Class' AND n2.node_type = 'Class'
+            WHERE n1.node_type IN ('Class', 'File') AND n2.node_type IN ('Class', 'File')
         """)
         
         for row in cursor.fetchall():

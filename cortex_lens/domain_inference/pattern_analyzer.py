@@ -509,18 +509,35 @@ class PatternAnalyzer:
         stats = self.storage.get_statistics()
         logger.debug(f"Graph stats: {stats}")
         
-        # Query all Class nodes
+        # Query all Class nodes (fallback to File nodes if no classes)
         conn = self.storage._get_connection()
         cursor = conn.cursor()
         cursor.execute("""
-            SELECT name FROM nodes WHERE node_type = 'Class'
+            SELECT name, node_type FROM nodes WHERE node_type IN ('Class', 'File')
         """)
         
-        class_names = [row["name"] for row in cursor.fetchall()]
-        logger.debug(f"Found {len(class_names)} classes in graph")
+        rows = cursor.fetchall()
+        # Prefer Class nodes, fallback to Files if no classes
+        class_rows = [row for row in rows if row["node_type"] == "Class"]
+        file_rows = [row for row in rows if row["node_type"] == "File"]
         
-        if not class_names:
-            logger.warning("No classes found in graph")
+        if class_rows:
+            class_names = [row["name"] for row in class_rows]
+            logger.debug(f"Found {len(class_names)} Class nodes in graph")
+        elif file_rows:
+            # Extract class names from file names (e.g., user_repository.py → UserRepository)
+            class_names = []
+            for row in file_rows:
+                file_name = row["name"]
+                # Convert snake_case.py to PascalCase
+                if file_name.endswith(".py"):
+                    base_name = file_name[:-3]  # Remove .py
+                    # Convert snake_case to PascalCase
+                    class_name = "".join(word.capitalize() for word in base_name.split("_"))
+                    class_names.append(class_name)
+            logger.debug(f"Found {len(class_names)} File nodes, converted to class names")
+        else:
+            logger.warning("No Class or File nodes found in graph")
             return []
         
         # Cluster classes by domain prefix
