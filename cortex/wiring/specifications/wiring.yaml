@@ -493,7 +493,10 @@ orchestrators:
       icon: 🔌
       stages: 1
       intelligence: []
+      implementation_note: Enhancement integrated into InteractionOrchestrator, no separate class needed
     phase: '6'
+    status: enhancement_integrated
+    target_phase: completed
   - name: OnboardingOrchestrator
     module: cortex.orchestrators.onboarding.orchestrator
     class: OnboardingOrchestrator
@@ -1431,6 +1434,9 @@ orchestrators:
       phase: '54'
       stage: 4-6
       authority: AC-PHASE54-S4-S6-001
+      implementation_note: Implement during phase-77 S2 (Intelligence & Learning Core)
+    status: pending_implementation
+    target_phase: phase-77
   - name: CCLIntegrationOrchestrator
     module: cortex.orchestrators.phase_49.context_crystallization_layer
     class: CCLIntegrationOrchestrator
@@ -1462,6 +1468,9 @@ orchestrators:
       phase: '54'
       stage: 7-9
       authority: AC-PHASE54-S7-S9-001
+      implementation_note: Implement during phase-77 S2 (Intelligence & Learning Core)
+    status: pending_implementation
+    target_phase: phase-77
   - name: IntelligenceEngineOrchestrator
     module: cortex.intelligence.relationships.traversal
     class: RelationshipTraversalEngine
