@@ -98,8 +98,8 @@ class DigestSessionOrchestrator:
         if history_path:
             self.history_path = Path(history_path)
         else:
-            # Default to docs/meta/enhancement-history.yaml
-            self.history_path = Path("docs/meta/enhancement-history.yaml")
+            # CORE-002 COMPLIANCE: Use cortex_brain/state/ not docs/
+            self.history_path = Path("cortex_brain/state/enhancement-history.yaml")
         
         # Cache enhancement history (avoid re-reading 653KB file on every call)
         self._history_cache: Optional[Dict[str, Any]] = None

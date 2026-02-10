@@ -153,7 +153,7 @@ class VacuumOrchestrator:
             # Phase/Session marker files (ARCHIVE to docs/archive)
             "phase_markers": {
                 "patterns": [],  # Uses regex patterns from phase_marker_patterns
-                "destination": "docs/archive/phase-markers/",
+                "destination": "cortex_brain/state/archive/phase-markers/",
                 "action": "move",
             },
             # Production-critical root files (KEEP)
@@ -196,7 +196,7 @@ class VacuumOrchestrator:
                 "patterns": [
                     ".coverage",
                 ],
-                "destination": "docs/archive/reports/coverage/",
+                "destination": "cortex_brain/state/archive/reports/coverage/",
                 "action": "move",
             },
             # Historical reports directory (ARCHIVE)
@@ -204,7 +204,7 @@ class VacuumOrchestrator:
                 "patterns": [
                     "reports",
                 ],
-                "destination": "docs/archive/reports/",
+                "destination": "cortex_brain/state/archive/reports/",
                 "action": "archive_directory",
             },
             # Legacy utility scripts directory (ARCHIVE)
@@ -212,7 +212,7 @@ class VacuumOrchestrator:
                 "patterns": [
                     "scripts",
                 ],
-                "destination": "docs/archive/scripts/",
+                "destination": "cortex_brain/state/archive/scripts/",
                 "action": "archive_directory",
             },
         }

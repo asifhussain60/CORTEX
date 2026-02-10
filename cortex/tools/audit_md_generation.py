@@ -44,7 +44,8 @@ BLOCKED_PATTERNS = [
     (r"PHASE-.*-REPORT\.md$", "REPORT"),
 ]
 
-ALLOWED_LOCATIONS = ["docs/", "_workspaces/docs/"]
+# CORE-002 COMPLIANCE: Only these locations allow markdown files
+ALLOWED_LOCATIONS = [".github/prompts/", ".github/agents/", "README.md"]
 
 
 def is_violation(file_path: str) -> Tuple[bool, Optional[str]]:
