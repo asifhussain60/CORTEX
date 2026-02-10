@@ -44,6 +44,12 @@ from cortex.orchestrators.core.routing_enforcement import (
     RoutingViolation,
 )
 
+# Registry Intelligence Integration
+try:
+    from cortex.learning.registry_intelligence_agent import get_registry_intelligence_agent
+except ImportError:
+    get_registry_intelligence_agent = None
+
 
 @dataclass
 class RoutingDecision:
@@ -362,6 +368,9 @@ class IntentRouter(IOrchestrator):
         
         # AC-PHASE-8.2-01: Initialize orchestrator lookup (singleton)
         self.orchestrator_lookup: OrchestratorLookup = OrchestratorLookup()
+        
+        # Registry Intelligence: Initialize gap detection
+        self.registry_agent = get_registry_intelligence_agent() if get_registry_intelligence_agent else None
         
         # AC-PHASE-8.2-01: Initialize routing enforcement engine
         enforcement_config = self.routing_rules_config.get("enforcement", {})
@@ -1018,19 +1027,27 @@ class IntentRouter(IOrchestrator):
                 confidence = sum(confidence_breakdown.values())
                 
             else:
-                # Fallback: Use old routing rules (backward compatibility)
-                routing_key = (intent_type, domain)
-                if routing_key not in self.routing_rules:
-                    routing_key = (intent_type, None)
-                
-                target_handler = self.routing_rules.get(
-                    routing_key,
-                    f"{intent_type.value.capitalize()}OrchestrationHandler"
+                # REGISTRY INTELLIGENCE: No orchestrator found by keywords
+                # Attempt intelligent discovery and auto-registration
+                target_handler, target_orchestrator = self._handle_missing_orchestrator(
+                    intent_type, keywords, context
                 )
                 
-                # Try resolving orchestrator instance from handler name
-                result = self.orchestrator_lookup.resolve_instance(target_handler)
-                target_orchestrator = result.value if result.is_ok() else None
+                if not target_orchestrator:
+                    # Fallback: Use old routing rules (backward compatibility)
+                    routing_key = (intent_type, domain)
+                    if routing_key not in self.routing_rules:
+                        routing_key = (intent_type, None)
+                    
+                    target_handler = self.routing_rules.get(
+                        routing_key,
+                        f"{intent_type.value.capitalize()}OrchestrationHandler"
+                    )
+                    
+                    # Try resolving orchestrator instance from handler name
+                    result = self.orchestrator_lookup.resolve_instance(target_handler)
+                    target_orchestrator = result.value if result.is_ok() else None
+                
                 fallback_orchestrators = []
                 
                 # Fallback confidence calculation
@@ -1408,7 +1425,76 @@ class IntentRouter(IOrchestrator):
             # On any error, return original decision unchanged
             return decision
     
-    # ===== End LENS-002 Methods =====
+    def _handle_missing_orchestrator(
+        self,
+        intent_type: IntentType,
+        keywords: List[str],
+        context: Dict[str, Any]
+    ) -> Tuple[str, Optional[IOrchestrator]]:
+        """
+        Handle missing orchestrator by attempting intelligent discovery.
+        
+        Args:
+            intent_type: Detected intent type
+            keywords: Extracted keywords from request
+            context: Full request context
+            
+        Returns:
+            Tuple of (handler_name, orchestrator_instance)
+        """
+        if not self.registry_agent:
+            return f"{intent_type.value.capitalize()}Handler", None
+        
+        try:
+            # Scan for missing orchestrators
+            discoveries = self.registry_agent.scan_for_orchestrators(force_rescan=True)
+            
+            # Look for orchestrators that match our intent keywords
+            matching_discoveries = []
+            for discovery in discoveries:
+                if not discovery.is_registered:
+                    # Check if this orchestrator's keywords match our intent
+                    keyword_overlap = discovery.keywords & set(kw.lower() for kw in keywords)
+                    if keyword_overlap:
+                        matching_discoveries.append((discovery, len(keyword_overlap)))
+            
+            if matching_discoveries:
+                # Sort by keyword overlap (highest first)
+                matching_discoveries.sort(key=lambda x: x[1], reverse=True)
+                best_discovery = matching_discoveries[0][0]
+                
+                # Learn from this intent gap
+                self.registry_agent.learn_from_intent_gap(
+                    user_intent=context.get("description", "") or context.get("operation", ""),
+                    missing_orchestrator=best_discovery.name
+                )
+                
+                # Attempt to auto-register (if enabled)
+                gaps = self.registry_agent.detect_registry_gaps([best_discovery])
+                if gaps:
+                    fix_results = self.registry_agent.auto_fix_gaps(gaps, dry_run=False)
+                    if fix_results["fixed"]:
+                        # Try to get the orchestrator instance after registration
+                        result = self.orchestrator_lookup.resolve_instance(best_discovery.name)
+                        if result.is_ok():
+                            return best_discovery.name, result.value
+                
+                # Return discovered orchestrator name even if registration failed
+                return best_discovery.name, None
+            
+            # No matching discoveries found
+            return f"{intent_type.value.capitalize()}Handler", None
+            
+        except Exception as e:
+            self.logger.log_operation_complete(
+                ac_id="REGISTRY-INTELLIGENCE-001",
+                operation="MISSING_ORCHESTRATOR_DISCOVERY",
+                success=False,
+                details={"error": str(e), "intent": intent_type.value}
+            )
+            return f"{intent_type.value.capitalize()}Handler", None
+    
+    # ===== End Registry Intelligence Methods =====
     
     def route(self, context: Dict[str, Any]) -> RoutingDecision:
         """

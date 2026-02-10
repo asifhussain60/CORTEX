@@ -8,6 +8,7 @@ Available Tools:
 - intelligent_lens_tools: Tiered LENS with LLM enhancement (NEW)
 - onboarding_tools: Repository onboarding and config analysis (LENS v2.0)
 - dashboard_aggregator_v3_tool: Dashboard v3 JSON generation + HTTP serving + E2E tests (PHASE-21)
+- deployment_tools: Production deployment with DeploymentOrchestrator (HOLISTIC-REGISTRY-002)
 
 LENS CONSOLIDATION (2026-02-02):
 All LENS analyzers consolidated in cortex.lens package:
@@ -82,6 +83,13 @@ from .cortex_verify_claim import (
     cortex_verify_claim,
 )
 
+# Deployment Tools (HOLISTIC-REGISTRY-002)
+from .deployment_tools import (
+    cortex_deploy_to_production,
+    cortex_deployment_health_check,
+    cortex_deployment_canary,
+)
+
 __all__ = [
     # Git Merge
     "IntelligentGitMergeTool",
@@ -110,6 +118,10 @@ __all__ = [
     # Educational Tools (Phase 22)
     "cortex_ask",
     "cortex_verify_claim",
+    # Deployment Tools (HOLISTIC-REGISTRY-002)
+    "cortex_deploy_to_production",
+    "cortex_deployment_health_check",
+    "cortex_deployment_canary",
 ]
 
 # MCP Tool Registry for discovery
@@ -227,5 +239,24 @@ MCP_TOOLS = {
         "description": "Markdown cleanup with post-cleanup validation workflow",
         "category": "maintenance",
         "features": ["markdown_cleanup", "file_archival", "verification", "audit_offering"]
+    },
+    # Deployment Tools (HOLISTIC-REGISTRY-002: Fix orchestrator registration gap)
+    "cortex_deploy_to_production": {
+        "function": cortex_deploy_to_production,
+        "description": "Deploy CORTEX to production with full validation pipeline",
+        "category": "deployment",
+        "features": ["pre_flight_validation", "canary_deployment", "rollback_capability", "health_monitoring"]
+    },
+    "cortex_deployment_health_check": {
+        "function": cortex_deployment_health_check,
+        "description": "Check deployment readiness and system health",
+        "category": "deployment",
+        "features": ["health_validation", "readiness_check", "system_monitoring"]
+    },
+    "cortex_deployment_canary": {
+        "function": cortex_deployment_canary,
+        "description": "Manage canary deployments with staged rollout",
+        "category": "deployment",
+        "features": ["staged_rollout", "traffic_splitting", "automatic_promotion"]
     },
 }
