@@ -196,8 +196,24 @@ class VacuumOrchestrator:
                 "patterns": [
                     ".coverage",
                 ],
-                "destination": "reports/coverage/",
+                "destination": "docs/archive/reports/coverage/",
                 "action": "move",
+            },
+            # Historical reports directory (ARCHIVE)
+            "historical_reports": {
+                "patterns": [
+                    "reports",
+                ],
+                "destination": "docs/archive/reports/",
+                "action": "archive_directory",
+            },
+            # Legacy utility scripts directory (ARCHIVE)
+            "legacy_scripts": {
+                "patterns": [
+                    "scripts",
+                ],
+                "destination": "docs/archive/scripts/",
+                "action": "archive_directory",
             },
         }
 
@@ -1412,6 +1428,121 @@ class VacuumOrchestrator:
             Dictionary with flush results (same as trigger_brain_flush)
         """
         return self.trigger_brain_flush()
+
+    def cleanup_root_directories(
+        self,
+        root_path: str = ".",
+        dry_run: bool = False,
+    ) -> Dict[str, Any]:
+        """
+        Clean up root-level directories (reports/, scripts/, etc.) to docs/archive/.
+        
+        Watches for patterns of utility/historical content and archives to docs/archive/.
+        
+        Patterns cleaned:
+        - reports/ → docs/archive/reports/
+        - scripts/ → docs/archive/scripts/
+        - Any future similar utility directories
+        
+        Args:
+            root_path: Root directory of repository
+            dry_run: If True, only simulate actions without making changes
+            
+        Returns:
+            Dictionary with execution results:
+                - success: Whether cleanup completed successfully
+                - directories_archived: Number of directories moved
+                - actions_taken: List of actions performed
+                - errors: List of error messages
+                
+        Example:
+            >>> orchestrator = VacuumOrchestrator()
+            >>> result = orchestrator.cleanup_root_directories(".", dry_run=False)
+            >>> print(result["directories_archived"])
+            2
+        """
+        try:
+            root = Path(root_path)
+            directories_archived = 0
+            actions_taken = []
+            errors = []
+            
+            # Get directories to clean (reports, scripts, etc.)
+            directories_to_clean = [
+                ("reports", "docs/archive/reports"),
+                ("scripts", "docs/archive/scripts"),
+            ]
+            
+            for dir_name, dest_path in directories_to_clean:
+                source = root / dir_name
+                destination = root / dest_path
+                
+                if not source.exists():
+                    continue  # Directory doesn't exist, skip
+                
+                try:
+                    if not dry_run:
+                        # Create destination parent directory
+                        destination.parent.mkdir(parents=True, exist_ok=True)
+                        
+                        # Check if destination already exists (conflict)
+                        if destination.exists():
+                            # Archive existing destination
+                            counter = 1
+                            while destination.exists():
+                                new_dest = destination.parent / f"{destination.name}_{counter}"
+                                counter += 1
+                            
+                            # Move existing to numbered backup
+                            shutil.move(str(destination), str(new_dest))
+                            actions_taken.append({
+                                "action": "archived_existing",
+                                "directory": dir_name,
+                                "from": str(destination),
+                                "to": str(new_dest),
+                                "reason": "Archived existing destination to make room",
+                            })
+                        
+                        # Move the directory
+                        shutil.move(str(source), str(destination))
+                    
+                    directories_archived += 1
+                    actions_taken.append({
+                        "action": "archived",
+                        "directory": dir_name,
+                        "from": str(source),
+                        "to": str(destination),
+                        "dry_run": dry_run,
+                        "reason": "Archive utility/historical directory to docs/archive",
+                    })
+                    
+                except Exception as e:
+                    errors.append(f"Failed to archive {dir_name}: {str(e)}")
+            
+            return {
+                "success": len(errors) == 0,
+                "directories_archived": directories_archived,
+                "actions_taken": actions_taken,
+                "errors": errors,
+                "summary": {
+                    "total_actions": len(actions_taken),
+                    "archived": directories_archived,
+                    "dry_run": dry_run,
+                },
+            }
+            
+        except Exception as e:
+            return {
+                "success": False,
+                "directories_archived": 0,
+                "actions_taken": [],
+                "errors": [str(e)],
+                "summary": {
+                    "total_actions": 0,
+                    "archived": 0,
+                    "dry_run": dry_run,
+                },
+            }
     
     def verify_cortex_integrity(self, root_path: str = ".") -> Dict[str, Any]:
         """
