@@ -32,7 +32,9 @@ class TestPhase71MarkdownPrevention:
         assert result.is_err(), "Should block root markdown file"
         enforcement_result = result.error
         assert enforcement_result.level == EnforcementLevel.BLOCKED
-        assert any("root directory" in v.lower() for v in enforcement_result.violations)
+        # Updated assertion: Check for CORE-002 violation (not "root directory")
+        assert any("CORE-002" in v for v in enforcement_result.violations), \
+            f"Expected CORE-002 violation, got: {enforcement_result.violations}"
 
     def test_enforcement_orchestrator_blocks_docs_markdown(self):
         """EnforcementOrchestrator blocks docs/ markdown (CORE-002-SUB)."""

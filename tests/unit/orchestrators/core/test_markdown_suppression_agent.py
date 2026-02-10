@@ -75,8 +75,8 @@ class TestMarkdownSuppressionAgent:
         result = agent.validate(context)
 
         assert result.level == EnforcementLevel.BLOCKED
-        # DEPLOYMENT-PLAN.md matches both *-PLAN.md and DEPLOYMENT-*.md patterns
-        assert len(result.violations) == 4
+        # Updated: One violation per file (no duplicates after Gap #2 fix)
+        assert len(result.violations) == 3, f"Expected 3 violations, got {len(result.violations)}: {result.violations}"
         for violation in result.violations:
             assert "CORE-002" in violation
 
@@ -136,7 +136,7 @@ class TestMarkdownSuppressionAgent:
         assert result.level == EnforcementLevel.PASS
 
     def test_validate_documentation_file_passes(self, agent: MarkdownSuppressionAgent):
-        """Regular documentation file should PASS."""
+        """Regular documentation file should now be BLOCKED (Gap #2A fix - docs/ no longer allowed)."""
         context = {
             "intent": "DOCUMENT",
             "output_files": ["docs/architecture/system-overview.md"],
@@ -144,10 +144,13 @@ class TestMarkdownSuppressionAgent:
 
         result = agent.validate(context)
 
-        assert result.level == EnforcementLevel.PASS
+        # Updated 2026-02-10: docs/*.md is NO LONGER ALLOWED (CORE-002-SUB)
+        assert result.level == EnforcementLevel.BLOCKED
+        assert len(result.violations) == 1
+        assert "CORE-002" in result.violations[0]
 
     def test_validate_changelog_passes(self, agent: MarkdownSuppressionAgent):
-        """CHANGELOG.md file creation should PASS."""
+        """CHANGELOG.md file creation should now be BLOCKED (only README.md allowed in root)."""
         context = {
             "intent": "DOCUMENT",
             "output_files": ["CHANGELOG.md"],
@@ -155,10 +158,13 @@ class TestMarkdownSuppressionAgent:
 
         result = agent.validate(context)
 
-        assert result.level == EnforcementLevel.PASS
+        # Updated 2026-02-10: Only README.md, .github/prompts/*.md, .github/agents/*.md allowed
+        assert result.level == EnforcementLevel.BLOCKED
+        assert len(result.violations) == 1
+        assert "CORE-002" in result.violations[0]
 
     def test_validate_guide_passes(self, agent: MarkdownSuppressionAgent):
-        """*-guide.md file creation should PASS (not forbidden pattern)."""
+        """*-guide.md file creation should now be BLOCKED (not in allowed paths)."""
         context = {
             "intent": "DOCUMENT",
             "output_files": ["user-guide.md"],
@@ -166,7 +172,10 @@ class TestMarkdownSuppressionAgent:
 
         result = agent.validate(context)
 
-        assert result.level == EnforcementLevel.PASS
+        # Updated 2026-02-10: All root .md files except README.md are blocked
+        assert result.level == EnforcementLevel.BLOCKED
+        assert len(result.violations) == 1
+        assert "CORE-002" in result.violations[0]
 
     # -------------------------------------------------------------------------
     # Edge Cases & Metadata Tests

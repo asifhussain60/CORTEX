@@ -529,15 +529,8 @@ class MarkdownSuppressionAgent:
         for file in output_files:
             file_lower = file.lower()
             
-            # Pattern-based validation (existing logic)
-            for pattern, description in forbidden_patterns:
-                if pattern.lower() in file_lower:
-                    violations.append(
-                        f"CORE-002 VIOLATION: Cannot generate {description} markdown file: {file}. "
-                        "Results must be reported inline in chat."
-                    )
-            
             # Strict markdown file validation (Phase 71 + Gap #2A fix)
+            # Check this FIRST to avoid duplicate violations
             if file.endswith(".md") or file.endswith(".MD"):
                 # Check if file matches allowed paths
                 is_allowed = False
@@ -552,12 +545,25 @@ class MarkdownSuppressionAgent:
                             is_allowed = True
                             break
                 
-                # Block ALL other markdown files
+                # Block ALL other markdown files (single violation per file)
                 if not is_allowed:
-                    violations.append(
-                        f"CORE-002 VIOLATION: Cannot generate markdown file: {file}. "
-                        "ONLY allowed: .github/prompts/*.md, .github/agents/*.md, README.md. "
-                        "All findings must be inline in chat or stored in cortex-registry YAML files."
+                    # Check for specific forbidden patterns to provide better error messages
+                    pattern_matched = False
+                    for pattern, description in forbidden_patterns:
+                        if pattern.lower() in file_lower:
+                            violations.append(
+                                f"CORE-002 VIOLATION: Cannot generate {description} markdown file: {file}. "
+                                "Results must be reported inline in chat."
+                            )
+                            pattern_matched = True
+                            break
+                    
+                    # If no specific pattern matched, use generic message
+                    if not pattern_matched:
+                        violations.append(
+                            f"CORE-002 VIOLATION: Cannot generate markdown file: {file}. "
+                            "ONLY allowed: .github/prompts/*.md, .github/agents/*.md, README.md. "
+                            "All findings must be inline in chat or stored in cortex-registry YAML files."
                     )
         
         # Determine enforcement level
