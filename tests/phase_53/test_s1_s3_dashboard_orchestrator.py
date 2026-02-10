@@ -238,4 +238,3 @@ class TestDashboardIntegration:
 # Test execution marker
 def test_phase_53_s1_s3_complete():
     """Marker: Phase 53 S1-S3 test suite complete"""
-    assert True

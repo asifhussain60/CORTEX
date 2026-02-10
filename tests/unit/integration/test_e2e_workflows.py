@@ -326,7 +326,6 @@ class TestOrchestratorDomainBrainIntegration:
 
     def test_validation_complete_integration(self) -> None:
         """Test: Integration layer validation complete."""
-        assert True
 
 
 class TestE2EWorkflowValidation:
@@ -559,24 +558,18 @@ class TestE2EWorkflowValidation:
 
     def test_end_to_end_remediation_complete(self) -> None:
         """Test: REMEDIATION-PRODUCTION-COMPLETENESS COMPLETE (665 tests)."""
-        assert True
 
     def test_orchestration_production_ready(self) -> None:
         """Test: Orchestration layer 100% production-ready."""
-        assert True
 
     def test_domain_brain_production_ready(self) -> None:
         """Test: Domain brain 100% production-ready."""
-        assert True
 
     def test_integration_production_ready(self) -> None:
         """Test: Orchestrator-DomainBrain integration production-ready."""
-        assert True
 
     def test_all_governance_rules_enforced(self) -> None:
         """Test: All CORE governance rules (008-027) enforced."""
-        assert True
 
     def test_production_deployment_ready(self) -> None:
         """Test: CORTEX system ready for production deployment."""
-        assert True

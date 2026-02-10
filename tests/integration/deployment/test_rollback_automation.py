@@ -412,7 +412,6 @@ class TestRollbackMetrics:
             
             # Should collect metrics (if metrics_collector exists)
             # This is a placeholder - actual implementation may differ
-            assert True  # Metrics collection is optional
 
     @pytest.mark.asyncio
     async def test_rollback_history_tracking(self) -> None:

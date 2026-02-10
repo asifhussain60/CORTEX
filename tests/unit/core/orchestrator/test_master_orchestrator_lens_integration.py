@@ -164,7 +164,6 @@ class TestPhase64Stage1LensComprehension:
             try:
                 result = master_orchestrator.execute_operation("implement", sample_parameters)
                 # Should complete with or without LENS
-                assert True
             except Exception as e:
                 # Fallback acceptable - operation should not crash
                 assert "LENS" not in str(e) or True
@@ -179,7 +178,6 @@ class TestPhase64Stage1LensComprehension:
             # Operation should still proceed
             try:
                 result = master_orchestrator.execute_operation("implement", sample_parameters)
-                assert True
             except Exception:
                 pass
     
@@ -191,7 +189,6 @@ class TestPhase64Stage1LensComprehension:
         try:
             result = master_orchestrator.execute_operation("implement", bad_params)
             # Should still complete
-            assert True
         except Exception:
             pass
     
@@ -203,7 +200,6 @@ class TestPhase64Stage1LensComprehension:
             try:
                 result = master_orchestrator.execute_operation("implement", sample_parameters)
                 # Operation completes with empty LENS context
-                assert True
             except Exception:
                 pass
     
@@ -299,7 +295,6 @@ class TestPhase64Stage1LensComprehension:
         try:
             result = master_orchestrator.execute_operation("implement", empty_params)
             # Should complete or provide meaningful error
-            assert True
         except Exception as e:
             # Should not be a Stage 1 LENS error
             assert "LENS" not in str(e) or "graceful" in str(e)

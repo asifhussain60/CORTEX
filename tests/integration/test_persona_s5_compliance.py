@@ -215,7 +215,6 @@ class TestPersonaE2EIntegration:
         # 3. Verify persistence
         # 4. Retrieve in new session
         
-        assert True  # Placeholder for E2E test
 
     def test_depth_override_workflow(self):
         """Test depth override workflow"""
@@ -224,7 +223,6 @@ class TestPersonaE2EIntegration:
         # 3. Verify override applied
         # 4. Verify expires after turn
         
-        assert True  # Placeholder for E2E test
 
 
 class TestCleanupTasks:

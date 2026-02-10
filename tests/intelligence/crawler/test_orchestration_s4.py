@@ -42,7 +42,6 @@ class TestCrawlerOrchestrator:
         # Attempt invalid operation
         try:
             orch.get_status()
-            assert True
         except Exception as e:
             pytest.fail(f"Orchestrator raised: {e}")
 

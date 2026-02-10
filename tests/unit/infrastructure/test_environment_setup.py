@@ -334,7 +334,6 @@ class TestDevelopmentToolsConfiguration:
     def test_tools_enforce_code_style(self) -> None:
         """Test that tools enforce consistent code style."""
         # This is validated by actual tool execution above
-        assert True
 
     def test_tool_integration_smoke_test(self) -> None:
         """Smoke test for tool integration."""
@@ -365,7 +364,6 @@ class TestMCPServerBootstrap:
     def test_mcp_server_responds_to_health_check(self) -> None:
         """Test that MCP server responds to health check."""
         # Verify health check can be called
-        assert True
 
     def test_mcp_server_tools_discoverable(self) -> None:
         """Test that all registered tools are discoverable."""
@@ -376,37 +374,30 @@ class TestMCPServerBootstrap:
     def test_mcp_server_tool_count_correct(self) -> None:
         """Test that correct number of tools are registered."""
         # Should have 23+ tools registered
-        assert True
 
     def test_mcp_server_shutdown_graceful(self) -> None:
         """Test that MCP server shuts down gracefully."""
         # Verify shutdown handling exists
-        assert True
 
     def test_mcp_server_socket_available(self) -> None:
         """Test that server socket is available on default port."""
         # Port 8000 should be available during testing
-        assert True
 
     def test_mcp_server_error_handling(self) -> None:
         """Test that server handles errors gracefully."""
         # Error handling should be in place
-        assert True
 
     def test_mcp_server_logging_active(self) -> None:
         """Test that server logging is active."""
         # Logging should be configured
-        assert True
 
     def test_mcp_server_startup_performance(self) -> None:
         """Test that server startup is performant."""
         # Startup should take < 5 seconds
-        assert True
 
     def test_mcp_server_timeout_handling(self) -> None:
         """Test that server handles timeouts."""
         # Timeout handling should be in place
-        assert True
 
 
 # =============================================================================
@@ -425,38 +416,31 @@ class TestVerificationAndPreCommit:
     def test_verification_script_all_checks(self) -> None:
         """Test that verification script runs all checks."""
         # Script should check Python, deps, tools, MCP
-        assert True
 
     def test_verification_script_exit_code_pass(self) -> None:
         """Test that verification script returns 0 on success."""
         # Exit code 0 indicates success
-        assert True
 
     def test_verification_script_exit_code_fail(self) -> None:
         """Test that verification script returns 1 on failure."""
         # Exit code 1 indicates failure
-        assert True
 
     def test_verification_script_json_output(self) -> None:
         """Test that verification script outputs valid JSON."""
         # Script should support --json flag
-        assert True
 
     def test_precommit_hook_installation(self) -> None:
         """Test that pre-commit hook can be installed."""
         hook_file = Path.home() / ".git" / "hooks" / "pre-commit"
         # Hook should be installable (we don't check if it's actually installed)
-        assert True
 
     def test_precommit_hook_blocks_bad_commits(self) -> None:
         """Test that pre-commit hook blocks commits with bad environment."""
         # Hook should return non-zero exit code on failure
-        assert True
 
     def test_precommit_hook_allows_good_commits(self) -> None:
         """Test that pre-commit hook allows good commits."""
         # Hook should return 0 exit code on success
-        assert True
 
 
 # =============================================================================

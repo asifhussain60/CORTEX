@@ -370,7 +370,6 @@ class TestPhase3Compliance:
         """Verify existing tests still pass (no regressions)."""
         # This is tested via pytest execution
         # If we reach here, test collection succeeded
-        assert True
 
 
 # ============================================================================

@@ -377,7 +377,6 @@ class TestRopeAdapterPerformance:
         adapter.execute_refactoring(request2)
         
         # If it got this far without errors, caching works
-        assert True
 
 
 class TestRopeAdapterIntegration:

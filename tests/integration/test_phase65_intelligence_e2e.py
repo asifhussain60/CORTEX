@@ -2689,7 +2689,6 @@ class TestS9PerformanceComprehensive:
         """S9-P3: Context synthesis cached with per-intent TTL."""
         # Test TTL mechanism (conceptual)
         # In production, would verify cache expiration
-        assert True  # Placeholder for TTL validation
     
     def test_parallel_synthesis_performance(self, synthesis_engine):
         """S9-P4: Parallel synthesis doesn't degrade performance."""
@@ -2735,7 +2734,6 @@ class TestS9PerformanceComprehensive:
         """S9-P6: LENS analysis cached for session duration."""
         # Session-scoped cache verification
         # In production, verify cache cleared after session ends
-        assert True  # Conceptual validation
     
     def test_95th_percentile_under_500ms(self, synthesis_engine):
         """S9-P7: 95th percentile synthesis time < 500ms."""

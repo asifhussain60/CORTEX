@@ -388,7 +388,6 @@ class TestEdgeCases:
                 logger.info(f"Info {i}")
 
         # Should not crash
-        assert True
 
     def test_sampling_in_production(self, logger: "StructuredLogger") -> None:
         """Test DEBUG logs sampled at 1% in production."""

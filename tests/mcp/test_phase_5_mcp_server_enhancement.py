@@ -215,7 +215,6 @@ class TestStartupBanner:
         """Test banner printing doesn't error."""
         try:
             print_banner()
-            assert True
         except Exception as e:
             pytest.fail(f"print_banner raised {e}")
 
@@ -256,7 +255,6 @@ class TestWiringFileWatcher:
         watcher.stop()
         
         # Should not error even without callback
-        assert True
     
     def test_global_wiring_watcher(self) -> None:
         """Test global wiring watcher singleton."""

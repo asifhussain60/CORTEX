@@ -523,12 +523,10 @@ class TestAccessibilityFeatures:
 
     def test_focus_indicators(self) -> None:
         """Verify visible focus indicators for keyboard users."""
-        assert True  # CSS will include focus states
 
     def test_reduced_motion_support(self) -> None:
         """Verify support for prefers-reduced-motion."""
         # CSS should include @media (prefers-reduced-motion: reduce)
-        assert True
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -594,4 +592,3 @@ class TestPerformance:
     def test_dom_update_batching(self) -> None:
         """Verify DOM updates are batched efficiently."""
         # Should use requestAnimationFrame for batching
-        assert True

@@ -109,7 +109,6 @@ class TestHeaderLogo:
         for css_file in css_path.glob("*.css"):
             content = css_file.read_text(encoding='utf-8')
             if 'cursor' in content and ('logo' in content.lower() or 'header' in content.lower()):
-                assert True
                 return
         
         # If we get here, check for general clickable element styling

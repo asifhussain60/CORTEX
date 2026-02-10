@@ -73,7 +73,6 @@ class TestPromptVersionDrift:
         # THEN: No drift detected
         # assert result["has_drift"] is False
         # assert result["drifted_files"] == []
-        assert True  # RED: Not implemented yet
     
     def test_missing_version_number_detected(self):
         """Test that missing version numbers are detected."""
@@ -90,7 +89,6 @@ class TestPromptVersionDrift:
         
         # THEN: Missing version flagged
         # assert result["missing_versions"] == ["CORTEX.prompt.md"]
-        assert True  # RED: Not implemented yet
     
     def test_missing_updated_date_detected(self):
         """Test that missing updated dates are detected."""
@@ -107,7 +105,6 @@ class TestPromptVersionDrift:
         
         # THEN: Missing date flagged
         # assert result["missing_dates"] == ["CORTEX.prompt.md"]
-        assert True  # RED: Not implemented yet
     
     def test_extracts_version_from_prompt_header(self):
         """Test that version extracted correctly from prompt markdown header."""
@@ -124,7 +121,6 @@ class TestPromptVersionDrift:
         # THEN: Version and date extracted
         # assert metadata["version"] == "7.4"
         # assert metadata["updated"] == "2026-02-06"
-        assert True  # RED: Not implemented yet
     
     def test_handles_malformed_prompt_headers(self):
         """Test that malformed headers are handled gracefully."""
@@ -141,7 +137,6 @@ class TestPromptVersionDrift:
         # THEN: Returns None for missing fields
         # assert metadata["version"] is None
         # assert metadata["updated"] is None
-        assert True  # RED: Not implemented yet
 
 
 class TestCoreRulesConsistency:
@@ -163,7 +158,6 @@ class TestCoreRulesConsistency:
         # THEN: Inconsistency detected
         # assert result["consistent"] is False
         # assert "CORE-002" in result["missing_rules"]["cortex-architect.prompt.md"]
-        assert True  # RED: Not implemented yet
     
     def test_all_core_rules_present(self):
         """Test that all CORE rules present in all prompts."""
@@ -181,7 +175,6 @@ class TestCoreRulesConsistency:
         # THEN: All consistent
         # assert result["consistent"] is True
         # assert result["missing_rules"] == {}
-        assert True  # RED: Not implemented yet
     
     def test_detects_rule_description_mismatch(self):
         """Test that differing rule descriptions are detected."""
@@ -204,7 +197,6 @@ class TestCoreRulesConsistency:
         
         # THEN: Mismatch detected
         # assert result["mismatches"]["CORE-002"] == ["CORTEX.prompt.md"]
-        assert True  # RED: Not implemented yet
     
     def test_extracts_core_rules_from_prompt(self):
         """Test that CORE rules extracted from prompt content."""
@@ -225,7 +217,6 @@ class TestCoreRulesConsistency:
         # THEN: Rules extracted
         # assert "CORE-002" in rules
         # assert "CORE-008" in rules
-        assert True  # RED: Not implemented yet
     
     def test_checks_mcp_first_rule_presence(self):
         """Test that MCP-FIRST and MCP-GATE rules are validated."""
@@ -242,7 +233,6 @@ class TestCoreRulesConsistency:
         
         # THEN: Missing MCP-GATE flagged
         # assert result["missing_mcp_rules"]["cortex-architect.prompt.md"] == ["MCP-GATE"]
-        assert True  # RED: Not implemented yet
     
     def test_validates_rule_enforcement_level(self):
         """Test that enforcement levels (BLOCKED, WARNING) match."""
@@ -268,7 +258,6 @@ class TestCoreRulesConsistency:
         
         # THEN: Mismatch detected
         # assert "CORE-028" in result["enforcement_mismatches"]
-        assert True  # RED: Not implemented yet
 
 
 class TestMCPFirstEnforcement:
@@ -289,7 +278,6 @@ class TestMCPFirstEnforcement:
         
         # THEN: Missing PRE-FLIGHT flagged
         # assert result["missing_preflight"] == ["cortex-architect.prompt.md"]
-        assert True  # RED: Not implemented yet
     
     def test_detects_missing_mcp_gate_rule(self):
         """Test that missing MCP-GATE rule is detected."""
@@ -306,7 +294,6 @@ class TestMCPFirstEnforcement:
         
         # THEN: Missing MCP-GATE flagged
         # assert result["missing_gate"] == ["CORTEX.prompt.md"]
-        assert True  # RED: Not implemented yet
     
     def test_validates_cortex_process_request_routing(self):
         """Test that cortex_process_request routing is consistent."""
@@ -332,7 +319,6 @@ class TestMCPFirstEnforcement:
         
         # THEN: Routing mismatch detected
         # assert result["routing_mismatches"]["FIX"] == ["CORTEX.prompt.md"]
-        assert True  # RED: Not implemented yet
     
     def test_extracts_mcp_sections_from_prompt(self):
         """Test that MCP sections extracted from prompt content."""
@@ -355,7 +341,6 @@ class TestMCPFirstEnforcement:
         # THEN: Sections extracted
         # assert sections["has_preflight"] is True
         # assert sections["has_gate"] is True
-        assert True  # RED: Not implemented yet
     
     def test_validates_intent_to_orchestrator_mapping(self):
         """Test that intent→orchestrator mappings are consistent."""
@@ -381,7 +366,6 @@ class TestMCPFirstEnforcement:
         
         # THEN: Mapping mismatch detected
         # assert result["mapping_mismatches"]["ANALYZE"] == ["CORTEX.prompt.md"]
-        assert True  # RED: Not implemented yet
     
     def test_all_mcp_enforcement_consistent(self):
         """Test that all MCP enforcement is consistent across prompts."""

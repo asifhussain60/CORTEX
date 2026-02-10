@@ -56,7 +56,6 @@ class TestSecurityReviewEngine:
         # assert "CWE-89" in findings[0].title
         
         # Placeholder assertion - will be replaced after implementation
-        assert True
 
     def test_detect_sql_injection_none_for_parameterized(self):
         """CWE-89: Do NOT flag parameterized/prepared queries"""
@@ -80,7 +79,6 @@ class TestSecurityReviewEngine:
         # findings = engine.detect_sql_injection([change], {"auth.py": code})
         # assert len(findings) == 0, "Should not flag parameterized queries"
         
-        assert True
 
     def test_detect_command_injection_os_system(self):
         """CWE-78: Detect command injection with os.system()"""
@@ -107,7 +105,6 @@ class TestSecurityReviewEngine:
         # assert "CWE-78" in findings[0].title
         # assert "command injection" in findings[0].description.lower()
         
-        assert True
 
     def test_detect_weak_cryptography_md5(self):
         """CWE-327: Detect weak cryptography (MD5)"""
@@ -134,7 +131,6 @@ class TestSecurityReviewEngine:
         # assert "CWE-327" in findings[0].title
         # assert "MD5" in findings[0].description or "weak" in findings[0].description.lower()
         
-        assert True
 
     def test_detect_weak_cryptography_sha1(self):
         """CWE-327: Detect weak cryptography (SHA1)"""
@@ -160,7 +156,6 @@ class TestSecurityReviewEngine:
         # assert findings[0].severity == ReviewSeverity.P1_HIGH
         # assert "SHA1" in findings[0].description or "weak" in findings[0].description.lower()
         
-        assert True
 
     def test_detect_path_traversal(self):
         """CWE-22: Detect path traversal vulnerability"""
@@ -190,7 +185,6 @@ class TestSecurityReviewEngine:
         # assert "CWE-22" in findings[0].title
         # assert "path traversal" in findings[0].description.lower()
         
-        assert True
 
     def test_detect_xss_javascript(self):
         """CWE-79: Detect XSS (Cross-Site Scripting) in JavaScript"""
@@ -216,7 +210,6 @@ class TestSecurityReviewEngine:
         # assert "CWE-79" in findings[0].title
         # assert "XSS" in findings[0].description or "cross-site" in findings[0].description.lower()
         
-        assert True
 
     def test_detect_unsafe_deserialization(self):
         """CWE-502: Detect unsafe deserialization (pickle)"""
@@ -243,7 +236,6 @@ class TestSecurityReviewEngine:
         # assert "CWE-502" in findings[0].title
         # assert "deserialization" in findings[0].description.lower()
         
-        assert True
 
     def test_no_false_positives_benign_code(self):
         """Verify no false positives on benign code"""
@@ -269,7 +261,6 @@ class TestSecurityReviewEngine:
         # findings = engine.analyze_all([change], {"math.py": code})
         # assert len(findings) == 0, "Should not flag benign code"
         
-        assert True
 
 
 class TestSecurityReviewEngineIntegration:
@@ -287,7 +278,6 @@ class TestSecurityReviewEngineIntegration:
         # verify security engine is properly initialized
         # assert security_engine is not None
         
-        assert True
 
     def test_security_findings_include_fix_suggestions(self):
         """Verify security findings include actionable fix suggestions"""
@@ -307,7 +297,6 @@ class TestSecurityReviewEngineIntegration:
         # assert findings[0].fix_suggestion is not None
         # assert "parameterized" in findings[0].fix_suggestion.lower()
         
-        assert True
 
 
 class TestCWEPatternMatching:
@@ -339,7 +328,6 @@ class TestCWEPatternMatching:
         #     findings = engine._match_cwe89(pattern)
         #     assert len(findings) == 0, f"Should NOT match: {pattern}"
         
-        assert True
 
     def test_cwe327_detects_all_weak_algorithms(self):
         """Verify CWE-327 catches MD5, SHA1, DES, RC4"""
@@ -356,7 +344,6 @@ class TestCWEPatternMatching:
         #     findings = engine._match_cwe327(algo)
         #     assert len(findings) >= 1, f"Should detect weak algorithm: {algo}"
         
-        assert True
 
 
 # AC_COMPLETE: AC-PHASE48-S2-001 (test definitions written)

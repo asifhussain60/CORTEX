@@ -169,6 +169,7 @@ class TestIntegrationWorkflow:
             assert result is not None
         except Exception as e:
             # Or it may raise an exception
+            pass
 
     def test_performance_single_pr_analysis(self, integration_engine):
         """AC-PHASE52-S1-4-012: Performance benchmark - single PR."""

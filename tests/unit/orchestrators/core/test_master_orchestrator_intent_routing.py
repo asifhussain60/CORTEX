@@ -130,7 +130,6 @@ class TestMasterOrchestratorIntentRouting:
                         parameters={"test": "data"},
                     )
                     # Execution continues past classification error
-                    assert True
                 except Exception as e:
                     # Classification error should be logged but not raised
                     pytest.fail(
@@ -190,6 +189,5 @@ class TestMasterOrchestratorIntentRouting:
                         operation_name="test_op",
                         parameters={"test": "data"},
                     )
-                    assert True
                 except Exception as e:
                     pytest.fail(f"Should handle None factory gracefully: {str(e)}")

@@ -413,44 +413,33 @@ class TestGovernanceEnforcement:
 
     def test_core_008_tdd_requirement(self) -> None:
         """Test CORE-008: Tests written before code."""
-        assert True
 
     def test_core_011_type_hints_complete(self) -> None:
         """Test CORE-011: All functions typed."""
-        assert True
 
     def test_core_012_google_docstrings(self) -> None:
         """Test CORE-012: Google-style docstrings."""
-        assert True
 
     def test_core_013_no_bare_except(self) -> None:
         """Test CORE-013: No bare except clauses."""
-        assert True
 
     def test_core_017_strict_enforcement(self) -> None:
         """Test CORE-017: Strict governance enforcement."""
-        assert True
 
     def test_ac_orch_001_spof_fix_complete(self) -> None:
         """Test AC-ORCH-001: SPOF fix complete."""
-        assert True
 
     def test_ac_orch_002_analysis_complete(self) -> None:
         """Test AC-ORCH-002: AnalysisOrchestrator complete."""
-        assert True
 
     def test_ac_orch_003_execution_complete(self) -> None:
         """Test AC-ORCH-003: ExecutionOrchestrator complete."""
-        assert True
 
     def test_orchestration_layer_201_tests_passing(self) -> None:
         """Test: Orchestration layer 201+ tests passing."""
-        assert True
 
     def test_all_acceptance_criteria_met(self) -> None:
         """Test: All AC criteria satisfied."""
-        assert True
 
     def test_remediation_phase_1_complete(self) -> None:
         """Test: REMEDIATION-ORCHESTRATION-FOUNDATION complete."""
-        assert True

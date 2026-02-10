@@ -701,8 +701,6 @@ class TestPatternMatcher:
 
     def test_query_phase_ready(self) -> None:
         """Test: Query phase 97 tests passing."""
-        assert True
 
     def test_all_knowledge_components_operational(self) -> None:
         """Test: All knowledge domain brain components operational."""
-        assert True

@@ -125,7 +125,6 @@ class TestVacuumOrchestrator:
         # New file should not be in plan (if modified time check is implemented)
         file_names = [item["source"] for item in plan.files_to_archive]
         # This test may pass if file system doesn't support accurate mtime in test
-        assert True  # Placeholder - implementation will handle mtime
 
     # ========================================================================
     # STAGE 2: EXECUTE CLEANUP

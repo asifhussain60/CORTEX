@@ -203,7 +203,6 @@ for item in items:
         challenges = self.generator.analyze_performance(source)
         perf_risks = [c for c in challenges if "N+1" in c.description or "N+1" in str(c.mitigation)]
         # May or may not detect depending on regex, but test should not fail
-        assert True
 
     def test_detect_string_concatenation_loop(self):
         """Test detection of string concatenation in loop."""

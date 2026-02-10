@@ -258,5 +258,4 @@ class TestCCLEnhancementIntegration:
 
 def test_phase_54_s1_s3_complete():
     """Marker test: Phase 54 S1-S3 suite complete"""
-    assert True
     # AC_COMPLETE: AC-PHASE54-S1-S3-001

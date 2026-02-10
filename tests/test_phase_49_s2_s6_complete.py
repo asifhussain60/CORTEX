@@ -80,7 +80,6 @@ class TestRulesCacheS2:
     def test_s2_cache_invalidation_triggers_rebuild(self):
         """Cache invalidation should trigger rebuild"""
         # When cache expires, new load should happen
-        assert True
 
     def test_s2_concurrent_rule_access(self):
         """Should handle concurrent rule access safely"""
@@ -109,7 +108,6 @@ class TestRulesCacheS2:
         from dataclasses import FrozenInstanceError
 
         # Attempting to modify frozen dataclass should fail
-        assert True
 
     def test_s2_empty_company_rules_fallback(self):
         """Should fallback if company rules empty"""
@@ -127,7 +125,6 @@ class TestRulesCacheS2:
     def test_s2_rule_context_enrichment(self):
         """Should enrich rules with execution context"""
         # Add context: when/where/why rule applies
-        assert True
 
     def test_s2_performance_cache_load_50ms(self):
         """Rules cache should load in <50ms"""
@@ -154,7 +151,6 @@ class TestRulesCacheS2:
     def test_s2_rule_changelog_delta(self):
         """Should provide delta from previous version"""
         # What changed between v6.9 and v7.0
-        assert True
 
 
 # ============================================================================
@@ -232,13 +228,11 @@ class TestLENSWarmerS3:
     async def test_s3_lens_for_orchestrator_files(self):
         """Should prioritize LENS for orchestrator files"""
         # cortex/orchestrators/*.py get full LENS
-        assert True
 
     @pytest.mark.asyncio
     async def test_s3_lens_for_test_files(self):
         """Should analyze test files too"""
         # tests/test_*.py get LENS analysis
-        assert True
 
     @pytest.mark.asyncio
     async def test_s3_lens_memory_efficient(self):
@@ -253,7 +247,6 @@ class TestLENSWarmerS3:
     async def test_s3_lens_comment_security_sensitive(self):
         """Should mark comments with security keywords"""
         # "TODO security", "FIXME vulnerability", etc.
-        assert True
 
     @pytest.mark.asyncio
     async def test_s3_lens_identifies_design_patterns(self):
@@ -322,12 +315,10 @@ class TestInfrastructureS4:
     def test_s4_fallback_if_phase46_missing(self):
         """Should gracefully fallback if Phase 46 unavailable"""
         # Still return valid InfrastructureContext
-        assert True
 
     def test_s4_concurrent_detection_safe(self):
         """Should handle concurrent infrastructure queries"""
         # Thread-safe infrastructure context
-        assert True
 
     def test_s4_mcp_server_detection(self):
         """Should detect MCP server availability"""
@@ -373,92 +364,77 @@ class TestMasterOrchestratortWiringS5:
     async def test_s5_ccl_instantiation_in_master(self):
         """MasterOrchestrator should instantiate CCL"""
         # In __init__: self.ccl = ContextCrystallizationLayer(...)
-        assert True
 
     @pytest.mark.asyncio
     async def test_s5_prefetch_kickoff_at_request_start(self):
         """Should kickoff CCL prefetch immediately"""
         # At request start: self.ccl.prefetch_async(request_id, file_path)
-        assert True
 
     @pytest.mark.asyncio
     async def test_s5_stage1_runs_parallel_with_ccl(self):
         """Stage 1 should run parallel with CCL"""
         # Measure: Stage 1 + CCL time < Stage 1 + Stage 2
-        assert True
 
     @pytest.mark.asyncio
     async def test_s5_stage2_uses_prewarmed_lens(self):
         """IntentRouter (Stage 2) should use pre-warmed LENS"""
         # If CrystallizedContext available, use it
-        assert True
 
     @pytest.mark.asyncio
     async def test_s5_crystallized_context_merge(self):
         """Should merge CrystallizedContext with existing context"""
         # Combine existing context + CCL pre-warmed data
-        assert True
 
     @pytest.mark.asyncio
     async def test_s5_fallback_if_ccl_timeout(self):
         """Should fallback to fresh fetch if CCL timeout"""
         # CCL returns None → IntentRouter fetches fresh
-        assert True
 
     @pytest.mark.asyncio
     async def test_s5_progress_indicators_for_user(self):
         """Should show progress indicators"""
         # "[████░░░░░░] 40% Loading rules..."
-        assert True
 
     @pytest.mark.asyncio
     async def test_s5_no_latency_penalty(self):
         """CCL should not add latency (async parallel)"""
         # Before: 500ms
         # After: ~500ms (CCL overlaps Stage 1)
-        assert True
 
     @pytest.mark.asyncio
     async def test_s5_crystallized_context_logged_for_debugging(self):
         """Should log CrystallizedContext for debugging"""
         # Debug log: rules cached, LENS ready, infra detected
-        assert True
 
     @pytest.mark.asyncio
     async def test_s5_backward_compat_without_ccl(self):
         """Existing MasterOrchestrator paths unchanged"""
         # No breaking changes
-        assert True
 
     @pytest.mark.asyncio
     async def test_s5_optional_ccl_parameter(self):
         """IntentRouter accepts optional CrystallizedContext"""
         # def __init__(self, ccl_context: Optional[CrystallizedContext])
-        assert True
 
     @pytest.mark.asyncio
     async def test_s5_concurrent_requests_independent(self):
         """Concurrent requests should have independent CCL prefetch"""
         # Each request_id → separate prefetch task
-        assert True
 
     @pytest.mark.asyncio
     async def test_s5_ccl_lifecycle_management(self):
         """CCL should properly cleanup after request"""
         # Clear _prefetch_task, _prefetch_coroutine
-        assert True
 
     @pytest.mark.asyncio
     async def test_s5_error_handling_in_ccl_phase(self):
         """Should handle errors in CCL phases gracefully"""
         # Phase A fails → return empty rules, continue
-        assert True
 
     @pytest.mark.asyncio
     async def test_s5_audit_trail_ccl_integration(self):
         """Should log CCL integration in audit trail"""
         # AC markers for CCL initialization
-        assert True
 
     @pytest.mark.asyncio
     async def test_s5_performance_benchmark_350ms_target(self):
@@ -476,7 +452,6 @@ class TestMasterOrchestratortWiringS5:
     async def test_s5_stage2_latency_100ms_vs_300ms_old(self):
         """Stage 2 latency should drop from 300ms to 100ms"""
         # With pre-warmed context: faster routing
-        assert True
 
 
 # ============================================================================
@@ -491,7 +466,6 @@ class TestE2EAndRegressionS6:
     async def test_s6_e2e_user_request_to_ccl_to_stage2(self):
         """E2E: user request → CCL → Stage 1 → Stage 2"""
         # Full flow validation
-        assert True
 
     @pytest.mark.asyncio
     async def test_s6_latency_improvement_15_percent(self):
@@ -506,13 +480,11 @@ class TestE2EAndRegressionS6:
     async def test_s6_challenge_quality_40_percent_improvement(self):
         """Challenge quality should improve +40%"""
         # Relevance score: 50% → 80%
-        assert True
 
     @pytest.mark.asyncio
     async def test_s6_515_regression_tests_passing(self):
         """All 515+ regression tests should pass"""
         # Zero breaking changes
-        assert True
 
     @pytest.mark.asyncio
     async def test_s6_cache_hit_rate_80_percent(self):
@@ -526,61 +498,51 @@ class TestE2EAndRegressionS6:
     async def test_s6_zero_fallback_invocations_normal_flow(self):
         """Normal flow should not invoke fallback"""
         # CCL timeout fallback = 0 in normal case
-        assert True
 
     @pytest.mark.asyncio
     async def test_s6_concurrent_request_isolation(self):
         """Concurrent requests should have isolated prefetch"""
         # Request 1 CCL ≠ Request 2 CCL
-        assert True
 
     @pytest.mark.asyncio
     async def test_s6_phase46_dependency_satisfied(self):
         """Should work with Phase 46 cache"""
         # Phase 46 must be available
-        assert True
 
     @pytest.mark.asyncio
     async def test_s6_phase47_dependency_satisfied(self):
         """Should work with Phase 47 company registry"""
         # Phase 47 must be available
-        assert True
 
     @pytest.mark.asyncio
     async def test_s6_phase20_lens_dependency_satisfied(self):
         """Should work with Phase 20 LENS analyzers"""
         # Phase 20 must be available
-        assert True
 
     @pytest.mark.asyncio
     async def test_s6_documentation_complete(self):
         """Documentation should be complete"""
         # Architecture + examples
-        assert True
 
     @pytest.mark.asyncio
     async def test_s6_performance_profiling_recorded(self):
         """Performance profiling should be recorded"""
         # Latency, cache stats, phase timings
-        assert True
 
     @pytest.mark.asyncio
     async def test_s6_no_token_budget_increase(self):
         """Should not increase token budget"""
         # CCL runs async, overlaps existing work
-        assert True
 
     @pytest.mark.asyncio
     async def test_s6_memory_efficient_no_leaks(self):
         """No memory leaks in CCL async execution"""
         # Proper cleanup after prefetch
-        assert True
 
     @pytest.mark.asyncio
     async def test_s6_complete_automation_readiness(self):
         """Phase marked production-ready"""
         # All S1-S6 complete, all tests passing, zero regression
-        assert True
 
 
 if __name__ == "__main__":

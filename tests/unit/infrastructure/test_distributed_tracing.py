@@ -425,7 +425,6 @@ class TestEdgeCases:
         collector.end_span(span2, status=SpanStatus.OK)
         
         # Should complete without error
-        assert True
 
     def test_large_trace_aggressive_sampling(self) -> None:
         """Test more aggressive sampling for large traces."""

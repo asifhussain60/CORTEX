@@ -192,7 +192,6 @@ class TestJSONDataBinding:
         }
         
         # Should use fallback for null/undefined
-        assert True  # Placeholder for actual logic
 
 
 class TestJSONErrorHandling:

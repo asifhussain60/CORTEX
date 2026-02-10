@@ -10,6 +10,7 @@ from typing import List, Dict, Any
 
 
 class TestAsyncRepositoryCrawler:
+    pass
     """Test AsyncRepositoryCrawler base class (T1-T3)."""
 
     def test_async_crawler_instantiation(self):
@@ -45,6 +46,7 @@ class TestAsyncRepositoryCrawler:
 
 
 class TestRepositoryWalker:
+    pass
     """Test RepositoryWalker file traversal (T4-T6)."""
 
     def test_walker_instantiation(self):
@@ -101,6 +103,7 @@ class TestRepositoryWalker:
 
 
 class TestPatternDiscoveryScheduler:
+    pass
     """Test PatternDiscoveryScheduler queue management (T7-T8)."""
 
     def test_scheduler_instantiation(self):
@@ -125,6 +128,7 @@ class TestPatternDiscoveryScheduler:
 
 
 class TestErrorHandlingAndCancellation:
+    pass
     """Test error handling and cancellation (T9-T10)."""
 
     @pytest.mark.asyncio
@@ -138,7 +142,6 @@ class TestErrorHandlingAndCancellation:
         try:
             await walker.crawl("/nonexistent/path")
             # Should complete without crashing
-            assert True
         except Exception as e:
             pytest.fail(f"Crawler raised unexpected exception: {e}")
 
@@ -161,7 +164,7 @@ class TestErrorHandlingAndCancellation:
         try:
             await task
         except asyncio.CancelledError:
-            assert True
+            pass
 
 # AC_COMPLETE: AC-PHASE58-S1-001 ✅
 # Test Results: 10/10 tests designed

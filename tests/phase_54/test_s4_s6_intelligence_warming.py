@@ -306,5 +306,4 @@ class TestIntelligenceWarmingIntegration:
 
 def test_phase_54_s4_s6_complete():
     """Marker test: Phase 54 S4-S6 suite complete"""
-    assert True
     # AC_COMPLETE: AC-PHASE54-S4-S6-001

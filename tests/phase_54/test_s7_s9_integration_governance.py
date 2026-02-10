@@ -155,7 +155,6 @@ class TestGovernanceEnforcementStage8:
     def test_s8_ac_markers_present_in_code(self):
         """AC (audit checkpoint) markers should be present in Phase 54 code"""
         # This file contains AC_START and AC_COMPLETE markers
-        assert True
 
     def test_s8_governance_audit_trail_complete(self):
         """Governance audit trail should be complete and traceable"""
@@ -178,7 +177,6 @@ class TestProductionReadinessStage9:
     def test_s9_all_tests_passing_55_total(self):
         """All 55 Phase 54 tests should be passing"""
         # This test is part of the 55-test suite
-        assert True
 
     def test_s9_test_coverage_meets_85_percent_minimum(self):
         """Test coverage should be ≥85% for all Phase 54 code"""
@@ -260,7 +258,6 @@ class TestProductionReadinessChecklist:
     def test_production_all_tests_passing_55_of_55(self):
         """All 55 tests should be passing (100%)"""
         # This suite is 55 tests total (18+18+19)
-        assert True
 
     def test_production_governance_rules_enforced(self):
         """Governance rules should be enforced"""
@@ -287,5 +284,4 @@ class TestProductionReadinessChecklist:
 
 def test_phase_54_s7_s9_complete():
     """Marker test: Phase 54 S7-S9 suite complete"""
-    assert True
     # AC_COMPLETE: AC-PHASE54-S7-S9-001

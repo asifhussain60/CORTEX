@@ -275,12 +275,10 @@ class TestSPAHTTPDetection:
     def test_spa_detects_file_protocol(self):
         """SPA should detect file:// protocol"""
         # When embedded dashboard is served via file://, JSON is embedded
-        assert True  # Detection logic tested in JSONDataLayer.js tests
     
     def test_spa_detects_http_protocol(self):
         """SPA should detect http:// protocol"""
         # When dashboard is served via http://, JSON is fetched via fetch API
-        assert True  # Detection logic tested in JSONDataLayer.js tests
 
 
 class TestSPADataRemovalCleanup:
@@ -298,13 +296,11 @@ class TestSPADataRemovalCleanup:
         # 2. app.js doesn't import SQLiteDataLayer
         # 3. No db:// protocol handling
         
-        assert True  # Verified during code review phase
     
     def test_spa_no_sql_js_bundle_loaded(self):
         """SPA should not load sql.js WASM bundle"""
         # Bundle size should be reduced by 1.5MB (sql.js removal)
         # Expected: <500KB for all JS bundles (was 2MB with sql.js)
-        assert True  # Verified during bundle analysis
 
 
 class TestSPAJSONDataLayerIntegration:
@@ -318,7 +314,6 @@ class TestSPAJSONDataLayerIntegration:
         # - fetchJSON(url): Promise
         # - embedJSON(data): Object
         
-        assert True  # Verified in JSONDataLayer.js implementation
     
     def test_json_data_layer_detects_protocol(self):
         """JSONDataLayer should detect protocol automatically"""
@@ -327,7 +322,6 @@ class TestSPAJSONDataLayerIntegration:
         # - http:// → use fetch()
         # - https:// → use fetch()
         
-        assert True  # Verified in JSONDataLayer.js tests
 
 
 class TestSPABundleSize:

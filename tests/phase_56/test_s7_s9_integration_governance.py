@@ -116,7 +116,6 @@ class TestGovernanceEnforcementStage8:
     def test_s8_core_049_silent_autonomous_execution_enabled(self):
         """CORE-049 (silent autonomous execution) should be enabled"""
         # Phase 56 executes autonomously without user prompts
-        assert True
 
     def test_s8_governance_violations_detected(self):
         """Governance violations should be detected"""
@@ -133,7 +132,6 @@ class TestGovernanceEnforcementStage8:
     def test_s8_ac_markers_present_in_code(self):
         """AC (audit checkpoint) markers should be present"""
         # This file contains AC_START and AC_COMPLETE markers
-        assert True
 
 
 # =============================================================================
@@ -147,7 +145,6 @@ class TestProductionReadinessStage9:
     def test_s9_phase_56_a_tests_all_passing_15_total(self):
         """Phase 56-A tests should all be passing (15/15)"""
         # Tests in tests/unit/intelligence/test_relationship_traversal.py
-        assert True
 
     def test_s9_phase_56_circular_dependency_validation_passing(self):
         """Circular dependency validation should be passing"""
@@ -158,7 +155,6 @@ class TestProductionReadinessStage9:
     def test_s9_overall_phase_56_tests_52_total(self):
         """Overall Phase 56 tests should total 52 (15+37)"""
         # 15 from Phase 56-A + 37 from integration + production readiness
-        assert True
 
     def test_s9_test_coverage_meets_85_percent_minimum(self):
         """Test coverage should be ≥85% for all Phase 56 code"""
@@ -233,7 +229,6 @@ class TestPhase56ProductionReadinessChecklist:
     def test_production_all_tests_passing_52_of_52(self):
         """All 52 tests should be passing (100%)"""
         # 15 from Phase 56-A + 37 from S7-S9
-        assert True
 
     def test_production_governance_rules_enforced(self):
         """Governance rules should be enforced"""
@@ -254,5 +249,4 @@ class TestPhase56ProductionReadinessChecklist:
 
 def test_phase_56_s7_s9_complete():
     """Marker test: Phase 56 S7-S9 suite complete"""
-    assert True
     # AC_COMPLETE: AC-PHASE56-S7-S9-001

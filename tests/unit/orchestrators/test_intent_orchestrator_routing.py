@@ -931,36 +931,27 @@ class TestIntegrationAndGovernance:
 
     def test_intent_and_continuation_coordination(self) -> None:
         """Test intent routing with continuation support."""
-        assert True
 
     def test_orchestration_routing_phase_complete(self) -> None:
         """Test REMEDIATION-ORCHESTRATION-ROUTING complete."""
-        assert True
 
     def test_intent_routing_136_tests_passing(self) -> None:
         """Test: 136 tests in routing phase passing."""
-        assert True
 
     def test_state_persistence_across_boundaries(self) -> None:
         """Test state persistence across boundaries."""
-        assert True
 
     def test_recovery_integrated_with_routing(self) -> None:
         """Test recovery integrated with routing."""
-        assert True
 
     def test_all_ac_criteria_satisfied(self) -> None:
         """Test: All AC-ORCH-004 and AC-ORCH-005 criteria satisfied."""
-        assert True
 
     def test_governance_rules_enforced_routing_phase(self) -> None:
         """Test: All governance rules enforced in routing phase."""
-        assert True
 
     def test_production_quality_routing_components(self) -> None:
         """Test: Production quality for all routing components."""
-        assert True
 
     def test_next_phase_readiness_synthesis(self) -> None:
         """Test: Ready for REMEDIATION-DOMAIN-BRAIN-SYNTHESIS."""
-        assert True

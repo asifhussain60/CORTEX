@@ -323,7 +323,6 @@ def test_protocol_backward_compatible():
     #   def use_knowledge(provider: KnowledgeProvider):
     #       provider.query()
     
-    assert True  # This is a documentation test
 
 
 def test_no_breaking_changes_to_knowledge_repository():
@@ -349,7 +348,6 @@ def test_no_breaking_changes_to_knowledge_repository():
         #   repo = KnowledgeRepository()
         #   result = repo.query(keywords=["test"])
         
-        assert True
     except ImportError:
         pytest.skip("KnowledgeRepository not available in test environment")
 
@@ -372,7 +370,6 @@ def test_no_breaking_changes_to_business_knowledge_repository():
         assert hasattr(BusinessKnowledgeRepository, "entry_count")
         assert hasattr(BusinessKnowledgeRepository, "domains")
         
-        assert True
     except ImportError:
         pytest.skip("BusinessKnowledgeRepository not available in test environment")
 

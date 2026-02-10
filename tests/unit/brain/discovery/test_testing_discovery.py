@@ -191,7 +191,6 @@ class TestTestFileScanning:
         
         (tests_dir / "test_example.py").write_text("""
 def test_something():
-    assert True
 
 def test_another():
     assert 1 + 1 == 2

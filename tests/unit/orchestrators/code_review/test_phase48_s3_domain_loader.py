@@ -37,7 +37,6 @@ class TestCompanyDomainLoader:
         # assert "pci-dss" in domains
         # assert len(domains) >= 2
         
-        assert True
 
     def test_identify_healthcare_domain_from_patient_data_path(self):
         """Identify healthcare domain from HIPAA/patient data files"""
@@ -57,7 +56,6 @@ class TestCompanyDomainLoader:
         # assert "hipaa" in domains
         # assert "phi-handling" in domains
         
-        assert True
 
     def test_identify_api_domain_from_api_service_path(self):
         """Identify API domain from API service files"""
@@ -76,7 +74,6 @@ class TestCompanyDomainLoader:
         # assert "api-services" in domains
         # assert "rest-api" in domains
         
-        assert True
 
     def test_identify_database_domain_from_sql_file(self):
         """Identify database domain from SQL schema files"""
@@ -95,7 +92,6 @@ class TestCompanyDomainLoader:
         # assert "database-standards" in domains
         # assert "sql-standards" in domains
         
-        assert True
 
     def test_identify_multiple_domains_for_mixed_changes(self):
         """Identify multiple domains when PR changes multiple file types"""
@@ -129,7 +125,6 @@ class TestCompanyDomainLoader:
         # assert "api-services" in domains
         # assert len(domains) >= 3
         
-        assert True
 
 
 class TestDomainLoading:
@@ -145,7 +140,6 @@ class TestDomainLoading:
         # assert domain.name == "Payment Processing"
         # assert "PCI-DSS" in domain.standards
         
-        assert True
 
     def test_load_all_available_domains(self):
         """Load all domain configurations from company/domains/"""
@@ -159,7 +153,6 @@ class TestDomainLoading:
         # assert "api-services" in domains
         # assert "database-standards" in domains
         
-        assert True
 
     def test_domain_contains_rules_and_patterns(self):
         """Verify loaded domain contains rules and file patterns"""
@@ -178,7 +171,6 @@ class TestDomainLoading:
         # # Domain should have file patterns
         # assert len(domain.file_patterns) > 0
         
-        assert True
 
 
 class TestPatternMatching:
@@ -207,7 +199,6 @@ class TestPatternMatching:
         #     has_payment = "payment-processing" in domains
         #     assert has_payment == should_match, f"Failed for {filepath}"
         
-        assert True
 
     def test_match_api_file_patterns(self):
         """Verify API domain matches API-related files"""
@@ -232,7 +223,6 @@ class TestPatternMatching:
         #     has_api = "api-services" in domains
         #     assert has_api == should_match, f"Failed for {filepath}"
         
-        assert True
 
     def test_match_database_file_patterns(self):
         """Verify database domain matches SQL/schema files"""
@@ -257,7 +247,6 @@ class TestPatternMatching:
         #     has_db = "database-standards" in domains
         #     assert has_db == should_match, f"Failed for {filepath}"
         
-        assert True
 
 
 class TestDomainIntegration:
@@ -286,7 +275,6 @@ class TestDomainIntegration:
         # assert len(domains) > 0
         # assert "payment-processing" in domains
         
-        assert True
 
     def test_loader_handles_empty_changes(self):
         """Verify loader handles empty change list gracefully"""
@@ -296,7 +284,6 @@ class TestDomainIntegration:
         # assert isinstance(domains, set)
         # assert len(domains) == 0
         
-        assert True
 
     def test_loader_returns_unique_domains(self):
         """Verify loader returns unique domain set (no duplicates)"""
@@ -325,7 +312,6 @@ class TestDomainIntegration:
         # # No duplicates (set naturally deduplicates)
         # assert len(domains) == len(set(domains))
         
-        assert True
 
 
 # AC_COMPLETE: AC-PHASE48-S3-001 (test definitions written)

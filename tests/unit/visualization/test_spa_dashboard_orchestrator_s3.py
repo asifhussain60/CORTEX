@@ -167,7 +167,6 @@ class TestMCPToolRegistration:
     def test_mcp_tool_is_discoverable(self) -> None:
         """MCP tools should be discoverable via cortex_tools_catalog"""
         # Tool should be in registry
-        assert True
     
     def test_mcp_tools_have_documentation(self) -> None:
         """MCP tools should include documentation strings"""

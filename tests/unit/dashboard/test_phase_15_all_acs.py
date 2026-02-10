@@ -759,7 +759,6 @@ class TestDO005GovernanceRulesViewer:
         """Tier 0 rules marked as immutable - verifies CSS structure"""
         tier0_css = get_css_selector('.rule-item[data-tier="0"]')
         # Tier 0 styling should exist
-        assert True
 
 class TestDO005EnforcementMonitor:
     """DO-005-02: Tier 0 Rule Enforcement Status"""
@@ -777,7 +776,6 @@ class TestDO005EnforcementMonitor:
     def test_each_violation_shows_cause_and_context(self):
         """Each violation shows cause and context - verifies CSS structure"""
         violation_css = get_css_selector('.violation-item')
-        assert True  # CSS structure verified
     
     def test_audit_trail_shows_who_enforced_rule(self):
         """Audit trail shows who enforced rule - verifies audit trail"""

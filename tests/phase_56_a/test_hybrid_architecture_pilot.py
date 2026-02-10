@@ -296,7 +296,6 @@ class TestPilotSuccessCriteria:
         """Verify all MCP tools still work"""
         # Would test via MCP interface
         # For now, verify structure is in place
-        assert True  # Placeholder
     
     def test_performance_regression_under_5_percent(self):
         """Test performance regression is < 5%"""
@@ -320,4 +319,3 @@ class TestPilotSuccessCriteria:
         """Test code coverage >= 90% for pilot engine"""
         # Would be measured by pytest-cov
         # For now, verify tests exist and run
-        assert True  # Will be verified by coverage reports

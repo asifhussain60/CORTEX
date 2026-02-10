@@ -22,17 +22,14 @@ class TestMCPSetupGuide:
         doc_path = Path("docs") / "MCP-SETUP-GUIDE.md"
         # We'll create this as a documentation file, not require it here
         # This test documents the expectation
-        assert True
     
     def test_setup_includes_claude_desktop(self) -> None:
         """Test that setup guide mentions Claude Desktop."""
         # Documentation requirement
-        assert True
     
     def test_setup_includes_vscode(self) -> None:
         """Test that setup guide mentions VS Code."""
         # Documentation requirement
-        assert True
 
 
 class TestToolReferenceDocumentation:
@@ -42,22 +39,18 @@ class TestToolReferenceDocumentation:
         """Test that tool reference documentation exists."""
         doc_path = Path("docs") / "MCP-TOOL-REFERENCE.md"
         # Documentation requirement
-        assert True
     
     def test_reference_includes_orchestrator_tools(self) -> None:
         """Test that reference documents orchestrator tools."""
         # Documentation requirement
-        assert True
     
     def test_reference_includes_validator_tools(self) -> None:
         """Test that reference documents validator tools."""
         # Documentation requirement
-        assert True
     
     def test_reference_includes_parameter_info(self) -> None:
         """Test that reference includes parameter information."""
         # Documentation requirement
-        assert True
 
 
 class TestTroubleshootingGuide:
@@ -67,17 +60,14 @@ class TestTroubleshootingGuide:
         """Test that troubleshooting guide exists."""
         doc_path = Path("docs") / "MCP-TROUBLESHOOTING.md"
         # Documentation requirement
-        assert True
     
     def test_troubleshooting_includes_common_issues(self) -> None:
         """Test that troubleshooting guide covers common issues."""
         # Documentation requirement
-        assert True
     
     def test_troubleshooting_includes_solutions(self) -> None:
         """Test that troubleshooting guide includes solutions."""
         # Documentation requirement
-        assert True
 
 
 class TestConfigurationReadme:

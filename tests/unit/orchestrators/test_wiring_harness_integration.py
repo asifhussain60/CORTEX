@@ -293,7 +293,6 @@ class TestWiredComponentsRetrieval(BaseWiringTest):
             priority_order = {"CRITICAL": 3, "HIGH": 2, "MEDIUM": 1, "LOW": 0}
             priorities = [priority_order.get(c.get("priority", "LOW"), 0) for c in wired]
             # Should be descending (CRITICAL first)
-            assert True  # Can have any order depending on configuration
 
 
 class TestWiringValidation(BaseWiringTest):

@@ -907,7 +907,6 @@ class TestBLUFCoreRuleCompliance:
         # This test itself demonstrates TDD compliance
         # The test file was created with test stubs
         # Implementation added to make tests pass
-        assert True  # If we get here, tests are running
 
     def test_core_011_type_hints(self):
         """Test CORE-011: Type hints on all functions.

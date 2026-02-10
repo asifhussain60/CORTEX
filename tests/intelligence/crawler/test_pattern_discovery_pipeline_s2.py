@@ -145,7 +145,6 @@ class TestPipelineIntegration:
         # Process invalid file
         try:
             result = await pipeline.process_file("", {})
-            assert True  # Should not crash
         except Exception as e:
             pytest.fail(f"Pipeline raised exception: {e}")
 
