@@ -106,7 +106,7 @@ Environment Check (cortex_verify_environment)
                              └─ Report P0/P1 issues (requires user input)
       ↓
    [AUDIT COMPLETE] → Generate Pull Enhancement Template
-                      ├─ Load response-template-pull-enhancement.py
+                      ├─ Generate enhancement template inline (CORE-002 compliant)
                       ├─ Compare before/after commits
                       ├─ Show new capabilities table
                       └─ Provide exploration commands
@@ -950,7 +950,7 @@ def should_run_autonomous_audit(wiring_gaps: List[WiringGap]) -> str:
 1. **Wiring Gap Detection** — P6 validation from cortex-architect.prompt.md
 2. **Smart Decision** — SKIP/OFFER/MANDATORY based on gap severity  
 3. **Autonomous Audit** — Silent execution with progress bars (if triggered)
-4. **Enhancement Template** — Show user what changed via `response-template-pull-enhancement.py`
+4. **Enhancement Template** — Show user what changed via inline template generation (CORE-002 compliant)
 
 ### Auto-Fix Categories (P2/P3 Only)
 
@@ -971,6 +971,6 @@ def should_run_autonomous_audit(wiring_gaps: List[WiringGap]) -> str:
 ### Integration Points
 
 - **P6 Wiring Check** from cortex-architect.prompt.md (lines 4040-4200)
-- **Pull Enhancement Template** via response-template-pull-enhancement.py
+- **Pull Enhancement Template** via inline template generation (CORE-002 compliant)
 - **MCP Tools:** cortex_lens_analyze, cortex_detect_duplicates
 - **Audit Triggers:** After successful git merge/rebase operations

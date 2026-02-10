@@ -349,19 +349,16 @@ class OrchestratorInventoryAuditor:
         
         return output_path
 
-    def save_markdown_report(self, report: InventoryReport, output_path: Path) -> Path:
+    def generate_markdown_report_inline(self, report: InventoryReport) -> str:
         """
-        Save report as Markdown.
+        Generate markdown report content inline (CORE-002 compliant).
         
         Args:
-            report: InventoryReport to save
-            output_path: Path to save markdown report
+            report: InventoryReport to format
             
         Returns:
-            Path to saved file
+            Markdown content as string (no file creation)
         """
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-        
         lines = [
             "# Orchestrator Inventory Audit Report",
             f"**Generated:** {report.timestamp}",
@@ -433,10 +430,8 @@ class OrchestratorInventoryAuditor:
             "",
         ])
         
-        with open(output_path, "w") as f:
-            f.write("\n".join(lines))
-        
-        return output_path
+        # CORE-002 COMPLIANCE: Return content, don't write file
+        return "\\n".join(lines)
 
     def audit(self) -> InventoryReport:
         """

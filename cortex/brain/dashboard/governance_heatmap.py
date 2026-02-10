@@ -380,11 +380,17 @@ class PhaseReadinessChecker:
         }
         
     def _check_docs(self, phase_id: str) -> Dict[str, Any]:
-        """Stage 4: Check if documentation is complete."""
-        docs_path = Path(f"docs/{phase_id.lower()}.md")
+        """Stage 4: Check if documentation exists in approved locations."""
+        # CORE-002 COMPLIANCE: Check .github/agents/ instead of docs/
+        agent_path = Path(f".github/agents/core/{phase_id.lower().replace('_', '-')}.md")
+        prompt_path = Path(f".github/prompts/{phase_id.lower().replace('_', '-')}.prompt.md")
         
-        doc_exists = docs_path.exists()
-        doc_size = docs_path.stat().st_size if doc_exists else 0
+        doc_exists = agent_path.exists() or prompt_path.exists()
+        doc_size = 0
+        if agent_path.exists():
+            doc_size += agent_path.stat().st_size
+        if prompt_path.exists():
+            doc_size += prompt_path.stat().st_size
         has_content = doc_size > 100  # At least 100 bytes
         
         return {

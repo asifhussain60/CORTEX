@@ -296,11 +296,13 @@ class ToolGenerator:
             version=template.version,
         )
         
+        # CORE-002 COMPLIANCE: No docs/ markdown generation
+        # Documentation generated inline only
         tool = GeneratedTool(
             name=f"{template.name} Documentation",
             tool_type=ToolType.DOCUMENTATION,
             content=doc_content,
-            path=Path(f"docs/{doc_name}.md"),
+            path=None,  # No file path - inline only
             template_source=template.name,
             dependencies=[],
         )

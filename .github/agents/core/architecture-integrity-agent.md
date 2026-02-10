@@ -1034,9 +1034,13 @@ if __name__ == '__main__':
     results = audit.run_audit()
     report = audit.generate_report(results)
     
-    # Write report
-    report_file = Path(f"docs/audit/monthly-audit-{audit.timestamp.strftime('%Y-%m')}.md")
-    report_file.write_text(report)
+    # CORE-002 COMPLIANCE: No docs/ file generation
+    # Write report inline only (no file creation)
+    print("\n" + "="*60)
+    print("📋 MONTHLY ARCHITECTURE AUDIT REPORT")
+    print("="*60)
+    print(report)
+    print("="*60)
     
     print(f"✅ Monthly audit complete")
     print(f"   Report: {report_file}")
