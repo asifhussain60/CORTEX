@@ -133,15 +133,23 @@ class TestRoslynWorkspaceBuilder:
         assert result["projects"][0]["name"] == "Core"
         assert "path" in result["projects"][0]
     
+    @pytest.mark.integration
     def test_load_solution_with_semantic_model(self, temp_dotnet_solution):
         """
         Test loading solution with semantic model extraction.
         
         AC: Extract type symbols from loaded projects
+        
+        Note: Requires dotnet build of temp solution, so marked as integration test
         """
         builder = RoslynWorkspaceBuilder()
         
         solution_path = temp_dotnet_solution / "TestSolution.sln"
+        
+        # Build solution first (required for Roslyn analysis)
+        import subprocess
+        subprocess.run(["dotnet", "build", str(solution_path)], capture_output=True)
+        
         result = builder.load_solution(solution_path, include_semantic=True)
         
         assert result["success"]
@@ -164,14 +172,6 @@ class TestRoslynWorkspaceBuilder:
         
         # Verify User class has expected structure
         user_type = next(t for t in types if t["Name"] == "User")
-        print(f"\n=== User Type Found ===")
-        print(f"Namespace: {user_type.get('Namespace')}")
-        print(f"FullName: {user_type.get('FullName')}")
-        print(f"Methods: {user_type.get('Methods')}")
-        print(f"Properties: {user_type.get('Properties')}")
-        print(f"Interfaces: {user_type.get('Interfaces')}")
-        print(f"=======================\n")
-        
         assert user_type["Kind"] == "Class"
         # Check for interface implementation (may be Core.Entities.IEntity or TestSolution.Core.Entities.IEntity)
         assert any("IEntity" in iface for iface in user_type["Interfaces"])
