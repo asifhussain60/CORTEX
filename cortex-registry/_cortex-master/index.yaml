@@ -11,6 +11,46 @@ revision: "Phase 70 Created: Implementation ↔ Specification Alignment Remediat
 
 # Active Phases (Current Development)
 active_phases:
+  - id: "phase-72"
+    name: "Unified Digest-Ingest Facade - Composition Layer"
+    file: "phases/active/phase-72-unified-digest-ingest-facade.yaml"
+    created: "2026-02-10"
+    started: "2026-02-10"
+    status: "in_progress"
+    priority: "P2"
+    execution_order: 23
+    roi_score: 0.75
+    estimated_duration: "1-2 days"
+    test_target: 12
+    coverage_target: 95
+    tests_passing: 12
+    stages_complete: "4/5"
+    description: |
+      🔵 IN PROGRESS (75% complete): Unified DIGEST-INGEST facade with intelligent routing.
+      ✅ S1: UnifiedDigestIngestionFacade (12 tests ✅) — Composition layer, complete isolation
+      ✅ S2: MCP Tool Router (cortex_unified_digest_ingest + adapter) — Intelligent mode detection
+      ✅ S3: Prompt Enhancement (CORTEX.prompt.md + cortex-architect.prompt.md) — Command updates
+      ✅ S4: Git Commits (916cdf96f) — Phase 72 S1-S3 complete
+      ⚪ S5: Registry Update + Documentation — Final integration
+      
+      Design Benefits:
+      - Prevents brittleness: DIGEST and INGEST completely independent
+      - CORE-035 compliant: Each has single canonical implementation
+      - Easy maintenance: Changes isolated to one orchestrator
+      - Test simplicity: 12 unit tests, 100% passing
+      
+      Architecture: Composition layer (NOT inheritance) → UnifiedDigestIngestionFacade routes to:
+      - DigestSessionOrchestrator (chat files → enhancement extraction)
+      - BulkIngestionPipeline (knowledge entries → KB population)
+      
+      Auto-detection logic: Analyzes content for chat markers or structured data.
+      MCP tools: cortex_unified_digest_ingest (main) + adapter for orchestrator wiring.
+      
+      Risk: 2.1/10 (LOW) — Full isolation prevents scope creep and brittleness.
+    depends_on:
+      - "phase-41"
+    blocks: []
+
   - id: "phase-70"
     name: "Implementation ↔ Specification Alignment Remediation"
     file: "phases/active/phase-70-alignment-remediation.yaml"
