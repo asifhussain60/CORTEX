@@ -36,8 +36,13 @@ class RoslynWorkspaceBuilder:
         Initialize Roslyn workspace builder.
         
         Args:
-            roslyn_cli_path: Path to Roslyn CLI analyzer (optional)
+            roslyn_cli_path: Path to Roslyn CLI analyzer (optional, auto-detected if not provided)
         """
+        if roslyn_cli_path is None:
+            # Import here to avoid circular dependency
+            from cortex_lens.dotnet import DEFAULT_ROSLYN_CLI_PATH
+            roslyn_cli_path = DEFAULT_ROSLYN_CLI_PATH
+        
         self.roslyn_cli_path = roslyn_cli_path
         self._verify_dotnet_sdk()
     
@@ -150,10 +155,18 @@ class RoslynWorkspaceBuilder:
         # If semantic analysis requested, invoke Roslyn CLI
         if include_semantic:
             if self.roslyn_cli_path and self.roslyn_cli_path.exists():
-                result["semantic_models"] = self._extract_semantic_models(solution_path)
+                semantic_projects = self._extract_semantic_models(solution_path)
+                
+                # Merge semantic data into projects
+                for i, project in enumerate(projects):
+                    if i < len(semantic_projects):
+                        project["semantic_model"] = semantic_projects[i]
             else:
                 logger.warning("Roslyn CLI not available — skipping semantic extraction")
-                result["semantic_models"] = []
+        
+        # Add success flag for consistent API
+        result["success"] = True
+        result["type"] = "solution"
         
         logger.info(f"Loaded solution with {len(projects)} projects")
         return result
@@ -298,9 +311,38 @@ class RoslynWorkspaceBuilder:
         Returns:
             List of semantic model dictionaries (one per project)
         """
-        # STUB: This will be implemented when Roslyn CLI tool is ready
-        logger.warning("Semantic model extraction not yet implemented")
-        return []
+        try:
+            # Invoke Roslyn CLI
+            result = subprocess.run(
+                [
+                    "dotnet", "run", "--project", str(self.roslyn_cli_path),
+                    "--", str(solution_path)
+                ],
+                capture_output=True,
+                text=True,
+                timeout=30
+            )
+            
+            if result.returncode != 0:
+                logger.error(f"Roslyn CLI failed: {result.stderr}")
+                return []
+            
+            # Parse JSON output
+            import json
+            semantic_data = json.loads(result.stdout)
+            
+            # Return projects array with semantic model data
+            return semantic_data.get("Projects", [])
+            
+        except subprocess.TimeoutExpired:
+            logger.error(f"Roslyn CLI timeout analyzing: {solution_path}")
+            return []
+        except json.JSONDecodeError as e:
+            logger.error(f"Failed to parse Roslyn CLI output: {e}")
+            return []
+        except Exception as e:
+            logger.error(f"Error extracting semantic models: {e}", exc_info=True)
+            return []
     
     def _extract_project_semantic_model(self, project_path: Path) -> Optional[Dict[str, Any]]:
         """
@@ -312,9 +354,29 @@ class RoslynWorkspaceBuilder:
         Returns:
             Semantic model dictionary or None
         """
-        # STUB: This will be implemented when Roslyn CLI tool is ready
-        logger.warning("Project semantic model extraction not yet implemented")
-        return None
+        try:
+            # Create temporary solution for single project
+            import tempfile
+            with tempfile.NamedTemporaryFile(mode='w', suffix='.sln', delete=False) as tmp_sln:
+                sln_path = Path(tmp_sln.name)
+                tmp_sln.write(f"""
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}}") = "{project_path.stem}", "{project_path}", "{{12345678-1234-1234-1234-123456789012}}"
+EndProject
+""")
+            
+            # Extract semantic models from temporary solution
+            semantic_models = self._extract_semantic_models(sln_path)
+            
+            # Clean up temporary solution
+            sln_path.unlink()
+            
+            # Return first (and only) project's semantic model
+            return semantic_models[0] if semantic_models else None
+            
+        except Exception as e:
+            logger.error(f"Error extracting project semantic model: {e}", exc_info=True)
+            return None
 
 
 # AC_COMPLETE: AC-PHASE67-S1-WORKSPACE-001 ✅ Basic workspace loading implemented

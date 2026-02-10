@@ -65,7 +65,12 @@ EndGlobal
     public class User : IEntity
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
+        
+        public string GetDisplayName()
+        {
+            return $"User: {Name}";
+        }
     }
 }
 """
@@ -128,7 +133,6 @@ class TestRoslynWorkspaceBuilder:
         assert result["projects"][0]["name"] == "Core"
         assert "path" in result["projects"][0]
     
-    @pytest.mark.skip(reason="Requires Roslyn CLI implementation")
     def test_load_solution_with_semantic_model(self, temp_dotnet_solution):
         """
         Test loading solution with semantic model extraction.
@@ -140,14 +144,39 @@ class TestRoslynWorkspaceBuilder:
         solution_path = temp_dotnet_solution / "TestSolution.sln"
         result = builder.load_solution(solution_path, include_semantic=True)
         
-        assert result is not None
-        assert "semantic_models" in result
+        assert result["success"]
+        assert result["type"] == "solution"
+        assert "projects" in result
+        assert len(result["projects"]) == 1
         
-        # Should find IEntity and User types
-        types = result["semantic_models"][0]["types"]
-        type_names = [t["name"] for t in types]
+        # Verify semantic model data is present
+        project = result["projects"][0]
+        assert "semantic_model" in project
         
+        semantic_model = project["semantic_model"]
+        assert "Types" in semantic_model
+        
+        # Verify IEntity interface found
+        types = semantic_model["Types"]
+        type_names = [t["Name"] for t in types]
         assert "IEntity" in type_names
+        assert "User" in type_names
+        
+        # Verify User class has expected structure
+        user_type = next(t for t in types if t["Name"] == "User")
+        print(f"\n=== User Type Found ===")
+        print(f"Namespace: {user_type.get('Namespace')}")
+        print(f"FullName: {user_type.get('FullName')}")
+        print(f"Methods: {user_type.get('Methods')}")
+        print(f"Properties: {user_type.get('Properties')}")
+        print(f"Interfaces: {user_type.get('Interfaces')}")
+        print(f"=======================\n")
+        
+        assert user_type["Kind"] == "Class"
+        # Check for interface implementation (may be Core.Entities.IEntity or TestSolution.Core.Entities.IEntity)
+        assert any("IEntity" in iface for iface in user_type["Interfaces"])
+        assert len(user_type["Methods"]) >= 1, f"Expected >=1 methods, got {len(user_type['Methods'])}"  # GetDisplayName method
+        assert len(user_type["Properties"]) >= 2  # Id, Name properties
         assert "User" in type_names
     
     def test_load_project_directly(self, temp_dotnet_solution):
