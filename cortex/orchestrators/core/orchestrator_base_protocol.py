@@ -1,8 +1,8 @@
 """
-Orchestrator Base Protocol - Mandatory 4-phase execution for ALL orchestrators.
+Orchestrator Base Protocol - Mandatory 6-phase execution for ALL orchestrators.
 
 AC-ID: ARCH-012
-Purpose: Enforce LENS → Security → Challenge → DoR → Execute pattern
+Purpose: Enforce LENS → Security → Challenge → DoR → Execute → Learn pattern
 
 This base class provides:
 1. LENS Context Building (automatic on every turn)
@@ -10,12 +10,14 @@ This base class provides:
 3. Challenge Generation (automatic when CORTEX disagrees)
 4. DoR Confidence Gate (blocks execution if <60%)
 5. Domain-specific execution (subclass implements)
+6. Learning Capture (automatic pattern extraction - Phase 71)
 
 All orchestrators MUST inherit from this class to ensure:
 - Consistent intelligence layer (LENS synthesis)
 - Security-first hard gates (Phase 8.3)
 - Intelligent disagreement detection (Challenge Engine)
 - Quality gates (DoR confidence threshold)
+- Automatic learning capture (Universal Learning Loop)
 - Audit trail compliance (CORE-027)
 
 Governance:
@@ -27,19 +29,57 @@ Governance:
 - CORE-027: Audit trail logging
 - CORE-029: LENS + Challenge automatic
 - AC-PERMANENT-FIX-006: Challenge system cannot be disabled
+- PHASE-71-S2: Automatic learning capture
 
 Author: Asif Hussain
 Date: 2026-01-31
+Updated: 2026-02-09 (Phase 71 S2 - Learning Capture)
 """
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional, List, Callable
 from pathlib import Path
 import logging
+import functools
 
 from cortex.core.result import Result, Ok, Err
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
+
+
+# Decorator to skip learning capture for specific orchestrators
+def skip_learning(cls_or_method):
+    """
+    Decorator to skip automatic learning capture.
+    
+    Use on orchestrator class or _execute_learning_phase method
+    to disable automatic learning capture for that orchestrator.
+    
+    Example:
+        @skip_learning
+        class DebugOrchestrator(OrchestratorBaseProtocol):
+            pass
+    
+    AC-ID: PHASE-71-S2
+    """
+    if isinstance(cls_or_method, type):
+        # Class decorator
+        cls_or_method._skip_learning = True
+        return cls_or_method
+    else:
+        # Method decorator
+        @functools.wraps(cls_or_method)
+        def wrapper(*args, **kwargs):
+            return None  # Skip learning
+        wrapper._skip_learning = True
+        return wrapper
+
+# Import Universal Learning Loop for Phase 6 (Learning Capture)
+try:
+    from cortex.learning import get_learning_loop, UniversalLearningLoop
+except ImportError:
+    get_learning_loop = None
+    UniversalLearningLoop = None
 
 # Import LENS, Challenge, DoR, Security components
 try:
@@ -396,6 +436,23 @@ class OrchestratorBaseProtocol(ABC):
                 context=context,
             )
             
+            # =====================================================================
+            # PHASE 6: Learning Capture (Automatic - Phase 71)
+            # =====================================================================
+            if domain_result.is_ok():
+                try:
+                    logger.info("Phase 6: Capturing learnings...")
+                    self._execute_learning_phase(
+                        user_request=user_request,
+                        context=context,
+                        result=domain_result.unwrap(),
+                        lens_context=lens_context,
+                    )
+                    logger.info("Phase 6: Learnings captured successfully")
+                except Exception as e:
+                    # Learning capture failure should NOT block execution
+                    logger.warning(f"Phase 6: Learning capture failed: {e}")
+            
             self.logger.log_operation_complete(
                 ac_id="ARCH-012",
                 operation="ORCHESTRATOR_PROTOCOL_EXECUTION",
@@ -408,6 +465,7 @@ class OrchestratorBaseProtocol(ABC):
                         "challenge",
                         "dor" if dor_reflection else None,
                         "domain",
+                        "learning" if domain_result.is_ok() else None,
                     ],
                 }
             )
@@ -565,6 +623,99 @@ class OrchestratorBaseProtocol(ABC):
         except Exception as e:
             return Err(f"DoR evaluation failed: {e}")
     
+    def _execute_learning_phase(
+        self,
+        user_request: str,
+        context: Dict[str, Any],
+        result: Any,
+        lens_context: Optional[Any] = None,
+    ) -> None:
+        """
+        Execute Phase 6: Learning Capture (Phase 71).
+        
+        Automatically captures patterns from orchestrator execution results
+        and merges them into CORTEX knowledge repositories.
+        
+        This is a NON-BLOCKING phase - failures do not stop execution.
+        Subclasses can override to customize learning capture.
+        
+        Args:
+            user_request: Original user request
+            context: Request context
+            result: Domain execution result
+            lens_context: LENS context from Phase 1 (may be None)
+        
+        AC-ID: PHASE-71-S2
+        """
+        # Check if learning is skipped for this orchestrator
+        if getattr(self.__class__, '_skip_learning', False):
+            logger.debug(f"Phase 6: Learning skipped for {self.__class__.__name__} (decorator)")
+            return
+        
+        if get_learning_loop is None:
+            logger.debug("Phase 6: Learning loop not available (optional)")
+            return
+        
+        try:
+            learning_loop = get_learning_loop()
+            
+            # Build result dict for learning capture
+            result_dict = result if isinstance(result, dict) else {"result": result}
+            
+            # Build context dict for learning capture
+            context_dict = {
+                "request": user_request,
+                "lens_context": lens_context,
+                **context,
+            }
+            
+            # Capture learnings from this operation
+            captures = learning_loop.capture_from_operation(
+                orchestrator=self.__class__.__name__,
+                operation=self._get_learning_operation_type(),
+                context=context_dict,
+                result=result_dict,
+            )
+            
+            if captures:
+                logger.info(
+                    f"Phase 6: Captured {len(captures)} learnings "
+                    f"from {self.__class__.__name__}"
+                )
+            
+        except Exception as e:
+            # Learning failure should never block execution
+            logger.warning(f"Phase 6: Learning capture failed: {e}")
+    
+    def _get_learning_operation_type(self) -> str:
+        """
+        Get the operation type for learning capture.
+        
+        Subclasses should override to provide specific operation types:
+        - TDDOrchestrator -> "tdd"
+        - RefactoringOrchestrator -> "refactoring"
+        - InteractionOrchestrator -> "interaction"
+        - etc.
+        
+        Returns:
+            Operation type string for pattern extraction
+        """
+        # Default: derive from class name
+        class_name = self.__class__.__name__.lower()
+        
+        if "tdd" in class_name:
+            return "tdd"
+        elif "refactor" in class_name:
+            return "refactoring"
+        elif "interaction" in class_name:
+            return "interaction"
+        elif "governance" in class_name or "enforcement" in class_name:
+            return "governance"
+        elif "coordination" in class_name or "master" in class_name:
+            return "coordination"
+        else:
+            return "generic"
+    
     @abstractmethod
     def _execute_domain_logic(
         self,
@@ -606,23 +757,26 @@ class OrchestratorBaseProtocol(ABC):
         """
         return {
             "orchestrator": self.__class__.__name__,
-            "protocol_version": "1.0",
+            "protocol_version": "2.0",  # Updated for Phase 71
             "components": {
                 "lens": self.lens_orchestrator is not None,
                 "challenge": self.challenge_engine is not None,
                 "dor_gate": self.dor_gate is not None,
                 "security": self.security_analyzer is not None,
+                "learning": get_learning_loop is not None,
             },
             "enforcement": {
                 "lens_enabled": self._enable_lens,
                 "security_enabled": self._enable_security,
                 "challenges_enabled": self._enable_challenges,
                 "dor_gate_enabled": self._enable_dor_gate,
+                "learning_enabled": not getattr(self.__class__, '_skip_learning', False),
             },
             "governance": [
                 "ARCH-012",  # Orchestrator base protocol
                 "CORE-029",  # LENS + Challenge automatic
                 "AC-PERMANENT-FIX-006",  # Challenge system mandatory
+                "PHASE-71-S2",  # Automatic learning capture
             ],
         }
 
@@ -630,4 +784,5 @@ class OrchestratorBaseProtocol(ABC):
 __all__ = [
     "OrchestratorBaseProtocol",
     "ProtocolExecutionResult",
+    "skip_learning",
 ]
