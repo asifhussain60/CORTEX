@@ -918,6 +918,8 @@ class RegistryIntelligenceAgent:
         except Exception as e:
             logger.error(f"Failed to map intent '{intent}' to {orchestrator_name}: {e}")
             return False
+    
+    def _capture_discovery_patterns(
         self,
         discoveries: List[OrchestratorDiscovery]
     ) -> None:

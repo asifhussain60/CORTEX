@@ -35,7 +35,7 @@
   "// CORTEX MCP Server Configuration (Local Development)": null,
   "github.copilot.chat.mcpServers": {
     "cortex": {
-      "command": "/Users/asifhussain/PROJECTS/CORTEX/.venv/bin/python",
+      "command": "D:/PROJECTS/CORTEX/.venv/bin/python",
       "args": [
         "-m",
         "cortex.mcp"
@@ -43,8 +43,8 @@
       "env": {
         "CORTEX_ENV": "development",
         "CORTEX_MCP_SERVER": "true",
-        "PYTHONPATH": "/Users/asifhussain/PROJECTS/CORTEX",
-        "PATH": "/Users/asifhussain/PROJECTS/CORTEX/.venv/bin:$PATH"
+        "PYTHONPATH": "D:/PROJECTS/CORTEX",
+        "PATH": "D:/PROJECTS/CORTEX/.venv/bin:$PATH"
       }
     }
   },
