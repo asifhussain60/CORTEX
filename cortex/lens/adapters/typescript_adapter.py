@@ -52,8 +52,9 @@ class TypeScriptAdapter(LanguageAdapter):
     
     def __init__(self):
         """Initialize TypeScriptAdapter with tree-sitter parser (uses JavaScript parser)."""
-        self.language = Language(ts_javascript.language())
-        self.parser = Parser(self.language)
+        # New tree-sitter API (0.20+): pass language directly to Parser
+        self.parser = Parser(ts_javascript.language())
+        self.language = ts_javascript.language()
     
     def parse_file(self, file_path: Path) -> PolyglotASTResult:
         """

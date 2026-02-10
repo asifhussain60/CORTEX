@@ -258,16 +258,17 @@ creational_patterns:
       - "sealed keyword prevents subclassing for better control"
       - "Protected constructor allows subclassing if needed"
       - "Consider implementing IDisposable if singleton manages resources"
-        
-        typescript:
-          good: |
-            class Singleton {
-                private static instance: Singleton;
-                private constructor() {}
-                
-                public static getInstance(): Singleton {
-                    if (!Singleton.instance) {
-                        Singleton.instance = new Singleton();
+    
+    examples:
+      typescript:
+        good: |
+          class Singleton {
+              private static instance: Singleton;
+              private constructor() {}
+              
+              public static getInstance(): Singleton {
+                  if (!Singleton.instance) {
+                      Singleton.instance = new Singleton();
                     }
                     return Singleton.instance;
                 }

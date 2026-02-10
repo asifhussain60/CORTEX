@@ -1,749 +1,324 @@
-Reverse-engineering a real codebase into UML + object relationships + actual domain knowledge is less “run a magic tool” and more “build a pipeline that triangulates truth from code, runtime, and data.” Here’s the best way to do it for a C# / .NET MVC + Angular + SQL/Oracle stack, without wasting weeks generating pretty-but-useless diagrams.
+asifhussain60: Follow instructions in [cortex-architect.prompt.md](file:///Users/asifhussain/PROJECTS/CORTEX/.github/prompts/cortex-architect.prompt.md).
+review #file:_cortex-master. List all pending phases and prioritize for completion of cortex master plan implementation and get everything done and ready for production excluding deployment
 
-The winning approach: three lenses, one model
-1) Static structure (what the code says)
+GitHub Copilot: ## 🏛️ CORTEX Architect ANALYZE
+**Author:** Asif Hussain | **Orchestrator:** PlanOrchestrator ✅
 
-Goal: classes, interfaces, dependencies, call graph hints, layering.
+---
 
-C# / .NET
+I'll analyze the master registry to identify all pending phases and create a prioritized completion roadmap for production readiness. 
 
-Parse the solution with Roslyn (this is the grown-up way). Extract:
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/_cortex-master/index.yaml#1-1), lines 1 to 200
 
-type graph (inheritance, interface impl)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/_cortex-master/index.yaml#200-200), lines 200 to 600
 
-composition/aggregation (fields, properties)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/_cortex-master/index.yaml#600-600), lines 600 to 1200
 
-references between assemblies/namespaces
+Let me continue reading to get the complete picture of all phases: 
 
-method call edges (best-effort; dynamic dispatch complicates)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/_cortex-master/index.yaml#1200-1200), lines 1200 to 2000
 
-Generate UML-ish class diagrams selectively, not for the whole solution. Whole-solution class diagrams become “spaghetti art” fast.
+Now let me get the final section of the index to complete the picture: 
 
-Identify architectural boundaries:
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/_cortex-master/index.yaml#2000-2000), lines 2000 to 2506
 
-MVC: Controllers → Services → Repositories → DbContext (or DAL)
+Perfect! Now I have the complete picture. Let me analyze and create a prioritized completion roadmap:
 
-.NET layers by assembly naming + dependency direction (enforce “no upward references”)
+## 🏛️ CORTEX Architect ANALYZE
+**Author:** Asif Hussain | **Orchestrator:** PlanOrchestrator ✅
 
-Angular
+---
 
-Parse TypeScript AST (or use tooling) to extract:
+### 📊 CORTEX Master Plan: Production Readiness Analysis
 
-module boundaries, component/service dependencies
+**Master Registry Status:** 54/64 phases complete (84.4%) | 10 pending phases
 
-DI graph (providers)
+---
 
-routing map → feature areas (this is often closer to domain than folder names)
+## 🎯 PENDING PHASES ANALYSIS
 
-Don’t try to UML every component. Use it to map feature slices and state/data flows.
+### P0 - CRITICAL (Production Blockers) - 3 Phases
 
-2) Runtime truth (what actually happens)
+| Phase | Name | Status | Est. Duration | Tests | ROI | Priority Rank |
+|-------|------|--------|---------------|-------|-----|---------------|
+| **Phase 65** | LENS Intelligence Remediation | In Progress (1/9) | 10 days | 155 | 0.95 | **#1** |
+| **Phase 38** | Brain Cohesion & Health System | In Progress (11/12) | S11-S12 remain | 310/260 | 0.94 | **#2** |
+| **Phase 48** | Registry Isolation & Multi-Tenant | Planned | 6 days | 105 | 0.93 | **#3** |
 
-Goal: confirm real call paths, object lifetimes, and cross-layer flows that static analysis misses.
+### P1 - HIGH (Core Functionality) - 4 Phases
 
-Instrument / trace:
+| Phase | Name | Status | Est. Duration | Tests | ROI | Priority Rank |
+|-------|------|--------|---------------|-------|-----|---------------|
+| **Phase 66** | LENS Knowledge Graph | In Progress (1/4) | 11-13 weeks | 110 | 0.88 | **#4** |
+| **Phase 52** | Enterprise Orchestrator Suite | In Progress (1/7) | 16 days | 165 | 0.87 | **#5** |
+| **Phase 67** | .NET Roslyn Deep Intelligence | Planned | 6-8 weeks | 95 | 0.87 | **#6** |
+| **Phase 47** | Company/CORTEX Separation | Completed | - | 123 | 0.87 | ✅ Done |
 
-.NET: OpenTelemetry traces (or APM) to capture request → controller → service → db calls
+### P2 - MEDIUM (Enhancement) - 3 Phases
 
-Log correlation IDs; capture endpoint, service method, SQL text hash, latency
+| Phase | Name | Status | Est. Duration | Tests | ROI | Priority Rank |
+|-------|------|--------|---------------|-------|-----|---------------|
+| **Phase 68** | Angular Deep Analysis | Planned | 4-5 weeks | 75 | 0.82 | **#7** |
+| **Phase 69** | Runtime Correlation Engine | Planned | 5-6 weeks | 85 | 0.78 | **#8** |
+| **Phase 54-A** | Repository Onboarding Refactor | Completed | - | 75 | 0.65 | ✅ Done |
 
-Dependency injection (DI) container graph:
+---
 
-Export registrations (interfaces → concrete types) at startup
+## 🚀 RECOMMENDED COMPLETION SEQUENCE (Production-First)
 
-This is gold for “what implementations are actually used”
+### **WAVE 1: IMMEDIATE (2-3 weeks) - Foundation Completion**
 
-This is how you avoid diagrams based on dead code, old interfaces, or “intended architecture.”
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ 🔥 PRODUCTION BLOCKERS - Must Complete Before Any Deployment    │
+└─────────────────────────────────────────────────────────────────┘
+```
 
-3) Data model (what the domain really is)
+#### **#1 Priority: Phase 65 - LENS Intelligence Remediation** ⚡ P0
+- **Current:** 1/9 stages (S1 YAML loading ✅)
+- **Duration:** 8 days remaining (9 stages - 1 done)
+- **Impact:** Transforms hollow LENS architecture → operational intelligence
+- **Critical For:** All orchestrators depend on real LENS data
+- **Tests:** 143/155 (12 remaining)
+- **Action:** `/plan continue phase-65` → S2-S9 autonomous execution
 
-Goal: domain entities, relationships, cardinality, aggregates, invariants (as much as code+DB reveals).
+**Why First:** Without working LENS intelligence, CORTEX is 40% functional. This is the single biggest production blocker.
 
-Reverse engineer the DB (SQL Server/Oracle):
+---
 
-ERD from foreign keys, unique constraints, check constraints
+#### **#2 Priority: Phase 38 - Brain Cohesion S11-S12** ⚡ P0
+- **Current:** 11/12 stages (S11 in GREEN phase)
+- **Duration:** 1-2 days
+- **Impact:** VacuumOrchestrator production-ready + AUDIT integration
+- **Tests:** 310/260 (119% complete, S11-S12 pending)
+- **Action:** Complete S11 REFACTOR → S12 implementation
 
-stored procs/views as “domain operations” (often where business logic hides)
+**Why Second:** 92% complete. Finish what's started before context switches.
 
-Map ORM models ↔ tables:
+---
 
-Entity Framework: mappings, navigation properties, fluent config
+#### **#3 Priority: Phase 48 - Multi-Tenant Registry** 🔐 P0
+- **Duration:** 6 days
+- **Impact:** Eliminates singleton hell, enables SaaS deployment
+- **Unblocks:** Phase 50 (cloud storage), Phase 51 (secrets management)
+- **Tests:** 105 planned
+- **Action:** Requires Phase 38 complete first (dependency)
 
-Legacy: hand-written SQL → infer entity boundaries via query patterns
+**Why Third:** Foundation for enterprise deployment. Unblocks 2 other critical phases.
 
-Read the “names”:
+---
 
-table/column names, enum tables, reference data tables
+### **WAVE 2: CORE FUNCTIONALITY (3-4 weeks) - Production Polish**
 
-these often encode domain language more reliably than code comments
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ 🎯 PRODUCTION POLISH - Core Features for Enterprise Deployment  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+#### **#4 Priority: Phase 66 - LENS Knowledge Graph** 📊 P1
+- **Current:** 1/4 stages (Architecture Lens ✅)
+- **Duration:** 10 weeks remaining (S2-S4)
+- **Impact:** Pattern-based intelligence (language-agnostic)
+- **Tests:** 96/110 remaining
+- **Strategy:** Incremental delivery (S2 → S3, defer S4 if needed)
 
-Then unify this into a single Domain Knowledge Graph:
+**Why Fourth:** Strategic intelligence layer. Can run in parallel with Wave 1 completion.
 
-nodes: types, tables, endpoints, UI routes
+---
 
-edges: “calls”, “reads/writes”, “maps to”, “depends on”, “contains”
-
-attributes: namespaces, assemblies, module, ownership, last changed, usage frequency
-
-That graph becomes the source-of-truth; UML is just one view of it.
-
-Practical workflow (what I’d do on a real team)
-Step 0 — Stop the bleeding: define the outputs you want
-
-You want usable artifacts, not “a 600-page PDF class diagram.”
-Target these:
-
-C4-style maps (Context → Container → Component) for “how it hangs together”
-
-3–10 domain diagrams (bounded contexts / modules)
-
-Key sequence diagrams for critical flows (top 10 endpoints or business processes)
-
-ERD with mappings to domain entities
-
-Glossary (ubiquitous language): nouns (entities), verbs (use cases), rules (invariants)
-
-Step 1 — Discover boundaries fast
-
-List assemblies/projects and dependencies
-
-List Angular routes and lazy-loaded modules
-
-List DB schemas and top tables by usage (from query logs if possible)
-
-This produces your first “map of the city.”
-
-Step 2 — Extract relationships automatically (but only keep what matters)
-
-From C#: type graph + DI graph + controller/service/repo call edges
-
-From Angular: route → component → service → API client mapping
-
-From DB: FK graph + view/proc dependencies
-
-Now you have raw material.
-
-Step 3 — Build “domain slices”
-
-Pick a business capability (e.g., Claims, Billing, Scheduling) and trace it end-to-end:
-
-Angular route/module → API endpoint → service → repository → tables/procs
-For each slice, create:
-
-a small class diagram (only the relevant types)
-
-a sequence diagram (actual call chain)
-
-a data diagram (tables + relationships used)
-
-Repeat until you’ve covered the core capabilities.
-
-Step 4 — Validate with humans (because code lies by omission)
-
-Interview product/SMEs with your diagrams in hand:
-
-“Which of these entities are real business concepts vs technical artifacts?”
-
-“Which relationships are actually enforced vs ‘we hope’?”
-
-“Where do rules live: UI, API, DB, batch jobs?”
-
-Update glossary + bounded contexts accordingly.
-
-Tooling that actually works (stack-specific)
-C#/.NET
-
-Roslyn for extraction (custom or existing analyzers)
-
-NDepend for dependency graphs and architectural rule checks (very effective for .NET layering)
-
-Visual Studio Architecture / DGML (still useful for dependency graphs)
-
-OpenTelemetry + Jaeger/Zipkin/APM for runtime traces
-
-Angular
-
-Compodoc (quick DI + module/component documentation)
-
-Dependency Cruiser (TS dependency rules/graphs)
-
-Route map extraction (Angular Router config)
-
-DB (SQL Server / Oracle)
-
-ERD tools (Oracle SQL Developer Data Modeler for Oracle; many options for SQL Server)
-
-Query logging / AWR (Oracle) / Query Store (SQL Server) to see actual usage
-
-Dependency extraction for views/procs/packages
-
-Cross-cutting diagram outputs
-
-PlantUML (best “diagram as code” for versioning)
-
-Structurizr (C4 diagrams; excellent for architecture-as-code)
-
-Mermaid (good for lightweight docs, less precise for UML)
-
-The trap to avoid
-
-Auto-generated full UML of the entire system is almost always garbage.
-It’s technically “accurate” and practically useless. The best reverse-engineering is curated: generate everything, keep only what answers questions.
-
-If you want a “best single strategy”
-
-Build a graph-based model (types + endpoints + routes + tables + runtime traces) and generate:
-
-C4 maps (architecture)
-
-curated UML per domain slice (structure)
-
-sequence diagrams from traces (behavior)
-
-ERD + entity mappings (data)
-
-glossary (language)
-
-That’s how you get domain knowledge, not just diagrams.
-
-
-Best way: treat it like building a knowledge graph + a few “truthy” diagrams, not like drawing UML by hand from vibes. Reverse-engineering succeeds when you automate extraction, then curate the few models that matter.
-
-1) Start with an automated structural map (fast, low drama)
-
-C# / .NET
-
-Build + index the solution: restore, build, run tests. This ensures analyzers see real types.
-
-Use Roslyn-based analysis (or tools built on it) to extract:
-
-Class/interface inheritance
-
-Method call graph (at least per assembly)
-
-Dependency graph between projects/namespaces
-
-Attributes/annotations (often encode domain meaning)
-
-Practical tools:
-
-NDepend (excellent dependency graphs, coupling, layering, cycle detection; great “architecture x-ray”)
-
-ReSharper / Rider: diagrams, type hierarchy, call hierarchy, “find usages” at scale
-
-dotnet-depends / dependency graph outputs (quick project-level view)
-
-Angular / TypeScript
-
-Generate dependency/call/module graphs:
-
-Madge (module dependency graph)
-
-Compodoc (Angular docs + dependency views)
-
-Extract:
-
-Modules → components/services relationships
-
-Injectable service usage
-
-Route graph (often a domain workflow map)
-
-2) Extract “domain nouns” from the edges, not just the nodes
-
-UML class diagrams alone are usually too literal. Domain knowledge is hiding in:
-
-Database schema (tables, columns, constraints, FK graph)
-
-API contracts (OpenAPI/Swagger, controllers, routes, DTOs)
-
-Business rules (validation layers, “specification” classes, policy engines, stored procedures/packages)
-
-Workflows (state machines, status fields, routing, background jobs)
-
-So do this early:
-
-DB-first ERD:
-
-For SQL Server: SSMS database diagrams (basic), or better: SchemaSpy, dbdiagram.io, Redgate SQL Doc
-
-For Oracle: SQL Developer Data Modeler, SchemaSpy (works with Oracle too)
-
-Then map Entities ↔ Tables ↔ DTOs ↔ API endpoints. That mapping is where “domain truth” lives.
-
-3) Build a “thin UML set” that people actually use
-
-Instead of 200-class diagrams, generate/maintain 5–8 diagrams max, each answering a question:
-
-Context diagram: system boundaries + integrations (Oracle/other services/auth/jobs)
-
-Container diagram: Angular app, .NET services, DB(s), queues, batch jobs
-
-Component diagram: major modules (Auth, Orders, Billing…) and their dependencies
-
-Key domain model: only core aggregates/entities (20–40 types, not 400)
-
-Sequence diagram: top 3 user flows end-to-end (UI → API → DB → external)
-
-State diagram: for key lifecycle entities (OrderStatus, CaseStatus…)
-
-ERD: for core schema areas
-
-Deployment diagram (optional): environments, hosting, network boundaries
-
-4) Use “runtime truth” to validate the static analysis
-
-Static graphs lie by omission (reflection, DI, dynamic SQL). Add runtime evidence:
-
-ASP.NET MVC / Web API
-
-Enable request logging and inspect routing + middleware pipeline
-
-OpenTelemetry tracing (or Application Insights) to capture call chains
-
-DI container inspection
-
-Dump service registrations at startup → actual wiring graph
-
-SQL observation
-
-SQL Server Extended Events / Profiler; Oracle tracing/AWR (careful in prod)
-
-Identify top queries and which endpoints trigger them
-
-5) Produce a knowledge graph you can query (this is the power move)
-
-If you want “ask anything about the codebase” capability, store extracted facts as triples:
-
-Nodes: Type, Method, Route, Table, Column, StoredProc, Module, Component
-
-Edges: calls, depends_on, maps_to, reads, writes, returns, validates, owns
-
-Implementation options:
-
-Neo4j (classic; great for relationship queries)
-
-Datomic / RDF if you’re feeling philosophical
-
-Or simplest: JSON + SQLite with good indexing
-
-Example queries you’ll want:
-
-“Which endpoints write to TABLE_X?”
-
-“Which UI components call endpoint /api/orders?”
-
-“What classes enforce rule ‘cannot close case if balance > 0’?”
-
-“Where is OrderStatus transitioned to ‘Approved’?”
-
-6) Toolchain suggestion by stack (pragmatic picks)
-
-C#/.NET
-
-NDepend (architecture + dependency truth)
-
-Rider/ReSharper (navigation + diagrams)
-
-Roslyn analyzer script (custom extraction)
-
-PlantUML / Mermaid for curated diagrams
-
-Angular
-
-Compodoc (docs + graph)
-
-Madge (module graph)
-
-ESLint rules + TS compiler API for extraction if needed
-
-SQL Server / Oracle
-
-SchemaSpy (ERD + HTML docs)
-
-Oracle SQL Developer Data Modeler (best native)
-
-Store schema metadata + FK graph into your knowledge graph
-
-7) A recommended workflow that actually works
-
-Inventory: solutions/projects, apps, DBs, integrations, scheduled jobs
-
-Auto-extract: dependency graphs + schema ERD + route map
-
-Identify bounded contexts: cluster by dependency + schema areas + namespaces
-
-Curate diagrams (thin set)
-
-Add runtime traces for top flows
-
-Build the queryable knowledge graph
-
-Write a “Domain Glossary”: nouns + lifecycles + invariants + owners
-
-Reverse Engineering KSESSIONS for Use‑Case & UML Discovery
-
-This report outlines how CORTEX should analyse the KSESSIONS repository (branch DEVELOPMENT) to reverse engineer it into meaningful use cases, UML object relationships, and domain knowledge. The goal is to build a knowledge graph of the system so that agents can reason about the codebase and generate high‑level documentation or automation tasks.
-
-1 Repository overview
-
-The KSESSIONS application is a full‑stack platform built with ASP.NET MVC/Web API, AngularJS and SQL Server. It uses a layered architecture with presentation, business, data and domain layers and follows patterns like the repository pattern and DTOs. Authentication is handled with Auth0/JWT and dependency injection is managed via Ninject. A recent Etymology module extends the system with an Angular‑driven UI, RESTful API endpoints and a new database schema for linguistic analysis.
-
-Key components
-Layer/component	Purpose
-Presentation (Sessions.Spa)	Controllers and Angular components serve user interfaces and handle HTTP requests.
-Business layer (Sessions.Business)	Contains services, business logic and orchestrates operations.
-Data layer (Sessions.Data)	Implements repository interfaces using Dapper to execute stored procedures and SQL queries.
-Domain layer (Sessions.Domain)	Defines DTOs and entities such as AhadeesDto.
-Authentication	Uses [Authorize] attributes and JWT to secure controllers.
-Etymology subsystem	Adds endpoints /api/etymology/*, Angular UI and a new schema for roots and derivatives.
-Documentation	Extensive guides cover architecture, quick‑reference commands, recent changes and implementation successes.
-2 Reverse‑engineering workflow for CORTEX
-2.1 Inventory & code extraction
-
-Clone and build: Use ksrun for full‑stack development or ksiis <port> for API testing. A successful build ensures all controllers and repositories compile and exposes the dependency graph.
-
-Static analysis: Use Roslyn analyzers (for C#) and the TypeScript compiler API (for Angular) to extract:
-
-Class hierarchies, interfaces, inheritance and dependencies (Roslyn).
-
-Controller routes and action methods with their HTTP verbs and DTOs.
-
-Repository interfaces and implementations (e.g., IAhadeesRepository and AhadeesRepository), mapping methods to stored procedures and tables.
-
-Angular modules, components and services to map UI flows to backend endpoints.
-
-Database schema extraction: Generate an ER diagram from the SQL Server database. The Etymology subsystem uses Roots and Derivatives tables with performance indexes, while the Ahadees module uses the Ahadees table and sp_SaveAhadeesNew stored procedure. Tools like SchemaSpy or SQL Server Management Studio diagramming can provide the foreign‑key relationships.
-
-Configuration inspection: Examine Web.config, Ninject bindings, startup scripts and package manifests. Security improvements include disabling debug mode, enabling security headers and enforcing HTTPS.
-
-2.2 Deriving use cases
-
-CORTEX should derive use cases by tracing user‑facing flows from the front‑end through the API to the data layer:
-
-Identify top routes: Extract Angular route definitions and map them to controllers. For example, the Etymology module defines routes for search, root management and derivative management with CRUD operations.
-
-Define actors and triggers: Use authentication attributes and naming conventions to determine who can perform each action (e.g., admin vs. user). Token management endpoints support generating, validating and analyzing tokens.
-
-Map data interactions: Link each API endpoint to repository methods and stored procedures. For example, saving Ahadees goes through IAhadeesRepository.SaveAhadees and sp_SaveAhadeesNew, which validates and cleans text before saving.
-
-Document success and error flows: For each use case, describe the normal sequence (e.g., Save Ahadees) and error scenarios (e.g., unauthorized access, validation failure). This ensures complete test coverage.
-
-2.3 Constructing UML diagrams
-
-Generate a minimal set of diagrams to avoid information overload:
-
-Context diagram: Show system boundaries—web UI, API layer, database, authentication provider and external integrations.
-
-Container diagram: Depict the major application containers (frontend, API, data layer, domain layer) and the flows between them.
-
-Component diagram: Show major services (e.g., token service, Ahadees repository, Etymology service) and their dependencies. Indicate how controllers depend on services and repositories via constructor injection.
-
-Class diagram: Limit to core domain models (e.g., AhadeesDto, AddSessionTokenRequest, Roots and Derivatives entities). Show relationships between DTOs, repositories and stored procedures.
-
-Sequence diagrams: Create one for each key use case (e.g., Save Ahadees, Generate Token, Search Etymology) to illustrate the request flow from the UI to the database.
-
-State diagrams (optional): Model lifecycle transitions where appropriate (e.g., status changes for sessions or tokens).
-
-2.4 Building a knowledge graph
-
-To support agent reasoning, store extracted facts (nodes and relationships) in a graph database. Nodes can represent types, methods, endpoints, tables, stored procedures and UI components; edges can represent calls, reads, writes, owns or maps_to relationships. Example queries include:
-
-Query	Purpose
-“Which endpoints write to Ahadees table?”	Identifies data ownership and coupling.
-“Which Angular component calls /api/etymology/search?”	Maps UI interactions to backend logic.
-“Where are validation rules for AhadeesDto implemented?”	Locates business rules and error handling.
-
-By storing this graph, CORTEX can generate documentation, detect architectural violations and assist developers with context‑aware recommendations.
-
-3 Extracting domain best practices & coding styles
-3.1 Established patterns
-
-Documentation emphasises several patterns and best practices:
-
-Layer separation: Presentation, business, data and domain layers are clearly separated, enforcing single responsibility.
-
-Repository pattern: Interfaces such as IAhadeesRepository define contracts, while concrete repositories handle SQL operations. This abstracts data access and facilitates testing.
-
-Dependency injection: Ninject is used to register and inject services, repositories and DbConnections. The TokenController constructor shows typical DI for repository, token service, cache and analytics dependencies.
-
-DTO usage: Lightweight data transfer objects (e.g., AhadeesDto) separate domain models from persistence models.
-
-RESTful APIs: Controllers expose CRUD endpoints following REST conventions, using [HttpGet], [HttpPost], [HttpPut] and [HttpDelete] attributes and returning appropriate status codes. Token endpoints include generate, validate, analytics and popular actions.
-
-Security hygiene: Web.config is hardened—debug mode disabled, custom errors enabled, cookies secured, and headers like X‑Content‑Type‑Options and Content‑Security‑Policy added. JWT tokens use long expiration in development and shorter expiration in production.
-
-Testing strategy: The architecture guide recommends unit, API and integration testing using frameworks like xUnit and Playwright. The Implementation Success Summary highlights that following patterns reduces new API implementation time from hours to minutes.
-
-Error handling: Controllers validate input, check authentication and return meaningful HTTP responses (e.g., 400 Bad Request, 401 Unauthorized, 500 Internal Server Error).
-
-Documentation and quick reference: Guides like KSESSIONS-ARCHITECTURE-GUIDE.md and KSESSIONS-QUICK-REFERENCE.md provide step‑by‑step instructions, templates, troubleshooting tips and patterns. Developers are encouraged to follow these to avoid common pitfalls.
-
-3.2 Coding style guidelines
-
-While KSESSIONS does not include a formal StyleCop configuration, patterns emerge from the documentation and code:
-
-Professional naming: Variables and methods use descriptive, camelCase or PascalCase names. The Etymology summary notes “professional naming and structure throughout”.
-
-Consistent formatting: Indentation and spacing follow standard C# conventions, and Angular code uses consistent bracket and semicolon placement.
-
-Comprehensive comments: Complex logic (e.g., text sanitization in AhadeesRepository.ValidateAndCleanForJson) is well commented.
-
-Separation of concerns: Controllers remain thin, delegating business logic to services and data operations to repositories.
-
-Parameter validation: Data annotations and explicit validation in controllers ensure that required fields are present before persisting or processing.
-
-Modular Angular design: The Etymology module uses reusable components, service layer abstraction and proper state management.
-
-3.3 Security best practices
-
-Security documentation emphasises:
-
-Updating dependencies: Upgrading vulnerable packages like Bootstrap, CodeMirror and FontAwesome to secure versions.
-
-Configuring secure headers: Adding headers such as X-Content-Type-Options, X-Frame-Options, X-XSS-Protection and Content-Security-Policy.
-
-Disabling debug & error exposure: Setting debug="false" and enabling custom errors to prevent information leakage.
-
-Secure cookies and HTTPS: Enforcing SSL and HSTS, requiring requireSSL="true" and adding Strict-Transport-Security in production.
-
-Monitoring and maintenance: Monthly package updates, header verification and automated security scanning.
-
-4 Practical steps for CORTEX implementation
-
-Automate extraction using CORTEX’s total-recall agent: run inventory on the repository to detect project structure, languages and build commands.
-
-Use connectors to fetch documentation and code: the GitHub connector can retrieve architecture guides, quick references and source files for analysis.
-
-Generate the knowledge graph: store extracted entities and relationships; update with runtime traces by capturing API calls and DB queries.
-
-Create diagrams: use PlantUML or Mermaid to generate diagrams automatically from the knowledge graph, then allow human curation.
-
-Incorporate best practices: configure CORTEX’s intelligence layer to flag deviations from patterns (e.g., missing dependency injection, lack of stored procedure mapping, insecure headers). Provide suggestions using domain rules and templates derived from the repository’s documentation and examples.
-
-Support continuous learning: After initial reverse engineering, use the Etymology and Ahadees modules as reference models for new features. Encourage contributions to update documentation and pattern libraries when new modules are added.
-
-Conclusion
-
-The KSESSIONS repository offers rich documentation and a well‑structured codebase that follow established patterns. By automating extraction of code structure, API flows and database schemas, CORTEX can construct a comprehensive knowledge graph. From this graph it can generate use‑case descriptions, UML diagrams and enforce domain best practices. Leveraging the existing architecture guide, security improvements and implementation summaries, CORTEX can provide intelligent guidance to developers and ensure future features remain consistent, secure and maintainable.
-
-In short, the report explains that KSESSIONS is a layered ASP.NET/Angular application with clear separation between presentation, business, data and domain tiers. It outlines a workflow for CORTEX that starts by cloning and building the solution, then uses static analyzers to extract classes, controllers, repositories and Angular components. It describes mapping API routes to use‑cases, generating concise UML diagrams, and building a knowledge graph to answer questions like which endpoints write to certain tables. The report also distills key architectural patterns—repository abstraction, dependency injection, DTO usage, RESTful conventions—and highlights coding style practices and security hardening measures drawn from the project’s extensive documentation.
-
-
-
-Reverse-engineering a real codebase into UML + object relationships + actual domain knowledge is less “run a magic tool” and more “build a pipeline that triangulates truth from code, runtime, and data.” Here’s the best way to do it for a C# / .NET MVC + Angular + SQL/Oracle stack, without wasting weeks generating pretty-but-useless diagrams.
-
-The winning approach: three lenses, one model
-1) Static structure (what the code says)
-
-Goal: classes, interfaces, dependencies, call graph hints, layering.
-
-C# / .NET
-
-Parse the solution with Roslyn (this is the grown-up way). Extract:
-
-type graph (inheritance, interface impl)
-
-composition/aggregation (fields, properties)
-
-references between assemblies/namespaces
-
-method call edges (best-effort; dynamic dispatch complicates)
-
-Generate UML-ish class diagrams selectively, not for the whole solution. Whole-solution class diagrams become “spaghetti art” fast.
-
-Identify architectural boundaries:
-
-MVC: Controllers → Services → Repositories → DbContext (or DAL)
-
-.NET layers by assembly naming + dependency direction (enforce “no upward references”)
-
-Angular
-
-Parse TypeScript AST (or use tooling) to extract:
-
-module boundaries, component/service dependencies
-
-DI graph (providers)
-
-routing map → feature areas (this is often closer to domain than folder names)
-
-Don’t try to UML every component. Use it to map feature slices and state/data flows.
-
-2) Runtime truth (what actually happens)
-
-Goal: confirm real call paths, object lifetimes, and cross-layer flows that static analysis misses.
-
-Instrument / trace:
-
-.NET: OpenTelemetry traces (or APM) to capture request → controller → service → db calls
-
-Log correlation IDs; capture endpoint, service method, SQL text hash, latency
-
-Dependency injection (DI) container graph:
-
-Export registrations (interfaces → concrete types) at startup
-
-This is gold for “what implementations are actually used”
-
-This is how you avoid diagrams based on dead code, old interfaces, or “intended architecture.”
-
-3) Data model (what the domain really is)
-
-Goal: domain entities, relationships, cardinality, aggregates, invariants (as much as code+DB reveals).
-
-Reverse engineer the DB (SQL Server/Oracle):
-
-ERD from foreign keys, unique constraints, check constraints
-
-stored procs/views as “domain operations” (often where business logic hides)
-
-Map ORM models ↔ tables:
-
-Entity Framework: mappings, navigation properties, fluent config
-
-Legacy: hand-written SQL → infer entity boundaries via query patterns
-
-Read the “names”:
-
-table/column names, enum tables, reference data tables
-
-these often encode domain language more reliably than code comments
-
-Then unify this into a single Domain Knowledge Graph:
-
-nodes: types, tables, endpoints, UI routes
-
-edges: “calls”, “reads/writes”, “maps to”, “depends on”, “contains”
-
-attributes: namespaces, assemblies, module, ownership, last changed, usage frequency
-
-That graph becomes the source-of-truth; UML is just one view of it.
-
-Practical workflow (what I’d do on a real team)
-Step 0 — Stop the bleeding: define the outputs you want
-
-You want usable artifacts, not “a 600-page PDF class diagram.”
-Target these:
-
-C4-style maps (Context → Container → Component) for “how it hangs together”
-
-3–10 domain diagrams (bounded contexts / modules)
-
-Key sequence diagrams for critical flows (top 10 endpoints or business processes)
-
-ERD with mappings to domain entities
-
-Glossary (ubiquitous language): nouns (entities), verbs (use cases), rules (invariants)
-
-Step 1 — Discover boundaries fast
-
-List assemblies/projects and dependencies
-
-List Angular routes and lazy-loaded modules
-
-List DB schemas and top tables by usage (from query logs if possible)
-
-This produces your first “map of the city.”
-
-Step 2 — Extract relationships automatically (but only keep what matters)
-
-From C#: type graph + DI graph + controller/service/repo call edges
-
-From Angular: route → component → service → API client mapping
-
-From DB: FK graph + view/proc dependencies
-
-Now you have raw material.
-
-Step 3 — Build “domain slices”
-
-Pick a business capability (e.g., Claims, Billing, Scheduling) and trace it end-to-end:
-
-Angular route/module → API endpoint → service → repository → tables/procs
-For each slice, create:
-
-a small class diagram (only the relevant types)
-
-a sequence diagram (actual call chain)
-
-a data diagram (tables + relationships used)
-
-Repeat until you’ve covered the core capabilities.
-
-Step 4 — Validate with humans (because code lies by omission)
-
-Interview product/SMEs with your diagrams in hand:
-
-“Which of these entities are real business concepts vs technical artifacts?”
-
-“Which relationships are actually enforced vs ‘we hope’?”
-
-“Where do rules live: UI, API, DB, batch jobs?”
-
-Update glossary + bounded contexts accordingly.
-
-Tooling that actually works (stack-specific)
-C#/.NET
-
-Roslyn for extraction (custom or existing analyzers)
-
-NDepend for dependency graphs and architectural rule checks (very effective for .NET layering)
-
-Visual Studio Architecture / DGML (still useful for dependency graphs)
-
-OpenTelemetry + Jaeger/Zipkin/APM for runtime traces
-
-Angular
-
-Compodoc (quick DI + module/component documentation)
-
-Dependency Cruiser (TS dependency rules/graphs)
-
-Route map extraction (Angular Router config)
-
-DB (SQL Server / Oracle)
-
-ERD tools (Oracle SQL Developer Data Modeler for Oracle; many options for SQL Server)
-
-Query logging / AWR (Oracle) / Query Store (SQL Server) to see actual usage
-
-Dependency extraction for views/procs/packages
-
-Cross-cutting diagram outputs
-
-PlantUML (best “diagram as code” for versioning)
-
-Structurizr (C4 diagrams; excellent for architecture-as-code)
-
-Mermaid (good for lightweight docs, less precise for UML)
-
-The trap to avoid
-
-Auto-generated full UML of the entire system is almost always garbage.
-It’s technically “accurate” and practically useless. The best reverse-engineering is curated: generate everything, keep only what answers questions.
-
-If you want a “best single strategy”
-
-Build a graph-based model (types + endpoints + routes + tables + runtime traces) and generate:
-
-C4 maps (architecture)
-
-curated UML per domain slice (structure)
-
-sequence diagrams from traces (behavior)
-
-ERD + entity mappings (data)
-
-glossary (language)
-
-That’s how you get domain knowledge, not just diagrams.
-
-If you share:
-
-repo structure (project list) and
-
-whether you use EF/EF Core, Dapper, or raw ADO.NET, and
-
-whether Oracle logic lives in packages/procs/views
-…I can give you a concrete extraction plan (and even a Roslyn-based skeleton) that fits your exact layout.
+#### **#5 Priority: Phase 52 - Enterprise Orchestrators** 🏢 P1
+- **Current:** 1/7 stages (PRReview foundation ✅)
+- **Duration:** 16 days (S2-S7)
+- **Impact:** PR review automation, migrations, performance testing
+- **Tests:** 144/165 remaining
+- **Strategy:** Complete PRReview (S2-S3), defer others if needed
+
+**Why Fifth:** Team velocity for 50+ engineers. Can run parallel with Phase 66.
+
+---
+
+### **WAVE 3: ADVANCED INTELLIGENCE (4-8 weeks) - Domain Depth**
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ 🧠 ADVANCED INTELLIGENCE - Domain-Specific Deep Analysis        │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+#### **#6 Priority: Phase 67 - .NET Roslyn Intelligence** 🎯 P1
+- **Duration:** 6-8 weeks
+- **Impact:** Closes 35% .NET capability gap (55% → 90%)
+- **Tests:** 95 planned
+- **Dependencies:** Phase 55 ✅, Phase 66 ⚪
+- **Defer Until:** Phase 66 S2-S3 complete
+
+---
+
+#### **#7 Priority: Phase 68 - Angular Deep Analysis** 🅰️ P2
+- **Duration:** 4-5 weeks
+- **Impact:** Closes 45% Angular gap (40% → 85%)
+- **Tests:** 75 planned
+- **Dependencies:** Phase 66 ⚪
+- **Defer Until:** Phase 66 S2-S3 complete
+
+---
+
+#### **#8 Priority: Phase 69 - Runtime Correlation** 🔗 P2
+- **Duration:** 5-6 weeks
+- **Impact:** Runtime intelligence (DI validation, EF lineage)
+- **Tests:** 85 planned
+- **Dependencies:** Phase 55 ✅, Phase 66 ⚪
+- **Defer Until:** Phase 67 complete
+
+---
+
+## 📋 MASTER PLAN COMPLETION ROADMAP (GANTT-STYLE)
+
+```
+Week 1-2 (Feb 10-21):
+  ████████████████████ Phase 65 (8 days) → ✅ LENS Intelligence
+  ████████ Phase 38 S11-S12 (2 days) → ✅ Brain Health
+
+Week 3 (Feb 24-28):
+  ██████ Phase 48 (6 days) → ✅ Multi-Tenant Registry
+
+Week 4-6 (Mar 3-21):
+  ████████████████████████████████ Phase 66 S2-S3 (4 weeks) → ⚪ Knowledge Graph
+  ████████████████ Phase 52 S2-S3 (2.5 weeks) → ⚪ PR Review
+
+Week 7-14 (Mar 24 - May 9):
+  ████████████████████████████████ Phase 67 (6-8 weeks) → ⚪ .NET Roslyn
+  ████████████████████ Phase 68 (4-5 weeks) → ⚪ Angular Deep
+  ██████████████████████ Phase 69 (5-6 weeks) → ⚪ Runtime Correlation
+
+TOTAL TIMELINE: ~14 weeks (3.5 months)
+TARGET COMPLETION: May 9, 2026
+```
+
+---
+
+## 🎯 IMMEDIATE ACTION PLAN (Next 48 Hours)
+
+### **Day 1 (Today - Feb 10)**
+1. ✅ **Complete Phase 38 S11 REFACTOR** (4 hours)
+   - Finish VacuumOrchestrator enhancement GREEN phase
+   - Run regression suite (310 tests)
+   - Commit: `git commit -m "Phase 38 S11: VacuumOrchestrator COMPLETE"`
+
+2. ✅ **Start Phase 38 S12** (4 hours)
+   - AUDIT mode integration tests (24 tests)
+   - Complete final Brain Health stage
+   - Commit: `git commit -m "Phase 38 COMPLETE: Brain Health System ✅"`
+
+### **Day 2 (Tomorrow - Feb 11)**
+3. ⚡ **Launch Phase 65 S2-S4 Autonomous Execution** (full day)
+   - Command: `/plan continue phase-65 stage-2`
+   - Silent autonomous mode (12 stages remaining)
+   - Target: Complete S2-S4 (LENSWarmer + Challenge + Brain integration)
+   - Expected: 36/155 tests → 86/155 tests (+50 tests)
+
+---
+
+## 📊 SUCCESS METRICS & COMPLETION GATES
+
+### **Production Readiness Definition**
+```yaml
+PRODUCTION_READY:
+  phase_completion: ≥ 90%              # 58/64 phases (currently 54/64 = 84%)
+  
+  critical_phases:
+    - phase-65: COMPLETE               # ⚪ In Progress (1/9)
+    - phase-38: COMPLETE               # 🔵 In Progress (11/12)
+    - phase-48: COMPLETE               # ⚪ Planned
+  
+  test_coverage: ≥ 90%                # Currently: 92% ✅
+  regression_tests: 0 failures        # Currently: 515+ passing ✅
+  
+  deployment_blockers: 0              # Currently: 3 (phases 65, 38, 48)
+  
+  mcp_tools: ALL operational          # Currently: 10/10 ✅
+  orchestrators: ALL wired            # Currently: 28/28 ✅
+```
+
+### **Completion Gates**
+- ✅ **Wave 1 Complete:** Can deploy to staging (basic functionality)
+- ✅ **Wave 2 Complete:** Can deploy to production (enterprise-ready)
+- ✅ **Wave 3 Complete:** Advanced intelligence (domain experts)
+
+---
+
+## 🚫 DEFERRED/EXCLUDED FROM PRODUCTION
+
+### **Excluded Phases (Not Required for Initial Production)**
+1. **Phase 50** - Cloud Storage Backends (P1, 8 days)
+   - **Reason:** Local filesystem sufficient for initial deployment
+   - **Defer Until:** Multi-tenant customer demand (post-launch)
+
+2. **Phase 51-alt** - Secrets Management (P0, 10 days)
+   - **Reason:** Environment variables sufficient for single-tenant
+   - **Defer Until:** SOX/HIPAA certification required
+
+3. **Phase 49** - Document Ingestion Pipeline (P1, 14 days)
+   - **Reason:** Manual YAML curation sufficient initially
+   - **Defer Until:** 10x knowledge scaling needed
+
+---
+
+## 💰 ROI ANALYSIS (Effort vs Impact)
+
+### **HIGH ROI (Do First)**
+| Phase | ROI | Duration | Impact | Priority |
+|-------|-----|----------|--------|----------|
+| Phase 65 | 0.95 | 8 days | LENS operational | #1 |
+| Phase 38 | 0.94 | 2 days | Brain health | #2 |
+| Phase 48 | 0.93 | 6 days | Multi-tenant | #3 |
+
+### **MEDIUM ROI (Do After Foundation)**
+| Phase | ROI | Duration | Impact | Priority |
+|-------|-----|----------|--------|----------|
+| Phase 66 | 0.88 | 10 weeks | Knowledge graph | #4 |
+| Phase 52 | 0.87 | 16 days | Enterprise orchestrators | #5 |
+| Phase 67 | 0.87 | 6-8 weeks | .NET deep intelligence | #6 |
+
+### **LOWER ROI (Do Last or Defer)**
+| Phase | ROI | Duration | Impact | Priority |
+|-------|-----|----------|--------|----------|
+| Phase 68 | 0.82 | 4-5 weeks | Angular analysis | #7 |
+| Phase 69 | 0.78 | 5-6 weeks | Runtime correlation | #8 |
+
+---
+
+## ✅ RECOMMENDED DECISION: WAVE 1 FOCUS
+
+**PROCEED WITH:**
+1. Complete Phase 38 S11-S12 (2 days) → Brain Health ✅
+2. Execute Phase 65 S2-S9 autonomous (8 days) → LENS Intelligence ✅
+3. Launch Phase 48 (6 days) → Multi-Tenant Foundation ✅
+
+**Total: 16 days (3 weeks) to production-ready state**
+
+**Command to execute:**
+```bash
+# Option 1: Sequential (safest)
+/plan continue phase-38 stage-11  # Complete Brain Health first
+# Then after completion:
+/plan execute phase-65 autonomous  # LENS Intelligence full pipeline
+# Then after completion:
+/plan execute phase-48 autonomous  # Multi-Tenant Registry
+
+# Option 2: Parallel (faster, requires monitoring)
+/plan execute phase-38 phase-65 parallel  # Run both simultaneously
+# Then after both complete:
+/plan execute phase-48 autonomous
+```
+
+**After Wave 1:** Reassess Wave 2 priorities based on customer feedback and deployment experience.
+
+---
+
+**Would you like me to:**
+1. ✅ **Proceed autonomously with Wave 1 execution** (Phase 38 → Phase 65 → Phase 48)
+2. 📋 **Generate detailed implementation plans** for each phase
+3. 🔍 **Deep-dive analysis** of any specific phase
+4. 📊 **Update master plan registry** with this prioritization

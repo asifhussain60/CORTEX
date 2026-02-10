@@ -17,6 +17,7 @@ Authority: ENH-017 Phase 2 (Multi-Language AST Parsing)
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass, field
+import logging
 
 from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer, ASTAnalysisResult, FunctionInfo, ClassInfo
 from cortex.lens.adapters.csharp_adapter import CSharpAdapter
@@ -24,6 +25,8 @@ from cortex.lens.adapters.java_adapter import JavaAdapter
 from cortex.lens.adapters.typescript_adapter import TypeScriptAdapter
 from cortex.lens.adapters.javascript_adapter import JavaScriptAdapter
 from cortex.lens.models.polyglot_ast_result import PolyglotASTResult, LanguageType
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -80,10 +83,31 @@ class PolyglotAnalyzer:
     def __init__(self):
         """Initialize polyglot analyzer with all language adapters."""
         self.python_analyzer = ASTAnalyzer()
-        self.csharp_adapter = CSharpAdapter()
-        self.java_adapter = JavaAdapter()
-        self.typescript_adapter = TypeScriptAdapter()
-        self.javascript_adapter = JavaScriptAdapter()
+        
+        # Initialize language adapters with graceful degradation (Phase 65)
+        try:
+            self.csharp_adapter = CSharpAdapter()
+        except Exception as e:
+            logger.warning(f"CSharpAdapter unavailable: {e}")
+            self.csharp_adapter = None
+        
+        try:
+            self.java_adapter = JavaAdapter()
+        except Exception as e:
+            logger.warning(f"JavaAdapter unavailable: {e}")
+            self.java_adapter = None
+        
+        try:
+            self.typescript_adapter = TypeScriptAdapter()
+        except Exception as e:
+            logger.warning(f"TypeScriptAdapter unavailable: {e}")
+            self.typescript_adapter = None
+        
+        try:
+            self.javascript_adapter = JavaScriptAdapter()
+        except Exception as e:
+            logger.warning(f"JavaScriptAdapter unavailable: {e}")
+            self.javascript_adapter = None
         
         # Language detection map
         self.language_map = {
@@ -218,6 +242,17 @@ class PolyglotAnalyzer:
             PolyglotAnalysisResult
         """
         try:
+            # Graceful degradation if adapter not available (Phase 65)
+            if self.csharp_adapter is None:
+                return PolyglotAnalysisResult(
+                    success=False,
+                    language="csharp",
+                    functions=[],
+                    classes=[],
+                    imports=[],
+                    error="CSharpAdapter not available (tree-sitter-c-sharp not installed)"
+                )
+            
             result = self.csharp_adapter.parse_file(file_path)
             
             # Convert to unified format
@@ -293,6 +328,17 @@ class PolyglotAnalyzer:
             PolyglotAnalysisResult
         """
         try:
+            # Graceful degradation if adapter not available (Phase 65)
+            if self.java_adapter is None:
+                return PolyglotAnalysisResult(
+                    success=False,
+                    language="java",
+                    functions=[],
+                    classes=[],
+                    imports=[],
+                    error="JavaAdapter not available (tree-sitter-java not installed)"
+                )
+            
             result = self.java_adapter.parse_file(file_path)
             
             # Convert to unified format
@@ -368,6 +414,17 @@ class PolyglotAnalyzer:
             PolyglotAnalysisResult
         """
         try:
+            # Graceful degradation if adapter not available (Phase 65)
+            if self.typescript_adapter is None:
+                return PolyglotAnalysisResult(
+                    success=False,
+                    language="typescript",
+                    functions=[],
+                    classes=[],
+                    imports=[],
+                    error="TypeScriptAdapter not available (tree-sitter-typescript installed but init failed)"
+                )
+            
             result = self.typescript_adapter.parse_file(file_path)
             
             # Convert to unified format
@@ -443,6 +500,17 @@ class PolyglotAnalyzer:
             PolyglotAnalysisResult
         """
         try:
+            # Graceful degradation if adapter not available (Phase 65)
+            if self.javascript_adapter is None:
+                return PolyglotAnalysisResult(
+                    success=False,
+                    language="javascript",
+                    functions=[],
+                    classes=[],
+                    imports=[],
+                    error="JavaScriptAdapter not available (tree-sitter-javascript installed but init failed)"
+                )
+            
             result = self.javascript_adapter.parse_file(file_path)
             
             # Convert to unified format

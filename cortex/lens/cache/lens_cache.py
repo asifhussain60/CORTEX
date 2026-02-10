@@ -101,6 +101,53 @@ class LENSCache:
             "hit_rate_percent": round(hit_rate, 2),
             "total_operations": total
         }
+    
+    def generate_key(
+        self,
+        file_path,  # Path or str
+        repo_path,  # Path or str
+        additional_context: Optional[Dict[str, Any]] = None,
+    ) -> str:
+        """Generate cache key for file analysis.
+        
+        Cache key incorporates:
+        - File path relative to repo
+        - Optional additional context
+        
+        Args:
+            file_path: Path to file being analyzed
+            repo_path: Path to repository root
+            additional_context: Optional extra context for cache key
+            
+        Returns:
+            Cache key string
+        """
+        from pathlib import Path
+        import hashlib
+        
+        # Convert to Path objects if strings
+        file_path = Path(file_path) if isinstance(file_path, str) else file_path
+        repo_path = Path(repo_path) if isinstance(repo_path, str) else repo_path
+        
+        # Get relative path
+        try:
+            rel_path = file_path.relative_to(repo_path)
+        except ValueError:
+            rel_path = file_path
+        
+        # Build key components
+        key_parts = [str(rel_path)]
+        
+        # Add additional context if provided
+        if additional_context:
+            context_str = str(sorted(additional_context.items()))
+            key_parts.append(context_str)
+        
+        # Generate hash
+        key_string = "|".join(key_parts)
+        key_hash = hashlib.sha256(key_string.encode()).hexdigest()[:16]
+        
+        return f"lens:{key_hash}:{rel_path.name}"
 
 
 # Phase 65 S6: Canonical LENSCache singleton accessor
