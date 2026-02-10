@@ -11,6 +11,42 @@ revision: "Phase 70 Created: Implementation ↔ Specification Alignment Remediat
 
 # Active Phases (Current Development)
 active_phases:
+  - id: "phase-71"
+    name: "LENS Intelligence Integration Framework (LDv1 Schema + Evidence Protocol)"
+    file: "phases/active/phase-71-lens-intelligence-integration-framework.yaml"
+    created: "2026-02-10"
+    status: "planned"
+    priority: "P1"
+    execution_order: 22
+    roi_score: 0.92
+    estimated_duration: "3-4 weeks"
+    test_target: 180
+    coverage_target: 90
+    tests_passing: 0
+    stages_complete: "0/5"
+    description: |
+      🔴 PLANNED (P1 - FOUNDATION): Enterprise-scale LENS intelligence backbone.
+      - S1: LDv1 Schema Definition (4-5 days, 45 tests)
+      - S2: Analyzer Standardization (5-6 days, 45 tests) — Evidence protocol on all analyzers
+      - S3: Incremental Extraction & Caching (5-7 days, 45 tests) — 10x speedup on re-analysis
+      - S4: Manifest-Based Publishing (4-5 days, 45 tests) — Lazy-loadable per-tab artifacts
+      - S5: Integration & Documentation (3-4 days, 15 tests) — LDv1 spec published
+      
+      Strategic Value:
+      - Schema standardization → enables new LENS analyzers
+      - Evidence protocol → compliance-ready audit trails
+      - Incremental extraction → enterprise-scale performance
+      - Manifest publishing → multi-repo readiness
+      - Enables Phase 72, 73, 74 (composition, consolidation, visualization)
+      
+      Risk: 2.2/10 (LOW) — Foundation work, no breaking changes
+    depends_on:
+      - "phase-70"
+    blocks:
+      - "phase-72-unified-digest-ingest-facade"
+      - "phase-73-multi-repo-lens-consolidation"
+      - "phase-74-role-based-lens-dashboard"
+
   - id: "phase-72"
     name: "Unified Digest-Ingest Facade - Composition Layer"
     file: "phases/active/phase-72-unified-digest-ingest-facade.yaml"
