@@ -107,6 +107,16 @@ User Request (IMPLEMENT/FIX/REFACTOR)
 └─────────────────────────────────────┘
          ↓
 ┌─────────────────────────────────────┐
+│  4.5 IMPLEMENTATION ALIGNMENT       │
+│     (Phase 70 Integration)          │
+│     - Wiring ↔ implementation sync  │
+│     - Duplicate detection           │
+│     - Stub test validation          │
+│     - Usage pattern analysis        │
+│     → See: architecture-integrity-agent.md
+└─────────────────────────────────────┘
+         ↓
+┌─────────────────────────────────────┐
 │  5. MANDATORY CHALLENGE GATE        │
 │     - Generate alternatives         │
 │     - ROI comparison (Ext/Scale/Acc)
@@ -126,6 +136,386 @@ User Request (IMPLEMENT/FIX/REFACTOR)
 ```
 
 **Key Rule:** This agent OWNS Challenge Gate logic. YAML provides parameters (risk thresholds, metrics). Challenge Gate decision tree is agent-specific.
+
+---
+
+## Implementation Alignment Validation (Phase 70 Integration)
+
+**Authority:** architecture-integrity-agent.md + Phase 70 Remediation Plan  
+**Purpose:** Pre-implementation gate to prevent wiring misalignment  
+**Enforcement:** BLOCKING for new orchestrators, WARNING for existing modifications
+
+### Pre-Implementation Checks
+
+**When user requests implementation of new orchestrator:**
+
+```python
+# Step 1: Extract orchestrator name from request
+orchestrator_name = extract_orchestrator_name(user_request)
+
+# Step 2: Check if already exists
+existing = scan_existing_implementations(orchestrator_name)
+
+if existing:
+    CHALLENGE:
+    """
+    ⚠️ Similar Orchestrator May Already Exist
+    
+    Found: {existing.name}
+    Location: {existing.file_path}
+    Wired: {'Yes' if existing.wired else 'No'}
+    Usage (30d): {existing.usage_count} invocations
+    Similarity: {similarity_score}%
+    
+    Options:
+    1. ✅ Use existing orchestrator (if similarity >80%)
+       - Lower maintenance burden
+       - Proven implementation
+       - Immediate availability
+    
+    2. 🔧 Enhance existing orchestrator (if similarity 50-80%)
+       - Add requested features
+       - Maintain single canonical implementation (CORE-035)
+       - Update tests and documentation
+    
+    3. 🆕 Create new orchestrator (if similarity <50%)
+       - Distinct functionality
+       - Separate responsibility
+       - New MCP tool exposure
+    
+    Recommendation: {recommendation_based_on_similarity}
+    
+    Please confirm: use existing / enhance / create new
+    """
+    
+    WAIT for user decision
+    
+    if user_chooses("use existing"):
+        SKIP implementation, provide usage guide
+        EXIT
+    
+    elif user_chooses("enhance"):
+        SET target = existing.file_path
+        ADD validation: ensure backward compatibility
+        CONTINUE to Step 3
+    
+    # If user_chooses("create new"): continue to Step 3
+```
+
+**Step 3: Validate wiring plan**
+
+```python
+# Prepare wiring entry
+wiring_plan = {
+    'name': orchestrator_name,
+    'category': determine_category(user_request),  # core/domain/support
+    'tier': determine_tier(dependencies),
+    'priority': calculate_priority(category, complexity),
+    'dependencies': extract_dependencies(user_request),
+    'capabilities': extract_capabilities(user_request),
+    'health_check': generate_health_check_name(),
+    'mcp_adapter': generate_mcp_adapter_path(),
+    'mcp_tools': generate_mcp_tool_names()
+}
+
+# Validation checks
+errors = []
+warnings = []
+
+# Check 1: No duplicate names
+if wiring_plan['name'] in get_wired_orchestrators():
+    errors.append(f"Orchestrator name {wiring_plan['name']} already wired")
+
+# Check 2: Priority not already taken
+if wiring_plan['priority'] in get_used_priorities(wiring_plan['category']):
+    warnings.append(f"Priority {wiring_plan['priority']} already used, suggest: {suggest_priority()}")
+
+# Check 3: Dependencies exist
+for dep in wiring_plan['dependencies']:
+    if dep not in get_wired_orchestrators():
+        errors.append(f"Dependency {dep} not found in wiring.yaml")
+
+# Check 4: Module path valid (check if directory exists)
+module_path = wiring_plan.get('module', generate_module_path(orchestrator_name))
+if not is_valid_module_path(module_path):
+    errors.append(f"Module path {module_path} invalid or directory doesn't exist")
+
+# Check 5: Category appropriate
+if wiring_plan['category'] == 'core' and len(get_core_orchestrators()) >= 11:
+    warnings.append("Core orchestrator count high (11+), consider domain or support category")
+
+if errors:
+    CHALLENGE:
+    """
+    🔴 Wiring Plan Validation Failed
+    
+    Errors:
+    {errors_formatted}
+    
+    Fix these issues before implementation:
+    1. Resolve name conflicts
+    2. Fix dependency references
+    3. Correct module paths
+    
+    Re-run validation after fixes.
+    """
+    BLOCK implementation
+
+if warnings:
+    CHALLENGE:
+    """
+    ⚠️ Wiring Plan Warnings
+    
+    Warnings:
+    {warnings_formatted}
+    
+    Recommendations:
+    - Adjust priority to avoid conflicts
+    - Consider category reassignment
+    
+    Proceed anyway? (yes / fix warnings)
+    """
+    
+    WAIT for user decision
+```
+
+**Step 4: Validate test plan**
+
+```python
+# Extract test coverage target
+test_plan = extract_test_plan(user_request)
+
+# Minimum coverage threshold
+MIN_COVERAGE = 85
+
+if test_plan.target_coverage < MIN_COVERAGE:
+    CHALLENGE:
+    """
+    🔴 Test Coverage Below Minimum
+    
+    Target Coverage: {test_plan.target_coverage}%
+    Minimum Required: {MIN_COVERAGE}%
+    
+    Test Plan Issues:
+    {analyze_test_plan(test_plan)}
+    
+    Action Required:
+    1. Increase test coverage plan to ≥85%
+    2. Include unit + integration tests
+    3. Add AC markers for audit trail
+    
+    BLOCKED until test plan meets standards.
+    """
+    BLOCK implementation
+
+# Check for stub test prevention
+if test_plan.contains_stub_patterns():
+    CHALLENGE:
+    """
+    🔴 Stub Test Patterns Detected in Plan
+    
+    Found:
+    - Tests with only "pass" statement
+    - Tests with no assertions
+    - Placeholder tests marked "TODO"
+    
+    Action Required:
+    Remove stub patterns from test plan.
+    All tests must have meaningful assertions.
+    
+    BLOCKED until test plan cleaned.
+    """
+    BLOCK implementation
+```
+
+**Step 5: Validate LENS integration plan**
+
+```python
+# Extract LENS integration details
+lens_plan = extract_lens_integration_plan(user_request)
+
+# Check if UnifiedIntelligenceProvider is used
+if not lens_plan.uses_unified_intelligence_provider:
+    CHALLENGE:
+    """
+    🔴 Missing LENS Integration
+    
+    All orchestrators must use UnifiedIntelligenceProvider for:
+    - Company domain rules (company/domains/)
+    - CORTEX best practices (cortex/knowledge/)
+    - LENS code intelligence (cortex/lens/)
+    
+    Required Integration:
+    ```python
+    from cortex.intelligence.unified_provider import UnifiedIntelligenceProvider
+    
+    class {orchestrator_name}(IOrchestrator):
+        def __init__(self):
+            self.intelligence = UnifiedIntelligenceProvider()
+        
+        async def execute(self, request):
+            # Load relevant context
+            context = await self.intelligence.synthesize_context(
+                request=request,
+                include_lens=True,
+                include_company_rules=True,
+                include_best_practices=True
+            )
+            
+            # Use context in orchestration
+            ...
+    ```
+    
+    Action Required:
+    Add LENS integration to implementation plan.
+    
+    BLOCKED until LENS integration added.
+    """
+    BLOCK implementation
+
+# Check if LENS is used appropriately (not for simple orchestrators)
+if orchestrator_is_simple(user_request) and lens_plan.uses_heavy_lens:
+    CHALLENGE:
+    """
+    ⚠️ LENS Integration May Be Overkill
+    
+    Orchestrator Type: Simple utility
+    LENS Usage: Heavy (all analyzers)
+    
+    Recommendation:
+    For simple orchestrators, consider:
+    - Minimal LENS usage (only if needed)
+    - Direct implementation without intelligence layer
+    - Focus on single responsibility
+    
+    Proceed with full LENS integration? (yes / simplify)
+    """
+    
+    WAIT for user decision
+```
+
+### Post-Implementation Validation
+
+**After implementation, before commit:**
+
+```python
+# Validation checklist
+checks = [
+    validate_implementation_exists(),
+    validate_wiring_entry_added(),
+    validate_mcp_adapter_created(),
+    validate_tests_written(),
+    validate_test_coverage_met(),
+    validate_no_stub_tests(),
+    validate_lens_integration(),
+    validate_ac_markers_present()
+]
+
+results = run_checks(checks)
+
+if results.has_failures():
+    CHALLENGE:
+    """
+    🔴 Post-Implementation Validation Failed
+    
+    Failed Checks:
+    {format_failures(results)}
+    
+    Action Required:
+    1. Fix all failed checks
+    2. Re-run validation
+    3. Do not commit until all checks pass
+    
+    BLOCKED until validation passes.
+    """
+    BLOCK commit
+
+if results.has_warnings():
+    CHALLENGE:
+    """
+    ⚠️ Post-Implementation Warnings
+    
+    Warnings:
+    {format_warnings(results)}
+    
+    Recommendations:
+    {generate_recommendations(results)}
+    
+    Proceed with commit? (yes / fix warnings)
+    """
+    
+    WAIT for user decision
+```
+
+### Alignment Score Monitoring
+
+**Track alignment score during session:**
+
+```python
+class AlignmentScoreTracker:
+    def __init__(self):
+        self.initial_score = get_current_alignment_score()
+        self.changes_made = []
+    
+    def record_change(self, change_type, component):
+        """Record each change that affects alignment"""
+        self.changes_made.append({
+            'type': change_type,
+            'component': component,
+            'timestamp': datetime.now()
+        })
+    
+    def predict_final_score(self):
+        """Predict alignment score after session"""
+        score = self.initial_score
+        
+        for change in self.changes_made:
+            if change['type'] == 'wire_orchestrator':
+                score += 1.0  # Wiring unwired implementation improves score
+            elif change['type'] == 'delete_stub_test':
+                score += 0.5  # Removing stub test improves quality
+            elif change['type'] == 'create_orchestrator_unwired':
+                score -= 1.5  # Creating unwired orchestrator degrades score
+        
+        return min(100, max(0, score))
+    
+    def should_block_if_degrades(self):
+        """Block if session degrades alignment"""
+        predicted = self.predict_final_score()
+        
+        if predicted < self.initial_score:
+            CHALLENGE:
+            """
+            🔴 Session Degrades Alignment Score
+            
+            Initial Score: {self.initial_score}%
+            Predicted Score: {predicted}%
+            Delta: {predicted - self.initial_score:+.1f}%
+            
+            Changes:
+            {format_changes(self.changes_made)}
+            
+            Action Required:
+            1. Wire new orchestrators before commit
+            2. Delete stub tests created
+            3. Fix alignment issues
+            
+            BLOCKED until alignment score maintained or improved.
+            """
+            return True
+        
+        return False
+
+# Usage in validation flow
+tracker = AlignmentScoreTracker()
+
+# Record changes as they happen
+tracker.record_change('create_orchestrator_unwired', 'MyOrchestrator')
+
+# Before commit, check if score degrades
+if tracker.should_block_if_degrades():
+    BLOCK commit
+```
 
 ---
 

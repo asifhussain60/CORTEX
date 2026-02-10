@@ -1,5 +1,5 @@
 # CORTEX Agent Index
-**Version:** 1.2 | **Updated:** 2026-02-08 | **Purpose:** Lazy loading + silent autonomous execution | **Agents:** 12 | **Default Mode:** Silent + Visual Progress
+**Version:** 1.3 | **Updated:** 2026-02-10 | **Purpose:** Lazy loading + silent autonomous execution + architecture integrity | **Agents:** 13 | **Default Mode:** Silent + Visual Progress | **Phase 70:** ✅
 
 ---
 
@@ -115,7 +115,7 @@ Total Savings: ~245,000 tokens per session (98% reduction)
 
 ---
 
-## 🤖 Agent Registry (12 Core Agents)
+## 🤖 Agent Registry (13 Core Agents)
 
 ### Master Orchestration
 - **CORTEX.md** — Main orchestrator, routes all requests
@@ -123,22 +123,32 @@ Total Savings: ~245,000 tokens per session (98% reduction)
   - **Size:** ~250 lines
   - **Key capabilities:** Intent routing, MCP gateway, DoR classification
 
-- **cortex-architect.md** — HEXA-mode router (AUDIT/DESIGN/PLAN/DIGEST/QUERY/META-AUDIT)
-  - **Load when:** Architecture requests, planning, audits
-  - **Size:** ~436 lines
-  - **Key capabilities:** Mode detection, challenge generation, ROI prioritization
+- **cortex-architect.md** — HEXA-mode router (AUDIT/DESIGN/PLAN/DIGEST/QUERY/META-AUDIT) + Production Readiness Gate
+  - **Load when:** Architecture requests, planning, audits, production deployment
+  - **Size:** ~939 lines
+  - **Key capabilities:** Mode detection, challenge generation, ROI prioritization, alignment validation, production readiness checklist
 
 ### Validation & Governance Agents
-- **cortex-holistic-validator.md** — Pre-implementation holistic validation (Phase 48) ⭐ NEW
+- **cortex-holistic-validator.md** — Pre-implementation holistic validation (Phase 48) + Implementation Alignment Gate ⭐ ENHANCED
   - **Load when:** Before ANY IMPLEMENT/FIX/REFACTOR intent
-  - **Size:** ~400 lines
-  - **Key capabilities:** Registry cross-validation, dependency analysis, regression risk scoring, mandatory challenge gate, cortex_brain self-analysis
-  - **Enforcement:** BLOCKING — No implementation without validation pass
+  - **Size:** ~480 lines
+  - **Key capabilities:** Registry cross-validation, dependency analysis, regression risk scoring, mandatory challenge gate, cortex_brain self-analysis, pre-implementation alignment checks, duplicate detection, test plan validation, LENS integration validation
+  - **Enforcement:** BLOCKING — No implementation without validation pass + alignment check
 
-- **cortex-auditor.md** — Codebase health scanning
-  - **Load when:** `/audit`, quality analysis
-  - **Size:** ~400 lines
-  - **Key capabilities:** P0-P3 issue detection, security scanning, P0.5 holistic validation
+- **architecture-integrity-agent.md** — Wiring alignment enforcer + Auto-remediation ⭐ NEW (Phase 70)
+  - **Load when:** Pre-commit hooks, CI/CD pipeline, monthly audits, alignment validation requests
+  - **Size:** ~850 lines
+  - **Key capabilities:** Wiring ↔ implementation alignment validation (100% target), stub test detection + auto-deletion, duplicate orchestrator detection (>85% similarity), usage tracking + retirement analysis, dependency validation, autonomous gap remediation, dashboard monitoring integration
+  - **Enforcement:** BLOCKING — Pre-commit validation blocks commits with alignment <100%, CI/CD blocks merges, production deployment requires full alignment
+  - **Auto-fix:** Module path correction, unwired implementation wiring (<5 count), stub test deletion (confidence >95%), priority conflict resolution
+  - **Integration:** Real-time dashboard widget, monthly comprehensive audit, GitHub Actions workflow
+  - **Target Metrics:** 100% wiring alignment, 0 stub tests, 0 duplicates, 95% orchestrator utilization
+
+- **cortex-auditor.md** — Codebase health scanning + Implementation Alignment Audit ⭐ ENHANCED
+  - **Load when:** `/audit`, quality analysis, alignment validation
+  - **Size:** ~327 lines
+  - **Key capabilities:** P0-P3 issue detection, security scanning, P0.5 holistic validation, P1 implementation alignment audit (wiring score, unwired implementations, stub tests, duplicates, usage analysis), autonomous remediation recommendations
+  - **Enforcement:** Comprehensive 12-check alignment matrix, auto-fix eligible issues with confidence >90%, monthly audit automation
 
 ### Specialist Agents
 - **cortex-designer.md** — Design mode specialist
