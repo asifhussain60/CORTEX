@@ -1,0 +1,39 @@
+#!/bin/bash
+#
+# Git pre-commit hook: Validate wiring.yaml accuracy
+# Phase 76 S1 T6: CI/CD Gate Implementation
+#
+# AC_START: AC-PHASE76-S1-T6-002
+# Authority: Production Foundation Trilogy
+# Pattern: CI/CD Integration + Git Hooks
+
+# Only run if wiring.yaml changed
+if ! git diff --cached --name-only | grep -q "cortex/wiring/specifications/wiring.yaml"; then
+    exit 0
+fi
+
+echo "🔍 CORTEX: Validating wiring.yaml changes..."
+echo ""
+
+# Run validator in strict mode
+python3 cortex/validation/wiring_validator.py --strict
+
+EXIT_CODE=$?
+
+if [ $EXIT_CODE -eq 0 ]; then
+    echo "✅ Wiring validation passed"
+    exit 0
+else
+    echo "❌ Wiring validation failed"
+    echo ""
+    echo "To bypass (NOT RECOMMENDED):"
+    echo "  git commit --no-verify"
+    echo ""
+    echo "To fix:"
+    echo "  1. Review P0/P1 issues above"
+    echo "  2. Either implement missing orchestrators"
+    echo "  3. Or mark as pending_implementation in wiring.yaml"
+    exit 1
+fi
+
+# AC_COMPLETE: AC-PHASE76-S1-T6-002
