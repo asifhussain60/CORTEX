@@ -22,13 +22,22 @@
 
 ## Overview
 
-The **MasterOrchestrator** is the central coordination hub of CORTEX. It receives all incoming operation requests, determines the appropriate domain orchestrators, delegates work, and aggregates results.
+**The MasterOrchestrator: CORTEX's Executive Control Center**
 
-**Key Facts:**
-- **Category:** Core
-- **Priority:** 10 (second only to infrastructure)
-- **Capabilities:** orchestration, routing, delegation
-- **Dependencies:** IntentRouter, LENS, Governance
+Just as the **prefrontal cortex** serves as the brain's executive control center—coordinating thoughts, making decisions, and orchestrating complex behaviors—the **MasterOrchestrator** functions as CORTEX's central command center. It receives all incoming development requests, orchestrates the appropriate neural networks (orchestrators), and ensures coordinated execution.
+
+**Think of MasterOrchestrator as the "CEO of the CORTEX Brain":**
+- **🎯 Executive Decision Making** — Determines which brain regions (orchestrators) should handle each request
+- **🧠 Cognitive Coordination** — Ensures different brain regions work together harmoniously  
+- **📊 Resource Management** — Allocates cognitive resources and manages parallel processing
+- **🛡️ Quality Control** — Maintains standards and governance across all operations
+- **🔄 Learning Integration** — Incorporates feedback to improve future decision-making
+
+**Key Brain Functions:**
+- **Category:** Core Brain (Executive Functions)
+- **Priority:** 10 (highest operational priority, second only to life support)
+- **Cognitive Capabilities:** orchestration, routing, delegation, quality assurance
+- **Neural Dependencies:** IntentRouter (pattern recognition), LENS (sensory input), Governance (behavioral control)
 
 ---
 

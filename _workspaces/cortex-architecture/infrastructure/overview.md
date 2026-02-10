@@ -1,55 +1,266 @@
 # Infrastructure Overview
 
-**Purpose:** Introduction to CORTEX infrastructure  
+**Purpose:** The nervous system that keeps the CORTEX brain running  
 **Audience:** SRE, DevOps, Architects  
 **Last Updated:** 2026-02-10
 
 ---
 
-## Table of Contents
-
-- [Overview](#overview)
-- [Architecture](#architecture)
-- [Core Components](#core-components)
-- [Deployment Environments](#deployment-environments)
-- [Health and Monitoring](#health-and-monitoring)
-- [Related Documents](#related-documents)
-
----
-
 ## Overview
 
-CORTEX is designed as a cloud-native platform with container-first deployment, horizontal scalability, and comprehensive observability.
+**CORTEX Infrastructure: The Nervous System and Life Support**
+
+Just as the human brain requires a sophisticated circulatory system, nervous system, and life support mechanisms to function, CORTEX relies on cloud-native infrastructure to keep its **AI brain** healthy and operational.
+
+**Infrastructure as Brain Life Support:**
+- **🩸 Circulatory System** → Load balancers and network routing (delivers requests like blood flow)
+- **🫁 Respiratory System** → Container orchestration and scaling (provides computational oxygen)
+- **💓 Cardiac System** → Health monitoring and auto-recovery (keeps the brain alive)
+- **🧠 Nervous System** → Observability and metrics (brain monitoring and feedback)
+- **🦴 Skeletal System** → Persistent storage and databases (structural foundation)
+
+CORTEX is designed as a **cloud-native cognitive platform** with container-first deployment, horizontal scalability, and comprehensive observability—ensuring the AI brain can think clearly under any workload.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                CORTEX INFRASTRUCTURE                             │
+│              🧠 CORTEX BRAIN LIFE SUPPORT SYSTEM                 │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                  │
 │  ┌─────────────────────────────────────────────────────────┐   │
-│  │                    Load Balancer                         │   │
-│  │                    (NGINX/ALB)                           │   │
+│  │                🩸 Circulatory System                    │   │
+│  │               Load Balancer (NGINX/ALB)                 │   │
+│  │          (Distributes neural traffic like blood flow)   │   │
 │  └───────────────────────────┬─────────────────────────────┘   │
 │                              │                                   │
 │         ┌────────────────────┼────────────────────┐             │
 │         │                    │                    │              │
 │         ▼                    ▼                    ▼              │
 │  ┌─────────────┐     ┌─────────────┐     ┌─────────────┐       │
-│  │ MCP Server  │     │ MCP Server  │     │ MCP Server  │       │
-│  │  Pod 1      │     │  Pod 2      │     │  Pod N      │       │
+│  │🧠 Brain Pod │     │🧠 Brain Pod │     │🧠 Brain Pod │       │
+│  │ MCP Server 1│     │ MCP Server 2│     │ MCP Server N│       │
+│  │(Neural Net) │     │(Neural Net) │     │(Neural Net) │       │
 │  └─────────────┘     └─────────────┘     └─────────────┘       │
 │         │                    │                    │              │
 │         └────────────────────┼────────────────────┘             │
 │                              │                                   │
 │                              ▼                                   │
 │  ┌─────────────────────────────────────────────────────────┐   │
-│  │                   Data Layer                             │   │
+│  │                🦴 Structural Foundation                  │   │
 │  │  ┌──────────┐  ┌──────────┐  ┌──────────┐              │   │
-│  │  │  Redis   │  │ PostgreSQL│  │ Registry │              │   │
-│  │  │  Cache   │  │  Metrics │  │  (Git)   │              │   │
+│  │  │💾 Memory │  │📊 Metrics│  │📚 Neural │              │   │
+│  │  │  Cache   │  │Database  │  │Registry  │              │   │
+│  │  │ (Redis)  │  │(PostgreSQL)│ │  (Git)  │              │   │
+│  │  └──────────┘  └──────────┘  └──────────┘              │   │
+│  └─────────────────────────────────────────────────────────┘   ││                                                                  │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │                💓 Monitoring & Health                    │   │
+│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐              │   │
+│  │  │Prometheus│  │ Grafana  │  │   ELK    │              │   │
+│  │  │ Metrics  │  │Dashboards│  │ Logging  │              │   │
 │  │  └──────────┘  └──────────┘  └──────────┘              │   │
 │  └─────────────────────────────────────────────────────────┘   │
-│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### D3.js Infrastructure Health Dashboard
+
+```json
+{
+  "type": "infrastructure_dashboard",
+  "title": "CORTEX Brain Health Monitor",
+  "real_time": true,
+  "refresh_interval": "5s",
+  "sections": [
+    {
+      "name": "🧠 Brain Pod Health",
+      "type": "node_status_grid",
+      "data": [
+        {"pod": "cortex-brain-1", "status": "healthy", "cpu": 45, "memory": 62, "rps": 180},
+        {"pod": "cortex-brain-2", "status": "healthy", "cpu": 52, "memory": 58, "rps": 165},
+        {"pod": "cortex-brain-3", "status": "healthy", "cpu": 38, "memory": 71, "rps": 195},
+        {"pod": "cortex-brain-4", "status": "warning", "cpu": 78, "memory": 85, "rps": 95},
+        {"pod": "cortex-brain-5", "status": "healthy", "cpu": 41, "memory": 55, "rps": 175}
+      ]
+    },
+    {
+      "name": "🩸 Neural Traffic Flow",
+      "type": "real_time_line_chart",
+      "metrics": [
+        {"name": "Requests/Second", "current": 845, "trend": "+12%", "color": "#4CAF50"},
+        {"name": "Response Time (p95)", "current": "342ms", "trend": "-8%", "color": "#2196F3"},
+        {"name": "Error Rate", "current": "0.23%", "trend": "-45%", "color": "#FF5722"},
+        {"name": "Queue Depth", "current": 12, "trend": "-15%", "color": "#FF9800"}
+      ]
+    },
+    {
+      "name": "🫁 Resource Utilization",
+      "type": "gauge_cluster", 
+      "gauges": [
+        {"metric": "CPU", "value": 52, "threshold": 80, "color": "#4CAF50"},
+        {"metric": "Memory", "value": 68, "threshold": 85, "color": "#FF9800"},
+        {"metric": "Network", "value": 34, "threshold": 90, "color": "#4CAF50"},
+        {"metric": "Storage", "value": 23, "threshold": 75, "color": "#4CAF50"}
+      ]
+    },
+    {
+      "name": "💓 Orchestrator Heartbeats",
+      "type": "status_timeline",
+      "orchestrators": [
+        {"name": "MasterOrchestrator", "status": "active", "last_heartbeat": "2s ago"},
+        {"name": "IntentRouter", "status": "active", "last_heartbeat": "1s ago"},
+        {"name": "TDDOrchestrator", "status": "active", "last_heartbeat": "3s ago"},
+        {"name": "LENS", "status": "active", "last_heartbeat": "1s ago"},
+        {"name": "RefactoringOrchestrator", "status": "idle", "last_heartbeat": "45s ago"},
+        {"name": "PlanningOrchestrator", "status": "active", "last_heartbeat": "12s ago"}
+      ]
+    }
+  ]
+}
+```
+
+### D3.js Scalability Architecture
+
+```json
+{
+  "type": "scalability_diagram",
+  "title": "CORTEX Brain Scaling Architecture",
+  "components": [
+    {
+      "layer": "Load Balancing",
+      "components": [
+        {
+          "name": "NGINX/ALB",
+          "type": "load_balancer",
+          "position": {"x": 400, "y": 50},
+          "scaling": "Auto-scaling based on connection count",
+          "capacity": "10,000 concurrent connections"
+        }
+      ]
+    },
+    {
+      "layer": "Application Tier",
+      "components": [
+        {
+          "name": "MCP Server Pods", 
+          "type": "horizontal_pod_autoscaler",
+          "position": {"x": 200, "y": 200},
+          "current_replicas": 5,
+          "min_replicas": 2,
+          "max_replicas": 20,
+          "scaling_metrics": ["CPU > 70%", "Memory > 80%", "Queue Depth > 50"]
+        },
+        {
+          "name": "Orchestrator Workers",
+          "type": "job_queue_scaler", 
+          "position": {"x": 400, "y": 200},
+          "current_workers": 12,
+          "scaling_trigger": "Queue wait time > 100ms"
+        },
+        {
+          "name": "LENS Analyzers",
+          "type": "vertical_pod_autoscaler",
+          "position": {"x": 600, "y": 200}, 
+          "resource_optimization": "Memory-optimized for large codebases"
+        }
+      ]
+    },
+    {
+      "layer": "Data Tier", 
+      "components": [
+        {
+          "name": "Redis Cluster",
+          "type": "cache_cluster",
+          "position": {"x": 200, "y": 350},
+          "sharding": "Automatic",
+          "replication": "Master-Slave",
+          "capacity": "100GB memory"
+        },
+        {
+          "name": "PostgreSQL",
+          "type": "database_cluster", 
+          "position": {"x": 400, "y": 350},
+          "read_replicas": 3,
+          "connection_pooling": "PgBouncer",
+          "backup_strategy": "Point-in-time recovery"
+        }
+      ]
+    }
+  ],
+  "scaling_policies": [
+    {"trigger": "CPU > 70% for 2 min", "action": "Scale out MCP pods +2"},
+    {"trigger": "Memory > 85% for 1 min", "action": "Scale up pod resources"},
+    {"trigger": "Queue depth > 100 for 30s", "action": "Add orchestrator workers +5"},
+    {"trigger": "Error rate > 1% for 5 min", "action": "Circuit breaker activation"}
+  ]
+}
+```
+
+### System Topology Map
+
+```json
+{
+  "type": "network_topology",
+  "title": "CORTEX Brain Network Topology",
+  "nodes": [
+    {
+      "id": "internet",
+      "label": "🌍 Internet",
+      "type": "external",
+      "position": {"x": 400, "y": 0}
+    },
+    {
+      "id": "cdn",
+      "label": "📡 CDN",
+      "type": "edge",
+      "position": {"x": 400, "y": 100},
+      "specs": "Global edge locations"
+    },
+    {
+      "id": "lb",
+      "label": "⚖️ Load Balancer", 
+      "type": "infrastructure",
+      "position": {"x": 400, "y": 200},
+      "specs": "NGINX/ALB - 99.99% uptime"
+    },
+    {
+      "id": "mcp_cluster",
+      "label": "🧠 MCP Brain Cluster",
+      "type": "application",
+      "position": {"x": 400, "y": 300},
+      "specs": "2-20 pods, auto-scaling"
+    },
+    {
+      "id": "redis",
+      "label": "💾 Redis Cache",
+      "type": "cache",
+      "position": {"x": 200, "y": 400},
+      "specs": "100GB, 6 shards"
+    },
+    {
+      "id": "postgres",
+      "label": "🗄️ PostgreSQL",
+      "type": "database", 
+      "position": {"x": 600, "y": 400},
+      "specs": "Primary + 3 read replicas"
+    },
+    {
+      "id": "monitoring",
+      "label": "📊 Monitoring Stack",
+      "type": "observability",
+      "position": {"x": 400, "y": 500},
+      "specs": "Prometheus, Grafana, ELK"
+    }
+  ],
+  "connections": [
+    {"from": "internet", "to": "cdn", "type": "https", "bandwidth": "10 Gbps"},
+    {"from": "cdn", "to": "lb", "type": "https", "bandwidth": "10 Gbps"},
+    {"from": "lb", "to": "mcp_cluster", "type": "http", "bandwidth": "1 Gbps"},
+    {"from": "mcp_cluster", "to": "redis", "type": "tcp", "bandwidth": "100 Mbps"},
+    {"from": "mcp_cluster", "to": "postgres", "type": "tcp", "bandwidth": "100 Mbps"},
+    {"from": "mcp_cluster", "to": "monitoring", "type": "metrics", "bandwidth": "10 Mbps"}
+  ]
+}
+```│                                                                  │
 │  ┌─────────────────────────────────────────────────────────┐   │
 │  │                 Observability                            │   │
 │  │  ┌──────────┐  ┌──────────┐  ┌──────────┐              │   │

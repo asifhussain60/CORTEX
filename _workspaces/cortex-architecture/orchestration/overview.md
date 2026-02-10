@@ -19,81 +19,219 @@
 
 ## What is Orchestration?
 
-Orchestration in CORTEX refers to the coordination of multiple specialized components to accomplish complex development tasks. Unlike simple command-response systems, CORTEX orchestrators:
+**Think of Orchestration as Neural Processing in the CORTEX Brain**
 
-- **Understand Context** — Analyze code, history, and domain knowledge
-- **Make Decisions** — Route requests to appropriate handlers
-- **Coordinate Actions** — Manage multi-step workflows
-- **Enforce Governance** — Apply quality and security rules
-- **Learn and Adapt** — Improve based on outcomes
+Just as your brain has specialized regions that work together to process thoughts and coordinate actions, CORTEX orchestration involves **neural networks of specialized components** working in harmony to accomplish complex development tasks.
+
+**How CORTEX Brain Orchestration Works:**
+
+- **🧠 Cognitive Understanding** — Like how your brain analyzes sensory input, orchestrators examine code, history, and domain knowledge
+- **⚡ Neural Decision Making** — Similar to how neurons fire to make decisions, orchestrators route requests through neural pathways
+- **🤝 Coordinated Actions** — Like how brain regions collaborate for complex tasks (speaking, writing, etc.), orchestrators manage multi-step workflows
+- **🛡️ Executive Control** — Just as your prefrontal cortex enforces behavioral rules, governance orchestrators apply quality and security standards
+- **📚 Neural Learning** — Like brain plasticity, orchestrators adapt and improve based on experience and outcomes
+
+Unlike simple reflex systems that just respond to commands, CORTEX orchestrators exhibit **higher-order cognitive functions**—understanding context, reasoning about problems, and making intelligent decisions.
 
 ---
 
 ## Orchestrator Categories
 
-CORTEX organizes 23 orchestrators into four categories:
+**CORTEX organizes 23 neural orchestrators into four specialized brain regions:**
 
-### Core Orchestrators (8)
+### 🧠 Core Brain (8 Orchestrators)
+*The brain stem and executive functions - essential for all cognitive operations*
 
-Central coordination and fundamental operations.
+Central coordination and fundamental operations that keep the entire system functioning.
 
-| Orchestrator | Priority | Purpose |
-|--------------|----------|---------|
-| **MasterOrchestrator** | 10 | Central coordinator for all operations |
-| **IntentRouter** | 20 | Intent classification and routing |
-| **TDDOrchestrator** | 30 | Test-driven development workflow |
-| **WorkflowOrchestrator** | 40 | Multi-step workflow management |
-| **InteractionOrchestrator** | 50 | User interaction handling |
-| **WrappedTDDOrchestrator** | 170 | TDD with additional wrappers |
-| **DatabaseBackedRegistry** | 5 | Wiring and registry management |
-| **HealthChecker** | 2 | System health monitoring |
+| Neural Orchestrator | Priority | Cognitive Function |
+|---------------------|----------|-------------------|
+| **MasterOrchestrator** | 10 | 🎯 Executive control - coordinates all brain regions |
+| **IntentRouter** | 20 | 🧭 Pattern recognition - classifies and routes neural signals |
+| **TDDOrchestrator** | 30 | 🔬 Quality assurance - ensures reliable neural pathways |
+| **WorkflowOrchestrator** | 40 | 🔄 Sequential processing - manages complex thought chains |
+| **InteractionOrchestrator** | 50 | 💬 Communication center - handles user interaction |
+| **WrappedTDDOrchestrator** | 170 | 🛡️ Enhanced quality control - TDD with protective layers |
+| **DatabaseBackedRegistry** | 5 | 📋 Neural network registry - manages brain wiring |
+| **HealthChecker** | 2 | ❤️ Vital signs monitor - ensures brain health |
 
-### Domain Orchestrators (6)
+### 🎨 Creative Brain (6 Orchestrators)
+*The creative and analytical regions - specialized cognitive functions*
 
-Domain-specific logic and specialized operations.
+Domain-specific logic and specialized operations that require creative problem-solving.
 
-| Orchestrator | Priority | Purpose |
-|--------------|----------|---------|
-| **RefactoringOrchestrator** | 60 | Code improvement and restructuring |
-| **PlanningOrchestrator** | 70 | Development planning and phases |
-| **DomainOrchestrator** | 80 | Business domain logic |
-| **ConversationOrchestrator** | 90 | Dialogue and conversation |
-| **SeleniumPlaywrightOrchestrator** | 100 | Browser automation |
-| **DocumentationOrchestrator** | — | Documentation generation |
+| Neural Orchestrator | Priority | Cognitive Function |
+|---------------------|----------|-------------------|
+| **RefactoringOrchestrator** | 60 | 🔧 Code restructuring - optimizes neural pathways |
+| **PlanningOrchestrator** | 70 | 📅 Strategic thinking - plans development phases |
+| **DomainOrchestrator** | 80 | 🏢 Business logic processing - understands domain context |
+| **ConversationOrchestrator** | 90 | 💬 Language processing - handles dialogue and conversation |
+| **SeleniumPlaywrightOrchestrator** | 100 | 🌐 Motor control - automates browser interactions |
+| **DocumentationOrchestrator** | — | 📚 Knowledge articulation - generates documentation |
 
-### Support Orchestrators (9)
+### 🔧 Support Brain (9 Orchestrators)  
+*The supporting neural networks - operational and maintenance functions*
 
-Auxiliary functions and operational support.
+Auxiliary functions that keep the brain healthy and operational.
 
-| Orchestrator | Priority | Purpose |
-|--------------|----------|---------|
-| **OnboardingOrchestrator** | 110 | Repository onboarding |
-| **ToolDiscoveryOrchestrator** | 120 | Tool and feature discovery |
-| **UpgradeOrchestrator** | 130 | Version upgrades |
-| **RollbackOrchestrator** | 140 | Rollback and recovery |
-| **SetupOrchestrator** | 150 | Initial setup and configuration |
-| **ComposedOrchestrator** | 160 | Composite operations |
-| **KnowledgeOrchestrator** | — | Knowledge retrieval |
-| **ValidationOrchestrator** | — | Validation operations |
-| **MigrationOrchestrator** | — | Migration operations |
+| Neural Orchestrator | Priority | Cognitive Function |
+|---------------------|----------|-------------------|
+| **OnboardingOrchestrator** | 110 | 🎓 Learning initiation - introduces new repositories |
+| **ToolDiscoveryOrchestrator** | 120 | 🔍 Pattern recognition - discovers tools and features |
+| **UpgradeOrchestrator** | 130 | ⬆️ System evolution - manages version upgrades |
+| **RollbackOrchestrator** | 140 | ↩️ Error recovery - handles rollbacks and recovery |
+| **SetupOrchestrator** | 150 | ⚙️ Environment initialization - configures systems |
+| **ComposedOrchestrator** | 160 | 🧩 Complex coordination - handles composite operations |
+| **KnowledgeOrchestrator** | — | 📖 Memory retrieval - accesses stored knowledge |
+| **ValidationOrchestrator** | — | ✅ Quality checking - validates operations |
+| **MigrationOrchestrator** | — | 🔄 System transitions - manages migrations |
 
-### Infrastructure Orchestrators (3)
+### ⚙️ System Brain (3 Orchestrators)
+*The autonomic nervous system - vital infrastructure functions*
 
-System-level operations and management.
+System-level operations that keep the brain alive and functioning.
 
-| Orchestrator | Priority | Purpose |
-|--------------|----------|---------|
-| **OrchestratorBootstrap** | 1 | System initialization |
-| **DatabaseBackedRegistry** | 5 | Wiring registry |
-| **HealthChecker** | 2 | Health monitoring |
+| Neural Orchestrator | Priority | Cognitive Function |
+|---------------------|----------|-------------------|
+| **OrchestratorBootstrap** | 1 | 🚀 Brain startup - initializes the entire system |
+| **DatabaseBackedRegistry** | 5 | 📋 Neural wiring map - manages brain connections |
+| **HealthChecker** | 2 | ❤️ Vital monitoring - ensures brain health |
 
 ---
 
 ## Orchestrator Hierarchy
 
+### D3.js Hierarchical Tree Diagram
+
+```json
+{
+  "type": "hierarchy_tree",
+  "title": "CORTEX Neural Network Hierarchy",
+  "root": {
+    "name": "🧠 CORTEX Brain",
+    "type": "root",
+    "children": [
+      {
+        "name": "🎯 MasterOrchestrator",
+        "type": "core",
+        "priority": 10,
+        "description": "Executive Control Center",
+        "metrics": {
+          "requests_per_second": 450,
+          "avg_response_time": "1.2s",
+          "success_rate": "97.8%"
+        },
+        "children": [
+          {
+            "name": "🧭 IntentRouter",
+            "type": "core", 
+            "priority": 20,
+            "description": "Pattern Recognition & Routing",
+            "capabilities": ["intent_classification", "confidence_scoring", "fallback_routing"],
+            "children": [
+              {
+                "name": "🧠 Core Brain Networks",
+                "type": "category",
+                "children": [
+                  {"name": "🔬 TDDOrchestrator", "type": "core", "priority": 30, "rps": 180},
+                  {"name": "🔄 WorkflowOrchestrator", "type": "core", "priority": 40, "rps": 95},
+                  {"name": "💬 InteractionOrchestrator", "type": "core", "priority": 50, "rps": 210},
+                  {"name": "🛡️ WrappedTDDOrchestrator", "type": "core", "priority": 170, "rps": 25}
+                ]
+              },
+              {
+                "name": "🎨 Creative Brain Networks",
+                "type": "category", 
+                "children": [
+                  {"name": "🔧 RefactoringOrchestrator", "type": "domain", "priority": 60, "rps": 85},
+                  {"name": "📅 PlanningOrchestrator", "type": "domain", "priority": 70, "rps": 45},
+                  {"name": "🏢 DomainOrchestrator", "type": "domain", "priority": 80, "rps": 65},
+                  {"name": "💬 ConversationOrchestrator", "type": "domain", "priority": 90, "rps": 120},
+                  {"name": "🌐 SeleniumPlaywrightOrchestrator", "type": "domain", "priority": 100, "rps": 15},
+                  {"name": "📚 DocumentationOrchestrator", "type": "domain", "priority": null, "rps": 35}
+                ]
+              },
+              {
+                "name": "🔧 Support Brain Networks",
+                "type": "category",
+                "children": [
+                  {"name": "🎓 OnboardingOrchestrator", "type": "support", "priority": 110, "rps": 12},
+                  {"name": "🔍 ToolDiscoveryOrchestrator", "type": "support", "priority": 120, "rps": 28},
+                  {"name": "⬆️ UpgradeOrchestrator", "type": "support", "priority": 130, "rps": 8},
+                  {"name": "↩️ RollbackOrchestrator", "type": "support", "priority": 140, "rps": 5},
+                  {"name": "⚙️ SetupOrchestrator", "type": "support", "priority": 150, "rps": 15},
+                  {"name": "🧩 ComposedOrchestrator", "type": "support", "priority": 160, "rps": 22}
+                ]
+              }
+            ]
+          },
+          {
+            "name": "👁️ LENS Intelligence",
+            "type": "intelligence",
+            "description": "Sensory & Analysis System",
+            "capabilities": ["code_analysis", "pattern_detection", "context_synthesis"]
+          },
+          {
+            "name": "🛡️ Governance Engine",
+            "type": "governance", 
+            "description": "Quality & Compliance Control",
+            "capabilities": ["rule_enforcement", "audit_logging", "security_checks"]
+          }
+        ]
+      },
+      {
+        "name": "⚙️ System Brain Networks",
+        "type": "infrastructure",
+        "children": [
+          {"name": "🚀 OrchestratorBootstrap", "type": "infra", "priority": 1, "rps": null},
+          {"name": "📋 DatabaseBackedRegistry", "type": "infra", "priority": 5, "rps": null},
+          {"name": "❤️ HealthChecker", "type": "infra", "priority": 2, "rps": null}
+        ]
+      }
+    ]
+  }
+}
+```
+
+### D3.js Network Graph Data
+
+```json
+{
+  "type": "network_graph",
+  "title": "Orchestrator Communication Network",
+  "nodes": [
+    {"id": "master", "label": "MasterOrchestrator", "type": "hub", "size": 80, "color": "#FF9800"},
+    {"id": "intent", "label": "IntentRouter", "type": "router", "size": 60, "color": "#9C27B0"},
+    {"id": "lens", "label": "LENS", "type": "intelligence", "size": 70, "color": "#E91E63"},
+    {"id": "governance", "label": "Governance", "type": "control", "size": 50, "color": "#F44336"},
+    {"id": "tdd", "label": "TDD", "type": "core", "size": 45, "color": "#4CAF50"},
+    {"id": "refactor", "label": "Refactoring", "type": "domain", "size": 40, "color": "#2196F3"},
+    {"id": "planning", "label": "Planning", "type": "domain", "size": 35, "color": "#00BCD4"},
+    {"id": "conversation", "label": "Conversation", "type": "domain", "size": 42, "color": "#795548"},
+    {"id": "onboarding", "label": "Onboarding", "type": "support", "size": 25, "color": "#607D8B"},
+    {"id": "health", "label": "HealthChecker", "type": "infra", "size": 30, "color": "#9E9E9E"}
+  ],
+  "links": [
+    {"source": "master", "target": "intent", "weight": 95, "type": "primary"},
+    {"source": "master", "target": "lens", "weight": 80, "type": "primary"},
+    {"source": "master", "target": "governance", "weight": 60, "type": "control"},
+    {"source": "intent", "target": "tdd", "weight": 70, "type": "routing"},
+    {"source": "intent", "target": "refactor", "weight": 45, "type": "routing"},
+    {"source": "intent", "target": "planning", "weight": 35, "type": "routing"},
+    {"source": "intent", "target": "conversation", "weight": 55, "type": "routing"},
+    {"source": "lens", "target": "tdd", "weight": 85, "type": "intelligence"},
+    {"source": "lens", "target": "refactor", "weight": 90, "type": "intelligence"},
+    {"source": "governance", "target": "tdd", "weight": 40, "type": "control"},
+    {"source": "governance", "target": "refactor", "weight": 35, "type": "control"},
+    {"source": "master", "target": "onboarding", "weight": 15, "type": "support"},
+    {"source": "health", "target": "master", "weight": 20, "type": "monitoring"}
+  ]
+}
+```
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                     ORCHESTRATOR HIERARCHY                       │
+│                  NEURAL NETWORK HIERARCHY                        │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                  │
 │                    ┌─────────────────────┐                      │
