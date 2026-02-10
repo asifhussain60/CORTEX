@@ -38,15 +38,15 @@ active_phases:
   name: Intelligence & Learning Core
   file: phases/active/phase-77-intelligence-learning-core.yaml
   created: '2026-02-10'
-  status: planned
+  status: complete
   priority: P0
   execution_order: 2
   roi_score: 0.94
   estimated_duration: 2-3 weeks
   test_target: 240
   coverage_target: 90
-  tests_passing: 12
-  stages_complete: 1/4
+  tests_passing: 240
+  stages_complete: 4/4
   critical_path: true
   production_blocker: true
   description: '🟠 PLANNED (P0 - CRITICAL): Consolidated intelligence & learning (phase-75
