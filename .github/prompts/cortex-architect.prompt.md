@@ -128,10 +128,75 @@ AI: [On completion: Summary + git hash]
 | Second "proceed" | Start execution silently, show progress bars |
 | Stage complete | Update progress bar, continue to next |
 | Test passes | Increment counter, continue |
-| Test fails | Stop, show error with fix suggestion |
+| Test fails | STOP EXECUTION, show error with fix suggestion, DO NOT IGNORE |
 | Token 75% | Generate continuation prompt, commit, stop |
 | Phase complete | Show completion summary, commit |
 | User interrupts | Acknowledge, pause gracefully |
+
+### 🚨 CORE-008 ENFORCEMENT: NO TEST BYPASS UNDER ANY CIRCUMSTANCES
+
+**MANDATORY RULE (BLOCKING):**
+
+**When running tests discovers failures:**
+
+| Scenario | FORBIDDEN ❌ | REQUIRED ✅ |
+|----------|-------------|------------|
+| Test fails | Skip with `--ignore` | Fix test (TDD: RED→GREEN→REFACTOR) |
+| Test fails | Rename to `_skip_` | Fix root cause |
+| Test fails | Continue to next phase | Stop phase, create fix commit |
+| Dependency missing | Mock or stub | Install dependency or add to requirements |
+| Test hangs | Use shorter timeout | Fix test logic or performance |
+| Unclear error | Skip for later | Add debug output, understand error |
+
+**SILENT DOES NOT MEAN SKIP:**
+- ✅ Silent = No narration during execution
+- ✅ Silent = Just progress bars and completion report
+- ❌ Silent ≠ Ignore failing tests
+- ❌ Silent ≠ Rename tests to bypass discovery
+- ❌ Silent ≠ Use `--ignore` flags to hide failures
+
+**On Test Failure (ALL MODES):**
+```
+ALWAYS:
+1. Read test error completely
+2. Understand root cause (not symptom)
+3. Fix source (not test)
+4. Re-run to verify fix
+5. Commit fix with AC markers
+
+NEVER:
+- Skip with --ignore
+- Rename files to _skip_*
+- Move to different folder
+- Delete test
+- Mock away the failure
+```
+
+**Example - WRONG:**
+```bash
+# VIOLATION: Using --ignore to hide failures
+pytest tests/ --ignore=tests/unit/lens/adapters  ← BANNED
+
+# VIOLATION: Renaming to bypass discovery
+mv test_foo.py _skip_test_foo.py  ← BANNED
+```
+
+**Example - CORRECT:**
+```bash
+# Read error completely
+pytest tests/unit/lens/adapters/test_typescript_adapter.py -vvv
+
+# Identify: "tree_sitter_javascript not found"
+# Fix: pip install tree-sitter-javascript
+# Verify: pytest tests/unit/lens/adapters/test_typescript_adapter.py
+# Commit: git commit -m "Fix: Add tree-sitter-javascript dependency"
+```
+
+**ENFORCEMENT:**
+- ❌ Any `--ignore` flag in AUDIT/IMPLEMENT = VIOLATION (fail immediately)
+- ❌ Any file rename to `_skip_*` = VIOLATION (revert immediately)  
+- ❌ Any deletion of test files = VIOLATION (restore from git)
+- ✅ Fix failures properly or STOP phase (no silent skips)
 
 ### FORBIDDEN Outputs (Silent Mode Violations)
 

@@ -396,7 +396,8 @@ cortex-registry/_cortex-master/
 | Rule | Enforcement |
 |------|-------------|
 | **CORE-002** | **NO markdown file generation in chat responses** — Inline chat ONLY. ❌ FORBIDDEN: `cat > *.md`, `create_file` tool, terminal file generation, markdown reports, completion artifacts. ✅ REQUIRED: All findings/results inline, use markdown tables (chat content, not files), state via MCP tools or code files. Auto-vacuum after every completion. Exception: docs/.github + README.md (legitimate documentation). |
-| **CORE-008** | TDD MANDATORY — Tests BEFORE code (use TDDOrchestrator via MCP) |
+| **CORE-008** | **TDD MANDATORY — Tests BEFORE code** (use TDDOrchestrator via MCP). ❌ FORBIDDEN: Using `--ignore` flags to skip failing tests, renaming test files to `_skip_*`, deleting tests, mocking failures. ✅ REQUIRED: Fix root cause, re-run to verify, commit with AC markers. Silent execution does NOT mean test bypass. |
+| **CORE-008-SUB** | **NO TEST BYPASS UNDER ANY CIRCUMSTANCES** — When test fails: (1) Read error completely, (2) Understand root cause, (3) Fix source code or dependencies, (4) Re-run to verify, (5) Commit. FORBIDDEN: `--ignore`, `_skip_*` renaming, deletion, mocking. This applies in ALL execution modes (silent, verbose, autonomous). |
 | **CORE-019** | ALL IMPLEMENT intents MUST route through TDDOrchestrator |
 | **CORE-029** | Response header MANDATORY |
 | **CORE-030** | Implementation Truth — verify code, not docs |
@@ -404,7 +405,7 @@ cortex-registry/_cortex-master/
 | **CORE-036** | Industry standards compliance — verify against 45+ knowledge YAMLs |
 | **CORE-047** | **Instruction files MUST NOT include file paths** — Even backticks trigger VS Code auto-load (51k+ token bloat). Use directory references only. AI loads via semantic_search or read_file when explicitly needed. |
 | **CORE-048** | **Holistic Validation Gate (Phase 48)** — mandatory pre-implementation validation + challenge gate |
-| **CORE-049** | **Silent Autonomous Execution** — No confirmations, no narration, just progress bars + completion report |
+| **CORE-049** | **Silent Autonomous Execution** — No confirmations, no narration, just progress bars + completion report. **CRITICAL:** Silent applies to narration ONLY, not to test rigor or code quality. Never trade quality for speed in any execution mode. |
 | **MCP-FIRST** | ALL functionality exposed via MCP tools |
 | **MCP-GATE** | IMPLEMENT intents MUST use `cortex_process_request` tool (NO direct file creation) |
 | **ARCH-012** | Standards gate — 12-Factor + SOLID + Clean Code + OWASP required |
