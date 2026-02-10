@@ -223,9 +223,12 @@ class RoslynWorkspaceBuilder:
             for line in content.splitlines():
                 if line.startswith("Project("):
                     parts = line.split('"')
-                    if len(parts) >= 6:
-                        project_name = parts[1]
-                        project_relative_path = parts[3]
+                    if len(parts) >= 9:  # Need at least 9 parts for valid project line
+                        project_name = parts[3]  # Index 3 is the project name
+                        project_relative_path = parts[5]  # Index 5 is the project path
+                        
+                        # Normalize path separators (convert Windows \ to /)
+                        project_relative_path = project_relative_path.replace('\\', '/')
                         
                         # Resolve project path
                         project_path = solution_dir / project_relative_path
@@ -236,9 +239,10 @@ class RoslynWorkspaceBuilder:
                                 "path": str(project_path),
                                 "relative_path": project_relative_path
                             })
+                            logger.debug(f"Found project: {project_name} at {project_path}")
         
         except Exception as e:
-            logger.error(f"Error parsing solution file: {e}")
+            logger.error(f"Error parsing solution file: {e}", exc_info=True)
         
         return projects
     

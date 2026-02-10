@@ -110,7 +110,6 @@ class TestRoslynWorkspaceBuilder:
         # Should be able to detect it's a valid project
         assert builder.is_valid_project(project_path)
     
-    @pytest.mark.skip(reason="Requires Roslyn CLI implementation")
     def test_load_solution_basic(self, temp_dotnet_solution):
         """
         Test loading a basic .NET solution.
@@ -124,8 +123,10 @@ class TestRoslynWorkspaceBuilder:
         
         assert result is not None
         assert result["solution_path"] == str(solution_path)
+        assert result["solution_name"] == "TestSolution"
         assert len(result["projects"]) == 1
         assert result["projects"][0]["name"] == "Core"
+        assert "path" in result["projects"][0]
     
     @pytest.mark.skip(reason="Requires Roslyn CLI implementation")
     def test_load_solution_with_semantic_model(self, temp_dotnet_solution):
@@ -149,7 +150,6 @@ class TestRoslynWorkspaceBuilder:
         assert "IEntity" in type_names
         assert "User" in type_names
     
-    @pytest.mark.skip(reason="Requires Roslyn CLI implementation")
     def test_load_project_directly(self, temp_dotnet_solution):
         """
         Test loading a single project without solution.
@@ -164,6 +164,9 @@ class TestRoslynWorkspaceBuilder:
         assert result is not None
         assert result["project_path"] == str(project_path)
         assert result["name"] == "Core"
+        assert result["target_framework"] == "net8.0"
+        assert result["sdk"] == "Microsoft.NET.Sdk"
+        assert result["nullable"] == "enable"
     
     def test_invalid_solution_path(self):
         """Test error handling for invalid solution path."""
