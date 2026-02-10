@@ -7,8 +7,9 @@ Author: CORTEX Architect
 Phase: Phase 66 S2
 """
 
+import json
 import logging
-from typing import List, Dict, Set, Optional, Tuple
+from typing import List, Dict, Set, Optional, Tuple, Any
 from pathlib import Path
 
 from cortex_lens.knowledge_graph.graph_storage import GraphStorage
@@ -104,14 +105,19 @@ class GraphQuery:
                 
                 visited.add(node_id)
                 
-                # Get neighbors at current depth
-                # Note: query_neighbors only supports single edge_type
-                edge_type = edge_types[0] if edge_types else None
-                neighbors = self.storage.query_neighbors(
-                    node_id=node_id,
-                    edge_type=edge_type,
-                    depth=1  # Single hop per iteration
-                )
+                # Get neighbors based on direction
+                if direction == "incoming":
+                    # For incoming edges, we need to query where this node is the TARGET
+                    # Use get_edges_for_nodes or custom query
+                    neighbors = self._query_incoming_neighbors(node_id, edge_types[0] if edge_types else None)
+                else:
+                    # Outgoing edges (default behavior)
+                    edge_type = edge_types[0] if edge_types else None
+                    neighbors = self.storage.query_neighbors(
+                        node_id=node_id,
+                        edge_type=edge_type,
+                        depth=1  # Single hop per iteration
+                    )
                 
                 for neighbor in neighbors:
                     neighbor_id = neighbor["id"]
@@ -388,3 +394,181 @@ class GraphQuery:
         
         logger.debug(f"Found {len(all_paths)} paths")
         return all_paths
+    
+    def find_callers(
+        self,
+        target_name: str,
+        edge_type: str = "calls",
+        max_depth: int = 2
+    ) -> List[Node]:
+        """
+        Find all nodes that call/reference the target node by name.
+        
+        Args:
+            target_name: Name of target node to find callers for
+            edge_type: Edge type to traverse (default: "calls")
+            max_depth: Maximum traversal depth
+        
+        Returns:
+            List of nodes that reference the target
+        
+        Example:
+            # Find all files that import UserRepository
+            callers = query.find_callers("UserRepository", "imports", max_depth=2)
+        """
+        logger.debug(f"Finding callers of '{target_name}' via '{edge_type}' (depth={max_depth})")
+        
+        # Find target node by name
+        target_nodes = self._find_nodes_by_name(target_name)
+        
+        if not target_nodes:
+            logger.warning(f"No nodes found with name '{target_name}'")
+            return []
+        
+        # For each target, find incoming edges
+        all_callers: List[Node] = []
+        visited_ids: Set[int] = set()
+        
+        for target_node in target_nodes:
+            # Traverse incoming edges
+            callers = self.traverse(
+                start_node_id=target_node["id"],
+                edge_types=[edge_type],
+                direction="incoming",
+                max_depth=max_depth
+            )
+            
+            # Deduplicate by ID
+            for caller in callers:
+                if caller.id is not None and caller.id not in visited_ids:
+                    all_callers.append(caller)
+                    visited_ids.add(caller.id)
+        
+        logger.debug(f"Found {len(all_callers)} callers")
+        return all_callers
+    
+    def _find_nodes_by_name(self, name: str) -> List[Dict[str, Any]]:
+        """
+        Find nodes by name (internal helper).
+        
+        Args:
+            name: Node name to search for
+        
+        Returns:
+            List of node dictionaries matching the name
+        """
+        conn = self.storage._get_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+            SELECT id, node_type, name, properties
+            FROM nodes
+            WHERE name LIKE ?
+        """, (f"%{name}%",))
+        
+        results = []
+        for row in cursor.fetchall():
+            results.append({
+                "id": row["id"],
+                "node_type": row["node_type"],
+                "name": row["name"],
+                "properties": json.loads(row["properties"]) if row["properties"] else {}
+            })
+        
+        return results
+    
+    def _query_incoming_neighbors(self, node_id: int, edge_type: Optional[str] = None) -> List[Dict[str, Any]]:
+        """
+        Query incoming neighbors (nodes that point TO this node).
+        
+        Args:
+            node_id: Target node ID
+            edge_type: Filter by edge type (None = all types)
+        
+        Returns:
+            List of source nodes that have edges pointing to node_id
+        """
+        conn = self.storage._get_connection()
+        cursor = conn.cursor()
+        
+        # Query incoming edges (where this node is the TARGET)
+        if edge_type:
+            cursor.execute(
+                """
+                SELECT n.id, n.node_type, n.name, n.properties
+                FROM edges e
+                JOIN nodes n ON e.source_id = n.id
+                WHERE e.target_id = ? AND e.edge_type = ?
+                """,
+                (node_id, edge_type)
+            )
+        else:
+            cursor.execute(
+                """
+                SELECT n.id, n.node_type, n.name, n.properties
+                FROM edges e
+                JOIN nodes n ON e.source_id = n.id
+                WHERE e.target_id = ?
+                """,
+                (node_id,)
+            )
+        
+        neighbors = []
+        for row in cursor.fetchall():
+            neighbors.append({
+                "id": row["id"],
+                "node_type": row["node_type"],
+                "name": row["name"],
+                "properties": json.loads(row["properties"]) if row["properties"] else {}
+            })
+        
+        return neighbors
+    
+    def get_edges_for_nodes(
+        self,
+        nodes: List[Node],
+        edge_type: Optional[str] = None
+    ) -> List[Edge]:
+        """
+        Get edges connecting the given nodes.
+        
+        Args:
+            nodes: List of nodes to get edges for
+            edge_type: Optional edge type filter
+        
+        Returns:
+            List of edges between the nodes
+        """
+        if not nodes:
+            return []
+        
+        node_ids = [node.id for node in nodes]
+        conn = self.storage._get_connection()
+        cursor = conn.cursor()
+        
+        if edge_type:
+            cursor.execute("""
+                SELECT id, source_id, target_id, edge_type, properties
+                FROM edges
+                WHERE source_id IN ({}) AND target_id IN ({}) AND edge_type = ?
+            """.format(','.join('?' * len(node_ids)), ','.join('?' * len(node_ids))),
+                (*node_ids, *node_ids, edge_type))
+        else:
+            cursor.execute("""
+                SELECT id, source_id, target_id, edge_type, properties
+                FROM edges
+                WHERE source_id IN ({}) AND target_id IN ({})
+            """.format(','.join('?' * len(node_ids)), ','.join('?' * len(node_ids))),
+                (*node_ids, *node_ids))
+        
+        edges = []
+        for row in cursor.fetchall():
+            edges.append(Edge(
+                id=row["id"],
+                source_id=row["source_id"],
+                target_id=row["target_id"],
+                edge_type=row["edge_type"],
+                properties=json.loads(row["properties"]) if row["properties"] else {}
+            ))
+        
+        return edges

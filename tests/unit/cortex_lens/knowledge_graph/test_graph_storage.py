@@ -290,6 +290,18 @@ class TestGraphQuery:
     """Test suite for GraphQuery traversal interface"""
     
     @pytest.fixture
+    def temp_db(self):
+        """Create temporary SQLite database"""
+        with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as tmp:
+            db_path = Path(tmp.name)
+        
+        yield db_path
+        
+        # Cleanup
+        if db_path.exists():
+            db_path.unlink()
+    
+    @pytest.fixture
     def populated_db(self):
         """Create populated graph database"""
         with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as tmp:
@@ -305,9 +317,16 @@ class TestGraphQuery:
         node_c = storage.insert_node("File", "c.py", {})
         node_d = storage.insert_node("File", "d.py", {})
         
+        # Add functions for find_callers tests
+        foo_func = storage.insert_node("Function", "foo", {})
+        bar_func = storage.insert_node("Function", "bar", {})
+        
         storage.insert_edge(node_a, node_b, "imports", {})
         storage.insert_edge(node_b, node_c, "imports", {})
         storage.insert_edge(node_a, node_d, "calls", {})
+        
+        # Function call edges
+        storage.insert_edge(foo_func, bar_func, "calls", {})
         
         yield db_path, storage
         
@@ -385,5 +404,84 @@ class TestGraphQuery:
         assert path[2][0].name == "c.py"
 
 
+    def test_get_statistics(self, populated_db):
+        """Test graph statistics retrieval"""
+        db_path, storage = populated_db
+        
+        # Get statistics
+        stats = storage.get_statistics()
+        
+        # Verify structure
+        assert "total_nodes" in stats
+        assert "total_edges" in stats
+        assert "nodes_by_type" in stats
+        assert "edges_by_type" in stats
+        
+        # Verify counts (from populated_db fixture: 4 files + 2 functions = 6 nodes, 2 imports + 2 calls = 4 edges)
+        assert stats["total_nodes"] == 6
+        assert stats["total_edges"] == 4
+        
+        # Verify type breakdowns
+        assert stats["nodes_by_type"]["File"] == 4
+        assert stats["nodes_by_type"]["Function"] == 2
+        assert stats["edges_by_type"]["imports"] == 2
+        assert stats["edges_by_type"]["calls"] == 2
+    
+    def test_find_callers(self, populated_db):
+        """Test finding callers of a function by name"""
+        db_path, storage = populated_db
+        from cortex_lens.knowledge_graph.graph_query import GraphQuery
+        
+        query = GraphQuery(storage)
+        
+        # Find callers of "bar" function
+        callers = query.find_callers(target_name="bar", edge_type="calls", max_depth=2)
+        
+        # Should find "foo" function (which calls "bar")
+        assert len(callers) > 0
+        caller_names = [c.name for c in callers]
+        assert "foo" in caller_names
+    
+    def test_find_callers_no_matches(self, populated_db):
+        """Test find_callers with non-existent target"""
+        db_path, storage = populated_db
+        from cortex_lens.knowledge_graph.graph_query import GraphQuery
+        
+        query = GraphQuery(storage)
+        
+        # Search for non-existent function
+        callers = query.find_callers(target_name="nonexistent", edge_type="calls")
+        
+        assert callers == []
+    
+    def test_find_callers_deduplication(self, temp_db):
+        """Test that find_callers deduplicates results"""
+        from cortex_lens.knowledge_graph.graph_storage import GraphStorage
+        from cortex_lens.knowledge_graph.graph_query import GraphQuery
+        
+        storage = GraphStorage(temp_db)
+        storage.initialize_schema()
+        query = GraphQuery(storage)
+        
+        # Create diamond pattern: foo → bar, foo → baz, bar → target, baz → target
+        foo_id = storage.insert_node("Function", "foo", {})
+        bar_id = storage.insert_node("Function", "bar", {})
+        baz_id = storage.insert_node("Function", "baz", {})
+        target_id = storage.insert_node("Function", "target", {})
+        
+        storage.insert_edge(foo_id, bar_id, "calls", {})
+        storage.insert_edge(foo_id, baz_id, "calls", {})
+        storage.insert_edge(bar_id, target_id, "calls", {})
+        storage.insert_edge(baz_id, target_id, "calls", {})
+        
+        # Find callers of "target" with depth=2
+        callers = query.find_callers(target_name="target", edge_type="calls", max_depth=2)
+        
+        # Should find: bar, baz, foo (no duplicates)
+        caller_names = [c.name for c in callers]
+        assert len(caller_names) == len(set(caller_names)), "Found duplicate callers"
+        assert set(caller_names) == {"foo", "bar", "baz"}
+
+
 # AC_CHECKPOINT: AC-PHASE66-S2-001 RED phase complete
-# 20 tests created for graph storage, all should FAIL (implementation pending)
+# 24 tests created for graph storage + query (including S3 methods), all should FAIL (implementation pending)

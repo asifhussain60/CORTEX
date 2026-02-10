@@ -465,6 +465,58 @@ class GraphStorage:
         
         return json.dumps(graph, indent=2)
     
+    def get_statistics(self) -> Dict[str, Any]:
+        """
+        Get graph statistics.
+        
+        Returns:
+            Dictionary with node/edge counts and type breakdown
+        
+        Example:
+            >>> storage.get_statistics()
+            {
+                "total_nodes": 150,
+                "total_edges": 300,
+                "nodes_by_type": {"File": 50, "Class": 75, "Function": 25},
+                "edges_by_type": {"calls": 100, "imports": 150, "tests": 50}
+            }
+        """
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        
+        # Count total nodes
+        cursor.execute("SELECT COUNT(*) as count FROM nodes")
+        total_nodes = cursor.fetchone()["count"]
+        
+        # Count total edges
+        cursor.execute("SELECT COUNT(*) as count FROM edges")
+        total_edges = cursor.fetchone()["count"]
+        
+        # Count nodes by type
+        cursor.execute("""
+            SELECT node_type, COUNT(*) as count
+            FROM nodes
+            GROUP BY node_type
+        """)
+        nodes_by_type = {row["node_type"]: row["count"] for row in cursor.fetchall()}
+        
+        # Count edges by type
+        cursor.execute("""
+            SELECT edge_type, COUNT(*) as count
+            FROM edges
+            GROUP BY edge_type
+        """)
+        edges_by_type = {row["edge_type"]: row["count"] for row in cursor.fetchall()}
+        
+        logger.debug(f"Statistics: {total_nodes} nodes, {total_edges} edges")
+        
+        return {
+            "total_nodes": total_nodes,
+            "total_edges": total_edges,
+            "nodes_by_type": nodes_by_type,
+            "edges_by_type": edges_by_type
+        }
+    
     def close(self) -> None:
         """Close database connection."""
         if self.conn:
