@@ -1,0 +1,406 @@
+# Phase 77: Intelligence & Learning Core
+# Authority: Production Readiness Consolidation 2026-02-10
+# Consolidates: phase-75 + phase-65
+# Created: 2026-02-10
+# AC-ID: AC-PHASE77-001
+
+metadata:
+  phase_id: "phase-77"
+  title: "Intelligence & Learning Core"
+  status: "planned"
+  priority: "P0"
+  created: "2026-02-10"
+  updated: "2026-02-10"
+  estimated_duration: "2-3 weeks"
+  actual_duration: "0"
+  roi_score: 0.94
+  execution_order: 2
+  test_target: 240
+  tests_passing: 12
+  test_coverage: 5
+  coverage_target: 90
+  autonomous_execution: true
+  approval_required: true
+  cross_cutting: true
+  breaking_changes: false
+  production_blocker: true
+  stages_complete: "1/4"
+  critical_path: true
+
+overview:
+  vision: |
+    Transform CORTEX from a stateless execution engine into an intelligent, learning system
+    that accumulates knowledge and improves over time. Combines LENS intelligence remediation
+    with knowledge persistence and universal learning loop.
+    
+    This mega-phase creates the cognitive backbone that enables CORTEX to remember, learn,
+    and evolve from every operation across all sessions.
+
+  problem_statement: |
+    Two separate P0 phases (phase-75, phase-65) address intelligence concerns but lack
+    integration and coherent architecture:
+    
+    1. **Knowledge Persistence & Learning Loop (phase-75)**
+       - Operations are ephemeral (no memory between sessions)
+       - Repository onboarding doesn't capture learnings
+       - No feedback loop for continuous improvement
+       - Brain layer lacks intelligence enhancement
+       - 0/6 stages complete (just started)
+    
+    2. **LENS Intelligence Remediation (phase-65)**
+       - 1/9 stages complete (11% done)
+       - Partial LENS implementation
+       - Missing evidence protocol
+       - Performance issues unresolved
+       - 12/155 tests passing (8%)
+    
+    **Root Cause:** Intelligence (LENS) and learning (knowledge persistence) are two sides
+    of the same coin. LENS provides the intelligence framework; learning provides the
+    persistence and evolution mechanism. They should be built together.
+
+  expected_outcomes:
+    - "LENS Intelligence fully operational (9/9 stages)"
+    - "155 LENS tests passing (up from 12)"
+    - "Knowledge Persistence Service operational"
+    - "Universal Learning Loop active (OBSERVE→ANALYZE→SYNTHESIZE→APPLY)"
+    - "Brain Intelligence Layer enhanced with perception/reasoning/action"
+    - "8th Enforcement Agent: Knowledge Persistence Enforcement"
+    - "Repository onboarding creates 5+ YAML artifacts per operation"
+    - "Cross-session learning: Future operations benefit from past learnings"
+    - "Learning dashboard shows intelligence evolution over time"
+
+roi_analysis:
+  cost: "2-3 weeks (S1: 1 week, S2: 1 week, S3: 1 week, S4: 3 days)"
+  impact: |
+    Immediate (S1):
+    - LENS intelligence fully operational
+    - Evidence protocol on all analyzers
+    - Performance 10x improvement
+    - 155 tests passing
+    
+    Immediate (S2):
+    - Every ONBOARD creates knowledge artifacts
+    - Company/domains/ YAML population
+    - Persistent domain intelligence
+    
+    Immediate (S3):
+    - CORTEX learns from every operation
+    - Pattern recognition improves over time
+    - Strategy selection becomes smarter
+    - Execution planning benefits from history
+    
+    Long-term (S4):
+    - Self-improving system
+    - Zero knowledge loss between sessions
+    - Compound intelligence growth
+    - Reduced human intervention over time
+    
+  risk_mitigation: |
+    - Start with S1 (LENS remediation) as foundation
+    - S2 builds knowledge persistence on stable LENS
+    - S3 adds learning loop on top of persistence
+    - S4 validates end-to-end intelligence flow
+    - Each stage has independent validation
+    - Rollback possible after any stage
+
+dependencies:
+  depends_on:
+    - "phase-76"
+  blocks:
+    - "phase-78"
+    - "Knowledge-driven automation phases"
+  enables:
+    - "Enterprise Orchestrator Maturity (phase-78)"
+    - "Pattern-based automation"
+    - "Self-optimizing CORTEX"
+
+stages:
+  - stage_id: "S1"
+    name: "LENS Intelligence Remediation"
+    description: |
+      Complete all 9 stages of phase-65, bringing LENS intelligence to full operational
+      status with evidence protocol, performance optimization, and comprehensive testing.
+    estimated_duration: "1 week"
+    test_target: 80
+    coverage_target: 90
+    status: "in_progress"
+    tests_passing: 12
+    
+    tasks:
+      - task_id: "S1.T1"
+        name: "Complete Remaining 8 LENS Stages"
+        description: |
+          Finish phase-65 implementation:
+          - S2: Evidence protocol on all analyzers
+          - S3: Incremental extraction & caching
+          - S4: Cross-language analyzer expansion
+          - S5: Manifest-based publishing
+          - S6: Integration with orchestrators
+          - S7: Performance optimization (10x target)
+          - S8: Dashboard & visualization
+          - S9: Documentation & examples
+        estimated_duration: "5 days"
+        
+      - task_id: "S1.T2"
+        name: "LENS Test Suite Completion"
+        description: |
+          Bring test coverage from 12/155 to 155/155:
+          - Implement missing 143 tests
+          - Fix failing tests
+          - Integration tests across analyzers
+          - Performance benchmarks
+        estimated_duration: "2 days"
+    
+    validation:
+      - "9/9 LENS stages complete"
+      - "155/155 tests passing"
+      - "90% coverage on LENS codebase"
+      - "Evidence protocol on all analyzers"
+      - "Performance 10x vs. baseline"
+      - "Manifest-based publishing operational"
+
+  - stage_id: "S2"
+    name: "Knowledge Persistence Service"
+    description: |
+      Implement knowledge capture and YAML generation for company/domains/ directories.
+      Every repository onboarding operation creates persistent knowledge artifacts.
+    estimated_duration: "1 week"
+    test_target: 60
+    coverage_target: 90
+    status: "not_started"
+    
+    tasks:
+      - task_id: "S2.T1"
+        name: "Knowledge Persistence Architecture"
+        description: |
+          Design knowledge capture system:
+          - KnowledgeCapture interface (what to capture)
+          - KnowledgePersistenceService (how to store)
+          - YAML schema for company/domains/
+          - Template system for artifact generation
+        estimated_duration: "2 days"
+        
+      - task_id: "S2.T2"
+        name: "YAML Generation Engine"
+        description: |
+          Implement artifact generation:
+          - domain_patterns.yaml (detected patterns)
+          - architecture_decisions.yaml (ADRs)
+          - technology_stack.yaml (detected tech)
+          - best_practices.yaml (extracted practices)
+          - code_conventions.yaml (style guides)
+        estimated_duration: "2 days"
+        
+      - task_id: "S2.T3"
+        name: "Repository Onboarding Enhancement"
+        description: |
+          Integrate knowledge persistence into onboarding:
+          - Hook into RepositoryOnboardingOrchestrator
+          - Trigger knowledge capture after analysis
+          - Generate 5+ YAML artifacts per onboarding
+          - Store in company/domains/{domain_name}/
+        estimated_duration: "2 days"
+        
+      - task_id: "S2.T4"
+        name: "MCP Tool Enhancement"
+        description: |
+          Enhance cortex_onboard_repository:
+          - Add --persist-knowledge flag
+          - Return knowledge artifact paths
+          - Validation of generated YAMLs
+          - Error handling and rollback
+        estimated_duration: "1 day"
+    
+    validation:
+      - "KnowledgePersistenceService operational"
+      - "YAML generation for 5+ artifact types"
+      - "Repository onboarding creates artifacts"
+      - "cortex_onboard_repository enhanced"
+      - "60 tests passing, 90% coverage"
+      - "Sample repository generates valid YAMLs"
+
+  - stage_id: "S3"
+    name: "Universal Learning Loop & Brain Enhancement"
+    description: |
+      Implement OBSERVE→ANALYZE→SYNTHESIZE→APPLY learning cycle and enhance Brain
+      Intelligence Layer with perception, reasoning, and action capabilities.
+    estimated_duration: "1 week"
+    test_target: 60
+    coverage_target: 90
+    status: "not_started"
+    
+    tasks:
+      - task_id: "S3.T1"
+        name: "Universal Learning Loop Service"
+        description: |
+          Implement 4-phase learning cycle:
+          - OBSERVE: Capture operation outcomes, errors, successes
+          - ANALYZE: Pattern detection, root cause analysis
+          - SYNTHESIZE: Generate learnings, update knowledge base
+          - APPLY: Use learnings in future operations
+        estimated_duration: "3 days"
+        
+      - task_id: "S3.T2"
+        name: "Brain Intelligence Layer Enhancement"
+        description: |
+          Add intelligence capabilities to cortex_brain:
+          - Perception layer: Pattern recognition from operations
+          - Reasoning layer: Strategy selection based on history
+          - Action layer: Execution planning with learned optimizations
+          - Memory layer: Long-term knowledge retention
+        estimated_duration: "3 days"
+        
+      - task_id: "S3.T3"
+        name: "Learning Dashboard"
+        description: |
+          Visualize intelligence evolution:
+          - Learning metrics (operations → learnings ratio)
+          - Pattern recognition accuracy over time
+          - Knowledge base growth charts
+          - Operation success rate trends
+        estimated_duration: "1 day"
+    
+    validation:
+      - "Universal Learning Loop operational"
+      - "Brain Intelligence Layer enhanced"
+      - "Learning captured from 10+ operation types"
+      - "Future operations show improvement"
+      - "Learning dashboard live with metrics"
+      - "60 tests passing, 90% coverage"
+
+  - stage_id: "S4"
+    name: "Integration & Enforcement"
+    description: |
+      Add 8th enforcement agent, validate end-to-end intelligence flow, and ensure
+      all knowledge persistence requirements are enforced.
+    estimated_duration: "3 days"
+    test_target: 40
+    coverage_target: 90
+    status: "not_started"
+    
+    tasks:
+      - task_id: "S4.T1"
+        name: "Knowledge Persistence Enforcement Agent"
+        description: |
+          Create 8th enforcement agent:
+          - KnowledgePersistenceEnforcementAgent
+          - Blocks ONBOARD operations without --persist-knowledge
+          - Validates YAML artifact generation
+          - Pre-execution gate for knowledge-sensitive operations
+        estimated_duration: "1 day"
+        
+      - task_id: "S4.T2"
+        name: "End-to-End Intelligence Validation"
+        description: |
+          Validate complete intelligence flow:
+          - ONBOARD → LENS analysis → Knowledge persistence → Learning loop
+          - Future ONBOARD benefits from past learnings
+          - Cross-session knowledge retention
+          - Performance improvement over time
+        estimated_duration: "1 day"
+        
+      - task_id: "S4.T3"
+        name: "Documentation & Examples"
+        description: |
+          Complete phase documentation:
+          - Intelligence architecture diagram
+          - Learning loop flow documentation
+          - Knowledge persistence examples
+          - Best practices for knowledge-driven operations
+        estimated_duration: "1 day"
+    
+    validation:
+      - "8th enforcement agent operational"
+      - "ONBOARD operations enforce knowledge persistence"
+      - "End-to-end intelligence flow validated"
+      - "Cross-session learning confirmed"
+      - "40 tests passing, 90% coverage"
+      - "Documentation complete"
+
+acceptance_criteria:
+  - id: "AC-PHASE77-001"
+    description: "All 240 tests passing with 90% coverage"
+    validation: "pytest tests/ --cov=cortex --cov-report=term-missing"
+    
+  - id: "AC-PHASE77-002"
+    description: "LENS Intelligence fully operational (9/9 stages)"
+    validation: "155 LENS tests passing"
+    
+  - id: "AC-PHASE77-003"
+    description: "Knowledge Persistence Service operational"
+    validation: "Sample onboarding generates 5+ YAML artifacts"
+    
+  - id: "AC-PHASE77-004"
+    description: "Universal Learning Loop active"
+    validation: "Learning metrics show >0 learnings captured"
+    
+  - id: "AC-PHASE77-005"
+    description: "Brain Intelligence Layer enhanced"
+    validation: "Perception/reasoning/action layers functional"
+    
+  - id: "AC-PHASE77-006"
+    description: "8th Enforcement Agent operational"
+    validation: "ONBOARD without --persist-knowledge is blocked"
+    
+  - id: "AC-PHASE77-007"
+    description: "Cross-session learning validated"
+    validation: "Second operation shows improvement vs. first"
+
+git_strategy:
+  branching: "feature/phase-77-intelligence-learning"
+  commit_frequency: "After each task completion"
+  pr_strategy: "Stage-by-stage PRs (S1 → S2 → S3 → S4)"
+  review_requirements: "2 approvals for intelligence-critical changes"
+
+rollback_plan:
+  triggers:
+    - "Any stage validation fails"
+    - "Performance regression detected"
+    - "Knowledge persistence failures"
+  
+  procedure: |
+    1. Stop current stage immediately
+    2. Git revert to last stable commit
+    3. Document failure reason
+    4. Remediate and re-attempt
+  
+  safe_points:
+    - "After S1 (LENS remediation done, can continue without S2-S4)"
+    - "After S2 (knowledge persistence done, can continue without S3-S4)"
+    - "After S3 (learning loop done, can continue without S4)"
+
+monitoring:
+  metrics:
+    - "lens_test_pass_rate (target: 1.0)"
+    - "knowledge_artifacts_generated_total"
+    - "learning_loop_cycles_total"
+    - "brain_intelligence_score (0.0-1.0)"
+    - "cross_session_improvement_rate"
+  
+  dashboards:
+    - "Grafana: Phase 77 Intelligence Dashboard"
+    - "Prometheus: Learning Metrics"
+  
+  alerts:
+    - "lens_test_pass_rate < 0.9 → Critical"
+    - "knowledge_artifacts_generated_total = 0 (24h) → Warning"
+    - "learning_loop_cycles_total = 0 (24h) → Warning"
+
+supersedes:
+  - phase_id: "phase-75"
+    reason: "S2-S3 replace knowledge persistence & learning loop"
+    
+  - phase_id: "phase-65"
+    reason: "S1 completes LENS intelligence remediation"
+
+notes: |
+  This mega-phase transforms CORTEX from stateless execution to intelligent learning system.
+  
+  **Critical Path:** S1 (LENS) → S2 (persistence) → S3 (learning) → S4 (enforcement)
+  
+  **Key Innovation:** Knowledge persistence + learning loop creates compound intelligence
+  growth over time. Every operation makes CORTEX smarter.
+  
+  **Timeline:** 2-3 weeks vs. original 3+ weeks (phase-75 + phase-65 separate)
+  
+  **Integration:** Builds on phase-76 foundation (aligned, isolated, secure infrastructure)

@@ -1,0 +1,495 @@
+# Phase 76: Production Foundation Trilogy
+# Authority: Production Readiness Consolidation 2026-02-10
+# Consolidates: phase-70 + phase-48 + phase-51-alt
+# Created: 2026-02-10
+# AC-ID: AC-PHASE76-001
+
+metadata:
+  phase_id: "phase-76"
+  title: "Production Foundation Trilogy"
+  status: "next_activation"
+  priority: "P0"
+  created: "2026-02-10"
+  updated: "2026-02-10"
+  estimated_duration: "4-6 weeks"
+  actual_duration: "0"
+  roi_score: 0.97
+  execution_order: 1
+  test_target: 320
+  tests_passing: 0
+  test_coverage: 0
+  coverage_target: 90
+  autonomous_execution: true
+  approval_required: true
+  cross_cutting: true
+  breaking_changes: false
+  production_blocker: true
+  stages_complete: "0/4"
+  critical_path: true
+
+overview:
+  vision: |
+    Build production-ready foundation infrastructure by consolidating three critical P0 blockers:
+    implementation-specification alignment, registry isolation, and secrets management.
+    
+    This mega-phase eliminates phase sprawl and provides a clear 4-6 week path to production
+    readiness through systematic remediation of technical debt and infrastructure gaps.
+
+  problem_statement: |
+    Three separate P0 phases (phase-70, phase-48, phase-51-alt) address foundational
+    infrastructure but have overlapping concerns and unclear sequencing:
+    
+    1. **Implementation ↔ Specification Alignment (phase-70)**
+       - 25 orchestrators wired but not implemented
+       - 620 stub tests creating false confidence
+       - 25+ STUB code blocks in production paths
+       - Wiring.yaml accuracy unknown
+    
+    2. **Registry Isolation (phase-48)**
+       - No multi-tenant support
+       - Git-backed registry lacks isolation
+       - Cross-workspace contamination risk
+       - 0% implementation (no code exists)
+    
+    3. **Secrets Management (phase-51-alt)**
+       - Environment variables unvalidated
+       - No encryption layer
+       - Audit trail incomplete
+       - 33% implementation (only audit_trail.py)
+    
+    **Root Cause:** These are tightly coupled infrastructure concerns that should be
+    built together in a single, coherent foundation phase.
+
+  expected_outcomes:
+    - "100% wiring.yaml ↔ implementation alignment"
+    - "0 stub tests (620 deleted or implemented)"
+    - "0 STUB code in production paths"
+    - "GitBackedRegistry with tenant isolation operational"
+    - "SecretsManager with encryption operational"
+    - "CI/CD gate: --strict mode blocks on P0/P1 gaps"
+    - "Security audit passed: encryption, isolation, validation"
+    - "Production deployment checklist: 100% complete"
+
+roi_analysis:
+  cost: "4-6 weeks (S1: 2 weeks, S2: 1 week, S3: 1 week, S4: 1 week)"
+  impact: |
+    Immediate (S1):
+    - Eliminate 620 false-positive tests
+    - Restore test suite confidence
+    - Implement 2 critical domain orchestrators
+    - 100% wiring.yaml accuracy
+    
+    Immediate (S2):
+    - Multi-tenant registry support
+    - Workspace isolation enforcement
+    - Registry health monitoring
+    
+    Immediate (S3):
+    - Encrypted secrets management
+    - Environment validation
+    - Security audit trail
+    
+    Long-term (S4):
+    - Production-ready infrastructure
+    - Continuous alignment monitoring
+    - Zero technical debt in foundation
+    - Clear deployment path
+    
+  risk_mitigation: |
+    - Incremental: Each stage validates before next
+    - TDD: All 320 tests written before implementation
+    - Rollback: Git checkpoints after each stage
+    - Validation: Stage 4 is dedicated integration testing
+    - Reversible: Can pause after any stage if issues arise
+
+dependencies:
+  depends_on: []
+  blocks:
+    - "phase-77"
+    - "phase-78"
+    - "Production deployment"
+  enables:
+    - "Intelligence & Learning Core (phase-77)"
+    - "Enterprise Orchestrator Maturity (phase-78)"
+    - "Production-ready CORTEX deployment"
+
+stages:
+  - stage_id: "S1"
+    name: "Implementation ↔ Specification Alignment"
+    description: |
+      Achieve 100% alignment between wiring.yaml specification and actual orchestrator
+      implementations. Delete 620 stub tests, implement missing orchestrators, remove
+      STUB code, and establish CI/CD gates.
+    estimated_duration: "2 weeks"
+    test_target: 120
+    coverage_target: 90
+    status: "not_started"
+    
+    tasks:
+      - task_id: "S1.T1"
+        name: "Gap Triage & Decision Framework"
+        description: |
+          Analyze all 25 wiring gaps and categorize:
+          - IMPLEMENT (2 domain orchestrators: RefactoringOrchestrator, PlanningOrchestrator)
+          - REMOVE (23 support orchestrators: defer or deprecate)
+          - DOCUMENT (planned vs. implemented distinction)
+        estimated_duration: "2 days"
+        
+      - task_id: "S1.T2"
+        name: "Stub Test Elimination"
+        description: |
+          Delete or implement 620 stub tests using "assert True":
+          - Identify all test files with "assert True" patterns
+          - Determine if test is needed (implement) or not (delete)
+          - Run test suite after each deletion batch
+          - Verify 0 stub tests remain
+        estimated_duration: "3 days"
+        
+      - task_id: "S1.T3"
+        name: "Domain Orchestrator Implementation"
+        description: |
+          Implement 2 critical domain orchestrators:
+          - RefactoringOrchestrator (TDD: tests first)
+          - PlanningOrchestrator (TDD: tests first)
+          - Wire into MCP gateway
+          - Integration tests with existing orchestrators
+        estimated_duration: "4 days"
+        
+      - task_id: "S1.T4"
+        name: "STUB Code Remediation"
+        description: |
+          Remove all 25+ NotImplementedError/TODO markers:
+          - Scan codebase for STUB patterns
+          - Implement real logic or delete dead code
+          - Verify no STUB in production paths
+        estimated_duration: "2 days"
+        
+      - task_id: "S1.T5"
+        name: "Wiring.yaml Accuracy Validation"
+        description: |
+          Update wiring.yaml to reflect implementation truth:
+          - Mark removed orchestrators as "planned" or delete
+          - Verify all "wired" orchestrators have implementations
+          - Generate alignment report
+          - 100% accuracy validation
+        estimated_duration: "2 days"
+        
+      - task_id: "S1.T6"
+        name: "CI/CD Gate Implementation"
+        description: |
+          Create automated alignment gate:
+          - --strict mode blocks deployment on P0/P1 gaps
+          - Pre-commit hook validates wiring alignment
+          - Dashboard shows real-time alignment status
+        estimated_duration: "1 day"
+    
+    validation:
+      - "0 stub tests (grep -r 'assert True' returns nothing)"
+      - "2 domain orchestrators fully implemented and tested"
+      - "0 STUB code (grep -r 'NotImplementedError\\|TODO' in production paths)"
+      - "wiring.yaml 100% accurate (validation script passes)"
+      - "CI/CD gate active and blocking on violations"
+      - "120 tests passing, 90% coverage"
+
+  - stage_id: "S2"
+    name: "Registry Isolation & Multi-Tenant Foundation"
+    description: |
+      Implement GitBackedRegistry with tenant isolation, multi-workspace support,
+      and health monitoring. Ensure zero cross-tenant contamination.
+    estimated_duration: "1 week"
+    test_target: 80
+    coverage_target: 90
+    status: "not_started"
+    
+    tasks:
+      - task_id: "S2.T1"
+        name: "Tenant Isolation Architecture"
+        description: |
+          Design and implement tenant isolation layer:
+          - TenantContext with workspace_id, user_id, permissions
+          - Registry path isolation (separate directories per tenant)
+          - Access control validation
+          - Cross-tenant read/write prevention
+        estimated_duration: "2 days"
+        
+      - task_id: "S2.T2"
+        name: "GitBackedRegistry Enhancement"
+        description: |
+          Enhance existing registry with isolation:
+          - Tenant-aware CRUD operations
+          - Isolated git branches per tenant (optional)
+          - Commit isolation (tenant metadata in commits)
+          - Conflict resolution strategies
+        estimated_duration: "2 days"
+        
+      - task_id: "S2.T3"
+        name: "Multi-Workspace Support"
+        description: |
+          Enable multiple workspaces per tenant:
+          - Workspace registry (workspace_id → path mapping)
+          - Workspace switching API
+          - Workspace-scoped phase management
+          - Workspace health checks
+        estimated_duration: "1 day"
+        
+      - task_id: "S2.T4"
+        name: "Registry Health Monitoring"
+        description: |
+          Add health check endpoints:
+          - /health/registry (git status, file integrity)
+          - /health/tenants (active tenants, isolation status)
+          - /health/workspaces (workspace count, paths)
+          - Prometheus metrics integration
+        estimated_duration: "1 day"
+        
+      - task_id: "S2.T5"
+        name: "Integration & Testing"
+        description: |
+          End-to-end validation:
+          - Multi-tenant phase creation
+          - Cross-tenant isolation tests
+          - Performance benchmarks (10+ tenants)
+          - Rollback scenarios
+        estimated_duration: "1 day"
+    
+    validation:
+      - "TenantContext implemented and enforced"
+      - "GitBackedRegistry tenant-aware"
+      - "Cross-tenant isolation verified (negative tests pass)"
+      - "Multi-workspace support operational"
+      - "Health endpoints returning 200 OK"
+      - "80 tests passing, 90% coverage"
+
+  - stage_id: "S3"
+    name: "Secrets Management & Audit Trail Hardening"
+    description: |
+      Implement SecretsManager with encryption, environment validation, and
+      audit trail integration. Ensure production-grade security.
+    estimated_duration: "1 week"
+    test_target: 70
+    coverage_target: 90
+    status: "not_started"
+    
+    tasks:
+      - task_id: "S3.T1"
+        name: "Encryption Layer"
+        description: |
+          Implement secrets encryption:
+          - AES-256-GCM encryption for secrets at rest
+          - Key derivation from environment (CORTEX_MASTER_KEY)
+          - Encrypted storage format (JSON + encrypted values)
+          - Key rotation support
+        estimated_duration: "2 days"
+        
+      - task_id: "S3.T2"
+        name: "SecretsManager Implementation"
+        description: |
+          Core secrets management API:
+          - set_secret(key, value) → encrypted storage
+          - get_secret(key) → decrypted value
+          - delete_secret(key) → secure deletion
+          - list_secrets() → keys only (no values)
+          - Environment variable fallback
+        estimated_duration: "2 days"
+        
+      - task_id: "S3.T3"
+        name: "Environment Validation"
+        description: |
+          Validate environment variables:
+          - Required secrets check (CORTEX_MASTER_KEY, etc.)
+          - Type validation (URL, port, boolean)
+          - Range validation (numeric values)
+          - Pre-flight check in MCP server startup
+        estimated_duration: "1 day"
+        
+      - task_id: "S3.T4"
+        name: "Audit Trail Integration"
+        description: |
+          Enhance existing audit_trail.py:
+          - Secret access logging (who, when, which secret)
+          - Encryption/decryption events
+          - Failed access attempts
+          - Prometheus metrics (secret_access_total)
+        estimated_duration: "1 day"
+        
+      - task_id: "S3.T5"
+        name: "Security Gate in EnforcementOrchestrator"
+        description: |
+          Add 9th enforcement agent:
+          - SecretsIntegrityAgent
+          - Blocks operations with unencrypted secrets
+          - Validates CORTEX_MASTER_KEY presence
+          - Pre-execution gate for sensitive operations
+        estimated_duration: "1 day"
+    
+    validation:
+      - "AES-256-GCM encryption operational"
+      - "SecretsManager API complete and tested"
+      - "Environment validation passing"
+      - "Audit trail capturing secret access"
+      - "9th enforcement agent active"
+      - "70 tests passing, 90% coverage"
+      - "Security audit passed (no plaintext secrets)"
+
+  - stage_id: "S4"
+    name: "Integration & Production Validation"
+    description: |
+      End-to-end integration testing, performance benchmarks, security audit,
+      and production deployment checklist completion.
+    estimated_duration: "1 week"
+    test_target: 50
+    coverage_target: 90
+    status: "not_started"
+    
+    tasks:
+      - task_id: "S4.T1"
+        name: "End-to-End Integration Tests"
+        description: |
+          Validate all components working together:
+          - Aligned wiring → tenant-isolated registry → encrypted secrets
+          - Multi-tenant phase creation with secrets
+          - Cross-component data flow
+          - Error handling and rollback
+        estimated_duration: "2 days"
+        
+      - task_id: "S4.T2"
+        name: "Performance Benchmarks"
+        description: |
+          Measure production readiness:
+          - Registry operations: <100ms (CRUD)
+          - Secrets encryption/decryption: <10ms
+          - Multi-tenant load: 50+ concurrent tenants
+          - Memory footprint: <500MB per tenant
+        estimated_duration: "1 day"
+        
+      - task_id: "S4.T3"
+        name: "Security Audit"
+        description: |
+          Comprehensive security validation:
+          - Penetration testing (cross-tenant access attempts)
+          - Secrets leakage scan (logs, errors, responses)
+          - Encryption strength validation
+          - OWASP Top 10 compliance check
+        estimated_duration: "2 days"
+        
+      - task_id: "S4.T4"
+        name: "Production Deployment Checklist"
+        description: |
+          Complete pre-deployment validation:
+          - All 320 tests passing
+          - 90% coverage achieved
+          - Documentation complete
+          - Monitoring dashboards live
+          - Rollback plan documented
+          - Incident response playbook ready
+        estimated_duration: "1 day"
+        
+      - task_id: "S4.T5"
+        name: "Staging Environment Validation"
+        description: |
+          Deploy to staging and validate:
+          - 24-hour soak test
+          - Load testing (100+ concurrent users)
+          - Failover scenarios
+          - Production parity verification
+        estimated_duration: "1 day"
+    
+    validation:
+      - "All 320 tests passing (S1+S2+S3+S4)"
+      - "90% coverage across all stages"
+      - "Performance benchmarks met"
+      - "Security audit passed (0 critical issues)"
+      - "Production deployment checklist 100% complete"
+      - "Staging validation successful"
+      - "Production deployment approved"
+
+acceptance_criteria:
+  - id: "AC-PHASE76-001"
+    description: "All 320 tests passing with 90% coverage"
+    validation: "pytest tests/ --cov=cortex --cov-report=term-missing"
+    
+  - id: "AC-PHASE76-002"
+    description: "0 stub tests in codebase"
+    validation: "grep -r 'assert True' tests/ returns empty"
+    
+  - id: "AC-PHASE76-003"
+    description: "0 STUB code in production paths"
+    validation: "grep -r 'NotImplementedError\\|TODO' cortex/ (excluding tests/) returns empty"
+    
+  - id: "AC-PHASE76-004"
+    description: "wiring.yaml 100% accurate"
+    validation: "python scripts/validate_wiring_alignment.py --strict"
+    
+  - id: "AC-PHASE76-005"
+    description: "GitBackedRegistry with tenant isolation operational"
+    validation: "Integration tests pass: test_multi_tenant_isolation.py"
+    
+  - id: "AC-PHASE76-006"
+    description: "SecretsManager with encryption operational"
+    validation: "Security tests pass: test_secrets_encryption.py"
+    
+  - id: "AC-PHASE76-007"
+    description: "Production deployment checklist 100% complete"
+    validation: "All checklist items marked ✅ in deployment/production_checklist.md"
+
+git_strategy:
+  branching: "feature/phase-76-production-foundation"
+  commit_frequency: "After each task completion"
+  pr_strategy: "Stage-by-stage PRs (S1 → S2 → S3 → S4)"
+  review_requirements: "2 approvals for production-critical changes"
+
+rollback_plan:
+  triggers:
+    - "Any stage validation fails"
+    - "Security audit reveals critical issue"
+    - "Performance benchmarks not met"
+  
+  procedure: |
+    1. Stop current stage immediately
+    2. Git revert to last stable commit
+    3. Document failure reason
+    4. Create remediation plan
+    5. Re-attempt after fixes
+  
+  safe_points:
+    - "After S1 completion (alignment done, can continue without S2-S4)"
+    - "After S2 completion (registry isolation done, can continue without S3-S4)"
+    - "After S3 completion (secrets management done, can continue without S4)"
+
+monitoring:
+  metrics:
+    - "wiring_alignment_score (0.0-1.0)"
+    - "stub_test_count (target: 0)"
+    - "registry_tenant_count"
+    - "secrets_encryption_rate (target: 1.0)"
+    - "production_readiness_score (0-100)"
+  
+  dashboards:
+    - "Grafana: Phase 76 Progress Dashboard"
+    - "Prometheus: Infrastructure Health Metrics"
+  
+  alerts:
+    - "stub_test_count > 0 → Critical"
+    - "wiring_alignment_score < 1.0 → Warning"
+    - "secrets_encryption_rate < 1.0 → Critical"
+
+supersedes:
+  - phase_id: "phase-70"
+    reason: "S1 replaces implementation ↔ specification alignment"
+    
+  - phase_id: "phase-48"
+    reason: "S2 replaces registry isolation & multi-tenant"
+    
+  - phase_id: "phase-51-alt"
+    reason: "S3 replaces secrets management & audit hardening"
+
+notes: |
+  This mega-phase consolidates three P0 blockers into a cohesive foundation build.
+  Each stage builds on the previous, creating a production-ready infrastructure layer.
+  
+  **Critical Success Factor:** Complete S1 first (alignment) before S2-S3, as alignment
+  affects all subsequent work.
+  
+  **Timeline Optimization:** Original 21+ weeks → 4-6 weeks through consolidation.
+  
+  **Risk Mitigation:** Stage-by-stage validation with safe rollback points after each stage.
