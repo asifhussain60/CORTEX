@@ -33,6 +33,8 @@ Just as your brain has specialized regions that work together to process thought
 
 Unlike simple reflex systems that just respond to commands, CORTEX orchestrators exhibit **higher-order cognitive functions**—understanding context, reasoning about problems, and making intelligent decisions.
 
+**NEW - Phase 71 Learning Integration:** Every orchestrator now automatically captures operational patterns through dual-layer interception (protocol hooks + MCP gateway). This enables CORTEX to learn from each operation and continuously improve recommendations. Learning happens silently at <10ms overhead per operation.
+
 ---
 
 ## Orchestrator Categories

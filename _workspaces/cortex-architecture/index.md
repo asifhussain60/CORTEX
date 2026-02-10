@@ -27,7 +27,7 @@ For **executive leadership**, CORTEX represents a cognitive multiplier for devel
 
 ## CORTEX Brain Architecture
 
-**Think of CORTEX as an AI Brain with Three Main Systems:**
+**Think of CORTEX as an AI Brain with Four Main Systems:**
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -81,23 +81,28 @@ For **executive leadership**, CORTEX represents a cognitive multiplier for devel
 │                                                                              │
 │           🧠 23 Specialized Neural Networks (Brain Regions) 🧠               │
 └──────────────────────────────────────────────────────────────────────────────┘
-                          │                 │
-          ┌───────────────┘                 └───────────────┐
-          │                                                 │
-          ▼                                                 ▼
-┌─────────────────────────────┐           ┌─────────────────────────────┐
-│      👁️ LENS SENSORY         │           │      🧠 MEMORY CENTER        │
-│    (Visual Cortex for Code) │           │     (Knowledge Storage)      │
-│  ┌──────────┐ ┌──────────┐ │           │  ┌──────────┐ ┌──────────┐ │
-│  │   Git    │ │   Code   │ │           │  │Knowledge │ │ Business │ │
-│  │  Vision  │ │ Analysis │ │           │  │   Bank   │ │  Logic   │ │
-│  └──────────┘ └──────────┘ │           │  └──────────┘ └──────────┘ │
-│  ┌──────────┐ ┌──────────┐ │           │  ┌──────────┐ ┌──────────┐ │
-│  │ Comment  │ │  Pattern │ │           │  │ Rules &  │ │ Domain   │ │
-│  │ Reading  │ │Detection │ │           │  │Governance│ │  Wisdom  │ │
-│  └──────────┘ └──────────┘ │           │  └──────────┘ └──────────┘ │
-└─────────────────────────────┘           └─────────────────────────────┘
+              │                           │                           │
+              ▼                           ▼                           ▼
+┌─────────────────────────┐  ┌──────────────────────┐  ┌─────────────────────┐
+│  👁️ LENS SENSORY       │  │  🧠 LEARNING CORTEX  │  │  💾 MEMORY CENTER    │
+│ (Visual Cortex for Code)│  │  (Adaptive Learning) │  │  (Knowledge Storage) │
+│  ┌──────────┐ ┌──────┐ │  │ ┌────────────────┐   │  │ ┌────────────────┐   │
+│  │   Git    │ │Code  │ │  │ │ Learning Loop  │   │  │ │ Knowledge      │   │
+│  │  Vision  │ │Analy │ │  │ │ (Pattern Learn)│   │  │ │ Repository     │   │
+│  └──────────┘ └──────┘ │  │ └────────────────┘   │  │ └────────────────┘   │
+│  ┌──────────┐ ┌──────┐ │  │ ┌────────────────┐   │  │ ┌────────────────┐   │
+│  │ Comment  │ │Patter│ │  │ │ Test Quality   │   │  │ │ Business Logic │   │
+│  │ Reading  │ │Detec │ │  │ │ Measurement    │   │  │ │ & Domain      │   │
+│  └──────────┘ └──────┘ │  │ └────────────────┘   │  │ │ Wisdom        │   │
+│                        │  │ ┌────────────────┐   │  │ └────────────────┘   │
+│                        │  │ │ Validation &   │   │  │ ┌────────────────┐   │
+│                        │  │ │ Metrics        │   │  │ │ Governance &   │   │
+│                        │  │ └────────────────┘   │  │ │ Rules          │   │
+│                        │  └──────────────────────┘  │ └────────────────┘   │
+└─────────────────────────┘                          └─────────────────────────┘
 ```
+
+**NEW - Phase 71 Learning Cortex:** Unified learning infrastructure that captures, validates, and leverages patterns from every orchestrator operation. Dual-layer interception (protocol hooks + MCP gateway) ensures zero-friction pattern capture at <10ms overhead.
 
 ---
 
@@ -164,6 +169,15 @@ This documentation includes comprehensive **d3.js-compatible** technical visuali
 | [Caching Strategy](lens/caching.md) | Performance optimization | Operations |
 | [LENS Governance](lens/governance.md) | Governance integration | Security |
 
+### 🧠 Learning System Documentation (NEW - Phase 71)
+
+| Document | Description | Primary Audience |
+|----------|-------------|------------------|
+| [Learning Overview](learning/overview.md) | Universal learning loop introduction | All Technical |
+| [Learning Architecture](infrastructure/learning-architecture.md) | Technical architecture & deployment | Architects, SRE |
+| [Pattern Capture](learning/overview.md#core-components) | How patterns are captured & stored | Developers |
+| [Validation & Governance](learning/overview.md#governance--validation) | Learning system integrity assurance | Security, Architects |
+
 ### 🔧 Toolkit Documentation
 
 | Document | Description | Primary Audience |
@@ -180,6 +194,7 @@ This documentation includes comprehensive **d3.js-compatible** technical visuali
 |----------|-------------|------------------|
 | [Infrastructure Overview](infrastructure/overview.md) | Infrastructure summary | Operations |
 | [Technology Stack](infrastructure/tech-stack.md) | Technology choices | Architects |
+| [Learning Architecture](infrastructure/learning-architecture.md) | Learning system infrastructure | SRE, Architects |
 | [Deployment Models](infrastructure/deployment.md) | Deployment options | Operations |
 | [Scalability](infrastructure/scalability.md) | Scaling strategies | SRE |
 | [Observability](infrastructure/observability.md) | Monitoring and metrics | SRE |
@@ -232,6 +247,7 @@ This documentation includes comprehensive **d3.js-compatible** technical visuali
 |--------|---------|---------------|
 | **🎯 Cognitive Center** | The thinking brain—processes requests and coordinates responses | [Master Orchestrator](orchestration/master-orchestrator.md), [Orchestration Overview](orchestration/overview.md) |
 | **👁️ Sensory System** | How CORTEX sees and understands code | [LENS Overview](lens/overview.md), [LENS Architecture](lens/architecture.md) |
+| **🧠 Learning System (NEW)** | How CORTEX learns and improves from experience | [Learning Overview](learning/overview.md), [Learning Architecture](infrastructure/learning-architecture.md) |
 | **🔗 Neural Interface** | How external tools connect to the brain | [MCP Overview](mcp/overview.md), [MCP Protocol](mcp/protocol.md) |
 | **🧠 Cognitive Tools** | The brain's capabilities exposed as tools | [Toolkit Overview](toolkit/overview.md), [Tools Catalog](mcp/tools-catalog.md) |
 | **🏗️ Life Support** | Infrastructure that keeps the brain healthy | [Infrastructure Overview](infrastructure/overview.md), [Scalability](infrastructure/scalability.md) |
