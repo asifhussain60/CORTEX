@@ -10,7 +10,7 @@ active_phases:
   name: Production Foundation Trilogy
   file: phases/active/phase-76-production-foundation-trilogy.yaml
   created: '2026-02-10'
-  status: next_activation
+  status: in_progress
   priority: P0
   execution_order: 1
   roi_score: 0.97
@@ -21,7 +21,7 @@ active_phases:
   stages_complete: 0/4
   critical_path: true
   production_blocker: true
-  description: '🔴 NEXT ACTIVATION (P0 - CRITICAL): Consolidated production foundation
+  description: '� IN PROGRESS (P0 - CRITICAL): Consolidated production foundation
     (phase-70 + phase-48 + phase-51-alt). S1: Implementation ↔ Specification Alignment
     (2 weeks, 120 tests) — Delete 620 stub tests, implement 2 domain orchestrators,
     wiring.yaml 100% accuracy. S2: Registry Isolation & Multi-Tenant (1 week, 80 tests)
