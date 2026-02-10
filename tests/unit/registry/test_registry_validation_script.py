@@ -128,6 +128,7 @@ class TestStatisticsDriftDetection:
         
         if abs(calculated_progress - phase_data["claimed_progress"]) > 0.01:
             # Drift detected
+            pass
         else:
             assert False
 

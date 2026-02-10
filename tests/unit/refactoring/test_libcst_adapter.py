@@ -105,8 +105,10 @@ def process():
         # Code should handle both cases
         if not has_libcst:
             # System should degrade gracefully
+            pass
         else:
             # LibCST available, should use it
+            pass
 
     def test_libcst_vs_rope_choice(self) -> None:
         """AC-PHASE43-029-2: Choose LibCST for formatting, Rope for cross-file."""
@@ -158,6 +160,7 @@ def process():
             # The important thing is it doesn't crash
         except Exception:
             # Expected - graceful failure
+            pass
 
     def test_rope_adapter_available(self) -> None:
         """AC-PHASE43-029-3: Rope adapter available for fallback."""

@@ -731,6 +731,7 @@ class TestIntegrationPatterns:
         unhealthy = configured_checker.get_unhealthy_dependencies()
         if unhealthy:
             # Would trigger REDUCED degradation
+            pass
     
     def test_detects_cascading_failures(self, health_checker: HealthChecker) -> None:
         """Should detect cascading failures across dependencies."""

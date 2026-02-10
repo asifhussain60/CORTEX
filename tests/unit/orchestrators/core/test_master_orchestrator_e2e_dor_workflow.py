@@ -781,6 +781,7 @@ class TestErrorHandlingAndEdgeCases:
         # Even if gate is None, orchestrator should still function
         if orchestrator._dor_gate is None:
             # This is acceptable - gate is optional enhancement
+            pass
         else:
             # Gate is available, which is also acceptable
             assert orchestrator._dor_gate is not None
