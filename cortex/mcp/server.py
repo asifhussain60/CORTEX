@@ -545,6 +545,21 @@ class MCPServer:
             # Cache response
             self._response_cache[cache_key] = response
             
+            # Phase 71 S3: Learning Gateway Interception (defense-in-depth)
+            try:
+                from cortex.mcp.learning_gateway_interceptor import get_mcp_learning_interceptor
+                interceptor = get_mcp_learning_interceptor()
+                interceptor.after_execution(
+                    tool_name=tool_name,
+                    parameters=params,
+                    result=result,
+                    execution_time_ms=execution_time_ms,
+                    request_id=request_id,
+                )
+            except Exception as e:
+                # Non-blocking - don't let learning failures affect tool execution
+                self.logger.warning(f"MCP learning interception failed: {e}")
+            
             # Audit execution
             if self._audit_logger is not None:
                 try:
