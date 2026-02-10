@@ -15,6 +15,9 @@ from cortex.registry.tenant_context import (
     require_permission,
     require_admin,
 )
+from cortex.registry.tenant_aware_git_backed_registry import (
+    TenantAwareGitBackedRegistry,
+)
 
 __all__ = [
     "CortexMasterDashboardGenerator",
@@ -23,4 +26,5 @@ __all__ = [
     "validate_tenant_context",
     "require_permission",
     "require_admin",
+    "TenantAwareGitBackedRegistry",
 ]
