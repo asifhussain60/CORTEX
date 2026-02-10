@@ -100,6 +100,14 @@ class DigestSessionOrchestrator:
         else:
             # Default to docs/meta/enhancement-history.yaml
             self.history_path = Path("docs/meta/enhancement-history.yaml")
+        
+        # Cache enhancement history (avoid re-reading 653KB file on every call)
+        self._history_cache: Optional[Dict[str, Any]] = None
+        self._history_cache_time: Optional[float] = None
+        self._cache_ttl_seconds = 60  # Cache for 60 seconds
+        
+        # Bulk operation flag (skip history writes for performance)
+        self._skip_history_write = False
     
     def detect_chat_file(self, content: str) -> DigestResult:
         """
@@ -272,7 +280,7 @@ class DigestSessionOrchestrator:
             DigestResult indicating success/failure
         """
         try:
-            # Read current history
+            # Read current history (cached)
             history = self.read_enhancement_history()
             
             # Ensure enhancements list exists
@@ -289,6 +297,10 @@ class DigestSessionOrchestrator:
             self.history_path.parent.mkdir(parents=True, exist_ok=True)
             with open(self.history_path, 'w', encoding='utf-8') as f:
                 yaml.dump(history, f, default_flow_style=False, sort_keys=False)
+            
+            # Invalidate cache after write
+            self._history_cache = None
+            self._history_cache_time = None
             
             return DigestResult(success=True)
             

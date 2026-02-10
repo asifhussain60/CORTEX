@@ -172,12 +172,30 @@ class WorkflowOrchestrator:
             timestamp=datetime.now(),
         )
         
+        # Visual feedback initialization
+        from cortex.orchestrators.response.ascii_progress_bar import ASCIIProgressBar
+        progress_bar = ASCIIProgressBar() if self._show_progress else None
+        total_stages = 5
+        
+        if progress_bar:
+            print(f"\n🔄 Workflow: {context.operation} ({total_stages} stages)")
+            print("━" * 60)
+        
         try:
             # ================================================================
             # Stage 1: Comprehension
             # ================================================================
+            if progress_bar:
+                self._show_stage_progress(progress_bar, 1, total_stages, "Comprehension", 0.0)
+            
             stage1_result = self._execute_stage_1(context)
             result.stage_results.append(stage1_result)
+            
+            if progress_bar:
+                self._show_stage_progress(progress_bar, 1, total_stages, "Comprehension", 1.0)
+            
+            if self.on_stage_progress:
+                self.on_stage_progress(1, "Comprehension", 1.0)
             
             if not stage1_result.success:
                 result.success = False

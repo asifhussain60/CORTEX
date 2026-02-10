@@ -179,12 +179,18 @@ class IntelligentBatchProcessor:
             "failed": 0,
             "total_time": 0.0,
         }
+        
+        # Visual feedback support
+        self._show_progress = True
+        self.on_level_progress: Optional[callable] = None
 
     def process_batch(
         self,
         batch: List[BatchedRequest],
     ) -> BatchResult:
         """Process a batch of requests"""
+        from cortex.orchestrators.response.ascii_progress_bar import ASCIIProgressBar
+        
         batch_id = hashlib.md5(
             str(time.time()).encode()
         ).hexdigest()[:8]
@@ -196,13 +202,38 @@ class IntelligentBatchProcessor:
 
         # Group by dependency level (simple DAG analysis)
         levels = self._group_by_dependency_level(batch)
+        total_levels = len(levels)
+        
+        # Progress bar
+        progress_bar = ASCIIProgressBar() if self._show_progress else None
+        
+        if progress_bar and total_levels > 0:
+            print(f"\n🔄 Batch Processing: {len(batch)} requests in {total_levels} dependency levels")
+            print("━" * 60)
 
-        for level_requests in levels:
+        for level_idx, level_requests in enumerate(levels, 1):
+            # Show level progress
+            if progress_bar:
+                progress = level_idx / total_levels
+                bar = progress_bar.generate_bar(progress)
+                percentage = int(progress * 100)
+                print(f"\r{bar} {percentage:3d}% | Level {level_idx}/{total_levels} ({len(level_requests)} requests)", end="", flush=True)
+            
+            # Call progress callback if registered
+            if self.on_level_progress:
+                self.on_level_progress(level_idx, total_levels, progress)
+            
             # Execute requests at this level in parallel
             level_results = self._execute_level(level_requests)
             results.update(level_results)
             success_count += sum(1 for r in level_results.values() if r["success"])
             failure_count += sum(1 for r in level_results.values() if not r["success"])
+        
+        if progress_bar:
+            print()  # New line
+            elapsed = time.time() - start_time
+            print(f"✅ Batch complete: {success_count} succeeded, {failure_count} failed ({elapsed:.2f}s)")
+            print("━" * 60)
 
         execution_time = time.time() - start_time
         throughput = len(batch) / execution_time if execution_time > 0 else 0

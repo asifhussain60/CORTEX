@@ -397,6 +397,8 @@ class BulkIngestionPipeline:
 
     Manages adapters, filters, transformers, and coordinates batch processing
     with transaction support.
+    
+    Includes visual feedback via VisualFeedbackMixin integration.
     """
 
     def __init__(self, batch_size: int = 1000) -> None:
@@ -413,6 +415,10 @@ class BulkIngestionPipeline:
         self.batch_counter = 0
         self.stats = BulkIngestionStats()
         self.transactions: Dict[str, List[IngestionEntry]] = {}
+        
+        # Visual feedback support
+        self._show_progress = True
+        self.on_progress: Optional[callable] = None
 
     def add_adapter(self, adapter: AdapterComponent) -> None:
         """Add adapter to pipeline.
@@ -448,23 +454,56 @@ class BulkIngestionPipeline:
             Ingestion statistics.
         """
         import time
+        from cortex.orchestrators.response.ascii_progress_bar import ASCIIProgressBar
 
         start_time = time.time()
         self.stats = BulkIngestionStats()
+        progress_bar = ASCIIProgressBar() if self._show_progress else None
 
         try:
             # Adapt data
             entries = self._adapt_data(raw_data)
             self.stats.total_entries = len(entries)
 
+            # Calculate total batches
+            total_batches = (len(entries) + self.batch_size - 1) // self.batch_size
+            
+            # Show progress header
+            if progress_bar and total_batches > 0:
+                print(f"\n🔄 Bulk Ingestion: {len(entries)} entries in {total_batches} batches")
+                print("━" * 60)
+
             # Process in batches
+            batch_num = 0
             for batch_start in range(0, len(entries), self.batch_size):
                 batch_end = min(batch_start + self.batch_size, len(entries))
                 batch_entries = entries[batch_start:batch_end]
+                batch_num += 1
+
+                # Show batch progress
+                if progress_bar:
+                    progress = batch_num / total_batches
+                    bar = progress_bar.generate_bar(progress)
+                    percentage = int(progress * 100)
+                    print(f"\r{bar} {percentage:3d}% | Batch {batch_num}/{total_batches}", end="", flush=True)
+                
+                # Call progress callback if registered
+                if self.on_progress:
+                    self.on_progress(batch_num, total_batches, progress)
 
                 self._process_batch(batch_entries)
+            
+            # Complete progress
+            if progress_bar:
+                print()  # New line
+                elapsed = time.time() - start_time
+                print(f"✅ Complete ({self._format_time(elapsed)})")
+                print("━" * 60)
 
         except Exception as e:
+            if progress_bar:
+                print()  # New line
+                print(f"❌ Failed: {e}")
             logger.error(f"Ingestion failed: {e}")
             raise
 
@@ -473,6 +512,17 @@ class BulkIngestionPipeline:
             self.stats.duration_seconds = elapsed
 
         return self.stats
+    
+    def _format_time(self, seconds: float) -> str:
+        """Format seconds into human-readable time."""
+        if seconds < 1:
+            return "<1s"
+        elif seconds < 60:
+            return f"{int(seconds)}s"
+        else:
+            minutes = int(seconds / 60)
+            secs = int(seconds % 60)
+            return f"{minutes}m {secs}s"
 
     def _adapt_data(self, raw_data: Any) -> List[IngestionEntry]:
         """Adapt raw data using adapters.
