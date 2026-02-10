@@ -175,6 +175,40 @@ class GraphStorage:
             "properties": json.loads(row[3]) if row[3] else {}
         }
     
+    def find_node_by_name(self, name: str) -> Optional[Dict[str, Any]]:
+        """
+        Find node by exact name match.
+        
+        Args:
+            name: Node name to search for
+        
+        Returns:
+            Node dictionary or None if not found
+        """
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute(
+            """
+            SELECT id, node_type, name, properties
+            FROM nodes
+            WHERE name = ?
+            LIMIT 1
+            """,
+            (name,)
+        )
+        
+        row = cursor.fetchone()
+        if row is None:
+            return None
+        
+        return {
+            "id": row[0],
+            "node_type": row[1],
+            "name": row[2],
+            "properties": json.loads(row[3]) if row[3] else {}
+        }
+    
     def get_edge(self, edge_id: int) -> Optional[Dict[str, Any]]:
         """
         Retrieve edge by ID.
@@ -264,6 +298,35 @@ class GraphStorage:
             logger.debug(f"Deleted node: id={node_id}")
         
         return deleted
+    
+    def delete_edges_for_node(self, node_id: int) -> int:
+        """
+        Delete all edges connected to a node (both incoming and outgoing).
+        
+        Args:
+            node_id: Node ID
+        
+        Returns:
+            Number of edges deleted
+        """
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute(
+            """
+            DELETE FROM edges 
+            WHERE source_id = ? OR target_id = ?
+            """,
+            (node_id, node_id)
+        )
+        
+        conn.commit()
+        deleted_count = cursor.rowcount
+        
+        if deleted_count > 0:
+            logger.debug(f"Deleted {deleted_count} edges for node: id={node_id}")
+        
+        return deleted_count
     
     def query_neighbors(
         self,

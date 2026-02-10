@@ -63,10 +63,7 @@ class KnowledgeGraphQueryTool(Tool):
         Args:
             db_path: Path to knowledge graph database (defaults to .cortex/knowledge_graph.db)
         """
-        super().__init__(
-            name="cortex_knowledge_graph_query",
-            description="Query knowledge graph for code relationships and dependencies"
-        )
+        # Tool is an ABC - no need to call super().__init__()
         
         if db_path is None:
             db_path = Path(".cortex/knowledge_graph.db")
@@ -137,7 +134,6 @@ class KnowledgeGraphQueryTool(Tool):
         if self.storage is None:
             try:
                 self.storage = GraphStorage(self.db_path)
-                self.storage.connect()
                 self.query_engine = GraphQuery(self.storage)
                 logger.info(f"Knowledge graph loaded from {self.db_path}")
                 return True

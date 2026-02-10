@@ -127,7 +127,7 @@ class GraphBuilder:
         
         if existing_node:
             # Delete old edges
-            self.storage.delete_edges_for_node(existing_node.id)
+            self.storage.delete_edges_for_node(existing_node["id"])
             
         # Re-analyze file and add new edges
         # (This is a simplified version - real implementation would parse imports)
