@@ -5,6 +5,13 @@ Core provider interface and configuration
 
 from abc import ABC, abstractmethod
 from typing import Dict, Optional, Any, List
+from cortex.secrets.encryption import (
+    EncryptionManager,
+    EncryptedValue,
+    encrypt_value,
+    decrypt_value,
+    derive_key,
+)
 
 
 class ISecretsProvider(ABC):
