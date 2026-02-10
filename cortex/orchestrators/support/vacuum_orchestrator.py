@@ -107,6 +107,17 @@ class VacuumOrchestrator:
             "**/README.md",
         ]
         
+        # Phase/session marker patterns (ALWAYS delete/archive)
+        # Detects: .phase67-s1-complete, .phase67-S5-*, .session-*, etc.
+        self.phase_marker_patterns = [
+            r"^\.phase\d+-s\d+-complete$",      # .phase67-s1-complete
+            r"^\.phase\d+.*",                    # .phase67-*, .phase67-S5-*, etc.
+            r"^\.session.*",                     # .session-*, .session-phase-*, etc.
+            r"^.*-complete$",                    # Any *-complete file
+            r"^.*-checkpoint$",                  # Any *-checkpoint file
+            r"^.*-progress$",                    # Any *-progress file
+        ]
+        
         # Root-level file categorization for comprehensive cleanup
         self.root_file_rules = {
             # Development utilities that should be in scripts/utilities/
@@ -137,6 +148,12 @@ class VacuumOrchestrator:
                     "*.log",
                 ],
                 "destination": "logs/",
+                "action": "move",
+            },
+            # Phase/Session marker files (ARCHIVE to docs/archive)
+            "phase_markers": {
+                "patterns": [],  # Uses regex patterns from phase_marker_patterns
+                "destination": "docs/archive/phase-markers/",
                 "action": "move",
             },
             # Production-critical root files (KEEP)
@@ -256,6 +273,7 @@ class VacuumOrchestrator:
             utility_scripts = []
             test_files = []
             log_files = []
+            phase_markers = []  # NEW: Phase marker files
             production_files = []
             directories = []
             recommendations = []
@@ -265,7 +283,25 @@ class VacuumOrchestrator:
                 if item.is_file():
                     filename = item.name
                     
-                    # Check test files first (test_*.py pattern)
+                    # Check phase marker files FIRST (highest priority)
+                    is_phase_marker = False
+                    for pattern in self.phase_marker_patterns:
+                        if re.match(pattern, filename):
+                            is_phase_marker = True
+                            phase_markers.append(filename)
+                            recommendations.append({
+                                "file": filename,
+                                "action": "archive",
+                                "destination": self.root_file_rules["phase_markers"]["destination"],
+                                "reason": "Phase/session marker file - archive to docs/archive/phase-markers/",
+                                "priority": "critical",
+                            })
+                            break
+                    
+                    if is_phase_marker:
+                        continue  # Move to next item
+                    
+                    # Check test files (test_*.py pattern)
                     if filename.startswith("test_") and filename.endswith(".py"):
                         test_files.append(filename)
                         recommendations.append({
@@ -325,6 +361,7 @@ class VacuumOrchestrator:
                 "utility_scripts": utility_scripts,
                 "test_files": test_files,
                 "log_files": log_files,
+                "phase_markers": phase_markers,  # NEW: Phase marker files
                 "production_files": production_files,
                 "directories": directories,
                 "recommendations": recommendations,
@@ -332,6 +369,7 @@ class VacuumOrchestrator:
                     "utility_scripts_count": len(utility_scripts),
                     "test_files_count": len(test_files),
                     "log_files_count": len(log_files),
+                    "phase_markers_count": len(phase_markers),  # NEW
                     "production_files_count": len(production_files),
                     "directories_count": len(directories),
                     "total_recommendations": len(recommendations),
@@ -342,6 +380,96 @@ class VacuumOrchestrator:
             return {
                 "status": "error",
                 "error": str(e),
+            }
+    
+    def scan_phase_markers(self, root_path: str) -> Dict[str, Any]:
+        """
+        Enhanced scan: Detect phase/session marker files throughout repository.
+        
+        Scans all directories recursively for phase marker files:
+        - .phase67-s1-complete (phase completion markers)
+        - .session-* (session tracking files)
+        - *-complete, *-checkpoint, *-progress (operation markers)
+        
+        Args:
+            root_path: Root directory to scan
+            
+        Returns:
+            Dictionary with phase marker findings:
+                - phase_markers_found: List of marker files with paths
+                - total_markers: Count of marker files
+                - by_directory: Markers grouped by directory
+                - by_type: Markers grouped by type (phase, session, operation)
+                
+        Example:
+            >>> result = orchestrator.scan_phase_markers(".")
+            >>> print(result["phase_markers_found"])
+            [".phase67-s1-complete", ...]
+        """
+        try:
+            root = Path(root_path)
+            phase_markers = []
+            markers_by_directory = {}
+            markers_by_type = {
+                "phase": [],
+                "session": [],
+                "operation": [],
+            }
+            
+            # Scan ALL files recursively (including hidden files)
+            for file_path in root.rglob("*"):
+                if not file_path.is_file():
+                    continue
+                
+                relative_path = file_path.relative_to(root)
+                file_name = file_path.name
+                dir_name = str(relative_path.parent)
+                
+                # Check against all phase marker patterns
+                for pattern in self.phase_marker_patterns:
+                    if re.match(pattern, file_name):
+                        phase_markers.append({
+                            "file": file_name,
+                            "path": str(relative_path),
+                            "directory": dir_name,
+                            "size_bytes": file_path.stat().st_size,
+                            "modified": datetime.fromtimestamp(file_path.stat().st_mtime).isoformat(),
+                        })
+                        
+                        # Categorize by directory
+                        if dir_name not in markers_by_directory:
+                            markers_by_directory[dir_name] = []
+                        markers_by_directory[dir_name].append(file_name)
+                        
+                        # Categorize by type
+                        if file_name.startswith(".phase"):
+                            markers_by_type["phase"].append(file_name)
+                        elif file_name.startswith(".session"):
+                            markers_by_type["session"].append(file_name)
+                        else:
+                            markers_by_type["operation"].append(file_name)
+                        
+                        break  # Stop checking patterns once match found
+            
+            return {
+                "status": "success",
+                "phase_markers_found": phase_markers,
+                "total_markers": len(phase_markers),
+                "by_directory": markers_by_directory,
+                "by_type": markers_by_type,
+                "summary": {
+                    "phase_count": len(markers_by_type["phase"]),
+                    "session_count": len(markers_by_type["session"]),
+                    "operation_count": len(markers_by_type["operation"]),
+                },
+            }
+            
+        except Exception as e:
+            return {
+                "status": "error",
+                "error": str(e),
+                "phase_markers_found": [],
+                "total_markers": 0,
             }
     
     def _format_size(self, size_bytes: int) -> str:
@@ -446,16 +574,22 @@ class VacuumOrchestrator:
             file_path: Relative file path
             
         Returns:
-            Category name: "phases", "testing", "workspaces", "reports", or "other"
+            Category name: "phase-markers", "phases", "testing", "workspaces", "reports", or "other"
         """
-        file_name = Path(file_path).name.upper()
+        file_name = Path(file_path).name
+        file_name_upper = file_name.upper()
         path_lower = file_path.lower()
         
-        # Category: phases
-        if file_name.startswith("PHASE-") or \
-           "COMPLETION" in file_name or \
-           "SUMMARY" in file_name or \
-           "PROGRESS" in file_name:
+        # Category: phase markers (HIGHEST PRIORITY - .phase*, .session*)
+        for pattern in self.phase_marker_patterns:
+            if re.match(pattern, file_name):
+                return "phase-markers"
+        
+        # Category: phases (markdown reports)
+        if file_name_upper.startswith("PHASE-") or \
+           "COMPLETION" in file_name_upper or \
+           "SUMMARY" in file_name_upper or \
+           "PROGRESS" in file_name_upper:
             return "phases"
         
         # Category: testing

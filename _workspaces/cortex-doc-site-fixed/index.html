@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX Interactive Reference</title>
+    <!-- Link our CSS files -->
+    <link rel="stylesheet" href="assets/css/theme.css">
+    <link rel="stylesheet" href="assets/css/app.css">
+    <!-- Include SVG support and icons via font awesome (bundled) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <!-- Role selection overlay -->
+    <div id="role-overlay" class="overlay active">
+        <h1 class="title">CORTEX Documentation Explorer</h1>
+        <p class="subtitle">Choose your role to begin your tailored journey</p>
+        <div class="role-grid">
+            <button class="role-card" data-role="leader">
+                <i class="fa fa-briefcase fa-2x"></i>
+                <span>Business Leader</span>
+            </button>
+            <button class="role-card" data-role="po">
+                <i class="fa fa-tasks fa-2x"></i>
+                <span>Product Owner</span>
+            </button>
+            <button class="role-card" data-role="manager">
+                <i class="fa fa-users fa-2x"></i>
+                <span>Dev Manager</span>
+            </button>
+            <button class="role-card" data-role="engineer">
+                <i class="fa fa-code fa-2x"></i>
+                <span>Software Engineer</span>
+            </button>
+            <button class="role-card" data-role="quality">
+                <i class="fa fa-check-circle fa-2x"></i>
+                <span>Quality / SET</span>
+            </button>
+        </div>
+        <p class="note">Your selection will tailor the experience but you can explore freely.</p>
+    </div>
+
+    <!-- Main container with tabs -->
+    <div id="main-container" class="hidden">
+        <header>
+            <h1>CORTEX Interactive Reference</h1>
+            <nav id="role-label"></nav>
+        </header>
+        <div class="tabs">
+            <button class="tab" data-tab="overview">Overview</button>
+            <button class="tab" data-tab="capabilities">Capabilities</button>
+            <button class="tab" data-tab="architecture">Architecture</button>
+            <button class="tab" data-tab="intelligence">Intelligence</button>
+            <button class="tab" data-tab="wiring">Wiring & Registry</button>
+            <button class="tab" data-tab="quality">Quality & Testing</button>
+            <button class="tab" data-tab="security">Security & Risk</button>
+            <button class="tab" data-tab="ops">Ops & Deployment</button>
+            <button class="tab" data-tab="next">Next Steps</button>
+        </div>
+        <!-- Tab content containers -->
+        <section id="overview" class="tab-content"></section>
+        <section id="capabilities" class="tab-content"></section>
+        <section id="architecture" class="tab-content"></section>
+        <section id="intelligence" class="tab-content"></section>
+        <section id="wiring" class="tab-content"></section>
+        <section id="quality" class="tab-content"></section>
+        <section id="security" class="tab-content"></section>
+        <section id="ops" class="tab-content"></section>
+        <section id="next" class="tab-content"></section>
+    </div>
+
+    <!-- Data and JS modules -->
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/visualizations.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
