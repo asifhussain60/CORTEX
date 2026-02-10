@@ -26,6 +26,7 @@ core_rules:
       - create_file tool for *.md reports
       - Terminal file generation
       - Markdown completion/summary/report artifacts
+      - docs/*.md files (all findings must be inline or in cortex-registry YAML)
       
       REQUIRED:
       - All findings/results inline in chat
@@ -33,7 +34,27 @@ core_rules:
       - State via MCP tools or code files
       - Auto-vacuum after every completion
       
-      EXCEPTION: docs/, .github/, README.md (legitimate documentation)
+      EXCEPTION: ONLY 3 allowed paths:
+      - .github/prompts/*.md (prompt file updates ONLY)
+      - .github/agents/*.md (agent specification updates ONLY)
+      - README.md (root repository README ONLY)
+      ALL other markdown generation FORBIDDEN (including docs/*.md)
+      
+      DECISION TREE:
+      Q: "Should I create docs/ANALYSIS.md?"
+      A: NO → Display inline in chat
+      
+      Q: "Analysis is 500+ lines, too long for chat"
+      A: NO → Summarize in chat, store raw data in cortex-registry YAML if reusable
+      
+      Q: "User wants to save this for later"
+      A: NO → User can save chat transcript, not your job to create files
+      
+      Q: "This is governance documentation, seems legitimate"
+      A: NO → Governance rules go in cortex-registry YAML, not docs/*.md
+      
+      Q: "When IS .md file creation allowed?"
+      A: YES → ONLY: .github/prompts/*.md, .github/agents/*.md, README.md
     enforcement: "BLOCKED"
     violation_action: "Halt execution + regenerate response"
     detection_patterns:
