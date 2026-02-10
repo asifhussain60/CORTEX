@@ -22,6 +22,10 @@ from cortex.registry.workspace_manager import (
     WorkspaceManager,
     Workspace,
 )
+from cortex.registry.health_monitor import (
+    RegistryHealthMonitor,
+    HealthCheckResult,
+)
 
 __all__ = [
     "CortexMasterDashboardGenerator",
@@ -33,4 +37,6 @@ __all__ = [
     "TenantAwareGitBackedRegistry",
     "WorkspaceManager",
     "Workspace",
+    "RegistryHealthMonitor",
+    "HealthCheckResult",
 ]
