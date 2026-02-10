@@ -29,7 +29,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 # Unique marker prefix - easily grep-able across all languages
-CORTEX_DEBUG_MARKER = "CORTEX_DEBUG_"
 
 
 class DebugPhase(Enum):
@@ -151,14 +150,12 @@ class DebugMarker:
     
     def to_log_string(self) -> str:
         """Generate the log string for injection."""
-        marker = f"[{CORTEX_DEBUG_MARKER}{self.session_id}:{self.phase}:{self.file}:{self.line}]"
         return f'{marker} {self.message}'
     
     @classmethod
     def parse(cls, log_text: str) -> Optional["DebugMarker"]:
         """Parse a log string back into a DebugMarker."""
         import re
-        pattern = rf'\[{CORTEX_DEBUG_MARKER}(\w+):(\w+):([^:]+):(\d+)\]\s*(.*)'
         match = re.match(pattern, log_text)
         if match:
             return cls(

@@ -25,7 +25,6 @@ from collections import defaultdict
 
 logger = logging.getLogger(__name__)
 
-CORTEX_DEBUG_MARKER = "CORTEX_DEBUG_"
 
 
 class IssueSeverity(Enum):

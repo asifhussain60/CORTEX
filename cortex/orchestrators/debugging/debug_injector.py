@@ -32,7 +32,6 @@ import shutil
 logger = logging.getLogger(__name__)
 
 # Marker prefix constant
-CORTEX_DEBUG_MARKER = "CORTEX_DEBUG_"
 
 # Default exclusion patterns
 DEFAULT_EXCLUDE_PATTERNS = [
@@ -99,7 +98,6 @@ class LanguageInjector(ABC):
     
     def _create_marker(self, phase: str, file_name: str, line: int, message: str) -> str:
         """Create a standardized debug marker string."""
-        return f"[{CORTEX_DEBUG_MARKER}{self.session_id}:{phase}:{file_name}:{line}] {message}"
 
 
 class JavaScriptInjector(LanguageInjector):
@@ -130,7 +128,6 @@ class JavaScriptInjector(LanguageInjector):
             modified_lines.append(line)
             
             # Skip if already has CORTEX marker
-            if CORTEX_DEBUG_MARKER in line:
                 continue
             
             # Skip comments
@@ -322,7 +319,6 @@ class PythonInjector(LanguageInjector):
             modified_lines.append(line)
             
             # Skip if already has CORTEX marker
-            if CORTEX_DEBUG_MARKER in line:
                 continue
             
             # Skip comments and empty lines
@@ -572,7 +568,6 @@ class DebugInjector:
                 content = file_path.read_text(encoding='utf-8')
                 
                 # Skip if already injected
-                if CORTEX_DEBUG_MARKER in content:
                     logger.info(f"Skipping {rel_path} - already injected")
                     continue
                 

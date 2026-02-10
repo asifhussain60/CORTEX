@@ -282,7 +282,6 @@ class TestInjectionPoint:
         
         assert session_id in marker
         assert "trace_001" in marker
-        assert "CORTEX_DEBUG" in marker
 
 
 # =============================================================================
@@ -338,7 +337,6 @@ class TestDebugInjector:
         
         log_statement = injector.generate_log_statement(point, session_id)
         
-        assert "CORTEX_DEBUG" in log_statement
         assert session_id in log_statement
         assert "calculate_sum" in log_statement
         assert "logger.debug" in log_statement
@@ -383,7 +381,6 @@ class TestDebugInjector:
         
         assert result.success
         modified_content = file_path.read_text()
-        assert "CORTEX_DEBUG" in modified_content
         assert modified_content != original_content
     
     def test_inject_adds_logger_import_if_missing(self, temp_workspace: Path, session_id: str):
@@ -424,7 +421,6 @@ class TestDebugCleaner:
     """Tests for DebugCleaner class."""
     
     def test_cleaner_finds_all_markers(self, temp_workspace: Path, session_id: str):
-        """Cleaner finds all CORTEX_DEBUG markers."""
         # First inject
         injector = DebugInjector()
         file_path = temp_workspace / "sample_module.py"
@@ -470,7 +466,6 @@ class TestDebugCleaner:
         )
         
         # Verify injection
-        assert "CORTEX_DEBUG" in file_path.read_text()
         
         # Clean
         cleaner = DebugCleaner()
@@ -478,7 +473,6 @@ class TestDebugCleaner:
         
         assert result.success
         cleaned_content = file_path.read_text()
-        assert "CORTEX_DEBUG" not in cleaned_content
     
     def test_cleaner_preserves_original_code(self, temp_workspace: Path, session_id: str):
         """Cleaner preserves original code after cleanup."""

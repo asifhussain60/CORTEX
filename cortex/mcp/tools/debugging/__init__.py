@@ -53,7 +53,6 @@ def cortex_debug_inject(
     """
     Inject debug markers into repository files.
     
-    Markers follow the format: [CORTEX_DEBUG_{session}:{phase}:{file}:{line}] {message}
     
     Args:
         repo_path: Path to the repository to inject markers into
@@ -230,7 +229,6 @@ def cortex_debug_cleanup(
     """
     Remove all CORTEX debug markers from injected files.
     
-    Safely removes ONLY lines containing CORTEX_DEBUG_ markers.
     Original code logic remains intact.
     
     Args:

@@ -50,7 +50,6 @@ except ImportError:
 
 
 # Constants
-MARKER_PREFIX = "CORTEX_DEBUG_"
 DEBUG_DIR = ".cortex-debug"
 
 
@@ -248,7 +247,6 @@ class JavaScriptAdapter(LanguageAdapter):
     
     def clean_file(self, content: str) -> tuple[str, int]:
         patterns = [
-            r"^\s*console\.(log|warn|error|info|debug)\s*\(\s*['\"`]\[CORTEX_DEBUG_[^\]]+\][^'\"`]*['\"`][^)]*\);\s*\n?"
         ]
         
         modified = content
@@ -303,8 +301,6 @@ class PythonAdapter(LanguageAdapter):
     
     def clean_file(self, content: str) -> tuple[str, int]:
         patterns = [
-            r"^\s*print\s*\(\s*f?['\"`]\[CORTEX_DEBUG_[^\]]+\][^'\"`]*['\"`]\s*\)\s*\n?",
-            r"^\s*(logging\.)?(debug|info|warning|error)\s*\(\s*f?['\"`]\[CORTEX_DEBUG_[^\]]+\][^'\"`]*['\"`]\s*\)\s*\n?"
         ]
         
         modified = content
@@ -359,8 +355,6 @@ class CSharpAdapter(LanguageAdapter):
     
     def clean_file(self, content: str) -> tuple[str, int]:
         patterns = [
-            r'^\s*(System\.Diagnostics\.)?Debug\.WriteLine\s*\(\s*\$?"?\[CORTEX_DEBUG_[^\]]+\][^"]*"?\s*\);\s*\n?',
-            r'^\s*Console\.WriteLine\s*\(\s*\$?"?\[CORTEX_DEBUG_[^\]]+\][^"]*"?\s*\);\s*\n?'
         ]
         
         modified = content
@@ -401,7 +395,6 @@ def get_adapter(stack: TechnologyStack, session_id: str, base_path: Path) -> Lan
 
 @mcp_tool(
     name="cortex_debug_inject",
-    description="Inject CORTEX_DEBUG markers into codebase for comprehensive tracing. Supports JS/TS, Python, C#."
 )
 def debug_inject(
     path: str,
@@ -499,7 +492,6 @@ def debug_inject(
 
 @mcp_tool(
     name="cortex_debug_cleanup",
-    description="Remove ALL CORTEX_DEBUG markers from codebase, leaving code production-ready."
 )
 def debug_cleanup(
     path: str,

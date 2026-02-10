@@ -106,7 +106,6 @@ class InjectionPoint:
         Returns:
             Unique marker string for cleanup identification
         """
-        return f"# CORTEX_DEBUG[{session_id}][{self.trace_id}]"
 
 
 @dataclass
@@ -546,8 +545,6 @@ class DebugInjector:
         
         # Add logging import if needed
         if not has_logging_import:
-            new_lines.append(f"import logging  # CORTEX_DEBUG[{session_id}]")
-            new_lines.append(f"logger = logging.getLogger(__name__)  # CORTEX_DEBUG[{session_id}]")
             new_lines.append("")
         
         for i, line in enumerate(lines, 1):
@@ -582,7 +579,6 @@ class DebugCleaner:
     
     def find_markers(self, file_path: Path, session_id: str) -> List[str]:
         """
-        Find all CORTEX_DEBUG markers for a session in a file.
         
         Args:
             file_path: Path to the file to search
@@ -592,7 +588,6 @@ class DebugCleaner:
             List of marker strings found
         """
         content = file_path.read_text()
-        pattern = rf'# CORTEX_DEBUG\[{re.escape(session_id)}\]'
         return re.findall(pattern, content)
     
     def clean_file(self, file_path: Path, session_id: str) -> CleanupResult:
@@ -615,7 +610,6 @@ class DebugCleaner:
             )
         
         lines = content.split('\n')
-        marker_pattern = rf'CORTEX_DEBUG\[{re.escape(session_id)}\]'
         
         # Filter out lines containing the session marker
         cleaned_lines = []

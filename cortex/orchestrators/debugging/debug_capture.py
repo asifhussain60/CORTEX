@@ -31,7 +31,6 @@ import time
 logger = logging.getLogger(__name__)
 
 # Marker prefix constant
-CORTEX_DEBUG_MARKER = "CORTEX_DEBUG_"
 
 # Noise patterns to filter (third-party extensions, etc.)
 NOISE_PATTERNS = [
@@ -79,7 +78,6 @@ class LogEntry:
     @classmethod
     def parse_cortex_marker(cls, text: str) -> Optional[Dict[str, Any]]:
         """Parse a CORTEX debug marker from log text."""
-        pattern = rf'\[{CORTEX_DEBUG_MARKER}(\w+):(\w+):([^:]+):(\d+)\]\s*(.*)'
         match = re.match(pattern, text)
         if match:
             return {

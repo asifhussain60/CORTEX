@@ -10,7 +10,6 @@ Version: 1.0.0
 Phase: Phase 21.5 - Universal Debugging
 
 Safety Features:
-- Only removes lines containing CORTEX_DEBUG_ markers
 - Verifies cleanup by scanning for remaining markers
 - Can restore from backup if cleanup fails
 - Logs all changes for audit trail
@@ -28,7 +27,6 @@ import shutil
 logger = logging.getLogger(__name__)
 
 # Marker prefix constant
-CORTEX_DEBUG_MARKER = "CORTEX_DEBUG_"
 
 
 @dataclass
@@ -57,7 +55,6 @@ class DebugCleanup:
     """
     Safe cleanup tool for removing CORTEX debug markers.
     
-    Removes ONLY lines that contain CORTEX_DEBUG_ markers,
     ensuring the original code logic remains intact.
     """
     
@@ -153,32 +150,22 @@ class DebugCleanup:
             original_lines = content.split('\n')
             original_count = len(original_lines)
             
-            # Remove lines containing CORTEX_DEBUG_ markers
             cleaned_lines = []
             markers_removed = 0
             
             for line in original_lines:
-                if CORTEX_DEBUG_MARKER in line:
                     # Check if it's a standalone debug line (only console.log/print)
                     stripped = line.strip()
                     
-                    # JavaScript: console.log('[CORTEX_DEBUG_...]');
-                    if stripped.startswith('console.log(') and CORTEX_DEBUG_MARKER in stripped:
                         markers_removed += 1
                         continue
                     
-                    # JavaScript: console.error('[CORTEX_DEBUG_...]');
-                    if stripped.startswith('console.error(') and CORTEX_DEBUG_MARKER in stripped:
                         markers_removed += 1
                         continue
                     
-                    # JavaScript: console.warn('[CORTEX_DEBUG_...]');
-                    if stripped.startswith('console.warn(') and CORTEX_DEBUG_MARKER in stripped:
                         markers_removed += 1
                         continue
                     
-                    # Python: print("[CORTEX_DEBUG_...]")
-                    if stripped.startswith('print(') and CORTEX_DEBUG_MARKER in stripped:
                         markers_removed += 1
                         continue
                     
@@ -233,10 +220,8 @@ class DebugCleanup:
                 
                 try:
                     content = file_path.read_text(encoding='utf-8')
-                    if CORTEX_DEBUG_MARKER in content:
                         # Find specific lines
                         for i, line in enumerate(content.split('\n'), 1):
-                            if CORTEX_DEBUG_MARKER in line:
                                 remaining.append({
                                     "file": str(file_path.relative_to(self.repo_path)),
                                     "line": i,

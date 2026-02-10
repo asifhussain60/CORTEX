@@ -98,7 +98,6 @@ def autonomous_implementation_example():
         "Audit trail complete: AC_START → AC_COMPLETE markers in all files",
         "EnforcementOrchestrator validation: PASSED (7-agent gate)",
         "Git checkpoints at stage boundaries (CORE-026)",
-        "No CORTEX_DEBUG markers remaining",
     ]
     
     # Generate session summary
