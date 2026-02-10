@@ -85,7 +85,7 @@ class MethodSignatureAnalyzer:
                 "name": param.get("Name"),
                 "type": param.get("Type"),
                 "is_nullable": "?" in param.get("Type", ""),
-                "is_params": False  # TODO: Detect params keyword
+                "is_params": False  # FIXME: Detect params keyword [TRACKED: Phase-67-Enhancement]
             })
         
         return resolved

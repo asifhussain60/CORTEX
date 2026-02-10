@@ -66,9 +66,10 @@ class CrossAssemblyResolver:
             # Initialize empty dependency list
             graph[project_name] = []
             
-            # TODO: Extract project references from .csproj
+            # FIXME: Extract project references from .csproj [TRACKED: Phase-67-Enhancement]
             # Requires parsing <ProjectReference Include="..." />
             # For now, analyze using namespaces as proxy
+            # Issue: Roslyn CLI needs enhancement to parse project references
             
             semantic_model = project.get("semantic_model", {})
             types = semantic_model.get("Types", [])

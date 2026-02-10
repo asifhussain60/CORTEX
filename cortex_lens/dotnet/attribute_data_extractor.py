@@ -61,7 +61,8 @@ class AttributeDataExtractor:
             >>> attrs = extractor.extract_attributes(type_info)
             >>> print(attrs)  # [{"name": "ApiController", "arguments": []}]
         """
-        # TODO: Enhance Roslyn CLI to extract attributes from ISymbol.GetAttributes()
+        # FIXME: Enhance Roslyn CLI to extract attributes [TRACKED: Phase-67-Enhancement]
+        # Required: CLI enhancement to call ISymbol.GetAttributes()
         # For now, return empty list as CLI doesn't include attribute data yet
         logger.debug("Attribute extraction requires Roslyn CLI enhancement")
         return []

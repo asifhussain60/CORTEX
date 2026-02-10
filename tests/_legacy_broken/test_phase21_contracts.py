@@ -123,14 +123,15 @@ def test_frontend_loader_expects_json_structure():
     for field in expected_fields:
         # Allow as comments or in reasonable references
         if field in loader_content:
+            pass  # Field validation
 
 
 def test_frontend_dashboard_structure():
-    pass
     """
     Validate dashboard HTML expects correct JSON structure
     (Phase-21 is JSON-first).
     """
+    pass
     dashboard_html = Path("company/dashboards/spa/dashboard.html")
     if not dashboard_html.exists():
         pytest.skip("dashboard.html not present in current Phase-21 structure")
