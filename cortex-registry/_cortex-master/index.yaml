@@ -6,11 +6,51 @@
 version: "1.2"
 registry_name: "_cortex-master"
 description: "CORTEX self-development planning with phase tracking and enhancement pipeline"
-last_updated: "2026-02-10T12:00:00Z"
-revision: "Phase 70 Created: Implementation ↔ Specification Alignment Remediation (P0-BLOCKING) | 55/60 phases done (92%) | Production Ready Path Established"
+last_updated: "2026-02-10T14:00:00Z"
+revision: "Phase 74 Created: Multi-Role Documentation Portal (Git-Aware + Delta Intelligence) | 56/60 phases done (93%) | Production Documentation System"
 
 # Active Phases (Current Development)
 active_phases:
+  - id: "phase-74"
+    name: "Multi-Role Documentation Portal (Git-Aware Incremental Builds + Delta Intelligence)"
+    file: "phases/active/phase-74-documentation-site-generation.yaml"
+    created: "2026-02-10"
+    status: "planned"
+    priority: "P1"
+    execution_order: 24
+    roi_score: 0.88
+    estimated_duration: "4-5 weeks"
+    test_target: 360
+    coverage_target: 90
+    tests_passing: 0
+    stages_complete: "0/8"
+    description: |
+      🔴 PLANNED (P1 - STRATEGIC): Production-ready documentation site with multi-stakeholder navigation.
+      - S0: Git-Aware Build Infrastructure (3 days, 40 tests) — Incremental builds, SHA-256 caching
+      - S1: Delta Detection Intelligence (3 days, 40 tests) — Functionality tracking, 80% time savings
+      - S2: Agent Enhancement (4 days, 50 tests) — Embedded design system v4.0.0, D3.js specs
+      - S3: Entry Portal (5 days, 60 tests) — Multi-role navigation (Business/Product/Engineering)
+      - S4: Content Migration (6 days, 80 tests) — 47 markdown → HTML, zero modification
+      - S5: D3.js Diagram Engine (7 days, 60 tests) — 8 diagram types, responsive mobile
+      - S6: Validation Pipeline (5 days, 50 tests) — 6-tier validation, Lighthouse >90
+      - S7: GitHub Pages Compatibility (4 days, 40 tests) — Production deployment ready
+      - S8: Structure Cleanup + Source Deletion (2 days, 30 tests) — Delete _workspaces/cortex-architecture/
+      
+      Strategic Value:
+      - Multi-role navigation → business/product/engineering entry paths
+      - Delta intelligence → regenerate only changed content (80% faster)
+      - Embedded design system → zero external dependencies
+      - Source deletion → HTML becomes single source of truth
+      - GitHub Pages ready → production hosting with zero config
+      
+      Risk: 2.5/10 (LOW-MEDIUM) — Premature source deletion mitigated by strict gates
+    depends_on:
+      - "phase-70"
+      - "phase-48"
+    blocks:
+      - "phase-75-documentation-versioning"
+      - "phase-76-documentation-search-analytics"
+
   - id: "phase-71"
     name: "LENS Intelligence Integration Framework (LDv1 Schema + Evidence Protocol)"
     file: "phases/active/phase-71-lens-intelligence-integration-framework.yaml"

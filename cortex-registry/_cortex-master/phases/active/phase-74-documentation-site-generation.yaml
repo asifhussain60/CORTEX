@@ -1,0 +1,877 @@
+# Phase 74: CORTEX Documentation Site Generation
+# Authority: cortex-architect.prompt.md v7.7 + User Requirements (2026-02-10)
+# Strategic Enhancement: Multi-Role Portal + Delta Intelligence + Structure Cleanup
+# Created: 2026-02-10
+# AC-ID: AC-PHASE74-001
+
+metadata:
+  phase_id: "phase-74"
+  title: "Multi-Role Documentation Portal (Git-Aware Incremental Builds + Delta Intelligence)"
+  subtitle: "Production-ready docs site with glassmorphism design, D3.js diagrams, and intelligent update detection"
+  status: "planned"
+  priority: "P1"
+  created: "2026-02-10"
+  estimated_duration: "4-5 weeks"
+  roi_score: 0.88
+  execution_order: 24
+  test_target: 360
+  coverage_target: 90
+  stages_complete: "0/8"
+  autonomous_execution: true
+  approval_required: true
+  breaking_changes: false
+  github_pages_compatible: true
+  enables_phases:
+    - "phase-75-documentation-versioning"
+    - "phase-76-documentation-search-analytics"
+
+overview:
+  vision: |
+    Transform CORTEX documentation from 47 markdown files into a production-ready
+    multi-stakeholder web portal hosted on GitHub Pages with:
+    
+    1. **Multi-Role Navigation** — Business/Product/Engineering entry paths with adaptive depth
+    2. **Glassmorphism Design v4.0.0** — Dark blue theme with glass panels, responsive mobile-first
+    3. **Intelligent D3.js Diagrams** — 8 diagram types auto-generated from markdown metadata
+    4. **Delta Detection Intelligence** — Git-aware regeneration (only rebuild changed content)
+    5. **Structure Enforcement** — Mandatory cleanup with nested folder hierarchy validation
+    6. **6-Tier Validation Pipeline** — HTML5, CSS, JS, Typography, Accessibility, Performance
+    7. **GitHub Pages Compatibility** — Relative paths, asset optimization, CSP headers
+    8. **Source Cleanup** — Delete markdown source after successful validation (HTML becomes SSOT)
+    
+    Strategic Outcome:
+    - Unified documentation portal replacing scattered markdown files
+    - Role-based entry (business stakeholders see value, engineers see architecture)
+    - Incremental builds (5-10 second updates vs 45 second full regeneration)
+    - Production-ready hosting (GitHub Pages with zero config)
+    - Self-documenting (content changes trigger automatic site updates)
+
+  problem_statement: |
+    Current documentation state has strong content (_workspaces/cortex-architecture/47 files)
+    but lacks production-ready delivery mechanism:
+    
+    **Gap 1: No Stakeholder Navigation**
+    - 47 markdown files organized by technical domain (orchestration/, lens/, mcp/)
+    - Business users cannot find "What can CORTEX do for me?"
+    - Product managers cannot see feature roadmap
+    - Engineers face 11,600 lines of flat markdown
+    
+    **Gap 2: Static Content (No Diagrams)**
+    - Markdown describes architecture but lacks visual representation
+    - No interactive diagrams showing orchestrator relationships
+    - Cannot visualize data flow, request lifecycle, deployment topology
+    
+    **Gap 3: Full Regeneration Required**
+    - No incremental build capability (all-or-nothing)
+    - Phase 75 content change requires regenerating all 47 HTML pages
+    - Wastes CI/CD time (45+ seconds per build)
+    
+    **Gap 4: No Structure Enforcement**
+    - No folder hierarchy validation
+    - Risk of orphaned files (not linked from navigation)
+    - Broken internal links possible
+    - Nesting depth unlimited (hard to navigate)
+    
+    **Gap 5: No Source of Truth Clarity**
+    - Markdown AND HTML coexist (which is canonical?)
+    - Developers might edit markdown expecting docs to update
+    - Drift risk between source and generated output
+    
+    **Gap 6: GitHub Pages Compatibility Unknown**
+    - No validation for relative paths
+    - Asset loading not tested on GitHub CDN
+    - CSP headers may conflict with GitHub Pages
+
+  success_criteria:
+    - "47 HTML pages generated from _workspaces/cortex-architecture/ markdown (zero content modification)"
+    - "8 D3.js diagram types working responsively (force-directed, tree, Sankey, timeline, packed circles, flow, sunburst, network)"
+    - "Delta detection functional (detect 3 markdown changes → regenerate only 3 HTML pages)"
+    - "Folder structure validated (Option C hybrid: guides/, architecture/, capabilities/, deployment/)"
+    - "360 tests passing (40 build + 50 agent + 60 portal + 80 content + 60 diagrams + 50 validation + 20 cleanup)"
+    - "Lighthouse score >90, WCAG AA compliant, Web Vitals: LCP <2.5s, CLS <0.1"
+    - "GitHub Pages test deployment successful (site accessible at https://{owner}.github.io/{repo}/)"
+    - "_workspaces/cortex-architecture/ deleted after successful validation"
+    - "Search index generated from final HTML output (full-text search functional)"
+
+  folder_structure: |
+    Target structure (Option C - Hybrid):
+    
+    docs/
+    ├─ index.html                          # Entry portal with role selection panels
+    │
+    ├─ guides/
+    │  ├─ business.html                    # Business stakeholder overview
+    │  ├─ product.html                     # Product manager overview
+    │  └─ engineering.html                 # Engineering overview
+    │
+    ├─ architecture/
+    │  ├─ index.html                       # Architecture hub
+    │  ├─ overview.html                    # System overview
+    │  ├─ orchestration/
+    │  │  ├─ index.html                    # Orchestration hub
+    │  │  ├─ overview.html
+    │  │  ├─ master-orchestrator.html
+    │  │  ├─ tdd-orchestrator.html
+    │  │  ├─ intent-router.html
+    │  │  ├─ domain-orchestrators.html
+    │  │  ├─ support-orchestrators.html
+    │  │  ├─ cross-orchestrator.html
+    │  │  └─ end-to-end-flow.html
+    │  ├─ lens/
+    │  │  ├─ index.html                    # LENS hub
+    │  │  ├─ overview.html
+    │  │  ├─ architecture.html
+    │  │  ├─ analyzers.html
+    │  │  ├─ synthesis.html
+    │  │  ├─ caching.html
+    │  │  └─ governance.html
+    │  ├─ mcp/
+    │  │  ├─ index.html                    # MCP hub
+    │  │  ├─ overview.html
+    │  │  ├─ protocol.html
+    │  │  ├─ integration.html
+    │  │  ├─ tools-catalog.html
+    │  │  └─ versioning.html
+    │  └─ diagrams/
+    │     ├─ architecture-overview.html
+    │     ├─ component-relationships.html
+    │     ├─ data-flow.html
+    │     └─ request-lifecycle.html
+    │
+    ├─ capabilities/
+    │  ├─ index.html                       # Capabilities hub
+    │  ├─ overview.html
+    │  ├─ core-platform.html
+    │  ├─ ai-intelligence.html
+    │  ├─ decisioning.html
+    │  ├─ extensibility.html
+    │  └─ governance-compliance.html
+    │
+    ├─ deployment/
+    │  ├─ index.html                       # Deployment hub
+    │  ├─ overview.html
+    │  ├─ infrastructure.html
+    │  ├─ ci-cd.html
+    │  ├─ observability.html
+    │  ├─ scalability.html
+    │  ├─ tech-stack.html
+    │  └─ toolkit/
+    │     ├─ index.html                    # Toolkit hub
+    │     ├─ overview.html
+    │     ├─ developer-guide.html
+    │     ├─ security-model.html
+    │     ├─ tool-categories.html
+    │     └─ tool-registry.html
+    │
+    └─ assets/
+       ├─ css/
+       │  ├─ glass-design-tokens.css       # Design system v4.0.0
+       │  ├─ glass-named-panels.css        # 10 panel types
+       │  └─ main.css                      # Complete stylesheet
+       ├─ js/
+       │  ├─ d3.min.js                     # D3.js v7
+       │  ├─ diagrams.js                   # 8 diagram components
+       │  ├─ navigation.js                 # Role-based routing
+       │  └─ search.js                     # Full-text search
+       └─ fonts/
+          ├─ inter/                        # Google Fonts - Inter
+          ├─ jetbrains-mono/               # Google Fonts - JetBrains Mono
+          └─ lexend/                       # Google Fonts - Lexend
+
+stages:
+  - stage_id: "S0"
+    name: "Git-Aware Build Infrastructure"
+    duration: "3 days"
+    effort_hours: 12
+    status: "planned"
+    description: |
+      Create incremental build engine with SHA-256 content hashing for efficient regeneration.
+      
+      Deliverables:
+      1. cortex/documentation/builder.py
+         - DocumentationBuilder class with incremental build logic
+         - SHA-256 content hashing per markdown file
+         - Dependency tracking (shared templates, CSS, JS)
+         - Manifest generation (docs/_manifest.json)
+      
+      2. cortex/documentation/manifest.py
+         - Manifest schema (version, build_date, files[], dependencies[])
+         - Validation logic (manifest integrity checks)
+         - Cache invalidation rules (git SHA, file mtime, template changes)
+      
+      3. cortex/documentation/search_indexer.py
+         - Post-build search index generator
+         - Full-text indexing from generated HTML
+         - Lunr.js compatible output (docs/assets/search-index.json)
+      
+      4. Tests (40 total)
+         - Build script correctness (10 tests)
+         - Cache invalidation (10 tests)
+         - Manifest integrity (10 tests)
+         - Search indexing (10 tests)
+      
+      Risks & Mitigations:
+      - Risk: Cache invalidation bugs (stale content served)
+        Mitigation: Conservative invalidation (regenerate on doubt), extensive tests
+      - Risk: Shared template changes not detected (partial regeneration)
+        Mitigation: Dependency graph tracking, invalidate all on template change
+    
+    acceptance_criteria:
+      - "AC-PHASE74-S0-001: DocumentationBuilder runs on 47 markdown files → generates 47 HTML pages"
+      - "AC-PHASE74-S0-002: Change 1 markdown file → only 1 HTML regenerated (not all 47)"
+      - "AC-PHASE74-S0-003: Manifest tracks all files with SHA-256 hashes"
+      - "AC-PHASE74-S0-004: Search index generated with full-text search working"
+      - "AC-PHASE74-S0-005: Cache survives git checkout/branch switch (SHA-based)"
+      - "AC-PHASE74-S0-006: 40 tests passing (build + cache + manifest + search)"
+
+  - stage_id: "S1"
+    name: "Delta Detection Intelligence"
+    duration: "3 days"
+    effort_hours: 12
+    status: "planned"
+    description: |
+      Implement intelligent change detection beyond file-level granularity.
+      
+      Deliverables:
+      1. cortex/documentation/delta_detector.py
+         - DeltaDetector class with git diff analysis
+         - Functionality tracking (new/deprecated orchestrators, tools, phases)
+         - Cross-reference analysis (which pages mention changed features)
+         - Regeneration rules engine (content/functionality/dependency deltas)
+      
+      2. Integration with CORTEX registry
+         - cortex-registry/_cortex-master/index.yaml monitoring (new phases)
+         - cortex/mcp/tools/catalog.py monitoring (tool changes)
+         - cortex/wiring/specifications/*.yaml monitoring (orchestrator changes)
+      
+      3. Delta reporting
+         - Detailed report generation (changed markdown, new features, deprecated)
+         - Affected pages calculation (which HTML needs rebuild)
+         - Time savings estimation (incremental vs full rebuild)
+      
+      4. Tests (40 tests)
+         - Git diff parsing (10 tests)
+         - Registry comparison (10 tests)
+         - Cross-reference detection (10 tests)
+         - False positive prevention (10 tests)
+      
+      Risks & Mitigations:
+      - Risk: False negatives (miss changes requiring regeneration)
+        Mitigation: Conservative detection, regenerate on ambiguity
+      - Risk: Performance overhead (delta detection slower than full rebuild)
+        Mitigation: Parallel git operations, cache registry comparisons
+    
+    acceptance_criteria:
+      - "AC-PHASE74-S1-001: Detect 3 markdown changes → regenerate only affected pages"
+      - "AC-PHASE74-S1-002: Detect new orchestrator → regenerate orchestration/* + index"
+      - "AC-PHASE74-S1-003: Detect deprecated tool → regenerate tool catalog + cross-refs"
+      - "AC-PHASE74-S1-004: Shared template change → regenerate all pages"
+      - "AC-PHASE74-S1-005: Delta report accurate (time savings ≥80% vs full rebuild)"
+      - "AC-PHASE74-S1-006: 40 tests passing (delta detection accuracy)"
+
+  - stage_id: "S2"
+    name: "Agent Enhancement (Embedded Design System)"
+    duration: "4 days"
+    effort_hours: 16
+    status: "planned"
+    description: |
+      Enhance .github/agents/support/cortex-documentation-architect.md with self-contained design DNA.
+      
+      Deliverables:
+      1. Enhanced agent specification (1,200+ lines)
+         - Embedded design system v4.0.0 (350 lines YAML)
+         - D3.js diagram component library specification
+         - Responsive design rules (5 breakpoints, mobile-first)
+         - 6-tier validation pipeline definition
+         - GitHub Pages compatibility checks
+      
+      2. Design system v4.0.0 specification
+         - Color palette (dark blue rgba(26,31,58,0.7), cyan #00d4ff, purple #7b61ff)
+         - Glass blur tiers (10px small, 20px medium, 30px large)
+         - 10 named panel types (glass-card-display, clickable, purple, cyan, etc.)
+         - Typography system (Inter, JetBrains Mono, Lexend with WCAG AA)
+         - Responsive scaling rules (0.9x mobile, 1.0x tablet, 1.1x desktop)
+      
+      3. D3.js component specifications
+         - Force-directed graph (architecture overview)
+         - Hierarchical tree (component relationships)
+         - Sankey diagram (data flow)
+         - Timeline (request lifecycle)
+         - Packed circles (orchestrator hierarchy)
+         - Horizontal flow (LENS pipeline)
+         - Sunburst (tool categories)
+         - Network graph (deployment topology)
+      
+      4. Agent wiring enforcement patterns
+         - Pre-build validation (markdown frontmatter checks)
+         - During-build monitoring (HTML generation compliance)
+         - Post-build validation (6-tier pipeline execution)
+         - Pre-merge gates (GitHub Pages compatibility)
+      
+      5. Tests (50 tests)
+         - Agent validation logic (15 tests)
+         - Design system integrity (15 tests)
+         - D3.js specification completeness (10 tests)
+         - Enforcement pattern execution (10 tests)
+      
+      Risks & Mitigations:
+      - Risk: Design system too rigid (hard to evolve)
+        Mitigation: Version design system (v4.0.0), plan for v5.0.0
+      - Risk: Agent spec too long (hard to maintain)
+        Mitigation: Modular YAML sections, clear separation of concerns
+    
+    acceptance_criteria:
+      - "AC-PHASE74-S2-001: Agent spec complete (1,200+ lines with embedded design DNA)"
+      - "AC-PHASE74-S2-002: Design system v4.0.0 self-contained (no external CSS dependencies)"
+      - "AC-PHASE74-S2-003: D3.js components specified (8 types with mobile optimization)"
+      - "AC-PHASE74-S2-004: Responsive design rules defined (5 breakpoints, WCAG AA)"
+      - "AC-PHASE74-S2-005: 6-tier validation pipeline documented"
+      - "AC-PHASE74-S2-006: 50 tests passing (agent + design + D3.js + enforcement)"
+
+  - stage_id: "S3"
+    name: "Entry Portal (Multi-Role Landing Page)"
+    duration: "5 days"
+    effort_hours: 20
+    status: "planned"
+    description: |
+      Create docs/index.html entry portal with Business/Product/Engineering role panels.
+      
+      Deliverables:
+      1. docs/index.html
+         - Hero section with 200px brain logo (animated spinner)
+         - Multi-role navigation panels (Business/Product/Engineering)
+         - Glassmorphism design v4.0.0 (dark blue base, cyan/purple accents)
+         - Loading animation + Web Vitals monitoring
+         - Responsive layout (mobile-first, touch targets ≥44px)
+      
+      2. Role-based landing pages
+         - docs/guides/business.html (business stakeholder overview)
+         - docs/guides/product.html (product manager overview)
+         - docs/guides/engineering.html (engineering overview)
+      
+      3. Navigation system
+         - Client-side routing (hash-based: #/architecture/overview)
+         - Breadcrumb generation (automatic from folder hierarchy)
+         - Search integration (full-text search box in header)
+      
+      4. Performance optimization
+         - Lazy-load images (srcset for responsive images)
+         - Debounced scroll events (200ms)
+         - Reduced blur on mobile (7px vs 20px desktop)
+      
+      5. Tests (60 tests)
+         - HTML structure validation (15 tests)
+         - CSS glassmorphism compliance (15 tests)
+         - Responsive layout (15 tests)
+         - Performance metrics (15 tests)
+      
+      Risks & Mitigations:
+      - Risk: Mobile performance poor (blur expensive on low-end devices)
+        Mitigation: Reduce blur on mobile, test on target devices
+      - Risk: Touch targets too small (WCAG AAA violation)
+        Mitigation: Enforce 44px minimum, validate with accessibility tools
+    
+    acceptance_criteria:
+      - "AC-PHASE74-S3-001: Multi-role navigation working (clickable panels route correctly)"
+      - "AC-PHASE74-S3-002: Glassmorphism design v4.0.0 applied (dark blue, cyan/purple)"
+      - "AC-PHASE74-S3-003: Lighthouse score >90, LCP <2.5s, CLS <0.1"
+      - "AC-PHASE74-S3-004: WCAG AA compliant (touch targets ≥44px, contrast 7:1)"
+      - "AC-PHASE74-S3-005: Responsive on mobile/tablet/desktop (5 breakpoints tested)"
+      - "AC-PHASE74-S3-006: 60 tests passing (HTML + CSS + responsive + performance)"
+
+  - stage_id: "S4"
+    name: "Content Migration (47 Markdown → HTML)"
+    duration: "6 days"
+    effort_hours: 24
+    status: "planned"
+    description: |
+      Generate 47 HTML pages from _workspaces/cortex-architecture/ markdown with zero modification.
+      
+      Deliverables:
+      1. Content preservation pipeline
+         - Markdown parsing (preserve formatting, links, code blocks)
+         - HTML generation (apply glassmorphism design to markdown content)
+         - Cross-reference validation (all internal links functional)
+         - Table of contents generation (automatic from markdown headings)
+      
+      2. Folder structure mapping
+         - capabilities/ → docs/capabilities/ (6 files)
+         - orchestration/ → docs/architecture/orchestration/ (8 files)
+         - lens/ → docs/architecture/lens/ (6 files)
+         - mcp/ → docs/architecture/mcp/ (5 files)
+         - toolkit/ → docs/deployment/toolkit/ (5 files)
+         - infrastructure/ → docs/deployment/ (6 files)
+         - diagrams/ → docs/architecture/diagrams/ (4 files)
+         - index.md → docs/guides/ (3 role-based views)
+      
+      3. Typography integration
+         - Google Fonts loaded (Inter, JetBrains Mono, Lexend)
+         - WCAG AA contrast validation (7:1 normal, 4.5:1 large)
+         - Responsive font scaling (0.9x mobile, 1.0x tablet, 1.1x desktop)
+      
+      4. Code block enhancement
+         - Syntax highlighting (Prism.js or highlight.js)
+         - Copy-to-clipboard buttons
+         - Line numbers for long blocks
+      
+      5. Tests (80 tests)
+         - Content integrity (20 tests) — No truncation, no modification
+         - Link validation (20 tests) — All internal links functional
+         - Typography compliance (20 tests) — Fonts loaded, contrast valid
+         - HTML5 structure (20 tests) — W3C validation
+      
+      Risks & Mitigations:
+      - Risk: Content truncation during conversion (data loss)
+        Mitigation: Byte-by-byte comparison, automated integrity checks
+      - Risk: Broken internal links (404s)
+        Mitigation: Link validation crawler, block merge on failures
+    
+    acceptance_criteria:
+      - "AC-PHASE74-S4-001: 47 HTML pages generated, content matches source markdown"
+      - "AC-PHASE74-S4-002: Zero content modification (verbatim integration verified)"
+      - "AC-PHASE74-S4-003: All internal links working (no 404s detected)"
+      - "AC-PHASE74-S4-004: Typography system functional (Inter/JetBrains/Lexend loaded)"
+      - "AC-PHASE74-S4-005: WCAG AA contrast ratios validated (7:1 normal, 4.5:1 large)"
+      - "AC-PHASE74-S4-006: 80 tests passing (content + links + typography + HTML5)"
+
+  - stage_id: "S5"
+    name: "D3.js Diagram Engine"
+    duration: "7 days"
+    effort_hours: 28
+    status: "planned"
+    description: |
+      Implement 8 D3.js diagram types with responsive mobile optimization.
+      
+      Deliverables:
+      1. D3.js component library (docs/assets/js/diagrams.js)
+         - ForceDirectedGraph class (architecture overview)
+         - HierarchicalTree class (component relationships)
+         - SankeyDiagram class (data flow)
+         - TimelineDiagram class (request lifecycle)
+         - PackedCircles class (orchestrator hierarchy)
+         - HorizontalFlow class (LENS pipeline)
+         - SunburstDiagram class (tool categories)
+         - NetworkGraph class (deployment topology)
+      
+      2. Responsive optimization
+         - Resize observers (debounced 200ms)
+         - Mobile simplification (reduce node count, larger touch targets)
+         - Performance throttling (<768px: simplified layouts)
+      
+      3. Accessibility enhancements
+         - Keyboard navigation (tab through nodes)
+         - ARIA labels (screen reader support)
+         - High contrast mode (color-blind friendly palette)
+      
+      4. Diagram data extraction
+         - Markdown frontmatter parsing (diagram_type, data_source)
+         - CORTEX registry integration (orchestrator counts, phase timeline)
+         - MCP tool catalog integration (tool relationships)
+      
+      5. Tests (60 tests)
+         - D3.js component rendering (24 tests) — 3 per diagram type
+         - Responsive behavior (16 tests) — 2 per diagram type
+         - Accessibility compliance (10 tests)
+         - Data extraction (10 tests)
+      
+      Risks & Mitigations:
+      - Risk: D3.js bundle size too large (slow page load)
+        Mitigation: Tree-shaking, load diagrams on-demand
+      - Risk: Mobile performance poor (complex SVG expensive)
+        Mitigation: Simplified mobile layouts, canvas fallback
+    
+    acceptance_criteria:
+      - "AC-PHASE74-S5-001: 8 D3.js diagram types rendering correctly on desktop"
+      - "AC-PHASE74-S5-002: Responsive resize working (no layout breaks on viewport change)"
+      - "AC-PHASE74-S5-003: Mobile optimization functional (simplified on <768px)"
+      - "AC-PHASE74-S5-004: Accessibility compliant (keyboard nav, ARIA labels)"
+      - "AC-PHASE74-S5-005: Diagram data extracted from markdown frontmatter"
+      - "AC-PHASE74-S5-006: 60 tests passing (rendering + responsive + a11y + data)"
+
+  - stage_id: "S6"
+    name: "Validation Pipeline (6-Tier)"
+    duration: "5 days"
+    effort_hours: 20
+    status: "planned"
+    description: |
+      Implement comprehensive validation pipeline with blocking gates.
+      
+      Deliverables:
+      1. Tier 1: HTML5 Validator
+         - W3C validation via validator.w3.org API
+         - Semantic HTML checks (proper heading hierarchy, landmark regions)
+         - Meta tag validation (Open Graph, Twitter Cards)
+      
+      2. Tier 2: CSS Layout Validator
+         - CORTEXLayoutValidator.js (existing tool)
+         - Grid validation (no overlap, proper alignment)
+         - Panel spacing checks (glassmorphism design compliance)
+      
+      3. Tier 3: JavaScript Validator
+         - ESLint with Airbnb config
+         - TypeScript strict mode (if TypeScript used)
+         - No console.log() in production
+      
+      4. Tier 4: Typography Validator
+         - Font loading verification (Inter, JetBrains Mono, Lexend)
+         - Font size validation (16px minimum body text)
+         - Contrast ratio checks (7:1 normal, 4.5:1 large)
+      
+      5. Tier 5: Accessibility Validator
+         - axe-core integration (WCAG AA compliance)
+         - Keyboard navigation testing (all interactive elements reachable)
+         - Screen reader testing (ARIA labels, semantic HTML)
+      
+      6. Tier 6: Performance Validator
+         - Lighthouse CI integration (score >90 target)
+         - Web Vitals monitoring (LCP <2.5s, FID <100ms, CLS <0.1)
+         - Bundle size checks (CSS <50KB, JS <100KB per page)
+      
+      7. Validation reporting
+         - Per-page reports (docs/_validation/{page}.json)
+         - Aggregate dashboard (docs/_validation/summary.html)
+         - CI/CD integration (block merge on failures)
+      
+      8. Tests (50 tests)
+         - Validation pipeline integrity (10 tests)
+         - Tier 1-6 execution (24 tests) — 4 per tier
+         - Reporting accuracy (10 tests)
+         - CI/CD integration (6 tests)
+      
+      Risks & Mitigations:
+      - Risk: Validation too strict (blocks legitimate changes)
+        Mitigation: Configurable thresholds, warning vs error levels
+      - Risk: Performance overhead (validation slows CI/CD)
+        Mitigation: Parallel execution, cache results
+    
+    acceptance_criteria:
+      - "AC-PHASE74-S6-001: All 47 pages passing 6-tier validation"
+      - "AC-PHASE74-S6-002: Zero critical issues, <5 warnings total"
+      - "AC-PHASE74-S6-003: Lighthouse score >90 (performance + accessibility + best practices)"
+      - "AC-PHASE74-S6-004: WCAG AA compliant (axe-core passing)"
+      - "AC-PHASE74-S6-005: Validation reports generated per page"
+      - "AC-PHASE74-S6-006: 50 tests passing (validation pipeline + reporting)"
+
+  - stage_id: "S7"
+    name: "GitHub Pages Compatibility & Polish"
+    duration: "4 days"
+    effort_hours: 16
+    status: "planned"
+    description: |
+      Ensure production-ready deployment on GitHub Pages with final polish.
+      
+      Deliverables:
+      1. GitHub Pages compatibility checks
+         - Relative paths validation (no hardcoded localhost URLs)
+         - Asset loading verification (CSS, JS, fonts, images from relative paths)
+         - CSP headers compatibility (GitHub Pages restrictions)
+         - HTTPS enforcement (all assets loaded over HTTPS)
+      
+      2. Performance optimization
+         - Lazy-load images (srcset for responsive images)
+         - Debounced scroll events (200ms)
+         - CSS minification (reduce bundle size)
+         - JS tree-shaking (remove unused D3.js code)
+      
+      3. Final accessibility audit
+         - Keyboard navigation testing (all pages)
+         - Screen reader testing (NVDA, JAWS, VoiceOver)
+         - Color contrast validation (all panels, buttons, links)
+         - Focus management (visible focus indicators)
+      
+      4. Refactor/cleanup cycle
+         - Remove debug code (console.log, commented code)
+         - Optimize asset sizes (compress images, fonts)
+         - Code review (CORTEX EnforcementOrchestrator)
+      
+      5. Test deployment
+         - Deploy to GitHub Pages test branch
+         - Smoke test all 47 pages (verify loading, navigation, diagrams)
+         - Performance testing (Lighthouse on live site)
+      
+      6. Tests (40 tests)
+         - GitHub Pages compatibility (10 tests)
+         - Performance optimization (10 tests)
+         - Accessibility audit (10 tests)
+         - Deployment verification (10 tests)
+      
+      Risks & Mitigations:
+      - Risk: Asset loading fails on GitHub CDN (404s)
+        Mitigation: Test on live GitHub Pages, fix paths
+      - Risk: CSP headers block inline scripts (functionality broken)
+        Mitigation: Move inline scripts to external files
+    
+    acceptance_criteria:
+      - "AC-PHASE74-S7-001: Site works on GitHub Pages (test deployment verified)"
+      - "AC-PHASE74-S7-002: All assets loading correctly (no 404s, all HTTPS)"
+      - "AC-PHASE74-S7-003: Lighthouse score >90 on live site"
+      - "AC-PHASE74-S7-004: WCAG AA compliant (keyboard nav + screen reader tested)"
+      - "AC-PHASE74-S7-005: No debug code in production (console.log removed)"
+      - "AC-PHASE74-S7-006: 40 tests passing (compatibility + performance + a11y + deployment)"
+
+  - stage_id: "S8"
+    name: "Structure Cleanup & Source Deletion"
+    duration: "2 days"
+    effort_hours: 8
+    status: "planned"
+    description: |
+      Mandatory structure validation and source markdown deletion after successful generation.
+      
+      Deliverables:
+      1. cortex/documentation/structure_validator.py
+         - StructureValidator class with folder hierarchy enforcement
+         - Cleanup script removing orphaned files, fixing broken links
+         - Navigation breadcrumb generator (automatic from folder hierarchy)
+      
+      2. Folder structure validation rules
+         - Rule 1: No files in docs/ root (except index.html)
+         - Rule 2: Max nesting depth = 3 levels (docs/architecture/orchestration/tdd.html)
+         - Rule 3: No orphaned files (all HTML linked from navigation)
+         - Rule 4: No broken internal links (all cross-references valid)
+         - Rule 5: Approved hierarchy only (guides/, architecture/, capabilities/, deployment/)
+      
+      3. Source deletion gate
+         - Verify all 47 HTML pages exist and pass validation
+         - Verify GitHub Pages test deployment successful
+         - Delete _workspaces/cortex-architecture/ folder
+         - Update documentation references (README.md, CONTRIBUTING.md)
+      
+      4. Documentation updates
+         - README.md: Update links to point to GitHub Pages site
+         - CONTRIBUTING.md: Document HTML-first workflow (no markdown editing)
+         - docs/README.md: Add maintenance guide for documentation site
+      
+      5. Tests (30 tests)
+         - Structure validation (10 tests)
+         - Orphan detection (5 tests)
+         - Link validation (5 tests)
+         - Deletion gate (5 tests)
+         - Documentation updates (5 tests)
+      
+      Risks & Mitigations:
+      - Risk: Premature deletion (source deleted before validation passes)
+        Mitigation: Strict gate enforcement, require explicit approval
+      - Risk: No rollback path (markdown deleted, HTML broken)
+        Mitigation: Git commit before deletion, easy revert
+    
+    acceptance_criteria:
+      - "AC-PHASE74-S8-001: Zero files in docs/ root (except index.html)"
+      - "AC-PHASE74-S8-002: Max nesting depth = 3 levels (validated)"
+      - "AC-PHASE74-S8-003: Zero orphaned files (all linked from navigation)"
+      - "AC-PHASE74-S8-004: Zero broken internal links (all cross-references valid)"
+      - "AC-PHASE74-S8-005: _workspaces/cortex-architecture/ deleted (after validation passes)"
+      - "AC-PHASE74-S8-006: Documentation updated (README.md, CONTRIBUTING.md, docs/README.md)"
+      - "AC-PHASE74-S8-007: 30 tests passing (structure + orphans + links + deletion + docs)"
+
+agent_wiring:
+  agent: ".github/agents/support/cortex-documentation-architect.md"
+  enforcement_points:
+    - stage: "S0"
+      hook: "post_build"
+      action: "validate_manifest_integrity"
+      blocking: true
+    
+    - stage: "S1"
+      hook: "post_detection"
+      action: "validate_delta_report"
+      blocking: false
+    
+    - stage: "S2"
+      hook: "pre_enhancement"
+      action: "validate_existing_agent_spec"
+      blocking: true
+    
+    - stage: "S2"
+      hook: "post_enhancement"
+      action: "validate_design_system_completeness"
+      blocking: true
+    
+    - stage: "S3"
+      hook: "post_build"
+      action: "validate_glassmorphism_compliance"
+      blocking: true
+    
+    - stage: "S3"
+      hook: "post_build"
+      action: "validate_responsive_design"
+      blocking: true
+    
+    - stage: "S4"
+      hook: "post_build"
+      action: "validate_content_integrity"
+      blocking: true
+    
+    - stage: "S4"
+      hook: "post_build"
+      action: "validate_internal_links"
+      blocking: true
+    
+    - stage: "S5"
+      hook: "post_build"
+      action: "validate_d3js_rendering"
+      blocking: true
+    
+    - stage: "S5"
+      hook: "post_build"
+      action: "validate_accessibility"
+      blocking: true
+    
+    - stage: "S6"
+      hook: "post_validation"
+      action: "validate_6_tier_pipeline"
+      blocking: true
+    
+    - stage: "S7"
+      hook: "post_deployment"
+      action: "validate_github_pages_compatibility"
+      blocking: true
+    
+    - stage: "S8"
+      hook: "pre_deletion"
+      action: "validate_all_pages_exist"
+      blocking: true
+    
+    - stage: "S8"
+      hook: "pre_deletion"
+      action: "validate_github_pages_live"
+      blocking: true
+    
+    - stage: "S8"
+      hook: "post_deletion"
+      action: "validate_structure_compliance"
+      blocking: true
+
+verification_gates:
+  mandatory_checkpoints:
+    - gate: "S0_COMPLETE"
+      condition: "40 tests passing + manifest valid + search index generated"
+      blocking: true
+    
+    - gate: "S1_COMPLETE"
+      condition: "40 tests passing + delta detection accurate (≥80% time savings)"
+      blocking: true
+    
+    - gate: "S2_COMPLETE"
+      condition: "50 tests passing + agent spec 1,200+ lines + design system embedded"
+      blocking: true
+    
+    - gate: "S3_COMPLETE"
+      condition: "60 tests passing + Lighthouse >90 + WCAG AA + responsive validated"
+      blocking: true
+    
+    - gate: "S4_COMPLETE"
+      condition: "80 tests passing + 47 HTML pages + content integrity + links valid"
+      blocking: true
+    
+    - gate: "S5_COMPLETE"
+      condition: "60 tests passing + 8 D3.js diagrams + responsive + accessible"
+      blocking: true
+    
+    - gate: "S6_COMPLETE"
+      condition: "50 tests passing + 6-tier validation + zero critical issues"
+      blocking: true
+    
+    - gate: "S7_COMPLETE"
+      condition: "40 tests passing + GitHub Pages live + Lighthouse >90 on production"
+      blocking: true
+    
+    - gate: "S8_COMPLETE"
+      condition: "30 tests passing + structure valid + source deleted + docs updated"
+      blocking: true
+
+  refactor_cleanup_cycles:
+    - after_stage: "S3"
+      action: "Remove debug code from entry portal HTML/JS"
+      duration: "2 hours"
+    
+    - after_stage: "S4"
+      action: "Optimize content migration pipeline (remove temp files)"
+      duration: "2 hours"
+    
+    - after_stage: "S5"
+      action: "Optimize D3.js performance (reduce bundle size, tree-shaking)"
+      duration: "4 hours"
+    
+    - after_stage: "S6"
+      action: "Cleanup validation artifacts (remove temp validation files)"
+      duration: "2 hours"
+    
+    - after_stage: "S7"
+      action: "Final code review (CORTEX EnforcementOrchestrator)"
+      duration: "4 hours"
+    
+    - after_stage: "S8"
+      action: "Documentation review + commit message cleanup"
+      duration: "2 hours"
+
+dependencies:
+  depends_on:
+    - "phase-70"  # Alignment remediation (ensure production ready)
+    - "phase-48"  # Holistic validation (validation patterns)
+  
+  blocks:
+    - "phase-75-documentation-versioning"  # Multi-version docs support
+    - "phase-76-documentation-search-analytics"  # Search analytics + user tracking
+
+risks:
+  - risk_id: "R74-001"
+    severity: "MEDIUM"
+    description: "Delta detection false negatives (miss changes requiring regeneration)"
+    mitigation: "Conservative detection rules, regenerate on ambiguity, extensive tests"
+    probability: 0.3
+  
+  - risk_id: "R74-002"
+    severity: "LOW"
+    description: "D3.js bundle size too large (slow page load)"
+    mitigation: "Tree-shaking, on-demand loading, mobile simplification"
+    probability: 0.2
+  
+  - risk_id: "R74-003"
+    severity: "HIGH"
+    description: "Premature source deletion (markdown deleted before validation passes)"
+    mitigation: "Strict S8 gate enforcement, require explicit approval, git commit before deletion"
+    probability: 0.1
+  
+  - risk_id: "R74-004"
+    severity: "MEDIUM"
+    description: "GitHub Pages CSP conflicts (inline scripts blocked)"
+    mitigation: "Move inline scripts to external files, test on live GitHub Pages"
+    probability: 0.2
+
+rollback_plan:
+  condition: "Critical validation failure or GitHub Pages deployment broken"
+  steps:
+    - "Revert git commit before S8 source deletion"
+    - "Restore _workspaces/cortex-architecture/ from git history"
+    - "Roll back docs/ folder to previous commit"
+    - "Investigate validation failures"
+    - "Fix issues in development branch"
+    - "Re-run Phase 74 from failing stage"
+
+notes: |
+  Phase 74 represents a strategic shift in CORTEX documentation delivery:
+  
+  **Key Design Decisions:**
+  1. **Option C Hybrid Structure** — Balances stakeholder needs (guides/) with technical depth (architecture/)
+  2. **Delta Intelligence** — Git-aware regeneration prevents full rebuild waste (80% time savings)
+  3. **Embedded Design System** — Zero external dependencies ensures long-term maintainability
+  4. **Source Deletion** — HTML becomes single source of truth (prevents markdown/HTML drift)
+  5. **6-Tier Validation** — Production-ready quality gate (Lighthouse >90, WCAG AA)
+  
+  **Future Phases Enabled:**
+  - Phase 75: Documentation versioning (v1.0, v2.0 support)
+  - Phase 76: Search analytics + user tracking (understand documentation usage)
+  - Phase 77: Multi-language support (i18n for global teams)
+  
+  **Maintenance Model:**
+  - Content changes: Edit HTML directly in docs/ (not markdown)
+  - Design changes: Update embedded design system in agent spec
+  - New pages: Run documentation builder with new markdown source
+  - Delta updates: Automatic detection + incremental rebuild
+  
+  **Success Metrics:**
+  - Build time: <10 seconds for typical change (3-5 pages)
+  - Full rebuild: <45 seconds (baseline: 45 seconds)
+  - Page load: <2.5s LCP, <0.1 CLS
+  - Accessibility: WCAG AA compliant, Lighthouse >90
+  - User engagement: Track via Phase 76 analytics
