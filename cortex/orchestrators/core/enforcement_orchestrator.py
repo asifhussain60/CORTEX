@@ -351,6 +351,7 @@ class FileNamingEnforcementAgent:
             "__init__.py",
             "setup.py",
             "conftest.py",
+            "README.md",  # Phase 71 S1: Standard project root file
             "node_modules",
             ".git",
             "__pycache__",
@@ -478,8 +479,11 @@ class MarkdownSuppressionAgent:
     - *-report.md
     - *-plan.md
     - DEPLOYMENT-*.md
+    - Root directory markdown (except README.md, docs/, cortex-registry/)
     
     Unless user explicitly requests them (user_explicit_request=True).
+    
+    Phase 71 S1: Enhanced with root directory validation to prevent pollution.
     """
     
     def validate(self, context: Dict[str, Any]) -> EnforcementResult:
@@ -514,13 +518,32 @@ class MarkdownSuppressionAgent:
             ("DEPLOYMENT-", "deployment guide"),
         ]
         
+        # Allowed root directories (explicit allowlist)
+        allowed_root_paths = ["docs/", "cortex-registry/", ".cortex/", ".github/"]
+        
         for file in output_files:
             file_lower = file.lower()
+            
+            # Pattern-based validation (existing logic)
             for pattern, description in forbidden_patterns:
                 if pattern.lower() in file_lower:
                     violations.append(
                         f"CORE-002 VIOLATION: Cannot generate {description} markdown file: {file}. "
                         "Results must be reported inline in chat."
+                    )
+            
+            # Root directory validation (Phase 71 enhancement)
+            if file.endswith(".md") or file.endswith(".MD"):
+                # Check if file is in root directory
+                is_root = not any(file.startswith(prefix) for prefix in allowed_root_paths)
+                is_readme = file.strip("/").upper() == "README.MD" or file.strip("/") == "README.md"
+                
+                # Block root markdown unless README.md
+                if is_root and not is_readme:
+                    violations.append(
+                        f"CORE-002 VIOLATION: Cannot generate markdown in root directory: {file}. "
+                        "Markdown files must be in docs/, cortex-registry/, or .cortex/ directories. "
+                        "Only README.md is allowed in root."
                     )
         
         # Determine enforcement level
