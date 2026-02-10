@@ -315,15 +315,6 @@ class TestFileContentSynthesis:
         
         assert "process_data" in result.content and "validate_input" in result.content
     
-    '''This is a critical function that does X, Y, Z'''
-    pass
-"""
-        
-        result = synthesizer.synthesize_file_content(code_content, "important.py")
-        
-        # Should have function name
-        assert "important_function" in result.content
-    
     def test_synthesize_file_compression_target(self):
         """Verify good compression for source files"""
         synthesizer = ContextSynthesizer()
