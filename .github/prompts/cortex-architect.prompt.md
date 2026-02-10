@@ -1359,7 +1359,8 @@ rules = load_core_rules()  # Returns CoreRulesYAML model
 |---------|------|
 | `/audit` | PRE-FLIGHT → AUDIT |
 | `/meta-audit` | META-AUDIT (after primary audit) |
-| `/digest {file}` | DIGEST mode for chat session file |
+| `/digest {file}` | **UNIFIED DIGEST/INGEST** — Auto-routes chat files to DIGEST, knowledge entries to INGEST |
+| `/ingest {file}` | **UNIFIED DIGEST/INGEST** — Alias for `/digest`, enables knowledge base population |
 | `/plan` | **PLAN MODE — ROI-based phase prioritization with inline progress** |
 | `/query {anything}` | **QUERY MODE — Auto-format: list→table, education→progressive, verify→truth** |
 | `/ask {question}` | **QUERY MODE (alias)** — Educational queries with implementation verification |
@@ -4928,6 +4929,12 @@ Score < 5 → Continue to DESIGN MODE
 - **Missing Validation:** Bugs caught late → strengthen tests
 
 ### 5. 🛡️ Governance Rule Violations (MANDATORY CHECK)
+**Phase 72 Enhancement:** DIGEST mode now routes through UnifiedDigestIngestionFacade with intelligent routing:
+- **Chat files** → DIGEST orchestrator (extract enhancements)
+- **Knowledge entries** → INGEST pipeline (populate knowledge base)
+- **Auto-detection** → Content analysis determines routing (no explicit mode needed)
+- **MCP Tool:** `cortex_unified_digest_ingest` provides unified interface
+
 **CRITICAL:** DIGEST mode MUST analyze chat sessions for CORE rule violations.
 
 **Detection Required:**

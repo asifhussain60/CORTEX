@@ -512,7 +512,9 @@ result = mcp_tool.execute(parameters)
 | TEST | TDDOrchestrator | `cortex_process_request` |
 | DEPLOY | GitOrchestrator | `cortex_process_request` |
 | ONBOARD | RepositoryOnboardingOrchestrator | `cortex_onboard_repository` |
-| **DIGEST** | **DigestOrchestrator** | `cortex_digest_session` |
+| **DIGEST/INGEST** | **UnifiedDigestIngestionFacade** | `cortex_unified_digest_ingest` |
+
+**Note (Phase 72):** DIGEST (chat file learning) and INGEST (knowledge population) now route through unified facade with intelligent mode detection. Use `cortex_unified_digest_ingest` which auto-routes based on source type or content analysis.
 
 ### Available Orchestrators (28)
 
