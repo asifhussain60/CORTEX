@@ -1,4 +1,6 @@
-# Phase 74: CORTEX Documentation Site Generation
+# Phase 74: CORTEX Documentation Site     6. **GitHub Pages Compatibility** — Relative paths, asset optimization, CSP headers
+    7. **Markdown Preservation** — Source moved to docs/_source/ with CORE-028 compliance (kebab-case)
+    8. **Git Strategy** — Markdown committed to origin/main, HTML blocked via .gitignoreneration
 # Authority: cortex-architect.prompt.md v7.7 + User Requirements (2026-02-10)
 # Strategic Enhancement: Multi-Role Portal + Delta Intelligence + Structure Cleanup
 # Created: 2026-02-10
@@ -83,85 +85,139 @@ overview:
     - CSP headers may conflict with GitHub Pages
 
   success_criteria:
-    - "47 HTML pages generated from _workspaces/cortex-architecture/ markdown (zero content modification)"
+    - "47 HTML pages generated from docs/_source/ markdown (zero content modification)"
     - "8 D3.js diagram types working responsively (force-directed, tree, Sankey, timeline, packed circles, flow, sunburst, network)"
     - "Delta detection functional (detect 3 markdown changes → regenerate only 3 HTML pages)"
-    - "Folder structure validated (Option C hybrid: guides/, architecture/, capabilities/, deployment/)"
-    - "360 tests passing (40 build + 50 agent + 60 portal + 80 content + 60 diagrams + 50 validation + 20 cleanup)"
+    - "Folder structure validated (Option C hybrid: guides/, architecture/, capabilities/, deployment/, _source/)"
+    - "47 markdown files migrated to docs/_source/ with CORE-028 compliance (kebab-case, no SCREAMING_CASE)"
+    - "360 tests passing (40 build + 40 delta + 50 agent + 60 portal + 80 content + 60 diagrams + 50 validation + 40 compatibility + 30 migration)"
     - "Lighthouse score >90, WCAG AA compliant, Web Vitals: LCP <2.5s, CLS <0.1"
     - "GitHub Pages test deployment successful (site accessible at https://{owner}.github.io/{repo}/)"
-    - "_workspaces/cortex-architecture/ deleted after successful validation"
+    - ".gitignore blocks HTML from origin/main, allows markdown source docs/_source/"
+    - "_workspaces/cortex-architecture/ empty or removed (source moved to docs/_source/)"
     - "Search index generated from final HTML output (full-text search functional)"
 
   folder_structure: |
-    Target structure (Option C - Hybrid):
+    Target structure (Option C - Hybrid) with markdown source preservation:
     
     docs/
     ├─ index.html                          # Entry portal with role selection panels
+    ├─ README.md                           # Site overview + navigation guide
+    │
+    ├─ _source/                            # Markdown source (CORE-028 compliant)
+    │  ├─ README.md                        # Maintenance guide for updates
+    │  ├─ index.md                         # Root content
+    │  ├─ capabilities/
+    │  │  ├─ ai-intelligence.md
+    │  │  ├─ core-platform.md
+    │  │  ├─ decisioning.md
+    │  │  ├─ extensibility.md
+    │  │  ├─ governance-compliance.md
+    │  │  └─ overview.md
+    │  ├─ orchestration/
+    │  │  ├─ cross-orchestrator.md
+    │  │  ├─ domain-orchestrators.md
+    │  │  ├─ end-to-end-flow.md
+    │  │  ├─ intent-router.md
+    │  │  ├─ master-orchestrator.md
+    │  │  ├─ overview.md
+    │  │  ├─ support-orchestrators.md
+    │  │  └─ tdd-orchestrator.md
+    │  ├─ lens/
+    │  │  ├─ analyzers.md
+    │  │  ├─ architecture.md
+    │  │  ├─ caching.md
+    │  │  ├─ governance.md
+    │  │  ├─ overview.md
+    │  │  └─ synthesis.md
+    │  ├─ mcp/
+    │  │  ├─ integration.md
+    │  │  ├─ overview.md
+    │  │  ├─ protocol.md
+    │  │  ├─ tools-catalog.md
+    │  │  └─ versioning.md
+    │  ├─ toolkit/
+    │  │  ├─ developer-guide.md
+    │  │  ├─ overview.md
+    │  │  ├─ security-model.md
+    │  │  ├─ tool-categories.md
+    │  │  └─ tool-registry.md
+    │  ├─ infrastructure/
+    │  │  ├─ ci-cd.md
+    │  │  ├─ deployment.md
+    │  │  ├─ observability.md
+    │  │  ├─ overview.md
+    │  │  ├─ scalability.md
+    │  │  └─ tech-stack.md
+    │  └─ diagrams/
+    │     ├─ architecture-overview.md
+    │     ├─ component-relationships.md
+    │     ├─ data-flow.md
+    │     └─ request-lifecycle.md
     │
     ├─ guides/
-    │  ├─ business.html                    # Business stakeholder overview
-    │  ├─ product.html                     # Product manager overview
-    │  └─ engineering.html                 # Engineering overview
+    │  ├─ business.html                    # Business stakeholder overview (generated)
+    │  ├─ product.html                     # Product manager overview (generated)
+    │  └─ engineering.html                 # Engineering overview (generated)
     │
     ├─ architecture/
-    │  ├─ index.html                       # Architecture hub
-    │  ├─ overview.html                    # System overview
+    │  ├─ index.html                       # Architecture hub (generated)
+    │  ├─ overview.html                    # System overview (generated)
     │  ├─ orchestration/
-    │  │  ├─ index.html                    # Orchestration hub
-    │  │  ├─ overview.html
-    │  │  ├─ master-orchestrator.html
-    │  │  ├─ tdd-orchestrator.html
-    │  │  ├─ intent-router.html
-    │  │  ├─ domain-orchestrators.html
-    │  │  ├─ support-orchestrators.html
-    │  │  ├─ cross-orchestrator.html
-    │  │  └─ end-to-end-flow.html
+    │  │  ├─ index.html                    # Orchestration hub (generated)
+    │  │  ├─ overview.html                 # (generated from _source/orchestration/overview.md)
+    │  │  ├─ master-orchestrator.html      # (generated)
+    │  │  ├─ tdd-orchestrator.html         # (generated)
+    │  │  ├─ intent-router.html            # (generated)
+    │  │  ├─ domain-orchestrators.html     # (generated)
+    │  │  ├─ support-orchestrators.html    # (generated)
+    │  │  ├─ cross-orchestrator.html       # (generated)
+    │  │  └─ end-to-end-flow.html          # (generated)
     │  ├─ lens/
-    │  │  ├─ index.html                    # LENS hub
-    │  │  ├─ overview.html
-    │  │  ├─ architecture.html
-    │  │  ├─ analyzers.html
-    │  │  ├─ synthesis.html
-    │  │  ├─ caching.html
-    │  │  └─ governance.html
+    │  │  ├─ index.html                    # LENS hub (generated)
+    │  │  ├─ overview.html                 # (generated from _source/lens/overview.md)
+    │  │  ├─ architecture.html             # (generated)
+    │  │  ├─ analyzers.html                # (generated)
+    │  │  ├─ synthesis.html                # (generated)
+    │  │  ├─ caching.html                  # (generated)
+    │  │  └─ governance.html               # (generated)
     │  ├─ mcp/
-    │  │  ├─ index.html                    # MCP hub
-    │  │  ├─ overview.html
-    │  │  ├─ protocol.html
-    │  │  ├─ integration.html
-    │  │  ├─ tools-catalog.html
-    │  │  └─ versioning.html
+    │  │  ├─ index.html                    # MCP hub (generated)
+    │  │  ├─ overview.html                 # (generated from _source/mcp/overview.md)
+    │  │  ├─ protocol.html                 # (generated)
+    │  │  ├─ integration.html              # (generated)
+    │  │  ├─ tools-catalog.html            # (generated)
+    │  │  └─ versioning.html               # (generated)
     │  └─ diagrams/
-    │     ├─ architecture-overview.html
-    │     ├─ component-relationships.html
-    │     ├─ data-flow.html
-    │     └─ request-lifecycle.html
+    │     ├─ architecture-overview.html    # (generated from _source/diagrams/architecture-overview.md)
+    │     ├─ component-relationships.html  # (generated)
+    │     ├─ data-flow.html                # (generated)
+    │     └─ request-lifecycle.html        # (generated)
     │
     ├─ capabilities/
-    │  ├─ index.html                       # Capabilities hub
-    │  ├─ overview.html
-    │  ├─ core-platform.html
-    │  ├─ ai-intelligence.html
-    │  ├─ decisioning.html
-    │  ├─ extensibility.html
-    │  └─ governance-compliance.html
+    │  ├─ index.html                       # Capabilities hub (generated)
+    │  ├─ overview.html                    # (generated from _source/capabilities/overview.md)
+    │  ├─ core-platform.html               # (generated)
+    │  ├─ ai-intelligence.html             # (generated)
+    │  ├─ decisioning.html                 # (generated)
+    │  ├─ extensibility.html               # (generated)
+    │  └─ governance-compliance.html       # (generated)
     │
     ├─ deployment/
-    │  ├─ index.html                       # Deployment hub
-    │  ├─ overview.html
-    │  ├─ infrastructure.html
-    │  ├─ ci-cd.html
-    │  ├─ observability.html
-    │  ├─ scalability.html
-    │  ├─ tech-stack.html
+    │  ├─ index.html                       # Deployment hub (generated)
+    │  ├─ overview.html                    # (generated from _source/infrastructure/overview.md)
+    │  ├─ infrastructure.html              # (generated)
+    │  ├─ ci-cd.html                       # (generated)
+    │  ├─ observability.html               # (generated)
+    │  ├─ scalability.html                 # (generated)
+    │  ├─ tech-stack.html                  # (generated)
     │  └─ toolkit/
-    │     ├─ index.html                    # Toolkit hub
-    │     ├─ overview.html
-    │     ├─ developer-guide.html
-    │     ├─ security-model.html
-    │     ├─ tool-categories.html
-    │     └─ tool-registry.html
+    │     ├─ index.html                    # Toolkit hub (generated)
+    │     ├─ overview.html                 # (generated from _source/toolkit/overview.md)
+    │     ├─ developer-guide.html          # (generated)
+    │     ├─ security-model.html           # (generated)
+    │     ├─ tool-categories.html          # (generated)
+    │     └─ tool-registry.html            # (generated)
     │
     └─ assets/
        ├─ css/
@@ -177,6 +233,12 @@ overview:
           ├─ inter/                        # Google Fonts - Inter
           ├─ jetbrains-mono/               # Google Fonts - JetBrains Mono
           └─ lexend/                       # Google Fonts - Lexend
+    
+    Git Strategy:
+    - docs/_source/*.md → Committed to origin/main (source of truth)
+    - docs/**/*.html → Blocked via .gitignore (generated content, local only)
+    - docs/assets/ → Committed to origin/main (design system, D3.js)
+    - docs/README.md → Committed to origin/main (site documentation)
 
 stages:
   - stage_id: "S0"
@@ -610,12 +672,12 @@ stages:
       - "AC-PHASE74-S7-006: 40 tests passing (compatibility + performance + a11y + deployment)"
 
   - stage_id: "S8"
-    name: "Structure Cleanup & Source Deletion"
+    name: "Markdown Migration & Structure Cleanup"
     duration: "2 days"
     effort_hours: 8
     status: "planned"
     description: |
-      Mandatory structure validation and source markdown deletion after successful generation.
+      Mandatory structure validation with markdown source preservation and migration to docs/.
       
       Deliverables:
       1. cortex/documentation/structure_validator.py
@@ -624,44 +686,68 @@ stages:
          - Navigation breadcrumb generator (automatic from folder hierarchy)
       
       2. Folder structure validation rules
-         - Rule 1: No files in docs/ root (except index.html)
-         - Rule 2: Max nesting depth = 3 levels (docs/architecture/orchestration/tdd.html)
+         - Rule 1: No files in docs/ root (except index.html, README.md)
+         - Rule 2: Max nesting depth = 3 levels (docs/architecture/orchestration/tdd-orchestrator.html)
          - Rule 3: No orphaned files (all HTML linked from navigation)
          - Rule 4: No broken internal links (all cross-references valid)
-         - Rule 5: Approved hierarchy only (guides/, architecture/, capabilities/, deployment/)
+         - Rule 5: Approved hierarchy only (guides/, architecture/, capabilities/, deployment/, _source/)
       
-      3. Source deletion gate
-         - Verify all 47 HTML pages exist and pass validation
-         - Verify GitHub Pages test deployment successful
-         - Delete _workspaces/cortex-architecture/ folder
-         - Update documentation references (README.md, CONTRIBUTING.md)
+      3. Markdown migration strategy (CORE-028 compliant)
+         - Move 47 markdown files from _workspaces/cortex-architecture/ to docs/_source/
+         - Apply CORE-028 governance: Convert to kebab-case (ai-intelligence.md stays, NO SCREAMING_CASE)
+         - Preserve content integrity (zero modification)
+         - Update internal markdown links (adjust paths for new location)
+         - Create docs/_source/README.md (maintenance guide for future updates)
       
-      4. Documentation updates
-         - README.md: Update links to point to GitHub Pages site
-         - CONTRIBUTING.md: Document HTML-first workflow (no markdown editing)
-         - docs/README.md: Add maintenance guide for documentation site
+      4. File naming validation (CORE-028)
+         - Scan all markdown files for SCREAMING_CASE violations
+         - Convert to kebab-case: ai-intelligence.md, core-platform.md (already compliant)
+         - Block: AI_INTELLIGENCE.md, CORE_PLATFORM.md (violations)
+         - Validate: Max 40 chars per filename (plan file exception not applicable here)
       
-      5. Tests (30 tests)
-         - Structure validation (10 tests)
-         - Orphan detection (5 tests)
-         - Link validation (5 tests)
-         - Deletion gate (5 tests)
-         - Documentation updates (5 tests)
+      5. .gitignore update
+         - Block docs/*.html from origin/main (generated content)
+         - Block docs/**/*.html from origin/main (all HTML files)
+         - Allow docs/_source/*.md to origin/main (source of truth)
+         - Allow docs/assets/ to origin/main (CSS, JS, fonts)
+      
+      6. Documentation updates
+         - README.md: Update links to point to GitHub Pages site + markdown source
+         - CONTRIBUTING.md: Document markdown-first workflow (edit docs/_source/, run builder)
+         - docs/_source/README.md: Add maintenance guide (how to update documentation)
+         - docs/README.md: Add site overview (role navigation, structure)
+      
+      7. Builder workflow documentation
+         - Document: python -m cortex.documentation.builder (regenerate HTML)
+         - Document: Delta detection (only rebuilds changed pages)
+         - Document: Design system enforcement (glassmorphism v4.0.0)
+         - Document: D3.js diagram generation (from frontmatter metadata)
+      
+      8. Tests (30 tests)
+         - Structure validation (8 tests)
+         - Markdown migration (8 tests) — Path updates, integrity checks
+         - File naming compliance (6 tests) — CORE-028 governance
+         - .gitignore validation (3 tests)
+         - Documentation completeness (5 tests)
       
       Risks & Mitigations:
-      - Risk: Premature deletion (source deleted before validation passes)
-        Mitigation: Strict gate enforcement, require explicit approval
-      - Risk: No rollback path (markdown deleted, HTML broken)
-        Mitigation: Git commit before deletion, easy revert
+      - Risk: Markdown internal links broken after migration
+        Mitigation: Automated link rewriting, validation tests
+      - Risk: File naming violations missed (CORE-028 breach)
+        Mitigation: Pre-migration scan, block on violations
+      - Risk: .gitignore misconfiguration (HTML committed to remote)
+        Mitigation: Test .gitignore rules, CI/CD validation
     
     acceptance_criteria:
-      - "AC-PHASE74-S8-001: Zero files in docs/ root (except index.html)"
+      - "AC-PHASE74-S8-001: Zero files in docs/ root (except index.html, README.md)"
       - "AC-PHASE74-S8-002: Max nesting depth = 3 levels (validated)"
       - "AC-PHASE74-S8-003: Zero orphaned files (all linked from navigation)"
       - "AC-PHASE74-S8-004: Zero broken internal links (all cross-references valid)"
-      - "AC-PHASE74-S8-005: _workspaces/cortex-architecture/ deleted (after validation passes)"
-      - "AC-PHASE74-S8-006: Documentation updated (README.md, CONTRIBUTING.md, docs/README.md)"
-      - "AC-PHASE74-S8-007: 30 tests passing (structure + orphans + links + deletion + docs)"
+      - "AC-PHASE74-S8-005: 47 markdown files migrated to docs/_source/ (CORE-028 compliant)"
+      - "AC-PHASE74-S8-006: .gitignore updated (HTML blocked, markdown allowed)"
+      - "AC-PHASE74-S8-007: Documentation updated (README.md, CONTRIBUTING.md, docs/_source/README.md)"
+      - "AC-PHASE74-S8-008: _workspaces/cortex-architecture/ empty or deleted (source moved)"
+      - "AC-PHASE74-S8-009: 30 tests passing (structure + migration + naming + gitignore + docs)"
 
 agent_wiring:
   agent: ".github/agents/support/cortex-documentation-architect.md"
@@ -727,17 +813,22 @@ agent_wiring:
       blocking: true
     
     - stage: "S8"
-      hook: "pre_deletion"
-      action: "validate_all_pages_exist"
+      hook: "pre_migration"
+      action: "validate_core_028_compliance"
       blocking: true
     
     - stage: "S8"
-      hook: "pre_deletion"
-      action: "validate_github_pages_live"
+      hook: "post_migration"
+      action: "validate_markdown_links"
       blocking: true
     
     - stage: "S8"
-      hook: "post_deletion"
+      hook: "post_migration"
+      action: "validate_gitignore_configuration"
+      blocking: true
+    
+    - stage: "S8"
+      hook: "post_cleanup"
       action: "validate_structure_compliance"
       blocking: true
 
@@ -776,7 +867,7 @@ verification_gates:
       blocking: true
     
     - gate: "S8_COMPLETE"
-      condition: "30 tests passing + structure valid + source deleted + docs updated"
+      condition: "30 tests passing + structure valid + markdown migrated to docs/_source/ + CORE-028 compliant"
       blocking: true
 
   refactor_cleanup_cycles:
@@ -801,7 +892,7 @@ verification_gates:
       duration: "4 hours"
     
     - after_stage: "S8"
-      action: "Documentation review + commit message cleanup"
+      action: "Documentation review + markdown migration verification + commit message cleanup"
       duration: "2 hours"
 
 dependencies:
@@ -827,10 +918,10 @@ risks:
     probability: 0.2
   
   - risk_id: "R74-003"
-    severity: "HIGH"
-    description: "Premature source deletion (markdown deleted before validation passes)"
-    mitigation: "Strict S8 gate enforcement, require explicit approval, git commit before deletion"
-    probability: 0.1
+    severity: "LOW"
+    description: "Markdown internal links broken after migration to docs/_source/"
+    mitigation: "Automated link rewriting, path validation tests, comprehensive link checker"
+    probability: 0.2
   
   - risk_id: "R74-004"
     severity: "MEDIUM"
@@ -839,24 +930,31 @@ risks:
     probability: 0.2
 
 rollback_plan:
-  condition: "Critical validation failure or GitHub Pages deployment broken"
+  condition: "Critical validation failure or markdown migration broken"
   steps:
-    - "Revert git commit before S8 source deletion"
+    - "Revert git commit before S8 markdown migration"
     - "Restore _workspaces/cortex-architecture/ from git history"
     - "Roll back docs/ folder to previous commit"
-    - "Investigate validation failures"
+    - "Investigate migration failures (link validation, CORE-028 violations)"
     - "Fix issues in development branch"
-    - "Re-run Phase 74 from failing stage"
+    - "Re-run Phase 74 from S8 stage"
 
 notes: |
-  Phase 74 represents a strategic shift in CORTEX documentation delivery:
+  Phase 74 represents a strategic shift in CORTEX documentation delivery with markdown preservation:
   
   **Key Design Decisions:**
   1. **Option C Hybrid Structure** — Balances stakeholder needs (guides/) with technical depth (architecture/)
-  2. **Delta Intelligence** — Git-aware regeneration prevents full rebuild waste (80% time savings)
-  3. **Embedded Design System** — Zero external dependencies ensures long-term maintainability
-  4. **Source Deletion** — HTML becomes single source of truth (prevents markdown/HTML drift)
-  5. **6-Tier Validation** — Production-ready quality gate (Lighthouse >90, WCAG AA)
+  2. **Markdown Preservation** — Source moved to docs/_source/ (NOT deleted, enables future updates)
+  3. **Delta Intelligence** — Git-aware regeneration prevents full rebuild waste (80% time savings)
+  4. **Embedded Design System** — Zero external dependencies ensures long-term maintainability
+  5. **CORE-028 Compliance** — All markdown files kebab-case (ai-intelligence.md, core-platform.md)
+  6. **6-Tier Validation** — Production-ready quality gate (Lighthouse >90, WCAG AA)
+  
+  **Markdown Migration Strategy:**
+  - Source: _workspaces/cortex-architecture/ (47 files)
+  - Target: docs/_source/ (47 files, CORE-028 compliant)
+  - Git: Markdown committed to origin/main, HTML blocked via .gitignore
+  - Updates: Edit docs/_source/*.md, run builder, HTML regenerated automatically
   
   **Future Phases Enabled:**
   - Phase 75: Documentation versioning (v1.0, v2.0 support)
@@ -864,14 +962,34 @@ notes: |
   - Phase 77: Multi-language support (i18n for global teams)
   
   **Maintenance Model:**
-  - Content changes: Edit HTML directly in docs/ (not markdown)
+  - Content changes: Edit markdown in docs/_source/ (simple, admin-friendly)
   - Design changes: Update embedded design system in agent spec
-  - New pages: Run documentation builder with new markdown source
-  - Delta updates: Automatic detection + incremental rebuild
+  - New pages: Add markdown to docs/_source/, run builder
+  - Delta updates: Automatic detection + incremental rebuild (5-10 seconds)
+  - Builder command: python -m cortex.documentation.builder
+  
+  **Git Strategy:**
+  ```
+  # .gitignore
+  docs/*.html           # Block generated HTML
+  docs/**/*.html        # Block all HTML files
+  !docs/_source/*.md    # Allow markdown source
+  !docs/assets/         # Allow CSS, JS, fonts
+  !docs/README.md       # Allow site documentation
+  ```
+  
+  **Workflow (Future Updates):**
+  1. Edit markdown: docs/_source/orchestration/phase-80-orchestrator.md
+  2. Run builder: python -m cortex.documentation.builder
+  3. Builder detects change (delta intelligence)
+  4. Regenerates affected HTML (3 pages in 8 seconds)
+  5. Commit markdown: git add docs/_source/orchestration/phase-80-orchestrator.md
+  6. Push to remote: git push origin CORTEX (markdown only, HTML stays local)
   
   **Success Metrics:**
   - Build time: <10 seconds for typical change (3-5 pages)
   - Full rebuild: <45 seconds (baseline: 45 seconds)
   - Page load: <2.5s LCP, <0.1 CLS
   - Accessibility: WCAG AA compliant, Lighthouse >90
-  - User engagement: Track via Phase 76 analytics
+  - Maintenance: Simple markdown editing (admin-friendly)
+  - CORE-028: 100% compliance (zero SCREAMING_CASE violations)
