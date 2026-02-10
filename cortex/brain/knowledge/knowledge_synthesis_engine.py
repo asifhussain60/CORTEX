@@ -604,13 +604,60 @@ class KnowledgeSynthesisEngine:
         
         # Check complexity violations
         ast_analysis = lens_intelligence.ast_analysis
-        if ast_analysis.get("complexity", 0) > 20:
-            violations.append("CORTEX: High complexity detected (>20), refactoring recommended")
+        complexity_value = ast_analysis.get("complexity", 0)
+        # Handle string or non-numeric complexity values
+        try:
+            if isinstance(complexity_value, str):
+                # Handle special string values
+                if complexity_value.lower() in ["very_high", "high", "critical"]:
+                    violations.append("CORTEX: High complexity detected, refactoring recommended")
+                elif complexity_value.isdigit():
+                    complexity = int(complexity_value)
+                    if complexity > 20:
+                        violations.append("CORTEX: High complexity detected (>20), refactoring recommended")
+            elif isinstance(complexity_value, (int, float)):
+                if complexity_value > 20:
+                    violations.append("CORTEX: High complexity detected (>20), refactoring recommended")
+        except (ValueError, TypeError):
+            pass  # Invalid complexity value, skip check
+        
+        # Check security issues
+        security_issues = ast_analysis.get("security_issues", [])
+        if security_issues:
+            for issue in security_issues:
+                if isinstance(issue, dict):
+                    issue_type = issue.get("type", "UNKNOWN")
+                    severity = issue.get("severity", "MEDIUM")
+                    description = issue.get("description", "Security issue detected")
+                    violations.append(f"SECURITY: {severity} - {issue_type}: {description}")
+                else:
+                    violations.append(f"SECURITY: {issue}")
+        
+        # Check method length violations
+        method_length = ast_analysis.get("method_length", 0)
+        try:
+            length = int(method_length) if isinstance(method_length, (str, int, float)) else 0
+            if length > 15:
+                violations.append(f"CORTEX: Method too long ({length} lines > 15 line threshold)")
+        except (ValueError, TypeError):
+            pass
+        
+        # Check AST-detected violations (from LENS analysis)
+        ast_violations = ast_analysis.get("violations", [])
+        if ast_violations:
+            for violation in ast_violations:
+                violations.append(f"LENS: {violation}")
         
         # Check TODO/FIXME violations
         comment_analysis = lens_intelligence.comment_analysis
-        if comment_analysis.get("fixmes", 0) > 5:
-            violations.append("CORTEX: Excessive FIXMEs detected (>5), technical debt accumulating")
+        fixme_count = comment_analysis.get("fixmes", 0)
+        # Handle string or non-numeric fixme counts
+        try:
+            fixmes = int(fixme_count) if isinstance(fixme_count, (str, int, float)) else 0
+            if fixmes > 5:
+                violations.append("CORTEX: Excessive FIXMEs detected (>5), technical debt accumulating")
+        except (ValueError, TypeError):
+            pass  # Invalid fixme count, skip check
         
         # Check compliance violations
         if "PCI-DSS" in company_knowledge.compliance_standards:
@@ -641,6 +688,31 @@ class KnowledgeSynthesisEngine:
         """
         guidance = []
         
+        # Company rule guidance (check first - higher precedence)
+        for rule_key, rule_value in merged_rules.items():
+            # Company rules typically have prefixes like ERR-, LOG-, SEC-, etc.
+            if rule_key.startswith(("ERR-", "LOG-", "SEC-", "PERF-", "TEST-")):
+                # Extract key concepts from rule value
+                rule_text = str(rule_value).lower()
+                # Add company-specific guidance with key terms
+                guidance.append(f"Follow company standard {rule_key}: {rule_value}")
+        
+        # Security guidance (CRITICAL - check early)
+        ast_analysis = lens_intelligence.ast_analysis
+        security_issues = ast_analysis.get("security_issues", [])
+        if security_issues:
+            for issue in security_issues:
+                if isinstance(issue, dict):
+                    issue_type = issue.get("type", "UNKNOWN")
+                    if "SQL_INJECTION" in issue_type:
+                        guidance.append("Use parameterized queries or prepared statements to prevent SQL injection")
+                        guidance.append("Never concatenate user input directly into SQL queries")
+                        guidance.append("Sanitize and escape all user inputs before database operations")
+                    elif "XSS" in issue_type:
+                        guidance.append("Escape all user-generated content before rendering in HTML")
+                    elif "PATH_TRAVERSAL" in issue_type:
+                        guidance.append("Validate and sanitize file paths to prevent directory traversal")
+        
         # Intent-specific guidance
         if intent_type == "IMPLEMENT":
             if "CORE-008" in merged_rules:
@@ -648,14 +720,41 @@ class KnowledgeSynthesisEngine:
             if "CORE-011" in merged_rules:
                 guidance.append("Add type hints to all function signatures")
         
+        elif intent_type == "REFACTOR":
+            # Check for responsibility violations in AST analysis
+            responsibilities = ast_analysis.get("responsibilities", [])
+            # Handle both list and integer types for responsibilities
+            responsibility_count = len(responsibilities) if isinstance(responsibilities, list) else responsibilities
+            if isinstance(responsibility_count, int) and responsibility_count > 3:
+                guidance.append("Apply Single Responsibility Principle: separate concerns into focused classes")
+                guidance.append("Consider Extract Class pattern to isolate responsibilities")
+            
+            # Check for SOLID violations
+            ast_violations = ast_analysis.get("violations", [])
+            for violation in ast_violations:
+                if "single responsibility" in violation.lower():
+                    guidance.append("Follow SOLID principles: each class should have one reason to change")
+        
         # Violation-based guidance
         if violations:
             guidance.append(f"Address {len(violations)} violation(s) before proceeding")
         
         # LENS-based guidance
-        complexity = lens_intelligence.ast_analysis.get("complexity", 0)
-        if complexity > 15:
-            guidance.append(f"Consider refactoring to reduce complexity (current: {complexity})")
+        complexity_value = lens_intelligence.ast_analysis.get("complexity", 0)
+        # Handle string or non-numeric complexity values
+        try:
+            if isinstance(complexity_value, str):
+                if complexity_value.lower() in ["very_high", "high", "critical"]:
+                    guidance.append("Consider refactoring to reduce complexity")
+                elif complexity_value.isdigit():
+                    complexity = int(complexity_value)
+                    if complexity > 15:
+                        guidance.append(f"Consider refactoring to reduce complexity (current: {complexity})")
+            elif isinstance(complexity_value, (int, float)):
+                if complexity_value > 15:
+                    guidance.append(f"Consider refactoring to reduce complexity (current: {complexity_value})")
+        except (ValueError, TypeError):
+            pass  # Invalid complexity value, skip check
         
         return guidance
 
