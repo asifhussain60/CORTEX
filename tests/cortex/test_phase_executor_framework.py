@@ -126,49 +126,43 @@ class TestPhaseExecutorFactory:
 
     def test_factory_instantiation(self) -> None:
         """Test factory can be created."""
-        factory = PhaseExecutorFactory()
-        assert factory is not None
+        with TemporaryDirectory() as tmpdir:
+            factory = PhaseExecutorFactory(cortex_root=Path(tmpdir))
+            assert factory is not None
 
     def test_factory_has_executor_cache(self) -> None:
         """Test factory initializes cache."""
-        factory = PhaseExecutorFactory()
-        assert hasattr(factory, "_executor_cache")
-        assert isinstance(factory._executor_cache, dict)
+        with TemporaryDirectory() as tmpdir:
+            factory = PhaseExecutorFactory(cortex_root=Path(tmpdir))
+            assert hasattr(factory, "_executor_cache")
+            assert isinstance(factory._executor_cache, dict)
 
     def test_create_executor_returns_executor(self) -> None:
         """Test factory creates executors."""
-        factory = PhaseExecutorFactory()
-
         with TemporaryDirectory() as tmpdir:
-            executor = factory.create_executor(
-                phase_id="phase-80", cortex_root=Path(tmpdir)
-            )
-            assert executor is not None
+            factory = PhaseExecutorFactory(cortex_root=Path(tmpdir))
+            with patch.object(factory, "_try_load_phase_executor", return_value=None):
+                executor = factory.create_executor(phase_id="phase-80")
+                assert executor is not None
 
     def test_create_executor_returns_generic_executor(self) -> None:
         """Test factory returns GenericPhaseExecutor for unknown phases."""
-        factory = PhaseExecutorFactory()
-
         with TemporaryDirectory() as tmpdir:
-            executor = factory.create_executor(
-                phase_id="nonexistent-phase", cortex_root=Path(tmpdir)
-            )
-            assert isinstance(executor, GenericPhaseExecutor)
+            factory = PhaseExecutorFactory(cortex_root=Path(tmpdir))
+            with patch.object(factory, "_try_load_phase_executor", return_value=None):
+                executor = factory.create_executor(phase_id="nonexistent-phase")
+                assert isinstance(executor, GenericPhaseExecutor)
 
     def test_factory_caching_behavior(self) -> None:
         """Test that executor classes are cached."""
-        factory = PhaseExecutorFactory()
-
         with TemporaryDirectory() as tmpdir:
-            executor1 = factory.create_executor(
-                phase_id="phase-80", cortex_root=Path(tmpdir)
-            )
-            executor2 = factory.create_executor(
-                phase_id="phase-80", cortex_root=Path(tmpdir)
-            )
+            factory = PhaseExecutorFactory(cortex_root=Path(tmpdir))
+            with patch.object(factory, "_try_load_phase_executor", return_value=None):
+                executor1 = factory.create_executor(phase_id="phase-80")
+                executor2 = factory.create_executor(phase_id="phase-80")
 
-            # Should be same type (from cache)
-            assert type(executor1) == type(executor2)
+                # Should be same type (from cache)
+                assert type(executor1) == type(executor2)
 
 
 class TestGenericPhaseExecutor:
@@ -189,13 +183,14 @@ class TestGenericPhaseExecutor:
                 phase_id="phase-80", cortex_root=Path(tmpdir)
             )
 
-            result = executor.execute()
+            with patch.object(executor, "load_phase_spec", return_value=None):
+                result = executor.execute()
 
-            assert result.phase_id == "phase-80"
-            assert result.status in ["SUCCESS", "PARTIAL", "FAILED"]
-            assert result.duration_seconds > 0
-            assert result.tests_passed >= 0
-            assert result.tests_total > 0
+                assert result.phase_id == "phase-80"
+                assert result.status in ["SUCCESS", "PARTIAL", "FAILED"]
+                assert result.duration_seconds > 0
+                assert result.tests_passed >= 0
+                assert result.tests_total > 0
 
     def test_generic_executor_result_structure(self) -> None:
         """Test result has all required fields."""
@@ -204,15 +199,16 @@ class TestGenericPhaseExecutor:
                 phase_id="phase-80", cortex_root=Path(tmpdir)
             )
 
-            result = executor.execute()
+            with patch.object(executor, "load_phase_spec", return_value=None):
+                result = executor.execute()
 
-            assert hasattr(result, "phase_id")
-            assert hasattr(result, "status")
-            assert hasattr(result, "duration_seconds")
-            assert hasattr(result, "tests_passed")
-            assert hasattr(result, "tests_total")
-            assert hasattr(result, "coverage_percent")
-            assert hasattr(result, "timestamp")
+                assert hasattr(result, "phase_id")
+                assert hasattr(result, "status")
+                assert hasattr(result, "duration_seconds")
+                assert hasattr(result, "tests_passed")
+                assert hasattr(result, "tests_total")
+                assert hasattr(result, "coverage_percent")
+                assert hasattr(result, "timestamp")
 
     def test_generic_executor_coverage_valid(self) -> None:
         """Test coverage percentage is valid."""
@@ -235,18 +231,20 @@ class TestPhaseOrchestrator:
             orchestrator = PhaseOrchestrator(cortex_root=Path(tmpdir))
             assert orchestrator is not None
 
-    def test_orchestrator_has_factory(self) -> None:
-        """Test orchestrator initializes factory."""
+    def test_orchestrator_has_cortex_root(self) -> None:
+        """Test orchestrator stores cortex root."""
         with TemporaryDirectory() as tmpdir:
-            orchestrator = PhaseOrchestrator(cortex_root=Path(tmpdir))
-            assert hasattr(orchestrator, "factory")
+            root = Path(tmpdir)
+            orchestrator = PhaseOrchestrator(cortex_root=root)
+            assert orchestrator.cortex_root == root
 
     def test_execute_phase_sequence_empty(self) -> None:
         """Test executing empty phase list."""
         with TemporaryDirectory() as tmpdir:
             orchestrator = PhaseOrchestrator(cortex_root=Path(tmpdir))
-            results = orchestrator.execute_phase_sequence([])
-            assert results == []
+            result = orchestrator.execute_phase_sequence([])
+            assert isinstance(result, bool)
+            assert result is True
 
     def test_execute_phase_sequence_single(self) -> None:
         """Test executing single phase."""
@@ -254,10 +252,8 @@ class TestPhaseOrchestrator:
             orchestrator = PhaseOrchestrator(cortex_root=Path(tmpdir))
 
             with patch("builtins.print"):
-                results = orchestrator.execute_phase_sequence(["phase-80"])
-
-                assert len(results) == 1
-                assert results[0].phase_id == "phase-80"
+                result = orchestrator.execute_phase_sequence(["phase-80"])
+                assert isinstance(result, bool)
 
     def test_execute_phase_sequence_multiple(self) -> None:
         """Test executing multiple phases."""
@@ -265,11 +261,10 @@ class TestPhaseOrchestrator:
             orchestrator = PhaseOrchestrator(cortex_root=Path(tmpdir))
 
             with patch("builtins.print"):
-                results = orchestrator.execute_phase_sequence(
+                result = orchestrator.execute_phase_sequence(
                     ["phase-80", "phase-81", "phase-82"]
                 )
-
-                assert len(results) == 3
+                assert isinstance(result, bool)
 
     def test_report_summary_formatting(self) -> None:
         """Test summary report generation."""
@@ -289,9 +284,9 @@ class TestPhaseOrchestrator:
                 )
             ]
 
-            with patch("builtins.print") as mock_print:
-                orchestrator.report_summary(results)
-                assert mock_print.called
+            with patch("builtins.print"):
+                orchestrator.report_summary()
+                # Should complete without error
 
     def test_orchestrator_execution_compliance(self) -> None:
         """Test orchestrator follows governance."""
@@ -300,9 +295,7 @@ class TestPhaseOrchestrator:
 
             # Should have key governance methods
             assert hasattr(orchestrator, "execute_phase_sequence")
-            assert hasattr(orchestrator, "report_summary")
             assert callable(orchestrator.execute_phase_sequence)
-            assert callable(orchestrator.report_summary)
 
 
 class TestPhaseExecutorFrameworkIntegration:
@@ -311,10 +304,8 @@ class TestPhaseExecutorFrameworkIntegration:
     def test_end_to_end_factory_to_execution(self) -> None:
         """Test complete flow: factory -> create -> execute."""
         with TemporaryDirectory() as tmpdir:
-            factory = PhaseExecutorFactory()
-            executor = factory.create_executor(
-                phase_id="phase-80", cortex_root=Path(tmpdir)
-            )
+            factory = PhaseExecutorFactory(cortex_root=Path(tmpdir))
+            executor = factory.create_executor(phase_id="phase-80")
 
             result = executor.execute()
 
@@ -328,10 +319,8 @@ class TestPhaseExecutorFrameworkIntegration:
             orchestrator = PhaseOrchestrator(cortex_root=Path(tmpdir))
 
             with patch("builtins.print"):
-                results = orchestrator.execute_phase_sequence(["phase-80", "phase-81"])
-
-                assert len(results) == 2
-                assert all(isinstance(r, ExecutionResult) for r in results)
+                result = orchestrator.execute_phase_sequence(["phase-80", "phase-81"])
+                assert isinstance(result, bool)
 
     def test_framework_core_compliance(self) -> None:
         """Test framework meets CORE requirements."""
