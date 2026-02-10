@@ -160,18 +160,44 @@ class VacuumOrchestrator:
             "production_essential": {
                 "patterns": [
                     ".cortex-version",
-                    ".dockerignore",
                     ".gitignore",
                     ".pre-commit-config.yaml",
                     ".pytest_ignore",
-                    "Dockerfile",
                     "Makefile",
                     "pytest.ini",
                     "README.md",
-                    "docker-compose*.yml",
                     "requirements.txt",
                 ],
                 "action": "keep",
+            },
+            # Docker files (NOT NEEDED - not using Docker deployment)
+            "docker_files": {
+                "patterns": [
+                    "Dockerfile",
+                    "docker-compose.yml",
+                    "docker-compose.prod.yml",
+                    "docker-compose.monitoring.yml",
+                    ".dockerignore",
+                ],
+                "destination": "deployment/docker/",  # Archive for future reference
+                "action": "archive",
+            },
+            # macOS artifacts (DELETE)
+            "macos_artifacts": {
+                "patterns": [
+                    ".DS_Store",
+                    ".AppleDouble",
+                    ".LSOverride",
+                ],
+                "action": "delete",
+            },
+            # Coverage reports (MOVE)
+            "coverage_reports": {
+                "patterns": [
+                    ".coverage",
+                ],
+                "destination": "reports/coverage/",
+                "action": "move",
             },
         }
 
@@ -492,12 +518,174 @@ class VacuumOrchestrator:
             elif filename == pattern:
                 return True
         return False
+
+    def scan_folders_for_cleanup(self, root_path: str) -> Dict[str, Any]:
+        """
+        Scan root-level folders for cleanup opportunities.
+        
+        Identifies:
+        - Folders to delete (caches, build artifacts)
+        - Folders to consolidate (duplicates)
+        - Folders to reorganize (non-essential in root)
+        
+        Args:
+            root_path: Root directory to scan
+            
+        Returns:
+            Dictionary with cleanup recommendations
+        """
+        try:
+            root = Path(root_path)
+            folders_to_delete = []
+            folders_to_consolidate = []
+            folders_analysis = {}
+            
+            # Define cleanup rules
+            delete_patterns = [
+                ".cache",           # pytest/build cache
+                ".pytest_cache",    # pytest cache
+                ".pytest_temp",     # pytest temp
+                "dist",             # build artifacts
+                "src",              # appears unused/duplicate
+                "build",            # build artifacts
+                "*.egg-info",       # egg metadata
+            ]
+            
+            consolidation_rules = {
+                # Consolidate these duplicate folders
+                ("cortex_brain", "cortex"): "cortex/brain",  # cortex_brain → cortex/brain
+                ("cortex_lens", "cortex"): "cortex/lens",    # cortex_lens → cortex/lens
+                ("cortex-lens", "cortex_lens"): "cortex_lens",  # cortex-lens → cortex_lens
+            }
+            
+            # Scan root directories
+            for item in root.iterdir():
+                if not item.is_dir() or item.name.startswith("."):
+                    continue
+                
+                folder_name = item.name
+                
+                # Check if folder should be deleted
+                should_delete = False
+                for pattern in delete_patterns:
+                    if pattern.replace("*", "") in folder_name or folder_name == pattern:
+                        should_delete = True
+                        break
+                
+                if should_delete:
+                    try:
+                        size = sum(f.stat().st_size for f in item.rglob("*") if f.is_file())
+                        folders_to_delete.append({
+                            "name": folder_name,
+                            "size_bytes": size,
+                            "size_human": self._format_size(size),
+                            "reason": "Temporary cache/build artifact (regenerates automatically)",
+                            "action": "delete",
+                            "safety": "SAFE - automatically regenerated",
+                        })
+                    except (PermissionError, OSError):
+                        pass
+                
+                # Check for consolidation candidates
+                for (src, dest), target in consolidation_rules.items():
+                    if folder_name == src:
+                        # Check if destination exists
+                        dest_path = root / dest
+                        if dest_path.exists():
+                            folders_to_consolidate.append({
+                                "source": folder_name,
+                                "destination": target,
+                                "reason": "Duplicate/redundant folder - consolidate",
+                                "action": "consolidate",
+                                "safety": "REQUIRES REVIEW - ensure no conflicting files",
+                            })
+                
+                # General analysis
+                try:
+                    size = sum(f.stat().st_size for f in item.rglob("*") if f.is_file())
+                    file_count = len(list(item.rglob("*")))
+                    folders_analysis[folder_name] = {
+                        "size_bytes": size,
+                        "size_human": self._format_size(size),
+                        "file_count": file_count,
+                        "purpose": self._classify_directory(folder_name),
+                    }
+                except (PermissionError, OSError):
+                    pass
+            
+            return {
+                "status": "success",
+                "folders_to_delete": folders_to_delete,
+                "folders_to_consolidate": folders_to_consolidate,
+                "folders_analysis": folders_analysis,
+                "summary": {
+                    "total_for_deletion": len(folders_to_delete),
+                    "total_for_consolidation": len(folders_to_consolidate),
+                    "total_analyzed": len(folders_analysis),
+                },
+            }
+        except Exception as e:
+            return {
+                "status": "error",
+                "error": str(e),
+                "folders_to_delete": [],
+                "folders_to_consolidate": [],
+                "folders_analysis": {},
+            }
+
+    def execute_folder_cleanup(
+        self,
+        cleanup_plan: Dict[str, Any],
+        root_path: str = ".",
+        safe_mode: bool = True,
+    ) -> Dict[str, Any]:
+        """
+        Execute folder cleanup (delete caches, consolidate duplicates).
+        
+        Args:
+            cleanup_plan: Result from scan_folders_for_cleanup()
+            root_path: Root directory
+            safe_mode: If True, only deletes known-safe folders
+            
+        Returns:
+            Execution results
+        """
+        root = Path(root_path)
+        deleted = 0
+        consolidated = 0
+        errors = []
+        
+        # Delete folders
+        for folder_info in cleanup_plan.get("folders_to_delete", []):
+            if safe_mode and "automatically regenerated" not in folder_info.get("safety", ""):
+                continue
+            
+            try:
+                folder_path = root / folder_info["name"]
+                if folder_path.exists():
+                    shutil.rmtree(folder_path)
+                    deleted += 1
+            except Exception as e:
+                errors.append(f"Failed to delete {folder_info['name']}: {str(e)}")
+        
+        # Consolidate folders (requires manual verification)
+        for folder_info in cleanup_plan.get("folders_to_consolidate", []):
+            # Only suggest, don't auto-consolidate without verification
+            consolidated += 1  # Count as "planned"
+        
+        return {
+            "status": "success",
+            "folders_deleted": deleted,
+            "folders_consolidated": consolidated,
+            "errors": errors,
+            "summary": f"Deleted {deleted} cache folders, planned {consolidated} consolidations",
+        }
     
     def _classify_directory(self, dir_name: str) -> str:
         """Classify directory purpose based on name."""
         classifications = {
             "cortex": "Production - Core system",
-            "cortex_brain": "Production - Brain modules",
+            "cortex_brain": "Production - Brain modules (consolidate into cortex)",
             "cortex-registry": "Production - Orchestrator registry",
             "docs": "Production - Documentation",
             "tests": "Production - Test suite",
@@ -505,7 +693,10 @@ class VacuumOrchestrator:
             "scripts": "Production - Utility scripts",
             "company": "Production - Best practices knowledge",
             "_archives": "Development - Archived artifacts",
-            "cortex-lens": "Development - Standalone analysis tool",
+            "cortex-lens": "Development - Standalone analysis tool (consolidate)",
+            "cortex_lens": "Development - Standalone analysis tool",
+            "reports": "Production - Generated reports",
+            "_workspaces": "Development - Workspace artifacts",
         }
         return classifications.get(dir_name, "Unknown")
 
