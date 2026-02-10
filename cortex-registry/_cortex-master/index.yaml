@@ -6,11 +6,49 @@
 version: "1.2"
 registry_name: "_cortex-master"
 description: "CORTEX self-development planning with phase tracking and enhancement pipeline"
-last_updated: "2026-02-10T14:00:00Z"
-revision: "Phase 74 Created: Multi-Role Documentation Portal (Git-Aware + Delta Intelligence) | 56/60 phases done (93%) | Production Documentation System"
+last_updated: "2026-02-10T16:00:00Z"
+revision: "Phase 75 Created: Knowledge Persistence & Universal Learning Loop (P0) | 57/60 phases done (95%) | Persistent Intelligence System"
 
 # Active Phases (Current Development)
 active_phases:
+  - id: "phase-75"
+    name: "Knowledge Persistence & Universal Learning Loop"
+    file: "phases/active/phase-75-knowledge-persistence-universal-learning-loop.yaml"
+    created: "2026-02-10"
+    status: "active"
+    priority: "P0"
+    execution_order: 1
+    roi_score: 0.95
+    estimated_duration: "7-10 days"
+    test_target: 120
+    coverage_target: 90
+    tests_passing: 0
+    stages_complete: "0/6"
+    description: |
+      🔴 ACTIVE (P0 - CRITICAL): Transform ephemeral operations into persistent knowledge and continuous intelligence enhancement.
+      - S1: Knowledge Persistence Service (2 days, 25 tests) — YAML generation for company/domains/
+      - S2: Universal Learning Loop Service (2 days, 25 tests) — OBSERVE→ANALYZE→SYNTHESIZE→APPLY
+      - S3: Brain Intelligence Layer Enhancement (2 days, 20 tests) — Perception/Reasoning/Action layers
+      - S4: Repository Onboarding Orchestrator Enhancement (2 days, 20 tests) — MCP-first integration
+      - S5: Knowledge Persistence Enforcement Agent (1 day, 15 tests) — 8th enforcement agent
+      - S6: MCP Tool Enhancement & Documentation (1 day, 15 tests) — cortex_onboard_repository flags
+      
+      Strategic Value:
+      - Knowledge persistence → Every ONBOARD creates 5+ YAML artifacts
+      - Learning loop → CORTEX gets smarter with every operation
+      - Brain enhancement → Pattern recognition, strategy selection, execution planning
+      - Enforcement → 8th agent blocks ONBOARD without persistence
+      - Cross-session learning → Future operations benefit from past learnings
+      
+      Risk: 1.8/10 (LOW) — Foundation work with clear validation gates
+    depends_on:
+      - "phase-70"
+      - "phase-48"
+      - "phase-51"
+    blocks:
+      - "phase-76-knowledge-analytics"
+      - "phase-77-pattern-based-automation"
+
   - id: "phase-74"
     name: "Multi-Role Documentation Portal (Git-Aware Incremental Builds + Delta Intelligence)"
     file: "phases/active/phase-74-documentation-site-generation.yaml"
