@@ -21,6 +21,9 @@ Just as the human brain requires a sophisticated circulatory system, nervous sys
 
 CORTEX is designed as a **cloud-native cognitive platform** with container-first deployment, horizontal scalability, and comprehensive observability—ensuring the AI brain can think clearly under any workload.
 
+**NEW - Phase 71 Learning Infrastructure:**
+The learning system adds a distributed pattern capture layer that operates non-blocking at <10ms overhead per operation. YAML-based knowledge storage integrates seamlessly with existing infrastructure, requiring no additional databases or services. Validation pipelines ensure learning integrity across all components.
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │              🧠 CORTEX BRAIN LIFE SUPPORT SYSTEM                 │

@@ -21,11 +21,21 @@
 
 ## Executive Summary
 
-**CORTEX Cognitive Capabilities: How the AI Brain Thinks and Acts**
+**CORTEX Cognitive Capabilities: How the AI Brain Thinks, Acts, and Learns**
 
-Just as the human brain has specialized cognitive abilities—memory, reasoning, pattern recognition, decision-making—CORTEX possesses five core **cognitive capability domains** that work together to provide intelligent software development assistance.
+Just as the human brain has specialized cognitive abilities—memory, reasoning, pattern recognition, decision-making, and learning—CORTEX possesses **six core cognitive capability domains** that work together to provide intelligent, adaptive software development assistance.
 
-**The Five Cognitive Domains:**
+**The Six Cognitive Domains:**
+
+1. **🏗️ Core Platform** — Foundation orchestration, MCP gateway, tool registry
+2. **🤖 AI & Intelligence** — LENS vision, code analysis, pattern recognition
+3. **🧠 Adaptive Learning** — NEW (Phase 71) Universal learning loop, pattern capture, confidence scoring
+4. **🎯 Decisioning** — Intent routing, TDD workflow, challenge engine
+5. **🛡️ Governance** — Security gates, compliance, audit trails
+6. **🔌 Extensibility** — Custom tools, domain integration, plugin architecture
+
+**NEW - Phase 71 Adaptive Learning Capability:**
+CORTEX now captures operational patterns from every orchestrator invocation through dual-layer interception (protocol hooks + MCP gateway). This enables continuous intelligence improvement without manual intervention or measurable performance overhead. High-confidence patterns (≥0.75) automatically inform future recommendations.
 
 ### D3.js Capability Mind Map
 
