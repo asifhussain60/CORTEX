@@ -119,12 +119,6 @@ class Test{{ crawler_name }}:
         assert analyzer is not None
         assert hasattr(analyzer, 'analyze')
     
-    def test_analyze_returns_dict(self, analyzer, sample_repo):
-        \"\"\"Test analyze returns dictionary.\"\"\"
-        result = analyzer.analyze(sample_repo)
-        assert isinstance(result, dict)
-        assert "analyzer" in result
-        assert result["analyzer"] == "{{ crawler_name }}"
 {% for scenario in test_scenarios %}
     def test_{{ scenario|lower|replace(' ', '_') }}(self, analyzer, sample_repo):
         \"\"\"Test: {{ scenario }}.\"\"\"

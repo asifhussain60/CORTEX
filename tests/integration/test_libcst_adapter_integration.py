@@ -52,15 +52,6 @@ class TestLibCSTAdapterRegistration:
         # TypeScript files should map to TypeScript adapter
         assert RefactoringLanguage.TYPESCRIPT is not None
 
-    def test_libcst_adapter_supports_python(self) -> None:
-        """LibCST adapter handles Python language."""
-        from cortex.refactoring.models import RefactoringLanguage
-        
-        # LibCST is Python-only
-        supported = RefactoringLanguage.PYTHON
-        assert supported is not None
-
-
 class TestLibCSTVsRopeSelection:
     pass
     """AC-PHASE43-029-1: Selection between LibCST and Rope adapters."""
@@ -115,22 +106,6 @@ class TestLibCSTVsRopeSelection:
         assert strategy["primary"] == "libcst"
         assert strategy["fallback"] == "rope"
 
-    def test_rope_fallback_on_libcst_parse_error(self) -> None:
-        """Fallback to Rope when LibCST cannot parse code."""
-        # If LibCST.parse_module(code) fails → use Rope
-        # Rope is more lenient and can handle malformed input
-        
-        error_scenarios = [
-            "syntax_error",
-            "encoding_error",
-            "large_file",
-        ]
-        
-        for scenario in error_scenarios:
-            # Rope should be fallback
-            pass
-
-
 class TestEndToEndTDDRefactorFlow:
     """AC-PHASE43-030: TDD REFACTOR → Orchestrator → Adapter → Tool."""
 
@@ -166,26 +141,6 @@ class TestEndToEndTDDRefactorFlow:
         
         # Adapter should implement execute_refactoring
         assert hasattr(RefactoringToolAdapter, "execute_refactoring")
-
-    def test_refactoring_result_returned(self) -> None:
-        """Refactoring operation returns structured RefactoringResult."""
-        from cortex.refactoring.models import RefactoringResult
-        from cortex.brain.core.result import Ok
-        
-        # Result should include:
-        # - success: bool
-        # - modified_files: List[Path]
-        # - description: str
-        
-        assert hasattr(RefactoringResult, "__dataclass_fields__")
-        # Check that key fields are accessible
-        result = RefactoringResult(
-            success=True,
-            modified_files=[],
-            description="test"
-        )
-        assert result.success is not None
-
 
 class TestLibCSTAdapterOperations:
     pass
@@ -303,25 +258,6 @@ class TestRopeFallback:
         rope = RopeAdapter()
         assert rope is not None
 
-    def test_rope_as_universal_fallback(self) -> None:
-        """Rope can handle any refactoring operation (fallback)."""
-        # Rope is more mature and can handle:
-        # - Single-file operations (like LibCST)
-        # - Cross-file operations (unlike LibCST)
-        # - Complex transformations
-        
-        fallback_capabilities = [
-            "rename_variable",
-            "extract_method",
-            "inline_variable",
-            "rename_module",
-            "move_class",
-        ]
-        
-        # Rope should support all
-        assert len(fallback_capabilities) > 0
-
-
 class TestAdapterDelegationChain:
     pass
     """Test full adapter delegation chain."""
@@ -356,24 +292,6 @@ class TestAdapterDelegationChain:
         assert request.operation is not None
         assert request.file_path is not None
 
-    def test_adapter_returns_structured_result(self) -> None:
-        """Adapter returns RefactoringResult with required fields."""
-        from cortex.refactoring.models import RefactoringResult
-        from pathlib import Path
-        
-        # Result should have required fields
-        result = RefactoringResult(
-            success=True,
-            modified_files=[Path("test.py")],
-            description="Test refactoring"
-        )
-        
-        # Verify fields exist and are accessible
-        assert result.success is not None
-        assert result.modified_files is not None
-        assert result.description is not None
-
-
 class TestStrategyOptimization:
     pass
     """Test strategy optimization for adapter selection."""
@@ -405,23 +323,6 @@ class TestStrategyOptimization:
         }
         
         assert scope_ranking["libcst"] < scope_ranking["rope"]
-
-    def test_decision_tree_for_adapter_selection(self) -> None:
-        """Decision tree for adapter selection."""
-        decision_tree = """
-        Is operation single-file?
-        ├─ YES: Can preserve formatting?
-        │  ├─ YES: Try LibCST
-        │  │  ├─ Available? → Use LibCST ✓
-        │  │  └─ Unavailable? → Fallback to Rope
-        │  └─ NO: Use Rope
-        └─ NO: Use Rope (cross-file)
-        """
-        
-        # Decision tree logic verified
-        assert "LibCST" in decision_tree
-        assert "Rope" in decision_tree
-
 
 class TestGracefulDegradation:
     pass

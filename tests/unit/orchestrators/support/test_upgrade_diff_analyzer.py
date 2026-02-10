@@ -253,9 +253,6 @@ class TestMCPToolChangeDetection:
         assert changes[0].change_type == "new_mcp_tool"
         assert "cortex_digest_session" in changes[0].name
 
-    def test_extracts_mcp_tool_description_from_docstring(self, analyzer):
-        """Verify extraction of tool descriptions from docstrings."""
-        diff = """
 +@mcp_tool(name="cortex_debug_inject")
 +def cortex_debug_inject(target_path: str) -> DebugResult:
 +    '''Inject debug markers for CORTEX-assisted debugging.'''

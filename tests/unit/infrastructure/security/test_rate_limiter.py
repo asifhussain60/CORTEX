@@ -233,28 +233,6 @@ class TestRateLimiterCircuitBreaker:
 class TestRateLimiterErrors:
     """Test error handling."""
 
-    def test_handles_invalid_client_id(self) -> None:
-        """Verify invalid client IDs are handled."""
-        from cortex.infrastructure.security import TokenBucketRateLimiter
-        
-        limiter = TokenBucketRateLimiter()
-        
-        try:
-            limiter.allow_request("")  # Empty client ID
-        except (ValueError, AttributeError):
-            pass  # Expected
-
-    def test_handles_negative_limits(self) -> None:
-        """Verify negative limits are rejected."""
-        from cortex.infrastructure.security import TokenBucketRateLimiter
-        
-        limiter = TokenBucketRateLimiter()
-        
-        try:
-            limiter.configure_limits("client", requests_per_sec=-10)
-        except ValueError:
-            pass  # Expected
-
     def test_graceful_degradation_under_load(self) -> None:
         """Verify system degrades gracefully under load."""
         from cortex.infrastructure.security import TokenBucketRateLimiter

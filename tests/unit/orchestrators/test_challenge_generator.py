@@ -150,9 +150,6 @@ def _private_method():
         governance_risks = [c for c in challenges if "_private_method" in c.description]
         assert len(governance_risks) == 0
 
-    def test_detect_missing_docstring_class(self):
-        """Test detection of missing class docstring."""
-        source = """
 class MyClass:
     pass
 """
@@ -216,9 +213,6 @@ for item in items:
         # Check if any concatenation risk detected
         assert len(perf_risks) >= 0  # May or may not detect
 
-    def test_performance_severity_levels(self):
-        """Test performance risks have appropriate severity."""
-        source = """
 for i in range(100):
     for j in range(100):
         pass

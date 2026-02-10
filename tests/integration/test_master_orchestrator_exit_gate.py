@@ -234,16 +234,3 @@ class TestMasterOrchestratorExitGate:
 class TestMasterOrchestratorExitGateMetrics:
     """Test EXIT GATE metrics recording."""
     
-    def test_compression_ratio_logged(self):
-        """Test compression ratio is logged."""
-        # This test validates the logging structure
-        # Actual metric values depend on synthesizer implementation
-        pass
-    
-    def test_token_count_logged(self):
-        """Test token count is logged."""
-        pass
-    
-    def test_synthesis_time_logged(self):
-        """Test synthesis time is logged."""
-        pass

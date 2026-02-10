@@ -160,17 +160,6 @@ class TestIntegrationWorkflow:
         assert len(results) == 3
         assert all(r.recommendation is not None for r in results)
 
-    def test_error_handling_invalid_pr(self, integration_engine):
-        """AC-PHASE52-S1-4-011: Error handling for invalid PRs."""
-        # Should handle gracefully
-        try:
-            result = integration_engine.review_pr_comprehensive("owner", "repo", -1)
-            # If it succeeds, that's fine too (mock returns data)
-            assert result is not None
-        except Exception as e:
-            # Or it may raise an exception
-            pass
-
     def test_performance_single_pr_analysis(self, integration_engine):
         """AC-PHASE52-S1-4-012: Performance benchmark - single PR."""
         start = time.time()

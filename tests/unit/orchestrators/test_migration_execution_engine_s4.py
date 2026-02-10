@@ -653,23 +653,6 @@ class TestErrorHandling:
         # or continue processing (both acceptable in foundation phase)
         assert isinstance(result, TransformationResult)
 
-    def test_handle_unsupported_language(self, execution_engine: MigrationExecutionEngine):
-        """Test handling of unsupported language."""
-        code = "some code"
-
-        # Should raise TypeError when invalid language enum passed
-        try:
-            result = execution_engine.transform_code(
-                code=code,
-                language=LanguageSupport.PYTHON,  # Use valid language
-                target_version="1.70",
-            )
-            # If we get here, should at least handle gracefully
-            assert result is not None
-        except (ValueError, TypeError):
-            # Expected if language validation is strict
-            pass
-
     def test_handle_empty_code(self, execution_engine: MigrationExecutionEngine):
         """Test handling of empty code."""
         result = execution_engine.transform_code(

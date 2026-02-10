@@ -421,19 +421,6 @@ class TestMultipleRouting(BaseConfidenceRouterTest):
 class TestEdgeCases(BaseConfidenceRouterTest):
     """Test edge cases and boundary conditions."""
 
-    def test_route_with_none_intent_type(self):
-        """Test routing with None intent type."""
-        # Should not crash, should handle gracefully
-        try:
-            decision = self.router.route(
-                intent_type=None,
-                confidence=0.85,
-            )
-            assert decision is not None
-        except (TypeError, ValueError):
-            # Acceptable to raise error for invalid input
-            pass
-
     def test_route_with_negative_confidence(self):
         """Test routing with negative confidence."""
         decision = self.router.route(

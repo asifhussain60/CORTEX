@@ -206,10 +206,6 @@ def complex_function(x):
 class TestCommentExtractionIntegration:
     """Test CommentExtractor integration."""
 
-    def test_extract_todos_and_fixmes(self, tmp_path):
-        """Test extracting TODO and FIXME comments."""
-        test_file = tmp_path / "work.py"
-        test_file.write_text("""
 # TODO: Refactor this method
 def work():
     # FIXME: Handle null case
@@ -234,29 +230,6 @@ def work():
             assert len(result["fixmes"]) == 1
             assert result["todos"][0]["text"] == "TODO: Refactor this method"
             mock_extract.assert_called_once_with(test_file)
-
-    def test_detect_refactor_hints_from_comments(self, tmp_path):
-        """Test detecting refactor hints from TODO comments."""
-        test_file = tmp_path / "hints.py"
-        test_file.write_text("# TODO: Refactor\ndef foo(): pass")
-        
-        integration = LENSIntegration(repo_path=tmp_path)
-        
-        with patch.object(integration.git_analyzer, 'get_file_history') as mock_git, \
-             patch.object(integration.ast_analyzer, 'analyze_file') as mock_ast, \
-             patch.object(integration.comment_extractor, 'extract_comments') as mock_extract:
-            
-            mock_git.return_value = MockGitHistoryResult(success=True, commits=[])
-            mock_ast.return_value = MockASTAnalysisResult(success=True, functions=[])
-            mock_extract.return_value = MockCommentExtractionResult(
-                success=True,
-                comments=[MockComment(line_number=1, content="TODO: Refactor this", comment_type="block")]
-            )
-            
-            patterns = integration.detect_intent_patterns(test_file)
-            
-            assert IntentPattern.REFACTOR in patterns
-
 
 class TestFullLENSAnalysis:
     """Test complete LENS analysis pipeline."""

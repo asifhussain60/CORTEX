@@ -229,17 +229,6 @@ class TestDependencyResolution(BaseWiringTest):
         assert isinstance(cs_deps, list)
         assert isinstance(cg_deps, list)
 
-    def test_circular_dependency_handled(self):
-        """Test circular dependencies are handled."""
-        # Should not crash even with circular deps
-        try:
-            deps = self.wiring.resolve_dependencies("SomeComponent")
-            assert isinstance(deps, list)
-        except RecursionError:
-            # Acceptable to fail on circular dependencies
-            pass
-
-
 class TestIntegrationWiring(BaseWiringTest):
     """Test full integration wiring."""
 
@@ -347,25 +336,6 @@ class TestEdgeCases(BaseWiringTest):
         status2 = self.wiring.wire_to_stage("ComprehensionSession", "STAGE_1")
         # Second wiring should be ALREADY_WIRED or SUCCESS
         assert status2 in [WiringStatus.SUCCESS, WiringStatus.ALREADY_WIRED]
-
-    def test_empty_stage_name(self):
-        """Test wiring with empty stage name."""
-        try:
-            status = self.wiring.wire_to_stage("ComprehensionSession", "")
-            # Should either fail or handle gracefully
-            assert status is not None
-        except (ValueError, KeyError):
-            # Acceptable to raise for invalid input
-            pass
-
-    def test_empty_component_name(self):
-        """Test wiring with empty component name."""
-        try:
-            status = self.wiring.wire_to_stage("", "STAGE_1")
-            assert status is not None
-        except (ValueError, TypeError):
-            # Acceptable to raise
-            pass
 
     def test_multiple_wiring_instances_independent(self):
         """Test multiple wiring instances are independent."""

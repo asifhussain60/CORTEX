@@ -208,17 +208,6 @@ class TestMCPLearningInterceptor:
         assert interceptor._metrics is not None
         assert interceptor._metrics.operations_intercepted == 0
     
-    def test_before_execution(self, interceptor):
-        """before_execution should not raise."""
-        # Should be no-op
-        interceptor.before_execution(
-            tool_name="cortex_test_tool",
-            parameters={"input": "test"},
-        )
-        
-        # No exception
-        assert True
-    
     def test_after_execution_without_learning_loop(self, interceptor):
         """after_execution should work without learning loop."""
         # Learning loop is None (set in fixture)

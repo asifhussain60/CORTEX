@@ -251,8 +251,6 @@ class TestClass:
     def method_one(self, param: str) -> str:
         pass
 
-def test_function(arg1, arg2):
-    pass
 '''
         
         # WHEN: Distill

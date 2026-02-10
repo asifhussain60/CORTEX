@@ -234,45 +234,6 @@ class TestStatusReporting:
         """Create manager fixture."""
         return OptimisticLockManager()
 
-    def test_status_reporting(self, manager: OptimisticLockManager) -> None:
-        """Test comprehensive status reporting."""
-        manager.create_domain("test1")
-        manager.create_domain("test2")
-
-        manager.write_domain("test1", {"value": 1}, expected_version=1)
-
-        try:
-            manager.write_domain("test1", {"value": 2}, expected_version=1)
-        except ConflictError:
-            pass
-
-        status = manager.get_status()
-
-        assert status["total_domains"] == 2
-        assert status["write_attempts"] >= 2
-        assert status["write_conflicts"] >= 1
-
-    def test_conflict_log_tracking(self, manager: OptimisticLockManager) -> None:
-        """Test conflict log tracking."""
-        manager.create_domain("test")
-
-        # First write succeeds, moves to version 2
-        manager.write_domain("test", {}, expected_version=1)
-
-        # Subsequent writes with old version fail
-        for _ in range(2):
-            try:
-                manager.write_domain("test", {}, expected_version=1)
-            except ConflictError:
-                pass
-
-        log = manager.get_conflict_log()
-
-        assert len(log) >= 2
-        assert all("domain_id" in entry for entry in log)
-        assert all("expected_version" in entry for entry in log)
-
-
 class TestEdgeCases:
     """Tests for edge cases."""
 

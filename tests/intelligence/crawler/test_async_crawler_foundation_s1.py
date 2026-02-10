@@ -21,13 +21,6 @@ class TestAsyncRepositoryCrawler:
         # Cannot instantiate abstract class directly
         assert issubclass(AsyncRepositoryCrawler, ABC)
 
-    def test_async_crawler_abstract_methods(self):
-        """T2: Verify abstract methods exist (crawl, on_file_discovered)."""
-        from cortex.intelligence.crawler.base import AsyncRepositoryCrawler
-        from abc import ABC
-        
-        assert issubclass(AsyncRepositoryCrawler, ABC)
-
     @pytest.mark.asyncio
     async def test_async_crawler_lifecycle(self):
         """T3: Verify crawler lifecycle (start, run, stop)."""
@@ -48,13 +41,6 @@ class TestAsyncRepositoryCrawler:
 class TestRepositoryWalker:
     pass
     """Test RepositoryWalker file traversal (T4-T6)."""
-
-    def test_walker_instantiation(self):
-        """T4: Verify RepositoryWalker can be instantiated."""
-        from cortex.intelligence.crawler.walker import RepositoryWalker
-        
-        walker = RepositoryWalker()
-        assert walker is not None
 
     @pytest.mark.asyncio
     async def test_walker_file_discovery(self):
@@ -105,13 +91,6 @@ class TestRepositoryWalker:
 class TestPatternDiscoveryScheduler:
     pass
     """Test PatternDiscoveryScheduler queue management (T7-T8)."""
-
-    def test_scheduler_instantiation(self):
-        """T7: Verify PatternDiscoveryScheduler can be instantiated."""
-        from cortex.intelligence.crawler.scheduler import PatternDiscoveryScheduler
-        
-        scheduler = PatternDiscoveryScheduler()
-        assert scheduler is not None
 
     @pytest.mark.asyncio
     async def test_scheduler_queue_management(self):

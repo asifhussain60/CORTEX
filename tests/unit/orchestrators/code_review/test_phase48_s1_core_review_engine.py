@@ -92,9 +92,6 @@ index 9876543..0000000
         assert changes[2].change_type == "deleted"
         assert changes[2].lines_removed == 4
     
-    def test_parse_diff_handles_binary_files(self):
-        """Parse diff with binary files (should skip)"""
-        diff_text = """diff --git a/image.png b/image.png
 index 1234567..abcdefg 100644
 Binary files a/image.png and b/image.png differ
 diff --git a/test.py b/test.py
@@ -293,9 +290,6 @@ class TestCodeReviewOrchestrator:
         assert report.status == "APPROVED"
         assert report.total_issues == 0
     
-    def test_review_integrates_diff_parser(self):
-        """Review uses GitDiffParser internally"""
-        diff = """diff --git a/test.py b/test.py
 index 1234567..abcdefg 100644
 --- a/test.py
 +++ b/test.py

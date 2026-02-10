@@ -162,22 +162,6 @@ class TestRepositoryScannerEdgeCases:
         assert output is not None
         assert output.file_count == 0
     
-    def test_scanner_nonexistent_path(self, scanner):
-        """Test Scanner handles nonexistent path."""
-        ctx = ScanContext(
-            workspace_root="/nonexistent/path",
-            target_paths=["/nonexistent/path"],
-            exclude_patterns=[],
-        )
-        
-        # Should handle gracefully (might raise or return empty)
-        try:
-            output = scanner.scan(ctx)
-            assert output is not None
-        except (AttributeError, TypeError, FileNotFoundError):
-            # Expected - scanner validates paths
-            pass
-    
     def test_scanner_with_mixed_file_types(self, scanner, corrupted_repo):
         """Test Scanner handles mixed file types."""
         ctx = ScanContext(

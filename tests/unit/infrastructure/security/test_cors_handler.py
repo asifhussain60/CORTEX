@@ -150,17 +150,6 @@ class TestSecurityHeaders:
 class TestCORSErrors:
     """Test error handling."""
 
-    def test_handles_invalid_requests(self) -> None:
-        """Verify invalid requests are handled."""
-        from cortex.infrastructure.security import CORSHandler
-        
-        cors = CORSHandler()
-        
-        try:
-            cors.validate_origin(None)
-        except (TypeError, AttributeError, ValueError):
-            pass  # Expected
-
     def test_returns_appropriate_error_codes(self) -> None:
         """Verify appropriate HTTP error codes are returned."""
         from cortex.infrastructure.security import CORSHandler

@@ -50,9 +50,6 @@ class TestEnhancedMcpToolDecorator:
     def test_decorator_metadata_on_function(self):
         """Decorator should attach metadata to function."""
         @mcp_tool(name="test_tool", description="Test")
-        def test_func():
-            pass
-
         assert hasattr(test_func, "_mcp_tool_metadata")
         assert test_func._mcp_tool_metadata["name"] == "test_tool"
 
@@ -60,16 +57,10 @@ class TestEnhancedMcpToolDecorator:
         """Decorator should reject empty names."""
         with pytest.raises(ValueError):
             @mcp_tool(name="", description="Test")
-            def test_func():
-                pass
-
     def test_decorator_invalid_description(self):
         """Decorator should reject empty descriptions."""
         with pytest.raises(ValueError):
             @mcp_tool(name="test_tool", description="")
-            def test_func():
-                pass
-
     def test_inject_intelligence_enabled(self):
         """Decorator should inject intelligence when enabled."""
         mock_context = Mock()
@@ -181,9 +172,6 @@ class TestEnhancedMcpToolDecorator:
             description="Test",
             category="analysis"
         )
-        def test_func():
-            pass
-
         tools = get_registered_tools()
         assert tools["test_tool"]["category"] == "analysis"
 

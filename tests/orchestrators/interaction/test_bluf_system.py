@@ -897,17 +897,6 @@ class TestBLUFCoreRuleCompliance:
         result = engine.render_full_detail(ctx, "content")
         assert isinstance(result, str)
 
-    def test_core_008_tdd_implementation(self):
-        """Test CORE-008: TDD (tests before implementation).
-        
-        Verifies:
-        - All formatters tested before implementation
-        - Tests comprehensive
-        """
-        # This test itself demonstrates TDD compliance
-        # The test file was created with test stubs
-        # Implementation added to make tests pass
-
     def test_core_011_type_hints(self):
         """Test CORE-011: Type hints on all functions.
         

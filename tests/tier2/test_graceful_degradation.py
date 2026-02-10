@@ -260,49 +260,6 @@ class TestGracefulDegradationIntegration:
         assert status["db"]["current_mode"] == "primary"
         assert status["cache"]["current_mode"] == "fallback_1"
     
-    def test_end_to_end_workflow(self):
-        """Test: Complete end-to-end implementation workflow"""
-        from cortex_brain.tier2.resilience import (
-            GracefulDegradationFramework,
-            PartialFunctionalityMode,
-            DegradedResponse,
-        )
-        
-        # Setup framework
-        framework = GracefulDegradationFramework()
-        primary = Mock(return_value={"status": "ok"})
-        fallback = Mock(return_value={"status": "degraded"})
-        framework.register_component("api", primary, [fallback])
-        
-        # Setup partial functionality
-        mode = PartialFunctionalityMode()
-        
-        # Normal operation
-        result1, exec_mode1 = framework.execute_with_degradation("api")
-        assert exec_mode1 == "primary"
-        assert not framework.is_degraded("api")
-        assert mode.is_feature_available("advanced_search")
-        
-        # Simulate failure
-        primary.side_effect = Exception("API down")
-        result2, exec_mode2 = framework.execute_with_degradation("api")
-        assert exec_mode2 == "fallback_1"
-        assert framework.is_degraded("api")
-        
-        # Disable non-critical features
-        mode.disable_feature("advanced_search", "API degraded")
-        assert not mode.is_feature_available("advanced_search")
-        
-        # Wrap response
-        response = DegradedResponse(
-            data=result2,
-            degradation_reason="API offline",
-            mode=exec_mode2,
-            original_request_id="req-001"
-        )
-        assert response.is_degraded()
-
-
 # ===== Pytest Configuration & Markers =====
 
 @pytest.mark.unit

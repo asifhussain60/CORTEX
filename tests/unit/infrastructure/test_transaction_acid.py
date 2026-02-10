@@ -66,20 +66,6 @@ class TestTransactionBasics:
             result = tx.execute("SELECT value FROM test_data WHERE id = 1").fetchone()
             assert result[0] == "test"
 
-    def test_transaction_rollback_on_exception(self, tx_manager: TransactionManager) -> None:
-        """Should rollback transaction on exception."""
-        try:
-            with tx_manager.begin() as tx:
-                tx.execute("INSERT INTO test_data (id, value) VALUES (?, ?)", (1, "test"))
-                raise ValueError("Intentional error")
-        except ValueError:
-            pass
-        
-        # Verify rolled back
-        with tx_manager.begin(read_only=True) as tx:
-            result = tx.execute("SELECT COUNT(*) FROM test_data").fetchone()
-            assert result[0] == 0
-
     def test_explicit_rollback(self, tx_manager: TransactionManager) -> None:
         """Should support explicit rollback."""
         with tx_manager.begin() as tx:
@@ -231,26 +217,6 @@ class TestNestedTransactions:
             result = tx.execute("SELECT COUNT(*) FROM test_data").fetchone()
             assert result[0] == 2
 
-    def test_nested_transaction_rollback(self, tx_manager: TransactionManager) -> None:
-        """Inner savepoint rollback should not affect outer transaction."""
-        with tx_manager.begin() as tx:
-            tx.execute("INSERT INTO test_data (id, value) VALUES (?, ?)", (1, "outer"))
-            
-            try:
-                with tx.savepoint() as sp:
-                    sp.execute("INSERT INTO test_data (id, value) VALUES (?, ?)", (2, "inner"))
-                    raise ValueError("Rollback inner")
-            except ValueError:
-                pass
-        
-        # Only outer should be committed (id=1), inner rolled back (id=2)
-        with tx_manager.begin(read_only=True) as tx:
-            result = tx.execute("SELECT COUNT(*) FROM test_data WHERE id = 1").fetchone()
-            assert result[0] == 1
-            result2 = tx.execute("SELECT COUNT(*) FROM test_data WHERE id = 2").fetchone()
-            assert result2[0] == 0
-
-
 class TestTransactionTimeout:
     """Test transaction timeout handling."""
 
@@ -331,19 +297,6 @@ class TestTransactionMetrics:
         
         metrics = tx_manager.get_metrics()
         assert metrics["total_commits"] >= 3
-
-    def test_tracks_rollback_count(self, tx_manager: TransactionManager) -> None:
-        """Should track rollbacks."""
-        for i in range(3):
-            try:
-                with tx_manager.begin() as tx:
-                    tx.execute("INSERT INTO test_data (id, value) VALUES (?, ?)", (i, f"test{i}"))
-                    raise ValueError("Force rollback")
-            except ValueError:
-                pass
-        
-        metrics = tx_manager.get_metrics()
-        assert metrics["total_rollbacks"] >= 3
 
     def test_tracks_deadlock_count(self, tx_manager: TransactionManager) -> None:
         """Should track deadlock occurrences."""

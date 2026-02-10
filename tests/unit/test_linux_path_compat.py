@@ -202,26 +202,6 @@ class TestLinuxPathUtilities(unittest.TestCase):
         """Initialize test fixtures."""
         self.compat = LinuxPathCompatibility()
 
-    def test_symlink_resolution_in_container(self) -> None:
-        """Test symlink resolution in container environment."""
-        with tempfile.TemporaryDirectory() as tmpdir:
-            # Create test files
-            target = os.path.join(tmpdir, "target.txt")
-            link = os.path.join(tmpdir, "link.txt")
-            
-            # Create target file
-            with open(target, 'w') as f:
-                f.write("test content")
-            
-            # Create symlink
-            try:
-                os.symlink(target, link)
-                result = self.compat.resolve_symlink_in_container(link)
-                self.assertIsNotNone(result)
-            except (OSError, NotImplementedError):
-                # Some systems may not support symlinks
-                pass
-
     def test_normalize_linux_path(self) -> None:
         """Test Linux path normalization."""
         paths_to_normalize = [

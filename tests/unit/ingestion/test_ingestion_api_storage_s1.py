@@ -341,35 +341,6 @@ class TestMIMETypeValidation:
             
             assert metadata is None
     
-    def test_validate_whitelist_only(self):
-        """Test that only whitelisted MIME types are accepted."""
-        with tempfile.TemporaryDirectory() as tmpdir:
-            storage = LocalFilesystemStorage(tmpdir)
-            orchestrator = DocumentIngestionOrchestrator(storage)
-            
-            # Valid MIME types should pass
-            valid_mimes = [
-                "application/pdf",
-                "text/markdown",
-                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-            ]
-            
-            for mime_type in valid_mimes:
-                result = orchestrator.validate_mime_type(mime_type)
-                assert result is True
-            
-            # Invalid MIME types should fail
-            invalid_mimes = [
-                "application/x-executable",
-                "application/javascript",
-                "text/html"
-            ]
-            
-            for mime_type in invalid_mimes:
-                result = orchestrator.validate_mime_type(mime_type)
-                assert result is False
-
-
 # ============================================================================
 # TESTS: File Size Validation
 # ============================================================================

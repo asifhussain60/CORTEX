@@ -107,11 +107,6 @@ class TestIntentRoutingSpecification:
 class TestIntentRoutingEnforcement:
     """Test that MasterOrchestrator enforces intent routing specification."""
     
-    def test_intent_routing_loads_spec_file(self):
-        """Verify routing enforcement loads spec file."""
-        # This test just verifies the pattern is correct without mocking
-        pass  # Covered by test_routing_spec_file_exists
-    
     def test_intent_classification_normalization(self):
         """Verify intent names are normalized (lowercased)."""
         test_intents = ["implement", "IMPLEMENT", "Implement"]

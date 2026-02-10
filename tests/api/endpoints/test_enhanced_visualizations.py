@@ -260,26 +260,6 @@ class TestZoomPanControls:
             # At high zoom, should have at least as many nodes as low zoom
             assert len(data2["nodes"]) >= len(data1["nodes"]) * 0.5
     
-    def test_pan_offset(self, client: TestClient, large_repo: Path) -> None:
-        """Test pan offset for visible region."""
-        response = client.get(
-            "/api/dashboard/tab/dependencies",
-            params={
-                "repo_path": str(large_repo),
-                "pan_x": "500",
-                "pan_y": "300"
-            }
-        )
-        
-        assert response.status_code == 200
-        data = response.json()
-        
-        # Should include pan metadata
-        if "_metadata" in data:
-            metadata = data["_metadata"]
-            # Pan offset may be tracked
-            pass
-    
     def test_spatial_culling(self, client: TestClient, large_repo: Path) -> None:
         """Test spatial culling for off-screen nodes."""
         response = client.get(
@@ -329,32 +309,6 @@ class TestZoomPanControls:
         assert response1.status_code in [200, 400]
         assert response2.status_code in [200, 400]
     
-    def test_zoom_pan_state_persistence(self, client: TestClient, large_repo: Path) -> None:
-        """Test that zoom/pan state can be persisted."""
-        viewport_state = {
-            "x": 100,
-            "y": 200,
-            "zoom": 1.5
-        }
-        
-        response = client.get(
-            "/api/dashboard/tab/dependencies",
-            params={
-                "repo_path": str(large_repo),
-                "viewport": json.dumps(viewport_state)
-            }
-        )
-        
-        assert response.status_code == 200
-        data = response.json()
-        
-        # State should be reflected in response
-        if "_metadata" in data and "viewport" in data["_metadata"]:
-            returned_viewport = data["_metadata"]["viewport"]
-            # Should match or be close to requested state
-            pass
-
-
 class TestExportFunctionality:
     """Test export functionality for visualizations (8 tests)."""
     
@@ -581,24 +535,6 @@ class TestTimelineAnimation:
         if "timeline_data" in data:
             assert len(data["timeline_data"]) <= 11  # 0-10 inclusive
     
-    def test_animation_state_snapshots(self, client: TestClient, test_repo: Path) -> None:
-        """Test retrieving state at specific timeline point."""
-        response = client.get(
-            "/api/dashboard/tab/timeline",
-            params={
-                "repo_path": str(test_repo),
-                "snapshot_at": "5"
-            }
-        )
-        
-        assert response.status_code == 200
-        data = response.json()
-        
-        # Should return state at frame 5
-        if "timeline_data" in data:
-            # Should have data for snapshot
-            pass
-    
     def test_timeline_interpolation(self, client: TestClient, test_repo: Path) -> None:
         """Test timeline data interpolation."""
         response = client.get(
@@ -619,20 +555,3 @@ class TestTimelineAnimation:
             if "interpolated" in metadata:
                 assert metadata["interpolated"] is True
     
-    def test_timeline_markers(self, client: TestClient, test_repo: Path) -> None:
-        """Test timeline markers for important events."""
-        response = client.get(
-            "/api/dashboard/tab/timeline",
-            params={
-                "repo_path": str(test_repo),
-                "include_markers": "true"
-            }
-        )
-        
-        assert response.status_code == 200
-        data = response.json()
-        
-        # Should include markers if available
-        if "markers" in data or ("_metadata" in data and "markers" in data["_metadata"]):
-            # Markers may include releases, major refactors, etc.
-            pass

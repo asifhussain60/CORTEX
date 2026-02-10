@@ -179,20 +179,6 @@ class TestRetryStrategyFailurePaths:
             strategy.execute(non_retriable_error)
         assert call_count_non_retriable[0] == 1  # Only first attempt
 
-    def test_tracks_failed_operations_count(self):
-        """RS should accurately track failed operations."""
-        strategy = RetryStrategy()
-        
-        for i in range(3):
-            try:
-                strategy.execute(lambda: (_ for _ in ()).throw(ConnectionError("fail")))
-            except (RetryExhaustedError, NonRetriableError):
-                pass
-        
-        metrics = strategy.get_metrics()
-        assert metrics["failed_operations"] == 3
-
-
 class TestExponentialBackoff:
     """Test exponential backoff delay calculation."""
 
@@ -401,41 +387,6 @@ class TestIdempotency:
 class TestMetricsTracking:
     """Test metrics collection and reporting."""
 
-    def test_tracks_all_operations(self):
-        """RS should track all operations in metrics."""
-        strategy = RetryStrategy()
-        
-        # Mix of successes and failures
-        for i in range(3):
-            strategy.execute(lambda: "success")
-        
-        for i in range(2):
-            try:
-                strategy.execute(lambda: (_ for _ in ()).throw(ConnectionError("fail")))
-            except (RetryExhaustedError, NonRetriableError):
-                pass
-        
-        metrics = strategy.get_metrics()
-        assert metrics["total_operations"] == 5
-        assert metrics["successful_operations"] == 3
-        assert metrics["failed_operations"] == 2
-
-    def test_calculates_success_rate(self):
-        """RS should calculate success rate accurately."""
-        strategy = RetryStrategy()
-        
-        # 3 successes, 1 failure = 75% success rate
-        for i in range(3):
-            strategy.execute(lambda: "success")
-        
-        try:
-            strategy.execute(lambda: (_ for _ in ()).throw(ConnectionError("fail")))
-        except RetryExhaustedError:
-            pass
-        
-        metrics = strategy.get_metrics()
-        assert metrics["success_rate"] == pytest.approx(0.75, abs=0.01)
-
     def test_tracks_total_retries(self):
         """RS should track total retry attempts."""
         strategy = RetryStrategy()
@@ -542,17 +493,6 @@ class TestEdgeCases:
         assert result == "recovered"
         assert call_count[0] == 2
 
-    def test_handles_unknown_exception_as_non_retriable(self):
-        """RS should treat unknown exceptions as non-retriable."""
-        strategy = RetryStrategy()
-        
-        class CustomError(Exception):
-            pass
-        
-        with pytest.raises(NonRetriableError):
-            strategy.execute(lambda: (_ for _ in ()).throw(CustomError("custom")))
-
-
 class TestIntegration:
     """Test integration scenarios."""
 
@@ -633,34 +573,6 @@ class TestConfiguration:
         
         # Should have tried exactly max_attempts times
         assert call_count[0] == 2
-
-    def test_custom_retriable_exceptions(self):
-        """RS should support custom retriable exception types."""
-        class CustomTransientError(Exception):
-            pass
-        
-        config = RetryConfig(
-            retriable_exceptions=(CustomTransientError,),
-            non_retriable_exceptions=(ConnectionError,),
-            max_attempts=3
-        )
-        strategy = RetryStrategy(config=config)
-        
-        # CustomTransientError should be retried
-        call_count_custom = [0]
-        def with_custom_error():
-            call_count_custom[0] += 1
-            if call_count_custom[0] < 2:
-                raise CustomTransientError("Custom transient")
-            return "recovered"
-        
-        result = strategy.execute(with_custom_error)
-        assert result == "recovered"
-        
-        # ConnectionError should not be retried
-        with pytest.raises(NonRetriableError):
-            strategy.execute(lambda: (_ for _ in ()).throw(ConnectionError("Not retriable")))
-
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

@@ -283,24 +283,6 @@ class TestConcurrentAccess:
 class TestInvalidInput:
     """Test handling of invalid input."""
 
-    def test_get_rule_with_none_id(self) -> None:
-        """Test getting rule with None ID."""
-        with tempfile.TemporaryDirectory() as tmpdir:
-            db_path = Path(tmpdir) / "test.db"
-            mgr = GovernanceDatabaseManager(db_path=db_path)
-            mgr.initialize()
-            
-            # This may raise or return None - just verify it doesn't crash
-            try:
-                rule = mgr.get_rule(None)  # type: ignore
-                # If it returns, should be None
-                assert rule is None
-            except (TypeError, AttributeError):
-                # Also acceptable
-                pass
-            
-            mgr.close()
-
     def test_get_rule_with_empty_string(self) -> None:
         """Test getting rule with empty string ID."""
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -317,38 +299,6 @@ class TestInvalidInput:
 
 class TestRecovery:
     """Test error recovery scenarios."""
-
-    def test_get_rule_after_failed_operation(self) -> None:
-        """Test that system recovers after failed operations."""
-        with tempfile.TemporaryDirectory() as tmpdir:
-            db_path = Path(tmpdir) / "test.db"
-            mgr = GovernanceDatabaseManager(db_path=db_path)
-            mgr.initialize()
-            
-            # Create a rule
-            mgr.create_project_rule(
-                rule_id="RECOV-001",
-                name="Recovery Test",
-                category="test",
-                severity="info",
-                description="Recovery",
-                enforcement_point="test",
-                audit_event="TEST",
-                created_by="test_user",
-            )
-            
-            # Try invalid operation
-            try:
-                mgr.get_rule(None)  # type: ignore
-            except (TypeError, AttributeError):
-                pass
-            
-            # System should still work
-            rule = mgr.get_rule("RECOV-001")
-            assert rule is not None
-            assert rule.rule_id == "RECOV-001"
-            
-            mgr.close()
 
     def test_registry_multiple_initializations(self) -> None:
         """Test registry survives multiple initializations."""

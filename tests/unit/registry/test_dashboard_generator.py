@@ -227,27 +227,6 @@ class TestDashboardSync:
 class TestDashboardIntegration:
     """Integration tests for dashboard sync with PhaseManager."""
 
-    def test_phase_create_triggers_dashboard_sync(self, dashboard_generator):
-        """Test: Creating phase triggers dashboard sync."""
-        from cortex.registry.phase_manager import PhaseManager
-        
-        mock_index = {
-            "active_phases": [],
-            "statistics": {"total_phases": 24}
-        }
-        
-        with patch.object(PhaseManager, '_load_index', return_value=mock_index):
-            with patch.object(dashboard_generator, 'sync_dashboard') as mock_sync:
-                # PhaseManager should call dashboard sync after phase creation
-                # This will be wired in Stage 4
-                pass
-
-    def test_phase_complete_updates_dashboard_statistics(self, dashboard_generator):
-        """Test: Completing phase updates dashboard statistics."""
-        # Dashboard should reflect completed phase count increase
-        pass
-
-
 class TestDashboardData:
     """Tests for DashboardData model."""
 

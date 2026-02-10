@@ -712,19 +712,3 @@ def test_onboarding_performance_benchmark(sample_repo, output_dir):
 # ERROR HANDLING TESTS
 # ============================================================================
 
-def test_error_handling_corrupted_lens_data(sample_repo, output_dir):
-    """Test handling of corrupted LENS analysis data."""
-    # This would require mocking the LENS orchestrator to return bad data
-    pass
-
-
-def test_error_handling_sqlite_generation_failure(sample_repo, output_dir):
-    """Test handling of SQLite generation failures."""
-    # This would require mocking the SQLiteDataGenerator to raise exceptions
-    pass
-
-
-def test_error_handling_registry_update_failure(sample_repo, output_dir):
-    """Test handling of registry update failures."""
-    # This would require mocking the RegistryManagerV3 to raise exceptions
-    pass

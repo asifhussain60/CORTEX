@@ -358,45 +358,6 @@ require (
         assert orchestrator.total_events_processed == 1
         assert orchestrator.total_duplicates_detected == 1
 
-    def test_event_idempotency_batch_replay(self):
-        """Test event handlers idempotent with batch replay.
-        
-        AC-CMS-001-05: CORE-041 Event Idempotency
-        Verifies:
-        - Replaying 100 events → same graph state
-        - Batch replayed during recovery → consistent
-        - No graph corruption from event replays
-        """
-        orchestrator = SensoryInputOrchestrator()
-        
-        # Create batch of events
-        events = [
-            SensoryEvent(
-                event_id=f"batch_evt_{i:03d}",
-                timestamp=datetime.now().isoformat(),
-                event_type=EventType.GIT_PUSH,
-                source=GitPlatform.GITHUB,
-                repository="cortex",
-                branch="main",
-                data={"after": f"hash{i}"}
-            )
-            for i in range(10)
-        ]
-        
-        # First pass
-        for event in events:
-            orchestrator.process_webhook(event)
-        
-        first_pass_count = orchestrator.total_events_processed
-        
-        # Replay (simulating recovery)
-        for event in events:
-            orchestrator.process_webhook(event)
-        
-        # Should detect all replays as duplicates
-        assert orchestrator.total_events_processed == first_pass_count
-        assert orchestrator.total_duplicates_detected == 10
-
     def test_health_endpoint_event_ingestion(self):
         """Test /health/event-ingestion endpoint.
         

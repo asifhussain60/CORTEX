@@ -69,26 +69,6 @@ class TestRegistryValidationScript:
         # All checks should be defined
         assert len(checks) >= 6
 
-    def test_validator_returns_detailed_report(self) -> None:
-        """Validator returns detailed validation report."""
-        report = {
-            "total_checks": 12,
-            "passed": 11,
-            "failed": 1,
-            "warnings": 2,
-            "errors": [
-                "Duplicate phase ID: phase-43 found in index.yaml",
-            ],
-            "warnings": [
-                "Phase 40 has no completion date",
-                "Registry version mismatch detected",
-            ],
-        }
-        
-        assert report["total_checks"] > 0
-        assert "errors" in report
-
-
 class TestStatisticsDriftDetection:
     pass
     """AC-PHASE43-044: Detect statistics drift in index.yaml."""
@@ -116,22 +96,6 @@ class TestStatisticsDriftDetection:
         
         assert len(mismatches) > 0
 
-    def test_detect_progress_percentage_mismatch(self) -> None:
-        """Detect incorrect progress calculations."""
-        phase_data = {
-            "tests_total": 200,
-            "tests_passing": 115,
-            "claimed_progress": 0.60,  # Wrong! Should be 0.575
-        }
-        
-        calculated_progress = phase_data["tests_passing"] / phase_data["tests_total"]
-        
-        if abs(calculated_progress - phase_data["claimed_progress"]) > 0.01:
-            # Drift detected
-            pass
-        else:
-            assert False
-
     def test_detect_status_consistency_issues(self) -> None:
         """Detect inconsistent phase status."""
         phases = [
@@ -146,18 +110,6 @@ class TestStatisticsDriftDetection:
                 issues.append(f"{phase['id']}: completed but not 100%")
         
         assert len(issues) > 0
-
-    def test_track_drift_over_time(self) -> None:
-        """Track statistics drift across multiple checks."""
-        drift_history = [
-            {"date": "2026-02-01", "tests_reported": 200, "tests_actual": 200, "drift": 0},
-            {"date": "2026-02-05", "tests_reported": 200, "tests_actual": 197, "drift": 3},
-            {"date": "2026-02-09", "tests_reported": 200, "tests_actual": 197, "drift": 3},
-        ]
-        
-        # Should detect persistent drift
-        assert drift_history[-1]["drift"] > 0
-
 
 class TestFilePathValidation:
     pass
@@ -188,17 +140,6 @@ class TestFilePathValidation:
         for ref in yaml_refs:
             assert ".yaml" in ref or ".yml" in ref
 
-    def test_detect_broken_references(self) -> None:
-        """Detect references to non-existent files."""
-        known_broken = [
-            "cortex/refactoring/adapters/libcst_adapter.py",  # Planned but not created yet
-            "cortex_brain/domain_knowledge/extraction.py",    # Planned but not created yet
-        ]
-        
-        # Should identify broken references
-        assert len(known_broken) > 0
-
-
 class TestPhaseSequencingValidation:
     pass
     """Validate phase sequencing and dependencies."""
@@ -220,19 +161,6 @@ class TestPhaseSequencingValidation:
         # Should be in order
         stages = [s["stage"] for s in completed_order]
         assert stages == sorted(stages)
-
-    def test_batch_dependencies_satisfied(self) -> None:
-        """Verify batch dependencies are satisfied."""
-        dependencies = {
-            "batch_3": {"requires": ["batch_1", "batch_2"]},
-            "batch_4": {"requires": ["batch_1", "batch_2", "batch_3"]},
-            "batch_5": {"requires": ["batch_1", "batch_2", "batch_3", "batch_4"]},
-        }
-        
-        # Verify all dependencies satisfied
-        for batch, deps in dependencies.items():
-            assert len(deps["requires"]) > 0
-
 
 class TestCrossStageCoherence:
     pass
@@ -273,20 +201,6 @@ class TestCrossStageCoherence:
         # Cohesion: Stage 10 verifies Stage 9 work
         
 
-    def test_end_to_end_phase_coherence(self) -> None:
-        """All 10 stages work together coherently."""
-        coherence_map = {
-            "batch_1": "Foundation - wire existing code (LENS, DoR)",
-            "batch_2": "Integration - semantic enrichment (TDD, symtable)",
-            "batch_3": "Refactoring - formatting-safe transforms (LibCST)",
-            "batch_4": "Knowledge - extract domain & requirements",
-            "batch_5": "Cleanup - registry integrity & validation",
-        }
-        
-        # Full phase coherence
-        assert len(coherence_map) == 5
-
-
 class TestIntegrationTests:
     pass
     """Integration tests across full phase."""
@@ -321,21 +235,6 @@ class TestIntegrationTests:
         passing_rate = tests_passing / tests_total
         
         assert passing_rate >= 0.95
-
-    def test_batch_quality_progression(self) -> None:
-        """Verify quality improves through batches."""
-        batch_quality = {
-            "batch_1": {"coverage": 1.0, "lint_issues": 0},
-            "batch_2": {"coverage": 1.0, "lint_issues": 0},
-            "batch_3": {"coverage": 0.95, "lint_issues": 0},  # LibCST skips expected
-            "batch_4": {"coverage": 1.0, "lint_issues": 0},
-            "batch_5": {"coverage": 1.0, "lint_issues": 0},
-        }
-        
-        # No batch should have quality regression
-        for batch, quality in batch_quality.items():
-            assert quality["coverage"] >= 0.9
-
 
 class TestPhaseCompletion:
     pass

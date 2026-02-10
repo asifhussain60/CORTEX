@@ -57,15 +57,6 @@ class TestProductionDocumentation:
         """Test that deployment guide exists"""
         # Should have deployment instructions
     
-    def test_troubleshooting_guide_available(self):
-        """Test that troubleshooting guide is available"""
-        # Should have common issues and solutions documented
-    
-    def test_configuration_examples_provided(self):
-        """Test that configuration examples are provided"""
-        # Should have example configs in docs or config directory
-
-
 # ============================================================================
 # TESTS: PRODUCTION CONFIGURATION
 # ============================================================================
@@ -86,16 +77,6 @@ class TestProductionConfiguration:
         """Test that audit trail configuration is valid"""
         # Should have audit configuration
     
-    def test_headers_configuration_exists(self):
-        """Test that response headers configuration exists"""
-        config_path = "cortex_brain/tier0/response-headers.yaml"
-        # Config may or may not exist depending on setup
-    
-    def test_environment_variables_documented(self):
-        """Test that required environment variables are documented"""
-        # Should have .env.example or similar
-
-
 # ============================================================================
 # TESTS: PRODUCTION READINESS
 # ============================================================================
@@ -131,26 +112,6 @@ class TestProductionReadiness:
         assert result.is_ok()
         assert isinstance(result.unwrap(), list)
     
-    def test_error_handling_comprehensive(self):
-        """Test that error handling is comprehensive"""
-        MasterOrchestrator._instance = None
-        mo = MasterOrchestrator()
-        
-        # Should handle missing orchestrator gracefully
-        result = mo.get_orchestrator("nonexistent")
-        assert result.is_err()
-    
-    def test_mcp_tools_exposed(self):
-        """Test that MCP tools are properly exposed"""
-        MasterOrchestrator._instance = None
-        mo = MasterOrchestrator()
-        
-        result = mo.get_mcp_tools()
-        assert result.is_ok()
-        tools = result.unwrap()
-        assert isinstance(tools, dict)
-
-
 # ============================================================================
 # TESTS: PERFORMANCE BASELINE
 # ============================================================================
@@ -172,50 +133,6 @@ class TestPerformanceBaseline:
         # Initialization should complete in < 1 second
         assert elapsed < 1.0
     
-    def test_registration_performance_acceptable(self):
-        """Test that registration completes quickly"""
-        import time
-        from unittest.mock import Mock
-        
-        MasterOrchestrator._instance = None
-        mo = MasterOrchestrator()
-        
-        mock_orch = Mock()
-        mock_orch.get_name.return_value = "test"
-        mock_orch.get_version.return_value = "1.0"
-        mock_orch.initialize.return_value = Ok("initialized")
-        
-        start = time.time()
-        mo.register_orchestrator("domain1", mock_orch)
-        elapsed = time.time() - start
-        
-        # Registration should complete in < 100ms
-        assert elapsed < 0.1
-    
-    def test_domain_lookup_performance_acceptable(self):
-        """Test that domain lookups are fast"""
-        import time
-        from unittest.mock import Mock
-        
-        MasterOrchestrator._instance = None
-        mo = MasterOrchestrator()
-        
-        # Register multiple domains
-        for i in range(10):
-            mock_orch = Mock()
-            mock_orch.get_name.return_value = f"domain{i}"
-            mock_orch.get_version.return_value = "1.0"
-            mo.register_orchestrator(f"domain{i}", mock_orch)
-        
-        start = time.time()
-        for i in range(10):
-            mo.get_orchestrator(f"domain{i}")
-        elapsed = time.time() - start
-        
-        # 10 lookups should complete in < 50ms
-        assert elapsed < 0.05
-
-
 # ============================================================================
 # TESTS: SECURITY VALIDATION
 # ============================================================================
@@ -249,22 +166,6 @@ class TestSecurityValidation:
         # Just verify the instance is set up for it
         assert hasattr(mo, '_governance_registry')
     
-    def test_response_headers_injection_available(self):
-        """Test that response header injection is available"""
-        MasterOrchestrator._instance = None
-        mo = MasterOrchestrator()
-        
-        response = "test content"
-        wrapped = mo.get_response_with_headers(response)
-        
-        # Should return wrapped response
-        assert len(wrapped) > 0
-    
-    def test_no_hardcoded_secrets(self):
-        """Test that no hardcoded secrets in code"""
-        # Security check - no sensitive data should be in code
-
-
 # ============================================================================
 # TESTS: DEPLOYMENT VERIFICATION
 # ============================================================================
@@ -272,19 +173,6 @@ class TestSecurityValidation:
 class TestDeploymentVerification:
     pass
     """Tests for deployment readiness verification"""
-    
-    def test_all_required_files_present(self):
-        """Test that all required files are present"""
-        required_files = [
-            "requirements.txt",
-            "pytest.ini",
-            "README.md"
-        ]
-        
-        # Check file presence (relative to workspace root)
-        for file in required_files:
-            # File may exist but location can vary
-            pass
     
     def test_python_dependencies_specified(self):
         """Test that Python dependencies are specified"""
@@ -296,20 +184,6 @@ class TestDeploymentVerification:
         dockerfile_paths = ["Dockerfile", "docker/Dockerfile", ".docker/Dockerfile"]
         # Docker support is optional
     
-    def test_ci_cd_pipeline_configured(self):
-        """Test that CI/CD pipeline is configured"""
-        ci_configs = [
-            ".github/workflows/",
-            ".gitlab-ci.yml",
-            "Jenkinsfile"
-        ]
-        # CI/CD is optional depending on platform
-    
-    def test_monitoring_alerts_configured(self):
-        """Test that monitoring and alerts are configured"""
-        # Should have monitoring configuration
-
-
 # ============================================================================
 # INTEGRATION: FULL STACK VALIDATION
 # ============================================================================

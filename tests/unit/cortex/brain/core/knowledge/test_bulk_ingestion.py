@@ -200,14 +200,6 @@ class TestValidationFilter:
 
         assert action == FilterAction.ACCEPT
 
-    def test_filter_missing_required_field(self, ingestion_entry: IngestionEntry) -> None:
-        """Test filtering entry missing required field."""
-        filter_comp = ValidationFilter(require_fields=["domain"])
-        action = filter_comp.filter(ingestion_entry)
-
-        # Entry has domain, so should pass
-        assert action == FilterAction.ACCEPT
-
     def test_filter_missing_field_fails(self) -> None:
         """Test filtering entry without required field."""
         entry = IngestionEntry(

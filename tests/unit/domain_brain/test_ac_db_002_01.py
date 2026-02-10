@@ -203,11 +203,6 @@ class TestCommentsAdapter:
         results = adapter.query_source("comment:design")
         assert isinstance(results, list)
 
-    def test_query_todos(self, adapter: CommentsAdapter) -> None:
-        """Test querying TODO comments."""
-        results = adapter.query_source("todo:*")
-        assert isinstance(results, list)
-
     def test_invalid_query_format(self, adapter: CommentsAdapter) -> None:
         """Test invalid query format returns empty list."""
         results = adapter.query_source("invalid:query")

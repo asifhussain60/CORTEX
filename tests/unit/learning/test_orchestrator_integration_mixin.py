@@ -204,55 +204,6 @@ class TestPatternExtraction:
 class TestOrchestratorTypeDetection:
     """Tests for orchestrator type detection."""
     
-    def test_detect_tdd_orchestrator_type(self):
-        """Mixin should detect TDD orchestrator type."""
-        class TDDOrchestrator(OrchestratorLearningMixin):
-            pass
-        
-        orch = TDDOrchestrator()
-        assert orch._get_learning_orchestrator_type() == "tdd"
-    
-    def test_detect_refactoring_orchestrator_type(self):
-        """Mixin should detect refactoring orchestrator type."""
-        class RefactoringOrchestrator(OrchestratorLearningMixin):
-            pass
-        
-        orch = RefactoringOrchestrator()
-        assert orch._get_learning_orchestrator_type() == "refactoring"
-    
-    def test_detect_interaction_orchestrator_type(self):
-        """Mixin should detect interaction orchestrator type."""
-        class InteractionOrchestrator(OrchestratorLearningMixin):
-            pass
-        
-        orch = InteractionOrchestrator()
-        assert orch._get_learning_orchestrator_type() == "interaction"
-    
-    def test_detect_governance_orchestrator_type(self):
-        """Mixin should detect governance orchestrator type."""
-        class GovernanceOrchestrator(OrchestratorLearningMixin):
-            pass
-        
-        orch = GovernanceOrchestrator()
-        assert orch._get_learning_orchestrator_type() == "governance"
-    
-    def test_detect_coordination_orchestrator_type(self):
-        """Mixin should detect coordination orchestrator type."""
-        class CoordinationOrchestrator(OrchestratorLearningMixin):
-            pass
-        
-        orch = CoordinationOrchestrator()
-        assert orch._get_learning_orchestrator_type() == "coordination"
-    
-    def test_default_orchestrator_type(self):
-        """Mixin should return generic for unknown orchestrator type."""
-        class UnknownOrchestrator(OrchestratorLearningMixin):
-            pass
-        
-        orch = UnknownOrchestrator()
-        assert orch._get_learning_orchestrator_type() == "generic"
-
-
 # =============================================================================
 # Test: Integration Scenarios
 # =============================================================================

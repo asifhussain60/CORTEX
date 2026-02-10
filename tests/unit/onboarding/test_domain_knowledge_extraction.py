@@ -285,18 +285,6 @@ class TestTier3HistoricalExtraction:
         
         assert "adr-001" in adrs
 
-    def test_extract_technical_debt_indicators(self) -> None:
-        """Identify technical debt from code patterns."""
-        debt_indicators = [
-            "Multiple large files (>1000 LOC)",
-            "Circular dependencies between modules",
-            "Deprecated dependency versions",
-            "TODO/FIXME comments with old dates",
-        ]
-        
-        confidence = 0.85
-        assert confidence >= 0.85
-
     def test_tier3_confidence_minimum_85_percent(self) -> None:
         """Tier 3 extractions have minimum 85% confidence."""
         tier3_sources = [

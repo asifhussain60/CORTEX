@@ -447,8 +447,6 @@ class TestCleanerRegistry:
         with pytest.raises(CleanerRegistrationError):
             registry.register_cleaner(MockCleanerA(config={}))  # type: ignore
 
-    def test_register_non_interface_raises_error(
-        self, registry: CleanerRegistry
     ) -> None:
         """Registry should reject classes not implementing CleanerInterface."""
 

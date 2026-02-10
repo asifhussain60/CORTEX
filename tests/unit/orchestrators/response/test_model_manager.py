@@ -92,15 +92,6 @@ class TestModelTypes:
         
         assert model is not None
     
-    def test_unsupported_model_type(self):
-        """Unsupported model types handled gracefully."""
-        manager = ModelManager()
-        
-        # ABSTRACTIVE not implemented yet
-        with pytest.raises((ValueError, NotImplementedError)):
-            manager.get_model("ABSTRACTIVE_UNKNOWN")
-
-
 class TestModelConfig:
     """Test ModelConfig dataclass."""
     

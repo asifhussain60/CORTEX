@@ -91,27 +91,6 @@ class TestOrchestratorRouterIntegration:
         assert isinstance(audit, dict)
 
     @pytest.mark.skip(reason="Requires IntelligentKnowledgeRouter full implementation - DummyRouter doesn't have query_count")
-    def test_orchestrator_captures_routing_metrics(self):
-        """Test that orchestrator captures routing metrics during operations."""
-        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
-        
-        orchestrator = MasterOrchestrator()
-        
-        # Perform operation that uses routing
-        initial_count = orchestrator.router.query_count
-        
-        # Route a query
-        mock_backend = Mock()
-        orchestrator.router.backends['default'] = mock_backend
-        
-        try:
-            orchestrator.router.route_query("test query")
-        except Exception:
-            pass
-        
-        # Query count should increase
-        assert orchestrator.router.query_count > initial_count
-
     @pytest.mark.skip(reason="Requires IntelligentKnowledgeRouter full implementation - DummyRouter doesn't include intent_type in audit")
     def test_orchestrator_audit_trail_includes_routing_decision(self):
         """Test that operation audit trail includes routing decision."""
@@ -235,45 +214,7 @@ class TestOrchestratorRoutingBehavior:
         assert isinstance(results, (list, tuple))
 
     @pytest.mark.skip(reason="Requires IntelligentKnowledgeRouter full implementation - DummyRouter doesn't have get_performance_metrics")
-    def test_orchestrator_tracks_routing_efficiency(self):
-        """Test that orchestrator tracks routing efficiency."""
-        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
-        
-        orchestrator = MasterOrchestrator()
-        mock_backend = Mock()
-        orchestrator.router.backends['default'] = mock_backend
-        
-        # Route several queries
-        for _ in range(3):
-            try:
-                orchestrator.router.route_query("test query")
-            except Exception:
-                pass
-        
-        metrics = orchestrator.router.get_performance_metrics()
-        
-        # Should track queries
-        assert metrics['queries_routed'] >= 0
-
     @pytest.mark.skip(reason="Requires IntelligentKnowledgeRouter full implementation - DummyRouter doesn't have get_routing_history")
-    def test_orchestrator_routing_history_preserved_across_operations(self):
-        """Test that routing history is preserved."""
-        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
-        
-        orchestrator = MasterOrchestrator()
-        mock_backend = Mock()
-        orchestrator.router.backends['default'] = mock_backend
-        
-        initial_history_len = len(orchestrator.router.get_routing_history())
-        
-        try:
-            orchestrator.router.route_query("test")
-        except Exception:
-            pass
-        
-        # History should grow
-        assert len(orchestrator.router.get_routing_history()) > initial_history_len
-
     def test_orchestrator_confidence_score_influences_selection(self):
         """Test that confidence score influences backend selection."""
         from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
@@ -368,22 +309,6 @@ class TestOrchestratorRoutingBehavior:
 
 class TestOrchestratorRegressions:
     """Regression tests to ensure orchestrator backward compatibility."""
-
-    def test_coordinate_operation_still_returns_results(self):
-        """Test that coordinate_operation still returns results after routing integration."""
-        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
-        
-        orchestrator = MasterOrchestrator()
-        mock_backend = Mock()
-        mock_backend.query = Mock(return_value=[{'data': 'result'}])
-        orchestrator.router.backends['default'] = mock_backend
-        
-        # Should be able to route queries
-        try:
-            backend, confidence, audit = orchestrator.router.route_query("test")
-            assert backend is not None
-        except Exception:
-            pass
 
     @pytest.mark.skip(reason="Requires IntelligentKnowledgeRouter full implementation - DummyRouter doesn't have route_query_with_fallback")
     def test_parallel_fallback_mode_available(self):

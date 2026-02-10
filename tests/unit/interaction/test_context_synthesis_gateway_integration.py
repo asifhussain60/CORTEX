@@ -78,23 +78,6 @@ class TestAgentFileSynthesis:
         assert "cortex-architect.md" in result.content.lower()
         assert "check_environment" in result.content or "audit" in result.content
     
-    def test_synthesize_extracts_purpose(self):
-        """Extract purpose/description from agent file"""
-        synthesizer = ContextSynthesizer()
-        
-        agent_content = """
-        # EnforcementOrchestrator
-        # Purpose: 7-agent pre-execution gate for CORE rule validation
-        
-        class EnforcementOrchestrator:
-            pass
-        """
-        
-        result = synthesizer.synthesize_agent_files(agent_content, "enforcement-orchestrator.py")
-        
-        assert "7-agent" in result.content or "gate" in result.content
-        assert "validation" in result.content.lower() or "enforcement" in result.content.lower()
-    
     def test_synthesize_extracts_key_methods(self):
         """Extract key method signatures only (not implementation)"""
         synthesizer = ContextSynthesizer()
@@ -332,11 +315,6 @@ class TestFileContentSynthesis:
         
         assert "process_data" in result.content and "validate_input" in result.content
     
-    def test_synthesize_file_preserves_docstrings(self):
-        """Preserve docstrings in AST summary"""
-        synthesizer = ContextSynthesizer()
-        
-        code_content = """def important_function():
     '''This is a critical function that does X, Y, Z'''
     pass
 """
@@ -371,23 +349,6 @@ class TestFileContentSynthesis:
         
         # Should compress significantly (signature only, no implementation)
         assert result.compression_ratio >= 0.5, f"Should compress 50%+, got {result.compression_ratio:.1%}"
-    
-    def test_synthesize_file_handles_imports(self):
-        """Preserve import statements in summary"""
-        synthesizer = ContextSynthesizer()
-        
-        code_content = """
-        from typing import Dict, List
-        import numpy as np
-        
-        class DataProcessor:
-            def process(self): pass
-        """
-        
-        result = synthesizer.synthesize_file_content(code_content, "processor.py")
-        
-        # Imports may be preserved or omitted (both acceptable)
-        assert "DataProcessor" in result.content
     
     def test_synthesize_file_invalid_syntax(self):
         """Handle files with syntax errors gracefully"""

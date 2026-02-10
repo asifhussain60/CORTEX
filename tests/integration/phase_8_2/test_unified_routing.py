@@ -300,39 +300,6 @@ class TestUnifiedRouting:
             assert fallback is not None
             assert hasattr(fallback, "get_name")
     
-    def test_enforcement_violations_logged(self) -> None:
-        """
-        Test: Routing violations are logged to audit trail
-        Expected: Violations appear in audit log
-        
-        CORE-027: Verify audit trail compliance
-        """
-        # Arrange
-        context = {
-            "operation": "invalid_operation",
-            "description": "",
-            "keywords": [],
-        }
-        
-        # Act
-        try:
-            decision = self.router.route(context)
-            # May or may not raise, depending on blocking config
-        except ValueError:
-            pass  # Expected if blocking enabled
-        
-        # Assert
-        audit_result = self.router.get_audit_trail(limit=10)
-        assert audit_result.is_ok()
-        audit_entries = audit_result.value
-        
-        # Check for enforcement-related log entries
-        enforcement_logs = [
-            entry for entry in audit_entries
-            if "ENFORCEMENT" in str(entry).upper() or "VIOLATION" in str(entry).upper()
-        ]
-        # May or may not have violations depending on confidence
-    
     def test_cache_hit_for_identical_requests(self) -> None:
         """
         Test: Identical requests return cached decisions
@@ -439,15 +406,6 @@ class TestRoutingEnforcementIntegration:
         if decision.confidence_score < 0.6:
             assert not result.is_valid
             assert any("ROUTING-002" in v for v in result.violations)
-    
-    def test_routing_003_fallback_required(self) -> None:
-        """
-        ROUTING-003: Fallback orchestrators required for low confidence
-        Expected: Warning if confidence < 0.7 and no fallbacks
-        """
-        # This is a warning, not blocking, so we just verify it's detected
-        # Implementation checks if fallback_orchestrators list is populated
-        pass  # Enforcement engine handles this internally
     
     def test_routing_004_auditable_reasoning(self) -> None:
         """

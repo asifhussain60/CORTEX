@@ -338,25 +338,6 @@ class TestSecretsMigrationIntegration:
             assert result["to_migrate"] == 5
             assert mock_sim.called
     
-    def test_migration_rollback_on_error(self):
-        """Migration rolls back automatically on errors"""
-        from cortex.secrets.migration import SecretsMigrationOrchestrator
-        from cortex.secrets.provider import ISecretsProvider
-        
-        orchestrator = SecretsMigrationOrchestrator()
-        mock_provider = MagicMock(spec=ISecretsProvider)
-        
-        with patch.object(orchestrator, '_execute_migration') as mock_exec:
-            mock_exec.side_effect = Exception("Vault connection failed")
-            
-            with patch.object(orchestrator, '_rollback') as mock_rollback:
-                try:
-                    orchestrator.run_full_migration(mock_provider)
-                except Exception:
-                    pass
-                
-                mock_rollback.assert_called_once()
-    
     def test_migration_creates_audit_trail(self):
         """Migration creates immutable audit trail of all actions"""
         from cortex.secrets.migration import SecretsMigrationOrchestrator

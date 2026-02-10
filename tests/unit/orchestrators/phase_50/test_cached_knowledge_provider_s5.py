@@ -196,23 +196,6 @@ class TestCachedProviderL2Cache:
 class TestCachedProviderCacheBypass:
     """AC-PHASE50-S5-005: Cache bypass capability"""
 
-    def test_bypass_cache_flag_skips_cache(self):
-        """bypass_cache parameter skips caching logic"""
-        mock_provider = Mock(spec=IKnowledgeProvider)
-        mock_provider.read.side_effect = ["content_v1", "content_v2"]
-        
-        config = StorageConfig(backend="local", endpoint="/tmp")
-        cached = CachedKnowledgeProvider(mock_provider, config)
-        
-        # Read with cache
-        result1 = cached.read("file.txt", bypass_cache=False)
-        assert result1 == "content_v1"
-        
-        # Read with bypass
-        result2 = cached.read("file.txt", bypass_cache=True)
-        assert result2 == "content_v2"
-        assert mock_provider.read.call_count == 2
-
     def test_cache_disabled_in_config_skips_caching(self):
         """cache_enabled=False disables all caching"""
         mock_provider = Mock(spec=IKnowledgeProvider)

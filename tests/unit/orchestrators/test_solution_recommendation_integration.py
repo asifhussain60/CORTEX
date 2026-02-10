@@ -264,24 +264,10 @@ class TestInteractionOrchestratorIntegration:
     """Test integration with InteractionOrchestrator."""
     
     @pytest.mark.skip(reason="Requires full orchestrator setup")
-    def test_evaluate_solution_options(self):
-        """Test InteractionOrchestrator.evaluate_solution_options()."""
-        # This would require full orchestrator setup
-        # Skipped for now, can be implemented with fixtures
-        pass
-
-
 class TestConversationProtocolIntegration:
     """Test integration with ConversationProtocol."""
     
     @pytest.mark.skip(reason="Requires full protocol setup")
-    def test_get_recommended_option(self):
-        """Test ConversationProtocol.get_recommended_option()."""
-        # This would require full protocol setup
-        # Skipped for now, can be implemented with fixtures
-        pass
-
-
 class TestRecommendationDataStructures:
     """Test data structures used by recommendation system."""
     

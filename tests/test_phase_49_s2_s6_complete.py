@@ -148,11 +148,6 @@ class TestRulesCacheS2:
         version = "7.0"
         assert version == "7.0"
 
-    def test_s2_rule_changelog_delta(self):
-        """Should provide delta from previous version"""
-        # What changed between v6.9 and v7.0
-
-
 # ============================================================================
 # STAGE 3: LENS WARMER TESTS (16 tests)
 # ============================================================================

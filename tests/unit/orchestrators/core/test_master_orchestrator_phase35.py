@@ -181,13 +181,6 @@ class TestMasterOrchestratorMinimalStatus:
             orchestrator = MasterOrchestrator()
             return orchestrator
     
-    def test_autonomous_mode_flag_set(self, mock_orchestrator):
-        """Test autonomous mode flag prevents verbose status updates."""
-        # This will be tested via integration tests once PlanOrchestrator/TDDOrchestrator
-        # support autonomous mode flag
-        pass
-
-
 class TestMasterOrchestratorSingleDecisionGate:
     """Test single decision gate enforcement (R4)."""
     

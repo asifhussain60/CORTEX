@@ -62,9 +62,6 @@ class ExecutionContext:
         assert "ExecutionContext" in result.reason
         assert result.pattern == BlockingPattern.EXECUTION_CONTEXT
 
-    def test_allows_canonical_execution_context(
-        self,
-        matcher: PreCommitPatternMatcher,
     ) -> None:
         """
         PATTERN-002: Allows ExecutionContext in canonical location only
@@ -171,9 +168,6 @@ class GovernanceRegistry:
         assert "BaseRegistry" in result.reason
         assert result.pattern == BlockingPattern.REGISTRY
 
-    def test_allows_registry_with_base_registry_inheritance(
-        self,
-        matcher: PreCommitPatternMatcher,
     ) -> None:
         """
         PATTERN-006: Allows Registry classes that inherit from BaseRegistry[T]
@@ -277,9 +271,6 @@ class BaseOrchestrator:
         assert "base" in result.reason.lower()
         assert result.pattern == BlockingPattern.ORCHESTRATOR_BASE
 
-    def test_allows_canonical_orchestrator_base(
-        self,
-        matcher: PreCommitPatternMatcher,
     ) -> None:
         """
         PATTERN-010: Allows OrchestratorBase in canonical location
@@ -442,9 +433,6 @@ def load_wiring_from_yaml():
     # COMPREHENSIVE PATTERN CHECKING
     # =====================================================================
 
-    def test_check_all_patterns_in_file(
-        self,
-        matcher: PreCommitPatternMatcher,
     ) -> None:
         """
         PATTERN-016: Check all patterns in a single file

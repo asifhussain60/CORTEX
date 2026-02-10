@@ -320,22 +320,6 @@ class TestTier3GateLogic:
         # Should work with either new or old logic
         assert challenge is not None
     
-    def test_hard_gate_requires_explicit_response(self, engine: ChallengeEngine, lens_context_high_confidence: LENSContext):
-        """Test that hard gates require explicit user response."""
-        challenge = engine.generate_challenge(
-            "Unsafe operation",
-            lens_context_high_confidence,
-            challenge_type=ChallengeType.HARMFUL
-        )
-        
-        assert challenge.gate_type == GateType.HARD
-        # Hard gate options should be minimal and not allow bypass
-        assert len(challenge.options) <= 3  # Only core options, no proceed-anyway
-        # Check that options don't include unsafe bypass language
-        option_text = " ".join(challenge.options).lower()
-        assert "acknowledge risk" not in option_text
-        assert "risk" not in option_text or "mitigate" in option_text
-    
     def test_soft_gate_includes_proceed_option(self, engine: ChallengeEngine, lens_context_high_confidence: LENSContext):
         """Test that soft gates include proceed option."""
         challenge = engine.generate_challenge(

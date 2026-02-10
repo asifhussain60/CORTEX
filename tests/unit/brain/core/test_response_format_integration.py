@@ -260,12 +260,6 @@ Content here."""
 class TestProductionGate:
     """Test production format gate."""
     
-    def test_production_gate_strict(self):
-        """Test production gate with strict validation."""
-        gate = FormatGate(production_mode=True)
-        
-        # Perfect format should pass
-        perfect = """## 🧠 CORTEX Implementation
 **Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
 
 ---
@@ -308,21 +302,6 @@ class TestIntegrationErrorHandling:
         assert result is not None
         assert result.final_response is not None
     
-    def test_handles_processing_errors(self):
-        """Test handling of processing errors."""
-        integration = ResponseFormatIntegration()
-        
-        # Very malformed input
-        malformed = "\x00\x01\x02"
-        
-        try:
-            result = integration.process(malformed, orchestrator="TestOrch")
-            assert result is not None
-        except IntegrationError:
-            # Acceptable to raise IntegrationError
-            pass
-
-
 class TestBackwardCompatibility:
     """Test backward compatibility."""
     

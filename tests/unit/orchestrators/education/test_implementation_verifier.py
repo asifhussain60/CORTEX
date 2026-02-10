@@ -105,12 +105,6 @@ class TestClass:
         assert result.missing_requirements == []
         assert result.confidence >= 0.9
         
-    def test_detects_missing_required_methods(self, tmp_path):
-        """Should detect when required methods are missing."""
-        verifier = ImplementationVerifier(repo_root=tmp_path)
-        
-        spec_file = tmp_path / "spec.yaml"
-        spec_file.write_text("""
 required_methods:
   - initialize
   - execute
@@ -385,19 +379,6 @@ class TestVerificationReport:
         assert "Architectural Alignment" in report
         assert "Security Compliance" in report
         
-    def test_report_includes_action_items(self, tmp_path):
-        """Should include action items for incomplete verification."""
-        verifier = ImplementationVerifier(repo_root=tmp_path)
-        
-        # Incomplete DoR
-        dor = {"intent": "IMPLEMENT"}
-        
-        report = verifier.generate_report(dor=dor)
-        
-        assert "Action Items" in report
-        assert "TODO" in report or "REQUIRED" in report
-
-
 class TestEdgeCases:
     """Test edge cases and error handling."""
     

@@ -141,67 +141,6 @@ class TestCryptoKeyRotation:
         crypto.rotate_key(new_key)
         # Should not raise
 
-    def test_decrypt_with_old_key_after_rotation(self) -> None:
-        """Verify old encrypted data can still be decrypted after rotation."""
-        from cortex.infrastructure.security import CryptoProvider
-        
-        crypto = CryptoProvider()
-        plaintext = "test data"
-        
-        # Encrypt with current key
-        ciphertext = crypto.encrypt(plaintext.encode())
-        
-        # Rotate key
-        new_key = crypto.generate_key()
-        crypto.rotate_key(new_key)
-        
-        # Old data should still be decodable (implementation dependent)
-        # This tests graceful handling
-        try:
-            decrypted = crypto.decrypt(ciphertext)
-        except ValueError:
-            pass  # Expected if old key is needed
-
-
 class TestCryptoErrors:
     """Test error handling."""
 
-    def test_rejects_invalid_key_length(self) -> None:
-        """Verify invalid key lengths are rejected."""
-        from cortex.infrastructure.security import CryptoProvider
-        
-        crypto = CryptoProvider()
-        
-        try:
-            # AES-256 requires 32-byte key
-            invalid_key = b"short"
-            crypto.set_current_key(invalid_key)
-        except (ValueError, RuntimeError):
-            pass  # Expected
-
-    def test_handles_decryption_failures(self) -> None:
-        """Verify decryption failures are handled."""
-        from cortex.infrastructure.security import CryptoProvider
-        
-        crypto = CryptoProvider()
-        corrupted_ciphertext = b"invalid_data"
-        
-        try:
-            crypto.decrypt(corrupted_ciphertext)
-        except (ValueError, RuntimeError, Exception):
-            pass  # Expected
-
-    def test_handles_corrupted_ciphertext(self) -> None:
-        """Verify corrupted ciphertext handling."""
-        from cortex.infrastructure.security import CryptoProvider
-        
-        crypto = CryptoProvider()
-        
-        # Create valid ciphertext then corrupt it
-        valid = crypto.encrypt(b"test")
-        corrupted = valid[:-5] + b"xxxxx"  # Corrupt last 5 bytes
-        
-        try:
-            crypto.decrypt(corrupted)
-        except (ValueError, RuntimeError, Exception):
-            pass  # Expected to fail

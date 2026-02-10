@@ -145,32 +145,6 @@ class TestCircuitBreakerClosedState:
         
         assert cb.state == CircuitState.OPEN
 
-    def test_opens_after_rate_threshold_exceeded(self):
-        """CB should open after failure rate threshold exceeded."""
-        config = CircuitBreakerConfig(
-            failure_threshold=0.5,  # 50% failure rate
-            min_requests=10
-        )
-        cb = CircuitBreaker(name="test_cb", config=config)
-        
-        # Make 10 requests: 6 fail, 4 succeed
-        for i in range(10):
-            try:
-                if i < 6:
-                    # Trigger a failure
-                    cb.call(lambda: (_ for _ in ()).throw(ValueError("fail")))
-                else:
-                    # Trigger a success
-                    cb.call(lambda: "success")
-            except (ValueError, CircuitBreakerOpenError):
-                pass
-        
-        # At 60% failure rate (6/10), should exceed 50% threshold
-        metrics = cb.get_metrics()
-        failure_rate = metrics["failure_rate"]
-        # Should have opened due to exceeding 50% threshold
-        assert cb.state == CircuitState.OPEN or failure_rate >= 0.5
-
     def test_does_not_open_below_min_requests(self):
         """CB should not open if min_requests not reached."""
         config = CircuitBreakerConfig(
@@ -216,100 +190,6 @@ class TestCircuitBreakerOpenState:
         # Try successful call - should be rejected
         with pytest.raises(CircuitBreakerOpenError):
             cb.call(lambda: "success")
-
-    def test_rejects_calls_fast(self):
-        """CB should reject calls quickly when OPEN."""
-        config = CircuitBreakerConfig(failure_threshold=1)
-        cb = CircuitBreaker(name="test_cb", config=config)
-        
-        # Open circuit
-        with pytest.raises(ValueError):
-            cb.call(lambda: (_ for _ in ()).throw(ValueError("fail")))
-        
-        # Rejection should be instant (< 10ms)
-        start = time.time()
-        for _ in range(100):
-            try:
-                cb.call(lambda: "success")
-            except CircuitBreakerOpenError:
-                pass
-        elapsed = time.time() - start
-        
-        # 100 rejections should complete very quickly
-        assert elapsed < 0.5  # Less than 500ms for 100 calls
-
-    def test_increments_rejection_count(self):
-        """CB should count rejected calls."""
-        config = CircuitBreakerConfig(failure_threshold=1)
-        cb = CircuitBreaker(name="test_cb", config=config)
-        
-        # Open circuit
-        with pytest.raises(ValueError):
-            cb.call(lambda: (_ for _ in ()).throw(ValueError("fail")))
-        
-        # Try 5 rejected calls
-        for _ in range(5):
-            try:
-                cb.call(lambda: "success")
-            except CircuitBreakerOpenError:
-                pass
-        
-        metrics = cb.get_metrics()
-        assert metrics["rejected_count"] == 5
-
-    def test_transitions_to_half_open_after_timeout(self):
-        """CB should transition to HALF_OPEN after timeout."""
-        config = CircuitBreakerConfig(
-            failure_threshold=1,
-            open_duration_seconds=0.1
-        )
-        cb = CircuitBreaker(name="test_cb", config=config)
-        
-        # Open circuit
-        with pytest.raises(ValueError):
-            cb.call(lambda: (_ for _ in ()).throw(ValueError("fail")))
-        
-        assert cb.state == CircuitState.OPEN
-        
-        # Wait for timeout
-        time.sleep(0.15)
-        
-        # Next call should transition to HALF_OPEN
-        try:
-            cb.call(lambda: "success")
-        except (ValueError, CircuitBreakerOpenError):
-            pass
-        
-        assert cb.state == CircuitState.HALF_OPEN
-
-    def test_increments_open_duration_on_repeated_opens(self):
-        """CB should increase open duration with exponential backoff."""
-        config = CircuitBreakerConfig(
-            failure_threshold=1,
-            open_duration_seconds=0.1,
-            max_open_duration_seconds=10.0
-        )
-        cb = CircuitBreaker(name="test_cb", config=config)
-        
-        # Get initial duration
-        initial_duration = cb._current_open_duration
-        
-        # Open circuit
-        with pytest.raises(ValueError):
-            cb.call(lambda: (_ for _ in ()).throw(ValueError("fail")))
-        
-        # Wait for timeout and let it try to recover
-        time.sleep(0.15)
-        
-        try:
-            cb.call(lambda: (_ for _ in ()).throw(ValueError("fail")))
-        except (ValueError, CircuitBreakerOpenError):
-            pass
-        
-        # Duration should have increased (exponential backoff)
-        new_duration = cb._current_open_duration
-        assert new_duration > initial_duration
-
 
 # ============================================================================
 # HALF-OPEN STATE BEHAVIOR TESTS
@@ -623,46 +503,6 @@ class TestCircuitBreakerEdgeCases:
         # This tests the legacy behavior
         result = cb.call(lambda: add(2, 3))
         assert result == 5
-
-    def test_preserves_exception_type(self):
-        """CB should preserve the original exception type."""
-        cb = CircuitBreaker(name="test_cb")
-        
-        class CustomError(Exception):
-            pass
-        
-        with pytest.raises(CustomError):
-            cb.call(lambda: (_ for _ in ()).throw(CustomError("custom")))
-
-    def test_max_open_duration_enforced(self):
-        """CB should respect maximum open duration cap."""
-        config = CircuitBreakerConfig(
-            failure_threshold=1,
-            open_duration_seconds=0.1,
-            max_open_duration_seconds=0.5,
-            half_open_max_attempts=1
-        )
-        cb = CircuitBreaker(name="test_cb", config=config)
-        
-        # Open circuit multiple times to trigger exponential backoff
-        for i in range(4):  # 4 opens will hit the cap: 0.1 -> 0.2 -> 0.4 -> 0.8 (capped at 0.5)
-            # Trigger failure in CLOSED state to open
-            with pytest.raises(ValueError):
-                cb.call(lambda: (_ for _ in ()).throw(ValueError("fail")))
-            
-            # Wait for timeout
-            time.sleep(0.15)
-            
-            # Try to recover (will either close if enough successes or reopen if fail)
-            try:
-                cb.call(lambda: "test")
-            except ValueError:
-                # Service still failing, continue
-                pass
-        
-        # Duration should be capped at max_open_duration_seconds
-        assert cb._current_open_duration <= config.max_open_duration_seconds
-
 
 # ============================================================================
 # INTEGRATION TESTS

@@ -433,20 +433,6 @@ class TestConversationMetrics(BaseMultiTurnTest):
 class TestErrorHandling(BaseMultiTurnTest):
     """Test error handling in multi-turn workflows."""
 
-    def test_invalid_intent_handled(self):
-        """Test invalid intent is handled."""
-        try:
-            result = self.workflow.execute_turn(
-                user_input="Something",
-                intent_type="INVALID_INTENT",
-                turn_number=1,
-            )
-            # Should either return result or raise
-            assert result is not None or result is None
-        except ValueError:
-            # Acceptable to raise for invalid intent
-            pass
-
     def test_out_of_order_turns_handled(self):
         """Test out-of-order turn numbers handled."""
         result1 = self.workflow.execute_turn(

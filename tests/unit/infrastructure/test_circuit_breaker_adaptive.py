@@ -456,8 +456,6 @@ class TestCircuitBreakerEdgeCases:
         result = circuit_breaker.call(lambda: operation_with_args(5, 3))
         assert result == 8
 
-    def test_preserves_exception_type(
-        self, circuit_breaker: CircuitBreaker
     ) -> None:
         """Circuit breaker should preserve original exception type."""
         class CustomError(Exception):

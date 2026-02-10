@@ -636,36 +636,6 @@ def test_stage_0_missing_fields_parametrized(missing_field: str) -> None:
     assert not result
 
 
-@pytest.mark.parametrize(
-    "intent_text,should_succeed",
-    [
-        ("implement new feature", True),
-        ("fix critical bug", True),
-        ("refactor module code", True),
-        ("create test suite", True),
-        ("", False),
-        ("xyz unknown intent", False),
-    ],
-)
-def test_intent_classification_parametrized(intent_text: str, should_succeed: bool) -> None:
-    """Parametrized test for intent classification."""
-    executor = MasterGatewayExecutor()
-    spec = {"operation_id": "OP_001", "intent": intent_text, "parameters": {}}
-    stages: list = []
-    violations: list = []
-    errors: list = []
-
-    intent_type = executor._execute_stage_1_classification(
-        spec, stages, violations, errors
-    )
-
-    if should_succeed:
-        assert intent_type is not None
-    else:
-        # May fail classification but that's ok for unrecognized intents
-        pass
-
-
 # ============================================================================
 # TEST METRICS & REPORTING
 # ============================================================================

@@ -187,11 +187,6 @@ All phases complete.
         
         assert policy.is_report_intent("output.md", content)
     
-    def test_technical_documentation_allowed(self):
-        """Technical docs without report keywords allowed."""
-        policy = FileWritePolicy()
-        
-        content = """
 # Data Adapter Architecture
 
 ## Overview

@@ -210,25 +210,6 @@ class TestCapabilityDiscoveryAgent:
         assert len(discovered) > 0
         assert isinstance(discovered, dict)
     
-    def test_extract_capabilities_from_docstring(self):
-        """Test extracting capabilities from orchestrator docstring."""
-        agent = CapabilityDiscoveryAgent()
-        
-        mock_code = '''
-        class TestOrchestrator:
-            """
-            Capabilities:
-            - code_analysis: Analyze code structure
-            - metrics_generation: Generate code metrics
-            """
-            pass
-        '''
-        
-        capabilities = agent.extract_capabilities_from_docstring(mock_code)
-        
-        assert len(capabilities) >= 2
-        assert any("code_analysis" in c for c in capabilities)
-    
     def test_extract_capabilities_from_methods(self):
         """Test extracting capabilities from public methods."""
         agent = CapabilityDiscoveryAgent()

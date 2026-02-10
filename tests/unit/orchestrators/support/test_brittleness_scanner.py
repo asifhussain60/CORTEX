@@ -172,13 +172,6 @@ class TestBrittlenessScoreCalculation:
         # With circular deps + god object, score should be > 0.3
         assert result.brittleness_score > 0.3
     
-    def test_score_increases_with_violations(self, scanner):
-        """Brittleness score should increase with more violations"""
-        # This would require creating multiple codebases with varying violations
-        # For now, we test the formula exists and produces valid output
-        pass
-
-
 class TestBrittlenessReport:
     """Test report generation"""
     

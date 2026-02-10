@@ -90,17 +90,6 @@ class ShoppingCart:
             # Real git data has timestamps, not relative strings
             assert "last_modified" in result or "commits" in result
     
-    def test_warmer_comments_returns_real_todo_count(self):
-        """Test _extract_comments returns real TODO count"""
-        # Act
-        result = self.warmer._extract_comments(str(self.test_file))
-        
-        # Assert
-        assert isinstance(result, dict)
-        # Real file has 0 TODOs, not hardcoded 2
-        if "todo_count" in result:
-            assert result["todo_count"] == 0 or "todos" in result
-    
     def test_warmer_security_detects_real_patterns(self):
         """Test _check_security detects actual security patterns"""
         # Act

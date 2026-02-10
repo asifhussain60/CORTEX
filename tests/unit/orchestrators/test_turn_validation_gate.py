@@ -413,16 +413,3 @@ class TestEdgeCases(BaseTurnValidationTest):
         result2 = gate2.validate(turn_number=1, intent_type="QUERY", governance_tier="TIER_3")
         assert result2.turn_number == 1
 
-    def test_invalid_tier_handled(self):
-        """Test invalid governance tier is handled."""
-        try:
-            result = self.gate.validate(
-                turn_number=1,
-                intent_type="IMPLEMENT",
-                governance_tier="INVALID_TIER",
-            )
-            # Should either return a result or raise ValueError
-            assert result is not None
-        except ValueError:
-            # Acceptable to raise for invalid input
-            pass

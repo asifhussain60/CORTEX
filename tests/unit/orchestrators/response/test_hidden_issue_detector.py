@@ -319,23 +319,6 @@ class TestHiddenIssueIntegration:
         
         assert isinstance(issues, list)
     
-    def test_issue_suggestions_provided(self):
-        """Test all issues include suggestions."""
-        code = """
-        for i in range(100):
-            for j in range(100):
-                pass
-        """
-        
-        context = CodeAnalysisContext("nested", code, language="python")
-        detector = HiddenIssueDetector()
-        issues = detector.detect(context)
-        
-        # If issues detected, should have suggestions
-        for issue in issues:
-            assert issue.suggestion is not None or len(issues) == 0
-
-
 # ============================================================================
 # TEST: EDGE CASES
 # ============================================================================

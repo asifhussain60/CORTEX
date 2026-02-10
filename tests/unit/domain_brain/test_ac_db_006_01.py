@@ -92,22 +92,6 @@ class TestGovernanceCompliance:
         assert len(sig.parameters) > 0
         assert sig.return_annotation != inspect.Signature.empty
 
-    def test_error_handling_compliance(self, api: DomainBrainAPI) -> None:
-        """Test that error handling follows governance rules."""
-        # Test invalid domain handling
-        invalid_domain = Domain(
-            domain_id="",
-            name="Invalid",
-            description="Invalid domain",
-        )
-
-        try:
-            api.upsert_domain(invalid_domain)
-            # If no error, system handles gracefully
-        except Exception:
-            # If error, should be specific type
-            pass
-
     def test_audit_logging_compliance(self, api: DomainBrainAPI) -> None:
         """Test that all operations are properly audited."""
         domain = Domain(

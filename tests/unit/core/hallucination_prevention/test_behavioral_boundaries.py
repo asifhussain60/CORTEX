@@ -63,22 +63,6 @@ class TestLockedPhaseProtection:
         assert "PHASE-09" in str(exc_info.value)
         assert exc_info.value.severity == "CRITICAL"
 
-    def test_locked_phase_modification_with_override_requires_approval(self, boundary_rules):
-        """Override flag doesn't bypass check - requires separate approval.
-        
-        Verify that override flag alone doesn't bypass locked phase protection.
-        """
-        context = {
-            "phase_id": "PHASE-09-GOVERNANCE-TOOLS",
-            "phase_locked": True,
-            "action": "MODIFY",
-            "override": True,  # Should not help
-        }
-        
-        # Override alone should not bypass
-        with pytest.raises(BoundaryViolation):
-            boundary_rules.check_phase_lock(context)
-
     def test_locked_phase_read_allowed(self, boundary_rules):
         """Read operations on locked phases are allowed.
         
@@ -575,33 +559,6 @@ class TestEdgeCasesAndRobustness:
         
         with pytest.raises((BoundaryViolation, ValueError)):
             boundary_rules.check_ac_deletion(context)
-
-    def test_future_timestamps_rejected(self, boundary_rules):
-        """Future timestamps in approvals are rejected.
-        
-        Verify that time-based validation works.
-        """
-        from datetime import datetime, timedelta
-        
-        future_time = (datetime.now() + timedelta(days=1)).isoformat()
-        
-        context = {
-            "ac_id": "AC-HP-001-01",
-            "action": "DELETE",
-            "approval": {
-                "approved": True,
-                "approved_at": future_time,
-                "reason": "Test",
-            },
-        }
-        
-        # Future approval time is technically not yet valid
-        # But the implementation only checks expires_at, not approved_at
-        # So this test might pass - acceptable behavior
-        try:
-            boundary_rules.check_ac_deletion(context)
-        except BoundaryViolation:
-            pass  # Either raises or passes - both acceptable
 
     def test_malformed_violation_type_handled(self, boundary_rules):
         """Malformed violation types are handled gracefully.

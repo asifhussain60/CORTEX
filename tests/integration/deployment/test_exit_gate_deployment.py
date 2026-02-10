@@ -275,40 +275,6 @@ class TestDeploymentReadinessChecks:
 class TestDeploymentAuditTrail:
     """Test suite for deployment validation audit trail."""
 
-    def test_audit_trail_deployment_validation_start(self) -> None:
-        """Test audit trail captures deployment validation start.
-        
-        Validates:
-        - AC_START marker present
-        - Deployment mode recorded
-        - Timestamp captured
-        """
-        # Audit trail will be implemented in integration
-        pass
-
-    def test_audit_trail_deployment_validation_complete(self) -> None:
-        """Test audit trail captures deployment validation completion.
-        
-        Validates:
-        - AC_COMPLETE marker present
-        - Validation results recorded
-        - Success/failure status
-        """
-        # Audit trail will be implemented in integration
-        pass
-
-    def test_audit_trail_deployment_blocked(self) -> None:
-        """Test audit trail captures blocked deployment.
-        
-        Validates:
-        - Block reason recorded
-        - Validation failures listed
-        - Retry guidance provided
-        """
-        # Audit trail will be implemented in integration
-        pass
-
-
 class TestProductionDeploymentChecklist:
     """Test suite for production deployment checklist validation."""
 

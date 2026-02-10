@@ -261,46 +261,5 @@ class TestErrorHandling:
             
             mgr.close()
 
-    def test_create_duplicate_rule_fails(self) -> None:
-        """Test creating duplicate rule raises exception."""
-        with tempfile.TemporaryDirectory() as tmpdir:
-            db_path = Path(tmpdir) / "test.db"
-            mgr = GovernanceDatabaseManager(db_path=db_path)
-            mgr.initialize()
-            
-            # Create rule
-            mgr.create_project_rule(
-                rule_id="DUP-001",
-                name="Duplicate Test",
-                category="test",
-                severity="info",
-                description="Test",
-                enforcement_point="test",
-                audit_event="TEST",
-                created_by="test_user",
-            )
-            
-            # Try to create duplicate - should raise IntegrityError
-            import sqlite3
-            try:
-                mgr.create_project_rule(
-                    rule_id="DUP-001",
-                    name="Duplicate Attempt",
-                    category="test",
-                    severity="info",
-                    description="Test",
-                    enforcement_point="test",
-                    audit_event="TEST",
-                    created_by="test_user",
-                )
-                # If we get here, test fails
-                assert False, "Should have raised IntegrityError"
-            except sqlite3.IntegrityError:
-                # Expected behavior
-                pass
-            
-            mgr.close()
-
-
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

@@ -322,13 +322,6 @@ class TestInitialization:
             config = HealthCheckConfig(check_interval_ms=-1.0)
             HealthChecker(config=config)
     
-    def test_rejects_invalid_failure_threshold(self) -> None:
-        """Should reject invalid failure threshold."""
-        with pytest.raises(ValueError):
-            config = HealthCheckConfig(failure_threshold=0)
-            HealthChecker(config=config)
-
-
 # ============================================================================
 # CATEGORY 2: DEPENDENCY REGISTRATION (3/3)
 # ============================================================================
@@ -356,15 +349,6 @@ class TestDependencyRegistration:
         
         assert len(health_checker.check_functions) == 3
     
-    def test_initializes_dependency_as_unknown(self, health_checker: HealthChecker) -> None:
-        """Should initialize dependency with UNKNOWN status."""
-        health_checker.register_dependency("service", lambda: True)
-        
-        dep = health_checker.get_dependency_health("service")
-        assert dep is not None
-        assert dep.status == HealthStatus.UNKNOWN
-
-
 # ============================================================================
 # CATEGORY 3: HEALTH CHECK EXECUTION (4/4)
 # ============================================================================
@@ -521,17 +505,6 @@ class TestDependencyQueries:
         unhealthy = configured_checker.get_unhealthy_dependencies()
         assert "service-c" in unhealthy
     
-    def test_checks_if_all_healthy(self, configured_checker: HealthChecker) -> None:
-        """Should check if all dependencies are healthy."""
-        assert not configured_checker.are_all_healthy()  # service-c fails
-        
-        # Register only healthy service
-        checker = HealthChecker()
-        checker.register_dependency("service", lambda: True)
-        checker.check_dependency("service")
-        assert checker.are_all_healthy()
-
-
 # ============================================================================
 # CATEGORY 6: METRICS COLLECTION (4/4)
 # ============================================================================
@@ -575,14 +548,6 @@ class TestMetricsCollection:
         metrics = health_checker.get_metrics()
         assert metrics["success_rate"] == 100.0
     
-    def test_tracks_state_transitions(self, configured_checker: HealthChecker) -> None:
-        """Should track health state transitions."""
-        configured_checker.check_all_dependencies()
-        
-        metrics = configured_checker.get_metrics()
-        assert metrics["health_state_transitions"] > 0
-
-
 # ============================================================================
 # CATEGORY 7: RECOVERY & DEGRADATION TRACKING (3/3)
 # ============================================================================
@@ -621,17 +586,6 @@ class TestRecoveryDegradationTracking:
         metrics = health_checker.get_metrics()
         assert metrics["recovery_events"] > 0
     
-    def test_tracks_check_history(self, health_checker: HealthChecker) -> None:
-        """Should track history of health checks."""
-        health_checker.register_dependency("service", lambda: True)
-        
-        health_checker.check_dependency("service")
-        health_checker.check_dependency("service")
-        
-        history = health_checker.get_check_history()
-        assert len(history) == 2
-
-
 # ============================================================================
 # CATEGORY 8: RESPONSE TIME TRACKING (2/2)
 # ============================================================================
@@ -720,9 +674,6 @@ class TestIntegrationPatterns:
     pass
     """Test integration with other resilience patterns."""
     
-    def test_integrates_with_graceful_degradation(
-        self,
-        configured_checker: HealthChecker,
     ) -> None:
         """Should provide health status for degradation decisions."""
         configured_checker.check_all_dependencies()

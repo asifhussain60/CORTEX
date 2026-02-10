@@ -232,13 +232,6 @@ class Test404Handling:
         # For now, verify URL attempted
         expect(page).to_have_url(f".*phase-999/index.html$")
     
-    def test_404_page_provides_back_to_dashboard_link(self, page: Page, phase_detail_url: str):
-        """404 page should provide link back to dashboard."""
-        # This test will be implemented when 404.html is created
-        # For file:// protocol, browser shows default 404
-        pass
-
-
 class TestNavigationAccessibility:
     """Test navigation accessibility features."""
     

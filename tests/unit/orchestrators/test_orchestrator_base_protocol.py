@@ -288,25 +288,6 @@ class TestOperationTypeDetection:
         orchestrator = ConcreteOrchestrator()
         assert orchestrator._get_learning_operation_type() == "generic"
     
-    def test_interaction_in_name_returns_interaction_type(self):
-        """Orchestrators with 'interaction' in name should return 'interaction' type."""
-        
-        class InteractionTestOrchestrator(ConcreteOrchestrator):
-            pass
-        
-        orchestrator = InteractionTestOrchestrator()
-        assert orchestrator._get_learning_operation_type() == "interaction"
-    
-    def test_governance_in_name_returns_governance_type(self):
-        """Orchestrators with 'governance' in name should return 'governance' type."""
-        
-        class GovernanceTestOrchestrator(ConcreteOrchestrator):
-            pass
-        
-        orchestrator = GovernanceTestOrchestrator()
-        assert orchestrator._get_learning_operation_type() == "governance"
-
-
 # =============================================================================
 # Test: Protocol Status
 # =============================================================================

@@ -183,17 +183,6 @@ class TestMasterOrchestratorResponsePath:
         assert hasattr(master_orchestrator, 'logger')
         assert hasattr(master_orchestrator, 'get_response_with_headers')
     
-    def test_autonomous_mode_flag_enforced(self):
-        """Should enforce policies during autonomous execution."""
-        # After implementation, MasterOrchestrator should track:
-        # - autonomous_mode: bool (set by user request)
-        # - suppress_narration: bool (always True in autonomous mode)
-        # - enforce_3_sections: bool (always True)
-        
-        # During "continue autonomously", policies should be mandatory
-        pass
-
-
 class TestEndToEndResponseVerbosity:
     """End-to-end tests for complete response verbosity reduction."""
     
@@ -240,23 +229,6 @@ Excellent! The template exists."""
         # For now, we just verify the test structure works
         assert len(cleaned) <= len(antipattern)
     
-    def test_all_acceptance_criteria_met(self):
-        """Verify all Phase 33 acceptance criteria."""
-        # AC-VER-001: Every response has EXACTLY 3 sections
-        # AC-VER-002: Zero "Let me", "Perfect!", tool narration
-        # AC-VER-003: No markdown report files created
-        # AC-VER-004: Plan spine ≤ 3 lines
-        # AC-VER-005: Business language for 4 roles
-        
-        # AC-VER-NF-001: Response length ≤ 247 lines (60% reduction from 617)
-        # AC-VER-NF-002: Token count ≤ 4,000 tokens per response
-        # AC-VER-NF-003: Policy enforcement latency < 50ms
-        # AC-VER-NF-004: 100% existing tests pass
-        # AC-VER-NF-005: Context overflow 1 per 1000 lines (vs 1 per 13.7)
-        
-        pass
-
-
 # Run tests if executed directly
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

@@ -50,11 +50,6 @@ class TestFileRelocationEngine:
         assert len(engine.category_patterns) > 0
 
     # Test: Category detection
-    def test_detect_orchestrator_file(self, engine):
-        """Test: Detects orchestrator files by naming and content"""
-        # Create temp orchestrator file
-        temp_file = engine.workspace_root / "test_orchestrator.py"
-        temp_file.write_text("""
 class MyOrchestrator:
     pass
 """)

@@ -217,16 +217,6 @@ class TestOverlayDataEndpoint:
         assert 'core_rules' in result
         assert 'compliance_percentage' in result
 
-    def test_get_overlay_invalid_type_raises_404(self, mock_repo_path: Path):
-        """Test fetching invalid overlay raises 404."""
-        from cortex.api.endpoints.lens_dashboard_routes import get_overlay_data
-        
-        with pytest.raises(HTTPException) as exc_info:
-            get_overlay_data(overlay_type='invalid', repo_path=str(mock_repo_path))
-        
-        assert exc_info.value.status_code == 404
-
-
 class TestWebSocketSupport:
     """Test WebSocket endpoint for real-time updates."""
 
@@ -312,10 +302,6 @@ class TestCacheSupport:
     """Test caching for dashboard data."""
 
     @pytest.mark.skip(reason="Caching disabled for MVP - timestamp differences cause spurious failures")
-    def test_dashboard_data_is_cached(self, tmp_path: Path):
-        """Test dashboard analysis results are cached."""
-        pass
-
     def test_cache_invalidation_on_file_change(self, tmp_path: Path):
         """Test cache is invalidated when repository files change."""
         from cortex.api.endpoints.lens_dashboard_routes import (

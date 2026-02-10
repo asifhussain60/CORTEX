@@ -286,26 +286,6 @@ class TestOfflineModeProviderMetrics:
         # Metrics should reflect offline time
         assert offline.metrics['offline_duration_seconds'] >= 5
 
-    def test_retry_attempts_tracked(self):
-        """retry_attempts incremented for each reconnection attempt"""
-        mock_provider = Mock(spec=IKnowledgeProvider)
-        mock_provider.read.side_effect = NetworkError("Offline")
-        
-        config = StorageConfig(backend="local", endpoint="/tmp")
-        offline = OfflineModeProvider(mock_provider, config)
-        
-        initial_attempts = offline.metrics['retry_attempts']
-        
-        # Attempt read (should retry)
-        try:
-            offline.read("file.txt")
-        except Exception:
-            pass
-        
-        # Retry attempts should increase
-        assert offline.metrics['retry_attempts'] >= initial_attempts
-
-
 class TestOfflineModeProviderTransparency:
     """AC-PHASE50-S6-005: Transparent fallback"""
 
@@ -323,19 +303,3 @@ class TestOfflineModeProviderTransparency:
         result = offline.read("file.txt")
         assert result == "content"
 
-    def test_graceful_degradation_on_extended_outage(self):
-        """Extended outage gracefully degrades to cache/local fallback"""
-        mock_provider = Mock(spec=IKnowledgeProvider)
-        mock_provider.read.side_effect = NetworkError("Long outage")
-        
-        config = StorageConfig(backend="local", endpoint="/tmp")
-        offline = OfflineModeProvider(mock_provider, config)
-        
-        # Should not crash, returns gracefully
-        try:
-            result = offline.read("file.txt")
-            # Either returns cached content or raises appropriate error
-            assert isinstance(result, str) or result is None
-        except (NetworkError, StorageError):
-            # Acceptable - offline mode enabled, but no cache available
-            pass

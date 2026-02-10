@@ -72,9 +72,6 @@ class TooManyMethods:
         assert len(violations) > 0
         assert any(v.violation_type == SolidViolationType.SRP_VIOLATION for v in violations)
     
-    def test_detect_multiple_responsibilities(self, analyzer: SRPAnalyzer, temp_python_file: Path):
-        """Test detection of multiple distinct responsibilities."""
-        code = '''
 class MixedResponsibilities:
     """Class handling multiple concerns."""
     def get_data(self): pass
@@ -90,9 +87,6 @@ class MixedResponsibilities:
         violations = result.unwrap()
         assert len(violations) > 0
     
-    def test_ignore_small_well_defined_class(self, analyzer: SRPAnalyzer, temp_python_file: Path):
-        """Test that well-designed classes are not flagged."""
-        code = '''
 class UserRepository:
     """Repository with single responsibility: user data access."""
     def get_user(self, user_id: int): pass
@@ -177,10 +171,6 @@ class ViolatingClass:
         assert hasattr(result, 'is_err')
         assert result.is_ok()
     
-    def test_multiple_violations_in_file(self, analyzer: SRPAnalyzer, temp_python_file: Path):
-        """Test detection of multiple violations in same file."""
-        methods1 = '\n'.join([f"    def method_{i}(self): pass" for i in range(25)])
-        code = f'''
 class ViolatingClass1:
 {methods1}
 

@@ -466,9 +466,6 @@ class TestEventRegistryIntegration:
         # Event should have been fired
         # (Actual firing depends on implementation)
 
-    def test_error_event_fired_on_failure(
-        self,
-        wrapped_orchestrator: WrappedTDDOrchestrator
     ) -> None:
         """ErrorEvent is fired when error occurs.
 
@@ -672,9 +669,6 @@ class TestWrappedTDDOrchestratorSingleton:
 class TestErrorHandling:
     """Tests for error handling in wrapped orchestrator."""
 
-    def test_invalid_tdd_phase_handling(
-        self,
-        wrapped_orchestrator: WrappedTDDOrchestrator
     ) -> None:
         """Invalid TDD phase is handled gracefully.
 

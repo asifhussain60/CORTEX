@@ -351,13 +351,6 @@ class TestCompoundOnboardAndDashboardOperation:
 class TestPhase28S5Integration:
     """Integration tests combining hook and compound operation"""
     
-    def test_hook_integration_in_onboarding_flow(self):
-        """T12: Dashboard hook integrates with onboarding orchestrator"""
-        # This would test actual integration with RepositoryOnboardingOrchestrator
-        # Placeholder for integration test
-        pass
-
-
 # Test Execution Summary
 # =======================
 # Total Tests: 12 (6 required + 6 additional integration)

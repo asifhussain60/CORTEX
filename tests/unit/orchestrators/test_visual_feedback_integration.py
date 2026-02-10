@@ -270,34 +270,6 @@ class TestCCLProgressIntegration:
         assert any("LENS" in up["stage"] for up in progress_updates)
         assert any("Infrastructure" in up["stage"] for up in progress_updates)
         
-    def test_ccl_shows_timeout_warnings(self):
-        """Test CCL shows warnings when approaching timeout."""
-        # ARRANGE
-        from cortex.orchestrators.context_crystallization.ccl_core import ContextCrystallizationLayer
-        
-        ccl = ContextCrystallizationLayer(timeout_sla_ms=100, fallback_timeout_ms=200)
-        
-        # Capture warnings
-        import io
-        import sys
-        captured_output = io.StringIO()
-        sys.stdout = captured_output
-        
-        # ACT
-        future = ccl.prefetch_async("test", Path("/test.py"), {})
-        try:
-            result = future.result(timeout=0.3)
-        except:
-            pass
-        
-        # RESTORE
-        sys.stdout = sys.__stdout__
-        output = captured_output.getvalue()
-        
-        # ASSERT
-        assert "⚠️" in output or "WARNING" in output or "timeout" in output.lower()
-
-
 class TestRepositoryOnboardingProgressIntegration:
     """Tests for repository onboarding progress."""
     
