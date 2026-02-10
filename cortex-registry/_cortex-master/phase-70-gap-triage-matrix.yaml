@@ -1,0 +1,183 @@
+version: '1.0'
+created: '2026-02-10'
+phase: phase-70-s1
+ac_id: AC-PHASE70-S1-001
+total_gaps: 14
+decisions:
+- gap_id: WIRED-001
+  gap_type: WIRED_NOT_IMPLEMENTED
+  component: RefactoringOrchestrator
+  priority: P1
+  resolution: IMPLEMENT
+  rationale: Already partially implemented in cortex/refactoring/. Need to move to
+    cortex/orchestrators/domain/ and wire fully. Domain-tier orchestrator critical
+    for refactoring workflows.
+  effort_hours: 8
+  target_phase: phase-70
+  owner: CORTEX-Autonomous
+  acceptance_criteria: "\u2705 Full specification coverage with tests, MCP adapter,\
+    \ LENS integration, wired in wiring.yaml"
+  notes: null
+- gap_id: WIRED-002
+  gap_type: WIRED_NOT_IMPLEMENTED
+  component: PlanningOrchestrator
+  priority: P1
+  resolution: IMPLEMENT
+  rationale: Domain-tier orchestrator wired but not found in cortex/orchestrators/domain/.
+    TDD implementation needed. High-value for multi-phase planning workflows.
+  effort_hours: 12
+  target_phase: phase-70
+  owner: CORTEX-Autonomous
+  acceptance_criteria: "\u2705 TDD (test before code), MCP adapter, LENS integration,\
+    \ EnforcementOrchestrator gate passing"
+  notes: null
+- gap_id: STUB-001
+  gap_type: STUB_TEST
+  component: tests/unit/visualization/test_spa_phase_b.py (27 tests)
+  priority: P1
+  resolution: DELETE_TEST
+  rationale: Placeholder tests with no real assertions (assert True, 'Phase B gate'
+    comments). No implementation exists. Safe to delete.
+  effort_hours: 0.5
+  target_phase: phase-70
+  owner: CORTEX-Autonomous
+  acceptance_criteria: "\u2705 Tests deleted, verified no broken imports"
+  notes: 'Identified in initial audit: 27x ''assert True'' with documentation-only
+    assertions'
+- gap_id: STUB-002
+  gap_type: STUB_TEST
+  component: tests/unit/domain_brain/test_synthesis_domain_integration.py (8+ tests)
+  priority: P1
+  resolution: DELETE_TEST
+  rationale: 8 consecutive 'assert True' at lines 1066-1094. No real test logic. Safe
+    to delete.
+  effort_hours: 0.5
+  target_phase: phase-70
+  owner: CORTEX-Autonomous
+  acceptance_criteria: "\u2705 Tests deleted, coverage metrics updated"
+  notes: null
+- gap_id: STUB-003
+  gap_type: STUB_TEST
+  component: tests/test_phase_52_s1_4_integration.py:172
+  priority: P1
+  resolution: DELETE_TEST
+  rationale: Single 'assert True' in phase integration test. No real assertion value.
+  effort_hours: 0.25
+  target_phase: phase-70
+  owner: CORTEX-Autonomous
+  acceptance_criteria: "\u2705 Test deleted"
+  notes: null
+- gap_id: STUB-004
+  gap_type: STUB_TEST
+  component: tests/unit/core/orchestrator/test_production_validation.py (9 tests)
+  priority: P1
+  resolution: DELETE_TEST
+  rationale: All 9 tests are 'assert True' with environment-dependent comments. No
+    production-grade assertions. Delete and document expectations.
+  effort_hours: 0.5
+  target_phase: phase-70
+  owner: CORTEX-Autonomous
+  acceptance_criteria: "\u2705 Tests deleted, environment validation documented separately"
+  notes: null
+- gap_id: SKIP-001
+  gap_type: SKIPPED_TEST
+  component: tests/orchestrators/capacity/__init__.py (40+ pytest.skip)
+  priority: P1
+  resolution: DELETE_TEST
+  rationale: 40+ consecutive 'pytest.skip("Implementation pending")' in capacity tests.
+    Phase 12 feature not scheduled. Delete tests and move to phase-70 if needed.
+  effort_hours: 1
+  target_phase: phase-72-future
+  owner: CORTEX-Autonomous
+  acceptance_criteria: "\u2705 Tests deleted or moved to separate test file marked\
+    \ 'pending-phase-12'"
+  notes: All tests in capacity/__init__.py are skipped - entire file can be archived
+- gap_id: SKIP-002
+  gap_type: SKIPPED_TEST
+  component: tests/_legacy_broken/ (8 files with pytest.skip)
+  priority: P1
+  resolution: DELETE_TEST
+  rationale: Entire _legacy_broken directory contains skipped legacy tests. Should
+    be archived, not kept in active test suite.
+  effort_hours: 0.5
+  target_phase: phase-70
+  owner: CORTEX-Autonomous
+  acceptance_criteria: "\u2705 Directory moved to tests/_archived_legacy/ or deleted\
+    \ entirely"
+  notes: null
+- gap_id: STUB-CODE-001
+  gap_type: STUB_CODE
+  component: cortex/orchestrators/capacity/capacity_orchestrators.py:47
+  priority: P2
+  resolution: DEFER
+  rationale: 'CapacityOrchestrator: ''raise NotImplementedError("Implementation pending
+    - Phase 12 CAP-1")''. Phase 12 is future. Mark stub status in wiring.yaml.'
+  effort_hours: 0.25
+  target_phase: phase-72
+  owner: CORTEX-Autonomous
+  acceptance_criteria: "\u2705 Wiring.yaml annotated: status='stub', phase-target='phase-72'"
+  notes: Legitimate future feature - not a bug
+- gap_id: STUB-CODE-002
+  gap_type: STUB_CODE
+  component: cortex_brain/tier2/governance/cost_tracking.py (STUB IMPLEMENTATION comment)
+  priority: P2
+  resolution: DEFER
+  rationale: 'CostTracker: Documented stub for Phase E. Add to roadmap with explicit
+    status.'
+  effort_hours: 0.25
+  target_phase: phase-e-future
+  owner: CORTEX-Autonomous
+  acceptance_criteria: "\u2705 Wiring.yaml has 'CostTrackerOrchestrator' marked as\
+    \ 'planned'"
+  notes: null
+- gap_id: WIRED-003
+  gap_type: WIRED_NOT_IMPLEMENTED
+  component: ContextCrystallizationLayerEnhanced (P90)
+  priority: P2
+  resolution: DEFER
+  rationale: Phase 49 already has ContextCrystallizationLayer. Enhanced version is
+    future optimization. Keep in wiring as 'planned'.
+  effort_hours: 0
+  target_phase: phase-75-future
+  owner: null
+  acceptance_criteria: "\u2705 Wiring.yaml: status='planned', notes='optimization\
+    \ track'"
+  notes: null
+- gap_id: WIRED-004
+  gap_type: WIRED_NOT_IMPLEMENTED
+  component: ContentExtractionEngine (P88)
+  priority: P2
+  resolution: DEFER
+  rationale: Future content processing feature. Evaluate need after phase-70. Keep
+    in wiring as 'planned'.
+  effort_hours: 0
+  target_phase: phase-76-future
+  owner: null
+  acceptance_criteria: "\u2705 Wiring.yaml marked as 'planned', ROI evaluation pending"
+  notes: null
+- gap_id: WIRED-005-TO-025
+  gap_type: WIRED_NOT_IMPLEMENTED
+  component: 21 additional support orchestrators (P67-P90)
+  priority: P2
+  resolution: DEFER
+  rationale: 'Bulk decision: High-priority support features (P76+) should be implemented
+    on-demand. Keep in wiring with ''planned'' status. Prioritize by ROI when scheduling.'
+  effort_hours: 0
+  target_phase: phase-71-onward
+  owner: CORTEX-Architect
+  acceptance_criteria: "\u2705 All 21 marked as 'planned' in wiring.yaml with ROI\
+    \ scores and phase targets"
+  notes: Use cortex-architect review cycle for quarterly prioritization
+- gap_id: ORPHAN-001-TO-154
+  gap_type: IMPLEMENTED_NOT_WIRED
+  component: 154 orphaned implementations (test helpers, adapters, internal classes)
+  priority: P3
+  resolution: MARK_INTERNAL
+  rationale: 'Bulk decision: Most are test helpers, adapters, or internal utilities.
+    Add ''internal_only: true'' to wiring.yaml. Delete if unused after grep verification.'
+  effort_hours: 2
+  target_phase: phase-70-s3
+  owner: CORTEX-Autonomous
+  acceptance_criteria: "\u2705 Grep search confirms no external callers for each,\
+    \ marked as internal or deleted"
+  notes: Batch process using audit_alignment.py output as reference

@@ -1,0 +1,478 @@
+# Phase 70: Implementation ↔ Specification Alignment Remediation
+# Authority: cortex-architect.prompt.md v15.0 + Production Readiness Audit
+# Created: 2026-02-10
+# AC-ID: AC-PHASE70-001
+
+metadata:
+  phase_id: "phase-70"
+  title: "Implementation ↔ Specification Alignment Remediation"
+  status: "planned"
+  priority: "P0"
+  created: "2026-02-10"
+  updated: "2026-02-10"
+  estimated_duration: "3-5 weeks"
+  actual_duration: "0"
+  roi_score: 0.95
+  execution_order: 21
+  test_target: 320
+  tests_passing: 0
+  test_coverage: 0
+  coverage_target: 90
+  autonomous_execution: true
+  approval_required: true
+  cross_cutting: true
+  breaking_changes: false
+  production_blocker: true
+  stages_complete: "0/4"
+  critical_path: true
+
+overview:
+  vision: |
+    Achieve 100% production readiness through comprehensive alignment of wiring specification (wiring.yaml)
+    with actual orchestrator implementations, eliminate false-positive tests (620 stub tests), and establish
+    continuous alignment monitoring via automated CI/CD gates.
+    
+    Strategic goal: Eliminate ambiguity between "what's supposed to be" and "what actually is" in CORTEX
+    implementation, ensuring every specification commitment has an executable implementation.
+
+  problem_statement: |
+    Current production readiness audit (2026-02-09) revealed critical misalignments:
+    
+    1. **Wiring Gap**: 25 orchestrators defined in wiring.yaml but NOT implemented
+       - 2 domain orchestrators (RefactoringOrchestrator, PlanningOrchestrator)
+       - 23 support orchestrators (various priority levels)
+       - Blocks verification that CORTEX architecture matches specification
+    
+    2. **Test Quality Crisis**: 620 stub tests using "assert True"
+       - False confidence in test suite reliability
+       - Masks actual implementation gaps
+       - 257 additional skipped tests with unclear status
+       - Creates brittleness in CI/CD gates
+    
+    3. **STUB Code in Production**: 25+ NotImplementedError/TODO markers
+       - Technical debt blocking production deployment
+       - Unclear if code paths are intentional stubs or incomplete work
+       - Performance/reliability impact unknown
+    
+    4. **Orphaned Implementations**: 154 orchestrators/components exist but aren't in wiring.yaml
+       - Unclear if intentional (deprecated) or forgotten
+       - Creates maintenance and documentation debt
+       - Wastes developer cycles on unused code
+    
+    5. **Continuous Validation Gap**: No automated CI/CD gate for alignment
+       - Regressions can slip through undetected
+       - Inconsistency accumulates with each phase
+       - Production deployments risk architectural debt
+
+  expected_outcomes:
+    - "100% wiring.yaml ↔ implementation sync validation"
+    - "0 stub tests (620 → either implemented or deleted)"
+    - "0 production STUB code (25+ resolved)"
+    - "Wiring.yaml reflects actual implementation state"
+    - "CI/CD gate: --strict mode blocks deployment if P0/P1 gaps exist"
+    - "Dashboard: Real-time alignment status visible to team"
+    - "Documentation: Clear 'implemented vs. planned' distinction"
+
+roi_analysis:
+  cost: "40-60 hours (S1-S2) + 20-30 hours (S3-S4 automation)"
+  impact: |
+    Immediate (S1-S2):
+    - Eliminate 620 false-positive tests (restore test confidence)
+    - Implement or deprecate 25 wiring gaps (100% specification coverage)
+    - Production ready signal: "Alignment: ✅ 100%"
+    
+    Medium-term (S3):
+    - Automated CI gate prevents future regressions
+    - Team alignment on "wired=committed" principle
+    - Clearer roadmap (planned vs. implemented phases visible)
+    
+    Long-term (S4):
+    - Continuous monitoring enables early debt detection
+    - Architectural drift prevention
+    - Improved onboarding (new developers see clear spec-impl boundary)
+    - Reduced technical debt accumulation
+    
+  risk_mitigation: |
+    - Incremental approach: Fix P0 first (domain orchestrators), then P1 (support)
+    - Decision framework: Each gap has clear resolution path (implement, remove, or defer)
+    - Reversible: Can mark components "planned" in wiring.yaml if deferral needed
+    - Fallback: If cleanup proves too large, split into Phase 70 (core) + Phase 71 (support)
+    - Safety: All changes go through standard TDD cycle (test first, implementation, review)
+
+dependencies:
+  required: []
+  optional:
+    - "phase-66: LENS Knowledge Graph (architecture detection)"
+    - "phase-64: Intelligent Tier Selection (context for decisions)"
+  blocks:
+    - "Production deployment"
+    - "Phases 71+ (depend on clean master plan)"
+
+governance:
+  core_rules:
+    - "CORE-008: TDD — test before implementation for every gap resolution"
+    - "CORE-011: Type hints mandatory"
+    - "CORE-012: Google-style docstrings"
+    - "CORE-027: Audit trail — AC_START/AC_COMPLETE markers"
+    - "CORE-030: Implementation Truth — verify code not docs"
+    - "CORE-028: File naming — resolution decisions in kebab-case phase filenames"
+  enforcement: "EnforcementOrchestrator 7-agent pre-execution gate"
+  tdd_required: true
+
+# ============================================================================
+# STAGE BREAKDOWN
+# ============================================================================
+
+stages:
+  # --------------------------------------------------------------------------
+  # STAGE 1: Gap Triage & Decision Framework (1-2 weeks)
+  # --------------------------------------------------------------------------
+  - id: "S1"
+    name: "Gap Triage & Resolution Decision Framework"
+    description: |
+      Comprehensive audit of all identified gaps. For each gap, make explicit 
+      decision: IMPLEMENT, REMOVE, DEFER (mark as "planned"), or INVESTIGATE.
+      Document rationale and create prioritized task backlog.
+    
+    deliverables:
+      - "Gap classification matrix (P0/P1/P2/P3)"
+      - "Resolution decision for each gap (implement/remove/defer)"
+      - "Evidence-based rationale documentation"
+      - "Updated wiring.yaml with status annotations"
+      - "Prioritized implementation backlog"
+      - "8 test scenarios covering gap classification logic"
+      
+    acceptance_criteria:
+      - "Every wiring gap has explicit decision documented"
+      - "Every stub test has delete or implement decision"
+      - "Gap impact assessment complete (which phases blocked?)"
+      - "Rationale linkable to user stories or technical debt reasons"
+      - "No 'TBD' decisions (all deferred decisions justified)"
+      - "test_gap_triage.py: 8/8 passing"
+      
+    effort_estimate: "16-20 hours (analysis + decision + documentation)"
+    dependencies: []
+    completion_criteria:
+      - "Gap matrix generated and reviewed"
+      - "wiring.yaml updated with status"
+      - "Backlog prioritized by impact"
+
+  # --------------------------------------------------------------------------
+  # STAGE 2: P0/P1 Remediation (1-3 weeks)
+  # --------------------------------------------------------------------------
+  - id: "S2"
+    name: "P0/P1 Gap Remediation"
+    description: |
+      Execute remediation plan for critical gaps blocking production:
+      - Implement 2 missing domain orchestrators (P0/P1)
+      - Delete or implement 226 stub tests (P1)
+      - Remove STUB code from production paths (P1)
+      - Update wiring.yaml with outcomes
+    
+    deliverables:
+      - "RefactoringOrchestrator: Full implementation with MCP adapter"
+      - "PlanningOrchestrator: Full implementation with MCP adapter"
+      - "Stub test remediation report: 620 tests → 0 stubs"
+      - "STUB code remediation: 25+ production stubs resolved"
+      - "Updated wiring.yaml reflecting actual state"
+      - "Integration tests: 85+ tests covering remediation"
+      
+    acceptance_criteria:
+      - "RefactoringOrchestrator: 100% specification coverage"
+      - "PlanningOrchestrator: 100% specification coverage"
+      - "Test suite: grep -rn 'assert True' tests/ → 0 results"
+      - "Production code: grep -rn 'NotImplementedError' cortex/ → 0 results (except tests)"
+      - "wiring.yaml: 100% orchestrators have implementation or explicit 'planned' status"
+      - "All new code passes EnforcementOrchestrator 7-agent validation"
+      - "Coverage: 85%+ on new implementations"
+      - "test_remediation_p0_p1.py: 85/85 passing"
+      
+    effort_estimate: "32-40 hours (implementation + tests + validation)"
+    dependencies:
+      - "S1: Gap triage complete"
+    completion_criteria:
+      - "All P0 gaps resolved"
+      - "All P1 gaps resolved"
+      - "Test suite clean"
+      - "Code coverage >85%"
+
+  # --------------------------------------------------------------------------
+  # STAGE 3: P2/P3 Cleanup & Documentation (1 week)
+  # --------------------------------------------------------------------------
+  - id: "S3"
+    name: "P2/P3 Cleanup & Architecture Documentation"
+    description: |
+      Address medium/low priority gaps and establish clear specification boundaries.
+      Document decision framework for future phases.
+    
+    deliverables:
+      - "Support orchestrator gap decisions: implement/remove/defer"
+      - "Orphaned implementation audit: 154 components categorized"
+      - "Architecture decision record (ADR) for gap handling"
+      - "Updated cortex-architect.md with alignment checks"
+      - "Alignment metrics dashboard (current status visible)"
+      - "35+ integration tests covering P2/P3 scenarios"
+      
+    acceptance_criteria:
+      - "154 orphaned components: 0 mystery/unclear status"
+      - "Each marked as: deprecated, internal-only, or to-be-wired"
+      - "ADR documents rationale for deferred gaps"
+      - "Alignment checks updated in cortex-architect.md"
+      - "Dashboard shows: 100% P0/P1, target 90% P2/P3"
+      - "test_cleanup_p2_p3.py: 35/35 passing"
+      
+    effort_estimate: "12-16 hours (cleanup + documentation + testing)"
+    dependencies:
+      - "S2: P0/P1 remediation complete"
+    completion_criteria:
+      - "All gaps classified"
+      - "Documentation complete"
+      - "Dashboard functional"
+
+  # --------------------------------------------------------------------------
+  # STAGE 4: CI/CD Automation & Continuous Monitoring (1 week)
+  # --------------------------------------------------------------------------
+  - id: "S4"
+    name: "CI/CD Automation & Continuous Alignment Monitoring"
+    description: |
+      Establish permanent alignment validation in CI/CD pipeline.
+      Implement continuous monitoring to prevent future regressions.
+    
+    deliverables:
+      - "GitHub Action: alignment-check.yml (weekly + on-push)"
+      - "Pre-commit hook: alignment validation (fast path)"
+      - "scripts/audit_alignment.py: Full audit capability (--strict mode)"
+      - "Integration with cortex_process_request MCP tool"
+      - "Alignment status visible in GitHub UI (check pass/fail)"
+      - "Slack integration: Weekly alignment reports"
+      - "20+ tests covering CI integration"
+      
+    acceptance_criteria:
+      - "GitHub Action runs on every push to main/develop"
+      - "Fails if P0/P1 gaps introduced"
+      - "Passes only if alignment ≥95%"
+      - "Weekly report sent to #cortex-dev channel"
+      - "Dashboard updated every 4 hours"
+      - "audit_alignment.py --strict blocks deployment if issues"
+      - "Zero alignment regressions in next 30 days"
+      - "test_ci_automation.py: 20/20 passing"
+      
+    effort_estimate: "16-24 hours (automation + testing + integration)"
+    dependencies:
+      - "S3: Documentation complete"
+    completion_criteria:
+      - "CI/CD gates functional"
+      - "Continuous monitoring active"
+      - "Team using alignment metrics for planning"
+
+# ============================================================================
+# TECHNICAL DETAILS & DECISION FRAMEWORK
+# ============================================================================
+
+technical_approach:
+  gap_resolution_matrix:
+    - gap_type: "WIRED_NOT_IMPLEMENTED"
+      examples: ["RefactoringOrchestrator", "PlanningOrchestrator"]
+      options:
+        - option: "IMPLEMENT"
+          description: "Full TDD implementation with tests + MCP adapter"
+          effort: "8-16 hours per orchestrator"
+          risk: "Scope creep if requirements unclear"
+          recommendation: "For P0/P1 (core domain orchestrators)"
+          
+        - option: "REMOVE_FROM_WIRING"
+          description: "Delete from wiring.yaml (acknowledged deprioritization)"
+          effort: "<5 minutes"
+          risk: "Signals deprioritization to team"
+          recommendation: "For P2/P3 (future enhancements)"
+          
+        - option: "MARK_PLANNED"
+          description: "Add status: 'planned' to wiring.yaml (explicit roadmap item)"
+          effort: "<5 minutes"
+          risk: "Must maintain this status actively"
+          recommendation: "For strategic future features (Phase 71+)"
+      
+      decision_template: |
+        Gap: {{orchestrator_name}}
+        Priority: {{priority}}
+        Resolution: {{option}}
+        Rationale: {{business_reason}}
+        Target Phase: {{target_phase_if_deferred}}
+        Owner: {{responsible_person_if_assigned}}
+    
+    - gap_type: "STUB_TEST (assert True)"
+      examples: ["test_dashboard_fix_modules.py:20+ instances"]
+      options:
+        - option: "DELETE"
+          description: "Remove test entirely (was placeholder, no real assertion)"
+          effort: "1-2 minutes per test"
+          risk: "Lose placeholder documentation"
+          recommendation: "For tests with no real assertion value"
+          
+        - option: "IMPLEMENT"
+          description: "Replace 'assert True' with real assertions"
+          effort: "30 minutes - 2 hours per test"
+          risk: "May discover real failures"
+          recommendation: "For tests covering important functionality"
+      
+      decision_template: |
+        Test: {{test_file}}:{{line}}
+        Assertion: {{current_assertion}}
+        Resolution: {{option}}
+        Rationale: {{why_placeholder_was_used}}
+        Owner: {{responsible_person_if_implementing}}
+
+    - gap_type: "STUB_CODE (NotImplementedError)"
+      examples: ["CapacityOrchestrator.py:47", "CostTracker.py:23"]
+      options:
+        - option: "IMPLEMENT"
+          description: "Complete the implementation"
+          effort: "2-8 hours per stub"
+          risk: "Requirements may be unclear"
+          recommendation: "For stubs in critical paths"
+          
+        - option: "REMOVE_CODE_PATH"
+          description: "Delete unused code path if no longer needed"
+          effort: "30 minutes"
+          risk: "May break dependent code"
+          recommendation: "For deprecated features"
+          
+        - option: "DEFER_PHASE"
+          description: "Move to explicit phase (e.g., Phase 72)"
+          effort: "<5 minutes documentation"
+          risk: "Must schedule phase execution"
+          recommendation: "For planned-but-not-started features"
+      
+      decision_template: |
+        Stub: {{file}}:{{line}}
+        Current: {{code_snippet}}
+        Resolution: {{option}}
+        Target Phase: {{phase_if_deferred}}
+        Rationale: {{why_deferred}}
+
+    - gap_type: "IMPLEMENTED_NOT_WIRED"
+      examples: ["VerificationComplianceGate", "MCPToolsRegistry"]
+      options:
+        - option: "ADD_TO_WIRING"
+          description: "Register in wiring.yaml (was accidentally omitted)"
+          effort: "<5 minutes"
+          risk: "May duplicate existing registration"
+          recommendation: "If component is actively used"
+          
+        - option: "MARK_INTERNAL"
+          description: "Add annotation: 'internal_only: true' (not for external routing)"
+          effort: "<5 minutes"
+          risk: "None - clarifies intent"
+          recommendation: "For helper/adapter classes"
+          
+        - option: "DELETE"
+          description: "Remove unused code if truly orphaned"
+          effort: "15-30 minutes (verify no refs)"
+          risk: "May break hidden dependencies"
+          recommendation: "After grep search confirms no callers"
+      
+      decision_template: |
+        Component: {{class_name}}
+        Location: {{file_path}}
+        Resolution: {{option}}
+        Rationale: {{why_not_needed_or_why_add_now}}
+        Owner: {{responsible_person}}
+
+continuous_validation:
+  audit_frequency: "On every push (fast path) + Weekly comprehensive"
+  automation_tool: "scripts/audit_alignment.py"
+  ci_gate: "GitHub Actions: fails if P0/P1 gaps detected"
+  dashboard: "Updated every 4 hours via scheduled job"
+  alerts:
+    - condition: "P0 gap introduced"
+      action: "Fail CI, notify #cortex-arch channel, block merge"
+    - condition: "P1 gap introduced"
+      action: "Warn CI, notify #cortex-dev channel, require review"
+    - condition: "Alignment <95%"
+      action: "Update dashboard status, weekly report"
+
+# ============================================================================
+# TRACKING & METRICS
+# ============================================================================
+
+metrics:
+  gap_count:
+    baseline: "459 total gaps (25 wired-not-impl, 620 stub-tests, 25 stub-code, 154 impl-not-wired, 257 skipped-tests)"
+    target_s1_complete: "All gaps classified with decisions"
+    target_s2_complete: "P0/P1: 226 → 0 (100% remediated)"
+    target_s3_complete: "P2/P3: 233 → <50 (managed through decisions)"
+    target_s4_complete: "Continuous validation <0.5% gap regression/week"
+  
+  test_quality:
+    stub_tests_baseline: 620
+    stub_tests_target: 0
+    skipped_tests_baseline: 257
+    skipped_tests_target: "<15 (legitimate skips only)"
+    coverage_baseline: "80%"
+    coverage_target: "92%+"
+  
+  alignment_score:
+    calculation: "((implementation_matched / wiring_defined) + (tests_real / tests_total) + (stub_code_resolved / stub_code_baseline)) / 3"
+    baseline: "0.62 (62%)"
+    target_s2: "0.95 (95%)"
+    target_s4: "0.99+ (99%+)"
+  
+  regression_prevention:
+    baseline: "None (no continuous validation)"
+    target: "<0.5% alignment regression per week"
+
+# ============================================================================
+# EXECUTION PLAN
+# ============================================================================
+
+execution:
+  start_date: "2026-02-10"
+  target_completion: "2026-03-31"
+  
+  s1_timeline:
+    start: "2026-02-10"
+    end: "2026-02-21"
+    critical_path: false
+    team_size: 1
+    review_gate: "Gap classification approved by architect"
+  
+  s2_timeline:
+    start: "2026-02-24"
+    end: "2026-03-14"
+    critical_path: true
+    team_size: 2
+    review_gate: "All P0/P1 remediation passing EnforcementOrchestrator"
+  
+  s3_timeline:
+    start: "2026-03-17"
+    end: "2026-03-24"
+    critical_path: false
+    team_size: 1
+    review_gate: "Architecture documentation approved"
+  
+  s4_timeline:
+    start: "2026-03-25"
+    end: "2026-03-31"
+    critical_path: false
+    team_size: 1
+    review_gate: "CI/CD automation tests passing, alerts configured"
+
+success_criteria:
+  s1_complete: "Gap classification matrix 100% decided"
+  s2_complete: "All P0/P1 gaps resolved, test suite clean, production ready"
+  s3_complete: "P2/P3 gaps documented, orphaned components clarified"
+  s4_complete: "CI/CD gates active, regressions prevented, team trained"
+  
+  production_ready_signal: |
+    ✅ Wiring ↔ Implementation: 100% alignment
+    ✅ Test Quality: 0 stub tests, 0 STUB code
+    ✅ Continuous Validation: Active CI gates
+    ✅ Documentation: Clear spec-impl boundary
+    ✅ Team Alignment: "Wired = Committed"
+
+notes:
+  - "Phase 70 is production-blocking: No deployment until P0/P1 remediated"
+  - "Decision framework is reusable: Future phases reference this model"
+  - "Gap ownership: Each gap assigned to responsible person in S1"
+  - "Communication: Weekly status reports to #cortex-dev + dashboard visibility"
+  - "Escalation: P0 gaps escalate to architect immediately upon discovery"

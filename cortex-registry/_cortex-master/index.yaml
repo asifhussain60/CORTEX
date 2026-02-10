@@ -3,14 +3,44 @@
 # Authority: cortex-architect.prompt.md v15.3
 # Updated: 2026-02-09 (Production Status Verification Complete)
 
-version: "1.1"
+version: "1.2"
 registry_name: "_cortex-master"
 description: "CORTEX self-development planning with phase tracking and enhancement pipeline"
-last_updated: "2026-02-09T15:00:00Z"
-revision: "Phases 67-69 Created: .NET Roslyn + Angular + Runtime Correlation | 54/60 phases done (90%)"
+last_updated: "2026-02-10T12:00:00Z"
+revision: "Phase 70 Created: Implementation ↔ Specification Alignment Remediation (P0-BLOCKING) | 55/60 phases done (92%) | Production Ready Path Established"
 
 # Active Phases (Current Development)
 active_phases:
+  - id: "phase-70"
+    name: "Implementation ↔ Specification Alignment Remediation"
+    file: "phases/active/phase-70-alignment-remediation.yaml"
+    created: "2026-02-10"
+    status: "planned"
+    priority: "P0"
+    execution_order: 21
+    roi_score: 0.95
+    estimated_duration: "3-5 weeks"
+    test_target: 320
+    coverage_target: 90
+    tests_passing: 0
+    stages_complete: "0/4"
+    critical_path: true
+    production_blocker: true
+    description: |
+      🔴 PLANNED (P0 - PRODUCTION BLOCKING): Achieve 100% alignment between wiring.yaml and actual implementations.
+      - S1: Gap Triage & Decision Framework (1-2 weeks)
+      - S2: P0/P1 Remediation (1-3 weeks) — Fix 2 domain orchestrators, delete 620 stub tests
+      - S3: P2/P3 Cleanup & Documentation (1 week)
+      - S4: CI/CD Automation & Continuous Monitoring (1 week)
+      
+      Current gaps: 25 wired-not-impl, 620 stub-tests, 25 stub-code, 154 impl-not-wired
+      Target: 100% alignment, 0 stub tests, 0 production STUB code
+      Impact: Production ready signal, continuous regression prevention
+    depends_on: []
+    blocks:
+      - "Production deployment"
+      - "Phases 71+"
+
   - id: "phase-66"
     name: "LENS Knowledge Graph & Domain Intelligence"
     file: "phases/active/phase-66-lens-knowledge-graph-domain-intelligence.yaml"
