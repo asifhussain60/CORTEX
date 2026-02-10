@@ -572,8 +572,8 @@ if result.passed:
 **ALLOWED for ANALYZE/AUDIT/DESIGN intents:**
 
 - ✅ ALL read-only tools (read_file, semantic_search, grep_search, etc.)
-- ✅ `create_file` for docs/ directory ONLY (documentation)
-- ✅ `replace_string_in_file` for docs/ directory ONLY
+- ✅ `create_file` for .github/agents/ and .github/prompts/ ONLY
+- ✅ `replace_string_in_file` for .github/agents/ and .github/prompts/ ONLY
 - ❌ NO .py file modifications (use `cortex_process_request` instead)
 
 ### Enforcement Pattern (MANDATORY)
@@ -618,7 +618,7 @@ if tool in ALLOWED_TOOLS_FOR_INTENT[intent]:
 | **REFACTOR** | ❌ BLOCKED | ✅ REQUIRED | ✅ Via MCP |
 | **ANALYZE** | 📖 Read-only | ✅ Preferred | ✅ Allowed |
 | **AUDIT** | 📖 Read-only | ✅ Required | ✅ Allowed |
-| **DESIGN** | 📖 Read-only + docs/ | ⚪ Optional | ✅ Allowed |
+| **DESIGN** | 📖 Read-only + .github/ | ⚪ Optional | ✅ Allowed |
 
 **Violation Response:**
 ```markdown
@@ -938,8 +938,8 @@ However, IMPLEMENT/FIX/REFACTOR will remain blocked.
 **ALLOWED for ANALYZE/AUDIT/DESIGN intents:**
 
 - ✅ ALL read-only tools (read_file, semantic_search, grep_search, etc.)
-- ✅ `create_file` for docs/ directory ONLY (documentation)
-- ✅ `replace_string_in_file` for docs/ directory ONLY
+- ✅ `create_file` for .github/agents/ and .github/prompts/ ONLY
+- ✅ `replace_string_in_file` for .github/agents/ and .github/prompts/ ONLY
 - ❌ NO .py file modifications (use `cortex_process_request` instead)
 
 ### Enforcement Pattern (MANDATORY)
@@ -984,7 +984,7 @@ if tool in ALLOWED_TOOLS_FOR_INTENT[intent]:
 | **REFACTOR** | ❌ BLOCKED | ✅ REQUIRED | ✅ Via MCP |
 | **ANALYZE** | 📖 Read-only | ✅ Preferred | ✅ Allowed |
 | **AUDIT** | 📖 Read-only | ✅ Required | ✅ Allowed |
-| **DESIGN** | 📖 Read-only + docs/ | ⚪ Optional | ✅ Allowed |
+| **DESIGN** | 📖 Read-only + .github/ | ⚪ Optional | ✅ Allowed |
 
 **Violation Response:**
 ```markdown

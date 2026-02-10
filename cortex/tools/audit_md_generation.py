@@ -235,7 +235,7 @@ def generate_violation_report(violations: List[MarkdownViolation]) -> str:
         "",
         "3. **Update workflow:**",
         "   - Use inline chat responses instead of files",
-        "   - Only create .md files in `docs/` or `_workspaces/docs/`",
+        "   - Only create .md files in .github/prompts/ or .github/agents/",
         "",
         "4. **Verify fix:**",
         "   ```bash",

@@ -419,8 +419,8 @@ class GovernanceRegistry:
             # Non-markdown artifacts are allowed
             return Ok(True)
         
-        # Approved markdown locations (always allowed, no user request needed)
-        approved_directories = ["docs/", "_workspaces/docs/"]
+        # Approved markdown locations (CORE-002 compliant: .github only)
+        approved_directories = [".github/prompts/", ".github/agents/"]
         
         # Extract path string
         path_str = str(artifact_path)
@@ -431,7 +431,7 @@ class GovernanceRegistry:
         )
         
         if in_approved_directory:
-            # docs/ and _workspaces/docs/ are always allowed
+            # .github/prompts/ and .github/agents/ are always allowed
             return Ok(True)
         
         # Extract filename to check for report patterns
@@ -473,11 +473,12 @@ class GovernanceRegistry:
             )
             return Ok(True)
         
-        # Non-report markdown file outside docs/ - block
+        # Non-report markdown file outside approved locations - block
         violation_msg = (
-            f"CORE-002 VIOLATION: Markdown file creation blocked outside docs/\n"
-            f"File: {artifact_path}\n"
-            f"Approved locations: docs/, _workspaces/docs/\n"
+            f"CORE-002 VIOLATION: Markdown file creation blocked\\n"
+            f"File: {artifact_path}\\n"
+            f"Approved locations: .github/prompts/, .github/agents/, README.md (root only)\\n"
+            f"docs/ folder reserved for canonical CORTEX documentation only\\n"
             f"AC-ID: {ac_id if ac_id else 'unspecified'}"
         )
         

@@ -36,7 +36,7 @@ class FileWritePolicy:
     Example:
         >>> policy = FileWritePolicy()
         >>> policy.check_write("phase-report.md", content)  # Raises MarkdownBanViolation
-        >>> policy.check_write("docs/guide.md", content)    # Returns True
+        >>> policy.check_write(\".github/prompts/guide.md\", content)    # Returns True
     """
     
     # Forbidden filename patterns

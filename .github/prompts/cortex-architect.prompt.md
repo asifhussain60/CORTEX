@@ -4795,7 +4795,7 @@ P6 Wiring Integrity audit runs on EVERY AUDIT invocation if cortex-registry/_cor
 
 | Question | Answer | Action |
 |----------|--------|--------|
-| "Should I create docs/ANALYSIS-RESULTS.md?" | ❌ NO | Display findings inline in chat |
+| "Should I create analysis documentation?" | ❌ NO | Display findings inline in chat |
 | "But analysis is 500+ lines, too long for chat" | ❌ NO | Summarize in chat, store raw data in cortex-registry YAML if reusable |
 | "User wants to save this for later" | ❌ NO | User can save chat transcript, not your job to create files |
 | "This is governance documentation, seems legitimate" | ❌ NO | Governance rules go in cortex-registry YAML, not docs/*.md |
@@ -5020,7 +5020,7 @@ Score < 5 → Continue to DESIGN MODE
 **CRITICAL:** DIGEST mode MUST analyze chat sessions for CORE rule violations.
 
 **Detection Required:**
-- **CORE-002 Violations:** Markdown file generation outside docs/.github (look for: `cat >`, `create_file`, terminal file writes)
+- **CORE-002 Violations:** Markdown file generation outside .github/ (look for: `cat >`, `create_file`, terminal file writes)
 - **CORE-008 Violations:** Implementation without tests (code added but no test file created)
 - **CORE-028 Violations:** File naming issues (SCREAMING_CASE, plan files >40 chars, non-kebab-case)
 - **CORE-035 Violations:** Duplicate implementations (*_v2, *_old, *_backup patterns)
@@ -5090,7 +5090,7 @@ Score < 5 → Continue to DESIGN MODE
 ### 🎯 Actions
 - [ ] Update enhancement-history.yaml
 - [ ] Create lessons-learned artifact
-- [ ] Extract patterns to docs/patterns/
+- [ ] Extract patterns to cortex-registry YAML files
 - [ ] Document anti-patterns
 - [ ] Propagate to CORTEX.prompt.md (if applicable)
 ```
@@ -5101,8 +5101,8 @@ Score < 5 → Continue to DESIGN MODE
 
 | Target | Condition | Action |
 |--------|-----------|--------|
-| docs/meta/enhancement-history.yaml | Efficiency/Accuracy findings | Add ENH-* entries |
-| docs/meta/lessons-learned/*.yaml | Session has actionable learnings | Create artifact |
+| cortex_brain/state/enhancement-history.yaml | Efficiency/Accuracy findings | Add ENH-* entries |
+| cortex_brain/state/lessons-learned/*.yaml | Session has actionable learnings | Create artifact |
 | docs/patterns/*.md | Reusability = HIGH | Extract pattern |
 | docs/anti-patterns/*.md | Drifts identified | Document anti-pattern |
 | CORTEX.prompt.md | Prompt improvement needed | **Requires AUDIT validation** |
@@ -5147,8 +5147,8 @@ Score < 5 → Continue to DESIGN MODE
 | Activity | Tool | Purpose | Constraint |
 |----------|------|---------|------------|
 | **Read code** | `read_file`, `semantic_search` | Analysis only | No modifications |
-| **Generate diagrams** | Chat markdown (Mermaid) | Architecture visualization | docs/ directory ONLY |
-| **Create design docs** | `create_file` | Documentation | docs/ directory ONLY |
+| **Generate diagrams** | Chat markdown (Mermaid) | Architecture visualization | Inline chat display |
+| **Create design docs** | Inline display | Documentation | Chat content only |
 | **Propose file structure** | Chat markdown (list) | Architecture planning | No actual file creation |
 | **Write test specs** | Chat markdown | TDD preparation | NOT .py files |
 | **Search codebase** | `grep_search`, `file_search` | Discovery | Read-only |
@@ -5171,7 +5171,7 @@ Score < 5 → Continue to DESIGN MODE
 
 ```yaml
 Step 1: Save Design
-  - If design docs created → ensure in docs/ directory
+  - If design docs needed → display inline in chat
   - Commit design artifacts: git commit -m "docs: Phase X design"
 
 Step 2: MODE SWITCH
@@ -5225,7 +5225,7 @@ def validate_design_boundary(current_mode: str, file_path: str, operation: str) 
             return False  # BLOCK
         
         # Check 2: Is this outside docs/ ?
-        if operation in ["create", "modify"] and not file_path.startswith("docs/"):
+        if operation in ["create", "modify"] and not file_path.startswith(\".github/\"):
             if file_path.endswith(".md") or file_path.endswith(".yaml"):
                 print("❌ DESIGN MODE VIOLATION: Documentation must be in docs/ directory")
                 print(f"   Attempted: {file_path}")
@@ -6397,7 +6397,7 @@ INJECT → CAPTURE → ANALYZE → FIX-PLAN → CLEANUP
 
 ### Enhancement Registry
 
-**Location:** docs/meta/enhancement-history.yaml  
+**Location:** cortex_brain/state/enhancement-history.yaml  
 **Update Frequency:** After every DESIGN/META-AUDIT  
 **Owner:** EnhancementRegistry orchestrator
 

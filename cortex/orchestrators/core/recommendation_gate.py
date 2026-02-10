@@ -183,10 +183,10 @@ class RecommendationGate:
         Returns:
             Path to enhancement history file
         """
-        # Try standard locations
+        # Try standard locations (CORE-002 compliant: use cortex_brain/state/)
         locations = [
-            Path("docs/meta/enhancement-history.yaml"),
-            Path(__file__).parent.parent.parent.parent / "docs" / "meta" / "enhancement-history.yaml",
+            Path("cortex_brain/state/enhancement-history.yaml"),
+            Path(__file__).parent.parent.parent.parent / "cortex_brain" / "state" / "enhancement-history.yaml",
         ]
         
         for loc in locations:
@@ -194,7 +194,7 @@ class RecommendationGate:
                 return loc
         
         # Return default even if not exists
-        return Path("docs/meta/enhancement-history.yaml")
+        return Path("cortex_brain/state/enhancement-history.yaml")
     
     def _load_rejection_history(self) -> None:
         """Load rejected recommendations from enhancement history."""
