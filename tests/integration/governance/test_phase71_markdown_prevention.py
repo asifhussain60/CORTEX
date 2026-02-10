@@ -34,8 +34,8 @@ class TestPhase71MarkdownPrevention:
         assert enforcement_result.level == EnforcementLevel.BLOCKED
         assert any("root directory" in v.lower() for v in enforcement_result.violations)
 
-    def test_enforcement_orchestrator_allows_docs_markdown(self):
-        """EnforcementOrchestrator allows docs/ markdown."""
+    def test_enforcement_orchestrator_blocks_docs_markdown(self):
+        """EnforcementOrchestrator blocks docs/ markdown (CORE-002-SUB)."""
         orchestrator = EnforcementOrchestrator()
         
         operation = {
@@ -45,7 +45,11 @@ class TestPhase71MarkdownPrevention:
         
         result = orchestrator.validate_operation(operation)
         
-        assert result.is_ok(), "Should allow docs/ markdown"
+        # After Gap #2A fix: docs/ markdown is NO LONGER ALLOWED
+        assert result.is_err(), "Should block docs/ markdown files"
+        enforcement_result = result.error
+        assert enforcement_result.level == EnforcementLevel.BLOCKED
+        assert any("CORE-002" in v for v in enforcement_result.violations)
 
     def test_enforcement_orchestrator_allows_readme(self):
         """EnforcementOrchestrator allows README.md in root."""

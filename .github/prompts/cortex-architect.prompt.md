@@ -4769,23 +4769,40 @@ P6 Wiring Integrity audit runs on EVERY AUDIT invocation if cortex-registry/_cor
 
 ## 🛡️ CORE-002 ENFORCEMENT (CRITICAL)
 
-**MANDATORY:** DIGEST mode MUST NOT generate markdown files.
+**MANDATORY:** ALL modes MUST NOT generate markdown files outside allowed exceptions.
 
 **FORBIDDEN:**
 - ❌ `cat > file.md << 'EOF'` patterns
-- ❌ `create_file` tool invocations  
+- ❌ `create_file` tool invocations for .md files
 - ❌ Terminal file generation (`Ran terminal command: cat > ...`)
 - ❌ Completion/summary/report markdown files
 - ❌ YAML file generation to _workspaces/
+- ❌ docs/*.md files (including governance, analysis, session summaries)
+
+**ALLOWED ONLY (3 Exception Paths):**
+- ✅ `.github/prompts/*.md` — Prompt file updates ONLY
+- ✅ `.github/agents/*.md` — Agent specification updates ONLY  
+- ✅ `README.md` — Root repository README ONLY
 
 **REQUIRED:**
 - ✅ Inline analysis in chat only
 - ✅ Use markdown tables for findings (these are chat content, not files)
 - ✅ Extract learnings via MCP `cortex_digest_session` tool (not file writes)
 - ✅ Programmatic enhancement updates via MCP, not manual file creation
+- ✅ Store reusable data in cortex-registry YAML files, not docs/
+
+**Decision Tree: When You Think You Need to Create a File**
+
+| Question | Answer | Action |
+|----------|--------|--------|
+| "Should I create docs/ANALYSIS-RESULTS.md?" | ❌ NO | Display findings inline in chat |
+| "But analysis is 500+ lines, too long for chat" | ❌ NO | Summarize in chat, store raw data in cortex-registry YAML if reusable |
+| "User wants to save this for later" | ❌ NO | User can save chat transcript, not your job to create files |
+| "This is governance documentation, seems legitimate" | ❌ NO | Governance rules go in cortex-registry YAML, not docs/*.md |
+| "When IS .md file creation allowed?" | ✅ YES | ONLY: `.github/prompts/*.md`, `.github/agents/*.md`, `README.md` |
 
 **Violation Detection:**
-If response contains any "Ran terminal command: cat" or "Created [" patterns → BLOCK and regenerate response without file generation.
+If response contains any "Ran terminal command: cat" or "Created [" patterns for .md files outside allowed paths → BLOCK and regenerate response without file generation.
 
 ## 5-Gate Defense-in-Depth Architecture
 

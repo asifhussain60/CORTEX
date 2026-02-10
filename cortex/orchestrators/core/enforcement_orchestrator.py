@@ -518,8 +518,13 @@ class MarkdownSuppressionAgent:
             ("DEPLOYMENT-", "deployment guide"),
         ]
         
-        # Allowed root directories (explicit allowlist)
-        allowed_root_paths = ["docs/", "cortex-registry/", ".cortex/", ".github/"]
+        # CORE-002 ENFORCEMENT: ONLY 3 allowed paths for .md files
+        # Updated 2026-02-10: docs/ NO LONGER ALLOWED (inline only)
+        allowed_md_paths = [
+            ".github/prompts/",     # Prompt file updates
+            ".github/agents/",      # Agent specification updates
+            "README.md",            # Root README only (exact match)
+        ]
         
         for file in output_files:
             file_lower = file.lower()
@@ -532,18 +537,27 @@ class MarkdownSuppressionAgent:
                         "Results must be reported inline in chat."
                     )
             
-            # Root directory validation (Phase 71 enhancement)
+            # Strict markdown file validation (Phase 71 + Gap #2A fix)
             if file.endswith(".md") or file.endswith(".MD"):
-                # Check if file is in root directory
-                is_root = not any(file.startswith(prefix) for prefix in allowed_root_paths)
-                is_readme = file.strip("/").upper() == "README.MD" or file.strip("/") == "README.md"
+                # Check if file matches allowed paths
+                is_allowed = False
                 
-                # Block root markdown unless README.md
-                if is_root and not is_readme:
+                # Check exact README.md match
+                if file.strip("/") == "README.md":
+                    is_allowed = True
+                else:
+                    # Check if file starts with allowed directory paths
+                    for allowed_path in allowed_md_paths:
+                        if allowed_path.endswith("/") and file.startswith(allowed_path):
+                            is_allowed = True
+                            break
+                
+                # Block ALL other markdown files
+                if not is_allowed:
                     violations.append(
-                        f"CORE-002 VIOLATION: Cannot generate markdown in root directory: {file}. "
-                        "Markdown files must be in docs/, cortex-registry/, or .cortex/ directories. "
-                        "Only README.md is allowed in root."
+                        f"CORE-002 VIOLATION: Cannot generate markdown file: {file}. "
+                        "ONLY allowed: .github/prompts/*.md, .github/agents/*.md, README.md. "
+                        "All findings must be inline in chat or stored in cortex-registry YAML files."
                     )
         
         # Determine enforcement level
