@@ -6,13 +6,20 @@ Validates operations against 3-tier governance before execution:
 - Tier 1 (WARNING): Phase acceptance criteria
 - Tier 2 (INFO): Best practices
 
-Uses 3 specialized agents:
+Uses 8 specialized agents:
 1. GovernanceEnforcementAgent: CORE-008, 011, 012, 013, 029, 030, 035
 2. SecurityCheckpointAgent: CORE-026, 025, 027
 3. ComplianceValidationAgent: Tier 1 phase rules
+4. FileNamingEnforcementAgent: CORE-028
+5. IncrementalExecutionAgent: CORE-001, 004
+6. MarkdownSuppressionAgent: CORE-002
+7. ArchitectureIntegrityAgent: CORE-017-020, 032, 034, 035, 038-041
+8. DiscoveryEnforcementAgent: CORE-030, 035 (ENH-047)
+
+With integrated telemetry for observability (Phase 4 GAP-002).
 
 AC-ID: ENFORCEMENT-001
-Phase: 8 (Governance Enhancement)
+Phase: 8 (Governance Enhancement) + Phase 2-4 (GAP-002)
 Authority: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings)
 
 Author: Asif Hussain
@@ -29,6 +36,14 @@ from cortex.core.result import Result, Ok, Err
 from cortex.orchestrators.core.governance_registry import GovernanceRegistry
 
 logger = logging.getLogger(__name__)
+
+# Import telemetry (Phase 4)
+try:
+    from cortex.governance.telemetry import get_telemetry
+    TELEMETRY_AVAILABLE = True
+except ImportError:
+    TELEMETRY_AVAILABLE = False
+    logger.warning("Governance telemetry not available (cortex.governance.telemetry)")
 
 
 # ============================================================================
@@ -881,24 +896,76 @@ class EnforcementOrchestrator:
         all_warnings = []
         highest_level = EnforcementLevel.PASS
         
+        # Get telemetry instance if available
+        telemetry = get_telemetry() if TELEMETRY_AVAILABLE else None
+        intent = operation.get("intent", "UNKNOWN")
+        
         # Execute agents in parallel
         with ThreadPoolExecutor(max_workers=7) as executor:
             futures = {executor.submit(agent.validate, operation): agent for agent in self.agents}
             
             for future in as_completed(futures):
                 agent = futures[future]
+                agent_start_time = time.time()
+                
                 try:
                     result = future.result()
                     agent_name = result.metadata.get("agent", agent.__class__.__name__)
+                    agent_latency_ms = (time.time() - agent_start_time) * 1000
+                    
+                    # Record telemetry
+                    if telemetry:
+                        telemetry.record_agent_invocation(
+                            agent_name=agent_name,
+                            intent=intent,
+                            result=result.level.value,
+                            latency_ms=agent_latency_ms,
+                            violations_count=len(result.violations),
+                            warnings_count=len(result.warnings),
+                        )
                     
                     # Collect violations and warnings
                     if result.violations:
                         all_violations.extend(result.violations)
                         logger.warning(f"{agent_name} detected {len(result.violations)} violations")
+                        
+                        # Record each violation
+                        if telemetry:
+                            for violation in result.violations:
+                                # Extract CORE rule ID from violation message
+                                rule_id = "UNKNOWN"
+                                if "CORE-" in violation:
+                                    import re
+                                    match = re.search(r'CORE-\d+', violation)
+                                    if match:
+                                        rule_id = match.group(0)
+                                
+                                telemetry.record_violation(
+                                    rule_id=rule_id,
+                                    violation_message=violation,
+                                    agent_name=agent_name,
+                                )
                     
                     if result.warnings:
                         all_warnings.extend(result.warnings)
                         logger.info(f"{agent_name} issued {len(result.warnings)} warnings")
+                        
+                        # Record each warning
+                        if telemetry:
+                            for warning in result.warnings:
+                                # Extract CORE rule ID from warning message
+                                rule_id = "UNKNOWN"
+                                if "CORE-" in warning or "TIER-" in warning:
+                                    import re
+                                    match = re.search(r'(CORE|TIER)-\d+', warning)
+                                    if match:
+                                        rule_id = match.group(0)
+                                
+                                telemetry.record_warning(
+                                    rule_id=rule_id,
+                                    warning_message=warning,
+                                    agent_name=agent_name,
+                                )
                     
                     # Track highest enforcement level
                     if result.level == EnforcementLevel.BLOCKED:

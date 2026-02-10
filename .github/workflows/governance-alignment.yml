@@ -1,0 +1,74 @@
+name: Governance Alignment Check
+
+on:
+  pull_request:
+    paths:
+      - '.github/copilot-instructions.md'
+      - '.github/prompts/cortex-architect.prompt.md'
+      - 'cortex-registry/_cortex-master/governance/core-rules.yaml'
+      - 'cortex/orchestrators/core/enforcement_orchestrator.py'
+      - 'tests/integration/governance/**'
+      - 'tests/unit/orchestrators/core/test_markdown_suppression_agent.py'
+
+jobs:
+  validate-governance-alignment:
+    runs-on: ubuntu-latest
+    name: Validate CORE-002 Alignment
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml
+      
+      - name: Run governance alignment validation
+        id: alignment_check
+        run: |
+          python3 scripts/validate_governance_alignment.py
+        continue-on-error: true
+      
+      - name: Generate alignment report
+        if: steps.alignment_check.outcome == 'failure'
+        run: |
+          echo "## ❌ Governance Alignment Failure" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "CORE-002 misalignment detected across governance layers." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Required Actions" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "1. Ensure all 6 layers use consistent allowed paths:" >> $GITHUB_STEP_SUMMARY
+          echo "   - \`.github/prompts/*.md\`" >> $GITHUB_STEP_SUMMARY
+          echo "   - \`.github/agents/*.md\`" >> $GITHUB_STEP_SUMMARY
+          echo "   - \`README.md\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "2. Run locally: \`python3 scripts/validate_governance_alignment.py\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "3. Fix misalignments and push again" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Success report
+        if: steps.alignment_check.outcome == 'success'
+        run: |
+          echo "## ✅ Governance Alignment Valid" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "All 6 layers aligned on CORE-002 enforcement:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- Layer 1: Copilot Instructions" >> $GITHUB_STEP_SUMMARY
+          echo "- Layer 2: Prompt Files" >> $GITHUB_STEP_SUMMARY
+          echo "- Layer 3: Registry YAML" >> $GITHUB_STEP_SUMMARY
+          echo "- Layer 4: Enforcement Code" >> $GITHUB_STEP_SUMMARY
+          echo "- Layer 5: Test Expectations" >> $GITHUB_STEP_SUMMARY
+          echo "- Layer 6: MCP Tools" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ PR ready for review" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Fail if misaligned
+        if: steps.alignment_check.outcome == 'failure'
+        run: exit 1
