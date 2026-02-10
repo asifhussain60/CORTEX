@@ -74,6 +74,59 @@ class KnowledgeGraphQueryTool(Tool):
         self.db_path = db_path
         self.storage: Optional[Any] = None
         self.query_engine: Optional[Any] = None
+    
+    @property
+    def definition(self) -> "ToolDefinition":  # type: ignore
+        """Get tool definition for MCP registration."""
+        from cortex.mcp.server import ToolDefinition, ToolParameter
+        
+        return ToolDefinition(
+            name="cortex_knowledge_graph_query",
+            description="Query CORTEX knowledge graph for code relationships and dependencies",
+            parameters=[
+                ToolParameter(
+                    name="query_type",
+                    type="string",
+                    required=True,
+                    description="Query type: find_callers, find_dependencies, find_path, find_related",
+                    enum=["find_callers", "find_dependencies", "find_path", "find_related"]
+                ),
+                ToolParameter(
+                    name="target",
+                    type="string",
+                    required=True,
+                    description="Target identifier (file path, class name, function name)"
+                ),
+                ToolParameter(
+                    name="edge_type",
+                    type="string",
+                    required=False,
+                    description="Edge type filter: calls, imports, tests, depends_on, writes_to",
+                    default="calls",
+                    enum=["calls", "imports", "tests", "depends_on", "writes_to", "reads_from"]
+                ),
+                ToolParameter(
+                    name="depth",
+                    type="integer",
+                    required=False,
+                    description="Maximum traversal depth (default: 2)",
+                    default=2,
+                    min_value=1,
+                    max_value=5
+                ),
+                ToolParameter(
+                    name="destination",
+                    type="string",
+                    required=False,
+                    description="Destination node for find_path queries"
+                )
+            ],
+            metadata={
+                "category": "analysis",
+                "phase": "phase-66-s2",
+                "performance": "<100ms typical"
+            }
+        )
         
     def _ensure_initialized(self) -> bool:
         """Ensure storage and query engine are initialized."""

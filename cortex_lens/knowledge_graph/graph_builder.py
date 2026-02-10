@@ -59,39 +59,47 @@ class GraphBuilder:
         """
         logger.info(f"Building knowledge graph from architecture report")
         
-        # Extract files from report
-        files = getattr(report, 'files', [])
-        dependencies = getattr(report, 'dependencies', {})
+        # Extract data from report
+        # ArchitectureReport has dependency_graph: Dict[str, List[str]]
+        dependency_graph = getattr(report, 'dependency_graph', {})
+        
+        # Collect all files from dependency graph
+        all_files = set()
+        for source, targets in dependency_graph.items():
+            all_files.add(source)
+            for target in targets:
+                all_files.add(target)
         
         # Create file nodes
-        file_nodes: Dict[Path, int] = {}
-        for file_path in files:
+        file_nodes: Dict[str, int] = {}  # Changed from Path to str
+        for file_path_str in all_files:
+            file_path = Path(file_path_str) if isinstance(file_path_str, str) else file_path_str
             node_id = self.storage.insert_node(
                 node_type="File",
-                name=str(file_path.name),
-                metadata={"path": str(file_path)}
+                name=file_path.name,
+                properties={"path": str(file_path)}
             )
-            file_nodes[file_path] = node_id
+            file_nodes[str(file_path)] = node_id
             self.node_count += 1
         
-        # Create dependency edges
-        for source_path, targets in dependencies.items():
-            if source_path not in file_nodes:
+        # Create dependency edges from dependency_graph
+        for source_str, target_list in dependency_graph.items():
+            if source_str not in file_nodes:
                 continue
             
-            source_id = file_nodes[source_path]
+            source_id = file_nodes[source_str]
             
-            for target_path in targets:
-                if target_path not in file_nodes:
+            for target_str in target_list:
+                if target_str not in file_nodes:
                     continue
                 
-                target_id = file_nodes[target_path]
+                target_id = file_nodes[target_str]
                 
                 self.storage.insert_edge(
                     source_id=source_id,
                     target_id=target_id,
                     edge_type="imports",
-                    metadata={}
+                    properties={}
                 )
                 self.edge_count += 1
         
