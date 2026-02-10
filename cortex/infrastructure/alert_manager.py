@@ -39,7 +39,7 @@ class Alert:
             "alert_id": self.alert_id,
             "rule_name": self.rule_name,
             "message": self.message,
-            "severity": self.severity.value,
+            "severity": self.severity.name.lower(),
             "state": self.state.value,
             "triggered_at": self.triggered_at.isoformat(),
             "resolved_at": self.resolved_at.isoformat() if self.resolved_at else None,

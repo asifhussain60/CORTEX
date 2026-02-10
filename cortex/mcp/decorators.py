@@ -6,6 +6,7 @@ Purpose: Auto-inject UnifiedIntelligenceContext for all MCP tools
 """
 
 import logging
+import inspect
 from typing import Any, Callable, Dict, Optional
 from functools import wraps
 
@@ -79,7 +80,15 @@ def mcp_tool(
         def wrapper(*args: Any, **kwargs: Any) -> Any:
             """Call original function with intelligence injection."""
             # Phase 54 S4: Inject unified intelligence context if not present
-            if inject_intelligence and "unified_intelligence" not in kwargs:
+            # BUT only if the function signature accepts it
+            sig = inspect.signature(func)
+            func_params = sig.parameters
+            accepts_unified_intelligence = (
+                "unified_intelligence" in func_params or
+                any(p.kind == inspect.Parameter.VAR_KEYWORD for p in func_params.values())
+            )
+            
+            if inject_intelligence and accepts_unified_intelligence and "unified_intelligence" not in kwargs:
                 try:
                     from cortex.mcp.middleware.intelligence_gate import IntelligenceGate
                     from cortex.brain.knowledge.knowledge_synthesis_engine import get_synthesis_engine

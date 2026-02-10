@@ -11,8 +11,8 @@ from typing import Dict, Any
 from unittest.mock import Mock, patch, MagicMock
 
 from cortex.brain.llm.i_llm_provider import ILLMProvider, LLMResponse, LLMUsage
-from cortex.brain.llm.openai_provider import OpenAIProvider
-from cortex.brain.llm.anthropic_provider import AnthropicProvider
+from cortex.brain.llm.openai_provider import OpenAIProvider, OPENAI_AVAILABLE
+from cortex.brain.llm.anthropic_provider import AnthropicProvider, ANTHROPIC_AVAILABLE
 from cortex.brain.llm.llm_factory import LLMFactory
 
 
@@ -42,6 +42,7 @@ class TestILLMProvider:
         assert response.provider == "openai"
 
 
+@pytest.mark.skipif(not OPENAI_AVAILABLE, reason="OpenAI package not installed")
 class TestOpenAIProvider:
     """Test OpenAI provider implementation."""
     
@@ -131,6 +132,7 @@ class TestOpenAIProvider:
             provider.generate("Test prompt")
 
 
+@pytest.mark.skipif(not ANTHROPIC_AVAILABLE, reason="Anthropic package not installed")
 class TestAnthropicProvider:
     """Test Anthropic provider implementation."""
     
@@ -173,6 +175,7 @@ class TestAnthropicProvider:
         assert response.provider == "anthropic"
 
 
+@pytest.mark.skipif(not OPENAI_AVAILABLE and not ANTHROPIC_AVAILABLE, reason="LLM packages not installed")
 class TestLLMFactory:
     """Test LLM provider factory."""
     

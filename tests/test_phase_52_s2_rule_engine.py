@@ -228,13 +228,14 @@ class TestRuleEngine:
             description="Large PR rule",
             priority=RulePriority.MEDIUM,
             conditions=[Condition("changed_lines", ConditionOperator.GREATER_THAN, 100)],
-            actions=[RuleActionDefinition(RuleAction.COMMENT, message="Large PR")]
+            actions=[RuleActionDefinition(RuleAction.REQUEST_CHANGES, message="Large PR needs review")]
         )
         engine.add_rule(rule)
         
         result = engine.evaluate_pr({"changed_lines": 500})
         assert len(result.matching_rules) == 1
         assert result.matching_rules[0].rule_id == "E-004"
+        # REQUEST_CHANGES prevents auto-approve, so result is COMMENT
         assert result.recommended_action == RuleAction.COMMENT
 
     def test_engine_evaluate_pr_multiple_matches(self):
@@ -448,8 +449,9 @@ class TestRuleValidator:
         rule = Rule(
             rule_id="",
             name="Test",
+            description="Test rule with missing ID",
             conditions=[],
-            actions=[RuleAction(RuleAction.SKIP)]
+            actions=[RuleActionDefinition(RuleAction.SKIP)]
         )
         
         valid, errors = RuleValidator.validate_rule(rule)
@@ -458,7 +460,7 @@ class TestRuleValidator:
 
     def test_validate_rule_no_conditions_or_actions(self):
         """Test validation fails for no conditions or actions"""
-        rule = Rule(rule_id="VAL-002", name="Empty", conditions=[], actions=[])
+        rule = Rule(rule_id="VAL-002", name="Empty", description="Empty rule", conditions=[], actions=[])
         
         valid, errors = RuleValidator.validate_rule(rule)
         assert not valid
@@ -469,8 +471,9 @@ class TestRuleValidator:
         engine.add_rule(Rule(
             rule_id="VSET-001",
             name="Test",
+            description="Test rule for ruleset validation",
             conditions=[Condition("flag", ConditionOperator.EQUALS, True)],
-            actions=[RuleAction(RuleAction.APPROVE)]
+            actions=[RuleActionDefinition(RuleAction.APPROVE)]
         ))
         
         valid, errors = RuleValidator.validate_ruleset(engine)

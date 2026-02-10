@@ -72,11 +72,11 @@ def check_prohibited_phrases(text: str) -> List[str]:
 
 def test_copilot_instruction_has_verbosity_guidelines():
     """
-    Verify that .github/copilot-instruction.md contains verbosity guidelines.
+    Verify that .github/copilot-instructions.md contains verbosity guidelines.
     """
-    copilot_file = Path(__file__).parent.parent.parent / ".github" / "copilot-instruction.md"
+    copilot_file = Path(__file__).parent.parent.parent / ".github" / "copilot-instructions.md"
     
-    assert copilot_file.exists(), "copilot-instruction.md not found"
+    assert copilot_file.exists(), "copilot-instructions.md not found"
     
     with open(copilot_file, 'r') as f:
         content = f.read()

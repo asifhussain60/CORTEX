@@ -72,7 +72,7 @@ class TestTieredLENSAnalyzer:
                 assert "domain_context" in result.data
                 assert "base" in result.data  # Includes tier 0 data
     
-    @patch('cortex.brain.analysis.tiered_lens_analyzer.LLMFactory')
+    @patch('cortex.brain.llm.llm_factory.LLMFactory')
     def test_tier_2_deep_analysis_uses_llm(self, mock_llm_factory):
         """Test Tier 2 (deep) uses LLM enhancement."""
         analyzer = TieredLENSAnalyzer(repo_path=Path("."))

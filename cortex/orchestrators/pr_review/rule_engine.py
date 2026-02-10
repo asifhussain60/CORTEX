@@ -127,8 +127,35 @@ class Rule:
 
     @staticmethod
     def _pattern_matches(path: str, pattern: str) -> bool:
-        """Check if path matches glob-like pattern"""
+        """Check if path matches glob-like pattern.
+        
+        Supports standard glob patterns including:
+        - * matches any characters except /
+        - ** matches any characters including /
+        - ? matches single character
+        """
         import fnmatch
+        from pathlib import PurePath
+        
+        # Handle ** glob pattern (recursive match)
+        if '**' in pattern:
+            # Convert ** to fnmatch-compatible pattern
+            # src/**/*.ts -> matches src/app.ts, src/foo/bar.ts
+            pattern_parts = pattern.split('**')
+            if len(pattern_parts) == 2:
+                prefix, suffix = pattern_parts
+                prefix = prefix.rstrip('/')
+                suffix = suffix.lstrip('/')
+                
+                # If path starts with prefix and ends matching suffix
+                if prefix and not path.startswith(prefix.rstrip('*')):
+                    return False
+                
+                if suffix:
+                    return fnmatch.fnmatch(PurePath(path).name, suffix) or \
+                           fnmatch.fnmatch(path, pattern.replace('**/', '*').replace('**', '*'))
+                return True
+        
         return fnmatch.fnmatch(path, pattern)
 
     def evaluate(self, context: Dict[str, Any]) -> bool:

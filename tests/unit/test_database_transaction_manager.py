@@ -244,16 +244,17 @@ class TestHashChainCalculation:
         self, manager: DatabaseTransactionManager, temp_db: str
     ) -> None:
         """
-        Test: Different AC-IDs should have separate hash chains.
+        Test: Hash chain is GLOBAL (not per-AC-ID) for tamper-evidence.
         
         Acceptance:
-        - AC-FIX-001-02 has its own chain
-        - AC-FIX-001-03 has its own chain (doesn't link to AC-FIX-001-02)
-        - Each chain independently validates (CORE-025)
+        - AC-FIX-001-05: Global hash chain for complete tamper-evidence
+        - Each entry links to the PREVIOUS entry (regardless of AC-ID)
+        - Chain is continuous across all operations
         
         Architecture:
-        - NOT a global chain (that's handled by integration tests)
-        - Each AC-ID has its own per-AC-ID chain
+        - Global chain provides stronger tamper-evidence than per-AC-ID
+        - Any modification to any entry breaks the entire chain
+        - This is CORE-025 compliance requirement
         """
         # Create entries for AC-FIX-001-02
         with manager.atomic_operation("AC-FIX-001-02", "test") as txn:
@@ -267,39 +268,27 @@ class TestHashChainCalculation:
         with manager.atomic_operation("AC-FIX-001-02", "test2") as txn:
             pass
         
-        # Query entries
+        # Query entries - verify GLOBAL chain (each entry links to prior entry)
         conn = sqlite3.connect(temp_db)
         cursor = conn.cursor()
         cursor.execute("""
-            SELECT ac_id, operation, previous_hash, entry_hash FROM audit_log
-            WHERE ac_id IN ('AC-FIX-001-02', 'AC-FIX-001-03')
+            SELECT id, ac_id, operation, previous_hash, entry_hash FROM audit_log
             ORDER BY id ASC
         """)
         
         entries = cursor.fetchall()
         
-        # Group by AC-ID
-        ac_entries = {}
-        for ac_id, op, prev_hash, entry_hash in entries:
-            if ac_id not in ac_entries:
-                ac_entries[ac_id] = []
-            ac_entries[ac_id].append((op, prev_hash, entry_hash))
-        
-        # Validate each AC-ID's chain is separate
-        for ac_id in ['AC-FIX-001-02', 'AC-FIX-001-03']:
-            if ac_id in ac_entries:
-                ac_chain = ac_entries[ac_id]
-                
-                for i, (op, prev_hash, entry_hash) in enumerate(ac_chain):
-                    if i == 0:
-                        # First entry should have empty previous_hash
-                        assert prev_hash == "", f"{ac_id} first entry should have empty previous_hash"
-                    else:
-                        # Subsequent entries should link to prior entry in SAME AC-ID
-                        prior_hash = ac_chain[i - 1][2]  # Prior entry's entry_hash
-                        assert prev_hash == prior_hash, (
-                            f"{ac_id}: Entry {i} should link to prior entry in same AC-ID"
-                        )
+        # Validate GLOBAL hash chain (each entry links to immediately prior entry)
+        for i, (entry_id, ac_id, op, prev_hash, entry_hash) in enumerate(entries):
+            if i == 0:
+                # First entry should have empty previous_hash (GENESIS)
+                assert prev_hash == "", f"Entry {i} (GENESIS) should have empty previous_hash"
+            else:
+                # Subsequent entries should link to PRIOR entry (globally, not per AC-ID)
+                prior_entry_hash = entries[i - 1][4]  # Prior entry's entry_hash
+                assert prev_hash == prior_entry_hash, (
+                    f"Entry {i} should link to prior entry (global chain)"
+                )
         
         conn.close()
     

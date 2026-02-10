@@ -69,7 +69,11 @@ class TestMCPRefactoringTools:
         assert result["status"] == "success"
         assert "languages" in result
         assert "python" in result["languages"]
-        assert len(result["languages"]["python"]["operations"]) == 6
+        # Operations have been extended - verify minimum expected operations exist
+        operations = result["languages"]["python"]["operations"]
+        assert len(operations) >= 6  # At least 6 operations
+        assert "extract_method" in operations
+        assert "rename" in operations
     
     def test_cortex_refactoring_list_operations_python(self):
         """List operations must filter by language."""

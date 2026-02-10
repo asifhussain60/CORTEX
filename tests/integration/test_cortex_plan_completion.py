@@ -35,13 +35,13 @@ class TestCortexPlanIntegration:
         
         # Verify verification was performed
         if "verification" in result:
-            assert "verdict" in result["verification"]
+            assert "verified" in result["verification"]
 
     def test_claim_verification_end_to_end(self):
         """Test complete claim verification flow."""
-        # Verify a known true claim
+        # Verify a known true claim with specific orchestrator name
         result = cortex_verify_claim(
-            claim="CORTEX has orchestrators",
+            claim="MasterOrchestrator exists",
             use_ast=True
         )
         

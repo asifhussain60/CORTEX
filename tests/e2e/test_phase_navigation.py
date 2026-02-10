@@ -10,7 +10,17 @@ TDD RED Phase: Tests written before implementation
 
 import pytest
 from pathlib import Path
-from playwright.sync_api import Page, expect
+
+# Check if Playwright is available
+try:
+    from playwright.sync_api import Page, expect
+    PLAYWRIGHT_AVAILABLE = True
+except ImportError:
+    PLAYWRIGHT_AVAILABLE = False
+    Page = None  # type placeholder
+
+
+pytestmark = pytest.mark.skipif(not PLAYWRIGHT_AVAILABLE, reason="Playwright not installed")
 
 
 @pytest.fixture

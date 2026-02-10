@@ -6,7 +6,51 @@ Exposes TruthVerificationEngine for external validation.
 """
 
 from typing import Dict, Any, Optional, Tuple
-from cortex.brain.verification.truth_verification_engine import TruthVerificationEngine
+from cortex.brain.verification.truth_verification_engine import TruthVerificationEngine, ClaimType
+
+
+def infer_claim_type(claim: str) -> ClaimType:
+    """
+    Infer claim type from natural language claim.
+    
+    Args:
+        claim: Natural language claim
+        
+    Returns:
+        Inferred ClaimType
+    """
+    claim_lower = claim.lower()
+    
+    # Check for specific orchestrator patterns (e.g., "TDDOrchestrator exists")
+    import re
+    orchestrator_pattern = re.search(r'(\w+orchestrator)', claim_lower)
+    
+    if orchestrator_pattern:
+        if "exists" in claim_lower or "has" in claim_lower:
+            return ClaimType.ORCHESTRATOR_EXISTS
+        return ClaimType.ORCHESTRATOR_CAPABILITY
+    elif "wiring" in claim_lower or "config" in claim_lower:
+        return ClaimType.WIRING_CONFIG
+    elif "test" in claim_lower and "coverage" in claim_lower:
+        return ClaimType.TEST_COVERAGE
+    elif "file" in claim_lower and "exists" in claim_lower:
+        return ClaimType.FILE_EXISTS
+    elif "function" in claim_lower:
+        return ClaimType.FUNCTION_EXISTS
+    elif "class" in claim_lower:
+        return ClaimType.CLASS_EXISTS
+    elif "mcp" in claim_lower and "tool" in claim_lower:
+        return ClaimType.MCP_TOOL
+    elif "git" in claim_lower:
+        return ClaimType.GIT_HISTORY
+    else:
+        # Default to class/function exists for general "X exists" patterns
+        if "exists" in claim_lower:
+            return ClaimType.CLASS_EXISTS
+        # Generic orchestrator check for broad claims about orchestrators
+        if "orchestrator" in claim_lower:
+            return ClaimType.ORCHESTRATOR_EXISTS
+        return ClaimType.WIRING_CONFIG
 
 
 def cortex_verify_claim(
@@ -52,24 +96,38 @@ def cortex_verify_claim(
         # Initialize verification engine
         engine = TruthVerificationEngine()
         
-        # Prepare verification request
-        verification_request = {
-            "claim": claim,
+        # Infer claim type from claim text
+        claim_type = infer_claim_type(claim)
+        
+        # Prepare context
+        context = {
             "file_path": file_path,
             "scope": scope,
             "use_ast": use_ast
         }
         
-        # Execute verification
-        result_obj = engine.verify_claim(verification_request)
+        # Execute verification with proper signature
+        result_obj = engine.verify_claim(claim, claim_type, context)
         
-        # Unwrap Result object
-        if hasattr(result_obj, 'is_ok') and result_obj.is_ok():
-            raw_result = result_obj.unwrap()
-        elif hasattr(result_obj, '__dict__'):
-            raw_result = result_obj.__dict__
-        else:
-            raw_result = result_obj
+        # Convert VerificationResult to dict for formatting
+        raw_result = {
+            "claim": result_obj.claim,
+            "status": result_obj.status.value,
+            "verdict": result_obj.status.value,  # Map status to verdict
+            "confidence": result_obj.confidence,
+            "evidence": [
+                {
+                    "source_type": e.source_type,
+                    "file_path": e.file_path,
+                    "line_number": e.line_number,
+                    "content": getattr(e, 'content', None),
+                    "description": e.description
+                }
+                for e in result_obj.evidence
+            ],
+            "explanation": result_obj.explanation,
+            "recommendations": result_obj.recommendations
+        }
         
         # Format response
         formatted_result = format_verification_result(raw_result)
