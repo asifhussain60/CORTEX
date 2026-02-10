@@ -1,0 +1,452 @@
+# Phase 69: Runtime Correlation Engine
+# Authority: CORTEX Architect Analysis (chat01.md gap assessment)
+# Created: 2026-02-09
+# AC-ID: AC-PHASE69-001
+
+metadata:
+  phase_id: "phase-69"
+  title: "Runtime Correlation Engine"
+  status: "planned"
+  priority: "P2"
+  created: "2026-02-09"
+  updated: "2026-02-09"
+  estimated_duration: "5-6 weeks"
+  roi_score: 0.78
+  execution_order: 20
+  test_target: 85
+  coverage_target: 85
+  autonomous_execution: true
+  approval_required: false
+  cross_cutting: true
+  breaking_changes: false
+  production_blocker: false
+
+overview:
+  vision: |
+    Complete CORTEX reverse-engineering capability with runtime validation — 
+    confirming "what actually happens" vs. "what code says should happen." 
+    Integrate OpenTelemetry traces, DI container runtime inspection, SQL 
+    profiling, and test execution correlation to validate static analysis 
+    against live system behavior.
+    
+    Addresses Lens 2 (Runtime Truth) from chat01.md: "Goal: confirm real call 
+    paths, object lifetimes, and cross-layer flows that static analysis misses."
+
+  problem_statement: |
+    CORTEX static analysis (Phases 66-68) provides strong architectural 
+    intelligence but cannot validate runtime behavior:
+    
+    1. Static DI graphs may include dead registrations (never instantiated)
+    2. Call graphs miss dynamic dispatch and reflection-based invocations
+    3. Cannot confirm "actual implementations used" vs. "intended architecture"
+    4. Missing SQL query profiling (which endpoints trigger which queries)
+    5. No test coverage correlation (which tests exercise which code paths)
+    6. Cannot detect performance hot paths from live system data
+    7. Dependency graphs may show obsolete or unused code paths
+    
+    Intelligence gap: CORTEX sees code structure but not runtime behavior.
+    
+    chat01.md insight: "Runtime truth (what actually happens): .NET: 
+    OpenTelemetry traces (or APM) to capture request → controller → service 
+    → db calls. Log correlation IDs; capture endpoint, service method, SQL 
+    text hash, latency. DI container inspection: Export registrations 
+    (interfaces → concrete types) at startup."
+
+  expected_outcomes:
+    - "OpenTelemetry trace correlation (request → controller → service → DB)"
+    - ".NET DI container runtime inspection (startup registration export)"
+    - "Python DI container inspection (FastAPI/Flask dependency providers)"
+    - "SQL query profiling integration (SQL Server Extended Events, PostgreSQL)"
+    - "Test execution correlation (pytest traces → code coverage → call graph)"
+    - "Performance hot path detection (latency + frequency analysis)"
+    - "Dead code identification (registered but never instantiated)"
+    - "Runtime vs. static validation (confirm architectural assumptions)"
+    - "Live system analysis mode (production trace ingestion)"
+    - "Integration with Phases 66-68 knowledge graph (runtime-enriched)"
+    - "MCP tool: cortex_runtime_validate"
+
+roi_analysis:
+  cost: "35-42 hours (5-6 weeks part-time)"
+  impact: |
+    Immediate:
+    - Runtime validation: Confirm "actual vs intended" architecture
+    - Dead code detection: Identify unused DI registrations
+    - Performance analysis: Hot path identification from live data
+    
+    Medium-term:
+    - Test coverage gaps: Which code paths lack test validation
+    - Refactoring safety: Runtime-validated dependency changes
+    - Production debugging: Live trace analysis
+    
+    Long-term:
+    - Architectural drift detection: Runtime vs. design alignment
+    - Capacity planning: Latency/throughput analysis
+    - Incident investigation: Trace-driven root cause analysis
+    
+    Strategic: Completes chat01.md "3-lens triangulation" (static + runtime + data).
+    
+  risk_mitigation: |
+    - OpenTelemetry is industry-standard (proven, well-documented)
+    - Runtime inspection is non-invasive (read-only analysis)
+    - Incremental delivery: Value every 1-1.5 weeks per stage
+    - Optional feature: Core static analysis (Phases 66-68) works without runtime
+    - Privacy-safe: No PII collection, only structural data
+
+dependencies:
+  required:
+    - "phase-66: LENS Knowledge Graph & Domain Intelligence (S2+ complete)"
+  optional:
+    - "phase-67: .NET Roslyn Deep Intelligence (enhances .NET runtime correlation)"
+    - "phase-68: Angular Deep Analysis (enhances frontend-backend correlation)"
+  blocks:
+    - "Production runtime validation"
+    - "Performance hot path analysis"
+    - "Dead code elimination at scale"
+
+governance:
+  core_rules:
+    - "CORE-008: TDD — tests before implementation for every stage"
+    - "CORE-011: Type hints mandatory on all new/modified functions"
+    - "CORE-012: Google-style docstrings on all public methods"
+    - "CORE-035: Single canonical implementation — no duplicate analyzers"
+    - "CORE-027: Audit trail — AC_START/AC_COMPLETE markers"
+    - "CORE-030: Implementation Truth — verify code not docs"
+  enforcement: "EnforcementOrchestrator 7-agent pre-execution gate"
+  tdd_required: true
+
+# ============================================================================
+# STAGE BREAKDOWN
+# ============================================================================
+
+stages:
+  # --------------------------------------------------------------------------
+  # STAGE 1: OpenTelemetry Trace Correlation (1.5-2 weeks)
+  # --------------------------------------------------------------------------
+  - id: "S1"
+    name: "OpenTelemetry Trace Correlation"
+    description: |
+      Integrate OpenTelemetry distributed tracing to capture and correlate 
+      runtime call paths across application layers.
+    
+    deliverables:
+      - "OpenTelemetry trace ingestion pipeline"
+      - "Span correlation engine (parent-child relationship analysis)"
+      - "Call path reconstruction (request → controller → service → DB)"
+      - "Latency analysis (per-span timing + critical path detection)"
+      - "Frequency analysis (most-called endpoints/methods)"
+      - "Error trace correlation (exception → span → code location)"
+      - "Integration with Phase 66 knowledge graph (runtime edges)"
+      
+    acceptance_criteria:
+      - "Ingest OpenTelemetry traces from .NET/Python applications"
+      - "Reconstruct call paths: HTTP request → UserController → UserService → DB"
+      - "Calculate span latencies: P50/P95/P99 per operation"
+      - "Identify most-called endpoints (frequency ranking)"
+      - "Correlate errors to code locations via stack traces"
+      - "Add runtime edges to knowledge graph: 'actually_calls' vs. 'can_call'"
+      - "25+ tests covering trace ingestion and correlation"
+      - "85%+ test coverage"
+      - "Integration test: Analyze CORTEX MCP server traces (real-world)"
+      
+    technical_approach: |
+      1. Set up OpenTelemetry collector endpoint (OTLP protocol)
+      2. Ingest traces from instrumented applications
+      3. Parse span data: trace_id, span_id, parent_span_id, operation_name
+      4. Reconstruct call trees via parent-child relationships
+      5. Calculate latency: span end_time - start_time
+      6. Aggregate frequency: count spans per operation
+      7. Add runtime edges to knowledge graph
+      8. Output: RuntimeCallGraph with validated call paths
+      
+    files_to_create:
+      - "cortex_lens/runtime/otel_trace_ingestion.py"
+      - "cortex_lens/runtime/span_correlator.py"
+      - "cortex_lens/runtime/call_path_reconstructor.py"
+      - "cortex_lens/runtime/latency_analyzer.py"
+      - "cortex_lens/models/runtime_call_graph.py"
+      - "tests/unit/cortex_lens/runtime/test_otel_ingestion.py"
+      - "tests/unit/cortex_lens/runtime/test_span_correlation.py"
+      - "tests/integration/cortex_lens/test_runtime_correlation_e2e.py"
+      
+    tests:
+      - "test_ingest_otel_trace_from_dotnet"
+      - "test_parse_span_parent_child_relationship"
+      - "test_reconstruct_http_to_db_call_path"
+      - "test_calculate_span_latency_p95"
+      - "test_identify_most_called_endpoint"
+      - "test_correlate_error_to_code_location"
+      - "test_add_runtime_edge_to_knowledge_graph"
+      - "test_integration_cortex_mcp_traces"
+      
+    estimated_effort: "12-16 hours"
+    depends_on: []
+
+  # --------------------------------------------------------------------------
+  # STAGE 2: DI Container Runtime Inspection (1.5-2 weeks)
+  # --------------------------------------------------------------------------
+  - id: "S2"
+    name: "DI Container Runtime Inspection"
+    description: |
+      Export and analyze DI container registrations at runtime to validate 
+      "actual implementations used" vs. static analysis.
+    
+    deliverables:
+      - ".NET Core DI container inspector (startup registration export)"
+      - "Ninject/Autofac container inspectors"
+      - "Python FastAPI/Flask dependency provider inspector"
+      - "Registration vs. usage validator"
+      - "Dead registration detector (declared but never resolved)"
+      - "Lifetime scope validator (singleton correctness check)"
+      - "Integration with Phase 67 static DI graph (runtime validation)"
+      
+    acceptance_criteria:
+      - "Export .NET Core DI registrations: List<(Interface, Implementation, Lifetime)>"
+      - "Export Ninject bindings: Bind<I>.To<C>() runtime resolution"
+      - "Export Python FastAPI dependencies: Depends() resolution graph"
+      - "Compare runtime registrations vs. static analysis: 95%+ match"
+      - "Identify dead registrations: 'ILegacyService registered but never resolved'"
+      - "Validate singleton lifetime: 'CacheService should be singleton but is transient'"
+      - "20+ tests covering DI container inspection"
+      - "85%+ test coverage"
+      - "Integration test: KSESSIONS Ninject container validation"
+      
+    technical_approach: |
+      1. Hook .NET Core Startup.ConfigureServices() to dump registrations
+      2. Use reflection to inspect Ninject container at runtime
+      3. Hook FastAPI app dependency injection to export providers
+      4. Parse runtime registration data: service type, implementation, lifetime
+      5. Compare with Phase 67 static DI graph
+      6. Identify mismatches: registered but unused, unexpected implementations
+      7. Output: RuntimeDIReport with validation results
+      
+    files_to_create:
+      - "cortex_lens/runtime/dotnet_di_inspector.py"
+      - "cortex_lens/runtime/python_di_inspector.py"
+      - "cortex_lens/runtime/di_validator.py"
+      - "cortex_lens/runtime/dead_registration_detector.py"
+      - "cortex_lens/models/runtime_di_report.py"
+      - "tests/unit/cortex_lens/runtime/test_dotnet_di_inspection.py"
+      - "tests/unit/cortex_lens/runtime/test_di_validation.py"
+      - "tests/integration/cortex_lens/test_di_runtime_e2e.py"
+      
+    tests:
+      - "test_export_dotnet_core_registrations"
+      - "test_inspect_ninject_container"
+      - "test_export_fastapi_dependencies"
+      - "test_validate_runtime_vs_static_di"
+      - "test_detect_dead_registration"
+      - "test_validate_singleton_lifetime"
+      - "test_integration_ksessions_di_validation"
+      
+    estimated_effort: "12-16 hours"
+    depends_on: []
+
+  # --------------------------------------------------------------------------
+  # STAGE 3: SQL Query Profiling + Test Correlation (1.5-2 weeks)
+  # --------------------------------------------------------------------------
+  - id: "S3"
+    name: "SQL Query Profiling + Test Correlation"
+    description: |
+      Integrate SQL profiling to capture runtime queries and correlate test 
+      execution with code coverage and call graphs.
+    
+    deliverables:
+      - "SQL Server Extended Events integration"
+      - "PostgreSQL pg_stat_statements analyzer"
+      - "Query-to-endpoint correlation (which APIs trigger which queries)"
+      - "Slow query detector (latency threshold alerts)"
+      - "Pytest trace correlation (test → code coverage → call graph)"
+      - "Test coverage gap identifier (uncovered code paths)"
+      - "Integration with Phase 66 knowledge graph (test edges)"
+      
+    acceptance_criteria:
+      - "Capture SQL queries from Extended Events (SQL Server)"
+      - "Parse pg_stat_statements for query frequency/latency (PostgreSQL)"
+      - "Correlate queries to endpoints: '/api/users GET → SELECT * FROM Users'"
+      - "Detect slow queries: queries >100ms with execution plan hints"
+      - "Trace pytest execution: test_user_creation → UserService.create() → DB"
+      - "Identify coverage gaps: 'UserService.delete() never tested'"
+      - "20+ tests covering SQL profiling and test correlation"
+      - "85%+ test coverage"
+      - "Integration test: KSESSIONS sp_SaveAhadeesNew profiling"
+      
+    technical_approach: |
+      1. Configure SQL Server Extended Events for query capture
+      2. Query pg_stat_statements for PostgreSQL metrics
+      3. Correlate SQL queries with trace span_ids (OpenTelemetry)
+      4. Parse pytest --cov output for coverage data
+      5. Instrument pytest with CORTEX_DEBUG markers (existing)
+      6. Map test execution → code coverage → call graph
+      7. Output: RuntimeQueryReport + TestCoverageReport
+      
+    files_to_create:
+      - "cortex_lens/runtime/sql_profiler.py"
+      - "cortex_lens/runtime/query_correlator.py"
+      - "cortex_lens/runtime/pytest_tracer.py"
+      - "cortex_lens/runtime/coverage_analyzer.py"
+      - "cortex_lens/models/runtime_query_report.py"
+      - "tests/unit/cortex_lens/runtime/test_sql_profiling.py"
+      - "tests/unit/cortex_lens/runtime/test_pytest_correlation.py"
+      - "tests/integration/cortex_lens/test_runtime_validation_e2e.py"
+      
+    tests:
+      - "test_capture_sql_query_from_extended_events"
+      - "test_parse_pg_stat_statements"
+      - "test_correlate_query_to_endpoint"
+      - "test_detect_slow_query_100ms"
+      - "test_trace_pytest_execution"
+      - "test_identify_coverage_gap"
+      - "test_integration_ksessions_sql_profiling"
+      
+    estimated_effort: "12-16 hours"
+    depends_on: ["S1"]
+
+  # --------------------------------------------------------------------------
+  # STAGE 4: Runtime Validation Dashboard + MCP Tool (1 week)
+  # --------------------------------------------------------------------------
+  - id: "S4"
+    name: "Runtime Validation Dashboard + MCP Tool"
+    description: |
+      Build runtime validation dashboard and expose runtime analysis via MCP 
+      tool for integrated static+runtime intelligence.
+    
+    deliverables:
+      - "Runtime validation dashboard (HTML/JSON reports)"
+      - "Static vs. runtime diff analyzer"
+      - "Dead code report (unused registrations + unreachable paths)"
+      - "Performance hot path visualizer"
+      - "MCP tool: cortex_runtime_validate"
+      - "Live system analysis mode (production trace ingestion)"
+      - "Integration with Phase 66 knowledge graph (runtime-enriched nodes)"
+      
+    acceptance_criteria:
+      - "Generate runtime validation dashboard: static vs. runtime comparison"
+      - "Display dead code report: 'ILegacyService: registered but never used'"
+      - "Visualize hot paths: 'UserService.getAll() called 1000x, avg 45ms'"
+      - "Show coverage gaps: 'UserService.delete() never tested or traced'"
+      - "MCP tool returns runtime validation via cortex_runtime_validate"
+      - "Support live production trace ingestion (OpenTelemetry collector)"
+      - "20+ tests covering dashboard and MCP tool"
+      - "85%+ test coverage"
+      - "Integration test: CORTEX MCP server runtime validation"
+      
+    technical_approach: |
+      1. Aggregate data from Stages 1-3 (traces, DI, SQL, tests)
+      2. Compare static analysis (Phases 66-68) with runtime data
+      3. Generate HTML dashboard with visualizations
+      4. Identify discrepancies: dead code, unexpected implementations
+      5. Build MCP tool wrapper for Copilot Chat
+      6. Support live mode: continuous trace ingestion
+      7. Output: RuntimeValidationDashboard + MCP tool
+      
+    files_to_create:
+      - "cortex_lens/runtime/validation_dashboard.py"
+      - "cortex_lens/runtime/diff_analyzer.py"
+      - "cortex_lens/runtime/dead_code_reporter.py"
+      - "cortex/mcp/tools/runtime_validate_tool.py"
+      - "tests/unit/cortex_lens/runtime/test_validation_dashboard.py"
+      - "tests/unit/cortex_lens/runtime/test_diff_analyzer.py"
+      - "tests/integration/cortex/mcp/test_runtime_validate_tool.py"
+      
+    tests:
+      - "test_generate_runtime_validation_dashboard"
+      - "test_compare_static_vs_runtime_di"
+      - "test_identify_dead_code"
+      - "test_visualize_performance_hot_paths"
+      - "test_mcp_tool_runtime_validation"
+      - "test_live_production_trace_ingestion"
+      - "test_integration_cortex_mcp_validation"
+      
+    estimated_effort: "7-10 hours"
+    depends_on: ["S1", "S2", "S3"]
+
+# ============================================================================
+# COMPLETION CRITERIA
+# ============================================================================
+
+completion_criteria:
+  technical:
+    - "All 85 tests passing with 85%+ coverage"
+    - "OpenTelemetry trace ingestion and correlation functional"
+    - "DI container runtime inspection working (.NET + Python)"
+    - "SQL query profiling operational (SQL Server + PostgreSQL)"
+    - "Test execution correlation with code coverage"
+    - "Runtime validation dashboard generating reports"
+    - "MCP tool cortex_runtime_validate operational"
+    - "Static vs. runtime validation <5% discrepancy"
+    - "CORTEX MCP server runtime analysis successful"
+    
+  documentation:
+    - "Runtime correlation guide in docs/"
+    - "DI container inspection examples"
+    - "SQL profiling integration guide"
+    - "Runtime validation dashboard user guide"
+    - "Phase 69 completion report"
+    
+  governance:
+    - "All CORE rules applied (008, 011, 012, 027, 030, 035)"
+    - "AC markers on all implementations"
+    - "No CORTEX_DEBUG markers remaining"
+    - "Registry index.yaml updated with phase status"
+    
+  integration:
+    - "Phase 66 knowledge graph enriched with runtime edges"
+    - "Phase 67 .NET DI graph validated with runtime data"
+    - "Phase 68 Angular analysis validated with browser traces (future)"
+
+# ============================================================================
+# SUCCESS METRICS
+# ============================================================================
+
+success_metrics:
+  quantitative:
+    - "85/85 tests passing (100%)"
+    - "85%+ test coverage achieved"
+    - "Runtime validation accuracy: 95%+ match with static analysis"
+    - "Dead code detection: 10-20 unused registrations identified"
+    - "CORTEX MCP server analysis: 100% success"
+    
+  qualitative:
+    - "OpenTelemetry trace correlation validates call paths"
+    - "DI container inspection confirms actual implementations"
+    - "SQL profiling identifies query-endpoint relationships"
+    - "Test correlation reveals coverage gaps"
+    - "Runtime validation enables confident refactoring"
+    
+  business:
+    - "Dead code elimination (unused registrations removed)"
+    - "Performance optimization (hot path identification)"
+    - "Incident investigation (trace-driven root cause)"
+    - "Architectural alignment (runtime validates design)"
+
+# ============================================================================
+# REFERENCES
+# ============================================================================
+
+references:
+  phases:
+    - "phase-66: LENS Knowledge Graph & Domain Intelligence"
+    - "phase-67: .NET Roslyn Deep Intelligence"
+    - "phase-68: Angular Deep Analysis"
+  
+  documents:
+    - "_workspaces/.chats/chat01.md (runtime truth patterns)"
+    - "cortex-architect.prompt.md v15.3"
+    - "docs/05-lens-protocol/ (LENS architecture)"
+  
+  external:
+    - "OpenTelemetry documentation (OTLP protocol)"
+    - "SQL Server Extended Events documentation"
+    - "PostgreSQL pg_stat_statements"
+    - "pytest coverage documentation"
+
+# ============================================================================
+# AC MARKERS
+# ============================================================================
+
+audit_trail:
+  - ac_id: "AC-PHASE69-001"
+    operation: "PLAN"
+    timestamp: "2026-02-09T15:45:00Z"
+    description: "Phase 69 created: Runtime Correlation Engine"
+    author: "CORTEX Architect"

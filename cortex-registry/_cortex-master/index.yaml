@@ -7,7 +7,7 @@ version: "1.1"
 registry_name: "_cortex-master"
 description: "CORTEX self-development planning with phase tracking and enhancement pipeline"
 last_updated: "2026-02-09T15:00:00Z"
-revision: "Phase 67 Created: .NET Roslyn Deep Intelligence | 54/58 phases done (93.1%)"
+revision: "Phases 67-69 Created: .NET Roslyn + Angular + Runtime Correlation | 54/60 phases done (90%)"
 
 # Active Phases (Current Development)
 active_phases:
@@ -48,6 +48,51 @@ active_phases:
     roi_score: 0.87
     estimated_duration: "6-8 weeks"
     test_target: 95
+    coverage_target: 85
+    stages_complete: "0/4"
+    description: |
+      ⚪ PLANNED: .NET semantic analysis via Microsoft Roslyn.
+      - Closes 35% capability gap: 55% → 90% (.NET deep intelligence)
+      - DI container registration analysis (Ninject, Autofac, .NET Core)
+      - EF Core full mapping lineage (DbContext → Entity → Table → DTO → API)
+      - Cross-assembly type resolution (semantic model)
+      - Integration with Phase 66 knowledge graph
+    depends_on:
+      - "phase-55"
+      - "phase-66"
+
+  - id: "phase-68"
+    name: "Angular Deep Analysis"
+    file: "phases/active/phase-68-angular-deep-analysis.yaml"
+    created: "2026-02-09"
+    status: "planned"
+    priority: "P2"
+    execution_order: 19
+    roi_score: 0.82
+    estimated_duration: "4-5 weeks"
+    test_target: 75
+    coverage_target: 85
+    stages_complete: "0/4"
+    description: |
+      ⚪ PLANNED: Angular TypeScript AST + DI graph + routing analysis.
+      - Closes 45% capability gap: 40% → 85% (Angular deep intelligence)
+      - TypeScript AST parsing with Angular decorator extraction
+      - DI graph builder (providers, injectables, injection chains)
+      - Route-to-component mapper + HTTP client tracer
+      - Integration with Phase 66 knowledge graph
+    depends_on:
+      - "phase-66"
+
+  - id: "phase-69"
+    name: "Runtime Correlation Engine"
+    file: "phases/active/phase-69-runtime-correlation-engine.yaml"
+    created: "2026-02-09"
+    status: "planned"
+    priority: "P2"
+    execution_order: 20
+    roi_score: 0.78
+    estimated_duration: "5-6 weeks"
+    test_target: 85
     coverage_target: 90
     tests_passing: 0
     stages_complete: "0/4"

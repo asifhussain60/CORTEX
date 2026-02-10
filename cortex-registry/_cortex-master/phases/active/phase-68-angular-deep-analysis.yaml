@@ -1,0 +1,459 @@
+# Phase 68: Angular Deep Analysis
+# Authority: CORTEX Architect Analysis (chat01.md gap assessment)
+# Created: 2026-02-09
+# AC-ID: AC-PHASE68-001
+
+metadata:
+  phase_id: "phase-68"
+  title: "Angular Deep Analysis"
+  status: "planned"
+  priority: "P1"
+  created: "2026-02-09"
+  updated: "2026-02-09"
+  estimated_duration: "4-5 weeks"
+  roi_score: 0.82
+  execution_order: 19
+  test_target: 75
+  coverage_target: 90
+  autonomous_execution: true
+  approval_required: false
+  cross_cutting: true
+  breaking_changes: false
+  production_blocker: false
+
+overview:
+  vision: |
+    Transform CORTEX Angular/TypeScript analysis from basic module detection 
+    to deep architectural intelligence through DI graph extraction, component 
+    hierarchy analysis, and API-to-backend traceability. Enable CORTEX to 
+    understand frontend-backend relationships as architects do: route → 
+    component → service → HTTP client → API endpoint → backend service.
+    
+    Addresses Angular gap from chat01.md analysis: "Parse TypeScript AST (or 
+    use tooling) to extract module boundaries, component/service dependencies, 
+    DI graph (providers), routing map → feature areas."
+
+  problem_statement: |
+    Current Angular LENS provides basic module detection but lacks architectural 
+    depth for modern Angular applications:
+    
+    1. No DI graph: Cannot export providers/injectables dependency chains
+    2. Missing component hierarchy: Parent-child relationships unclear
+    3. No route-to-component mapping: Feature area boundaries unknown
+    4. Incomplete service usage: Which components inject which services?
+    5. No HTTP client analysis: Cannot trace API endpoint calls
+    6. Missing state management: NgRx/Akita/RxJS patterns undetected
+    7. Token-inefficient: Requires full codebase scan for relationship queries
+    
+    Intelligence gap: CORTEX sees Angular syntax but not application architecture.
+    
+    chat01.md insight: "Angular: Parse TypeScript AST to extract module 
+    boundaries, component/service dependencies, DI graph (providers), routing 
+    map → feature areas (this is often closer to domain than folder names)."
+
+  expected_outcomes:
+    - "TypeScript AST parser with Angular decorator analysis"
+    - "DI graph extractor (providers, injectables, constructor injection)"
+    - "Component hierarchy builder (parent-child, host-embedded)"
+    - "Route-to-component mapper with lazy-loaded module detection"
+    - "Service usage analyzer (which components inject which services)"
+    - "HTTP client call tracer (service → HttpClient → API endpoint)"
+    - "State management pattern detector (NgRx, Akita, RxJS)"
+    - "Feature area identifier (routing-based domain boundaries)"
+    - "Angular-to-Backend lineage (route → API endpoint → .NET service)"
+    - "Integration with Phase 66 knowledge graph (unified frontend+backend)"
+    - "MCP tool: cortex_angular_analyze"
+
+roi_analysis:
+  cost: "28-35 hours (4-5 weeks part-time)"
+  impact: |
+    Immediate:
+    - Angular codebase understanding: 40% → 85% capability
+    - Frontend-backend traceability: route → API → database full path
+    - DI graph validation: "Which components depend on UserService?"
+    
+    Medium-term:
+    - Refactoring safety (validated component dependencies)
+    - Dead code detection (unused components, services)
+    - Feature area documentation (routing-based boundaries)
+    
+    Long-term:
+    - Cross-stack knowledge graph (Angular + .NET + Python unified)
+    - End-to-end flow visualization (UI → API → DB)
+    - Migration planning (AngularJS → Angular with dependency tracking)
+    
+    Strategic: Closes 45% Angular capability gap identified in chat01.md.
+    
+  risk_mitigation: |
+    - TypeScript AST parsing is well-established (ts-morph library)
+    - Angular decorators follow consistent patterns (stable API)
+    - Incremental delivery: Value every 1-1.5 weeks per stage
+    - Language-neutral patterns: Applicable to React/Vue later
+    - Fallback: Basic module detection remains functional
+
+dependencies:
+  required:
+    - "phase-66: LENS Knowledge Graph & Domain Intelligence (S2 complete)"
+  optional:
+    - "phase-67: .NET Roslyn Deep Intelligence (enhances backend lineage)"
+  blocks:
+    - "Frontend-backend architectural reasoning"
+    - "Feature area boundary documentation"
+    - "API endpoint usage analysis"
+
+governance:
+  core_rules:
+    - "CORE-008: TDD — tests before implementation for every stage"
+    - "CORE-011: Type hints mandatory on all new/modified functions"
+    - "CORE-012: Google-style docstrings on all public methods"
+    - "CORE-035: Single canonical implementation — no duplicate analyzers"
+    - "CORE-027: Audit trail — AC_START/AC_COMPLETE markers"
+    - "CORE-030: Implementation Truth — verify code not docs"
+  enforcement: "EnforcementOrchestrator 7-agent pre-execution gate"
+  tdd_required: true
+
+# ============================================================================
+# STAGE BREAKDOWN
+# ============================================================================
+
+stages:
+  # --------------------------------------------------------------------------
+  # STAGE 1: TypeScript AST + Angular Decorator Analysis (1-1.5 weeks)
+  # --------------------------------------------------------------------------
+  - id: "S1"
+    name: "TypeScript AST + Angular Decorator Analysis"
+    description: |
+      Establish TypeScript AST parser with Angular-specific decorator 
+      extraction (@Component, @Injectable, @NgModule, etc.).
+    
+    deliverables:
+      - "TypeScript AST parser (ts-morph integration)"
+      - "Angular decorator extractor (@Component, @Injectable, @Directive, etc.)"
+      - "Metadata parser (selector, providers, imports, declarations)"
+      - "Class member analyzer (constructor parameters, properties, methods)"
+      - "Import statement resolver (module dependencies)"
+      - "Generic type analyzer (Observable<T>, Subject<T>)"
+      - "Integration with existing LENS infrastructure"
+      
+    acceptance_criteria:
+      - "Parse TypeScript files with Angular decorators successfully"
+      - "Extract @Component metadata: selector, templateUrl, styleUrls, providers"
+      - "Extract @Injectable metadata: providedIn scope"
+      - "Parse @NgModule: imports, declarations, providers, exports"
+      - "Resolve constructor injection: constructor(private userService: UserService)"
+      - "Identify generic types: Observable<User[]>, BehaviorSubject<string>"
+      - "20+ tests covering Angular decorator patterns"
+      - "90%+ test coverage"
+      - "Integration test: Analyze KSESSIONS Etymology module (from chat01.md)"
+      
+    technical_approach: |
+      1. Use ts-morph library for TypeScript AST parsing
+      2. Identify Angular decorators via AST node types
+      3. Extract decorator arguments (metadata objects)
+      4. Parse class constructors for DI parameters
+      5. Resolve import paths to module/service dependencies
+      6. Handle generic types (Observable, Promise, etc.)
+      7. Output: AngularAnalysisResult with components/services/modules
+      
+    files_to_create:
+      - "cortex_lens/angular/typescript_parser.py"
+      - "cortex_lens/angular/decorator_extractor.py"
+      - "cortex_lens/angular/metadata_parser.py"
+      - "cortex_lens/models/angular_analysis_result.py"
+      - "tests/unit/cortex_lens/angular/test_typescript_parser.py"
+      - "tests/unit/cortex_lens/angular/test_decorator_extractor.py"
+      - "tests/integration/cortex_lens/test_angular_analysis_e2e.py"
+      
+    tests:
+      - "test_parse_typescript_file_with_decorators"
+      - "test_extract_component_metadata"
+      - "test_extract_injectable_metadata"
+      - "test_parse_ngmodule_imports"
+      - "test_resolve_constructor_injection"
+      - "test_identify_generic_observable_type"
+      - "test_import_statement_resolution"
+      - "test_integration_ksessions_etymology_module"
+      
+    estimated_effort: "8-12 hours"
+    depends_on: []
+
+  # --------------------------------------------------------------------------
+  # STAGE 2: DI Graph + Component Hierarchy (1.5-2 weeks)
+  # --------------------------------------------------------------------------
+  - id: "S2"
+    name: "DI Graph + Component Hierarchy"
+    description: |
+      Build Angular dependency injection graph with provider resolution 
+      and component parent-child hierarchy analysis.
+    
+    deliverables:
+      - "DI graph builder (provider → injectable resolution)"
+      - "Provider scope analyzer (root, module, component-level)"
+      - "Constructor injection chain tracker"
+      - "Component hierarchy builder (parent-child via routing/templates)"
+      - "Service usage matrix (which components inject which services)"
+      - "Circular dependency detector"
+      - "Dead service detector (declared but never injected)"
+      - "Integration with Phase 66 knowledge graph"
+      
+    acceptance_criteria:
+      - "Build DI graph: UserService providedIn 'root' → injected by 3 components"
+      - "Detect provider scopes: module-level vs. component-level"
+      - "Resolve injection chains: Component → Service → HttpClient"
+      - "Build component hierarchy from routing and template refs"
+      - "Generate service usage matrix: 'UserListComponent injects [UserService, AuthService]'"
+      - "Detect circular dependencies: ServiceA → ServiceB → ServiceA"
+      - "Identify unused services (declared but never injected)"
+      - "25+ tests covering DI patterns"
+      - "90%+ test coverage"
+      - "Integration test: KSESSIONS Etymology component DI graph"
+      
+    technical_approach: |
+      1. Scan all @Injectable decorators for providers
+      2. Parse providedIn metadata: 'root', ModuleName, null
+      3. Track constructor parameters across components/services
+      4. Build directed graph: Component/Service → Injected Dependencies
+      5. Analyze routing config for component parent-child relationships
+      6. Parse template files for component refs (<app-user-list>)
+      7. Cross-reference providers with injection sites
+      8. Output: AngularDIGraph with providers + injectors + hierarchy
+      
+    files_to_create:
+      - "cortex_lens/angular/di_graph_builder.py"
+      - "cortex_lens/angular/provider_resolver.py"
+      - "cortex_lens/angular/component_hierarchy_builder.py"
+      - "cortex_lens/angular/service_usage_analyzer.py"
+      - "cortex_lens/models/angular_di_graph.py"
+      - "tests/unit/cortex_lens/angular/test_di_graph_builder.py"
+      - "tests/unit/cortex_lens/angular/test_component_hierarchy.py"
+      - "tests/integration/cortex_lens/test_angular_di_e2e.py"
+      
+    tests:
+      - "test_build_di_graph_root_provider"
+      - "test_detect_module_level_provider"
+      - "test_resolve_injection_chain"
+      - "test_build_component_hierarchy_from_routing"
+      - "test_generate_service_usage_matrix"
+      - "test_detect_circular_dependency"
+      - "test_identify_unused_service"
+      - "test_integration_ksessions_etymology_di"
+      
+    estimated_effort: "12-16 hours"
+    depends_on: ["S1"]
+
+  # --------------------------------------------------------------------------
+  # STAGE 3: Route Analysis + HTTP Client Tracing (1-1.5 weeks)
+  # --------------------------------------------------------------------------
+  - id: "S3"
+    name: "Route Analysis + HTTP Client Tracing"
+    description: |
+      Map Angular routing to components (feature area boundaries) and trace 
+      HTTP client calls to backend API endpoints.
+    
+    deliverables:
+      - "Routing config parser (Routes array analysis)"
+      - "Lazy-loaded module detector"
+      - "Feature area identifier (routing-based domain boundaries)"
+      - "HTTP client call tracer (service → HttpClient.get/post/put/delete)"
+      - "API endpoint extractor (URL patterns + HTTP methods)"
+      - "Angular-to-Backend lineage builder"
+      - "State management detector (NgRx actions, effects, reducers)"
+      - "Integration with Phase 67 .NET lineage (if available)"
+      
+    acceptance_criteria:
+      - "Map routes: '/users' → UserListComponent, '/users/:id' → UserDetailComponent"
+      - "Detect lazy loading: loadChildren: () => import('./users/users.module')"
+      - "Identify feature areas: 'users', 'orders', 'admin' (routing-based)"
+      - "Trace API calls: UserService.getUsers() → this.http.get('/api/users')"
+      - "Extract HTTP methods: GET /api/users, POST /api/users, PUT /api/users/:id"
+      - "Build lineage: Angular route → Component → Service → API → .NET Controller"
+      - "Detect NgRx patterns: UserActions → UserEffects → UserService → API"
+      - "20+ tests covering routing and HTTP patterns"
+      - "90%+ test coverage"
+      - "Integration test: KSESSIONS Etymology route → API → backend"
+      
+    technical_approach: |
+      1. Parse app-routing.module.ts Routes array
+      2. Extract route paths, components, lazy-loaded modules
+      3. Group routes by prefix (feature areas)
+      4. Scan services for HttpClient method calls
+      5. Extract API endpoint URLs from http.get/post/put/delete
+      6. Parse HTTP method types and request/response bodies
+      7. Cross-reference with Phase 67 .NET endpoints (if available)
+      8. Output: AngularRouteMap + APICallLineage
+      
+    files_to_create:
+      - "cortex_lens/angular/routing_parser.py"
+      - "cortex_lens/angular/http_client_tracer.py"
+      - "cortex_lens/angular/feature_area_identifier.py"
+      - "cortex_lens/angular/lineage_builder.py"
+      - "cortex_lens/models/angular_route_map.py"
+      - "tests/unit/cortex_lens/angular/test_routing_parser.py"
+      - "tests/unit/cortex_lens/angular/test_http_client_tracer.py"
+      - "tests/integration/cortex_lens/test_angular_lineage_e2e.py"
+      
+    tests:
+      - "test_parse_routes_array"
+      - "test_detect_lazy_loaded_module"
+      - "test_identify_feature_areas"
+      - "test_trace_http_get_call"
+      - "test_extract_api_endpoint_url"
+      - "test_build_angular_to_backend_lineage"
+      - "test_detect_ngrx_action_effect_pattern"
+      - "test_integration_ksessions_etymology_lineage"
+      
+    estimated_effort: "8-12 hours"
+    depends_on: ["S1", "S2"]
+
+  # --------------------------------------------------------------------------
+  # STAGE 4: Knowledge Graph Integration + MCP Tool (1 week)
+  # --------------------------------------------------------------------------
+  - id: "S4"
+    name: "Knowledge Graph Integration + MCP Tool"
+    description: |
+      Integrate Angular analysis with Phase 66 knowledge graph for unified 
+      frontend-backend queries and expose via MCP tool.
+    
+    deliverables:
+      - "Knowledge graph node types: Angular-specific (Module, Component, Service, Route)"
+      - "Edge types: routes_to, injects, calls_api, lazy_loads, extends"
+      - "Cross-stack query support (Angular → .NET → Python)"
+      - "MCP tool: cortex_angular_analyze"
+      - "Query examples: 'Which components call /api/users?'"
+      - "Performance optimization: <100ms for 1-hop Angular queries"
+      - "Incremental update support (file change → delta rebuild)"
+      - "Unified documentation generator (Angular + backend together)"
+      
+    acceptance_criteria:
+      - "Add Angular nodes to Phase 66 knowledge graph"
+      - "Query: 'Which components inject UserService?' → DI graph results"
+      - "Query: 'What APIs does UserListComponent call?' → HTTP client trace"
+      - "Cross-stack: 'Trace /users route to database table' → full lineage"
+      - "MCP tool returns Angular analysis via cortex_angular_analyze"
+      - "1-hop queries execute in <100ms, 2-hop in <250ms"
+      - "Incremental rebuild: component change → rebuild affected nodes only"
+      - "10+ tests covering cross-stack queries"
+      - "90%+ test coverage"
+      - "Integration test: KSESSIONS Etymology route → API → DB unified"
+      
+    technical_approach: |
+      1. Extend Phase 66 graph schema with Angular node types
+      2. Map Angular components/services → graph nodes
+      3. Create edges: DI injections, API calls, routing
+      4. Implement cross-stack queries (Angular → .NET → DB)
+      5. Build MCP tool wrapper for Copilot Chat
+      6. Optimize SQLite indexes for Angular-specific queries
+      7. Add incremental update: hash .ts files
+      8. Output: Unified knowledge graph + MCP tool
+      
+    files_to_create:
+      - "cortex_lens/knowledge_graph/angular_node_builder.py"
+      - "cortex_lens/knowledge_graph/cross_stack_query.py"
+      - "cortex/mcp/tools/angular_analyze_tool.py"
+      - "cortex_lens/angular/incremental_updater.py"
+      - "tests/unit/cortex_lens/knowledge_graph/test_angular_nodes.py"
+      - "tests/unit/cortex_lens/knowledge_graph/test_cross_stack_query.py"
+      - "tests/integration/cortex/mcp/test_angular_analyze_tool.py"
+      
+    tests:
+      - "test_add_angular_nodes_to_graph"
+      - "test_create_injects_edge"
+      - "test_cross_stack_query_angular_to_dotnet"
+      - "test_mcp_tool_angular_analysis"
+      - "test_1hop_query_performance_100ms"
+      - "test_incremental_update_component_change"
+      - "test_unified_documentation_generation"
+      - "test_integration_ksessions_full_stack_query"
+      
+    estimated_effort: "7-10 hours"
+    depends_on: ["S1", "S2", "S3"]
+
+# ============================================================================
+# COMPLETION CRITERIA
+# ============================================================================
+
+completion_criteria:
+  technical:
+    - "All 75 tests passing with 90%+ coverage"
+    - "TypeScript AST parsing with Angular decorators functional"
+    - "DI graph export working (providers + injectables + injection chains)"
+    - "Component hierarchy builder operational"
+    - "Route-to-component mapping complete with feature area detection"
+    - "HTTP client call tracing to API endpoints working"
+    - "Knowledge graph integration with Angular+backend unified queries"
+    - "MCP tool cortex_angular_analyze operational"
+    - "Performance: <100ms for 1-hop Angular queries"
+    - "KSESSIONS Etymology module analysis successful"
+    
+  documentation:
+    - "Angular analysis guide in docs/"
+    - "DI graph query examples"
+    - "Route-to-API lineage cookbook"
+    - "MCP tool usage documentation"
+    - "Phase 68 completion report"
+    
+  governance:
+    - "All CORE rules applied (008, 011, 012, 027, 030, 035)"
+    - "AC markers on all implementations"
+    - "No CORTEX_DEBUG markers remaining"
+    - "Registry index.yaml updated with phase status"
+    
+  integration:
+    - "Phase 66 knowledge graph extended with Angular nodes"
+    - "Phase 67 .NET lineage connected (if complete)"
+    - "Cross-stack queries functional (Angular → .NET → DB)"
+
+# ============================================================================
+# SUCCESS METRICS
+# ============================================================================
+
+success_metrics:
+  quantitative:
+    - "75/75 tests passing (100%)"
+    - "90%+ test coverage achieved"
+    - "Angular capability: 40% → 85% (Phase 68 target)"
+    - "Query performance: <100ms for 1-hop, <250ms for 2-hop"
+    - "KSESSIONS analysis: 100% success on Etymology module"
+    
+  qualitative:
+    - "TypeScript AST parsing stable for Angular apps"
+    - "DI graph validates component-service dependencies"
+    - "Route analysis enables feature area documentation"
+    - "HTTP client tracing delivers frontend-backend lineage"
+    - "Cross-stack queries provide end-to-end visibility"
+    
+  business:
+    - "Frontend refactoring safety (validated dependencies)"
+    - "Dead code detection (unused components/services)"
+    - "Feature area documentation (routing-based boundaries)"
+    - "API usage analysis (which endpoints are called from UI)"
+
+# ============================================================================
+# REFERENCES
+# ============================================================================
+
+references:
+  phases:
+    - "phase-66: LENS Knowledge Graph & Domain Intelligence"
+    - "phase-67: .NET Roslyn Deep Intelligence (optional integration)"
+  
+  documents:
+    - "_workspaces/.chats/chat01.md (Angular analysis patterns)"
+    - "cortex-architect.prompt.md v15.3"
+    - "docs/05-lens-protocol/ (LENS architecture)"
+  
+  external:
+    - "ts-morph: TypeScript AST manipulation library"
+    - "Angular documentation (DI, routing, HttpClient)"
+    - "NgRx documentation (state management patterns)"
+
+# ============================================================================
+# AC MARKERS
+# ============================================================================
+
+audit_trail:
+  - ac_id: "AC-PHASE68-001"
+    operation: "PLAN"
+    timestamp: "2026-02-09T15:30:00Z"
+    description: "Phase 68 created: Angular Deep Analysis"
+    author: "CORTEX Architect"
