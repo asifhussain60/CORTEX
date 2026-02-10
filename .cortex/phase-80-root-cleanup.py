@@ -125,7 +125,7 @@ Next: Enable pre-commit hook to prevent future violations
 
 def main():
     """Execute root cleanup."""
-    cortex_root = Path(__file__).parent
+    cortex_root = Path(__file__).parent.parent  # Go up from .cortex/ to root
     print("\n" + "━" * 70)
     print("🔧 PHASE 80: Root Directory Cleanup & Governance Fix")
     print("━" * 70 + "\n")

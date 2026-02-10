@@ -151,3 +151,7 @@ company/dashboards/spa/cortex/
 /*-v[0-9]*.py
 /*-v[0-9]*.md
 _archives/
+
+# CORE-038: Prevent root .py files (use cortex/phase-executors/)
+# Phase executors must be in proper module, never in root
+/execute_phase_*.py
