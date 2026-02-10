@@ -91,7 +91,27 @@ Environment Check (cortex_verify_environment)
    [NO CONFLICTS] → git merge origin/main → Success
    [CONFLICTS] → Display conflict files → Manual merge instructions
       ↓
-   ✅ UPGRADED → Pass control to cortex-architect (latest ecosystem)
+   ✅ UPGRADED → AUTONOMOUS WIRING AUDIT (NEW - SMART AUDIT TRIGGER)
+      ↓
+   SMART AUDIT DECISION LOGIC:
+   ├─ Check for wiring gaps (P6 check from cortex-architect.prompt.md)
+   ├─ IF 0 gaps found → Skip audit, show pull enhancement template only
+   ├─ IF 1-2 P2/P3 gaps → Show warning, offer audit ("audit" to run full check)
+   └─ IF P0/P1 gaps OR ≥3 gaps → AUTO-RUN audit cycle (mandatory)
+      ↓
+   [AUTO-AUDIT TRIGGERED] → Silent Audit Execution:
+                             ├─ cortex_lens_analyze (wiring integrity) 
+                             ├─ cortex_detect_duplicates (CORE-035)
+                             ├─ Auto-fix P2/P3 issues (safe changes only)
+                             └─ Report P0/P1 issues (requires user input)
+      ↓
+   [AUDIT COMPLETE] → Generate Pull Enhancement Template
+                      ├─ Load response-template-pull-enhancement.py
+                      ├─ Compare before/after commits
+                      ├─ Show new capabilities table
+                      └─ Provide exploration commands
+      ↓
+   ✅ READY → Pass control to cortex-architect (latest ecosystem + validated wiring)
    ❌ MISSING_PYTHON → Guide Python upgrade
    ❌ MISSING_DEPS → Offer auto-install or manual steps
    ⚠️ PARTIAL → Warning + proceed option
@@ -904,4 +924,53 @@ User Request → cortex-architect
 
 ---
 
-**Version:** v2.0 — Environment validation + Git-based CORTEX upgrade detection and safe merge
+**Version:** v2.1 — Environment validation + Git-based CORTEX upgrade detection and smart autonomous audit cycle
+
+## 🔄 Autonomous Audit & Fix Cycle (v2.1)
+
+**NEW Enhancement** — Smart audit triggers with pull enhancement templates
+
+### Decision Logic
+
+```python
+def should_run_autonomous_audit(wiring_gaps: List[WiringGap]) -> str:
+    """Determine if autonomous audit should run based on wiring gaps."""
+    if not wiring_gaps:
+        return "SKIP"  # No gaps, just show enhancement template
+    
+    p0_p1_gaps = [g for g in wiring_gaps if g.severity in ["P0", "P1"]]
+    if p0_p1_gaps or len(wiring_gaps) >= 3:
+        return "MANDATORY"  # Critical gaps or too many issues
+    
+    return "OFFER"  # Minor gaps, let user decide
+```
+
+### Execution Phases
+
+1. **Wiring Gap Detection** — P6 validation from cortex-architect.prompt.md
+2. **Smart Decision** — SKIP/OFFER/MANDATORY based on gap severity  
+3. **Autonomous Audit** — Silent execution with progress bars (if triggered)
+4. **Enhancement Template** — Show user what changed via `response-template-pull-enhancement.py`
+
+### Auto-Fix Categories (P2/P3 Only)
+
+- ✅ **Documentation sync** - Update prompts to match implementation
+- ✅ **Test file creation** - Generate missing test stubs  
+- ✅ **Import organization** - Fix unused imports
+- ✅ **Wiring configuration** - Add missing YAML entries
+- ❌ **Code implementation** - NEVER auto-modify logic
+- ❌ **Breaking changes** - NEVER modify APIs automatically
+
+### Benefits
+
+- **Token Efficient:** Skip unnecessary audits when no wiring gaps
+- **User Friendly:** Non-blocking for most sessions (proceed immediately)
+- **Quality Assured:** Catches critical wiring drift proactively
+- **Safe:** Only auto-fixes low-risk issues, reports critical ones
+
+### Integration Points
+
+- **P6 Wiring Check** from cortex-architect.prompt.md (lines 4040-4200)
+- **Pull Enhancement Template** via response-template-pull-enhancement.py
+- **MCP Tools:** cortex_lens_analyze, cortex_detect_duplicates
+- **Audit Triggers:** After successful git merge/rebase operations
