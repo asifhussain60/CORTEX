@@ -2,10 +2,20 @@ version: '1.2'
 registry_name: _cortex-master
 description: CORTEX self-development planning with phase tracking and enhancement
   pipeline
-last_updated: '2026-02-10T23:09:51.954054Z'
-revision: 'Phase 53 Complete (2026-02-10): 79 total (53 complete, 4 active, 22 planned)
-  | ALL P1-CRITICAL PHASES COMPLETE - Enterprise v1.1 ready'
+last_updated: '2026-02-10T23:14:21.366900Z'
+revision: 'Phase 54 Complete (2026-02-10): 79 total (54 complete, 3 active, 22 planned)
+  | Intelligence enforcement operational'
 active_phases:
+- id: phase-54
+  name: Intelligence Layer Enforcement & MCP Gateway
+  file: phases/active/phase-54-intelligence-enforcement.yaml
+  created: '2026-02-10'
+  status: complete
+  priority: P0
+  tests_passing: 80
+  stages_complete: 5/5
+  description: "\u2705 COMPLETE (P0 - INTELLIGENCE): Intelligence Layer Enforcement\
+    \ & MCP Gateway. All 80 tests passing, 90% coverage."
 - id: phase-76
   name: Production Foundation Trilogy
   file: phases/active/phase-76-production-foundation-trilogy.yaml
