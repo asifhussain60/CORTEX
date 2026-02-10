@@ -42,7 +42,7 @@ class RootDirectoryAnalyzer:
         # Development and company
         "company": "Company domain knowledge",
         "registry": "Alternative registry location",
-        "lens-dashboards": "LENS visualization dashboards",
+        # Moved to: company/dashboards/lens
         
         # Virtual environment and cache
         ".venv": "Python virtual environment",

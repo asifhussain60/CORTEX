@@ -120,7 +120,7 @@ tests/test_ac_nfr_003_02_secrets.py
 tests/_archive/
 
 # CLI generated dashboard output
-lens-dashboards/
+company/dashboards/lens/
 
 # Dashboard v3 artifacts (PHASE-21)
 # Node.js dependencies and build artifacts
