@@ -555,7 +555,7 @@ class VacuumOrchestrator:
                 # Consolidate these duplicate folders
                 ("cortex_brain", "cortex"): "cortex/brain",  # cortex_brain → cortex/brain
                 ("cortex_lens", "cortex"): "cortex/lens",    # cortex_lens → cortex/lens
-                ("cortex-lens", "cortex_lens"): "cortex_lens",  # cortex-lens → cortex_lens
+                # NOTE: cortex-lens (legacy) has been archived to docs/archive/legacy-tools/
             }
             
             # Scan root directories
@@ -693,8 +693,7 @@ class VacuumOrchestrator:
             "scripts": "Production - Utility scripts",
             "company": "Production - Best practices knowledge",
             "_archives": "Development - Archived artifacts",
-            "cortex-lens": "Development - Standalone analysis tool (consolidate)",
-            "cortex_lens": "Development - Standalone analysis tool",
+            "cortex_lens": "Production - Unified LENS analysis system",
             "reports": "Production - Generated reports",
             "_workspaces": "Development - Workspace artifacts",
         }
