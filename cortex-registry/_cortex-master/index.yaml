@@ -607,7 +607,7 @@ active_phases:
   - phase-47
 - id: phase-47
   name: Company/CORTEX Separation & Registry Consolidation
-  file: phases/active/phase-47-company-cortex-separation.yaml
+  file: phases/completed/2026/phase-47-company-cortex-separation.yaml
   started: '2026-02-08'
   status: completed
   priority: P1
@@ -1650,7 +1650,7 @@ active_phases:
   - Multi-region replication
 - id: phase-51
   name: MCP-FIRST Enforcement
-  file: phases/active/phase-51-mcp-first-enforcement.yaml
+  file: phases/completed/2026/phase-51-mcp-first-enforcement.yaml
   created: '2026-02-08'
   completed: '2026-02-08'
   status: completed
