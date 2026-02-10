@@ -6,8 +6,8 @@
 version: "1.1"
 registry_name: "_cortex-master"
 description: "CORTEX self-development planning with phase tracking and enhancement pipeline"
-last_updated: "2026-02-09T14:30:00Z"
-revision: "Production Status Update - Phases 54-60 Verified Complete | 54/57 phases done (94.7%)"
+last_updated: "2026-02-09T15:00:00Z"
+revision: "Phase 67 Created: .NET Roslyn Deep Intelligence | 54/58 phases done (93.1%)"
 
 # Active Phases (Current Development)
 active_phases:
@@ -37,6 +37,32 @@ active_phases:
     depends_on:
       - "phase-64"
       - "phase-63"
+
+  - id: "phase-67"
+    name: ".NET Roslyn Deep Intelligence"
+    file: "phases/active/phase-67-dotnet-roslyn-deep-intelligence.yaml"
+    created: "2026-02-09"
+    status: "planned"
+    priority: "P1"
+    execution_order: 18
+    roi_score: 0.87
+    estimated_duration: "6-8 weeks"
+    test_target: 95
+    coverage_target: 90
+    tests_passing: 0
+    stages_complete: "0/4"
+    description: |
+      ⚪ PLANNED: .NET semantic intelligence upgrade (Roslyn semantic model).
+      - ⚪ S1: Roslyn Semantic Model Integration (20 tests, 1.5-2 weeks)
+      - ⚪ S2: DI Container Registration Analysis (25 tests, 2-2.5 weeks)
+      - ⚪ S3: EF Core Full Mapping Lineage (30 tests, 2-2.5 weeks)
+      - ⚪ S4: Knowledge Graph Integration + MCP Tool (20 tests, 1.5-2 weeks)
+      
+      Gap: Closes 35% .NET capability gap (55% → 90%) from chat01.md analysis.
+      Strategic: DI container validation + EF Core lineage + cross-assembly type resolution.
+    depends_on:
+      - "phase-55"
+      - "phase-66"
 
   - id: "phase-65"
     name: "LENS Intelligence Remediation"

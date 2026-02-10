@@ -1,0 +1,477 @@
+# Phase 67: .NET Roslyn Deep Intelligence
+# Authority: CORTEX Architect Analysis (chat01.md gap assessment)
+# Created: 2026-02-09
+# AC-ID: AC-PHASE67-001
+
+metadata:
+  phase_id: "phase-67"
+  title: ".NET Roslyn Deep Intelligence"
+  status: "planned"
+  priority: "P1"
+  created: "2026-02-09"
+  updated: "2026-02-09"
+  estimated_duration: "6-8 weeks"
+  roi_score: 0.87
+  execution_order: 18
+  test_target: 95
+  coverage_target: 90
+  autonomous_execution: true
+  approval_required: false
+  cross_cutting: true
+  breaking_changes: false
+  production_blocker: false
+
+overview:
+  vision: |
+    Transform CORTEX .NET analysis from syntax-level (Phase 55) to semantic-level 
+    intelligence through Microsoft Roslyn semantic model integration. Enable CORTEX 
+    to understand .NET codebases with architect-level depth: type resolution, DI 
+    container graphs, EF Core entity lineage, compilation symbol analysis, and 
+    cross-assembly relationship tracking.
+    
+    Addresses primary gap from chat01.md analysis: "Runtime truth (what actually 
+    happens)" — specifically DI container registrations and ORM mapping validation.
+
+  problem_statement: |
+    Current .NET LENS (Phase 55) provides project-level analysis but lacks 
+    semantic depth:
+    
+    1. Syntax-only: Cannot resolve method signatures across assemblies
+    2. No type inference: Generic constraints, interface implementations unclear
+    3. Missing DI graph: Cannot export "interface → concrete type" registrations
+    4. Incomplete EF mapping: Detects models but not table↔entity↔DTO lineage
+    5. No compilation context: Cannot validate cross-assembly references
+    6. Token-inefficient: Requires full codebase scan for relationship queries
+    
+    Intelligence gap: CORTEX sees .NET syntax trees but not semantic meaning.
+    
+    chat01.md insight: "DI container graph: Export registrations (interfaces → 
+    concrete types) at startup. This is gold for 'what implementations are 
+    actually used.' This is how you avoid diagrams based on dead code."
+
+  expected_outcomes:
+    - "Roslyn semantic model integration (compilation analysis)"
+    - "Type resolution across assemblies (interface implementations)"
+    - "DI container registration export (.NET Core + Ninject + Autofac)"
+    - "EF Core full mapping: DbContext → Entity → Table → DTO → API endpoint"
+    - "Symbol analysis: method signatures, generic constraints, attributes"
+    - "Cross-assembly call graph with resolved types"
+    - "Navigation property relationship extraction"
+    - "Fluent API configuration parsing"
+    - "Startup.cs / Program.cs DI registration analysis"
+    - "Integration with Phase 66 knowledge graph (unified Python+.NET)"
+    - "MCP tool: cortex_dotnet_semantic_analyze"
+
+roi_analysis:
+  cost: "42-56 hours (6-8 weeks part-time)"
+  impact: |
+    Immediate:
+    - .NET codebase understanding: 55% → 90% capability
+    - DI container validation: "What implementations are actually used?"
+    - EF Core lineage: Database schema → API endpoint full traceability
+    
+    Medium-term:
+    - Architectural refactoring safety (validated dependency changes)
+    - Dead code detection (unused DI registrations)
+    - Test coverage gap identification (untested implementations)
+    
+    Long-term:
+    - Cross-language knowledge graph (Python + .NET unified)
+    - Domain-driven documentation for .NET microservices
+    - Migration planning (legacy → modern with dependency tracking)
+    
+    Strategic: Closes 35% capability gap identified in chat01.md analysis.
+    
+  risk_mitigation: |
+    - Builds on Phase 55 foundation (no rewrite, additive enhancement)
+    - Roslyn is Microsoft-supported (stable, well-documented)
+    - Incremental delivery: Value every 1.5-2 weeks per stage
+    - Language-neutral design: Patterns applicable to Java/Kotlin later
+    - Fallback: Phase 55 syntax analysis remains functional if semantic fails
+
+dependencies:
+  required:
+    - "phase-55: .NET LENS Multi-Stage Implementation (Complete)"
+    - "phase-66: LENS Knowledge Graph & Domain Intelligence (S2 complete for graph integration)"
+  optional:
+    - "phase-64: Intelligent LENS Tier Selection (enhances tier routing)"
+  blocks:
+    - ".NET microservice architectural reasoning"
+    - "Entity Framework migration impact analysis"
+    - "Dependency injection validation"
+
+governance:
+  core_rules:
+    - "CORE-008: TDD — tests before implementation for every stage"
+    - "CORE-011: Type hints mandatory on all new/modified functions"
+    - "CORE-012: Google-style docstrings on all public methods"
+    - "CORE-035: Single canonical implementation — no duplicate analyzers"
+    - "CORE-027: Audit trail — AC_START/AC_COMPLETE markers"
+    - "CORE-030: Implementation Truth — verify code not docs"
+  enforcement: "EnforcementOrchestrator 7-agent pre-execution gate"
+  tdd_required: true
+
+# ============================================================================
+# STAGE BREAKDOWN
+# ============================================================================
+
+stages:
+  # --------------------------------------------------------------------------
+  # STAGE 1: Roslyn Semantic Model Integration (1.5-2 weeks)
+  # --------------------------------------------------------------------------
+  - id: "S1"
+    name: "Roslyn Semantic Model Integration"
+    description: |
+      Establish Roslyn compilation workspace for semantic analysis with 
+      cross-assembly type resolution and symbol inspection.
+    
+    deliverables:
+      - "Roslyn workspace builder (MSBuild project loading)"
+      - "Compilation semantic model extractor"
+      - "Type symbol resolver (INamedTypeSymbol inspection)"
+      - "Method signature analyzer with generic constraints"
+      - "Attribute data extraction (validation, DI registration hints)"
+      - "Cross-assembly reference resolver"
+      - "Integration with Phase 55 project analyzer"
+      
+    acceptance_criteria:
+      - "Load .NET solution with 10+ projects successfully"
+      - "Resolve IUserRepository → UserRepository across assemblies"
+      - "Extract method signatures with parameter types resolved"
+      - "Identify [ApiController] and [Authorize] attributes"
+      - "Detect generic constraints: T where T : IEntity"
+      - "Map using statements to fully qualified type names"
+      - "20+ tests covering semantic analysis scenarios"
+      - "90%+ test coverage"
+      - "Integration test: Analyze KSESSIONS repository (from chat01.md)"
+      
+    technical_approach: |
+      1. Use Microsoft.CodeAnalysis.MSBuild to load .sln files
+      2. Build Compilation for each project with references
+      3. Extract SemanticModel per syntax tree
+      4. Query ISymbol instances for type/method information
+      5. Traverse INamedTypeSymbol for interfaces + implementations
+      6. Parse AttributeData for decorators
+      7. Output: SemanticAnalysisResult with resolved symbols
+      
+    files_to_create:
+      - "cortex_lens/dotnet/roslyn_workspace.py"
+      - "cortex_lens/dotnet/semantic_analyzer.py"
+      - "cortex_lens/dotnet/type_resolver.py"
+      - "cortex_lens/dotnet/symbol_inspector.py"
+      - "cortex_lens/models/semantic_analysis_result.py"
+      - "tests/unit/cortex_lens/dotnet/test_roslyn_workspace.py"
+      - "tests/unit/cortex_lens/dotnet/test_semantic_analyzer.py"
+      - "tests/integration/cortex_lens/test_dotnet_semantic_e2e.py"
+      
+    tests:
+      - "test_load_solution_with_multiple_projects"
+      - "test_resolve_interface_implementation"
+      - "test_extract_method_signature_with_generics"
+      - "test_parse_attribute_data"
+      - "test_resolve_cross_assembly_type"
+      - "test_generic_constraint_detection"
+      - "test_using_statement_resolution"
+      - "test_integration_ksessions_analysis"
+      
+    estimated_effort: "12-16 hours"
+    depends_on: []
+
+  # --------------------------------------------------------------------------
+  # STAGE 2: DI Container Registration Analysis (2-2.5 weeks)
+  # --------------------------------------------------------------------------
+  - id: "S2"
+    name: "DI Container Registration Analysis"
+    description: |
+      Extract dependency injection container registrations from Startup.cs, 
+      Program.cs, and DI modules to build "interface → concrete type" graph.
+    
+    deliverables:
+      - ".NET Core DI registration extractor (AddScoped/Singleton/Transient)"
+      - "Ninject module analyzer (Bind<I>.To<C>() patterns)"
+      - "Autofac container builder parser"
+      - "Generic registration resolver (open generics)"
+      - "Lifetime scope detector (singleton vs. scoped vs. transient)"
+      - "DI graph builder with injection chain analysis"
+      - "Dead registration detector (unused types)"
+      - "Integration with Phase 66 knowledge graph"
+      
+    acceptance_criteria:
+      - "Extract all AddScoped<IRepo, Repo>() registrations"
+      - "Parse Ninject Bind<IService>.To<Service>() calls"
+      - "Detect lifetime scopes: Singleton (1 instance) vs Transient (per-request)"
+      - "Resolve open generic registrations: AddScoped<IRepo<>, Repo<>>()"
+      - "Build injection chain: Controller → Service → Repository"
+      - "Identify unused registrations (registered but never injected)"
+      - "25+ tests covering DI patterns (.NET Core, Ninject, Autofac)"
+      - "90%+ test coverage"
+      - "Integration test: KSESSIONS DI graph with Auth0 token service"
+      
+    technical_approach: |
+      1. Locate DI registration files: Startup.cs, Program.cs, *Module.cs
+      2. Parse ConfigureServices() method invocations
+      3. Extract service type (interface) and implementation type
+      4. Detect lifetime: Singleton/Scoped/Transient/Keyed
+      5. Resolve constructor injection chains via semantic model
+      6. Build directed graph: Service → Dependencies
+      7. Cross-reference with usage (controllers, services)
+      8. Output: DIContainerGraph with registrations + usage
+      
+    files_to_create:
+      - "cortex_lens/dotnet/di_analyzer.py"
+      - "cortex_lens/dotnet/di_extractors/dotnet_core.py"
+      - "cortex_lens/dotnet/di_extractors/ninject.py"
+      - "cortex_lens/dotnet/di_extractors/autofac.py"
+      - "cortex_lens/models/di_container_graph.py"
+      - "tests/unit/cortex_lens/dotnet/test_di_analyzer.py"
+      - "tests/unit/cortex_lens/dotnet/test_di_extractors.py"
+      - "tests/integration/cortex_lens/test_di_analysis_e2e.py"
+      
+    tests:
+      - "test_extract_dotnet_core_registrations"
+      - "test_parse_ninject_bindings"
+      - "test_detect_singleton_lifetime"
+      - "test_resolve_open_generic_registration"
+      - "test_build_injection_chain"
+      - "test_detect_unused_registration"
+      - "test_autofac_container_builder_parsing"
+      - "test_integration_ksessions_di_graph"
+      
+    estimated_effort: "16-20 hours"
+    depends_on: ["S1"]
+
+  # --------------------------------------------------------------------------
+  # STAGE 3: EF Core Full Mapping Lineage (2-2.5 weeks)
+  # --------------------------------------------------------------------------
+  - id: "S3"
+    name: "EF Core Full Mapping Lineage"
+    description: |
+      Complete Entity Framework Core lineage tracking from DbContext → Entity 
+      → Table → DTO → API endpoint with navigation property relationships.
+    
+    deliverables:
+      - "DbContext analyzer (DbSet<> properties)"
+      - "Entity configuration parser (fluent API + data annotations)"
+      - "Navigation property relationship extractor"
+      - "Table mapping resolver (entity → SQL table name)"
+      - "DTO mapping detector (AutoMapper, manual mapping)"
+      - "API endpoint tracer (controller actions → DTOs → entities)"
+      - "Foreign key relationship graph"
+      - "Migration history analyzer"
+      - "Integration with Phase 66 knowledge graph (entity nodes)"
+      
+    acceptance_criteria:
+      - "Map DbContext.Users → User entity → dbo.Users table"
+      - "Extract navigation properties: User.Orders (one-to-many)"
+      - "Resolve fluent API: modelBuilder.Entity<User>().ToTable('Users')"
+      - "Detect foreign keys: Order.UserId → User.Id"
+      - "Trace API: POST /api/users → CreateUserDto → User entity"
+      - "Identify AutoMapper profiles: UserDto → User mapping"
+      - "Build entity relationship graph (ERD-equivalent)"
+      - "30+ tests covering EF Core patterns (Code First, Database First)"
+      - "90%+ test coverage"
+      - "Integration test: KSESSIONS Ahadees entity → sp_SaveAhadeesNew"
+      
+    technical_approach: |
+      1. Scan for DbContext classes via semantic model
+      2. Extract DbSet<TEntity> properties
+      3. Parse OnModelCreating() for fluent API configurations
+      4. Resolve entity data annotations: [Table], [Column], [ForeignKey]
+      5. Extract navigation properties with relationship types
+      6. Map entities to DTOs via controller action parameters
+      7. Cross-reference with stored procedures (Phase 55)
+      8. Output: EFCoreLineageMap with full traceability
+      
+    files_to_create:
+      - "cortex_lens/dotnet/ef_core_analyzer.py"
+      - "cortex_lens/dotnet/dbcontext_inspector.py"
+      - "cortex_lens/dotnet/entity_mapper.py"
+      - "cortex_lens/dotnet/navigation_property_extractor.py"
+      - "cortex_lens/dotnet/dto_tracer.py"
+      - "cortex_lens/models/ef_lineage_map.py"
+      - "tests/unit/cortex_lens/dotnet/test_ef_core_analyzer.py"
+      - "tests/unit/cortex_lens/dotnet/test_entity_mapper.py"
+      - "tests/integration/cortex_lens/test_ef_lineage_e2e.py"
+      
+    tests:
+      - "test_extract_dbset_properties"
+      - "test_parse_fluent_api_configuration"
+      - "test_resolve_table_mapping"
+      - "test_extract_navigation_properties"
+      - "test_detect_foreign_key_relationships"
+      - "test_trace_api_endpoint_to_entity"
+      - "test_identify_automapper_profile"
+      - "test_build_entity_relationship_graph"
+      - "test_integration_ksessions_ahadees_lineage"
+      
+    estimated_effort: "16-20 hours"
+    depends_on: ["S1"]
+
+  # --------------------------------------------------------------------------
+  # STAGE 4: Knowledge Graph Integration + MCP Tool (1.5-2 weeks)
+  # --------------------------------------------------------------------------
+  - id: "S4"
+    name: "Knowledge Graph Integration + MCP Tool"
+    description: |
+      Integrate .NET semantic analysis with Phase 66 knowledge graph for 
+      unified Python+.NET queries and expose via MCP tool.
+    
+    deliverables:
+      - "Knowledge graph node types: .NET-specific (Assembly, Namespace, Type, Method)"
+      - "Edge types: implements, inherits, injects, maps_to (EF), calls"
+      - "Cross-language query support (Python→.NET, .NET→Python)"
+      - "MCP tool: cortex_dotnet_semantic_analyze"
+      - "Query examples: 'Which .NET services inject IUserRepository?'"
+      - "Performance optimization: <100ms for 1-hop .NET queries"
+      - "Incremental update support (solution change → delta rebuild)"
+      - "Unified documentation generator (Python + .NET together)"
+      
+    acceptance_criteria:
+      - "Add .NET nodes to Phase 66 knowledge graph"
+      - "Query: 'Which controllers use UserService?' → cross-assembly results"
+      - "Query: 'What entities map to dbo.Users table?' → EF Core lineage"
+      - "MCP tool returns semantic analysis via cortex_dotnet_semantic_analyze"
+      - "1-hop queries execute in <100ms, 2-hop in <250ms"
+      - "Incremental rebuild: project change → rebuild affected nodes only"
+      - "20+ tests covering cross-language queries"
+      - "90%+ test coverage"
+      - "Integration test: Query CORTEX (Python) + KSESSIONS (.NET) unified"
+      
+    technical_approach: |
+      1. Extend Phase 66 graph schema with .NET node types
+      2. Map Roslyn ISymbol → graph nodes (Assembly, Type, Method)
+      3. Create edges: DI injections, EF mappings, call relationships
+      4. Implement cross-language queries (Python file → .NET endpoint)
+      5. Build MCP tool wrapper for Copilot Chat
+      6. Optimize SQLite indexes for .NET-specific queries
+      7. Add incremental update: hash .csproj + .cs files
+      8. Output: Unified knowledge graph + MCP tool
+      
+    files_to_create:
+      - "cortex_lens/knowledge_graph/dotnet_node_builder.py"
+      - "cortex_lens/knowledge_graph/cross_language_query.py"
+      - "cortex/mcp/tools/dotnet_semantic_analyze_tool.py"
+      - "cortex_lens/dotnet/incremental_updater.py"
+      - "tests/unit/cortex_lens/knowledge_graph/test_dotnet_nodes.py"
+      - "tests/unit/cortex_lens/knowledge_graph/test_cross_language_query.py"
+      - "tests/integration/cortex/mcp/test_dotnet_semantic_tool.py"
+      
+    tests:
+      - "test_add_dotnet_nodes_to_graph"
+      - "test_create_implements_edge"
+      - "test_cross_language_query_python_to_dotnet"
+      - "test_mcp_tool_semantic_analysis"
+      - "test_1hop_query_performance_100ms"
+      - "test_incremental_update_project_change"
+      - "test_unified_documentation_generation"
+      - "test_integration_cortex_ksessions_unified_query"
+      
+    estimated_effort: "12-16 hours"
+    depends_on: ["S1", "S2", "S3"]
+
+# ============================================================================
+# COMPLETION CRITERIA
+# ============================================================================
+
+completion_criteria:
+  technical:
+    - "All 95 tests passing with 90%+ coverage"
+    - "Roslyn semantic model integration functional"
+    - "DI container graph export working (.NET Core + Ninject + Autofac)"
+    - "EF Core lineage complete (DbContext → Entity → Table → DTO → API)"
+    - "Knowledge graph integration with Python+.NET unified queries"
+    - "MCP tool cortex_dotnet_semantic_analyze operational"
+    - "Performance: <100ms for 1-hop .NET queries"
+    - "KSESSIONS repository analysis successful (real-world validation)"
+    
+  documentation:
+    - "Roslyn integration guide in docs/"
+    - "DI container analysis examples"
+    - "EF Core lineage query cookbook"
+    - "MCP tool usage documentation"
+    - "Phase 67 completion report"
+    
+  governance:
+    - "All CORE rules applied (008, 011, 012, 027, 030, 035)"
+    - "AC markers on all implementations"
+    - "No CORTEX_DEBUG markers remaining"
+    - "Registry index.yaml updated with phase status"
+    
+  integration:
+    - "Phase 66 knowledge graph extended with .NET nodes"
+    - "Phase 55 enhanced (syntax → semantic upgrade)"
+    - "Phase 64 tier selection aware of .NET semantic analysis"
+
+# ============================================================================
+# ROLLBACK PLAN
+# ============================================================================
+
+rollback:
+  conditions:
+    - "Roslyn semantic model fails on 20%+ of real-world solutions"
+    - "DI container analysis accuracy <80% on known patterns"
+    - "Performance: 1-hop queries exceed 200ms consistently"
+    - "Breaking changes to Phase 55 or Phase 66"
+    
+  steps:
+    - "Revert to Phase 55 syntax-only analysis"
+    - "Disable .NET semantic nodes in knowledge graph"
+    - "Preserve MCP tool interface (return Phase 55 data)"
+    - "Document limitations + future retry plan"
+
+# ============================================================================
+# SUCCESS METRICS
+# ============================================================================
+
+success_metrics:
+  quantitative:
+    - "95/95 tests passing (100%)"
+    - "90%+ test coverage achieved"
+    - ".NET capability: 55% → 90% (Phase 67 target)"
+    - "Query performance: <100ms for 1-hop, <250ms for 2-hop"
+    - "KSESSIONS analysis: 100% success on 50+ files"
+    
+  qualitative:
+    - "Roslyn semantic model integration stable"
+    - "DI container graph validates 'actual vs intended' architecture"
+    - "EF Core lineage enables migration impact analysis"
+    - "Cross-language queries deliver unified Python+.NET insights"
+    - "MCP tool provides architect-level .NET intelligence"
+    
+  business:
+    - ".NET microservice refactoring safety (validated dependencies)"
+    - "Dead code detection (unused DI registrations identified)"
+    - "Entity Framework migration planning (lineage tracking)"
+    - "Architectural documentation auto-generation (DI + EF diagrams)"
+
+# ============================================================================
+# REFERENCES
+# ============================================================================
+
+references:
+  phases:
+    - "phase-55: .NET LENS Multi-Stage Implementation"
+    - "phase-66: LENS Knowledge Graph & Domain Intelligence"
+    - "phase-64: Intelligent LENS Tier Selection"
+  
+  documents:
+    - "_workspaces/.chats/chat01.md (reverse-engineering patterns)"
+    - "cortex-architect.prompt.md v15.3"
+    - "docs/05-lens-protocol/ (LENS architecture)"
+  
+  external:
+    - "Microsoft.CodeAnalysis.MSBuild (Roslyn NuGet)"
+    - "Entity Framework Core documentation"
+    - "ASP.NET Core DI documentation"
+    - "Ninject/Autofac container docs"
+
+# ============================================================================
+# AC MARKERS
+# ============================================================================
+
+audit_trail:
+  - ac_id: "AC-PHASE67-001"
+    operation: "PLAN"
+    timestamp: "2026-02-09T15:00:00Z"
+    description: "Phase 67 created: .NET Roslyn Deep Intelligence"
+    author: "CORTEX Architect"
