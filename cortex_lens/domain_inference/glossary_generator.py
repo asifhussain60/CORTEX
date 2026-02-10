@@ -12,6 +12,34 @@ import ast
 import re
 from pathlib import Path
 from typing import List, Dict, Any, Set, Optional
+from dataclasses import dataclass, field
+
+
+@dataclass
+class DomainEntity:
+    """Represents a domain entity in the glossary"""
+    name: str
+    domain: str
+    description: Optional[str] = None
+    attributes: List[str] = field(default_factory=list)
+    relationships: List[str] = field(default_factory=list)
+
+
+@dataclass
+class DomainRelationship:
+    """Represents a relationship between entities"""
+    source: str
+    target: str
+    relationship_type: str
+    description: Optional[str] = None
+
+
+@dataclass
+class DomainGlossary:
+    """Glossary containing all domain knowledge"""
+    domains: List[str] = field(default_factory=list)
+    entities: List[DomainEntity] = field(default_factory=list)
+    relationships: List[DomainRelationship] = field(default_factory=list)
 
 
 class GlossaryGenerator:
@@ -31,7 +59,16 @@ class GlossaryGenerator:
     - Naming patterns (0.2)
     """
     
-    def __init__(self):
+    def __init__(self, storage=None, domains=None):
+        """
+        Initialize glossary generator.
+        
+        Args:
+            storage: Optional GraphStorage instance for graph-based analysis
+            domains: Optional list of domain dictionaries from PatternAnalyzer
+        """
+        self.storage = storage
+        self.domains = domains or []
         self.entity_indicators = {
             "BaseModel", "Model", "Entity", "Aggregate", "ValueObject"
         }
@@ -337,3 +374,79 @@ class GlossaryGenerator:
             return entity.title()
         
         return None
+    
+    def generate(self) -> DomainGlossary:
+        """
+        Generate comprehensive domain glossary from graph and domains.
+        
+        Returns:
+            DomainGlossary with domains, entities, and relationships
+        
+        Example:
+            glossary = generator.generate()
+            print(f"Found {len(glossary.domains)} domains")
+            print(f"Found {len(glossary.entities)} entities")
+        """
+        if not self.storage or not self.domains:
+            # Return empty glossary if no data
+            return DomainGlossary()
+        
+        glossary = DomainGlossary()
+        
+        # Extract domain names
+        glossary.domains = [d["name"] for d in self.domains]
+        
+        # Build entities from domains
+        for domain_dict in self.domains:
+            domain_name = domain_dict["name"]
+            
+            for entity_name in domain_dict["entities"]:
+                # Query graph for entity details
+                conn = self.storage._get_connection()
+                cursor = conn.cursor()
+                cursor.execute("""
+                    SELECT node_type, properties FROM nodes WHERE name = ?
+                """, (entity_name,))
+                
+                row = cursor.fetchone()
+                if row:
+                    entity = DomainEntity(
+                        name=entity_name,
+                        domain=domain_name,
+                        description=f"{entity_name} entity in {domain_name} domain"
+                    )
+                    glossary.entities.append(entity)
+        
+        # Extract relationships from graph edges
+        from cortex_lens.knowledge_graph.graph_query import GraphQuery
+        query = GraphQuery(self.storage)
+        
+        # Get all edges to build relationships
+        conn = self.storage._get_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT 
+                n1.name as source_name,
+                e.edge_type,
+                n2.name as target_name
+            FROM edges e
+            JOIN nodes n1 ON e.source_id = n1.id
+            JOIN nodes n2 ON e.target_id = n2.id
+            WHERE n1.node_type = 'Class' AND n2.node_type = 'Class'
+        """)
+        
+        for row in cursor.fetchall():
+            source_name = row["source_name"]
+            target_name = row["target_name"]
+            edge_type = row["edge_type"]
+            
+            relationship = DomainRelationship(
+                source=source_name,
+                target=target_name,
+                relationship_type=edge_type,
+                description=f"{source_name} {edge_type} {target_name}"
+            )
+            glossary.relationships.append(relationship)
+        
+        return glossary
+

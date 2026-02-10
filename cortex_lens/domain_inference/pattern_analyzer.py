@@ -42,8 +42,14 @@ class PatternAnalyzer:
         # Returns: "User" (the entity class)
     """
     
-    def __init__(self):
-        """Initialize pattern analyzer"""
+    def __init__(self, storage=None):
+        """
+        Initialize pattern analyzer.
+        
+        Args:
+            storage: Optional GraphStorage instance for graph-based analysis
+        """
+        self.storage = storage
         self.pattern_keywords = {
             "repository": ["Repository", "Repo", "Store", "DAO"],
             "service": ["Service", "Manager", "Handler", "Processor"],
@@ -467,3 +473,96 @@ class PatternAnalyzer:
         
         logger.info(f"Detected {len(contexts)} domains in {directory}")
         return contexts
+    
+    def analyze_domains(self) -> List[Dict[str, Any]]:
+        """
+        Analyze knowledge graph to detect and cluster domains.
+        
+        Requires storage to be initialized with graph data.
+        
+        Returns:
+            List of detected domains with:
+            - name: Domain name
+            - entities: List of entity class names
+            - patterns: Detected patterns (repository, service, etc.)
+            - confidence: Confidence score (0.0-1.0)
+        
+        Example:
+            storage = GraphStorage("graph.db")
+            analyzer = PatternAnalyzer(storage)
+            domains = analyzer.analyze_domains()
+            # Returns: [
+            #     {"name": "User", "entities": ["User", "UserRepository", ...], "confidence": 0.85},
+            #     {"name": "Order", "entities": ["Order", "OrderService", ...], "confidence": 0.92}
+            # ]
+        """
+        if not self.storage:
+            raise ValueError("Storage not initialized. Pass GraphStorage to constructor.")
+        
+        logger.info("Analyzing domains from knowledge graph")
+        
+        # Get all class nodes from graph
+        from cortex_lens.knowledge_graph.graph_query import GraphQuery
+        query = GraphQuery(self.storage)
+        
+        # Get statistics to understand graph structure
+        stats = self.storage.get_statistics()
+        logger.debug(f"Graph stats: {stats}")
+        
+        # Query all Class nodes
+        conn = self.storage._get_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT name FROM nodes WHERE node_type = 'Class'
+        """)
+        
+        class_names = [row["name"] for row in cursor.fetchall()]
+        logger.debug(f"Found {len(class_names)} classes in graph")
+        
+        if not class_names:
+            logger.warning("No classes found in graph")
+            return []
+        
+        # Cluster classes by domain prefix
+        clusters = self.cluster_by_prefix(class_names, min_cluster_size=1)
+        
+        # Build domain objects with patterns and confidence
+        domains = []
+        for domain_name, entities in clusters.items():
+            # Detect patterns in entities by checking name suffixes
+            patterns_detected = {}
+            for entity in entities:
+                # Check each pattern keyword
+                for pattern_type, keywords in self.pattern_keywords.items():
+                    if any(keyword in entity for keyword in keywords):
+                        patterns_detected[pattern_type] = patterns_detected.get(pattern_type, 0) + 1
+                        break  # Only count each entity once
+            
+            # Calculate confidence based on:
+            # - Number of entities (more = higher confidence)
+            # - Pattern diversity (repository + service = higher)
+            # - Naming consistency
+            confidence_signals = {
+                "entity_count": len(entities),
+                "pattern_diversity": len(patterns_detected),
+                "has_repository": "repository" in patterns_detected,
+                "has_service": "service" in patterns_detected
+            }
+            confidence = self.calculate_confidence(confidence_signals)
+            
+            domains.append({
+                "name": domain_name,
+                "entities": entities,
+                "patterns": patterns_detected,
+                "confidence": confidence
+            })
+        
+        # Sort by confidence (highest first)
+        domains.sort(key=lambda d: d["confidence"], reverse=True)
+        
+        logger.info(f"Detected {len(domains)} domains from graph")
+        for domain in domains:
+            logger.debug(f"  - {domain['name']}: {len(domain['entities'])} entities, confidence={domain['confidence']:.2f}")
+        
+        return domains
+
