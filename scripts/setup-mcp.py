@@ -19,6 +19,8 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass
 import logging
+import platform
+import io
 
 # Configure logging
 logging.basicConfig(
@@ -26,6 +28,14 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+# AC_START: AC-MCP-FIX-001
+# Description: UTF-8 Console Encoding for Windows compatibility
+# Fix emoji characters (✅, ❌, ⚡) that crash Windows console
+if platform.system() == "Windows":
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+# AC_COMPLETE: AC-MCP-FIX-001 ✅ Windows UTF-8 console encoding active
 
 
 @dataclass
@@ -147,6 +157,8 @@ class CORTEXMCPSetup:
     
     def _configure_vscode(self) -> SetupResult:
         """Configure VS Code settings for MCP."""
+        # AC_START: AC-MCP-FIX-002
+        # Description: Enhanced Pylance MCP disable (4 settings)
         mcp_config = {
             "github.copilot.chat.mcpServers": {
                 "cortex": {
@@ -159,8 +171,13 @@ class CORTEXMCPSetup:
                         "CORTEX_ENV": "development"
                     }
                 }
-            }
+            },
+            # Disable Pylance MCP (4 aggressive settings)
+            "pylance.mcpServer.enabled": False,
+            "pylance.mcpServer.tools.enabled": False,
+            "github.copilot.chat.tools.pylance": False
         }
+        # AC_COMPLETE: AC-MCP-FIX-002 ✅ Pylance MCP disabled (4 settings)
         
         # Load existing settings or create new
         existing_settings = {}

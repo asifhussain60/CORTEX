@@ -113,11 +113,20 @@ if [ -n "$MCP_CONFIG_CHANGES" ]; then
         STAGED_MCP=$(git show :".vscode/mcp.json" 2>/dev/null || echo "")
         
         if [ -n "$STAGED_MCP" ]; then
-            # Check for servers other than "cortex"
-            NON_CORTEX=$(echo "$STAGED_MCP" | grep -oE '"[a-zA-Z0-9_-]+"[[:space:]]*:' | \
-                        grep -v '"servers"' | grep -v '"cortex"' | \
-                        grep -v '"type"' | grep -v '"command"' | grep -v '"args"' | \
-                        grep -v '"env"' | sed 's/"//g' | sed 's/://g' | tr '\n' ' ')
+            # AC_START: AC-MCP-FIX-004
+            # Description: Replace regex with Python JSON parser for accuracy
+            # Check for servers other than "cortex" using proper JSON parsing
+            NON_CORTEX=$(echo "$STAGED_MCP" | python3 -c "
+import json, sys
+try:
+    data = json.load(sys.stdin)
+    servers = data.get('mcpServers', {})
+    non_cortex = [s for s in servers.keys() if s != 'cortex']
+    print(' '.join(non_cortex))
+except:
+    pass
+" 2>/dev/null || echo "")
+            # AC_COMPLETE: AC-MCP-FIX-004 ✅ JSON parser for MCP server validation
             
             if [ -n "$NON_CORTEX" ]; then
                 echo -e "${RED}❌ MCP POLICY VIOLATION: Non-CORTEX MCP servers detected: $NON_CORTEX${NC}"

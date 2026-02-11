@@ -151,8 +151,12 @@ class BaseIntelligenceEngine:
         try:
             json_str = json.dumps(context, sort_keys=True, default=str)
             return hashlib.md5(json_str.encode()).hexdigest()
-        except:
+        # AC_START: AC-MCP-FIX-005
+        # Description: Replace bare except with specific exceptions (CORE-013 compliance)
+        except (TypeError, ValueError, AttributeError) as e:
+            # Fallback to hash-based key if JSON serialization fails
             return str(hash(frozenset(context.items())))
+        # AC_COMPLETE: AC-MCP-FIX-005 ✅ CORE-013 compliant exception handling
 
     def _get_cached(self, key: str) -> Optional[Dict]:
         """Get cached result if still valid"""
