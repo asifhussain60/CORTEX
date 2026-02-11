@@ -276,6 +276,7 @@ tracks:
     duration: "6-8 days"
     team_size: 1
     roi: 8.5
+    parallel_with: "Track 5 (LENS Tests)"  # Can run simultaneously
     
     transformations:
       - orchestrator: "ToolDiscoveryOrchestrator"
@@ -353,6 +354,148 @@ tracks:
       - "20 test mocks retained"
       - "Clean import tree (no dead references)"
       - "Updated documentation index"
+  
+  track_5_lens_tests:
+    name: "LENS Physical File Testing Infrastructure"
+    priority: P0-CRITICAL  # Upgraded from P1 - prevents production failures
+    duration: "3-4 days"
+    team_size: 1
+    roi: 9.0  # High - prevents silent production failures
+    parallel_with: "Track 3 (Support Elimination)"
+    authority: "User requirement + Integration-First Testing pattern"
+    
+    problem:
+      current_state: "LENS tests use mocking/stubbing extensively"
+      risk: "Silent failures in production (YAML profiles vanish/corrupt)"
+      gap: "No physical file system validation in tests"
+    
+    solution:
+      approach: "Integration-First Testing for LENS"
+      test_pyramid_inversion:
+        current: "80% unit (mocked), 15% integration, 5% e2e"
+        new_lens: "40% integration (physical), 35% unit, 25% e2e"
+      rationale: "LENS is inherently integration-heavy (AST + Git + Files + Knowledge)"
+    
+    scope:
+      components_requiring_physical_tests:
+        - name: "RepositoryOnboardingOrchestrator"
+          artifacts: "cortex_brain/onboarded_repos/*.yaml profiles"
+          test_pattern: "Create → Validate schema → Teardown"
+        
+        - name: "InteractionOrchestrator"
+          artifacts: "cortex_brain/state/*.json session state"
+          test_pattern: "Save state → Reload → Verify → Cleanup"
+        
+        - name: "LENS Crawlers (AST, Git, Comments)"
+          artifacts: "Temporary analysis outputs"
+          test_pattern: "Analyze → Cache → Validate → Delete"
+        
+        - name: "Dashboard Generation"
+          artifacts: "HTML/JSON artifacts"
+          test_pattern: "Generate → Validate structure → Teardown"
+        
+        - name: "Knowledge Synthesis"
+          artifacts: "Cached YAML aggregations"
+          test_pattern: "Aggregate → Cache → Validate → Cleanup"
+    
+    stages:
+      stage_1_infrastructure:
+        duration: "1 day"
+        tasks:
+          - "Create tests/fixtures/temp_repos/ isolation directory"
+          - "Build PhysicalFileTestHarness (pytest fixtures)"
+          - "Schema validation utilities (YAML/JSON)"
+          - "Cleanup verification (no artifacts left)"
+        deliverables:
+          - "tests/fixtures/temp_repos/ (gitignored)"
+          - "tests/utils/physical_file_harness.py"
+          - "tests/utils/schema_validator.py"
+        tests: 8
+      
+      stage_2_retrofit:
+        duration: "1 day"
+        tasks:
+          - "Retrofit 12 existing LENS tests with physical validation"
+          - "Add teardown cleanup to existing tests"
+          - "Verify no test artifacts remain after suite"
+        deliverables:
+          - "12 retrofitted tests (physical file validation)"
+        tests: 12
+      
+      stage_3_new_tests:
+        duration: "1 day"
+        tasks:
+          - "25 new integration tests (physical file lifecycle)"
+          - "Onboarding → profile creation validation"
+          - "Session state persistence validation"
+          - "Dashboard artifact generation validation"
+        deliverables:
+          - "25 new integration tests"
+        tests: 25
+      
+      stage_4_e2e:
+        duration: "0.5 days"
+        tasks:
+          - "End-to-end test: Onboard → Analyze → Dashboard"
+          - "Full file lifecycle (create → use → delete)"
+          - "Verify no orphaned files in cortex_brain/"
+        deliverables:
+          - "1 comprehensive E2E test"
+        tests: 1
+    
+    test_pattern_template: |
+      # Pattern: Physical File Testing (ENH-087 Track 5)
+      # Authority: Integration-First Testing for LENS
+      
+      @pytest.fixture
+      def temp_repo_workspace(tmp_path):
+          """Isolated workspace for physical file tests."""
+          workspace = tmp_path / "test_repos"
+          workspace.mkdir()
+          yield workspace
+          # Cleanup: ensure no artifacts remain
+          shutil.rmtree(workspace)
+          assert not workspace.exists()
+      
+      def test_onboarding_creates_profile_file(temp_repo_workspace):
+          """Onboarding MUST create physical YAML profile."""
+          # Setup: mock repository
+          repo_path = temp_repo_workspace / "sample_repo"
+          
+          # Execute: real onboarding (no mocks)
+          orchestrator = RepositoryOnboardingOrchestrator()
+          result = orchestrator.onboard(repo_path)
+          
+          # Assert: physical file created
+          profile_path = Path("cortex_brain/onboarded_repos/sample_repo.yaml")
+          assert profile_path.exists()
+          
+          # Assert: valid YAML structure
+          profile = yaml.safe_load(profile_path.read_text())
+          assert "repository_name" in profile
+          assert "onboarded_date" in profile
+          
+          # Teardown: cleanup (verified by fixture)
+    
+    deliverables:
+      - "Physical file test harness (8 tests)"
+      - "12 retrofitted LENS tests"
+      - "25 new integration tests"
+      - "1 E2E test (onboard → dashboard)"
+      - "Coverage: 95% file I/O paths"
+      - "Total: 46 new/enhanced tests"
+    
+    success_criteria:
+      - "100% LENS components with physical file validation"
+      - "95% file I/O path coverage"
+      - "0 orphaned test artifacts after pytest run"
+      - "All tests cleanup verified (assert not exists)"
+    
+    impact:
+      - "Prevents silent production failures (missing YAML profiles)"
+      - "Catches file permission issues before production"
+      - "Validates encoding/race condition edge cases"
+      - "Ensures cleanup (no disk space leaks)"
 
 # ============================================================================
 # ENHANCED CAPABILITIES (Gap Filling)

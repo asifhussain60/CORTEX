@@ -1,8 +1,8 @@
-version: '1.9'
+version: '2.0'
 registry_name: _cortex-master
 description: CORTEX self-development planning with wave-based incremental value delivery
-last_updated: '2026-02-11T21:00:00.000000Z'
-revision: 'Wave-Based Execution Plan v4.0: 6 release waves - Added WAVE-6 Comprehensive Cleanup & Refactoring (ROI 9.2/10 - HIGHEST)'
+last_updated: '2026-02-11T22:30:00.000000Z'
+revision: 'Wave-Based Execution Plan v5.0: 9 release waves - Optimized for ROI, Added Track 5 (LENS Tests), Wave 8 (Architecture Migration), Sequential autonomous execution'
 
 # ============================================================================
 # MASTER REMEDIATION PLAN (WAVE-BASED RELEASES)
@@ -17,11 +17,11 @@ master_remediation:
   wave_execution: true
   
   summary:
-    total_phases: 20  # 16 original + 4 new (ENH-082/084/085/086)
-    p0_critical: 3  # ENH-063, ENH-064, ENH-066
-    p1_high: 12      # phase-81, ENH-067-071, ENH-078, ENH-082/084/085/086
-    p2_medium: 5    # ENH-065, ENH-072-074, ENH-077, phase-80
-    estimated_effort: "~115 days (70 days parallelized across 6 waves)"
+    total_phases: 23  # 16 original + 4 wave enhancements + 3 new (Track 5, Wave 8, Wave 9)
+    p0_critical: 4  # ENH-063, ENH-064, ENH-066, Track 5 (LENS Tests)
+    p1_high: 13      # phase-81, ENH-067-071, ENH-078, ENH-082/084/085/086, ENH-087
+    p2_medium: 6    # ENH-065, ENH-072-074, ENH-077, phase-80, Wave 8 (Arch Migration)
+    estimated_effort: "~135 days (62 days optimized with parallel execution + Track 5 + Wave 8/9)"
   
   # Wave-Based Incremental Releases
   release_strategy:
@@ -49,34 +49,41 @@ master_remediation:
       blocks: ["Wave 2", "Wave 3"]
     
     - wave: 7
-      name: "Orchestrator Consolidation (HIGH-ROI Architecture)"
+      name: "Orchestrator Consolidation + LENS Test Hardening (HIGH-ROI Architecture)"
       release: "R7-CONSOLIDATION"
-      priority: "P1-HIGH-ROI"
-      duration: "10-18 days"
-      phases: 3  # ENH-087, ENH-088, ENH-089
-      status: "ready"
-      roi: 9.2  # SECOND HIGHEST (after Wave 6: 9.2)
+      priority: "P0/P1-CRITICAL-HIGH-ROI"
+      duration: "14-22 days"
+      phases: 4  # ENH-087, ENH-088, ENH-089, Track 5 (LENS Tests)
+      status: "in_progress"  # Track 1.1 Stage 1 complete (28/28 tests)
+      roi: 9.3  # HIGHEST (upgraded from 9.2 with Track 5 addition)
       requires: ["R1-FOUNDATION"]
       highlights:
         - "ENH-087: Orchestrator Consolidation 26→15 (78% code reduction)"
-        - "ENH-088: Multi-Cycle TDD Enhancement (iterative quality)"
+        - "ENH-088: Multi-Cycle TDD Enhancement ✅ COMPLETE (42/42 tests)"
         - "ENH-089: EventBus-Driven Debugger (zero-friction debugging)"
+        - "Track 5: LENS Physical File Testing (95% I/O coverage) 🆕"
       value_delivered:
         - "✅ 78-83% orchestrator code reduction (45k→12k LOC)"
         - "✅ Multi-cycle TDD: iterative refinement until 85%+ coverage"
         - "✅ Zero-friction debugging: auto-marker injection on failures"
         - "✅ Master plan execution: registry plans → automated workflow"
         - "✅ EventBus decoupling: 15 dependencies eliminated"
+        - "✅ LENS physical file validation: prevents silent production failures 🆕"
       dependencies: ["ENH-063"]  # Foundation security must be complete
       blocks: []
       authority: "Phase 81 + CORE-035 + Enhanced Vision (chat01.md)"
       file_reference: "enhancements/ENH-087-orchestrator-consolidation.yaml"
-      parallel_tracks: 4  # Core, Domain, Support, Cleanup
+      parallel_tracks: 5  # Core, Domain, Support, Cleanup, LENS Tests (Track 5)
       architectural_patterns:
         - "Strategy Pattern (88+ orchestrators → pluggable strategies)"
         - "Event-Driven Decoupling (OrchestratorEventBus)"
         - "Mixin Composition (replace inheritance)"
         - "Behavior-Driven Consolidation (test capabilities, not methods)"
+        - "Integration-First Testing (LENS physical file lifecycle) 🆕"
+      progress:
+        track_1: "25% complete (Stage 1: StageExecutionStrategy + Stage1Comprehension)"
+        track_5: "0% (not started - scheduled after Track 1)"
+        tests_passing: "70/70 (ENH-088: 42, Track 1.1: 28)"
     
     - wave: 2
       name: "Intelligence (Enhanced Decision Making)"
@@ -175,6 +182,69 @@ master_remediation:
       blocks: []
       authority: "chat01.md + cortex-architect.prompt.md v15.3"
       file_reference: "WAVE-6-COMPREHENSIVE-CLEANUP-REFACTORING.yaml"
+    
+    - wave: 8
+      name: "Architecture Documentation Migration & Consolidation (Documentation SSOT)"
+      release: "R8-ARCH-DOCS"
+      priority: "P2-MEDIUM-HIGH"
+      duration: "5-7 days"
+      phases: 1  # Migration + Consolidation + Automation
+      status: "planned"
+      roi: 8.5  # High value for long-term maintainability
+      requires: ["R7-CONSOLIDATION", "R6-CLEANUP"]  # After major architecture changes
+      highlights:
+        - "Migrate _workspaces/cortex-architecture → cortex-registry/architecture/"
+        - "Auto-generate diagrams from wiring.yaml + EventBus topology"
+        - "Detect + resolve documentation contradictions"
+        - "Create living architecture (SSOT in registry)"
+      value_delivered:
+        - "✅ Single source of truth for architecture (cortex-registry)"
+        - "✅ Auto-generated Mermaid diagrams (40+)"
+        - "✅ Zero documentation drift (contradictions eliminated)"
+        - "✅ Automated doc generation pipeline"
+        - "✅ Delete _workspaces/cortex-architecture (cleanup)"
+      dependencies: ["ENH-087", "ENH-082"]  # After orchestrator consolidation + response templates
+      blocks: []
+      authority: "CORE-002 (markdown suppression) + chat01.md analysis"
+      architectural_patterns:
+        - "Documentation as Code (auto-generated from wiring)"
+        - "Living Architecture (registry = SSOT)"
+        - "Semantic Diff (contradiction detection)"
+      deliverables:
+        - "cortex-registry/architecture/ (migrated + enhanced)"
+        - "Auto-generation scripts (diagrams, metrics, topology)"
+        - "Contradiction detection report"
+        - "cortex-architect.prompt.md v16.0 (updated counts)"
+        - "DELETE: _workspaces/cortex-architecture/"
+      execution_mode: "autonomous_silent_with_validation"
+    
+    - wave: 9
+      name: "Workspace Cleanup & Structure Optimization (Repository Hygiene)"
+      release: "R9-CLEANUP"
+      priority: "P2-MEDIUM"
+      duration: "3-4 days"
+      phases: 1  # Cleanup + Consolidation
+      status: "planned"
+      roi: 7.5  # Developer experience improvement
+      requires: ["R8-ARCH-DOCS"]  # After architecture migration
+      highlights:
+        - "Archive development artifacts (_workspaces/__bak-docs/)"
+        - "Complete cortex_brain migration (consolidate state/tier files)"
+        - "Consolidate root scripts into scripts/"
+        - "Evaluate cortex-lens/ and company/ for optimization"
+      value_delivered:
+        - "✅ Clean repository structure (production-ready)"
+        - "✅ Consolidated scripts (single location)"
+        - "✅ Archived dev artifacts (preserved history)"
+        - "✅ Optimized workspace layout"
+      dependencies: ["Wave 8"]  # After architecture cleanup
+      blocks: []
+      authority: "cortex-architect.prompt.md v13.1 (Repository Structure Cleanup)"
+      deliverables:
+        - "Archived _workspaces/ content"
+        - "Consolidated scripts/"
+        - "Cleaned cortex_brain/"
+        - "Repository structure documentation"
   
   success_metrics:
     wave_1_foundation:
