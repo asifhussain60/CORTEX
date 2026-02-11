@@ -87,7 +87,7 @@ class TestMCPToolRegistration:
     def test_mcp_tool_accepts_dry_run_flag(self, tmp_path):
         """Test that MCP tool accepts dry_run parameter."""
         test_file = tmp_path / "test.txt"
-        test_file.write_text("Sample")
+        test_file.write_text("Sample", encoding="utf-8")
         
         result = cortex_digest_session(file_path=str(test_file), dry_run=True)
         assert isinstance(result, dict)
@@ -95,7 +95,7 @@ class TestMCPToolRegistration:
     def test_mcp_tool_returns_digest_result(self, tmp_path, sample_chat_content):
         """Test that MCP tool returns DigestResult structure."""
         test_file = tmp_path / "chat.txt"
-        test_file.write_text(sample_chat_content)
+        test_file.write_text(sample_chat_content, encoding="utf-8")
         
         result = cortex_digest_session(file_path=str(test_file), dry_run=True)
         
@@ -121,7 +121,7 @@ class TestMCPToolRegistration:
         import json
         
         test_file = tmp_path / "chat.txt"
-        test_file.write_text(sample_chat_content)
+        test_file.write_text(sample_chat_content, encoding="utf-8")
         
         result = cortex_digest_session(file_path=str(test_file), dry_run=True)
         
@@ -348,7 +348,7 @@ class TestDryRunMode:
     def test_dry_run_does_not_save_to_disk(self, tmp_path, sample_chat_content):
         """Test that dry_run=True does not save results."""
         test_file = tmp_path / "chat.txt"
-        test_file.write_text(sample_chat_content)
+        test_file.write_text(sample_chat_content, encoding="utf-8")
         
         result = cortex_digest_session(file_path=str(test_file), dry_run=True)
         
@@ -358,7 +358,7 @@ class TestDryRunMode:
     def test_dry_run_returns_extractions(self, tmp_path, sample_chat_content):
         """Test that dry_run=True returns extractions."""
         test_file = tmp_path / "chat.txt"
-        test_file.write_text(sample_chat_content)
+        test_file.write_text(sample_chat_content, encoding="utf-8")
         
         result = cortex_digest_session(file_path=str(test_file), dry_run=True)
         
@@ -368,7 +368,7 @@ class TestDryRunMode:
     def test_non_dry_run_saves_results(self, tmp_path, sample_chat_content):
         """Test that dry_run=False saves results to disk."""
         test_file = tmp_path / "chat.txt"
-        test_file.write_text(sample_chat_content)
+        test_file.write_text(sample_chat_content, encoding="utf-8")
         
         # Use tmp_path as output directory to avoid cluttering cortex_brain
         result = cortex_digest_session(file_path=str(test_file), dry_run=False)
@@ -379,7 +379,7 @@ class TestDryRunMode:
     def test_dry_run_flag_in_result(self, tmp_path, sample_chat_content):
         """Test that dry_run flag is reflected in result."""
         test_file = tmp_path / "chat.txt"
-        test_file.write_text(sample_chat_content)
+        test_file.write_text(sample_chat_content, encoding="utf-8")
         
         result = cortex_digest_session(file_path=str(test_file), dry_run=True)
         
@@ -390,7 +390,7 @@ class TestDryRunMode:
         import time
         
         test_file = tmp_path / "chat.txt"
-        test_file.write_text(sample_chat_content)
+        test_file.write_text(sample_chat_content, encoding="utf-8")
         
         start = time.time()
         cortex_digest_session(file_path=str(test_file), dry_run=True)
