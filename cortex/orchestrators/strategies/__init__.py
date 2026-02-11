@@ -44,6 +44,17 @@ from cortex.orchestrators.strategies.planning_strategy_pattern import (
     MicroPlanningStrategy,
     UnifiedPlanningOrchestrator,
 )
+from cortex.orchestrators.strategies.support_layer_pattern import (
+    SupportOperationType,
+    SupportRequest,
+    SupportMetrics,
+    SupportResult,
+    SupportStrategy,
+    ValidationStrategy,
+    ErrorHandlingStrategy,
+    CachingStrategy,
+    UnifiedSupportOrchestrator,
+)
 
 __all__ = [
     "StageContext",
@@ -76,4 +87,14 @@ __all__ = [
     "MacroPlanningStrategy",
     "MicroPlanningStrategy",
     "UnifiedPlanningOrchestrator",
+    # ENH-090 Track 2: Support Layer Consolidation (Stage 3)
+    "SupportOperationType",
+    "SupportRequest",
+    "SupportMetrics",
+    "SupportResult",
+    "SupportStrategy",
+    "ValidationStrategy",
+    "ErrorHandlingStrategy",
+    "CachingStrategy",
+    "UnifiedSupportOrchestrator",
 ]
