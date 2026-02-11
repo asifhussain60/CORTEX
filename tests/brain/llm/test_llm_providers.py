@@ -122,9 +122,16 @@ class TestOpenAIProvider:
         mock_client = MagicMock()
         mock_openai_class.return_value = mock_client
         
-        # Simulate rate limit
+        # Simulate rate limit with proper RateLimitError initialization
         import openai
-        mock_client.chat.completions.create.side_effect = openai.RateLimitError("Rate limit")
+        mock_response = MagicMock()
+        mock_response.status_code = 429
+        rate_limit_error = openai.RateLimitError(
+            "Rate limit",
+            response=mock_response,
+            body={"error": {"message": "Rate limit exceeded"}}
+        )
+        mock_client.chat.completions.create.side_effect = rate_limit_error
         
         provider = OpenAIProvider(api_key="test-key")
         
@@ -179,37 +186,29 @@ class TestAnthropicProvider:
 class TestLLMFactory:
     """Test LLM provider factory."""
     
-    @patch('cortex.brain.llm.llm_factory.OpenAIProvider')
-    def test_create_openai_provider(self, mock_provider_class):
+    def test_create_openai_provider(self):
         """Test factory creates OpenAI provider."""
-        mock_provider = Mock()
-        mock_provider_class.return_value = mock_provider
-        
         provider = LLMFactory.create_provider(
             provider_name="openai",
             api_key="test-key",
             model="gpt-4"
         )
         
-        assert provider == mock_provider
-        mock_provider_class.assert_called_once_with(
-            api_key="test-key",
-            model="gpt-4"
-        )
+        assert provider.get_name() == "openai"
+        assert provider.get_model() == "gpt-4"
+        assert isinstance(provider, OpenAIProvider)
     
-    @patch('cortex.brain.llm.llm_factory.AnthropicProvider')
-    def test_create_anthropic_provider(self, mock_provider_class):
+    def test_create_anthropic_provider(self):
         """Test factory creates Anthropic provider."""
-        mock_provider = Mock()
-        mock_provider_class.return_value = mock_provider
-        
         provider = LLMFactory.create_provider(
             provider_name="anthropic",
             api_key="test-key",
             model="claude-3-opus-20240229"
         )
         
-        assert provider == mock_provider
+        assert provider.get_name() == "anthropic"
+        assert provider.get_model() == "claude-3-opus-20240229"
+        assert isinstance(provider, AnthropicProvider)
     
     def test_create_invalid_provider(self):
         """Test factory raises error for invalid provider."""
@@ -219,16 +218,14 @@ class TestLLMFactory:
                 api_key="test-key"
             )
     
-    @patch.dict('os.environ', {'DEFAULT_LLM_PROVIDER': 'openai'})
-    @patch('cortex.brain.llm.llm_factory.OpenAIProvider')
-    def test_create_default_provider(self, mock_provider_class):
+    @patch.dict('os.environ', {'DEFAULT_LLM_PROVIDER': 'openai', 'DEFAULT_LLM_MODEL': 'gpt-4'})
+    def test_create_default_provider(self):
         """Test factory creates default provider from environment."""
-        mock_provider = Mock()
-        mock_provider_class.return_value = mock_provider
-        
         provider = LLMFactory.create_default_provider(api_key="test-key")
         
-        assert provider == mock_provider
+        assert provider.get_name() == "openai"
+        assert provider.get_model() == "gpt-4"
+        assert isinstance(provider, OpenAIProvider)
     
     def test_get_available_providers(self):
         """Test factory returns list of available providers."""
