@@ -1,0 +1,577 @@
+# ============================================================================
+# CORTEX WAVE-BASED EXECUTION PLAN
+# ============================================================================
+# Authority: cortex-architect.prompt.md v15.3 + MASTER-REMEDIATION-PLAN-V2.yaml
+# Purpose: Wave-based prioritization for autonomous silent execution of 35 active phases
+# Status: ACTIVE - Ready for autonomous execution
+# Created: 2026-02-11
+# AC-ID: AC-WAVE-EXEC-001
+# ============================================================================
+
+version: "1.0"
+created: "2026-02-11T18:30:00Z"
+last_updated: "2026-02-11T18:30:00Z"
+execution_mode: "autonomous_silent"
+progress_tracking: "ascii_bars"
+
+metadata:
+  total_phases: 35
+  p0_critical: 8
+  p1_high: 18
+  p2_medium: 9
+  estimated_total_effort: "26 weeks (18 weeks parallelized)"
+  wave_count: 5
+  completed_phases: 2  # Phase-71, Phase-76
+  in_progress: 3      # Phase-75, Phase-80, Phase-54
+
+# ============================================================================
+# WAVE 1: PRODUCTION BLOCKERS (P0) - Week 1-4
+# ============================================================================
+wave_1:
+  name: "Production Blockers & Quick Wins"
+  priority: "P0-CRITICAL"
+  duration: "4 weeks (3 weeks parallelized)"
+  parallelizable: true
+  
+  phases:
+    - phase_id: "ENH-063"
+      title: "Production Architecture Remediation (15 Critical Fixes)"
+      status: "ready"
+      estimated_effort: "19 days (12 days parallelized)"
+      roi: 10.0
+      impact: "BLOCKING - Security vulnerabilities, authentication, circuit breakers"
+      deliverables:
+        - "MCP authentication + RBAC"
+        - "Command injection fix"
+        - "Circuit breakers + async git"
+        - "Global exception handler"
+        - "Structured logging"
+      wave_assignment: "WAVE-1-SECURITY"
+    
+    - phase_id: "phase-54-environment-bootstrap-reboot"
+      title: "Environment Bootstrap Reboot"
+      status: "ready"
+      estimated_effort: "1 week"
+      priority: "P0-CRITICAL"
+      impact: "MCP setup reliability, onboarding friction"
+      wave_assignment: "WAVE-1-INFRASTRUCTURE"
+    
+    - phase_id: "phase-51-secrets-management"
+      title: "Secrets Management Audit Hardening"
+      status: "ready"
+      estimated_effort: "1 week"
+      priority: "P0"
+      impact: "Security compliance, production deployment"
+      wave_assignment: "WAVE-1-SECURITY"
+    
+    - phase_id: "ENH-066"
+      title: "MCP Pylance-Style Architecture Clarification"
+      status: "ready"
+      estimated_effort: "1 day"
+      priority: "P0"
+      roi: 10.0
+      impact: "Onboarding: 30 min → 3 min (10x improvement)"
+      wave_assignment: "WAVE-1-QUICK-WIN"
+    
+    - phase_id: "phase-48-holistic-validation"
+      title: "Holistic Validation & Challenge Gate"
+      status: "planned"
+      estimated_effort: "2 weeks"
+      priority: "P0"
+      impact: "Pre-implementation validation, challenge generation"
+      depends_on: ["ENH-063"]
+      wave_assignment: "WAVE-1-VALIDATION"
+    
+    - phase_id: "phase-48-registry-isolation"
+      title: "Registry Isolation Multi-Tenant"
+      status: "planned"
+      estimated_effort: "1 week"
+      priority: "P0"
+      impact: "Enterprise deployment, cross-workspace isolation"
+      wave_assignment: "WAVE-1-INFRASTRUCTURE"
+
+  success_metrics:
+    security:
+      - "MCP authentication: false → true"
+      - "Command injection vulns: 2 → 0"
+      - "Secrets encrypted: false → true"
+    reliability:
+      - "Circuit breakers: false → true"
+      - "Server crash rate: 3/week → 0/month"
+    operability:
+      - "MCP setup time: 30 min → 3 min"
+      - "Onboarding success rate: 60% → 95%"
+
+# ============================================================================
+# WAVE 2: HIGH-VALUE FEATURES (P1) - Week 5-10
+# ============================================================================
+wave_2:
+  name: "High-Value Features & Intelligence"
+  priority: "P1-HIGH"
+  duration: "6 weeks (4 weeks parallelized)"
+  parallelizable: true
+  depends_on: ["wave_1"]
+  
+  phases:
+    - phase_id: "ENH-064"
+      title: "LENS Intelligence Layer Separation"
+      status: "ready"
+      estimated_effort: "2 weeks"
+      priority: "P1"
+      roi: 10.0
+      impact: "0% → 90% codebase understanding"
+      wave_assignment: "WAVE-2-INTELLIGENCE"
+    
+    - phase_id: "ENH-065"
+      title: "SPA Dashboard Production Readiness (15 Issues)"
+      status: "ready"
+      estimated_effort: "7 days (6 phases)"
+      priority: "P1"
+      roi: 9.0
+      impact: "Production score: 3.6/10 → 9/10"
+      wave_assignment: "WAVE-2-DASHBOARD"
+    
+    - phase_id: "phase-80"
+      title: "MCP Tools Documentation Architect"
+      status: "active"
+      estimated_effort: "4 weeks (1 week MVP)"
+      priority: "P1"
+      roi: 9.2
+      impact: "Tool health: 32% → 77%, doc effort: 40h → 2-3h"
+      wave_assignment: "WAVE-2-DOCUMENTATION"
+    
+    - phase_id: "ENH-067"
+      title: "Autonomous Plan Execution with Visual Progress"
+      status: "partially_implemented"
+      estimated_effort: "3 weeks"
+      priority: "P1"
+      roi: 5.0
+      impact: "User approves → CORTEX executes autonomously"
+      wave_assignment: "WAVE-2-AUTOMATION"
+    
+    - phase_id: "phase-53-lens-intelligence-upgrade"
+      title: "LENS Intelligence Upgrade"
+      status: "planned"
+      estimated_effort: "2 weeks"
+      priority: "P1"
+      impact: "Enhanced code intelligence, pattern detection"
+      wave_assignment: "WAVE-2-INTELLIGENCE"
+    
+    - phase_id: "phase-49-context-crystallization"
+      title: "Context Crystallization Layer"
+      status: "planned"
+      estimated_effort: "2 weeks"
+      priority: "P1"
+      impact: "Pre-warmed context, reduced latency"
+      wave_assignment: "WAVE-2-PERFORMANCE"
+    
+    - phase_id: "phase-52-enterprise-orchestrator"
+      title: "Enterprise Orchestrator Suite"
+      status: "planned"
+      estimated_effort: "3 weeks"
+      priority: "P1"
+      impact: "Team collaboration, production quality"
+      wave_assignment: "WAVE-2-ENTERPRISE"
+    
+    - phase_id: "ENH-068"
+      title: "Data Integrity Validator for Dashboard"
+      status: "planned"
+      estimated_effort: "1 week"
+      priority: "P1"
+      roi: 7.0
+      impact: "Trust improvement, stakeholder confidence"
+      wave_assignment: "WAVE-2-DASHBOARD"
+    
+    - phase_id: "ENH-069"
+      title: "Dashboard Explainability Panel"
+      status: "planned"
+      estimated_effort: "1 week"
+      priority: "P1"
+      roi: 8.0
+      impact: "Transparency, debugging, stakeholder education"
+      wave_assignment: "WAVE-2-DASHBOARD"
+    
+    - phase_id: "ENH-070"
+      title: "Use-Case Library Generator (5 Personas × 6 Categories)"
+      status: "planned"
+      estimated_effort: "1 week"
+      priority: "P1"
+      roi: 6.0
+      impact: "User adoption, feature discovery"
+      wave_assignment: "WAVE-2-ADOPTION"
+    
+    - phase_id: "ENH-071"
+      title: "Domain Inference from Business Summary (NLP)"
+      status: "planned"
+      estimated_effort: "2 weeks"
+      priority: "P1"
+      roi: 7.0
+      impact: "Automatic domain knowledge capture"
+      wave_assignment: "WAVE-2-INTELLIGENCE"
+
+  success_metrics:
+    intelligence:
+      - "Codebase understanding: 0% → 90%"
+      - "Pattern detection accuracy: 60% → 85%"
+    dashboard:
+      - "Production score: 3.6/10 → 9/10"
+      - "User engagement: 2 personas → 5 personas"
+    documentation:
+      - "Tool health: 32% → 77%"
+      - "Documentation refresh: 40h → 2-3h"
+
+# ============================================================================
+# WAVE 3: RELIABILITY & PERFORMANCE (P1) - Week 11-14
+# ============================================================================
+wave_3:
+  name: "Reliability & Performance Optimization"
+  priority: "P1-RELIABILITY"
+  duration: "4 weeks (3 weeks parallelized)"
+  parallelizable: true
+  depends_on: ["wave_1", "wave_2"]
+  
+  phases:
+    - phase_id: "phase-50-storage-backend"
+      title: "Storage Backend Abstraction"
+      status: "planned"
+      estimated_effort: "2 weeks"
+      priority: "P1"
+      impact: "Enterprise deployment foundation"
+      wave_assignment: "WAVE-3-INFRASTRUCTURE"
+    
+    - phase_id: "phase-56-lens-hybrid"
+      title: "LENS Intelligence Hybrid Architecture"
+      status: "planned"
+      estimated_effort: "3 weeks"
+      priority: "P1"
+      impact: "Performance optimization, caching"
+      wave_assignment: "WAVE-3-PERFORMANCE"
+    
+    - phase_id: "phase-58-async-crawler"
+      title: "Async Crawler Framework"
+      status: "planned"
+      estimated_effort: "2 weeks"
+      priority: "P1"
+      impact: "Scalable repository analysis"
+      wave_assignment: "WAVE-3-SCALABILITY"
+    
+    - phase_id: "phase-54-onboarding-refactor"
+      title: "Incremental Onboarding Refactor"
+      status: "planned"
+      estimated_effort: "2 weeks"
+      priority: "P1"
+      impact: "Faster onboarding, better UX"
+      wave_assignment: "WAVE-3-PERFORMANCE"
+    
+    - phase_id: "phase-72-unified-digest"
+      title: "Unified Digest Ingest Facade"
+      status: "planned"
+      estimated_effort: "1 week"
+      priority: "P1"
+      impact: "Consistent learning pipeline"
+      wave_assignment: "WAVE-3-LEARNING"
+
+  success_metrics:
+    performance:
+      - "MCP P99 latency: 2-5s → <100ms"
+      - "Onboarding time: 10 min → 3 min"
+    scalability:
+      - "Concurrent repos: 1 → 10"
+      - "Crawler throughput: 1 repo/min → 5 repos/min"
+
+# ============================================================================
+# WAVE 4: ADVANCED INTELLIGENCE (P1-P2) - Week 15-20
+# ============================================================================
+wave_4:
+  name: "Advanced Intelligence & Pattern Recognition"
+  priority: "P1-P2"
+  duration: "6 weeks (4 weeks parallelized)"
+  parallelizable: true
+  depends_on: ["wave_2", "wave_3"]
+  
+  phases:
+    - phase_id: "phase-57-architectural-patterns"
+      title: "Architectural Pattern Detection"
+      status: "planned"
+      estimated_effort: "3 weeks"
+      priority: "P1"
+      impact: "Architecture understanding, recommendations"
+      wave_assignment: "WAVE-4-INTELLIGENCE"
+    
+    - phase_id: "phase-59-ml-pattern"
+      title: "ML Pattern Similarity"
+      status: "planned"
+      estimated_effort: "3 weeks"
+      priority: "P1"
+      impact: "Pattern matching, anomaly detection"
+      wave_assignment: "WAVE-4-ML"
+    
+    - phase_id: "phase-60-enterprise-pattern"
+      title: "Enterprise Pattern Registry"
+      status: "planned"
+      estimated_effort: "2 weeks"
+      priority: "P1"
+      impact: "Best practices library, reusability"
+      wave_assignment: "WAVE-4-ENTERPRISE"
+    
+    - phase_id: "phase-65-lens-remediation"
+      title: "LENS Intelligence Remediation"
+      status: "planned"
+      estimated_effort: "2 weeks"
+      priority: "P1"
+      impact: "Code quality improvements"
+      wave_assignment: "WAVE-4-INTELLIGENCE"
+    
+    - phase_id: "phase-66-knowledge-graph"
+      title: "LENS Knowledge Graph Domain Intelligence"
+      status: "planned"
+      estimated_effort: "3 weeks"
+      priority: "P1"
+      impact: "Domain understanding, relationships"
+      wave_assignment: "WAVE-4-INTELLIGENCE"
+    
+    - phase_id: "phase-67-dotnet-roslyn"
+      title: "DotNet Roslyn Deep Intelligence"
+      status: "planned"
+      estimated_effort: "3 weeks"
+      priority: "P1"
+      impact: ".NET deep analysis, C# intelligence"
+      wave_assignment: "WAVE-4-LANGUAGE"
+    
+    - phase_id: "phase-68-angular-analysis"
+      title: "Angular Deep Analysis"
+      status: "planned"
+      estimated_effort: "2 weeks"
+      priority: "P1"
+      impact: "Angular app intelligence"
+      wave_assignment: "WAVE-4-LANGUAGE"
+    
+    - phase_id: "phase-69-runtime-correlation"
+      title: "Runtime Correlation Engine"
+      status: "planned"
+      estimated_effort: "3 weeks"
+      priority: "P1"
+      impact: "Runtime behavior analysis"
+      wave_assignment: "WAVE-4-OBSERVABILITY"
+
+  success_metrics:
+    intelligence:
+      - "Pattern detection: 100+ patterns"
+      - "Language support: 3 → 6 languages"
+      - "ML accuracy: baseline → 85%"
+
+# ============================================================================
+# WAVE 5: ARCHITECTURAL IMPROVEMENTS (P2) - Week 21-26
+# ============================================================================
+wave_5:
+  name: "Architectural Improvements & Long-term Enhancements"
+  priority: "P2-MEDIUM"
+  duration: "6 weeks (4 weeks parallelized)"
+  parallelizable: true
+  depends_on: ["wave_3", "wave_4"]
+  
+  phases:
+    - phase_id: "ENH-072"
+      title: "Renderable Content Schema (Unified Output)"
+      status: "planned"
+      estimated_effort: "1 week"
+      priority: "P2"
+      impact: "Consistent output structure"
+      wave_assignment: "WAVE-5-ARCHITECTURE"
+    
+    - phase_id: "ENH-073"
+      title: "Chart Interaction Standard"
+      status: "planned"
+      estimated_effort: "1 week"
+      priority: "P2"
+      impact: "Standardized chart UX"
+      wave_assignment: "WAVE-5-UX"
+    
+    - phase_id: "ENH-074"
+      title: "Virtualization for Large Lists (>1000 items)"
+      status: "planned"
+      estimated_effort: "3 days"
+      priority: "P2"
+      impact: "Performance for large datasets"
+      wave_assignment: "WAVE-5-PERFORMANCE"
+    
+    - phase_id: "ENH-077"
+      title: "Self-Optimizing CORTEX (Quarterly Audit)"
+      status: "planned"
+      estimated_effort: "3 weeks"
+      priority: "P2"
+      impact: "Continuous improvement automation"
+      wave_assignment: "WAVE-5-AUTOMATION"
+    
+    - phase_id: "phase-74-documentation-site"
+      title: "Documentation Site Generation"
+      status: "planned"
+      estimated_effort: "2 weeks"
+      priority: "P2"
+      impact: "GitHub Pages documentation"
+      wave_assignment: "WAVE-5-DOCUMENTATION"
+    
+    - phase_id: "phase-77-intelligence-learning"
+      title: "Intelligence Learning Core"
+      status: "planned"
+      estimated_effort: "3 weeks"
+      priority: "P2"
+      impact: "Enhanced learning algorithms"
+      wave_assignment: "WAVE-5-LEARNING"
+    
+    - phase_id: "phase-78-enterprise-maturity"
+      title: "Enterprise Orchestrator Maturity"
+      status: "planned"
+      estimated_effort: "3 weeks"
+      priority: "P2"
+      impact: "Production-grade orchestrators"
+      wave_assignment: "WAVE-5-ENTERPRISE"
+    
+    - phase_id: "phase-79-enterprise-support"
+      title: "Enterprise Support Framework"
+      status: "planned"
+      estimated_effort: "2 weeks"
+      priority: "P2"
+      impact: "Enterprise-grade support"
+      wave_assignment: "WAVE-5-ENTERPRISE"
+
+  success_metrics:
+    architecture:
+      - "Code consistency: 70% → 90%"
+      - "API standards: 60% → 95%"
+    automation:
+      - "Manual effort: 40h/quarter → 2h/quarter"
+
+# ============================================================================
+# SUPERSEDED PHASES (Completed or Consolidated)
+# ============================================================================
+superseded_phases:
+  - phase_id: "phase-71"
+    title: "Universal Learning Loop"
+    status: "COMPLETE"
+    completion_date: "2026-02-10"
+    tests_passing: "74/75 (1 timeout)"
+    location: "phases/completed/2026/"
+    reason: "All 8 stages complete, learning infrastructure operational"
+  
+  - phase_id: "phase-76"
+    title: "Production Foundation Trilogy"
+    status: "COMPLETE"
+    completion_date: "2026-02-10"
+    tests_passing: "320/320"
+    location: "phases/completed/2026/"
+    reason: "Consolidated phase-70+48+51-alt, foundation infrastructure complete"
+  
+  - phase_id: "phase-75"
+    title: "Knowledge Persistence & Universal Learning Loop"
+    status: "SUPERSEDED"
+    superseded_by: "phase-71"
+    reason: "Overlaps with Phase-71 learning loop architecture (already complete)"
+    action: "Mark as superseded, remove from active phases"
+  
+  - phase_id: "phase-70"
+    title: "Implementation ↔ Specification Alignment"
+    status: "CONSOLIDATED"
+    consolidated_into: "phase-76"
+    reason: "Merged into Production Foundation Trilogy"
+  
+  - phase_id: "phase-48-alt"
+    title: "Registry Isolation (original)"
+    status: "CONSOLIDATED"
+    consolidated_into: "phase-76"
+    reason: "Merged into Production Foundation Trilogy S2"
+
+# ============================================================================
+# EXECUTION GUIDELINES
+# ============================================================================
+execution_guidelines:
+  autonomous_mode:
+    enabled: true
+    trigger_words: ["proceed", "implement", "continue", "yes", "do it"]
+    visual_feedback: "ASCII progress bars"
+    narration: "NONE (silent execution)"
+    reporting: "On completion or error only"
+  
+  wave_execution:
+    strategy: "Sequential waves, parallel phases within wave"
+    wave_1_blocking: true  # Must complete before Wave 2
+    wave_2_dependency: ["wave_1"]
+    wave_3_dependency: ["wave_1", "wave_2"]
+    wave_4_dependency: ["wave_2", "wave_3"]
+    wave_5_dependency: ["wave_3", "wave_4"]
+  
+  phase_execution:
+    orchestrator: "TDDOrchestrator"
+    mcp_tool: "cortex_process_request"
+    enforcement: "EnforcementOrchestrator (7-agent pre-execution gate)"
+    governance: "CORE-008 (TDD mandatory), MCP-FIRST, MCP-GATE"
+    testing: "Tests BEFORE code (no bypass allowed)"
+  
+  progress_tracking:
+    format: "ASCII progress bars"
+    frequency: "Per-stage completion"
+    metrics: "Tests passing, coverage %, duration"
+    git_commits: "Per-phase completion with AC markers"
+  
+  quality_gates:
+    pre_execution: "EnforcementOrchestrator validation"
+    post_execution: "Test suite must pass (no skip/ignore)"
+    security: "OWASP compliance, secrets detection"
+    performance: "Benchmarks within thresholds"
+
+# ============================================================================
+# SUCCESS METRICS (OVERALL)
+# ============================================================================
+overall_success_metrics:
+  security:
+    - "Authentication: false → true"
+    - "Vulnerabilities: 15 → 0"
+    - "Secrets encrypted: false → true"
+  
+  reliability:
+    - "Server crash rate: 3/week → 0/month"
+    - "Circuit breakers: false → true"
+    - "Test suite confidence: 60% → 95%"
+  
+  performance:
+    - "MCP P99 latency: 2-5s → <100ms"
+    - "Onboarding time: 30 min → 3 min"
+    - "Dashboard load: 5s → <500ms"
+  
+  intelligence:
+    - "Codebase understanding: 0% → 90%"
+    - "Pattern detection: 20 → 100+ patterns"
+    - "Language support: 3 → 6 languages"
+  
+  operability:
+    - "MTTR: 30+ min → <5 min"
+    - "Documentation refresh: 40h → 2-3h"
+    - "Manual effort: 40h/sprint → 2h/sprint"
+  
+  adoption:
+    - "User engagement: 2 personas → 5 personas"
+    - "Feature discovery: 30% → 85%"
+    - "Onboarding success: 60% → 95%"
+
+# ============================================================================
+# NEXT ACTIONS
+# ============================================================================
+next_actions:
+  immediate:
+    - "Update index.yaml with wave assignments"
+    - "Mark phase-75 as superseded by phase-71"
+    - "Create Wave 1 execution kickoff plan"
+    - "Set up ASCII progress bar infrastructure"
+    - "Git commit: AC-WAVE-EXEC-001 (wave-based reprioritization)"
+  
+  wave_1_prep:
+    - "Validate ENH-063 is ready (MCP pre-flight check)"
+    - "Create ENH-066 1-day implementation plan"
+    - "Review phase-54 bootstrap requirements"
+    - "Align phase-48 validation with ENH-063 completion"
+  
+  governance:
+    - "Ensure EnforcementOrchestrator gates all wave executions"
+    - "Set up MCP-FIRST violation detection"
+    - "Configure TDD enforcement (no test bypass)"
+    - "Enable AC marker auto-injection for audit trail"
