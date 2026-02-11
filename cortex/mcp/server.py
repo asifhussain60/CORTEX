@@ -532,12 +532,21 @@ class MCPServer:
                 "timestamp": datetime.now().isoformat(),
             })
             
-            # Create response
+            # Create response in MCP protocol format
+            # MCP expects: { "content": [{"type": "text", "text": "..."}] }
             response: MCPResponse = MCPResponse(
                 result={
-                    "tool": tool_name,
-                    "output": result,
-                    "execution_time_ms": execution_time_ms,
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": json.dumps(result, indent=2, default=str) if isinstance(result, dict) else str(result)
+                        }
+                    ],
+                    "isError": False,
+                    "_metadata": {
+                        "tool": tool_name,
+                        "execution_time_ms": execution_time_ms,
+                    }
                 },
                 id=request_id
             )
@@ -579,12 +588,24 @@ class MCPServer:
             self.logger.error(f"Tool execution error: {e}", exc_info=True)
             
             execution_time_ms = (time.time() - start_time) * 1000
+            
+            # Return error in MCP protocol format
+            error_message = str(e)
             return MCPResponse(
-                error=MCPError(
-                    code=self.INTERNAL_ERROR,
-                    message=str(e),
-                    data={"tool": tool_name, "execution_time_ms": execution_time_ms}
-                ).to_dict(),
+                result={
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": f"Error executing {tool_name}: {error_message}"
+                        }
+                    ],
+                    "isError": True,
+                    "_metadata": {
+                        "tool": tool_name,
+                        "execution_time_ms": execution_time_ms,
+                        "error": error_message
+                    }
+                },
                 id=request_id
             )
 
