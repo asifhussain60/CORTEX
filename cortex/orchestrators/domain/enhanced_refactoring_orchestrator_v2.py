@@ -290,9 +290,8 @@ class EnhancedRefactoringOrchestrator:
         branch_count = code.count("if ") + code.count("elif ")
         if branch_count > 5:
             issues.append("complexity: Multiple conditional branches")
-            quality_score -= 10
-            if complexity_level == "low":
-                complexity_level = "medium"
+            quality_score -= 15
+            complexity_level = "critical"  # 6+ branches is critical complexity
         elif branch_count >= 2:
             # Code with 2+ branches is complex, especially in loop context
             # Check if it's also inside a loop (function body with loop + conditionals)
