@@ -16,6 +16,9 @@ from enum import Enum
 import logging
 from datetime import datetime
 
+# MCP Tool Integration (Phase 81 S3 Part 3)
+from cortex.intent_router.mcp_executor import MCPToolExecutor, MCPExecutionRequest
+
 logger = logging.getLogger(__name__)
 
 
@@ -118,6 +121,7 @@ class AgentCollaborationCoordinator:
         """Initialize collaboration coordinator."""
         self._active_collaborations: Dict[str, CollaborationRequest] = {}
         self._agent_registry: Dict[str, Dict[str, Any]] = {}
+        self._mcp_executor = MCPToolExecutor()  # MCP tool integration (Phase 81 S3 Part 3)
         logger.info("AgentCollaborationCoordinator initialized")
     
     def register_agent(
@@ -143,6 +147,10 @@ class AgentCollaborationCoordinator:
             "registered_at": datetime.now().isoformat(),
             "collaboration_count": 0
         }
+        
+        # Register agent's tools with MCP executor (Phase 81 S3 Part 3)
+        self._mcp_executor.register_agent_tools(agent_id, mcp_tools)
+        
         logger.info(f"Agent registered: {agent_id} | Capabilities: {len(capabilities)}")
     
     def determine_collaboration_pattern(
@@ -386,9 +394,11 @@ class AgentCollaborationCoordinator:
         request: CollaborationRequest
     ) -> Dict[str, Any]:
         """
-        Execute single agent (placeholder for MCP tool invocation).
+        Execute single agent via MCP tool invocation.
         
-        In production, this would invoke actual MCP tools based on agent_id.
+        Phase 81 S3 Part 3: Actual MCP tool integration
+        
+        Invokes agent's MCP tools with request context and captures output.
         """
         logger.debug(f"Executing agent: {agent_id}")
         
@@ -399,11 +409,47 @@ class AgentCollaborationCoordinator:
         agent_info = self._agent_registry[agent_id]
         agent_info["collaboration_count"] += 1
         
-        # Placeholder: In production, invoke cortex_process_request or specific MCP tool
+        # Phase 81 S3 Part 3: Actual MCP tool invocation
+        mcp_tools = agent_info.get("mcp_tools", [])
+        
+        if not mcp_tools:
+            logger.warning(f"No MCP tools for agent: {agent_id}")
+            return {
+                "agent_id": agent_id,
+                "status": "completed",
+                "mcp_tools_invoked": [],
+                "error": "No MCP tools registered"
+            }
+        
+        # Execute primary MCP tool for agent
+        primary_tool = mcp_tools[0]  # Use first tool as primary
+        
+        mcp_request = MCPExecutionRequest(
+            agent_id=agent_id,
+            tool_name=primary_tool,
+            tool_parameters={
+                "request_id": request.request_id,
+                "user_request": request.context.user_request if request.context else "",
+                "intent": request.context.intent if request.context else "",
+                "extracted_data": request.context.extracted_data if request.context else {}
+            },
+            request_id=request.request_id,
+            timeout_seconds=request.timeout_seconds
+        )
+        
+        # Invoke MCP tool via executor
+        execution_result = self._mcp_executor.execute(mcp_request)
+        
         return {
             "agent_id": agent_id,
-            "status": "completed",
-            "mcp_tools_invoked": agent_info["mcp_tools"],
+            "status": "completed" if execution_result.success else "failed",
+            "mcp_tools_invoked": [primary_tool],
+            "mcp_execution_result": {
+                "success": execution_result.success,
+                "output": execution_result.output,
+                "error": execution_result.error_message,
+                "duration": execution_result.duration_seconds
+            },
             "timestamp": datetime.now().isoformat()
         }
     
