@@ -147,8 +147,13 @@ Total Savings: ~245,000 tokens per session (98% reduction)
 - **cortex-auditor.md** — Codebase health scanning + Implementation Alignment Audit ⭐ ENHANCED
   - **Load when:** `/audit`, quality analysis, alignment validation
   - **Size:** ~327 lines
-  - **Key capabilities:** P0-P3 issue detection, security scanning, P0.5 holistic validation, P1 implementation alignment audit (wiring score, unwired implementations, stub tests, duplicates, usage analysis), autonomous remediation recommendations
-  - **Enforcement:** Comprehensive 12-check alignment matrix, auto-fix eligible issues with confidence >90%, monthly audit automation
+  - **Key capabilities:** P0-P3 issue detection, security scanning, P0.5 holistic validation, P1 implementation alignment audit (wiring score, unwired implementations, stub tests, duplicates, usage analysis), autonomous remediation recommendations, GitHub Actions security scanning
+  - **Enforcement:** Comprehensive 12-check alignment matrix, auto-fix eligible issues with confidence >90%, monthly audit automation, credential persistence validation across CI/CD workflows
+  - **New Capability:** GitHub Actions Audit Check (AC-SEC-001)
+    - Validates all `.github/workflows/*.yml` files for `persist-credentials: false` on `actions/checkout`
+    - Severity: Medium (Credential Persistence Vulnerability)
+    - Auto-remediation: Injects `persist-credentials: false` where missing
+    - Detection: Scans 9 checkout patterns, reports on credential persistence risk
 
 ### Specialist Agents
 - **cortex-designer.md** — Design mode specialist
@@ -198,7 +203,7 @@ Total Savings: ~245,000 tokens per session (98% reduction)
 | User Intent | Load These Agents |
 |-------------|-------------------|
 | **IMPLEMENT** | CORTEX.md + cortex-holistic-validator.md + cortex-designer.md |
-| **AUDIT** | CORTEX.md + cortex-architect.md + cortex-auditor.md |
+| **AUDIT** | CORTEX.md + cortex-architect.md + cortex-auditor.md (includes GitHub Actions security scanning) |
 | **QUESTION** | CORTEX.md + cortex-interactive.md |
 | **PLAN** | cortex-architect.md + cortex-phase-resolver.md |
 | **DIGEST** | cortex-architect.md + cortex-digest.md |
@@ -207,6 +212,7 @@ Total Savings: ~245,000 tokens per session (98% reduction)
 | **SETUP** | cortex-environment-setup.md |
 | **MCP** | cortex-mcp-gateway.md |
 | **VALIDATE** | cortex-holistic-validator.md |
+| **SECURITY-AUDIT** | CORTEX.md + cortex-auditor.md (credential persistence, artifact safety, CI/CD hardening) |
 
 ---
 
@@ -229,6 +235,35 @@ Execute Validation Sequence:
          ↓
 IF PASS/WARN → Load cortex-designer.md → Proceed
 IF BLOCK → Stop, show remediation, require override
+```
+
+---
+
+## 🛡️ GitHub Actions Security Audit Flow (AC-SEC-001)
+
+**AUTOMATIC:** Triggered by `/audit` or monthly schedule
+
+```
+User Request (AUDIT or SECURITY-AUDIT intent)
+         ↓
+Load: cortex-auditor.md (with GitHub Actions capability)
+         ↓
+Execute Security Scan:
+  1. Scan all .github/workflows/*.yml files
+  2. Detect actions/checkout instances
+  3. Verify persist-credentials: false
+  4. Check for credential leakage vectors
+  5. Validate artifact upload safety
+         ↓
+RESULTS:
+  ✅ PASS: All 9 instances patched, credentials protected
+  🟡 WARN: Partial coverage, recommend fixes
+  🔴 FAIL: Credential persistence vulnerability detected
+         ↓
+AUTO-REMEDIATION:
+  - Inject persist-credentials: false where missing
+  - Add safety comments for context
+  - Generate audit report with AC markers
 ```
 
 ---
