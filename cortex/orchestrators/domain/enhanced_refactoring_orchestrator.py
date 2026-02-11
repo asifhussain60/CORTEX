@@ -838,18 +838,13 @@ class EnhancedRefactoringOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 for v, m in config.get('violation_mappings', {}).items()
             }
 
-            self.logger.log_operation(
-                "strategies_loaded",
-                {
-                    "strategies_count": len(self._strategies),
-                    "profiles_count": len(self._profiles),
-                }
+            logger.info(
+                f"Strategies loaded: {len(self._strategies)} strategies, {len(self._profiles)} profiles"
             )
 
         except Exception as e:
-            self.logger.log_error(
-                "yaml_parse_failed",
-                {"error": str(e)}
+            logger.error(
+                f"YAML parse failed: {str(e)}"
             )
 
     def _analyze_code(self, parameters: Dict[str, Any]) -> Result[Dict[str, Any]]:
