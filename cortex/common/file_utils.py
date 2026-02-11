@@ -4,10 +4,12 @@ cortex/common/file_utils.py
 Unified file operation utilities.
 
 AC-REM-002-04: Centralizes file I/O patterns across codebase.
+Phase 53: Cross-platform support (Windows, macOS, Linux)
 """
 
 import json
 import os
+import platform
 import shutil
 import tempfile
 from contextlib import contextmanager
@@ -15,6 +17,11 @@ from pathlib import Path
 from typing import Any, Dict, Generator, List, Optional, Union
 
 import yaml
+
+# Cross-platform detection
+IS_WINDOWS = platform.system() == "Windows"
+IS_MACOS = platform.system() == "Darwin"
+IS_LINUX = platform.system() == "Linux"
 
 
 class FileOperations:
@@ -271,3 +278,96 @@ def atomic_write(
         if temp_path.exists():
             temp_path.unlink()
         raise
+
+
+def get_venv_python_path(use_vscode_variable: bool = True) -> str:
+    """
+    Get cross-platform Python executable path in virtual environment.
+    
+    Args:
+        use_vscode_variable: If True, return VS Code-compatible path using 
+            ${workspaceFolder} variable for portability. If False, return 
+            relative path from current directory.
+    
+    Returns:
+        str: Cross-platform Python path
+    
+    Examples:
+        >>> get_venv_python_path(use_vscode_variable=True)  # Windows
+        '${workspaceFolder}/.venv/Scripts/python.exe'
+        >>> get_venv_python_path(use_vscode_variable=True)  # macOS/Linux
+        '${workspaceFolder}/.venv/bin/python'
+        >>> get_venv_python_path(use_vscode_variable=False)  # Windows
+        '.venv/Scripts/python.exe'
+    """
+    if use_vscode_variable:
+        base = "${workspaceFolder}"
+    else:
+        base = "."
+    
+    if IS_WINDOWS:
+        return f"{base}/.venv/Scripts/python.exe"
+    else:
+        return f"{base}/.venv/bin/python"
+
+
+def get_absolute_venv_python(workspace_folder: Union[str, Path] = ".") -> Path:
+    """
+    Get absolute path to Python executable in virtual environment.
+    
+    Args:
+        workspace_folder: Workspace root directory (default: current directory)
+    
+    Returns:
+        Path: Absolute path to Python executable
+    
+    Raises:
+        FileNotFoundError: If virtual environment doesn't exist
+        
+    Examples:
+        >>> get_absolute_venv_python()  # Windows
+        WindowsPath('D:/PROJECTS/CORTEX/.venv/Scripts/python.exe')
+    """
+    workspace = Path(workspace_folder).resolve()
+    
+    if IS_WINDOWS:
+        candidates = [
+            workspace / ".venv" / "Scripts" / "python.exe",
+            workspace / ".venv" / "Scripts" / "python",
+        ]
+    else:
+        candidates = [
+            workspace / ".venv" / "bin" / "python",
+            workspace / ".venv" / "bin" / "python3",
+        ]
+    
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+    
+    raise FileNotFoundError(
+        f"Virtual environment Python not found in {workspace}. "
+        f"Tried: {[str(c) for c in candidates]}"
+    )
+
+
+def normalize_path_separators(path: str) -> str:
+    """
+    Normalize path separators for current platform.
+    
+    Args:
+        path: Path with mixed separators
+    
+    Returns:
+        str: Path with platform-appropriate separators
+        
+    Examples:
+        >>> normalize_path_separators('path/to/file')  # Windows
+        'path\\to\\file'
+        >>> normalize_path_separators('path\\to\\file')  # macOS/Linux
+        'path/to/file'
+    """
+    if IS_WINDOWS:
+        return path.replace('/', '\\')
+    else:
+        return path.replace('\\', '/')

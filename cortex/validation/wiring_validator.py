@@ -48,7 +48,7 @@ class WiringValidator:
 
     def load_wiring(self) -> Dict:
         """Load wiring.yaml specification."""
-        with open(self.wiring_path) as f:
+        with open(self.wiring_path, 'r', encoding='utf-8') as f:
             return yaml.safe_load(f)
 
     def check_implementation(self, module_path: str, class_name: str) -> Tuple[bool, str]:

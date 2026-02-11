@@ -199,7 +199,7 @@ dependency-injector==4.40.0  # Dependency injection framework (CORTEX core patte
 playwright==1.40.0         # Browser automation for E2E testing
 
 # Monitoring and observability
-prometheus-client==0.19.0  # Prometheus metrics exporter [PREFLIGHT]
+prometheus-client==0.24.1  # Prometheus metrics exporter [PREFLIGHT] - Updated for compatibility
 
 # ============================================================================
 # DASHBOARD & DATA AGGREGATION (PHASE-21)

@@ -132,12 +132,12 @@ class AutonomousPhaseExecutor:
 
     def load_index(self) -> Dict:
         """Load master index."""
-        with open(self.index_file) as f:
+        with open(self.index_file, 'r', encoding='utf-8') as f:
             return yaml.safe_load(f)
 
     def save_index(self, data: Dict):
         """Save master index."""
-        with open(self.index_file, 'w') as f:
+        with open(self.index_file, 'w', encoding='utf-8') as f:
             yaml.dump(data, f, default_flow_style=False, sort_keys=False)
 
     def get_phase_config(self, phase_id: str) -> Dict:
