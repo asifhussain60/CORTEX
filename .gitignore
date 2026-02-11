@@ -114,8 +114,12 @@ tests/test_ac_nfr_003_02_secrets.py
 # Office machine: Strict HealthEquity data leakage prevention
 # Personal machines: No hooks needed (CORTEX-only work)
 # These hooks are LOCAL to office machine and should NOT propagate
+# EXCEPTION: CORTEX-specific hooks for MCP policy enforcement (Phase 50)
 .githooks/*
 !.githooks/.gitkeep
+!.githooks/pre-commit
+!.githooks/post-checkout
+!.githooks/pre-commit-wiring-validator
 
 tests/_archive/
 

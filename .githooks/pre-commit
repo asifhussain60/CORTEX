@@ -93,6 +93,82 @@ if [ -n "$GOVERNANCE_FILES" ]; then
     fi
 fi
 
+# ============================================================================
+# CHECK 3: MCP Configuration Policy (CORTEX-only)
+# ============================================================================
+# AC_START: AC-PHASE50-MCPCLEANUP-002 - Pre-commit MCP policy validation
+
+MCP_VIOLATIONS=0
+
+# Check if .vscode/mcp.json or settings.json are being committed
+MCP_CONFIG_CHANGES=$(git diff --cached --name-only --diff-filter=ACM | \
+    grep -E '\.vscode/(mcp\.json|settings\.json)' || true)
+
+if [ -n "$MCP_CONFIG_CHANGES" ]; then
+    echo -e "${BLUE}🔌 MCP configuration changed, validating CORTEX-only policy...${NC}"
+    
+    # Check mcp.json for non-CORTEX servers
+    if echo "$MCP_CONFIG_CHANGES" | grep -q "mcp.json"; then
+        # Get staged content of mcp.json
+        STAGED_MCP=$(git show :".vscode/mcp.json" 2>/dev/null || echo "")
+        
+        if [ -n "$STAGED_MCP" ]; then
+            # Check for servers other than "cortex"
+            NON_CORTEX=$(echo "$STAGED_MCP" | grep -oE '"[a-zA-Z0-9_-]+"[[:space:]]*:' | \
+                        grep -v '"servers"' | grep -v '"cortex"' | \
+                        grep -v '"type"' | grep -v '"command"' | grep -v '"args"' | \
+                        grep -v '"env"' | sed 's/"//g' | sed 's/://g' | tr '\n' ' ')
+            
+            if [ -n "$NON_CORTEX" ]; then
+                echo -e "${RED}❌ MCP POLICY VIOLATION: Non-CORTEX MCP servers detected: $NON_CORTEX${NC}"
+                echo -e "${YELLOW}   CORTEX must be the ONLY MCP server in this repository${NC}"
+                MCP_VIOLATIONS=$((MCP_VIOLATIONS + 1))
+            fi
+        fi
+    fi
+    
+    # Check settings.json for non-CORTEX MCP servers
+    if echo "$MCP_CONFIG_CHANGES" | grep -q "settings.json"; then
+        STAGED_SETTINGS=$(git show :".vscode/settings.json" 2>/dev/null || echo "")
+        
+        if [ -n "$STAGED_SETTINGS" ]; then
+            # Check mcpServers section for non-CORTEX entries
+            if echo "$STAGED_SETTINGS" | grep -q "mcpServers"; then
+                # Look for pylance, gitkraken, or other servers
+                if echo "$STAGED_SETTINGS" | grep -q '"pylance".*mcp\|mcp.*"pylance"'; then
+                    echo -e "${RED}❌ MCP POLICY VIOLATION: Pylance MCP detected in settings.json${NC}"
+                    MCP_VIOLATIONS=$((MCP_VIOLATIONS + 1))
+                fi
+                if echo "$STAGED_SETTINGS" | grep -q '"gitkraken".*mcp\|mcp.*"gitkraken"'; then
+                    echo -e "${RED}❌ MCP POLICY VIOLATION: GitKraken MCP detected in settings.json${NC}"
+                    MCP_VIOLATIONS=$((MCP_VIOLATIONS + 1))
+                fi
+            fi
+        fi
+    fi
+    
+    if [ $MCP_VIOLATIONS -gt 0 ]; then
+        echo ""
+        echo -e "${RED}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+        echo -e "${RED}Pre-commit check FAILED (MCP Policy)${NC}"
+        echo -e "${RED}Found $MCP_VIOLATIONS MCP policy violation(s)${NC}"
+        echo -e "${RED}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+        echo ""
+        echo -e "${YELLOW}Resolution:${NC}"
+        echo -e "  1. Remove non-CORTEX MCP servers from configuration"
+        echo -e "  2. Run: python .cortex/setup-mcp.py --cleanup"
+        echo -e "  3. Re-stage and commit"
+        echo ""
+        echo -e "${CYAN}Policy: CORTEX MCP must be the ONLY MCP server${NC}"
+        echo ""
+        exit 1
+    fi
+    
+    echo -e "${GREEN}✅ MCP policy: CORTEX-only verified${NC}"
+fi
+
+# AC_COMPLETE: AC-PHASE50-MCPCLEANUP-002 ✅
+
 echo ""
 echo -e "${GREEN}✅ All pre-commit checks passed${NC}"
 exit 0

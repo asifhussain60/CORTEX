@@ -3,7 +3,7 @@
 CORTEX MCP Integration Setup Script
 
 Configures VS Code MCP integration for CORTEX development.
-Authority: Phase 25 + Phase 48 + Phase 49 + Phase 53 (Cross-Platform)
+Authority: Phase 25 + Phase 48 + Phase 49 + Phase 50 + Phase 53 (Cross-Platform)
 Requirement: Zero-exception setup on all user machines (macOS + Windows)
 
 MCP Architecture:
@@ -12,7 +12,14 @@ MCP Architecture:
 - Uses stdio transport (stdin/stdout JSON-RPC)
 - NO manual server startup required
 
-Run: python .cortex/setup-mcp.py
+MCP Policy (Phase 50):
+- CORTEX MCP must be the ONLY MCP server
+- Competing servers (Pylance MCP, GitKraken MCP) are disabled
+- Enforced via git hooks (pre-commit, post-checkout)
+
+Run: python .cortex/setup-mcp.py [--cleanup] [--silent]
+  --cleanup: Remove competing MCP servers (Pylance, GitKraken, etc.)
+  --silent: Suppress output (for use in git hooks)
 """
 
 import json
@@ -20,9 +27,10 @@ import os
 import sys
 import logging
 import platform
+import argparse
 from pathlib import Path
 from datetime import datetime
-from typing import Dict, Tuple, Optional
+from typing import Dict, Tuple, Optional, List
 
 # Configure logging
 LOG_DIR = Path(".cortex")
@@ -44,6 +52,28 @@ logger = logging.getLogger(__name__)
 IS_WINDOWS = platform.system() == "Windows"
 IS_MACOS = platform.system() == "Darwin"
 IS_LINUX = platform.system() == "Linux"
+
+# MCP servers that should be disabled (Phase 50 policy)
+COMPETING_MCP_SERVERS = ["pylance", "gitkraken", "mssql", "other"]
+
+
+def parse_args():
+    """Parse command line arguments."""
+    parser = argparse.ArgumentParser(
+        description="CORTEX MCP Integration Setup",
+        epilog="Example: python .cortex/setup-mcp.py --cleanup"
+    )
+    parser.add_argument(
+        "--cleanup",
+        action="store_true",
+        help="Remove competing MCP servers (Pylance, GitKraken, etc.)"
+    )
+    parser.add_argument(
+        "--silent",
+        action="store_true",
+        help="Suppress output (for use in git hooks)"
+    )
+    return parser.parse_args()
 
 
 def log_header():
@@ -267,10 +297,204 @@ def verify_mcp_startup() -> Tuple[bool, str]:
         return False, str(e)
 
 
-def display_completion_message():
+# ============================================================================
+# AC_START: AC-PHASE50-MCPCLEANUP-003 - Competing MCP cleanup functions
+# ============================================================================
+
+def detect_competing_mcps() -> List[Dict]:
+    """
+    Detect competing MCP servers in VS Code configuration.
+    
+    Returns:
+        List of detected competing servers with their locations.
+    """
+    competing = []
+    
+    # Check .vscode/settings.json
+    settings_path = Path(".vscode/settings.json")
+    if settings_path.exists():
+        try:
+            with open(settings_path) as f:
+                content = f.read()
+                # Handle JSONC (JSON with comments)
+                import re
+                content_no_comments = re.sub(r'//.*$', '', content, flags=re.MULTILINE)
+                content_no_comments = re.sub(r'/\*.*?\*/', '', content_no_comments, flags=re.DOTALL)
+                settings = json.loads(content_no_comments)
+            
+            mcp_servers = settings.get("github.copilot.chat.mcpServers", {})
+            for server_name in mcp_servers:
+                if server_name.lower() != "cortex":
+                    competing.append({
+                        "name": server_name,
+                        "location": "settings.json",
+                        "path": str(settings_path)
+                    })
+        except (json.JSONDecodeError, Exception) as e:
+            logger.warning(f"Could not parse settings.json: {e}")
+    
+    # Check .vscode/mcp.json
+    mcp_json_path = Path(".vscode/mcp.json")
+    if mcp_json_path.exists():
+        try:
+            with open(mcp_json_path) as f:
+                mcp_config = json.load(f)
+            
+            servers = mcp_config.get("servers", {})
+            for server_name in servers:
+                if server_name.lower() != "cortex":
+                    competing.append({
+                        "name": server_name,
+                        "location": "mcp.json",
+                        "path": str(mcp_json_path)
+                    })
+        except (json.JSONDecodeError, Exception) as e:
+            logger.warning(f"Could not parse mcp.json: {e}")
+    
+    return competing
+
+
+def disable_pylance_mcp(settings_path: Path) -> bool:
+    """
+    Disable Pylance MCP server in VS Code settings.
+    
+    Args:
+        settings_path: Path to .vscode/settings.json
+    
+    Returns:
+        True if successfully disabled or already disabled.
+    """
+    try:
+        if not settings_path.exists():
+            return True
+        
+        with open(settings_path) as f:
+            content = f.read()
+        
+        # Handle JSONC
+        import re
+        content_no_comments = re.sub(r'//.*$', '', content, flags=re.MULTILINE)
+        content_no_comments = re.sub(r'/\*.*?\*/', '', content_no_comments, flags=re.DOTALL)
+        settings = json.loads(content_no_comments)
+        
+        modified = False
+        
+        # Disable Pylance MCP server
+        if "pylance.mcpServer.enabled" not in settings:
+            settings["pylance.mcpServer.enabled"] = False
+            modified = True
+            logger.info("✅ Disabled Pylance MCP server (pylance.mcpServer.enabled = false)")
+        elif settings.get("pylance.mcpServer.enabled") is True:
+            settings["pylance.mcpServer.enabled"] = False
+            modified = True
+            logger.info("✅ Disabled Pylance MCP server (was enabled)")
+        
+        # Remove Pylance from mcpServers if present
+        mcp_servers = settings.get("github.copilot.chat.mcpServers", {})
+        if "pylance" in mcp_servers:
+            del mcp_servers["pylance"]
+            settings["github.copilot.chat.mcpServers"] = mcp_servers
+            modified = True
+            logger.info("✅ Removed Pylance from mcpServers")
+        
+        if modified:
+            settings_path.write_text(json.dumps(settings, indent=2) + "\n")
+        
+        return True
+        
+    except Exception as e:
+        logger.error(f"❌ Failed to disable Pylance MCP: {e}")
+        return False
+
+
+def remove_competing_from_mcp_json(mcp_json_path: Path) -> bool:
+    """
+    Remove competing MCP servers from mcp.json, keeping only CORTEX.
+    
+    Args:
+        mcp_json_path: Path to .vscode/mcp.json
+    
+    Returns:
+        True if successfully cleaned or already clean.
+    """
+    try:
+        if not mcp_json_path.exists():
+            return True
+        
+        with open(mcp_json_path) as f:
+            mcp_config = json.load(f)
+        
+        servers = mcp_config.get("servers", {})
+        original_count = len(servers)
+        
+        # Keep only CORTEX server
+        if "cortex" in servers:
+            cortex_config = servers["cortex"]
+            mcp_config["servers"] = {"cortex": cortex_config}
+        
+        removed_count = original_count - len(mcp_config.get("servers", {}))
+        
+        if removed_count > 0:
+            mcp_json_path.write_text(json.dumps(mcp_config, indent=2) + "\n")
+            logger.info(f"✅ Removed {removed_count} competing MCP server(s) from mcp.json")
+        
+        return True
+        
+    except Exception as e:
+        logger.error(f"❌ Failed to clean mcp.json: {e}")
+        return False
+
+
+def enforce_cortex_only() -> Tuple[bool, str]:
+    """
+    Enforce CORTEX-only MCP policy by removing all competing servers.
+    
+    Returns:
+        Tuple of (success, message)
+    """
+    logger.info("=" * 80)
+    logger.info("🔌 MCP Cleanup: Enforcing CORTEX-only policy")
+    logger.info("=" * 80)
+    
+    # Detect competing servers
+    competing = detect_competing_mcps()
+    
+    if not competing:
+        logger.info("✅ No competing MCP servers detected")
+        return True, "Already CORTEX-only"
+    
+    logger.info(f"⚠️  Found {len(competing)} competing MCP server(s):")
+    for server in competing:
+        logger.info(f"   - {server['name']} in {server['location']}")
+    
+    # Disable Pylance MCP
+    settings_path = Path(".vscode/settings.json")
+    disable_pylance_mcp(settings_path)
+    
+    # Clean mcp.json
+    mcp_json_path = Path(".vscode/mcp.json")
+    remove_competing_from_mcp_json(mcp_json_path)
+    
+    # Verify cleanup
+    remaining = detect_competing_mcps()
+    if remaining:
+        logger.warning(f"⚠️  {len(remaining)} server(s) could not be removed automatically")
+        return False, f"Manual cleanup needed for: {[s['name'] for s in remaining]}"
+    
+    logger.info("✅ MCP cleanup complete: CORTEX is now the only MCP server")
+    return True, "Cleanup successful"
+
+
+# AC_COMPLETE: AC-PHASE50-MCPCLEANUP-003 ✅
+
+
+def display_completion_message(cleanup_mode: bool = False):
     """Display completion message with next steps."""
     print("\n" + "=" * 80)
-    print("🔌 CORTEX MCP INTEGRATION SETUP COMPLETE")
+    if cleanup_mode:
+        print("🧹 CORTEX MCP CLEANUP COMPLETE")
+    else:
+        print("🔌 CORTEX MCP INTEGRATION SETUP COMPLETE")
     print("=" * 80)
     print("\n✅ Configuration Status: SUCCESS\n")
     print("MCP Architecture (Pylance-Style):")
@@ -278,16 +502,25 @@ def display_completion_message():
     print("  • Auto-started when Copilot Chat invokes cortex_* tools")
     print("  • Uses stdio transport (stdin/stdout JSON-RPC)")
     print("  • NO manual server startup required\n")
-    print("What was configured:")
-    print("  ✅ .vscode/mcp.json created (PRIMARY - VS Code reads this)")
-    print("  ✅ .vscode/settings.json updated (SECONDARY - fallback)")
-    if IS_WINDOWS:
-        print("  ✅ Python: ${workspaceFolder}/.venv/Scripts/python.exe")
+    
+    if cleanup_mode:
+        print("MCP Policy Enforcement (Phase 50):")
+        print("  ✅ Competing MCP servers removed")
+        print("  ✅ Pylance MCP disabled")
+        print("  ✅ CORTEX is the ONLY MCP server")
+        print("  ✅ Policy enforced via git hooks\n")
     else:
-        print("  ✅ Python: ${workspaceFolder}/.venv/bin/python")
-    print("  ✅ MCP module: cortex.mcp (stdio transport)")
-    print("  ✅ Environment variables configured")
-    print("  ✅ Cross-platform: Works on macOS/Windows/Linux\n")
+        print("What was configured:")
+        print("  ✅ .vscode/mcp.json created (PRIMARY - VS Code reads this)")
+        print("  ✅ .vscode/settings.json updated (SECONDARY - fallback)")
+        if IS_WINDOWS:
+            print("  ✅ Python: ${workspaceFolder}/.venv/Scripts/python.exe")
+        else:
+            print("  ✅ Python: ${workspaceFolder}/.venv/bin/python")
+        print("  ✅ MCP module: cortex.mcp (stdio transport)")
+        print("  ✅ Environment variables configured")
+        print("  ✅ Cross-platform: Works on macOS/Windows/Linux\n")
+    
     print("NEXT STEPS:")
     print("⚡ **Restart VS Code for changes to take effect**\n")
     print("In VS Code:")
@@ -317,7 +550,24 @@ def display_completion_message():
 
 def main():
     """Main setup flow."""
+    args = parse_args()
+    
+    # Configure logging for silent mode
+    if args.silent:
+        logging.getLogger().setLevel(logging.WARNING)
+    
     log_header()
+    
+    # If cleanup mode, just do cleanup and exit
+    if args.cleanup:
+        success, message = enforce_cortex_only()
+        if success:
+            if not args.silent:
+                display_completion_message(cleanup_mode=True)
+            return 0
+        else:
+            logger.error(f"Cleanup failed: {message}")
+            return 1
 
     # Step 1: Check Python
     python_ok, python_version = check_python()
@@ -366,6 +616,9 @@ def main():
     if not inject_ok:
         logger.error("Setup failed: MCP configuration injection")
         return 1
+    
+    # Step 8.5: Disable Pylance MCP (Phase 50 policy)
+    disable_pylance_mcp(settings_path)
 
     # Step 9: Verify MCP startup
     verify_ok, verify_msg = verify_mcp_startup()
@@ -383,7 +636,8 @@ def main():
     logger.info("⚡ Next: Restart VS Code for changes to take effect")
     logger.info("=" * 80)
 
-    display_completion_message()
+    if not args.silent:
+        display_completion_message()
 
     return 0
 
