@@ -1,0 +1,718 @@
+# ============================================================================
+# WAVE 6: COMPREHENSIVE CLEANUP & REFACTORING (HIGH-ROI RELEASE)
+# ============================================================================
+# Authority: chat01.md + cortex-architect.prompt.md v15.3
+# Purpose: Consolidate ENH-082 + establish standard practices for phase creation
+# Status: DESIGN COMPLETE - READY FOR AUTONOMOUS EXECUTION
+# Created: 2026-02-11
+# AC-ID: AC-WAVE6-001
+# ============================================================================
+
+version: "1.0"
+created: "2026-02-11T21:00:00Z"
+last_updated: "2026-02-11T21:00:00Z"
+wave_id: "WAVE-6"
+name: "Comprehensive Cleanup & Refactoring Wave"
+priority: "P1-HIGH-ROI"
+roi_score: 9.2  # Highest of all waves (ENH-082: 8.5 + Standards: 9.5 = avg 9.0)
+
+metadata:
+  total_enhancements: 4
+  estimated_effort: "14-18 days"
+  parallelizable: true
+  blocking_dependencies: ["WAVE-1"]  # Must have foundation security fixes
+  value_delivery: "Architectural cleanup + standard practices + template unification"
+  
+objectives:
+  primary: "Implement response template system + establish refactoring standards"
+  secondary: "Create reusable pattern for future phase cleanup/migration"
+  tertiary: "Ensure all completed work aligns with architecture"
+
+# ============================================================================
+# ENHANCEMENT BREAKDOWN
+# ============================================================================
+
+enhancements:
+  
+  # -------------------------------------------------------------------------
+  # ENH-082: Response Template System Integration (From chat01.md)
+  # -------------------------------------------------------------------------
+  - enhancement_id: "ENH-082"
+    title: "Response Template System Integration"
+    authority: "chat01.md analysis"
+    status: "ready"
+    priority: "P1-HIGH"
+    roi: 8.5
+    estimated_effort: "8-11 days"
+    
+    problem:
+      current_state: "72 orchestrator templates built but ZERO production usage"
+      gaps:
+        - "Dual registry (orchestrator vs role) with no bridge"
+        - "Integration layer missing - orchestrators hardcode responses"
+        - "Templates are passive data structures"
+        - "Maintenance burden grows linearly with orchestrators"
+      impact: "Extensibility poor, scalability issues, inconsistent responses"
+    
+    solution:
+      approach: "Unified Response Engine"
+      benefits:
+        - "Bridges both registries (role + orchestrator templates)"
+        - "Automatic role detection from intent (IMPLEMENT→ENGINEER, etc.)"
+        - "Template fusion: merge role structure + orchestrator content"
+        - "Variable auto-binding: context → template variables (80%+ automatic)"
+        - "Centralized composition: single path, no duplication"
+        - "Zero orchestrator code changes (backward compatible)"
+    
+    waves:
+      - wave: "W1-Foundation"
+        duration: "3 days"
+        effort: "8-12h"
+        deliverables:
+          - "Registry audit (map both registries, find overlaps)"
+          - "Stale component cleanup (remove orphaned templates)"
+          - "Master plan sync (update index.yaml, WAVE-BASED-EXECUTION-PLAN.yaml)"
+        tests: 6
+        
+      - wave: "W2-Engine"
+        duration: "3 days"
+        effort: "16-20h"
+        deliverables:
+          - "UnifiedResponseEngine implementation"
+          - "Injection point in OrchestratorBaseProtocol"
+          - "5 core orchestrators enabled (Master, TDD, LENS, Intent, Challenge)"
+        tests: 50
+        
+      - wave: "W3-Migration"
+        duration: "3 days"
+        effort: "20-24h"
+        deliverables:
+          - "Linter + batch migration script"
+          - "67 remaining orchestrators migrated"
+          - "200+ regression tests"
+        tests: 200
+        
+      - wave: "W4-Polish"
+        duration: "2 days"
+        effort: "8-10h"
+        deliverables:
+          - "Developer guide + 5 examples"
+          - "Architecture diagrams"
+          - "Master plan sync (mark ENH-082 complete)"
+        tests: 10
+    
+    success_metrics:
+      - "72/72 orchestrators using UnifiedResponseEngine"
+      - "0 hardcoded response strings in orchestrators"
+      - "200+ tests passing (100% coverage)"
+      - "Developer guide with 5 working examples"
+      - "Linter enforcing template usage"
+    
+    file_reference: "cortex-registry/_cortex-master/phases/active/ENH-082-response-template-integration-wave.yaml"
+  
+  # -------------------------------------------------------------------------
+  # ENH-084: Standard Phase Creation Practices (New - From chat01.md insight)
+  # -------------------------------------------------------------------------
+  - enhancement_id: "ENH-084"
+    title: "Standard Phase Creation Practices"
+    authority: "chat01.md - 'should be standard practice when phases are created'"
+    status: "design"
+    priority: "P1-HIGH"
+    roi: 9.5  # Highest ROI - prevents future technical debt
+    estimated_effort: "3-4 days"
+    
+    problem:
+      current_state: "Ad-hoc phase creation without cleanup/migration standards"
+      gaps:
+        - "No standard template for wave-based phase specs"
+        - "Cleanup/migration not baked into phase design"
+        - "Registry sync manual and inconsistent"
+        - "No linting for phase spec quality"
+      impact: "Technical debt accumulates, orphaned components, plan drift"
+    
+    solution:
+      approach: "Codify ENH-082 cleanup pattern as standard practice"
+      components:
+        - "Phase Specification Template (YAML)"
+        - "Mandatory Wave Structure (Foundation → Core → Migration → Polish)"
+        - "Auto-Cleanup Requirements (vacuum stage per wave)"
+        - "Registry Sync Enforcement (linter + CI checks)"
+        - "Phase Creation CLI (guided wizard)"
+    
+    deliverables:
+      phase_template:
+        file: ".github/templates/phase-specification-template.yaml"
+        sections:
+          - "Metadata (ID, title, priority, ROI, effort)"
+          - "Problem statement (current state, gaps, impact)"
+          - "Solution approach (benefits, architecture)"
+          - "Wave breakdown (4 waves minimum: Foundation/Core/Migration/Polish)"
+          - "Cleanup requirements (vacuum stage per wave)"
+          - "Registry sync checkpoints (index.yaml, WAVE-BASED-EXECUTION-PLAN.yaml)"
+          - "Success metrics (quantifiable)"
+          - "Test requirements (coverage targets)"
+      
+      phase_cli:
+        file: "cortex/cli/phase_creator.py"
+        commands:
+          - "cortex phase create --id ENH-XXX --title 'Feature Name'"
+          - "cortex phase validate --spec phase-XXX.yaml"
+          - "cortex phase lint --check-cleanup"
+          - "cortex phase sync --update-registry"
+      
+      linter:
+        file: "cortex/validation/phase_spec_linter.py"
+        checks:
+          - "Wave structure complete (4 waves minimum)"
+          - "Cleanup stage present in each wave"
+          - "Registry sync checkpoints defined"
+          - "Test targets defined (coverage ≥ 80%)"
+          - "ROI score justified with evidence"
+          - "Dependencies mapped correctly"
+      
+      documentation:
+        file: ".github/agents/core/phase-creation-standards.md"
+        content:
+          - "Phase lifecycle overview"
+          - "Wave-based design principles"
+          - "Cleanup/migration requirements"
+          - "Registry synchronization protocol"
+          - "5 worked examples (ENH-082, Phase-48, Phase-71, etc.)"
+    
+    integration:
+      with_cortex_architect:
+        trigger: "When cortex-architect.prompt.md creates new phase"
+        workflow: |
+          1. cortex-architect detects IMPLEMENT/DESIGN intent for new phase
+          2. Auto-invoke phase_creator.py with guided wizard
+          3. Generate phase spec from template with user input
+          4. Run phase_spec_linter.py to validate
+          5. Sync with registry (update index.yaml)
+          6. Display wave execution plan + ROI estimate
+          7. User approves → phase enters active/ folder
+      
+      with_agents:
+        - "cortex-architect.md: Auto-use phase template on DESIGN intent"
+        - "cortex-phase-resolver.md: Validate phase specs during resolution"
+        - "cortex-vacuum.md: Use cleanup requirements from phase spec"
+        - "cortex-auditor.md: Verify cleanup stages executed"
+    
+    success_metrics:
+      - "Phase specification template in .github/templates/"
+      - "phase_creator.py CLI functional (5 commands)"
+      - "phase_spec_linter.py enforcing 8 checks"
+      - "phase-creation-standards.md with 5 examples"
+      - "100% of new phases (post-ENH-084) use template"
+      - "0 orphaned components in phases created post-ENH-084"
+  
+  # -------------------------------------------------------------------------
+  # ENH-085: Completed Phase Cleanup Audit (New - Comprehensive)
+  # -------------------------------------------------------------------------
+  - enhancement_id: "ENH-085"
+    title: "Completed Phase Cleanup Audit & Migration"
+    authority: "Vision: 'comprehensive final refactoring and cleanup phase'"
+    status: "design"
+    priority: "P1-HIGH"
+    roi: 8.8
+    estimated_effort: "4-5 days"
+    
+    problem:
+      current_state: "35+ completed phases with varying degrees of cleanup"
+      gaps:
+        - "Unknown count of orphaned components from completed phases"
+        - "No systematic audit of completed phase artifacts"
+        - "Stale files in cortex/ and cortex_brain/ from old phases"
+        - "Registry completed/ folder not synchronized with active/"
+      impact: "Codebase bloat, confusion, maintenance burden"
+    
+    solution:
+      approach: "Systematic audit + cleanup + migration of all completed phases"
+      stages:
+        - "S1: Audit (Identify all completed phases + artifacts)"
+        - "S2: Classification (Essential vs Stale vs Orphaned)"
+        - "S3: Migration (Move completed phases to registry/completed/)"
+        - "S4: Cleanup (Remove stale/orphaned components)"
+        - "S5: Verification (Ensure no regressions)"
+    
+    audit_methodology:
+      discovery:
+        - "Scan cortex-registry/_cortex-master/phases/active/ for status=completed"
+        - "Scan cortex/ for file timestamps > 6 months with 0 imports"
+        - "Scan cortex_brain/ for onboarded repos with 0 dashboard access"
+        - "Git log analysis: files with 0 commits in last 90 days"
+        - "Import graph analysis: modules with 0 inbound references"
+      
+      classification:
+        essential: "Core infrastructure used in production"
+        stale: "Completed phases not moved to completed/ folder"
+        orphaned: "Files/modules with 0 references, 6+ months old"
+        deprecated: "Functionality replaced by newer implementations"
+      
+      cleanup_rules:
+        essential: "Keep, add tests if coverage < 80%"
+        stale: "Move to completed/ folder, update registry"
+        orphaned: "Archive to _workspaces/__cleanup-archive/"
+        deprecated: "Delete after verifying 0 imports"
+    
+    deliverables:
+      - "Audit report (CSV: file, classification, last_used, action)"
+      - "Cleanup script (cortex/scripts/cleanup_completed_phases.py)"
+      - "Migration script (move phases to completed/)"
+      - "Verification tests (ensure no regressions after cleanup)"
+      - "Updated registry (completed/ folder synchronized)"
+    
+    success_metrics:
+      - "100% of completed phases in registry/completed/ folder"
+      - "0 files in cortex/ with 0 imports + age > 6 months"
+      - "Codebase size reduced by 15-25%"
+      - "All tests passing after cleanup (0 regressions)"
+      - "Audit report reviewed and approved"
+  
+  # -------------------------------------------------------------------------
+  # ENH-086: Architecture Alignment Verification (New - Comprehensive)
+  # -------------------------------------------------------------------------
+  - enhancement_id: "ENH-086"
+    title: "Architecture Alignment Verification & Remediation"
+    authority: "Vision: 'get completed work aligned with existing architecture'"
+    status: "design"
+    priority: "P1-HIGH"
+    roi: 9.0
+    estimated_effort: "3-4 days"
+    
+    problem:
+      current_state: "Unknown drift between completed phases and architectural standards"
+      gaps:
+        - "No systematic verification that completed phases follow CORTEX patterns"
+        - "Possible violations of CORE rules in older phases"
+        - "Response format inconsistencies across orchestrators"
+        - "MCP-FIRST violations in pre-Phase-53 code"
+      impact: "Architectural erosion, inconsistent behavior, technical debt"
+    
+    solution:
+      approach: "Automated alignment verification + remediation plan"
+      verification_layers:
+        - "L1: CORE Rules Compliance (30 rules)"
+        - "L2: MCP-FIRST Architecture (no direct file ops in IMPLEMENT)"
+        - "L3: Response Format Standards (headers, DoR, inline-only)"
+        - "L4: Orchestrator Patterns (protocol adherence)"
+        - "L5: Test Coverage (≥80% for all modules)"
+      
+      remediation_strategy:
+        detect: "Run alignment checks on all cortex/ modules"
+        classify: "P0 (blocking), P1 (high), P2 (nice-to-have)"
+        fix: "Auto-fix where possible, manual for P0/P1"
+        verify: "Re-run alignment checks + full test suite"
+    
+    alignment_checks:
+      core_rules:
+        - "CORE-002: No markdown file generation (check all orchestrators)"
+        - "CORE-008: TDD mandatory (check all IMPLEMENT flows)"
+        - "CORE-029: Response header mandatory (check all orchestrators)"
+        - "CORE-030: Implementation Truth (verify with code inspection)"
+        - "CORE-035: Single canonical implementation (detect duplicates)"
+        - "CORE-048: Holistic validation gate (verify MCP integration)"
+      
+      mcp_first:
+        - "No create_file in IMPLEMENT intent handlers"
+        - "No replace_string_in_file in FIX intent handlers"
+        - "All file operations route through cortex_process_request"
+        - "MCP pre-flight check present in all entry points"
+      
+      response_format:
+        - "Response header present (🧠 CORTEX {operation})"
+        - "Orchestrator identified in header"
+        - "DoR displayed before execution"
+        - "No file generation for reports/summaries"
+        - "Inline chat ONLY for all outputs"
+      
+      orchestrator_patterns:
+        - "All orchestrators extend OrchestratorBaseProtocol"
+        - "execute_with_protocol() implemented correctly"
+        - "Context loading follows pattern"
+        - "Error handling via try/except with logging"
+        - "AC markers for audit trail"
+    
+    deliverables:
+      - "Alignment checker (cortex/validation/architecture_alignment_checker.py)"
+      - "Alignment report (violations by layer, priority, module)"
+      - "Auto-fix script (handle 70%+ of violations automatically)"
+      - "Manual remediation plan (P0/P1 violations)"
+      - "Verification tests (100% alignment post-remediation)"
+    
+    success_metrics:
+      - "100% CORE rules compliance (30/30 rules)"
+      - "0 MCP-FIRST violations in production code"
+      - "100% orchestrators with correct response format"
+      - "100% orchestrators following protocol pattern"
+      - "≥80% test coverage across all modules"
+
+# ============================================================================
+# WAVE EXECUTION PLAN (Sequential Phases)
+# ============================================================================
+
+execution_plan:
+  
+  # PHASE 1: ENH-082 Wave 1 (Foundation)
+  - phase: "P1-ENH082-W1"
+    title: "ENH-082 Foundation & Cleanup"
+    duration: "3 days"
+    effort: "8-12h"
+    prerequisites: ["WAVE-1 complete"]
+    deliverables:
+      - "Registry audit report"
+      - "Stale component cleanup"
+      - "Master plan sync"
+    tests: 6
+    git_checkpoint: "ENH-082-W1: Foundation complete"
+  
+  # PHASE 2: ENH-084 (Standards) - Parallel with ENH-082 W2
+  - phase: "P2-ENH084"
+    title: "ENH-084 Standard Phase Creation Practices"
+    duration: "3-4 days"
+    effort: "12-16h"
+    parallelizable: true  # Can run while ENH-082 W2 executes
+    deliverables:
+      - "Phase specification template"
+      - "phase_creator.py CLI"
+      - "phase_spec_linter.py"
+      - "phase-creation-standards.md"
+    tests: 20
+    git_checkpoint: "ENH-084: Standard practices complete"
+  
+  # PHASE 3: ENH-082 Wave 2 (Engine) - Parallel with ENH-084
+  - phase: "P3-ENH082-W2"
+    title: "ENH-082 Unified Response Engine"
+    duration: "3 days"
+    effort: "16-20h"
+    parallelizable: true  # Can run while ENH-084 executes
+    dependencies: ["P1-ENH082-W1"]
+    deliverables:
+      - "UnifiedResponseEngine implementation"
+      - "Injection point in OrchestratorBaseProtocol"
+      - "5 core orchestrators enabled"
+    tests: 50
+    git_checkpoint: "ENH-082-W2: Engine complete"
+  
+  # PHASE 4: ENH-085 (Cleanup Audit)
+  - phase: "P4-ENH085"
+    title: "ENH-085 Completed Phase Cleanup Audit"
+    duration: "4-5 days"
+    effort: "16-20h"
+    dependencies: ["P2-ENH084"]  # Needs phase standards to classify properly
+    deliverables:
+      - "Audit report (completed phases + artifacts)"
+      - "Cleanup script"
+      - "Migration script"
+      - "Verification tests"
+    tests: 30
+    git_checkpoint: "ENH-085: Cleanup audit complete"
+  
+  # PHASE 5: ENH-082 Wave 3 (Migration)
+  - phase: "P5-ENH082-W3"
+    title: "ENH-082 Orchestrator Migration"
+    duration: "3 days"
+    effort: "20-24h"
+    dependencies: ["P3-ENH082-W2"]
+    deliverables:
+      - "Linter + batch migration script"
+      - "67 orchestrators migrated"
+      - "200+ regression tests"
+    tests: 200
+    git_checkpoint: "ENH-082-W3: Migration complete"
+  
+  # PHASE 6: ENH-086 (Architecture Alignment)
+  - phase: "P6-ENH086"
+    title: "ENH-086 Architecture Alignment Verification"
+    duration: "3-4 days"
+    effort: "14-18h"
+    dependencies: ["P4-ENH085"]  # Cleanup first, then align
+    deliverables:
+      - "Alignment checker"
+      - "Alignment report"
+      - "Auto-fix script (70%+ violations)"
+      - "Manual remediation plan"
+    tests: 40
+    git_checkpoint: "ENH-086: Architecture aligned"
+  
+  # PHASE 7: ENH-082 Wave 4 (Polish)
+  - phase: "P7-ENH082-W4"
+    title: "ENH-082 Polish & Documentation"
+    duration: "2 days"
+    effort: "8-10h"
+    dependencies: ["P5-ENH082-W3"]
+    deliverables:
+      - "Developer guide + 5 examples"
+      - "Architecture diagrams"
+      - "Master plan sync (mark ENH-082 complete)"
+    tests: 10
+    git_checkpoint: "ENH-082-W4: Polish complete, production-ready"
+  
+  # PHASE 8: Final Validation & Release
+  - phase: "P8-WAVE6-FINAL"
+    title: "Wave 6 Final Validation & Release"
+    duration: "1 day"
+    effort: "4-6h"
+    dependencies: ["P6-ENH086", "P7-ENH082-W4"]
+    deliverables:
+      - "Full test suite (500+ tests)"
+      - "Release notes"
+      - "Wave 6 completion report"
+      - "Master registry sync"
+    tests: 500
+    git_checkpoint: "WAVE-6: Complete, production-ready"
+
+# ============================================================================
+# DEPENDENCY GRAPH
+# ============================================================================
+
+dependency_graph:
+  visualization: |
+    P1-ENH082-W1 (Foundation)
+         ↓
+         ├──────────────────────┐
+         ↓                      ↓
+    P2-ENH084 (Standards)   P3-ENH082-W2 (Engine)
+         ↓                      ↓
+         ↓                  P5-ENH082-W3 (Migration)
+         ↓                      ↓
+    P4-ENH085 (Cleanup)    P7-ENH082-W4 (Polish)
+         ↓                      ↓
+    P6-ENH086 (Alignment)      ↓
+         └──────────────────────┘
+                  ↓
+         P8-WAVE6-FINAL (Release)
+  
+  critical_path: ["P1", "P3", "P5", "P7", "P8"]
+  parallelizable: [["P2", "P3"], ["P4", "P5"]]
+
+# ============================================================================
+# SUCCESS METRICS (WAVE 6 COMPLETE)
+# ============================================================================
+
+success_metrics:
+  ench_082:
+    - "72/72 orchestrators using UnifiedResponseEngine"
+    - "200+ tests passing (template integration)"
+    - "Developer guide with 5 examples"
+  
+  ench_084:
+    - "Phase specification template operational"
+    - "phase_creator.py CLI functional (5 commands)"
+    - "100% of new phases use template"
+  
+  ench_085:
+    - "100% completed phases in registry/completed/"
+    - "Codebase size reduced 15-25%"
+    - "0 orphaned components"
+  
+  ench_086:
+    - "100% CORE rules compliance"
+    - "0 MCP-FIRST violations"
+    - "≥80% test coverage"
+  
+  overall:
+    - "500+ tests passing (Wave 6 total)"
+    - "Master registry synchronized"
+    - "Release notes published"
+    - "Wave 6 marked complete in index.yaml"
+
+# ============================================================================
+# ROI JUSTIFICATION (9.2/10 - HIGHEST WAVE)
+# ============================================================================
+
+roi_analysis:
+  efficiency_gains:
+    - "ENH-082: 67 orchestrators gain 80% response generation efficiency"
+    - "ENH-084: Future phases 50% faster to create (template + CLI)"
+    - "ENH-085: 15-25% codebase size reduction → faster CI/CD"
+    - "ENH-086: Prevent 90% of architectural drift violations"
+  
+  quality_improvements:
+    - "Consistent response format across all 72 orchestrators"
+    - "Architectural alignment enforced automatically"
+    - "0 orphaned components → easier maintenance"
+    - "Standard phase practices → predictable outcomes"
+  
+  extensibility:
+    - "New orchestrators trivial to add (use ResponseEngine)"
+    - "Phase template enables rapid iteration"
+    - "Cleanup/migration baked into design"
+    - "Alignment checker prevents future drift"
+  
+  risk_reduction:
+    - "Technical debt eliminated (cleanup audit)"
+    - "Architectural violations caught pre-production"
+    - "Test coverage ≥80% across modules"
+    - "Standard practices reduce ad-hoc decisions"
+  
+  comparison_to_other_waves:
+    wave_1_foundation: 8.5  # Security critical but tactical
+    wave_2_intelligence: 7.8  # Agent optimization valuable
+    wave_3_autonomy: 8.2  # Execution improvements
+    wave_4_enhancement: 7.5  # UX improvements
+    wave_5_polish: 6.5  # Nice-to-have refinements
+    wave_6_cleanup: 9.2  # Strategic infrastructure investment
+
+# ============================================================================
+# INTEGRATION WITH EXISTING ARCHITECTURE
+# ============================================================================
+
+architecture_integration:
+  cortex_architect:
+    changes:
+      - "Import phase_creator.py on DESIGN intent"
+      - "Auto-validate phase specs with linter"
+      - "Display wave execution plan + ROI"
+    file: ".github/agents/core/cortex-architect.md"
+  
+  cortex_phase_resolver:
+    changes:
+      - "Use phase spec template for resolution"
+      - "Validate cleanup requirements present"
+      - "Sync registry on phase completion"
+    file: ".github/agents/core/cortex-phase-resolver.md"
+  
+  cortex_vacuum:
+    changes:
+      - "Read cleanup requirements from phase spec"
+      - "Execute wave-specific vacuum stages"
+      - "Verify 0 orphaned components"
+    file: ".github/agents/support/cortex-vacuum.md"
+  
+  master_orchestrator:
+    changes:
+      - "Use UnifiedResponseEngine for all responses"
+      - "Inject ResponseEngine in execute_with_protocol()"
+      - "Auto-bind context variables to templates"
+    file: "cortex/orchestrators/core/master_orchestrator.py"
+
+# ============================================================================
+# EXECUTION INSTRUCTIONS
+# ============================================================================
+
+execution_instructions:
+  mode: "autonomous_silent"
+  progress_tracking: "ascii_bars"
+  
+  start_command: |
+    cortex_plan_execute_autonomous(
+      wave_id="WAVE-6",
+      mode="silent",
+      progress="ascii_bars"
+    )
+  
+  prerequisites:
+    - "WAVE-1 complete (foundation security fixes)"
+    - "Git clean working directory"
+    - "Python ≥3.9, dependencies installed"
+    - "MCP server configured"
+  
+  monitoring:
+    - "Track progress via ASCII bars"
+    - "Git checkpoints after each phase"
+    - "Test suite after each wave"
+    - "Master registry sync on completion"
+  
+  rollback_plan:
+    - "Each phase has git checkpoint"
+    - "git reset --hard WAVE-6-P{N}-CHECKPOINT"
+    - "Re-run from failed phase"
+
+# ============================================================================
+# DELIVERABLES CHECKLIST
+# ============================================================================
+
+deliverables_checklist:
+  ench_082:
+    - file: "cortex/orchestrators/response/unified_response_engine.py"
+      tests: 25
+    - file: "cortex/orchestrators/core/base_orchestrator.py"
+      tests: 15
+    - file: "docs/developer-guide-response-templates.md"
+      tests: 0
+    - file: "cortex/validation/response_template_linter.py"
+      tests: 10
+  
+  ench_084:
+    - file: ".github/templates/phase-specification-template.yaml"
+      tests: 0
+    - file: "cortex/cli/phase_creator.py"
+      tests: 20
+    - file: "cortex/validation/phase_spec_linter.py"
+      tests: 15
+    - file: ".github/agents/core/phase-creation-standards.md"
+      tests: 0
+  
+  ench_085:
+    - file: "cortex/scripts/cleanup_completed_phases.py"
+      tests: 20
+    - file: "cortex-registry/_cortex-master/audit-reports/cleanup-audit-2026-02.csv"
+      tests: 0
+    - file: "cortex/scripts/migrate_to_completed.py"
+      tests: 10
+  
+  ench_086:
+    - file: "cortex/validation/architecture_alignment_checker.py"
+      tests: 40
+    - file: "cortex/scripts/auto_fix_alignment.py"
+      tests: 20
+    - file: "cortex-registry/_cortex-master/audit-reports/alignment-report-2026-02.md"
+      tests: 0
+
+# ============================================================================
+# AUDIT TRAIL
+# ============================================================================
+
+audit_trail:
+  - timestamp: "2026-02-11T21:00:00Z"
+    action: "Wave 6 design created"
+    authority: "chat01.md + cortex-architect.prompt.md v15.3"
+    ac_id: "AC-WAVE6-001"
+  
+  - timestamp: "TBD"
+    action: "Wave 6 execution started"
+    ac_id: "AC-WAVE6-002"
+  
+  - timestamp: "TBD"
+    action: "Wave 6 execution completed"
+    ac_id: "AC-WAVE6-003"
+
+# ============================================================================
+# FUTURE ENHANCEMENTS (Post-Wave 6)
+# ============================================================================
+
+future_enhancements:
+  - id: "ENH-087"
+    title: "Semantic Block Library (Alternative to Templates)"
+    depends_on: ["ENH-082"]
+    estimated_effort: "5-7 days"
+    description: "If ResponseEngine adoption shows template proliferation, migrate to semantic block library (15 reusable blocks vs 72 templates)"
+  
+  - id: "Phase-84"
+    title: "Cross-Repository Template Sharing"
+    depends_on: ["ENH-082"]
+    estimated_effort: "3-4 days"
+    description: "Enable template sharing across onboarded repositories via registry"
+  
+  - id: "Phase-85"
+    title: "Advanced Response Optimization (Dynamic Composition)"
+    depends_on: ["ENH-082"]
+    estimated_effort: "4-5 days"
+    description: "Runtime template selection based on user context, preferences, and role"
+
+# ============================================================================
+# REFERENCES
+# ============================================================================
+
+references:
+  source_documents:
+    - "chat01.md (response template system analysis)"
+    - "cortex-architect.prompt.md v15.3"
+    - "ENH-082-response-template-integration-wave.yaml"
+    - "WAVE-BASED-EXECUTION-PLAN.yaml"
+    - "index.yaml (master registry)"
+  
+  related_phases:
+    - "ENH-063: Production Architecture Remediation (WAVE-1)"
+    - "Phase-48: Holistic Validation & Challenge Gate"
+    - "Phase-71: LENS Intelligence Integration Framework"

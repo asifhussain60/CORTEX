@@ -1,0 +1,986 @@
+version: '1.0'
+phase_id: phase-81
+title: "Agent Architecture Holistic Redesign & Governance Gap Closure"
+status: active
+priority: P1
+created: '2026-02-11T19:00:00.000000Z'
+estimated_effort: "10 days"
+estimated_tokens: "45000"
+roi_score: 92
+confidence: 9.5
+
+# ============================================================================
+# EXECUTIVE SUMMARY
+# ============================================================================
+summary: |
+  Comprehensive agent architecture redesign implementing capability-based
+  clustering for optimal extensibility, scalability, and efficiency. Closes
+  2 critical gaps (META-AUDIT, PLAN sync) and establishes systematic agent
+  collaboration protocol. Includes complete legacy cleanup, wiring migration,
+  and machine-readable agent metadata system.
+
+problem_statement: |
+  CURRENT STATE ANALYSIS (from chat01.md digest):
+  
+  1. Mode-Agent Mapping Issues:
+     - Implicit mapping causing discovery friction
+     - 2 critical gaps: META-AUDIT mode and PLAN synchronization
+     - No systematic agent collaboration protocol
+     - Agent specs lack machine-readable metadata
+  
+  2. Architecture Inefficiencies:
+     - 1-to-1 mode-agent mapping creates proliferation (10+ agents)
+     - Redundant capabilities across agents (LENS analysis duplication)
+     - Token overhead from loading multiple agent specs
+     - Integration complexity from orchestrating 10+ separate agents
+  
+  3. Governance Gaps:
+     - META-AUDIT: No recursive validation of auditors/validators
+     - PLAN: No plan-reality synchronization or wave organization
+     - Enforcement gaps slip through when validators have issues
+     - Plan drifts from reality without systematic correction
+  
+  4. Technical Debt:
+     - Legacy agent specs without standardized metadata
+     - Inconsistent agent discovery mechanisms
+     - No clear collaboration handoff patterns
+     - Scattered wiring definitions
+
+expected_outcomes:
+  - "✅ All 8 modes have explicit agent coverage (100%)"
+  - "✅ Agent collaboration protocol defined with request flow patterns"
+  - "✅ Machine-readable agent metadata (YAML front-matter in all specs)"
+  - "✅ IntentRouter capability-based routing (vs trigger-word routing)"
+  - "✅ 2 new agents: cortex-meta-auditor, cortex-master-plan-auditor"
+  - "✅ Mode → Agent → MCP Tool mapping matrix documented"
+  - "✅ 60% token savings via agent reuse vs duplication"
+  - "✅ Legacy test/data/file cleanup complete"
+  - "✅ Wiring consolidated and migrated to specifications/"
+
+success_metrics:
+  extensibility:
+    - "New mode addition: 4 days → 1 day (agent reuse)"
+    - "Multi-repo support: N agent sets → 1 agent set"
+    - "Token overhead per mode: 8K → 3K (60% reduction)"
+  scalability:
+    - "Concurrent audits: Stateless agent design"
+    - "Plan size growth: Linear scaling (vs exponential)"
+    - "Agent coordination: <150ms overhead"
+  accuracy:
+    - "Mode coverage: 75% → 100% (all 8 modes)"
+    - "Governance gap detection: +2 agents (meta-auditor, plan-auditor)"
+    - "Implementation Truth: Plan-reality delta <5%"
+  efficiency:
+    - "Session init tokens: 245K → 30K (88% reduction)"
+    - "Agent load time: Per-request lazy loading"
+    - "LENS analysis: Phase 49 CCL caching (70% hit rate)"
+
+# ============================================================================
+# STAGE BREAKDOWN
+# ============================================================================
+stages:
+  - id: S1
+    name: "Agent Gap Closure"
+    duration: "2 days"
+    estimated_tokens: "8000"
+    description: |
+      Create 2 new agents to close critical gaps in META-AUDIT and PLAN modes.
+      Enhance existing phase-resolver for collaboration protocol.
+    
+    tasks:
+      - task: "Create cortex-meta-auditor.md agent spec"
+        file: ".github/agents/core/cortex-meta-auditor.md"
+        requirements:
+          - "Purpose: Recursive governance validation (audit the auditors)"
+          - "MCP Tools: cortex_meta_audit, cortex_validate_governance_health"
+          - "Capabilities: Enforcement gap detection, MCP-FIRST compliance checks"
+          - "Integration: PlanOrchestrator post-phase, CI/CD pre-merge hooks"
+          - "Coverage: EnforcementOrchestrator, HolisticValidationOrchestrator validation"
+        acceptance_criteria:
+          - "✅ Agent spec includes YAML front-matter metadata"
+          - "✅ All MCP tools defined with input/output schemas"
+          - "✅ Integration points with existing orchestrators documented"
+          - "✅ Recursive audit algorithm pseudocode included"
+      
+      - task: "Create cortex-master-plan-auditor.md agent spec"
+        file: ".github/agents/core/cortex-master-plan-auditor.md"
+        requirements:
+          - "Purpose: Plan-reality synchronization + wave orchestration"
+          - "MCP Tools: cortex_audit_plan, cortex_sync_plan_status, cortex_reorganize_waves, cortex_execute_wave_autonomous"
+          - "Capabilities: Delta analysis, status alignment, ROI clustering, autonomous execution"
+          - "Integration: /plan sync trigger, post-completion hooks, dashboard refresh"
+          - "Algorithm: PERT dependency clustering + ROI scoring + token budgeting"
+        acceptance_criteria:
+          - "✅ Wave reorganization algorithm with token budget constraints"
+          - "✅ Continuation protocol for autonomous execution (75% checkpoint)"
+          - "✅ Phase 49 CCL integration for context pre-warming"
+          - "✅ Implementation Truth validation via LENS"
+      
+      - task: "Enhance cortex-phase-resolver.md collaboration"
+        file: ".github/agents/core/cortex-phase-resolver.md"
+        requirements:
+          - "Add collaboration protocol with cortex-master-plan-auditor"
+          - "Phase resolver identifies WHAT, auditor determines HOW (waves)"
+          - "Shared context passing to avoid duplicate LENS analysis"
+          - "Request handoff pattern documentation"
+        acceptance_criteria:
+          - "✅ Collaboration protocol section added"
+          - "✅ Handoff pattern: resolver → auditor → executor documented"
+          - "✅ Shared context schema defined (LENS cache keys)"
+    
+    tests:
+      - "test_meta_auditor_recursive_validation.py (15 tests)"
+      - "test_master_plan_auditor_delta_analysis.py (18 tests)"
+      - "test_phase_resolver_collaboration.py (10 tests)"
+    
+    test_coverage_target: 90%
+    
+    dependencies:
+      - "Phase 48: Holistic Validation (completed)"
+      - "Phase 49: Context Crystallization Layer (completed)"
+
+  - id: S2
+    name: "Agent Metadata Standardization"
+    duration: "1.5 days"
+    estimated_tokens: "6000"
+    description: |
+      Add YAML front-matter to all agent specs for programmatic discovery.
+      Enable capability-based routing and collaboration optimization.
+    
+    tasks:
+      - task: "Define agent metadata schema"
+        file: "cortex/agents/metadata_schema.yaml"
+        requirements:
+          - "Fields: capabilities, modes_served, mcp_tools, collaborators, priority, version"
+          - "Validation rules for each field"
+          - "Example metadata block"
+        acceptance_criteria:
+          - "✅ Schema supports all 28 existing orchestrators"
+          - "✅ Backward compatible (existing agents without metadata still work)"
+          - "✅ Validation script: validate_agent_metadata.py"
+      
+      - task: "Add metadata to all core agents (11 agents)"
+        files:
+          - ".github/agents/core/cortex-auditor.md"
+          - ".github/agents/core/cortex-designer.md"
+          - ".github/agents/core/cortex-digest.md"
+          - ".github/agents/core/cortex-environment-setup.md"
+          - ".github/agents/core/cortex-holistic-validator.md"
+          - ".github/agents/core/cortex-interactive.md"
+          - ".github/agents/core/cortex-phase-resolver.md"
+          - ".github/agents/core/cortex-ask-coordinator.md"
+          - ".github/agents/core/cortex-meta-auditor.md (new)"
+          - ".github/agents/core/cortex-master-plan-auditor.md (new)"
+          - ".github/agents/core/cortex-storyteller.md"
+        metadata_template: |
+          ---
+          agent_id: cortex-{name}
+          version: 1.0
+          status: active
+          layer: core
+          capabilities:
+            - {primary_capability}
+            - {secondary_capability}
+          modes_served:
+            - {MODE_NAME}
+          mcp_tools:
+            - cortex_{tool_name}
+          collaborators:
+            - {other_agent_id}
+          priority: {P0|P1|P2}
+          token_cost_estimate: {estimated_tokens}
+          ---
+        acceptance_criteria:
+          - "✅ All 11 agents have valid YAML front-matter"
+          - "✅ Metadata passes validation script"
+          - "✅ No breaking changes to existing agent invocation"
+      
+      - task: "Implement agent metadata parser"
+        file: "cortex/agents/metadata_parser.py"
+        requirements:
+          - "Parse YAML front-matter from agent markdown files"
+          - "Validate against schema"
+          - "Cache parsed metadata (avoid re-parsing)"
+          - "Query interface: get_agents_by_capability(), get_agents_by_mode()"
+        acceptance_criteria:
+          - "✅ Parses all 11 agents without errors"
+          - "✅ Query performance: <50ms for capability lookup"
+          - "✅ Cache invalidation on agent file changes"
+    
+    tests:
+      - "test_metadata_parser.py (12 tests)"
+      - "test_agent_discovery_by_capability.py (8 tests)"
+      - "test_metadata_validation.py (10 tests)"
+    
+    test_coverage_target: 95%
+
+  - id: S3
+    name: "IntentRouter Capability-Based Routing"
+    duration: "1.5 days"
+    estimated_tokens: "7000"
+    description: |
+      Enhance IntentRouter with capability-based agent selection algorithm.
+      Replace trigger-word routing with intelligent capability matching.
+    
+    tasks:
+      - task: "Implement capability matching algorithm"
+        file: "cortex/intent_router/capability_matcher.py"
+        requirements:
+          - "Input: User request, parsed intent, required capabilities"
+          - "Algorithm: Score agents by capability overlap + priority + token cost"
+          - "Output: Ranked list of agents with confidence scores"
+          - "Fallback chain: Primary agent → secondary agent if primary unavailable"
+        acceptance_criteria:
+          - "✅ Matches capabilities with 95% accuracy (vs ground truth)"
+          - "✅ Selects optimal agent in <100ms"
+          - "✅ Fallback chain prevents single point of failure"
+      
+      - task: "Update IntentRouter with capability routing"
+        file: "cortex/intent_router/router.py"
+        requirements:
+          - "Replace hardcoded trigger-word → agent mapping"
+          - "Use capability_matcher for agent selection"
+          - "Support multi-agent coordination for complex requests"
+          - "Integrate with agent metadata parser"
+        acceptance_criteria:
+          - "✅ All 8 modes route correctly (AUDIT, IMPLEMENT, PLAN, etc.)"
+          - "✅ Multi-agent requests coordinate via shared context"
+          - "✅ Backward compatible with existing /commands"
+      
+      - task: "Add agent collaboration coordinator"
+        file: "cortex/intent_router/collaboration_coordinator.py"
+        requirements:
+          - "Orchestrate multi-agent workflows (resolver → auditor → executor)"
+          - "Shared context passing (avoid duplicate LENS analysis)"
+          - "Token budget tracking across agent handoffs"
+          - "Continuation protocol for long-running workflows"
+        acceptance_criteria:
+          - "✅ Collaboration reduces duplicate work by 60%"
+          - "✅ Token budget enforcement at handoff boundaries"
+          - "✅ Audit trail for multi-agent workflows (AC markers)"
+    
+    tests:
+      - "test_capability_matcher.py (15 tests)"
+      - "test_intent_router_capability_routing.py (20 tests)"
+      - "test_collaboration_coordinator.py (12 tests)"
+    
+    test_coverage_target: 92%
+    
+    dependencies:
+      - "S2: Agent Metadata Standardization (metadata parser ready)"
+
+  - id: S4
+    name: "Mode-Agent Mapping Documentation"
+    duration: "1 day"
+    estimated_tokens: "4000"
+    description: |
+      Comprehensive documentation of mode → agent → MCP tool mappings.
+      Visual diagrams and integration with cortex-architect.prompt.md.
+    
+    tasks:
+      - task: "Create mode-agent mapping matrix"
+        file: "docs/architecture/MODE-AGENT-MAPPING.md"
+        content: |
+          # Mode-Agent-MCP Tool Mapping Matrix
+          
+          ## Overview
+          CORTEX uses capability-based agent clustering where agents serve
+          multiple modes based on shared capabilities.
+          
+          ## Mapping Table
+          
+          | Mode | Primary Agent | Secondary Agent | MCP Tools | Capabilities |
+          |------|---------------|-----------------|-----------|--------------|
+          | PRE-FLIGHT | cortex-environment-setup | - | cortex_validate_environment | env_validation |
+          | AUDIT | cortex-auditor | cortex-meta-auditor | cortex_audit, cortex_meta_audit | code_analysis, governance_check |
+          | META-AUDIT | cortex-meta-auditor | cortex-holistic-validator | cortex_meta_audit, cortex_validate_governance_health | recursive_validation |
+          | DIGEST | cortex-digest | - | cortex_digest_session | session_learning |
+          | QUERY | cortex-ask-coordinator | - | cortex_total_recall | knowledge_retrieval |
+          | PLAN | cortex-phase-resolver | cortex-master-plan-auditor | cortex_plan_resolve, cortex_audit_plan, cortex_sync_plan_status | phase_management, plan_sync |
+          | DESIGN | cortex-designer | cortex-holistic-validator | cortex_challenge | challenge_generation |
+          | INTERACTIVE | cortex-interactive | - | cortex_process_request | user_refinement |
+          
+          ## Capability Clusters
+          
+          ### Analysis & Intelligence
+          - cortex-auditor (codebase health)
+          - cortex-meta-auditor (governance health)
+          - cortex-ask-coordinator (knowledge)
+          
+          ### Planning & Execution
+          - cortex-phase-resolver (phase ops)
+          - cortex-master-plan-auditor (plan sync)
+          
+          ### Design & Learning
+          - cortex-designer (challenges)
+          - cortex-digest (learning)
+          - cortex-interactive (refinement)
+          
+          ### Environment & Validation
+          - cortex-environment-setup (pre-flight)
+          - cortex-holistic-validator (validation)
+          
+          ### Communication
+          - cortex-storyteller (formatting)
+          
+          ## Agent Collaboration Patterns
+          
+          ### Pattern 1: Resolver → Auditor → Executor
+          User: "/plan sync" → cortex-phase-resolver identifies phases →
+          cortex-master-plan-auditor organizes waves → Executor runs autonomous
+          
+          ### Pattern 2: Designer → Validator → Executor
+          User: "/implement feature" → cortex-designer generates challenge →
+          cortex-holistic-validator checks → TDDOrchestrator executes
+          
+          ### Pattern 3: Auditor → Meta-Auditor → Remediator
+          User: "/audit" → cortex-auditor finds issues →
+          cortex-meta-auditor validates audit process → Remediation plan generated
+        acceptance_criteria:
+          - "✅ All 8 modes documented with agent mappings"
+          - "✅ Collaboration patterns with sequence diagrams"
+          - "✅ MCP tool catalog with descriptions"
+      
+      - task: "Create visual architecture diagram"
+        file: "docs/architecture/agent-architecture-diagram.svg"
+        requirements:
+          - "Mode layer → Agent layer → MCP tool layer"
+          - "Capability clusters with color coding"
+          - "Agent collaboration arrows"
+          - "Token flow indicators"
+        acceptance_criteria:
+          - "✅ Diagram renders correctly in GitHub"
+          - "✅ All agents and modes represented"
+          - "✅ Collaboration patterns visible"
+      
+      - task: "Update AGENT-INDEX.md"
+        file: ".github/agents/AGENT-INDEX.md"
+        requirements:
+          - "Add mode mapping matrix section"
+          - "Link to detailed documentation"
+          - "Quick reference for each agent"
+        acceptance_criteria:
+          - "✅ Index includes all 11 core agents"
+          - "✅ Mode mappings accurate"
+          - "✅ Links to detailed specs work"
+      
+      - task: "Integrate with cortex-architect.prompt.md"
+        file: ".github/prompts/cortex-architect.prompt.md"
+        requirements:
+          - "Add HEXA-MODE agent mapping section"
+          - "Reference MODE-AGENT-MAPPING.md documentation"
+          - "Include agent selection algorithm overview"
+        acceptance_criteria:
+          - "✅ Prompt file references new architecture"
+          - "✅ All 8 modes have agent mappings"
+          - "✅ No outdated agent references"
+    
+    tests:
+      - "test_documentation_completeness.py (8 tests)"
+      - "test_agent_index_validation.py (5 tests)"
+    
+    test_coverage_target: 85%
+
+  - id: S5
+    name: "Agent Collaboration Protocol Implementation"
+    duration: "1.5 days"
+    estimated_tokens: "7000"
+    description: |
+      Define and implement agent collaboration protocol with request handoff
+      patterns, shared context passing, and Phase 49 CCL integration.
+    
+    tasks:
+      - task: "Define collaboration protocol specification"
+        file: "cortex/agents/collaboration_protocol.yaml"
+        content: |
+          # Agent Collaboration Protocol Specification
+          version: 1.0
+          
+          handoff_patterns:
+            - name: "resolver_to_auditor"
+              trigger: "phase resolution complete"
+              source_agent: "cortex-phase-resolver"
+              target_agent: "cortex-master-plan-auditor"
+              shared_context:
+                - phase_id
+                - phase_yaml_path
+                - estimated_tokens
+                - dependencies
+              continuation_checkpoint: false
+            
+            - name: "auditor_to_executor"
+              trigger: "wave plan generated"
+              source_agent: "cortex-master-plan-auditor"
+              target_agent: "TDDOrchestrator"
+              shared_context:
+                - wave_plan
+                - token_budget
+                - continuation_protocol
+                - lens_cache_keys
+              continuation_checkpoint: true
+              checkpoint_threshold: 0.75  # 75% token budget
+            
+            - name: "designer_to_validator"
+              trigger: "challenge generated"
+              source_agent: "cortex-designer"
+              target_agent: "cortex-holistic-validator"
+              shared_context:
+                - challenge_alternatives
+                - user_intent
+                - risk_score
+              continuation_checkpoint: false
+          
+          shared_context_schema:
+            lens_analysis:
+              type: object
+              fields:
+                - file_path
+                - ast_hash
+                - git_hash
+                - dependencies
+                - complexity_score
+              cache_key_pattern: "lens:{file_path}:{git_hash}"
+            
+            phase_metadata:
+              type: object
+              fields:
+                - phase_id
+                - status
+                - stages
+                - tests
+                - token_estimate
+              cache_key_pattern: "phase:{phase_id}:{status}"
+          
+          token_budget_tracking:
+            checkpoint_thresholds:
+              - 0.50  # Warning
+              - 0.75  # Checkpoint + continuation
+              - 0.90  # Force stop
+            continuation_prompt_template: |
+              Phase {phase_id} Checkpoint at {progress}%
+              
+              Completed: {completed_stages}
+              Remaining: {remaining_stages}
+              Token Budget: {used_tokens}/{total_tokens}
+              
+              Next Session Command: /plan continue {phase_id}
+        acceptance_criteria:
+          - "✅ All handoff patterns documented"
+          - "✅ Shared context schema validated"
+          - "✅ Token budget checkpoints defined"
+      
+      - task: "Implement collaboration context manager"
+        file: "cortex/agents/collaboration_context.py"
+        requirements:
+          - "Shared context storage (in-memory + Redis optional)"
+          - "LENS cache integration (Phase 49 CCL)"
+          - "Token budget tracking across handoffs"
+          - "Continuation protocol generation"
+        acceptance_criteria:
+          - "✅ Context shared without duplicate LENS analysis (60% reduction)"
+          - "✅ Token budget enforced at checkpoints"
+          - "✅ Continuation prompts auto-generated"
+      
+      - task: "Integrate Phase 49 CCL with collaboration"
+        file: "cortex/orchestrators/context_crystallization.py"
+        requirements:
+          - "Pre-warm LENS analysis for incoming agent handoffs"
+          - "Cache shared context across agent boundaries"
+          - "Async prefetch for anticipated handoffs"
+        acceptance_criteria:
+          - "✅ 70% cache hit rate for LENS analysis"
+          - "✅ Handoff latency reduced by 40%"
+          - "✅ No duplicate analysis in multi-agent workflows"
+    
+    tests:
+      - "test_collaboration_context_manager.py (15 tests)"
+      - "test_handoff_patterns.py (12 tests)"
+      - "test_ccl_agent_integration.py (10 tests)"
+    
+    test_coverage_target: 90%
+    
+    dependencies:
+      - "S3: IntentRouter Capability Routing (collaboration coordinator ready)"
+      - "Phase 49: Context Crystallization Layer (CCL available)"
+
+  - id: S6
+    name: "MCP Tool Implementation"
+    duration: "2 days"
+    estimated_tokens: "8000"
+    description: |
+      Implement 6 new MCP tools for meta-auditor and master-plan-auditor agents.
+      Wire to MCP server and integrate with orchestrators.
+    
+    tasks:
+      - task: "Implement cortex_meta_audit MCP tool"
+        file: "cortex/mcp/tools/meta_audit_tool.py"
+        requirements:
+          - "Recursive validation of EnforcementOrchestrator + HolisticValidationOrchestrator"
+          - "Enforcement gap detection (P0 checks not running)"
+          - "MCP-FIRST compliance validation"
+          - "Returns: Governance health score + gap report"
+        acceptance_criteria:
+          - "✅ Detects 10 governance gap patterns"
+          - "✅ Health score calculation (0-100)"
+          - "✅ Remediation plan generation"
+      
+      - task: "Implement cortex_validate_governance_health MCP tool"
+        file: "cortex/mcp/tools/validate_governance_health_tool.py"
+        requirements:
+          - "Check: All 7 enforcement agents active"
+          - "Check: CORE rules loaded and validated"
+          - "Check: Audit trail integrity (AC markers)"
+          - "Check: MCP-FIRST routing correctness"
+        acceptance_criteria:
+          - "✅ Validates all 7 enforcement agents"
+          - "✅ CORE rule coverage: 30/30 rules"
+          - "✅ AC marker validation"
+      
+      - task: "Implement cortex_audit_plan MCP tool"
+        file: "cortex/mcp/tools/audit_plan_tool.py"
+        requirements:
+          - "Load registry master index"
+          - "For each phase: Run LENS analysis on related files"
+          - "Compare: Phase status (registry) vs implementation (code)"
+          - "Generate delta report with severity (P0/P1/P2)"
+        acceptance_criteria:
+          - "✅ Detects plan-reality deltas with <5% error"
+          - "✅ LENS integration via Phase 49 CCL"
+          - "✅ Delta report includes severity + remediation"
+      
+      - task: "Implement cortex_sync_plan_status MCP tool"
+        file: "cortex/mcp/tools/sync_plan_status_tool.py"
+        requirements:
+          - "Auto-fix: Low-risk drifts (status only)"
+          - "Manual-review: High-risk drifts (code changes needed)"
+          - "Update registry YAML files atomically"
+          - "Log all changes with AC markers"
+        acceptance_criteria:
+          - "✅ Auto-fixes 80% of status drifts"
+          - "✅ Manual review for remaining 20%"
+          - "✅ Atomic YAML updates (no corruption)"
+      
+      - task: "Implement cortex_reorganize_waves MCP tool"
+        file: "cortex/mcp/tools/reorganize_waves_tool.py"
+        requirements:
+          - "Input: Pending phases from registry"
+          - "Algorithm: PERT dependency clustering + ROI scoring"
+          - "Token budget: Target 15-25K per wave"
+          - "Output: WAVE-BASED-EXECUTION-PLAN.yaml"
+        acceptance_criteria:
+          - "✅ Wave clustering respects dependencies"
+          - "✅ ROI scoring prioritizes high-impact work"
+          - "✅ Token budget per wave: 15-25K (continuation boundary)"
+      
+      - task: "Implement cortex_execute_wave_autonomous MCP tool"
+        file: "cortex/mcp/tools/execute_wave_autonomous_tool.py"
+        requirements:
+          - "Load wave plan from WAVE-BASED-EXECUTION-PLAN.yaml"
+          - "Route all operations through MasterOrchestrator (MCP-FIRST)"
+          - "Inject continuation protocol at 75% token budget"
+          - "Dashboard sync on completion"
+        acceptance_criteria:
+          - "✅ Autonomous execution with progress bars"
+          - "✅ Continuation checkpoint at 75% tokens"
+          - "✅ MCP-FIRST enforcement (no native tools)"
+      
+      - task: "Wire new tools to MCP server"
+        file: "cortex/mcp/server.py"
+        requirements:
+          - "Register 6 new tools in tool catalog"
+          - "Add JSON-RPC handlers"
+          - "Update health checks"
+        acceptance_criteria:
+          - "✅ All 6 tools discoverable via /tools endpoint"
+          - "✅ Tool invocation via cortex_* functions"
+          - "✅ Error handling + logging"
+    
+    tests:
+      - "test_meta_audit_tool.py (15 tests)"
+      - "test_validate_governance_health_tool.py (10 tests)"
+      - "test_audit_plan_tool.py (18 tests)"
+      - "test_sync_plan_status_tool.py (12 tests)"
+      - "test_reorganize_waves_tool.py (15 tests)"
+      - "test_execute_wave_autonomous_tool.py (12 tests)"
+      - "test_mcp_tool_registration.py (8 tests)"
+    
+    test_coverage_target: 93%
+
+  - id: S7
+    name: "Integration Testing & Validation"
+    duration: "1.5 days"
+    estimated_tokens: "6000"
+    description: |
+      End-to-end testing of capability-based routing, agent collaboration,
+      and new MCP tools. Validate all 8 modes route correctly.
+    
+    tasks:
+      - task: "Create integration test suite"
+        file: "tests/integration/test_agent_architecture_integration.py"
+        test_scenarios:
+          - "Mode routing: All 8 modes → correct agents"
+          - "Multi-agent collaboration: resolver → auditor → executor"
+          - "Shared context: No duplicate LENS analysis"
+          - "Token budget: Continuation checkpoints at 75%"
+          - "MCP tools: All 6 new tools functional"
+          - "Fallback chain: Primary agent unavailable → secondary"
+          - "Metadata discovery: Capability queries return correct agents"
+        acceptance_criteria:
+          - "✅ All 8 modes route to correct primary agent (100%)"
+          - "✅ Multi-agent workflows reduce duplicate work by 60%"
+          - "✅ Continuation protocol triggers at 75% token budget"
+          - "✅ All 6 MCP tools execute without errors"
+      
+      - task: "Performance benchmarking"
+        file: "tests/performance/test_agent_architecture_performance.py"
+        benchmarks:
+          - "Agent metadata loading: <50ms"
+          - "Capability matching: <100ms"
+          - "Agent handoff latency: <150ms"
+          - "LENS cache hit rate: >70%"
+          - "Token overhead reduction: >60%"
+        acceptance_criteria:
+          - "✅ All benchmarks meet targets"
+          - "✅ No performance regression vs baseline"
+      
+      - task: "Governance validation"
+        file: "tests/governance/test_agent_architecture_governance.py"
+        validations:
+          - "MCP-FIRST enforcement: No native tool usage for file ops"
+          - "AC marker audit trail: All agent actions logged"
+          - "CORE rules: All 30 rules validated"
+          - "Meta-audit: Recursive validation detects enforcement gaps"
+        acceptance_criteria:
+          - "✅ MCP-FIRST compliance: 100%"
+          - "✅ AC marker coverage: 100%"
+          - "✅ CORE rule validation: 30/30"
+      
+      - task: "User acceptance testing scenarios"
+        file: "tests/acceptance/test_agent_architecture_uat.py"
+        scenarios:
+          - "User: '/plan sync' → Correct delta report + wave plan"
+          - "User: '/audit' followed by '/meta-audit' → Governance gaps found"
+          - "User: '/implement feature' → Designer → Validator → Executor flow"
+          - "User: 'proceed' with continuation → Resumes from checkpoint"
+        acceptance_criteria:
+          - "✅ All UAT scenarios pass"
+          - "✅ User experience: Clear progress feedback"
+          - "✅ Error messages: Actionable guidance"
+    
+    tests:
+      - "test_agent_architecture_integration.py (25 tests)"
+      - "test_agent_architecture_performance.py (8 benchmarks)"
+      - "test_agent_architecture_governance.py (12 tests)"
+      - "test_agent_architecture_uat.py (10 scenarios)"
+    
+    test_coverage_target: 88%
+
+  - id: S8
+    name: "Legacy Cleanup & Migration"
+    duration: "1 day"
+    estimated_tokens: "5000"
+    description: |
+      Comprehensive cleanup of legacy tests, data files, deprecated agents,
+      and scattered wiring definitions. Consolidate to specifications/ and
+      archive obsolete components.
+    
+    tasks:
+      - task: "Identify legacy components"
+        script: "scripts/identify_legacy_components.py"
+        scan_targets:
+          - "tests/ - Identify deprecated test files"
+          - "cortex/wiring/ - Find scattered wiring definitions"
+          - ".github/agents/ - Detect agents without metadata"
+          - "docs/ - Find outdated documentation"
+          - "cortex/ - Locate orphaned utility files"
+        output: "docs/cleanup/LEGACY-COMPONENTS-INVENTORY.md"
+        acceptance_criteria:
+          - "✅ Complete inventory of legacy components"
+          - "✅ Risk assessment for each component (safe to remove?)"
+          - "✅ Migration plan for components to keep"
+      
+      - task: "Clean up legacy test files"
+        targets:
+          - "tests/test_old_orchestrator_*.py → Archive to _workspaces/__bak-tests/"
+          - "tests/integration/test_deprecated_*.py → Delete (no longer valid)"
+          - "tests/conftest_old.py → Delete (superseded by conftest.py)"
+          - "tests/fixtures/legacy_*.yaml → Archive"
+        acceptance_criteria:
+          - "✅ tests/ contains only active tests"
+          - "✅ All remaining tests pass (pytest tests/)"
+          - "✅ Coverage maintained or improved"
+      
+      - task: "Consolidate wiring definitions"
+        source: "cortex/wiring/ (scattered YAML/JSON files)"
+        target: "cortex/wiring/specifications/"
+        actions:
+          - "Merge duplicate orchestrator definitions"
+          - "Migrate JSON → YAML (consistent format)"
+          - "Remove deprecated orchestrator references"
+          - "Validate against __wiring_contract__.yaml"
+        acceptance_criteria:
+          - "✅ All wiring in specifications/ directory"
+          - "✅ No duplicate definitions"
+          - "✅ Wiring contract validation passes"
+      
+      - task: "Archive deprecated agents"
+        targets:
+          - ".github/agents/deprecated/ → Move old agent specs"
+          - "Update AGENT-INDEX.md to remove deprecated entries"
+        acceptance_criteria:
+          - "✅ Only active agents in .github/agents/core|education|support"
+          - "✅ Deprecated agents archived with timestamp"
+          - "✅ AGENT-INDEX.md accurate"
+      
+      - task: "Clean up orphaned data files"
+        targets:
+          - "cortex_brain/state/old_*.json → Archive"
+          - "cortex_brain/onboarded_repos/deprecated_*.yaml → Delete"
+          - "docs/abandoned_*.md → Archive"
+        acceptance_criteria:
+          - "✅ Only active data files remain"
+          - "✅ Archived files timestamped + indexed"
+          - "✅ No broken references to removed files"
+      
+      - task: "Update import statements"
+        script: "scripts/update_imports_after_cleanup.py"
+        actions:
+          - "Remove imports of deleted modules"
+          - "Update wiring imports to new specifications/ path"
+          - "Fix broken agent spec references"
+        acceptance_criteria:
+          - "✅ No import errors (python -m cortex.cli)"
+          - "✅ All orchestrators load correctly"
+          - "✅ MCP server starts without errors"
+      
+      - task: "Migration documentation"
+        file: "docs/migration/PHASE-81-MIGRATION-GUIDE.md"
+        content: |
+          # Phase 81 Migration Guide
+          
+          ## Breaking Changes
+          - Agent metadata required for new agents
+          - Wiring definitions moved to specifications/
+          - Deprecated agents removed
+          
+          ## Migration Steps
+          1. Update agent references in custom code
+          2. Use capability-based routing in IntentRouter
+          3. Migrate wiring to specifications/ directory
+          4. Update tests to use new agent metadata
+          
+          ## Rollback Plan
+          - Archive available in _workspaces/__bak-phase81/
+          - Restore command: scripts/rollback_phase81.sh
+        acceptance_criteria:
+          - "✅ Migration guide covers all breaking changes"
+          - "✅ Rollback tested and working"
+          - "✅ User impact documented"
+    
+    tests:
+      - "test_legacy_cleanup_completeness.py (10 tests)"
+      - "test_wiring_consolidation.py (8 tests)"
+      - "test_import_integrity.py (12 tests)"
+    
+    test_coverage_target: 90%
+    
+    rollback_plan:
+      archive_location: "_workspaces/__bak-phase81/"
+      archive_date: "2026-02-11"
+      restore_script: "scripts/rollback_phase81.sh"
+
+# ============================================================================
+# DEPENDENCIES & INTEGRATION
+# ============================================================================
+dependencies:
+  required_phases:
+    - phase-48: "Holistic Validation (challenge gate patterns)"
+    - phase-49: "Context Crystallization Layer (LENS caching)"
+    - phase-56: "MCP Unified Routing (tool infrastructure)"
+  
+  required_tools:
+    - "pytest >=7.0"
+    - "pyyaml >=6.0"
+    - "redis-py >=4.0 (optional, for distributed context)"
+  
+  optional_enhancements:
+    - "Distributed context storage via Redis (for multi-instance deployments)"
+    - "LLM-based agent metadata generation (auto-generate from spec content)"
+
+integration_points:
+  - component: "IntentRouter"
+    change: "Capability-based routing replaces trigger-word routing"
+    impact: "All /commands route through new algorithm"
+    test: "tests/integration/test_intent_router_capability_routing.py"
+  
+  - component: "MCP Server"
+    change: "6 new tools registered (meta-audit, plan-audit, wave execution)"
+    impact: "Tool catalog grows from 30 → 36 tools"
+    test: "tests/mcp/test_tool_registration.py"
+  
+  - component: "Agent System"
+    change: "2 new agents (meta-auditor, master-plan-auditor) + 11 enhanced"
+    impact: "Agent count: 9 → 11 core agents"
+    test: "tests/agents/test_agent_discovery.py"
+  
+  - component: "Phase 49 CCL"
+    change: "LENS cache shared across agent handoffs"
+    impact: "60% reduction in duplicate analysis"
+    test: "tests/orchestrators/test_ccl_agent_integration.py"
+
+backward_compatibility:
+  - "Existing agent specs without metadata still work (degraded routing)"
+  - "Old trigger-word routing available as fallback"
+  - "Wiring files in old locations supported (deprecated warnings)"
+  - "MCP tools: Existing tools unchanged, new tools additive"
+
+# ============================================================================
+# ROLLOUT PLAN
+# ============================================================================
+rollout_strategy:
+  phase_1_testing:
+    duration: "2 days"
+    scope: "Local testing on development branch"
+    validation:
+      - "All 65+ tests pass"
+      - "Performance benchmarks met"
+      - "No regression in existing functionality"
+  
+  phase_2_staging:
+    duration: "1 day"
+    scope: "Deploy to staging environment"
+    validation:
+      - "Integration tests with real MCP server"
+      - "Multi-agent workflows functional"
+      - "Dashboard updates working"
+  
+  phase_3_production:
+    duration: "0.5 days"
+    scope: "Gradual rollout to production"
+    strategy: "Canary deployment (10% → 50% → 100%)"
+    rollback_trigger: "Error rate >5% or user complaints"
+
+monitoring:
+  metrics:
+    - "agent_routing_accuracy (target: >95%)"
+    - "agent_handoff_latency_ms (target: <150ms)"
+    - "lens_cache_hit_rate (target: >70%)"
+    - "token_overhead_per_request (target: <8K)"
+    - "meta_audit_governance_score (target: >85)"
+  
+  alerts:
+    - "Agent routing failures >5%"
+    - "Handoff latency >300ms"
+    - "Cache hit rate <50%"
+    - "Governance health score <70"
+
+# ============================================================================
+# RISK ASSESSMENT
+# ============================================================================
+risks:
+  - risk: "Agent routing algorithm incorrect"
+    severity: "P1"
+    likelihood: "Low"
+    mitigation: "Extensive unit tests + fallback to trigger-word routing"
+    rollback: "Revert IntentRouter to previous version"
+  
+  - risk: "Performance regression from metadata parsing"
+    severity: "P2"
+    likelihood: "Medium"
+    mitigation: "Metadata caching + lazy loading"
+    rollback: "Disable metadata parsing, use hardcoded mappings"
+  
+  - risk: "Legacy cleanup breaks existing functionality"
+    severity: "P1"
+    likelihood: "Low"
+    mitigation: "Comprehensive import validation + archive before delete"
+    rollback: "Restore from _workspaces/__bak-phase81/"
+  
+  - risk: "Multi-agent collaboration overhead excessive"
+    severity: "P2"
+    likelihood: "Low"
+    mitigation: "Token budget tracking + early termination if overhead >30%"
+    rollback: "Disable collaboration, use single-agent routing"
+
+# ============================================================================
+# COMPLETION CRITERIA
+# ============================================================================
+completion_checklist:
+  - "✅ 2 new agents created (meta-auditor, master-plan-auditor)"
+  - "✅ All 11 core agents have metadata (YAML front-matter)"
+  - "✅ IntentRouter uses capability-based routing"
+  - "✅ 6 new MCP tools implemented and registered"
+  - "✅ Agent collaboration protocol defined and tested"
+  - "✅ Mode-agent mapping documented (MODE-AGENT-MAPPING.md)"
+  - "✅ Visual architecture diagram created"
+  - "✅ 65+ tests pass with >90% coverage"
+  - "✅ Performance benchmarks met (all targets)"
+  - "✅ Legacy cleanup complete (wiring, tests, data)"
+  - "✅ Migration guide published"
+  - "✅ Rollback tested and documented"
+  - "✅ Integration with Phase 48, 49, 56 validated"
+  - "✅ Production deployment successful"
+
+definition_of_done:
+  code:
+    - "All new code follows CORE rules (type hints, docstrings, TDD)"
+    - "Test coverage >90% for new components"
+    - "No lint errors or type checking failures"
+    - "AC markers present (AC_START → AC_COMPLETE)"
+  
+  documentation:
+    - "All agents documented with metadata"
+    - "Mode-agent mapping matrix complete"
+    - "Migration guide published"
+    - "Architecture diagram created"
+  
+  testing:
+    - "Unit tests: 45 tests (S1-S8)"
+    - "Integration tests: 25 tests"
+    - "Performance tests: 8 benchmarks"
+    - "UAT scenarios: 10 scenarios"
+  
+  governance:
+    - "MCP-FIRST compliance: 100%"
+    - "CORE rule validation: 30/30"
+    - "Audit trail: All actions logged with AC markers"
+    - "Meta-audit: Governance health score >85"
+
+# ============================================================================
+# FOLLOW-UP PHASES
+# ============================================================================
+follow_up_phases:
+  - phase_id: "phase-82"
+    title: "Multi-Repository Agent Support"
+    description: "Extend agents to support user domain repositories (not just CORTEX)"
+    estimated_effort: "5 days"
+    dependencies: ["phase-81"]
+  
+  - phase_id: "phase-83"
+    title: "LLM-Based Agent Metadata Generation"
+    description: "Auto-generate agent metadata from spec content using LLM"
+    estimated_effort: "3 days"
+    dependencies: ["phase-81"]
+  
+  - phase_id: "phase-84"
+    title: "Distributed Agent Context Storage"
+    description: "Redis-based context sharing for multi-instance deployments"
+    estimated_effort: "4 days"
+    dependencies: ["phase-81"]
+
+# ============================================================================
+# AUDIT TRAIL
+# ============================================================================
+created_by: "asifhussain60"
+approved_by: "pending"
+source: "chat01.md comprehensive analysis (2026-02-11)"
+related_documents:
+  - ".github/prompts/cortex-architect.prompt.md (HEXA-MODE spec)"
+  - "docs/architecture/MODE-AGENT-MAPPING.md (to be created)"
+  - "_workspaces/.chats/chat01.md (source analysis)"
+  - "cortex-registry/_cortex-master/WAVE-BASED-EXECUTION-PLAN.yaml"
+
+# AC_START: AC-PHASE81-001
+# Description: Phase 81 specification created - Agent Architecture Holistic Redesign
+# Status: Specification complete, awaiting approval
+# AC_COMPLETE: AC-PHASE81-001 ✅

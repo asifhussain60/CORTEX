@@ -1,121 +1,203 @@
-version: '1.6'
+version: '1.9'
 registry_name: _cortex-master
-description: CORTEX self-development planning with unified remediation tracking and wave-based autonomous execution
-last_updated: '2026-02-11T18:30:00.000000Z'
-revision: 'Master Remediation Plan v2.1: Wave-based prioritization for autonomous silent execution - 2 phases completed (71, 76)'
+description: CORTEX self-development planning with wave-based incremental value delivery
+last_updated: '2026-02-11T21:00:00.000000Z'
+revision: 'Wave-Based Execution Plan v4.0: 6 release waves - Added WAVE-6 Comprehensive Cleanup & Refactoring (ROI 9.2/10 - HIGHEST)'
 
 # ============================================================================
-# MASTER REMEDIATION PLAN (CONSOLIDATED)
+# MASTER REMEDIATION PLAN (WAVE-BASED RELEASES)
 # ============================================================================
 master_remediation:
   plan_file: "MASTER-REMEDIATION-PLAN-V2.yaml"
   wave_plan_file: "WAVE-BASED-EXECUTION-PLAN.yaml"
+  wave_6_file: "WAVE-6-COMPREHENSIVE-CLEANUP-REFACTORING.yaml"
   status: "active"
   execution_mode: "autonomous_silent"
   progress_display: "ascii_bars"
   wave_execution: true
   
   summary:
-    total_fixes: 45
-    p0_critical: 23
-    p1_high: 15
-    p2_medium: 7
-    estimated_effort: "32 days (19 days parallelized)"
+    total_phases: 20  # 16 original + 4 new (ENH-082/084/085/086)
+    p0_critical: 3  # ENH-063, ENH-064, ENH-066
+    p1_high: 12      # phase-81, ENH-067-071, ENH-078, ENH-082/084/085/086
+    p2_medium: 5    # ENH-065, ENH-072-074, ENH-077, phase-80
+    estimated_effort: "~115 days (70 days parallelized across 6 waves)"
+  
+  # Wave-Based Incremental Releases
+  release_strategy:
+    approach: "Incremental value delivery - each wave is a production release"
+    cadence: "2-3 weeks per wave"
+    value_focus: "Foundation → Intelligence → Autonomy → Enhancement → Polish → Cleanup"
   
   waves:
     - wave: 1
-      name: "Quick Wins"
+      name: "Foundation (Production-Critical Infrastructure)"
+      release: "R1-FOUNDATION"
       priority: "P0-CRITICAL"
-      duration: "1-2 days"
-      fixes: 8
+      duration: "12-14 days"
+      phases: 3
       status: "ready"
       highlights:
-        - "Command injection fix (4h)"
-        - "Global exception handler (4h)"
-        - "Liveness probe (3h)"
-        - "Path traversal fix (4h)"
-        - "Bare except clauses (2h)"
-        - "Debug race condition (6h)"
-        - "Module imports (15min)"
-        - "Test dependencies (10min)"
+        - "ENH-063: Production security + reliability (15 fixes)"
+        - "ENH-066: MCP onboarding clarity (10x faster)"
+        - "ENH-064: LENS intelligence (0% → 90% understanding)"
+      value_delivered:
+        - "✅ Secure production-ready infrastructure"
+        - "✅ 10x faster onboarding (30min → 3min)"
+        - "✅ Real codebase intelligence (vs hardcoded)"
+      dependencies: []
+      blocks: ["Wave 2", "Wave 3"]
     
     - wave: 2
-      name: "Security Hardening"
-      priority: "P0-SECURITY"
-      duration: "3-5 days"
-      fixes: 3
-      status: "ready"
+      name: "Intelligence (Enhanced Decision Making)"
+      release: "R2-INTELLIGENCE"
+      priority: "P1-HIGH"
+      duration: "10-14 days"
+      phases: 2
+      status: "blocked"
+      requires: ["R1-FOUNDATION"]
       highlights:
-        - "MCP authentication (2 days)"
-        - "AWS credentials cleanup (1 day)"
-        - "RBAC implementation (2 days)"
+        - "phase-81: Agent architecture redesign (60% token savings)"
+        - "ENH-078: Language refinement (8x intent accuracy)"
+      value_delivered:
+        - "✅ 60% token reduction from agent efficiency"
+        - "✅ Intent accuracy: 65% → 90%"
+        - "✅ Clarifications: 40% → <15%"
+      dependencies: ["ENH-063"]
+      blocks: ["Wave 3"]
     
     - wave: 3
-      name: "Reliability Hardening"
-      priority: "P0-RELIABILITY"
-      duration: "2-3 days"
-      fixes: 4
-      status: "ready"
+      name: "Autonomy (Execution & Trust)"
+      release: "R3-AUTONOMY"
+      priority: "P1-HIGH"
+      duration: "10-14 days"
+      phases: 3
+      status: "blocked"
+      requires: ["R1-FOUNDATION", "R2-INTELLIGENCE"]
       highlights:
-        - "Circuit breakers (1 day)"
-        - "Async git operations (1 day)"
-        - "Configuration drift fix (2 days)"
-        - "Session persistence (1 day)"
+        - "ENH-067: Autonomous plan execution"
+        - "ENH-068: Data integrity validation"
+        - "ENH-069: Dashboard explainability"
+      value_delivered:
+        - "✅ True autonomous execution (approve → done)"
+        - "✅ Data contradiction detection"
+        - "✅ KPI transparency + stakeholder trust"
+      dependencies: ["ENH-063", "ENH-064"]
+      blocks: []
     
     - wave: 4
-      name: "Infrastructure & Observability"
-      priority: "P1-INFRASTRUCTURE"
-      duration: "3-5 days"
-      fixes: 3
-      status: "ready"
+      name: "Enhancement (UX & Discovery)"
+      release: "R4-ENHANCEMENT"
+      priority: "P1-HIGH"
+      duration: "6-8 days"
+      phases: 2
+      status: "blocked"
+      requires: ["R1-FOUNDATION"]
       highlights:
-        - "Structured logging (1 day)"
-        - "Distributed tracing (2 days)"
-        - "Event history bounds (1 day)"
+        - "ENH-070: Use-case library (30+ examples)"
+        - "ENH-071: Domain inference (NLP)"
+      value_delivered:
+        - "✅ 30+ concrete use cases"
+        - "✅ Automatic domain extraction"
+        - "✅ Feature discoverability"
+      dependencies: ["ENH-064"]
+      blocks: []
     
     - wave: 5
-      name: "Cleanup & Optimization"
-      priority: "P2-CLEANUP"
-      duration: "2-3 days"
-      fixes: 3
-      status: "ready"
+      name: "Polish (Long-term Refinements)"
+      release: "R5-POLISH"
+      priority: "P2-MEDIUM"
+      duration: "Variable"
+      phases: 6
+      status: "backlog"
+      requires: []
       highlights:
-        - "Vacuum orchestrator enhancement (1 day)"
-        - "Root directory cleanup (1 day)"
-        - "Orphaned files cleanup (4h)"
+        - "ENH-065: SPA dashboard production polish (DEFERRED)"
+        - "phase-80: MCP tools documentation"
+        - "ENH-072-074, ENH-077: UX improvements"
+      value_delivered:
+        - "✅ Production-grade dashboard polish"
+        - "✅ 85% documentation effort reduction"
+        - "✅ UI/UX refinements"
+      dependencies: []
+      blocks: []
+    
+    - wave: 6
+      name: "Comprehensive Cleanup & Refactoring (HIGH-ROI)"
+      release: "R6-CLEANUP"
+      priority: "P1-HIGH-ROI"
+      duration: "14-18 days"
+      phases: 4  # ENH-082, ENH-084, ENH-085, ENH-086
+      status: "ready"
+      roi: 9.2  # HIGHEST of all waves
+      requires: ["R1-FOUNDATION"]
+      highlights:
+        - "ENH-082: Response Template System Integration (8.5 ROI)"
+        - "ENH-084: Standard Phase Creation Practices (9.5 ROI)"
+        - "ENH-085: Completed Phase Cleanup Audit (8.8 ROI)"
+        - "ENH-086: Architecture Alignment Verification (9.0 ROI)"
+      value_delivered:
+        - "✅ 72/72 orchestrators using Unified Response Engine"
+        - "✅ Standard phase creation (50% faster, 0 orphans)"
+        - "✅ Codebase reduced 15-25% (cleanup audit)"
+        - "✅ 100% CORE rules + MCP-FIRST compliance"
+      dependencies: ["ENH-063"]  # Foundation security must be complete
+      blocks: []
+      authority: "chat01.md + cortex-architect.prompt.md v15.3"
+      file_reference: "WAVE-6-COMPREHENSIVE-CLEANUP-REFACTORING.yaml"
   
   success_metrics:
-    security:
-      - "MCP authentication enabled: false → true"
-      - "Command injection vulns: 2 → 0"
-      - "Hardcoded credentials: present → none"
-    reliability:
-      - "Server crash rate: 3/week → 0/month"
-      - "Circuit breakers: false → true"
-      - "File corruption: 2/week → 0/month"
-    performance:
-      - "MCP P99 latency: 2-5s → <100ms"
-      - "Event loop blocking: yes → no"
-    operability:
-      - "MTTR: 30+ min → <5 min"
+    wave_1_foundation:
+      - "MCP authentication: enabled"
+      - "Command injection: 2 → 0"
+      - "LENS intelligence: 0% → 90%"
+      - "Onboarding time: 30min → 3min"
+    wave_2_intelligence:
+      - "Agent token usage: -60%"
+      - "Intent accuracy: 65% → 90%"
+      - "Clarifications: 40% → <15%"
+    wave_3_autonomy:
+      - "Autonomous execution: functional"
+      - "Data integrity: validated"
+      - "KPI transparency: 100%"
+    wave_4_enhancement:
+      - "Use cases: 30+ published"
+      - "Domain inference: automated"
+    wave_5_polish:
+      - "Dashboard score: 3.6 → 9/10"
+      - "Documentation effort: -85%"
       - "Structured logging: 0% → 100%"
       - "Distributed tracing: false → true"
+    wave_6_cleanup:
+      - "Unified Response Engine: 72/72 orchestrators"
+      - "Phase creation: 50% faster (standard template + CLI)"
+      - "Codebase reduction: 15-25% (cleanup audit)"
+      - "CORE rules compliance: 100% (30/30 rules)"
+      - "MCP-FIRST violations: 0"
+      - "Test coverage: ≥80% across all modules"
 
 active_phases:
-  # CRITICAL (P0) - Immediate Action Required
+  # ============================================================================
+  # WAVE 1: FOUNDATION (Production-Critical Infrastructure) - Release 1
+  # Duration: 12-14 days | Value: Security + MCP + LENS core functionality
+  # ============================================================================
+  
   - id: ENH-063
     title: "Production Architecture Remediation (15 Critical Fixes)"
     priority: P0
+    wave: 1
+    release: "R1-FOUNDATION"
     status: active
-    estimated_effort: "19 days (12 days parallelized)"
-    roi: "Security + Reliability hardening → production-ready"
+    estimated_effort: "12 days (parallelized)"
+    roi: "Security + Reliability → production-ready"
     confidence: 9.5
+    dependencies: []
+    blocks: ["ENH-078", "phase-81", "ENH-067"]
     source: "chat01.md digest (2026-02-11)"
     description: |
-      Address 15 P0/P1 production-readiness findings from comprehensive
-      architecture analysis: MCP authentication, command injection, circuit
-      breakers, exception handling, async git, RBAC, structured logging,
-      distributed tracing, configuration drift, session persistence.
+      Address 15 P0/P1 production-readiness findings: MCP authentication,
+      command injection, circuit breakers, exception handling, async git,
+      RBAC, structured logging, distributed tracing, config drift, session.
     impact: "CRITICAL - Production deployment blocked by security vulnerabilities"
     phases:
       - "Phase 1: Critical Security Fixes (5-7 days, 4 fixes)"
@@ -132,13 +214,44 @@ active_phases:
       - cortex/orchestrators/support/debug_orchestrator.py (RACE CONDITION FIX)
       - tests/integration/ (CREDENTIALS CLEANUP)
       - cortex/*/*.py (STRUCTURED LOGGING)
+    value_delivered:
+      - "✅ Secure MCP server (P0 security)"
+      - "✅ Reliable git operations (P0 reliability)"
+      - "✅ Production observability (P1 ops)"
+  
+  - id: ENH-066
+    title: "MCP Pylance-Style Architecture Clarification"
+    priority: P0
+    wave: 1
+    release: "R1-FOUNDATION"
+    status: planned
+    estimated_effort: "1 day"
+    roi: "10x (Onboarding: 30 min → 3 min)"
+    dependencies: []
+    blocks: []
+    description: |
+      Update documentation to clarify MCP auto-starts like Pylance.
+      Create MCP-SETUP-GUIDE.md with cross-platform instructions.
+    impact: "CRITICAL - User onboarding friction, wasted troubleshooting time"
+    files:
+      - .github/prompts/MCP-SETUP-GUIDE.md (NEW)
+      - .github/prompts/cortex-architect.prompt.md (UPDATE)
+      - scripts/setup-mcp.py (ENHANCE)
+    value_delivered:
+      - "✅ 10x faster onboarding (30min → 3min)"
+      - "✅ Clear MCP architecture understanding"
+      - "✅ Cross-platform setup guide"
   
   - id: ENH-064
     title: "LENS Intelligence Layer Separation"
     priority: P0
+    wave: 1
+    release: "R1-FOUNDATION"
     status: planned
     estimated_effort: "2 weeks"
     roi: "10x (0% → 90% codebase understanding)"
+    dependencies: []
+    blocks: ["ENH-068", "ENH-071", "ENH-078"]
     description: |
       Extract intelligence layer from brain/lens/pipeline.py Phase 2 stub.
       Connect to real AST/Git analysis via LENSOrchestrator.
@@ -147,17 +260,218 @@ active_phases:
       - cortex/brain/lens/pipeline.py (REFACTOR)
       - cortex/intelligence/ (NEW directory)
       - cortex/lens/orchestrator.py (INTEGRATE)
+    value_delivered:
+      - "✅ Real dependency detection (vs hardcoded)"
+      - "✅ 90% codebase comprehension"
+      - "✅ Foundation for intelligent features"
+  
+  # ============================================================================
+  # WAVE 2: INTELLIGENCE (Enhanced Decision Making) - Release 2
+  # Duration: 10-14 days | Value: Agent architecture + Language refinement
+  # Dependencies: Requires ENH-063 (secure infrastructure)
+  # ============================================================================
+  
+  - id: phase-81
+    title: "Agent Architecture Holistic Redesign & Governance Gap Closure"
+    priority: P1
+    wave: 2
+    release: "R2-INTELLIGENCE"
+    status: active
+    estimated_effort: "10 days"
+    roi_score: 92
+    confidence: 9.5
+    dependencies: ["ENH-063"]
+    blocks: ["ENH-078"]
+    source: "chat01.md comprehensive analysis (2026-02-11)"
+    description: |
+      Capability-based agent clustering for extensibility + scalability.
+      Closes 2 critical gaps (META-AUDIT, PLAN sync). Implements collaboration
+      protocol, machine-readable agent metadata, and complete legacy cleanup.
+    impact: "HIGH - Eliminates 2 governance gaps, 60% token savings, multi-repo ready"
+    key_outcomes:
+      - "2 new agents: cortex-meta-auditor, cortex-master-plan-auditor"
+      - "All 11 core agents with machine-readable metadata"
+      - "IntentRouter capability-based routing (vs trigger-word)"
+      - "6 new MCP tools (meta-audit, plan-audit, wave execution)"
+      - "Agent collaboration protocol with Phase 49 CCL integration"
+      - "Legacy cleanup: wiring, tests, data, deprecated agents"
+    files:
+      - .github/agents/core/cortex-meta-auditor.md (NEW)
+      - .github/agents/core/cortex-master-plan-auditor.md (NEW)
+      - cortex/agents/metadata_parser.py (NEW)
+      - cortex/intent_router/capability_matcher.py (NEW)
+      - cortex/mcp/tools/meta_audit_tool.py (NEW)
+      - cortex/mcp/tools/audit_plan_tool.py (NEW)
+      - docs/architecture/MODE-AGENT-MAPPING.md (NEW)
+    value_delivered:
+      - "✅ 60% token reduction (agent efficiency)"
+      - "✅ 2 governance gaps closed"
+      - "✅ Capability-based routing"
+  
+  - id: ENH-078
+    title: "Language Refinement Layer (Request Optimization)"
+    priority: P1
+    wave: 2
+    release: "R2-INTELLIGENCE"
+    status: planned
+    estimated_effort: "2 weeks"
+    roi: "8x (30-40% intent accuracy + 60% fewer clarifications)"
+    dependencies: ["ENH-063", "ENH-064", "phase-81"]
+    blocks: []
+    source: "language-orch.txt analysis (2026-02-11)"
+    description: |
+      Add Language Refinement Layer to MasterOrchestrator that automatically
+      reconstructs user requests into LLM-optimal language BEFORE LENS classification.
+      Transform vague/ambiguous requests into clear, structured, contextual prompts.
+    impact: |
+      HIGH - Current flow struggles with vague requests, leading to:
+      - 35% intent classification errors
+      - 40% follow-up clarifications needed
+      - Sub-optimal orchestrator routing
+      - Poor user experience
+    value_delivered:
+      - "✅ Intent accuracy: 65% → 90%"
+      - "✅ Clarifications: 40% → <15%"
+      - "✅ User satisfaction: 3.2/5 → 4.5/5"
+  
+  # ============================================================================
+  # WAVE 3: AUTONOMY (Execution & Trust) - Release 3
+  # Duration: 10-14 days | Value: Autonomous execution + Data integrity
+  # Dependencies: Requires ENH-064 (LENS intelligence)
+  # ============================================================================
+  
+  - id: ENH-067
+    title: "Autonomous Plan Execution with Visual Progress"
+    priority: P1
+    wave: 3
+    release: "R3-AUTONOMY"
+    status: partially_implemented
+    estimated_effort: "3 weeks"
+    roi: "5x - User approves, CORTEX executes autonomously"
+    dependencies: ["ENH-063"]
+    blocks: []
+    description: |
+      Complete autonomous execution: user approves → CORTEX executes all phases
+      with real-time progress bars, TDD enforcement, and UI updates per phase.
+    current_state: "Phase 35/40 partially complete, needs coordination layer"
+    files:
+      - cortex/orchestrators/autonomous_execution_coordinator.py (ENHANCE)
+      - cortex/mcp/tools/plan_management_tool.py (INTEGRATE)
+    value_delivered:
+      - "✅ True autonomous execution (approve once → done)"
+      - "✅ Real-time ASCII progress tracking"
+      - "✅ TDD enforcement throughout"
+  
+  - id: ENH-068
+    title: "Data Integrity Validator for Dashboard Pipeline"
+    priority: P1
+    wave: 3
+    release: "R3-AUTONOMY"
+    status: planned
+    estimated_effort: "1 week"
+    roi: "Trust improvement, stakeholder confidence"
+    dependencies: ["ENH-064"]
+    blocks: []
+    description: |
+      Pre-render validation gate for dashboard data contradictions.
+      Add integrity banner component with confidence scoring.
+    files:
+      - cortex/onboarding/data_integrity_validator.py (NEW)
+      - cortex/dashboards/renderers/integrity_banner.py (NEW)
+    value_delivered:
+      - "✅ Data contradiction detection"
+      - "✅ Confidence scoring per KPI"
+      - "✅ Stakeholder trust improvement"
+  
+  - id: ENH-069
+    title: "Dashboard Explainability Panel"
+    priority: P1
+    wave: 3
+    release: "R3-AUTONOMY"
+    status: planned
+    estimated_effort: "1 week"
+    roi: "Transparency, debugging, stakeholder education"
+    dependencies: []
+    blocks: []
+    description: |
+      Every KPI needs 'How computed' explanation with formula, data source,
+      confidence level, and raw data link.
+    files:
+      - cortex/dashboards/schema/explainability_schema.yaml (NEW)
+      - company/dashboards/spa/js/explainability.js (NEW)
+    value_delivered:
+      - "✅ KPI transparency (formula + source)"
+      - "✅ Debugging capability"
+      - "✅ Stakeholder education"
+  
+  # ============================================================================
+  # WAVE 4: ENHANCEMENT (User Experience & Discovery) - Release 4
+  # Duration: 6-8 days | Value: Use cases + Domain inference
+  # Dependencies: Requires ENH-064 (LENS intelligence)
+  # ============================================================================
+  
+  - id: ENH-070
+    title: "Use-Case Library Generator (5 Personas × 6 Categories)"
+    priority: P1
+    wave: 4
+    release: "R4-ENHANCEMENT"
+    status: planned
+    estimated_effort: "1 week"
+    roi: "User adoption, feature discovery"
+    dependencies: []
+    blocks: []
+    description: |
+      Generate 30+ use cases (5 personas: exec/architect/dev/PM/researcher
+      × 6 categories: onboarding/analysis/debugging/planning/compliance/learning)
+    files:
+      - cortex/dashboards/use_case_generator.py (NEW)
+    value_delivered:
+      - "✅ 30+ concrete use cases"
+      - "✅ Feature discoverability"
+      - "✅ User adoption acceleration"
+  
+  - id: ENH-071
+    title: "Domain Inference from Business Summary (NLP)"
+    priority: P1
+    wave: 4
+    release: "R4-ENHANCEMENT"
+    status: planned
+    estimated_effort: "2 weeks"
+    roi: "Automatic domain knowledge capture"
+    dependencies: ["ENH-064"]
+    blocks: []
+    description: |
+      Use NLP to extract domain concepts, relationships, terminology from
+      business_summary even without explicit entities.
+    files:
+      - cortex/intelligence/domain_inference.py (NEW)
+      - cortex/nlp/concept_extractor.py (NEW)
+    value_delivered:
+      - "✅ Automatic domain extraction"
+      - "✅ No manual entity definitions required"
+      - "✅ Relationship mapping"
+  
+  # ============================================================================
+  # WAVE 5: POLISH (Long-term Improvements) - Release 5
+  # Duration: Variable | Value: UI/UX refinements, optimization
+  # Dependencies: None (can run anytime)
+  # ============================================================================
   
   - id: ENH-065
     title: "SPA Dashboard Production Readiness (15 Critical Issues)"
-    priority: P0
-    status: planned
+    priority: P2
+    wave: 5
+    release: "R5-POLISH"
+    status: deferred
     estimated_effort: "7 days (6 phases)"
     roi: "Production score: 3.6/10 → 9/10"
+    dependencies: []
+    blocks: []
     description: |
       Fix 15 production blockers: state management, error boundaries, security,
       lazy loading, schema validation, observability. 6-phase refactoring plan.
-    impact: "CRITICAL - Dashboard cannot be deployed to stakeholders in current state"
+      DEFERRED: Dashboard functional but needs polish, not blocking core value.
+    impact: "MEDIUM - Dashboard works but lacks production polish"
     phases:
       - "Phase 1: State Management (versioning + freeze)"
       - "Phase 2: Error Boundaries (per-tab fallback)"
@@ -171,84 +485,137 @@ active_phases:
       - company/dashboards/spa/js/lazy-loader.js (NEW)
       - company/dashboards/spa/js/sanitizer.js (NEW)
       - company/dashboards/spa/js/schema.js (NEW)
+    value_delivered:
+      - "✅ Production-grade dashboard (when needed)"
+      - "✅ Enterprise security standards"
+      - "✅ Scalability for large datasets"
   
-  - id: ENH-066
-    title: "MCP Pylance-Style Architecture Clarification"
-    priority: P0
+  - id: phase-80
+    title: "MCP Tools Documentation Architect (Dual-Mode System)"
+    priority: P2
+    wave: 5
+    release: "R5-POLISH"
     status: planned
-    estimated_effort: "1 day"
-    roi: "10x (Onboarding: 30 min → 3 min)"
+    estimated_effort: "4 weeks (1 week MVP)"
+    roi: "Documentation effort: 40+ hours → 2-3 hours (85% reduction)"
+    confidence: 9.2
+    dependencies: []
+    blocks: []
+    source: "chat01.md digest (2026-02-11)"
     description: |
-      Update documentation to clarify MCP auto-starts like Pylance.
-      Create MCP-SETUP-GUIDE.md with cross-platform instructions.
-    impact: "CRITICAL - User onboarding friction, wasted troubleshooting time"
-    files:
-      - .github/prompts/MCP-SETUP-GUIDE.md (NEW)
-      - .github/prompts/cortex-architect.prompt.md (UPDATE)
-      - scripts/setup-mcp.py (ENHANCE)
+      Apply Documentation Architect solution to MCP Tools with dual-mode system:
+      MODE: Refresh (git-aware delta detection) + MODE: Generate (GitHub Pages).
+      Auto-document from @mcp_tool decorators, interactive tool explorer, multi-persona
+      views, test coverage heat map, phantom tool cleanup (6 tools).
+    impact: "MEDIUM - Improve MCP tool health 32% → 77%, eliminate manual documentation"
+    stages:
+      - "S1: Foundation — Tool Delta Analyzer + Phantom Cleanup (1-2 days)"
+      - "S2: Intelligence — Health Score + Coverage Integration (2-3 days)"
+      - "S3: Interactive — Tool Explorer UI (3-4 days)"
+      - "S4: Multi-Persona — Developer/Architect/Security/Manager Views (2-3 days)"
+      - "S5: Searchable — Catalog + Fuzzy Search + Filters (2-3 days)"
+      - "S6: Deployment — GitHub Pages + CI/CD (1 day)"
+    value_delivered:
+      - "✅ Health score: 32% → 77%"
+      - "✅ 85% documentation effort reduction"
+      - "✅ Interactive tool explorer"
   
-  # HIGH VALUE (P1) - Next Sprint
-  - id: ENH-067
-    title: "Autonomous Plan Execution with Visual Progress"
-    priority: P1
-    status: partially_implemented
+  # ============================================================================
+  # BACKLOG: Lower-Priority Enhancements
+  # ============================================================================
+  
+  - id: ENH-072
+    title: "Renderable Content Schema (Unified Output)"
+    priority: P2
+    wave: "BACKLOG"
+    status: planned
+    estimated_effort: "1 week"
+    description: "Unified output structure for all dashboard components"
+  
+  - id: ENH-073
+    title: "Chart Interaction Standard (Tooltip + Cross-Filter)"
+    priority: P2
+    wave: "BACKLOG"
+    status: planned
+    estimated_effort: "1 week"
+    description: "Standardize chart interactions: tooltip, raw data, source, cross-filter"
+  
+  - id: ENH-074
+    title: "Virtualization for Large Lists (>1000 items)"
+    priority: P2
+    wave: "BACKLOG"
+    status: planned
+    estimated_effort: "3 days"
+    description: "Virtual scrolling for 8000+ item dependency graphs"
+  
+  - id: ENH-077
+    title: "Self-Optimizing CORTEX Enhancement (Quarterly Audit)"
+    priority: P2
+    wave: "BACKLOG"
+    status: planned
     estimated_effort: "3 weeks"
-    roi: "5x - User approves, CORTEX executes autonomously"
-    description: |
-      Complete autonomous execution: user approves → CORTEX executes all phases
-      with real-time progress bars, TDD enforcement, and UI updates per phase.
-    current_state: "Phase 35/40 partially complete, needs coordination layer"
-    files:
-      - cortex/orchestrators/autonomous_execution_coordinator.py (ENHANCE)
-      - cortex/mcp/tools/plan_management_tool.py (INTEGRATE)
-  
-  - id: ENH-068
-    title: "Data Integrity Validator for Dashboard Pipeline"
-    priority: P1
-    status: planned
-    estimated_effort: "1 week"
-    roi: "Trust improvement, stakeholder confidence"
-    description: |
-      Pre-render validation gate for dashboard data contradictions.
-      Add integrity banner component with confidence scoring.
-    files:
-      - cortex/onboarding/data_integrity_validator.py (NEW)
-      - cortex/dashboards/renderers/integrity_banner.py (NEW)
-  
-  - id: ENH-069
-    title: "Dashboard Explainability Panel"
-    priority: P1
-    status: planned
-    estimated_effort: "1 week"
-    roi: "Transparency, debugging, stakeholder education"
-    description: |
-      Every KPI needs 'How computed' explanation with formula, data source,
-      confidence level, and raw data link.
-    files:
-      - cortex/dashboards/schema/explainability_schema.yaml (NEW)
-      - company/dashboards/spa/js/explainability.js (NEW)
-  
-  - id: ENH-070
-    title: "Use-Case Library Generator (5 Personas × 6 Categories)"
-    priority: P1
-    status: planned
-    estimated_effort: "1 week"
-    roi: "User adoption, feature discovery"
-    description: |
-      Generate 30+ use cases (5 personas: exec/architect/dev/PM/researcher
-      × 6 categories: onboarding/analysis/debugging/planning/compliance/learning)
-    files:
-      - cortex/dashboards/use_case_generator.py (NEW)
-  
-  - id: ENH-071
-    title: "Domain Inference from Business Summary (NLP)"
-    priority: P1
-    status: planned
-    estimated_effort: "2 weeks"
-    roi: "Automatic domain knowledge capture"
-    description: |
-      Use NLP to extract domain concepts, relationships, terminology from
-      business_summary even without explicit entities.
+    description: "Automated quarterly enhancement pipeline with user approval"
+      
+      Transformations:
+      - Vague → Specific (add context, expand scope)
+      - Fragmented → Structured (multi-part organization)
+      - Implicit → Explicit (clarify assumptions)
+      - Abbreviations → Full terms (MCP → Model Context Protocol)
+      - Single sentence → Paragraph with dimensions
+    impact: |
+      HIGH - Current flow struggles with vague requests, leading to:
+      - 35% intent classification errors
+      - 40% follow-up clarifications needed
+      - Sub-optimal orchestrator routing
+      - Poor user experience
+    phases:
+      - "Phase 1: LanguageRefinementOrchestrator + Ambiguity Detection (Week 1)"
+      - "Phase 2: Template Library + MasterOrchestrator Integration (Week 2)"
+      - "Phase 3: Validation + A/B Testing (Optional Week 3)"
+    success_metrics:
+      - "Intent classification accuracy: 65% → 90%+"
+      - "Clarification requests: 40% → <15%"
+      - "User satisfaction: 3.2/5 → 4.5/5"
+      - "Refinement latency: N/A → <50ms P95"
+      - "False refinements: N/A → <5%"
+    components:
+      orchestrator:
+        file: "cortex/orchestrators/support/language_refinement_orchestrator.py"
+        methods:
+          - "refine_request(raw_request, context) -> RefinedRequest"
+          - "detect_ambiguity_level(request) -> float (0.0-1.0)"
+          - "apply_refinement_template(request, type) -> str"
+          - "expand_technical_shorthand(request) -> str"
+      templates:
+        location: "cortex-registry/_cortex-master/templates/request-refinement/"
+        types:
+          - "analysis-templates.yaml (architecture/code review)"
+          - "implement-templates.yaml (feature implementation)"
+          - "audit-templates.yaml (system health check)"
+          - "refactor-templates.yaml (code improvement)"
+          - "plan-templates.yaml (phase planning)"
+      integration:
+        file: "cortex/orchestrators/core/master_orchestrator.py"
+        modification: "Add refinement call before LENS pipeline"
+        transparency: "3 modes: silent (default), show refinement, interactive"
+    ambiguity_scoring:
+      factors:
+        - "Short length (<10 words): weight 0.3"
+        - "Missing context (no file/component): weight 0.25"
+        - "Vague verbs (check/fix/update): weight 0.2"
+        - "Abbreviations (>2): weight 0.15"
+        - "No success criteria: weight 0.1"
+      thresholds:
+        - "0.0-0.3: Low (optional refinement)"
+        - "0.3-0.6: Medium (recommended refinement)"
+        - "0.6-1.0: High (mandatory refinement)"
+    examples:
+      - input: "check mcp tools"
+        ambiguity_score: 0.65
+        output: "Verify that all Model Context Protocol tools are fully functional and production-ready by checking their implementation status, test coverage, and operational completeness..."
+      - input: "fix lens phase 2 stub"
+        ambiguity_score: 0.55
+        output: "Refactor the LENS (Language-Examination-Navigation-Synthesis) Pipeline Phase 2 Examination implementation in cortex/brain/lens/pipeline.py. Current implementation uses hardcoded feature lists..."
     files:
       - cortex/intelligence/domain_inference.py (NEW)
       - cortex/nlp/concept_extractor.py (NEW)
