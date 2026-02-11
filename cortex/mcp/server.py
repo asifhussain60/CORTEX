@@ -207,6 +207,10 @@ class MCPServer:
 
     Implements JSON-RPC 2.0 compliant Model Context Protocol for
     tool discovery, invocation, execution, and response formatting.
+    
+    AC_START: AC-ENH063-P0-001-002
+    Description: Integrate authentication manager into MCP server
+    Security: Token-based authentication for all tool calls
     """
 
     # JSON-RPC error codes
@@ -216,14 +220,35 @@ class MCPServer:
     INVALID_PARAMS: int = -32602
     INTERNAL_ERROR: int = -32603
     SERVER_ERROR_START: int = -32099
+    UNAUTHORIZED: int = -32001  # Custom: Authentication required
 
-    def __init__(self) -> None:
-        """Initialize MCP Server."""
+    def __init__(self, enable_auth: bool = True) -> None:
+        """
+        Initialize MCP Server.
+        
+        Args:
+            enable_auth: Whether to enable authentication (default: True for production)
+        
+        AC_NOTE: Set enable_auth=False only for local development/testing
+        """
         self.logger: logging.Logger = logging.getLogger(__name__)
         self._tools: Dict[str, Tool] = {}
         self._request_cache: Dict[str, Any] = {}
         self._execution_history: List[Dict[str, Any]] = []
         self._response_cache: Dict[str, MCPResponse] = {}
+        
+        # AC-ENH063-P0-001-002: Initialize authentication manager
+        self.enable_auth = enable_auth
+        self._auth_manager = None
+        
+        if self.enable_auth:
+            try:
+                from cortex.mcp.authentication import MCPAuthenticationManager
+                self._auth_manager = MCPAuthenticationManager()
+                self.logger.info("MCP Authentication enabled")
+            except ImportError as e:
+                self.logger.error(f"Failed to initialize authentication: {e}")
+                self.logger.warning("MCP running WITHOUT authentication - not safe for production!")
 
         # NOTE: sample_tool removed (dev-only, not for production)
         # Register CORTEX orchestrator tools only
@@ -579,20 +604,51 @@ class MCPServer:
         self,
         tool_name: str,
         params: Dict[str, Any],
-        request_id: Optional[str] = None
+        request_id: Optional[str] = None,
+        auth_token: Optional[str] = None
     ) -> MCPResponse:
         """
         Call a tool and return MCP response.
+        
+        AC_START: AC-ENH063-P0-001-003
+        Description: Add authentication check to tool execution
+        Security: Verify token before allowing tool invocation
 
         Args:
             tool_name: Name of the tool to call
             params: Tool parameters
             request_id: Request ID for correlation
+            auth_token: Authentication token (required if auth enabled)
 
         Returns:
             MCPResponse with result or error
         """
         start_time: float = time.time()
+        
+        # AC-ENH063-P0-001-003: Authentication check
+        if self.enable_auth and self._auth_manager:
+            if not auth_token:
+                return MCPResponse(
+                    error=MCPError(
+                        code=self.UNAUTHORIZED,
+                        message="Authentication required. Provide valid token."
+                    ).to_dict(),
+                    id=request_id
+                )
+            
+            auth_result = self._auth_manager.validate_token(auth_token)
+            if not auth_result.authenticated:
+                return MCPResponse(
+                    error=MCPError(
+                        code=self.UNAUTHORIZED,
+                        message=f"Authentication failed: {auth_result.error}"
+                    ).to_dict(),
+                    id=request_id
+                )
+            
+            # Log successful authentication
+            self.logger.debug(f"Authenticated user {auth_result.user_id} for tool {tool_name}")
+        # AC_COMPLETE: AC-ENH063-P0-001-003
 
         # Validate parameters
         valid, error = self._validate_parameters(tool_name, params)

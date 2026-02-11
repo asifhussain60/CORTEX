@@ -358,13 +358,51 @@ class Alerting:
         return alerts
 
     def _evaluate_condition(self, condition: str, value: float) -> bool:
-        """Evaluate a condition string."""
-        # Simple condition evaluation (e.g., "value > 100")
+        """
+        Evaluate a condition string safely without eval().
+        
+        AC_START: AC-ENH063-P0-002-002
+        Description: Fix code injection vulnerability - replace eval() with safe parser
+        Security: OWASP A03 Injection Prevention
+        """
+        # Safe condition evaluation (e.g., "value > 100")
         try:
-            return eval(condition.replace("value", str(value)))
+            # Parse simple comparison conditions safely
+            import operator
+            import re
+            
+            # Map of safe operators
+            ops = {
+                '>': operator.gt,
+                '<': operator.lt,
+                '>=': operator.ge,
+                '<=': operator.le,
+                '==': operator.eq,
+                '!=': operator.ne,
+            }
+            
+            # Match pattern like "value > 100"
+            pattern = r'value\s*([><=!]+)\s*(-?\d+(?:\.\d+)?)'
+            match = re.match(pattern, condition.strip())
+            
+            if not match:
+                logger.error(f"Invalid condition format: {condition}")
+                return False
+            
+            op_str, threshold_str = match.groups()
+            op_func = ops.get(op_str)
+            
+            if not op_func:
+                logger.error(f"Unsupported operator: {op_str}")
+                return False
+            
+            threshold = float(threshold_str)
+            return op_func(value, threshold)
+            
         except Exception as e:
             logger.error(f"Error evaluating condition: {e}")
             return False
+        # AC_COMPLETE: AC-ENH063-P0-002-002
 
 
 class DeploymentOrchestrator:

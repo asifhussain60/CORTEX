@@ -182,16 +182,51 @@ class PythonProfiler(Profiler):
     """Python profiling support (cProfile, Pyinstrument)"""
 
     async def profile(self, code: str, language: str = "python") -> ProfileResult:
-        """Profile Python code"""
+        """
+        Profile Python code
+        
+        AC_START: AC-ENH063-P0-002-003
+        Description: Secure exec() usage with restricted builtins
+        Security: Limit code execution to safe operations only
+        """
         import time
 
         try:
             # Time the code execution
             start_time = time.perf_counter()
 
-            # Prepare code execution environment
+            # AC-ENH063-P0-002-003: Restrict exec() to safe builtins only
+            # Allow only safe built-in functions for profiling
+            safe_builtins = {
+                'len': len,
+                'str': str,
+                'int': int,
+                'float': float,
+                'list': list,
+                'dict': dict,
+                'tuple': tuple,
+                'set': set,
+                'range': range,
+                'enumerate': enumerate,
+                'zip': zip,
+                'map': map,
+                'filter': filter,
+                'sum': sum,
+                'min': min,
+                'max': max,
+                'abs': abs,
+                'round': round,
+                'sorted': sorted,
+                'reversed': reversed,
+                'bool': bool,
+                'isinstance': isinstance,
+                'type': type,
+            }
+            
+            # Prepare code execution environment with restricted builtins
             local_namespace = {}
-            exec(code, {}, local_namespace)
+            global_namespace = {'__builtins__': safe_builtins}
+            exec(code, global_namespace, local_namespace)
 
             # Calculate total time
             total_time = time.perf_counter() - start_time

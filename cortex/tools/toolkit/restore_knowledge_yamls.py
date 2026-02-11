@@ -74,7 +74,12 @@ YAML_FILES = {
 }
 
 def restore_yamls():
-    """Restore all 35 Knowledge YAMLs from git commit"""
+    """Restore all 35 Knowledge YAMLs from git commit
+    
+    AC_START: AC-ENH063-P0-002-001
+    Description: Fix command injection vulnerability - replace shell=True with argument list
+    Security: OWASP A03 Injection Prevention
+    """
 
     created = 0
     failed = 0
@@ -85,9 +90,17 @@ def restore_yamls():
             target_dir = Path(target_path).parent
             target_dir.mkdir(parents=True, exist_ok=True)
 
+            # AC-ENH063-P0-002-001: Fixed command injection - use argument list instead of shell=True
             # Extract file from git commit (use UTF-8 encoding)
-            cmd = f'git show {COMMIT_HASH}:{source_path}'
-            result = subprocess.run(cmd, shell=True, capture_output=True, encoding='utf-8', errors='replace', cwd='d:\\PROJECTS\\CORTEX')
+            git_show_cmd = ['git', 'show', f'{COMMIT_HASH}:{source_path}']
+            result = subprocess.run(
+                git_show_cmd, 
+                shell=False,  # Security: Prevent command injection
+                capture_output=True, 
+                encoding='utf-8', 
+                errors='replace', 
+                cwd='d:\\PROJECTS\\CORTEX'
+            )
 
             if result.returncode == 0:
                 # Write to target location

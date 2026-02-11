@@ -140,13 +140,24 @@ class TemplateBlock:
         if disallowed:
             raise ValueError(f"Condition contains disallowed identifiers: {disallowed}")
 
+        # AC_START: AC-ENH063-P0-002-004
+        # Description: Enhanced safe evaluation with minimal builtins
+        # Security: Restrict to comparison operations only
         # Safely evaluate the condition using compile + limited namespace
         try:
             code = compile(safe_condition, '<condition>', 'eval')
-            result = eval(code, {'__builtins__': {}, 'len': len}, {})
+            # Only allow len() and basic comparison operators
+            safe_builtins = {
+                'len': len,
+                'True': True,
+                'False': False,
+                'None': None,
+            }
+            result = eval(code, {'__builtins__': safe_builtins}, {})
             return bool(result)
         except SyntaxError as e:
             raise ValueError(f"Invalid condition syntax: {e}")
+        # AC_COMPLETE: AC-ENH063-P0-002-004
 
     def _interpolate(self, text: str, context: Dict[str, Any]) -> str:
         """Interpolate variables in text."""
