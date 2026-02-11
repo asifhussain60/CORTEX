@@ -1,0 +1,523 @@
+version: '1.0'
+enhancement_id: ENH-089
+title: "EventBus-Driven Debugger Integration"
+category: developer_experience
+priority: P1-HIGH
+roi: 9.3
+status: planned
+created: '2026-02-11'
+depends_on:
+  - ENH-087
+  - ENH-088
+authority:
+  - CORE-041 (Event-Driven Architecture)
+  - WAVE-7 Enhanced Vision (Zero-Friction Debugging)
+
+# ============================================================================
+# EXECUTIVE SUMMARY
+# ============================================================================
+summary: |
+  Implement zero-friction debugging through EventBus-driven auto-marker
+  injection. When TDDOrchestrator test fails, RefactoringOrchestrator detects
+  regression, or EnforcementOrchestrator finds violation, DebuggerOrchestrator
+  automatically injects CORTEX_DEBUG markers without manual intervention.
+  
+  Vision: Developer sees test failure → opens file → markers already present
+  
+  ROI: Eliminates 5-10 minutes per debug session × 50 sessions/week = 
+       4-8 hours/week saved (20% developer productivity gain)
+
+# ============================================================================
+# PROBLEM STATEMENT
+# ============================================================================
+problem:
+  current_workflow:
+    - "Developer runs test suite"
+    - "Test fails"
+    - "Developer manually runs: cortex_debug inject"
+    - "Developer specifies file path, line range"
+    - "Developer opens file, locates markers"
+    - "Developer analyzes issue"
+    - "Developer manually runs: cortex_debug cleanup"
+    time_per_session: "5-10 minutes (manual steps)"
+  
+  pain_points:
+    - "Context switching (test output → terminal → debug command → file)"
+    - "Manual marker injection (error-prone, tedious)"
+    - "Forgotten cleanup (CORTEX_DEBUG markers left in code)"
+    - "No correlation (which test failure → which file to debug)"
+  
+  scale_impact:
+    sessions_per_week: 50
+    time_per_session_minutes: 7.5
+    weekly_waste_hours: 6.25
+    annual_waste_hours: 325
+    developer_cost_per_hour: 100
+    annual_cost_dollars: 32500
+
+# ============================================================================
+# SOLUTION ARCHITECTURE
+# ============================================================================
+solution:
+  approach: "EventBus-Driven Auto-Injection"
+  
+  components:
+    debugger_orchestrator:
+      name: "DebuggerOrchestrator"
+      purpose: "Auto-inject debug markers on failure events"
+      pattern: "Event-driven subscriber"
+      
+      subscriptions:
+        - event: "TEST_FAILURE"
+          publisher: "TDDOrchestrator"
+          payload:
+            - "test_name: str"
+            - "file_path: str"
+            - "line_number: int"
+            - "failure_reason: str"
+          action: "Inject CORTEX_DEBUG markers at failure location"
+        
+        - event: "REFACTOR_REGRESSION"
+          publisher: "EnhancedRefactoringOrchestrator"
+          payload:
+            - "refactor_type: str"
+            - "affected_files: List[str]"
+            - "regression_type: str"
+          action: "Inject markers in affected files"
+        
+        - event: "GOVERNANCE_VIOLATION"
+          publisher: "EnforcementOrchestrator"
+          payload:
+            - "rule_id: str"
+            - "file_path: str"
+            - "violation_details: Dict"
+          action: "Inject markers at violation location"
+      
+      publications:
+        - event: "DEBUG_MARKERS_INJECTED"
+          payload:
+            - "file_paths: List[str]"
+            - "marker_count: int"
+            - "session_id: str"
+          subscribers: ["IDE Extension", "Dashboard"]
+        
+        - event: "DEBUG_SESSION_READY"
+          payload:
+            - "session_id: str"
+            - "entry_point: str (file:line)"
+            - "context: Dict (variables, stack trace)"
+          subscribers: ["Developer Notification"]
+    
+    marker_injection_engine:
+      purpose: "Smart marker placement logic"
+      
+      strategies:
+        test_failure_strategy:
+          logic: |
+            1. Parse test failure traceback
+            2. Identify assertion line (actual failure point)
+            3. Walk stack trace to find user code (skip test framework)
+            4. Inject marker at first user code line
+            5. Capture local variables at failure point
+        
+        refactor_regression_strategy:
+          logic: |
+            1. Diff before/after refactoring
+            2. Identify changed lines
+            3. Inject markers at modified functions
+            4. Capture performance metrics (if latency regression)
+        
+        governance_violation_strategy:
+          logic: |
+            1. Parse violation details (rule ID, location)
+            2. Inject marker at violation line
+            3. Include rule documentation in marker comment
+      
+      marker_format:
+        template: |
+          # CORTEX_DEBUG_START: {session_id}
+          # Trigger: {event_type}
+          # Context: {context_summary}
+          # Injected: {timestamp}
+          {original_code}
+          # CORTEX_DEBUG_END: {session_id}
+        
+        metadata:
+          - "session_id: Unique debug session identifier"
+          - "event_type: TEST_FAILURE | REFACTOR_REGRESSION | GOVERNANCE_VIOLATION"
+          - "context_summary: Brief description of issue"
+          - "timestamp: ISO 8601 format"
+    
+    auto_cleanup_manager:
+      purpose: "Prevent marker pollution"
+      
+      strategies:
+        on_success:
+          trigger: "All tests pass after debug session"
+          action: "Auto-remove markers for resolved sessions"
+        
+        on_commit:
+          trigger: "Git pre-commit hook"
+          action: "Block commit if CORTEX_DEBUG markers present"
+        
+        time_based:
+          trigger: "Marker age > 24 hours"
+          action: "Notify developer + offer cleanup"
+
+  workflow:
+    scenario_1_test_failure:
+      - step: "Developer runs pytest"
+        actor: "Developer"
+      
+      - step: "test_master_orchestrator_stage_2() fails"
+        actor: "pytest"
+      
+      - step: "TDDOrchestrator emits TEST_FAILURE event"
+        actor: "TDDOrchestrator"
+        payload:
+          test_name: "test_master_orchestrator_stage_2"
+          file_path: "cortex/orchestrators/core/master_orchestrator.py"
+          line_number: 2380
+          failure_reason: "AssertionError: Expected stage2_result, got None"
+      
+      - step: "DebuggerOrchestrator receives event, injects markers"
+        actor: "DebuggerOrchestrator"
+        actions:
+          - "Parse traceback → identify cortex/orchestrators/core/master_orchestrator.py:2380"
+          - "Inject CORTEX_DEBUG markers at lines 2370-2390"
+          - "Capture local variables: operation_name, parameters, stage1_result"
+          - "Emit DEBUG_MARKERS_INJECTED event"
+      
+      - step: "Developer opens master_orchestrator.py"
+        actor: "Developer"
+        sees: |
+          # CORTEX_DEBUG_START: session-20260211-143052
+          # Trigger: TEST_FAILURE (test_master_orchestrator_stage_2)
+          # Issue: stage2_result is None (expected IntentVerificationResult)
+          # Context: operation_name='implement', stage1_result=<ComprehensionResult>
+          # Injected: 2026-02-11T14:30:52Z
+          
+          if self.intent_router:
+              intent_verification_result = self.intent_router.verify_intent(...)
+              # ^ Suspected issue: verify_intent() returning None
+          
+          # CORTEX_DEBUG_END: session-20260211-143052
+      
+      - step: "Developer fixes issue, re-runs tests"
+        actor: "Developer"
+      
+      - step: "All tests pass"
+        actor: "pytest"
+      
+      - step: "Auto-cleanup removes markers"
+        actor: "DebuggerOrchestrator"
+        action: "Detect session-20260211-143052 resolved → remove markers"
+    
+    scenario_2_refactor_regression:
+      - step: "ENH-087 Track 1: Consolidate MasterOrchestrator"
+      
+      - step: "RefactoringOrchestrator detects 15ms latency increase"
+        actor: "EnhancedRefactoringOrchestrator"
+      
+      - step: "Emit REFACTOR_REGRESSION event"
+        payload:
+          refactor_type: "consolidation"
+          affected_files: ["master_orchestrator.py"]
+          regression_type: "performance_latency"
+      
+      - step: "DebuggerOrchestrator injects markers at hot path"
+        actor: "DebuggerOrchestrator"
+        actions:
+          - "Identify hot path: execute_operation() method"
+          - "Inject markers at Stage 1-4 execution"
+          - "Capture timing data per stage"
+      
+      - step: "Developer profiles, identifies Stage 2 bottleneck"
+      
+      - step: "Apply Phase 49 Context Crystallization Layer"
+      
+      - step: "Latency back to baseline → markers auto-removed"
+
+# ============================================================================
+# IMPLEMENTATION STAGES
+# ============================================================================
+stages:
+  stage_1_debugger_orchestrator:
+    duration: "4-5 days"
+    tasks:
+      - "Create DebuggerOrchestrator class"
+      - "Implement EventBus subscriptions (TEST_FAILURE, REFACTOR_REGRESSION, GOVERNANCE_VIOLATION)"
+      - "Implement event handlers (route to appropriate strategy)"
+      - "Register in wiring.yaml"
+    
+    tdd_approach:
+      red:
+        - "test_debugger_subscribes_to_test_failure_event"
+        - "test_debugger_receives_event_payload"
+        - "test_debugger_publishes_debug_markers_injected"
+      green:
+        - "Subscribe to EventBus topics"
+        - "Parse event payloads"
+        - "Call marker injection engine"
+      refactor:
+        - "Extract EventHandler strategy per event type"
+  
+  stage_2_marker_injection_engine:
+    duration: "3-4 days"
+    tasks:
+      - "Create MarkerInjectionEngine class"
+      - "Implement test_failure_strategy"
+      - "Implement refactor_regression_strategy"
+      - "Implement governance_violation_strategy"
+      - "Add marker formatting logic"
+    
+    tdd_approach:
+      red:
+        - "test_test_failure_strategy_identifies_user_code_line"
+        - "test_refactor_regression_strategy_injects_at_diff_lines"
+        - "test_marker_format_includes_context"
+      green:
+        - "Traceback parsing (Python traceback module)"
+        - "Git diff parsing (GitPython)"
+        - "Template rendering (Jinja2)"
+      refactor:
+        - "Strategy Pattern (3 strategies)"
+        - "Template caching"
+  
+  stage_3_auto_cleanup:
+    duration: "2-3 days"
+    tasks:
+      - "Create AutoCleanupManager class"
+      - "Implement on_success cleanup"
+      - "Implement git pre-commit hook"
+      - "Implement time-based cleanup"
+    
+    tdd_approach:
+      red:
+        - "test_auto_cleanup_removes_markers_when_tests_pass"
+        - "test_pre_commit_blocks_when_markers_present"
+        - "test_time_based_cleanup_after_24_hours"
+      green:
+        - "Test result watcher (pytest plugin)"
+        - "Git hook integration (.githooks/pre-commit)"
+        - "Background cleanup task (async)"
+      refactor:
+        - "Cleanup policy abstraction"
+  
+  stage_4_integration:
+    duration: "3-4 days"
+    tasks:
+      - "Wire TDDOrchestrator → TEST_FAILURE emission"
+      - "Wire EnhancedRefactoringOrchestrator → REFACTOR_REGRESSION emission"
+      - "Wire EnforcementOrchestrator → GOVERNANCE_VIOLATION emission"
+      - "Update MCP tools (cortex_debug_auto_inject, cortex_debug_auto_cleanup)"
+    
+    tdd_approach:
+      red:
+        - "test_tdd_orchestrator_emits_test_failure_on_fail"
+        - "test_refactoring_emits_regression_on_latency_increase"
+        - "test_enforcement_emits_violation_on_rule_break"
+      green:
+        - "Add EventBus.publish() calls to orchestrators"
+        - "Update MCP adapters"
+      refactor:
+        - "Standardize event payload schemas"
+  
+  stage_5_documentation:
+    duration: "1-2 days"
+    tasks:
+      - "Create zero-friction debugging guide"
+      - "Update ENH-087 to use auto-debugging"
+      - "Create troubleshooting guide (if markers not appearing)"
+
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+success_criteria:
+  functionality:
+    - "TEST_FAILURE → markers injected within 500ms"
+    - "REFACTOR_REGRESSION → markers at diff lines"
+    - "GOVERNANCE_VIOLATION → markers with rule docs"
+    - "Auto-cleanup on test success"
+    - "Pre-commit hook blocks markers"
+  
+  integration:
+    - "TDDOrchestrator emits TEST_FAILURE"
+    - "RefactoringOrchestrator emits REFACTOR_REGRESSION"
+    - "EnforcementOrchestrator emits GOVERNANCE_VIOLATION"
+    - "MCP tools: cortex_debug_auto_inject, cortex_debug_auto_cleanup"
+  
+  quality:
+    - "Test coverage: 90%+"
+    - "Zero false positives (markers in wrong location)"
+    - "Zero marker pollution (all cleaned up)"
+  
+  developer_experience:
+    - "Time per debug session: 5-10 minutes → <1 minute"
+    - "Zero manual marker injection"
+    - "95%+ developer satisfaction (survey)"
+
+# ============================================================================
+# TEST CASES (High-Value)
+# ============================================================================
+test_cases:
+  p0_critical:
+    - name: "test_debugger_auto_injects_on_test_failure"
+      scenario: "TDDOrchestrator runs test, test fails"
+      expected: "Markers injected at failure location within 500ms"
+      validation: "Check file contains CORTEX_DEBUG_START marker"
+      value: 5
+    
+    - name: "test_markers_include_failure_context"
+      scenario: "Test fails with AssertionError"
+      expected: "Marker includes: test name, expected vs actual, local variables"
+      value: 5
+    
+    - name: "test_auto_cleanup_removes_markers_when_tests_pass"
+      scenario: "Debug session → fix issue → tests pass"
+      expected: "Markers for session removed automatically"
+      value: 5
+  
+  p1_high:
+    - name: "test_refactor_regression_triggers_markers_at_hot_path"
+      scenario: "Refactoring increases latency 15ms"
+      expected: "Markers at hot path with timing data"
+      value: 4
+    
+    - name: "test_pre_commit_hook_blocks_commit_with_markers"
+      scenario: "Developer attempts: git commit"
+      expected: "Commit blocked, message: 'Remove CORTEX_DEBUG markers first'"
+      value: 4
+    
+    - name: "test_time_based_cleanup_notifies_after_24_hours"
+      scenario: "Markers present for 24 hours"
+      expected: "Developer notified: 'Debug session stale, cleanup?'"
+      value: 3
+
+# ============================================================================
+# INTEGRATION WITH ENH-087
+# ============================================================================
+integration_enh_087:
+  usage_pattern: |
+    # ENH-087 Track 1, Cycle 2: MasterOrchestrator performance test fails
+    
+    1. TDDOrchestrator runs: test_master_orchestrator_latency_under_200ms
+    2. Test fails: Actual latency = 245ms
+    3. TDDOrchestrator emits: TEST_FAILURE event
+    4. DebuggerOrchestrator receives event
+    5. Markers injected at execute_operation() method
+    6. Developer opens master_orchestrator.py
+    7. Sees markers with context:
+       - Latency: 245ms (target: <200ms)
+       - Hot path: Stage 2 (intent verification)
+       - Recommendation: Apply Phase 49 CCL
+    8. Developer applies CCL, re-runs test
+    9. Test passes: Latency = 145ms
+    10. Auto-cleanup removes markers
+  
+  benefits:
+    - "Zero manual debug commands during ENH-087"
+    - "Performance regressions caught immediately"
+    - "Context-rich markers (not just line numbers)"
+    - "Auto-cleanup after fix (no marker pollution)"
+
+# ============================================================================
+# RISKS & MITIGATION
+# ============================================================================
+risks:
+  - risk: "Markers injected in wrong location (false positive)"
+    likelihood: MEDIUM
+    mitigation:
+      - "Smart traceback parsing (skip test framework frames)"
+      - "Confidence score per injection (low confidence → ask user)"
+      - "Developer can override via MCP tool"
+  
+  - risk: "Marker pollution (cleanup fails)"
+    likelihood: LOW
+    mitigation:
+      - "3-layer cleanup: on_success, pre-commit, time-based"
+      - "Monitoring: alert if markers > 24 hours old"
+  
+  - risk: "Performance overhead from EventBus"
+    likelihood: LOW
+    mitigation:
+      - "EventBus already tested at 1000+ events/sec"
+      - "Async marker injection (non-blocking)"
+      - "Impact: <50ms per debug session"
+
+# ============================================================================
+# DELIVERABLES
+# ============================================================================
+deliverables:
+  code:
+    - "DebuggerOrchestrator (new orchestrator)"
+    - "MarkerInjectionEngine (3 strategies)"
+    - "AutoCleanupManager (3 policies)"
+    - "EventBus integrations (3 orchestrators)"
+    - "Git pre-commit hook"
+  
+  tests:
+    - "25 unit tests (orchestrator + engine + cleanup)"
+    - "10 integration tests (EventBus flow)"
+    - "5 end-to-end tests (full debug workflow)"
+    - "Coverage: 90%+"
+  
+  documentation:
+    - "Zero-Friction Debugging Guide"
+    - "ENH-087 integration examples"
+    - "Troubleshooting guide"
+  
+  mcp_tools:
+    - "cortex_debug_auto_inject (manual override)"
+    - "cortex_debug_auto_cleanup (manual cleanup)"
+    - "cortex_debug_session_status (view active sessions)"
+
+# ============================================================================
+# TIMELINE
+# ============================================================================
+timeline:
+  stage_1: "4-5 days (DebuggerOrchestrator)"
+  stage_2: "3-4 days (marker injection)"
+  stage_3: "2-3 days (auto-cleanup)"
+  stage_4: "3-4 days (integration)"
+  stage_5: "1-2 days (documentation)"
+  total: "13-18 days"
+
+# ============================================================================
+# ROI CALCULATION
+# ============================================================================
+roi:
+  time_savings:
+    before:
+      manual_steps_per_session: 6
+      time_per_step_seconds: 60
+      total_per_session_minutes: 6
+    
+    after:
+      automatic_injection_seconds: 1
+      total_per_session_minutes: 0.017
+    
+    savings_per_session_minutes: 5.983
+  
+  productivity_gain:
+    sessions_per_week: 50
+    weekly_savings_hours: 5.0
+    annual_savings_hours: 260
+    developer_hourly_rate: 100
+    annual_value_dollars: 26000
+  
+  roi_score: 9.3
+  rationale: "26k annual value / 2.8k implementation cost = 9.3x ROI"
+
+# ============================================================================
+# GOVERNANCE
+# ============================================================================
+governance:
+  core_rules:
+    - "CORE-008: TDD (test auto-injection before implementing)"
+    - "CORE-011: Type hints (all new methods)"
+    - "CORE-012: Google-style docstrings"
+    - "CORE-041: Event-Driven Architecture"
+  
+  audit_trail:
+    - "AC_START: AC-ENH-089-001 (EventBus-driven debugger)"

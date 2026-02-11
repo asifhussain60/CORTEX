@@ -48,6 +48,36 @@ master_remediation:
       dependencies: []
       blocks: ["Wave 2", "Wave 3"]
     
+    - wave: 7
+      name: "Orchestrator Consolidation (HIGH-ROI Architecture)"
+      release: "R7-CONSOLIDATION"
+      priority: "P1-HIGH-ROI"
+      duration: "10-18 days"
+      phases: 3  # ENH-087, ENH-088, ENH-089
+      status: "ready"
+      roi: 9.2  # SECOND HIGHEST (after Wave 6: 9.2)
+      requires: ["R1-FOUNDATION"]
+      highlights:
+        - "ENH-087: Orchestrator Consolidation 26→15 (78% code reduction)"
+        - "ENH-088: Multi-Cycle TDD Enhancement (iterative quality)"
+        - "ENH-089: EventBus-Driven Debugger (zero-friction debugging)"
+      value_delivered:
+        - "✅ 78-83% orchestrator code reduction (45k→12k LOC)"
+        - "✅ Multi-cycle TDD: iterative refinement until 85%+ coverage"
+        - "✅ Zero-friction debugging: auto-marker injection on failures"
+        - "✅ Master plan execution: registry plans → automated workflow"
+        - "✅ EventBus decoupling: 15 dependencies eliminated"
+      dependencies: ["ENH-063"]  # Foundation security must be complete
+      blocks: []
+      authority: "Phase 81 + CORE-035 + Enhanced Vision (chat01.md)"
+      file_reference: "enhancements/ENH-087-orchestrator-consolidation.yaml"
+      parallel_tracks: 4  # Core, Domain, Support, Cleanup
+      architectural_patterns:
+        - "Strategy Pattern (88+ orchestrators → pluggable strategies)"
+        - "Event-Driven Decoupling (OrchestratorEventBus)"
+        - "Mixin Composition (replace inheritance)"
+        - "Behavior-Driven Consolidation (test capabilities, not methods)"
+    
     - wave: 2
       name: "Intelligence (Enhanced Decision Making)"
       release: "R2-INTELLIGENCE"

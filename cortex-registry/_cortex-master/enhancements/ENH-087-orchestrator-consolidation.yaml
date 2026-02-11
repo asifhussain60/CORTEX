@@ -1,0 +1,705 @@
+version: '1.0'
+enhancement_id: ENH-087
+title: "Orchestrator Consolidation: 26 → 15 Core Orchestrators"
+category: architecture
+priority: P1-HIGH
+roi: 9.2
+status: planned
+created: '2026-02-11'
+authority:
+  - Phase 81 (Agent Architecture Redesign)
+  - CORE-035 (Single Canonical Implementation)
+  - WAVE-7 Enhanced Vision
+
+# ============================================================================
+# EXECUTIVE SUMMARY
+# ============================================================================
+summary: |
+  Massive orchestrator consolidation to eliminate 87% duplication:
+  - Physical files: 114 → 20-25 (78-82% reduction)
+  - Total classes: 201+ → 35-45 (78-83% reduction)
+  - Registered orchestrators: 26 → 15 (42% reduction)
+  - Lines of code: ~45,000 → ~12,000 (73% reduction)
+  
+  Approach: Behavior-Driven Consolidation (BDC) via multi-cycle TDD with
+  parallel workstreams and EventBus-driven debugger integration.
+
+# ============================================================================
+# PROBLEM STATEMENT
+# ============================================================================
+problem:
+  current_state:
+    registered_orchestrators: 26
+    physical_files: 114
+    total_classes: 201+
+    duplication_rate: 87%
+    orphaned_orchestrators: 88
+    maintenance_burden: "HIGH"
+    onboarding_time: "8 hours"
+  
+  critical_issues:
+    - issue: "4.4x over-registration (201 classes vs 26 registered)"
+      severity: P0
+      impact: "Massive confusion, impossible to maintain"
+    
+    - issue: "God Object Pattern - MasterOrchestrator 2,369 lines"
+      severity: P1
+      impact: "Single Responsibility Principle violation"
+    
+    - issue: "Duplicate Responsibility across 6+ orchestrators"
+      severity: P1
+      impact: "Unclear ownership, conflicting implementations"
+    
+    - issue: "88 orphaned orchestrators not in wiring.yaml"
+      severity: P2
+      impact: "Dead code consuming 78% of orchestrators/"
+
+# ============================================================================
+# SOLUTION ARCHITECTURE
+# ============================================================================
+solution:
+  approach: "Behavior-Driven Consolidation (BDC) with Multi-Cycle TDD"
+  
+  architectural_patterns:
+    - name: "Strategy Pattern"
+      purpose: "Replace 88+ orchestrators with pluggable strategies"
+      example: "RefactoringOrchestrator + SecurityStrategy/PerformanceStrategy"
+      authority: "Phase 81 specification"
+    
+    - name: "Event-Driven Decoupling"
+      purpose: "Eliminate direct orchestrator dependencies"
+      mechanism: "OrchestratorEventBus (already in wiring.yaml)"
+      benefit: "15 direct dependencies → EventBus subscriptions"
+    
+    - name: "Mixin Composition"
+      purpose: "Replace inheritance hierarchies"
+      example: "EnhancedRefactoringOrchestrator(SecurityMixin, PerformanceMixin)"
+      benefit: "Single inheritance → multiple capabilities"
+    
+    - name: "Factory Pattern"
+      purpose: "Dynamic orchestrator instantiation"
+      benefit: "30+ specialized orchestrators → factory-generated instances"
+
+  consolidation_strategy:
+    test_approach: "Behavioral Contract Testing"
+    rationale: "Test 26 capabilities vs 3,000 methods (95% efficiency gain)"
+    
+    multi_cycle_tdd:
+      cycle_1:
+        red: "Behavioral contract tests (capabilities from wiring.yaml)"
+        green: "Minimal consolidation (behavioral parity)"
+        refactor: "Holistic analysis + Strategy Pattern"
+        success: "16/16 capability tests PASS, 78%+ coverage"
+      
+      cycle_2:
+        red: "Performance + extensibility tests"
+        green: "EventBus integration, stage registry pattern"
+        refactor: "Optimize hot paths, extract strategies"
+        success: "ALL tests PASS, 85%+ coverage, <200ms latency"
+      
+      cycle_3:
+        condition: "Only if success criteria not met"
+        focus: "Address gaps identified in cycle 2 refactor"
+
+# ============================================================================
+# IMPLEMENTATION PLAN: 4 PARALLEL TRACKS
+# ============================================================================
+tracks:
+  track_1_core:
+    name: "Core Layer Consolidation"
+    priority: P0-CRITICAL
+    duration: "10-14 days"
+    team_size: 2
+    roi: 9.5
+    
+    consolidations:
+      - target: "MasterOrchestrator"
+        absorbs:
+          - "CentralBrainOrchestrator"
+          - "ResponseAssemblyOrchestrator"
+        capability_count: 4
+        enhancement: "Stage 1-4 extraction via StageExecutionStrategy"
+      
+      - target: "IntentRouter"
+        absorbs:
+          - "FuzzyIntentMatcher"
+        converts:
+          - "ComplexityClassifier → plugin"
+        capability_count: 4
+        enhancement: "Pluggable intent matching strategies"
+      
+      - target: "TDDOrchestrator"
+        absorbs:
+          - "WrappedTDDOrchestrator"
+        gains:
+          - "Multi-cycle TDD capability"
+          - "Holistic refactor gate"
+        capability_count: 3
+        enhancement: "execute_multi_cycle(success_criteria)"
+      
+      - target: "InteractionOrchestrator"
+        absorbs:
+          - "ConversationOrchestrator"
+          - "ComprehensionSession"
+        pattern: "Mixin composition"
+        capability_count: 4
+    
+    tdd_cycles:
+      cycle_1:
+        red_phase:
+          test_suite: "Core Orchestrator Capabilities"
+          test_count: 16
+          harness: "Existing orchestrator.execute_operation()"
+          assertions: "Capability outputs match wiring.yaml spec"
+          expected_result: "16/16 FAIL (orchestrators not consolidated)"
+        
+        green_phase:
+          implementation: "Merge logic, preserve signatures via adapters"
+          wiring: "EventBus for decoupling"
+          expected_result: "16/16 PASS (behavioral parity)"
+          coverage_target: 78
+        
+        refactor_phase:
+          questions:
+            - "Can we eliminate 30% methods via Strategy Pattern?"
+            - "Are Stage 1-4 properly separated (SOLID check)?"
+            - "Does EventBus eliminate 12/15 dependencies?"
+          actions:
+            - "Extract StageExecutionStrategy (4 implementations)"
+            - "Convert 12 dependencies → EventBus subscriptions"
+            - "Apply Context Crystallization Layer (Phase 49)"
+          expected_result: "16/16 PASS + 4 integration tests, 89% coverage"
+      
+      cycle_2:
+        red_phase:
+          focus: "Performance & Extensibility"
+          tests:
+            - "Concurrent request handling (EventBus benefit)"
+            - "Stage execution latency < 200ms"
+            - "Add new stage without modifying core"
+          expected_result: "4/4 FAIL (gaps exist)"
+        
+        green_phase:
+          implementation: "EventBus async execution, stage registry"
+          expected_result: "ALL PASS, 92% coverage, 145ms avg latency"
+    
+    deliverables:
+      - "4 consolidated core orchestrators"
+      - "Multi-cycle TDD capability in TDDOrchestrator"
+      - "EventBus decoupling (12 dependencies eliminated)"
+      - "Test suite: 20 capability + 8 integration tests"
+      - "Coverage: 85-92%"
+
+  track_2_domain:
+    name: "Domain Layer Consolidation"
+    priority: P1-HIGH
+    duration: "8-12 days"
+    team_size: 2
+    roi: 9.0
+    
+    consolidations:
+      - target: "EnhancedRefactoringOrchestrator"
+        absorbs:
+          - "RefactoringOrchestrator"
+          - "CodeReviewOrchestrator"
+          - "SecurityReviewEngine"
+        gains:
+          - "Debugger integration hooks"
+          - "EventBus regression detection"
+        capability_count: 8
+      
+      - target: "EnhancedPlanningOrchestrator"
+        absorbs:
+          - "PlanningOrchestrator"
+          - "CodeLevelPlanner"
+        keeps_separate:
+          - "PlanOrchestrator (lifecycle management)"
+        capability_count: 6
+      
+      - target: "EnhancedDocumentationOrchestrator"
+        absorbs:
+          - "DocumentationOrchestrator"
+        capability_count: 4
+      
+      - target: "AutonomousExecutionEngine"
+        gains:
+          - "Multi-step TDD capability"
+          - "Master plan execution integration"
+        capability_count: 5
+    
+    debugger_integration:
+      orchestrator: "DebuggerOrchestrator (NEW)"
+      purpose: "Zero-friction debugging via EventBus"
+      subscriptions:
+        - "TEST_FAILURE (from TDDOrchestrator)"
+        - "REFACTOR_REGRESSION (from RefactoringOrchestrator)"
+        - "GOVERNANCE_VIOLATION (from EnforcementOrchestrator)"
+      publications:
+        - "DEBUG_MARKERS_INJECTED"
+        - "DEBUG_SESSION_READY"
+      workflow: |
+        TDDOrchestrator test fails → emits TEST_FAILURE event
+        → DebuggerOrchestrator subscribes → auto-injects markers
+        → Developer opens file → markers already present
+        Result: Zero manual marker injection
+    
+    tdd_cycles:
+      cycle_1:
+        focus: "Consolidation + behavioral parity"
+        test_count: 23
+        capability_count: 8
+      
+      cycle_2:
+        focus: "Debugger integration"
+        tests:
+          - "Refactoring regression triggers debug event"
+          - "Debug markers injected automatically"
+          - "Debug session captures full state"
+      
+      cycle_3:
+        focus: "Master orchestrator wiring"
+        tests:
+          - "MasterOrchestrator delegates to domain orchestrators"
+          - "Plan execution flows through enhanced orchestrators"
+          - "Multi-stage dependencies resolved correctly"
+    
+    deliverables:
+      - "4 consolidated domain orchestrators"
+      - "DebuggerOrchestrator (new capability)"
+      - "EventBus-driven debugging workflow"
+      - "Test suite: 30 capability + 12 integration tests"
+      - "Coverage: 85-90%"
+
+  track_3_support:
+    name: "Support Layer Elimination"
+    priority: P1-MEDIUM
+    duration: "6-8 days"
+    team_size: 1
+    roi: 8.5
+    
+    transformations:
+      - orchestrator: "ToolDiscoveryOrchestrator"
+        converts_to: "orchestrator_utils.discover_tools()"
+        rationale: "Single method, no state"
+      
+      - orchestrator: "UpgradeOrchestrator"
+        converts_to: "lifecycle_utils.upgrade_system()"
+        rationale: "Configuration script, not orchestration"
+      
+      - orchestrator: "RollbackOrchestrator"
+        converts_to: "lifecycle_utils.rollback_to_checkpoint()"
+        rationale: "Lifecycle utility"
+      
+      - orchestrator: "SetupOrchestrator"
+        converts_to: "setup_utils.configure_environment()"
+        rationale: "One-time setup, not orchestration"
+      
+      - orchestrator: "KnowledgeRepository"
+        keeps_as: "Data layer component"
+        rationale: "Repository pattern, not orchestrator"
+    
+    tdd_approach:
+      pattern: "Single-Cycle TDD (utilities are simple)"
+      cycle_1_only:
+        red: "Test utility functions (input/output validation)"
+        green: "Extract utility, delete orchestrator class"
+        refactor: "Clean up imports, update docs"
+      time_savings: "50% faster (6-8 days vs 12-14)"
+    
+    deliverables:
+      - "15 orchestrators → utility modules"
+      - "Utility module: cortex.orchestrators.utils"
+      - "Test suite: 45 unit tests (95%+ coverage)"
+      - "Updated imports across codebase"
+
+  track_4_cleanup:
+    name: "Orphan Cleanup"
+    priority: P2-LOW
+    duration: "4-6 days"
+    team_size: 1
+    roi: 8.0
+    
+    targets:
+      total_orphans: 88
+      categories:
+        test_mocks:
+          count: 20
+          action: "KEEP (test infrastructure)"
+        
+        legacy_deprecated:
+          count: 30
+          action: "DELETE"
+          examples:
+            - "OldRefactoringOrchestrator"
+            - "LegacyPlanningEngine"
+        
+        experimental:
+          count: 15
+          action: "DELETE or promote to wiring.yaml"
+          decision: "If used in tests → promote, else delete"
+        
+        adapter_wrappers:
+          count: 23
+          action: "Convert to adapter pattern (not orchestrators)"
+    
+    tdd_approach:
+      pattern: "Reverse TDD (novel for CORTEX)"
+      red_phase: "Assert no imports of orphan orchestrators in wiring.yaml orchestrators"
+      green_phase: "Delete orphan files"
+      refactor_phase: "Clean up import statements, update documentation"
+    
+    deliverables:
+      - "58-68 orchestrators deleted"
+      - "20 test mocks retained"
+      - "Clean import tree (no dead references)"
+      - "Updated documentation index"
+
+# ============================================================================
+# ENHANCED CAPABILITIES (Gap Filling)
+# ============================================================================
+capability_enhancements:
+  multi_cycle_tdd:
+    orchestrator: "TDDOrchestrator"
+    current_state: "Single RED→GREEN→REFACTOR cycle"
+    enhancement: "Iterative cycles until success criteria met"
+    
+    new_methods:
+      - signature: "execute_multi_cycle(success_criteria: Callable) -> Result"
+        purpose: "Run TDD cycles until criteria satisfied"
+      
+      - signature: "track_cycle_metrics(cycle_number, coverage, performance)"
+        purpose: "Monitor progress across cycles"
+      
+      - signature: "holistic_refactor_gate(min_coverage=85%, max_latency_ms=200)"
+        purpose: "Quality gate between cycles"
+    
+    test_design:
+      cycle_1: "Behavioral parity (coverage 75-80%)"
+      cycle_2: "Performance tests (latency < 200ms)"
+      cycle_3: "Extensibility tests (plugin capability)"
+      exit_condition: "All 3 criteria met"
+  
+  debugger_integration:
+    orchestrator: "DebuggerOrchestrator (NEW)"
+    current_state: "Manual marker injection"
+    enhancement: "Auto-inject on TDD/Refactoring failures"
+    
+    eventbus_integration:
+      subscribes_to:
+        - "TEST_FAILURE"
+        - "REFACTOR_REGRESSION"
+        - "GOVERNANCE_VIOLATION"
+      publishes:
+        - "DEBUG_MARKERS_INJECTED"
+        - "DEBUG_SESSION_READY"
+    
+    workflow:
+      trigger: "TDDOrchestrator test fails"
+      action: "DebuggerOrchestrator auto-injects CORTEX_DEBUG markers"
+      result: "Zero manual intervention (zero-friction debugging)"
+  
+  master_plan_execution:
+    orchestrator: "MasterOrchestrator"
+    current_state: "Coordinates operations, no plan execution"
+    enhancement: "Execute cortex-registry plans via enhanced orchestrators"
+    
+    new_method:
+      signature: "execute_plan(plan_id: str) -> Result"
+      workflow:
+        - "Load plan from cortex-registry (SSOT)"
+        - "Parse stages (via PlanOrchestrator)"
+        - "Delegate to enhanced orchestrators"
+        - "Track progress via EventBus"
+        - "Update plan status in registry"
+    
+    tdd_multi_cycle:
+      cycle_1: "Load plan, delegate single stage"
+      cycle_2: "Handle multi-stage dependencies"
+      cycle_3: "Rollback on failure"
+
+# ============================================================================
+# SUCCESS CRITERIA (Measurable)
+# ============================================================================
+success_criteria:
+  consolidation:
+    metric: "Orchestrator count"
+    current: 26
+    target: 15
+    validation: "wiring.yaml audit"
+  
+  behavioral_parity:
+    metric: "Capability coverage"
+    target: "100%"
+    validation: "Contract test suite (all capabilities tested)"
+  
+  quality:
+    metric: "Test coverage"
+    target: "85%+ per orchestrator"
+    validation: "pytest --cov"
+  
+  performance:
+    metric: "Average operation latency"
+    target: "< 200ms"
+    validation: "Prometheus metrics"
+  
+  extensibility:
+    metric: "New capability add time"
+    target: "< 2 hours"
+    validation: "Plugin pattern test (add strategy, verify works)"
+  
+  integration:
+    metric: "Master plan execution success rate"
+    target: "95%+"
+    validation: "End-to-end tests (execute 20 registry plans)"
+  
+  debugger_integration:
+    metric: "Auto-marker injection"
+    target: "100% on test failures"
+    validation: "EventBus audit log"
+
+# ============================================================================
+# HIGH-VALUE TEST CASES (Priority Matrix)
+# ============================================================================
+test_priorities:
+  p0_critical:
+    - name: "test_behavioral_contract_refactoring_detects_smells"
+      rationale: "Ensures consolidation doesn't break core functionality"
+      value: 5
+    
+    - name: "test_debugger_auto_injects_on_test_failure"
+      rationale: "Validates zero-friction debugging (vision goal)"
+      value: 5
+    
+    - name: "test_tdd_multi_cycle_iterates_until_coverage_85"
+      rationale: "Proves multi-cycle capability works"
+      value: 5
+    
+    - name: "test_master_executes_phase_81_plan_end_to_end"
+      rationale: "Ultimate integration test (vision goal)"
+      value: 5
+  
+  p1_high:
+    - name: "test_operation_latency_under_200ms"
+      rationale: "Production readiness SLA"
+      value: 4
+    
+    - name: "test_refactor_rolls_back_on_regression"
+      rationale: "Risk mitigation (safety net)"
+      value: 4
+    
+    - name: "test_eventbus_decouples_12_dependencies"
+      rationale: "Architectural pattern validation"
+      value: 4
+  
+  p2_medium:
+    - name: "test_old_imports_still_work_via_adapters"
+      rationale: "Backward compatibility (can break for v2.0)"
+      value: 2
+
+# ============================================================================
+# RISKS & MITIGATION
+# ============================================================================
+risks:
+  - risk: "Breaking changes to existing code"
+    likelihood: HIGH
+    impact: HIGH
+    mitigation:
+      - "Incremental wave-based rollout (4 parallel tracks)"
+      - "Adapter pattern preserves old signatures"
+      - "Feature flags for gradual cutover"
+  
+  - risk: "Test coverage loss during consolidation"
+    likelihood: MEDIUM
+    impact: HIGH
+    mitigation:
+      - "Behavioral contract tests before consolidation"
+      - "Require 85%+ coverage before deleting orchestrator"
+      - "Multi-cycle TDD ensures quality"
+  
+  - risk: "Performance regression from EventBus"
+    likelihood: LOW
+    impact: MEDIUM
+    mitigation:
+      - "EventBus already tested at 1000+ concurrent requests"
+      - "Performance tests in Cycle 2"
+      - "< 200ms latency SLA enforced"
+  
+  - risk: "Integration issues with MCP adapters"
+    likelihood: MEDIUM
+    impact: MEDIUM
+    mitigation:
+      - "MCP adapter layer isolates changes"
+      - "Adapter pattern maintains interface stability"
+      - "Integration tests cover MCP tool invocations"
+
+# ============================================================================
+# TIMELINE & DEPENDENCIES
+# ============================================================================
+timeline:
+  pre_wave_7:
+    duration: "2 days"
+    tasks:
+      - "Create DebuggerOrchestrator specification"
+      - "Enhance TDDOrchestrator with multi-cycle support (PR #1)"
+      - "Setup 4 parallel GitHub branches"
+  
+  week_1_2:
+    phase: "Cycle 1 (All Tracks)"
+    duration: "8-10 days"
+    activities:
+      - "Red Phase: Behavioral contract tests (4 parallel test suites)"
+      - "Green Phase: Minimal consolidation (behavioral parity)"
+      - "Refactor Phase: Holistic analysis + Strategy Pattern"
+  
+  week_2_3:
+    phase: "Cycle 2 (Tracks 1-2 Only)"
+    duration: "4-6 days"
+    activities:
+      - "Performance + extensibility tests"
+      - "Debugger integration (Track 2)"
+      - "Master plan execution (Track 1)"
+  
+  week_3:
+    phase: "Cleanup & Integration"
+    duration: "2-3 days"
+    activities:
+      - "Merge 4 tracks into main"
+      - "Update wiring.yaml (15 orchestrators)"
+      - "Dashboard sync via PlanOrchestrator"
+
+dependencies:
+  required:
+    - enhancement: "Phase 49 (Context Crystallization Layer)"
+      reason: "Stage 2 acceleration in MasterOrchestrator"
+    
+    - enhancement: "Phase 81 (Agent Architecture Redesign)"
+      reason: "Strategy Pattern specification"
+    
+    - orchestrator: "OrchestratorEventBus"
+      reason: "EventBus decoupling foundation"
+  
+  optional:
+    - enhancement: "Phase 48 (Holistic Validation)"
+      reason: "Pre-consolidation validation gate"
+
+# ============================================================================
+# EXPECTED IMPACT
+# ============================================================================
+impact:
+  metrics:
+    - metric: "Registered Orchestrators"
+      before: 26
+      after: 15
+      improvement: "42% reduction"
+    
+    - metric: "Physical Files"
+      before: 114
+      after: 25
+      improvement: "78% reduction"
+    
+    - metric: "Total Classes"
+      before: 201
+      after: 45
+      improvement: "78% reduction"
+    
+    - metric: "Lines of Code"
+      before: 45000
+      after: 12000
+      improvement: "73% reduction"
+    
+    - metric: "Maintenance Burden"
+      before: "HIGH"
+      after: "LOW"
+      improvement: "85% less complexity"
+    
+    - metric: "Onboarding Time"
+      before: "8 hours"
+      after: "2 hours"
+      improvement: "75% faster"
+  
+  architectural_benefits:
+    - "Single Canonical Implementation (CORE-035 compliance)"
+    - "Event-Driven Decoupling (15 dependencies eliminated)"
+    - "Strategy Pattern Extensibility (add capabilities without core changes)"
+    - "Zero-Friction Debugging (auto-marker injection)"
+    - "Master Plan Execution (registry plans → automated execution)"
+
+# ============================================================================
+# GOVERNANCE & COMPLIANCE
+# ============================================================================
+governance:
+  core_rules:
+    - "CORE-008: TDD (multi-cycle pattern)"
+    - "CORE-011: Type hints (all new methods)"
+    - "CORE-012: Google-style docstrings"
+    - "CORE-035: Single Canonical Implementation"
+    - "CORE-041: Event-Driven Architecture"
+  
+  audit_trail:
+    - "AC_START: AC-ENH-087-001 (Track 1 consolidation)"
+    - "AC_START: AC-ENH-087-002 (Track 2 consolidation)"
+    - "AC_START: AC-ENH-087-003 (Track 3 elimination)"
+    - "AC_START: AC-ENH-087-004 (Track 4 cleanup)"
+
+# ============================================================================
+# DELIVERABLES
+# ============================================================================
+deliverables:
+  code:
+    - "15 consolidated orchestrators in wiring.yaml"
+    - "DebuggerOrchestrator (new)"
+    - "Multi-cycle TDD in TDDOrchestrator"
+    - "Master plan execution in MasterOrchestrator"
+    - "Utility module: cortex.orchestrators.utils"
+  
+  tests:
+    - "85 capability tests (behavior contracts)"
+    - "32 integration tests"
+    - "45 utility unit tests"
+    - "Total: 162 high-value tests"
+    - "Coverage: 85-92%"
+  
+  documentation:
+    - "wiring.yaml updated (15 orchestrators)"
+    - "Migration guide (old → new orchestrator mapping)"
+    - "Architecture decision record (ADR)"
+    - "EventBus integration guide"
+
+# ============================================================================
+# RELATED ENHANCEMENTS
+# ============================================================================
+related_enhancements:
+  - id: "ENH-088"
+    title: "Multi-Cycle TDD Enhancement"
+    relationship: "Builds on ENH-087 TDDOrchestrator consolidation"
+  
+  - id: "ENH-089"
+    title: "EventBus-Driven Debugger Integration"
+    relationship: "Implements DebuggerOrchestrator from ENH-087"
+  
+  - id: "Phase 81"
+    title: "Agent Architecture Redesign"
+    relationship: "Provides Strategy Pattern specification"
+
+# ============================================================================
+# VALIDATION CHECKLIST
+# ============================================================================
+validation:
+  pre_implementation:
+    - "[ ] All 4 track leads assigned"
+    - "[ ] DebuggerOrchestrator specification complete"
+    - "[ ] TDDOrchestrator multi-cycle PR merged"
+    - "[ ] GitHub branches created (track-1 through track-4)"
+  
+  during_implementation:
+    - "[ ] Cycle 1 complete: 100% behavioral parity"
+    - "[ ] Cycle 2 complete: 85%+ coverage, <200ms latency"
+    - "[ ] All 162 tests passing"
+    - "[ ] No breaking changes to MCP tools"
+  
+  post_implementation:
+    - "[ ] wiring.yaml updated (15 orchestrators)"
+    - "[ ] 88 orphans deleted"
+    - "[ ] Migration guide published"
+    - "[ ] Dashboard sync complete"
+    - "[ ] Production deployment verified"

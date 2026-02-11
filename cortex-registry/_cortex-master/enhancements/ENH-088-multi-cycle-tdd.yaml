@@ -1,0 +1,360 @@
+version: '1.0'
+enhancement_id: ENH-088
+title: "Multi-Cycle TDD Enhancement"
+category: methodology
+priority: P1-HIGH
+roi: 9.0
+status: planned
+created: '2026-02-11'
+depends_on:
+  - ENH-087
+authority:
+  - CORE-008 (TDD Mandatory)
+  - WAVE-7 Enhanced Vision
+
+# ============================================================================
+# EXECUTIVE SUMMARY
+# ============================================================================
+summary: |
+  Enhance TDDOrchestrator to support iterative RED→GREEN→REFACTOR cycles
+  until success criteria met. Enables holistic refactoring pattern where
+  Cycle 1 achieves behavioral parity, Cycle 2 adds performance/extensibility,
+  and optional Cycle 3 addresses remaining gaps.
+  
+  Key Features:
+  - execute_multi_cycle(success_criteria) method
+  - Cycle metrics tracking (coverage, performance, quality)
+  - Holistic refactor gate (85%+ coverage, <200ms latency)
+  - Exit conditions (all criteria met OR max 5 cycles)
+
+# ============================================================================
+# PROBLEM STATEMENT
+# ============================================================================
+problem:
+  current_state:
+    tdd_pattern: "Single RED→GREEN→REFACTOR cycle"
+    limitation: "Cannot iterate until quality criteria satisfied"
+    use_case_gap: "ENH-087 requires 2-3 cycles per orchestrator consolidation"
+  
+  specific_gaps:
+    - "Cycle 1 achieves 75-80% coverage, but 85%+ required"
+    - "Performance tests added in Cycle 2 (not Cycle 1)"
+    - "Extensibility validation requires plugin testing (Cycle 3)"
+    - "No automated quality gates between cycles"
+
+# ============================================================================
+# SOLUTION DESIGN
+# ============================================================================
+solution:
+  approach: "Multi-Cycle TDD with Quality Gates"
+  
+  new_capabilities:
+    - capability: "execute_multi_cycle"
+      signature: "execute_multi_cycle(success_criteria: SuccessCriteria, max_cycles: int = 5) -> Result"
+      behavior: |
+        Executes TDD cycles iteratively:
+        1. Run RED phase (tests first)
+        2. Run GREEN phase (minimal implementation)
+        3. Run REFACTOR phase (holistic optimization)
+        4. Evaluate success_criteria
+        5. If met → return success
+        6. If not met AND cycles < max_cycles → repeat
+        7. If max_cycles reached → return partial success + gaps
+    
+    - capability: "track_cycle_metrics"
+      signature: "track_cycle_metrics(cycle: int, metrics: CycleMetrics) -> None"
+      behavior: "Records coverage, performance, quality per cycle"
+    
+    - capability: "holistic_refactor_gate"
+      signature: "holistic_refactor_gate(criteria: RefactorCriteria) -> GateResult"
+      behavior: "Quality gate between cycles (min coverage, max latency, extensibility checks)"
+
+  data_structures:
+    success_criteria:
+      fields:
+        - "min_coverage: float (0.85 = 85%)"
+        - "max_latency_ms: int (200)"
+        - "extensibility_required: bool"
+        - "custom_checks: List[Callable]"
+    
+    cycle_metrics:
+      fields:
+        - "cycle_number: int"
+        - "tests_passed: int"
+        - "tests_failed: int"
+        - "coverage_percent: float"
+        - "avg_latency_ms: float"
+        - "extensibility_score: float (0.0-1.0)"
+    
+    gate_result:
+      fields:
+        - "passed: bool"
+        - "gaps: List[str]"
+        - "recommendations: List[str]"
+
+  workflow:
+    cycle_1:
+      focus: "Behavioral parity + basic coverage"
+      red_phase:
+        - "Write capability contract tests"
+        - "Harness existing functions"
+        - "Expected: ALL FAIL"
+      green_phase:
+        - "Minimal consolidation"
+        - "Preserve behavior via adapters"
+        - "Expected: ALL PASS"
+      refactor_phase:
+        - "Extract strategies"
+        - "Apply patterns (Strategy, Mixin, EventBus)"
+        - "Expected: Tests still PASS + coverage 75-80%"
+      gate_check:
+        - "Coverage ≥ 85%? → NO (proceed to Cycle 2)"
+        - "Latency < 200ms? → Maybe (not tested yet)"
+    
+    cycle_2:
+      focus: "Performance + extensibility"
+      red_phase:
+        - "Add performance tests (latency SLA)"
+        - "Add extensibility tests (plugin pattern)"
+        - "Expected: NEW tests FAIL"
+      green_phase:
+        - "Optimize hot paths"
+        - "Add async execution (EventBus)"
+        - "Expected: ALL tests PASS"
+      refactor_phase:
+        - "Extract more strategies"
+        - "Cache optimization"
+        - "Expected: Coverage 85-90%, latency <200ms"
+      gate_check:
+        - "Coverage ≥ 85%? → YES"
+        - "Latency < 200ms? → YES"
+        - "Extensibility? → YES (plugin pattern works)"
+        - "Result: SUCCESS (exit loop)"
+    
+    cycle_3:
+      condition: "Only if Cycle 2 gate fails"
+      focus: "Address specific gaps identified"
+
+# ============================================================================
+# IMPLEMENTATION STAGES
+# ============================================================================
+stages:
+  stage_1_core_logic:
+    duration: "3-4 days"
+    tasks:
+      - "Create SuccessCriteria dataclass"
+      - "Create CycleMetrics dataclass"
+      - "Create GateResult dataclass"
+      - "Implement execute_multi_cycle() method"
+      - "Implement track_cycle_metrics() method"
+    
+    tdd_approach:
+      red:
+        - "test_execute_multi_cycle_runs_until_criteria_met"
+        - "test_execute_multi_cycle_exits_after_max_cycles"
+        - "test_cycle_metrics_tracked_per_iteration"
+      green:
+        - "Basic loop: while not criteria_met and cycles < max"
+        - "Call existing execute() per cycle"
+        - "Track metrics after each cycle"
+      refactor:
+        - "Extract CycleExecutor class"
+        - "Add logging (audit trail)"
+  
+  stage_2_quality_gates:
+    duration: "2-3 days"
+    tasks:
+      - "Implement holistic_refactor_gate() method"
+      - "Add coverage validation (pytest-cov integration)"
+      - "Add latency validation (timer integration)"
+      - "Add extensibility checks (plugin pattern test)"
+    
+    tdd_approach:
+      red:
+        - "test_refactor_gate_fails_when_coverage_below_85"
+        - "test_refactor_gate_fails_when_latency_exceeds_200ms"
+        - "test_refactor_gate_passes_when_all_criteria_met"
+      green:
+        - "Check coverage via pytest-cov API"
+        - "Check latency via collected metrics"
+        - "Check extensibility via test execution"
+      refactor:
+        - "Extract GateValidator class"
+        - "Pluggable validators (Strategy Pattern)"
+  
+  stage_3_integration:
+    duration: "2-3 days"
+    tasks:
+      - "Integrate with existing TDDOrchestrator.execute()"
+      - "Add EventBus notifications (CYCLE_COMPLETE, CRITERIA_MET)"
+      - "Update MCP tool: cortex_tdd_multi_cycle"
+    
+    tdd_approach:
+      red:
+        - "test_multi_cycle_integrates_with_execute"
+        - "test_cycle_complete_event_published"
+        - "test_mcp_tool_exposes_multi_cycle"
+      green:
+        - "Wire execute_multi_cycle into execute()"
+        - "Emit EventBus events"
+        - "Update MCP adapter"
+      refactor:
+        - "Backward compatibility (single cycle = default)"
+        - "Feature flag: enable_multi_cycle
+
+  stage_4_documentation:
+    duration: "1-2 days"
+    tasks:
+      - "Update TDDOrchestrator docstrings"
+      - "Create multi-cycle TDD guide"
+      - "Update ENH-087 to use multi-cycle pattern"
+
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+success_criteria:
+  functionality:
+    - "execute_multi_cycle() runs 1-5 cycles"
+    - "Exits when all criteria met"
+    - "Tracks metrics per cycle"
+    - "Quality gate validates coverage/latency/extensibility"
+  
+  integration:
+    - "Integrates with existing TDDOrchestrator"
+    - "Backward compatible (single cycle = default)"
+    - "MCP tool: cortex_tdd_multi_cycle available"
+  
+  quality:
+    - "Test coverage: 90%+"
+    - "All tests passing"
+    - "Performance: No regression vs single-cycle"
+  
+  usability:
+    - "ENH-087 uses multi-cycle successfully"
+    - "Documentation: 5-minute quick start"
+
+# ============================================================================
+# TEST CASES (High-Value)
+# ============================================================================
+test_cases:
+  p0_critical:
+    - name: "test_multi_cycle_achieves_85_percent_coverage_after_cycle_2"
+      scenario: "Cycle 1 = 78%, Cycle 2 = 87%"
+      expected: "Exit after Cycle 2 (criteria met)"
+      value: 5
+    
+    - name: "test_multi_cycle_exits_after_5_cycles_if_criteria_not_met"
+      scenario: "Coverage stuck at 80% for 5 cycles"
+      expected: "Return partial success + gaps list"
+      value: 5
+    
+    - name: "test_refactor_gate_blocks_cycle_2_when_cycle_1_coverage_below_75"
+      scenario: "Cycle 1 = 70% coverage"
+      expected: "Gate recommends: improve Cycle 1 before proceeding"
+      value: 5
+  
+  p1_high:
+    - name: "test_cycle_metrics_tracked_and_accessible"
+      expected: "get_cycle_metrics() returns List[CycleMetrics]"
+      value: 4
+    
+    - name: "test_eventbus_emits_cycle_complete_after_each_cycle"
+      expected: "CYCLE_COMPLETE event includes cycle_number, metrics"
+      value: 4
+    
+    - name: "test_backward_compatible_single_cycle_still_works"
+      scenario: "execute() called without multi_cycle param"
+      expected: "Single cycle executed (legacy behavior)"
+      value: 4
+
+# ============================================================================
+# INTEGRATION WITH ENH-087
+# ============================================================================
+integration_enh_087:
+  usage_pattern: |
+    # Track 1, Cycle 1: MasterOrchestrator consolidation
+    criteria = SuccessCriteria(
+        min_coverage=0.85,
+        max_latency_ms=200,
+        extensibility_required=True
+    )
+    
+    result = tdd_orchestrator.execute_multi_cycle(
+        test_suite="test_master_orchestrator_consolidated.py",
+        success_criteria=criteria,
+        max_cycles=3
+    )
+    
+    if result.is_ok():
+        # Cycle 1: 78% coverage → Gate: proceed to Cycle 2
+        # Cycle 2: 89% coverage, 145ms latency → Gate: SUCCESS
+        print("MasterOrchestrator consolidation complete!")
+    else:
+        # Max cycles reached, criteria not met
+        gaps = result.unwrap_err()
+        print(f"Gaps remaining: {gaps}")
+  
+  benefits:
+    - "ENH-087 Track 1: 4 orchestrators × 2 cycles = 8 multi-cycle runs"
+    - "Automated quality gates (no manual intervention)"
+    - "Clear success/failure criteria (85%+ coverage, <200ms)"
+    - "Metrics tracking for wave retrospective"
+
+# ============================================================================
+# RISKS & MITIGATION
+# ============================================================================
+risks:
+  - risk: "Infinite loops if criteria never met"
+    likelihood: LOW
+    mitigation: "max_cycles=5 hard limit + partial success reporting"
+  
+  - risk: "Performance overhead from cycle tracking"
+    likelihood: LOW
+    mitigation: "Metrics collection is lightweight (< 10ms per cycle)"
+  
+  - risk: "Backward compatibility issues"
+    likelihood: MEDIUM
+    mitigation: "Feature flag + single cycle = default behavior"
+
+# ============================================================================
+# DELIVERABLES
+# ============================================================================
+deliverables:
+  code:
+    - "TDDOrchestrator.execute_multi_cycle() method"
+    - "SuccessCriteria, CycleMetrics, GateResult dataclasses"
+    - "holistic_refactor_gate() validator"
+    - "EventBus integration (CYCLE_COMPLETE, CRITERIA_MET)"
+  
+  tests:
+    - "20 unit tests (core logic)"
+    - "8 integration tests (with TDDOrchestrator)"
+    - "4 end-to-end tests (with ENH-087)"
+    - "Coverage: 90%+"
+  
+  documentation:
+    - "Multi-Cycle TDD Guide (5-minute quick start)"
+    - "ENH-087 integration examples"
+    - "API reference (docstrings)"
+
+# ============================================================================
+# TIMELINE
+# ============================================================================
+timeline:
+  stage_1: "3-4 days (core logic)"
+  stage_2: "2-3 days (quality gates)"
+  stage_3: "2-3 days (integration)"
+  stage_4: "1-2 days (documentation)"
+  total: "8-12 days"
+
+# ============================================================================
+# GOVERNANCE
+# ============================================================================
+governance:
+  core_rules:
+    - "CORE-008: TDD (test multi-cycle before implementing)"
+    - "CORE-011: Type hints (all new methods)"
+    - "CORE-012: Google-style docstrings"
+  
+  audit_trail:
+    - "AC_START: AC-ENH-088-001 (Multi-cycle TDD implementation)"
