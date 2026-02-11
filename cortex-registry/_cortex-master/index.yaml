@@ -1,8 +1,8 @@
-version: '1.8'
+version: '1.9'
 registry_name: _cortex-master
 description: CORTEX self-development planning with wave-based incremental value delivery
-last_updated: '2026-02-11T20:30:00.000000Z'
-revision: 'Wave-Based Execution Plan v3.0: 5 release waves for incremental value delivery - ENH-065 deprioritized to Wave 5'
+last_updated: '2026-02-11T21:00:00.000000Z'
+revision: 'Wave-Based Execution Plan v4.0: 6 release waves - Added WAVE-6 Comprehensive Cleanup & Refactoring (ROI 9.2/10 - HIGHEST)'
 
 # ============================================================================
 # MASTER REMEDIATION PLAN (WAVE-BASED RELEASES)
@@ -10,23 +10,24 @@ revision: 'Wave-Based Execution Plan v3.0: 5 release waves for incremental value
 master_remediation:
   plan_file: "MASTER-REMEDIATION-PLAN-V2.yaml"
   wave_plan_file: "WAVE-BASED-EXECUTION-PLAN.yaml"
+  wave_6_file: "WAVE-6-COMPREHENSIVE-CLEANUP-REFACTORING.yaml"
   status: "active"
   execution_mode: "autonomous_silent"
   progress_display: "ascii_bars"
   wave_execution: true
   
   summary:
-    total_phases: 16
+    total_phases: 20  # 16 original + 4 new (ENH-082/084/085/086)
     p0_critical: 3  # ENH-063, ENH-064, ENH-066
-    p1_high: 8      # phase-81, ENH-067-071, ENH-078
+    p1_high: 12      # phase-81, ENH-067-071, ENH-078, ENH-082/084/085/086
     p2_medium: 5    # ENH-065, ENH-072-074, ENH-077, phase-80
-    estimated_effort: "~100 days (60 days parallelized across 5 waves)"
+    estimated_effort: "~115 days (70 days parallelized across 6 waves)"
   
   # Wave-Based Incremental Releases
   release_strategy:
     approach: "Incremental value delivery - each wave is a production release"
     cadence: "2-3 weeks per wave"
-    value_focus: "Foundation → Intelligence → Autonomy → Enhancement → Polish"
+    value_focus: "Foundation → Intelligence → Autonomy → Enhancement → Polish → Cleanup"
   
   waves:
     - wave: 1
@@ -120,6 +121,30 @@ master_remediation:
         - "✅ UI/UX refinements"
       dependencies: []
       blocks: []
+    
+    - wave: 6
+      name: "Comprehensive Cleanup & Refactoring (HIGH-ROI)"
+      release: "R6-CLEANUP"
+      priority: "P1-HIGH-ROI"
+      duration: "14-18 days"
+      phases: 4  # ENH-082, ENH-084, ENH-085, ENH-086
+      status: "ready"
+      roi: 9.2  # HIGHEST of all waves
+      requires: ["R1-FOUNDATION"]
+      highlights:
+        - "ENH-082: Response Template System Integration (8.5 ROI)"
+        - "ENH-084: Standard Phase Creation Practices (9.5 ROI)"
+        - "ENH-085: Completed Phase Cleanup Audit (8.8 ROI)"
+        - "ENH-086: Architecture Alignment Verification (9.0 ROI)"
+      value_delivered:
+        - "✅ 72/72 orchestrators using Unified Response Engine"
+        - "✅ Standard phase creation (50% faster, 0 orphans)"
+        - "✅ Codebase reduced 15-25% (cleanup audit)"
+        - "✅ 100% CORE rules + MCP-FIRST compliance"
+      dependencies: ["ENH-063"]  # Foundation security must be complete
+      blocks: []
+      authority: "chat01.md + cortex-architect.prompt.md v15.3"
+      file_reference: "WAVE-6-COMPREHENSIVE-CLEANUP-REFACTORING.yaml"
   
   success_metrics:
     wave_1_foundation:
@@ -143,6 +168,13 @@ master_remediation:
       - "Documentation effort: -85%"
       - "Structured logging: 0% → 100%"
       - "Distributed tracing: false → true"
+    wave_6_cleanup:
+      - "Unified Response Engine: 72/72 orchestrators"
+      - "Phase creation: 50% faster (standard template + CLI)"
+      - "Codebase reduction: 15-25% (cleanup audit)"
+      - "CORE rules compliance: 100% (30/30 rules)"
+      - "MCP-FIRST violations: 0"
+      - "Test coverage: ≥80% across all modules"
 
 active_phases:
   # ============================================================================
