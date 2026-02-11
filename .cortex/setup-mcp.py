@@ -3,8 +3,14 @@
 CORTEX MCP Integration Setup Script
 
 Configures VS Code MCP integration for CORTEX development.
-Authority: Phase 25 + Phase 48 + Phase 49
-Requirement: Zero-exception setup on all user machines
+Authority: Phase 25 + Phase 48 + Phase 49 + Phase 53 (Cross-Platform)
+Requirement: Zero-exception setup on all user machines (macOS + Windows)
+
+MCP Architecture:
+- MCP runs locally within VS Code (like Pylance)
+- Auto-started by VS Code when Copilot Chat invokes cortex_* tools
+- Uses stdio transport (stdin/stdout JSON-RPC)
+- NO manual server startup required
 
 Run: python .cortex/setup-mcp.py
 """
@@ -13,6 +19,7 @@ import json
 import os
 import sys
 import logging
+import platform
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, Tuple, Optional
@@ -32,6 +39,11 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger(__name__)
+
+# Cross-platform detection
+IS_WINDOWS = platform.system() == "Windows"
+IS_MACOS = platform.system() == "Darwin"
+IS_LINUX = platform.system() == "Linux"
 
 
 def log_header():
@@ -57,17 +69,30 @@ def check_python() -> Tuple[bool, str]:
 
 
 def check_venv() -> Tuple[bool, str]:
-    """Check if .venv/bin/python exists."""
-    venv_python = Path(".venv/bin/python")
+    """Check if virtual environment exists (cross-platform)."""
+    # Cross-platform venv paths
+    if IS_WINDOWS:
+        venv_python = Path(".venv/Scripts/python.exe")
+        venv_alt = Path(".venv/Scripts/python")
+    else:
+        venv_python = Path(".venv/bin/python")
+        venv_alt = Path(".venv/bin/python3")
 
+    # Check primary path
     if venv_python.exists() and venv_python.is_file():
         logger.info(f"✅ Virtual environment: {venv_python.absolute()}")
         return True, str(venv_python.absolute())
 
+    # Check alternate path
+    if venv_alt.exists() and venv_alt.is_file():
+        logger.info(f"✅ Virtual environment: {venv_alt.absolute()}")
+        return True, str(venv_alt.absolute())
+
     logger.error(f"❌ Virtual environment not found: {venv_python}")
-    logger.error(
-        "   Run: python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt"
-    )
+    if IS_WINDOWS:
+        logger.error("   Run: python -m venv .venv && .venv\\Scripts\\activate && pip install -r requirements.txt")
+    else:
+        logger.error("   Run: python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt")
     return False, ""
 
 
@@ -127,24 +152,35 @@ def ensure_settings_json(vscode_dir: Path) -> Tuple[bool, Path]:
 
 
 def inject_mcp_config(settings_path: Path) -> Tuple[bool, Dict]:
-    """Inject MCP configuration into .vscode/settings.json."""
+    """Inject cross-platform MCP configuration into .vscode/settings.json.
+    
+    MCP Architecture (Phase 53 - Pylance-Style):
+    - VS Code auto-starts MCP server when Copilot invokes cortex_* tools
+    - Uses stdio transport (stdin/stdout JSON-RPC 2.0)
+    - NO manual 'python -m cortex.mcp.server' required
+    - Cross-platform: Uses ${workspaceFolder} for portability
+    """
     try:
         # Read current settings
         current = json.loads(settings_path.read_text()) if settings_path.exists() else {}
 
-        # Get workspace root
-        workspace_root = Path.cwd()
+        # Cross-platform Python path using VS Code variable
+        # ${workspaceFolder} is resolved by VS Code at runtime
+        if IS_WINDOWS:
+            python_path = "${workspaceFolder}/.venv/Scripts/python.exe"
+        else:
+            python_path = "${workspaceFolder}/.venv/bin/python"
 
-        # MCP configuration
+        # MCP configuration (Pylance-style: auto-started by VS Code)
         mcp_config = {
             "cortex": {
-                "command": f"{workspace_root}/.venv/bin/python",
+                "command": python_path,
                 "args": ["-m", "cortex.mcp"],
                 "env": {
                     "CORTEX_ENV": "development",
-                    "CORTEX_MCP_SERVER": "true",
-                    "PYTHONPATH": str(workspace_root),
-                    "PATH": f"{workspace_root}/.venv/bin:$PATH",
+                    "CORTEX_MCP_ENABLED": "true",
+                    "PYTHONPATH": "${workspaceFolder}",
+                    "CORTEX_WORKSPACE": "${workspaceFolder}"
                 },
             }
         }
@@ -191,16 +227,24 @@ def display_completion_message():
     print("🔌 CORTEX MCP INTEGRATION SETUP COMPLETE")
     print("=" * 80)
     print("\n✅ Configuration Status: SUCCESS\n")
+    print("MCP Architecture (Pylance-Style):")
+    print("  • MCP runs locally within VS Code (like Pylance)")
+    print("  • Auto-started when Copilot Chat invokes cortex_* tools")
+    print("  • Uses stdio transport (stdin/stdout JSON-RPC)")
+    print("  • NO manual server startup required\n")
     print("What was configured:")
     print("  ✅ .vscode/settings.json updated with cortex MCP server")
-    print("  ✅ Python interpreter: ${workspaceFolder}/.venv/bin/python")
-    print("  ✅ MCP module: cortex.mcp ready")
+    if IS_WINDOWS:
+        print("  ✅ Python: ${workspaceFolder}/.venv/Scripts/python.exe")
+    else:
+        print("  ✅ Python: ${workspaceFolder}/.venv/bin/python")
+    print("  ✅ MCP module: cortex.mcp (stdio transport)")
     print("  ✅ Environment variables configured")
-    print("  ✅ Server startup verification passed\n")
+    print("  ✅ Cross-platform: Works on macOS/Windows/Linux\n")
     print("NEXT STEP:")
-    print("⚡ **Restart Copilot for changes to take effect**\n")
+    print("⚡ **Restart VS Code for changes to take effect**\n")
     print("In VS Code:")
-    print("  1. Command Palette (Cmd+Shift+P)")
+    print("  1. Command Palette (Cmd+Shift+P / Ctrl+Shift+P)")
     print("  2. Type: Developer: Reload Window")
     print("  3. Press Enter\n")
     print("Available Tools After Restart:")
@@ -214,6 +258,8 @@ def display_completion_message():
     print("  • cortex_plan_setup (Pre-execution hook)")
     print("  • cortex_plan_teardown (Post-execution hook)")
     print("  • cortex_plan_sync (Dashboard sync)\n")
+    print("NOTE: NO 'python -m cortex.mcp.server' needed!")
+    print("      VS Code auto-starts MCP when Copilot invokes tools.\n")
     print("Setup Log: .cortex/setup.log")
     print("=" * 80 + "\n")
 

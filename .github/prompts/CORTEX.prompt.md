@@ -436,9 +436,11 @@ result = mcp_tool.execute(parameters)
 
 ---
 
-## 🌐 MCP-FIRST ARCHITECTURE
+## 🌐 MCP-FIRST ARCHITECTURE (PYLANCE-STYLE)
 
 **CORTEX = SaaS behind MCP server.** Every capability is MCP-exposed.
+**Architecture:** MCP runs **locally within VS Code** (like Pylance).
+**Key:** VS Code auto-starts MCP when Copilot Chat invokes cortex_* tools.
 
 ### 🚨 MCP PRE-FLIGHT CHECK (MANDATORY)
 
@@ -448,12 +450,11 @@ result = mcp_tool.execute(parameters)
    ```
    Required tools: cortex_process_request, cortex_lens_analyze  # Updated Phase 37
    ```
-   If missing → STOP and instruct: "Start MCP: python -m cortex.mcp.server"
-   ```
+   If missing → STOP and instruct: "Run setup: python .cortex/setup-mcp.py, then reload VS Code"
 
 2. **NEVER Fallback to Direct Editing:**
    - ❌ FORBIDDEN: "MCP unavailable, editing files directly"
-   - ✅ REQUIRED: "MCP unavailable. Please start server first."
+   - ✅ REQUIRED: "MCP unavailable. Run setup script first."
 
 3. **Intent Classification:**
    - IMPLEMENT/FIX/REFACTOR → **REQUIRES MCP** (no exceptions)

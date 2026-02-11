@@ -129,10 +129,14 @@ Reference: .github/prompts/MCP-SETUP-GUIDE.md
 
 ---
 
-## MCP Pre-Flight Validation (LEGACY - DEPRECATED)
-Required: python -m cortex.mcp.server
-Cannot proceed with {intent} operations without MCP
-```
+## MCP Architecture (Phase 53 - Pylance-Style)
+
+**Key Insight:** MCP runs **locally within VS Code** (like Pylance).
+- VS Code auto-starts MCP when Copilot Chat invokes cortex_* tools
+- Uses stdio transport (stdin/stdout JSON-RPC 2.0)
+- NO manual server startup required
+
+**Setup:** Run `python .cortex/setup-mcp.py` and reload VS Code
 
 ---
 

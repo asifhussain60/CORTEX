@@ -533,25 +533,28 @@ if "github.copilot.chat.mcpServers" in settings:
 ```
 ❌ CORTEX Session Blocked: MCP Not Available
 
+Architecture: Pylance-Style (VS Code auto-starts MCP)
+Issue: MCP configuration not found or VS Code needs reload
+
 Status:
   - Tool Registry: No cortex_* tools found
   - Environment: CORTEX_MCP_ENABLED not set
   - Configuration: .vscode/settings.json missing/incomplete
 
-Available Options:
+Resolution Steps:
 
-A) AUTO-SETUP (Recommended):
+STEP 1: Run Setup Script (Cross-Platform)
    python .cortex/setup-mcp.py
 
-B) Manual Configuration:
-   1. Edit .vscode/settings.json
-   2. Add cortex MCP server config
-   3. Restart VS Code
-   4. Check .cortex/setup.log
+STEP 2: Reload VS Code
+   Command Palette → Developer: Reload Window
 
-C) Start MCP Server:
-   python -m cortex.mcp
-   (then restart VS Code)
+STEP 3: Verify MCP Active
+   Check: .cortex/setup.log for "✅ SETUP COMPLETE"
+
+NOTE: MCP uses Pylance-style architecture (auto-started by VS Code).
+      NO manual 'python -m cortex.mcp.server' needed!
+      VS Code spawns MCP process when Copilot invokes cortex_* tools.
 
 ⚠️ Note: CORTEX enforces MCP-FIRST (no fallback to direct file ops)
 Reference: .github/prompts/MCP-SETUP-GUIDE.md

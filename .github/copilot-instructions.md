@@ -1,13 +1,39 @@
 # CORTEX Copilot Instructions
-**Version:** 7.7 | **Updated:** 2026-02-08 | **Authority:** MCP-First SaaS Architecture | **Silent Autonomous:** ✅ | **Visual Progress:** ASCII Bars | **Session Continuity:** Phase Discovery Protocol ✅ | **MCP P0 Checks:** ✅ MANDATORY
+**Version:** 7.8 | **Updated:** 2026-02-10 | **Authority:** MCP-First SaaS Architecture | **Silent Autonomous:** ✅ | **Visual Progress:** ASCII Bars | **Session Continuity:** Phase Discovery Protocol ✅ | **MCP P0 Checks:** ✅ MANDATORY
 
 ---
 
-## 🚨 MCP ACTIVATION & AVAILABILITY (P0 - CRITICAL)
+## 🚨 MCP ARCHITECTURE: PYLANCE-STYLE (P0 - CRITICAL)
 
-**Authority:** CORE-049 + CORE-030 + MCP-FIRST + MCP-GATE  
+**Authority:** CORE-049 + CORE-030 + MCP-FIRST + MCP-GATE + Phase 53  
+**Architecture:** MCP runs **locally within VS Code** (like Pylance)  
 **Enforcement:** BLOCKING — Every session MUST validate MCP availability  
-**Status:** P0 CRITICAL — Production cannot proceed without MCP
+**Key Insight:** NO manual server startup required — VS Code auto-starts MCP
+
+### How MCP Works (Pylance-Style Architecture)
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    VS Code                                  │
+│  ┌─────────────────┐    ┌────────────────────────────────┐  │
+│  │  Copilot Chat   │───▶│  MCP Server (Auto-Started)     │  │
+│  │                 │    │  • stdio transport             │  │
+│  │  User: /impl    │◀───│  • JSON-RPC 2.0                │  │
+│  │                 │    │  • python -m cortex.mcp        │  │
+│  └─────────────────┘    └────────────────────────────────┘  │
+│                                    │                        │
+│                                    ▼                        │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │            cortex_* Tools                            │   │
+│  │  • cortex_process_request  • cortex_lens_analyze    │   │
+│  │  • cortex_challenge        • cortex_detect_duplicates│   │
+│  │  • cortex_plan_execute_autonomous                    │   │
+│  └─────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+
+❌ OLD (Wrong): User manually runs "python -m cortex.mcp.server"
+✅ NEW (Correct): VS Code auto-starts MCP when Copilot invokes tools
+```
 
 ### Session Start: MCP Pre-Flight Check (MANDATORY)
 
@@ -17,7 +43,7 @@
 # Step 0: MCP Activation Pre-Flight (before any user request processing)
 print("🔧 CORTEX Session: MCP Activation Check...")
 
-# Check 1: MCP Tools Available
+# Check 1: MCP Tools Available (VS Code should auto-provide them)
 mcp_tools = ["cortex_process_request", "cortex_lens_analyze", "cortex_challenge"]
 available = check_tools_in_copilot_registry(mcp_tools)
 
@@ -25,13 +51,15 @@ if not available:
     print("""
     ❌ CRITICAL: MCP tools not available in Copilot Chat
     
-    MCP Server Status: NOT REGISTERED
+    MCP Architecture: Pylance-Style (auto-started by VS Code)
     
     Actions Required:
-    1. Ensure MCP server running: python -m cortex.mcp
-    2. Verify .vscode/settings.json has cortex MCP configuration
-    3. Restart VS Code: Command Palette → Developer: Reload Window
-    4. Check .cortex/setup.log for configuration details
+    1. Run setup script: python .cortex/setup-mcp.py
+    2. Restart VS Code: Command Palette → Developer: Reload Window
+    3. Check .cortex/setup.log for configuration details
+    
+    NOTE: NO manual 'python -m cortex.mcp.server' needed!
+          VS Code auto-starts MCP when Copilot invokes tools.
     
     ⚠️ CORTEX cannot proceed without MCP tools.
     No fallback to direct file operations allowed (CORE-049).
@@ -62,7 +90,7 @@ else:
     print("ℹ️ INFO: Running MCP setup for first time...")
     run(".cortex/setup-mcp.py")
 
-print("✅ MCP Activation: READY")
+print("✅ MCP Activation: READY (Pylance-style, auto-started)")
 ```
 
 ### P0 Check Matrix (BLOCKING)
@@ -123,9 +151,10 @@ def verify_mcp_availability() -> Tuple[bool, str]:
 
 **When MCP Available:**
 ```
-🟢 CORTEX Session Ready
+🟢 CORTEX Session Ready (Pylance-Style MCP)
 ✅ MCP Tools: cortex_process_request (10 tools total)
 ✅ Configuration: .vscode/settings.json
+✅ Architecture: Auto-started by VS Code (no manual server)
 ✅ Python: 3.9.6
 ✅ Setup Log: Last successful at 2026-02-08 14:40
 
@@ -136,25 +165,27 @@ Proceeding with full CORTEX capabilities...
 ```
 ❌ CORTEX Session Blocked: MCP Not Available
 
-Available Detection Methods:
+Architecture: Pylance-Style (VS Code auto-starts MCP)
+Issue: MCP configuration not found or VS Code needs reload
+
+Detection Results:
   ❌ Method 1: Tool Registry - No cortex_* tools found
   ❌ Method 2: Environment - CORTEX_MCP_ENABLED not set
   ❌ Method 3: Configuration - .vscode/settings.json incomplete
 
-Resolution (Choose One):
+Resolution Steps:
 
-OPTION A: Auto-Setup (Recommended)
+STEP 1: Run Setup Script (Cross-Platform)
   python .cortex/setup-mcp.py
 
-OPTION B: Manual Configuration
-  1. Edit .vscode/settings.json
-  2. Add cortex MCP server config
-  3. Restart VS Code: Developer: Reload Window
-  4. Check .cortex/setup.log
+STEP 2: Reload VS Code
+  Command Palette → Developer: Reload Window
 
-OPTION C: Start MCP Server
-  python -m cortex.mcp
-  (then restart VS Code)
+STEP 3: Verify MCP Active
+  Check: .cortex/setup.log for "✅ SETUP COMPLETE"
+
+NOTE: NO 'python -m cortex.mcp.server' needed!
+      VS Code auto-starts MCP when Copilot invokes tools.
 
 Reference: .github/prompts/MCP-SETUP-GUIDE.md
 ```
@@ -492,19 +523,18 @@ if not result.passed:
     STOP ❌
     Display:
     """
-    ❌ MCP Server Required
+    ❌ MCP Tools Required (Pylance-Style Architecture)
     
     Intent: {intent}
-    Status: MCP tools not available
+    Status: MCP tools not available in Copilot Chat
     
     Resolution Steps:
-    1. Start MCP Server:
-       python -m cortex.mcp.server
+    1. Run setup script: python .cortex/setup-mcp.py
+    2. Reload VS Code: Command Palette → Developer: Reload Window
+    3. Verify: Check .cortex/setup.log for "✅ SETUP COMPLETE"
     
-    2. Verify Server Running:
-       curl http://localhost:8000/health
-    
-    3. Restart Copilot session
+    NOTE: MCP runs locally like Pylance (NO manual server startup)
+    VS Code auto-starts MCP when Copilot invokes cortex_* tools.
     
     CORTEX operates at ONE quality level: Production.
     Fix infrastructure. No bypasses allowed.
@@ -536,8 +566,8 @@ if result.passed:
 ❌ "MCP not available, so I'll just edit files directly" → **NEVER ALLOWED**
 ❌ "Let me try a simpler approach" → **QUALITY DEGRADATION BLOCKED**
 ❌ "Skip tests to save time" → **CORE-008 VIOLATION**
-✅ "MCP not available. Please start MCP server first." → **CORRECT**
-✅ "Fix infrastructure, then retry" → **CORRECT**
+✅ "MCP not available. Run setup: python .cortex/setup-mcp.py" → **CORRECT**
+✅ "Reload VS Code then retry" → **CORRECT**
 
 ---
 
@@ -633,10 +663,11 @@ if tool in ALLOWED_TOOLS_FOR_INTENT[intent]:
 2. Invoke `cortex_process_request` with same parameters
 3. Follow TDD workflow (tests before code)
 
-**Command:**
+**Setup MCP (if not configured):**
 ```bash
-# Start MCP server if not running
-python -m cortex.mcp.server
+# Run setup script (cross-platform)
+python .cortex/setup-mcp.py
+# Then reload VS Code: Command Palette → Developer: Reload Window
 ```
 
 **MCP Tool Usage:**
@@ -656,12 +687,20 @@ cortex_process_request(
 
 **CRITICAL:** Execute MCP availability check at session start and before IMPLEMENT/FIX/REFACTOR operations.
 
+**Architecture Note (Phase 53):** MCP runs locally within VS Code (like Pylance). 
+VS Code auto-starts the MCP server via `python -m cortex.mcp` when Copilot invokes tools.
+No manual server startup is required.
+
 ### Detection Pattern 1: Tool Availability Query
 
 ```python
 def is_mcp_available() -> bool:
     """
     Check if MCP tools are available in current session.
+    
+    MCP Architecture: Pylance-style (auto-started by VS Code)
+    - Tools registered via .vscode/settings.json github.copilot.chat.mcpServers
+    - VS Code spawns MCP process when Copilot invokes cortex_* tools
     
     Returns:
         True if MCP tools available, False otherwise
@@ -679,9 +718,9 @@ def is_mcp_available() -> bool:
 
 # Usage in pre-flight check
 if not is_mcp_available():
-    print("❌ MCP Server not running")
-    print("Start: python -m cortex.mcp.server")
-    print("Port: 8000 (default)")
+    print("❌ MCP tools not available in Copilot Chat")
+    print("Run setup: python .cortex/setup-mcp.py")
+    print("Then reload VS Code")
     return STOP_EXECUTION
 ```
 
@@ -776,11 +815,9 @@ is_available, message = verify_mcp_environment(intent)
 if not is_available:
     print(f"❌ {message}")
     print("")
-    print("Start MCP Server:")
-    print("  python -m cortex.mcp.server")
-    print("")
-    print("Verify Running:")
-    print("  curl http://localhost:8000/health")
+    print("MCP runs locally in VS Code (like Pylance)")
+    print("Run setup: python .cortex/setup-mcp.py")
+    print("Then: Reload VS Code (Command Palette → Developer: Reload Window)")
     return STOP_EXECUTION
 ```
 
@@ -792,24 +829,24 @@ if not is_available:
 # SESSION INIT - Run automatically
 print("🔧 Initializing CORTEX session...")
 
-# Check MCP availability
+# Check MCP availability (Pylance-style: auto-started by VS Code)
 is_available, message = verify_mcp_environment("IMPLEMENT")
 
 if is_available:
-    print("✅ MCP Server: Available")
+    print("✅ MCP Tools: Available (Pylance-style)")
     print("✅ cortex_process_request: Ready")
     print("✅ cortex_lens_analyze: Ready")
     print("")
     print("🟢 CORTEX ready for operations")
 else:
-    print("⚠️ MCP Server: Not detected")
+    print("⚠️ MCP Tools: Not detected")
     print("")
     print("CORTEX will operate in READ-ONLY mode.")
     print("IMPLEMENT/FIX/REFACTOR operations blocked.")
     print("")
     print("To enable full functionality:")
-    print("  1. python -m cortex.mcp.server")
-    print("  2. Restart Copilot session")
+    print("  1. python .cortex/setup-mcp.py")
+    print("  2. Reload VS Code: Command Palette → Developer: Reload Window")
 ```
 
 ### Error Messages (User-Facing)
@@ -817,33 +854,30 @@ else:
 **When MCP unavailable for required intent:**
 
 ```markdown
-❌ **MCP Server Required**
+❌ **MCP Tools Required**
 
 **Intent:** {intent}
-**Status:** MCP tools not available
+**Status:** MCP tools not available in Copilot Chat
 **Impact:** Cannot proceed with {intent} operations
+
+**Architecture:** Pylance-Style (VS Code auto-starts MCP)
 
 **Resolution Steps:**
 
-1. **Start MCP Server:**
+1. **Run Setup Script (Cross-Platform):**
    ```bash
-   python -m cortex.mcp.server
+   python .cortex/setup-mcp.py
    ```
 
-2. **Verify Server Running:**
-   ```bash
-   curl http://localhost:8000/health
-   # Expected: {"status": "healthy"}
-   ```
+2. **Reload VS Code:**
+   - Command Palette → Developer: Reload Window
 
-3. **Check Environment:**
-   ```bash
-   echo $MCP_SERVER_PORT  # Should show 8000
-   ```
+3. **Verify MCP Configured:**
+   - Check `.cortex/setup.log` for "✅ SETUP COMPLETE"
+   - Verify `.vscode/settings.json` has `github.copilot.chat.mcpServers`
 
-4. **Restart Copilot:**
-   - Reload VS Code window
-   - Or restart Copilot extension
+**Note:** MCP uses Pylance-style architecture (auto-started by VS Code).
+No manual `python -m cortex.mcp.server` needed!
 
 **Alternative (Temporary):**
 For analysis-only operations, you can continue without MCP.
@@ -999,10 +1033,11 @@ if tool in ALLOWED_TOOLS_FOR_INTENT[intent]:
 2. Invoke `cortex_process_request` with same parameters
 3. Follow TDD workflow (tests before code)
 
-**Command:**
+**Setup MCP (if not configured):**
 ```bash
-# Start MCP server if not running
-python -m cortex.mcp.server
+# Run setup script (cross-platform)
+python .cortex/setup-mcp.py
+# Then reload VS Code: Command Palette → Developer: Reload Window
 ```
 
 **MCP Tool Usage:**

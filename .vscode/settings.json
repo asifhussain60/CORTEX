@@ -32,19 +32,20 @@
     "**/*-SUMMARY.md": true,
     "**/*-REPORT.md": true
   },
-  "// CORTEX MCP Server Configuration (Local Development)": null,
+  "// CORTEX MCP Server Configuration (Auto-Started by VS Code - Like Pylance)": null,
+  "// MCP runs locally via stdio transport, no manual server startup needed": null,
   "github.copilot.chat.mcpServers": {
     "cortex": {
-      "command": "D:/PROJECTS/CORTEX/.venv/bin/python",
+      "command": "${workspaceFolder}/.venv/bin/python",
       "args": [
         "-m",
         "cortex.mcp"
       ],
       "env": {
         "CORTEX_ENV": "development",
-        "CORTEX_MCP_SERVER": "true",
-        "PYTHONPATH": "D:/PROJECTS/CORTEX",
-        "PATH": "D:/PROJECTS/CORTEX/.venv/bin:$PATH"
+        "CORTEX_MCP_ENABLED": "true",
+        "PYTHONPATH": "${workspaceFolder}",
+        "CORTEX_WORKSPACE": "${workspaceFolder}"
       }
     }
   },
