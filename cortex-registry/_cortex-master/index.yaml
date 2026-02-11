@@ -1,8 +1,8 @@
-version: '1.6'
+version: '1.7'
 registry_name: _cortex-master
 description: CORTEX self-development planning with unified remediation tracking and wave-based autonomous execution
-last_updated: '2026-02-11T18:30:00.000000Z'
-revision: 'Master Remediation Plan v2.1: Wave-based prioritization for autonomous silent execution - 2 phases completed (71, 76)'
+last_updated: '2026-02-11T19:15:00.000000Z'
+revision: 'Master Remediation Plan v2.2: Phase 81 Agent Architecture Holistic Redesign added - 2 phases completed (71, 76), 2 active (ENH-063, phase-81)'
 
 # ============================================================================
 # MASTER REMEDIATION PLAN (CONSOLIDATED)
@@ -132,6 +132,35 @@ active_phases:
       - cortex/orchestrators/support/debug_orchestrator.py (RACE CONDITION FIX)
       - tests/integration/ (CREDENTIALS CLEANUP)
       - cortex/*/*.py (STRUCTURED LOGGING)
+  
+  - id: phase-81
+    title: "Agent Architecture Holistic Redesign & Governance Gap Closure"
+    priority: P1
+    status: active
+    estimated_effort: "10 days"
+    roi_score: 92
+    confidence: 9.5
+    source: "chat01.md comprehensive analysis (2026-02-11)"
+    description: |
+      Capability-based agent clustering for extensibility + scalability.
+      Closes 2 critical gaps (META-AUDIT, PLAN sync). Implements collaboration
+      protocol, machine-readable agent metadata, and complete legacy cleanup.
+    impact: "HIGH - Eliminates 2 governance gaps, 60% token savings, multi-repo ready"
+    key_outcomes:
+      - "2 new agents: cortex-meta-auditor, cortex-master-plan-auditor"
+      - "All 11 core agents with machine-readable metadata"
+      - "IntentRouter capability-based routing (vs trigger-word)"
+      - "6 new MCP tools (meta-audit, plan-audit, wave execution)"
+      - "Agent collaboration protocol with Phase 49 CCL integration"
+      - "Legacy cleanup: wiring, tests, data, deprecated agents"
+    files:
+      - .github/agents/core/cortex-meta-auditor.md (NEW)
+      - .github/agents/core/cortex-master-plan-auditor.md (NEW)
+      - cortex/agents/metadata_parser.py (NEW)
+      - cortex/intent_router/capability_matcher.py (NEW)
+      - cortex/mcp/tools/meta_audit_tool.py (NEW)
+      - cortex/mcp/tools/audit_plan_tool.py (NEW)
+      - docs/architecture/MODE-AGENT-MAPPING.md (NEW)
   
   - id: ENH-064
     title: "LENS Intelligence Layer Separation"
