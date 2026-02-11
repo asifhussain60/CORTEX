@@ -34,11 +34,16 @@ class TestTieredLENSAnalyzer:
         """Test Tier 0 (fast) provides AST + git + comments."""
         analyzer = TieredLENSAnalyzer(repo_path=Path("."))
         
-        with patch.object(analyzer.lens_orchestrator, 'analyze_file') as mock_analyze:
+        # Mock the adapter function at the location it's used in the module
+        from cortex.brain.analysis import tiered_lens_analyzer
+        with patch.object(tiered_lens_analyzer, 'analyze_file_via_unified') as mock_analyze:
             mock_analyze.return_value = {
-                "git_analysis": {"commits": []},
-                "ast_analysis": {"functions": []},
-                "comment_analysis": {"todos": []}
+                "success": True,
+                "analysis": {
+                    "git_analysis": {"commits": []},
+                    "ast_analysis": {"functions": []},
+                    "comment_analysis": {"todos": []}
+                }
             }
             
             result = analyzer.analyze_tier_0(Path("test.py"))
