@@ -11,8 +11,8 @@ from pathlib import Path
 from typing import Any, Dict
 
 from cortex.mcp.server import Tool, ToolDefinition, ToolParameter
-from cortex.orchestrators.support.repository_onboarding_orchestrator import (
-    get_repository_onboarding_orchestrator,
+from cortex.orchestrators.support.orchestrator_factories import (
+    get_unified_onboarding_orchestrator,
 )
 from cortex_brain.onboarded_repos import ProfileStore
 
@@ -82,7 +82,7 @@ class RepositoryOnboardingTool(Tool):
             profile_store = ProfileStore()
 
         # Get orchestrator
-        orchestrator = get_repository_onboarding_orchestrator()
+        orchestrator = get_unified_onboarding_orchestrator()
 
         try:
             # Onboard repository
