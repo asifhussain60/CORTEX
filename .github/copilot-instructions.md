@@ -206,6 +206,221 @@ Reference: .github/prompts/MCP-SETUP-GUIDE.md
 
 ---
 
+## 🚨 NATIVE TOOL BYPASS PREVENTION (P0 - ENFORCEMENT LAYER)
+
+**Authority:** CORE-049 + MCP-FIRST + ENH-055 Phase 4  
+**Trigger:** BEFORE any native tool invocation  
+**Enforcement:** BLOCKING — Intent-based tool restriction matrix
+
+### Pre-Tool-Invocation Check (MANDATORY)
+
+**EXECUTE BEFORE EVERY TOOL CALL:**
+
+```python
+# Step 1: Classify user intent from context
+intent = classify_current_intent()  # Returns: IMPLEMENT|FIX|REFACTOR|ANALYZE|AUDIT|DESIGN
+
+# Step 2: Check if tool is allowed for this intent
+tool_name = get_current_tool()  # e.g., "create_file", "cortex_process_request"
+
+# Step 3: Validate against intent-tool matrix
+if intent in ["IMPLEMENT", "FIX", "REFACTOR"]:
+    # Check if attempting to use blocked native tools
+    blocked_tools = [
+        "create_file",
+        "replace_string_in_file",
+        "edit_files",
+        "run_in_terminal",  # Only for file operations
+        "edit_notebook_file",  # Only for code cells
+    ]
+    
+    if tool_name in blocked_tools:
+        # Check if targeting production code files (.py, .ts, .js, etc.)
+        if is_production_code_file(target_file):
+            DISPLAY_ERROR_AND_HALT(
+                f"""
+                ❌ NATIVE TOOL BYPASS BLOCKED
+                
+                Intent: {intent}
+                Tool: {tool_name}
+                File: {target_file}
+                Severity: P0 - CRITICAL
+                
+                REQUIRED ACTION:
+                Use MCP tool instead: cortex_process_request
+                
+                Example:
+                cortex_process_request(
+                    operation="{intent.lower()}",
+                    target="{target_file}",
+                    request="{user_request}",
+                    mode="TDD"
+                )
+                
+                WHY: MCP-FIRST architecture ensures:
+                ✅ TDD enforcement (CORE-008)
+                ✅ Security gates (ARCH-012)
+                ✅ Cross-layer validation (CORE-035)
+                ✅ Audit trail (AC markers)
+                ✅ Governance enforcement
+                
+                CORTEX operates at ONE quality level: Production.
+                No bypasses allowed.
+                """
+            )
+            HALT_EXECUTION
+            return
+
+# Step 4: If allowed, proceed
+if is_tool_allowed_for_intent(tool_name, intent):
+    proceed_with_tool_invocation()
+```
+
+### Intent-Based Tool Restriction Matrix
+
+**IMPLEMENT/FIX/REFACTOR Intents:**
+
+| Tool | Status | Replacement |
+|------|--------|-------------|
+| `create_file` | ❌ **BLOCKED** (for .py/.ts/.js files) | `cortex_process_request` |
+| `replace_string_in_file` | ❌ **BLOCKED** (for .py/.ts/.js files) | `cortex_process_request` |
+| `edit_files` | ❌ **BLOCKED** (for production code) | `cortex_process_request` |
+| `run_in_terminal` | ⚠️ **RESTRICTED** (file ops only) | `cortex_process_request` |
+| `edit_notebook_file` | ❌ **BLOCKED** (code cells) | `cortex_process_request` |
+| `read_file` | ✅ **ALLOWED** | Analysis only |
+| `semantic_search` | ✅ **ALLOWED** | Discovery only |
+| `grep_search` | ✅ **ALLOWED** | Analysis only |
+| `file_search` | ✅ **ALLOWED** | Discovery only |
+| `list_dir` | ✅ **ALLOWED** | Navigation only |
+| `cortex_process_request` | ✅ **REQUIRED** | ALL file modifications |
+| `cortex_lens_analyze` | ✅ **ALLOWED** | Code intelligence |
+| `cortex_validate_environment` | ✅ **REQUIRED** | Session start |
+| `cortex_get_session_rules` | ✅ **ALLOWED** | Dynamic rule loading |
+
+**ANALYZE/AUDIT Intents:**
+
+| Tool | Status | Purpose |
+|------|--------|---------|
+| All read-only tools | ✅ **ALLOWED** | Analysis operations |
+| `cortex_lens_analyze` | ✅ **PREFERRED** | Primary analysis tool |
+| `cortex_audit` | ✅ **REQUIRED** | Audit operations |
+| Native write tools | ⚠️ **WARN** | Prefer MCP tools |
+
+**DESIGN Intent:**
+
+| Tool | Status | Purpose |
+|------|--------|---------|
+| Read-only tools | ✅ **ALLOWED** | Discovery and analysis |
+| `create_file` | ✅ **ALLOWED** | .github/agents/, .github/prompts/ ONLY |
+| `replace_string_in_file` | ✅ **ALLOWED** | .github/agents/, .github/prompts/ ONLY |
+| Production code tools | ❌ **BLOCKED** | Use `cortex_process_request` |
+
+### Production Code File Detection
+
+```python
+def is_production_code_file(file_path: str) -> bool:
+    """
+    Determine if file is production code requiring MCP routing.
+    
+    Args:
+        file_path: Path to file being modified
+    
+    Returns:
+        True if file is production code, False otherwise
+    """
+    production_extensions = {
+        ".py",   # Python
+        ".ts",   # TypeScript
+        ".js",   # JavaScript
+        ".tsx",  # TypeScript React
+        ".jsx",  # JavaScript React
+        ".java", # Java
+        ".cs",   # C#
+        ".go",   # Go
+        ".rs",   # Rust
+    }
+    
+    # Check file extension
+    for ext in production_extensions:
+        if file_path.endswith(ext):
+            # Exempt config/docs areas
+            if not any(x in file_path for x in [".github/", "docs/", "tests/"]):
+                return True
+    
+    return False
+```
+
+### Bypass Attempt Logging
+
+**All bypass attempts are logged:**
+
+```python
+# Log bypass attempt for audit trail
+log_bypass_attempt(
+    timestamp=datetime.now(),
+    intent=intent,
+    tool=tool_name,
+    file=target_file,
+    action="BLOCKED",
+    session_id=get_session_id()
+)
+
+# Increment bypass counter (for governance reporting)
+increment_metric("cortex_bypass_attempts_blocked_total")
+```
+
+### Error Response Template
+
+**When bypass blocked:**
+
+```markdown
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+❌ NATIVE TOOL BYPASS BLOCKED (MCP-FIRST VIOLATION)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**Intent:** {intent}
+**Tool:** {tool_name}
+**File:** {target_file}
+**Severity:** P0 - CRITICAL
+
+**Why Blocked:**
+MCP-FIRST architecture requires all IMPLEMENT/FIX/REFACTOR operations
+to route through MCP tools for:
+✅ TDD enforcement (tests before code)
+✅ Security validation (OWASP checks)
+✅ Cross-layer validation (CORE-035)
+✅ Audit trail (AC markers)
+✅ Governance enforcement (7 agents)
+
+**Required Action:**
+
+Use MCP tool instead:
+```python
+cortex_process_request(
+    operation="{intent.lower()}",
+    target="{target_file}",
+    request="{user_request}",
+    mode="TDD"
+)
+```
+
+**Setup MCP (if not configured):**
+```bash
+python .cortex/setup-mcp.py
+# Then: Reload VS Code (Command Palette → Developer: Reload Window)
+```
+
+**Reference:**
+- .github/prompts/MCP-SETUP-GUIDE.md
+- .github/copilot-instructions.md § NATIVE TOOL BYPASS PREVENTION
+
+CORTEX operates at ONE quality level: Production.
+Fix infrastructure. No bypasses allowed.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+---
+
 ## 🤖 SILENT AUTONOMOUS EXECUTION (DEFAULT)
 
 **PHASE 49 INTEGRATION:** Context Crystallization Layer now active for all requests
