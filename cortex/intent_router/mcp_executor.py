@@ -1,4 +1,5 @@
 # AC_START: AC-PHASE81-S3-P3-001
+# AC_ENHANCED: AC-PHASE81-S3-P4-001 (Metadata-driven tool discovery)
 """
 MCP Tool Executor for Agent Collaboration Workflows
 
@@ -7,13 +8,17 @@ tool discovery and error handling.
 
 Module: cortex/intent_router/mcp_executor.py
 Authority: Phase 81 S3 Part 3 - MCP Tool Integration
-Version: 1.0
+         + Phase 81 S3 Part 4 - Metadata-Driven Discovery
+Version: 2.0 (with metadata integration)
 """
 
-from typing import Optional, Dict, List, Any
+from typing import Optional, Dict, List, Any, TYPE_CHECKING
 from dataclasses import dataclass
 import logging
 from datetime import datetime
+
+if TYPE_CHECKING:
+    from cortex.intent_router.metadata_driven_discovery import MetadataDrivenDiscovery
 
 logger = logging.getLogger(__name__)
 
@@ -50,15 +55,20 @@ class MCPToolExecutor:
     Executes MCP tools on behalf of agents.
     
     Features:
-    - Metadata-driven tool discovery
+    - Metadata-driven tool discovery (Phase 81 S3 Part 4)
     - Parameter validation before execution
     - Error handling and retry logic
     - Execution result formatting
+    - Dynamic agent registration from metadata
     
     Example:
         >>> executor = MCPToolExecutor()
         >>> executor.register_tool_handler("cortex_process_request", handler_func)
         >>> result = executor.execute(req)
+        
+        >>> # Or with metadata discovery:
+        >>> executor.initialize_from_metadata(".github/agents/core")
+        >>> result = executor.execute(req)  # Tools auto-resolved from metadata
     """
     
     def __init__(self):
@@ -66,6 +76,7 @@ class MCPToolExecutor:
         self._tool_handlers: Dict[str, Any] = {}
         self._agent_tools: Dict[str, List[str]] = {}
         self._execution_history: List[MCPExecutionResult] = []
+        self._metadata_discovery: Optional['MetadataDrivenDiscovery'] = None
         logger.info("MCPToolExecutor initialized")
     
     def register_tool_handler(self, tool_name: str, handler: Any) -> None:
@@ -89,6 +100,37 @@ class MCPToolExecutor:
         """
         self._agent_tools[agent_id] = tools
         logger.debug(f"Agent tools registered: {agent_id} → {len(tools)} tools")
+    
+    def initialize_from_metadata(self, agents_dir: str = ".github/agents/core") -> int:
+        """
+        Initialize executor with metadata-driven tool discovery.
+        
+        Phase 81 S3 Part 4: Load agent metadata and register tools from YAML.
+        
+        Args:
+            agents_dir: Directory containing agent markdown files
+        
+        Returns:
+            Number of agents initialized
+        """
+        try:
+            from cortex.intent_router.metadata_driven_discovery import MetadataDrivenDiscovery
+            
+            self._metadata_discovery = MetadataDrivenDiscovery(agents_dir)
+            self._metadata_discovery.initialize()
+            
+            # Register all agents and tools from metadata
+            registered = self._metadata_discovery.register_with_executor(self)
+            
+            logger.info(f"Metadata-driven initialization complete: {registered} agents")
+            return registered
+            
+        except ImportError:
+            logger.warning("MetadataDrivenDiscovery not available, using manual registration")
+            return 0
+        except Exception as e:
+            logger.error(f"Failed to initialize from metadata: {e}")
+            return 0
     
     def execute(self, request: MCPExecutionRequest) -> MCPExecutionResult:
         """
