@@ -73,6 +73,13 @@ PHASE-*-COMPLETION.md
 ENH-*-PHASE-*-COMPLETION.md
 ARCHITECT-*-SUMMARY.md
 
+# EXCEPTION: Wave 8+ Master Plan Files (NOT auto-generated, governance artifacts)
+# These are deliberate CORTEX master plan files that track self-development
+# They are tracked across machines for multi-machine development
+!cortex-registry/_cortex-master/WAVE-*.md
+!cortex-registry/_cortex-master/WAVE-*.yaml
+!cortex-registry/_cortex-master/index.yaml
+
 # VS Code Copilot Chat Sessions (keep in _workspaces/.chats/ only)
 _workspaces/*-COMPLETION.md
 _workspaces/*-SUMMARY.md
