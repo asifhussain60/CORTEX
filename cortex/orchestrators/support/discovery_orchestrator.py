@@ -1,6 +1,14 @@
 """
 DiscoveryOrchestrator - Infrastructure Topology Discovery
 
+⚠️  DEPRECATED: This orchestrator is being consolidated.
+Use `cortex.orchestrators.support.unified_discovery_orchestrator.UnifiedDiscoveryOrchestrator` instead.
+
+Migration Timeline:
+- Phase 45-46: Active deprecation with import redirects
+- Phase 47-48: Wrapper-only mode (functionality moved to unified)
+- Phase 49+: Removal
+
 Unified orchestrator for discovering infrastructure topology including:
 - Configuration files (web.config, appsettings.json, docker-compose, etc.)
 - Database connections (ORMs, migrations, schemas)
@@ -11,7 +19,7 @@ Unified orchestrator for discovering infrastructure topology including:
 
 Task: DISC-001
 Authority: PHASE-9-DISCOVERY-ORCHESTRATOR.yaml
-Status: Phase 9.1 - Stage 1
+Status: Phase 9.1 - Stage 1 (DEPRECATED - TRACK-4-PHASE-1)
 
 Governance:
 - CORE-008: TDD (tests written first)
@@ -81,6 +89,9 @@ class DiscoveryOrchestrator:
     """
     Unified infrastructure topology discovery orchestrator.
 
+    ⚠️  DEPRECATED (TRACK-4-PHASE-1): Use UnifiedDiscoveryOrchestrator instead.
+    Migration: cortex.orchestrators.support.unified_discovery_orchestrator.UnifiedDiscoveryOrchestrator
+
     Coordinates multiple discovery plugins to build complete topology map
     of application infrastructure. Supports plugin-based architecture for
     extensibility, caching for performance, and parallel execution.
@@ -115,6 +126,12 @@ class DiscoveryOrchestrator:
         audit_logger: Audit trail logger
     """
 
+    __deprecated__ = True
+    __deprecation_message__ = (
+        "DiscoveryOrchestrator is deprecated (TRACK-4-PHASE-1). "
+        "Use UnifiedDiscoveryOrchestrator instead."
+    )
+
     def __init__(
         self,
         repo_path: Path,
@@ -125,12 +142,23 @@ class DiscoveryOrchestrator:
         """
         Initialize DiscoveryOrchestrator.
 
+        ⚠️  DEPRECATED: Use UnifiedDiscoveryOrchestrator instead.
+
         Args:
             repo_path: Path to repository to analyze
             enable_cache: Enable caching of discovery results
             parallel_execution: Run plugins in parallel
             max_workers: Maximum parallel workers
+
+        AC_START: AC-TRACK4-DEPRECATION-DISCOVERY-001
         """
+        # Log deprecation warning
+        logging.warning(
+            "DiscoveryOrchestrator is deprecated (TRACK-4-PHASE-1). "
+            "Use UnifiedDiscoveryOrchestrator instead. "
+            "Migration timeline: Phase 45-46 (active), Phase 47-48 (wrapper), Phase 49+ (removal)"
+        )
+
         self.repo_path = repo_path
         self.cache_enabled = enable_cache
         self.parallel_execution = parallel_execution

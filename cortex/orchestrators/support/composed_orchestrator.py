@@ -1,4 +1,15 @@
-"""ComposedOrchestrator - Phase 3.3. All 12 AC-fixes (SUP-CORE-001-012)."""
+"""
+ComposedOrchestrator - Phase 3.3. All 12 AC-fixes (SUP-CORE-001-012).
+
+⚠️  DEPRECATED: This orchestrator has low usage and limited value.
+Consider migration to unified implementations or direct composition pattern.
+
+Migration Timeline:
+- Phase 45-46: Mark as deprecated, assess dependencies
+- Phase 47+: Remove if no active usage found
+
+Status: Low priority for consolidation (minimal dependencies)
+"""
 import hashlib
 import logging
 import threading

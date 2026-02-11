@@ -1,11 +1,19 @@
 """
 SetupOrchestrator - Phase 3.2 Enhanced Implementation
 
+⚠️  DEPRECATED: This orchestrator is being consolidated.
+Use `cortex.orchestrators.support.unified_onboarding_orchestrator.UnifiedOnboardingOrchestrator` instead.
+
+Migration Timeline:
+- Phase 45-46: Active deprecation with import redirects
+- Phase 47-48: Wrapper-only mode (functionality moved to unified)
+- Phase 49+: Removal
+
 System initialization and environment setup orchestration.
 Implements all 12 AC-fixes (SUP-CORE-001-012) for production-grade operation.
 Enhanced with progress feedback for long-running operations.
 
-AC-Fixes: SUP-CORE-001 through SUP-CORE-012 (all implemented)
+AC-Fixes: SUP-CORE-001 through SUP-CORE-012 (all implemented) - DEPRECATED TRACK-4-PHASE-1
 Status: Production Ready (9.8/10)
 """
 

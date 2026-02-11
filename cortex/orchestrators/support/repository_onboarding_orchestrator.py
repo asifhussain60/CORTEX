@@ -1,6 +1,14 @@
 """
 Repository Onboarding Orchestrator (ENHANCED v2.0).
 
+⚠️  DEPRECATED: This orchestrator is being consolidated.
+Use `cortex.orchestrators.support.unified_onboarding_orchestrator.UnifiedOnboardingOrchestrator` instead.
+
+Migration Timeline:
+- Phase 45-46: Active deprecation with import redirects
+- Phase 47-48: Wrapper-only mode (functionality moved to unified)
+- Phase 49+: Removal
+
 Universal repository onboarding with comprehensive analysis:
 - `/CORTEX onboard {path}` command
 - Multi-layer analysis (code, config, DB, API)
@@ -11,7 +19,7 @@ Universal repository onboarding with comprehensive analysis:
 - Landing page hub with repository tiles
 - Collapsible file references and evidence tracking
 
-AC-ID: AC-UNIVERSAL-ONBOARD-001
+AC-ID: AC-UNIVERSAL-ONBOARD-001 (DEPRECATED - TRACK-4-PHASE-1)
 Authority: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings)
 """
 
