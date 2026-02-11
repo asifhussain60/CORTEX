@@ -1,17 +1,24 @@
 """
-Environment Integrity Agent - Phase 51 Stage 2
+Environment Integrity Agent - Phase 51 Stage 2 + Phase 50 MCP Policy
 
 8th enforcement agent for EnforcementOrchestrator.
 Validates environment prerequisites before IMPLEMENT/FIX/REFACTOR operations.
 
-AC-ID: PHASE-51-S2-002
+Phase 50 Enhancement: MCP Policy Enforcement
+- Detects competing MCP servers (Pylance, GitKraken)
+- Enforces CORTEX-only MCP policy
+- Auto-runs setup script when needed
+
+AC-ID: PHASE-51-S2-002 + PHASE-50-MCPCLEANUP-004
 """
 
 import os
 import socket
 import subprocess
-from dataclasses import dataclass
-from typing import List, Optional
+import json
+import re
+from dataclasses import dataclass, field
+from typing import List, Optional, Dict, Any
 from pathlib import Path
 
 from cortex.models.canonical_enums import IntentType
@@ -26,17 +33,23 @@ class MCPAvailability:
 
 
 @dataclass
+class MCPPolicyResult:
+    """MCP policy validation result (Phase 50)."""
+    compliant: bool
+    competing_servers: List[str] = field(default_factory=list)
+    cortex_configured: bool = False
+    action: Optional[str] = None
+
+
+@dataclass
 class ValidationResult:
     """Environment validation result."""
     passed: bool
     severity: str  # 'PASSED', 'WARNING', 'CRITICAL'
     reason: str
     action: str
-    missing_packages: List[str] = None
-    
-    def __post_init__(self):
-        if self.missing_packages is None:
-            self.missing_packages = []
+    missing_packages: List[str] = field(default_factory=list)
+    mcp_policy: Optional[MCPPolicyResult] = None
 
 
 class EnvironmentIntegrityAgent:
@@ -70,6 +83,8 @@ class EnvironmentIntegrityAgent:
         """
         Validate environment before operation.
         
+        Includes Phase 50 MCP policy check.
+        
         Args:
             intent: User intent type
             
@@ -85,6 +100,27 @@ class EnvironmentIntegrityAgent:
                 action='PROCEED'
             )
         
+        # Phase 50: Check MCP policy compliance FIRST
+        policy_result = self.check_mcp_policy()
+        
+        if not policy_result.compliant:
+            return ValidationResult(
+                passed=False,
+                severity='WARNING',
+                reason=f'MCP policy violation: competing servers detected ({", ".join(policy_result.competing_servers)})',
+                action='Run: python .cortex/setup-mcp.py --cleanup',
+                mcp_policy=policy_result
+            )
+        
+        if not policy_result.cortex_configured:
+            return ValidationResult(
+                passed=False,
+                severity='CRITICAL',
+                reason='CORTEX MCP not configured',
+                action='Run: python .cortex/setup-mcp.py',
+                mcp_policy=policy_result
+            )
+        
         # Check MCP availability
         mcp_status = self.check_mcp_availability()
         
@@ -93,16 +129,133 @@ class EnvironmentIntegrityAgent:
                 passed=False,
                 severity='CRITICAL',
                 reason=f'MCP Server unavailable (checked: {mcp_status.detection_method})',
-                action='BLOCKED: Start MCP server - python -m cortex.mcp.server'
+                action='BLOCKED: Reload VS Code - Command Palette → Developer: Reload Window',
+                mcp_policy=policy_result
             )
         
-        # MCP available
+        # MCP available and policy compliant
         return ValidationResult(
             passed=True,
             severity='PASSED',
-            reason=f'MCP available ({mcp_status.detection_method})',
-            action='PROCEED'
+            reason=f'MCP available ({mcp_status.detection_method}), CORTEX-only policy enforced',
+            action='PROCEED',
+            mcp_policy=policy_result
         )
+    
+    # =========================================================================
+    # AC_START: AC-PHASE50-MCPCLEANUP-004 - MCP Policy Check Integration
+    # =========================================================================
+    
+    def check_mcp_policy(self) -> MCPPolicyResult:
+        """
+        Check MCP policy compliance (Phase 50).
+        
+        Validates:
+        1. CORTEX MCP is configured
+        2. No competing MCP servers (Pylance, GitKraken, etc.)
+        
+        Returns:
+            MCPPolicyResult with compliance status
+        """
+        competing_servers: List[str] = []
+        cortex_configured = False
+        
+        # Check .vscode/settings.json
+        settings_path = Path('.vscode/settings.json')
+        if settings_path.exists():
+            try:
+                content = settings_path.read_text()
+                # Handle JSONC (JSON with comments)
+                content_clean = re.sub(r'//.*$', '', content, flags=re.MULTILINE)
+                content_clean = re.sub(r'/\*.*?\*/', '', content_clean, flags=re.DOTALL)
+                settings = json.loads(content_clean)
+                
+                mcp_servers = settings.get('github.copilot.chat.mcpServers', {})
+                
+                # Check for CORTEX
+                if 'cortex' in mcp_servers:
+                    cortex_configured = True
+                
+                # Check for competing servers
+                for server_name in mcp_servers:
+                    if server_name.lower() not in ['cortex']:
+                        competing_servers.append(f'{server_name} (settings.json)')
+                
+            except (json.JSONDecodeError, Exception):
+                pass  # Silently handle parse errors
+        
+        # Check .vscode/mcp.json
+        mcp_json_path = Path('.vscode/mcp.json')
+        if mcp_json_path.exists():
+            try:
+                mcp_config = json.loads(mcp_json_path.read_text())
+                servers = mcp_config.get('servers', {})
+                
+                # Check for CORTEX
+                if 'cortex' in servers:
+                    cortex_configured = True
+                
+                # Check for competing servers
+                for server_name in servers:
+                    if server_name.lower() not in ['cortex']:
+                        competing_servers.append(f'{server_name} (mcp.json)')
+                
+            except (json.JSONDecodeError, Exception):
+                pass  # Silently handle parse errors
+        
+        # Determine compliance
+        compliant = len(competing_servers) == 0
+        
+        # Determine action
+        if not cortex_configured:
+            action = 'Run: python .cortex/setup-mcp.py'
+        elif not compliant:
+            action = 'Run: python .cortex/setup-mcp.py --cleanup'
+        else:
+            action = None
+        
+        return MCPPolicyResult(
+            compliant=compliant,
+            competing_servers=competing_servers,
+            cortex_configured=cortex_configured,
+            action=action
+        )
+    
+    def run_mcp_setup(self, cleanup: bool = False) -> bool:
+        """
+        Run MCP setup script.
+        
+        Args:
+            cleanup: If True, run with --cleanup flag
+            
+        Returns:
+            True if setup successful
+        """
+        setup_script = Path('.cortex/setup-mcp.py')
+        
+        if not setup_script.exists():
+            return False
+        
+        try:
+            cmd = ['python', str(setup_script)]
+            if cleanup:
+                cmd.append('--cleanup')
+            cmd.append('--silent')
+            
+            result = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                timeout=30
+            )
+            
+            return result.returncode == 0
+            
+        except Exception:
+            return False
+    
+    # AC_COMPLETE: AC-PHASE50-MCPCLEANUP-004 ✅
+    # =========================================================================
     
     def check_mcp_availability(self) -> MCPAvailability:
         """
