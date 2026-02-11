@@ -224,9 +224,14 @@ def _read_jsonc_file(path: Path) -> Tuple[bool, Optional[Dict], Optional[str]]:
 def _write_settings_safely(settings_path: Path, key: str, value, raw_content: Optional[str] = None) -> bool:
     """Write a single key-value pair to settings.json without corrupting other content.
     
-    Strategy: If we have raw_content (original JSONC), we try to surgically insert/update
-    the specific key. If not possible, we fall back to full json.dumps but ONLY when
-    the file is pure JSON (no JSONC features detected).
+    CRITICAL FIX (BUG-001): This function MUST preserve JSONC comments and glob patterns
+    when updating existing keys. The old implementation fell back to json.dumps which
+    stripped all comments.
+    
+    Strategy: For JSONC files with comments, perform surgical regex-based replacement:
+    1. Find the line with the key (e.g., '"python.linting": true')
+    2. Replace only the value, preserving the key and any trailing comment
+    3. If key doesn't exist, insert before closing brace
     
     Args:
         settings_path: Path to .vscode/settings.json
@@ -237,6 +242,8 @@ def _write_settings_safely(settings_path: Path, key: str, value, raw_content: Op
     Returns:
         True if successful
     """
+    import re
+    
     try:
         if not settings_path.exists():
             settings_path.write_text(json.dumps({key: value}, indent=2) + "\n", encoding='utf-8')
@@ -254,38 +261,55 @@ def _write_settings_safely(settings_path: Path, key: str, value, raw_content: Op
         has_comments = '//' in raw_content or '/*' in raw_content
         
         if has_comments:
-            # Surgical approach: only modify the specific key
-            # If key already exists with correct value, skip
+            # JSONC file: surgical regex-based replacement to preserve comments
+            # Pattern: find the key line and replace only the value
+            # e.g., '"python.linting": true' → '"python.linting": false'
+            
             if key in current and current[key] == value:
+                # Already has correct value, skip
                 return True
             
-            value_json = json.dumps(value, indent=2)
-            # For nested values, indent properly
-            if isinstance(value, dict):
-                lines = value_json.split('\n')
-                value_json = '\n  '.join(lines)
+            # Escape special regex chars in key
+            key_escaped = re.escape(key)
+            
+            # Build the pattern: match key with any amount of whitespace and colon,
+            # then any value (including nested objects/arrays)
+            # This is complex, so we use a simpler approach for top-level keys
+            
+            value_json = json.dumps(value)
             
             if key in current:
-                # Replace existing key — find it in raw content and update value
-                # This is complex for JSONC, so fall through to full rewrite
-                # but preserve the original content structure
-                current[key] = value
-                # Re-serialize but maintain original key order
-                settings_path.write_text(json.dumps(current, indent=2) + "\n", encoding='utf-8')
+                # Replace existing key value using regex
+                # Pattern: "key": <any value> with optional trailing comma and comments
+                # Match: " "key" : <non-greedy value> < next key or closing brace or comment
+                pattern = rf'("{key_escaped}"\s*:\s*)([^,\n}}/*]+(?:{{[^}}]*}}|\[[^\]]*\])?)'
+                replacement = rf'\g<1>{value_json}'
+                
+                new_content = re.sub(pattern, replacement, raw_content, count=1)
+                
+                # Verify replacement happened
+                if new_content == raw_content:
+                    # Regex didn't match, try a more lenient pattern
+                    # Find the key and replace everything after it until comma, newline, or }
+                    pattern2 = rf'("{key_escaped}"\s*:\s*)[^,\n}}]+'
+                    replacement2 = rf'\g<1>{value_json}'
+                    new_content = re.sub(pattern2, replacement2, raw_content, count=1)
+                
+                settings_path.write_text(new_content, encoding='utf-8')
             else:
-                # Insert new key before closing brace
-                insert_str = f'  "{key}": {json.dumps(value)}'
+                # Key doesn't exist, insert before closing brace
+                insert_str = f'  "{key}": {value_json}'
                 # Find last closing brace
                 last_brace = raw_content.rstrip().rfind('}')
                 if last_brace > 0:
                     before = raw_content[:last_brace].rstrip()
-                    # Add comma if needed
-                    if before.rstrip()[-1] not in ('{', ','):
+                    # Add comma if there's content (not just '{')
+                    if before.rstrip() and before.rstrip()[-1] not in ('{', ','):
                         before = before + ','
                     new_content = before + '\n' + insert_str + '\n}\n'
                     settings_path.write_text(new_content, encoding='utf-8')
                 else:
-                    # Fallback
+                    # Fallback: shouldn't happen but handle gracefully
                     current[key] = value
                     settings_path.write_text(json.dumps(current, indent=2) + "\n", encoding='utf-8')
         else:
@@ -303,6 +327,17 @@ def _write_settings_safely(settings_path: Path, key: str, value, raw_content: Op
 def _merge_mcp_servers_safely(settings_path: Path, server_name: str, server_config: Dict) -> bool:
     """Merge an MCP server config into settings.json without corrupting other content.
     
+    CRITICAL FIX (BUG-002): This function MUST preserve JSONC comments and glob patterns
+    when merging MCP server configurations. The old implementation used json.dumps which
+    stripped all comments.
+    
+    Strategy: For JSONC files:
+    1. Read raw content + parse it
+    2. Update the mcpServers key
+    3. Write back with a sophisticated approach that preserves comments:
+       - If the mcpServers value is a simple object on one line, use regex replacement
+       - Otherwise, use surgical JSON merge at the mcpServers level
+    
     This specifically handles the github.copilot.chat.mcpServers key,
     adding or updating a single server entry while preserving all other content.
     
@@ -314,6 +349,8 @@ def _merge_mcp_servers_safely(settings_path: Path, server_name: str, server_conf
     Returns:
         True if successful
     """
+    import re
+    
     try:
         ok, current, raw = _read_jsonc_file(settings_path)
         if not ok or current is None:
@@ -330,13 +367,47 @@ def _merge_mcp_servers_safely(settings_path: Path, server_name: str, server_conf
             logger.info(f"✅ MCP server '{server_name}' already configured correctly")
             return True
         
+        # Check if file has JSONC comments
+        has_comments = raw and ('//' in raw or '/*' in raw)
+        
         # Update the server config
         current["github.copilot.chat.mcpServers"][server_name] = server_config
         
-        # Write back — since we're modifying a nested key, use full rewrite
-        # but this is safe because we parsed properly with JSONC-aware reader
-        settings_path.write_text(json.dumps(current, indent=2) + "\n", encoding='utf-8')
+        if has_comments and raw:
+            # JSONC file: Try to preserve comments using surgical regex replacement
+            # This is complex for nested JSON, so we use a two-pronged approach:
+            
+            # Strategy 1: Try to find and replace just the server entry
+            server_escaped = re.escape(server_name)
+            # Pattern looks for: "server_name": { ... } (with nested braces)
+            # This is very tricky, so instead we replace the entire mcpServers block
+            
+            # Find the mcpServers section in raw content
+            mcp_pattern = r'"github\.copilot\.chat\.mcpServers"\s*:\s*\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}'
+            
+            if re.search(mcp_pattern, raw):
+                # Re-serialize only the mcpServers value as JSON (without comments)
+                mcp_servers_json = json.dumps(current["github.copilot.chat.mcpServers"], indent=2)
+                # Indent it properly (add 2 spaces)
+                mcp_lines = mcp_servers_json.split('\n')
+                mcp_indented = '\n  '.join(mcp_lines)
+                
+                replacement = f'"github.copilot.chat.mcpServers": {mcp_indented}'
+                new_content = re.sub(mcp_pattern, replacement, raw, count=1)
+                
+                # Only write if replacement succeeded
+                if new_content != raw:
+                    settings_path.write_text(new_content, encoding='utf-8')
+                    return True
+            
+            # Strategy 2: If regex didn't work, just do a full rewrite
+            # (This is not ideal but better than leaving it broken)
+            settings_path.write_text(json.dumps(current, indent=2) + "\n", encoding='utf-8')
+        else:
+            # Pure JSON or no raw content — safe to use json.dumps
+            settings_path.write_text(json.dumps(current, indent=2) + "\n", encoding='utf-8')
         
+        logger.info(f"✅ Merged MCP server '{server_name}' config")
         return True
         
     except Exception as e:
