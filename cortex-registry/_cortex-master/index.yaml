@@ -1,16 +1,138 @@
-version: '1.3'
+version: '1.4'
 registry_name: _cortex-master
 description: CORTEX self-development planning with phase tracking and enhancement
   pipeline
-last_updated: '2026-02-11T14:45:00.000000Z'
-revision: 'Chat01 TDD Remediation Complete (2026-02-11): All P0 bugs fixed + JSONC preservation tested + integration harness'
+last_updated: '2026-02-11T15:30:00.000000Z'
+revision: 'Chat Digest Complete (2026-02-11): 17 high-value enhancements extracted from 13 chat sessions'
 active_phases:
+  # CRITICAL (P0) - Immediate Action Required
+  - id: ENH-064
+    title: "LENS Intelligence Layer Separation"
+    priority: P0
+    status: planned
+    estimated_effort: "2 weeks"
+    roi: "10x (0% → 90% codebase understanding)"
+    description: |
+      Extract intelligence layer from brain/lens/pipeline.py Phase 2 stub.
+      Connect to real AST/Git analysis via LENSOrchestrator.
+    impact: "CRITICAL - Current Phase 2 uses hardcoded data, cannot detect real dependencies"
+    files:
+      - cortex/brain/lens/pipeline.py (REFACTOR)
+      - cortex/intelligence/ (NEW directory)
+      - cortex/lens/orchestrator.py (INTEGRATE)
+  
+  - id: ENH-065
+    title: "SPA Dashboard Production Readiness (15 Critical Issues)"
+    priority: P0
+    status: planned
+    estimated_effort: "7 days (6 phases)"
+    roi: "Production score: 3.6/10 → 9/10"
+    description: |
+      Fix 15 production blockers: state management, error boundaries, security,
+      lazy loading, schema validation, observability. 6-phase refactoring plan.
+    impact: "CRITICAL - Dashboard cannot be deployed to stakeholders in current state"
+    phases:
+      - "Phase 1: State Management (versioning + freeze)"
+      - "Phase 2: Error Boundaries (per-tab fallback)"
+      - "Phase 3: Lazy Loading (virtual scrolling)"
+      - "Phase 4: Security (DOMPurify + CSP)"
+      - "Phase 5: Schema Validation (Zod)"
+      - "Phase 6: Observability (telemetry)"
+    files:
+      - company/dashboards/spa/js/state-manager.js (NEW)
+      - company/dashboards/spa/js/error-handler.js (NEW)
+      - company/dashboards/spa/js/lazy-loader.js (NEW)
+      - company/dashboards/spa/js/sanitizer.js (NEW)
+      - company/dashboards/spa/js/schema.js (NEW)
+  
+  - id: ENH-066
+    title: "MCP Pylance-Style Architecture Clarification"
+    priority: P0
+    status: planned
+    estimated_effort: "1 day"
+    roi: "10x (Onboarding: 30 min → 3 min)"
+    description: |
+      Update documentation to clarify MCP auto-starts like Pylance.
+      Create MCP-SETUP-GUIDE.md with cross-platform instructions.
+    impact: "CRITICAL - User onboarding friction, wasted troubleshooting time"
+    files:
+      - .github/prompts/MCP-SETUP-GUIDE.md (NEW)
+      - .github/prompts/cortex-architect.prompt.md (UPDATE)
+      - scripts/setup-mcp.py (ENHANCE)
+  
+  # HIGH VALUE (P1) - Next Sprint
+  - id: ENH-067
+    title: "Autonomous Plan Execution with Visual Progress"
+    priority: P1
+    status: partially_implemented
+    estimated_effort: "3 weeks"
+    roi: "5x - User approves, CORTEX executes autonomously"
+    description: |
+      Complete autonomous execution: user approves → CORTEX executes all phases
+      with real-time progress bars, TDD enforcement, and UI updates per phase.
+    current_state: "Phase 35/40 partially complete, needs coordination layer"
+    files:
+      - cortex/orchestrators/autonomous_execution_coordinator.py (ENHANCE)
+      - cortex/mcp/tools/plan_management_tool.py (INTEGRATE)
+  
+  - id: ENH-068
+    title: "Data Integrity Validator for Dashboard Pipeline"
+    priority: P1
+    status: planned
+    estimated_effort: "1 week"
+    roi: "Trust improvement, stakeholder confidence"
+    description: |
+      Pre-render validation gate for dashboard data contradictions.
+      Add integrity banner component with confidence scoring.
+    files:
+      - cortex/onboarding/data_integrity_validator.py (NEW)
+      - cortex/dashboards/renderers/integrity_banner.py (NEW)
+  
+  - id: ENH-069
+    title: "Dashboard Explainability Panel"
+    priority: P1
+    status: planned
+    estimated_effort: "1 week"
+    roi: "Transparency, debugging, stakeholder education"
+    description: |
+      Every KPI needs 'How computed' explanation with formula, data source,
+      confidence level, and raw data link.
+    files:
+      - cortex/dashboards/schema/explainability_schema.yaml (NEW)
+      - company/dashboards/spa/js/explainability.js (NEW)
+  
+  - id: ENH-070
+    title: "Use-Case Library Generator (5 Personas × 6 Categories)"
+    priority: P1
+    status: planned
+    estimated_effort: "1 week"
+    roi: "User adoption, feature discovery"
+    description: |
+      Generate 30+ use cases (5 personas: exec/architect/dev/PM/researcher
+      × 6 categories: onboarding/analysis/debugging/planning/compliance/learning)
+    files:
+      - cortex/dashboards/use_case_generator.py (NEW)
+  
+  - id: ENH-071
+    title: "Domain Inference from Business Summary (NLP)"
+    priority: P1
+    status: planned
+    estimated_effort: "2 weeks"
+    roi: "Automatic domain knowledge capture"
+    description: |
+      Use NLP to extract domain concepts, relationships, terminology from
+      business_summary even without explicit entities.
+    files:
+      - cortex/intelligence/domain_inference.py (NEW)
+      - cortex/nlp/concept_extractor.py (NEW)
+  
   - id: ENH-062
     title: "Self-Optimizing CORTEX"
     priority: P1
     status: planned
     estimated_effort: "3 weeks"
     description: "Autonomous quarterly governance self-audit + enhancement pipeline"
+  
   - id: ENH-063
     title: "MCP Server Selective Coexistence with Tool Budget"
     priority: P1
@@ -18,6 +140,35 @@ active_phases:
     estimated_effort: "1 day"
     description: "Auto-disable competing MCP servers + tool budget management (<=128)"
     notes: "detect_competing_mcps() + enforce_cortex_only() already in .cortex/setup-mcp.py"
+  
+  # ARCHITECTURAL (P2) - Long-term Improvements
+  - id: ENH-072
+    title: "Renderable Content Schema (Unified Output)"
+    priority: P2
+    status: planned
+    estimated_effort: "1 week"
+    description: "Unified output structure for all dashboard components"
+  
+  - id: ENH-073
+    title: "Chart Interaction Standard (Tooltip + Cross-Filter)"
+    priority: P2
+    status: planned
+    estimated_effort: "1 week"
+    description: "Standardize chart interactions: tooltip, raw data, source, cross-filter"
+  
+  - id: ENH-074
+    title: "Virtualization for Large Lists (>1000 items)"
+    priority: P2
+    status: planned
+    estimated_effort: "3 days"
+    description: "Virtual scrolling for 8000+ item dependency graphs"
+  
+  - id: ENH-077
+    title: "Self-Optimizing CORTEX Enhancement (Quarterly Audit)"
+    priority: P2
+    status: planned
+    estimated_effort: "3 weeks"
+    description: "Automated quarterly enhancement pipeline with user approval"
 completed_phases:
   - id: CHAT01-REMEDIATION-COMPLETE
     title: "Chat01 Holistic Remediation + TDD Testing"
