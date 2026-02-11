@@ -55,6 +55,18 @@ from cortex.orchestrators.strategies.support_layer_pattern import (
     CachingStrategy,
     UnifiedSupportOrchestrator,
 )
+from cortex.orchestrators.strategies.infrastructure_strategy_pattern import (
+    InfrastructureOperationType,
+    InfrastructureRequest,
+    InfrastructureMetrics,
+    InfrastructureResult,
+    InfrastructureStrategy,
+    SessionManagementStrategy,
+    ConfigurationManagementStrategy,
+    DeploymentStrategy,
+    MonitoringStrategy,
+    UnifiedInfrastructureOrchestrator,
+)
 
 __all__ = [
     "StageContext",
@@ -97,4 +109,15 @@ __all__ = [
     "ErrorHandlingStrategy",
     "CachingStrategy",
     "UnifiedSupportOrchestrator",
+    # ENH-091 Track 3: Infrastructure Layer Consolidation (Stage 1)
+    "InfrastructureOperationType",
+    "InfrastructureRequest",
+    "InfrastructureMetrics",
+    "InfrastructureResult",
+    "InfrastructureStrategy",
+    "SessionManagementStrategy",
+    "ConfigurationManagementStrategy",
+    "DeploymentStrategy",
+    "MonitoringStrategy",
+    "UnifiedInfrastructureOrchestrator",
 ]
