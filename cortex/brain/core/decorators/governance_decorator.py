@@ -21,29 +21,29 @@ import inspect
 from typing import Any, Callable, Optional
 
 from cortex.brain.core.governance_enforcer import GovernanceEnforcer
-from cortex.brain.core.result import Result, Ok, Err
+from cortex.brain.core.result import Err, Ok, Result
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 
 
 def governance_enforced(ac_id: str, phase: Optional[str] = None):
     """
     Decorator: @governance_enforced
-    
+
     Validates that the operation is allowed under current governance rules.
     Checks phase locks, AC-ID validity, and tier precedence.
-    
+
     AC-AR-003-01: @governance_enforced decorator validates all rules
-    
+
     Usage:
         @governance_enforced(ac_id="AC-TEST-001")
         def my_function():
             pass
-    
+
     Args:
         ac_id: Acceptance Criteria ID for this operation
         phase: Optional phase ID (auto-detected if not provided)
         db: Optional DatabaseManager (will use default if not provided)
-    
+
     Returns:
         Decorator function
     """
@@ -52,26 +52,26 @@ def governance_enforced(ac_id: str, phase: Optional[str] = None):
         def wrapper(*args, **kwargs) -> Result[Any]:
             # Initialize enforcer
             enforcer = GovernanceEnforcer()
-            
+
             # Enforce governance
             enforcement = enforcer.enforce_operation(
                 ac_id=ac_id,
                 operation="EXECUTE",
                 phase=phase or "PHASE-01",
             )
-            
+
             if not enforcement.allowed:
                 return Err(f"Governance violation: {enforcement.reason}")
-            
+
             # Execute function
             try:
                 result = func(*args, **kwargs)
                 return Ok(result)
             except Exception as e:
                 return Err(f"Execution failed: {str(e)}")
-        
+
         return wrapper
-    
+
     return decorator
 
 
@@ -81,22 +81,22 @@ def audit_logged(
 ):
     """
     Decorator: @audit_logged
-    
+
     Records operation to audit log with hash chain before and after execution.
     Implements audit-first pattern with completion tracking.
-    
+
     AC-AR-003-02: @audit_logged decorator records to governance.db
-    
+
     Usage:
         @audit_logged(ac_id="AC-TEST-001", operation="AC_EXECUTE")
         def my_function():
             pass
-    
+
     Args:
         ac_id: Acceptance Criteria ID
         operation: Operation type (e.g., "AC_EXECUTE", "AC_COMPLETE")
         db: Optional DatabaseManager instance
-    
+
     Returns:
         Decorator function
     """
@@ -111,7 +111,7 @@ def audit_logged(
                 return Err(f"Execution failed: {str(e)}")
             try:
                 result = func(*args, **kwargs)
-                
+
                 # Log completion
                 complete_result = logger.log_operation_complete(
                     ac_id=ac_id,
@@ -119,12 +119,12 @@ def audit_logged(
                     success=True,
                     details={"status": "completed"},
                 )
-                
+
                 if complete_result.is_err():
                     return complete_result
-                
+
                 return Ok(result)
-            
+
             except Exception as e:
                 # Log failure
                 logger.log_operation_complete(
@@ -134,9 +134,9 @@ def audit_logged(
                     details={"error": str(e)},
                 )
                 return Err(f"Execution failed: {str(e)}")
-        
+
         return wrapper
-    
+
     return decorator
 
 
@@ -147,23 +147,23 @@ def governance_with_audit(
 ):
     """
     Composite decorator: @governance_with_audit
-    
+
     Combines governance enforcement and audit logging.
     Validates rules first, then logs to audit trail.
-    
+
     AC-AR-003-03: Decorators composable
-    
+
     Usage:
         @governance_with_audit(ac_id="AC-TEST-001")
         def my_function():
             pass
-    
+
     Args:
         ac_id: Acceptance Criteria ID
         operation: Operation type
         phase: Optional phase ID
         db: Optional DatabaseManager instance
-    
+
     Returns:
         Decorator function
     """
@@ -172,20 +172,20 @@ def governance_with_audit(
         def wrapper(*args, **kwargs) -> Result[Any]:
             # Initialize enforcer for governance check
             enforcer = GovernanceEnforcer()
-            
+
             # Enforce governance first
             enforcement = enforcer.enforce_operation(
                 ac_id=ac_id,
                 operation=operation,
                 phase=phase or "PHASE-01",
             )
-            
+
             if not enforcement.allowed:
                 return Err(f"Governance violation: {enforcement.reason}")
-            
+
             # Now perform audit logging
             logger = EnhancedAuditLogger.instance()
-            
+
             # Log operation start
             start_result = logger.log_operation_start(
                 ac_id=ac_id,
@@ -195,14 +195,14 @@ def governance_with_audit(
                     "module": func.__module__,
                 },
             )
-            
+
             if start_result.is_err():
                 return start_result
-            
+
             # Execute function
             try:
                 result = func(*args, **kwargs)
-                
+
                 # Log completion
                 complete_result = logger.log_operation_complete(
                     ac_id=ac_id,
@@ -210,12 +210,12 @@ def governance_with_audit(
                     success=True,
                     details={"status": "completed"},
                 )
-                
+
                 if complete_result.is_err():
                     return complete_result
-                
+
                 return Ok(result)
-            
+
             except Exception as e:
                 # Log failure
                 logger.log_operation_complete(
@@ -225,7 +225,7 @@ def governance_with_audit(
                     details={"error": str(e)},
                 )
                 return Err(f"Execution failed: {str(e)}")
-        
+
         return wrapper
-    
+
     return decorator

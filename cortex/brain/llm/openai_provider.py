@@ -9,11 +9,10 @@ PHASE 3: Integrated with Prometheus metrics for observability.
 
 import os
 import time
-from typing import Optional, Dict, Any
+from typing import Any, Dict, Optional
 
 try:
-    from openai import OpenAI
-    from openai import APITimeoutError, RateLimitError, APIError
+    from openai import APIError, APITimeoutError, OpenAI, RateLimitError
     OPENAI_AVAILABLE = True
 except ImportError:
     OPENAI_AVAILABLE = False
@@ -35,15 +34,15 @@ except ImportError:
 class OpenAIProvider(ILLMProvider):
     """
     OpenAI LLM provider implementation.
-    
+
     Supports: GPT-4, GPT-4o, GPT-4-turbo, GPT-3.5-turbo
-    
+
     Example:
         >>> provider = OpenAIProvider(api_key="sk-...", model="gpt-4")
         >>> response = provider.generate("Analyze this code", max_tokens=500)
         >>> print(f"Cost: ${response.usage.cost_estimate_usd:.4f}")
     """
-    
+
     def __init__(
         self,
         api_key: Optional[str] = None,
@@ -52,12 +51,12 @@ class OpenAIProvider(ILLMProvider):
     ):
         """
         Initialize OpenAI provider.
-        
+
         Args:
             api_key: OpenAI API key (or set OPENAI_API_KEY env var)
             model: Model to use (default: gpt-4o-mini for cost efficiency)
             base_url: Optional custom base URL (for Azure OpenAI)
-        
+
         Raises:
             ValueError: If API key is missing
             ImportError: If openai package not installed
@@ -66,18 +65,18 @@ class OpenAIProvider(ILLMProvider):
             raise ImportError(
                 "openai package not installed. Install with: pip install openai"
             )
-        
+
         self.api_key = api_key or os.getenv("OPENAI_API_KEY")
         if not self.api_key:
             raise ValueError(
                 "OpenAI API key required. Set OPENAI_API_KEY environment variable "
                 "or pass api_key parameter."
             )
-        
+
         self.model = model
         self.base_url = base_url
         self.client = OpenAI(api_key=self.api_key, base_url=base_url)
-    
+
     def generate(
         self,
         prompt: str,
@@ -88,17 +87,17 @@ class OpenAIProvider(ILLMProvider):
     ) -> LLMResponse:
         """
         Generate text using OpenAI API.
-        
+
         Args:
             prompt: Input prompt
             max_tokens: Maximum tokens in response
             temperature: Sampling temperature (0.0-2.0)
             timeout: Request timeout in seconds
             **kwargs: Additional OpenAI parameters
-        
+
         Returns:
             LLMResponse with generated text and usage info
-        
+
         Raises:
             TimeoutError: If request times out
             ValueError: If parameters are invalid
@@ -107,7 +106,7 @@ class OpenAIProvider(ILLMProvider):
         start_time = time.time()
         status = "success"
         error_type = None
-        
+
         try:
             response = self.client.chat.completions.create(
                 model=self.model,
@@ -117,14 +116,14 @@ class OpenAIProvider(ILLMProvider):
                 timeout=timeout,
                 **kwargs
             )
-            
+
             content = response.choices[0].message.content
             usage = LLMUsage(
                 prompt_tokens=response.usage.prompt_tokens,
                 completion_tokens=response.usage.completion_tokens,
                 total_tokens=response.usage.total_tokens
             )
-            
+
             # PHASE 3: Record metrics
             latency = time.time() - start_time
             record_llm_call(
@@ -137,7 +136,7 @@ class OpenAIProvider(ILLMProvider):
                 completion_tokens=usage.completion_tokens,
                 cost_usd=usage.cost_estimate_usd
             )
-            
+
             return LLMResponse(
                 content=content,
                 usage=usage,
@@ -145,7 +144,7 @@ class OpenAIProvider(ILLMProvider):
                 provider="openai",
                 metadata={"finish_reason": response.choices[0].finish_reason}
             )
-            
+
         except APITimeoutError as e:
             status = "error"
             error_type = "timeout"
@@ -166,29 +165,29 @@ class OpenAIProvider(ILLMProvider):
             error_type = "unknown"
             record_llm_error("openai", error_type)
             raise Exception(f"Unexpected error calling OpenAI: {str(e)}") from e
-    
+
     def get_name(self) -> str:
         """Get provider name."""
         return "openai"
-    
+
     def get_model(self) -> str:
         """Get current model name."""
         return self.model
-    
+
     def validate_config(self) -> bool:
         """
         Validate OpenAI configuration.
-        
+
         Returns:
             True if API key is present and model is supported
         """
         if not self.api_key:
             return False
-        
+
         supported_models = [
             "gpt-4", "gpt-4-turbo", "gpt-4o", "gpt-4o-mini",
             "gpt-3.5-turbo", "gpt-3.5-turbo-16k"
         ]
-        
+
         # Check if model starts with any supported model name
         return any(self.model.startswith(m) for m in supported_models)

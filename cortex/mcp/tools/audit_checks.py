@@ -10,6 +10,7 @@ Date: 2026-02-07
 """
 
 from pathlib import Path
+
 from cortex.mcp.decorators import mcp_tool
 from cortex.orchestrators.audit.dependency_drift_detector import DependencyDriftDetector
 from cortex.orchestrators.audit.test_performance_analyzer import TestPerformanceAnalyzer
@@ -50,10 +51,10 @@ async def cortex_check_dependency_drift(repo_path: str) -> dict:
     """
     detector = DependencyDriftDetector()
     result = detector.analyze(Path(repo_path))
-    
+
     response = result.to_dict()
     response["fix_commands"] = detector.generate_fix_commands(result)
-    
+
     return response
 
 
@@ -96,10 +97,10 @@ async def cortex_analyze_test_performance(repo_path: str) -> dict:
     """
     analyzer = TestPerformanceAnalyzer()
     result = analyzer.analyze(Path(repo_path))
-    
+
     response = result.to_dict()
     response["baseline_path"] = str(Path(repo_path) / ".cortex" / "metrics" / "test_performance_baseline.json")
-    
+
     return response
 
 
@@ -135,7 +136,7 @@ async def cortex_validate_venv(repo_path: str) -> dict:
     """
     validator = EnvironmentValidator()
     result = validator.validate_venv(Path(repo_path))
-    
+
     return result.to_dict()
 
 

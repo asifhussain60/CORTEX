@@ -4,13 +4,13 @@ Implements rich error context with correlation IDs, causality tracking,
 recovery suggestions, and PII sanitization for safe logging.
 """
 
+import json
+import re
+import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
-import re
-import uuid
-import json
 
 
 class ErrorType(str, Enum):
@@ -24,7 +24,7 @@ class ErrorType(str, Enum):
 @dataclass
 class RecoveryHint:
     """Hint for recovering from error.
-    
+
     Args:
         action: Recommended action
         automated: Whether retry can be automated
@@ -35,14 +35,14 @@ class RecoveryHint:
     automated: bool
     estimated_duration_seconds: Optional[int] = None
     additional_context: Dict[str, Any] = field(default_factory=dict)
-    
+
     @classmethod
     def for_error_type(cls, error_type: ErrorType) -> "RecoveryHint":
         """Generate recovery hint for error type.
-        
+
         Args:
             error_type: Type of error
-            
+
         Returns:
             Recovery hint
         """
@@ -74,7 +74,7 @@ class RecoveryHint:
 @dataclass
 class CausalityNode:
     """Node in causality chain.
-    
+
     Args:
         error_id: Error identifier
         message: Error message
@@ -90,12 +90,12 @@ class CausalityNode:
 @dataclass
 class CausalityChain:
     """Tracks error causality relationships.
-    
+
     Attributes:
         errors: List of errors in chain
     """
     errors: List[CausalityNode] = field(default_factory=list)
-    
+
     def add_error(
         self,
         error_id: str,
@@ -104,7 +104,7 @@ class CausalityChain:
         contributing_factors: Optional[List[str]] = None
     ) -> None:
         """Add error to causality chain.
-        
+
         Args:
             error_id: Error identifier
             message: Error message
@@ -118,54 +118,54 @@ class CausalityChain:
             contributing_factors=contributing_factors or []
         )
         self.errors.append(node)
-    
+
     def root_cause(self) -> Optional[str]:
         """Get root cause error message.
-        
+
         Returns:
             Root cause message
         """
         if not self.errors:
             return None
-        
+
         # Find error with no parent
         error_map = {e.error_id: e for e in self.errors}
-        
+
         for error in self.errors:
             if error.caused_by is None or error.caused_by not in error_map:
                 return error.message
-        
+
         # If all have parents (cycle), return first
         return self.errors[0].message
-    
+
     def has_cycle(self) -> bool:
         """Detect circular causality.
-        
+
         Returns:
             True if cycle detected
         """
         if len(self.errors) < 2:
             return False
-        
+
         visited = set()
         error_map = {e.error_id: e for e in self.errors}
-        
+
         for error in self.errors:
             current = error.error_id
             path = set()
-            
+
             while current and current in error_map:
                 if current in path:
                     return True  # Cycle detected
-                
+
                 path.add(current)
                 current = error_map[current].caused_by
-        
+
         return False
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Serialize causality chain.
-        
+
         Returns:
             Dictionary representation
         """
@@ -186,7 +186,7 @@ class CausalityChain:
 @dataclass
 class ErrorContext:
     """Context for error occurrence.
-    
+
     Args:
         operation: Operation being performed
         correlation_id: Correlation ID for tracing
@@ -201,7 +201,7 @@ class ErrorContext:
     session_id: Optional[str] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
     parent_context: Optional["ErrorContext"] = None
-    
+
     def __post_init__(self) -> None:
         """Generate correlation ID if missing."""
         if not self.correlation_id:
@@ -210,10 +210,10 @@ class ErrorContext:
                 self.correlation_id = self.parent_context.correlation_id
             else:
                 self.correlation_id = str(uuid.uuid4())
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Serialize context.
-        
+
         Returns:
             Dictionary representation
         """
@@ -228,35 +228,35 @@ class ErrorContext:
 
 def sanitize_pii(text: str) -> str:
     """Sanitize personally identifiable information.
-    
+
     Args:
         text: Text potentially containing PII
-        
+
     Returns:
         Sanitized text
     """
     # Email addresses
     text = re.sub(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', '[EMAIL]', text)
-    
+
     # API keys (common patterns) - match full key including prefix
     text = re.sub(r'\b(sk|pk|api|key)[-_]?[A-Za-z0-9]{8,}\b', '[API_KEY]', text, flags=re.IGNORECASE)
-    
+
     # Phone numbers
     text = re.sub(r'\b\d{3}[-.]?\d{3}[-.]?\d{4}\b', '[PHONE]', text)
-    
+
     # Social Security Numbers
     text = re.sub(r'\b\d{3}-\d{2}-\d{4}\b', '[SSN]', text)
-    
+
     # Credit card numbers (basic pattern)
     text = re.sub(r'\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b', '[CREDIT_CARD]', text)
-    
+
     return text
 
 
 @dataclass
 class StructuredError:
     """Structured error with rich context.
-    
+
     Args:
         error_type: Error type classification
         message: Error message
@@ -273,26 +273,26 @@ class StructuredError:
     causality: Optional[CausalityChain] = None
     recovery_hint: Optional[RecoveryHint] = None
     timestamp: datetime = field(default_factory=datetime.utcnow)
-    
+
     def correlation_id(self) -> Optional[str]:
         """Get correlation ID.
-        
+
         Returns:
             Correlation ID
         """
         return self.context.correlation_id
-    
+
     def sanitized_message(self) -> str:
         """Get message with PII sanitized.
-        
+
         Returns:
             Sanitized message
         """
         return sanitize_pii(self.message)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Serialize error to dictionary.
-        
+
         Returns:
             Dictionary representation
         """
@@ -304,30 +304,30 @@ class StructuredError:
             "timestamp": self.timestamp.isoformat(),
             "context": self.context.to_dict()
         }
-        
+
         if self.causality:
             result["causality"] = self.causality.to_dict()
-        
+
         if self.recovery_hint:
             result["recovery_hint"] = {
                 "action": self.recovery_hint.action,
                 "automated": self.recovery_hint.automated,
                 "estimated_duration_seconds": self.recovery_hint.estimated_duration_seconds
             }
-        
+
         return result
-    
+
     def to_json(self) -> str:
         """Serialize error to JSON string.
-        
+
         Returns:
             JSON representation
         """
         return json.dumps(self.to_dict(), indent=2)
-    
+
     def __str__(self) -> str:
         """String representation.
-        
+
         Returns:
             Human-readable error
         """
@@ -337,15 +337,15 @@ class StructuredError:
             f"Correlation ID: {self.correlation_id()}",
             f"Operation: {self.context.operation}"
         ]
-        
+
         if self.causality:
             root = self.causality.root_cause()
             if root:
                 parts.append(f"Root Cause: {root}")
-        
+
         if self.recovery_hint:
             parts.append(f"Recovery: {self.recovery_hint.action}")
-        
+
         return "\n".join(parts)
 
 
@@ -358,7 +358,7 @@ def create_error(
     **context_kwargs: Any
 ) -> StructuredError:
     """Helper to create structured error.
-    
+
     Args:
         error_type: Error type
         message: Error message
@@ -366,7 +366,7 @@ def create_error(
         operation: Operation name
         correlation_id: Correlation ID
         **context_kwargs: Additional context fields
-        
+
     Returns:
         Structured error
     """
@@ -375,9 +375,9 @@ def create_error(
         correlation_id=correlation_id,
         **context_kwargs
     )
-    
+
     recovery_hint = RecoveryHint.for_error_type(error_type)
-    
+
     return StructuredError(
         error_type=error_type,
         message=message,

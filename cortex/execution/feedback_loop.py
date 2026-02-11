@@ -6,7 +6,8 @@ execution system to improve strategies based on actual outcomes.
 """
 
 from dataclasses import dataclass
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
+
 from cortex.execution.adaptive_execution_engine import ExecutionStrategy
 
 
@@ -21,7 +22,7 @@ class StrategySuggestion:
 class FeedbackLoop:
     """
     Feedback loop for continuous improvement of execution strategies.
-    
+
     Records execution outcomes and uses them to suggest and validate
     strategy improvements.
     """
@@ -38,7 +39,7 @@ class FeedbackLoop:
     def record_outcome(self, outcome: Dict[str, Any]) -> None:
         """
         Record an execution outcome.
-        
+
         Args:
             outcome: Dictionary containing execution outcome details.
         """
@@ -50,7 +51,7 @@ class FeedbackLoop:
     def get_cumulative_improvement(self) -> float:
         """
         Calculate cumulative improvement over time.
-        
+
         Returns:
             Cumulative improvement value (0.0 to 1.0+).
         """
@@ -66,7 +67,7 @@ class FeedbackLoop:
     def get_strategy_suggestion(self) -> Optional[StrategySuggestion]:
         """
         Get strategy suggestion based on feedback.
-        
+
         Returns:
             StrategySuggestion if enough data is available, None otherwise.
         """
@@ -118,7 +119,7 @@ class FeedbackLoop:
     def apply_feedback(self, strategy: ExecutionStrategy, improved: bool) -> None:
         """
         Record feedback on whether a strategy change was beneficial.
-        
+
         Args:
             strategy: The strategy that was evaluated.
             improved: Whether the strategy resulted in improvement.

@@ -7,11 +7,11 @@ Purpose: Integrate learning into TDD, Refactoring, Interaction orchestrators
 Pattern:
     class YourOrchestrator(OrchestratorLearningMixin, YourBaseMixin):
         pass
-    
+
     # In _execute_domain_logic():
     # 1. Collect test scores if applicable
     # 2. Call self._capture_learning(...) at end
-    
+
 Learning Integration Points:
 - Test value scoring for TDD: High-value tests prioritized
 - Refactoring pattern extraction: Patterns learned from refactorings
@@ -26,9 +26,9 @@ from __future__ import annotations
 import logging
 from typing import Any, Dict, List, Optional
 
+from cortex.core.result import Err, Ok, Result
 from cortex.learning.universal_learning_loop import get_learning_loop
 from cortex.testing.test_value_scorer import TestMetrics, get_test_value_scorer
-from cortex.core.result import Result, Ok, Err
 
 logger = logging.getLogger(__name__)
 
@@ -36,18 +36,18 @@ logger = logging.getLogger(__name__)
 class OrchestratorLearningMixin:
     """
     Mixin for orchestrators to enable learning capture.
-    
+
     Provides:
     - Non-blocking learning integration
     - Test quality scoring for TDD
     - Pattern extraction helpers
     - Learning metrics tracking
-    
+
     Usage:
         class MyOrchestrator(OrchestratorLearningMixin, BaseOrchestrator):
             def _execute_domain_logic(self, ...):
                 # Your logic
-                
+
                 # Capture learning at end
                 self._capture_learning(
                     operation_type="custom_type",
@@ -55,7 +55,7 @@ class OrchestratorLearningMixin:
                     test_scores=test_scores  # optional
                 )
     """
-    
+
     def _capture_learning(
         self,
         operation_type: str,
@@ -65,7 +65,7 @@ class OrchestratorLearningMixin:
     ) -> None:
         """
         Capture learning from orchestrator execution.
-        
+
         Args:
             operation_type: Type of operation (tdd, refactoring, interaction, etc.)
             patterns: Dictionary of extracted patterns
@@ -74,11 +74,11 @@ class OrchestratorLearningMixin:
         """
         try:
             learning_loop = get_learning_loop()
-            
+
             if not learning_loop:
                 logger.debug("Learning loop unavailable, skipping capture")
                 return
-            
+
             # Build learning operation
             operation = {
                 "type": operation_type,
@@ -86,7 +86,7 @@ class OrchestratorLearningMixin:
                 "test_scores": test_scores or [],
                 "context": execution_context or {},
             }
-            
+
             # Capture patterns (non-blocking)
             learning_loop.capture_from_operation(
                 orchestrator=self.__class__.__name__,
@@ -94,18 +94,18 @@ class OrchestratorLearningMixin:
                 context={},
                 result=operation,
             )
-            
+
             logger.debug(
                 f"Learning captured for {operation_type} "
                 f"({len(patterns or {})} patterns, {len(test_scores or [])} scores)"
             )
-            
+
         except Exception as e:
             logger.warning(
                 f"Learning capture failed (non-blocking): {e}",
                 exc_info=False,
             )
-    
+
     def _score_test_quality(
         self,
         test_name: str,
@@ -119,9 +119,9 @@ class OrchestratorLearningMixin:
     ) -> Optional[Dict[str, Any]]:
         """
         Score test quality and track high-value tests.
-        
+
         Returns test score dict for learning or None if scoring disabled.
-        
+
         Args:
             test_name: Name of test being scored
             coverage_percent: Code coverage (0-100)
@@ -131,17 +131,17 @@ class OrchestratorLearningMixin:
             total_mutations: Total mutations in scope
             flakiness_percent: Test flakiness (0-100)
             false_positives: Number of false positive alerts
-            
+
         Returns:
             Dict with score info, or None
         """
         try:
             scorer = get_test_value_scorer()
-            
+
             if not scorer:
                 logger.debug("Test value scorer unavailable, skipping scoring")
                 return None
-            
+
             metrics = TestMetrics(
                 coverage_percent=coverage_percent,
                 edge_cases_covered=edge_cases_covered,
@@ -151,20 +151,20 @@ class OrchestratorLearningMixin:
                 flakiness_percent=flakiness_percent,
                 false_positives=false_positives,
             )
-            
+
             score = scorer.score_test(test_name, metrics)
-            
+
             logger.debug(f"Test {test_name} scored as {score.tier.value}")
-            
+
             return score.to_dict()
-            
+
         except Exception as e:
             logger.warning(
                 f"Test quality scoring failed (non-blocking): {e}",
                 exc_info=False,
             )
             return None
-    
+
     def _extract_refactoring_patterns(
         self,
         operation: str,
@@ -173,12 +173,12 @@ class OrchestratorLearningMixin:
     ) -> Dict[str, Any]:
         """
         Extract patterns from refactoring operation.
-        
+
         Args:
             operation: Refactoring operation (rename, extract_method, etc.)
             files_affected: Files changed by refactoring
             changes_summary: Dict of change metrics
-            
+
         Returns:
             Dict of extracted patterns for learning
         """
@@ -190,9 +190,9 @@ class OrchestratorLearningMixin:
             "lines_changed": changes_summary.get("lines_changed", 0),
             "maintainability_improvement": changes_summary.get("maintainability_improvement", 0),
         }
-        
+
         return patterns
-    
+
     def _extract_interaction_patterns(
         self,
         user_intent: str,
@@ -202,13 +202,13 @@ class OrchestratorLearningMixin:
     ) -> Dict[str, Any]:
         """
         Extract patterns from user interaction.
-        
+
         Args:
             user_intent: What user was trying to do
             interaction_type: Type of interaction (clarification, suggestion, etc.)
             outcome: How the interaction resolved
             metadata: Additional context
-            
+
         Returns:
             Dict of extracted patterns for learning
         """
@@ -218,20 +218,20 @@ class OrchestratorLearningMixin:
             "outcome": outcome,
             "metadata": metadata or {},
         }
-        
+
         return patterns
-    
+
     def _get_learning_orchestrator_type(self) -> str:
         """
         Get learning orchestrator type for this mixin user.
-        
+
         Override in subclasses for custom classification.
-        
+
         Returns:
             Orchestrator type (tdd, refactoring, interaction, coordination, governance)
         """
         class_name = self.__class__.__name__.lower()
-        
+
         # Determine type based on class name
         if "tdd" in class_name:
             return "tdd"

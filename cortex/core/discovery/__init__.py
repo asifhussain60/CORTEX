@@ -2,8 +2,8 @@
 
 from cortex.core.discovery.mcp_discovery import (
     HealthCheck,
-    ServiceDiscovery,
     PromptVersionConfig,
+    ServiceDiscovery,
 )
 
 __all__ = ["HealthCheck", "ServiceDiscovery", "PromptVersionConfig"]

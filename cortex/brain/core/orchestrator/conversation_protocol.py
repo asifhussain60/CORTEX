@@ -7,52 +7,55 @@ continuation decisions, governance validation, audit logging, and token tracking
 This replaces imperative "while True" loops with declarative, testable execution.
 """
 
+import hashlib
+import json
 from dataclasses import dataclass, field
-from typing import Dict, Any, List, Optional
 from datetime import datetime
 from pathlib import Path
-import yaml
-import json
-import hashlib
+from typing import Any, Dict, List, Optional
 
-from cortex.brain.core.orchestrator.continuation_decision import (
-    ContinuationDecision,
-    ContinuationReason,
-)
-from cortex.core.orchestrator.terminal_events import (
-    EventRegistry,
-    PhaseCompletedEvent,
-    UserCancelledEvent,
-    MaxTurnsReachedEvent,
-    ErrorOccurredEvent,
-    TokenLimitEvent,
-    GovernanceViolationEvent,
-    UserApprovalRejectedEvent,
-)
-from cortex.brain.core.result import Result, Ok, Err
-from cortex.orchestrators.core.governance_registry import GovernanceRegistry
-from cortex.execution.exec_gateway_impl import GovernanceViolationError
-from cortex.brain.core.governance_pregate import get_governance_pregate, PreGateDecision
-from cortex.brain.core.tier_validator import TierAccessValidator
+import yaml
+
+from cortex.brain.core.governance_pregate import PreGateDecision, get_governance_pregate
 from cortex.brain.core.intelligence.ast_intelligence import ASTIntelligenceEngine
 from cortex.brain.core.intelligence.call_graph import CallGraphBuilder
 from cortex.brain.core.intelligence.dependency_mapper import DependencyMapper
 from cortex.brain.core.intelligence.pattern_detector import PatternDetector
-from cortex.infrastructure.database_transaction_manager import DatabaseTransactionManager
+from cortex.brain.core.orchestrator.continuation_decision import (
+    ContinuationDecision,
+    ContinuationReason,
+)
+from cortex.brain.core.result import Err, Ok, Result
+from cortex.brain.core.tier_validator import TierAccessValidator
+from cortex.core.orchestrator.terminal_events import (
+    ErrorOccurredEvent,
+    EventRegistry,
+    GovernanceViolationEvent,
+    MaxTurnsReachedEvent,
+    PhaseCompletedEvent,
+    TokenLimitEvent,
+    UserApprovalRejectedEvent,
+    UserCancelledEvent,
+)
+from cortex.execution.exec_gateway_impl import GovernanceViolationError
+from cortex.infrastructure.database_transaction_manager import (
+    DatabaseTransactionManager,
+)
+from cortex.orchestrators.core.governance_registry import GovernanceRegistry
 
 
 class RequestComplexityClassifier:
     """
     Classifies request complexity to determine adaptive turn limits.
-    
+
     AC-FUTURE-004: Adaptive turn limit based on task complexity
-    
+
     Complexity levels:
     - SIMPLE (2-3 turns): Single file edit, quick fix
     - MEDIUM (5-8 turns): Multi-file changes, some refactoring
     - COMPLEX (10-15 turns): Major feature, heavy architecture changes
     - CRITICAL (20-25 turns): System-wide changes, multiple components
-    
+
     Analysis factors:
     - Request length (word count, character count)
     - Keyword analysis (multi-step, refactor, architecture)
@@ -60,28 +63,28 @@ class RequestComplexityClassifier:
     - Component count
     - Dependencies implied
     """
-    
+
     # Keyword maps for complexity detection
     SIMPLE_KEYWORDS = ["fix", "typo", "bug", "edit", "single file", "one file"]
     MEDIUM_KEYWORDS = ["refactor", "improve", "implement feature", "modify", "update"]
     COMPLEX_KEYWORDS = ["architecture", "redesign", "rebuild", "multiple", "system", "orchestrator"]
     CRITICAL_KEYWORDS = ["rewrite", "migration", "consolidation", "governance", "complete system"]
-    
+
     # Complexity thresholds based on word count
     SIMPLE_MAX_WORDS = 20
     MEDIUM_MAX_WORDS = 50
     COMPLEX_MAX_WORDS = 100
-    
+
     @staticmethod
     def classify(request: str) -> tuple[str, int]:
         """
         Classify request complexity and return level + recommended turn count.
-        
+
         AC-FUTURE-004: Adaptive turn limits
-        
+
         Args:
             request: User's natural language request
-            
+
         Returns:
             Tuple of (complexity_level, recommended_max_turns)
         """
@@ -93,24 +96,24 @@ class RequestComplexityClassifier:
             "complex": 0,
             "critical": 0
         }
-        
+
         # Count matching keywords
         for keyword in RequestComplexityClassifier.SIMPLE_KEYWORDS:
             if keyword in request_lower:
                 keyword_count["simple"] += 1
-        
+
         for keyword in RequestComplexityClassifier.MEDIUM_KEYWORDS:
             if keyword in request_lower:
                 keyword_count["medium"] += 1
-        
+
         for keyword in RequestComplexityClassifier.COMPLEX_KEYWORDS:
             if keyword in request_lower:
                 keyword_count["complex"] += 1
-        
+
         for keyword in RequestComplexityClassifier.CRITICAL_KEYWORDS:
             if keyword in request_lower:
                 keyword_count["critical"] += 1
-        
+
         # Determine complexity level
         if keyword_count["critical"] > 0 or word_count > RequestComplexityClassifier.COMPLEX_MAX_WORDS:
             return "CRITICAL", 25
@@ -126,7 +129,7 @@ class RequestComplexityClassifier:
 
 class RoundContext:
     """Context for a single round of execution."""
-    
+
     round_number: int
     user_input: str
     previous_context: Dict[str, Any]
@@ -137,10 +140,10 @@ class RoundContext:
 class ConversationProtocol:
     """
     Stateless executor that runs one orchestrator turn and returns explicit decision.
-    
+
     NOT a loop - each call to execute_turn() executes exactly one turn and returns
     a ContinuationDecision. The caller decides what to do next.
-    
+
     This enables:
     - Independent testing of each turn
     - Clear audit trail per turn
@@ -148,7 +151,7 @@ class ConversationProtocol:
     - Per-turn governance validation
     - Per-turn token tracking
     - Explicit continuation reasons (not hidden loop state)
-    
+
     Attributes:
         orchestrator: The IOrchestrator to wrap
         max_turns: Safety limit on iterations (default: 10)
@@ -171,7 +174,7 @@ class ConversationProtocol:
     ):
         """
         Initialize ConversationProtocol wrapper.
-        
+
         Args:
             orchestrator: IOrchestrator instance to wrap
             max_turns: Maximum turns before safety halt (default: 10)
@@ -185,69 +188,69 @@ class ConversationProtocol:
         self.max_turns = max_turns
         self.token_limit = token_limit
         self.adaptive_turn_limit = adaptive_turn_limit  # AC-FUTURE-004
-        
+
         # Event handling
         self.event_registry = event_registry or EventRegistry()
-        
+
         # Execution state
         self.turn_number: int = 0
         self.total_tokens_used: int = 0
         self.decisions_history: List[ContinuationDecision] = []
         self.conversation_session: Optional[Any] = None
-        
+
         # AC-FUTURE-006: Turn result memoization cache
         self.turn_result_cache: Dict[str, Any] = {}  # Maps turn_key → result
         self.turn_cache_hits: int = 0
         self.turn_cache_misses: int = 0
         self.memoization_enabled: bool = memoization_enabled
-        
+
         # Governance and audit
         self._governance_registry = None  # Will be injected if available
         self._audit_logger = None  # Will be set if available
         self._tier_validator = TierAccessValidator(enforce_mode=True)  # AC-REM-002-08: Wire validator
-        
+
         # AC-FIX-001-01: Initialize DatabaseTransactionManager for atomic turn execution
         # AC-FIX-008-01: Use provided db_path for tests, default for production
         if db_path is None:
             db_path = str(Path(__file__).parent.parent.parent / "cortex_brain" / "state" / "governance.db")
         self.transaction_manager = DatabaseTransactionManager(db_path)
-        
+
         # AC-REM-001-01: Initialize AST Intelligence Engine for comprehension phase
         self.ast_engine = ASTIntelligenceEngine(enable_cache=True)
-        
+
         # AC-REM-001-02: Initialize CallGraphBuilder for layer tracing
         self.call_graph_builder = CallGraphBuilder()
-        
+
         # AC-REM-001-03: Initialize DependencyMapper for import classification
         self.dependency_mapper = DependencyMapper()
-        
+
         # AC-REM-001-04: Initialize PatternDetector for architectural patterns
         self.pattern_detector = PatternDetector()
 
     def calculate_adaptive_turn_limit(self, user_request: str) -> int:
         """
         Calculate adaptive turn limit based on request complexity.
-        
+
         AC-FUTURE-004: Adaptive turn limit determination
-        
+
         Uses RequestComplexityClassifier to analyze request and return
         appropriate max_turns for this conversation:
         - SIMPLE: 2-3 turns
         - MEDIUM: 5-8 turns
         - COMPLEX: 10-15 turns
         - CRITICAL: 20-25 turns
-        
+
         Args:
             user_request: User's natural language request
-            
+
         Returns:
             Recommended max_turns for this request (or original self.max_turns if adaptive disabled)
         """
         if not self.adaptive_turn_limit:
             return self.max_turns
-        
+
         complexity_level, recommended_turns = RequestComplexityClassifier.classify(user_request)
-        
+
         # Log the classification
         if self._audit_logger:
             self._audit_logger.log_operation_complete(
@@ -260,20 +263,20 @@ class ConversationProtocol:
                     "user_request": user_request[:100]
                 }
             )
-        
+
         return recommended_turns
 
     def _compute_turn_hash(self, round_context: RoundContext) -> str:
         """
         Compute hash of turn context for memoization.
-        
+
         AC-FUTURE-006: Turn result memoization
-        
+
         Creates deterministic hash of turn input to enable result caching.
-        
+
         Args:
             round_context: Turn context with user input and settings
-            
+
         Returns:
             Hex hash string of turn context
         """
@@ -284,67 +287,67 @@ class ConversationProtocol:
             "round": round_context.round_number,
             "turn": self.turn_number
         }
-        
+
         # Hash to string
         key_json = json.dumps(key_data, sort_keys=True, default=str)
         return hashlib.md5(key_json.encode()).hexdigest()
-    
+
     def _get_cached_result(self, turn_hash: str) -> Optional[Dict[str, Any]]:
         """
         Retrieve cached result for identical turn.
-        
+
         AC-FUTURE-006: Memoization retrieval
-        
+
         Args:
             turn_hash: Hash of turn context
-            
+
         Returns:
             Cached result if available, None otherwise
         """
         if not self.memoization_enabled:
             return None
-        
+
         if turn_hash in self.turn_result_cache:
             self.turn_cache_hits += 1
             return self.turn_result_cache[turn_hash]
-        
+
         self.turn_cache_misses += 1
         return None
-    
+
     def _cache_result(self, turn_hash: str, result: Dict[str, Any]) -> None:
         """
         Cache result for this turn.
-        
+
         AC-FUTURE-006: Memoization storage
-        
+
         Args:
             turn_hash: Hash of turn context
             result: Result to cache
         """
         if not self.memoization_enabled or not result:
             return
-        
+
         # Limit cache size to 1000 entries (prevent memory bloat)
         if len(self.turn_result_cache) >= 1000:
             # Remove oldest entries (simple FIFO)
             keys_to_remove = list(self.turn_result_cache.keys())[:100]
             for key in keys_to_remove:
                 del self.turn_result_cache[key]
-        
+
         self.turn_result_cache[turn_hash] = result
-    
+
     def get_memoization_stats(self) -> Dict[str, Any]:
         """
         Get memoization cache statistics.
-        
+
         AC-FUTURE-006: Cache performance metrics
-        
+
         Returns:
             Dict with cache hits, misses, hit rate
         """
         total = self.turn_cache_hits + self.turn_cache_misses
         hit_rate = (self.turn_cache_hits / total * 100) if total > 0 else 0.0
-        
+
         return {
             "cache_enabled": self.memoization_enabled,
             "cache_size": len(self.turn_result_cache),
@@ -359,9 +362,9 @@ class ConversationProtocol:
     ) -> Result[Dict[str, Any]]:
         """
         Execute one turn and return explicit continuation decision.
-        
+
         AC-FIX-001-01: Atomic transaction for turn execution + audit logging
-        
+
         This is THE core method - it executes exactly one turn within an atomic transaction:
         1. Increment turn counter
         2. Validate governance (pre-turn check)
@@ -372,42 +375,42 @@ class ConversationProtocol:
         7. Evaluate continuation logic
         8. Log AC_COMPLETE audit entry (in transaction)
         9. Return ContinuationDecision
-        
+
         All audit entries and state changes committed atomically or rolled back together.
-        
+
         Args:
             round_context: RoundContext with user_input, previous_context, orchestrator_name
-        
+
         Returns:
             Result[Dict[str, Any]] - Orchestrator output or error
-        
+
         Raises:
             None - errors wrapped in Result type
         """
         # Extract inputs from round_context
         user_input = round_context.user_input
         previous_context = round_context.previous_context
-        
+
         # AC-FIX-001-01: Wrap entire turn in atomic transaction
         # Both turn execution and audit logging occur in single transaction boundary
         try:
             with self.transaction_manager.atomic_operation("AC-FIX-001-01", f"execute_turn_{self.turn_number}") as txn:
                 # Increment turn counter
                 self.turn_number += 1
-                
+
                 # Step 1: Pre-turn governance validation (CORE-017)
                 governance_result = self._validate_governance_before_turn()
                 if governance_result.is_err():
                     raise Exception(f"Governance validation failed: {governance_result.error}")
-                
+
                 # Step 2: Create round context
                 round_context = self._create_round_context(
                     user_input, previous_context
                 )
-                
+
                 # Step 3: Log AC_START (audit trail) - within transaction
                 ac_start_entry_id = self._log_ac_start(round_context)
-                
+
                 # Step 3b: Run LENS comprehension phase (AC-REM-001-01)
                 # Execute AST scanning on identified target files
                 comprehension_result = self._run_comprehension_phase(
@@ -416,12 +419,12 @@ class ConversationProtocol:
                 if comprehension_result.is_err():
                     # Log comprehension error but continue (graceful degradation)
                     pass
-                
+
                 # Add comprehension results to context for orchestrator
                 round_context.previous_context["comprehension_result"] = (
                     comprehension_result.unwrap() if comprehension_result.is_ok() else {}
                 )
-                
+
                 # Step 3c: Check pre-execution governance gates (AC-FIX-002-01)
                 # FINDING-002: Governance must prevent (not just log) unauthorized operations
                 pregate_result = self._check_pre_execution_gates()
@@ -429,7 +432,7 @@ class ConversationProtocol:
                     # Pre-gate blocked execution - return GOVERNANCE_HALT
                     error_msg = pregate_result.error
                     self._log_ac_execute_with_error(ac_start_entry_id, error_msg)
-                    
+
                     # Return governance halt decision
                     halt_decision = ContinuationDecision(
                         reason=ContinuationReason.GOVERNANCE_HALT,
@@ -441,7 +444,7 @@ class ConversationProtocol:
                     )
                     self.decisions_history.append(halt_decision)
                     return Ok(halt_decision)
-                
+
                 # Step 4: Execute orchestrator for one turn
                 try:
                     orchestrator_result = self.orchestrator.execute(
@@ -451,10 +454,10 @@ class ConversationProtocol:
                     # Handle orchestrator errors
                     self._log_ac_execute_with_error(ac_start_entry_id, str(e))
                     raise Exception(f"Orchestrator execution failed: {str(e)}")
-                
+
                 # Step 5: Log AC_EXECUTE (audit trail) - within transaction
                 self._log_ac_execute(ac_start_entry_id, orchestrator_result)
-                
+
                 # Step 6: Evaluate continuation logic
                 decision = self._evaluate_continuation(
                     user_input,
@@ -462,24 +465,24 @@ class ConversationProtocol:
                     previous_context,
                     ac_start_entry_id,
                 )
-                
+
                 # Step 7: Log AC_COMPLETE (audit trail) - within transaction
                 ac_complete_entry_id = self._log_ac_complete(
                     ac_start_entry_id, decision
                 )
-                
+
                 # Update decision with audit entry
                 decision_with_audit = self._add_audit_entry_to_decision(
                     decision, ac_complete_entry_id
                 )
-                
+
                 # Step 8: Add to history
                 self.decisions_history.append(decision_with_audit)
-                
+
                 # Transaction commits automatically on context exit
                 # All audit entries and state changes committed atomically
                 return Ok(decision_with_audit)
-        
+
         except Exception as e:
             # Transaction automatically rolled back on exception
             # Catch any errors and create error decision
@@ -497,23 +500,23 @@ class ConversationProtocol:
     def _validate_governance_before_turn(self) -> Result[bool]:
         """
         Pre-turn governance validation gate (CORE-017).
-        
+
         Validates governance state before executing each turn:
         1. Initialize GovernanceRegistry if not already done
         2. Call should_proceed() with current turn number and orchestrator ID
         3. Return Ok(True) if validation passes
         4. Raise GovernanceViolationError on violation
-        
+
         This method is called BEFORE each turn to enforce:
         - TIER-0 immutability (AR-001-03)
         - Strict governance enforcement (CORE-017)
         - Per-turn audit trail (CORE-027)
-        
+
         Implementation for AC-REM-002-02.
-        
+
         Returns:
             Result[bool] - Ok(True) if OK to proceed, Err(message) on violation
-        
+
         Raises:
             GovernanceViolationError if governance violations detected
         """
@@ -524,7 +527,7 @@ class ConversationProtocol:
                 init_result = self._governance_registry.initialize()
                 if init_result.is_err():
                     return Err(f"Failed to initialize governance registry: {init_result.error}")
-            
+
             # Get orchestrator ID for governance validation
             # Try multiple attribute names to find ID
             orchestrator_id = None
@@ -536,13 +539,13 @@ class ConversationProtocol:
                 orchestrator_id = self.orchestrator.__class__.__name__
             else:
                 orchestrator_id = str(type(self.orchestrator))
-            
+
             # Validate governance state for this turn
             validation_result = self._governance_registry.should_proceed(
                 turn_number=self.turn_number,
                 orchestrator_id=orchestrator_id
             )
-            
+
             # Handle validation result
             if validation_result.is_ok():
                 # Governance validation passed
@@ -556,7 +559,7 @@ class ConversationProtocol:
                             tier=1,  # Default tier for infrastructure operations
                             governance_rules=None
                         )
-                        
+
                         if not tier_access_result:
                             # Tier access validation failed (non-enforcing mode returned False)
                             violation_message = (
@@ -590,7 +593,7 @@ class ConversationProtocol:
                                 }
                             )
                         raise GovernanceViolationError(violation_message)
-                
+
                 # Log to audit trail if logger available
                 if self._audit_logger:
                     self._audit_logger.log_operation_start(
@@ -607,7 +610,7 @@ class ConversationProtocol:
             else:
                 # Governance violation detected
                 violation_message = validation_result.error
-                
+
                 if self._audit_logger:
                     self._audit_logger.log_operation_complete(
                         ac_id="AC-REM-002-02",
@@ -619,14 +622,14 @@ class ConversationProtocol:
                             "violation": violation_message
                         }
                     )
-                
+
                 # Raise exception to halt execution
                 raise GovernanceViolationError(violation_message)
-        
+
         except GovernanceViolationError as e:
             # Re-raise governance violations
             raise e
-        
+
         except Exception as e:
             # Wrap other exceptions
             error_msg = f"Governance validation failed: {str(e)}"
@@ -635,14 +638,14 @@ class ConversationProtocol:
     def _check_pre_execution_gates(self) -> Result[bool]:
         """
         Check pre-execution governance gates (AC-FIX-002-01).
-        
+
         This method is called AFTER governance validation but BEFORE orchestrator execution.
         It applies pre-gates that can prevent the orchestrator from running based on:
-        
+
         1. Resource quota availability
         2. Actor authorization
         3. Tier access declarations
-        
+
         Returns:
             Ok(True) if all gates pass (execution allowed)
             Err(message) if any gate blocks (execution prevented)
@@ -650,7 +653,7 @@ class ConversationProtocol:
         try:
             # Get pre-gate instance
             pregate = get_governance_pregate()
-            
+
             # Get orchestrator ID
             orchestrator_id = "unknown"
             if hasattr(self.orchestrator, 'id'):
@@ -659,14 +662,14 @@ class ConversationProtocol:
                 orchestrator_id = self.orchestrator.domain
             elif hasattr(self.orchestrator, '__class__'):
                 orchestrator_id = self.orchestrator.__class__.__name__
-            
+
             # Prepare gate context
             context = {
                 "actor_id": orchestrator_id,
                 "turn_number": self.turn_number,
                 "timestamp": datetime.utcnow().isoformat(),
             }
-            
+
             # Get declared tier access if available
             declared_tiers = []
             if hasattr(self.orchestrator, 'get_tier_access'):
@@ -674,7 +677,7 @@ class ConversationProtocol:
                     declared_tiers = self.orchestrator.get_tier_access()
                 except Exception:
                     declared_tiers = []
-            
+
             # Evaluate all gates
             gate_decision: PreGateDecision = pregate.evaluate_all_gates(
                 operation_id=f"turn_{self.turn_number}",
@@ -684,7 +687,7 @@ class ConversationProtocol:
                 tier_access=declared_tiers if declared_tiers else None,
                 context=context
             )
-            
+
             # Log gate decision to audit trail if logger available
             if self._audit_logger:
                 self._audit_logger.log_operation_start(
@@ -698,11 +701,11 @@ class ConversationProtocol:
                         "violation_type": gate_decision.violation_type,
                     }
                 )
-            
+
             # Handle gate decision
             if not gate_decision.allowed:
                 error_msg = f"Pre-execution gate blocked: {gate_decision.reason}"
-                
+
                 if self._audit_logger:
                     self._audit_logger.log_operation_complete(
                         ac_id="AC-FIX-002-01",
@@ -714,11 +717,11 @@ class ConversationProtocol:
                             "audit_context": gate_decision.audit_context,
                         }
                     )
-                
+
                 return Err(error_msg)
-            
+
             return Ok(True)
-        
+
         except Exception as e:
             error_msg = f"Pre-execution gate check failed: {str(e)}"
             if self._audit_logger:
@@ -735,18 +738,18 @@ class ConversationProtocol:
     ) -> RoundContext:
         """
         Create round context for single-turn execution.
-        
+
         This context includes:
         - LENS phases (Language, Examination, Navigation, Synthesis)
         - Turn metadata (number, timestamp)
         - Orchestrator metadata
         - User input
         - Previous context
-        
+
         Args:
             user_input: User's input for this turn
             previous_context: Context from previous turns
-        
+
         Returns:
             RoundContext with all metadata for this turn
         """
@@ -757,7 +760,7 @@ class ConversationProtocol:
             orchestrator_name=self.orchestrator.__class__.__name__,
             timestamp=datetime.now(),
         )
-        
+
         # Add LENS phase metadata (executed fresh per turn - not cached)
         previous_context["lens_phases"] = {
             "language": "ACTIVE",
@@ -766,27 +769,27 @@ class ConversationProtocol:
             "synthesis": "ACTIVE",
         }
         previous_context["turn_number"] = self.turn_number
-        
+
         return context
 
     def _log_ac_start(self, round_context: RoundContext) -> str:
         """
         Log AC_START audit entry.
-        
+
         Records:
         - Operation: AC_START
         - Turn number
         - Round context
         - Timestamp
-        
+
         Args:
             round_context: The round context
-        
+
         Returns:
             Entry ID for linking EXECUTE/COMPLETE entries
         """
         entry_id = f"ac-start-turn-{self.turn_number}"
-        
+
         if self._audit_logger:
             self._audit_logger.log_entry(
                 operation="AC_START",
@@ -797,7 +800,7 @@ class ConversationProtocol:
                     "user_input_length": len(round_context.user_input),
                 },
             )
-        
+
         return entry_id
 
     def _log_ac_execute(
@@ -805,21 +808,21 @@ class ConversationProtocol:
     ) -> str:
         """
         Log AC_EXECUTE audit entry.
-        
+
         Records:
         - Operation: AC_EXECUTE
         - Orchestrator result
         - Timestamp
-        
+
         Args:
             ac_start_entry_id: AC_START entry for linking
             orchestrator_result: Result from orchestrator.execute()
-        
+
         Returns:
             Entry ID
         """
         entry_id = f"ac-execute-turn-{self.turn_number}"
-        
+
         if self._audit_logger:
             self._audit_logger.log_entry(
                 operation="AC_EXECUTE",
@@ -830,7 +833,7 @@ class ConversationProtocol:
                 },
                 previous_entry_id=ac_start_entry_id,
             )
-        
+
         return entry_id
 
     def _log_ac_execute_with_error(
@@ -838,7 +841,7 @@ class ConversationProtocol:
     ) -> str:
         """Log AC_EXECUTE with error details."""
         entry_id = f"ac-execute-error-turn-{self.turn_number}"
-        
+
         if self._audit_logger:
             self._audit_logger.log_entry(
                 operation="AC_EXECUTE_ERROR",
@@ -846,7 +849,7 @@ class ConversationProtocol:
                 details={"parent_entry": ac_start_entry_id, "error": error_msg},
                 previous_entry_id=ac_start_entry_id,
             )
-        
+
         return entry_id
 
     def _evaluate_continuation(
@@ -858,7 +861,7 @@ class ConversationProtocol:
     ) -> ContinuationDecision:
         """
         Evaluate continuation logic - THE KEY DECISION POINT.
-        
+
         Evaluates all break conditions and fires terminal events:
         1. Max turns reached? → MaxTurnsReachedEvent → MAX_ROUNDS_REACHED
         2. Token limit approaching? → TokenLimitEvent → TOKEN_LIMIT
@@ -868,13 +871,13 @@ class ConversationProtocol:
         6. Result indicates completion? → PhaseCompletedEvent → COMPLETION
         7. Orchestrator suggests next operation? → IMPLICIT_NEXT_OPERATION
         8. Otherwise → INTERACTION_REQUIRED (wait for user input)
-        
+
         Args:
             user_input: User's input
             orchestrator_result: Result from orchestrator
             previous_context: Previous round context
             ac_start_entry_id: AC_START entry ID
-        
+
         Returns:
             ContinuationDecision with explicit reason
         """
@@ -894,7 +897,7 @@ class ConversationProtocol:
                 turn_number=self.turn_number,
                 token_usage=self._get_token_usage(),
             )
-        
+
         # Check token limit
         if self.total_tokens_used > int(self.token_limit * 0.9):
             tokens_percentage = int(
@@ -914,7 +917,7 @@ class ConversationProtocol:
                 turn_number=self.turn_number,
                 token_usage=self._get_token_usage(),
             )
-        
+
         # Check for orchestrator errors
         if orchestrator_result.get("error"):
             error_msg = orchestrator_result.get("error", "Unknown error")
@@ -932,7 +935,7 @@ class ConversationProtocol:
                 turn_number=self.turn_number,
                 token_usage=self._get_token_usage(),
             )
-        
+
         # Check for user approval rejection
         if orchestrator_result.get("requires_approval") and orchestrator_result.get(
             "approval_rejected"
@@ -952,7 +955,7 @@ class ConversationProtocol:
                 turn_number=self.turn_number,
                 token_usage=self._get_token_usage(),
             )
-        
+
         # Check if result indicates completion
         if orchestrator_result.get("status") == "completed":
             event = PhaseCompletedEvent(
@@ -968,7 +971,7 @@ class ConversationProtocol:
                 turn_number=self.turn_number,
                 token_usage=self._get_token_usage(),
             )
-        
+
         # Check for orchestrator-specified next operation
         next_op = orchestrator_result.get("next_operation", None)
         if next_op:
@@ -981,7 +984,7 @@ class ConversationProtocol:
                 turn_number=self.turn_number,
                 token_usage=self._get_token_usage(),
             )
-        
+
         # Default: require user follow-up
         return ContinuationDecision(
             should_continue=False,
@@ -996,21 +999,21 @@ class ConversationProtocol:
     ) -> str:
         """
         Log AC_COMPLETE audit entry.
-        
+
         Records:
         - Operation: AC_COMPLETE
         - Continuation decision
         - Timestamp
-        
+
         Args:
             ac_start_entry_id: AC_START entry for linking
             decision: The continuation decision made
-        
+
         Returns:
             Entry ID
         """
         entry_id = f"ac-complete-turn-{self.turn_number}"
-        
+
         if self._audit_logger:
             self._audit_logger.log_entry(
                 operation="AC_COMPLETE",
@@ -1025,7 +1028,7 @@ class ConversationProtocol:
                 },
                 previous_entry_id=ac_start_entry_id,
             )
-        
+
         return entry_id
 
     def _add_audit_entry_to_decision(
@@ -1035,11 +1038,11 @@ class ConversationProtocol:
     ) -> ContinuationDecision:
         """
         Create new decision with audit entry ID.
-        
+
         Args:
             decision: Original decision
             ac_complete_entry_id: The AC_COMPLETE entry ID
-        
+
         Returns:
             New decision with audit entry ID
         """
@@ -1059,11 +1062,11 @@ class ConversationProtocol:
     ) -> Result["ContinuationDecision"]:
         """
         Create and return a halt decision.
-        
+
         Args:
             reason: Reason for halting
             error_msg: Error message (if applicable)
-        
+
         Returns:
             Result with halt decision
         """
@@ -1080,7 +1083,7 @@ class ConversationProtocol:
     def _get_token_usage(self) -> Dict[str, int]:
         """
         Get current token usage.
-        
+
         Returns:
             Dict with prompt, completion, total tokens
         """
@@ -1097,19 +1100,19 @@ class ConversationProtocol:
     ) -> Result[Dict[str, Any]]:
         """
         AC-REM-001-01: Execute LENS comprehension phase with AST scanning.
-        
+
         This phase:
         1. Identifies target files from user input context
         2. Uses ASTIntelligenceEngine to parse each target file
         3. Collects parse results for downstream phases
         4. Stores comprehension results in context
-        
+
         This runs on EVERY turn (per AC-REM-001-06 requirement).
-        
+
         Args:
             user_input: User's input for this turn
             round_context: Round context with previous context
-        
+
         Returns:
             Result[Dict] with comprehension results:
             - target_files: List of analyzed files
@@ -1123,10 +1126,10 @@ class ConversationProtocol:
                 "summary": {},
                 "turn_number": round_context.round_number,
             }
-            
+
             # Try to extract target files from previous context or current round
             target_files: List[Path] = []
-            
+
             # Check if orchestrator result from previous turn contains target files
             prev_result = round_context.previous_context.get(
                 "last_orchestrator_result", {}
@@ -1137,7 +1140,7 @@ class ConversationProtocol:
                     for t in prev_targets:
                         if isinstance(t, (str, Path)):
                             target_files.append(Path(t))
-            
+
             # If no explicit targets, try to identify files from project context
             if not target_files:
                 # Fallback: Look for common source directories
@@ -1150,14 +1153,14 @@ class ConversationProtocol:
                         target_files.extend(py_files)
                         if len(target_files) >= 5:
                             break
-            
+
             # AC-REM-001-01: Parse each target file with ASTIntelligenceEngine
             parse_results = []
             for target_file in target_files:
                 try:
                     parse_result = self.ast_engine.parse_file(target_file)
                     parse_results.append(parse_result)
-                    
+
                     comprehension_data["target_files"].append(str(target_file))
                 except Exception as e:
                     # Graceful error handling per AC-REM-001-01
@@ -1171,12 +1174,12 @@ class ConversationProtocol:
                                 "error": str(e),
                             },
                         )
-            
+
             # Store parse results (serialize to dicts for JSON compatibility)
             comprehension_data["parse_results"] = [
                 r.to_dict() for r in parse_results
             ]
-            
+
             # AC-REM-001-02: Build call graphs for layer tracing
             call_graphs = []
             for parse_result in parse_results:
@@ -1192,12 +1195,12 @@ class ConversationProtocol:
                             success=False,
                             details={"error": str(e)},
                         )
-            
+
             # Store call graphs (serialize to dicts for JSON compatibility)
             comprehension_data["call_graphs"] = [
                 g.to_dict() for g in call_graphs
             ]
-            
+
             # AC-REM-001-03: Map dependencies for impact analysis
             dependency_maps = []
             for parse_result in parse_results:
@@ -1213,22 +1216,22 @@ class ConversationProtocol:
                             success=False,
                             details={"error": str(e)},
                         )
-            
+
             # Store dependency maps (serialize to dicts for JSON compatibility)
             comprehension_data["dependency_maps"] = [
                 m.to_dict() for m in dependency_maps
             ]
-            
+
             # Aggregate dependency statistics
             all_stdlib = set()
             all_third_party = set()
             all_local = set()
-            
+
             for dep_map in dependency_maps:
                 all_stdlib.update(dep_map.get_standard_library())
                 all_third_party.update(dep_map.get_third_party())
                 all_local.update(dep_map.get_local())
-            
+
             # AC-REM-001-04: Detect architectural patterns
             patterns_detected = []
             for parse_result in parse_results:
@@ -1244,15 +1247,15 @@ class ConversationProtocol:
                             success=False,
                             details={"error": str(e)},
                         )
-            
+
             # Store detected patterns (serialize to dicts for JSON compatibility)
             comprehension_data["patterns_detected"] = [
                 p.to_dict() for p in patterns_detected
             ]
-            
+
             # Count layer transitions across all call graphs
             total_layer_transitions = sum(g.edge_count for g in call_graphs)
-            
+
             # Build comprehension summary
             comprehension_data["summary"] = {
                 "files_analyzed": len(target_files),
@@ -1271,7 +1274,7 @@ class ConversationProtocol:
                 "local_dependencies": len(all_local),
                 "patterns_detected": len(patterns_detected),
             }
-            
+
             if self._audit_logger:
                 self._audit_logger.log_operation_complete(
                     ac_id="AC-REM-001-04",
@@ -1284,7 +1287,7 @@ class ConversationProtocol:
                         )),
                     },
                 )
-            
+
             if self._audit_logger:
                 self._audit_logger.log_operation_complete(
                     ac_id="AC-REM-001-03",
@@ -1297,7 +1300,7 @@ class ConversationProtocol:
                         "local": len(all_local),
                     },
                 )
-            
+
             if self._audit_logger:
                 self._audit_logger.log_operation_complete(
                     ac_id="AC-REM-001-02",
@@ -1308,7 +1311,7 @@ class ConversationProtocol:
                         "transitions": total_layer_transitions,
                     },
                 )
-            
+
             if self._audit_logger:
                 self._audit_logger.log_operation_complete(
                     ac_id="AC-REM-001-01",
@@ -1316,9 +1319,9 @@ class ConversationProtocol:
                     success=True,
                     details=comprehension_data["summary"],
                 )
-            
+
             return Ok(comprehension_data)
-            
+
         except Exception as e:
             # Graceful error handling - comprehension errors don't block execution
             if self._audit_logger:
@@ -1328,7 +1331,7 @@ class ConversationProtocol:
                     success=False,
                     details={"error": str(e)},
                 )
-            
+
             # Return empty comprehension data to allow execution to continue
             return Ok({
                 "target_files": [],
@@ -1341,17 +1344,17 @@ class ConversationProtocol:
     ) -> str:
         """
         AC-REM-001-05: Generate comprehension YAML for approval gate.
-        
+
         Creates holistic context YAML containing:
         - parsed_files: AST scan results
         - call_graphs: Layer relationship tracing
         - dependencies: Import classification
         - patterns: Architectural pattern detection
         - impact_map: Change impact analysis
-        
+
         Args:
             comprehension_data: Result from _run_comprehension_phase
-        
+
         Returns:
             YAML string for approval gate workflow
         """
@@ -1363,10 +1366,10 @@ class ConversationProtocol:
                 "timestamp": datetime.now().isoformat(),
                 "turn_number": self.turn_number,
             }
-            
+
             # Add summary
             approval_yaml["summary"] = comprehension_data.get("summary", {})
-            
+
             # Add parsed files
             if comprehension_data.get("parse_results"):
                 approval_yaml["parsed_files"] = [
@@ -1378,11 +1381,11 @@ class ConversationProtocol:
                     }
                     for i, r in enumerate(comprehension_data["parse_results"][:5])
                 ]
-            
+
             # Add call graphs
             if comprehension_data.get("call_graphs"):
                 approval_yaml["call_graphs"] = comprehension_data["call_graphs"][:5]
-            
+
             # Add dependencies
             if comprehension_data.get("dependency_maps"):
                 approval_yaml["dependencies"] = {
@@ -1393,14 +1396,14 @@ class ConversationProtocol:
                     },
                     "maps": comprehension_data["dependency_maps"][:3],
                 }
-            
+
             # Add patterns
             if comprehension_data.get("patterns_detected"):
                 approval_yaml["patterns"] = {
                     "total": len(comprehension_data["patterns_detected"]),
                     "details": comprehension_data["patterns_detected"],
                 }
-            
+
             # Add impact map
             approval_yaml["impact_map"] = {
                 "files_affected": comprehension_data.get("summary", {}).get("files_analyzed", 0),
@@ -1408,7 +1411,7 @@ class ConversationProtocol:
                 "transitive_dependency_depth": 3,  # From AC-REM-001-03
                 "architectural_patterns_identified": comprehension_data.get("summary", {}).get("patterns_detected", 0),
             }
-            
+
             # Add approval recommendation
             approval_yaml["approval_recommendation"] = {
                 "status": "READY_FOR_APPROVAL",
@@ -1416,16 +1419,16 @@ class ConversationProtocol:
                 "reason": "All comprehension components completed successfully",
                 "sign_off_required": True,
             }
-            
+
             # Convert to YAML string
             yaml_str = yaml.dump(
                 approval_yaml,
                 default_flow_style=False,
                 sort_keys=False,
             )
-            
+
             return yaml_str
-            
+
         except Exception as e:
             # Graceful error handling
             if self._audit_logger:
@@ -1443,11 +1446,11 @@ class ConversationProtocol:
     ) -> Optional[Dict[str, Any]]:
         """
         AC-RECOMMENDATION-001: Evaluate solution options and mark best one.
-        
+
         Converts solution options dict format to SolutionOption objects,
         scores them using the recommendation engine, and marks the best option
         with ⭐ RECOMMENDED BY CORTEX for presentation to user.
-        
+
         Args:
             solution_options: List of solution option dictionaries with keys:
                 - option_id: Unique identifier
@@ -1465,7 +1468,7 @@ class ConversationProtocol:
                 - pros: List[str]
                 - cons: List[str]
                 - timeline_estimate: str (optional)
-        
+
         Returns:
             Dict with recommendation details including marked best option
         """
@@ -1475,7 +1478,7 @@ class ConversationProtocol:
                 SolutionOption,
                 get_recommendation_engine,
             )
-            
+
             # Convert dicts to SolutionOption objects
             options = []
             for opt_dict in solution_options:
@@ -1498,14 +1501,14 @@ class ConversationProtocol:
                     timeline_estimate=opt_dict.get("timeline_estimate"),
                 )
                 options.append(option)
-            
+
             # Get recommendation (using singleton pattern)
             engine = get_recommendation_engine()
             recommendation = engine.recommend_best_option(
                 options,
                 context={"turn_number": self.turn_number}
             )
-            
+
             # Audit the recommendation
             if self._audit_logger:
                 self._audit_logger.log_operation_complete(
@@ -1518,9 +1521,9 @@ class ConversationProtocol:
                         "score": engine.score_option(recommendation.best_option),
                     },
                 )
-            
+
             return recommendation.to_dict()
-        
+
         except Exception as e:
             logger.error(f"Error in recommendation engine: {str(e)}")
             if self._audit_logger:

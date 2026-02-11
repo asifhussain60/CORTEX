@@ -23,14 +23,14 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
-from dataclasses import dataclass, field, asdict
+from dataclasses import asdict, dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, AsyncIterator
+from typing import Any, AsyncIterator, Callable, Dict, List, Optional
 from uuid import uuid4
 
-from cortex.core.result import Result, Ok, Err
+from cortex.core.result import Err, Ok, Result
 from cortex.orchestrators.decorators import inject_orchestrator_context
 
 logger = logging.getLogger(__name__)

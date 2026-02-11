@@ -13,15 +13,15 @@ Version: 1.0.0
 Phase: Phase 21.5 - Universal Debugging
 """
 
+import json
+import logging
+import re
+from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
-import json
-import logging
-import re
-from collections import defaultdict
 
 logger = logging.getLogger(__name__)
 
@@ -53,7 +53,7 @@ class IssueType(Enum):
 @dataclass
 class DetectedIssue:
     """Represents a detected issue with full context."""
-    
+
     issue_type: IssueType
     severity: IssueSeverity
     title: str
@@ -64,7 +64,7 @@ class DetectedIssue:
     evidence: List[Dict[str, Any]] = field(default_factory=list)
     fix: Optional[str] = None
     fix_code: Optional[str] = None
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
@@ -84,7 +84,7 @@ class DetectedIssue:
 @dataclass
 class RaceCondition:
     """Represents a detected race condition."""
-    
+
     description: str
     files: List[str]
     sequence: str
@@ -92,7 +92,7 @@ class RaceCondition:
     actual_order: List[str]
     evidence: List[Dict[str, Any]] = field(default_factory=list)
     fix: Optional[str] = None
-    
+
     def to_dict(self) -> Dict[str, Any]:
         return {
             "description": self.description,
@@ -108,13 +108,13 @@ class RaceCondition:
 @dataclass
 class IntegrationBreak:
     """Represents an integration breakage."""
-    
+
     description: str
     component: str
     dependency: str
     error_message: Optional[str] = None
     fix: Optional[str] = None
-    
+
     def to_dict(self) -> Dict[str, Any]:
         return {
             "description": self.description,
@@ -128,14 +128,14 @@ class IntegrationBreak:
 class DebugAnalyzer:
     """
     Intelligent analyzer for captured debug logs.
-    
+
     Detects:
     - Race conditions via execution order analysis
     - Integration breakages via error pattern matching
     - Timing issues via async operation tracking
     - Root causes via call chain analysis
     """
-    
+
     # Known error patterns and their fixes
     ERROR_PATTERNS = {
         r"(\w+) is not defined": {
@@ -179,14 +179,14 @@ class DebugAnalyzer:
             "fix_template": "Function is undefined. Check import/export statements and load order.",
         },
     }
-    
+
     # Expected initialization order for common patterns
     EXPECTED_ORDERS = {
         "data_loading": ["DataAdapter", "DataLoader", "DataBinder", "Render"],
         "dom_init": ["DOMContentLoaded", "QuerySelectors", "EventListeners", "Init"],
         "async_flow": ["Start", "Await", "Then", "Complete"],
     }
-    
+
     def __init__(
         self,
         session_id: str,
@@ -194,9 +194,9 @@ class DebugAnalyzer:
     ):
         self.session_id = session_id
         self.output_dir = Path(output_dir)
-        
+
         logger.info(f"DebugAnalyzer initialized for session {session_id}")
-    
+
     def analyze(
         self,
         cortex_markers: List[Dict[str, Any]],
@@ -205,27 +205,27 @@ class DebugAnalyzer:
     ) -> Dict[str, Any]:
         """
         Analyze captured logs to detect issues.
-        
+
         Args:
             cortex_markers: CORTEX debug markers captured
             errors: Error logs captured
             warnings: Warning logs captured
-        
+
         Returns:
             Analysis results with detected issues
         """
         logger.info(f"Analyzing {len(cortex_markers)} markers, {len(errors)} errors, {len(warnings)} warnings")
-        
+
         issues: List[DetectedIssue] = []
         race_conditions: List[RaceCondition] = []
         integration_breaks: List[IntegrationBreak] = []
-        
+
         # 1. Analyze error patterns
         for error in errors:
             issue = self._analyze_error(error)
             if issue:
                 issues.append(issue)
-        
+
         # 2. Analyze execution order (race conditions)
         race_issues = self._detect_race_conditions(cortex_markers)
         race_conditions.extend(race_issues)
@@ -239,7 +239,7 @@ class DebugAnalyzer:
                 evidence=race.evidence,
                 fix=race.fix,
             ))
-        
+
         # 3. Detect integration breakages
         int_breaks = self._detect_integration_breaks(cortex_markers, errors)
         integration_breaks.extend(int_breaks)
@@ -252,15 +252,15 @@ class DebugAnalyzer:
                 related_files=[brk.component, brk.dependency],
                 fix=brk.fix,
             ))
-        
+
         # 4. Analyze timing issues
         timing_issues = self._detect_timing_issues(cortex_markers)
         issues.extend(timing_issues)
-        
+
         # 5. Analyze data flow issues
         data_issues = self._detect_data_flow_issues(cortex_markers)
         issues.extend(data_issues)
-        
+
         # Sort by severity
         severity_order = {
             IssueSeverity.CRITICAL: 0,
@@ -270,7 +270,7 @@ class DebugAnalyzer:
             IssueSeverity.INFO: 4,
         }
         issues.sort(key=lambda x: severity_order.get(x.severity, 5))
-        
+
         result = {
             "session_id": self.session_id,
             "analysis_time": datetime.now().isoformat(),
@@ -287,21 +287,21 @@ class DebugAnalyzer:
                 "integration_breaks": len(integration_breaks),
             }
         }
-        
+
         # Save analysis
         self._save_analysis(result)
-        
+
         return result
-    
+
     def _analyze_error(self, error: Dict[str, Any]) -> Optional[DetectedIssue]:
         """Analyze a single error for known patterns."""
         message = error.get("message", "")
-        
+
         for pattern, info in self.ERROR_PATTERNS.items():
             match = re.search(pattern, message, re.IGNORECASE)
             if match:
                 fix = info["fix_template"].format(*match.groups()) if match.groups() else info["fix_template"]
-                
+
                 return DetectedIssue(
                     issue_type=info["type"],
                     severity=info["severity"],
@@ -310,7 +310,7 @@ class DebugAnalyzer:
                     evidence=[error],
                     fix=fix,
                 )
-        
+
         # Unknown error
         if "error" in message.lower() or "exception" in message.lower():
             return DetectedIssue(
@@ -321,30 +321,30 @@ class DebugAnalyzer:
                 evidence=[error],
                 fix="Review error message and stack trace for root cause.",
             )
-        
+
         return None
-    
+
     def _detect_race_conditions(self, markers: List[Dict[str, Any]]) -> List[RaceCondition]:
         """Detect race conditions from execution order."""
         race_conditions = []
-        
+
         # Group markers by file
         by_file = defaultdict(list)
         for marker in markers:
             parsed = marker.get("parsed_marker", {})
             if parsed:
                 by_file[parsed.get("file", "unknown")].append(parsed)
-        
+
         # Check for common race condition patterns
-        
+
         # Pattern 1: Data accessed before load complete
         for file, file_markers in by_file.items():
             phases = [m.get("phase", "") for m in file_markers]
-            
+
             # Check if DOM accessed before data loaded
             dom_indices = [i for i, p in enumerate(phases) if p == "DOM"]
             data_indices = [i for i, p in enumerate(phases) if p in ("DATA", "ASYNC")]
-            
+
             for dom_idx in dom_indices:
                 for data_idx in data_indices:
                     if dom_idx < data_idx:
@@ -358,15 +358,15 @@ class DebugAnalyzer:
                             fix="Wait for data to load before accessing DOM elements. Use async/await or Promise chains.",
                         ))
                         break
-        
+
         # Pattern 2: Event handlers attached before elements exist
         for file, file_markers in by_file.items():
             phases = [m.get("phase", "") for m in file_markers]
             messages = [m.get("message", "") for m in file_markers]
-            
+
             event_indices = [i for i, p in enumerate(phases) if p == "EVENT"]
             init_indices = [i for i, m in enumerate(messages) if "ENTER init" in m or "ENTER constructor" in m]
-            
+
             for event_idx in event_indices:
                 if init_indices and event_idx < min(init_indices):
                     race_conditions.append(RaceCondition(
@@ -378,9 +378,9 @@ class DebugAnalyzer:
                         evidence=[file_markers[event_idx]] if event_idx < len(file_markers) else [],
                         fix="Attach event listeners inside DOMContentLoaded or after init() completes.",
                     ))
-        
+
         return race_conditions
-    
+
     def _detect_integration_breaks(
         self,
         markers: List[Dict[str, Any]],
@@ -388,11 +388,11 @@ class DebugAnalyzer:
     ) -> List[IntegrationBreak]:
         """Detect integration breakages between components."""
         breaks = []
-        
+
         # Check for missing script errors
         for error in errors:
             message = error.get("message", "")
-            
+
             # Pattern: "X not loaded"
             match = re.search(r"(\w+)\s+not\s+loaded", message, re.IGNORECASE)
             if match:
@@ -404,7 +404,7 @@ class DebugAnalyzer:
                     error_message=message,
                     fix=f"Add <script src=\"js/{component}.js\"></script> before dependent scripts.",
                 ))
-            
+
             # Pattern: "X is not defined"
             match = re.search(r"(\w+)\s+is\s+not\s+defined", message, re.IGNORECASE)
             if match:
@@ -416,19 +416,19 @@ class DebugAnalyzer:
                     error_message=message,
                     fix=f"Ensure {var_name} is defined or imported before use. Check script loading order.",
                 ))
-        
+
         return breaks
-    
+
     def _detect_timing_issues(self, markers: List[Dict[str, Any]]) -> List[DetectedIssue]:
         """Detect timing issues in async operations."""
         issues = []
-        
+
         # Group ASYNC markers
         async_markers = [m for m in markers if m.get("parsed_marker", {}).get("phase") == "ASYNC"]
-        
+
         # Check for AWAIT without completion
         await_starts = [m for m in async_markers if "AWAIT" in m.get("parsed_marker", {}).get("message", "")]
-        
+
         # If we have many awaits but errors, likely timing issue
         if len(await_starts) > 3:
             issues.append(DetectedIssue(
@@ -439,16 +439,16 @@ class DebugAnalyzer:
                 evidence=await_starts[:5],
                 fix="Consider using Promise.all() for parallel operations or sequential await for dependencies.",
             ))
-        
+
         return issues
-    
+
     def _detect_data_flow_issues(self, markers: List[Dict[str, Any]]) -> List[DetectedIssue]:
         """Detect data flow issues."""
         issues = []
-        
+
         # Check for data-related markers followed by errors
         data_markers = [m for m in markers if m.get("parsed_marker", {}).get("phase") in ("DATA", "ASYNC")]
-        
+
         # Look for "No data found" or similar messages
         for marker in markers:
             message = marker.get("message", "") or marker.get("parsed_marker", {}).get("message", "")
@@ -461,9 +461,9 @@ class DebugAnalyzer:
                     evidence=[marker],
                     fix="Check data source path, verify data file exists, and ensure correct format.",
                 ))
-        
+
         return issues
-    
+
     def generate_fix_plan(
         self,
         issues: List[Dict[str, Any]],
@@ -483,7 +483,7 @@ class DebugAnalyzer:
             },
             "estimated_time": "unknown",
         }
-        
+
         # Organize by priority
         for issue in issues:
             severity = issue.get("severity", "MEDIUM")
@@ -493,7 +493,7 @@ class DebugAnalyzer:
                 "fix": issue.get("fix", "Review and fix manually"),
                 "type": issue.get("type"),
             }
-            
+
             if severity == "CRITICAL":
                 fix_plan["by_priority"]["P0_critical"].append(fix_item)
                 fix_plan["priority_order"].append(("P0", fix_item["title"]))
@@ -506,7 +506,7 @@ class DebugAnalyzer:
             else:
                 fix_plan["by_priority"]["P3_low"].append(fix_item)
                 fix_plan["priority_order"].append(("P3", fix_item["title"]))
-        
+
         # Add race condition fixes
         for race in race_conditions:
             fix_plan["by_priority"]["P1_high"].append({
@@ -515,7 +515,7 @@ class DebugAnalyzer:
                 "fix": race.get("fix", "Fix execution order"),
                 "type": "race_condition",
             })
-        
+
         # Add integration break fixes
         for brk in integration_breaks:
             fix_plan["by_priority"]["P0_critical"].append({
@@ -525,21 +525,21 @@ class DebugAnalyzer:
                 "fix": brk.get("fix", "Fix integration"),
                 "type": "integration_break",
             })
-        
+
         # Estimate time
         p0_count = len(fix_plan["by_priority"]["P0_critical"])
         p1_count = len(fix_plan["by_priority"]["P1_high"])
         total_minutes = (p0_count * 30) + (p1_count * 15)
         fix_plan["estimated_time"] = f"{total_minutes} minutes"
-        
+
         return fix_plan
-    
+
     def _save_analysis(self, result: Dict[str, Any]):
         """Save analysis result to disk."""
         self.output_dir.mkdir(parents=True, exist_ok=True)
-        
+
         analysis_path = self.output_dir / "analysis-report.json"
         with open(analysis_path, 'w') as f:
             json.dump(result, f, indent=2)
-        
+
         logger.info(f"Analysis saved to {analysis_path}")

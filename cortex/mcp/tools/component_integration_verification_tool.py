@@ -19,13 +19,13 @@ from cortex.orchestrators.core.component_integration_verification import (
 def cortex_verify_integration(workspace_root: str) -> Dict[str, Any]:
     """
     Verify CORTEX component integration across 3 layers.
-    
+
     Args:
         workspace_root: Path to CORTEX workspace root
-    
+
     Returns:
         Dictionary with CIV report data
-    
+
     Example:
         >>> result = cortex_verify_integration("/path/to/cortex")
         >>> print(result["overall_status"])

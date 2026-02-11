@@ -20,40 +20,39 @@ import os
 from pathlib import Path
 from typing import Optional
 
-
 _PROJECT_ROOT: Optional[Path] = None
 
 
 def get_project_root() -> Path:
     """
     Get the project root directory.
-    
+
     Resolution order:
     1. CORTEX_ROOT environment variable
     2. Git root (if in git repo)
     3. Current working directory
-    
+
     Returns:
         Path to project root
     """
     global _PROJECT_ROOT
-    
+
     if _PROJECT_ROOT is not None:
         return _PROJECT_ROOT
-    
+
     # Check environment variable first
     env_root = os.environ.get("CORTEX_ROOT")
     if env_root:
         _PROJECT_ROOT = Path(env_root)
         return _PROJECT_ROOT
-    
+
     # Try to find git root
     current = Path.cwd()
     for parent in [current] + list(current.parents):
         if (parent / ".git").exists():
             _PROJECT_ROOT = parent
             return _PROJECT_ROOT
-    
+
     # Fall back to current directory
     _PROJECT_ROOT = Path.cwd()
     return _PROJECT_ROOT
@@ -62,13 +61,13 @@ def get_project_root() -> Path:
 def resolve_path(*parts: str) -> Path:
     """
     Resolve a path relative to project root.
-    
+
     Args:
         *parts: Path components (e.g., "cortex_brain", "tier0")
-    
+
     Returns:
         Absolute Path object
-    
+
     Example:
         >>> resolve_path("cortex_brain", "tier0", "governance")
         Path("/path/to/project/cortex_brain/tier0/governance")

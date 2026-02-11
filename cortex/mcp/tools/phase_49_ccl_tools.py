@@ -4,7 +4,8 @@ MCP Tool Adapters for Phase 49 Context Crystallization Layer
 Exposes CCL functionality via MCP for IDE integration.
 """
 
-from typing import Optional, Dict, Any
+from typing import Any, Dict, Optional
+
 from cortex.orchestrators.phase_49 import ContextCrystallizationLayer
 
 
@@ -19,17 +20,17 @@ class CCLMCPTools:
     ) -> Dict[str, Any]:
         """
         Start async context crystallization prefetch.
-        
+
         MCP Tool: cortex_ccl_prefetch
-        
+
         Starts non-blocking async context prefetch (rules + LENS + infrastructure).
         Returns immediately. Context becomes available asynchronously.
-        
+
         Args:
             request_id: Unique request identifier
             file_path: Optional file path for LENS analysis
             timeout_ms: Max prefetch time (default 300ms)
-        
+
         Returns:
             {
               "status": "prefetch_started",
@@ -61,16 +62,16 @@ class CCLMCPTools:
     ) -> Dict[str, Any]:
         """
         Get crystallized rules cache.
-        
+
         MCP Tool: cortex_ccl_get_rules
-        
+
         Retrieves rules cache with tier precedence:
         Company > tier1 > tier0
-        
+
         Args:
             intent: Filter by intent type (IMPLEMENT, FIX, REFACTOR, etc.)
             company_override: Apply company rule precedence
-        
+
         Returns:
             {
               "tier0_rules": {...},
@@ -111,17 +112,17 @@ class CCLMCPTools:
     ) -> Dict[str, Any]:
         """
         Warm LENS context for file.
-        
+
         MCP Tool: cortex_ccl_warm_lens
-        
+
         Performs async LENS analysis (AST + git history + comments).
         Returns partial context if timeout.
-        
+
         Args:
             file_path: Path to file for analysis
             include_comments: Extract comments
             include_patterns: Detect patterns
-        
+
         Returns:
             {
               "ast_ready": True,
@@ -158,15 +159,15 @@ class CCLMCPTools:
     ) -> Dict[str, Any]:
         """
         Get infrastructure context.
-        
+
         MCP Tool: cortex_ccl_get_infra
-        
+
         Detects environment and capabilities from Phase 46 cache.
-        
+
         Args:
             include_capabilities: List detected capabilities
             environment: Override environment detection
-        
+
         Returns:
             {
               "environment": "development",

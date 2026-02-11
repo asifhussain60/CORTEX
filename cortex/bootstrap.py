@@ -25,7 +25,7 @@ def run_startup_validation_hook() -> bool:
     Called automatically on first import of cortex module.
     This is NOT the orchestrator wiring bootstrap - for that use:
         from cortex.wiring import bootstrap_cortex
-    
+
     Returns:
         True if validation successful, False if critical issues detected.
     """
@@ -36,11 +36,11 @@ def run_startup_validation_hook() -> bool:
             rebuild_knowledge_cache()
         except Exception as e:
             logger.warning(f"Knowledge cache rebuild skipped during bootstrap: {e}")
-        
+
         # Import validator (this also triggers auto-validation)
         from cortex.infrastructure.startup_validator import (
-            run_startup_validation,
             get_startup_validator,
+            run_startup_validation,
         )
 
         # Run validation
@@ -69,7 +69,7 @@ def run_startup_validation_hook() -> bool:
                 )
                 return False
 
-    except Exception as e:
+    except Exception:
         logger.exception("CORTEX startup validation failed with exception")
         return False
 

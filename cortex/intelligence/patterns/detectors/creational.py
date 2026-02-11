@@ -6,12 +6,13 @@ Stage: S2 - Design Pattern Detectors
 AC Marker: AC-PHASE57-S2-002
 """
 
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
+
 from cortex.intelligence.patterns.base import (
     BasePatternDetector,
+    PatternCategory,
     PatternInfo,
     PatternMatch,
-    PatternCategory,
 )
 
 
@@ -34,11 +35,11 @@ class SingletonDetector(BasePatternDetector):
     ) -> List[PatternMatch]:
         """
         Detect Singleton pattern in AST.
-        
+
         Args:
             ast_node: AST node to analyze
             context: Optional execution context
-            
+
         Returns:
             List of PatternMatch instances
         """

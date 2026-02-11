@@ -7,8 +7,8 @@ for conversational guidance without TDD triggers.
 Authority: ENH-034 (INTERACTIVE Mode Addition)
 """
 
-from typing import Optional, Dict, Any
 import logging
+from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -20,15 +20,15 @@ def cortex_interactive_mode(
 ) -> Dict[str, Any]:
     """
     MCP Tool: INTERACTIVE mode for exploratory conversations.
-    
+
     Engages InteractionOrchestrator to provide evidence-based recommendations
     without triggering TDD or implementation workflows.
-    
+
     Args:
         user_question: User's question, recommendation request, or inquiry
         conversation_context: Prior conversation history for multi-turn support
         auto_challenge: Whether to generate challenges when CORTEX disagrees
-    
+
     Returns:
         {
             "status": "success" | "error",
@@ -66,14 +66,14 @@ def cortex_interactive_mode(
             "next_steps": [str, ...],
             "can_transition_to_design": bool,
         }
-    
+
     Examples:
         >>> result = cortex_interactive_mode(
         ...     user_question="How should I handle authentication in microservices?"
         ... )
         >>> print(result["recommendation"])
         'JWT-based token authentication with...'
-        
+
         >>> result = cortex_interactive_mode(
         ...     user_question="What's your take on event-driven architecture?",
         ...     auto_challenge=True
@@ -83,9 +83,13 @@ def cortex_interactive_mode(
     """
     try:
         # Import here to avoid circular imports
-        from cortex.orchestrators.core.interaction_orchestrator import InteractionOrchestrator
-        from cortex.brain.core.orchestrator.conversation_protocol import ConversationProtocol
-        
+        from cortex.brain.core.orchestrator.conversation_protocol import (
+            ConversationProtocol,
+        )
+        from cortex.orchestrators.core.interaction_orchestrator import (
+            InteractionOrchestrator,
+        )
+
         # Create ConversationProtocol (with default parameters)
         protocol = ConversationProtocol(
             orchestrator=None,  # Will be set by wiring system
@@ -94,22 +98,22 @@ def cortex_interactive_mode(
             adaptive_turn_limit=True,
             memoization_enabled=True
         )
-        
+
         # Instantiate orchestrator with protocol
         orchestrator = InteractionOrchestrator(
             conversation_protocol=protocol,
             enable_challenges=auto_challenge
         )
-        
+
         # Call standalone method for INTERACTIVE mode
         result = orchestrator.engage_interactive_mode(
             user_question=user_question,
             conversation_context=conversation_context or {},
             auto_challenge=auto_challenge,
         )
-        
+
         logger.info(f"INTERACTIVE mode engaged for question: {user_question[:50]}...")
-        
+
         # Ensure result is a dict before unpacking
         if isinstance(result, dict):
             return {
@@ -127,7 +131,7 @@ def cortex_interactive_mode(
                 "next_steps": [],
                 "can_transition_to_design": False,
             }
-    
+
     except ImportError as e:
         logger.error(f"Failed to import InteractionOrchestrator: {e}")
         return {
@@ -135,7 +139,7 @@ def cortex_interactive_mode(
             "message": "InteractionOrchestrator not available",
             "error": str(e),
         }
-    
+
     except Exception as e:
         logger.error(f"Error in INTERACTIVE mode: {e}", exc_info=True)
         return {

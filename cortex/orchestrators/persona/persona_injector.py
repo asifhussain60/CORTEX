@@ -9,17 +9,17 @@ Formats responses based on:
 - Word limits and presentation style
 """
 
-from typing import Optional
 import re
+from typing import Optional
 
-from cortex.orchestrators.persona.models import PersonaId, DepthLevel
+from cortex.orchestrators.persona.models import DepthLevel, PersonaId
 from cortex.orchestrators.persona.persona_loader import PersonaLoader
 
 
 class PersonaInjector:
     """
     Apply persona-specific formatting to responses.
-    
+
     Attributes:
         loader: PersonaLoader instance for accessing persona configurations
     """
@@ -94,7 +94,7 @@ class PersonaInjector:
     def __init__(self, loader: PersonaLoader) -> None:
         """
         Initialize PersonaInjector with PersonaLoader.
-        
+
         Args:
             loader: PersonaLoader instance
         """
@@ -108,12 +108,12 @@ class PersonaInjector:
     ) -> str:
         """
         Format response according to persona preferences and depth level.
-        
+
         Args:
             response: Original response text
             persona: Target PersonaId for formatting
             depth: Depth level (defaults to STANDARD)
-            
+
         Returns:
             Formatted response text
         """
@@ -141,11 +141,11 @@ class PersonaInjector:
     def _filter_code_blocks(self, response: str, persona: PersonaId) -> str:
         """
         Filter code blocks based on persona preferences.
-        
+
         Args:
             response: Response text
             persona: Target PersonaId
-            
+
         Returns:
             Response with code blocks filtered appropriately
         """
@@ -156,7 +156,7 @@ class PersonaInjector:
         # Remove code blocks for personas that don't need them
         # Match markdown code blocks (```...```)
         pattern = r'```[\s\S]*?```'
-        
+
         # Replace code blocks with summaries
         def replace_code(match):
             code_block = match.group(0)
@@ -169,18 +169,18 @@ class PersonaInjector:
                     name = first_line.split('(')[0].split(':')[0].replace('def ', '').replace('class ', '')
                     return f"[Code: {name.strip()}]"
             return "[Code snippet]"
-        
+
         filtered = re.sub(pattern, replace_code, response)
         return filtered
 
     def _filter_metrics(self, response: str, persona: PersonaId) -> str:
         """
         Emphasize metrics relevant to persona.
-        
+
         Args:
             response: Response text
             persona: Target PersonaId
-            
+
         Returns:
             Response with metrics emphasized or de-emphasized
         """
@@ -191,27 +191,27 @@ class PersonaInjector:
     def _apply_word_limit(self, response: str, depth: DepthLevel) -> str:
         """
         Apply word limits based on depth level.
-        
+
         Args:
             response: Response text
             depth: Depth level
-            
+
         Returns:
             Truncated response if exceeds limit
         """
         limit = self.WORD_LIMITS.get(depth, 300)
-        
+
         words = response.split()
         if len(words) <= limit:
             return response
 
         # Truncate at word limit
         truncated = ' '.join(words[:limit])
-        
+
         # Add ellipsis
         if limit > 0:
             truncated += '...'
-        
+
         return truncated
 
     def _apply_format_style(
@@ -222,12 +222,12 @@ class PersonaInjector:
     ) -> str:
         """
         Apply formatting style based on persona and depth.
-        
+
         Args:
             response: Response text
             persona: Target PersonaId
             depth: Depth level
-            
+
         Returns:
             Styled response
         """
@@ -236,7 +236,7 @@ class PersonaInjector:
             # For executives, try to move key finding to top
             # Look for conclusion/recommendation patterns
             lines = response.split('\n')
-            
+
             # Find first sentence with recommendation words
             recommendation_keywords = ['recommend', 'suggest', 'conclude', 'find', 'result', 'key']
             for i, line in enumerate(lines):
@@ -245,7 +245,7 @@ class PersonaInjector:
                     key_line = line
                     remaining = '\n'.join(lines[:i] + lines[i+1:])
                     return f"{key_line}\n\n{remaining}"
-        
+
         # For detailed depth, preserve structure
         if depth == DepthLevel.DETAILED:
             # Keep step-by-step, numbered lists

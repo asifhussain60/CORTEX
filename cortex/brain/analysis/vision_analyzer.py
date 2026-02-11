@@ -70,19 +70,19 @@ class VisionAnalysisResult:
     status: str
     image_type: ImageType
     analysis_depth: AnalysisDepth
-    
+
     # Extracted data
     urls: List[ExtractedURL] = field(default_factory=list)
     ui_elements: List[UIElement] = field(default_factory=list)
     issues: List[DetectedIssue] = field(default_factory=list)
     text_content: List[str] = field(default_factory=list)
     structural_map: Dict[str, Any] = field(default_factory=dict)
-    
+
     # Metadata
     raw_response: Optional[str] = None
     processing_time_ms: int = 0
     token_usage: Dict[str, int] = field(default_factory=dict)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dict for MCP response."""
         return {
@@ -126,10 +126,10 @@ class VisionAnalysisResult:
 class VisionAnalyzer:
     """
     Analyzer for image content using Vision API.
-    
+
     Extracts UI elements, URLs, issues, and structural information
     from screenshots, diagrams, mockups, and error messages.
-    
+
     Features:
     - URL extraction (address bar, links, API endpoints)
     - UI element detection (buttons, inputs, labels, icons)
@@ -138,30 +138,30 @@ class VisionAnalyzer:
     - Text/OCR extraction (all visible text)
     - Structural mapping (component hierarchy)
     - Error detection (stack traces, error messages)
-    
+
     Example:
         ```python
         analyzer = VisionAnalyzer()
-        
+
         # Analyze from file
         result = analyzer.analyze_file(Path("screenshot.png"))
-        
+
         # Analyze from base64
         result = analyzer.analyze_base64(base64_data)
-        
+
         # Access results
         for url in result.urls:
             print(f"Found URL: {url.url}")
-        
+
         for element in result.ui_elements:
             print(f"Element: {element.element_type} - {element.text}")
         ```
-    
+
     Attributes:
         api_key: Vision API key (optional, uses env var if not provided)
         default_depth: Default analysis depth
     """
-    
+
     # Vision analysis prompt templates
     ANALYSIS_PROMPTS = {
         AnalysisDepth.QUICK: """Analyze this image quickly. Extract:
@@ -226,7 +226,7 @@ Return as JSON with keys: urls, elements, issues, text, structure""",
 
 Return comprehensive JSON with: urls, elements, issues, text, structure, metadata""",
     }
-    
+
     def __init__(
         self,
         api_key: Optional[str] = None,
@@ -234,14 +234,14 @@ Return comprehensive JSON with: urls, elements, issues, text, structure, metadat
     ):
         """
         Initialize VisionAnalyzer.
-        
+
         Args:
             api_key: Vision API key (uses OPENAI_API_KEY env var if not provided)
             default_depth: Default analysis depth
         """
         self.api_key = api_key
         self.default_depth = default_depth
-    
+
     def analyze_file(
         self,
         file_path: Path,
@@ -253,7 +253,7 @@ Return comprehensive JSON with: urls, elements, issues, text, structure, metadat
     ) -> VisionAnalysisResult:
         """
         Analyze image from file path.
-        
+
         Args:
             file_path: Path to image file
             image_type: Type of image (auto-detected if UNKNOWN)
@@ -261,7 +261,7 @@ Return comprehensive JSON with: urls, elements, issues, text, structure, metadat
             extract_urls: Extract URLs from image
             extract_elements: Extract UI elements
             detect_issues: Detect issues and problems
-            
+
         Returns:
             VisionAnalysisResult with extracted data
         """
@@ -271,15 +271,15 @@ Return comprehensive JSON with: urls, elements, issues, text, structure, metadat
                 image_type=image_type,
                 analysis_depth=depth or self.default_depth,
             )
-        
+
         # Read and encode file
         with open(file_path, "rb") as f:
             image_data = base64.b64encode(f.read()).decode("utf-8")
-        
+
         # Detect image type from extension
         if image_type == ImageType.UNKNOWN:
             image_type = self._detect_image_type(file_path.name)
-        
+
         return self.analyze_base64(
             image_data=image_data,
             image_type=image_type,
@@ -288,7 +288,7 @@ Return comprehensive JSON with: urls, elements, issues, text, structure, metadat
             extract_elements=extract_elements,
             detect_issues=detect_issues,
         )
-    
+
     def analyze_base64(
         self,
         image_data: str,
@@ -300,7 +300,7 @@ Return comprehensive JSON with: urls, elements, issues, text, structure, metadat
     ) -> VisionAnalysisResult:
         """
         Analyze image from base64-encoded data.
-        
+
         Args:
             image_data: Base64-encoded image data
             image_type: Type of image
@@ -308,15 +308,15 @@ Return comprehensive JSON with: urls, elements, issues, text, structure, metadat
             extract_urls: Extract URLs
             extract_elements: Extract UI elements
             detect_issues: Detect issues
-            
+
         Returns:
             VisionAnalysisResult with extracted data
         """
         import time
         start_time = time.time()
-        
+
         depth = depth or self.default_depth
-        
+
         # Build analysis request
         prompt = self._build_prompt(
             image_type=image_type,
@@ -325,7 +325,7 @@ Return comprehensive JSON with: urls, elements, issues, text, structure, metadat
             extract_elements=extract_elements,
             detect_issues=detect_issues,
         )
-        
+
         # Call Vision API
         try:
             response = self._call_vision_api(image_data, prompt)
@@ -336,12 +336,12 @@ Return comprehensive JSON with: urls, elements, issues, text, structure, metadat
                 image_type=image_type,
                 analysis_depth=depth,
             )
-        
+
         # Record timing
         result.processing_time_ms = int((time.time() - start_time) * 1000)
-        
+
         return result
-    
+
     def analyze_url(
         self,
         image_url: str,
@@ -353,7 +353,7 @@ Return comprehensive JSON with: urls, elements, issues, text, structure, metadat
     ) -> VisionAnalysisResult:
         """
         Analyze image from URL.
-        
+
         Args:
             image_url: URL to image
             image_type: Type of image
@@ -361,15 +361,15 @@ Return comprehensive JSON with: urls, elements, issues, text, structure, metadat
             extract_urls: Extract URLs
             extract_elements: Extract UI elements
             detect_issues: Detect issues
-            
+
         Returns:
             VisionAnalysisResult with extracted data
         """
         import time
         start_time = time.time()
-        
+
         depth = depth or self.default_depth
-        
+
         prompt = self._build_prompt(
             image_type=image_type,
             depth=depth,
@@ -377,7 +377,7 @@ Return comprehensive JSON with: urls, elements, issues, text, structure, metadat
             extract_elements=extract_elements,
             detect_issues=detect_issues,
         )
-        
+
         try:
             response = self._call_vision_api_url(image_url, prompt)
             result = self._parse_response(response, image_type, depth)
@@ -387,11 +387,11 @@ Return comprehensive JSON with: urls, elements, issues, text, structure, metadat
                 image_type=image_type,
                 analysis_depth=depth,
             )
-        
+
         result.processing_time_ms = int((time.time() - start_time) * 1000)
-        
+
         return result
-    
+
     def _build_prompt(
         self,
         image_type: ImageType,
@@ -402,7 +402,7 @@ Return comprehensive JSON with: urls, elements, issues, text, structure, metadat
     ) -> str:
         """Build analysis prompt based on parameters."""
         base_prompt = self.ANALYSIS_PROMPTS[depth]
-        
+
         # Add image-type specific instructions
         type_instructions = {
             ImageType.SCREENSHOT: "This is a screenshot of a user interface. Focus on interactive elements and navigation.",
@@ -411,9 +411,9 @@ Return comprehensive JSON with: urls, elements, issues, text, structure, metadat
             ImageType.ERROR: "This shows an error state. Prioritize extracting error messages, stack traces, and error codes.",
             ImageType.UNKNOWN: "Analyze this image and determine its type (screenshot, diagram, error, etc.).",
         }
-        
+
         prompt_parts = [base_prompt, type_instructions[image_type]]
-        
+
         # Add filter instructions
         if not extract_urls:
             prompt_parts.append("Skip URL extraction.")
@@ -421,22 +421,23 @@ Return comprehensive JSON with: urls, elements, issues, text, structure, metadat
             prompt_parts.append("Skip UI element extraction.")
         if not detect_issues:
             prompt_parts.append("Skip issue detection.")
-        
+
         return "\n\n".join(prompt_parts)
-    
+
     def _call_vision_api(self, image_data: str, prompt: str) -> Dict[str, Any]:
         """
         Call Vision API with base64 image.
-        
+
         Uses OpenAI GPT-4 Vision API format.
         """
         import os
+
         import httpx
-        
+
         api_key = self.api_key or os.environ.get("OPENAI_API_KEY")
         if not api_key:
             raise ValueError("No API key provided. Set OPENAI_API_KEY or pass api_key.")
-        
+
         # Determine media type from base64 header or default to PNG
         media_type = "image/png"
         if image_data.startswith("/9j/"):
@@ -445,7 +446,7 @@ Return comprehensive JSON with: urls, elements, issues, text, structure, metadat
             media_type = "image/gif"
         elif image_data.startswith("UklGR"):
             media_type = "image/webp"
-        
+
         payload = {
             "model": "gpt-4o",
             "messages": [
@@ -466,7 +467,7 @@ Return comprehensive JSON with: urls, elements, issues, text, structure, metadat
             "max_tokens": 4096,
             "response_format": {"type": "json_object"},
         }
-        
+
         with httpx.Client(timeout=60.0) as client:
             response = client.post(
                 "https://api.openai.com/v1/chat/completions",
@@ -478,16 +479,17 @@ Return comprehensive JSON with: urls, elements, issues, text, structure, metadat
             )
             response.raise_for_status()
             return response.json()
-    
+
     def _call_vision_api_url(self, image_url: str, prompt: str) -> Dict[str, Any]:
         """Call Vision API with image URL."""
         import os
+
         import httpx
-        
+
         api_key = self.api_key or os.environ.get("OPENAI_API_KEY")
         if not api_key:
             raise ValueError("No API key provided. Set OPENAI_API_KEY or pass api_key.")
-        
+
         payload = {
             "model": "gpt-4o",
             "messages": [
@@ -508,7 +510,7 @@ Return comprehensive JSON with: urls, elements, issues, text, structure, metadat
             "max_tokens": 4096,
             "response_format": {"type": "json_object"},
         }
-        
+
         with httpx.Client(timeout=60.0) as client:
             response = client.post(
                 "https://api.openai.com/v1/chat/completions",
@@ -520,7 +522,7 @@ Return comprehensive JSON with: urls, elements, issues, text, structure, metadat
             )
             response.raise_for_status()
             return response.json()
-    
+
     def _parse_response(
         self,
         response: Dict[str, Any],
@@ -533,7 +535,7 @@ Return comprehensive JSON with: urls, elements, issues, text, structure, metadat
             image_type=image_type,
             analysis_depth=depth,
         )
-        
+
         # Extract usage info
         if "usage" in response:
             result.token_usage = {
@@ -541,14 +543,14 @@ Return comprehensive JSON with: urls, elements, issues, text, structure, metadat
                 "completion_tokens": response["usage"].get("completion_tokens", 0),
                 "total_tokens": response["usage"].get("total_tokens", 0),
             }
-        
+
         # Parse content
         try:
             content = response["choices"][0]["message"]["content"]
             result.raw_response = content
-            
+
             data = json.loads(content)
-            
+
             # Parse URLs
             for url_data in data.get("urls", []):
                 if isinstance(url_data, str):
@@ -563,7 +565,7 @@ Return comprehensive JSON with: urls, elements, issues, text, structure, metadat
                         context=url_data.get("context", "extracted"),
                         url_type=url_data.get("type", "unknown"),
                     ))
-            
+
             # Parse elements
             for elem_data in data.get("elements", []):
                 if isinstance(elem_data, dict):
@@ -575,7 +577,7 @@ Return comprehensive JSON with: urls, elements, issues, text, structure, metadat
                         confidence=elem_data.get("confidence", 0.8),
                         attributes=elem_data.get("attributes", {}),
                     ))
-            
+
             # Parse issues
             for issue_data in data.get("issues", []):
                 if isinstance(issue_data, dict):
@@ -586,26 +588,26 @@ Return comprehensive JSON with: urls, elements, issues, text, structure, metadat
                         location=issue_data.get("location"),
                         suggestion=issue_data.get("suggestion"),
                     ))
-            
+
             # Parse text content
             text_data = data.get("text", [])
             if isinstance(text_data, list):
                 result.text_content = text_data
             elif isinstance(text_data, str):
                 result.text_content = [text_data]
-            
+
             # Parse structure
             result.structural_map = data.get("structure", {})
-            
+
         except (json.JSONDecodeError, KeyError, IndexError) as e:
             result.status = f"parse_error: {str(e)}"
-        
+
         return result
-    
+
     def _detect_image_type(self, filename: str) -> ImageType:
         """Detect image type from filename patterns."""
         filename_lower = filename.lower()
-        
+
         if any(x in filename_lower for x in ["error", "exception", "crash", "fail"]):
             return ImageType.ERROR
         if any(x in filename_lower for x in ["diagram", "flow", "arch", "uml"]):
@@ -614,7 +616,7 @@ Return comprehensive JSON with: urls, elements, issues, text, structure, metadat
             return ImageType.MOCKUP
         if any(x in filename_lower for x in ["screenshot", "screen", "capture", "snap"]):
             return ImageType.SCREENSHOT
-        
+
         return ImageType.UNKNOWN
 
 
@@ -625,22 +627,22 @@ def analyze_image(
 ) -> Dict[str, Any]:
     """
     Quick image analysis function.
-    
+
     Args:
         image: Path, URL, or base64 data
         depth: Analysis depth (quick/standard/thorough)
-        
+
     Returns:
         Analysis result as dict
     """
     analyzer = VisionAnalyzer()
     depth_enum = AnalysisDepth(depth)
-    
+
     if isinstance(image, Path) or (isinstance(image, str) and Path(image).exists()):
         result = analyzer.analyze_file(Path(image), depth=depth_enum)
     elif isinstance(image, str) and image.startswith(("http://", "https://")):
         result = analyzer.analyze_url(image, depth=depth_enum)
     else:
         result = analyzer.analyze_base64(image, depth=depth_enum)
-    
+
     return result.to_dict()

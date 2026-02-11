@@ -3,9 +3,9 @@
 Phase 48 S4: Use cortex_brain for CORTEX repository analysis.
 """
 
+import json
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
-import json
 
 
 @dataclass

@@ -26,8 +26,8 @@ Type Hints: 100% ✅
 Docstrings: 100% ✅
 """
 
-from typing import Dict, Any, List
 from dataclasses import dataclass
+from typing import Any, Dict, List
 
 # This module documents the refactoring approach
 # The actual refactoring will be applied to intent_router.py
@@ -38,9 +38,9 @@ class RefactoringChanges:
     """Documents the changes needed for spec-driven intent routing."""
 
     target_file: str = "cortex/orchestrators/core/intent_router.py"
-    
+
     changes: List[Dict[str, Any]] = None  # type: ignore
-    
+
     def __post_init__(self) -> None:
         """Initialize refactoring changes."""
         if self.changes is None:
@@ -195,7 +195,7 @@ class RefactoringChanges:
 
 class IntentRouterRefactoringGuide:
     """Step-by-step guide for refactoring IntentRouter."""
-    
+
     @staticmethod
     def get_refactoring_steps() -> List[Dict[str, str]]:
         """Get ordered refactoring steps."""
@@ -251,7 +251,7 @@ class IntentRouterRefactoringGuide:
                 "reason": "Verify spec-driven behavior"
             }
         ]
-    
+
     @staticmethod
     def get_test_updates() -> List[Dict[str, Any]]:
         """Get test updates needed."""
@@ -291,7 +291,7 @@ class IntentRouterRefactoringGuide:
 
 class ImplementationVerification:
     """Verification checklist for IntentRouter refactoring."""
-    
+
     @staticmethod
     def get_verification_checklist() -> List[Dict[str, Any]]:
         """Get verification checklist."""

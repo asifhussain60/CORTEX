@@ -10,39 +10,36 @@ Date: 2026-01-26 (updated 2026-01-28)
 """
 
 from .core_adapters import (
-    MasterOrchestratorAdapter,
-    TDDOrchestratorAdapter,
     IntentRouterAdapter,
     InteractionOrchestratorAdapter,
+    MasterOrchestratorAdapter,
+    TDDOrchestratorAdapter,
     WorkflowOrchestratorAdapter,
     WrappedTDDOrchestratorAdapter,
 )
-
 from .domain_adapters import (
-    RefactoringOrchestratorAdapter,
-    PlanningOrchestratorAdapter,
-    DomainOrchestratorAdapter,
     ConversationOrchestratorAdapter,
-    SeleniumPlaywrightOrchestratorAdapter,
     DocumentationOrchestratorAdapter,
+    DomainOrchestratorAdapter,
+    PlanningOrchestratorAdapter,
+    RefactoringOrchestratorAdapter,
+    SeleniumPlaywrightOrchestratorAdapter,
 )
-
-from .support_adapters import (
-    OnboardingOrchestratorAdapter,
-    ToolDiscoveryOrchestratorAdapter,
-    UpgradeOrchestratorAdapter,
-    RollbackOrchestratorAdapter,
-    SetupOrchestratorAdapter,
-    ComposedOrchestratorAdapter,
-    OrchestratorBootstrapAdapter,
-    DoRApprovalGateAdapter,
-    LENSSynthesisAdapter,
-    GovernanceRegistryAdapter,
-    KnowledgeRepositoryAdapter,
-)
-
 from .recommendation_adapter import (
     RecommendationEngineAdapter,
+)
+from .support_adapters import (
+    ComposedOrchestratorAdapter,
+    DoRApprovalGateAdapter,
+    GovernanceRegistryAdapter,
+    KnowledgeRepositoryAdapter,
+    LENSSynthesisAdapter,
+    OnboardingOrchestratorAdapter,
+    OrchestratorBootstrapAdapter,
+    RollbackOrchestratorAdapter,
+    SetupOrchestratorAdapter,
+    ToolDiscoveryOrchestratorAdapter,
+    UpgradeOrchestratorAdapter,
 )
 
 __all__ = [

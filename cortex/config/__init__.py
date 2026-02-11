@@ -9,10 +9,10 @@ Provides:
 
 # Unified Onboarding - Primary API
 from cortex.config.unified_onboarding import (
-    UnifiedOnboarding,
-    OnboardingConfig,
     Journey,
     JourneyState,
+    OnboardingConfig,
+    UnifiedOnboarding,
     get_unified_onboarding,
 )
 

@@ -9,7 +9,7 @@ Author: CORTEX Framework (Phase 38)
 
 import json
 import logging
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 
 from cortex.mcp.server import Tool, ToolDefinition, ToolParameter
 
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 class BrainHealthTool(Tool):
     """
     MCP tool for brain health monitoring.
-    
+
     Provides real-time CORTEX brain health metrics across 5 dimensions:
     - Cache staleness
     - Orchestrator connectivity
@@ -67,26 +67,26 @@ class BrainHealthTool(Tool):
     ) -> Dict[str, Any]:
         """
         Execute brain health check.
-        
+
         Args:
             format: Output format ('summary', 'detailed', 'prometheus')
             include_recommendations: Include remediation recommendations
             **kwargs: Additional arguments (ignored)
-        
+
         Returns:
             Dict with health report or error
         """
         try:
             from cortex.orchestrators.support.brain_health_orchestrator import (
-                BrainHealthOrchestrator
+                BrainHealthOrchestrator,
             )
-            
+
             # Create orchestrator instance
             orchestrator = BrainHealthOrchestrator()
-            
+
             # Generate health report
             report = orchestrator.calculate_health_score()
-            
+
             # Format output based on requested format
             if format == "prometheus":
                 return self._format_prometheus(orchestrator, report)
@@ -94,7 +94,7 @@ class BrainHealthTool(Tool):
                 return self._format_detailed(report, include_recommendations)
             else:  # summary
                 return self._format_summary(report, include_recommendations)
-                
+
         except Exception as e:
             logger.error(f"Brain health check failed: {e}", exc_info=True)
             return {
@@ -121,13 +121,13 @@ class BrainHealthTool(Tool):
                 "domain_utilization": f"{report['dimensions']['domain_utilization']:.1f}%"
             }
         }
-        
+
         if include_recommendations and report['alerts']:
             result["alerts_count"] = len(report['alerts'])
             result["top_recommendations"] = [
                 alert['recommendation'] for alert in report['alerts'][:3]
             ]
-        
+
         return result
 
     def _format_detailed(
@@ -169,10 +169,10 @@ class BrainHealthTool(Tool):
                 }
             }
         }
-        
+
         if include_recommendations:
             result["alerts"] = report['alerts']
-        
+
         return result
 
     def _format_prometheus(
@@ -196,19 +196,17 @@ class BrainHealthTool(Tool):
             }
 
 
-# Tool registration
-def register_brain_health_tool():
-    """Register brain health tool with MCP server."""
-    from cortex.mcp.tool_registry import ToolRegistry
-    
-    registry = ToolRegistry.instance()
-    registry.register(BrainHealthTool())
-    
-    logger.info("Brain health tool registered: cortex_brain_health")
+# Tool registration - DISABLED: MCPServer auto-discovers Tool objects
+# def register_brain_health_tool():
+#     """Register brain health tool with MCP server."""
+#     from cortex.mcp.tool_registry import get_mcp_tool_registry
+#
+#     registry = get_mcp_tool_registry()
+#     registry.register(BrainHealthTool())
+#
+#     logger.info("Brain health tool registered: cortex_brain_health")
 
 
-# Auto-register on import
-try:
-    register_brain_health_tool()
-except Exception as e:
-    logger.warning(f"Failed to auto-register brain health tool: {e}")
+# Note: MCPServer will auto-discover BrainHealthTool via _register_tool()
+# No manual registration needed - the Tool class is the API
+

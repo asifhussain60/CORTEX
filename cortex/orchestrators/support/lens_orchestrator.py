@@ -27,7 +27,7 @@ def __getattr__(name):
         DeprecationWarning,
         stacklevel=2
     )
-    
+
     # Forward to new location
     if name == "LENSOrchestrator":
         from cortex.lens import LENSOrchestrator

@@ -5,16 +5,17 @@ Generated adapter for ComprehensionSession.
 AC-ID: AC-PHASE2B-006
 """
 
+import logging
+import time
 from typing import Any, Dict, List, Optional
+
 from cortex.mcp.orchestrator_mcp_server import (
-    IOrchestratorAdapter,
     CapabilityMetadata,
     CapabilityResponse,
     ExecutionContext,
+    IOrchestratorAdapter,
 )
 from cortex.orchestrators.core.comprehension_session import ComprehensionSession
-import logging
-import time
 
 logger = logging.getLogger(__name__)
 
@@ -33,14 +34,14 @@ def _get_orchestrator_from_wiring(name: str) -> Optional[Any]:
 class ComprehensionSessionAdapter(IOrchestratorAdapter):
     """
     MCP Adapter for ComprehensionSession.
-    
+
     Exposes capabilities:
     - start_session: Start comprehension session
     - track_understanding: Track user understanding
-    
+
     CORE-035: Uses wiring system for orchestrator access (single execution path).
     """
-    
+
     def __init__(self, orchestrator: Optional[ComprehensionSession] = None):
         """Initialize adapter with orchestrator from wiring system."""
         if orchestrator is not None:
@@ -48,7 +49,7 @@ class ComprehensionSessionAdapter(IOrchestratorAdapter):
         else:
             self.orchestrator = _get_orchestrator_from_wiring("ComprehensionSession")
         self.name = "ComprehensionSessionAdapter"
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         """Get all capabilities exposed by this orchestrator."""
         return [
@@ -71,7 +72,7 @@ class ComprehensionSessionAdapter(IOrchestratorAdapter):
                 tags={"generated", "phase2b"},
             )
         ]
-    
+
     def execute_capability(
         self,
         capability_name: str,
@@ -89,7 +90,7 @@ class ComprehensionSessionAdapter(IOrchestratorAdapter):
                     orchestrator="comprehensionsession",
                     duration_ms=(time.time() - start) * 1000,
                 )
-            
+
             if capability_name == "start_session":
                 result = self.orchestrator.start_session(context=parameters.get('context'))
                 return CapabilityResponse(
@@ -108,7 +109,7 @@ class ComprehensionSessionAdapter(IOrchestratorAdapter):
                     orchestrator="{orchestrator_name_lower}",
                     duration_ms=(time.time() - start) * 1000,
                 )
-            
+
             return CapabilityResponse(
                 request_id=context.session_id,
                 success=False,
@@ -125,7 +126,7 @@ class ComprehensionSessionAdapter(IOrchestratorAdapter):
                 orchestrator="comprehensionsession",
                 duration_ms=(time.time() - start) * 1000,
             )
-    
+
     def validate_parameters(
         self, capability_name: str, parameters: Dict[str, Any]
     ) -> tuple[bool, Optional[str]]:

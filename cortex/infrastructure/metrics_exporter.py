@@ -7,15 +7,15 @@ Supports async export and batching.
 AC-NFR-004-01: OpenTelemetry metrics exported
 """
 
-import logging
 import json
-from typing import Any, Dict, List, Optional
-from enum import Enum
-from dataclasses import dataclass, field, asdict
-from datetime import datetime
-from abc import ABC, abstractmethod
-import threading
+import logging
 import queue
+import threading
+from abc import ABC, abstractmethod
+from dataclasses import asdict, dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +44,7 @@ class MetricData:
     unit: Optional[str] = None
     timestamp: datetime = field(default_factory=datetime.utcnow)
     attributes: List[MetricAttribute] = field(default_factory=list)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
@@ -63,7 +63,7 @@ class MetricBatch:
     metrics: List[MetricData] = field(default_factory=list)
     timestamp: datetime = field(default_factory=datetime.utcnow)
     batch_id: str = ""
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
@@ -75,12 +75,12 @@ class MetricBatch:
 
 class MetricsExporter(ABC):
     """Base class for metrics exporters."""
-    
+
     @abstractmethod
     def export(self, batch: MetricBatch) -> bool:
         """Export a batch of metrics. Returns success."""
         pass
-    
+
     @abstractmethod
     def shutdown(self):
         """Shutdown exporter gracefully."""
@@ -89,7 +89,7 @@ class MetricsExporter(ABC):
 
 class ConsoleMetricsExporter(MetricsExporter):
     """Exports metrics to console (stdout)."""
-    
+
     def export(self, batch: MetricBatch) -> bool:
         """Export metrics to console."""
         try:
@@ -99,7 +99,7 @@ class ConsoleMetricsExporter(MetricsExporter):
         except Exception as e:
             logger.error(f"Failed to export metrics: {str(e)}")
             return False
-    
+
     def shutdown(self):
         """No-op for console exporter."""
         pass
@@ -107,11 +107,11 @@ class ConsoleMetricsExporter(MetricsExporter):
 
 class MemoryMetricsExporter(MetricsExporter):
     """Stores metrics in memory for testing."""
-    
+
     def __init__(self, max_batches: int = 100):
         self.batches: List[MetricBatch] = []
         self.max_batches = max_batches
-    
+
     def export(self, batch: MetricBatch) -> bool:
         """Store batch in memory."""
         try:
@@ -123,15 +123,15 @@ class MemoryMetricsExporter(MetricsExporter):
         except Exception as e:
             logger.error(f"Failed to store metrics: {str(e)}")
             return False
-    
+
     def shutdown(self):
         """Clear memory."""
         self.batches.clear()
-    
+
     def get_batches(self) -> List[MetricBatch]:
         """Get all stored batches."""
         return self.batches.copy()
-    
+
     def get_metrics_count(self) -> int:
         """Get total metrics stored."""
         return sum(len(b.metrics) for b in self.batches)
@@ -142,7 +142,7 @@ class TelemetryProvider:
     Manages metric collection and export.
     Supports async batching and multiple exporters.
     """
-    
+
     def __init__(
         self,
         exporters: Optional[List[MetricsExporter]] = None,
@@ -151,7 +151,7 @@ class TelemetryProvider:
     ):
         """
         Initialize telemetry provider.
-        
+
         Args:
             exporters: List of metrics exporters
             batch_size: Metrics per batch before auto-flush
@@ -165,15 +165,15 @@ class TelemetryProvider:
         self.batch_queue: queue.Queue = queue.Queue()
         self._running = threading.Event()  # Atomic state flag
         self.export_thread: Optional[threading.Thread] = None
-        
+
         if use_async:
             self._start_async_export()
-    
+
     def add_exporter(self, exporter: MetricsExporter):
         """Add a metrics exporter."""
         self.exporters.append(exporter)
         logger.info(f"Added exporter: {type(exporter).__name__}")
-    
+
     def record_metric(
         self,
         name: str,
@@ -190,44 +190,44 @@ class TelemetryProvider:
             unit=unit,
             attributes=attributes or []
         )
-        
+
         with self.metrics_lock:
             self.metrics_buffer.append(metric)
-        
+
         logger.debug(f"Recorded metric: {name} = {value}")
-        
+
         # Check if batch is ready
         if len(self.metrics_buffer) >= self.batch_size:
             self.flush()
-        
+
         return metric
-    
+
     def flush(self, force: bool = False) -> bool:
         """Flush buffered metrics."""
         with self.metrics_lock:
             if not self.metrics_buffer and not force:
                 return True
-            
+
             if not self.metrics_buffer:
                 return True
-            
+
             batch = MetricBatch(
                 metrics=self.metrics_buffer.copy(),
                 batch_id=f"batch-{datetime.utcnow().timestamp()}"
             )
             self.metrics_buffer.clear()
-        
+
         if self.use_async:
             self.batch_queue.put(batch)
         else:
             return self._export_batch(batch)
-        
+
         return True
-    
+
     def _start_async_export(self):
         """
         Start async export thread.
-        
+
         Creates and starts background thread for metric export.
         Uses threading.Event() for atomic state management.
         """
@@ -238,11 +238,11 @@ class TelemetryProvider:
         )
         self.export_thread.start()
         logger.info("Started async metrics exporter")
-    
+
     def _async_export_worker(self):
         """
         Worker thread for async metric export.
-        
+
         Continuously exports batches from queue until shutdown signal.
         Uses threading.Event() for atomic shutdown detection.
         """
@@ -254,7 +254,7 @@ class TelemetryProvider:
                 continue
             except Exception as e:
                 logger.error(f"Async export error: {str(e)}")
-    
+
     def _export_batch(self, batch: MetricBatch) -> bool:
         """Export batch to all exporters."""
         success = True
@@ -265,25 +265,25 @@ class TelemetryProvider:
             except Exception as e:
                 logger.error(f"Exporter error: {str(e)}")
                 success = False
-        
+
         return success
-    
+
     def shutdown(self):
         """
         Shutdown telemetry provider gracefully.
-        
+
         1. Flush remaining buffered metrics
         2. Signal async export worker to stop
         3. Wait for worker thread to terminate (with timeout)
         4. Shutdown all exporters
-        
+
         Uses threading.Event() for atomic state management.
         """
         logger.info("Shutting down telemetry provider...")
-        
+
         # Flush remaining metrics
         self.flush(force=True)
-        
+
         # Stop async export with graceful shutdown
         if self.use_async:
             self._running.clear()  # Atomic shutdown signal
@@ -292,29 +292,29 @@ class TelemetryProvider:
                 self.export_thread.join(timeout=5.0)
                 if self.export_thread.is_alive():
                     logger.warning("Export thread did not shutdown within 5 seconds")
-        
+
         # Shutdown exporters
         for exporter in self.exporters:
             try:
                 exporter.shutdown()
             except Exception as e:
                 logger.error(f"Exporter shutdown error: {str(e)}")
-        
+
         logger.info("Telemetry provider shutdown complete")
-    
+
     def get_metrics_count(self) -> int:
         """Get count of buffered metrics."""
         with self.metrics_lock:
             return len(self.metrics_buffer)
-    
+
     def get_exporters(self) -> List[MetricsExporter]:
         """Get list of exporters."""
         return self.exporters.copy()
-    
+
     def is_running(self) -> bool:
         """
         Check if async export is running.
-        
+
         Returns:
             True if async mode and export thread is active, False otherwise
         """

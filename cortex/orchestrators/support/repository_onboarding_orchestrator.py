@@ -15,22 +15,22 @@ AC-ID: AC-UNIVERSAL-ONBOARD-001
 Authority: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings)
 """
 
-from pathlib import Path
-from typing import Dict, Any, List, Optional
+import json
+import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-import logging
-import json
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
-from cortex.orchestrators.mixins.security_advisor_mixin import SecurityAdvisorMixin
+from cortex.brain.core.result import Err, Ok, Result
 from cortex.core.interfaces import IOrchestrator
-from cortex.brain.core.result import Result, Ok, Err
+from cortex.orchestrators.mixins.security_advisor_mixin import SecurityAdvisorMixin
 
 
 class LLMMode(Enum):
     """LLM generation modes for repository onboarding.
-    
+
     - INTERACTIVE: Print prompts to console for manual copy/paste
     - BATCH: Save prompts to files for batch processing
     - SKIP: Bypass LLM generation entirely
@@ -40,32 +40,32 @@ class LLMMode(Enum):
     SKIP = 'skip'
 
 
-from cortex.models.dashboard_schema import (
-    RepoDashboardModel,
-    RepoMetadata,
-    OverviewSection,
-    MetricsSection,
-    SecuritySection,
-    SecurityVulnerability,
-    DependenciesSection,
-    PackageDependency,
-    QualitySection,
-    CodeSmell,
-    UseCase,
-    LensSection,
-    RefactoringSection,
-)
 from cortex.common.debug_logger import (
+    dashboard_debug,
     log_dashboard_debug,
     log_dashboard_generation,
     log_dashboard_schema_validation,
-    dashboard_debug,
 )
 from cortex.common.progress_reporter import (
     ProgressReporter,
     ProgressStyle,
-    track_repository_onboarding,
     get_time_estimator,
+    track_repository_onboarding,
+)
+from cortex.models.dashboard_schema import (
+    CodeSmell,
+    DependenciesSection,
+    LensSection,
+    MetricsSection,
+    OverviewSection,
+    PackageDependency,
+    QualitySection,
+    RefactoringSection,
+    RepoDashboardModel,
+    RepoMetadata,
+    SecuritySection,
+    SecurityVulnerability,
+    UseCase,
 )
 
 logger = logging.getLogger(__name__)
@@ -88,7 +88,7 @@ def _get_asset_manager():
     global _asset_manager
     if _asset_manager is None:
         from cortex.orchestrators.support.dashboard_asset_manager import (
-            get_dashboard_asset_manager
+            get_dashboard_asset_manager,
         )
         _asset_manager = get_dashboard_asset_manager()
     return _asset_manager
@@ -100,7 +100,7 @@ def _get_landing_page_generator():
     if _landing_page_generator is None:
         try:
             from cortex.orchestrators.support.landing_page_generator import (
-                get_landing_page_generator
+                get_landing_page_generator,
             )
             _landing_page_generator = get_landing_page_generator()
         except ImportError:
@@ -114,7 +114,7 @@ def _get_business_language_orchestrator():
     global _business_language_orchestrator
     if _business_language_orchestrator is None:
         from cortex.orchestrators.support.business_language_orchestrator import (
-            get_business_language_orchestrator
+            get_business_language_orchestrator,
         )
         _business_language_orchestrator = get_business_language_orchestrator()
     return _business_language_orchestrator
@@ -126,7 +126,7 @@ def _get_universal_dashboard_generator():
     if _universal_dashboard_generator is None:
         try:
             from cortex.orchestrators.support.universal_dashboard_generator import (
-                get_universal_dashboard_generator
+                get_universal_dashboard_generator,
             )
             _universal_dashboard_generator = get_universal_dashboard_generator()
         except ImportError:
@@ -139,7 +139,7 @@ def _get_universal_dashboard_generator():
 class OnboardingResult:
     """
     Result of repository onboarding.
-    
+
     Attributes:
         success: Whether onboarding succeeded
         repo_path: Path to onboarded repository
@@ -171,7 +171,7 @@ class OnboardingResult:
 class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
     """
     Universal Repository Onboarding Orchestrator v2.0.
-    
+
     MCP-EXPOSED CAPABILITIES:
     - `/CORTEX onboard {path}` — Full repository analysis
     - Generates dashboard in company/dashboards/{repo_name}/
@@ -179,12 +179,12 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
     - Comprehensive business narratives with confidence scores
     - Security-first assessment with P0/P1/P2 classification
     - Collapsible file references with evidence tracking
-    
+
     Phase-28 S5 Integration:
     - Auto-triggers dashboard generation via OnboardingDashboardHook
     - Hooks into profile_store.save() to trigger dashboard creation
     - Enables atomic compound workflows via cortex_onboard_and_dashboard MCP tool
-    
+
     Example:
         >>> orchestrator = RepositoryOnboardingOrchestrator()
         >>> result = orchestrator.onboard_repository(Path("/path/to/repo"))
@@ -193,27 +193,27 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
         ...     print(f"Landing: {result.landing_page_path}")
         ...     print(f"Confidence: {result.business_narrative.confidence.score}%")
     """
-    
+
     def __init__(self):
         """Initialize RepositoryOnboardingOrchestrator."""
         super().__init__()
         self.lens_orchestrator = None  # Lazy-loaded
         self.dashboard_generator = None  # Lazy-loaded
         self._dashboard_hook = None  # Phase-28 S5: Lazy-loaded dashboard hook
-    
+
     def _get_dashboard_hook(self) -> 'OnboardingDashboardHook':
         """
         Lazy-load and return OnboardingDashboardHook instance.
-        
+
         Returns:
             OnboardingDashboardHook instance
-            
+
         AC_START: AC-PHASE28-S5-010
         """
         if self._dashboard_hook is None:
             try:
                 from cortex.orchestrators.support.onboarding_dashboard_hook import (
-                    OnboardingDashboardHook
+                    OnboardingDashboardHook,
                 )
                 self._dashboard_hook = OnboardingDashboardHook(enabled=True)
                 logger.info("Dashboard hook initialized (Phase-28 S5 integration active)")
@@ -221,7 +221,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 logger.warning("OnboardingDashboardHook not available (optional feature)")
                 return None
         return self._dashboard_hook
-    
+
     def onboard_repository(
         self,
         repo_path: Path,
@@ -234,7 +234,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
     ) -> OnboardingResult:
         """
         Onboard repository with comprehensive analysis.
-        
+
         Universal Workflow:
         1. Ensure shared assets exist in company/dashboards/assets/
         2. Run LENSOrchestrator.analyze_repository_holistic()
@@ -243,7 +243,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
         5. Generate universal dashboard with confidence scores
         6. Update landing page hub with new repository tile
         7. Create onboarding report
-        
+
         Args:
             repo_path: Path to repository to onboard
             include_dashboard: Whether to generate dashboard
@@ -252,10 +252,10 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             icon: Emoji icon for landing page tile
             progress_style: Progress output style (MINIMAL, DETAILED, VERBOSE)
             show_progress: Whether to show progress feedback
-            
+
         Returns:
             OnboardingResult with analysis, dashboard, and landing page
-            
+
         Example:
             >>> result = orchestrator.onboard_repository(
             ...     Path("/workspace/kashkole"),
@@ -266,10 +266,10 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             >>> print(result.business_narrative.description)
         """
         logger.info("Starting universal repository onboarding: %s", repo_path)
-        
+
         # Canonical name
         canonical_name = (repo_name or repo_path.name).lower().strip()
-        
+
         if not repo_path.exists():
             return OnboardingResult(
                 success=False,
@@ -278,24 +278,24 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 timestamp=datetime.now().isoformat(),
                 error=f"Repository path does not exist: {repo_path}"
             )
-        
+
         result = OnboardingResult(
             success=True,
             repo_path=str(repo_path),
             repo_name=canonical_name,
             timestamp=datetime.now().isoformat(),
         )
-        
+
         # Calculate total steps based on options
         total_steps = 5  # Core steps
         if include_dashboard:
             total_steps += 2  # Dashboard + landing page
         if update_company_domain:
             total_steps += 1  # Domain updates
-        
+
         # Use silent style if progress is disabled
         style = progress_style if show_progress else ProgressStyle.SILENT
-        
+
         # Create progress reporter
         progress = ProgressReporter(
             operation_name=f"Repository Onboarding: {canonical_name}",
@@ -303,7 +303,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             style=style,
             time_estimator=get_time_estimator(),
         )
-        
+
         try:
             with progress:
                 # Step 0: Ensure shared assets exist (only if dashboard enabled)
@@ -316,7 +316,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                     asset_manager = _get_asset_manager()
                     asset_manager.ensure_assets_exist()
                     progress.complete_step()
-                
+
                 # Step 1: Holistic LENS analysis
                 progress.start_step(
                     "LENS Analysis",
@@ -328,7 +328,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 progress.complete_step({
                     "files_analyzed": lens_context.get("repository_summary", {}).get("total_files", 0)
                 })
-                
+
                 # Step 2: Generate business narrative
                 progress.start_step(
                     "Business Narrative",
@@ -342,7 +342,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 )
                 result.business_narrative = narrative
                 progress.complete_step()
-                
+
                 # Step 3: Security threat modeling
                 progress.start_step(
                     "Security Modeling",
@@ -355,7 +355,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                     "p0_count": len(security_model.get("p0_risks", [])),
                     "p1_count": len(security_model.get("p1_risks", [])),
                 })
-                
+
                 # Step 4: Company domain updates
                 if update_company_domain:
                     progress.start_step(
@@ -366,7 +366,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                     domain_updates = self._update_company_domains(lens_context, repo_path)
                     result.company_domain_updates = domain_updates
                     progress.complete_step({"domains_updated": len(domain_updates)})
-                
+
                 # Step 5: Generate recommendations BEFORE dashboard
                 progress.start_step(
                     "Recommendations",
@@ -376,7 +376,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 recommendations = self._prioritize_recommendations(security_model, lens_context)
                 result.recommendations = recommendations
                 progress.complete_step({"recommendations_count": len(recommendations)})
-                
+
                 # Step 6: Generate universal dashboard
                 if include_dashboard:
                     progress.start_step(
@@ -384,7 +384,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                         "Generating universal dashboard with metrics",
                         estimated_seconds=10.0,
                     )
-                
+
                 # Convert to RepoDashboardModel schema v2.0
                 dashboard_model = self._convert_to_dashboard_model(
                     repo_path=repo_path,
@@ -394,7 +394,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                     narrative=narrative,
                     recommendations=recommendations,
                 )
-                
+
                 # Validate schema
                 is_valid, validation_errors = dashboard_model.to_dict(), []
                 log_dashboard_schema_validation(
@@ -403,25 +403,25 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                     len(validation_errors) == 0,
                     validation_errors
                 )
-                
+
                 # Save dashboard-data.json
                 dashboard_dir = Path("company/dashboards/repos") / canonical_name
                 dashboard_dir.mkdir(parents=True, exist_ok=True)
-                
+
                 dashboard_json_path = dashboard_dir / "dashboard-data.json"
                 with open(dashboard_json_path, "w", encoding="utf-8") as f:
                     f.write(dashboard_model.to_json(indent=2))
-                
+
                 log_dashboard_generation(
                     "json_saved",
                     canonical_name,
                     path=str(dashboard_json_path),
                     size=dashboard_json_path.stat().st_size,
                 )
-                
+
                 result.dashboard_path = str(dashboard_json_path)
                 progress.complete_step({"dashboard_size": dashboard_json_path.stat().st_size})
-                
+
                 # Legacy dashboard generator support (optional)
                 dashboard_gen = _get_universal_dashboard_generator()
                 if dashboard_gen is not None:
@@ -433,7 +433,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                         'holistic_context': lens_context,
                         'recommendations': recommendations,
                     }
-                        
+
                     try:
                         dashboard_html_path = dashboard_gen.generate_dashboard(
                             repo_name=canonical_name,
@@ -443,7 +443,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                         logger.info("Legacy dashboard HTML generated: %s", dashboard_html_path)
                     except Exception as gen_error:
                         logger.warning("Legacy dashboard generation failed: %s", gen_error)
-                
+
                 # Step 7: Update landing page hub
                 progress.start_step(
                     "Landing Page",
@@ -451,13 +451,13 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                     estimated_seconds=3.0,
                 )
                 landing_gen = _get_landing_page_generator()
-                
+
                 if landing_gen is not None:
                     # Determine tagline
                     tagline = getattr(narrative, 'tagline', 'Software Application')
                     confidence = getattr(narrative, 'confidence', None)
                     conf_score = getattr(confidence, 'score', 50) if confidence else 50
-                    
+
                     landing_gen.add_repo_to_registry(
                         repo_name=canonical_name,
                         title=getattr(narrative, 'title', canonical_name.upper()),
@@ -469,18 +469,18 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                     result.landing_page_path = str(landing_page_path)
                 else:
                     logger.info("Landing page generation skipped (optional feature not available)")
-                
+
                 progress.complete_step()
-            
+
             logger.info("Repository onboarding complete: %s", repo_path)
-            
+
         except Exception as e:
             logger.error("Repository onboarding failed: %s", e, exc_info=True)
             result.success = False
             result.error = str(e)
-        
+
         return result
-    
+
     @dashboard_debug
     def _convert_to_dashboard_model(
         self,
@@ -493,9 +493,9 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
     ) -> RepoDashboardModel:
         """
         Convert analysis results to RepoDashboardModel schema v2.0.
-        
+
         This ensures all generated dashboards conform to the standard schema.
-        
+
         Args:
             repo_path: Repository path
             repo_name: Canonical repository name
@@ -503,15 +503,15 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             security_model: Security threat modeling results
             narrative: Business narrative (optional)
             recommendations: List of recommendations
-            
+
         Returns:
             RepoDashboardModel instance
         """
         log_dashboard_generation("schema_conversion_start", repo_name)
-        
+
         # Extract language detection (handle various formats)
         lang_detection = lens_context.get("language_detection")
-        
+
         # Handle different data structures
         if isinstance(lang_detection, dict):
             primary_language = lang_detection.get("primary_language", "Unknown")
@@ -527,7 +527,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             repo_summary_data = lens_context.get("repository_summary", {})
             primary_language = repo_summary_data.get("primary_language", "Unknown")
             language_counts = repo_summary_data.get("file_counts_by_language", {})
-        
+
         # Repo metadata section
         repo_metadata = RepoMetadata(
             slug=repo_name,
@@ -538,7 +538,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             version="1.0",  # Could extract from git tags or package version
             last_analyzed_at=datetime.now().isoformat(),
         )
-        
+
         # Overview section
         # AC_START: AC-KSESSIONS-HYBRID-008
         # Try to use UnifiedLLMSynthesisLayer executive summary if available
@@ -547,7 +547,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             from cortex.orchestrators.support.unified_llm_synthesis_layer import (
                 UnifiedLLMSynthesisLayer,
             )
-            
+
             synthesis_layer = UnifiedLLMSynthesisLayer()
             synthesis_input = {
                 "repository_name": repo_name,
@@ -556,14 +556,14 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 "patterns_detected": lens_context.get("patterns_detected", {}),
                 "security_findings": security_model,
             }
-            
+
             result = synthesis_layer.synthesize(synthesis_input)
             if result and result.executive_summary:
                 exec_summary = result.executive_summary
                 logger.info("UnifiedLLMSynthesisLayer: Generated executive summary for %s", repo_name)
         except Exception as e:
             logger.warning("UnifiedLLMSynthesisLayer executive summary failed: %s", e)
-        
+
         # Build overview section
         if exec_summary:
             # Use LLM-generated executive summary
@@ -588,7 +588,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 key_findings=self._extract_key_findings(lens_context, security_model),
             )
         # AC_COMPLETE: AC-KSESSIONS-HYBRID-008 ✅ Generic executive summary integration
-        
+
         # Metrics section
         repo_summary = lens_context.get("repository_summary", {})
         metrics = MetricsSection(
@@ -602,49 +602,49 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             coverage_pct=repo_summary.get("test_coverage_pct", 0.0),
             languages=language_counts,  # Use extracted language_counts
         )
-        
+
         # Security section
         security = self._convert_security_section(lens_context, security_model)
-        
+
         # Dependencies section
         dependencies = self._convert_dependencies_section(lens_context)
-        
+
         # Quality section
         quality = self._convert_quality_section(lens_context)
-        
+
         # Use cases
         use_cases = self._generate_use_cases(lens_context, security_model, repo_name)
-        
+
         # LENS section
         lens = LensSection(
             analysis_summary=lens_context.get("metadata", {}).get("summary", "LENS analysis complete")
         )
-        
+
         # Refactoring section
         refactoring = RefactoringSection(
             recommendations=recommendations
         )
-        
+
         # Architecture section (NEW - Tab 9)
         # AC_START: AC-DASHBOARD-9TAB-007
         architecture = self._compute_architecture_section(lens_context, repo_path)
         # AC_COMPLETE: AC-DASHBOARD-9TAB-007 ✅ Architecture section computed
-        
+
         # Data quality section (NEW - Honest Dashboard)
         # AC_START: AC-DASHBOARD-9TAB-008
         data_quality = self._compute_data_quality(lens_context, security_model, metrics, dependencies)
         # AC_COMPLETE: AC-DASHBOARD-9TAB-008 ✅ Data quality section computed
-        
+
         # Add pre-computed visualizations to metrics
         # AC_START: AC-DASHBOARD-9TAB-009
         metrics.visualizations = self._compute_metrics_visualizations(metrics)
         # AC_COMPLETE: AC-DASHBOARD-9TAB-009 ✅ Metrics visualizations computed
-        
+
         # Add pre-computed dependency graph
         # AC_START: AC-DASHBOARD-9TAB-010
         dependencies.visualizations = self._compute_dependency_graph(lens_context, dependencies.packages)
         # AC_COMPLETE: AC-DASHBOARD-9TAB-010 ✅ Dependency graph computed
-        
+
         model = RepoDashboardModel(
             repo=repo_metadata,
             overview=overview,
@@ -658,7 +658,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             architecture=architecture,
             data_quality=data_quality,
         )
-        
+
         log_dashboard_generation(
             "schema_conversion_complete",
             repo_name,
@@ -666,9 +666,9 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             security_vulns=security.total_count,
             health_score=metrics.health_score,
         )
-        
+
         return model
-    
+
     def _extract_key_findings(
         self,
         lens_context: Dict[str, Any],
@@ -676,7 +676,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
     ) -> List[str]:
         """Extract key findings from analysis."""
         findings = []
-        
+
         # Security findings
         p0_count = len(security_model.get("p0_risks", []))
         p1_count = len(security_model.get("p1_risks", []))
@@ -686,20 +686,20 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             findings.append(f"{p1_count} high-priority security issues identified")
         else:
             findings.append("No critical security issues detected")
-        
+
         # Code quality
         repo_summary = lens_context.get("repository_summary", {})
         if repo_summary.get("total_files", 0) > 0:
             findings.append(f"Codebase contains {repo_summary['total_files']} files")
-        
+
         # Dependencies
         dep_analysis = lens_context.get("dependency_analysis", {})
         vulnerable_packages = dep_analysis.get("vulnerable_packages", 0)
         if vulnerable_packages > 0:
             findings.append(f"{vulnerable_packages} dependencies have known vulnerabilities")
-        
+
         return findings[:5]  # Limit to top 5
-    
+
     def _calculate_health_score(
         self,
         lens_context: Dict[str, Any],
@@ -707,34 +707,34 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
     ) -> int:
         """Calculate overall health score (0-100)."""
         score = 100
-        
+
         # Deduct for security risks
         p0_count = len(security_model.get("p0_risks", []))
         p1_count = len(security_model.get("p1_risks", []))
         score -= p0_count * 20  # -20 per P0
         score -= p1_count * 10  # -10 per P1
-        
+
         # Deduct for vulnerable dependencies
         dep_analysis = lens_context.get("dependency_analysis", {})
         score -= dep_analysis.get("critical_vulnerabilities", 0) * 15
         score -= dep_analysis.get("high_vulnerabilities", 0) * 5
-        
+
         return max(0, min(100, score))
-    
+
     def _calculate_risk_score(self, security_model: Dict[str, Any]) -> int:
         """Calculate risk score (0-100, higher is more risky)."""
         score = 0
-        
+
         p0_count = len(security_model.get("p0_risks", []))
         p1_count = len(security_model.get("p1_risks", []))
         p2_count = len(security_model.get("p2_risks", []))
-        
+
         score += p0_count * 25
         score += p1_count * 15
         score += p2_count * 5
-        
+
         return min(100, score)
-    
+
     def _convert_security_section(
         self,
         lens_context: Dict[str, Any],
@@ -742,18 +742,18 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
     ) -> SecuritySection:
         """Convert security analysis to SecuritySection."""
         log_dashboard_debug("Converting security section")
-        
+
         vulnerabilities = []
-        
+
         # Aggregate all security risks
         all_risks = (
             security_model.get("p0_risks", []) +
             security_model.get("p1_risks", []) +
             security_model.get("p2_risks", [])
         )
-        
+
         severity_map = {"P0": "critical", "P1": "high", "P2": "medium"}
-        
+
         for idx, risk in enumerate(all_risks[:50]):  # Limit to 50
             severity_key = risk.get("priority", "P2")
             vuln = SecurityVulnerability(
@@ -766,13 +766,13 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 description=risk.get("description", ""),
             )
             vulnerabilities.append(vuln)
-        
+
         # Count by severity
         critical_count = len([v for v in vulnerabilities if v.severity == "critical"])
         high_count = len([v for v in vulnerabilities if v.severity == "high"])
         medium_count = len([v for v in vulnerabilities if v.severity == "medium"])
         low_count = len([v for v in vulnerabilities if v.severity == "low"])
-        
+
         return SecuritySection(
             total_count=len(vulnerabilities),
             critical_count=critical_count,
@@ -781,17 +781,17 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             low_count=low_count,
             vulnerabilities=vulnerabilities,
         )
-    
+
     def _convert_dependencies_section(
         self,
         lens_context: Dict[str, Any],
     ) -> DependenciesSection:
         """Convert dependency analysis to DependenciesSection."""
         log_dashboard_debug("Converting dependencies section")
-        
+
         dep_analysis = lens_context.get("dependency_analysis", {})
         packages_data = dep_analysis.get("packages", [])
-        
+
         packages = []
         for pkg_data in packages_data[:100]:  # Limit to 100
             pkg = PackageDependency(
@@ -801,15 +801,15 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 is_direct=pkg_data.get("type", "direct") == "direct",
             )
             packages.append(pkg)
-        
+
         # Extract license distribution
         licenses = {}
         for pkg in packages:
             licenses[pkg.license] = licenses.get(pkg.license, 0) + 1
-        
+
         total_packages = dep_analysis.get("total_packages", len(packages))
         direct_count = len([p for p in packages if p.is_direct])
-        
+
         return DependenciesSection(
             total_count=total_packages,
             direct_count=direct_count,
@@ -817,20 +817,20 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             packages=packages,
             licenses=licenses,
         )
-    
+
     def _convert_quality_section(
         self,
         lens_context: Dict[str, Any],
     ) -> QualitySection:
         """Convert quality analysis to QualitySection."""
         log_dashboard_debug("Converting quality section")
-        
+
         code_analysis = lens_context.get("code_analysis", {})
-        
+
         # Extract code smells (if available from LENS)
         code_smells = []
         # TODO: Extract from actual LENS data when available
-        
+
         return QualitySection(
             maintainability=75,  # TODO: Calculate from LENS metrics
             readability=80,
@@ -839,7 +839,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             code_smells=code_smells,
             hotspots=[],
         )
-    
+
     def _generate_use_cases(
         self,
         lens_context: Dict[str, Any],
@@ -848,7 +848,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
     ) -> List[UseCase]:
         """
         Generate use cases for the dashboard.
-        
+
         AC_START: AC-KSESSIONS-HYBRID-006
         AC_UPDATE: AC-LENS-ENHANCED-INTEGRATION
         ENHANCEMENT: Integrated enhanced LENS extractors for aggressive use case mining (50-100+).
@@ -856,32 +856,35 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
         Falls back to basic use cases if both fail.
         """
         log_dashboard_debug("Generating use cases", repo=repo_name)
-        
+
         use_cases = []
-        
+
         # PHASE 1: Enhanced LENS Extractors (NEW - aggressive extraction)
         try:
-            from cortex.lens.extractors.enhanced_extractors import extract_enhanced_use_cases
             from pathlib import Path
-            
+
+            from cortex.lens.extractors.enhanced_extractors import (
+                extract_enhanced_use_cases,
+            )
+
             # Get repository path from metadata or lens_context root
             repo_path_str = (
-                lens_context.get("metadata", {}).get("repo_path") 
-                or lens_context.get("repository_path") 
+                lens_context.get("metadata", {}).get("repo_path")
+                or lens_context.get("repository_path")
                 or "."
             )
             repo_path = Path(repo_path_str)
-            
+
             logger.info(f"Running enhanced extractors on: {repo_path}")
             extracted_use_cases = extract_enhanced_use_cases(repo_path)
-            
+
             if extracted_use_cases:
                 logger.info(
                     "Enhanced extractors: Generated %d use cases for %s",
                     len(extracted_use_cases),
                     repo_name
                 )
-                
+
                 # Convert to dashboard UseCase models (compatibility layer)
                 for uc_dict in extracted_use_cases:
                     # Map extractor format to dashboard schema
@@ -896,23 +899,23 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                         tags=uc_dict.get("actors", []),
                         severity="info",  # Default severity
                     ))
-                
+
                 # If we got 20+ use cases from extractors, return them
                 if len(use_cases) >= 20:
                     logger.info(f"Enhanced extractors achieved target: {len(use_cases)} use cases")
                     return use_cases
-        
+
         except Exception as e:
             logger.warning(f"Enhanced extractors failed: {e}, falling back to LLM synthesis")
-        
+
         # PHASE 2: UnifiedLLMSynthesisLayer fallback
         try:
             from cortex.orchestrators.support.unified_llm_synthesis_layer import (
                 UnifiedLLMSynthesisLayer,
             )
-            
+
             synthesis_layer = UnifiedLLMSynthesisLayer()
-            
+
             # Build synthesis input dict (matches MultiSourceSynthesizer.to_dict() format)
             synthesis_input = {
                 "repository_name": repo_name,
@@ -921,17 +924,17 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 "patterns_detected": lens_context.get("patterns_detected", {}),
                 "security_findings": security_model,
             }
-            
+
             # Call LLM synthesis
             result = synthesis_layer.synthesize(synthesis_input)
-            
+
             if result and result.use_cases:
                 logger.info(
                     "UnifiedLLMSynthesisLayer: Generated %d use cases for %s",
                     len(result.use_cases),
                     repo_name
                 )
-                
+
                 # Convert dataclass use cases to dashboard UseCase models
                 for uc in result.use_cases:
                     use_cases.append(UseCase(
@@ -945,16 +948,16 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                         tags=[uc.category.lower()],
                         severity="medium",  # Default severity
                     ))
-                
+
                 log_dashboard_debug("LLM-generated use cases", count=len(use_cases))
                 return use_cases
-            
+
         except Exception as e:
             logger.warning(
                 "UnifiedLLMSynthesisLayer unavailable or failed: %s. Falling back to basic use cases.",
                 e
             )
-        
+
         # FALLBACK: Generate basic use cases if LLM synthesis fails
         # Security use case
         p0_count = len(security_model.get("p0_risks", []))
@@ -974,7 +977,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 tags=["security", "urgent", "p0"],
                 severity="critical",
             ))
-        
+
         # Dependency use case
         dep_analysis = lens_context.get("dependency_analysis", {})
         outdated_packages = dep_analysis.get("outdated_packages", 0)
@@ -994,7 +997,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 tags=["dependencies", "maintenance"],
                 severity="medium",
             ))
-        
+
         # Code quality use case
         use_cases.append(UseCase(
             id="UC-QUAL-001",
@@ -1011,36 +1014,36 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             tags=["quality", "monitoring"],
             severity="low",
         ))
-        
+
         log_dashboard_debug("Generated basic use cases", count=len(use_cases))
         return use_cases
         # AC_COMPLETE: AC-KSESSIONS-HYBRID-006 ✅ Generic LLM use case generation integrated
-    
+
     def _compute_metrics_visualizations(self, metrics: "MetricsSection") -> Dict[str, Any]:
         """
         Compute pre-rendered visualization data for metrics tab.
-        
+
         AC_START: AC-DASHBOARD-9TAB-011
-        
+
         Client will NO LONGER compute health gauge arc data.
         All D3.js coordinates pre-computed here.
-        
+
         Args:
             metrics: MetricsSection with health_score
-        
+
         Returns:
             Dict with visualization coordinates
         """
         import math
-        
+
         score = metrics.health_score
-        
+
         # Health gauge arc data (D3.js compatible)
         # Pre-compute arc path for gauge
         radius = 100
         start_angle = -math.pi / 2  # -90 degrees
         end_angle = start_angle + (score / 100) * math.pi  # 0 to 180 degrees
-        
+
         # Color thresholds
         if score >= 80:
             color = "#10b981"  # Green
@@ -1050,7 +1053,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             color = "#ef4444"  # Red
         else:
             color = "#7f1d1d"  # Dark red
-        
+
         visualizations = {
             "health_gauge": {
                 "score": score,
@@ -1064,11 +1067,11 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 "thresholds": [30, 60, 80],
             }
         }
-        
+
         log_dashboard_debug("Computed metrics visualizations", score=score, color=color)
         return visualizations
         # AC_COMPLETE: AC-DASHBOARD-9TAB-011 ✅ Metrics visualizations computed
-    
+
     def _compute_dependency_graph(
         self,
         lens_context: Dict[str, Any],
@@ -1076,44 +1079,44 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
     ) -> Dict[str, Any]:
         """
         Compute REAL dependency graph with AST-based edges.
-        
+
         AC_START: AC-DASHBOARD-9TAB-012
-        
+
         NO MORE FAKE PREFIX HEURISTICS.
         Uses AST analysis to find real import relationships.
         Pre-computes D3.js force layout coordinates.
-        
+
         Args:
             lens_context: LENS analysis results
             packages: List of package dependencies
-        
+
         Returns:
             Dict with nodes and edges (real AST-based relationships)
         """
-        import random
         import math
-        
+        import random
+
         # Extract AST analysis
         code_analysis = lens_context.get("code_analysis", {})
         imports = code_analysis.get("imports", [])
-        
+
         # Build node list (limit to top 50 for visualization)
         nodes = []
         edges = []
-        
+
         top_packages = packages[:50]
-        
+
         # Create nodes with pre-computed positions (force layout simulation)
         width = 800
         height = 500
         center_x = width / 2
         center_y = height / 2
-        
+
         for idx, pkg in enumerate(top_packages):
             # Simple circular layout for now (better than random)
             angle = (idx / len(top_packages)) * 2 * math.pi
             radius_offset = 200 if pkg.is_direct else 150
-            
+
             nodes.append({
                 "id": pkg.name,
                 "x": center_x + radius_offset * math.cos(angle),
@@ -1123,16 +1126,16 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 "is_direct": pkg.is_direct,
                 "version": pkg.version,
             })
-        
+
         # Build edges from AST imports (REAL relationships)
         pkg_names = {pkg.name for pkg in top_packages}
-        
+
         for import_stmt in imports[:200]:  # Limit to 200 imports
             # Extract source/target from import statement
             # Format: "from X import Y" or "import X"
             source = import_stmt.get("module")
             target = import_stmt.get("name")
-            
+
             if source and target and source in pkg_names and target in pkg_names:
                 edges.append({
                     "source": source,
@@ -1140,7 +1143,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                     "import_type": import_stmt.get("type", "import"),  # import|from|require
                     "weight": 1,
                 })
-        
+
         # If no real edges found, create SOME edges (but mark as inferred)
         if len(edges) == 0 and len(nodes) > 1:
             logger.warning("No AST-based edges found, creating fallback cluster edges")
@@ -1152,7 +1155,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                     "import_type": "inferred",  # Mark as inferred, not real
                     "weight": 0.5,
                 })
-        
+
         visualizations = {
             "dependency_graph": {
                 "nodes": nodes,
@@ -1162,7 +1165,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 "inferred_edges": len([e for e in edges if e["import_type"] == "inferred"]),
             }
         }
-        
+
         log_dashboard_debug(
             "Computed dependency graph",
             nodes=len(nodes),
@@ -1171,7 +1174,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
         )
         return visualizations
         # AC_COMPLETE: AC-DASHBOARD-9TAB-012 ✅ Real dependency graph computed
-    
+
     def _compute_architecture_section(
         self,
         lens_context: Dict[str, Any],
@@ -1179,54 +1182,55 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
     ) -> "ArchitectureSection":
         """
         Compute architecture analysis with layer graph.
-        
+
         AC_START: AC-DASHBOARD-9TAB-013
-        
+
         Analyzes codebase architecture:
         - Detects layers (presentation, business, data)
         - Computes coupling/cohesion scores
         - Pre-computes layer graph coordinates
         - Detects circular dependencies
-        
+
         Args:
             lens_context: LENS analysis results
             repo_path: Repository path
-        
+
         Returns:
             ArchitectureSection with metrics and visualizations
         """
-        from cortex.models.dashboard_schema import ArchitectureSection
         import random
-        
+
+        from cortex.models.dashboard_schema import ArchitectureSection
+
         code_analysis = lens_context.get("code_analysis", {})
-        
+
         # Count total dependencies (imports)
         imports = code_analysis.get("imports", [])
         total_dependencies = len(imports)
-        
+
         # Detect circular dependencies (simplified)
         # TODO: Implement proper cycle detection
         circular_dependencies = 0
-        
+
         # Calculate coupling score (0-100, lower is better)
         # High imports/files ratio = high coupling
         total_files = lens_context.get("repository_summary", {}).get("total_files", 1)
         imports_per_file = total_dependencies / max(total_files, 1)
         coupling_score = min(100, int(imports_per_file * 10))
-        
+
         # Calculate cohesion score (0-100, higher is better)
         # For now, inverse of coupling
         cohesion_score = max(0, 100 - coupling_score)
-        
+
         # Pre-compute layer graph (simplified 3-layer architecture)
         # TODO: Use actual layer detection from AST
         layers = ["presentation", "business", "data"]
         nodes = []
         edges = []
-        
+
         # Sample some files into layers (for visualization)
         files = code_analysis.get("files", [])[:30]  # Limit to 30 files
-        
+
         for idx, file_info in enumerate(files):
             # Assign to layer based on path heuristics
             file_path = file_info.get("path", "")
@@ -1236,9 +1240,9 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 layer = "data"
             else:
                 layer = "business"
-            
+
             layer_idx = layers.index(layer)
-            
+
             # Position nodes by layer (vertical layout)
             nodes.append({
                 "id": file_info.get("name", f"file-{idx}"),
@@ -1247,7 +1251,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 "y": 100 + layer_idx * 150,
                 "complexity": file_info.get("complexity", 5),
             })
-        
+
         # Create some edges based on imports
         for i in range(min(20, len(nodes) - 1)):
             if i + 1 < len(nodes):
@@ -1256,7 +1260,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                     "target": nodes[i + 1]["id"],
                     "type": "import",
                 })
-        
+
         visualizations = {
             "layer_graph": {
                 "nodes": nodes,
@@ -1264,7 +1268,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 "layers": layers,
             }
         }
-        
+
         architecture = ArchitectureSection(
             coupling_score=coupling_score,
             cohesion_score=cohesion_score,
@@ -1272,7 +1276,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             circular_dependencies=circular_dependencies,
             visualizations=visualizations,
         )
-        
+
         log_dashboard_debug(
             "Computed architecture section",
             coupling=coupling_score,
@@ -1281,7 +1285,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
         )
         return architecture
         # AC_COMPLETE: AC-DASHBOARD-9TAB-013 ✅ Architecture section computed
-    
+
     def _compute_data_quality(
         self,
         lens_context: Dict[str, Any],
@@ -1291,30 +1295,30 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
     ) -> "DataQualitySection":
         """
         Compute data quality and confidence scores.
-        
+
         AC_START: AC-DASHBOARD-9TAB-014
-        
+
         Implements "honest dashboard" principle:
         - Detects contradictions (LOC=0 but languages exist)
         - Identifies missing fields
         - Calculates confidence score
         - Enables degraded state UI
-        
+
         Args:
             lens_context: LENS analysis results
             security_model: Security analysis
             metrics: Metrics section
             dependencies: Dependencies section
-        
+
         Returns:
             DataQualitySection with confidence and contradictions
         """
         from cortex.models.dashboard_schema import DataQualitySection
-        
+
         contradictions = []
         missing_fields = []
         coverage_pct = 100.0
-        
+
         # Detect LOC=0 but languages exist
         if metrics.loc == 0 and len(metrics.languages) > 0:
             contradictions.append(
@@ -1322,13 +1326,13 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 "Language detection may be inaccurate."
             )
             coverage_pct -= 10
-        
+
         # Detect security count=0 but vulnerabilities exist
         if security_model:
             vuln_count = len(security_model.get("p0_risks", [])) + len(security_model.get("p1_risks", []))
             if vuln_count == 0:
                 coverage_pct -= 5  # Missing security analysis
-        
+
         # Detect dependencies count=0 but packages exist
         if dependencies.total_count == 0 and len(dependencies.packages) > 0:
             contradictions.append(
@@ -1336,28 +1340,28 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 "Count computation may be incorrect."
             )
             coverage_pct -= 10
-        
+
         # Check for missing language counts
         if len(metrics.languages) == 0:
             missing_fields.append("metrics.languages")
             coverage_pct -= 15
-        
+
         # Check for missing test coverage
         if metrics.coverage_pct == 0:
             missing_fields.append("metrics.coverage_pct")
             coverage_pct -= 10
-        
+
         # Calculate confidence score
         # Start at 100, deduct for contradictions and missing fields
         confidence_score = max(0, int(coverage_pct))
-        
+
         data_quality = DataQualitySection(
             confidence_score=confidence_score,
             coverage_pct=max(0.0, coverage_pct),
             contradictions=contradictions,
             missing_fields=missing_fields,
         )
-        
+
         log_dashboard_debug(
             "Computed data quality",
             confidence=confidence_score,
@@ -1366,11 +1370,11 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
         )
         return data_quality
         # AC_COMPLETE: AC-DASHBOARD-9TAB-014 ✅ Data quality section computed
-    
+
     def _run_holistic_analysis(self, repo_path: Path) -> Dict[str, Any]:
         """
         Run holistic LENS analysis on repository.
-        
+
         Uses LENSOrchestrator.analyze_repository_holistic() for comprehensive analysis:
         - Git history (commits, contributors, patterns)
         - AST analysis (code structure, complexity)
@@ -1378,7 +1382,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
         - Config security scanning
         - Database schema analysis
         - API endpoint analysis
-        
+
         Returns:
             Dict with comprehensive LENS analysis including all 9 analyzer outputs
         """
@@ -1390,46 +1394,46 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             else:
                 # Update repo path if different
                 self.lens_orchestrator.repo_path = repo_path
-            
+
             # Run the FULL holistic analysis using all 9 LENS analyzers
             logger.info("Running LENS analyze_repository_holistic()...")
             lens_result = self.lens_orchestrator.analyze_repository_holistic(
                 include_vision=False,  # Skip vision for speed
                 include_security=True,  # Always include security
             )
-            
+
             # Merge in additional repo-specific data
             lens_result["metadata"]["repo_path"] = str(repo_path)
             lens_result["metadata"]["analysis_timestamp"] = datetime.now().isoformat()
-            
+
             # Add dependency analysis (not yet in LENS but useful)
             lens_result["dependency_analysis"] = self._analyze_dependency_layer(repo_path)
-            
+
             # Detect language/framework if not already present
             if "language_detection" not in lens_result:
                 lens_result["language_detection"] = self._detect_languages(repo_path)
-            
+
             logger.info(
                 "LENS analysis complete: %s analyzers, %d ms",
                 len(lens_result.get("metadata", {}).get("analyzers_enabled", [])),
                 lens_result.get("metadata", {}).get("analysis_time_ms", 0)
             )
-            
+
             return lens_result
-            
+
         except Exception as e:
             logger.error("Holistic LENS analysis failed: %s", e, exc_info=True)
             # Fallback to basic analysis if LENS fails
             return self._fallback_basic_analysis(repo_path, str(e))
-    
+
     def _fallback_basic_analysis(self, repo_path: Path, error_msg: str) -> Dict[str, Any]:
         """
         Fallback analysis when full LENS pipeline fails.
-        
+
         Provides basic repository information without deep analysis.
         """
         logger.warning("Using fallback analysis due to: %s", error_msg)
-        
+
         return {
             "metadata": {
                 "repo_path": str(repo_path),
@@ -1451,11 +1455,11 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             "security_analysis": {"findings": [], "note": "Fallback mode - limited security analysis"},
             "recommendations": [],
         }
-    
+
     def _detect_languages(self, repo_path: Path) -> Dict[str, Any]:
         """
         Detect programming languages and frameworks in repository.
-        
+
         Returns:
             Dict with detected languages, frameworks, and file counts
         """
@@ -1480,7 +1484,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             ".json": "JSON",
             ".xml": "XML",
         }
-        
+
         framework_indicators = {
             "requirements.txt": "Python",
             "setup.py": "Python Package",
@@ -1501,16 +1505,16 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             "vue.config.js": "Vue.js",
             "next.config.js": "Next.js",
         }
-        
+
         language_counts = {}
         frameworks_detected = []
-        
+
         # Count files by extension
         for ext, lang in extensions_map.items():
             count = len(list(repo_path.glob(f"**/*{ext}")))
             if count > 0:
                 language_counts[lang] = language_counts.get(lang, 0) + count
-        
+
         # Detect frameworks
         for pattern, framework in framework_indicators.items():
             if pattern.startswith("*"):
@@ -1519,30 +1523,30 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 matches = list(repo_path.glob(f"**/{pattern}"))
             if matches:
                 frameworks_detected.append(framework)
-        
+
         # Determine primary language
         primary_language = max(language_counts, key=language_counts.get) if language_counts else "Unknown"
-        
+
         return {
             "primary_language": primary_language,
             "language_counts": language_counts,
             "frameworks_detected": list(set(frameworks_detected)),
             "total_source_files": sum(language_counts.values()),
         }
-    
+
     def _analyze_code_layer(self, repo_path: Path) -> Dict[str, Any]:
         """Analyze code using Git, AST, Comments analyzers."""
         # Use existing LENS capabilities
         python_files = list(repo_path.glob("**/*.py"))[:10]  # Sample first 10
-        
+
         analysis = {
             "total_python_files": len(list(repo_path.glob("**/*.py"))),
             "analyzed_files": len(python_files),
             "summary": f"Found {len(list(repo_path.glob('**/*.py')))} Python files",
         }
-        
+
         return analysis
-    
+
     def _analyze_config_layer(self, repo_path: Path) -> Dict[str, Any]:
         """Analyze configs using ConfigAnalyzer."""
         try:
@@ -1551,7 +1555,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
         except Exception as e:
             logger.warning("Config analysis failed: %s", e)
             return {"error": str(e)}
-    
+
     def _analyze_database_layer(self, repo_path: Path) -> Dict[str, Any]:
         """Analyze database-related files and configurations."""
         try:
@@ -1561,7 +1565,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 "sql": list(repo_path.glob("**/*.sql")),
                 "alembic": list(repo_path.glob("**/alembic/**/*.py")),
             }
-            
+
             return {
                 "has_database": any(len(files) > 0 for files in db_files.values()),
                 "migration_files": len(db_files["migrations"]),
@@ -1572,7 +1576,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
         except Exception as e:
             logger.warning("Database analysis failed: %s", e)
             return {"error": str(e), "has_database": False}
-    
+
     def _analyze_api_layer(self, repo_path: Path) -> Dict[str, Any]:
         """Analyze API-related files and endpoints."""
         try:
@@ -1582,7 +1586,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 "django": list(repo_path.glob("**/views.py")) + list(repo_path.glob("**/urls.py")),
                 "rest": list(repo_path.glob("**/rest/**/*.py")),
             }
-            
+
             return {
                 "has_api": any(len(files) > 0 for files in api_patterns.values()),
                 "flask_files": len(api_patterns["flask"]),
@@ -1593,26 +1597,28 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
         except Exception as e:
             logger.warning("API analysis failed: %s", e)
             return {"error": str(e), "has_api": False}
-    
+
     def _analyze_dependency_layer(self, repo_path: Path) -> Dict[str, Any]:
         """
         Analyze dependencies and vulnerabilities using DependencyAnalyzer.
-        
+
         Returns comprehensive dependency data for dashboard display.
         """
         try:
-            from cortex.lens.analyzers.dependency_analyzer import get_dependency_analyzer
-            
+            from cortex.lens.analyzers.dependency_analyzer import (
+                get_dependency_analyzer,
+            )
+
             analyzer = get_dependency_analyzer()
             result = analyzer.analyze_project(repo_path)
-            
+
             if not result.success:
                 return {
                     "error": result.error,
                     "total_packages": 0,
                     "packages": [],
                 }
-            
+
             # Transform packages for dashboard display
             packages_data = []
             for pkg in result.packages:
@@ -1626,7 +1632,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                     "vulnerabilities": [],
                 }
                 packages_data.append(pkg_data)
-            
+
             # Map vulnerabilities to packages
             for finding in result.findings:
                 if finding.finding_type == "vulnerability":
@@ -1644,12 +1650,12 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                                 for v in finding.vulnerabilities
                             ]
                             break
-            
+
             # Summary counts
             critical_count = len([f for f in result.findings if f.severity.value == "critical"])
             high_count = len([f for f in result.findings if f.severity.value == "high"])
             medium_count = len([f for f in result.findings if f.severity.value == "medium"])
-            
+
             return {
                 "total_packages": result.total_packages,
                 "outdated_packages": result.outdated_packages,
@@ -1671,7 +1677,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                     for f in result.findings
                 ],
             }
-            
+
         except Exception as e:
             logger.warning("Dependency analysis failed: %s", e)
             # Fallback to basic file counting
@@ -1679,7 +1685,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             package_json = list(repo_path.glob("**/package.json"))
             csproj_files = list(repo_path.glob("**/*.csproj"))
             packages_config = list(repo_path.glob("**/packages.config"))
-            
+
             return {
                 "python_requirements": len(requirements_files),
                 "npm_packages": len(package_json),
@@ -1688,7 +1694,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 "error": str(e),
                 "packages": [],
             }
-    
+
     def _run_threat_modeling(
         self,
         lens_context: Dict[str, Any],
@@ -1696,7 +1702,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
     ) -> Dict[str, Any]:
         """
         Security threat modeling with P0/P1/P2 classification.
-        
+
         Uses:
         - SecurityThreatAnalyzer (CWE detection)
         - ConfigAnalyzer (secrets, insecure defaults)
@@ -1711,7 +1717,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             "compliance_gaps": [],
             "summary": "",
         }
-        
+
         try:
             # Aggregate config analysis risks
             config_analysis = lens_context.get("config_analysis", {})
@@ -1721,24 +1727,24 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 security_model["p1_risks"].extend(config_analysis["p1_findings"])
             if "p2_findings" in config_analysis:
                 security_model["p2_risks"].extend(config_analysis["p2_findings"])
-            
+
             # Run additional security assessments
             context = {
                 "operation": "onboard",
                 "repo_path": str(repo_path),
             }
-            
+
             additional_risks = self.assess_security_risks(context)
             security_model["p0_risks"].extend(additional_risks.get("p0_risks", []))
             security_model["p1_risks"].extend(additional_risks.get("p1_risks", []))
             security_model["p2_risks"].extend(additional_risks.get("p2_risks", []))
             security_model["compliance_gaps"].extend(additional_risks.get("compliance_gaps", []))
-            
+
             # Generate summary
             p0_count = len(security_model["p0_risks"])
             p1_count = len(security_model["p1_risks"])
             p2_count = len(security_model["p2_risks"])
-            
+
             if p0_count > 0:
                 security_model["summary"] = f"⛔ CRITICAL: {p0_count} P0 risk(s) require immediate attention"
             elif p1_count > 0:
@@ -1747,13 +1753,13 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 security_model["summary"] = f"ℹ️  MODERATE: {p2_count} P2 risk(s) detected"
             else:
                 security_model["summary"] = "✅ No critical security risks detected"
-        
+
         except Exception as e:
             logger.error("Threat modeling failed: %s", e)
             security_model["error"] = str(e)
-        
+
         return security_model
-    
+
     def _generate_dashboard(
         self,
         lens_context: Dict[str, Any],
@@ -1763,7 +1769,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
     ) -> Optional[Path]:
         """
         Generate PHASE-14 multi-tab dashboard.
-        
+
         Uses DomainDashboardGenerator for company dashboards with glassmorphism theme.
         """
         try:
@@ -1772,24 +1778,24 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             # Check both dashboards/ and domains/ paths for company integration
             company_dashboard_path = Path("company/dashboards") / domain_name
             company_domain_path = Path("company/domains") / domain_name
-            
+
             is_company_dashboard = company_dashboard_path.exists() or company_domain_path.exists()
-            
+
             if is_company_dashboard:
                 # Generate glassmorphism dashboard for company domain
                 from cortex.orchestrators.support.domain_dashboard_generator import (
-                    DomainDashboardGenerator
+                    DomainDashboardGenerator,
                 )
-                
+
                 # Use dashboards path for output
                 output_dashboard_path = company_dashboard_path
                 output_dashboard_path.mkdir(parents=True, exist_ok=True)
-                
+
                 generator = DomainDashboardGenerator(
                     domain_name=domain_name,
                     domain_path=output_dashboard_path
                 )
-                
+
                 # Prepare onboarding data
                 onboarding_data = {
                     'repo_path': str(repo_path),
@@ -1798,7 +1804,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                     'holistic_context': lens_context,
                     'recommendations': recommendations or []
                 }
-                
+
                 dashboard_path = generator.generate_dashboard(onboarding_data)
                 logger.info("Generated glassmorphism dashboard: %s", dashboard_path)
                 return dashboard_path
@@ -1806,18 +1812,18 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 # Use standard LENS dashboard orchestrator
                 if self.dashboard_generator is None:
                     from cortex.orchestrators.support.lens_dashboard_orchestrator import (
-                        LensDashboardOrchestrator
+                        LensDashboardOrchestrator,
                     )
                     self.dashboard_generator = LensDashboardOrchestrator(repo_path=repo_path)
-                
+
                 dashboard_path = Path("cortex-lens") / "onboarding-dashboard.html"
                 logger.info("Dashboard generated: %s", dashboard_path)
                 return dashboard_path
-            
+
         except Exception as e:
             logger.error("Dashboard generation failed: %s", e, exc_info=True)
             return None
-    
+
     def _update_company_domains(
         self,
         lens_context: Dict[str, Any],
@@ -1825,24 +1831,24 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
     ) -> Dict[str, Any]:
         """
         Update company domain YAMLs with snowball effect.
-        
+
         This method implements the Phase 19 "snowball effect":
         - Each repository scan enriches existing domain knowledge
         - Merges new entities, patterns, vendors with existing data
         - Respects company precedence (company YAMLs override CORTEX)
         - Creates YAML files in company/domains/{repo_name}/
-        
+
         Args:
             lens_context: LENS holistic analysis result
             repo_path: Path to repository
-            
+
         Returns:
             Dict with:
                 - created_files: List of new YAML files created
                 - updated_files: List of existing files updated
                 - entities_added: Count of new entities
                 - patterns_promoted: Count of patterns promoted to Tier 2
-                
+
         Note:
             This is a placeholder implementation for Phase 19 integration.
             Full implementation requires DomainKnowledgeMerger orchestrator.
@@ -1850,19 +1856,19 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
         repo_name = repo_path.name
         domain_dir = Path("company/domains") / repo_name
         domain_dir.mkdir(parents=True, exist_ok=True)
-        
+
         result = {
             "created_files": [],
             "updated_files": [],
             "entities_added": 0,
             "patterns_promoted": 0,
         }
-        
+
         # Extract entities from LENS context
         entities = lens_context.get("entities", [])
         if entities:
             entities_yaml = domain_dir / "entities.yaml"
-            
+
             # Merge with existing (snowball effect)
             existing_entities = []
             if entities_yaml.exists():
@@ -1873,51 +1879,51 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                         existing_entities = existing_data.get("entities", [])
                 except Exception as e:
                     logger.warning(f"Could not load existing entities.yaml: {e}")
-            
+
             # Merge (preserve existing, add new)
             all_entities = list(set(existing_entities + entities))
             result["entities_added"] = len(all_entities) - len(existing_entities)
-            
+
             # Write back
             import yaml
             with open(entities_yaml, "w") as f:
                 yaml.dump({"entities": all_entities}, f)
-            
+
             if entities_yaml in result["created_files"] or entities_yaml.exists():
                 result["updated_files"].append(str(entities_yaml))
             else:
                 result["created_files"].append(str(entities_yaml))
-        
+
         # Extract patterns
         patterns = lens_context.get("patterns", {})
         if patterns:
             patterns_yaml = domain_dir / "patterns.yaml"
-            
+
             with open(patterns_yaml, "w") as f:
                 import yaml
                 yaml.dump(patterns, f)
-            
+
             result["created_files"].append(str(patterns_yaml))
             result["patterns_promoted"] = len(patterns.get("learned", []))
-        
+
         # Extract vendors
         vendors = lens_context.get("vendors", [])
         if vendors:
             vendors_yaml = domain_dir / "vendors.yaml"
-            
+
             with open(vendors_yaml, "w") as f:
                 import yaml
                 yaml.dump({"vendors": vendors}, f)
-            
+
             result["created_files"].append(str(vendors_yaml))
-        
+
         logger.info(
             f"Company domain update: {result['entities_added']} entities added, "
             f"{result['patterns_promoted']} patterns promoted"
         )
-        
+
         return result
-    
+
     def _prioritize_recommendations(
         self,
         security_model: Dict[str, Any],
@@ -1925,11 +1931,11 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
     ) -> List[Dict[str, Any]]:
         """
         Generate prioritized recommendations.
-        
+
         Returns top 10 P0/P1 actions sorted by impact.
         """
         recommendations = []
-        
+
         # Add P0 recommendations
         for risk in security_model.get("p0_risks", [])[:5]:
             recommendations.append({
@@ -1939,7 +1945,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 "recommendation": risk.get("recommendation", ""),
                 "impact": "CRITICAL",
             })
-        
+
         # Add P1 recommendations
         for risk in security_model.get("p1_risks", [])[:5]:
             recommendations.append({
@@ -1949,21 +1955,21 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 "recommendation": risk.get("recommendation", ""),
                 "impact": "HIGH",
             })
-        
+
         return recommendations[:10]  # Top 10
-    
+
     # IOrchestrator interface implementation
-    
+
     def execute(self, parameters: Dict[str, Any]) -> Result[Any]:
         """
         Execute onboarding operation.
-        
+
         Args:
             parameters: Dict with:
                 - repo_path: str (path to repository)
                 - include_dashboard: bool (default True)
                 - update_company_domain: bool (default True)
-                
+
         Returns:
             Result with OnboardingResult or error
         """
@@ -1971,43 +1977,43 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             repo_path = Path(parameters.get("repo_path", "."))
             include_dashboard = parameters.get("include_dashboard", True)
             update_company_domain = parameters.get("update_company_domain", True)
-            
+
             result = self.onboard_repository(
                 repo_path=repo_path,
                 include_dashboard=include_dashboard,
                 update_company_domain=update_company_domain,
             )
-            
+
             if result.success:
                 return Ok(result)
             else:
                 return Err(result.error)
-                
+
         except Exception as e:
             logger.error("Onboarding execution failed: %s", e, exc_info=True)
             return Err(str(e))
-    
+
     def get_name(self) -> str:
         """Get orchestrator name."""
         return "RepositoryOnboardingOrchestrator"
-    
+
     def get_description(self) -> str:
         """Get orchestrator description."""
         return "Repository onboarding with holistic LENS analysis and security assessment"
-    
+
     def get_version(self) -> str:
         """Get orchestrator version."""
         return "2.0.0"
-    
+
     def initialize(self) -> Result[str]:
         """Initialize orchestrator."""
         return Ok("RepositoryOnboardingOrchestrator initialized")
-    
+
     def get_mode(self):
         """Get current operation mode."""
         from cortex.brain.core.interfaces.i_orchestrator import OperationMode
         return OperationMode.EXECUTION
-    
+
     def get_mcp_tools(self) -> Result[Dict[str, Any]]:
         """Get exposed MCP tools for this orchestrator."""
         return Ok({
@@ -2043,85 +2049,85 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 }
             }
         })
-    
+
     # ========================================================================
     # PHASE 28: REPOSITORY PROFILE GENERATION (LOOSE COUPLING SUPPORT)
     # ========================================================================
-    
+
     def scan_repository(self, repo_path: Path) -> Dict[str, Any]:
         """
         Scan repository structure and gather metadata.
-        
+
         Args:
             repo_path: Path to repository
-            
+
         Returns:
             Dictionary with scan results
-            
+
         Raises:
             RepositoryNotFoundError: If repository doesn't exist
         """
         if not repo_path.exists():
             raise RepositoryNotFoundError(f"Repository not found: {repo_path}")
-        
+
         return {
             'structure': self._scan_structure(repo_path),
             'tech_stack': self.analyze_tech_stack(repo_path),
             'security': self.assess_security_baseline(repo_path),
             'standards': self.extract_standards(repo_path),
         }
-    
+
     def detect_company_domains(
         self, repo_path: Path
     ) -> tuple[bool, Optional[str], List[str]]:
         """
         Detect company/domains/ structure in repository.
-        
+
         Args:
             repo_path: Path to repository
-            
+
         Returns:
             Tuple of (has_domains, domains_path, detected_domains)
         """
         domains_path = repo_path / "company" / "domains"
-        
+
         if not domains_path.exists():
             return (False, None, [])
-        
+
         # List subdirectories in company/domains/
         detected_domains = [
             f"{d.name}/" for d in domains_path.iterdir() if d.is_dir()
         ]
-        
+
         return (True, str(domains_path.relative_to(repo_path)), detected_domains)
-    
+
     def analyze_tech_stack(self, repo_path: Path) -> Dict[str, Any]:
         """
         Analyze technology stack of repository.
-        
+
         Args:
             repo_path: Path to repository
-            
+
         Returns:
             Dictionary with tech stack information
         """
         languages = self._detect_languages(repo_path)
         primary_language = languages[0] if languages else None
-        
+
         return {
             'primary_language': primary_language,
             'languages': languages,
             'frameworks': self._detect_frameworks(repo_path),
             'dependencies': self.analyze_dependencies(repo_path),
         }
-    
+
     def assess_security_baseline(self, repo_path: Path) -> Dict[str, Any]:
         """
         Assess security baseline of repository.
-        
+
         Args:
             repo_path: Path to repository
-            
+
         Returns:
             Dictionary with security metadata
         """
@@ -2131,14 +2137,14 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             'vulnerabilities_detected': 0,  # Placeholder for security scan
             'last_scan': datetime.now(),
         }
-    
+
     def extract_standards(self, repo_path: Path) -> Dict[str, Any]:
         """
         Extract coding standards from repository.
-        
+
         Args:
             repo_path: Path to repository
-            
+
         Returns:
             Dictionary with standards information
         """
@@ -2148,34 +2154,34 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             'test_patterns': self._detect_test_patterns(repo_path),
             'api_patterns': self._detect_api_patterns(repo_path),
         }
-    
+
     def generate_profile(self, repo_path: Path) -> 'RepositoryProfile':
         """
         Generate complete RepositoryProfile from repository scan.
-        
+
         Args:
             repo_path: Path to repository
-            
+
         Returns:
             RepositoryProfile instance
         """
         from cortex_brain.onboarded_repos import (
-            RepositoryProfile,
-            TechStack,
-            RepositoryStructure,
-            Standards,
-            SecurityMetadata,
             LooseCoupling,
+            RepositoryProfile,
+            RepositoryStructure,
+            SecurityMetadata,
+            Standards,
+            TechStack,
         )
-        
+
         # Scan repository
         scan_results = self.scan_repository(repo_path)
-        
+
         # Detect company domains
         has_domains, domains_path, detected_domains = self.detect_company_domains(
             repo_path
         )
-        
+
         # Build profile
         profile = RepositoryProfile(
             name=repo_path.name,
@@ -2192,9 +2198,9 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             security=SecurityMetadata(**scan_results['security']),
             loose_coupling=LooseCoupling(),
         )
-        
+
         return profile
-    
+
     def onboard_repository_with_profile(
         self,
         repo_path: Path,
@@ -2202,52 +2208,53 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
     ) -> 'RepositoryProfile':
         """
         Onboard repository and save profile to store.
-        
+
         Triggers dashboard auto-generation hook (Phase-28 S5) after profile save.
-        
+
         Args:
             repo_path: Path to repository
             profile_store: ProfileStore instance (optional)
-            
+
         Returns:
             RepositoryProfile instance
-            
+
         AC_START: AC-PHASE28-S5-011
         """
         from cortex_brain.onboarded_repos import ProfileStore
-        
+
         # Generate profile
         profile = self.generate_profile(repo_path)
-        
+
         # Save to store if provided
         if profile_store is None:
             profile_store = ProfileStore()
-        
+
         # Save profile to disk
         profile_path = profile_store.save(profile)
-        
+
         # AC_MARKER: AC-PHASE28-S5-011: Trigger dashboard hook after profile save
         # Phase-28 S5: Auto-generate dashboard for newly onboarded repository
         try:
             hook = self._get_dashboard_hook()
             if hook is not None:
-                from cortex.orchestrators.support.onboarding_dashboard_hook import (
-                    ProfileCreatedEvent
-                )
                 from datetime import datetime
-                
+
+                from cortex.orchestrators.support.onboarding_dashboard_hook import (
+                    ProfileCreatedEvent,
+                )
+
                 # Convert profile to dict for event (using Pydantic model_dump)
                 profile_data = {}
                 if hasattr(profile, 'model_dump'):
                     profile_data = profile.model_dump(mode='json', exclude_none=False)
-                
+
                 event = ProfileCreatedEvent(
                     repo_name=profile.name,
                     profile_path=str(profile_path),
                     timestamp=datetime.now(),
                     profile_data=profile_data
                 )
-                
+
                 hook_result = hook.on_profile_created(event)
                 logger.info(
                     "Dashboard hook triggered for %s (Phase-28 S5): %s",
@@ -2262,16 +2269,16 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 profile.name,
                 e
             )
-        
+
         return profile
-    
+
     def detect_test_framework(self, repo_path: Path) -> Dict[str, Any]:
         """
         Detect test framework used in repository.
-        
+
         Args:
             repo_path: Path to repository
-            
+
         Returns:
             Dictionary with test framework information
         """
@@ -2279,32 +2286,32 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             'has_tests': False,
             'test_framework': None,
         }
-        
+
         # Check for pytest
         if (repo_path / "pytest.ini").exists() or \
            (repo_path / "pyproject.toml").exists():
             test_info['has_tests'] = True
             test_info['test_framework'] = "pytest"
-        
+
         # Check for unittest
         elif (repo_path / "tests").exists():
             test_info['has_tests'] = True
             test_info['test_framework'] = "unittest"
-        
+
         return test_info
-    
+
     def analyze_dependencies(self, repo_path: Path) -> List[str]:
         """
         Analyze project dependencies.
-        
+
         Args:
             repo_path: Path to repository
-            
+
         Returns:
             List of dependency strings
         """
         dependencies = []
-        
+
         # Check requirements.txt
         req_file = repo_path / "requirements.txt"
         if req_file.exists():
@@ -2313,7 +2320,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 line.strip() for line in content.split('\n')
                 if line.strip() and not line.startswith('#')
             ])
-        
+
         # Check pyproject.toml
         pyproject_file = repo_path / "pyproject.toml"
         if pyproject_file.exists():
@@ -2321,11 +2328,11 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             content = pyproject_file.read_text()
             if 'dependencies' in content:
                 dependencies.append("(see pyproject.toml)")
-        
+
         return dependencies
-    
+
     # Helper methods
-    
+
     def _scan_structure(self, repo_path: Path) -> Dict[str, Any]:
         """Scan repository structure."""
         return {
@@ -2333,54 +2340,54 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             'has_tests': (repo_path / "tests").exists(),
             'has_docs': (repo_path / "docs").exists(),
         }
-    
+
     def _detect_languages(self, repo_path: Path) -> List[str]:
         """Detect programming languages in repository."""
         languages = []
-        
+
         # Check for Python files
         if list(repo_path.rglob("*.py")):
             languages.append("Python")
-        
+
         # Check for YAML files
         if list(repo_path.rglob("*.yaml")) or list(repo_path.rglob("*.yml")):
             languages.append("YAML")
-        
+
         # Check for Markdown
         if list(repo_path.rglob("*.md")):
             languages.append("Markdown")
-        
+
         return languages
-    
+
     def _detect_frameworks(self, repo_path: Path) -> List[str]:
         """Detect frameworks used in repository."""
         frameworks = []
-        
+
         # Check for FastAPI
-        if any("fastapi" in dep.lower() 
+        if any("fastapi" in dep.lower()
                for dep in self.analyze_dependencies(repo_path)):
             frameworks.append("FastAPI")
-        
+
         # Check for Pydantic
-        if any("pydantic" in dep.lower() 
+        if any("pydantic" in dep.lower()
                for dep in self.analyze_dependencies(repo_path)):
             frameworks.append("Pydantic")
-        
+
         return frameworks
-    
+
     def _detect_secrets_management(self, repo_path: Path) -> str:
         """Detect secrets management approach."""
         if (repo_path / ".env.example").exists():
             return "environment variables"
         return "unknown"
-    
+
     def _detect_auth_pattern(self, repo_path: Path) -> str:
         """Detect authentication pattern."""
         deps = self.analyze_dependencies(repo_path)
         if any("jwt" in dep.lower() for dep in deps):
             return "JWT"
         return "unknown"
-    
+
     def _detect_coding_style(self, repo_path: Path) -> Optional[str]:
         """Detect coding style tools."""
         tools = []
@@ -2389,26 +2396,26 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
         if (repo_path / "mypy.ini").exists():
             tools.append("mypy")
         return " + ".join(tools) if tools else None
-    
+
     def _detect_security_baseline(self, repo_path: Path) -> Optional[str]:
         """Detect security baseline."""
         # Placeholder - would check for security configs
         return None
-    
+
     def _detect_test_patterns(self, repo_path: Path) -> Optional[str]:
         """Detect test patterns."""
         test_info = self.detect_test_framework(repo_path)
         if test_info['has_tests']:
             return f"{test_info['test_framework']}"
         return None
-    
+
     def _detect_api_patterns(self, repo_path: Path) -> Optional[str]:
         """Detect API patterns."""
         frameworks = self._detect_frameworks(repo_path)
         if "FastAPI" in frameworks:
             return "RESTful + OpenAPI 3.0"
         return None
-    
+
     def _get_structure_metadata(self, repo_path: Path) -> Dict[str, Any]:
         """Get additional structure metadata."""
         test_info = self.detect_test_framework(repo_path)
@@ -2418,7 +2425,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             'has_docs': (repo_path / "docs").exists(),
             'doc_format': "markdown" if (repo_path / "docs").exists() else None,
         }
-    
+
     def execute_operation(
         self,
         operation_name: str,
@@ -2428,7 +2435,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
         if operation_name == "onboard_repository":
             return self.execute(parameters)
         return Err(f"Unknown operation: {operation_name}")
-    
+
     def get_audit_trail(self, limit: int = 100) -> Result[list]:
         """Get audit trail with hash chain."""
         # Basic audit trail - would be enhanced with hash chain in production

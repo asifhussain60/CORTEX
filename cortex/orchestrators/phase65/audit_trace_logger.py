@@ -27,16 +27,15 @@ CORE Compliance:
 
 from __future__ import annotations
 
-import time
 import json
-from dataclasses import dataclass, field, asdict
-from typing import Dict, Any, List, Optional, Literal
+import time
+from dataclasses import asdict, dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
+from typing import Any, Dict, List, Literal, Optional
 
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
-
 
 # ============================================================================
 # PHASE 65 AUDIT OPERATION TYPES
@@ -44,14 +43,14 @@ from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 
 class Phase65Operation(str, Enum):
     """Phase 65-specific operation types for audit logging."""
-    
+
     # S1: YAML Best Practice Loading
     YAML_INDEX_PARSE = "YAML_INDEX_PARSE"
     YAML_LOAD = "YAML_LOAD"
     YAML_CACHE_HIT = "YAML_CACHE_HIT"
     YAML_CACHE_MISS = "YAML_CACHE_MISS"
     YAML_LOAD_ERROR = "YAML_LOAD_ERROR"
-    
+
     # S2: LENS Warmer Operations
     LENS_WARM_START = "LENS_WARM_START"
     LENS_AST_ANALYSIS = "LENS_AST_ANALYSIS"
@@ -60,28 +59,28 @@ class Phase65Operation(str, Enum):
     LENS_SECURITY_CHECK = "LENS_SECURITY_CHECK"
     LENS_PERFORMANCE_CHECK = "LENS_PERFORMANCE_CHECK"
     LENS_WARM_COMPLETE = "LENS_WARM_COMPLETE"
-    
+
     # S3: Challenge Engine LENS Integration
     CHALLENGE_BUILD_LENS_CONTEXT = "CHALLENGE_BUILD_LENS_CONTEXT"
     CHALLENGE_ANALYZE_SCOPE = "CHALLENGE_ANALYZE_SCOPE"
     CHALLENGE_GENERATE = "CHALLENGE_GENERATE"
-    
+
     # S4: Unified Intelligence Provider
     INTELLIGENCE_SYNTHESIS_START = "INTELLIGENCE_SYNTHESIS_START"
     INTELLIGENCE_MERGE_RULES = "INTELLIGENCE_MERGE_RULES"
     INTELLIGENCE_DETECT_VIOLATIONS = "INTELLIGENCE_DETECT_VIOLATIONS"
     INTELLIGENCE_GENERATE_GUIDANCE = "INTELLIGENCE_GENERATE_GUIDANCE"
     INTELLIGENCE_SYNTHESIS_COMPLETE = "INTELLIGENCE_SYNTHESIS_COMPLETE"
-    
+
     # S5: Cross-Turn Accumulation
     INTELLIGENCE_ACCUMULATE = "INTELLIGENCE_ACCUMULATE"
     INTELLIGENCE_CACHE_RESTORE = "INTELLIGENCE_CACHE_RESTORE"
     INTELLIGENCE_CACHE_UPDATE = "INTELLIGENCE_CACHE_UPDATE"
-    
+
     # S6: CORE-035 Remediation
     DUPLICATE_DETECTION = "DUPLICATE_DETECTION"
     DUPLICATE_CONSOLIDATION = "DUPLICATE_CONSOLIDATION"
-    
+
     # S8: Integration Testing
     E2E_TEST_START = "E2E_TEST_START"
     E2E_TEST_COMPLETE = "E2E_TEST_COMPLETE"
@@ -136,22 +135,22 @@ class IntelligenceSynthesisTrace:
     start_time: float
     end_time: float
     duration_ms: float
-    
+
     # Knowledge sources
     cortex_rules_loaded: int
     company_rules_loaded: int
     lens_analyses: List[str] = field(default_factory=list)
-    
+
     # Synthesis results
     merged_rules_count: int = 0
     violations_detected: int = 0
     guidance_generated: int = 0
     citations_count: int = 0
-    
+
     # Performance
     cache_hits: int = 0
     cache_misses: int = 0
-    
+
     # Outcome
     success: bool = True
     errors: List[str] = field(default_factory=list)
@@ -176,13 +175,13 @@ class CrossTurnAccumulationTrace:
 class Phase65AuditTraceLogger:
     """
     Enhanced audit trace logger for Phase 65 intelligence pipeline.
-    
+
     Provides structured logging with performance metrics, violation tracking,
     and cross-turn accumulation history.
-    
+
     Example:
         >>> logger = Phase65AuditTraceLogger()
-        >>> 
+        >>>
         >>> # Log YAML loading
         >>> trace = YAMLLoadTrace(
         ...     yaml_file="tdd-best-practices.yaml",
@@ -192,7 +191,7 @@ class Phase65AuditTraceLogger:
         ...     cache_hit=False
         ... )
         >>> logger.log_yaml_load(trace)
-        >>> 
+        >>>
         >>> # Log intelligence synthesis
         >>> synthesis_trace = IntelligenceSynthesisTrace(
         ...     ac_id="AC-PHASE65-001",
@@ -209,17 +208,17 @@ class Phase65AuditTraceLogger:
         ... )
         >>> logger.log_intelligence_synthesis(synthesis_trace)
     """
-    
+
     def __init__(self):
         """Initialize Phase 65 audit trace logger."""
         self.base_logger = EnhancedAuditLogger.instance()
         self.session_start = time.time()
-        
+
         # Performance tracking
         self.yaml_load_times: List[float] = []
         self.lens_analysis_times: List[float] = []
         self.synthesis_times: List[float] = []
-        
+
         # Cache metrics
         self.cache_stats = {
             "yaml_hits": 0,
@@ -229,7 +228,7 @@ class Phase65AuditTraceLogger:
             "intelligence_hits": 0,
             "intelligence_misses": 0
         }
-        
+
         # Violation tracking
         self.violations_by_severity: Dict[str, int] = {
             "INFO": 0,
@@ -237,35 +236,35 @@ class Phase65AuditTraceLogger:
             "ERROR": 0,
             "CRITICAL": 0
         }
-        
+
         # Cross-turn tracking
         self.turn_history: List[CrossTurnAccumulationTrace] = []
-    
+
     # ========================================================================
     # S1: YAML LOADING OPERATIONS
     # ========================================================================
-    
+
     def log_yaml_load(self, trace: YAMLLoadTrace) -> None:
         """
         Log YAML file loading operation.
-        
+
         Args:
             trace: YAMLLoadTrace with load details
         """
         self.yaml_load_times.append(trace.load_time_ms)
-        
+
         if trace.cache_hit:
             self.cache_stats["yaml_hits"] += 1
         else:
             self.cache_stats["yaml_misses"] += 1
-        
+
         operation = (
-            Phase65Operation.YAML_CACHE_HIT if trace.cache_hit 
+            Phase65Operation.YAML_CACHE_HIT if trace.cache_hit
             else Phase65Operation.YAML_LOAD
         )
-        
+
         self.base_logger.log_operation_complete(
-            ac_id=f"AC-PHASE65-S1-YAML",
+            ac_id="AC-PHASE65-S1-YAML",
             operation=operation.value,
             success=trace.error is None,
             details={
@@ -277,7 +276,7 @@ class Phase65AuditTraceLogger:
                 "error": trace.error
             }
         )
-    
+
     def log_yaml_load_error(
         self,
         yaml_file: str,
@@ -286,14 +285,14 @@ class Phase65AuditTraceLogger:
     ) -> None:
         """
         Log YAML loading error.
-        
+
         Args:
             yaml_file: YAML file that failed to load
             intent_type: Intent type attempted
             error: Error message
         """
         self.base_logger.log_operation_complete(
-            ac_id=f"AC-PHASE65-S1-ERROR",
+            ac_id="AC-PHASE65-S1-ERROR",
             operation=Phase65Operation.YAML_LOAD_ERROR.value,
             success=False,
             details={
@@ -302,25 +301,25 @@ class Phase65AuditTraceLogger:
                 "error": error
             }
         )
-    
+
     # ========================================================================
     # S2: LENS ANALYSIS OPERATIONS
     # ========================================================================
-    
+
     def log_lens_analysis(self, trace: LENSAnalysisTrace) -> None:
         """
         Log LENS analysis operation.
-        
+
         Args:
             trace: LENSAnalysisTrace with analysis details
         """
         self.lens_analysis_times.append(trace.analysis_time_ms)
-        
+
         if trace.cache_hit:
             self.cache_stats["lens_hits"] += 1
         else:
             self.cache_stats["lens_misses"] += 1
-        
+
         # Map analysis type to operation
         operation_map = {
             "ast": Phase65Operation.LENS_AST_ANALYSIS,
@@ -329,12 +328,12 @@ class Phase65AuditTraceLogger:
             "security": Phase65Operation.LENS_SECURITY_CHECK,
             "performance": Phase65Operation.LENS_PERFORMANCE_CHECK
         }
-        
+
         operation = operation_map.get(
             trace.analysis_type,
             Phase65Operation.LENS_WARM_COMPLETE
         )
-        
+
         self.base_logger.log_operation_complete(
             ac_id=f"AC-PHASE65-S2-LENS-{trace.analysis_type.upper()}",
             operation=operation.value,
@@ -348,26 +347,26 @@ class Phase65AuditTraceLogger:
                 "cache_hit": trace.cache_hit
             }
         )
-    
+
     # ========================================================================
     # S4: INTELLIGENCE SYNTHESIS OPERATIONS
     # ========================================================================
-    
+
     def log_intelligence_synthesis(
         self,
         trace: IntelligenceSynthesisTrace
     ) -> None:
         """
         Log complete intelligence synthesis operation.
-        
+
         Args:
             trace: IntelligenceSynthesisTrace with synthesis details
         """
         self.synthesis_times.append(trace.duration_ms)
-        
+
         self.cache_stats["intelligence_hits"] += trace.cache_hits
         self.cache_stats["intelligence_misses"] += trace.cache_misses
-        
+
         self.base_logger.log_operation_complete(
             ac_id=trace.ac_id,
             operation=Phase65Operation.INTELLIGENCE_SYNTHESIS_COMPLETE.value,
@@ -388,18 +387,18 @@ class Phase65AuditTraceLogger:
                 "errors": trace.errors
             }
         )
-    
+
     def log_violation(self, trace: ViolationTrace) -> None:
         """
         Log violation detection.
-        
+
         Args:
             trace: ViolationTrace with violation details
         """
         self.violations_by_severity[trace.severity] += 1
-        
+
         self.base_logger.log_operation_complete(
-            ac_id=f"AC-PHASE65-S4-VIOLATION",
+            ac_id="AC-PHASE65-S4-VIOLATION",
             operation=Phase65Operation.INTELLIGENCE_DETECT_VIOLATIONS.value,
             success=True,
             details={
@@ -412,23 +411,23 @@ class Phase65AuditTraceLogger:
                 "remediation": trace.remediation
             }
         )
-    
+
     # ========================================================================
     # S5: CROSS-TURN ACCUMULATION OPERATIONS
     # ========================================================================
-    
+
     def log_cross_turn_accumulation(
         self,
         trace: CrossTurnAccumulationTrace
     ) -> None:
         """
         Log cross-turn intelligence accumulation.
-        
+
         Args:
             trace: CrossTurnAccumulationTrace with accumulation details
         """
         self.turn_history.append(trace)
-        
+
         self.base_logger.log_operation_complete(
             ac_id=f"AC-PHASE65-S5-TURN-{trace.turn_number}",
             operation=Phase65Operation.INTELLIGENCE_ACCUMULATE.value,
@@ -443,15 +442,15 @@ class Phase65AuditTraceLogger:
                 "cache_size_bytes": trace.cache_size_bytes
             }
         )
-    
+
     # ========================================================================
     # PERFORMANCE METRICS & REPORTING
     # ========================================================================
-    
+
     def get_performance_summary(self) -> Dict[str, Any]:
         """
         Get performance summary for all Phase 65 operations.
-        
+
         Returns:
             Dict with performance metrics:
             - avg_yaml_load_ms: Average YAML load time
@@ -462,7 +461,7 @@ class Phase65AuditTraceLogger:
         """
         def avg(times: List[float]) -> float:
             return sum(times) / len(times) if times else 0.0
-        
+
         total_hits = sum(
             v for k, v in self.cache_stats.items() if k.endswith("_hits")
         )
@@ -473,7 +472,7 @@ class Phase65AuditTraceLogger:
         cache_hit_rate = (
             total_hits / total_cache_ops if total_cache_ops > 0 else 0.0
         )
-        
+
         return {
             "avg_yaml_load_ms": avg(self.yaml_load_times),
             "avg_lens_analysis_ms": avg(self.lens_analysis_times),
@@ -484,16 +483,16 @@ class Phase65AuditTraceLogger:
             "total_turns": len(self.turn_history),
             "session_duration_seconds": time.time() - self.session_start
         }
-    
+
     def generate_audit_report(self) -> str:
         """
         Generate human-readable audit report.
-        
+
         Returns:
             Formatted audit report string
         """
         summary = self.get_performance_summary()
-        
+
         report = f"""
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📋 PHASE 65 INTELLIGENCE PIPELINE AUDIT REPORT
@@ -522,7 +521,7 @@ class Phase65AuditTraceLogger:
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         """
-        
+
         return report.strip()
 
 
@@ -536,7 +535,7 @@ _phase65_logger_instance: Optional[Phase65AuditTraceLogger] = None
 def get_phase65_audit_logger() -> Phase65AuditTraceLogger:
     """
     Get or create singleton Phase65AuditTraceLogger instance.
-    
+
     Returns:
         Phase65AuditTraceLogger singleton instance
     """

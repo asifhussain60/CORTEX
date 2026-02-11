@@ -1,6 +1,7 @@
 """Domain brain orchestrator for business knowledge operations."""
 
 from typing import Any, Dict, List, Optional
+
 from cortex.mcp.decorators import mcp_tool
 
 
@@ -15,14 +16,14 @@ def get_relevant_business_knowledge_for_operation(
 ) -> Dict[str, Any]:
     """
     Retrieve relevant business knowledge for a given operation.
-    
+
     Args:
         operation_id: Unique identifier for the operation.
         context: Optional execution context containing operation metadata.
-    
+
     Returns:
         Dictionary containing relevant knowledge, sources, and confidence scores.
-    
+
     Example:
         knowledge = get_relevant_business_knowledge_for_operation(
             operation_id="OP-123",
@@ -31,10 +32,10 @@ def get_relevant_business_knowledge_for_operation(
     """
     if not operation_id:
         raise ValueError("operation_id must be provided")
-    
+
     if context is None:
         context = {}
-    
+
     # Retrieve knowledge from domain brain
     knowledge: Dict[str, Any] = {
         "operation_id": operation_id,
@@ -42,16 +43,16 @@ def get_relevant_business_knowledge_for_operation(
         "knowledge": {},
         "confidence": 0.0,
     }
-    
+
     # Query tier 3 knowledge registry
     domain = context.get("domain", "general")
     knowledge["domain"] = domain
-    
+
     # Fetch relevant knowledge entries
     knowledge["sources"] = _get_knowledge_sources(operation_id, domain)
     knowledge["knowledge"] = _synthesize_knowledge(operation_id, context)
     knowledge["confidence"] = _calculate_confidence(knowledge["sources"])
-    
+
     return knowledge
 
 

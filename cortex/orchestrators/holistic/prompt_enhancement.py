@@ -4,8 +4,8 @@ Minimal adjustments to cortex-architect.prompt.md based on validation insights.
 """
 
 from dataclasses import dataclass, field
-from typing import List, Dict, Any, Optional
 from enum import Enum
+from typing import Any, Dict, List, Optional
 
 
 class EnhancementType(str, Enum):
@@ -356,16 +356,16 @@ class PromptEnhancementOrchestrator:
             Formatted report string.
         """
         lines = []
-        lines.append(f"\n## 📋 Phase 48 S5: Prompt Enhancement Report")
+        lines.append("\n## 📋 Phase 48 S5: Prompt Enhancement Report")
         lines.append(f"\n**Total Impact:** {report.total_impact.upper()}")
         lines.append(f"**Prompt Enhancements:** {len(report.prompt_enhancements)}")
         lines.append(f"**Agent Enhancements:** {len(report.agent_enhancements)}")
 
-        lines.append(f"\n### Prompt Enhancements")
+        lines.append("\n### Prompt Enhancements")
         for enhancement in report.prompt_enhancements:
             lines.append(self.format_enhancement_for_documentation(enhancement))
 
-        lines.append(f"\n### Agent Enhancements")
+        lines.append("\n### Agent Enhancements")
         for agent_enh in report.agent_enhancements:
             lines.append(f"\n#### {agent_enh.agent_name}")
             lines.append(f"File: `{agent_enh.agent_file}`")
@@ -373,7 +373,7 @@ class PromptEnhancementOrchestrator:
             lines.append(f"**Rationale:** {agent_enh.rationale}")
             lines.append(f"**Impact:** {agent_enh.impact}")
 
-        lines.append(f"\n### Recommendations")
+        lines.append("\n### Recommendations")
         for i, rec in enumerate(report.recommendations, 1):
             lines.append(f"{i}. {rec}")
 

@@ -17,9 +17,9 @@ Pattern: MCP-FIRST + Zero External Dependencies
 
 import json
 import logging
-from typing import Dict, Any, List
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from datetime import datetime
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
@@ -27,15 +27,15 @@ logger = logging.getLogger(__name__)
 @dataclass
 class RepositorySynthesisRequest:
     """Generic repository synthesis request (works for any repo)."""
-    
+
     repository_name: str
     repository_path: str
-    
+
     # LENS analysis (code patterns, architecture)
     lens_patterns: List[Dict[str, Any]]
     api_contracts: List[Dict[str, Any]]
     architectural_layers: Dict[str, Any]
-    
+
     # Git history (evolution, maturity)
     first_commit: str
     last_commit: str
@@ -43,17 +43,17 @@ class RepositorySynthesisRequest:
     total_commits: int
     active_contributors: int
     recent_changes: List[str]
-    
+
     # Tech stack (languages, frameworks, tools)
     languages: List[str]
     frameworks: List[str]
     databases: List[str]
     has_ci_cd: bool
     containerized: bool
-    
+
     # Documentation
     readme_summary: str = ""
-    
+
     def to_synthesis_prompt(self) -> str:
         """Generate generic synthesis prompt for any repository."""
         return f"""Analyze this repository and provide comprehensive business insights:
@@ -170,23 +170,23 @@ Return as JSON with this exact structure:
 @dataclass
 class RepositorySynthesisResponse:
     """Generic repository synthesis response (works for any repo)."""
-    
+
     repository_name: str
     timestamp: str
-    
+
     executive_summary: Dict[str, Any]
     use_cases: List[Dict[str, Any]]
     architectural_insights: str
     risk_assessment: str
     recommendations: List[str]
-    
+
     synthesis_method: str  # "copilot_direct" | "anthropic_api" | "mock"
 
 
 def cortex_synthesize_repository(request_data: Dict[str, Any]) -> Dict[str, Any]:
     """
     MCP Tool: Synthesize repository insights using GitHub Copilot LLM.
-    
+
     GENERIC DESIGN - Works with ANY repository:
     - Python projects
     - JavaScript/TypeScript projects
@@ -195,13 +195,13 @@ def cortex_synthesize_repository(request_data: Dict[str, Any]) -> Dict[str, Any]
     - Rust projects
     - Multi-language projects
     - Any tech stack
-    
+
     Args:
         request_data: Repository analysis data from LENS, Git, Config analysis
-        
+
     Returns:
         Structured synthesis response with executive summary and use cases
-        
+
     Usage:
         # From Python code (onboarding orchestrator)
         result = cortex_synthesize_repository({
@@ -211,7 +211,7 @@ def cortex_synthesize_repository(request_data: Dict[str, Any]) -> Dict[str, Any]
             "git_history": {...},
             "tech_stack": {...}
         })
-        
+
         # From Copilot Chat (manual synthesis)
         Use: cortex_synthesize_repository tool with repository data
     """
@@ -236,18 +236,18 @@ def cortex_synthesize_repository(request_data: Dict[str, Any]) -> Dict[str, Any]
             containerized=request_data.get("containerized", False),
             readme_summary=request_data.get("readme_summary", ""),
         )
-        
+
         # Generate synthesis prompt (generic, works for any repo)
         prompt = req.to_synthesis_prompt()
-        
+
         # Method 1: GitHub Copilot direct synthesis (when in Copilot Chat)
         # This will be populated by Copilot when it processes this tool call
         synthesis_response = _synthesize_with_copilot(prompt, req)
-        
+
         # Method 2: Fallback to structured template (if Copilot not available)
         if not synthesis_response:
             synthesis_response = _generate_structured_template(req)
-        
+
         return {
             "success": True,
             "repository_name": req.repository_name,
@@ -255,7 +255,7 @@ def cortex_synthesize_repository(request_data: Dict[str, Any]) -> Dict[str, Any]
             "synthesis": synthesis_response,
             "prompt_used": prompt,  # For debugging/learning
         }
-        
+
     except Exception as e:
         logger.error(f"Repository synthesis failed: {e}")
         return {
@@ -268,13 +268,13 @@ def cortex_synthesize_repository(request_data: Dict[str, Any]) -> Dict[str, Any]
 def _synthesize_with_copilot(prompt: str, req: RepositorySynthesisRequest) -> Dict[str, Any]:
     """
     Attempt synthesis using GitHub Copilot's inference.
-    
+
     When this function is called from within Copilot Chat, Copilot will:
     1. See the prompt content
     2. Analyze the repository data
     3. Generate structured JSON response
     4. Return it via this function
-    
+
     This is GENERIC - works for ANY repository because:
     - Prompt is generated dynamically from analysis data
     - No hardcoded assumptions about tech stack
@@ -283,14 +283,14 @@ def _synthesize_with_copilot(prompt: str, req: RepositorySynthesisRequest) -> Di
     # TODO: Actual Copilot API integration
     # For now, this is a placeholder that will be enhanced
     # when Copilot provides direct API access
-    
+
     raise NotImplementedError("Direct Copilot synthesis pending API integration")
 
 
 def _generate_structured_template(req: RepositorySynthesisRequest) -> Dict[str, Any]:
     """
     Generate structured template when Copilot not available.
-    
+
     GENERIC FALLBACK - Works for any repository:
     - Uses actual analysis data (not hardcoded)
     - Extracts patterns from LENS results
@@ -306,7 +306,7 @@ def _generate_structured_template(req: RepositorySynthesisRequest) -> Dict[str, 
         maturity = "mature"
     else:
         maturity = "legacy"
-    
+
     # Extract capabilities from patterns (generic)
     capabilities = []
     if req.api_contracts:
@@ -317,7 +317,7 @@ def _generate_structured_template(req: RepositorySynthesisRequest) -> Dict[str, 
         capabilities.append("Automated CI/CD pipeline")
     if req.containerized:
         capabilities.append("Containerized deployment")
-    
+
     # Extract functionalities from frameworks (generic)
     functionalities = []
     for framework in req.frameworks:
@@ -327,7 +327,7 @@ def _generate_structured_template(req: RepositorySynthesisRequest) -> Dict[str, 
             functionalities.append("Web application server")
         if "express" in framework.lower():
             functionalities.append("Node.js API server")
-    
+
     # Generate use cases from API contracts (generic)
     use_cases = []
     for i, contract in enumerate(req.api_contracts[:10], 1):
@@ -348,7 +348,7 @@ def _generate_structured_template(req: RepositorySynthesisRequest) -> Dict[str, 
             "business_value": f"Enables programmatic access to {endpoint.split('/')[-1]} functionality",
             "confidence_score": 0.85
         })
-    
+
     # If no API contracts, generate generic use cases
     if not use_cases:
         use_cases.append({
@@ -366,7 +366,7 @@ def _generate_structured_template(req: RepositorySynthesisRequest) -> Dict[str, 
             "business_value": "Delivers core business capabilities",
             "confidence_score": 0.75
         })
-    
+
     return {
         "executive_summary": {
             "overview": f"A {', '.join(req.languages)} repository with {req.total_commits} commits across {req.age_days} days",

@@ -2,13 +2,13 @@
 Component initialization status tracking and health checks.
 
 AC-REM-004-01: Explicit Initialization Status API
-AC-REM-004-02: Component Health Checks  
+AC-REM-004-02: Component Health Checks
 AC-REM-004-03: Degradation Mode Visibility
 """
 
 from dataclasses import dataclass
-from typing import Dict, List, Optional
 from enum import Enum
+from typing import Dict, List, Optional
 
 
 class ComponentType(Enum):
@@ -20,7 +20,7 @@ class ComponentType(Enum):
 @dataclass
 class ComponentStatus:
     """Status of a single component."""
-    
+
     component_name: str
     initialized: bool
     required: bool  # True if CRITICAL
@@ -32,18 +32,18 @@ class ComponentStatus:
 class ComponentHealthTracker:
     """
     Tracks component initialization status and provides health check API.
-    
+
     Provides:
     - get_initialization_status() - per-component status
     - get_health_summary() - overall system health
     - is_ready() - CRITICAL components check
     - is_live() - system running check
     """
-    
+
     def __init__(self):
         """Initialize health tracker."""
         self._components: Dict[str, ComponentStatus] = {}
-    
+
     def register_component(
         self,
         component_name: str,
@@ -51,7 +51,7 @@ class ComponentHealthTracker:
     ) -> None:
         """
         Register a component for tracking.
-        
+
         Args:
             component_name: Name of component
             component_type: CRITICAL or OPTIONAL
@@ -63,7 +63,7 @@ class ComponentHealthTracker:
             degraded=False,
             component_type=component_type
         )
-    
+
     def mark_initialized(
         self,
         component_name: str,
@@ -72,7 +72,7 @@ class ComponentHealthTracker:
     ) -> None:
         """
         Mark component as initialized.
-        
+
         Args:
             component_name: Component name
             success: Whether initialization succeeded
@@ -80,33 +80,33 @@ class ComponentHealthTracker:
         """
         if component_name not in self._components:
             return
-        
+
         component = self._components[component_name]
         component.initialized = success
         component.degraded = not success
         component.error_message = error_message
-    
+
     def get_initialization_status(
         self,
         component_name: Optional[str] = None
     ) -> List[ComponentStatus]:
         """
         Get initialization status.
-        
+
         Args:
             component_name: Specific component or all if None
-            
+
         Returns:
             List of component statuses
         """
         if component_name:
             return [self._components[component_name]] if component_name in self._components else []
         return list(self._components.values())
-    
+
     def is_ready(self) -> bool:
         """
         Check if system is ready (all CRITICAL components initialized).
-        
+
         Returns:
             True if all CRITICAL components initialized
         """
@@ -114,20 +114,20 @@ class ComponentHealthTracker:
             if component.required and not component.initialized:
                 return False
         return True
-    
+
     def is_live(self) -> bool:
         """
         Check if system is live (at least running).
-        
+
         Returns:
             True (always, if process is running)
         """
         return True
-    
+
     def get_health_summary(self) -> Dict[str, any]:
         """
         Get overall health summary.
-        
+
         Returns:
             Dictionary with health metrics
         """
@@ -138,7 +138,7 @@ class ComponentHealthTracker:
             1 for c in self._components.values()
             if c.required and not c.initialized
         )
-        
+
         return {
             "ready": self.is_ready(),
             "live": self.is_live(),

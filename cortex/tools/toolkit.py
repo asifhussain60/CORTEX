@@ -6,7 +6,7 @@ Eliminates 40+ separate script entry points.
 
 Usage:
     python -m src.tools.toolkit <command> [args]
-    
+
     # or via alias
     cortex <command> [args]
 
@@ -23,11 +23,10 @@ Author: Asif Hussain
 import argparse
 import sys
 import threading
-from typing import List, Optional, Callable, Dict, Any
+from typing import Any, Callable, Dict, List, Optional
 
-from cortex.brain.core.result import Result, Ok, Err
 from cortex.brain.core.path_resolver import get_project_root
-
+from cortex.brain.core.result import Err, Ok, Result
 
 # REM-CRIT-004: Thread-safe tool registry with lock
 _TOOLS: Dict[str, Callable] = {}
@@ -69,24 +68,24 @@ def main(argv: Optional[List[str]] = None) -> int:
     """Main entry point."""
     if argv is None:
         argv = sys.argv[1:]
-    
+
     if not argv:
         result = cmd_help([])
         print(result.unwrap())
         return 0
-    
+
     command = argv[0]
     args = argv[1:]
-    
+
     with _TOOLS_LOCK:
         if command not in _TOOLS:
             print(f"Unknown command: {command}")
             print("Use 'cortex help' to see available commands.")
             return 1
         tool_func = _TOOLS[command]
-    
+
     result = tool_func(args)
-    
+
     if result.is_ok():
         output = result.unwrap()
         if output:

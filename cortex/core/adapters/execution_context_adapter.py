@@ -27,9 +27,9 @@ Authority: PHASE 8.3B Specification
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional, Union
-from datetime import datetime
 import logging
+from datetime import datetime
+from typing import Any, Dict, Optional, Union
 
 logger = logging.getLogger(__name__)
 
@@ -37,12 +37,12 @@ logger = logging.getLogger(__name__)
 class ExecutionContextAdapter:
     """
     Adapter that converts between OrchestrationContext and 6 ExecutionContext formats.
-    
+
     This adapter enables seamless integration between different parts of the CORTEX
     system that use different ExecutionContext implementations, preventing duplication
     and ensuring data consistency.
     """
-    
+
     # Format identifiers
     FORMAT_CANONICAL = "canonical"  # OrchestrationContext
     FORMAT_CORE_INTERFACES = "core_interfaces"  # cortex/core/interfaces.py
@@ -51,7 +51,7 @@ class ExecutionContextAdapter:
     FORMAT_MCP_SERVER = "mcp_server"  # cortex/mcp/orchestrator_mcp_server.py
     FORMAT_ADAPTIVE_ANALYZER = "adaptive_analyzer"  # cortex/orchestrators/adaptive/execution_context_analyzer.py
     FORMAT_REFACTORED_ARCH = "refactored_arch"  # cortex/orchestrators/refactored_architecture.py
-    
+
     ALL_FORMATS = [
         FORMAT_CANONICAL,
         FORMAT_CORE_INTERFACES,
@@ -61,27 +61,27 @@ class ExecutionContextAdapter:
         FORMAT_ADAPTIVE_ANALYZER,
         FORMAT_REFACTORED_ARCH,
     ]
-    
+
     @staticmethod
     def to_dict(context: Any) -> Dict[str, Any]:
         """
         Convert any ExecutionContext to canonical dictionary format.
-        
+
         Args:
             context: ExecutionContext in any format
-            
+
         Returns:
             Canonical dictionary representation
-            
+
         Raises:
             ValueError: If context format not recognized
         """
         if context is None:
             return {}
-        
+
         # Try to detect format and convert to dict
         context_dict = {}
-        
+
         # Extract common fields using multiple strategies
         for attr in dir(context):
             if attr.startswith("_"):
@@ -92,21 +92,21 @@ class ExecutionContextAdapter:
                     context_dict[attr] = value
             except Exception:
                 pass
-        
+
         return context_dict
-    
+
     @staticmethod
     def from_dict(data: Dict[str, Any], target_format: str = FORMAT_CANONICAL) -> Any:
         """
         Convert dictionary to ExecutionContext in target format.
-        
+
         Args:
             data: Dictionary with context data
             target_format: Target format identifier
-            
+
         Returns:
             ExecutionContext in target format
-            
+
         Raises:
             ValueError: If target format not recognized
         """
@@ -126,7 +126,7 @@ class ExecutionContextAdapter:
             return ExecutionContextAdapter._create_refactored_arch(data)
         else:
             raise ValueError(f"Unknown target format: {target_format}")
-    
+
     @staticmethod
     def convert(
         context: Any,
@@ -135,12 +135,12 @@ class ExecutionContextAdapter:
     ) -> Any:
         """
         Convert ExecutionContext from source format to target format.
-        
+
         Args:
             context: ExecutionContext to convert
             source_format: Source format (auto-detect if None)
             target_format: Target format (default: canonical)
-            
+
         Returns:
             ExecutionContext in target format
         """
@@ -149,14 +149,14 @@ class ExecutionContextAdapter:
             data = context.to_dict()
         else:
             data = ExecutionContextAdapter.to_dict(context)
-        
+
         # Then convert to target format
         return ExecutionContextAdapter.from_dict(data, target_format)
-    
+
     # =====================================================================
     # CREATION METHODS FOR EACH FORMAT
     # =====================================================================
-    
+
     @staticmethod
     def _create_canonical(data: Dict[str, Any]) -> Dict[str, Any]:
         """Create OrchestrationContext (canonical) from dict"""
@@ -177,7 +177,7 @@ class ExecutionContextAdapter:
             "error_message": data.get("error_message"),
             "error_code": data.get("error_code"),
         }
-    
+
     @staticmethod
     def _create_core_interfaces(data: Dict[str, Any]) -> Dict[str, Any]:
         """Create cortex/core/interfaces.py:ExecutionContext from dict"""
@@ -194,7 +194,7 @@ class ExecutionContextAdapter:
                 **data.get("metadata", {}),
             },
         }
-    
+
     @staticmethod
     def _create_adaptive_engine(data: Dict[str, Any]) -> Dict[str, Any]:
         """Create cortex/execution/adaptive_execution_engine.py:ExecutionContext from dict"""
@@ -211,7 +211,7 @@ class ExecutionContextAdapter:
                 **data.get("metadata", {}),
             },
         }
-    
+
     @staticmethod
     def _create_mcp_executor(data: Dict[str, Any]) -> Dict[str, Any]:
         """Create cortex/mcp/executor.py:ExecutionContext from dict"""
@@ -226,7 +226,7 @@ class ExecutionContextAdapter:
             "result": data.get("result"),
             "error": data.get("error"),
         }
-    
+
     @staticmethod
     def _create_mcp_server(data: Dict[str, Any]) -> Dict[str, Any]:
         """Create cortex/mcp/orchestrator_mcp_server.py:ExecutionContext from dict"""
@@ -242,7 +242,7 @@ class ExecutionContextAdapter:
                 **data.get("metadata", {}),
             },
         }
-    
+
     @staticmethod
     def _create_adaptive_analyzer(data: Dict[str, Any]) -> Dict[str, Any]:
         """Create cortex/orchestrators/adaptive/execution_context_analyzer.py:ExecutionContext from dict"""
@@ -261,7 +261,7 @@ class ExecutionContextAdapter:
                 **data.get("metadata", {}),
             },
         }
-    
+
     @staticmethod
     def _create_refactored_arch(data: Dict[str, Any]) -> Dict[str, Any]:
         """Create cortex/orchestrators/refactored_architecture.py:ExecutionContext from dict"""
@@ -277,24 +277,24 @@ class ExecutionContextAdapter:
             "end_time": data.get("end_time"),
             "metadata": data.get("metadata", {}),
         }
-    
+
     @staticmethod
     def is_equivalent(context1: Any, context2: Any) -> bool:
         """
         Check if two ExecutionContexts are equivalent.
-        
+
         Converts both to canonical dicts and compares key fields.
-        
+
         Args:
             context1: First ExecutionContext
             context2: Second ExecutionContext
-            
+
         Returns:
             True if equivalent, False otherwise
         """
         dict1 = ExecutionContextAdapter.to_dict(context1)
         dict2 = ExecutionContextAdapter.to_dict(context2)
-        
+
         # Check key fields match
         key_fields = [
             "execution_id",
@@ -302,13 +302,13 @@ class ExecutionContextAdapter:
             "status",
             "parameters",
         ]
-        
+
         for field in key_fields:
             if dict1.get(field) != dict2.get(field):
                 return False
-        
+
         return True
-    
+
     @staticmethod
     def verify_idempotence(
         context: Any,
@@ -317,37 +317,37 @@ class ExecutionContextAdapter:
     ) -> bool:
         """
         Verify that conversions are idempotent (A→B→A→B = B).
-        
+
         Args:
             context: ExecutionContext to test
             source_format: Starting format
             cycles: Number of conversion cycles to test
-            
+
         Returns:
             True if idempotent, False otherwise
         """
         current = context
         prev_dict = ExecutionContextAdapter.to_dict(current)
-        
+
         for i in range(cycles):
             # Convert through all formats
             for fmt in ExecutionContextAdapter.ALL_FORMATS:
                 if fmt == source_format:
                     continue
                 current = ExecutionContextAdapter.convert(current, source_format, fmt)
-            
+
             # Return to source format
             current = ExecutionContextAdapter.convert(
                 current,
                 None,  # auto-detect
                 source_format,
             )
-            
+
             # Check if equivalent
             curr_dict = ExecutionContextAdapter.to_dict(current)
             if curr_dict.get("execution_id") != prev_dict.get("execution_id"):
                 return False
-        
+
         return True
 
 

@@ -15,28 +15,29 @@ Date: 2026-01-24
 from __future__ import annotations
 
 from typing import Optional
+
 from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator
-from cortex.core.result import Ok, Err
-from cortex.orchestrators.core.orchestrator_wiring import (
-    OrchestratorWiringRegistry,
-    OrchestratorCategory,
-    get_wiring_registry
-)
+from cortex.core.result import Err, Ok
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
+from cortex.orchestrators.core.orchestrator_wiring import (
+    OrchestratorCategory,
+    OrchestratorWiringRegistry,
+    get_wiring_registry,
+)
 
 
 class OrchestratorWiringImplementation:
     """Implementation of TRANSFORM-001 orchestrator wiring"""
-    
+
     def __init__(self):
         """Initialize wiring implementation"""
         self.logger = EnhancedAuditLogger.instance()
         self.registry = get_wiring_registry()
-    
+
     def wire_core_orchestrators(self) -> dict[str, bool]:
         """
         WIRE-001: Register Core Orchestrators
-        
+
         Wires 6 core orchestrators:
         - InteractionOrchestrator (Stage 1 comprehension)
         - IntentRouter (Stage 2 routing)
@@ -44,15 +45,17 @@ class OrchestratorWiringImplementation:
         - WorkflowOrchestrator (multi-step workflows)
         - WrappedTDDOrchestrator (TDD with governance)
         - OrchestratorBootstrap (initialization)
-        
+
         Returns:
             Dictionary mapping orchestrator names to success status
         """
         results: dict[str, bool] = {}
-        
+
         # Import core orchestrators
         try:
-            from cortex.orchestrators.core.interaction_orchestrator import InteractionOrchestrator
+            from cortex.orchestrators.core.interaction_orchestrator import (
+                InteractionOrchestrator,
+            )
             orchestrator = InteractionOrchestrator()
             result = self.registry.register_orchestrator(
                 domain="interaction",
@@ -71,7 +74,7 @@ class OrchestratorWiringImplementation:
                 details={"error": str(e)}
             )
             results["InteractionOrchestrator"] = False
-        
+
         # IntentRouter
         try:
             from cortex.orchestrators.core.intent_router import IntentRouter
@@ -93,10 +96,13 @@ class OrchestratorWiringImplementation:
                 details={"error": str(e)}
             )
             results["IntentRouter"] = False
-        
+
         # TDDOrchestrator
         try:
-            from cortex.orchestrators.core.tdd_orchestrator import TDDOrchestrator, get_tdd_orchestrator
+            from cortex.orchestrators.core.tdd_orchestrator import (
+                TDDOrchestrator,
+                get_tdd_orchestrator,
+            )
             orchestrator = get_tdd_orchestrator()
             result = self.registry.register_orchestrator(
                 domain="tdd",
@@ -115,10 +121,12 @@ class OrchestratorWiringImplementation:
                 details={"error": str(e)}
             )
             results["TDDOrchestrator"] = False
-        
+
         # WorkflowOrchestrator
         try:
-            from cortex.orchestrators.core.workflow_orchestrator import WorkflowOrchestrator
+            from cortex.orchestrators.core.workflow_orchestrator import (
+                WorkflowOrchestrator,
+            )
             orchestrator = WorkflowOrchestrator()
             result = self.registry.register_orchestrator(
                 domain="workflow",
@@ -137,10 +145,12 @@ class OrchestratorWiringImplementation:
                 details={"error": str(e)}
             )
             results["WorkflowOrchestrator"] = False
-        
+
         # WrappedTDDOrchestrator
         try:
-            from cortex.orchestrators.core.wrapped_tdd_orchestrator import WrappedTDDOrchestrator
+            from cortex.orchestrators.core.wrapped_tdd_orchestrator import (
+                WrappedTDDOrchestrator,
+            )
             orchestrator = WrappedTDDOrchestrator()
             result = self.registry.register_orchestrator(
                 domain="wrapped_tdd",
@@ -159,7 +169,7 @@ class OrchestratorWiringImplementation:
                 details={"error": str(e)}
             )
             results["WrappedTDDOrchestrator"] = False
-        
+
         # Log WIRE-001 completion
         success_count = sum(1 for v in results.values() if v)
         self.logger.log_operation_complete(
@@ -172,28 +182,30 @@ class OrchestratorWiringImplementation:
                 "results": results
             }
         )
-        
+
         return results
-    
+
     def wire_domain_orchestrators(self) -> dict[str, bool]:
         """
         WIRE-002: Register Domain Orchestrators
-        
+
         Wires 5 domain orchestrators:
         - RefactoringOrchestrator (code refactoring)
         - PlanningOrchestrator (planning workflows)
         - DomainOrchestrator (domain operations)
         - ConversationOrchestrator (stateful conversations)
         - SeleniumPlaywrightOrchestrator (test migration)
-        
+
         Returns:
             Dictionary mapping orchestrator names to success status
         """
         results: dict[str, bool] = {}
-        
+
         # RefactoringOrchestrator
         try:
-            from cortex.orchestrators.refactored_architecture import RefactoringOrchestrator
+            from cortex.orchestrators.refactored_architecture import (
+                RefactoringOrchestrator,
+            )
             orchestrator = RefactoringOrchestrator()
             result = self.registry.register_orchestrator(
                 domain="refactoring",
@@ -212,7 +224,7 @@ class OrchestratorWiringImplementation:
                 details={"error": str(e)}
             )
             results["RefactoringOrchestrator"] = False
-        
+
         # PlanningOrchestrator (domain brain)
         try:
             from cortex.domain_brain.planning_orchestrator import PlanningOrchestrator
@@ -234,7 +246,7 @@ class OrchestratorWiringImplementation:
                 details={"error": str(e)}
             )
             results["PlanningOrchestrator"] = False
-        
+
         # DomainOrchestrator
         try:
             from cortex.orchestrators.domain_orchestrator import DomainOrchestrator
@@ -256,10 +268,12 @@ class OrchestratorWiringImplementation:
                 details={"error": str(e)}
             )
             results["DomainOrchestrator"] = False
-        
+
         # ConversationOrchestrator
         try:
-            from cortex.orchestrators.conversation_orchestrator import ConversationOrchestrator
+            from cortex.orchestrators.conversation_orchestrator import (
+                ConversationOrchestrator,
+            )
             orchestrator = ConversationOrchestrator()
             result = self.registry.register_orchestrator(
                 domain="conversation",
@@ -278,7 +292,7 @@ class OrchestratorWiringImplementation:
                 details={"error": str(e)}
             )
             results["ConversationOrchestrator"] = False
-        
+
         # Log WIRE-002 completion
         success_count = sum(1 for v in results.values() if v)
         self.logger.log_operation_complete(
@@ -291,13 +305,13 @@ class OrchestratorWiringImplementation:
                 "results": results
             }
         )
-        
+
         return results
-    
+
     def wire_support_orchestrators(self) -> dict[str, bool]:
         """
         WIRE-003: Register Support Orchestrators
-        
+
         Wires 6 support orchestrators:
         - OnboardingOrchestrator (new user experience)
         - ToolDiscoveryOrchestrator (capability discovery)
@@ -305,12 +319,12 @@ class OrchestratorWiringImplementation:
         - RollbackOrchestrator (failure recovery)
         - SetupOrchestrator (environment configuration)
         - ComposedOrchestrator (orchestrator composition)
-        
+
         Returns:
             Dictionary mapping orchestrator names to success status
         """
         results: dict[str, bool] = {}
-        
+
         # OnboardingOrchestrator
         try:
             from cortex.orchestrators.onboarding import OnboardingOrchestrator
@@ -332,7 +346,7 @@ class OrchestratorWiringImplementation:
                 details={"error": str(e)}
             )
             results["OnboardingOrchestrator"] = False
-        
+
         # ToolDiscoveryOrchestrator
         try:
             from cortex.orchestrators.tools import ToolDiscoveryOrchestrator
@@ -354,10 +368,12 @@ class OrchestratorWiringImplementation:
                 details={"error": str(e)}
             )
             results["ToolDiscoveryOrchestrator"] = False
-        
+
         # UpgradeOrchestrator
         try:
-            from cortex.orchestrators.support.upgrade_orchestrator import UpgradeOrchestrator
+            from cortex.orchestrators.support.upgrade_orchestrator import (
+                UpgradeOrchestrator,
+            )
             orchestrator = UpgradeOrchestrator()
             result = self.registry.register_orchestrator(
                 domain="upgrade",
@@ -376,10 +392,12 @@ class OrchestratorWiringImplementation:
                 details={"error": str(e)}
             )
             results["UpgradeOrchestrator"] = False
-        
+
         # RollbackOrchestrator
         try:
-            from cortex.orchestrators.support.rollback_orchestrator import RollbackOrchestrator
+            from cortex.orchestrators.support.rollback_orchestrator import (
+                RollbackOrchestrator,
+            )
             orchestrator = RollbackOrchestrator()
             result = self.registry.register_orchestrator(
                 domain="rollback",
@@ -398,7 +416,7 @@ class OrchestratorWiringImplementation:
                 details={"error": str(e)}
             )
             results["RollbackOrchestrator"] = False
-        
+
         # Log WIRE-003 completion
         success_count = sum(1 for v in results.values() if v)
         self.logger.log_operation_complete(
@@ -411,13 +429,13 @@ class OrchestratorWiringImplementation:
                 "results": results
             }
         )
-        
+
         return results
-    
+
     def execute_all_wiring(self) -> dict[str, any]:
         """
         Execute WIRE-001, WIRE-002, WIRE-003 orchestrator wiring
-        
+
         Returns:
             Dictionary with overall results
         """
@@ -426,15 +444,15 @@ class OrchestratorWiringImplementation:
             "wire_002_domain": self.wire_domain_orchestrators(),
             "wire_003_support": self.wire_support_orchestrators(),
         }
-        
+
         # Calculate overall statistics
         all_results = []
         for category_results in results.values():
             all_results.extend(category_results.values())
-        
+
         success_count = sum(1 for v in all_results if v)
         total_count = len(all_results)
-        
+
         self.logger.log_operation_complete(
             ac_id="AC-TRANSFORM-001",
             operation="ORCHESTRATOR_WIRING_COMPLETE",
@@ -448,12 +466,12 @@ class OrchestratorWiringImplementation:
                 "wire_003_summary": results["wire_003_support"],
             }
         )
-        
+
         results["summary"] = {
             "total_wired": success_count,
             "target": 17,
             "coverage_percentage": (success_count / 23) * 100,
             "status": "SUCCESS" if success_count >= 15 else "PARTIAL"
         }
-        
+
         return results

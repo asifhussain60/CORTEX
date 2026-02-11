@@ -77,8 +77,8 @@ def _initialize_drift_detector() -> None:
     """Start Drift Detector background health-check loop."""
     try:
         from cortex.infrastructure.wiring_drift_detector import (
-            WiringDriftDetector,
             AuditTrailLogger,
+            WiringDriftDetector,
         )
 
         detector = WiringDriftDetector.instance()

@@ -6,8 +6,8 @@ Authority: CORE-008, CORE-030 (Implementation Truth)
 """
 
 import logging
-from typing import Dict, Any, List, Optional
 from datetime import datetime
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -15,29 +15,29 @@ logger = logging.getLogger(__name__)
 class JSONDataGenerator:
     """
     Generates dashboard.json from LENS analysis output.
-    
+
     Transforms LENS data structure into dashboard JSON schema:
     - Input: LENS repository analysis (from cortex_lens_analyze)
     - Output: Structured dashboard JSON (for SPA rendering)
-    
+
     Architecture:
     - Single SSOT: cortex/models/dashboard_schema_v3.py
     - Data transformation: LENS → Dashboard schema
     - Validation: Pydantic schema enforcement
     """
-    
+
     def __init__(self):
         """Initialize generator"""
         self.schema_version = "3.0"
         logger.debug(f"JSONDataGenerator initialized (schema v{self.schema_version})")
-    
+
     def generate(self, lens_data: Dict[str, Any]) -> Dict[str, Any]:
         """
         Generate dashboard JSON from LENS analysis.
-        
+
         Args:
             lens_data: Raw LENS analysis output from cortex_lens_analyze
-        
+
         Returns:
             Structured dashboard data dictionary
         """
@@ -46,7 +46,7 @@ class JSONDataGenerator:
             repo_info = lens_data.get("repo", {})
             files = lens_data.get("files", [])
             metrics = lens_data.get("metrics", {})
-            
+
             # Build dashboard structure
             dashboard = {
                 "repo": self._build_repo_section(repo_info),
@@ -55,15 +55,15 @@ class JSONDataGenerator:
                 "files": self._build_files_section(files),
                 "generated_at": datetime.utcnow().isoformat() + "Z"
             }
-            
+
             logger.debug(f"Generated dashboard for {repo_info.get('name', 'unknown')}")
             return dashboard
-        
+
         except Exception as e:
             logger.error(f"Error generating dashboard: {e}")
             # Return minimal valid structure
             return self._get_empty_dashboard()
-    
+
     def _build_repo_section(self, repo_info: Dict[str, Any]) -> Dict[str, Any]:
         """Build 'repo' section from input"""
         name = repo_info.get("name", "Unknown Repository")
@@ -76,9 +76,9 @@ class JSONDataGenerator:
             "version": repo_info.get("version", ""),
             "last_analyzed_at": datetime.utcnow().isoformat() + "Z"
         }
-    
-    def _build_overview_section(self, repo_info: Dict[str, Any], 
-                               files: List[Dict], 
+
+    def _build_overview_section(self, repo_info: Dict[str, Any],
+                               files: List[Dict],
                                metrics: Dict[str, Any]) -> Dict[str, Any]:
         """Build 'overview' section with summary statistics"""
         return {
@@ -88,8 +88,8 @@ class JSONDataGenerator:
             "primary_language": repo_info.get("primary_language", "Unknown"),
             "last_updated": repo_info.get("last_updated", datetime.utcnow().isoformat() + "Z")
         }
-    
-    def _build_metrics_section(self, metrics: Dict[str, Any], 
+
+    def _build_metrics_section(self, metrics: Dict[str, Any],
                               files: List[Dict]) -> Dict[str, Any]:
         """Build 'metrics' section with quality scores"""
         return {
@@ -102,7 +102,7 @@ class JSONDataGenerator:
             "test_coverage": metrics.get("test_coverage", 0),
             "maintainability_index": metrics.get("maintainability_index", 50)
         }
-    
+
     def _build_files_section(self, files: List[Dict]) -> List[Dict[str, Any]]:
         """Build 'files' section with file-level data"""
         return [
@@ -115,7 +115,7 @@ class JSONDataGenerator:
             }
             for f in files[:100]  # Limit to first 100 for JSON size
         ]
-    
+
     def _extract_languages(self, files: List[Dict]) -> Dict[str, int]:
         """Extract language distribution from files"""
         languages = {}
@@ -123,11 +123,11 @@ class JSONDataGenerator:
             lang = file.get("language", "Other")
             languages[lang] = languages.get(lang, 0) + 1
         return languages
-    
+
     def _slugify(self, name: str) -> str:
         """Convert repo name to URL-safe slug"""
         return name.lower().replace(" ", "-").replace("_", "-")
-    
+
     def _get_empty_dashboard(self) -> Dict[str, Any]:
         """Return minimal valid dashboard structure"""
         return {
@@ -153,17 +153,17 @@ class JSONDataGenerator:
             "files": [],
             "generated_at": datetime.utcnow().isoformat() + "Z"
         }
-    
+
     def validate_schema(self, dashboard: Dict[str, Any]) -> bool:
         """
         Validate dashboard JSON against schema.
-        
+
         Args:
             dashboard: Dashboard data to validate
-        
+
         Returns:
             True if valid, False otherwise
-        
+
         Note:
             Full Pydantic validation in downstream tools.
             This is a quick structural check.

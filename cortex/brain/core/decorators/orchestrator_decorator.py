@@ -24,9 +24,8 @@ Author: Asif Hussain
 """
 
 import functools
-from typing import Any, Callable, List, Optional, Type, Dict
 from datetime import datetime
-
+from typing import Any, Callable, Dict, List, Optional, Type
 
 # Global registry for orchestrator classes
 _REGISTERED_ORCHESTRATORS: Dict[str, Dict[str, Any]] = {}
@@ -40,16 +39,16 @@ def orchestrator(
 ):
     """
     Decorator to mark a class as an orchestrator and auto-register it.
-    
+
     Args:
         domain: Domain name (e.g., "governance", "audit", "evidence")
         version: Orchestrator version (default: "1.0")
         capabilities: List of capabilities (e.g., ["validate", "enforce"])
         description: Human-readable description
-    
+
     Returns:
         Decorated class with orchestrator metadata
-    
+
     Example:
         @orchestrator(
             domain="governance",
@@ -70,20 +69,20 @@ def orchestrator(
             "registered_at": datetime.now().isoformat(),
             "class_name": cls.__name__
         }
-        
+
         # Store in global registry
         registry_key = f"{domain}:{cls.__name__}"
         _REGISTERED_ORCHESTRATORS[registry_key] = metadata
-        
+
         # Add metadata attribute to class
         cls._orchestrator_metadata = metadata
         cls._orchestrator_domain = domain
         cls._orchestrator_registered = True
-        
+
         @functools.wraps(cls)
         def wrapper(*args, **kwargs):
             return cls(*args, **kwargs)
-        
+
         # Preserve original class attributes
         wrapper._orchestrator_metadata = metadata
         wrapper._orchestrator_domain = domain
@@ -91,9 +90,9 @@ def orchestrator(
         wrapper.__bases__ = cls.__bases__
         wrapper.__name__ = cls.__name__
         wrapper.__module__ = cls.__module__
-        
+
         return cls
-    
+
     return decorator
 
 

@@ -12,11 +12,11 @@ from typing import Dict, List, Optional
 # AC-REM-011-02: Export TDD Orchestrator for knowledge integration
 try:
     from cortex.orchestrators.core.tdd_orchestrator import (
-        TDDOrchestrator,
-        TDDKnowledgeLoader,
-        TDDPhase,
         TDDDisciplineRule,
         TDDImplementationGuidance,
+        TDDKnowledgeLoader,
+        TDDOrchestrator,
+        TDDPhase,
         get_tdd_orchestrator,
     )
     __all__ = [

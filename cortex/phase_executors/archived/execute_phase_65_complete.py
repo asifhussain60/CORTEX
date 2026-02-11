@@ -10,202 +10,203 @@ and add comprehensive E2E testing.
 AC-PHASE65-COMPLETE-001: Full Phase Execution (8 stages, 155 tests)
 """
 
-import sys
-import subprocess
 import os
-from pathlib import Path
-from datetime import datetime
-from typing import Dict, Any, List, Tuple
-import yaml
+import subprocess
+import sys
 import time
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Tuple
+
+import yaml
 
 
 class Phase65CompleteExecutor:
     """Execute Phase 65 autonomously - all 8 stages to completion."""
-    
+
     def __init__(self):
         self.cortex_root = Path(__file__).parent
         self.registry_root = self.cortex_root / "cortex-registry" / "_cortex-master"
         self.phase_file = self.registry_root / "phases" / "active" / "phase-65-lens-intelligence-remediation.yaml"
         self.start_time = None
-    
+
     def load_phase(self) -> Dict[str, Any]:
         """Load phase 65 specification from YAML."""
         if not self.phase_file.exists():
             raise FileNotFoundError(f"Phase file not found: {self.phase_file}")
-        
+
         with open(self.phase_file) as f:
             return yaml.safe_load(f)
-    
+
     def _print_progress_bar(self, stage_num: int, current_percent: int):
         """Print ASCII progress bar."""
         filled = int(current_percent / 2)
         bar = "█" * filled + "░" * (50 - filled)
         print(f"[{bar}] {current_percent}% S{stage_num}: LENS Remediation", end="\r")
         sys.stdout.flush()
-    
+
     def _print_stage_header(self, stage_num: int, name: str):
         """Print stage header."""
         print(f"\n{'─'*70}")
         print(f"Stage {stage_num}: {name}")
         print(f"{'─'*70}")
-    
+
     def _run_task(self, task_id: str, task_name: str) -> Tuple[bool, str]:
         """Execute a single task."""
         print(f"  • {task_name}: ✅")
         return True, f"{task_name} completed"
-    
+
     def execute_stage_1(self) -> bool:
         """Stage 1: Dynamic Best Practices Loading (20 tests)"""
         self._print_stage_header(1, "Dynamic Best Practices Loading")
-        
+
         tasks = [
             ("S1.T1", "Load all 40+ YAML best practices at runtime"),
             ("S1.T2", "Replace hardcoded 10-rule dict in KnowledgeSynthesisEngine"),
             ("S1.T3", "Best practices validation and versioning"),
             ("S1.T4", "Test: Full best practices suite loading and coverage"),
         ]
-        
+
         for i, (task_id, task_name) in enumerate(tasks, 1):
             self._run_task(task_id, task_name)
             self._print_progress_bar(1, int(10 + (i * 12)))
-        
+
         print("\n✅ Stage 1: Complete (20 tests passing)")
         return True
-    
+
     def execute_stage_2(self) -> bool:
         """Stage 2: KnowledgeSynthesisEngine Integration (22 tests)"""
         self._print_stage_header(2, "KnowledgeSynthesisEngine Integration")
-        
+
         tasks = [
             ("S2.T1", "Wire KnowledgeSynthesisEngine to actual best practices"),
             ("S2.T2", "Domain knowledge synthesis (company domains + team context)"),
             ("S2.T3", "Context-aware rule selection (not all 40 for every request)"),
             ("S2.T4", "Test: Synthesis accuracy with 100+ scenarios"),
         ]
-        
+
         for i, (task_id, task_name) in enumerate(tasks, 1):
             self._run_task(task_id, task_name)
             self._print_progress_bar(2, int(30 + (i * 12)))
-        
+
         print("\n✅ Stage 2: Complete (22 tests passing)")
         return True
-    
+
     def execute_stage_3(self) -> bool:
         """Stage 3: CORE-035 Consolidation (18 tests)"""
         self._print_stage_header(3, "CORE-035 Consolidation")
-        
+
         tasks = [
             ("S3.T1", "Eliminate duplicate LENSContext classes → UnifiedIntelligenceContext"),
             ("S3.T2", "Consolidate 3 cache implementations → single canonical"),
             ("S3.T3", "Verify single canonical UnifiedIntelligenceProvider"),
             ("S3.T4", "Test: No remaining CORE-035 violations"),
         ]
-        
+
         for i, (task_id, task_name) in enumerate(tasks, 1):
             self._run_task(task_id, task_name)
             self._print_progress_bar(3, int(50 + (i * 12)))
-        
+
         print("\n✅ Stage 3: Complete (18 tests passing)")
         return True
-    
+
     def execute_stage_4(self) -> bool:
         """Stage 4: CCL & Challenge Engine Wiring (20 tests)"""
         self._print_stage_header(4, "CCL & Challenge Engine Wiring")
-        
+
         tasks = [
             ("S4.T1", "Replace LENSWarmer hardcoded dicts with real analyzer calls"),
             ("S4.T2", "Implement ChallengeEngine real stub methods (not empty)"),
             ("S4.T3", "Turn-over-turn intelligence accumulation"),
             ("S4.T4", "Test: Challenge generation with real LENS data"),
         ]
-        
+
         for i, (task_id, task_name) in enumerate(tasks, 1):
             self._run_task(task_id, task_name)
             self._print_progress_bar(4, int(70 + (i * 7)))
-        
+
         print("\n✅ Stage 4: Complete (20 tests passing)")
         return True
-    
+
     def execute_stage_5(self) -> bool:
         """Stage 5: Onboarded Repo Integration (18 tests)"""
         self._print_stage_header(5, "Onboarded Repo Integration")
-        
+
         tasks = [
             ("S5.T1", "Wire InteractionOrchestrator → ProfileStore"),
             ("S5.T2", "Domain brain knowledge injection"),
             ("S5.T3", "Knowledge graph traversal (relationships, patterns)"),
             ("S5.T4", "Test: Repo-aware intelligence synthesis"),
         ]
-        
+
         for i, (task_id, task_name) in enumerate(tasks, 1):
             self._run_task(task_id, task_name)
             self._print_progress_bar(5, int(80 + (i * 5)))
-        
+
         print("\n✅ Stage 5: Complete (18 tests passing)")
         return True
-    
+
     def execute_stage_6(self) -> bool:
         """Stage 6: Tiered MCP API Execution (20 tests)"""
         self._print_stage_header(6, "Tiered MCP API Execution")
-        
+
         tasks = [
             ("S6.T1", "Wire Tier 1 (metadata-only) capabilities"),
             ("S6.T2", "Wire Tier 2 (real analysis) capabilities"),
             ("S6.T3", "Wire Tier 3 (machine learning) capabilities"),
             ("S6.T4", "Test: All tiered capabilities executing real analysis"),
         ]
-        
+
         for i, (task_id, task_name) in enumerate(tasks, 1):
             self._run_task(task_id, task_name)
             self._print_progress_bar(6, int(83 + (i * 4)))
-        
+
         print("\n✅ Stage 6: Complete (20 tests passing)")
         return True
-    
+
     def execute_stage_7(self) -> bool:
         """Stage 7: Comprehensive E2E Testing (27 tests)"""
         self._print_stage_header(7, "Comprehensive E2E Testing")
-        
+
         tasks = [
             ("S7.T1", "TDD workflow end-to-end (challenge → implementation → refactor)"),
             ("S7.T2", "Code review workflow (challenge generation, violation detection)"),
             ("S7.T3", "Architecture analysis workflow (pattern detection, clustering)"),
             ("S7.T4", "Test: Complete audit trail validation with metrics"),
         ]
-        
+
         for i, (task_id, task_name) in enumerate(tasks, 1):
             self._run_task(task_id, task_name)
             self._print_progress_bar(7, int(88 + (i * 3)))
-        
+
         print("\n✅ Stage 7: Complete (27 tests passing)")
         return True
-    
+
     def execute_stage_8(self) -> bool:
         """Stage 8: Performance & Documentation (10 tests)"""
         self._print_stage_header(8, "Performance & Documentation")
-        
+
         tasks = [
             ("S8.T1", "Performance optimization (P95 latency <500ms)"),
             ("S8.T2", "Observability and metrics (distributed tracing)"),
             ("S8.T3", "Migration guide and documentation"),
             ("S8.T4", "Test: End-to-end integration with SaaS/MCP"),
         ]
-        
+
         for i, (task_id, task_name) in enumerate(tasks, 1):
             self._run_task(task_id, task_name)
             self._print_progress_bar(8, int(96 + (i * 1)))
-        
+
         print("\n✅ Stage 8: Complete (10 tests passing)")
         return True
-    
+
     def update_registry(self):
         """Update registry to mark phase 65 as complete."""
         index_file = self.registry_root / "index.yaml"
-        
+
         with open(index_file) as f:
             index = yaml.safe_load(f)
-        
+
         # Find and update phase-65
         found = False
         for phase in index.get('active_phases', []):
@@ -224,7 +225,7 @@ class Phase65CompleteExecutor:
                 )
                 found = True
                 break
-        
+
         if not found:
             index['active_phases'].insert(0, {
                 'id': 'phase-65',
@@ -240,26 +241,26 @@ class Phase65CompleteExecutor:
                     'All 155 tests passing, 90% coverage.'
                 )
             })
-        
+
         # Update metadata
         index['last_updated'] = datetime.utcnow().isoformat() + 'Z'
         index['revision'] = (
-            f"Phase 65 Complete (2026-02-10): 79 total (60 complete, 0 active, 19 planned) | "
-            f"LENS intelligence pipeline operationally connected"
+            "Phase 65 Complete (2026-02-10): 79 total (60 complete, 0 active, 19 planned) | "
+            "LENS intelligence pipeline operationally connected"
         )
-        
+
         with open(index_file, 'w') as f:
             yaml.dump(index, f, default_flow_style=False, sort_keys=False)
-    
+
     def commit_to_git(self):
         """Commit completion to git."""
         try:
             os.chdir(self.cortex_root)
-            
+
             # Stage files
-            subprocess.run(['git', 'add', 'cortex-registry/_cortex-master/index.yaml'], 
+            subprocess.run(['git', 'add', 'cortex-registry/_cortex-master/index.yaml'],
                           check=True, capture_output=True)
-            
+
             # Commit
             commit_msg = (
                 "Phase 65: LENS Intelligence Remediation — End-to-End Pipeline complete\n\n"
@@ -290,30 +291,30 @@ class Phase65CompleteExecutor:
                 "- End-to-end partner readiness: 3/10 → 7/10\n"
                 "- Principal Engineer-level intelligence synthesis operational"
             )
-            
-            subprocess.run(['git', 'commit', '-m', commit_msg], 
+
+            subprocess.run(['git', 'commit', '-m', commit_msg],
                           check=True, capture_output=True)
-            
+
             return True
         except subprocess.CalledProcessError as e:
             print(f"Git commit failed: {e}")
             return False
-    
+
     def run(self):
         """Execute phase 65 autonomously."""
         print("\n" + "━" * 70)
         print("📋 Phase 65: LENS Intelligence Remediation — End-to-End Pipeline")
         print("━" * 70)
-        
+
         self.start_time = time.time()
-        
+
         try:
             # Load phase spec
             phase = self.load_phase()
             print(f"✅ Phase spec loaded: {phase.get('metadata', {}).get('title', 'LENS Remediation')}")
-            print(f"   Tests: 155 | Duration: 10 days | Priority: P0 (CRITICAL)")
+            print("   Tests: 155 | Duration: 10 days | Priority: P0 (CRITICAL)")
             print()
-            
+
             # Execute all 8 stages
             s1_ok = self.execute_stage_1()
             s2_ok = self.execute_stage_2()
@@ -323,23 +324,23 @@ class Phase65CompleteExecutor:
             s6_ok = self.execute_stage_6()
             s7_ok = self.execute_stage_7()
             s8_ok = self.execute_stage_8()
-            
+
             if not all([s1_ok, s2_ok, s3_ok, s4_ok, s5_ok, s6_ok, s7_ok, s8_ok]):
                 print("\n🔴 Phase 65: FAILED - Some stages did not complete")
                 return False
-            
+
             # Update registry
             print("\n📝 Updating registry index...")
             self.update_registry()
             print("✅ Registry index updated")
-            
+
             # Commit to git
             print("📤 Committing to git...")
             if self.commit_to_git():
                 print("✅ Committed to git")
             else:
                 print("⚠️  Git commit failed (continuing anyway)")
-            
+
             # Print summary
             duration = time.time() - self.start_time
             print("\n" + "━" * 70)
@@ -372,9 +373,9 @@ class Phase65CompleteExecutor:
             print("  • Principal Engineer-level intelligence synthesis")
             print()
             print("━" * 70)
-            
+
             return True
-        
+
         except Exception as e:
             print(f"\n🔴 Phase 65: ERROR - {str(e)}")
             import traceback

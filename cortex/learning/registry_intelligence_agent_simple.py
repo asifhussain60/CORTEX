@@ -3,9 +3,9 @@
 
 import ast
 import logging
-from pathlib import Path
-from typing import Dict, List, Optional, Set, Any
 from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Set
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +18,7 @@ class OrchestratorDiscovery:
     keywords: Set[str]
     orchestrator_type: str
     confidence: float
-    
+
     def to_dict(self) -> Dict[str, Any]:
         return {
             "name": self.name,
@@ -36,7 +36,7 @@ class RegistryGap:
     gap_type: str
     impact: str
     suggested_fix: str
-    
+
     def to_dict(self) -> Dict[str, Any]:
         return {
             "orchestrator": self.orchestrator.to_dict(),
@@ -47,12 +47,12 @@ class RegistryGap:
 
 class RegistryIntelligenceAgent:
     """Universal orchestrator discovery and wiring system."""
-    
+
     def __init__(self, workspace_root: Optional[Path] = None):
         """Initialize registry intelligence agent."""
         self.workspace_root = workspace_root or Path.cwd()
         self._discovery_cache: Dict[str, OrchestratorDiscovery] = {}
-        
+
         # Intent keyword patterns for universal detection
         self.intent_patterns = {
             "deploy": ["deploy", "deployment", "production", "release", "publish"],
@@ -64,95 +64,95 @@ class RegistryIntelligenceAgent:
             "debug": ["debug", "troubleshoot", "diagnose", "fix"],
             "audit": ["audit", "compliance", "governance", "security"],
         }
-    
+
     def scan_for_orchestrators(self) -> List[OrchestratorDiscovery]:
         """Scan for all orchestrators in the workspace."""
         if self._discovery_cache:
             return list(self._discovery_cache.values())
-        
+
         discoveries = []
         orchestrator_dirs = [
             self.workspace_root / "cortex" / "orchestrators",
             self.workspace_root / "cortex" / "domain_orchestrators",
             self.workspace_root / "cortex_brain" / "governance"
         ]
-        
+
         for directory in orchestrator_dirs:
             if directory.exists():
                 discoveries.extend(self._scan_directory(directory))
-        
+
         # Cache results
         for discovery in discoveries:
             self._discovery_cache[discovery.name] = discovery
-        
+
         return discoveries
-    
+
     def _scan_directory(self, directory: Path) -> List[OrchestratorDiscovery]:
         """Scan a directory for orchestrator files."""
         discoveries = []
-        
+
         for py_file in directory.rglob("*.py"):
             if py_file.name.startswith("__"):
                 continue
-                
+
             try:
                 discoveries.extend(self._analyze_file(py_file))
             except Exception as e:
                 logger.debug(f"Failed to analyze {py_file}: {e}")
-        
+
         return discoveries
-    
+
     def _analyze_file(self, file_path: Path) -> List[OrchestratorDiscovery]:
         """Analyze a Python file for orchestrator classes."""
         discoveries = []
-        
+
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
-            
+
             tree = ast.parse(content)
-            
+
             for node in ast.walk(tree):
                 if isinstance(node, ast.ClassDef):
                     if self._is_orchestrator_class(node, content):
                         discovery = self._create_discovery(node, file_path, content)
                         if discovery:
                             discoveries.append(discovery)
-        
+
         except Exception as e:
             logger.debug(f"Failed to parse {file_path}: {e}")
-        
+
         return discoveries
-    
+
     def _is_orchestrator_class(self, class_node: ast.ClassDef, content: str) -> bool:
         """Check if class is an orchestrator."""
         name = class_node.name.lower()
-        
+
         # Direct name patterns
         if any(pattern in name for pattern in ["orchestrator", "handler", "engine", "manager"]):
             return True
-        
+
         # Check for inheritance patterns
         for base in class_node.bases:
             if hasattr(base, 'id') and base.id:
                 base_name = base.id.lower()
                 if any(pattern in base_name for pattern in ["orchestrator", "protocol", "interface"]):
                     return True
-        
+
         return False
-    
+
     def _create_discovery(self, class_node: ast.ClassDef, file_path: Path, content: str) -> Optional[OrchestratorDiscovery]:
         """Create orchestrator discovery from AST node."""
         try:
             # Extract keywords from docstring and comments
             keywords = self._extract_keywords(class_node, content)
-            
+
             # Determine orchestrator type
             orchestrator_type = self._determine_type(class_node.name, keywords)
-            
+
             # Calculate confidence
             confidence = self._calculate_confidence(class_node, keywords)
-            
+
             return OrchestratorDiscovery(
                 name=class_node.name,
                 file_path=file_path,
@@ -161,19 +161,19 @@ class RegistryIntelligenceAgent:
                 orchestrator_type=orchestrator_type,
                 confidence=confidence
             )
-        
+
         except Exception as e:
             logger.debug(f"Failed to create discovery for {class_node.name}: {e}")
             return None
-    
+
     def _extract_keywords(self, class_node: ast.ClassDef, content: str) -> Set[str]:
         """Extract intent keywords from class."""
         keywords = set()
-        
+
         # From class name
         name_parts = class_node.name.lower().split("_") + class_node.name.lower().split()
         keywords.update(name_parts)
-        
+
         # From docstring
         if class_node.body and isinstance(class_node.body[0], ast.Expr):
             if hasattr(class_node.body[0].value, 's'):
@@ -181,13 +181,13 @@ class RegistryIntelligenceAgent:
                 for intent, patterns in self.intent_patterns.items():
                     if any(pattern in docstring for pattern in patterns):
                         keywords.add(intent)
-        
+
         return keywords
-    
+
     def _determine_type(self, class_name: str, keywords: Set[str]) -> str:
         """Determine orchestrator type from name and keywords."""
         name_lower = class_name.lower()
-        
+
         # Direct mapping from name
         if "deploy" in name_lower or "deploy" in keywords:
             return "deployment"
@@ -207,22 +207,22 @@ class RegistryIntelligenceAgent:
             return "auditing"
         else:
             return "general"
-    
+
     def _calculate_confidence(self, class_node: ast.ClassDef, keywords: Set[str]) -> float:
         """Calculate confidence score for orchestrator detection."""
         score = 0.0
-        
+
         # Name patterns
         name_lower = class_node.name.lower()
         if "orchestrator" in name_lower:
             score += 0.4
         elif any(pattern in name_lower for pattern in ["handler", "engine", "manager"]):
             score += 0.2
-        
+
         # Keyword matches
         if keywords:
             score += min(0.3, len(keywords) * 0.1)
-        
+
         # Method patterns
         for node in class_node.body:
             if isinstance(node, ast.FunctionDef):
@@ -230,16 +230,16 @@ class RegistryIntelligenceAgent:
                 if method_name in ["execute", "orchestrate", "process", "handle"]:
                     score += 0.2
                     break
-        
+
         return min(1.0, score)
-    
+
     def detect_registry_gaps(self, discoveries: Optional[List[OrchestratorDiscovery]] = None) -> List[RegistryGap]:
         """Detect gaps in orchestrator registry."""
         if discoveries is None:
             discoveries = self.scan_for_orchestrators()
-        
+
         gaps = []
-        
+
         for discovery in discoveries:
             # For now, just mark as unregistered if we found it
             # In full implementation, would check against OrchestratorLookup
@@ -250,19 +250,19 @@ class RegistryIntelligenceAgent:
                 suggested_fix=f"Register {discovery.name} with keyword mapping for {discovery.orchestrator_type}"
             )
             gaps.append(gap)
-        
+
         return gaps
-    
+
     def validate_universal_wiring(self) -> Dict[str, Any]:
         """Validate universal orchestrator wiring."""
         discoveries = self.scan_for_orchestrators()
         gaps = self.detect_registry_gaps(discoveries)
-        
+
         # Analyze coverage
         intent_coverage = {}
         for intent in self.intent_patterns:
             matching_orchestrators = [
-                d for d in discoveries 
+                d for d in discoveries
                 if intent in d.keywords or d.orchestrator_type == intent
             ]
             intent_coverage[intent] = {
@@ -270,7 +270,7 @@ class RegistryIntelligenceAgent:
                 "orchestrators": [d.name for d in matching_orchestrators],
                 "covered": len(matching_orchestrators) > 0
             }
-        
+
         return {
             "discovered_orchestrators": len(discoveries),
             "registry_gaps": len(gaps),

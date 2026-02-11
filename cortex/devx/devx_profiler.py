@@ -1,10 +1,10 @@
 """DevX Profiler for performance measurement."""
 
-from typing import Any, Dict, List
-from dataclasses import dataclass, field
-from datetime import datetime, timezone
 import time
 from contextlib import contextmanager
+from dataclasses import dataclass, field
+from datetime import datetime, timezone
+from typing import Any, Dict, List
 
 
 @dataclass
@@ -33,10 +33,10 @@ class DevxProfiler:
     @contextmanager
     def measure(self, operation: str) -> Any:
         """Context manager for measuring execution time.
-        
+
         Args:
             operation: Operation name
-            
+
         Yields:
             Measurement context
         """
@@ -47,10 +47,10 @@ class DevxProfiler:
             end_time = time.time()
             execution_time = (end_time - start_time) * 1000  # Convert to ms
             self.active_measurements[operation] = execution_time
-            
+
             if operation not in self.results:
                 self.results[operation] = ProfileResult(operation=operation)
-            
+
             self.results[operation].execution_time_ms = execution_time
             self.results[operation].measurements.append({
                 "timestamp": datetime.now(timezone.utc).isoformat(),
@@ -59,7 +59,7 @@ class DevxProfiler:
 
     def get_results(self) -> Dict[str, ProfileResult]:
         """Get profiling results.
-        
+
         Returns:
             Dictionary of results
         """
@@ -67,10 +67,10 @@ class DevxProfiler:
 
     def get_profile_result(self, operation: str) -> ProfileResult:
         """Get profile result for operation.
-        
+
         Args:
             operation: Operation name
-            
+
         Returns:
             ProfileResult
         """
@@ -80,10 +80,10 @@ class DevxProfiler:
 
     def find_bottlenecks(self, threshold_ms: float = 100.0) -> List[str]:
         """Find operations exceeding threshold.
-        
+
         Args:
             threshold_ms: Threshold in milliseconds
-            
+
         Returns:
             List of bottleneck operations
         """
@@ -95,13 +95,13 @@ class DevxProfiler:
 
     def generate_report(self) -> str:
         """Generate profiling report.
-        
+
         Returns:
             Report string
         """
         total_time = sum(r.execution_time_ms for r in self.results.values())
         avg_time = total_time / len(self.results) if self.results else 0.0
-        
+
         report_dict: Dict[str, Any] = {
             "total_operations": len(self.results),
             "total_time_ms": total_time,

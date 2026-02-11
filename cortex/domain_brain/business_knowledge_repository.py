@@ -4,9 +4,9 @@ This module provides the interface for managing business knowledge entries
 in the Domain Brain. Full implementation scheduled for future phases.
 """
 
-from typing import Optional, Dict, Any, List
-from dataclasses import dataclass
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from typing import Any, Dict, List, Optional
 
 
 @dataclass
@@ -19,12 +19,12 @@ class BusinessKnowledgeEntry:
 
 class BusinessKnowledgeRepository(ABC):
     """Abstract business knowledge repository."""
-    
+
     @abstractmethod
     def add(self, entry: BusinessKnowledgeEntry) -> None:
         """Add entry."""
         pass
-    
+
     @abstractmethod
     def get(self, entry_id: str) -> Optional[BusinessKnowledgeEntry]:
         """Get entry."""
@@ -38,14 +38,14 @@ def get_business_knowledge_repository() -> BusinessKnowledgeRepository:
 
 class _DefaultBusinessKnowledgeRepository(BusinessKnowledgeRepository):
     """Default business knowledge repository."""
-    
+
     def __init__(self):
         self._entries: Dict[str, BusinessKnowledgeEntry] = {}
-    
+
     def add(self, entry: BusinessKnowledgeEntry) -> None:
         """Add entry."""
         self._entries[entry.id] = entry
-    
+
     def get(self, entry_id: str) -> Optional[BusinessKnowledgeEntry]:
         """Get entry."""
         return self._entries.get(entry_id)

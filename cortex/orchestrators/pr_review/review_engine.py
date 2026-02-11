@@ -14,26 +14,26 @@ Orchestrates:
 - Automated comment/review submission
 """
 
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any, Tuple
-from enum import Enum
 import logging
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
 
-from cortex.orchestrators.pr_review.github_client import (
-    GitHubAPIClient,
-    ReviewAction,
-    GitHubPR,
-)
-from cortex.orchestrators.pr_review.prreview_orchestrator import (
-    DiffParser,
-    SecurityAnalyzer,
-    ComplexityAnalyzer,
-    PRReviewAnalysis,
-    FileDiff,
-)
 from cortex.orchestrators.pr_review.diff_security_analyzer import (
     DiffSecurityAnalyzer,
     SecurityScanResult,
+)
+from cortex.orchestrators.pr_review.github_client import (
+    GitHubAPIClient,
+    GitHubPR,
+    ReviewAction,
+)
+from cortex.orchestrators.pr_review.prreview_orchestrator import (
+    ComplexityAnalyzer,
+    DiffParser,
+    FileDiff,
+    PRReviewAnalysis,
+    SecurityAnalyzer,
 )
 
 logger = logging.getLogger(__name__)
@@ -364,7 +364,7 @@ class PRReviewEngine:
         recommendation: ReviewRecommendation,
     ) -> str:
         """Generate summary comment."""
-        summary = f"## PR Review Summary\n\n"
+        summary = "## PR Review Summary\n\n"
         summary += f"**Recommendation:** {recommendation.value.upper()}\n\n"
         summary += f"**Files Changed:** {len(code_analysis.files)}\n"
         summary += f"**Lines Added:** +{code_analysis.total_additions}\n"

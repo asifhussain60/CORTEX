@@ -4,7 +4,7 @@ Interaction Orchestrator Enhancement - Phase 6.
 Adds planning integration and multi-layer coordination.
 """
 
-# Phase 6: Just marks enhancement - actual updates to InteractionOrchestrator 
+# Phase 6: Just marks enhancement - actual updates to InteractionOrchestrator
 # are minimal event subscription additions and documented in wiring
 # This is a placeholder showing the enhancement location
 

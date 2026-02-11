@@ -15,13 +15,14 @@ Features:
 Author: Asif Hussain (CORTEX Phase 34B)
 """
 
+import threading
+import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Dict, List, Optional, Any
-import threading
-import time
+from typing import Any, Dict, List, Optional
+
 import yaml
 
 from cortex.orchestrators.intelligence.types import TechStack
@@ -55,7 +56,7 @@ class SynthesisResult:
 class KnowledgeSynthesizer:
     """
     Synthesizes actionable knowledge from multiple sources.
-    
+
     Generates YAML configurations, TDD templates, and security rules
     tailored to specific tech stacks.
     """
@@ -196,17 +197,17 @@ import pytest
 
 class Test{ClassName}:
     \"\"\"Test suite for {ClassName}.\"\"\"
-    
+
     @pytest.fixture
     def {fixture_name}(self):
         \"\"\"Setup test fixture.\"\"\"
         return {ClassName}()
-    
+
     def test_{method_name}_success(self, {fixture_name}):
         \"\"\"Test {method_name} succeeds with valid input.\"\"\"
         result = {fixture_name}.{method_name}()
         assert result is not None
-    
+
     def test_{method_name}_handles_error(self, {fixture_name}):
         \"\"\"Test {method_name} handles errors gracefully.\"\"\"
         with pytest.raises(ValueError):
@@ -215,16 +216,16 @@ class Test{ClassName}:
         "jest": """// Jest Pattern
 describe('{ClassName}', () => {{
     let instance;
-    
+
     beforeEach(() => {{
         instance = new {ClassName}();
     }});
-    
+
     test('{methodName} succeeds with valid input', () => {{
         const result = instance.{methodName}();
         expect(result).toBeDefined();
     }});
-    
+
     test('{methodName} handles errors gracefully', () => {{
         expect(() => instance.{methodName}(invalidInput)).toThrow();
     }});
@@ -237,21 +238,21 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class {ClassName}Test {{
     private {ClassName} instance;
-    
+
     @BeforeEach
     void setUp() {{
         instance = new {ClassName}();
     }}
-    
+
     @Test
     void {methodName}_SucceedsWithValidInput() {{
         var result = instance.{methodName}();
         assertNotNull(result);
     }}
-    
+
     @Test
     void {methodName}_HandlesErrorsGracefully() {{
-        assertThrows(IllegalArgumentException.class, 
+        assertThrows(IllegalArgumentException.class,
             () -> instance.{methodName}(invalidInput));
     }}
 }}
@@ -294,7 +295,7 @@ class {ClassName}Test {{
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         """
         Initialize KnowledgeSynthesizer.
-        
+
         Args:
             config: Optional configuration dictionary
         """
@@ -302,7 +303,7 @@ class {ClassName}Test {{
         self.cache_enabled = config.get("cache_enabled", True)
         self.template_dir = config.get("template_dir", None)
         self.max_cache_size = config.get("max_cache_size", 100)
-        
+
         # Thread-safe caching
         self._cache: Dict[str, SynthesisResult] = {}
         self._cache_lock = threading.Lock()
@@ -310,30 +311,30 @@ class {ClassName}Test {{
         self._cache_misses = 0
 
     def synthesize_best_practices(
-        self, 
+        self,
         tech_stack: Optional[TechStack],
         source: KnowledgeSource = KnowledgeSource.INTERNAL
     ) -> SynthesisResult:
         """
         Synthesize best practices YAML for tech stack.
-        
+
         Args:
             tech_stack: Technology stack to generate practices for
             source: Knowledge source to use
-            
+
         Returns:
             SynthesisResult with YAML content
         """
         if tech_stack is None:
             return self._create_empty_result(TemplateType.BEST_PRACTICES, source)
-        
+
         # Check cache
         cache_key = f"bp_{tech_stack.language}_{','.join(tech_stack.frameworks)}"
         if self.cache_enabled:
             cached = self._get_from_cache(cache_key)
             if cached:
                 return cached
-        
+
         # Handle external sources with fallback
         original_source = source
         if source != KnowledgeSource.INTERNAL:
@@ -345,10 +346,10 @@ class {ClassName}Test {{
             except Exception:
                 # Fallback to internal source
                 source = KnowledgeSource.INTERNAL
-        
+
         # Generate from internal knowledge base
         yaml_content = self._generate_best_practices_yaml(tech_stack)
-        
+
         result = SynthesisResult(
             content=yaml_content,
             source=KnowledgeSource.INTERNAL,  # Mark as internal since we fell back
@@ -360,10 +361,10 @@ class {ClassName}Test {{
                 "fallback": original_source != KnowledgeSource.INTERNAL
             }
         )
-        
+
         if self.cache_enabled:
             self._store_in_cache(cache_key, result)
-        
+
         return result
 
     def generate_tdd_patterns(
@@ -373,25 +374,25 @@ class {ClassName}Test {{
     ) -> SynthesisResult:
         """
         Generate TDD pattern templates for tech stack.
-        
+
         Args:
             tech_stack: Technology stack to generate patterns for
             source: Knowledge source to use
-            
+
         Returns:
             SynthesisResult with TDD pattern template
         """
         # Determine TDD framework from tools
         tdd_framework = self._detect_tdd_framework(tech_stack)
-        
+
         # Get pattern template
         pattern = self.TDD_PATTERNS.get(tdd_framework, self.TDD_PATTERNS.get("pytest", ""))
-        
+
         # Add framework-specific patterns if available
         framework_patterns = self._get_framework_tdd_patterns(tech_stack)
         if framework_patterns:
             pattern += f"\n\n# Framework-specific patterns:\n{framework_patterns}"
-        
+
         result = SynthesisResult(
             content=pattern,
             source=source,
@@ -402,7 +403,7 @@ class {ClassName}Test {{
                 "language": tech_stack.language
             }
         )
-        
+
         return result
 
     def generate_security_rules(
@@ -412,33 +413,33 @@ class {ClassName}Test {{
     ) -> SynthesisResult:
         """
         Generate security rules for tech stack.
-        
+
         Args:
             tech_stack: Technology stack to generate rules for
             source: Knowledge source to use
-            
+
         Returns:
             SynthesisResult with security rules
         """
         language = tech_stack.language.lower()
         rules = self.SECURITY_RULES.get(language, {})
-        
+
         # Build security rules document
         content_lines = [f"# Security Rules for {tech_stack.language}\n"]
-        
+
         for category, rule_list in rules.items():
             content_lines.append(f"\n## {category.upper()}")
             for rule in rule_list:
                 content_lines.append(f"- {rule}")
-        
+
         # Add framework-specific rules
         framework_rules = self._get_framework_security_rules(tech_stack)
         if framework_rules:
             content_lines.append("\n## Framework-Specific Security")
             content_lines.extend(framework_rules)
-        
+
         content = "\n".join(content_lines)
-        
+
         result = SynthesisResult(
             content=content,
             source=source,
@@ -446,7 +447,7 @@ class {ClassName}Test {{
             timestamp=datetime.now(),
             metadata={"language": tech_stack.language}
         )
-        
+
         return result
 
     def invalidate_cache(self):
@@ -459,14 +460,14 @@ class {ClassName}Test {{
     def get_cache_stats(self) -> Dict[str, Any]:
         """
         Get cache statistics.
-        
+
         Returns:
             Dictionary with hits (int), misses (int), and hit_rate (float)
         """
         with self._cache_lock:
             total = self._cache_hits + self._cache_misses
             hit_rate = (self._cache_hits / total * 100) if total > 0 else 0.0
-            
+
             return {
                 "hits": self._cache_hits,
                 "misses": self._cache_misses,
@@ -479,7 +480,7 @@ class {ClassName}Test {{
         """Generate YAML content for best practices."""
         language = tech_stack.language.lower()
         practices_data = self.BEST_PRACTICES_KB.get(language, {})
-        
+
         # Build YAML structure
         yaml_data = {
             "language": tech_stack.language,
@@ -488,20 +489,20 @@ class {ClassName}Test {{
                 "general": practices_data.get("general", []),
             }
         }
-        
+
         # Add framework-specific practices
         if tech_stack.frameworks and "frameworks" in practices_data:
             framework_practices = {}
             for framework in tech_stack.frameworks:
                 if framework.lower() in practices_data["frameworks"]:
                     framework_practices[framework] = practices_data["frameworks"][framework.lower()]
-            
+
             if framework_practices:
                 yaml_data["frameworks"] = framework_practices
-        
+
         # Note: TechStack no longer has tools attribute
         # Tools are now included in frameworks list
-        
+
         return yaml.dump(yaml_data, default_flow_style=False, sort_keys=False)
 
     def _detect_tdd_framework(self, tech_stack: TechStack) -> str:
@@ -515,7 +516,7 @@ class {ClassName}Test {{
                 return "jest"
             elif "junit" in framework_lower:
                 return "junit"
-        
+
         # Default based on language
         language_defaults = {
             "python": "pytest",
@@ -523,13 +524,13 @@ class {ClassName}Test {{
             "typescript": "jest",
             "java": "junit",
         }
-        
+
         return language_defaults.get(tech_stack.language.lower(), "pytest")
 
     def _get_framework_tdd_patterns(self, tech_stack: TechStack) -> str:
         """Get framework-specific TDD patterns."""
         patterns = []
-        
+
         for framework in tech_stack.frameworks:
             framework_lower = framework.lower()
             if framework_lower == "django":
@@ -541,13 +542,13 @@ class {ClassName}Test {{
             elif framework_lower == "react":
                 patterns.append("# Use React Testing Library")
                 patterns.append("# Test user interactions, not implementation")
-        
+
         return "\n".join(patterns) if patterns else ""
 
     def _get_framework_security_rules(self, tech_stack: TechStack) -> List[str]:
         """Get framework-specific security rules."""
         rules = []
-        
+
         for framework in tech_stack.frameworks:
             framework_lower = framework.lower()
             if framework_lower == "django":
@@ -558,7 +559,7 @@ class {ClassName}Test {{
                 rules.append("- Use OAuth2 with password flow for authentication")
                 rules.append("- Enable CORS with specific origins")
                 rules.append("- Use Pydantic for input validation")
-        
+
         return rules
 
     def _fetch_from_external_source(
@@ -569,7 +570,7 @@ class {ClassName}Test {{
     ) -> Optional[SynthesisResult]:
         """
         Fetch knowledge from external source.
-        
+
         Note: This is a placeholder for future external API integration.
         """
         # Future: Implement GitHub API, docs scraping, etc.
@@ -607,5 +608,5 @@ class {ClassName}Test {{
             if len(self._cache) >= self.max_cache_size:
                 oldest_key = next(iter(self._cache))
                 del self._cache[oldest_key]
-            
+
             self._cache[key] = result

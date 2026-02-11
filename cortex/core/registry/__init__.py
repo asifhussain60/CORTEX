@@ -1,11 +1,11 @@
 """Registry modules for CORTEX."""
 
 from cortex.core.registry.repo_registry import (
+    DuplicateRepositoryError,
+    InvalidRepositoryPathError,
+    InvalidRepositoryTypeError,
     RepositoryRegistry,
     RepositoryRegistryEntry,
-    DuplicateRepositoryError,
-    InvalidRepositoryTypeError,
-    InvalidRepositoryPathError,
 )
 
 __all__ = [

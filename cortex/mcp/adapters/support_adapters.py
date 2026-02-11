@@ -6,15 +6,16 @@ Adapters for 11 support orchestrators.
 AC-ID: AC-MCP-ADAPTER-013 through AC-MCP-ADAPTER-023
 """
 
+import logging
+import time
 from typing import Any, Dict, List
+
 from cortex.mcp.orchestrator_mcp_server import (
-    IOrchestratorAdapter,
     CapabilityMetadata,
     CapabilityResponse,
     ExecutionContext,
+    IOrchestratorAdapter,
 )
-import logging
-import time
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 class OnboardingOrchestratorAdapter(IOrchestratorAdapter):
     """MCP Adapter for OnboardingOrchestrator"""
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         return [
             CapabilityMetadata(
@@ -38,7 +39,7 @@ class OnboardingOrchestratorAdapter(IOrchestratorAdapter):
                 tags={"support", "onboarding"},
             ),
         ]
-    
+
     def execute_capability(
         self, capability_name: str, parameters: Dict[str, Any], context: ExecutionContext
     ) -> CapabilityResponse:
@@ -51,10 +52,10 @@ class OnboardingOrchestratorAdapter(IOrchestratorAdapter):
             orchestrator="onboarding",
             duration_ms=(time.time() - start) * 1000,
         )
-    
+
     def is_healthy(self) -> bool:
         return False
-    
+
     def get_status(self) -> Dict[str, Any]:
         return {"name": "OnboardingOrchestrator", "healthy": False, "status": "not_implemented"}
 
@@ -65,7 +66,7 @@ class OnboardingOrchestratorAdapter(IOrchestratorAdapter):
 
 class ToolDiscoveryOrchestratorAdapter(IOrchestratorAdapter):
     """MCP Adapter for ToolDiscoveryOrchestrator"""
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         return [
             CapabilityMetadata(
@@ -78,7 +79,7 @@ class ToolDiscoveryOrchestratorAdapter(IOrchestratorAdapter):
                 tags={"support", "discovery"},
             ),
         ]
-    
+
     def execute_capability(
         self, capability_name: str, parameters: Dict[str, Any], context: ExecutionContext
     ) -> CapabilityResponse:
@@ -91,10 +92,10 @@ class ToolDiscoveryOrchestratorAdapter(IOrchestratorAdapter):
             orchestrator="tool_discovery",
             duration_ms=(time.time() - start) * 1000,
         )
-    
+
     def is_healthy(self) -> bool:
         return False
-    
+
     def get_status(self) -> Dict[str, Any]:
         return {"name": "ToolDiscoveryOrchestrator", "healthy": False, "status": "not_implemented"}
 
@@ -105,7 +106,7 @@ class ToolDiscoveryOrchestratorAdapter(IOrchestratorAdapter):
 
 class UpgradeOrchestratorAdapter(IOrchestratorAdapter):
     """MCP Adapter for UpgradeOrchestrator"""
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         return [
             CapabilityMetadata(
@@ -118,7 +119,7 @@ class UpgradeOrchestratorAdapter(IOrchestratorAdapter):
                 tags={"support", "upgrade"},
             ),
         ]
-    
+
     def execute_capability(
         self, capability_name: str, parameters: Dict[str, Any], context: ExecutionContext
     ) -> CapabilityResponse:
@@ -131,10 +132,10 @@ class UpgradeOrchestratorAdapter(IOrchestratorAdapter):
             orchestrator="upgrade",
             duration_ms=(time.time() - start) * 1000,
         )
-    
+
     def is_healthy(self) -> bool:
         return False
-    
+
     def get_status(self) -> Dict[str, Any]:
         return {"name": "UpgradeOrchestrator", "healthy": False, "status": "not_implemented"}
 
@@ -145,7 +146,7 @@ class UpgradeOrchestratorAdapter(IOrchestratorAdapter):
 
 class RollbackOrchestratorAdapter(IOrchestratorAdapter):
     """MCP Adapter for RollbackOrchestrator"""
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         return [
             CapabilityMetadata(
@@ -158,7 +159,7 @@ class RollbackOrchestratorAdapter(IOrchestratorAdapter):
                 tags={"support", "rollback"},
             ),
         ]
-    
+
     def execute_capability(
         self, capability_name: str, parameters: Dict[str, Any], context: ExecutionContext
     ) -> CapabilityResponse:
@@ -171,10 +172,10 @@ class RollbackOrchestratorAdapter(IOrchestratorAdapter):
             orchestrator="rollback",
             duration_ms=(time.time() - start) * 1000,
         )
-    
+
     def is_healthy(self) -> bool:
         return False
-    
+
     def get_status(self) -> Dict[str, Any]:
         return {"name": "RollbackOrchestrator", "healthy": False, "status": "not_implemented"}
 
@@ -185,7 +186,7 @@ class RollbackOrchestratorAdapter(IOrchestratorAdapter):
 
 class SetupOrchestratorAdapter(IOrchestratorAdapter):
     """MCP Adapter for SetupOrchestrator"""
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         return [
             CapabilityMetadata(
@@ -198,7 +199,7 @@ class SetupOrchestratorAdapter(IOrchestratorAdapter):
                 tags={"support", "setup"},
             ),
         ]
-    
+
     def execute_capability(
         self, capability_name: str, parameters: Dict[str, Any], context: ExecutionContext
     ) -> CapabilityResponse:
@@ -211,10 +212,10 @@ class SetupOrchestratorAdapter(IOrchestratorAdapter):
             orchestrator="setup",
             duration_ms=(time.time() - start) * 1000,
         )
-    
+
     def is_healthy(self) -> bool:
         return False
-    
+
     def get_status(self) -> Dict[str, Any]:
         return {"name": "SetupOrchestrator", "healthy": False, "status": "not_implemented"}
 
@@ -225,7 +226,7 @@ class SetupOrchestratorAdapter(IOrchestratorAdapter):
 
 class ComposedOrchestratorAdapter(IOrchestratorAdapter):
     """MCP Adapter for ComposedOrchestrator"""
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         return [
             CapabilityMetadata(
@@ -238,7 +239,7 @@ class ComposedOrchestratorAdapter(IOrchestratorAdapter):
                 tags={"support", "composition"},
             ),
         ]
-    
+
     def execute_capability(
         self, capability_name: str, parameters: Dict[str, Any], context: ExecutionContext
     ) -> CapabilityResponse:
@@ -251,10 +252,10 @@ class ComposedOrchestratorAdapter(IOrchestratorAdapter):
             orchestrator="composed",
             duration_ms=(time.time() - start) * 1000,
         )
-    
+
     def is_healthy(self) -> bool:
         return False
-    
+
     def get_status(self) -> Dict[str, Any]:
         return {"name": "ComposedOrchestrator", "healthy": False, "status": "not_implemented"}
 
@@ -265,7 +266,7 @@ class ComposedOrchestratorAdapter(IOrchestratorAdapter):
 
 class OrchestratorBootstrapAdapter(IOrchestratorAdapter):
     """MCP Adapter for OrchestratorBootstrap"""
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         return [
             CapabilityMetadata(
@@ -278,7 +279,7 @@ class OrchestratorBootstrapAdapter(IOrchestratorAdapter):
                 tags={"support", "bootstrap"},
             ),
         ]
-    
+
     def execute_capability(
         self, capability_name: str, parameters: Dict[str, Any], context: ExecutionContext
     ) -> CapabilityResponse:
@@ -291,10 +292,10 @@ class OrchestratorBootstrapAdapter(IOrchestratorAdapter):
             orchestrator="bootstrap",
             duration_ms=(time.time() - start) * 1000,
         )
-    
+
     def is_healthy(self) -> bool:
         return False
-    
+
     def get_status(self) -> Dict[str, Any]:
         return {"name": "OrchestratorBootstrap", "healthy": False, "status": "not_implemented"}
 
@@ -305,7 +306,7 @@ class OrchestratorBootstrapAdapter(IOrchestratorAdapter):
 
 class DoRApprovalGateAdapter(IOrchestratorAdapter):
     """MCP Adapter for DoRApprovalGate"""
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         return [
             CapabilityMetadata(
@@ -318,7 +319,7 @@ class DoRApprovalGateAdapter(IOrchestratorAdapter):
                 tags={"support", "governance"},
             ),
         ]
-    
+
     def execute_capability(
         self, capability_name: str, parameters: Dict[str, Any], context: ExecutionContext
     ) -> CapabilityResponse:
@@ -331,10 +332,10 @@ class DoRApprovalGateAdapter(IOrchestratorAdapter):
             orchestrator="dor_gate",
             duration_ms=(time.time() - start) * 1000,
         )
-    
+
     def is_healthy(self) -> bool:
         return False
-    
+
     def get_status(self) -> Dict[str, Any]:
         return {"name": "DoRApprovalGate", "healthy": False, "status": "not_implemented"}
 
@@ -345,7 +346,7 @@ class DoRApprovalGateAdapter(IOrchestratorAdapter):
 
 class LENSSynthesisAdapter(IOrchestratorAdapter):
     """MCP Adapter for LENSSynthesis"""
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         return [
             CapabilityMetadata(
@@ -358,7 +359,7 @@ class LENSSynthesisAdapter(IOrchestratorAdapter):
                 tags={"support", "synthesis"},
             ),
         ]
-    
+
     def execute_capability(
         self, capability_name: str, parameters: Dict[str, Any], context: ExecutionContext
     ) -> CapabilityResponse:
@@ -371,10 +372,10 @@ class LENSSynthesisAdapter(IOrchestratorAdapter):
             orchestrator="lens_synthesis",
             duration_ms=(time.time() - start) * 1000,
         )
-    
+
     def is_healthy(self) -> bool:
         return False
-    
+
     def get_status(self) -> Dict[str, Any]:
         return {"name": "LENSSynthesis", "healthy": False, "status": "not_implemented"}
 
@@ -385,7 +386,7 @@ class LENSSynthesisAdapter(IOrchestratorAdapter):
 
 class GovernanceRegistryAdapter(IOrchestratorAdapter):
     """MCP Adapter for GovernanceRegistry"""
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         return [
             CapabilityMetadata(
@@ -398,7 +399,7 @@ class GovernanceRegistryAdapter(IOrchestratorAdapter):
                 tags={"support", "governance"},
             ),
         ]
-    
+
     def execute_capability(
         self, capability_name: str, parameters: Dict[str, Any], context: ExecutionContext
     ) -> CapabilityResponse:
@@ -411,10 +412,10 @@ class GovernanceRegistryAdapter(IOrchestratorAdapter):
             orchestrator="governance_registry",
             duration_ms=(time.time() - start) * 1000,
         )
-    
+
     def is_healthy(self) -> bool:
         return False
-    
+
     def get_status(self) -> Dict[str, Any]:
         return {"name": "GovernanceRegistry", "healthy": False, "status": "not_implemented"}
 
@@ -425,7 +426,7 @@ class GovernanceRegistryAdapter(IOrchestratorAdapter):
 
 class KnowledgeRepositoryAdapter(IOrchestratorAdapter):
     """MCP Adapter for KnowledgeRepository"""
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         return [
             CapabilityMetadata(
@@ -438,7 +439,7 @@ class KnowledgeRepositoryAdapter(IOrchestratorAdapter):
                 tags={"support", "knowledge"},
             ),
         ]
-    
+
     def execute_capability(
         self, capability_name: str, parameters: Dict[str, Any], context: ExecutionContext
     ) -> CapabilityResponse:
@@ -451,9 +452,9 @@ class KnowledgeRepositoryAdapter(IOrchestratorAdapter):
             orchestrator="knowledge_repository",
             duration_ms=(time.time() - start) * 1000,
         )
-    
+
     def is_healthy(self) -> bool:
         return False
-    
+
     def get_status(self) -> Dict[str, Any]:
         return {"name": "KnowledgeRepository", "healthy": False, "status": "not_implemented"}

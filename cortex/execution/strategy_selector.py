@@ -12,7 +12,7 @@ from cortex.execution.performance_metrics import PerformanceMetrics
 class StrategySelector:
     """
     Selects optimal execution strategy based on performance metrics.
-    
+
     Uses performance characteristics to recommend sequential, parallel,
     or async execution strategies.
     """
@@ -24,10 +24,10 @@ class StrategySelector:
     def recommend(self, metrics: PerformanceMetrics) -> ExecutionStrategy:
         """
         Recommend an execution strategy based on metrics.
-        
+
         Args:
             metrics: PerformanceMetrics object with current performance data.
-            
+
         Returns:
             ExecutionStrategy recommendation.
         """
@@ -52,10 +52,10 @@ class StrategySelector:
     def is_safe_to_parallelize(self, metrics: PerformanceMetrics) -> bool:
         """
         Check if it's safe to parallelize based on error rates.
-        
+
         Args:
             metrics: Performance metrics to evaluate.
-            
+
         Returns:
             True if parallelization is recommended, False otherwise.
         """
@@ -64,10 +64,10 @@ class StrategySelector:
     def is_suitable_for_async(self, metrics: PerformanceMetrics) -> bool:
         """
         Check if async execution is suitable.
-        
+
         Args:
             metrics: Performance metrics to evaluate.
-            
+
         Returns:
             True if async is recommended, False otherwise.
         """

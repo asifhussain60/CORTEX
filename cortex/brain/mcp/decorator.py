@@ -18,7 +18,6 @@ import functools
 import threading
 from typing import Any, Callable, Dict, Optional
 
-
 # REM-CRIT-004: Thread-safe tool registry with lock
 _REGISTERED_TOOLS: Dict[str, Any] = {}
 _REGISTRY_LOCK = threading.Lock()
@@ -32,13 +31,13 @@ def mcp_tool(
 ):
     """
     Decorator to register a function as an MCP tool.
-    
+
     Args:
         name: Tool name (must be unique)
         description: Human-readable description
         category: Optional category for grouping
         parameters: Optional parameter schema for MCP
-    
+
     Returns:
         Decorated function registered as MCP tool
     """
@@ -46,14 +45,14 @@ def mcp_tool(
         @functools.wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
             return func(*args, **kwargs)
-        
+
         # Store metadata
         wrapper._mcp_tool = True  # type: ignore
         wrapper._mcp_name = name  # type: ignore
         wrapper._mcp_description = description  # type: ignore
         wrapper._mcp_category = category  # type: ignore
         wrapper._mcp_parameters = parameters or {}  # type: ignore
-        
+
         # Also set _mcp_tool_metadata for tool discovery
         wrapper._mcp_tool_metadata = {  # type: ignore
             "name": name,
@@ -61,7 +60,7 @@ def mcp_tool(
             "category": category,
             "parameters": parameters or {}
         }
-        
+
         # Register in thread-safe registry
         with _REGISTRY_LOCK:
             _REGISTERED_TOOLS[name] = {
@@ -71,9 +70,9 @@ def mcp_tool(
                 "category": category,
                 "parameters": parameters or {}
             }
-        
+
         return wrapper
-    
+
     return decorator
 
 

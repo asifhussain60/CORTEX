@@ -4,10 +4,10 @@ ISSUE #2: Environment-Specific Timeout Profiles
 Provides different timeout values for DEV, TEST, and PROD environments.
 """
 
+import logging
 import os
 from dataclasses import dataclass
-from typing import Dict, Optional, Literal
-import logging
+from typing import Dict, Literal, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +17,7 @@ EnvironmentType = Literal["development", "test", "production"]
 @dataclass
 class TimeoutProfile:
     """Timeout configuration for an environment."""
-    
+
     name: str
     thread_join_ms: int
     http_request_ms: int
@@ -26,7 +26,7 @@ class TimeoutProfile:
     cache_operation_ms: int
     fallback_timeout_ms: int
     circuit_breaker_threshold_ms: int
-    
+
     def to_dict(self) -> Dict[str, int]:
         """Export profile as dictionary."""
         return {
@@ -78,40 +78,40 @@ PROFILES: Dict[EnvironmentType, TimeoutProfile] = {
 def get_environment() -> EnvironmentType:
     """
     Get current environment from CORTEX_ENV variable.
-    
+
     Returns:
         Environment type ("development", "test", or "production")
-    
+
     Raises:
         ValueError: If CORTEX_ENV is set to unknown value
     """
     env = os.getenv("CORTEX_ENV", "development").lower()
-    
+
     if env not in PROFILES:
         raise ValueError(
             f"Unknown environment: {env}. "
             f"Must be one of: {list(PROFILES.keys())}"
         )
-    
+
     return env  # type: ignore
 
 
 def get_profile(env: Optional[EnvironmentType] = None) -> TimeoutProfile:
     """
     Get timeout profile for specified environment.
-    
+
     Args:
         env: Environment type. If None, uses current CORTEX_ENV
-    
+
     Returns:
         TimeoutProfile for the environment
     """
     if env is None:
         env = get_environment()
-    
+
     if env not in PROFILES:
         raise ValueError(f"Unknown environment: {env}")
-    
+
     profile = PROFILES[env]
     logger.debug(f"Loaded timeout profile for {env}: {profile.name}")
     return profile
@@ -120,36 +120,36 @@ def get_profile(env: Optional[EnvironmentType] = None) -> TimeoutProfile:
 def get_timeout(key: str, env: Optional[EnvironmentType] = None) -> int:
     """
     Get specific timeout value for current environment.
-    
+
     Args:
         key: Timeout parameter name (e.g., "thread_join_ms")
         env: Environment type. If None, uses current CORTEX_ENV
-    
+
     Returns:
         Timeout value in milliseconds
-    
+
     Raises:
         AttributeError: If key is not a valid timeout parameter
     """
     profile = get_profile(env)
-    
+
     if not hasattr(profile, key):
         valid_keys = list(profile.to_dict().keys())
         raise AttributeError(
             f"Unknown timeout key: {key}. Valid keys: {valid_keys}"
         )
-    
+
     return getattr(profile, key)
 
 
 def get_timeout_seconds(key: str, env: Optional[EnvironmentType] = None) -> float:
     """
     Get timeout value in seconds (for use with Python timeouts).
-    
+
     Args:
         key: Timeout parameter name
         env: Environment type. If None, uses current CORTEX_ENV
-    
+
     Returns:
         Timeout value in seconds
     """

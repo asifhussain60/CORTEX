@@ -11,44 +11,45 @@ Phase: 41 Stage 1 (ENH-053)
 
 import json
 from typing import Any
+
 from cortex.learning.digest.models import DigestResult
 
 
 class OutputFormatter:
     """
     Format DIGEST results for output.
-    
+
     Supports:
     - JSON serialization
     - Markdown summary generation
-    
+
     Usage:
         formatter = OutputFormatter()
         json_str = formatter.to_json(result)
         markdown = formatter.to_markdown(result)
     """
-    
+
     def to_json(self, result: DigestResult) -> str:
         """
         Serialize DigestResult to JSON string.
-        
+
         Args:
             result: DigestResult to serialize
-        
+
         Returns:
             JSON string
         """
         # Use Pydantic's model_dump for clean serialization
         data = result.model_dump(mode="json")
         return json.dumps(data, indent=2, default=str)
-    
+
     def to_markdown(self, result: DigestResult) -> str:
         """
         Generate Markdown summary of DigestResult.
-        
+
         Args:
             result: DigestResult to summarize
-        
+
         Returns:
             Markdown formatted string
         """
@@ -63,14 +64,14 @@ class OutputFormatter:
             "---",
             ""
         ]
-        
+
         if not result.is_chat_session:
             lines.append("❌ **Not a chat session** (score < 5)")
             return "\n".join(lines)
-        
+
         # Extract categories
         extractions = result.extractions
-        
+
         # Drifts
         drifts = extractions.get("drifts", [])
         lines.extend([
@@ -83,7 +84,7 @@ class OutputFormatter:
         else:
             lines.append("*No drifts detected*")
         lines.append("")
-        
+
         # Patterns
         patterns = extractions.get("patterns", [])
         lines.extend([
@@ -96,7 +97,7 @@ class OutputFormatter:
         else:
             lines.append("*No patterns identified*")
         lines.append("")
-        
+
         # Tools
         tools = extractions.get("tools", [])
         lines.extend([
@@ -109,7 +110,7 @@ class OutputFormatter:
         else:
             lines.append("*No tool invocations*")
         lines.append("")
-        
+
         # Efficiency
         efficiency = extractions.get("efficiency", {})
         lines.extend([
@@ -124,7 +125,7 @@ class OutputFormatter:
         else:
             lines.append("*No efficiency data*")
         lines.append("")
-        
+
         # Accuracy
         accuracy = extractions.get("accuracy", {})
         lines.extend([
@@ -139,7 +140,7 @@ class OutputFormatter:
         else:
             lines.append("*No accuracy data*")
         lines.append("")
-        
+
         # Governance Violations
         violations = extractions.get("governance_violations", [])
         lines.extend([
@@ -152,7 +153,7 @@ class OutputFormatter:
         else:
             lines.append("*No violations detected*")
         lines.append("")
-        
+
         return "\n".join(lines)
 
 

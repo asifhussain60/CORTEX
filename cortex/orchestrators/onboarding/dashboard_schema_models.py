@@ -3,11 +3,11 @@ CORTEX Repository Dashboard Schema Validation Models
 Pydantic-based models for all 9 dashboard tabs with comprehensive validation
 """
 
-from pydantic import BaseModel, Field, validator, root_validator
-from typing import List, Dict, Optional, Any
 from datetime import datetime
 from enum import Enum
+from typing import Any, Dict, List, Optional
 
+from pydantic import BaseModel, Field, root_validator, validator
 
 # ============================================================================
 # ENUMERATIONS
@@ -93,7 +93,7 @@ class IntegrationType(str, Enum):
 
 class RepositoryMetadata(BaseModel):
     """Repository metadata and basic information"""
-    
+
     name: str = Field(..., min_length=1, max_length=255, description="Repository name")
     path: str = Field(..., min_length=1, description="Repository path")
     description: Optional[str] = None
@@ -103,13 +103,13 @@ class RepositoryMetadata(BaseModel):
     contributors: int = Field(..., ge=1, description="Number of contributors")
     last_updated: datetime = Field(..., description="Last update timestamp")
     repo_age_days: int = Field(..., ge=0, description="Repository age in days")
-    
+
     @validator('last_updated', pre=True)
     def parse_datetime(cls, v):
         if isinstance(v, str):
             return datetime.fromisoformat(v.replace('Z', '+00:00'))
         return v
-    
+
     class Config:
         json_schema_extra = {
             "example": {
@@ -127,7 +127,7 @@ class RepositoryMetadata(BaseModel):
 
 class AudienceCard(BaseModel):
     """Audience persona card"""
-    
+
     persona: Persona
     icon: str = Field(..., description="Emoji or icon")
     description: str = Field(..., description="Audience description")
@@ -135,7 +135,7 @@ class AudienceCard(BaseModel):
 
 class OverviewTab(BaseModel):
     """Overview tab (📊) - Executive dashboard"""
-    
+
     health_score: float = Field(..., ge=0, le=100, description="Overall health (0-100)")
     code_quality: float = Field(..., ge=0, le=10, description="Code quality score")
     test_coverage: float = Field(..., ge=0, le=100, description="Test coverage %")
@@ -147,7 +147,7 @@ class OverviewTab(BaseModel):
 
 class Layer(BaseModel):
     """Architectural layer"""
-    
+
     name: str
     description: str
     modules: List[str] = Field(default_factory=list)
@@ -156,7 +156,7 @@ class Layer(BaseModel):
 
 class Module(BaseModel):
     """Code module"""
-    
+
     lines_of_code: int = Field(..., ge=0)
     files: int = Field(..., ge=0)
     complexity: float = Field(..., ge=0)
@@ -166,7 +166,7 @@ class Module(BaseModel):
 
 class DesignPattern(BaseModel):
     """Detected design pattern"""
-    
+
     name: str
     description: str
     location: str
@@ -175,7 +175,7 @@ class DesignPattern(BaseModel):
 
 class ArchitectureTab(BaseModel):
     """Architecture tab (🏗️) - System design"""
-    
+
     layers: List[Layer] = Field(default_factory=list)
     modules: Dict[str, Module] = Field(default_factory=dict)
     design_patterns: List[DesignPattern] = Field(default_factory=list)
@@ -183,10 +183,10 @@ class ArchitectureTab(BaseModel):
 
 class TrendPoint(BaseModel):
     """Time-series data point"""
-    
+
     date: str = Field(..., description="Date (YYYY-MM-DD)")
     value: float = Field(...)
-    
+
     @validator('date')
     def validate_date(cls, v):
         try:
@@ -198,13 +198,13 @@ class TrendPoint(BaseModel):
 
 class ComplexityTrendPoint(TrendPoint):
     """Complexity trend data point"""
-    
+
     avg_complexity: float = Field(...)
 
 
 class Hotspot(BaseModel):
     """Code complexity hotspot"""
-    
+
     file: str
     complexity: float = Field(..., ge=0)
     issues: int = Field(..., ge=0)
@@ -213,7 +213,7 @@ class Hotspot(BaseModel):
 
 class QualityTab(BaseModel):
     """Quality tab (✅) - Code health metrics"""
-    
+
     code_quality_score: float = Field(..., ge=0, le=10)
     maintainability_index: float = Field(..., ge=0, le=100)
     code_smells: int = Field(..., ge=0)
@@ -228,7 +228,7 @@ class QualityTab(BaseModel):
 
 class OWASPFinding(BaseModel):
     """OWASP Top 10 finding"""
-    
+
     category: str
     severity: Severity
     count: int = Field(..., ge=0)
@@ -237,7 +237,7 @@ class OWASPFinding(BaseModel):
 
 class SecretsScan(BaseModel):
     """Secrets scan result"""
-    
+
     status: str = Field(..., description="clean or violations_found")
     secrets_found: int = Field(..., ge=0)
     last_scan: Optional[datetime] = None
@@ -245,7 +245,7 @@ class SecretsScan(BaseModel):
 
 class CVE(BaseModel):
     """CVE (Common Vulnerabilities and Exposures)"""
-    
+
     id: str
     severity: str
     affected_package: str
@@ -254,7 +254,7 @@ class CVE(BaseModel):
 
 class VulnerabilitiesTab(BaseModel):
     """Vulnerabilities tab (🛡️) - Security findings"""
-    
+
     critical: int = Field(..., ge=0)
     high: int = Field(..., ge=0)
     medium: int = Field(..., ge=0)
@@ -266,7 +266,7 @@ class VulnerabilitiesTab(BaseModel):
 
 class ComplianceFramework(BaseModel):
     """Compliance framework status"""
-    
+
     name: str
     status: ComplianceStatus
     score: float = Field(..., ge=0, le=100)
@@ -275,7 +275,7 @@ class ComplianceFramework(BaseModel):
 
 class Authentication(BaseModel):
     """Authentication configuration"""
-    
+
     implemented: str
     standards: List[str] = Field(default_factory=list)
     multi_factor: bool = False
@@ -283,7 +283,7 @@ class Authentication(BaseModel):
 
 class Encryption(BaseModel):
     """Encryption status"""
-    
+
     at_rest: bool
     in_transit: bool
     key_management: Optional[str] = None
@@ -291,7 +291,7 @@ class Encryption(BaseModel):
 
 class DataProtection(BaseModel):
     """Data protection measures"""
-    
+
     pii_detection: int = Field(..., ge=0)
     masking: bool
     retention_policy: Optional[str] = None
@@ -299,7 +299,7 @@ class DataProtection(BaseModel):
 
 class SecurityTab(BaseModel):
     """Security tab (🔒) - Compliance posture"""
-    
+
     security_score: float = Field(..., ge=0, le=10)
     security_posture: str
     frameworks: List[ComplianceFramework] = Field(default_factory=list)
@@ -310,7 +310,7 @@ class SecurityTab(BaseModel):
 
 class Dependency(BaseModel):
     """Package dependency"""
-    
+
     name: str
     version: str
     latest: str
@@ -322,7 +322,7 @@ class Dependency(BaseModel):
 
 class License(BaseModel):
     """License information"""
-    
+
     name: str
     count: int = Field(..., ge=0)
     packages: List[str] = Field(default_factory=list)
@@ -330,7 +330,7 @@ class License(BaseModel):
 
 class DependenciesTab(BaseModel):
     """Dependencies tab (📦) - Package management"""
-    
+
     direct_count: int = Field(..., ge=0)
     transitive_count: int = Field(..., ge=0)
     outdated_count: int = Field(..., ge=0)
@@ -342,7 +342,7 @@ class DependenciesTab(BaseModel):
 
 class TestCounts(BaseModel):
     """Test execution counts"""
-    
+
     total: int = Field(..., ge=0)
     passing: int = Field(..., ge=0)
     failing: int = Field(..., ge=0)
@@ -351,7 +351,7 @@ class TestCounts(BaseModel):
 
 class TestTypes(BaseModel):
     """Test type breakdown"""
-    
+
     unit: int = Field(..., ge=0)
     integration: int = Field(..., ge=0)
     e2e: int = Field(..., ge=0)
@@ -359,7 +359,7 @@ class TestTypes(BaseModel):
 
 class FailingTest(BaseModel):
     """Failing test information"""
-    
+
     name: str
     file: str
     error: str
@@ -368,7 +368,7 @@ class FailingTest(BaseModel):
 
 class TestingTab(BaseModel):
     """Testing tab (🧪) - Quality assurance"""
-    
+
     coverage_percentage: float = Field(..., ge=0, le=100)
     coverage_trend: List[TrendPoint] = Field(default_factory=list)
     test_counts: TestCounts
@@ -379,7 +379,7 @@ class TestingTab(BaseModel):
 
 class AntiPattern(BaseModel):
     """Detected anti-pattern or code smell"""
-    
+
     name: str
     severity: Severity
     count: int = Field(..., ge=0)
@@ -389,7 +389,7 @@ class AntiPattern(BaseModel):
 
 class RefactoringOpportunity(BaseModel):
     """Refactoring opportunity"""
-    
+
     type: str
     file: str
     priority: Priority
@@ -399,7 +399,7 @@ class RefactoringOpportunity(BaseModel):
 
 class SOLIDPrinciples(BaseModel):
     """SOLID principles compliance scores"""
-    
+
     single_responsibility: float = Field(..., ge=0, le=100)
     open_closed: float = Field(..., ge=0, le=100)
     liskov_substitution: float = Field(..., ge=0, le=100)
@@ -409,7 +409,7 @@ class SOLIDPrinciples(BaseModel):
 
 class PatternsTab(BaseModel):
     """Patterns tab (🎨) - Design patterns & code smells"""
-    
+
     design_patterns: List[DesignPattern] = Field(default_factory=list)
     anti_patterns: List[AntiPattern] = Field(default_factory=list)
     refactoring_opportunities: List[RefactoringOpportunity] = Field(default_factory=list)
@@ -418,7 +418,7 @@ class PatternsTab(BaseModel):
 
 class BusinessCapability(BaseModel):
     """Business capability (LLM-generated)"""
-    
+
     id: str
     business_capability: str
     technical_name: str
@@ -433,7 +433,7 @@ class BusinessCapability(BaseModel):
 
 class BusinessFlow(BaseModel):
     """Business flow/workflow"""
-    
+
     name: str
     description: str
     steps: List[str] = Field(default_factory=list)
@@ -444,7 +444,7 @@ class BusinessFlow(BaseModel):
 
 class Integration(BaseModel):
     """External system integration"""
-    
+
     system: str
     type: IntegrationType
     description: str
@@ -452,7 +452,7 @@ class Integration(BaseModel):
 
 class UseCasesTab(BaseModel):
     """Use Cases tab (📋) - Business capabilities"""
-    
+
     detected_capabilities: List[BusinessCapability] = Field(default_factory=list)
     business_flows: List[BusinessFlow] = Field(default_factory=list)
     integrations: List[Integration] = Field(default_factory=list)
@@ -465,7 +465,7 @@ class UseCasesTab(BaseModel):
 
 class RepositoryDashboardSchema(BaseModel):
     """Complete CORTEX Repository Dashboard Schema - All 9 Tabs"""
-    
+
     metadata: RepositoryMetadata
     overview: OverviewTab
     architecture: ArchitectureTab
@@ -476,7 +476,7 @@ class RepositoryDashboardSchema(BaseModel):
     testing: TestingTab
     patterns: PatternsTab
     use_cases: UseCasesTab
-    
+
     @root_validator(skip_on_failure=True)
     def validate_schema_completeness(cls, values):
         """Validate schema is complete"""
@@ -489,7 +489,7 @@ class RepositoryDashboardSchema(BaseModel):
             if field not in values or values[field] is None:
                 raise ValueError(f"Required field missing: {field}")
         return values
-    
+
     class Config:
         json_schema_extra = {
             "title": "Repository Dashboard Schema",
@@ -504,13 +504,13 @@ class RepositoryDashboardSchema(BaseModel):
 def validate_dashboard_data(data: Dict[str, Any]) -> RepositoryDashboardSchema:
     """
     Validate dashboard data against schema
-    
+
     Args:
         data: Dictionary containing dashboard data
-        
+
     Returns:
         RepositoryDashboardSchema instance if valid
-        
+
     Raises:
         ValidationError: If data is invalid
     """
@@ -520,16 +520,16 @@ def validate_dashboard_data(data: Dict[str, Any]) -> RepositoryDashboardSchema:
 def load_and_validate_json_file(filepath: str) -> RepositoryDashboardSchema:
     """
     Load and validate dashboard JSON file
-    
+
     Args:
         filepath: Path to JSON file
-        
+
     Returns:
         RepositoryDashboardSchema instance
     """
     import json
-    
+
     with open(filepath, 'r') as f:
         data = json.load(f)
-    
+
     return validate_dashboard_data(data)

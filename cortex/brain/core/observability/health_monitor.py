@@ -9,17 +9,17 @@ Attributes:
     DEFAULT_CHECK_TIMEOUT: Default check timeout in seconds (5)
 """
 
-from dataclasses import dataclass, field
-from typing import Optional, Dict, Any, Callable, List
-from datetime import datetime, timedelta
-from enum import Enum
 import logging
 import time
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any, Callable, Dict, List, Optional
 
 
 class HealthStatusLevel(Enum):
     """Health status levels.
-    
+
     Attributes:
         HEALTHY: All checks passing
         DEGRADED: Some checks failing
@@ -33,7 +33,7 @@ class HealthStatusLevel(Enum):
 @dataclass
 class HealthCheckResult:
     """Result of a single health check.
-    
+
     Attributes:
         name: Check name
         passed: Whether check passed
@@ -49,7 +49,7 @@ class HealthCheckResult:
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary representation.
-        
+
         Returns:
             Dictionary with check result
         """
@@ -65,7 +65,7 @@ class HealthCheckResult:
 @dataclass
 class HealthStatus:
     """Overall system health status.
-    
+
     Attributes:
         status: Overall status (healthy, degraded, unhealthy)
         healthy: Whether system is healthy
@@ -79,7 +79,7 @@ class HealthStatus:
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary representation.
-        
+
         Returns:
             Dictionary with health status
         """
@@ -96,23 +96,23 @@ class HealthStatus:
 
 class HealthMonitor:
     """Monitors health of CORTEX system components.
-    
+
     Executes periodic health checks, aggregates results, and provides
     status reporting with caching.
-    
+
     Attributes:
         checks: Dictionary of registered health checks
         cache_ttl_seconds: How long to cache results
         check_timeout_seconds: Timeout for individual checks
     """
-    
+
     def __init__(
         self,
         cache_ttl_seconds: int = 30,
         check_timeout_seconds: int = 5,
     ) -> None:
         """Initialize health monitor.
-        
+
         Args:
             cache_ttl_seconds: Cache duration in seconds
             check_timeout_seconds: Check timeout in seconds
@@ -120,14 +120,14 @@ class HealthMonitor:
         self.checks: Dict[str, Callable[[], bool]] = {}
         self.cache_ttl_seconds = cache_ttl_seconds
         self.check_timeout_seconds = check_timeout_seconds
-        
+
         self._cached_status: Optional[HealthStatus] = None
         self._cache_timestamp: Optional[datetime] = None
         self._logger: logging.Logger = logging.getLogger(__name__)
 
     def register_check(self, name: str, check_func: Callable[[], bool]) -> None:
         """Register a health check function.
-        
+
         Args:
             name: Check name
             check_func: Callable that returns True if healthy
@@ -137,7 +137,7 @@ class HealthMonitor:
 
     def deregister_check(self, name: str) -> None:
         """Deregister a health check.
-        
+
         Args:
             name: Check name to remove
         """
@@ -147,7 +147,7 @@ class HealthMonitor:
 
     def get_registered_checks(self) -> List[str]:
         """Get list of registered check names.
-        
+
         Returns:
             List of check names
         """
@@ -155,7 +155,7 @@ class HealthMonitor:
 
     def get_status(self) -> HealthStatus:
         """Get current system health status.
-        
+
         Returns:
             HealthStatus with current status
         """
@@ -164,18 +164,18 @@ class HealthMonitor:
             age = (datetime.utcnow() - self._cache_timestamp).total_seconds()
             if age < self.cache_ttl_seconds:
                 return self._cached_status
-        
+
         # Run checks
         check_results: Dict[str, HealthCheckResult] = {}
         failed_count = 0
-        
+
         for name, check_func in self.checks.items():
             result = self._run_check(name, check_func)
             check_results[name] = result
-            
+
             if not result.passed:
                 failed_count += 1
-        
+
         # Determine overall status
         if failed_count == 0:
             overall_status = HealthStatusLevel.HEALTHY
@@ -186,7 +186,7 @@ class HealthMonitor:
         else:
             overall_status = HealthStatusLevel.UNHEALTHY
             healthy = False
-        
+
         # Create status object
         status = HealthStatus(
             status=overall_status,
@@ -194,30 +194,30 @@ class HealthMonitor:
             timestamp=datetime.utcnow(),
             checks=check_results,
         )
-        
+
         # Cache result
         self._cached_status = status
         self._cache_timestamp = datetime.utcnow()
-        
+
         return status
 
     def _run_check(self, name: str, check_func: Callable[[], bool]) -> HealthCheckResult:
         """Run a single health check.
-        
+
         Args:
             name: Check name
             check_func: Check function
-            
+
         Returns:
             HealthCheckResult with check outcome
         """
         start_time = time.time()
-        
+
         try:
             # Execute check with timeout
             result = self._execute_with_timeout(check_func, self.check_timeout_seconds)
             duration_ms = (time.time() - start_time) * 1000
-            
+
             return HealthCheckResult(
                 name=name,
                 passed=result,
@@ -226,9 +226,9 @@ class HealthMonitor:
             )
         except Exception as e:
             duration_ms = (time.time() - start_time) * 1000
-            
+
             self._logger.error(f"Health check {name} failed: {e}")
-            
+
             return HealthCheckResult(
                 name=name,
                 passed=False,
@@ -242,25 +242,25 @@ class HealthMonitor:
         timeout_seconds: int,
     ) -> bool:
         """Execute function with timeout.
-        
+
         Args:
             func: Callable to execute
             timeout_seconds: Timeout in seconds
-            
+
         Returns:
             Function result
         """
         # Simple implementation - in production, use multiprocessing/threading
         import signal
-        
+
         def timeout_handler(signum: int, frame: Any) -> None:
             raise TimeoutError(f"Check exceeded {timeout_seconds}s timeout")
-        
+
         # Set signal handler (Unix-like systems only)
         try:
             signal.signal(signal.SIGALRM, timeout_handler)
             signal.alarm(timeout_seconds)
-            
+
             try:
                 return func()
             finally:
@@ -271,10 +271,10 @@ class HealthMonitor:
 
     def get_check_result(self, check_name: str) -> Optional[HealthCheckResult]:
         """Get last result for a specific check.
-        
+
         Args:
             check_name: Name of check
-            
+
         Returns:
             HealthCheckResult or None if not found
         """
@@ -288,15 +288,15 @@ class HealthMonitor:
 
     def get_stats(self) -> Dict[str, Any]:
         """Get health monitor statistics.
-        
+
         Returns:
             Dictionary with health stats
         """
         status = self.get_status()
-        
+
         passed_count = sum(1 for c in status.checks.values() if c.passed)
         failed_count = len(status.checks) - passed_count
-        
+
         return {
             "overall_status": status.status.value,
             "healthy": status.healthy,

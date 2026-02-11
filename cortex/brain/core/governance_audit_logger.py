@@ -19,16 +19,15 @@ Version: 1.0
 """
 
 import json
-import uuid
 import logging
+import uuid
+from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
-from typing import Dict, List, Optional, Any
 from enum import Enum
-from dataclasses import dataclass, asdict
+from typing import Any, Dict, List, Optional
 
-from cortex.brain.core.governance_database import GovernanceDatabaseManager, AuditAction
+from cortex.brain.core.governance_database import AuditAction, GovernanceDatabaseManager
 from cortex.models.canonical_enums import AuditEventType
-
 
 logger = logging.getLogger(__name__)
 
@@ -60,7 +59,7 @@ class AuditEvent:
 class EnhancedGovernanceAuditLogger:
     """
     Enhanced audit logger for governance rule changes.
-    
+
     Provides comprehensive audit logging for all governance operations
     with full traceability and compliance support.
     """

@@ -4,11 +4,11 @@ Orchestrator Composite - Coordinates multiple orchestrators.
 Routes requests to conversation, domain, and workflow orchestrators.
 """
 
-from typing import Dict, List, Any
 from datetime import datetime
+from typing import Any, Dict, List
 
-from cortex.orchestrators.conversation_orchestrator import ConversationOrchestrator
 from cortex.domain_orchestrators.domain_orchestrator import DomainOrchestrator
+from cortex.orchestrators.conversation_orchestrator import ConversationOrchestrator
 from cortex.orchestrators.core.workflow_orchestrator import WorkflowOrchestrator
 
 
@@ -28,10 +28,10 @@ class OrchestratorComposite:
     def process_request(self, request: Dict[str, Any]) -> Dict[str, Any]:
         """
         Process a request by routing to appropriate orchestrator.
-        
+
         Args:
             request: Request with type field indicating orchestrator.
-            
+
         Returns:
             Response from appropriate orchestrator.
         """
@@ -67,7 +67,7 @@ class OrchestratorComposite:
     def get_aggregated_metrics(self) -> Dict[str, Any]:
         """
         Get aggregated metrics from all orchestrators.
-        
+
         Returns:
             Combined metrics from all orchestrators.
         """

@@ -2,7 +2,7 @@
 Unified Response Composer (AC-RESP-CONS-008)
 
 Consolidates 5 response composition implementations into 1 unified interface:
-1. TurnResponseGenerator → core response generation  
+1. TurnResponseGenerator → core response generation
 2. ResponseFormattingEngine → multi-mode formatting
 3. ResponseTemplateEngine → template composition
 4. UXOptimizer → response optimization & quality metrics
@@ -11,14 +11,14 @@ Consolidates 5 response composition implementations into 1 unified interface:
 Version: 1.0.0
 """
 
-from dataclasses import dataclass, field
-from typing import Dict, Any, List, Optional, Union, Tuple
-from enum import Enum
 import hashlib
-from datetime import datetime
 import json
-from cortex.models.canonical_enums import ChallengeType, ResponseType
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
 
+from cortex.models.canonical_enums import ChallengeType, ResponseType
 
 # ================================================================================
 # ENUMS & TYPES
@@ -96,7 +96,7 @@ class ResponseMetadata:
     context_hash: str = field(default="")
     timestamp: datetime = field(default_factory=datetime.now)
     token_estimate: int = 0
-    
+
     def __post_init__(self) -> None:
         """Generate context hash if not provided."""
         if not self.context_hash:
@@ -109,7 +109,7 @@ class ResponseSegment:
     """Individual segment of response (from TurnResponseGenerator)."""
     segment_type: str
     content: str
-    
+
     @property
     def length(self) -> int:
         """Calculate segment length."""
@@ -129,7 +129,7 @@ class TurnResponse:
     confidence_score: float = 1.0
     ready_to_send: bool = False
     quality_metrics: Optional['ResponseQualityMetrics'] = None
-    
+
     @property
     def segment_summary(self) -> Dict[str, int]:
         """Summarize segments by type."""
@@ -137,7 +137,7 @@ class TurnResponse:
         for segment in self.segments:
             summary[segment.segment_type] = summary.get(segment.segment_type, 0) + segment.length
         return summary
-    
+
     @property
     def total_length(self) -> int:
         """Calculate total response length."""
@@ -165,7 +165,7 @@ class ResponseQualityMetrics:
 class FormattingOptions:
     """
     Formatting options (from multi_mode_formatter).
-    
+
     Phase 33: Changed default profile from STANDARD to COMPACT for verbosity reduction.
     """
     profile: FormattingProfile = FormattingProfile.COMPACT
@@ -223,31 +223,31 @@ class ResponseWithChallenges:
 class UnifiedResponseComposer:
     """
     Consolidates 5 response composition implementations into single interface.
-    
+
     Provides unified API for:
     - Response generation with modes & tones
     - Multi-mode formatting (7 formatters)
     - Template composition with validation
     - Response optimization & quality metrics
     - Challenge generation & injection
-    
+
     Implements:
     - Composition pattern (not inheritance)
     - Lazy initialization for performance
     - Audit logging throughout
     - 100% backward compatibility
     """
-    
+
     # Internal handler instances (lazy-initialized)
     _turn_generator: Optional[Any] = None
     _formatting_engine: Optional[Any] = None
     _template_engine: Optional[Any] = None
     _ux_optimizer: Optional[Any] = None
     _challenge_generator: Optional[Any] = None
-    
+
     def __init__(self, config: Optional[ResponseComposerConfig] = None) -> None:
         """Initialize UnifiedResponseComposer.
-        
+
         Args:
             config: Configuration options (uses defaults if None)
         """
@@ -264,9 +264,9 @@ class UnifiedResponseComposer:
                 "enable_challenge_injection": self.config.enable_challenge_injection,
             }
         })
-    
+
     # ====== CORE RESPONSE GENERATION (from TurnResponseGenerator) ======
-    
+
     def generate_response(
         self,
         operation_id: str,
@@ -280,7 +280,7 @@ class UnifiedResponseComposer:
         confidence_score: float = 1.0
     ) -> TurnResponse:
         """Generate response with specified mode and tone.
-        
+
         Args:
             operation_id: Operation identifier
             turn_number: Turn sequence number
@@ -291,7 +291,7 @@ class UnifiedResponseComposer:
             orchestrator: Orchestrator name
             alternatives: Alternative actions list
             confidence_score: Response confidence (0-1)
-        
+
         Returns:
             Generated TurnResponse object
         """
@@ -303,7 +303,7 @@ class UnifiedResponseComposer:
             phase=phase,
             orchestrator=orchestrator
         )
-        
+
         # Create response
         response = TurnResponse(
             operation_id=operation_id,
@@ -316,11 +316,11 @@ class UnifiedResponseComposer:
             confidence_score=confidence_score,
             ready_to_send=True
         )
-        
+
         # Cache if enabled
         if self.config.enable_caching:
             self._cache_response(response)
-        
+
         self.generation_count += 1
         self._log_audit("generate_response", {
             "operation_id": operation_id,
@@ -329,9 +329,9 @@ class UnifiedResponseComposer:
             "tone": tone.value,
             "confidence": confidence_score
         })
-        
+
         return response
-    
+
     def add_segment(
         self,
         response: TurnResponse,
@@ -339,68 +339,68 @@ class UnifiedResponseComposer:
         content: str
     ) -> TurnResponse:
         """Add segment to response (e.g., header, footer, alternatives).
-        
+
         Args:
             response: Response to augment
             segment_type: Type of segment
             content: Segment content
-        
+
         Returns:
             Updated TurnResponse
         """
         response.segments.append(ResponseSegment(segment_type=segment_type, content=content))
         response.formatted_content = "\n\n".join(s.content for s in response.segments)
-        
+
         self._log_audit("add_segment", {
             "operation_id": response.operation_id,
             "segment_type": segment_type,
             "content_length": len(content)
         })
-        
+
         return response
-    
+
     def validate_response(self, response: TurnResponse) -> bool:
         """Validate response structure and content.
-        
+
         Args:
             response: Response to validate
-        
+
         Returns:
             True if valid, False otherwise
         """
         # Check required fields
         if not response.operation_id or not response.metadata:
             return False
-        
+
         # Check segments
         if not response.segments or not response.formatted_content:
             return False
-        
+
         # Check confidence
         if not (0.0 <= response.confidence_score <= 1.0):
             return False
-        
+
         return True
-    
+
     def get_cached_response(
         self,
         operation_id: str,
         turn_number: int
     ) -> Optional[TurnResponse]:
         """Retrieve cached response.
-        
+
         Args:
             operation_id: Operation identifier
             turn_number: Turn number
-        
+
         Returns:
             Cached response or None
         """
         cache_key = f"{operation_id}:{turn_number}"
         return self.response_cache.get(cache_key)
-    
+
     # ====== MULTI-MODE FORMATTING (from ResponseFormattingEngine) ======
-    
+
     def format_response(
         self,
         response: Union[str, TurnResponse, Dict],
@@ -409,19 +409,19 @@ class UnifiedResponseComposer:
     ) -> Any:
         """
         Format response for specific delivery mode.
-        
+
         Phase 33: Changed default profile from STANDARD to COMPACT for verbosity reduction.
-        
+
         Args:
             response: Response to format (str, TurnResponse, or Dict)
             mode: Formatting mode (chat, command, visualization, json_api, markdown, stream)
             profile: Formatting profile
-        
+
         Returns:
             Formatted response (type depends on mode)
         """
         options = FormattingOptions(profile=profile)
-        
+
         if mode == "chat":
             return self._format_chat(response, options)
         elif mode == "command":
@@ -439,32 +439,32 @@ class UnifiedResponseComposer:
             if isinstance(response, TurnResponse):
                 return response.formatted_content
             return str(response)
-    
+
     def batch_format(
         self,
         contents: List[Union[str, TurnResponse, Dict]],
         mode: str = 'chat'
     ) -> List[Any]:
         """Format multiple responses in batch.
-        
+
         Args:
             contents: List of responses to format
             mode: Formatting mode
-        
+
         Returns:
             List of formatted responses
         """
         results = []
         for content in contents:
             results.append(self.format_response(content, mode))
-        
+
         self._log_audit("batch_format", {
             "count": len(contents),
             "mode": mode
         })
-        
+
         return results
-    
+
     def convert_format(
         self,
         content: Union[str, TurnResponse],
@@ -472,39 +472,39 @@ class UnifiedResponseComposer:
         to_mode: str
     ) -> Any:
         """Convert response from one format to another.
-        
+
         Args:
             content: Response to convert
             from_mode: Source format
             to_mode: Target format
-        
+
         Returns:
             Converted response
         """
         # Convert from source format to intermediate format
         intermediate = self.format_response(content, from_mode)
-        
+
         # Handle TurnResponse by converting back to content
         if isinstance(intermediate, dict) and "content" in intermediate:
             intermediate = intermediate["content"]
         elif isinstance(intermediate, dict) and "data" in intermediate:
             intermediate = str(intermediate)
-        
+
         # Convert from intermediate to target format
         result = self.format_response(intermediate, to_mode)
-        
+
         self._log_audit("convert_format", {
             "from_mode": from_mode,
             "to_mode": to_mode
         })
-        
+
         return result
-    
+
     # ====== TEMPLATE COMPOSITION (from ResponseTemplateEngine) ======
-    
+
     def register_template(self, template: ResponseTemplate) -> None:
         """Register response template.
-        
+
         Args:
             template: Template to register
         """
@@ -514,73 +514,73 @@ class UnifiedResponseComposer:
             "name": template.name,
             "variables": len(template.variables)
         })
-    
+
     def compose_from_template(
         self,
         template_id: str,
         variables: Dict[str, Any]
     ) -> str:
         """Compose response from template.
-        
+
         Args:
             template_id: Template identifier
             variables: Variable values for template
-        
+
         Returns:
             Composed response string
-        
+
         Raises:
             KeyError if template not found
             ValueError if variables invalid
         """
         if template_id not in self.templates:
             raise KeyError(f"Template not found: {template_id}")
-        
+
         template = self.templates[template_id]
-        
+
         # Validate variables
         valid, errors = self.validate_template_variables(template_id, variables)
         if not valid:
             raise ValueError(f"Invalid variables: {errors}")
-        
+
         # Render template by substituting variables
         result = template.pattern
         for var_name, var_value in variables.items():
             result = result.replace(f"{{{{{var_name}}}}}", str(var_value))
-        
+
         self._log_audit("compose_from_template", {
             "template_id": template_id,
             "variables_count": len(variables),
             "output_length": len(result)
         })
-        
+
         return result
-    
+
     def validate_template_variables(
         self,
         template_id: str,
         variables: Dict[str, Any]
     ) -> Tuple[bool, List[str]]:
         """Validate variables for template.
-        
+
         Args:
             template_id: Template identifier
             variables: Variables to validate
-        
+
         Returns:
             Tuple of (valid: bool, errors: List[str])
         """
         if template_id not in self.templates:
             return False, [f"Template not found: {template_id}"]
-        
+
         template = self.templates[template_id]
         errors = []
-        
+
         # Check required variables
         for var_name, var_spec in template.variables.items():
             if var_spec.required and var_name not in variables:
                 errors.append(f"Missing required variable: {var_name}")
-        
+
         # Validate provided variables
         for var_name, var_value in variables.items():
             if var_name not in template.variables:
@@ -592,48 +592,48 @@ class UnifiedResponseComposer:
                     errors.append(f"Variable {var_name} must be string")
                 elif var_spec.var_type == VariableType.INTEGER and not isinstance(var_value, int):
                     errors.append(f"Variable {var_name} must be integer")
-        
+
         return len(errors) == 0, errors
-    
+
     # ====== QUALITY OPTIMIZATION (from UXOptimizer) ======
-    
+
     def optimize_response(self, response: TurnResponse) -> TurnResponse:
         """Optimize response for quality.
-        
+
         Args:
             response: Response to optimize
-        
+
         Returns:
             Optimized TurnResponse
         """
         if not self.config.enable_optimization:
             return response
-        
+
         # Calculate quality metrics
         metrics = self.calculate_quality_metrics(f"{response.operation_id}:{response.turn_number}")
         response.quality_metrics = metrics
-        
+
         # Apply optimizations based on metrics
         if metrics.clarity_score < 0.7:
             response = self._improve_clarity(response)
-        
+
         if metrics.completeness_score < 0.7:
             response = self._improve_completeness(response)
-        
+
         self._log_audit("optimize_response", {
             "operation_id": response.operation_id,
             "overall_score": metrics.overall_score,
             "optimizations_applied": metrics.overall_score < 0.7
         })
-        
+
         return response
-    
+
     def calculate_quality_metrics(self, response_id: str) -> ResponseQualityMetrics:
         """Calculate quality metrics for response.
-        
+
         Args:
             response_id: Response identifier
-        
+
         Returns:
             ResponseQualityMetrics with calculated scores
         """
@@ -642,31 +642,31 @@ class UnifiedResponseComposer:
         if ":" in response_id:
             op_id, turn_num = response_id.rsplit(":", 1)
             response = self.get_cached_response(op_id, int(turn_num))
-        
+
         metrics = ResponseQualityMetrics(response_id=response_id)
-        
+
         if response:
             # Calculate clarity (based on segment length and variety)
             metrics.clarity_score = min(100.0, len(response.segments) * 20)
-            
+
             # Calculate completeness (based on total content length)
             metrics.completeness_score = min(100.0, response.total_length / 100)
-            
+
             # Calculate relevance (based on confidence score)
             metrics.relevance_score = response.confidence_score * 100
-            
+
             # Calculate tone appropriateness
             metrics.tone_appropriateness = 85.0  # Default
-            
+
             # Calculate actionability
             metrics.actionability = 75.0 if response.alternatives else 50.0
-            
+
             # Calculate accuracy
             metrics.accuracy = 90.0  # Default
-            
+
             # Calculate efficiency
             metrics.efficiency = min(100.0, 100 - (response.total_length / 10))
-            
+
             # Calculate overall score
             metrics.overall_score = (
                 metrics.clarity_score +
@@ -677,10 +677,10 @@ class UnifiedResponseComposer:
                 metrics.accuracy +
                 metrics.efficiency
             ) / 7.0
-        
+
         self.quality_metrics_history.append(metrics)
         return metrics
-    
+
     def collect_user_feedback(
         self,
         response_id: str,
@@ -688,7 +688,7 @@ class UnifiedResponseComposer:
         feedback_text: Optional[str] = None
     ) -> None:
         """Collect user feedback for response.
-        
+
         Args:
             response_id: Response identifier
             rating: User rating (0-5)
@@ -700,24 +700,24 @@ class UnifiedResponseComposer:
                 metrics.feedback_count += 1
                 metrics.user_rating_avg = (metrics.user_rating_avg + rating) / metrics.feedback_count
                 break
-        
+
         self._log_audit("collect_user_feedback", {
             "response_id": response_id,
             "rating": rating,
             "has_text": feedback_text is not None
         })
-    
+
     def get_optimization_recommendations(self, response_id: str) -> List[str]:
         """Get optimization recommendations for response.
-        
+
         Args:
             response_id: Response identifier
-        
+
         Returns:
             List of recommendations
         """
         recommendations = []
-        
+
         # Find metrics
         for metrics in self.quality_metrics_history:
             if metrics.response_id == response_id:
@@ -730,28 +730,28 @@ class UnifiedResponseComposer:
                 if metrics.actionability < 0.5:
                     recommendations.append("Add actionable next steps")
                 break
-        
+
         return recommendations
-    
+
     # ====== CHALLENGE COMPOSITION (from TurnResponseWithChallenges) ======
-    
+
     def generate_challenges(
         self,
         context: Dict[str, Any]
     ) -> List[Challenge]:
         """Generate challenges for user engagement.
-        
+
         Args:
             context: Context information for challenge generation
-        
+
         Returns:
             List of generated challenges
         """
         if not self.config.enable_challenge_injection:
             return []
-        
+
         challenges = []
-        
+
         # Generate challenges based on context
         if context.get("domain"):
             # Clarification challenge
@@ -762,7 +762,7 @@ class UnifiedResponseComposer:
                 difficulty_level=2,
                 confidence_score=0.8
             ))
-        
+
         if context.get("advanced"):
             # Alternative approach challenge
             challenges.append(Challenge(
@@ -772,14 +772,14 @@ class UnifiedResponseComposer:
                 difficulty_level=3,
                 confidence_score=0.75
             ))
-        
+
         self._log_audit("generate_challenges", {
             "context_keys": list(context.keys()),
             "challenges_generated": len(challenges)
         })
-        
+
         return challenges
-    
+
     def inject_challenges(
         self,
         response: TurnResponse,
@@ -787,12 +787,12 @@ class UnifiedResponseComposer:
         confidence_threshold: float = 0.7
     ) -> TurnResponse:
         """Inject challenges into response.
-        
+
         Args:
             response: Response to augment
             challenges: Challenges to inject
             confidence_threshold: Minimum confidence for injection
-        
+
         Returns:
             Response with challenges injected
         """
@@ -801,7 +801,7 @@ class UnifiedResponseComposer:
             c for c in challenges
             if c.confidence_score >= confidence_threshold
         ]
-        
+
         if filtered_challenges:
             # Add challenges as segment
             challenge_content = "\n".join([
@@ -809,15 +809,15 @@ class UnifiedResponseComposer:
                 for c in filtered_challenges
             ])
             response = self.add_segment(response, "challenges", challenge_content)
-        
+
         self._log_audit("inject_challenges", {
             "operation_id": response.operation_id,
             "challenges_injected": len(filtered_challenges),
             "threshold": confidence_threshold
         })
-        
+
         return response
-    
+
     def compose_with_challenges(
         self,
         operation_id: str,
@@ -825,55 +825,55 @@ class UnifiedResponseComposer:
         context: Optional[Dict[str, Any]] = None
     ) -> ResponseWithChallenges:
         """Compose complete response with integrated challenges.
-        
+
         Args:
             operation_id: Operation identifier
             content: Response content
             context: Context for challenge generation
-        
+
         Returns:
             ResponseWithChallenges object
         """
         # Generate base response
         response = self.generate_response(operation_id, 1, content)
-        
+
         # Generate challenges
         challenges = self.generate_challenges(context or {})
-        
+
         # Inject challenges
         if challenges:
             response = self.inject_challenges(response, challenges)
-        
+
         # Create composed response
         composed = ResponseWithChallenges(
             response=response,
             challenges=challenges,
             formatted_content=response.formatted_content
         )
-        
+
         self._log_audit("compose_with_challenges", {
             "operation_id": operation_id,
             "challenges_count": len(challenges),
             "context_provided": context is not None
         })
-        
+
         return composed
-    
+
     # ====== CACHING & PERFORMANCE ======
-    
+
     def _cache_response(self, response: TurnResponse) -> None:
         """Cache response internally."""
         if len(self.response_cache) >= self.config.max_cache_size:
             # Simple FIFO eviction
             first_key = next(iter(self.response_cache))
             del self.response_cache[first_key]
-        
+
         cache_key = f"{response.operation_id}:{response.turn_number}"
         self.response_cache[cache_key] = response
-    
+
     def clear_cache(self, operation_id: Optional[str] = None) -> None:
         """Clear response cache.
-        
+
         Args:
             operation_id: Clear only this operation (or all if None)
         """
@@ -886,12 +886,12 @@ class UnifiedResponseComposer:
             ]
             for key in keys_to_remove:
                 del self.response_cache[key]
-    
+
     # ====== STATISTICS & MONITORING ======
-    
+
     def get_formatting_statistics(self) -> Dict[str, Any]:
         """Get formatting statistics.
-        
+
         Returns:
             Dictionary with formatting stats
         """
@@ -902,10 +902,10 @@ class UnifiedResponseComposer:
             "quality_metrics_recorded": len(self.quality_metrics_history),
             "templates_registered": len(self.templates)
         }
-    
+
     def generate_quality_report(self) -> Dict[str, Any]:
         """Generate quality report.
-        
+
         Returns:
             Dictionary with quality metrics
         """
@@ -914,11 +914,11 @@ class UnifiedResponseComposer:
                 "status": "no_metrics",
                 "message": "No quality metrics recorded yet"
             }
-        
+
         avg_overall = sum(m.overall_score for m in self.quality_metrics_history) / len(self.quality_metrics_history)
         avg_clarity = sum(m.clarity_score for m in self.quality_metrics_history) / len(self.quality_metrics_history)
         avg_completeness = sum(m.completeness_score for m in self.quality_metrics_history) / len(self.quality_metrics_history)
-        
+
         return {
             "metrics_recorded": len(self.quality_metrics_history),
             "average_overall_score": round(avg_overall, 2),
@@ -927,17 +927,17 @@ class UnifiedResponseComposer:
             "generation_count": self.generation_count,
             "cache_usage": f"{len(self.response_cache)}/{self.config.max_cache_size}"
         }
-    
+
     def reset_statistics(self) -> None:
         """Reset all statistics."""
         self.formatting_stats.clear()
         self.generation_count = 0
         self.quality_metrics_history.clear()
         self._log_audit("reset_statistics", {})
-    
+
     def health_check(self) -> Dict[str, Any]:
         """Perform health check.
-        
+
         Returns:
             Health status dictionary
         """
@@ -950,9 +950,9 @@ class UnifiedResponseComposer:
             "templates_count": len(self.templates),
             "audit_logging": self.config.audit_logging_enabled
         }
-    
+
     # ====== INTERNAL FORMATTING METHODS ======
-    
+
     def _format_chat(self, response: Union[str, TurnResponse, Dict], options: FormattingOptions) -> Dict[str, Any]:
         """Format for chat interface."""
         if isinstance(response, TurnResponse):
@@ -968,19 +968,19 @@ class UnifiedResponseComposer:
                 }
             }
         return {"type": "chat", "content": str(response)}
-    
+
     def _format_command(self, response: Union[str, TurnResponse, Dict], options: FormattingOptions) -> str:
         """Format for command line."""
         content = response.formatted_content if isinstance(response, TurnResponse) else str(response)
         return f"{'='*40}\n{content}\n{'='*40}"
-    
+
     def _format_visualization(self, response: Union[str, TurnResponse, Dict], options: FormattingOptions) -> Dict[str, Any]:
         """Format for visualization."""
         return {
             "type": "visualization",
             "content": response.formatted_content if isinstance(response, TurnResponse) else str(response)
         }
-    
+
     def _format_json_api(self, response: Union[str, TurnResponse, Dict], options: FormattingOptions) -> Dict[str, Any]:
         """Format as JSON API."""
         if isinstance(response, TurnResponse):
@@ -997,12 +997,12 @@ class UnifiedResponseComposer:
                 }
             }
         return {"jsonapi": {"version": "1.0"}, "data": {"type": "response", "content": str(response)}}
-    
+
     def _format_markdown(self, response: Union[str, TurnResponse, Dict], options: FormattingOptions) -> str:
         """Format as markdown."""
         content = response.formatted_content if isinstance(response, TurnResponse) else str(response)
         return f"# Response\n\n{content}"
-    
+
     def _format_stream(self, response: Union[str, TurnResponse, Dict], options: FormattingOptions) -> Dict[str, Any]:
         """Format for streaming."""
         content = response.formatted_content if isinstance(response, TurnResponse) else str(response)
@@ -1012,35 +1012,35 @@ class UnifiedResponseComposer:
             "total_chunks": 1,
             "content": content
         }
-    
+
     def _improve_clarity(self, response: TurnResponse) -> TurnResponse:
         """Internal: improve response clarity."""
         # Simplification logic would go here
         return response
-    
+
     def _improve_completeness(self, response: TurnResponse) -> TurnResponse:
         """Internal: improve response completeness."""
         # Expansion logic would go here
         return response
-    
+
     # ====== AUDIT LOGGING ======
-    
+
     def _log_audit(self, operation: str, details: Dict[str, Any]) -> None:
         """Log operation for audit trail.
-        
+
         Args:
             operation: Operation name
             details: Operation details
         """
         if not self.config.audit_logging_enabled:
             return
-        
+
         audit_entry = {
             "timestamp": datetime.now().isoformat(),
             "operation": operation,
             "details": details
         }
-        
+
         # In production, this would write to audit trail
         # For now, we just track the operation occurred
 
@@ -1056,18 +1056,18 @@ def get_unified_response_composer(
     config: Optional[ResponseComposerConfig] = None
 ) -> UnifiedResponseComposer:
     """Get or create singleton UnifiedResponseComposer.
-    
+
     Args:
         config: Configuration (only used on first call)
-    
+
     Returns:
         UnifiedResponseComposer singleton instance
     """
     global _unified_composer_instance
-    
+
     if _unified_composer_instance is None:
         _unified_composer_instance = UnifiedResponseComposer(config)
-    
+
     return _unified_composer_instance
 
 

@@ -6,12 +6,12 @@ Description: P0/P1/P2 threat modeling
 Authority: phase-54-A-incremental-onboarding-refactor.yaml, S1 task 2
 """
 
-from pathlib import Path
-from typing import List, Dict, Any
 from dataclasses import dataclass
 from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List
 
-from cortex.brain.core.result import Result, Ok, Err
+from cortex.brain.core.result import Err, Ok, Result
 
 
 class SecurityLevel(Enum):
@@ -34,7 +34,7 @@ class SecurityThreat:
 
 class AnalyzeSecurityThreatsUseCase:
     """Analyze security threats (SOLID: Single Responsibility)."""
-    
+
     # Pattern signatures for threat detection
     THREAT_PATTERNS = {
         "hardcoded_secrets": {
@@ -50,14 +50,14 @@ class AnalyzeSecurityThreatsUseCase:
             "level": SecurityLevel.P1,
         },
     }
-    
+
     def execute(self, repo_path: Path) -> Result[List[SecurityThreat]]:
         """
         Analyze security threats.
-        
+
         Args:
             repo_path: Path to repository
-            
+
         Returns:
             Result containing list of threats or error
         """
@@ -65,26 +65,26 @@ class AnalyzeSecurityThreatsUseCase:
             # Ensure path is a Path object
             if isinstance(repo_path, str):
                 repo_path = Path(repo_path)
-            
+
             # Validate path exists
             if not repo_path.exists():
                 return Err(f"Repository not found: {repo_path}")
-            
+
             if not repo_path.is_dir():
                 return Err(f"Path is not a directory: {repo_path}")
-            
+
             threats: List[SecurityThreat] = []
-            
+
             # Scan for common threats
             threats.extend(self._scan_for_secrets(repo_path))
             threats.extend(self._scan_for_injection_risks(repo_path))
             threats.extend(self._scan_for_insecure_deps(repo_path))
-            
+
             return Ok(threats)
-        
+
         except Exception as e:
             return Err(f"Failed to analyze security threats: {str(e)}")
-    
+
     def _scan_for_secrets(self, repo_path: Path) -> List[SecurityThreat]:
         """Scan for hardcoded secrets."""
         threats = []
@@ -104,9 +104,9 @@ class AnalyzeSecurityThreatsUseCase:
                         ))
         except Exception:
             pass
-        
+
         return threats
-    
+
     def _scan_for_injection_risks(self, repo_path: Path) -> List[SecurityThreat]:
         """Scan for SQL injection risks."""
         threats = []
@@ -124,9 +124,9 @@ class AnalyzeSecurityThreatsUseCase:
                     ))
         except Exception:
             pass
-        
+
         return threats
-    
+
     def _scan_for_insecure_deps(self, repo_path: Path) -> List[SecurityThreat]:
         """Scan for insecure dependencies."""
         threats = []
@@ -140,7 +140,7 @@ class AnalyzeSecurityThreatsUseCase:
                     pass
         except Exception:
             pass
-        
+
         return threats
 
 

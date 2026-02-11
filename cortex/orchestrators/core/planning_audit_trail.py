@@ -37,14 +37,13 @@ Version: 2.0
 Authority: AC-PLANNING-REFINE-COMPLETE
 """
 
-from dataclasses import dataclass, field
-from typing import List, Optional, Dict, Any
-from datetime import datetime
 import hashlib
+from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
+from typing import Any, Dict, List, Optional
+
 from cortex.models.canonical_enums import AuditEventType
-
-
 
 
 @dataclass

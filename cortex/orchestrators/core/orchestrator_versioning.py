@@ -7,10 +7,10 @@ enabling safe updates and version management.
 Production Ready: ✅
 """
 
-from dataclasses import dataclass
-from typing import List, Optional, Tuple
-from enum import Enum
 import re
+from dataclasses import dataclass
+from enum import Enum
+from typing import List, Optional, Tuple
 
 
 class VersionBump(Enum):

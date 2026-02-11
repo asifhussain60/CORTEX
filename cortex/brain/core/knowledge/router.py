@@ -36,18 +36,18 @@ Performance Impact:
 
 Example Usage:
     from cortex.brain.core.knowledge.router import IntelligentKnowledgeRouter
-    
+
     router = IntelligentKnowledgeRouter(
         tech_provider=knowledge_repo,
         business_provider=business_knowledge_repo,
     )
-    
+
     decision = router.analyze_operation(
         request_type="API_DESIGN",
         keywords=["microservices", "authentication"],
         domains=["ARCHITECTURE", "SECURITY"],
     )
-    
+
     if decision.route_to_tech:
         tech_knowledge = router.query_tech(decision.query)
     if decision.route_to_business:
@@ -66,14 +66,13 @@ References:
 
 from __future__ import annotations
 
+import time
 from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
-from datetime import datetime
-import time
 
 from cortex.core.knowledge import KnowledgeProvider, KnowledgeQueryResult
-
 
 # =============================================================================
 # ENUMS AND DATA CLASSES
@@ -104,7 +103,7 @@ class OperationType(Enum):
 class AffinityScores:
     """
     Affinity scores for technical and business knowledge.
-    
+
     Attributes:
         tech_score: Confidence score for technical knowledge (0-100)
         business_score: Confidence score for business knowledge (0-100)
@@ -117,7 +116,7 @@ class AffinityScores:
     tech_keywords: List[str] = field(default_factory=list)
     business_keywords: List[str] = field(default_factory=list)
     calculation_time_ms: float = 0.0
-    
+
     def dominant_affinity(self) -> str:
         """Return the dominant affinity type."""
         if self.tech_score > self.business_score:
@@ -135,7 +134,7 @@ class AffinityScores:
 class RoutingDecision:
     """
     Decision for how to route a knowledge query.
-    
+
     Attributes:
         strategy: Routing strategy (TECH_ONLY, BUSINESS_ONLY, BOTH, NONE)
         route_to_tech: Whether to query technical repository
@@ -160,7 +159,7 @@ class RoutingDecision:
 class OperationContext:
     """
     Context information about an operation requiring knowledge.
-    
+
     Attributes:
         operation_type: Type of operation
         request_type: Short description of request
@@ -181,7 +180,7 @@ class OperationContext:
 
 class TechnicalAffinityCalculator:
     """Calculates affinity to technical knowledge domains."""
-    
+
     # Technical domain indicators
     TECH_KEYWORDS = {
         "architecture", "design", "pattern", "microservices",
@@ -195,7 +194,7 @@ class TechnicalAffinityCalculator:
         "code", "class", "function", "method", "interface",
         "refactor", "technical", "infrastructure", "ops",
     }
-    
+
     TECH_OPERATION_TYPES = {
         OperationType.API_DESIGN,
         OperationType.ARCHITECTURE,
@@ -203,7 +202,7 @@ class TechnicalAffinityCalculator:
         OperationType.DATA_MODEL,
         OperationType.INTEGRATION,
     }
-    
+
     @staticmethod
     def calculate(
         context: OperationContext,
@@ -211,43 +210,43 @@ class TechnicalAffinityCalculator:
     ) -> Tuple[float, List[str]]:
         """
         Calculate technical affinity score.
-        
+
         Args:
             context: Operation context
             available_domains: Available technical domains
-        
+
         Returns:
             Tuple of (score: 0-100, matching_keywords: List[str])
         """
         score = 0.0
         matching_keywords = []
-        
+
         # Operation type signals
         if context.operation_type in TechnicalAffinityCalculator.TECH_OPERATION_TYPES:
             score += 30
-        
+
         # Keyword matches
         for keyword in context.keywords:
             keyword_lower = keyword.lower()
             if keyword_lower in TechnicalAffinityCalculator.TECH_KEYWORDS:
                 score += 15
                 matching_keywords.append(keyword)
-        
+
         # Domain matches
         if context.domains and available_domains:
             tech_domains = {"ARCHITECTURE", "SECURITY", "PERFORMANCE", "DATA"}
             matches = [d for d in context.domains if d in tech_domains]
             score += len(matches) * 10
-        
+
         # Cap at 100
         score = min(score, 100.0)
-        
+
         return score, matching_keywords
 
 
 class BusinessAffinityCalculator:
     """Calculates affinity to business knowledge domains."""
-    
+
     # Business domain indicators
     BUSINESS_KEYWORDS = {
         "business", "process", "workflow", "domain",
@@ -260,13 +259,13 @@ class BusinessAffinityCalculator:
         "integration", "system", "platform", "solution",
         "rule", "constraint", "validation", "condition",
     }
-    
+
     BUSINESS_OPERATION_TYPES = {
         OperationType.BUSINESS_PROCESS,
         OperationType.WORKFLOW,
         OperationType.GOVERNANCE,
     }
-    
+
     @staticmethod
     def calculate(
         context: OperationContext,
@@ -274,37 +273,37 @@ class BusinessAffinityCalculator:
     ) -> Tuple[float, List[str]]:
         """
         Calculate business affinity score.
-        
+
         Args:
             context: Operation context
             available_domains: Available business domains
-        
+
         Returns:
             Tuple of (score: 0-100, matching_keywords: List[str])
         """
         score = 0.0
         matching_keywords = []
-        
+
         # Operation type signals
         if context.operation_type in BusinessAffinityCalculator.BUSINESS_OPERATION_TYPES:
             score += 30
-        
+
         # Keyword matches
         for keyword in context.keywords:
             keyword_lower = keyword.lower()
             if keyword_lower in BusinessAffinityCalculator.BUSINESS_KEYWORDS:
                 score += 15
                 matching_keywords.append(keyword)
-        
+
         # Domain matches
         if context.domains and available_domains:
             business_domains = {"BUSINESS", "WORKFLOW", "GOVERNANCE", "COMPLIANCE"}
             matches = [d for d in context.domains if d in business_domains]
             score += len(matches) * 10
-        
+
         # Cap at 100
         score = min(score, 100.0)
-        
+
         return score, matching_keywords
 
 
@@ -315,16 +314,16 @@ class BusinessAffinityCalculator:
 class IntelligentKnowledgeRouter:
     """
     Intelligent router for knowledge queries to optimal repository/repositories.
-    
+
     Uses affinity scoring to determine whether queries should be routed to
     technical knowledge repository, business knowledge repository, or both.
-    
+
     Thresholds:
     - Technical Confidence >= 70%: Route to technical repository
     - Business Confidence >= 70%: Route to business repository
     - If both >= 70%: Route to both (only when both are highly confident)
     - If neither >= 50%: Route to both (fallback for unclear cases)
-    
+
     Example Usage:
         router = IntelligentKnowledgeRouter(
             tech_provider=knowledge_repo,
@@ -332,22 +331,22 @@ class IntelligentKnowledgeRouter:
             tech_confidence_threshold=70,
             business_confidence_threshold=70,
         )
-        
+
         decision = router.analyze_operation(
             operation_type=OperationType.API_DESIGN,
             keywords=["rest", "design", "patterns"],
             domains=["ARCHITECTURE"],
         )
-        
+
         if decision.route_to_tech:
             tech_results = router.query_tech(decision)
-    
+
     CORE Governance:
       - CORE-004: Tier1 (uses Tier0 protocol)
       - CORE-011: Type hints enforced
       - CORE-012: Google-style docstrings
     """
-    
+
     def __init__(
         self,
         tech_provider: Optional[KnowledgeProvider] = None,
@@ -360,11 +359,11 @@ class IntelligentKnowledgeRouter:
     ) -> None:
         """
         Initialize the router.
-        
+
         Supports two initialization patterns:
         1. Explicit providers: IntelligentKnowledgeRouter(tech_provider=..., business_provider=...)
         2. Backends dict: IntelligentKnowledgeRouter(backends={'tech': ..., 'biz': ...})
-        
+
         Args:
             tech_provider: Technical knowledge provider (pattern 1)
             business_provider: Business knowledge provider (pattern 1)
@@ -373,7 +372,7 @@ class IntelligentKnowledgeRouter:
             fallback_threshold: Score below which to query both (default: 50%)
             backends: Dictionary of backends (pattern 2, for test compatibility)
             confidence_threshold: Override for test compatibility (0-1 range)
-        
+
         Raises:
             ValueError: If neither pattern is provided or providers are invalid
         """
@@ -381,21 +380,21 @@ class IntelligentKnowledgeRouter:
         if backends is not None:
             if not isinstance(backends, dict):
                 raise ValueError("backends must be a dictionary")
-            
+
             if not backends:
                 raise ValueError("backends dictionary cannot be empty")
-            
+
             # Validate backends are not primitive types
             for name, backend in backends.items():
                 if isinstance(backend, (str, int, float, bool, type(None))):
                     raise TypeError(f"Backend '{name}' must be an object, not {type(backend).__name__}")
-            
+
             self.backends = backends
-            
+
             # Try to extract tech and business providers
             self._tech_provider = backends.get('technical') or backends.get('tech')
             self._business_provider = backends.get('business') or backends.get('biz')
-            
+
             # If not found, use first two backends
             if not self._tech_provider and len(backends) > 0:
                 self._tech_provider = list(backends.values())[0]
@@ -403,7 +402,7 @@ class IntelligentKnowledgeRouter:
                 self._business_provider = list(backends.values())[1]
             elif not self._business_provider:
                 self._business_provider = self._tech_provider
-        
+
         # Pattern 1: explicit providers
         elif tech_provider is not None and business_provider is not None:
             # Validate providers (only if they claim to be KnowledgeProvider)
@@ -413,10 +412,10 @@ class IntelligentKnowledgeRouter:
             if hasattr(business_provider, '__class__') and business_provider.__class__.__name__ == 'KnowledgeProvider':
                 if not isinstance(business_provider, KnowledgeProvider):
                     raise ValueError("business_provider must implement KnowledgeProvider protocol")
-            
+
             self._tech_provider = tech_provider
             self._business_provider = business_provider
-            
+
             # Build backends dict for test compatibility
             self.backends: Dict[str, Any] = {
                 'technical': tech_provider,
@@ -424,24 +423,24 @@ class IntelligentKnowledgeRouter:
             }
         else:
             raise ValueError("Must provide either (tech_provider + business_provider) or backends dict")
-        
+
         self._tech_threshold = tech_confidence_threshold
         self._business_threshold = business_confidence_threshold
         self._fallback_threshold = fallback_threshold
-        
+
         self._decision_cache: Dict[str, RoutingDecision] = {}
-        
+
         # Add test-compatibility attributes
         if confidence_threshold is not None:
             self.confidence_threshold = confidence_threshold
         else:
             self.confidence_threshold = tech_confidence_threshold / 100.0  # Convert to 0-1 range
-        
+
         self.query_count = 0
         self.fallback_count = 0
         self.successful_routes = 0
         self.routing_history: List[Dict[str, Any]] = []
-    
+
     def analyze_operation(
         self,
         operation_type: OperationType = OperationType.UNKNOWN,
@@ -451,20 +450,20 @@ class IntelligentKnowledgeRouter:
     ) -> RoutingDecision:
         """
         Analyze an operation and decide routing strategy.
-        
+
         Args:
             operation_type: Type of operation
             request_type: Description of request
             keywords: Relevant keywords
             domains: Relevant domains
-        
+
         Returns:
             RoutingDecision with routing strategy
         """
         start_time = time.time()
-        
+
         keywords = keywords or []
-        
+
         # Create context
         context = OperationContext(
             operation_type=operation_type,
@@ -472,35 +471,35 @@ class IntelligentKnowledgeRouter:
             keywords=keywords,
             domains=domains,
         )
-        
+
         # Calculate affinity scores
         tech_domains = getattr(self._tech_provider, 'domains', [])
         business_domains = getattr(self._business_provider, 'domains', [])
-        
+
         tech_score, tech_keywords = TechnicalAffinityCalculator.calculate(
             context, tech_domains
         )
         business_score, business_keywords = BusinessAffinityCalculator.calculate(
             context, business_domains
         )
-        
+
         affinity_scores = AffinityScores(
             tech_score=tech_score,
             business_score=business_score,
             tech_keywords=tech_keywords,
             business_keywords=business_keywords,
         )
-        
+
         # Determine routing strategy
         route_to_tech = tech_score >= self._tech_threshold
         route_to_business = business_score >= self._business_threshold
-        
+
         # Fallback: if both scores are low, query both
         if not route_to_tech and not route_to_business:
             if max(tech_score, business_score) < self._fallback_threshold:
                 route_to_tech = True
                 route_to_business = True
-        
+
         # Determine strategy and confidence
         if route_to_tech and route_to_business:
             strategy = RoutingStrategy.BOTH
@@ -521,9 +520,9 @@ class IntelligentKnowledgeRouter:
             strategy = RoutingStrategy.NONE
             confidence = 0.0
             reasoning = "No knowledge relevant to this operation"
-        
+
         decision_time = (time.time() - start_time) * 1000  # Convert to ms
-        
+
         decision = RoutingDecision(
             strategy=strategy,
             route_to_tech=route_to_tech,
@@ -533,9 +532,9 @@ class IntelligentKnowledgeRouter:
             reasoning=reasoning,
             decision_time_ms=decision_time,
         )
-        
+
         return decision
-    
+
     def query_tech(
         self,
         decision: RoutingDecision,
@@ -543,20 +542,20 @@ class IntelligentKnowledgeRouter:
     ) -> KnowledgeQueryResult:
         """
         Query technical knowledge repository.
-        
+
         Args:
             decision: Routing decision from analyze_operation
             keywords: Optional keywords override
-        
+
         Returns:
             Query results from technical provider
         """
         if not decision.route_to_tech:
             return KnowledgeQueryResult(entries=[], total_matches=0)
-        
+
         keywords = keywords or decision.affinity_scores.tech_keywords
         return self._tech_provider.get_relevant_knowledge(keywords=keywords)
-    
+
     def query_business(
         self,
         decision: RoutingDecision,
@@ -564,20 +563,20 @@ class IntelligentKnowledgeRouter:
     ) -> KnowledgeQueryResult:
         """
         Query business knowledge repository.
-        
+
         Args:
             decision: Routing decision from analyze_operation
             keywords: Optional keywords override
-        
+
         Returns:
             Query results from business provider
         """
         if not decision.route_to_business:
             return KnowledgeQueryResult(entries=[], total_matches=0)
-        
+
         keywords = keywords or decision.affinity_scores.business_keywords
         return self._business_provider.get_relevant_knowledge(keywords=keywords)
-    
+
     def route_query(
         self,
         query: str,
@@ -587,31 +586,31 @@ class IntelligentKnowledgeRouter:
     ) -> Tuple[Any, float, Dict[str, Any]]:
         """
         Route a query and return backend, confidence, and audit trail.
-        
+
         This is a convenience method for test compatibility that combines
         analyze_operation and backend selection into one call.
-        
+
         Args:
             query: Query string
             operation_type: Type of operation
             keywords: Relevant keywords (extracted from query if not provided)
             domains: Relevant domains
-            
+
         Returns:
             Tuple of (selected_backend, confidence, audit_info)
-        
+
         Raises:
             ValueError: If query is empty
         """
         if not query or not query.strip():
             raise ValueError("Query cannot be empty")
-        
+
         # Track metrics
         self.query_count += 1
-        
+
         # Use score_backend_confidence to get scores for all backends
         backend_scores = self.score_backend_confidence(query)
-        
+
         # Select backend with highest score
         if backend_scores:
             backend_name = max(backend_scores, key=backend_scores.get)
@@ -622,7 +621,7 @@ class IntelligentKnowledgeRouter:
             backend_name = list(self.backends.keys())[0] if self.backends else "none"
             selected_backend = self.backends.get(backend_name)
             confidence = 0.5
-        
+
         # Build audit info
         audit_info = {
             "selected_backend": backend_name,
@@ -631,15 +630,15 @@ class IntelligentKnowledgeRouter:
             "timestamp": datetime.now().isoformat(),
             "query": query,
         }
-        
+
         # Track successful routes
         self.successful_routes += 1
-        
+
         # Add to routing history
         self.routing_history.append(audit_info)
-        
+
         return selected_backend, confidence, audit_info
-    
+
     def query_all(
         self,
         decision: RoutingDecision,
@@ -648,44 +647,44 @@ class IntelligentKnowledgeRouter:
     ) -> Tuple[Optional[KnowledgeQueryResult], Optional[KnowledgeQueryResult]]:
         """
         Query both repositories according to routing decision.
-        
+
         Args:
             decision: Routing decision from analyze_operation
             tech_keywords: Optional technical keywords override
             business_keywords: Optional business keywords override
-        
+
         Returns:
             Tuple of (tech_results, business_results)
             Either result can be None if not routed to that provider
         """
         tech_results = self.query_tech(decision, tech_keywords)
         business_results = self.query_business(decision, business_keywords)
-        
-        return tech_results, business_results    
+
+        return tech_results, business_results
     # Test-compatibility methods
-    
+
     def score_backend_confidence(self, query: str) -> Dict[str, float]:
         """
         Score confidence for each backend (test compatibility method).
-        
+
         Args:
             query: Query string to score
-            
+
         Returns:
             Dictionary mapping backend names to confidence scores (0-1 range)
         """
         # Check query for keywords to determine affinity
         query_lower = query.lower()
-        
+
         # Technical keywords
         tech_keywords = {'database', 'performance', 'docker', 'optimize', 'architecture', 'technical', 'api'}
         business_keywords = {'revenue', 'quarterly', 'sales', 'business', 'customer', 'policy'}
-        
+
         tech_score = sum(1 for kw in tech_keywords if kw in query_lower)
         business_score = sum(1 for kw in business_keywords if kw in query_lower)
-        
+
         total_score = max(tech_score + business_score, 1)
-        
+
         # Build scores for all backends
         scores = {}
         for backend_name in self.backends.keys():
@@ -696,21 +695,21 @@ class IntelligentKnowledgeRouter:
             else:
                 # Generic backend - medium confidence
                 scores[backend_name] = 0.5
-        
+
         return scores
-    
+
     def route_query_with_fallback(self, query: str) -> Any:
         """
         Route query with fallback to parallel queries (test compatibility).
-        
+
         Args:
             query: Query string
-            
+
         Returns:
             Results from selected or parallel backends (dict or results)
         """
         backend, confidence, audit = self.route_query(query)
-        
+
         # If confidence is low, trigger fallback
         if confidence < self.confidence_threshold and len(self.backends) > 1:
             self.fallback_count += 1
@@ -726,7 +725,7 @@ class IntelligentKnowledgeRouter:
                     except Exception:
                         pass
             return results if results else []
-        
+
         # Normal path - return results from selected backend
         if hasattr(backend, 'query'):
             try:
@@ -734,22 +733,22 @@ class IntelligentKnowledgeRouter:
                 return results if results is not None else []
             except Exception:
                 pass
-        
+
         return []
-    
+
     def get_routing_history(self) -> List[Dict[str, Any]]:
         """
         Get routing history (test compatibility method).
-        
+
         Returns:
             List of routing audit entries
         """
         return self.routing_history
-    
+
     def get_performance_metrics(self) -> Dict[str, Any]:
         """
         Get router performance metrics (test compatibility method).
-        
+
         Returns:
             Dictionary with performance metrics
         """
@@ -757,7 +756,7 @@ class IntelligentKnowledgeRouter:
         avg_confidence = sum(
             h.get('confidence', 0.0) for h in self.routing_history
         ) / max(len(self.routing_history), 1)
-        
+
         return {
             'queries_routed': self.query_count,
             'successful_routes': self.successful_routes,
@@ -766,31 +765,31 @@ class IntelligentKnowledgeRouter:
             'avg_confidence': avg_confidence,
             'fallback_queries': self.fallback_count,
         }
-    
+
     def analyze_query_intent(self, query: str) -> Dict[str, Any]:
         """
         Analyze query intent (test compatibility method).
-        
+
         Args:
             query: Query string to analyze
-            
+
         Returns:
             Dictionary with intent_type and other metadata
         """
         intent_type = "question" if '?' in query else "request"
-        
+
         # Extract keywords from query
         words = query.lower().split()
         tech_matches = sum(1 for w in words if w in TechnicalAffinityCalculator.TECH_KEYWORDS)
         biz_matches = sum(1 for w in words if w in BusinessAffinityCalculator.BUSINESS_KEYWORDS)
-        
+
         if tech_matches > biz_matches:
             domain_affinity = "technical"
         elif biz_matches > tech_matches:
             domain_affinity = "business"
         else:
             domain_affinity = "general"
-        
+
         return {
             'intent_type': intent_type,
             'domain_affinity': domain_affinity,
@@ -798,92 +797,92 @@ class IntelligentKnowledgeRouter:
             'technical_keywords': tech_matches,
             'business_keywords': biz_matches,
         }
-    
+
     def detect_domain_keywords(self, query: str) -> List[str]:
         """
         Detect domain keywords in query (test compatibility method).
-        
+
         Args:
             query: Query string to analyze
-            
+
         Returns:
             List of detected domain keywords
         """
         query_lower = query.lower()
         keywords = []
-        
+
         # Check technical keywords
         for keyword in TechnicalAffinityCalculator.TECH_KEYWORDS:
             if keyword in query_lower:
                 keywords.append(keyword)
-        
+
         # Check business keywords
         for keyword in BusinessAffinityCalculator.BUSINESS_KEYWORDS:
             if keyword in query_lower:
                 keywords.append(keyword)
-        
+
         return keywords
-    
+
     def select_best_backend(self, query: str) -> Any:
         """
         Select best backend for query (test compatibility method).
-        
+
         Args:
             query: Query string
-            
+
         Returns:
             Selected backend object
         """
         backend, confidence, audit = self.route_query(query)
         return backend
-    
+
     def get_confidence_factors(self, query: str) -> Dict[str, Any]:
         """
         Get confidence scoring factors (test compatibility method).
-        
+
         Args:
             query: Query string
-            
+
         Returns:
             Dictionary of confidence factors
         """
         scores = self.score_backend_confidence(query)
         keywords = self.detect_domain_keywords(query)
         intent = self.analyze_query_intent(query)
-        
+
         return {
             'backend_scores': scores,
             'detected_keywords': keywords,
             'intent_analysis': intent,
             'total_backends': len(self.backends),
         }
-    
+
     def aggregate_parallel_results(
         self,
         results_by_backend: Dict[str, List[Dict[str, Any]]]
     ) -> List[Dict[str, Any]]:
         """
         Aggregate results from parallel backend queries (test compatibility method).
-        
+
         Args:
             results_by_backend: Dictionary mapping backend names to their results
-            
+
         Returns:
             Aggregated and deduplicated list of results
         """
         aggregated = []
         seen_ids = set()
-        
+
         for backend_name, results in results_by_backend.items():
             if not isinstance(results, list):
                 continue
-                
+
             for result in results:
                 # Add backend source
                 if isinstance(result, dict):
                     result_copy = result.copy()
                     result_copy['_source_backend'] = backend_name
-                    
+
                     # Simple deduplication by result content
                     result_id = str(result.get('id', hash(str(result))))
                     if result_id not in seen_ids:
@@ -891,5 +890,5 @@ class IntelligentKnowledgeRouter:
                         aggregated.append(result_copy)
                 else:
                     aggregated.append(result)
-        
+
         return aggregated

@@ -6,15 +6,14 @@ This module implements real-time event ingestion from Git webhooks,
 with support for GitHub, GitLab, and Bitbucket webhooks.
 """
 
-from typing import Dict, Any, List, Optional, Set
+import hashlib
+import hmac
+import json
+import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-import hashlib
-import hmac
-import logging
-import json
-
+from typing import Any, Dict, List, Optional, Set
 
 logger = logging.getLogger(__name__)
 
@@ -48,7 +47,7 @@ class DependencyEcosystem(Enum):
 @dataclass
 class SensoryEvent:
     """Sensory input event from external sources.
-    
+
     Attributes:
         event_id: Unique event identifier (for deduplication)
         timestamp: When event occurred (ISO 8601 format)
@@ -67,10 +66,10 @@ class SensoryEvent:
     branch: str
     data: Dict[str, Any]
     metadata: Dict[str, Any] = field(default_factory=dict)
-    
+
     def validate(self) -> bool:
         """Validate event structure.
-        
+
         Returns:
             True if valid, raises ValueError if invalid
         """
@@ -86,7 +85,7 @@ class SensoryEvent:
 @dataclass
 class DependencyData:
     """Dependency information extracted from file.
-    
+
     Attributes:
         package: Package name
         version: Version specification
@@ -99,10 +98,10 @@ class DependencyData:
     ecosystem: DependencyEcosystem
     license: Optional[str] = None
     source: Optional[str] = None
-    
+
     def validate(self) -> bool:
         """Validate dependency data.
-        
+
         Returns:
             True if valid
         """
@@ -114,7 +113,7 @@ class DependencyData:
 @dataclass
 class SynapticNode:
     """Graph node representing a concept.
-    
+
     Attributes:
         node_id: Unique node identifier
         node_type: Type of node (package, version, cve, etc.)
@@ -134,7 +133,7 @@ class SynapticNode:
 @dataclass
 class SynapticConnection:
     """Connection between two graph nodes.
-    
+
     Attributes:
         connection_id: Unique connection identifier
         source_node_id: Source node ID
@@ -153,22 +152,22 @@ class SynapticConnection:
 
 class GitWebhookValidator:
     """Validates Git webhook signatures.
-    
+
     Supports:
     - GitHub: SHA256 HMAC
     - GitLab: SHA256 HMAC
     - Bitbucket: SHA256 HMAC
     """
-    
+
     @staticmethod
     def validate_github_signature(payload: str, signature: str, secret: str) -> bool:
         """Validate GitHub webhook signature.
-        
+
         Args:
             payload: Raw request body
             signature: X-Hub-Signature-256 header value
             secret: Webhook secret
-            
+
         Returns:
             True if signature valid
         """
@@ -179,30 +178,30 @@ class GitWebhookValidator:
         ).hexdigest()
         expected_signature = f"sha256={expected_hash}"
         return hmac.compare_digest(signature, expected_signature)
-    
+
     @staticmethod
     def validate_gitlab_signature(payload: str, signature: str, secret: str) -> bool:
         """Validate GitLab webhook signature.
-        
+
         Args:
             payload: Raw request body
             signature: X-Gitlab-Token header value
             secret: Webhook token
-            
+
         Returns:
             True if signature valid
         """
         return hmac.compare_digest(signature, secret)
-    
+
     @staticmethod
     def validate_bitbucket_signature(payload: str, signature: str, secret: str) -> bool:
         """Validate Bitbucket webhook signature.
-        
+
         Args:
             payload: Raw request body
             signature: X-Hub-Signature header value
             secret: Webhook secret
-            
+
         Returns:
             True if signature valid
         """
@@ -216,23 +215,23 @@ class GitWebhookValidator:
 
 class GitWebhookParser:
     """Parses Git webhook payloads into SensoryEvent objects."""
-    
+
     @staticmethod
     def parse_github_push(payload: Dict[str, Any]) -> SensoryEvent:
         """Parse GitHub push webhook.
-        
+
         Args:
             payload: GitHub webhook JSON payload
-            
+
         Returns:
             SensoryEvent object
         """
         repo_name = payload["repository"]["name"]
         ref = payload["ref"]  # refs/heads/main
         branch = ref.split("/")[-1]
-        
+
         event_id = f"gh_{repo_name}_{payload['after'][:8]}_{int(datetime.utcnow().timestamp())}"
-        
+
         return SensoryEvent(
             event_id=event_id,
             timestamp=datetime.utcnow().isoformat(),
@@ -247,23 +246,23 @@ class GitWebhookParser:
                 "commit_sha": payload.get("after"),
             }
         )
-    
+
     @staticmethod
     def parse_gitlab_push(payload: Dict[str, Any]) -> SensoryEvent:
         """Parse GitLab push webhook.
-        
+
         Args:
             payload: GitLab webhook JSON payload
-            
+
         Returns:
             SensoryEvent object
         """
         repo_name = payload["project"]["name"]
         ref = payload["ref"]  # refs/heads/main
         branch = ref.split("/")[-1]
-        
+
         event_id = f"gl_{repo_name}_{payload['after'][:8]}_{int(datetime.utcnow().timestamp())}"
-        
+
         return SensoryEvent(
             event_id=event_id,
             timestamp=datetime.utcnow().isoformat(),
@@ -278,27 +277,27 @@ class GitWebhookParser:
                 "commit_sha": payload.get("after"),
             }
         )
-    
+
     @staticmethod
     def parse_bitbucket_push(payload: Dict[str, Any]) -> SensoryEvent:
         """Parse Bitbucket push webhook.
-        
+
         Args:
             payload: Bitbucket webhook JSON payload
-            
+
         Returns:
             SensoryEvent object
         """
         repo_name = payload["repository"]["name"]
-        
+
         # Bitbucket push has push.changes array
         changes = payload.get("push", {}).get("changes", [])
         new_ref = changes[0].get("new", {}) if changes else {}
         branch = new_ref.get("name", "main")
         commit_sha = new_ref.get("target", {}).get("hash", "unknown")
-        
+
         event_id = f"bb_{repo_name}_{commit_sha[:8]}_{int(datetime.utcnow().timestamp())}"
-        
+
         return SensoryEvent(
             event_id=event_id,
             timestamp=datetime.utcnow().isoformat(),
@@ -316,7 +315,7 @@ class GitWebhookParser:
 
 class DependencyFileDetector:
     """Detects and identifies dependency files."""
-    
+
     DEPENDENCY_FILES = {
         # Python
         "requirements.txt": DependencyEcosystem.PYTHON,
@@ -326,39 +325,39 @@ class DependencyFileDetector:
         "setup.cfg": DependencyEcosystem.PYTHON,
         "Pipfile": DependencyEcosystem.PYTHON,
         "Pipfile.lock": DependencyEcosystem.PYTHON,
-        
+
         # Node.js
         "package.json": DependencyEcosystem.NODEJS,
         "package-lock.json": DependencyEcosystem.NODEJS,
         "yarn.lock": DependencyEcosystem.NODEJS,
         "pnpm-lock.yaml": DependencyEcosystem.NODEJS,
         "npm-shrinkwrap.json": DependencyEcosystem.NODEJS,
-        
+
         # Go
         "go.mod": DependencyEcosystem.GOLANG,
         "go.sum": DependencyEcosystem.GOLANG,
-        
+
         # Java
         "pom.xml": DependencyEcosystem.JAVA,
         "build.gradle": DependencyEcosystem.JAVA,
         "build.gradle.kts": DependencyEcosystem.JAVA,
-        
+
         # Rust
         "Cargo.toml": DependencyEcosystem.RUST,
         "Cargo.lock": DependencyEcosystem.RUST,
-        
+
         # .NET
         "packages.config": DependencyEcosystem.DOTNET,
         ".csproj": DependencyEcosystem.DOTNET,
     }
-    
+
     @staticmethod
     def is_dependency_file(filename: str) -> bool:
         """Check if file is a dependency file.
-        
+
         Args:
             filename: Filename to check
-            
+
         Returns:
             True if dependency file
         """
@@ -366,14 +365,14 @@ class DependencyFileDetector:
             if filename.endswith(dep_file) or filename == dep_file:
                 return True
         return False
-    
+
     @staticmethod
     def get_ecosystem(filename: str) -> Optional[DependencyEcosystem]:
         """Get ecosystem for dependency file.
-        
+
         Args:
             filename: Filename
-            
+
         Returns:
             DependencyEcosystem if recognized, None otherwise
         """

@@ -13,10 +13,10 @@ CORE-008: Implementation follows TDD specification from test suite.
 import json
 import logging
 import time
-from typing import Any, Dict, List, Optional, Callable, Tuple
-from dataclasses import dataclass, asdict, field
 from abc import ABC, abstractmethod
+from dataclasses import asdict, dataclass, field
 from datetime import datetime
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 try:
     from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
@@ -32,7 +32,7 @@ except (ImportError, ModuleNotFoundError):
 class ToolParameter:
     """
     MCP Tool Parameter Definition (compliant with MCP v2024-11-05).
-    
+
     Attributes:
         name: Parameter name
         type: Parameter type (string, number, boolean, array, object)
@@ -57,7 +57,7 @@ class ToolParameter:
 class ToolDefinition:
     """
     MCP Tool Definition.
-    
+
     Attributes:
         name: Tool name (unique identifier)
         description: Tool description
@@ -74,7 +74,7 @@ class ToolDefinition:
 class MCPRequest:
     """
     JSON-RPC 2.0 MCP Request.
-    
+
     Attributes:
         jsonrpc: JSON-RPC version (always "2.0")
         method: Method name (e.g., "tools/call")
@@ -91,7 +91,7 @@ class MCPRequest:
 class MCPResponse:
     """
     JSON-RPC 2.0 MCP Response.
-    
+
     Attributes:
         jsonrpc: JSON-RPC version (always "2.0")
         result: Response result (if successful)
@@ -112,7 +112,7 @@ class MCPResponse:
 class MCPError:
     """
     JSON-RPC 2.0 Error Object.
-    
+
     Attributes:
         code: Error code (-32700 to -32600, or -32000 to -32099)
         message: Error message
@@ -150,10 +150,10 @@ class Tool(ABC):
     def execute(self, **kwargs: Any) -> Any:
         """
         Execute tool with given parameters.
-        
+
         Args:
             **kwargs: Tool-specific parameters
-            
+
         Returns:
             Tool execution result
         """
@@ -204,7 +204,7 @@ class SampleTool(Tool):
 class MCPServer:
     """
     MCP Protocol Server for Tool Execution.
-    
+
     Implements JSON-RPC 2.0 compliant Model Context Protocol for
     tool discovery, invocation, execution, and response formatting.
     """
@@ -224,21 +224,23 @@ class MCPServer:
         self._request_cache: Dict[str, Any] = {}
         self._execution_history: List[Dict[str, Any]] = []
         self._response_cache: Dict[str, MCPResponse] = {}
-        
+
         # NOTE: sample_tool removed (dev-only, not for production)
         # Register CORTEX orchestrator tools only
-        
+
         # AC-MCP-REGISTRY-001: Restore decorator-registered tools from global registry
         # Ensure tools decorated with @mcp_tool() are available on boot
         try:
-            from cortex.mcp.decorators import get_registered_tools as get_decorator_tools
+            from cortex.mcp.decorators import (
+                get_registered_tools as get_decorator_tools,
+            )
             decorator_tools = get_decorator_tools()
             self.logger.info(f"Found {len(decorator_tools)} tools from @mcp_tool decorator registry")
             # Note: Decorator registry stores metadata only, not Tool objects
             # These are exposed via list_tools() but not directly registered here
         except (ImportError, Exception) as e:
             self.logger.debug(f"No decorator-registered tools available: {e}")
-        
+
         # Register CORTEX orchestrator tools
         try:
             from cortex.mcp.cortex_tools import get_cortex_tools
@@ -247,29 +249,81 @@ class MCPServer:
             self.logger.info("CORTEX orchestrator tools registered")
         except (ImportError, Exception) as e:
             self.logger.warning(f"Could not register CORTEX tools: {e}")
-        
+
         # Import tool modules to trigger @mcp_tool decorator registration
-        # Phase 54 S6: Auto-import all tool modules to populate decorator registry
+        # AC-PRODUCTION-READINESS-001: Auto-discover and import ALL tool modules
+        # Phase 54 S6 Enhanced: Comprehensive tool module discovery
         tool_modules = [
+            # Core LENS tools
             'cortex.mcp.tools.lens_tools',
+            'cortex.mcp.tools.intelligent_lens_tools',
+            # Plan tools
+            'cortex.mcp.tools.plan_tools',
+            'cortex.mcp.tools.plan_management_tool',
+            'cortex.mcp.tools.planning_tools',
+            'cortex.mcp.tools.planning.planning_tools',
+            # Validation & governance
+            'cortex.mcp.tools.validation_tools',
+            'cortex.mcp.tools.architecture_validation_tool',
+            'cortex.mcp.tools.governance.cortex_governance_tools',
+            'cortex.mcp.tools.governance.yaml_loader_tools',
+            # Onboarding & repository tools
+            'cortex.mcp.tools.onboarding_tools',
+            'cortex.mcp.tools.repository_onboarding_tool',
+            'cortex.mcp.tools.repository_onboarding_v3_tool',
+            # Vacuum & cleanup
+            'cortex.mcp.tools.vacuum_tools',
+            # Educational tools
+            'cortex.mcp.tools.cortex_ask',
+            'cortex.mcp.tools.cortex_verify_claim',
+            'cortex.mcp.tools.educational_tools',
+            # Discovery tools
+            'cortex.mcp.tools.discovery.cortex_discover',
+            # Debugging tools
+            'cortex.mcp.tools.debugging.cortex_debug_governance',
+            # Dashboard tools
+            'cortex.mcp.tools.dashboard_tools',
+            'cortex.mcp.tools.dashboard_management',
+            'cortex.mcp.tools.dashboard_server_mcp',
+            # Instrumentation
+            'cortex.mcp.tools.instrumentation_tool',
+            # Audit tools
+            'cortex.mcp.tools.audit_checks',
+            # Refactoring tools
+            'cortex.mcp.tools.refactoring_tool',
+            # Brain health
+            'cortex.mcp.tools.brain_health_tool',
+            # Phase 49 CCL tools
+            'cortex.mcp.tools.phase_49_ccl_tools',
+            # Environment tools
+            'cortex.mcp.tools.environment',
+            # Approval tools (already loaded via cortex_tools.py but ensure)
+            'cortex.mcp.tools.approval_mcp_tools',
+            # Knowledge tools
+            'cortex.mcp.tools.knowledge.guidance_tool',
+            # Orchestration package init
+            'cortex.mcp.tools.orchestration',
+            # Utility package init
+            'cortex.mcp.tools.utility',
+            # Legacy brain tools (if exist)
             'cortex.brain.mcp.tools.governance_tools',
             'cortex.brain.mcp.tools.knowledge_tools',
             'cortex.brain.mcp.tools.orchestrator_tools',
             'cortex.brain.mcp.tools.utility_tools',
-            'cortex.mcp.tools.plan_tools',
-            'cortex.mcp.tools.validation_tools',
         ]
-        
+
         imported_count = 0
+        failed_modules = []
         for module_name in tool_modules:
             try:
                 __import__(module_name)
                 imported_count += 1
             except (ImportError, Exception) as e:
+                failed_modules.append(module_name)
                 self.logger.debug(f"Could not import {module_name}: {e}")
-        
+
         self.logger.info(f"Imported {imported_count}/{len(tool_modules)} tool modules")
-        
+
         if EnhancedAuditLogger is not None:
             self._audit_logger: Optional[Any] = EnhancedAuditLogger.instance()
         else:
@@ -278,7 +332,7 @@ class MCPServer:
     def _register_tool(self, tool: Tool) -> None:
         """
         Register a tool.
-        
+
         Args:
             tool: Tool implementation
         """
@@ -289,23 +343,23 @@ class MCPServer:
     def list_tools(self) -> List[Dict[str, Any]]:
         """
         List all available tools from local registry and all orchestrators.
-        
+
         AC-MCP-EXPOSURE-001b: Dynamic tool discovery from all 23 orchestrators
-        
+
         Tool sources:
         1. Locally registered tools (self._tools)
         2. Global ToolRegistry
         3. All 23 registered orchestrators via MasterOrchestrator
-        
+
         Returns:
             List of tool definitions as dictionaries, consolidated from all sources
         """
         from cortex.mcp.tool_registry import get_mcp_tool_registry
-        
+
         # Get tools from local registry and global ToolRegistry
         tools_list = []
         seen_tools = set()
-        
+
         # 1. Add locally registered tools (like SampleTool)
         for tool in self._tools.values():
             tool_dict = {
@@ -324,7 +378,7 @@ class MCPServer:
             }
             tools_list.append(tool_dict)
             seen_tools.add(tool.definition.name)
-        
+
         # 2. Add tools from global ToolRegistry
         try:
             registry = get_mcp_tool_registry()
@@ -342,7 +396,7 @@ class MCPServer:
                                     "required": param_spec.get("required", False),
                                     "description": param_spec.get("description", ""),
                                 })
-                    
+
                     tool_dict = {
                         "name": metadata.id,
                         "description": metadata.description,
@@ -353,12 +407,14 @@ class MCPServer:
                     seen_tools.add(metadata.id)
         except Exception as e:
             self.logger.warning(f"Could not load tools from ToolRegistry: {e}")
-        
+
         # 2.5. Add decorator-registered tools (@mcp_tool)
         try:
-            from cortex.mcp.decorators import get_registered_tools as get_decorator_tools
+            from cortex.mcp.decorators import (
+                get_registered_tools as get_decorator_tools,
+            )
             decorator_tools = get_decorator_tools()
-            
+
             for tool_name, tool_meta in decorator_tools.items():
                 if tool_name not in seen_tools:
                     # Convert parameter dict to list format
@@ -371,7 +427,7 @@ class MCPServer:
                                 "required": False,  # Can't determine from decorator metadata
                                 "description": "",
                             })
-                    
+
                     tool_dict = {
                         "name": tool_name,
                         "description": tool_meta.get("description", ""),
@@ -381,34 +437,36 @@ class MCPServer:
                     }
                     tools_list.append(tool_dict)
                     seen_tools.add(tool_name)
-            
+
             if len(decorator_tools) > 0:
                 self.logger.info(f"Added {len(decorator_tools)} decorator-registered tools")
         except Exception as e:
             self.logger.warning(f"Could not load decorator-registered tools: {e}")
-        
+
         # 3. Add tools from all 23 registered orchestrators
         try:
             from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
-            from cortex.orchestrators.core.orchestrator_wiring import get_wiring_registry
-            
+            from cortex.orchestrators.core.orchestrator_wiring import (
+                get_wiring_registry,
+            )
+
             registry = get_wiring_registry()
             orchestrator_count = 0
-            
+
             # Query each registered orchestrator for its tools
             if hasattr(registry, 'wired_orchestrators'):
                 for domain, metadata in registry.wired_orchestrators.items():
                     orchestrator = metadata.orchestrator
                     orchestrator_count += 1
-                    
+
                     # Call get_mcp_tools() on each orchestrator
                     if hasattr(orchestrator, 'get_mcp_tools'):
                         try:
                             tools_result = orchestrator.get_mcp_tools()
-                            
+
                             if tools_result and isinstance(tools_result, dict):
                                 orchestrator_tools = tools_result.get("tools", {})
-                                
+
                                 # Extract tool names from result
                                 if isinstance(orchestrator_tools, dict):
                                     for category, tool_names in orchestrator_tools.items():
@@ -427,21 +485,21 @@ class MCPServer:
                             self.logger.warning(
                                 f"Could not get tools from orchestrator '{domain}': {e}"
                             )
-            
+
             self.logger.info(
                 f"Tool discovery: queried {orchestrator_count} orchestrators, "
                 f"found {len(seen_tools)} unique tools"
             )
-            
+
         except Exception as e:
             self.logger.warning(f"Could not query orchestrators for tools: {e}")
-        
+
         return tools_list
 
     def get_tools(self) -> List[Dict[str, Any]]:
         """
         Get all tools (alias for list_tools).
-        
+
         Returns:
             List of tool definitions as dictionaries
         """
@@ -454,11 +512,11 @@ class MCPServer:
     ) -> Tuple[bool, Optional[MCPError]]:
         """
         Validate parameters for a tool.
-        
+
         Args:
             tool_name: Name of the tool
             params: Parameters to validate
-            
+
         Returns:
             Tuple of (valid, error) where error is None if valid
         """
@@ -466,7 +524,7 @@ class MCPServer:
         if tool_name in self._tools:
             tool: Tool = self._tools[tool_name]
             definition: ToolDefinition = tool.definition
-            
+
             # Check required parameters for Tool objects
             for param in definition.parameters:
                 if param.required and param.name not in params:
@@ -475,7 +533,7 @@ class MCPServer:
                         message=f"Required parameter missing: {param.name}",
                         data={"parameter": param.name}
                     )
-            
+
             # Check parameter types (basic validation)
             for param in definition.parameters:
                 if param.name in params:
@@ -492,14 +550,14 @@ class MCPServer:
                             message=f"Parameter {param.name} must be number",
                             data={"parameter": param.name, "expected": "number"}
                         )
-            
+
             return True, None
-        
+
         # Tool not in local registry - check decorator registry (Phase 54 S6)
         try:
             from cortex.mcp.decorators import get_registered_tools
             decorator_tools = get_registered_tools()
-            
+
             if tool_name in decorator_tools:
                 # Tool exists in decorator registry - skip detailed validation
                 # (decorator tools don't have ToolDefinition objects)
@@ -525,17 +583,17 @@ class MCPServer:
     ) -> MCPResponse:
         """
         Call a tool and return MCP response.
-        
+
         Args:
             tool_name: Name of the tool to call
             params: Tool parameters
             request_id: Request ID for correlation
-            
+
         Returns:
             MCPResponse with result or error
         """
         start_time: float = time.time()
-        
+
         # Validate parameters
         valid, error = self._validate_parameters(tool_name, params)
         if not valid:
@@ -543,17 +601,17 @@ class MCPServer:
                 error=error.to_dict() if error else None,
                 id=request_id
             )
-        
+
         # Check cache
         cache_key: str = f"{tool_name}:{json.dumps(params, sort_keys=True, default=str)}"
         if cache_key in self._response_cache:
             return self._response_cache[cache_key]
-        
+
         try:
             # Try to get tool from local registry first
             tool: Optional[Tool] = self._tools.get(tool_name)
             result: Any = None
-            
+
             if tool is not None:
                 # Tool is in local registry (Tool object)
                 result = tool.execute(**params)
@@ -562,23 +620,23 @@ class MCPServer:
                 try:
                     from cortex.mcp.decorators import get_registered_tools
                     decorator_tools = get_registered_tools()
-                    
+
                     if tool_name in decorator_tools:
                         # Get the actual callable function
                         tool_func = decorator_tools[tool_name].get("func")
                         if tool_func is None:
                             raise ValueError(f"Tool {tool_name} has no callable function")
-                        
+
                         # Call the decorated function directly
                         result = tool_func(**params)
                     else:
                         # Tool not found anywhere
                         raise KeyError(f"Tool not found: {tool_name}")
-                        
+
                 except Exception as decorator_error:
                     # Fallback failed
                     raise KeyError(f"Tool not found in any registry: {tool_name}") from decorator_error
-            
+
             # Record execution
             execution_time_ms: float = (time.time() - start_time) * 1000
             self._execution_history.append({
@@ -588,7 +646,7 @@ class MCPServer:
                 "execution_time_ms": execution_time_ms,
                 "timestamp": datetime.now().isoformat(),
             })
-            
+
             # Create response in MCP protocol format
             # MCP expects: { "content": [{"type": "text", "text": "..."}] }
             response: MCPResponse = MCPResponse(
@@ -607,13 +665,15 @@ class MCPServer:
                 },
                 id=request_id
             )
-            
+
             # Cache response
             self._response_cache[cache_key] = response
-            
+
             # Phase 71 S3: Learning Gateway Interception (defense-in-depth)
             try:
-                from cortex.mcp.learning_gateway_interceptor import get_mcp_learning_interceptor
+                from cortex.mcp.learning_gateway_interceptor import (
+                    get_mcp_learning_interceptor,
+                )
                 interceptor = get_mcp_learning_interceptor()
                 interceptor.after_execution(
                     tool_name=tool_name,
@@ -625,7 +685,7 @@ class MCPServer:
             except Exception as e:
                 # Non-blocking - don't let learning failures affect tool execution
                 self.logger.warning(f"MCP learning interception failed: {e}")
-            
+
             # Audit execution
             if self._audit_logger is not None:
                 try:
@@ -638,14 +698,14 @@ class MCPServer:
                     )
                 except Exception:
                     pass  # Graceful degradation
-            
+
             return response
-            
+
         except Exception as e:
             self.logger.error(f"Tool execution error: {e}", exc_info=True)
-            
+
             execution_time_ms = (time.time() - start_time) * 1000
-            
+
             # Return error in MCP protocol format
             error_message = str(e)
             return MCPResponse(
@@ -669,10 +729,10 @@ class MCPServer:
     def process_request(self, request: MCPRequest) -> MCPResponse:
         """
         Process MCP request and return response.
-        
+
         Args:
             request: MCPRequest object
-            
+
         Returns:
             MCPResponse object
         """
@@ -681,12 +741,12 @@ class MCPServer:
                 result={"tools": self.list_tools()},
                 id=request.id
             )
-        
+
         elif request.method == "tools/call":
             tool_name: str = request.params.get("tool", "")
             params: Dict[str, Any] = request.params.get("params", {})
             return self.call_tool(tool_name, params, request.id)
-        
+
         else:
             return MCPResponse(
                 error=MCPError(
@@ -699,16 +759,16 @@ class MCPServer:
     def process_json_rpc(self, json_str: str) -> str:
         """
         Process JSON-RPC 2.0 request string and return response string.
-        
+
         Args:
             json_str: JSON request string
-            
+
         Returns:
             JSON response string
         """
         try:
             request_data: Dict[str, Any] = json.loads(json_str)
-            
+
             # Validate JSON-RPC format
             if "jsonrpc" not in request_data or request_data["jsonrpc"] != "2.0":
                 error_response: MCPResponse = MCPResponse(
@@ -719,17 +779,17 @@ class MCPServer:
                     id=request_data.get("id")
                 )
                 return error_response.to_json()
-            
+
             request: MCPRequest = MCPRequest(
                 jsonrpc=request_data.get("jsonrpc", "2.0"),
                 method=request_data.get("method", ""),
                 params=request_data.get("params", {}),
                 id=request_data.get("id")
             )
-            
+
             response: MCPResponse = self.process_request(request)
             return response.to_json()
-            
+
         except json.JSONDecodeError as e:
             error_response: MCPResponse = MCPResponse(
                 error=MCPError(
@@ -751,7 +811,7 @@ class MCPServer:
     def execution_statistics(self) -> Dict[str, Any]:
         """
         Get execution statistics.
-        
+
         Returns:
             Dictionary with execution stats
         """
@@ -766,17 +826,17 @@ class MCPServer:
 if __name__ == "__main__":
     # Example usage
     server: MCPServer = MCPServer()
-    
+
     # List tools
     print("Available tools:")
     print(json.dumps(server.list_tools(), indent=2))
-    
+
     # Call a tool
     response: MCPResponse = server.call_tool(
         "sample_tool",
         {"input": "test", "mode": "demo"},
         request_id="123"
     )
-    
+
     print("\nTool execution response:")
     print(response.to_json())

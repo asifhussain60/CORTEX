@@ -12,12 +12,11 @@ Version: 1.0
 Authority: ENH-064 Response Template Migration
 """
 
-from typing import Dict, List, Any, Optional, Tuple, Callable, Set
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 
 from cortex.orchestrators.core.base_response_template import ContentZone
-
 
 # ============================================================================
 # BLOCK TYPES
@@ -26,7 +25,7 @@ from cortex.orchestrators.core.base_response_template import ContentZone
 
 class BlockType(str, Enum):
     """Type of template block."""
-    
+
     HEADER = "header"
     ANALYSIS = "analysis"
     METRICS = "metrics"
@@ -43,27 +42,27 @@ class BlockType(str, Enum):
 class ChainableBlock:
     """
     Base class for chainable template blocks.
-    
+
     Each block is self-contained and can be chained with others
     using the + operator or compose() method.
     """
-    
+
     def __init__(self, content: str = "", zone: Optional[ContentZone] = None):
         self.content = content
         self.zone = zone
-    
+
     def __add__(self, other: 'ChainableBlock') -> 'ChainableBlock':
         """Chain blocks using + operator."""
         return ChainableBlock(self.content + "\n" + other.content)
-    
+
     def render(self) -> str:
         """Render block content."""
         return self.content
-    
+
     def is_empty(self) -> bool:
         """Check if block is empty."""
         return not self.content.strip()
-    
+
     def get_zone(self) -> Optional[ContentZone]:
         """Get content zone for this block."""
         return self.zone
@@ -76,11 +75,11 @@ class ChainableBlock:
 
 class TestResultsBlock(ChainableBlock):
     """Block for displaying test results."""
-    
+
     def __init__(self, tests: List[Dict[str, Any]], title: str = "Test Results"):
         """
         Create test results block.
-        
+
         Args:
             tests: List of test dicts with name, passed, duration_ms
             title: Section title
@@ -90,27 +89,27 @@ class TestResultsBlock(ChainableBlock):
         else:
             passing = sum(1 for t in tests if t.get("passed", False))
             total = len(tests)
-            
+
             content = f"\n## 🧪 {title}\n\n**Status:** {passing}/{total} tests passing\n\n"
             content += "| Test | Status | Duration |\n"
             content += "|------|--------|----------|\n"
-            
+
             for test in tests:
                 status = "✅" if test.get("passed") else "❌"
                 name = test.get("name", "Unknown")
                 duration = test.get("duration_ms", 0)
                 content += f"| {name} | {status} | {duration}ms |\n"
-        
+
         super().__init__(content)
 
 
 class CoverageMetricsBlock(ChainableBlock):
     """Block for displaying coverage metrics."""
-    
+
     def __init__(self, metrics: Dict[str, float], title: str = "Coverage Metrics"):
         """
         Create coverage metrics block.
-        
+
         Args:
             metrics: Dict of metric name -> percentage
             title: Section title
@@ -121,17 +120,17 @@ class CoverageMetricsBlock(ChainableBlock):
             content = f"\n### {title}\n\n"
             content += "| Metric | Coverage | Status |\n"
             content += "|--------|----------|--------|\n"
-            
+
             for metric, value in metrics.items():
                 status = "✅" if value >= 80 else "⚠️" if value >= 60 else "❌"
                 content += f"| {metric} | {value:.1f}% | {status} |\n"
-        
+
         super().__init__(content)
 
 
 class ProblemSolutionBlock(ChainableBlock):
     """Block for displaying problem/solution pairs."""
-    
+
     def __init__(
         self,
         pairs: List[Tuple[str, str]],
@@ -141,7 +140,7 @@ class ProblemSolutionBlock(ChainableBlock):
     ):
         """
         Create problem/solution block.
-        
+
         Args:
             pairs: List of (problem, solution) tuples
             title: Section title
@@ -154,20 +153,20 @@ class ProblemSolutionBlock(ChainableBlock):
             content = f"\n## {title}\n\n"
             content += f"| {problem_header} | {solution_header} |\n"
             content += "|----------------|------------------|\n"
-            
+
             for problem, solution in pairs:
                 content += f"| {problem} | {solution} |\n"
-        
+
         super().__init__(content)
 
 
 class ValidationChecklistBlock(ChainableBlock):
     """Block for displaying validation checklist."""
-    
+
     def __init__(self, checks: Dict[str, bool], title: str = "Validation Results"):
         """
         Create validation checklist block.
-        
+
         Args:
             checks: Dict of check name -> passed
             title: Section title
@@ -176,17 +175,17 @@ class ValidationChecklistBlock(ChainableBlock):
             content = f"\n## ✅ {title}\n\n_No validation checks defined._\n"
         else:
             content = f"\n## ✅ {title}\n\n"
-            
+
             for check, passed in checks.items():
                 status = "✅" if passed else "❌"
                 content += f"- [{status}] {check}\n"
-        
+
         super().__init__(content)
 
 
 class MetricsDashboardBlock(ChainableBlock):
     """Block for displaying metrics dashboard."""
-    
+
     def __init__(
         self,
         metrics: Dict[str, Any],
@@ -195,7 +194,7 @@ class MetricsDashboardBlock(ChainableBlock):
     ):
         """
         Create metrics dashboard block.
-        
+
         Args:
             metrics: Dict of metric name -> {value, target, status}
             title: Section title
@@ -205,11 +204,11 @@ class MetricsDashboardBlock(ChainableBlock):
             content = f"\n## 📊 {title}\n\n_No metrics available._\n"
         else:
             content = f"\n## 📊 {title}\n\n"
-            
+
             if show_targets:
                 content += "| Metric | Value | Target | Status |\n"
                 content += "|--------|-------|--------|--------|\n"
-                
+
                 for metric, data in metrics.items():
                     value = data.get("value", "N/A")
                     target = data.get("target", "N/A")
@@ -218,18 +217,18 @@ class MetricsDashboardBlock(ChainableBlock):
             else:
                 content += "| Metric | Value | Status |\n"
                 content += "|--------|-------|--------|\n"
-                
+
                 for metric, data in metrics.items():
                     value = data.get("value", "N/A")
                     status = data.get("status", "⚪")
                     content += f"| {metric} | {value} | {status} |\n"
-        
+
         super().__init__(content)
 
 
 class RecommendationsBlock(ChainableBlock):
     """Block for displaying recommendations."""
-    
+
     def __init__(
         self,
         recommendations: List[str],
@@ -238,7 +237,7 @@ class RecommendationsBlock(ChainableBlock):
     ):
         """
         Create recommendations block.
-        
+
         Args:
             recommendations: List of recommendation strings
             title: Section title
@@ -248,20 +247,20 @@ class RecommendationsBlock(ChainableBlock):
             content = f"\n## 🚀 {title}\n\n_No recommendations available._\n"
         else:
             content = f"\n## 🚀 {title}\n\n"
-            
+
             if numbered:
                 content += "\n".join(f"{i+1}. {r}" for i, r in enumerate(recommendations))
             else:
                 content += "\n".join(f"- {r}" for r in recommendations)
-            
+
             content += "\n"
-        
+
         super().__init__(content)
 
 
 class NextStepsBlock(ChainableBlock):
     """Block for displaying next steps with priority."""
-    
+
     def __init__(
         self,
         steps: List[Dict[str, Any]],
@@ -269,7 +268,7 @@ class NextStepsBlock(ChainableBlock):
     ):
         """
         Create next steps block.
-        
+
         Args:
             steps: List of step dicts with description, priority, effort
             title: Section title
@@ -280,12 +279,12 @@ class NextStepsBlock(ChainableBlock):
             content = f"\n## ⏭️ {title}\n\n"
             content += "| Step | Priority | Effort |\n"
             content += "|------|----------|--------|\n"
-            
+
             for step in steps:
                 desc = step.get("description", "Unknown")
                 priority = step.get("priority", "P2")
                 effort = step.get("effort", "N/A")
-                
+
                 # Priority emoji
                 priority_emoji = {
                     "P0": "🔴",
@@ -293,15 +292,15 @@ class NextStepsBlock(ChainableBlock):
                     "P2": "🟢",
                     "P3": "🔵"
                 }.get(priority, "⚪")
-                
+
                 content += f"| {desc} | {priority_emoji} {priority} | {effort} |\n"
-        
+
         super().__init__(content)
 
 
 class CodeComparisonBlock(ChainableBlock):
     """Block for before/after code comparison."""
-    
+
     def __init__(
         self,
         before: str,
@@ -311,7 +310,7 @@ class CodeComparisonBlock(ChainableBlock):
     ):
         """
         Create code comparison block.
-        
+
         Args:
             before: Before code
             after: After code
@@ -323,13 +322,13 @@ class CodeComparisonBlock(ChainableBlock):
         content += f"```{language}\n{before}\n```\n\n"
         content += "### ✅ After\n\n"
         content += f"```{language}\n{after}\n```\n"
-        
+
         super().__init__(content)
 
 
 class ErrorAnalysisBlock(ChainableBlock):
     """Block for error analysis."""
-    
+
     def __init__(
         self,
         error_type: str,
@@ -340,7 +339,7 @@ class ErrorAnalysisBlock(ChainableBlock):
     ):
         """
         Create error analysis block.
-        
+
         Args:
             error_type: Type of error
             message: Error message
@@ -349,16 +348,16 @@ class ErrorAnalysisBlock(ChainableBlock):
             title: Section title
         """
         content = f"\n## 🔍 {title}\n\n"
-        content += f"| Field | Value |\n"
-        content += f"|-------|-------|\n"
+        content += "| Field | Value |\n"
+        content += "|-------|-------|\n"
         content += f"| **Type** | {error_type} |\n"
         content += f"| **Message** | {message} |\n"
         content += f"| **Location** | {location} |\n"
-        
+
         if stack_trace:
-            content += f"\n### Stack Trace\n\n"
+            content += "\n### Stack Trace\n\n"
             content += f"```\n{stack_trace}\n```\n"
-        
+
         super().__init__(content)
 
 
@@ -370,7 +369,7 @@ class ErrorAnalysisBlock(ChainableBlock):
 class BlockComposer:
     """
     Fluent API for composing template blocks.
-    
+
     Usage:
         response = (BlockComposer()
             .add_test_results(tests)
@@ -378,10 +377,10 @@ class BlockComposer:
             .add_recommendations(recs)
             .build())
     """
-    
+
     def __init__(self):
         self.blocks: List[ChainableBlock] = []
-    
+
     def add_test_results(
         self,
         tests: List[Dict[str, Any]],
@@ -391,7 +390,7 @@ class BlockComposer:
         if tests:
             self.blocks.append(TestResultsBlock(tests, title))
         return self
-    
+
     def add_coverage(
         self,
         metrics: Dict[str, float],
@@ -401,7 +400,7 @@ class BlockComposer:
         if metrics:
             self.blocks.append(CoverageMetricsBlock(metrics, title))
         return self
-    
+
     def add_problem_solution(
         self,
         pairs: List[Tuple[str, str]],
@@ -411,7 +410,7 @@ class BlockComposer:
         if pairs:
             self.blocks.append(ProblemSolutionBlock(pairs, title))
         return self
-    
+
     def add_validation_checklist(
         self,
         checks: Dict[str, bool],
@@ -421,7 +420,7 @@ class BlockComposer:
         if checks:
             self.blocks.append(ValidationChecklistBlock(checks, title))
         return self
-    
+
     def add_metrics_dashboard(
         self,
         metrics: Dict[str, Any],
@@ -431,7 +430,7 @@ class BlockComposer:
         if metrics:
             self.blocks.append(MetricsDashboardBlock(metrics, title))
         return self
-    
+
     def add_recommendations(
         self,
         recommendations: List[str],
@@ -441,7 +440,7 @@ class BlockComposer:
         if recommendations:
             self.blocks.append(RecommendationsBlock(recommendations, title))
         return self
-    
+
     def add_next_steps(
         self,
         steps: List[Dict[str, Any]],
@@ -451,7 +450,7 @@ class BlockComposer:
         if steps:
             self.blocks.append(NextStepsBlock(steps, title))
         return self
-    
+
     def add_code_comparison(
         self,
         before: str,
@@ -463,7 +462,7 @@ class BlockComposer:
         if before and after:
             self.blocks.append(CodeComparisonBlock(before, after, language, title))
         return self
-    
+
     def add_error_analysis(
         self,
         error_type: str,
@@ -475,27 +474,27 @@ class BlockComposer:
         """Add error analysis block."""
         self.blocks.append(ErrorAnalysisBlock(error_type, message, location, stack_trace, title))
         return self
-    
+
     def add_custom(self, block: ChainableBlock) -> 'BlockComposer':
         """Add custom block."""
         self.blocks.append(block)
         return self
-    
+
     def build(self) -> str:
         """
         Build final response from all blocks.
-        
+
         Validates zone conflicts before composition.
-        
+
         Returns:
             Combined response content
-        
+
         Raises:
             RuntimeError: If zone conflicts detected
         """
         # Validate no zone conflicts
         zones_used: Set[ContentZone] = set()
-        
+
         for block in self.blocks:
             if block.zone:
                 if block.zone in zones_used:
@@ -504,7 +503,7 @@ class BlockComposer:
                         f"BlockComposer detected duplicate semantic content."
                     )
                 zones_used.add(block.zone)
-        
+
         # Compose blocks
         return "\n".join(block.render() for block in self.blocks)
 

@@ -9,17 +9,18 @@ Orchestrator: LENSVisualizationOrchestrator
 AC-ID: LENS-009
 """
 
+import json
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Any, Optional
-import json
+from typing import Any, Dict, List, Optional
+
 import yaml
 
 
 @dataclass
 class TierInfo:
     """Information about a brain tier.
-    
+
     Attributes:
         tier_number: Tier number (0-3)
         name: Tier name (e.g., "Governance", "Acceptance")
@@ -39,7 +40,7 @@ class TierInfo:
 @dataclass
 class OrchestratorInfo:
     """Information about a registered orchestrator.
-    
+
     Attributes:
         name: Orchestrator name
         category: Category (core, domain, support)
@@ -59,7 +60,7 @@ class OrchestratorInfo:
 @dataclass
 class BrainArchitecture:
     """Complete brain architecture data.
-    
+
     Attributes:
         tiers: List of tier information
         orchestrators: List of orchestrator information
@@ -76,12 +77,12 @@ class BrainArchitecture:
 
 class BrainArchitectureRenderer:
     """Renderer for CORTEX brain architecture visualizations.
-    
+
     This renderer analyzes the cortex_brain/ directory structure and
     orchestrator registry to generate comprehensive brain architecture
     visualizations showing the 4-tier system and orchestrator constellation.
     """
-    
+
     def __init__(self) -> None:
         """Initialize brain architecture renderer."""
         self.tier_names = {
@@ -90,26 +91,26 @@ class BrainArchitectureRenderer:
             2: "Response Templates",
             3: "Knowledge & Best Practices",
         }
-    
+
     def analyze_brain_structure(
         self,
         cortex_brain_path: Path,
     ) -> BrainArchitecture:
         """Analyze CORTEX brain directory structure.
-        
+
         Args:
             cortex_brain_path: Path to cortex_brain/ directory
-        
+
         Returns:
             BrainArchitecture: Complete brain architecture data
         """
         tiers = self._analyze_tiers(cortex_brain_path)
         orchestrators = self._load_orchestrator_registry(cortex_brain_path.parent)
-        
+
         total_rules = sum(tier.rule_count or 0 for tier in tiers)
         total_orchestrators = len(orchestrators)
         wiring_status = self._calculate_wiring_status(orchestrators)
-        
+
         return BrainArchitecture(
             tiers=tiers,
             orchestrators=orchestrators,
@@ -117,34 +118,34 @@ class BrainArchitectureRenderer:
             total_orchestrators=total_orchestrators,
             wiring_status=wiring_status,
         )
-    
+
     def _analyze_tiers(self, cortex_brain_path: Path) -> List[TierInfo]:
         """Analyze tier directories.
-        
+
         Args:
             cortex_brain_path: Path to cortex_brain/ directory
-        
+
         Returns:
             List[TierInfo]: List of tier information
         """
         tiers = []
-        
+
         for tier_num, tier_name in self.tier_names.items():
             tier_path = cortex_brain_path / f"tier{tier_num}"
-            
+
             if not tier_path.exists():
                 continue
-            
+
             # Count files
             file_count = len(list(tier_path.rglob("*.yaml")))
             file_count += len(list(tier_path.rglob("*.yml")))
             file_count += len(list(tier_path.rglob("*.md")))
-            
+
             # Count rules for Tier 0
             rule_count = None
             if tier_num == 0:
                 rule_count = self._count_governance_rules(tier_path)
-            
+
             tier_info = TierInfo(
                 tier_number=tier_num,
                 name=tier_name,
@@ -154,30 +155,30 @@ class BrainArchitectureRenderer:
                 location=tier_path,
             )
             tiers.append(tier_info)
-        
+
         return tiers
-    
+
     def _count_governance_rules(self, tier0_path: Path) -> int:
         """Count CORE governance rules in Tier 0.
-        
+
         Args:
             tier0_path: Path to tier0/ directory
-        
+
         Returns:
             int: Number of CORE rules found
         """
         governance_path = tier0_path / "governance"
         if not governance_path.exists():
             return 0
-        
+
         rule_count = 0
-        
+
         # Count CORE-XXX rules in YAML files
         for yaml_file in governance_path.rglob("*.yaml"):
             try:
                 with open(yaml_file, "r", encoding="utf-8") as f:
                     content = yaml.safe_load(f)
-                    
+
                 if isinstance(content, dict) and "rules" in content:
                     rule_count += len(content["rules"])
                 elif isinstance(content, list):
@@ -186,15 +187,15 @@ class BrainArchitectureRenderer:
             except Exception:
                 # Skip files that can't be parsed
                 continue
-        
+
         return rule_count
-    
+
     def _get_tier_description(self, tier_num: int) -> str:
         """Get tier description.
-        
+
         Args:
             tier_num: Tier number (0-3)
-        
+
         Returns:
             str: Tier description
         """
@@ -205,36 +206,36 @@ class BrainArchitectureRenderer:
             3: "Knowledge repository with 35+ YAML best practices",
         }
         return descriptions.get(tier_num, "Unknown tier")
-    
+
     def _load_orchestrator_registry(
         self,
         cortex_path: Path,
     ) -> List[OrchestratorInfo]:
         """Load orchestrator registry from wiring.yaml.
-        
+
         Args:
             cortex_path: Path to cortex/ directory
-        
+
         Returns:
             List[OrchestratorInfo]: List of orchestrator information
         """
         wiring_path = cortex_path / "wiring" / "specifications" / "wiring.yaml"
-        
+
         if not wiring_path.exists():
             # Fallback to legacy location
             wiring_path = cortex_path / "cortex-registry" / "manifest.yaml"
-        
+
         if not wiring_path.exists():
             return []
-        
+
         try:
             with open(wiring_path, "r", encoding="utf-8") as f:
                 wiring_data = yaml.safe_load(f)
         except Exception:
             return []
-        
+
         orchestrators = []
-        
+
         # Parse wiring data
         if "orchestrators" in wiring_data:
             for orch_data in wiring_data["orchestrators"]:
@@ -247,36 +248,36 @@ class BrainArchitectureRenderer:
                     description=orch_data.get("description", ""),
                 )
                 orchestrators.append(orchestrator)
-        
+
         return orchestrators
-    
+
     def _calculate_wiring_status(
         self,
         orchestrators: List[OrchestratorInfo],
     ) -> float:
         """Calculate overall wiring status percentage.
-        
+
         Args:
             orchestrators: List of orchestrators
-        
+
         Returns:
             float: Wiring status percentage (0.0-100.0)
         """
         if not orchestrators:
             return 0.0
-        
+
         wired_count = sum(1 for o in orchestrators if o.status == "wired")
         return (wired_count / len(orchestrators)) * 100.0
-    
+
     def render_tier_hierarchy(
         self,
         brain_architecture: BrainArchitecture,
     ) -> Dict[str, Any]:
         """Render tier hierarchy visualization data.
-        
+
         Args:
             brain_architecture: Brain architecture data
-        
+
         Returns:
             Dict[str, Any]: Mermaid diagram data for tier hierarchy
         """
@@ -285,22 +286,22 @@ class BrainArchitectureRenderer:
             "graph TB",
             "    %% CORTEX 4-Tier Brain Architecture",
         ]
-        
+
         for tier in brain_architecture.tiers:
             tier_id = f"tier{tier.tier_number}"
             label = f"{tier.name}<br/>{tier.file_count} files"
-            
+
             if tier.rule_count is not None:
                 label += f"<br/>{tier.rule_count} rules"
-            
+
             mermaid_lines.append(f'    {tier_id}["{label}"]')
-        
+
         # Add connections
         for i in range(len(brain_architecture.tiers) - 1):
             tier_id = f"tier{i}"
             next_tier_id = f"tier{i + 1}"
             mermaid_lines.append(f"    {tier_id} --> {next_tier_id}")
-        
+
         # Add styling
         mermaid_lines.extend([
             "    classDef tier0 fill:#ef4444,stroke:#991b1b,color:#fff",
@@ -312,36 +313,36 @@ class BrainArchitectureRenderer:
             "    class tier2 tier2",
             "    class tier3 tier3",
         ])
-        
+
         return {
             "type": "mermaid",
             "diagram": "\n".join(mermaid_lines),
         }
-    
+
     def render_orchestrator_constellation(
         self,
         brain_architecture: BrainArchitecture,
     ) -> Dict[str, Any]:
         """Render orchestrator constellation visualization data.
-        
+
         Args:
             brain_architecture: Brain architecture data
-        
+
         Returns:
             Dict[str, Any]: D3.js force-directed graph data
         """
         nodes = []
         links = []
-        
+
         # Create nodes for each orchestrator
         for idx, orch in enumerate(brain_architecture.orchestrators):
             # Assign group based on category
             group_map = {"core": 1, "domain": 2, "support": 3}
             group = group_map.get(orch.category, 0)
-            
+
             # Size based on number of dependencies
             size = 10 + (len(orch.dependencies) * 2)
-            
+
             node = {
                 "id": orch.name,
                 "name": orch.name,
@@ -351,7 +352,7 @@ class BrainArchitectureRenderer:
                 "size": size,
             }
             nodes.append(node)
-        
+
         # Create links for dependencies
         for orch in brain_architecture.orchestrators:
             for dep_name in orch.dependencies:
@@ -363,7 +364,7 @@ class BrainArchitectureRenderer:
                         "value": 1,
                     }
                     links.append(link)
-        
+
         return {
             "nodes": nodes,
             "links": links,
@@ -377,38 +378,38 @@ class BrainArchitectureRenderer:
                 },
             },
         }
-    
+
     def render_knowledge_graph(
         self,
         brain_architecture: BrainArchitecture,
         knowledge_path: Path,
     ) -> Dict[str, Any]:
         """Render knowledge graph from Tier 3.
-        
+
         Args:
             brain_architecture: Brain architecture data
             knowledge_path: Path to tier3/knowledge/ directory
-        
+
         Returns:
             Dict[str, Any]: Knowledge graph visualization data
         """
         nodes = []
         links = []
-        
+
         if not knowledge_path.exists():
             return {"nodes": nodes, "links": links}
-        
+
         # Parse knowledge YAML files
         knowledge_files = list(knowledge_path.glob("*.yaml"))
-        
+
         for idx, yaml_file in enumerate(knowledge_files):
             try:
                 with open(yaml_file, "r", encoding="utf-8") as f:
                     content = yaml.safe_load(f)
-                
+
                 if not isinstance(content, dict):
                     continue
-                
+
                 # Create node for knowledge file
                 node = {
                     "id": yaml_file.stem,
@@ -417,7 +418,7 @@ class BrainArchitectureRenderer:
                     "size": 8,
                 }
                 nodes.append(node)
-                
+
                 # Extract related topics
                 if "related" in content:
                     for related in content["related"]:
@@ -428,11 +429,11 @@ class BrainArchitectureRenderer:
                             "value": 1,
                         }
                         links.append(link)
-            
+
             except Exception:
                 # Skip files that can't be parsed
                 continue
-        
+
         return {
             "nodes": nodes,
             "links": links,
@@ -441,16 +442,16 @@ class BrainArchitectureRenderer:
                 "total_relationships": len(links),
             },
         }
-    
+
     def generate_brain_summary(
         self,
         brain_architecture: BrainArchitecture,
     ) -> Dict[str, Any]:
         """Generate brain architecture summary statistics.
-        
+
         Args:
             brain_architecture: Brain architecture data
-        
+
         Returns:
             Dict[str, Any]: Summary statistics
         """

@@ -8,11 +8,10 @@ AC-ID: AC-DASHBOARD-SCHEMA-V3
 Authority: CORE-035 (Single implementation)
 """
 
-from dataclasses import dataclass, field, asdict
-from typing import Dict, List, Any, Optional
-from enum import Enum
+from dataclasses import asdict, dataclass, field
 from datetime import datetime
-
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
 # =============================================================================
 # Enums
@@ -69,7 +68,7 @@ class RepoSummary:
     health_score: int = 0
     total_files: int = 0
     total_loc: int = 0
-    
+
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
 
@@ -85,7 +84,7 @@ class UseCase:
     business_value: str = ""
     confidence_score: float = 0.0
     implementation_status: str = "detected"
-    
+
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
 
@@ -101,7 +100,7 @@ class MetricsSummary:
     technical_debt_hours: int = 0
     health_score: int = 0
     calculated_at: str = field(default_factory=lambda: datetime.now().isoformat())
-    
+
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
 
@@ -116,7 +115,7 @@ class Vulnerability:
     file_path: str = ""
     line_number: int = 0
     fix_suggestion: str = ""
-    
+
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
 
@@ -129,7 +128,7 @@ class Package:
     package_type: str = "runtime"
     is_outdated: bool = False
     has_vulnerability: bool = False
-    
+
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
 
@@ -143,7 +142,7 @@ class CodeSmell:
     line_number: int = 0
     description: str = ""
     fix_suggestion: str = ""
-    
+
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
 
@@ -156,7 +155,7 @@ class Entity:
     file_path: str = ""
     description: str = ""
     attributes: List[str] = field(default_factory=list)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
 
@@ -168,7 +167,7 @@ class Relationship:
     target_entity: str
     relationship_type: str
     description: str = ""
-    
+
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
 
@@ -181,7 +180,7 @@ class Component:
     file_path: str = ""
     dependencies: List[str] = field(default_factory=list)
     description: str = ""
-    
+
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
 
@@ -194,7 +193,7 @@ class FileEntry:
     loc: int = 0
     complexity: int = 0
     last_modified: str = ""
-    
+
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
 
@@ -207,7 +206,7 @@ class TestResult:
     duration_seconds: float = 0.0
     file_path: str = ""
     error_message: str = ""
-    
+
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
 
@@ -221,7 +220,7 @@ class LENSInsight:
     file_path: str = ""
     line_number: int = 0
     recommendation: str = ""
-    
+
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
 
@@ -235,7 +234,7 @@ class RefactoringSuggestion:
     description: str
     estimated_effort: str = ""
     impact: str = ""
-    
+
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
 
@@ -243,16 +242,16 @@ class RefactoringSuggestion:
 class SQLiteSchemaGenerator:
     """
     Generates SQLite schema for dashboard data persistence.
-    
+
     This is a simplified generator that creates tables matching
     the dashboard data models.
     """
-    
+
     @staticmethod
     def generate_full_schema() -> str:
         """
         Generate complete SQLite schema.
-        
+
         Returns:
             SQL DDL string for all tables
         """

@@ -21,7 +21,7 @@ from pydantic import BaseModel, Field, field_validator
 
 class TDDMetric(BaseModel):
     """Metric for TDD cycle tracking."""
-    
+
     cycle_id: str = Field(description="Unique cycle identifier")
     phase: Literal["RED", "GREEN", "REFACTOR"] = Field(description="TDD phase")
     orchestrator: str = Field(description="Orchestrator name")
@@ -31,7 +31,7 @@ class TDDMetric(BaseModel):
     failure_reason: Optional[str] = Field(default=None, description="Failure reason if failed")
     retry_count: int = Field(default=0, ge=0, description="Number of retries")
     timestamp: datetime = Field(default_factory=datetime.now, description="Recording timestamp")
-    
+
     @field_validator("phase")
     @classmethod
     def validate_phase(cls, v: str) -> str:
@@ -44,7 +44,7 @@ class TDDMetric(BaseModel):
 
 class DebugMetric(BaseModel):
     """Metric for debugging session tracking."""
-    
+
     session_id: str = Field(description="Unique session identifier")
     orchestrator: str = Field(description="Orchestrator name")
     target_file: str = Field(description="File being debugged")
@@ -57,7 +57,7 @@ class DebugMetric(BaseModel):
 
 class CodeGenMetric(BaseModel):
     """Metric for code generation tracking."""
-    
+
     generation_id: str = Field(description="Unique generation identifier")
     template_name: str = Field(description="Template used")
     target_type: Literal["orchestrator", "tool", "test", "component"] = Field(
@@ -68,7 +68,7 @@ class CodeGenMetric(BaseModel):
     customizations_applied: int = Field(default=0, ge=0, description="Number of customizations")
     manual_edits_needed: bool = Field(default=False, description="Whether manual edits were needed")
     timestamp: datetime = Field(default_factory=datetime.now, description="Recording timestamp")
-    
+
     @field_validator("target_type")
     @classmethod
     def validate_target_type(cls, v: str) -> str:
@@ -81,7 +81,7 @@ class CodeGenMetric(BaseModel):
 
 class OrchestratorMetric(BaseModel):
     """Metric for orchestrator invocation tracking."""
-    
+
     invocation_id: str = Field(description="Unique invocation identifier")
     orchestrator_name: str = Field(description="Orchestrator name")
     operation: str = Field(description="Operation performed")
@@ -93,7 +93,7 @@ class OrchestratorMetric(BaseModel):
 
 class MetricAggregation(BaseModel):
     """Aggregated metrics for analysis."""
-    
+
     metric_type: str = Field(description="Type of metrics aggregated")
     count: int = Field(default=0, ge=0, description="Number of metrics")
     avg_duration_ms: float = Field(default=0, ge=0, description="Average duration")
@@ -101,24 +101,24 @@ class MetricAggregation(BaseModel):
     success_rate: float = Field(default=0, ge=0, le=1, description="Success rate (0-1)")
     time_range_start: Optional[datetime] = Field(default=None, description="Start of time range")
     time_range_end: Optional[datetime] = Field(default=None, description="End of time range")
-    
+
     @classmethod
     def from_tdd_metrics(cls, metrics: list[TDDMetric]) -> "MetricAggregation":
         """Create aggregation from TDD metrics."""
         if not metrics:
             return cls(metric_type="tdd", count=0, avg_duration_ms=0, p90_duration_ms=0, success_rate=0)
-            
+
         durations = [m.duration_ms for m in metrics]
         successes = [m.success for m in metrics]
-        
+
         avg_duration = sum(durations) / len(durations)
         success_rate = sum(successes) / len(successes)
-        
+
         # Calculate P90
         sorted_durations = sorted(durations)
         p90_index = int(len(sorted_durations) * 0.9)
         p90_duration = sorted_durations[min(p90_index, len(sorted_durations) - 1)]
-        
+
         return cls(
             metric_type="tdd",
             count=len(metrics),
@@ -128,23 +128,23 @@ class MetricAggregation(BaseModel):
             time_range_start=min(m.timestamp for m in metrics),
             time_range_end=max(m.timestamp for m in metrics),
         )
-    
+
     @classmethod
     def from_debug_metrics(cls, metrics: list[DebugMetric]) -> "MetricAggregation":
         """Create aggregation from debug metrics."""
         if not metrics:
             return cls(metric_type="debug", count=0, avg_duration_ms=0, p90_duration_ms=0, success_rate=0)
-            
+
         durations = [m.duration_ms for m in metrics]
         successes = [m.resolved for m in metrics]
-        
+
         avg_duration = sum(durations) / len(durations)
         success_rate = sum(successes) / len(successes)
-        
+
         sorted_durations = sorted(durations)
         p90_index = int(len(sorted_durations) * 0.9)
         p90_duration = sorted_durations[min(p90_index, len(sorted_durations) - 1)]
-        
+
         return cls(
             metric_type="debug",
             count=len(metrics),
@@ -156,14 +156,14 @@ class MetricAggregation(BaseModel):
 
 class EnhancementRecommendation(BaseModel):
     """Recommendation for tool enhancement based on metrics."""
-    
+
     priority: Literal["P0", "P1", "P2"] = Field(description="Priority level")
     enhancement: str = Field(description="Enhancement description")
     evidence: dict[str, Any] = Field(description="Evidence supporting recommendation")
     effort: Literal["S", "M", "L"] = Field(description="Estimated effort")
     expected_impact: str = Field(description="Expected impact description")
     created_at: datetime = Field(default_factory=datetime.now, description="Creation timestamp")
-    
+
     @field_validator("priority")
     @classmethod
     def validate_priority(cls, v: str) -> str:
@@ -176,7 +176,7 @@ class EnhancementRecommendation(BaseModel):
 
 class RecordResult(BaseModel):
     """Result of recording a metric."""
-    
+
     success: bool = Field(description="Whether recording succeeded")
     metric_id: Optional[str] = Field(default=None, description="ID of recorded metric")
     message: Optional[str] = Field(default=None, description="Additional message")

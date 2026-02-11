@@ -5,16 +5,19 @@ Generated adapter for DigestEnhancementOrchestrator.
 AC-ID: AC-PHASE2B-016
 """
 
+import logging
+import time
 from typing import Any, Dict, List, Optional
+
 from cortex.mcp.orchestrator_mcp_server import (
-    IOrchestratorAdapter,
     CapabilityMetadata,
     CapabilityResponse,
     ExecutionContext,
+    IOrchestratorAdapter,
 )
-from cortex.orchestrators.learning.digest_enhancement_orchestrator import DigestEnhancementOrchestrator
-import logging
-import time
+from cortex.orchestrators.learning.digest_enhancement_orchestrator import (
+    DigestEnhancementOrchestrator,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -33,14 +36,14 @@ def _get_orchestrator_from_wiring(name: str) -> Optional[Any]:
 class DigestEnhancementOrchestratorAdapter(IOrchestratorAdapter):
     """
     MCP Adapter for DigestEnhancementOrchestrator.
-    
+
     Exposes capabilities:
     - digest_session: Digest session learnings
     - extract_patterns: Extract learning patterns
-    
+
     CORE-035: Uses wiring system for orchestrator access (single execution path).
     """
-    
+
     def __init__(self, orchestrator: Optional[DigestEnhancementOrchestrator] = None):
         """Initialize adapter with orchestrator from wiring system."""
         if orchestrator is not None:
@@ -48,7 +51,7 @@ class DigestEnhancementOrchestratorAdapter(IOrchestratorAdapter):
         else:
             self.orchestrator = _get_orchestrator_from_wiring("DigestEnhancementOrchestrator")
         self.name = "DigestEnhancementOrchestratorAdapter"
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         """Get all capabilities exposed by this orchestrator."""
         return [
@@ -71,7 +74,7 @@ class DigestEnhancementOrchestratorAdapter(IOrchestratorAdapter):
                 tags={"generated", "phase2b"},
             )
         ]
-    
+
     def execute_capability(
         self,
         capability_name: str,
@@ -89,7 +92,7 @@ class DigestEnhancementOrchestratorAdapter(IOrchestratorAdapter):
                     orchestrator="digestenhancementorchestrator",
                     duration_ms=(time.time() - start) * 1000,
                 )
-            
+
             if capability_name == "digest_session":
                 result = self.orchestrator.digest_session(session_data=parameters.get('session_data'))
                 return CapabilityResponse(
@@ -108,7 +111,7 @@ class DigestEnhancementOrchestratorAdapter(IOrchestratorAdapter):
                     orchestrator="{orchestrator_name_lower}",
                     duration_ms=(time.time() - start) * 1000,
                 )
-            
+
             return CapabilityResponse(
                 request_id=context.session_id,
                 success=False,
@@ -125,7 +128,7 @@ class DigestEnhancementOrchestratorAdapter(IOrchestratorAdapter):
                 orchestrator="digestenhancementorchestrator",
                 duration_ms=(time.time() - start) * 1000,
             )
-    
+
     def validate_parameters(
         self, capability_name: str, parameters: Dict[str, Any]
     ) -> tuple[bool, Optional[str]]:

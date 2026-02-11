@@ -6,9 +6,9 @@ Description: Implement intent classification to route requests to appropriate MC
 Authority: ROOT-CAUSE-ANALYSIS-2026-02-08 (P0: Intent Classification Missing)
 """
 
-from enum import Enum
-from typing import Optional, Dict, Any
 import re
+from enum import Enum
+from typing import Any, Dict, Optional
 
 
 class UserIntent(Enum):
@@ -26,10 +26,10 @@ class UserIntent(Enum):
 class IntentClassifier:
     """
     Classify user intent from natural language request.
-    
+
     Maps requests to MCP tools for proper routing and enforcement.
     """
-    
+
     # Patterns for each intent type (order matters - more specific first)
     PATTERNS = {
         UserIntent.ANALYZE: [
@@ -59,24 +59,24 @@ class IntentClassifier:
             r'\b(phase|stage|milestone|roadmap)\b',
         ],
     }
-    
+
     @classmethod
     def classify(cls, user_request: str) -> UserIntent:
         """
         Classify user intent from request text.
-        
+
         Args:
             user_request: User's natural language request
-            
+
         Returns:
             UserIntent enum value
         """
         if not user_request or not user_request.strip():
             return UserIntent.UNKNOWN
-        
+
         request_lower = user_request.lower()
         scores = {}
-        
+
         # Score each intent based on pattern matches
         for intent, patterns in cls.PATTERNS.items():
             score = 0
@@ -84,22 +84,22 @@ class IntentClassifier:
                 matches = re.findall(pattern, request_lower, re.IGNORECASE)
                 score += len(matches)
             scores[intent] = score
-        
+
         # Return intent with highest score
         if max(scores.values()) > 0:
             best_intent = max(scores, key=lambda x: scores[x])
             return best_intent
-        
+
         return UserIntent.UNKNOWN
-    
+
     @classmethod
     def get_mcp_tool(cls, intent: UserIntent) -> Optional[str]:
         """
         Get recommended MCP tool for intent.
-        
+
         Args:
             intent: User intent
-            
+
         Returns:
             MCP tool name, or None if no tool recommended
         """
@@ -114,7 +114,7 @@ class IntentClassifier:
             UserIntent.UNKNOWN: None,
         }
         return tool_mapping.get(intent)
-    
+
     @classmethod
     def requires_mcp(cls, intent: UserIntent) -> bool:
         """Check if intent requires MCP tool availability."""
@@ -126,7 +126,7 @@ class IntentClassifier:
             UserIntent.AUDIT,
             UserIntent.PLAN,
         ]
-    
+
     @classmethod
     def requires_tdd(cls, intent: UserIntent) -> bool:
         """Check if intent requires TDD (tests before code)."""
@@ -135,12 +135,12 @@ class IntentClassifier:
             UserIntent.FIX,
             UserIntent.REFACTOR,
         ]
-    
+
     @classmethod
     def get_enforcement_level(cls, intent: UserIntent) -> str:
         """
         Get enforcement level for intent.
-        
+
         Returns: "BLOCKING" | "WARNING" | "INFO"
         """
         if cls.requires_mcp(intent):

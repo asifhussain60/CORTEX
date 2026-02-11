@@ -6,32 +6,32 @@ MCP tool definitions and orchestrator wiring for all LENS tiers.
 AC_START: AC-PHASE63-ORCHESTRATOR-001
 """
 
-from typing import List, Optional, Dict
-from pathlib import Path
 import json
 from dataclasses import asdict
+from pathlib import Path
+from typing import Dict, List, Optional
 
 from cortex.lens.lens_tiered_mcp_api import (
-    LensOrchestratorIntegration,
     LensAnalysisResult,
+    LensOrchestratorIntegration,
 )
 
 
 class LensMCPTools:
     """MCP Tool definitions for LENS Tiered API"""
-    
+
     @staticmethod
     def cortex_lens_quick_tool_definition() -> Dict:
         """
         MCP Tool: cortex_lens_quick
-        
+
         Tier 2 quick analysis (<200ms) for fast feedback loops.
         Used by InteractionOrchestrator for real-time analysis.
-        
+
         Parameters:
             - file_path (required): Path to file for analysis
             - cache (optional): Use cached results (default: true)
-        
+
         Returns:
             LensAnalysisResult (Tier 2) with high-priority findings
         """
@@ -62,19 +62,19 @@ class LensMCPTools:
                 "analysis_time_ms": "float",
             },
         }
-    
+
     @staticmethod
     def cortex_lens_targeted_tool_definition() -> Dict:
         """
         MCP Tool: cortex_lens_targeted
-        
+
         Tier 3 targeted analysis with custom capabilities.
         Used by PlanOrchestrator for selective validation.
-        
+
         Parameters:
             - file_path (required): Path to file for analysis
             - capabilities (optional): List of capability names to execute
-        
+
         Returns:
             LensAnalysisResult (Tier 3) with targeted findings
         """
@@ -104,20 +104,20 @@ class LensMCPTools:
                 "analysis_time_ms": "float",
             },
         }
-    
+
     @staticmethod
     def cortex_lens_stream_tool_definition() -> Dict:
         """
         MCP Tool: cortex_lens_stream
-        
+
         Tier 3 streaming analysis for large repositories.
         Emits progressive results without blocking.
-        
+
         Parameters:
             - repo_path (required): Repository path to analyze
             - batch_size (optional): Files per batch (default: 10)
             - capabilities (optional): Custom capabilities to execute
-        
+
         Yields:
             StreamEvent objects (progress, result, complete, error)
         """
@@ -151,18 +151,18 @@ class LensMCPTools:
                 "complete",  # Streaming complete
             ],
         }
-    
+
     @staticmethod
     def cortex_lens_analyze_tool_definition() -> Dict:
         """
         MCP Tool: cortex_lens_analyze (UNCHANGED)
-        
+
         Tier 4 full analysis - comprehensive, unchanged from Phase 62.
         Used by RepositoryOnboardingOrchestrator for complete analysis.
-        
+
         Parameters:
             - file_path (required): Path to file for analysis
-        
+
         Returns:
             LensAnalysisResult (Tier 4) with all findings
         """
@@ -192,12 +192,12 @@ class LensMCPTools:
 
 class LensOrchestratorWiring:
     """Orchestrator wiring for LENS Tiered API"""
-    
+
     @staticmethod
     def get_wiring_configuration() -> Dict:
         """
         Get complete orchestrator wiring for LENS Tiered API.
-        
+
         Returns:
             Wiring configuration dictionary for GitBackedRegistry
         """
@@ -249,16 +249,16 @@ class LensOrchestratorWiring:
 
 class LensOrchestratorTierSelection:
     """Intelligent tier selection for orchestrators"""
-    
+
     @staticmethod
     def select_tier_for_intent(intent: str, repo_size: int = 0) -> str:
         """
         Select appropriate LENS tier based on orchestrator intent.
-        
+
         Args:
             intent: Orchestrator intent (interact, tdd, plan, onboard, stream)
             repo_size: Repository size in files (for stream selection)
-        
+
         Returns:
             Tier name (tier_2_quick, tier_3_targeted, tier_3_stream, tier_4_full)
         """
@@ -270,16 +270,16 @@ class LensOrchestratorTierSelection:
             "onboard": "tier_4_full",
             "stream": "tier_3_stream",
         }
-        
+
         selected_tier = tier_map.get(intent, "tier_2_quick")
-        
+
         # Override for large repositories
         if intent != "stream" and repo_size > 500:
             selected_tier = "tier_3_stream"
-        
+
         return selected_tier
         # AC_COMPLETE: AC-PHASE63-SELECTION-001
-    
+
     @staticmethod
     def get_tier_characteristics(tier: str) -> Dict:
         """Get characteristics of specified tier"""
@@ -313,7 +313,7 @@ class LensOrchestratorTierSelection:
             },
         }
         return characteristics.get(tier, {})
-    
+
     @staticmethod
     def select_tier_with_escalation(
         initial_tier: str,
@@ -322,72 +322,72 @@ class LensOrchestratorTierSelection:
     ) -> str:
         """
         AC-PHASE64-S2-001: Select tier with intelligent escalation.
-        
+
         Escalation triggers:
         1. Critical findings detected → Escalate to Tier 3
         2. Ambiguous results (confidence < 0.7) → Escalate to Tier 3
         3. Clear results → Stay with default tier
-        
+
         Args:
             initial_tier: Starting tier (usually tier_2_quick)
             tier_2_result: Results from Tier 2 analysis
             context: Orchestrator context
-        
+
         Returns:
             Selected tier after escalation evaluation
         """
         if tier_2_result is None:
             return initial_tier
-        
+
         # Check for critical findings (security, performance issues)
         findings = tier_2_result.get("findings", [])
         has_critical = any(
             f.get("severity", "info").lower() == "critical"
             for f in findings
         )
-        
+
         if has_critical:
             # Critical findings found → escalate to Tier 3
             return "tier_3_targeted"
-        
+
         # Check for ambiguous results (confidence < 0.7)
         avg_confidence = 0.0
         if findings:
             confidences = [f.get("confidence", 0.5) for f in findings]
             avg_confidence = sum(confidences) / len(confidences)
-        
+
         if avg_confidence < 0.7:
             # Ambiguous results → escalate to Tier 3
             return "tier_3_targeted"
-        
+
         # Clear results → stay with initial tier
         return initial_tier
 
 
 class LensIntegrationOrchestrator:
     """Coordinates all LENS tier operations"""
-    
+
     def __init__(self):
         """Initialize LENS integration orchestrator"""
         self.integration = LensOrchestratorIntegration()
         self.tools = LensMCPTools()
         self.wiring = LensOrchestratorWiring()
         self.selection = LensOrchestratorTierSelection()
-    
+
     async def execute_interaction_analysis(self, file_path: Path) -> Dict:
         """Execute Tier 2 quick analysis for interactions"""
         result = await self.integration.interaction_orchestrator_quick_analysis(
             file_path
         )
         return result.to_dict()
-    
+
     async def execute_tdd_enrichment(self, file_path: Path) -> Dict:
         """Execute Tier 2 context enrichment for TDD"""
         result = await self.integration.tdd_orchestrator_context_enrichment(
             file_path
         )
         return result.to_dict()
-    
+
     async def execute_plan_validation(
         self,
         file_path: Path,
@@ -399,18 +399,18 @@ class LensIntegrationOrchestrator:
             capabilities,
         )
         return result.to_dict()
-    
+
     async def execute_onboarding_analysis(self, file_path: Path) -> Dict:
         """Execute Tier 4 full analysis for onboarding"""
         result = await self.integration.onboarding_orchestrator_full_analysis(
             file_path
         )
         return result.to_dict()
-    
+
     def get_mcp_tools_manifest(self) -> Dict:
         """
         Get manifest of all available MCP tools.
-        
+
         Returns:
             Dictionary of MCP tool definitions
         """
@@ -420,7 +420,7 @@ class LensIntegrationOrchestrator:
             "cortex_lens_stream": self.tools.cortex_lens_stream_tool_definition(),
             "cortex_lens_analyze": self.tools.cortex_lens_analyze_tool_definition(),
         }
-    
+
     def get_orchestrator_wiring(self) -> Dict:
         """Get complete orchestrator wiring configuration"""
         return self.wiring.get_wiring_configuration()

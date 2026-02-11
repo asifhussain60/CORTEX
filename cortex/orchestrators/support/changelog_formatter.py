@@ -15,14 +15,14 @@ Date: 2026-02-07
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import List, Dict, Union, Optional
+from typing import Dict, List, Optional, Union
 
 from cortex.orchestrators.support.upgrade_diff_analyzer import (
-    DiffResult,
-    PromptChange,
     AgentChange,
-    OrchestratorChange,
+    DiffResult,
     MCPToolChange,
+    OrchestratorChange,
+    PromptChange,
 )
 
 

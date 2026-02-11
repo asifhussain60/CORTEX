@@ -7,22 +7,24 @@ with the fixed global hash chain architecture (AC-FIX-001-05).
 """
 
 import sys
+
 sys.path.insert(0, '/Users/asifhussain/PROJECTS/CORTEX')
 
-import sqlite3
-from pathlib import Path
-from datetime import datetime, timezone
 import hashlib
 import json
+import sqlite3
+from datetime import datetime, timezone
+from pathlib import Path
+
 
 def create_audit_entry(conn, entry_id, ac_id, operation, previous_hash, entry_hash):
     """Insert an audit entry directly"""
     cursor = conn.cursor()
     timestamp = datetime.now(timezone.utc).isoformat()
-    
+
     cursor.execute("""
         INSERT INTO audit_log
-        (id, ac_id, operation, timestamp, component, level, message, 
+        (id, ac_id, operation, timestamp, component, level, message,
          correlation_id, metadata, previous_hash, entry_hash)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, (
@@ -78,13 +80,13 @@ with sqlite3.connect(str(db_path)) as conn:
         for operation in ["AC_START", "AC_EXECUTE", "AC_COMPLETE"]:
             # Simple hash: hash of (previous_hash + entry_id)
             entry_hash = hashlib.sha256(f"{prev_hash}{entry_id}".encode()).hexdigest()
-            
+
             create_audit_entry(conn, entry_id, ac_id, operation, prev_hash, entry_hash)
-            
+
             print(f"  Entry {entry_id}: {ac_id} {operation}")
             print(f"    previous_hash: {prev_hash[:16] if prev_hash else 'GENESIS'}...")
             print(f"    entry_hash:    {entry_hash[:16]}...")
-            
+
             # For GLOBAL chain: next entry links to THIS entry
             prev_hash = entry_hash
             entry_id += 1

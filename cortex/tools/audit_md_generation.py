@@ -13,7 +13,7 @@ import subprocess
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import List, Tuple, Optional
+from typing import List, Optional, Tuple
 
 
 @dataclass
@@ -25,7 +25,7 @@ class MarkdownViolation:
     author: str
     timestamp: datetime
     violation_type: str  # 'REPORT', 'COMPLETION', 'STATUS', 'SUMMARY'
-    
+
     def __str__(self) -> str:
         return (
             f"🚨 VIOLATION: {self.file_path}\n"
@@ -51,10 +51,10 @@ ALLOWED_LOCATIONS = [".github/prompts/", ".github/agents/", "README.md"]
 def is_violation(file_path: str) -> Tuple[bool, Optional[str]]:
     """
     Check if file path is a CORE-002 violation.
-    
+
     Args:
         file_path: Relative file path from repo root
-        
+
     Returns:
         (is_violation, violation_type) tuple
     """
@@ -62,29 +62,29 @@ def is_violation(file_path: str) -> Tuple[bool, Optional[str]]:
     for allowed in ALLOWED_LOCATIONS:
         if file_path.startswith(allowed):
             return False, None
-    
+
     # Check patterns
     filename = Path(file_path).name
     for pattern, vtype in BLOCKED_PATTERNS:
         if re.match(pattern, filename, re.IGNORECASE):
             return True, vtype
-    
+
     return False, None
 
 
 def get_recent_commits(since_minutes: int = 60) -> List[str]:
     """
     Get commit hashes from recent commits.
-    
+
     Args:
         since_minutes: How far back to look
-        
+
     Returns:
         List of commit hashes
     """
     since_time = datetime.now() - timedelta(minutes=since_minutes)
     since_str = since_time.strftime("%Y-%m-%d %H:%M:%S")
-    
+
     try:
         result = subprocess.run(
             ['git', 'log', f'--since={since_str}', '--format=%H'],
@@ -100,10 +100,10 @@ def get_recent_commits(since_minutes: int = 60) -> List[str]:
 def get_files_in_commit(commit_hash: str) -> List[str]:
     """
     Get files added/modified in a commit.
-    
+
     Args:
         commit_hash: Git commit hash
-        
+
     Returns:
         List of file paths
     """
@@ -123,10 +123,10 @@ def get_files_in_commit(commit_hash: str) -> List[str]:
 def get_commit_info(commit_hash: str) -> Tuple[str, str, str]:
     """
     Get commit metadata.
-    
+
     Args:
         commit_hash: Git commit hash
-        
+
     Returns:
         (message, author, timestamp) tuple
     """
@@ -148,25 +148,25 @@ def get_commit_info(commit_hash: str) -> Tuple[str, str, str]:
 def audit_recent_commits(since_minutes: int = 60) -> List[MarkdownViolation]:
     """
     Audit recent commits for CORE-002 violations.
-    
+
     Args:
         since_minutes: How far back to scan
-        
+
     Returns:
         List of violations found
     """
     violations = []
     commits = get_recent_commits(since_minutes)
-    
+
     for commit_hash in commits:
         files = get_files_in_commit(commit_hash)
         message, author, timestamp_str = get_commit_info(commit_hash)
-        
+
         try:
             timestamp = datetime.fromisoformat(timestamp_str.replace(' ', 'T'))
         except ValueError:
             timestamp = datetime.now()
-        
+
         for file_path in files:
             is_viol, vtype = is_violation(file_path)
             if is_viol and vtype:
@@ -178,23 +178,23 @@ def audit_recent_commits(since_minutes: int = 60) -> List[MarkdownViolation]:
                     timestamp=timestamp,
                     violation_type=vtype
                 ))
-    
+
     return violations
 
 
 def generate_violation_report(violations: List[MarkdownViolation]) -> str:
     """
     Generate inline chat report of violations.
-    
+
     Args:
         violations: List of detected violations
-        
+
     Returns:
         Formatted markdown report string
     """
     if not violations:
         return "✅ No CORE-002 violations detected in recent commits"
-    
+
     report = [
         "## 🚨 CORE-002 Violations Detected",
         "",
@@ -204,7 +204,7 @@ def generate_violation_report(violations: List[MarkdownViolation]) -> str:
         "### Violations:",
         ""
     ]
-    
+
     for v in violations:
         report.append(f"#### {v.file_path}")
         report.append(f"- **Commit:** `{v.commit_hash[:8]}`")
@@ -213,17 +213,17 @@ def generate_violation_report(violations: List[MarkdownViolation]) -> str:
         report.append(f"- **Author:** {v.author}")
         report.append(f"- **Time:** {v.timestamp.strftime('%Y-%m-%d %H:%M:%S')}")
         report.append("")
-    
+
     report.extend([
         "### 🔧 Remediation Steps:",
         "",
         "1. **Delete violation files:**",
         "   ```bash",
     ])
-    
+
     for v in violations:
         report.append(f"   rm {v.file_path}")
-    
+
     report.extend([
         "   ```",
         "",
@@ -242,14 +242,14 @@ def generate_violation_report(violations: List[MarkdownViolation]) -> str:
         "   python -m cortex.tools.audit_md_generation",
         "   ```",
     ])
-    
+
     return "\n".join(report)
 
 
 def main() -> int:
     """Main entry point for CLI usage."""
     import argparse
-    
+
     parser = argparse.ArgumentParser(
         description="Audit recent commits for CORE-002 markdown generation violations"
     )
@@ -265,11 +265,11 @@ def main() -> int:
         default='inline',
         help="Output format (default: inline)"
     )
-    
+
     args = parser.parse_args()
-    
+
     violations = audit_recent_commits(since_minutes=args.since)
-    
+
     if args.format == 'json':
         import json
         output = json.dumps([
@@ -286,7 +286,7 @@ def main() -> int:
     else:
         report = generate_violation_report(violations)
         print(report)
-    
+
     return 1 if violations else 0
 
 

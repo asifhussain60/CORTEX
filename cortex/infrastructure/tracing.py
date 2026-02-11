@@ -13,14 +13,14 @@ Classes:
     TracingCollector: Main tracing coordinator.
 """
 
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Optional, Dict, List, Any
-import uuid
-import time
 import threading
-from datetime import datetime, timedelta
+import time
+import uuid
 from collections import defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
 
 class SpanKind(Enum):
@@ -44,7 +44,7 @@ class SpanStatus(Enum):
 @dataclass
 class TraceContext:
     """Trace context for propagation across components.
-    
+
     Args:
         trace_id: Unique trace identifier.
         span_id: Current span identifier.
@@ -65,7 +65,7 @@ class TraceContext:
 @dataclass
 class Span:
     """Individual span representation.
-    
+
     Args:
         name: Span name/operation name.
         span_id: Unique span identifier.
@@ -96,7 +96,7 @@ class Span:
 @dataclass
 class TracingConfig:
     """Configuration for tracing.
-    
+
     Args:
         service_name: Name of the service being traced.
         environment: Deployment environment (test, staging, prod).
@@ -126,14 +126,14 @@ class TracingConfig:
 
 class TracingCollector:
     """Main coordinator for distributed tracing.
-    
+
     Manages trace context propagation, span creation, sampling,
     and export to Jaeger/Zipkin backends.
     """
 
     def __init__(self, config: TracingConfig) -> None:
         """Initialize tracing collector.
-        
+
         Args:
             config: Tracing configuration.
         """
@@ -145,7 +145,7 @@ class TracingCollector:
 
     def create_trace_context(self) -> TraceContext:
         """Create a new trace context.
-        
+
         Returns:
             New TraceContext with generated trace and span IDs.
         """
@@ -161,15 +161,15 @@ class TracingCollector:
         headers: Dict[str, str],
     ) -> TraceContext:
         """Extract trace context from HTTP headers.
-        
+
         Args:
             headers: HTTP headers dict.
-            
+
         Returns:
             Extracted TraceContext or new context if not found.
         """
         traceparent = headers.get("traceparent", "")
-        
+
         if traceparent:
             # W3C Trace Context format: version-trace_id-parent_id-trace_flags
             parts = traceparent.split("-")
@@ -177,14 +177,14 @@ class TracingCollector:
                 trace_id = parts[1]
                 parent_span_id = parts[2]
                 trace_flags = parts[3]
-                
+
                 context = TraceContext(
                     trace_id=trace_id,
                     span_id=str(uuid.uuid4()).replace("-", "")[:16],
                     parent_span_id=parent_span_id,
                     trace_flags=trace_flags,
                 )
-                
+
                 # Extract baggage if present
                 tracestate = headers.get("tracestate", "")
                 if tracestate:
@@ -192,18 +192,18 @@ class TracingCollector:
                         if "=" in item:
                             key, value = item.split("=", 1)
                             context.baggage[key.strip()] = value.strip()
-                
+
                 return context
-        
+
         # Create new context if not found
         return self.create_trace_context()
 
     def context_to_headers(self, context: TraceContext) -> Dict[str, str]:
         """Convert trace context to HTTP headers.
-        
+
         Args:
             context: TraceContext to convert.
-            
+
         Returns:
             Dictionary of headers to propagate.
         """
@@ -211,9 +211,9 @@ class TracingCollector:
         traceparent = (
             f"00-{context.trace_id}-{context.span_id}-{context.trace_flags}"
         )
-        
+
         headers = {"traceparent": traceparent}
-        
+
         # Add baggage if present
         if context.baggage:
             tracestate_parts = []
@@ -221,7 +221,7 @@ class TracingCollector:
                 tracestate_parts.append(f"{key}={value}")
             if tracestate_parts:
                 headers["tracestate"] = ",".join(tracestate_parts)
-        
+
         return headers
 
     def start_span(
@@ -232,21 +232,21 @@ class TracingCollector:
         attributes: Optional[Dict[str, Any]] = None,
     ) -> Span:
         """Start a new span.
-        
+
         Args:
             name: Span name/operation name.
             kind: Span kind (internal, server, client, etc).
             parent_context: Parent trace context.
             attributes: Custom attributes for span.
-            
+
         Returns:
             New Span object.
         """
         if parent_context is None:
             parent_context = self.create_trace_context()
-        
+
         span_id = str(uuid.uuid4()).replace("-", "")[:16]
-        
+
         span = Span(
             name=name,
             span_id=span_id,
@@ -256,7 +256,7 @@ class TracingCollector:
             attributes=attributes or {},
             start_time=time.time(),
         )
-        
+
         return span
 
     def end_span(
@@ -266,7 +266,7 @@ class TracingCollector:
         error: Optional[Exception] = None,
     ) -> None:
         """End a span and record it.
-        
+
         Args:
             span: Span to end.
             status: Final span status.
@@ -275,24 +275,24 @@ class TracingCollector:
         span.end_time = time.time()
         span.duration_ms = (span.end_time - span.start_time) * 1000
         span.status = status
-        
+
         if error is not None:
             span.error_message = str(error)
-        
+
         with self._lock:
             self._spans_buffer.append(span)
             self._traces[span.trace_id].append(span)
-        
+
         # Check if should flush
         if len(self._spans_buffer) >= self.config.batch_size:
             self.try_export_spans()
 
     def should_sample_trace(self, context: Optional[TraceContext] = None) -> bool:
         """Determine if a trace should be sampled.
-        
+
         Args:
             context: Optional trace context to check for errors.
-            
+
         Returns:
             True if trace should be sampled, False otherwise.
         """
@@ -300,14 +300,14 @@ class TracingCollector:
             # Always sample error traces
             import random
             return random.random() < self.config.error_sample_rate
-        
+
         # Sample based on configured rate
         import random
         return random.random() < self.config.sample_rate
 
     def get_buffered_spans(self) -> List[Span]:
         """Get buffered spans awaiting export.
-        
+
         Returns:
             List of buffered spans.
         """
@@ -316,7 +316,7 @@ class TracingCollector:
 
     def get_traces(self) -> Dict[str, List[Span]]:
         """Get all recorded traces.
-        
+
         Returns:
             Dictionary of trace_id -> list of spans.
         """
@@ -325,30 +325,30 @@ class TracingCollector:
 
     def try_export_spans(self) -> bool:
         """Attempt to export buffered spans.
-        
+
         Returns:
             True if export successful, False if buffered for retry.
         """
         with self._lock:
             if len(self._spans_buffer) == 0:
                 return True
-            
+
             # In production, this would send to Jaeger/Zipkin
             # For now, we just simulate successful export
             spans_to_export = self._spans_buffer[:]
             self._spans_buffer.clear()
-        
+
         # Simulate export (would call actual Jaeger/Zipkin API)
         self._last_flush = time.time()
         return True
 
     def flush(self, timeout_seconds: int = 5) -> bool:
         """Flush all buffered spans.
-        
+
         Args:
             timeout_seconds: Maximum time to wait for flush.
-            
-            
+
+
         Returns:
             True if all spans flushed, False if timeout.
         """
@@ -359,7 +359,7 @@ class TracingCollector:
                     if len(self._spans_buffer) == 0:
                         return True
             time.sleep(0.01)
-        
+
         return False
 
 

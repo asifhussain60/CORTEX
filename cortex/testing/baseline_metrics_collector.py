@@ -10,12 +10,12 @@ TDD: Tests BEFORE code (CORE-008)
 """
 
 import json
-import time
-from pathlib import Path
-from typing import Dict, List, Any, Optional
-from dataclasses import dataclass, asdict
-from datetime import datetime
 import statistics
+import time
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 try:
     import psutil
@@ -40,20 +40,20 @@ class PerformanceMetrics:
 class BaselineMetricsCollector:
     """
     Collects baseline performance metrics for regression detection.
-    
+
     AC-PHASE38.0-011: Captures test execution, orchestrator latency, memory, cache metrics.
     """
 
     def __init__(self, cortex_root: Optional[Path] = None):
         """
         Initialize metrics collector.
-        
+
         Args:
             cortex_root: Root path of CORTEX repository (auto-detect if None)
         """
         if cortex_root is None:
             cortex_root = Path(__file__).parent.parent.parent
-        
+
         self.cortex_root = cortex_root
         self.baselines_dir = cortex_root / "cortex-registry" / "_cortex-master" / "baselines"
         self.test_durations: List[float] = []
@@ -64,7 +64,7 @@ class BaselineMetricsCollector:
     def record_test_duration(self, duration_seconds: float) -> None:
         """
         Record a test execution duration.
-        
+
         Args:
             duration_seconds: Test execution time in seconds
         """
@@ -73,12 +73,12 @@ class BaselineMetricsCollector:
     def record_memory_sample(self, memory_mb: Optional[float] = None) -> None:
         """
         Record a memory usage sample.
-        
+
         Args:
             memory_mb: Memory usage in MB (auto-detected if None)
         """
         actual_memory: float
-        
+
         if memory_mb is None:
             # Get current process memory
             if PSUTIL_AVAILABLE:
@@ -91,13 +91,13 @@ class BaselineMetricsCollector:
                 actual_memory = 100.0  # Default fallback
         else:
             actual_memory = memory_mb
-        
+
         self.memory_samples.append(actual_memory)
 
     def record_cache_access(self, hit: bool) -> None:
         """
         Record a cache access (hit or miss).
-        
+
         Args:
             hit: True if cache hit, False if cache miss
         """
@@ -109,17 +109,17 @@ class BaselineMetricsCollector:
     def calculate_percentile(self, data: List[float], percentile: float) -> float:
         """
         Calculate percentile from data.
-        
+
         Args:
             data: List of numeric values
             percentile: Percentile to calculate (0-100)
-            
+
         Returns:
             Percentile value
         """
         if not data:
             return 0.0
-        
+
         sorted_data = sorted(data)
         index = int((percentile / 100) * len(sorted_data))
         index = min(index, len(sorted_data) - 1)
@@ -128,57 +128,57 @@ class BaselineMetricsCollector:
     def measure_orchestrator_latency(self, samples: int = 10) -> float:
         """
         Measure orchestrator routing latency.
-        
+
         Args:
             samples: Number of samples to collect
-            
+
         Returns:
             Average latency in milliseconds
         """
         latencies = []
-        
+
         for _ in range(samples):
             start = time.perf_counter()
             # Simulate orchestrator routing (lightweight operation)
             _ = {"operation": "route", "timestamp": datetime.utcnow().isoformat()}
             end = time.perf_counter()
             latencies.append((end - start) * 1000)  # Convert to ms
-        
+
         return statistics.mean(latencies) if latencies else 0.0
 
     def calculate_cache_hit_rate(self) -> float:
         """
         Calculate cache hit rate percentage.
-        
+
         Returns:
             Cache hit rate as percentage (0-100)
         """
         total = self.cache_hits + self.cache_misses
         if total == 0:
             return 0.0
-        
+
         return (self.cache_hits / total) * 100
 
     def collect_metrics(self) -> PerformanceMetrics:
         """
         Collect all performance metrics.
-        
+
         Returns:
             PerformanceMetrics snapshot
         """
         # Calculate test execution percentiles
         p50 = self.calculate_percentile(self.test_durations, 50)
         p95 = self.calculate_percentile(self.test_durations, 95)
-        
+
         # Calculate memory average
         memory_avg = statistics.mean(self.memory_samples) if self.memory_samples else 0.0
-        
+
         # Measure orchestrator latency
         latency = self.measure_orchestrator_latency()
-        
+
         # Calculate cache hit rate
         cache_rate = self.calculate_cache_hit_rate()
-        
+
         metrics = PerformanceMetrics(
             test_execution_time_p50=p50,
             test_execution_time_p95=p95,
@@ -189,53 +189,53 @@ class BaselineMetricsCollector:
             total_tests=len(self.test_durations),
             test_durations=self.test_durations
         )
-        
+
         return metrics
 
     def save_baseline(self, metrics: PerformanceMetrics, baseline_name: str) -> Path:
         """
         Save baseline metrics to JSON file.
-        
+
         Args:
             metrics: PerformanceMetrics to save
             baseline_name: Name for baseline file (e.g., "2026-02-07-pre-phase38")
-            
+
         Returns:
             Path to saved baseline file
         """
         self.baselines_dir.mkdir(parents=True, exist_ok=True)
-        
+
         baseline_file = self.baselines_dir / f"{baseline_name}.json"
-        
+
         with open(baseline_file, "w") as f:
             json.dump(asdict(metrics), f, indent=2)
-        
+
         return baseline_file
 
     def load_baseline(self, baseline_name: str) -> Optional[PerformanceMetrics]:
         """
         Load baseline metrics from JSON file.
-        
+
         Args:
             baseline_name: Name of baseline file to load
-            
+
         Returns:
             PerformanceMetrics if found, None otherwise
         """
         baseline_file = self.baselines_dir / f"{baseline_name}.json"
-        
+
         if not baseline_file.exists():
             return None
-        
+
         with open(baseline_file, "r") as f:
             data = json.load(f)
-        
+
         return PerformanceMetrics(**data)
 
     def collect_from_pytest_output(self, pytest_output: str) -> None:
         """
         Parse pytest output to collect test durations.
-        
+
         Args:
             pytest_output: Output from pytest --durations=0
         """

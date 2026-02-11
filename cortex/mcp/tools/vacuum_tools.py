@@ -8,9 +8,9 @@ markdown files outside docs/.github (P3 compliance).
 Authority: AC-VACUUM-CLEANUP-001, CORE-002
 """
 
-from pathlib import Path
-from typing import Dict, Any, Optional
 import logging
+from pathlib import Path
+from typing import Any, Dict, Optional
 
 from cortex.mcp.decorators import mcp_tool
 
@@ -45,25 +45,25 @@ def cortex_vacuum(
 ) -> Dict[str, Any]:
     """
     Clean up markdown sprawl with 5-stage workflow.
-    
+
     Workflow:
         1. SCAN - Detect markdown files outside docs/.github
         2. PLAN - Categorize files for archival
         3. CLEANUP - Move files to docs/archive/ (if execute=True)
         4. VERIFY - Validate no deletions, check links, git status
         5. AUDIT OFFER - Suggest post-cleanup audit if verification passes
-    
+
     Safety Guarantees:
         - Never deletes files (only moves to archive)
         - Respects age threshold (default 30 days)
         - Resolves naming conflicts automatically
         - Validates git status and broken links
-    
+
     Args:
         repo_path: Path to repository (defaults to current directory)
         age_threshold_days: Only archive files older than this (default: 30)
         execute: If True, execute cleanup; if False, dry-run only
-        
+
     Returns:
         Dict with:
         - success: bool
@@ -76,12 +76,12 @@ def cortex_vacuum(
         - audit_message: str (if offer_audit=True)
         - report: Dict with comprehensive metrics
         - error: str (if failed)
-        
+
     Example:
         >>> # Dry-run (scan only)
         >>> result = cortex_vacuum(repo_path="/path/to/repo", execute=False)
         >>> print(f"Found {result['scan_result']['total_count']} files")
-        
+
         >>> # Execute cleanup
         >>> result = cortex_vacuum(repo_path="/path/to/repo", execute=True)
         >>> print(f"Moved {result['cleanup_result']['files_moved']} files")
@@ -92,17 +92,17 @@ def cortex_vacuum(
         from cortex.orchestrators.support.vacuum_orchestrator import (
             VacuumOrchestrator,
         )
-        
+
         # Initialize orchestrator
         orchestrator = VacuumOrchestrator()
-        
+
         # Determine repository path
         target_path = str(Path(repo_path).resolve()) if repo_path else str(Path.cwd())
-        
+
         # Stage 1: SCAN
         logger.info(f"VacuumOrchestrator: Scanning {target_path} for markdown sprawl")
         scan_result = orchestrator.scan_repository(target_path)
-        
+
         if scan_result["status"] == "error":
             return {
                 "success": False,
@@ -110,14 +110,14 @@ def cortex_vacuum(
                 "error": scan_result.get("error", "Unknown scan error"),
                 "repo_path": target_path,
             }
-        
+
         # Stage 2: PLAN
         logger.info(f"VacuumOrchestrator: Generating cleanup plan ({scan_result['total_count']} files)")
         cleanup_plan = orchestrator.generate_cleanup_plan(
             scan_result=scan_result,
             age_threshold_days=age_threshold_days,
         )
-        
+
         # Dry-run mode: Return scan + plan only
         if not execute:
             return {
@@ -135,23 +135,23 @@ def cortex_vacuum(
                 },
                 "message": f"Dry-run complete. Found {cleanup_plan.total_files} files to archive. Set execute=True to proceed.",
             }
-        
+
         # Execute mode: Stages 3-5
-        
+
         # Stage 3: CLEANUP
         logger.info(f"VacuumOrchestrator: Executing cleanup (moving {cleanup_plan.total_files} files)")
         cleanup_result = orchestrator.execute_cleanup(
             plan=cleanup_plan,
             root_path=target_path,
         )
-        
+
         # Stage 4: VERIFY
         logger.info("VacuumOrchestrator: Verifying cleanup results")
         verification = orchestrator.verify_cleanup(
             cleanup_result=cleanup_result,
             plan=cleanup_plan,
         )
-        
+
         # Stage 5: AUDIT OFFER
         offer_audit = orchestrator.should_offer_audit(verification)
         audit_message = ""
@@ -160,7 +160,7 @@ def cortex_vacuum(
             logger.info("VacuumOrchestrator: Verification passed - offering post-cleanup audit")
         else:
             logger.warning(f"VacuumOrchestrator: Verification issues detected: {verification.issues}")
-        
+
         # Generate comprehensive report
         report = orchestrator.generate_report(
             scan_result=scan_result,
@@ -168,7 +168,7 @@ def cortex_vacuum(
             cleanup_result=cleanup_result,
             verification=verification,
         )
-        
+
         return {
             "success": cleanup_result.success,
             "mode": "execute",
@@ -200,7 +200,7 @@ def cortex_vacuum(
             "audit_message": audit_message if offer_audit else None,
             "report": report,
         }
-        
+
     except ImportError as e:
         logger.error(f"cortex_vacuum import error: {e}", exc_info=True)
         return {

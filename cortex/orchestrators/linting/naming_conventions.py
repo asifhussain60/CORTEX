@@ -8,18 +8,18 @@ Author: Asif Hussain
 
 import re
 from dataclasses import dataclass, field
-from enum import Enum
 from datetime import datetime
+from enum import Enum
 from typing import Any, Dict, List, Optional
 
 
 class NamingConvention(Enum):
     """Naming convention enumeration"""
-    
+
     KEBAB_CASE = "kebab_case"
     SNAKE_CASE = "snake_case"
     PASCAL_CASE = "pascal_case"
-    
+
     @property
     def description(self) -> str:
         """Get convention description"""
@@ -35,7 +35,7 @@ class NamingConvention(Enum):
             ),
         }
         return descriptions.get(self, "Unknown convention")
-    
+
     @property
     def pattern(self) -> str:
         """Get regex pattern for convention"""
@@ -45,7 +45,7 @@ class NamingConvention(Enum):
             NamingConvention.PASCAL_CASE: r"^[A-Z][a-zA-Z0-9]*$",
         }
         return patterns.get(self, "")
-    
+
     @property
     def examples(self) -> List[str]:
         """Get convention examples"""
@@ -67,7 +67,7 @@ class NamingConvention(Enum):
             ],
         }
         return examples.get(self, [])
-    
+
     @property
     def use_cases(self) -> List[str]:
         """Get convention use cases"""
@@ -89,7 +89,7 @@ class NamingConvention(Enum):
             ],
         }
         return use_cases.get(self, [])
-    
+
     @classmethod
     def get_all(cls) -> List["NamingConvention"]:
         """Get all naming conventions"""
@@ -99,7 +99,7 @@ class NamingConvention(Enum):
 @dataclass
 class NamingViolation:
     """Naming convention violation"""
-    
+
     code: str
     message: str
     severity: str = "ERROR"
@@ -110,7 +110,7 @@ class NamingViolation:
 @dataclass
 class LintResult:
     """Result of linting operation"""
-    
+
     is_valid: bool
     violations: List[NamingViolation] = field(default_factory=list)
     timestamp: datetime = field(default_factory=datetime.utcnow)
@@ -121,16 +121,16 @@ class LintResult:
 @dataclass
 class LintReport:
     """Report of batch linting operations"""
-    
+
     total_names: int = 0
     valid_count: int = 0
     invalid_count: int = 0
     violations: List[Dict[str, Any]] = field(default_factory=list)
     timestamp: datetime = field(default_factory=datetime.utcnow)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert report to dictionary
-        
+
         Returns:
             Report as dictionary
         """
@@ -151,26 +151,26 @@ class LintReport:
 
 class NamingLinter:
     """Linter for orchestrator naming conventions"""
-    
+
     MAX_NAME_LENGTH = 25
     MIN_NAME_LENGTH = 1
-    
+
     def lint(
         self,
         name: str,
         convention: NamingConvention
     ) -> LintResult:
         """Lint a single name
-        
+
         Args:
             name: Name to validate
             convention: Naming convention to check against
-            
+
         Returns:
             Lint result with violations
         """
         violations: List[NamingViolation] = []
-        
+
         # Check length
         if len(name) > self.MAX_NAME_LENGTH:
             violations.append(
@@ -181,7 +181,7 @@ class NamingLinter:
                     suggestion=f"Shorten name to {self.MAX_NAME_LENGTH} characters or less",
                 )
             )
-        
+
         if len(name) < self.MIN_NAME_LENGTH:
             violations.append(
                 NamingViolation(
@@ -191,7 +191,7 @@ class NamingLinter:
                     suggestion="Provide a non-empty name",
                 )
             )
-        
+
         # Check pattern
         pattern = convention.pattern
         if not re.match(pattern, name):
@@ -203,46 +203,46 @@ class NamingLinter:
                     suggestion=self._suggest_fix(name, convention),
                 )
             )
-        
+
         return LintResult(
             is_valid=len(violations) == 0,
             violations=violations,
             name=name,
             convention=convention.name,
         )
-    
+
     def lint_batch(
         self,
         names: List[str],
         convention: NamingConvention
     ) -> List[LintResult]:
         """Lint multiple names
-        
+
         Args:
             names: List of names to validate
             convention: Naming convention to check against
-            
+
         Returns:
             List of lint results
         """
         return [self.lint(name, convention) for name in names]
-    
+
     def generate_report(
         self,
         names: List[str],
         convention: NamingConvention
     ) -> LintReport:
         """Generate linting report
-        
+
         Args:
             names: List of names to validate
             convention: Naming convention to check against
-            
+
         Returns:
             Lint report
         """
         results = self.lint_batch(names, convention)
-        
+
         violations_list = []
         for result in results:
             if not result.is_valid:
@@ -254,19 +254,19 @@ class NamingLinter:
                         "suggestion": violation.suggestion,
                         "severity": violation.severity,
                     })
-        
+
         report = LintReport(
             total_names=len(names),
             valid_count=sum(1 for r in results if r.is_valid),
             invalid_count=sum(1 for r in results if not r.is_valid),
             violations=violations_list,
         )
-        
+
         return report
-    
+
     def get_best_practices(self) -> List[str]:
         """Get naming best practices
-        
+
         Returns:
             List of best practices
         """
@@ -281,18 +281,18 @@ class NamingLinter:
             "Document any custom naming conventions",
         ]
         return practices
-    
+
     def _suggest_fix(
         self,
         name: str,
         convention: NamingConvention
     ) -> str:
         """Suggest fix for naming violation
-        
+
         Args:
             name: Invalid name
             convention: Target convention
-            
+
         Returns:
             Suggested corrected name
         """
@@ -305,7 +305,7 @@ class NamingLinter:
             name = re.sub(r"-+", "-", name)  # Multiple hyphens to single
             name = name.strip("-")  # Remove leading/trailing hyphens
             return name
-        
+
         elif convention == NamingConvention.SNAKE_CASE:
             # Convert to snake case
             name = re.sub(r"[-\s]+", "_", name)  # Replace hyphens/spaces
@@ -315,10 +315,10 @@ class NamingLinter:
             name = re.sub(r"_+", "_", name)  # Multiple underscores to single
             name = name.strip("_")  # Remove leading/trailing underscores
             return name
-        
+
         elif convention == NamingConvention.PASCAL_CASE:
             # Convert to pascal case
             parts = re.split(r"[-_\s]+", name)
             return "".join(p.capitalize() for p in parts if p)
-        
+
         return name

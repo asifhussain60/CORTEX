@@ -18,7 +18,7 @@ import logging
 import threading
 import time
 from dataclasses import dataclass, field
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +39,7 @@ class PoolExhaustedError(Exception):
 class Connection:
     """
     Represents a managed connection in the pool.
-    
+
     Attributes:
         connection_id: Unique identifier for this connection
         pool: Reference to parent pool

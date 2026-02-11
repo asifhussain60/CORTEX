@@ -13,19 +13,19 @@ Classes:
     CustomMetrics: Custom metrics for orchestrators and circuit breakers.
 """
 
-from dataclasses import dataclass, field
-from typing import Optional, Dict, List, Set, Any
-import time
 import threading
+import time
 from collections import defaultdict
+from dataclasses import dataclass, field
 from datetime import datetime
+from typing import Any, Dict, List, Optional, Set
 
 from prometheus_client import (
-    Counter,
-    Histogram,
-    Gauge,
-    CollectorRegistry,
     REGISTRY,
+    CollectorRegistry,
+    Counter,
+    Gauge,
+    Histogram,
     generate_latest,
 )
 
@@ -33,7 +33,7 @@ from prometheus_client import (
 @dataclass
 class MetricsConfig:
     """Configuration for metrics collection.
-    
+
     Args:
         environment: Deployment environment (test, staging, prod).
         cardinality_limit: Maximum unique label values per metric (prevent explosion).
@@ -53,7 +53,7 @@ class MetricsConfig:
 
 class RequestMetrics:
     """HTTP request metrics following RED (Rate, Errors, Duration) method.
-    
+
     Metrics:
         http_requests_total: Counter of requests by status, method, endpoint.
         http_request_duration_seconds: Histogram of request latency.
@@ -66,7 +66,7 @@ class RequestMetrics:
         config: Optional[MetricsConfig] = None,
     ) -> None:
         """Initialize request metrics.
-        
+
         Args:
             registry: Prometheus registry to use.
             config: Metrics configuration.
@@ -107,7 +107,7 @@ class RequestMetrics:
         status: int,
     ) -> None:
         """Record a completed HTTP request.
-        
+
         Args:
             endpoint: Request endpoint path.
             method: HTTP method (GET, POST, etc).
@@ -126,7 +126,7 @@ class RequestMetrics:
         duration_seconds: float,
     ) -> None:
         """Record request duration histogram.
-        
+
         Args:
             endpoint: Request endpoint path.
             duration_seconds: Request duration in seconds.
@@ -136,10 +136,10 @@ class RequestMetrics:
 
     def start_request(self, endpoint: str) -> str:
         """Start tracking an in-flight request.
-        
+
         Args:
             endpoint: Request endpoint path.
-            
+
         Returns:
             Request ID for later reference.
         """
@@ -152,7 +152,7 @@ class RequestMetrics:
 
     def end_request(self, request_id: str, endpoint: str) -> None:
         """End tracking an in-flight request.
-        
+
         Args:
             request_id: Request ID from start_request.
             endpoint: Request endpoint path.
@@ -165,11 +165,11 @@ class RequestMetrics:
 
     def _enforce_cardinality(self, label_name: str, value: str) -> str:
         """Enforce cardinality limit on label values.
-        
+
         Args:
             label_name: Label name.
             value: Label value.
-            
+
         Returns:
             Either the original value or 'other' if cardinality limit exceeded.
         """
@@ -182,7 +182,7 @@ class RequestMetrics:
 
 class DatabaseMetrics:
     """Database metrics following USE (Utilization, Saturation, Errors) method.
-    
+
     Metrics:
         db_connections_active: Gauge of active connections.
         db_connections_idle: Gauge of idle connections.
@@ -196,7 +196,7 @@ class DatabaseMetrics:
         config: Optional[MetricsConfig] = None,
     ) -> None:
         """Initialize database metrics.
-        
+
         Args:
             registry: Prometheus registry to use.
             config: Metrics configuration.
@@ -235,7 +235,7 @@ class DatabaseMetrics:
 
     def set_active_connections(self, count: int) -> None:
         """Set the number of active database connections.
-        
+
         Args:
             count: Number of active connections.
         """
@@ -243,7 +243,7 @@ class DatabaseMetrics:
 
     def set_idle_connections(self, count: int) -> None:
         """Set the number of idle database connections.
-        
+
         Args:
             count: Number of idle connections.
         """
@@ -255,7 +255,7 @@ class DatabaseMetrics:
         duration_seconds: float,
     ) -> None:
         """Record database query duration.
-        
+
         Args:
             query_type: Type of query (SELECT, INSERT, UPDATE, DELETE).
             duration_seconds: Query duration in seconds.
@@ -268,7 +268,7 @@ class DatabaseMetrics:
         status: str,
     ) -> None:
         """Record a database query execution.
-        
+
         Args:
             query_type: Type of query.
             status: Query status (success, error, timeout).
@@ -278,7 +278,7 @@ class DatabaseMetrics:
 
 class BusinessMetrics:
     """Business-level metrics for phases and governance.
-    
+
     Metrics:
         phases_total: Counter of phase completions.
         ac_completed_total: Counter of acceptance criteria completions.
@@ -291,7 +291,7 @@ class BusinessMetrics:
         config: Optional[MetricsConfig] = None,
     ) -> None:
         """Initialize business metrics.
-        
+
         Args:
             registry: Prometheus registry to use.
             config: Metrics configuration.
@@ -322,7 +322,7 @@ class BusinessMetrics:
 
     def record_phase_completion(self, status: str) -> None:
         """Record a phase completion.
-        
+
         Args:
             status: Phase status (success, failed, skipped).
         """
@@ -330,7 +330,7 @@ class BusinessMetrics:
 
     def record_ac_completion(self, phase: str, count: int = 1) -> None:
         """Record acceptance criteria completions.
-        
+
         Args:
             phase: Phase ID.
             count: Number of ACs completed.
@@ -340,7 +340,7 @@ class BusinessMetrics:
 
     def record_governance_check(self, rule: str, decision: str) -> None:
         """Record a governance check result.
-        
+
         Args:
             rule: Governance rule ID.
             decision: Rule decision (allow, deny, warn).
@@ -350,7 +350,7 @@ class BusinessMetrics:
 
 class CustomMetrics:
     """Custom metrics for orchestrators and circuit breakers.
-    
+
     Metrics:
         orchestrator_executions_total: Counter of orchestrator executions.
         circuit_breaker_state: Gauge of circuit breaker state.
@@ -362,7 +362,7 @@ class CustomMetrics:
         config: Optional[MetricsConfig] = None,
     ) -> None:
         """Initialize custom metrics.
-        
+
         Args:
             registry: Prometheus registry to use.
             config: Metrics configuration.
@@ -390,7 +390,7 @@ class CustomMetrics:
         status: str,
     ) -> None:
         """Record an orchestrator execution.
-        
+
         Args:
             orchestrator: Orchestrator name.
             status: Execution status (success, error, timeout).
@@ -402,7 +402,7 @@ class CustomMetrics:
 
     def set_circuit_breaker_state(self, circuit: str, state: int) -> None:
         """Set circuit breaker state.
-        
+
         Args:
             circuit: Circuit name.
             state: State code (0=closed, 1=open, 2=half_open).
@@ -412,14 +412,14 @@ class CustomMetrics:
 
 class MetricsCollector:
     """Main coordinator for all metrics collection.
-    
+
     Manages HTTP request metrics, database metrics, business metrics,
     and custom metrics with a unified interface.
     """
 
     def __init__(self, config: MetricsConfig) -> None:
         """Initialize metrics collector.
-        
+
         Args:
             config: Metrics configuration.
         """
@@ -446,7 +446,7 @@ class MetricsCollector:
 
     def generate_metrics_text(self) -> str:
         """Generate Prometheus metrics text format.
-        
+
         Returns:
             Metrics in Prometheus text format.
         """
@@ -454,7 +454,7 @@ class MetricsCollector:
 
     def get_metrics_dict(self) -> Dict[str, Any]:
         """Get metrics as a dictionary.
-        
+
         Returns:
             Dictionary representation of metrics.
         """

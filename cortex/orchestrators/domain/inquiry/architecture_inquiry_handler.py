@@ -16,22 +16,22 @@ from cortex.orchestrators.domain.inquiry.base_inquiry_handler import (
 
 class ArchitectureInquiryHandler(BaseInquiryHandler):
     """Specialized handler for CORTEX architecture questions.
-    
+
     Focuses on: System design, component integration, wiring patterns,
     orchestrator relationships, phase dependencies.
     """
-    
+
     def handle(self, context: AssembledContext) -> Dict[str, Any]:
         """Handle architecture inquiry.
-        
+
         Args:
             context: Assembled context with CORTEX evidence
-            
+
         Returns:
             Response with architecture-focused answer
         """
         answer = self._generate_architecture_answer(context)
-        
+
         evidence_refs = [
             {
                 "file": ev.file_path,
@@ -41,7 +41,7 @@ class ArchitectureInquiryHandler(BaseInquiryHandler):
             }
             for ev in context.evidence_sources
         ]
-        
+
         return {
             "answer": answer,
             "evidence": evidence_refs,
@@ -49,16 +49,16 @@ class ArchitectureInquiryHandler(BaseInquiryHandler):
             "tier3_knowledge": context.tier3_knowledge or [],
             "core_rules": context.core_rules or [],
         }
-    
+
     def _generate_architecture_answer(
         self,
         context: AssembledContext,
     ) -> str:
         """Generate architecture-focused answer.
-        
+
         Args:
             context: Assembled context
-            
+
         Returns:
             Architecture answer (40-60 words)
         """
@@ -69,11 +69,11 @@ class ArchitectureInquiryHandler(BaseInquiryHandler):
                 "a different naming convention. Check the DatabaseBackedRegistry "
                 "for orchestrator wiring or review phase specifications."
             )
-        
+
         # Extract architecture-relevant info
         files = [ev.file_path for ev in context.evidence_sources[:3]]
         file_summary = ", ".join(files)
-        
+
         return (
             f"Architecture analysis: Found implementation across {len(context.evidence_sources)} "
             f"files ({file_summary}). Key components show orchestrator integration patterns. "

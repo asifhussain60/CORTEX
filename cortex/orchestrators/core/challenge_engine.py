@@ -22,19 +22,19 @@ Author: Asif Hussain
 Date: 2026-01-25
 """
 
+import logging
 from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional
 from enum import Enum
 from pathlib import Path
-import logging
+from typing import Any, Dict, List, Optional
 
-from cortex.core.result import Result, Ok, Err
-from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from cortex.brain.analysis.security_threat_analyzer import (
     SecurityThreatAnalyzer,
     ThreatFinding,
     ThreatSeverity,
 )
+from cortex.core.result import Err, Ok, Result
+from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 
 # CORE-035: Import DisagreementType from canonical location
 # Note: Local DisagreementType kept for backward compatibility but should migrate
@@ -45,11 +45,11 @@ logger = logging.getLogger(__name__)
 
 class DisagreementType(Enum):
     """Types of disagreements CORTEX can have with user requests.
-    
+
     DEPRECATED: Use cortex.models.canonical_enums.DisagreementType instead.
     Kept for backward compatibility during migration.
     """
-    
+
     BETTER_SOLUTION = "better_solution"  # CORTEX has a superior approach
     MISSING_CONTEXT = "missing_context"  # User missing critical information
     HARMFUL_ACTION = "harmful_action"  # Request would cause problems
@@ -61,7 +61,7 @@ class DisagreementType(Enum):
 class LENSContext:
     """
     Context gathered via LENS (Language→Examination→Navigation→Synthesis).
-    
+
     Attributes:
         language: Natural language interpretation of user request
         examination: Code/docs/tests examined to understand current state
@@ -78,7 +78,7 @@ class LENSContext:
 
 class GateType(Enum):
     """Types of challenge gates (Phase 8.1 - Tier-3 Logic)."""
-    
+
     HARD = "hard"  # Blocks execution, requires explicit user response
     SOFT = "soft"  # Suggests challenge, auto-proceeds after timeout
     CONTEXT = "context"  # Asks clarifying questions
@@ -86,7 +86,7 @@ class GateType(Enum):
 
 class ChallengeType(Enum):
     """Challenge types with specific gate behavior (Phase 8.1 - Tier-3 Logic)."""
-    
+
     SECURITY = "security"  # Hard gate - security vulnerabilities
     HARMFUL = "harmful"  # Hard gate - harmful actions
     SRP_VIOLATION = "srp_violation"  # Soft gate - Single Responsibility Principle
@@ -100,7 +100,7 @@ class ChallengeType(Enum):
 class ChallengeRule:
     """
     Rule for handling specific challenge type (Phase 8.1 - Tier-3 Logic).
-    
+
     Attributes:
         challenge_type: Type of challenge
         gate_type: Hard/Soft/Context
@@ -119,7 +119,7 @@ class ChallengeRule:
 class ChallengeResponse:
     """
     CORTEX's challenge to user's request.
-    
+
     Attributes:
         has_disagreement: Whether CORTEX disagrees with user
         disagreement_type: Type of disagreement
@@ -148,10 +148,10 @@ class ChallengeResponse:
 class SecurityThreatAssessment:
     """
     Security threat assessment for a request context.
-    
+
     Phase 8.3: Integrates SecurityThreatAnalyzer findings into ChallengeEngine
     for security-first hard gates before DoR approval.
-    
+
     Attributes:
         has_threats: Whether threats were detected
         threats: List of ThreatFinding objects
@@ -171,15 +171,15 @@ class SecurityThreatAssessment:
 class ChallengeEngine:
     """
     Generates intelligent challenges when CORTEX disagrees with user requests.
-    
+
     Uses LENS synthesis to build deep context, then applies AI reasoning to:
     1. Detect when user's request may not be optimal
     2. Analyze implementation reality vs user's assumptions
     3. Generate better alternatives with clear reasoning
     4. Present choices in user-friendly format
-    
+
     Integrated into InteractionOrchestrator to challenge every turn.
-    
+
     Usage:
         >>> engine = ChallengeEngine()
         >>> lens_context = engine.build_lens_context("Remove AC-PERMANENT-FIX")
@@ -187,16 +187,16 @@ class ChallengeEngine:
         >>> if challenge.has_disagreement:
         >>>     print(challenge.recommended_alternative)
     """
-    
+
     def __init__(self) -> None:
         """Initialize Challenge Engine with audit logging and Tier-3 rules."""
         self.logger = EnhancedAuditLogger.instance()
-        
+
         # Phase 8.2: Initialize SecurityThreatAnalyzer for hard security gates
         self.security_analyzer = SecurityThreatAnalyzer()
-        
+
         logger.info("ChallengeEngine initialized with SecurityThreatAnalyzer (Phase 8.2)")
-        
+
         # Phase 8.1: Tier-3 Gate Logic - Define rules for each challenge type
         self.challenge_rules: Dict[ChallengeType, ChallengeRule] = {
             ChallengeType.SECURITY: ChallengeRule(
@@ -249,7 +249,7 @@ class ChallengeEngine:
                 description="Work already exists"
             ),
         }
-    
+
     def build_lens_context(
         self,
         user_request: str,
@@ -257,16 +257,16 @@ class ChallengeEngine:
     ) -> LENSContext:
         """
         Build context using LENS protocol.
-        
+
         LENS = Language → Examination → Navigation → Synthesis
-        
+
         Args:
             user_request: User's natural language request
             search_tools: Optional dict of search tools (grep_search, semantic_search, etc.)
-            
+
         Returns:
             LENSContext with full analysis
-            
+
         Example:
             >>> engine = ChallengeEngine()
             >>> context = engine.build_lens_context("Remove AC-PERMANENT-FIX")
@@ -274,26 +274,26 @@ class ChallengeEngine:
             "AC-PERMANENT-FIX serves different purpose than CORE-030..."
         """
         logger.info("Building LENS context for request: %s", user_request)
-        
+
         # Language: Parse natural language
         language_interpretation = self._parse_language(user_request)
-        
+
         # Examination: Search code/docs/tests
         examination_results = self._examine_implementation(
             user_request,
             search_tools or {}
         )
-        
+
         # Navigation: Explore relevant paths
         navigation_paths = self._navigate_context(examination_results)
-        
+
         # Synthesis: Combine all phases
         synthesis, confidence = self._synthesize_context(
             language_interpretation,
             examination_results,
             navigation_paths
         )
-        
+
         context = LENSContext(
             language=language_interpretation,
             examination=examination_results,
@@ -301,15 +301,15 @@ class ChallengeEngine:
             synthesis=synthesis,
             confidence=confidence
         )
-        
+
         logger.info(
             "LENS context built: confidence=%.2f, paths=%d",
             confidence,
             len(navigation_paths)
         )
-        
+
         return context
-    
+
     def generate_challenge(
         self,
         user_request: str,
@@ -319,18 +319,18 @@ class ChallengeEngine:
     ) -> ChallengeResponse:
         """
         Generate challenge if CORTEX disagrees with user's request.
-        
+
         Phase 8.1: Supports Tier-3 gate logic with challenge_type parameter.
-        
+
         Args:
             user_request: User's original request
             lens_context: LENS context from build_lens_context()
             threshold: Legacy confidence threshold (default: 0.7) - used if challenge_type is None
             challenge_type: Specific challenge type for Tier-3 gate logic (Phase 8.1)
-            
+
         Returns:
             ChallengeResponse with disagreement details or no challenge
-            
+
         Example:
             >>> challenge = engine.generate_challenge(request, context, challenge_type=ChallengeType.SRP_VIOLATION)
             >>> if challenge.has_disagreement:
@@ -338,54 +338,54 @@ class ChallengeEngine:
             >>>     print(f"Auto-proceed: {challenge.auto_proceed_ms}ms")
         """
         logger.info("Analyzing request for potential disagreement")
-        
+
         # Phase 8.1: Apply Tier-3 gate logic if challenge_type specified
         if challenge_type is not None:
             return self._apply_tier3_gates(user_request, lens_context, challenge_type)
-        
+
         # Legacy behavior: use threshold parameter
         # If confidence too low, don't challenge (need more info)
         if lens_context.confidence < threshold:
-            logger.info("Confidence %.2f below threshold %.2f - no challenge", 
+            logger.info("Confidence %.2f below threshold %.2f - no challenge",
                        lens_context.confidence, threshold)
             return ChallengeResponse(has_disagreement=False)
-        
+
         # Detect disagreement type
         disagreement_type = self._detect_disagreement(
             user_request,
             lens_context
         )
-        
+
         if disagreement_type is None:
             logger.info("No disagreement detected")
             return ChallengeResponse(has_disagreement=False)
-        
+
         logger.info("Disagreement detected: %s", disagreement_type.value)
-        
+
         # Generate alternative
         alternative = self._generate_alternative(
             user_request,
             lens_context,
             disagreement_type
         )
-        
+
         # Build reasoning
         reasoning = self._build_reasoning(
             lens_context,
             disagreement_type,
             alternative
         )
-        
+
         # Extract evidence
         evidence = self._extract_evidence(lens_context)
-        
+
         # Generate options for user
         options = self._generate_options(
             user_request,
             alternative,
             disagreement_type
         )
-        
+
         challenge = ChallengeResponse(
             has_disagreement=True,
             disagreement_type=disagreement_type,
@@ -396,7 +396,7 @@ class ChallengeEngine:
             evidence=evidence,
             options=options
         )
-        
+
         self.logger.log_operation_complete(
             ac_id="AC-CHALLENGE-SYSTEM-001",
             operation="CHALLENGE_GENERATED",
@@ -407,9 +407,9 @@ class ChallengeEngine:
                 "has_alternative": bool(alternative)
             }
         )
-        
+
         return challenge
-    
+
     def _apply_tier3_gates(
         self,
         user_request: str,
@@ -418,27 +418,27 @@ class ChallengeEngine:
     ) -> ChallengeResponse:
         """
         Apply Tier-3 gate logic for specific challenge type.
-        
+
         Phase 8.1: Routes challenges through hard/soft/context gates based on
         violation type and confidence score.
-        
+
         Args:
             user_request: User's original request
             lens_context: LENS context
             challenge_type: Type of challenge to apply gate logic for
-            
+
         Returns:
             ChallengeResponse with gate_type and auto_proceed_ms populated
         """
         logger.info("Applying Tier-3 gate logic for challenge type: %s", challenge_type.value)
-        
+
         # Look up rule for this challenge type
         if challenge_type not in self.challenge_rules:
             logger.warning("No rule found for challenge type: %s", challenge_type.value)
             return ChallengeResponse(has_disagreement=False)
-        
+
         rule = self.challenge_rules[challenge_type]
-        
+
         # Check if confidence meets threshold
         if lens_context.confidence < rule.threshold:
             logger.info(
@@ -448,9 +448,9 @@ class ChallengeEngine:
                 challenge_type.value
             )
             return ChallengeResponse(has_disagreement=False)
-        
+
         logger.info("Confidence %.2f meets threshold %.2f", lens_context.confidence, rule.threshold)
-        
+
         # Map ChallengeType to DisagreementType for backward compatibility
         disagreement_type_map = {
             ChallengeType.SECURITY: DisagreementType.HARMFUL_ACTION,
@@ -461,32 +461,32 @@ class ChallengeEngine:
             ChallengeType.AMBIGUITY: DisagreementType.MISSING_CONTEXT,
             ChallengeType.REDUNDANT_WORK: DisagreementType.REDUNDANT_WORK,
         }
-        
+
         disagreement_type = disagreement_type_map.get(
             challenge_type,
             DisagreementType.BETTER_SOLUTION
         )
-        
+
         # Generate alternative
         alternative = self._generate_alternative(
             user_request,
             lens_context,
             disagreement_type
         )
-        
+
         # Build reasoning
         reasoning = self._build_reasoning(
             lens_context,
             disagreement_type,
             alternative
         )
-        
+
         # Extract evidence
         evidence = self._extract_evidence(lens_context)
-        
+
         # Generate options based on gate type
         options = self._generate_tier3_options(challenge_type, rule.gate_type)
-        
+
         # Create response with gate information
         challenge = ChallengeResponse(
             has_disagreement=True,
@@ -500,14 +500,14 @@ class ChallengeEngine:
             gate_type=rule.gate_type,
             auto_proceed_ms=rule.auto_proceed_ms
         )
-        
+
         logger.info(
             "Challenge generated: type=%s, gate=%s, auto_proceed=%dms",
             challenge_type.value,
             rule.gate_type.value,
             rule.auto_proceed_ms
         )
-        
+
         self.logger.log_operation_complete(
             ac_id="AC-CHALLENGE-SYSTEM-001",
             operation="TIER3_GATE_APPLIED",
@@ -520,9 +520,9 @@ class ChallengeEngine:
                 "auto_proceed_ms": rule.auto_proceed_ms
             }
         )
-        
+
         return challenge
-    
+
     def _generate_tier3_options(
         self,
         challenge_type: ChallengeType,
@@ -530,7 +530,7 @@ class ChallengeEngine:
     ) -> List[str]:
         """
         Generate options for user based on gate type.
-        
+
         Hard gates: Accept / Reject / Cancel
         Soft gates: Accept / Reject / Proceed anyway / Cancel
         Context gates: Provide context / Clarify / Proceed / Cancel
@@ -555,22 +555,22 @@ class ChallengeEngine:
                 "3. Accept CORTEX interpretation and proceed",
                 "4. Cancel"
             ]
-        
+
         return ["1. Accept", "2. Reject", "3. Cancel"]
-    
+
     def format_challenge_response(
         self,
         challenge: ChallengeResponse
     ) -> str:
         """
         Format challenge as user-friendly markdown.
-        
+
         Args:
             challenge: ChallengeResponse from generate_challenge()
-            
+
         Returns:
             Markdown-formatted challenge message
-            
+
         Example:
             >>> formatted = engine.format_challenge_response(challenge)
             >>> print(formatted)
@@ -579,7 +579,7 @@ class ChallengeEngine:
         """
         if not challenge.has_disagreement:
             return ""
-        
+
         lines = [
             "### 🤔 CORTEX Challenge",
             "",
@@ -598,104 +598,104 @@ class ChallengeEngine:
             challenge.reasoning,
             ""
         ]
-        
+
         if challenge.evidence:
             lines.append("**Evidence:**")
             for key, value in challenge.evidence.items():
                 lines.append(f"- {key}: {value}")
             lines.append("")
-        
+
         if challenge.options:
             lines.append("**What would you like to do?**")
             lines.append("")
-            
+
             # Emoji indicators for quick visual scanning
             emoji_indicators = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣"]
             for i, option in enumerate(challenge.options, 1):
                 emoji = emoji_indicators[i - 1] if i <= len(emoji_indicators) else f"{i}."
                 lines.append(f"{emoji} {option}")
-            
+
             lines.append("")
             lines.append("Reply with: `1` / `2` / `3` (or your choice)")
             lines.append("")
-        
+
         return "\n".join(lines)
-    
+
     # Private helper methods
-    
+
     def _parse_language(self, user_request: str) -> str:
         """Parse natural language to extract intent.
-        
+
         Phase 65 S3: Now delegates to IntentRouter for real classification.
-        
+
         Args:
             user_request: User's natural language request
-            
+
         Returns:
             Classified intent with keywords and confidence
         """
         try:
             # Phase 65 S3: Wire to IntentRouter for real classification
-            from cortex.orchestrators.core.intent_router import IntentRouter
             from cortex.models.canonical_enums import IntentType
-            
+            from cortex.orchestrators.core.intent_router import IntentRouter
+
             router = IntentRouter()
-            
+
             # Detect intent from user request
             context = {
                 "operation": "user_request",
                 "description": user_request,
                 "user_request": user_request
             }
-            
+
             intent_type = router.detect_intent(context)
-            
+
             # Build structured interpretation
             interpretation = f"Intent: {intent_type.value if hasattr(intent_type, 'value') else str(intent_type)}"
-            
+
             # Extract keywords from request
             keywords = [word for word in user_request.split() if len(word) > 4][:5]
             if keywords:
                 interpretation += f" | Keywords: {', '.join(keywords)}"
-            
+
             return interpretation
-            
+
         except Exception as e:
             logger.warning(f"Intent classification failed: {e}")
             # Fallback to simple parsing
             return f"User wants to: {user_request.lower().strip()}"
-    
+
     def _examine_implementation(
         self,
         request: str,
         search_tools: Dict[str, Any]
     ) -> Dict[str, Any]:
         """Examine code/docs/tests related to request.
-        
+
         Phase 65 S3: Delegates to LENSOrchestrator when file_path available.
-        
+
         Args:
             request: User request being examined
             search_tools: Dict with optional 'file_path' key
-            
+
         Returns:
             Dict with examination results (AST, git, comments, etc.)
         """
         try:
             # Phase 65 S3: Wire to LENSOrchestrator when file_path provided
             file_path = search_tools.get("file_path")
-            
+
             if file_path and Path(file_path).exists():
                 # Use LENS for real file analysis
                 from cortex.lens.orchestrator import LENSOrchestrator
-                
+
                 lens = LENSOrchestrator(repo_path=Path(file_path).parent.parent)
-                
+
                 # Analyze file with LENS
                 lens_result = lens.analyze_file(
                     file_path=Path(file_path)
                 )
-                
+
                 # Extract examination results
                 examination = {
                     "code_found": [str(file_path)],
@@ -704,18 +704,18 @@ class ChallengeEngine:
                     "comments": lens_result.get("comments", {}),
                     "lens_context": lens_result
                 }
-                
+
                 return examination
-            
+
             else:
                 # No file_path - attempt repo profile load
                 # Phase 65 S3-T5: ProfileStore integration
                 try:
                     from cortex.brain.repository.profile_store import ProfileStore
-                    
+
                     profile_store = ProfileStore()
                     active_profile = profile_store.get_active_profile()
-                    
+
                     if active_profile:
                         return {
                             "repo_profile": active_profile.metadata,
@@ -725,7 +725,7 @@ class ChallengeEngine:
                         }
                 except Exception as e:
                     logger.debug(f"Profile load failed: {e}")
-                
+
                 # Fallback to empty
                 return {
                     "code_found": [],
@@ -733,7 +733,7 @@ class ChallengeEngine:
                     "docs_found": [],
                     "git_history": []
                 }
-                
+
         except Exception as e:
             logger.warning(f"Examination failed: {e}")
             # Fallback to hardcoded
@@ -743,18 +743,18 @@ class ChallengeEngine:
                 "docs_found": [],
                 "git_history": []
             }
-    
+
     def _navigate_context(
         self,
         examination: Dict[str, Any]
     ) -> List[str]:
         """Navigate through related context paths.
-        
+
         Phase 65 S3: Uses knowledge graph relationships when available.
-        
+
         Args:
             examination: Results from _examine_implementation
-            
+
         Returns:
             List of related entity paths/names
         """
@@ -762,31 +762,31 @@ class ChallengeEngine:
             # Phase 65 S3: Wire to KnowledgeQuerier for graph traversal
             # Extract entities from examination
             code_files = examination.get("code_found", [])
-            
+
             if not code_files:
                 return []
-            
+
             # Simple semantic navigation based on file names for now
             # Future: Use full knowledge graph traversal
             related_paths = []
-            
+
             for file_path in code_files:
                 # Extract module name
                 if "/" in file_path or "\\" in file_path:
                     parts = file_path.replace("\\", "/").split("/")
                     module_name = parts[-1].replace(".py", "").replace(".ts", "")
                     related_paths.append(module_name)
-                    
+
                     # Add parent directory as context
                     if len(parts) > 1:
                         related_paths.append(parts[-2])
-            
+
             return list(set(related_paths))[:10]  # Limit to 10 related entities
-            
+
         except Exception as e:
             logger.warning(f"Context navigation failed: {e}")
             return []
-    
+
     def _synthesize_context(
         self,
         language: str,
@@ -795,26 +795,28 @@ class ChallengeEngine:
     ) -> tuple[str, float]:
         """
         Synthesize all LENS phases into understanding.
-        
+
         Phase 65 S3: Now calls KnowledgeSynthesisEngine for real synthesis.
-        
+
         Args:
             language: Language phase output
             examination: Examination phase results
             navigation: Navigation paths found
-            
+
         Returns:
             Tuple of (synthesis_text, confidence_score)
         """
         try:
             # Phase 65 S3: Wire to KnowledgeSynthesisEngine
-            from cortex.brain.knowledge.knowledge_synthesis_engine import KnowledgeSynthesisEngine
-            
+            from cortex.brain.knowledge.knowledge_synthesis_engine import (
+                KnowledgeSynthesisEngine,
+            )
+
             synthesis_engine = KnowledgeSynthesisEngine()
-            
+
             # Build context for synthesis
             intent_type = language.split("|")[0].replace("Intent: ", "").strip() if "|" in language else "UNKNOWN"
-            
+
             # Attempt to synthesize with real knowledge
             # Note: S1 wired YAML loading, so this now works
             synthesis_result = synthesis_engine.synthesize_unified_context(
@@ -823,53 +825,53 @@ class ChallengeEngine:
                 company_knowledge=None,  # Future: pass company data
                 file_path=None
             )
-            
+
             # Extract synthesis and confidence
             if synthesis_result:
                 # Use number of loaded practices as confidence indicator
                 cortex_knowledge = synthesis_result.cortex_knowledge
                 rules_loaded = cortex_knowledge.synthesis_metadata.get("rules_loaded", 0)
-                
+
                 # Confidence based on knowledge + data availability
                 base_confidence = 0.3 + (rules_loaded / 200.0)  # 0.3-0.6 range from knowledge
-                
+
                 # Boost from examination data
                 exam_boost = 0.0
                 if examination:
                     code_count = len(examination.get("code_found", []))
                     exam_boost = min(0.2, code_count * 0.1)
-                
+
                 # Boost from navigation
                 nav_boost = min(0.1, len(navigation) * 0.02) if navigation else 0.0
-                
+
                 confidence = min(0.95, base_confidence + exam_boost + nav_boost)
             else:
                 # Estimate confidence from data availability
                 confidence = 0.5 if examination or navigation else 0.3
-            
+
             # Build synthesis text
             parts = []
             parts.append(f"Intent: {intent_type}")
-            
+
             if examination:
                 code_count = len(examination.get("code_found", []))
                 if code_count > 0:
                     parts.append(f"Analyzed {code_count} file(s)")
-            
+
             if navigation:
                 parts.append(f"Related: {', '.join(navigation[:3])}")
-            
+
             synthesis = " | ".join(parts)
-            
+
             return synthesis, confidence
-            
+
         except Exception as e:
             logger.warning(f"Knowledge synthesis failed: {e}")
             # Fallback to simple heuristic
             parts = []
             if language:
                 parts.append(f"Language: {language[:100]}")
-            
+
             exam_sources = 0
             if isinstance(examination, dict):
                 exam_sources = (
@@ -877,22 +879,22 @@ class ChallengeEngine:
                     len(examination.get("tests_found", [])) +
                     len(examination.get("docs_found", []))
                 )
-            
+
             parts.append(f"Examined {exam_sources} sources")
-            
+
             if navigation:
                 parts.append(f"Navigation: {len(navigation)} paths explored")
-            
+
             synthesis = "; ".join(parts)
-            
+
             # Calculate confidence based on data availability
             confidence = 0.3
             confidence += min(0.3, exam_sources * 0.1)
             confidence += min(0.2, len(navigation) * 0.05)
             confidence = min(0.95, confidence)
-            
+
             return synthesis, confidence
-    
+
     def _detect_disagreement(
         self,
         request: str,
@@ -900,39 +902,39 @@ class ChallengeEngine:
     ) -> Optional[DisagreementType]:
         """
         Detect if there's a disagreement and classify it.
-        
+
         AC-FUTURE-002: Real disagreement detection logic
-        
+
         Analyzes request for 5 types:
         1. BETTER_SOLUTION - CORTEX has superior approach (TDD, design patterns)
         2. MISSING_CONTEXT - Request too vague or missing critical info
         3. HARMFUL_ACTION - Request would cause damage/data loss
         4. REDUNDANT_WORK - Feature already exists, reimplementation unnecessary
         5. ARCHITECTURAL_VIOLATION - Breaks CORE rules or design principles
-        
+
         Returns:
             DisagreementType if disagreement detected, None otherwise
         """
         request_lower = request.lower().strip()
-        
+
         # Check 1: ARCHITECTURAL_VIOLATION patterns
         # CORE-028/CORE-038: .md files must be in docs/
         if ".md" in request_lower and ("root" in request_lower or "outside docs" in request_lower):
             logger.info("Detected ARCHITECTURAL_VIOLATION: .md file outside docs/")
             return DisagreementType.ARCHITECTURAL_VIOLATION
-        
+
         # CORE-039: MD file generation prohibition
         if ("generate" in request_lower or "create" in request_lower) and ".md" in request_lower:
             if "docs/" not in request_lower and "documentation" not in request_lower:
                 logger.info("Detected ARCHITECTURAL_VIOLATION: MD generation outside docs/")
                 return DisagreementType.ARCHITECTURAL_VIOLATION
-        
+
         # CORE-035: No duplicate implementations
         if any(dup in request_lower for dup in ["duplicate", "copy", "replicate", "redo", "remake"]):
             if "existing" in request_lower or "already" in request_lower:
                 logger.info("Detected REDUNDANT_WORK: Attempting duplicate of existing feature")
                 return DisagreementType.REDUNDANT_WORK
-        
+
         # Check 2: HARMFUL_ACTION patterns
         harmful_keywords = [
             "delete all", "remove all", "drop all", "truncate all",
@@ -942,38 +944,38 @@ class ChallengeEngine:
         if any(keyword in request_lower for keyword in harmful_keywords):
             logger.info("Detected HARMFUL_ACTION: Request appears dangerous")
             return DisagreementType.HARMFUL_ACTION
-        
+
         # Check 3: BETTER_SOLUTION patterns
         # TDD is better than writing code without tests
         if "without" in request_lower and "test" in request_lower:
             logger.info("Detected BETTER_SOLUTION: Code without tests detected")
             return DisagreementType.BETTER_SOLUTION
-        
+
         if "write code" in request_lower and "test" not in request_lower:
             # Check if TDD would be better
             if context.confidence > 0.5:
                 logger.info("Detected BETTER_SOLUTION: Recommending TDD approach")
                 return DisagreementType.BETTER_SOLUTION
-        
+
         # Design pattern violations
         if any(anti in request_lower for anti in ["bare except", "global variable", "super long function"]):
             logger.info("Detected BETTER_SOLUTION: Anti-pattern detected")
             return DisagreementType.BETTER_SOLUTION
-        
+
         # Check 4: MISSING_CONTEXT patterns
         vague_patterns = [
             ("fix", "bug", ["fix the bug", "fix it", "fix this"]),
             ("implement", "feature", ["implement feature", "add feature", "implement it"]),
             ("refactor", "code", ["refactor code", "improve it", "make it better"]),
         ]
-        
+
         for keyword, concept, patterns in vague_patterns:
             if any(pattern in request_lower for pattern in patterns):
                 # Check if request is too vague (no specific details)
                 if len(request) < 20 or request_lower.count(" ") < 3:
                     logger.info("Detected MISSING_CONTEXT: Vague request - %s", request)
                     return DisagreementType.MISSING_CONTEXT
-        
+
         # Check 5: REDUNDANT_WORK patterns (more specific)
         redundant_patterns = [
             "reimplement", "recreate", "rebuild", "rewrite from scratch",
@@ -983,11 +985,11 @@ class ChallengeEngine:
             if "already" in context.synthesis.lower() or "exists" in context.synthesis.lower():
                 logger.info("Detected REDUNDANT_WORK: Reimplementation of existing feature")
                 return DisagreementType.REDUNDANT_WORK
-        
+
         # No clear disagreement detected
         logger.info("No disagreement detected for request: %s", request[:50])
         return None
-    
+
     def _generate_alternative(
         self,
         request: str,
@@ -996,14 +998,14 @@ class ChallengeEngine:
     ) -> str:
         """
         Generate alternative approach based on disagreement type.
-        
+
         AC-FUTURE-002: Alternative generation
-        
+
         Args:
             request: Original user request
             context: LENS context with analysis
             disagreement: Type of disagreement detected
-            
+
         Returns:
             Recommended alternative approach
         """
@@ -1018,37 +1020,37 @@ class ChallengeEngine:
                 "Reconsider approach to align with CORTEX best practices: "
                 "Design patterns, type hints, proper error handling, and code organization."
             )
-        
+
         elif disagreement == DisagreementType.MISSING_CONTEXT:
             return (
                 "Please provide more specific details: "
                 "What is the specific bug/feature? What is the expected behavior? "
                 "What have you already tried? Any error messages or logs?"
             )
-        
+
         elif disagreement == DisagreementType.HARMFUL_ACTION:
             return (
                 "This action could cause data loss or system damage. "
                 "Recommended: Create backup first, test on non-production environment, "
                 "implement safeguards (soft delete, audit trail), or reconsider necessity."
             )
-        
+
         elif disagreement == DisagreementType.REDUNDANT_WORK:
             return (
                 "This feature or functionality already exists. "
                 "Recommended: Use existing implementation, extend it if needed, "
                 "or explain why reimplementation is necessary."
             )
-        
+
         elif disagreement == DisagreementType.ARCHITECTURAL_VIOLATION:
             return (
                 "This violates CORTEX architectural principles or governance rules. "
                 "Recommended: Follow proper file placement (CORE-038), file type restrictions (CORE-039), "
                 "and design patterns established in the codebase."
             )
-        
+
         return "Alternative approach not yet determined. Please clarify your request."
-    
+
     def _build_reasoning(
         self,
         context: LENSContext,
@@ -1057,68 +1059,68 @@ class ChallengeEngine:
     ) -> str:
         """
         Build explanation of why alternative is better.
-        
+
         AC-FUTURE-002: Reasoning generation
-        
+
         Args:
             context: LENS context with confidence and analysis
             disagreement: Type of disagreement
             alternative: Proposed alternative
-            
+
         Returns:
             Explanation of why alternative is better
         """
         confidence_pct = int(context.confidence * 100)
-        
+
         if disagreement == DisagreementType.BETTER_SOLUTION:
             return (
                 f"CORTEX analysis (confidence: {confidence_pct}%) suggests a better approach. "
                 f"Based on project standards and best practices in CORTEX codebase, "
                 f"the recommended approach is more maintainable, testable, and aligns with governance rules."
             )
-        
+
         elif disagreement == DisagreementType.MISSING_CONTEXT:
             return (
                 f"Your request is too general to execute properly (analysis confidence: {confidence_pct}%). "
                 f"Additional context would help CORTEX provide a more accurate and comprehensive solution. "
                 f"This also helps prevent mistakes and ensures what you ask for is actually what you need."
             )
-        
+
         elif disagreement == DisagreementType.HARMFUL_ACTION:
             return (
                 f"CORTEX detected potentially destructive operation (confidence: {confidence_pct}%). "
                 f"This could result in data loss, system downtime, or other severe consequences. "
                 f"Caution is strongly recommended - implement safeguards and test thoroughly first."
             )
-        
+
         elif disagreement == DisagreementType.REDUNDANT_WORK:
             return (
                 f"CORTEX analysis ({confidence_pct}% confidence) indicates similar or identical "
                 f"functionality already exists in the codebase. Reimplementation creates maintenance burden, "
                 f"increases bugs, and violates DRY (Don't Repeat Yourself) principle."
             )
-        
+
         elif disagreement == DisagreementType.ARCHITECTURAL_VIOLATION:
             return (
                 f"This violates established architectural patterns and governance rules "
                 f"(confidence: {confidence_pct}%). CORTEX enforces file placement (CORE-038), "
                 f"file restrictions (CORE-039), and design principles to maintain codebase integrity."
             )
-        
+
         return f"Analysis confidence: {confidence_pct}%. See evidence section for details."
-    
+
     def _extract_evidence(
         self,
         context: LENSContext
     ) -> Dict[str, Any]:
         """
         Extract supporting evidence from LENS context.
-        
+
         AC-FUTURE-002: Evidence extraction
-        
+
         Args:
             context: LENS context with examination data
-            
+
         Returns:
             Dict with evidence items (code locations, patterns, confidence)
         """
@@ -1126,7 +1128,7 @@ class ChallengeEngine:
             "confidence": f"{context.confidence:.0%}",
             "sources_examined": len(context.examination) if context.examination else 0,
         }
-        
+
         # Extract specific evidence items if available
         if context.examination:
             if isinstance(context.examination, dict):
@@ -1138,13 +1140,13 @@ class ChallengeEngine:
                     evidence["documentation_reviewed"] = len(context.examination.get("docs_found", []))
                 if context.examination.get("git_history"):
                     evidence["git_history_length"] = len(context.examination.get("git_history", []))
-        
+
         # Add synthesis as evidence
         if context.synthesis:
             evidence["analysis"] = context.synthesis[:200]  # First 200 chars
-        
+
         return evidence
-    
+
     def _generate_options(
         self,
         original_request: str,
@@ -1158,7 +1160,7 @@ class ChallengeEngine:
             "Modify approach (tell me how)",
             "Explain your reasoning (I'll reconsider)"
         ]
-    
+
     def assess_security_threats(
         self,
         code_context: str,
@@ -1166,14 +1168,14 @@ class ChallengeEngine:
     ) -> SecurityThreatAssessment:
         """
         Assess security threats in code context (Phase 8.3).
-        
+
         Phase 8.3: Integrates SecurityThreatAnalyzer findings into challenge
         engine for hard security gates. Called automatically before DoR gate
         if code analysis is available.
-        
+
         Returns:
             SecurityThreatAssessment with threats, severity, and block flag
-            
+
         Example:
             >>> assessment = engine.assess_security_threats("eval(user_input)")
             >>> if assessment.block_execution:
@@ -1182,10 +1184,10 @@ class ChallengeEngine:
             >>>         print(f"  - {threat.cwe_id}: {threat.description}")
         """
         logger.info("Assessing security threats in code context (Phase 8.3)")
-        
+
         # Run security analysis
         result = self.security_analyzer.analyze_code(code_context, file_path)
-        
+
         if not result.success:
             logger.warning("Security analysis failed: %s", result.error)
             return SecurityThreatAssessment(
@@ -1196,7 +1198,7 @@ class ChallengeEngine:
                 threat_summary="Security analysis could not be completed",
                 threat_context={"error": result.error}
             )
-        
+
         # Determine highest severity
         if not result.threat_findings:
             return SecurityThreatAssessment(
@@ -1210,28 +1212,28 @@ class ChallengeEngine:
                     "analysis_time_ms": result.analysis_time_ms
                 }
             )
-        
+
         # Find highest severity
         highest_severity = max(
             (t.severity for t in result.threat_findings),
             default=ThreatSeverity.INFO
         )
-        
+
         # Determine if execution should be blocked (CRITICAL or HIGH with CWE-94, CWE-95, CWE-78)
         block_execution = (
             highest_severity == ThreatSeverity.CRITICAL or
             any(t.cwe_id in ["CWE-94", "CWE-95", "CWE-78"] for t in result.threat_findings)
         )
-        
+
         # Build threat summary
         threat_counts = {}
         for threat in result.threat_findings:
             key = f"{threat.cwe_id} ({threat.severity.name})"
             threat_counts[key] = threat_counts.get(key, 0) + 1
-        
+
         summary_items = [f"{key}: {count}" for key, count in threat_counts.items()]
         threat_summary = f"Found {len(result.threat_findings)} threat(s): {', '.join(summary_items)}"
-        
+
         # Log to audit trail
         self.logger.log_operation_complete(
             ac_id="AC-SECURITY-FRAMEWORK-001",
@@ -1244,7 +1246,7 @@ class ChallengeEngine:
                 "analysis_time_ms": result.analysis_time_ms,
             }
         )
-        
+
         return SecurityThreatAssessment(
             has_threats=True,
             threats=result.threat_findings,
@@ -1266,10 +1268,10 @@ _challenge_engine_instance: Optional[ChallengeEngine] = None
 def get_challenge_engine() -> ChallengeEngine:
     """
     Get singleton instance of ChallengeEngine.
-    
+
     Returns:
         ChallengeEngine instance
-        
+
     Example:
         >>> engine = get_challenge_engine()
         >>> challenge = engine.generate_challenge(request, context)

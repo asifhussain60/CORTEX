@@ -17,7 +17,7 @@ Usage:
         require_user_context,
         operation_lock,
     )
-    
+
     # Set user context for a request
     user = UserContext(
         user_id="alice",
@@ -26,11 +26,11 @@ Usage:
         session_id="abc123"
     )
     set_current_user(user)
-    
+
     # Get current user in any function
     current = get_current_user()
     print(f"Current user: {current.username}")
-    
+
     # Use operation locking for concurrent safety
     with operation_lock("file:src/main.py"):
         # Exclusive access to file
@@ -42,17 +42,17 @@ Date: 2026-01-27
 CORE-030: Docker-first architecture - no database dependencies
 """
 
+from cortex.collaboration.operation_lock import (
+    LockTimeoutError,
+    OperationLockError,
+    operation_lock,
+)
 from cortex.collaboration.user_context import (
     UserContext,
-    get_current_user,
-    set_current_user,
-    require_user_context,
     clear_user_context,
-)
-from cortex.collaboration.operation_lock import (
-    operation_lock,
-    OperationLockError,
-    LockTimeoutError,
+    get_current_user,
+    require_user_context,
+    set_current_user,
 )
 
 __all__ = [

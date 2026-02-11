@@ -6,8 +6,8 @@ Author: CORTEX Framework
 """
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, Optional
 from datetime import datetime
+from typing import Any, Dict, Optional
 
 
 @dataclass

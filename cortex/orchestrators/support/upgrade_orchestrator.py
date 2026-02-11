@@ -37,12 +37,11 @@ import logging
 import threading
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
 from typing import Any, Callable, Dict, List, Optional
-from datetime import datetime
 
 from cortex.models.canonical_enums import OrchestratorComplexityLevel as ComplexityLevel
-
 
 # ============================================================================
 # ENUMS & TYPES
@@ -206,7 +205,7 @@ UPGRADE_CONFIG = {
 
 class LENSPhase:
     """LENS comprehension phases for upgrade context."""
-    
+
     @staticmethod
     def language(context: UpgradeContext) -> Dict[str, Any]:
         """Phase 1: Language - Parse upgrade requirements."""
@@ -217,30 +216,30 @@ class LENSPhase:
             "parallel_execution": context.parallel_execution,
             "dry_run_mode": context.dry_run
         }
-    
+
     @staticmethod
     def examination(parsed: Dict[str, Any]) -> Dict[str, Any]:
         """Phase 2: Examination - Analyze upgrade complexity."""
         component_count: int = parsed.get("component_count", 0)
-        
+
         return {
             "single_component": component_count == 1,
             "multi_component": component_count > 1,
             "requires_orchestration": component_count > 1,
             "complexity_score": min(100, component_count * 10)
         }
-    
+
     @staticmethod
     def navigation(examination: Dict[str, Any]) -> Dict[str, Any]:
         """Phase 3: Navigation - Determine upgrade approach."""
         requires_orchestration: bool = examination.get("requires_orchestration", False)
-        
+
         return {
             "approach": "orchestrated" if requires_orchestration else "direct",
             "validation_order": "sequential" if not requires_orchestration else "parallel",
             "safety_level": "strict" if requires_orchestration else "standard"
         }
-    
+
     @staticmethod
     def synthesis(navigation: Dict[str, Any]) -> Dict[str, Any]:
         """Phase 4: Synthesis - Create upgrade strategy."""
@@ -261,12 +260,12 @@ class UpgradeValidationEngine:
     SUP-HIGH-002: Real validation analysis with semantic checking.
     Validates upgrade readiness across all components and dependencies.
     """
-    
+
     def __init__(self) -> None:
         """Initialize validation engine."""
         self.logger = logging.getLogger(__name__)
         self.validation_results: List[UpgradeCheckResult] = []
-    
+
     def validate_upgrade_readiness(
         self,
         context: UpgradeContext
@@ -276,16 +275,16 @@ class UpgradeValidationEngine:
         """
         if context.dry_run:
             self.logger.info(f"DRY RUN: Validating upgrade {context.upgrade_id}")
-        
+
         # LENS analysis first
         lens_phase1 = LENSPhase.language(context)
         lens_phase2 = LENSPhase.examination(lens_phase1)
         lens_phase3 = LENSPhase.navigation(lens_phase2)
         lens_phase4 = LENSPhase.synthesis(lens_phase3)
-        
+
         if not lens_phase4.get("ready_for_upgrade", False):
             return self._create_failure_report(context)
-        
+
         # SUP-HIGH-006: Parallel validation checks
         with ThreadPoolExecutor(max_workers=3) as executor:
             dependency_checks = executor.submit(
@@ -297,22 +296,22 @@ class UpgradeValidationEngine:
             version_checks = executor.submit(
                 self._check_version_compatibility, context
             )
-            
+
             all_checks = (
                 dependency_checks.result() +
                 system_checks.result() +
                 version_checks.result()
             )
-        
+
         self.validation_results = all_checks
-        
+
         # Compile report
         return self._compile_readiness_report(context, all_checks)
-    
+
     def _check_dependencies(self, context: UpgradeContext) -> List[UpgradeCheckResult]:
         """Check component dependencies are satisfied."""
         checks: List[UpgradeCheckResult] = []
-        
+
         for component in context.components:
             if component.dependencies:
                 # Check each dependency
@@ -321,7 +320,7 @@ class UpgradeValidationEngine:
                     # Real implementation: verify dependency version
                     available = True  # Placeholder
                     all_deps_available = all_deps_available and available
-                
+
                 checks.append(
                     UpgradeCheckResult(
                         check_name="dependency_check",
@@ -331,28 +330,28 @@ class UpgradeValidationEngine:
                         component=component.name
                     )
                 )
-        
+
         return checks
-    
+
     def _check_system_resources(self, context: UpgradeContext) -> List[UpgradeCheckResult]:
         """Check system has required resources."""
         config: Any = UPGRADE_CONFIG["validation_rules"]
         checks: List[UpgradeCheckResult] = []
-        
+
         disk_space_mb: int = 5000  # Simulated
         free_memory_percent: int = 45  # Simulated
-        
+
         required_disk_mb: int = 2048
         min_memory_percent: int = 20
-        
+
         config_disk = config.get("disk_space_required_mb")
         if isinstance(config_disk, int):
             required_disk_mb = config_disk
-        
+
         config_mem = config.get("min_free_memory_percent")
         if isinstance(config_mem, int):
             min_memory_percent = config_mem
-        
+
         checks.append(
             UpgradeCheckResult(
                 check_name="disk_space",
@@ -361,7 +360,7 @@ class UpgradeValidationEngine:
                 severity="critical"
             )
         )
-        
+
         checks.append(
             UpgradeCheckResult(
                 check_name="free_memory",
@@ -370,17 +369,17 @@ class UpgradeValidationEngine:
                 severity="warning"
             )
         )
-        
+
         return checks
-    
+
     def _check_version_compatibility(self, context: UpgradeContext) -> List[UpgradeCheckResult]:
         """Check version compatibility."""
         checks: List[UpgradeCheckResult] = []
-        
+
         for component in context.components:
             # Real implementation: check version compatibility matrix
             is_compatible = True  # Placeholder
-            
+
             checks.append(
                 UpgradeCheckResult(
                     check_name="version_compatibility",
@@ -390,9 +389,9 @@ class UpgradeValidationEngine:
                     component=component.name
                 )
             )
-        
+
         return checks
-    
+
     def _create_failure_report(self, context: UpgradeContext) -> UpgradeReadinessReport:
         """Create failure readiness report."""
         return UpgradeReadinessReport(
@@ -405,7 +404,7 @@ class UpgradeValidationEngine:
             critical_issues=["LENS analysis failed: upgrade not ready"],
             recommendations=["Review upgrade context and retry"]
         )
-    
+
     def _compile_readiness_report(
         self,
         context: UpgradeContext,
@@ -415,10 +414,10 @@ class UpgradeValidationEngine:
         passed = sum(1 for c in checks if c.passed)
         failed = sum(1 for c in checks if not c.passed and c.severity == "critical")
         warnings = sum(1 for c in checks if c.severity == "warning")
-        
+
         # Calculate overall confidence (SUP-HIGH-005)
         overall_confidence: float = (passed / len(checks) * 100) if checks else 0.0
-        
+
         # Collect issues
         critical_issues: List[str] = [
             c.message for c in checks if c.severity == "critical" and not c.passed
@@ -426,7 +425,7 @@ class UpgradeValidationEngine:
         warning_messages: List[str] = [
             c.message for c in checks if c.severity == "warning"
         ]
-        
+
         return UpgradeReadinessReport(
             upgrade_id=context.upgrade_id,
             ready_to_proceed=failed == 0 and overall_confidence >= 75,
@@ -439,23 +438,23 @@ class UpgradeValidationEngine:
             recommendations=self._generate_recommendations(checks),
             estimated_duration_ms=self._estimate_duration(context)
         )
-    
+
     def _generate_recommendations(self, checks: List[UpgradeCheckResult]) -> List[str]:
         """Generate recommendations from check results."""
         recommendations: List[str] = []
-        
+
         for check in checks:
             if check.severity == "warning":
                 recommendations.append(f"Resolve warning: {check.message}")
             elif not check.passed:
                 recommendations.append(f"Critical: {check.message}")
-        
+
         return recommendations
-    
+
     def _estimate_duration(self, context: UpgradeContext) -> int:
         """Estimate total upgrade duration in milliseconds."""
         total_downtime: int = sum(c.estimated_downtime_ms for c in context.components)
-        
+
         # Add overhead for orchestration
         overhead: int = 5000  # 5 seconds
         return total_downtime + overhead
@@ -470,7 +469,7 @@ class CircuitBreaker:
     SUP-HIGH-008: Circuit breaker for failure isolation.
     Prevents cascading failures in upgrade operations.
     """
-    
+
     def __init__(self, failure_threshold: int = 3, timeout_seconds: int = 60):
         """Initialize circuit breaker."""
         self.failure_threshold = failure_threshold
@@ -479,7 +478,7 @@ class CircuitBreaker:
         self.last_failure_time: Optional[datetime] = None
         self.state = "CLOSED"  # CLOSED, OPEN, HALF_OPEN
         self.lock = threading.Lock()
-    
+
     def call(self, func: Callable[..., Any], *args: Any, **kwargs: Any) -> Any:
         """Execute function with circuit breaker protection."""
         with self.lock:
@@ -488,7 +487,7 @@ class CircuitBreaker:
                     self.state = "HALF_OPEN"
                 else:
                     raise RuntimeError("Circuit breaker OPEN - upgrade halted")
-        
+
         try:
             result: Any = func(*args, **kwargs)
             self._on_success()
@@ -496,27 +495,27 @@ class CircuitBreaker:
         except Exception:
             self._on_failure()
             raise
-    
+
     def _should_attempt_reset(self) -> bool:
         """Check if enough time has passed to attempt reset."""
         if self.last_failure_time is None:
             return False
-        
+
         elapsed = (datetime.now() - self.last_failure_time).total_seconds()
         return elapsed >= self.timeout_seconds
-    
+
     def _on_success(self) -> None:
         """Handle successful execution."""
         with self.lock:
             self.failure_count = 0
             self.state = "CLOSED"
-    
+
     def _on_failure(self) -> None:
         """Handle failed execution."""
         with self.lock:
             self.failure_count += 1
             self.last_failure_time = datetime.now()
-            
+
             if self.failure_count >= self.failure_threshold:
                 self.state = "OPEN"
 
@@ -528,11 +527,11 @@ class CircuitBreaker:
 class UpgradeOrchestrator:
     """
     Phase 2.3 Enhanced Upgrade Orchestrator.
-    
+
     Implements all 12 AC-fixes for production-grade upgrade orchestration
     with safety checks, validation, and rollback capability.
     """
-    
+
     def __init__(self) -> None:
         """Initialize orchestrator."""
         self.logger = logging.getLogger(__name__)
@@ -541,7 +540,7 @@ class UpgradeOrchestrator:
         self._upgrade_cache: Dict[str, UpgradeReadinessReport] = {}
         self._execution_history: Dict[str, Dict[str, Any]] = {}
         self.max_cache_size = 1000
-    
+
     def plan_upgrade(
         self,
         upgrade_id: str,
@@ -553,7 +552,7 @@ class UpgradeOrchestrator:
     ) -> UpgradeExecutionPlan:
         """
         Plan an upgrade operation.
-        
+
         Args:
             upgrade_id: Unique upgrade identifier
             components: List of components to upgrade
@@ -561,17 +560,17 @@ class UpgradeOrchestrator:
             complexity_preference: Complexity level
             parallel_execution: Whether to execute in parallel
             dry_run: Whether to perform dry run
-        
+
         Returns:
             UpgradeExecutionPlan with detailed upgrade instructions
-        
+
         Raises:
             RuntimeError: If upgrade planning fails or circuit breaker is open
             ValueError: If validation fails
         """
         # SUP-HIGH-009: Check memoization cache first
         cache_key = self._compute_cache_key(upgrade_id, components, strategy)
-        
+
         try:
             # Create upgrade context
             context = UpgradeContext(
@@ -582,18 +581,18 @@ class UpgradeOrchestrator:
                 parallel_execution=parallel_execution,
                 dry_run=dry_run
             )
-            
+
             # SUP-HIGH-008: Circuit breaker protection
             readiness_report: UpgradeReadinessReport = self.circuit_breaker.call(
                 self.engine.validate_upgrade_readiness, context
             )
-            
+
             # SUP-HIGH-011: Multi-turn learning from validation
             self._execution_history[upgrade_id] = {
                 "readiness_report": readiness_report,
                 "timestamp": datetime.now().isoformat()
             }
-            
+
             # Build execution plan
             if readiness_report.ready_to_proceed:
                 plan = self._build_execution_plan(context, readiness_report)
@@ -602,21 +601,21 @@ class UpgradeOrchestrator:
                     f"Upgrade {upgrade_id} not ready: "
                     f"{', '.join(readiness_report.critical_issues)}"
                 )
-            
+
             # SUP-HIGH-012: Deployment validation (pre-flight checks)
             plan_valid: bool = self._validate_execution_plan(plan)
-            
+
             if plan_valid:
                 # SUP-HIGH-009: Cache result
                 self._cache_plan(cache_key, readiness_report)
                 return plan
             else:
                 raise ValueError("Execution plan validation failed")
-            
+
         except Exception as error:
             self.logger.error(f"Upgrade planning failed for {upgrade_id}: {error}")
             raise
-    
+
     def _build_execution_plan(
         self,
         context: UpgradeContext,
@@ -630,17 +629,17 @@ class UpgradeOrchestrator:
             UpgradePhase.UPGRADE,
             UpgradePhase.VERIFICATION
         ]
-        
+
         # Component order (respect dependencies)
         component_order: List[str] = self._topological_sort_components(
             context.components
         )
-        
+
         # Rollback plan
         rollback_plan: Dict[str, Any] = self._generate_rollback_plan(
             context, component_order
         )
-        
+
         # Validation checkpoints
         validation_checkpoints: List[str] = [
             "pre_upgrade_state_verified",
@@ -649,7 +648,7 @@ class UpgradeOrchestrator:
             "health_checks_passed",
             "rollback_tested"
         ]
-        
+
         return UpgradeExecutionPlan(
             upgrade_id=context.upgrade_id,
             phase_sequence=phase_sequence,
@@ -659,7 +658,7 @@ class UpgradeOrchestrator:
             backup_locations={comp.name: f"backup_{comp.name}" for comp in context.components},
             safety_gates=["manual_approval", "health_check", "rollback_readiness"]
         )
-    
+
     def _topological_sort_components(
         self,
         components: List[UpgradeComponent]
@@ -667,11 +666,11 @@ class UpgradeOrchestrator:
         """Sort components by dependency order."""
         # Build adjacency list
         adj: Dict[str, List[str]] = {comp.name: comp.dependencies for comp in components}
-        
+
         # Simple topological sort (real implementation would be more complex)
         sorted_names: List[str] = []
         visited: set[str] = set()
-        
+
         def visit(node: str) -> None:
             if node in visited:
                 return
@@ -679,12 +678,12 @@ class UpgradeOrchestrator:
             for dep in adj.get(node, []):
                 visit(dep)
             sorted_names.append(node)
-        
+
         for comp in components:
             visit(comp.name)
-        
+
         return sorted_names
-    
+
     def _generate_rollback_plan(
         self,
         context: UpgradeContext,
@@ -692,14 +691,14 @@ class UpgradeOrchestrator:
     ) -> Dict[str, Any]:
         """Generate rollback plan for safety."""
         config = UPGRADE_CONFIG["safety"]
-        
+
         return {
             "rollback_on_any_failure": config.get("rollback_on_any_failure", True),
             "component_rollback_sequence": list(reversed(component_order)),
             "verification_after_rollback": True,
             "notify_on_rollback": True
         }
-    
+
     def _validate_execution_plan(self, plan: UpgradeExecutionPlan) -> bool:
         """SUP-HIGH-012: Pre-flight validation of execution plan."""
         checks: List[bool] = [
@@ -708,9 +707,9 @@ class UpgradeOrchestrator:
             len(plan.validation_checkpoints) > 0,
             plan.rollback_plan.get("rollback_on_any_failure", False)
         ]
-        
+
         return all(checks)
-    
+
     def _compute_cache_key(
         self,
         upgrade_id: str,
@@ -721,15 +720,15 @@ class UpgradeOrchestrator:
         component_str = "|".join(f"{c.name}:{c.target_version}" for c in components)
         key_str = f"{upgrade_id}|{component_str}|{strategy.value}"
         return hashlib.md5(key_str.encode()).hexdigest()
-    
+
     def _cache_plan(self, cache_key: str, report: UpgradeReadinessReport) -> None:
         """SUP-HIGH-009: Cache readiness report with size limit."""
         if len(self._upgrade_cache) >= self.max_cache_size:
             oldest_key = next(iter(self._upgrade_cache))
             del self._upgrade_cache[oldest_key]
-        
+
         self._upgrade_cache[cache_key] = report
-    
+
     async def plan_upgrade_async(
         self,
         upgrade_id: str,
@@ -743,7 +742,7 @@ class UpgradeOrchestrator:
             components,
             strategy
         )
-    
+
     def get_health_status(self) -> Dict[str, Any]:
         """Get orchestrator health status."""
         return {

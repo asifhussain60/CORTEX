@@ -10,15 +10,15 @@ Authority: Phase 34B Week 3 (Increment 6)
 """
 
 from dataclasses import dataclass, field
-from typing import List, Optional
 from datetime import datetime
+from typing import List, Optional
 
 
 @dataclass
 class TechStack:
     """
     Technology stack representation.
-    
+
     Captures language, frameworks, version, and tooling information
     for a codebase.
     """
@@ -26,7 +26,7 @@ class TechStack:
     frameworks: List[str] = field(default_factory=list)
     version: Optional[str] = None
     tools: List[str] = field(default_factory=list)
-    
+
     def __hash__(self):
         """Make TechStack hashable for caching."""
         return hash((
@@ -35,7 +35,7 @@ class TechStack:
             self.version,
             tuple(sorted(self.tools))
         ))
-    
+
     def __eq__(self, other):
         """Compare TechStack instances."""
         if not isinstance(other, TechStack):
@@ -52,7 +52,7 @@ class TechStack:
 class ReadinessScore:
     """
     Readiness score for a tech stack.
-    
+
     4-factor weighted scoring:
     - Best practices coverage: 40%
     - TDD support: 30%
@@ -66,7 +66,7 @@ class ReadinessScore:
     usage: float  # 0.0 to 1.0
     action: str  # "ready", "needs_work", "learn_required"
     timestamp: datetime = field(default_factory=datetime.now)
-    
+
     @classmethod
     def calculate(
         cls,
@@ -77,7 +77,7 @@ class ReadinessScore:
     ) -> "ReadinessScore":
         """
         Calculate weighted readiness score.
-        
+
         Weights:
         - Best practices: 40%
         - TDD support: 30%
@@ -90,7 +90,7 @@ class ReadinessScore:
             security * 0.2 +
             usage * 0.1
         )
-        
+
         # Determine action
         if overall >= 0.7:
             action = "ready"
@@ -98,7 +98,7 @@ class ReadinessScore:
             action = "needs_work"
         else:
             action = "learn_required"
-        
+
         return cls(
             overall=overall,
             best_practices=best_practices,

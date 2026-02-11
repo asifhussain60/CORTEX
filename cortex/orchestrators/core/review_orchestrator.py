@@ -5,10 +5,11 @@ Holistic implementation verification using LENS + Git analysis.
 """
 
 import logging
-from typing import Dict, Any, Optional
 from dataclasses import dataclass
 from datetime import datetime
-from cortex.models.review_models import ReviewStatus, ReviewOutcome, ReviewIssue
+from typing import Any, Dict, Optional
+
+from cortex.models.review_models import ReviewIssue, ReviewOutcome, ReviewStatus
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +17,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class ReviewOrchestrator:
     """Holistic implementation verification."""
-    
+
     def analyze_implementation_commits(self, task_id: str, plan: Dict) -> Dict[str, Any]:
         """Analyze commits related to task implementation."""
         return {
@@ -24,7 +25,7 @@ class ReviewOrchestrator:
             "commit_count": 0,
             "quality_score": 100,
         }
-    
+
     def verify_plan_implementation(self, plan: Dict, commits: Dict) -> Dict[str, Any]:
         """Verify plan was implemented correctly."""
         return {
@@ -34,14 +35,14 @@ class ReviewOrchestrator:
             "extra_artifacts": [],
             "deviations": [],
         }
-    
+
     def verify_cross_layer_coherence_final(self, task_id: str) -> Dict[str, Any]:
         """Final cross-layer coherence check."""
         return {
             "status": "PASS",
             "issues": [],
         }
-    
+
     def execute_final_review(self, task_id: str, plan: Dict) -> Any:
         """Execute comprehensive final review."""
         class FinalReviewResult:
@@ -50,7 +51,7 @@ class ReviewOrchestrator:
                 self.status = "PASS"
                 self.outcome = ReviewOutcome.PASS
         return FinalReviewResult()
-    
+
     def execute_post_phase_review(self, phase_id: str) -> Any:
         """Run post-phase verification."""
         class PhaseReviewResult:
@@ -62,7 +63,7 @@ class ReviewOrchestrator:
                 self.issues_found = []
                 self.review_timestamp = datetime.now()
         return PhaseReviewResult()
-    
+
     def gate_next_phase(self, current_phase: str, review: Dict) -> Any:
         """Gate decision for next phase."""
         class GateDecision:

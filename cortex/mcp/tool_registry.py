@@ -12,15 +12,15 @@ Authority: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 Phase: MCP Server Fix (Holistic)
 """
 
+import threading
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, List, Optional, Any
-import threading
+from typing import Any, Dict, List, Optional
 
 
 class ToolCategory(Enum):
     """Tool category classification for MCP tools.
-    
+
     Categories organize tools by their primary purpose:
     - GOVERNANCE: Rules enforcement, compliance, audit
     - ORCHESTRATION: Workflow management, task coordination
@@ -36,10 +36,10 @@ class ToolCategory(Enum):
 @dataclass
 class ToolMetadata:
     """Metadata for a registered MCP tool.
-    
+
     Captures all information needed to discover, authorize,
     and invoke an MCP tool.
-    
+
     Attributes:
         id: Unique tool identifier (e.g., "cortex_process_request")
         name: Human-readable tool name
@@ -48,7 +48,7 @@ class ToolMetadata:
         parameters: Parameter schema (dict of param specs)
         auth_required: Whether authentication is required (default: False)
         version: Tool version string (default: "1.0.0")
-    
+
     Example:
         ```python
         metadata = ToolMetadata(
@@ -76,19 +76,19 @@ class ToolMetadata:
 
 class ToolRegistry:
     """Central registry for MCP tools with discovery capabilities.
-    
+
     Provides thread-safe singleton registry for registering, discovering,
     and retrieving MCP tool metadata. Used by MCP server to enumerate
     available tools and by governance systems to enforce policies.
-    
+
     Thread Safety: All operations are protected by internal lock.
     Singleton: Use get_mcp_tool_registry() to access the shared instance.
-    
+
     Usage:
         ```python
         # Get singleton instance
         registry = get_mcp_tool_registry()
-        
+
         # Register a tool
         metadata = ToolMetadata(
             id="my_tool",
@@ -98,16 +98,16 @@ class ToolRegistry:
             parameters={"input": {"type": "string", "required": True}}
         )
         registry.register(metadata)
-        
+
         # Retrieve tool metadata
         tool = registry.get("my_tool")
-        
+
         # List all tools
         all_tools = registry.list_all()
-        
+
         # Filter by category
         utils = registry.list_by_category(ToolCategory.UTILITY)
-        
+
         # Count tools per category
         count = registry.count_by_category(ToolCategory.UTILITY)
         ```
@@ -115,7 +115,7 @@ class ToolRegistry:
 
     def __init__(self) -> None:
         """Initialize empty tool registry.
-        
+
         Creates internal storage for tool metadata and sets up thread lock
         for safe concurrent access.
         """
@@ -124,16 +124,16 @@ class ToolRegistry:
 
     def register(self, metadata: ToolMetadata) -> None:
         """Register a new tool in the registry.
-        
+
         Adds tool metadata to the registry. Tools are indexed by ID for
         fast lookup. Prevents duplicate registrations.
-        
+
         Args:
             metadata: Tool metadata to register.
-            
+
         Raises:
             ValueError: If tool with same ID already registered.
-            
+
         Example:
             ```python
             registry = get_mcp_tool_registry()
@@ -156,13 +156,13 @@ class ToolRegistry:
 
     def get(self, tool_id: str) -> Optional[ToolMetadata]:
         """Get tool metadata by ID.
-        
+
         Args:
             tool_id: Tool identifier to look up.
-            
+
         Returns:
             Tool metadata if found, None otherwise.
-            
+
         Example:
             ```python
             registry = get_mcp_tool_registry()
@@ -176,10 +176,10 @@ class ToolRegistry:
 
     def list_all(self) -> List[ToolMetadata]:
         """List all registered tools.
-        
+
         Returns:
             List of all tool metadata in the registry.
-            
+
         Example:
             ```python
             registry = get_mcp_tool_registry()
@@ -192,13 +192,13 @@ class ToolRegistry:
 
     def list_by_category(self, category: ToolCategory) -> List[ToolMetadata]:
         """List all tools in a specific category.
-        
+
         Args:
             category: Category to filter by.
-            
+
         Returns:
             List of tools in the specified category.
-            
+
         Example:
             ```python
             registry = get_mcp_tool_registry()
@@ -214,13 +214,13 @@ class ToolRegistry:
 
     def count_by_category(self, category: ToolCategory) -> int:
         """Count tools in a specific category.
-        
+
         Args:
             category: Category to count.
-            
+
         Returns:
             Number of tools in the category.
-            
+
         Example:
             ```python
             registry = get_mcp_tool_registry()
@@ -236,10 +236,10 @@ class ToolRegistry:
 
     def discover(self) -> Dict[str, List[str]]:
         """Return tool discovery information organized by category.
-        
+
         Returns:
             Dictionary mapping category names to lists of tool IDs.
-            
+
         Example:
             ```python
             registry = get_mcp_tool_registry()
@@ -264,31 +264,31 @@ _registry_lock = threading.RLock()
 
 def get_mcp_tool_registry() -> ToolRegistry:
     """Get the singleton MCP tool registry instance.
-    
+
     Returns the shared ToolRegistry instance, creating it if necessary.
     Thread-safe singleton pattern ensures only one registry exists.
-    
+
     Returns:
         The singleton ToolRegistry instance.
-        
+
     Example:
         ```python
         # Multiple calls return the same instance
         registry1 = get_mcp_tool_registry()
         registry2 = get_mcp_tool_registry()
         assert registry1 is registry2  # True - same instance
-        
+
         # Use the registry
         registry1.register(ToolMetadata(...))
         tools = registry2.list_all()  # Sees tools registered via registry1
         ```
     """
     global _registry_instance
-    
+
     if _registry_instance is None:
         with _registry_lock:
             # Double-check locking pattern
             if _registry_instance is None:
                 _registry_instance = ToolRegistry()
-    
+
     return _registry_instance

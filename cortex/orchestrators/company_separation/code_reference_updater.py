@@ -3,10 +3,10 @@
 Update imports and references to use dual-path resolver.
 """
 
-from dataclasses import dataclass
-from typing import Any, Dict, List, Tuple
-from pathlib import Path
 import re
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, Dict, List, Tuple
 
 
 @dataclass

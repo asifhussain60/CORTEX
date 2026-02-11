@@ -4,10 +4,11 @@ Phase 48 S2: Builds and analyzes the orchestrator dependency graph.
 """
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Set, Optional, Tuple
 from enum import Enum
-import yaml
 from pathlib import Path
+from typing import Dict, List, Optional, Set, Tuple
+
+import yaml
 
 
 class DependencyType(str, Enum):

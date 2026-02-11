@@ -9,13 +9,12 @@ Implements three complementary features:
 Production Ready: ✅
 """
 
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any, Callable
-from enum import Enum
 import hashlib
 import time
+from dataclasses import dataclass, field
 from datetime import datetime
-
+from enum import Enum
+from typing import Any, Callable, Dict, List, Optional
 
 # ============ AC-FUTURE-014: Advanced Memoization ============
 
@@ -35,12 +34,12 @@ class MemoizationEntry:
     semantic_score: float = 1.0  # 1.0 for exact, <1.0 for semantic
     created_at: float = field(default_factory=time.time)
     access_count: int = 0
-    
+
 
 class AdvancedMemoizer:
     """
     Advanced memoization with semantic matching and partial result caching.
-    
+
     40% more cache hits than exact matching through semantic similarity.
     """
 
@@ -154,7 +153,7 @@ class TurnOutcome:
 class MultiTurnLearner:
     """
     Learns from multi-turn conversations to improve routing strategy.
-    
+
     Tracks successful patterns and adapts routing decisions based on
     accumulated experience.
     """
@@ -250,7 +249,7 @@ class DeploymentCheck:
 class DeploymentValidator:
     """
     Comprehensive pre-deployment validation suite.
-    
+
     Prevents broken deployments through automated validation.
     """
 
@@ -265,7 +264,7 @@ class DeploymentValidator:
     def validate_all(self) -> tuple[bool, List[DeploymentCheck]]:
         """
         Run all deployment checks.
-        
+
         Returns (all_passed, check_results)
         """
         self.results = []

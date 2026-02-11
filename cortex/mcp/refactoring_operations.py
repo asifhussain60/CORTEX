@@ -12,7 +12,7 @@ Compliance: CORE-011 (type hints), CORE-012 (docstrings), MCP-FIRST
 
 import logging
 from pathlib import Path
-from typing import Dict, Any, Optional, List
+from typing import Any, Dict, List, Optional
 
 from cortex.mcp.decorators import mcp_tool
 
@@ -31,7 +31,7 @@ def cortex_refactor_python(
 ) -> Dict[str, Any]:
     """
     Execute Python semantic refactoring operation.
-    
+
     Supported operations:
         - extract_method: Extract code block into new method
         - rename: Rename variables, functions, classes
@@ -39,7 +39,7 @@ def cortex_refactor_python(
         - encapsulate_field: Create getter/setter for field
         - move_method: Move method to another class
         - change_signature: Modify method signature
-    
+
     Args:
         operation: Refactoring operation name
         file_path: Path to Python file to refactor
@@ -50,21 +50,21 @@ def cortex_refactor_python(
             - encapsulate_field: {offset: int}
             - move_method: {offset: int, target_class: str}
             - change_signature: {offset: int, new_parameters: list}
-    
+
     Returns:
         Refactoring result with success status, modified files, and description
-        
+
     Examples:
         cortex_refactor_python("rename", "/app/main.py", {"offset": 150, "new_name": "process_data"})
         cortex_refactor_python("extract_method", "/app/utils.py", {"start_offset": 100, "end_offset": 200, "new_name": "helper"})
     """
     try:
         from cortex.refactoring.adapters.rope_adapter import RopeAdapter
-        from cortex.refactoring.models import RefactoringRequest, RefactoringLanguage
-        
+        from cortex.refactoring.models import RefactoringLanguage, RefactoringRequest
+
         # Initialize adapter
         adapter = RopeAdapter()
-        
+
         # Check availability
         if not adapter.is_available():
             return {
@@ -73,7 +73,7 @@ def cortex_refactor_python(
                 "operation": operation,
                 "file_path": file_path
             }
-        
+
         # Create refactoring request
         request = RefactoringRequest(
             operation=operation,
@@ -81,10 +81,10 @@ def cortex_refactor_python(
             language=RefactoringLanguage.PYTHON,
             parameters=parameters
         )
-        
+
         # Execute refactoring
         result = adapter.execute_refactoring(request)
-        
+
         if result.is_ok():
             refactoring_result = result.unwrap()
             return {
@@ -105,7 +105,7 @@ def cortex_refactor_python(
                 "operation": operation,
                 "file_path": file_path
             }
-    
+
     except Exception as e:
         logger.error(f"Python refactoring failed: {e}", exc_info=True)
         return {
@@ -126,31 +126,31 @@ def cortex_refactoring_list_operations(
 ) -> Dict[str, Any]:
     """
     List available refactoring operations.
-    
+
     Args:
         language: Optional language filter (python, csharp, typescript, java)
-        
+
     Returns:
         Dictionary with supported languages and their operations
     """
     try:
-        from cortex.refactoring.registry import RefactoringToolRegistry
         from cortex.refactoring.adapters.rope_adapter import RopeAdapter
         from cortex.refactoring.models import RefactoringLanguage
-        
+        from cortex.refactoring.registry import RefactoringToolRegistry
+
         # Initialize registry with available adapters
         registry = RefactoringToolRegistry()
-        
+
         # Register Python adapter
         try:
             rope_adapter = RopeAdapter()
             registry.register(rope_adapter)
         except Exception as e:
             logger.warning(f"Failed to register Rope adapter: {e}")
-        
+
         # Get operations by language
         operations_by_language = {}
-        
+
         for lang in registry.get_supported_languages():
             ops_result = registry.get_operations_for_language(lang)
             if ops_result.is_ok():
@@ -158,7 +158,7 @@ def cortex_refactoring_list_operations(
                     "operations": ops_result.unwrap(),
                     "available": lang in registry.get_available_languages()
                 }
-        
+
         # Filter by language if specified
         if language:
             lang_lower = language.lower()
@@ -175,14 +175,14 @@ def cortex_refactoring_list_operations(
                     "error": f"Language '{language}' not supported",
                     "supported_languages": list(operations_by_language.keys())
                 }
-        
+
         # Return all languages
         return {
             "status": "success",
             "languages": operations_by_language,
             "total_languages": len(operations_by_language)
         }
-    
+
     except Exception as e:
         logger.error(f"Failed to list refactoring operations: {e}", exc_info=True)
         return {
@@ -204,32 +204,29 @@ def cortex_refactoring_validate(
 ) -> Dict[str, Any]:
     """
     Validate refactoring request without executing.
-    
+
     Args:
         operation: Refactoring operation name
         file_path: Path to file to refactor
         language: Programming language (python, csharp, typescript, java)
         parameters: Operation-specific parameters
-        
+
     Returns:
         Validation result with success status and any errors
     """
     try:
-        from cortex.refactoring.registry import RefactoringToolRegistry
         from cortex.refactoring.adapters.rope_adapter import RopeAdapter
-        from cortex.refactoring.models import (
-            RefactoringRequest,
-            RefactoringLanguage
-        )
-        
+        from cortex.refactoring.models import RefactoringLanguage, RefactoringRequest
+        from cortex.refactoring.registry import RefactoringToolRegistry
+
         # Initialize registry
         registry = RefactoringToolRegistry()
-        
+
         # Register adapters
         if language.lower() == "python":
             adapter = RopeAdapter()
             registry.register(adapter)
-        
+
         # Get language enum
         try:
             lang_enum = RefactoringLanguage[language.upper()]
@@ -239,7 +236,7 @@ def cortex_refactoring_validate(
                 "error": f"Unsupported language: {language}",
                 "supported": [l.value for l in RefactoringLanguage]
             }
-        
+
         # Get adapter
         adapter_result = registry.get_adapter(lang_enum)
         if adapter_result.is_err():
@@ -248,9 +245,9 @@ def cortex_refactoring_validate(
                 "error": adapter_result.unwrap_err(),
                 "language": language
             }
-        
+
         adapter = adapter_result.unwrap()
-        
+
         # Create request
         request = RefactoringRequest(
             operation=operation,
@@ -258,10 +255,10 @@ def cortex_refactoring_validate(
             language=lang_enum,
             parameters=parameters
         )
-        
+
         # Validate
         validation_result = adapter.validate_request(request)
-        
+
         if validation_result.is_ok():
             return {
                 "status": "success",
@@ -279,7 +276,7 @@ def cortex_refactoring_validate(
                 "language": language,
                 "error": validation_result.unwrap_err()
             }
-    
+
     except Exception as e:
         logger.error(f"Validation failed: {e}", exc_info=True)
         return {

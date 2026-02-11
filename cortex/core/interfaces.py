@@ -8,9 +8,9 @@ CORE-035: Re-exports canonical IOrchestrator from cortex.brain.core.interfaces.i
 Author: CORTEX Framework
 """
 
-from typing import Any, Dict, Optional, Protocol, runtime_checkable
-from enum import Enum
 from abc import ABC, abstractmethod
+from enum import Enum
+from typing import Any, Dict, Optional, Protocol, runtime_checkable
 
 
 class OperationMode(Enum):
@@ -71,7 +71,12 @@ class ExecutionContext:
 # CORE-035: Single Canonical Implementation
 # Re-export IOrchestrator from canonical location
 # ============================================================================
-from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, OperationMode as OrchestratorOperationMode  # noqa: F401, E501
+from cortex.brain.core.interfaces.i_orchestrator import (  # noqa: F401, E501
+    IOrchestrator,
+)
+from cortex.brain.core.interfaces.i_orchestrator import (
+    OperationMode as OrchestratorOperationMode,
+)
 
 # Keep local OperationMode for backward compatibility
 # (Different from IOrchestrator's OperationMode)

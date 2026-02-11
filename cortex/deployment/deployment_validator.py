@@ -12,13 +12,14 @@ Requirements: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 """
 
 import asyncio
-import httpx
 import time
-import psutil
-from typing import Dict, Any, List, Optional
 from dataclasses import dataclass, field
-from enum import Enum
 from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional
+
+import httpx
+import psutil
 
 
 class DeploymentMode(Enum):
@@ -31,7 +32,7 @@ class DeploymentMode(Enum):
 @dataclass
 class ValidationResult:
     """Deployment validation result.
-    
+
     Attributes:
         success: Whether validation passed
         mode: Deployment mode validated
@@ -51,7 +52,7 @@ class ValidationResult:
 @dataclass
 class ProtocolComplianceResult:
     """MCP protocol compliance validation result.
-    
+
     Attributes:
         compliant: Whether protocol is compliant
         jsonrpc_version: JSON-RPC version detected
@@ -69,7 +70,7 @@ class ProtocolComplianceResult:
 @dataclass
 class LoadTestResult:
     """Load test execution result.
-    
+
     Attributes:
         success: Whether load test passed thresholds
         total_requests: Total requests executed
@@ -89,7 +90,7 @@ class LoadTestResult:
 @dataclass
 class ScalingValidationResult:
     """Scaling validation result.
-    
+
     Attributes:
         success: Whether scaling validation passed
         user_count: Number of concurrent users
@@ -109,7 +110,7 @@ class ScalingValidationResult:
 @dataclass
 class DockerDeploymentResult:
     """Docker deployment validation result.
-    
+
     Attributes:
         success: Whether Docker deployment is valid
         checks_passed: List of passed checks
@@ -125,7 +126,7 @@ class DockerDeploymentResult:
 @dataclass
 class K8sDeploymentResult:
     """Kubernetes deployment validation result.
-    
+
     Attributes:
         success: Whether K8s deployment is valid
         checks_passed: List of passed checks
@@ -140,7 +141,7 @@ class K8sDeploymentResult:
 
 class DeploymentValidator:
     """Validates production deployments for MCP and SaaS modes.
-    
+
     Provides comprehensive validation including:
     - Health check validation
     - Protocol compliance verification
@@ -156,7 +157,7 @@ class DeploymentValidator:
         timeout: int = 30
     ) -> None:
         """Initialize DeploymentValidator.
-        
+
         Args:
             mcp_endpoint: MCP server endpoint URL
             saas_api_endpoint: SaaS API endpoint URL
@@ -169,7 +170,7 @@ class DeploymentValidator:
 
     async def _get_client(self) -> httpx.AsyncClient:
         """Get or create httpx async client.
-        
+
         Returns:
             httpx AsyncClient instance
         """
@@ -179,20 +180,20 @@ class DeploymentValidator:
 
     async def validate_deployment(self, mode: DeploymentMode) -> ValidationResult:
         """Validate deployment for specified mode.
-        
+
         Args:
             mode: Deployment mode to validate
-            
+
         Returns:
             ValidationResult with validation status and details
         """
         start_time = time.time()
         checks_passed: List[str] = []
         errors: List[str] = []
-        
+
         try:
             client = await self._get_client()
-            
+
             if mode == DeploymentMode.MCP:
                 # Validate MCP health
                 try:
@@ -203,7 +204,7 @@ class DeploymentValidator:
                         errors.append(f"Health check failed: {resp.status_code}")
                 except Exception as e:
                     errors.append(f"Health check error: {str(e)}")
-                
+
                 # Validate tool discovery
                 try:
                     resp = await client.post(
@@ -222,7 +223,7 @@ class DeploymentValidator:
                         errors.append(f"Tool discovery failed: {resp.status_code}")
                 except Exception as e:
                     errors.append(f"Tool discovery error: {str(e)}")
-            
+
             elif mode == DeploymentMode.SAAS:
                 # Validate REST API
                 try:
@@ -233,7 +234,7 @@ class DeploymentValidator:
                         errors.append(f"REST API failed: {resp.status_code}")
                 except Exception as e:
                     errors.append(f"REST API error: {str(e)}")
-                
+
                 # Validate WebSocket (simplified for httpx)
                 try:
                     # Note: httpx doesn't natively support WebSocket
@@ -241,10 +242,10 @@ class DeploymentValidator:
                     checks_passed.append("websocket")  # Placeholder
                 except Exception as e:
                     errors.append(f"WebSocket error: {str(e)}")
-            
+
             success = len(errors) == 0 and len(checks_passed) > 0
             duration = time.time() - start_time
-            
+
             return ValidationResult(
                 success=success,
                 mode=mode,
@@ -252,7 +253,7 @@ class DeploymentValidator:
                 errors=errors,
                 duration_seconds=duration
             )
-            
+
         except Exception as e:
             duration = time.time() - start_time
             return ValidationResult(
@@ -264,20 +265,20 @@ class DeploymentValidator:
 
     async def validate_mcp_protocol(self) -> ProtocolComplianceResult:
         """Validate MCP protocol compliance.
-        
+
         Validates JSON-RPC 2.0 format, request/response structure,
         and protocol-specific requirements.
-        
+
         Returns:
             ProtocolComplianceResult with compliance status
         """
         checks_passed: List[str] = []
         violations: List[str] = []
         tools_discovered = 0
-        
+
         try:
             client = await self._get_client()
-            
+
             # Test JSON-RPC 2.0 format
             resp = await client.post(
                 f"{self.mcp_endpoint}/mcp/tools",
@@ -289,14 +290,14 @@ class DeploymentValidator:
             )
             if resp.status_code == 200:
                 data = resp.json()
-                
+
                 # Validate response format
                 if "jsonrpc" in data and data["jsonrpc"] == "2.0":
                     checks_passed.append("request_format")
                     checks_passed.append("response_format")
                 else:
                     violations.append("Invalid JSON-RPC version")
-                
+
                 # Validate result structure
                 if "result" in data:
                     checks_passed.append("result_structure")
@@ -306,9 +307,9 @@ class DeploymentValidator:
                     violations.append("Missing result or error field")
             else:
                 violations.append(f"Protocol request failed: {resp.status_code}")
-            
+
             compliant = len(violations) == 0 and len(checks_passed) >= 2
-            
+
             return ProtocolComplianceResult(
                 compliant=compliant,
                 jsonrpc_version="2.0",
@@ -316,7 +317,7 @@ class DeploymentValidator:
                 violations=violations,
                 tools_discovered=tools_discovered
             )
-            
+
         except Exception as e:
             return ProtocolComplianceResult(
                 compliant=False,
@@ -325,28 +326,28 @@ class DeploymentValidator:
 
     async def validate_scaling(self, user_count: int) -> ScalingValidationResult:
         """Validate scaling at specified user count.
-        
+
         Args:
             user_count: Number of concurrent users to simulate
-            
+
         Returns:
             ScalingValidationResult with resource metrics
         """
         try:
             # Get current process metrics
             process = psutil.Process()
-            
+
             # Simulate user load (in real scenario, would trigger actual load)
             await asyncio.sleep(0.1)
-            
+
             memory_info = process.memory_info()
             memory_mb = memory_info.rss / (1024 * 1024)
             cpu_percent = process.cpu_percent(interval=0.1)
-            
+
             # Connection pool health check (simplified)
             client = await self._get_client()
             connection_pool_healthy = not client.is_closed
-            
+
             # Determine success based on thresholds
             success = True
             if user_count <= 10:
@@ -355,7 +356,7 @@ class DeploymentValidator:
                 success = memory_mb < 1024 and cpu_percent < 75
             elif user_count <= 100:
                 success = memory_mb < 2048 and cpu_percent < 90
-            
+
             return ScalingValidationResult(
                 success=success,
                 user_count=user_count,
@@ -364,8 +365,8 @@ class DeploymentValidator:
                 connection_pool_healthy=connection_pool_healthy,
                 connection_leaks=0
             )
-            
-        except Exception as e:
+
+        except Exception:
             return ScalingValidationResult(
                 success=False,
                 user_count=user_count,
@@ -376,13 +377,13 @@ class DeploymentValidator:
 
     async def validate_docker_deployment(self) -> DockerDeploymentResult:
         """Validate Docker container deployment.
-        
+
         Returns:
             DockerDeploymentResult with deployment status
         """
         checks_passed: List[str] = []
         start_time = time.time()
-        
+
         try:
             # Check container startup (via subprocess)
             process = await asyncio.create_subprocess_exec(
@@ -391,19 +392,19 @@ class DeploymentValidator:
                 stderr=asyncio.subprocess.PIPE
             )
             stdout, stderr = await process.communicate()
-            
+
             if process.returncode == 0:
                 checks_passed.append("container_startup")
-            
+
             startup_time = time.time() - start_time
-            
+
             return DockerDeploymentResult(
                 success=len(checks_passed) > 0,
                 checks_passed=checks_passed,
                 startup_time_seconds=startup_time,
                 health_status="running" if checks_passed else "unknown"
             )
-            
+
         except Exception as e:
             return DockerDeploymentResult(
                 success=False,
@@ -413,7 +414,7 @@ class DeploymentValidator:
 
     async def validate_docker_health(self) -> DockerDeploymentResult:
         """Validate Docker container health endpoint.
-        
+
         Returns:
             DockerDeploymentResult with health status
         """
@@ -423,7 +424,7 @@ class DeploymentValidator:
             if resp.status_code == 200:
                 data = resp.json()
                 health_status = data.get("status", "unknown")
-                
+
                 return DockerDeploymentResult(
                     success=health_status == "healthy",
                     checks_passed=["health_endpoint"],
@@ -442,13 +443,13 @@ class DeploymentValidator:
 
     async def validate_k8s_deployment(self) -> K8sDeploymentResult:
         """Validate Kubernetes deployment.
-        
+
         Returns:
             K8sDeploymentResult with pod and service status
         """
         checks_passed: List[str] = []
         ready_pods = 0
-        
+
         try:
             # Check pod status (via kubectl)
             process = await asyncio.create_subprocess_exec(
@@ -457,22 +458,22 @@ class DeploymentValidator:
                 stderr=asyncio.subprocess.PIPE
             )
             stdout, stderr = await process.communicate()
-            
+
             if process.returncode == 0:
                 output = stdout.decode()
                 # Count "Running" pods
                 ready_pods = output.count("Running")
                 if ready_pods > 0:
                     checks_passed.append("pod_readiness")
-            
+
             return K8sDeploymentResult(
                 success=len(checks_passed) > 0,
                 checks_passed=checks_passed,
                 ready_pods=ready_pods,
                 service_endpoints=0
             )
-            
-        except Exception as e:
+
+        except Exception:
             return K8sDeploymentResult(
                 success=False,
                 ready_pods=0,
@@ -481,26 +482,26 @@ class DeploymentValidator:
 
     async def validate_k8s_service(self) -> K8sDeploymentResult:
         """Validate Kubernetes service discovery.
-        
+
         Returns:
             K8sDeploymentResult with service status
         """
         checks_passed: List[str] = []
-        
+
         try:
             client = await self._get_client()
             resp = await client.get(f"{self.mcp_endpoint}/health")
             if resp.status_code == 200:
                 checks_passed.append("service_discovery")
-            
+
             return K8sDeploymentResult(
                 success=len(checks_passed) > 0,
                 checks_passed=checks_passed,
                 ready_pods=0,
                 service_endpoints=1 if checks_passed else 0
             )
-            
-        except Exception as e:
+
+        except Exception:
             return K8sDeploymentResult(
                 success=False,
                 ready_pods=0,
@@ -509,29 +510,29 @@ class DeploymentValidator:
 
     async def validate_sse_streaming(self) -> ProtocolComplianceResult:
         """Validate SSE streaming compliance.
-        
+
         Returns:
             ProtocolComplianceResult for SSE streaming
         """
         checks_passed: List[str] = []
         violations: List[str] = []
-        
+
         try:
             # SSE validation would check:
             # - Content-Type: text/event-stream
             # - Event format: data: {...}
             # - Connection keep-alive
-            
+
             # Simplified validation
             checks_passed.append("event_format")
             checks_passed.append("chunked_transfer")
-            
+
             return ProtocolComplianceResult(
                 compliant=True,
                 checks_passed=checks_passed,
                 violations=violations
             )
-            
+
         except Exception as e:
             return ProtocolComplianceResult(
                 compliant=False,
@@ -540,14 +541,14 @@ class DeploymentValidator:
 
     async def validate_tool_discovery_protocol(self) -> ProtocolComplianceResult:
         """Validate tool discovery protocol compliance.
-        
+
         Returns:
             ProtocolComplianceResult for tool discovery
         """
         checks_passed: List[str] = []
         violations: List[str] = []
         tools_discovered = 0
-        
+
         try:
             client = await self._get_client()
             resp = await client.post(
@@ -560,11 +561,11 @@ class DeploymentValidator:
             )
             if resp.status_code == 200:
                 data = resp.json()
-                
+
                 if "result" in data and "tools" in data["result"]:
                     tools = data["result"]["tools"]
                     tools_discovered = len(tools)
-                    
+
                     # Validate tool schema
                     if all("name" in tool and "inputSchema" in tool for tool in tools):
                         checks_passed.append("schema_validation")
@@ -574,14 +575,14 @@ class DeploymentValidator:
                     violations.append("Missing tools in result")
             else:
                 violations.append(f"Discovery failed: {resp.status_code}")
-            
+
             return ProtocolComplianceResult(
                 compliant=len(violations) == 0,
                 checks_passed=checks_passed,
                 violations=violations,
                 tools_discovered=tools_discovered
             )
-            
+
         except Exception as e:
             return ProtocolComplianceResult(
                 compliant=False,

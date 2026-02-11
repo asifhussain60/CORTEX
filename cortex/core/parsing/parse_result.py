@@ -7,7 +7,7 @@ Author: CORTEX Framework
 """
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Generic, TypeVar
+from typing import Any, Dict, Generic, List, Optional, TypeVar
 
 T = TypeVar("T")
 

@@ -31,17 +31,18 @@ Author: Asif Hussain
 Version: 1.0
 """
 
-import sqlite3
 import json
+import logging
+import sqlite3
 import threading
 import uuid
-from datetime import datetime, timezone, timedelta
-from pathlib import Path
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta, timezone
 from enum import Enum
 from functools import lru_cache
-import logging
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
 from cortex.models.canonical_enums import AuditAction
 
 logger = logging.getLogger(__name__)
@@ -100,22 +101,22 @@ class AuditLogEntry:
 class QueryCache:
     """
     LRU cache for governance rule queries.
-    
+
     Purpose: Improve performance for frequently accessed queries
     Max size: 128 entries (rules and query results)
     """
-    
+
     def __init__(self, maxsize: int = 128):
         """Initialize query cache."""
         self.maxsize = maxsize
         self.cache: Dict[str, Any] = {}
         self._lock = threading.Lock()
-    
+
     def get(self, key: str) -> Optional[Any]:
         """Get value from cache."""
         with self._lock:
             return self.cache.get(key)
-    
+
     def set(self, key: str, value: Any) -> None:
         """Set value in cache."""
         with self._lock:
@@ -124,12 +125,12 @@ class QueryCache:
                 oldest_key = next(iter(self.cache))
                 del self.cache[oldest_key]
             self.cache[key] = value
-    
+
     def clear(self) -> None:
         """Clear entire cache."""
         with self._lock:
             self.cache.clear()
-    
+
     def invalidate(self, pattern: Optional[str] = None) -> None:
         """Invalidate cache entries matching pattern."""
         with self._lock:
@@ -139,7 +140,7 @@ class QueryCache:
                 keys_to_delete = [k for k in self.cache.keys() if pattern in k]
                 for key in keys_to_delete:
                     del self.cache[key]
-    
+
     def size(self) -> int:
         """Get current cache size."""
         with self._lock:
@@ -149,7 +150,7 @@ class QueryCache:
 class GovernanceDatabaseManager:
     """
     SQLite database manager for governance rules.
-    
+
     Provides CRUD operations, audit logging, and query interface for
     Tier 1 and Tier 2 governance rules.
     """
@@ -167,10 +168,10 @@ class GovernanceDatabaseManager:
         """
         if db_path is None:
             db_path = Path.home() / ".cortex" / "governance_rules.db"
-        
+
         self.db_path = Path(db_path)
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
-        
+
         self._connection = None
         self._initialized = False
         self._query_cache = QueryCache(maxsize=128)
@@ -539,7 +540,7 @@ class GovernanceDatabaseManager:
     ) -> None:
         """
         Log an audit event (internal use - assumes lock already held).
-        
+
         Note: Caller must hold _db_lock before calling this.
         """
         audit_id = str(uuid.uuid4())
@@ -591,7 +592,7 @@ class GovernanceDatabaseManager:
     ) -> None:
         """
         Log an audit event (public method).
-        
+
         Args:
             rule_id: Rule identifier
             action: Action type (CREATE, UPDATE, DELETE, etc.)
@@ -663,15 +664,15 @@ class GovernanceDatabaseManager:
             cursor = conn.cursor()
 
             table_name = "project_rules" if tier == RuleTier.TIER_1.value else "team_rules"
-            
+
             cursor.execute(
                 f"SELECT * FROM {table_name} WHERE category = ? ORDER BY name",
                 (category,)
             )
-            
+
             rows = cursor.fetchall()
             results = [GovernanceRule(**dict(row)) for row in rows]
-            
+
             self._query_cache.set(cache_key, results)
             logger.info(f"✅ Retrieved {len(results)} rules from category: {category}")
             return results
@@ -697,15 +698,15 @@ class GovernanceDatabaseManager:
             cursor = conn.cursor()
 
             table_name = "project_rules" if tier == RuleTier.TIER_1.value else "team_rules"
-            
+
             cursor.execute(
                 f"SELECT * FROM {table_name} WHERE severity = ? ORDER BY name",
                 (severity,)
             )
-            
+
             rows = cursor.fetchall()
             results = [GovernanceRule(**dict(row)) for row in rows]
-            
+
             self._query_cache.set(cache_key, results)
             logger.info(f"✅ Retrieved {len(results)} rules with severity: {severity}")
             return results
@@ -731,15 +732,15 @@ class GovernanceDatabaseManager:
             cursor = conn.cursor()
 
             table_name = "project_rules" if tier == RuleTier.TIER_1.value else "team_rules"
-            
+
             cursor.execute(
                 f"SELECT * FROM {table_name} WHERE enforcement_point = ? AND is_active = 1 ORDER BY severity DESC",
                 (enforcement_point,)
             )
-            
+
             rows = cursor.fetchall()
             results = [GovernanceRule(**dict(row)) for row in rows]
-            
+
             self._query_cache.set(cache_key, results)
             logger.info(f"✅ Retrieved {len(results)} rules for enforcement point: {enforcement_point}")
             return results
@@ -766,19 +767,19 @@ class GovernanceDatabaseManager:
 
             table_name = "project_rules" if tier == RuleTier.TIER_1.value else "team_rules"
             search_pattern = f"%{query_term}%"
-            
+
             cursor.execute(
                 f"""
-                SELECT * FROM {table_name} 
+                SELECT * FROM {table_name}
                 WHERE name LIKE ? OR description LIKE ? OR category LIKE ?
                 ORDER BY name
                 """,
                 (search_pattern, search_pattern, search_pattern)
             )
-            
+
             rows = cursor.fetchall()
             results = [GovernanceRule(**dict(row)) for row in rows]
-            
+
             self._query_cache.set(cache_key, results)
             logger.info(f"✅ Found {len(results)} rules matching: {query_term}")
             return results
@@ -803,14 +804,14 @@ class GovernanceDatabaseManager:
             cursor = conn.cursor()
 
             table_name = "project_rules" if tier == RuleTier.TIER_1.value else "team_rules"
-            
+
             cursor.execute(
                 f"SELECT * FROM {table_name} WHERE is_active = 1 ORDER BY category, name"
             )
-            
+
             rows = cursor.fetchall()
             results = [GovernanceRule(**dict(row)) for row in rows]
-            
+
             self._query_cache.set(cache_key, results)
             logger.info(f"✅ Retrieved {len(results)} active rules from tier {tier}")
             return results
@@ -841,22 +842,22 @@ class GovernanceDatabaseManager:
     def get_violations_by_rule(self, rule: Optional[str] = None, limit: int = 100) -> List[Dict[str, Any]]:
         """
         Get violations by rule (from audit log).
-        
+
         Args:
             rule: Optional rule_id filter
             limit: Maximum number of results
-            
+
         Returns:
             List of violation records
         """
         with self._db_lock:
             conn = self._get_connection()
             cursor = conn.cursor()
-            
+
             if rule:
                 cursor.execute(
                     """
-                    SELECT * FROM governance_audit_log 
+                    SELECT * FROM governance_audit_log
                     WHERE rule_id = ? AND is_compliant = 0
                     ORDER BY timestamp DESC
                     LIMIT ?
@@ -866,125 +867,125 @@ class GovernanceDatabaseManager:
             else:
                 cursor.execute(
                     """
-                    SELECT * FROM governance_audit_log 
+                    SELECT * FROM governance_audit_log
                     WHERE is_compliant = 0
                     ORDER BY timestamp DESC
                     LIMIT ?
                     """,
                     (limit,)
                 )
-            
+
             rows = cursor.fetchall()
             return [dict(row) for row in rows]
 
     def get_violations_since(self, days: int = 7) -> List[Dict[str, Any]]:
         """
         Get violations from the last N days.
-        
+
         Args:
             days: Number of days to look back
-            
+
         Returns:
             List of violation records
         """
         with self._db_lock:
             conn = self._get_connection()
             cursor = conn.cursor()
-            
+
             # Calculate cutoff timestamp
             cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
-            
+
             cursor.execute(
                 """
-                SELECT * FROM governance_audit_log 
+                SELECT * FROM governance_audit_log
                 WHERE timestamp >= ? AND is_compliant = 0
                 ORDER BY timestamp DESC
                 """,
                 (cutoff,)
             )
-            
+
             rows = cursor.fetchall()
             return [dict(row) for row in rows]
 
     def get_operation_count(self, days: int = 7) -> int:
         """
         Get count of governance operations in the last N days.
-        
+
         Args:
             days: Number of days to look back
-            
+
         Returns:
             Total operation count
         """
         with self._db_lock:
             conn = self._get_connection()
             cursor = conn.cursor()
-            
+
             cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
-            
+
             cursor.execute(
                 """
-                SELECT COUNT(*) FROM governance_audit_log 
+                SELECT COUNT(*) FROM governance_audit_log
                 WHERE timestamp >= ?
                 """,
                 (cutoff,)
             )
-            
+
             result = cursor.fetchone()
             return result[0] if result else 0
 
     def get_execution_history(self, days: int = 7) -> List[Dict[str, Any]]:
         """
         Get execution history for the last N days.
-        
+
         Args:
             days: Number of days to look back
-            
+
         Returns:
             List of execution records
         """
         with self._db_lock:
             conn = self._get_connection()
             cursor = conn.cursor()
-            
+
             cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
-            
+
             cursor.execute(
                 """
-                SELECT * FROM governance_audit_log 
+                SELECT * FROM governance_audit_log
                 WHERE timestamp >= ?
                 ORDER BY timestamp DESC
                 """,
                 (cutoff,)
             )
-            
+
             rows = cursor.fetchall()
             return [dict(row) for row in rows]
 
     def get_active_rules_count(self, tier: int = RuleTier.TIER_1.value) -> int:
         """
         Get count of active rules.
-        
+
         Args:
             tier: Rule tier
-            
+
         Returns:
             Count of active rules
         """
         with self._db_lock:
             conn = self._get_connection()
             cursor = conn.cursor()
-            
+
             table_name = "project_rules" if tier == RuleTier.TIER_1.value else "team_rules"
             cursor.execute(f"SELECT COUNT(*) FROM {table_name} WHERE is_active = 1")
-            
+
             result = cursor.fetchone()
             return result[0] if result else 0
 
     def log_enforcement(self, rule_id: str, actor: str, result: str) -> None:
         """
         Log a rule enforcement action.
-        
+
         Args:
             rule_id: The rule that was enforced
             actor: The actor performing enforcement
@@ -994,13 +995,13 @@ class GovernanceDatabaseManager:
             rule_id=rule_id,
             action=f"ENFORCEMENT_{result}",
             actor=actor,
-            reason=f"Rule enforcement action"
+            reason="Rule enforcement action"
         )
 
     def log_blocking(self, rule_id: str, actor: str, reason: str) -> None:
         """
         Log a blocking action.
-        
+
         Args:
             rule_id: The rule that triggered blocking
             actor: The actor initiating the block
@@ -1016,24 +1017,24 @@ class GovernanceDatabaseManager:
     def get_audit_trail(self, rule_id: Optional[str] = None, days: int = 30) -> List[Dict[str, Any]]:
         """
         Get audit trail for a rule or all rules.
-        
+
         Args:
             rule_id: Optional specific rule filter
             days: Number of days to look back
-            
+
         Returns:
             List of audit log entries
         """
         with self._db_lock:
             conn = self._get_connection()
             cursor = conn.cursor()
-            
+
             cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
-            
+
             if rule_id:
                 cursor.execute(
                     """
-                    SELECT * FROM governance_audit_log 
+                    SELECT * FROM governance_audit_log
                     WHERE rule_id = ? AND timestamp >= ?
                     ORDER BY timestamp DESC
                     """,
@@ -1042,20 +1043,20 @@ class GovernanceDatabaseManager:
             else:
                 cursor.execute(
                     """
-                    SELECT * FROM governance_audit_log 
+                    SELECT * FROM governance_audit_log
                     WHERE timestamp >= ?
                     ORDER BY timestamp DESC
                     """,
                     (cutoff,)
                 )
-            
+
             rows = cursor.fetchall()
             return [dict(row) for row in rows]
 
     def log_remediation(self, rule_id: str, actor: str, action: str, description: str) -> None:
         """
         Log a remediation action.
-        
+
         Args:
             rule_id: The rule that was remediated
             actor: The actor performing remediation

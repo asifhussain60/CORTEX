@@ -8,11 +8,10 @@ Created: 2026-02-07
 Version: 1.0
 """
 
-from enum import Enum
-from typing import Optional, Dict, List
-from dataclasses import dataclass
 from abc import ABC, abstractmethod
-
+from dataclasses import dataclass
+from enum import Enum
+from typing import Dict, List, Optional
 
 # ============================================================================
 # ENUMERATIONS
@@ -21,17 +20,17 @@ from abc import ABC, abstractmethod
 
 class HeaderType(str, Enum):
     """Header type enumeration for response differentiation."""
-    
+
     CORTEX_OPERATIONS = "cortex_operations"
     """CORTEX.prompt.md - Operational orchestrator headers"""
-    
+
     CORTEX_ARCHITECT = "cortex_architect"
     """cortex-architect.prompt.md - Self-development planning headers"""
 
 
 class ResponseMode(str, Enum):
     """Response mode enumeration."""
-    
+
     OPERATIONS = "Operations"
     AUDIT = "Audit"
     TDD = "TDD"
@@ -50,7 +49,7 @@ class ResponseMode(str, Enum):
 @dataclass
 class HeaderSpec:
     """Specification for a header type."""
-    
+
     type: HeaderType
     icon: str
     title: str
@@ -62,7 +61,7 @@ class HeaderSpec:
 @dataclass
 class HeaderContext:
     """Context information for header rendering."""
-    
+
     mode: ResponseMode
     author: str = "Asif Hussain"
     scope: str = "Implementation"
@@ -109,12 +108,12 @@ CORTEX_ARCHITECT_SPEC = HeaderSpec(
 
 class HeaderRenderer(ABC):
     """Abstract base class for header rendering."""
-    
+
     @abstractmethod
     def render(self, context: HeaderContext) -> str:
         """Render header with given context."""
         pass
-    
+
     @abstractmethod
     def validate(self) -> bool:
         """Validate header specification."""
@@ -128,23 +127,23 @@ class HeaderRenderer(ABC):
 
 class CORTEXOperationsHeaderRenderer(HeaderRenderer):
     """Renderer for CORTEX operations headers."""
-    
+
     def __init__(self):
         self.spec = CORTEX_OPERATIONS_SPEC
-    
+
     def render(self, context: HeaderContext) -> str:
         """
         Render CORTEX operations header.
-        
+
         Format:
             ## 🧠 CORTEX {mode}
             **Author:** {author} | **Orchestrator:** {orchestrator} ✅
-            
+
             ---
-        
+
         Args:
             context: Header context with mode, author, etc.
-        
+
         Returns:
             Rendered header string
         """
@@ -152,16 +151,16 @@ class CORTEXOperationsHeaderRenderer(HeaderRenderer):
             f"## {self.spec.icon} {self.spec.title} {context.mode.value}",
             f"**Author:** {context.author}",
         ]
-        
+
         if context.orchestrator:
             lines[-1] += f" | **Orchestrator:** {context.orchestrator}"
-        
+
         lines[-1] += " ✅"
         lines.append("")
         lines.append("---")
-        
+
         return "\n".join(lines)
-    
+
     def validate(self) -> bool:
         """Validate header specification."""
         return (
@@ -173,25 +172,25 @@ class CORTEXOperationsHeaderRenderer(HeaderRenderer):
 
 class CORTEXArchitectHeaderRenderer(HeaderRenderer):
     """Renderer for CORTEX Architect headers."""
-    
+
     def __init__(self):
         self.spec = CORTEX_ARCHITECT_SPEC
-    
+
     def render(self, context: HeaderContext) -> str:
         """
         Render CORTEX Architect header with mode hints.
-        
+
         Format:
             ## 🏛️ CORTEX Architect {mode}
             **Author:** {author} | **Modes:** /audit /plan /query /design /digest /meta-audit ✅
-            
+
             **Dedicated to CORTEX self-development**
-            
+
             ---
-        
+
         Args:
             context: Header context with mode, author, etc.
-        
+
         Returns:
             Rendered header string
         """
@@ -203,9 +202,9 @@ class CORTEXArchitectHeaderRenderer(HeaderRenderer):
             "",
             "---",
         ]
-        
+
         return "\n".join(lines)
-    
+
     def validate(self) -> bool:
         """Validate header specification."""
         return (
@@ -222,20 +221,20 @@ class CORTEXArchitectHeaderRenderer(HeaderRenderer):
 
 class HeaderRendererFactory:
     """Factory for creating header renderers."""
-    
+
     _renderers: Dict[HeaderType, HeaderRenderer] = {}
-    
+
     @classmethod
     def create(cls, header_type: HeaderType) -> HeaderRenderer:
         """
         Create header renderer by type.
-        
+
         Args:
             header_type: Type of header to create (CORTEX_OPERATIONS or CORTEX_ARCHITECT)
-        
+
         Returns:
             HeaderRenderer instance
-        
+
         Raises:
             ValueError: If header_type is not supported
         """
@@ -246,17 +245,17 @@ class HeaderRendererFactory:
                 cls._renderers[header_type] = CORTEXArchitectHeaderRenderer()
             else:
                 raise ValueError(f"Unsupported header type: {header_type}")
-        
+
         return cls._renderers[header_type]
-    
+
     @classmethod
     def get_renderer_for_prompt(cls, prompt_name: str) -> HeaderRenderer:
         """
         Get appropriate header renderer for prompt name.
-        
+
         Args:
             prompt_name: Name of prompt (e.g., "CORTEX.prompt.md")
-        
+
         Returns:
             Appropriate HeaderRenderer
         """
@@ -273,10 +272,10 @@ class HeaderRendererFactory:
 
 class DualHeaderManager:
     """Manager for dual header system."""
-    
+
     def __init__(self):
         self.factory = HeaderRendererFactory()
-    
+
     def get_header(
         self,
         header_type: HeaderType,
@@ -284,11 +283,11 @@ class DualHeaderManager:
     ) -> str:
         """
         Get rendered header for given type and context.
-        
+
         Args:
             header_type: Type of header
             context: Header context
-        
+
         Returns:
             Rendered header string
         """
@@ -296,11 +295,11 @@ class DualHeaderManager:
         if not renderer.validate():
             raise RuntimeError(f"Header validation failed for type: {header_type}")
         return renderer.render(context)
-    
+
     def validate_all_headers(self) -> Dict[HeaderType, bool]:
         """
         Validate all header types.
-        
+
         Returns:
             Dictionary mapping HeaderType to validation result
         """

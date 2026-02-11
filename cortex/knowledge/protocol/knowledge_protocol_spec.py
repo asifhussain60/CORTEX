@@ -1,8 +1,8 @@
 """Knowledge Protocol specification and message types."""
 
-from typing import Any, Dict, List
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any, Dict, List
 
 
 class MessageType(Enum):
@@ -116,10 +116,10 @@ class KnowledgeProtocolSpec:
 
     def validate_message_id(self, message_id: str) -> bool:
         """Validate message ID format.
-        
+
         Args:
             message_id: Message ID to validate
-            
+
         Returns:
             True if valid
         """
@@ -127,10 +127,10 @@ class KnowledgeProtocolSpec:
 
     def validate_query_length(self, query: str) -> bool:
         """Validate query length constraint.
-        
+
         Args:
             query: Query string
-            
+
         Returns:
             True if valid
         """
@@ -138,10 +138,10 @@ class KnowledgeProtocolSpec:
 
     def validate_result_count(self, count: int) -> bool:
         """Validate result count constraint.
-        
+
         Args:
             count: Number of results
-            
+
         Returns:
             True if valid
         """
@@ -149,7 +149,7 @@ class KnowledgeProtocolSpec:
 
     def get_specification(self) -> Dict[str, Any]:
         """Get full protocol specification.
-        
+
         Returns:
             Specification dictionary
         """

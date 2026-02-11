@@ -21,8 +21,8 @@ __description__ = 'AI-Powered Development Orchestration System'
 from cortex.wiring import (
     bootstrap_cortex,
     get_cortex,
-    is_wired,
     get_wiring_hash,
+    is_wired,
 )
 
 # AC-PERMANENT-FIX-015: Run mandatory startup validation on import

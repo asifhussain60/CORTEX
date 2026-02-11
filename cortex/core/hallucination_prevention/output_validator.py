@@ -7,14 +7,12 @@ before downstream processing to prevent injection attacks and hallucinations.
 Author: CORTEX Framework
 """
 
-import re
 import json
-from typing import Any, Dict, List, Optional
+import re
 from enum import Enum
+from typing import Any, Dict, List, Optional
 
 from cortex.models.canonical_enums import ValidationLevel
-
-
 
 
 class OutputValidationError(Exception):
@@ -24,7 +22,7 @@ class OutputValidationError(Exception):
 
 class LLMOutputValidator:
     """Validates and sanitizes LLM-generated output.
-    
+
     Implements CORE-CRIT-HALL-001: All LLM output must be validated before
     downstream processing to prevent:
     - Code injection attacks
@@ -35,12 +33,12 @@ class LLMOutputValidator:
 
     def __init__(self, level: ValidationLevel = ValidationLevel.STRICT) -> None:
         """Initialize validator.
-        
+
         Args:
             level: Validation severity level
         """
         self.level = level
-        
+
         # Dangerous patterns to detect
         self.dangerous_patterns = {
             "sql_injection": [
@@ -74,15 +72,15 @@ class LLMOutputValidator:
         allow_dangerous: bool = False,
     ) -> Any:
         """Validate LLM output.
-        
+
         Args:
             output: LLM output to validate
             schema: Expected output schema (optional)
             allow_dangerous: If True, only log dangerous patterns (don't block)
-            
+
         Returns:
             Validated output
-            
+
         Raises:
             OutputValidationError: If validation fails in STRICT mode
         """
@@ -119,11 +117,11 @@ class LLMOutputValidator:
         schema: Optional[Dict[str, Any]] = None,
     ) -> List[Any]:
         """Validate list of outputs.
-        
+
         Args:
             outputs: List of outputs to validate
             schema: Expected schema for each item
-            
+
         Returns:
             Validated outputs
         """
@@ -131,31 +129,31 @@ class LLMOutputValidator:
 
     def sanitize(self, output: str) -> str:
         """Sanitize LLM output by removing dangerous patterns.
-        
+
         Args:
             output: Output to sanitize
-            
+
         Returns:
             Sanitized output
         """
         sanitized = output
-        
+
         # Remove SQL injection patterns
         for pattern in self.dangerous_patterns["sql_injection"]:
             sanitized = re.sub(pattern, "[SANITIZED]", sanitized, flags=re.IGNORECASE)
-        
+
         # Remove code injection patterns
         for pattern in self.dangerous_patterns["code_injection"]:
             sanitized = re.sub(pattern, "[SANITIZED]", sanitized, flags=re.IGNORECASE)
-        
+
         # Remove XML injection patterns
         for pattern in self.dangerous_patterns["xml_injection"]:
             sanitized = re.sub(pattern, "[SANITIZED]", sanitized)
-        
+
         # Remove prompt injection patterns
         for pattern in self.dangerous_patterns["prompt_injection"]:
             sanitized = re.sub(pattern, "[SANITIZED]", sanitized, flags=re.IGNORECASE)
-        
+
         return sanitized
 
     def _validate_schema(
@@ -164,11 +162,11 @@ class LLMOutputValidator:
         schema: Dict[str, Any],
     ) -> None:
         """Validate output against schema.
-        
+
         Args:
             output: Output to validate
             schema: Expected schema
-            
+
         Raises:
             OutputValidationError: If schema validation fails
         """
@@ -177,7 +175,7 @@ class LLMOutputValidator:
             raise OutputValidationError(
                 f"Expected dict output, got {type(output).__name__}"
             )
-        
+
         # Check required keys
         required_keys = schema.get("required_keys", [])
         for key in required_keys:
@@ -186,10 +184,10 @@ class LLMOutputValidator:
 
     def _check_dangerous_patterns(self, content: str) -> Optional[str]:
         """Check for dangerous patterns in content.
-        
+
         Args:
             content: Content to check
-            
+
         Returns:
             Name of dangerous pattern found, or None
         """
@@ -206,10 +204,10 @@ _global_validator: Optional[LLMOutputValidator] = None
 
 def get_validator(level: ValidationLevel = ValidationLevel.STRICT) -> LLMOutputValidator:
     """Get global output validator instance.
-    
+
     Args:
         level: Validation level
-        
+
     Returns:
         LLMOutputValidator instance
     """
@@ -225,12 +223,12 @@ def validate_llm_output(
     allow_dangerous: bool = False,
 ) -> Any:
     """Validate LLM output using global validator.
-    
+
     Args:
         output: Output to validate
         schema: Expected schema
         allow_dangerous: If True, only log dangerous patterns
-        
+
     Returns:
         Validated output
     """
@@ -239,10 +237,10 @@ def validate_llm_output(
 
 def sanitize_llm_output(output: str) -> str:
     """Sanitize LLM output.
-    
+
     Args:
         output: Output to sanitize
-        
+
     Returns:
         Sanitized output
     """

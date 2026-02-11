@@ -5,32 +5,32 @@ Implements domain orchestration patterns for multi-domain support.
 Author: CORTEX Framework
 """
 
-from typing import Dict, Any, Optional
 from abc import ABC, abstractmethod
+from typing import Any, Dict, Optional
 
 
 class DomainHandler(ABC):
     """Base class for domain handlers."""
-    
+
     @abstractmethod
     def execute(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """Execute handler operation.
-        
+
         Args:
             params: Operation parameters
-            
+
         Returns:
             Operation result
         """
         pass
-    
+
     @abstractmethod
     def validate(self, params: Dict[str, Any]) -> bool:
         """Validate parameters.
-        
+
         Args:
             params: Parameters to validate
-            
+
         Returns:
             True if valid, False otherwise
         """
@@ -39,7 +39,7 @@ class DomainHandler(ABC):
 
 class DomainRegistry:
     """Domain registry for handler management."""
-    
+
     def __init__(self) -> None:
         """Initialize registry."""
         self.domains: Dict[str, str] = {}
@@ -51,13 +51,13 @@ class DomainRegistry:
             "optimize": OptimizationHandler(),
             "integrate": IntegrationHandler(),
         }
-    
+
     def get_handler(self, handler_type: str) -> Optional[DomainHandler]:
         """Get handler by type.
-        
+
         Args:
             handler_type: Handler type name
-            
+
         Returns:
             Handler instance or None
         """
@@ -66,13 +66,13 @@ class DomainRegistry:
 
 class CreateHandler(DomainHandler):
     """Handler for domain creation."""
-    
+
     def execute(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """Execute domain creation.
-        
+
         Args:
             params: Creation parameters (must include 'domain')
-            
+
         Returns:
             Result with status
         """
@@ -82,13 +82,13 @@ class CreateHandler(DomainHandler):
             "domain": domain,
             "message": f"Domain {domain} created successfully",
         }
-    
+
     def validate(self, params: Dict[str, Any]) -> bool:
         """Validate creation parameters.
-        
+
         Args:
             params: Parameters to validate
-            
+
         Returns:
             True if both 'domain' and 'target' are present
         """
@@ -97,13 +97,13 @@ class CreateHandler(DomainHandler):
 
 class ModifyHandler(DomainHandler):
     """Handler for domain modification."""
-    
+
     def execute(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """Execute domain modification.
-        
+
         Args:
             params: Modification parameters
-            
+
         Returns:
             Result with status
         """
@@ -113,13 +113,13 @@ class ModifyHandler(DomainHandler):
             "domain": domain,
             "message": f"Domain {domain} modified successfully",
         }
-    
+
     def validate(self, params: Dict[str, Any]) -> bool:
         """Validate modification parameters.
-        
+
         Args:
             params: Parameters to validate
-            
+
         Returns:
             True if 'domain' and 'target' are present
         """
@@ -128,13 +128,13 @@ class ModifyHandler(DomainHandler):
 
 class FixHandler(DomainHandler):
     """Handler for domain issue fixing."""
-    
+
     def execute(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """Execute domain fix.
-        
+
         Args:
             params: Fix parameters
-            
+
         Returns:
             Result with status
         """
@@ -144,13 +144,13 @@ class FixHandler(DomainHandler):
             "domain": domain,
             "message": f"Issues in domain {domain} fixed successfully",
         }
-    
+
     def validate(self, params: Dict[str, Any]) -> bool:
         """Validate fix parameters.
-        
+
         Args:
             params: Parameters to validate
-            
+
         Returns:
             True if 'domain' and 'issue' are present
         """
@@ -159,13 +159,13 @@ class FixHandler(DomainHandler):
 
 class AnalysisHandler(DomainHandler):
     """Handler for domain analysis."""
-    
+
     def execute(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """Execute domain analysis.
-        
+
         Args:
             params: Analysis parameters
-            
+
         Returns:
             Result with analysis data
         """
@@ -179,13 +179,13 @@ class AnalysisHandler(DomainHandler):
                 "test_coverage": 85,
             },
         }
-    
+
     def validate(self, params: Dict[str, Any]) -> bool:
         """Validate analysis parameters.
-        
+
         Args:
             params: Parameters to validate
-            
+
         Returns:
             True if 'domain' is present
         """
@@ -194,13 +194,13 @@ class AnalysisHandler(DomainHandler):
 
 class OptimizationHandler(DomainHandler):
     """Handler for domain optimization."""
-    
+
     def execute(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """Execute domain optimization.
-        
+
         Args:
             params: Optimization parameters
-            
+
         Returns:
             Result with status
         """
@@ -214,13 +214,13 @@ class OptimizationHandler(DomainHandler):
                 "Enhanced maintainability",
             ],
         }
-    
+
     def validate(self, params: Dict[str, Any]) -> bool:
         """Validate optimization parameters.
-        
+
         Args:
             params: Parameters to validate
-            
+
         Returns:
             True if 'domain' is present
         """
@@ -229,13 +229,13 @@ class OptimizationHandler(DomainHandler):
 
 class IntegrationHandler(DomainHandler):
     """Handler for multi-domain integration."""
-    
+
     def execute(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """Execute multi-domain integration.
-        
+
         Args:
             params: Integration parameters (must include 'domains' list)
-            
+
         Returns:
             Result with status
         """
@@ -246,13 +246,13 @@ class IntegrationHandler(DomainHandler):
             "integration_points": len(domains) - 1,
             "message": f"Successfully integrated {len(domains)} domains",
         }
-    
+
     def validate(self, params: Dict[str, Any]) -> bool:
         """Validate integration parameters.
-        
+
         Args:
             params: Parameters to validate
-            
+
         Returns:
             True if 'domains' list has 2+ entries
         """
@@ -262,29 +262,29 @@ class IntegrationHandler(DomainHandler):
 
 class DomainOrchestrator:
     """Main orchestrator for coordinating domain operations."""
-    
+
     def __init__(self) -> None:
         """Initialize orchestrator."""
         self.registry = DomainRegistry()
-    
+
     def execute(self, domain_id: str, operation: str, params: Dict[str, Any]) -> Dict[str, Any]:
         """Execute domain operation.
-        
+
         Args:
             domain_id: Target domain ID
             operation: Operation type
             params: Operation parameters
-            
+
         Returns:
             Operation result
         """
         handler = self.registry.get_handler(operation)
         if not handler:
             return {"status": "error", "message": f"Unknown operation: {operation}"}
-        
+
         if not handler.validate(params):
             return {"status": "error", "message": "Invalid parameters for operation"}
-        
+
         return handler.execute(params)
 
 

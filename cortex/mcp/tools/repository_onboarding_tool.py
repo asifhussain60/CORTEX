@@ -20,17 +20,17 @@ from cortex_brain.onboarded_repos import ProfileStore
 class RepositoryOnboardingTool(BaseTool):
     """
     MCP Tool for repository onboarding.
-    
+
     Command: /onboard {path}
-    
+
     Onboards external repositories with profile generation and loose coupling.
     """
-    
+
     @property
     def name(self) -> str:
         """Tool name."""
         return "cortex_onboard_repository"
-    
+
     @property
     def description(self) -> str:
         """Tool description."""
@@ -46,7 +46,7 @@ Creates repository profile with:
 
 Usage: /onboard /path/to/repository
 """
-    
+
     @property
     def input_schema(self) -> Dict[str, Any]:
         """Tool input schema."""
@@ -65,44 +65,44 @@ Usage: /onboard /path/to/repository
             },
             "required": ["repo_path"]
         }
-    
+
     def execute(self, **kwargs: Any) -> Dict[str, Any]:
         """
         Execute repository onboarding.
-        
+
         Args:
             repo_path: Path to repository
             profile_store_path: Optional profile storage path
-            
+
         Returns:
             Onboarding result with profile
         """
         repo_path = Path(kwargs['repo_path'])
         profile_store_path = kwargs.get('profile_store_path')
-        
+
         # Validate repository exists
         if not repo_path.exists():
             return {
                 'success': False,
                 'error': f"Repository not found: {repo_path}"
             }
-        
+
         # Create profile store
         if profile_store_path:
             profile_store = ProfileStore(storage_path=Path(profile_store_path))
         else:
             profile_store = ProfileStore()
-        
+
         # Get orchestrator
         orchestrator = get_repository_onboarding_orchestrator()
-        
+
         try:
             # Onboard repository
             profile = orchestrator.onboard_repository_with_profile(
                 repo_path=repo_path,
                 profile_store=profile_store
             )
-            
+
             return {
                 'success': True,
                 'repo_name': profile.name,
@@ -125,7 +125,7 @@ Usage: /onboard /path/to/repository
                 },
                 'message': f"✅ Repository '{profile.name}' onboarded successfully"
             }
-        
+
         except Exception as e:
             return {
                 'success': False,

@@ -11,19 +11,21 @@ Classes:
     ResponseHeaderInjector: Main injector that wraps template engine
 """
 
-from typing import Dict, Any, Optional
-from datetime import datetime
-from .response_header_config import HeaderConfigurationManager
 import re
+from datetime import datetime
+from typing import Any, Dict, Optional
+
 import yaml
 
 # Phase 20.2: Orchestrator Visibility Enhancement
 from cortex.observability.visibility_controller import (
-    get_visibility_controller,
-    OrchestratorContext,
     IntelligenceFlags,
+    OrchestratorContext,
     VisibilityMode,
+    get_visibility_controller,
 )
+
+from .response_header_config import HeaderConfigurationManager
 
 # Note: ResponseTemplateEngine stub removed (CORE-035 consolidation)
 # Response formatting now handled by scaffolder_templates or orchestrator-specific templates
@@ -36,7 +38,7 @@ from cortex.observability.visibility_controller import (
 def escape_yaml_string(value: str) -> str:
     """
     Escape a string to be safe for YAML value contexts.
-    
+
     Prevents prompt injection attacks by escaping YAML special characters.
     Special characters that need escaping in YAML:
     - : (colon) - indicates key/value pairs
@@ -50,52 +52,52 @@ def escape_yaml_string(value: str) -> str:
     - # (hash) - comments
     - | (pipe) - block scalars
     - > (greater) - folded scalars
-    
+
     Strategy: Quote the entire string if it contains any special characters.
     This ensures the entire value is treated as a literal string.
-    
+
     Args:
         value: String value to escape
-        
+
     Returns:
         Escaped string safe for YAML contexts
     """
     if not isinstance(value, str):
         value = str(value)
-    
+
     # Check if string contains any YAML special characters
     yaml_special_chars = r'[:\-\?[\]{},&*#|>\'\"@`]|^-|^---'
-    
+
     if re.search(yaml_special_chars, value) or value.startswith(' ') or value.endswith(' '):
         # Quote the string to treat it as a literal
         # Escape any quotes within the string
         escaped = value.replace('\\', '\\\\').replace('"', '\\"')
         return f'"{escaped}"'
-    
+
     return value
 
 
 def validate_ac_id(ac_id: str) -> bool:
     """
     Validate AC-ID format against whitelist pattern.
-    
+
     Valid formats:
     - AC-FIX-001-01
     - AC-DOC-007-01
     - AC-MINOR-008-01
     - CORE-001
     - FINDING-001
-    
+
     Args:
         ac_id: AC-ID string to validate
-        
+
     Returns:
         True if valid format, False otherwise
     """
     # Allow alphanumeric and hyphens, but nothing else
     if not isinstance(ac_id, str):
         return False
-    
+
     # Pattern: Uppercase letters, numbers, hyphens only
     # Must start and end with alphanumeric
     pattern = r'^[A-Z][A-Z0-9]*([-][A-Z0-9]+)*$'
@@ -105,19 +107,19 @@ def validate_ac_id(ac_id: str) -> bool:
 def validate_operation_name(operation: str) -> bool:
     """
     Validate operation name against whitelist.
-    
+
     Valid operations (from typical governance domains):
     create, read, update, delete, execute, query, backup, restore, validate, etc.
-    
+
     Args:
         operation: Operation name to validate
-        
+
     Returns:
         True if valid, False otherwise
     """
     if not isinstance(operation, str):
         return False
-    
+
     # Allow lowercase alphanumeric and underscores only
     pattern = r'^[a-z][a-z0-9_]{0,31}$'
     return bool(re.match(pattern, operation))
@@ -126,18 +128,18 @@ def validate_operation_name(operation: str) -> bool:
 def validate_domain_name(domain: str) -> bool:
     """
     Validate domain name against whitelist.
-    
+
     Valid domains: governance, security, compliance, operations, infrastructure
-    
+
     Args:
         domain: Domain name to validate
-        
+
     Returns:
         True if valid, False otherwise
     """
     if not isinstance(domain, str):
         return False
-    
+
     # Allow lowercase alphanumeric and underscores only
     pattern = r'^[a-z][a-z0-9_]{0,31}$'
     return bool(re.match(pattern, domain))
@@ -146,29 +148,29 @@ def validate_domain_name(domain: str) -> bool:
 def sanitize_context_value(var_name: str, value: Any, is_mandatory: bool = False) -> str:
     """
     Sanitize a context value before interpolation.
-    
+
     Strategy:
     1. For known fields with whitelists (ac_id, operation_name, domain),
        validate against whitelist
     2. For all values, apply YAML-safe escaping
     3. Reject if whitelist validation fails (for mandatory fields)
-    
+
     Args:
         var_name: Variable name to determine validation rules
         value: Value to sanitize
         is_mandatory: Whether this is a mandatory variable
-        
+
     Returns:
         Sanitized, escaped string value
-        
+
     Raises:
         ValueError: If whitelist validation fails for mandatory field
     """
     if value is None:
         return ""
-    
+
     value_str = str(value)
-    
+
     # Apply whitelist validation for known fields
     if var_name.lower() in ('ac_id', 'ac-id', 'acid'):
         if not validate_ac_id(value_str):
@@ -179,7 +181,7 @@ def sanitize_context_value(var_name: str, value: Any, is_mandatory: bool = False
             value_str = escape_yaml_string(value_str)
         else:
             value_str = escape_yaml_string(value_str)
-    
+
     elif var_name.lower() in ('operation_name', 'operation', 'op_name'):
         if not validate_operation_name(value_str):
             msg = f"Invalid operation name: {value_str}"
@@ -188,7 +190,7 @@ def sanitize_context_value(var_name: str, value: Any, is_mandatory: bool = False
             value_str = escape_yaml_string(value_str)
         else:
             value_str = escape_yaml_string(value_str)
-    
+
     elif var_name.lower() in ('domain_name', 'domain'):
         if not validate_domain_name(value_str):
             msg = f"Invalid domain name: {value_str}"
@@ -197,11 +199,11 @@ def sanitize_context_value(var_name: str, value: Any, is_mandatory: bool = False
             value_str = escape_yaml_string(value_str)
         else:
             value_str = escape_yaml_string(value_str)
-    
+
     else:
         # For unknown fields, just apply escaping
         value_str = escape_yaml_string(value_str)
-    
+
     return value_str
 
 
@@ -241,7 +243,7 @@ class ResponseHeaderInjector:
         self.engine = template_engine
         self.config_manager = config_manager or HeaderConfigurationManager.get_instance()
         self._render_cache: Dict[str, str] = {}
-        
+
         # Phase 20.2: Orchestrator Visibility Controller
         self._visibility_controller = get_visibility_controller()
 
@@ -342,7 +344,7 @@ class ResponseHeaderInjector:
         # Check if headers are enabled
         if not self.config_manager.is_header_enabled():
             return None
-        
+
         template = self.config_manager.get_header_template()
         if not template:
             return None
@@ -373,7 +375,7 @@ class ResponseHeaderInjector:
         # Check if copyright section is enabled
         if not self.config_manager.is_copyright_enabled():
             return None
-        
+
         template = self.config_manager.get_copyright_template()
         if not template:
             return None
@@ -440,7 +442,7 @@ class ResponseHeaderInjector:
 
         Returns:
             Template with variables substituted (sanitized and escaped)
-            
+
         Raises:
             ValueError: If mandatory field validation fails (ac_id, operation, domain)
         """
@@ -506,7 +508,7 @@ class ResponseHeaderInjector:
     def get_statistics(self) -> Dict[str, Any]:
         """Get injector statistics."""
         engine_stats = {}
-        
+
         # Try to get engine statistics if available
         try:
             if self.engine and hasattr(self.engine, 'registry'):
@@ -514,7 +516,7 @@ class ResponseHeaderInjector:
         except (AttributeError, TypeError):
             # Engine or registry not available (e.g., in tests with mocks)
             pass
-        
+
         return {
             "header_enabled": self.config_manager.is_header_enabled(),
             "copyright_enabled": self.config_manager.is_copyright_enabled(),
@@ -527,12 +529,12 @@ class ResponseHeaderInjector:
     def clear_cache(self) -> None:
         """Clear render cache."""
         self._render_cache.clear()
-    
+
     # =========================================================================
     # PHASE 20.2: ORCHESTRATOR VISIBILITY ENHANCEMENT
     # Authority: AC-UX-VISIBILITY-001
     # =========================================================================
-    
+
     def inject_header(
         self,
         operation: str,
@@ -540,50 +542,50 @@ class ResponseHeaderInjector:
     ) -> str:
         """
         Inject CORTEX response header with optional orchestrator visibility.
-        
+
         This is the main entry point for Phase 20.2 orchestrator badges.
         Generates enhanced header with:
         - Orchestrator icon and name (🧪 TDDOrchestrator)
         - Stage progress dots (●●●○)
         - Intelligence badges (🧠📚)
         - Failure indicators (●●✗○ ⚠️)
-        
+
         Respects CORTEX_ORCHESTRATOR_VISIBILITY environment variable:
         - full: All indicators (learning phase)
         - failures: Only show failures (transitioning)
         - off: Clean responses (mature phase)
-        
+
         Args:
             operation: Operation name (e.g., "Implementation", "Refactoring")
             orchestrator_context: Optional orchestrator execution context
-        
+
         Returns:
             Formatted header with orchestrator visibility (if enabled)
-        
+
         Example:
             ## 🧠 CORTEX Implementation
             **Author:** Asif Hussain | **🧪 TDDOrchestrator** ●●●○ 🧠📚
-            
+
             ---
-        
+
         Authority: AC-UX-VISIBILITY-001 (Phase 20.2)
         """
         # Base header
         header_lines = [f"## 🧠 CORTEX {operation}"]
-        
+
         # Author line (mandatory)
         author_line = "**Author:** Asif Hussain"
-        
+
         # Add orchestrator badge if context provided and visibility enabled
         if orchestrator_context:
             badge = self._format_orchestrator_badge(orchestrator_context)
             if badge:
                 author_line += f" | {badge}"
-        
+
         header_lines.append(author_line)
-        
+
         # Add failure details if present and visibility enabled
-        if (orchestrator_context and 
+        if (orchestrator_context and
             orchestrator_context.failure_stage is not None and
             self._visibility_controller.should_show_failure_details()):
             failure_line = (
@@ -591,31 +593,31 @@ class ResponseHeaderInjector:
                 f"{orchestrator_context.failure_reason or 'Unknown error'}"
             )
             header_lines.append(failure_line)
-        
+
         header_lines.append("")  # Blank line
         header_lines.append("---")
-        
+
         return "\n".join(header_lines)
-    
+
     def _format_orchestrator_badge(self, context: OrchestratorContext) -> str:
         """
         Generate orchestrator badge with stage progress and intelligence indicators.
-        
+
         Badge format:
         - Success: **🧪 TDDOrchestrator** ●●●○ 🧠📚
         - Failure: **🔧 FixOrchestrator** ●●✗○ ⚠️
-        
+
         Respects visibility mode:
         - FULL: Show all indicators
         - FAILURES_ONLY: Show only if failure
         - OFF: Empty string
-        
+
         Args:
             context: Orchestrator execution context
-        
+
         Returns:
             Formatted badge string or empty if visibility disabled
-        
+
         Authority: AC-UX-VISIBILITY-001
         """
         # Check if visibility enabled
@@ -627,7 +629,7 @@ class ResponseHeaderInjector:
             # Show success if success details enabled
             if not self._visibility_controller.should_show_success_details():
                 return ""
-        
+
         # Icon mapping
         icon_map = {
             "TDDOrchestrator": "🧪",
@@ -638,23 +640,23 @@ class ResponseHeaderInjector:
             "ConversationOrchestrator": "🤝",
         }
         icon = icon_map.get(context.orchestrator_name, context.orchestrator_icon)
-        
+
         # Stage progress
         progress = self._format_stage_progress(
             context.current_stage,
             context.stages_completed,
             context.failure_stage
         )
-        
+
         # Intelligence indicators
         intelligence = self._format_intelligence_badges(context.intelligence_active)
-        
+
         # Add failure indicator
         if context.failure_stage is not None:
             intelligence = "⚠️"
-        
+
         return f"**{icon} {context.orchestrator_name}** {progress} {intelligence}".strip()
-    
+
     def _format_stage_progress(
         self,
         current: int,
@@ -663,22 +665,22 @@ class ResponseHeaderInjector:
     ) -> str:
         """
         Generate stage progress dots (●●○○).
-        
+
         Progress indicators:
         - ●●●●: All 4 stages complete
         - ●●●○: Stage 3 complete, Stage 4 in progress
         - ●●○○: Stage 2 complete, Stage 3 in progress
         - ●○○○: Stage 1 complete, Stage 2 in progress
         - ●●✗○: Failed at Stage 3
-        
+
         Args:
             current: Current stage number (1-4)
             completed: List of completed stage names
             failed: Stage number where failure occurred (None if no failure)
-        
+
         Returns:
             Progress dots string
-        
+
         Authority: AC-UX-VISIBILITY-001
         """
         if failed is not None:
@@ -690,25 +692,25 @@ class ResponseHeaderInjector:
         else:
             # Show current progress
             dots = ["●" if i <= current else "○" for i in range(1, 5)]
-        
+
         return "".join(dots)
-    
+
     def _format_intelligence_badges(self, flags: IntelligenceFlags) -> str:
         """
         Generate intelligence indicator badges.
-        
+
         Intelligence indicators:
         - 🧠📚: Full synthesis (LENS + Knowledge + Synthesis)
         - 🧠: LENS intelligence active
         - 📚: Company knowledge active
         - (empty): No intelligence active
-        
+
         Args:
             flags: Intelligence activation flags
-        
+
         Returns:
             Intelligence badge string
-        
+
         Authority: AC-UX-VISIBILITY-001
         """
         if flags.synthesis_enabled:

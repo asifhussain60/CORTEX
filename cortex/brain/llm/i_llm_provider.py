@@ -8,7 +8,7 @@ Compliance: CORE-011 (Type hints), CORE-012 (Docstrings), SOLID (D - Dependency 
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 
 
 @dataclass
@@ -17,7 +17,7 @@ class LLMUsage:
     prompt_tokens: int
     completion_tokens: int
     total_tokens: int
-    
+
     @property
     def cost_estimate_usd(self) -> float:
         """Estimate cost in USD (rough estimate based on GPT-4 pricing)."""
@@ -35,7 +35,7 @@ class LLMResponse:
     model: str
     provider: str
     metadata: Dict[str, Any] = None
-    
+
     def __post_init__(self):
         """Initialize metadata if None."""
         if self.metadata is None:
@@ -45,16 +45,16 @@ class LLMResponse:
 class ILLMProvider(ABC):
     """
     Interface for LLM providers.
-    
+
     SOLID: Dependency Inversion Principle - depend on abstraction, not concrete implementation.
     Allows swapping OpenAI ↔ Anthropic ↔ Azure OpenAI without changing consumer code.
-    
+
     Example:
         >>> provider = LLMFactory.create_provider("openai", api_key="sk-...")
         >>> response = provider.generate("Explain this code", max_tokens=100)
         >>> print(response.content)
     """
-    
+
     @abstractmethod
     def generate(
         self,
@@ -66,39 +66,39 @@ class ILLMProvider(ABC):
     ) -> LLMResponse:
         """
         Generate text from prompt.
-        
+
         Args:
             prompt: Input prompt for LLM
             max_tokens: Maximum tokens in response
             temperature: Sampling temperature (0.0 = deterministic, 1.0 = creative)
             timeout: Timeout in seconds
             **kwargs: Provider-specific parameters
-        
+
         Returns:
             LLMResponse with content, usage, model, provider
-        
+
         Raises:
             TimeoutError: If request exceeds timeout
             ValueError: If parameters are invalid
             Exception: Provider-specific errors
         """
         pass
-    
+
     @abstractmethod
     def get_name(self) -> str:
         """Get provider name (openai, anthropic, azure)."""
         pass
-    
+
     @abstractmethod
     def get_model(self) -> str:
         """Get model name being used."""
         pass
-    
+
     @abstractmethod
     def validate_config(self) -> bool:
         """
         Validate provider configuration.
-        
+
         Returns:
             True if configuration is valid (API key present, model supported)
         """

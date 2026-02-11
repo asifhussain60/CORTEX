@@ -8,12 +8,12 @@ Configurable PR review rule system supporting:
 - Rule inheritance and composition
 """
 
+import logging
+import re
+from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Callable, Set
-from abc import ABC, abstractmethod
-import re
-import logging
+from typing import Any, Callable, Dict, List, Optional, Set
 
 logger = logging.getLogger(__name__)
 
@@ -62,7 +62,7 @@ class Condition:
     def evaluate(self, context: Dict[str, Any]) -> bool:
         """Evaluate condition against context"""
         field_value = context.get(self.field)
-        
+
         if self.operator == ConditionOperator.EQUALS:
             return field_value == self.value
         elif self.operator == ConditionOperator.NOT_EQUALS:
@@ -116,19 +116,19 @@ class Rule:
         """Check if rule applies to file"""
         if not self.applies_to:
             return True
-        
+
         matches_include = any(self._pattern_matches(file_path, p) for p in self.applies_to)
-        
+
         if self.excludes:
             matches_exclude = any(self._pattern_matches(file_path, p) for p in self.excludes)
             return matches_include and not matches_exclude
-        
+
         return matches_include
 
     @staticmethod
     def _pattern_matches(path: str, pattern: str) -> bool:
         """Check if path matches glob-like pattern.
-        
+
         Supports standard glob patterns including:
         - * matches any characters except /
         - ** matches any characters including /
@@ -136,7 +136,7 @@ class Rule:
         """
         import fnmatch
         from pathlib import PurePath
-        
+
         # Handle ** glob pattern (recursive match)
         if '**' in pattern:
             # Convert ** to fnmatch-compatible pattern
@@ -146,25 +146,25 @@ class Rule:
                 prefix, suffix = pattern_parts
                 prefix = prefix.rstrip('/')
                 suffix = suffix.lstrip('/')
-                
+
                 # If path starts with prefix and ends matching suffix
                 if prefix and not path.startswith(prefix.rstrip('*')):
                     return False
-                
+
                 if suffix:
                     return fnmatch.fnmatch(PurePath(path).name, suffix) or \
                            fnmatch.fnmatch(path, pattern.replace('**/', '*').replace('**', '*'))
                 return True
-        
+
         return fnmatch.fnmatch(path, pattern)
 
     def evaluate(self, context: Dict[str, Any]) -> bool:
         """Evaluate all conditions"""
         if not self.enabled or not self.conditions:
             return False
-        
+
         results = [cond.evaluate(context) for cond in self.conditions]
-        
+
         if self.condition_logic == "AND":
             return all(results)
         elif self.condition_logic == "OR":
@@ -196,7 +196,7 @@ class RulesetEvaluationResult:
     @property
     def should_block(self) -> bool:
         """Check if any rule recommends blocking"""
-        return any(r.actions and any(a.action == RuleAction.BLOCK for a in r.actions) 
+        return any(r.actions and any(a.action == RuleAction.BLOCK for a in r.actions)
                    for r in self.matching_rules)
 
     @property
@@ -214,7 +214,7 @@ class RuleEngine:
     def __init__(self, rules: Optional[List[Rule]] = None):
         self.rules: Dict[str, Rule] = {}
         self.evaluation_cache: Dict[str, RulesetEvaluationResult] = {}
-        
+
         if rules:
             for rule in rules:
                 self.add_rule(rule)
@@ -251,23 +251,23 @@ class RuleEngine:
     def evaluate_pr(self, pr_context: Dict[str, Any], file_path: Optional[str] = None) -> RulesetEvaluationResult:
         """Evaluate PR against all rules"""
         result = RulesetEvaluationResult()
-        
+
         # Sort rules by priority (highest first)
         sorted_rules = sorted(
             self.rules.values(),
             key=lambda r: r.priority.value,
             reverse=True
         )
-        
+
         for rule in sorted_rules:
             if not rule.enabled:
                 continue
-            
+
             # Check scope if file_path provided
             if file_path and rule.applies_to:
                 if not rule.matches_scope(file_path):
                     continue
-            
+
             # Evaluate rule
             if rule.evaluate(pr_context):
                 eval_result = RuleEvaluationResult(
@@ -279,28 +279,28 @@ class RuleEngine:
                     message=rule.description
                 )
                 result.matching_rules.append(eval_result)
-                
+
                 # Update warnings
                 if rule.priority == RulePriority.HIGH:
                     result.warnings.append(f"{rule.name}: {rule.description}")
-                
+
                 # Check for blocks
                 if any(a.action == RuleAction.BLOCK for a in rule.actions):
                     result.blocking_violations.append(rule.rule_id)
-        
+
         # Calculate confidence based on matching rules
         if result.matching_rules:
             blocking_count = len(result.blocking_violations)
             total_count = len(result.matching_rules)
             result.confidence = 1.0 - (blocking_count / total_count)
-            
+
             if result.should_block:
                 result.recommended_action = RuleAction.BLOCK
             elif result.should_approve:
                 result.recommended_action = RuleAction.APPROVE
             else:
                 result.recommended_action = RuleAction.COMMENT
-        
+
         return result
 
     def get_rule_stats(self) -> Dict[str, Any]:

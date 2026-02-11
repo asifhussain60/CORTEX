@@ -12,11 +12,11 @@ Implements:
 AC-PHASE80-EXE-002: Phase Executor Factory
 """
 
-from pathlib import Path
-from typing import Dict, Any, Type, Optional
-import logging
 import importlib
 import inspect
+import logging
+from pathlib import Path
+from typing import Any, Dict, Optional, Type
 
 from cortex.phase_executors.phase_executor_base import PhaseExecutorBase
 
@@ -120,8 +120,9 @@ class GenericPhaseExecutor(PhaseExecutorBase):
 
     def execute(self):
         """Execute all stages defined in phase spec."""
-        from cortex.phase_executors.phase_executor_base import ExecutionResult
         import time
+
+        from cortex.phase_executors.phase_executor_base import ExecutionResult
 
         self.start_time = time.time()
         spec = self.load_phase_spec()

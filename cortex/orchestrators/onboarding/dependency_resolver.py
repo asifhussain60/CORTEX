@@ -10,13 +10,14 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional
+
 import yaml
 
 
 @dataclass
 class DependencyConflict:
     """Represents a dependency version conflict.
-    
+
     Attributes:
         package: Package name.
         versions: Dict of repo name → version spec.
@@ -30,7 +31,7 @@ class DependencyConflict:
 @dataclass
 class ResolutionStrategy:
     """Strategy for resolving a dependency conflict.
-    
+
     Attributes:
         package: Package name.
         recommendation: Recommended strategy (unified, isolated, upgrade).
@@ -46,7 +47,7 @@ class ResolutionStrategy:
 @dataclass
 class ConflictReport:
     """Full conflict resolution report.
-    
+
     Attributes:
         conflicts: List of detected conflicts.
         recommendations: List of resolution strategies.
@@ -59,99 +60,99 @@ class ConflictReport:
 
 class DependencyResolver:
     """Resolves dependency conflicts across multiple repos.
-    
+
     Scans D:\\PROJECTS\\* for requirements.txt files and detects
     version conflicts between repos.
-    
+
     Attributes:
         projects_root: Path to the projects root directory.
     """
-    
+
     # Regex for parsing requirements
     REQUIREMENT_PATTERN = re.compile(
         r'^([a-zA-Z0-9_-]+)\s*((?:[<>=!]+\s*[0-9.]+,?\s*)+)?'
     )
-    
+
     def __init__(self, projects_root: Path) -> None:
         """Initialize the resolver.
-        
+
         Args:
             projects_root: Path to the projects root directory.
         """
         self.projects_root = Path(projects_root)
-    
+
     def _parse_requirements_file(self, file_path: Path) -> Dict[str, str]:
         """Parse a requirements.txt file.
-        
+
         Args:
             file_path: Path to requirements.txt.
-            
+
         Returns:
             Dict of package name → version spec.
         """
         requirements: Dict[str, str] = {}
-        
+
         if not file_path.exists():
             return requirements
-        
+
         for line in file_path.read_text().strip().split("\n"):
             line = line.strip()
-            
+
             if not line or line.startswith("#") or line.startswith("-"):
                 continue
-            
+
             match = self.REQUIREMENT_PATTERN.match(line)
             if match:
                 name = match.group(1).lower()
                 version = (match.group(2) or "").strip()
                 requirements[name] = version
-        
+
         return requirements
-    
+
     def scan_requirements(self) -> Dict[str, Dict[str, str]]:
         """Scan all repos for requirements.txt files.
-        
+
         Returns:
             Dict of repo name → package requirements.
         """
         repos: Dict[str, Dict[str, str]] = {}
-        
+
         if not self.projects_root.exists():
             return repos
-        
+
         for project_dir in self.projects_root.iterdir():
             if not project_dir.is_dir():
                 continue
-            
+
             requirements_file = project_dir / "requirements.txt"
             if requirements_file.exists():
                 repos[project_dir.name] = self._parse_requirements_file(requirements_file)
-        
+
         return repos
-    
+
     def build_dependency_graph(self) -> Dict[str, Dict[str, str]]:
         """Build dependency graph showing package → repos and versions.
-        
+
         Returns:
             Dict of package name → {repo name: version spec}.
         """
         repos = self.scan_requirements()
         graph: Dict[str, Dict[str, str]] = {}
-        
+
         for repo_name, requirements in repos.items():
             for package, version in requirements.items():
                 if package not in graph:
                     graph[package] = {}
                 graph[package][repo_name] = version
-        
+
         return graph
-    
+
     def _extract_version_tuple(self, spec: str) -> tuple:
         """Extract version tuple from spec.
-        
+
         Args:
             spec: Version specifier.
-            
+
         Returns:
             Tuple of (major, minor, patch).
         """
@@ -163,51 +164,51 @@ class DependencyResolver:
                 int(match.group(3) or 0),
             )
         return (0, 0, 0)
-    
+
     def detect_conflicts(self) -> List[DependencyConflict]:
         """Detect version conflicts across repos.
-        
+
         Returns:
             List of detected conflicts.
         """
         graph = self.build_dependency_graph()
         conflicts: List[DependencyConflict] = []
-        
+
         for package, versions in graph.items():
             if len(versions) <= 1:
                 continue
-            
+
             # Get unique version specs
             unique_specs = set(v for v in versions.values() if v)
-            
+
             if len(unique_specs) <= 1:
                 continue
-            
+
             # Determine severity based on major version differences
             major_versions = set()
             for spec in unique_specs:
                 major = self._extract_version_tuple(spec)[0]
                 major_versions.add(major)
-            
+
             severity = "major" if len(major_versions) > 1 else "minor"
-            
+
             conflicts.append(DependencyConflict(
                 package=package,
                 versions=versions,
                 severity=severity,
             ))
-        
+
         return conflicts
-    
+
     def suggest_resolutions(self) -> List[ResolutionStrategy]:
         """Suggest resolution strategies for conflicts.
-        
+
         Returns:
             List of resolution strategies.
         """
         conflicts = self.detect_conflicts()
         strategies: List[ResolutionStrategy] = []
-        
+
         for conflict in conflicts:
             if conflict.severity == "minor":
                 # Minor conflicts: suggest upgrading to highest version
@@ -215,7 +216,7 @@ class DependencyResolver:
                     (self._extract_version_tuple(v), v)
                     for v in conflict.versions.values() if v
                 )[1]
-                
+
                 strategies.append(ResolutionStrategy(
                     package=conflict.package,
                     recommendation="unified",
@@ -229,23 +230,23 @@ class DependencyResolver:
                     recommendation="upgrade",
                     notes="Major version conflict - consider upgrading all repos to latest",
                 ))
-        
+
         return strategies
-    
+
     def generate_report(self) -> ConflictReport:
         """Generate conflict resolution report.
-        
+
         Returns:
             ConflictReport with full analysis.
         """
         from datetime import datetime
-        
+
         report = ConflictReport(
             conflicts=self.detect_conflicts(),
             recommendations=self.suggest_resolutions(),
             timestamp=datetime.now().isoformat(),
         )
-        
+
         # Write to file
         report_path = self.projects_root / "conflict_resolution_report.yaml"
         report_dict = {
@@ -269,34 +270,34 @@ class DependencyResolver:
             ],
         }
         report_path.write_text(yaml.dump(report_dict, default_flow_style=False))
-        
+
         return report
 
 
 def main() -> int:
     """CLI entry point for dependency resolver.
-    
+
     Returns:
         Exit code.
     """
     import sys
-    
+
     projects_root = Path.cwd().parent if Path.cwd().name != "PROJECTS" else Path.cwd()
-    
+
     if "--projects" in sys.argv:
         idx = sys.argv.index("--projects")
         if idx + 1 < len(sys.argv):
             projects_root = Path(sys.argv[idx + 1])
-    
+
     resolver = DependencyResolver(projects_root)
-    
+
     if "--scan" in sys.argv:
         repos = resolver.scan_requirements()
         print(f"Found {len(repos)} repos with requirements:")
         for repo_name in repos:
             print(f"  - {repo_name}")
         return 0
-    
+
     if "--conflicts" in sys.argv:
         conflicts = resolver.detect_conflicts()
         if conflicts:
@@ -306,13 +307,13 @@ def main() -> int:
         else:
             print("No conflicts found")
         return 0
-    
+
     # Default: generate full report
     report = resolver.generate_report()
     print(f"Generated conflict report at {projects_root / 'conflict_resolution_report.yaml'}")
     print(f"  Conflicts: {len(report.conflicts)}")
     print(f"  Recommendations: {len(report.recommendations)}")
-    
+
     return 0
 
 

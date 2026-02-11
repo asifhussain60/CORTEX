@@ -10,9 +10,9 @@ Governance: CORE-008 (TDD-first), CORE-027 (Audit trail), CORE-035 (Single imple
 
 import importlib
 import logging
-from typing import Any, Callable, Dict, List, Optional, Set
 from dataclasses import dataclass, field
 from datetime import datetime
+from typing import Any, Callable, Dict, List, Optional, Set
 
 import yaml
 from pydantic import BaseModel, Field

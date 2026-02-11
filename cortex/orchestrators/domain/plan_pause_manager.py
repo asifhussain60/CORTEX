@@ -19,12 +19,12 @@ from __future__ import annotations
 
 import json
 import logging
-from dataclasses import dataclass, field, asdict
+from dataclasses import asdict, dataclass, field
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from cortex.core.result import Result, Ok, Err
+from cortex.core.result import Err, Ok, Result
 
 logger = logging.getLogger(__name__)
 

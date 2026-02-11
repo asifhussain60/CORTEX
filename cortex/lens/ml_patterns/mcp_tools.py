@@ -11,33 +11,40 @@ Provides:
 3. Dashboard generator for visualization
 """
 
-from typing import Dict, List, Any, Optional
 import json
-import numpy as np
 from dataclasses import asdict
+from typing import Any, Dict, List, Optional
+
+import numpy as np
 
 from cortex.lens.ml_patterns.pattern_embedder import PatternEmbedder, PatternFeatures
-from cortex.lens.ml_patterns.similarity_clustering import SimilarityAnalyzer, ClusteringEngine
-from cortex.lens.ml_patterns.repository_fingerprinting import RepositoryFingerprinter, RepositoryFingerprint
+from cortex.lens.ml_patterns.repository_fingerprinting import (
+    RepositoryFingerprint,
+    RepositoryFingerprinter,
+)
+from cortex.lens.ml_patterns.similarity_clustering import (
+    ClusteringEngine,
+    SimilarityAnalyzer,
+)
 
 
 class PatternSimilarityTool:
     """
     MCP Tool: cortex_pattern_similarity
-    
+
     Analyzes similarity between architectural patterns using embeddings.
     """
-    
+
     def __init__(self):
         """Initialize pattern similarity tool."""
         self.name = "cortex_pattern_similarity"
         self.embedder = PatternEmbedder()
         self.analyzer = SimilarityAnalyzer()
-    
+
     def get_schema(self) -> Dict[str, Any]:
         """
         Get MCP tool schema for registration.
-        
+
         Returns:
             Tool schema dictionary
         """
@@ -59,17 +66,17 @@ class PatternSimilarityTool:
                 "required": ["pattern1", "pattern2"],
             },
         }
-    
+
     def analyze_patterns(
         self, pattern1: Dict[str, float], pattern2: Dict[str, float]
     ) -> Dict[str, Any]:
         """
         Analyze similarity between two patterns.
-        
+
         Args:
             pattern1: First pattern features dict
             pattern2: Second pattern features dict
-            
+
         Returns:
             Result dict with similarity score and details
         """
@@ -83,7 +90,7 @@ class PatternSimilarityTool:
                 coupling_score=float(pattern1.get("coupling_score", 0.5)),
                 cohesion_score=float(pattern1.get("cohesion_score", 0.8)),
             )
-            
+
             features2 = PatternFeatures(
                 pattern_type=pattern2.get("pattern_type", "generic"),
                 lines_of_code=float(pattern2.get("lines_of_code", 1000)),
@@ -92,14 +99,14 @@ class PatternSimilarityTool:
                 coupling_score=float(pattern2.get("coupling_score", 0.5)),
                 cohesion_score=float(pattern2.get("cohesion_score", 0.8)),
             )
-            
+
             # Generate embeddings
             emb1 = self.embedder.embed_pattern(features1)
             emb2 = self.embedder.embed_pattern(features2)
-            
+
             # Calculate similarity
             similarity = self.analyzer.cosine_similarity(emb1, emb2)
-            
+
             return {
                 "similarity": float(similarity),
                 "embedding1_dim": len(emb1),
@@ -108,28 +115,28 @@ class PatternSimilarityTool:
                 "pattern2_type": features2.pattern_type,
                 "status": "success",
             }
-        
+
         except Exception as e:
             return {
                 "error": str(e),
                 "status": "failed",
             }
-    
+
     def batch_analyze(
         self, patterns: List[Dict[str, Any]]
     ) -> Dict[str, Any]:
         """
         Analyze similarities for batch of patterns.
-        
+
         Args:
             patterns: List of pattern dicts with 'id' field
-            
+
         Returns:
             Results dict with all pairwise similarities
         """
         results = []
         embeddings = {}
-        
+
         # Generate embeddings for all patterns
         for pattern in patterns:
             try:
@@ -142,9 +149,9 @@ class PatternSimilarityTool:
                     cohesion_score=float(pattern.get("cohesion_score", 0.8)),
                 )
                 embeddings[pattern["id"]] = self.embedder.embed_pattern(features)
-            except Exception as e:
+            except Exception:
                 continue
-        
+
         # Calculate pairwise similarities
         pattern_ids = list(embeddings.keys())
         for i in range(len(pattern_ids)):
@@ -158,7 +165,7 @@ class PatternSimilarityTool:
                     "pattern2_id": id2,
                     "similarity": float(sim),
                 })
-        
+
         return {
             "results": results,
             "total_patterns": len(pattern_ids),
@@ -170,20 +177,20 @@ class PatternSimilarityTool:
 class RepositoryClusteringTool:
     """
     MCP Tool: cortex_repository_clustering
-    
+
     Clusters repositories based on architecture fingerprints and patterns.
     """
-    
+
     def __init__(self):
         """Initialize repository clustering tool."""
         self.name = "cortex_repository_clustering"
         self.fingerprinter = RepositoryFingerprinter()
         self.clustering_engine = ClusteringEngine()
-    
+
     def get_schema(self) -> Dict[str, Any]:
         """
         Get MCP tool schema for registration.
-        
+
         Returns:
             Tool schema dictionary
         """
@@ -211,7 +218,7 @@ class RepositoryClusteringTool:
                 "required": ["repositories"],
             },
         }
-    
+
     def cluster_repositories(
         self,
         repositories: Dict[str, Dict[str, Any]],
@@ -220,12 +227,12 @@ class RepositoryClusteringTool:
     ) -> Dict[str, Any]:
         """
         Cluster repositories based on fingerprints.
-        
+
         Args:
             repositories: Dict mapping repo_id to feature dict
             n_clusters: Number of clusters (auto-detect if None)
             method: Clustering method (kmeans, hierarchical, dbscan)
-            
+
         Returns:
             Result dict with clusters and metadata
         """
@@ -234,14 +241,14 @@ class RepositoryClusteringTool:
             fingerprints = self.fingerprinter.generate_batch_fingerprints(
                 repositories
             )
-            
+
             # Generate fingerprint vectors
             vectors = self.fingerprinter.compute_fingerprint_vectors(fingerprints)
-            
+
             # Determine number of clusters
             if n_clusters is None:
                 n_clusters = self.clustering_engine.find_optimal_clusters(vectors)
-            
+
             # Perform clustering
             if method == "hierarchical":
                 result = self.clustering_engine.hierarchical_clustering(
@@ -253,17 +260,17 @@ class RepositoryClusteringTool:
                 result = self.clustering_engine.kmeans_clustering(
                     vectors, n_clusters
                 )
-            
+
             # Format clusters
             clusters: Dict[str, List[str]] = {}
             repo_ids = list(fingerprints.keys())
-            
+
             for i in range(result.n_clusters):
                 clusters[str(i)] = [
                     repo_ids[j] for j, label in enumerate(result.labels)
                     if label == i
                 ]
-            
+
             return {
                 "clusters": clusters,
                 "n_clusters": result.n_clusters,
@@ -276,7 +283,7 @@ class RepositoryClusteringTool:
                 },
                 "status": "success",
             }
-        
+
         except Exception as e:
             return {
                 "error": str(e),

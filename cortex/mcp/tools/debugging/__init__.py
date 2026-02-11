@@ -19,9 +19,9 @@ Tools Exposed:
 - cortex_debug_verify: Verify no markers remain
 """
 
+import logging
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-import logging
 
 # Try to import MCP decorator, fallback to noop if not available
 try:
@@ -52,21 +52,21 @@ def cortex_debug_inject(
 ) -> Dict[str, Any]:
     """
     Inject debug markers into repository files.
-    
-    
+
+
     Args:
         repo_path: Path to the repository to inject markers into
         file_patterns: Glob patterns for files to inject (default: **/*.js, **/*.ts, **/*.py, **/*.html)
         exclude_patterns: Patterns to exclude (default: node_modules, .git, etc.)
         session_id: Optional session ID (auto-generated if not provided)
-    
+
     Returns:
         Injection result with:
         - session_id: The debug session ID
         - injected_files: List of files that were injected
         - total_markers: Number of markers injected
         - backup_dir: Path to file backups
-    
+
     Example:
         >>> result = cortex_debug_inject("/path/to/repo")
         >>> print(f"Injected {result['total_markers']} markers")
@@ -75,7 +75,7 @@ def cortex_debug_inject(
         repo_path=Path(repo_path),
         session_id=session_id,
     )
-    
+
     return orchestrator.inject(
         file_patterns=file_patterns,
         exclude_patterns=exclude_patterns,
@@ -98,10 +98,10 @@ def cortex_debug_capture(
 ) -> Dict[str, Any]:
     """
     Capture console logs during execution.
-    
+
     For web applications: Opens browser, navigates to URL, captures all console output.
     For CLI applications: Runs command, captures stdout/stderr.
-    
+
     Args:
         repo_path: Path to the repository
         url: URL to load (for web applications)
@@ -110,14 +110,14 @@ def cortex_debug_capture(
         headless: Run browser in headless mode (default: True)
         click_tabs: Automatically click through tabs (default: True)
         session_id: Optional session ID (uses existing if available)
-    
+
     Returns:
         Capture result with:
         - cortex_markers: All CORTEX debug markers captured
         - errors: All error messages
         - warnings: All warning messages
         - tabs_visited: Tabs clicked during capture
-    
+
     Example:
         >>> result = cortex_debug_capture("/path/to/repo", url="http://localhost:8888/dashboard.html")
         >>> print(f"Captured {len(result['cortex_markers'])} markers")
@@ -126,7 +126,7 @@ def cortex_debug_capture(
         repo_path=Path(repo_path),
         session_id=session_id,
     )
-    
+
     return orchestrator.capture_logs(
         url=url,
         command=command,
@@ -146,24 +146,24 @@ def cortex_debug_analyze(
 ) -> Dict[str, Any]:
     """
     Analyze captured logs to detect issues.
-    
+
     Detects:
     - Race conditions (out-of-order execution)
     - Integration breakages (missing dependencies, DOM issues)
     - Timing issues (async operations completing incorrectly)
     - Error patterns and root causes
-    
+
     Args:
         repo_path: Path to the repository
         session_id: Session ID to analyze (uses latest if not provided)
-    
+
     Returns:
         Analysis result with:
         - issues: All detected issues sorted by severity
         - race_conditions: Specific race condition details
         - integration_breaks: Integration breakage details
         - summary: Issue counts by severity
-    
+
     Example:
         >>> result = cortex_debug_analyze("/path/to/repo")
         >>> print(f"Found {result['summary']['critical']} critical issues")
@@ -172,7 +172,7 @@ def cortex_debug_analyze(
         repo_path=Path(repo_path),
         session_id=session_id,
     )
-    
+
     return orchestrator.analyze()
 
 
@@ -187,22 +187,22 @@ def cortex_debug_fix_plan(
 ) -> Dict[str, Any]:
     """
     Generate a prioritized fix plan based on analysis.
-    
+
     Produces:
     - Prioritized list of fixes (P0 critical → P3 low)
     - Specific fix recommendations for each issue
     - Estimated time to resolve
-    
+
     Args:
         repo_path: Path to the repository
         session_id: Session ID to use (uses latest if not provided)
-    
+
     Returns:
         Fix plan with:
         - priority_order: Fixes in recommended order
         - by_priority: Fixes grouped by priority level
         - estimated_time: Time estimate to fix all issues
-    
+
     Example:
         >>> plan = cortex_debug_fix_plan("/path/to/repo")
         >>> for p0 in plan['by_priority']['P0_critical']:
@@ -212,7 +212,7 @@ def cortex_debug_fix_plan(
         repo_path=Path(repo_path),
         session_id=session_id,
     )
-    
+
     return orchestrator.generate_fix_plan()
 
 
@@ -228,21 +228,21 @@ def cortex_debug_cleanup(
 ) -> Dict[str, Any]:
     """
     Remove all CORTEX debug markers from injected files.
-    
+
     Original code logic remains intact.
-    
+
     Args:
         repo_path: Path to the repository
         verify: Run verification after cleanup (default: True)
         session_id: Session ID to cleanup (uses latest if not provided)
-    
+
     Returns:
         Cleanup result with:
         - cleaned_files: List of files cleaned
         - total_markers_removed: Number of markers removed
         - verified: Whether verification passed (no markers remain)
         - remaining_markers: Any markers that couldn't be removed
-    
+
     Example:
         >>> result = cortex_debug_cleanup("/path/to/repo")
         >>> if result['verified']:
@@ -252,7 +252,7 @@ def cortex_debug_cleanup(
         repo_path=Path(repo_path),
         session_id=session_id,
     )
-    
+
     return orchestrator.cleanup(verify=verify)
 
 
@@ -270,24 +270,24 @@ def cortex_debug_full_cycle(
 ) -> Dict[str, Any]:
     """
     Run the complete CORTEX debug workflow.
-    
+
     Phases:
     1. INJECT: Insert debug markers into target files
     2. CAPTURE: Collect console output during execution
     3. ANALYZE: Detect race conditions and integration issues
     4. FIX_PLAN: Generate prioritized fix recommendations
     5. CLEANUP (optional): Remove all debug markers
-    
+
     Args:
         repo_path: Path to the repository
         url: URL to test (for web applications)
         command: Command to run (for CLI applications)
         file_patterns: Glob patterns for files to inject
         auto_cleanup: Automatically cleanup after analysis (default: False)
-    
+
     Returns:
         Complete debug report with results from all phases
-    
+
     Example:
         >>> result = cortex_debug_full_cycle(
         ...     "/path/to/repo",
@@ -297,7 +297,7 @@ def cortex_debug_full_cycle(
         >>> print(f"Issues found: {result['phases']['analyze']['summary']['total_issues']}")
     """
     orchestrator = DebugOrchestrator(repo_path=Path(repo_path))
-    
+
     return orchestrator.run_full_cycle(
         file_patterns=file_patterns,
         url=url,
@@ -317,11 +317,11 @@ def cortex_debug_status(
 ) -> Dict[str, Any]:
     """
     Get current debug session status.
-    
+
     Args:
         repo_path: Path to the repository
         session_id: Specific session ID to check
-    
+
     Returns:
         Session status with:
         - session_id: The debug session ID
@@ -333,7 +333,7 @@ def cortex_debug_status(
         repo_path=Path(repo_path),
         session_id=session_id,
     )
-    
+
     return orchestrator.get_session_status()
 
 
@@ -345,20 +345,20 @@ def cortex_debug_status(
 def cortex_debug_verify(repo_path: str) -> Dict[str, Any]:
     """
     Verify that no CORTEX debug markers remain in the repository.
-    
+
     Can be used as:
     - Pre-commit hook
     - CI/CD check
     - Production deployment gate
-    
+
     Args:
         repo_path: Path to the repository to verify
-    
+
     Returns:
         Verification result with:
         - clean: True if no markers found
         - remaining: List of any remaining markers with file:line info
-    
+
     Example:
         >>> result = cortex_debug_verify("/path/to/repo")
         >>> if not result['clean']:
@@ -381,16 +381,16 @@ def cortex_debug_restore(
 ) -> Dict[str, Any]:
     """
     Restore all files from backup (emergency recovery).
-    
+
     Use this if:
     - Debug injection caused issues
     - Cleanup removed more than expected
     - Need to revert to pre-injection state
-    
+
     Args:
         repo_path: Path to the repository
         session_id: Session ID to restore from
-    
+
     Returns:
         Restoration result with:
         - restored_files: List of files restored
@@ -400,7 +400,7 @@ def cortex_debug_restore(
         repo_path=Path(repo_path),
         session_id=session_id,
     )
-    
+
     return orchestrator.restore_from_backup()
 
 

@@ -26,11 +26,12 @@ import ast
 import importlib
 import random
 import time
-import yaml
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 from typing import Dict, List, Optional, Set
+
+import yaml
 
 
 class CIVStatus(Enum):
@@ -137,26 +138,26 @@ class CIVReport:
 class ComponentIntegrationVerifier:
     """
     Verifies CORTEX component integration across 3 layers.
-    
+
     Layer 1: Wiring→Implementation alignment
         - Parse wiring.yaml for orchestrator declarations
         - Verify implementation files exist
         - Validate class names and health_check methods via AST
-    
+
     Layer 2: MCP Tool Registration chain
         - Find all @mcp_tool decorators in cortex/mcp/tools/
         - Verify catalog entries in mcp_tools_catalog.py
         - Detect orphaned catalog entries (no implementation)
-    
+
     Layer 3: Health Check execution
         - Sample 5 random orchestrators
         - Import and instantiate
         - Execute health_check method
         - Report failures
-    
+
     Args:
         workspace_root: Path to CORTEX workspace root
-    
+
     Example:
         >>> verifier = ComponentIntegrationVerifier(Path.cwd())
         >>> report = verifier.verify_all()
@@ -173,7 +174,7 @@ class ComponentIntegrationVerifier:
     def verify_wiring_implementation_alignment(self) -> WiringImplementationResult:
         """
         Layer 1: Verify orchestrators in wiring.yaml have implementations.
-        
+
         Process:
             1. Parse wiring.yaml for orchestrator declarations
             2. For each orchestrator:
@@ -181,14 +182,14 @@ class ComponentIntegrationVerifier:
                 - Parse file with AST
                 - Verify class exists
                 - Verify health_check method exists
-        
+
         Returns:
             WiringImplementationResult with alignment status
-        
+
         Performance: ~5 sec (AST parsing for 34 orchestrators)
         """
         start_time = time.time()
-        
+
         if not self.wiring_path.exists():
             return WiringImplementationResult(
                 status=CIVStatus.FAIL,
@@ -196,57 +197,57 @@ class ComponentIntegrationVerifier:
                 missing_implementations=["wiring.yaml not found"],
                 execution_time_ms=0.0
             )
-        
+
         # Parse wiring.yaml
         with open(self.wiring_path, 'r') as f:
             wiring_data = yaml.safe_load(f)
-        
+
         orchestrators = []
         for category in ["core", "domain", "support"]:
             if "orchestrators" in wiring_data and category in wiring_data["orchestrators"]:
                 orchestrators.extend(wiring_data["orchestrators"][category])
-        
+
         aligned = []
         missing_implementations = []
         missing_health_checks = []
-        
+
         for orch in orchestrators:
             name = orch.get("name")
             module_path = orch.get("module")
             class_name = orch.get("class")
             health_check_method = orch.get("health_check")
-            
+
             if not all([name, module_path, class_name]):
                 missing_implementations.append(f"{name} (incomplete wiring entry)")
                 continue
-            
+
             # Convert module path to file path
             file_path = self.workspace_root / (module_path.replace(".", "/") + ".py")
-            
+
             if not file_path.exists():
                 missing_implementations.append(f"{name} (file not found: {file_path})")
                 continue
-            
+
             # Parse file with AST
             try:
                 with open(file_path, 'r') as f:
                     tree = ast.parse(f.read())
-                
+
                 # Find class definition
                 class_found = False
                 health_check_found = False
-                
+
                 for node in ast.walk(tree):
                     if isinstance(node, ast.ClassDef) and node.name == class_name:
                         class_found = True
-                        
+
                         # Check for health_check method
                         for item in node.body:
                             if isinstance(item, ast.FunctionDef) and item.name == health_check_method:
                                 health_check_found = True
                                 break
                         break
-                
+
                 if not class_found:
                     missing_implementations.append(f"{name} (class {class_name} not found)")
                 elif not health_check_found and health_check_method:
@@ -254,12 +255,12 @@ class ComponentIntegrationVerifier:
                     aligned.append(name)
                 else:
                     aligned.append(name)
-                    
+
             except Exception as e:
                 missing_implementations.append(f"{name} (AST parse error: {str(e)})")
-        
+
         execution_time = (time.time() - start_time) * 1000
-        
+
         # Determine status
         if missing_implementations:
             status = CIVStatus.FAIL
@@ -267,7 +268,7 @@ class ComponentIntegrationVerifier:
             status = CIVStatus.WARNING
         else:
             status = CIVStatus.PASS
-        
+
         return WiringImplementationResult(
             status=status,
             total_orchestrators=len(orchestrators),
@@ -280,20 +281,20 @@ class ComponentIntegrationVerifier:
     def verify_mcp_tool_registration(self) -> MCPToolRegistrationResult:
         """
         Layer 2: Verify MCP tool registration chain.
-        
+
         Process:
             1. Find all Python files in cortex/mcp/tools/
             2. Search for @mcp_tool decorator usage
             3. Parse mcp_tools_catalog.py for TOOLS dict
             4. Cross-check: decorated tools in catalog, catalog tools implemented
-        
+
         Returns:
             MCPToolRegistrationResult with registration status
-        
+
         Performance: ~3 sec (text search)
         """
         start_time = time.time()
-        
+
         if not self.mcp_tools_dir.exists():
             return MCPToolRegistrationResult(
                 status=CIVStatus.FAIL,
@@ -301,19 +302,19 @@ class ComponentIntegrationVerifier:
                 undecorated_tools=["mcp/tools/ directory not found"],
                 execution_time_ms=0.0
             )
-        
+
         # Find all @mcp_tool decorated functions
         decorated_tools = set()
         tool_files = list(self.mcp_tools_dir.glob("**/*.py"))
-        
+
         for tool_file in tool_files:
             if tool_file.name.startswith("__"):
                 continue
-            
+
             try:
                 with open(tool_file, 'r') as f:
                     content = f.read()
-                
+
                 # Simple pattern matching for @mcp_tool decorator
                 if "@mcp_tool" in content:
                     # Extract tool names from decorator
@@ -327,14 +328,14 @@ class ComponentIntegrationVerifier:
                                 decorated_tools.add(tool_name)
             except Exception:
                 pass
-        
+
         # Parse catalog
         catalog_tools = set()
         if self.mcp_catalog_path.exists():
             try:
                 with open(self.mcp_catalog_path, 'r') as f:
                     content = f.read()
-                
+
                 # Extract tool names from TOOLS dict (only lines with tool names as keys)
                 in_tools_dict = False
                 for line in content.split("\n"):
@@ -354,32 +355,32 @@ class ComponentIntegrationVerifier:
                                 catalog_tools.add(potential_tool)
             except Exception:
                 pass
-        
+
         # Find issues
         undecorated_tools = []
         orphaned_catalog_entries = []
         registered_tools = []
-        
+
         # Check for tools in catalog but not decorated
         for tool in catalog_tools:
             if tool not in decorated_tools:
                 orphaned_catalog_entries.append(tool)
             else:
                 registered_tools.append(tool)
-        
+
         # Check for decorated tools not in catalog
         for tool in decorated_tools:
             if tool not in catalog_tools:
                 undecorated_tools.append(tool)
-        
+
         execution_time = (time.time() - start_time) * 1000
-        
+
         # Determine status
         if undecorated_tools or orphaned_catalog_entries:
             status = CIVStatus.FAIL
         else:
             status = CIVStatus.PASS
-        
+
         return MCPToolRegistrationResult(
             status=status,
             total_tools=len(decorated_tools) + len(catalog_tools),
@@ -392,24 +393,24 @@ class ComponentIntegrationVerifier:
     def verify_health_checks(self, sample_count: int = 5) -> HealthCheckResult:
         """
         Layer 3: Execute health checks on sampled orchestrators.
-        
+
         Process:
             1. Parse wiring.yaml for orchestrators with health_check
             2. Randomly sample N orchestrators
             3. Import and instantiate each
             4. Execute health_check method
             5. Report failures
-        
+
         Args:
             sample_count: Number of orchestrators to sample (default 5)
-        
+
         Returns:
             HealthCheckResult with execution status
-        
+
         Performance: ~30 sec (5 health check executions)
         """
         start_time = time.time()
-        
+
         if not self.wiring_path.exists():
             return HealthCheckResult(
                 status=CIVStatus.FAIL,
@@ -419,40 +420,40 @@ class ComponentIntegrationVerifier:
                 failed_orchestrators=["wiring.yaml not found"],
                 execution_time_ms=0.0
             )
-        
+
         # Parse wiring.yaml
         with open(self.wiring_path, 'r') as f:
             wiring_data = yaml.safe_load(f)
-        
+
         orchestrators = []
         for category in ["core", "domain", "support"]:
             if "orchestrators" in wiring_data and category in wiring_data["orchestrators"]:
                 orchestrators.extend(wiring_data["orchestrators"][category])
-        
+
         # Filter orchestrators with health_check
         testable = [o for o in orchestrators if o.get("health_check")]
-        
+
         # Sample orchestrators
         sample_size = min(sample_count, len(testable))
         sampled = random.sample(testable, sample_size) if testable else []
-        
+
         passed_count = 0
         failed_count = 0
         failed_orchestrators = []
-        
+
         for orch in sampled:
             name = orch.get("name")
             module_path = orch.get("module")
             class_name = orch.get("class")
             health_check_method = orch.get("health_check")
-            
+
             try:
                 # Import module
                 module = importlib.import_module(module_path)
-                
+
                 # Get class
                 orch_class = getattr(module, class_name)
-                
+
                 # Instantiate (may require dependencies)
                 # For now, assume no-arg constructor or graceful failure
                 try:
@@ -460,23 +461,23 @@ class ComponentIntegrationVerifier:
                 except TypeError:
                     # Constructor requires args, skip
                     continue
-                
+
                 # Execute health check
                 health_method = getattr(instance, health_check_method)
                 result = health_method()
-                
+
                 if result:
                     passed_count += 1
                 else:
                     failed_count += 1
                     failed_orchestrators.append(f"{name} (health check returned False)")
-                    
+
             except Exception as e:
                 failed_count += 1
                 failed_orchestrators.append(f"{name} ({str(e)[:50]})")
-        
+
         execution_time = (time.time() - start_time) * 1000
-        
+
         # Determine status
         if failed_count > 0:
             status = CIVStatus.FAIL
@@ -484,7 +485,7 @@ class ComponentIntegrationVerifier:
             status = CIVStatus.WARNING
         else:
             status = CIVStatus.PASS
-        
+
         return HealthCheckResult(
             status=status,
             total_sampled=sample_size,
@@ -502,12 +503,12 @@ class ComponentIntegrationVerifier:
     ) -> CIVReport:
         """
         Generate comprehensive CIV report.
-        
+
         Args:
             wiring_result: Layer 1 result
             mcp_result: Layer 2 result
             health_result: Layer 3 result
-        
+
         Returns:
             CIVReport with overall status and combined metrics
         """
@@ -516,7 +517,7 @@ class ComponentIntegrationVerifier:
             mcp_result.execution_time_ms +
             health_result.execution_time_ms
         )
-        
+
         issues_found = (
             len(wiring_result.missing_implementations) +
             len(wiring_result.missing_health_checks) +
@@ -524,7 +525,7 @@ class ComponentIntegrationVerifier:
             len(mcp_result.orphaned_catalog_entries) +
             health_result.failed_count
         )
-        
+
         # Determine overall status
         if any(r.status == CIVStatus.FAIL for r in [wiring_result, mcp_result, health_result]):
             overall_status = CIVStatus.FAIL
@@ -532,7 +533,7 @@ class ComponentIntegrationVerifier:
             overall_status = CIVStatus.WARNING
         else:
             overall_status = CIVStatus.PASS
-        
+
         return CIVReport(
             overall_status=overall_status,
             wiring_result=wiring_result,
@@ -545,14 +546,14 @@ class ComponentIntegrationVerifier:
     def verify_all(self) -> CIVReport:
         """
         Execute all 3 CIV layers and generate report.
-        
+
         Returns:
             CIVReport with complete validation results
-        
+
         Performance: ~40 sec total (within AUDIT <60 sec budget)
         """
         wiring_result = self.verify_wiring_implementation_alignment()
         mcp_result = self.verify_mcp_tool_registration()
         health_result = self.verify_health_checks()
-        
+
         return self.generate_civ_report(wiring_result, mcp_result, health_result)

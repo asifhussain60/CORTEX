@@ -9,12 +9,12 @@ Provides enterprise-grade migration step execution with:
 - Real-time progress tracking
 """
 
+import asyncio
+import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any, Callable, Dict, List, Optional
-import time
-import asyncio
 
 
 class MigrationStatus(Enum):
@@ -65,11 +65,11 @@ class MigrationExecutionPlan:
 
 class MigrationExecutor:
     """Execute migration steps with rollback capability."""
-    
+
     def __init__(self, plan: MigrationExecutionPlan):
         """
         Initialize migration executor.
-        
+
         Args:
             plan: MigrationExecutionPlan with step definitions
         """
@@ -81,17 +81,17 @@ class MigrationExecutor:
         self.error: Optional[str] = None
         self.rollback_manager = RollbackManager()
         self.audit_logger = AuditLogger()
-    
+
     def execute(self) -> bool:
         """
         Execute all migration steps.
-        
+
         Returns:
             True if successful, False if failed
         """
         self.status = MigrationStatus.IN_PROGRESS
         self.started_at = datetime.now()
-        
+
         try:
             for step in self.plan.steps:
                 if not self._execute_step(step):
@@ -99,25 +99,25 @@ class MigrationExecutor:
                         if self.plan.auto_rollback:
                             self._rollback_executed_steps()
                         return False
-            
+
             self.status = MigrationStatus.COMPLETED
             self.completed_at = datetime.now()
             return True
-        
+
         except Exception as e:
             self.error = str(e)
             self.status = MigrationStatus.FAILED
             if self.plan.auto_rollback:
                 self._rollback_executed_steps()
             return False
-    
+
     def _execute_step(self, step: MigrationStep) -> bool:
         """
         Execute single migration step.
-        
+
         Args:
             step: MigrationStep to execute
-        
+
         Returns:
             True if successful, False if failed
         """
@@ -125,15 +125,15 @@ class MigrationExecutor:
             step_id=step.id,
             status=MigrationStatus.PENDING
         )
-        
+
         try:
             # Create snapshot before execution
             snapshot = {"step_id": step.id, "timestamp": datetime.now()}
             self.rollback_manager.create_snapshot(step.id, snapshot)
-            
+
             # Log start
             self.audit_logger.log_step_start(step.id, step.name)
-            
+
             # Execute step
             execution.started_at = datetime.now()
             output = step.execute_fn()
@@ -141,44 +141,44 @@ class MigrationExecutor:
             execution.duration = (execution.completed_at - execution.started_at).total_seconds()
             execution.status = MigrationStatus.COMPLETED
             execution.output = str(output)
-            
+
             # Log completion
             self.audit_logger.log_step_complete(step.id, execution.duration)
             self.executions.append(execution)
-            
+
             return True
-        
+
         except Exception as e:
             execution.completed_at = datetime.now()
             execution.duration = (execution.completed_at - execution.started_at).total_seconds() if execution.started_at else 0
             execution.status = MigrationStatus.FAILED
             execution.error = str(e)
-            
+
             # Log error
             self.audit_logger.log_step_error(step.id, str(e))
             self.executions.append(execution)
-            
+
             return False
-    
+
     def _rollback_executed_steps(self) -> bool:
         """
         Rollback all completed steps in reverse order.
-        
+
         Returns:
             True if all rollbacks successful, False otherwise
         """
         success = True
-        
+
         # Rollback in reverse order
         for execution in reversed(self.executions):
             if execution.status != MigrationStatus.COMPLETED:
                 continue
-            
+
             # Find original step
             step = next((s for s in self.plan.steps if s.id == execution.step_id), None)
             if not step:
                 continue
-            
+
             try:
                 step.rollback_fn()
                 execution.status = MigrationStatus.ROLLED_BACK
@@ -188,21 +188,21 @@ class MigrationExecutor:
                 execution.error = f"Rollback failed: {str(e)}"
                 self.audit_logger.log_step_error(execution.step_id, f"Rollback failed: {str(e)}")
                 success = False
-        
+
         self.status = MigrationStatus.ROLLED_BACK
         return success
-    
+
     def get_progress(self) -> Dict[str, Any]:
         """
         Get current execution progress.
-        
+
         Returns:
             Dictionary with progress metrics
         """
         total_steps = len(self.plan.steps)
         completed = sum(1 for e in self.executions if e.status == MigrationStatus.COMPLETED)
         failed = sum(1 for e in self.executions if e.status == MigrationStatus.FAILED)
-        
+
         return {
             "status": self.status.value,
             "total_steps": total_steps,
@@ -217,29 +217,29 @@ class MigrationExecutor:
 
 class RollbackManager:
     """Manage rollback operations with state snapshots."""
-    
+
     def __init__(self):
         """Initialize rollback manager."""
         self.snapshots: Dict[str, Dict[str, Any]] = {}
         self.rollback_history: List[str] = []
-    
+
     def create_snapshot(self, step_id: str, state: Dict[str, Any]) -> None:
         """
         Create state snapshot before step execution.
-        
+
         Args:
             step_id: Step identifier
             state: State dictionary to snapshot
         """
         self.snapshots[step_id] = state.copy()
-    
+
     def restore_snapshot(self, step_id: str) -> Optional[Dict[str, Any]]:
         """
         Restore state from snapshot.
-        
+
         Args:
             step_id: Step identifier
-        
+
         Returns:
             Restored state or None if snapshot not found
         """
@@ -247,7 +247,7 @@ class RollbackManager:
             self.rollback_history.append(step_id)
             return self.snapshots[step_id].copy()
         return None
-    
+
     def clear_snapshots(self) -> None:
         """Clear all stored snapshots."""
         self.snapshots.clear()
@@ -256,15 +256,15 @@ class RollbackManager:
 
 class AuditLogger:
     """Track all migration operations for audit trail."""
-    
+
     def __init__(self):
         """Initialize audit logger."""
         self.audit_trail: List[Dict[str, Any]] = []
-    
+
     def log_step_start(self, step_id: str, step_name: str) -> None:
         """
         Log step execution start.
-        
+
         Args:
             step_id: Step identifier
             step_name: Step name
@@ -275,11 +275,11 @@ class AuditLogger:
             "step_id": step_id,
             "step_name": step_name
         })
-    
+
     def log_step_complete(self, step_id: str, duration: float) -> None:
         """
         Log step completion.
-        
+
         Args:
             step_id: Step identifier
             duration: Execution duration in seconds
@@ -290,11 +290,11 @@ class AuditLogger:
             "step_id": step_id,
             "duration": duration
         })
-    
+
     def log_step_error(self, step_id: str, error_msg: str) -> None:
         """
         Log step error.
-        
+
         Args:
             step_id: Step identifier
             error_msg: Error message
@@ -305,11 +305,11 @@ class AuditLogger:
             "step_id": step_id,
             "error": error_msg
         })
-    
+
     def log_rollback(self, step_id: str) -> None:
         """
         Log rollback operation.
-        
+
         Args:
             step_id: Step identifier being rolled back
         """
@@ -318,11 +318,11 @@ class AuditLogger:
             "event": "rollback",
             "step_id": step_id
         })
-    
+
     def get_audit_trail(self) -> List[Dict[str, Any]]:
         """
         Get complete audit trail.
-        
+
         Returns:
             List of audit events
         """

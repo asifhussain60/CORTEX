@@ -5,15 +5,16 @@ Learns from feedback to improve classification accuracy over time.
 Author: CORTEX Framework
 """
 
-from typing import List
 from dataclasses import dataclass
+from typing import List
+
 from cortex.intent_router.classifier import IntentCategory
 
 
 @dataclass
 class FeedbackEntry:
     """Feedback on an intent classification.
-    
+
     Attributes:
         predicted: Predicted intent category
         actual: Actual intent category (from feedback)
@@ -28,17 +29,17 @@ class FeedbackEntry:
 
 class IntentLearner:
     """Learn from classification feedback.
-    
+
     Records feedback on classifications and tracks accuracy over time.
-    
+
     Attributes:
         feedback_log: List of feedback entries
     """
-    
+
     def __init__(self):
         """Initialize learner."""
         self.feedback_log: List[FeedbackEntry] = []
-    
+
     def record_feedback(
         self,
         predicted: IntentCategory,
@@ -46,7 +47,7 @@ class IntentLearner:
         query: str
     ) -> None:
         """Record feedback on a classification.
-        
+
         Args:
             predicted: Predicted intent category
             actual: Actual intent category
@@ -60,16 +61,16 @@ class IntentLearner:
             was_correct=was_correct
         )
         self.feedback_log.append(entry)
-    
+
     def get_accuracy(self) -> float:
         """Calculate classification accuracy.
-        
+
         Returns:
             Accuracy as percentage (0.0 to 1.0)
         """
         if not self.feedback_log:
             return 0.0
-        
+
         correct = sum(1 for entry in self.feedback_log if entry.was_correct)
         return correct / len(self.feedback_log)
 

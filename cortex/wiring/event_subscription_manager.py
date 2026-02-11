@@ -9,9 +9,9 @@ Automatically registers event subscriptions for orchestrators based on:
 """
 
 import logging
-from typing import Any, Callable, Dict, List, Optional, Set
-from dataclasses import dataclass
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from typing import Any, Callable, Dict, List, Optional, Set
 
 logger = logging.getLogger(__name__)
 
@@ -160,7 +160,7 @@ class EventSubscriptionBuilder:
                 )
                 registry.register_subscription(subscription)
 
-        logger.info(f"✅ Built subscription registry from wiring spec")
+        logger.info("✅ Built subscription registry from wiring spec")
         return registry
 
 

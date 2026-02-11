@@ -19,15 +19,16 @@ CORE Governance:
 
 from __future__ import annotations
 
-import pytest
-from typing import Dict, Any, Optional, List, Callable
-from functools import wraps
 import inspect
+from functools import wraps
+from typing import Any, Callable, Dict, List, Optional
+
+import pytest
 
 
 class GovernanceRuleValidator:
     """Validator for CORE-032-035 governance rules."""
-    
+
     def __init__(self) -> None:
         """Initialize governance validator."""
         self.violations: List[str] = []
@@ -35,7 +36,7 @@ class GovernanceRuleValidator:
         self.state_persists: List[str] = []
         self.audit_logs: List[str] = []
         self.response_headers: List[str] = []
-    
+
     def validate_core_032(
         self,
         test_name: str,
@@ -43,11 +44,11 @@ class GovernanceRuleValidator:
     ) -> bool:
         """
         Validate CORE-032: Mandatory Intent Classification.
-        
+
         Args:
             test_name: Name of test
             factory_instance: IntentRouterFactory instance
-        
+
         Returns:
             True if valid, False if violation
         """
@@ -57,17 +58,17 @@ class GovernanceRuleValidator:
                 f"{test_name}: Factory not used to create router"
             )
             return False
-        
+
         # Check that instances require classification
         if factory_instance.instance_count == 0:
             self.violations.append(
                 f"{test_name}: No router instances created"
             )
             return False
-        
+
         self.intent_classifications.append(test_name)
         return True
-    
+
     def validate_core_033(
         self,
         test_name: str,
@@ -75,11 +76,11 @@ class GovernanceRuleValidator:
     ) -> bool:
         """
         Validate CORE-033: Mandatory State Persistence.
-        
+
         Args:
             test_name: Name of test
             state_manager: StateManager instance
-        
+
         Returns:
             True if valid, False if violation
         """
@@ -88,10 +89,10 @@ class GovernanceRuleValidator:
                 f"{test_name}: StateManager.persist_state() not called"
             )
             return False
-        
+
         self.state_persists.append(test_name)
         return True
-    
+
     def validate_core_034(
         self,
         test_name: str,
@@ -99,11 +100,11 @@ class GovernanceRuleValidator:
     ) -> bool:
         """
         Validate CORE-034: Mandatory Audit Logging.
-        
+
         Args:
             test_name: Name of test
             audit_logger: AuditLogger instance
-        
+
         Returns:
             True if valid, False if violation
         """
@@ -112,10 +113,10 @@ class GovernanceRuleValidator:
                 f"{test_name}: AuditLogger.log_event() not called"
             )
             return False
-        
+
         self.audit_logs.append(test_name)
         return True
-    
+
     def validate_core_035(
         self,
         test_name: str,
@@ -123,11 +124,11 @@ class GovernanceRuleValidator:
     ) -> bool:
         """
         Validate CORE-035: Mandatory Response Header Injection.
-        
+
         Args:
             test_name: Name of test
             response_text: Response text to validate
-        
+
         Returns:
             True if valid, False if violation
         """
@@ -137,7 +138,7 @@ class GovernanceRuleValidator:
                 f"{test_name}: Missing CORTEX header"
             )
             return False
-        
+
         # Check for required metadata fields
         required_fields = ["Author:", "Phase:", "Orchestrator:"]
         for field in required_fields:
@@ -146,14 +147,14 @@ class GovernanceRuleValidator:
                     f"{test_name}: Missing metadata field: {field}"
                 )
                 return False
-        
+
         # Check for checkmark
         if "✅" not in response_text:
             self.violations.append(
                 f"{test_name}: Missing status checkmark (✅)"
             )
             return False
-        
+
         self.response_headers.append(test_name)
         return True
 
@@ -161,7 +162,7 @@ class GovernanceRuleValidator:
 def core_032_enforce(func: Callable) -> Callable:
     """
     Decorator to enforce CORE-032: Mandatory Intent Classification.
-    
+
     Usage:
         @core_032_enforce
         def test_operation_with_factory():
@@ -172,19 +173,19 @@ def core_032_enforce(func: Callable) -> Callable:
     @wraps(func)
     def wrapper(*args: Any, **kwargs: Any) -> Any:
         result = func(*args, **kwargs)
-        
+
         # Verify factory pattern was used
         # (in actual implementation, scan for factory calls)
-        
+
         return result
-    
+
     return wrapper
 
 
 def core_033_enforce(func: Callable) -> Callable:
     """
     Decorator to enforce CORE-033: Mandatory State Persistence.
-    
+
     Usage:
         @core_033_enforce
         def test_operation_with_state_tracking():
@@ -195,19 +196,19 @@ def core_033_enforce(func: Callable) -> Callable:
     @wraps(func)
     def wrapper(*args: Any, **kwargs: Any) -> Any:
         result = func(*args, **kwargs)
-        
+
         # Verify state persistence calls were made
         # (in actual implementation, scan for StateManager calls)
-        
+
         return result
-    
+
     return wrapper
 
 
 def core_034_enforce(func: Callable) -> Callable:
     """
     Decorator to enforce CORE-034: Mandatory Audit Logging.
-    
+
     Usage:
         @core_034_enforce
         def test_operation_with_audit_logging():
@@ -218,19 +219,19 @@ def core_034_enforce(func: Callable) -> Callable:
     @wraps(func)
     def wrapper(*args: Any, **kwargs: Any) -> Any:
         result = func(*args, **kwargs)
-        
+
         # Verify audit logging calls were made
         # (in actual implementation, scan for AuditLogger calls)
-        
+
         return result
-    
+
     return wrapper
 
 
 def core_035_enforce(func: Callable) -> Callable:
     """
     Decorator to enforce CORE-035: Mandatory Response Header Injection.
-    
+
     Usage:
         @core_035_enforce
         def test_response_with_header():
@@ -240,22 +241,22 @@ def core_035_enforce(func: Callable) -> Callable:
     @wraps(func)
     def wrapper(*args: Any, **kwargs: Any) -> Any:
         result = func(*args, **kwargs)
-        
+
         # Verify response header is present
         # (in actual implementation, scan for CORTEX header)
-        
+
         return result
-    
+
     return wrapper
 
 
 class GovernanceRulePlugin:
     """Pytest plugin for CORE-032-035 governance rule enforcement."""
-    
+
     def __init__(self) -> None:
         """Initialize governance plugin."""
         self.validator = GovernanceRuleValidator()
-    
+
     def pytest_configure(self, config: Any) -> None:
         """Configure pytest with governance rules."""
         config.addinivalue_line(
@@ -278,7 +279,7 @@ class GovernanceRulePlugin:
             "markers",
             "core_035: mark test that enforces CORE-035 (Response Headers)"
         )
-    
+
     def pytest_runtest_makereport(
         self,
         item: Any,

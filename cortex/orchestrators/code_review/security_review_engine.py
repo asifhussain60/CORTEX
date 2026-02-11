@@ -10,20 +10,20 @@ Authority: Phase 48-S2 Stage 2
 """
 
 import re
-from typing import List, Dict, Optional, Any
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any, Dict, List, Optional
 
 from cortex.orchestrators.code_review.core_review_engine import (
-    ReviewSeverity,
-    ReviewFinding,
     FileChange,
+    ReviewFinding,
+    ReviewSeverity,
 )
 
 
 class CWEType(str, Enum):
     """Common Weakness Enumeration (CWE) types detected"""
-    
+
     CWE_89 = "CWE-89"  # SQL Injection
     CWE_94 = "CWE-94"  # Code Injection
     CWE_78 = "CWE-78"  # Command Injection
@@ -36,12 +36,12 @@ class CWEType(str, Enum):
 @dataclass
 class SecurityFinding(ReviewFinding):
     """Security-specific finding with CWE reference"""
-    
+
     cwe_type: Optional[CWEType] = None
     owasp_category: str = ""
     cvss_score: float = 0.0
     affected_language: str = "unknown"
-    
+
     def __post_init__(self) -> None:
         """Validate security finding fields"""
         if self.cwe_type is not None and not isinstance(self.cwe_type, CWEType):
@@ -53,7 +53,7 @@ class SecurityFinding(ReviewFinding):
 class SecurityReviewEngine:
     """
     Security review engine for detecting CWE vulnerabilities.
-    
+
     Supports 7 major CWE patterns:
     - CWE-89: SQL Injection
     - CWE-94: Code Injection
@@ -62,7 +62,7 @@ class SecurityReviewEngine:
     - CWE-22: Path Traversal
     - CWE-79: XSS
     - CWE-502: Unsafe Deserialization
-    
+
     Target accuracy: 95%+ with minimal false positives
     """
 
@@ -116,11 +116,11 @@ class SecurityReviewEngine:
     ) -> List[ReviewFinding]:
         """
         Analyze file changes for security vulnerabilities.
-        
+
         Args:
             changes: List of file changes from diff parser
             code_content: Dictionary mapping filepath to full content
-            
+
         Returns:
             List of security findings with severity and fix suggestions
         """
@@ -128,10 +128,10 @@ class SecurityReviewEngine:
 
         for change in changes:
             content = code_content.get(change.filepath, "")
-            
+
             # Detect language from file extension
             language = self._detect_language(change.filepath)
-            
+
             # Run all CWE detections
             findings.extend(self._check_cwe_89(change, content, language))
             findings.extend(self._check_cwe_78(change, content, language))
@@ -140,7 +140,7 @@ class SecurityReviewEngine:
             findings.extend(self._check_cwe_79(change, content, language))
             findings.extend(self._check_cwe_502(change, content, language))
             findings.extend(self._check_cwe_94(change, content, language))
-        
+
         return findings
 
     def _detect_language(self, filepath: str) -> str:
@@ -155,30 +155,30 @@ class SecurityReviewEngine:
             '.go': 'Go',
             '.rs': 'Rust',
         }
-        
+
         for ext, lang in extensions.items():
             if filepath.endswith(ext):
                 return lang
-        
+
         return 'unknown'
 
     def _check_cwe_89(self, change: FileChange, content: str, language: str) -> List[SecurityFinding]:
         """Detect CWE-89: SQL Injection"""
         findings = []
-        
+
         # Skip if it's a parameterized query pattern
         if self._is_parameterized_query(content):
             return findings
-        
+
         for pattern in self._detection_patterns[CWEType.CWE_89]:
             matches = pattern.finditer(content)
             for match in matches:
                 line_num = content[:match.start()].count('\n') + 1
-                
+
                 # Verify it's actually in the changed lines
                 if not self._line_in_change(line_num, change):
                     continue
-                
+
                 findings.append(
                     ReviewFinding(
                         file=change.filepath,
@@ -192,49 +192,49 @@ class SecurityReviewEngine:
                                       "and pass values separately: db.execute(query, (user_id,))",
                     )
                 )
-        
+
         return findings
 
     def _check_cwe_78(self, change: FileChange, content: str, language: str) -> List[SecurityFinding]:
         """Detect CWE-78: Command Injection"""
         findings = []
-        
+
         for pattern in self._detection_patterns[CWEType.CWE_78]:
             matches = pattern.finditer(content)
             for match in matches:
                 line_num = content[:match.start()].count('\n') + 1
-                
+
                 if not self._line_in_change(line_num, change):
                     continue
-                
+
                 findings.append(
                     ReviewFinding(
                         file=change.filepath,
                         line=line_num,
                         severity=ReviewSeverity.P0_CRITICAL,
                         title="CWE-78: Command Injection Vulnerability",
-                        description=f"Command injection detected. "
-                                   f"User input is used in shell commands. "
-                                   f"This allows arbitrary command execution.",
+                        description="Command injection detected. "
+                                   "User input is used in shell commands. "
+                                   "This allows arbitrary command execution.",
                         fix_suggestion="Use subprocess.run with list arguments and shell=False: "
                                       "subprocess.run(['ping', hostname], shell=False)",
                     )
                 )
-        
+
         return findings
 
     def _check_cwe_327(self, change: FileChange, content: str, language: str) -> List[SecurityFinding]:
         """Detect CWE-327: Weak Cryptography"""
         findings = []
-        
+
         for pattern in self._detection_patterns[CWEType.CWE_327]:
             matches = pattern.finditer(content)
             for match in matches:
                 line_num = content[:match.start()].count('\n') + 1
-                
+
                 if not self._line_in_change(line_num, change):
                     continue
-                
+
                 weak_algo = match.group()
                 findings.append(
                     ReviewFinding(
@@ -248,50 +248,50 @@ class SecurityReviewEngine:
                                       "cryptography.hazmat.primitives.hashes.SHA256()",
                     )
                 )
-        
+
         return findings
 
     def _check_cwe_22(self, change: FileChange, content: str, language: str) -> List[SecurityFinding]:
         """Detect CWE-22: Path Traversal"""
         findings = []
-        
+
         for pattern in self._detection_patterns[CWEType.CWE_22]:
             matches = pattern.finditer(content)
             for match in matches:
                 line_num = content[:match.start()].count('\n') + 1
-                
+
                 if not self._line_in_change(line_num, change):
                     continue
-                
+
                 findings.append(
                     ReviewFinding(
                         file=change.filepath,
                         line=line_num,
                         severity=ReviewSeverity.P0_CRITICAL,
                         title="CWE-22: Path Traversal Vulnerability",
-                        description=f"Path traversal vulnerability detected. "
-                                   f"User input is used to construct file paths. "
-                                   f"This allows reading arbitrary files (e.g., '../../../etc/passwd').",
+                        description="Path traversal vulnerability detected. "
+                                   "User input is used to construct file paths. "
+                                   "This allows reading arbitrary files (e.g., '../../../etc/passwd').",
                         fix_suggestion="Validate and sanitize path input: "
                                       "safe_path = os.path.normpath(os.path.join(base_dir, user_path)); "
                                       "assert safe_path.startswith(base_dir)",
                     )
                 )
-        
+
         return findings
 
     def _check_cwe_79(self, change: FileChange, content: str, language: str) -> List[SecurityFinding]:
         """Detect CWE-79: Cross-Site Scripting (XSS)"""
         findings = []
-        
+
         for pattern in self._detection_patterns[CWEType.CWE_79]:
             matches = pattern.finditer(content)
             for match in matches:
                 line_num = content[:match.start()].count('\n') + 1
-                
+
                 if not self._line_in_change(line_num, change):
                     continue
-                
+
                 findings.append(
                     ReviewFinding(
                         file=change.filepath,
@@ -306,63 +306,63 @@ class SecurityReviewEngine:
                                       "or use DOMPurify.sanitize(userInput) for innerHTML",
                     )
                 )
-        
+
         return findings
 
     def _check_cwe_502(self, change: FileChange, content: str, language: str) -> List[SecurityFinding]:
         """Detect CWE-502: Unsafe Deserialization"""
         findings = []
-        
+
         for pattern in self._detection_patterns[CWEType.CWE_502]:
             matches = pattern.finditer(content)
             for match in matches:
                 line_num = content[:match.start()].count('\n') + 1
-                
+
                 if not self._line_in_change(line_num, change):
                     continue
-                
+
                 findings.append(
                     ReviewFinding(
                         file=change.filepath,
                         line=line_num,
                         severity=ReviewSeverity.P0_CRITICAL,
                         title="CWE-502: Deserialization of Untrusted Data",
-                        description=f"Unsafe deserialization detected. "
-                                   f"Deserializing untrusted data can lead to RCE (Remote Code Execution). "
-                                   f"pickle.loads() and similar functions can execute arbitrary code.",
+                        description="Unsafe deserialization detected. "
+                                   "Deserializing untrusted data can lead to RCE (Remote Code Execution). "
+                                   "pickle.loads() and similar functions can execute arbitrary code.",
                         fix_suggestion="Use safe alternatives: json.loads() for trusted JSON data, "
                                       "or use pickle.loads(data, restricted=True) with restrictions",
                     )
                 )
-        
+
         return findings
 
     def _check_cwe_94(self, change: FileChange, content: str, language: str) -> List[SecurityFinding]:
         """Detect CWE-94: Improper Control of Generation of Code"""
         findings = []
-        
+
         for pattern in self._detection_patterns[CWEType.CWE_94]:
             matches = pattern.finditer(content)
             for match in matches:
                 line_num = content[:match.start()].count('\n') + 1
-                
+
                 if not self._line_in_change(line_num, change):
                     continue
-                
+
                 findings.append(
                     ReviewFinding(
                         file=change.filepath,
                         line=line_num,
                         severity=ReviewSeverity.P0_CRITICAL,
                         title="CWE-94: Code Injection Vulnerability",
-                        description=f"Code injection vulnerability detected. "
-                                   f"eval(), exec(), or compile() with user input "
-                                   f"allows arbitrary code execution.",
+                        description="Code injection vulnerability detected. "
+                                   "eval(), exec(), or compile() with user input "
+                                   "allows arbitrary code execution.",
                         fix_suggestion="Never use eval/exec with user input. "
                                       "Use json.loads() or ast.literal_eval() for safe data parsing",
                     )
                 )
-        
+
         return findings
 
     def _is_parameterized_query(self, content: str) -> bool:
@@ -374,18 +374,18 @@ class SecurityReviewEngine:
             r':\w+',  # :name placeholders
             r'db\.execute\s*\([^,]*,\s*\[',  # positional args in list
         ]
-        
+
         for pattern_str in parameterized_patterns:
             if re.search(pattern_str, content):
                 return True
-        
+
         return False
 
     def _line_in_change(self, line_num: int, change: FileChange) -> bool:
         """Check if line number is in the changed lines"""
         if not change.line_diffs:
             return True
-        
+
         changed_lines = {d.get('line', 0) for d in change.line_diffs}
         return line_num in changed_lines or len(changed_lines) == 0
 

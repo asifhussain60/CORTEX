@@ -18,11 +18,11 @@ Benefits:
 """
 
 from abc import ABC, abstractmethod
-from typing import Dict, List, Any, Optional, Union, Type
 from dataclasses import dataclass, field
 from datetime import datetime
-from cortex.brain.core.result import Ok, Err
+from typing import Any, Dict, List, Optional, Type, Union
 
+from cortex.brain.core.result import Err, Ok
 
 # ============================================================================
 # ORCHESTRATOR METADATA & REGISTRATION
@@ -55,14 +55,14 @@ class OrchestratorMetadata:
 class SupportOrchestratorBase(ABC):
     """
     Base class for Phase 52 support orchestrators
-    
+
     Provides:
     - Common orchestrator interface
     - Capability management
     - Request routing
     - Result handling
     - Metadata exposure
-    
+
     Requires subclasses to:
     - Define capabilities via get_capabilities_list()
     - Implement _execute_domain_logic() for actual work
@@ -76,7 +76,7 @@ class SupportOrchestratorBase(ABC):
         self._capabilities: List[OrchestratorCapability] = []
         self._execution_count = 0
         self._total_execution_time = 0.0
-        
+
         # Register capabilities on init
         self._register_capabilities()
 
@@ -88,7 +88,7 @@ class SupportOrchestratorBase(ABC):
     def get_capabilities_list(self) -> List[OrchestratorCapability]:
         """
         Get list of orchestrator capabilities
-        
+
         Returns:
             List of OrchestratorCapability objects
         """
@@ -98,10 +98,10 @@ class SupportOrchestratorBase(ABC):
     def _execute_domain_logic(self, request: Any) -> Union[Ok, Err]:
         """
         Execute domain-specific logic
-        
+
         Args:
             request: Request object or dict
-        
+
         Returns:
             Union[Ok, Err] with result or error
         """
@@ -118,52 +118,52 @@ class SupportOrchestratorBase(ABC):
     def execute(self, request: Any) -> Union[Ok, Err]:
         """
         Execute orchestrator operation
-        
+
         Acts as main entry point. Routes to _execute_domain_logic.
-        
+
         Args:
             request: Request object or dict
-        
+
         Returns:
             Union[Ok[result], Err[error]]
         """
         import time
-        
+
         start_time = time.time()
         try:
             result = self._execute_domain_logic(request)
-            
+
             # Record metrics
             execution_time = time.time() - start_time
             self._execution_count += 1
             self._total_execution_time += execution_time
-            
+
             return result
-            
+
         except Exception as e:
             return Err(f"Orchestrator execution failed: {str(e)}")
 
     def validate(self) -> Union[Ok, Err]:
         """
         Validate orchestrator state
-        
+
         Override for custom validation. Default implementation always passes.
-        
+
         Returns:
             Union[Ok[True], Err[error]]
         """
         if not self.name:
             return Err("Orchestrator name not set")
-        
+
         if not self._capabilities:
             return Err("No capabilities registered")
-        
+
         return Ok(True)
 
     def get_capabilities(self) -> Dict[str, Any]:
         """
         Get orchestrator capabilities for discovery
-        
+
         Returns:
             Dict with capability names and descriptions
         """
@@ -175,7 +175,7 @@ class SupportOrchestratorBase(ABC):
     def get_metadata(self) -> OrchestratorMetadata:
         """
         Get complete orchestrator metadata
-        
+
         Returns:
             OrchestratorMetadata object
         """
@@ -188,13 +188,13 @@ class SupportOrchestratorBase(ABC):
     def get_metrics(self) -> Dict[str, Any]:
         """
         Get execution metrics
-        
+
         Returns:
             Dict with execution statistics
         """
-        avg_time = (self._total_execution_time / self._execution_count 
+        avg_time = (self._total_execution_time / self._execution_count
                    if self._execution_count > 0 else 0)
-        
+
         return {
             "name": self.name,
             "execution_count": self._execution_count,
@@ -290,13 +290,13 @@ def create_capability(
 ) -> OrchestratorCapability:
     """
     Convenience function to create a capability
-    
+
     Args:
         name: Capability name
         description: Human-readable description
         parameters: Optional parameter definitions
         returns: Optional return type description
-    
+
     Returns:
         OrchestratorCapability object
     """

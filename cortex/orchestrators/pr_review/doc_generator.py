@@ -3,16 +3,16 @@ Phase 52 S4: Documentation Generation System
 
 Auto-generate documentation from PR review findings:
 - Finding summaries
-- Change reports  
+- Change reports
 - Recommendation documents
 - Migration guides
 """
 
+import json
 from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
-from datetime import datetime
-import json
 
 
 class DocumentFormat(Enum):
@@ -81,13 +81,13 @@ class DocumentBuilder:
         """Build markdown findings summary"""
         lines = [
             "# PR Review Report",
-            f"\n## Metadata",
+            "\n## Metadata",
             f"- **PR ID**: {report.pr_id}",
             f"- **Repository**: {report.repository}",
             f"- **Review Type**: {report.review_type}",
             f"- **Timestamp**: {report.timestamp}",
             f"- **Confidence**: {report.confidence_score:.1%}",
-            f"\n## Summary",
+            "\n## Summary",
             f"{report.summary or 'No summary provided'}",
             f"\n## Findings ({len(report.findings)})",
         ]
@@ -106,17 +106,17 @@ class DocumentBuilder:
                 f"\n**Description**:\n{finding.description}",
                 f"\n**Recommendation**:\n{finding.recommendation}",
             ])
-            
+
             if finding.affected_components:
                 lines.append(f"\n**Affected Components**: {', '.join(finding.affected_components)}")
-            
+
             if finding.tags:
                 lines.append(f"\n**Tags**: {', '.join(finding.tags)}")
 
         lines.extend([
-            f"\n## Overall Recommendation",
+            "\n## Overall Recommendation",
             f"**Action**: {report.recommendation}",
-            f"\n## Reviewer Notes",
+            "\n## Reviewer Notes",
             report.reviewer_notes or "No additional notes"
         ])
 
@@ -169,9 +169,9 @@ class DocumentBuilder:
             html.extend([
                 f"<h3>{finding.severity.upper()}: {finding.title}</h3>",
                 f"<p><strong>Category</strong>: {finding.category}</p>",
-                f"<p><strong>Description</strong></p>",
+                "<p><strong>Description</strong></p>",
                 f"<p>{finding.description}</p>",
-                f"<p><strong>Recommendation</strong></p>",
+                "<p><strong>Recommendation</strong></p>",
                 f"<p>{finding.recommendation}</p>",
             ])
 
@@ -189,23 +189,23 @@ class DocumentBuilder:
                 "# Change Report",
                 f"\n## PR: {report.pr_id}",
             ]
-            
+
             if "files_changed" in changes:
                 lines.append(f"\n## Files Changed: {changes['files_changed']}")
-            
+
             if "lines_added" in changes:
                 lines.append(f"## Lines Added: {changes['lines_added']}")
-            
+
             if "lines_removed" in changes:
                 lines.append(f"## Lines Removed: {changes['lines_removed']}")
-            
+
             if "affected_modules" in changes:
-                lines.append(f"\n## Affected Modules")
+                lines.append("\n## Affected Modules")
                 for module in changes["affected_modules"]:
                     lines.append(f"- {module}")
-            
+
             return "\n".join(lines)
-        
+
         return json.dumps(changes, indent=2)
 
     def build_migration_guide(self, components: List[str], steps: List[str]) -> str:
@@ -215,16 +215,16 @@ class DocumentBuilder:
                 "# Migration Guide",
                 "\n## Components Being Migrated",
             ]
-            
+
             for component in components:
                 lines.append(f"- {component}")
-            
+
             lines.append("\n## Migration Steps")
             for i, step in enumerate(steps, 1):
                 lines.append(f"{i}. {step}")
-            
+
             return "\n".join(lines)
-        
+
         return json.dumps({
             "components": components,
             "steps": steps
@@ -235,25 +235,25 @@ class DocumentBuilder:
         if self.format == DocumentFormat.MARKDOWN:
             lines = [
                 "# Deployment Plan",
-                f"\n## Pre-Deployment",
+                "\n## Pre-Deployment",
             ]
-            
+
             if "pre_checks" in plan_data:
                 for check in plan_data["pre_checks"]:
                     lines.append(f"- [ ] {check}")
-            
-            lines.append(f"\n## Deployment Steps")
+
+            lines.append("\n## Deployment Steps")
             if "steps" in plan_data:
                 for i, step in enumerate(plan_data["steps"], 1):
                     lines.append(f"{i}. {step}")
-            
-            lines.append(f"\n## Post-Deployment")
+
+            lines.append("\n## Post-Deployment")
             if "post_checks" in plan_data:
                 for check in plan_data["post_checks"]:
                     lines.append(f"- [ ] {check}")
-            
+
             return "\n".join(lines)
-        
+
         return json.dumps(plan_data, indent=2)
 
 
@@ -263,7 +263,7 @@ class ReportGenerator:
     def __init__(self):
         self.generated_reports: Dict[str, ReviewReport] = {}
 
-    def create_report(self, pr_id: str, repository: str, 
+    def create_report(self, pr_id: str, repository: str,
                      review_type: str = "standard") -> ReviewReport:
         """Create new review report"""
         report = ReviewReport(
@@ -279,7 +279,7 @@ class ReportGenerator:
         """Add finding to report"""
         if pr_id not in self.generated_reports:
             return False
-        
+
         self.generated_reports[pr_id].findings.append(finding)
         return True
 
@@ -288,24 +288,24 @@ class ReportGenerator:
         """Finalize and return report"""
         if pr_id not in self.generated_reports:
             return None
-        
+
         report = self.generated_reports[pr_id]
         report.recommendation = recommendation
         report.confidence_score = confidence
-        
+
         # Generate summary if not provided
         if not report.summary:
             critical_count = len([f for f in report.findings if f.severity == "critical"])
             high_count = len([f for f in report.findings if f.severity == "high"])
             report.summary = f"Found {len(report.findings)} issues: {critical_count} critical, {high_count} high"
-        
+
         return report
 
     def export_report(self, pr_id: str, format: DocumentFormat = DocumentFormat.MARKDOWN) -> str:
         """Export report in specified format"""
         if pr_id not in self.generated_reports:
             return ""
-        
+
         report = self.generated_reports[pr_id]
         builder = DocumentBuilder(format)
         return builder.build_findings_summary(report)
@@ -314,13 +314,13 @@ class ReportGenerator:
         """Get statistics about generated reports"""
         total_findings = 0
         severity_counts = {"critical": 0, "high": 0, "medium": 0, "low": 0}
-        
+
         for report in self.generated_reports.values():
             total_findings += len(report.findings)
             for finding in report.findings:
                 if finding.severity in severity_counts:
                     severity_counts[finding.severity] += 1
-        
+
         return {
             "total_reports": len(self.generated_reports),
             "total_findings": total_findings,

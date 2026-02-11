@@ -5,9 +5,10 @@ Author: CORTEX Framework
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, Any, Optional, List
-from cortex.brain.core.orchestrator_base import OrchestratorBase, OrchestrationContext
-from cortex.domain_brain.api import DomainBrainAPI, Domain, Entity
+from typing import Any, Dict, List, Optional
+
+from cortex.brain.core.orchestrator_base import OrchestrationContext, OrchestratorBase
+from cortex.domain_brain.api import Domain, DomainBrainAPI, Entity
 from cortex.domain_brain.models import EntityType
 
 
@@ -36,7 +37,7 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
 
     def __init__(self, context: OrchestrationContext, api: DomainBrainAPI) -> None:
         """Initialize BKIO orchestrator.
-        
+
         Args:
             context: Orchestration context.
             api: Domain brain API instance.
@@ -58,7 +59,7 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
 
     def validate_context(self) -> List[str]:
         """Validate orchestration context.
-        
+
         Returns:
             List of validation errors (empty if valid).
         """
@@ -77,17 +78,17 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
 
     def execute(self, context: Optional[Dict[str, Any]] = None) -> Optional[OrchestrationResult]:
         """Execute orchestrator.
-        
+
         Args:
             context: Optional execution context (unused, uses self.context).
-        
+
         Returns:
             Execution result.
         """
         docs = self.context.parameters.get("documents", [])
         if not docs:
             raise ValueError("No documents provided")
-        
+
         total_docs = len(docs)
         for idx, doc in enumerate(docs):
             try:
@@ -96,20 +97,20 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
             except Exception as e:
                 self.documents_failed += 1
                 self._log(f"Document processing failed: {str(e)}")
-            
+
             # Update progress
             self.context.progress_percent = ((idx + 1) / total_docs) * 100
-        
+
         return OrchestrationResult(
             success=self.documents_failed == 0,
             documents_processed=self.documents_processed,
             documents_failed=self.documents_failed,
             conflicts_detected=self.conflicts_detected,
         )
-    
+
     def run(self) -> Optional[OrchestrationResult]:
         """Run the orchestrator (alias for execute).
-        
+
         Returns:
             Execution result.
         """
@@ -121,22 +122,22 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
 
     def _process_document(self, doc: Dict[str, Any]) -> None:
         """Process a document.
-        
+
         Args:
             doc: Document to process.
         """
         domain_id = doc.get("domain_id")
         if not domain_id:
             raise ValueError("Document missing domain_id")
-        
+
         name = doc.get("name", "")
         description = doc.get("description", "")
         fmt = doc.get("format", "yaml")
         content = doc.get("content", {})
-        
+
         # Update context with domain name
         self.context.domain_name = domain_id
-        
+
         # Validate format
         try:
             doc_format = DocumentFormat(fmt) if fmt in [f.value for f in DocumentFormat] else None
@@ -144,10 +145,10 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
                 raise ValueError(f"Unsupported document format: {fmt}")
         except (ValueError, KeyError) as e:
             raise ValueError(f"Invalid document format: {fmt}") from e
-        
+
         # Parse document
         parsed = self._parse_document(doc, doc_format)
-        
+
         # Get or create domain
         domain = self.domain_brain_api.query_domain(domain_id)
         if not domain:
@@ -158,34 +159,34 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
             )
         else:
             domain.description = description
-        
+
         # Process entities
         entities = parsed.get("entities", [])
         for entity_data in entities:
             self._merge_entity(domain, entity_data)
-        
+
         # Save domain
         self.domain_brain_api.upsert_domain(domain)
 
     def _parse_document(self, doc: Dict[str, Any], fmt: DocumentFormat) -> Dict[str, Any]:
         """Parse document by format.
-        
+
         Args:
             doc: Document to parse.
             fmt: Document format.
-        
+
         Returns:
             Parsed content as dictionary.
-            
+
         Raises:
             ValueError: If format is invalid.
         """
         content = doc.get("content", {})
-        
+
         # Validate format
         if not isinstance(fmt, DocumentFormat):
             raise ValueError(f"Invalid document format: {fmt}")
-        
+
         if fmt == DocumentFormat.YAML or fmt == DocumentFormat.JSON:
             return content if isinstance(content, dict) else {}
         elif fmt == DocumentFormat.MARKDOWN:
@@ -197,7 +198,7 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
 
     def _merge_entity(self, domain: Domain, entity_data: Dict[str, Any]) -> None:
         """Merge entity into domain.
-        
+
         Args:
             domain: Target domain.
             entity_data: Entity data to merge.
@@ -206,18 +207,18 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
         if not entity_id:
             # Skip entities without ID
             return
-        
+
         entity_type_str = entity_data.get("type", "resource").lower()
         name = entity_data.get("name", "")
         description = entity_data.get("description", "")
         metadata = entity_data.get("metadata", {})
-        
+
         entity_type = self._get_entity_type(entity_type_str)
-        
+
         # Check for existing entity (conflict detection)
         if entity_id in domain.entities:
             existing = domain.entities[entity_id]
-            
+
             # Detect description conflict
             if existing.description and description and existing.description != description:
                 # Create conflict record
@@ -237,15 +238,15 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
                 )
                 domain.conflicts.append(conflict)
                 self.conflicts_detected += 1
-                
+
                 # BKIO has priority - overwrite description
                 existing.description = description
             elif description:
                 existing.description = description
-            
+
             # Preserve original source but update description
             return
-        
+
         # Create new entity
         entity = Entity(
             entity_id=entity_id,
@@ -255,21 +256,21 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
             source="BKIO",
             metadata=metadata,
         )
-        
+
         domain.entities[entity_id] = entity
 
     def _get_entity_type(self, type_str: str) -> EntityType:
         """Convert type string to EntityType.
-        
+
         Args:
             type_str: Type string.
-        
+
         Returns:
             EntityType enum value.
         """
         # Normalize type string
         type_str = type_str.lower().strip()
-        
+
         type_map = {
             "service": EntityType.SERVICE,
             "function": EntityType.FUNCTION,
@@ -284,7 +285,7 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
 
     def _log(self, message: str) -> None:
         """Log a message.
-        
+
         Args:
             message: Message to log.
         """

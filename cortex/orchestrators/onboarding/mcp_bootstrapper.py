@@ -17,7 +17,7 @@ from typing import Dict, List, Optional
 @dataclass
 class ServerStartResult:
     """Result of server start operation.
-    
+
     Attributes:
         started: Whether the server started successfully.
         pid: Process ID if started.
@@ -33,7 +33,7 @@ class ServerStartResult:
 @dataclass
 class ServerStopResult:
     """Result of server stop operation.
-    
+
     Attributes:
         stopped: Whether the server was stopped.
         error: Error message if stop failed.
@@ -45,7 +45,7 @@ class ServerStopResult:
 @dataclass
 class HealthCheckResult:
     """Result of health check.
-    
+
     Attributes:
         healthy: Whether the server is healthy.
         response: Health check response.
@@ -59,7 +59,7 @@ class HealthCheckResult:
 @dataclass
 class ConfigUpdateResult:
     """Result of Claude config update.
-    
+
     Attributes:
         updated: Whether the config was updated.
         path: Path to the config file.
@@ -72,18 +72,18 @@ class ConfigUpdateResult:
 
 class MCPBootstrapper:
     """Bootstraps and manages the MCP server.
-    
+
     Handles starting, stopping, and validating the MCP server,
     as well as configuring Claude Desktop integration.
-    
+
     Attributes:
         workspace: Path to the workspace root.
         claude_config_path: Path to Claude Desktop config.
         port: Port to run the server on.
     """
-    
+
     DEFAULT_PORT = 3000
-    
+
     def __init__(
         self,
         workspace: Path,
@@ -91,7 +91,7 @@ class MCPBootstrapper:
         port: int = DEFAULT_PORT,
     ) -> None:
         """Initialize the bootstrapper.
-        
+
         Args:
             workspace: Path to the workspace root.
             claude_config_path: Path to Claude Desktop config.
@@ -101,21 +101,21 @@ class MCPBootstrapper:
         self.claude_config_path = Path(claude_config_path) if claude_config_path else None
         self.port = port
         self._process: Optional[subprocess.Popen] = None
-    
+
     def start_server(self) -> ServerStartResult:
         """Start the MCP server as a subprocess.
-        
+
         Returns:
             ServerStartResult with start details.
         """
         result = ServerStartResult(port=self.port)
-        
+
         server_path = self.workspace / "cortex" / "mcp" / "server.py"
-        
+
         if not server_path.exists():
             result.error = f"Server not found at {server_path}"
             return result
-        
+
         try:
             self._process = subprocess.Popen(
                 ["python", str(server_path)],
@@ -123,34 +123,34 @@ class MCPBootstrapper:
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
             )
-            
+
             # Give it a moment to start
             time.sleep(0.5)
-            
+
             if self._process.poll() is None:
                 # Process is still running
                 result.started = True
                 result.pid = self._process.pid
             else:
                 result.error = "Server exited immediately"
-                
+
         except Exception as e:
             result.error = str(e)
-        
+
         return result
-    
+
     def stop_server(self) -> ServerStopResult:
         """Stop the MCP server.
-        
+
         Returns:
             ServerStopResult with stop details.
         """
         result = ServerStopResult()
-        
+
         if self._process is None:
             result.stopped = True
             return result
-        
+
         try:
             self._process.terminate()
             self._process.wait(timeout=5)
@@ -160,96 +160,96 @@ class MCPBootstrapper:
             result.stopped = True
         except Exception as e:
             result.error = str(e)
-        
+
         self._process = None
         return result
-    
+
     def check_health(self, timeout: int = 5) -> HealthCheckResult:
         """Check if the MCP server is healthy.
-        
+
         Args:
             timeout: Timeout for health check request.
-            
+
         Returns:
             HealthCheckResult with health status.
         """
         result = HealthCheckResult()
-        
+
         try:
             import requests
-            
+
             response = requests.get(
                 f"http://localhost:{self.port}/health",
                 timeout=timeout,
             )
-            
+
             if response.status_code == 200:
                 result.healthy = True
                 result.response = response.json()
             else:
                 result.error = f"Unhealthy response: {response.status_code}"
-                
+
         except ImportError:
             result.error = "requests library not available"
         except Exception as e:
             result.error = str(e)
-        
+
         return result
-    
+
     def get_registered_tools(self) -> List[Dict]:
         """Get list of registered MCP tools.
-        
+
         Returns:
             List of tool definitions.
         """
         try:
             import requests
-            
+
             response = requests.get(
                 f"http://localhost:{self.port}/tools",
                 timeout=5,
             )
-            
+
             if response.status_code == 200:
                 data = response.json()
                 return data.get("tools", [])
-                
+
         except Exception:
             pass
-        
+
         return []
-    
+
     def update_claude_config(self) -> ConfigUpdateResult:
         """Update Claude Desktop config with MCP server.
-        
+
         Returns:
             ConfigUpdateResult with update details.
         """
         result = ConfigUpdateResult()
-        
+
         if self.claude_config_path is None:
             # Try to find Claude config
             possible_paths = [
                 Path.home() / ".config" / "claude" / "claude_desktop_config.json",
                 Path.home() / "AppData" / "Roaming" / "Claude" / "claude_desktop_config.json",
             ]
-            
+
             for path in possible_paths:
                 if path.exists():
                     self.claude_config_path = path
                     break
-        
+
         if self.claude_config_path is None or not self.claude_config_path.exists():
             # Create new config
             if self.claude_config_path is None:
                 result.error = "Could not determine Claude config path"
                 return result
-            
+
             self.claude_config_path.parent.mkdir(parents=True, exist_ok=True)
             config = {"mcpServers": {}}
         else:
             config = json.loads(self.claude_config_path.read_text())
-        
+
         # Add CORTEX MCP server
         config.setdefault("mcpServers", {})
         config["mcpServers"]["cortex"] = {
@@ -257,26 +257,26 @@ class MCPBootstrapper:
             "args": [str(self.workspace / "cortex" / "mcp" / "server.py")],
             "cwd": str(self.workspace),
         }
-        
+
         self.claude_config_path.write_text(json.dumps(config, indent=2))
-        
+
         result.updated = True
         result.path = str(self.claude_config_path)
-        
+
         return result
 
 
 def main() -> int:
     """CLI entry point for MCP bootstrapper.
-    
+
     Returns:
         Exit code.
     """
     import sys
-    
+
     workspace = Path.cwd()
     bootstrapper = MCPBootstrapper(workspace)
-    
+
     if "--start" in sys.argv:
         result = bootstrapper.start_server()
         if result.started:
@@ -285,7 +285,7 @@ def main() -> int:
         else:
             print(f"❌ Failed to start MCP server: {result.error}")
             return 1
-    
+
     if "--stop" in sys.argv:
         result = bootstrapper.stop_server()
         if result.stopped:
@@ -294,7 +294,7 @@ def main() -> int:
         else:
             print(f"❌ Failed to stop MCP server: {result.error}")
             return 1
-    
+
     if "--health" in sys.argv:
         result = bootstrapper.check_health()
         if result.healthy:
@@ -303,7 +303,7 @@ def main() -> int:
         else:
             print(f"❌ MCP server unhealthy: {result.error}")
             return 1
-    
+
     if "--config" in sys.argv:
         result = bootstrapper.update_claude_config()
         if result.updated:
@@ -312,7 +312,7 @@ def main() -> int:
         else:
             print(f"❌ Failed to update config: {result.error}")
             return 1
-    
+
     print("Usage: mcp_bootstrapper.py [--start|--stop|--health|--config]")
     return 0
 

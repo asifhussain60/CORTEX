@@ -19,16 +19,16 @@ import re
 import shutil
 import subprocess
 from dataclasses import dataclass, field
-from pathlib import Path
-from typing import Dict, List, Any, Optional
 from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 
 @dataclass
 class CleanupPlan:
     """
     Cleanup execution plan with file categorization.
-    
+
     Attributes:
         files_to_archive: List of files to move with source/dest/category
         archive_base_path: Base path for archive (docs/archive)
@@ -43,7 +43,7 @@ class CleanupPlan:
 class CleanupResult:
     """
     Result of cleanup execution.
-    
+
     Attributes:
         success: Whether cleanup completed successfully
         files_moved: Number of files moved to archive
@@ -62,7 +62,7 @@ class CleanupResult:
 class VerificationResult:
     """
     Result of post-cleanup verification.
-    
+
     Attributes:
         files_preserved: All files were moved, none deleted
         no_deletions: Confirms no files were deleted
@@ -80,14 +80,14 @@ class VerificationResult:
 class VacuumOrchestrator:
     """
     Orchestrates markdown cleanup with post-cleanup validation workflow.
-    
+
     Workflow:
         1. scan_repository() - Find markdown files outside docs/.github
         2. generate_cleanup_plan() - Categorize files for archival
         3. execute_cleanup() - Move files to archive
         4. verify_cleanup() - Validate cleanup results
         5. should_offer_audit() - Determine if audit should be offered
-    
+
     Safety guarantees:
         - Never deletes files (only moves to archive)
         - Respects 30-day age threshold (configurable)
@@ -106,7 +106,7 @@ class VacuumOrchestrator:
             "**/.archive/**",
             "**/README.md",
         ]
-        
+
         # Phase/session marker patterns (ALWAYS delete/archive)
         # Detects: .phase67-s1-complete, .phase67-S5-*, .session-*, etc.
         self.phase_marker_patterns = [
@@ -117,7 +117,7 @@ class VacuumOrchestrator:
             r"^.*-checkpoint$",                  # Any *-checkpoint file
             r"^.*-progress$",                    # Any *-progress file
         ]
-        
+
         # Root-level file categorization for comprehensive cleanup
         self.root_file_rules = {
             # Development utilities that should be in scripts/utilities/
@@ -220,10 +220,10 @@ class VacuumOrchestrator:
     def scan_repository(self, root_path: str) -> Dict[str, Any]:
         """
         Scan repository for markdown files outside docs/.github and conflicting files.
-        
+
         Args:
             root_path: Root directory of repository to scan
-            
+
         Returns:
             Dictionary with scan results:
                 - status: "success" or "partial" or "error"
@@ -231,7 +231,7 @@ class VacuumOrchestrator:
                 - total_count: Total number of files found
                 - conflicting_files: List of conflicting/duplicate files detected
                 - conflicting_count: Total number of conflicting files
-                
+
         Example:
             >>> orchestrator = VacuumOrchestrator()
             >>> result = orchestrator.scan_repository("/path/to/repo")
@@ -241,13 +241,13 @@ class VacuumOrchestrator:
         try:
             root = Path(root_path)
             markdown_files = []
-            
+
             # Find all .md files
             for md_file in root.rglob("*.md"):
                 # Check if file should be excluded
                 should_exclude = False
                 relative_path = md_file.relative_to(root)
-                
+
                 for pattern in self.exclude_patterns:
                     # Simple pattern matching (could be enhanced with fnmatch)
                     if "docs/" in str(relative_path) or \
@@ -259,13 +259,13 @@ class VacuumOrchestrator:
                        md_file.name == "README.md":
                         should_exclude = True
                         break
-                
+
                 if not should_exclude:
                     markdown_files.append(str(relative_path))
-            
+
             # Detect conflicting files
             conflicting_detection = self.detect_conflicting_files(root_path)
-            
+
             return {
                 "status": "success",
                 "files_found": markdown_files,
@@ -274,7 +274,7 @@ class VacuumOrchestrator:
                 "conflicting_count": conflicting_detection.get("total_count", 0),
                 "conflicting_size_human": conflicting_detection.get("total_size_human", "0B"),
             }
-            
+
         except Exception as e:
             return {
                 "status": "error",
@@ -288,22 +288,22 @@ class VacuumOrchestrator:
     def scan_root_level(self, root_path: str) -> Dict[str, Any]:
         """
         Scan root-level files and directories for cleanup opportunities.
-        
+
         Analyzes:
         - Root Python scripts (should be in scripts/utilities/)
         - Root directories (company/, cortex-lens/, etc.)
         - Production vs development artifacts
-        
+
         Args:
             root_path: Root directory of repository to scan
-            
+
         Returns:
             Dictionary with categorized findings:
                 - utility_scripts: Scripts that should move to scripts/utilities/
                 - production_files: Essential root files (keep)
                 - directories: Root directories with size/purpose analysis
                 - recommendations: List of cleanup actions
-                
+
         Example:
             >>> orchestrator = VacuumOrchestrator()
             >>> result = orchestrator.scan_root_level("/path/to/repo")
@@ -319,12 +319,12 @@ class VacuumOrchestrator:
             production_files = []
             directories = []
             recommendations = []
-            
+
             # Scan root-level files
             for item in root.iterdir():
                 if item.is_file():
                     filename = item.name
-                    
+
                     # Check phase marker files FIRST (highest priority)
                     is_phase_marker = False
                     for pattern in self.phase_marker_patterns:
@@ -339,10 +339,10 @@ class VacuumOrchestrator:
                                 "priority": "critical",
                             })
                             break
-                    
+
                     if is_phase_marker:
                         continue  # Move to next item
-                    
+
                     # Check test files (test_*.py pattern)
                     if filename.startswith("test_") and filename.endswith(".py"):
                         test_files.append(filename)
@@ -384,7 +384,7 @@ class VacuumOrchestrator:
                             "reason": f"Unknown root-level file: {filename}",
                             "priority": "low",
                         })
-                
+
                 elif item.is_dir() and not item.name.startswith("."):
                     # Analyze root directories
                     try:
@@ -397,7 +397,7 @@ class VacuumOrchestrator:
                         })
                     except (PermissionError, OSError):
                         pass  # Skip inaccessible directories
-            
+
             return {
                 "status": "success",
                 "utility_scripts": utility_scripts,
@@ -417,32 +417,32 @@ class VacuumOrchestrator:
                     "total_recommendations": len(recommendations),
                 },
             }
-            
+
         except Exception as e:
             return {
                 "status": "error",
                 "error": str(e),
             }
-    
+
     def scan_phase_markers(self, root_path: str) -> Dict[str, Any]:
         """
         Enhanced scan: Detect phase/session marker files throughout repository.
-        
+
         Scans all directories recursively for phase marker files:
         - .phase67-s1-complete (phase completion markers)
         - .session-* (session tracking files)
         - *-complete, *-checkpoint, *-progress (operation markers)
-        
+
         Args:
             root_path: Root directory to scan
-            
+
         Returns:
             Dictionary with phase marker findings:
                 - phase_markers_found: List of marker files with paths
                 - total_markers: Count of marker files
                 - by_directory: Markers grouped by directory
                 - by_type: Markers grouped by type (phase, session, operation)
-                
+
         Example:
             >>> result = orchestrator.scan_phase_markers(".")
             >>> print(result["phase_markers_found"])
@@ -457,16 +457,16 @@ class VacuumOrchestrator:
                 "session": [],
                 "operation": [],
             }
-            
+
             # Scan ALL files recursively (including hidden files)
             for file_path in root.rglob("*"):
                 if not file_path.is_file():
                     continue
-                
+
                 relative_path = file_path.relative_to(root)
                 file_name = file_path.name
                 dir_name = str(relative_path.parent)
-                
+
                 # Check against all phase marker patterns
                 for pattern in self.phase_marker_patterns:
                     if re.match(pattern, file_name):
@@ -477,12 +477,12 @@ class VacuumOrchestrator:
                             "size_bytes": file_path.stat().st_size,
                             "modified": datetime.fromtimestamp(file_path.stat().st_mtime).isoformat(),
                         })
-                        
+
                         # Categorize by directory
                         if dir_name not in markers_by_directory:
                             markers_by_directory[dir_name] = []
                         markers_by_directory[dir_name].append(file_name)
-                        
+
                         # Categorize by type
                         if file_name.startswith(".phase"):
                             markers_by_type["phase"].append(file_name)
@@ -490,9 +490,9 @@ class VacuumOrchestrator:
                             markers_by_type["session"].append(file_name)
                         else:
                             markers_by_type["operation"].append(file_name)
-                        
+
                         break  # Stop checking patterns once match found
-            
+
             return {
                 "status": "success",
                 "phase_markers_found": phase_markers,
@@ -505,7 +505,7 @@ class VacuumOrchestrator:
                     "operation_count": len(markers_by_type["operation"]),
                 },
             }
-            
+
         except Exception as e:
             return {
                 "status": "error",
@@ -513,7 +513,7 @@ class VacuumOrchestrator:
                 "phase_markers_found": [],
                 "total_markers": 0,
             }
-    
+
     def _format_size(self, size_bytes: int) -> str:
         """Format byte size to human-readable string."""
         size: float = float(size_bytes)
@@ -522,7 +522,7 @@ class VacuumOrchestrator:
                 return f"{size:.1f}{unit}"
             size /= 1024
         return f"{size:.1f}TB"
-    
+
     def _is_production_file(self, filename: str) -> bool:
         """Check if filename matches production essential patterns."""
         for pattern in self.root_file_rules["production_essential"]["patterns"]:
@@ -538,15 +538,15 @@ class VacuumOrchestrator:
     def scan_folders_for_cleanup(self, root_path: str) -> Dict[str, Any]:
         """
         Scan root-level folders for cleanup opportunities.
-        
+
         Identifies:
         - Folders to delete (caches, build artifacts)
         - Folders to consolidate (duplicates)
         - Folders to reorganize (non-essential in root)
-        
+
         Args:
             root_path: Root directory to scan
-            
+
         Returns:
             Dictionary with cleanup recommendations
         """
@@ -555,7 +555,7 @@ class VacuumOrchestrator:
             folders_to_delete = []
             folders_to_consolidate = []
             folders_analysis = {}
-            
+
             # Define cleanup rules
             delete_patterns = [
                 ".cache",           # pytest/build cache
@@ -566,28 +566,28 @@ class VacuumOrchestrator:
                 "build",            # build artifacts
                 "*.egg-info",       # egg metadata
             ]
-            
+
             consolidation_rules = {
                 # Consolidate these duplicate folders
                 ("cortex_brain", "cortex"): "cortex/brain",  # cortex_brain → cortex/brain
                 ("cortex_lens", "cortex"): "cortex/lens",    # cortex_lens → cortex/lens
                 # NOTE: cortex-lens (legacy) has been archived to docs/archive/legacy-tools/
             }
-            
+
             # Scan root directories
             for item in root.iterdir():
                 if not item.is_dir() or item.name.startswith("."):
                     continue
-                
+
                 folder_name = item.name
-                
+
                 # Check if folder should be deleted
                 should_delete = False
                 for pattern in delete_patterns:
                     if pattern.replace("*", "") in folder_name or folder_name == pattern:
                         should_delete = True
                         break
-                
+
                 if should_delete:
                     try:
                         size = sum(f.stat().st_size for f in item.rglob("*") if f.is_file())
@@ -601,7 +601,7 @@ class VacuumOrchestrator:
                         })
                     except (PermissionError, OSError):
                         pass
-                
+
                 # Check for consolidation candidates
                 for (src, dest), target in consolidation_rules.items():
                     if folder_name == src:
@@ -615,7 +615,7 @@ class VacuumOrchestrator:
                                 "action": "consolidate",
                                 "safety": "REQUIRES REVIEW - ensure no conflicting files",
                             })
-                
+
                 # General analysis
                 try:
                     size = sum(f.stat().st_size for f in item.rglob("*") if f.is_file())
@@ -628,7 +628,7 @@ class VacuumOrchestrator:
                     }
                 except (PermissionError, OSError):
                     pass
-            
+
             return {
                 "status": "success",
                 "folders_to_delete": folders_to_delete,
@@ -657,12 +657,12 @@ class VacuumOrchestrator:
     ) -> Dict[str, Any]:
         """
         Execute folder cleanup (delete caches, consolidate duplicates).
-        
+
         Args:
             cleanup_plan: Result from scan_folders_for_cleanup()
             root_path: Root directory
             safe_mode: If True, only deletes known-safe folders
-            
+
         Returns:
             Execution results
         """
@@ -670,12 +670,12 @@ class VacuumOrchestrator:
         deleted = 0
         consolidated = 0
         errors = []
-        
+
         # Delete folders
         for folder_info in cleanup_plan.get("folders_to_delete", []):
             if safe_mode and "automatically regenerated" not in folder_info.get("safety", ""):
                 continue
-            
+
             try:
                 folder_path = root / folder_info["name"]
                 if folder_path.exists():
@@ -683,12 +683,12 @@ class VacuumOrchestrator:
                     deleted += 1
             except Exception as e:
                 errors.append(f"Failed to delete {folder_info['name']}: {str(e)}")
-        
+
         # Consolidate folders (requires manual verification)
         for folder_info in cleanup_plan.get("folders_to_consolidate", []):
             # Only suggest, don't auto-consolidate without verification
             consolidated += 1  # Count as "planned"
-        
+
         return {
             "status": "success",
             "folders_deleted": deleted,
@@ -696,7 +696,7 @@ class VacuumOrchestrator:
             "errors": errors,
             "summary": f"Deleted {deleted} cache folders, planned {consolidated} consolidations",
         }
-    
+
     def _classify_directory(self, dir_name: str) -> str:
         """Classify directory purpose based on name."""
         classifications = {
@@ -723,15 +723,15 @@ class VacuumOrchestrator:
     ) -> CleanupPlan:
         """
         Generate cleanup plan with file categorization.
-        
+
         Args:
             scan_result: Result from scan_repository()
             age_threshold_days: Only archive files older than this (default 30)
             include_conflicting: Include conflicting files in plan (default True)
-            
+
         Returns:
             CleanupPlan with categorized files and archive paths
-            
+
         Categories:
             - phases: PHASE-*.md, *-COMPLETION.md, *-SUMMARY.md
             - testing: files in tests/
@@ -741,22 +741,22 @@ class VacuumOrchestrator:
             - other: uncategorized files
         """
         files_to_archive = []
-        
+
         # Process markdown files
         for file_path in scan_result["files_found"]:
             # Determine category
             category = self._categorize_file(file_path)
-            
+
             # Build archive path
             file_name = Path(file_path).name
             archive_path = f"docs/archive/{category}/{file_name}"
-            
+
             files_to_archive.append({
                 "source": file_path,
                 "destination": archive_path,
                 "category": category,
             })
-        
+
         # Process conflicting files if included
         if include_conflicting:
             for file_info in scan_result.get("conflicting_files", []):
@@ -765,7 +765,7 @@ class VacuumOrchestrator:
                     "destination": f"docs/archive/conflicting/{file_info['filename']}",
                     "category": "conflicting",
                 })
-        
+
         return CleanupPlan(
             files_to_archive=files_to_archive,
             archive_base_path="docs/archive",
@@ -775,54 +775,54 @@ class VacuumOrchestrator:
     def _categorize_file(self, file_path: str) -> str:
         """
         Categorize file based on path and name patterns.
-        
+
         Args:
             file_path: Relative file path
-            
+
         Returns:
             Category name: "phase-markers", "phases", "testing", "workspaces", "reports", or "other"
         """
         file_name = Path(file_path).name
         file_name_upper = file_name.upper()
         path_lower = file_path.lower()
-        
+
         # Category: phase markers (HIGHEST PRIORITY - .phase*, .session*)
         for pattern in self.phase_marker_patterns:
             if re.match(pattern, file_name):
                 return "phase-markers"
-        
+
         # Category: phases (markdown reports)
         if file_name_upper.startswith("PHASE-") or \
            "COMPLETION" in file_name_upper or \
            "SUMMARY" in file_name_upper or \
            "PROGRESS" in file_name_upper:
             return "phases"
-        
+
         # Category: testing
         if "tests/" in path_lower or "testing/" in path_lower:
             return "testing"
-        
+
         # Category: workspaces
         if "_workspaces/" in path_lower or "workspace" in path_lower:
             return "workspaces"
-        
+
         # Category: reports
         if "REPORT" in file_name or "AUDIT" in file_name or "ANALYSIS" in file_name:
             return "reports"
-        
+
         return "other"
 
     def execute_cleanup(self, plan: CleanupPlan, root_path: Optional[str] = None) -> CleanupResult:
         """
         Execute cleanup by moving files to archive.
-        
+
         Args:
             plan: CleanupPlan from generate_cleanup_plan()
             root_path: Optional root directory (defaults to current working directory)
-            
+
         Returns:
             CleanupResult with execution metrics
-            
+
         Safety:
             - Never deletes files (only moves)
             - Creates archive directories if missing
@@ -832,26 +832,26 @@ class VacuumOrchestrator:
         files_moved = 0
         conflicts_resolved = 0
         errors = []
-        
+
         try:
             # Get repository root
             root = Path(root_path) if root_path else Path.cwd()
-            
+
             # Create archive directories
             for category in ["phases", "testing", "workspaces", "reports", "other"]:
                 archive_dir = root / "docs" / "archive" / category
                 archive_dir.mkdir(parents=True, exist_ok=True)
-            
+
             # Move files
             for item in plan.files_to_archive:
                 try:
                     source = root / item["source"]
                     dest = root / item["destination"]
-                    
+
                     if not source.exists():
                         errors.append(f"Source not found: {item['source']}")
                         continue
-                    
+
                     # Handle conflicts
                     if dest.exists():
                         conflicts_resolved += 1
@@ -862,19 +862,19 @@ class VacuumOrchestrator:
                             suffix = dest.suffix
                             dest = dest.parent / f"{stem}_{counter}{suffix}"
                             counter += 1
-                    
+
                     # Ensure destination directory exists
                     dest.parent.mkdir(parents=True, exist_ok=True)
-                    
+
                     # Move file
                     shutil.move(str(source), str(dest))
                     files_moved += 1
-                    
+
                 except Exception as e:
                     errors.append(f"Error moving {item['source']}: {str(e)}")
-            
+
             success = len(errors) == 0 or files_moved > 0
-            
+
             return CleanupResult(
                 success=success,
                 files_moved=files_moved,
@@ -882,7 +882,7 @@ class VacuumOrchestrator:
                 conflicts_resolved=conflicts_resolved,
                 errors=errors,
             )
-            
+
         except Exception as e:
             return CleanupResult(
                 success=False,
@@ -900,14 +900,14 @@ class VacuumOrchestrator:
     ) -> Dict[str, Any]:
         """
         Execute root-level cleanup based on scan results.
-        
+
         Moves utility scripts to scripts/utilities/ and reports on directory structure.
-        
+
         Args:
             scan_result: Result from scan_root_level()
             root_path: Root directory of repository
             dry_run: If True, only simulate actions without making changes
-            
+
         Returns:
             Dictionary with execution results:
                 - success: Whether cleanup completed successfully
@@ -915,7 +915,7 @@ class VacuumOrchestrator:
                 - dry_run: Whether this was a dry run
                 - actions_taken: List of actions performed
                 - errors: List of error messages
-                
+
         Example:
             >>> orchestrator = VacuumOrchestrator()
             >>> scan = orchestrator.scan_root_level(".")
@@ -928,22 +928,22 @@ class VacuumOrchestrator:
             files_moved = 0
             actions_taken = []
             errors = []
-            
+
             # Process recommendations
             for rec in scan_result.get("recommendations", []):
                 if rec["action"] == "move":
                     source = root / rec["file"]
                     dest_dir = root / rec["destination"]
                     dest_file = dest_dir / rec["file"]
-                    
+
                     try:
                         if not dry_run:
                             # Create destination directory if needed
                             dest_dir.mkdir(parents=True, exist_ok=True)
-                            
+
                             # Move file
                             shutil.move(str(source), str(dest_file))
-                        
+
                         files_moved += 1
                         actions_taken.append({
                             "action": "moved",
@@ -952,10 +952,10 @@ class VacuumOrchestrator:
                             "to": str(dest_file),
                             "reason": rec["reason"],
                         })
-                        
+
                     except Exception as e:
                         errors.append(f"Failed to move {rec['file']}: {str(e)}")
-                
+
                 elif rec["action"] == "review":
                     actions_taken.append({
                         "action": "flagged",
@@ -963,7 +963,7 @@ class VacuumOrchestrator:
                         "reason": rec["reason"],
                         "priority": rec.get("priority", "medium"),
                     })
-            
+
             return {
                 "success": len(errors) == 0,
                 "files_moved": files_moved,
@@ -976,7 +976,7 @@ class VacuumOrchestrator:
                     "reviews": len([a for a in actions_taken if a["action"] == "flagged"]),
                 },
             }
-            
+
         except Exception as e:
             return {
                 "success": False,
@@ -993,38 +993,38 @@ class VacuumOrchestrator:
     ) -> VerificationResult:
         """
         Verify cleanup results and check for issues.
-        
+
         Args:
             cleanup_result: Result from execute_cleanup()
             plan: Original CleanupPlan
-            
+
         Returns:
             VerificationResult with validation checks
-            
+
         Checks:
             - Files were moved, not deleted
             - No broken markdown links
             - Git repository status clean
         """
         issues = []
-        
+
         # Check 1: Verify no deletions
         files_preserved = cleanup_result.files_deleted == 0
         no_deletions = cleanup_result.files_deleted == 0
-        
+
         if not no_deletions:
             issues.append(f"{cleanup_result.files_deleted} files were deleted")
-        
+
         # Check 2: Look for broken links (simple check)
         broken_links_count = self._check_broken_links()
         if broken_links_count > 0:
             issues.append(f"{broken_links_count} broken links detected")
-        
+
         # Check 3: Check git status
         git_status_clean = self._check_git_status()
         if not git_status_clean:
             issues.append("Git repository has uncommitted changes")
-        
+
         return VerificationResult(
             files_preserved=files_preserved,
             no_deletions=no_deletions,
@@ -1036,18 +1036,18 @@ class VacuumOrchestrator:
     def _check_broken_links(self) -> int:
         """
         Check for broken markdown links in docs/ directory.
-        
+
         Returns:
             Number of potentially broken links found
         """
         # Simple implementation: count links to files that don't exist
         broken_count = 0
-        
+
         try:
             docs_dir = Path.cwd() / "docs"
             if not docs_dir.exists():
                 return 0
-            
+
             # Scan markdown files in docs
             for md_file in docs_dir.rglob("*.md"):
                 try:
@@ -1056,28 +1056,28 @@ class VacuumOrchestrator:
                     link_pattern = r'\[([^\]]+)\]\(([^)]+)\)'
                     for match in re.finditer(link_pattern, content):
                         link_path = match.group(2)
-                        
+
                         # Skip external links
                         if link_path.startswith(("http://", "https://", "#")):
                             continue
-                        
+
                         # Check if linked file exists
                         full_path = (md_file.parent / link_path).resolve()
                         if not full_path.exists():
                             broken_count += 1
-                            
+
                 except Exception:
                     continue
-                    
+
         except Exception:
             pass
-        
+
         return broken_count
 
     def _check_git_status(self) -> bool:
         """
         Check if git repository has uncommitted changes.
-        
+
         Returns:
             True if git status is clean, False otherwise
         """
@@ -1089,10 +1089,10 @@ class VacuumOrchestrator:
                 check=False,
                 timeout=5,
             )
-            
+
             # Clean if no output
             return len(result.stdout.strip()) == 0
-            
+
         except Exception:
             # Assume clean if git check fails
             return True
@@ -1100,13 +1100,13 @@ class VacuumOrchestrator:
     def should_offer_audit(self, verification: VerificationResult) -> bool:
         """
         Determine if post-cleanup audit should be offered.
-        
+
         Args:
             verification: VerificationResult from verify_cleanup()
-            
+
         Returns:
             True if audit should be offered, False otherwise
-            
+
         Criteria:
             - Verification passed (no issues)
             - Files were preserved (not deleted)
@@ -1122,10 +1122,10 @@ class VacuumOrchestrator:
     def format_audit_offer(self, verification: VerificationResult) -> str:
         """
         Format audit offer message for user.
-        
+
         Args:
             verification: VerificationResult from verify_cleanup()
-            
+
         Returns:
             Formatted message string
         """
@@ -1147,13 +1147,13 @@ class VacuumOrchestrator:
     ) -> Dict[str, Any]:
         """
         Generate comprehensive cleanup report.
-        
+
         Args:
             scan_result: Original scan results
             plan: Cleanup plan
             cleanup_result: Cleanup execution results
             verification: Verification results
-            
+
         Returns:
             Dictionary with complete report data
         """
@@ -1176,17 +1176,17 @@ class VacuumOrchestrator:
     def detect_conflicting_files(self, root_path: str) -> Dict[str, Any]:
         """
         Detect conflicting/duplicate files with pattern suffixes.
-        
+
         Finds files with common duplicate patterns:
         - .old, .new, .bak, .backup
         - .enhanced, .fixed, .updated, .improved
         - .draft, .temp, .tmp, .v1, .v2, etc.
         - _old, _new, _backup, _enhanced, _fixed
         - filename.html.new (incomplete overwrites)
-        
+
         Args:
             root_path: Root directory to scan
-            
+
         Returns:
             Dictionary with:
                 - conflicting_files: List of detected conflicting files
@@ -1194,7 +1194,7 @@ class VacuumOrchestrator:
                 - recommendations: Cleanup recommendations per group
                 - total_count: Total conflicting files found
                 - total_size_bytes: Total size of conflicting files
-                
+
         Example:
             >>> orchestrator = VacuumOrchestrator()
             >>> result = orchestrator.detect_conflicting_files(".")
@@ -1224,28 +1224,28 @@ class VacuumOrchestrator:
                 r'_draft$': 'draft version prefix',
                 r'\.v\d+$': 'versioned file',
             }
-            
+
             conflicting_files = []
             groups = {}
             total_size = 0
-            
+
             # Scan all files
             for file_path in root.rglob("*"):
                 if not file_path.is_file():
                     continue
-                
+
                 filename = file_path.name
-                
+
                 # Check against conflicting patterns
                 for pattern, pattern_type in conflicting_patterns.items():
                     if re.search(pattern, filename, re.IGNORECASE):
                         # Extract base filename
                         base_name = re.sub(pattern, '', filename, flags=re.IGNORECASE)
-                        
+
                         try:
                             file_size = file_path.stat().st_size
                             total_size += file_size
-                            
+
                             conflicting_files.append({
                                 'path': str(file_path.relative_to(root)),
                                 'filename': filename,
@@ -1255,7 +1255,7 @@ class VacuumOrchestrator:
                                 'size_human': self._format_size(file_size),
                                 'modified': datetime.fromtimestamp(file_path.stat().st_mtime).isoformat(),
                             })
-                            
+
                             # Group by base filename
                             if base_name not in groups:
                                 groups[base_name] = []
@@ -1263,7 +1263,7 @@ class VacuumOrchestrator:
                         except (OSError, PermissionError):
                             pass
                         break
-            
+
             # Generate recommendations
             recommendations = []
             for base_name, filenames in groups.items():
@@ -1277,7 +1277,7 @@ class VacuumOrchestrator:
                         'priority': 'medium',
                         'reason': f'Found {len(filenames)} versions of {base_name}. Archive duplicates to docs/archive/conflicting/',
                     })
-            
+
             return {
                 'status': 'success',
                 'conflicting_files': conflicting_files,
@@ -1287,7 +1287,7 @@ class VacuumOrchestrator:
                 'total_size_bytes': total_size,
                 'total_size_human': self._format_size(total_size),
             }
-            
+
         except Exception as e:
             return {
                 'status': 'error',
@@ -1305,22 +1305,22 @@ class VacuumOrchestrator:
     ) -> CleanupPlan:
         """
         Generate cleanup plan for conflicting files.
-        
+
         Args:
             conflict_detection_result: Result from detect_conflicting_files()
-            
+
         Returns:
             CleanupPlan with files categorized for archival
         """
         files_to_archive = []
-        
+
         for file_info in conflict_detection_result.get('conflicting_files', []):
             files_to_archive.append({
                 'source': file_info['path'],
                 'destination': f"docs/archive/conflicting/{file_info['filename']}",
                 'category': 'conflicting',
             })
-        
+
         return CleanupPlan(
             files_to_archive=files_to_archive,
             archive_base_path='docs/archive/conflicting',
@@ -1338,14 +1338,14 @@ class VacuumOrchestrator:
     ) -> Dict[str, Any]:
         """
         Trigger brain state flush via BrainStateManager.
-        
+
         Integrates brain state cleanup into vacuum workflow, ensuring
         comprehensive cleanup beyond markdown files.
-        
+
         Args:
             targets: Optional list of flush targets (None = all)
             force: Force flush even if recent snapshot exists
-            
+
         Returns:
             Dictionary with flush results:
                 - success: bool
@@ -1353,46 +1353,47 @@ class VacuumOrchestrator:
                 - files_captured: int
                 - total_size_mb: float
                 - error_message: str (if failed)
-                
+
         Example:
             >>> orchestrator = VacuumOrchestrator()
             >>> result = orchestrator.trigger_brain_flush()
             >>> print(f"Flushed {result['files_captured']} files")
         """
         try:
-            from cortex.brain.core.brain_state_manager import BrainStateManager
             from pathlib import Path
-            
+
+            from cortex.brain.core.brain_state_manager import BrainStateManager
+
             # Get cortex_brain path
             cortex_brain_path = Path(__file__).parent.parent.parent.parent / "cortex_brain"
-            
+
             if not cortex_brain_path.exists():
                 return {
                     "success": False,
                     "error_message": f"cortex_brain not found at {cortex_brain_path}",
                 }
-            
+
             # Initialize manager
             manager = BrainStateManager(cortex_brain_path)
-            
+
             # Flush state
             flush_result = manager.flush_state()
-            
+
             if flush_result.success and flush_result.snapshot_path:
                 # Get snapshot info
                 snapshot_path = Path(flush_result.snapshot_path)
                 size_mb = snapshot_path.stat().st_size / (1024 * 1024)
-                
+
                 # Count files in snapshot
                 import json
                 with open(snapshot_path) as f:
                     snapshot_data = json.load(f)
-                
+
                 files_captured = sum(
                     len(tier_data.get("files", {}))
                     for tier_data in snapshot_data.get("data", {}).values()
                 )
-                
+
                 return {
                     "success": True,
                     "snapshot_path": str(snapshot_path),
@@ -1404,7 +1405,7 @@ class VacuumOrchestrator:
                     "success": False,
                     "error_message": flush_result.error_message or "Flush failed",
                 }
-                
+
         except Exception as e:
             return {
                 "success": False,
@@ -1414,7 +1415,7 @@ class VacuumOrchestrator:
     def cleanup_brain_state(self) -> Dict[str, Any]:
         """
         Alias for trigger_brain_flush() for backward compatibility.
-        
+
         Returns:
             Dictionary with flush results (same as trigger_brain_flush)
         """
@@ -1423,7 +1424,7 @@ class VacuumOrchestrator:
     def flush_brain_state(self) -> Dict[str, Any]:
         """
         Alias for trigger_brain_flush() for backward compatibility.
-        
+
         Returns:
             Dictionary with flush results (same as trigger_brain_flush)
         """
@@ -1436,25 +1437,25 @@ class VacuumOrchestrator:
     ) -> Dict[str, Any]:
         """
         Clean up root-level directories (reports/, scripts/, etc.) to docs/archive/.
-        
+
         Watches for patterns of utility/historical content and archives to docs/archive/.
-        
+
         Patterns cleaned:
         - reports/ → docs/archive/reports/
         - scripts/ → docs/archive/scripts/
         - Any future similar utility directories
-        
+
         Args:
             root_path: Root directory of repository
             dry_run: If True, only simulate actions without making changes
-            
+
         Returns:
             Dictionary with execution results:
                 - success: Whether cleanup completed successfully
                 - directories_archived: Number of directories moved
                 - actions_taken: List of actions performed
                 - errors: List of error messages
-                
+
         Example:
             >>> orchestrator = VacuumOrchestrator()
             >>> result = orchestrator.cleanup_root_directories(".", dry_run=False)
@@ -1466,25 +1467,25 @@ class VacuumOrchestrator:
             directories_archived = 0
             actions_taken = []
             errors = []
-            
+
             # Get directories to clean (reports, scripts, etc.)
             directories_to_clean = [
                 ("reports", "docs/archive/reports"),
                 ("scripts", "docs/archive/scripts"),
             ]
-            
+
             for dir_name, dest_path in directories_to_clean:
                 source = root / dir_name
                 destination = root / dest_path
-                
+
                 if not source.exists():
                     continue  # Directory doesn't exist, skip
-                
+
                 try:
                     if not dry_run:
                         # Create destination parent directory
                         destination.parent.mkdir(parents=True, exist_ok=True)
-                        
+
                         # Check if destination already exists (conflict)
                         if destination.exists():
                             # Archive existing destination
@@ -1492,7 +1493,7 @@ class VacuumOrchestrator:
                             while destination.exists():
                                 new_dest = destination.parent / f"{destination.name}_{counter}"
                                 counter += 1
-                            
+
                             # Move existing to numbered backup
                             shutil.move(str(destination), str(new_dest))
                             actions_taken.append({
@@ -1502,10 +1503,10 @@ class VacuumOrchestrator:
                                 "to": str(new_dest),
                                 "reason": "Archived existing destination to make room",
                             })
-                        
+
                         # Move the directory
                         shutil.move(str(source), str(destination))
-                    
+
                     directories_archived += 1
                     actions_taken.append({
                         "action": "archived",
@@ -1515,10 +1516,10 @@ class VacuumOrchestrator:
                         "dry_run": dry_run,
                         "reason": "Archive utility/historical directory to docs/archive",
                     })
-                    
+
                 except Exception as e:
                     errors.append(f"Failed to archive {dir_name}: {str(e)}")
-            
+
             return {
                 "success": len(errors) == 0,
                 "directories_archived": directories_archived,
@@ -1530,7 +1531,7 @@ class VacuumOrchestrator:
                     "dry_run": dry_run,
                 },
             }
-            
+
         except Exception as e:
             return {
                 "success": False,
@@ -1543,11 +1544,11 @@ class VacuumOrchestrator:
                     "dry_run": dry_run,
                 },
             }
-    
+
     def verify_cortex_integrity(self, root_path: str = ".") -> Dict[str, Any]:
         """
         Comprehensive CORTEX integrity verification after vacuum operations.
-        
+
         Checks:
         1. Wiring system integrity (YAML file paths)
         2. Orchestrator registry completeness
@@ -1555,17 +1556,17 @@ class VacuumOrchestrator:
         4. Import health (no broken imports)
         5. Test suite status
         6. Git repository cleanliness
-        
+
         Args:
             root_path: Root directory of CORTEX repository
-            
+
         Returns:
             Dictionary with verification results:
                 - status: "passed", "warnings", or "failed"
                 - checks: List of check results
                 - issues: List of issues found
                 - recommendations: List of recommended fixes
-                
+
         Example:
             >>> orchestrator = VacuumOrchestrator()
             >>> result = orchestrator.verify_cortex_integrity()
@@ -1577,19 +1578,19 @@ class VacuumOrchestrator:
             checks = []
             issues = []
             recommendations = []
-            
+
             # Check 1: Wiring YAML integrity
             wiring_specs = root / "cortex" / "wiring" / "specifications"
             if wiring_specs.exists():
                 yaml_files = list(wiring_specs.glob("*.yaml"))
                 broken_paths = []
-                
+
                 for yaml_file in yaml_files:
                     try:
                         import yaml
                         with open(yaml_file, encoding="utf-8") as f:
                             spec = yaml.safe_load(f)
-                            
+
                         # Check file_path references
                         if "implementation" in spec and "file_path" in spec["implementation"]:
                             impl_path = root / spec["implementation"]["file_path"]
@@ -1600,11 +1601,11 @@ class VacuumOrchestrator:
                                 })
                     except Exception as e:
                         issues.append(f"Failed to parse {yaml_file.name}: {str(e)}")
-                
+
                 if broken_paths:
                     issues.append(f"Found {len(broken_paths)} broken file paths in wiring specs")
                     recommendations.append("Update wiring YAML files with correct file_path references")
-                
+
                 checks.append({
                     "name": "Wiring YAML Integrity",
                     "status": "passed" if not broken_paths else "failed",
@@ -1617,7 +1618,7 @@ class VacuumOrchestrator:
                     "status": "failed",
                     "details": "Directory not found",
                 })
-            
+
             # Check 2: Orchestrator registry
             registry_path = root / "cortex-registry" / "_cortex-master" / "index.yaml"
             if registry_path.exists():
@@ -1633,7 +1634,7 @@ class VacuumOrchestrator:
                     "status": "failed",
                     "details": "Index not found",
                 })
-            
+
             # Check 3: Git status
             try:
                 result = subprocess.run(
@@ -1643,7 +1644,7 @@ class VacuumOrchestrator:
                     text=True,
                     timeout=5,
                 )
-                
+
                 if result.returncode == 0:
                     modified_files = len([line for line in result.stdout.strip().split("\n") if line])
                     checks.append({
@@ -1651,7 +1652,7 @@ class VacuumOrchestrator:
                         "status": "passed" if modified_files == 0 else "warnings",
                         "details": f"{modified_files} modified files",
                     })
-                    
+
                     if modified_files > 0:
                         recommendations.append("Commit or stash modified files")
             except Exception:
@@ -1660,13 +1661,13 @@ class VacuumOrchestrator:
                     "status": "skipped",
                     "details": "Git check failed",
                 })
-            
+
             # Check 4: Core module imports
             try:
-                import cortex.orchestrators.core.master_orchestrator
-                import cortex.models.canonical_enums
                 import cortex.mcp.server
-                
+                import cortex.models.canonical_enums
+                import cortex.orchestrators.core.master_orchestrator
+
                 checks.append({
                     "name": "Core Module Imports",
                     "status": "passed",
@@ -1679,18 +1680,18 @@ class VacuumOrchestrator:
                     "status": "failed",
                     "details": str(e),
                 })
-            
+
             # Determine overall status
             failed_checks = [c for c in checks if c["status"] == "failed"]
             warning_checks = [c for c in checks if c["status"] == "warnings"]
-            
+
             if failed_checks:
                 status = "failed"
             elif warning_checks or issues:
                 status = "warnings"
             else:
                 status = "passed"
-            
+
             return {
                 "status": status,
                 "checks": checks,
@@ -1703,7 +1704,7 @@ class VacuumOrchestrator:
                     "warnings": len(warning_checks),
                 },
             }
-            
+
         except Exception as e:
             return {
                 "status": "error",

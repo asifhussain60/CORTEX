@@ -11,12 +11,12 @@ Implementations:
 """
 
 from cortex.brain.core.knowledge.graph.interface import (
-    IGraphAdapter,
     EntityNode,
-    Relationship,
-    Path,
-    HealthStatus,
     GraphQueryError,
+    HealthStatus,
+    IGraphAdapter,
+    Path,
+    Relationship,
 )
 from cortex.brain.core.knowledge.graph.mock_adapter import MockGraphAdapter
 from cortex.brain.core.knowledge.graph.sqlite_adapter import SQLiteGraphAdapter

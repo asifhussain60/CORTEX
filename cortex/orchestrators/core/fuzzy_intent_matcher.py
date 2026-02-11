@@ -15,13 +15,13 @@ Key Features:
 Production Ready: ✅
 """
 
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import List, Dict, Tuple, Optional, Set
-from difflib import SequenceMatcher
-import re
-from functools import lru_cache
 import json
+import re
+from dataclasses import dataclass, field
+from difflib import SequenceMatcher
+from enum import Enum
+from functools import lru_cache
+from typing import Dict, List, Optional, Set, Tuple
 
 
 class TokenizationStrategy(Enum):
@@ -69,7 +69,7 @@ class IntentExtractionResult:
 class FuzzyIntentMatcher:
     """
     Implements fuzzy matching and advanced NLP for intent classification.
-    
+
     Combines multiple matching strategies:
     - Exact matching (100% similarity)
     - Fuzzy matching (Levenshtein distance)
@@ -79,17 +79,17 @@ class FuzzyIntentMatcher:
     def __init__(self, fuzzy_threshold: float = 0.75, cache_size: int = 1000):
         """
         Initialize fuzzy intent matcher.
-        
+
         Args:
             fuzzy_threshold: Similarity threshold for fuzzy matches (0.0-1.0)
             cache_size: Number of matches to cache
         """
         if not 0.0 <= fuzzy_threshold <= 1.0:
             raise ValueError(f"Threshold must be 0.0-1.0, got {fuzzy_threshold}")
-        
+
         self.fuzzy_threshold = fuzzy_threshold
         self.cache_size = cache_size
-        
+
         # Semantic similarity mappings (simple knowledge base)
         self.semantic_synonyms: Dict[str, Set[str]] = {
             "implement": {"create", "build", "develop", "write", "code"},
@@ -98,7 +98,7 @@ class FuzzyIntentMatcher:
             "test": {"verify", "validate", "check", "unit_test", "integration_test"},
             "document": {"document", "comment", "annotate", "describe"},
         }
-        
+
         # Intent classification keywords
         self.intent_keywords: Dict[str, List[str]] = {
             "implement": ["implement", "create", "build", "develop", "feature", "add"],
@@ -117,23 +117,23 @@ class FuzzyIntentMatcher:
     ) -> FuzzyMatchResult:
         """
         Perform fuzzy matching between two strings.
-        
+
         Uses SequenceMatcher for efficient string similarity calculation.
-        
+
         Args:
             text1: First string to compare
             text2: Second string to compare
             threshold: Override default threshold for this match
-        
+
         Returns:
             FuzzyMatchResult with similarity score and match type
         """
         threshold = threshold or self.fuzzy_threshold
-        
+
         # Normalize inputs
         norm_text1 = self._normalize_text(text1)
         norm_text2 = self._normalize_text(text2)
-        
+
         # Check for exact match
         if norm_text1 == norm_text2:
             return FuzzyMatchResult(
@@ -144,21 +144,21 @@ class FuzzyIntentMatcher:
                 is_match=True,
                 distance=0,
             )
-        
+
         # Calculate similarity using SequenceMatcher
         matcher = SequenceMatcher(None, norm_text1, norm_text2)
         similarity = matcher.ratio()
-        
+
         # Calculate Levenshtein distance
         distance = self._levenshtein_distance(norm_text1, norm_text2)
-        
+
         # Extract matching tokens
         matching_tokens = self._extract_matching_tokens(norm_text1, norm_text2)
-        
+
         # Determine match type
         match_type = MatchType.EXACT if similarity == 1.0 else MatchType.FUZZY
         is_match = similarity >= threshold
-        
+
         return FuzzyMatchResult(
             text1=text1,
             text2=text2,
@@ -176,11 +176,11 @@ class FuzzyIntentMatcher:
     ) -> List[str]:
         """
         Tokenize text using specified strategy.
-        
+
         Args:
             text: Text to tokenize
             strategy: Tokenization strategy to use
-        
+
         Returns:
             List of tokens
         """
@@ -196,23 +196,23 @@ class FuzzyIntentMatcher:
     def semantic_similarity(self, text1: str, text2: str) -> float:
         """
         Calculate semantic similarity between two texts.
-        
+
         Considers synonyms and semantic relationships.
-        
+
         Args:
             text1: First text
             text2: Second text
-        
+
         Returns:
             Similarity score (0.0-1.0)
         """
         tokens1 = set(self._tokenize_advanced(text1))
         tokens2 = set(self._tokenize_advanced(text2))
-        
+
         # Start with fuzzy match score
         fuzzy_result = self.fuzzy_match(text1, text2)
         score = fuzzy_result.similarity_score
-        
+
         # Boost score if semantic synonyms found
         for token1 in tokens1:
             for intent, synonyms in self.semantic_synonyms.items():
@@ -220,26 +220,26 @@ class FuzzyIntentMatcher:
                     for token2 in tokens2:
                         if token2 == intent or token2 in synonyms:
                             score = min(1.0, score + 0.15)
-        
+
         return score
 
     def extract_intent(self, user_input: str) -> IntentExtractionResult:
         """
         Extract primary intent from user input using fuzzy matching.
-        
+
         Args:
             user_input: User's request text
-        
+
         Returns:
             IntentExtractionResult with primary intent and confidence
         """
         normalized = self._normalize_text(user_input)
         tokens = self._tokenize_advanced(normalized)
-        
+
         intent_scores: Dict[str, float] = {}
         matched_keywords: List[str] = []
         fuzzy_corrections: Dict[str, str] = {}
-        
+
         # Check each token against intent keywords
         for token in tokens:
             for intent, keywords in self.intent_keywords.items():
@@ -248,11 +248,11 @@ class FuzzyIntentMatcher:
                     if result.is_match:
                         intent_scores[intent] = intent_scores.get(intent, 0) + result.similarity_score
                         matched_keywords.append(token)
-                        
+
                         # Track fuzzy corrections
                         if result.similarity_score < 1.0:
                             fuzzy_corrections[token] = keyword
-        
+
         # Find primary intent with highest score
         if intent_scores:
             primary_intent = max(intent_scores, key=intent_scores.get)
@@ -261,14 +261,14 @@ class FuzzyIntentMatcher:
         else:
             primary_intent = "unknown"
             confidence = 0.0
-        
+
         # Get alternative intents sorted by score
         alternative_intents = sorted(
             [(intent, score) for intent, score in intent_scores.items()],
             key=lambda x: x[1],
             reverse=True,
         )[1:3]  # Top 2 alternatives
-        
+
         return IntentExtractionResult(
             primary_intent=primary_intent,
             confidence=confidence,
@@ -285,26 +285,26 @@ class FuzzyIntentMatcher:
     ) -> List[FuzzyMatchResult]:
         """
         Find best matches for a query from candidate list.
-        
+
         Args:
             query: Query string
             candidates: List of candidate strings to match against
             top_k: Number of top matches to return
-        
+
         Returns:
             List of FuzzyMatchResult sorted by similarity (highest first)
         """
         results: List[FuzzyMatchResult] = []
-        
+
         for candidate in candidates:
             result = self.fuzzy_match(query, candidate)
             result.candidate = candidate  # Track the candidate string
             if result.is_match or result.similarity_score > 0.6:
                 results.append(result)
-        
+
         # Sort by similarity score descending
         results.sort(key=lambda x: x.similarity_score, reverse=True)
-        
+
         return results[:top_k]
 
     # Private helper methods
@@ -324,10 +324,10 @@ class FuzzyIntentMatcher:
         # Handle numbers
         text = re.sub(r'([a-zA-Z])(\d)', r'\1_\2', text)
         text = re.sub(r'(\d)([a-zA-Z])', r'\1_\2', text)
-        
+
         # Split on whitespace and underscores
         tokens = re.split(r'[\s_\-\.]+', text.lower())
-        
+
         # Filter out empty tokens
         return [t for t in tokens if t]
 
@@ -342,10 +342,10 @@ class FuzzyIntentMatcher:
         """Calculate Levenshtein distance between two strings"""
         if len(s1) < len(s2):
             return FuzzyIntentMatcher._levenshtein_distance(s2, s1)
-        
+
         if len(s2) == 0:
             return len(s1)
-        
+
         previous_row = range(len(s2) + 1)
         for i, c1 in enumerate(s1):
             current_row = [i + 1]
@@ -356,7 +356,7 @@ class FuzzyIntentMatcher:
                 substitutions = previous_row[j] + (c1 != c2)
                 current_row.append(min(insertions, deletions, substitutions))
             previous_row = current_row
-        
+
         return previous_row[-1]
 
     @staticmethod

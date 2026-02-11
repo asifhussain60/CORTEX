@@ -5,26 +5,26 @@ Evaluates governance rules against code.
 Author: CORTEX Framework
 """
 
-from typing import Dict, Any
 from pathlib import Path
+from typing import Any, Dict
 
 
 class RuleEvaluator:
     """Evaluates governance rules against code.
-    
+
     Supports rules like CORE-008 (test-first), CORE-012 (docstrings), etc.
     """
-    
+
     SUPPORTED_RULES = {
         "CORE-008": "test_exists",
         "CORE-011": "type_hints",
         "CORE-012": "docstring",
     }
-    
+
     def __init__(self):
         """Initialize the rule evaluator."""
         pass
-    
+
     def evaluate_rule(
         self,
         rule_id: str,
@@ -32,12 +32,12 @@ class RuleEvaluator:
         **kwargs,
     ) -> Dict[str, Any]:
         """Evaluate a rule against code.
-        
+
         Args:
             rule_id: Rule identifier (e.g., CORE-008).
             code_path: Path to the code file.
             **kwargs: Additional parameters for specific rules.
-            
+
         Returns:
             Evaluation result with passed, message, rule_id.
         """
@@ -51,14 +51,14 @@ class RuleEvaluator:
                 "passed": True,
                 "message": f"Rule {rule_id} not implemented, passing by default",
             }
-    
+
     def _evaluate_core_008(self, code_path: str, test_exists: bool) -> Dict[str, Any]:
         """Evaluate CORE-008: Tests must exist before implementation.
-        
+
         Args:
             code_path: Path to the implementation file.
             test_exists: Whether corresponding test file exists.
-            
+
         Returns:
             Evaluation result.
         """
@@ -74,14 +74,14 @@ class RuleEvaluator:
                 "passed": False,
                 "message": f"Test file not found for {code_path}. CORE-008 requires tests before implementation.",
             }
-    
+
     def _evaluate_core_012(self, code_path: str, code: str = None) -> Dict[str, Any]:
         """Evaluate CORE-012: Google docstrings required.
-        
+
         Args:
             code_path: Path to the code file.
             code: Optional code content to check.
-            
+
         Returns:
             Evaluation result.
         """
@@ -99,7 +99,7 @@ class RuleEvaluator:
                     "passed": False,
                     "message": "Missing docstring. CORE-012 requires Google-style docstrings.",
                 }
-        
+
         # If no code provided, try to read from path
         try:
             content = Path(code_path).read_text()
@@ -111,7 +111,7 @@ class RuleEvaluator:
                 }
         except Exception:
             pass
-        
+
         return {
             "rule_id": "CORE-012",
             "passed": False,

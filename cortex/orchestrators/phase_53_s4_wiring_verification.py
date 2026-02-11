@@ -6,7 +6,7 @@ Authority: Phase 53 Stage 4
 
 import logging
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 class OrchestratorWiringScript:
     """Script to wire DashboardOrchestrator with 7 operational orchestrators"""
-    
+
     ORCHESTRATORS_TO_WIRE = [
         {
             "name": "MasterOrchestrator",
@@ -60,31 +60,31 @@ class OrchestratorWiringScript:
             "capability": "dashboard_testing",
         },
     ]
-    
+
     @classmethod
     def verify_wiring(cls) -> bool:
         """
         Verify all orchestrators are registered with DashboardOrchestrator
-        
+
         Returns:
             True if all 7 orchestrators are properly wired
         """
         logger.info("Verifying DashboardOrchestrator wiring...")
-        
+
         wired_count = 0
         for orch in cls.ORCHESTRATORS_TO_WIRE:
             logger.info(f"✓ {orch['name']}: {orch['integration']}")
             wired_count += 1
-        
+
         all_wired = wired_count == len(cls.ORCHESTRATORS_TO_WIRE)
-        
+
         if all_wired:
             logger.info(f"✅ All {wired_count}/7 orchestrators ready for dashboard integration")
         else:
             logger.warning(f"⚠️  Only {wired_count}/7 orchestrators verified")
-        
+
         return all_wired
-    
+
     @classmethod
     def get_wiring_summary(cls) -> Dict[str, Any]:
         """Get summary of wiring configuration"""
@@ -107,12 +107,12 @@ def register_dashboard_orchestrator_in_wiring() -> bool:
     """
     Register DashboardOrchestrator in wiring.yaml
     (Called as part of S6 - Documentation & Registry Sync)
-    
+
     Returns:
         True if successfully registered
     """
     logger.info("Registering DashboardOrchestrator in wiring.yaml...")
-    
+
     dashboard_orchestrator_entry = {
         "name": "DashboardOrchestrator",
         "type": "domain",
@@ -130,24 +130,24 @@ def register_dashboard_orchestrator_in_wiring() -> bool:
         "phase": "phase-53",
         "status": "production",
     }
-    
+
     logger.info(f"DashboardOrchestrator entry: {dashboard_orchestrator_entry}")
     logger.info("✅ Ready to add to wiring.yaml in S6")
-    
+
     return True
 
 
 if __name__ == "__main__":
     # Verify all orchestrators are ready
     wired = OrchestratorWiringScript.verify_wiring()
-    
+
     # Get summary
     summary = OrchestratorWiringScript.get_wiring_summary()
     print(f"\nWiring Summary: {summary['orchestrators_count']}/7 orchestrators")
-    
+
     # Register in wiring
     registered = register_dashboard_orchestrator_in_wiring()
-    
+
     if wired and registered:
         print("\n✅ Phase 53 S4: Orchestrator Integration Ready for Production")
     else:

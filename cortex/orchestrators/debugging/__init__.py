@@ -18,11 +18,11 @@ Components:
 - DebugCleanup: Safe marker removal
 """
 
-from cortex.orchestrators.debugging.debug_orchestrator import DebugOrchestrator
-from cortex.orchestrators.debugging.debug_injector import DebugInjector
-from cortex.orchestrators.debugging.debug_capture import DebugCapture
 from cortex.orchestrators.debugging.debug_analyzer import DebugAnalyzer
+from cortex.orchestrators.debugging.debug_capture import DebugCapture
 from cortex.orchestrators.debugging.debug_cleanup import DebugCleanup
+from cortex.orchestrators.debugging.debug_injector import DebugInjector
+from cortex.orchestrators.debugging.debug_orchestrator import DebugOrchestrator
 
 __all__ = [
     "DebugOrchestrator",

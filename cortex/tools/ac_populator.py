@@ -12,15 +12,15 @@ from typing import Any, Dict, List, Optional
 
 import yaml
 
-from cortex.brain.core.result import Result, Ok, Err
 from cortex.brain.core.path_resolver import resolve_path
+from cortex.brain.core.result import Err, Ok, Result
 from cortex.infrastructure.database import DatabaseManager
 
 
 class ACPopulator:
     """
     Populates AC index from cortex-master.yaml.
-    
+
     Extracts AC-IDs from:
     - phases.phase_XX.ac_ids lists
     - architecture_decisions.AR-XXX.acceptance_criteria
@@ -29,7 +29,7 @@ class ACPopulator:
     - hallucination_prevention.phase_X_enhancements.components
     - brittleness_fixes.critical_blockers/high_priority.ac_ids
     """
-    
+
     def __init__(
         self,
         db: DatabaseManager,
@@ -37,7 +37,7 @@ class ACPopulator:
     ):
         """
         Initialize populator.
-        
+
         Args:
             db: Initialized DatabaseManager
             master_yaml_path: Path to cortex-master.yaml (uses default if None)
@@ -46,20 +46,20 @@ class ACPopulator:
         self._master_path = master_yaml_path or resolve_path(
             ".github", "roadmap", "cortex-master.yaml"
         )
-    
+
     def parse_ac_ids(self) -> List[Dict[str, Any]]:
         """
         Parse all AC-IDs from master YAML.
-        
+
         Returns:
             List of AC-ID dicts with ac_id, phase, description, test_file
         """
         with open(self._master_path, "r", encoding="utf-8") as f:
             master = yaml.safe_load(f)
-        
+
         ac_ids = []
         ac_details = {}  # ac_id -> details
-        
+
         # Build phase mapping from phases section
         phase_mapping = {}  # ac_id -> phase_id
         phases = master.get("phases", {})
@@ -67,7 +67,7 @@ class ACPopulator:
             phase_id = phase_data.get("id", phase_key.upper().replace("_", "-"))
             for ac_id in phase_data.get("ac_ids", []):
                 phase_mapping[ac_id] = phase_id
-        
+
         # Extract from architecture_decisions
         for ar_id, ar_data in master.get("architecture_decisions", {}).items():
             for ac in ar_data.get("acceptance_criteria", []):
@@ -78,7 +78,7 @@ class ACPopulator:
                         "test_file": ac.get("test", ""),
                         "source": f"AR: {ar_id}"
                     }
-        
+
         # Extract from functional_requirements
         for fr_id, fr_data in master.get("functional_requirements", {}).items():
             for ac in fr_data.get("acceptance_criteria", []):
@@ -89,7 +89,7 @@ class ACPopulator:
                         "test_file": ac.get("test", ""),
                         "source": f"FR: {fr_id}"
                     }
-        
+
         # Extract from non_functional_requirements
         for nfr_id, nfr_data in master.get("non_functional_requirements", {}).items():
             for ac in nfr_data.get("acceptance_criteria", []):
@@ -100,7 +100,7 @@ class ACPopulator:
                         "test_file": ac.get("test", ""),
                         "source": f"NFR: {nfr_id}"
                     }
-        
+
         # Extract from hallucination_prevention
         hp = master.get("hallucination_prevention", {})
         for phase_key in ["phase_2_enhancements", "phase_4_enhancements"]:
@@ -113,7 +113,7 @@ class ACPopulator:
                             "test_file": "",
                             "source": f"HP: {comp_name}"
                         }
-        
+
         # Extract from brittleness_fixes
         bf = master.get("brittleness_fixes", {})
         for section in ["critical_blockers", "high_priority"]:
@@ -126,7 +126,7 @@ class ACPopulator:
                         "test_file": "",
                         "source": f"BF: {section}"
                     }
-        
+
         # Combine phase mapping with details
         for ac_id, phase_id in phase_mapping.items():
             details = ac_details.get(ac_id, {})
@@ -136,7 +136,7 @@ class ACPopulator:
                 "description": details.get("description", ""),
                 "test_file": details.get("test_file", ""),
             })
-        
+
         # Add any AC-IDs from details not in phase mapping
         for ac_id, details in ac_details.items():
             if ac_id not in phase_mapping:
@@ -148,9 +148,9 @@ class ACPopulator:
                     "description": details.get("description", ""),
                     "test_file": details.get("test_file", ""),
                 })
-        
+
         return ac_ids
-    
+
     def _infer_phase(self, ac_id: str) -> str:
         """Infer phase from AC-ID pattern."""
         if "AR-001" in ac_id or "AR-002" in ac_id or "AR-003" in ac_id or "AR-004" in ac_id or "AR-005" in ac_id:
@@ -174,28 +174,28 @@ class ACPopulator:
         if "AR-010" in ac_id:
             return "PHASE-PARALLEL"
         return "PHASE-01"  # Default
-    
+
     def populate(self) -> Result[Dict[str, int]]:
         """
         Populate database with AC-IDs from master plan.
-        
+
         Returns:
             Result containing stats dict with inserted/skipped/total counts
         """
         try:
             ac_ids = self.parse_ac_ids()
-            
+
             inserted = 0
             skipped = 0
             errors = []
-            
+
             for ac in ac_ids:
                 # Check if already exists
                 exists = self._db.ac_exists(ac["ac_id"])
                 if exists.is_ok() and exists.unwrap():
                     skipped += 1
                     continue
-                
+
                 # Insert
                 result = self._db.insert_ac(
                     ac_id=ac["ac_id"],
@@ -204,12 +204,12 @@ class ACPopulator:
                     description=ac["description"],
                     test_file=ac.get("test_file")
                 )
-                
+
                 if result.is_ok():
                     inserted += 1
                 else:
                     errors.append(f"{ac['ac_id']}: {result.error}")
-            
+
             # Log population to audit
             self._db.insert_audit(
                 operation="AC_INDEX_POPULATED",
@@ -223,13 +223,13 @@ class ACPopulator:
                     "errors": errors
                 }
             )
-            
+
             return Ok({
                 "inserted": inserted,
                 "skipped": skipped,
                 "total": len(ac_ids),
                 "errors": errors
             })
-            
+
         except Exception as e:
             return Err(f"Population failed: {e}")

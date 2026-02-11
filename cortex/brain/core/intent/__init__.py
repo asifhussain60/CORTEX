@@ -1,13 +1,24 @@
 """Intent module for CORTEX."""
 
-from .intent_canonicalizer import IntentCanonicalizer, CanonicalizedIntent, IntentScope, IntentType
-from cortex.core.intent.challenge_generator import ChallengeGenerator, Challenge, ChallengeCategory, Severity
+from cortex.core.intent.challenge_generator import (
+    Challenge,
+    ChallengeCategory,
+    ChallengeGenerator,
+    Severity,
+)
+
 from .comprehension_yaml import (
     CanonicalIntentComposer,
+    ChallengeSection,
     ComprehensionYAML,
     IntentSection,
-    ChallengeSection,
     RecommendationSection,
+)
+from .intent_canonicalizer import (
+    CanonicalizedIntent,
+    IntentCanonicalizer,
+    IntentScope,
+    IntentType,
 )
 from .intent_reflection_protocol import (
     IntentReflectionEngine,
@@ -16,17 +27,17 @@ from .intent_reflection_protocol import (
     ReflectionStatus,
 )
 from .lens_context_builder import (
-    LENSContextBuilder,
-    LENSContext,
-    KnowledgeGraph,
-    ContextNode,
     ContextEdge,
+    ContextNode,
+    KnowledgeGraph,
+    LENSContext,
+    LENSContextBuilder,
 )
 from .lens_response_formatter import (
+    FormattedResponse,
     LENSResponseFormatter,
     ResponseFormat,
     SeverityColor,
-    FormattedResponse,
 )
 
 __all__ = [

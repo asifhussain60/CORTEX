@@ -6,8 +6,8 @@ MCP tools for remediation planning and audit coordination.
 Authority: ENH-059 (P1, 8.5 confidence)
 """
 
-from typing import Dict, Any
 import logging
+from typing import Any, Dict
 
 from cortex.mcp.decorators import mcp_tool
 
@@ -32,12 +32,12 @@ async def cortex_audit_remediation_plan(
 ) -> Dict[str, Any]:
     """
     Generate remediation plan from audit results.
-    
+
     Args:
         arguments: Dict with:
             - audit_results: Dict with 'findings' key
             - format: "markdown" or "json" (default: markdown)
-    
+
     Returns:
         Dict with:
             - plan: RemediationPlan (if format=json)
@@ -46,22 +46,22 @@ async def cortex_audit_remediation_plan(
     """
     try:
         from cortex.orchestrators.planning import AuditRemediationCoordinator
-        
+
         audit_results = arguments.get("audit_results", {})
         output_format = arguments.get("format", "markdown")
-        
+
         if not audit_results:
             return {
                 "success": False,
                 "error": "No audit_results provided"
             }
-        
+
         # Initialize coordinator
         coordinator = AuditRemediationCoordinator()
-        
+
         # Generate plan
         plan = coordinator.generate_remediation_plan(audit_results)
-        
+
         # Format based on requested output
         if output_format == "json":
             return {
@@ -85,17 +85,17 @@ async def cortex_audit_remediation_plan(
                     "execution_options": plan.execution_options
                 }
             }
-        
+
         else:  # markdown (default)
             formatted = coordinator.format_plan_with_prompt(plan, audit_results)
-            
+
             return {
                 "success": True,
                 "formatted": formatted,
                 "phase_count": len(plan.phases),
                 "total_effort_minutes": plan.total_effort_minutes
             }
-    
+
     except Exception as e:
         logger.error(f"Error generating remediation plan: {e}", exc_info=True)
         return {
@@ -117,33 +117,33 @@ async def cortex_process_remediation_selection(
 ) -> Dict[str, Any]:
     """
     Process user selection of execution mode.
-    
+
     Args:
         arguments: Dict with:
             - option: int (1-4)
-    
+
     Returns:
         Dict with mode and execution parameters
     """
     try:
         from cortex.orchestrators.planning import AuditRemediationCoordinator
-        
+
         option = arguments.get("option")
-        
+
         if option is None:
             return {
                 "success": False,
                 "error": "No option provided"
             }
-        
+
         coordinator = AuditRemediationCoordinator()
         result = coordinator.process_user_selection(option)
-        
+
         return {
             "success": True,
             **result
         }
-    
+
     except Exception as e:
         logger.error(f"Error processing selection: {e}", exc_info=True)
         return {

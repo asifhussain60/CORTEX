@@ -8,10 +8,11 @@ Or enable via pytest.ini:
     addopts = -p cortex.devx.pytest_progress_plugin
 """
 
-import pytest
 import sys
 from datetime import datetime
 from typing import Optional
+
+import pytest
 from _pytest.config import Config
 from _pytest.nodes import Item
 from _pytest.reports import TestReport
@@ -19,7 +20,7 @@ from _pytest.reports import TestReport
 
 class ProgressReporter:
     """Pytest plugin that reports test progress in real-time."""
-    
+
     def __init__(self) -> None:
         """Initialize progress reporter."""
         self.start_time: Optional[datetime] = None
@@ -30,31 +31,31 @@ class ProgressReporter:
         self.skipped = 0
         self.current_test: Optional[str] = None
         self.last_report_count = 0
-        
+
     def pytest_configure(self, config: Config) -> None:
         """Hook called before test collection."""
         self.start_time = datetime.now()
         sys.stdout.write("[PYTEST] Test execution started\n")
         sys.stdout.flush()
-        
+
     def pytest_collection_finish(self, session) -> None:
         """Hook called after test collection."""
         self.test_count = len(session.items)
         sys.stdout.write(f"[PYTEST PROGRESS] Collected {self.test_count} tests\n")
         sys.stdout.flush()
-        
+
     def pytest_runtest_logreport(self, report: TestReport) -> None:
         """Hook called after test result is known."""
         if report.when == "call":
             self.current_test = report.nodeid.split("::")[-1]
-            
+
             if report.passed:
                 self.passed += 1
             elif report.failed:
                 self.failed += 1
             elif report.skipped:
                 self.skipped += 1
-                
+
             # Report progress every 10 tests
             total = self.passed + self.failed + self.errors + self.skipped
             if total - self.last_report_count >= 10:
@@ -72,7 +73,7 @@ class ProgressReporter:
         elapsed = (datetime.now() - self.start_time).total_seconds()
         total = self.passed + self.failed + self.errors + self.skipped
         pass_rate = (self.passed / total * 100) if total > 0 else 0
-        
+
         sys.stdout.write("\n" + "="*70 + "\n")
         sys.stdout.write("PYTEST PROGRESS SUMMARY\n")
         sys.stdout.write("="*70 + "\n")

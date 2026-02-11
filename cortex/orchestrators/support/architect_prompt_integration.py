@@ -9,15 +9,15 @@ Author: Asif Hussain
 Date: 2026-02-07
 """
 
-from typing import Dict, Any, Optional
 import logging
+from typing import Any, Dict, Optional
 
-from cortex.orchestrators.support.upgrade_diff_analyzer import (
-    UpgradeDiffAnalyzer,
-    DiffResult,
-)
 from cortex.orchestrators.support.changelog_formatter import (
     ChangelogFormatter,
+)
+from cortex.orchestrators.support.upgrade_diff_analyzer import (
+    DiffResult,
+    UpgradeDiffAnalyzer,
 )
 
 logger = logging.getLogger(__name__)
@@ -144,7 +144,7 @@ class ArchitectPromptUpgradeHandler:
 
             # Add PRE-FLIGHT specific header if not already present
             if "Prompt Upgrade" not in changelog:
-                header = f"\n### 📋 Prompt Upgrade: What's New\n\n"
+                header = "\n### 📋 Prompt Upgrade: What's New\n\n"
                 changelog = header + changelog
 
             return changelog

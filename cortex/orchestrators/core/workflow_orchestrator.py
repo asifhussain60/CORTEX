@@ -3,7 +3,7 @@
 
 Integrates all 5 components of the Master Orchestrator workflow:
 1. Stage 1 (Comprehension) - LENS Phase 1 language analysis
-2. Stage 2 (Repository Scan) - System-wide code analysis  
+2. Stage 2 (Repository Scan) - System-wide code analysis
 3. Stage 3 (Knowledge) - LENS Phases 1-3 with graph building
 4. Stage 4 (Approval) - 5 approval gates + implementation planning
 5. Stage 5 (Execution) - Execute approved operations
@@ -28,19 +28,14 @@ import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import List, Dict, Optional, Any
+from typing import Any, Dict, List, Optional
 
-from cortex.brain.core.result import Result, Ok, Err
+from cortex.brain.core.result import Err, Ok, Result
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from cortex.orchestrators.core.master_orchestrator_stage_1 import (
     MasterOrchestrationStage1,
     Stage1ComprehensionContext,
     Stage1Output,
-)
-from cortex.orchestrators.core.repository_scanner import (
-    RepositoryScanner,
-    ScanContext,
-    ScanOutput,
 )
 from cortex.orchestrators.core.master_orchestrator_stage_3 import (
     MasterOrchestrationStage3,
@@ -52,7 +47,11 @@ from cortex.orchestrators.core.master_orchestrator_stage_4 import (
     Stage4ApprovalContext,
     Stage4Output,
 )
-
+from cortex.orchestrators.core.repository_scanner import (
+    RepositoryScanner,
+    ScanContext,
+    ScanOutput,
+)
 
 # ============================================================================
 # Data Classes
@@ -102,7 +101,7 @@ class WorkflowExecutionResult:
 class WorkflowOrchestrator:
     """
     Coordinates complete 5-stage Master Orchestrator workflow.
-    
+
     Responsibilities:
     - Execute Stage 1: Comprehension (intent extraction)
     - Execute Stage 2: Repository Scan (code analysis)
@@ -112,7 +111,7 @@ class WorkflowOrchestrator:
     - Manage data flow between stages
     - Handle errors at boundaries
     - Track execution metrics
-    
+
     Usage:
         orchestrator = WorkflowOrchestrator(workspace_root=Path("/project"))
         context = WorkflowExecutionContext(
@@ -123,38 +122,38 @@ class WorkflowOrchestrator:
         )
         result = orchestrator.execute_workflow(context)
     """
-    
+
     def __init__(self, workspace_root: Path) -> None:
         """
         Initialize workflow orchestrator.
-        
+
         Args:
             workspace_root: Root directory of workspace
         """
         self.workspace_root = workspace_root
         self.logger = EnhancedAuditLogger()
-        
+
         # Initialize stages
         self.stage1 = MasterOrchestrationStage1()
         self.scanner = RepositoryScanner(workspace_root=workspace_root)
         self.stage3 = MasterOrchestrationStage3()
         self.stage4 = MasterOrchestrationStage4()
-    
+
     def execute_workflow(
         self,
         context: WorkflowExecutionContext,
     ) -> WorkflowExecutionResult:
         """
         Execute complete 5-stage workflow.
-        
+
         Args:
             context: Workflow execution context
-            
+
         Returns:
             WorkflowExecutionResult with detailed execution metrics
         """
         ac_id = "AC-PROD-004-02"
-        
+
         self.logger.log_operation_start(
             ac_id=ac_id,
             operation="Execute 5-Stage Workflow",
@@ -164,39 +163,39 @@ class WorkflowOrchestrator:
                 "turn": context.turn_number,
             },
         )
-        
+
         start_time = time.time()
         result = WorkflowExecutionResult(
             operation=context.operation,
             success=True,
             timestamp=datetime.now(),
         )
-        
+
         # Visual feedback initialization
         from cortex.orchestrators.response.ascii_progress_bar import ASCIIProgressBar
         progress_bar = ASCIIProgressBar() if self._show_progress else None
         total_stages = 5
-        
+
         if progress_bar:
             print(f"\n🔄 Workflow: {context.operation} ({total_stages} stages)")
             print("━" * 60)
-        
+
         try:
             # ================================================================
             # Stage 1: Comprehension
             # ================================================================
             if progress_bar:
                 self._show_stage_progress(progress_bar, 1, total_stages, "Comprehension", 0.0)
-            
+
             stage1_result = self._execute_stage_1(context)
             result.stage_results.append(stage1_result)
-            
+
             if progress_bar:
                 self._show_stage_progress(progress_bar, 1, total_stages, "Comprehension", 1.0)
-            
+
             if self.on_stage_progress:
                 self.on_stage_progress(1, "Comprehension", 1.0)
-            
+
             if not stage1_result.success:
                 result.success = False
                 result.errors.append(f"Stage 1 failed: {stage1_result.error}")
@@ -207,35 +206,35 @@ class WorkflowOrchestrator:
                     details={"error": "Stage 1 failed"},
                 )
                 return result
-            
+
             stage1_output: Stage1Output = stage1_result.output
-            
+
             # ================================================================
             # Stage 2: Repository Scan
             # ================================================================
             stage2_result = self._execute_stage_2(context)
             result.stage_results.append(stage2_result)
-            
+
             if not stage2_result.success:
                 result.success = False
                 result.errors.append(f"Stage 2 failed: {stage2_result.error}")
                 # Continue anyway - scan is not critical
-            
+
             stage2_output: Optional[ScanOutput] = stage2_result.output
-            
+
             # ================================================================
             # Stage 3: Knowledge Processing
             # ================================================================
             stage3_result = self._execute_stage_3(context, stage2_output)
             result.stage_results.append(stage3_result)
-            
+
             if not stage3_result.success:
                 result.success = False
                 result.errors.append(f"Stage 3 failed: {stage3_result.error}")
                 # Continue anyway - knowledge is not critical
-            
+
             stage3_output: Optional[Stage3Output] = stage3_result.output
-            
+
             # ================================================================
             # Stage 4: Approval
             # ================================================================
@@ -244,10 +243,10 @@ class WorkflowOrchestrator:
             if stage3_output and hasattr(stage3_output, 'confidence_score'):
                 # Use Stage 3 confidence if available
                 confidence = max(confidence, stage3_output.confidence_score)
-            
+
             stage4_result = self._execute_stage_4(context, confidence)
             result.stage_results.append(stage4_result)
-            
+
             if not stage4_result.success:
                 result.success = False
                 result.errors.append(f"Stage 4 failed: {stage4_result.error}")
@@ -258,9 +257,9 @@ class WorkflowOrchestrator:
                     details={"error": "Stage 4 failed"},
                 )
                 return result
-            
+
             stage4_output: Stage4Output = stage4_result.output
-            
+
             # ================================================================
             # Prepare Final Results
             # ================================================================
@@ -269,12 +268,12 @@ class WorkflowOrchestrator:
                 "approval_reason": stage4_output.approval_reason,
                 "approval_confidence": stage4_output.approval_confidence,
             }
-            
+
             if stage4_output.implementation_plan:
                 result.implementation_plan = stage4_output.implementation_plan
-            
+
             result.total_duration = time.time() - start_time
-            
+
             self.logger.log_operation_complete(
                 ac_id=ac_id,
                 operation="Execute 5-Stage Workflow",
@@ -285,9 +284,9 @@ class WorkflowOrchestrator:
                     "duration": f"{result.total_duration:.2f}s",
                 },
             )
-            
+
             return result
-            
+
         except Exception as e:
             result.success = False
             result.errors.append(f"Workflow error: {str(e)}")
@@ -298,18 +297,18 @@ class WorkflowOrchestrator:
                 details={"error": str(e)},
             )
             return result
-    
+
     # ========================================================================
     # Private Stage Execution Methods
     # ========================================================================
-    
+
     def _execute_stage_1(
         self,
         context: WorkflowExecutionContext,
     ) -> WorkflowStageResult:
         """Execute Stage 1: Comprehension."""
         start_time = time.time()
-        
+
         try:
             stage1_context = Stage1ComprehensionContext(
                 operation=context.operation,
@@ -317,9 +316,9 @@ class WorkflowOrchestrator:
                 keywords=context.keywords,
                 domain=context.domain,
             )
-            
+
             result = self.stage1.comprehend(stage1_context)
-            
+
             if result.is_ok():
                 output = result.ok_value()
                 return WorkflowStageResult(
@@ -335,7 +334,7 @@ class WorkflowOrchestrator:
                     error=str(result.err_value()),
                     duration=time.time() - start_time,
                 )
-        
+
         except Exception as e:
             return WorkflowStageResult(
                 stage_name="Stage 1: Comprehension",
@@ -343,33 +342,33 @@ class WorkflowOrchestrator:
                 error=str(e),
                 duration=time.time() - start_time,
             )
-    
+
     def _execute_stage_2(
         self,
         context: WorkflowExecutionContext,
     ) -> WorkflowStageResult:
         """Execute Stage 2: Repository Scan."""
         start_time = time.time()
-        
+
         try:
             if not context.target_paths:
                 context.target_paths = [self.workspace_root / "src"]
-            
+
             scan_context = ScanContext(
                 workspace_root=context.workspace_root or self.workspace_root,
                 target_paths=context.target_paths,
                 exclude_patterns=["*.pyc", "__pycache__", ".git"],
             )
-            
+
             output = self.scanner.scan(scan_context)
-            
+
             return WorkflowStageResult(
                 stage_name="Stage 2: Repository Scan",
                 success=True,
                 output=output,
                 duration=time.time() - start_time,
             )
-        
+
         except Exception as e:
             return WorkflowStageResult(
                 stage_name="Stage 2: Repository Scan",
@@ -377,7 +376,7 @@ class WorkflowOrchestrator:
                 error=str(e),
                 duration=time.time() - start_time,
             )
-    
+
     def _execute_stage_3(
         self,
         context: WorkflowExecutionContext,
@@ -385,10 +384,10 @@ class WorkflowOrchestrator:
     ) -> WorkflowStageResult:
         """Execute Stage 3: Knowledge Processing."""
         start_time = time.time()
-        
+
         try:
             entities = scan_output.entities if scan_output else None
-            
+
             stage3_context = Stage3KnowledgeContext(
                 operation=context.operation,
                 domain=context.domain,
@@ -396,9 +395,9 @@ class WorkflowOrchestrator:
                 existing_knowledge=None,
                 turn_number=context.turn_number,
             )
-            
+
             result = self.stage3.process_knowledge(stage3_context)
-            
+
             if result.is_ok():
                 output = result.ok_value()
                 return WorkflowStageResult(
@@ -414,7 +413,7 @@ class WorkflowOrchestrator:
                     error=str(result.err_value()),
                     duration=time.time() - start_time,
                 )
-        
+
         except Exception as e:
             return WorkflowStageResult(
                 stage_name="Stage 3: Knowledge Processing",
@@ -422,7 +421,7 @@ class WorkflowOrchestrator:
                 error=str(e),
                 duration=time.time() - start_time,
             )
-    
+
     def _execute_stage_4(
         self,
         context: WorkflowExecutionContext,
@@ -430,7 +429,7 @@ class WorkflowOrchestrator:
     ) -> WorkflowStageResult:
         """Execute Stage 4: Approval."""
         start_time = time.time()
-        
+
         try:
             stage4_context = Stage4ApprovalContext(
                 operation=context.operation,
@@ -440,9 +439,9 @@ class WorkflowOrchestrator:
                 confidence_score=confidence_score,
                 turn_number=context.turn_number,
             )
-            
+
             result = self.stage4.approve_operation(stage4_context)
-            
+
             if result.is_ok():
                 output = result.ok_value()
                 return WorkflowStageResult(
@@ -458,7 +457,7 @@ class WorkflowOrchestrator:
                     error=str(result.err_value()),
                     duration=time.time() - start_time,
                 )
-        
+
         except Exception as e:
             return WorkflowStageResult(
                 stage_name="Stage 4: Approval",

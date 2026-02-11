@@ -10,11 +10,11 @@ Key Components:
 - Optimization engine: Generates actionable recommendations
 """
 
+import statistics
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any
 from datetime import datetime, timedelta
 from enum import Enum
-import statistics
+from typing import Any, Dict, List, Optional
 
 
 class BottleneckType(str, Enum):

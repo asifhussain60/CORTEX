@@ -7,9 +7,10 @@ Phase: 8
 AC-ID: CLI-001
 """
 
-import click
 from pathlib import Path
 from typing import Optional
+
+import click
 
 from cortex.cli.commands.lens import lens
 from cortex.cli.lens_dashboard import dashboard
@@ -20,16 +21,16 @@ from cortex.cli.lens_dashboard import dashboard
 def cli() -> None:
     """
     CORTEX - COgnitive Real-Time EXecution System.
-    
+
     AI-powered development orchestrator with governance-first architecture.
-    
+
     \b
     Commands:
       lens          LENS Remote Intelligence (git history, AST, comments)
       status        Show system status
       governance    Governance rules and compliance
       ask           Ask questions about the codebase
-    
+
     \b
     Examples:
       cortex lens analyze-remote owner/repo src/file.py
@@ -44,10 +45,10 @@ def status() -> None:
     """Show CORTEX system status."""
     try:
         from cortex.wiring import get_registry
-        
+
         registry = get_registry()
         orchestrators = registry.list_orchestrators()
-        
+
         click.echo("🧠 CORTEX Status")
         click.echo("=" * 40)
         click.echo(f"Orchestrators Wired: {len(orchestrators)}")
@@ -91,13 +92,13 @@ def governance_check(file_path: str) -> None:
     """Check a file for governance compliance."""
     path = Path(file_path)
     click.echo(f"🔍 Checking: {path.name}")
-    
+
     issues = []
-    
+
     # Check file naming (CORE-028)
     if path.suffix == ".py" and "-" in path.stem:
         issues.append(("CORE-028", "Python files must use snake_case (hyphens forbidden)"))
-    
+
     # Check for type hints and docstrings
     if path.suffix == ".py":
         content = path.read_text()
@@ -107,7 +108,7 @@ def governance_check(file_path: str) -> None:
             issues.append(("CORE-012", "Missing docstrings"))
         if "except:" in content and "except Exception" not in content:
             issues.append(("CORE-013", "Bare except clause detected"))
-    
+
     if issues:
         click.echo("⚠️  Issues found:")
         for rule_id, msg in issues:
@@ -122,10 +123,10 @@ def governance_check(file_path: str) -> None:
 def ask(question: str, category: Optional[str] = None) -> None:
     """Ask a question about the codebase."""
     from cortex.cli.commands.inquiry import AskCommand
-    
+
     cmd = AskCommand()
     result = cmd.execute(question, category=category)
-    
+
     if result.success:
         click.echo(f"✅ {result.message}")
         if result.data:

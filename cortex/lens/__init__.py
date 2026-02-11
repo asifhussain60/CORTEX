@@ -60,5 +60,5 @@ def __getattr__(name):
     elif name == "DependencyAnalyzer":
         from cortex.lens.analyzers.dependency_analyzer import DependencyAnalyzer
         return DependencyAnalyzer
-    
+
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

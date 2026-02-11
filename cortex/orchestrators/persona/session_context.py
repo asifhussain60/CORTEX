@@ -10,11 +10,11 @@ Manages:
 - Session-specific overrides
 """
 
-from typing import Optional, List, Dict, Any
-from datetime import datetime
 from dataclasses import dataclass, field
+from datetime import datetime
+from typing import Any, Dict, List, Optional
 
-from cortex.orchestrators.persona.models import PersonaId, DepthLevel
+from cortex.orchestrators.persona.models import DepthLevel, PersonaId
 
 
 @dataclass
@@ -39,7 +39,7 @@ class DepthOverride:
 class SessionContext:
     """
     Manage in-session persona and depth state.
-    
+
     Attributes:
         user_id: Unique identifier for user
         primary_persona: Current active persona
@@ -51,7 +51,7 @@ class SessionContext:
     def __init__(self, user_id: str):
         """
         Initialize session context.
-        
+
         Args:
             user_id: Unique identifier for user
         """
@@ -71,7 +71,7 @@ class SessionContext:
     ) -> None:
         """
         Set primary persona for session.
-        
+
         Args:
             persona: PersonaId to set
             confidence: Confidence score (0-1)
@@ -88,7 +88,7 @@ class SessionContext:
                     trigger=trigger
                 )
             )
-        
+
         self.primary_persona = persona
         self.inference_confidence = confidence
 
@@ -100,7 +100,7 @@ class SessionContext:
     ) -> None:
         """
         Set temporary depth override.
-        
+
         Args:
             level: DepthLevel to override to
             ttl_turns: Number of turns before expiring (-1 = permanent)
@@ -117,19 +117,19 @@ class SessionContext:
     def get_active_depth(self) -> DepthLevel:
         """
         Get current active depth, handling override TTL.
-        
+
         Returns:
             Current DepthLevel (override if active, otherwise primary)
         """
         if self.depth_override is None:
             return self.active_depth
-        
+
         # Check if override expired
         if self.depth_override.ttl_turns != -1:
             if self.depth_override.turns_elapsed >= self.depth_override.ttl_turns:
                 self.depth_override = None
                 return self.active_depth
-        
+
         return self.depth_override.level
 
     def advance_turn(self) -> None:
@@ -147,10 +147,10 @@ class SessionContext:
     def get_switch_history(self, limit: Optional[int] = None) -> List[Dict[str, Any]]:
         """
         Get persona switch history.
-        
+
         Args:
             limit: Max number of switches to return (None = all)
-            
+
         Returns:
             List of switch records
         """
@@ -164,7 +164,7 @@ class SessionContext:
             }
             for switch in self.switch_history
         ]
-        
+
         if limit:
             return history[-limit:]
         return history
@@ -180,7 +180,7 @@ class SessionContext:
     def get_state_dict(self) -> Dict[str, Any]:
         """
         Get current session state as dict.
-        
+
         Returns:
             Dict with current session state
         """

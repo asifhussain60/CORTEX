@@ -11,7 +11,7 @@ CORE-011: All functions have type hints.
 CORE-012: All public APIs have Google-style docstrings.
 """
 
-from typing import Dict, Any
+from typing import Any, Dict
 
 
 def get_banner(
@@ -23,14 +23,14 @@ def get_banner(
 ) -> str:
     """
     Generate CORTEX MCP Server startup banner.
-    
+
     Args:
         version: Server version.
         wiring_hash: Hash of wiring specification.
         orchestrator_count: Number of wired orchestrators.
         port: Server port.
         environment: Runtime environment (development/production).
-    
+
     Returns:
         Formatted banner string.
     """
@@ -57,7 +57,7 @@ def print_banner(
 ) -> None:
     """
     Print CORTEX MCP Server startup banner to stdout.
-    
+
     Args:
         version: Server version.
         wiring_hash: Hash of wiring specification.
@@ -78,14 +78,14 @@ def get_banner_dict(
 ) -> Dict[str, Any]:
     """
     Get startup info as dictionary.
-    
+
     Args:
         version: Server version.
         wiring_hash: Hash of wiring specification.
         orchestrator_count: Number of wired orchestrators.
         port: Server port.
         environment: Runtime environment.
-    
+
     Returns:
         Dictionary with startup information.
     """

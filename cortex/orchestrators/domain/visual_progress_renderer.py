@@ -25,6 +25,7 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, AsyncIterator, Callable, Dict, List, Optional
+
 from cortex.models.canonical_enums import MessageLevel
 
 logger = logging.getLogger(__name__)
@@ -104,8 +105,8 @@ class VisualProgressRenderer:
         message = f"""
 ## 🚀 Plan Execution Started
 
-**Plan:** {plan_name}  
-**Total Phases:** {total_phases}  
+**Plan:** {plan_name}
+**Total Phases:** {total_phases}
 **Started:** {self._execution_start.strftime('%H:%M:%S')}
 
 ---
@@ -219,7 +220,7 @@ Executing plan autonomously with real-time progress updates below...
 
 {progress}
 
-**Duration:** {elapsed_str}  
+**Duration:** {elapsed_str}
 """
 
         if test_count > 0:
@@ -228,7 +229,7 @@ Executing plan autonomously with real-time progress updates below...
         if coverage_percent > 0:
             details += f"**Coverage:** {coverage_percent:.0%}  \n"
 
-        details += f"""
+        details += """
 ---
 
 """
@@ -272,7 +273,7 @@ Executing plan autonomously with real-time progress updates below...
 
         message += """**Actions:**
 - 💾 Current code checkpoint saved
-- 🧪 Test results saved  
+- 🧪 Test results saved
 - ⏸️  Awaiting your correction...
 
 """

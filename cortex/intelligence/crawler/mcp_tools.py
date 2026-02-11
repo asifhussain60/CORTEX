@@ -3,24 +3,24 @@
 # Authority: CORE-008 TDD, MCP-FIRST
 # Stage: S5 - GREEN phase implementation
 
-from typing import Dict, List, Any, Callable
+from typing import Any, Callable, Dict, List
 
 
 def cortex_discover_patterns() -> Callable:
     """
     MCP Tool: Discover architectural patterns in repository.
-    
+
     Returns:
         Callable MCP tool
     """
     def tool_impl(repository_path: str, pattern_types: List[str] = None) -> Dict[str, Any]:
         """
         Discover patterns in repository.
-        
+
         Args:
             repository_path: Path to repository
             pattern_types: Optional pattern type filter
-            
+
         Returns:
             Dictionary with discovery results
         """
@@ -30,24 +30,24 @@ def cortex_discover_patterns() -> Callable:
             "patterns_discovered": 0,
             "status": "Discovery completed"
         }
-    
+
     return tool_impl
 
 
 def cortex_analyze_repository() -> Callable:
     """
     MCP Tool: Analyze repository architecture.
-    
+
     Returns:
         Callable MCP tool
     """
     def tool_impl(repository_path: str) -> Dict[str, Any]:
         """
         Analyze repository structure and patterns.
-        
+
         Args:
             repository_path: Path to repository
-            
+
         Returns:
             Dictionary with analysis results
         """
@@ -58,14 +58,14 @@ def cortex_analyze_repository() -> Callable:
             "patterns_found": [],
             "confidence": 0.0
         }
-    
+
     return tool_impl
 
 
 def register_mcp_tools(registry: Dict[str, Callable]) -> None:
     """
     Register MCP tools with orchestrator.
-    
+
     Args:
         registry: MCP tool registry
     """

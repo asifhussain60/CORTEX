@@ -27,7 +27,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from cortex.core.result import Result, Ok, Err
+from cortex.core.result import Err, Ok, Result
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +42,7 @@ class TodoStatus(Enum):
 @dataclass
 class TodoItem:
     """Single todo item."""
-    
+
     id: str
     title: str
     description: str
@@ -53,7 +53,7 @@ class TodoItem:
 @dataclass
 class TodoList:
     """Collection of todo items."""
-    
+
     items: List[TodoItem] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
@@ -61,10 +61,10 @@ class TodoList:
 class TodoTool:
     """
     MCP-exposed todo list management tool.
-    
+
     Provides CRUD operations for tracking implementation subtasks.
     Designed for MCP client integration (GitHub Copilot, Cursor, etc.).
-    
+
     Example:
         >>> tool = TodoTool()
         >>> result = tool.create_todo_list([
@@ -72,14 +72,14 @@ class TodoTool:
         ... ])
         >>> tool.update_todo_status("1", "completed")
         >>> progress = tool.get_progress()
-    
+
     AC-TDD-INCREMENTAL-02: MCP todo tool implementation
     """
 
     def __init__(self) -> None:
         """
         Initialize TodoTool.
-        
+
         AC-TDD-INCREMENTAL-02-01: Initialization
         """
         self._todo_list: TodoList = TodoList()
@@ -91,15 +91,15 @@ class TodoTool:
     ) -> Result[TodoList]:
         """
         Create todo list from subtask specifications.
-        
+
         Replaces any existing todo list.
-        
+
         Args:
             todos: List of todo specifications with id, title, description
-            
+
         Returns:
             Result with TodoList or error
-            
+
         AC-TDD-INCREMENTAL-02-02: Create todo list
         """
         try:
@@ -114,7 +114,7 @@ class TodoTool:
             items = []
             for todo in todos:
                 status_str = todo.get("status", "not-started")
-                
+
                 try:
                     status = TodoStatus(status_str)
                 except ValueError:
@@ -147,20 +147,20 @@ class TodoTool:
     ) -> Result[TodoItem]:
         """
         Update status of a todo item.
-        
+
         Args:
             todo_id: Todo item ID
             status: New status (not-started, in-progress, completed)
-            
+
         Returns:
             Result with updated TodoItem or error
-            
+
         AC-TDD-INCREMENTAL-02-03: Update todo status
         """
         try:
             # Find todo
             todo = self.get_todo_by_id(todo_id)
-            
+
             if todo is None:
                 return Err(f"Todo with id '{todo_id}' not found")
 
@@ -186,14 +186,14 @@ class TodoTool:
     def get_progress(self) -> Dict[str, Any]:
         """
         Get todo list progress.
-        
+
         Returns:
             Dictionary with total, completed, and percentage
-            
+
         AC-TDD-INCREMENTAL-02-04: Get todo progress
         """
         total = len(self._todo_list.items)
-        
+
         if total == 0:
             return {
                 "total": 0,
@@ -226,10 +226,10 @@ class TodoTool:
     def get_all_todos(self) -> List[TodoItem]:
         """
         Get all todo items.
-        
+
         Returns:
             List of TodoItem objects
-            
+
         AC-TDD-INCREMENTAL-02-05: Get all todos
         """
         return self._todo_list.items
@@ -237,10 +237,10 @@ class TodoTool:
     def get_todo_by_id(self, todo_id: str) -> Optional[TodoItem]:
         """
         Get todo item by ID.
-        
+
         Args:
             todo_id: Todo item ID
-            
+
         Returns:
             TodoItem if found, None otherwise
         """
@@ -256,10 +256,10 @@ class TodoTool:
     def get_tool_definition(self) -> Dict[str, Any]:
         """
         Get MCP tool definition.
-        
+
         Returns:
             Tool definition dictionary
-            
+
         AC-TDD-INCREMENTAL-02-06: MCP interface
         """
         return {
@@ -297,33 +297,33 @@ class TodoTool:
     ) -> Result[Any]:
         """
         Execute tool operation via MCP interface.
-        
+
         Args:
             operation: Operation name
             parameters: Operation parameters
-            
+
         Returns:
             Result with operation result or error
         """
         try:
             if operation == "create_todo_list":
                 return self.create_todo_list(parameters.get("todos", []))
-            
+
             elif operation == "update_todo_status":
                 todo_id = parameters.get("todo_id")
                 status = parameters.get("status")
-                
+
                 if not todo_id or not status:
                     return Err("Missing required parameters: todo_id, status")
-                
+
                 return self.update_todo_status(todo_id, status)
-            
+
             elif operation == "get_progress":
                 return Ok(self.get_progress())
-            
+
             elif operation == "get_all_todos":
                 return Ok(self.get_all_todos())
-            
+
             else:
                 return Err(f"Unknown operation: {operation}")
 

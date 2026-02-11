@@ -11,17 +11,17 @@ CORE-013: Specific exceptions only.
 
 import json
 import logging
-import uuid
+import queue
 import re
 import threading
-import queue
-from typing import Any, Dict, Optional, List
-from datetime import datetime
-from pathlib import Path
-from enum import Enum
-from dataclasses import dataclass, field, asdict
 import traceback
+import uuid
 from concurrent.futures import ThreadPoolExecutor
+from dataclasses import asdict, dataclass, field
+from datetime import datetime
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 
 class LogLevel(str, Enum):
@@ -439,7 +439,7 @@ class StructuredLogger:
 
     def close(self) -> None:
         """Close logger and cleanup resources.
-        
+
         This is an alias for shutdown() for context manager compatibility.
         """
         self.shutdown()

@@ -33,17 +33,17 @@ def cortex_capture_metrics(
 ) -> dict[str, Any]:
     """
     Record development metrics for evidence-driven tool enhancement.
-    
+
     Args:
         operation_type: Type of operation (tdd, debug, codegen, orchestrator)
         operation_name: Name/identifier of the operation
         duration_ms: Duration in milliseconds
         success: Whether the operation succeeded
         metadata: Additional metadata specific to operation type
-        
+
     Returns:
         Result dictionary with success status and metric ID
-        
+
     Example:
         >>> cortex_capture_metrics(
         ...     operation_type="tdd",
@@ -56,7 +56,7 @@ def cortex_capture_metrics(
     """
     orch = get_instrumentation_orchestrator()
     metadata = metadata or {}
-    
+
     if operation_type == "tdd":
         result = orch.record_tdd_cycle(
             phase=metadata.get("phase", "GREEN"),
@@ -99,7 +99,7 @@ def cortex_capture_metrics(
             "metric_id": None,
             "message": f"Unknown operation type: {operation_type}",
         }
-    
+
     return {
         "success": result.success,
         "metric_id": result.metric_id,
@@ -115,23 +115,23 @@ def cortex_capture_metrics(
 def cortex_get_enhancement_recommendations() -> dict[str, Any]:
     """
     Analyze captured metrics and return evidence-driven enhancement suggestions.
-    
+
     Returns:
         Dictionary containing:
         - recommendations: List of enhancement recommendations with priority, evidence, effort
         - summary: Current metrics summary
         - thresholds: Active threshold configuration
-        
+
     Example:
         >>> recommendations = cortex_get_enhancement_recommendations()
         >>> print(recommendations["recommendations"][0]["enhancement"])
         "TDD Orchestrator Acceleration"
     """
     orch = get_instrumentation_orchestrator()
-    
+
     recommendations = orch.get_enhancement_recommendations()
     summary = orch.get_metrics_summary()
-    
+
     return {
         "recommendations": [
             {
@@ -157,10 +157,10 @@ def cortex_get_enhancement_recommendations() -> dict[str, Any]:
 def cortex_metrics_report(format: Literal["yaml", "json"] = "yaml") -> str:
     """
     Export current metrics as a formatted report.
-    
+
     Args:
         format: Output format (yaml or json)
-        
+
     Returns:
         Formatted metrics report string
     """

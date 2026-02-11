@@ -5,10 +5,10 @@ Authority: Phase 54 S4 - Intelligence layer decorator enhancement
 Purpose: Auto-inject UnifiedIntelligenceContext for all MCP tools
 """
 
-import logging
 import inspect
-from typing import Any, Callable, Dict, Optional
+import logging
 from functools import wraps
+from typing import Any, Callable, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -25,23 +25,23 @@ def mcp_tool(
 ) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
     """
     Decorator to register a function as an MCP-callable tool.
-    
+
     ENHANCED (Phase 54 S4): Automatically injects UnifiedIntelligenceContext
     if 'unified_intelligence' not present in kwargs.
-    
+
     Args:
         name: Unique name for the MCP tool.
         description: Human-readable description of the tool's purpose.
         parameters: Optional dict mapping parameter names to their types.
         category: Optional category for tool organization.
         inject_intelligence: Whether to inject UnifiedIntelligenceContext (default True).
-    
+
     Returns:
         Decorator function that registers and returns the enhanced function.
-    
+
     Raises:
         ValueError: If name is empty or not a valid identifier.
-    
+
     Example:
         @mcp_tool(
             name="analyze_code",
@@ -55,10 +55,10 @@ def mcp_tool(
     """
     if not name or not isinstance(name, str):
         raise ValueError("Tool name must be a non-empty string")
-    
+
     if not description:
         raise ValueError("Tool description must be provided")
-    
+
     def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
         """Register function and return it enhanced."""
         # Store tool metadata
@@ -71,10 +71,10 @@ def mcp_tool(
             "inject_intelligence": inject_intelligence,
         }
         MCP_TOOLS_REGISTRY[name] = metadata
-        
+
         # Attach metadata to function for discovery
         func._mcp_tool_metadata = metadata
-        
+
         # Return original function with intelligence injection
         @wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
@@ -87,22 +87,24 @@ def mcp_tool(
                 "unified_intelligence" in func_params or
                 any(p.kind == inspect.Parameter.VAR_KEYWORD for p in func_params.values())
             )
-            
+
             if inject_intelligence and accepts_unified_intelligence and "unified_intelligence" not in kwargs:
                 try:
+                    from cortex.brain.knowledge.knowledge_synthesis_engine import (
+                        get_synthesis_engine,
+                    )
                     from cortex.mcp.middleware.intelligence_gate import IntelligenceGate
-                    from cortex.brain.knowledge.knowledge_synthesis_engine import get_synthesis_engine
-                    
+
                     # Create synthesis engine if needed
                     synthesis_engine = get_synthesis_engine()
-                    
+
                     # Create IntelligenceGate and synthesize context
                     gate = IntelligenceGate(synthesis_engine)
-                    
+
                     # Get intent from kwargs or default to GENERIC
                     intent_type = kwargs.get("intent_type", "GENERIC")
                     file_path = kwargs.get("file_path", None)
-                    
+
                     # Synthesize unified intelligence context
                     logger.debug(
                         f"AC_PHASE54-S4-001: Intelligence injection for tool '{name}' | "
@@ -113,22 +115,22 @@ def mcp_tool(
                         file_path=file_path,
                     )
                     kwargs["unified_intelligence"] = unified_context
-                    
+
                 except Exception as e:
                     logger.warning(
                         f"AC_PHASE54-S4-001: Failed to inject intelligence for '{name}': {e}"
                     )
                     # Graceful degradation - proceed without intelligence
                     kwargs["unified_intelligence"] = None
-            
+
             # Call original function
             return func(*args, **kwargs)
-        
+
         # Also attach metadata to wrapper
         wrapper._mcp_tool_metadata = metadata
-        
+
         return wrapper
-    
+
     return decorator
 
 

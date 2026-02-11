@@ -9,8 +9,8 @@ AC-PHASE-24: Master Orchestrator Decomposition
 
 from __future__ import annotations
 
-from typing import Dict, Any, List, Optional, Callable, Tuple
 from dataclasses import dataclass
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 
 @dataclass

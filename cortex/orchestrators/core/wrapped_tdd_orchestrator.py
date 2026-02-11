@@ -35,32 +35,30 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-from cortex.core.result import Ok, Err
-from cortex.orchestrators.core.tdd_orchestrator import (
-    TDDOrchestrator,
-    TDDPhase,
-    TDDImplementationGuidance
+from cortex.brain.core.orchestrator.continuation_decision import (
+    ContinuationDecision,
+    ContinuationReason,
 )
 from cortex.brain.core.orchestrator.conversation_protocol import (
     ConversationProtocol,
-    RoundContext
+    RoundContext,
 )
-from cortex.brain.core.orchestrator.continuation_decision import (
-    ContinuationDecision,
-    ContinuationReason
+from cortex.core.orchestrator.terminal_events import (
+    ErrorOccurredEvent,
+    EventRegistry,
+    GovernanceViolationEvent,
+    MaxTurnsReachedEvent,
+    PhaseCompletedEvent,
+    TerminalEvent,
+    TokenLimitEvent,
+)
+from cortex.core.result import Err, Ok, Result
+from cortex.orchestrators.core.tdd_orchestrator import (
+    TDDImplementationGuidance,
+    TDDOrchestrator,
+    TDDPhase,
 )
 from cortex.orchestrators.decorators import inject_orchestrator_context
-from cortex.core.result import Result
-from cortex.core.orchestrator.terminal_events import (
-    EventRegistry,
-    TerminalEvent,
-    PhaseCompletedEvent,
-    ErrorOccurredEvent,
-    GovernanceViolationEvent,
-    TokenLimitEvent,
-    MaxTurnsReachedEvent
-)
-
 
 logger = logging.getLogger(__name__)
 
@@ -559,44 +557,46 @@ class WrappedTDDOrchestrator:
     ) -> Result[Dict[str, Any]]:
         """
         Execute task incrementally with automatic decomposition and todo tracking.
-        
+
         This method orchestrates the complete incremental TDD flow:
         1. Decompose task using IncrementalTaskDecomposer
         2. Publish todo list via MCP tool
         3. Execute each subtask via TDD orchestrator
         4. Update todo status after each completion
         5. Track overall progress
-        
+
         Args:
             task: Task specification with task_id, description, module_path, domain
             max_tokens_per_subtask: Maximum tokens per subtask (default: 10K)
-            
+
         Returns:
             Result with execution summary or error
-            
+
         AC-TDD-INCREMENTAL-03: Incremental execution with decomposition
         """
         try:
-            from cortex.orchestrators.planning.incremental_task_decomposer import IncrementalTaskDecomposer
             from cortex.mcp.tools.todo_tool import TodoTool
+            from cortex.orchestrators.planning.incremental_task_decomposer import (
+                IncrementalTaskDecomposer,
+            )
 
             task_id = task.get("task_id", "UNKNOWN")
-            
+
             self.logger.info(f"Starting incremental execution for task {task_id}")
 
             # Phase 1: Decompose task into subtasks
             decomposer = IncrementalTaskDecomposer(
                 max_tokens_per_subtask=max_tokens_per_subtask
             )
-            
+
             decomp_result = decomposer.decompose_into_subtasks(task)
-            
+
             if decomp_result.is_err():
                 return Err(f"Task decomposition failed: {decomp_result.error}")
 
             decomposition = decomp_result.unwrap()
             subtasks = decomposition.subtasks
-            
+
             self.logger.info(
                 f"Task {task_id} decomposed into {len(subtasks)} subtasks "
                 f"(total_tokens={decomposition.total_estimated_tokens})"
@@ -604,7 +604,7 @@ class WrappedTDDOrchestrator:
 
             # Phase 2: Publish todo list via MCP tool
             todo_tool = TodoTool()
-            
+
             todo_items = [
                 {
                     "id": subtask.subtask_id,
@@ -619,9 +619,9 @@ class WrappedTDDOrchestrator:
                 }
                 for subtask in subtasks
             ]
-            
+
             todo_result = todo_tool.create_todo_list(todo_items)
-            
+
             if todo_result.is_err():
                 self.logger.warning(f"Todo list creation failed: {todo_result.error}")
             else:
@@ -630,7 +630,7 @@ class WrappedTDDOrchestrator:
             # Phase 3: Execute each subtask via TDD orchestrator
             completed_subtasks = []
             failed_subtasks = []
-            
+
             for subtask in subtasks:
                 self.logger.info(
                     f"Executing subtask {subtask.subtask_id} "
@@ -674,7 +674,7 @@ class WrappedTDDOrchestrator:
 
             # Phase 4: Compile execution results
             progress = todo_tool.get_progress()
-            
+
             execution_result = {
                 "task_id": task_id,
                 "subtasks_total": len(subtasks),

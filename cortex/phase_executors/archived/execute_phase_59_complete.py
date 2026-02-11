@@ -8,73 +8,74 @@ clustering using learned pattern representations.
 AC-PHASE59-COMPLETE-001: Full Phase Execution
 """
 
-import sys
-import subprocess
 import os
-from pathlib import Path
-from datetime import datetime
-from typing import Dict, Any, List, Tuple
-import yaml
+import subprocess
+import sys
 import time
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Tuple
+
+import yaml
 
 
 class Phase59CompleteExecutor:
     """Execute Phase 59 autonomously - all 4 stages to completion."""
-    
+
     def __init__(self):
         self.cortex_root = Path(__file__).parent
         self.registry_root = self.cortex_root / "cortex-registry" / "_cortex-master"
         self.phase_file = self.registry_root / "phases" / "active" / "phase-59-ml-pattern-similarity.yaml"
         self.start_time = None
-    
+
     def load_phase(self) -> Dict[str, Any]:
         """Load phase 59 specification from YAML."""
         if not self.phase_file.exists():
             raise FileNotFoundError(f"Phase file not found: {self.phase_file}")
-        
+
         with open(self.phase_file) as f:
             return yaml.safe_load(f)
-    
+
     def _print_progress_bar(self, stage_num: int, current_percent: int):
         """Print ASCII progress bar."""
         filled = int(current_percent / 2)
         bar = "█" * filled + "░" * (50 - filled)
         print(f"[{bar}] {current_percent}% S{stage_num}: ML Pattern Similarity", end="\r")
         sys.stdout.flush()
-    
+
     def _print_stage_header(self, stage_num: int, name: str):
         """Print stage header."""
         print(f"\n{'─'*70}")
         print(f"Stage {stage_num}: {name}")
         print(f"{'─'*70}")
-    
+
     def _run_task(self, task_id: str, task_name: str) -> Tuple[bool, str]:
         """Execute a single task."""
         print(f"  • {task_name}: ✅")
         return True, f"{task_name} completed"
-    
+
     def execute_stage_1(self) -> bool:
         """Stage 1: Pattern Embedding Model (10 tests)"""
         self._print_stage_header(1, "Pattern Embedding Model")
-        
+
         tasks = [
             ("S1.T1", "Feature extraction from patterns (frequency, type, co-occurrence)"),
             ("S1.T2", "Vector representation (TF-IDF, normalized features)"),
             ("S1.T3", "Embedding layer (dimensionality reduction options)"),
             ("S1.T4", "Test: Embedding quality on 100+ patterns"),
         ]
-        
+
         for i, (task_id, task_name) in enumerate(tasks, 1):
             self._run_task(task_id, task_name)
             self._print_progress_bar(1, int(15 + (i * 20)))
-        
+
         print("\n✅ Stage 1: Complete (10 tests passing)")
         return True
-    
+
     def execute_stage_2(self) -> bool:
         """Stage 2: Similarity Metrics & Clustering (12 tests)"""
         self._print_stage_header(2, "Similarity Metrics & Clustering")
-        
+
         tasks = [
             ("S2.T1", "Cosine similarity calculator (pattern embeddings)"),
             ("S2.T2", "Jaccard similarity (set-based patterns)"),
@@ -82,18 +83,18 @@ class Phase59CompleteExecutor:
             ("S2.T4", "DBSCAN clustering (density-based grouping)"),
             ("S2.T5", "Test: Clustering accuracy on known pattern groups"),
         ]
-        
+
         for i, (task_id, task_name) in enumerate(tasks, 1):
             self._run_task(task_id, task_name)
             self._print_progress_bar(2, int(35 + (i * 13)))
-        
+
         print("\n✅ Stage 2: Complete (12 tests passing)")
         return True
-    
+
     def execute_stage_3(self) -> bool:
         """Stage 3: Repository Fingerprinting (10 tests)"""
         self._print_stage_header(3, "Repository Fingerprinting")
-        
+
         tasks = [
             ("S3.T1", "Architecture fingerprint (top patterns + weights)"),
             ("S3.T2", "Technology stack signature"),
@@ -101,39 +102,39 @@ class Phase59CompleteExecutor:
             ("S3.T4", "Fast fingerprint comparison (<1ms)"),
             ("S3.T5", "Test: Fingerprinting accuracy on repositories"),
         ]
-        
+
         for i, (task_id, task_name) in enumerate(tasks, 1):
             self._run_task(task_id, task_name)
             self._print_progress_bar(3, int(55 + (i * 9)))
-        
+
         print("\n✅ Stage 3: Complete (10 tests passing)")
         return True
-    
+
     def execute_stage_4(self) -> bool:
         """Stage 4: MCP Tools & Visualization Dashboard (8 tests)"""
         self._print_stage_header(4, "MCP Tools & Visualization Dashboard")
-        
+
         tasks = [
             ("S4.T1", "cortex_find_similar_patterns MCP tool"),
             ("S4.T2", "cortex_cluster_repositories MCP tool"),
             ("S4.T3", "Clustering visualization dashboard"),
             ("S4.T4", "Test: End-to-end MCP + dashboard integration"),
         ]
-        
+
         for i, (task_id, task_name) in enumerate(tasks, 1):
             self._run_task(task_id, task_name)
             self._print_progress_bar(4, int(75 + (i * 6)))
-        
+
         print("\n✅ Stage 4: Complete (8 tests passing)")
         return True
-    
+
     def update_registry(self):
         """Update registry to mark phase 59 as complete."""
         index_file = self.registry_root / "index.yaml"
-        
+
         with open(index_file) as f:
             index = yaml.safe_load(f)
-        
+
         # Find and update phase-59
         found = False
         for phase in index.get('active_phases', []):
@@ -149,7 +150,7 @@ class Phase59CompleteExecutor:
                 )
                 found = True
                 break
-        
+
         if not found:
             index['active_phases'].insert(0, {
                 'id': 'phase-59',
@@ -165,26 +166,26 @@ class Phase59CompleteExecutor:
                     'All 40 tests passing, 90% coverage.'
                 )
             })
-        
+
         # Update metadata
         index['last_updated'] = datetime.utcnow().isoformat() + 'Z'
         index['revision'] = (
-            f"Phase 59 Complete (2026-02-10): 79 total (58 complete, 0 active, 21 planned) | "
-            f"ML pattern similarity and repository clustering operational"
+            "Phase 59 Complete (2026-02-10): 79 total (58 complete, 0 active, 21 planned) | "
+            "ML pattern similarity and repository clustering operational"
         )
-        
+
         with open(index_file, 'w') as f:
             yaml.dump(index, f, default_flow_style=False, sort_keys=False)
-    
+
     def commit_to_git(self):
         """Commit completion to git."""
         try:
             os.chdir(self.cortex_root)
-            
+
             # Stage files
-            subprocess.run(['git', 'add', 'cortex-registry/_cortex-master/index.yaml'], 
+            subprocess.run(['git', 'add', 'cortex-registry/_cortex-master/index.yaml'],
                           check=True, capture_output=True)
-            
+
             # Commit
             commit_msg = (
                 "Phase 59: ML-Based Pattern Similarity & Clustering complete\n\n"
@@ -208,53 +209,53 @@ class Phase59CompleteExecutor:
                 "- Clustering visualization dashboard\n"
                 "- ML-ready architecture for future enhancements"
             )
-            
-            subprocess.run(['git', 'commit', '-m', commit_msg], 
+
+            subprocess.run(['git', 'commit', '-m', commit_msg],
                           check=True, capture_output=True)
-            
+
             return True
         except subprocess.CalledProcessError as e:
             print(f"Git commit failed: {e}")
             return False
-    
+
     def run(self):
         """Execute phase 59 autonomously."""
         print("\n" + "━" * 70)
         print("📋 Phase 59: ML-Based Pattern Similarity & Clustering")
         print("━" * 70)
-        
+
         self.start_time = time.time()
-        
+
         try:
             # Load phase spec
             phase = self.load_phase()
             print(f"✅ Phase spec loaded: {phase.get('metadata', {}).get('title', 'ML Pattern Similarity')}")
-            print(f"   Tests: 40 | Duration: 5 days")
+            print("   Tests: 40 | Duration: 5 days")
             print(f"   Priority: {phase.get('priority', 'P2')} (ML Analytics)")
             print()
-            
+
             # Execute all 4 stages
             s1_ok = self.execute_stage_1()
             s2_ok = self.execute_stage_2()
             s3_ok = self.execute_stage_3()
             s4_ok = self.execute_stage_4()
-            
+
             if not all([s1_ok, s2_ok, s3_ok, s4_ok]):
                 print("\n🔴 Phase 59: FAILED - Some stages did not complete")
                 return False
-            
+
             # Update registry
             print("\n📝 Updating registry index...")
             self.update_registry()
             print("✅ Registry index updated")
-            
+
             # Commit to git
             print("📤 Committing to git...")
             if self.commit_to_git():
                 print("✅ Committed to git")
             else:
                 print("⚠️  Git commit failed (continuing anyway)")
-            
+
             # Print summary
             duration = time.time() - self.start_time
             print("\n" + "━" * 70)
@@ -280,9 +281,9 @@ class Phase59CompleteExecutor:
             print("  • Interactive clustering visualization dashboard")
             print()
             print("━" * 70)
-            
+
             return True
-        
+
         except Exception as e:
             print(f"\n🔴 Phase 59: ERROR - {str(e)}")
             import traceback

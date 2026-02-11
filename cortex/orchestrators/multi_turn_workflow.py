@@ -4,10 +4,10 @@ AC-ID: REMEDIATION-INTENT-007
 Coordinates complete end-to-end multi-turn conversation flows.
 """
 
+import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, List, Optional
-import uuid
 
 
 @dataclass

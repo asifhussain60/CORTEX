@@ -8,12 +8,11 @@ Created: 2026-02-07
 Version: 1.0
 """
 
-from enum import Enum
-from typing import Optional, Dict, List, Set, Tuple
-from dataclasses import dataclass, field
-from abc import ABC, abstractmethod
 import re
-
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Dict, List, Optional, Set, Tuple
 
 # ============================================================================
 # ENUMERATIONS
@@ -22,13 +21,13 @@ import re
 
 class SeverityLevel(str, Enum):
     """Security severity level."""
-    
+
     P0_BLOCKER = "P0_BLOCKER"
     """Critical vulnerability - hard gate, blocks execution"""
-    
+
     P1_WARNING = "P1_WARNING"
     """High severity - included in challenge"""
-    
+
     P2_ADVISORY = "P2_ADVISORY"
     """Medium severity - included in synthesis"""
 
@@ -40,12 +39,12 @@ class SeverityLevel(str, Enum):
 
 class CWEPattern:
     """CWE pattern for detection."""
-    
+
     def __init__(self, cwe_id: str, description: str, patterns: List[str]):
         self.cwe_id = cwe_id
         self.description = description
         self.patterns = [re.compile(p, re.IGNORECASE) for p in patterns]
-    
+
     def matches(self, code: str) -> bool:
         """Check if code matches pattern."""
         return any(p.search(code) for p in self.patterns)
@@ -132,7 +131,7 @@ P2_CWES = set()  # Additional P2 checks defined dynamically
 @dataclass
 class SecurityFinding:
     """A security finding."""
-    
+
     cwe_id: str
     description: str
     severity: SeverityLevel
@@ -144,19 +143,19 @@ class SecurityFinding:
 @dataclass
 class SecurityAnalysis:
     """Complete security analysis result."""
-    
+
     p0_findings: List[SecurityFinding] = field(default_factory=list)
     p1_findings: List[SecurityFinding] = field(default_factory=list)
     p2_findings: List[SecurityFinding] = field(default_factory=list)
-    
+
     has_blockers: bool = False
     owasp_coverage: float = 0.0
-    
+
     @property
     def all_findings(self) -> List[SecurityFinding]:
         """Get all findings."""
         return self.p0_findings + self.p1_findings + self.p2_findings
-    
+
     @property
     def total_findings(self) -> int:
         """Get total finding count."""
@@ -170,23 +169,23 @@ class SecurityAnalysis:
 
 class SecurityFirstAnalyzer:
     """Proactive security threat detector."""
-    
+
     def __init__(self):
         self.cwe_db = CWE_DATABASE
-    
+
     def analyze(self, code: str, file_path: str = "unknown") -> SecurityAnalysis:
         """
         Analyze code for security threats.
-        
+
         Args:
             code: Source code to analyze
             file_path: File path for context
-        
+
         Returns:
             SecurityAnalysis with findings
         """
         analysis = SecurityAnalysis()
-        
+
         # Check for P0 blockers
         for cwe_id in P0_CWES:
             if cwe_id in self.cwe_db:
@@ -200,7 +199,7 @@ class SecurityFirstAnalyzer:
                         context=self._extract_context(code, cwe_id)
                     ))
                     analysis.has_blockers = True
-        
+
         # Check for P1 warnings
         for cwe_id in P1_CWES:
             if cwe_id in self.cwe_db:
@@ -213,12 +212,12 @@ class SecurityFirstAnalyzer:
                         remediation=self._get_remediation(cwe_id),
                         context=self._extract_context(code, cwe_id)
                     ))
-        
+
         # Calculate OWASP coverage
         analysis.owasp_coverage = self._calculate_owasp_coverage(analysis)
-        
+
         return analysis
-    
+
     def _get_remediation(self, cwe_id: str) -> str:
         """Get remediation steps for CWE."""
         remediations = {
@@ -230,18 +229,18 @@ class SecurityFirstAnalyzer:
             "CWE-502": "Avoid pickle. Use JSON with schema validation instead.",
         }
         return remediations.get(cwe_id, "Review security best practices.")
-    
+
     def _extract_context(self, code: str, cwe_id: str) -> str:
         """Extract context around vulnerable code."""
         if cwe_id not in self.cwe_db:
             return ""
-        
+
         for line in code.split('\n'):
             if self.cwe_db[cwe_id].matches(line):
                 return line.strip()[:100]
-        
+
         return ""
-    
+
     def _calculate_owasp_coverage(self, analysis: SecurityAnalysis) -> float:
         """Calculate OWASP Top 10 coverage percentage."""
         # Simplified: checks 6 key OWASP items
@@ -263,10 +262,10 @@ class SecurityFirstAnalyzer:
 
 class SurroundingContextAnalyzer:
     """Analyzes surrounding context for security issues."""
-    
+
     def __init__(self, analyzer: SecurityFirstAnalyzer):
         self.analyzer = analyzer
-    
+
     def find_related_issues(
         self,
         primary_finding: SecurityFinding,
@@ -274,23 +273,23 @@ class SurroundingContextAnalyzer:
     ) -> List[SecurityFinding]:
         """
         Find related security issues in other files.
-        
+
         Args:
             primary_finding: Primary finding to search for related issues
             codebase_files: Dictionary of file_path -> code
-        
+
         Returns:
             List of related findings
         """
         related = []
-        
+
         for file_path, code in codebase_files.items():
             if file_path != primary_finding.location:
                 analysis = self.analyzer.analyze(code, file_path)
                 for finding in analysis.all_findings:
                     if finding.cwe_id == primary_finding.cwe_id:
                         related.append(finding)
-        
+
         return related
 
 
@@ -301,7 +300,7 @@ class SurroundingContextAnalyzer:
 
 class OWASPCoverageReport:
     """OWASP Top 10 coverage analysis."""
-    
+
     OWASP_ITEMS = [
         ("A01:2021", "Broken Access Control", ["CWE-22", "CWE-639"]),
         ("A02:2021", "Cryptographic Failures", ["CWE-327", "CWE-521"]),
@@ -314,12 +313,12 @@ class OWASPCoverageReport:
         ("A09:2021", "Logging Monitoring Failures", ["CWE-778"]),
         ("A10:2021", "SSRF", ["CWE-918"]),
     ]
-    
+
     @staticmethod
     def generate_report(analysis: SecurityAnalysis) -> Dict[str, object]:
         """Generate OWASP coverage report."""
         findings_cwes = {f.cwe_id for f in analysis.all_findings}
-        
+
         coverage = {}
         for item_id, item_name, cwes in OWASPCoverageReport.OWASP_ITEMS:
             matched = any(cwe in findings_cwes for cwe in cwes)
@@ -328,10 +327,10 @@ class OWASPCoverageReport:
                 "checked": matched,
                 "cwes": cwes,
             }
-        
+
         covered_items = sum(1 for v in coverage.values() if v["checked"])
         coverage_percent = (covered_items / len(coverage)) * 100
-        
+
         return {
             "coverage_percent": coverage_percent,
             "covered_items": covered_items,

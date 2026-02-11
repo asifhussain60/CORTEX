@@ -12,12 +12,12 @@ Architecture:
 
 Usage:
     manager = ApprovalSessionManager()
-    
+
     # Phase 1: Classify → Store
     gate = DoRApprovalGate()
     gate.classify_and_reflect("Implement auth", {})
     session = manager.create_session(gate, user_id="copilot-user")
-    
+
     # Phase 2: Restore → Approve → Execute
     restored_gate = manager.restore_gate(session.session_id)
     restored_gate.approve()
@@ -26,16 +26,20 @@ Usage:
 Governance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 """
 
-from dataclasses import dataclass, field, asdict
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Any
-import uuid
 import json
-from threading import Lock
+import uuid
+from dataclasses import asdict, dataclass, field
+from datetime import datetime, timedelta
 from pathlib import Path
+from threading import Lock
+from typing import Any, Dict, List, Optional
 
-from cortex.orchestrators.core.dor_approval_gate import DoRApprovalGate, IntentReflection, ApprovalDecision
 from cortex.models.canonical_enums import ApprovalStatus
+from cortex.orchestrators.core.dor_approval_gate import (
+    ApprovalDecision,
+    DoRApprovalGate,
+    IntentReflection,
+)
 
 
 class SessionNotFoundError(Exception):
@@ -52,7 +56,7 @@ class SessionExpiredError(Exception):
 class ApprovalSession:
     """
     Approval session containing DoR gate state.
-    
+
     Attributes:
         session_id: Unique session identifier (UUID)
         user_id: User who created the session
@@ -80,10 +84,10 @@ class ApprovalSession:
     def is_expired(self, ttl_seconds: int = 300) -> bool:
         """
         Check if session has expired.
-        
+
         Args:
             ttl_seconds: Time-to-live in seconds (default: 5 minutes)
-        
+
         Returns:
             True if session age > ttl_seconds
         """
@@ -93,14 +97,14 @@ class ApprovalSession:
 class ApprovalSessionManager:
     """
     Singleton manager for approval session lifecycle.
-    
+
     Provides:
     - Session creation with unique session_id
     - Session retrieval by ID
     - Session deletion and cleanup
     - DoR gate state serialization/deserialization
     - TTL-based expiration
-    
+
     Thread-safe with lock protection for concurrent access.
     """
 
@@ -125,15 +129,15 @@ class ApprovalSessionManager:
     ) -> ApprovalSession:
         """
         Create new approval session from DoR gate.
-        
+
         Args:
             gate: DoR approval gate with current state
             user_id: User identifier
             metadata: Optional session metadata
-        
+
         Returns:
             ApprovalSession with unique session_id
-        
+
         Example:
             >>> manager = ApprovalSessionManager()
             >>> gate = DoRApprovalGate()
@@ -143,7 +147,7 @@ class ApprovalSessionManager:
         """
         session_id = str(uuid.uuid4())
         gate_state = self._serialize_gate(gate)
-        
+
         session = ApprovalSession(
             session_id=session_id,
             user_id=user_id,
@@ -151,10 +155,10 @@ class ApprovalSessionManager:
             gate_state=gate_state,
             metadata=metadata or {}
         )
-        
+
         with self._session_lock:
             self._sessions[session_id] = session
-        
+
         return session
 
     def get_session(
@@ -165,18 +169,18 @@ class ApprovalSessionManager:
     ) -> Optional[ApprovalSession]:
         """
         Retrieve session by ID.
-        
+
         Args:
             session_id: Session identifier
             enforce_ttl: If True, raise SessionExpiredError for expired sessions
             ttl_seconds: TTL threshold for expiration check
-        
+
         Returns:
             ApprovalSession if found, None otherwise
-        
+
         Raises:
             SessionExpiredError: If enforce_ttl=True and session expired
-        
+
         Example:
             >>> manager = ApprovalSessionManager()
             >>> session = manager.get_session("some-id")
@@ -185,28 +189,28 @@ class ApprovalSessionManager:
         """
         with self._session_lock:
             session = self._sessions.get(session_id)
-        
+
         if session is None:
             return None
-        
+
         if enforce_ttl and session.is_expired(ttl_seconds):
             raise SessionExpiredError(
                 f"Session {session_id} expired "
                 f"({session.age_seconds():.0f}s > {ttl_seconds}s)"
             )
-        
+
         return session
 
     def restore_gate(self, session_id: str) -> Optional[DoRApprovalGate]:
         """
         Restore DoR gate from session state.
-        
+
         Args:
             session_id: Session identifier
-        
+
         Returns:
             DoRApprovalGate with restored state, None if session not found
-        
+
         Example:
             >>> manager = ApprovalSessionManager()
             >>> gate = manager.restore_gate("session-123")
@@ -216,19 +220,19 @@ class ApprovalSessionManager:
         session = self.get_session(session_id)
         if session is None:
             return None
-        
+
         return self._deserialize_gate(session.gate_state)
 
     def delete_session(self, session_id: str) -> bool:
         """
         Delete session by ID.
-        
+
         Args:
             session_id: Session identifier
-        
+
         Returns:
             True if deleted, False if not found
-        
+
         Example:
             >>> manager = ApprovalSessionManager()
             >>> deleted = manager.delete_session("session-123")
@@ -243,13 +247,13 @@ class ApprovalSessionManager:
     def list_sessions_by_user(self, user_id: str) -> List[ApprovalSession]:
         """
         List all sessions for a specific user.
-        
+
         Args:
             user_id: User identifier
-        
+
         Returns:
             List of ApprovalSession objects
-        
+
         Example:
             >>> manager = ApprovalSessionManager()
             >>> sessions = manager.list_sessions_by_user("user1")
@@ -264,13 +268,13 @@ class ApprovalSessionManager:
     def cleanup_expired_sessions(self, ttl_seconds: int = 300) -> int:
         """
         Remove expired sessions.
-        
+
         Args:
             ttl_seconds: TTL threshold (default: 5 minutes)
-        
+
         Returns:
             Number of sessions removed
-        
+
         Example:
             >>> manager = ApprovalSessionManager()
             >>> removed = manager.cleanup_expired_sessions(300)
@@ -283,16 +287,16 @@ class ApprovalSessionManager:
             ]
             for sid in expired_ids:
                 del self._sessions[sid]
-        
+
         return len(expired_ids)
 
     def _serialize_gate(self, gate: DoRApprovalGate) -> Dict[str, Any]:
         """
         Serialize DoR gate state to dict.
-        
+
         Args:
             gate: DoR approval gate
-        
+
         Returns:
             Serializable dict containing gate state
         """
@@ -300,7 +304,7 @@ class ApprovalSessionManager:
             "pending_text": gate._pending_text,
             "pending_context": gate._pending_context,
         }
-        
+
         # Serialize current reflection
         if gate._current_reflection:
             reflection = gate._current_reflection
@@ -314,7 +318,7 @@ class ApprovalSessionManager:
                 "business_principles": reflection.business_principles,
                 "timestamp": reflection.timestamp,
             }
-        
+
         # Serialize approval decision
         if gate._approval_decision:
             decision = gate._approval_decision
@@ -323,25 +327,25 @@ class ApprovalSessionManager:
                 "timestamp": decision.timestamp,  # Already ISO string
                 "feedback": decision.feedback,
             }
-        
+
         return state
 
     def _deserialize_gate(self, state: Dict[str, Any]) -> DoRApprovalGate:
         """
         Deserialize DoR gate from state dict.
-        
+
         Args:
             state: Serialized gate state
-        
+
         Returns:
             DoRApprovalGate with restored state
         """
         gate = DoRApprovalGate()
-        
+
         # Restore pending request
         gate._pending_text = state.get("pending_text")
         gate._pending_context = state.get("pending_context")
-        
+
         # Restore reflection
         if "current_reflection" in state:
             reflection_data = state["current_reflection"]
@@ -355,7 +359,7 @@ class ApprovalSessionManager:
                 business_principles=reflection_data["business_principles"],
                 timestamp=reflection_data["timestamp"],
             )
-        
+
         # Restore approval decision
         if "approval_decision" in state:
             decision_data = state["approval_decision"]
@@ -364,13 +368,13 @@ class ApprovalSessionManager:
                 timestamp=decision_data["timestamp"],  # Already ISO string
                 feedback=decision_data["feedback"],
             )
-        
+
         return gate
 
     def clear_all(self) -> int:
         """
         Clear all sessions (for testing).
-        
+
         Returns:
             Number of sessions cleared
         """

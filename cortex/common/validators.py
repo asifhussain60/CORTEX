@@ -12,16 +12,15 @@ import re
 from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, Optional, Pattern, Type, TypeVar, Union
 
-
 T = TypeVar('T')
 
 
 class ValidationError(Exception):
     """Exception raised when validation fails.
-    
+
     Provides clear error messages for validation failures.
     """
-    
+
     def __init__(
         self,
         field: str,
@@ -29,7 +28,7 @@ class ValidationError(Exception):
         value: Any = None,
     ) -> None:
         """Initialize validation error.
-        
+
         Args:
             field: Name of the field that failed validation
             message: Error message
@@ -45,15 +44,15 @@ class ValidationError(Exception):
 @dataclass
 class ValidationResult:
     """Result of a validation operation.
-    
+
     Contains validation status and any errors encountered.
     """
     errors: Dict[str, str] = field(default_factory=dict)
     is_valid: bool = True
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert result to dictionary.
-        
+
         Returns:
             Dict with is_valid and errors
         """
@@ -68,14 +67,14 @@ def required(
     message: Optional[str] = None,
 ) -> Callable[[Callable[..., T]], Callable[..., T]]:
     """Decorator to validate required parameter.
-    
+
     Args:
         param_name: Name of required parameter
         message: Custom error message
-        
+
     Returns:
         Decorated function
-        
+
     Example:
         @required("name")
         def greet(name: str) -> str:
@@ -99,15 +98,15 @@ def type_check(
     message: Optional[str] = None,
 ) -> Callable[[Callable[..., T]], Callable[..., T]]:
     """Decorator to validate parameter type.
-    
+
     Args:
         param_name: Name of parameter to check
         expected_type: Expected type for parameter
         message: Custom error message
-        
+
     Returns:
         Decorated function
-        
+
     Example:
         @type_check("count", int)
         def process(count: int) -> int:
@@ -135,16 +134,16 @@ def range_check(
     message: Optional[str] = None,
 ) -> Callable[[Callable[..., T]], Callable[..., T]]:
     """Decorator to validate parameter is within range.
-    
+
     Args:
         param_name: Name of parameter to check
         min_val: Minimum allowed value (inclusive)
         max_val: Maximum allowed value (inclusive)
         message: Custom error message
-        
+
     Returns:
         Decorated function
-        
+
     Example:
         @range_check("age", min_val=0, max_val=150)
         def set_age(age: int) -> None:
@@ -175,16 +174,16 @@ def regex_match(
     pattern: Union[str, Pattern],
     message: Optional[str] = None,
 ) -> Callable[[Callable[..., T]], Callable[..., T]]:
-    """Decorator to validate parameter matches regex pattern.
-    
+    r"""Decorator to validate parameter matches regex pattern.
+
     Args:
         param_name: Name of parameter to check
         pattern: Regex pattern to match
         message: Custom error message
-        
+
     Returns:
         Decorated function
-        
+
     Example:
         @regex_match("email", r"^[\w.-]+@[\w.-]+\.\w+$")
         def send_email(email: str) -> None:
@@ -194,7 +193,7 @@ def regex_match(
         compiled = re.compile(pattern)
     else:
         compiled = pattern
-    
+
     def decorator(func: Callable[..., T]) -> Callable[..., T]:
         @functools.wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> T:
@@ -215,14 +214,14 @@ def validate_schema(
     schema: Dict[str, Type],
 ) -> ValidationResult:
     """Validate data against a schema.
-    
+
     Args:
         data: Data dictionary to validate
         schema: Schema defining required fields and types
-        
+
     Returns:
         ValidationResult with is_valid and errors
-        
+
     Example:
         schema = {"name": str, "age": int}
         result = validate_schema({"name": "John"}, schema)
@@ -230,7 +229,7 @@ def validate_schema(
             print(result.errors)
     """
     errors: Dict[str, str] = {}
-    
+
     for field_name, expected_type in schema.items():
         if field_name not in data:
             errors[field_name] = f"Missing required field: {field_name}"
@@ -241,7 +240,7 @@ def validate_schema(
                 f"Expected {expected_type.__name__}, "
                 f"got {type(data[field_name]).__name__}"
             )
-    
+
     return ValidationResult(
         is_valid=len(errors) == 0,
         errors=errors,

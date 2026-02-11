@@ -1,7 +1,7 @@
 """Governance Analyzer for policy violation detection."""
 
-from typing import List, Dict, Any
 from dataclasses import dataclass
+from typing import Any, Dict, List
 
 
 @dataclass
@@ -56,17 +56,17 @@ class GovernanceAnalyzer:
         entity_data: Dict[str, Any]
     ) -> List[ViolationReport]:
         """Analyze entity for policy violations.
-        
+
         Args:
             entity_type: Type of entity (operation, code, function, etc.)
             entity_data: Entity data to analyze
-            
+
         Returns:
             List of ViolationReport objects
         """
         self.metrics["total_checks"] += 1
         violations: List[ViolationReport] = []
-        
+
         # Check core rules
         for rule_id, rule_info in self.CORE_RULES.items():
             try:
@@ -82,7 +82,7 @@ class GovernanceAnalyzer:
                     )
             except Exception:
                 pass
-        
+
         # Check custom rules
         for rule_id, rule_info in self.custom_rules.items():
             try:
@@ -99,10 +99,10 @@ class GovernanceAnalyzer:
                     )
             except Exception:
                 pass
-        
+
         if violations:
             self.metrics["violations_detected"] += len(violations)
-        
+
         return violations
 
     def add_custom_rule(
@@ -112,7 +112,7 @@ class GovernanceAnalyzer:
         check_function: Any
     ) -> None:
         """Add custom governance rule.
-        
+
         Args:
             rule_id: Unique rule identifier
             rule_text: Human-readable rule description
@@ -125,7 +125,7 @@ class GovernanceAnalyzer:
 
     def get_metrics(self) -> Dict[str, Any]:
         """Get analyzer metrics.
-        
+
         Returns:
             Dictionary with metrics
         """

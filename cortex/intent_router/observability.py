@@ -3,11 +3,11 @@
 Author: CORTEX Framework
 """
 
-from typing import Any, Dict, List, Optional, Callable
+import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-import logging
+from typing import Any, Callable, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +23,7 @@ class MetricType(Enum):
 @dataclass
 class Metric:
     """A single metric measurement."""
-    
+
     name: str
     value: float
     metric_type: MetricType
@@ -34,14 +34,14 @@ class Metric:
 @dataclass
 class Span:
     """A tracing span."""
-    
+
     operation: str
     start_time: datetime
     end_time: Optional[datetime] = None
     duration_ms: Optional[float] = None
     tags: Dict[str, Any] = field(default_factory=dict)
     status: str = "success"
-    
+
     def finish(self) -> None:
         """Finish the span and calculate duration."""
         self.end_time = datetime.now()
@@ -52,10 +52,10 @@ class Span:
 
 class ObservabilityInstrument:
     """Instruments code for observability with metrics and tracing."""
-    
+
     def __init__(self, service_name: str = "cortex"):
         """Initialize observability instrument.
-        
+
         Args:
             service_name: Name of the service being instrumented
         """
@@ -64,7 +64,7 @@ class ObservabilityInstrument:
         self.spans: List[Span] = []
         self.active_spans: Dict[str, Span] = {}
         self.events: List[Dict[str, Any]] = []  # For record_event compatibility
-    
+
     def record_event(
         self,
         event_type: str,
@@ -72,7 +72,7 @@ class ObservabilityInstrument:
         details: Dict[str, Any]
     ) -> None:
         """Record an observability event (simplified API for testing).
-        
+
         Args:
             event_type: Type of event
             component: Component name
@@ -86,15 +86,15 @@ class ObservabilityInstrument:
         }
         self.events.append(event)
         logger.debug(f"Recorded event: {event_type} from {component}")
-    
+
     def get_events(self) -> List[Dict[str, Any]]:
         """Get recorded events.
-        
+
         Returns:
             List of event dictionaries
         """
         return self.events.copy()
-    
+
     def record_metric(
         self,
         name: str,
@@ -103,7 +103,7 @@ class ObservabilityInstrument:
         tags: Optional[Dict[str, str]] = None
     ) -> None:
         """Record a metric.
-        
+
         Args:
             name: Metric name
             value: Metric value
@@ -118,14 +118,14 @@ class ObservabilityInstrument:
         )
         self.metrics.append(metric)
         logger.debug(f"Recorded metric: {metric.name}={value}")
-    
+
     def start_span(self, operation: str, tags: Optional[Dict[str, Any]] = None) -> str:
         """Start a tracing span.
-        
+
         Args:
             operation: Name of the operation
             tags: Optional tags for the span
-            
+
         Returns:
             Span ID for use with finish_span
         """
@@ -138,10 +138,10 @@ class ObservabilityInstrument:
         self.active_spans[span_id] = span
         logger.debug(f"Started span: {operation}")
         return span_id
-    
+
     def finish_span(self, span_id: str, status: str = "success") -> None:
         """Finish a tracing span.
-        
+
         Args:
             span_id: ID of the span to finish
             status: Status of the operation (success/error)
@@ -152,13 +152,13 @@ class ObservabilityInstrument:
             span.finish()
             self.spans.append(span)
             logger.debug(f"Finished span: {span.operation} ({span.duration_ms:.2f}ms)")
-    
+
     def trace(self, operation: str) -> Callable:
         """Decorator to automatically trace a function.
-        
+
         Args:
             operation: Name of the operation
-            
+
         Returns:
             Decorator function
         """
@@ -169,15 +169,15 @@ class ObservabilityInstrument:
                     result = func(*args, **kwargs)
                     self.finish_span(span_id, "success")
                     return result
-                except Exception as e:
+                except Exception:
                     self.finish_span(span_id, "error")
                     raise
             return wrapper
         return decorator
-    
+
     def get_metrics_summary(self) -> Dict[str, Any]:
         """Get summary of recorded metrics.
-        
+
         Returns:
             Dictionary with metric statistics
         """
@@ -191,29 +191,29 @@ class ObservabilityInstrument:
                 "value": metric.value,
                 "timestamp": metric.timestamp.isoformat()
             })
-        
+
         return {
             "service": self.service_name,
             "total_metrics": len(self.metrics),
             "by_type": by_type
         }
-    
+
     def get_trace_summary(self) -> Dict[str, Any]:
         """Get summary of tracing spans.
-        
+
         Returns:
             Dictionary with trace statistics
         """
         total_spans = len(self.spans)
         successful = sum(1 for s in self.spans if s.status == "success")
         failed = total_spans - successful
-        
+
         avg_duration = 0.0
         if self.spans:
             durations = [s.duration_ms for s in self.spans if s.duration_ms is not None]
             if durations:
                 avg_duration = sum(durations) / len(durations)
-        
+
         return {
             "service": self.service_name,
             "total_spans": total_spans,

@@ -2,7 +2,7 @@
 Orchestrator Composition Engine - AR-017-02
 
 DEPRECATED: Use cortex.orchestrators.support.composed_orchestrator instead.
-This module contains composition patterns that have been superseded by the 
+This module contains composition patterns that have been superseded by the
 canonical ComposedOrchestrator in support/composed_orchestrator.py.
 
 Composition patterns for orchestrator workflows:
@@ -15,19 +15,19 @@ Author: Asif Hussain
 """
 
 from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
-from datetime import datetime
 
 
 class CompositionPattern(Enum):
     """Composition pattern enumeration"""
-    
+
     SEQUENTIAL = "sequential"
     PARALLEL = "parallel"
     CONDITIONAL = "conditional"
     DELEGATING = "delegating"
-    
+
     @property
     def description(self) -> str:
         """Get pattern description"""
@@ -46,7 +46,7 @@ class CompositionPattern(Enum):
             ),
         }
         return descriptions.get(self, "Unknown pattern")
-    
+
     @property
     def use_cases(self) -> List[str]:
         """Get pattern use cases"""
@@ -73,7 +73,7 @@ class CompositionPattern(Enum):
             ],
         }
         return use_cases.get(self, [])
-    
+
     @property
     def examples(self) -> List[str]:
         """Get pattern examples"""
@@ -96,7 +96,7 @@ class CompositionPattern(Enum):
             ],
         }
         return examples.get(self, [])
-    
+
     @classmethod
     def get_all(cls) -> List["CompositionPattern"]:
         """Get all composition patterns"""
@@ -106,14 +106,14 @@ class CompositionPattern(Enum):
 @dataclass
 class ComposedOrchestrator:
     """Represents a composed orchestrator"""
-    
+
     name: str
     pattern: CompositionPattern
     steps: List[str] = field(default_factory=list)
     description: str = ""
     created_at: datetime = field(default_factory=datetime.utcnow)
     errors: List[Dict[str, Any]] = field(default_factory=list)
-    
+
     def get_metadata(self) -> Dict[str, Any]:
         """Get composition metadata"""
         return {
@@ -124,35 +124,35 @@ class ComposedOrchestrator:
             "created_at": self.created_at.isoformat(),
             "description": self.description,
         }
-    
+
     def add_step(self, step: str) -> None:
         """Add step to composition
-        
+
         Args:
             step: Step identifier to add
         """
         self.steps.append(step)
-    
+
     def remove_step(self, step: str) -> None:
         """Remove step from composition
-        
+
         Args:
             step: Step identifier to remove
-            
+
         Raises:
             ValueError: If step not found
         """
         if step not in self.steps:
             raise ValueError(f"Step '{step}' not found in composition")
         self.steps.remove(step)
-    
+
     def handle_error(self, error: Exception, step: str) -> Dict[str, Any]:
         """Handle error in composition
-        
+
         Args:
             error: Exception that occurred
             step: Step where error occurred
-            
+
         Returns:
             Error handling result
         """
@@ -164,10 +164,10 @@ class ComposedOrchestrator:
         }
         self.errors.append(error_record)
         return error_record
-    
+
     def rollback(self) -> Dict[str, Any]:
         """Rollback composition to previous state
-        
+
         Returns:
             Rollback result
         """
@@ -176,10 +176,10 @@ class ComposedOrchestrator:
             "timestamp": datetime.utcnow().isoformat(),
             "errors_cleared": len(self.errors),
         }
-    
+
     def get_recovery_strategies(self) -> List[str]:
         """Get available recovery strategies
-        
+
         Returns:
             List of recovery strategies
         """
@@ -191,10 +191,10 @@ class ComposedOrchestrator:
             "use-fallback-value",
         ]
         return strategies
-    
+
     def get_best_practices(self) -> List[str]:
         """Get composition best practices
-        
+
         Returns:
             List of best practices
         """
@@ -213,7 +213,7 @@ class ComposedOrchestrator:
 @dataclass
 class DelegationResult:
     """Result of a delegation operation"""
-    
+
     delegator: str
     delegatee: str
     status: str

@@ -2,7 +2,7 @@
 Knowledge Inference - Reasoning over knowledge graph.
 """
 
-from typing import Dict, List, Set, Any
+from typing import Any, Dict, List, Set
 
 
 class KnowledgeInference:
@@ -27,10 +27,10 @@ class KnowledgeInference:
         reachable: Set[str] = set()
         to_visit = [source]
         visited = {source}
-        
+
         while to_visit:
             current = to_visit.pop(0)
-            
+
             for rel in self.relationships:
                 if rel["source"] == current and rel["type"] == rel_type:
                     target = rel["target"]
@@ -38,7 +38,7 @@ class KnowledgeInference:
                         reachable.add(target)
                         visited.add(target)
                         to_visit.append(target)
-        
+
         return reachable
 
     def analyze_impact(self, source: str) -> Set[str]:
@@ -47,10 +47,10 @@ class KnowledgeInference:
         affected: Set[str] = set()
         to_visit = [source]
         visited = {source}
-        
+
         while to_visit:
             current = to_visit.pop(0)
-            
+
             for rel in self.relationships:
                 if rel["source"] == current:
                     target = rel["target"]
@@ -58,7 +58,7 @@ class KnowledgeInference:
                         affected.add(target)
                         visited.add(target)
                         to_visit.append(target)
-        
+
         return affected
 
     def add_rule(self, rule: Dict[str, Any]) -> None:
@@ -68,14 +68,14 @@ class KnowledgeInference:
     def apply_rules(self, entity: Dict[str, Any]) -> Dict[str, Any]:
         """Apply rules to an entity."""
         result = dict(entity)
-        
+
         for rule in self.rules:
             condition = rule.get("condition", {})
             if all(entity.get(k) == v for k, v in condition.items()):
                 action = rule.get("action", "")
                 if action:
                     result["inferred_" + action] = True
-        
+
         return result
 
     def check_consistency(self) -> bool:
@@ -83,10 +83,10 @@ class KnowledgeInference:
         # Simple consistency check: ensure no contradictory relationships
         for rel1 in self.relationships:
             for rel2 in self.relationships:
-                if (rel1["source"] == rel2["target"] and 
+                if (rel1["source"] == rel2["target"] and
                     rel2["source"] == rel1["target"] and
                     rel1["type"] != rel2["type"]):
                     # Could be contradictory - simplified check
                     pass
-        
+
         return True

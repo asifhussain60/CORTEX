@@ -6,8 +6,8 @@ Author: CORTEX Framework
 """
 
 from dataclasses import dataclass
-from typing import Any, Dict, Optional, List, Callable
 from enum import Enum
+from typing import Any, Callable, Dict, List, Optional
 
 
 class RuleSeverity(Enum):

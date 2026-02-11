@@ -1,7 +1,9 @@
 """Tests for telemetry data scrubbing and schema validation."""
 
-import pytest
 from datetime import datetime
+
+import pytest
+
 from cortex.api.telemetry.schema import TelemetryEventSchema
 
 

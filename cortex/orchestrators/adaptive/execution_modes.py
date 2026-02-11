@@ -12,15 +12,14 @@ Author: Asif Hussain
 from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Dict, Optional
+
 from cortex.models.canonical_enums import ExecutionMode
-
-
 
 
 @dataclass
 class ModeConfiguration:
     """Configuration for an execution mode.
-    
+
     Attributes:
         mode: ExecutionMode
         timeout_seconds: Maximum execution time
@@ -30,7 +29,7 @@ class ModeConfiguration:
         retry_count: Number of retries on failure
         parallel_execution: Whether to parallelize operations
     """
-    
+
     mode: ExecutionMode
     timeout_seconds: float
     validation_level: float  # 0.0 = none, 1.0 = maximum
@@ -42,18 +41,18 @@ class ModeConfiguration:
 
 class AdaptiveExecutor:
     """Executes tasks with configurable performance/quality trade-offs.
-    
+
     Provides three execution modes:
     - FAST: Minimizes overhead and latency
     - BALANCED: Optimizes for common use cases
     - THOROUGH: Maximizes validation and reliability
-    
+
     Example:
         >>> executor = AdaptiveExecutor()
         >>> executor.set_execution_mode(ExecutionMode.FAST)
         >>> result = executor.execute({"task": "example"})
     """
-    
+
     def __init__(self) -> None:
         """Initialize the AdaptiveExecutor with mode configurations."""
         self._mode_configs: Dict[ExecutionMode, ModeConfiguration] = {
@@ -86,67 +85,67 @@ class AdaptiveExecutor:
             ),
         }
         self._current_mode = ExecutionMode.BALANCED
-    
+
     def set_execution_mode(self, mode: ExecutionMode) -> None:
         """Set the execution mode.
-        
+
         Args:
             mode: ExecutionMode to use
-            
+
         Raises:
             ValueError: If mode is not an ExecutionMode
         """
         if not isinstance(mode, ExecutionMode):
             raise ValueError("mode must be an ExecutionMode")
         self._current_mode = mode
-    
+
     def get_execution_mode(self) -> ExecutionMode:
         """Get the current execution mode.
-        
+
         Returns:
             Current ExecutionMode
         """
         return self._current_mode
-    
+
     def get_mode_config(
         self,
         mode: Optional[ExecutionMode] = None,
     ) -> ModeConfiguration:
         """Get configuration for a mode.
-        
+
         Args:
             mode: ExecutionMode (uses current if not specified)
-            
+
         Returns:
             ModeConfiguration for the mode
         """
         if mode is None:
             mode = self._current_mode
         return self._mode_configs[mode]
-    
+
     def execute(
         self,
         task: Any,
         context: Optional[Dict[str, Any]] = None,
     ) -> Any:
         """Execute a task with current mode configuration.
-        
+
         Args:
             task: Task to execute
             context: Optional execution context
-            
+
         Returns:
             Task result
         """
         if context is None:
             context = {}
-        
+
         config = self.get_mode_config()
-        
+
         # Simulate execution with mode-specific behavior
         if config.validation_level > 0:
             self._validate_task(task)
-        
+
         if config.retry_count > 0:
             return self._execute_with_retries(
                 task,
@@ -155,30 +154,30 @@ class AdaptiveExecutor:
             )
         else:
             return self._execute_once(task, context)
-    
+
     def _validate_task(self, task: Any) -> None:
         """Validate task based on current validation level.
-        
+
         Args:
             task: Task to validate
-            
+
         Raises:
             ValueError: If task is invalid
         """
         if not task:
             raise ValueError("Task cannot be None or empty")
-    
+
     def _execute_once(
         self,
         task: Any,
         context: Dict[str, Any],
     ) -> Any:
         """Execute task once without retries.
-        
+
         Args:
             task: Task to execute
             context: Execution context
-            
+
         Returns:
             Execution result
         """
@@ -187,7 +186,7 @@ class AdaptiveExecutor:
             "task": task,
             "mode": self._current_mode.value,
         }
-    
+
     def _execute_with_retries(
         self,
         task: Any,
@@ -195,20 +194,20 @@ class AdaptiveExecutor:
         context: Dict[str, Any],
     ) -> Any:
         """Execute task with retries on failure.
-        
+
         Args:
             task: Task to execute
             retries: Number of retries allowed
             context: Execution context
-            
+
         Returns:
             Execution result
-            
+
         Raises:
             Exception: If all retries fail
         """
         last_error = None
-        
+
         for attempt in range(retries + 1):
             try:
                 return self._execute_once(task, context)
@@ -216,6 +215,6 @@ class AdaptiveExecutor:
                 last_error = e
                 if attempt == retries:
                     raise
-        
+
         if last_error:
             raise last_error

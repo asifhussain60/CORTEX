@@ -13,8 +13,8 @@ Phase: 56 - LENS/Intelligence Hybrid Architecture Audit Integration
 # Authority: Phase 56 YAML + Enhanced Audit Checklist (2026-02-09)
 # ============================================================================
 
-from typing import List, Dict
 from dataclasses import dataclass
+from typing import Dict, List
 
 
 @dataclass
@@ -40,7 +40,7 @@ PHASE_56_AUDIT_ALIGNMENT: List[AuditCheckMapping] = [
         gate_level="Gate 2 (Pre-Execution)",
         coverage="FULL"
     ),
-    
+
     # Criterion 2: Backward compatibility maintained
     AuditCheckMapping(
         success_criterion="Backward compatibility maintained (all MCP tools work)",
@@ -49,7 +49,7 @@ PHASE_56_AUDIT_ALIGNMENT: List[AuditCheckMapping] = [
         gate_level="Gate 2 (Pre-Execution)",
         coverage="FULL"
     ),
-    
+
     # Criterion 3: Performance no regression
     AuditCheckMapping(
         success_criterion="Performance: No regression (< 5% latency increase)",
@@ -58,7 +58,7 @@ PHASE_56_AUDIT_ALIGNMENT: List[AuditCheckMapping] = [
         gate_level="Gate 4 (Post-Execution)",
         coverage="PARTIAL"  # Need explicit <5% threshold check
     ),
-    
+
     # Criterion 4: Test coverage ≥ 90%
     AuditCheckMapping(
         success_criterion="Test coverage ≥ 90% for pilot engine",
@@ -67,7 +67,7 @@ PHASE_56_AUDIT_ALIGNMENT: List[AuditCheckMapping] = [
         gate_level="Gate 4 (Post-Execution)",
         coverage="PARTIAL"  # Threshold is 80%, need 90% for Phase 56
     ),
-    
+
     # Architecture alignment checks
     AuditCheckMapping(
         success_criterion="Clean LENS/Intelligence separation",
@@ -76,7 +76,7 @@ PHASE_56_AUDIT_ALIGNMENT: List[AuditCheckMapping] = [
         gate_level="Gate 1 (Design)",
         coverage="FULL"
     ),
-    
+
     AuditCheckMapping(
         success_criterion="Single entry point for synthesis",
         audit_check="P1 — Intelligence Architecture: Synthesis Duplication",
@@ -84,7 +84,7 @@ PHASE_56_AUDIT_ALIGNMENT: List[AuditCheckMapping] = [
         gate_level="Gate 2 (Pre-Execution)",
         coverage="FULL"
     ),
-    
+
     AuditCheckMapping(
         success_criterion="Registry-wiring synchronization",
         audit_check="P1 — Wiring Integrity: Registry-Wiring Sync",
@@ -92,7 +92,7 @@ PHASE_56_AUDIT_ALIGNMENT: List[AuditCheckMapping] = [
         gate_level="Gate 2 (Pre-Execution)",
         coverage="FULL"
     ),
-    
+
     # Knowledge synthesis checks
     AuditCheckMapping(
         success_criterion="Company domain loader consolidation",
@@ -101,7 +101,7 @@ PHASE_56_AUDIT_ALIGNMENT: List[AuditCheckMapping] = [
         gate_level="Gate 5 (Audit)",
         coverage="FULL"
     ),
-    
+
     AuditCheckMapping(
         success_criterion="Synthesis timing consistency",
         audit_check="P2 — Knowledge Synthesis: Synthesis Timing",
@@ -124,10 +124,10 @@ def analyze_coverage() -> Dict[str, int]:
         "MISSING": 0,
         "TOTAL": len(PHASE_56_AUDIT_ALIGNMENT)
     }
-    
+
     for mapping in PHASE_56_AUDIT_ALIGNMENT:
         coverage_summary[mapping.coverage] += 1
-    
+
     return coverage_summary
 
 
@@ -139,10 +139,10 @@ def generate_alignment_report() -> str:
 ## Summary
 
 """
-    
+
     coverage = analyze_coverage()
     coverage_pct = (coverage["FULL"] / coverage["TOTAL"]) * 100
-    
+
     report += f"""
 | Metric | Value |
 |--------|-------|
@@ -156,31 +156,31 @@ def generate_alignment_report() -> str:
 | Gate | Checks | Coverage |
 |------|--------|----------|
 """
-    
+
     gate_counts = {}
     for mapping in PHASE_56_AUDIT_ALIGNMENT:
         gate = mapping.gate_level
         if gate not in gate_counts:
             gate_counts[gate] = {"FULL": 0, "PARTIAL": 0, "MISSING": 0}
         gate_counts[gate][mapping.coverage] += 1
-    
+
     for gate, counts in sorted(gate_counts.items()):
         total = sum(counts.values())
         full_pct = (counts["FULL"] / total) * 100 if total > 0 else 0
         report += f"| {gate} | {total} | {counts['FULL']}/{total} ({full_pct:.0f}%) |\n"
-    
+
     report += """
 ## Detailed Mapping
 
 | Success Criterion | Audit Check | Detection Tool | Gate | Coverage |
 |-------------------|-------------|----------------|------|----------|
 """
-    
+
     for mapping in PHASE_56_AUDIT_ALIGNMENT:
         criterion_short = mapping.success_criterion[:50]
         check_short = mapping.audit_check[:40]
         report += f"| {criterion_short} | {check_short} | `{mapping.detection_tool}` | {mapping.gate_level.split()[0]} | {mapping.coverage} |\n"
-    
+
     report += """
 ## Recommendations
 
@@ -222,7 +222,7 @@ Partial coverage items (performance, test coverage) addressable via phase-specif
 
 **Recommendation:** Proceed with Phase 56 pilot. Audit infrastructure ready.
 """
-    
+
     return report
 
 

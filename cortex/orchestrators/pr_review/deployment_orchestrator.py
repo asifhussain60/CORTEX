@@ -3,12 +3,12 @@ Phase 52 S6: Deployment & Monitoring Orchestrator
 Handles deployment strategies, monitoring setup, health checks, and metrics collection.
 """
 
+import json
+import logging
 from dataclasses import dataclass, field
+from datetime import datetime, timedelta
 from enum import Enum
 from typing import Dict, List, Optional, Tuple
-import logging
-from datetime import datetime, timedelta
-import json
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +54,7 @@ class HealthCheckConfig:
     healthy_threshold: int = 2
     endpoint: Optional[str] = None
     script_path: Optional[str] = None
-    
+
     def validate(self) -> Tuple[bool, str]:
         """Validate health check configuration."""
         if self.interval_seconds <= 0:
@@ -78,7 +78,7 @@ class MetricDefinition:
     unit: str
     description: str
     tags: Dict[str, str] = field(default_factory=dict)
-    
+
     def to_dict(self) -> dict:
         """Convert to dictionary."""
         return {
@@ -99,7 +99,7 @@ class AlertRule:
     severity: AlertSeverity
     duration_seconds: int
     description: str
-    
+
     def validate(self) -> Tuple[bool, str]:
         """Validate alert rule."""
         if not self.metric_name:
@@ -121,7 +121,7 @@ class DeploymentConfig:
     termination_grace_period_seconds: int = 30
     revision_history_limit: int = 10
     canary_percentage: Optional[int] = None  # For canary deployments
-    
+
     def validate(self) -> Tuple[bool, str]:
         """Validate deployment config."""
         if self.replicas <= 0:
@@ -146,7 +146,7 @@ class DeploymentPlan:
     estimated_duration_minutes: int
     rollback_strategy: str
     validation_steps: List[str]
-    
+
     def to_dict(self) -> dict:
         """Convert to dictionary."""
         return {
@@ -169,13 +169,13 @@ class DeploymentMetrics:
     failed_replicas: int = 0
     health_check_failures: int = 0
     error_messages: List[str] = field(default_factory=list)
-    
+
     @property
     def success_rate(self) -> float:
         """Calculate success rate."""
         total = self.successful_replicas + self.failed_replicas
         return (self.successful_replicas / total * 100) if total > 0 else 0.0
-    
+
     @property
     def duration_seconds(self) -> int:
         """Calculate duration."""
@@ -192,7 +192,7 @@ class HealthStatus:
     metrics: Dict[str, float]
     last_check_time: datetime
     consecutive_failures: int = 0
-    
+
     def to_dict(self) -> dict:
         """Convert to dictionary."""
         return {
@@ -207,12 +207,12 @@ class HealthStatus:
 
 class HealthChecker:
     """Manages health checks."""
-    
+
     def __init__(self):
         """Initialize health checker."""
         self.checks: Dict[str, HealthCheckConfig] = {}
         self.last_results: Dict[str, Tuple[datetime, bool]] = {}
-    
+
     def add_check(self, name: str, config: HealthCheckConfig) -> Tuple[bool, str]:
         """Add a health check."""
         valid, msg = config.validate()
@@ -221,14 +221,14 @@ class HealthChecker:
         self.checks[name] = config
         logger.info(f"Added health check: {name}")
         return (True, f"Added health check {name}")
-    
+
     def run_check(self, name: str) -> Tuple[bool, str]:
         """Run a specific health check."""
         if name not in self.checks:
             return (False, f"Check not found: {name}")
-        
+
         config = self.checks[name]
-        
+
         # Simulate health check based on type
         if config.check_type == HealthCheckType.HTTP:
             result = self._check_http(config)
@@ -238,33 +238,33 @@ class HealthChecker:
             result = self._check_script(config)
         else:
             result = (True, "Container check passed")
-        
+
         self.last_results[name] = (datetime.now(), result[0])
         return result
-    
+
     def _check_http(self, config: HealthCheckConfig) -> Tuple[bool, str]:
         """Check HTTP endpoint."""
         # In production, would use requests library
         return (True, f"HTTP check passed for {config.endpoint}")
-    
+
     def _check_tcp(self, config: HealthCheckConfig) -> Tuple[bool, str]:
         """Check TCP port."""
         # In production, would use socket
-        return (True, f"TCP check passed")
-    
+        return (True, "TCP check passed")
+
     def _check_script(self, config: HealthCheckConfig) -> Tuple[bool, str]:
         """Check using script."""
         # In production, would execute script
         return (True, f"Script check passed: {config.script_path}")
-    
+
     def get_status(self) -> HealthStatus:
         """Get overall health status."""
         component_statuses = {}
         for name, (timestamp, healthy) in self.last_results.items():
             component_statuses[name] = healthy
-        
+
         overall_healthy = all(component_statuses.values()) if component_statuses else True
-        
+
         return HealthStatus(
             timestamp=datetime.now(),
             overall_healthy=overall_healthy,
@@ -276,13 +276,13 @@ class HealthChecker:
 
 class MetricsCollector:
     """Collects and stores metrics."""
-    
+
     def __init__(self):
         """Initialize metrics collector."""
         self.metrics: Dict[str, MetricDefinition] = {}
         self.data: Dict[str, List[Tuple[datetime, float]]] = {}
         self.retention_hours = 24
-    
+
     def define_metric(self, definition: MetricDefinition) -> Tuple[bool, str]:
         """Define a new metric."""
         if definition.name in self.metrics:
@@ -291,12 +291,12 @@ class MetricsCollector:
         self.data[definition.name] = []
         logger.info(f"Defined metric: {definition.name}")
         return (True, f"Defined metric {definition.name}")
-    
+
     def record_metric(self, metric_name: str, value: float) -> Tuple[bool, str]:
         """Record a metric value."""
         if metric_name not in self.metrics:
             return (False, f"Metric not defined: {metric_name}")
-        
+
         self.data[metric_name].append((datetime.now(), value))
         # Clean old data
         cutoff = datetime.now() - timedelta(hours=self.retention_hours)
@@ -304,16 +304,16 @@ class MetricsCollector:
             (ts, v) for ts, v in self.data[metric_name] if ts > cutoff
         ]
         return (True, f"Recorded metric {metric_name}")
-    
+
     def get_metric_stats(self, metric_name: str) -> Dict[str, float]:
         """Get statistics for a metric."""
         if metric_name not in self.data:
             return {}
-        
+
         values = [v for _, v in self.data[metric_name]]
         if not values:
             return {}
-        
+
         return {
             "count": len(values),
             "min": min(values),
@@ -321,7 +321,7 @@ class MetricsCollector:
             "avg": sum(values) / len(values),
             "latest": values[-1] if values else 0
         }
-    
+
     def get_all_metrics(self) -> Dict[str, dict]:
         """Get all metric definitions."""
         return {name: defn.to_dict() for name, defn in self.metrics.items()}
@@ -329,13 +329,13 @@ class MetricsCollector:
 
 class Alerting:
     """Manages alert rules and evaluations."""
-    
+
     def __init__(self, metrics_collector: MetricsCollector):
         """Initialize alerting system."""
         self.metrics_collector = metrics_collector
         self.rules: Dict[str, AlertRule] = {}
         self.active_alerts: Dict[str, datetime] = {}
-    
+
     def add_rule(self, rule: AlertRule) -> Tuple[bool, str]:
         """Add an alert rule."""
         valid, msg = rule.validate()
@@ -346,7 +346,7 @@ class Alerting:
         self.rules[rule.name] = rule
         logger.info(f"Added alert rule: {rule.name}")
         return (True, f"Added alert rule {rule.name}")
-    
+
     def evaluate_rules(self) -> List[Tuple[str, AlertSeverity, str]]:
         """Evaluate all alert rules."""
         alerts = []
@@ -356,7 +356,7 @@ class Alerting:
                 alerts.append((rule_name, rule.severity, rule.description))
                 self.active_alerts[rule_name] = datetime.now()
         return alerts
-    
+
     def _evaluate_condition(self, condition: str, value: float) -> bool:
         """Evaluate a condition string."""
         # Simple condition evaluation (e.g., "value > 100")
@@ -369,7 +369,7 @@ class Alerting:
 
 class DeploymentOrchestrator:
     """Main deployment orchestrator."""
-    
+
     def __init__(self):
         """Initialize deployment orchestrator."""
         self.deployments: Dict[str, DeploymentPlan] = {}
@@ -377,25 +377,25 @@ class DeploymentOrchestrator:
         self.health_checker = HealthChecker()
         self.metrics_collector = MetricsCollector()
         self.alerting = Alerting(self.metrics_collector)
-    
+
     def plan_deployment(
-        self, 
-        deployment_type: DeploymentType, 
+        self,
+        deployment_type: DeploymentType,
         config: DeploymentConfig
     ) -> Tuple[bool, DeploymentPlan]:
         """Plan a deployment."""
         valid, msg = config.validate()
         if not valid:
             return (False, None)
-        
+
         deployment_id = f"deploy-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
-        
+
         # Generate stages based on deployment type
         stages = self._generate_stages(deployment_type, config)
-        
+
         # Estimate duration
         estimated_duration = len(stages) * 5
-        
+
         plan = DeploymentPlan(
             deployment_id=deployment_id,
             deployment_type=deployment_type,
@@ -409,14 +409,14 @@ class DeploymentOrchestrator:
                 "Validate service connectivity"
             ]
         )
-        
+
         self.deployments[deployment_id] = plan
         logger.info(f"Created deployment plan: {deployment_id}")
         return (True, plan)
-    
+
     def _generate_stages(
-        self, 
-        deployment_type: DeploymentType, 
+        self,
+        deployment_type: DeploymentType,
         config: DeploymentConfig
     ) -> List[str]:
         """Generate deployment stages."""
@@ -451,32 +451,32 @@ class DeploymentOrchestrator:
                 "Health verification",
                 "Cleanup old container"
             ]
-    
+
     def execute_deployment(self, deployment_id: str) -> Tuple[bool, DeploymentMetrics]:
         """Execute a deployment."""
         if deployment_id not in self.deployments:
             return (False, None)
-        
+
         plan = self.deployments[deployment_id]
         metrics = DeploymentMetrics(
             deployment_id=deployment_id,
             start_time=datetime.now()
         )
-        
+
         # Simulate deployment execution
         metrics.successful_replicas = plan.deployment_type.value.count('a') % 3 + 1
         metrics.failed_replicas = 0
         metrics.end_time = datetime.now()
-        
+
         self.deployment_metrics[deployment_id] = metrics
         logger.info(f"Executed deployment: {deployment_id}")
         return (True, metrics)
-    
+
     def get_deployment_status(self, deployment_id: str) -> Optional[Dict]:
         """Get deployment status."""
         if deployment_id not in self.deployment_metrics:
             return None
-        
+
         metrics = self.deployment_metrics[deployment_id]
         return {
             "deployment_id": deployment_id,
@@ -486,7 +486,7 @@ class DeploymentOrchestrator:
             "failed_replicas": metrics.failed_replicas,
             "health_check_failures": metrics.health_check_failures
         }
-    
+
     def get_system_health(self) -> Dict:
         """Get overall system health."""
         health_status = self.health_checker.get_status()

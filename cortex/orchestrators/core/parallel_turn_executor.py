@@ -15,14 +15,14 @@ Production Ready: ✅
 """
 
 import asyncio
-from dataclasses import dataclass, field
-from typing import List, Dict, Any, Optional, Callable, Coroutine
-from enum import Enum
-import time
-from functools import wraps
 import logging
-from cortex.models.canonical_enums import ExecutionMode
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from functools import wraps
+from typing import Any, Callable, Coroutine, Dict, List, Optional
 
+from cortex.models.canonical_enums import ExecutionMode
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +35,7 @@ class TurnDependency:
     turn_id: str
     depends_on: List[str] = field(default_factory=list)  # Turn IDs this depends on
     can_parallelize_with: List[str] = field(default_factory=list)  # Safe to parallelize
-    
+
     def is_independent(self, other: "TurnDependency") -> bool:
         """Check if two turns can execute in parallel"""
         return (
@@ -64,7 +64,7 @@ class ParallelExecutionStats:
     speedup_factor: float = 1.0
     parallel_sections: int = 0
     failed_turns: int = 0
-    
+
     def __post_init__(self):
         """Calculate speedup after initialization"""
         if self.parallel_time > 0:
@@ -74,7 +74,7 @@ class ParallelExecutionStats:
 class ParallelTurnExecutor:
     """
     Executes turns concurrently using asyncio.
-    
+
     Analyzes dependencies between turns and executes independent turns
     in parallel for improved performance.
     """
@@ -87,7 +87,7 @@ class ParallelTurnExecutor:
     ):
         """
         Initialize parallel turn executor.
-        
+
         Args:
             execution_mode: Strategy for parallelization
             max_concurrent: Max concurrent turn executions
@@ -106,12 +106,12 @@ class ParallelTurnExecutor:
     ) -> List[TurnExecutionResult]:
         """
         Execute turns with optional parallelization.
-        
+
         Args:
             turns: List of turn configurations
             executor_func: Async function to execute each turn
             dependencies: Optional dependency graph between turns
-        
+
         Returns:
             List of TurnExecutionResult in original order
         """
@@ -130,7 +130,7 @@ class ParallelTurnExecutor:
         """Execute turns sequentially (baseline)"""
         results = []
         start_time = time.time()
-        
+
         for i, turn in enumerate(turns):
             try:
                 turn_start = time.time()
@@ -139,7 +139,7 @@ class ParallelTurnExecutor:
                     timeout=self.timeout_per_turn,
                 )
                 execution_time = time.time() - turn_start
-                
+
                 results.append(TurnExecutionResult(
                     turn_id=turn.get("id", f"turn_{i}"),
                     status="success",
@@ -160,7 +160,7 @@ class ParallelTurnExecutor:
                     error=e,
                     attempted_parallel=False,
                 ))
-        
+
         sequential_time = time.time() - start_time
         self.stats = ParallelExecutionStats(
             total_turns=len(turns),
@@ -169,7 +169,7 @@ class ParallelTurnExecutor:
             speedup_factor=1.0,
             parallel_sections=0,
         )
-        
+
         return results
 
     async def _execute_parallel(
@@ -180,14 +180,14 @@ class ParallelTurnExecutor:
     ) -> List[TurnExecutionResult]:
         """Execute all turns in parallel"""
         semaphore = asyncio.Semaphore(self.max_concurrent)
-        
+
         async def bounded_executor(turn: Dict[str, Any], idx: int):
             async with semaphore:
                 return await executor_func(turn, idx)
-        
+
         start_time = time.time()
         parallel_time = time.time() - start_time
-        
+
         # Create tasks
         tasks = [
             self._wrap_executor(
@@ -196,16 +196,16 @@ class ParallelTurnExecutor:
             )
             for i, turn in enumerate(turns)
         ]
-        
+
         # Execute all in parallel
         results = await asyncio.gather(*tasks, return_exceptions=False)
-        
+
         parallel_time = time.time() - start_time
-        
+
         # Calculate statistics
         sequential_time = sum(r.execution_time for r in results)
         speedup = sequential_time / parallel_time if parallel_time > 0 else 1.0
-        
+
         self.stats = ParallelExecutionStats(
             total_turns=len(turns),
             sequential_time=sequential_time,
@@ -214,7 +214,7 @@ class ParallelTurnExecutor:
             parallel_sections=1,
             failed_turns=sum(1 for r in results if r.status == "failed"),
         )
-        
+
         return results
 
     async def _execute_hybrid(
@@ -225,19 +225,19 @@ class ParallelTurnExecutor:
     ) -> List[TurnExecutionResult]:
         """
         Analyze dependencies and parallelize independent sections.
-        
+
         Falls back to sequential if no parallelization opportunities.
         """
         if not dependencies:
             # No dependency info, use full parallelization
             return await self._execute_parallel(turns, executor_func, dependencies)
-        
+
         # Build execution groups (dependent turns must be sequential)
         execution_groups = self._build_execution_groups(dependencies)
-        
+
         results: List[TurnExecutionResult] = []
         start_time = time.time()
-        
+
         for group in execution_groups:
             group_tasks = [
                 self._wrap_executor(
@@ -248,11 +248,11 @@ class ParallelTurnExecutor:
             ]
             group_results = await asyncio.gather(*group_tasks, return_exceptions=False)
             results.extend(group_results)
-        
+
         parallel_time = time.time() - start_time
         sequential_time = sum(r.execution_time for r in results)
         speedup = sequential_time / parallel_time if parallel_time > 0 else 1.0
-        
+
         self.stats = ParallelExecutionStats(
             total_turns=len(turns),
             sequential_time=sequential_time,
@@ -261,7 +261,7 @@ class ParallelTurnExecutor:
             parallel_sections=len(execution_groups),
             failed_turns=sum(1 for r in results if r.status == "failed"),
         )
-        
+
         return results
 
     async def _wrap_executor(
@@ -274,7 +274,7 @@ class ParallelTurnExecutor:
             turn_start = time.time()
             result = await asyncio.wait_for(coro, timeout=self.timeout_per_turn)
             execution_time = time.time() - turn_start
-            
+
             return TurnExecutionResult(
                 turn_id=turn_id,
                 status="success",
@@ -302,28 +302,28 @@ class ParallelTurnExecutor:
     ) -> List[List[int]]:
         """
         Build execution groups where turns in same group can parallelize.
-        
+
         Returns list of lists, where each inner list contains indices
         of turns that can execute in parallel.
         """
         # Simple dependency resolution: turns with no deps can go first
         groups = []
         processed = set()
-        
+
         for turn_id, dep in dependencies.items():
             if not dep.depends_on:
                 groups.append([turn_id])
                 processed.add(turn_id)
-        
+
         # TODO: Implement full topological sort for complex dependency graphs
-        
+
         return groups
 
 
 def enable_parallel_execution(func: Callable) -> Callable:
     """
     Decorator to enable parallel turn execution for orchestrator methods.
-    
+
     Usage:
         @enable_parallel_execution
         async def execute_turns(self, turns):
@@ -334,5 +334,5 @@ def enable_parallel_execution(func: Callable) -> Callable:
         execution_mode = kwargs.pop("execution_mode", ExecutionMode.HYBRID)
         executor = ParallelTurnExecutor(execution_mode=execution_mode)
         return await func(*args, executor=executor, **kwargs)
-    
+
     return wrapper

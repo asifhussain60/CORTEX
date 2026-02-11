@@ -1,8 +1,10 @@
 """Tests for telemetry aggregation (AC-UNIFIED-DEPLOY-001-03)."""
 
-import pytest
 from datetime import datetime, timedelta
-from cortex.api.telemetry.aggregator import TelemetryAggregator, ErrorPattern
+
+import pytest
+
+from cortex.api.telemetry.aggregator import ErrorPattern, TelemetryAggregator
 
 
 class TestTelemetryAggregator:

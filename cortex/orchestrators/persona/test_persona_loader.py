@@ -6,15 +6,21 @@ Authority: CORE-008 (TDD-first), CORE-035 (Single canonical implementation)
 Status: TDD RED (tests failing, expecting implementation to follow)
 """
 
-import pytest
+import tempfile
 from pathlib import Path
 from typing import Dict
+
+import pytest
 import yaml
-import tempfile
 
 from cortex.orchestrators.persona.models import (
-    PersonaConfig, DepthConfig, PersonaId, DepthLevel, SessionContext,
-    UserPreferences, WorkspaceConfig
+    DepthConfig,
+    DepthLevel,
+    PersonaConfig,
+    PersonaId,
+    SessionContext,
+    UserPreferences,
+    WorkspaceConfig,
 )
 from cortex.orchestrators.persona.persona_loader import PersonaLoader
 
@@ -39,7 +45,7 @@ class TestPersonaLoaderBasics:
         """T3: load() method successfully parses personas.yaml"""
         loader = PersonaLoader()
         config = loader.load()
-        
+
         assert config is not None
         assert isinstance(config, dict)
         assert "personas" in config
@@ -50,7 +56,7 @@ class TestPersonaLoaderBasics:
         loader = PersonaLoader()
         config1 = loader.load()
         config2 = loader.load()
-        
+
         assert config1 is config2  # Same object reference (cached)
 
 
@@ -61,7 +67,7 @@ class TestPersonaRetrieval:
         """T5: get_persona() returns PersonaConfig for valid ID"""
         loader = PersonaLoader()
         persona = loader.get_persona("engineer")
-        
+
         assert persona is not None
         assert isinstance(persona, PersonaConfig)
         assert persona.id == PersonaId.ENGINEER
@@ -70,14 +76,14 @@ class TestPersonaRetrieval:
         """T6: get_persona() returns None for non-existent persona"""
         loader = PersonaLoader()
         persona = loader.get_persona("nonexistent_role")
-        
+
         assert persona is None
 
     def test_get_all_personas_returns_dict(self):
         """T7: get_all_personas() returns complete persona dictionary"""
         loader = PersonaLoader()
         personas = loader.get_all_personas()
-        
+
         assert isinstance(personas, dict)
         assert len(personas) == 6  # 6 personas defined
         assert all(isinstance(v, PersonaConfig) for v in personas.values())
@@ -87,14 +93,14 @@ class TestPersonaRetrieval:
         loader = PersonaLoader()
         personas1 = loader.get_all_personas()
         personas2 = loader.get_all_personas()
-        
+
         assert personas1 is personas2  # Same object reference
 
     def test_get_all_personas_includes_all_six_personas(self):
         """T9: All 6 defined personas are loaded correctly"""
         loader = PersonaLoader()
         personas = loader.get_all_personas()
-        
+
         expected_personas = {
             "business_leader", "product_owner", "scrum_master",
             "tech_lead", "engineer", "unknown"
@@ -105,7 +111,7 @@ class TestPersonaRetrieval:
         """T10: PersonaConfig objects have all required attributes"""
         loader = PersonaLoader()
         persona = loader.get_persona("engineer")
-        
+
         assert persona.id == PersonaId.ENGINEER
         assert isinstance(persona.display_name, str)
         assert len(persona.display_name) > 0
@@ -121,7 +127,7 @@ class TestDepthLevelRetrieval:
         """T11: get_depth() returns DepthConfig for valid ID"""
         loader = PersonaLoader()
         depth = loader.get_depth("executive")
-        
+
         assert depth is not None
         assert isinstance(depth, DepthConfig)
         assert depth.id == DepthLevel.EXECUTIVE
@@ -130,14 +136,14 @@ class TestDepthLevelRetrieval:
         """T12: get_depth() returns None for non-existent depth"""
         loader = PersonaLoader()
         depth = loader.get_depth("invalid_depth")
-        
+
         assert depth is None
 
     def test_get_all_depths_returns_dict(self):
         """T13: get_all_depths() returns complete depth dictionary"""
         loader = PersonaLoader()
         depths = loader.get_all_depths()
-        
+
         assert isinstance(depths, dict)
         assert len(depths) == 4  # 4 depth levels defined
         assert all(isinstance(v, DepthConfig) for v in depths.values())
@@ -146,7 +152,7 @@ class TestDepthLevelRetrieval:
         """T14: All 4 depth levels are loaded correctly"""
         loader = PersonaLoader()
         depths = loader.get_all_depths()
-        
+
         expected_depths = {"executive", "standard", "detailed", "full"}
         assert set(depths.keys()) == expected_depths
 
@@ -158,7 +164,7 @@ class TestDefaultPersona:
         """T15: get_default_persona() returns engineer if available"""
         loader = PersonaLoader()
         default = loader.get_default_persona()
-        
+
         assert default is not None
         assert default.id == PersonaId.ENGINEER
 
@@ -167,14 +173,14 @@ class TestDefaultPersona:
         loader = PersonaLoader()
         default1 = loader.get_default_persona()
         default2 = loader.get_default_persona()
-        
+
         assert default1.id == default2.id
 
     def test_get_default_persona_not_none(self):
         """T17: get_default_persona() always returns a valid persona"""
         loader = PersonaLoader()
         default = loader.get_default_persona()
-        
+
         assert default is not None
         assert isinstance(default, PersonaConfig)
 
@@ -185,7 +191,7 @@ class TestPersonaYAMLValidation:
     def test_load_from_missing_file_raises_error(self):
         """T18: load() raises FileNotFoundError for missing file"""
         loader = PersonaLoader(config_path=Path("/nonexistent/path/personas.yaml"))
-        
+
         with pytest.raises(FileNotFoundError):
             loader.load()
 
@@ -194,7 +200,7 @@ class TestPersonaYAMLValidation:
         with tempfile.NamedTemporaryFile(mode='w', suffix='.yaml', delete=False) as f:
             f.write("invalid: yaml: [syntax:")
             temp_path = Path(f.name)
-        
+
         try:
             loader = PersonaLoader(config_path=temp_path)
             with pytest.raises(yaml.YAMLError):
@@ -207,10 +213,10 @@ class TestPersonaYAMLValidation:
         # Test that PersonaLoader skips personas with invalid enum values
         # The current implementation validates PersonaId enum membership
         loader = PersonaLoader()
-        
+
         # Get all personas - should only include valid ones
         personas = loader.get_all_personas()
-        
+
         # All returned personas should have valid PersonaIds
         for persona_id, persona in personas.items():
             assert isinstance(persona.id, PersonaId)
@@ -224,11 +230,11 @@ class TestPersonaLoaderIntegration:
     def test_full_workflow_load_persona_and_depth(self):
         """Integration: Load persona and its associated depth"""
         loader = PersonaLoader()
-        
+
         # Get engineer persona
         engineer = loader.get_persona("engineer")
         assert engineer is not None
-        
+
         # Get its associated depth
         if engineer.depth:
             depth = loader.get_depth(engineer.depth.value)
@@ -239,13 +245,13 @@ class TestPersonaLoaderIntegration:
         """Integration: Multiple loader instances have independent caches"""
         loader1 = PersonaLoader()
         loader2 = PersonaLoader()
-        
+
         # Load with first loader
         personas1 = loader1.get_all_personas()
-        
+
         # Second loader should have empty cache initially
         assert loader2._personas_cache is None
-        
+
         # After loading, both should have same data (not same reference)
         personas2 = loader2.get_all_personas()
         assert set(personas1.keys()) == set(personas2.keys())

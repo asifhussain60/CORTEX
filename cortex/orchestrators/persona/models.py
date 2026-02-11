@@ -5,8 +5,8 @@ Dataclasses representing personas, depth levels, and configuration.
 """
 
 from dataclasses import dataclass, field
-from typing import Optional, List, Dict, Any, Union
 from enum import Enum
+from typing import Any, Dict, List, Optional, Union
 
 
 class DepthLevel(str, Enum):

@@ -1,10 +1,10 @@
 """DevX Debugger for debugging and introspection."""
 
-from typing import Any, Dict, List
+import sys
+import traceback
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-import traceback
-import sys
+from typing import Any, Dict, List
 
 
 @dataclass
@@ -22,7 +22,7 @@ class DebugContext:
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for serialization.
-        
+
         Returns:
             Dictionary representation
         """
@@ -44,10 +44,10 @@ class DevxDebugger:
 
     def create_context(self, operation: str) -> DebugContext:
         """Create debug context.
-        
+
         Args:
             operation: Operation name
-            
+
         Returns:
             DebugContext
         """
@@ -62,12 +62,12 @@ class DevxDebugger:
         var_value: Any
     ) -> Dict[str, Any]:
         """Inspect a variable.
-        
+
         Args:
             context: Debug context
             var_name: Variable name
             var_value: Variable value
-            
+
         Returns:
             Inspection results
         """
@@ -81,10 +81,10 @@ class DevxDebugger:
 
     def get_stack_trace(self, context: DebugContext) -> str:
         """Get current stack trace.
-        
+
         Args:
             context: Debug context
-            
+
         Returns:
             Stack trace string
         """
@@ -93,12 +93,12 @@ class DevxDebugger:
         if exc_info[0] is not None:
             # Format just the exception type and message
             return f"{exc_info[0].__name__}: {exc_info[1]}"
-        
+
         return "".join(traceback.format_stack())
 
     def set_breakpoint(self, context: DebugContext, location: str) -> None:
         """Set a breakpoint.
-        
+
         Args:
             context: Debug context
             location: Breakpoint location
@@ -107,7 +107,7 @@ class DevxDebugger:
 
     def remove_breakpoint(self, context: DebugContext, location: str) -> None:
         """Remove a breakpoint.
-        
+
         Args:
             context: Debug context
             location: Breakpoint location

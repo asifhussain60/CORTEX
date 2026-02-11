@@ -4,13 +4,16 @@ Authority: Phase 52 S1
 AC_START: AC-PHASE52-S1-002
 """
 
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Dict, List, Optional, Any, Union
-from datetime import datetime
 import json
-from cortex.brain.core.result import Ok, Err
-from cortex.orchestrators.core.orchestrator_base_protocol import OrchestratorBaseProtocol
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional, Union
+
+from cortex.brain.core.result import Err, Ok
+from cortex.orchestrators.core.orchestrator_base_protocol import (
+    OrchestratorBaseProtocol,
+)
 
 
 @dataclass
@@ -184,7 +187,7 @@ class PRReviewOrchestrator(OrchestratorBaseProtocol):
         try:
             body = f"**{type.capitalize()} Issue**: {issue}\n\n"
             body += f"**Suggestion**: {suggestion}\n"
-            body += f"_Automated review by CORTEX PR Analyzer_"
+            body += "_Automated review by CORTEX PR Analyzer_"
             comment = ReviewComment(body=body, file=file, line=line)
             return Ok(value=comment)
         except Exception as e:
@@ -201,16 +204,16 @@ class PRReviewOrchestrator(OrchestratorBaseProtocol):
             issues_found = pr_context.get("issues_found", 0)
             coverage_delta = pr_context.get("coverage_delta", 0.0)
             risk_score = pr_context.get("risk_score", 0.0)
-            
+
             if (security_issues == 0 and issues_found == 0 and coverage_delta >= -0.02 and risk_score < 0.3):
                 return Ok(value=ReviewDecision(type="approve", reason="All checks passed", confidence=0.95))
-            
+
             if security_issues > 0 or risk_score > 0.7 or coverage_delta < -0.05:
                 return Ok(value=ReviewDecision(type="request_changes", reason=f"Issues found: {issues_found}, Risk: {risk_score:.1%}", confidence=0.85))
-            
+
             if issues_found > 0:
                 return Ok(value=ReviewDecision(type="comment", reason=f"Minor issues ({issues_found}) to address", confidence=0.75))
-            
+
             return Ok(value=ReviewDecision(type="comment", reason="Review completed", confidence=0.70))
         except Exception as e:
             return Err(error=f"Failed to compute decision: {str(e)}")
@@ -254,34 +257,34 @@ class PRReviewOrchestrator(OrchestratorBaseProtocol):
             pr_result = self.fetch_pr_info(repo, pr_number, mock_pr)
             if pr_result.is_err():
                 return Err(error=f"Failed to fetch PR: {pr_result.unwrap_err()}")
-            
+
             files_result = self.fetch_pr_files(repo, pr_number, mock_files)
             if files_result.is_err():
                 return Err(error=f"Failed to fetch files: {files_result.unwrap_err()}")
-            
+
             diff_result = self.fetch_diff_content(repo, pr_number, mock_diff)
             if diff_result.is_err():
                 return Err(error=f"Failed to fetch diff: {diff_result.unwrap_err()}")
-            
+
             analysis_result = self.analyze_pr_diff(pr_result.unwrap(), files_result.unwrap(), diff_result.unwrap())
             if analysis_result.is_err():
                 return Err(error=f"Analysis failed: {analysis_result.unwrap_err()}")
-            
+
             analysis = analysis_result.unwrap()
             secrets_result = self.check_for_secrets(diff_result.unwrap())
             security_issues = len(secrets_result.unwrap()) if secrets_result.is_ok() else 0
-            
+
             pr_context = {
                 "issues_found": len(analysis.issues_found),
                 "security_issues": security_issues,
                 "coverage_delta": 0.0,
                 "risk_score": analysis.risk_score,
             }
-            
+
             decision_result = self.compute_review_decision(pr_context)
             if decision_result.is_err():
                 return Err(error=f"Decision failed: {decision_result.unwrap_err()}")
-            
+
             decision = decision_result.unwrap()
             return Ok(value=self.ReviewResult(
                 decision_type=decision.type,
@@ -298,24 +301,24 @@ class PRReviewOrchestrator(OrchestratorBaseProtocol):
     def _execute_domain_logic(self, user_request: str, lens_context: Optional[Any], context: Dict[str, Any]) -> Union[Ok, Err]:
         """
         Execute Phase 5: Domain-specific orchestration logic (PR Review).
-        
+
         This implements the PR review domain logic required by OrchestratorBaseProtocol.
-        
+
         Args:
             user_request: Original user request
             lens_context: LENS context from Phase 1 (may be None)
             context: Request context with PR information
-        
+
         Returns:
             Result[Any]: Success with review result or Error
         """
         try:
             repo = context.get("repo")
             pr_number = context.get("pr_number")
-            
+
             if not repo or not pr_number:
                 return Err(error="Missing repo or pr_number in context")
-            
+
             # Execute the PR review workflow
             review_result = self.review_pr(
                 repo=repo,
@@ -324,7 +327,7 @@ class PRReviewOrchestrator(OrchestratorBaseProtocol):
                 mock_files=context.get("mock_files"),
                 mock_diff=context.get("mock_diff"),
             )
-            
+
             return review_result
         except Exception as e:
             return Err(error=f"Domain logic execution failed: {str(e)}")

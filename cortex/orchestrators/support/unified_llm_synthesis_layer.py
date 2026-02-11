@@ -9,19 +9,19 @@ AC_START: AC-UNIFIED-LLM-SYNTHESIS-001
 Authority: Phase 28.2.2 | CORE-008 (TDD) | CORE-035 (No Duplication)
 """
 
-from typing import Dict, Any, List, Optional
-from dataclasses import dataclass, field
-import logging
 import json
-from enum import Enum
+import logging
+from dataclasses import dataclass, field
 from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
 
 class LLMProvider(Enum):
     """Supported LLM providers."""
-    
+
     CLAUDE_SONNET = "claude-sonnet"
     GPT4 = "gpt-4"
     CLAUDE_OPUS = "claude-opus"
@@ -30,7 +30,7 @@ class LLMProvider(Enum):
 @dataclass
 class UseCase:
     """Business use case extracted by LLM."""
-    
+
     id: str
     title: str
     category: str
@@ -40,7 +40,7 @@ class UseCase:
     technical_details: Dict[str, List[str]]
     business_value: str
     confidence_score: float
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
@@ -59,7 +59,7 @@ class UseCase:
 @dataclass
 class ExecutiveSummary:
     """Executive summary narrative about the repository."""
-    
+
     overview: str
     purpose: str
     maturity_level: str  # "early", "growth", "mature", "legacy"
@@ -70,7 +70,7 @@ class ExecutiveSummary:
     technical_highlights: List[str]
     business_outcomes: List[str]
     integration_points: List[str]
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
@@ -90,7 +90,7 @@ class ExecutiveSummary:
 @dataclass
 class LLMSynthesisResult:
     """Complete LLM synthesis output."""
-    
+
     repository_name: str
     synthesis_timestamp: str
     executive_summary: ExecutiveSummary
@@ -98,7 +98,7 @@ class LLMSynthesisResult:
     architectural_insights: str
     risk_assessment: str
     recommendations: List[str]
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
@@ -115,7 +115,7 @@ class LLMSynthesisResult:
 class UnifiedLLMSynthesisLayer:
     """
     Single-call LLM synthesis orchestrator.
-    
+
     Converts multi-source analysis into:
     - Executive summary (repository narrative)
     - Business use cases (detailed with actors/flows)
@@ -123,12 +123,12 @@ class UnifiedLLMSynthesisLayer:
     - Risk assessment
     - Recommendations
     """
-    
+
     def __init__(self, provider: LLMProvider = LLMProvider.CLAUDE_SONNET):
         """Initialize synthesis layer."""
         self.provider = provider
         self.model = self._get_model_name()
-    
+
     def _get_model_name(self) -> str:
         """Get model name based on provider."""
         if self.provider == LLMProvider.CLAUDE_SONNET:
@@ -138,48 +138,48 @@ class UnifiedLLMSynthesisLayer:
         elif self.provider == LLMProvider.GPT4:
             return "gpt-4-turbo"
         return "claude-3-5-sonnet-20241022"  # Default
-    
+
     def synthesize(self, synthesis_input: Dict[str, Any]) -> LLMSynthesisResult:
         """
         Perform unified LLM synthesis.
-        
+
         Args:
             synthesis_input: Output from MultiSourceSynthesizer.to_dict()
-            
+
         Returns:
             LLMSynthesisResult with all synthesized content
         """
         repo_name = synthesis_input.get("repository_name", "Unknown")
-        
+
         logger.info(f"Starting unified LLM synthesis for {repo_name}")
-        
+
         # Build comprehensive synthesis prompt
         prompt = self._build_synthesis_prompt(synthesis_input)
-        
+
         # Call LLM with single request
         try:
             llm_response = self._call_llm(prompt)
-            
+
             # Parse LLM response
             result = self._parse_llm_response(llm_response, repo_name)
-            
+
             logger.info(f"LLM synthesis complete for {repo_name}")
             return result
-            
+
         except Exception as e:
             logger.error(f"LLM synthesis failed: {e}")
             # Return minimal valid result
             return self._empty_result(repo_name)
-    
+
     def _build_synthesis_prompt(self, synthesis_input: Dict[str, Any]) -> str:
         """Build comprehensive synthesis prompt."""
-        
+
         repo_name = synthesis_input.get("repository_name", "")
         lens = synthesis_input.get("lens_analysis", {})
         git = synthesis_input.get("git_history", {})
         config = synthesis_input.get("config_analysis", {})
         readme = synthesis_input.get("documentation", {}).get("readme", "")
-        
+
         prompt = f"""You are a technical business analyst helping to understand a software repository.
 
 Analyze the following repository data and provide comprehensive insights:
@@ -277,13 +277,13 @@ RESPOND WITH VALID JSON ONLY. No markdown, no explanation. Structure:
   "recommendations": [ /* array of strings */ ]
 }}
 """
-        
+
         return prompt
-    
+
     def _call_llm(self, prompt: str) -> str:
         """
         Call LLM with synthesis prompt.
-        
+
         Attempts to use GitHub Copilot's LLM (when running in VS Code),
         falls back to Anthropic API if available, otherwise uses mock response.
         """
@@ -295,13 +295,13 @@ RESPOND WITH VALID JSON ONLY. No markdown, no explanation. Structure:
                 return response
         except Exception as e:
             logger.debug(f"GitHub Copilot LLM not available: {e}")
-        
+
         # Strategy 2: Try Anthropic API (external)
         try:
             import anthropic
-            
+
             client = anthropic.Anthropic()
-            
+
             message = client.messages.create(
                 model=self.model,
                 max_tokens=4096,
@@ -309,84 +309,86 @@ RESPOND WITH VALID JSON ONLY. No markdown, no explanation. Structure:
                     {"role": "user", "content": prompt}
                 ]
             )
-            
+
             logger.info("Using Anthropic API for synthesis")
             return message.content[0].text
-            
+
         except ImportError:
             logger.debug("Anthropic client not available")
         except Exception as e:
             logger.warning(f"Anthropic API call failed: {e}")
-        
+
         # Strategy 3: Mock response (fallback)
         logger.warning("Using mock response (no LLM available)")
         return self._get_mock_response()
-    
+
     def _call_copilot_llm(self, prompt: str) -> str:
         """
         Attempt to use GitHub Copilot's LLM for synthesis.
-        
+
         GENERIC APPROACH: This method attempts to use the generic MCP tool
         cortex_synthesize_repository which works for ANY repository.
-        
+
         When running in Copilot Chat, the tool can be invoked directly
         and Copilot will generate the synthesis response using its inference.
-        
+
         This is repository-agnostic - it extracts synthesis data from the prompt
         and builds a generic request that works for any codebase.
         """
         try:
             # Try to import and use the generic synthesis tool
-            from cortex.mcp.tools.repository_synthesis_tool import cortex_synthesize_repository
-            
+            from cortex.mcp.tools.repository_synthesis_tool import (
+                cortex_synthesize_repository,
+            )
+
             # Extract repository data from prompt (generic parsing)
             # This works for any repository because we parse the structured data
             request_data = self._extract_synthesis_request_from_prompt(prompt)
-            
+
             # Call generic synthesis tool (works for any repo)
             result = cortex_synthesize_repository(request_data)
-            
+
             if result.get("success"):
                 synthesis = result.get("synthesis", {})
                 # Convert to expected JSON string format
                 return json.dumps(synthesis, indent=2)
             else:
                 raise Exception(f"Synthesis failed: {result.get('error')}")
-                
+
         except ImportError:
             logger.debug("Generic synthesis tool not available")
             raise NotImplementedError("GitHub Copilot synthesis tool not found")
         except Exception as e:
             logger.warning(f"Generic Copilot synthesis failed: {e}")
             raise
-    
+
     def _extract_synthesis_request_from_prompt(self, prompt: str) -> Dict[str, Any]:
         """
         Extract synthesis request data from prompt (GENERIC parser).
-        
+
         This method parses the structured prompt to extract:
         - Repository metadata
-        - LENS analysis results  
+        - LENS analysis results
         - Git history
         - Tech stack information
-        
+
         Works for ANY repository because it uses generic field parsing.
         """
         import re
-        
+
         # Generic extraction patterns (work for any repo)
         request_data = {}
-        
+
         # Extract repository name (generic)
         repo_match = re.search(r'REPOSITORY:\s*(.+)', prompt)
         if repo_match:
             request_data["repository_name"] = repo_match.group(1).strip()
-        
+
         # Extract path (generic)
         path_match = re.search(r'Path:\s*(.+)', prompt)
         if path_match:
             request_data["repository_path"] = path_match.group(1).strip()
-        
+
         # Extract LENS patterns (generic JSON parsing)
         patterns_match = re.search(r'Sample patterns:\s*(\[[\s\S]*?\])', prompt)
         if patterns_match:
@@ -394,7 +396,7 @@ RESPOND WITH VALID JSON ONLY. No markdown, no explanation. Structure:
                 request_data["lens_patterns"] = json.loads(patterns_match.group(1))
             except (json.JSONDecodeError, ValueError, TypeError):
                 request_data["lens_patterns"] = []
-        
+
         # Extract API contracts (generic JSON parsing)
         api_match = re.search(r'Sample API contracts:\s*(\[[\s\S]*?\])', prompt)
         if api_match:
@@ -402,16 +404,16 @@ RESPOND WITH VALID JSON ONLY. No markdown, no explanation. Structure:
                 request_data["api_contracts"] = json.loads(api_match.group(1))
             except (json.JSONDecodeError, ValueError, TypeError):
                 request_data["api_contracts"] = []
-        
+
         # Extract Git data (generic field extraction)
         age_match = re.search(r'Age \(days\):\s*(\d+)', prompt)
         if age_match:
             request_data["age_days"] = int(age_match.group(1))
-        
+
         commits_match = re.search(r'Total commits:\s*(\d+)', prompt)
         if commits_match:
             request_data["total_commits"] = int(commits_match.group(1))
-        
+
         # Extract tech stack (generic list parsing)
         lang_match = re.search(r'Languages:\s*(\[.*?\])', prompt)
         if lang_match:
@@ -419,14 +421,14 @@ RESPOND WITH VALID JSON ONLY. No markdown, no explanation. Structure:
                 request_data["languages"] = json.loads(lang_match.group(1))
             except (json.JSONDecodeError, ValueError, TypeError):
                 request_data["languages"] = []
-        
+
         frameworks_match = re.search(r'Frameworks:\s*(\[.*?\])', prompt)
         if frameworks_match:
             try:
                 request_data["frameworks"] = json.loads(frameworks_match.group(1))
             except (json.JSONDecodeError, ValueError, TypeError):
                 request_data["frameworks"] = []
-        
+
         # Set defaults for missing fields (generic)
         request_data.setdefault("repository_name", "Unknown")
         request_data.setdefault("repository_path", "")
@@ -445,9 +447,9 @@ RESPOND WITH VALID JSON ONLY. No markdown, no explanation. Structure:
         request_data.setdefault("has_ci_cd", False)
         request_data.setdefault("containerized", False)
         request_data.setdefault("readme_summary", "")
-        
+
         return request_data
-    
+
     def _get_mock_response(self) -> str:
         """Get mock LLM response for testing."""
         return json.dumps({
@@ -539,12 +541,12 @@ RESPOND WITH VALID JSON ONLY. No markdown, no explanation. Structure:
                 "Add historical trend analysis for maturity tracking"
             ]
         })
-    
+
     def _parse_llm_response(self, response: str, repo_name: str) -> LLMSynthesisResult:
         """Parse and validate LLM response."""
         try:
             data = json.loads(response)
-            
+
             # Parse executive summary
             exec_summary_data = data.get("executive_summary", {})
             exec_summary = ExecutiveSummary(
@@ -559,7 +561,7 @@ RESPOND WITH VALID JSON ONLY. No markdown, no explanation. Structure:
                 business_outcomes=exec_summary_data.get("business_outcomes", []),
                 integration_points=exec_summary_data.get("integration_points", []),
             )
-            
+
             # Parse use cases
             use_cases = []
             for uc_data in data.get("use_cases", []):
@@ -575,7 +577,7 @@ RESPOND WITH VALID JSON ONLY. No markdown, no explanation. Structure:
                     confidence_score=uc_data.get("confidence_score", 0.5),
                 )
                 use_cases.append(use_case)
-            
+
             result = LLMSynthesisResult(
                 repository_name=repo_name,
                 synthesis_timestamp=datetime.utcnow().isoformat(),
@@ -585,13 +587,13 @@ RESPOND WITH VALID JSON ONLY. No markdown, no explanation. Structure:
                 risk_assessment=data.get("risk_assessment", ""),
                 recommendations=data.get("recommendations", []),
             )
-            
+
             return result
-            
+
         except Exception as e:
             logger.error(f"Error parsing LLM response: {e}")
             return self._empty_result(repo_name)
-    
+
     def _empty_result(self, repo_name: str) -> LLMSynthesisResult:
         """Return empty valid result."""
         return LLMSynthesisResult(

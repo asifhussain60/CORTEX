@@ -11,11 +11,11 @@ AC-ID: AC-PHASE-19-VENDOR-DETECTOR-001
 Authority: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings)
 """
 
-from pathlib import Path
-from typing import Dict, Any, List, Set
 import json
-import re
 import logging
+import re
+from pathlib import Path
+from typing import Any, Dict, List, Set
 
 logger = logging.getLogger(__name__)
 
@@ -23,33 +23,33 @@ logger = logging.getLogger(__name__)
 class VendorDetector:
     """
     Intelligent vendor dependency detector.
-    
+
     Detects known third-party vendors across multiple evidence sources:
     - Package dependencies (package.json, requirements.txt, etc.)
     - Import statements in code
     - Environment variables and API keys
     - Configuration files
-    
+
     Confidence Scoring:
     - 0.9-1.0: Multiple evidence sources (high confidence)
     - 0.7-0.9: Single strong evidence (medium-high)
     - 0.5-0.7: Weak evidence (medium)
     - <0.5: Candidate (low confidence)
-    
+
     Usage:
         >>> detector = VendorDetector()
         >>> result = detector.detect_vendors(Path("/path/to/repo"))
         >>> print(f"Found {result['total_vendors']} vendors")
     """
-    
+
     def __init__(self):
         """Initialize VendorDetector with known vendor database."""
         self.known_vendors = self._load_known_vendors()
-    
+
     def _load_known_vendors(self) -> Dict[str, Dict[str, Any]]:
         """
         Load known vendor database.
-        
+
         Returns:
             Dict of vendor_id -> metadata
         """
@@ -125,14 +125,14 @@ class VendorDetector:
                 "env_patterns": [r"POSTGRES_", r"DATABASE_URL.*postgres"],
             },
         }
-    
+
     def detect_vendors(self, repo_path: Path) -> Dict[str, Any]:
         """
         Detect vendors in repository.
-        
+
         Args:
             repo_path: Path to repository
-            
+
         Returns:
             Dict with:
                 - vendors: Dict of vendor_id -> detection data
@@ -142,35 +142,35 @@ class VendorDetector:
         """
         detected: Dict[str, Dict[str, Any]] = {}
         candidates: List[str] = []
-        
+
         # Evidence sources
         evidence: Dict[str, List[str]] = {}
-        
+
         # 1. Check package dependencies
         dep_evidence = self._check_dependencies(repo_path)
         for vendor_id, files in dep_evidence.items():
             if vendor_id not in evidence:
                 evidence[vendor_id] = []
             evidence[vendor_id].extend(files)
-        
+
         # 2. Check import statements
         import_evidence = self._check_imports(repo_path)
         for vendor_id, files in import_evidence.items():
             if vendor_id not in evidence:
                 evidence[vendor_id] = []
             evidence[vendor_id].extend(files)
-        
+
         # 3. Check config files
         config_evidence = self._check_config_files(repo_path)
         for vendor_id, files in config_evidence.items():
             if vendor_id not in evidence:
                 evidence[vendor_id] = []
             evidence[vendor_id].extend(files)
-        
+
         # Calculate confidence and build result
         for vendor_id, files in evidence.items():
             vendor_meta = self.known_vendors.get(vendor_id, {})
-            
+
             # Confidence based on evidence count
             evidence_count = len(set(files))
             if evidence_count >= 3:
@@ -179,7 +179,7 @@ class VendorDetector:
                 confidence = 0.85
             else:
                 confidence = 0.75
-            
+
             detected[vendor_id] = {
                 "name": vendor_meta.get("name", vendor_id.title()),
                 "category": vendor_meta.get("category", "unknown"),
@@ -187,21 +187,21 @@ class VendorDetector:
                 "evidence_files": list(set(files)),
                 "evidence_count": evidence_count,
             }
-        
+
         # Categories
         categories = set(v["category"] for v in detected.values())
-        
+
         return {
             "vendors": detected,
             "total_vendors": len(detected),
             "categories": list(categories),
             "candidates": candidates,
         }
-    
+
     def _check_dependencies(self, repo_path: Path) -> Dict[str, List[str]]:
         """Check package dependency files."""
         evidence: Dict[str, List[str]] = {}
-        
+
         # package.json (Node.js)
         package_json = repo_path / "package.json"
         if package_json.exists():
@@ -209,7 +209,7 @@ class VendorDetector:
                 with open(package_json, "r") as f:
                     data = json.load(f)
                     deps = {**data.get("dependencies", {}), **data.get("devDependencies", {})}
-                    
+
                     for vendor_id, vendor_meta in self.known_vendors.items():
                         for pkg_name in vendor_meta.get("package_names", []):
                             if pkg_name in deps:
@@ -218,7 +218,7 @@ class VendorDetector:
                                 evidence[vendor_id].append(str(package_json))
             except (OSError, ValueError, json.JSONDecodeError):
                 pass
-        
+
         # requirements.txt (Python)
         requirements = repo_path / "requirements.txt"
         if requirements.exists():
@@ -232,21 +232,21 @@ class VendorDetector:
                             evidence[vendor_id].append(str(requirements))
             except (OSError, UnicodeDecodeError):
                 pass
-        
+
         return evidence
-    
+
     def _check_imports(self, repo_path: Path) -> Dict[str, List[str]]:
         """Check import statements in code files."""
         evidence: Dict[str, List[str]] = {}
-        
+
         # Python files
         for py_file in repo_path.rglob("*.py"):
             if ".venv" in str(py_file) or "venv" in str(py_file):
                 continue
-            
+
             try:
                 content = py_file.read_text()
-                
+
                 for vendor_id, vendor_meta in self.known_vendors.items():
                     for pattern in vendor_meta.get("import_patterns", []):
                         if re.search(pattern, content, re.IGNORECASE):
@@ -256,15 +256,15 @@ class VendorDetector:
                             break
             except (OSError, UnicodeDecodeError):
                 pass
-        
+
         # JavaScript/TypeScript files
         for js_file in repo_path.rglob("*.js"):
             if "node_modules" in str(js_file):
                 continue
-            
+
             try:
                 content = js_file.read_text()
-                
+
                 for vendor_id, vendor_meta in self.known_vendors.items():
                     for pkg_name in vendor_meta.get("package_names", []):
                         if f"from '{pkg_name}'" in content or f'from "{pkg_name}"' in content:
@@ -274,18 +274,18 @@ class VendorDetector:
                             break
             except (OSError, UnicodeDecodeError):
                 pass
-        
+
         return evidence
-    
+
     def _check_config_files(self, repo_path: Path) -> Dict[str, List[str]]:
         """Check configuration files for API keys and env vars."""
         evidence: Dict[str, List[str]] = {}
-        
+
         # .env files
         for env_file in repo_path.rglob(".env*"):
             try:
                 content = env_file.read_text()
-                
+
                 for vendor_id, vendor_meta in self.known_vendors.items():
                     for pattern in vendor_meta.get("env_patterns", []):
                         if re.search(pattern, content, re.IGNORECASE):
@@ -295,7 +295,7 @@ class VendorDetector:
                             break
             except (OSError, UnicodeDecodeError):
                 pass
-        
+
         return evidence
 
 

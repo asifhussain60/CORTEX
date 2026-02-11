@@ -1,8 +1,8 @@
 """Audit Navigator for querying audit trails."""
 
-from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
 from datetime import datetime, timezone
+from typing import Any, Dict, List, Optional
 
 
 @dataclass
@@ -30,7 +30,7 @@ class AuditNavigator:
         actor: str
     ) -> None:
         """Log an audit entry.
-        
+
         Args:
             entity_type: Type of entity
             entity_id: Entity identifier
@@ -52,11 +52,11 @@ class AuditNavigator:
         entity_id: str
     ) -> List[AuditEntry]:
         """Query audit trail by entity.
-        
+
         Args:
             entity_type: Type of entity
             entity_id: Entity identifier
-            
+
         Returns:
             List of matching audit entries
         """
@@ -71,11 +71,11 @@ class AuditNavigator:
         end_time: datetime
     ) -> List[AuditEntry]:
         """Query audit trail by time range.
-        
+
         Args:
             start_time: Start of time range
             end_time: End of time range
-            
+
         Returns:
             List of matching audit entries
         """
@@ -88,10 +88,10 @@ class AuditNavigator:
 
     def query_by_action(self, action: str) -> List[AuditEntry]:
         """Query audit trail by action.
-        
+
         Args:
             action: Action to search for
-            
+
         Returns:
             List of matching audit entries
         """
@@ -102,10 +102,10 @@ class AuditNavigator:
 
     def get_recent_entries(self, limit: int = 50) -> List[AuditEntry]:
         """Get recent audit entries.
-        
+
         Args:
             limit: Maximum entries to return
-            
+
         Returns:
             List of recent entries
         """

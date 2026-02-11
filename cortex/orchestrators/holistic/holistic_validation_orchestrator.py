@@ -4,10 +4,11 @@ Phase 48 S1: Performs holistic validation of CORTEX system consistency.
 """
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
 from enum import Enum
-import yaml
 from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+import yaml
 
 
 class ValidationVerdict(str, Enum):

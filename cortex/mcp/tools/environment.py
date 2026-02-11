@@ -4,17 +4,17 @@ Exposes environment validation checks via MCP protocol, wrapping the
 existing verify_environment.py script with MCP-compatible interface.
 """
 
-import sys
 import subprocess
+import sys
+from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import List, Optional, Dict, Any
-from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
 
 # Import existing environment verifier
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
-from cortex.scripts.verify_environment import EnvironmentVerifier
 from cortex.mcp.decorators import mcp_tool
+from cortex.scripts.verify_environment import EnvironmentVerifier
 
 
 class EnvironmentStatus(str, Enum):

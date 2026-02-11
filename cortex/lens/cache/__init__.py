@@ -8,8 +8,8 @@ Provides:
 - Cache statistics tracking
 """
 
-from .lens_cache import LENSCache, CacheEntry, CacheKey, get_lens_cache
-from .cache_key_builder import build_cache_key, get_repo_state_hash, CacheKeyConfig
+from .cache_key_builder import CacheKeyConfig, build_cache_key, get_repo_state_hash
+from .lens_cache import CacheEntry, CacheKey, LENSCache, get_lens_cache
 from .memory_backend import MemoryBackend
 from .redis_backend import RedisBackend
 
@@ -38,12 +38,12 @@ __all__ = [
     "CacheKey",
     "CacheKeyConfig",
     "CacheStats",
-    
+
     # Backends
     "MemoryBackend",
     "InMemoryCacheBackend",  # Alias for backward compatibility
     "RedisBackend",
-    
+
     # Utilities
     "get_lens_cache",
     "reset_lens_cache",

@@ -1,12 +1,12 @@
 """Intent Router for semantic intent recognition and routing."""
 
-from typing import List, Dict, Any, Optional
-from datetime import datetime, timezone
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
+from typing import Any, Dict, List, Optional
 
-from cortex.brain.domain_brain.intent_router_interface import IIntentRouter
-from cortex.brain.domain_brain.intent_parser import NLPIntentParser, ParsedIntent
 from cortex.brain.domain_brain.intent_classifier import IntentClassifier
+from cortex.brain.domain_brain.intent_parser import NLPIntentParser, ParsedIntent
+from cortex.brain.domain_brain.intent_router_interface import IIntentRouter
 
 
 @dataclass
@@ -41,34 +41,34 @@ class IntentRouter(IIntentRouter):
 
     def query_intent(self, query: str) -> IntentResult:
         """Query and route an intent.
-        
+
         Args:
             query: Natural language query string
-            
+
         Returns:
             IntentResult with routing information
         """
         # Parse intent
         parsed = self.parser.parse(query)
-        
+
         # Classify intent
         category = self.classifier.classify(query)
         classification = self.classifier.classify_with_confidence(query)
-        
+
         # Determine handler
         handler = self.HANDLERS.get(category, "default_handler")
-        
+
         # Build entity list
         entities = [
             {"value": e.value, "type": e.entity_type, "confidence": e.confidence}
             for e in parsed.entities
         ]
-        
+
         # Determine if fallback needed
         fallback_handlers = []
         if parsed.confidence < 0.70:
             fallback_handlers = self._get_fallback_handlers(category, classification)
-        
+
         # Create result
         result = IntentResult(
             intent=parsed.intent,
@@ -78,15 +78,15 @@ class IntentRouter(IIntentRouter):
             handler=handler,
             fallback_handlers=fallback_handlers
         )
-        
+
         # Record in history
         self._record_history(query, result)
-        
+
         return result
 
     def get_history(self) -> List[Dict[str, Any]]:
         """Get intent execution history.
-        
+
         Returns:
             List of recent intent queries (max 100)
         """
@@ -98,24 +98,24 @@ class IntentRouter(IIntentRouter):
         classification: Dict[str, Any]
     ) -> List[Dict[str, Any]]:
         """Get fallback handler chain for uncertain intent.
-        
+
         Args:
             primary_category: Primary category from classification
             classification: Full classification results with scores
-            
+
         Returns:
             List of fallback handlers ordered by confidence
         """
         fallback_handlers = []
         scores = classification.get("scores", {})
-        
+
         # Get all categories sorted by confidence except primary
         sorted_categories = sorted(
             [(cat, conf) for cat, conf in scores.items() if cat != primary_category],
             key=lambda x: x[1],
             reverse=True
         )
-        
+
         # If all scores are 0, provide default fallback chain
         if all(conf == 0 for _, conf in sorted_categories):
             # Default fallback chain for unrecognized intents
@@ -136,12 +136,12 @@ class IntentRouter(IIntentRouter):
                         "category": category,
                         "confidence": confidence
                     })
-        
+
         return fallback_handlers
 
     def _record_history(self, query: str, result: IntentResult) -> None:
         """Record query in history.
-        
+
         Args:
             query: Original query text
             result: Intent result
@@ -154,7 +154,7 @@ class IntentRouter(IIntentRouter):
             "timestamp": datetime.now(timezone.utc).isoformat()
         }
         self.history.append(entry)
-        
+
         # Keep only last 100 entries
         if len(self.history) > 100:
             self.history = self.history[-100:]

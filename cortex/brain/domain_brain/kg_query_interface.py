@@ -6,14 +6,14 @@ with fallback mechanisms for non-blocking KG operations.
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
 from datetime import datetime
+from typing import Any, Dict, List, Optional
 
 
 @dataclass
 class QueryNode:
     """Node in graph query result.
-    
+
     Attributes:
         node_id: Unique node identifier
         entity_type: Type of entity (Service, API, etc.)
@@ -27,7 +27,7 @@ class QueryNode:
 @dataclass
 class QueryEdge:
     """Edge in graph query result.
-    
+
     Attributes:
         source_id: Source node ID
         target_id: Target node ID
@@ -43,7 +43,7 @@ class QueryEdge:
 @dataclass
 class QueryPath:
     """Path through knowledge graph.
-    
+
     Attributes:
         nodes: List of nodes in path
         edges: List of edges connecting nodes
@@ -55,7 +55,7 @@ class QueryPath:
 @dataclass
 class QueryResult:
     """Result of a KG query.
-    
+
     Attributes:
         status: Query status (SUCCESS, FAILED, PARSE_ERROR)
         entities: List of entity nodes returned
@@ -76,7 +76,7 @@ class QueryResult:
 
 class IQueryAdapter(ABC):
     """Abstract interface for Knowledge Graph query operations.
-    
+
     Supports semantic queries, graph traversal, relationship analysis,
     and rule inference with fallback mechanisms.
     """
@@ -84,13 +84,13 @@ class IQueryAdapter(ABC):
     @abstractmethod
     def query(self, query_string: str) -> QueryResult:
         """Execute semantic query on KG.
-        
+
         Args:
             query_string: Semantic query (e.g., "SELECT * FROM Service WHERE tier=1")
-        
+
         Returns:
             QueryResult: Query results
-        
+
         Raises:
             ValueError: If query format is invalid
         """
@@ -101,12 +101,12 @@ class IQueryAdapter(ABC):
         self, source_id: str, target_id: str, max_hops: int = 3
     ) -> QueryResult:
         """Query paths between two entities.
-        
+
         Args:
             source_id: Start entity ID
             target_id: End entity ID
             max_hops: Maximum hops (default 3)
-        
+
         Returns:
             QueryResult: Paths found
         """
@@ -117,12 +117,12 @@ class IQueryAdapter(ABC):
         self, entity_id: str, max_hops: int = 2, rel_types: Optional[List[str]] = None
     ) -> List[QueryPath]:
         """Traverse graph from starting entity.
-        
+
         Args:
             entity_id: Start entity ID
             max_hops: Maximum traversal depth
             rel_types: Relationship types to follow (None = all)
-        
+
         Returns:
             List[QueryPath]: Discovered paths
         """
@@ -131,10 +131,10 @@ class IQueryAdapter(ABC):
     @abstractmethod
     def infer_dependencies(self, entity_id: str) -> List[Dict[str, Any]]:
         """Infer entity dependencies.
-        
+
         Args:
             entity_id: Entity to analyze
-        
+
         Returns:
             List[Dict]: Dependency relationships
         """
@@ -143,10 +143,10 @@ class IQueryAdapter(ABC):
     @abstractmethod
     def infer_relationships(self, entity_id: str) -> List[Dict[str, Any]]:
         """Infer relationships for entity.
-        
+
         Args:
             entity_id: Entity to analyze
-        
+
         Returns:
             List[Dict]: Inferred relationships
         """
@@ -155,10 +155,10 @@ class IQueryAdapter(ABC):
     @abstractmethod
     def infer_impact(self, entity_id: str) -> List[Dict[str, Any]]:
         """Infer impact of changes to entity.
-        
+
         Args:
             entity_id: Entity to analyze
-        
+
         Returns:
             List[Dict]: Impacted entities
         """
@@ -167,10 +167,10 @@ class IQueryAdapter(ABC):
     @abstractmethod
     def health_check(self, timeout: int = 5) -> Dict[str, Any]:
         """Check query layer health.
-        
+
         Args:
             timeout: Health check timeout in seconds
-        
+
         Returns:
             Dict: Health status
         """

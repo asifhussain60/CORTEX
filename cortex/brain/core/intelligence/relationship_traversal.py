@@ -18,7 +18,6 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
-
 # =============================================================================
 # DATA CLASSES
 # =============================================================================
@@ -33,7 +32,7 @@ class APIEndpoint:
     line_number: int
     framework: str = "unknown"  # flask, fastapi, django
     prefix: str = ""
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
@@ -51,7 +50,7 @@ class ForeignKeyRef:
     """A foreign key reference."""
     column: str
     reference: str
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {"column": self.column, "reference": self.reference}
@@ -64,7 +63,7 @@ class ModelRelationship:
     target: str
     relationship_type: str = "relationship"  # relationship, backref
     back_populates: Optional[str] = None
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
@@ -84,7 +83,7 @@ class DatabaseModel:
     foreign_keys: List[ForeignKeyRef]
     relationships: List[ModelRelationship]
     line_number: int
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
@@ -104,7 +103,7 @@ class EnvReference:
     line_number: int
     default_value: Optional[str] = None
     required: bool = False
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
@@ -121,7 +120,7 @@ class ConfigReference:
     key: str
     source: str  # settings, config, etc.
     line_number: int
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
@@ -138,7 +137,7 @@ class FileDependency:
     source_module: str
     imports: List[str]
     line_number: int
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
@@ -154,11 +153,11 @@ class DependencyGraph:
     """A graph of file dependencies."""
     nodes: Set[str] = field(default_factory=set)
     edges: List[Tuple[str, str]] = field(default_factory=list)
-    
+
     def add_node(self, node: str) -> None:
         """Add a node to the graph."""
         self.nodes.add(node)
-    
+
     def add_edge(self, from_node: str, to_node: str) -> None:
         """Add an edge to the graph."""
         self.nodes.add(from_node)
@@ -171,11 +170,11 @@ class ModelGraph:
     """A graph of model relationships."""
     nodes: Set[str] = field(default_factory=set)
     edges: List[Tuple[str, str, str]] = field(default_factory=list)  # (from, to, type)
-    
+
     def add_node(self, node: str) -> None:
         """Add a node to the graph."""
         self.nodes.add(node)
-    
+
     def add_edge(self, from_node: str, to_node: str, edge_type: str = "relates") -> None:
         """Add an edge to the graph."""
         self.nodes.add(from_node)
@@ -191,7 +190,7 @@ class ImpactAnalysis:
     affected_endpoints: List[str]
     affected_models: List[str]
     impact_level: str = "LOW"  # LOW, MEDIUM, HIGH, CRITICAL
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
@@ -214,11 +213,11 @@ class RelationshipAnalysisResult:
     dependency_graph: Optional[DependencyGraph] = None
     model_graph: Optional[ModelGraph] = None
     _file_path_map: Dict[str, str] = field(default_factory=dict)
-    
+
     def get_file_dependencies(self, file_path: str) -> List[FileDependency]:
         """Get dependencies for a specific file."""
         return [d for d in self.file_dependencies if d.source_file == file_path]
-    
+
     def get_related_models(self, model_name: str) -> List[str]:
         """Get models related to the given model."""
         related = []
@@ -229,25 +228,25 @@ class RelationshipAnalysisResult:
                 elif to_node == model_name:
                     related.append(from_node)
         return list(set(related))
-    
+
     def calculate_impact(self, file_path: str) -> ImpactAnalysis:
         """Calculate impact of changing a file."""
         affected_files = []
         affected_endpoints = []
         affected_models = []
-        
+
         # Find files that depend on this file
         if self.dependency_graph:
             file_name = Path(file_path).stem
             for from_node, to_node in self.dependency_graph.edges:
                 if to_node == file_name:
                     affected_files.append(from_node)
-        
+
         # Find endpoints in affected files
         for endpoint in self.api_endpoints:
             if endpoint.function_name in [d.source_module for d in self.file_dependencies]:
                 affected_endpoints.append(endpoint.path)
-        
+
         # Determine impact level
         impact_level = "LOW"
         if len(affected_files) > 5:
@@ -256,7 +255,7 @@ class RelationshipAnalysisResult:
             impact_level = "HIGH"
         elif len(affected_files) > 0:
             impact_level = "MEDIUM"
-        
+
         return ImpactAnalysis(
             source_file=file_path,
             affected_files=affected_files,
@@ -264,7 +263,7 @@ class RelationshipAnalysisResult:
             affected_models=affected_models,
             impact_level=impact_level,
         )
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
@@ -274,27 +273,27 @@ class RelationshipAnalysisResult:
             "config_references": [c.to_dict() for c in self.config_references],
             "file_dependencies": [d.to_dict() for d in self.file_dependencies],
         }
-    
+
     def to_graphviz(self) -> str:
         """Export to graphviz DOT format."""
         lines = ["digraph relationships {"]
         lines.append("  rankdir=LR;")
         lines.append("  node [shape=box];")
-        
+
         # Add model nodes and relationships
         if self.model_graph:
             for node in self.model_graph.nodes:
                 lines.append(f'  "{node}" [style=filled,fillcolor=lightblue];')
             for from_node, to_node, edge_type in self.model_graph.edges:
                 lines.append(f'  "{from_node}" -> "{to_node}" [label="{edge_type}"];')
-        
+
         # Add file dependency nodes
         if self.dependency_graph:
             for node in self.dependency_graph.nodes:
                 lines.append(f'  "{node}" [style=filled,fillcolor=lightyellow];')
             for from_node, to_node in self.dependency_graph.edges:
                 lines.append(f'  "{from_node}" -> "{to_node}" [style=dashed];')
-        
+
         lines.append("}")
         return "\n".join(lines)
 
@@ -306,13 +305,13 @@ class RelationshipAnalysisResult:
 
 class RelationshipEngine:
     """Engine for analyzing code relationships."""
-    
+
     # Flask route decorator pattern
     FLASK_ROUTE_PATTERN = re.compile(
         r"@\w+\.route\s*\(\s*['\"]([^'\"]+)['\"]"
         r"(?:.*?methods\s*=\s*\[([^\]]+)\])?"
     )
-    
+
     # FastAPI route decorator patterns
     FASTAPI_PATTERNS = {
         "get": re.compile(r"@\w+\.get\s*\(\s*['\"]([^'\"]+)['\"]"),
@@ -321,135 +320,135 @@ class RelationshipEngine:
         "delete": re.compile(r"@\w+\.delete\s*\(\s*['\"]([^'\"]+)['\"]"),
         "patch": re.compile(r"@\w+\.patch\s*\(\s*['\"]([^'\"]+)['\"]"),
     }
-    
+
     def __init__(self):
         """Initialize the relationship engine."""
         pass
-    
+
     def analyze_file(self, file_path: Path) -> RelationshipAnalysisResult:
         """Analyze relationships in a file.
-        
+
         Args:
             file_path: Path to the Python file.
-            
+
         Returns:
             RelationshipAnalysisResult with detected relationships.
         """
         content = file_path.read_text(encoding="utf-8")
         result = self.analyze_string(content)
         return result
-    
+
     def analyze_string(self, source: str) -> RelationshipAnalysisResult:
         """Analyze relationships in source code.
-        
+
         Args:
             source: Python source code.
-            
+
         Returns:
             RelationshipAnalysisResult with detected relationships.
         """
         result = RelationshipAnalysisResult()
-        
+
         # Parse AST
         try:
             tree = ast.parse(source)
         except SyntaxError:
             return result
-        
+
         # Extract API endpoints
         result.api_endpoints = self._extract_api_endpoints(tree, source)
-        
+
         # Extract database models
         result.database_models = self._extract_database_models(tree, source)
-        
+
         # Extract environment references
         result.env_references = self._extract_env_references(tree, source)
-        
+
         # Extract config references
         result.config_references = self._extract_config_references(tree, source)
-        
+
         # Build model graph
         result.model_graph = self._build_model_graph(result.database_models)
-        
+
         return result
-    
+
     def analyze_directory(self, dir_path: Path) -> RelationshipAnalysisResult:
         """Analyze relationships across a directory.
-        
+
         Args:
             dir_path: Path to the directory.
-            
+
         Returns:
             RelationshipAnalysisResult with aggregated relationships.
         """
         result = RelationshipAnalysisResult()
         result.dependency_graph = DependencyGraph()
-        
+
         # Find all Python files
         py_files = list(dir_path.glob("*.py"))
-        
+
         for py_file in py_files:
             try:
                 content = py_file.read_text(encoding="utf-8")
                 file_result = self.analyze_string(content)
-                
+
                 # Aggregate results
                 result.api_endpoints.extend(file_result.api_endpoints)
                 result.database_models.extend(file_result.database_models)
                 result.env_references.extend(file_result.env_references)
                 result.config_references.extend(file_result.config_references)
-                
+
                 # Extract file dependencies
                 deps = self._extract_file_dependencies(content, str(py_file))
                 result.file_dependencies.extend(deps)
-                
+
                 # Build dependency graph
                 file_name = py_file.stem
                 result.dependency_graph.add_node(file_name)
                 for dep in deps:
                     result.dependency_graph.add_edge(file_name, dep.source_module)
-                
+
             except Exception:
                 continue
-        
+
         # Build model graph from all models
         result.model_graph = self._build_model_graph(result.database_models)
-        
+
         return result
-    
+
     def _extract_api_endpoints(
         self, tree: ast.AST, source: str
     ) -> List[APIEndpoint]:
         """Extract API endpoints from AST and source.
-        
+
         Args:
             tree: Parsed AST.
             source: Original source code.
-            
+
         Returns:
             List of detected API endpoints.
         """
         endpoints = []
         lines = source.split('\n')
-        
+
         # Find decorated functions
         for node in ast.walk(tree):
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 # Check decorators
                 for decorator in node.decorator_list:
                     decorator_line = lines[decorator.lineno - 1] if decorator.lineno <= len(lines) else ""
-                    
+
                     # Check for Flask-style route
                     flask_match = self.FLASK_ROUTE_PATTERN.search(decorator_line)
                     if flask_match:
                         path = flask_match.group(1)
                         methods_str = flask_match.group(2) if flask_match.lastindex >= 2 else None
-                        
+
                         if methods_str:
                             methods = [m.strip().strip("'\"") for m in methods_str.split(',')]
                         else:
                             methods = ['GET']
-                        
+
                         endpoints.append(APIEndpoint(
                             path=path,
                             methods=methods,
@@ -458,7 +457,7 @@ class RelationshipEngine:
                             framework="flask",
                         ))
                         continue
-                    
+
                     # Check for FastAPI-style routes
                     for method, pattern in self.FASTAPI_PATTERNS.items():
                         match = pattern.search(decorator_line)
@@ -472,23 +471,23 @@ class RelationshipEngine:
                                 framework="fastapi",
                             ))
                             break
-        
+
         return endpoints
-    
+
     def _extract_database_models(
         self, tree: ast.AST, source: str
     ) -> List[DatabaseModel]:
         """Extract database model definitions.
-        
+
         Args:
             tree: Parsed AST.
             source: Original source code.
-            
+
         Returns:
             List of detected database models.
         """
         models = []
-        
+
         for node in ast.walk(tree):
             if isinstance(node, ast.ClassDef):
                 # Check if it's a SQLAlchemy model (has Base or __tablename__)
@@ -496,7 +495,7 @@ class RelationshipEngine:
                 columns = []
                 foreign_keys = []
                 relationships = []
-                
+
                 for item in node.body:
                     # Check for __tablename__
                     if isinstance(item, ast.Assign):
@@ -504,7 +503,7 @@ class RelationshipEngine:
                             if isinstance(target, ast.Name) and target.id == '__tablename__':
                                 if isinstance(item.value, ast.Constant):
                                     table_name = item.value.value
-                    
+
                     # Check for Column definitions
                     if isinstance(item, ast.Assign):
                         for target in item.targets:
@@ -514,7 +513,7 @@ class RelationshipEngine:
                                     func = item.value.func
                                     if isinstance(func, ast.Name) and func.id == 'Column':
                                         columns.append(col_name)
-                                        
+
                                         # Check for ForeignKey
                                         for arg in item.value.args:
                                             if isinstance(arg, ast.Call):
@@ -524,24 +523,24 @@ class RelationshipEngine:
                                                             column=col_name,
                                                             reference=arg.args[0].value,
                                                         ))
-                                    
+
                                     # Check for relationship
                                     if isinstance(func, ast.Name) and func.id == 'relationship':
                                         if item.value.args and isinstance(item.value.args[0], ast.Constant):
                                             target = item.value.args[0].value
                                             back_populates = None
-                                            
+
                                             for keyword in item.value.keywords:
                                                 if keyword.arg == 'back_populates':
                                                     if isinstance(keyword.value, ast.Constant):
                                                         back_populates = keyword.value.value
-                                            
+
                                             relationships.append(ModelRelationship(
                                                 name=col_name,
                                                 target=target,
                                                 back_populates=back_populates,
                                             ))
-                
+
                 # Only add if it looks like a model
                 if table_name or columns or foreign_keys or relationships:
                     models.append(DatabaseModel(
@@ -552,28 +551,28 @@ class RelationshipEngine:
                         relationships=relationships,
                         line_number=node.lineno,
                     ))
-        
+
         return models
-    
+
     def _extract_env_references(
         self, tree: ast.AST, source: str
     ) -> List[EnvReference]:
         """Extract environment variable references.
-        
+
         Args:
             tree: Parsed AST.
             source: Original source code.
-            
+
         Returns:
             List of environment variable references.
         """
         env_refs = []
-        
+
         for node in ast.walk(tree):
             # Check for os.environ.get() or os.getenv()
             if isinstance(node, ast.Call):
                 func = node.func
-                
+
                 # os.environ.get('VAR') or os.environ['VAR']
                 if isinstance(func, ast.Attribute):
                     if func.attr in ('get', 'getenv'):
@@ -582,14 +581,14 @@ class RelationshipEngine:
                             default = None
                             if len(node.args) > 1 and isinstance(node.args[1], ast.Constant):
                                 default = str(node.args[1].value)
-                            
+
                             env_refs.append(EnvReference(
                                 name=var_name,
                                 line_number=node.lineno,
                                 default_value=default,
                                 required=False,
                             ))
-                
+
                 # Check for os.environ access without get
             elif isinstance(node, ast.Subscript):
                 if isinstance(node.value, ast.Attribute):
@@ -601,23 +600,23 @@ class RelationshipEngine:
                                     line_number=node.lineno,
                                     required=True,
                                 ))
-        
+
         return env_refs
-    
+
     def _extract_config_references(
         self, tree: ast.AST, source: str
     ) -> List[ConfigReference]:
         """Extract configuration references.
-        
+
         Args:
             tree: Parsed AST.
             source: Original source code.
-            
+
         Returns:
             List of configuration references.
         """
         config_refs = []
-        
+
         for node in ast.walk(tree):
             # Check for settings.ATTR access
             if isinstance(node, ast.Attribute):
@@ -628,28 +627,28 @@ class RelationshipEngine:
                             source=node.value.id,
                             line_number=node.lineno,
                         ))
-        
+
         return config_refs
-    
+
     def _extract_file_dependencies(
         self, source: str, file_path: str
     ) -> List[FileDependency]:
         """Extract file/module dependencies from imports.
-        
+
         Args:
             source: Python source code.
             file_path: Path to the source file.
-            
+
         Returns:
             List of file dependencies.
         """
         dependencies = []
-        
+
         try:
             tree = ast.parse(source)
         except SyntaxError:
             return dependencies
-        
+
         for node in ast.walk(tree):
             if isinstance(node, ast.Import):
                 for alias in node.names:
@@ -659,7 +658,7 @@ class RelationshipEngine:
                         imports=[alias.name],
                         line_number=node.lineno,
                     ))
-            
+
             elif isinstance(node, ast.ImportFrom):
                 if node.module:
                     module_name = node.module.split('.')[0]
@@ -670,27 +669,27 @@ class RelationshipEngine:
                         imports=imported,
                         line_number=node.lineno,
                     ))
-        
+
         return dependencies
-    
+
     def _build_model_graph(self, models: List[DatabaseModel]) -> ModelGraph:
         """Build a graph of model relationships.
-        
+
         Args:
             models: List of database models.
-            
+
         Returns:
             ModelGraph with nodes and edges.
         """
         graph = ModelGraph()
-        
+
         for model in models:
             graph.add_node(model.name)
-            
+
             # Add edges from relationships
             for rel in model.relationships:
                 graph.add_edge(model.name, rel.target, "relationship")
-            
+
             # Add edges from foreign keys
             for fk in model.foreign_keys:
                 # Extract table name from reference (e.g., 'users.id' -> 'users')
@@ -700,7 +699,7 @@ class RelationshipEngine:
                     if other_model.table_name == ref_table:
                         graph.add_edge(model.name, other_model.name, "foreign_key")
                         break
-        
+
         return graph
 
 

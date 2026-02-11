@@ -6,11 +6,11 @@ Description: Dependency analysis and graph construction
 Authority: phase-54-A-incremental-onboarding-refactor.yaml, S1 task 4
 """
 
-from pathlib import Path
-from typing import Dict, List, Set, Union, Optional
 from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Dict, List, Optional, Set, Union
 
-from cortex.brain.core.result import Result, Ok, Err
+from cortex.brain.core.result import Err, Ok, Result
 
 
 @dataclass
@@ -34,31 +34,31 @@ class DependencyGraph:
 
 class BuildDependencyGraphUseCase:
     """Build dependency graph (SOLID: Single Responsibility)."""
-    
+
     def execute(self, repo_path: Path) -> Result[DependencyGraph]:
         """
         Build dependency graph for repository.
-        
+
         Args:
             repo_path: Path to repository
-            
+
         Returns:
             Result containing DependencyGraph or error
         """
         try:
             if not repo_path.exists():
                 return Err(f"Repository not found: {repo_path}")
-            
+
             dependencies = []
-            
+
             # Scan different dependency files
             dependencies.extend(self._parse_python_deps(repo_path))
             dependencies.extend(self._parse_node_deps(repo_path))
             dependencies.extend(self._parse_dotnet_deps(repo_path))
-            
+
             runtime_count = sum(1 for d in dependencies if d.category == "runtime")
             dev_count = sum(1 for d in dependencies if d.category == "dev")
-            
+
             graph = DependencyGraph(
                 dependencies=dependencies,
                 dependency_count=len(dependencies),
@@ -66,12 +66,12 @@ class BuildDependencyGraphUseCase:
                 dev_count=dev_count,
                 direct_dependencies=set(d.name for d in dependencies),
             )
-            
+
             return Ok(graph)
-        
+
         except Exception as e:
             return Err(f"Failed to build dependency graph: {str(e)}")
-    
+
     def _parse_python_deps(self, repo_path: Path) -> List[PackageDependency]:
         """Parse Python dependencies."""
         deps = []
@@ -85,17 +85,17 @@ class BuildDependencyGraphUseCase:
                         pkg = self._parse_requirement(line, "requirements.txt", "runtime")
                         if pkg:
                             deps.append(pkg)
-            
+
             # pyproject.toml
             pyproject_file = repo_path / "pyproject.toml"
             if pyproject_file.exists():
                 deps.extend(self._parse_pyproject(pyproject_file))
-        
+
         except Exception:
             pass
-        
+
         return deps
-    
+
     def _parse_node_deps(self, repo_path: Path) -> List[PackageDependency]:
         """Parse Node.js dependencies."""
         deps = []
@@ -104,7 +104,7 @@ class BuildDependencyGraphUseCase:
             if pkg_file.exists():
                 import json
                 data = json.loads(pkg_file.read_text())
-                
+
                 # Runtime dependencies
                 for pkg_name, version in data.get("dependencies", {}).items():
                     deps.append(PackageDependency(
@@ -113,7 +113,7 @@ class BuildDependencyGraphUseCase:
                         source="package.json",
                         category="runtime",
                     ))
-                
+
                 # Dev dependencies
                 for pkg_name, version in data.get("devDependencies", {}).items():
                     deps.append(PackageDependency(
@@ -122,12 +122,12 @@ class BuildDependencyGraphUseCase:
                         source="package.json",
                         category="dev",
                     ))
-        
+
         except Exception:
             pass
-        
+
         return deps
-    
+
     def _parse_dotnet_deps(self, repo_path: Path) -> List[PackageDependency]:
         """Parse .NET dependencies."""
         deps = []
@@ -136,9 +136,9 @@ class BuildDependencyGraphUseCase:
                 deps.extend(self._parse_csproj(csproj_file))
         except Exception:
             pass
-        
+
         return deps
-    
+
     def _parse_requirement(self, line: str, source: str, category: str) -> Optional[PackageDependency]:
         """Parse single requirement line."""
         try:
@@ -152,7 +152,7 @@ class BuildDependencyGraphUseCase:
                         source=source,
                         category=category,
                     )
-            
+
             # No version specifier
             return PackageDependency(
                 name=line.strip(),
@@ -162,16 +162,16 @@ class BuildDependencyGraphUseCase:
             )
         except Exception:
             pass
-        
+
         return None
-    
+
     def _parse_pyproject(self, pyproject_file: Path) -> List[PackageDependency]:
         """Parse pyproject.toml dependencies."""
         deps = []
         try:
             import toml
             data = toml.loads(pyproject_file.read_text())
-            
+
             for pkg_name, version in data.get("project", {}).get("dependencies", []):
                 deps.append(PackageDependency(
                     name=pkg_name,
@@ -181,9 +181,9 @@ class BuildDependencyGraphUseCase:
                 ))
         except Exception:
             pass
-        
+
         return deps
-    
+
     def _parse_csproj(self, csproj_file: Path) -> List[PackageDependency]:
         """Parse .csproj NuGet dependencies."""
         deps = []
@@ -201,7 +201,7 @@ class BuildDependencyGraphUseCase:
                 ))
         except Exception:
             pass
-        
+
         return deps
 
 

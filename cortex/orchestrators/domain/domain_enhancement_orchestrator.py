@@ -14,18 +14,19 @@ Key Features:
 - Version control for domains
 """
 
-from pathlib import Path
-from typing import Dict, Any, List, Optional
+import hashlib
 from dataclasses import dataclass, field
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
 import yaml
-import hashlib
 
 
 @dataclass
 class DomainGap:
     """Represents a gap in company domain coverage."""
-    
+
     domain: str
     gap_type: str  # 'missing', 'outdated', 'incomplete'
     description: str
@@ -37,26 +38,26 @@ class DomainGap:
 
 class DomainTemplate:
     """Template for creating new domains."""
-    
+
     def __init__(self, name: str, sections: Dict[str, List[str]]):
         """
         Initialize domain template.
-        
+
         Args:
             name: Template name
             sections: Dict mapping section names to content lists
         """
         self.name = name
         self.sections = sections
-    
+
     @classmethod
     def load(cls, template_name: str) -> 'DomainTemplate':
         """
         Load a domain template by name.
-        
+
         Args:
             template_name: Name of template to load
-        
+
         Returns:
             Loaded template
         """
@@ -147,29 +148,29 @@ class DomainTemplate:
                 ],
             },
         }
-        
+
         if template_name not in templates:
             raise ValueError(f"Unknown template: {template_name}")
-        
+
         return cls(name=template_name, sections=templates[template_name])
-    
+
     def instantiate(
-        self, 
-        domain_name: str, 
+        self,
+        domain_name: str,
         context: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         """
         Instantiate template as a domain with company context.
-        
+
         Args:
             domain_name: Name for the new domain
             context: Company context (industry, compliance, etc.)
-        
+
         Returns:
             Domain dictionary ready for saving
         """
         context = context or {}
-        
+
         domain = {
             'name': domain_name,
             'template': self.name,
@@ -177,93 +178,93 @@ class DomainTemplate:
             'context': context,
             'standards': {}
         }
-        
+
         # Copy template sections
         for section, standards in self.sections.items():
             domain['standards'][section] = standards.copy()
-        
+
         # Apply context-specific customizations
         if context.get('industry') == 'fintech':
             if 'authorization' in domain['standards']:
                 domain['standards']['authorization'].append(
                     'Comply with PCI-DSS for payment processing'
                 )
-        
+
         if context.get('compliance') == 'HIPAA':
             if 'data-protection' in domain['standards']:
                 domain['standards']['data-protection'].append(
                     'Implement HIPAA-compliant audit logging'
                 )
-        
+
         return domain
-    
+
     def validate(self) -> Dict[str, Any]:
         """
         Validate template structure.
-        
+
         Returns:
             Validation result with errors
         """
         errors = []
-        
+
         if not self.name:
             errors.append("Template name is required")
-        
+
         if not self.sections:
             errors.append("Template must have at least one section")
-        
+
         for section, standards in self.sections.items():
             if not isinstance(standards, list):
                 errors.append(f"Section '{section}' must be a list")
-        
+
         return {
             'valid': len(errors) == 0,
             'errors': errors
         }
-    
+
     def extend(self, sections: Dict[str, List[str]]) -> 'DomainTemplate':
         """
         Extend template with additional sections.
-        
+
         Args:
             sections: New sections to add
-        
+
         Returns:
             New template with extended sections
         """
         extended_sections = self.sections.copy()
         extended_sections.update(sections)
-        
+
         return DomainTemplate(name=self.name, sections=extended_sections)
 
 
 class GapAnalyzer:
     """Analyzes gaps in company domain coverage."""
-    
+
     def __init__(self):
         """Initialize gap analyzer."""
         self._gap_history: List[DomainGap] = []
-    
+
     def analyze_gaps(
-        self, 
-        domain: str, 
+        self,
+        domain: str,
         operation_context: Dict[str, Any]
     ) -> List[DomainGap]:
         """
         Analyze gaps for a specific domain.
-        
+
         Args:
             domain: Domain name
             operation_context: Context from operation
-        
+
         Returns:
             List of detected gaps
         """
         gaps = []
-        
+
         # Check if domain file exists
         domain_path = Path(f"company/domains/{domain}-standards.yaml")
-        
+
         if not domain_path.exists():
             gaps.append(DomainGap(
                 domain=domain,
@@ -273,16 +274,16 @@ class GapAnalyzer:
                 priority=0.8,
                 recommended_action='create_from_template'
             ))
-        
+
         return gaps
-    
+
     def calculate_priority(self, gap: DomainGap) -> float:
         """
         Calculate priority score for a gap.
-        
+
         Args:
             gap: Gap to score
-        
+
         Returns:
             Priority score (0.0-1.0)
         """
@@ -291,29 +292,29 @@ class GapAnalyzer:
             'medium': 0.6,
             'high': 0.9
         }
-        
+
         base_priority = impact_weights.get(gap.impact, 0.5)
-        
+
         # Boost priority for missing gaps
         if gap.gap_type == 'missing':
             base_priority *= 1.2
-        
+
         return min(1.0, base_priority)
-    
+
     def analyze_from_audit(self, audit_results: Dict[str, Any]) -> List[DomainGap]:
         """
         Analyze gaps from AUDIT mode results.
-        
+
         Args:
             audit_results: Results from AUDIT mode
-        
+
         Returns:
             List of gaps detected
         """
         gaps = []
-        
+
         missing_domains = audit_results.get('domains_missing', [])
-        
+
         for domain in missing_domains:
             gaps.append(DomainGap(
                 domain=domain,
@@ -322,16 +323,16 @@ class GapAnalyzer:
                 impact='medium',
                 priority=0.6
             ))
-        
+
         return gaps
-    
+
     def generate_recommendation(self, gap: DomainGap) -> Dict[str, Any]:
         """
         Generate actionable recommendation for a gap.
-        
+
         Args:
             gap: Gap to generate recommendation for
-        
+
         Returns:
             Recommendation dictionary
         """
@@ -341,37 +342,37 @@ class GapAnalyzer:
                 'template': f"{gap.domain}-standards",
                 'description': f"Create {gap.domain} domain from template"
             }
-        
+
         if gap.gap_type == 'outdated':
             return {
                 'action': 'update',
                 'description': f"Update {gap.domain} domain with latest standards"
             }
-        
+
         return {
             'action': 'review',
             'description': f"Review {gap.domain} domain for completeness"
         }
-    
+
     def record_gap(self, gap: DomainGap):
         """Record a gap in history."""
         self._gap_history.append(gap)
-    
+
     def get_gap_history(self, domain: Optional[str] = None) -> List[Dict[str, Any]]:
         """
         Get gap history, optionally filtered by domain.
-        
+
         Args:
             domain: Optional domain filter
-        
+
         Returns:
             List of historical gaps
         """
         gaps = self._gap_history
-        
+
         if domain:
             gaps = [g for g in gaps if g.domain == domain]
-        
+
         return [
             {
                 'domain': g.domain,
@@ -382,14 +383,14 @@ class GapAnalyzer:
             }
             for g in gaps
         ]
-    
+
     def batch_analyze(self, domains: List[str]) -> Dict[str, List[DomainGap]]:
         """
         Analyze multiple domains at once.
-        
+
         Args:
             domains: List of domain names
-        
+
         Returns:
             Dict mapping domain to gaps
         """
@@ -397,24 +398,24 @@ class GapAnalyzer:
             domain: self.analyze_gaps(domain, {})
             for domain in domains
         }
-    
+
     def filter_false_positives(
-        self, 
+        self,
         potential_gaps: List[DomainGap],
         existing_domains: List[str]
     ) -> List[DomainGap]:
         """
         Filter out false positive gaps.
-        
+
         Args:
             potential_gaps: Gaps to filter
             existing_domains: List of existing domain names
-        
+
         Returns:
             Filtered gaps
         """
         filtered = []
-        
+
         for gap in potential_gaps:
             # Check if domain actually exists
             if gap.gap_type == 'missing':
@@ -422,30 +423,30 @@ class GapAnalyzer:
                     filtered.append(gap)
             else:
                 filtered.append(gap)
-        
+
         return filtered
 
 
 class DomainEnhancementOrchestrator:
     """
     Orchestrator for automatic domain enhancement.
-    
+
     Manages domain templates, gap detection, and continuous refinement.
     """
-    
+
     def __init__(self):
         """Initialize orchestrator."""
         self._template_registry: Dict[str, DomainTemplate] = {}
         self._domain_usage: Dict[str, Dict[str, Any]] = {}
         self._domain_versions: Dict[str, List[Dict[str, Any]]] = {}
         self._gap_analyzer = GapAnalyzer()
-        
+
         # Register default templates
-        for name in ['security-standards', 'testing-standards', 
-                     'documentation-standards', 'api-design-standards', 
+        for name in ['security-standards', 'testing-standards',
+                     'documentation-standards', 'api-design-standards',
                      'deployment-standards']:
             self._template_registry[name] = DomainTemplate.load(name)
-    
+
     def create_domain_from_template(
         self,
         template_name: str,
@@ -454,53 +455,53 @@ class DomainEnhancementOrchestrator:
     ) -> Dict[str, Any]:
         """
         Create a new domain from template.
-        
+
         Args:
             template_name: Name of template to use
             domain_name: Name for the new domain
             company_context: Company-specific context
-        
+
         Returns:
             Result with domain path and success status
         """
         if template_name not in self._template_registry:
             return {'success': False, 'error': f"Unknown template: {template_name}"}
-        
+
         template = self._template_registry[template_name]
         domain = template.instantiate(domain_name, company_context)
-        
+
         # Save domain to file
         domain_dir = Path("company/domains")
         domain_dir.mkdir(parents=True, exist_ok=True)
-        
+
         domain_path = domain_dir / f"{domain_name}.yaml"
-        
+
         with open(domain_path, 'w') as f:
             yaml.dump(domain, f, default_flow_style=False)
-        
+
         return {
             'success': True,
             'domain_path': str(domain_path),
             'domain': domain
         }
-    
+
     def detect_domain_gaps(
-        self, 
+        self,
         operation_context: Dict[str, Any]
     ) -> List[DomainGap]:
         """
         Detect gaps in company domains based on operation context.
-        
+
         Args:
             operation_context: Context from operation
-        
+
         Returns:
             List of detected gaps
         """
         domain = operation_context.get('domain', 'unknown')
-        
+
         return self._gap_analyzer.analyze_gaps(domain, operation_context)
-    
+
     def enhance_domain(
         self,
         domain_name: str,
@@ -508,47 +509,47 @@ class DomainEnhancementOrchestrator:
     ) -> Dict[str, Any]:
         """
         Enhance existing domain with new learnings.
-        
+
         Args:
             domain_name: Domain to enhance
             learnings: List of learnings to add
-        
+
         Returns:
             Result with items added count
         """
         domain_path = Path(f"company/domains/{domain_name}.yaml")
-        
+
         if not domain_path.exists():
             return {'success': False, 'error': 'Domain not found'}
-        
+
         with open(domain_path, 'r') as f:
             domain = yaml.safe_load(f)
-        
+
         items_added = 0
-        
+
         for learning in learnings:
             topic = learning.get('topic', 'general')
             content = learning.get('content')
-            
+
             if 'standards' not in domain:
                 domain['standards'] = {}
-            
+
             if topic not in domain['standards']:
                 domain['standards'][topic] = []
-            
+
             if content and content not in domain['standards'][topic]:
                 domain['standards'][topic].append(content)
                 items_added += 1
-        
+
         with open(domain_path, 'w') as f:
             yaml.dump(domain, f, default_flow_style=False)
-        
+
         return {'success': True, 'items_added': items_added}
-    
+
     def list_templates(self) -> List[Dict[str, Any]]:
         """
         List all available domain templates.
-        
+
         Returns:
             List of template metadata
         """
@@ -560,7 +561,7 @@ class DomainEnhancementOrchestrator:
             }
             for name, template in self._template_registry.items()
         ]
-    
+
     def auto_create_missing_domain(
         self,
         domain_name: str,
@@ -568,11 +569,11 @@ class DomainEnhancementOrchestrator:
     ) -> Dict[str, Any]:
         """
         Automatically create missing domain during operation.
-        
+
         Args:
             domain_name: Domain to create
             trigger_context: Context that triggered creation
-        
+
         Returns:
             Result with creation status
         """
@@ -584,80 +585,80 @@ class DomainEnhancementOrchestrator:
             'documentation-standards': 'documentation-standards',
             'deployment-standards': 'deployment-standards',
         }
-        
+
         template_name = template_mapping.get(domain_name, 'security-standards')
-        
+
         result = self.create_domain_from_template(
             template_name=template_name,
             domain_name=domain_name,
             company_context={}
         )
-        
+
         return {
             'created': result['success'],
             'template_used': template_name,
             'domain_path': result.get('domain_path')
         }
-    
+
     def validate_domain(self, domain_path: str) -> Dict[str, Any]:
         """
         Validate domain YAML structure.
-        
+
         Args:
             domain_path: Path to domain file
-        
+
         Returns:
             Validation result
         """
         path = Path(domain_path)
-        
+
         if not path.exists():
             return {'valid': False, 'errors': ['Domain file not found']}
-        
+
         try:
             with open(path, 'r') as f:
                 domain = yaml.safe_load(f)
-            
+
             errors = []
-            
+
             if 'name' not in domain:
                 errors.append("Domain must have 'name' field")
-            
+
             if 'standards' not in domain:
                 errors.append("Domain must have 'standards' field")
-            
+
             return {'valid': len(errors) == 0, 'errors': errors}
-        
+
         except Exception as e:
             return {'valid': False, 'errors': [str(e)]}
-    
+
     def merge_domains(self, domain_names: List[str]) -> Dict[str, Any]:
         """
         Merge multiple domains into consolidated view.
-        
+
         Args:
             domain_names: List of domain names to merge
-        
+
         Returns:
             Merged domain dictionary
         """
         merged = {'standards': {}}
-        
+
         for domain_name in domain_names:
             domain_path = Path(f"company/domains/{domain_name}.yaml")
-            
+
             if domain_path.exists():
                 with open(domain_path, 'r') as f:
                     domain = yaml.safe_load(f)
-                
+
                 if 'standards' in domain:
                     for section, standards in domain['standards'].items():
                         if section not in merged['standards']:
                             merged['standards'][section] = []
                         merged['standards'][section].extend(standards)
-        
+
         return merged
-    
+
     def track_domain_usage(
         self,
         domain_name: str,
@@ -665,7 +666,7 @@ class DomainEnhancementOrchestrator:
     ):
         """
         Track domain usage in operations.
-        
+
         Args:
             domain_name: Domain being used
             operation_context: Operation context
@@ -676,71 +677,71 @@ class DomainEnhancementOrchestrator:
                 'last_used': None,
                 'operations': []
             }
-        
+
         self._domain_usage[domain_name]['usage_count'] += 1
         self._domain_usage[domain_name]['last_used'] = datetime.now()
         self._domain_usage[domain_name]['operations'].append(operation_context)
-    
+
     def get_domain_usage_stats(self) -> Dict[str, Dict[str, Any]]:
         """
         Get domain usage statistics.
-        
+
         Returns:
             Dict mapping domain to usage stats
         """
         return self._domain_usage
-    
+
     def check_domain_freshness(self, domain_name: str) -> Dict[str, Any]:
         """
         Check if domain needs updating based on age.
-        
+
         Args:
             domain_name: Domain to check
-        
+
         Returns:
             Freshness information
         """
         domain_path = Path(f"company/domains/{domain_name}.yaml")
-        
+
         if not domain_path.exists():
             return {'is_fresh': False, 'error': 'Domain not found'}
-        
+
         mtime = domain_path.stat().st_mtime
         last_updated = datetime.fromtimestamp(mtime)
         days_since_update = (datetime.now() - last_updated).days
-        
+
         return {
             'is_fresh': days_since_update < 90,  # 3 months
             'last_updated': last_updated.isoformat(),
             'days_since_update': days_since_update
         }
-    
+
     def search_domains(self, query: str) -> List[Dict[str, Any]]:
         """
         Search across domain content.
-        
+
         Args:
             query: Search query
-        
+
         Returns:
             List of matching results
         """
         results = []
         domain_dir = Path("company/domains")
-        
+
         if not domain_dir.exists():
             return results
-        
+
         for domain_path in domain_dir.glob("*.yaml"):
             try:
                 with open(domain_path, 'r') as f:
                     domain = yaml.safe_load(f)
-                
+
                 if not domain or 'standards' not in domain:
                     continue
-                
+
                 standards = domain['standards']
-                
+
                 # Handle both dict and list formats
                 if isinstance(standards, dict):
                     for section, section_standards in standards.items():
@@ -763,25 +764,25 @@ class DomainEnhancementOrchestrator:
             except Exception:
                 # Skip malformed YAML files
                 continue
-        
+
         return results
-    
+
     def export_domain(self, domain_name: str, format: str = 'yaml') -> Optional[str]:
         """
         Export domain for sharing/backup.
-        
+
         Args:
             domain_name: Domain to export
             format: Export format ('yaml', 'json')
-        
+
         Returns:
             Exported content as string
         """
         domain_path = Path(f"company/domains/{domain_name}.yaml")
-        
+
         if not domain_path.exists():
             return None
-        
+
         with open(domain_path, 'r') as f:
             if format == 'yaml':
                 return f.read()
@@ -789,9 +790,9 @@ class DomainEnhancementOrchestrator:
                 import json
                 domain = yaml.safe_load(f)
                 return json.dumps(domain, indent=2)
-        
+
         return None
-    
+
     def import_domain(
         self,
         domain_data: Dict[str, Any],
@@ -799,31 +800,31 @@ class DomainEnhancementOrchestrator:
     ) -> Dict[str, Any]:
         """
         Import external domain.
-        
+
         Args:
             domain_data: Domain data to import
             source: Source of import
-        
+
         Returns:
             Import result
         """
         domain_name = domain_data.get('name', 'imported-domain')
         domain_path = Path(f"company/domains/{domain_name}.yaml")
-        
+
         domain_path.parent.mkdir(parents=True, exist_ok=True)
-        
+
         with open(domain_path, 'w') as f:
             yaml.dump(domain_data, f, default_flow_style=False)
-        
+
         return {'success': True, 'domain_path': str(domain_path)}
-    
+
     def get_domain_versions(self, domain_name: str) -> List[Dict[str, Any]]:
         """
         Get version history for a domain.
-        
+
         Args:
             domain_name: Domain to check
-        
+
         Returns:
             List of versions
         """
@@ -831,9 +832,9 @@ class DomainEnhancementOrchestrator:
             self._domain_versions[domain_name] = [
                 {'version': '1.0', 'timestamp': datetime.now().isoformat()}
             ]
-        
+
         return self._domain_versions[domain_name]
-    
+
     def compute_domain_diff(
         self,
         domain_name: str,
@@ -842,12 +843,12 @@ class DomainEnhancementOrchestrator:
     ) -> Dict[str, List[str]]:
         """
         Compute diff between domain versions.
-        
+
         Args:
             domain_name: Domain to diff
             version_a: First version
             version_b: Second version
-        
+
         Returns:
             Diff with added, removed, modified
         """

@@ -11,17 +11,17 @@ AC-ID: SPA-SUITE-MCP-001
 Authority: CORE-007 (MCP-first) + Phase 53 S4 (Orchestrator Integration)
 """
 
-from pathlib import Path
-from typing import Dict, Any, List, Optional
 import logging
 from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 from cortex.mcp.decorators import mcp_tool
 from cortex.orchestrators.domain.dashboard_capability_broker import (
     DashboardCapabilityBroker,
     DashboardGenerationRequest,
+    DashboardMetric,
     RepositoryType,
-    DashboardMetric
 )
 
 logger = logging.getLogger(__name__)
@@ -49,7 +49,7 @@ def _register_orchestrators(broker: DashboardCapabilityBroker):
         ("RecommendationGate", ["generate_dashboard", "metrics_evidence"]),
         ("TDDOrchestrator", ["generate_dashboard", "test_suite"])
     ]
-    
+
     for orch_name, capabilities in orchestrators:
         broker.register_orchestrator(orch_name, capabilities)
 
@@ -74,15 +74,15 @@ def cortex_generate_dashboard_suite(
 ) -> Dict[str, Any]:
     """
     Generate complete static dashboard suite.
-    
+
     Produces:
     - dist/index.html (landing with hero + tile grid)
     - dist/repos/<slug>/index.html (repo dashboards)
     - dist/assets/* (CSS, JS, vendor libs)
     - dist/images/* (logo)
-    
+
     All data embedded as JSON - no fetch() calls, file:// compatible.
-    
+
     Args:
         repos: List of repo manifest entries:
             - slug: URL-safe identifier
@@ -99,25 +99,25 @@ def cortex_generate_dashboard_suite(
             - version: CORTEX version
             - tags: List of tags
             - icon: Emoji icon
-            
+
         repo_data: Dictionary mapping slug -> full dashboard data:
             - repo_slug, display_name, owner, primary_language
             - health_score, risk_score, loc, files
             - overview_metrics, architecture, dependencies
             - quality, vulnerabilities, testing
             - use_cases, recommendations
-            
+
         output_dir: Output directory path (absolute)
         title: Suite title for landing page
         subtitle: Suite subtitle
-        
+
     Returns:
         Dict with:
         - success: bool
         - landing_path: str (path to landing HTML)
         - repo_dashboards: List[str] (paths to repo HTMLs)
         - errors: List[str]
-        
+
     Example:
         >>> result = cortex_generate_dashboard_suite(
         ...     repos=[{
@@ -142,13 +142,13 @@ def cortex_generate_dashboard_suite(
         >>> print(f"Generated: {result['landing_path']}")
     """
     try:
+        from cortex.visualization.spa.models import RepoManifestEntry
         from cortex.visualization.spa.suite_generator import (
-            DashboardSuiteGenerator,
             DashboardSuiteConfig,
+            DashboardSuiteGenerator,
             RepoDashboardData,
         )
-        from cortex.visualization.spa.models import RepoManifestEntry
-        
+
         # Convert dicts to dataclasses
         manifest_entries = []
         for r in repos:
@@ -169,7 +169,7 @@ def cortex_generate_dashboard_suite(
                 icon=r.get("icon", "📁"),
             )
             manifest_entries.append(entry)
-        
+
         # Convert repo data (simplified - uses dict directly)
         dashboard_data = {}
         for slug, data in repo_data.items():
@@ -191,7 +191,7 @@ def cortex_generate_dashboard_suite(
                 overview_metrics=data.get("overview_metrics", {}),
                 # Note: Other fields use defaults for now
             )
-        
+
         # Create config
         config = DashboardSuiteConfig(
             repos=manifest_entries,
@@ -199,21 +199,21 @@ def cortex_generate_dashboard_suite(
             title=title,
             subtitle=subtitle,
         )
-        
+
         # Generate suite
         generator = DashboardSuiteGenerator(
             output_dir=Path(output_dir),
         )
-        
+
         result = generator.generate_suite(config, dashboard_data)
-        
+
         return {
             "success": result.success,
             "landing_path": result.landing_path,
             "repo_dashboards": result.repo_dashboards,
             "errors": result.errors,
         }
-        
+
     except Exception as e:
         logger.error(f"cortex_generate_dashboard_suite failed: {e}", exc_info=True)
         return {
@@ -240,21 +240,21 @@ def cortex_generate_repo_dashboard(
 ) -> Dict[str, Any]:
     """
     Generate single repository dashboard.
-    
+
     Creates a standalone HTML dashboard with embedded JSON data.
     Useful for generating individual repo dashboards without full suite.
-    
+
     Args:
         repo_slug: Repository identifier
         dashboard_data: Full dashboard data dictionary
         output_path: Output file path (absolute)
-        
+
     Returns:
         Dict with:
         - success: bool
         - output_path: str
         - error: Optional[str]
-        
+
     Example:
         >>> result = cortex_generate_repo_dashboard(
         ...     repo_slug="kashkole",
@@ -263,12 +263,12 @@ def cortex_generate_repo_dashboard(
         ... )
     """
     try:
+        from cortex.visualization.spa.models import RepoDashboardData, RepoManifestEntry
         from cortex.visualization.spa.suite_generator import DashboardSuiteGenerator
-        from cortex.visualization.spa.models import RepoManifestEntry, RepoDashboardData
-        
+
         output_path = Path(output_path)
         output_path.parent.mkdir(parents=True, exist_ok=True)
-        
+
         # Create manifest entry
         repo = RepoManifestEntry(
             slug=repo_slug,
@@ -286,7 +286,7 @@ def cortex_generate_repo_dashboard(
             tags=dashboard_data.get("tags", []),
             icon=dashboard_data.get("icon", "📁"),
         )
-        
+
         # Create dashboard data
         data = RepoDashboardData(
             repo_slug=repo_slug,
@@ -304,20 +304,20 @@ def cortex_generate_repo_dashboard(
             tags=dashboard_data.get("tags", []),
             overview_metrics=dashboard_data.get("overview_metrics", {}),
         )
-        
+
         # Generate using suite generator's method
         generator = DashboardSuiteGenerator(
             output_dir=output_path.parent,
         )
-        
+
         result_path = generator._generate_repo_dashboard(repo, data)
-        
+
         return {
             "success": True,
             "output_path": str(result_path),
             "error": None,
         }
-        
+
     except Exception as e:
         logger.error(f"cortex_generate_repo_dashboard failed: {e}", exc_info=True)
         return {
@@ -345,15 +345,15 @@ def cortex_generate_landing_page(
 ) -> Dict[str, Any]:
     """
     Generate landing page HTML for dashboard suite.
-    
+
     Creates a hero + tile grid landing page with embedded manifest.
-    
+
     Args:
         repos: List of repo manifest entries (see cortex_generate_dashboard_suite)
         output_path: Output file path (absolute)
         title: Page title
         subtitle: Page subtitle
-        
+
     Returns:
         Dict with:
         - success: bool
@@ -361,15 +361,15 @@ def cortex_generate_landing_page(
         - error: Optional[str]
     """
     try:
-        from cortex.visualization.spa.suite_generator import (
-            DashboardSuiteGenerator,
-            DashboardSuiteConfig,
-        )
         from cortex.visualization.spa.models import RepoManifestEntry
-        
+        from cortex.visualization.spa.suite_generator import (
+            DashboardSuiteConfig,
+            DashboardSuiteGenerator,
+        )
+
         output_path = Path(output_path)
         output_path.parent.mkdir(parents=True, exist_ok=True)
-        
+
         # Convert repos
         manifest_entries = []
         for r in repos:
@@ -390,26 +390,26 @@ def cortex_generate_landing_page(
                 icon=r.get("icon", "📁"),
             )
             manifest_entries.append(entry)
-        
+
         config = DashboardSuiteConfig(
             repos=manifest_entries,
             output_dir=str(output_path.parent),
             title=title,
             subtitle=subtitle,
         )
-        
+
         generator = DashboardSuiteGenerator(
             output_dir=output_path.parent,
         )
-        
+
         result_path = generator._generate_landing(config)
-        
+
         return {
             "success": True,
             "output_path": str(result_path),
             "error": None,
         }
-        
+
     except Exception as e:
         logger.error(f"cortex_generate_landing_page failed: {e}", exc_info=True)
         return {

@@ -4,8 +4,9 @@ Extract company overrides from cortex_brain/tiers/ into registry.
 """
 
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
 from pathlib import Path
+from typing import Any, Dict, List, Optional
+
 import yaml
 
 

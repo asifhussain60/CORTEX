@@ -14,11 +14,11 @@ Phase 43: AC-PHASE43-017 through AC-PHASE43-020
 """
 
 import ast
-import symtable
 import logging
+import symtable
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import List, Optional, Dict, Any
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 class FunctionInfo:
     """
     Information about a function definition.
-    
+
     Attributes:
         name: Function name
         line_number: Line number where function is defined
@@ -50,7 +50,7 @@ class FunctionInfo:
 class ClassInfo:
     """
     Information about a class definition.
-    
+
     Attributes:
         name: Class name
         line_number: Line number where class is defined
@@ -71,7 +71,7 @@ class ClassInfo:
 class ImportInfo:
     """
     Information about an import statement.
-    
+
     Attributes:
         module: Module name being imported
         names: List of names imported from module
@@ -88,7 +88,7 @@ class ImportInfo:
 class ASTAnalysisResult:
     """
     Result of AST analysis.
-    
+
     Attributes:
         success: Whether analysis succeeded
         functions: List of functions found
@@ -108,56 +108,56 @@ class ASTAnalysisResult:
 class ASTAnalyzer:
     """
     Analyzes Python code using Abstract Syntax Tree (AST).
-    
+
     Extracts:
     - Function definitions and signatures
     - Class definitions and methods
     - Import statements
     - Code structure and organization
-    
+
     Example:
         ```python
         analyzer = ASTAnalyzer()
-        
+
         # Analyze code string
         result = analyzer.analyze_code(code_string)
         for func in result.functions:
             print(f"Function: {func.name} at line {func.line_number}")
-        
+
         # Analyze file
         result = analyzer.analyze_file(Path("module.py"))
         for cls in result.classes:
             print(f"Class: {cls.name} with methods {cls.methods}")
         ```
     """
-    
+
     def analyze_code(self, code: str) -> ASTAnalysisResult:
         """
         Analyze Python code from a string.
-        
+
         Args:
             code: Python source code to analyze
-        
+
         Returns:
             ASTAnalysisResult with extracted information
         """
         try:
             tree = ast.parse(code)
-            
+
             functions = []
             classes = []
             imports = []
-            
+
             # Visit all nodes in the AST
             for node in ast.walk(tree):
                 if isinstance(node, ast.FunctionDef) or isinstance(node, ast.AsyncFunctionDef):
                     func_info = self._extract_function_info(node)
                     functions.append(func_info)
-                
+
                 elif isinstance(node, ast.ClassDef):
                     class_info = self._extract_class_info(node)
                     classes.append(class_info)
-                
+
                 elif isinstance(node, ast.Import):
                     for alias in node.names:
                         imports.append(
@@ -168,7 +168,7 @@ class ASTAnalyzer:
                                 line_number=node.lineno,
                             )
                         )
-                
+
                 elif isinstance(node, ast.ImportFrom):
                     names = [alias.name for alias in node.names]
                     # Get first alias for the import
@@ -181,10 +181,10 @@ class ASTAnalyzer:
                             line_number=node.lineno,
                         )
                     )
-            
+
             # Calculate metadata
             line_count = len(code.splitlines())
-            
+
             # Phase 43: Add symtable integration for scope analysis
             scope_analysis = {}
             try:
@@ -193,7 +193,7 @@ class ASTAnalyzer:
             except Exception as e:
                 logger.debug(f"Symtable scope analysis failed: {e}")
                 # Continue without scope analysis - not critical
-            
+
             return ASTAnalysisResult(
                 success=True,
                 functions=functions,
@@ -207,7 +207,7 @@ class ASTAnalyzer:
                     "scope_analysis": scope_analysis,  # Phase 43 addition
                 },
             )
-        
+
         except SyntaxError as e:
             return ASTAnalysisResult(
                 success=False,
@@ -218,14 +218,14 @@ class ASTAnalyzer:
                 success=False,
                 error=f"Analysis error: {str(e)}",
             )
-    
+
     def analyze_file(self, file_path: Path) -> ASTAnalysisResult:
         """
         Analyze Python code from a file.
-        
+
         Args:
             file_path: Path to Python file
-        
+
         Returns:
             ASTAnalysisResult with extracted information
         """
@@ -235,43 +235,43 @@ class ASTAnalyzer:
                     success=False,
                     error=f"File not found: {file_path}",
                 )
-            
+
             code = file_path.read_text(encoding="utf-8")
             result = self.analyze_code(code)
-            
+
             # Add file path to metadata
             if result.success:
                 result.metadata["file_path"] = str(file_path)
-            
+
             return result
-        
+
         except Exception as e:
             return ASTAnalysisResult(
                 success=False,
                 error=f"Failed to read file: {str(e)}",
             )
-    
+
     def _extract_function_info(self, node: ast.FunctionDef) -> FunctionInfo:
         """
         Extract information from a function definition node.
-        
+
         Args:
             node: AST FunctionDef or AsyncFunctionDef node
-        
+
         Returns:
             FunctionInfo with extracted data
         """
         # Get parameters
         parameters = [arg.arg for arg in node.args.args]
-        
+
         # Get return type annotation
         return_type = ""
         if node.returns:
             return_type = self._get_type_annotation(node.returns)
-        
+
         # Get docstring
         docstring = ast.get_docstring(node) or ""
-        
+
         # Get decorators
         decorators = []
         for decorator in node.decorator_list:
@@ -279,10 +279,10 @@ class ASTAnalyzer:
                 decorators.append(decorator.id)
             elif isinstance(decorator, ast.Attribute):
                 decorators.append(decorator.attr)
-        
+
         # Check if async
         is_async = isinstance(node, ast.AsyncFunctionDef)
-        
+
         return FunctionInfo(
             name=node.name,
             line_number=node.lineno,
@@ -292,14 +292,14 @@ class ASTAnalyzer:
             decorators=decorators,
             is_async=is_async,
         )
-    
+
     def _extract_class_info(self, node: ast.ClassDef) -> ClassInfo:
         """
         Extract information from a class definition node.
-        
+
         Args:
             node: AST ClassDef node
-        
+
         Returns:
             ClassInfo with extracted data
         """
@@ -310,16 +310,16 @@ class ASTAnalyzer:
                 bases.append(base.id)
             elif isinstance(base, ast.Attribute):
                 bases.append(base.attr)
-        
+
         # Get methods
         methods = []
         for item in node.body:
             if isinstance(item, ast.FunctionDef) or isinstance(item, ast.AsyncFunctionDef):
                 methods.append(item.name)
-        
+
         # Get docstring
         docstring = ast.get_docstring(node) or ""
-        
+
         # Get decorators
         decorators = []
         for decorator in node.decorator_list:
@@ -327,7 +327,7 @@ class ASTAnalyzer:
                 decorators.append(decorator.id)
             elif isinstance(decorator, ast.Attribute):
                 decorators.append(decorator.attr)
-        
+
         return ClassInfo(
             name=node.name,
             line_number=node.lineno,
@@ -336,14 +336,14 @@ class ASTAnalyzer:
             docstring=docstring,
             decorators=decorators,
         )
-    
+
     def _get_type_annotation(self, node: ast.AST) -> str:
         """
         Extract type annotation as string.
-        
+
         Args:
             node: AST node representing a type annotation
-        
+
         Returns:
             String representation of the type
         """
@@ -356,17 +356,17 @@ class ASTAnalyzer:
             if isinstance(node.value, ast.Name):
                 return node.value.id
         return ""
-    
+
     def _extract_scope_analysis(self, symbols: symtable.SymbolTable) -> Dict[str, Any]:
         """Phase 43: Extract scope analysis from symtable.
-        
+
         AC-PHASE43-017: Analyzes variable scopes and symbol types.
         AC-PHASE43-018: Identifies local, global, free, and cell variables.
         AC-PHASE43-019: Distinguishes imported from assigned symbols.
-        
+
         Args:
             symbols: SymbolTable from symtable.symtable()
-        
+
         Returns:
             Dictionary with scope analysis information
         """
@@ -380,13 +380,13 @@ class ASTAnalyzer:
                 "cell": [],
             }
         }
-        
+
         try:
             # Process each symbol in the table
             for symbol in symbols.get_symbols():
                 sym_name = symbol.get_name()
                 sym_type = "unknown"
-                
+
                 # Classify symbol type
                 if symbol.is_imported():
                     sym_type = "imported"
@@ -400,7 +400,7 @@ class ASTAnalyzer:
                 else:
                     sym_type = "local"
                     analysis["symbols_by_type"]["local"].append(sym_name)
-            
+
             # Process nested scopes (functions, classes)
             for child in symbols.get_children():
                 child_analysis = {
@@ -413,5 +413,5 @@ class ASTAnalyzer:
         except Exception as e:
             logger.debug(f"Error extracting scope analysis: {e}")
             # Return partial analysis
-        
+
         return analysis

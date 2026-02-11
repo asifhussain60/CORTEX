@@ -6,17 +6,17 @@ Description: Convert data models to dashboard JSON
 Authority: phase-54-A-incremental-onboarding-refactor.yaml, S1 task 5
 """
 
-from pathlib import Path
-from typing import Dict, Any
-from dataclasses import asdict
 import json
+from dataclasses import asdict
+from pathlib import Path
+from typing import Any, Dict
 
-from cortex.brain.core.result import Result, Ok, Err
+from cortex.brain.core.result import Err, Ok, Result
 
 
 class RenderDashboardJSONUseCase:
     """Render dashboard JSON (SOLID: Single Responsibility)."""
-    
+
     def execute(
         self,
         repo_overview: Dict[str, Any],
@@ -26,13 +26,13 @@ class RenderDashboardJSONUseCase:
     ) -> Result[Dict[str, Any]]:
         """
         Convert data models to dashboard JSON.
-        
+
         Args:
             repo_overview: Repository overview data
             security_threats: List of security threats
             business_narrative: Business narrative data
             dependency_graph: Dependency graph data
-            
+
         Returns:
             Result containing dashboard JSON or error
         """
@@ -51,17 +51,17 @@ class RenderDashboardJSONUseCase:
                     "valid": True,
                 },
             }
-            
+
             return Ok(dashboard)
-        
+
         except Exception as e:
             return Err(f"Failed to render dashboard JSON: {str(e)}")
-    
+
     def _get_timestamp(self) -> str:
         """Get current timestamp."""
         from datetime import datetime
         return datetime.now().isoformat()
-    
+
     def _render_overview_section(self, overview: Dict[str, Any]) -> Dict[str, Any]:
         """Render overview section."""
         return {
@@ -73,13 +73,13 @@ class RenderDashboardJSONUseCase:
             "test_framework": overview.get("test_framework"),
             "has_docs": overview.get("has_docs", False),
         }
-    
+
     def _render_security_section(self, threats: list) -> Dict[str, Any]:
         """Render security section."""
         p0_threats = [t for t in threats if t.get("level") == "P0"]
         p1_threats = [t for t in threats if t.get("level") == "P1"]
         p2_threats = [t for t in threats if t.get("level") == "P2"]
-        
+
         return {
             "total_threats": len(threats),
             "p0_count": len(p0_threats),
@@ -87,7 +87,7 @@ class RenderDashboardJSONUseCase:
             "p2_count": len(p2_threats),
             "threats": threats,
         }
-    
+
     def _render_business_section(self, narrative: Dict[str, Any]) -> Dict[str, Any]:
         """Render business section."""
         return {
@@ -99,7 +99,7 @@ class RenderDashboardJSONUseCase:
             "outcomes": narrative.get("business_outcomes", []),
             "confidence": narrative.get("confidence_score", 0.0),
         }
-    
+
     def _render_dependencies_section(self, graph: Dict[str, Any]) -> Dict[str, Any]:
         """Render dependencies section."""
         return {
@@ -108,26 +108,26 @@ class RenderDashboardJSONUseCase:
             "dev_count": graph.get("dev_count", 0),
             "dependencies": graph.get("dependencies", []),
         }
-    
+
     def write_to_file(self, dashboard: Dict[str, Any], output_path: Path) -> Result[Path]:
         """
         Write dashboard JSON to file.
-        
+
         Args:
             dashboard: Dashboard data
             output_path: Path to write JSON file
-            
+
         Returns:
             Result containing output path or error
         """
         try:
             output_path.parent.mkdir(parents=True, exist_ok=True)
-            
+
             with open(output_path, "w") as f:
                 json.dump(dashboard, f, indent=2, default=str)
-            
+
             return Ok(output_path)
-        
+
         except Exception as e:
             return Err(f"Failed to write dashboard JSON: {str(e)}")
 

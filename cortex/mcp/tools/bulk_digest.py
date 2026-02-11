@@ -6,9 +6,10 @@ MCP tool for bulk markdown file ingestion.
 Exposes BulkDigestOrchestrator functionality via MCP interface.
 """
 
-from typing import Dict, Any, Optional, List
-from cortex.orchestrators.support.bulk_digest_orchestrator import BulkDigestOrchestrator
 import logging
+from typing import Any, Dict, List, Optional
+
+from cortex.orchestrators.support.bulk_digest_orchestrator import BulkDigestOrchestrator
 
 logger = logging.getLogger(__name__)
 
@@ -25,10 +26,10 @@ def cortex_bulk_digest_files(
     continue_on_error: bool = True
 ) -> Dict[str, Any]:
     """Bulk ingest markdown files with intelligent routing and cleanup.
-    
+
     Scans directory for markdown files, ingests via DigestSessionOrchestrator,
     and optionally deletes files after successful ingestion.
-    
+
     Args:
         directory: Directory to scan (default: current directory)
         pattern: Glob pattern for file matching (default: *.md)
@@ -39,7 +40,7 @@ def cortex_bulk_digest_files(
         parallel: Enable parallel processing for faster execution
         max_workers: Maximum parallel workers (default: 4)
         continue_on_error: Continue processing remaining files on error
-        
+
     Returns:
         Dictionary with bulk digest results:
         - success: bool
@@ -55,7 +56,7 @@ def cortex_bulk_digest_files(
         - dry_run: bool
         - parallel: bool
         - errors: List[str] (up to 10 error messages)
-    
+
     Example:
         >>> # Ingest all root-level markdown files
         >>> result = cortex_bulk_digest_files(
@@ -67,7 +68,7 @@ def cortex_bulk_digest_files(
         >>> print(f"Processed: {result['files_processed']}")
         >>> print(f"Deleted: {result['files_deleted']}")
         >>> print(f"Enhancements: {result['total_enhancements']}")
-        
+
         >>> # Dry run to see what would happen
         >>> result = cortex_bulk_digest_files(
         ...     directory=".",
@@ -75,7 +76,7 @@ def cortex_bulk_digest_files(
         ...     dry_run=True
         ... )
         >>> print(f"Would process {result['files_processed']} files")
-        
+
         >>> # Parallel processing for large batches
         >>> result = cortex_bulk_digest_files(
         ...     directory=".",
@@ -86,7 +87,7 @@ def cortex_bulk_digest_files(
     """
     try:
         orchestrator = BulkDigestOrchestrator()
-        
+
         result = orchestrator.process_directory(
             directory=directory,
             pattern=pattern,
@@ -98,9 +99,9 @@ def cortex_bulk_digest_files(
             max_workers=max_workers,
             continue_on_error=continue_on_error
         )
-        
+
         return result
-        
+
     except Exception as e:
         logger.error(f"Bulk digest MCP tool error: {e}")
         return {

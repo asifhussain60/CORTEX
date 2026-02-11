@@ -10,7 +10,8 @@ Compliance: NORMAL
 Author: CORTEX Framework
 """
 
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List, Optional
+
 from cortex.mcp.decorators import mcp_tool
 
 
@@ -21,10 +22,10 @@ from cortex.mcp.decorators import mcp_tool
 )
 def get_operation_status(operation_id: str) -> Dict[str, Any]:
     """Get operation status.
-    
+
     Args:
         operation_id: Operation identifier
-        
+
     Returns:
         Dict with operation status
     """
@@ -44,10 +45,10 @@ def get_operation_status(operation_id: str) -> Dict[str, Any]:
 )
 def monitor_orchestrator_health(orchestrator_id: str) -> Dict[str, Any]:
     """Monitor orchestrator health.
-    
+
     Args:
         orchestrator_id: Orchestrator identifier
-        
+
     Returns:
         Dict with health metrics
     """
@@ -68,11 +69,11 @@ def monitor_orchestrator_health(orchestrator_id: str) -> Dict[str, Any]:
 )
 def optimize_orchestrator_config(orchestrator_id: str, optimization_type: str = "auto") -> Dict[str, Any]:
     """Optimize orchestrator configuration.
-    
+
     Args:
         orchestrator_id: Orchestrator identifier
         optimization_type: Type of optimization ('auto', 'performance', 'reliability')
-        
+
     Returns:
         Dict with optimization results
     """
@@ -92,10 +93,10 @@ def optimize_orchestrator_config(orchestrator_id: str, optimization_type: str = 
 )
 def diagnose_orchestrator_issues(orchestrator_id: str) -> Dict[str, Any]:
     """Diagnose orchestrator issues.
-    
+
     Args:
         orchestrator_id: Orchestrator identifier
-        
+
     Returns:
         Dict with diagnostic results
     """

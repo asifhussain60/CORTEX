@@ -3,8 +3,8 @@ Architecture Validation MCP Tool - Phase 24 Layer 1
 MCP-exposed interface for ArchitectureGuard orchestrator
 """
 
-from typing import Dict, Any, Optional, List
 import logging
+from typing import Any, Dict, List, Optional
 
 from cortex.mcp.decorators import mcp_tool
 from cortex.orchestrators.core.architecture_guard import (
@@ -60,41 +60,41 @@ def cortex_validate_architecture(
 ) -> Dict[str, Any]:
     """
     Validate user request against master plan.
-    
+
     Prevents:
     - Architectural regression
-    - Master plan drift  
+    - Master plan drift
     - Untracked significant changes
     - Contradictions with completed phases
-    
+
     Returns verdictUnion[PROCEED, CREATE_PHASE] | BLOCK
-    
+
     Args:
         request_description: Description of requested change
         intent_type: IMPLEMENT, REFACTOR, FIX, or DESIGN
         scope: Optional list of affected files
-        
+
     Returns:
         Dict with status, verdict, reasoning, and phase_alignment
     """
     try:
         guard = _get_guard()
-        
+
         # Validate request
         validation_result = guard.validate_request(
             request_description=request_description,
             intent_type=intent_type,
             scope=scope or []
         )
-        
+
         if validation_result.is_err():
             return {
                 "status": "error",
                 "error": f"Validation failed: {validation_result.error}"
             }
-        
+
         validation = validation_result.unwrap()
-        
+
         # Format result based on verdict
         if validation.verdict == GateVerdict.PROCEED:
             return {
@@ -109,7 +109,7 @@ def cortex_validate_architecture(
                 },
                 "message": f"✅ Request approved: {validation.reasoning}"
             }
-        
+
         elif validation.verdict == GateVerdict.CREATE_PHASE:
             suggested_phase = {}
             if validation.suggested_phase:
@@ -120,7 +120,7 @@ def cortex_validate_architecture(
                     "estimated_effort": validation.suggested_phase.estimated_effort,
                     "scope": validation.suggested_phase.scope
                 }
-            
+
             return {
                 "status": "success",
                 "verdict": "CREATE_PHASE",
@@ -132,7 +132,7 @@ def cortex_validate_architecture(
                 },
                 "message": f"📋 Phase creation recommended: {validation.reasoning}"
             }
-        
+
         else:  # BLOCK
             return {
                 "status": "blocked",
@@ -145,7 +145,7 @@ def cortex_validate_architecture(
                 },
                 "error": f"❌ Request blocked: {validation.reasoning}"
             }
-    
+
     except Exception as e:
         logger.error(f"Architecture validation tool error: {e}", exc_info=True)
         return {

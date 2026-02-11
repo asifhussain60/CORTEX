@@ -28,8 +28,10 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 from uuid import uuid4
 
-from cortex.brain.knowledge.unified_intelligence_context import UnifiedIntelligenceContext
 from cortex.brain.knowledge.knowledge_synthesis_engine import KnowledgeSynthesisEngine
+from cortex.brain.knowledge.unified_intelligence_context import (
+    UnifiedIntelligenceContext,
+)
 
 logger = logging.getLogger(__name__)
 

@@ -12,13 +12,14 @@ Requirements: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 """
 
 import asyncio
-import httpx
-import time
 import statistics
-from typing import Dict, Any, List, Optional, Callable
+import time
 from dataclasses import dataclass, field
-from enum import Enum
 from datetime import datetime
+from enum import Enum
+from typing import Any, Callable, Dict, List, Optional
+
+import httpx
 
 
 class RequestType(Enum):
@@ -32,7 +33,7 @@ class RequestType(Enum):
 @dataclass
 class LoadTestScenario:
     """Load test scenario configuration.
-    
+
     Attributes:
         name: Scenario name
         concurrent_users: Number of concurrent users
@@ -52,7 +53,7 @@ class LoadTestScenario:
 @dataclass
 class LoadTestResult:
     """Load test execution result.
-    
+
     Attributes:
         success: Whether load test passed thresholds
         scenario_name: Name of executed scenario
@@ -86,7 +87,7 @@ class LoadTestResult:
 @dataclass
 class RequestMetrics:
     """Metrics for a single request.
-    
+
     Attributes:
         success: Whether request succeeded
         latency_ms: Request latency in milliseconds
@@ -101,7 +102,7 @@ class RequestMetrics:
 
 class UserSimulator:
     """Simulates a single user making requests.
-    
+
     Coordinates request execution, timing, and metrics collection
     for a simulated user during load testing.
     """
@@ -114,7 +115,7 @@ class UserSimulator:
         think_time_ms: int = 100
     ) -> None:
         """Initialize UserSimulator.
-        
+
         Args:
             user_id: Unique user identifier
             endpoint: Target endpoint URL
@@ -133,16 +134,16 @@ class UserSimulator:
         request_type: RequestType
     ) -> RequestMetrics:
         """Execute a single request and record metrics.
-        
+
         Args:
             client: httpx AsyncClient
             request_type: Type of request to execute
-            
+
         Returns:
             RequestMetrics with execution results
         """
         start_time = time.time()
-        
+
         try:
             if request_type == RequestType.TOOL_DISCOVERY:
                 resp = await client.post(
@@ -159,7 +160,7 @@ class UserSimulator:
                     latency_ms=latency_ms,
                     status_code=resp.status_code
                 )
-            
+
             elif request_type == RequestType.TOOL_EXECUTION:
                 resp = await client.post(
                     f"{self.endpoint}/mcp/execute",
@@ -179,7 +180,7 @@ class UserSimulator:
                     latency_ms=latency_ms,
                     status_code=resp.status_code
                 )
-            
+
             elif request_type == RequestType.HEALTH_CHECK:
                 resp = await client.get(f"{self.endpoint}/health")
                 latency_ms = (time.time() - start_time) * 1000
@@ -188,7 +189,7 @@ class UserSimulator:
                     latency_ms=latency_ms,
                     status_code=resp.status_code
                 )
-            
+
             elif request_type == RequestType.STREAMING:
                 # Simulate streaming request (simplified)
                 resp = await client.post(
@@ -206,7 +207,7 @@ class UserSimulator:
                     latency_ms=latency_ms,
                     status_code=resp.status_code
                 )
-            
+
             else:
                 latency_ms = (time.time() - start_time) * 1000
                 return RequestMetrics(
@@ -214,7 +215,7 @@ class UserSimulator:
                     latency_ms=latency_ms,
                     error_message=f"Unknown request type: {request_type}"
                 )
-                
+
         except Exception as e:
             latency_ms = (time.time() - start_time) * 1000
             return RequestMetrics(
@@ -229,34 +230,34 @@ class UserSimulator:
         stop_event: asyncio.Event
     ) -> List[RequestMetrics]:
         """Run user simulation until stop event is set.
-        
+
         Args:
             client: httpx AsyncClient
             stop_event: Event to signal stop
-            
+
         Returns:
             List of RequestMetrics collected
         """
         request_count = 0
-        
+
         while not stop_event.is_set():
             # Select request type (round-robin)
             request_type = self.request_types[request_count % len(self.request_types)]
-            
+
             # Execute request
             metrics = await self.execute_request(client, request_type)
             self.metrics.append(metrics)
             request_count += 1
-            
+
             # Think time
             await asyncio.sleep(self.think_time_ms / 1000.0)
-        
+
         return self.metrics
 
 
 class LoadTestRunner:
     """Executes load test scenarios and collects results.
-    
+
     Coordinates multiple user simulators, manages test lifecycle,
     and aggregates metrics across all simulated users.
     """
@@ -268,7 +269,7 @@ class LoadTestRunner:
         timeout: int = 30
     ) -> None:
         """Initialize LoadTestRunner.
-        
+
         Args:
             endpoint: Target endpoint URL
             max_concurrent_users: Maximum concurrent users supported
@@ -281,7 +282,7 @@ class LoadTestRunner:
 
     async def _get_client(self) -> httpx.AsyncClient:
         """Get or create httpx client.
-        
+
         Returns:
             httpx AsyncClient instance
         """
@@ -297,10 +298,10 @@ class LoadTestRunner:
         request_type: RequestType
     ) -> Dict[str, Any]:
         """Execute a single request (for testing/mocking).
-        
+
         Args:
             request_type: Type of request to execute
-            
+
         Returns:
             Dict with request results
         """
@@ -318,17 +319,17 @@ class LoadTestRunner:
 
     async def run_scenario(self, scenario: LoadTestScenario) -> LoadTestResult:
         """Execute load test scenario.
-        
+
         Args:
             scenario: LoadTestScenario to execute
-            
+
         Returns:
             LoadTestResult with aggregated metrics
         """
         start_time = time.time()
         client = await self._get_client()
         stop_event = asyncio.Event()
-        
+
         # Create user simulators
         simulators = [
             UserSimulator(
@@ -339,31 +340,31 @@ class LoadTestRunner:
             )
             for i in range(scenario.concurrent_users)
         ]
-        
+
         # Start all users
         tasks = [
             asyncio.create_task(sim.run_until_stopped(client, stop_event))
             for sim in simulators
         ]
-        
+
         # Run for specified duration
         await asyncio.sleep(scenario.duration_seconds)
-        
+
         # Stop all users
         stop_event.set()
         await asyncio.gather(*tasks, return_exceptions=True)
-        
+
         # Collect and aggregate metrics
         all_metrics: List[RequestMetrics] = []
         for sim in simulators:
             all_metrics.extend(sim.metrics)
-        
+
         # Calculate statistics
         total_requests = len(all_metrics)
         successful_requests = sum(1 for m in all_metrics if m.success)
         failed_requests = total_requests - successful_requests
         success_rate = successful_requests / total_requests if total_requests > 0 else 0.0
-        
+
         latencies = [m.latency_ms for m in all_metrics]
         if latencies:
             latencies_sorted = sorted(latencies)
@@ -376,19 +377,19 @@ class LoadTestRunner:
             max_latency = max(latencies)
         else:
             p50_latency = p95_latency = p99_latency = min_latency = max_latency = 0.0
-        
+
         # Collect errors
         errors = [m.error_message for m in all_metrics if not m.success and m.error_message]
-        
+
         duration = time.time() - start_time
-        
+
         # Determine success based on thresholds
         success = self._evaluate_success(
             scenario.concurrent_users,
             success_rate,
             p95_latency
         )
-        
+
         return LoadTestResult(
             success=success,
             scenario_name=scenario.name,
@@ -412,12 +413,12 @@ class LoadTestRunner:
         p95_latency: float
     ) -> bool:
         """Evaluate if load test passed success criteria.
-        
+
         Args:
             concurrent_users: Number of concurrent users
             success_rate: Success rate (0.0-1.0)
             p95_latency: 95th percentile latency
-            
+
         Returns:
             True if test passed, False otherwise
         """

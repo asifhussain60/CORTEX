@@ -10,8 +10,8 @@ Detects user roles based on:
 """
 
 import re
-from typing import Optional, Tuple, Dict, Any
 from enum import Enum
+from typing import Any, Dict, Optional, Tuple
 
 from cortex.orchestrators.persona.models import PersonaId
 from cortex.orchestrators.persona.persona_loader import PersonaLoader
@@ -20,7 +20,7 @@ from cortex.orchestrators.persona.persona_loader import PersonaLoader
 class RoleResolver:
     """
     Infer user roles from context signals with memory and confidence scoring.
-    
+
     Attributes:
         loader: PersonaLoader instance for accessing persona configurations
         inference_history: Dict mapping user_id to their detected PersonaId
@@ -140,7 +140,7 @@ class RoleResolver:
     def __init__(self, loader: PersonaLoader) -> None:
         """
         Initialize RoleResolver with PersonaLoader.
-        
+
         Args:
             loader: PersonaLoader instance
         """
@@ -156,13 +156,13 @@ class RoleResolver:
     ) -> Tuple[PersonaId, float]:
         """
         Infer user role from message with optional context.
-        
+
         Args:
             message: User message text
             user_id: Optional user identifier for memory tracking
             context: Optional context dict with signals (job_title, etc.)
             use_memory: Whether to use inference history for ambiguous messages
-            
+
         Returns:
             Tuple of (PersonaId, confidence_score 0.0-1.0)
         """
@@ -214,10 +214,10 @@ class RoleResolver:
     def _infer_from_message(self, message_lower: str) -> Tuple[PersonaId, float]:
         """
         Infer role from message keywords and context signals.
-        
+
         Args:
             message_lower: Lowercase message text
-            
+
         Returns:
             Tuple of (PersonaId, confidence_score)
         """
@@ -240,19 +240,19 @@ class RoleResolver:
         if keyword_found:
             best_persona = PersonaId.ENGINEER
             best_score = 0.0
-            
+
             for persona, score in persona_scores.items():
                 if score > best_score:
                     best_score = score
                     best_persona = persona
-            
+
             confidence = min(best_score, 1.0)
             return best_persona, confidence
 
         # Score based on context signals only if no keywords matched
         for persona, signals in self.CONTEXT_SIGNALS.items():
             signal_matches = sum(
-                1 for signal in signals 
+                1 for signal in signals
                 if re.search(r'\b' + re.escape(signal) + r'\b', message_lower)
             )
             if signal_matches > 0:
@@ -262,7 +262,7 @@ class RoleResolver:
         # Find persona with highest score
         best_persona = PersonaId.ENGINEER
         best_score = 0.0
-        
+
         for persona, score in persona_scores.items():
             if score > best_score:
                 best_score = score
@@ -282,14 +282,14 @@ class RoleResolver:
     ) -> Tuple[PersonaId, float]:
         """
         Infer role from context dict (job_title, department, etc).
-        
+
         Args:
             context: Context dict with optional keys:
                 - job_title: str
                 - department: str
                 - current_role: PersonaId
                 - experience_level: str
-                
+
         Returns:
             Tuple of (PersonaId, confidence_score)
         """
@@ -305,7 +305,7 @@ class RoleResolver:
         # Check job_title
         if "job_title" in context:
             job_title = context["job_title"].lower()
-            
+
             if any(kw in job_title for kw in self.ROLE_KEYWORDS[PersonaId.ENGINEER]):
                 best_persona = PersonaId.ENGINEER
                 confidence = 0.7
@@ -322,7 +322,7 @@ class RoleResolver:
         # Check department
         if "department" in context and confidence < 0.7:
             department = context["department"].lower()
-            
+
             if "engineering" in department:
                 best_persona = PersonaId.ENGINEER
                 confidence = max(confidence, 0.6)

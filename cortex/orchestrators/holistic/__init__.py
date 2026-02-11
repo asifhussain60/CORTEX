@@ -8,8 +8,8 @@ and ensure architectural coherence before implementation.
 
 from cortex.orchestrators.holistic.holistic_validation_orchestrator import (
     HolisticValidationOrchestrator,
-    ValidationResult,
     ValidationEvidence,
+    ValidationResult,
 )
 
 __all__ = [

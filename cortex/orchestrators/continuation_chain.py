@@ -2,8 +2,8 @@
 Continuation Chain - Chain multiple checkpoints with execution order preservation.
 """
 
-from typing import List, Dict, Any, Optional
 from collections import deque
+from typing import Any, Dict, List, Optional
 
 
 class ContinuationChain:
@@ -17,7 +17,7 @@ class ContinuationChain:
     def add_checkpoint(self, checkpoint_id: str, metadata: Optional[Dict[str, Any]] = None) -> None:
         """
         Add checkpoint to chain.
-        
+
         Args:
             checkpoint_id: Checkpoint ID.
             metadata: Optional metadata for checkpoint.
@@ -28,7 +28,7 @@ class ContinuationChain:
     def execute(self) -> List[str]:
         """
         Execute chain in order.
-        
+
         Returns:
             List of executed checkpoint IDs.
         """
@@ -51,10 +51,10 @@ class ContinuationChain:
     def skip_checkpoint(self, checkpoint_id: str) -> bool:
         """
         Skip a checkpoint in chain.
-        
+
         Args:
             checkpoint_id: Checkpoint ID to skip.
-            
+
         Returns:
             True if skipped.
         """

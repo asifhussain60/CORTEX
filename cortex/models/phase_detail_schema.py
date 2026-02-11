@@ -5,10 +5,11 @@ Data models for phase detail pages with LLM-generated content, diagrams, and nar
 Authority: PHASE-STORY-SYSTEM-COMPREHENSIVE.yaml (ENH-032)
 """
 
-from enum import Enum
-from typing import List, Optional, Dict, Any
-from pydantic import BaseModel, Field
 from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional
+
+from pydantic import BaseModel, Field
 
 
 class PhaseStatus(str, Enum):
@@ -30,7 +31,7 @@ class MermaidDiagram(BaseModel):
     type: str = Field(..., description="Diagram type: architecture, workflow, data_flow, dependency")
     title: str = Field(..., description="Diagram title for display")
     mermaid_code: str = Field(..., description="Mermaid.js diagram code")
-    
+
     class Config:
         json_schema_extra = {
             "example": {
@@ -65,7 +66,7 @@ class ArchitectureSection(BaseModel):
     diagrams: List[MermaidDiagram] = Field(default_factory=list, description="Architecture diagrams")
     components: List[str] = Field(default_factory=list, description="Key components")
     design_patterns: Optional[List[str]] = Field(None, description="Design patterns applied")
-    
+
     class Config:
         json_schema_extra = {
             "example": {
@@ -138,47 +139,47 @@ class Lesson(BaseModel):
 
 class PhaseDetail(BaseModel):
     """Complete phase detail model for comprehensive detail pages"""
-    
+
     # Core metadata
     phase_id: str = Field(..., description="Phase identifier (e.g., PHASE-01)")
     title: str = Field(..., description="Phase title")
     status: PhaseStatus = Field(..., description="Phase status")
     completion_date: Optional[str] = Field(None, description="Completion date (YYYY-MM-DD)")
-    
+
     # LLM-generated content sections
     overview: Optional[str] = Field(None, description="LLM-generated phase overview")
     objectives: Optional[List[str]] = Field(None, description="Phase objectives")
     key_features: Optional[List[Feature]] = Field(None, description="Key features delivered")
-    
+
     # Architecture section with diagrams
     architecture: Optional[ArchitectureSection] = Field(None, description="Architecture details")
-    
+
     # Implementation details
     implementation_details: Optional[ImplementationSection] = Field(None, description="Implementation section")
-    
+
     # Testing section
     testing: Optional[TestingSection] = Field(None, description="Testing metrics")
-    
+
     # Governance compliance
     compliance: Optional[List[ComplianceRule]] = Field(None, description="CORE rule compliance")
-    
+
     # Impact metrics
     impact: Optional[ImpactMetrics] = Field(None, description="Impact assessment")
-    
+
     # Story and narrative
     story_context: Optional[StoryContext] = Field(None, description="Phase narrative and links")
-    
+
     # Technical decisions
     technical_decisions: Optional[List[TechnicalDecision]] = Field(None, description="Key decisions made")
-    
+
     # Lessons learned
     lessons_learned: Optional[List[Lesson]] = Field(None, description="Lessons from this phase")
-    
+
     # Additional metadata
     git_tag: Optional[str] = Field(None, description="Git tag for phase completion")
     author: Optional[str] = Field(None, description="Phase author")
     created_date: Optional[str] = Field(None, description="Phase creation date")
-    
+
     class Config:
         json_schema_extra = {
             "example": {
@@ -193,7 +194,7 @@ class PhaseDetail(BaseModel):
                 ]
             }
         }
-    
+
     def to_html_context(self) -> Dict[str, Any]:
         """Convert to HTML template context"""
         return {
@@ -213,19 +214,19 @@ class PhaseDetail(BaseModel):
             "decisions": [d.model_dump() for d in self.technical_decisions] if self.technical_decisions else [],
             "lessons": [l.model_dump() for l in self.lessons_learned] if self.lessons_learned else []
         }
-    
+
     def get_diagram_count(self) -> int:
         """Get total number of diagrams"""
         if not self.architecture or not self.architecture.diagrams:
             return 0
         return len(self.architecture.diagrams)
-    
+
     def get_test_coverage_percentage(self) -> int:
         """Get test coverage as percentage"""
         if not self.testing:
             return 0
         return int(self.testing.coverage * 100)
-    
+
     def has_complete_documentation(self) -> bool:
         """Check if phase has complete documentation"""
         required_sections = [
@@ -236,7 +237,7 @@ class PhaseDetail(BaseModel):
             self.testing
         ]
         return all(section is not None for section in required_sections)
-    
+
     def get_completion_percentage(self) -> int:
         """Calculate documentation completion percentage"""
         sections = [

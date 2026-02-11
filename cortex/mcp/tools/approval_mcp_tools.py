@@ -14,14 +14,20 @@ Governance: CORE-011 (type hints), CORE-012 (docstrings)
 """
 
 import logging
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 
 from cortex.mcp.server import Tool, ToolDefinition, ToolParameter
 from cortex.mcp.tools.approval_tools import (
-    cortex_classify_request as classify_func,
     cortex_approve_request as approve_func,
-    cortex_reject_request as reject_func,
+)
+from cortex.mcp.tools.approval_tools import (
+    cortex_classify_request as classify_func,
+)
+from cortex.mcp.tools.approval_tools import (
     cortex_modify_request as modify_func,
+)
+from cortex.mcp.tools.approval_tools import (
+    cortex_reject_request as reject_func,
 )
 
 logger = logging.getLogger(__name__)
@@ -232,7 +238,7 @@ class CORTEXModifyRequestTool(Tool):
 def get_approval_tools() -> list:
     """
     Get all approval workflow tools for MCP server registration.
-    
+
     Returns:
         List of Tool instances for approval workflow
     """

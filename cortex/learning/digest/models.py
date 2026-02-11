@@ -9,14 +9,15 @@ Phase: 41 Stage 1 (ENH-053)
 """
 
 from datetime import datetime
-from typing import Dict, Any
+from typing import Any, Dict
+
 from pydantic import BaseModel, Field
 
 
 class DigestResult(BaseModel):
     """
     Structured result from DIGEST session analysis.
-    
+
     Attributes:
         file_path: Path to analyzed file
         is_chat_session: Whether file is a Copilot chat session

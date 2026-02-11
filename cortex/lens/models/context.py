@@ -12,20 +12,20 @@ Purpose: CORE-035 compliance - eliminate duplicate LENSContext classes
 # Description: Phase 65 S6 - Canonical LENSContext implementation
 
 from dataclasses import dataclass, field
-from typing import Dict, Any, Optional
 from datetime import datetime
+from typing import Any, Dict, Optional
 
 
 @dataclass
 class LENSContext:
     """
     Canonical LENS operation context.
-    
+
     Consolidates all fields from previous LENSContext implementations:
     - cortex/orchestrators/core/lens_synthesis.py::LENSContext
     - cortex/lens/context_provider.py::LENSContext (if existed)
     - Other scattered LENSContext definitions
-    
+
     Fields:
         operation: LENS operation type ("analyze", "navigate", "synthesize")
         language_analysis: Language-specific analysis results
@@ -34,10 +34,10 @@ class LENSContext:
         synthesis_output: Final synthesis recommendations
         timestamp: Operation timestamp
         turn_number: Turn number in multi-turn session
-    
+
     Authority: Phase 65 S6-T1
     """
-    
+
     operation: str
     language_analysis: Dict[str, Any] = field(default_factory=dict)
     code_examination: Dict[str, Any] = field(default_factory=dict)
@@ -45,13 +45,13 @@ class LENSContext:
     synthesis_output: Dict[str, Any] = field(default_factory=dict)
     timestamp: datetime = field(default_factory=datetime.now)
     turn_number: int = 1
-    
+
     # Optional fields for extended use cases
     file_path: Optional[str] = None
     repo_path: Optional[str] = None
     intent: Optional[str] = None
     session_id: Optional[str] = None
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary representation."""
         return {
@@ -67,7 +67,7 @@ class LENSContext:
             'intent': self.intent,
             'session_id': self.session_id
         }
-    
+
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'LENSContext':
         """Create from dictionary representation."""
@@ -77,7 +77,7 @@ class LENSContext:
             timestamp = datetime.fromisoformat(timestamp_str)
         else:
             timestamp = datetime.now()
-        
+
         return cls(
             operation=data['operation'],
             language_analysis=data.get('language_analysis', {}),

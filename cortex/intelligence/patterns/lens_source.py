@@ -3,9 +3,9 @@
 # Authority: CORE-008 TDD, CORE-011 type hints, CORE-012 docstrings
 # Stage: S5 - GREEN phase implementation
 
-from dataclasses import dataclass
-from typing import Dict, List, Any, Optional
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from typing import Any, Dict, List, Optional
 
 from cortex.intelligence.patterns.base import PatternMatch
 
@@ -23,7 +23,7 @@ class LENSAnalysisResult:
 class ArchitecturePatternSource(ABC):
     """
     LENS source for architecture pattern detection and classification.
-    
+
     Integrates with LENS orchestration to analyze code structure
     and classify architectural patterns.
     """
@@ -39,11 +39,11 @@ class ArchitecturePatternSource(ABC):
     def analyze(self, ast_node: Any, context: Optional[Dict] = None) -> Dict[str, Any]:
         """
         Analyze AST node for architectural patterns.
-        
+
         Args:
             ast_node: AST node or code structure to analyze
             context: Optional analysis context
-            
+
         Returns:
             Dictionary with analysis results
         """
@@ -57,10 +57,10 @@ class ArchitecturePatternSource(ABC):
     def analyze_patterns(self, patterns: List[PatternMatch]) -> Dict[str, Any]:
         """
         Analyze detected patterns to determine architecture type.
-        
+
         Args:
             patterns: List of detected PatternMatch objects
-            
+
         Returns:
             Dictionary with architecture classification and insights
         """
@@ -71,10 +71,10 @@ class ArchitecturePatternSource(ABC):
                 "pattern_count": 0,
                 "insights": ["No patterns detected"]
             }
-        
+
         # Classify based on pattern combinations
         pattern_names = [p.pattern_name for p in patterns]
-        
+
         # Check for MVC/MVVM
         if "Model" in pattern_names and "View" in pattern_names and "Controller" in pattern_names:
             return {
@@ -83,7 +83,7 @@ class ArchitecturePatternSource(ABC):
                 "pattern_count": len(patterns),
                 "insights": ["Classic MVC architecture detected"]
             }
-        
+
         # Check for DDD
         if any(p in pattern_names for p in ["AggregateRoot", "DomainEvent", "Repository"]):
             return {
@@ -92,7 +92,7 @@ class ArchitecturePatternSource(ABC):
                 "pattern_count": len(patterns),
                 "insights": ["Domain-Driven Design patterns identified"]
             }
-        
+
         # Default
         return {
             "architecture_type": "Unknown",
@@ -104,10 +104,10 @@ class ArchitecturePatternSource(ABC):
     def get_lens_result(self, analysis: Dict[str, Any]) -> LENSAnalysisResult:
         """
         Convert analysis to LENS result format.
-        
+
         Args:
             analysis: Raw analysis dictionary
-            
+
         Returns:
             LENSAnalysisResult for LENS orchestration
         """

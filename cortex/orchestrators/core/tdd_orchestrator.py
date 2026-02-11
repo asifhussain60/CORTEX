@@ -40,24 +40,16 @@ Date: 2026-01-31
 
 from __future__ import annotations
 
-import yaml
 import logging
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from cortex.core.result import Result, Ok, Err
+import yaml
 
 # Phase 51: Enhanced response template with semantic color coding
 from cortex.agents.core.response_template_generator import ResponseTemplate
-
-from cortex.orchestrators.support.brittleness_scanner import BrittlenessScanner
-from cortex.orchestrators.support.phase_completion_orchestrator import PhaseCompletionOrchestrator
-from cortex.orchestrators.core.orchestrator_base_protocol import (
-    OrchestratorBaseProtocol,
-    ProtocolExecutionResult,
-)
 from cortex.brain.core.knowledge_guidance_engine import (
     KnowledgeGuidanceEngine,
     ModuleGuidance,
@@ -65,13 +57,22 @@ from cortex.brain.core.knowledge_guidance_engine import (
 
 # Phase 27: Import StandardsResolver for company domain integration
 from cortex.common.standards_resolver import StandardsResolver
+from cortex.core.result import Err, Ok, Result
+from cortex.orchestrators.core.orchestrator_base_protocol import (
+    OrchestratorBaseProtocol,
+    ProtocolExecutionResult,
+)
+from cortex.orchestrators.support.brittleness_scanner import BrittlenessScanner
+from cortex.orchestrators.support.phase_completion_orchestrator import (
+    PhaseCompletionOrchestrator,
+)
+from cortex.refactoring.models import (
+    RefactoringLanguage,
+    RefactoringRequest,
+)
 
 # Phase 43: Import RefactoringOrchestrator for REFACTOR phase wiring
 from cortex.refactoring.orchestrator import RefactoringOrchestrator
-from cortex.refactoring.models import (
-    RefactoringRequest,
-    RefactoringLanguage,
-)
 
 logger = logging.getLogger(__name__)
 
@@ -115,7 +116,7 @@ class TDDKnowledgeLoader:
         """Initialize TDD knowledge loader."""
         if knowledge_root is None:
             knowledge_root = (
-                Path(__file__).parent.parent.parent.parent 
+                Path(__file__).parent.parent.parent.parent
                 / "cortex_brain" / "tier3" / "knowledge"
             )
 
@@ -158,8 +159,8 @@ class TDDKnowledgeLoader:
                 try:
                     phase_str = rule.get("phase", "green").lower()
                     phase = (
-                        TDDPhase[phase_str.upper()] 
-                        if phase_str.upper() in TDDPhase.__members__ 
+                        TDDPhase[phase_str.upper()]
+                        if phase_str.upper() in TDDPhase.__members__
                         else TDDPhase.GREEN
                     )
 
@@ -187,23 +188,23 @@ class TDDKnowledgeLoader:
 class TDDOrchestrator(OrchestratorBaseProtocol):
     """
     TDD Orchestrator V2 - Refactored with OrchestratorBaseProtocol.
-    
+
     AUTOMATIC PROTOCOL (inherited from base):
     1. LENS Context Building → Understands request deeply
     2. Security Assessment → Blocks vulnerable test/impl code
     3. Challenge Generation → Suggests better TDD approaches
     4. DoR Confidence Gate → Blocks <60% confidence requests
     5. TDD Domain Logic → RED → GREEN → REFACTOR
-    
+
     This orchestrator focuses ONLY on TDD domain logic:
     - Phase determination (RED, GREEN, REFACTOR)
     - Knowledge YAML integration (35+ best practices)
     - Test pattern selection
     - Coverage target validation
     - Anti-pattern detection
-    
+
     All intelligence/security/quality gates handled by base protocol.
-    
+
     Usage:
         >>> orchestrator = TDDOrchestrator()
         >>> result = orchestrator.execute_with_protocol(
@@ -216,10 +217,10 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
     def __init__(self, knowledge_root: Optional[Path] = None) -> None:
         """
         Initialize TDD Orchestrator V2.
-        
+
         Args:
             knowledge_root: Root path to knowledge repository
-        
+
         ARCH-012: Inherits protocol initialization from base class
         """
         # Initialize base protocol (LENS, Security, Challenge, DoR)
@@ -229,20 +230,20 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
             enable_challenges=True,
             enable_dor_gate=True,
         )
-        
+
         # TDD-specific components
         self.knowledge_loader = TDDKnowledgeLoader(knowledge_root)
         self.guidance_engine = KnowledgeGuidanceEngine()
-        
+
         # AC-PHASE24-005: Initialize BrittlenessScanner for regression detection
         self._brittleness_scanner = BrittlenessScanner()
-        
+
         # AC-PHASE24-007: Initialize PhaseCompletionOrchestrator for post-completion hooks
         self._phase_completion_orchestrator = PhaseCompletionOrchestrator()
-        
+
         # Phase 27: Initialize StandardsResolver for company domain integration
         self.standards_resolver = StandardsResolver()
-        
+
         logger.info(
             f"TDD Orchestrator V2 initialized with base protocol + "
             f"{len(self.knowledge_loader.tdd_yamls)} knowledge YAMLs + "
@@ -258,18 +259,18 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
     ) -> Result:
         """
         Execute TDD workflow with ExecutionDirective from Phase 52.
-        
+
         AC-PHASE52-002: TDDOrchestrator accepts ExecutionDirective
-        
+
         Applies constraints from directive during RED→GREEN→REFACTOR:
         - RED phase: Apply pattern constraints from directive.constraints
         - GREEN phase: Implement minimal code to pass tests
         - REFACTOR phase: Validate against rules from directive.rule_id
-        
+
         Args:
             directive: ExecutionDirective from AgentRulesInterpreter
             context: Execution context with module_path, etc.
-        
+
         Returns:
             Result with TDD execution outcome
         """
@@ -281,31 +282,31 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
                 f"rules={directive.rule_id}, "
                 f"context={directive.context.value if hasattr(directive.context, 'value') else str(directive.context)}"
             )
-            
+
             # Store directive in context for phase methods to access
             context["_execution_directive"] = directive
             context["_rule_constraints"] = directive.constraints
-            
+
             # Apply pattern constraints from directive
             for constraint in directive.constraints:
                 if constraint.constraint_type == "pattern":
                     context.setdefault("_patterns_to_enforce", []).append(constraint.value)
-            
+
             # Log constraint application
             if context.get("_patterns_to_enforce"):
                 logger.debug(
                     f"Applied {len(context['_patterns_to_enforce'])} pattern constraints from directive"
                 )
-            
+
             # Execute TDD cycle through base protocol
             # This will run: LENS → Security → Challenge → DoR → TDD domain logic
             result = self.execute_with_protocol(
                 user_request=context.get("request", ""),
                 context=context
             )
-            
+
             return result
-            
+
         except Exception as e:
             logger.error(f"TDD execution with directive failed: {str(e)}")
             return Err(f"TDD execution failed: {str(e)}")
@@ -313,44 +314,44 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
     def _run_pre_execution_brittleness_scan(self, context: Dict[str, Any]) -> None:
         """
         Run BrittlenessScanner before TDD execution (AC-PHASE24-005).
-        
+
         Non-blocking: Violations logged as warnings, execution continues.
-        
+
         Args:
             context: Execution context with module_path
         """
         if self._brittleness_scanner is None:
             return  # Scanner not initialized (e.g., in tests without injection)
-        
+
         try:
             # Get module path from context
             module_path = context.get("module_path", "")
             if not module_path:
                 return
-            
+
             # Scan for brittleness (convert Path to str for scanner)
             scan_path = str(Path(module_path).parent)
             scan_result = self._brittleness_scanner.scan(scan_path)
-            
+
             # Log violations as warnings (non-blocking)
             if scan_result.brittleness_score > 0.5:
                 logger.warning(
                     f"⚠️ Brittleness detected (score: {scan_result.brittleness_score:.2f}) "
                     f"in {scan_result.scanned_path}"
                 )
-            
+
             if scan_result.circular_dependencies:
                 for violation in scan_result.circular_dependencies:
                     logger.warning(
                         f"⚠️ Circular dependency: {' → '.join(violation.cycle_path)} "
                         f"(severity: {violation.severity})"
                     )
-            
+
             if scan_result.coupling_violations:
                 logger.warning(
                     f"⚠️ High coupling detected: {len(scan_result.coupling_violations)} violations"
                 )
-        
+
         except Exception as e:
             # Scanner failures don't block TDD execution
             logger.warning(f"BrittlenessScanner failed (non-blocking): {e}")
@@ -358,94 +359,94 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
     def _run_post_execution_brittleness_scan(self, context: Dict[str, Any]) -> None:
         """
         Run BrittlenessScanner AFTER TDD execution (AC-PHASE24-005).
-        
+
         Post-execution scan verifies implementation didn't introduce brittleness.
         Violations logged as warnings (non-blocking).
-        
+
         Args:
             context: Execution context with module_path
-            
+
         AC-PHASE24-005: Post-execution brittleness verification
         """
         try:
             module_path = context.get("module_path", "")
             if not module_path:
                 return
-            
+
             # Scan directory containing modified files
             scan_path = str(Path(module_path).parent)
             scan_result = self._brittleness_scanner.scan(scan_path)
-            
+
             # Log violations as warnings (non-blocking)
             if scan_result.brittleness_score > 0.5:
                 logger.warning(
                     f"⚠️ Post-execution brittleness (score: {scan_result.brittleness_score:.2f}) "
                     f"in {scan_result.scanned_path}"
                 )
-            
+
             if scan_result.circular_dependencies:
                 for violation in scan_result.circular_dependencies:
                     logger.warning(
                         f"⚠️ Post-execution circular dependency: {' → '.join(violation.cycle_path)} "
                         f"(severity: {violation.severity})"
                     )
-            
+
             if scan_result.coupling_violations:
                 logger.warning(
                     f"⚠️ Post-execution high coupling: {len(scan_result.coupling_violations)} violations"
                 )
-        
+
         except Exception as e:
             # Scanner failures don't block TDD execution
             logger.warning(f"Post-execution BrittlenessScanner failed (non-blocking): {e}")
 
     def _run_phase_completion_hook(
-        self, 
-        context: Dict[str, Any], 
+        self,
+        context: Dict[str, Any],
         execution_result: Dict[str, Any]
     ) -> None:
         """
         Run PhaseCompletionOrchestrator after successful TDD execution (AC-PHASE24-007).
-        
+
         Automatically updates:
         - Phase YAML completion_status
         - Dashboard data via regeneration
         - Registry sync
         - Enhancement history
-        
+
         Non-blocking: Failures logged as warnings.
-        
+
         Args:
             context: Execution context
             execution_result: TDD execution results
-            
+
         AC-PHASE24-007: Automatic post-completion status updates
         """
         if self._phase_completion_orchestrator is None:
             return  # Not initialized (e.g., in tests)
-        
+
         try:
             # Extract phase information from context
             phase_file_str = context.get("phase_file")
             phase_key = context.get("phase_key")
-            
+
             if not phase_file_str or not phase_key:
                 # Not a phase-tracked operation, skip completion hook
                 logger.debug(
                     "Skipping phase completion hook: no phase_file or phase_key in context"
                 )
                 return
-            
+
             phase_file = Path(phase_file_str)
             enhancement_id = context.get("enhancement_id")  # Optional
-            
+
             # Call PhaseCompletionOrchestrator
             completion_result = self._phase_completion_orchestrator.complete_phase(
                 phase_file=phase_file,
                 phase_key=phase_key,
                 enhancement_id=enhancement_id
             )
-            
+
             if completion_result.success:
                 logger.info(
                     f"✅ AC-PHASE24-007: Phase completion hook successful - "
@@ -457,7 +458,7 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
                     f"⚠️ AC-PHASE24-007: Phase completion hook failed - "
                     f"Error: {completion_result.error}"
                 )
-        
+
         except Exception as e:
             # Completion hook failures don't block TDD execution
             logger.warning(f"PhaseCompletionOrchestrator hook failed (non-blocking): {e}")
@@ -470,21 +471,21 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
     ) -> Result[Any]:
         """
         Execute TDD domain logic (RED → GREEN → REFACTOR).
-        
+
         This method is called AFTER:
         - LENS context built
         - Security threats assessed
         - Challenges generated (if disagreement)
         - DoR confidence validated (≥60%)
-        
+
         Args:
             user_request: User's natural language request
             lens_context: LENS context from Phase 1 (or None if degraded)
             context: Execution context with module_path, domain, etc.
-            
+
         Returns:
             Result with TDD guidance and execution status
-            
+
         CORE-008: Enforces TDD discipline (RED → GREEN → REFACTOR)
         MCP-GATE: Rejects non-MCP invocations for IMPLEMENT intents
         AC-PHASE24-005: BrittlenessScanner pre-execution hook
@@ -492,7 +493,7 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
         try:
             # AC-PHASE24-005: Pre-execution brittleness scan (non-blocking)
             self._run_pre_execution_brittleness_scan(context)
-            
+
             # MCP-GATE ENFORCEMENT: Block direct chat invocations
             invocation_source = context.get("source", "unknown")
             if invocation_source != "mcp_gateway":
@@ -514,14 +515,14 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
                     "    context={'module_path': 'cortex/...', 'domain': '...'}\n"
                     "  )"
                 )
-            
+
             # Extract context
             module_path = context.get("module_path", "unknown")
             domain = context.get("domain", "unknown")
-            
+
             # Determine TDD phase from request
             tdd_phase = self._determine_tdd_phase(user_request)
-            
+
             # Build TDD implementation guidance
             guidance = self._build_tdd_guidance(
                 module_path=module_path,
@@ -530,19 +531,19 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
                 user_request=user_request,
                 lens_context=lens_context
             )
-            
+
             # Execute TDD phase
             phase_result = self._execute_tdd_phase(tdd_phase, guidance, context)
-            
+
             if phase_result.is_err():
                 return phase_result
-            
+
             # AC-PHASE24-005: Post-execution brittleness scan (non-blocking)
             self._run_post_execution_brittleness_scan(context)
-            
+
             # AC-PHASE24-007: Phase completion hook (automatic status updates)
             self._run_phase_completion_hook(context, phase_result.unwrap())
-            
+
             # Return comprehensive TDD result
             return Ok({
                 "orchestrator": "TDDOrchestrator",
@@ -559,13 +560,13 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
                 "lens_context_used": lens_context is not None,
                 "protocol_phases_completed": [
                     "LENS Context",
-                    "Security Assessment", 
+                    "Security Assessment",
                     "Challenge Generation",
                     "DoR Confidence Gate",
                     "TDD Domain Logic"
                 ]
             })
-            
+
         except Exception as e:
             logger.error(f"TDD domain logic failed: {e}", exc_info=True)
             return Err(f"TDD execution error: {str(e)}")
@@ -573,27 +574,27 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
     def _determine_tdd_phase(self, user_request: str) -> TDDPhase:
         """
         Determine TDD phase from user request.
-        
+
         Args:
             user_request: User's natural language request
-            
+
         Returns:
             TDD phase (RED, GREEN, REFACTOR)
         """
         request_lower = user_request.lower()
-        
+
         # RED: Writing tests
         if any(word in request_lower for word in [
             "test", "failing test", "red phase", "write test"
         ]):
             return TDDPhase.RED
-        
+
         # REFACTOR: Improving code
         elif any(word in request_lower for word in [
             "refactor", "improve", "optimize", "clean up"
         ]):
             return TDDPhase.REFACTOR
-        
+
         # GREEN: Implementation (default)
         else:
             return TDDPhase.GREEN
@@ -608,14 +609,14 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
     ) -> TDDImplementationGuidance:
         """
         Build TDD implementation guidance.
-        
+
         Args:
             module_path: Target module path
             domain: Domain classification
             tdd_phase: Current TDD phase
             user_request: User's request
             lens_context: LENS context (optional)
-            
+
         Returns:
             TDD implementation guidance
         """
@@ -624,10 +625,10 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
             rule for rule in self.knowledge_loader.tdd_rules
             if rule.phase == tdd_phase
         ]
-        
+
         # Get best practices
         best_practices = self.knowledge_loader.get_best_practices()
-        
+
         # Build guidance
         guidance = TDDImplementationGuidance(
             module_path=module_path,
@@ -639,7 +640,7 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
             coverage_targets={"line": 0.8, "branch": 0.7},
             governance_rules=["CORE-008", "CORE-011", "CORE-012"]
         )
-        
+
         return guidance
 
     def _select_test_patterns(self, tdd_phase: TDDPhase) -> List[str]:
@@ -674,12 +675,12 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
     ) -> Result[Dict[str, Any]]:
         """
         Execute specific TDD phase.
-        
+
         Args:
             tdd_phase: TDD phase to execute
             guidance: TDD guidance
             context: Execution context
-            
+
         Returns:
             Result with phase execution status
         """
@@ -724,9 +725,9 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
         context: Dict[str, Any]
     ) -> Result[Dict[str, Any]]:
         """Execute REFACTOR phase (improve design).
-        
+
         AC-PHASE43-021: Wires to RefactoringOrchestrator for actual refactoring execution.
-        
+
         For Python files, delegates to Rope adapter via RefactoringOrchestrator.
         For TypeScript/JavaScript files, delegates to TypeScript adapter.
         Falls back to guidance suggestions if adapters unavailable.
@@ -734,7 +735,7 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
         try:
             file_path = context.get("file_path", guidance.module_path)
             language = context.get("language")
-            
+
             # Detect language from file extension if not provided
             if not language:
                 if file_path.endswith(".py"):
@@ -745,12 +746,12 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
                     language = "javascript"
                 else:
                     language = "unknown"
-            
+
             # Try to invoke RefactoringOrchestrator for real execution
             try:
                 from pathlib import Path
                 orchestrator = RefactoringOrchestrator()
-                
+
                 # Map string language to RefactoringLanguage enum
                 language_map = {
                     "python": RefactoringLanguage.PYTHON,
@@ -758,9 +759,9 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
                     "javascript": RefactoringLanguage.JAVASCRIPT,
                     "csharp": RefactoringLanguage.CSHARP,
                 }
-                
+
                 refactoring_language = language_map.get(language.lower(), RefactoringLanguage.PYTHON)
-                
+
                 # Create refactoring request
                 request = RefactoringRequest(
                     operation="suggest_refactorings",
@@ -768,10 +769,10 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
                     language=refactoring_language,
                     parameters={"patterns": guidance.test_patterns}
                 )
-                
+
                 # Execute via RefactoringOrchestrator
                 refactoring_result = orchestrator.execute_refactoring(request)
-                
+
                 # Process result
                 if isinstance(refactoring_result, Ok):
                     refactoring_data = refactoring_result.unwrap()
@@ -787,7 +788,7 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
                     })
                 else:
                     # Graceful fallback to guidance-based suggestions
-                    logger.info(f"RefactoringOrchestrator unavailable, using guidance fallback")
+                    logger.info("RefactoringOrchestrator unavailable, using guidance fallback")
                     return Ok({
                         "phase": "REFACTOR",
                         "action": "Refactor code while keeping tests green",
@@ -798,7 +799,7 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
                         "source": "TDD guidance fallback",
                         "status": "suggestion_mode"
                     })
-                    
+
             except Exception as tool_error:
                 # Tool execution failed - return guidance-based suggestions
                 logger.warning(f"RefactoringOrchestrator execution failed: {tool_error}, falling back to guidance")
@@ -819,7 +820,7 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
                     "status": "suggestion_mode",
                     "note": "Install refactoring tools (rope, libcst) for real execution"
                 })
-                
+
         except Exception as e:
             logger.error(f"REFACTOR phase error: {e}", exc_info=True)
             # Never crash - always return meaningful suggestion
@@ -836,7 +837,7 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
     def get_tdd_status(self) -> Dict[str, Any]:
         """
         Get TDD orchestrator status and loaded knowledge.
-        
+
         Returns:
             Dictionary with status information
         """
@@ -866,10 +867,10 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
 def get_tdd_orchestrator(knowledge_root: Optional[Path] = None) -> TDDOrchestrator:
     """
     Singleton factory for TDDOrchestrator.
-    
+
     Args:
         knowledge_root: Root path to knowledge repository
-        
+
     Returns:
         TDDOrchestrator instance
     """

@@ -26,20 +26,20 @@ Architecture:
 - Audit trail compliance (AC markers)
 """
 
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any, Callable, Set, Tuple
-from enum import Enum
-from pathlib import Path
+import hashlib
 import logging
 from abc import ABC, abstractmethod
-import hashlib
+from dataclasses import dataclass, field
 from datetime import datetime
+from enum import Enum
+from pathlib import Path
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 
+from cortex.core.result import Err, Ok, Result
 from cortex.orchestrators.core.orchestrator_base_protocol import (
     OrchestratorBaseProtocol,
     ProtocolExecutionResult,
 )
-from cortex.core.result import Result, Ok, Err
 
 logger = logging.getLogger(__name__)
 

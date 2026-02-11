@@ -12,11 +12,11 @@ Integrates with ConversationProtocol to:
 Author: CORTEX Framework
 """
 
-from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional
-from enum import Enum
 import json
 import logging
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +32,7 @@ class RecommendationConfidence(Enum):
 @dataclass
 class SolutionOption:
     """A single solution option with evaluation metrics."""
-    
+
     option_id: str
     name: str
     description: str
@@ -45,7 +45,7 @@ class SolutionOption:
     scalability_score: float  # 0.0-1.0: Scalability potential
     team_familiarity: float  # 0.0-1.0: How familiar team is with tech
     technical_debt: float  # 0.0-1.0: Inverse of technical debt (1.0 = no debt)
-    
+
     # Metadata
     pros: List[str] = field(default_factory=list)
     cons: List[str] = field(default_factory=list)
@@ -58,7 +58,7 @@ class SolutionOption:
 @dataclass
 class RecommendedSolution:
     """A recommendation with the best option marked."""
-    
+
     best_option_id: str
     best_option: SolutionOption
     confidence: RecommendationConfidence
@@ -67,7 +67,7 @@ class RecommendedSolution:
     option_scores: Dict[str, float] = field(default_factory=dict)
     summary: str = ""
     user_override_enabled: bool = True
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for serialization."""
         return {
@@ -98,7 +98,7 @@ class RecommendedSolution:
 class SolutionRecommendationEngine:
     """
     Evaluates multiple solution options and marks the best one.
-    
+
     Scoring Factors (weighted):
     - CORTEX alignment: 25%
     - Governance compliance: 20%
@@ -108,7 +108,7 @@ class SolutionRecommendationEngine:
     - Maintenance cost: 10%
     - Team familiarity: 5%
     """
-    
+
     # Weights for scoring (must sum to 1.0)
     WEIGHTS = {
         "cortex_alignment": 0.25,
@@ -120,23 +120,23 @@ class SolutionRecommendationEngine:
         "team_familiarity": 0.05,
         "technical_debt": 0.05,
     }
-    
+
     def __init__(self):
         """Initialize the recommendation engine."""
         self.evaluated_options: Dict[str, SolutionOption] = {}
         self.recommendations: List[RecommendedSolution] = []
-    
+
     def score_option(self, option: SolutionOption) -> float:
         """
         Calculate composite score for a solution option.
-        
+
         Returns:
             Float between 0.0 and 1.0, where 1.0 is best.
         """
         # Convert categorical scores to numeric (0.0-1.0)
         effort_score = self._effort_to_score(option.implementation_effort)
         risk_score = self._risk_to_score(option.risk_level)
-        
+
         # Calculate weighted score
         score = (
             option.cortex_alignment * self.WEIGHTS["cortex_alignment"] +
@@ -148,9 +148,9 @@ class SolutionRecommendationEngine:
             option.team_familiarity * self.WEIGHTS["team_familiarity"] +
             option.technical_debt * self.WEIGHTS["technical_debt"]
         )
-        
+
         return round(score, 3)
-    
+
     def _effort_to_score(self, effort: str) -> float:
         """Convert effort level to score (low effort = high score)."""
         mapping = {
@@ -159,7 +159,7 @@ class SolutionRecommendationEngine:
             "high": 0.2,
         }
         return mapping.get(effort.lower(), 0.5)
-    
+
     def _risk_to_score(self, risk: str) -> float:
         """Convert risk level to score (low risk = high score)."""
         mapping = {
@@ -168,7 +168,7 @@ class SolutionRecommendationEngine:
             "high": 0.2,
         }
         return mapping.get(risk.lower(), 0.5)
-    
+
     def recommend_best_option(
         self,
         options: List[SolutionOption],
@@ -176,37 +176,37 @@ class SolutionRecommendationEngine:
     ) -> RecommendedSolution:
         """
         Evaluate options and return recommendation with best option marked.
-        
+
         Args:
             options: List of solution options to evaluate
             context: Optional context for decision-making
-        
+
         Returns:
             RecommendedSolution with best option marked as ⭐ RECOMMENDED BY CORTEX
         """
         if not options:
             raise ValueError("Must provide at least one option")
-        
+
         # Score all options
         scores = {}
         for option in options:
             score = self.score_option(option)
             scores[option.option_id] = score
             self.evaluated_options[option.option_id] = option
-        
+
         # Find best option
         best_option_id = max(scores, key=scores.get)
         best_option = next(opt for opt in options if opt.option_id == best_option_id)
         best_score = scores[best_option_id]
-        
+
         # Determine confidence level
         confidence = self._determine_confidence(best_score, scores, options)
-        
+
         # Build reasoning
         reasoning = self._build_reasoning(
             best_option, best_score, scores, options, confidence
         )
-        
+
         # Create recommendation
         recommendation = RecommendedSolution(
             best_option_id=best_option_id,
@@ -217,15 +217,15 @@ class SolutionRecommendationEngine:
             option_scores=scores,
             summary=self._build_summary(best_option, confidence),
         )
-        
+
         self.recommendations.append(recommendation)
         logger.info(
             f"Recommendation: {best_option.name} (score: {best_score:.2f}, "
             f"confidence: {confidence.value})"
         )
-        
+
         return recommendation
-    
+
     def _determine_confidence(
         self,
         best_score: float,
@@ -235,15 +235,15 @@ class SolutionRecommendationEngine:
         """Determine confidence level based on score spread."""
         if not options or len(options) < 2:
             return RecommendationConfidence.HIGH
-        
+
         other_scores = [s for oid, s in scores.items() if oid != list(scores.keys())[0]]
         if not other_scores:
             return RecommendationConfidence.HIGH
-        
+
         # Calculate score gap (best - second best)
         second_best = max(other_scores)
         gap = best_score - second_best
-        
+
         if gap >= 0.3:
             return RecommendationConfidence.HIGH
         elif gap >= 0.15:
@@ -252,7 +252,7 @@ class SolutionRecommendationEngine:
             return RecommendationConfidence.LOW
         else:
             return RecommendationConfidence.UNCERTAIN
-    
+
     def _build_reasoning(
         self,
         best_option: SolutionOption,
@@ -264,33 +264,33 @@ class SolutionRecommendationEngine:
         """Build detailed reasoning for the recommendation."""
         reasoning_parts = [
             f"✅ CORTEX Recommendation: {best_option.name}",
-            f"",
+            "",
             f"Confidence: {confidence.value.upper()}",
             f"Overall Score: {best_score:.2f}/1.0",
-            f"",
-            f"Key Strengths:",
+            "",
+            "Key Strengths:",
         ]
-        
+
         # Add strengths
         if best_option.pros:
             for pro in best_option.pros[:3]:  # Top 3 pros
                 reasoning_parts.append(f"  • {pro}")
-        
+
         # Add scoring breakdown
         reasoning_parts.extend([
-            f"",
-            f"Scoring Breakdown:",
+            "",
+            "Scoring Breakdown:",
             f"  • CORTEX Alignment: {best_option.cortex_alignment:.0%}",
             f"  • Governance Compliance: {best_option.governance_compliance:.0%}",
             f"  • Implementation Effort: {best_option.implementation_effort}",
             f"  • Risk Level: {best_option.risk_level}",
             f"  • Performance Impact: {best_option.performance_impact:.0%}",
         ])
-        
+
         # Add comparison if other options exist
         if len(options) > 1:
-            reasoning_parts.append(f"")
-            reasoning_parts.append(f"Why not the alternatives?")
+            reasoning_parts.append("")
+            reasoning_parts.append("Why not the alternatives?")
             for opt in options:
                 if opt.option_id != best_option.option_id:
                     score = scores.get(opt.option_id, 0.0)
@@ -298,9 +298,9 @@ class SolutionRecommendationEngine:
                     reasoning_parts.append(
                         f"  • {opt.name}: Score {score:.2f} (-{gap:.2f})"
                     )
-        
+
         return "\n".join(reasoning_parts)
-    
+
     def _build_summary(
         self,
         best_option: SolutionOption,
@@ -313,7 +313,7 @@ class SolutionRecommendationEngine:
             RecommendationConfidence.LOW: "🟠",
             RecommendationConfidence.UNCERTAIN: "⚪",
         }
-        
+
         return (
             f"{confidence_emoji[confidence]} CORTEX Recommends: {best_option.name}\n"
             f"Implementation: {best_option.implementation_effort} effort\n"

@@ -31,14 +31,14 @@ class ComplexityMetrics:
         retry_count: int = 0
     ) -> Dict[str, Any]:
         """Collect metrics for an operation.
-        
+
         Args:
             operation_type: Type of operation
             data_size_mb: Data size in megabytes
             dependency_count: Number of dependencies
             parallel_tasks: Number of parallel tasks
             retry_count: Number of retries configured
-            
+
         Returns:
             Dictionary of collected metrics
         """
@@ -59,14 +59,14 @@ class ComplexityMetrics:
         retry_count: int = 0
     ) -> Dict[str, float]:
         """Calculate complexity factors from metrics.
-        
+
         Args:
             operation_type: Type of operation
             data_size_mb: Data size in megabytes
             dependency_count: Number of dependencies
             parallel_tasks: Number of parallel tasks
             retry_count: Number of retries
-            
+
         Returns:
             Dictionary of factors
         """
@@ -80,10 +80,10 @@ class ComplexityMetrics:
 
     def get_operation_factor(self, operation_type: str) -> float:
         """Get complexity factor for operation type.
-        
+
         Args:
             operation_type: Type of operation
-            
+
         Returns:
             Complexity factor (0-100 scale)
         """
@@ -91,10 +91,10 @@ class ComplexityMetrics:
 
     def get_data_size_factor(self, data_size_mb: float) -> float:
         """Get complexity factor for data size.
-        
+
         Args:
             data_size_mb: Data size in megabytes
-            
+
         Returns:
             Complexity factor based on data size
         """
@@ -111,10 +111,10 @@ class ComplexityMetrics:
 
     def get_dependency_factor(self, dependency_count: int) -> float:
         """Get complexity factor for dependencies.
-        
+
         Args:
             dependency_count: Number of dependencies
-            
+
         Returns:
             Complexity factor based on dependency count
         """
@@ -131,10 +131,10 @@ class ComplexityMetrics:
 
     def get_parallel_factor(self, parallel_tasks: int) -> float:
         """Get complexity factor for parallel execution.
-        
+
         Args:
             parallel_tasks: Number of parallel tasks
-            
+
         Returns:
             Complexity factor based on parallelism
         """
@@ -151,10 +151,10 @@ class ComplexityMetrics:
 
     def get_retry_factor(self, retry_count: int) -> float:
         """Get complexity factor for retry configuration.
-        
+
         Args:
             retry_count: Number of retries
-            
+
         Returns:
             Complexity factor based on retry count
         """

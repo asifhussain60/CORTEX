@@ -20,7 +20,7 @@ ARCHITECTURE:
 USAGE:
     # From project root
     python src/dashboard/serve.py
-    
+
     # Or make executable
     chmod +x src/dashboard/serve.py
     ./src/dashboard/serve.py
@@ -30,18 +30,18 @@ GOVERNANCE:
 - CORE-012: Google-style docstrings
 - CORE-026: Checkpoint protocol (manual git commit)
 """
-import os
-import sys
-import platform
-import subprocess
-import time
-import signal
 import atexit
-from pathlib import Path
-from typing import Optional, List, Tuple
+import os
+import platform
+import signal
 import socket
-import psutil  # type: ignore
+import subprocess
+import sys
+import time
+from pathlib import Path
+from typing import List, Optional, Tuple
 
+import psutil  # type: ignore
 
 # =============================================================================
 # CONFIGURATION
@@ -71,7 +71,7 @@ FRONTEND_PROCESS: Optional[subprocess.Popen] = None
 def get_platform() -> str:
     """
     Detect current operating system.
-    
+
     Returns:
         str: 'windows', 'macos', or 'linux'
     """
@@ -87,10 +87,10 @@ def get_platform() -> str:
 def find_processes_on_port(port: int) -> List[psutil.Process]:
     """
     Find all processes listening on specified port.
-    
+
     Args:
         port: Port number to check
-        
+
     Returns:
         List of psutil.Process objects using the port
     """
@@ -109,16 +109,16 @@ def find_processes_on_port(port: int) -> List[psutil.Process]:
 def kill_orphaned_processes(port: int) -> int:
     """
     Kill all processes listening on specified port.
-    
+
     Args:
         port: Port number to clean up
-        
+
     Returns:
         Number of processes killed
     """
     processes = find_processes_on_port(port)
     killed = 0
-    
+
     for proc in processes:
         try:
             print(f"⚠️  Killing orphaned process PID {proc.pid} ({proc.name()}) on port {port}")
@@ -130,18 +130,18 @@ def kill_orphaned_processes(port: int) -> int:
             killed += 1
         except (psutil.NoSuchProcess, psutil.AccessDenied) as e:
             print(f"⚠️  Could not kill PID {proc.pid}: {e}")
-    
+
     return killed
 
 
 def is_port_available(port: int, host: str = "127.0.0.1") -> bool:
     """
     Check if port is available for binding.
-    
+
     Args:
         port: Port number to check
         host: Host address to check
-        
+
     Returns:
         True if port is available, False otherwise
     """
@@ -156,12 +156,12 @@ def is_port_available(port: int, host: str = "127.0.0.1") -> bool:
 def wait_for_port(port: int, host: str = "127.0.0.1", timeout: int = 10) -> bool:
     """
     Wait for port to become available (server started).
-    
+
     Args:
         port: Port number to check
         host: Host address to check
         timeout: Maximum seconds to wait
-        
+
     Returns:
         True if port is listening, False if timeout
     """
@@ -179,7 +179,7 @@ def wait_for_port(port: int, host: str = "127.0.0.1", timeout: int = 10) -> bool
 def get_python_executable() -> str:
     """
     Get the correct Python executable path.
-    
+
     Returns:
         Path to Python executable (respects virtual environments)
     """
@@ -189,16 +189,16 @@ def get_python_executable() -> str:
 def open_in_external_terminal(command: str, title: str = "CORTEX Dashboard") -> bool:
     """
     Launch command in external terminal window (not VS Code integrated).
-    
+
     Args:
         command: Shell command to execute
         title: Window title for terminal
-        
+
     Returns:
         True if successfully launched, False otherwise
     """
     os_type = get_platform()
-    
+
     try:
         if os_type == "macos":
             # macOS: Use osascript to launch Terminal.app
@@ -211,14 +211,14 @@ def open_in_external_terminal(command: str, title: str = "CORTEX Dashboard") -> 
             '''
             subprocess.Popen(['osascript', '-e', applescript])
             return True
-            
+
         elif os_type == "windows":
             # Windows: Use PowerShell in new window
             ps_command = f'Start-Process powershell -ArgumentList "-NoExit", "-Command", "{command}" -WindowStyle Normal'
-            subprocess.Popen(['powershell', '-Command', ps_command], 
+            subprocess.Popen(['powershell', '-Command', ps_command],
                            creationflags=subprocess.CREATE_NEW_CONSOLE)
             return True
-            
+
         else:  # Linux
             # Try common terminal emulators
             terminals = [
@@ -226,17 +226,17 @@ def open_in_external_terminal(command: str, title: str = "CORTEX Dashboard") -> 
                 ['konsole', '-e', 'bash', '-c', f'{command}; exec bash'],
                 ['xterm', '-e', f'{command}; bash'],
             ]
-            
+
             for terminal_cmd in terminals:
                 try:
                     subprocess.Popen(terminal_cmd)
                     return True
                 except FileNotFoundError:
                     continue
-            
+
             print("❌ No suitable terminal emulator found on Linux")
             return False
-            
+
     except Exception as e:
         print(f"❌ Failed to launch external terminal: {e}")
         return False
@@ -249,29 +249,29 @@ def open_in_external_terminal(command: str, title: str = "CORTEX Dashboard") -> 
 def start_backend_server() -> Tuple[bool, Optional[subprocess.Popen]]:
     """
     Start FastAPI backend server on port 8000.
-    
+
     Returns:
         Tuple of (success: bool, process: Optional[Popen])
     """
     global BACKEND_PROCESS
-    
+
     print(f"🚀 Starting FastAPI backend on http://{BACKEND_HOST}:{BACKEND_PORT}")
-    
+
     # Kill orphaned processes
     killed = kill_orphaned_processes(BACKEND_PORT)
     if killed:
         print(f"   Cleaned up {killed} orphaned process(es)")
         time.sleep(1)  # Wait for port cleanup
-    
+
     # Verify port is available
     if not is_port_available(BACKEND_PORT, BACKEND_HOST):
         print(f"❌ Port {BACKEND_PORT} still in use after cleanup")
         return False, None
-    
+
     # Start uvicorn server
     python_exec = get_python_executable()
     api_main = API_DIR / "main.py"
-    
+
     cmd = [
         python_exec, "-m", "uvicorn",
         "src.dashboard.api.main:app",
@@ -280,7 +280,7 @@ def start_backend_server() -> Tuple[bool, Optional[subprocess.Popen]]:
         "--reload",
         "--log-level", "info"
     ]
-    
+
     try:
         BACKEND_PROCESS = subprocess.Popen(
             cmd,
@@ -290,7 +290,7 @@ def start_backend_server() -> Tuple[bool, Optional[subprocess.Popen]]:
             text=True,
             bufsize=1
         )
-        
+
         # Wait for server to start
         if wait_for_port(BACKEND_PORT, BACKEND_HOST, timeout=10):
             print(f"✅ Backend ready: http://{BACKEND_HOST}:{BACKEND_PORT}")
@@ -301,7 +301,7 @@ def start_backend_server() -> Tuple[bool, Optional[subprocess.Popen]]:
             if BACKEND_PROCESS:
                 BACKEND_PROCESS.terminate()
             return False, None
-            
+
     except Exception as e:
         print(f"❌ Failed to start backend: {e}")
         return False, None
@@ -310,35 +310,35 @@ def start_backend_server() -> Tuple[bool, Optional[subprocess.Popen]]:
 def start_frontend_server() -> Tuple[bool, Optional[subprocess.Popen]]:
     """
     Start static file server for frontend on port 8080.
-    
+
     Returns:
         Tuple of (success: bool, process: Optional[Popen])
     """
     global FRONTEND_PROCESS
-    
+
     print(f"🚀 Starting static frontend on http://{FRONTEND_HOST}:{FRONTEND_PORT}")
-    
+
     # Kill orphaned processes
     killed = kill_orphaned_processes(FRONTEND_PORT)
     if killed:
         print(f"   Cleaned up {killed} orphaned process(es)")
         time.sleep(1)
-    
+
     # Verify port is available
     if not is_port_available(FRONTEND_PORT, FRONTEND_HOST):
         print(f"❌ Port {FRONTEND_PORT} still in use after cleanup")
         return False, None
-    
+
     # Start Python's built-in HTTP server
     python_exec = get_python_executable()
-    
+
     cmd = [
         python_exec, "-m", "http.server",
         str(FRONTEND_PORT),
         "--bind", FRONTEND_HOST,
         "--directory", str(FRONTEND_DIR)
     ]
-    
+
     try:
         FRONTEND_PROCESS = subprocess.Popen(
             cmd,
@@ -347,7 +347,7 @@ def start_frontend_server() -> Tuple[bool, Optional[subprocess.Popen]]:
             text=True,
             bufsize=1
         )
-        
+
         # Wait for server to start
         if wait_for_port(FRONTEND_PORT, FRONTEND_HOST, timeout=10):
             print(f"✅ Frontend ready: http://{FRONTEND_HOST}:{FRONTEND_PORT}")
@@ -357,7 +357,7 @@ def start_frontend_server() -> Tuple[bool, Optional[subprocess.Popen]]:
             if FRONTEND_PROCESS:
                 FRONTEND_PROCESS.terminate()
             return False, None
-            
+
     except Exception as e:
         print(f"❌ Failed to start frontend: {e}")
         return False, None
@@ -368,9 +368,9 @@ def cleanup_servers() -> None:
     Gracefully shutdown both servers.
     """
     global BACKEND_PROCESS, FRONTEND_PROCESS
-    
+
     print("\n🛑 Shutting down servers...")
-    
+
     for name, process in [("Backend", BACKEND_PROCESS), ("Frontend", FRONTEND_PROCESS)]:
         if process and process.poll() is None:
             print(f"   Stopping {name} (PID {process.pid})")
@@ -380,7 +380,7 @@ def cleanup_servers() -> None:
             except subprocess.TimeoutExpired:
                 print(f"   Force killing {name}")
                 process.kill()
-    
+
     print("✅ Cleanup complete")
 
 
@@ -391,7 +391,7 @@ def cleanup_servers() -> None:
 def main() -> int:
     """
     Main entry point for dashboard server.
-    
+
     Returns:
         Exit code (0 = success, 1 = failure)
     """
@@ -403,34 +403,34 @@ def main() -> int:
     print(f"Project Root: {PROJECT_ROOT}")
     print(f"Dashboard Dir: {DASHBOARD_DIR}")
     print()
-    
+
     # Verify directories exist
     if not FRONTEND_DIR.exists():
         print(f"❌ Frontend directory not found: {FRONTEND_DIR}")
         return 1
-    
+
     if not API_DIR.exists():
         print(f"❌ API directory not found: {API_DIR}")
         return 1
-    
+
     # Register cleanup handler
     atexit.register(cleanup_servers)
     signal.signal(signal.SIGINT, lambda s, f: sys.exit(0))
     signal.signal(signal.SIGTERM, lambda s, f: sys.exit(0))
-    
+
     # Start backend
     backend_success, backend_proc = start_backend_server()
     if not backend_success:
         return 1
-    
+
     print()
-    
+
     # Start frontend
     frontend_success, frontend_proc = start_frontend_server()
     if not frontend_success:
         cleanup_servers()
         return 1
-    
+
     print()
     print("=" * 80)
     print("🎉 DASHBOARD READY")
@@ -443,24 +443,24 @@ def main() -> int:
     print("Press Ctrl+C to stop servers")
     print("=" * 80)
     print()
-    
+
     # Monitor processes
     try:
         while True:
             time.sleep(5)
-            
+
             # Check if processes are still running
             if backend_proc and backend_proc.poll() is not None:
                 print("❌ Backend process died unexpectedly")
                 break
-            
+
             if frontend_proc and frontend_proc.poll() is not None:
                 print("❌ Frontend process died unexpectedly")
                 break
-            
+
     except KeyboardInterrupt:
         print("\n⚠️  Received interrupt signal")
-    
+
     cleanup_servers()
     return 0
 

@@ -8,8 +8,8 @@ interactions.
 
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Callable, Dict, List, Optional, Set
 from enum import Enum
+from typing import Any, Callable, Dict, List, Optional, Set
 
 from cortex.models.canonical_enums import ValidationSeverity
 
@@ -21,7 +21,7 @@ class ValidationResult:
     messages: List[str] = field(default_factory=list)
     severity: ValidationSeverity = ValidationSeverity.INFO
     timestamp: datetime = field(default_factory=datetime.utcnow)
-    
+
     def add_message(self, message: str, severity: ValidationSeverity = ValidationSeverity.ERROR) -> None:
         """Add a validation message."""
         self.messages.append(message)
@@ -39,7 +39,7 @@ class ValidationRule:
     description: str
     validate: Callable[[Dict[str, Any]], bool]
     severity: ValidationSeverity = ValidationSeverity.ERROR
-    
+
     def check(self, context: Dict[str, Any]) -> bool:
         """Execute the validation rule."""
         return self.validate(context)
@@ -48,24 +48,24 @@ class ValidationRule:
 class DomainValidator:
     """
     Validator for domain operations and contexts.
-    
+
     Provides:
     - Context validation per domain
     - Operation validation
     - Cross-domain operation validation
     - Custom rule registration
     """
-    
+
     # Default domain validation rules
     DEFAULT_RULES: Dict[str, List[ValidationRule]] = {}
-    
+
     # Domain compatibility matrix
     DOMAIN_COMPATIBILITY: Dict[str, Set[str]] = {
         "financial": {"financial", "ecommerce"},
         "healthcare": {"healthcare"},
         "ecommerce": {"ecommerce", "financial"},
     }
-    
+
     def __init__(self) -> None:
         """Initialize domain validator."""
         self._rules: Dict[str, List[ValidationRule]] = {
@@ -112,7 +112,7 @@ class DomainValidator:
                 ),
             ],
         }
-    
+
     def validate_context(
         self,
         domain: str,
@@ -120,16 +120,16 @@ class DomainValidator:
     ) -> ValidationResult:
         """
         Validate a domain context.
-        
+
         Args:
             domain: Domain name
             context: Context to validate
-            
+
         Returns:
             Validation result
         """
         result = ValidationResult(is_valid=True)
-        
+
         rules = self.get_rules(domain)
         for rule in rules:
             if not rule.check(context):
@@ -137,9 +137,9 @@ class DomainValidator:
                     f"Rule {rule.rule_id} failed: {rule.description}",
                     rule.severity,
                 )
-        
+
         return result
-    
+
     def validate_operation(
         self,
         domain: str,
@@ -147,27 +147,27 @@ class DomainValidator:
     ) -> ValidationResult:
         """
         Validate a domain operation.
-        
+
         Args:
             domain: Domain name
             operation: Operation name
-            
+
         Returns:
             Validation result
         """
         result = ValidationResult(is_valid=True)
-        
+
         # Get valid operations for domain
         valid_operations = self._get_valid_operations(domain)
-        
+
         if operation not in valid_operations:
             result.add_message(
                 f"Operation '{operation}' not supported for domain '{domain}'",
                 ValidationSeverity.ERROR,
             )
-        
+
         return result
-    
+
     def validate_cross_domain_operation(
         self,
         source_domain: str,
@@ -177,18 +177,18 @@ class DomainValidator:
     ) -> ValidationResult:
         """
         Validate cross-domain operation.
-        
+
         Args:
             source_domain: Source domain
             target_domain: Target domain
             operation: Operation name
             context: Operation context
-            
+
         Returns:
             Validation result
         """
         result = ValidationResult(is_valid=True)
-        
+
         # Check domain compatibility
         if not self.are_domains_compatible(source_domain, target_domain):
             result.add_message(
@@ -196,36 +196,36 @@ class DomainValidator:
                 ValidationSeverity.ERROR,
             )
             return result
-        
+
         # Validate context for both domains
         source_result = self.validate_context(source_domain, context)
         if not source_result.is_valid:
             result.is_valid = False
             result.messages.extend(source_result.messages)
-        
+
         target_result = self.validate_context(target_domain, context)
         if not target_result.is_valid:
             result.is_valid = False
             result.messages.extend(target_result.messages)
-        
+
         return result
-    
+
     def get_rules(self, domain: str) -> List[ValidationRule]:
         """
         Get validation rules for a domain.
-        
+
         Args:
             domain: Domain name
-            
+
         Returns:
             List of validation rules
         """
         return self._rules.get(domain, [])
-    
+
     def register_rule(self, rule: ValidationRule) -> None:
         """
         Register a custom validation rule.
-        
+
         Args:
             rule: Validation rule to register
         """
@@ -233,7 +233,7 @@ class DomainValidator:
         if domain not in self._rules:
             self._rules[domain] = []
         self._rules[domain].append(rule)
-    
+
     def are_domains_compatible(
         self,
         source_domain: str,
@@ -241,21 +241,21 @@ class DomainValidator:
     ) -> bool:
         """
         Check if two domains are compatible.
-        
+
         Args:
             source_domain: Source domain
             target_domain: Target domain
-            
+
         Returns:
             True if domains are compatible
         """
         # All domains are self-compatible
         if source_domain == target_domain:
             return True
-        
+
         compatible = self.DOMAIN_COMPATIBILITY.get(source_domain, {source_domain})
         return target_domain in compatible
-    
+
     def _get_valid_operations(self, domain: str) -> Set[str]:
         """Get valid operations for a domain."""
         operations = {

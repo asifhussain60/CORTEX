@@ -29,8 +29,8 @@ import math
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
-from cortex.core.result import Result, Ok, Err
 from cortex.capacity.evidence_collector import EvidenceCollector
+from cortex.core.result import Err, Ok, Result
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +38,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class SubTask:
     """Single subtask from decomposition."""
-    
+
     subtask_id: str
     parent_task_id: str
     sequence_number: int
@@ -55,7 +55,7 @@ class SubTask:
 @dataclass
 class TaskDecompositionResult:
     """Result of task decomposition."""
-    
+
     task_id: str
     subtasks: List[SubTask] = field(default_factory=list)
     total_estimated_tokens: int = 0
@@ -67,12 +67,12 @@ class TaskDecompositionResult:
 class IncrementalTaskDecomposer:
     """
     Decomposes tasks into subtasks with token budget constraints.
-    
+
     Uses Phase 12 CAP framework for evidence-based estimation:
     - EvidenceCollector: Complexity assessment from LENS, Git, Domain
     - PERT estimation: Three-point estimation (optimistic, likely, pessimistic)
     - Token budget: Ensures subtasks fit within LLM context limits
-    
+
     Example:
         >>> decomposer = IncrementalTaskDecomposer(max_tokens_per_subtask=10000)
         >>> result = decomposer.decompose_into_subtasks({
@@ -82,7 +82,7 @@ class IncrementalTaskDecomposer:
         ...     "domain": "backend"
         ... })
         >>> subtasks = result.unwrap().subtasks
-    
+
     AC-TDD-INCREMENTAL-01: Task decomposition with token budgets
     """
 
@@ -93,16 +93,16 @@ class IncrementalTaskDecomposer:
     ) -> None:
         """
         Initialize IncrementalTaskDecomposer.
-        
+
         Args:
             max_tokens_per_subtask: Maximum tokens allowed per subtask
             evidence_collector: Evidence collector for complexity assessment
-            
+
         AC-TDD-INCREMENTAL-01-01: Initialization with token budget
         """
         self.max_tokens_per_subtask = max_tokens_per_subtask
         self.evidence_collector = evidence_collector or EvidenceCollector()
-        
+
         logger.info(
             f"IncrementalTaskDecomposer initialized with "
             f"max_tokens_per_subtask={max_tokens_per_subtask}"
@@ -114,13 +114,13 @@ class IncrementalTaskDecomposer:
     ) -> Result[TaskDecompositionResult]:
         """
         Decompose task into subtasks with token budget constraints.
-        
+
         Args:
             task: Task specification with task_id, description, module_path, domain
-            
+
         Returns:
             Result with TaskDecompositionResult or error
-            
+
         AC-TDD-INCREMENTAL-01-02: Task decomposition logic
         """
         try:
@@ -201,25 +201,25 @@ class IncrementalTaskDecomposer:
     ) -> Result[int]:
         """
         Estimate token budget for task using PERT and evidence.
-        
+
         Args:
             task: Task specification
-            
+
         Returns:
             Result with estimated token count or error
-            
+
         AC-TDD-INCREMENTAL-01-03: Token budget estimation
         """
         try:
             description = task.get("description", "")
             acceptance_criteria = task.get("acceptance_criteria", [])
-            
+
             # Base estimation on description length and complexity
             base_tokens = len(description.split()) * 50  # ~50 tokens per word average
-            
+
             # Add tokens for acceptance criteria
             ac_tokens = len(acceptance_criteria) * 500  # ~500 tokens per AC
-            
+
             # Collect evidence for complexity multiplier
             task_id = task.get("task_id", "unknown")
             try:
@@ -227,11 +227,11 @@ class IncrementalTaskDecomposer:
                     task_id=task_id,
                     task_description=description
                 )
-                
+
                 # Apply complexity multiplier
                 complexity_score = evidence.lens_complexity.get("score", 1.0) if evidence.lens_complexity else 1.0
                 complexity_multiplier = 1.0 + (complexity_score / 10.0)  # 1.0 to 2.0 range
-                
+
             except Exception as e:
                 logger.warning(f"Evidence collection failed: {e}, using default multiplier")
                 complexity_multiplier = 1.5  # Default moderate complexity
@@ -240,17 +240,17 @@ class IncrementalTaskDecomposer:
             optimistic = base_tokens + ac_tokens
             likely = int((base_tokens + ac_tokens) * complexity_multiplier)
             pessimistic = int((base_tokens + ac_tokens) * complexity_multiplier * 1.5)
-            
+
             pert_estimate = int((optimistic + 4 * likely + pessimistic) / 6)
-            
+
             # Ensure minimum 1K tokens
             final_estimate = max(1000, pert_estimate)
-            
+
             logger.debug(
                 f"Token estimate for {task_id}: {final_estimate} "
                 f"(complexity_multiplier={complexity_multiplier:.2f})"
             )
-            
+
             return Ok(final_estimate)
 
         except Exception as e:
@@ -260,12 +260,12 @@ class IncrementalTaskDecomposer:
     def _validate_task(self, task: Dict[str, Any]) -> Result[None]:
         """Validate task structure has required fields."""
         required_fields = ["task_id", "description"]
-        
+
         missing = [field for field in required_fields if field not in task]
-        
+
         if missing:
             return Err(f"Missing required fields: {', '.join(missing)}")
-        
+
         return Ok(None)
 
     def _create_single_subtask(
@@ -305,26 +305,26 @@ class IncrementalTaskDecomposer:
         # Calculate number of subtasks needed
         num_subtasks = math.ceil(total_tokens / self.max_tokens_per_subtask)
         tokens_per_subtask = total_tokens // num_subtasks
-        
+
         subtasks = []
-        
+
         # Distribute acceptance criteria across subtasks
         ac_per_subtask = max(1, len(acceptance_criteria) // num_subtasks)
-        
+
         for i in range(num_subtasks):
             start_ac = i * ac_per_subtask
             end_ac = start_ac + ac_per_subtask if i < num_subtasks - 1 else len(acceptance_criteria)
-            
+
             subtask_ac = acceptance_criteria[start_ac:end_ac] if acceptance_criteria else []
-            
+
             # Build subtask description
             subtask_desc = f"{description} (Part {i+1}/{num_subtasks})"
             if subtask_ac:
                 subtask_desc += f": {', '.join(subtask_ac[:2])}"  # Show first 2 ACs
-            
+
             # Previous subtask as dependency (except for first)
             depends_on = [f"{task_id}-SUB-{i:02d}"] if i > 0 else []
-            
+
             subtask = SubTask(
                 subtask_id=f"{task_id}-SUB-{i+1:02d}",
                 parent_task_id=task_id,
@@ -338,9 +338,9 @@ class IncrementalTaskDecomposer:
                 depends_on=depends_on,
                 metadata={"part": i+1, "total_parts": num_subtasks}
             )
-            
+
             subtasks.append(subtask)
-        
+
         return subtasks
 
     def _evidence_to_dict(self, evidence: Any) -> Dict[str, Any]:

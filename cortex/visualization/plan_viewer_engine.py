@@ -14,15 +14,15 @@ Author: Asif Hussain
 Phase: PHASE 4 (Plan Viewer Generator)
 """
 
-import json
 import asyncio
-from typing import Dict, Any, List, Optional, AsyncIterator
+import json
+from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
-from pathlib import Path
-from dataclasses import dataclass, asdict
 from enum import Enum
-from cortex.models.canonical_enums import PhaseStatus
+from pathlib import Path
+from typing import Any, AsyncIterator, Dict, List, Optional
 
+from cortex.models.canonical_enums import PhaseStatus
 
 # ═══════════════════════════════════════════════════════════════════════════
 # Type Definitions
@@ -107,14 +107,14 @@ class PlanData:
 class PlanViewerEngine:
     """
     Backend engine for real-time plan visualization.
-    
+
     Provides plan data export and streaming capabilities for the plan-viewer.html SPA.
     """
 
     def __init__(self, planner_orchestrator: Optional[Any] = None) -> None:
         """
         Initialize the plan viewer engine.
-        
+
         Args:
             planner_orchestrator: Reference to PlannerOrchestrator for plan data
         """
@@ -125,10 +125,10 @@ class PlanViewerEngine:
     def export_plan_data(self, plan_id: str) -> Dict[str, Any]:
         """
         Export plan data for viewer consumption.
-        
+
         Args:
             plan_id: ID of plan to export
-            
+
         Returns:
             Plan data dictionary ready for JSON serialization
         """
@@ -152,7 +152,7 @@ class PlanViewerEngine:
     def export_all_plans(self) -> Dict[str, Any]:
         """
         Export all plans for viewer.
-        
+
         Returns:
             Dictionary with all plans organized by status
         """
@@ -176,11 +176,11 @@ class PlanViewerEngine:
     def subscribe_to_plan(self, plan_id: str, callback: Any) -> str:
         """
         Subscribe to plan updates (WebSocket/polling).
-        
+
         Args:
             plan_id: Plan to subscribe to
             callback: Callback function for updates
-            
+
         Returns:
             Subscription ID
         """
@@ -195,11 +195,11 @@ class PlanViewerEngine:
     def unsubscribe_from_plan(self, plan_id: str, subscription_id: str) -> bool:
         """
         Unsubscribe from plan updates.
-        
+
         Args:
             plan_id: Plan ID
             subscription_id: Subscription ID to remove
-            
+
         Returns:
             True if unsubscribed, False if not found
         """
@@ -211,15 +211,15 @@ class PlanViewerEngine:
         self.active_subscriptions[plan_id] = []
         return True
 
-    async def stream_plan_updates(self, plan_id: str, 
+    async def stream_plan_updates(self, plan_id: str,
                                   poll_interval: float = 1.0) -> AsyncIterator[Dict[str, Any]]:
         """
         Stream plan updates asynchronously.
-        
+
         Args:
             plan_id: Plan to stream
             poll_interval: Polling interval in seconds
-            
+
         Yields:
             Updated plan data
         """
@@ -242,10 +242,10 @@ class PlanViewerEngine:
     def get_plan_json(self, plan_id: str) -> str:
         """
         Get plan data as JSON string.
-        
+
         Args:
             plan_id: Plan ID
-            
+
         Returns:
             JSON string of plan data
         """
@@ -255,11 +255,11 @@ class PlanViewerEngine:
     def save_plan_snapshot(self, plan_id: str, filepath: Path) -> bool:
         """
         Save plan snapshot to file.
-        
+
         Args:
             plan_id: Plan ID
             filepath: Path to save JSON file
-            
+
         Returns:
             True if successful
         """
@@ -279,10 +279,10 @@ class PlanViewerEngine:
     def load_plan_snapshot(self, filepath: Path) -> Optional[Dict[str, Any]]:
         """
         Load plan snapshot from file.
-        
+
         Args:
             filepath: Path to JSON file
-            
+
         Returns:
             Plan data dictionary or None if error
         """

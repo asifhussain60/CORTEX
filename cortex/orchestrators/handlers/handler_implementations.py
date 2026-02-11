@@ -9,8 +9,8 @@ No type annotation complexity - focus on functionality.
 
 from __future__ import annotations
 
-from typing import Any, Optional, Dict
 from dataclasses import dataclass
+from typing import Any, Dict, Optional
 
 
 @dataclass

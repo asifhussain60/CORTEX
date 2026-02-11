@@ -7,12 +7,12 @@ compliance checking, and reporting.
 
 """
 
+import uuid
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Set
 from enum import Enum
-import uuid
+from typing import Any, Dict, List, Optional, Set
 
 
 class ComplianceFramework(Enum):
@@ -67,7 +67,7 @@ class DomainContext:
 class BusinessDomainOrchestrator(ABC):
     """
     Abstract base class for business domain-specific orchestrators.
-    
+
     Provides:
     - Domain context management
     - Compliance framework integration
@@ -75,105 +75,105 @@ class BusinessDomainOrchestrator(ABC):
     - Audit trail integration
     - Reporting capabilities
     """
-    
+
     def __init__(self) -> None:
         """Initialize business domain orchestrator."""
         self._audit_entries: List[Dict[str, Any]] = []
         self._context: Optional[DomainContext] = None
-    
+
     # =========================================================================
     # Abstract Properties (must be implemented by subclasses)
     # =========================================================================
-    
+
     @property
     @abstractmethod
     def domain(self) -> str:
         """Return the business domain name."""
         pass
-    
+
     @property
     @abstractmethod
     def orchestrator_id(self) -> str:
         """Return unique orchestrator identifier."""
         pass
-    
+
     @property
     @abstractmethod
     def compliance_requirements(self) -> List[str]:
         """Return list of compliance frameworks required."""
         pass
-    
+
     @property
     @abstractmethod
     def supported_operations(self) -> List[str]:
         """Return list of supported operations."""
         pass
-    
+
     @property
     def required_tier(self) -> int:
         """Return required governance tier. Default is 2 for business domains."""
         return 2
-    
+
     # =========================================================================
     # Abstract Methods (must be implemented by subclasses)
     # =========================================================================
-    
+
     @abstractmethod
     def validate(self, context: Dict[str, Any]) -> bool:
         """
         Validate context for operation.
-        
+
         Args:
             context: Operation context dictionary
-            
+
         Returns:
             True if context is valid, False otherwise
         """
         pass
-    
+
     @abstractmethod
     def execute(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """
         Execute domain-specific operation.
-        
+
         Args:
             context: Operation context dictionary
-            
+
         Returns:
             Result dictionary with operation outcome
         """
         pass
-    
+
     @abstractmethod
     def assess_risk(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """
         Assess risk for the given context.
-        
+
         Args:
             context: Operation context dictionary
-            
+
         Returns:
             Risk assessment result
         """
         pass
-    
+
     @abstractmethod
     def generate_report(self, **kwargs: Any) -> Dict[str, Any]:
         """
         Generate domain-specific report.
-        
+
         Args:
             **kwargs: Report parameters
-            
+
         Returns:
             Report data dictionary
         """
         pass
-    
+
     # =========================================================================
     # Common Methods (inherited by all business domain orchestrators)
     # =========================================================================
-    
+
     def check_compliance(
         self,
         context: Dict[str, Any],
@@ -181,26 +181,26 @@ class BusinessDomainOrchestrator(ABC):
     ) -> ComplianceCheckResult:
         """
         Check compliance against specified framework.
-        
+
         Args:
             context: Operation context
             framework: Specific framework to check (or all if None)
-            
+
         Returns:
             ComplianceCheckResult with pass/fail status
         """
         frameworks_to_check = (
             [framework] if framework else self.compliance_requirements
         )
-        
+
         violations = []
-        
+
         # Check for suspicious flags (AML/KYC violations)
         suspicious_flags = context.get("suspicious_flags", [])
         if suspicious_flags:
             for flag in suspicious_flags:
                 violations.append(f"AML: Suspicious activity detected - {flag}")
-        
+
         for fw in frameworks_to_check:
             # Framework-specific checks
             if fw == "PCI-DSS":
@@ -212,13 +212,13 @@ class BusinessDomainOrchestrator(ABC):
             elif fw == "SOX":
                 if not context.get("audit_trail_enabled", True):
                     violations.append(f"{fw}: Audit trail required")
-        
+
         return ComplianceCheckResult(
             passed=len(violations) == 0,
             framework=",".join(frameworks_to_check),
             violations=violations,
         )
-    
+
     def log_audit_entry(
         self,
         operation: str,
@@ -227,12 +227,12 @@ class BusinessDomainOrchestrator(ABC):
     ) -> str:
         """
         Log an audit trail entry.
-        
+
         Args:
             operation: Operation performed
             context: Operation context
             result: Operation result
-            
+
         Returns:
             Audit entry ID
         """
@@ -248,11 +248,11 @@ class BusinessDomainOrchestrator(ABC):
         }
         self._audit_entries.append(entry)
         return audit_id
-    
+
     def get_audit_trail(self) -> List[Dict[str, Any]]:
         """Return all audit entries for this orchestrator instance."""
         return self._audit_entries.copy()
-    
+
     def _create_base_result(
         self,
         status: str,
@@ -261,12 +261,12 @@ class BusinessDomainOrchestrator(ABC):
     ) -> Dict[str, Any]:
         """
         Create base result dictionary with common fields.
-        
+
         Args:
             status: Operation status
             context: Operation context
             **kwargs: Additional result fields
-            
+
         Returns:
             Result dictionary
         """
@@ -277,7 +277,7 @@ class BusinessDomainOrchestrator(ABC):
             "timestamp": datetime.utcnow().isoformat(),
             **kwargs,
         }
-        
+
         # Add audit entry
         audit_id = self.log_audit_entry(
             operation=context.get("operation", "unknown"),
@@ -285,5 +285,5 @@ class BusinessDomainOrchestrator(ABC):
             result=result,
         )
         result["audit_id"] = audit_id
-        
+
         return result

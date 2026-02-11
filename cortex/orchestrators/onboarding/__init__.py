@@ -9,40 +9,40 @@ This package provides automated setup and configuration orchestrators:
 """
 
 # SetupOrchestrator lives in support package (CORE-035 canonical location)
-from cortex.orchestrators.support.setup_orchestrator import (
-    SetupOrchestrator,
-    SetupResult,
-    SetupContext,
-    SetupPhase,
+# Backward compatibility: Unified Onboarding interface
+import warnings
+
+from cortex.config.unified_onboarding import (
+    Journey,
+    JourneyState,
+    OnboardingConfig,
+    UnifiedOnboarding,
+    get_unified_onboarding,
 )
-from cortex.orchestrators.onboarding.vscode_configurator import (
-    VSCodeConfigurator,
+from cortex.orchestrators.onboarding.dependency_resolver import (
+    DependencyConflict,
+    DependencyResolver,
+    ResolutionStrategy,
+)
+from cortex.orchestrators.onboarding.mcp_bootstrapper import (
+    ConfigUpdateResult,
+    HealthCheckResult,
+    MCPBootstrapper,
+    ServerStartResult,
+    ServerStopResult,
 )
 from cortex.orchestrators.onboarding.toolchain_validator import (
     ToolchainValidator,
     ToolValidationResult,
 )
-from cortex.orchestrators.onboarding.mcp_bootstrapper import (
-    MCPBootstrapper,
-    ServerStartResult,
-    ServerStopResult,
-    HealthCheckResult,
-    ConfigUpdateResult,
+from cortex.orchestrators.onboarding.vscode_configurator import (
+    VSCodeConfigurator,
 )
-from cortex.orchestrators.onboarding.dependency_resolver import (
-    DependencyResolver,
-    DependencyConflict,
-    ResolutionStrategy,
-)
-
-# Backward compatibility: Unified Onboarding interface
-import warnings
-from cortex.config.unified_onboarding import (
-    UnifiedOnboarding,
-    OnboardingConfig,
-    Journey,
-    JourneyState,
-    get_unified_onboarding,
+from cortex.orchestrators.support.setup_orchestrator import (
+    SetupContext,
+    SetupOrchestrator,
+    SetupPhase,
+    SetupResult,
 )
 
 
@@ -50,13 +50,13 @@ from cortex.config.unified_onboarding import (
 class OnboardingOrchestrator(UnifiedOnboarding):
     """
     Legacy OnboardingOrchestrator alias.
-    
+
     **DEPRECATED**: Use UnifiedOnboarding from cortex.config instead.
-    
+
     This class is maintained for backward compatibility only.
     All new code should use cortex.config.UnifiedOnboarding.
     """
-    
+
     def __init__(self, config=None):
         warnings.warn(
             "OnboardingOrchestrator is deprecated. Use UnifiedOnboarding from "

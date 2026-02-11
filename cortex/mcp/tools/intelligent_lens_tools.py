@@ -7,7 +7,7 @@ Compliance: CORE-011 (Type hints), CORE-012 (Docstrings), ARCH-007 (MCP-first)
 """
 
 from pathlib import Path
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 
 from cortex.mcp.decorators import mcp_tool
 
@@ -36,40 +36,40 @@ def cortex_lens_deep_analyze(
 ) -> Dict[str, Any]:
     """
     Intelligent LENS analysis with tiered depth and optional LLM enhancement.
-    
+
     USAGE TRIGGERS (Natural Language):
       - "use lens" / "use cortex lens"
       - "analyze" / "investigate" / "inspect"
       - "deep dive" / "deep analysis"
       - "scan for security issues"
       - "find patterns" / "detect anomalies"
-    
+
     ANALYSIS TIERS:
       - fast: Static analysis only (AST + git + comments) - ~50ms
       - smart: Add domain knowledge + pattern matching - ~200ms
       - deep: LLM-augmented insights - 2-5s
       - crawler: Async deep crawl + LLM synthesis - background job
-    
+
     LLM ENHANCEMENT (when use_llm=True):
       - Pattern recognition (anti-patterns, code smells)
       - Anomaly detection (unusual patterns, security risks)
       - Recommendations (refactoring suggestions, best practices)
       - Natural language explanations
       - OWASP compliance checks
-    
+
     COMPANY DOMAIN CONTEXT (when include_domain_context=True):
       - Loads company/domains/**/*.yaml
       - Applies domain-specific compliance standards
       - Caches for 1h (fast successive scans)
       - Incremental update detection
-    
+
     SECURITY:
       - PII/secrets sanitized before LLM calls
       - Token budgets enforced (per-request + per-user)
       - Rate limiting applied
       - Audit trail logged
       - Graceful degradation without LLM
-    
+
     Args:
         path: File or directory to analyze (relative or absolute)
         depth: Analysis depth (fast|smart|deep|crawler) - auto-selected if query provided
@@ -78,7 +78,7 @@ def cortex_lens_deep_analyze(
         provider: LLM provider (openai|anthropic|azure)
         include_domain_context: Load company domain YAMLs first
         query: Natural language query (e.g., "find security issues")
-    
+
     Returns:
         Dict with:
           - status: success/error
@@ -88,18 +88,18 @@ def cortex_lens_deep_analyze(
           - llm_used: Whether LLM was invoked
           - llm_tokens: Tokens used (if LLM)
           - cache_hit: Whether result was cached
-    
+
     Examples:
         # Fast analysis (no LLM)
         >>> result = cortex_lens_deep_analyze("src/module.py", depth="fast")
-        
+
         # Smart analysis with domain context
         >>> result = cortex_lens_deep_analyze(
         ...     "src/auth.py",
         ...     depth="smart",
         ...     include_domain_context=True
         ... )
-        
+
         # Deep analysis with LLM
         >>> result = cortex_lens_deep_analyze(
         ...     "src/payment.py",
@@ -108,7 +108,7 @@ def cortex_lens_deep_analyze(
         ...     provider="openai",
         ...     query="Find security vulnerabilities"
         ... )
-        
+
         # Async crawler (background job)
         >>> result = cortex_lens_deep_analyze(
         ...     "src/",
@@ -118,11 +118,14 @@ def cortex_lens_deep_analyze(
     """
     try:
         from cortex.brain.analysis.tiered_lens_analyzer import TieredLENSAnalyzer
-        from cortex.brain.llm.token_budget_manager import TokenBudgetManager, BudgetExceededError
-        
+        from cortex.brain.llm.token_budget_manager import (
+            BudgetExceededError,
+            TokenBudgetManager,
+        )
+
         # Initialize analyzer
         analyzer = TieredLENSAnalyzer(repo_path=Path("."))
-        
+
         # Check token budget if using LLM
         if use_llm:
             try:
@@ -136,7 +139,7 @@ def cortex_lens_deep_analyze(
                     "error_type": "budget_exceeded",
                     "path": path
                 }
-        
+
         # Run intelligent analysis
         result = analyzer.analyze_intelligent(
             path=Path(path),
@@ -145,7 +148,7 @@ def cortex_lens_deep_analyze(
             max_tokens=max_tokens,
             provider=provider
         )
-        
+
         # Record usage if LLM was used
         if use_llm and result.llm_used:
             try:
@@ -158,7 +161,7 @@ def cortex_lens_deep_analyze(
                 )
             except Exception:
                 pass  # Don't fail request if usage recording fails
-        
+
         return {
             "status": "success",
             "path": path,
@@ -170,8 +173,8 @@ def cortex_lens_deep_analyze(
             "cache_hit": result.cache_hit,
             "metadata": result.metadata
         }
-        
-    except FileNotFoundError as e:
+
+    except FileNotFoundError:
         return {
             "status": "error",
             "error": f"File not found: {path}",

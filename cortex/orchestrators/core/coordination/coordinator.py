@@ -10,9 +10,9 @@ AC-PHASE-24: Master Orchestrator Decomposition
 from __future__ import annotations
 
 import logging
-from typing import Dict, List, Any, Optional, Callable
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any, Callable, Dict, List, Optional
 
 
 class PipelineStage(Enum):
@@ -199,8 +199,11 @@ class Coordinator:
 
             # Build RoundContext for comprehension turn
             try:
-                from cortex.brain.core.orchestrator.conversation_protocol import RoundContext
                 from datetime import datetime
+
+                from cortex.brain.core.orchestrator.conversation_protocol import (
+                    RoundContext,
+                )
                 round_context = RoundContext(
                     round_number=1,
                     user_input=user_request,
@@ -295,7 +298,9 @@ class Coordinator:
 
                     # Check enforcement level
                     if hasattr(enforcement_result, "level"):
-                        from cortex.orchestrators.core.enforcement_orchestrator import EnforcementLevel
+                        from cortex.orchestrators.core.enforcement_orchestrator import (
+                            EnforcementLevel,
+                        )
                         if enforcement_result.level == EnforcementLevel.BLOCKED:
                             self.logger.error(f"Governance violation: {enforcement_result}")
                             return StageResult(

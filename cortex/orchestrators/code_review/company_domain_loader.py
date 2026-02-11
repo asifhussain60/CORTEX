@@ -9,10 +9,10 @@ Authority: Phase 48-S3 Stage 1
 """
 
 import re
-from typing import List, Dict, Set, Optional, Any
 from dataclasses import dataclass, field
-from pathlib import Path
 from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Set
 
 from cortex.orchestrators.code_review.core_review_engine import FileChange
 
@@ -57,7 +57,7 @@ class CompanyDomain:
 class CompanyDomainLoader:
     """
     Load and identify company domains for code review validation.
-    
+
     Domains are loaded from company/domains/ YAML files and identify
     which business standards apply to a given set of code changes.
     """
@@ -70,7 +70,7 @@ class CompanyDomainLoader:
 
     def _initialize_built_in_domains(self) -> None:
         """Initialize built-in domain definitions"""
-        
+
         # Payment Processing Domain
         payment_domain = CompanyDomain(
             id="payment-processing",
@@ -106,7 +106,7 @@ class CompanyDomainLoader:
             ]
         )
         self.domains["payment-processing"] = payment_domain
-        
+
         # PCI-DSS compliance domain (references payment)
         pci_domain = CompanyDomain(
             id="pci-dss",
@@ -120,7 +120,7 @@ class CompanyDomainLoader:
             ],
         )
         self.domains["pci-dss"] = pci_domain
-        
+
         # Healthcare/HIPAA domain
         healthcare_domain = CompanyDomain(
             id="healthcare",
@@ -147,7 +147,7 @@ class CompanyDomainLoader:
             ]
         )
         self.domains["healthcare"] = healthcare_domain
-        
+
         # HIPAA specific domain
         hipaa_domain = CompanyDomain(
             id="hipaa",
@@ -162,7 +162,7 @@ class CompanyDomainLoader:
             ],
         )
         self.domains["hipaa"] = hipaa_domain
-        
+
         # API Services domain
         api_domain = CompanyDomain(
             id="api-services",
@@ -198,7 +198,7 @@ class CompanyDomainLoader:
             ]
         )
         self.domains["api-services"] = api_domain
-        
+
         # Database Standards domain
         database_domain = CompanyDomain(
             id="database-standards",
@@ -234,21 +234,21 @@ class CompanyDomainLoader:
             ]
         )
         self.domains["database-standards"] = database_domain
-        
+
         # Build file pattern index for fast lookup
         self._rebuild_pattern_index()
 
     def _rebuild_pattern_index(self) -> None:
         """Rebuild file pattern index for O(1) domain lookup"""
         self.file_pattern_index.clear()
-        
+
         for domain_id, domain in self.domains.items():
             if not domain.file_patterns:
                 continue
-            
+
             if domain_id not in self.file_pattern_index:
                 self.file_pattern_index[domain_id] = set()
-            
+
             # Store patterns as strings for regex matching
             for pattern in domain.file_patterns:
                 self.file_pattern_index[domain_id].add(pattern)
@@ -256,15 +256,15 @@ class CompanyDomainLoader:
     def identify_domains(self, changes: List[FileChange]) -> Set[str]:
         """
         Identify which domains apply to a set of code changes.
-        
+
         Args:
             changes: List of file changes from diff parser
-            
+
         Returns:
             Set of domain IDs that apply to these changes
         """
         identified_domains: Set[str] = set()
-        
+
         for change in changes:
             for domain_id, patterns in self.file_pattern_index.items():
                 for pattern in patterns:
@@ -272,16 +272,16 @@ class CompanyDomainLoader:
                     if re.search(pattern, change.filepath):
                         identified_domains.add(domain_id)
                         break  # Found match for this domain, move to next
-        
+
         return identified_domains
 
     def get_domain(self, domain_id: str) -> Optional[CompanyDomain]:
         """
         Get a specific domain by ID.
-        
+
         Args:
             domain_id: Domain identifier
-            
+
         Returns:
             CompanyDomain object or None if not found
         """
@@ -290,7 +290,7 @@ class CompanyDomainLoader:
     def get_all_domains(self) -> Dict[str, CompanyDomain]:
         """
         Get all loaded domains.
-        
+
         Returns:
             Dictionary of all domains (id → CompanyDomain)
         """
@@ -299,10 +299,10 @@ class CompanyDomainLoader:
     def get_domains_by_category(self, category: DomainCategory) -> Dict[str, CompanyDomain]:
         """
         Get all domains in a specific category.
-        
+
         Args:
             category: Domain category (security, architecture, etc.)
-            
+
         Returns:
             Dictionary of domains in this category
         """
@@ -315,36 +315,36 @@ class CompanyDomainLoader:
     def get_rules_for_domains(self, domain_ids: Set[str]) -> List[DomainRule]:
         """
         Get all rules for a set of domains.
-        
+
         Args:
             domain_ids: Set of domain IDs
-            
+
         Returns:
             List of all rules from these domains
         """
         rules = []
-        
+
         for domain_id in domain_ids:
             domain = self.domains.get(domain_id)
             if domain and domain.rules:
                 rules.extend(domain.rules)
-        
+
         return rules
 
     def load_domains_from_files(self, domain_dir: Optional[Path] = None) -> None:
         """
         Load domains from YAML files in company/domains/ directory.
-        
+
         Args:
             domain_dir: Path to domains directory (default: company/domains/)
         """
         if domain_dir is None:
             domain_dir = Path("company/domains")
-        
+
         if not domain_dir.exists():
             # If directory doesn't exist, use built-in domains only
             return
-        
+
         # In production, would parse YAML files here
         # For now, built-in domains are sufficient
         # TODO: Implement YAML loading when company/domains/ is populated
@@ -353,7 +353,7 @@ class CompanyDomainLoader:
     def validate_domain_coverage(self) -> Dict[str, Any]:
         """
         Validate that all domains have proper configuration.
-        
+
         Returns:
             Dictionary with validation results
         """
@@ -363,19 +363,19 @@ class CompanyDomainLoader:
             "domains_with_patterns": 0,
             "coverage": {},
         }
-        
+
         for domain_id, domain in self.domains.items():
             domain_info = {
                 "rules": len(domain.rules),
                 "patterns": len(domain.file_patterns),
             }
             results["coverage"][domain_id] = domain_info
-            
+
             if domain.rules:
                 results["domains_with_rules"] += 1
             if domain.file_patterns:
                 results["domains_with_patterns"] += 1
-        
+
         return results
 
 

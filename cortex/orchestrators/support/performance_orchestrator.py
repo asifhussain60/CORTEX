@@ -14,15 +14,17 @@ Features:
 - Report generation
 """
 
-import re
 import json
+import re
 import time
-from typing import Dict, List, Any, Optional, Union, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
-from cortex.brain.core.result import Ok, Err
-from cortex.orchestrators.core.orchestrator_base_protocol import OrchestratorBaseProtocol
+from typing import Any, Dict, List, Optional, Tuple, Union
 
+from cortex.brain.core.result import Err, Ok
+from cortex.orchestrators.core.orchestrator_base_protocol import (
+    OrchestratorBaseProtocol,
+)
 
 # ============================================================================
 # DATACLASSES
@@ -137,7 +139,7 @@ class PerformanceOrchestrator(OrchestratorBaseProtocol):
     """
     Production-grade performance orchestrator for profiling, load testing,
     and regression detection
-    
+
     Protocol Compliance:
     - Implements OrchestratorBaseProtocol
     - Requires _execute_domain_logic() implementation
@@ -204,7 +206,7 @@ class PerformanceOrchestrator(OrchestratorBaseProtocol):
 
         # Estimate memory from code patterns
         peak_memory = len(code) / 100  # Rough estimate
-        
+
         memory_profile = MemoryProfile(
             peak_memory=peak_memory,
             average_memory=peak_memory * 0.7,
@@ -309,7 +311,7 @@ class PerformanceOrchestrator(OrchestratorBaseProtocol):
     ) -> str:
         """Generate SVG representation"""
         functions = profile_data.get("functions", [])
-        
+
         svg_lines = [
             '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400">',
             '  <style>rect:hover { stroke: black; stroke-width: 2; }</style>'

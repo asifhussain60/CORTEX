@@ -5,17 +5,17 @@ Authority: Phase 37 S4
 Exposes persona management via MCP interface
 """
 
-from typing import Optional, List, Dict, Any
 from datetime import datetime
+from typing import Any, Dict, List, Optional
 
-from cortex.orchestrators.persona.master_orchestrator import MasterOrchestrator
-from cortex.orchestrators.persona.models import PersonaId, DepthLevel
 from cortex.interaction.persona_store import PersonaStore
+from cortex.orchestrators.persona.master_orchestrator import MasterOrchestrator
+from cortex.orchestrators.persona.models import DepthLevel, PersonaId
 
 
 class PersonaSetResult:
     """Result of setting a persona"""
-    
+
     def __init__(
         self,
         success: bool,
@@ -42,7 +42,7 @@ class PersonaSetResult:
 
 class PersonaState:
     """Current persona state"""
-    
+
     def __init__(
         self,
         user_id: str,
@@ -78,7 +78,7 @@ class PersonaState:
 
 class DepthSetResult:
     """Result of setting depth level"""
-    
+
     def __init__(
         self,
         success: bool,
@@ -105,7 +105,7 @@ class DepthSetResult:
 
 class InferenceResult:
     """Result of persona inference"""
-    
+
     def __init__(
         self,
         inferred_persona: str,
@@ -129,7 +129,7 @@ class InferenceResult:
 
 class PersonaHistory:
     """User's persona history"""
-    
+
     def __init__(
         self,
         user_id: str,
@@ -150,11 +150,11 @@ class PersonaHistory:
 
 class PersonaTools:
     """MCP tools for persona management"""
-    
+
     def __init__(self, master_orchestrator: MasterOrchestrator):
         """
         Initialize PersonaTools.
-        
+
         Args:
             master_orchestrator: MasterOrchestrator instance for persona operations
         """
@@ -168,11 +168,11 @@ class PersonaTools:
     ) -> PersonaSetResult:
         """
         Set persona for user.
-        
+
         Args:
             user_id: User identifier
             persona: Persona name (BUSINESS_LEADER, PRODUCT_OWNER, etc.)
-        
+
         Returns:
             PersonaSetResult with success status and details
         """
@@ -185,19 +185,19 @@ class PersonaTools:
                     success=False,
                     message=f"Invalid persona: {persona}",
                 )
-            
+
             # Get current state
             current_state = self.orchestrator.get_current_state()
             previous_persona = current_state.get("persona") if current_state else None
-            
+
             # Set persona via orchestrator
             self.orchestrator.switch_persona(persona_enum, user_id)
-            
+
             # Store preference
             current_depth_str = current_state.get("depth", "STANDARD") if current_state else "STANDARD"
             current_depth = DepthLevel[current_depth_str.upper()]
             self.store.update_user_persona(user_id, persona_enum, current_depth)
-            
+
             return PersonaSetResult(
                 success=True,
                 persona=persona,
@@ -214,17 +214,17 @@ class PersonaTools:
     def cortex_get_persona(self, user_id: str) -> PersonaState:
         """
         Get current persona state for user.
-        
+
         Args:
             user_id: User identifier
-        
+
         Returns:
             PersonaState with current settings and available options
         """
         try:
             # Get from orchestrator
             state = self.orchestrator.get_current_state()
-            
+
             if not state:
                 # Default state
                 return PersonaState(
@@ -234,15 +234,15 @@ class PersonaTools:
                     available_personas=[p.value for p in PersonaId],
                     available_depths=[d.value for d in DepthLevel],
                 )
-            
+
             # Get stored preferences
             stored = self.store.get_user_persona(user_id)
-            
+
             # Check for active overrides
             overrides = self.store.get_active_overrides(user_id)
             has_override = len(overrides) > 0
             override_level = overrides[-1]["level"] if has_override else None
-            
+
             return PersonaState(
                 user_id=user_id,
                 current_persona=state.get("persona", "ENGINEER"),
@@ -252,7 +252,7 @@ class PersonaTools:
                 has_active_override=has_override,
                 override_level=override_level,
             )
-        except Exception as e:
+        except Exception:
             # Return default on error
             return PersonaState(
                 user_id=user_id,
@@ -271,13 +271,13 @@ class PersonaTools:
     ) -> DepthSetResult:
         """
         Set depth level for user.
-        
+
         Args:
             user_id: User identifier
             depth: Depth level (EXECUTIVE, STANDARD, DETAILED, FULL)
             is_override: Whether this is a single-turn override
             context: Optional context for override
-        
+
         Returns:
             DepthSetResult with success status
         """
@@ -290,14 +290,14 @@ class PersonaTools:
                     success=False,
                     message=f"Invalid depth: {depth}",
                 )
-            
+
             # Get current state
             current_state = self.orchestrator.get_current_state()
             previous_depth = current_state.get("depth") if current_state else "STANDARD"
-            
+
             # Set via orchestrator
             self.orchestrator.set_depth(depth_enum)
-            
+
             if is_override:
                 # Add override to store
                 self.store.add_depth_override(user_id, depth_enum, context)
@@ -306,7 +306,7 @@ class PersonaTools:
                 persona_str = current_state.get("persona", "ENGINEER") if current_state else "ENGINEER"
                 persona_enum = PersonaId[persona_str.upper()]
                 self.store.update_user_persona(user_id, persona_enum, depth_enum)
-            
+
             return DepthSetResult(
                 success=True,
                 depth=depth,
@@ -327,18 +327,18 @@ class PersonaTools:
     ) -> InferenceResult:
         """
         Infer persona from context and input.
-        
+
         Args:
             context: Conversation context
             user_input: User's current input
-        
+
         Returns:
             InferenceResult with inferred persona and confidence
         """
         try:
             # Call role resolver for inference
             result = self.orchestrator.infer_role(context, user_input)
-            
+
             return InferenceResult(
                 inferred_persona=result.get("persona", "ENGINEER"),
                 confidence=result.get("confidence", 0.0),
@@ -360,30 +360,30 @@ class PersonaTools:
     ) -> PersonaHistory:
         """
         Get user's persona switch history.
-        
+
         Args:
             user_id: User identifier
             limit: Max entries to return
-        
+
         Returns:
             PersonaHistory with switch records
         """
         try:
             # Get history from orchestrator
             history = self.orchestrator.get_switch_history(user_id)
-            
+
             if limit:
                 history = history[:limit]
-            
+
             # Count total switches
             total_switches = len(self.orchestrator.get_switch_history(user_id))
-            
+
             return PersonaHistory(
                 user_id=user_id,
                 entries=history,
                 total_switches=total_switches,
             )
-        except Exception as e:
+        except Exception:
             return PersonaHistory(
                 user_id=user_id,
                 entries=[],

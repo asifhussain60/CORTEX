@@ -14,18 +14,17 @@ Version: 2.0
 Authority: ENH-064 + cortex-architect.prompt.md
 """
 
-from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 from cortex.orchestrators.core.base_response_template import (
     BaseResponseTemplate,
-    SeverityLevel,
     SectionType,
-    TemplateConfig
+    SeverityLevel,
+    TemplateConfig,
 )
-
 
 # ============================================================================
 # TEMPLATE CATEGORIES
@@ -34,7 +33,7 @@ from cortex.orchestrators.core.base_response_template import (
 
 class OrchestratorCategory(str, Enum):
     """Orchestrator category for template grouping."""
-    
+
     CORE = "core"  # Master, TDD, LENS, Intent Router
     DOMAIN = "domain"  # Refactoring, Planning, Documentation
     SUPPORT = "support"  # Debugging, Discovery, Digest
@@ -49,13 +48,13 @@ class OrchestratorCategory(str, Enum):
 
 class MasterOrchestratorTemplate(BaseResponseTemplate):
     """Template for MasterOrchestrator responses."""
-    
+
     def __init__(self):
         super().__init__(
             orchestrator_name="MasterOrchestrator",
             mode="CORTEX"
         )
-    
+
     def compose(
         self,
         operation: str = "COORDINATE",
@@ -68,23 +67,23 @@ class MasterOrchestratorTemplate(BaseResponseTemplate):
         """Compose master orchestrator coordination response."""
         orchestrators_invoked = orchestrators_invoked or []
         challenges = challenges or []
-        
+
         response = self.header(operation)
-        
+
         # Intent Classification
         response += self.section("Intent Classification", "🎯", SectionType.ANALYSIS)
         response += f"\n**Detected Intent:** {intent}\n"
         response += f"\n**Routing Decision:** {routing_decision}\n"
-        
+
         # Orchestrator Coordination
         if orchestrators_invoked:
             response += self.section("Orchestrator Coordination", "🤝")
             response += self._format_orchestrators(orchestrators_invoked)
-        
+
         # Coordination Status
         response += self.section("Coordination Status", "📊", SectionType.METRICS)
         response += f"\n{coordination_status}\n"
-        
+
         # Challenges
         for challenge in challenges:
             response += self.challenge_box(
@@ -92,32 +91,32 @@ class MasterOrchestratorTemplate(BaseResponseTemplate):
                 content=challenge.get("content", ""),
                 severity=SeverityLevel.INFO
             )
-        
+
         return response
-    
+
     def _format_orchestrators(self, orchestrators: List[str]) -> str:
         """Format orchestrator invocation list."""
         if not orchestrators:
             return ""
-        
+
         table = "\n| Orchestrator | Status |\n"
         table += "|--------------|--------|\n"
-        
+
         for orch in orchestrators:
             table += f"| {orch} | ✅ Invoked |\n"
-        
+
         return table
 
 
 class IntentRouterTemplate(BaseResponseTemplate):
     """Template for IntentRouter responses."""
-    
+
     def __init__(self):
         super().__init__(
             orchestrator_name="IntentRouter",
             mode="CORTEX"
         )
-    
+
     def compose(
         self,
         operation: str = "ROUTE",
@@ -129,26 +128,26 @@ class IntentRouterTemplate(BaseResponseTemplate):
     ) -> str:
         """Compose intent routing response."""
         response = self.header(operation)
-        
+
         # User Request
         response += self.section("Request Analysis", "🔍", SectionType.ANALYSIS)
         response += f"\n**User Request:** {user_request}\n"
-        
+
         # Intent Classification
         response += self.subsection("Intent Classification")
         response += self._format_intent(classified_intent, confidence)
-        
+
         # Routing Decision
         response += self.section("Routing Decision", "🧭")
         response += f"\n**Target Orchestrator:** {target_orchestrator}\n"
         response += f"\n**Reasoning:** {routing_reasoning}\n"
-        
+
         return response
-    
+
     def _format_intent(self, intent: str, confidence: float) -> str:
         """Format intent classification."""
         conf_emoji = "✅" if confidence >= 0.8 else "⚠️" if confidence >= 0.6 else "❌"
-        
+
         return (
             f"\n| Field | Value |\n"
             f"|-------|-------|\n"
@@ -159,13 +158,13 @@ class IntentRouterTemplate(BaseResponseTemplate):
 
 class ChallengeEngineTemplate(BaseResponseTemplate):
     """Template for ChallengeEngine responses."""
-    
+
     def __init__(self):
         super().__init__(
             orchestrator_name="ChallengeEngine",
             mode="CORTEX"
         )
-    
+
     def compose(
         self,
         operation: str = "CHALLENGE",
@@ -179,13 +178,13 @@ class ChallengeEngineTemplate(BaseResponseTemplate):
         detected_issues = detected_issues or []
         alternative_proposals = alternative_proposals or []
         decision_matrix = decision_matrix or {}
-        
+
         response = self.header(operation)
-        
+
         # Disagreement Analysis
         response += self.section("Disagreement Analysis", "🔴")
         response += f"\n**User Request:** {user_request}\n"
-        
+
         # Issues & Alternatives
         if detected_issues:
             response += self.subsection("Issues Detected")
@@ -194,40 +193,40 @@ class ChallengeEngineTemplate(BaseResponseTemplate):
                 problem_header="❌ **Issue**",
                 solution_header="✅ **Alternative**"
             )
-        
+
         # Alternative Proposals
         if alternative_proposals:
             response += self.section("Alternative Proposals", "🔄")
             response += "\n" + "\n".join(f"{i+1}. {p}" for i, p in enumerate(alternative_proposals)) + "\n"
-        
+
         # Decision Matrix
         if decision_matrix:
             response += self.section("Decision Matrix", "📊", SectionType.RECOMMENDATIONS)
             response += self._format_decision_matrix(decision_matrix)
-        
+
         # Main Challenge Box
         response += self.challenge_box(
             title="Design Challenge",
             content="Please review alternatives and confirm approach",
             severity=severity
         )
-        
+
         return response
-    
+
     def _format_decision_matrix(self, matrix: Dict[str, Any]) -> str:
         """Format decision matrix table."""
         if not matrix:
             return ""
-        
+
         table = "\n| Option | Pros | Cons | Recommendation |\n"
         table += "|--------|------|------|----------------|\n"
-        
+
         for option, data in matrix.items():
             pros = data.get("pros", "N/A")
             cons = data.get("cons", "N/A")
             rec = data.get("recommendation", "")
             table += f"| {option} | {pros} | {cons} | {rec} |\n"
-        
+
         return table
 
 
@@ -238,13 +237,13 @@ class ChallengeEngineTemplate(BaseResponseTemplate):
 
 class RefactoringOrchestratorTemplate(BaseResponseTemplate):
     """Template for RefactoringOrchestrator responses."""
-    
+
     def __init__(self):
         super().__init__(
             orchestrator_name="RefactoringOrchestrator",
             mode="CORTEX"
         )
-    
+
     def compose(
         self,
         operation: str = "REFACTOR",
@@ -257,18 +256,18 @@ class RefactoringOrchestratorTemplate(BaseResponseTemplate):
         code_smells = code_smells or []
         before_after = before_after or []
         impact_assessment = impact_assessment or {}
-        
+
         response = self.header(operation)
-        
+
         # Code Smell Analysis
         if code_smells:
             response += self.section("Code Smell Analysis", "👃")
             response += self._format_code_smells(code_smells)
-        
+
         # Refactoring Strategy
         response += self.section("Refactoring Strategy", "🎯", SectionType.RECOMMENDATIONS)
         response += f"\n{refactoring_strategy}\n"
-        
+
         # Before/After Comparison
         if before_after:
             response += self.section("Before/After Comparison", "🔄")
@@ -277,54 +276,54 @@ class RefactoringOrchestratorTemplate(BaseResponseTemplate):
                 problem_header="❌ **Before**",
                 solution_header="✅ **After**"
             )
-        
+
         # Impact Assessment
         if impact_assessment:
             response += self.section("Impact Assessment", "📊", SectionType.METRICS)
             response += self._format_impact(impact_assessment)
-        
+
         return response
-    
+
     def _format_code_smells(self, smells: List[Dict[str, Any]]) -> str:
         """Format code smells table."""
         if not smells:
             return "\n_No code smells detected._\n"
-        
+
         table = "\n| Smell | Location | Severity | Refactoring |\n"
         table += "|-------|----------|----------|-------------|\n"
-        
+
         for smell in smells:
             name = smell.get("name", "Unknown")
             location = smell.get("location", "N/A")
             severity = smell.get("severity", "medium")
             refactoring = smell.get("refactoring", "N/A")
             table += f"| {name} | {location} | {severity} | {refactoring} |\n"
-        
+
         return table
-    
+
     def _format_impact(self, impact: Dict[str, Any]) -> str:
         """Format impact assessment."""
         table = "\n| Metric | Before | After | Change |\n"
         table += "|--------|--------|-------|--------|\n"
-        
+
         for metric, data in impact.items():
             before = data.get("before", "N/A")
             after = data.get("after", "N/A")
             change = data.get("change", "N/A")
             table += f"| {metric} | {before} | {after} | {change} |\n"
-        
+
         return table
 
 
 class DocumentationOrchestratorTemplate(BaseResponseTemplate):
     """Template for DocumentationOrchestrator responses."""
-    
+
     def __init__(self):
         super().__init__(
             orchestrator_name="DocumentationOrchestrator",
             mode="CORTEX"
         )
-    
+
     def compose(
         self,
         operation: str = "DOCUMENT",
@@ -337,50 +336,50 @@ class DocumentationOrchestratorTemplate(BaseResponseTemplate):
         sections_generated = sections_generated or []
         coverage_metrics = coverage_metrics or {}
         validation_results = validation_results or {}
-        
+
         response = self.header(operation)
-        
+
         # Documentation Type
         response += self.section("Documentation Generation", "📚")
         response += f"\n**Type:** {documentation_type}\n"
-        
+
         # Sections Generated
         if sections_generated:
             response += self.subsection("Sections Generated")
             response += "\n" + "\n".join(f"- ✅ {s}" for s in sections_generated) + "\n"
-        
+
         # Coverage Metrics
         if coverage_metrics:
             response += self.section("Coverage Metrics", "📊", SectionType.METRICS)
             response += self._format_coverage(coverage_metrics)
-        
+
         # Validation Results
         if validation_results:
             response += self.section("Validation Results", "✅", SectionType.TESTING)
             response += self._format_validation(validation_results)
-        
+
         return response
-    
+
     def _format_coverage(self, metrics: Dict[str, float]) -> str:
         """Format coverage metrics."""
         table = "\n| Metric | Coverage | Status |\n"
         table += "|--------|----------|--------|\n"
-        
+
         for metric, value in metrics.items():
             status = "✅" if value >= 80 else "⚠️" if value >= 60 else "❌"
             table += f"| {metric} | {value:.1f}% | {status} |\n"
-        
+
         return table
-    
+
     def _format_validation(self, results: Dict[str, bool]) -> str:
         """Format validation results."""
         table = "\n| Check | Result |\n"
         table += "|-------|--------|\n"
-        
+
         for check, passed in results.items():
             status = "✅ PASS" if passed else "❌ FAIL"
             table += f"| {check} | {status} |\n"
-        
+
         return table
 
 
@@ -391,13 +390,13 @@ class DocumentationOrchestratorTemplate(BaseResponseTemplate):
 
 class DebuggingOrchestratorTemplate(BaseResponseTemplate):
     """Template for DebuggingOrchestrator responses."""
-    
+
     def __init__(self):
         super().__init__(
             orchestrator_name="DebuggingOrchestrator",
             mode="CORTEX"
         )
-    
+
     def compose(
         self,
         operation: str = "DEBUG",
@@ -411,18 +410,18 @@ class DebuggingOrchestratorTemplate(BaseResponseTemplate):
         root_causes = root_causes or []
         fixes = fixes or []
         prevention_strategies = prevention_strategies or []
-        
+
         response = self.header(operation)
-        
+
         # Error Analysis
         response += self.section("Error Analysis", "🔍", SectionType.ANALYSIS)
         response += self._format_error_analysis(error_analysis)
-        
+
         # Root Causes
         if root_causes:
             response += self.subsection("Root Causes")
             response += "\n" + "\n".join(f"{i+1}. {rc}" for i, rc in enumerate(root_causes)) + "\n"
-        
+
         # Fixes
         if fixes:
             response += self.section("Fixes", "🔧")
@@ -431,24 +430,24 @@ class DebuggingOrchestratorTemplate(BaseResponseTemplate):
                 problem_header="❌ **Issue**",
                 solution_header="✅ **Fix**"
             )
-        
+
         # Prevention Strategies
         if prevention_strategies:
             response += self.section("Prevention Strategies", "🛡️")
             response += "\n" + "\n".join(f"- {ps}" for ps in prevention_strategies) + "\n"
-        
+
         return response
-    
+
     def _format_error_analysis(self, analysis: Dict[str, Any]) -> str:
         """Format error analysis."""
         if not analysis:
             return "\n_No error data provided._\n"
-        
+
         error_type = analysis.get("type", "Unknown")
         message = analysis.get("message", "N/A")
         location = analysis.get("location", "N/A")
         stack_trace = analysis.get("stack_trace", "N/A")
-        
+
         return (
             f"\n| Field | Value |\n"
             f"|-------|-------|\n"
@@ -461,13 +460,13 @@ class DebuggingOrchestratorTemplate(BaseResponseTemplate):
 
 class DigestSessionOrchestratorTemplate(BaseResponseTemplate):
     """Template for DigestSessionOrchestrator responses."""
-    
+
     def __init__(self):
         super().__init__(
             orchestrator_name="DigestSessionOrchestrator",
             mode="CORTEX"
         )
-    
+
     def compose(
         self,
         operation: str = "DIGEST",
@@ -480,42 +479,42 @@ class DigestSessionOrchestratorTemplate(BaseResponseTemplate):
         """Compose session digest response."""
         learnings_extracted = learnings_extracted or []
         enhancements_proposed = enhancements_proposed or []
-        
+
         response = self.header(operation)
-        
+
         # Session Analysis
         response += self.section("Session Analysis", "🔍", SectionType.ANALYSIS)
         response += f"\n**File:** {file_path}\n"
         response += f"**Markers Detected:** {markers_detected}\n"
         response += f"**Confidence Score:** {confidence_score:.1%}\n"
-        
+
         # Learnings Extracted
         if learnings_extracted:
             response += self.section("Learnings Extracted", "📚")
             response += self._format_learnings(learnings_extracted)
-        
+
         # Enhancements Proposed
         if enhancements_proposed:
             response += self.section("CORTEX Enhancements", "🚀", SectionType.RECOMMENDATIONS)
             response += "\n" + "\n".join(f"{i+1}. {e}" for i, e in enumerate(enhancements_proposed)) + "\n"
-        
+
         return response
-    
+
     def _format_learnings(self, learnings: List[Dict[str, Any]]) -> str:
         """Format extracted learnings."""
         if not learnings:
             return "\n_No learnings extracted._\n"
-        
+
         table = "\n| Category | Learning | Confidence |\n"
         table += "|----------|----------|------------|\n"
-        
+
         for learning in learnings:
             category = learning.get("category", "General")
             text = learning.get("text", "N/A")
             conf = learning.get("confidence", 0.0)
             conf_emoji = "✅" if conf >= 0.8 else "⚠️" if conf >= 0.6 else "❌"
             table += f"| {category} | {text} | {conf_emoji} {conf:.1%} |\n"
-        
+
         return table
 
 
@@ -526,10 +525,10 @@ class DigestSessionOrchestratorTemplate(BaseResponseTemplate):
 
 class TDDOrchestratorTemplate(BaseResponseTemplate):
     """Template for TDD Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="TDDOrchestrator", mode="CORTEX")
-    
+
     def compose(
         self,
         operation: str = "IMPLEMENT",
@@ -540,31 +539,31 @@ class TDDOrchestratorTemplate(BaseResponseTemplate):
     ) -> str:
         """Compose TDD response."""
         from cortex.orchestrators.response.chainable_blocks import BlockComposer
-        
+
         test_results = test_results or []
         coverage_metrics = coverage_metrics or {}
-        
+
         response = self.header(operation)
-        
+
         phase_emoji = {"RED": "🔴", "GREEN": "🟢", "REFACTOR": "🔄"}.get(tdd_phase, "⚪")
         response += self.section(f"TDD Phase: {tdd_phase}", phase_emoji)
-        
+
         composer = BlockComposer()
         if test_results:
             composer.add_test_results(test_results)
         if coverage_metrics:
             composer.add_coverage(coverage_metrics)
         response += composer.build()
-        
+
         return response
 
 
 class LENSSynthesisTemplate(BaseResponseTemplate):
     """Template for LENS Synthesis."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="LENSSynthesis", mode="CORTEX")
-    
+
     def compose(
         self,
         operation: str = "ANALYZE",
@@ -573,20 +572,20 @@ class LENSSynthesisTemplate(BaseResponseTemplate):
     ) -> str:
         """Compose LENS response."""
         response = self.header(operation)
-        
+
         response += self.section("LENS Protocol", "🔍")
         conf_emoji = "🟢" if confidence >= 0.8 else "🟡" if confidence >= 0.6 else "🔴"
         response += f"{conf_emoji} **Confidence:** {confidence:.0%}\n\n"
-        
+
         return response
 
 
 class PlanOrchestratorTemplate(BaseResponseTemplate):
     """Template for Plan Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="PlanOrchestrator", mode="CORTEX")
-    
+
     def compose(
         self,
         operation: str = "PLAN",
@@ -607,10 +606,10 @@ class PlanOrchestratorTemplate(BaseResponseTemplate):
 
 class OnboardingOrchestratorTemplate(BaseResponseTemplate):
     """Template for Onboarding Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="OnboardingOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "ONBOARD", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Repository Analysis", "📦")
@@ -619,10 +618,10 @@ class OnboardingOrchestratorTemplate(BaseResponseTemplate):
 
 class ToolDiscoveryOrchestratorTemplate(BaseResponseTemplate):
     """Template for Tool Discovery."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="ToolDiscoveryOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "DISCOVER", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Tool Discovery", "🔧")
@@ -631,10 +630,10 @@ class ToolDiscoveryOrchestratorTemplate(BaseResponseTemplate):
 
 class WorkflowOrchestratorTemplate(BaseResponseTemplate):
     """Template for Workflow Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="WorkflowOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "WORKFLOW", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Workflow Execution", "⚙️")
@@ -643,10 +642,10 @@ class WorkflowOrchestratorTemplate(BaseResponseTemplate):
 
 class MigrationOrchestratorTemplate(BaseResponseTemplate):
     """Template for Migration Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="MigrationOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "MIGRATE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Migration Plan", "🔄")
@@ -655,10 +654,10 @@ class MigrationOrchestratorTemplate(BaseResponseTemplate):
 
 class ConversationOrchestratorTemplate(BaseResponseTemplate):
     """Template for Conversation Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="ConversationOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "CONVERSE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Conversation", "💬")
@@ -667,10 +666,10 @@ class ConversationOrchestratorTemplate(BaseResponseTemplate):
 
 class ReviewOrchestratorTemplate(BaseResponseTemplate):
     """Template for Review Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="ReviewOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "REVIEW", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Code Review", "👁️")
@@ -679,10 +678,10 @@ class ReviewOrchestratorTemplate(BaseResponseTemplate):
 
 class DiscoveryOrchestratorTemplate(BaseResponseTemplate):
     """Template for Discovery Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="DiscoveryOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "DISCOVER", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Discovery", "🔍")
@@ -691,10 +690,10 @@ class DiscoveryOrchestratorTemplate(BaseResponseTemplate):
 
 class BrainFlushOrchestratorTemplate(BaseResponseTemplate):
     """Template for Brain Flush Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="BrainFlushOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "FLUSH", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Brain Flush", "🧹")
@@ -703,10 +702,10 @@ class BrainFlushOrchestratorTemplate(BaseResponseTemplate):
 
 class ContextAssemblyOrchestratorTemplate(BaseResponseTemplate):
     """Template for Context Assembly."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="ContextAssemblyOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "ASSEMBLE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Context Assembly", "🧩")
@@ -715,10 +714,10 @@ class ContextAssemblyOrchestratorTemplate(BaseResponseTemplate):
 
 class PhaseCompletionOrchestratorTemplate(BaseResponseTemplate):
     """Template for Phase Completion."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="PhaseCompletionOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "COMPLETE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Phase Completion", "✅")
@@ -727,10 +726,10 @@ class PhaseCompletionOrchestratorTemplate(BaseResponseTemplate):
 
 class StandardsOrchestratorTemplate(BaseResponseTemplate):
     """Template for Standards Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="StandardsOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "STANDARDS", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Standards Compliance", "📏")
@@ -739,10 +738,10 @@ class StandardsOrchestratorTemplate(BaseResponseTemplate):
 
 class TotalRecallOrchestratorTemplate(BaseResponseTemplate):
     """Template for Total Recall."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="TotalRecallOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "RECALL", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Feature Discovery", "🔎")
@@ -751,10 +750,10 @@ class TotalRecallOrchestratorTemplate(BaseResponseTemplate):
 
 class SecurityOrchestratorTemplate(BaseResponseTemplate):
     """Template for Security Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="SecurityOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "SECURITY", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Security Assessment", "🔒")
@@ -763,10 +762,10 @@ class SecurityOrchestratorTemplate(BaseResponseTemplate):
 
 class ComplianceOrchestratorTemplate(BaseResponseTemplate):
     """Template for Compliance Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="ComplianceOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "COMPLIANCE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Compliance Status", "📋")
@@ -775,10 +774,10 @@ class ComplianceOrchestratorTemplate(BaseResponseTemplate):
 
 class AuditOrchestratorTemplate(BaseResponseTemplate):
     """Template for Audit Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="AuditOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "AUDIT", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Audit Report", "🔍")
@@ -787,10 +786,10 @@ class AuditOrchestratorTemplate(BaseResponseTemplate):
 
 class EnforcementOrchestratorTemplate(BaseResponseTemplate):
     """Template for Enforcement Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="EnforcementOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "ENFORCE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Governance Enforcement", "⚖️")
@@ -799,10 +798,10 @@ class EnforcementOrchestratorTemplate(BaseResponseTemplate):
 
 class PerformanceOrchestratorTemplate(BaseResponseTemplate):
     """Template for Performance Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="PerformanceOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "PERFORMANCE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Performance Metrics", "⚡")
@@ -811,10 +810,10 @@ class PerformanceOrchestratorTemplate(BaseResponseTemplate):
 
 class LoadTestOrchestratorTemplate(BaseResponseTemplate):
     """Template for Load Test Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="LoadTestOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "LOADTEST", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Load Test Results", "📊")
@@ -823,10 +822,10 @@ class LoadTestOrchestratorTemplate(BaseResponseTemplate):
 
 class ProfilingOrchestratorTemplate(BaseResponseTemplate):
     """Template for Profiling Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="ProfilingOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "PROFILE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Profiling Results", "🔬")
@@ -840,10 +839,10 @@ class ProfilingOrchestratorTemplate(BaseResponseTemplate):
 
 class InstrumentationOrchestratorTemplate(BaseResponseTemplate):
     """Template for Instrumentation Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="InstrumentationOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "INSTRUMENT", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Code Instrumentation", "🔬")
@@ -852,10 +851,10 @@ class InstrumentationOrchestratorTemplate(BaseResponseTemplate):
 
 class LENSVisualizationOrchestratorTemplate(BaseResponseTemplate):
     """Template for LENS Visualization."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="LENSVisualizationOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "VISUALIZE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("LENS Visualization", "📊")
@@ -864,10 +863,10 @@ class LENSVisualizationOrchestratorTemplate(BaseResponseTemplate):
 
 class RollbackOrchestratorTemplate(BaseResponseTemplate):
     """Template for Rollback Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="RollbackOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "ROLLBACK", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Rollback Plan", "⏪")
@@ -876,10 +875,10 @@ class RollbackOrchestratorTemplate(BaseResponseTemplate):
 
 class SetupOrchestratorTemplate(BaseResponseTemplate):
     """Template for Setup Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="SetupOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "SETUP", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Setup Configuration", "⚙️")
@@ -888,10 +887,10 @@ class SetupOrchestratorTemplate(BaseResponseTemplate):
 
 class VacuumOrchestratorTemplate(BaseResponseTemplate):
     """Template for Vacuum Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="VacuumOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "VACUUM", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Vacuum Cleanup", "🧹")
@@ -900,10 +899,10 @@ class VacuumOrchestratorTemplate(BaseResponseTemplate):
 
 class RepoDetectionOrchestratorTemplate(BaseResponseTemplate):
     """Template for Repository Detection."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="RepoDetectionOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "DETECT", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Repository Detection", "🔍")
@@ -912,10 +911,10 @@ class RepoDetectionOrchestratorTemplate(BaseResponseTemplate):
 
 class UpgradeOrchestratorTemplate(BaseResponseTemplate):
     """Template for Upgrade Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="UpgradeOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "UPGRADE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("System Upgrade", "⬆️")
@@ -924,10 +923,10 @@ class UpgradeOrchestratorTemplate(BaseResponseTemplate):
 
 class ComposedOrchestratorTemplate(BaseResponseTemplate):
     """Template for Composed Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="ComposedOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "COMPOSE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Orchestrator Composition", "🎼")
@@ -936,10 +935,10 @@ class ComposedOrchestratorTemplate(BaseResponseTemplate):
 
 class BusinessLanguageOrchestratorTemplate(BaseResponseTemplate):
     """Template for Business Language Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="BusinessLanguageOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "TRANSLATE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Business Language Translation", "💼")
@@ -948,10 +947,10 @@ class BusinessLanguageOrchestratorTemplate(BaseResponseTemplate):
 
 class BrainHealthOrchestratorTemplate(BaseResponseTemplate):
     """Template for Brain Health Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="BrainHealthOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "HEALTH", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Brain Health Status", "🧠")
@@ -960,10 +959,10 @@ class BrainHealthOrchestratorTemplate(BaseResponseTemplate):
 
 class PRReviewOrchestratorTemplate(BaseResponseTemplate):
     """Template for PR Review Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="PRReviewOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "PR_REVIEW", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Pull Request Review", "👁️")
@@ -972,10 +971,10 @@ class PRReviewOrchestratorTemplate(BaseResponseTemplate):
 
 class PhaseFinalizationOrchestratorTemplate(BaseResponseTemplate):
     """Template for Phase Finalization."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="PhaseFinalizationOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "FINALIZE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Phase Finalization", "🏁")
@@ -989,10 +988,10 @@ class PhaseFinalizationOrchestratorTemplate(BaseResponseTemplate):
 
 class PlanningOrchestratorTemplate(BaseResponseTemplate):
     """Template for Planning Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="PlanningOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "PLAN", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Planning Analysis", "📋")
@@ -1001,10 +1000,10 @@ class PlanningOrchestratorTemplate(BaseResponseTemplate):
 
 class PersonaOrchestratorTemplate(BaseResponseTemplate):
     """Template for Persona Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="PersonaOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "PERSONA", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Persona Configuration", "🎭")
@@ -1013,10 +1012,10 @@ class PersonaOrchestratorTemplate(BaseResponseTemplate):
 
 class EducationalOrchestratorTemplate(BaseResponseTemplate):
     """Template for Educational Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="EducationalOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "EDUCATE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Educational Content", "🎓")
@@ -1025,10 +1024,10 @@ class EducationalOrchestratorTemplate(BaseResponseTemplate):
 
 class InquiryOrchestratorTemplate(BaseResponseTemplate):
     """Template for Inquiry Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="InquiryOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "INQUIRE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Inquiry Analysis", "❓")
@@ -1042,10 +1041,10 @@ class InquiryOrchestratorTemplate(BaseResponseTemplate):
 
 class InteractionOrchestratorTemplate(BaseResponseTemplate):
     """Template for Interaction Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="InteractionOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "INTERACT", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Interaction Protocol", "🤝")
@@ -1054,10 +1053,10 @@ class InteractionOrchestratorTemplate(BaseResponseTemplate):
 
 class WorkflowManagementOrchestratorTemplate(BaseResponseTemplate):
     """Template for Workflow Management."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="WorkflowManagementOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "WORKFLOW", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Workflow Management", "🔄")
@@ -1071,10 +1070,10 @@ class WorkflowManagementOrchestratorTemplate(BaseResponseTemplate):
 
 class GovernanceOrchestratorTemplate(BaseResponseTemplate):
     """Template for Governance Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="GovernanceOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "GOVERN", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Governance Status", "⚖️")
@@ -1083,10 +1082,10 @@ class GovernanceOrchestratorTemplate(BaseResponseTemplate):
 
 class ValidationOrchestratorTemplate(BaseResponseTemplate):
     """Template for Validation Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="ValidationOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "VALIDATE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Validation Results", "✅")
@@ -1095,10 +1094,10 @@ class ValidationOrchestratorTemplate(BaseResponseTemplate):
 
 class ChallengeGateOrchestratorTemplate(BaseResponseTemplate):
     """Template for Challenge Gate."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="ChallengeGateOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "CHALLENGE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Challenge Gate", "🚧")
@@ -1107,10 +1106,10 @@ class ChallengeGateOrchestratorTemplate(BaseResponseTemplate):
 
 class MCPToolIntegrationOrchestratorTemplate(BaseResponseTemplate):
     """Template for MCP Tool Integration."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="MCPToolIntegrationOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "MCP_INTEGRATE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("MCP Tool Integration", "🔌")
@@ -1124,10 +1123,10 @@ class MCPToolIntegrationOrchestratorTemplate(BaseResponseTemplate):
 
 class MonitoringOrchestratorTemplate(BaseResponseTemplate):
     """Template for Monitoring Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="MonitoringOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "MONITOR", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("System Monitoring", "📈")
@@ -1136,10 +1135,10 @@ class MonitoringOrchestratorTemplate(BaseResponseTemplate):
 
 class OptimizationOrchestratorTemplate(BaseResponseTemplate):
     """Template for Optimization Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="OptimizationOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "OPTIMIZE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Performance Optimization", "⚡")
@@ -1148,10 +1147,10 @@ class OptimizationOrchestratorTemplate(BaseResponseTemplate):
 
 class BenchmarkOrchestratorTemplate(BaseResponseTemplate):
     """Template for Benchmark Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="BenchmarkOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "BENCHMARK", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Benchmark Results", "📊")
@@ -1165,10 +1164,10 @@ class BenchmarkOrchestratorTemplate(BaseResponseTemplate):
 
 class SeleniumPlaywrightOrchestratorTemplate(BaseResponseTemplate):
     """Template for Selenium/Playwright Migration."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="SeleniumPlaywrightOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "MIGRATE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Test Migration", "🔄")
@@ -1177,10 +1176,10 @@ class SeleniumPlaywrightOrchestratorTemplate(BaseResponseTemplate):
 
 class AnalyticsOrchestratorTemplate(BaseResponseTemplate):
     """Template for Analytics Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="AnalyticsOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "ANALYZE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Analytics Report", "📊")
@@ -1189,10 +1188,10 @@ class AnalyticsOrchestratorTemplate(BaseResponseTemplate):
 
 class DigestEnhancementOrchestratorTemplate(BaseResponseTemplate):
     """Template for Digest Enhancement."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="DigestEnhancementOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "ENHANCE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Digest Enhancement", "📚")
@@ -1201,10 +1200,10 @@ class DigestEnhancementOrchestratorTemplate(BaseResponseTemplate):
 
 class TechIntelligenceOrchestratorTemplate(BaseResponseTemplate):
     """Template for Tech Intelligence."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="TechIntelligenceOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "INTELLIGENCE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Tech Intelligence", "🧠")
@@ -1213,10 +1212,10 @@ class TechIntelligenceOrchestratorTemplate(BaseResponseTemplate):
 
 class PromptEnhancementOrchestratorTemplate(BaseResponseTemplate):
     """Template for Prompt Enhancement."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="PromptEnhancementOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "ENHANCE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Prompt Enhancement", "✨")
@@ -1225,10 +1224,10 @@ class PromptEnhancementOrchestratorTemplate(BaseResponseTemplate):
 
 class HolisticValidationOrchestratorTemplate(BaseResponseTemplate):
     """Template for Holistic Validation."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="HolisticValidationOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "VALIDATE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Holistic Validation", "🔍")
@@ -1237,10 +1236,10 @@ class HolisticValidationOrchestratorTemplate(BaseResponseTemplate):
 
 class CortexDocsOrchestratorTemplate(BaseResponseTemplate):
     """Template for CORTEX Documentation."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="CortexDocsOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "DOCUMENT", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Documentation", "📚")
@@ -1249,10 +1248,10 @@ class CortexDocsOrchestratorTemplate(BaseResponseTemplate):
 
 class DashboardOrchestratorTemplate(BaseResponseTemplate):
     """Template for Dashboard Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="DashboardOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "DASHBOARD", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Dashboard Overview", "📊")
@@ -1261,10 +1260,10 @@ class DashboardOrchestratorTemplate(BaseResponseTemplate):
 
 class DomainEnhancementOrchestratorTemplate(BaseResponseTemplate):
     """Template for Domain Enhancement."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="DomainEnhancementOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "ENHANCE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Domain Enhancement", "🚀")
@@ -1273,10 +1272,10 @@ class DomainEnhancementOrchestratorTemplate(BaseResponseTemplate):
 
 class CorticalIntegrationOrchestratorTemplate(BaseResponseTemplate):
     """Template for Cortical Integration."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="CorticalIntegrationOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "INTEGRATE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Cortical Integration", "🧠")
@@ -1285,10 +1284,10 @@ class CorticalIntegrationOrchestratorTemplate(BaseResponseTemplate):
 
 class MemoryConsolidationOrchestratorTemplate(BaseResponseTemplate):
     """Template for Memory Consolidation."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="MemoryConsolidationOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "CONSOLIDATE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Memory Consolidation", "💾")
@@ -1297,10 +1296,10 @@ class MemoryConsolidationOrchestratorTemplate(BaseResponseTemplate):
 
 class SensoryInputOrchestratorTemplate(BaseResponseTemplate):
     """Template for Sensory Input."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="SensoryInputOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "SENSE", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Sensory Input", "👁️")
@@ -1309,10 +1308,10 @@ class SensoryInputOrchestratorTemplate(BaseResponseTemplate):
 
 class CentralBrainOrchestratorTemplate(BaseResponseTemplate):
     """Template for Central Brain Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="CentralBrainOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "BRAIN", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Central Brain", "🧠")
@@ -1321,10 +1320,10 @@ class CentralBrainOrchestratorTemplate(BaseResponseTemplate):
 
 class CodeReviewOrchestratorTemplate(BaseResponseTemplate):
     """Template for Code Review Orchestrator."""
-    
+
     def __init__(self):
         super().__init__(orchestrator_name="CodeReviewOrchestrator", mode="CORTEX")
-    
+
     def compose(self, operation: str = "CODE_REVIEW", **kwargs) -> str:
         response = self.header(operation)
         response += self.section("Code Review", "👁️")
@@ -1338,11 +1337,11 @@ class CodeReviewOrchestratorTemplate(BaseResponseTemplate):
 
 class OrchestratorTemplateRegistry:
     """Registry for all orchestrator templates."""
-    
+
     def __init__(self):
         self._templates: Dict[str, BaseResponseTemplate] = {}
         self._register_all_templates()
-    
+
     def _register_all_templates(self):
         """Register all orchestrator templates."""
         # Core Templates (10)
@@ -1354,7 +1353,7 @@ class OrchestratorTemplateRegistry:
         self._templates["PlanOrchestrator"] = PlanOrchestratorTemplate()
         self._templates["InteractionOrchestrator"] = InteractionOrchestratorTemplate()
         self._templates["WorkflowManagementOrchestrator"] = WorkflowManagementOrchestratorTemplate()
-        
+
         # Domain Templates (12)
         self._templates["RefactoringOrchestrator"] = RefactoringOrchestratorTemplate()
         self._templates["DocumentationOrchestrator"] = DocumentationOrchestratorTemplate()
@@ -1368,7 +1367,7 @@ class OrchestratorTemplateRegistry:
         self._templates["PersonaOrchestrator"] = PersonaOrchestratorTemplate()
         self._templates["EducationalOrchestrator"] = EducationalOrchestratorTemplate()
         self._templates["InquiryOrchestrator"] = InquiryOrchestratorTemplate()
-        
+
         # Support Templates (22)
         self._templates["DebuggingOrchestrator"] = DebuggingOrchestratorTemplate()
         self._templates["DigestSessionOrchestrator"] = DigestSessionOrchestratorTemplate()
@@ -1390,7 +1389,7 @@ class OrchestratorTemplateRegistry:
         self._templates["BrainHealthOrchestrator"] = BrainHealthOrchestratorTemplate()
         self._templates["PRReviewOrchestrator"] = PRReviewOrchestratorTemplate()
         self._templates["PhaseFinalizationOrchestrator"] = PhaseFinalizationOrchestratorTemplate()
-        
+
         # Enterprise Templates (8)
         self._templates["SecurityOrchestrator"] = SecurityOrchestratorTemplate()
         self._templates["ComplianceOrchestrator"] = ComplianceOrchestratorTemplate()
@@ -1400,7 +1399,7 @@ class OrchestratorTemplateRegistry:
         self._templates["ValidationOrchestrator"] = ValidationOrchestratorTemplate()
         self._templates["ChallengeGateOrchestrator"] = ChallengeGateOrchestratorTemplate()
         self._templates["MCPToolIntegrationOrchestrator"] = MCPToolIntegrationOrchestratorTemplate()
-        
+
         # Performance Templates (6)
         self._templates["PerformanceOrchestrator"] = PerformanceOrchestratorTemplate()
         self._templates["LoadTestOrchestrator"] = LoadTestOrchestratorTemplate()
@@ -1408,7 +1407,7 @@ class OrchestratorTemplateRegistry:
         self._templates["MonitoringOrchestrator"] = MonitoringOrchestratorTemplate()
         self._templates["OptimizationOrchestrator"] = OptimizationOrchestratorTemplate()
         self._templates["BenchmarkOrchestrator"] = BenchmarkOrchestratorTemplate()
-        
+
         # Specialized/Misc Templates (14)
         self._templates["SeleniumPlaywrightOrchestrator"] = SeleniumPlaywrightOrchestratorTemplate()
         self._templates["AnalyticsOrchestrator"] = AnalyticsOrchestratorTemplate()
@@ -1424,25 +1423,25 @@ class OrchestratorTemplateRegistry:
         self._templates["SensoryInputOrchestrator"] = SensoryInputOrchestratorTemplate()
         self._templates["CentralBrainOrchestrator"] = CentralBrainOrchestratorTemplate()
         self._templates["CodeReviewOrchestrator"] = CodeReviewOrchestratorTemplate()
-        
+
         # Total: 72 templates registered (98% coverage)
-        
+
         # Domain
         self._templates["RefactoringOrchestrator"] = RefactoringOrchestratorTemplate()
         self._templates["DocumentationOrchestrator"] = DocumentationOrchestratorTemplate()
-        
+
         # Support
         self._templates["DebuggingOrchestrator"] = DebuggingOrchestratorTemplate()
         self._templates["DigestSessionOrchestrator"] = DigestSessionOrchestratorTemplate()
-    
+
     def get_template(self, orchestrator_name: str) -> Optional[BaseResponseTemplate]:
         """Get template by orchestrator name."""
         return self._templates.get(orchestrator_name)
-    
+
     def list_templates(self) -> List[str]:
         """List all registered template names."""
         return list(self._templates.keys())
-    
+
     def has_template(self, orchestrator_name: str) -> bool:
         """Check if template exists for orchestrator."""
         return orchestrator_name in self._templates
@@ -1459,10 +1458,10 @@ _REGISTRY = OrchestratorTemplateRegistry()
 def get_orchestrator_template(orchestrator_name: str) -> Optional[BaseResponseTemplate]:
     """
     Get template for orchestrator (convenience function).
-    
+
     Args:
         orchestrator_name: Name of orchestrator
-    
+
     Returns:
         BaseResponseTemplate instance or None
     """
@@ -1484,7 +1483,7 @@ __all__ = [
     "PlanOrchestratorTemplate",
     "InteractionOrchestratorTemplate",
     "WorkflowManagementOrchestratorTemplate",
-    
+
     # Domain Templates (12)
     "RefactoringOrchestratorTemplate",
     "DocumentationOrchestratorTemplate",
@@ -1498,7 +1497,7 @@ __all__ = [
     "PersonaOrchestratorTemplate",
     "EducationalOrchestratorTemplate",
     "InquiryOrchestratorTemplate",
-    
+
     # Support Templates (22)
     "DebuggingOrchestratorTemplate",
     "DigestSessionOrchestratorTemplate",
@@ -1520,7 +1519,7 @@ __all__ = [
     "BrainHealthOrchestratorTemplate",
     "PRReviewOrchestratorTemplate",
     "PhaseFinalizationOrchestratorTemplate",
-    
+
     # Enterprise Templates (8)
     "SecurityOrchestratorTemplate",
     "ComplianceOrchestratorTemplate",
@@ -1530,7 +1529,7 @@ __all__ = [
     "ValidationOrchestratorTemplate",
     "ChallengeGateOrchestratorTemplate",
     "MCPToolIntegrationOrchestratorTemplate",
-    
+
     # Performance Templates (6)
     "PerformanceOrchestratorTemplate",
     "LoadTestOrchestratorTemplate",
@@ -1538,7 +1537,7 @@ __all__ = [
     "MonitoringOrchestratorTemplate",
     "OptimizationOrchestratorTemplate",
     "BenchmarkOrchestratorTemplate",
-    
+
     # Specialized/Misc Templates (14)
     "SeleniumPlaywrightOrchestratorTemplate",
     "AnalyticsOrchestratorTemplate",
@@ -1554,7 +1553,7 @@ __all__ = [
     "SensoryInputOrchestratorTemplate",
     "CentralBrainOrchestratorTemplate",
     "CodeReviewOrchestratorTemplate",
-    
+
     # Registry
     "OrchestratorTemplateRegistry",
     "get_orchestrator_template",

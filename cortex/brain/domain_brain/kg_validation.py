@@ -4,11 +4,16 @@ Provides comprehensive graph validation, consistency checking, performance bench
 health monitoring, and observability metrics for Knowledge Graph implementation.
 """
 
-import time
 import logging
-from typing import Dict, List, Any, Optional, Set
+import time
 from dataclasses import dataclass, field
-from cortex.brain.core.knowledge.graph.interface import IGraphAdapter, EntityNode, HealthStatus
+from typing import Any, Dict, List, Optional, Set
+
+from cortex.brain.core.knowledge.graph.interface import (
+    EntityNode,
+    HealthStatus,
+    IGraphAdapter,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -48,7 +53,7 @@ class GraphValidator:
                     all_entities.extend(entities)
                 except Exception:
                     pass
-            
+
             for entity in all_entities:
                 if entity.type not in {"Service", "API", "Domain", "DataStore", "Config"}:
                     violations.append(ValidationViolation(
@@ -76,7 +81,7 @@ class GraphValidator:
                     all_entities.extend(entities)
                 except Exception:
                     pass
-            
+
             valid_types = {"CALLS", "BELONGS_TO", "DEPENDS_ON", "MANAGES", "CREATED_BY"}
             for entity in all_entities:
                 try:
@@ -106,9 +111,9 @@ class GraphValidator:
                     all_entities.extend(entities)
                 except Exception:
                     pass
-            
+
             entity_ids = {e.id for e in all_entities}
-            
+
             for entity in all_entities:
                 try:
                     paths = self.adapter.query_paths(entity.id, rel_types=None, max_hops=2)
@@ -142,14 +147,14 @@ class GraphValidator:
                     all_entities.extend(entities)
                 except Exception:
                     pass
-            
+
             entity_names: Dict[str, int] = {}
-            
+
             for entity in all_entities:
                 name = entity.properties.get("name") if entity.properties else None
                 if name:
                     entity_names[name] = entity_names.get(name, 0) + 1
-            
+
             for name, count in entity_names.items():
                 if count > 1:
                     violations.append(ValidationViolation(
@@ -177,7 +182,7 @@ class GraphValidator:
                     all_entities.extend(entities)
                 except Exception:
                     pass
-            
+
             related_ids: Set[str] = set()
             for entity in all_entities:
                 try:
@@ -188,7 +193,7 @@ class GraphValidator:
                         related_ids.update(path.nodes)
                 except Exception:
                     pass
-            
+
             for entity in all_entities:
                 if entity.id not in related_ids:
                     orphaned.append(entity.id)
@@ -206,12 +211,12 @@ class GraphValidator:
         try:
             visited: Set[str] = set()
             rec_stack: Set[str] = set()
-            
+
             def dfs(node: str, path: List[str]) -> None:
                 visited.add(node)
                 rec_stack.add(node)
                 path.append(node)
-                
+
                 try:
                     paths = self.adapter.query_paths(node, rel_types=None, max_hops=1)
                     for p in paths:
@@ -224,9 +229,9 @@ class GraphValidator:
                                 cycles.append(path + [target])
                 except Exception:
                     pass
-                
+
                 rec_stack.remove(node)
-            
+
             all_entities: List[EntityNode] = []
             for entity_type in ["Service", "API", "Domain", "DataStore", "Config"]:
                 try:
@@ -234,7 +239,7 @@ class GraphValidator:
                     all_entities.extend(entities)
                 except Exception:
                     pass
-            
+
             for entity in all_entities:
                 if entity.id not in visited:
                     dfs(entity.id, [])
@@ -255,7 +260,7 @@ class GraphValidator:
                 "API": ["name", "version", "status"],
                 "Domain": ["name", "status"],
             }
-            
+
             for entity_type_name, required in required_props.items():
                 try:
                     entities = self.adapter.query_entities(entity_type_name, {})
@@ -321,7 +326,7 @@ class PerformanceBenchmark:
         except Exception:
             entities = []
         end_time = time.time()
-        
+
         execution_time = (end_time - start_time) * 1000
         return {
             "execution_time_ms": execution_time,
@@ -337,7 +342,7 @@ class PerformanceBenchmark:
         """
         start_time = time.time()
         relationship_count = 0
-        
+
         try:
             for entity_type in ["Service", "API"]:
                 entities = self.adapter.query_entities(entity_type, {})
@@ -346,10 +351,10 @@ class PerformanceBenchmark:
                     relationship_count += len(paths)
         except Exception:
             pass
-        
+
         end_time = time.time()
         execution_time = (end_time - start_time) * 1000
-        
+
         return {
             "execution_time_ms": execution_time,
             "relationship_count": relationship_count,
@@ -366,7 +371,7 @@ class PerformanceBenchmark:
             Benchmark metrics dictionary
         """
         start_time = time.time()
-        
+
         try:
             entities = self.adapter.query_entities("Service", {})
             path_count = 0
@@ -375,10 +380,10 @@ class PerformanceBenchmark:
                 path_count += len(paths)
         except Exception:
             path_count = 0
-        
+
         end_time = time.time()
         execution_time = (end_time - start_time) * 1000
-        
+
         return {
             "execution_time_ms": execution_time,
             "paths_found": path_count,
@@ -435,7 +440,7 @@ class HealthChecker:
         try:
             all_entities: List[EntityNode] = []
             entity_types: Dict[str, int] = {}
-            
+
             for entity_type in ["Service", "API", "Domain", "DataStore", "Config"]:
                 try:
                     entities = self.adapter.query_entities(entity_type, {})
@@ -443,7 +448,7 @@ class HealthChecker:
                     entity_types[entity_type] = len(entities)
                 except Exception:
                     pass
-            
+
             return {
                 "total_entities": len(all_entities),
                 "by_type": entity_types
@@ -461,21 +466,21 @@ class HealthChecker:
         try:
             relationship_count = 0
             all_entities: List[EntityNode] = []
-            
+
             for entity_type in ["Service", "API", "Domain", "DataStore", "Config"]:
                 try:
                     entities = self.adapter.query_entities(entity_type, {})
                     all_entities.extend(entities)
                 except Exception:
                     pass
-            
+
             for entity in all_entities:
                 try:
                     paths = self.adapter.query_paths(entity.id, rel_types=None, max_hops=1)
                     relationship_count += len(paths)
                 except Exception:
                     pass
-            
+
             return {
                 "total_relationships": relationship_count,
                 "by_type": {}
@@ -493,14 +498,14 @@ class HealthChecker:
         try:
             all_entities: List[EntityNode] = []
             connected_entities: Set[str] = set()
-            
+
             for entity_type in ["Service", "API", "Domain", "DataStore", "Config"]:
                 try:
                     entities = self.adapter.query_entities(entity_type, {})
                     all_entities.extend(entities)
                 except Exception:
                     pass
-            
+
             for entity in all_entities:
                 try:
                     paths = self.adapter.query_paths(entity.id, rel_types=None, max_hops=1)
@@ -510,9 +515,9 @@ class HealthChecker:
                             connected_entities.update(path.nodes)
                 except Exception:
                     pass
-            
+
             orphaned_count = len(all_entities) - len(connected_entities)
-            
+
             return {
                 "total_entities": len(all_entities),
                 "connected_entities": len(connected_entities),
@@ -532,16 +537,16 @@ class HealthChecker:
         try:
             issues: List[str] = []
             all_entities: List[EntityNode] = []
-            
+
             for entity_type in ["Service", "API", "Domain", "DataStore", "Config"]:
                 try:
                     entities = self.adapter.query_entities(entity_type, {})
                     all_entities.extend(entities)
                 except Exception:
                     pass
-            
+
             entity_ids = {e.id for e in all_entities}
-            
+
             for entity in all_entities:
                 try:
                     paths = self.adapter.query_paths(entity.id, rel_types=None, max_hops=2)
@@ -551,7 +556,7 @@ class HealthChecker:
                                 issues.append(f"Path references missing entity: {node_id}")
                 except Exception:
                     pass
-            
+
             return {
                 "integrity_status": "GOOD" if not issues else "COMPROMISED",
                 "issues": issues,
@@ -582,21 +587,21 @@ class ObservabilityCollector:
         try:
             all_entities: List[EntityNode] = []
             relationship_count = 0
-            
+
             for entity_type in ["Service", "API", "Domain", "DataStore", "Config"]:
                 try:
                     entities = self.adapter.query_entities(entity_type, {})
                     all_entities.extend(entities)
                 except Exception:
                     pass
-            
+
             for entity in all_entities:
                 try:
                     paths = self.adapter.query_paths(entity.id, rel_types=None, max_hops=1)
                     relationship_count += len(paths)
                 except Exception:
                     pass
-            
+
             return {
                 "entity_count": len(all_entities),
                 "relationship_count": relationship_count,
@@ -612,7 +617,7 @@ class ObservabilityCollector:
             Distribution by entity type
         """
         distribution: Dict[str, int] = {}
-        
+
         for entity_type in ["Service", "API", "Domain", "DataStore", "Config"]:
             try:
                 entities = self.adapter.query_entities(entity_type, {})
@@ -620,7 +625,7 @@ class ObservabilityCollector:
                     distribution[entity_type] = len(entities)
             except Exception:
                 pass
-        
+
         return distribution
 
     def collect_relationship_distribution(self) -> Dict[str, int]:
@@ -638,7 +643,7 @@ class ObservabilityCollector:
             Distribution by tier
         """
         distribution: Dict[str, int] = {}
-        
+
         try:
             services = self.adapter.query_entities("Service", {})
             for service in services:
@@ -647,7 +652,7 @@ class ObservabilityCollector:
                     distribution[str(tier_val)] = distribution.get(str(tier_val), 0) + 1
         except Exception:
             pass
-        
+
         return distribution
 
     def generate_dashboard_metrics(self) -> Dict[str, Any]:
@@ -671,26 +676,26 @@ class ObservabilityCollector:
             List of alerts
         """
         alerts: List[Dict[str, Any]] = []
-        
+
         metrics = self.collect_metrics()
-        
+
         if metrics["entity_count"] == 0:
             alerts.append({
                 "severity": "CRITICAL",
                 "message": "No entities in graph"
             })
-        
+
         if metrics["relationship_count"] == 0:
             alerts.append({
                 "severity": "WARNING",
                 "message": "No relationships in graph"
             })
-        
+
         tier_dist = self.collect_tier_distribution()
         if len(tier_dist) == 0:
             alerts.append({
                 "severity": "INFO",
                 "message": "No services in graph"
             })
-        
+
         return alerts

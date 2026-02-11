@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Optional
 
 class TemplateLibrary:
     """Manages comprehensive template library with hierarchical organization.
-    
+
     Provides templates organized by:
     - Use-cases (API integration, monitoring, etc.)
     - Domains (Finance, Healthcare, E-commerce)
@@ -305,12 +305,12 @@ class TemplateLibrary:
         domain: Optional[str] = None
     ) -> Optional[Dict[str, Any]]:
         """Get template by category and ID.
-        
+
         Args:
             category: Template category (use_case, domain, workflow)
             template_id: Template identifier
             domain: Domain name (for domain category)
-            
+
         Returns:
             Template dictionary or None
         """
@@ -330,12 +330,12 @@ class TemplateLibrary:
             return self.use_case_templates[template_id]
         elif template_id in self.workflow_templates:
             return self.workflow_templates[template_id]
-        
+
         # Try domain templates
         for domain_dict in self.domain_templates.values():
             if template_id in domain_dict:
                 return domain_dict[template_id]
-        
+
         return None
 
     def list_templates(
@@ -344,11 +344,11 @@ class TemplateLibrary:
         domain: Optional[str] = None
     ) -> List[str]:
         """List template IDs in a category.
-        
+
         Args:
             category: Template category
             domain: Domain name (for domain category)
-            
+
         Returns:
             List of template identifiers
         """
@@ -362,7 +362,7 @@ class TemplateLibrary:
 
     def list_domains(self) -> List[str]:
         """List available domains.
-        
+
         Returns:
             List of domain names
         """
@@ -370,7 +370,7 @@ class TemplateLibrary:
 
     def list_all_templates(self) -> List[str]:
         """List all template IDs across all categories.
-        
+
         Returns:
             List of all template identifiers
         """
@@ -386,21 +386,21 @@ class TemplateLibrary:
         template: Dict[str, Any]
     ) -> List[Dict[str, Any]]:
         """Get templates related to given template.
-        
+
         Args:
             template: Template dictionary
-            
+
         Returns:
             List of related templates
         """
         related = []
         category = template.get("category", "")
-        
+
         if category == "use_case":
             # Find workflows that might be used with this use-case
             for workflow in self.workflow_templates.values():
                 related.append(workflow)
-        
+
         return related
 
 
@@ -413,16 +413,16 @@ class TemplateDiscovery:
 
     def search(self, keyword: str) -> List[Dict[str, Any]]:
         """Search templates by keyword.
-        
+
         Args:
             keyword: Search keyword
-            
+
         Returns:
             List of matching templates
         """
         results = []
         keyword_lower = keyword.lower()
-        
+
         all_templates = self.library.list_all_templates()
         for template_id in all_templates:
             template = self.library.get_template_by_id(template_id)
@@ -431,15 +431,15 @@ class TemplateDiscovery:
                 search_text = f"{template.get('name', '')} {template.get('title', '')} {template.get('description', '')}".lower()
                 if keyword_lower in search_text:
                     results.append({"id": template_id, "name": template.get("name"), "title": template.get("title")})
-        
+
         return results
 
     def search_by_domain(self, domain: str) -> List[Dict[str, Any]]:
         """Search templates by domain.
-        
+
         Args:
             domain: Domain name
-            
+
         Returns:
             List of templates in domain
         """
@@ -448,10 +448,10 @@ class TemplateDiscovery:
 
     def search_by_use_case(self, use_case_keyword: str) -> List[Dict[str, Any]]:
         """Search use-case templates by keyword.
-        
+
         Args:
             use_case_keyword: Use-case search term
-            
+
         Returns:
             List of matching use-case templates
         """
@@ -463,38 +463,38 @@ class TemplateValidator:
 
     def validate_template(self, template: Dict[str, Any]) -> List[str]:
         """Validate template structure.
-        
+
         Args:
             template: Template to validate
-            
+
         Returns:
             List of validation errors (empty if valid)
         """
         errors = []
-        
+
         required_fields = ["name", "content", "description"]
         for field in required_fields:
             if field not in template:
                 errors.append(f"Missing required field: {field}")
-        
+
         # Check content is not empty
         if template.get("content", "").strip() == "":
             errors.append("Template content cannot be empty")
-        
+
         return errors
 
     def validate_example(self, example: Dict[str, Any]) -> List[str]:
         """Validate template example.
-        
+
         Args:
             example: Example to validate
-            
+
         Returns:
             List of validation errors
         """
         errors = []
-        
+
         if "description" not in example and "parameters" not in example:
             errors.append("Example must have description or parameters")
-        
+
         return errors

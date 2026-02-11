@@ -7,12 +7,13 @@ CORTEX.prompt.md and copilot-instruction.md files.
 AC-ID: AC-MCP-043
 """
 
-from pathlib import Path
-from typing import Optional, Dict, List, Any
-from dataclasses import dataclass, field
 import re
 import subprocess
+from dataclasses import dataclass, field
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
 import yaml
 
 
@@ -29,18 +30,18 @@ class ReleaseResult:
 class ProductionReleaseManager:
     """
     Manager for production releases on origin/main.
-    
+
     Handles versioning, instruction file regeneration, and Git operations.
     Follows CORE-008 (TDD) and CORE-011 (type hints).
     """
-    
+
     # Main/master branch names
     MAIN_BRANCHES = {"main", "master", "CORTEX"}
-    
+
     def __init__(self, repo_path: Path, audit_enabled: bool = False):
         """
         Initialize ProductionReleaseManager.
-        
+
         Args:
             repo_path: Path to the repository root.
             audit_enabled: Whether to log to audit trail.
@@ -48,18 +49,18 @@ class ProductionReleaseManager:
         self.repo_path = Path(repo_path)
         self.audit_enabled = audit_enabled
         self._audit = None
-        
+
         if audit_enabled:
             try:
                 from cortex.orchestrators.shared_audit_trail import SharedAuditTrail
                 self._audit = SharedAuditTrail()
             except ImportError:
                 pass
-    
+
     def get_current_version(self) -> str:
         """
         Get current version from pyproject.toml or VERSION file.
-        
+
         Returns:
             Current version string.
         """
@@ -70,23 +71,23 @@ class ProductionReleaseManager:
             match = re.search(r'version\s*=\s*["\']([^"\']+)["\']', content)
             if match:
                 return match.group(1)
-        
+
         # Try VERSION file
         version_path = self.repo_path / "VERSION"
         if version_path.exists():
             return version_path.read_text().strip()
-        
+
         # Default
         return "0.0.0"
-    
+
     def bump_version(self, current: str, bump_type: str) -> str:
         """
         Bump version according to semantic versioning.
-        
+
         Args:
             current: Current version string.
             bump_type: Type of bump (major, minor, patch).
-            
+
         Returns:
             New version string.
         """
@@ -94,82 +95,82 @@ class ProductionReleaseManager:
         match = re.match(r'(\d+)\.(\d+)\.(\d+)', current)
         if not match:
             return current
-        
+
         major, minor, patch = int(match.group(1)), int(match.group(2)), int(match.group(3))
-        
+
         if bump_type == "major":
             return f"{major + 1}.0.0"
         elif bump_type == "minor":
             return f"{major}.{minor + 1}.0"
         else:  # patch
             return f"{major}.{minor}.{patch + 1}"
-    
+
     def regenerate_cortex_prompt(self, version: str) -> Dict[str, Any]:
         """
         Regenerate CORTEX.prompt.md with fresh content.
-        
+
         Args:
             version: Version to include in the prompt.
-            
+
         Returns:
             Result dictionary.
         """
         result = {"success": False, "error": None}
-        
+
         try:
             prompts_dir = self.repo_path / ".github" / "prompts"
             prompts_dir.mkdir(parents=True, exist_ok=True)
-            
+
             prompt_path = prompts_dir / "CORTEX.prompt.md"
-            
+
             # Delete old file
             if prompt_path.exists():
                 prompt_path.unlink()
-            
+
             # Generate new content
             content = self._generate_cortex_prompt_content(version)
             prompt_path.write_text(content, encoding="utf-8")
-            
+
             result["success"] = True
-            
+
         except Exception as e:
             result["error"] = str(e)
-        
+
         return result
-    
+
     def regenerate_copilot_instructions(self, version: str) -> Dict[str, Any]:
         """
         Regenerate copilot-instruction.md with fresh content.
-        
+
         Args:
             version: Version to include in instructions.
-            
+
         Returns:
             Result dictionary.
         """
         result = {"success": False, "error": None}
-        
+
         try:
             github_dir = self.repo_path / ".github"
             github_dir.mkdir(parents=True, exist_ok=True)
-            
+
             instruction_path = github_dir / "copilot-instruction.md"
-            
+
             # Delete old file
             if instruction_path.exists():
                 instruction_path.unlink()
-            
+
             # Generate new content
             content = self._generate_copilot_instruction_content(version)
             instruction_path.write_text(content, encoding="utf-8")
-            
+
             result["success"] = True
-            
+
         except Exception as e:
             result["error"] = str(e)
-        
+
         return result
-    
+
     def regenerate_instruction_files(
         self,
         version: str,
@@ -177,43 +178,43 @@ class ProductionReleaseManager:
     ) -> Dict[str, Any]:
         """
         Regenerate all instruction files.
-        
+
         Args:
             version: Version string.
             delete_first: Whether to delete old files first.
-            
+
         Returns:
             Result dictionary.
         """
         result = {"success": False, "deleted_files": 0, "error": None}
-        
+
         try:
             files_to_delete = [
                 self.repo_path / ".github" / "prompts" / "CORTEX.prompt.md",
                 self.repo_path / ".github" / "copilot-instruction.md",
             ]
-            
+
             if delete_first:
                 for file_path in files_to_delete:
                     if file_path.exists():
                         file_path.unlink()
                         result["deleted_files"] += 1
-            
+
             # Regenerate
             self.regenerate_cortex_prompt(version)
             self.regenerate_copilot_instructions(version)
-            
+
             result["success"] = True
-            
+
         except Exception as e:
             result["error"] = str(e)
-        
+
         return result
-    
+
     def _generate_cortex_prompt_content(self, version: str) -> str:
         """Generate CORTEX.prompt.md content."""
         timestamp = datetime.now().strftime("%Y-%m-%d")
-        
+
         return f"""# CORTEX Master Orchestrator System Prompt
 **Version:** {version} | **Generated:** {timestamp}
 
@@ -298,11 +299,11 @@ Every response MUST include this header (line 1):
 
 *Generated by CORTEX ProductionReleaseManager v{version}*
 """
-    
+
     def _generate_copilot_instruction_content(self, version: str) -> str:
         """Generate copilot-instruction.md content."""
         timestamp = datetime.now().strftime("%Y-%m-%d")
-        
+
         return f"""# CORTEX {version} Implementation Instructions
 **Updated:** {timestamp}
 
@@ -370,7 +371,7 @@ AC_START (log intent) -> EXECUTE -> AC_COMPLETE (log result) -> Verify hash chai
 
 *Generated by CORTEX ProductionReleaseManager v{version}*
 """
-    
+
     def _run_git_command(self, *args: str) -> str:
         """Run a git command and return output."""
         try:
@@ -386,55 +387,55 @@ AC_START (log intent) -> EXECUTE -> AC_COMPLETE (log result) -> Verify hash chai
             return ""
         except FileNotFoundError:
             return ""
-    
+
     def is_main_branch(self) -> bool:
         """Check if current branch is main/master."""
         current = self._run_git_command("rev-parse", "--abbrev-ref", "HEAD")
         return current in self.MAIN_BRANCHES
-    
+
     def create_release_tag(self, tag: str, message: str) -> Dict[str, Any]:
         """
         Create a Git tag for the release.
-        
+
         Args:
             tag: Tag name (e.g., v7.1.0).
             message: Tag message.
-            
+
         Returns:
             Result dictionary.
         """
         result = {"success": False, "error": None}
-        
+
         try:
             self._run_git_command("tag", "-a", tag, "-m", message)
             result["success"] = True
         except Exception as e:
             result["error"] = str(e)
-        
+
         return result
-    
+
     def generate_changelog_entry(self, version: str, changes: List[str]) -> str:
         """
         Generate changelog entry for the release.
-        
+
         Args:
             version: Version string.
             changes: List of changes.
-            
+
         Returns:
             Changelog entry string.
         """
         timestamp = datetime.now().strftime("%Y-%m-%d")
-        
+
         lines = [f"## [{version}] - {timestamp}", ""]
-        
+
         if changes:
             lines.append("### Changes")
             for change in changes:
                 lines.append(f"- {change}")
-        
+
         return "\n".join(lines)
-    
+
     def create_release(
         self,
         bump_type: str = "patch",
@@ -443,12 +444,12 @@ AC_START (log intent) -> EXECUTE -> AC_COMPLETE (log result) -> Verify hash chai
     ) -> Dict[str, Any]:
         """
         Create a production release.
-        
+
         Args:
             bump_type: Type of version bump.
             changes: List of changes for changelog.
             custom_version: Custom version override.
-            
+
         Returns:
             Result dictionary.
         """
@@ -458,12 +459,12 @@ AC_START (log intent) -> EXECUTE -> AC_COMPLETE (log result) -> Verify hash chai
             "files_regenerated": 0,
             "error": None
         }
-        
+
         # Check branch
         if not self.is_main_branch():
             result["error"] = "Releases can only be created on main/master branch"
             return result
-        
+
         try:
             # Determine new version
             if custom_version:
@@ -471,44 +472,44 @@ AC_START (log intent) -> EXECUTE -> AC_COMPLETE (log result) -> Verify hash chai
             else:
                 current = self.get_current_version()
                 new_version = self.bump_version(current, bump_type)
-            
+
             result["new_version"] = new_version
-            
+
             # Regenerate instruction files
             regen_result = self.regenerate_instruction_files(new_version)
             result["files_regenerated"] = 2  # Both files
-            
+
             # Update VERSION file
             version_path = self.repo_path / "VERSION"
             version_path.write_text(new_version, encoding="utf-8")
-            
+
             result["success"] = True
-            
+
             # Log to audit if enabled
             if self._audit and self.audit_enabled:
                 self._log_release_audit(new_version, changes or [])
-            
+
         except Exception as e:
             result["error"] = str(e)
-        
+
         return result
-    
+
     def validate_tests(self) -> Dict[str, Any]:
         """
         Validate all tests pass before release.
-        
+
         Returns:
             Validation result dictionary.
         """
         result = {"valid": False, "passed": 0, "failed": 0}
-        
+
         test_result = self._run_pytest()
         result["passed"] = test_result.get("passed", 0)
         result["failed"] = test_result.get("failed", 0)
         result["valid"] = result["failed"] == 0
-        
+
         return result
-    
+
     def _run_pytest(self) -> Dict[str, int]:
         """Run pytest and return results."""
         try:
@@ -522,21 +523,21 @@ AC_START (log intent) -> EXECUTE -> AC_COMPLETE (log result) -> Verify hash chai
             return {"passed": 0, "failed": 0}
         except Exception:
             return {"passed": 0, "failed": 0}
-    
+
     def validate_clean_working_directory(self) -> Dict[str, Any]:
         """
         Validate no uncommitted changes exist.
-        
+
         Returns:
             Validation result dictionary.
         """
         status = self._run_git_command("status", "--porcelain")
         return {"clean": status == ""}
-    
+
     def generate_release_workflow(self) -> str:
         """
         Generate GitHub Actions release workflow.
-        
+
         Returns:
             YAML workflow content.
         """
@@ -553,18 +554,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-      
+
       - name: Install dependencies
         run: pip install -r requirements.txt
-      
+
       - name: Run tests
         run: pytest tests/ -v
-      
+
       - name: Regenerate CORTEX.prompt.md
         run: |
           python -c "
@@ -576,7 +577,7 @@ jobs:
           manager.regenerate_copilot_instructions(version)
           print(f'Regenerated instruction files for v{version}')
           "
-      
+
       - name: Commit regenerated files
         run: |
           git config user.name "CORTEX Release Bot"
@@ -584,7 +585,7 @@ jobs:
           git add .github/prompts/CORTEX.prompt.md .github/copilot-instruction.md
           git diff --staged --quiet || git commit -m "chore: regenerate instruction files [skip ci]"
           git push
-      
+
       - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v1
@@ -593,30 +594,30 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 """
-    
+
     def save_release_workflow(self) -> Dict[str, Any]:
         """
         Save release workflow to .github/workflows.
-        
+
         Returns:
             Result dictionary.
         """
         result = {"success": False, "error": None}
-        
+
         try:
             workflows_dir = self.repo_path / ".github" / "workflows"
             workflows_dir.mkdir(parents=True, exist_ok=True)
-            
+
             workflow_path = workflows_dir / "release.yml"
             workflow_path.write_text(self.generate_release_workflow(), encoding="utf-8")
-            
+
             result["success"] = True
-            
+
         except Exception as e:
             result["error"] = str(e)
-        
+
         return result
-    
+
     def _log_release_audit(self, version: str, changes: List[str]) -> None:
         """Log release to audit trail."""
         if self._audit:
@@ -629,7 +630,7 @@ jobs:
                     "timestamp": datetime.now().isoformat()
                 }
             )
-    
+
     def generate_release_metadata(
         self,
         version: str,
@@ -637,11 +638,11 @@ jobs:
     ) -> Dict[str, Any]:
         """
         Generate release metadata with AC-ID.
-        
+
         Args:
             version: Version string.
             changes: List of changes.
-            
+
         Returns:
             Release metadata dictionary.
         """

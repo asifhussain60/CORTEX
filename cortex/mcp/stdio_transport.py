@@ -7,10 +7,10 @@ Copilot to communicate with CORTEX MCP server via stdin/stdout.
 Author: CORTEX Framework
 """
 
-import sys
 import json
 import logging
-from typing import Dict, Any, Optional
+import sys
+from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -18,18 +18,18 @@ logger = logging.getLogger(__name__)
 def run_stdio_server(server: Any) -> int:
     """
     Run MCP server with stdio transport.
-    
+
     Reads JSON-RPC 2.0 requests from stdin, processes via server,
     writes responses to stdout. Blocks until EOF or error.
-    
+
     Args:
         server: MCPServer instance to handle requests
-        
+
     Returns:
         int: Exit code (0 for success)
     """
     logger.info("Starting stdio transport (JSON-RPC 2.0)")
-    
+
     try:
         while True:
             # Read line from stdin
@@ -37,26 +37,26 @@ def run_stdio_server(server: Any) -> int:
             if not line:  # EOF
                 logger.info("stdin closed, shutting down")
                 break
-                
+
             line = line.strip()
             if not line:  # Empty line
                 continue
-                
+
             try:
                 # Parse JSON-RPC request
                 request_data = json.loads(line)
                 logger.debug(f"Received request: {request_data}")
-                
+
                 # Handle request
                 response = handle_jsonrpc_request(server, request_data)
-                
+
                 # Send response if not None (notifications don't get responses)
                 if response is not None:
                     response_json = json.dumps(response)
                     print(response_json)  # Write to stdout
                     sys.stdout.flush()
                     logger.debug(f"Sent response: {response}")
-                    
+
             except json.JSONDecodeError as e:
                 # Invalid JSON - send parse error
                 error_response = {
@@ -71,11 +71,11 @@ def run_stdio_server(server: Any) -> int:
                 print(json.dumps(error_response))
                 sys.stdout.flush()
                 logger.warning(f"Parse error: {e}")
-                
+
             except Exception as e:
                 # Internal error
                 error_response = {
-                    "jsonrpc": "2.0", 
+                    "jsonrpc": "2.0",
                     "error": {
                         "code": -32603,
                         "message": "Internal error",
@@ -86,9 +86,9 @@ def run_stdio_server(server: Any) -> int:
                 print(json.dumps(error_response))
                 sys.stdout.flush()
                 logger.error(f"Internal error: {e}", exc_info=True)
-                
+
         return 0
-        
+
     except KeyboardInterrupt:
         logger.info("Received interrupt, shutting down")
         return 0
@@ -100,18 +100,18 @@ def run_stdio_server(server: Any) -> int:
 def handle_jsonrpc_request(server: Any, request: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     """
     Handle a JSON-RPC 2.0 request.
-    
+
     Args:
         server: MCPServer instance
         request: JSON-RPC request dictionary
-        
+
     Returns:
         Response dictionary or None for notifications
     """
     method = request.get("method", "")
     params = request.get("params", {})
     request_id = request.get("id")
-    
+
     # Handle MCP methods
     if method == "initialize":
         return handle_initialize(request_id, params)
@@ -176,7 +176,7 @@ def handle_tools_call(server: Any, request_id: Optional[str], params: Dict[str, 
     try:
         tool_name = params.get("name", "")
         arguments = params.get("arguments", {})
-        
+
         if not tool_name:
             return {
                 "jsonrpc": "2.0",
@@ -187,10 +187,10 @@ def handle_tools_call(server: Any, request_id: Optional[str], params: Dict[str, 
                 },
                 "id": request_id
             }
-        
+
         # Call tool via server
         response = server.call_tool(tool_name, arguments, str(request_id) if request_id else "unknown")
-        
+
         # Convert MCPResponse to JSON-RPC response
         if response.error:
             return {
@@ -204,13 +204,13 @@ def handle_tools_call(server: Any, request_id: Optional[str], params: Dict[str, 
                 "result": response.result,
                 "id": request_id
             }
-            
+
     except Exception as e:
         return {
             "jsonrpc": "2.0",
             "error": {
                 "code": -32603,
-                "message": "Internal error", 
+                "message": "Internal error",
                 "data": f"Tool call failed: {str(e)}"
             },
             "id": request_id

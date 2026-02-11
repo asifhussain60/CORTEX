@@ -11,7 +11,7 @@ __all__ = [
 from .context_crystallization_layer import (
     ContextCrystallizationLayer,
     CrystallizedContext,
-    RulesCache,
-    LENSContext,
     InfrastructureContext,
+    LENSContext,
+    RulesCache,
 )

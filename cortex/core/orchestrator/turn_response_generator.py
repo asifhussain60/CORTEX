@@ -6,8 +6,8 @@ Author: CORTEX Framework
 """
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, Optional, List
 from enum import Enum
+from typing import Any, Dict, List, Optional
 
 
 class ResponseFormat(Enum):

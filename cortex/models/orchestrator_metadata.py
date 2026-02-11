@@ -9,8 +9,8 @@ across registry, lookup, and runtime systems.
 """
 
 from dataclasses import dataclass, field
-from typing import List, Any, Optional
 from datetime import datetime
+from typing import Any, List, Optional
 
 from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator
 
@@ -19,9 +19,9 @@ from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator
 class OrchestratorMetadata:
     """
     Canonical orchestrator metadata for runtime registration.
-    
+
     Used by MasterOrchestrator for tracking registered orchestrators.
-    
+
     Attributes:
         domain: Domain/category of orchestrator (core, domain, support)
         orchestrator: The orchestrator instance
@@ -40,9 +40,9 @@ class OrchestratorMetadata:
 class WiringMetadata:
     """
     Canonical orchestrator metadata from wiring registry (YAML-backed).
-    
+
     Used by OrchestratorLookup for resolving orchestrators from Git-backed YAML.
-    
+
     Attributes:
         name: Orchestrator alias/name (registry key)
         module: Python module path
@@ -65,9 +65,9 @@ class WiringMetadata:
 class DecoratorMetadata:
     """
     Lightweight metadata container for decorator-based registration.
-    
+
     Used by OrchestratorRegistry for @orchestrator decorator support.
-    
+
     Attributes:
         name: Orchestrator name
         class_type: The orchestrator class
@@ -81,6 +81,6 @@ class DecoratorMetadata:
 
 __all__ = [
     "OrchestratorMetadata",
-    "WiringMetadata", 
+    "WiringMetadata",
     "DecoratorMetadata",
 ]

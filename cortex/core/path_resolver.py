@@ -18,14 +18,14 @@ def get_project_root() -> Path:
     """
     # Look for cortex/config/cortex-config.yaml or cortex-config.yaml or setup.py to identify root
     current = Path(__file__).parent
-    
+
     while current != current.parent:
         if (current / "cortex" / "config" / "cortex-config.yaml").exists() or \
            (current / "cortex-config.yaml").exists() or \
            (current / "setup.py").exists():
             return current
         current = current.parent
-    
+
     # Fallback to current file's parent directory's parent (cortex/core -> project root)
     return Path(__file__).parent.parent.parent
 
@@ -42,9 +42,9 @@ def resolve_path(path_str: str, relative_to: Optional[Path] = None) -> Path:
     """
     if relative_to is None:
         relative_to = get_project_root()
-    
+
     path = Path(path_str)
-    
+
     if path.is_absolute():
         return path
     else:

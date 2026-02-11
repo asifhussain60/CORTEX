@@ -13,9 +13,9 @@ Author: GitHub Copilot
 Date: 2026-01-24
 """
 
-from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any, Dict, List, Optional
 
 from cortex.mcp.tool_governance import ToolCategory
 
@@ -34,11 +34,11 @@ class ToolMetadata:
 
 class MCPToolsRegistry:
     """Central registry for all 15 MCP tools.
-    
+
     Provides unified access to tool definitions, categories, and metadata.
     Used by orchestrators to expose tools and by MCPServer to discover tools.
     """
-    
+
     # Governance Tools (5)
     GOVERNANCE_TOOLS = {
         "query_governance_context": ToolMetadata(
@@ -77,7 +77,7 @@ class MCPToolsRegistry:
             location="cortex/mcp/tools/governance/__init__.py",
         ),
     }
-    
+
     # Orchestration Tools (4)
     ORCHESTRATION_TOOLS = {
         "get_operation_status": ToolMetadata(
@@ -109,7 +109,7 @@ class MCPToolsRegistry:
             location="cortex/mcp/tools/orchestration/__init__.py",
         ),
     }
-    
+
     # Knowledge Tools (3)
     KNOWLEDGE_TOOLS = {
         "search_knowledge_base": ToolMetadata(
@@ -134,7 +134,7 @@ class MCPToolsRegistry:
             location="cortex/mcp/tools/knowledge/__init__.py",
         ),
     }
-    
+
     # Utility Tools (3)
     UTILITY_TOOLS = {
         "echo_tool": ToolMetadata(
@@ -162,11 +162,11 @@ class MCPToolsRegistry:
             location="cortex/mcp/tools/utility/__init__.py",
         ),
     }
-    
+
     @classmethod
     def get_all_tools(cls) -> Dict[str, Dict[str, ToolMetadata]]:
         """Get all 15 tools organized by category.
-        
+
         Returns:
             Dict mapping category names to tool metadata dicts
         """
@@ -176,11 +176,11 @@ class MCPToolsRegistry:
             "knowledge": cls.KNOWLEDGE_TOOLS,
             "utility": cls.UTILITY_TOOLS,
         }
-    
+
     @classmethod
     def get_tool_names(cls) -> Dict[str, List[str]]:
         """Get tool names organized by category.
-        
+
         Returns:
             Dict mapping category names to lists of tool names
         """
@@ -190,14 +190,14 @@ class MCPToolsRegistry:
             "knowledge": list(cls.KNOWLEDGE_TOOLS.keys()),
             "utility": list(cls.UTILITY_TOOLS.keys()),
         }
-    
+
     @classmethod
     def get_tool(cls, tool_name: str) -> Optional[ToolMetadata]:
         """Get metadata for a specific tool by name.
-        
+
         Args:
             tool_name: Name of the tool
-            
+
         Returns:
             ToolMetadata if found, None otherwise
         """
@@ -206,45 +206,45 @@ class MCPToolsRegistry:
             if tool_name in category_tools:
                 return category_tools[tool_name]
         return None
-    
+
     @classmethod
     def get_tools_by_category(cls, category: str) -> Dict[str, ToolMetadata]:
         """Get all tools in a specific category.
-        
+
         Args:
             category: Category name ('governance', 'orchestration', 'knowledge', 'utility')
-            
+
         Returns:
             Dict of tool metadata in that category
         """
         all_tools = cls.get_all_tools()
         return all_tools.get(category, {})
-    
+
     @classmethod
     def get_tool_count(cls) -> int:
         """Get total number of tools.
-        
+
         Returns:
             Total count (should be 15)
         """
         all_tools = cls.get_all_tools()
         return sum(len(tools) for tools in all_tools.values())
-    
+
     @classmethod
     def validate_registry(cls) -> Dict[str, Any]:
         """Validate registry consistency.
-        
+
         Checks:
         - Total tool count == 15
         - No duplicate tool names
         - All tools have required metadata
         - Tool categories are correct
-        
+
         Returns:
             Dict with validation results
         """
         all_tools = cls.get_all_tools()
-        
+
         # Check total count
         total = cls.get_tool_count()
         if total != 15:
@@ -253,7 +253,7 @@ class MCPToolsRegistry:
                 "error": f"Expected 15 tools, found {total}",
                 "total": total,
             }
-        
+
         # Check for duplicates
         seen = set()
         for category_tools in all_tools.values():
@@ -265,7 +265,7 @@ class MCPToolsRegistry:
                         "total": total,
                     }
                 seen.add(tool_name)
-        
+
         # Check category counts
         counts = {
             "governance": len(cls.GOVERNANCE_TOOLS),
@@ -273,14 +273,14 @@ class MCPToolsRegistry:
             "knowledge": len(cls.KNOWLEDGE_TOOLS),
             "utility": len(cls.UTILITY_TOOLS),
         }
-        
+
         expected_counts = {
             "governance": 5,
             "orchestration": 4,
             "knowledge": 3,
             "utility": 3,
         }
-        
+
         for category, expected in expected_counts.items():
             if counts.get(category, 0) != expected:
                 return {
@@ -288,23 +288,23 @@ class MCPToolsRegistry:
                     "error": f"Category '{category}' has {counts.get(category, 0)} tools, expected {expected}",
                     "counts": counts,
                 }
-        
+
         return {
             "valid": True,
             "message": "Registry validation passed",
             "total_tools": total,
             "category_counts": counts,
         }
-    
+
     @classmethod
     def export_for_discovery(cls) -> Dict[str, Any]:
         """Export registry in format suitable for tool discovery.
-        
+
         Returns:
             Dict with all tool definitions for MCPServer
         """
         all_tools = cls.get_all_tools()
-        
+
         tools_list = []
         for category, tools in all_tools.items():
             for tool_name, metadata in tools.items():
@@ -317,7 +317,7 @@ class MCPToolsRegistry:
                     "compliance": metadata.compliance,
                     "location": metadata.location,
                 })
-        
+
         return {
             "status": "ok",
             "total_tools": len(tools_list),

@@ -12,47 +12,48 @@ Authority: AC-SECURITY-FRAMEWORK-001
 Date: 2026-01-28
 """
 
-from typing import Any, Dict, List, Optional
-from cortex.mcp.orchestrator_mcp_server import (
-    IOrchestratorAdapter,
-    CapabilityMetadata,
-    CapabilityResponse,
-    ExecutionContext,
-)
-from cortex.orchestrators.support.recommendation_engine import (
-    get_recommendation_engine,
-    RecommendationEngine,
-)
-from cortex.brain.analysis.security_threat_analyzer import (
-    ThreatSeverity,
-)
 import logging
 import time
 from dataclasses import asdict
+from typing import Any, Dict, List, Optional
+
+from cortex.brain.analysis.security_threat_analyzer import (
+    ThreatSeverity,
+)
+from cortex.mcp.orchestrator_mcp_server import (
+    CapabilityMetadata,
+    CapabilityResponse,
+    ExecutionContext,
+    IOrchestratorAdapter,
+)
+from cortex.orchestrators.support.recommendation_engine import (
+    RecommendationEngine,
+    get_recommendation_engine,
+)
 
 logger = logging.getLogger(__name__)
 
 
 class RecommendationEngineAdapter(IOrchestratorAdapter):
     """MCP Adapter for RecommendationEngine (Phase 8.4-8.5).
-    
+
     Exposes security-first recommendations through MCP interface.
     Supports threat analysis, SOLID guidance, performance optimization,
     and compliance advisory.
-    
+
     Authority: AC-SECURITY-FRAMEWORK-001
     """
-    
+
     def __init__(self):
         """Initialize adapter with RecommendationEngine singleton."""
         self.engine: RecommendationEngine = get_recommendation_engine()
         self._health_check_cache: Optional[Dict[str, Any]] = None
         self._last_health_check: float = 0
         self._health_check_ttl: float = 5.0  # 5 second TTL
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         """Get all RecommendationEngine capabilities.
-        
+
         Returns:
             List of exposed MCP capabilities
         """
@@ -98,7 +99,7 @@ class RecommendationEngineAdapter(IOrchestratorAdapter):
                 routing_keywords=["security", "recommendation", "cwe", "threat", "fix"],
                 tags={"security", "recommendation", "threat-response"},
             ),
-            
+
             # ================================================================
             # SOLID Recommendations
             # ================================================================
@@ -143,7 +144,7 @@ class RecommendationEngineAdapter(IOrchestratorAdapter):
                 routing_keywords=["solid", "principle", "code-design", "refactor", "architecture"],
                 tags={"architecture", "recommendation", "design-patterns"},
             ),
-            
+
             # ================================================================
             # Performance Recommendations
             # ================================================================
@@ -177,7 +178,7 @@ class RecommendationEngineAdapter(IOrchestratorAdapter):
                 routing_keywords=["performance", "optimization", "speed", "efficiency"],
                 tags={"performance", "recommendation", "optimization"},
             ),
-            
+
             # ================================================================
             # Compliance Recommendations
             # ================================================================
@@ -212,7 +213,7 @@ class RecommendationEngineAdapter(IOrchestratorAdapter):
                 tags={"compliance", "recommendation", "governance"},
             ),
         ]
-    
+
     def execute_capability(
         self,
         capability_name: str,
@@ -220,18 +221,18 @@ class RecommendationEngineAdapter(IOrchestratorAdapter):
         context: ExecutionContext,
     ) -> CapabilityResponse:
         """Execute a recommendation capability.
-        
+
         Args:
             capability_name: Name of capability to execute
             parameters: Input parameters
             context: Execution context
-            
+
         Returns:
             CapabilityResponse with results
         """
         start = time.time()
         request_id = context.session_id
-        
+
         try:
             if capability_name == "recommend_security_fix":
                 return self._recommend_security_fix(parameters, request_id, start)
@@ -260,7 +261,7 @@ class RecommendationEngineAdapter(IOrchestratorAdapter):
                 orchestrator="recommendation_engine",
                 duration_ms=(time.time() - start) * 1000,
             )
-    
+
     def _recommend_security_fix(
         self,
         parameters: Dict[str, Any],
@@ -268,12 +269,12 @@ class RecommendationEngineAdapter(IOrchestratorAdapter):
         start: float,
     ) -> CapabilityResponse:
         """Recommend security fix for CWE.
-        
+
         Args:
             parameters: Input parameters with cwe_id
             request_id: Request ID for tracking
             start: Start time for duration calculation
-            
+
         Returns:
             CapabilityResponse with security recommendations
         """
@@ -287,10 +288,10 @@ class RecommendationEngineAdapter(IOrchestratorAdapter):
                 orchestrator="recommendation_engine",
                 duration_ms=(time.time() - start) * 1000,
             )
-        
+
         try:
             result = self.engine.recommend_for_security(cwe_id)
-            
+
             output = {
                 "success": True,
                 "cwe_id": cwe_id,
@@ -300,9 +301,9 @@ class RecommendationEngineAdapter(IOrchestratorAdapter):
                 ] if result.recommendations else [],
                 "summary": result.summary or f"Security recommendations for {cwe_id}",
             }
-            
+
             logger.info(f"Generated {len(result.recommendations or [])} security recommendations for {cwe_id}")
-            
+
             return CapabilityResponse(
                 request_id=request_id,
                 success=True,
@@ -320,7 +321,7 @@ class RecommendationEngineAdapter(IOrchestratorAdapter):
                 orchestrator="recommendation_engine",
                 duration_ms=(time.time() - start) * 1000,
             )
-    
+
     def _recommend_solid_fix(
         self,
         parameters: Dict[str, Any],
@@ -328,12 +329,12 @@ class RecommendationEngineAdapter(IOrchestratorAdapter):
         start: float,
     ) -> CapabilityResponse:
         """Recommend SOLID principle fix.
-        
+
         Args:
             parameters: Input parameters with violation_type
             request_id: Request ID for tracking
             start: Start time for duration calculation
-            
+
         Returns:
             CapabilityResponse with SOLID recommendations
         """
@@ -347,10 +348,10 @@ class RecommendationEngineAdapter(IOrchestratorAdapter):
                 orchestrator="recommendation_engine",
                 duration_ms=(time.time() - start) * 1000,
             )
-        
+
         try:
             result = self.engine.recommend_for_solid(violation_type)
-            
+
             output = {
                 "success": True,
                 "violation_type": violation_type,
@@ -360,9 +361,9 @@ class RecommendationEngineAdapter(IOrchestratorAdapter):
                 ] if result.recommendations else [],
                 "summary": result.summary or f"SOLID recommendations for {violation_type}",
             }
-            
+
             logger.info(f"Generated {len(result.recommendations or [])} SOLID recommendations for {violation_type}")
-            
+
             return CapabilityResponse(
                 request_id=request_id,
                 success=True,
@@ -380,7 +381,7 @@ class RecommendationEngineAdapter(IOrchestratorAdapter):
                 orchestrator="recommendation_engine",
                 duration_ms=(time.time() - start) * 1000,
             )
-    
+
     def _recommend_performance_fix(
         self,
         parameters: Dict[str, Any],
@@ -388,12 +389,12 @@ class RecommendationEngineAdapter(IOrchestratorAdapter):
         start: float,
     ) -> CapabilityResponse:
         """Recommend performance optimization.
-        
+
         Args:
             parameters: Input parameters with performance_issue
             request_id: Request ID for tracking
             start: Start time for duration calculation
-            
+
         Returns:
             CapabilityResponse with performance recommendations
         """
@@ -407,10 +408,10 @@ class RecommendationEngineAdapter(IOrchestratorAdapter):
                 orchestrator="recommendation_engine",
                 duration_ms=(time.time() - start) * 1000,
             )
-        
+
         try:
             result = self.engine.recommend_for_performance(performance_issue)
-            
+
             output = {
                 "success": True,
                 "issue": performance_issue,
@@ -419,9 +420,9 @@ class RecommendationEngineAdapter(IOrchestratorAdapter):
                 ] if result.recommendations else [],
                 "summary": result.summary or f"Performance recommendations for {performance_issue}",
             }
-            
+
             logger.info(f"Generated {len(result.recommendations or [])} performance recommendations")
-            
+
             return CapabilityResponse(
                 request_id=request_id,
                 success=True,
@@ -439,7 +440,7 @@ class RecommendationEngineAdapter(IOrchestratorAdapter):
                 orchestrator="recommendation_engine",
                 duration_ms=(time.time() - start) * 1000,
             )
-    
+
     def _recommend_compliance_fix(
         self,
         parameters: Dict[str, Any],
@@ -447,12 +448,12 @@ class RecommendationEngineAdapter(IOrchestratorAdapter):
         start: float,
     ) -> CapabilityResponse:
         """Recommend compliance framework fix.
-        
+
         Args:
             parameters: Input parameters with framework
             request_id: Request ID for tracking
             start: Start time for duration calculation
-            
+
         Returns:
             CapabilityResponse with compliance recommendations
         """
@@ -466,10 +467,10 @@ class RecommendationEngineAdapter(IOrchestratorAdapter):
                 orchestrator="recommendation_engine",
                 duration_ms=(time.time() - start) * 1000,
             )
-        
+
         try:
             result = self.engine.recommend_for_compliance(framework)
-            
+
             output = {
                 "success": True,
                 "framework": framework,
@@ -478,9 +479,9 @@ class RecommendationEngineAdapter(IOrchestratorAdapter):
                 ] if result.recommendations else [],
                 "summary": result.summary or f"Compliance recommendations for {framework}",
             }
-            
+
             logger.info(f"Generated {len(result.recommendations or [])} compliance recommendations for {framework}")
-            
+
             return CapabilityResponse(
                 request_id=request_id,
                 success=True,
@@ -498,10 +499,10 @@ class RecommendationEngineAdapter(IOrchestratorAdapter):
                 orchestrator="recommendation_engine",
                 duration_ms=(time.time() - start) * 1000,
             )
-    
+
     def is_healthy(self) -> bool:
         """Check if RecommendationEngine is healthy.
-        
+
         Returns:
             True if healthy and accessible
         """
@@ -510,12 +511,12 @@ class RecommendationEngineAdapter(IOrchestratorAdapter):
             current_time = time.time()
             if self._health_check_cache and (current_time - self._last_health_check) < self._health_check_ttl:
                 return self._health_check_cache.get("healthy", False)
-            
+
             # Verify engine is accessible
             engine = get_recommendation_engine()
             if not engine:
                 return False
-            
+
             # Test advisor access
             advisors_ok = all([
                 hasattr(engine, "_security_advisor"),
@@ -523,18 +524,18 @@ class RecommendationEngineAdapter(IOrchestratorAdapter):
                 hasattr(engine, "_performance_advisor"),
                 hasattr(engine, "_compliance_advisor"),
             ])
-            
+
             self._health_check_cache = {"healthy": advisors_ok}
             self._last_health_check = current_time
-            
+
             return advisors_ok
         except Exception as e:
             logger.error(f"Health check failed: {e}")
             return False
-    
+
     def get_status(self) -> Dict[str, Any]:
         """Get RecommendationEngine status.
-        
+
         Returns:
             Status dictionary with orchestrator information
         """

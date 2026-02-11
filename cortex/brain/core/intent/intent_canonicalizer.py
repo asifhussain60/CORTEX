@@ -12,8 +12,8 @@ import re
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Set
-from cortex.models.canonical_enums import IntentType
 
+from cortex.models.canonical_enums import IntentType
 
 # =============================================================================
 # ENUMS
@@ -36,7 +36,7 @@ class IntentScope:
     ac_id: Optional[str] = None
     module_name: Optional[str] = None
     description: str = ""
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
@@ -60,7 +60,7 @@ class CanonicalizedIntent:
     needs_clarification: bool = False
     clarification_prompt: Optional[str] = None
     alternative_intents: List[Dict[str, Any]] = field(default_factory=list)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
@@ -184,13 +184,13 @@ SCOPE_PATTERNS = {
 
 class IntentCanonicalizer:
     """Transform user requests into canonicalized intents."""
-    
+
     CONFIDENCE_THRESHOLD = 0.7
-    
+
     def __init__(self):
         """Initialize the intent canonicalizer."""
         self._compile_patterns()
-    
+
     def _compile_patterns(self) -> None:
         """Compile regex patterns for efficiency."""
         self._intent_patterns: Dict[str, List[tuple]] = {}
@@ -198,59 +198,59 @@ class IntentCanonicalizer:
             self._intent_patterns[intent_type] = [
                 (re.compile(p, re.IGNORECASE), w) for p, w in patterns
             ]
-        
+
         self._scope_patterns = {
             name: re.compile(pattern, re.IGNORECASE)
             for name, pattern in SCOPE_PATTERNS.items()
         }
-    
+
     def canonicalize(
         self, text: str, context: Optional[Dict[str, Any]] = None
     ) -> CanonicalizedIntent:
         """Canonicalize a user request into a structured intent.
-        
+
         Args:
             text: Raw user request text.
             context: Optional context (current file, project info, etc.)
-            
+
         Returns:
             CanonicalizedIntent with extracted information.
         """
         if not text or not text.strip():
             return self._create_unknown_intent(text)
-        
+
         text_lower = text.lower()
-        
+
         # Extract keywords
         keywords = self._extract_keywords(text)
-        
+
         # Score each intent type
         intent_scores = self._score_intents(text_lower)
-        
+
         # Get best intent and confidence
         best_intent, confidence = self._select_best_intent(intent_scores)
-        
+
         # Adjust confidence based on context
         if context:
             confidence = self._adjust_confidence_with_context(
                 confidence, best_intent, context
             )
-        
+
         # Extract scope
         scope = self._extract_scope(text)
-        
+
         # Determine if clarification needed
         needs_clarification = confidence < self.CONFIDENCE_THRESHOLD
         clarification_prompt = None
-        
+
         if needs_clarification:
             clarification_prompt = self._generate_clarification(
                 text, intent_scores, scope
             )
-        
+
         # Get alternative intents
         alternatives = self._get_alternative_intents(intent_scores, best_intent)
-        
+
         return CanonicalizedIntent(
             original_text=text,
             intent_type=best_intent,
@@ -261,13 +261,13 @@ class IntentCanonicalizer:
             clarification_prompt=clarification_prompt,
             alternative_intents=alternatives,
         )
-    
+
     def _extract_keywords(self, text: str) -> List[str]:
         """Extract relevant keywords from text.
-        
+
         Args:
             text: Input text.
-            
+
         Returns:
             List of keywords.
         """
@@ -283,10 +283,10 @@ class IntentCanonicalizer:
             "please", "it", "this", "that", "these", "those", "i", "me",
             "my", "we", "our", "you", "your",
         }
-        
+
         # Tokenize
         words = re.findall(r'\b[a-zA-Z_][a-zA-Z0-9_]*\b', text.lower())
-        
+
         # Filter and dedupe
         keywords = []
         seen: Set[str] = set()
@@ -294,102 +294,102 @@ class IntentCanonicalizer:
             if word not in stop_words and word not in seen and len(word) > 2:
                 keywords.append(word)
                 seen.add(word)
-        
+
         return keywords[:10]  # Limit to top 10
-    
+
     def _score_intents(self, text: str) -> Dict[str, float]:
         """Score text against all intent patterns.
-        
+
         Args:
             text: Lowercased input text.
-            
+
         Returns:
             Dict of intent type to score.
         """
         scores: Dict[str, float] = {}
-        
+
         for intent_type, patterns in self._intent_patterns.items():
             total_score = 0.0
             max_score = 0.0
-            
+
             for pattern, weight in patterns:
                 if pattern.search(text):
                     total_score += weight
                     max_score = max(max_score, weight)
-            
+
             # Use a combination of max and total for final score
             scores[intent_type] = min(1.0, max_score * 0.6 + total_score * 0.1)
-        
+
         return scores
-    
+
     def _select_best_intent(
         self, scores: Dict[str, float]
     ) -> tuple:
         """Select best intent based on scores.
-        
+
         Args:
             scores: Intent scores.
-            
+
         Returns:
             Tuple of (best_intent, confidence).
         """
         if not scores:
             return "UNKNOWN", 0.0
-        
+
         best_intent = max(scores, key=scores.get)
         best_score = scores[best_intent]
-        
+
         # If no pattern matched at all
         if best_score == 0:
             return "UNKNOWN", 0.1
-        
+
         return best_intent, best_score
-    
+
     def _adjust_confidence_with_context(
         self, confidence: float, intent: str, context: Dict[str, Any]
     ) -> float:
         """Adjust confidence based on context.
-        
+
         Args:
             confidence: Base confidence score.
             intent: Detected intent type.
             context: Additional context.
-            
+
         Returns:
             Adjusted confidence.
         """
         adjustment = 0.0
-        
+
         # If we have a current file, boost confidence slightly
         if context.get("current_file"):
             adjustment += 0.1
-        
+
         # If project type is known, boost confidence
         if context.get("project_type"):
             adjustment += 0.05
-        
+
         # If recent changes relate to the request
         if context.get("recent_changes"):
             adjustment += 0.05
-        
+
         return min(1.0, confidence + adjustment)
-    
+
     def _extract_scope(self, text: str) -> IntentScope:
         """Extract target scope from text.
-        
+
         Args:
             text: Input text.
-            
+
         Returns:
             IntentScope with extracted targets.
         """
         scope = IntentScope()
-        
+
         # Check for AC-ID first (highest priority)
         ac_match = self._scope_patterns["ac_id"].search(text)
         if ac_match:
             scope.ac_id = ac_match.group(1)
-        
+
         # Check for function in file pattern
         func_file_match = self._scope_patterns["function_in_file"].search(text)
         if func_file_match:
@@ -400,12 +400,12 @@ class IntentCanonicalizer:
             file_match = self._scope_patterns["py_file"].search(text)
             if file_match:
                 scope.file_path = file_match.group(1)
-            
+
             # Check for function
             func_match = self._scope_patterns["function"].search(text)
             if func_match:
                 scope.function_name = func_match.group(1)
-        
+
         # Check for class
         class_match = self._scope_patterns["class"].search(text)
         if class_match:
@@ -415,29 +415,29 @@ class IntentCanonicalizer:
             class_like = self._scope_patterns["class_mention"].search(text)
             if class_like:
                 scope.class_name = class_like.group(1)
-        
+
         return scope
-    
+
     def _generate_clarification(
         self, text: str, scores: Dict[str, float], scope: IntentScope
     ) -> str:
         """Generate clarification prompt for ambiguous request.
-        
+
         Args:
             text: Original text.
             scores: Intent scores.
             scope: Extracted scope.
-            
+
         Returns:
             Clarification prompt string.
         """
         # Get top 3 intents
         top_intents = sorted(scores.items(), key=lambda x: x[1], reverse=True)[:3]
-        
+
         prompt_parts = ["I'd like to clarify your request."]
-        
+
         if top_intents[0][1] > 0:
-            options = [f"- **{i[0]}**: {self._intent_description(i[0])}" 
+            options = [f"- **{i[0]}**: {self._intent_description(i[0])}"
                        for i in top_intents if i[1] > 0]
             if options:
                 prompt_parts.append("\nDid you mean to:")
@@ -450,19 +450,19 @@ class IntentCanonicalizer:
                 "- **REFACTOR**: Improve code structure\n"
                 "- **EXPLAIN**: Get information about the code"
             )
-        
+
         # Ask about scope if missing
         if not any([scope.file_path, scope.function_name, scope.class_name, scope.ac_id]):
             prompt_parts.append("\nAlso, please specify the target (file, function, or AC-ID).")
-        
+
         return "\n".join(prompt_parts)
-    
+
     def _intent_description(self, intent: str) -> str:
         """Get human-readable description for intent type.
-        
+
         Args:
             intent: Intent type.
-            
+
         Returns:
             Description string.
         """
@@ -477,16 +477,16 @@ class IntentCanonicalizer:
             "UNKNOWN": "Unknown action",
         }
         return descriptions.get(intent, "Perform an action")
-    
+
     def _get_alternative_intents(
         self, scores: Dict[str, float], best_intent: str
     ) -> List[Dict[str, Any]]:
         """Get alternative intent interpretations.
-        
+
         Args:
             scores: Intent scores.
             best_intent: The selected best intent.
-            
+
         Returns:
             List of alternative intent dicts.
         """
@@ -499,13 +499,13 @@ class IntentCanonicalizer:
                     "description": self._intent_description(intent),
                 })
         return alternatives[:3]  # Top 3 alternatives
-    
+
     def _create_unknown_intent(self, text: str) -> CanonicalizedIntent:
         """Create an unknown intent for empty/invalid input.
-        
+
         Args:
             text: Original text.
-            
+
         Returns:
             CanonicalizedIntent with UNKNOWN type.
         """

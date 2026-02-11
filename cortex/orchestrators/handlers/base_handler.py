@@ -8,8 +8,8 @@ AC-REM-HIGH-001: Handler extraction pattern
 
 from __future__ import annotations
 
-from typing import Any, Optional, Generic, TypeVar
 from abc import ABC, abstractmethod
+from typing import Any, Generic, Optional, TypeVar
 
 T = TypeVar("T")
 

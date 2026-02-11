@@ -10,14 +10,14 @@ Authority: Phase 36 Stage 2 specification
 """
 
 import logging
-from typing import List, Optional, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import List, Optional, Tuple
 
 try:
+    import numpy as np
     from sentence_transformers import SentenceTransformer
     from sklearn.metrics.pairwise import cosine_similarity
-    import numpy as np
     DEPENDENCIES_AVAILABLE = True
 except ImportError:
     DEPENDENCIES_AVAILABLE = False
@@ -41,7 +41,7 @@ class ContinuityScore(Enum):
 class ContextWindow:
     """
     Context window for conversation turns.
-    
+
     Attributes:
         turns: List of conversation turns
         start_index: Starting index in full conversation
@@ -60,7 +60,7 @@ class ContextWindow:
 class SynthesisResult:
     """
     Context synthesis result.
-    
+
     Attributes:
         synthesized_context: Synthesized context text
         continuity_score: Conversation continuity score
@@ -79,7 +79,7 @@ class SynthesisResult:
 class CompressionConfig:
     """
     Compression configuration.
-    
+
     Attributes:
         target_ratio: Target compression ratio (0-1)
         min_continuity: Minimum continuity threshold
@@ -94,14 +94,14 @@ class CompressionConfig:
 class TokenBudget:
     """
     Token budget tracker.
-    
+
     Attributes:
         total_budget: Total token budget
         used_tokens: Tokens already used
     """
     total_budget: int
     used_tokens: int
-    
+
     @property
     def remaining(self) -> int:
         """Calculate remaining tokens."""
@@ -111,11 +111,11 @@ class TokenBudget:
 class ContextSynthesizer:
     """
     Context synthesis engine.
-    
+
     Tracks conversation context, analyzes continuity,
     and compresses context to fit token budgets.
     """
-    
+
     def __init__(
         self,
         model_name: str = "all-MiniLM-L6-v2",
@@ -123,11 +123,11 @@ class ContextSynthesizer:
     ):
         """
         Initialize context synthesizer.
-        
+
         Args:
             model_name: SentenceTransformer model name
             config: Compression configuration
-            
+
         Raises:
             ImportError: If dependencies not installed
         """
@@ -136,13 +136,13 @@ class ContextSynthesizer:
                 "Required dependencies not installed. "
                 "Install with: pip install sentence-transformers scikit-learn"
             )
-        
+
         self.model = SentenceTransformer(model_name)
         self.summarizer = MLSummarizer(model_name=model_name)
         self.config = config or CompressionConfig()
-        
+
         logger.info(f"ContextSynthesizer initialized with model: {model_name}")
-    
+
     def synthesize(
         self,
         turns: List[str],
@@ -150,11 +150,11 @@ class ContextSynthesizer:
     ) -> SynthesisResult:
         """
         Synthesize conversation context.
-        
+
         Args:
             turns: List of conversation turns
             token_budget: Optional token budget
-            
+
         Returns:
             SynthesisResult: Synthesis result
         """
@@ -165,11 +165,11 @@ class ContextSynthesizer:
                 token_count=0,
                 compression_ratio=0.0,
             )
-        
+
         # Estimate original token count (words * 1.3)
         original_text = " ".join(turns)
         original_tokens = int(len(original_text.split()) * 1.3)
-        
+
         # Check if compression needed
         if token_budget and original_tokens > token_budget:
             # Compress to fit budget
@@ -177,55 +177,55 @@ class ContextSynthesizer:
             synthesized = self.compress(original_text, target_ratio=target_ratio)
         else:
             synthesized = original_text
-        
+
         # Calculate final token count
         final_tokens = int(len(synthesized.split()) * 1.3)
-        
+
         # Analyze continuity
         continuity = self.analyze_continuity(turns)
-        
+
         # Calculate compression ratio
         compression_ratio = 1 - (final_tokens / max(original_tokens, 1))
-        
+
         return SynthesisResult(
             synthesized_context=synthesized,
             continuity_score=continuity,
             token_count=final_tokens,
             compression_ratio=max(0.0, compression_ratio),
         )
-    
+
     def analyze_continuity(self, turns: List[str]) -> ContinuityScore:
         """
         Analyze conversation continuity.
-        
+
         Args:
             turns: List of conversation turns
-            
+
         Returns:
             ContinuityScore: Continuity level
         """
         if len(turns) < 2:
             return ContinuityScore.LOW
-        
+
         # Generate embeddings
         embeddings = self.model.encode(turns)
-        
+
         # Calculate pairwise similarities between consecutive turns
         similarities = []
         for i in range(len(embeddings) - 1):
             sim = cosine_similarity([embeddings[i]], [embeddings[i + 1]])[0][0]
             similarities.append(float(sim))
-        
+
         # Average similarity indicates continuity
         avg_similarity = sum(similarities) / len(similarities)
-        
+
         if avg_similarity >= 0.7:
             return ContinuityScore.HIGH
         elif avg_similarity >= 0.5:
             return ContinuityScore.MEDIUM
         else:
             return ContinuityScore.LOW
-    
+
     def create_windows(
         self,
         turns: List[str],
@@ -234,29 +234,29 @@ class ContextSynthesizer:
     ) -> List[ContextWindow]:
         """
         Create context windows from conversation turns.
-        
+
         Args:
             turns: List of conversation turns
             window_size: Size of each window
             overlap: Number of overlapping turns
-            
+
         Returns:
             List[ContextWindow]: Context windows
         """
         if not turns:
             return []
-        
+
         windows = []
         stride = max(1, window_size - overlap)
-        
+
         for i in range(0, len(turns), stride):
             end_idx = min(i + window_size, len(turns))
             window_turns = turns[i:end_idx]
-            
+
             # Estimate token count
             window_text = " ".join(window_turns)
             token_count = int(len(window_text.split()) * 1.3)
-            
+
             window = ContextWindow(
                 turns=window_turns,
                 start_index=i,
@@ -264,12 +264,12 @@ class ContextSynthesizer:
                 token_count=token_count,
             )
             windows.append(window)
-            
+
             if end_idx >= len(turns):
                 break
-        
+
         return windows
-    
+
     def compress(
         self,
         context: str,
@@ -277,26 +277,26 @@ class ContextSynthesizer:
     ) -> str:
         """
         Compress context text.
-        
+
         Args:
             context: Context text to compress
             target_ratio: Target compression ratio (0-1)
-            
+
         Returns:
             str: Compressed context
         """
         if not context:
             return ""
-        
+
         # Split into sentences
         sentences = [s.strip() for s in context.split(".") if s.strip()]
-        
+
         if len(sentences) <= 1:
             return context
-        
+
         # Use ML summarizer for semantic compression
         summary_result = self.summarizer.summarize(sentences)
-        
+
         # If summary is too long, truncate
         target_length = int(len(context) * target_ratio)
         if len(summary_result.summary) > target_length:
@@ -304,11 +304,11 @@ class ContextSynthesizer:
             words = summary_result.summary.split()
             target_words = int(len(words) * target_ratio)
             compressed = " ".join(words[:target_words])
-            
+
             # Add ellipsis if truncated
             if target_words < len(words):
                 compressed += "..."
-            
+
             return compressed
-        
+
         return summary_result.summary

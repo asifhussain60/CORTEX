@@ -30,10 +30,10 @@ F = TypeVar("F", bound=Callable[..., Any])
 class UserContext:
     """
     User context for request attribution and access control.
-    
+
     This dataclass holds all information about the current user making a request.
     It is propagated through the entire request lifecycle using contextvars.
-    
+
     Attributes:
         user_id: Unique identifier for the user (e.g., "alice", "user_123")
         username: Human-readable display name
@@ -41,7 +41,7 @@ class UserContext:
         session_id: Unique identifier for this session/request
         created_at: When this context was created
         metadata: Additional user metadata (optional)
-    
+
     Example:
         >>> user = UserContext(
         ...     user_id="alice",
@@ -54,25 +54,25 @@ class UserContext:
         >>> user.has_role("developer")
         True
     """
-    
+
     user_id: str
     username: str
     roles: list[str] = field(default_factory=list)
     session_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     metadata: dict[str, Any] = field(default_factory=dict)
-    
+
     @classmethod
     def anonymous(cls) -> UserContext:
         """
         Create an anonymous user context.
-        
+
         Used when no authentication is provided. Anonymous users have
         limited permissions (readonly role only).
-        
+
         Returns:
             UserContext with anonymous identity
-            
+
         Example:
             >>> anon = UserContext.anonymous()
             >>> anon.user_id
@@ -86,15 +86,15 @@ class UserContext:
             roles=["readonly"],
             session_id=str(uuid.uuid4()),
         )
-    
+
     @classmethod
     def system(cls) -> UserContext:
         """
         Create a system user context.
-        
+
         Used for automated operations, background tasks, and system-initiated
         actions. System users have elevated permissions.
-        
+
         Returns:
             UserContext with system identity
         """
@@ -104,45 +104,45 @@ class UserContext:
             roles=["system", "admin"],
             session_id=f"system-{uuid.uuid4()}",
         )
-    
+
     @property
     def is_authenticated(self) -> bool:
         """Check if user is authenticated (not anonymous)."""
         return self.user_id not in ("anonymous", "")
-    
+
     @property
     def is_system(self) -> bool:
         """Check if this is a system user context."""
         return self.user_id == "system"
-    
+
     def has_role(self, role: str) -> bool:
         """
         Check if user has a specific role.
-        
+
         Args:
             role: Role name to check
-            
+
         Returns:
             True if user has the role
         """
         return role in self.roles
-    
+
     def has_any_role(self, *roles: str) -> bool:
         """
         Check if user has any of the specified roles.
-        
+
         Args:
             *roles: Role names to check
-            
+
         Returns:
             True if user has at least one of the roles
         """
         return any(role in self.roles for role in roles)
-    
+
     def to_dict(self) -> dict[str, Any]:
         """
         Convert to dictionary for serialization.
-        
+
         Returns:
             Dictionary representation suitable for JSON/audit logging
         """
@@ -167,15 +167,15 @@ _current_user: ContextVar[Optional[UserContext]] = ContextVar(
 def get_current_user() -> UserContext:
     """
     Get the current user context.
-    
+
     Returns the user context for the current execution context.
     If no user has been set, returns an anonymous user.
-    
+
     This function is thread-safe and async-safe due to contextvars.
-    
+
     Returns:
         Current UserContext (anonymous if not set)
-        
+
     Example:
         >>> user = get_current_user()
         >>> print(f"Request by: {user.username}")
@@ -189,13 +189,13 @@ def get_current_user() -> UserContext:
 def set_current_user(user: UserContext) -> None:
     """
     Set the current user context.
-    
+
     Sets the user context for the current execution context.
     This should be called at the beginning of each request/operation.
-    
+
     Args:
         user: UserContext to set as current
-        
+
     Example:
         >>> user = UserContext(user_id="alice", username="Alice", roles=["dev"])
         >>> set_current_user(user)
@@ -208,10 +208,10 @@ def set_current_user(user: UserContext) -> None:
 def clear_user_context() -> None:
     """
     Clear the current user context.
-    
+
     Resets the user context to None, causing subsequent calls to
     get_current_user() to return anonymous user.
-    
+
     Should be called at the end of request handling for cleanup.
     """
     _current_user.set(None)
@@ -220,19 +220,19 @@ def clear_user_context() -> None:
 def require_user_context(func: F) -> F:
     """
     Decorator to ensure user context exists before function execution.
-    
+
     Raises PermissionError if the current user is anonymous.
     Use this decorator on functions that require authentication.
-    
+
     Args:
         func: Function to decorate
-        
+
     Returns:
         Decorated function that checks authentication
-        
+
     Raises:
         PermissionError: If user is not authenticated
-        
+
     Example:
         >>> @require_user_context
         ... def sensitive_operation():
@@ -250,26 +250,26 @@ def require_user_context(func: F) -> F:
                 "Please provide valid credentials via X-CORTEX-API-KEY header."
             )
         return func(*args, **kwargs)
-    
+
     return wrapper  # type: ignore[return-value]
 
 
 def require_role(*required_roles: str) -> Callable[[F], F]:
     """
     Decorator factory to ensure user has required role(s).
-    
+
     Creates a decorator that checks if the current user has at least
     one of the specified roles before allowing function execution.
-    
+
     Args:
         *required_roles: Role names that grant access
-        
+
     Returns:
         Decorator function
-        
+
     Raises:
         PermissionError: If user lacks required role
-        
+
     Example:
         >>> @require_role("admin", "superuser")
         ... def admin_only_function():
@@ -288,7 +288,7 @@ def require_role(*required_roles: str) -> Callable[[F], F]:
                     f"User roles: {user.roles}"
                 )
             return func(*args, **kwargs)
-        
+
         return wrapper  # type: ignore[return-value]
-    
+
     return decorator

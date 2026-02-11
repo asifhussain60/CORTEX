@@ -5,16 +5,19 @@ Generated adapter for InstrumentationOrchestrator.
 AC-ID: AC-PHASE2B-013
 """
 
+import logging
+import time
 from typing import Any, Dict, List, Optional
+
 from cortex.mcp.orchestrator_mcp_server import (
-    IOrchestratorAdapter,
     CapabilityMetadata,
     CapabilityResponse,
     ExecutionContext,
+    IOrchestratorAdapter,
 )
-from cortex.orchestrators.support.instrumentation_orchestrator import InstrumentationOrchestrator
-import logging
-import time
+from cortex.orchestrators.support.instrumentation_orchestrator import (
+    InstrumentationOrchestrator,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -33,14 +36,14 @@ def _get_orchestrator_from_wiring(name: str) -> Optional[Any]:
 class InstrumentationOrchestratorAdapter(IOrchestratorAdapter):
     """
     MCP Adapter for InstrumentationOrchestrator.
-    
+
     Exposes capabilities:
     - instrument_code: Add instrumentation to code
     - collect_metrics: Collect instrumentation metrics
-    
+
     CORE-035: Uses wiring system for orchestrator access (single execution path).
     """
-    
+
     def __init__(self, orchestrator: Optional[InstrumentationOrchestrator] = None):
         """Initialize adapter with orchestrator from wiring system."""
         if orchestrator is not None:
@@ -48,7 +51,7 @@ class InstrumentationOrchestratorAdapter(IOrchestratorAdapter):
         else:
             self.orchestrator = _get_orchestrator_from_wiring("InstrumentationOrchestrator")
         self.name = "InstrumentationOrchestratorAdapter"
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         """Get all capabilities exposed by this orchestrator."""
         return [
@@ -71,7 +74,7 @@ class InstrumentationOrchestratorAdapter(IOrchestratorAdapter):
                 tags={"generated", "phase2b"},
             )
         ]
-    
+
     def execute_capability(
         self,
         capability_name: str,
@@ -89,7 +92,7 @@ class InstrumentationOrchestratorAdapter(IOrchestratorAdapter):
                     orchestrator="instrumentationorchestrator",
                     duration_ms=(time.time() - start) * 1000,
                 )
-            
+
             if capability_name == "instrument_code":
                 result = self.orchestrator.instrument_code(file_path=parameters.get('file_path'), config=parameters.get('config'))
                 return CapabilityResponse(
@@ -108,7 +111,7 @@ class InstrumentationOrchestratorAdapter(IOrchestratorAdapter):
                     orchestrator="{orchestrator_name_lower}",
                     duration_ms=(time.time() - start) * 1000,
                 )
-            
+
             return CapabilityResponse(
                 request_id=context.session_id,
                 success=False,
@@ -125,7 +128,7 @@ class InstrumentationOrchestratorAdapter(IOrchestratorAdapter):
                 orchestrator="instrumentationorchestrator",
                 duration_ms=(time.time() - start) * 1000,
             )
-    
+
     def validate_parameters(
         self, capability_name: str, parameters: Dict[str, Any]
     ) -> tuple[bool, Optional[str]]:

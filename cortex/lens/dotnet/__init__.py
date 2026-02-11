@@ -1,21 +1,21 @@
 """CORTEX LENS: .NET Enterprise Analysis Module."""
 
-from cortex.lens.dotnet.msbuild_resolver import (
-    MSBuildProjectReferenceResolver,
-    DependencyGraph,
-    ProjectNode,
-)
 from cortex.lens.dotnet.centralized_packages import (
-    CentralizedPackageManager,
     CentralizedPackageContext,
+    CentralizedPackageManager,
 )
 from cortex.lens.dotnet.enterprise_analysis import (
-    DatabaseProjectAnalyzer,
-    EntityFrameworkMigrationAnalyzer,
     AzureDevOpsPipelineAnalyzer,
-    WCFServiceAnalyzer,
-    SolutionArchitectureVisualizer,
+    DatabaseProjectAnalyzer,
     DotNetRepositoryOnboardingIntegration,
+    EntityFrameworkMigrationAnalyzer,
+    SolutionArchitectureVisualizer,
+    WCFServiceAnalyzer,
+)
+from cortex.lens.dotnet.msbuild_resolver import (
+    DependencyGraph,
+    MSBuildProjectReferenceResolver,
+    ProjectNode,
 )
 
 __all__ = [

@@ -6,8 +6,11 @@ MCP tool for DIGEST mode automation.
 Exposes DigestSessionOrchestrator functionality via MCP interface.
 """
 
-from typing import Dict, Any, Optional
-from cortex.orchestrators.support.digest_session_orchestrator import DigestSessionOrchestrator
+from typing import Any, Dict, Optional
+
+from cortex.orchestrators.support.digest_session_orchestrator import (
+    DigestSessionOrchestrator,
+)
 
 
 def cortex_digest_session(
@@ -17,15 +20,15 @@ def cortex_digest_session(
 ) -> Dict[str, Any]:
     """
     Auto-trigger DIGEST mode on chat file.
-    
+
     Detects Copilot chat files, extracts enhancement proposals, and optionally
     auto-applies high-confidence enhancements.
-    
+
     Args:
         file_path: Path to Copilot chat file or markdown document
         auto_apply: Auto-apply high-confidence enhancements (score ≥9)
         min_confidence: Minimum confidence score (5-10) to process file
-        
+
     Returns:
         Dictionary with digest results:
         - success: bool
@@ -36,7 +39,7 @@ def cortex_digest_session(
         - auto_applied_count: int
         - review_queue_count: int
         - error_message: str (if failed)
-    
+
     Example:
         >>> result = cortex_digest_session("/path/to/chat.md", auto_apply=True)
         >>> print(f"Found {result['enhancements_found']} enhancements")

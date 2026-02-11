@@ -9,8 +9,8 @@ Extracted from comprehensive test specifications into production-grade code.
 
 import json
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Callable
 from enum import Enum
+from typing import Any, Callable, Dict, List, Optional
 
 
 class MCPToolType(Enum):

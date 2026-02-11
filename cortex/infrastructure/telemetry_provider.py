@@ -5,12 +5,13 @@ Provides convenience functions for telemetry initialization and management.
 """
 
 import logging
-from typing import Optional, List
+from typing import List, Optional
+
 from cortex.infrastructure.metrics_exporter import (
-    TelemetryProvider,
-    MetricsExporter,
     ConsoleMetricsExporter,
     MemoryMetricsExporter,
+    MetricsExporter,
+    TelemetryProvider,
 )
 
 logger = logging.getLogger(__name__)
@@ -18,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 class TelemetryConfiguration:
     """Configuration for telemetry setup."""
-    
+
     def __init__(
         self,
         enable_console: bool = True,
@@ -37,34 +38,34 @@ def create_telemetry_provider(
 ) -> TelemetryProvider:
     """
     Create and configure a telemetry provider with standard exporters.
-    
+
     Args:
         config: Optional telemetry configuration
-    
+
     Returns:
         Configured TelemetryProvider instance
     """
     config = config or TelemetryConfiguration()
-    
+
     exporters: List[MetricsExporter] = []
-    
+
     if config.enable_console:
         exporters.append(ConsoleMetricsExporter())
-    
+
     if config.enable_memory:
         exporters.append(MemoryMetricsExporter())
-    
+
     provider = TelemetryProvider(
         exporters=exporters,
         batch_size=config.batch_size,
         use_async=config.use_async
     )
-    
+
     logger.info(
         f"Telemetry provider created with {len(exporters)} exporters "
         f"(batch_size={config.batch_size}, async={config.use_async})"
     )
-    
+
     return provider
 
 

@@ -9,11 +9,12 @@ Every phase completion must:
 """
 
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Tuple
+from datetime import datetime
 from enum import Enum
 from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+
 import yaml
-from datetime import datetime
 
 
 class ValidationLevel(Enum):
@@ -335,24 +336,24 @@ class HolisticReviewValidator:
 
     def _find_phase_orchestrators(self) -> List[str]:
         """Find orchestrators for this phase.
-        
+
         Returns:
             List of orchestrator Python files in phase directory.
         """
         import glob
-        
+
         # Map phase IDs to actual directory names
         phase_dir_mapping = {
             "phase-47": "company_separation",
             "phase-48": "holistic",
         }
-        
+
         dir_name = phase_dir_mapping.get(self.phase_id, self.phase_id.replace("-", "_"))
         phase_dir = Path(self.workspace_root) / "cortex" / "orchestrators" / dir_name
-        
+
         if not phase_dir.exists():
             return []
-        
+
         orchestrator_files = glob.glob(str(phase_dir / "*.py"))
         # Filter out __init__.py and test files
         return [
@@ -363,164 +364,164 @@ class HolisticReviewValidator:
 
     def _check_type_hints(self, files: List[str]) -> bool:
         """Check if files have type hints.
-        
+
         Args:
             files: List of file stems to check.
-            
+
         Returns:
             True if ≥90% of functions have type hints.
         """
         import re
-        
+
         if not files:
             return True
-        
+
         # Map phase IDs to actual directory names
         phase_dir_mapping = {
             "phase-47": "company_separation",
             "phase-48": "holistic",
         }
-        
+
         dir_name = phase_dir_mapping.get(self.phase_id, self.phase_id.replace("-", "_"))
         type_hint_count = 0
         total_functions = 0
-        
+
         for file_stem in files:
             phase_dir = Path(self.workspace_root) / "cortex" / "orchestrators" / dir_name
             file_path = phase_dir / f"{file_stem}.py"
-            
+
             if not file_path.exists():
                 continue
-            
+
             try:
                 with open(file_path, "r") as f:
                     content = f.read()
-                
+
                 # Find function definitions
                 func_pattern = r"def \w+\([^)]*\)\s*->"
                 return_type_funcs = len(re.findall(func_pattern, content))
-                
+
                 # Find all function definitions
                 all_funcs = len(re.findall(r"def \w+\(", content))
-                
+
                 type_hint_count += return_type_funcs
                 total_functions += all_funcs
             except Exception:
                 continue
-        
+
         if total_functions == 0:
             return True
-        
+
         return (type_hint_count / total_functions) >= 0.9
 
     def _check_docstrings(self, files: List[str]) -> bool:
         """Check if files have docstrings.
-        
+
         Args:
             files: List of file stems to check.
-            
+
         Returns:
             True if ≥80% of classes/functions have docstrings.
         """
         import re
-        
+
         if not files:
             return True
-        
+
         # Map phase IDs to actual directory names
         phase_dir_mapping = {
             "phase-47": "company_separation",
             "phase-48": "holistic",
         }
-        
+
         dir_name = phase_dir_mapping.get(self.phase_id, self.phase_id.replace("-", "_"))
         docstring_count = 0
         total_items = 0
-        
+
         for file_stem in files:
             phase_dir = Path(self.workspace_root) / "cortex" / "orchestrators" / dir_name
             file_path = phase_dir / f"{file_stem}.py"
-            
+
             if not file_path.exists():
                 continue
-            
+
             try:
                 with open(file_path, "r") as f:
                     content = f.read()
-                
+
                 # Count docstrings ("""...""" or '''...''')
                 docstrings = len(re.findall(r'""".*?"""', content, re.DOTALL)) + len(
                     re.findall(r"'''.*?'''", content, re.DOTALL)
                 )
-                
+
                 # Count classes and functions
                 classes = len(re.findall(r"class \w+", content))
                 functions = len(re.findall(r"def \w+", content))
-                
+
                 docstring_count += docstrings
                 total_items += classes + functions
             except Exception:
                 continue
-        
+
         if total_items == 0:
             return True
-        
+
         return (docstring_count / total_items) >= 0.8
 
     def _find_phase_tests(self) -> List[str]:
         """Find test files for this phase.
-        
+
         Returns:
             List of test files matching phase pattern.
         """
         import glob
-        
+
         test_dir = Path(self.workspace_root) / "tests"
         phase_pattern = self.phase_id.replace("-", "_")
-        
+
         if not test_dir.exists():
             return []
-        
+
         test_files = glob.glob(str(test_dir / f"test_*{phase_pattern}*.py"))
         return [Path(f).name for f in test_files]
 
     def _calculate_test_coverage(self, test_files: List[str]) -> int:
         """Calculate test coverage percentage.
-        
+
         Args:
             test_files: List of test files.
-            
+
         Returns:
             Estimated coverage percentage (80-100 based on file count).
         """
         if not test_files:
             return 0
-        
+
         # Simple heuristic: more test files = higher coverage
         # Actual coverage would require running coverage tool
         return min(100, 80 + (len(test_files) * 5))
 
     def _verify_tests_pass(self, test_files: List[str]) -> bool:
         """Verify all tests pass.
-        
+
         Args:
             test_files: List of test files.
-            
+
         Returns:
             True if all test files exist (assumes tests pass if run).
         """
         test_dir = Path(self.workspace_root) / "tests"
-        
+
         for test_file in test_files:
             test_path = test_dir / test_file
             if not test_path.exists():
                 return False
-        
+
         return len(test_files) > 0
 
     def _check_wiring_yaml_updated(self) -> bool:
         """Check if wiring.yaml was updated.
-        
+
         Returns:
             True if wiring.yaml exists (doesn't check recent updates).
         """
@@ -529,19 +530,19 @@ class HolisticReviewValidator:
 
     def _check_orchestrator_registration(self) -> bool:
         """Check if orchestrators are registered in MCP.
-        
+
         Returns:
             True if wiring.yaml contains phase references.
         """
         wiring_path = Path(self.workspace_root) / "cortex" / "wiring" / "specifications" / "wiring.yaml"
-        
+
         if not wiring_path.exists():
             return False
-        
+
         try:
             with open(wiring_path, "r") as f:
                 content = f.read()
-            
+
             # Check if phase ID appears in wiring.yaml
             return self.phase_id in content or self.phase_id.replace("-", "_") in content
         except Exception:
@@ -549,160 +550,160 @@ class HolisticReviewValidator:
 
     def _check_index_yaml_updated(self) -> bool:
         """Check if index.yaml synchronized.
-        
+
         Returns:
             True if index.yaml contains phase with status.
         """
         index_path = Path(self.workspace_root) / "cortex-registry" / "_cortex-master" / "index.yaml"
-        
+
         if not index_path.exists():
             return False
-        
+
         try:
             with open(index_path, "r") as f:
                 index_data = yaml.safe_load(f)
-            
+
             if not index_data or "phases" not in index_data:
                 return False
-            
+
             # Check if phase has status field
             for phase in index_data.get("phases", []):
                 if phase.get("id") == self.phase_id:
                     return "status" in phase
-            
+
             return False
         except Exception:
             return False
 
     def _check_audit_trail(self) -> bool:
         """Check for AC markers.
-        
+
         Returns:
             True if AC_START/AC_COMPLETE markers found.
         """
         import glob
-        
+
         # Map phase IDs to actual directory names
         phase_dir_mapping = {
             "phase-47": "company_separation",
             "phase-48": "holistic",
         }
-        
+
         dir_name = phase_dir_mapping.get(self.phase_id, self.phase_id.replace("-", "_"))
         phase_dir = Path(self.workspace_root) / "cortex" / "orchestrators" / dir_name
-        
+
         if not phase_dir.exists():
             return False
-        
+
         for py_file in glob.glob(str(phase_dir / "*.py")):
             try:
                 with open(py_file, "r") as f:
                     content = f.read()
-                
+
                 if "AC_START" in content and "AC_COMPLETE" in content:
                     return True
             except Exception:
                 continue
-        
+
         return False
 
     def _check_core_rules_compliance(self) -> bool:
         """Check CORE rules compliance.
-        
+
         Returns:
             True if no obvious violations found.
         """
         import glob
-        
+
         # Map phase IDs to actual directory names
         phase_dir_mapping = {
             "phase-47": "company_separation",
             "phase-48": "holistic",
         }
-        
+
         dir_name = phase_dir_mapping.get(self.phase_id, self.phase_id.replace("-", "_"))
         phase_dir = Path(self.workspace_root) / "cortex" / "orchestrators" / dir_name
-        
+
         if not phase_dir.exists():
             return True
-        
+
         violations = 0
-        
+
         for py_file in glob.glob(str(phase_dir / "*.py")):
             try:
                 with open(py_file, "r") as f:
                     content = f.read()
-                
+
                 # Check for obvious violations
                 if "except:" in content and "except Exception" not in content:
                     violations += 1  # Bare except (CORE-013)
-                
+
                 if "__pycache__" in content:
                     violations += 1  # Cache reference (should be in .gitignore)
             except Exception:
                 continue
-        
+
         return violations == 0
 
     def _check_code_documentation(self) -> bool:
         """Check code documentation.
-        
+
         Returns:
             True if inline comments present.
         """
         import glob
-        
+
         # Map phase IDs to actual directory names
         phase_dir_mapping = {
             "phase-47": "company_separation",
             "phase-48": "holistic",
         }
-        
+
         dir_name = phase_dir_mapping.get(self.phase_id, self.phase_id.replace("-", "_"))
         phase_dir = Path(self.workspace_root) / "cortex" / "orchestrators" / dir_name
-        
+
         if not phase_dir.exists():
             return True
-        
+
         for py_file in glob.glob(str(phase_dir / "*.py")):
             try:
                 with open(py_file, "r") as f:
                     content = f.read()
-                
+
                 # Check for comments and docstrings
                 if "#" in content or '"""' in content:
                     return True
             except Exception:
                 continue
-        
+
         return False
 
     def _check_architecture_documentation(self) -> bool:
         """Check architecture documentation.
-        
+
         Returns:
             True if architecture docs exist for phase.
         """
         docs_dir = Path(self.workspace_root) / "docs"
         phase_pattern = self.phase_id.replace("-", "_")
-        
+
         # Check for phase-specific documentation
         doc_files = [
             f"phase-{self.phase_id}.md",
             f"phase_{phase_pattern}.md",
             f"{self.phase_id}-completion.md",
         ]
-        
+
         for doc_file in doc_files:
             doc_path = docs_dir / doc_file
             if doc_path.exists():
                 return True
-        
+
         return False
 
     def _extract_wiring_updates(self) -> List[str]:
         """Extract wiring updates made.
-        
+
         Returns:
             List of wiring file paths updated.
         """
@@ -710,7 +711,7 @@ class HolisticReviewValidator:
 
     def _extract_registry_updates(self) -> List[str]:
         """Extract registry updates made.
-        
+
         Returns:
             List of registry file paths updated.
         """

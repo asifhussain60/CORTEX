@@ -36,12 +36,11 @@ import hashlib
 import logging
 import threading
 from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
 from typing import Any, Callable, Dict, List, Optional
-from datetime import datetime
 
 from cortex.models.canonical_enums import OrchestratorComplexityLevel as ComplexityLevel
-
 
 # ============================================================================
 # ENUMS & TYPES
@@ -198,7 +197,7 @@ ROLLBACK_CONFIG = {
 
 class LENSPhase:
     """LENS comprehension phases for rollback context."""
-    
+
     @staticmethod
     def language(context: RollbackContext) -> Dict[str, Any]:
         """Phase 1: Language - Parse rollback requirements."""
@@ -208,30 +207,30 @@ class LENSPhase:
             "strategy": context.strategy.value,
             "affected_count": len(context.affected_components)
         }
-    
+
     @staticmethod
     def examination(parsed: Dict[str, Any]) -> Dict[str, Any]:
         """Phase 2: Examination - Analyze rollback complexity."""
         affected_count: int = parsed.get("affected_count", 0)
-        
+
         return {
             "single_component": affected_count == 1,
             "multi_component": affected_count > 1,
             "complexity_score": min(100, affected_count * 15),
             "requires_cascade": affected_count > 2
         }
-    
+
     @staticmethod
     def navigation(examination: Dict[str, Any]) -> Dict[str, Any]:
         """Phase 3: Navigation - Determine rollback approach."""
         requires_cascade: bool = examination.get("requires_cascade", False)
-        
+
         return {
             "approach": "cascading" if requires_cascade else "direct",
             "verification_required": True,
             "cleanup_required": True
         }
-    
+
     @staticmethod
     def synthesis(navigation: Dict[str, Any]) -> Dict[str, Any]:
         """Phase 4: Synthesis - Create rollback strategy."""
@@ -251,11 +250,11 @@ class RollbackPlanningEngine:
     SUP-CORE-002: Real state reversal analysis with semantic checking.
     Plans and validates rollback operations.
     """
-    
+
     def __init__(self) -> None:
         """Initialize planning engine."""
         self.logger = logging.getLogger(__name__)
-    
+
     def plan_rollback(
         self,
         context: RollbackContext
@@ -268,10 +267,10 @@ class RollbackPlanningEngine:
         lens_phase2 = LENSPhase.examination(lens_phase1)
         lens_phase3 = LENSPhase.navigation(lens_phase2)
         lens_phase4 = LENSPhase.synthesis(lens_phase3)
-        
+
         if not lens_phase4.get("ready_for_rollback", False):
             raise ValueError("LENS analysis indicates rollback not safe")
-        
+
         # Build rollback plan
         phase_sequence: List[RollbackPhase] = [
             RollbackPhase.VALIDATION,
@@ -280,10 +279,10 @@ class RollbackPlanningEngine:
             RollbackPhase.VERIFICATION,
             RollbackPhase.CLEANUP
         ]
-        
+
         # Generate rollback steps
         rollback_steps: List[RollbackStep] = self._generate_rollback_steps(context)
-        
+
         # Build verification steps
         verification_steps: List[str] = [
             "state_consistency_check",
@@ -291,7 +290,7 @@ class RollbackPlanningEngine:
             "dependency_validation",
             "system_stability_check"
         ]
-        
+
         # Build execution plan
         plan = RollbackExecutionPlan(
             rollback_id=context.rollback_id,
@@ -302,26 +301,26 @@ class RollbackPlanningEngine:
             estimated_total_time_ms=self._estimate_rollback_duration(rollback_steps),
             safety_gates=["validation_passed", "state_verified", "rollback_safe"]
         )
-        
+
         return plan
-    
+
     def _generate_rollback_steps(self, context: RollbackContext) -> List[RollbackStep]:
         """Generate individual rollback steps respecting dependencies."""
         steps: List[RollbackStep] = []
-        
+
         # Build dependency graph
         component_deps = context.previous_state.dependencies
-        
+
         # Topological sort to determine rollback order (reverse)
         rollback_order = self._topological_sort_reverse(
             context.affected_components,
             component_deps
         )
-        
+
         # Create rollback step for each component
         for component in rollback_order:
             prev_version = context.previous_state.components.get(component, "unknown")
-            
+
             step = RollbackStep(
                 step_name=f"rollback_{component}",
                 component=component,
@@ -331,9 +330,9 @@ class RollbackPlanningEngine:
                 estimated_duration_ms=5000
             )
             steps.append(step)
-        
+
         return steps
-    
+
     def _topological_sort_reverse(
         self,
         components: List[str],
@@ -342,7 +341,7 @@ class RollbackPlanningEngine:
         """Reverse topological sort for rollback order."""
         # Simple implementation - real one would be more sophisticated
         return list(reversed(components))
-    
+
     def _generate_cleanup_tasks(self, context: RollbackContext) -> List[str]:
         """Generate cleanup tasks after rollback."""
         return [
@@ -351,7 +350,7 @@ class RollbackPlanningEngine:
             "archive_logs",
             "update_system_state"
         ]
-    
+
     def _estimate_rollback_duration(self, steps: List[RollbackStep]) -> int:
         """Estimate total rollback duration in milliseconds."""
         # Real implementation would be more sophisticated
@@ -369,7 +368,7 @@ class CircuitBreaker:
     SUP-CORE-008: Circuit breaker for failure isolation during rollback.
     Prevents cascading rollback failures.
     """
-    
+
     def __init__(self, failure_threshold: int = 2, timeout_seconds: int = 60):
         """Initialize circuit breaker."""
         self.failure_threshold = failure_threshold
@@ -378,7 +377,7 @@ class CircuitBreaker:
         self.last_failure_time: Optional[datetime] = None
         self.state = "CLOSED"  # CLOSED, OPEN, HALF_OPEN
         self.lock = threading.Lock()
-    
+
     def call(self, func: Callable[..., Any], *args: Any, **kwargs: Any) -> Any:
         """Execute function with circuit breaker protection."""
         with self.lock:
@@ -387,7 +386,7 @@ class CircuitBreaker:
                     self.state = "HALF_OPEN"
                 else:
                     raise RuntimeError("Circuit breaker OPEN - rollback halted")
-        
+
         try:
             result: Any = func(*args, **kwargs)
             self._on_success()
@@ -395,27 +394,27 @@ class CircuitBreaker:
         except Exception:
             self._on_failure()
             raise
-    
+
     def _should_attempt_reset(self) -> bool:
         """Check if enough time has passed to attempt reset."""
         if self.last_failure_time is None:
             return False
-        
+
         elapsed = (datetime.now() - self.last_failure_time).total_seconds()
         return elapsed >= self.timeout_seconds
-    
+
     def _on_success(self) -> None:
         """Handle successful execution."""
         with self.lock:
             self.failure_count = 0
             self.state = "CLOSED"
-    
+
     def _on_failure(self) -> None:
         """Handle failed execution."""
         with self.lock:
             self.failure_count += 1
             self.last_failure_time = datetime.now()
-            
+
             if self.failure_count >= self.failure_threshold:
                 self.state = "OPEN"
 
@@ -427,11 +426,11 @@ class CircuitBreaker:
 class RollbackOrchestrator:
     """
     Phase 3.1 Enhanced Rollback Orchestrator.
-    
+
     Implements all 12 AC-fixes for production-grade rollback orchestration
     with safety checks, state management, and verification.
     """
-    
+
     def __init__(self) -> None:
         """Initialize orchestrator."""
         self.logger = logging.getLogger(__name__)
@@ -440,7 +439,7 @@ class RollbackOrchestrator:
         self._rollback_cache: Dict[str, RollbackExecutionPlan] = {}
         self._rollback_history: Dict[str, RollbackResult] = {}
         self.max_cache_size = 500
-    
+
     def plan_rollback(
         self,
         rollback_id: str,
@@ -452,7 +451,7 @@ class RollbackOrchestrator:
     ) -> RollbackExecutionPlan:
         """
         Plan a rollback operation.
-        
+
         Args:
             rollback_id: Unique rollback identifier
             failure_reason: Reason for rollback
@@ -460,10 +459,10 @@ class RollbackOrchestrator:
             strategy: Rollback strategy
             complexity_preference: Complexity level
             affected_components: Components to rollback
-        
+
         Returns:
             RollbackExecutionPlan with detailed instructions
-        
+
         Raises:
             RuntimeError: If circuit breaker is open
             ValueError: If validation fails
@@ -472,7 +471,7 @@ class RollbackOrchestrator:
         cache_key = self._compute_cache_key(rollback_id, previous_state.snapshot_id)
         if cache_key in self._rollback_cache:
             return self._rollback_cache[cache_key]
-        
+
         try:
             # Create rollback context
             context = RollbackContext(
@@ -485,26 +484,26 @@ class RollbackOrchestrator:
                 parallel_rollback=True,
                 verify_after_rollback=True
             )
-            
+
             # SUP-CORE-008: Circuit breaker protection
             plan: RollbackExecutionPlan = self.circuit_breaker.call(
                 self.engine.plan_rollback, context
             )
-            
+
             # SUP-CORE-012: Deployment validation (pre-flight checks)
             plan_valid: bool = self._validate_rollback_plan(plan)
-            
+
             if plan_valid:
                 # SUP-CORE-009: Cache result
                 self._cache_plan(cache_key, plan)
                 return plan
             else:
                 raise ValueError("Rollback plan validation failed")
-            
+
         except Exception as error:
             self.logger.error(f"Rollback planning failed for {rollback_id}: {error}")
             raise
-    
+
     def _validate_rollback_plan(self, plan: RollbackExecutionPlan) -> bool:
         """SUP-CORE-012: Pre-flight validation of rollback plan."""
         checks: List[bool] = [
@@ -513,22 +512,22 @@ class RollbackOrchestrator:
             len(plan.verification_steps) > 0,
             plan.estimated_total_time_ms > 0
         ]
-        
+
         return all(checks)
-    
+
     def _compute_cache_key(self, rollback_id: str, state_id: str) -> str:
         """Compute cache key for rollback."""
         key_str = f"{rollback_id}|{state_id}"
         return hashlib.md5(key_str.encode()).hexdigest()
-    
+
     def _cache_plan(self, cache_key: str, plan: RollbackExecutionPlan) -> None:
         """SUP-CORE-009: Cache rollback plan with size limit."""
         if len(self._rollback_cache) >= self.max_cache_size:
             oldest_key = next(iter(self._rollback_cache))
             del self._rollback_cache[oldest_key]
-        
+
         self._rollback_cache[cache_key] = plan
-    
+
     async def plan_rollback_async(
         self,
         rollback_id: str,
@@ -542,7 +541,7 @@ class RollbackOrchestrator:
             failure_reason,
             previous_state
         )
-    
+
     def get_health_status(self) -> Dict[str, Any]:
         """Get orchestrator health status."""
         return {

@@ -23,19 +23,18 @@ from typing import Optional
 # Add parent directory for imports when run as script
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from cortex.visualization.spa.suite_generator import DashboardSuiteGenerator
 from cortex.visualization.spa.models import (
+    ArchitectureLayer,
+    QualityMetric,
     RepoDashboardData,
     RepoManifestEntry,
     Severity,
-    UseCase,
-    UseCasePersona,
-    UseCaseCategory,
     TestingMetrics,
-    QualityMetric,
-    ArchitectureLayer,
+    UseCase,
+    UseCaseCategory,
+    UseCasePersona,
 )
-
+from cortex.visualization.spa.suite_generator import DashboardSuiteGenerator
 
 logging.basicConfig(
     level=logging.INFO,
@@ -119,7 +118,7 @@ def load_data_from_file(data_path: Path) -> RepoDashboardData:
     """Load dashboard data from JSON file."""
     with open(data_path, "r", encoding="utf-8") as f:
         data_dict = json.load(f)
-    
+
     # Convert use_cases if present
     use_cases = []
     for uc in data_dict.get("use_cases", []):
@@ -135,7 +134,7 @@ def load_data_from_file(data_path: Path) -> RepoDashboardData:
             actions=uc.get("actions", []),
             related_tabs=uc.get("related_tabs", []),
         ))
-    
+
     # Convert architecture layers if present
     architecture = []
     for layer in data_dict.get("architecture", []):
@@ -146,7 +145,7 @@ def load_data_from_file(data_path: Path) -> RepoDashboardData:
             complexity=layer.get("complexity", 0.0),
             dependencies=layer.get("dependencies", []),
         ))
-    
+
     # Convert quality metrics if present
     quality = []
     for metric in data_dict.get("quality", []):
@@ -156,7 +155,7 @@ def load_data_from_file(data_path: Path) -> RepoDashboardData:
             threshold=metric.get("threshold"),
             status=metric.get("status", "ok"),
         ))
-    
+
     # Convert testing metrics if present
     testing_dict = data_dict.get("testing")
     testing = None
@@ -169,7 +168,7 @@ def load_data_from_file(data_path: Path) -> RepoDashboardData:
             risky_files=testing_dict.get("risky_files", []),
             uncovered_files=testing_dict.get("uncovered_files", []),
         )
-    
+
     return RepoDashboardData(
         repo_slug=data_dict["repo_slug"],
         display_name=data_dict.get("display_name", data_dict["repo_slug"]),
@@ -226,18 +225,18 @@ def main() -> int:
         action="store_true",
         help="Enable verbose logging",
     )
-    
+
     args = parser.parse_args()
-    
+
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
-    
+
     repo_slug = args.repo
     repo_name = args.name or repo_slug.replace("-", " ").title()
-    
+
     logger.info(f"Generating dashboard for: {repo_name} ({repo_slug})")
     logger.info(f"Output directory: {args.output}")
-    
+
     # Load or create data
     if args.data and args.data.exists():
         logger.info(f"Loading data from: {args.data}")
@@ -245,7 +244,7 @@ def main() -> int:
     else:
         logger.info("Using sample data (no --data provided)")
         data = create_sample_data(repo_slug, repo_name)
-    
+
     # Create repo entry
     repo = RepoManifestEntry(
         slug=repo_slug,
@@ -262,22 +261,22 @@ def main() -> int:
         version=data.version,
         tags=data.tags,
     )
-    
+
     # Initialize generator
     generator = DashboardSuiteGenerator(output_dir=args.output)
-    
+
     # Generate single dashboard using internal method
     try:
         # Ensure directory structure
         generator._create_directory_structure()
         generator._copy_assets()
-        
+
         # Generate the dashboard
         output_path = generator._generate_repo_dashboard(repo, data)
-        
+
         logger.info(f"✅ Dashboard generated: {output_path}")
         return 0
-        
+
     except Exception as e:
         logger.error(f"❌ Dashboard generation failed: {e}")
         return 1

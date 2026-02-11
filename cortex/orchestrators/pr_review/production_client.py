@@ -8,11 +8,11 @@ Real GitHub API integration with:
 - Production metrics
 """
 
-from dataclasses import dataclass
-from typing import Optional, Dict, Any, List
-from enum import Enum
 import asyncio
 import time
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
 
 class RateLimitStrategy(Enum):
@@ -70,10 +70,10 @@ class RateLimiter:
         """Check if we're within rate limits"""
         if not self.rate_limit_info:
             return True, None
-        
+
         if self.rate_limit_info.remaining <= 0:
             return False, self.rate_limit_info.reset_time - int(time.time())
-        
+
         return True, None
 
     def update_limits(self, limit_info: RateLimitInfo) -> None:
@@ -92,11 +92,11 @@ class RateLimiter:
     async def wait_if_needed(self) -> bool:
         """Wait if rate limited"""
         within_limits, wait_seconds = self.check_limits()
-        
+
         if not within_limits and wait_seconds:
             await asyncio.sleep(wait_seconds)
             return True
-        
+
         return False
 
 
@@ -112,7 +112,7 @@ class RetryStrategy:
         """Determine if request should be retried"""
         if attempt >= self.max_retries:
             return False
-        
+
         # Retry on transient errors
         retryable_errors = [
             ErrorType.RATE_LIMIT,
@@ -120,7 +120,7 @@ class RetryStrategy:
             ErrorType.TIMEOUT,
             ErrorType.SERVER_ERROR
         ]
-        
+
         return error_type in retryable_errors
 
     def get_backoff_time(self, attempt: int) -> float:
@@ -142,7 +142,7 @@ class ConnectionPool:
         if self.active_connections < self.max_connections:
             self.active_connections += 1
             return {"connection_id": self.active_connections}
-        
+
         return None
 
     def release(self, connection: Any) -> bool:
@@ -175,50 +175,50 @@ class ProductionGitHubClient:
     async def fetch_pr(self, owner: str, repo: str, pr_number: int) -> Optional[Dict[str, Any]]:
         """Fetch PR with production safeguards"""
         attempt = 0
-        
+
         while attempt <= self.retry_strategy.max_retries:
             # Get connection
             conn = self.connection_pool.acquire()
             if not conn:
                 await asyncio.sleep(0.5)
                 continue
-            
+
             try:
                 # Check rate limits
                 await self.rate_limiter.wait_if_needed()
-                
+
                 # Simulate API call
                 start_time = time.time()
                 pr_data = await self._call_api(f"repos/{owner}/{repo}/pulls/{pr_number}")
                 response_time = (time.time() - start_time) * 1000
-                
+
                 # Update metrics
                 self.metrics.total_requests += 1
                 self.metrics.successful_requests += 1
                 self.metrics.average_response_time_ms = (
                     (self.metrics.average_response_time_ms + response_time) / 2
                 )
-                
+
                 return pr_data
-            
+
             except Exception as e:
                 attempt += 1
                 error_type = self._classify_error(str(e))
-                
+
                 if error_type not in self.metrics.error_count_by_type:
                     self.metrics.error_count_by_type[error_type] = 0
                 self.metrics.error_count_by_type[error_type] += 1
-                
+
                 if self.retry_strategy.should_retry(error_type, attempt):
                     backoff_time = self.retry_strategy.get_backoff_time(attempt)
                     await asyncio.sleep(backoff_time)
                 else:
                     self.metrics.failed_requests += 1
                     raise
-            
+
             finally:
                 self.connection_pool.release(conn)
-        
+
         self.metrics.failed_requests += 1
         return None
 
@@ -251,7 +251,7 @@ class ProductionGitHubClient:
         """Get client health status"""
         error_rate = self.metrics.failed_requests / max(self.metrics.total_requests, 1)
         is_healthy = error_rate < 0.05  # Less than 5% error rate
-        
+
         return {
             "healthy": is_healthy,
             "error_rate": error_rate,

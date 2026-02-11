@@ -12,18 +12,19 @@ Capabilities:
 - get_circuit_breaker_status: Get circuit breaker status
 """
 
+import logging
+import time
 from typing import Any, Dict, List, Optional
+
 from cortex.mcp.orchestrator_mcp_server import (
-    IOrchestratorAdapter,
     CapabilityMetadata,
     CapabilityResponse,
     ExecutionContext,
+    IOrchestratorAdapter,
 )
 from cortex.orchestrators.domain.enhanced_refactoring_orchestrator import (
     EnhancedRefactoringOrchestrator,
 )
-import logging
-import time
 
 logger = logging.getLogger(__name__)
 
@@ -41,19 +42,19 @@ def _get_orchestrator_from_wiring(name: str) -> Optional[Any]:
 
 class EnhancedRefactoringOrchestratorAdapter(IOrchestratorAdapter):
     """MCP Adapter for EnhancedRefactoringOrchestrator.
-    
+
     Provides unified interface for refactoring operations:
     - Code analysis with LENS-based complexity scoring
     - Refactoring plan generation with confidence metrics
     - Strategy application with security-first approach
     - Pattern caching for performance optimization
-    
+
     CORE-035: Uses wiring system for orchestrator access.
     """
-    
+
     def __init__(self, orchestrator: Optional[EnhancedRefactoringOrchestrator] = None):
         """Initialize adapter with orchestrator from wiring system.
-        
+
         Args:
             orchestrator: Optional pre-configured orchestrator instance
         """
@@ -61,16 +62,16 @@ class EnhancedRefactoringOrchestratorAdapter(IOrchestratorAdapter):
             self.orchestrator = orchestrator
         else:
             self.orchestrator = _get_orchestrator_from_wiring("RefactoringOrchestrator")
-        
+
         if self.orchestrator is None:
             self.orchestrator = EnhancedRefactoringOrchestrator.instance()
-        
+
         self.name = "EnhancedRefactoringOrchestratorAdapter"
         self._start_time = time.time()
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         """Get all exposed capabilities.
-        
+
         Returns:
             List of CapabilityMetadata for each exposed operation
         """
@@ -147,7 +148,7 @@ class EnhancedRefactoringOrchestratorAdapter(IOrchestratorAdapter):
                 tags={"refactoring", "safety"},
             ),
         ]
-    
+
     def execute_capability(
         self,
         capability_name: str,
@@ -155,12 +156,12 @@ class EnhancedRefactoringOrchestratorAdapter(IOrchestratorAdapter):
         context: ExecutionContext,
     ) -> CapabilityResponse:
         """Execute a capability.
-        
+
         Args:
             capability_name: Name of capability to execute
             parameters: Capability parameters
             context: Execution context
-            
+
         Returns:
             CapabilityResponse with results or error
         """
@@ -192,7 +193,7 @@ class EnhancedRefactoringOrchestratorAdapter(IOrchestratorAdapter):
                     orchestrator="refactoring",
                     duration_ms=(time.time() - start) * 1000,
                 )
-            
+
             # Convert Result to CapabilityResponse
             if result.is_ok():
                 return CapabilityResponse(
@@ -210,7 +211,7 @@ class EnhancedRefactoringOrchestratorAdapter(IOrchestratorAdapter):
                     orchestrator="refactoring",
                     duration_ms=(time.time() - start) * 1000,
                 )
-        
+
         except Exception as e:
             logger.error(f"Capability execution failed: {e}", exc_info=True)
             return CapabilityResponse(
@@ -219,10 +220,10 @@ class EnhancedRefactoringOrchestratorAdapter(IOrchestratorAdapter):
                 result={"error": f"Execution error: {str(e)}"},
                 orchestrator="refactoring",
             )
-    
+
     def is_healthy(self) -> bool:
         """Check if orchestrator is healthy.
-        
+
         Returns:
             True if orchestrator is operational
         """
@@ -230,24 +231,24 @@ class EnhancedRefactoringOrchestratorAdapter(IOrchestratorAdapter):
             # Check if orchestrator is initialized
             if self.orchestrator is None:
                 return False
-            
+
             # Try to get name (lightweight health check)
             name = self.orchestrator.get_name()
             return name is not None and len(name) > 0
-        
+
         except Exception as e:
             logger.error(f"Health check failed: {e}")
             return False
-    
+
     def get_status(self) -> Dict[str, Any]:
         """Get orchestrator status.
-        
+
         Returns:
             Status dictionary with health and metrics
         """
         try:
             uptime_seconds = time.time() - self._start_time
-            
+
             return {
                 "name": self.orchestrator.get_name(),
                 "version": self.orchestrator.get_version(),
@@ -256,7 +257,7 @@ class EnhancedRefactoringOrchestratorAdapter(IOrchestratorAdapter):
                 "uptime_seconds": uptime_seconds,
                 "capabilities": len(self.get_capabilities()),
             }
-        
+
         except Exception as e:
             logger.error(f"Status check failed: {e}")
             return {

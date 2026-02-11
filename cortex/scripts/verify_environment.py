@@ -20,12 +20,11 @@ Usage:
 """
 
 import json
-import sys
 import subprocess
+import sys
+from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Dict, List, Any, Tuple
-from dataclasses import dataclass, asdict
-
+from typing import Any, Dict, List, Tuple
 
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 
@@ -117,7 +116,7 @@ class EnvironmentVerifier:
             self.add_result(
                 "Core Dependencies",
                 True,
-                f"All 5 core packages installed"
+                "All 5 core packages installed"
             )
         else:
             self.add_result(

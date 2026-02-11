@@ -4,12 +4,14 @@ Authority: Phase 52 S4
 AC_START: AC-PHASE52-S4-001
 """
 
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any, Union
 import re
-from cortex.brain.core.result import Ok, Err
-from cortex.orchestrators.core.orchestrator_base_protocol import OrchestratorBaseProtocol
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional, Union
 
+from cortex.brain.core.result import Err, Ok
+from cortex.orchestrators.core.orchestrator_base_protocol import (
+    OrchestratorBaseProtocol,
+)
 
 # ============================================================================
 # DATA MODELS
@@ -84,47 +86,47 @@ class MigrationExecutionEngine(OrchestratorBaseProtocol):
         try:
             new_code = code
             changes = []
-            
+
             if language == "python" and source_version == "2.7":
                 # Python 2 to 3 transformations
-                
+
                 # Transform print statements
                 if 'print "' in code or "print '" in code:
                     # Simple print transformation
                     new_code = re.sub(r'print\s+"([^"]*)"', r'print("\1")', new_code)
                     new_code = re.sub(r"print\s+'([^']*)'", r"print('\1')", new_code)
                     changes.append("Converted print statements to Python 3 function")
-                
+
                 # Transform .iteritems() to .items()
                 if '.iteritems()' in code:
                     new_code = new_code.replace('.iteritems()', '.items()')
                     changes.append("Converted .iteritems() to .items()")
-                
+
                 # Transform .iterkeys() to .keys()
                 if '.iterkeys()' in code:
                     new_code = new_code.replace('.iterkeys()', '.keys()')
                     changes.append("Converted .iterkeys() to .keys()")
-                
+
                 # Transform xrange to range
                 if 'xrange' in code:
                     new_code = new_code.replace('xrange', 'range')
                     changes.append("Converted xrange to range")
-            
+
             elif language == "javascript" and source_version == "es5":
                 # ES5 to ES6+ transformations
-                
+
                 # Transform var to const/let
                 if 'var ' in code:
                     new_code = re.sub(r'\bvar\b', 'const', new_code)
                     changes.append("Converted var declarations to const")
-            
+
             transformed = TransformedCode(
                 old_code=code,
                 new_code=new_code,
                 changes_made=changes,
                 transformation_notes="Code transformation completed successfully",
             )
-            
+
             return Ok(value=transformed)
         except Exception as e:
             return Err(error=f"Code transformation failed: {str(e)}")
@@ -138,14 +140,14 @@ class MigrationExecutionEngine(OrchestratorBaseProtocol):
         try:
             # Simple regex-based rename (in production, would use AST)
             new_code = re.sub(rf'\b{old_name}\b', new_name, code)
-            
+
             transformed = TransformedCode(
                 old_code=code,
                 new_code=new_code,
                 changes_made=[f"Renamed {old_name} to {new_name}"],
                 behavior_preserved=True,
             )
-            
+
             return Ok(value=transformed)
         except Exception as e:
             return Err(error=f"Rename failed: {str(e)}")
@@ -155,15 +157,15 @@ class MigrationExecutionEngine(OrchestratorBaseProtocol):
         try:
             lines = code.split('\n')
             extracted = '\n'.join(lines[start_line-1:end_line])
-            
+
             new_code = f"def {method_name}():\n    {extracted}\n\n" + code
-            
+
             transformed = TransformedCode(
                 old_code=code,
                 new_code=new_code,
                 changes_made=[f"Extracted lines {start_line}-{end_line} into {method_name}()"],
             )
-            
+
             return Ok(value=transformed)
         except Exception as e:
             return Err(error=f"Method extraction failed: {str(e)}")
@@ -173,13 +175,13 @@ class MigrationExecutionEngine(OrchestratorBaseProtocol):
         try:
             # Simple inline (in production, would use AST)
             new_code = code.replace(f"{method_name}(", "inlined_")
-            
+
             transformed = TransformedCode(
                 old_code=code,
                 new_code=new_code,
                 changes_made=[f"Inlined calls to {method_name}"],
             )
-            
+
             return Ok(value=transformed)
         except Exception as e:
             return Err(error=f"Method inlining failed: {str(e)}")
@@ -192,7 +194,7 @@ class MigrationExecutionEngine(OrchestratorBaseProtocol):
                 if result.is_ok():
                     transformed = result.unwrap()
                     return Ok(value=transformed)
-            
+
             return Err(error=f"Refactoring type {refactoring_type} not supported")
         except Exception as e:
             return Err(error=f"Safe refactor failed: {str(e)}")
@@ -202,13 +204,13 @@ class MigrationExecutionEngine(OrchestratorBaseProtocol):
         try:
             # Count occurrences
             occurrences = code.count(target)
-            
+
             impact = {
                 "affected_locations": [target] * occurrences,
                 "impact_score": float(occurrences) / len(code.split()),
                 "risk_level": "low" if occurrences < 5 else "medium",
             }
-            
+
             return Ok(value=impact)
         except Exception as e:
             return Err(error=f"Impact analysis failed: {str(e)}")
@@ -221,12 +223,12 @@ class MigrationExecutionEngine(OrchestratorBaseProtocol):
         """Generate tests for transformed code"""
         try:
             tests = []
-            
+
             # Extract function name
-            func_match = re.search(rf'def\s+(\w+)\s*\(', new_code)
+            func_match = re.search(r'def\s+(\w+)\s*\(', new_code)
             if func_match:
                 func_name = func_match.group(1)
-                
+
                 # Generate basic test
                 test_code = f"""
 def test_{func_name}_basic():
@@ -238,7 +240,7 @@ def test_{func_name}_basic():
                     test_type="unit",
                     coverage_target=func_name,
                 ))
-            
+
             return Ok(value=tests)
         except Exception as e:
             return Err(error=f"Test generation failed: {str(e)}")
@@ -247,7 +249,7 @@ def test_{func_name}_basic():
         """Generate edge case tests"""
         try:
             tests = []
-            
+
             # Generate edge case test
             test_code = """
 def test_edge_case_zero():
@@ -259,7 +261,7 @@ def test_edge_case_zero():
                 test_type="edge_case",
                 coverage_target="edge_case",
             ))
-            
+
             return Ok(value=tests)
         except Exception as e:
             return Err(error=f"Edge case test generation failed: {str(e)}")
@@ -268,7 +270,7 @@ def test_edge_case_zero():
         """Generate integration tests"""
         try:
             tests = []
-            
+
             for component, func in components.items():
                 test_code = f"""
 def test_{component}_integration():
@@ -281,7 +283,7 @@ def test_{component}_integration():
                     test_type="integration",
                     coverage_target=component,
                 ))
-            
+
             return Ok(value=tests)
         except Exception as e:
             return Err(error=f"Integration test generation failed: {str(e)}")
@@ -294,7 +296,7 @@ def test_{component}_integration():
                 "total_tests": len(test_cases),
                 "passed_tests": len(test_cases),
             }
-            
+
             return Ok(value=coverage)
         except Exception as e:
             return Err(error=f"Coverage calculation failed: {str(e)}")
@@ -307,20 +309,20 @@ def test_{component}_integration():
         """Generate side-by-side comparison"""
         try:
             diff_lines = []
-            
+
             old_lines = old_code.split('\n')
             new_lines = new_code.split('\n')
-            
+
             for i, (old, new) in enumerate(zip(old_lines, new_lines)):
                 if old != new:
                     diff_lines.append(f"Line {i+1}: '{old}' -> '{new}'")
-            
+
             comparison = ComparisonResult(
                 diff_lines=diff_lines,
                 breaking_changes=[],
                 compatibility_score=0.95,
             )
-            
+
             return Ok(value=comparison)
         except Exception as e:
             return Err(error=f"Comparison generation failed: {str(e)}")
@@ -329,12 +331,12 @@ def test_{component}_integration():
         """Identify breaking changes"""
         try:
             changes = []
-            
+
             # Simple heuristic: if return type changes, it's breaking
             if 'return' in old_code and 'return' in new_code:
                 if old_code.count('return') != new_code.count('return'):
                     changes.append("Return statement count changed")
-            
+
             return Ok(value=changes)
         except Exception as e:
             return Err(error=f"Breaking change identification failed: {str(e)}")
@@ -354,7 +356,7 @@ Key Changes:
 
 Please review the transformed code and run tests before deploying.
 """
-            
+
             return Ok(value=guide)
         except Exception as e:
             return Err(error=f"Migration guide generation failed: {str(e)}")
@@ -375,9 +377,9 @@ Please review the transformed code and run tests before deploying.
         """Generate feature flag configuration"""
         try:
             flags = [{"name": f, "enabled": False, "percentage": 0} for f in features]
-            
+
             config = FeatureFlagConfig(flags=flags, default_enabled=False)
-            
+
             return Ok(value=config)
         except Exception as e:
             return Err(error=f"Feature flag generation failed: {str(e)}")
@@ -386,7 +388,7 @@ Please review the transformed code and run tests before deploying.
         """Create gradual rollout plan"""
         try:
             phases = []
-            
+
             for day, config in rollout.items():
                 phase = RolloutPhase(
                     phase_name=day,
@@ -395,7 +397,7 @@ Please review the transformed code and run tests before deploying.
                     monitoring_criteria=["error_rate", "latency"],
                 )
                 phases.append(phase)
-            
+
             return Ok(value=type('RolloutPlan', (), {'phases': phases})())
         except Exception as e:
             return Err(error=f"Rollout plan creation failed: {str(e)}")
@@ -407,7 +409,7 @@ Please review the transformed code and run tests before deploying.
                 "metrics": metrics,
                 "alert_thresholds": {m: 0.1 for m in metrics},
             }
-            
+
             return Ok(value=config)
         except Exception as e:
             return Err(error=f"Monitoring config generation failed: {str(e)}")
@@ -423,18 +425,18 @@ Please review the transformed code and run tests before deploying.
             language = context.get("source_language", "python")
             source_version = context.get("source_version", "2.7")
             target_version = context.get("target_version", "3.11")
-            
+
             # Step 1: Transform code
             transform_result = self.transform_code(code, language, source_version, target_version)
             if transform_result.is_err():
                 return transform_result
-            
+
             transformed = transform_result.unwrap()
-            
+
             # Step 2: Generate tests
             tests_result = self.generate_tests(code, transformed.new_code, language)
             tests = tests_result.unwrap() if tests_result.is_ok() else []
-            
+
             # Step 3: Create execution result
             result = ExecutionResult(
                 success=True,
@@ -442,7 +444,7 @@ Please review the transformed code and run tests before deploying.
                 tests_generated=len(tests),
                 validation_passed=True,
             )
-            
+
             return Ok(value=result)
         except Exception as e:
             return Err(error=f"Migration execution failed: {str(e)}")
@@ -457,7 +459,7 @@ Please review the transformed code and run tests before deploying.
         """
         try:
             operation = context.get("operation", "execute_migration")
-            
+
             if operation == "execute_migration":
                 return self.execute_migration(context)
             elif operation == "transform":

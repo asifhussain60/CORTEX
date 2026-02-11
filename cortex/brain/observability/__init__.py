@@ -9,34 +9,32 @@ Comprehensive observability stack for CORTEX runtime:
 - Enhanced audit trail (Phase 13 AC-OB-003-01)
 """
 
-from cortex.brain.observability.health_monitor import (
-    HealthMonitor,
-    HealthCheck,
-    HealthCheckResult,
-    HealthStatus,
-    DatabaseHealthCheck,
-    MemoryHealthCheck,
-    CPUHealthCheck,
-    get_health_monitor,
-)
-
 from cortex.brain.core.observability.performance_profiler import (
-    PerformanceProfiler,
-    PerformanceMetric,
-    PerformanceStats,
-    PerformanceLevel,
     Bottleneck,
     OptimizationRecommendation,
+    PerformanceLevel,
+    PerformanceMetric,
+    PerformanceProfiler,
+    PerformanceStats,
     get_performance_profiler,
 )
-
 from cortex.brain.observability.audit_trail import (
-    AuditTrail,
     AuditEvent,
     AuditEventType,
     AuditSeverity,
+    AuditTrail,
     RetentionPolicy,
     get_audit_trail,
+)
+from cortex.brain.observability.health_monitor import (
+    CPUHealthCheck,
+    DatabaseHealthCheck,
+    HealthCheck,
+    HealthCheckResult,
+    HealthMonitor,
+    HealthStatus,
+    MemoryHealthCheck,
+    get_health_monitor,
 )
 
 __all__ = [

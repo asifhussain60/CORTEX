@@ -7,10 +7,10 @@ specific authorization rules.
 Author: CORTEX Framework
 """
 
-from typing import Dict, List, Optional, Set, Any
-from enum import Enum
 from dataclasses import dataclass, field
 from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional, Set
 
 
 class ToolCategory(str, Enum):
@@ -41,7 +41,7 @@ class ComplianceMode(str, Enum):
 @dataclass
 class ToolGovernancePolicy:
     """Governance policy for an MCP tool.
-    
+
     Attributes:
         tool_id: Unique tool identifier
         tool_name: Human-readable tool name
@@ -70,7 +70,7 @@ class ToolGovernancePolicy:
 
 class ToolGovernanceManager:
     """Manages governance policies and compliance for all MCP tools.
-    
+
     Provides:
     - Tool authorization checking
     - Rate limiting per tool
@@ -78,19 +78,19 @@ class ToolGovernanceManager:
     - Compliance validation
     - Category-based access control
     """
-    
+
     def __init__(self):
         """Initialize governance manager."""
         self._policies: Dict[str, ToolGovernancePolicy] = {}
         self._call_counts: Dict[str, int] = {}  # Per-minute tracking
         self._last_reset: Dict[str, datetime] = {}
-        
+
     def register_policy(self, policy: ToolGovernancePolicy) -> None:
         """Register governance policy for a tool.
-        
+
         Args:
             policy: ToolGovernancePolicy for the tool
-            
+
         Raises:
             ValueError: If policy already registered
         """
@@ -99,18 +99,18 @@ class ToolGovernanceManager:
         self._policies[policy.tool_id] = policy
         self._call_counts[policy.tool_id] = 0
         self._last_reset[policy.tool_id] = datetime.now()
-    
+
     def get_policy(self, tool_id: str) -> Optional[ToolGovernancePolicy]:
         """Get governance policy for a tool.
-        
+
         Args:
             tool_id: Tool identifier
-            
+
         Returns:
             ToolGovernancePolicy if registered, None otherwise
         """
         return self._policies.get(tool_id)
-    
+
     def can_access(
         self,
         tool_id: str,
@@ -118,80 +118,80 @@ class ToolGovernanceManager:
         context: Optional[Dict[str, Any]] = None,
     ) -> tuple[bool, Optional[str]]:
         """Check if tool access is authorized.
-        
+
         Args:
             tool_id: Tool identifier
             user_role: User's role (None = unauthenticated)
             context: Execution context
-            
+
         Returns:
             Tuple of (authorized: bool, reason: str if denied)
         """
         policy = self.get_policy(tool_id)
         if not policy:
             return False, f"Tool {tool_id} has no governance policy"
-        
+
         # Check authorization level
         if policy.auth_level == AuthLevel.SYSTEM and user_role != "system":
             return False, f"Tool {tool_id} requires SYSTEM authorization"
-        
+
         if policy.auth_level == AuthLevel.PRIVILEGED and user_role not in ["admin", "system"]:
             return False, f"Tool {tool_id} requires PRIVILEGED authorization"
-        
+
         if policy.auth_level == AuthLevel.AUTHENTICATED and not user_role:
             return False, f"Tool {tool_id} requires AUTHENTICATED user"
-        
+
         # Check role-based access
         if policy.allowed_roles and user_role not in policy.allowed_roles:
             return False, f"User role {user_role} not in allowed_roles"
-        
+
         # Check context requirement
         if policy.requires_context and not context:
             return False, f"Tool {tool_id} requires execution context"
-        
+
         return True, None
-    
+
     def check_rate_limit(self, tool_id: str) -> tuple[bool, Optional[str]]:
         """Check rate limit for tool.
-        
+
         Args:
             tool_id: Tool identifier
-            
+
         Returns:
             Tuple of (allowed: bool, reason: str if denied)
         """
         policy = self.get_policy(tool_id)
         if not policy or not policy.rate_limit:
             return True, None
-        
+
         now = datetime.now()
         if (now - self._last_reset[tool_id]).total_seconds() > 60:
             self._call_counts[tool_id] = 0
             self._last_reset[tool_id] = now
-        
+
         if self._call_counts[tool_id] >= policy.rate_limit:
             return False, f"Rate limit exceeded for {tool_id}"
-        
+
         self._call_counts[tool_id] += 1
         return True, None
-    
+
     def list_tools_by_category(self, category: ToolCategory) -> List[ToolGovernancePolicy]:
         """List all tools in a category.
-        
+
         Args:
             category: Tool category to filter by
-            
+
         Returns:
             List of policies matching category
         """
         return [p for p in self._policies.values() if p.category == category]
-    
+
     def get_tools_for_role(self, user_role: str) -> List[ToolGovernancePolicy]:
         """Get tools accessible by a specific role.
-        
+
         Args:
             user_role: User role to check
-            
+
         Returns:
             List of accessible tools
         """
@@ -214,7 +214,7 @@ _governance_manager: Optional[ToolGovernanceManager] = None
 
 def get_governance_manager() -> ToolGovernanceManager:
     """Get or create global governance manager.
-    
+
     Returns:
         ToolGovernanceManager instance
     """

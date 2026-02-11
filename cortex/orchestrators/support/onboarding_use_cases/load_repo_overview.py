@@ -6,12 +6,12 @@ Description: Extract basic repository metadata
 Authority: phase-54-A-incremental-onboarding-refactor.yaml, S1 task 1
 """
 
-from pathlib import Path
-from typing import Dict, Any, Optional
 from dataclasses import dataclass
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, Optional
 
-from cortex.brain.core.result import Result, Ok, Err
+from cortex.brain.core.result import Err, Ok, Result
 
 
 @dataclass
@@ -30,18 +30,18 @@ class RepoOverview:
 
 class LoadRepoOverviewUseCase:
     """Extract basic repository metadata (SOLID: Single Responsibility)."""
-    
+
     def __init__(self) -> None:
         """Initialize use case."""
         self.logger = None  # Optional logging
-    
+
     def execute(self, repo_path: Path) -> Result[RepoOverview]:
         """
         Extract repository overview.
-        
+
         Args:
             repo_path: Path to repository
-            
+
         Returns:
             Result containing RepoOverview or error
         """
@@ -49,21 +49,21 @@ class LoadRepoOverviewUseCase:
             # Ensure path is a Path object
             if isinstance(repo_path, str):
                 repo_path = Path(repo_path)
-            
+
             # Check existence first
             if not repo_path.exists():
                 return Err(f"Repository not found: {repo_path}")
-            
+
             if not repo_path.is_dir():
                 return Err(f"Path is not a directory: {repo_path}")
-            
+
             # Extract basic metadata
             name = repo_path.name
             file_count = self._count_files(repo_path)
             language_dist = self._detect_languages(repo_path)
             has_tests, test_framework = self._detect_tests(repo_path)
             has_docs, doc_format = self._detect_docs(repo_path)
-            
+
             overview = RepoOverview(
                 name=name,
                 path=str(repo_path),
@@ -75,19 +75,19 @@ class LoadRepoOverviewUseCase:
                 doc_format=doc_format,
                 created_at=datetime.now(),
             )
-            
+
             return Ok(overview)
-        
+
         except Exception as e:
             return Err(f"Failed to load repository overview: {str(e)}")
-    
+
     def _count_files(self, repo_path: Path) -> int:
         """Count total files in repository."""
         try:
             return sum(1 for _ in repo_path.rglob("*") if _.is_file())
         except Exception:
             return 0
-    
+
     def _detect_languages(self, repo_path: Path) -> Dict[str, int]:
         """Detect programming languages."""
         extensions = {}
@@ -100,7 +100,7 @@ class LoadRepoOverviewUseCase:
         except Exception:
             pass
         return extensions
-    
+
     def _detect_tests(self, repo_path: Path) -> tuple[bool, Optional[str]]:
         """Detect test framework."""
         test_indicators = {
@@ -109,7 +109,7 @@ class LoadRepoOverviewUseCase:
             "jest": ["jest.config.js", "__tests__/"],
             "mocha": ["mocha.opts", "test/"],
         }
-        
+
         for framework, patterns in test_indicators.items():
             for pattern in patterns:
                 try:
@@ -121,9 +121,9 @@ class LoadRepoOverviewUseCase:
                             return (True, framework)
                 except Exception:
                     pass
-        
+
         return (False, None)
-    
+
     def _detect_docs(self, repo_path: Path) -> tuple[bool, Optional[str]]:
         """Detect documentation."""
         if (repo_path / "docs").exists():

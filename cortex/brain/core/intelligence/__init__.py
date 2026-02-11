@@ -12,64 +12,64 @@ Part of PHASE-07: Holistic Intent Router Intelligence.
 
 from cortex.brain.core.intelligence.ast_intelligence import (
     ASTIntelligenceEngine,
-    ParseResult,
-    FunctionInfo,
     ClassInfo,
     ConstantInfo,
+    FunctionInfo,
     Parameter,
+    ParseResult,
+)
+from cortex.brain.core.intelligence.author_context import (
+    Author,
+    AuthorContextBuilder,
+    AuthorContribution,
 )
 from cortex.brain.core.intelligence.call_graph import (
-    CallGraphBuilder,
-    CallGraph,
     CallEdge,
-)
-from cortex.brain.core.intelligence.pattern_detector import (
-    PatternDetector,
-    DetectedPattern,
-)
-from cortex.brain.core.intelligence.dependency_mapper import (
-    DependencyMapper,
-    DependencyMap,
-    ImportInfo,
-)
-from cortex.lens.analyzers.git_history_analyzer import (
-    GitHistoryAnalyzer,
-    CommitInfo,
-    RenameInfo,
+    CallGraph,
+    CallGraphBuilder,
 )
 from cortex.brain.core.intelligence.change_frequency import (
     ChangeFrequencyMapper,
     HotSpot,
 )
-from cortex.brain.core.intelligence.author_context import (
-    AuthorContextBuilder,
-    Author,
-    AuthorContribution,
-)
 from cortex.brain.core.intelligence.comment_analyzer import (
-    CommentAnalyzer,
-    CommentAnalysisResult,
-    ParsedDocstring,
-    InlineComment,
-    TechDebtItem,
-    QualityIssue,
-    CommentIndex,
     ArgInfo,
+    CommentAnalysisResult,
+    CommentAnalyzer,
+    CommentIndex,
+    InlineComment,
+    ParsedDocstring,
+    QualityIssue,
     RaisesInfo,
+    TechDebtItem,
+)
+from cortex.brain.core.intelligence.dependency_mapper import (
+    DependencyMap,
+    DependencyMapper,
+    ImportInfo,
+)
+from cortex.brain.core.intelligence.pattern_detector import (
+    DetectedPattern,
+    PatternDetector,
 )
 from cortex.brain.core.intelligence.relationship_traversal import (
-    RelationshipEngine,
-    RelationshipAnalysisResult,
     APIEndpoint,
-    DatabaseModel,
-    EnvReference,
     ConfigReference,
-    FileDependency,
+    DatabaseModel,
     DependencyGraph,
-    ModelGraph,
-    ImpactAnalysis,
+    EnvReference,
+    FileDependency,
     ForeignKeyRef,
+    ImpactAnalysis,
+    ModelGraph,
     ModelRelationship,
+    RelationshipAnalysisResult,
+    RelationshipEngine,
+)
+from cortex.lens.analyzers.git_history_analyzer import (
+    CommitInfo,
+    GitHistoryAnalyzer,
+    RenameInfo,
 )
 
 __all__ = [

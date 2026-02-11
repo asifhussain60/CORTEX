@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Verification script for CORTEX adoption (AC-UNIFIED-DEPLOY-002-02)."""
 
+import json
 import os
 import sys
-import json
 from pathlib import Path
-from typing import Tuple, List
+from typing import List, Tuple
 
 
 class CORTEXVerifier:

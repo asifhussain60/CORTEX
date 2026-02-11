@@ -6,9 +6,9 @@ Provides JSON Schema export and compatibility checking.
 
 """
 
-from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional, Set
 import json
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional, Set
 
 
 @dataclass
@@ -23,37 +23,37 @@ class SchemaValidationResult:
 class KnowledgeBaseSchema:
     """
     Knowledge base schema for tier-2 templates.
-    
+
     Defines the structure, validation rules, and compatibility
     requirements for template content.
     """
-    
+
     SCHEMA_VERSION = "1.0"
-    
+
     # Required metadata fields
     REQUIRED_METADATA_FIELDS = {'template_id', 'version', 'domain'}
-    
+
     # Optional metadata fields
     OPTIONAL_METADATA_FIELDS = {
-        'created_at', 'author', 'description', 'tier', 
+        'created_at', 'author', 'description', 'tier',
         'category', 'tags', 'inherits_from'
     }
-    
+
     # Section types
     SECTION_TYPES = {'header', 'body', 'footer', 'custom'}
-    
+
     # Variable types
     VARIABLE_TYPES = {'string', 'int', 'float', 'bool', 'list', 'object', 'any'}
-    
+
     def __init__(self):
         """Initialize knowledge base schema."""
         self._schema = self._build_schema()
-    
+
     @property
     def schema_version(self) -> str:
         """Get schema version."""
         return self.SCHEMA_VERSION
-    
+
     def _build_schema(self) -> Dict[str, Any]:
         """Build the complete schema definition."""
         return {
@@ -103,11 +103,11 @@ class KnowledgeBaseSchema:
                 }
             }
         }
-    
+
     def get_template_structure(self) -> Dict[str, Any]:
         """
         Get template structure schema.
-        
+
         Returns:
             Structure schema definition
         """
@@ -126,11 +126,11 @@ class KnowledgeBaseSchema:
                 'required': False,
             }
         }
-    
+
     def get_metadata_schema(self) -> Dict[str, Any]:
         """
         Get metadata schema definition.
-        
+
         Returns:
             Metadata schema
         """
@@ -139,20 +139,20 @@ class KnowledgeBaseSchema:
             'optional': list(self.OPTIONAL_METADATA_FIELDS),
             'properties': self._schema['properties']['metadata']['properties'],
         }
-    
+
     def get_section_types(self) -> Set[str]:
         """
         Get supported section types.
-        
+
         Returns:
             Set of section type names
         """
         return self.SECTION_TYPES.copy()
-    
+
     def get_inheritance_rules(self) -> Dict[str, Any]:
         """
         Get template inheritance rules.
-        
+
         Returns:
             Inheritance rules definition
         """
@@ -165,11 +165,11 @@ class KnowledgeBaseSchema:
             },
             'inheritance_depth': 3,  # Maximum inheritance depth
         }
-    
+
     def get_variable_schema(self) -> Dict[str, Any]:
         """
         Get variable schema definition.
-        
+
         Returns:
             Variable schema
         """
@@ -180,40 +180,40 @@ class KnowledgeBaseSchema:
             'default_type': 'string',
             'required_indicator': '*',  # {*required_var}
         }
-    
+
     def validate(self, template: Dict[str, Any]) -> SchemaValidationResult:
         """
         Validate template against schema.
-        
+
         Args:
             template: Template dictionary to validate
-            
+
         Returns:
             Validation result
         """
         errors = []
         warnings = []
-        
+
         # Check required top-level keys
         if 'metadata' not in template:
             errors.append("Missing required key: metadata")
         if 'template' not in template:
             errors.append("Missing required key: template")
-        
+
         if errors:
             return SchemaValidationResult(valid=False, errors=errors)
-        
+
         # Validate metadata
         metadata = template.get('metadata', {})
         for field in self.REQUIRED_METADATA_FIELDS:
             if field not in metadata:
                 errors.append(f"Missing required metadata field: {field}")
-        
+
         # Validate template_id format
         template_id = metadata.get('template_id', '')
         if template_id and not all(c.islower() or c.isdigit() or c == '-' for c in template_id):
             errors.append(f"Invalid template_id format: {template_id}")
-        
+
         # Validate template structure
         template_def = template.get('template', {})
         if 'structure' not in template_def:
@@ -226,40 +226,40 @@ class KnowledgeBaseSchema:
                 for i, section in enumerate(structure):
                     if 'section' not in section:
                         errors.append(f"Section {i} missing required key: section")
-        
+
         return SchemaValidationResult(
             valid=len(errors) == 0,
             errors=errors,
             warnings=warnings,
         )
-    
+
     def to_json_schema(self) -> Dict[str, Any]:
         """
         Export as JSON Schema.
-        
+
         Returns:
             JSON Schema dictionary
         """
         return self._schema.copy()
-    
+
     def is_compatible(self, version: str) -> bool:
         """
         Check if version is compatible with current schema.
-        
+
         Args:
             version: Version string to check
-            
+
         Returns:
             True if compatible
         """
         try:
             major, minor = version.split('.')[:2]
             current_major, current_minor = self.SCHEMA_VERSION.split('.')[:2]
-            
+
             # Major version must match
             if int(major) != int(current_major):
                 return False
-            
+
             # Minor version must be <= current
             return int(minor) <= int(current_minor)
         except (ValueError, IndexError):

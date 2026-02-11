@@ -21,14 +21,15 @@ Date: 2026-02-07
 """
 
 from dataclasses import dataclass
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List, Optional
+
 from cortex.brain.core.yaml_loaders import load_response_format
 
 
 @dataclass
 class StageResult:
     """Result of a completed stage."""
-    
+
     stage_number: int
     stage_name: str
     files_created: List[str]
@@ -40,7 +41,7 @@ class StageResult:
 @dataclass
 class SessionMetrics:
     """Metrics for the session."""
-    
+
     token_used_k: int
     token_total_k: int
     implementation_time_minutes: int
@@ -53,10 +54,10 @@ class SessionMetrics:
 def get_token_status(percentage: float) -> str:
     """
     Get token budget status indicator.
-    
+
     Args:
         percentage: Token usage percentage (0-100)
-        
+
     Returns:
         Status string with appropriate messaging
     """
@@ -86,7 +87,7 @@ def format_session_summary(
 ) -> str:
     """
     Generate formatted session summary using SESSION_SUMMARY template.
-    
+
     Args:
         session_title: Session identifier (e.g., "Phase 38 Stages 1-3")
         completed_stages: List of completed stage results
@@ -94,10 +95,10 @@ def format_session_summary(
         metrics: Session metrics including token budget
         governance_notes: Optional list of governance/audit notes
         next_command: Command to continue work
-        
+
     Returns:
         Formatted session summary (markdown string for chat output)
-        
+
     Example:
         >>> stages = [
         ...     StageResult(1, "Brain Health Monitor", ["file1.py", "file2.py"], "16/16", 25),
@@ -109,7 +110,7 @@ def format_session_summary(
     # Calculate token percentage
     token_percentage = (metrics.token_used_k / metrics.token_total_k) * 100
     token_status = get_token_status(token_percentage)
-    
+
     lines = [
         f"## 🎯 Session Summary: {session_title}",
         "",
@@ -118,20 +119,20 @@ def format_session_summary(
         "| Stage | Name | Status | Tests | Duration |",
         "|-------|------|--------|-------|----------|",
     ]
-    
+
     # Add completed stages
     for stage in completed_stages:
         lines.append(
             f"| {stage.stage_number} | {stage.stage_name} | {stage.status} | "
             f"{stage.tests_passing} | {stage.duration_minutes}m |"
         )
-    
+
     lines.extend([
         "",
         "### 📦 Completed Stages & Deliverables",
         "",
     ])
-    
+
     for stage in completed_stages:
         lines.append(f"**Stage {stage.stage_number}: {stage.stage_name}**")
         lines.append("- **Files:**")
@@ -140,7 +141,7 @@ def format_session_summary(
         lines.append(f"- **Tests:** {stage.tests_passing} passing")
         lines.append(f"- **Duration:** {stage.duration_minutes} minutes")
         lines.append("")
-    
+
     # Remaining stages
     if remaining_stages:
         lines.extend([
@@ -149,15 +150,15 @@ def format_session_summary(
             "| Stage | Name | Tests | Estimate | Priority |",
             "|-------|------|-------|----------|----------|",
         ])
-        
+
         for stage_info in remaining_stages:
             lines.append(
                 f"| {stage_info['number']} | {stage_info['name']} | "
                 f"{stage_info['tests']} | {stage_info['estimate']} | {stage_info['priority']} |"
             )
-        
+
         lines.append("")
-    
+
     # CRITICAL: Token budget FIRST in final metrics
     lines.extend([
         "### 📊 Final Metrics",
@@ -173,21 +174,21 @@ def format_session_summary(
         f"- ✅ Docstrings: {metrics.docstring_coverage}",
         "",
     ])
-    
+
     if metrics.next_stage_preview:
         lines.append(f"**Next Stage Preview:** {metrics.next_stage_preview}")
         lines.append("")
-    
+
     # Next session commands
     lines.extend([
         "### 🚀 Next Session Commands",
         "",
-        f"```bash",
+        "```bash",
         f"{next_command}",
-        f"```",
+        "```",
         "",
     ])
-    
+
     # Governance notes
     if governance_notes:
         lines.extend([
@@ -197,14 +198,14 @@ def format_session_summary(
         for note in governance_notes:
             lines.append(f"- {note}")
         lines.append("")
-    
+
     lines.extend([
         "---",
         "",
         f"*Session complete. Token budget: {token_percentage:.0f}% used. "
         f"{'Continue in this session.' if token_percentage < 85 else 'Consider continuation checkpoint.'}*",
     ])
-    
+
     return "\n".join(lines)
 
 
@@ -217,19 +218,19 @@ def generate_continuation_checkpoint(
 ) -> str:
     """
     Generate continuation checkpoint when token budget >85%.
-    
+
     Args:
         session_id: Session identifier (e.g., "Phase 38 Stage 4")
         last_completed: Last completed item
         next_action: Next action to take
         token_percentage: Current token usage percentage
         branch: Git branch name
-        
+
     Returns:
         Continuation checkpoint prompt (<400 tokens)
     """
     status = "⚠️ High" if token_percentage < 95 else "🔴 Critical"
-    
+
     return f"""---
 
 ### 🔄 Continuation Checkpoint Required

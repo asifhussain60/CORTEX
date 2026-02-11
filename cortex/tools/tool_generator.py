@@ -13,10 +13,10 @@ Works with ParsedTemplate from template_parser.
 
 import re
 from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum, auto
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Callable
-from datetime import datetime
+from typing import Any, Callable, Dict, List, Optional, Set
 
 from cortex.tools.template_parser import ParsedTemplate, TemplateSection
 
@@ -43,13 +43,13 @@ class GenerationConfig:
     style_guide: str = "pep8"
     type_hints: bool = True
     docstrings: bool = True
-    
+
     # Template customization
     class_prefix: str = ""
     class_suffix: str = ""
     function_prefix: str = ""
     function_suffix: str = ""
-    
+
     # Output options
     overwrite: bool = False
     dry_run: bool = False
@@ -65,7 +65,7 @@ class GeneratedTool:
     template_source: str
     generated_at: datetime = field(default_factory=datetime.now)
     dependencies: List[str] = field(default_factory=list)
-    
+
     def write(self, base_dir: Optional[Path] = None) -> Path:
         """Write the generated tool to disk."""
         output_path = base_dir / self.path if base_dir else self.path
@@ -81,16 +81,16 @@ class GenerationResult:
     tools: List[GeneratedTool] = field(default_factory=list)
     errors: List[str] = field(default_factory=list)
     warnings: List[str] = field(default_factory=list)
-    
+
     def add_tool(self, tool: GeneratedTool) -> None:
         """Add a generated tool."""
         self.tools.append(tool)
-    
+
     def add_error(self, message: str) -> None:
         """Add an error message."""
         self.errors.append(message)
         self.success = False
-    
+
     def add_warning(self, message: str) -> None:
         """Add a warning message."""
         self.warnings.append(message)
@@ -99,13 +99,13 @@ class GenerationResult:
 class ToolGenerator:
     """
     Generator for orchestrator tooling.
-    
+
     Takes ParsedTemplate objects and generates various tools:
     - CLI commands for orchestrator invocation
     - API clients for programmatic access
     - Test harnesses for validation
     - Documentation for users
-    
+
     Example:
         generator = ToolGenerator()
         config = GenerationConfig(tool_type=ToolType.CLI_COMMAND)
@@ -113,7 +113,7 @@ class ToolGenerator:
         for tool in result.tools:
             tool.write(Path("output"))
     """
-    
+
     def __init__(self):
         """Initialize the generator."""
         self._generators: Dict[ToolType, Callable] = {
@@ -125,47 +125,47 @@ class ToolGenerator:
             ToolType.MOCK_SERVICE: self._generate_mock_service,
             ToolType.INTEGRATION_ADAPTER: self._generate_integration_adapter,
         }
-    
+
     def generate(self, template: ParsedTemplate, config: GenerationConfig) -> GenerationResult:
         """
         Generate tools from a template.
-        
+
         Args:
             template: ParsedTemplate to generate from
             config: Generation configuration
-            
+
         Returns:
             GenerationResult with generated tools
         """
         result = GenerationResult(success=True)
-        
+
         generator = self._generators.get(config.tool_type)
         if not generator:
             result.add_error(f"Unknown tool type: {config.tool_type}")
             return result
-        
+
         try:
             tools = generator(template, config)
             for tool in tools:
                 result.add_tool(tool)
         except Exception as e:
             result.add_error(f"Generation failed: {str(e)}")
-        
+
         return result
-    
+
     def generate_all(self, template: ParsedTemplate, output_dir: Path) -> GenerationResult:
         """
         Generate all available tools from a template.
-        
+
         Args:
             template: ParsedTemplate to generate from
             output_dir: Directory for output files
-            
+
         Returns:
             GenerationResult with all generated tools
         """
         result = GenerationResult(success=True)
-        
+
         for tool_type in ToolType:
             config = GenerationConfig(
                 tool_type=tool_type,
@@ -177,19 +177,19 @@ class ToolGenerator:
             result.warnings.extend(sub_result.warnings)
             if not sub_result.success:
                 result.success = False
-        
+
         return result
-    
+
     def _generate_cli(self, template: ParsedTemplate, config: GenerationConfig) -> List[GeneratedTool]:
         """Generate CLI command for orchestrator."""
         tools = []
-        
+
         class_name = self._to_class_name(template.name) + "CLI"
         module_name = self._to_module_name(template.name) + "_cli"
-        
+
         # Get parameters for CLI arguments
         params = self._get_parameters(template)
-        
+
         # Generate CLI code
         cli_code = self._render_cli_template(
             class_name=class_name,
@@ -199,7 +199,7 @@ class ToolGenerator:
             description=template.description,
             config=config,
         )
-        
+
         tool = GeneratedTool(
             name=class_name,
             tool_type=ToolType.CLI_COMMAND,
@@ -209,18 +209,18 @@ class ToolGenerator:
             dependencies=['click', 'typing'],
         )
         tools.append(tool)
-        
+
         return tools
-    
+
     def _generate_api_client(self, template: ParsedTemplate, config: GenerationConfig) -> List[GeneratedTool]:
         """Generate API client for orchestrator."""
         tools = []
-        
+
         class_name = self._to_class_name(template.name) + "Client"
         module_name = self._to_module_name(template.name) + "_client"
-        
+
         params = self._get_parameters(template)
-        
+
         client_code = self._render_api_client_template(
             class_name=class_name,
             template_name=template.name,
@@ -229,7 +229,7 @@ class ToolGenerator:
             description=template.description,
             config=config,
         )
-        
+
         tool = GeneratedTool(
             name=class_name,
             tool_type=ToolType.API_CLIENT,
@@ -239,20 +239,20 @@ class ToolGenerator:
             dependencies=['httpx', 'typing', 'dataclasses'],
         )
         tools.append(tool)
-        
+
         return tools
-    
+
     def _generate_test_harness(self, template: ParsedTemplate, config: GenerationConfig) -> List[GeneratedTool]:
         """Generate test harness for orchestrator."""
         tools = []
-        
+
         class_name = f"Test{self._to_class_name(template.name)}"
         module_name = f"test_{self._to_module_name(template.name)}"
-        
+
         params = self._get_parameters(template)
         stages = self._get_stages(template)
         hooks = self._get_hooks(template)
-        
+
         test_code = self._render_test_harness_template(
             class_name=class_name,
             template_name=template.name,
@@ -263,7 +263,7 @@ class ToolGenerator:
             description=template.description,
             config=config,
         )
-        
+
         tool = GeneratedTool(
             name=class_name,
             tool_type=ToolType.TEST_HARNESS,
@@ -273,19 +273,19 @@ class ToolGenerator:
             dependencies=['pytest', 'unittest.mock'],
         )
         tools.append(tool)
-        
+
         return tools
-    
+
     def _generate_documentation(self, template: ParsedTemplate, config: GenerationConfig) -> List[GeneratedTool]:
         """Generate documentation for orchestrator."""
         tools = []
-        
+
         doc_name = self._to_module_name(template.name)
-        
+
         params = self._get_parameters(template)
         stages = self._get_stages(template)
         hooks = self._get_hooks(template)
-        
+
         doc_content = self._render_documentation_template(
             template_name=template.name,
             template_domain=template.domain,
@@ -295,7 +295,7 @@ class ToolGenerator:
             description=template.description,
             version=template.version,
         )
-        
+
         # CORE-002 COMPLIANCE: No docs/ markdown generation
         # Documentation generated inline only
         tool = GeneratedTool(
@@ -307,25 +307,25 @@ class ToolGenerator:
             dependencies=[],
         )
         tools.append(tool)
-        
+
         return tools
-    
+
     def _generate_config_validator(self, template: ParsedTemplate, config: GenerationConfig) -> List[GeneratedTool]:
         """Generate configuration validator."""
         tools = []
-        
+
         class_name = self._to_class_name(template.name) + "ConfigValidator"
         module_name = self._to_module_name(template.name) + "_validator"
-        
+
         params = self._get_parameters(template)
-        
+
         validator_code = self._render_config_validator_template(
             class_name=class_name,
             template_name=template.name,
             parameters=params,
             config=config,
         )
-        
+
         tool = GeneratedTool(
             name=class_name,
             tool_type=ToolType.CONFIG_VALIDATOR,
@@ -335,25 +335,25 @@ class ToolGenerator:
             dependencies=['pydantic', 'typing'],
         )
         tools.append(tool)
-        
+
         return tools
-    
+
     def _generate_mock_service(self, template: ParsedTemplate, config: GenerationConfig) -> List[GeneratedTool]:
         """Generate mock service for testing."""
         tools = []
-        
+
         class_name = f"Mock{self._to_class_name(template.name)}Service"
         module_name = f"mock_{self._to_module_name(template.name)}"
-        
+
         stages = self._get_stages(template)
-        
+
         mock_code = self._render_mock_service_template(
             class_name=class_name,
             template_name=template.name,
             stages=stages,
             config=config,
         )
-        
+
         tool = GeneratedTool(
             name=class_name,
             tool_type=ToolType.MOCK_SERVICE,
@@ -363,25 +363,25 @@ class ToolGenerator:
             dependencies=['unittest.mock', 'typing'],
         )
         tools.append(tool)
-        
+
         return tools
-    
+
     def _generate_integration_adapter(self, template: ParsedTemplate, config: GenerationConfig) -> List[GeneratedTool]:
         """Generate integration adapter."""
         tools = []
-        
+
         class_name = self._to_class_name(template.name) + "Adapter"
         module_name = self._to_module_name(template.name) + "_adapter"
-        
+
         integrations = self._get_integrations(template)
-        
+
         adapter_code = self._render_integration_adapter_template(
             class_name=class_name,
             template_name=template.name,
             integrations=integrations,
             config=config,
         )
-        
+
         tool = GeneratedTool(
             name=class_name,
             tool_type=ToolType.INTEGRATION_ADAPTER,
@@ -391,17 +391,17 @@ class ToolGenerator:
             dependencies=['typing', 'abc'],
         )
         tools.append(tool)
-        
+
         return tools
-    
+
     # Helper methods
-    
+
     def _to_class_name(self, name: str) -> str:
         """Convert name to PascalCase class name."""
         # Remove special characters and split on separators
         parts = re.split(r'[-_\s]+', name)
         return ''.join(part.capitalize() for part in parts)
-    
+
     def _to_module_name(self, name: str) -> str:
         """Convert name to snake_case module name."""
         # Convert to lowercase and replace separators
@@ -409,7 +409,7 @@ class ToolGenerator:
         # Handle camelCase
         name = re.sub(r'([a-z])([A-Z])', r'\1_\2', name).lower()
         return name
-    
+
     def _get_parameters(self, template: ParsedTemplate) -> List[Dict[str, Any]]:
         """Extract parameter definitions from template."""
         params = []
@@ -433,30 +433,30 @@ class ToolGenerator:
                         'description': '',
                     })
         return params
-    
+
     def _get_stages(self, template: ParsedTemplate) -> List[Dict[str, Any]]:
         """Extract stage definitions from template."""
         stages_section = template.get_section('stages')
         if stages_section:
             return stages_section.content.get('stages', [])
         return []
-    
+
     def _get_hooks(self, template: ParsedTemplate) -> Dict[str, Any]:
         """Extract hook definitions from template."""
         hooks_section = template.get_section('hooks')
         if hooks_section:
             return hooks_section.content
         return {}
-    
+
     def _get_integrations(self, template: ParsedTemplate) -> Dict[str, Any]:
         """Extract integration definitions from template."""
         integrations_section = template.get_section('integrations')
         if integrations_section:
             return integrations_section.content
         return {}
-    
+
     # Template rendering methods
-    
+
     def _render_cli_template(
         self,
         class_name: str,
@@ -475,16 +475,16 @@ class ToolGenerator:
             required = param['required']
             default = param.get('default')
             help_text = param.get('description', '')
-            
+
             if required:
                 options.append(f"@click.option('--{opt_name}', type={opt_type}, required=True, help='{help_text}')")
             else:
                 default_str = f"'{default}'" if isinstance(default, str) else str(default)
                 options.append(f"@click.option('--{opt_name}', type={opt_type}, default={default_str}, help='{help_text}')")
-        
+
         options_str = '\n'.join(options)
         param_args = ', '.join(param['name'] for param in parameters)
-        
+
         return f'''"""
 CLI Command for {template_name}
 Generated from template: {template_name}
@@ -506,13 +506,13 @@ def {self._to_module_name(template_name)}_command({param_args}):
     config = {{
         {', '.join(f"'{p['name']}': {p['name']}" for p in parameters)}
     }}
-    
+
     # Execute orchestrator
     from cortex.orchestrators.factory import create_orchestrator
-    
+
     orchestrator = create_orchestrator('{template_domain}')
     result = orchestrator.execute(config)
-    
+
     # Output result
     click.echo(f"Execution completed: {{result.status}}")
     if result.output:
@@ -521,10 +521,10 @@ def {self._to_module_name(template_name)}_command({param_args}):
 
 class {class_name}:
     """CLI wrapper for {template_name}."""
-    
+
     def __init__(self):
         self.command = {self._to_module_name(template_name)}_command
-    
+
     def invoke(self, **kwargs) -> Any:
         """Invoke the CLI command programmatically."""
         from click.testing import CliRunner
@@ -536,7 +536,7 @@ class {class_name}:
 if __name__ == '__main__':
     {self._to_module_name(template_name)}_command()
 '''
-    
+
     def _render_api_client_template(
         self,
         class_name: str,
@@ -561,9 +561,9 @@ if __name__ == '__main__':
             else:
                 default_str = ""
             fields.append(f"    {param['name']}: {py_type}{default_str}")
-        
+
         fields_str = '\n'.join(fields)
-        
+
         return f'''"""
 API Client for {template_name}
 Generated from template: {template_name}
@@ -581,7 +581,7 @@ import httpx
 class {class_name}Request:
     """Request parameters for {template_name}."""
 {fields_str}
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary, excluding None values."""
         return {{k: v for k, v in asdict(self).items() if v is not None}}
@@ -600,15 +600,15 @@ class {class_name}Response:
 class {class_name}:
     """
     API Client for {template_name}.
-    
+
     {description}
-    
+
     Example:
         client = {class_name}(base_url="http://localhost:8000")
         request = {class_name}Request(...)
         response = client.execute(request)
     """
-    
+
     def __init__(
         self,
         base_url: str = "http://localhost:8000",
@@ -619,7 +619,7 @@ class {class_name}:
         self.timeout = timeout
         self.api_key = api_key
         self._client: Optional[httpx.Client] = None
-    
+
     @property
     def client(self) -> httpx.Client:
         """Get or create HTTP client."""
@@ -633,14 +633,14 @@ class {class_name}:
                 headers=headers,
             )
         return self._client
-    
+
     def execute(self, request: {class_name}Request) -> {class_name}Response:
         """
         Execute the {template_name} orchestrator.
-        
+
         Args:
             request: Request parameters
-            
+
         Returns:
             {class_name}Response with execution results
         """
@@ -663,7 +663,7 @@ class {class_name}:
                 status="error",
                 error=str(e),
             )
-    
+
     async def execute_async(self, request: {class_name}Request) -> {class_name}Response:
         """Execute asynchronously."""
         async with httpx.AsyncClient(
@@ -689,20 +689,20 @@ class {class_name}:
                     status="error",
                     error=str(e),
                 )
-    
+
     def close(self) -> None:
         """Close the client connection."""
         if self._client:
             self._client.close()
             self._client = None
-    
+
     def __enter__(self):
         return self
-    
+
     def __exit__(self, *args):
         self.close()
 '''
-    
+
     def _render_test_harness_template(
         self,
         class_name: str,
@@ -733,9 +733,9 @@ class {class_name}:
             else:
                 value = repr(value)
             fixtures.append(f"    '{param['name']}': {value},")
-        
+
         fixtures_str = '\n'.join(fixtures)
-        
+
         # Generate stage tests
         stage_tests = []
         for i, stage in enumerate(stages):
@@ -748,12 +748,12 @@ class {class_name}:
         result = orchestrator.execute_stage('{stage_name}', sample_input)
         assert result is not None
         assert result.status in ['completed', 'success']''')
-        
+
         stage_tests_str = '\n'.join(stage_tests) if stage_tests else '''
     def test_stages_placeholder(self, orchestrator, sample_input):
         """Placeholder for stage tests when no stages defined."""
         pass'''
-        
+
         # Generate hook tests
         hook_tests = []
         for hook_name in hooks.keys():
@@ -766,9 +766,9 @@ class {class_name}:
         orchestrator.register_hook('{hook_name}', hook_mock)
         orchestrator.execute(sample_input)
         hook_mock.assert_called()''')
-        
+
         hook_tests_str = '\n'.join(hook_tests) if hook_tests else ''
-        
+
         return f'''"""
 Test Harness for {template_name}
 Generated from template: {template_name}
@@ -784,43 +784,43 @@ from typing import Any, Dict
 
 class {class_name}:
     """Test harness for {template_name} orchestrator."""
-    
+
     @pytest.fixture
     def orchestrator(self):
         """Create orchestrator instance for testing."""
         from cortex.orchestrators.factory import create_orchestrator
         return create_orchestrator('{template_domain}')
-    
+
     @pytest.fixture
     def sample_input(self) -> Dict[str, Any]:
         """Sample input parameters for testing."""
         return {{
 {fixtures_str}
         }}
-    
+
     @pytest.fixture
     def mock_context(self):
         """Mock execution context."""
         return MagicMock()
-    
+
     # Basic Tests
-    
+
     def test_orchestrator_creation(self, orchestrator):
         """Test orchestrator can be created."""
         assert orchestrator is not None
         assert orchestrator.domain == '{template_domain}'
-    
+
     def test_basic_execution(self, orchestrator, sample_input):
         """Test basic orchestrator execution."""
         result = orchestrator.execute(sample_input)
         assert result is not None
         assert hasattr(result, 'status')
-    
+
     def test_with_missing_required_params(self, orchestrator):
         """Test execution with missing required parameters."""
         with pytest.raises((ValueError, TypeError)):
             orchestrator.execute({{}})
-    
+
     def test_with_invalid_params(self, orchestrator):
         """Test execution with invalid parameters."""
         invalid_input = {{'invalid_param': 'invalid_value'}}
@@ -830,28 +830,28 @@ class {class_name}:
             assert result.status in ['error', 'failed', 'invalid']
         except (ValueError, TypeError):
             pass  # Expected behavior
-    
+
     # Stage Tests
     {stage_tests_str}
-    
+
     # Hook Tests
     {hook_tests_str}
-    
+
     # Integration Tests
-    
+
     def test_end_to_end_execution(self, orchestrator, sample_input):
         """Test complete end-to-end execution."""
         result = orchestrator.execute(sample_input)
         assert result is not None
         assert result.status in ['completed', 'success']
-    
+
     def test_execution_with_context(self, orchestrator, sample_input, mock_context):
         """Test execution with custom context."""
         result = orchestrator.execute(sample_input, context=mock_context)
         assert result is not None
-    
+
     # Error Handling Tests
-    
+
     def test_error_recovery(self, orchestrator, sample_input):
         """Test error recovery mechanisms."""
         with patch.object(orchestrator, '_execute_stage', side_effect=Exception("Test error")):
@@ -860,15 +860,15 @@ class {class_name}:
                 assert result.status in ['error', 'failed', 'recovered']
             except Exception:
                 pass  # Error propagation is also valid
-    
+
     def test_timeout_handling(self, orchestrator, sample_input):
         """Test timeout handling."""
         import time
-        
+
         def slow_stage(*args, **kwargs):
             time.sleep(0.1)
             return {{'status': 'completed'}}
-        
+
         with patch.object(orchestrator, '_execute_stage', side_effect=slow_stage):
             # Should complete or timeout gracefully
             try:
@@ -896,7 +896,7 @@ def test_{self._to_module_name(template_name)}_basic():
     result = orchestrator.execute(sample_input)
     assert result is not None
 '''
-    
+
     def _render_documentation_template(
         self,
         template_name: str,
@@ -916,26 +916,26 @@ def test_{self._to_module_name(template_name)}_basic():
             default = param.get('default', '-')
             desc = param.get('description', '-')
             params_table += f"| `{param['name']}` | {param['type']} | {required} | {default} | {desc} |\n"
-        
+
         # Generate stages list
         stages_list = ""
         for i, stage in enumerate(stages, 1):
             stage_name = stage.get('name', f'Stage {i}')
             stage_desc = stage.get('description', 'No description')
             stages_list += f"{i}. **{stage_name}**: {stage_desc}\n"
-        
+
         if not stages_list:
             stages_list = "No stages defined in template.\n"
-        
+
         # Generate hooks list
         hooks_list = ""
         for hook_name, hook_config in hooks.items():
             hook_desc = hook_config.get('description', 'No description') if isinstance(hook_config, dict) else 'No description'
             hooks_list += f"- `{hook_name}`: {hook_desc}\n"
-        
+
         if not hooks_list:
             hooks_list = "No hooks defined in template.\n"
-        
+
         return f'''# {template_name}
 
 > Domain: {template_domain} | Version: {version}
@@ -1036,7 +1036,7 @@ orchestrator:
 
 *Generated from template: {template_name} v{version}*
 '''
-    
+
     def _render_config_validator_template(
         self,
         class_name: str,
@@ -1058,15 +1058,15 @@ orchestrator:
                 default_str = " = None"
             else:
                 default_str = " = ..."
-            
+
             desc = param.get('description', '')
             if desc:
                 fields.append(f"    {param['name']}: {py_type}{default_str}  # {desc}")
             else:
                 fields.append(f"    {param['name']}: {py_type}{default_str}")
-        
+
         fields_str = '\n'.join(fields)
-        
+
         return f'''"""
 Configuration Validator for {template_name}
 """
@@ -1078,23 +1078,23 @@ from pydantic import BaseModel, validator, root_validator
 class {class_name}(BaseModel):
     """
     Configuration validator for {template_name}.
-    
+
     Validates input parameters against the template schema.
     """
-    
+
 {fields_str}
-    
+
     class Config:
         """Pydantic configuration."""
         extra = 'forbid'  # Reject unknown fields
         validate_assignment = True
-    
+
     @root_validator
     def validate_all(cls, values: Dict[str, Any]) -> Dict[str, Any]:
         """Validate all values together."""
         # Add cross-field validation logic here
         return values
-    
+
     def to_execution_config(self) -> Dict[str, Any]:
         """Convert to execution configuration dict."""
         return self.dict(exclude_none=True)
@@ -1103,13 +1103,13 @@ class {class_name}(BaseModel):
 def validate_config(config: Dict[str, Any]) -> {class_name}:
     """
     Validate a configuration dictionary.
-    
+
     Args:
         config: Configuration to validate
-        
+
     Returns:
         Validated {class_name} instance
-        
+
     Raises:
         ValidationError: If validation fails
     """
@@ -1119,10 +1119,10 @@ def validate_config(config: Dict[str, Any]) -> {class_name}:
 def is_valid_config(config: Dict[str, Any]) -> bool:
     """
     Check if configuration is valid without raising.
-    
+
     Args:
         config: Configuration to check
-        
+
     Returns:
         True if valid, False otherwise
     """
@@ -1136,10 +1136,10 @@ def is_valid_config(config: Dict[str, Any]) -> bool:
 def get_validation_errors(config: Dict[str, Any]) -> List[str]:
     """
     Get validation errors for a configuration.
-    
+
     Args:
         config: Configuration to validate
-        
+
     Returns:
         List of error messages
     """
@@ -1151,7 +1151,7 @@ def get_validation_errors(config: Dict[str, Any]) -> List[str]:
             return [err['msg'] for err in e.errors()]
         return [str(e)]
 '''
-    
+
     def _render_mock_service_template(
         self,
         class_name: str,
@@ -1170,9 +1170,9 @@ def get_validation_errors(config: Dict[str, Any]) -> List[str]:
         """Mock implementation of {stage_name} stage."""
         self._call_log.append(('{stage_name}', args, kwargs))
         return self._stage_responses.get('{stage_name}', {{'status': 'mocked'}})''')
-        
+
         stage_mocks_str = '\n'.join(stage_mocks)
-        
+
         return f'''"""
 Mock Service for {template_name}
 """
@@ -1184,69 +1184,69 @@ from unittest.mock import MagicMock
 class {class_name}:
     """
     Mock service for {template_name} testing.
-    
+
     Provides configurable mock responses and call logging.
-    
+
     Example:
         mock = {class_name}()
         mock.set_response('stage_1', {{'result': 'test'}})
         result = mock.execute({{'input': 'test'}})
     """
-    
+
     def __init__(self):
         self._call_log: List[Tuple[str, tuple, dict]] = []
         self._stage_responses: Dict[str, Any] = {{}}
         self._error_stages: set = set()
         self._side_effects: Dict[str, Callable] = {{}}
-    
+
     @property
     def call_log(self) -> List[Tuple[str, tuple, dict]]:
         """Get log of all calls made."""
         return self._call_log.copy()
-    
+
     @property
     def call_count(self) -> int:
         """Get total number of calls."""
         return len(self._call_log)
-    
+
     def set_response(self, stage: str, response: Any) -> None:
         """Set mock response for a stage."""
         self._stage_responses[stage] = response
-    
+
     def set_error(self, stage: str, error: Optional[Exception] = None) -> None:
         """Configure a stage to raise an error."""
         self._error_stages.add(stage)
         if error:
             self._side_effects[stage] = lambda: (_ for _ in ()).throw(error)
-    
+
     def set_side_effect(self, stage: str, effect: Callable) -> None:
         """Set a side effect function for a stage."""
         self._side_effects[stage] = effect
-    
+
     def reset(self) -> None:
         """Reset all mock state."""
         self._call_log.clear()
         self._stage_responses.clear()
         self._error_stages.clear()
         self._side_effects.clear()
-    
+
     def execute(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """Execute mock orchestration."""
         self._call_log.append(('execute', (input_data,), {{}}))
-        
+
         if 'execute' in self._error_stages:
             raise RuntimeError("Mock execution error")
-        
+
         return {{
             'status': 'completed',
             'output': self._stage_responses.get('execute', {{'mocked': True}}),
             'stages_executed': list(self._stage_responses.keys()),
         }}
-    
+
     def get_calls_for_stage(self, stage: str) -> List[Tuple[tuple, dict]]:
         """Get all calls for a specific stage."""
         return [(args, kwargs) for name, args, kwargs in self._call_log if name == stage]
-    
+
     def assert_stage_called(self, stage: str, times: Optional[int] = None) -> None:
         """Assert a stage was called."""
         calls = self.get_calls_for_stage(stage)
@@ -1254,7 +1254,7 @@ class {class_name}:
             assert len(calls) == times, f"Stage '{{stage}}' called {{len(calls)}} times, expected {{times}}"
         else:
             assert len(calls) > 0, f"Stage '{{stage}}' was not called"
-    
+
     def assert_stage_called_with(self, stage: str, **kwargs) -> None:
         """Assert a stage was called with specific kwargs."""
         calls = self.get_calls_for_stage(stage)
@@ -1263,7 +1263,7 @@ class {class_name}:
                 return
         raise AssertionError(f"Stage '{{stage}}' not called with {{kwargs}}")
     {stage_mocks_str}
-    
+
     def create_mock_orchestrator(self) -> MagicMock:
         """Create a MagicMock configured as an orchestrator."""
         mock = MagicMock()
@@ -1271,7 +1271,7 @@ class {class_name}:
         mock.domain = '{template_name}'
         return mock
 '''
-    
+
     def _render_integration_adapter_template(
         self,
         class_name: str,
@@ -1291,16 +1291,16 @@ class {class_name}:
         config.update(kwargs)
         # Implementation depends on integration type
         return self._create_connection('{name}', config)
-    
+
     def disconnect_{safe_name}(self) -> None:
         """Disconnect from {name} integration."""
         if '{name}' in self._connections:
             conn = self._connections.pop('{name}')
             if hasattr(conn, 'close'):
                 conn.close()''')
-        
+
         adapter_methods_str = '\n'.join(adapter_methods)
-        
+
         return f'''"""
 Integration Adapter for {template_name}
 """
@@ -1311,17 +1311,17 @@ from typing import Any, Dict, Optional
 
 class IntegrationAdapterBase(ABC):
     """Base class for integration adapters."""
-    
+
     @abstractmethod
     def connect(self, name: str, **kwargs) -> Any:
         """Connect to an integration."""
         pass
-    
+
     @abstractmethod
     def disconnect(self, name: str) -> None:
         """Disconnect from an integration."""
         pass
-    
+
     @abstractmethod
     def is_connected(self, name: str) -> bool:
         """Check if connected to an integration."""
@@ -1331,45 +1331,45 @@ class IntegrationAdapterBase(ABC):
 class {class_name}(IntegrationAdapterBase):
     """
     Integration adapter for {template_name}.
-    
+
     Manages connections to external services and tools.
-    
+
     Example:
         adapter = {class_name}()
         adapter.connect('database', host='localhost')
         result = adapter.query('database', 'SELECT * FROM table')
         adapter.disconnect('database')
     """
-    
+
     def __init__(self, integrations: Optional[Dict[str, Any]] = None):
         self._integrations = integrations or {{}}
         self._connections: Dict[str, Any] = {{}}
-    
+
     def connect(self, name: str, **kwargs) -> Any:
         """
         Connect to an integration.
-        
+
         Args:
             name: Integration name
             **kwargs: Connection parameters
-            
+
         Returns:
             Connection object
         """
         if name in self._connections:
             return self._connections[name]
-        
+
         config = self._integrations.get(name, {{}})
         config.update(kwargs)
-        
+
         conn = self._create_connection(name, config)
         self._connections[name] = conn
         return conn
-    
+
     def disconnect(self, name: str) -> None:
         """
         Disconnect from an integration.
-        
+
         Args:
             name: Integration name
         """
@@ -1377,41 +1377,41 @@ class {class_name}(IntegrationAdapterBase):
             conn = self._connections.pop(name)
             if hasattr(conn, 'close'):
                 conn.close()
-    
+
     def is_connected(self, name: str) -> bool:
         """
         Check if connected to an integration.
-        
+
         Args:
             name: Integration name
-            
+
         Returns:
             True if connected
         """
         return name in self._connections
-    
+
     def get_connection(self, name: str) -> Optional[Any]:
         """Get an existing connection."""
         return self._connections.get(name)
-    
+
     def _create_connection(self, name: str, config: Dict[str, Any]) -> Any:
         """Create a connection based on configuration."""
         # Override in subclass for specific connection logic
         return {{'name': name, 'config': config, 'connected': True}}
-    
+
     def disconnect_all(self) -> None:
         """Disconnect from all integrations."""
         for name in list(self._connections.keys()):
             self.disconnect(name)
     {adapter_methods_str}
-    
+
     def __enter__(self):
         return self
-    
+
     def __exit__(self, *args):
         self.disconnect_all()
 '''
-    
+
     def _python_type_to_click(self, type_str: str) -> str:
         """Convert Python type to Click type."""
         type_map = {
@@ -1425,7 +1425,7 @@ class {class_name}(IntegrationAdapterBase):
             'boolean': 'bool',
         }
         return type_map.get(type_str.lower(), 'str')
-    
+
     def _yaml_type_to_python(self, type_str: str) -> str:
         """Convert YAML type to Python type."""
         type_map = {

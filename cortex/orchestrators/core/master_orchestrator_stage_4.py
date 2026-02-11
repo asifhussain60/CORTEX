@@ -5,11 +5,11 @@ Stage 4 (Execution) is now handled by TDDOrchestrator/WorkflowOrchestrator.
 This stub provides backward compatibility.
 """
 
-from typing import Dict, Any, Optional, List
-from dataclasses import dataclass, field
 import logging
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
 
-from cortex.core.result import Result, Ok, Err
+from cortex.core.result import Err, Ok, Result
 
 logger = logging.getLogger(__name__)
 
@@ -35,18 +35,18 @@ class Stage4Output:
 class MasterOrchestrationStage4:
     """
     Stub for Stage 4 execution.
-    
+
     In production, use TDDOrchestrator or WorkflowOrchestrator instead.
     """
-    
+
     def __init__(self):
         """Initialize stage 4."""
         logger.debug("MasterOrchestrationStage4 stub initialized")
-    
+
     def execute(self, operation: Dict[str, Any]) -> Result[Stage4Output, str]:
         """Execute operation (stub)."""
-        logger.info(f"Stage 4 stub executing operation")
-        
+        logger.info("Stage 4 stub executing operation")
+
         return Ok(Stage4Output(
             result={"status": "stub_executed"},
             status="success",

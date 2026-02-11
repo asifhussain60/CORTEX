@@ -4,8 +4,9 @@ Final documentation, deprecation warnings, and cleanup.
 """
 
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
 from datetime import datetime
+from typing import Any, Dict, List, Optional
+
 import yaml
 
 

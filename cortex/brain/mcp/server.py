@@ -13,16 +13,16 @@ Provides:
 
 Usage:
     from cortex.brain.mcp.server import MCPServer
-    
+
     server = MCPServer(
         host="127.0.0.1",
         port=8000,
         governance_registry=governance_registry
     )
-    
+
     # Start server (blocks until stopped)
     server.start()
-    
+
     # Or use context manager
     async with MCPServer.create(...) as server:
         await server.run()
@@ -32,16 +32,16 @@ Author: Asif Hussain
 
 import asyncio
 import logging
-from typing import Optional, Dict, Any, List, Callable
+import threading
 from dataclasses import dataclass
 from datetime import datetime
-import threading
+from typing import Any, Callable, Dict, List, Optional
 
-from cortex.brain.core.result import Result, Ok, Err
+from cortex.brain.core.result import Err, Ok, Result
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
-from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
 from cortex.orchestrators import get_orchestrator_count_by_category
 from cortex.orchestrators.core.governance_registry import GovernanceRegistry
+from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
 
 
 @dataclass
@@ -66,20 +66,20 @@ class MCPToolInfo:
 class MCPServer:
     """
     MCP Server - Coordinates LLM-to-Orchestrator communication.
-    
+
     Implements:
     - Server lifecycle (start, stop, shutdown)
     - Connection management
     - Tool registration from orchestrators
     - Governance context injection
     - Audit logging for all operations
-    
+
     AC-AR-007-01: Server startup and connection acceptance
     """
-    
+
     _instance: Optional['MCPServer'] = None
     _lock = threading.Lock()
-    
+
     def __init__(
         self,
         host: str = "127.0.0.1",
@@ -90,7 +90,7 @@ class MCPServer:
     ):
         """
         Initialize MCP Server.
-        
+
         Args:
             host: Server host address
             port: Server port
@@ -103,20 +103,20 @@ class MCPServer:
         self.enable_audit = enable_audit
         self.max_connections = max_connections
         self.connection_timeout = connection_timeout
-        
+
         self.logger = EnhancedAuditLogger.instance() if enable_audit else None
         self.master_orchestrator = MasterOrchestrator.instance()
         self.orchestrator_counts = get_orchestrator_count_by_category()
         self.governance_registry = GovernanceRegistry.instance()
-        
+
         self.is_running = False
         self.is_listening = False
         self.start_time: Optional[str] = None
         self.connections: Dict[str, MCPConnection] = {}
         self.tools: Dict[str, MCPToolInfo] = {}
-        
+
         self._initialize_logger()
-    
+
     @classmethod
     def instance(cls, **kwargs) -> 'MCPServer':
         """Get or create singleton instance"""
@@ -125,20 +125,20 @@ class MCPServer:
                 if cls._instance is None:
                     cls._instance = cls(**kwargs)
         return cls._instance
-    
+
     @classmethod
     def reset_instance(cls) -> None:
         """Reset singleton (for testing)"""
         with cls._lock:
             cls._instance = None
-    
+
     # Lifecycle Methods
-    
+
     def _initialize_logger(self) -> None:
         """Initialize audit logger"""
         if not self.enable_audit or not self.logger:
             return
-        
+
         self.logger.log_operation_start(
             ac_id="AC-AR-007-01",
             operation="MCP_SERVER_INIT",
@@ -148,20 +148,20 @@ class MCPServer:
                 "max_connections": self.max_connections
             }
         )
-    
+
     def start(self) -> Result[str]:
         """
         Start MCP server and listen for connections.
-        
+
         Returns:
             Result with server status
-        
+
         AC-AR-007-01: Server starts and is ready for connections
         """
         try:
             if self.is_running:
                 return Err("Server is already running")
-            
+
             # Log start attempt
             if self.logger:
                 self.logger.log_operation_start(
@@ -173,15 +173,15 @@ class MCPServer:
                         "timestamp": datetime.now().isoformat()
                     }
                 )
-            
+
             # Set running state
             self.is_running = True
             self.is_listening = True
             self.start_time = datetime.now().isoformat()
-            
+
             # Load tools from orchestrators
             self._load_orchestrator_tools()
-            
+
             # Log completion
             if self.logger:
                 self.logger.log_operation_complete(
@@ -195,13 +195,13 @@ class MCPServer:
                         "timestamp": datetime.now().isoformat()
                     }
                 )
-            
+
             return Ok(f"MCP Server started on {self.host}:{self.port}")
-        
+
         except Exception as e:
             self.is_running = False
             self.is_listening = False
-            
+
             if self.logger:
                 self.logger.log_operation_complete(
                     ac_id="AC-AR-007-01",
@@ -209,34 +209,34 @@ class MCPServer:
                     success=False,
                     details={"error": str(e)}
                 )
-            
+
             return Err(f"Failed to start MCP server: {str(e)}")
-    
+
     def stop(self) -> Result[str]:
         """
         Stop MCP server and close connections.
-        
+
         Returns:
             Result with shutdown status
         """
         try:
             if not self.is_running:
                 return Err("Server is not running")
-            
+
             if self.logger:
                 self.logger.log_operation_start(
                     ac_id="AC-AR-007-01",
                     operation="MCP_SERVER_STOP",
                     details={"connection_count": len(self.connections)}
                 )
-            
+
             # Close all connections
             self._close_all_connections()
-            
+
             # Set state
             self.is_running = False
             self.is_listening = False
-            
+
             if self.logger:
                 self.logger.log_operation_complete(
                     ac_id="AC-AR-007-01",
@@ -244,9 +244,9 @@ class MCPServer:
                     success=True,
                     details={"status": "STOPPED"}
                 )
-            
+
             return Ok("MCP Server stopped")
-        
+
         except Exception as e:
             if self.logger:
                 self.logger.log_operation_complete(
@@ -256,38 +256,38 @@ class MCPServer:
                     details={"error": str(e)}
                 )
             return Err(f"Error stopping server: {str(e)}")
-    
+
     # Connection Management
-    
+
     def accept_connection(self, client_id: str, remote_address: str) -> Result[MCPConnection]:
         """
         Accept new client connection.
-        
+
         Args:
             client_id: Unique client identifier
             remote_address: Client remote address
-        
+
         Returns:
             Result with connection object
-        
+
         AC-AR-007-01: Server accepts connections
         """
         try:
             if not self.is_listening:
                 return Err("Server is not listening")
-            
+
             if len(self.connections) >= self.max_connections:
                 return Err(f"Max connections ({self.max_connections}) reached")
-            
+
             connection = MCPConnection(
                 client_id=client_id,
                 connected_at=datetime.now().isoformat(),
                 remote_address=remote_address,
                 is_active=True
             )
-            
+
             self.connections[client_id] = connection
-            
+
             if self.logger:
                 self.logger.log_operation_complete(
                     ac_id="AC-AR-007-01",
@@ -299,9 +299,9 @@ class MCPServer:
                         "total_connections": len(self.connections)
                     }
                 )
-            
+
             return Ok(connection)
-        
+
         except Exception as e:
             if self.logger:
                 self.logger.log_operation_complete(
@@ -311,17 +311,17 @@ class MCPServer:
                     details={"error": str(e)}
                 )
             return Err(f"Failed to accept connection: {str(e)}")
-    
+
     def close_connection(self, client_id: str) -> Result[str]:
         """Close a specific client connection"""
         try:
             if client_id not in self.connections:
                 return Err(f"Connection {client_id} not found")
-            
+
             connection = self.connections[client_id]
             connection.is_active = False
             del self.connections[client_id]
-            
+
             if self.logger:
                 self.logger.log_operation_complete(
                     ac_id="AC-AR-007-01",
@@ -332,23 +332,23 @@ class MCPServer:
                         "remaining_connections": len(self.connections)
                     }
                 )
-            
+
             return Ok(f"Connection {client_id} closed")
-        
+
         except Exception as e:
             return Err(f"Error closing connection: {str(e)}")
-    
+
     def _close_all_connections(self) -> None:
         """Close all active connections"""
         for client_id in list(self.connections.keys()):
             self.close_connection(client_id)
-    
+
     # Tool Management
-    
+
     def _load_orchestrator_tools(self) -> Result[int]:
         """
         Load tools from orchestrators.
-        
+
         Docker-first: Uses YAML-backed orchestrator configuration.
         AC-AR-007-02: Orchestrators exposed as MCP tools
         """
@@ -356,17 +356,17 @@ class MCPServer:
             # Docker-first: Get orchestrator counts from YAML-backed config
             orchestrator_counts = get_orchestrator_count_by_category()
             total_orchestrators = orchestrator_counts.get("total", 23)
-            
+
             if self.logger:
                 self.logger.log_operation_start(
                     ac_id="AC-AR-007-02",
                     operation="LOAD_ORCHESTRATOR_TOOLS",
                     details={"orchestrator_count": total_orchestrators}
                 )
-            
+
             # In Docker-first architecture, tools are discovered via MCP adapters
             # This is a stub that reports success with the known orchestrator count
-            
+
             if self.logger:
                 self.logger.log_operation_complete(
                     ac_id="AC-AR-007-02",
@@ -378,9 +378,9 @@ class MCPServer:
                         "source": "yaml_wiring"
                     }
                 )
-            
+
             return Ok(len(self.tools))
-        
+
         except Exception as e:
             if self.logger:
                 self.logger.log_operation_complete(
@@ -390,21 +390,21 @@ class MCPServer:
                     details={"error": str(e)}
                 )
             return Err(f"Failed to load orchestrator tools: {str(e)}")
-    
+
     def get_tools(self) -> List[MCPToolInfo]:
         """Get list of available tools"""
         return list(self.tools.values())
-    
+
     def get_tool(self, tool_name: str) -> Optional[MCPToolInfo]:
         """Get specific tool info"""
         return self.tools.get(tool_name)
-    
+
     # Server Status
-    
+
     def get_status(self) -> Dict[str, Any]:
         """
         Get server status.
-        
+
         AC-AR-007-01: Server reports its status
         """
         return {
@@ -420,19 +420,19 @@ class MCPServer:
             "tools": [tool.name for tool in self.get_tools()],
             "status_timestamp": datetime.now().isoformat()
         }
-    
+
     def _calculate_uptime(self) -> float:
         """Calculate server uptime in seconds"""
         if not self.start_time:
             return 0.0
-        
+
         try:
             start = datetime.fromisoformat(self.start_time)
             now = datetime.now()
             return (now - start).total_seconds()
         except Exception:
             return 0.0
-    
+
     def get_connections(self) -> List[Dict[str, Any]]:
         """Get list of active connections"""
         return [
@@ -444,13 +444,13 @@ class MCPServer:
             }
             for conn in self.connections.values()
         ]
-    
+
     # Governance Context Injection
-    
+
     def get_governance_context(self) -> Dict[str, Any]:
         """
         Get governance context for MCP responses.
-        
+
         AC-AR-007-03: Governance context included in responses
         """
         try:
@@ -460,25 +460,25 @@ class MCPServer:
                     operation="GET_GOVERNANCE_CONTEXT",
                     details={}
                 )
-            
+
             # Get tier information
             tiers = {
                 "tier_0": "Immutable governance rules",
                 "tier_1": "Project-level governance",
                 "tier_2": "Team-level standards"
             }
-            
+
             # Get all rules from governance registry
             all_rules = self.governance_registry.get_all_rules()
             rule_count = sum(len(rules) for rules in all_rules.values())
-            
+
             context = {
                 "governance_enabled": True,
                 "tiers": tiers,
                 "active_rules_count": rule_count,
                 "timestamp": datetime.now().isoformat()
             }
-            
+
             if self.logger:
                 self.logger.log_operation_complete(
                     ac_id="AC-AR-007-03",
@@ -486,9 +486,9 @@ class MCPServer:
                     success=True,
                     details=context
                 )
-            
+
             return context
-        
+
         except Exception as e:
             if self.logger:
                 self.logger.log_operation_complete(

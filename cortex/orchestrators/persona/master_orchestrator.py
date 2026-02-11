@@ -10,12 +10,12 @@ Orchestrates:
 - Natural language depth triggers
 """
 
-from typing import Optional, Dict, Any, List, Tuple
 from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional, Tuple
 
-from cortex.orchestrators.persona.models import PersonaId, DepthLevel
-from cortex.orchestrators.persona.role_resolver import RoleResolver
+from cortex.orchestrators.persona.models import DepthLevel, PersonaId
 from cortex.orchestrators.persona.persona_injector import PersonaInjector
+from cortex.orchestrators.persona.role_resolver import RoleResolver
 from cortex.orchestrators.persona.session_context import SessionContext
 
 
@@ -36,14 +36,14 @@ class PersonaResult:
 class MasterOrchestrator:
     """
     Coordinate RoleResolver → PersonaInjector pipeline.
-    
+
     Flow:
     1. Message arrives
     2. RoleResolver detects persona + confidence
     3. SessionContext updates persona state
     4. PersonaInjector formats response per persona + depth
     5. PersonaResult returned with formatted output
-    
+
     Attributes:
         session_context: SessionContext managing in-session state
         role_resolver: RoleResolver for persona detection
@@ -74,7 +74,7 @@ class MasterOrchestrator:
     ):
         """
         Initialize MasterOrchestrator.
-        
+
         Args:
             session_context: SessionContext managing in-session state
             role_resolver: RoleResolver for persona detection
@@ -92,12 +92,12 @@ class MasterOrchestrator:
     ) -> PersonaResult:
         """
         Process message and return formatted result.
-        
+
         Args:
             message: User message to process
             context: Optional context dict with additional signals
             response_to_format: Optional pre-generated response to format
-            
+
         Returns:
             PersonaResult with detected persona and formatted output
         """
@@ -131,7 +131,7 @@ class MasterOrchestrator:
         # Step 5: Format response if provided
         formatted_response = ""
         format_rules_applied = []
-        
+
         if response_to_format:
             formatted_response = self.persona_injector.format_response(
                 response=response_to_format,
@@ -159,11 +159,11 @@ class MasterOrchestrator:
     ) -> DepthLevel:
         """
         Detect depth override from natural language or context.
-        
+
         Args:
             message: User message
             context: Context dict that may contain depth_override
-            
+
         Returns:
             DepthLevel if override detected, else current depth
         """
@@ -179,7 +179,7 @@ class MasterOrchestrator:
 
         # Check natural language triggers
         message_lower = message.lower()
-        
+
         for depth, patterns in self.NL_DEPTH_TRIGGERS.items():
             for pattern in patterns:
                 if re.search(pattern, message_lower, re.IGNORECASE):
@@ -191,7 +191,7 @@ class MasterOrchestrator:
     def get_switch_history(self) -> List[Dict[str, Any]]:
         """
         Get persona switch history.
-        
+
         Returns:
             List of persona switches
         """
@@ -204,7 +204,7 @@ class MasterOrchestrator:
     def get_current_state(self) -> Dict[str, Any]:
         """
         Get current session state.
-        
+
         Returns:
             Dict with current state
         """

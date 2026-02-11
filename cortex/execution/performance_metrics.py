@@ -24,7 +24,7 @@ class PerformanceMetrics:
 class PerformanceMetricsCollector:
     """
     Collects and aggregates performance metrics.
-    
+
     Tracks latency percentiles, error rates, and success metrics
     for analysis and optimization.
     """
@@ -39,7 +39,7 @@ class PerformanceMetricsCollector:
     def record_latency(self, latency: float) -> None:
         """
         Record a latency measurement.
-        
+
         Args:
             latency: Latency value in seconds.
         """
@@ -56,7 +56,7 @@ class PerformanceMetricsCollector:
     def compute_metrics(self) -> PerformanceMetrics:
         """
         Compute current performance metrics.
-        
+
         Returns:
             PerformanceMetrics object with current values.
         """
@@ -83,7 +83,7 @@ class PerformanceMetricsCollector:
             success_percentage=success_percentage,
             total_operations=total_ops,
         )
-        
+
         self.metrics_history.append(metrics)
         return metrics
 

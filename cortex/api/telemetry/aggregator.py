@@ -1,13 +1,12 @@
 """Aggregation engine for telemetry insights and GitHub issue auto-generation (AC-UNIFIED-DEPLOY-001-03)."""
 
-from typing import Dict, List, Any, Optional, Tuple
+import hashlib
+import json
+import logging
+from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from collections import defaultdict
-import json
-import hashlib
-import logging
-
+from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 

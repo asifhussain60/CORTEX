@@ -9,13 +9,13 @@ Thresholds:
 - EMERGENCY: > 2 GB
 """
 
-import sqlite3
 import logging
-from datetime import datetime
-from pathlib import Path
-from typing import Dict, Any, Optional
+import sqlite3
 from dataclasses import dataclass
+from datetime import datetime
 from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, Optional
 
 
 class AlertLevel(str, Enum):
@@ -50,7 +50,7 @@ class LogGrowthMonitor:
 
     def __init__(self, db_path: str, alert_handler=None) -> None:
         """Initialize monitoring system.
-        
+
         Args:
             db_path: Path to governance.db
             alert_handler: Optional custom alert handler function
@@ -74,7 +74,7 @@ class LogGrowthMonitor:
 
     def get_database_size(self) -> float:
         """Get total database size in MB.
-        
+
         Returns:
             Database size in megabytes
         """
@@ -87,12 +87,12 @@ class LogGrowthMonitor:
 
     def get_table_metrics(self) -> Dict[str, Dict[str, Any]]:
         """Get metrics for each table in database.
-        
+
         Returns:
             Dictionary with table size and row count statistics
         """
         metrics = {}
-        
+
         try:
             conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()
@@ -129,10 +129,10 @@ class LogGrowthMonitor:
 
     def check_growth_rate(self, current_size_mb: float) -> Optional[AlertLevel]:
         """Check if database is growing too fast.
-        
+
         Args:
             current_size_mb: Current database size
-            
+
         Returns:
             Alert level if growth rate is concerning, else None
         """
@@ -140,7 +140,7 @@ class LogGrowthMonitor:
             return None
 
         growth_mb = current_size_mb - self.previous_size_mb
-        
+
         if growth_mb > self.GROWTH_RATE_CRITICAL:
             return AlertLevel.CRITICAL
         elif growth_mb > self.GROWTH_RATE_WARNING:
@@ -150,10 +150,10 @@ class LogGrowthMonitor:
 
     def determine_alert_level(self, size_mb: float) -> AlertLevel:
         """Determine alert level based on database size.
-        
+
         Args:
             size_mb: Database size in MB
-            
+
         Returns:
             Alert level (HEALTHY, WARNING, CRITICAL, or EMERGENCY)
         """
@@ -170,12 +170,12 @@ class LogGrowthMonitor:
         self, alert_level: AlertLevel, size_mb: float, metrics: Dict[str, Any]
     ) -> str:
         """Generate detailed alert message.
-        
+
         Args:
             alert_level: Current alert level
             size_mb: Database size in MB
             metrics: Table metrics
-            
+
         Returns:
             Formatted alert message
         """
@@ -204,18 +204,18 @@ class LogGrowthMonitor:
     @staticmethod
     def _get_top_tables(metrics: Dict[str, Any], top_n: int) -> str:
         """Get string representation of top N tables by size.
-        
+
         Args:
             metrics: Table metrics dictionary
             top_n: Number of top tables to include
-            
+
         Returns:
             Formatted string of top tables
         """
         sorted_tables = sorted(
             metrics.items(), key=lambda x: x[1]["size_mb"], reverse=True
         )[:top_n]
-        
+
         return "; ".join(
             f"{name} ({info['size_mb']} MB, {info['row_count']} rows)"
             for name, info in sorted_tables
@@ -223,7 +223,7 @@ class LogGrowthMonitor:
 
     def check_health(self) -> DatabaseMetrics:
         """Run complete health check.
-        
+
         Returns:
             DatabaseMetrics snapshot with alert information
         """
@@ -258,16 +258,16 @@ class LogGrowthMonitor:
 
 def setup_monitoring(db_path: str, check_interval_seconds: int = 3600) -> LogGrowthMonitor:
     """Set up background monitoring for database growth.
-    
+
     Args:
         db_path: Path to governance.db
         check_interval_seconds: How often to check (default: hourly)
-        
+
     Returns:
         Configured monitor instance
     """
     monitor = LogGrowthMonitor(db_path)
-    
+
     # In production, this would be run by a scheduler (APScheduler, etc.)
     # For now, return the monitor for manual or external scheduling
     logging.info(f"Log growth monitoring initialized for {db_path}")
@@ -275,7 +275,7 @@ def setup_monitoring(db_path: str, check_interval_seconds: int = 3600) -> LogGro
     logging.info(f"Thresholds: WARNING={monitor.THRESHOLD_WARNING}MB, "
                 f"CRITICAL={monitor.THRESHOLD_CRITICAL}MB, "
                 f"EMERGENCY={monitor.THRESHOLD_EMERGENCY}MB")
-    
+
     return monitor
 
 
@@ -298,9 +298,9 @@ if __name__ == "__main__":
     print("\n" + "=" * 70)
     print("DATABASE LOG GROWTH MONITOR")
     print("=" * 70)
-    
+
     metrics = monitor.check_health()
-    
+
     print(f"\nTimestamp: {metrics.timestamp.isoformat()}")
     print(f"Total Size: {metrics.total_size_mb} MB")
     print(f"Alert Level: {metrics.alert_level.value}")
@@ -310,5 +310,5 @@ if __name__ == "__main__":
         metrics.table_metrics.items(), key=lambda x: x[1]["size_mb"], reverse=True
     )[:5]:
         print(f"  {table_name}: {table_info['size_mb']} MB ({table_info['row_count']} rows)")
-    
+
     print("=" * 70 + "\n")

@@ -9,18 +9,18 @@ Rule: CORE-011 (Type Hints)
 """
 
 import time
-from dataclasses import dataclass, asdict
-from typing import Dict, Any, List, Optional
+from dataclasses import asdict, dataclass
+from typing import Any, Dict, List, Optional
 
 
 @dataclass
 class LENSIntelligence:
     """
     LENS intelligence from Phase 20.
-    
+
     Combines git, AST, and comment analysis for holistic code understanding.
     """
-    
+
     git_analysis: Dict[str, Any]  # Change patterns, hotspots, commit history
     ast_analysis: Dict[str, Any]  # Complexity, functions, classes, dead code
     comment_analysis: Dict[str, Any]  # TODOs, FIXMEs, docstrings
@@ -30,11 +30,11 @@ class LENSIntelligence:
 class CompanyKnowledge:
     """
     Company-specific knowledge from Phase 20.
-    
+
     Domain rules and compliance standards with OVERRIDE precedence.
     Company rules take precedence over CORTEX best practices.
     """
-    
+
     domain_rules: Dict[str, Any]  # Company-specific rules from company/domains/
     compliance_standards: List[str]  # PCI-DSS, HIPAA, SOC2 detection
     precedence: str  # "OVERRIDE" - company rules override CORTEX
@@ -44,10 +44,10 @@ class CompanyKnowledge:
 class CORTEXKnowledge:
     """
     CORTEX best practices from 45+ knowledge YAMLs.
-    
+
     Best practices, patterns, anti-patterns from cortex_brain/tier3/knowledge/.
     """
-    
+
     best_practices: Dict[str, Any]  # 45+ YAMLs from cortex_brain/tier3/knowledge/
     applicable_patterns: List[str]  # Patterns matching current intent
     anti_patterns: List[str]  # Anti-patterns to avoid
@@ -58,10 +58,10 @@ class CORTEXKnowledge:
 class SynthesisResult:
     """
     Synthesis result from KnowledgeSynthesisEngine.
-    
+
     Merged rules with precedence resolution, citations, violations, and guidance.
     """
-    
+
     merged_rules: Dict[str, Any]  # Precedence-resolved final ruleset
     citations: List[str]  # Rule IDs cited in decision
     violations: List[str]  # Rules violated (if any)
@@ -72,16 +72,16 @@ class SynthesisResult:
 class UnifiedIntelligenceContext:
     """
     Unified intelligence context combining all knowledge sources.
-    
+
     Single context object that eliminates silos by combining:
     - LENS intelligence (git, AST, comments)
     - Company knowledge (domain rules, compliance)
     - CORTEX knowledge (45+ best practices YAMLs)
     - Synthesis result (merged rules, citations, violations, guidance)
-    
+
     This context flows through MasterOrchestrator Stage 2 to provide
     proactive guidance during intent classification and routing.
-    
+
     Usage:
         >>> lens = LENSIntelligence(git_analysis={...}, ast_analysis={...}, comment_analysis={...})
         >>> company = CompanyKnowledge(domain_rules={...}, compliance_standards=[...], precedence="OVERRIDE")
@@ -98,25 +98,25 @@ class UnifiedIntelligenceContext:
         ... )
         >>> if context.has_violations():
         ...     print("Violations detected:", context.synthesis_result.violations)
-    
+
     Authority: AC-KNOWLEDGE-SYNTHESIS-001 (Phase 20.5 Component #1)
     """
-    
+
     # Intelligence sources
     lens_intelligence: LENSIntelligence
     company_knowledge: CompanyKnowledge
     cortex_knowledge: CORTEXKnowledge
     synthesis_result: SynthesisResult
-    
+
     # Metadata
     intent_type: str  # IMPLEMENT, FIX, REFACTOR, ANALYZE, etc.
     file_path: Optional[str]  # File being analyzed (None for non-file operations)
     timestamp: float  # Unix timestamp when context created
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """
         Convert context to dictionary for serialization.
-        
+
         Returns:
             Dictionary representation of context
         """
@@ -129,54 +129,54 @@ class UnifiedIntelligenceContext:
             "file_path": self.file_path,
             "timestamp": self.timestamp,
         }
-    
+
     def has_violations(self) -> bool:
         """
         Check if synthesis detected any rule violations.
-        
+
         Returns:
             True if violations detected, False otherwise
         """
         return len(self.synthesis_result.violations) > 0
-    
+
     def get_cited_rules(self) -> List[str]:
         """
         Get list of rules cited in synthesis decision.
-        
+
         Returns:
             List of rule IDs (e.g., ["CORE-008", "COMPANY-001"])
         """
         return self.synthesis_result.citations.copy()
-    
+
     def get_guidance(self) -> List[str]:
         """
         Get proactive guidance for engineer.
-        
+
         Returns:
             List of guidance strings
         """
         return self.synthesis_result.guidance.copy()
-    
+
     def get_violations(self) -> List[str]:
         """
         Get list of detected violations.
-        
+
         Returns:
             List of violation strings
         """
         return self.synthesis_result.violations.copy()
-    
+
     @classmethod
     def create_empty(cls, intent_type: str, file_path: Optional[str] = None) -> "UnifiedIntelligenceContext":
         """
         Create empty context with no intelligence loaded.
-        
+
         Useful for fallback scenarios when knowledge loading fails.
-        
+
         Args:
             intent_type: Intent type
             file_path: Optional file path
-        
+
         Returns:
             Empty UnifiedIntelligenceContext
         """

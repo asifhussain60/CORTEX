@@ -6,10 +6,12 @@ AC_START: AC-PHASE52-S3-001
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Optional, Any, Union
-from cortex.brain.core.result import Ok, Err
-from cortex.orchestrators.core.orchestrator_base_protocol import OrchestratorBaseProtocol
+from typing import Any, Dict, List, Optional, Union
 
+from cortex.brain.core.result import Err, Ok
+from cortex.orchestrators.core.orchestrator_base_protocol import (
+    OrchestratorBaseProtocol,
+)
 
 # ============================================================================
 # DATA MODELS
@@ -138,12 +140,12 @@ class MigrationOrchestrator(OrchestratorBaseProtocol):
                 migration_key = f"{context['source_framework']}-{context['source_version']}->{context['target_framework']}-{context['target_version']}"
             else:
                 return Err(error="Missing source/target information in context")
-            
+
             # Look up template or create custom plan
             template = MIGRATION_TEMPLATES.get(
                 next((k for k in MIGRATION_TEMPLATES.keys() if f"{context.get('source_language', context.get('source_framework'))}-{context.get('source_version')}" in k), None)
             )
-            
+
             if not template:
                 # Generate generic plan
                 template = {
@@ -156,11 +158,11 @@ class MigrationOrchestrator(OrchestratorBaseProtocol):
                     "complexity": 0.6,
                     "risk_level": "medium",
                 }
-            
+
             # Build migration plan
             steps = []
             total_hours = 0
-            
+
             for i, step_template in enumerate(template["steps"]):
                 step = MigrationStep(
                     order=i,
@@ -173,7 +175,7 @@ class MigrationOrchestrator(OrchestratorBaseProtocol):
                 )
                 steps.append(step)
                 total_hours += step_template["hours"]
-            
+
             plan = MigrationPlan(
                 source=f"{context.get('source_language', context.get('source_framework'))}-{context.get('source_version')}",
                 target=f"{context.get('target_language', context.get('target_framework'))}-{context.get('target_version')}",
@@ -182,7 +184,7 @@ class MigrationOrchestrator(OrchestratorBaseProtocol):
                 complexity_score=template["complexity"],
                 risk_level=template["risk_level"],
             )
-            
+
             return Ok(value=plan)
         except Exception as e:
             return Err(error=f"Migration plan generation failed: {str(e)}")
@@ -195,10 +197,10 @@ class MigrationOrchestrator(OrchestratorBaseProtocol):
         """Check API compatibility between versions"""
         try:
             issues = []
-            
+
             old_functions = {f["name"]: f for f in old_api.get("functions", [])}
             new_functions = {f["name"]: f for f in new_api.get("functions", [])}
-            
+
             # Check for removed functions
             for fname, fold in old_functions.items():
                 if fname not in new_functions:
@@ -207,14 +209,14 @@ class MigrationOrchestrator(OrchestratorBaseProtocol):
                         severity="critical",
                         description=f"Function {fname} removed in new version",
                     ))
-            
+
             # Check for parameter changes
             for fname, fold in old_functions.items():
                 if fname in new_functions:
                     fnew = new_functions[fname]
                     old_params = set(fold.get("params", []))
                     new_params = set(fnew.get("params", []))
-                    
+
                     removed = old_params - new_params
                     if removed:
                         issues.append(CompatibilityIssue(
@@ -222,7 +224,7 @@ class MigrationOrchestrator(OrchestratorBaseProtocol):
                             severity="high",
                             description=f"Function {fname} removed parameters: {removed}",
                         ))
-            
+
             return Ok(value=issues)
         except Exception as e:
             return Err(error=f"API compatibility check failed: {str(e)}")
@@ -231,7 +233,7 @@ class MigrationOrchestrator(OrchestratorBaseProtocol):
         """Find calls to deprecated functions"""
         try:
             found_calls = []
-            
+
             for func_name, message in deprecations.items():
                 if func_name + "(" in code:
                     found_calls.append(CompatibilityIssue(
@@ -240,7 +242,7 @@ class MigrationOrchestrator(OrchestratorBaseProtocol):
                         description=f"Call to deprecated function: {func_name}",
                         fix_suggestion=message,
                     ))
-            
+
             return Ok(value=found_calls)
         except Exception as e:
             return Err(error=f"Deprecated call search failed: {str(e)}")
@@ -253,17 +255,17 @@ class MigrationOrchestrator(OrchestratorBaseProtocol):
                 "warnings": [],
                 "major_upgrades": [],
             }
-            
+
             for lib, old_version in old_deps.items():
                 if lib in new_deps:
                     new_version = new_deps[lib]
                     old_major = int(old_version.split('.')[0])
                     new_major = int(new_version.split('.')[0])
-                    
+
                     if new_major > old_major:
                         report["major_upgrades"].append(f"{lib}: {old_version} -> {new_version}")
                         report["warnings"].append(f"Major version upgrade for {lib}")
-            
+
             return Ok(value=report)
         except Exception as e:
             return Err(error=f"Dependency compatibility check failed: {str(e)}")
@@ -272,7 +274,7 @@ class MigrationOrchestrator(OrchestratorBaseProtocol):
         """Find potential behavior changes"""
         try:
             issues = []
-            
+
             if language == "python":
                 # Python 2 to 3 specific checks
                 if source_version == "2.7":
@@ -283,7 +285,7 @@ class MigrationOrchestrator(OrchestratorBaseProtocol):
                             description="Python 2 print statement found",
                             fix_suggestion="Convert to print() function",
                         ))
-                    
+
                     if ".iteritems()" in code:
                         issues.append(CompatibilityIssue(
                             type="iterator_method",
@@ -291,7 +293,7 @@ class MigrationOrchestrator(OrchestratorBaseProtocol):
                             description="Python 2 .iteritems() found",
                             fix_suggestion="Use .items() in Python 3",
                         ))
-                    
+
                     if "xrange" in code:
                         issues.append(CompatibilityIssue(
                             type="builtin_change",
@@ -299,7 +301,7 @@ class MigrationOrchestrator(OrchestratorBaseProtocol):
                             description="Python 2 xrange() found",
                             fix_suggestion="Use range() in Python 3",
                         ))
-            
+
             return Ok(value=issues)
         except Exception as e:
             return Err(error=f"Behavior change detection failed: {str(e)}")
@@ -314,28 +316,28 @@ class MigrationOrchestrator(OrchestratorBaseProtocol):
             missing = []
             new = []
             deprecated = []
-            
+
             for category, old_items in old_features.items():
                 new_items = new_features.get(category, [])
-                
+
                 for item in old_items:
                     if item not in new_items:
                         missing.append(f"{category}.{item}")
-            
+
             for category, new_items in new_features.items():
                 old_items = old_features.get(category, [])
-                
+
                 for item in new_items:
                     if item not in old_items:
                         new.append(f"{category}.{item}")
-            
+
             parity = FeatureParityCheck(
                 all_features_present=len(missing) == 0,
                 missing_features=missing,
                 new_features=new,
                 deprecated_features=deprecated,
             )
-            
+
             return Ok(value=parity)
         except Exception as e:
             return Err(error=f"Feature parity check failed: {str(e)}")
@@ -344,7 +346,7 @@ class MigrationOrchestrator(OrchestratorBaseProtocol):
         """Generate test cases for feature parity validation"""
         try:
             tests = []
-            
+
             for category, items in features.items():
                 for item in items:
                     test_name = f"test_{category}_{item}"
@@ -353,7 +355,7 @@ class MigrationOrchestrator(OrchestratorBaseProtocol):
                         "category": category,
                         "feature": item,
                     })
-            
+
             return Ok(value=tests)
         except Exception as e:
             return Err(error=f"Parity test generation failed: {str(e)}")
@@ -366,7 +368,7 @@ class MigrationOrchestrator(OrchestratorBaseProtocol):
         """Generate rollback strategy for a migration step"""
         try:
             step_type = migration_step.get("type", "generic")
-            
+
             if step_type == "database":
                 steps = [
                     "Backup current database state",
@@ -395,14 +397,14 @@ class MigrationOrchestrator(OrchestratorBaseProtocol):
                 steps = ["Revert changes", "Validate state"]
                 validation = ["Verify system stability"]
                 rollback_mins = 30
-            
+
             strategy = RollbackStrategy(
                 rollback_type=step_type,
                 steps=steps,
                 validation_steps=validation,
                 estimated_rollback_minutes=rollback_mins,
             )
-            
+
             return Ok(value=strategy)
         except Exception as e:
             return Err(error=f"Rollback strategy generation failed: {str(e)}")
@@ -416,7 +418,7 @@ class MigrationOrchestrator(OrchestratorBaseProtocol):
         try:
             risk_score = 0.0
             factors = []
-            
+
             # Assess codebase size
             size = context.get("codebase_size", "100k_lines")
             if "1m" in size:
@@ -427,7 +429,7 @@ class MigrationOrchestrator(OrchestratorBaseProtocol):
                 factors.append("Medium-large codebase")
             else:
                 risk_score += 0.1
-            
+
             # Assess test coverage
             coverage = context.get("test_coverage", 0.5)
             if coverage < 0.5:
@@ -435,7 +437,7 @@ class MigrationOrchestrator(OrchestratorBaseProtocol):
                 factors.append("Low test coverage increases risk")
             elif coverage < 0.75:
                 risk_score += 0.15
-            
+
             # Assess dependencies
             dep_count = context.get("dependencies", 10)
             if dep_count > 100:
@@ -443,10 +445,10 @@ class MigrationOrchestrator(OrchestratorBaseProtocol):
                 factors.append("Many dependencies increase complexity")
             elif dep_count > 50:
                 risk_score += 0.15
-            
+
             # Cap score at 1.0
             risk_score = min(risk_score, 1.0)
-            
+
             # Determine risk level
             if risk_score >= 0.75:
                 risk_level = "critical"
@@ -456,14 +458,14 @@ class MigrationOrchestrator(OrchestratorBaseProtocol):
                 risk_level = "medium"
             else:
                 risk_level = "low"
-            
+
             mitigation = [
                 "Establish rollback procedures",
                 "Create comprehensive test suite",
                 "Use feature flags for gradual rollout",
                 "Monitor application closely after deployment",
             ]
-            
+
             risk = MigrationRisk(
                 overall_risk_score=risk_score,
                 risk_level=risk_level,
@@ -471,7 +473,7 @@ class MigrationOrchestrator(OrchestratorBaseProtocol):
                 mitigation_strategies=mitigation,
                 critical_dependencies=["database", "api"],
             )
-            
+
             return Ok(value=risk)
         except Exception as e:
             return Err(error=f"Risk assessment failed: {str(e)}")
@@ -486,7 +488,7 @@ class MigrationOrchestrator(OrchestratorBaseProtocol):
         """
         try:
             operation = context.get("operation", "generate_plan")
-            
+
             if operation == "generate_plan":
                 return self.generate_migration_plan(context)
             elif operation == "check_compatibility":

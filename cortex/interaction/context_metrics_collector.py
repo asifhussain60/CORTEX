@@ -19,8 +19,9 @@ from __future__ import annotations
 import logging
 import time
 from dataclasses import dataclass, field
-from typing import Dict, Any, Optional, List
-from prometheus_client import Counter, Histogram, Gauge
+from typing import Any, Dict, List, Optional
+
+from prometheus_client import Counter, Gauge, Histogram
 
 logger = logging.getLogger(__name__)
 
@@ -94,7 +95,7 @@ token_budget_usage = Histogram(
 @dataclass
 class ContextMetrics:
     """Context optimization metrics for a single operation."""
-    
+
     session_id: str
     timestamp: float
     size_before: int  # bytes
@@ -117,7 +118,7 @@ class ContextMetrics:
 class ContextMetricsCollector:
     """
     Collects and publishes context optimization metrics.
-    
+
     Tracks:
     - Context size before/after synthesis
     - Compression ratios
@@ -125,12 +126,12 @@ class ContextMetricsCollector:
     - Cache efficiency
     - Copilot summarization frequency
     - Token budget compliance
-    
+
     Integration:
     - Called by ContextSynthesisGateway
     - Metrics exported to Prometheus
     - Dashboard visualization via Grafana
-    
+
     Example:
         >>> collector = ContextMetricsCollector()
         >>> collector.start_synthesis("session-123")
@@ -143,21 +144,21 @@ class ContextMetricsCollector:
         ...     cache_misses=2
         ... )
     """
-    
+
     def __init__(self):
         """Initialize context metrics collector."""
         self._active_syntheses: Dict[str, float] = {}
         self._session_metrics: Dict[str, List[ContextMetrics]] = {}
-    
+
     def start_synthesis(self, session_id: str) -> None:
         """
         Start tracking a synthesis operation.
-        
+
         Args:
             session_id: Unique session identifier
         """
         self._active_syntheses[session_id] = time.time()
-    
+
     def end_synthesis(
         self,
         session_id: str,
@@ -173,7 +174,7 @@ class ContextMetricsCollector:
     ) -> ContextMetrics:
         """
         Complete synthesis tracking and publish metrics.
-        
+
         Args:
             session_id: Unique session identifier
             size_before: Context size before synthesis (bytes)
@@ -185,23 +186,23 @@ class ContextMetricsCollector:
             references_loaded: Number of file references loaded
             reference_types: Breakdown by reference type
             metadata: Additional metadata
-            
+
         Returns:
             ContextMetrics object with all tracked metrics
         """
         # Calculate metrics
         start_time = self._active_syntheses.pop(session_id, time.time())
         synthesis_time = (time.time() - start_time) * 1000  # ms
-        
+
         ratio = 0.0
         if size_before > 0:
             ratio = 1.0 - (size_after / size_before)
-        
+
         cache_total = cache_hits + cache_misses
         hit_rate = 0.0
         if cache_total > 0:
             hit_rate = (cache_hits / cache_total) * 100.0
-        
+
         # Create metrics object
         metrics = ContextMetrics(
             session_id=session_id,
@@ -218,12 +219,12 @@ class ContextMetricsCollector:
             reference_types=reference_types or {},
             metadata=metadata or {}
         )
-        
+
         # Store metrics
         if session_id not in self._session_metrics:
             self._session_metrics[session_id] = []
         self._session_metrics[session_id].append(metrics)
-        
+
         # Publish to Prometheus
         context_size_before.observe(size_before)
         context_size_after.observe(size_after)
@@ -231,10 +232,10 @@ class ContextMetricsCollector:
         synthesis_time_ms.observe(synthesis_time)
         cache_hit_rate.set(hit_rate)
         token_budget_usage.observe(tokens_used)
-        
+
         if tokens_used > token_budget:
             token_budget_violations.labels(session_id=session_id).inc()
-        
+
         # Log for debugging
         logger.info(
             f"Context synthesis complete: {session_id} | "
@@ -242,16 +243,16 @@ class ContextMetricsCollector:
             f"Compression: {ratio:.1%} | Time: {synthesis_time:.1f}ms | "
             f"Cache: {cache_hits}/{cache_total} ({hit_rate:.1f}%)"
         )
-        
+
         return metrics
-    
+
     def record_copilot_summarization(self, session_id: str) -> None:
         """
         Record a Copilot "Summarized conversation history" event.
-        
+
         This is a critical governance metric - high frequency indicates
         token overconsumption.
-        
+
         Args:
             session_id: Unique session identifier
         """
@@ -260,7 +261,7 @@ class ContextMetricsCollector:
             f"Copilot summarization detected in session {session_id} - "
             f"indicates context exhaustion"
         )
-    
+
     def record_reference(
         self,
         session_id: str,
@@ -268,7 +269,7 @@ class ContextMetricsCollector:
     ) -> None:
         """
         Record a file reference loaded.
-        
+
         Args:
             session_id: Unique session identifier
             reference_type: Type of reference (agent, yaml, source, etc.)
@@ -277,38 +278,38 @@ class ContextMetricsCollector:
             session_id=session_id,
             reference_type=reference_type
         ).inc()
-    
+
     def get_session_summary(self, session_id: str) -> Dict[str, Any]:
         """
         Get summary metrics for a session.
-        
+
         Args:
             session_id: Unique session identifier
-            
+
         Returns:
             Summary metrics dictionary
         """
         metrics_list = self._session_metrics.get(session_id, [])
-        
+
         if not metrics_list:
             return {
                 "session_id": session_id,
                 "total_syntheses": 0,
                 "error": "No metrics recorded"
             }
-        
+
         # Calculate aggregates
         total_syntheses = len(metrics_list)
         avg_compression = sum(m.compression_ratio for m in metrics_list) / total_syntheses
         avg_time_ms = sum(m.synthesis_time_ms for m in metrics_list) / total_syntheses
         total_cache_hits = sum(m.cache_hits for m in metrics_list)
         total_cache_misses = sum(m.cache_misses for m in metrics_list)
-        
+
         cache_total = total_cache_hits + total_cache_misses
         cache_hit_rate_pct = 0.0
         if cache_total > 0:
             cache_hit_rate_pct = (total_cache_hits / cache_total) * 100.0
-        
+
         return {
             "session_id": session_id,
             "total_syntheses": total_syntheses,
@@ -329,13 +330,13 @@ _collector_instance: Optional[ContextMetricsCollector] = None
 def get_context_metrics_collector() -> ContextMetricsCollector:
     """
     Get singleton ContextMetricsCollector instance.
-    
+
     Returns:
         ContextMetricsCollector singleton
     """
     global _collector_instance
-    
+
     if _collector_instance is None:
         _collector_instance = ContextMetricsCollector()
-    
+
     return _collector_instance

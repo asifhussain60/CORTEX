@@ -10,13 +10,13 @@ Authority: AC-EDUCATIONAL-INTERACTION-001
 Rule: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings)
 """
 
-from typing import Dict, Any, List, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
 
 from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
-from cortex.core.result import Result, Ok, Err
+from cortex.core.result import Err, Ok, Result
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 
 
@@ -31,10 +31,10 @@ class KnowledgeLevel(Enum):
 class EducationalContext:
     """
     Context for educational interaction.
-    
+
     Tracks user's learning journey across conversation.
     """
-    
+
     query: str
     knowledge_level: KnowledgeLevel
     topics_covered: List[str] = field(default_factory=list)
@@ -48,10 +48,10 @@ class EducationalContext:
 class EducationalResponse:
     """
     Educational response with progressive disclosure.
-    
+
     Contains explanation adapted to knowledge level plus next steps.
     """
-    
+
     title: str
     implementation_reality: str  # Verified truth from live code
     evidence: List[str]  # File paths, line numbers, test refs
@@ -66,11 +66,11 @@ class EducationalResponse:
 class EducationalOrchestrator(IOrchestrator):
     """
     Educational Orchestrator - Truth-based learning with progressive disclosure.
-    
+
     Provides implementation-verified education about CORTEX architecture,
     adapting explanation depth to user's knowledge level and generating
     intelligent next-step options for continued learning.
-    
+
     Features:
     - Progressive disclosure (beginner → intermediate → advanced)
     - Implementation truth verification
@@ -78,7 +78,7 @@ class EducationalOrchestrator(IOrchestrator):
     - Intelligent next-step generation (3-5 options)
     - Fault detection with recommendations
     - Integration with InteractionOrchestrator for challenges
-    
+
     Usage:
         >>> orchestrator = EducationalOrchestrator()
         >>> context = EducationalContext(
@@ -88,39 +88,39 @@ class EducationalOrchestrator(IOrchestrator):
         >>> response = orchestrator.generate_response(context)
         >>> print(response.explanation)  # Adapted to beginner level
         >>> print(response.next_steps)  # 3-5 numbered options
-    
+
     Authority: AC-EDUCATIONAL-INTERACTION-001 (Phase 22)
     """
-    
+
     def __init__(self):
         """Initialize Educational Orchestrator."""
         self.logger = EnhancedAuditLogger.instance()
         self._conversation_contexts: Dict[str, EducationalContext] = {}
-        
+
         self.logger.log_operation_start(
             ac_id="AC-EDUCATIONAL-INTERACTION-001",
             operation="EDUCATIONAL_ORCHESTRATOR_INIT",
             details={"component": "EducationalOrchestrator"}
         )
-    
+
     def detect_knowledge_level(self, query: str, history: List[str]) -> KnowledgeLevel:
         """
         Detect user's knowledge level from query and history.
-        
+
         Phase 22: Knowledge Level Detection
-        
+
         Signals:
         - Beginner: General questions, no implementation details
         - Intermediate: References specific components, asks about integration
         - Advanced: Deep architectural questions, proposes alternatives
-        
+
         Args:
             query: User's current query
             history: Previous queries in conversation
-        
+
         Returns:
             KnowledgeLevel: Detected level
-        
+
         Example:
             >>> orchestrator.detect_knowledge_level("What is CORTEX?", [])
             KnowledgeLevel.BEGINNER
@@ -129,11 +129,11 @@ class EducationalOrchestrator(IOrchestrator):
             ...     ["What is MasterOrchestrator?"]
             ... )
             KnowledgeLevel.INTERMEDIATE
-        
+
         Authority: AC-EDUCATIONAL-INTERACTION-001
         """
         query_lower = query.lower()
-        
+
         # Advanced signals
         advanced_signals = [
             "architecture pattern",
@@ -145,7 +145,7 @@ class EducationalOrchestrator(IOrchestrator):
             "extension point",
             "refactor",
         ]
-        
+
         # Intermediate signals (component-specific or integration queries)
         intermediate_signals = [
             "integration",
@@ -158,7 +158,7 @@ class EducationalOrchestrator(IOrchestrator):
             "mcp tool",
             "challenge engine",
         ]
-        
+
         # Beginner override patterns (general "how does" + generic term)
         beginner_patterns = [
             "how does cortex work",
@@ -167,26 +167,26 @@ class EducationalOrchestrator(IOrchestrator):
             "what does cortex",
             "explain cortex",
         ]
-        
+
         # Check for advanced signals
         if any(signal in query_lower for signal in advanced_signals):
             return KnowledgeLevel.ADVANCED
-        
+
         # Check beginner override patterns first
         if any(pattern in query_lower for pattern in beginner_patterns):
             return KnowledgeLevel.BEGINNER
-        
+
         # Check history length (more history = likely more advanced)
         if len(history) > 5:
             return KnowledgeLevel.ADVANCED if len(history) > 10 else KnowledgeLevel.INTERMEDIATE
-        
+
         # Check for intermediate signals
         if any(signal in query_lower for signal in intermediate_signals):
             return KnowledgeLevel.INTERMEDIATE
-        
+
         # Default to beginner
         return KnowledgeLevel.BEGINNER
-    
+
     def generate_response(
         self,
         context: EducationalContext,
@@ -194,19 +194,19 @@ class EducationalOrchestrator(IOrchestrator):
     ) -> EducationalResponse:
         """
         Generate educational response with progressive disclosure.
-        
+
         Phase 22: Response Generation
-        
+
         Adapts explanation depth to user's knowledge level and generates
         3-5 intelligent next-step options for continued learning.
-        
+
         Args:
             context: Educational context with query and knowledge level
             verified_truth: Optional implementation verification results
-        
+
         Returns:
             EducationalResponse: Formatted response with next steps
-        
+
         Example:
             >>> context = EducationalContext(
             ...     query="What is MasterOrchestrator?",
@@ -215,34 +215,34 @@ class EducationalOrchestrator(IOrchestrator):
             >>> response = orchestrator.generate_response(context)
             >>> len(response.next_steps)
             5
-        
+
         Authority: AC-EDUCATIONAL-INTERACTION-001
         """
         # Extract topic from query
         topic = self._extract_topic(context.query)
-        
+
         # Generate explanation based on knowledge level
         explanation = self._generate_explanation(
             topic=topic,
             knowledge_level=context.knowledge_level,
             verified_truth=verified_truth
         )
-        
+
         # Collect evidence
         evidence = self._collect_evidence(topic, verified_truth)
-        
+
         # Generate next steps
         next_steps = self._generate_next_steps(
             topic=topic,
             knowledge_level=context.knowledge_level,
             user_path=context.user_path
         )
-        
+
         # Detect issues (if verification provided)
         detected_issues = []
         if verified_truth and verified_truth.get("issues"):
             detected_issues = verified_truth["issues"]
-        
+
         response = EducationalResponse(
             title=f"Understanding {topic}",
             implementation_reality=explanation.get("reality", ""),
@@ -253,7 +253,7 @@ class EducationalOrchestrator(IOrchestrator):
             knowledge_level=context.knowledge_level,
             code_snippets=explanation.get("snippets", [])
         )
-        
+
         self.logger.log_operation_complete(
             ac_id="AC-EDUCATIONAL-INTERACTION-001",
             operation="RESPONSE_GENERATED",
@@ -265,14 +265,14 @@ class EducationalOrchestrator(IOrchestrator):
                 "evidence_count": len(evidence)
             }
         )
-        
+
         return response
-    
+
     def _extract_topic(self, query: str) -> str:
         """Extract main topic from query."""
         # Simple extraction - can be enhanced with NLP
         query_lower = query.lower()
-        
+
         # Common CORTEX topics
         topics = {
             "master": "MasterOrchestrator",
@@ -286,13 +286,13 @@ class EducationalOrchestrator(IOrchestrator):
             "synthesis": "Knowledge Synthesis",
             "cortex": "CORTEX System",
         }
-        
+
         for keyword, topic in topics.items():
             if keyword in query_lower:
                 return topic
-        
+
         return "CORTEX Architecture"
-    
+
     def _generate_explanation(
         self,
         topic: str,
@@ -306,7 +306,7 @@ class EducationalOrchestrator(IOrchestrator):
             return self._intermediate_explanation(topic, verified_truth)
         else:
             return self._advanced_explanation(topic, verified_truth)
-    
+
     def _beginner_explanation(
         self,
         topic: str,
@@ -336,13 +336,13 @@ It's the "traffic controller" of CORTEX - making sure everything flows smoothly!
                 "snippets": []
             }
         }
-        
+
         return explanations.get(topic, {
             "reality": f"{topic} is a component of CORTEX",
             "content": f"**{topic}** helps CORTEX work effectively by managing specific responsibilities.",
             "snippets": []
         })
-    
+
     def _intermediate_explanation(
         self,
         topic: str,
@@ -365,7 +365,7 @@ This allows it to participate in the orchestration workflow while maintaining lo
             """,
             "snippets": []
         }
-    
+
     def _advanced_explanation(
         self,
         topic: str,
@@ -395,7 +395,7 @@ Extension Points:
             """,
             "snippets": []
         }
-    
+
     def _collect_evidence(
         self,
         topic: str,
@@ -403,7 +403,7 @@ Extension Points:
     ) -> List[str]:
         """Collect evidence (file paths, line numbers, tests)."""
         evidence = []
-        
+
         if verified_truth:
             if "file_path" in verified_truth:
                 evidence.append(f"File: `{verified_truth['file_path']}`")
@@ -411,14 +411,14 @@ Extension Points:
                 evidence.append(f"Lines: {verified_truth['line_range']}")
             if "tests" in verified_truth:
                 evidence.append(f"Tests: {verified_truth['tests']}")
-        
+
         # Default evidence for common topics
         if not evidence:
             evidence.append(f"Documentation: `docs/` (check for {topic})")
             evidence.append("Implementation: Verify via code inspection")
-        
+
         return evidence
-    
+
     def _generate_next_steps(
         self,
         topic: str,
@@ -427,26 +427,26 @@ Extension Points:
     ) -> List[Dict[str, str]]:
         """
         Generate 3-5 intelligent next-step options.
-        
+
         Phase 22: Next Step Generation
-        
+
         Rules:
         1. Always include deeper dive on current topic
         2. Add 1-2 related concepts
         3. Include practical example
         4. Add troubleshooting or advanced topic based on level
-        
+
         Returns:
             List of option dicts with 'title' and 'description'
         """
         options = []
-        
+
         # Option 1: Deeper dive (always)
         options.append({
             "title": f"Deep Dive: {topic} Implementation",
             "description": f"Explore the code, wiring, and tests for {topic}"
         })
-        
+
         # Option 2-3: Related concepts
         related = self._get_related_topics(topic)
         for rel_topic in related[:2]:
@@ -454,13 +454,13 @@ Extension Points:
                 "title": f"Explore {rel_topic}",
                 "description": f"Learn how {rel_topic} relates to {topic}"
             })
-        
+
         # Option 4: Practical example
         options.append({
             "title": f"See {topic} in Action",
             "description": f"Walk through a real example of {topic} working"
         })
-        
+
         # Option 5: Context-dependent
         if knowledge_level == KnowledgeLevel.ADVANCED:
             options.append({
@@ -472,9 +472,9 @@ Extension Points:
                 "title": "Common Questions",
                 "description": f"FAQ and troubleshooting for {topic}"
             })
-        
+
         return options[:5]  # Cap at 5
-    
+
     def _get_related_topics(self, topic: str) -> List[str]:
         """Get related topics for exploration."""
         relations = {
@@ -484,19 +484,19 @@ Extension Points:
             "ChallengeEngine": ["InteractionOrchestrator", "Disagreement Detection"],
             "Knowledge Synthesis": ["LENS Protocol", "Company Knowledge", "CORE Rules"],
         }
-        
+
         return relations.get(topic, ["CORTEX Architecture", "Orchestrators", "MCP Tools"])
-    
+
     def execute(self, parameters: Dict[str, Any]) -> Result[str]:
         """
         Execute educational query (IOrchestrator interface).
-        
+
         Args:
             parameters: Must contain 'query' and optionally 'knowledge_level'
-        
+
         Returns:
             Result[str]: Ok with response JSON, or Err with error
-        
+
         Authority: AC-EDUCATIONAL-INTERACTION-001
         """
         self.logger.log_operation_start(
@@ -504,26 +504,26 @@ Extension Points:
             operation="EDUCATIONAL_EXECUTE",
             details=parameters
         )
-        
+
         try:
             query = parameters.get("query", "")
             if not query:
                 return Err("Query parameter required")
-            
+
             # Detect knowledge level
             history = parameters.get("history", [])
             knowledge_level = self.detect_knowledge_level(query, history)
-            
+
             # Create context
             context = EducationalContext(
                 query=query,
                 knowledge_level=knowledge_level,
                 conversation_history=history
             )
-            
+
             # Generate response
             response = self.generate_response(context)
-            
+
             # Format as JSON
             import json
             result_json = json.dumps({
@@ -534,16 +534,16 @@ Extension Points:
                 "next_steps": response.next_steps,
                 "knowledge_level": response.knowledge_level.value
             }, indent=2)
-            
+
             self.logger.log_operation_complete(
                 ac_id="AC-EDUCATIONAL-INTERACTION-001",
                 operation="EDUCATIONAL_EXECUTE",
                 success=True,
                 details={"query": query, "knowledge_level": knowledge_level.value}
             )
-            
+
             return Ok(result_json)
-            
+
         except Exception as e:
             self.logger.log_operation_complete(
                 ac_id="AC-EDUCATIONAL-INTERACTION-001",
@@ -552,19 +552,19 @@ Extension Points:
                 details={"error": str(e)}
             )
             return Err(f"Educational execution failed: {str(e)}")
-    
+
     def get_mode(self) -> OperationMode:
         """Get orchestrator operation mode."""
         return OperationMode.EDUCATIONAL
-    
+
     def get_name(self) -> str:
         """Get orchestrator name."""
         return "EducationalOrchestrator"
-    
+
     def get_version(self) -> str:
         """Get orchestrator version."""
         return "1.0.0"
-    
+
     def initialize(self) -> Result[str]:
         """Initialize orchestrator."""
         try:
@@ -573,20 +573,20 @@ Extension Points:
                 operation="INITIALIZE",
                 details={}
             )
-            
+
             # Initialize conversation contexts
             self._conversation_contexts = {}
-            
+
             self.logger.log_operation_complete(
                 ac_id="AC-EDUCATIONAL-INTERACTION-001",
                 operation="INITIALIZE",
                 success=True
             )
-            
+
             return Ok("EducationalOrchestrator initialized")
         except Exception as e:
             return Err(f"Initialization failed: {str(e)}")
-    
+
     def get_mcp_tools(self) -> Result[Dict[str, Any]]:
         """Get exposed MCP tools for educational interaction."""
         tools = {
@@ -621,9 +621,9 @@ Extension Points:
                 }
             }
         }
-        
+
         return Ok(tools)
-    
+
     def execute_operation(
         self,
         operation_name: str,
@@ -634,7 +634,7 @@ Extension Points:
             return self.execute(parameters)
         else:
             return Err(f"Unknown operation: {operation_name}")
-    
+
     def get_audit_trail(self, limit: int = 100) -> Result[list]:
         """Get audit trail with hash chain."""
         try:

@@ -26,14 +26,14 @@ Architecture:
 - Feature flag management for gradual rollout
 """
 
+import ast
+import logging
+import re
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any, Set, Tuple
+from datetime import datetime
 from enum import Enum
 from pathlib import Path
-import logging
-import ast
-import re
-from datetime import datetime
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -94,17 +94,17 @@ class TransformationResult:
     error: Optional[str] = None
     applied_transformations: List[str] = field(default_factory=list)
     summary: str = ""
-    
+
     # Behavior preservation
     behavior_preserved: bool = True
-    
+
     # Test generation (AC-PHASE52-S4-002)
     generated_tests: List[str] = field(default_factory=list)
     test_coverage_percent: float = 0.0
-    
+
     # Comparison (AC-PHASE52-S4-001)
     comparison: Optional[ComparisonReport] = None
-    
+
     # Feature parity (AC-PHASE52-S4-003)
     parity_valid: bool = True
     parity_score: float = 1.0
@@ -474,7 +474,7 @@ class MigrationExecutionEngine:
                         success=False,
                         error=f"Syntax error: {str(e)}",
                     )
-                
+
                 transformer = CodeTransformer(language)
 
                 # Apply transformations

@@ -12,7 +12,7 @@ import time
 from typing import Optional
 
 try:
-    from anthropic import Anthropic, APITimeoutError, RateLimitError, APIError
+    from anthropic import Anthropic, APIError, APITimeoutError, RateLimitError
     ANTHROPIC_AVAILABLE = True
 except ImportError:
     ANTHROPIC_AVAILABLE = False
@@ -34,14 +34,14 @@ except ImportError:
 class AnthropicProvider(ILLMProvider):
     """
     Anthropic Claude LLM provider implementation.
-    
+
     Supports: Claude 3 Opus, Claude 3 Sonnet, Claude 3 Haiku
-    
+
     Example:
         >>> provider = AnthropicProvider(api_key="sk-ant-...", model="claude-3-opus-20240229")
         >>> response = provider.generate("Analyze this code", max_tokens=500)
     """
-    
+
     def __init__(
         self,
         api_key: Optional[str] = None,
@@ -49,11 +49,11 @@ class AnthropicProvider(ILLMProvider):
     ):
         """
         Initialize Anthropic provider.
-        
+
         Args:
             api_key: Anthropic API key (or set ANTHROPIC_API_KEY env var)
             model: Model to use (default: claude-3-5-sonnet)
-        
+
         Raises:
             ValueError: If API key is missing
             ImportError: If anthropic package not installed
@@ -62,17 +62,17 @@ class AnthropicProvider(ILLMProvider):
             raise ImportError(
                 "anthropic package not installed. Install with: pip install anthropic"
             )
-        
+
         self.api_key = api_key or os.getenv("ANTHROPIC_API_KEY")
         if not self.api_key:
             raise ValueError(
                 "Anthropic API key required. Set ANTHROPIC_API_KEY environment variable "
                 "or pass api_key parameter."
             )
-        
+
         self.model = model
         self.client = Anthropic(api_key=self.api_key)
-    
+
     def generate(
         self,
         prompt: str,
@@ -83,17 +83,17 @@ class AnthropicProvider(ILLMProvider):
     ) -> LLMResponse:
         """
         Generate text using Anthropic API.
-        
+
         Args:
             prompt: Input prompt
             max_tokens: Maximum tokens in response
             temperature: Sampling temperature (0.0-1.0)
             timeout: Request timeout in seconds
             **kwargs: Additional Anthropic parameters
-        
+
         Returns:
             LLMResponse with generated text and usage info
-        
+
         Raises:
             TimeoutError: If request times out
             ValueError: If parameters are invalid
@@ -102,7 +102,7 @@ class AnthropicProvider(ILLMProvider):
         start_time = time.time()
         status = "success"
         error_type = None
-        
+
         try:
             response = self.client.messages.create(
                 model=self.model,
@@ -112,14 +112,14 @@ class AnthropicProvider(ILLMProvider):
                 timeout=timeout,
                 **kwargs
             )
-            
+
             content = response.content[0].text
             usage = LLMUsage(
                 prompt_tokens=response.usage.input_tokens,
                 completion_tokens=response.usage.output_tokens,
                 total_tokens=response.usage.input_tokens + response.usage.output_tokens
             )
-            
+
             # PHASE 3: Record metrics
             latency = time.time() - start_time
             record_llm_call(
@@ -132,7 +132,7 @@ class AnthropicProvider(ILLMProvider):
                 completion_tokens=usage.completion_tokens,
                 cost_usd=usage.cost_estimate_usd
             )
-            
+
             return LLMResponse(
                 content=content,
                 usage=usage,
@@ -140,7 +140,7 @@ class AnthropicProvider(ILLMProvider):
                 provider="anthropic",
                 metadata={"stop_reason": response.stop_reason}
             )
-            
+
         except APITimeoutError as e:
             status = "error"
             error_type = "timeout"
@@ -161,29 +161,29 @@ class AnthropicProvider(ILLMProvider):
             error_type = "unknown"
             record_llm_error("anthropic", error_type)
             raise Exception(f"Unexpected error calling Anthropic: {str(e)}") from e
-    
+
     def get_name(self) -> str:
         """Get provider name."""
         return "anthropic"
-    
+
     def get_model(self) -> str:
         """Get current model name."""
         return self.model
-    
+
     def validate_config(self) -> bool:
         """
         Validate Anthropic configuration.
-        
+
         Returns:
             True if API key is present and model is supported
         """
         if not self.api_key:
             return False
-        
+
         supported_models = [
             "claude-3-opus", "claude-3-sonnet", "claude-3-haiku",
             "claude-3-5-sonnet", "claude-3-5-haiku"
         ]
-        
+
         # Check if model starts with any supported model name
         return any(self.model.startswith(m) for m in supported_models)

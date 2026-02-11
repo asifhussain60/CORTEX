@@ -5,16 +5,19 @@ Generated adapter for EducationalOrchestrator.
 AC-ID: AC-PHASE2B-009
 """
 
+import logging
+import time
 from typing import Any, Dict, List, Optional
+
 from cortex.mcp.orchestrator_mcp_server import (
-    IOrchestratorAdapter,
     CapabilityMetadata,
     CapabilityResponse,
     ExecutionContext,
+    IOrchestratorAdapter,
 )
-from cortex.orchestrators.education.educational_orchestrator import EducationalOrchestrator
-import logging
-import time
+from cortex.orchestrators.education.educational_orchestrator import (
+    EducationalOrchestrator,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -33,14 +36,14 @@ def _get_orchestrator_from_wiring(name: str) -> Optional[Any]:
 class EducationalOrchestratorAdapter(IOrchestratorAdapter):
     """
     MCP Adapter for EducationalOrchestrator.
-    
+
     Exposes capabilities:
     - provide_guidance: Provide educational guidance
     - assess_understanding: Assess user understanding
-    
+
     CORE-035: Uses wiring system for orchestrator access (single execution path).
     """
-    
+
     def __init__(self, orchestrator: Optional[EducationalOrchestrator] = None):
         """Initialize adapter with orchestrator from wiring system."""
         if orchestrator is not None:
@@ -48,7 +51,7 @@ class EducationalOrchestratorAdapter(IOrchestratorAdapter):
         else:
             self.orchestrator = _get_orchestrator_from_wiring("EducationalOrchestrator")
         self.name = "EducationalOrchestratorAdapter"
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         """Get all capabilities exposed by this orchestrator."""
         return [
@@ -71,7 +74,7 @@ class EducationalOrchestratorAdapter(IOrchestratorAdapter):
                 tags={"generated", "phase2b"},
             )
         ]
-    
+
     def execute_capability(
         self,
         capability_name: str,
@@ -89,7 +92,7 @@ class EducationalOrchestratorAdapter(IOrchestratorAdapter):
                     orchestrator="educationalorchestrator",
                     duration_ms=(time.time() - start) * 1000,
                 )
-            
+
             if capability_name == "provide_guidance":
                 result = self.orchestrator.provide_guidance(topic=parameters.get('topic'), level=parameters.get('level'))
                 return CapabilityResponse(
@@ -108,7 +111,7 @@ class EducationalOrchestratorAdapter(IOrchestratorAdapter):
                     orchestrator="{orchestrator_name_lower}",
                     duration_ms=(time.time() - start) * 1000,
                 )
-            
+
             return CapabilityResponse(
                 request_id=context.session_id,
                 success=False,
@@ -125,7 +128,7 @@ class EducationalOrchestratorAdapter(IOrchestratorAdapter):
                 orchestrator="educationalorchestrator",
                 duration_ms=(time.time() - start) * 1000,
             )
-    
+
     def validate_parameters(
         self, capability_name: str, parameters: Dict[str, Any]
     ) -> tuple[bool, Optional[str]]:

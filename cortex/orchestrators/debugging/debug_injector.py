@@ -128,6 +128,7 @@ class JavaScriptInjector(LanguageInjector):
             modified_lines.append(line)
             
             # Skip if already has CORTEX marker
+            if 'CORTEX_DEBUG' in line:
                 continue
             
             # Skip comments
@@ -319,6 +320,7 @@ class PythonInjector(LanguageInjector):
             modified_lines.append(line)
             
             # Skip if already has CORTEX marker
+            if 'CORTEX_DEBUG' in line:
                 continue
             
             # Skip comments and empty lines
@@ -568,6 +570,7 @@ class DebugInjector:
                 content = file_path.read_text(encoding='utf-8')
                 
                 # Skip if already injected
+                if 'CORTEX_DEBUG' in content:
                     logger.info(f"Skipping {rel_path} - already injected")
                     continue
                 

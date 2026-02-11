@@ -11,15 +11,15 @@ Handles:
 Authority: CORE-008 (TDD), Phase 53 specification
 """
 
-import json
-import os
-import shutil
-import re
 import hashlib
-from pathlib import Path
-from typing import Dict, Any, List, Optional, Tuple
-from datetime import datetime
+import json
 import logging
+import os
+import re
+import shutil
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -410,7 +410,7 @@ class DataMigrationOrchestrator:
             migration_summary["ac_marker"] = "AC_COMPLETE: AC-PHASE53.0-S5-MIGRATION ✅"
 
             logger.info("=" * 80)
-            logger.info(f"✅ Migration completed successfully")
+            logger.info("✅ Migration completed successfully")
             logger.info(f"   - Extracted: {len(extracted_data)} repositories")
             logger.info(f"   - Converted: {len(converted_data)} JSON files")
             logger.info(f"   - Verified: {verification['files_valid']}/{verification['files_checked']} files")

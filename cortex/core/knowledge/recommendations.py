@@ -1,15 +1,15 @@
 """Knowledge recommendation engine for personalized content suggestions."""
 
-from typing import Dict, List, Optional, Any, Tuple
+from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
-from collections import defaultdict
+from typing import Any, Dict, List, Optional, Tuple
 
 
 @dataclass
 class Recommendation:
     """Personalized recommendation for a user.
-    
+
     Attributes:
         doc_id: Document identifier being recommended.
         content: Recommendation content/title.
@@ -39,7 +39,7 @@ class Recommendation:
 @dataclass
 class UserInteraction:
     """Records a user interaction with content.
-    
+
     Attributes:
         user_id: User identifier.
         doc_id: Document identifier.
@@ -61,16 +61,16 @@ class UserInteraction:
 
 class RecommendationEngine:
     """Engine for generating personalized recommendations based on behavior and context.
-    
+
     Learns from user interactions and generates contextual recommendations.
     """
 
     def __init__(self, backends: Optional[Dict[str, Dict[str, Any]]] = None) -> None:
         """Initialize recommendation engine with configured backends.
-        
+
         Args:
             backends: Dictionary mapping backend names to backend configurations.
-        
+
         Raises:
             TypeError: If backends is not a dict or None.
         """
@@ -78,7 +78,7 @@ class RecommendationEngine:
             backends = {}
         if not isinstance(backends, dict):
             raise TypeError(f"backends must be dict, got {type(backends)}")
-        
+
         self.backends = backends
         self.behavior_history: Dict[str, List[UserInteraction]] = defaultdict(list)
         self.interaction_weights = {
@@ -98,24 +98,24 @@ class RecommendationEngine:
         limit: int = 10
     ) -> List[Recommendation]:
         """Generate recommendations based on context and optional user history.
-        
+
         Args:
             context: Context dictionary with topic, interest, skill, etc.
             user_id: Optional user ID for personalized recommendations.
             limit: Maximum number of recommendations to return.
-        
+
         Returns:
             List of Recommendation objects sorted by confidence.
         """
         recommendations: List[Recommendation] = []
-        
+
         # If we have user history, use it to personalize
         if user_id and user_id in self.behavior_history:
             for interaction in self.behavior_history[user_id]:
                 confidence = self.interaction_weights.get(
                     interaction.interaction_type, 0.5
                 ) * interaction.engagement_score
-                
+
                 rec = Recommendation(
                     doc_id=interaction.doc_id,
                     content=f"Previously engaged with {interaction.doc_id}",
@@ -124,7 +124,7 @@ class RecommendationEngine:
                     relevance_score=confidence
                 )
                 recommendations.append(rec)
-        
+
         # Generate context-based recommendations
         for topic_key, topic_value in context.items():
             if isinstance(topic_value, str):
@@ -137,7 +137,7 @@ class RecommendationEngine:
                     relevance_score=confidence
                 )
                 recommendations.append(rec)
-        
+
         # Sort by confidence descending
         recommendations.sort(key=lambda r: r.confidence, reverse=True)
         return recommendations[:limit]
@@ -150,7 +150,7 @@ class RecommendationEngine:
         engagement_score: float
     ) -> None:
         """Record a user interaction for learning.
-        
+
         Args:
             user_id: User identifier.
             doc_id: Document identifier.
@@ -164,11 +164,11 @@ class RecommendationEngine:
             engagement_score=engagement_score
         )
         self.behavior_history[user_id].append(interaction)
-        
+
         # Update user preferences
         if interaction_type not in self.user_preferences[user_id]:
             self.user_preferences[user_id][interaction_type] = 0.0
-        
+
         self.user_preferences[user_id][interaction_type] = (
             self.user_preferences[user_id][interaction_type] * 0.7 +
             engagement_score * 0.3
@@ -180,24 +180,24 @@ class RecommendationEngine:
         limit: int = 10
     ) -> List[Recommendation]:
         """Generate recommendations based purely on user behavior history.
-        
+
         Args:
             user_id: User identifier.
             limit: Maximum number of recommendations to return.
-        
+
         Returns:
             List of Recommendation objects from user behavior.
         """
         if user_id not in self.behavior_history:
             return []
-        
+
         recommendations_map: Dict[str, Recommendation] = {}
         interactions = self.behavior_history[user_id]
-        
+
         for interaction in interactions:
             weight = self.interaction_weights.get(interaction.interaction_type, 0.5)
             confidence = weight * interaction.engagement_score
-            
+
             # If doc_id already seen, update with higher confidence
             if interaction.doc_id not in recommendations_map:
                 rec = Recommendation(
@@ -214,7 +214,7 @@ class RecommendationEngine:
                 if confidence > existing.confidence:
                     existing.confidence = confidence
                     existing.reason = f"Based on your {interaction.interaction_type} of this item"
-        
+
         recommendations = list(recommendations_map.values())
         recommendations.sort(key=lambda r: r.confidence, reverse=True)
         return recommendations[:limit]
@@ -225,7 +225,7 @@ class RecommendationEngine:
         metadata: Dict[str, Any]
     ) -> None:
         """Register a document for recommendations.
-        
+
         Args:
             doc_id: Document identifier.
             metadata: Document metadata (title, tags, category, etc.).
@@ -239,21 +239,21 @@ class RecommendationEngine:
         limit: int = 10
     ) -> List[Recommendation]:
         """Get fully personalized recommendations combining behavior and context.
-        
+
         Args:
             user_id: User identifier.
             context: Optional context dictionary.
             limit: Maximum number of recommendations.
-        
+
         Returns:
             List of personalized Recommendation objects.
         """
         recommendations: List[Recommendation] = []
-        
+
         # Get behavioral recommendations
         behavioral = self.get_behavioral_recommendations(user_id, limit=limit * 2)
         recommendations.extend(behavioral)
-        
+
         # Get context-based recommendations if provided
         if context:
             context_based = self.get_recommendations(
@@ -262,13 +262,13 @@ class RecommendationEngine:
                 limit=limit * 2
             )
             recommendations.extend(context_based)
-        
+
         # Deduplicate by doc_id (keep highest confidence)
         seen: Dict[str, Recommendation] = {}
         for rec in recommendations:
             if rec.doc_id not in seen or rec.confidence > seen[rec.doc_id].confidence:
                 seen[rec.doc_id] = rec
-        
+
         final_recs = list(seen.values())
         final_recs.sort(key=lambda r: r.confidence, reverse=True)
         return final_recs[:limit]
@@ -276,13 +276,13 @@ class RecommendationEngine:
 
 class KnowledgeRecommender:
     """High-level knowledge recommender with advanced personalization.
-    
+
     Builds on RecommendationEngine to provide domain-specific recommendations.
     """
 
     def __init__(self, backends: Optional[Dict[str, Dict[str, Any]]] = None) -> None:
         """Initialize knowledge recommender.
-        
+
         Args:
             backends: Dictionary mapping backend names to backend configurations.
         """
@@ -295,15 +295,15 @@ class KnowledgeRecommender:
         strategy: str = "hybrid"
     ) -> List[Recommendation]:
         """Generate recommendations using specified strategy.
-        
+
         Args:
             user_id: Optional user identifier for personalization.
             context: Optional context for content-based recommendations.
             strategy: Strategy type ("behavioral", "contextual", "hybrid").
-        
+
         Returns:
             List of Recommendation objects.
-        
+
         Raises:
             ValueError: If strategy is not recognized.
         """

@@ -15,12 +15,14 @@ Key Features:
 - Health endpoint responses
 """
 
-from typing import Dict, Any, List
-from datetime import datetime
 import logging
+from datetime import datetime
+from typing import Any, Dict, List
 
+from cortex.registry.tenant_aware_git_backed_registry import (
+    TenantAwareGitBackedRegistry,
+)
 from cortex.registry.tenant_context import TenantContext, validate_tenant_context
-from cortex.registry.tenant_aware_git_backed_registry import TenantAwareGitBackedRegistry
 from cortex.registry.workspace_manager import WorkspaceManager
 
 logger = logging.getLogger(__name__)
@@ -28,14 +30,14 @@ logger = logging.getLogger(__name__)
 
 class HealthCheckResult:
     """Result of a health check."""
-    
+
     def __init__(self, name: str, healthy: bool, message: str = "") -> None:
         """Initialize health check result."""
         self.name = name
         self.healthy = healthy
         self.message = message
         self.timestamp = datetime.utcnow()
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
@@ -49,14 +51,14 @@ class HealthCheckResult:
 class RegistryHealthMonitor:
     """
     Monitor registry health and provide metrics.
-    
+
     Tracks:
     - Registry health status
     - Tenant isolation status
     - Workspace count and health
     - Prometheus metrics
     """
-    
+
     def __init__(
         self,
         registry: TenantAwareGitBackedRegistry,
@@ -64,7 +66,7 @@ class RegistryHealthMonitor:
     ) -> None:
         """
         Initialize health monitor.
-        
+
         Args:
             registry: TenantAwareGitBackedRegistry instance
             workspace_manager: WorkspaceManager instance
@@ -73,13 +75,13 @@ class RegistryHealthMonitor:
         self.workspace_manager = workspace_manager
         self._checks: List[HealthCheckResult] = []
         self._metrics: Dict[str, int] = {}
-        
+
         logger.info("Initialized RegistryHealthMonitor")
-    
+
     def check_registry_health(self) -> HealthCheckResult:
         """
         Check overall registry health.
-        
+
         Returns:
             HealthCheckResult
         """
@@ -97,7 +99,7 @@ class RegistryHealthMonitor:
                     False,
                     "Registry not initialized"
                 )
-            
+
             self._checks.append(result)
             return result
         except Exception as e:
@@ -108,24 +110,24 @@ class RegistryHealthMonitor:
             )
             self._checks.append(result)
             return result
-    
+
     def check_git_status(self) -> HealthCheckResult:
         """
         Check git repository status.
-        
+
         Returns:
             HealthCheckResult
         """
         try:
             # Simplified git check - in real implementation would call git status
             registry_root = self.registry.registry_root
-            
+
             result = HealthCheckResult(
                 "git",
                 True,
                 f"Git repository healthy at {registry_root}"
             )
-            
+
             self._checks.append(result)
             return result
         except Exception as e:
@@ -136,11 +138,11 @@ class RegistryHealthMonitor:
             )
             self._checks.append(result)
             return result
-    
+
     def check_file_integrity(self) -> HealthCheckResult:
         """
         Check registry file integrity.
-        
+
         Returns:
             HealthCheckResult
         """
@@ -151,7 +153,7 @@ class RegistryHealthMonitor:
                 True,
                 "Registry files intact"
             )
-            
+
             self._checks.append(result)
             return result
         except Exception as e:
@@ -162,11 +164,11 @@ class RegistryHealthMonitor:
             )
             self._checks.append(result)
             return result
-    
+
     def check_tenant_isolation(self) -> HealthCheckResult:
         """
         Check tenant isolation status.
-        
+
         Returns:
             HealthCheckResult
         """
@@ -177,7 +179,7 @@ class RegistryHealthMonitor:
                 True,
                 "Tenant isolation verified"
             )
-            
+
             self._checks.append(result)
             return result
         except Exception as e:
@@ -188,11 +190,11 @@ class RegistryHealthMonitor:
             )
             self._checks.append(result)
             return result
-    
+
     def get_registry_health(self) -> Dict[str, Any]:
         """
         Get complete registry health.
-        
+
         Returns:
             Dictionary with health status
         """
@@ -206,14 +208,14 @@ class RegistryHealthMonitor:
                 self.check_file_integrity().to_dict(),
             ]
         }
-    
+
     def get_tenants_health(self, tenant_count: int = 0) -> Dict[str, Any]:
         """
         Get tenants health status.
-        
+
         Args:
             tenant_count: Number of active tenants
-        
+
         Returns:
             Dictionary with tenant health
         """
@@ -227,17 +229,17 @@ class RegistryHealthMonitor:
                 self.check_tenant_isolation().to_dict(),
             ]
         }
-    
+
     def get_workspaces_health(
         self,
         workspace_count: int = 0
     ) -> Dict[str, Any]:
         """
         Get workspaces health status.
-        
+
         Args:
             workspace_count: Number of active workspaces
-        
+
         Returns:
             Dictionary with workspace health
         """
@@ -248,11 +250,11 @@ class RegistryHealthMonitor:
             "active_workspaces": workspace_count,
             "checks": []
         }
-    
+
     def get_metrics(self) -> Dict[str, int]:
         """
         Get Prometheus metrics.
-        
+
         Returns:
             Dictionary of metrics
         """
@@ -262,9 +264,9 @@ class RegistryHealthMonitor:
             "registry_operation_total": 0,
             "tenant_isolation_violations": 0,
         }
-        
+
         return metrics
-    
+
     def get_health_summary(
         self,
         tenant_count: int = 0,
@@ -272,11 +274,11 @@ class RegistryHealthMonitor:
     ) -> Dict[str, Any]:
         """
         Get health summary for all components.
-        
+
         Args:
             tenant_count: Number of active tenants
             workspace_count: Number of active workspaces
-        
+
         Returns:
             Health summary dictionary
         """
@@ -288,7 +290,7 @@ class RegistryHealthMonitor:
             "workspaces": self.get_workspaces_health(workspace_count),
             "metrics": self.get_metrics()
         }
-    
+
     def reset(self) -> None:
         """Reset health monitor (for testing)."""
         self._checks.clear()

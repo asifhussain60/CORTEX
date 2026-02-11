@@ -9,7 +9,7 @@ This prevents the server from being killed when VS Code prompts are triggered.
 
 USAGE:
     python src/dashboard/launch.py
-    
+
     # Or make executable (macOS/Linux)
     chmod +x src/dashboard/launch.py
     ./src/dashboard/launch.py
@@ -20,9 +20,9 @@ CROSS-PLATFORM:
 - Linux: Opens in gnome-terminal/konsole/xterm
 """
 import os
-import sys
 import platform
 import subprocess
+import sys
 from pathlib import Path
 
 
@@ -40,7 +40,7 @@ def get_platform() -> str:
 def launch_external_terminal() -> bool:
     """
     Launch dashboard server in external terminal.
-    
+
     Returns:
         True if successfully launched, False otherwise
     """
@@ -48,18 +48,18 @@ def launch_external_terminal() -> bool:
     script_dir = Path(__file__).parent.absolute()
     project_root = script_dir.parent.parent
     serve_script = script_dir / "serve-cortex-dashboard.py"
-    
+
     # Build command
     python_exec = sys.executable
     command = f'cd "{project_root}" && "{python_exec}" "{serve_script}"'
-    
+
     os_type = get_platform()
-    
+
     print("🚀 Launching CORTEX Dashboard in external terminal...")
     print(f"   Platform: {os_type}")
     print(f"   Script: {serve_script}")
     print()
-    
+
     try:
         if os_type == "macos":
             # macOS: Use Terminal.app
@@ -74,16 +74,16 @@ def launch_external_terminal() -> bool:
             print("✅ Launched in Terminal.app")
             print("   Check Terminal for server status")
             return True
-            
+
         elif os_type == "windows":
             # Windows: Use PowerShell in new window
             ps_command = f'Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd \\"{project_root}\\"; & \\"{python_exec}\\" \\"{serve_script}\\"" -WindowStyle Normal'
-            subprocess.Popen(['powershell', '-Command', ps_command], 
+            subprocess.Popen(['powershell', '-Command', ps_command],
                            creationflags=subprocess.CREATE_NEW_CONSOLE)
             print("✅ Launched in PowerShell")
             print("   Check PowerShell window for server status")
             return True
-            
+
         else:  # Linux
             # Try common terminal emulators
             terminals = [
@@ -91,7 +91,7 @@ def launch_external_terminal() -> bool:
                 (['konsole', '-e', 'bash', '-c', f'{command}; exec bash'], 'konsole'),
                 (['xterm', '-e', f'bash -c "{command}; bash"'], 'xterm'),
             ]
-            
+
             for terminal_cmd, terminal_name in terminals:
                 try:
                     subprocess.Popen(terminal_cmd)
@@ -100,11 +100,11 @@ def launch_external_terminal() -> bool:
                     return True
                 except FileNotFoundError:
                     continue
-            
+
             print("❌ No suitable terminal emulator found")
             print("   Install one of: gnome-terminal, konsole, xterm")
             return False
-            
+
     except Exception as e:
         print(f"❌ Failed to launch external terminal: {e}")
         return False
@@ -116,9 +116,9 @@ def main() -> int:
     print("CORTEX NEURAL OBSERVATORY - EXTERNAL LAUNCHER")
     print("=" * 80)
     print()
-    
+
     success = launch_external_terminal()
-    
+
     if success:
         print()
         print("=" * 80)

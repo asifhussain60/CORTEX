@@ -9,11 +9,11 @@ Description: Dashboard auto-generation hook infrastructure
 Author: CORTEX Implementation
 """
 
-from typing import Optional, Callable, Any, Dict
-from dataclasses import dataclass
-from enum import Enum
 import logging
+from dataclasses import dataclass
 from datetime import datetime
+from enum import Enum
+from typing import Any, Callable, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +32,7 @@ class ProfileCreatedEvent:
     profile_path: str
     timestamp: datetime
     profile_data: Dict[str, Any]
-    
+
     def __post_init__(self):
         """Validate event data"""
         if not self.repo_name:
@@ -45,9 +45,9 @@ class ProfileCreatedEvent:
 
 class OnboardingDashboardHook:
     """
-    Post-profile hook that triggers dashboard generation immediately after 
+    Post-profile hook that triggers dashboard generation immediately after
     repository profile is created.
-    
+
     Provides:
     - Event-driven architecture for dashboard generation
     - Error isolation (profile retained even if dashboard fails)
@@ -55,7 +55,7 @@ class OnboardingDashboardHook:
     - Audit trail via AC markers
     - Graceful degradation on generation failure
     """
-    
+
     def __init__(
         self,
         dashboard_orchestrator: Optional[Any] = None,
@@ -65,7 +65,7 @@ class OnboardingDashboardHook:
     ):
         """
         Initialize dashboard hook.
-        
+
         Args:
             dashboard_orchestrator: DashboardOrchestrator instance (lazy-loaded if None)
             enabled: Whether to trigger dashboard generation (default: True)
@@ -81,7 +81,7 @@ class OnboardingDashboardHook:
             HookEventType.PROFILE_UPDATED: [],
             HookEventType.ONBOARDING_COMPLETE: []
         }
-    
+
     def register_handler(
         self,
         event_type: HookEventType,
@@ -90,16 +90,16 @@ class OnboardingDashboardHook:
         """Register a custom event handler for dashboard generation events"""
         self._event_handlers[event_type].append(handler)
         logger.debug(f"Registered handler for {event_type.value}")
-    
+
     def on_profile_created(self, event: ProfileCreatedEvent) -> Dict[str, Any]:
         """
         Called when repository profile is successfully created.
-        
+
         Triggers dashboard generation via configured orchestrator.
-        
+
         Args:
             event: ProfileCreatedEvent with repo metadata
-            
+
         Returns:
             Dict with generation status and result
             {
@@ -110,22 +110,22 @@ class OnboardingDashboardHook:
             }
         """
         audit_trail = []
-        
+
         try:
             # Log start
             audit_trail.append(f"AC_START: AC-PHASE28-S5-HK001-{event.repo_name}")
             logger.info(f"Dashboard hook triggered for {event.repo_name}")
-            
+
             # Check if enabled
             if not self.enabled:
-                logger.info(f"Dashboard hook disabled, skipping dashboard generation")
-                audit_trail.append(f"Dashboard generation skipped (hook disabled)")
+                logger.info("Dashboard hook disabled, skipping dashboard generation")
+                audit_trail.append("Dashboard generation skipped (hook disabled)")
                 return {
                     "status": "skipped",
                     "reason": "hook_disabled",
                     "audit_trail": audit_trail
                 }
-            
+
             # Fire event handlers
             for handler in self._event_handlers[HookEventType.PROFILE_CREATED]:
                 try:
@@ -133,10 +133,10 @@ class OnboardingDashboardHook:
                 except Exception as e:
                     logger.warning(f"Event handler failed: {e}")
                     audit_trail.append(f"Warning: Handler failed - {str(e)}")
-            
+
             # Generate dashboard via orchestrator
             dashboard_result = self._generate_dashboard(event, audit_trail)
-            
+
             if dashboard_result["status"] == "success":
                 logger.info(
                     f"Dashboard generated successfully: "
@@ -167,7 +167,7 @@ class OnboardingDashboardHook:
                     "profile_retained": True,
                     "audit_trail": audit_trail
                 }
-        
+
         except Exception as e:
             logger.error(f"Hook error: {e}", exc_info=True)
             audit_trail.append(f"Hook error: {str(e)}")
@@ -177,7 +177,7 @@ class OnboardingDashboardHook:
                 "profile_retained": True,
                 "audit_trail": audit_trail
             }
-    
+
     def _generate_dashboard(
         self,
         event: ProfileCreatedEvent,
@@ -185,11 +185,11 @@ class OnboardingDashboardHook:
     ) -> Dict[str, Any]:
         """
         Internal: Generate dashboard via orchestrator with retry logic.
-        
+
         Args:
             event: Profile created event
             audit_trail: Running audit trail
-            
+
         Returns:
             Generation result
         """
@@ -198,10 +198,10 @@ class OnboardingDashboardHook:
                 "status": "failed",
                 "error": "Dashboard orchestrator not configured"
             }
-        
+
         retry_count = 0
         last_error = None
-        
+
         while retry_count <= self.max_retries:
             try:
                 # Call dashboard orchestrator
@@ -210,7 +210,7 @@ class OnboardingDashboardHook:
                     profile_data=event.profile_data,
                     profile_path=event.profile_path
                 )
-                
+
                 if result.get("status") == "success":
                     audit_trail.append(
                         f"Dashboard generated: {result.get('dashboard_path')}"
@@ -220,7 +220,7 @@ class OnboardingDashboardHook:
                     last_error = result.get("error", "Unknown error")
                     if not self.auto_retry_on_failure or retry_count >= self.max_retries:
                         return result
-                    
+
                     retry_count += 1
                     logger.warning(
                         f"Dashboard generation retry {retry_count}/{self.max_retries}: "
@@ -229,7 +229,7 @@ class OnboardingDashboardHook:
                     audit_trail.append(
                         f"Retry {retry_count}: {last_error}"
                     )
-            
+
             except Exception as e:
                 last_error = str(e)
                 if not self.auto_retry_on_failure or retry_count >= self.max_retries:
@@ -237,30 +237,30 @@ class OnboardingDashboardHook:
                         "status": "failed",
                         "error": last_error
                     }
-                
+
                 retry_count += 1
                 logger.warning(
                     f"Dashboard generation exception retry {retry_count}/{self.max_retries}: "
                     f"{last_error}"
                 )
                 audit_trail.append(f"Exception retry {retry_count}: {last_error}")
-        
+
         # All retries exhausted
         return {
             "status": "failed",
             "error": f"Dashboard generation failed after {self.max_retries} retries: {last_error}"
         }
-    
+
     def disable(self) -> None:
         """Disable dashboard auto-generation hook"""
         self.enabled = False
         logger.info("Dashboard hook disabled")
-    
+
     def enable(self) -> None:
         """Enable dashboard auto-generation hook"""
         self.enabled = True
         logger.info("Dashboard hook enabled")
-    
+
     def get_status(self) -> Dict[str, Any]:
         """Get current hook status"""
         return {

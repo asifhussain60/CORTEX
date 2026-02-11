@@ -5,12 +5,12 @@ Stage 1 (Comprehension) is now handled by InteractionOrchestrator.
 This stub provides backward compatibility.
 """
 
-from typing import Dict, Any, Optional, List
+import logging
 from dataclasses import dataclass, field
 from datetime import datetime
-import logging
+from typing import Any, Dict, List, Optional
 
-from cortex.core.result import Result, Ok, Err
+from cortex.core.result import Err, Ok, Result
 
 logger = logging.getLogger(__name__)
 
@@ -36,25 +36,25 @@ class Stage1Output:
 class MasterOrchestrationStage1:
     """
     Stub for Stage 1 comprehension.
-    
+
     In production, use InteractionOrchestrator instead.
     """
-    
+
     def __init__(self):
         """Initialize stage 1."""
         logger.debug("MasterOrchestrationStage1 stub initialized")
-    
+
     def execute(self, context: Stage1ComprehensionContext) -> Result[Stage1Output, str]:
         """Execute stage 1 comprehension (stub)."""
         logger.info(f"Stage 1 stub processing: {context.user_input[:50]}...")
-        
+
         return Ok(Stage1Output(
             understood_intent=context.user_input,
             confidence=0.85,
             entities=[],
             context={"source": "stage1_stub"}
         ))
-    
+
     def comprehend(self, user_input: str) -> Result[Stage1Output, str]:
         """Comprehend user input."""
         context = Stage1ComprehensionContext(user_input=user_input)

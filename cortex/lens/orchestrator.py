@@ -1,7 +1,7 @@
 """
 LENS Orchestrator for CORTEX.
 
-Unified orchestrator coordinating GitHistoryAnalyzer, ASTAnalyzer, 
+Unified orchestrator coordinating GitHistoryAnalyzer, ASTAnalyzer,
 CommentExtractor, and VisionAnalyzer for the LENS (Language→Examination→Navigation→Synthesis)
 intelligence cycle.
 
@@ -16,25 +16,25 @@ Authority: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings), LENS-00
 """
 
 import time
-from pathlib import Path
-from typing import Dict, Any, List, Optional
 from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
-from cortex.lens.analyzers.git_history_analyzer import GitHistoryAnalyzer
-from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer
-from cortex.lens.analyzers.comment_extractor import CommentExtractor
-from cortex.brain.analysis.remote_git_adapter import RemoteGitAdapter
 from cortex.brain.analysis.branch_comparator import BranchComparator
-from cortex.brain.analysis.vision_analyzer import VisionAnalyzer, VisionAnalysisResult
-from cortex.lens.analyzers.config_analyzer import get_config_analyzer
-from cortex.lens.analyzers.database_analyzer import get_database_analyzer
-from cortex.lens.analyzers.api_analyzer import get_api_analyzer
-from cortex.orchestrators.mixins.security_advisor_mixin import SecurityAdvisorMixin
-from cortex.lens.cache import LENSCache, get_lens_cache
+from cortex.brain.analysis.remote_git_adapter import RemoteGitAdapter
+from cortex.brain.analysis.vision_analyzer import VisionAnalysisResult, VisionAnalyzer
 
 # Phase 56: Intelligence layer integration (NEW)
 from cortex.intelligence.base import AnalysisContext
 from cortex.intelligence.relationships.traversal import RelationshipTraversalEngine
+from cortex.lens.analyzers.api_analyzer import get_api_analyzer
+from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer
+from cortex.lens.analyzers.comment_extractor import CommentExtractor
+from cortex.lens.analyzers.config_analyzer import get_config_analyzer
+from cortex.lens.analyzers.database_analyzer import get_database_analyzer
+from cortex.lens.analyzers.git_history_analyzer import GitHistoryAnalyzer
+from cortex.lens.cache import LENSCache, get_lens_cache
+from cortex.orchestrators.mixins.security_advisor_mixin import SecurityAdvisorMixin
 
 # Backward compatibility aliases (deprecated, use intelligence layer)
 _LegacyRelationshipTraversalEngine = None  # Will be imported if legacy code exists
@@ -44,9 +44,9 @@ _LegacyRelationshipTraversalEngine = None  # Will be imported if legacy code exi
 class LENSContext:
     """
     Unified LENS intelligence context.
-    
+
     Compatible with IntentRouter's lens_context parameter (LENS-002).
-    
+
     Attributes:
         git_analysis: Git commit history and patterns
         ast_analysis: AST structure and complexity
@@ -59,7 +59,7 @@ class LENSContext:
     comment_analysis: Dict[str, Any] = field(default_factory=dict)
     vision_analysis: Dict[str, Any] = field(default_factory=dict)
     metadata: Dict[str, Any] = field(default_factory=dict)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dict for IntentRouter compatibility."""
         result = {
@@ -77,38 +77,38 @@ class LENSContext:
 class LENSOrchestrator:
     """
     Unified LENS intelligence orchestrator.
-    
+
     Coordinates GitHistoryAnalyzer, ASTAnalyzer, and CommentExtractor
     to provide comprehensive code intelligence for CORTEX operations.
-    
+
     Features:
     - Unified analyze_file() API combining all three analyzers
     - Result caching for performance (avoids repeated analysis)
     - Batch analysis for multiple files
     - IntentRouter-compatible output (LENS-002 integration)
     - Graceful error handling (partial results on analyzer failures)
-    
+
     Example:
         ```python
         orchestrator = LENSOrchestrator(repo_path=Path("/path/to/repo"))
-        
+
         # Analyze single file
         lens_context = orchestrator.analyze_file(Path("src/module.py"))
-        
+
         # Use with IntentRouter
         router = IntentRouter()
         decision = router.route({
             "operation": "refactor",
             "lens_context": lens_context
         })
-        
+
         # Batch analysis
         results = orchestrator.analyze_batch([
             Path("file1.py"),
             Path("file2.py"),
         ])
         ```
-    
+
     Attributes:
         repo_path: Path to git repository root
         git_analyzer: Git history analyzer instance
@@ -116,7 +116,7 @@ class LENSOrchestrator:
         comment_extractor: Comment extractor instance
         cache: Result cache (path -> LENSContext)
     """
-    
+
     def __init__(
         self,
         repo_path: Path,
@@ -127,7 +127,7 @@ class LENSOrchestrator:
     ):
         """
         Initialize LENSOrchestrator.
-        
+
         Args:
             repo_path: Path to git repository root
             git_analyzer: Optional custom GitHistoryAnalyzer (for testing)
@@ -136,55 +136,55 @@ class LENSOrchestrator:
             polyglot_analyzer: Optional custom PolyglotAnalyzer (multi-language support)
         """
         self.repo_path = repo_path
-        
+
         # Initialize analyzers (use provided or create defaults)
         self.git_analyzer = git_analyzer or GitHistoryAnalyzer(repo_path=repo_path)
-        
+
         # Multi-language AST analysis (Phase 2 - ENH-017)
         from cortex.lens.analyzers.polyglot_analyzer import PolyglotAnalyzer
         self.polyglot_analyzer = polyglot_analyzer or PolyglotAnalyzer()
-        
+
         # Legacy Python-only analyzer (backward compatibility)
         self.ast_analyzer = ast_analyzer or ASTAnalyzer()
-        
+
         self.comment_extractor = comment_extractor or CommentExtractor()
-        
+
         # Initialize LENS v2.0 analyzers (singletons)
         self.config_analyzer = get_config_analyzer()
         self.database_analyzer = get_database_analyzer()
         self.api_analyzer = get_api_analyzer()
-        
+
         # Phase 43: CallGraphBuilder for relationship findings (AC-PHASE43-003)
         from cortex.core.intelligence.call_graph import CallGraphBuilder
         self.call_graph_builder = CallGraphBuilder()
-        
+
         # Phase 43: DependencyMapper for dependency findings (AC-PHASE43-004)
         from cortex.core.intelligence.dependency_mapper import DependencyMapper
         self.dependency_mapper = DependencyMapper()
-        
+
         # Phase 43: PatternDetector for pattern findings (AC-PHASE43-005)
         from cortex.core.intelligence.pattern_detector import PatternDetector
         self.pattern_detector = PatternDetector()
-        
+
         # ENH-042: TTL-based cache with LRU eviction (replaces simple dict cache)
         self.lens_cache = get_lens_cache()
-        
+
         # Legacy cache (deprecated - will be removed in next sprint)
         self.cache: Dict[Path, Dict[str, Any]] = {}
-    
+
     def analyze_file(self, file_path: Path) -> Dict[str, Any]:
         """
         Analyze a single file using all three LENS analyzers.
-        
+
         Coordinates Git, AST, and Comment analysis to produce unified
         intelligence context. Results are cached for performance.
-        
+
         Output format is compatible with IntentRouter's lens_context
         parameter (LENS-002 integration).
-        
+
         Args:
             file_path: Path to file to analyze
-        
+
         Returns:
             Dict with git_analysis, ast_analysis, comment_analysis, and _metadata.
             Format matches IntentRouter LENS-002 expectations:
@@ -192,18 +192,18 @@ class LENSOrchestrator:
             - ast_analysis.functions (list) or ast_analysis.function_count
             - ast_analysis.classes (list) or ast_analysis.class_count
             - comment_analysis.todos
-        
+
         Example:
             ```python
             result = orchestrator.analyze_file(Path("module.py"))
-            
+
             # Access git data
             commits = result["git_analysis"]["commits"]
-            
+
             # Access AST data
             functions = result["ast_analysis"]["functions"]
             classes = result["ast_analysis"]["classes"]
-            
+
             # Access comments
             todos = result["comment_analysis"]["todos"]
             ```
@@ -216,30 +216,30 @@ class LENSOrchestrator:
             cached_result.setdefault("_metadata", {})["cache_hit"] = True
             cached_result["_metadata"]["cache_key"] = cache_key
             return cached_result
-        
+
         # Legacy cache check (backward compatibility - will be removed)
         if file_path in self.cache:
             return self.cache[file_path]
-        
+
         start_time = time.time()
-        
+
         # Run all three analyzers
         git_result = self._analyze_git(file_path)
         ast_result = self._analyze_ast(file_path)
         comment_result = self._analyze_comments(file_path)
-        
+
         # Phase 43: Build relationship findings from CallGraphBuilder (AC-PHASE43-003)
         relationship_findings = self._build_relationship_findings(file_path, ast_result)
-        
+
         # Phase 43: Build dependency findings from DependencyMapper (AC-PHASE43-004)
         dependency_findings = self._build_dependency_findings(file_path, ast_result)
-        
+
         # Phase 43: Build pattern findings from PatternDetector (AC-PHASE43-005)
         pattern_findings = self._build_pattern_findings(file_path, ast_result)
-        
+
         # Calculate analysis time
         analysis_time_ms = int((time.time() - start_time) * 1000)
-        
+
         # Build unified context
         context = {
             "git_analysis": git_result,
@@ -256,31 +256,31 @@ class LENSOrchestrator:
                 "cache_key": cache_key,
             }
         }
-        
+
         # ENH-042: Store in TTL-based cache
         self.lens_cache.set(cache_key, context)
-        
+
         # Legacy cache (backward compatibility - will be removed)
         self.cache[file_path] = context
-        
+
         return context
-    
+
     def _analyze_git(self, file_path: Path) -> Dict[str, Any]:
         """
         Analyze file with GitHistoryAnalyzer.
-        
+
         Args:
             file_path: Path to file
-        
+
         Returns:
             Dict with git analysis data (commits, error if failed)
         """
         try:
             # Get file path relative to repo
             relative_path = file_path.relative_to(self.repo_path) if file_path.is_absolute() else file_path
-            
+
             result = self.git_analyzer.get_file_history(str(relative_path), max_commits=20)
-            
+
             if result.success:
                 # Format for IntentRouter compatibility
                 commits = [
@@ -309,26 +309,26 @@ class LENSOrchestrator:
                 "recent_commits": [],
                 "error": str(e),
             }
-    
+
     def _analyze_ast(self, file_path: Path) -> Dict[str, Any]:
         """
         Analyze file with PolyglotAnalyzer (multi-language support).
-        
+
         Routes to appropriate language adapter based on file extension:
         - Python (.py) → ASTAnalyzer
         - C# (.cs, .csx) → CSharpAdapter
         - More languages in future phases
-        
+
         Args:
             file_path: Path to file
-        
+
         Returns:
             Dict with AST analysis data (functions, classes, error if failed)
         """
         try:
             # Use PolyglotAnalyzer for multi-language support (Phase 2 - ENH-017)
             result = self.polyglot_analyzer.analyze_file(file_path)
-            
+
             if result.success:
                 # Result is already in unified format (PolyglotAnalysisResult)
                 return {
@@ -363,25 +363,25 @@ class LENSOrchestrator:
                 "language": "unknown",
                 "error": str(e),
             }
-    
+
     def _analyze_comments(self, file_path: Path) -> Dict[str, Any]:
         """
         Analyze file with CommentExtractor.
-        
+
         Args:
             file_path: Path to file
-        
+
         Returns:
             Dict with comment analysis data (todos, fixmes, error if failed)
         """
         try:
             result = self.comment_extractor.extract_from_file(file_path)
-            
+
             if result.success:
                 # Separate TODOs and FIXMEs
                 todos = []
                 fixmes = []
-                
+
                 for comment in result.comments:
                     content = comment.content.lower()
                     comment_dict = {
@@ -390,12 +390,12 @@ class LENSOrchestrator:
                         "line_number": comment.line_number,
                         "type": comment.comment_type,
                     }
-                    
+
                     if "todo" in content:
                         todos.append(comment_dict)
                     elif "fixme" in content:
                         fixmes.append(comment_dict)
-                
+
                 return {
                     "todos": todos,
                     "fixmes": fixmes,
@@ -415,18 +415,18 @@ class LENSOrchestrator:
                 "total_comments": 0,
                 "error": str(e),
             }
-    
+
     def _build_relationship_findings(self, file_path: Path, ast_result: Dict[str, Any]) -> Dict[str, Any]:
         """
         Build relationship findings using RelationshipTraversalEngine (Phase 56).
-        
+
         Constructs relationship analysis (API endpoints, database models, dependencies)
         from the analyzed file using the new intelligence layer.
-        
+
         Args:
             file_path: Path to analyzed file
             ast_result: AST analysis result from _analyze_ast (for fallback)
-        
+
         Returns:
             Dict with relationship_findings from intelligence layer
         """
@@ -437,14 +437,14 @@ class LENSOrchestrator:
                 file_path=file_path,
                 workspace_root=self.repo_path if hasattr(self, 'repo_path') else Path.cwd(),
             )
-            
+
             # Validate context before analysis
             if not engine.validate_context(context):
                 return self._build_relationship_findings_fallback(ast_result)
-            
+
             # Execute intelligence analysis
             result = engine.analyze(context)
-            
+
             # Convert to LENS-compatible format
             if result and result.data:
                 return {
@@ -458,11 +458,11 @@ class LENSOrchestrator:
                 }
             else:
                 return self._build_relationship_findings_fallback(ast_result)
-                
+
         except Exception as e:
             # Fallback to simple structure if intelligence analysis fails
             return self._build_relationship_findings_fallback(ast_result, str(e))
-    
+
     def _build_relationship_findings_fallback(
         self,
         ast_result: Dict[str, Any],
@@ -470,14 +470,14 @@ class LENSOrchestrator:
     ) -> Dict[str, Any]:
         """
         Fallback relationship findings for compatibility.
-        
+
         Used when RelationshipTraversalEngine unavailable or fails.
         Maintains compatibility with LENS pipeline.
-        
+
         Args:
             ast_result: AST analysis result for fallback data
             error: Optional error message from primary analysis
-        
+
         Returns:
             Minimal relationship_findings structure
         """
@@ -492,23 +492,23 @@ class LENSOrchestrator:
             },
             "source": "Fallback (AST-derived)",
         }
-        
+
         if error:
             result["error"] = error
-        
+
         return result
-    
+
     def _build_dependency_findings(self, file_path: Path, ast_result: Dict[str, Any]) -> Dict[str, Any]:
         """
         Build dependency findings using DependencyMapper.
-        
+
         Maps and classifies module imports from AST analysis to populate
         dependency_findings with standard library, third-party, and local imports.
-        
+
         Args:
             file_path: Path to analyzed file
             ast_result: AST analysis result from _analyze_ast
-        
+
         Returns:
             Dict with dependency_findings containing classified dependencies
         """
@@ -524,7 +524,7 @@ class LENSOrchestrator:
                     "source": "DependencyMapper",
                     "error": "No AST result available",
                 }
-            
+
             # For now, return minimal dependency_findings structure
             # Will be enriched in Phase 43 S5 with actual DependencyMapper integration
             return {
@@ -546,18 +546,18 @@ class LENSOrchestrator:
                 "source": "DependencyMapper",
                 "error": str(e),
             }
-    
+
     def _build_pattern_findings(self, file_path: Path, ast_result: Dict[str, Any]) -> Dict[str, Any]:
         """
         Build pattern findings using PatternDetector.
-        
+
         Analyzes AST results to identify common design patterns in the code,
         including singleton, factory, decorator, and decorator chain patterns.
-        
+
         Args:
             file_path: Path to analyzed file
             ast_result: AST analysis result from _analyze_ast
-        
+
         Returns:
             Dict with pattern_findings containing detected patterns
         """
@@ -570,18 +570,18 @@ class LENSOrchestrator:
                     "source": "PatternDetector",
                     "error": "No AST result available",
                 }
-            
+
             # For now, return minimal pattern_findings structure
             # Will be enriched in Phase 43 S5 with actual PatternDetector integration
             classes = ast_result.get("classes", [])
             functions = ast_result.get("functions", [])
-            
+
             # Count potential patterns
             pattern_count = (
                 len([c for c in classes if isinstance(c, dict) and "__new__" in str(c)])  # singletons
                 + len([f for f in functions if isinstance(f, dict) and f.get("decorators", [])])  # decorated
             )
-            
+
             return {
                 "patterns": [],
                 "pattern_count": pattern_count,
@@ -595,7 +595,7 @@ class LENSOrchestrator:
                 "source": "PatternDetector",
                 "error": str(e),
             }
-    
+
     def analyze_image(
         self,
         image_data: Optional[str] = None,
@@ -606,59 +606,58 @@ class LENSOrchestrator:
     ) -> Dict[str, Any]:
         """
         Analyze an image using VisionAnalyzer.
-        
+
         Extracts UI elements, URLs, issues, and structural information
         from screenshots, diagrams, mockups, and error messages.
-        
+
         Args:
             image_data: Base64-encoded image data
             image_url: URL to image
             image_path: Path to image file
             image_type: Type of image (screenshot/diagram/mockup/error/unknown)
             analysis_depth: Depth of analysis (quick/standard/thorough)
-            
+
         Returns:
             Dict with urls, ui_elements, issues, text_content, structural_map
-            
+
         Example:
             ```python
             # Analyze from base64
             result = orchestrator.analyze_image(image_data=base64_data)
-            
+
             # Analyze from URL
             result = orchestrator.analyze_image(image_url="https://example.com/screenshot.png")
-            
+
             # Analyze from file
             result = orchestrator.analyze_image(image_path=Path("screenshot.png"))
-            
+
             # Access extracted data
             for url in result["urls"]:
                 print(f"Found URL: {url['url']}")
-            
+
             for element in result["ui_elements"]:
                 print(f"Element: {element['type']} - {element['text']}")
             ```
         """
         from cortex.brain.analysis.vision_analyzer import (
-            VisionAnalyzer,
-            ImageType,
             AnalysisDepth,
+            ImageType,
         )
-        
+
         try:
             analyzer = VisionAnalyzer()
-            
+
             # Parse enums
             try:
                 img_type = ImageType(image_type.lower())
             except ValueError:
                 img_type = ImageType.UNKNOWN
-                
+
             try:
                 depth = AnalysisDepth(analysis_depth.lower())
             except ValueError:
                 depth = AnalysisDepth.STANDARD
-            
+
             # Analyze based on input type
             if image_path and image_path.exists():
                 result = analyzer.analyze_file(
@@ -683,15 +682,15 @@ class LENSOrchestrator:
                     "status": "error",
                     "error": "Must provide image_data, image_url, or image_path",
                 }
-            
+
             return result.to_dict()
-            
+
         except Exception as e:
             return {
                 "status": "error",
                 "error": str(e),
             }
-    
+
     def analyze_with_vision(
         self,
         file_path: Optional[Path] = None,
@@ -701,16 +700,16 @@ class LENSOrchestrator:
     ) -> Dict[str, Any]:
         """
         Combined LENS + Vision analysis.
-        
+
         Performs standard LENS analysis on a code file (if provided)
         AND Vision analysis on an image (if provided).
-        
+
         Args:
             file_path: Path to code file for LENS analysis
             image_data: Base64-encoded image for Vision analysis
             image_url: URL to image for Vision analysis
             image_path: Path to image file for Vision analysis
-            
+
         Returns:
             Dict with git_analysis, ast_analysis, comment_analysis, vision_analysis
         """
@@ -723,7 +722,7 @@ class LENSOrchestrator:
                 "analyzers_run": [],
             },
         }
-        
+
         # Run LENS analysis on code file
         if file_path and file_path.exists():
             lens_result = self.analyze_file(file_path)
@@ -731,7 +730,7 @@ class LENSOrchestrator:
             result["ast_analysis"] = lens_result.get("ast_analysis", {})
             result["comment_analysis"] = lens_result.get("comment_analysis", {})
             result["_metadata"]["analyzers_run"].extend(["git", "ast", "comment"])
-        
+
         # Run Vision analysis on image
         if image_data or image_url or image_path:
             vision_result = self.analyze_image(
@@ -741,25 +740,25 @@ class LENSOrchestrator:
             )
             result["vision_analysis"] = vision_result
             result["_metadata"]["analyzers_run"].append("vision")
-        
+
         return result
-    
+
     def clear_cache(self) -> None:
         """
         Clear the result cache.
-        
+
         Forces re-analysis on next analyze_file() call.
         Useful after file modifications or for testing.
-        
+
         ENH-042: Clears both TTL-based cache and legacy cache.
         """
         self.lens_cache.clear()
         self.cache.clear()
-    
+
     def get_cache_stats(self) -> Dict[str, Any]:
         """
         Get cache performance statistics.
-        
+
         Returns:
             Dictionary with cache metrics:
             - hits: Number of cache hits
@@ -768,9 +767,9 @@ class LENSOrchestrator:
             - total_entries: Number of cached entries
             - total_size_mb: Memory used by cache
             - avg_hit_latency_ms: Average cache hit latency
-            
+
         ENH-042: Exposes TTL-based cache statistics for observability.
-        
+
         Example:
             ```python
             stats = orchestrator.get_cache_stats()
@@ -779,30 +778,30 @@ class LENSOrchestrator:
             ```
         """
         return self.lens_cache.get_stats().to_dict()
-    
+
     def cleanup_expired_cache(self) -> int:
         """
         Remove expired cache entries.
-        
+
         Returns:
             Number of entries removed
-            
+
         ENH-042: Cleanup utility for expired TTL entries.
         """
         return self.lens_cache.cleanup_expired()
-    
+
     def analyze_batch(self, file_paths: List[Path]) -> Dict[Path, Dict[str, Any]]:
         """
         Analyze multiple files in batch.
-        
+
         Processes each file through analyze_file() (which uses caching).
-        
+
         Args:
             file_paths: List of file paths to analyze
-        
+
         Returns:
             Dict mapping file paths to LENS contexts
-        
+
         Example:
             ```python
             results = orchestrator.analyze_batch([
@@ -810,18 +809,18 @@ class LENSOrchestrator:
                 Path("file2.py"),
                 Path("file3.py"),
             ])
-            
+
             for path, context in results.items():
                 print(f"{path}: {len(context['git_analysis']['commits'])} commits")
             ```
         """
         results = {}
-        
+
         for file_path in file_paths:
             results[file_path] = self.analyze_file(file_path)
-        
+
         return results
-    
+
     def analyze_remote(
         self,
         remote_adapter: RemoteGitAdapter,
@@ -831,28 +830,28 @@ class LENSOrchestrator:
     ) -> Dict[str, Any]:
         """
         Analyze a remote file using LENS intelligence.
-        
+
         Fetches file content and commit history from remote repository
         and performs AST and comment analysis.
-        
+
         Args:
             remote_adapter: RemoteGitAdapter instance
             repo: Repository identifier (owner/repo)
             file_path: Path to file in repository
             ref: Branch/tag/commit reference (default: "main")
-        
+
         Returns:
             Dict with git_analysis, ast_analysis, comment_analysis, and _metadata.
             Same format as analyze_file() for compatibility.
-        
+
         Example:
             ```python
             from cortex.brain.analysis.remote_git_adapter import create_adapter
             from cortex.brain.analysis.providers import ProviderConfig
-            
+
             config = ProviderConfig(provider="github", token="ghp_...")
             adapter = create_adapter(config)
-            
+
             result = orchestrator.analyze_remote(
                 remote_adapter=adapter,
                 repo="owner/repo",
@@ -862,7 +861,7 @@ class LENSOrchestrator:
             ```
         """
         start_time = time.time()
-        
+
         # Create remote git analyzer
         git_analyzer = GitHistoryAnalyzer(
             repo_path=None,
@@ -870,7 +869,7 @@ class LENSOrchestrator:
             remote_repo=repo,
             remote_ref=ref,
         )
-        
+
         # Fetch file content
         try:
             remote_file = remote_adapter.fetch_file(repo, file_path, ref)
@@ -886,18 +885,18 @@ class LENSOrchestrator:
                     "error": str(e),
                 }
             }
-        
+
         # Git analysis
         git_result = self._analyze_git_remote(git_analyzer, file_path)
-        
+
         # AST analysis (analyze content directly)
         ast_result = self._analyze_ast_content(file_content)
-        
+
         # Comment analysis (analyze content directly)
         comment_result = self._analyze_comments_content(file_content)
-        
+
         analysis_time_ms = int((time.time() - start_time) * 1000)
-        
+
         return {
             "git_analysis": git_result,
             "ast_analysis": ast_result,
@@ -911,7 +910,7 @@ class LENSOrchestrator:
                 "analyzers_run": ["git", "ast", "comment"],
             }
         }
-    
+
     def _analyze_git_remote(
         self,
         git_analyzer: GitHistoryAnalyzer,
@@ -919,17 +918,17 @@ class LENSOrchestrator:
     ) -> Dict[str, Any]:
         """
         Analyze file with remote GitHistoryAnalyzer.
-        
+
         Args:
             git_analyzer: GitHistoryAnalyzer with remote configuration
             file_path: Path to file in repository
-        
+
         Returns:
             Dict with git analysis data
         """
         try:
             result = git_analyzer.get_file_history(file_path, max_commits=20)
-            
+
             if result.success:
                 commits = [
                     {
@@ -957,20 +956,20 @@ class LENSOrchestrator:
                 "recent_commits": [],
                 "error": str(e),
             }
-    
+
     def _analyze_ast_content(self, content: str) -> Dict[str, Any]:
         """
         Analyze Python code content with ASTAnalyzer.
-        
+
         Args:
             content: Python source code
-        
+
         Returns:
             Dict with AST analysis data
         """
         try:
             result = self.ast_analyzer.analyze_code(content)
-            
+
             if result.success:
                 functions = [
                     {
@@ -981,7 +980,7 @@ class LENSOrchestrator:
                     }
                     for func in result.functions
                 ]
-                
+
                 classes = [
                     {
                         "name": cls.name,
@@ -991,7 +990,7 @@ class LENSOrchestrator:
                     }
                     for cls in result.classes
                 ]
-                
+
                 return {
                     "functions": functions,
                     "function_count": len(functions),
@@ -1014,24 +1013,24 @@ class LENSOrchestrator:
                 "class_count": 0,
                 "error": str(e),
             }
-    
+
     def _analyze_comments_content(self, content: str) -> Dict[str, Any]:
         """
         Analyze comments in Python code content.
-        
+
         Args:
             content: Python source code
-        
+
         Returns:
             Dict with comment analysis data
         """
         try:
             result = self.comment_extractor.extract_from_code(content)
-            
+
             if result.success:
                 todos = []
                 fixmes = []
-                
+
                 for comment in result.comments:
                     content_lower = comment.content.lower()
                     comment_dict = {
@@ -1040,12 +1039,12 @@ class LENSOrchestrator:
                         "line_number": comment.line_number,
                         "type": comment.comment_type,
                     }
-                    
+
                     if "todo" in content_lower:
                         todos.append(comment_dict)
                     elif "fixme" in content_lower:
                         fixmes.append(comment_dict)
-                
+
                 return {
                     "todos": todos,
                     "fixmes": fixmes,
@@ -1065,7 +1064,7 @@ class LENSOrchestrator:
                 "total_comments": 0,
                 "error": str(e),
             }
-    
+
     def compare_branches(
         self,
         base_branch: str,
@@ -1075,23 +1074,23 @@ class LENSOrchestrator:
     ) -> Dict[str, Any]:
         """
         Compare two branches using BranchComparator.
-        
+
         Can compare local or remote branches.
-        
+
         Args:
             base_branch: Base branch name
             head_branch: Head branch name to compare against base
             remote_adapter: Optional RemoteGitAdapter for remote comparison
             remote_repo: Optional repository identifier for remote comparison
-        
+
         Returns:
             Dict with branch comparison results (commits, file diffs, conflicts)
-        
+
         Example:
             ```python
             # Local comparison
             result = orchestrator.compare_branches("main", "feature")
-            
+
             # Remote comparison
             result = orchestrator.compare_branches(
                 "main",
@@ -1112,9 +1111,9 @@ class LENSOrchestrator:
             else:
                 # Local comparison
                 comparator = BranchComparator(repo_path=self.repo_path)
-            
+
             comparison = comparator.compare_branches(base_branch, head_branch)
-            
+
             # Convert to dict
             return {
                 "base_branch": comparison.base_branch,
@@ -1159,7 +1158,7 @@ class LENSOrchestrator:
                 "error": str(e),
                 "is_mergeable": False,
             }
-    
+
     def analyze_repository_holistic(
         self,
         include_vision: bool = False,
@@ -1167,7 +1166,7 @@ class LENSOrchestrator:
     ) -> Dict[str, Any]:
         """
         Perform holistic repository analysis integrating all 9 LENS v2.0 analyzers.
-        
+
         This is the flagship method bringing together:
         1. GitHistoryAnalyzer - Commit patterns, contributors
         2. ASTAnalyzer - Code structure across all files
@@ -1178,11 +1177,11 @@ class LENSOrchestrator:
         7. APIAnalyzer - OpenAPI security, OWASP compliance
         8. SecurityAdvisorMixin - Threat modeling, compliance
         9. DependencyAnalyzer - Package vulnerabilities (future)
-        
+
         Args:
             include_vision: Whether to analyze images (slower, requires Vision API)
             include_security: Whether to run security analysis (recommended: True)
-        
+
         Returns:
             Dict with comprehensive repository intelligence:
             - repository_summary: Stats (files, commits, contributors)
@@ -1194,7 +1193,7 @@ class LENSOrchestrator:
             - vision_analysis: Image/diagram analysis (if enabled)
             - recommendations: Prioritized action items
             - metadata: Analysis timing and coverage
-        
+
         Example:
             >>> orchestrator = LENSOrchestrator(repo_path=Path("."))
             >>> result = orchestrator.analyze_repository_holistic()
@@ -1203,7 +1202,7 @@ class LENSOrchestrator:
         """
         import time
         start_time = time.time()
-        
+
         result = {
             "repository_summary": {},
             "code_analysis": {},
@@ -1218,35 +1217,35 @@ class LENSOrchestrator:
                 "analyzers_enabled": [],
             }
         }
-        
+
         try:
             # 1. Repository Summary (Git)
             result["metadata"]["analyzers_enabled"].append("git")
             result["repository_summary"] = self._analyze_repository_summary()
-            
+
             # 2. Code Analysis (AST + Comments across files)
             result["metadata"]["analyzers_enabled"].append("ast")
             result["metadata"]["analyzers_enabled"].append("comment")
             result["code_analysis"] = self._analyze_codebase_structure()
-            
+
             # 3. Config Analysis (Security)
             if include_security:
                 result["metadata"]["analyzers_enabled"].append("config")
                 result["config_analysis"] = self._analyze_configurations()
-            
+
             # 4. Database Analysis
             result["metadata"]["analyzers_enabled"].append("database")
             result["database_analysis"] = self._analyze_database_artifacts()
-            
+
             # 5. API Analysis
             result["metadata"]["analyzers_enabled"].append("api")
             result["api_analysis"] = self._analyze_api_specs()
-            
+
             # 6. Vision Analysis (optional)
             if include_vision:
                 result["metadata"]["analyzers_enabled"].append("vision")
                 result["vision_analysis"] = self._analyze_visual_artifacts()
-            
+
             # 7. Security Synthesis
             if include_security:
                 result["metadata"]["analyzers_enabled"].append("security")
@@ -1255,23 +1254,23 @@ class LENSOrchestrator:
                     result["database_analysis"],
                     result["api_analysis"]
                 )
-            
+
             # 8. Generate Recommendations
             result["recommendations"] = self._generate_holistic_recommendations(result)
-            
+
             # Metadata
             analysis_time_ms = (time.time() - start_time) * 1000
             result["metadata"]["analysis_time_ms"] = analysis_time_ms
             result["metadata"]["analysis_complete"] = time.strftime("%Y-%m-%d %H:%M:%S")
             result["metadata"]["success"] = True
-            
+
         except Exception as e:
             result["metadata"]["success"] = False
             result["metadata"]["error"] = str(e)
             result["metadata"]["analysis_time_ms"] = (time.time() - start_time) * 1000
-        
+
         return result
-    
+
     def _analyze_repository_summary(self) -> Dict[str, Any]:
         """Get repository-level git statistics and multi-language file counts."""
         try:
@@ -1293,10 +1292,10 @@ class LENSOrchestrator:
                 "SQL": [".sql"],
                 "Config": [".yaml", ".yml", ".json", ".xml", ".config"],
             }
-            
+
             # Count files by language (skip common large directories)
             SKIP_DIRS = {'node_modules', 'bower_components', '.git', '__pycache__', '.venv', 'venv', 'dist', 'build', 'out'}
-            
+
             file_counts = {}
             total_source_files = 0
             for lang, exts in language_extensions.items():
@@ -1310,17 +1309,17 @@ class LENSOrchestrator:
                 if count > 0:
                     file_counts[lang] = count
                     total_source_files += count
-            
+
             # Get git statistics
             result = self.git_analyzer.get_recent_commits(max_commits=1000)
-            
+
             if result.success:
                 commits = result.commits
                 contributors = set(commit.author for commit in commits)
-                
+
                 # Determine primary language
                 primary_language = max(file_counts, key=file_counts.get) if file_counts else "Unknown"
-                
+
                 return {
                     "total_commits": len(commits),
                     "total_contributors": len(contributors),
@@ -1340,7 +1339,7 @@ class LENSOrchestrator:
                 }
         except Exception as e:
             return {"error": str(e)}
-    
+
     def _analyze_codebase_structure(self) -> Dict[str, Any]:
         """Analyze code structure across all supported languages."""
         try:
@@ -1354,15 +1353,15 @@ class LENSOrchestrator:
                 "Java": "**/*.java",
                 "ASP.NET": "**/*.aspx",
             }
-            
+
             # Python-specific deep analysis (AST available)
             python_files = list(self.repo_path.rglob("*.py"))[:100]
-            
+
             total_functions = 0
             total_classes = 0
             total_todos = 0
             complex_files = []
-            
+
             for py_file in python_files:
                 try:
                     # AST analysis
@@ -1370,7 +1369,7 @@ class LENSOrchestrator:
                     if ast_result.success:
                         total_functions += len(ast_result.functions)
                         total_classes += len(ast_result.classes)
-                        
+
                         # Flag complex files (>10 functions or >5 classes)
                         if len(ast_result.functions) > 10 or len(ast_result.classes) > 5:
                             complex_files.append({
@@ -1378,22 +1377,22 @@ class LENSOrchestrator:
                                 "functions": len(ast_result.functions),
                                 "classes": len(ast_result.classes),
                             })
-                    
+
                     # Comment analysis
                     comment_result = self.comment_extractor.extract_from_file(py_file)
                     if comment_result.success:
                         total_todos += len(comment_result.todos)
-                
+
                 except Exception:
                     continue  # Skip problematic files
-            
+
             # Multi-language file counts (for non-Python repos)
             language_file_counts = {}
             for lang, pattern in source_patterns.items():
                 files = list(self.repo_path.rglob(pattern.replace("**/", "")))
                 if files:
                     language_file_counts[lang] = len(files)
-            
+
             # Detect TODOs/FIXMEs in all text files (language-agnostic)
             todo_locations = []
             for pattern in ["**/*.cs", "**/*.vb", "**/*.js", "**/*.ts", "**/*.java"]:
@@ -1411,7 +1410,7 @@ class LENSOrchestrator:
                                     })
                     except Exception:
                         continue
-            
+
             return {
                 "files_analyzed": len(python_files),
                 "language_file_counts": language_file_counts,
@@ -1422,20 +1421,20 @@ class LENSOrchestrator:
             }
         except Exception as e:
             return {"error": str(e)}
-    
+
     def _analyze_configurations(self) -> Dict[str, Any]:
         """Analyze configuration files for security issues."""
         try:
             # analyze_repository returns a Dict, not ConfigAnalysisResult
             config_result = self.config_analyzer.analyze_repository(self.repo_path)
-            
+
             # Extract findings from the dict result
             p0_findings = config_result.get("p0_findings", [])
             p1_findings = config_result.get("p1_findings", [])
             p2_findings = config_result.get("p2_findings", [])
-            
+
             all_findings = p0_findings + p1_findings + p2_findings
-            
+
             return {
                 "files_analyzed": config_result.get("analyzed_files", 0),
                 "findings_count": len(all_findings),
@@ -1448,7 +1447,7 @@ class LENSOrchestrator:
         except Exception as e:
             logger.warning("Config analysis failed: %s", e)
             return {"error": str(e)}
-    
+
     def _analyze_database_artifacts(self) -> Dict[str, Any]:
         """Analyze database migrations and schemas."""
         try:
@@ -1458,11 +1457,11 @@ class LENSOrchestrator:
                 self.repo_path / "alembic" / "versions",
                 self.repo_path / "db" / "migrations",
             ]
-            
+
             for migration_path in migration_paths:
                 if migration_path.exists():
                     db_result = self.database_analyzer.analyze_migrations(migration_path)
-                    
+
                     if db_result.success:
                         return {
                             "migrations_found": len(db_result.migrations),
@@ -1477,23 +1476,23 @@ class LENSOrchestrator:
                                 for r in db_result.recommendations
                             ],
                         }
-            
+
             return {"migrations_found": 0, "note": "No migration directories detected"}
         except Exception as e:
             return {"error": str(e)}
-    
+
     def _analyze_api_specs(self) -> Dict[str, Any]:
         """Analyze OpenAPI specifications."""
         try:
             # Look for OpenAPI spec files
             spec_patterns = ["openapi.yaml", "openapi.yml", "openapi.json", "swagger.yaml", "swagger.json"]
-            
+
             for pattern in spec_patterns:
                 spec_files = list(self.repo_path.rglob(pattern))
-                
+
                 for spec_file in spec_files:
                     api_result = self.api_analyzer.analyze_openapi_spec(spec_file)
-                    
+
                     if api_result.success:
                         return {
                             "spec_found": True,
@@ -1515,27 +1514,27 @@ class LENSOrchestrator:
                                 for f in api_result.security_findings[:20]
                             ],
                         }
-            
+
             return {"spec_found": False, "note": "No OpenAPI spec detected"}
         except Exception as e:
             return {"error": str(e)}
-    
+
     def _analyze_visual_artifacts(self) -> Dict[str, Any]:
         """Analyze images and diagrams (optional)."""
         try:
             image_patterns = ["*.png", "*.jpg", "*.jpeg"]
             images = []
-            
+
             for pattern in image_patterns:
                 images.extend(list(self.repo_path.rglob(pattern)))
-            
+
             return {
                 "images_found": len(images),
                 "note": "Vision analysis requires explicit image paths",
             }
         except Exception as e:
             return {"error": str(e)}
-    
+
     def _synthesize_security_findings(
         self,
         config_analysis: Dict[str, Any],
@@ -1544,14 +1543,14 @@ class LENSOrchestrator:
     ) -> Dict[str, Any]:
         """Synthesize all security findings into unified report."""
         all_findings = []
-        
+
         # Config findings - handle both old and new format
         findings_list = config_analysis.get("findings", [])
         for f in findings_list:
             # Handle both file and file_path keys
             file_path = f.get("file") or f.get("file_path", "unknown")
             line_num = f.get("line") or f.get("line_number", 0)
-            
+
             all_findings.append({
                 "source": "config",
                 "priority": f.get("severity", "P2"),
@@ -1560,7 +1559,7 @@ class LENSOrchestrator:
                 "description": f.get("description", ""),
                 "recommendation": f.get("recommendation", "Review and fix"),
             })
-        
+
         # Database findings
         if "recommendations" in database_analysis:
             for r in database_analysis["recommendations"]:
@@ -1572,7 +1571,7 @@ class LENSOrchestrator:
                     "description": r["description"],
                     "recommendation": r.get("recommendation", "Review and address"),
                 })
-        
+
         # API findings
         if "findings" in api_analysis:
             for f in api_analysis["findings"]:
@@ -1585,17 +1584,17 @@ class LENSOrchestrator:
                     "recommendation": f.get("recommendation", "Review OWASP API guidelines"),
                     "owasp": f.get("owasp"),
                 })
-        
+
         # Sort by priority (P0 first)
         priority_order = {"P0": 0, "P1": 1, "P2": 2, "P3": 3}
         all_findings.sort(key=lambda x: priority_order.get(x["priority"], 99))
-        
+
         # Categorize by priority
         p0_findings = [f for f in all_findings if f["priority"] == "P0"]
         p1_findings = [f for f in all_findings if f["priority"] == "P1"]
         p2_findings = [f for f in all_findings if f["priority"] == "P2"]
         p3_findings = [f for f in all_findings if f["priority"] == "P3"]
-        
+
         return {
             "total_findings": len(all_findings),
             "p0_count": len(p0_findings),
@@ -1608,11 +1607,11 @@ class LENSOrchestrator:
             "p2_findings": p2_findings[:10],
             "critical_action_required": len(p0_findings) > 0,
         }
-    
+
     def _generate_holistic_recommendations(self, analysis_result: Dict[str, Any]) -> List[Dict[str, Any]]:
         """Generate prioritized recommendations based on holistic analysis."""
         recommendations = []
-        
+
         # Security recommendations
         security = analysis_result.get("security_analysis", {})
         if security.get("p0_count", 0) > 0:
@@ -1623,7 +1622,7 @@ class LENSOrchestrator:
                 "description": "P0 security vulnerabilities detected that must be fixed immediately",
                 "action": "Review security_analysis.p0_findings and remediate",
             })
-        
+
         if security.get("p1_count", 0) > 0:
             recommendations.append({
                 "priority": "P1",
@@ -1632,7 +1631,7 @@ class LENSOrchestrator:
                 "description": "P1 security issues should be addressed in next sprint",
                 "action": "Review security_analysis.p1_findings and plan remediation",
             })
-        
+
         # Code quality recommendations
         code = analysis_result.get("code_analysis", {})
         if code.get("total_todos", 0) > 50:
@@ -1643,7 +1642,7 @@ class LENSOrchestrator:
                 "description": "High number of TODO comments indicates pending work",
                 "action": "Review and resolve TODO items or convert to tracked issues",
             })
-        
+
         if len(code.get("complex_files", [])) > 5:
             recommendations.append({
                 "priority": "P2",
@@ -1652,7 +1651,7 @@ class LENSOrchestrator:
                 "description": "Files with high function/class count may benefit from refactoring",
                 "action": "Review complex_files list and apply SOLID principles",
             })
-        
+
         # Database recommendations
         db = analysis_result.get("database_analysis", {})
         if db.get("recommendations_count", 0) > 0:
@@ -1663,7 +1662,7 @@ class LENSOrchestrator:
                 "description": f"{db['recommendations_count']} migration issue(s) detected",
                 "action": "Review database_analysis.recommendations",
             })
-        
+
         # API recommendations
         api = analysis_result.get("api_analysis", {})
         if api.get("p0_count", 0) > 0:
@@ -1674,9 +1673,9 @@ class LENSOrchestrator:
                 "description": "OWASP API Top 10 vulnerabilities detected",
                 "action": "Review api_analysis.findings and implement security controls",
             })
-        
+
         return recommendations
-    
+
     def analyze_with_company_knowledge(
         self,
         file_path: str,
@@ -1684,62 +1683,62 @@ class LENSOrchestrator:
     ) -> Dict[str, Any]:
         """
         Analyze file with company domain knowledge integration.
-        
+
         Combines standard LENS analysis with company-specific rules,
         patterns, and compliance requirements.
-        
+
         Args:
             file_path: Path to file to analyze
             company_name: Company name for domain knowledge lookup
-            
+
         Returns:
             Extended LENS context with company_knowledge field
-            
+
         Authority: Phase 20 Component #2 (AC_LENS_COMPANY_002)
         """
         # Standard LENS analysis
         lens_context = self.analyze_file(Path(file_path))
-        
+
         # Load company domain knowledge
         company_knowledge = self._load_company_domains(company_name)
-        
+
         # Detect applicable compliance standards
         code_content = Path(file_path).read_text() if Path(file_path).exists() else ""
         compliance_flags = self._detect_compliance(code_content)
-        
+
         # Merge knowledge with precedence rules
         merged_knowledge = self._merge_knowledge(
             base_knowledge={},  # CORTEX base knowledge (future enhancement)
             company_knowledge=company_knowledge,
             compliance_flags=compliance_flags
         )
-        
+
         # Add company knowledge to context
         lens_context["company_knowledge"] = merged_knowledge
-        
+
         return lens_context
-    
+
     def _load_company_domains(self, company_name: str) -> Dict[str, Any]:
         """
         Load company-specific domain knowledge from YAML files.
-        
+
         Args:
             company_name: Company name (e.g., "acme-corp")
-            
+
         Returns:
             Company domain knowledge dict
-            
+
         Authority: Phase 20 Component #2
         """
         import yaml
-        
+
         try:
             # Look for company domains in company/domains/
             company_dir = Path("company") / "domains"
-            
+
             if not company_dir.exists():
                 return {}
-            
+
             # Load all YAML files in company directory
             domains = {}
             for yaml_file in company_dir.glob("*.yaml"):
@@ -1751,40 +1750,40 @@ class LENSOrchestrator:
                 except Exception:
                     # Skip malformed files
                     continue
-            
+
             return domains
-            
+
         except Exception:
             # Fail-safe: return empty dict
             return {}
-    
+
     def _detect_compliance(self, code_content: str) -> Dict[str, Any]:
         """
         Auto-detect applicable compliance standards from code patterns.
-        
+
         Detects:
             - PCI-DSS: Credit card processing patterns
             - HIPAA: Healthcare/PHI patterns
             - SOC2: Data security patterns
             - GDPR: Personal data patterns
-        
+
         Args:
             code_content: Source code to analyze
-            
+
         Returns:
             Dict with detected_standards list
-            
+
         Authority: Phase 20 Component #2
         """
         detected_standards = []
-        
+
         # PCI-DSS detection patterns
         pci_patterns = [
             "stripe", "payment", "credit_card", "card_number",
             "cvv", "card_data", "payment_method"
         ]
         pci_confidence = sum(1 for p in pci_patterns if p in code_content.lower()) / len(pci_patterns)
-        
+
         if pci_confidence > 0.2:  # At least 20% pattern match
             detected_standards.append({
                 "standard_id": "PCI-DSS-3.2.1",
@@ -1792,14 +1791,14 @@ class LENSOrchestrator:
                 "violations": [],
                 "file_locations": []
             })
-        
+
         # HIPAA detection patterns
         hipaa_patterns = [
             "patient", "medical", "health", "hipaa", "phi",
             "ssn", "medical_record", "diagnosis"
         ]
         hipaa_confidence = sum(1 for p in hipaa_patterns if p in code_content.lower()) / len(hipaa_patterns)
-        
+
         if hipaa_confidence > 0.2:
             detected_standards.append({
                 "standard_id": "HIPAA",
@@ -1807,14 +1806,14 @@ class LENSOrchestrator:
                 "violations": [],
                 "file_locations": []
             })
-        
+
         # SOC2 detection (general data security)
         soc2_patterns = [
             "encrypt", "authentication", "authorization",
             "audit", "logging", "access_control"
         ]
         soc2_confidence = sum(1 for p in soc2_patterns if p in code_content.lower()) / len(soc2_patterns)
-        
+
         if soc2_confidence > 0.2:
             detected_standards.append({
                 "standard_id": "SOC2",
@@ -1822,11 +1821,11 @@ class LENSOrchestrator:
                 "violations": [],
                 "file_locations": []
             })
-        
+
         return {
             "detected_standards": detected_standards
         }
-    
+
     def _merge_knowledge(
         self,
         base_knowledge: Dict[str, Any],
@@ -1835,19 +1834,19 @@ class LENSOrchestrator:
     ) -> Dict[str, Any]:
         """
         Merge knowledge sources with precedence rules.
-        
+
         Precedence:
             - OVERRIDE: Company knowledge replaces CORTEX base
             - MERGE: Company knowledge extends CORTEX base
-        
+
         Args:
             base_knowledge: CORTEX base knowledge
             company_knowledge: Company-specific knowledge
             compliance_flags: Detected compliance standards
-            
+
         Returns:
             Merged knowledge dict with precedence tracking
-            
+
         Authority: Phase 20 Component #2
         """
         merged = {
@@ -1860,10 +1859,10 @@ class LENSOrchestrator:
                 "compliance_standards": [s["standard_id"] for s in compliance_flags.get("detected_standards", [])]
             }
         }
-        
+
         # Get precedence mode (default to MERGE)
         precedence = company_knowledge.get("precedence", "MERGE")
-        
+
         # Handle rules
         if precedence == "OVERRIDE":
             # Company knowledge overrides base
@@ -1875,13 +1874,13 @@ class LENSOrchestrator:
             merged["rules"].extend(company_knowledge.get("rules", []))
             merged["knowledge_precedence"]["cortex_base"] = len(base_knowledge.get("rules", []))
             merged["knowledge_precedence"]["company_overrides"] = len(company_knowledge.get("rules", []))
-        
+
         # Merge patterns (always combine)
         if "patterns" in base_knowledge:
             merged["patterns"].update(base_knowledge["patterns"])
         if "patterns" in company_knowledge:
             merged["patterns"].update(company_knowledge["patterns"])
-        
+
         return merged
 
 

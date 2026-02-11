@@ -9,29 +9,29 @@ Author: CORTEX Framework
 
 import importlib
 import inspect
-from pathlib import Path
-from typing import Dict, List, Optional, Any, Callable
 import logging
+from pathlib import Path
+from typing import Any, Callable, Dict, List, Optional
 
-from cortex.mcp.tool_registry import get_mcp_tool_registry
 from cortex.mcp.tool_governance import (
-    ToolCategory,
     AuthLevel,
     ComplianceMode,
+    ToolCategory,
     ToolGovernancePolicy,
     get_governance_manager,
 )
+from cortex.mcp.tool_registry import get_mcp_tool_registry
 
 logger = logging.getLogger(__name__)
 
 
 class ToolDiscoveryEngine:
     """Auto-discovers and registers MCP tools.
-    
+
     Scans tool modules by category and populates the tool registry
     and governance manager with discovered tools.
     """
-    
+
     # Tool categories and their modules
     TOOL_MODULES = {
         ToolCategory.GOVERNANCE: "cortex.brain.mcp.tools.governance_tools",
@@ -40,7 +40,7 @@ class ToolDiscoveryEngine:
         ToolCategory.UTILITY: "cortex.brain.mcp.tools.utility_tools",
         ToolCategory.SECURITY: "cortex.mcp.tools.security",  # Phase 8.2: Security tools (ENH-050)
     }
-    
+
     # Default authorization levels by category
     DEFAULT_AUTH_LEVELS = {
         ToolCategory.GOVERNANCE: AuthLevel.PRIVILEGED,
@@ -49,7 +49,7 @@ class ToolDiscoveryEngine:
         ToolCategory.UTILITY: AuthLevel.PUBLIC,
         ToolCategory.SECURITY: AuthLevel.AUTHENTICATED,  # Security tools require authentication (ENH-050)
     }
-    
+
     # Default compliance modes by category
     DEFAULT_COMPLIANCE_MODES = {
         ToolCategory.GOVERNANCE: ComplianceMode.STRICT,
@@ -58,21 +58,21 @@ class ToolDiscoveryEngine:
         ToolCategory.UTILITY: ComplianceMode.LIGHTWEIGHT,
         ToolCategory.SECURITY: ComplianceMode.STRICT,  # Security tools require strict compliance (ENH-050)
     }
-    
+
     def __init__(self):
         """Initialize tool discovery engine."""
         self.registry = get_mcp_tool_registry()
         self.governance = get_governance_manager()
         self.discovered_tools: Dict[str, Dict[str, Any]] = {}
-    
+
     def discover_tools(self) -> Dict[str, Dict[str, Any]]:
         """Discover all MCP tools.
-        
+
         Returns:
             Dict of discovered tools by category
         """
         self.discovered_tools = {}
-        
+
         for category, module_name in self.TOOL_MODULES.items():
             try:
                 module = importlib.import_module(module_name)
@@ -82,21 +82,21 @@ class ToolDiscoveryEngine:
                 logger.info(f"Discovered {len(tools)} {category.value} tools")
             except (ImportError, ModuleNotFoundError) as e:
                 logger.warning(f"Could not import {module_name}: {e}")
-        
+
         return self.discovered_tools
-    
+
     def _extract_tools_from_module(self, module: Any, category: ToolCategory) -> Dict[str, Callable]:
         """Extract tool functions from a module.
-        
+
         Args:
             module: Module to scan
             category: Tool category
-            
+
         Returns:
             Dict of tool functions
         """
         tools = {}
-        
+
         for name, obj in inspect.getmembers(module):
             if inspect.isfunction(obj) and hasattr(obj, "_mcp_tool_metadata"):
                 tool_id = obj._mcp_tool_metadata.get("name", name)
@@ -105,29 +105,29 @@ class ToolDiscoveryEngine:
                     "metadata": obj._mcp_tool_metadata,
                     "category": category,
                 }
-        
+
         return tools
-    
+
     def register_discovered_tools(self) -> int:
         """Register all discovered tools.
-        
+
         Returns:
             Number of tools registered
         """
         count = 0
-        
+
         for category_str, tools in self.discovered_tools.items():
             category = ToolCategory(category_str)
-            
+
             for tool_id, tool_info in tools.items():
                 try:
                     self._register_tool(tool_id, tool_info, category)
                     count += 1
                 except Exception as e:
                     logger.error(f"Failed to register tool {tool_id}: {e}")
-        
+
         return count
-    
+
     def _register_tool(
         self,
         tool_id: str,
@@ -135,18 +135,19 @@ class ToolDiscoveryEngine:
         category: Any,  # Accept both ToolCategory types
     ) -> None:
         """Register a single tool.
-        
+
         Args:
             tool_id: Tool identifier
             tool_info: Tool metadata and function
             category: Tool category (ToolCategory enum or compatible object)
         """
         # Import here to avoid circular dependency
-        from cortex.mcp.tool_registry import ToolMetadata, ToolCategory as RegistryToolCategory
-        
+        from cortex.mcp.tool_registry import ToolCategory as RegistryToolCategory
+        from cortex.mcp.tool_registry import ToolMetadata
+
         # Handle category - convert string to ToolCategory if needed
         registry_category = RegistryToolCategory.UTILITY  # Default
-        
+
         if isinstance(category, str):
             try:
                 registry_category = RegistryToolCategory(category)
@@ -158,7 +159,7 @@ class ToolDiscoveryEngine:
                 registry_category = RegistryToolCategory(category.value)
             except ValueError:
                 logger.warning(f"Cannot map category '{category.value}' for tool {tool_id}, using UTILITY")
-        
+
         # Register in tool registry using ToolMetadata
         try:
             metadata = ToolMetadata(
@@ -172,7 +173,7 @@ class ToolDiscoveryEngine:
             logger.debug(f"Registered tool {tool_id} in registry")
         except Exception as e:
             logger.error(f"Failed to register tool {tool_id} in registry: {e}")
-        
+
         # Register governance policy
         try:
             policy = ToolGovernancePolicy(
@@ -187,16 +188,16 @@ class ToolDiscoveryEngine:
             logger.debug(f"Registered governance policy for {tool_id}")
         except Exception as e:
             logger.error(f"Failed to register governance policy for {tool_id}: {e}")
-    
+
     def print_discovery_summary(self) -> None:
         """Print discovery summary."""
         total_tools = sum(len(tools) for tools in self.discovered_tools.values())
-        
+
         print(f"\n{'='*60}")
-        print(f"MCP Tool Discovery Summary")
+        print("MCP Tool Discovery Summary")
         print(f"{'='*60}")
         print(f"Total tools discovered: {total_tools}\n")
-        
+
         for category_str, tools in self.discovered_tools.items():
             print(f"{category_str.upper()} ({len(tools)} tools):")
             for tool_id in sorted(tools.keys()):
@@ -206,7 +207,7 @@ class ToolDiscoveryEngine:
 
 def auto_discover_and_register_tools() -> int:
     """Auto-discover and register all MCP tools.
-    
+
     Returns:
         Number of tools registered
     """

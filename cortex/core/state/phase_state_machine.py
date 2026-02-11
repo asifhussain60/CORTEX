@@ -60,15 +60,15 @@ class PhaseNotFoundError(Exception):
 class PhaseStateMachine:
     """
     Finite state machine for phase lifecycle management.
-    
+
     Valid transitions:
     - PLANNED → IN_PROGRESS
     - IN_PROGRESS → COMPLETED
     - COMPLETED → LOCKED
-    
+
     All other transitions are invalid and will raise InvalidTransitionError.
     """
-    
+
     # Valid state transition matrix
     _VALID_TRANSITIONS = {
         PhaseState.PLANNED: {PhaseState.IN_PROGRESS},
@@ -76,24 +76,24 @@ class PhaseStateMachine:
         PhaseState.COMPLETED: {PhaseState.LOCKED, PhaseState.COMPLETED},  # Idempotent
         PhaseState.LOCKED: {PhaseState.LOCKED},  # Idempotent only
     }
-    
+
     def __init__(self):
         """Initialize phase state machine."""
         self._phases: Dict[str, PhaseInfo] = {}
         self._lock = threading.RLock()
         self._metrics = StateMachineMetrics()
-    
+
     def create_phase(self, phase_id: str) -> None:
         """
         Create new phase in PLANNED state.
-        
+
         Args:
             phase_id: Unique phase identifier
         """
         with self._lock:
             if phase_id in self._phases:
                 return  # Idempotent
-            
+
             phase = PhaseInfo(
                 phase_id=phase_id,
                 current_state=PhaseState.PLANNED,
@@ -106,15 +106,15 @@ class PhaseStateMachine:
                 ],
             )
             self._phases[phase_id] = phase
-    
+
     def transition(self, phase_id: str, new_state: PhaseState) -> None:
         """
         Transition phase to new state (atomic CAS operation).
-        
+
         Args:
             phase_id: Phase to transition
             new_state: Target state
-            
+
         Raises:
             PhaseNotFoundError: If phase doesn't exist
             InvalidTransitionError: If transition invalid
@@ -122,21 +122,21 @@ class PhaseStateMachine:
         with self._lock:
             if phase_id not in self._phases:
                 raise PhaseNotFoundError(f"Phase '{phase_id}' not found")
-            
+
             phase = self._phases[phase_id]
             current_state = phase.current_state
-            
+
             # Check if transition is valid
             if new_state not in self._VALID_TRANSITIONS.get(current_state, set()):
                 self._metrics.invalid_transitions += 1
                 raise InvalidTransitionError(
                     f"Invalid transition: {current_state.value} → {new_state.value}"
                 )
-            
+
             # Idempotent: if already in target state, just return
             if current_state == new_state:
                 return
-            
+
             # Atomic state change with version increment
             phase.current_state = new_state
             phase.version += 1
@@ -147,19 +147,19 @@ class PhaseStateMachine:
                     to_state=new_state,
                 )
             )
-            
+
             self._metrics.total_transitions += 1
-    
+
     def get_state(self, phase_id: str) -> PhaseState:
         """
         Get current phase state.
-        
+
         Args:
             phase_id: Phase identifier
-            
+
         Returns:
             Current phase state
-            
+
         Raises:
             PhaseNotFoundError: If phase doesn't exist
         """
@@ -167,21 +167,21 @@ class PhaseStateMachine:
             if phase_id not in self._phases:
                 raise PhaseNotFoundError(f"Phase '{phase_id}' not found")
             return self._phases[phase_id].current_state
-    
+
     def get_history(self, phase_id: str) -> List[Dict[str, str]]:
         """
         Get phase transition history.
-        
+
         Args:
             phase_id: Phase identifier
-            
+
         Returns:
             List of transition entries
         """
         with self._lock:
             if phase_id not in self._phases:
                 raise PhaseNotFoundError(f"Phase '{phase_id}' not found")
-            
+
             phase = self._phases[phase_id]
             return [
                 {
@@ -191,14 +191,14 @@ class PhaseStateMachine:
                 }
                 for entry in phase.history
             ]
-    
+
     def list_phases_by_state(self, state: PhaseState) -> List[str]:
         """
         List all phases in given state.
-        
+
         Args:
             state: State to filter by
-            
+
         Returns:
             List of phase IDs
         """
@@ -208,11 +208,11 @@ class PhaseStateMachine:
                 for phase_id, phase in self._phases.items()
                 if phase.current_state == state
             ]
-    
+
     def get_metrics(self) -> Dict[str, int]:
         """
         Get state machine metrics.
-        
+
         Returns:
             Metrics dictionary
         """

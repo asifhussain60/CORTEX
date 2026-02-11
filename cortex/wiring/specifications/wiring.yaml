@@ -1250,8 +1250,7 @@ orchestrators:
     class: GitHubClientOrchestrator
     tier: 3
     priority: 83
-    dependencies:
-    - IncrementalUpdater
+    dependencies: []  # IncrementalUpdater pending implementation
     capabilities:
     - github_api_integration
     - pr_operations
@@ -1411,7 +1410,7 @@ orchestrators:
     priority: 88
     dependencies:
     - ContextCrystallizationLayerEnhanced
-    - KnowledgeSynthesisEngine
+    # KnowledgeSynthesisEngine pending implementation
     capabilities:
     - unified_intelligence_synthesis
     - lens_knowledge_integration
@@ -1447,7 +1446,7 @@ orchestrators:
     - IntentRouter
     - TDDOrchestrator
     - RefactoringOrchestrator
-    - LENSOrchestrator
+    # LENSOrchestrator pending implementation
     capabilities:
     - ccl_enhancement_registration
     - orchestrator_context_enrichment

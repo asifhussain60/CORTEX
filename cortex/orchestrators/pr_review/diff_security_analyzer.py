@@ -14,11 +14,11 @@ Detects:
 - Compliance violations (PII in code, license issues)
 """
 
-from dataclasses import dataclass
-from typing import List, Optional, Dict, Any, Tuple
-from enum import Enum
-import re
 import logging
+import re
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 

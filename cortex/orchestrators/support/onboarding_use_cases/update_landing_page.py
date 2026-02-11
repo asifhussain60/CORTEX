@@ -6,11 +6,11 @@ Description: Update landing page hub with repository tiles
 Authority: phase-54-A-incremental-onboarding-refactor.yaml, S1 task 6
 """
 
-from pathlib import Path
-from typing import Dict, Any, List
 from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, Dict, List
 
-from cortex.brain.core.result import Result, Ok, Err
+from cortex.brain.core.result import Err, Ok, Result
 
 
 @dataclass
@@ -26,7 +26,7 @@ class RepositoryTile:
 
 class UpdateLandingPageUseCase:
     """Update landing page hub (SOLID: Single Responsibility)."""
-    
+
     def execute(
         self,
         repo_name: str,
@@ -36,23 +36,23 @@ class UpdateLandingPageUseCase:
     ) -> Result[Path]:
         """
         Update landing page with new repository tile.
-        
+
         Args:
             repo_name: Repository name
             repo_slug: Repository slug (for URL)
             dashboard_path: Path to dashboard HTML/JSON
             landing_page_path: Path to landing page HTML
-            
+
         Returns:
             Result containing updated landing page path or error
         """
         try:
             if not landing_page_path.exists():
                 return Err(f"Landing page not found: {landing_page_path}")
-            
+
             # Read current landing page
             content = landing_page_path.read_text()
-            
+
             # Create repository tile
             tile = RepositoryTile(
                 name=repo_name,
@@ -62,24 +62,24 @@ class UpdateLandingPageUseCase:
                 icon=self._generate_icon(repo_name),
                 link=self._generate_link(repo_slug, dashboard_path),
             )
-            
+
             # Add tile to landing page
             updated_content = self._insert_tile(content, tile)
-            
+
             # Write updated landing page
             landing_page_path.write_text(updated_content)
-            
+
             return Ok(landing_page_path)
-        
+
         except Exception as e:
             return Err(f"Failed to update landing page: {str(e)}")
-    
+
     def _generate_color(self, repo_name: str) -> str:
         """Generate color for repository tile."""
         colors = ["#FF6B6B", "#4ECDC4", "#45B7D1", "#FFA07A", "#98D8C8"]
         hash_val = sum(ord(c) for c in repo_name)
         return colors[hash_val % len(colors)]
-    
+
     def _generate_icon(self, repo_name: str) -> str:
         """Generate icon for repository tile."""
         if "test" in repo_name.lower():
@@ -89,12 +89,12 @@ class UpdateLandingPageUseCase:
         if "api" in repo_name.lower():
             return "[API]"
         return "[PKG]"
-    
+
     def _generate_link(self, repo_slug: str, dashboard_path: Path) -> str:
         """Generate link for repository tile."""
         # Assuming dashboards are in dashboards/ directory
         return f"dashboards/{repo_slug}/index.html"
-    
+
     def _insert_tile(self, content: str, tile: RepositoryTile) -> str:
         """Insert tile HTML into landing page."""
         tile_html = f"""
@@ -111,7 +111,7 @@ class UpdateLandingPageUseCase:
         </div>
     </div>
 """
-        
+
         # Insert before closing </div> or </main>
         if "</main>" in content:
             return content.replace("</main>", tile_html + "</main>")
@@ -119,7 +119,7 @@ class UpdateLandingPageUseCase:
             return content.rstrip() + tile_html
         else:
             return content + tile_html
-    
+
     def create_registry_entry(
         self,
         repo_name: str,
@@ -128,12 +128,12 @@ class UpdateLandingPageUseCase:
     ) -> Result[Dict[str, Any]]:
         """
         Create registry entry for onboarded repository.
-        
+
         Args:
             repo_name: Repository name
             repo_slug: Repository slug
             dashboard_url: URL to dashboard
-            
+
         Returns:
             Result containing registry entry or error
         """
@@ -147,10 +147,10 @@ class UpdateLandingPageUseCase:
                 "status": "active",
             }
             return Ok(entry)
-        
+
         except Exception as e:
             return Err(f"Failed to create registry entry: {str(e)}")
-    
+
     def _get_timestamp(self) -> str:
         """Get current timestamp."""
         from datetime import datetime

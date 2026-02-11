@@ -3,7 +3,10 @@
     "cortex": {
       "type": "stdio",
       "command": "${workspaceFolder}/.venv/bin/python",
-      "args": ["-m", "cortex.mcp"],
+      "args": [
+        "-m",
+        "cortex.mcp"
+      ],
       "env": {
         "CORTEX_ENV": "development",
         "CORTEX_MCP_ENABLED": "true",

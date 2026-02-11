@@ -40,29 +40,29 @@ print()
 
 for file_path in files_to_update:
     full_path = repo_root / file_path
-    
+
     if not full_path.exists():
         print(f"❌ NOT FOUND: {file_path}")
         failed.append(file_path)
         continue
-    
+
     try:
         content = full_path.read_text()
         original = content
-        
+
         # Replace import statement
         content = content.replace(
             "from cortex.brain.core.governance_registry import",
             "from cortex.orchestrators.core.governance_registry import"
         )
-        
+
         if content != original:
             full_path.write_text(content)
             print(f"✅ UPDATED: {file_path}")
             updated += 1
         else:
             print(f"⚠️  NO CHANGES: {file_path}")
-            
+
     except Exception as e:
         print(f"❌ ERROR: {file_path} - {e}")
         failed.append(file_path)

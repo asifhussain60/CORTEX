@@ -13,23 +13,23 @@ Handler Classes:
 - ErrorRecoveryHandler: Handle errors and recovery
 """
 
-from cortex.orchestrators.handlers.intent_classification_handler import (
-    IntentClassificationHandler,
-)
-from cortex.orchestrators.handlers.routing_handler import (
-    RoutingHandler,
-)
-from cortex.orchestrators.handlers.governance_handler import (
-    GovernanceHandler,
-)
-from cortex.orchestrators.handlers.knowledge_handler import (
-    KnowledgeHandler,
+from cortex.orchestrators.handlers.error_recovery_handler import (
+    ErrorRecoveryHandler,
 )
 from cortex.orchestrators.handlers.execution_coordinator import (
     ExecutionCoordinator,
 )
-from cortex.orchestrators.handlers.error_recovery_handler import (
-    ErrorRecoveryHandler,
+from cortex.orchestrators.handlers.governance_handler import (
+    GovernanceHandler,
+)
+from cortex.orchestrators.handlers.intent_classification_handler import (
+    IntentClassificationHandler,
+)
+from cortex.orchestrators.handlers.knowledge_handler import (
+    KnowledgeHandler,
+)
+from cortex.orchestrators.handlers.routing_handler import (
+    RoutingHandler,
 )
 
 __all__ = [

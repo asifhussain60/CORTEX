@@ -10,12 +10,12 @@ PRReviewOrchestrator: Enterprise PR review automation system.
 S1 Foundation: Core diff parsing, security analysis, and review components.
 """
 
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple, Any
-from pathlib import Path
-from enum import Enum
-import time
 import logging
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 

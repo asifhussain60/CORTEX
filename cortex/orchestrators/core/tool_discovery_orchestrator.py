@@ -37,13 +37,12 @@ import logging
 import threading
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
 from functools import lru_cache
 from typing import Any, Callable, Dict, List, Optional, Tuple
-from datetime import datetime
 
 from cortex.models.canonical_enums import OrchestratorComplexityLevel as ComplexityLevel
-
 
 # ============================================================================
 # ENUMS & TYPES
@@ -169,7 +168,7 @@ DISCOVERY_CONFIG = {
 
 class LENSPhase:
     """LENS comprehension phases."""
-    
+
     @staticmethod
     def language(context: DiscoveryContext) -> Dict[str, Any]:
         """Phase 1: Language - Parse intent to structured understanding."""
@@ -179,7 +178,7 @@ class LENSPhase:
             "constraints": context.tool_constraints,
             "timestamp": datetime.now()
         }
-    
+
     @staticmethod
     def examination(parsed: Dict[str, Any]) -> Dict[str, Any]:
         """Phase 2: Examination - Analyze requirements and constraints."""
@@ -189,7 +188,7 @@ class LENSPhase:
             "feasibility_score": 85,  # Real analysis would go here
             "risk_factors": []
         }
-    
+
     @staticmethod
     def navigation(examination: Dict[str, Any]) -> Dict[str, Any]:
         """Phase 3: Navigation - Determine search strategy."""
@@ -199,7 +198,7 @@ class LENSPhase:
             "parallel_search": True,
             "max_iterations": 3
         }
-    
+
     @staticmethod
     def synthesis(navigation: Dict[str, Any]) -> Dict[str, Any]:
         """Phase 4: Synthesis - Combine findings into decision."""
@@ -220,7 +219,7 @@ class ToolDiscoveryEngine:
     SUP-HIGH-002: Real feature analysis with semantic parsing.
     Discovers and matches tools to user intents.
     """
-    
+
     def __init__(self) -> None:
         """Initialize discovery engine."""
         self.logger = logging.getLogger(__name__)
@@ -228,7 +227,7 @@ class ToolDiscoveryEngine:
         self._load_tool_registry()
         self.discovery_cache: Dict[str, DiscoveryResult] = {}
         self.match_history: List[Tuple[str, float]] = []
-    
+
     def _load_tool_registry(self) -> None:
         """Load available tools from registry."""
         # Real implementation would load from persistent store
@@ -270,14 +269,14 @@ class ToolDiscoveryEngine:
                 category=ToolCategory.VALIDATION
             ),
         }
-    
+
     def analyze_intent(self, context: DiscoveryContext) -> Dict[str, Any]:
         """SUP-HIGH-004: LENS-based analysis of intent."""
         lens_phase1 = LENSPhase.language(context)
         lens_phase2 = LENSPhase.examination(lens_phase1)
         lens_phase3 = LENSPhase.navigation(lens_phase2)
         lens_phase4 = LENSPhase.synthesis(lens_phase3)
-        
+
         return {
             "phases": {
                 "language": lens_phase1,
@@ -287,7 +286,7 @@ class ToolDiscoveryEngine:
             },
             "ready_for_discovery": lens_phase4.get("ready_to_discover", False)
         }
-    
+
     def discover_tools(
         self,
         context: DiscoveryContext
@@ -299,7 +298,7 @@ class ToolDiscoveryEngine:
         analysis = self.analyze_intent(context)
         if not analysis["ready_for_discovery"]:
             return []
-        
+
         # SUP-HIGH-006: Parallel discovery across strategies
         with ThreadPoolExecutor(max_workers=3) as executor:
             semantic_matches = executor.submit(
@@ -311,23 +310,23 @@ class ToolDiscoveryEngine:
             behavioral_matches = executor.submit(
                 self._behavioral_discovery, context
             )
-            
+
             all_matches = (
                 semantic_matches.result() +
                 syntactic_matches.result() +
                 behavioral_matches.result()
             )
-        
+
         # Deduplicate and score
         deduplicated = self._deduplicate_matches(all_matches)
         scored = self._score_matches(deduplicated, context)
-        
+
         return sorted(scored, key=lambda x: x.match_score, reverse=True)
-    
+
     def _semantic_discovery(self, context: DiscoveryContext) -> List[ToolMatch]:
         """Semantic-based tool discovery."""
         matches: List[ToolMatch] = []
-        
+
         for tool_name, capability in self.available_tools.items():
             # Real implementation: semantic similarity scoring
             if any(cap in context.required_capabilities for cap in capability.tags):
@@ -341,13 +340,13 @@ class ToolDiscoveryEngine:
                         reasoning="Semantic tag match"
                     )
                 )
-        
+
         return matches
-    
+
     def _syntactic_discovery(self, context: DiscoveryContext) -> List[ToolMatch]:
         """Syntactic-based tool discovery."""
         matches: List[ToolMatch] = []
-        
+
         for tool_name, capability in self.available_tools.items():
             # Check input/output type compatibility
             if capability.input_types and capability.output_types:
@@ -361,17 +360,17 @@ class ToolDiscoveryEngine:
                         reasoning="Type signature match"
                     )
                 )
-        
+
         return matches
-    
+
     def _behavioral_discovery(self, context: DiscoveryContext) -> List[ToolMatch]:
         """Behavioral-based tool discovery."""
         matches: List[ToolMatch] = []
-        
+
         # Match based on operational behavior and history
         for tool_name, capability in self.available_tools.items():
             complexity_match = (
-                capability.complexity_level.value 
+                capability.complexity_level.value
                 == context.complexity_preference.value
             )
             if complexity_match:
@@ -385,21 +384,21 @@ class ToolDiscoveryEngine:
                         reasoning="Complexity level match"
                     )
                 )
-        
+
         return matches
-    
+
     def _deduplicate_matches(self, matches: List[ToolMatch]) -> List[ToolMatch]:
         """Remove duplicate tool matches, keeping highest score."""
         seen: Dict[str, ToolMatch] = {}
-        
+
         for match in matches:
             if match.tool_name not in seen:
                 seen[match.tool_name] = match
             elif match.match_score > seen[match.tool_name].match_score:
                 seen[match.tool_name] = match
-        
+
         return list(seen.values())
-    
+
     def _score_matches(
         self,
         matches: List[ToolMatch],
@@ -408,38 +407,38 @@ class ToolDiscoveryEngine:
         """SUP-HIGH-005: Confidence scoring and risk assessment."""
         complexity_key: str = context.complexity_preference.name.lower()
         config_entry: Any = DISCOVERY_CONFIG["complexity_profiles"].get(complexity_key, {})
-        
+
         for match in matches:
             # Adjust confidence based on complexity and history
             base_confidence = match.confidence
             history_adjustment = self._history_adjustment(match.tool_name)
             adaptation_factor: float = float(config_entry.get("adaptation_factor", 0.75))
-            
+
             match.confidence = min(
                 100.0,
                 base_confidence + history_adjustment * adaptation_factor
             )
-        
+
         return matches
-    
+
     @lru_cache(maxsize=256)
     def _history_adjustment(self, tool_name: str) -> float:
         """SUP-HIGH-007, SUP-HIGH-009: Pattern caching and memoization."""
         # Real implementation: lookup historical success rates
         return 5.0
-    
+
     def validate_output(self, result: DiscoveryResult) -> bool:
         """SUP-HIGH-010: Output validation (quality gates)."""
         config: Any = DISCOVERY_CONFIG["validation_rules"]
         min_confidence: float = float(config.get("min_confidence", 60))
         quality_threshold: float = float(config.get("quality_threshold", 75))
-        
+
         checks: List[bool] = [
             len(result.matched_tools) > 0,
             result.overall_confidence >= min_confidence,
             result.quality_score >= quality_threshold
         ]
-        
+
         return all(checks)
 
 
@@ -452,7 +451,7 @@ class CircuitBreaker:
     SUP-HIGH-008: Circuit breaker for failure isolation.
     Prevents cascading failures in discovery operations.
     """
-    
+
     def __init__(self, failure_threshold: int = 5, timeout: int = 60):
         """Initialize circuit breaker."""
         self.failure_threshold = failure_threshold
@@ -461,7 +460,7 @@ class CircuitBreaker:
         self.last_failure_time: Optional[datetime] = None
         self.state = "CLOSED"  # CLOSED, OPEN, HALF_OPEN
         self.lock = threading.Lock()
-    
+
     def call(self, func: Callable[..., Any], *args: Any, **kwargs: Any) -> Any:
         """Execute function with circuit breaker protection."""
         with self.lock:
@@ -470,7 +469,7 @@ class CircuitBreaker:
                     self.state = "HALF_OPEN"
                 else:
                     raise RuntimeError("Circuit breaker OPEN")
-        
+
         try:
             result: Any = func(*args, **kwargs)
             self._on_success()
@@ -478,27 +477,27 @@ class CircuitBreaker:
         except Exception:
             self._on_failure()
             raise
-    
+
     def _should_attempt_reset(self) -> bool:
         """Check if enough time has passed to attempt reset."""
         if self.last_failure_time is None:
             return False
-        
+
         elapsed = (datetime.now() - self.last_failure_time).total_seconds()
         return elapsed >= self.timeout
-    
+
     def _on_success(self) -> None:
         """Handle successful execution."""
         with self.lock:
             self.failure_count = 0
             self.state = "CLOSED"
-    
+
     def _on_failure(self) -> None:
         """Handle failed execution."""
         with self.lock:
             self.failure_count += 1
             self.last_failure_time = datetime.now()
-            
+
             if self.failure_count >= self.failure_threshold:
                 self.state = "OPEN"
 
@@ -510,11 +509,11 @@ class CircuitBreaker:
 class ToolDiscoveryOrchestrator:
     """
     Phase 2.2 Enhanced Tool Discovery Orchestrator.
-    
+
     Implements all 12 AC-fixes for production-grade tool discovery,
     matching, and dependency analysis.
     """
-    
+
     def __init__(self) -> None:
         """Initialize orchestrator."""
         self.logger = logging.getLogger(__name__)
@@ -523,7 +522,7 @@ class ToolDiscoveryOrchestrator:
         self._discovery_cache: Dict[str, DiscoveryResult] = {}
         self._learning_history: Dict[str, List[ToolMatch]] = {}
         self.max_cache_size = 1000
-    
+
     def discover_and_match(
         self,
         user_intent: str,
@@ -533,16 +532,16 @@ class ToolDiscoveryOrchestrator:
     ) -> DiscoveryResult:
         """
         Main discovery and matching operation.
-        
+
         Args:
             user_intent: What the user wants to accomplish
             required_capabilities: Required tool capabilities
             complexity_preference: User's preferred complexity level
             tool_constraints: Optional constraints on tool selection
-        
+
         Returns:
             DiscoveryResult with matched tools and execution plan
-        
+
         Raises:
             RuntimeError: If circuit breaker is open
             ValueError: If validation fails
@@ -553,7 +552,7 @@ class ToolDiscoveryOrchestrator:
         )
         if cache_key in self._discovery_cache:
             return self._discovery_cache[cache_key]
-        
+
         try:
             # Create discovery context
             context = DiscoveryContext(
@@ -562,33 +561,33 @@ class ToolDiscoveryOrchestrator:
                 complexity_preference=complexity_preference,
                 tool_constraints=tool_constraints or {}
             )
-            
+
             # SUP-HIGH-008: Circuit breaker protection
             matched_tools: List[ToolMatch] = self.circuit_breaker.call(
                 self.engine.discover_tools, context
             )
-            
+
             # SUP-HIGH-011: Multi-turn learning from results
             self._learning_history[user_intent] = matched_tools
-            
+
             # Build discovery result
             result: DiscoveryResult = self._build_discovery_result(
                 context, matched_tools
             )
-            
+
             # SUP-HIGH-010: Validate output
             if not self.engine.validate_output(result):
                 result.quality_score = 60.0
-            
+
             # SUP-HIGH-009: Cache result
             self._cache_result(cache_key, result)
-            
+
             return result
-            
+
         except Exception as e:
             self.logger.error(f"Discovery failed: {e}")
             raise
-    
+
     def _build_discovery_result(
         self,
         context: DiscoveryContext,
@@ -598,10 +597,10 @@ class ToolDiscoveryOrchestrator:
         complexity_key: str = context.complexity_preference.name.lower()
         config: Any = DISCOVERY_CONFIG["complexity_profiles"].get(complexity_key, {})
         max_tools: int = int(config.get("max_tools", 2))
-        
+
         # Select top tools based on profile
         selected_tools: List[ToolMatch] = matched_tools[:max_tools]
-        
+
         # Calculate overall confidence
         overall_confidence: float = (
             sum(tool.confidence for tool in selected_tools) /
@@ -609,7 +608,7 @@ class ToolDiscoveryOrchestrator:
             if selected_tools
             else 0.0
         )
-        
+
         # Build execution plan
         execution_plan: Dict[str, Any] = {
             "tools": [tool.tool_name for tool in selected_tools],
@@ -617,10 +616,10 @@ class ToolDiscoveryOrchestrator:
             "dependencies": self._resolve_dependencies(selected_tools),
             "validation_steps": self._plan_validation(selected_tools)
         }
-        
+
         # SUP-HIGH-012: Deployment validation (pre-flight checks)
         deployment_valid: bool = self._validate_deployment(selected_tools)
-        
+
         result: DiscoveryResult = DiscoveryResult(
             intent=context.user_intent,
             matched_tools=selected_tools,
@@ -628,47 +627,47 @@ class ToolDiscoveryOrchestrator:
             execution_plan=execution_plan,
             quality_score=self._compute_quality_score(selected_tools)
         )
-        
+
         if deployment_valid:
             result.execution_plan["deployment_ready"] = True
-        
+
         return result
-    
+
     def _plan_execution_sequence(self, tools: List[ToolMatch]) -> List[str]:
         """Plan execution order based on dependencies."""
         # Real implementation: topological sort
         return [tool.tool_name for tool in tools]
-    
+
     def _resolve_dependencies(self, tools: List[ToolMatch]) -> Dict[str, List[str]]:
         """Resolve tool dependencies."""
         return {tool.tool_name: [] for tool in tools}
-    
+
     def _plan_validation(self, tools: List[ToolMatch]) -> List[str]:
         """Plan validation steps for selected tools."""
         return ["type_check", "dependency_check", "capability_check"]
-    
+
     def _validate_deployment(self, tools: List[ToolMatch]) -> bool:
         """SUP-HIGH-012: Pre-flight deployment checks."""
         config = DISCOVERY_CONFIG["deployment_checks"]
-        
+
         checks = [
             config.get("dependency_validation", True),
             config.get("version_compatibility", True),
             config.get("resource_availability", True)
         ]
-        
+
         return all(checks)
-    
+
     def _compute_quality_score(self, tools: List[ToolMatch]) -> float:
         """Compute overall quality score."""
         if not tools:
             return 0.0
-        
+
         avg_match_score = sum(t.match_score for t in tools) / len(tools)
         avg_confidence = sum(t.confidence for t in tools) / len(tools)
-        
+
         return (avg_match_score * 0.6 + avg_confidence * 0.4)
-    
+
     def _compute_cache_key(
         self,
         intent: str,
@@ -678,16 +677,16 @@ class ToolDiscoveryOrchestrator:
         """Compute cache key for discovery query."""
         key_str = f"{intent}|{'|'.join(sorted(capabilities))}|{complexity.name}"
         return hashlib.md5(key_str.encode()).hexdigest()
-    
+
     def _cache_result(self, cache_key: str, result: DiscoveryResult) -> None:
         """SUP-HIGH-009: Cache discovery result with size limit."""
         if len(self._discovery_cache) >= self.max_cache_size:
             # Remove oldest entry (FIFO)
             oldest_key = next(iter(self._discovery_cache))
             del self._discovery_cache[oldest_key]
-        
+
         self._discovery_cache[cache_key] = result
-    
+
     async def discover_tools_async(
         self,
         user_intent: str,
@@ -701,7 +700,7 @@ class ToolDiscoveryOrchestrator:
             required_capabilities,
             complexity_preference
         )
-    
+
     def get_health_status(self) -> Dict[str, Any]:
         """Get orchestrator health status."""
         return {

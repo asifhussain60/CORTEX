@@ -23,8 +23,8 @@ from typing import Any, Dict, List, Optional
 
 import yaml
 
-from cortex.brain.core.result import Result, Ok, Err
 from cortex.brain.core.path_resolver import resolve_path
+from cortex.brain.core.result import Err, Ok, Result
 
 logger = logging.getLogger(__name__)
 
@@ -186,7 +186,7 @@ class NamingFactory:
 class PlanningRegistryLoader:
     """
     Loads phase data from cortex-registry/planning/ structure.
-    
+
     Hierarchy:
     - cortex-registry/planning/index.yaml (main registry)
     - cortex-registry/planning/*.yaml (individual phase files)
@@ -198,80 +198,80 @@ class PlanningRegistryLoader:
     - In-memory caching
     - Naming factory for kebab-case folder generation
     """
-    
+
     def __init__(self, registry_path: Optional[Path] = None):
         """
         Initialize registry loader.
-        
+
         Args:
             registry_path: Path to cortex-registry folder. If None, auto-resolves.
-        
+
         Raises:
             RegistryPathNotFoundError: If registry path does not exist.
         """
         if registry_path is None:
             # Auto-resolve cortex-registry path
             registry_path = resolve_path("cortex-registry")
-        
+
         self.registry_path = Path(registry_path)
         self.planning_path = self.registry_path / "planning"
         self._phase_cache: Dict[str, Any] = {}
         self._initialized = False
         self.naming_factory = NamingFactory()  # Add naming factory
-        
+
         # Validate paths exist
         if not self.registry_path.exists():
             raise RegistryPathNotFoundError(
                 f"Registry path not found: {self.registry_path}"
             )
-        
+
         if not self.planning_path.exists():
             logger.warning(f"Planning path not found: {self.planning_path}")
-    
+
     def load_all_phases(self) -> Result[Dict[str, Any]]:
         """
         Load all phases from registry.
-        
+
         Returns:
             Result containing dictionary of all phases, or error.
         """
         try:
             phases = {}
-            
+
             # Load main index
             index_result = self._load_index()
             if index_result.is_err():
                 return index_result
-            
+
             phases.update(index_result.unwrap())
-            
+
             # Load individual phase files
             files_result = self._load_phase_files()
             if files_result.is_ok():
                 phases.update(files_result.unwrap())
-            
+
             # Load domain-specific phases
             domains_result = self._load_domain_phases()
             if domains_result.is_ok():
                 phases.update(domains_result.unwrap())
-            
+
             self._phase_cache = phases
             self._initialized = True
-            
+
             return Ok(phases)
-        
+
         except Exception as e:
             error_msg = f"Failed to load phases: {str(e)}"
             logger.error(error_msg)
             return Err(error_msg)
-    
+
     def load_phase(self, phase_id: str) -> Result[Dict[str, Any]]:
         """
         Load single phase by ID.
-        
+
         Args:
             phase_id: Phase identifier (e.g., "PHASE-001").
-        
+
         Returns:
             Result containing phase data, or error.
         """
@@ -279,56 +279,56 @@ class PlanningRegistryLoader:
             # Check cache first
             if phase_id in self._phase_cache:
                 return Ok(self._phase_cache[phase_id])
-            
+
             # Try to load from file
             phase_file = self.planning_path / f"{phase_id}.yaml"
-            
+
             if phase_file.exists():
                 phase_data = self._load_yaml(phase_file)
                 self._phase_cache[phase_id] = phase_data
                 return Ok(phase_data)
-            
+
             return Err(f"Phase not found: {phase_id}")
-        
+
         except Exception as e:
             error_msg = f"Failed to load phase {phase_id}: {str(e)}"
             logger.error(error_msg)
             return Err(error_msg)
-    
+
     def load_domain_phases(self, domain: str) -> Result[Dict[str, Any]]:
         """
         Load all phases for a specific domain.
-        
+
         Args:
             domain: Domain name (e.g., "orchestrator", "planning").
-        
+
         Returns:
             Result containing domain phases, or error.
         """
         try:
             domain_planning_path = self.registry_path / "domains" / domain / "planning"
-            
+
             if not domain_planning_path.exists():
                 return Ok({})  # Empty if domain doesn't exist
-            
+
             phases = {}
-            
+
             for yaml_file in domain_planning_path.glob("*.yaml"):
                 phase_id = yaml_file.stem
                 phase_data = self._load_yaml(yaml_file)
                 phases[f"{domain}_{phase_id}"] = phase_data
-            
+
             return Ok(phases)
-        
+
         except Exception as e:
             error_msg = f"Failed to load domain phases for {domain}: {str(e)}"
             logger.error(error_msg)
             return Err(error_msg)
-    
+
     def get_cached_phases(self) -> Dict[str, Any]:
         """Get currently cached phases."""
         return self._phase_cache.copy()
-    
+
     def clear_cache(self) -> None:
         """Clear phase cache."""
         self._phase_cache = {}
@@ -680,92 +680,92 @@ class PlanningRegistryLoader:
             error_msg = f"Failed to regenerate index: {str(e)}"
             logger.error(error_msg)
             return Err(error_msg)
-    
+
     # ========================================================================
     # PRIVATE METHODS
     # ========================================================================
-    
+
     def _load_index(self) -> Result[Dict[str, Any]]:
         """Load main index.yaml."""
         try:
             index_file = self.planning_path / "index.yaml"
-            
+
             if not index_file.exists():
                 logger.info(f"Index file not found: {index_file}")
                 return Ok({})
-            
+
             data = self._load_yaml(index_file)
             return Ok(data.get("plan_types", {}))
-        
+
         except Exception as e:
             error_msg = f"Failed to load index: {str(e)}"
             logger.error(error_msg)
             return Err(error_msg)
-    
+
     def _load_phase_files(self) -> Result[Dict[str, Any]]:
         """Load all individual phase files from planning/ folder."""
         try:
             phases = {}
-            
+
             if not self.planning_path.exists():
                 return Ok({})
-            
+
             for yaml_file in self.planning_path.glob("*.yaml"):
                 # Skip index.yaml
                 if yaml_file.name == "index.yaml":
                     continue
-                
+
                 phase_id = yaml_file.stem
                 phase_data = self._load_yaml(yaml_file)
                 phases[phase_id] = phase_data
-            
+
             return Ok(phases)
-        
+
         except Exception as e:
             error_msg = f"Failed to load phase files: {str(e)}"
             logger.error(error_msg)
             return Err(error_msg)
-    
+
     def _load_domain_phases(self) -> Result[Dict[str, Any]]:
         """Load all domain-specific phases."""
         try:
             domains_path = self.registry_path / "domains"
             phases = {}
-            
+
             if not domains_path.exists():
                 return Ok({})
-            
+
             for domain_folder in domains_path.iterdir():
                 if not domain_folder.is_dir():
                     continue
-                
+
                 domain_planning = domain_folder / "planning"
-                
+
                 if not domain_planning.exists():
                     continue
-                
+
                 for yaml_file in domain_planning.glob("*.yaml"):
                     phase_id = yaml_file.stem
                     phase_data = self._load_yaml(yaml_file)
                     phases[f"{domain_folder.name}_{phase_id}"] = phase_data
-            
+
             return Ok(phases)
-        
+
         except Exception as e:
             error_msg = f"Failed to load domain phases: {str(e)}"
             logger.error(error_msg)
             return Err(error_msg)
-    
+
     def _load_yaml(self, file_path: Path) -> Dict[str, Any]:
         """
         Load YAML file safely.
-        
+
         Args:
             file_path: Path to YAML file.
-        
+
         Returns:
             Parsed YAML as dictionary.
-        
+
         Raises:
             RegistryYAMLParseError: If YAML parsing fails.
         """
@@ -773,12 +773,12 @@ class PlanningRegistryLoader:
             with open(file_path, "r", encoding="utf-8") as f:
                 data = yaml.safe_load(f)
                 return data if isinstance(data, dict) else {}
-        
+
         except yaml.YAMLError as e:
             error_msg = f"YAML parsing error in {file_path}: {str(e)}"
             logger.error(error_msg)
             raise RegistryYAMLParseError(error_msg)
-        
+
         except Exception as e:
             error_msg = f"Error loading {file_path}: {str(e)}"
             logger.error(error_msg)
@@ -790,20 +790,20 @@ class PlanningRegistryLoader:
 
     def discover_legacy_plans(self, legacy_path: Path) -> List[Dict[str, Any]]:
         """Discover plans in legacy location.
-        
+
         Args:
             legacy_path: Path to legacy plans folder
-            
+
         Returns:
             List of discovered plan dictionaries
         """
         try:
             plans = []
-            
+
             if not legacy_path.exists():
                 logger.warning(f"Legacy path not found: {legacy_path}")
                 return plans
-            
+
             # Scan for YAML and JSON files
             for ext in ["*.yaml", "*.yml", "*.json"]:
                 for plan_file in legacy_path.glob(ext):
@@ -814,25 +814,25 @@ class PlanningRegistryLoader:
                             else:
                                 import json
                                 plan_data = json.load(f)
-                            
+
                             if plan_data and isinstance(plan_data, dict):
                                 plans.append(plan_data)
                     except Exception as e:
                         logger.warning(f"Failed to read {plan_file}: {str(e)}")
-            
+
             logger.info(f"Discovered {len(plans)} legacy plans")
             return plans
-        
+
         except Exception as e:
             logger.error(f"Legacy plan discovery failed: {str(e)}")
             return []
 
     def infer_domain_from_plan(self, plan_data: Dict[str, Any]) -> str:
         """Infer domain from plan data.
-        
+
         Args:
             plan_data: Plan dictionary
-            
+
         Returns:
             Inferred domain or 'general' as fallback
         """
@@ -840,12 +840,12 @@ class PlanningRegistryLoader:
             # Check for explicit domain
             if "domain" in plan_data:
                 return plan_data["domain"]
-            
+
             # Infer from description
             description = plan_data.get("description", "").lower()
             name = plan_data.get("name", "").lower()
             combined = f"{description} {name}"
-            
+
             # Domain keywords (same as NamingFactory)
             domain_keywords = {
                 "docs": ["documentation", "doc", "guide", "tutorial", "reference"],
@@ -853,73 +853,73 @@ class PlanningRegistryLoader:
                 "api": ["api", "rest", "endpoint", "request", "response"],
                 "core": ["core", "central", "main", "infrastructure"],
             }
-            
+
             for domain, keywords in domain_keywords.items():
                 for keyword in keywords:
                     if keyword in combined:
                         return domain
-            
+
             return "general"
-        
+
         except Exception as e:
             logger.warning(f"Domain inference failed: {str(e)}")
             return "general"
 
     def detect_duplicate_plans(self, legacy_path: Path) -> List[Dict[str, Any]]:
         """Detect duplicate plans in legacy location.
-        
+
         Args:
             legacy_path: Path to legacy plans
-            
+
         Returns:
             List of duplicate plan groups
         """
         try:
             import hashlib
-            
+
             plan_checksums: Dict[str, List[Path]] = {}
             duplicates = []
-            
+
             for plan_file in legacy_path.glob("*.yaml"):
                 try:
                     with open(plan_file, "rb") as f:
                         content_hash = hashlib.md5(f.read()).hexdigest()
-                    
+
                     if content_hash not in plan_checksums:
                         plan_checksums[content_hash] = []
-                    
+
                     plan_checksums[content_hash].append(plan_file)
                 except Exception as e:
                     logger.warning(f"Failed to hash {plan_file}: {str(e)}")
-            
+
             # Collect duplicates
             for file_list in plan_checksums.values():
                 if len(file_list) > 1:
                     duplicates.append({"files": [str(f) for f in file_list]})
-            
+
             logger.info(f"Found {len(duplicates)} duplicate plan groups")
             return duplicates
-        
+
         except Exception as e:
             logger.error(f"Duplicate detection failed: {str(e)}")
             return []
 
     def resolve_duplicate_plan_ids(self, plans: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """Resolve plans with duplicate IDs.
-        
+
         Args:
             plans: List of plans that may have duplicate IDs
-            
+
         Returns:
             List of plans with resolved IDs
         """
         try:
             seen_ids: Dict[str, int] = {}
             resolved = []
-            
+
             for plan in plans:
                 plan_id = plan.get("plan_id", "unknown")
-                
+
                 if plan_id in seen_ids:
                     # Add suffix to make unique
                     seen_ids[plan_id] += 1
@@ -927,12 +927,12 @@ class PlanningRegistryLoader:
                     plan["original_id"] = plan_id
                 else:
                     seen_ids[plan_id] = 1
-                
+
                 resolved.append(plan)
-            
+
             logger.info(f"Resolved {len(plans)} plans with duplicate IDs")
             return resolved
-        
+
         except Exception as e:
             logger.error(f"Duplicate ID resolution failed: {str(e)}")
             return plans

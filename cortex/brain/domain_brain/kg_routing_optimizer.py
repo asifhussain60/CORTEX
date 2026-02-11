@@ -5,15 +5,16 @@ based on service capabilities, topology, latency, and resource constraints.
 """
 
 import time
-from typing import Any, Dict, List, Optional
 from dataclasses import dataclass, field
-from cortex.brain.core.knowledge.graph.interface import IGraphAdapter, GraphQueryError
+from typing import Any, Dict, List, Optional
+
+from cortex.brain.core.knowledge.graph.interface import GraphQueryError, IGraphAdapter
 
 
 @dataclass
 class OptimizedRouteResult:
     """Result of routing optimization.
-    
+
     Attributes:
         status: Optimization status (SUCCESS, FAILED, NO_ROUTE)
         original_route: Original routing decision
@@ -36,14 +37,14 @@ class OptimizedRouteResult:
 
 class SemanticCapabilityMatcher:
     """Match services to required capabilities using semantic matching.
-    
+
     Finds services that provide required capabilities with coverage scoring
     and optional fuzzy/semantic matching for similar capability names.
     """
 
     def __init__(self, adapter: IGraphAdapter) -> None:
         """Initialize capability matcher.
-        
+
         Args:
             adapter: IGraphAdapter instance
         """
@@ -56,23 +57,23 @@ class SemanticCapabilityMatcher:
         semantic_match: bool = False,
     ) -> List[Dict[str, Any]]:
         """Find services providing required capabilities.
-        
+
         Args:
             required: List of required capability names
             min_coverage: Minimum coverage ratio (0-1)
             semantic_match: Enable fuzzy capability matching
-        
+
         Returns:
             List[Dict]: Services ranked by coverage score
         """
         matches = []
-        
+
         try:
             services = self.adapter.query_entities("Service", {})
-            
+
             for service in services:
                 capabilities = service.properties.get("capabilities", [])
-                
+
                 # Count matched capabilities
                 matched = 0
                 for req_cap in required:
@@ -80,9 +81,9 @@ class SemanticCapabilityMatcher:
                         matched += 1
                     elif semantic_match and self._fuzzy_match(req_cap, capabilities):
                         matched += 1
-                
+
                 coverage = matched / len(required) if required else 0.0
-                
+
                 if coverage >= min_coverage:
                     matches.append(
                         {
@@ -93,21 +94,21 @@ class SemanticCapabilityMatcher:
                             "total_required": len(required),
                         }
                     )
-            
+
             # Sort by coverage score descending
             matches.sort(key=lambda x: x["coverage_score"], reverse=True)
             return matches
-        
+
         except (GraphQueryError, ValueError, TypeError):
             return []
 
     def _fuzzy_match(self, required: str, available: List[str]) -> bool:
         """Fuzzy match capability names.
-        
+
         Args:
             required: Required capability
             available: Available capabilities
-        
+
         Returns:
             bool: True if fuzzy match found
         """
@@ -124,7 +125,7 @@ class SemanticCapabilityMatcher:
 @dataclass
 class RoutingDecision:
     """Routing decision with optimization details.
-    
+
     Attributes:
         status: Decision status (SUCCESS, FAILED, NO_ROUTE)
         recommended_path: Recommended service path
@@ -145,14 +146,14 @@ class RoutingDecision:
 
 class RoutingDecisionEngine:
     """Decision engine for optimal routing based on KG topology.
-    
+
     Analyzes service topology, capabilities, and constraints to make
     optimal routing decisions.
     """
 
     def __init__(self, adapter: IGraphAdapter) -> None:
         """Initialize routing decision engine.
-        
+
         Args:
             adapter: IGraphAdapter instance
         """
@@ -168,14 +169,14 @@ class RoutingDecisionEngine:
         optimize_for: str = "default",
     ) -> RoutingDecision:
         """Make routing decision for API.
-        
+
         Args:
             api_id: API identifier
             target_tier: Target service tier
             required_capabilities: Required service capabilities
             max_tier: Maximum tier constraint
             optimize_for: Optimization target (latency, reliability, cost, default)
-        
+
         Returns:
             RoutingDecision: Routing decision
         """
@@ -187,35 +188,35 @@ class RoutingDecisionEngine:
                 if entity.id == api_id:
                     api = entity
                     break
-            
+
             if not api:
                 return RoutingDecision(status="FAILED", reasoning="API not found")
-            
+
             # Get required capabilities from API if not provided
             if not required_capabilities:
                 required_capabilities = api.properties.get("required_capabilities", [])
-            
+
             # Find matching services
             services = self.matcher.find_services_with_capabilities(
                 required_capabilities if required_capabilities else []
             )
-            
+
             if not services:
                 return RoutingDecision(status="NO_ROUTE", reasoning="No services match requirements")
-            
+
             # Apply tier constraints
             if max_tier:
                 services = [
                     s for s in services
                     if self._get_service_tier(s["service_id"]) <= max_tier
                 ]
-            
+
             if not services:
                 return RoutingDecision(status="NO_ROUTE", reasoning="No services match tier constraints")
-            
+
             # Select optimal service based on optimization target
             optimal = self._select_optimal_service(services, optimize_for)
-            
+
             return RoutingDecision(
                 status="SUCCESS",
                 optimal_service=optimal["service_id"],
@@ -223,16 +224,16 @@ class RoutingDecisionEngine:
                 reliability_score=0.95,
                 reasoning=f"Selected {optimal['service_name']} with {optimal['coverage_score']:.0%} capability coverage",
             )
-        
+
         except (GraphQueryError, ValueError, TypeError) as e:
             return RoutingDecision(status="FAILED", reasoning=str(e))
 
     def _get_service_tier(self, service_id: str) -> int:
         """Get service tier level.
-        
+
         Args:
             service_id: Service ID
-        
+
         Returns:
             int: Tier level (1-3)
         """
@@ -249,11 +250,11 @@ class RoutingDecisionEngine:
         self, services: List[Dict[str, Any]], optimize_for: str
     ) -> Dict[str, Any]:
         """Select optimal service based on optimization target.
-        
+
         Args:
             services: List of candidate services
             optimize_for: Optimization target
-        
+
         Returns:
             Dict: Optimal service
         """
@@ -273,14 +274,14 @@ class RoutingDecisionEngine:
 
 class RoutingOptimizer:
     """End-to-end routing optimization with caching and audit logging.
-    
+
     Optimizes routing decisions with comprehensive metrics tracking,
     fallback routing, and idempotent caching.
     """
 
     def __init__(self, adapter: IGraphAdapter) -> None:
         """Initialize routing optimizer.
-        
+
         Args:
             adapter: IGraphAdapter instance
         """
@@ -293,7 +294,7 @@ class RoutingOptimizer:
         self, api_id: str, constraints: Dict[str, Any]
     ) -> OptimizedRouteResult:
         """Optimize routing for API with constraints.
-        
+
         Args:
             api_id: API identifier
             constraints: Routing constraints dict with optional keys:
@@ -301,7 +302,7 @@ class RoutingOptimizer:
                 - max_tier: maximum service tier
                 - required_capabilities: list of required capabilities
                 - max_latency_ms: maximum latency in milliseconds
-        
+
         Returns:
             OptimizedRouteResult: Optimization result with metrics
         """
@@ -309,9 +310,9 @@ class RoutingOptimizer:
         cache_key = f"{api_id}:{str(constraints)}"
         if cache_key in self._optimization_cache:
             return self._optimization_cache[cache_key]
-        
+
         start_time = time.time()
-        
+
         try:
             # Make routing decision
             decision = self.engine.decide_route(
@@ -321,7 +322,7 @@ class RoutingOptimizer:
                 max_tier=constraints.get("max_tier"),
                 optimize_for=constraints.get("optimize_for", "latency"),
             )
-            
+
             if decision.status != "SUCCESS":
                 result = OptimizedRouteResult(
                     status=decision.status,
@@ -333,7 +334,7 @@ class RoutingOptimizer:
                 estimated_latency = self._estimate_latency(decision.recommended_path or [])
                 reliability = decision.reliability_score
                 estimated_cost = self._estimate_cost(decision.recommended_path or [])
-                
+
                 result = OptimizedRouteResult(
                     status="SUCCESS",
                     original_route=[api_id, "direct_service"],
@@ -344,16 +345,16 @@ class RoutingOptimizer:
                     reliability_score=reliability,
                     estimated_cost=estimated_cost,
                 )
-            
+
             # Log optimization
             self._log_optimization(api_id, result, time.time() - start_time)
-            
+
             # Cache result
             self._optimization_cache[cache_key] = result
-            
+
             return result
-        
-        except Exception as e:
+
+        except Exception:
             result = OptimizedRouteResult(
                 status="FAILED",
             )
@@ -362,15 +363,15 @@ class RoutingOptimizer:
 
     def _estimate_latency(self, path: List[str]) -> float:
         """Estimate total latency for routing path.
-        
+
         Args:
             path: Service path
-        
+
         Returns:
             float: Estimated latency in milliseconds
         """
         total_latency = 0.0
-        
+
         try:
             for i in range(len(path) - 1):
                 # Get relationship between consecutive services
@@ -379,18 +380,18 @@ class RoutingOptimizer:
                     if len(p.nodes) > 1 and p.nodes[-1] == path[i + 1]:
                         # Found direct relationship - could extract latency from properties
                         total_latency += 50.0  # Default hop latency
-            
+
             return total_latency
-        
+
         except (GraphQueryError, ValueError, TypeError):
             return len(path) * 50.0
 
     def _estimate_cost(self, path: List[str]) -> float:
         """Estimate cost for routing path.
-        
+
         Args:
             path: Service path
-        
+
         Returns:
             float: Estimated cost
         """
@@ -404,9 +405,9 @@ class RoutingOptimizer:
                         if service.id == service_id:
                             tier = int(service.properties.get("tier", 3))
                             cost += tier * 1.5  # Tier-based cost
-            
+
             return cost
-        
+
         except (GraphQueryError, ValueError, TypeError):
             return len(path) * 1.0
 
@@ -414,7 +415,7 @@ class RoutingOptimizer:
         self, api_id: str, result: OptimizedRouteResult, elapsed: float
     ) -> None:
         """Log optimization decision.
-        
+
         Args:
             api_id: API identifier
             result: Optimization result
@@ -433,7 +434,7 @@ class RoutingOptimizer:
 
     def get_optimization_log(self) -> List[Dict[str, Any]]:
         """Get optimization log.
-        
+
         Returns:
             List[Dict]: Optimization log entries
         """

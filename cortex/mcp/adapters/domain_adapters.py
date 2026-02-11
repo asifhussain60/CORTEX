@@ -6,15 +6,16 @@ Adapters for 6 domain orchestrators.
 AC-ID: AC-MCP-ADAPTER-007 through AC-MCP-ADAPTER-012
 """
 
+import logging
+import time
 from typing import Any, Dict, List, Optional
+
 from cortex.mcp.orchestrator_mcp_server import (
-    IOrchestratorAdapter,
     CapabilityMetadata,
     CapabilityResponse,
     ExecutionContext,
+    IOrchestratorAdapter,
 )
-import logging
-import time
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +28,7 @@ def _create_generic_adapter(name: str, orchestrator_key: str, capabilities: List
             for cap in capabilities:
                 result.append(CapabilityMetadata(**cap))
             return result
-        
+
         def execute_capability(
             self,
             capability_name: str,
@@ -42,13 +43,13 @@ def _create_generic_adapter(name: str, orchestrator_key: str, capabilities: List
                 orchestrator=orchestrator_key,
                 duration_ms=0,
             )
-        
+
         def is_healthy(self) -> bool:
             return False
-        
+
         def get_status(self) -> Dict[str, Any]:
             return {"name": name, "healthy": False, "status": "not_implemented"}
-    
+
     return GenericAdapter()
 
 
@@ -58,7 +59,7 @@ def _create_generic_adapter(name: str, orchestrator_key: str, capabilities: List
 
 class RefactoringOrchestratorAdapter(IOrchestratorAdapter):
     """MCP Adapter for RefactoringOrchestrator"""
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         return [
             CapabilityMetadata(
@@ -80,7 +81,7 @@ class RefactoringOrchestratorAdapter(IOrchestratorAdapter):
                 tags={"domain", "refactoring"},
             ),
         ]
-    
+
     def execute_capability(
         self, capability_name: str, parameters: Dict[str, Any], context: ExecutionContext
     ) -> CapabilityResponse:
@@ -93,10 +94,10 @@ class RefactoringOrchestratorAdapter(IOrchestratorAdapter):
             orchestrator="refactoring",
             duration_ms=(time.time() - start) * 1000,
         )
-    
+
     def is_healthy(self) -> bool:
         return False
-    
+
     def get_status(self) -> Dict[str, Any]:
         return {"name": "RefactoringOrchestrator", "healthy": False, "status": "not_implemented"}
 
@@ -107,7 +108,7 @@ class RefactoringOrchestratorAdapter(IOrchestratorAdapter):
 
 class PlanningOrchestratorAdapter(IOrchestratorAdapter):
     """MCP Adapter for PlanningOrchestrator"""
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         return [
             CapabilityMetadata(
@@ -129,7 +130,7 @@ class PlanningOrchestratorAdapter(IOrchestratorAdapter):
                 tags={"domain", "planning"},
             ),
         ]
-    
+
     def execute_capability(
         self, capability_name: str, parameters: Dict[str, Any], context: ExecutionContext
     ) -> CapabilityResponse:
@@ -142,10 +143,10 @@ class PlanningOrchestratorAdapter(IOrchestratorAdapter):
             orchestrator="planning",
             duration_ms=(time.time() - start) * 1000,
         )
-    
+
     def is_healthy(self) -> bool:
         return False
-    
+
     def get_status(self) -> Dict[str, Any]:
         return {"name": "PlanningOrchestrator", "healthy": False, "status": "not_implemented"}
 
@@ -156,7 +157,7 @@ class PlanningOrchestratorAdapter(IOrchestratorAdapter):
 
 class DomainOrchestratorAdapter(IOrchestratorAdapter):
     """MCP Adapter for DomainOrchestrator"""
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         return [
             CapabilityMetadata(
@@ -169,7 +170,7 @@ class DomainOrchestratorAdapter(IOrchestratorAdapter):
                 tags={"domain", "context"},
             ),
         ]
-    
+
     def execute_capability(
         self, capability_name: str, parameters: Dict[str, Any], context: ExecutionContext
     ) -> CapabilityResponse:
@@ -182,10 +183,10 @@ class DomainOrchestratorAdapter(IOrchestratorAdapter):
             orchestrator="domain",
             duration_ms=(time.time() - start) * 1000,
         )
-    
+
     def is_healthy(self) -> bool:
         return False
-    
+
     def get_status(self) -> Dict[str, Any]:
         return {"name": "DomainOrchestrator", "healthy": False, "status": "not_implemented"}
 
@@ -196,7 +197,7 @@ class DomainOrchestratorAdapter(IOrchestratorAdapter):
 
 class ConversationOrchestratorAdapter(IOrchestratorAdapter):
     """MCP Adapter for ConversationOrchestrator"""
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         return [
             CapabilityMetadata(
@@ -209,7 +210,7 @@ class ConversationOrchestratorAdapter(IOrchestratorAdapter):
                 tags={"domain", "conversation"},
             ),
         ]
-    
+
     def execute_capability(
         self, capability_name: str, parameters: Dict[str, Any], context: ExecutionContext
     ) -> CapabilityResponse:
@@ -222,10 +223,10 @@ class ConversationOrchestratorAdapter(IOrchestratorAdapter):
             orchestrator="conversation",
             duration_ms=(time.time() - start) * 1000,
         )
-    
+
     def is_healthy(self) -> bool:
         return False
-    
+
     def get_status(self) -> Dict[str, Any]:
         return {"name": "ConversationOrchestrator", "healthy": False, "status": "not_implemented"}
 
@@ -236,7 +237,7 @@ class ConversationOrchestratorAdapter(IOrchestratorAdapter):
 
 class SeleniumPlaywrightOrchestratorAdapter(IOrchestratorAdapter):
     """MCP Adapter for SeleniumPlaywrightOrchestrator"""
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         return [
             CapabilityMetadata(
@@ -249,7 +250,7 @@ class SeleniumPlaywrightOrchestratorAdapter(IOrchestratorAdapter):
                 tags={"domain", "testing", "ui"},
             ),
         ]
-    
+
     def execute_capability(
         self, capability_name: str, parameters: Dict[str, Any], context: ExecutionContext
     ) -> CapabilityResponse:
@@ -262,10 +263,10 @@ class SeleniumPlaywrightOrchestratorAdapter(IOrchestratorAdapter):
             orchestrator="selenium_playwright",
             duration_ms=(time.time() - start) * 1000,
         )
-    
+
     def is_healthy(self) -> bool:
         return False
-    
+
     def get_status(self) -> Dict[str, Any]:
         return {"name": "SeleniumPlaywrightOrchestrator", "healthy": False, "status": "not_implemented"}
 
@@ -276,7 +277,7 @@ class SeleniumPlaywrightOrchestratorAdapter(IOrchestratorAdapter):
 
 class DocumentationOrchestratorAdapter(IOrchestratorAdapter):
     """MCP Adapter for DocumentationOrchestrator"""
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         return [
             CapabilityMetadata(
@@ -289,7 +290,7 @@ class DocumentationOrchestratorAdapter(IOrchestratorAdapter):
                 tags={"domain", "documentation"},
             ),
         ]
-    
+
     def execute_capability(
         self, capability_name: str, parameters: Dict[str, Any], context: ExecutionContext
     ) -> CapabilityResponse:
@@ -302,9 +303,9 @@ class DocumentationOrchestratorAdapter(IOrchestratorAdapter):
             orchestrator="documentation",
             duration_ms=(time.time() - start) * 1000,
         )
-    
+
     def is_healthy(self) -> bool:
         return False
-    
+
     def get_status(self) -> Dict[str, Any]:
         return {"name": "DocumentationOrchestrator", "healthy": False, "status": "not_implemented"}

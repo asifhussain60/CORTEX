@@ -1,7 +1,7 @@
 """Copilot Chat Response Templates for GitHub Copilot Chat Sessions.
 
 This module provides specialized response templates for GitHub Copilot Chat,
-ensuring consistent formatting, proper section ordering, and "Next Steps" 
+ensuring consistent formatting, proper section ordering, and "Next Steps"
 always appearing as the last section before approval gates.
 
 AC-ID: AC-REFACTOR-ARCHITECT-001
@@ -14,19 +14,20 @@ Date: 2026-02-04
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List, Optional
+
+from cortex.models.canonical_enums import ResponseType, VariableType
 from cortex.orchestrators.response.response_templates import (
     ResponseTemplate,
     ResponseTemplateRegistry,
-    VariableSpec,
     TemplateEngine,
+    VariableSpec,
 )
-from cortex.models.canonical_enums import ResponseType, VariableType
 
 
 class CopilotChatMode(Enum):
     """Copilot chat interaction modes."""
-    
+
     AUDIT = "audit"
     DESIGN = "design"
     DOR_GATE = "dor_gate"
@@ -37,14 +38,14 @@ class CopilotChatMode(Enum):
 @dataclass
 class SectionDefinition:
     """Definition of a response section.
-    
+
     Attributes:
         name: Section name (e.g., "Header", "Next Steps")
         required: Whether section is mandatory
         order: Position in response (lower = earlier)
         template: Section template pattern
     """
-    
+
     name: str
     required: bool
     order: int
@@ -53,20 +54,20 @@ class SectionDefinition:
 
 class CopilotChatTemplateEngine:
     """Template engine for GitHub Copilot Chat responses.
-    
+
     Provides 5 specialized templates with enforced section ordering:
     1. copilot-audit-summary: Audit mode results
     2. copilot-design-challenge: Challenge presentation
     3. copilot-dor-gate: Approval gate with DoR
     4. copilot-implementation-complete: Post-implementation summary
     5. copilot-next-steps: Reusable "Next Steps" section (always last)
-    
+
     Key Features:
     - Enforces "Next Steps" as the last section before approval gates
     - Validates section ordering
     - Provides consistent formatting across all modes
     - Integrates with existing ResponseTemplateRegistry
-    
+
     Example:
         >>> engine = CopilotChatTemplateEngine()
         >>> result = engine.render_audit_summary(
@@ -81,10 +82,10 @@ class CopilotChatTemplateEngine:
         ### 🎯 Next Steps
         ...
     """
-    
+
     def __init__(self, registry: Optional[ResponseTemplateRegistry] = None):
         """Initialize the Copilot chat template engine.
-        
+
         Args:
             registry: Optional existing template registry to use.
                      If None, creates a new registry.
@@ -92,12 +93,12 @@ class CopilotChatTemplateEngine:
         self.base_engine = TemplateEngine()
         if registry:
             self.base_engine.registry = registry
-        
+
         self._register_templates()
-    
+
     def _register_templates(self) -> None:
         """Register all Copilot chat templates."""
-        
+
         # Template 1: Audit Summary
         self.base_engine.create_template(
             template_id="copilot-audit-summary",
@@ -157,7 +158,7 @@ class CopilotChatTemplateEngine:
                 ),
             }
         )
-        
+
         # Template 2: Design Challenge
         self.base_engine.create_template(
             template_id="copilot-design-challenge",
@@ -229,7 +230,7 @@ class CopilotChatTemplateEngine:
                 ),
             }
         )
-        
+
         # Template 3: DoR Gate
         self.base_engine.create_template(
             template_id="copilot-dor-gate",
@@ -271,7 +272,7 @@ class CopilotChatTemplateEngine:
                 ),
             }
         )
-        
+
         # Template 4: Implementation Complete
         self.base_engine.create_template(
             template_id="copilot-implementation-complete",
@@ -325,7 +326,7 @@ class CopilotChatTemplateEngine:
                 ),
             }
         )
-        
+
         # Template 5: Next Steps (Reusable)
         self.base_engine.create_template(
             template_id="copilot-next-steps",
@@ -343,7 +344,7 @@ class CopilotChatTemplateEngine:
                 ),
             }
         )
-    
+
     def _get_audit_summary_pattern(self) -> str:
         """Get audit summary template pattern."""
         return """## 🔍 CORTEX Audit
@@ -366,7 +367,7 @@ class CopilotChatTemplateEngine:
 ---
 
 **Audit complete.** Type `/implement {fix}` to address issues."""
-    
+
     def _get_design_challenge_pattern(self) -> str:
         """Get design challenge template pattern."""
         return """## ⚠️ CHALLENGE + RECOMMENDATION
@@ -410,7 +411,7 @@ class CopilotChatTemplateEngine:
 ---
 
 **⏳ Awaiting approval...** Type **"proceed"**, **"yes"**, or **"approve"** to continue."""
-    
+
     def _get_dor_gate_pattern(self) -> str:
         """Get DoR gate template pattern."""
         return """## 📋 Definition of Ready
@@ -428,7 +429,7 @@ class CopilotChatTemplateEngine:
 ---
 
 **⏳ Awaiting approval...** Type **"proceed"**, **"yes"**, **"approve"**, or **"implement"** to begin execution."""
-    
+
     def _get_implementation_complete_pattern(self) -> str:
         """Get implementation complete template pattern."""
         return """## ✅ Implementation Complete
@@ -440,7 +441,7 @@ class CopilotChatTemplateEngine:
 
 {{ summary }}
 
-**Files Modified:** {{ files_modified }}  
+**Files Modified:** {{ files_modified }}
 **Tests Passing:** {{ tests_passing }}
 
 ### 🔍 Gap Analysis
@@ -460,13 +461,13 @@ class CopilotChatTemplateEngine:
 ---
 
 **Implementation complete.** All changes committed with audit trail."""
-    
+
     def _get_next_steps_pattern(self) -> str:
         """Get next steps template pattern."""
         return """### 🎯 Next Steps
 
 {{ steps }}"""
-    
+
     def render_audit_summary(
         self,
         orchestrator: str,
@@ -479,7 +480,7 @@ class CopilotChatTemplateEngine:
         next_steps: str,
     ) -> str:
         """Render audit summary response.
-        
+
         Args:
             orchestrator: Orchestrator name
             p0_count: P0 issue count
@@ -489,7 +490,7 @@ class CopilotChatTemplateEngine:
             audit_details: Detailed audit results table
             recommendations: Recommendations list
             next_steps: Next actions list
-            
+
         Returns:
             Rendered markdown response
         """
@@ -506,7 +507,7 @@ class CopilotChatTemplateEngine:
                 "next_steps": next_steps,
             }
         )
-    
+
     def render_design_challenge(
         self,
         orchestrator: str,
@@ -521,7 +522,7 @@ class CopilotChatTemplateEngine:
         counter_proposal: Optional[str] = None,
     ) -> str:
         """Render design challenge response.
-        
+
         Args:
             orchestrator: Orchestrator name
             user_request: User's original request
@@ -533,7 +534,7 @@ class CopilotChatTemplateEngine:
             verdictUnion[PROCEED, PIVOT] | HYBRID
             next_steps: Next actions
             counter_proposal: Optional alternative approach
-            
+
         Returns:
             Rendered markdown response
         """
@@ -550,12 +551,12 @@ class CopilotChatTemplateEngine:
         }
         if counter_proposal:
             variables["counter_proposal"] = counter_proposal
-        
+
         return self.base_engine.apply_template(
             template_id="copilot-design-challenge",
             variables=variables
         )
-    
+
     def render_dor_gate(
         self,
         orchestrator: str,
@@ -565,14 +566,14 @@ class CopilotChatTemplateEngine:
         next_steps: str,
     ) -> str:
         """Render DoR approval gate response.
-        
+
         Args:
             orchestrator: Orchestrator name
             intent: Intent type
             target: Target orchestrator/module
             dor_table: DoR validation table
             next_steps: Post-approval actions
-            
+
         Returns:
             Rendered markdown response
         """
@@ -586,7 +587,7 @@ class CopilotChatTemplateEngine:
                 "next_steps": next_steps,
             }
         )
-    
+
     def render_implementation_complete(
         self,
         orchestrator: str,
@@ -598,7 +599,7 @@ class CopilotChatTemplateEngine:
         next_steps: str,
     ) -> str:
         """Render implementation complete response.
-        
+
         Args:
             orchestrator: Orchestrator name
             summary: Implementation summary
@@ -607,13 +608,13 @@ class CopilotChatTemplateEngine:
             gap_analysis: Gap analysis table
             architecture_evolution: Evolution metrics
             next_steps: Recommended priorities
-            
+
         Returns:
             Rendered markdown response
         """
         # Convert boolean to display string AFTER template validation
         tests_display = "✅ Passing" if tests_passing else "❌ Failing"
-        
+
         return self.base_engine.apply_template(
             template_id="copilot-implementation-complete",
             variables={
@@ -629,13 +630,13 @@ class CopilotChatTemplateEngine:
             f"**Tests Passing:** {tests_passing}",
             f"**Tests Passing:** {tests_display}"
         )
-    
+
     def render_next_steps(self, steps: str) -> str:
         """Render standalone next steps section.
-        
+
         Args:
             steps: Ordered list of next actions
-            
+
         Returns:
             Rendered markdown section
         """
@@ -643,13 +644,13 @@ class CopilotChatTemplateEngine:
             template_id="copilot-next-steps",
             variables={"steps": steps}
         )
-    
+
     def validate_section_order(self, response: str) -> bool:
         """Validate that 'Next Steps' appears last before approval gates.
-        
+
         Args:
             response: Full markdown response
-            
+
         Returns:
             True if section order is valid, False otherwise
         """
@@ -657,14 +658,14 @@ class CopilotChatTemplateEngine:
         lines = response.split("\n")
         next_steps_line = -1
         approval_gate_line = -1
-        
+
         for i, line in enumerate(lines):
             # Match the exact Next Steps heading (with or without emoji)
             if line.strip() == "### 🎯 Next Steps" or line.strip() == "### Next Steps":
                 next_steps_line = i
             if "⏳ Awaiting approval" in line or "Type **\"proceed\"" in line:
                 approval_gate_line = i
-        
+
         # Valid if:
         # 1. Next Steps exists and approval gate exists
         # 2. No new headings (###) appear between Next Steps and approval gate
@@ -676,7 +677,7 @@ class CopilotChatTemplateEngine:
                 # Any heading (starts with ###) invalidates the order
                 if line.startswith("###"):
                     return False  # Found a heading after Next Steps
-        
+
         return True
 
 
@@ -686,7 +687,7 @@ _copilot_chat_engine: Optional[CopilotChatTemplateEngine] = None
 
 def get_copilot_chat_engine() -> CopilotChatTemplateEngine:
     """Get or create singleton Copilot chat template engine.
-    
+
     Returns:
         CopilotChatTemplateEngine instance
     """

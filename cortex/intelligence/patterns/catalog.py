@@ -6,24 +6,24 @@ Stage: S1 - Pattern Recognition Foundation
 AC Marker: AC-PHASE57-S1-003
 """
 
-from typing import Dict, Optional, List, Union
 from dataclasses import dataclass
+from typing import Dict, List, Optional, Union
 
-from .base import PatternInfo, PatternCategory
+from .base import PatternCategory, PatternInfo
 
 
 @dataclass
 class PatternCatalog:
     """
     Registry of recognized design patterns.
-    
+
     Maintains a catalog of 25+ design patterns that can be detected
     in code analysis. Patterns are organized by category.
-    
+
     Example:
         ```python
         catalog = PatternCatalog()
-        
+
         # Register patterns
         singleton_pattern = PatternInfo(
             name="Singleton",
@@ -32,7 +32,7 @@ class PatternCatalog:
             description="Ensure single instance"
         )
         catalog.register(singleton_pattern)
-        
+
         # Query patterns
         pattern = catalog.get("Singleton")
         all_creational = catalog.get_by_category(PatternCategory.CREATIONAL)
@@ -49,7 +49,7 @@ class PatternCatalog:
     def _initialize_default_patterns(self) -> None:
         """
         Initialize catalog with 25+ Gang of Four and enterprise patterns.
-        
+
         Patterns:
             Creational (5): Singleton, Factory, AbstractFactory, Builder, Prototype
             Structural (6): Adapter, Bridge, Composite, Decorator, Facade, Proxy
@@ -250,10 +250,10 @@ class PatternCatalog:
     def register(self, pattern: PatternInfo) -> None:
         """
         Register a pattern in the catalog.
-        
+
         Args:
             pattern: PatternInfo to register
-            
+
         Raises:
             ValueError: If pattern with same name already registered
         """
@@ -264,10 +264,10 @@ class PatternCatalog:
     def get(self, name: str) -> Optional[PatternInfo]:
         """
         Retrieve pattern by name.
-        
+
         Args:
             name: Pattern name
-            
+
         Returns:
             PatternInfo or None if not found
         """
@@ -276,10 +276,10 @@ class PatternCatalog:
     def get_by_category(self, category: Union[PatternCategory, str]) -> List[PatternInfo]:
         """
         Retrieve all patterns in a category.
-        
+
         Args:
             category: PatternCategory or string category name
-            
+
         Returns:
             List of PatternInfo matching category
         """
@@ -293,7 +293,7 @@ class PatternCatalog:
     def list_patterns(self) -> List[PatternInfo]:
         """
         List all registered patterns.
-        
+
         Returns:
             List of all PatternInfo objects
         """
@@ -302,7 +302,7 @@ class PatternCatalog:
     def count(self) -> int:
         """
         Get count of registered patterns.
-        
+
         Returns:
             Number of patterns in catalog
         """

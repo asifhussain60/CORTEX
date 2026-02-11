@@ -10,15 +10,15 @@ Exports:
 
 from cortex.orchestrators.domains.domain_classifier import DomainClassifier
 from cortex.orchestrators.domains.orchestrator_traits import (
-    ComposableOrchestrator,
     AnalyticalOrchestrator,
+    ComposableOrchestrator,
     ExecutiveOrchestrator,
-    ValidatingOrchestrator,
     IntegrativeOrchestrator,
-    get_trait_hierarchy,
+    ValidatingOrchestrator,
     detect_cycles,
-    is_dag,
     get_reachable_traits,
+    get_trait_hierarchy,
+    is_dag,
 )
 
 __all__ = [

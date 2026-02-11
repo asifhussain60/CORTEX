@@ -23,7 +23,7 @@ RULE 1: Output Location
 ALL planning artifacts MUST be created in:
   cortex-registry/planning/{plan-id}/{artifact-type}/{filename}
 
-RULE 2: Plan ID Format  
+RULE 2: Plan ID Format
 --------
 Plan IDs MUST be kebab-case (lowercase, dashes only):
   ✅ Valid:   phase-4, ac-permanent-fix-011, feature-xyz-123

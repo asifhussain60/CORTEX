@@ -10,38 +10,38 @@ AC-FIX-BRITTLENESS-004: Timeout Configuration
 
 """
 
-from dataclasses import dataclass, field
-from typing import Dict, Any, Optional
 import os
+from dataclasses import dataclass, field
+from typing import Any, Dict, Optional
 
 
 @dataclass
 class TimeoutConfig:
     """
     Timeout configuration for infrastructure operations.
-    
+
     All blocking operations should use these timeouts to prevent
     indefinite hangs.
     """
     # Thread operations
     thread_join: float = 5.0  # Timeout for thread.join() calls
     thread_start: float = 10.0  # Timeout waiting for thread start
-    
-    # Database operations  
+
+    # Database operations
     database: float = 30.0  # SQLite connection timeout
     query: float = 10.0  # Individual query timeout
-    
+
     # Queue operations
     queue_get: float = 5.0  # Queue.get() timeout
     queue_put: float = 5.0  # Queue.put() timeout
-    
+
     # Network operations (future)
     http_connect: float = 10.0  # HTTP connection timeout
     http_read: float = 30.0  # HTTP read timeout
-    
+
     # Graceful shutdown
     shutdown_grace: float = 5.0  # Grace period for shutdown
-    
+
     def to_dict(self) -> Dict[str, float]:
         """Convert to dictionary."""
         return {
@@ -64,33 +64,33 @@ _timeout_config: Optional[TimeoutConfig] = None
 def get_timeout_config() -> Dict[str, float]:
     """
     Get timeout configuration.
-    
+
     Returns a dictionary of timeout values for various operations.
     Values can be overridden via environment variables:
     - CORTEX_TIMEOUT_THREAD_JOIN
     - CORTEX_TIMEOUT_DATABASE
     - CORTEX_TIMEOUT_QUEUE_GET
     etc.
-    
+
     Returns:
         Dictionary of timeout name to value in seconds
     """
     global _timeout_config
-    
+
     if _timeout_config is None:
         _timeout_config = TimeoutConfig(
             thread_join=float(os.environ.get('CORTEX_TIMEOUT_THREAD_JOIN', 5.0)),
             database=float(os.environ.get('CORTEX_TIMEOUT_DATABASE', 30.0)),
             queue_get=float(os.environ.get('CORTEX_TIMEOUT_QUEUE_GET', 5.0)),
         )
-    
+
     return _timeout_config.to_dict()
 
 
 def set_timeout_config(config: TimeoutConfig) -> None:
     """
     Set custom timeout configuration.
-    
+
     Args:
         config: TimeoutConfig instance
     """

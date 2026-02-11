@@ -1,8 +1,9 @@
 """TechStackEvolutionPlanner - AUDIT Mode P1.6 Future-Vision (Stage 7)."""
-from pathlib import Path
-from typing import Dict, Any, List, Optional
-from dataclasses import dataclass, field
 import json
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
 
 @dataclass
 class TechnologyMetrics:
@@ -23,7 +24,7 @@ class MigrationPlan:
 class TechStackEvolutionPlanner:
     def __init__(self, repo_root: Optional[Path] = None):
         self.repo_root = repo_root or Path.cwd()
-    
+
     def validate_all(self) -> Dict[str, Any]:
         metrics = TechnologyMetrics(
             capacity_used=65.0,
@@ -32,7 +33,7 @@ class TechStackEvolutionPlanner:
             maturity_score=88.0,
             readiness_score=0.87
         )
-        
+
         migration_plan = MigrationPlan(
             phases=["Assessment", "Pilot", "Migration", "Validation"],
             duration_days=90,
@@ -40,13 +41,13 @@ class TechStackEvolutionPlanner:
             backward_compatible=True,
             has_rollback=True
         )
-        
+
         issues = []
         if metrics.capacity_used > 80.0:
             issues.append("P1.6-001: Technology stack capacity >80%")
         if metrics.performance_score < 80.0:
             issues.append("P1.6-001: Performance degradation detected")
-        
+
         return {
             "evolutionary": len(issues) == 0,
             "issues": issues,

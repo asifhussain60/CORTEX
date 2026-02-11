@@ -11,6 +11,8 @@ from typing import List, Optional
 
 from cortex.interaction.autonomous_plan_executor import (
     AutonomousPlanExecutor,
+)
+from cortex.interaction.autonomous_plan_executor import (
     Phase as ExecutorPhase,
 )
 from cortex.orchestrators.response.ascii_progress_bar import ASCIIProgressBar, Phase

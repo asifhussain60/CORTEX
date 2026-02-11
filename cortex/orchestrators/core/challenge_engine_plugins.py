@@ -7,12 +7,12 @@ disagreement types and handlers without modifying core code.
 Production Ready: ✅
 """
 
-from abc import ABC, abstractmethod
-from dataclasses import dataclass
-from typing import Dict, List, Optional, Type, Any
-from enum import Enum
 import importlib
 import logging
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Dict, List, Optional, Type
 
 from cortex.orchestrators.core.challenge_engine import DisagreementType
 
@@ -41,7 +41,7 @@ class DisagreementPlugin(ABC):
     def detect(self, context: DisagreementContext) -> Optional[str]:
         """
         Detect if this type of disagreement exists.
-        
+
         Returns:
             Disagreement explanation if detected, None otherwise
         """

@@ -41,23 +41,23 @@ def cortex_refactor(
     parameters: Optional[Dict[str, Any]] = None,    unified_intelligence: Optional[Any] = None,) -> Dict[str, Any]:
     """
     Execute a refactoring operation on a source file.
-    
+
     Supports 24+ operations across Python, C#, TypeScript/JavaScript:
     - extract_function, extract_method, extract_constant, extract_type
     - rename, inline_variable
     - organize_imports, add_type_hints, convert_to_f_string
     - encapsulate_field, extract_interface
-    
+
     Args:
         operation: Refactoring operation name (e.g., "rename", "extract_function")
         file_path: Path to source file to refactor
         language: Language identifier (python, csharp, typescript, javascript)
         parameters: Operation-specific parameters (offset, new_name, etc.)
         unified_intelligence: Optional UnifiedIntelligenceContext (Phase 54 S4 injection)
-        
+
     Returns:
         Dict with status, modified_files, description, or error
-        
+
     Example:
         >>> cortex_refactor(
         ...     operation="rename",
@@ -75,10 +75,10 @@ def cortex_refactor(
     """
     try:
         from cortex.refactoring.orchestrator import RefactoringOrchestrator
-        
+
         # Initialize orchestrator
         orchestrator = RefactoringOrchestrator()
-        
+
         # Map string language to enum
         language_map = {
             "python": RefactoringLanguage.PYTHON,
@@ -87,7 +87,7 @@ def cortex_refactor(
             "javascript": RefactoringLanguage.JAVASCRIPT,
             "java": RefactoringLanguage.JAVA,
         }
-        
+
         language_enum = language_map.get(language.lower())
         if not language_enum:
             return {
@@ -96,7 +96,7 @@ def cortex_refactor(
                 "operation": operation,
                 "file_path": file_path,
             }
-        
+
         # Create refactoring request
         request = RefactoringRequest(
             operation=operation,
@@ -104,10 +104,10 @@ def cortex_refactor(
             language=language_enum,
             parameters=parameters or {}
         )
-        
+
         # Execute refactoring
         result = orchestrator.execute_refactoring(request)
-        
+
         # Return result
         if result.is_ok():
             refactoring_result = result.unwrap()
@@ -150,13 +150,13 @@ def cortex_refactor_available_operations(
 ) -> Dict[str, Any]:
     """
     Get available refactoring operations for a language or all languages.
-    
+
     Args:
         language: Language identifier (optional). If omitted, returns operations for all languages.
-        
+
     Returns:
         Dict with status and operations map (language -> operations list)
-        
+
     Example:
         >>> cortex_refactor_available_operations()
         {
@@ -166,7 +166,7 @@ def cortex_refactor_available_operations(
                 "typescript": ["extract_function", "organize_imports", ...]
             }
         }
-        
+
         >>> cortex_refactor_available_operations(language="python")
         {
             "status": "success",
@@ -175,9 +175,9 @@ def cortex_refactor_available_operations(
     """
     try:
         from cortex.refactoring.orchestrator import RefactoringOrchestrator
-        
+
         orchestrator = RefactoringOrchestrator()
-        
+
         if language:
             # Get operations for specific language
             language_map = {
@@ -187,16 +187,16 @@ def cortex_refactor_available_operations(
                 "javascript": RefactoringLanguage.JAVASCRIPT,
                 "java": RefactoringLanguage.JAVA,
             }
-            
+
             language_enum = language_map.get(language.lower())
             if not language_enum:
                 return {
                     "status": "error",
                     "error": f"Unknown language: {language}. Supported: {list(language_map.keys())}",
                 }
-            
+
             operations_result = orchestrator.registry.get_operations_for_language(language_enum)
-            
+
             if operations_result.is_ok():
                 operations = operations_result.unwrap()
                 return {
@@ -213,12 +213,12 @@ def cortex_refactor_available_operations(
         else:
             # Get all operations
             all_operations = orchestrator.get_all_operations()
-            
+
             # Convert enum keys to strings
             operations_map = {
                 lang.value: ops for lang, ops in all_operations.items()
             }
-            
+
             return {
                 "status": "success",
                 "operations": operations_map,
@@ -238,13 +238,13 @@ def cortex_refactor_available_operations(
 def cortex_refactor_supported_languages() -> Dict[str, Any]:
     """
     Get supported languages and adapter availability status.
-    
+
     Returns supported languages (registered adapters), available languages
     (adapters with tools installed), and detailed adapter status.
-    
+
     Returns:
         Dict with status, supported_languages, available_languages, adapter_status
-        
+
     Example:
         >>> cortex_refactor_supported_languages()
         {
@@ -261,26 +261,26 @@ def cortex_refactor_supported_languages() -> Dict[str, Any]:
     """
     try:
         from cortex.refactoring.orchestrator import RefactoringOrchestrator
-        
+
         orchestrator = RefactoringOrchestrator()
-        
+
         # Get supported and available languages
         supported = orchestrator.get_supported_languages()
         available = orchestrator.get_available_languages()
-        
+
         # Get adapter status
         adapter_status = orchestrator.get_adapter_status()
-        
+
         # Get total operations count
         total_operations = orchestrator.get_total_operations_count()
-        
+
         # Convert enums to strings
         supported_languages = [lang.value for lang in supported]
         available_languages = [lang.value for lang in available]
         adapter_status_map = {
             lang.value: status for lang, status in adapter_status.items()
         }
-        
+
         return {
             "status": "success",
             "supported_languages": supported_languages,

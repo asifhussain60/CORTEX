@@ -6,8 +6,8 @@ Author: CORTEX Framework
 """
 
 from dataclasses import dataclass
-from typing import Any, Dict, Optional, List
 from enum import Enum
+from typing import Any, Dict, List, Optional
 
 
 class GateDecision(Enum):
@@ -21,7 +21,7 @@ class GateDecision(Enum):
 @dataclass
 class ContinuationDecision:
     """Decision about whether to continue execution.
-    
+
     Attributes:
         continue_execution: Whether to continue execution.
         reason: Reason for the decision.
@@ -130,7 +130,7 @@ class Stage25Gate:
         if self.engine and self.gate:
             assessment = self.engine.assess_complexity(signals)
             approval_decision = self.gate.evaluate_approval(assessment, operation_id)
-            
+
             # Create confirmation context if not auto-approved
             confirmation_context = None
             if not approval_decision.approved:
@@ -153,13 +153,13 @@ class Stage25Gate:
                     alternatives=alternatives,
                     confirmed=True
                 )
-            
+
             return ContinuationDecision(
                 continue_execution=approval_decision.approved,
                 reason=approval_decision.reason,
                 confirmation_context=confirmation_context
             )
-        
+
         # Default behavior without engine/gate
         return ContinuationDecision(
             continue_execution=True,

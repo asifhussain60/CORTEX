@@ -16,12 +16,12 @@ Authority: ENH-064 Response Template Migration
 """
 
 from abc import ABC, abstractmethod
-from typing import Dict, List, Tuple, Optional, Any
 from dataclasses import dataclass, field
 from enum import Enum
-import yaml
 from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
+import yaml
 
 # ============================================================================
 # ENUMERATIONS
@@ -30,7 +30,7 @@ from pathlib import Path
 
 class SeverityLevel(str, Enum):
     """Severity level for challenge boxes and alerts."""
-    
+
     CRITICAL = "CRITICAL"
     WARNING = "WARNING"
     INFO = "INFO"
@@ -39,7 +39,7 @@ class SeverityLevel(str, Enum):
 
 class SectionType(str, Enum):
     """Section type for automatic icon selection."""
-    
+
     ANALYSIS = "analysis"
     FINDINGS = "findings"
     RECOMMENDATIONS = "recommendations"
@@ -52,7 +52,7 @@ class SectionType(str, Enum):
 
 class ContentZone(str, Enum):
     """Semantic content zones for duplication prevention."""
-    
+
     TEST_RESULTS = "test_results"
     COVERAGE_METRICS = "coverage_metrics"
     RECOMMENDATIONS = "recommendations"
@@ -78,28 +78,28 @@ class ContentZone(str, Enum):
 @dataclass
 class TemplateConfig:
     """Configuration for orchestrator-specific templates."""
-    
+
     orchestrator_name: str
     """Name of the orchestrator"""
-    
+
     content_zones: set = field(default_factory=set)
     """Semantic content zones this template uses"""
-    
+
     custom_blocks: List[str] = field(default_factory=list)
     """Custom template blocks available"""
-    
+
     content_zones: set = field(default_factory=set)
     """Semantic content zones this template uses"""
-    
+
     section_icons: Dict[str, str] = field(default_factory=dict)
     """Section name → emoji mapping"""
-    
+
     enable_challenge_box: bool = True
     """Whether to enable challenge boxes"""
-    
+
     enable_problem_solution: bool = True
     """Whether to enable problem/solution tables"""
-    
+
     metadata: Dict[str, Any] = field(default_factory=dict)
     """Additional metadata"""
 
@@ -112,19 +112,19 @@ class TemplateConfig:
 class BaseResponseTemplate(ABC):
     """
     Abstract base class for orchestrator response templates.
-    
+
     Provides:
     - Single header generation (prevents repetition)
     - Cascading hierarchy (## → ### → ####)
     - Challenge boxes with visual borders
     - Problem/Solution 2-column tables
     - Registry-driven customization
-    
+
     Usage:
         class MyOrchestrator(BaseOrchestrator, BaseResponseTemplate):
             def __init__(self):
                 BaseResponseTemplate.__init__(self, "MyOrchestrator")
-                
+
             def compose(self, **kwargs) -> str:
                 response = self.header("ANALYZE")
                 response += self.section("Analysis Results", "📊")
@@ -132,7 +132,7 @@ class BaseResponseTemplate(ABC):
                 response += self.challenge_box("Design Question", "Should we...?")
                 return response
     """
-    
+
     def __init__(
         self,
         orchestrator_name: str,
@@ -143,7 +143,7 @@ class BaseResponseTemplate(ABC):
     ):
         """
         Initialize base response template.
-        
+
         Args:
             orchestrator_name: Name of orchestrator (e.g., "TDDOrchestrator")
             mode: Response mode (default: "CORTEX")
@@ -157,12 +157,12 @@ class BaseResponseTemplate(ABC):
         self._header_generated = False
         self._section_count = 0
         self._active_zones: set = set()
-        
+
         # Load configuration
         self.config = self._load_config(config_path)
         if content_zones:
             self.config.content_zones = content_zones
-        
+
         # Section icon mapping
         self._section_icons = {
             SectionType.ANALYSIS: "🔍",
@@ -175,7 +175,7 @@ class BaseResponseTemplate(ABC):
             SectionType.VERDICT: "✅",
         }
         self._section_icons.update(self.config.section_icons)
-        
+
         # Severity emoji mapping
         self._severity_emoji = {
             SeverityLevel.CRITICAL: "🔴",
@@ -183,14 +183,14 @@ class BaseResponseTemplate(ABC):
             SeverityLevel.INFO: "ℹ️",
             SeverityLevel.SUCCESS: "✅",
         }
-    
+
     def _load_config(self, config_path: Optional[Path]) -> TemplateConfig:
         """
         Load orchestrator-specific configuration from YAML.
-        
+
         Args:
             config_path: Path to config file (optional)
-        
+
         Returns:
             TemplateConfig instance
         """
@@ -199,7 +199,7 @@ class BaseResponseTemplate(ABC):
                 data = yaml.safe_load(f)
                 orchestrator_configs = data.get("orchestrator_templates", {})
                 orch_data = orchestrator_configs.get(self.orchestrator_name, {})
-                
+
                 return TemplateConfig(
                     orchestrator_name=self.orchestrator_name,
                     custom_blocks=orch_data.get("custom_blocks", []),
@@ -208,34 +208,34 @@ class BaseResponseTemplate(ABC):
                     enable_problem_solution=orch_data.get("enable_problem_solution", True),
                     metadata=orch_data.get("metadata", {}),
                 )
-        
+
         # Default config
         return TemplateConfig(orchestrator_name=self.orchestrator_name)
-    
+
     # ========================================================================
     # HEADER GENERATION (MANDATORY SINGLE CALL)
     # ========================================================================
-    
+
     def header(self, operation: str) -> str:
         """
         Generate response header.
-        
+
         **CRITICAL:** Call ONCE per response. Prevents header repetition.
-        
+
         Args:
             operation: Operation type (e.g., "ANALYZE", "IMPLEMENT", "FIX")
-        
+
         Returns:
             Formatted header markdown
-        
+
         Raises:
             RuntimeError: If header already generated (prevents repetition)
-        
+
         Example:
             >>> template.header("ANALYZE")
             ## 🧠 CORTEX ANALYZE
             **Author:** Asif Hussain | **Orchestrator:** LENSSynthesis ✅
-            
+
             ---
         """
         if self._header_generated:
@@ -243,99 +243,99 @@ class BaseResponseTemplate(ABC):
                 f"Header already generated for {self.orchestrator_name}. "
                 "Call header() ONCE per response to prevent repetition."
             )
-        
+
         self._header_generated = True
-        
+
         return (
             f"## 🧠 {self.mode} {operation}\n"
             f"**Author:** {self.author} | **Orchestrator:** {self.orchestrator_name} ✅\n"
             "\n---\n"
         )
-    
+
     # ========================================================================
     # SECTION HIERARCHY (CASCADING h2 → h3 → h4)
     # ========================================================================
-    
+
     def section(self, title: str, emoji: str = "", section_type: Optional[SectionType] = None) -> str:
         """
         Generate main section header (h2 level).
-        
+
         Use for top-level sections in response. Automatically increments section count.
-        
+
         Args:
             title: Section title
             emoji: Custom emoji (optional, auto-selected if not provided)
             section_type: Section type for automatic icon selection
-        
+
         Returns:
             Formatted section header
-        
+
         Example:
             >>> template.section("Analysis Results", "📊")
-            
+
             ## 📊 Analysis Results
         """
         self._section_count += 1
-        
+
         # Auto-select emoji based on section type or title
         if not emoji:
             if section_type:
                 emoji = self._section_icons.get(section_type, "")
             else:
                 emoji = self._infer_section_icon(title)
-        
+
         return f"\n## {emoji + ' ' if emoji else ''}{title}\n"
-    
+
     def subsection(self, title: str) -> str:
         """
         Generate subsection header (h3 level).
-        
+
         Use for subsections under main sections.
-        
+
         Args:
             title: Subsection title
-        
+
         Returns:
             Formatted subsection header
-        
+
         Example:
             >>> template.subsection("Key Findings")
-            
+
             ### Key Findings
         """
         return f"\n### {title}\n"
-    
+
     def subsubsection(self, title: str) -> str:
         """
         Generate nested subsection header (h4 level).
-        
+
         Use for nested content under subsections.
-        
+
         Args:
             title: Nested subsection title
-        
+
         Returns:
             Formatted nested header
-        
+
         Example:
             >>> template.subsubsection("Strengths")
-            
+
             #### Strengths
         """
         return f"\n#### {title}\n"
-    
+
     def _infer_section_icon(self, title: str) -> str:
         """
         Infer section icon from title keywords.
-        
+
         Args:
             title: Section title
-        
+
         Returns:
             Emoji icon or empty string
         """
         title_lower = title.lower()
-        
+
         if any(kw in title_lower for kw in ["analysis", "review", "examination"]):
             return "🔍"
         elif any(kw in title_lower for kw in ["finding", "issue", "problem"]):
@@ -352,13 +352,13 @@ class BaseResponseTemplate(ABC):
             return "⏭️"
         elif any(kw in title_lower for kw in ["verdict", "decision", "conclusion"]):
             return "✅"
-        
+
         return ""
-    
+
     # ========================================================================
     # CHALLENGE BOXES (VISUAL CALLOUTS)
     # ========================================================================
-    
+
     def challenge_box(
         self,
         title: str,
@@ -368,36 +368,36 @@ class BaseResponseTemplate(ABC):
     ) -> str:
         """
         Generate bordered challenge callout box.
-        
+
         Uses markdown blockquote (>) for visual distinction in Copilot Chat.
-        
+
         Args:
             title: Challenge title
             content: Challenge content/question
             severity: Severity level (CRITICAL, WARNING, INFO, SUCCESS)
             response_prompt: Prompt for user response
-        
+
         Returns:
             Formatted challenge box
-        
+
         Example:
             >>> template.challenge_box(
             ...     "Design Question",
             ...     "Should we use async or sync API?",
             ...     SeverityLevel.WARNING
             ... )
-            
+
             > ⚠️ **CHALLENGE: Design Question**
-            > 
+            >
             > Should we use async or sync API?
-            > 
+            >
             > **Response:** [Awaiting user input]
         """
         if not self.config.enable_challenge_box:
             return ""
-        
+
         emoji = self._severity_emoji.get(severity, "⚠️")
-        
+
         return (
             f"\n> {emoji} **CHALLENGE: {title}**\n"
             f"> \n"
@@ -405,11 +405,11 @@ class BaseResponseTemplate(ABC):
             f"> \n"
             f"> {response_prompt}\n"
         )
-    
+
     # ========================================================================
     # PROBLEM/SOLUTION TABLES
     # ========================================================================
-    
+
     def problem_solution_table(
         self,
         rows: List[Tuple[str, str]],
@@ -418,21 +418,21 @@ class BaseResponseTemplate(ABC):
     ) -> str:
         """
         Generate Problem/Solution 2-column table.
-        
+
         Args:
             rows: List of (problem, solution) tuples
             problem_header: Custom problem column header
             solution_header: Custom solution column header
-        
+
         Returns:
             Formatted markdown table
-        
+
         Example:
             >>> template.problem_solution_table([
             ...     ("Static routing", "Dynamic multi-orchestrator routing"),
             ...     ("Stub data", "Real AST analysis")
             ... ])
-            
+
             | 🔴 **Problem** | 🟢 **Solution** |
             |----------------|------------------|
             | Static routing | Dynamic multi-orchestrator routing |
@@ -440,35 +440,35 @@ class BaseResponseTemplate(ABC):
         """
         if not self.config.enable_problem_solution or not rows:
             return ""
-        
+
         # Build table
         header = f"| {problem_header} | {solution_header} |\n"
         separator = "|----------------|------------------|\n"
         body = "\n".join([f"| {prob} | {sol} |" for prob, sol in rows])
-        
+
         return f"\n{header}{separator}{body}\n"
-    
+
     # ========================================================================
     # UTILITY METHODS
     # ========================================================================
-    
+
     def reset_state(self) -> None:
         """
         Reset template state for new response.
-        
+
         Allows reusing template instance across multiple responses.
         """
         self._header_generated = False
         self._section_count = 0
         self._active_zones = set()
-    
+
     def add_zone(self, zone: ContentZone) -> None:
         """
         Mark a content zone as active in this response.
-        
+
         Args:
             zone: ContentZone to add
-        
+
         Raises:
             RuntimeError: If zone already active (duplication)
         """
@@ -478,14 +478,14 @@ class BaseResponseTemplate(ABC):
                 f"Duplicate content detected in {self.orchestrator_name}."
             )
         self._active_zones.add(zone)
-    
+
     def validate_zones(self, zones: set) -> None:
         """
         Validate that zones don't conflict with active zones.
-        
+
         Args:
             zones: Set of ContentZone enums to validate
-        
+
         Raises:
             RuntimeError: If any zone conflicts
         """
@@ -496,32 +496,32 @@ class BaseResponseTemplate(ABC):
                 f"Content zone conflict in {self.orchestrator_name}: {conflict_names}. "
                 f"These zones are already active in the current response."
             )
-    
+
     def get_section_count(self) -> int:
         """Get number of sections generated."""
         return self._section_count
-    
+
     def is_header_generated(self) -> bool:
         """Check if header already generated."""
         return self._header_generated
-    
+
     # ========================================================================
     # ABSTRACT METHOD (ORCHESTRATOR-SPECIFIC)
     # ========================================================================
-    
+
     @abstractmethod
     def compose(self, **kwargs) -> str:
         """
         Compose full response using template methods.
-        
+
         **Must be implemented by each orchestrator.**
-        
+
         Args:
             **kwargs: Orchestrator-specific data
-        
+
         Returns:
             Complete formatted response
-        
+
         Example Implementation:
             def compose(self, analysis: Dict, findings: List) -> str:
                 response = self.header("ANALYZE")

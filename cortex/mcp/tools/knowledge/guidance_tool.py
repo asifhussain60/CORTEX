@@ -17,13 +17,14 @@ CORE Governance:
   - CORE-013: Exception handling (specific, no bare except)
 """
 
-from typing import Dict, List, Any, Optional
-from cortex.mcp.decorators import mcp_tool
+from typing import Any, Dict, List, Optional
+
 from cortex.brain.core.knowledge_guidance_engine import (
-    get_guidance_engine,
     GuidanceEntry,
-    TierLevel
+    TierLevel,
+    get_guidance_engine,
 )
+from cortex.mcp.decorators import mcp_tool
 
 
 @mcp_tool(
@@ -58,20 +59,20 @@ def get_tdd_guidance_for_module(
 ) -> Dict[str, Any]:
     """
     Get comprehensive TDD implementation guidance for a module.
-    
+
     This tool integrates guidance from multiple sources in precedence order:
     1. Domain-specific overrides (company rules)
     2. TIER 0 governance rules (immutable core)
     3. TIER 1 governance rules (domain-specific)
     4. TIER 2 engineering standards
     5. CORTEX best practices (defaults)
-    
+
     Plus cross-domain synthesis from tier3 knowledge engine.
-    
+
     Args:
         module_path: Module path (e.g., "cortex.orchestrators.domain_brain")
         context: Optional execution context with domain, operation_type, etc.
-    
+
     Returns:
         Dict containing:
             - module_path: Input module path
@@ -87,10 +88,10 @@ def get_tdd_guidance_for_module(
             - guidance_confidence: Confidence score (0.0-1.0)
             - generated_at: ISO timestamp when guidance was generated
             - summary: Human-readable summary of critical guidance
-    
+
     Raises:
         ValueError: If module_path is empty or invalid
-    
+
     Example:
         guidance = get_tdd_guidance_for_module(
             module_path="cortex.orchestrators.master_orchestrator",
@@ -100,7 +101,7 @@ def get_tdd_guidance_for_module(
                 "priority": "P0-CRITICAL"
             }
         )
-        
+
         # Returns:
         {
             "module_path": "cortex.orchestrators.master_orchestrator",
@@ -128,13 +129,13 @@ def get_tdd_guidance_for_module(
     """
     if not module_path or not isinstance(module_path, str):
         raise ValueError("module_path must be non-empty string")
-    
+
     # Get guidance engine singleton
     engine = get_guidance_engine()
-    
+
     # Get comprehensive guidance for module
     guidance = engine.get_guidance_for_module(module_path, context)
-    
+
     # Convert guidance entries to dict format
     guidance_entries_dict = []
     for entry in sorted(
@@ -153,12 +154,12 @@ def get_tdd_guidance_for_module(
             "patterns": entry.patterns,
             "related_rules": entry.related_rules
         })
-    
+
     # Build summary
     critical_count = sum(1 for e in guidance.guidance_entries if e.priority == 1)
     tier_0_count = len(guidance.tier_0_rules)
     domain_override_count = len(guidance.domain_rules)
-    
+
     summary_parts = []
     if critical_count > 0:
         summary_parts.append(f"{critical_count} CRITICAL rules")
@@ -168,9 +169,9 @@ def get_tdd_guidance_for_module(
         summary_parts.append(f"{domain_override_count} domain overrides")
     if guidance.best_practices_guides:
         summary_parts.append(f"{len(guidance.best_practices_guides)} guides")
-    
+
     summary = " + ".join(summary_parts) if summary_parts else "No specific guidance found"
-    
+
     return {
         "module_path": guidance.module_path,
         "module_name": guidance.module_name,

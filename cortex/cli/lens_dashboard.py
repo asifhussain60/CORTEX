@@ -18,7 +18,6 @@ from cortex.orchestrators.support.lens_visualization_orchestrator import (
     LENSVisualizationOrchestrator,
 )
 
-
 # Configuration
 DASHBOARD_ROOT = Path.cwd() / ".cortex" / "lens-dashboard"
 
@@ -72,7 +71,7 @@ def generate(
     if repository_path is None:
         repository_path = Path.cwd()
 
-    click.echo(f"🧠 CORTEX LENS Dashboard Generator")
+    click.echo("🧠 CORTEX LENS Dashboard Generator")
     click.echo(f"Repository: {repository_path}")
 
     if verbose:
@@ -107,14 +106,14 @@ def generate(
 
         click.echo(
             click.style(
-                f"✅ Dashboard generated successfully!",
+                "✅ Dashboard generated successfully!",
                 fg="green",
                 bold=True,
             )
         )
         click.echo(f"📁 Location: {dashboard_path}")
-        click.echo(f"\n🚀 To serve the dashboard, run:")
-        click.echo(f"   cortex lens dashboard serve\n")
+        click.echo("\n🚀 To serve the dashboard, run:")
+        click.echo("   cortex lens dashboard serve\n")
 
     except Exception as e:
         click.echo(
@@ -160,12 +159,12 @@ def serve(host: str, port: int, reload: bool) -> None:
         cortex lens dashboard serve --port 9000
         cortex lens dashboard serve --host 0.0.0.0 --port 8080
     """
-    click.echo(f"🧠 CORTEX LENS Dashboard Server")
+    click.echo("🧠 CORTEX LENS Dashboard Server")
     click.echo(f"Host: {host}")
     click.echo(f"Port: {port}")
-    click.echo(f"\n🚀 Starting server...")
+    click.echo("\n🚀 Starting server...")
     click.echo(f"📊 Dashboard URL: http://{host}:{port}/api/lens/dashboard/list")
-    click.echo(f"\n⏹️  Press CTRL+C to stop\n")
+    click.echo("\n⏹️  Press CTRL+C to stop\n")
 
     try:
         from cortex.visualization.api.dashboard_routes import app
@@ -200,7 +199,7 @@ def list_cmd() -> None:
     Example:
         cortex lens dashboard list
     """
-    click.echo(f"🧠 CORTEX LENS Dashboard List")
+    click.echo("🧠 CORTEX LENS Dashboard List")
     click.echo(f"Location: {DASHBOARD_ROOT}\n")
 
     if not DASHBOARD_ROOT.exists():
@@ -232,8 +231,8 @@ def list_cmd() -> None:
         else:
             click.echo(f"  {i}. {dashboard_dir.name}")
 
-    click.echo(f"\n🚀 To serve dashboards, run:")
-    click.echo(f"   cortex lens dashboard serve\n")
+    click.echo("\n🚀 To serve dashboards, run:")
+    click.echo("   cortex lens dashboard serve\n")
 
 
 @dashboard.command()
@@ -304,7 +303,7 @@ def serve(port: int, no_cors: bool, path: Optional[Path]) -> None:
         click.echo("   Missing index.html file")
         return
 
-    click.echo(f"🧠 CORTEX LENS Dashboard Server")
+    click.echo("🧠 CORTEX LENS Dashboard Server")
     click.echo(f"Dashboard: {dashboard_dir.name}")
     click.echo(f"Port: {port}")
     click.echo(f"CORS: {'Disabled' if no_cors else 'Enabled'}\n")

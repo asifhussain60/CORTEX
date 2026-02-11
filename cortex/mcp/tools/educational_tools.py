@@ -8,13 +8,14 @@ and intelligent next-step suggestions.
 Authority: AC-EDUCATIONAL-INTERACTION-001, PHASE-22-ASK-MODE-SYSTEM.yaml
 """
 
-from typing import Dict, Any, Optional, List
+from typing import Any, Dict, List, Optional
+
+from cortex.brain.education.next_step_generator import NextStepContext
 from cortex.mcp.decorators import mcp_tool
 from cortex.orchestrators.education.educational_orchestrator import (
     EducationalOrchestrator,
     KnowledgeLevel,
 )
-from cortex.brain.education.next_step_generator import NextStepContext
 
 
 @mcp_tool(
@@ -48,47 +49,47 @@ def cortex_ask(
 ) -> Dict[str, Any]:
     """
     Ask questions about CORTEX with intelligent educational responses.
-    
+
     Features:
     - Implementation truth verification
     - Progressive disclosure based on knowledge level
     - 3-5 intelligent next-step suggestions
     - Evidence-based answers with file paths
     - Fault detection and recommendations
-    
+
     Args:
         query: User's question
         knowledge_level: Optional explicit knowledge level
         conversation_history: Optional previous queries
-        
+
     Returns:
         Dict with status, answer, next_steps, evidence, faults
     """
     try:
         # Initialize orchestrator
         orchestrator = EducationalOrchestrator()
-        
+
         # Prepare context
         context = {
             "query": query,
             "knowledge_level": knowledge_level,
             "conversation_history": conversation_history or [],
         }
-        
+
         # Execute educational orchestration (sync version)
         result = orchestrator.execute(context)
-        
+
         if not result.success:
             return {
                 "status": "error",
                 "error": result.error,
                 "query": query
             }
-        
+
         # Extract response data
         response_data = result.data
         educational_response = response_data.get("educational_response", {})
-        
+
         # Format output
         return {
             "status": "success",
@@ -101,7 +102,7 @@ def cortex_ask(
             "faults": educational_response.get("faults", []),
             "topic": educational_response.get("topic", "CORTEX"),
         }
-        
+
     except Exception as e:
         return {
             "status": "error",
@@ -133,18 +134,18 @@ def cortex_verify_claim(
 ) -> Dict[str, Any]:
     """
     Verify claims about CORTEX implementation against live code.
-    
+
     Uses TruthVerificationEngine to check:
     - File existence
     - Class/method presence
     - Implementation details
     - Wiring registration
     - Test coverage
-    
+
     Args:
         claim: Claim to verify
         component: Component to check
-        
+
     Returns:
         Dict with status, verified, confidence, evidence, recommendation
     """
@@ -153,9 +154,9 @@ def cortex_verify_claim(
             TruthVerificationEngine,
             VerificationStrategy,
         )
-        
+
         engine = TruthVerificationEngine()
-        
+
         # Determine verification strategy from claim
         if "exists" in claim.lower():
             strategy = VerificationStrategy.ORCHESTRATOR_EXISTS
@@ -167,17 +168,17 @@ def cortex_verify_claim(
             strategy = VerificationStrategy.TEST_COVERAGE
         else:
             strategy = VerificationStrategy.FILE_EXISTS
-        
+
         # Verify claim
         result = engine.verify(
             claim=claim,
             component=component,
             strategy=strategy
         )
-        
+
         # Format response
         verdict = "VERIFIED" if result.verified else "UNVERIFIED"
-        
+
         return {
             "status": "success",
             "claim": claim,
@@ -188,7 +189,7 @@ def cortex_verify_claim(
             "evidence": result.evidence,
             "recommendation": result.recommendation if not result.verified else None,
         }
-        
+
     except Exception as e:
         return {
             "status": "error",

@@ -8,8 +8,8 @@ AC Marker: AC-PHASE57-S1-002
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import List, Dict, Any, Optional, Union
 from enum import Enum
+from typing import Any, Dict, List, Optional, Union
 
 
 class PatternCategory(str, Enum):
@@ -27,7 +27,7 @@ class PatternCategory(str, Enum):
 class PatternInfo:
     """
     Metadata about a design pattern.
-    
+
     Attributes:
         name: Pattern name (e.g., "Singleton", "Factory")
         category: PatternCategory enum
@@ -56,7 +56,7 @@ class PatternInfo:
 class PatternMatch:
     """
     Result of pattern detection in code.
-    
+
     Attributes:
         pattern_name: Name of detected pattern
         confidence: Confidence score (0.0-1.0)
@@ -78,7 +78,7 @@ class PatternMatch:
 class SignatureMatcher:
     """
     Algorithm for matching method signatures against patterns.
-    
+
     Implements fuzzy matching to find patterns even when not all signatures
     are present (partial matches).
     """
@@ -90,15 +90,15 @@ class SignatureMatcher:
     ) -> float:
         """
         Calculate confidence score for pattern match.
-        
+
         Args:
             pattern_signatures: Expected method signatures for pattern
             code_methods: Dict of methods found in code
                          Keys: method names, Values: method metadata
-        
+
         Returns:
             Confidence score (0.0-1.0)
-        
+
         Example:
             >>> matcher = SignatureMatcher()
             >>> confidence = matcher.match(
@@ -112,25 +112,25 @@ class SignatureMatcher:
             return 0.0
 
         matched_count = 0
-        
+
         for sig in pattern_signatures:
             # Extract method name from signature (before parentheses)
             method_name = sig.split("(")[0].strip()
-            
+
             if method_name in code_methods:
                 matched_count += 1
 
         # Calculate confidence: (matched / total) with bonus for exact match
         confidence = matched_count / len(pattern_signatures)
-        
+
         # If all signatures matched, high confidence
         if matched_count == len(pattern_signatures):
             return min(1.0, confidence + 0.1)
-        
+
         # If no signatures matched, low confidence
         if matched_count == 0:
             return 0.0
-        
+
         # Partial match: scale between 0.5 and 0.85
         return 0.5 + (confidence * 0.35)
 
@@ -138,9 +138,9 @@ class SignatureMatcher:
 class BasePatternDetector(ABC):
     """
     Abstract base class for all pattern detectors.
-    
+
     Subclasses implement specific pattern detection algorithms.
-    
+
     Example:
         ```python
         class SingletonDetector(BasePatternDetector):
@@ -152,7 +152,7 @@ class BasePatternDetector(ABC):
                     signatures=["getInstance()"],
                     description="Restrict instantiation to single object"
                 )
-            
+
             def detect(self, ast_node, context) -> List[PatternMatch]:
                 # Implementation
                 ...
@@ -164,7 +164,7 @@ class BasePatternDetector(ABC):
     def pattern_info(self) -> PatternInfo:
         """
         Return metadata about this pattern.
-        
+
         Returns:
             PatternInfo object with pattern details
         """
@@ -174,11 +174,11 @@ class BasePatternDetector(ABC):
     def detect(self, ast_node: Any, context: Optional[Dict[str, Any]] = None) -> List[PatternMatch]:
         """
         Detect this pattern in an AST node.
-        
+
         Args:
             ast_node: AST node to analyze
             context: Optional execution context
-        
+
         Returns:
             List of PatternMatch objects found
         """

@@ -8,21 +8,21 @@ AC_START: AC-LENS-EXTRACTOR-001
 Authority: Phase 28.2.2 | CORE-008 (TDD) | CORE-035 (No Duplication)
 """
 
-from pathlib import Path
-from typing import Dict, Any, List, Optional, Set, Tuple
-from dataclasses import dataclass, field
-from enum import Enum
+import json
 import logging
 import re
-import json
+from dataclasses import dataclass, field
 from datetime import datetime
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 logger = logging.getLogger(__name__)
 
 
 class PatternType(Enum):
     """Code pattern categories for business use case extraction."""
-    
+
     API_ENDPOINT = "api_endpoint"
     DATA_MODEL = "data_model"
     SERVICE = "service"
@@ -38,7 +38,7 @@ class PatternType(Enum):
 @dataclass
 class CodePattern:
     """Represents a detected code pattern with context."""
-    
+
     pattern_type: PatternType
     name: str
     file_path: str
@@ -48,7 +48,7 @@ class CodePattern:
     dependencies: List[str] = field(default_factory=list)
     is_public: bool = True
     confidence: float = 0.85
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert pattern to dictionary."""
         return {
@@ -67,14 +67,14 @@ class CodePattern:
 @dataclass
 class DataFlow:
     """Represents data flow between components."""
-    
+
     source: str
     sink: str
     data_type: str
     transformation: Optional[str] = None
     is_async: bool = False
     confidence: float = 0.80
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert data flow to dictionary."""
         return {
@@ -90,7 +90,7 @@ class DataFlow:
 @dataclass
 class ApiContract:
     """Represents API contract signature."""
-    
+
     endpoint: str
     method: str
     request_schema: Dict[str, Any]
@@ -98,7 +98,7 @@ class ApiContract:
     description: str
     auth_required: bool = True
     confidence: float = 0.90
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert API contract to dictionary."""
         return {
@@ -115,7 +115,7 @@ class ApiContract:
 @dataclass
 class LensAnalysisResult:
     """Complete LENS analysis output for repository."""
-    
+
     repository_path: str
     analyzed_at: str
     patterns: List[CodePattern] = field(default_factory=list)
@@ -123,7 +123,7 @@ class LensAnalysisResult:
     api_contracts: List[ApiContract] = field(default_factory=list)
     architectural_layers: Dict[str, List[str]] = field(default_factory=dict)
     external_dependencies: Set[str] = field(default_factory=set)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert analysis result to dictionary."""
         return {
@@ -142,7 +142,7 @@ class LensAnalysisResult:
                 "layer_count": len(self.architectural_layers),
             }
         }
-    
+
     def _count_pattern_types(self) -> Dict[str, int]:
         """Count patterns by type."""
         counts = {}
@@ -155,10 +155,10 @@ class LensAnalysisResult:
 class LensAnalysisExtractor:
     """
     Extracts code patterns, data flows, and API contracts from repository.
-    
+
     Designed for integration with UnifiedLLMSynthesisLayer.
     """
-    
+
     def __init__(self):
         """Initialize extractor."""
         self.patterns: List[CodePattern] = []
@@ -166,42 +166,42 @@ class LensAnalysisExtractor:
         self.api_contracts: List[ApiContract] = []
         self.architectural_layers: Dict[str, List[str]] = {}
         self.external_dependencies: Set[str] = set()
-    
+
     def analyze(self, repo_path: str) -> LensAnalysisResult:
         """
         Analyze repository and extract LENS analysis.
-        
+
         Args:
             repo_path: Path to repository root
-            
+
         Returns:
             LensAnalysisResult with complete analysis
         """
         repo_path_obj = Path(repo_path)
-        
+
         if not repo_path_obj.exists():
             logger.warning(f"Repository path does not exist: {repo_path}")
             return self._empty_result(repo_path)
-        
+
         logger.info(f"Starting LENS analysis on {repo_path}")
-        
+
         # Phase 1: Scan Python files
         self._scan_python_files(repo_path_obj)
-        
+
         # Phase 2: Scan TypeScript/JavaScript files
         self._scan_typescript_files(repo_path_obj)
-        
+
         # Phase 3: Extract API contracts from FastAPI/Express
         self._extract_api_contracts(repo_path_obj)
-        
+
         # Phase 4: Identify architectural layers
         self._identify_architectural_layers(repo_path_obj)
-        
+
         # Phase 5: Extract external dependencies
         self._extract_external_dependencies(repo_path_obj)
-        
+
         logger.info(f"LENS analysis complete: {len(self.patterns)} patterns found")
-        
+
         return LensAnalysisResult(
             repository_path=repo_path,
             analyzed_at=datetime.utcnow().isoformat(),
@@ -211,40 +211,40 @@ class LensAnalysisExtractor:
             architectural_layers=self.architectural_layers,
             external_dependencies=self.external_dependencies,
         )
-    
+
     def _scan_python_files(self, repo_path: Path) -> None:
         """Scan Python files for patterns."""
         py_files = list(repo_path.rglob("*.py"))
-        
+
         for py_file in py_files:
             if self._should_skip_file(py_file):
                 continue
-            
+
             try:
                 content = py_file.read_text(encoding="utf-8", errors="ignore")
                 self._extract_python_patterns(content, str(py_file))
             except Exception as e:
                 logger.warning(f"Error scanning {py_file}: {e}")
-    
+
     def _scan_typescript_files(self, repo_path: Path) -> None:
         """Scan TypeScript/JavaScript files for patterns."""
         ts_files = list(repo_path.rglob("*.ts")) + list(repo_path.rglob("*.tsx"))
         js_files = list(repo_path.rglob("*.js")) + list(repo_path.rglob("*.jsx"))
-        
+
         for ts_file in ts_files + js_files:
             if self._should_skip_file(ts_file):
                 continue
-            
+
             try:
                 content = ts_file.read_text(encoding="utf-8", errors="ignore")
                 self._extract_typescript_patterns(content, str(ts_file))
             except Exception as e:
                 logger.warning(f"Error scanning {ts_file}: {e}")
-    
+
     def _extract_python_patterns(self, content: str, file_path: str) -> None:
         """Extract patterns from Python code."""
         lines = content.split("\n")
-        
+
         for idx, line in enumerate(lines, 1):
             # Detect service classes
             if re.match(r"^\s*class\s+\w+Service\s*[\(:]", line):
@@ -258,7 +258,7 @@ class LensAnalysisExtractor:
                         signature=line.strip(),
                         description=f"Service class: {match.group(1)}",
                     ))
-            
+
             # Detect API endpoints (FastAPI)
             if re.match(r"^\s*@app\.(get|post|put|delete|patch)", line):
                 method = re.search(r"@app\.(\w+)", line)
@@ -270,7 +270,7 @@ class LensAnalysisExtractor:
                         response_schema={},
                         description=f"FastAPI {method.group(1).upper()} endpoint",
                     ))
-            
+
             # Detect repositories
             if re.match(r"^\s*class\s+\w+Repository\s*[\(:]", line):
                 match = re.search(r"class\s+(\w+Repository)", line)
@@ -283,7 +283,7 @@ class LensAnalysisExtractor:
                         signature=line.strip(),
                         description=f"Data access repository: {match.group(1)}",
                     ))
-            
+
             # Detect data models
             if re.match(r"^\s*class\s+\w+(\(BaseModel\)|:\s*)", line):
                 match = re.search(r"class\s+(\w+)", line)
@@ -296,11 +296,11 @@ class LensAnalysisExtractor:
                         signature=line.strip(),
                         description=f"Data model: {match.group(1)}",
                     ))
-    
+
     def _extract_typescript_patterns(self, content: str, file_path: str) -> None:
         """Extract patterns from TypeScript/JavaScript code."""
         lines = content.split("\n")
-        
+
         for idx, line in enumerate(lines, 1):
             # Detect Express routes
             if re.match(r"^\s*(app|router)\.(get|post|put|delete|patch)", line):
@@ -313,7 +313,7 @@ class LensAnalysisExtractor:
                         response_schema={},
                         description=f"Express {method_match.group(1).upper()} route",
                     ))
-            
+
             # Detect service classes
             if re.match(r"^\s*export\s+class\s+\w+Service", line):
                 match = re.search(r"class\s+(\w+Service)", line)
@@ -326,7 +326,7 @@ class LensAnalysisExtractor:
                         signature=line.strip(),
                         description=f"Service class: {match.group(1)}",
                     ))
-            
+
             # Detect controllers
             if re.match(r"^\s*export\s+class\s+\w+Controller", line):
                 match = re.search(r"class\s+(\w+Controller)", line)
@@ -339,13 +339,13 @@ class LensAnalysisExtractor:
                         signature=line.strip(),
                         description=f"Controller class: {match.group(1)}",
                     ))
-    
+
     def _extract_api_contracts(self, repo_path: Path) -> None:
         """Extract API contracts from framework files."""
         # This is a placeholder for more sophisticated API extraction
         # In production, this would parse OpenAPI/Swagger specs, GraphQL schemas, etc.
         pass
-    
+
     def _identify_architectural_layers(self, repo_path: Path) -> None:
         """Identify architectural layers in repository."""
         layer_patterns = {
@@ -356,17 +356,17 @@ class LensAnalysisExtractor:
             "infrastructure": ["config/", "deployment/", "scripts/"],
             "testing": ["tests/", "test/", "__tests__/"],
         }
-        
+
         for layer, patterns in layer_patterns.items():
             found_dirs = []
             for pattern in patterns:
                 matching = list(repo_path.glob(f"**/{pattern}"))
                 if matching:
                     found_dirs.extend([str(m) for m in matching])
-            
+
             if found_dirs:
                 self.architectural_layers[layer] = found_dirs[:5]  # Limit to 5
-    
+
     def _extract_external_dependencies(self, repo_path: Path) -> None:
         """Extract external dependencies from package files."""
         # Python dependencies
@@ -381,7 +381,7 @@ class LensAnalysisExtractor:
                             self.external_dependencies.add(pkg)
             except Exception as e:
                 logger.warning(f"Error reading {requirements_file}: {e}")
-        
+
         # JavaScript dependencies
         package_json = repo_path / "package.json"
         if package_json.exists():
@@ -392,12 +392,12 @@ class LensAnalysisExtractor:
                     self.external_dependencies.add(pkg)
             except Exception as e:
                 logger.warning(f"Error reading {package_json}: {e}")
-    
+
     def _should_skip_file(self, file_path: Path) -> bool:
         """Check if file should be skipped."""
         skip_dirs = {"__pycache__", "node_modules", ".git", "venv", "dist", "build"}
         return any(skip_dir in file_path.parts for skip_dir in skip_dirs)
-    
+
     def _empty_result(self, repo_path: str) -> LensAnalysisResult:
         """Return empty result."""
         return LensAnalysisResult(

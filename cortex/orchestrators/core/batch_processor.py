@@ -7,12 +7,12 @@ Includes intelligent batching with dependency resolution for concurrent request 
 Production Ready: ✅
 """
 
-from dataclasses import dataclass, field
-from typing import List, Dict, Any, Optional, Callable, Set
-from enum import Enum
-from collections import defaultdict
-import time
 import hashlib
+import time
+from collections import defaultdict
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Callable, Dict, List, Optional, Set
 
 
 class BatchPriority(Enum):
@@ -48,7 +48,7 @@ class BatchResult:
 class RequestBatcher:
     """
     Batches independent requests for parallel processing (AC-FUTURE-017).
-    
+
     Features:
     - Automatic batching with configurable batch size
     - Dependency resolution for safe parallelization
@@ -65,7 +65,7 @@ class RequestBatcher:
         self.batch_size = batch_size
         self.batch_timeout = batch_timeout
         self.max_cache_size = max_cache_size
-        
+
         self.pending_requests: List[BatchedRequest] = []
         self.micro_cache: Dict[str, Any] = {}
         self.dependency_graph: Dict[str, Set[str]] = defaultdict(set)
@@ -82,7 +82,7 @@ class RequestBatcher:
             return cache_key
 
         self.pending_requests.append(request)
-        
+
         # Track dependencies
         for dep in request.dependencies:
             self.dependency_graph[request.request_id].add(dep)
@@ -93,7 +93,7 @@ class RequestBatcher:
         """Check if batch should execute"""
         if len(self.pending_requests) >= self.batch_size:
             return True
-        
+
         elapsed = time.time() - self.last_batch_time
         return elapsed >= self.batch_timeout and self.pending_requests
 
@@ -133,7 +133,7 @@ class RequestBatcher:
     ):
         """Cache result for future requests"""
         cache_key = self._get_cache_key(request)
-        
+
         if len(self.micro_cache) >= self.max_cache_size:
             # Simple FIFO eviction
             oldest_key = next(iter(self.micro_cache))
@@ -157,7 +157,7 @@ class RequestBatcher:
 class IntelligentBatchProcessor:
     """
     Processes batches with intelligent resource allocation (AC-FUTURE-021).
-    
+
     Features:
     - Dependency-aware execution planning
     - Resource allocation based on request complexity
@@ -179,7 +179,7 @@ class IntelligentBatchProcessor:
             "failed": 0,
             "total_time": 0.0,
         }
-        
+
         # Visual feedback support
         self._show_progress = True
         self.on_level_progress: Optional[callable] = None
@@ -190,7 +190,7 @@ class IntelligentBatchProcessor:
     ) -> BatchResult:
         """Process a batch of requests"""
         from cortex.orchestrators.response.ascii_progress_bar import ASCIIProgressBar
-        
+
         batch_id = hashlib.md5(
             str(time.time()).encode()
         ).hexdigest()[:8]
@@ -203,10 +203,10 @@ class IntelligentBatchProcessor:
         # Group by dependency level (simple DAG analysis)
         levels = self._group_by_dependency_level(batch)
         total_levels = len(levels)
-        
+
         # Progress bar
         progress_bar = ASCIIProgressBar() if self._show_progress else None
-        
+
         if progress_bar and total_levels > 0:
             print(f"\n🔄 Batch Processing: {len(batch)} requests in {total_levels} dependency levels")
             print("━" * 60)
@@ -218,17 +218,17 @@ class IntelligentBatchProcessor:
                 bar = progress_bar.generate_bar(progress)
                 percentage = int(progress * 100)
                 print(f"\r{bar} {percentage:3d}% | Level {level_idx}/{total_levels} ({len(level_requests)} requests)", end="", flush=True)
-            
+
             # Call progress callback if registered
             if self.on_level_progress:
                 self.on_level_progress(level_idx, total_levels, progress)
-            
+
             # Execute requests at this level in parallel
             level_results = self._execute_level(level_requests)
             results.update(level_results)
             success_count += sum(1 for r in level_results.values() if r["success"])
             failure_count += sum(1 for r in level_results.values() if not r["success"])
-        
+
         if progress_bar:
             print()  # New line
             elapsed = time.time() - start_time

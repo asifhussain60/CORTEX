@@ -1,12 +1,13 @@
 """Template renderer for rendering Jinja2 templates with safe mode."""
 
 from typing import Any, Dict
-from jinja2 import Environment, BaseLoader, TemplateNotFound, TemplateSyntaxError
+
+from jinja2 import BaseLoader, Environment, TemplateNotFound, TemplateSyntaxError
 
 
 class TemplateRenderer:
     """Renders Jinja2 templates with variable substitution and safe mode.
-    
+
     Features:
     - Safe mode prevents access to dangerous attributes/methods
     - Supports Jinja2 syntax (loops, conditionals, filters)
@@ -24,14 +25,14 @@ class TemplateRenderer:
 
     def render(self, template_str: str, context: Dict[str, Any]) -> str:
         """Render a template string with provided context variables.
-        
+
         Args:
             template_str: Template string with Jinja2 syntax
             context: Dictionary of variables available in template
-            
+
         Returns:
             Rendered template string
-            
+
         Raises:
             TemplateSyntaxError: If template syntax is invalid
             KeyError: If required variables are missing from context

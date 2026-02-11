@@ -5,16 +5,16 @@ This module is imported from alert_manager.py for convenience.
 """
 
 from cortex.infrastructure.alert_manager import (
+    Alert,
+    AlertSeverity,
+    AlertState,
     ThresholdMonitor,
     ThresholdRule,
-    AlertSeverity,
-    Alert,
-    AlertState,
 )
 
 __all__ = [
     "ThresholdMonitor",
-    "ThresholdRule", 
+    "ThresholdRule",
     "AlertSeverity",
     "Alert",
     "AlertState",

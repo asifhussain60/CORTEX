@@ -19,15 +19,16 @@ Timeout: 300ms SLA, fallback at 500ms
 import asyncio
 import logging
 import time
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import TimeoutError as FutureTimeoutError
 from dataclasses import dataclass, field
 from typing import Any, Dict, Optional
-from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeoutError
 
-from cortex.orchestrators.context_crystallization.rules_cache import RulesCache
-from cortex.orchestrators.context_crystallization.lens_warmer import LENSWarmer
 from cortex.orchestrators.context_crystallization.infrastructure_detector import (
     InfrastructureDetector,
 )
+from cortex.orchestrators.context_crystallization.lens_warmer import LENSWarmer
+from cortex.orchestrators.context_crystallization.rules_cache import RulesCache
 
 logger = logging.getLogger(__name__)
 

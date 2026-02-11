@@ -12,10 +12,10 @@ Note: best-practices uses hyphen (kebab-case) per file naming policy.
 Access YAML files directly via pathlib, not Python imports.
 
 Examples::
-    
+
     from pathlib import Path
     import yaml
-    
+
     # Load guides directly
     guides_dir = Path(__file__).parent / "best-practices"
     with open(guides_dir / "python-backend.yaml") as f:

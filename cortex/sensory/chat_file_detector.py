@@ -15,8 +15,8 @@ Returns confidence score (0-10) based on marker density and patterns.
 import re
 from dataclasses import dataclass
 from enum import Enum
-from typing import List, Tuple
 from pathlib import Path
+from typing import List, Tuple
 
 
 class CopilotMarker(Enum):
@@ -51,14 +51,14 @@ class ChatFileScore:
 class ChatFileDetector:
     """
     Detect Copilot chat files using pattern matching.
-    
+
     Achieves 90%+ accuracy on labeled datasets through multi-pattern analysis.
-    
+
     Attributes:
         patterns: Compiled regex patterns for marker detection
         weights: Scoring weights for different marker types
     """
-    
+
     def __init__(self):
         """Initialize detector with patterns and weights."""
         self.patterns = self._compile_patterns()
@@ -70,11 +70,11 @@ class ChatFileDetector:
             CopilotMarker.AUTHOR: 1.0,
             CopilotMarker.ORCHESTRATOR: 1.5,
         }
-    
+
     def _compile_patterns(self) -> dict:
         """
         Compile regex patterns for marker detection.
-        
+
         Returns:
             Dictionary mapping marker types to compiled patterns
         """
@@ -112,20 +112,20 @@ class ChatFileDetector:
                 re.compile(r'Orchestrator:\s*\w+\s*✅', re.IGNORECASE),
             ],
         }
-    
+
     def detect_markers(self, content: str) -> List[MarkerMatch]:
         """
         Detect all markers in content.
-        
+
         Args:
             content: Text content to analyze
-            
+
         Returns:
             List of detected markers with positions
         """
         markers = []
         lines = content.split('\n')
-        
+
         for line_num, line in enumerate(lines, 1):
             for marker_type, patterns in self.patterns.items():
                 for pattern in patterns:
@@ -136,28 +136,28 @@ class ChatFileDetector:
                             line_number=line_num,
                             position=match.start()
                         ))
-        
+
         return markers
-    
+
     def calculate_score(self, content: str) -> ChatFileScore:
         """
         Calculate confidence score for content being a chat file.
-        
+
         Score calculation:
         - Each marker type has a weight (1.0-2.0)
         - Base score = sum(marker_count * weight) / 10
         - Bonus for marker variety (+1 if 3+ types)
         - Penalty for very short content (-2 if <200 chars)
         - Final score clamped to 0-10 range
-        
+
         Args:
             content: Text content to analyze
-            
+
         Returns:
             ChatFileScore with confidence metrics
         """
         markers = self.detect_markers(content)
-        
+
         if not markers:
             return ChatFileScore(
                 total_score=0.0,
@@ -166,24 +166,24 @@ class ChatFileDetector:
                 markers=[],
                 reasons=["No markers detected"]
             )
-        
+
         # Calculate weighted score
         marker_type_counts = {}
         for marker in markers:
             marker_type_counts[marker.type] = marker_type_counts.get(marker.type, 0) + 1
-        
+
         weighted_score = sum(
             count * self.weights[marker_type]
             for marker_type, count in marker_type_counts.items()
         )
-        
+
         # Normalize to 0-10 scale (generous for chat detection)
         # Lower divisor = higher scores for same marker count
         base_score = min(weighted_score / 0.8, 10.0)
-        
+
         # Apply bonuses/penalties
         reasons = []
-        
+
         # Bonus for marker variety
         unique_types = len(marker_type_counts)
         if unique_types >= 3:
@@ -191,7 +191,7 @@ class ChatFileDetector:
             reasons.append(f"Diverse markers ({unique_types} types)")
         elif unique_types >= 2:
             base_score += 1.0  # Increased from 0.5 for 2 types
-        
+
         # Minimal penalty for short content (chat snippets can be brief)
         # Only apply if very minimal content AND low marker count
         if len(content) < 50 and len(markers) < 2:
@@ -200,15 +200,15 @@ class ChatFileDetector:
         elif len(content) < 100 and len(markers) < 3:
             # Light penalty for short content with few markers
             base_score -= 0.3
-        
+
         # Bonus for conversation pattern (user/assistant alternation)
         if self._has_conversation_pattern(markers):
             base_score += 1.5
             reasons.append("Conversation pattern detected")
-        
+
         # Clamp to 0-10
         final_score = max(0.0, min(10.0, base_score))
-        
+
         # Determine confidence level
         if final_score >= 8:
             confidence = "HIGH"
@@ -216,7 +216,7 @@ class ChatFileDetector:
             confidence = "MEDIUM"
         else:
             confidence = "LOW"
-        
+
         return ChatFileScore(
             total_score=final_score,
             marker_count=len(markers),
@@ -224,48 +224,48 @@ class ChatFileDetector:
             markers=markers,
             reasons=reasons
         )
-    
+
     def _has_conversation_pattern(self, markers: List[MarkerMatch]) -> bool:
         """
         Check if markers show conversational alternation pattern.
-        
+
         Args:
             markers: List of detected markers
-            
+
         Returns:
             True if conversation pattern detected
         """
         user_markers = [m for m in markers if m.type == CopilotMarker.USER]
         assistant_markers = [m for m in markers if m.type == CopilotMarker.ASSISTANT]
-        
+
         # Minimal conversation: at least 1 user AND 1 assistant marker
         if len(user_markers) >= 1 and len(assistant_markers) >= 1:
             return True
-        
+
         return False
-    
+
     def is_chat_file(self, content: str, threshold: float = 5.0) -> bool:
         """
         Determine if content is a chat file.
-        
+
         Args:
             content: Text content to analyze
             threshold: Minimum score to consider as chat file (default 5.0)
-            
+
         Returns:
             True if confidence score >= threshold
         """
         score = self.calculate_score(content)
         return score.total_score >= threshold
-    
+
     def is_chat_file_from_path(self, file_path: str, threshold: float = 5.0) -> Tuple[bool, ChatFileScore]:
         """
         Determine if file is a chat file by reading and analyzing.
-        
+
         Args:
             file_path: Path to file
             threshold: Minimum score to consider as chat file
-            
+
         Returns:
             Tuple of (is_chat_file, score)
         """
@@ -279,7 +279,7 @@ class ChatFileDetector:
                     markers=[],
                     reasons=["File not found"]
                 )
-            
+
             content = path.read_text(encoding='utf-8')
             score = self.calculate_score(content)
             return score.total_score >= threshold, score

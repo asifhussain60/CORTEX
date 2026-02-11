@@ -11,10 +11,10 @@ AC-ID: AC-DEBUG-DASHBOARD-001
 Authority: CORE-011 (Type hints), CORE-012 (Docstrings)
 """
 
-import logging
 import functools
-from typing import Any, Callable, Optional
+import logging
 from datetime import datetime
+from typing import Any, Callable, Optional
 
 # Dedicated logger for dashboard debugging
 # Can be disabled by setting level to CRITICAL or removing handlers
@@ -36,15 +36,15 @@ if not _dashboard_logger.handlers:
 def dashboard_debug(func: Callable) -> Callable:
     """
     Decorator for functions that need debug logging.
-    
+
     Can be easily removed along with this module.
-    
+
     Args:
         func: Function to wrap
-        
+
     Returns:
         Wrapped function with entry/exit logging
-        
+
     Example:
         >>> @dashboard_debug
         ... def generate_dashboard(repo_path: str) -> dict:
@@ -56,7 +56,7 @@ def dashboard_debug(func: Callable) -> Callable:
         _dashboard_logger.debug(f"→ ENTER {func_name}")
         _dashboard_logger.debug(f"  args: {_safe_repr(args)}")
         _dashboard_logger.debug(f"  kwargs: {_safe_repr(kwargs)}")
-        
+
         try:
             result = func(*args, **kwargs)
             _dashboard_logger.debug(f"← EXIT {func_name} (success)")
@@ -65,18 +65,18 @@ def dashboard_debug(func: Callable) -> Callable:
         except Exception as e:
             _dashboard_logger.debug(f"← EXIT {func_name} (error: {e})")
             raise
-            
+
     return wrapper
 
 
 def log_dashboard_debug(message: str, **context: Any) -> None:
     """
     Log debug message with context.
-    
+
     Args:
         message: Debug message
         **context: Additional context key-value pairs
-        
+
     Example:
         >>> log_dashboard_debug("Processing repo", repo_name="cortex", file_count=850)
     """
@@ -95,13 +95,13 @@ def log_dashboard_schema_validation(
 ) -> None:
     """
     Log schema validation results.
-    
+
     Args:
         schema_name: Name of schema being validated
         data: Data being validated
         is_valid: Whether validation passed
         errors: List of validation errors (if any)
-        
+
     Example:
         >>> log_dashboard_schema_validation(
         ...     "RepoDashboardModel",
@@ -111,13 +111,13 @@ def log_dashboard_schema_validation(
     """
     status = "✅ VALID" if is_valid else "❌ INVALID"
     _dashboard_logger.debug(f"Schema validation: {schema_name} - {status}")
-    
+
     if not is_valid and errors:
         for error in errors[:5]:  # Limit to first 5 errors
             _dashboard_logger.debug(f"  - {error}")
         if len(errors) > 5:
             _dashboard_logger.debug(f"  ... and {len(errors) - 5} more errors")
-    
+
     # Log data structure summary
     if isinstance(data, dict):
         keys = list(data.keys())
@@ -131,12 +131,12 @@ def log_dashboard_generation(
 ) -> None:
     """
     Log dashboard generation progress.
-    
+
     Args:
         stage: Generation stage (e.g., "schema_created", "template_rendered")
         repo_name: Repository name
         **metrics: Stage-specific metrics
-        
+
     Example:
         >>> log_dashboard_generation(
         ...     "template_rendered",
@@ -153,18 +153,18 @@ def log_dashboard_generation(
 def _safe_repr(obj: Any, max_length: int = 100) -> str:
     """
     Safe string representation of object.
-    
+
     Args:
         obj: Object to represent
         max_length: Maximum string length
-        
+
     Returns:
         Safe string representation
     """
     try:
         if obj is None:
             return "None"
-        
+
         if isinstance(obj, (str, int, float, bool)):
             repr_str = repr(obj)
         elif isinstance(obj, (list, tuple)):
@@ -173,7 +173,7 @@ def _safe_repr(obj: Any, max_length: int = 100) -> str:
             repr_str = f"dict[{len(obj)} keys]"
         else:
             repr_str = f"{type(obj).__name__}(...)"
-        
+
         if len(repr_str) > max_length:
             return repr_str[:max_length] + "..."
         return repr_str
@@ -184,7 +184,7 @@ def _safe_repr(obj: Any, max_length: int = 100) -> str:
 def disable_dashboard_debug() -> None:
     """
     Disable dashboard debug logging.
-    
+
     Call this to silence debug logs without removing code.
     """
     _dashboard_logger.setLevel(logging.CRITICAL)
@@ -193,7 +193,7 @@ def disable_dashboard_debug() -> None:
 def enable_dashboard_debug() -> None:
     """
     Enable dashboard debug logging.
-    
+
     Call this to re-enable debug logs.
     """
     _dashboard_logger.setLevel(logging.DEBUG)

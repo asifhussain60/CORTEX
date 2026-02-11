@@ -23,11 +23,11 @@ Tool Registry:
 """
 
 import time
-from typing import Dict, List, Any, Optional, Callable
 from dataclasses import dataclass, field
 from datetime import datetime
-from cortex.brain.core.result import Ok, Err
+from typing import Any, Callable, Dict, List, Optional
 
+from cortex.brain.core.result import Err, Ok
 
 # ============================================================================
 # TOOL DEFINITIONS
@@ -61,7 +61,7 @@ class MCPToolExecution:
 class MCPGateway:
     """
     MCP Gateway: Routes tool requests to orchestrators
-    
+
     Responsibilities:
     - Tool discovery and registration
     - Request validation and routing
@@ -73,11 +73,11 @@ class MCPGateway:
         """Initialize MCP gateway"""
         self.github_token = github_token
         self.timeout_seconds = timeout_seconds
-        
+
         self.start_time = datetime.now()
         self.requests_executed = 0
         self.total_execution_time = 0.0
-        
+
         self._register_tools()
 
     def _register_tools(self):
@@ -104,7 +104,7 @@ class MCPGateway:
                 },
                 required_auth=True,
             ),
-            
+
             # Migration Tools
             "cortex_plan_migration": ToolMetadata(
                 name="cortex_plan_migration",
@@ -125,7 +125,7 @@ class MCPGateway:
                     "step_number": {"type": "integer", "required": True},
                 },
             ),
-            
+
             # Performance Tools
             "cortex_profile_performance": ToolMetadata(
                 name="cortex_profile_performance",
@@ -163,7 +163,7 @@ class MCPGateway:
                     "profile": {"type": "object", "required": True},
                 },
             ),
-            
+
             # Dashboard Tools
             "cortex_dashboard_pr_queue": ToolMetadata(
                 name="cortex_dashboard_pr_queue",
@@ -238,9 +238,9 @@ class MCPGateway:
         try:
             result = self._execute_tool_handler(tool_name, params, timeout)
             execution_time = time.time() - start_time
-            
+
             self._record_execution(tool_name, execution_time)
-            
+
             return result
 
         except Exception as e:

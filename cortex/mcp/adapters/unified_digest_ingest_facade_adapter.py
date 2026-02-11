@@ -6,15 +6,15 @@ MCP adapter exposing UnifiedDigestIngestionFacade capabilities.
 Integrates with CORTEX MCP tool registry and orchestrator wiring system.
 """
 
-from typing import Dict, List, Any, Optional
-import time
 import logging
+import time
+from typing import Any, Dict, List, Optional
 
 from cortex.mcp.orchestrator_mcp_server import (
-    IOrchestratorAdapter,
     CapabilityMetadata,
     CapabilityResponse,
     ExecutionContext,
+    IOrchestratorAdapter,
 )
 from cortex.orchestrators.support.unified_digest_ingest_facade import (
     UnifiedDigestIngestionFacade,
@@ -25,18 +25,18 @@ logger = logging.getLogger(__name__)
 
 class UnifiedDigestIngestFacadeAdapter(IOrchestratorAdapter):
     """MCP Adapter for UnifiedDigestIngestionFacade.
-    
+
     Exposes capabilities:
     - process_knowledge_source: Process chat file or knowledge entry with auto-routing
     - detect_mode: Detect processing mode without processing
     - get_status: Get facade status
-    
+
     CORE-035: Uses wiring system for orchestrator access (single execution path).
     """
 
     def __init__(self, facade: Optional[UnifiedDigestIngestionFacade] = None):
         """Initialize adapter with facade from wiring system.
-        
+
         Args:
             facade: Custom facade instance (uses default if None).
         """
@@ -44,7 +44,7 @@ class UnifiedDigestIngestFacadeAdapter(IOrchestratorAdapter):
 
     def get_capabilities(self) -> List[CapabilityMetadata]:
         """Get all capabilities exposed by this adapter.
-        
+
         Returns:
             List of CapabilityMetadata for each exposed capability.
         """
@@ -121,12 +121,12 @@ class UnifiedDigestIngestFacadeAdapter(IOrchestratorAdapter):
         context: ExecutionContext,
     ) -> CapabilityResponse:
         """Execute a capability.
-        
+
         Args:
             capability_name: Name of capability to execute.
             parameters: Parameters for capability.
             context: Execution context.
-            
+
         Returns:
             CapabilityResponse with execution result.
         """
@@ -210,11 +210,11 @@ class UnifiedDigestIngestFacadeAdapter(IOrchestratorAdapter):
         self, capability_name: str, parameters: Dict[str, Any]
     ) -> tuple[bool, Optional[str]]:
         """Validate parameters for a capability.
-        
+
         Args:
             capability_name: Name of capability.
             parameters: Parameters to validate.
-            
+
         Returns:
             Tuple of (is_valid, error_message).
         """

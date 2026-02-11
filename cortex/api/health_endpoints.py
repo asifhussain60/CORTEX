@@ -12,12 +12,12 @@ Classes:
     HealthChecksCollector: Main health checks coordinator.
 """
 
-from enum import Enum
-from dataclasses import dataclass, field
-from typing import Dict, Callable, Optional, List, Any
-from datetime import datetime
-import time
 import threading
+import time
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any, Callable, Dict, List, Optional
 
 # CONSOLIDATED: Import from cortex.models.canonical_enums
 from cortex.models.canonical_enums import HealthStatus
@@ -26,7 +26,7 @@ from cortex.models.canonical_enums import HealthStatus
 @dataclass
 class ComponentHealth:
     """Health status of individual component.
-    
+
     Args:
         status: Current health status.
         latency_ms: Response time in milliseconds.
@@ -45,7 +45,7 @@ class ComponentHealth:
 @dataclass
 class HealthCheckResponse:
     """Complete health check response.
-    
+
     Args:
         status: Overall system health status.
         timestamp: ISO-8601 timestamp of check.
@@ -62,7 +62,7 @@ class HealthCheckResponse:
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert response to dictionary for JSON serialization.
-        
+
         Returns:
             Dictionary representation of health check response.
         """
@@ -85,7 +85,7 @@ class HealthCheckResponse:
 @dataclass
 class HealthCheckConfig:
     """Configuration for health checks.
-    
+
     Args:
         service_name: Name of the service.
         version: Service version.
@@ -103,14 +103,14 @@ class HealthCheckConfig:
 
 class HealthChecksCollector:
     """Main coordinator for health checks.
-    
+
     Manages liveness checks, readiness checks, component health verification,
     and detailed health status responses.
     """
 
     def __init__(self, config: HealthCheckConfig) -> None:
         """Initialize health checks collector.
-        
+
         Args:
             config: Health check configuration.
         """
@@ -127,7 +127,7 @@ class HealthChecksCollector:
         check_fn: Callable[[], Any],
     ) -> None:
         """Register a component health check function.
-        
+
         Args:
             name: Component name.
             check_fn: Function that returns ComponentHealth or HealthStatus.
@@ -137,7 +137,7 @@ class HealthChecksCollector:
 
     def get_component_checks(self) -> Dict[str, Callable[[], Any]]:
         """Get all registered component checks.
-        
+
         Returns:
             Dictionary of component_name -> check_function.
         """
@@ -146,9 +146,9 @@ class HealthChecksCollector:
 
     def liveness_check(self) -> HealthCheckResponse:
         """Check if service is alive (process running).
-        
+
         This is a quick check that should always respond in <100ms.
-        
+
         Returns:
             HealthCheckResponse indicating if process is alive.
         """
@@ -162,7 +162,7 @@ class HealthChecksCollector:
 
     def readiness_check(self) -> HealthCheckResponse:
         """Check if service is ready to accept traffic.
-        
+
         Returns:
             HealthCheckResponse indicating readiness.
         """
@@ -177,32 +177,32 @@ class HealthChecksCollector:
 
     def deep_health_check(self) -> HealthCheckResponse:
         """Perform comprehensive health check including all components.
-        
+
         This includes:
         - Database connectivity and latency
         - Cache connectivity and latency
         - Governance system health
         - Other component-level checks
-        
+
         Returns:
             HealthCheckResponse with detailed component status.
         """
         components = {}
         overall_status = HealthStatus.HEALTHY
-        
+
         with self._lock:
             component_checks = dict(self._component_checks)
-        
+
         for name, check_fn in component_checks.items():
             try:
                 result = self._run_component_check_with_retry(name, check_fn)
-                
+
                 if isinstance(result, ComponentHealth):
                     components[name] = result
                 else:
                     # Assume HealthStatus was returned
                     components[name] = ComponentHealth(status=result, latency_ms=None)
-                
+
                 # Update overall status
                 if components[name].status == HealthStatus.UNHEALTHY:
                     overall_status = HealthStatus.UNHEALTHY
@@ -219,7 +219,7 @@ class HealthChecksCollector:
                     error_message=str(e),
                 )
                 overall_status = HealthStatus.UNHEALTHY
-        
+
         response = HealthCheckResponse(
             status=overall_status,
             timestamp=datetime.utcnow().isoformat(),
@@ -235,17 +235,17 @@ class HealthChecksCollector:
         check_fn: Callable[[], Any],
     ) -> Any:
         """Run component check with retry logic.
-        
+
         Args:
             name: Component name.
             check_fn: Check function to run.
-            
+
         Returns:
             Result from check function.
         """
         if not self.config.retry_failed_checks:
             return check_fn()
-        
+
         for attempt in range(self.config.retry_count):
             try:
                 result = check_fn()
@@ -254,19 +254,19 @@ class HealthChecksCollector:
                         return result
                 else:
                     return result
-            except Exception as e:
+            except Exception:
                 if attempt == self.config.retry_count - 1:
                     raise
                 time.sleep(0.01)  # Brief delay before retry
-        
+
         return check_fn()
 
     def get_http_status_code(self, response: HealthCheckResponse) -> int:
         """Get appropriate HTTP status code for health check response.
-        
+
         Args:
             response: HealthCheckResponse.
-            
+
         Returns:
             HTTP status code (200 for healthy, 503 for degraded/unhealthy).
         """
@@ -277,7 +277,7 @@ class HealthChecksCollector:
 
     def get_uptime_seconds(self) -> int:
         """Get service uptime in seconds.
-        
+
         Returns:
             Uptime in seconds since service start.
         """

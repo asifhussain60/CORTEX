@@ -15,12 +15,12 @@ Flow:
   3. Fall back to LLM for complex cases → always returns
 """
 
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple, Any
-from enum import Enum
-import re
 import logging
+import re
+from dataclasses import dataclass, field
 from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +37,7 @@ class HybridRoutingLayer(str, Enum):
 class HybridRoutingResult:
     """
     Result from hybrid intent routing.
-    
+
     Attributes:
         intent: Detected intent type
         confidence: Confidence score (0.0-1.0)
@@ -151,19 +151,19 @@ INTENT_CONFIG: Dict[str, Dict[str, Any]] = {
 class HybridIntentRouter:
     """
     Multi-layer intent routing with keyword, semantic, and LLM fallback.
-    
+
     Architecture:
     - Layer 1 (Keyword): Fast, deterministic, handles 80% of requests
     - Layer 2 (Semantic): Embeddings-based similarity for fuzzy matching
     - Layer 3 (LLM): Last resort for complex/ambiguous intents
-    
+
     Example:
         >>> router = HybridIntentRouter()
         >>> result = router.route("onboard D:\\PROJECTS\\KASHKOLE")
         >>> print(f"Intent: {result.intent}, Confidence: {result.confidence}")
         Intent: ONBOARD, Confidence: 0.95
     """
-    
+
     def __init__(
         self,
         keyword_threshold: float = 0.7,
@@ -173,7 +173,7 @@ class HybridIntentRouter:
     ):
         """
         Initialize hybrid intent router.
-        
+
         Args:
             keyword_threshold: Confidence threshold for keyword matching (default: 0.7)
             semantic_threshold: Confidence threshold for semantic matching (default: 0.6)
@@ -184,7 +184,7 @@ class HybridIntentRouter:
         self.semantic_threshold = semantic_threshold
         self.enable_semantic = enable_semantic
         self.enable_llm_fallback = enable_llm_fallback
-        
+
         # Precompile keyword patterns for efficiency
         self._keyword_patterns: Dict[str, List[re.Pattern]] = {}
         for intent, config in INTENT_CONFIG.items():
@@ -192,36 +192,36 @@ class HybridIntentRouter:
                 re.compile(r'\b' + re.escape(kw) + r'\b', re.IGNORECASE)
                 for kw in config["keywords"]
             ]
-        
+
         # Lazy-loaded semantic embeddings
         self._embeddings_model = None
         self._intent_embeddings: Dict[str, Any] = {}
-        
+
         logger.info(
             "HybridIntentRouter initialized: keyword_threshold=%.2f, "
             "semantic=%s, llm_fallback=%s",
             keyword_threshold, enable_semantic, enable_llm_fallback
         )
-    
+
     def route(self, request: str) -> HybridRoutingResult:
         """
         Route request through hybrid layers.
-        
+
         Args:
             request: User's natural language request
-            
+
         Returns:
             HybridRoutingResult with intent, confidence, and routing info
-            
+
         Example:
             >>> result = router.route("onboard my project at /path/to/repo")
             >>> print(result.intent)  # "ONBOARD"
         """
         if not request or not request.strip():
             return self._unknown_result("Empty request")
-        
+
         normalized = request.lower().strip()
-        
+
         # Layer 1: Keyword Matching (fast path)
         keyword_result = self._match_keywords(normalized, request)
         if keyword_result.confidence >= self.keyword_threshold:
@@ -230,7 +230,7 @@ class HybridIntentRouter:
                 keyword_result.intent, keyword_result.confidence
             )
             return keyword_result
-        
+
         # Layer 2: Semantic Similarity (if enabled)
         if self.enable_semantic:
             semantic_result = self._match_semantic(normalized, request)
@@ -240,50 +240,50 @@ class HybridIntentRouter:
                     semantic_result.intent, semantic_result.confidence
                 )
                 return semantic_result
-        
+
         # Layer 3: LLM Fallback (if enabled)
         if self.enable_llm_fallback:
             llm_result = self._match_llm(request)
             return llm_result
-        
+
         # Return best keyword match even if below threshold
         if keyword_result.confidence > 0:
             keyword_result.reasoning += " (below threshold, best effort)"
             return keyword_result
-        
+
         return self._unknown_result("No intent matched")
-    
+
     def _match_keywords(self, normalized: str, original: str) -> HybridRoutingResult:
         """
         Layer 1: Keyword-based matching.
-        
+
         Fast, deterministic matching using precompiled regex patterns.
         """
         intent_scores: Dict[str, Tuple[float, List[str]]] = {}
-        
+
         for intent, patterns in self._keyword_patterns.items():
             matches = []
             for pattern in patterns:
                 if pattern.search(normalized):
                     matches.append(pattern.pattern.replace(r'\b', ''))
-            
+
             if matches:
                 # Score based on:
                 # - Number of keyword matches (density)
                 # - Proportion of intent keywords matched
                 config = INTENT_CONFIG[intent]
                 density = len(matches) / len(config["keywords"])
-                
+
                 # Boost for exact command patterns like "/onboard"
                 if f"/{intent.lower()}" in normalized:
                     density = min(density + 0.3, 1.0)
-                
+
                 # Boost if intent word itself is present
                 if intent.lower() in normalized:
                     density = min(density + 0.2, 1.0)
-                
+
                 intent_scores[intent] = (density, matches)
-        
+
         if not intent_scores:
             return HybridRoutingResult(
                 intent="UNKNOWN",
@@ -293,18 +293,18 @@ class HybridIntentRouter:
                 mcp_tool="cortex_process_request",
                 reasoning="No keyword matches found",
             )
-        
+
         # Get top intent
         sorted_intents = sorted(intent_scores.items(), key=lambda x: x[1][0], reverse=True)
         top_intent, (score, matches) = sorted_intents[0]
         config = INTENT_CONFIG[top_intent]
-        
+
         # Build alternatives list
         alternatives = [
-            (intent, scores[0]) 
+            (intent, scores[0])
             for intent, scores in sorted_intents[1:4]
         ]
-        
+
         return HybridRoutingResult(
             intent=top_intent,
             confidence=min(score, 0.99),
@@ -315,11 +315,11 @@ class HybridIntentRouter:
             keyword_matches=matches,
             alternative_intents=alternatives,
         )
-    
+
     def _match_semantic(self, normalized: str, original: str) -> HybridRoutingResult:
         """
         Layer 2: Semantic similarity matching.
-        
+
         Uses sentence embeddings to find semantically similar intents.
         Falls back to keyword result if embeddings unavailable.
         """
@@ -329,7 +329,7 @@ class HybridIntentRouter:
                 try:
                     from sentence_transformers import SentenceTransformer
                     self._embeddings_model = SentenceTransformer('all-MiniLM-L6-v2')
-                    
+
                     # Pre-compute intent embeddings from semantic hints
                     for intent, config in INTENT_CONFIG.items():
                         hints = config.get("semantic_hints", [])
@@ -341,24 +341,24 @@ class HybridIntentRouter:
                     logger.warning("sentence-transformers not available, semantic layer disabled")
                     self.enable_semantic = False
                     return self._match_keywords(normalized, original)
-            
+
             # Encode request
             request_embedding = self._embeddings_model.encode(original, convert_to_tensor=True)
-            
+
             # Compare against intent embeddings
             best_intent = None
             best_score = 0.0
-            
+
             from sentence_transformers import util
-            
+
             for intent, embeddings in self._intent_embeddings.items():
                 similarities = util.cos_sim(request_embedding, embeddings)
                 max_similarity = float(similarities.max())
-                
+
                 if max_similarity > best_score:
                     best_score = max_similarity
                     best_intent = intent
-            
+
             if best_intent:
                 config = INTENT_CONFIG[best_intent]
                 return HybridRoutingResult(
@@ -370,22 +370,22 @@ class HybridIntentRouter:
                     reasoning=f"Semantic similarity: {best_score:.2f}",
                     semantic_score=best_score,
                 )
-            
+
         except Exception as e:
             logger.warning("Semantic matching failed: %s", e)
-        
+
         return self._match_keywords(normalized, original)
-    
+
     def _match_llm(self, request: str) -> HybridRoutingResult:
         """
         Layer 3: LLM-based intent classification.
-        
+
         Uses LLM for complex/ambiguous requests. Most accurate but costly.
         """
         # Placeholder - would integrate with actual LLM service
         # For now, fall back to keyword matching
         logger.info("LLM fallback invoked for: %s", request[:50])
-        
+
         # In production, this would call an LLM with a classification prompt
         return HybridRoutingResult(
             intent="UNKNOWN",
@@ -395,7 +395,7 @@ class HybridIntentRouter:
             mcp_tool="cortex_process_request",
             reasoning="LLM classification (placeholder)",
         )
-    
+
     def _unknown_result(self, reason: str) -> HybridRoutingResult:
         """Create an UNKNOWN intent result."""
         return HybridRoutingResult(
@@ -420,13 +420,13 @@ def get_hybrid_intent_router(
 ) -> HybridIntentRouter:
     """
     Get singleton HybridIntentRouter instance.
-    
+
     Args:
         keyword_threshold: Confidence threshold for keyword matching
         semantic_threshold: Confidence threshold for semantic matching
         enable_semantic: Whether to use semantic layer
         enable_llm_fallback: Whether to use LLM fallback
-        
+
     Returns:
         HybridIntentRouter singleton instance
     """

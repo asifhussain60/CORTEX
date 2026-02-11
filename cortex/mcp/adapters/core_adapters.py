@@ -15,21 +15,26 @@ IMPORTANT: All orchestrators MUST be obtained via wiring system (bootstrap_corte
 NOT via direct instantiation. This ensures single execution path per CORE-035.
 """
 
+import logging
+import time
 from typing import Any, Dict, List, Optional
+
 from cortex.mcp.orchestrator_mcp_server import (
-    IOrchestratorAdapter,
     CapabilityMetadata,
     CapabilityResponse,
     ExecutionContext,
+    IOrchestratorAdapter,
 )
-# CORE-035: Import types only, get instances via wiring
-from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
-from cortex.orchestrators.core.tdd_orchestrator import TDDOrchestrator, get_tdd_orchestrator
 from cortex.orchestrators.core.intent_router import IntentRouter
 from cortex.orchestrators.core.interaction_orchestrator import InteractionOrchestrator
+
+# CORE-035: Import types only, get instances via wiring
+from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+from cortex.orchestrators.core.tdd_orchestrator import (
+    TDDOrchestrator,
+    get_tdd_orchestrator,
+)
 from cortex.orchestrators.core.workflow_orchestrator import WorkflowOrchestrator
-import logging
-import time
 
 logger = logging.getLogger(__name__)
 
@@ -52,16 +57,16 @@ def _get_orchestrator_from_wiring(name: str) -> Optional[Any]:
 class MasterOrchestratorAdapter(IOrchestratorAdapter):
     """
     MCP Adapter for MasterOrchestrator.
-    
+
     Exposes capabilities:
     - coordinate_operation: Coordinate multi-orchestrator operations
     - route_to_domain: Route to specific domain orchestrator
     - get_system_status: Get complete system health status
     - execute_workflow: Execute multi-stage workflow
-    
+
     CORE-035: Uses wiring system for orchestrator access (single execution path).
     """
-    
+
     def __init__(self, orchestrator: Optional[MasterOrchestrator] = None):
         """Initialize adapter with orchestrator from wiring system."""
         # CORE-035: Get from wiring, never instantiate directly
@@ -70,7 +75,7 @@ class MasterOrchestratorAdapter(IOrchestratorAdapter):
         else:
             self.orchestrator = _get_orchestrator_from_wiring("MasterOrchestrator")
         self.name = "MasterOrchestratorAdapter"
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         """Get all capabilities"""
         return [
@@ -114,7 +119,7 @@ class MasterOrchestratorAdapter(IOrchestratorAdapter):
                 tags={"core", "monitoring"},
             ),
         ]
-    
+
     def execute_capability(
         self,
         capability_name: str,
@@ -178,14 +183,14 @@ class MasterOrchestratorAdapter(IOrchestratorAdapter):
                 orchestrator="master",
                 duration_ms=(time.time() - start) * 1000,
             )
-    
+
     def is_healthy(self) -> bool:
         """Check if orchestrator is healthy"""
         try:
             return self.orchestrator.is_healthy()
         except Exception:
             return False
-    
+
     def get_status(self) -> Dict[str, Any]:
         """Get detailed status"""
         return {
@@ -202,18 +207,18 @@ class MasterOrchestratorAdapter(IOrchestratorAdapter):
 class TDDOrchestratorAdapter(IOrchestratorAdapter):
     """
     MCP Adapter for TDDOrchestrator.
-    
+
     Exposes capabilities:
     - execute_tdd_workflow: Execute RED→GREEN→REFACTOR cycle
     - generate_tests: Generate test cases with TDD guidance
     - validate_coverage: Validate test coverage metrics
     """
-    
+
     def __init__(self, orchestrator: Optional[TDDOrchestrator] = None):
         """Initialize adapter"""
         self.orchestrator = orchestrator or get_tdd_orchestrator()
         self.name = "TDDOrchestratorAdapter"
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         """Get all capabilities"""
         return [
@@ -251,7 +256,7 @@ class TDDOrchestratorAdapter(IOrchestratorAdapter):
                 tags={"core", "testing", "validation"},
             ),
         ]
-    
+
     def execute_capability(
         self,
         capability_name: str,
@@ -315,14 +320,14 @@ class TDDOrchestratorAdapter(IOrchestratorAdapter):
                 orchestrator="tdd",
                 duration_ms=(time.time() - start) * 1000,
             )
-    
+
     def is_healthy(self) -> bool:
         """Check if orchestrator is healthy"""
         try:
             return self.orchestrator.is_healthy()
         except Exception:
             return False
-    
+
     def get_status(self) -> Dict[str, Any]:
         """Get detailed status"""
         return {
@@ -339,18 +344,18 @@ class TDDOrchestratorAdapter(IOrchestratorAdapter):
 class IntentRouterAdapter(IOrchestratorAdapter):
     """
     MCP Adapter for IntentRouter.
-    
+
     Exposes capabilities:
     - classify_intent: Classify operation intent
     - route_operation: Route based on intent classification
     - get_routing_confidence: Get routing confidence metrics
     """
-    
+
     def __init__(self, orchestrator: Optional[IntentRouter] = None):
         """Initialize adapter"""
         self.orchestrator = orchestrator or IntentRouter()
         self.name = "IntentRouterAdapter"
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         """Get all capabilities"""
         return [
@@ -388,7 +393,7 @@ class IntentRouterAdapter(IOrchestratorAdapter):
                 tags={"core", "monitoring"},
             ),
         ]
-    
+
     def execute_capability(
         self,
         capability_name: str,
@@ -450,14 +455,14 @@ class IntentRouterAdapter(IOrchestratorAdapter):
                 orchestrator="intent_router",
                 duration_ms=(time.time() - start) * 1000,
             )
-    
+
     def is_healthy(self) -> bool:
         """Check if orchestrator is healthy"""
         try:
             return self.orchestrator.is_healthy()
         except Exception:
             return False
-    
+
     def get_status(self) -> Dict[str, Any]:
         """Get detailed status"""
         return {
@@ -474,23 +479,23 @@ class IntentRouterAdapter(IOrchestratorAdapter):
 class InteractionOrchestratorAdapter(IOrchestratorAdapter):
     """
     MCP Adapter for InteractionOrchestrator.
-    
+
     Exposes capabilities:
     - initiate_comprehension: Start comprehension phase
     - process_challenge: Process user response to challenge
     - get_context: Get current interaction context
     """
-    
+
     def __init__(self, orchestrator: Optional[InteractionOrchestrator] = None):
         """
         Initialize adapter.
-        
+
         Note: InteractionOrchestrator requires ConversationProtocol parameter.
         If not provided, adapter will be partially functional for discovery.
         """
         self.orchestrator = orchestrator  # Don't try to instantiate
         self.name = "InteractionOrchestratorAdapter"
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         """Get all capabilities"""
         return [
@@ -528,7 +533,7 @@ class InteractionOrchestratorAdapter(IOrchestratorAdapter):
                 tags={"core", "interaction"},
             ),
         ]
-    
+
     def execute_capability(
         self,
         capability_name: str,
@@ -537,7 +542,7 @@ class InteractionOrchestratorAdapter(IOrchestratorAdapter):
     ) -> CapabilityResponse:
         """Execute a capability"""
         start = time.time()
-        
+
         # Handle None orchestrator (not instantiated due to dependencies)
         if self.orchestrator is None:
             return CapabilityResponse(
@@ -548,7 +553,7 @@ class InteractionOrchestratorAdapter(IOrchestratorAdapter):
                 orchestrator="interaction",
                 duration_ms=(time.time() - start) * 1000,
             )
-        
+
         try:
             if capability_name == "initiate_comprehension":
                 result = self.orchestrator.initiate_comprehension(
@@ -602,7 +607,7 @@ class InteractionOrchestratorAdapter(IOrchestratorAdapter):
                 orchestrator="interaction",
                 duration_ms=(time.time() - start) * 1000,
             )
-    
+
     def is_healthy(self) -> bool:
         """Check if orchestrator is healthy"""
         if self.orchestrator is None:
@@ -611,7 +616,7 @@ class InteractionOrchestratorAdapter(IOrchestratorAdapter):
             return self.orchestrator.is_healthy()
         except Exception:
             return False
-    
+
     def get_status(self) -> Dict[str, Any]:
         """Get detailed status"""
         return {
@@ -628,23 +633,23 @@ class InteractionOrchestratorAdapter(IOrchestratorAdapter):
 class WorkflowOrchestratorAdapter(IOrchestratorAdapter):
     """
     MCP Adapter for WorkflowOrchestrator.
-    
+
     Exposes capabilities:
     - create_workflow: Create new workflow
     - execute_workflow: Execute workflow steps
     - track_progress: Track workflow progress
     """
-    
+
     def __init__(self, orchestrator: Optional[WorkflowOrchestrator] = None):
         """
         Initialize adapter.
-        
+
         Note: WorkflowOrchestrator requires workspace_root parameter.
         If not provided, adapter will be partially functional for discovery.
         """
         self.orchestrator = orchestrator  # Don't try to instantiate
         self.name = "WorkflowOrchestratorAdapter"
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         """Get all capabilities"""
         return [
@@ -682,7 +687,7 @@ class WorkflowOrchestratorAdapter(IOrchestratorAdapter):
                 tags={"core", "workflow", "monitoring"},
             ),
         ]
-    
+
     def execute_capability(
         self,
         capability_name: str,
@@ -691,7 +696,7 @@ class WorkflowOrchestratorAdapter(IOrchestratorAdapter):
     ) -> CapabilityResponse:
         """Execute a capability"""
         start = time.time()
-        
+
         # Handle None orchestrator (not instantiated due to dependencies)
         if self.orchestrator is None:
             return CapabilityResponse(
@@ -702,7 +707,7 @@ class WorkflowOrchestratorAdapter(IOrchestratorAdapter):
                 orchestrator="workflow",
                 duration_ms=(time.time() - start) * 1000,
             )
-        
+
         try:
             if capability_name == "create_workflow":
                 result = self.orchestrator.create_workflow(
@@ -758,7 +763,7 @@ class WorkflowOrchestratorAdapter(IOrchestratorAdapter):
                 orchestrator="workflow",
                 duration_ms=(time.time() - start) * 1000,
             )
-    
+
     def is_healthy(self) -> bool:
         """Check if orchestrator is healthy"""
         if self.orchestrator is None:
@@ -767,7 +772,7 @@ class WorkflowOrchestratorAdapter(IOrchestratorAdapter):
             return self.orchestrator.is_healthy()
         except Exception:
             return False
-    
+
     def get_status(self) -> Dict[str, Any]:
         """Get detailed status"""
         return {
@@ -784,18 +789,18 @@ class WorkflowOrchestratorAdapter(IOrchestratorAdapter):
 class WrappedTDDOrchestratorAdapter(IOrchestratorAdapter):
     """
     MCP Adapter for WrappedTDDOrchestrator (placeholder implementation).
-    
+
     Exposes capabilities:
     - execute_wrapped_tdd: Execute TDD with wrapper protocol
     - get_tdd_guidance: Get TDD guidance for module
     - validate_tdd_compliance: Validate TDD compliance
     """
-    
+
     def __init__(self, orchestrator: Optional[Any] = None):
         """Initialize adapter"""
         self.orchestrator = orchestrator
         self.name = "WrappedTDDOrchestratorAdapter"
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         """Get all capabilities"""
         return [
@@ -830,7 +835,7 @@ class WrappedTDDOrchestratorAdapter(IOrchestratorAdapter):
                 tags={"core", "tdd", "validation"},
             ),
         ]
-    
+
     def execute_capability(
         self,
         capability_name: str,
@@ -887,11 +892,11 @@ class WrappedTDDOrchestratorAdapter(IOrchestratorAdapter):
                 orchestrator="wrapped_tdd",
                 duration_ms=(time.time() - start) * 1000,
             )
-    
+
     def is_healthy(self) -> bool:
         """Check if orchestrator is healthy"""
         return False  # Not implemented
-    
+
     def get_status(self) -> Dict[str, Any]:
         """Get detailed status"""
         return {

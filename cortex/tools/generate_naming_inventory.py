@@ -8,14 +8,14 @@ AC-ID: NAMING-003
 """
 
 from pathlib import Path
-from typing import List, Dict, Set
+from typing import Dict, List, Set
+
 import yaml
 
 from cortex.tools.naming_violation_detector import (
     NamingViolationDetector,
     ViolationType,
 )
-
 
 # Special files to exclude (Python conventions)
 SPECIAL_FILES = {
@@ -28,26 +28,26 @@ SPECIAL_FILES = {
 
 def prioritize_violations(violations: List) -> Dict[str, List[Dict]]:
     """Prioritize violations by type and impact.
-    
+
     P0 - Critical: Public API files, orchestrators
     P1 - High: Core brain files, tools
     P2 - Medium: Tests, utilities
-    
+
     Args:
         violations: List of Violation objects
-        
+
     Returns:
         Dictionary with P0, P1, P2 keys containing violation dicts
     """
     prioritized = {"P0": [], "P1": [], "P2": []}
-    
+
     for v in violations:
         # Skip special Python files
         if v.file_path.name in SPECIAL_FILES:
             continue
-        
+
         file_str = str(v.file_path)
-        
+
         # Determine priority based on path
         if "orchestrators/" in file_str or "api/" in file_str:
             priority = "P0"  # Critical: Public APIs
@@ -57,7 +57,7 @@ def prioritize_violations(violations: List) -> Dict[str, List[Dict]]:
             priority = "P2"  # Medium: Tests and utilities
         else:
             priority = "P2"  # Default to medium
-        
+
         violation_dict = {
             "file": str(v.file_path.relative_to(Path.cwd())),
             "type": v.type.value,
@@ -65,33 +65,33 @@ def prioritize_violations(violations: List) -> Dict[str, List[Dict]]:
             "suggested_name": v.suggested_fix,
             "reason": v.reason,
         }
-        
+
         prioritized[priority].append(violation_dict)
-    
+
     return prioritized
 
 
 def main():
     """Generate naming migration inventory."""
     print("Scanning workspace for CORE-028 violations...")
-    
+
     detector = NamingViolationDetector(workspace_root=Path.cwd())
     all_violations = detector.scan_workspace()
-    
+
     # Filter out special files
     filtered = [v for v in all_violations if v.file_path.name not in SPECIAL_FILES]
-    
+
     print(f"Found {len(all_violations)} total violations")
     print(f"After filtering special files: {len(filtered)} violations")
-    
+
     # Prioritize violations
     prioritized = prioritize_violations(filtered)
-    
-    print(f"\nPriority Breakdown:")
+
+    print("\nPriority Breakdown:")
     print(f"  P0 (Critical): {len(prioritized['P0'])} files")
     print(f"  P1 (High): {len(prioritized['P1'])} files")
     print(f"  P2 (Medium): {len(prioritized['P2'])} files")
-    
+
     # Create inventory YAML
     inventory = {
         "# CORE-028 File Naming Migration Inventory": None,
@@ -104,16 +104,16 @@ def main():
         },
         "priorities": prioritized,
     }
-    
+
     # Write to file
     output_path = Path("cortex-registry/_cortex-master/meta/naming-migration-inventory.yaml")
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    
+
     with open(output_path, "w") as f:
         yaml.dump(inventory, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
-    
+
     print(f"\n✅ Inventory created: {output_path}")
-    print(f"\nTop 10 P0 (Critical) files to rename:")
+    print("\nTop 10 P0 (Critical) files to rename:")
     for i, item in enumerate(prioritized["P0"][:10], 1):
         print(f"  {i}. {item['file']}")
         print(f"     → {item['suggested_name']}")

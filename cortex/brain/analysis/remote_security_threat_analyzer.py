@@ -8,20 +8,20 @@ Phase 8.5: LENS Remote Intelligence
 Authority: AC-SECURITY-FRAMEWORK-001 (Phase 8.5 Extension)
 """
 
-from typing import Dict, List, Optional, Any
-from pathlib import Path
-from dataclasses import dataclass
 import logging
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
+from cortex.brain.analysis.remote_git_adapter import (
+    RemoteFile,
+    RemoteGitAdapter,
+)
 from cortex.brain.analysis.security_threat_analyzer import (
+    SecurityAnalysisResult,
     SecurityThreatAnalyzer,
     ThreatFinding,
     ThreatSeverity,
-    SecurityAnalysisResult,
-)
-from cortex.brain.analysis.remote_git_adapter import (
-    RemoteGitAdapter,
-    RemoteFile,
 )
 
 logger = logging.getLogger(__name__)
@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 class RemoteSecurityAnalysisResult(SecurityAnalysisResult):
     """
     Result of remote security analysis with GitHub metadata.
-    
+
     Extends SecurityAnalysisResult with remote source info.
     """
     github_repo: str = ""
@@ -46,15 +46,15 @@ class RemoteSecurityAnalysisResult(SecurityAnalysisResult):
 class RemoteSecurityThreatAnalyzer(SecurityThreatAnalyzer):
     """
     Analyzes security threats in remote GitHub repositories (Phase 8.5).
-    
+
     Extends SecurityThreatAnalyzer to:
     1. Fetch code from GitHub without cloning
     2. Correlate threats with git blame (who introduced vulnerability)
     3. Calculate risk scores based on file history
     4. Generate comprehensive security reports
-    
+
     Uses RemoteGitAdapter for efficient remote analysis.
-    
+
     Example:
         >>> analyzer = RemoteSecurityThreatAnalyzer()
         >>> result = analyzer.analyze_remote_file(
@@ -65,18 +65,18 @@ class RemoteSecurityThreatAnalyzer(SecurityThreatAnalyzer):
         >>> print(f"Threats: {len(result.threat_findings)}")
         >>> print(f"Risk Score: {result.risk_score}/10")
     """
-    
+
     def __init__(self, github_token: Optional[str] = None):
         """
         Initialize RemoteSecurityThreatAnalyzer.
-        
+
         Args:
             github_token: GitHub API token (optional, for private repos)
         """
         super().__init__()
         self.remote_adapter = RemoteGitAdapter(github_token=github_token)
         logger.info("RemoteSecurityThreatAnalyzer initialized (Phase 8.5)")
-    
+
     def analyze_remote_file(
         self,
         repo: str,
@@ -85,19 +85,19 @@ class RemoteSecurityThreatAnalyzer(SecurityThreatAnalyzer):
     ) -> RemoteSecurityAnalysisResult:
         """
         Analyze a file from a remote GitHub repository.
-        
+
         Phase 8.5: Remote LENS Intelligence
-        
+
         Args:
             repo: Repository (e.g., "cortex-ai/cortex")
             file_path: Path to file in repo (e.g., "src/handlers.py")
             branch: Git branch (default: "main")
-            
+
         Returns:
             RemoteSecurityAnalysisResult with threats and metadata
         """
         logger.info(f"Analyzing remote file: {repo}/{file_path} on {branch}")
-        
+
         try:
             # Fetch remote file
             remote_file: RemoteFile = self.remote_adapter.get_file(
@@ -105,26 +105,26 @@ class RemoteSecurityThreatAnalyzer(SecurityThreatAnalyzer):
                 path=file_path,
                 ref=branch
             )
-            
+
             if not remote_file:
                 return RemoteSecurityAnalysisResult(
                     success=False,
                     error=f"Failed to fetch {file_path} from {repo}:{branch}"
                 )
-            
+
             # Analyze code using parent class
             analysis_result = self.analyze_code(
                 remote_file.content,
                 file_path
             )
-            
+
             # Enhance with remote metadata
             blame_info = self.remote_adapter.get_blame(
                 repo=repo,
                 path=file_path,
                 ref=branch
             )
-            
+
             # Build comprehensive result
             result = RemoteSecurityAnalysisResult(
                 success=analysis_result.success,
@@ -144,15 +144,15 @@ class RemoteSecurityThreatAnalyzer(SecurityThreatAnalyzer):
                     blame_info
                 ),
             )
-            
+
             # Log findings
             logger.info(
                 f"Remote analysis complete: {repo}/{file_path} - "
                 f"{len(result.threat_findings)} threats, risk={result.risk_score:.1f}/10"
             )
-            
+
             return result
-            
+
         except Exception as e:
             logger.error(f"Remote analysis failed: {str(e)}")
             return RemoteSecurityAnalysisResult(
@@ -161,7 +161,7 @@ class RemoteSecurityThreatAnalyzer(SecurityThreatAnalyzer):
                 github_repo=repo,
                 github_branch=branch,
             )
-    
+
     def analyze_remote_repo(
         self,
         repo: str,
@@ -170,21 +170,21 @@ class RemoteSecurityThreatAnalyzer(SecurityThreatAnalyzer):
     ) -> Dict[str, RemoteSecurityAnalysisResult]:
         """
         Analyze multiple files in a remote repository.
-        
+
         Phase 8.5: Repository-wide security scan
-        
+
         Args:
             repo: Repository (e.g., "cortex-ai/cortex")
             branch: Git branch to analyze
             patterns: Optional glob patterns to match (e.g., ["*.py", "src/**/*.py"])
-            
+
         Returns:
             Dict mapping file paths to analysis results
         """
         logger.info(f"Starting repository scan: {repo} on {branch}")
-        
+
         results: Dict[str, RemoteSecurityAnalysisResult] = {}
-        
+
         try:
             # List files in repo
             files = self.remote_adapter.list_files(
@@ -192,20 +192,20 @@ class RemoteSecurityThreatAnalyzer(SecurityThreatAnalyzer):
                 ref=branch,
                 patterns=patterns or ["*.py"]
             )
-            
+
             logger.info(f"Found {len(files)} Python files to analyze")
-            
+
             # Analyze each file
             for file_path in files:
                 result = self.analyze_remote_file(repo, file_path, branch)
                 results[file_path] = result
-            
+
             return results
-            
+
         except Exception as e:
             logger.error(f"Repository scan failed: {str(e)}")
             return {}
-    
+
     def _calculate_risk_score(
         self,
         threats: List[ThreatFinding],
@@ -213,19 +213,19 @@ class RemoteSecurityThreatAnalyzer(SecurityThreatAnalyzer):
     ) -> float:
         """
         Calculate composite risk score (0-10 scale).
-        
+
         Phase 8.5: Risk scoring based on threat severity and ownership
-        
+
         Args:
             threats: List of detected threats
             blame_info: Optional blame metadata
-            
+
         Returns:
             Risk score 0-10
         """
         if not threats:
             return 0.0
-        
+
         # Base score on threat count and severity
         severity_scores = {
             ThreatSeverity.CRITICAL: 10,
@@ -234,20 +234,20 @@ class RemoteSecurityThreatAnalyzer(SecurityThreatAnalyzer):
             ThreatSeverity.LOW: 2,
             ThreatSeverity.INFO: 1,
         }
-        
+
         # Calculate average severity
         total_score = sum(
             severity_scores.get(t.severity, 0)
             for t in threats
         )
-        
+
         avg_severity = total_score / len(threats) if threats else 0
-        
+
         # Adjust for threat count (more threats = higher risk)
         threat_multiplier = min(1.0 + (len(threats) - 1) * 0.1, 2.0)
-        
+
         risk_score = avg_severity * threat_multiplier
-        
+
         # Cap at 10
         return min(risk_score, 10.0)
 
@@ -257,10 +257,10 @@ def get_remote_security_threat_analyzer(
 ) -> RemoteSecurityThreatAnalyzer:
     """
     Factory function for RemoteSecurityThreatAnalyzer.
-    
+
     Args:
         github_token: GitHub API token (optional)
-        
+
     Returns:
         RemoteSecurityThreatAnalyzer instance
     """

@@ -8,9 +8,9 @@ Provides MCP-compatible tool interfaces for:
 Authority: AC-SECURITY-FRAMEWORK-001
 """
 
-from typing import Dict, List, Any, Optional
-from dataclasses import asdict
 import logging
+from dataclasses import asdict
+from typing import Any, Dict, List, Optional
 
 from cortex.brain.analysis.security_threat_analyzer import (
     SecurityThreatAnalyzer,
@@ -26,11 +26,11 @@ logger = logging.getLogger(__name__)
 
 class SecurityThreatAnalyzerTool:
     """MCP wrapper for SecurityThreatAnalyzer."""
-    
+
     def __init__(self):
         """Initialize tool."""
         self.analyzer = get_security_threat_analyzer()
-    
+
     def analyze_code_for_threats(
         self,
         code: str,
@@ -38,16 +38,16 @@ class SecurityThreatAnalyzerTool:
     ) -> Dict[str, Any]:
         """
         Analyze code for security threats.
-        
+
         Args:
             code: Python source code to analyze
             file_path: Path to file (for context)
-            
+
         Returns:
             Dict with threat findings
         """
         result = self.analyzer.analyze_code(code, file_path)
-        
+
         return {
             "success": result.success,
             "file_path": result.file_path,
@@ -72,11 +72,11 @@ class SecurityThreatAnalyzerTool:
 
 class RecommendationEngineTool:
     """MCP wrapper for RecommendationEngine."""
-    
+
     def __init__(self):
         """Initialize tool."""
         self.engine = get_recommendation_engine()
-    
+
     def recommend_security_fix(
         self,
         cwe_id: str,
@@ -84,16 +84,16 @@ class RecommendationEngineTool:
     ) -> Dict[str, Any]:
         """
         Get security recommendations for a CWE.
-        
+
         Args:
             cwe_id: CWE identifier (e.g., "CWE-94")
             context: Additional context
-            
+
         Returns:
             Dict with recommendations
         """
         result = self.engine.recommend_for_security(cwe_id, context or {})
-        
+
         return {
             "success": result.success,
             "summary": result.summary,
@@ -112,7 +112,7 @@ class RecommendationEngineTool:
             ],
             "error": result.error,
         }
-    
+
     def recommend_solid_fix(
         self,
         violation_type: str,
@@ -120,16 +120,16 @@ class RecommendationEngineTool:
     ) -> Dict[str, Any]:
         """
         Get SOLID principle recommendations.
-        
+
         Args:
             violation_type: Type of violation (SRP, OCP, etc.)
             context: Additional context
-            
+
         Returns:
             Dict with recommendations
         """
         result = self.engine.recommend_for_solid(violation_type, context or {})
-        
+
         return {
             "success": result.success,
             "summary": result.summary,

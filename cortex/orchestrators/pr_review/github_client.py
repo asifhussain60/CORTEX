@@ -15,12 +15,12 @@ Supports:
 - Status checks
 """
 
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any, Tuple
-from enum import Enum
-import os
-import logging
 import base64
+import logging
+import os
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
 from urllib.parse import urljoin
 
 logger = logging.getLogger(__name__)

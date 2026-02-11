@@ -9,10 +9,10 @@ Authority: Phase 49 spec, TDD-first
 
 import asyncio
 import logging
+from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import Optional, Dict, Any, List
-from abc import ABC, abstractmethod
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -62,7 +62,7 @@ class RulesCache:
 class CrystallizedContext:
     """
     Immutable result of async context prefetch.
-    
+
     Carries pre-warmed LENS + Rules + Infrastructure context.
     """
 
@@ -101,12 +101,12 @@ class IOrchestrator(ABC):
 class ContextCrystallizationLayer(IOrchestrator):
     """
     Non-blocking async context prefetch layer.
-    
+
     Runs PARALLEL to Stage 1, pre-warming:
     - Rules cache (Company > tier1 > tier0)
     - LENS context (AST + git history)
     - Infrastructure capabilities
-    
+
     Design Principles:
     - Non-blocking: prefetch_async() returns immediately
     - Async-first: All operations async with timeout SLA
@@ -122,7 +122,7 @@ class ContextCrystallizationLayer(IOrchestrator):
         enable_infra_detection: bool = True,
     ):
         """Initialize CCL with configuration.
-        
+
         Args:
             timeout_ms: Max prefetch time before SLA violation (default 300ms)
             enable_rules_cache: Enable Phase A (rules cache loading)
@@ -146,7 +146,7 @@ class ContextCrystallizationLayer(IOrchestrator):
     def get_intelligence_cache(self) -> Dict[str, Any]:
         """
         Get pre-warmed intelligence context cache (Phase 54 S5 integration).
-        
+
         Returns dict of unified intelligence contexts keyed by intent type:
         {
             "IMPLEMENT": UnifiedIntelligenceContext(...),
@@ -154,7 +154,7 @@ class ContextCrystallizationLayer(IOrchestrator):
             "ANALYZE": UnifiedIntelligenceContext(...),
             "GENERIC": UnifiedIntelligenceContext(...),
         }
-        
+
         Authority: Phase 54 S5 - CCL Intelligence Integration
         """
         return self._intelligence_cache
@@ -167,9 +167,9 @@ class ContextCrystallizationLayer(IOrchestrator):
     ) -> None:
         """
         Start async context prefetch (non-blocking).
-        
+
         Returns immediately. Prefetch runs in background.
-        
+
         Args:
             request_id: Unique request identifier for tracking
             file_path: Optional file path for LENS analysis
@@ -185,7 +185,7 @@ class ContextCrystallizationLayer(IOrchestrator):
         # Create and store coroutine (don't await)
         self._prefetch_coroutine = self._run_prefetch_phases()
 
-        logger.info(f"[CCL] prefetch_async: Returned immediately (non-blocking)")
+        logger.info("[CCL] prefetch_async: Returned immediately (non-blocking)")
 
     async def get_crystallized_context(
         self,
@@ -193,13 +193,13 @@ class ContextCrystallizationLayer(IOrchestrator):
     ) -> Optional[CrystallizedContext]:
         """
         Get crystallized context with timeout.
-        
+
         Waits up to timeout_ms for prefetch completion.
         Returns None if timeout exceeded (graceful fallback).
-        
+
         Args:
             timeout_ms: Max wait time in milliseconds
-            
+
         Returns:
             CrystallizedContext if ready, None if timeout/no prefetch started
         """
@@ -227,19 +227,19 @@ class ContextCrystallizationLayer(IOrchestrator):
     async def _run_prefetch_phases(self) -> CrystallizedContext:
         """
         Run all prefetch phases in parallel.
-        
+
         Phases:
         - Phase A: Rules cache (50ms)
         - Phase B: LENS warmer (100-200ms if file given)
         - Phase C: Infrastructure detection (50ms)
         - Phase D: Intelligence warming (Phase 54 S5 integration, <50ms)
-        
+
         Returns:
             CrystallizedContext with all pre-warmed data
         """
         start_time = asyncio.get_event_loop().time()
 
-        logger.info(f"[CCL._run_prefetch_phases] Starting Phase A/B/C/D parallel execution")
+        logger.info("[CCL._run_prefetch_phases] Starting Phase A/B/C/D parallel execution")
 
         # Run phases in parallel
         tasks = []
@@ -268,13 +268,13 @@ class ContextCrystallizationLayer(IOrchestrator):
         result_idx = 0
         rules_cache_result = results[result_idx] if self.enable_rules_cache else {}
         result_idx += 1 if self.enable_rules_cache else 0
-        
+
         lens_result = results[result_idx] if self.enable_lens_warmer else LENSContext(False, False)
         result_idx += 1 if self.enable_lens_warmer else 0
-        
+
         infra_result = results[result_idx] if self.enable_infra_detection else InfrastructureContext("dev", [])
         result_idx += 1 if self.enable_infra_detection else 0
-        
+
         intelligence_result = results[result_idx] if len(results) > result_idx else {}
 
         # Handle exceptions gracefully
@@ -296,13 +296,13 @@ class ContextCrystallizationLayer(IOrchestrator):
 
         # Store intelligence cache for MCP tool access
         self._intelligence_cache = intelligence_result.get("intelligence_cache", {})
-        
+
         # Create crystallized context (store intelligence in rules_cache for now)
         rules_cache_with_intelligence = {
             **rules_cache_result,
             "_intelligence_context": intelligence_result,
         }
-        
+
         ctx = CrystallizedContext(
             timestamp=datetime.now(),
             rules_cache=rules_cache_with_intelligence,
@@ -374,26 +374,28 @@ class ContextCrystallizationLayer(IOrchestrator):
     async def _phase_d_intelligence_warming(self) -> Dict[str, Any]:
         """
         Phase D: Pre-warm unified intelligence context (Phase 54 S5 integration).
-        
+
         Authority: Phase 54 S5 - CCL Integration enhancement
         Purpose: Cache unified intelligence context for MCP tool calls
         Target: <50ms latency, 70% cache hit rate on repeat calls
-        
+
         Returns:
             Dict with synthesized intelligence context + cache metadata
         """
         try:
             logger.info("[CCL.Phase_D] Pre-warming unified intelligence context...")
-            
-            from cortex.brain.knowledge.knowledge_synthesis_engine import get_synthesis_engine
+
+            from cortex.brain.knowledge.knowledge_synthesis_engine import (
+                get_synthesis_engine,
+            )
             from cortex.mcp.middleware.intelligence_gate import IntelligenceGate
-            
+
             start = asyncio.get_event_loop().time()
-            
+
             # Create synthesis engine and gate
             synthesis_engine = get_synthesis_engine()
             gate = IntelligenceGate(synthesis_engine)
-            
+
             # Synthesize context for common intents
             intelligence_cache = {}
             for intent in ["IMPLEMENT", "FIX", "ANALYZE", "GENERIC"]:
@@ -406,22 +408,22 @@ class ContextCrystallizationLayer(IOrchestrator):
                     logger.debug(f"[CCL.Phase_D] Pre-warmed intelligence for intent: {intent}")
                 except Exception as e:
                     logger.warning(f"[CCL.Phase_D] Failed to warm {intent}: {e}")
-            
+
             # Calculate latency
             latency_ms = int((asyncio.get_event_loop().time() - start) * 1000)
-            
+
             logger.info(
                 f"AC_PHASE54-S5-001: Intelligence warming complete | "
                 f"Latency={latency_ms}ms | Cached_intents={len(intelligence_cache)}"
             )
-            
+
             return {
                 "intelligence_cache": intelligence_cache,
                 "warmup_latency_ms": latency_ms,
                 "cache_hit_count": 0,  # Will be updated during requests
                 "request_id": self._request_id,
             }
-            
+
         except Exception as e:
             logger.error(f"[CCL.Phase_D] Intelligence warming failed: {e}", exc_info=True)
             return {
@@ -437,7 +439,7 @@ class ContextCrystallizationLayer(IOrchestrator):
 
     async def execute(self, request: Dict[str, Any]) -> Dict[str, Any]:
         """Execute CCL prefetch and return status.
-        
+
         IOrchestrator.execute() method.
         """
         request_id = request.get("request_id", "unknown")
@@ -449,7 +451,7 @@ class ContextCrystallizationLayer(IOrchestrator):
 
     def validate(self) -> bool:
         """Validate CCL configuration.
-        
+
         IOrchestrator.validate() method.
         """
         return (
@@ -463,7 +465,7 @@ class ContextCrystallizationLayer(IOrchestrator):
 
     def get_status(self) -> str:
         """Get CCL status.
-        
+
         IOrchestrator.get_status() method.
         """
         if self._prefetch_coroutine is None:
@@ -482,7 +484,7 @@ class ContextCrystallizationLayer(IOrchestrator):
 class MasterOrchestratorCCLIntegration:
     """
     Integration point for MasterOrchestrator.
-    
+
     Adds CCL to MasterOrchestrator with minimal coupling.
     """
 
@@ -490,10 +492,10 @@ class MasterOrchestratorCCLIntegration:
     def add_ccl_to_master() -> ContextCrystallizationLayer:
         """
         Factory method for adding CCL to MasterOrchestrator.
-        
+
         Usage in MasterOrchestrator.__init__():
             self.ccl = MasterOrchestratorCCLIntegration.add_ccl_to_master()
-        
+
         Returns:
             Configured ContextCrystallizationLayer instance
         """
@@ -503,11 +505,11 @@ class MasterOrchestratorCCLIntegration:
             enable_lens_warmer=True,
             enable_infra_detection=True,
         )
-        
+
         logger.info(
             "[MasterOrchestratorCCLIntegration] CCL integrated into MasterOrchestrator"
         )
-        
+
         return ccl
 
     @staticmethod
@@ -519,23 +521,23 @@ class MasterOrchestratorCCLIntegration:
     ):
         """
         Execute CCL prefetch parallel with Stage 1.
-        
+
         Usage in MasterOrchestrator.process():
             ccl.prefetch_async(request_id, file_path)
             stage_1_result = await execute_ccl_prefetch_with_stage_1(
                 ccl, request_id, file_path, stage_1_coroutine
             )
-        
+
         Returns:
             Tuple of (stage_1_result, crystallized_context)
         """
         # Start CCL prefetch (non-blocking)
         ccl.prefetch_async(request_id=request_id, file_path=file_path)
-        
+
         # Run Stage 1 in parallel
         stage_1_result = await stage_1_coro
-        
+
         # Get CCL context (may be ready or timeout)
         ccl_context = await ccl.get_crystallized_context(timeout_ms=250)
-        
+
         return stage_1_result, ccl_context

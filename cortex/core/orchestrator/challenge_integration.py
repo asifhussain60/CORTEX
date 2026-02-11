@@ -10,8 +10,8 @@ Author: Asif Hussain
 """
 
 from dataclasses import dataclass
-from typing import Dict, Any, List, Optional
 from enum import Enum
+from typing import Any, Dict, List, Optional
 
 
 class ChallengeSeverity(Enum):
@@ -20,7 +20,7 @@ class ChallengeSeverity(Enum):
     MEDIUM = "medium"
     HIGH = "high"
     CRITICAL = "critical"
-    
+
     def sort_order(self) -> int:
         """Return sort order (lower = earlier in sorted list)."""
         order = {
@@ -42,7 +42,7 @@ class Challenge:
     parameters: Optional[Dict[str, Any]] = None
     mitigation: Optional[str] = None
     code_context: Optional[str] = None
-    
+
     def __post_init__(self):
         """Post-initialization setup."""
         if self.parameters is None:
@@ -53,7 +53,7 @@ class Challenge:
 
 class ChallengeIntegrationOrchestrator:
     """Orchestrate challenge integration with filtering and sorting."""
-    
+
     def __init__(
         self,
         generator: Optional[Any] = None,
@@ -61,24 +61,24 @@ class ChallengeIntegrationOrchestrator:
     ):
         """
         Initialize orchestrator.
-        
+
         Args:
             generator: Challenge generator (optional for testing)
             confidence_threshold: Minimum confidence to include challenge
         """
         self.generator = generator
         self.confidence_threshold = confidence_threshold
-    
+
     def process_challenges(
         self,
         context: Dict[str, Any],
     ) -> List[Challenge]:
         """
         Process challenges from generator with filtering and sorting.
-        
+
         Args:
             context: Context dict for challenge generation
-        
+
         Returns:
             Sorted list of challenges above confidence threshold
         """
@@ -87,28 +87,28 @@ class ChallengeIntegrationOrchestrator:
             challenges = self.generator.generate_challenges(context)
         else:
             challenges = []
-        
+
         # Filter by confidence threshold
         filtered = [
             c for c in challenges
             if c.confidence >= self.confidence_threshold
         ]
-        
+
         # Sort by severity (CRITICAL first)
         sorted_challenges = sorted(
             filtered,
             key=lambda c: c.severity.sort_order()
         )
-        
+
         return sorted_challenges
-    
+
     def process_challenge(self, challenge: Challenge) -> bool:
         """
         Process single challenge.
-        
+
         Args:
             challenge: Challenge to process
-        
+
         Returns:
             True if processed successfully
         """

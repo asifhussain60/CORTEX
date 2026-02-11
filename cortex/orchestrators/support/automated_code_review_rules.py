@@ -4,13 +4,15 @@ Authority: Phase 52 S2
 AC_START: AC-PHASE52-S2-001
 """
 
+import re
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Optional, Any, Union
-import re
-from cortex.brain.core.result import Ok, Err
-from cortex.orchestrators.core.orchestrator_base_protocol import OrchestratorBaseProtocol
+from typing import Any, Dict, List, Optional, Union
 
+from cortex.brain.core.result import Err, Ok
+from cortex.orchestrators.core.orchestrator_base_protocol import (
+    OrchestratorBaseProtocol,
+)
 
 # ============================================================================
 # DATA MODELS
@@ -133,14 +135,14 @@ class CodeReviewRulesOrchestrator(OrchestratorBaseProtocol):
         """Check code for security violations"""
         try:
             violations = []
-            
+
             for violation_type, pattern_info in SECURITY_PATTERNS.items():
                 for pattern in pattern_info["patterns"]:
                     matches = re.finditer(pattern, code, re.IGNORECASE | re.MULTILINE)
                     for match in matches:
                         # Count line number
                         line_num = code[:match.start()].count('\n') + 1
-                        
+
                         violation = SecurityViolation(
                             type=violation_type,
                             pattern=match.group(0),
@@ -149,7 +151,7 @@ class CodeReviewRulesOrchestrator(OrchestratorBaseProtocol):
                             fix_suggestion=pattern_info["fix"],
                         )
                         violations.append(violation)
-            
+
             return Ok(value=violations)
         except Exception as e:
             return Err(error=f"Security check failed: {str(e)}")
@@ -170,7 +172,7 @@ class CodeReviewRulesOrchestrator(OrchestratorBaseProtocol):
         try:
             violations = []
             lines = code.split('\n')
-            
+
             for i, line in enumerate(lines, 1):
                 # Check line length
                 if len(line) > max_line_length:
@@ -180,7 +182,7 @@ class CodeReviewRulesOrchestrator(OrchestratorBaseProtocol):
                         violation=f"Line exceeds {max_line_length} characters ({len(line)})",
                         fix_suggestion="Break line into multiple lines",
                     ))
-                
+
                 # Check spacing around operators (PEP8)
                 if "=" in line and language == "python":
                     if re.search(r'\w=\w', line) and "==" not in line:
@@ -190,7 +192,7 @@ class CodeReviewRulesOrchestrator(OrchestratorBaseProtocol):
                             violation="Missing spaces around operator",
                             fix_suggestion="Add spaces: x = 1 instead of x=1",
                         ))
-                
+
                 # Check operator spacing
                 if re.search(r'\w\*\w|\w\+\w', line) and "**" not in line:
                     violations.append(StyleViolation(
@@ -199,7 +201,7 @@ class CodeReviewRulesOrchestrator(OrchestratorBaseProtocol):
                         violation="Missing spaces around operator",
                         fix_suggestion="Add spaces around operators",
                     ))
-                
+
                 # Check naming convention (but exclude ALL_CAPS constants)
                 if language == "python":
                     match = re.match(r'\s*(\w+)\s*=', line)
@@ -214,7 +216,7 @@ class CodeReviewRulesOrchestrator(OrchestratorBaseProtocol):
                                     violation="Variable should use snake_case not CamelCase",
                                     fix_suggestion="Use lowercase_with_underscores",
                                 ))
-                
+
                 # Check missing type hints
                 if require_type_hints and "def " in line and "->" not in line:
                     violations.append(StyleViolation(
@@ -223,7 +225,7 @@ class CodeReviewRulesOrchestrator(OrchestratorBaseProtocol):
                         violation="Function missing type hints",
                         fix_suggestion="Add type hints: def func(x: int) -> int:",
                     ))
-                
+
                 # Check missing docstring
                 if require_docstrings and line.strip().startswith("def "):
                     if i < len(lines) - 1:
@@ -235,7 +237,7 @@ class CodeReviewRulesOrchestrator(OrchestratorBaseProtocol):
                                 violation="Function missing docstring",
                                 fix_suggestion='Add docstring after function definition',
                             ))
-            
+
             return Ok(value=violations)
         except Exception as e:
             return Err(error=f"Style check failed: {str(e)}")
@@ -254,10 +256,10 @@ class CodeReviewRulesOrchestrator(OrchestratorBaseProtocol):
         try:
             delta = baseline_coverage - pr_coverage
             acceptable = delta <= threshold
-            
+
             if not acceptable:
                 return Err(error=f"Coverage dropped {delta:.1%} (baseline {baseline_coverage:.1%} -> PR {pr_coverage:.1%}), exceeds {threshold:.1%} threshold")
-            
+
             return Ok(value={
                 "delta": delta,
                 "acceptable": acceptable,
@@ -283,10 +285,10 @@ class CodeReviewRulesOrchestrator(OrchestratorBaseProtocol):
         """Check coverage for specific files"""
         try:
             below_threshold = {f: c for f, c in file_coverage.items() if c < threshold}
-            
+
             if below_threshold:
                 return Err(error=f"Files below {threshold:.1%} threshold: {below_threshold}")
-            
+
             return Ok(value={"all_acceptable": True, "file_coverage": file_coverage})
         except Exception as e:
             return Err(error=f"File coverage check failed: {str(e)}")
@@ -300,7 +302,7 @@ class CodeReviewRulesOrchestrator(OrchestratorBaseProtocol):
         try:
             violations = []
             lines = code.split('\n')
-            
+
             # Check type hints requirement
             if standards.get("require_type_hints"):
                 for i, line in enumerate(lines, 1):
@@ -311,7 +313,7 @@ class CodeReviewRulesOrchestrator(OrchestratorBaseProtocol):
                             location=f"Line {i}",
                             fix_suggestion="Add type hints: def func(x: int) -> int:",
                         ))
-            
+
             # Check docstring requirement
             if standards.get("require_docstrings"):
                 for i, line in enumerate(lines, 1):
@@ -325,7 +327,7 @@ class CodeReviewRulesOrchestrator(OrchestratorBaseProtocol):
                                     location=f"Line {i}",
                                     fix_suggestion='Add docstring with triple quotes',
                                 ))
-            
+
             # Check forbidden imports
             if standards.get("forbidden_imports"):
                 for forbidden in standards.get("forbidden_imports"):
@@ -337,7 +339,7 @@ class CodeReviewRulesOrchestrator(OrchestratorBaseProtocol):
                                 location=f"Line {i}",
                                 fix_suggestion=f"Remove import of {forbidden}",
                             ))
-            
+
             # Check forbidden calls
             if standards.get("forbidden_calls"):
                 for forbidden in standards.get("forbidden_calls"):
@@ -349,7 +351,7 @@ class CodeReviewRulesOrchestrator(OrchestratorBaseProtocol):
                                 location=f"Line {i}",
                                 fix_suggestion=f"Remove call to {forbidden}",
                             ))
-            
+
             # Check max function length
             if standards.get("max_function_lines"):
                 max_lines = standards.get("max_function_lines")
@@ -368,7 +370,7 @@ class CodeReviewRulesOrchestrator(OrchestratorBaseProtocol):
                                 fix_suggestion=f"Function exceeds {max_lines} lines, consider breaking it up",
                             ))
                         in_function = False
-            
+
             return Ok(value=violations)
         except Exception as e:
             return Err(error=f"Standards check failed: {str(e)}")
@@ -381,7 +383,7 @@ class CodeReviewRulesOrchestrator(OrchestratorBaseProtocol):
         """Generate fix suggestions for violations"""
         try:
             suggestions = []
-            
+
             if violation_type == "spacing":
                 # Generate spacing fix
                 fixed = re.sub(r'(\w)=(\w)', r'\1 = \2', code)
@@ -393,7 +395,7 @@ class CodeReviewRulesOrchestrator(OrchestratorBaseProtocol):
                         explanation="Added spaces around operator",
                         difficulty="easy",
                     ))
-            
+
             elif violation_type == "missing_type_hints":
                 # Generate type hint fix
                 if "def " in code:
@@ -405,7 +407,7 @@ class CodeReviewRulesOrchestrator(OrchestratorBaseProtocol):
                         explanation="Added basic type hints",
                         difficulty="easy",
                     ))
-            
+
             elif violation_type == "hardcoded_secret":
                 # Generate secret fix
                 fixed = 'API_KEY = os.environ.get("API_KEY")'
@@ -416,7 +418,7 @@ class CodeReviewRulesOrchestrator(OrchestratorBaseProtocol):
                     explanation="Use environment variables for secrets",
                     difficulty="easy",
                 ))
-            
+
             return Ok(value=suggestions)
         except Exception as e:
             return Err(error=f"Fix suggestion generation failed: {str(e)}")
@@ -425,19 +427,19 @@ class CodeReviewRulesOrchestrator(OrchestratorBaseProtocol):
         """Generate all applicable fix suggestions"""
         try:
             suggestions = []
-            
+
             # Check for spacing issues
             if re.search(r'\w=\w', code):
                 result = self.generate_fix_suggestions(code, "spacing")
                 if result.is_ok():
                     suggestions.extend(result.unwrap())
-            
+
             # Check for missing type hints
             if "def " in code and "->" not in code:
                 result = self.generate_fix_suggestions(code, "missing_type_hints")
                 if result.is_ok():
                     suggestions.extend(result.unwrap())
-            
+
             return Ok(value=suggestions)
         except Exception as e:
             return Err(error=f"Fix suggestion generation failed: {str(e)}")
@@ -451,12 +453,12 @@ class CodeReviewRulesOrchestrator(OrchestratorBaseProtocol):
         try:
             security_result = self.check_security_violations(code)
             style_result = self.check_style_violations(code)
-            
+
             security_issues = security_result.unwrap() if security_result.is_ok() else []
             style_issues = style_result.unwrap() if style_result.is_ok() else []
-            
+
             total_issues = len(security_issues) + len(style_issues)
-            
+
             review = CodeReview(
                 has_issues=total_issues > 0,
                 security_issues=security_issues,
@@ -465,7 +467,7 @@ class CodeReviewRulesOrchestrator(OrchestratorBaseProtocol):
                 compliance_issues=[],
                 total_issues=total_issues,
             )
-            
+
             return Ok(value=review)
         except Exception as e:
             return Err(error=f"Comprehensive review failed: {str(e)}")
@@ -482,10 +484,10 @@ class CodeReviewRulesOrchestrator(OrchestratorBaseProtocol):
             code = context.get("code", "")
             if not code:
                 return Err(error="Code not provided in context")
-            
+
             # Perform comprehensive code review
             review_result = self.review_code_comprehensive(code)
-            
+
             return review_result
         except Exception as e:
             return Err(error=f"Domain logic execution failed: {str(e)}")

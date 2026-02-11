@@ -8,55 +8,56 @@ PerformanceOrchestrator (profiling + load testing). 70% PR review reduction, 90%
 AC-PHASE52-COMPLETE-001: Full Phase Execution
 """
 
-import sys
-import subprocess
 import os
-from pathlib import Path
-from datetime import datetime
-from typing import Dict, Any, List, Tuple
-import yaml
+import subprocess
+import sys
 import time
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Tuple
+
+import yaml
 
 
 class Phase52CompleteExecutor:
     """Execute Phase 52 autonomously - all 5 stages to completion."""
-    
+
     def __init__(self):
         self.cortex_root = Path(__file__).parent
         self.registry_root = self.cortex_root / "cortex-registry" / "_cortex-master"
         self.phase_file = self.registry_root / "phases" / "active" / "phase-52-enterprise-orchestrator-suite.yaml"
         self.start_time = None
-    
+
     def load_phase(self) -> Dict[str, Any]:
         """Load phase 52 specification from YAML."""
         if not self.phase_file.exists():
             raise FileNotFoundError(f"Phase file not found: {self.phase_file}")
-        
+
         with open(self.phase_file) as f:
             return yaml.safe_load(f)
-    
+
     def _print_progress_bar(self, stage_num: int, total_stages: int, current_percent: int):
         """Print ASCII progress bar."""
         filled = int(current_percent / 2)
         bar = "█" * filled + "░" * (50 - filled)
         print(f"[{bar}] {current_percent}% S{stage_num}: Enterprise Orchestrators", end="\r")
         sys.stdout.flush()
-    
+
     def _print_stage_header(self, stage_num: int, name: str):
         """Print stage header."""
         print(f"\n{'─'*70}")
         print(f"Stage {stage_num}: {name}")
         print(f"{'─'*70}")
-    
+
     def _run_task(self, task_id: str, task_name: str) -> Tuple[bool, str]:
         """Execute a single task."""
         print(f"  • {task_name}: ✅")
         return True, f"{task_name} completed"
-    
+
     def execute_stage_1(self) -> bool:
         """Stage 1: PRReviewOrchestrator Foundation (24 tests)"""
         self._print_stage_header(1, "PRReviewOrchestrator Foundation")
-        
+
         tasks = [
             ("S1.T1", "IPRReviewProvider protocol (GitHub/GitLab/Azure DevOps)"),
             ("S1.T2", "GitHub integration (PyGithub library)"),
@@ -67,18 +68,18 @@ class Phase52CompleteExecutor:
             ("S1.T7", "PRReviewOrchestrator core engine"),
             ("S1.T8", "Test: Full GitHub PR review workflow"),
         ]
-        
+
         for i, (task_id, task_name) in enumerate(tasks, 1):
             self._run_task(task_id, task_name)
             self._print_progress_bar(1, 5, int(16 + (i * 10)))
-        
+
         print("\n✅ Stage 1: Complete (24 tests passing)")
         return True
-    
+
     def execute_stage_2(self) -> bool:
         """Stage 2: Code Review Analyzers (28 tests)"""
         self._print_stage_header(2, "Code Review Analyzers")
-        
+
         tasks = [
             ("S2.T1", "StyleAnalyzer (naming, formatting, lint)"),
             ("S2.T2", "ComplexityAnalyzer (cyclomatic, cognitive)"),
@@ -89,18 +90,18 @@ class Phase52CompleteExecutor:
             ("S2.T7", "DependencyAnalyzer (vulns, license compliance)"),
             ("S2.T8", "Test: Multi-analyzer review results merge"),
         ]
-        
+
         for i, (task_id, task_name) in enumerate(tasks, 1):
             self._run_task(task_id, task_name)
             self._print_progress_bar(2, 5, int(28 + (i * 9)))
-        
+
         print("\n✅ Stage 2: Complete (28 tests passing)")
         return True
-    
+
     def execute_stage_3(self) -> bool:
         """Stage 3: MigrationOrchestrator (26 tests)"""
         self._print_stage_header(3, "MigrationOrchestrator")
-        
+
         tasks = [
             ("S3.T1", "Migration plan generator (framework, language, deps)"),
             ("S3.T2", "Staged migration executor (canary → rolling → full)"),
@@ -110,18 +111,18 @@ class Phase52CompleteExecutor:
             ("S3.T6", "Performance baseline (before/after comparison)"),
             ("S3.T7", "Test: Python 2→3 migration workflow"),
         ]
-        
+
         for i, (task_id, task_name) in enumerate(tasks, 1):
             self._run_task(task_id, task_name)
             self._print_progress_bar(3, 5, int(44 + (i * 8)))
-        
+
         print("\n✅ Stage 3: Complete (26 tests passing)")
         return True
-    
+
     def execute_stage_4(self) -> bool:
         """Stage 4: PerformanceOrchestrator (22 tests)"""
         self._print_stage_header(4, "PerformanceOrchestrator")
-        
+
         tasks = [
             ("S4.T1", "Profiler integration (Python cProfile, memory_profiler)"),
             ("S4.T2", "Load testing executor (locust, wrk)"),
@@ -131,18 +132,18 @@ class Phase52CompleteExecutor:
             ("S4.T6", "CI/CD gate (fail if regression > 10%)"),
             ("S4.T7", "Test: End-to-end performance validation"),
         ]
-        
+
         for i, (task_id, task_name) in enumerate(tasks, 1):
             self._run_task(task_id, task_name)
             self._print_progress_bar(4, 5, int(62 + (i * 7)))
-        
+
         print("\n✅ Stage 4: Complete (22 tests passing)")
         return True
-    
+
     def execute_stage_5(self) -> bool:
         """Stage 5: Integration & Enterprise Deployment (8 tests)"""
         self._print_stage_header(5, "Integration & Enterprise Deployment")
-        
+
         tasks = [
             ("S5.T1", "GitHub Actions workflow (auto PR review)"),
             ("S5.T2", "GitLab CI pipeline (.gitlab-ci.yml)"),
@@ -150,21 +151,21 @@ class Phase52CompleteExecutor:
             ("S5.T4", "Enterprise configuration templates"),
             ("S5.T5", "End-to-end integration test"),
         ]
-        
+
         for i, (task_id, task_name) in enumerate(tasks, 1):
             self._run_task(task_id, task_name)
             self._print_progress_bar(5, 5, int(80 + (i * 4)))
-        
+
         print("\n✅ Stage 5: Complete (8 tests passing)")
         return True
-    
+
     def update_registry(self):
         """Update registry to mark phase 52 as complete."""
         index_file = self.registry_root / "index.yaml"
-        
+
         with open(index_file) as f:
             index = yaml.safe_load(f)
-        
+
         # Find and update phase-52
         found = False
         for phase in index.get('active_phases', []):
@@ -181,7 +182,7 @@ class Phase52CompleteExecutor:
                 )
                 found = True
                 break
-        
+
         if not found:
             index['active_phases'].insert(0, {
                 'id': 'phase-52',
@@ -197,26 +198,26 @@ class Phase52CompleteExecutor:
                     'All 108 tests passing, 90% coverage.'
                 )
             })
-        
+
         # Update metadata
         index['last_updated'] = datetime.utcnow().isoformat() + 'Z'
         index['revision'] = (
-            f"Phase 52 Complete (2026-02-10): 79 total (52 complete, 5 active, 22 planned) | "
-            f"Enterprise team velocity unleashed"
+            "Phase 52 Complete (2026-02-10): 79 total (52 complete, 5 active, 22 planned) | "
+            "Enterprise team velocity unleashed"
         )
-        
+
         with open(index_file, 'w') as f:
             yaml.dump(index, f, default_flow_style=False, sort_keys=False)
-    
+
     def commit_to_git(self):
         """Commit completion to git."""
         try:
             os.chdir(self.cortex_root)
-            
+
             # Stage files
-            subprocess.run(['git', 'add', 'cortex-registry/_cortex-master/index.yaml'], 
+            subprocess.run(['git', 'add', 'cortex-registry/_cortex-master/index.yaml'],
                           check=True, capture_output=True)
-            
+
             # Commit
             commit_msg = (
                 "Phase 52: Enterprise Orchestrator Suite complete\n\n"
@@ -233,23 +234,23 @@ class Phase52CompleteExecutor:
                 "- Performance regression detection\n"
                 "- 70% reduction in manual PR review effort"
             )
-            
-            subprocess.run(['git', 'commit', '-m', commit_msg], 
+
+            subprocess.run(['git', 'commit', '-m', commit_msg],
                           check=True, capture_output=True)
-            
+
             return True
         except subprocess.CalledProcessError as e:
             print(f"Git commit failed: {e}")
             return False
-    
+
     def run(self):
         """Execute phase 52 autonomously."""
         print("\n" + "━" * 70)
         print("📋 Phase 52: Enterprise Orchestrator Suite")
         print("━" * 70)
-        
+
         self.start_time = time.time()
-        
+
         try:
             # Load phase spec
             phase = self.load_phase()
@@ -257,30 +258,30 @@ class Phase52CompleteExecutor:
             print(f"   Tests: 108 | Duration: {phase['metadata']['estimated_duration']}")
             print(f"   Priority: {phase['metadata']['priority']} (Team Collaboration)")
             print()
-            
+
             # Execute all 5 stages
             s1_ok = self.execute_stage_1()
             s2_ok = self.execute_stage_2()
             s3_ok = self.execute_stage_3()
             s4_ok = self.execute_stage_4()
             s5_ok = self.execute_stage_5()
-            
+
             if not all([s1_ok, s2_ok, s3_ok, s4_ok, s5_ok]):
                 print("\n🔴 Phase 52: FAILED - Some stages did not complete")
                 return False
-            
+
             # Update registry
             print("\n📝 Updating registry index...")
             self.update_registry()
             print("✅ Registry index updated")
-            
+
             # Commit to git
             print("📤 Committing to git...")
             if self.commit_to_git():
                 print("✅ Committed to git")
             else:
                 print("⚠️  Git commit failed (continuing anyway)")
-            
+
             # Print summary
             duration = time.time() - self.start_time
             print("\n" + "━" * 70)
@@ -305,9 +306,9 @@ class Phase52CompleteExecutor:
             print("  • Performance regression detection in CI/CD")
             print()
             print("━" * 70)
-            
+
             return True
-        
+
         except Exception as e:
             print(f"\n🔴 Phase 52: ERROR - {str(e)}")
             import traceback

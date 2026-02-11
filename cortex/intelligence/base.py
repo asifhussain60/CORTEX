@@ -6,11 +6,11 @@ Abstract base class enforcing contract for all intelligence engines.
 Authority: Phase 56 - LENS/Intelligence Hybrid Architecture
 """
 
+import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 class AnalysisContext:
     """
     Context for intelligence analysis.
-    
+
     Attributes:
         file_path: Primary file being analyzed
         workspace_root: Root of workspace
@@ -38,7 +38,7 @@ class AnalysisContext:
 class AnalysisResult:
     """
     Result from intelligence analysis.
-    
+
     Attributes:
         engine_name: Name of engine that produced result
         data: Analysis data (engine-specific)
@@ -54,7 +54,7 @@ class AnalysisResult:
 class BaseIntelligenceEngine(ABC):
     """
     Abstract base class for intelligence engines.
-    
+
     All intelligence engines must:
     1. Inherit from BaseIntelligenceEngine
     2. Implement analyze() method
@@ -63,72 +63,72 @@ class BaseIntelligenceEngine(ABC):
     5. Never import from cortex.lens (prevents circular deps)
     6. Return AnalysisResult with standardized format
     """
-    
+
     def __init__(self, engine_name: str):
         """
         Initialize intelligence engine.
-        
+
         Args:
             engine_name: Human-readable name for this engine
         """
         self.engine_name = engine_name
         self.logger = logging.getLogger(f"{__name__}.{engine_name}")
-    
+
     @abstractmethod
     def analyze(self, context: AnalysisContext) -> AnalysisResult:
         """
         Analyze code and return intelligence.
-        
+
         Args:
             context: Analysis context with file path, workspace, config
-            
+
         Returns:
             AnalysisResult with standardized data format
-            
+
         Raises:
             ValueError: If context validation fails
         """
         pass
-    
+
     @abstractmethod
     def validate_context(self, context: AnalysisContext) -> bool:
         """
         Validate that context is suitable for analysis.
-        
+
         Args:
             context: Analysis context to validate
-            
+
         Returns:
             True if context is valid
-            
+
         Raises:
             ValueError: If context is invalid
         """
         pass
-    
+
     def analyze_async(self, context: AnalysisContext) -> AnalysisResult:
         """
         Async version of analyze() (optional).
-        
+
         Default implementation delegates to sync analyze().
         Override for true async implementations.
-        
+
         Args:
             context: Analysis context
-            
+
         Returns:
             AnalysisResult
         """
         return self.analyze(context)
-    
+
     def _create_result(self, data: Dict[str, Any], cache_hit: bool = False) -> AnalysisResult:
         """
         Helper to create standardized result.
-        
+
         Args:
             data: Engine-specific analysis data
             cache_hit: Whether this came from cache
-            
+
         Returns:
             AnalysisResult with metadata
         """
@@ -141,14 +141,14 @@ class BaseIntelligenceEngine(ABC):
             },
             cache_hit=cache_hit,
         )
-    
+
     def _error_result(self, error: Exception) -> AnalysisResult:
         """
         Helper to create error result.
-        
+
         Args:
             error: Exception that occurred
-            
+
         Returns:
             AnalysisResult with error metadata
         """

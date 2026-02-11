@@ -17,7 +17,7 @@ import hashlib
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Any, Dict, List, Optional
 
 
 class RepoType(Enum):
@@ -39,7 +39,7 @@ class InquiryCategory(Enum):
 @dataclass
 class RepoContext:
     """Repository context from detection.
-    
+
     Attributes:
         repo_type: Classified repository type (CORTEX or USER_REPO)
         repo_path: Absolute path to repository root
@@ -54,28 +54,28 @@ class RepoContext:
     git_remote: Optional[str] = None
     detection_confidence: float = 0.0
     detection_signals: Dict[str, Any] = field(default_factory=dict)
-    
+
     def is_cortex_repo(self) -> bool:
         """Check if this is CORTEX repository.
-        
+
         Returns:
             True if CORTEX, False otherwise
         """
         return self.repo_type == RepoType.CORTEX
-    
+
     def get_cache_key(self, question: str) -> str:
         """Generate repo-scoped cache key.
-        
+
         Args:
             question: Question text
-            
+
         Returns:
             Unique cache key scoped to repository
         """
         # Normalize question
         normalized = question.lower().strip()
         question_hash = hashlib.md5(normalized.encode()).hexdigest()[:8]
-        
+
         # Repo-scoped key
         return f"{self.repo_name}:{question_hash}"
 
@@ -83,7 +83,7 @@ class RepoContext:
 @dataclass
 class EvidenceSource:
     """Code evidence source reference.
-    
+
     Attributes:
         file_path: Relative path to file
         line_number: Line number in file
@@ -94,10 +94,10 @@ class EvidenceSource:
     line_number: int
     content: str
     source_type: str = "code"
-    
+
     def format_reference(self) -> str:
         """Format evidence as file:line reference.
-        
+
         Returns:
             Formatted string like "file.py:123"
         """
@@ -107,7 +107,7 @@ class EvidenceSource:
 @dataclass
 class AssembledContext:
     """Complete assembled context for inquiry handlers.
-    
+
     Attributes:
         question: Original question text
         repo_context: Repository detection context
@@ -128,32 +128,32 @@ class AssembledContext:
     core_rules: Optional[List[str]] = None
     cache_hit: bool = False
     metadata: Dict[str, Any] = field(default_factory=dict)
-    
+
     def has_high_confidence(self, threshold: float = 0.85) -> bool:
         """Check if confidence exceeds threshold.
-        
+
         Args:
             threshold: Confidence threshold (default 0.85)
-            
+
         Returns:
             True if confidence >= threshold
         """
         return self.confidence >= threshold
-    
+
     def is_cortex_question(self) -> bool:
         """Check if question is about CORTEX.
-        
+
         Returns:
             True if CORTEX repo detected
         """
         return self.repo_context.is_cortex_repo()
-    
+
     def to_cacheable(self) -> Dict[str, Any]:
         """Serialize to cacheable dictionary.
-        
+
         Converts AssembledContext to dictionary for cache storage.
         Excludes repo_context (provided at deserialization) and cache_hit flag.
-        
+
         Returns:
             Dictionary suitable for JSON serialization
         """
@@ -174,7 +174,7 @@ class AssembledContext:
             "core_rules": self.core_rules,
             "metadata": self.metadata,
         }
-    
+
     @classmethod
     def from_cache(
         cls,
@@ -182,14 +182,14 @@ class AssembledContext:
         repo_context: RepoContext,
     ) -> "AssembledContext":
         """Deserialize from cached dictionary.
-        
+
         Reconstructs AssembledContext from cached data. Sets cache_hit=True
         to indicate this context came from cache.
-        
+
         Args:
             cached_data: Cached dictionary from to_cacheable()
             repo_context: Repository context (not cached)
-            
+
         Returns:
             Reconstructed AssembledContext with cache_hit=True
         """
@@ -203,10 +203,10 @@ class AssembledContext:
             )
             for ev in cached_data.get("evidence_sources", [])
         ]
-        
+
         # Reconstruct category enum
         category = InquiryCategory(cached_data["category"])
-        
+
         return cls(
             question=cached_data["question"],
             repo_context=repo_context,

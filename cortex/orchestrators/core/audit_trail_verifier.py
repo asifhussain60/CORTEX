@@ -27,14 +27,14 @@ Authority: AC-PLANNING-REFINE-COMPLETE
 """
 
 from dataclasses import dataclass
-from typing import List, Dict, Any, Optional
 from datetime import datetime
 from enum import Enum
+from typing import Any, Dict, List, Optional
 
 from cortex.orchestrators.core.planning_audit_trail import (
-    PlanningAuditTrail,
-    AuditLogEntry,
     AuditEventType,
+    AuditLogEntry,
+    PlanningAuditTrail,
 )
 
 

@@ -17,17 +17,17 @@ Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 
 from __future__ import annotations
 
-from typing import Dict, List, Any
+import logging
 from dataclasses import dataclass
 from enum import Enum, auto
-import logging
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
 
 class PatternType(Enum):
     """Type of pattern extracted."""
-    
+
     TECHNICAL = auto()
     BUSINESS = auto()
     GOVERNANCE = auto()
@@ -38,7 +38,7 @@ class PatternType(Enum):
 @dataclass
 class ExtractedPattern:
     """Pattern extracted from operation."""
-    
+
     pattern_type: PatternType
     description: str
     data: Dict[str, Any]
@@ -50,10 +50,10 @@ class ExtractedPattern:
 class PatternExtractor:
     """
     Extracts reusable patterns from orchestrator operation results.
-    
+
     AC-PHASE71-004: Pattern extraction logic
     """
-    
+
     def __init__(self):
         """Initialize pattern extractor."""
         # Orchestrator-specific extractors
@@ -64,7 +64,7 @@ class PatternExtractor:
             "EnforcementOrchestrator": self._extract_governance_patterns,
             "MasterOrchestrator": self._extract_coordination_patterns,
         }
-    
+
     def extract_patterns(
         self,
         orchestrator: str,
@@ -74,19 +74,19 @@ class PatternExtractor:
     ) -> List[ExtractedPattern]:
         """
         Extract patterns from operation result.
-        
+
         Args:
             orchestrator: Orchestrator name
             operation: Operation performed
             context: Operation context
             result: Operation result
-        
+
         Returns:
             List of extracted patterns
         """
         # Get orchestrator-specific extractor
         extractor = self._extractors.get(orchestrator, self._extract_generic_patterns)
-        
+
         try:
             patterns = extractor(operation, context, result)
             logger.debug(f"Extracted {len(patterns)} patterns from {orchestrator}.{operation}")
@@ -94,7 +94,7 @@ class PatternExtractor:
         except Exception as e:
             logger.warning(f"Pattern extraction failed: {e}")
             return []
-    
+
     def _extract_tdd_patterns(
         self,
         operation: str,
@@ -103,7 +103,7 @@ class PatternExtractor:
     ) -> List[ExtractedPattern]:
         """Extract patterns from TDDOrchestrator operations."""
         patterns: List[ExtractedPattern] = []
-        
+
         # Extract test patterns
         if "test_patterns" in result or "guidance_patterns" in result:
             test_patterns = result.get("test_patterns") or result.get("guidance_patterns", [])
@@ -116,7 +116,7 @@ class PatternExtractor:
                     source_orchestrator="TDDOrchestrator",
                     source_operation=operation
                 ))
-        
+
         # Extract refactoring operations
         if operation == "refactor" and "refactoring_result" in result:
             refactoring_data = result["refactoring_result"]
@@ -129,9 +129,9 @@ class PatternExtractor:
                     source_orchestrator="TDDOrchestrator",
                     source_operation=operation
                 ))
-        
+
         return patterns
-    
+
     def _extract_refactoring_patterns(
         self,
         operation: str,
@@ -140,7 +140,7 @@ class PatternExtractor:
     ) -> List[ExtractedPattern]:
         """Extract patterns from RefactoringOrchestrator operations."""
         patterns: List[ExtractedPattern] = []
-        
+
         # Extract code smell patterns
         if "code_smells" in result:
             smells = result["code_smells"]
@@ -153,7 +153,7 @@ class PatternExtractor:
                     source_orchestrator="RefactoringOrchestrator",
                     source_operation=operation
                 ))
-        
+
         # Extract successful refactoring operations
         if result.get("success"):
             patterns.append(ExtractedPattern(
@@ -164,9 +164,9 @@ class PatternExtractor:
                 source_orchestrator="RefactoringOrchestrator",
                 source_operation=operation
             ))
-        
+
         return patterns
-    
+
     def _extract_interaction_patterns(
         self,
         operation: str,
@@ -175,7 +175,7 @@ class PatternExtractor:
     ) -> List[ExtractedPattern]:
         """Extract patterns from InteractionOrchestrator operations."""
         patterns: List[ExtractedPattern] = []
-        
+
         # Extract user choice patterns (if challenge was presented)
         if "challenge" in result and "user_choice" in context:
             patterns.append(ExtractedPattern(
@@ -190,7 +190,7 @@ class PatternExtractor:
                 source_orchestrator="InteractionOrchestrator",
                 source_operation=operation
             ))
-        
+
         # Extract user corrections
         if context.get("correction_detected"):
             patterns.append(ExtractedPattern(
@@ -201,9 +201,9 @@ class PatternExtractor:
                 source_orchestrator="InteractionOrchestrator",
                 source_operation=operation
             ))
-        
+
         return patterns
-    
+
     def _extract_governance_patterns(
         self,
         operation: str,
@@ -212,7 +212,7 @@ class PatternExtractor:
     ) -> List[ExtractedPattern]:
         """Extract patterns from EnforcementOrchestrator operations."""
         patterns: List[ExtractedPattern] = []
-        
+
         # Extract violation patterns
         if "violations" in result:
             violations = result["violations"]
@@ -225,9 +225,9 @@ class PatternExtractor:
                     source_orchestrator="EnforcementOrchestrator",
                     source_operation=operation
                 ))
-        
+
         return patterns
-    
+
     def _extract_coordination_patterns(
         self,
         operation: str,
@@ -236,7 +236,7 @@ class PatternExtractor:
     ) -> List[ExtractedPattern]:
         """Extract patterns from MasterOrchestrator operations."""
         patterns: List[ExtractedPattern] = []
-        
+
         # Extract orchestrator routing patterns
         if "orchestrator_selected" in result:
             patterns.append(ExtractedPattern(
@@ -247,9 +247,9 @@ class PatternExtractor:
                 source_orchestrator="MasterOrchestrator",
                 source_operation=operation
             ))
-        
+
         return patterns
-    
+
     def _extract_generic_patterns(
         self,
         operation: str,

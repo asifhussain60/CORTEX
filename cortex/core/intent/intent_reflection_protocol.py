@@ -7,10 +7,10 @@ presents a comprehensive comprehension document to the user for approval.
 PHASE-07: Holistic Intent Router Intelligence
 """
 
-from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
+from typing import Any, Dict, List, Optional
 
 from cortex.brain.core.intent.comprehension_yaml import (
     CanonicalIntentComposer,
@@ -31,7 +31,7 @@ class ReflectionStatus(Enum):
 @dataclass
 class ReflectionRequest:
     """Request for intent reflection.
-    
+
     Attributes:
         user_request: The user's original request text.
         focal_point: The primary file or location of interest.
@@ -51,11 +51,11 @@ class ReflectionRequest:
 @dataclass
 class AuditEntry:
     """Audit log entry for tracking intent reflection operations."""
-    
+
     operation: str
     timestamp: str
     details: Dict[str, Any] = field(default_factory=dict)
-    
+
     def get(self, key: str, default: Any = None) -> Any:
         """Get attribute with dict-like access."""
         if key == "operation":
@@ -65,22 +65,22 @@ class AuditEntry:
         elif key == "details":
             return self.details
         return default
-    
+
     def __getitem__(self, key: str):
         """Dict-like subscript access."""
         result = self.get(key)
         if result is None:
             raise KeyError(key)
         return result
-    
+
     def __contains__(self, key: str) -> bool:
         """Dict-like 'in' operator support."""
         return key in ["operation", "timestamp", "details"]
-    
+
     def __iter__(self):
         """Make iterable over keys."""
         return iter(["operation", "timestamp", "details"])
-    
+
     def __hash__(self):
         """Make AuditEntry hashable for use in sets/dicts."""
         return hash((self.operation, self.timestamp))
@@ -89,7 +89,7 @@ class AuditEntry:
 @dataclass
 class ReflectionResponse:
     """Response from intent reflection.
-    
+
     Attributes:
         status: The status of the reflection.
         message: Human-readable message about the result.
@@ -127,10 +127,10 @@ class ReflectionResponse:
     requires_confirmation: bool = False
     confidence: float = 1.0
     ready_for_execution: bool = False
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert response to dictionary.
-        
+
         Returns:
             Dictionary representation.
         """
@@ -148,26 +148,26 @@ class ReflectionResponse:
 
 class IntentReflectionEngine:
     """Engine for processing intent reflections.
-    
+
     Orchestrates Master → Interaction delegation pattern.
     Validates user intents against governance rules.
     """
-    
+
     def __init__(self) -> None:
         """Initialize the reflection engine."""
         self._pending_requests: Dict[str, ReflectionRequest] = {}
         self._composer = CanonicalIntentComposer()
         self._audit_trail: List[AuditEntry] = []
-    
+
     def reflect(self, request: ReflectionRequest) -> ReflectionResponse:
         """Process a reflection request.
-        
+
         Args:
             request: The reflection request to process.
-            
+
         Raises:
             ValueError: If request validation fails.
-            
+
         Returns:
             ReflectionResponse with the result.
         """
@@ -179,15 +179,15 @@ class IntentReflectionEngine:
             details={"focal_point": request.focal_point}
         )
         audit_entries = [start_audit]
-        
+
         # Basic validation
         if not request.user_request:
             raise ValueError("Empty user request")
-        
+
         # Build context (mocked for now - in production would call HolisticContextBuilder)
         context_built_time = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
         context_sources = ["AST", "Git", "Comments", "Relationships"]
-        
+
         # Canonicalize intent
         canonicalized_intent = {
             "intent_id": f"intent_{request.target_name}_{request.timestamp}",
@@ -201,13 +201,13 @@ class IntentReflectionEngine:
             "keywords": request.user_request.split(),
             "needs_clarification": False,
         }
-        
+
         # Generate challenges (mocked - would call ChallengeGenerator)
         challenges = []
-        
+
         # Generate recommendations (mocked - would call RecommendationEngine)
         recommendations = []
-        
+
         # Generate comprehension YAML
         yaml_obj = self._composer.compose(
             intent_dict=canonicalized_intent,
@@ -215,7 +215,7 @@ class IntentReflectionEngine:
             recommendations=recommendations,
         )
         comprehension_yaml = self._composer.to_yaml_string(yaml_obj)
-        
+
         # Record reflection complete
         reflected_at = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
         complete_audit = AuditEntry(
@@ -224,12 +224,12 @@ class IntentReflectionEngine:
             details={"status": "PENDING_CONFIRMATION"}
         )
         audit_entries.append(complete_audit)
-        
+
         # Store pending request
         request_id = f"{request.target_name}_{request.timestamp}"
         self._pending_requests[request_id] = request
         self._audit_trail.extend(audit_entries)
-        
+
         # Return response pending confirmation
         return ReflectionResponse(
             status=ReflectionStatus.PENDING_CONFIRMATION,
@@ -248,13 +248,13 @@ class IntentReflectionEngine:
             requires_confirmation=True,
             confidence=0.95,
         )
-    
+
     def approve(self, response_or_id) -> ReflectionResponse:
         """Manually approve a pending request.
-        
+
         Args:
             response_or_id: ReflectionResponse object or request ID string.
-            
+
         Returns:
             ReflectionResponse confirming approval.
         """
@@ -269,10 +269,10 @@ class IntentReflectionEngine:
             request_id = f"{request.target_name}_{request.timestamp}"
         else:
             request_id = response_or_id
-        
+
         if request_id in self._pending_requests:
             request = self._pending_requests.pop(request_id)
-            
+
             # Record user approval
             approval_time = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
             approval_audit = AuditEntry(
@@ -281,7 +281,7 @@ class IntentReflectionEngine:
                 details={"request_id": request_id}
             )
             self._audit_trail.append(approval_audit)
-            
+
             return ReflectionResponse(
                 status=ReflectionStatus.APPROVED,
                 message="Request manually approved",
@@ -295,14 +295,14 @@ class IntentReflectionEngine:
             status=ReflectionStatus.ERROR,
             message=f"Request {request_id} not found",
         )
-    
+
     def reject(self, response_or_id, reason: str = "") -> ReflectionResponse:
         """Manually reject a pending request.
-        
+
         Args:
             response_or_id: ReflectionResponse object or request ID string.
             reason: Reason for rejection.
-            
+
         Returns:
             ReflectionResponse confirming rejection.
         """
@@ -317,10 +317,10 @@ class IntentReflectionEngine:
             request_id = f"{request.target_name}_{request.timestamp}"
         else:
             request_id = response_or_id
-        
+
         if request_id in self._pending_requests:
             request = self._pending_requests.pop(request_id)
-            
+
             # Record user rejection
             rejection_time = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
             rejection_audit = AuditEntry(
@@ -329,7 +329,7 @@ class IntentReflectionEngine:
                 details={"request_id": request_id, "reason": reason}
             )
             self._audit_trail.append(rejection_audit)
-            
+
             return ReflectionResponse(
                 status=ReflectionStatus.REJECTED,
                 message=f"Request rejected: {reason}",
@@ -345,14 +345,14 @@ class IntentReflectionEngine:
             status=ReflectionStatus.ERROR,
             message=f"Request {request_id} not found",
         )
-    
+
     def request_clarification(self, response_or_id, question: str) -> ReflectionResponse:
         """Request clarification for a pending request.
-        
+
         Args:
             response_or_id: ReflectionResponse object or request ID string.
             question: Clarification question to ask user.
-            
+
         Returns:
             ReflectionResponse with clarification request.
         """
@@ -367,10 +367,10 @@ class IntentReflectionEngine:
             request_id = f"{request.target_name}_{request.timestamp}"
         else:
             request_id = response_or_id
-        
+
         if request_id in self._pending_requests:
             request = self._pending_requests[request_id]
-            
+
             # Record clarification request
             clarification_time = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
             clarification_audit = AuditEntry(
@@ -379,7 +379,7 @@ class IntentReflectionEngine:
                 details={"request_id": request_id, "question": question}
             )
             self._audit_trail.append(clarification_audit)
-            
+
             return ReflectionResponse(
                 status=ReflectionStatus.NEEDS_CLARIFICATION,
                 message=f"Clarification needed: {question}",
@@ -392,26 +392,26 @@ class IntentReflectionEngine:
             status=ReflectionStatus.ERROR,
             message=f"Request {request_id} not found",
         )
-    
+
     def get_audit_trail(self) -> List[AuditEntry]:
         """Get the complete audit trail.
-        
+
         Returns:
             List of audit entries in chronological order.
         """
         return sorted(self._audit_trail, key=lambda e: e.timestamp)
-    
+
     def to_yaml(self, response: ReflectionResponse) -> str:
         """Serialize reflection response to YAML.
-        
+
         Args:
             response: ReflectionResponse to serialize.
-            
+
         Returns:
             YAML string representation.
         """
         import yaml
-        
+
         # Convert to serializable dict
         data = {
             "status": response.status.value,
@@ -422,22 +422,22 @@ class IntentReflectionEngine:
             "confidence": response.confidence,
             "ready_for_execution": response.ready_for_execution,
         }
-        
+
         return yaml.dump(data, default_flow_style=False)
-    
+
     def from_yaml(self, yaml_string: str) -> ReflectionResponse:
         """Deserialize reflection response from YAML.
-        
+
         Args:
             yaml_string: YAML string to deserialize.
-            
+
         Returns:
             ReflectionResponse object.
         """
         import yaml
-        
+
         data = yaml.safe_load(yaml_string)
-        
+
         return ReflectionResponse(
             status=ReflectionStatus(data.get("status", "pending")),
             message=data.get("message", ""),
@@ -451,20 +451,20 @@ class IntentReflectionEngine:
 
 class IntentReflectionProtocol:
     """Protocol interface for intent reflection.
-    
+
     Provides a high-level API for intent reflection operations.
     """
-    
+
     def __init__(self) -> None:
         """Initialize the protocol."""
         self._engine = IntentReflectionEngine()
-    
+
     def process(self, request: ReflectionRequest) -> ReflectionResponse:
         """Process a reflection request through the protocol.
-        
+
         Args:
             request: The reflection request to process.
-            
+
         Returns:
             ReflectionResponse with the result.
         """

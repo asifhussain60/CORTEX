@@ -13,7 +13,7 @@ The TestValueScorer measures test quality across 5 dimensions:
 
 Usage:
     scorer = TestValueScorer()
-    
+
     # Score a test
     score = scorer.score_test(
         test_function=test_my_feature,
@@ -25,11 +25,11 @@ Usage:
             "total_mutations": 20,
         }
     )
-    
+
     # Get tier
     if score.tier == "HIGH":
         print("Excellent test quality!")
-    
+
     # Extract high-value tests for learning
     high_value_tests = scorer.filter_tests(
         tests=[test1, test2, test3],
@@ -52,16 +52,16 @@ Date: 2026-02-10
 """
 
 import logging
-from typing import Dict, Any, List, Optional, Callable
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any, Callable, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
 
 class ScoreTier(Enum):
     """Test quality tiers based on score."""
-    
+
     ABSOLUTE = "ABSOLUTE"  # 0.9-1.0: Perfect quality
     HIGH = "HIGH"  # 0.7-0.9: Excellent quality
     MEDIUM = "MEDIUM"  # 0.4-0.7: Acceptable quality
@@ -71,7 +71,7 @@ class ScoreTier(Enum):
 @dataclass
 class TestMetrics:
     """Metrics from test execution."""
-    
+
     coverage_percent: float  # 0-100: Code coverage percentage
     edge_cases_covered: int  # Number of edge cases covered
     total_edge_cases: int  # Total edge cases in code
@@ -80,30 +80,30 @@ class TestMetrics:
     false_positives: int = 0  # False positive assertions
     execution_time_ms: float = 0.0  # Execution time
     flakiness_percent: float = 0.0  # How often it fails unexpectedly
-    
+
     def get_coverage_score(self) -> float:
         """Calculate coverage dimension (0-1)."""
         return min(1.0, self.coverage_percent / 100.0)
-    
+
     def get_edge_case_score(self) -> float:
         """Calculate edge case dimension (0-1)."""
         if self.total_edge_cases == 0:
             return 0.5  # Neutral if no edge cases
         return min(1.0, self.edge_cases_covered / self.total_edge_cases)
-    
+
     def get_mutation_score(self) -> float:
         """Calculate mutation dimension (0-1)."""
         if self.total_mutations == 0:
             return 0.5  # Neutral if no mutations
         return min(1.0, self.mutations_caught / self.total_mutations)
-    
+
     def get_regression_score(self) -> float:
         """Calculate regression detection dimension (0-1)."""
         # High coverage + edge cases = high regression detection
         coverage = self.get_coverage_score()
         edge_cases = self.get_edge_case_score()
         return (coverage + edge_cases) / 2.0
-    
+
     def get_brittleness_score(self) -> float:
         """Calculate brittleness dimension (0-1)."""
         # Lower flakiness = lower brittleness = higher score
@@ -117,18 +117,18 @@ class TestMetrics:
 @dataclass
 class TestScore:
     """Complete test quality score."""
-    
+
     test_name: str
     overall_score: float  # 0-1
     tier: ScoreTier
-    
+
     # Dimension scores
     coverage_score: float
     edge_case_score: float
     mutation_score: float
     regression_score: float
     brittleness_score: float
-    
+
     # Weights (hardcoded per requirements)
     _weights: Dict[str, float] = field(default_factory=lambda: {
         "coverage": 0.25,
@@ -137,7 +137,7 @@ class TestScore:
         "regression": 0.15,
         "brittleness": 0.15,
     })
-    
+
     @classmethod
     def from_metrics(cls, test_name: str, metrics: TestMetrics) -> "TestScore":
         """Create TestScore from metrics."""
@@ -147,7 +147,7 @@ class TestScore:
         mutation = metrics.get_mutation_score()
         regression = metrics.get_regression_score()
         brittleness = metrics.get_brittleness_score()
-        
+
         # Weighted average (5 dimensions)
         weights = {
             "coverage": 0.25,
@@ -156,7 +156,7 @@ class TestScore:
             "regression": 0.15,
             "brittleness": 0.15,
         }
-        
+
         overall = (
             coverage * weights["coverage"] +
             edge_cases * weights["edge_cases"] +
@@ -164,7 +164,7 @@ class TestScore:
             regression * weights["regression"] +
             brittleness * weights["brittleness"]
         )
-        
+
         # Determine tier
         if overall >= 0.9:
             tier = ScoreTier.ABSOLUTE
@@ -174,7 +174,7 @@ class TestScore:
             tier = ScoreTier.MEDIUM
         else:
             tier = ScoreTier.LOW
-        
+
         return cls(
             test_name=test_name,
             overall_score=overall,
@@ -185,7 +185,7 @@ class TestScore:
             regression_score=regression,
             brittleness_score=brittleness,
         )
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
@@ -205,15 +205,15 @@ class TestScore:
 class TestValueScorer:
     """
     Score test quality using 5-dimension framework.
-    
+
     AC-ID: PHASE-71-S4
     """
-    
+
     def __init__(self) -> None:
         """Initialize scorer."""
         self._scores: List[TestScore] = []
         self._metrics_cache: Dict[str, TestMetrics] = {}
-    
+
     def score_test(
         self,
         test_name: str,
@@ -221,30 +221,30 @@ class TestValueScorer:
     ) -> TestScore:
         """
         Score a single test.
-        
+
         Args:
             test_name: Name of the test
             metrics: TestMetrics from execution
-            
+
         Returns:
             TestScore with overall and dimension scores
         """
         # Create score
         score = TestScore.from_metrics(test_name, metrics)
-        
+
         # Cache metrics
         self._metrics_cache[test_name] = metrics
-        
+
         # Store score
         self._scores.append(score)
-        
+
         logger.info(
             f"Scored test '{test_name}': {score.tier.value} "
             f"({score.overall_score:.1%})"
         )
-        
+
         return score
-    
+
     def filter_tests(
         self,
         test_names: List[str],
@@ -252,16 +252,16 @@ class TestValueScorer:
     ) -> List[str]:
         """
         Filter tests by quality tier.
-        
+
         Args:
             test_names: Names of tests to filter
             min_tier: Minimum tier (LOW, MEDIUM, HIGH, ABSOLUTE)
-            
+
         Returns:
             Filtered test names meeting minimum tier
         """
         min_tier_enum = ScoreTier[min_tier]
-        
+
         # Tier hierarchy
         tier_order = {
             ScoreTier.LOW: 0,
@@ -269,9 +269,9 @@ class TestValueScorer:
             ScoreTier.HIGH: 2,
             ScoreTier.ABSOLUTE: 3,
         }
-        
+
         min_order = tier_order[min_tier_enum]
-        
+
         filtered = []
         for test_name in test_names:
             # Find score for this test
@@ -279,21 +279,21 @@ class TestValueScorer:
                 (s for s in self._scores if s.test_name == test_name),
                 None
             )
-            
+
             if score and tier_order[score.tier] >= min_order:
                 filtered.append(test_name)
-        
+
         logger.info(
             f"Filtered {len(filtered)}/{len(test_names)} tests "
             f"with tier >= {min_tier}"
         )
-        
+
         return filtered
-    
+
     def get_high_value_tests(self) -> List[TestScore]:
         """
         Get all tests with HIGH or ABSOLUTE tier.
-        
+
         Returns:
             List of high-value test scores
         """
@@ -301,11 +301,11 @@ class TestValueScorer:
             s for s in self._scores
             if s.tier in [ScoreTier.HIGH, ScoreTier.ABSOLUTE]
         ]
-    
+
     def get_low_value_tests(self) -> List[TestScore]:
         """
         Get all tests with LOW or MEDIUM tier.
-        
+
         Returns:
             List of low-value test scores
         """
@@ -313,11 +313,11 @@ class TestValueScorer:
             s for s in self._scores
             if s.tier in [ScoreTier.LOW, ScoreTier.MEDIUM]
         ]
-    
+
     def get_score_summary(self) -> Dict[str, Any]:
         """
         Get summary of all scored tests.
-        
+
         Returns:
             Summary dictionary with tier distribution
         """
@@ -327,15 +327,15 @@ class TestValueScorer:
                 "average_score": 0.0,
                 "by_tier": {},
             }
-        
+
         # Count by tier
         by_tier = {tier.value: 0 for tier in ScoreTier}
         for score in self._scores:
             by_tier[score.tier.value] += 1
-        
+
         # Calculate average
         avg_score = sum(s.overall_score for s in self._scores) / len(self._scores)
-        
+
         return {
             "total_tests": len(self._scores),
             "average_score": round(avg_score, 3),
@@ -343,17 +343,17 @@ class TestValueScorer:
             "high_value_count": len(self.get_high_value_tests()),
             "low_value_count": len(self.get_low_value_tests()),
         }
-    
+
     def get_dimensions_summary(self) -> Dict[str, float]:
         """
         Get average scores by dimension.
-        
+
         Returns:
             Dictionary with average dimension scores
         """
         if not self._scores:
             return {}
-        
+
         dimensions = {
             "coverage": [],
             "edge_cases": [],
@@ -361,19 +361,19 @@ class TestValueScorer:
             "regression": [],
             "brittleness": [],
         }
-        
+
         for score in self._scores:
             dimensions["coverage"].append(score.coverage_score)
             dimensions["edge_cases"].append(score.edge_case_score)
             dimensions["mutation"].append(score.mutation_score)
             dimensions["regression"].append(score.regression_score)
             dimensions["brittleness"].append(score.brittleness_score)
-        
+
         return {
             dim: round(sum(scores) / len(scores), 3)
             for dim, scores in dimensions.items()
         }
-    
+
     def reset(self) -> None:
         """Reset all scores."""
         self._scores.clear()
@@ -387,7 +387,7 @@ _scorer_instance: Optional[TestValueScorer] = None
 def get_test_value_scorer() -> TestValueScorer:
     """
     Get global TestValueScorer instance.
-    
+
     Returns:
         TestValueScorer singleton
     """

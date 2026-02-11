@@ -5,16 +5,17 @@ Generated adapter for ChallengeEngine.
 AC-ID: AC-PHASE2B-008
 """
 
+import logging
+import time
 from typing import Any, Dict, List, Optional
+
 from cortex.mcp.orchestrator_mcp_server import (
-    IOrchestratorAdapter,
     CapabilityMetadata,
     CapabilityResponse,
     ExecutionContext,
+    IOrchestratorAdapter,
 )
 from cortex.orchestrators.core.challenge_engine import ChallengeEngine
-import logging
-import time
 
 logger = logging.getLogger(__name__)
 
@@ -33,14 +34,14 @@ def _get_orchestrator_from_wiring(name: str) -> Optional[Any]:
 class ChallengeEngineAdapter(IOrchestratorAdapter):
     """
     MCP Adapter for ChallengeEngine.
-    
+
     Exposes capabilities:
     - generate_challenge: Generate design challenge
     - evaluate_response: Evaluate challenge response
-    
+
     CORE-035: Uses wiring system for orchestrator access (single execution path).
     """
-    
+
     def __init__(self, orchestrator: Optional[ChallengeEngine] = None):
         """Initialize adapter with orchestrator from wiring system."""
         if orchestrator is not None:
@@ -48,7 +49,7 @@ class ChallengeEngineAdapter(IOrchestratorAdapter):
         else:
             self.orchestrator = _get_orchestrator_from_wiring("ChallengeEngine")
         self.name = "ChallengeEngineAdapter"
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         """Get all capabilities exposed by this orchestrator."""
         return [
@@ -71,7 +72,7 @@ class ChallengeEngineAdapter(IOrchestratorAdapter):
                 tags={"generated", "phase2b"},
             )
         ]
-    
+
     def execute_capability(
         self,
         capability_name: str,
@@ -89,7 +90,7 @@ class ChallengeEngineAdapter(IOrchestratorAdapter):
                     orchestrator="challengeengine",
                     duration_ms=(time.time() - start) * 1000,
                 )
-            
+
             if capability_name == "generate_challenge":
                 result = self.orchestrator.generate_challenge(design_data=parameters.get('design_data'))
                 return CapabilityResponse(
@@ -108,7 +109,7 @@ class ChallengeEngineAdapter(IOrchestratorAdapter):
                     orchestrator="{orchestrator_name_lower}",
                     duration_ms=(time.time() - start) * 1000,
                 )
-            
+
             return CapabilityResponse(
                 request_id=context.session_id,
                 success=False,
@@ -125,7 +126,7 @@ class ChallengeEngineAdapter(IOrchestratorAdapter):
                 orchestrator="challengeengine",
                 duration_ms=(time.time() - start) * 1000,
             )
-    
+
     def validate_parameters(
         self, capability_name: str, parameters: Dict[str, Any]
     ) -> tuple[bool, Optional[str]]:

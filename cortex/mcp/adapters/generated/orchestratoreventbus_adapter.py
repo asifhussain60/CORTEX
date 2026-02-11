@@ -5,16 +5,17 @@ Generated adapter for OrchestratorEventBus.
 AC-ID: AC-PHASE2B-003
 """
 
+import logging
+import time
 from typing import Any, Dict, List, Optional
+
+from cortex.infrastructure.orchestrator_event_bus import OrchestratorEventBus
 from cortex.mcp.orchestrator_mcp_server import (
-    IOrchestratorAdapter,
     CapabilityMetadata,
     CapabilityResponse,
     ExecutionContext,
+    IOrchestratorAdapter,
 )
-from cortex.infrastructure.orchestrator_event_bus import OrchestratorEventBus
-import logging
-import time
 
 logger = logging.getLogger(__name__)
 
@@ -33,15 +34,15 @@ def _get_orchestrator_from_wiring(name: str) -> Optional[Any]:
 class OrchestratorEventBusAdapter(IOrchestratorAdapter):
     """
     MCP Adapter for OrchestratorEventBus.
-    
+
     Exposes capabilities:
     - publish_event: Publish event to bus
     - subscribe: Subscribe to events
     - get_event_history: Get event history
-    
+
     CORE-035: Uses wiring system for orchestrator access (single execution path).
     """
-    
+
     def __init__(self, orchestrator: Optional[OrchestratorEventBus] = None):
         """Initialize adapter with orchestrator from wiring system."""
         if orchestrator is not None:
@@ -49,7 +50,7 @@ class OrchestratorEventBusAdapter(IOrchestratorAdapter):
         else:
             self.orchestrator = _get_orchestrator_from_wiring("OrchestratorEventBus")
         self.name = "OrchestratorEventBusAdapter"
-    
+
     def get_capabilities(self) -> List[CapabilityMetadata]:
         """Get all capabilities exposed by this orchestrator."""
         return [
@@ -81,7 +82,7 @@ class OrchestratorEventBusAdapter(IOrchestratorAdapter):
                 tags={"generated", "phase2b"},
             )
         ]
-    
+
     def execute_capability(
         self,
         capability_name: str,
@@ -99,7 +100,7 @@ class OrchestratorEventBusAdapter(IOrchestratorAdapter):
                     orchestrator="orchestratoreventbus",
                     duration_ms=(time.time() - start) * 1000,
                 )
-            
+
             if capability_name == "publish_event":
                 result = self.orchestrator.publish_event(event_type=parameters.get('event_type'), data=parameters.get('data'))
                 return CapabilityResponse(
@@ -127,7 +128,7 @@ class OrchestratorEventBusAdapter(IOrchestratorAdapter):
                     orchestrator="{orchestrator_name_lower}",
                     duration_ms=(time.time() - start) * 1000,
                 )
-            
+
             return CapabilityResponse(
                 request_id=context.session_id,
                 success=False,
@@ -144,7 +145,7 @@ class OrchestratorEventBusAdapter(IOrchestratorAdapter):
                 orchestrator="orchestratoreventbus",
                 duration_ms=(time.time() - start) * 1000,
             )
-    
+
     def validate_parameters(
         self, capability_name: str, parameters: Dict[str, Any]
     ) -> tuple[bool, Optional[str]]:

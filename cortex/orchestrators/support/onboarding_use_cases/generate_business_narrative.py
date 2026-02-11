@@ -6,11 +6,11 @@ Description: Business language generation with confidence scores
 Authority: phase-54-A-incremental-onboarding-refactor.yaml, S1 task 3
 """
 
-from pathlib import Path
-from typing import Dict, Any
 from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, Dict
 
-from cortex.brain.core.result import Result, Ok, Err
+from cortex.brain.core.result import Err, Ok, Result
 
 
 @dataclass
@@ -27,26 +27,26 @@ class BusinessNarrative:
 
 class GenerateBusinessNarrativeUseCase:
     """Generate business narratives (SOLID: Single Responsibility)."""
-    
+
     def execute(self, repo_path: Path) -> Result[BusinessNarrative]:
         """
         Generate business narrative for repository.
-        
+
         Args:
             repo_path: Path to repository
-            
+
         Returns:
             Result containing BusinessNarrative or error
         """
         try:
             if not repo_path.exists():
                 return Err(f"Repository not found: {repo_path}")
-            
+
             # Extract signals from repository
             repo_name = repo_path.name
             readme_content = self._read_readme(repo_path)
             config_files = self._find_config_files(repo_path)
-            
+
             # Generate narrative based on signals
             narrative = BusinessNarrative(
                 title=self._generate_title(repo_name),
@@ -57,12 +57,12 @@ class GenerateBusinessNarrativeUseCase:
                 business_outcomes=self._extract_outcomes(repo_name),
                 confidence_score=self._calculate_confidence(readme_content),
             )
-            
+
             return Ok(narrative)
-        
+
         except Exception as e:
             return Err(f"Failed to generate business narrative: {str(e)}")
-    
+
     def _read_readme(self, repo_path: Path) -> str:
         """Read README content."""
         try:
@@ -72,7 +72,7 @@ class GenerateBusinessNarrativeUseCase:
         except Exception:
             pass
         return ""
-    
+
     def _find_config_files(self, repo_path: Path) -> list:
         """Find configuration files."""
         config_patterns = ["*.yaml", "*.yml", "*.json", "*.toml"]
@@ -83,11 +83,11 @@ class GenerateBusinessNarrativeUseCase:
         except Exception:
             pass
         return configs
-    
+
     def _generate_title(self, repo_name: str) -> str:
         """Generate narrative title."""
         return f"{repo_name} Repository Platform"
-    
+
     def _generate_description(self, readme_content: str) -> str:
         """Generate description from README."""
         if readme_content:
@@ -96,17 +96,17 @@ class GenerateBusinessNarrativeUseCase:
                 if line.strip() and not line.startswith("#"):
                     return line.strip()[:200]
         return "Comprehensive repository system"
-    
+
     def _generate_value_prop(self, repo_name: str) -> str:
         """Generate value proposition."""
         return f"Enterprise-grade {repo_name} platform with advanced analytics"
-    
+
     def _generate_audience(self, config_files: list) -> str:
         """Generate target audience."""
         if any("enterprise" in str(f).lower() for f in config_files):
             return "Enterprise development teams"
         return "Development teams"
-    
+
     def _extract_capabilities(self, repo_path: Path) -> list:
         """Extract key capabilities."""
         capabilities = []
@@ -119,9 +119,9 @@ class GenerateBusinessNarrativeUseCase:
                 capabilities.append("Configuration management")
         except Exception:
             pass
-        
+
         return capabilities or ["Core functionality"]
-    
+
     def _extract_outcomes(self, repo_name: str) -> list:
         """Extract business outcomes."""
         return [
@@ -129,7 +129,7 @@ class GenerateBusinessNarrativeUseCase:
             "Enhanced code quality",
             "Better team collaboration",
         ]
-    
+
     def _calculate_confidence(self, readme_content: str) -> float:
         """Calculate confidence score (0.0-1.0)."""
         if readme_content:

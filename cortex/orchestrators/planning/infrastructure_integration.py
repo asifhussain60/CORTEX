@@ -9,8 +9,9 @@ Description: Wire infrastructure awareness into PlanningOrchestrator.
              - Infrastructure-aware recommendations
 """
 
-from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
+from typing import Any, Dict, List, Optional
+
 from cortex.infrastructure.capability_detector import CapabilityDetector
 from cortex.infrastructure.infrastructure_scanner import EnvironmentType
 

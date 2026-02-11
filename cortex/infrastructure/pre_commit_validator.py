@@ -17,13 +17,14 @@ import json
 import logging
 import re
 import subprocess
+import time
 from dataclasses import dataclass, field
 from datetime import datetime
-from pathlib import Path
-from typing import List, Dict, Optional
 from enum import Enum
+from pathlib import Path
+from typing import Dict, List, Optional
+
 import yaml
-import time
 
 logger = logging.getLogger(__name__)
 
@@ -52,10 +53,10 @@ ALLOWED_MD_LOCATIONS = [
 def is_blocked_markdown_file(file_path: str) -> bool:
     """
     Check if file matches CORE-002 blocked markdown patterns.
-    
+
     Args:
         file_path: Relative path to file from repo root
-        
+
     Returns:
         True if file is blocked by CORE-002
     """
@@ -63,20 +64,20 @@ def is_blocked_markdown_file(file_path: str) -> bool:
     for allowed in ALLOWED_MD_LOCATIONS:
         if file_path.startswith(allowed):
             return False
-    
+
     # Check if matches blocked patterns
     filename = Path(file_path).name
     for pattern in BLOCKED_MD_PATTERNS:
         if re.match(pattern, filename, re.IGNORECASE):
             return True
-    
+
     return False
 
 
 def get_staged_markdown_files() -> List[str]:
     """
     Get list of staged markdown files from git.
-    
+
     Returns:
         List of file paths relative to repo root
     """
@@ -111,7 +112,7 @@ class HealthCheckResult:
     wired_count: int = 0
     error_message: str = ""
     check_timestamp: datetime = field(default_factory=datetime.now)
-    
+
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, HealthCheckResult):
             return False
@@ -150,7 +151,7 @@ class HybridGateDecision:
     failure_reason: str = ""
     remediation_steps: List[str] = field(default_factory=list)
     decision_timestamp: datetime = field(default_factory=datetime.now)
-    
+
     def to_dict(self) -> Dict[str, object]:
         """Convert to dictionary for serialization"""
         return {
@@ -177,30 +178,30 @@ class PreCommitConfig:
         {'type': 'mcp_adapter', 'required': True},
         {'type': 'schema', 'required': True},
     ])
-    
+
     @classmethod
     def from_yaml(cls, config_path: Optional[str] = None) -> 'PreCommitConfig':
         """Load config from YAML file"""
         if config_path is None:
             config_path = '.cortex/pre-commit-config.yaml'
-        
+
         path = Path(config_path)
         if not path.exists():
             return cls()
-        
+
         try:
             with open(path, 'r') as f:
                 data = yaml.safe_load(f)
-            
+
             if data is None:
                 return cls()
-            
+
             default_validators = [
                 {'type': 'wiring', 'required': True},
                 {'type': 'mcp_adapter', 'required': True},
                 {'type': 'schema', 'required': True},
             ]
-            
+
             return cls(
                 expected_orchestrator_count=data.get('expected_orchestrator_count', 23),
                 stage_1_timeout_ms=data.get('stage_1_timeout_ms', 200),
@@ -217,18 +218,18 @@ class PreCommitAuditLogger:
     CORE-027: Audit trail for pre-commit operations.
     Docker-first: Logs to JSON file instead of SQLite database.
     """
-    
+
     def __init__(self, log_path: str = '.cortex/pre_commit_audit.jsonl'):
         """Initialize audit logger with JSON Lines file"""
         self.log_path = Path(log_path)
         self._ensure_log_file()
-    
+
     def _ensure_log_file(self) -> None:
         """Ensure audit log directory exists"""
         self.log_path.parent.mkdir(parents=True, exist_ok=True)
         if not self.log_path.exists():
             self.log_path.touch()
-    
+
     def log_decision(self, decision: HybridGateDecision) -> None:
         """Log a hybrid gate decision"""
         self.log_record({
@@ -240,7 +241,7 @@ class PreCommitAuditLogger:
             'failure_reason': decision.failure_reason,
             'remediation_steps': decision.remediation_steps,
         })
-    
+
     def log_health_check(self, result: HealthCheckResult) -> None:
         """Log a health check result"""
         self.log_record({
@@ -251,7 +252,7 @@ class PreCommitAuditLogger:
             'wired_count': result.wired_count,
             'error_message': result.error_message,
         })
-    
+
     def log_record(self, record: Dict[str, object]) -> None:
         """Log a generic audit record to JSON Lines file"""
         try:
@@ -259,16 +260,16 @@ class PreCommitAuditLogger:
                 f.write(json.dumps(record) + '\n')
         except Exception as e:
             logger.error(f"Failed to write audit log: {e}")
-    
+
     def get_recent_records(self, limit: int = 10) -> List[Dict[str, object]]:
         """Get recent audit records"""
         try:
             if not self.log_path.exists():
                 return []
-            
+
             with open(self.log_path, 'r') as f:
                 lines = f.readlines()
-            
+
             recent_lines = lines[-limit:] if len(lines) > limit else lines
             records = []
             for line in reversed(recent_lines):
@@ -278,7 +279,7 @@ class PreCommitAuditLogger:
                         records.append(json.loads(line))
                     except json.JSONDecodeError:
                         continue
-            
+
             return records
         except Exception as e:
             logger.error(f"Failed to read audit log: {e}")
@@ -288,22 +289,22 @@ class PreCommitAuditLogger:
 class PreCommitValidator:
     """
     Hybrid smart gate validator for pre-commit checks.
-    
+
     Docker-first architecture: Uses YAML-backed wiring configuration.
-    
+
     Two-stage validation:
     1. Stage 1: Quick health check (<200ms)
     2. Stage 2: Full validation (only if Stage 1 fails, <3s)
     """
-    
-    def __init__(self, config: Optional[PreCommitConfig] = None, 
+
+    def __init__(self, config: Optional[PreCommitConfig] = None,
                  audit_logger: Optional[PreCommitAuditLogger] = None):
         """Initialize validator"""
         self.config = config or PreCommitConfig.from_yaml()
         self.audit_logger = audit_logger or PreCommitAuditLogger()
         self._health_check_cache: Optional[HealthCheckResult] = None
         self._cache_timestamp: Optional[datetime] = None
-    
+
     def quick_health_check(self) -> HealthCheckResult:
         """
         Stage 1: Quick health check (<200ms).
@@ -312,10 +313,10 @@ class PreCommitValidator:
         if self._is_cache_valid():
             assert self._health_check_cache is not None
             return self._health_check_cache
-        
+
         try:
             from cortex.orchestrators import get_orchestrator_count_by_category
-            
+
             try:
                 counts = get_orchestrator_count_by_category()
                 total = counts.get('total', 23)
@@ -324,9 +325,9 @@ class PreCommitValidator:
                     is_healthy=False,
                     error_message=f"Wiring config not available: {str(e)}"
                 )
-            
+
             wired = total  # All YAML-defined are wired
-            
+
             if total < self.config.expected_orchestrator_count:
                 result = HealthCheckResult(
                     is_healthy=False,
@@ -336,19 +337,19 @@ class PreCommitValidator:
                 )
                 self.audit_logger.log_health_check(result)
                 return result
-            
+
             result = HealthCheckResult(
                 is_healthy=True,
                 orchestrators_count=total,
                 wired_count=wired
             )
-            
+
             self._health_check_cache = result
             self._cache_timestamp = datetime.now()
-            
+
             self.audit_logger.log_health_check(result)
             return result
-            
+
         except Exception as e:
             result = HealthCheckResult(
                 is_healthy=False,
@@ -356,15 +357,15 @@ class PreCommitValidator:
             )
             self.audit_logger.log_health_check(result)
             return result
-    
+
     def _is_cache_valid(self) -> bool:
         """Check if health check cache is still valid"""
         if self._health_check_cache is None or self._cache_timestamp is None:
             return False
-        
+
         age = (datetime.now() - self._cache_timestamp).total_seconds()
         return age < self.config.health_check_cache_ttl_seconds
-    
+
     def get_registry_stats(self) -> Dict[str, int]:
         """Get orchestrator registry statistics from YAML config"""
         try:
@@ -375,7 +376,7 @@ class PreCommitValidator:
         except Exception as e:
             logger.error(f"Failed to get registry stats: {e}")
             return {'total': 0, 'wired': 0}
-    
+
     def full_wiring_validation(self) -> WiringValidationResult:
         """
         Stage 2: Full wiring validation.
@@ -383,13 +384,13 @@ class PreCommitValidator:
         """
         start_time = time.time()
         result = WiringValidationResult(is_valid=True)
-        
+
         try:
             orchestrators = self.get_all_orchestrators()
             result.total_orchestrators = len(orchestrators)
             result.wired_orchestrators = len(orchestrators)
             result.unwired_count = 0
-            
+
             result.schema_valid = self._verify_yaml_config()
             result.schema_tables = ['orchestrators.yaml']
             if not result.schema_valid:
@@ -400,10 +401,10 @@ class PreCommitValidator:
                 result.remediation_steps.append(
                     "Check: cortex-registry/manifest.yaml and domain configs"
                 )
-            
+
             result.mcp_adapters_exposed = self._verify_mcp_adapters()
             result.exposed_adapter_count = sum(
-                1 for o in orchestrators 
+                1 for o in orchestrators
                 if self._has_mcp_adapter(str(o.get('name', 'Unknown')))
             )
             if not result.mcp_adapters_exposed:
@@ -414,16 +415,16 @@ class PreCommitValidator:
                 result.remediation_steps.append(
                     "Verify: cortex/mcp/adapters/ has all 23 adapter files"
                 )
-            
+
             result.validation_time_ms = (time.time() - start_time) * 1000
             return result
-            
+
         except Exception as e:
             result.is_valid = False
             result.remediation_steps.append(f"Validation error: {str(e)}")
             result.validation_time_ms = (time.time() - start_time) * 1000
             return result
-    
+
     def get_all_orchestrators(self) -> List[Dict[str, object]]:
         """Get all orchestrators from YAML-backed registry"""
         try:
@@ -431,17 +432,17 @@ class PreCommitValidator:
             return _get_all()
         except ImportError:
             return self._read_orchestrators_from_yaml()
-    
+
     def _read_orchestrators_from_yaml(self) -> List[Dict[str, object]]:
         """Read orchestrators directly from YAML manifest"""
         try:
             manifest_path = Path('cortex-registry/manifest.yaml')
             if not manifest_path.exists():
                 return []
-            
+
             with open(manifest_path, 'r') as f:
                 data = yaml.safe_load(f)
-            
+
             orchestrators = []
             if data and 'orchestrators' in data:
                 for name, config in data['orchestrators'].items():
@@ -452,40 +453,40 @@ class PreCommitValidator:
                         'wired': 1,
                         'category': config.get('category', 'domain'),
                     })
-            
+
             return orchestrators
         except Exception as e:
             logger.error(f"Failed to read orchestrators from YAML: {e}")
             return []
-    
+
     def _verify_yaml_config(self) -> bool:
         """Verify YAML-backed wiring configuration is valid"""
         try:
             manifest_path = Path('cortex-registry/manifest.yaml')
             if not manifest_path.exists():
                 return False
-            
+
             with open(manifest_path, 'r') as f:
                 data = yaml.safe_load(f)
-            
+
             return data is not None and 'orchestrators' in data
         except Exception as e:
             logger.error(f"YAML config verification failed: {e}")
             return False
-    
+
     def _verify_mcp_adapters(self) -> bool:
         """Verify MCP adapters are exposed for all orchestrators"""
         try:
             mcp_adapters_dir = Path('cortex/mcp/adapters')
             if not mcp_adapters_dir.exists():
                 return False
-            
+
             adapter_files = list(mcp_adapters_dir.glob('*_adapter.py'))
             return len(adapter_files) >= self.config.expected_orchestrator_count
         except Exception as e:
             logger.error(f"MCP adapter verification failed: {e}")
             return False
-    
+
     def _has_mcp_adapter(self, orchestrator_name: str) -> bool:
         """Check if specific orchestrator has MCP adapter"""
         try:
@@ -494,21 +495,21 @@ class PreCommitValidator:
             return adapter_path.exists()
         except Exception:
             return False
-    
+
     def evaluate_commit(self) -> HybridGateDecision:
         """
         Hybrid gate evaluation: Try Stage 1, fallback to Stage 2 if needed.
-        
+
         Also validates CORE-002 markdown suppression rules.
-        
+
         Returns: HybridGateDecision with allow_commit flag and reasoning
         """
         start_time = time.time()
-        
+
         # CORE-002: Check for blocked markdown files
         staged_md = get_staged_markdown_files()
         blocked_files = [f for f in staged_md if is_blocked_markdown_file(f)]
-        
+
         if blocked_files:
             decision = HybridGateDecision(
                 allow_commit=False,
@@ -531,10 +532,10 @@ class PreCommitValidator:
             )
             self.audit_logger.log_decision(decision)
             return decision
-        
+
         # Proceed with wiring validation
         health_result = self.quick_health_check()
-        
+
         if health_result.is_healthy:
             decision = HybridGateDecision(
                 allow_commit=True,
@@ -545,9 +546,9 @@ class PreCommitValidator:
             )
             self.audit_logger.log_decision(decision)
             return decision
-        
+
         full_result = self.full_wiring_validation()
-        
+
         if full_result.is_valid:
             decision = HybridGateDecision(
                 allow_commit=True,
@@ -566,7 +567,7 @@ class PreCommitValidator:
                 failure_reason="\n".join(full_result.remediation_steps),
                 remediation_steps=full_result.remediation_steps,
             )
-        
+
         self.audit_logger.log_decision(decision)
         return decision
 

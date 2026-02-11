@@ -11,7 +11,7 @@ Author: CORTEX Framework
 
 import json
 import logging
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 
 from cortex.mcp.server import Tool, ToolDefinition, ToolParameter
 
@@ -30,7 +30,7 @@ class CORTEXProcessRequestTool(Tool):
             parameters=[
                 ToolParameter(
                     name="user_request",
-                    type="string", 
+                    type="string",
                     required=True,
                     description="User's natural language request"
                 ),
@@ -54,10 +54,10 @@ class CORTEXProcessRequestTool(Tool):
         """Execute request processing with challenge system."""
         try:
             from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
-            
+
             # Get MasterOrchestrator instance
             master = MasterOrchestrator.instance()
-            
+
             # Process request through challenge-driven workflow
             try:
                 if enable_challenge and hasattr(master, 'process_request_with_challenge'):
@@ -71,7 +71,7 @@ class CORTEXProcessRequestTool(Tool):
                         operation_name="process_request",
                         parameters={"request": user_request, "context": context or {}}
                     )
-                
+
                 # Treat result as dict (most common case)
                 if isinstance(result, dict):
                     return {
@@ -95,11 +95,11 @@ class CORTEXProcessRequestTool(Tool):
                     "status": "error",
                     "error": f"Execution failed: {str(exec_error)}"
                 }
-                
+
         except Exception as e:
             logger.error(f"CORTEX process request failed: {e}", exc_info=True)
             return {
-                "status": "error", 
+                "status": "error",
                 "error": f"Failed to process request: {str(e)}"
             }
 
@@ -141,17 +141,17 @@ class CORTEXTotalRecallTool(Tool):
         try:
             # Simple implementation: Search for query in orchestrators and tools
             from cortex.mcp.mcp_tools_catalog import get_mcp_tools_catalog
-            
+
             catalog = get_mcp_tools_catalog()
             # Use catalog._tools dict directly (contains MCPToolMetadata objects)
             tools_dict = catalog._tools
-            
+
             # Filter tools matching query
             matching_tools = [
                 tool for tool in tools_dict.values()
                 if query.lower() in tool.name.lower() or query.lower() in tool.description.lower()
             ]
-            
+
             return {
                 "status": "success",
                 "query": query,
@@ -168,7 +168,7 @@ class CORTEXTotalRecallTool(Tool):
                 ],
                 "total_tools_searched": len(tools_dict)
             }
-            
+
         except Exception as e:
             logger.error(f"Total recall failed: {e}", exc_info=True)
             return {
@@ -207,22 +207,22 @@ class CORTEXChallengeTool(Tool):
         """Execute challenge generation."""
         try:
             from cortex.orchestrators.core.challenge_engine import get_challenge_engine
-            
+
             # Get challenge engine
             engine = get_challenge_engine()
-            
+
             # Build LENS context
             lens_context = engine.build_lens_context(
                 user_request=user_request,
                 search_tools=search_tools or {}
             )
-            
+
             # Generate challenge
             challenge = engine.generate_challenge(
                 user_request=user_request,
                 lens_context=lens_context
             )
-            
+
             if challenge.has_disagreement:
                 formatted_response = engine.format_challenge_response(challenge)
                 return {
@@ -243,7 +243,7 @@ class CORTEXChallengeTool(Tool):
                     "has_disagreement": False,
                     "message": "No disagreement detected - request appears reasonable"
                 }
-            
+
         except Exception as e:
             logger.error(f"Challenge generation failed: {e}", exc_info=True)
             return {
@@ -260,7 +260,7 @@ def get_cortex_tools() -> list[Tool]:
         CORTEXTotalRecallTool(),
         CORTEXChallengeTool()
     ]
-    
+
     # Phase 41: Interactive approval workflow tools
     try:
         from cortex.mcp.tools.approval_mcp_tools import get_approval_tools

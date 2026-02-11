@@ -70,7 +70,7 @@ class StalenessChecker:
         self.logger = logging.getLogger(f"{__name__}.StalenessChecker")
         self.tech_mapper = TechStackMapper()
         self.logger.info(
-            f"AC_START: AC-PHASE54-S3-T2 | StalenessChecker initialized"
+            "AC_START: AC-PHASE54-S3-T2 | StalenessChecker initialized"
         )
 
     def check_staleness(
@@ -109,7 +109,7 @@ class StalenessChecker:
                     f"Add documentation for: {', '.join(sorted(missing))}"
                 )
                 recommendations.append(
-                    f"Update company/domains/ or cortex/knowledge/ with missing tech YAMLs"
+                    "Update company/domains/ or cortex/knowledge/ with missing tech YAMLs"
                 )
 
             # Determine severity

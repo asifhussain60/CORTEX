@@ -10,11 +10,12 @@ facade auto-detects and routes intelligently.
 Exposed as: cortex_unified_digest_ingest
 """
 
-from typing import Dict, Any, Optional, Literal
+import logging
+from typing import Any, Dict, Literal, Optional
+
 from cortex.orchestrators.support.unified_digest_ingest_facade import (
     UnifiedDigestIngestionFacade,
 )
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -26,16 +27,16 @@ def cortex_unified_digest_ingest(
     dry_run: bool = False,
 ) -> Dict[str, Any]:
     """Unified digest-ingest operation with intelligent routing.
-    
+
     Processes a knowledge source (chat file or knowledge entry) through
     the appropriate orchestrator:
     - Chat files → DIGEST mode (extract enhancements)
     - Knowledge entries → INGEST mode (populate knowledge base)
-    
+
     Auto-detection if source_type not specified:
     - Detects chat markers (User:, Assistant:, etc.) → DIGEST
     - Detects structured data (JSON, YAML, {, [, etc.) → INGEST
-    
+
     Args:
         source_path: Path to source file to process.
         source_type: Explicit source type ('chat_file' or 'knowledge_entry').
@@ -43,7 +44,7 @@ def cortex_unified_digest_ingest(
         auto_process: Enable auto-processing (auto-apply enhancements for DIGEST,
                      auto-ingest valid entries for INGEST).
         dry_run: Simulate processing without making changes.
-        
+
     Returns:
         Dictionary with operation results:
         {
@@ -57,23 +58,23 @@ def cortex_unified_digest_ingest(
             "error_message": str,
             "metadata": dict
         }
-        
+
     Examples:
         # Auto-detect and process
         result = cortex_unified_digest_ingest("session.md")
-        
+
         # Explicitly process as chat file
         result = cortex_unified_digest_ingest(
             "copilot_chat.md",
             source_type="chat_file"
         )
-        
+
         # Explicitly process as knowledge entry
         result = cortex_unified_digest_ingest(
             "enhancements.json",
             source_type="knowledge_entry"
         )
-        
+
         # Dry-run to preview processing
         result = cortex_unified_digest_ingest(
             "test.md",

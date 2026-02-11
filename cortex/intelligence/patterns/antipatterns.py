@@ -4,10 +4,15 @@
 # Stage: S4 - GREEN phase implementation
 
 from dataclasses import dataclass
-from typing import Dict, List, Any, Optional
 from enum import Enum
+from typing import Any, Dict, List, Optional
 
-from cortex.intelligence.patterns.base import BasePatternDetector, PatternInfo, PatternMatch, PatternCategory
+from cortex.intelligence.patterns.base import (
+    BasePatternDetector,
+    PatternCategory,
+    PatternInfo,
+    PatternMatch,
+)
 
 
 class AntiPatternType(Enum):
@@ -32,7 +37,7 @@ class AntiPatternInfo:
 class AntiPatternDetector(BasePatternDetector):
     """
     Detect anti-patterns (code smells) in source code.
-    
+
     Detects:
     - Structural: God Object, Blob, Feature Envy
     - Behavioral: Long Parameter, Duplicate Code, Long Method
@@ -90,32 +95,32 @@ class AntiPatternDetector(BasePatternDetector):
     def detect(self, ast_node: Any, context: Optional[Dict] = None) -> List[PatternMatch]:
         """
         Detect anti-patterns in AST node.
-        
+
         Args:
             ast_node: AST node or mock object to analyze
             context: Optional analysis context
-            
+
         Returns:
             List of PatternMatch objects for detected anti-patterns
         """
         if not isinstance(ast_node, dict):
             return []
-        
+
         matches = []
-        
+
         # Extract numeric values safely
         methods_count = ast_node.get("methods", 0)
         if isinstance(methods_count, list):
             methods_count = len(methods_count)
-        
+
         lines_count = ast_node.get("lines", 0)
         if isinstance(lines_count, list):
             lines_count = len(lines_count)
-        
+
         dependencies_count = ast_node.get("dependencies", 0)
         if isinstance(dependencies_count, list):
             dependencies_count = len(dependencies_count)
-        
+
         # Check God Object pattern
         if (
             methods_count > 20
@@ -130,7 +135,7 @@ class AntiPatternDetector(BasePatternDetector):
                     evidence={"methods": methods_count, "lines": lines_count},
                 )
             )
-        
+
         # Check Blob pattern (simpler God Object)
         if methods_count > 25 and lines_count > 2000:
             matches.append(
@@ -141,7 +146,7 @@ class AntiPatternDetector(BasePatternDetector):
                     evidence={"methods": methods_count, "lines": lines_count},
                 )
             )
-        
+
         # Check Long Parameter List
         if ast_node.get("parameters_in_method", 0) > 8:
             matches.append(
@@ -152,7 +157,7 @@ class AntiPatternDetector(BasePatternDetector):
                     evidence={"parameters": ast_node.get("parameters_in_method")},
                 )
             )
-        
+
         # Check Anemic Model (mostly getters/setters)
         methods = ast_node.get("methods", [])
         if isinstance(methods, list):
@@ -168,7 +173,7 @@ class AntiPatternDetector(BasePatternDetector):
                         evidence={"getter_setter_ratio": getter_setter_count / len(methods)},
                     )
                 )
-        
+
         # Check Race Condition (shared state + no synchronization)
         if (
             ast_node.get("shared_state", False) is True
@@ -182,7 +187,7 @@ class AntiPatternDetector(BasePatternDetector):
                     evidence={"shared_state": True, "synchronized": False},
                 )
             )
-        
+
         # Check N+1 Query pattern
         if ast_node.get("query_in_loop", False) is True:
             matches.append(
@@ -193,7 +198,7 @@ class AntiPatternDetector(BasePatternDetector):
                     evidence={"query_in_loop": True},
                 )
             )
-        
+
         return matches
 
 # AC_COMPLETE: AC-PHASE57-S4-002 ✅

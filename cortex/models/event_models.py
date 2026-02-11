@@ -15,7 +15,7 @@ from uuid import uuid4
 
 class EventType(str, Enum):
     """Types of events in orchestrator communication.
-    
+
     These events enable decoupled communication between orchestrators
     without direct imports or function calls.
     """
@@ -42,7 +42,7 @@ class EventType(str, Enum):
 @dataclass
 class OrchestratorEvent:
     """An event in the orchestrator communication mesh.
-    
+
     Attributes:
         event_type: Type of event (from EventType enum)
         source_orchestrator: Orchestrator that emitted the event
@@ -64,9 +64,9 @@ class OrchestratorEvent:
 @dataclass
 class EventChain:
     """A chain of related events linked by correlation_id.
-    
+
     Enables tracking the full lifecycle of a task across orchestrators.
-    
+
     Attributes:
         correlation_id: Shared ID for all events in chain
         event_ids: Ordered list of event IDs in the chain
@@ -84,9 +84,9 @@ class EventChain:
 @dataclass
 class EventSubscription:
     """A subscription to orchestrator events.
-    
+
     Orchestrators register subscriptions to receive specific event types.
-    
+
     Attributes:
         subscriber_id: ID of the subscribing orchestrator
         event_types: List of event types to subscribe to
@@ -105,9 +105,9 @@ class EventSubscription:
 @dataclass
 class IntentClassifiedPayload:
     """Payload for INTENT_CLASSIFIED events.
-    
+
     Emitted by IntentRouter when user intent is classified.
-    
+
     Attributes:
         intent: Classified intent type (IMPLEMENT, FIX, REFACTOR, etc.)
         confidence: Classification confidence (0.0-1.0)
@@ -123,9 +123,9 @@ class IntentClassifiedPayload:
 @dataclass
 class PhaseCompletePayload:
     """Payload for PHASE_COMPLETE events.
-    
+
     Emitted by WorkflowOrchestrator when a phase finishes.
-    
+
     Attributes:
         phase_id: Identifier of the completed phase
         success: Whether phase completed successfully
@@ -146,9 +146,9 @@ class PhaseCompletePayload:
 @dataclass
 class PlanEventPayload:
     """Payload for plan-related events.
-    
+
     Common structure for all plan events with plan context.
-    
+
     Attributes:
         plan_id: Unique plan identifier
         plan_spec: Full plan specification (when applicable)
@@ -164,9 +164,9 @@ class PlanEventPayload:
 @dataclass
 class PlanIntentDetectedPayload:
     """Payload for PLAN_INTENT_DETECTED events.
-    
+
     Emitted by InteractionOrchestrator when plan intent is detected.
-    
+
     Attributes:
         plan_id: Plan identifier (if creating from existing)
         user_context: The user's original request/context
@@ -182,9 +182,9 @@ class PlanIntentDetectedPayload:
 @dataclass
 class PlanCreatedPayload:
     """Payload for PLAN_CREATED events.
-    
+
     Emitted by PlanOrchestrator when a plan is created.
-    
+
     Attributes:
         plan_id: Unique plan identifier
         title: Plan title
@@ -200,9 +200,9 @@ class PlanCreatedPayload:
 @dataclass
 class PlanEnrichedPayload:
     """Payload for PLAN_ENRICHED events.
-    
+
     Emitted by EnhancedPlanningOrchestrator after enrichment.
-    
+
     Attributes:
         plan_id: Plan identifier
         enrichment_sources: List of enrichers that ran
@@ -218,9 +218,9 @@ class PlanEnrichedPayload:
 @dataclass
 class PlanStateChangedPayload:
     """Payload for PLAN_STATE_CHANGED events.
-    
+
     Emitted when plan transitions between lifecycle states.
-    
+
     Attributes:
         plan_id: Plan identifier
         old_status: Previous status
@@ -238,9 +238,9 @@ class PlanStateChangedPayload:
 @dataclass
 class PlanArchivedPayload:
     """Payload for PLAN_ARCHIVED events.
-    
+
     Emitted when plan is archived (moved to completed/).
-    
+
     Attributes:
         plan_id: Plan identifier
         archive_path: Path where plan was archived

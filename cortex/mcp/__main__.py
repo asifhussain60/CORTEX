@@ -11,9 +11,9 @@ CORE-011: All functions have type hints.
 CORE-012: All public APIs have Google-style docstrings.
 """
 
-import sys
 import json
 import logging
+import sys
 from typing import Optional
 
 # Configure logging
@@ -28,32 +28,32 @@ logger = logging.getLogger(__name__)
 def main() -> int:
     """
     Main entry point for MCP server.
-    
+
     Runs CORTEX MCP server with stdio transport for Copilot integration.
     Handles JSON-RPC 2.0 requests via stdin/stdout.
-    
+
     Returns:
         int: Exit code (0 for success, non-zero for failure)
     """
     try:
         from cortex.mcp.server import MCPServer
         from cortex.mcp.stdio_transport import run_stdio_server
-        
+
         logger.info("Initializing CORTEX MCP Server with stdio transport...")
         server: MCPServer = MCPServer()
-        
+
         # List available tools
         tools = server.list_tools()
         logger.info(f"MCP Server initialized with {len(tools)} tools:")
         for tool in tools:
             logger.info(f"  - {tool['name']}: {tool['description']}")
-        
+
         logger.info("Starting stdio JSON-RPC transport...")
         logger.info("CORTEX MCP Server ready for Copilot integration")
-        
+
         # Run stdio server (blocks until terminated)
         return run_stdio_server(server)
-        
+
     except ImportError as e:
         logger.error(f"Failed to import MCP server components: {e}")
         logger.error("Ensure CORTEX is properly installed")

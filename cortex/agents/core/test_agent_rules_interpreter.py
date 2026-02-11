@@ -6,25 +6,25 @@ Description: Comprehensive test suite for AgentRulesInterpreter
 Tests: 18 total (covering all major workflows)
 """
 
-import pytest
-from pathlib import Path
-from unittest.mock import Mock, patch, MagicMock
 from datetime import datetime
+from pathlib import Path
+from unittest.mock import MagicMock, Mock, patch
+
+import pytest
 import yaml
 
 from cortex.agents.core.agent_rules_interpreter import (
-    AgentRulesInterpreter,
-    RulesRegistry,
     AgentConfigRegistry,
-    ExecutionDirective,
-    ExecutionContext,
-    AgentRole,
-    RuleEnforcementLevel,
-    RuleViolation,
-    OrchestratorInvocationHelper,
     AgentConfiguration,
+    AgentRole,
+    AgentRulesInterpreter,
+    ExecutionContext,
+    ExecutionDirective,
+    OrchestratorInvocationHelper,
+    RuleEnforcementLevel,
+    RulesRegistry,
+    RuleViolation,
 )
-
 
 # ============================================================================
 # FIXTURES
@@ -35,7 +35,7 @@ def temp_registry_path(tmp_path):
     """Create a temporary registry with test rules."""
     governance_dir = tmp_path / "governance"
     governance_dir.mkdir()
-    
+
     # Create minimal core-rules.yaml for testing
     rules_yaml = {
         "meta": {
@@ -96,11 +96,11 @@ def temp_registry_path(tmp_path):
             },
         ]
     }
-    
+
     rules_file = governance_dir / "core-rules.yaml"
     with open(rules_file, 'w') as f:
         yaml.dump(rules_yaml, f)
-    
+
     return tmp_path
 
 
@@ -127,25 +127,25 @@ def interpreter(rules_registry):
 
 class TestRulesRegistry:
     """Test RulesRegistry loading and retrieval."""
-    
+
     def test_load_registry_success(self, rules_registry):
         """Test successful rule registry loading."""
         assert len(rules_registry._rules_cache) == 5
         assert "CORE-002" in rules_registry._rules_cache
         assert "CORE-008" in rules_registry._rules_cache
-    
+
     def test_get_rule_by_id(self, rules_registry):
         """Test retrieving rule by ID."""
         rule = rules_registry.get_rule("CORE-008")
         assert rule is not None
         assert rule["name"] == "TDD Mandatory"
         assert rule["priority"] == "P0"
-    
+
     def test_get_rule_not_found(self, rules_registry):
         """Test retrieving non-existent rule."""
         rule = rules_registry.get_rule("NONEXISTENT")
         assert rule is None
-    
+
     def test_get_rules_by_enforcement_level(self, rules_registry):
         """Test filtering rules by enforcement level."""
         blocked_rules = rules_registry.get_rules_by_enforcement_level(
@@ -161,14 +161,14 @@ class TestRulesRegistry:
 
 class TestAgentConfigRegistry:
     """Test AgentConfigRegistry configuration management."""
-    
+
     def test_get_agent_config_exists(self):
         """Test retrieving existing agent config."""
         config = AgentConfigRegistry.get_agent_config("cortex-architect")
         assert config is not None
         assert config.agent_name == "CORTEX Architect"
         assert config.role == AgentRole.ARCHITECT
-    
+
     def test_get_agents_by_role(self):
         """Test filtering agents by role."""
         auditors = AgentConfigRegistry.get_agents_by_role(AgentRole.AUDITOR)
@@ -182,7 +182,7 @@ class TestAgentConfigRegistry:
 
 class TestAgentRulesInterpreter:
     """Test AgentRulesInterpreter main functionality."""
-    
+
     def test_interpret_architect_request_cortex_context(self, interpreter):
         """Test architect agent interpretation in CORTEX context."""
         result = interpreter.interpret_agent_request(
@@ -190,13 +190,13 @@ class TestAgentRulesInterpreter:
             request="implement new feature",
             context=ExecutionContext.CORTEX_INTERNAL,
         )
-        
+
         assert result.is_ok()
         directive = result.unwrap()
         assert directive.agent_id == "cortex-architect"
         assert directive.context == ExecutionContext.CORTEX_INTERNAL
         assert directive.target_orchestrator is not None
-    
+
     def test_interpret_auditor_request_production_context(self, interpreter):
         """Test auditor agent interpretation in production context."""
         result = interpreter.interpret_agent_request(
@@ -204,12 +204,12 @@ class TestAgentRulesInterpreter:
             request="audit codebase",
             context=ExecutionContext.PRODUCTION_REPO,
         )
-        
+
         assert result.is_ok()
         directive = result.unwrap()
         assert directive.agent_id == "cortex-auditor"
         assert "CORE-008" in directive.rule_id  # TDD rule
-    
+
     def test_interpret_unknown_agent(self, interpreter):
         """Test interpretation with unknown agent."""
         result = interpreter.interpret_agent_request(
@@ -217,10 +217,10 @@ class TestAgentRulesInterpreter:
             request="test",
             context=ExecutionContext.PRODUCTION_REPO,
         )
-        
+
         assert result.is_err()
         assert "Unknown agent" in result.unwrap_or("").error
-    
+
     def test_interpret_with_fallback_rules(self, interpreter):
         """Test interpretation falls back to fallback rules if context unsupported."""
         # Cortex-auditor doesn't support CORTEX_INTERNAL as primary
@@ -229,44 +229,44 @@ class TestAgentRulesInterpreter:
             request="audit",
             context=ExecutionContext.CORTEX_INTERNAL,
         )
-        
+
         # Should still succeed using fallback
         assert result.is_ok()
         directive = result.unwrap()
         assert "CORE-029" in directive.rule_id  # Fallback is response header
-    
+
     def test_validate_against_rules_no_violations(self, interpreter):
         """Test code validation with no violations."""
         clean_code = '''def process_data(x: int) -> str:
     """Process data."""
     return str(x)
 '''
-        
+
         result = interpreter.validate_against_rules(
             rules=["CORE-002"],
             code_snippet=clean_code,
             context=ExecutionContext.PRODUCTION_REPO,
         )
-        
+
         assert result.is_ok()
         violations = result.unwrap()
         assert len(violations) == 0
-    
+
     def test_validate_against_rules_violations_found(self, interpreter):
         """Test code validation detecting violations."""
         bad_code = "cat > summary.md"
-        
+
         result = interpreter.validate_against_rules(
             rules=["CORE-002"],
             code_snippet=bad_code,
             context=ExecutionContext.PRODUCTION_REPO,
         )
-        
+
         assert result.is_ok()
         violations = result.unwrap()
         assert len(violations) > 0
         assert violations[0].rule_id == "CORE-002"
-    
+
     def test_interpret_with_target_override(self, interpreter):
         """Test interpretation with explicit orchestrator override."""
         result = interpreter.interpret_agent_request(
@@ -275,17 +275,17 @@ class TestAgentRulesInterpreter:
             context=ExecutionContext.PRODUCTION_REPO,
             target_orchestrator="CustomOrchestrator",
         )
-        
+
         assert result.is_ok()
         directive = result.unwrap()
         assert directive.target_orchestrator == "CustomOrchestrator"
-    
+
     def test_compile_constraints(self, interpreter):
         """Test constraint compilation from rules."""
         rules = interpreter.rules_registry.get_rules_by_enforcement_level(
             RuleEnforcementLevel.BLOCKED
         )
-        
+
         constraints = interpreter._compile_constraints(rules, ExecutionContext.PRODUCTION_REPO)
         assert len(constraints) > 0
         assert all(c.constraint_type == "pattern" for c in constraints)
@@ -297,11 +297,11 @@ class TestAgentRulesInterpreter:
 
 class TestOrchestratorInvocationHelper:
     """Test OrchestratorInvocationHelper orchestrator routing."""
-    
+
     def test_invoke_with_valid_directive(self, interpreter):
         """Test invoking orchestrator with valid directive."""
         helper = OrchestratorInvocationHelper(interpreter)
-        
+
         directive = ExecutionDirective(
             agent_id="cortex-architect",
             rule_id="CORE-008|CORE-029",
@@ -310,16 +310,16 @@ class TestOrchestratorInvocationHelper:
             action="ROUTE_TO_ORCHESTRATOR",
             target_orchestrator="TDDOrchestrator",
         )
-        
+
         result = helper.invoke_for_directive(directive)
         assert result.is_ok()
         response = result.unwrap()
         assert response["orchestrator"] == "TDDOrchestrator"
-    
+
     def test_invoke_with_missing_orchestrator(self, interpreter):
         """Test invoking with missing target orchestrator."""
         helper = OrchestratorInvocationHelper(interpreter)
-        
+
         directive = ExecutionDirective(
             agent_id="cortex-architect",
             rule_id="CORE-008",
@@ -328,7 +328,7 @@ class TestOrchestratorInvocationHelper:
             action="ROUTE_TO_ORCHESTRATOR",
             target_orchestrator=None,
         )
-        
+
         result = helper.invoke_for_directive(directive)
         assert result.is_err()
 
@@ -339,7 +339,7 @@ class TestOrchestratorInvocationHelper:
 
 class TestDualModeExecution:
     """Test dual-mode execution (CORTEX vs production repo)."""
-    
+
     def test_both_contexts_supported_architect(self, interpreter):
         """Test cortex-architect in both contexts."""
         cortex_result = interpreter.interpret_agent_request(
@@ -347,19 +347,19 @@ class TestDualModeExecution:
             request="test",
             context=ExecutionContext.CORTEX_INTERNAL,
         )
-        
+
         prod_result = interpreter.interpret_agent_request(
             agent_id="cortex-architect",
             request="test",
             context=ExecutionContext.PRODUCTION_REPO,
         )
-        
+
         assert cortex_result.is_ok()
         assert prod_result.is_ok()
         # Both should route properly despite different contexts
         assert cortex_result.unwrap().target_orchestrator is not None
         assert prod_result.unwrap().target_orchestrator is not None
-    
+
     def test_rules_adapt_to_context(self, interpreter):
         """Test that rules remain same but metadata adapts to context."""
         cortex_directive = interpreter.interpret_agent_request(
@@ -367,17 +367,17 @@ class TestDualModeExecution:
             request="audit",
             context=ExecutionContext.CORTEX_INTERNAL,
         ).unwrap()
-        
+
         prod_directive = interpreter.interpret_agent_request(
             agent_id="cortex-auditor",
             request="audit",
             context=ExecutionContext.PRODUCTION_REPO,
         ).unwrap()
-        
+
         # Rules should be consistent (both include CORE-008)
         assert "CORE-008" in cortex_directive.rule_id
         assert "CORE-008" in prod_directive.rule_id
-        
+
         # But contexts should differ
         assert cortex_directive.context == ExecutionContext.CORTEX_INTERNAL
         assert prod_directive.context == ExecutionContext.PRODUCTION_REPO
@@ -389,11 +389,11 @@ class TestDualModeExecution:
 
 class TestPhase51Integration:
     """Integration tests for Phase 51 architecture."""
-    
+
     def test_full_workflow_architect_to_orchestrator(self, interpreter):
         """Test complete workflow from agent interpretation to orchestrator routing."""
         helper = OrchestratorInvocationHelper(interpreter)
-        
+
         # Step 1: Interpret architect request
         result = interpreter.interpret_agent_request(
             agent_id="cortex-architect",
@@ -402,38 +402,38 @@ class TestPhase51Integration:
         )
         assert result.is_ok()
         directive = result.unwrap()
-        
+
         # Step 2: Validate directive has all required fields
         assert directive.agent_id == "cortex-architect"
         assert directive.rule_id  # Should have rules
         assert directive.target_orchestrator  # Should have routing
         assert directive.constraints  # Should have constraints
-        
+
         # Step 3: Invoke orchestrator with directive
         invoke_result = helper.invoke_for_directive(directive)
         assert invoke_result.is_ok()
-    
+
     def test_rules_registry_validation_chain(self, interpreter):
         """Test complete validation chain with rules registry."""
         # Load multiple rules
         rules_to_check = ["CORE-002", "CORE-008", "CORE-029"]
-        
+
         # Test code with potential violations
         test_code = '''
 def process(x):
     cat > report.md
     print(x)
 '''
-        
+
         result = interpreter.validate_against_rules(
             rules=rules_to_check,
             code_snippet=test_code,
             context=ExecutionContext.PRODUCTION_REPO,
         )
-        
+
         assert result.is_ok()
         violations = result.unwrap()
-        
+
         # Should detect markdown violation
         assert any(v.rule_id == "CORE-002" for v in violations)
 

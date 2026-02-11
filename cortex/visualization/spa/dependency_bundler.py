@@ -180,7 +180,7 @@ class DependencyBundler:
             ```python
             bundler = DependencyBundler(Path("static/vendor"))
             result = bundler.bundle_all()
-            
+
             if result["success"]:
                 print(f"Bundle complete: {result['downloaded']} files")
                 print(f"Total size: {result['total_size'] / 1024:.1f} KB")
@@ -222,7 +222,7 @@ class DependencyBundler:
             ```python
             bundler = DependencyBundler(Path("static/vendor"))
             verification = bundler.verify_bundle()
-            
+
             for name, valid in verification.items():
                 status = "✓" if valid else "✗"
                 print(f"{status} {name}")
@@ -304,7 +304,7 @@ def bundle_dependencies(output_dir: Path) -> Dict[str, any]:
         ```python
         from pathlib import Path
         from cortex.visualization.spa.dependency_bundler import bundle_dependencies
-        
+
         result = bundle_dependencies(Path("cortex/visualization/static/vendor"))
         print(f"Downloaded {result['downloaded']} dependencies")
         ```

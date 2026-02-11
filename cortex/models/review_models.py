@@ -9,7 +9,7 @@ Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Dict, List, Optional, Any
+from typing import Any, Dict, List, Optional
 
 
 class ReviewStatus(str, Enum):
@@ -29,7 +29,7 @@ class ReviewOutcome(str, Enum):
 @dataclass
 class ReviewIssue:
     """An issue found during review.
-    
+
     Attributes:
         issue_type: Category of issue (TEST_FAILURE, COHERENCE_ISSUE, etc.)
         description: Human-readable description
@@ -45,7 +45,7 @@ class ReviewIssue:
 @dataclass
 class PhaseReviewResult:
     """Result of reviewing a completed phase.
-    
+
     Attributes:
         phase_id: Identifier of the reviewed phase
         status: Overall review status (PASS, FAIL, PENDING)
@@ -65,7 +65,7 @@ class PhaseReviewResult:
 @dataclass
 class GateDecision:
     """Decision about whether to proceed to next phase.
-    
+
     Attributes:
         current_phase: The phase just completed
         next_phase: The phase to proceed to (if approved)
@@ -85,7 +85,7 @@ class GateDecision:
 @dataclass
 class Deviation:
     """A deviation from the original plan.
-    
+
     Attributes:
         spec_type: Type of spec that deviated (FileSpec, FunctionSpec, etc.)
         spec_id: Identifier of the spec
@@ -103,7 +103,7 @@ class Deviation:
 @dataclass
 class PlanFidelityReport:
     """Report measuring how closely implementation followed the plan.
-    
+
     Attributes:
         score: 0-100 fidelity score
         missing_specs: Specs in plan that weren't implemented
@@ -119,7 +119,7 @@ class PlanFidelityReport:
 @dataclass
 class CommitAnalysis:
     """Analysis of git commits for a task.
-    
+
     Attributes:
         total_commits: Number of commits for this task
         commits_with_task_reference: Commits that mention task ID
@@ -137,7 +137,7 @@ class CommitAnalysis:
 @dataclass
 class FinalReviewResult:
     """Final review result for a completed implementation.
-    
+
     Attributes:
         task_id: The task being reviewed
         outcome: Final outcome (PASS, CONDITIONAL_PASS, FAIL)

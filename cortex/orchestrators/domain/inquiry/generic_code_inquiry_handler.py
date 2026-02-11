@@ -19,25 +19,25 @@ Limitations:
 - Generic answers only
 """
 
-from typing import Dict, List, Any
+from typing import Any, Dict, List
 
 from cortex.models.inquiry_models import AssembledContext, EvidenceSource
 
 
 class GenericCodeInquiryHandler:
     """Universal code inquiry handler for any repository.
-    
+
     Provides code analysis without CORTEX-specific domain knowledge.
     Uses evidence from LENS analyzers (Git/AST/Comment) to answer
     questions about any codebase.
     """
-    
+
     def handle(self, context: AssembledContext) -> Dict[str, Any]:
         """Handle inquiry using generic code analysis.
-        
+
         Args:
             context: Assembled context with evidence
-            
+
         Returns:
             Response dictionary with answer, evidence, confidence, disclaimer
         """
@@ -47,15 +47,15 @@ class GenericCodeInquiryHandler:
             evidence_sources=context.evidence_sources,
             confidence=context.confidence,
         )
-        
+
         # Add disclaimer for user repos
         response = self._add_disclaimer(
             response,
             is_cortex=context.repo_context.is_cortex_repo(),
         )
-        
+
         return response
-    
+
     def _format_response(
         self,
         question: str,
@@ -63,12 +63,12 @@ class GenericCodeInquiryHandler:
         confidence: float,
     ) -> Dict[str, Any]:
         """Format response from evidence sources.
-        
+
         Args:
             question: Original question
             evidence_sources: List of code evidence
             confidence: Confidence score
-            
+
         Returns:
             Response dictionary with answer and evidence
         """
@@ -80,7 +80,7 @@ class GenericCodeInquiryHandler:
                 question,
                 evidence_sources,
             )
-        
+
         # Format evidence references
         evidence_refs = [
             {
@@ -91,30 +91,30 @@ class GenericCodeInquiryHandler:
             }
             for ev in evidence_sources
         ]
-        
+
         return {
             "answer": answer,
             "evidence": evidence_refs,
             "confidence": confidence,
         }
-    
+
     def _generate_answer_from_evidence(
         self,
         question: str,
         evidence_sources: List[EvidenceSource],
     ) -> str:
         """Generate answer from evidence sources.
-        
+
         Args:
             question: Original question
             evidence_sources: List of code evidence
-            
+
         Returns:
             Generated answer (40-60 words target)
         """
         # Extract file paths and locations
         files = [ev.file_path for ev in evidence_sources[:3]]  # Top 3
-        
+
         # Generate generic answer
         if len(evidence_sources) == 1:
             ev = evidence_sources[0]
@@ -139,37 +139,37 @@ class GenericCodeInquiryHandler:
                 f"The implementation spans multiple modules indicating a "
                 f"distributed architecture for this feature."
             )
-        
+
         return answer
-    
+
     def _generate_no_evidence_answer(self, question: str) -> str:
         """Generate answer when no evidence found.
-        
+
         Args:
             question: Original question
-            
+
         Returns:
             Generic low-confidence answer
         """
         return (
-            f"No direct code evidence found for this question in the repository. "
-            f"This could mean: (1) the feature doesn't exist yet, "
-            f"(2) it's named differently than expected, or "
-            f"(3) it's implemented in external dependencies. "
-            f"Try rephrasing your question with specific file or function names."
+            "No direct code evidence found for this question in the repository. "
+            "This could mean: (1) the feature doesn't exist yet, "
+            "(2) it's named differently than expected, or "
+            "(3) it's implemented in external dependencies. "
+            "Try rephrasing your question with specific file or function names."
         )
-    
+
     def _add_disclaimer(
         self,
         response: Dict[str, Any],
         is_cortex: bool,
     ) -> Dict[str, Any]:
         """Add disclaimer for user repository responses.
-        
+
         Args:
             response: Response dictionary
             is_cortex: Whether repo is CORTEX
-            
+
         Returns:
             Response with disclaimer field
         """
@@ -180,5 +180,5 @@ class GenericCodeInquiryHandler:
             )
         else:
             response["disclaimer"] = ""
-        
+
         return response

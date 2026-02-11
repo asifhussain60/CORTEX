@@ -7,17 +7,20 @@ disabled, ensuring CORTEX continues operating without KG backend.
 Implements the same interface as Neo4j adapter, enabling transparent fallback.
 """
 
-import sqlite3
-from typing import Any, Dict, List, Optional
-from pathlib import Path
 import json
+import sqlite3
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
 from cortex.brain.core.knowledge.graph.interface import (
-    IGraphAdapter,
     EntityNode,
-    Relationship,
-    Path as GraphPath,
-    HealthStatus,
     GraphQueryError,
+    HealthStatus,
+    IGraphAdapter,
+    Relationship,
+)
+from cortex.brain.core.knowledge.graph.interface import (
+    Path as GraphPath,
 )
 
 

@@ -20,7 +20,6 @@ from cortex.orchestrators.support.lens_visualization_orchestrator import (
     LENSVisualizationOrchestrator,
 )
 
-
 # Configuration
 DASHBOARD_ROOT = Path.cwd() / ".cortex" / "lens-dashboard"
 VERSION = "1.0.0"

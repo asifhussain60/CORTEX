@@ -15,10 +15,9 @@ Author: Asif Hussain
 
 from typing import Any, Dict, Optional
 
-from cortex.brain.core.result import Result, Ok, Err
 from cortex.brain.core.governance_enforcer import GovernanceEnforcer, IntentType
+from cortex.brain.core.result import Err, Ok, Result
 from cortex.brain.mcp.decorator import mcp_tool
-
 
 # Module-level instances (initialized lazily)
 _enforcer: Optional[GovernanceEnforcer] = None
@@ -41,7 +40,7 @@ def initialize_governance_tools() -> None:
     Initialize governance tools.
     """
     global _enforcer
-    
+
     if _enforcer is None:
         _enforcer = GovernanceEnforcer()
 
@@ -68,29 +67,29 @@ def _ensure_initialized() -> GovernanceEnforcer:
 def check_phase_lock(phase_id: str) -> Result[Dict[str, Any]]:
     """
     Check if a phase is locked.
-    
+
     Args:
         phase_id: Phase identifier (e.g., "PHASE-01")
-    
+
     Returns:
         Result containing lock status and details
     """
     if not phase_id or not phase_id.startswith("PHASE-"):
         return Err("Invalid phase_id: must be PHASE-XX format")
-    
+
     enforcer = _ensure_initialized()
     result = enforcer.check_phase_lock(phase_id)
-    
+
     response = {
         "phase_id": phase_id,
         "locked": not result.allowed,
     }
-    
+
     if not result.allowed and result.metadata:
         response["locked_by"] = result.metadata.get("locked_by")
         response["locked_at"] = result.metadata.get("locked_at")
         response["git_checkpoint"] = result.metadata.get("git_checkpoint")
-    
+
     return Ok(response)
 
 
@@ -111,16 +110,16 @@ _register_tool(
 def validate_ac_id(ac_id: str) -> Result[Dict[str, Any]]:
     """
     Validate an AC-ID exists and is properly formatted.
-    
+
     Args:
         ac_id: Acceptance criteria ID
-    
+
     Returns:
         Result containing validation status
     """
     enforcer = _ensure_initialized()
     result = enforcer.validate_ac_id(ac_id)
-    
+
     return Ok({
         "ac_id": ac_id,
         "valid": result.allowed,
@@ -145,16 +144,16 @@ _register_tool(
 def canonicalize_intent(raw_intent: str) -> Result[Dict[str, Any]]:
     """
     Canonicalize a raw intent string.
-    
+
     Args:
         raw_intent: Raw intent string
-    
+
     Returns:
         Result containing canonical intent
     """
     enforcer = _ensure_initialized()
     canonical = enforcer.canonicalize_intent(raw_intent)
-    
+
     return Ok({
         "intent_type": canonical.intent_type.name,
         "ac_id": canonical.ac_id,
@@ -187,18 +186,18 @@ def enforce_operation(
 ) -> Result[Dict[str, Any]]:
     """
     Enforce governance for a complete operation.
-    
+
     Args:
         operation: Operation type
         ac_id: Target AC-ID
         phase: Target phase
-    
+
     Returns:
         Result containing enforcement decision
     """
     enforcer = _ensure_initialized()
     result = enforcer.enforce_operation(operation, ac_id, phase)
-    
+
     return Ok({
         "allowed": result.allowed,
         "reason": result.reason,
@@ -230,23 +229,23 @@ _register_tool(
 def get_phase_status(phase_id: str) -> Result[Dict[str, Any]]:
     """
     Get comprehensive phase status.
-    
+
     Args:
         phase_id: Phase identifier
-    
+
     Returns:
         Result containing phase status details
     """
     enforcer = _ensure_initialized()
-    
+
     # Check lock status
     lock_result = enforcer.check_phase_lock(phase_id)
     is_locked = not lock_result.allowed
-    
+
     # Get AC count for phase
     # Map phase to AC prefix pattern
     phase_ac_prefixes = {
-        "PHASE-01": ["AC-AR-001", "AC-AR-002", "AC-AR-003", "AC-AR-004", "AC-AR-005", 
+        "PHASE-01": ["AC-AR-001", "AC-AR-002", "AC-AR-003", "AC-AR-004", "AC-AR-005",
                      "AC-FR-001", "AC-FR-003", "AC-FR-004", "AC-FR-005", "AC-FR-006", "AC-AR-008"],
         "PHASE-02": ["AC-AR-006", "AC-AR-007", "AC-FR-002", "AC-AR-009", "AC-VALIDATE", "AC-METRICS"],
         "PHASE-03": ["AC-NFR-002", "AC-NFR-004"],
@@ -254,14 +253,14 @@ def get_phase_status(phase_id: str) -> Result[Dict[str, Any]]:
         "PHASE-05": ["AC-NFR-001", "AC-BRITTLE"],
         "PHASE-PARALLEL": ["AC-AR-010"],
     }
-    
+
     # Count ACs for this phase (no database needed)
     ac_count = 0
-    
+
     # Get status breakdown
     status_counts = {"PENDING": 0, "IN_PROGRESS": 0, "COMPLETED": 0, "VERIFIED": 0}
     # Placeholder for future phase tracking implementation
-    
+
     response = {
         "phase_id": phase_id,
         "locked": is_locked,
@@ -269,11 +268,11 @@ def get_phase_status(phase_id: str) -> Result[Dict[str, Any]]:
         "status_breakdown": status_counts,
         "can_start": enforcer.can_start_phase(phase_id).allowed,
     }
-    
+
     if is_locked and lock_result.metadata:
         response["locked_by"] = lock_result.metadata.get("locked_by")
         response["locked_at"] = lock_result.metadata.get("locked_at")
-    
+
     return Ok(response)
 
 
@@ -287,7 +286,7 @@ _register_tool(
 def get_tool_registry() -> Dict[str, Dict[str, Any]]:
     """
     Get the MCP tool registry.
-    
+
     Returns:
         Dictionary of tool name -> tool info
     """

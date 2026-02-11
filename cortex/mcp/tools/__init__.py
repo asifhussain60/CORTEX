@@ -25,37 +25,39 @@ JSON-first dashboard with dual-format support (JSON + SQLite):
 """
 
 # Core MCP Tools
-from .intelligent_git_merge import IntelligentGitMergeTool, create_intelligent_merge_mcp_tool
-
-# LENS Analysis Tools (ARCH-007)
-from .lens_tools import (
-    cortex_lens_analyze,
-    cortex_git_history,
-    cortex_ast_analyze,
-    cortex_extract_comments,
-    cortex_detect_duplicates,
-    cortex_tools_catalog,
+# MCP-FIRST Enforcement Tools (PHASE-51)
+from cortex.orchestrators.response.legacy_migration_mcp_tools import (
+    AnalyzeResponseMCPTool,
+    ProcessRequestMCPTool,
 )
 
 # Discovery Tools (ENH-047)
 from .discovery import cortex_discover
+from .intelligent_git_merge import (
+    IntelligentGitMergeTool,
+    create_intelligent_merge_mcp_tool,
+)
 
 # Intelligent LENS Tools with LLM (AC-LENS-LLM-004)
 from .intelligent_lens_tools import (
     cortex_lens_deep_analyze,
 )
 
-# Onboarding Tools (LENS v2.0 - AC-LENS-V2-ONBOARD-001)
-from .onboarding_tools import (
-    cortex_onboard_repository,
-    cortex_analyze_config,
-    cortex_analyze_repository_configs,
+# LENS Analysis Tools (ARCH-007)
+from .lens_tools import (
+    cortex_ast_analyze,
+    cortex_detect_duplicates,
+    cortex_extract_comments,
+    cortex_git_history,
+    cortex_lens_analyze,
+    cortex_tools_catalog,
 )
 
-# MCP-FIRST Enforcement Tools (PHASE-51)
-from cortex.orchestrators.response.legacy_migration_mcp_tools import (
-    ProcessRequestMCPTool,
-    AnalyzeResponseMCPTool,
+# Onboarding Tools (LENS v2.0 - AC-LENS-V2-ONBOARD-001)
+from .onboarding_tools import (
+    cortex_analyze_config,
+    cortex_analyze_repository_configs,
+    cortex_onboard_repository,
 )
 
 # Create tool instances for discovery
@@ -71,10 +73,6 @@ cortex_analyze_response = AnalyzeResponseMCPTool()
 # )
 
 # Vacuum Tools (Markdown Cleanup - CORE-002)
-from .vacuum_tools import (
-    cortex_vacuum,
-)
-
 # Educational Tools (Phase 22 - ASK Mode)
 from .cortex_ask import (
     cortex_ask,
@@ -86,8 +84,11 @@ from .cortex_verify_claim import (
 # Deployment Tools (HOLISTIC-REGISTRY-002)
 from .deployment_tools import (
     cortex_deploy_to_production,
-    cortex_deployment_health_check,
     cortex_deployment_canary,
+    cortex_deployment_health_check,
+)
+from .vacuum_tools import (
+    cortex_vacuum,
 )
 
 __all__ = [

@@ -3,10 +3,10 @@
 Establish registry structure for company-specific overrides.
 """
 
-from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
-from pathlib import Path
 import json
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 
 @dataclass

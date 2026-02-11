@@ -28,39 +28,39 @@ class OperationMode(Enum):
 class IOrchestrator(ABC):
     """
     Interface contract for all orchestrators.
-    
+
     Guarantees:
     - Registry integration
     - MCP tool exposure
     - Audit logging
     - Result pattern compliance
     """
-    
+
     @abstractmethod
     def get_name(self) -> str:
         """Get orchestrator name."""
         pass
-    
+
     @abstractmethod
     def get_version(self) -> str:
         """Get orchestrator version."""
         pass
-    
+
     @abstractmethod
     def initialize(self) -> Result[str]:
         """Initialize orchestrator."""
         pass
-    
+
     @abstractmethod
     def get_mode(self) -> OperationMode:
         """Get current operation mode."""
         pass
-    
+
     @abstractmethod
     def get_mcp_tools(self) -> Result[Dict[str, Any]]:
         """AC-AR-011-02: Get exposed MCP tools."""
         pass
-    
+
     @abstractmethod
     def execute_operation(
         self,
@@ -69,7 +69,7 @@ class IOrchestrator(ABC):
     ) -> Result[Any]:
         """Execute operation with audit logging."""
         pass
-    
+
     @abstractmethod
     def get_audit_trail(self, limit: int = 100) -> Result[list]:
         """AC-AR-011-03: Get audit trail with hash chain."""

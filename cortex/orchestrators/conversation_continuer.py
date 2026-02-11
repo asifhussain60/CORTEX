@@ -3,7 +3,7 @@ Conversation Continuer - Resume conversations from checkpoints.
 """
 
 import uuid
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 
 
 class ConversationContinuer:
@@ -16,10 +16,10 @@ class ConversationContinuer:
     def create_checkpoint(self, state: Dict[str, Any]) -> str:
         """
         Create a checkpoint from current state.
-        
+
         Args:
             state: Current conversation state.
-            
+
         Returns:
             Checkpoint ID.
         """
@@ -30,10 +30,10 @@ class ConversationContinuer:
     def resume_from_checkpoint(self, checkpoint_id: str) -> Optional[Dict[str, Any]]:
         """
         Resume conversation from checkpoint.
-        
+
         Args:
             checkpoint_id: ID of checkpoint to resume from.
-            
+
         Returns:
             Restored state or None if not found.
         """

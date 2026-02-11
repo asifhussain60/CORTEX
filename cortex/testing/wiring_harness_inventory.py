@@ -14,10 +14,10 @@ Authority: cortex-impl-map.yaml v3.9 + cortex-total-recall.prompt.md
 
 """
 
-from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 
 class ComponentCategory(str, Enum):
@@ -51,36 +51,36 @@ class WiredComponentDependency:
 @dataclass
 class UnwiredComponent:
     """Definition of a component that is designed but not wired."""
-    
+
     id: str
     name: str
     category: ComponentCategory
     status: IntegrationStatus
-    
+
     # Design & Implementation
     description: str
     tests_count: int
     test_pass_rate: float  # e.g., 1.0 for 100%
     test_files: List[str]
     implementation_location: str
-    
+
     # Integration Details
     entry_point: str  # Module path to import from
     initialization_code: str  # Python code to initialize
     usage_pattern: str  # Example usage
     dependencies: List[WiredComponentDependency] = field(default_factory=list)
     wiring_priority: int = 0  # 0=critical, 10=optional
-    
+
     # Master Orchestrator Integration
     orchestrator_hook_type: Optional[str] = None  # "stage_1", "stage_2", "stage_3", "stage_4", etc.
     integration_point: Optional[str] = None  # Where in orchestrator lifecycle
     blocker_phase: Optional[str] = None  # Phase blocking integration
     estimated_wiring_hours: float = 0.5
-    
+
     # Governance
     governance_rules_required: List[str] = field(default_factory=list)
     test_coverage_minimum: float = 0.8  # 80% minimum
-    
+
     # Notes
     integration_notes: str = ""
     version: str = "1.0"
@@ -91,11 +91,11 @@ class WiringHarnessInventory:
     Centralized inventory of all unwired components with automatic discovery
     and integration support.
     """
-    
+
     # =========================================================================
     # SECTION 1: CHALLENGE INTEGRATION (Issue #9) - UNWIRED
     # =========================================================================
-    
+
     CHALLENGE_INTEGRATION_CHALLENGE_GENERATOR = UnwiredComponent(
         id="UNWIRED-CHALLENGE-001",
         name="ChallengeGenerator",
@@ -118,7 +118,7 @@ class WiringHarnessInventory:
         governance_rules_required=["CORE-008", "CORE-011", "CORE-012"],
         integration_notes="Required for INT-RULE-009: Mandatory Intelligent Challenge",
     )
-    
+
     CHALLENGE_INTEGRATION_ORCHESTRATOR = UnwiredComponent(
         id="UNWIRED-CHALLENGE-002",
         name="ChallengeIntegrationOrchestrator",
@@ -142,7 +142,7 @@ class WiringHarnessInventory:
         estimated_wiring_hours=1.0,
         integration_notes="Must initialize after ChallengeGenerator. Routes to stage 3 of MasterOrchestrator.",
     )
-    
+
     HOLISTIC_CONTEXT_BUILDER = UnwiredComponent(
         id="UNWIRED-CHALLENGE-003",
         name="HolisticContextBuilder",
@@ -162,7 +162,7 @@ class WiringHarnessInventory:
         governance_rules_required=["CORE-008", "CORE-011", "CORE-012"],
         integration_notes="Depends on challenges being generated in earlier stage",
     )
-    
+
     TURN_RESPONSE_WITH_CHALLENGES = UnwiredComponent(
         id="UNWIRED-CHALLENGE-004",
         name="TurnResponseWithChallenges",
@@ -186,13 +186,13 @@ class WiringHarnessInventory:
         estimated_wiring_hours=1.5,
         integration_notes="Must be last stage - generates final response with all integrated dimensions",
     )
-    
+
     # =========================================================================
     # SECTION 1B: TDD ORCHESTRATOR (KNOWLEDGE INTEGRATION) - WIRED ✓
     # =========================================================================
     # AC-REM-011-02: TDD Orchestrator Knowledge Integration - COMPLETED
     # Status: WIRED into MasterOrchestrator with 35 best practices YAMLs
-    
+
     TDD_ORCHESTRATOR_WIRED = {
         "id": "WIRED-TDD-ORCHESTRATOR-001",
         "name": "TDDOrchestrator",
@@ -200,17 +200,17 @@ class WiringHarnessInventory:
         "status": "WIRED",
         "phase": "AC-REM-011-02",
         "description": "Test-driven development orchestrator with 35 best practices YAMLs from cortex_brain/tier3/knowledge/",
-        
+
         "implementation_location": "cortex/orchestrators/core/tdd_orchestrator.py",
         "entry_point": "cortex.orchestrators.core.tdd_orchestrator.TDDOrchestrator",
         "singleton_getter": "cortex.orchestrators.core.tdd_orchestrator.get_tdd_orchestrator()",
-        
+
         "tests_count": 42,
         "test_pass_rate": 1.0,
         "test_files": ["tests/unit/orchestrators/test_tdd_orchestrator.py"],
-        
+
         "governance_rules": ["CORE-008", "CORE-011", "CORE-012", "CORE-019"],
-        
+
         "knowledge_yamls_wired": {
             "TESTING-VALIDATION": [
                 "tdd-best-practices.yaml",
@@ -227,7 +227,7 @@ class WiringHarnessInventory:
             "DOCUMENTATION": 2,
             "total_yamls": 35
         },
-        
+
         "wiring_details": {
             "wired_into": "MasterOrchestrator",
             "initialization_ac_id": "AC-REM-011-02",
@@ -253,7 +253,7 @@ class WiringHarnessInventory:
             "routing_rule": "ALL implementation intents route through TDD-Master (TDDOrchestrator)",
             "tdd_phases": ["RED (test-first)", "GREEN (minimal code)", "REFACTOR (design improvement)"]
         },
-        
+
         "integration_features": {
             "knowledge_guidance_engine": "Integrated via KnowledgeGuidanceEngine",
             "tdd_discipline_enforcement": "RED → GREEN → REFACTOR workflow per CORE-008",
@@ -263,7 +263,7 @@ class WiringHarnessInventory:
             "anti_pattern_detection": "Extracts and warns about TDD anti-patterns",
             "test_pattern_guidance": "Provides test double patterns, testing pyramid guidance"
         },
-        
+
         "completion_status": {
             "implementation": "COMPLETE",
             "testing": "42 tests PASSING (100%)",
@@ -272,7 +272,7 @@ class WiringHarnessInventory:
             "documentation": "Google-style docstrings on all public APIs",
             "governance_compliance": "CORE-008, CORE-011, CORE-012, CORE-019 compliant"
         },
-        
+
         "yaml_restoration_status": {
             "phase": "PHASE-REMEDIATION-07: TDD Knowledge Integration",
             "yaml_location": "cortex_brain/tier3/knowledge/",
@@ -282,22 +282,22 @@ class WiringHarnessInventory:
             "domains": ["ARCHITECTURE", "TESTING-VALIDATION", "DEPLOYMENT", "KNOWLEDGE-CURATION", "SECURITY", "PERFORMANCE", "DATA-MANAGEMENT", "DOCUMENTATION"],
             "key_tdd_files": ["tdd-best-practices.yaml (Kent Beck + Uncle Bob methodology)", "test-doubles.yaml (Mock patterns)", "testing-pyramid.yaml (70/20/10 distribution)"]
         },
-        
+
         "dependencies": {
             "KnowledgeGuidanceEngine": "cortex.brain.core.knowledge_guidance_engine.KnowledgeGuidanceEngine",
             "TDD_YAMLs": "cortex_brain/tier3/knowledge/TESTING-VALIDATION/*.yaml",
             "Governance": "cortex_brain/tier0/governance/core-rules.yaml (CORE-008, CORE-019)"
         },
-        
+
         "integration_notes": "✅ WIRED: TDD Orchestrator fully integrated with 35 best practices YAMLs. Routes ALL implementation intents through TDD discipline enforcer per CORE-019. Provides RED/GREEN/REFACTOR workflow guidance with knowledge integration."
     }
-    
+
     # =========================================================================
     # SECTION 1C: WRAPPED TDD ORCHESTRATOR (CONVERSATION PROTOCOL) - WIRED ✓
     # =========================================================================
     # AC-REM-011-03: WrappedTDDOrchestrator with ConversationProtocol - COMPLETED
     # Status: WIRED into MasterOrchestrator with multi-turn continuation support
-    
+
     WRAPPED_TDD_ORCHESTRATOR_WIRED = {
         "id": "WIRED-WRAPPED-TDD-ORCHESTRATOR-001",
         "name": "WrappedTDDOrchestrator",
@@ -305,24 +305,24 @@ class WiringHarnessInventory:
         "status": "WIRED",
         "phase": "AC-REM-011-03",
         "description": "Multi-turn TDD orchestrator with ConversationProtocol, ContinuationDecision routing, and EventRegistry callbacks",
-        
+
         "implementation_location": "cortex/orchestrators/core/wrapped_tdd_orchestrator.py",
         "entry_point": "cortex.orchestrators.core.wrapped_tdd_orchestrator.WrappedTDDOrchestrator",
         "singleton_getter": "cortex.orchestrators.core.wrapped_tdd_orchestrator.get_wrapped_tdd_orchestrator()",
-        
+
         "tests_count": 70,
         "test_pass_rate": 1.0,
         "test_files": ["tests/unit/orchestrators/test_wrapped_tdd_orchestrator.py"],
-        
+
         "governance_rules": ["CORE-008", "CORE-011", "CORE-012", "CORE-013", "CORE-019"],
-        
+
         "core_components": {
             "WrappedTDDOrchestrator": "Multi-turn orchestrator wrapper with continuation logic",
             "TDDTurn": "Single turn record with phase, tokens, guidance context",
             "TDDConversationContext": "Persistent state across turns (module, domain, tokens, violations)",
             "get_wrapped_tdd_orchestrator": "Singleton factory function"
         },
-        
+
         "multi_turn_features": {
             "execute_turn": "Single TDD phase execution (RED/GREEN/REFACTOR)",
             "execute_with_continuation": "Multi-turn conversation loop with auto-routing",
@@ -332,7 +332,7 @@ class WiringHarnessInventory:
             "max_turns": "Safety limit (default 10 turns)",
             "token_budget": "Default 8000 tokens, configurable per conversation"
         },
-        
+
         "event_integration": {
             "event_registry": "EventRegistry for event-driven callbacks",
             "terminal_events": [
@@ -344,7 +344,7 @@ class WiringHarnessInventory:
             ],
             "event_listeners": "Registerableeventlisteners for custom handling"
         },
-        
+
         "context_propagation": {
             "module_path": "Tracked across turns for module-specific guidance",
             "domain": "Domain context for knowledge routing",
@@ -353,7 +353,7 @@ class WiringHarnessInventory:
             "continuation_reasons": "History of halt/continue decisions",
             "turn_history": "Full record of each turn (input, phase, response, tokens)"
         },
-        
+
         "test_coverage": {
             "Initialization": "3 tests - component setup, defaults, history",
             "Single Turn": "4 tests - RED/GREEN execution, counter, tokens",
@@ -369,7 +369,7 @@ class WiringHarnessInventory:
             "total_tests": 32,
             "total_assertions": "70+"
         },
-        
+
         "governance_integration": {
             "CORE-008": "TDD discipline - RED phase writes tests, GREEN minimal code, REFACTOR improves design",
             "CORE-011": "Type hints - 100% coverage on all parameters + returns",
@@ -377,7 +377,7 @@ class WiringHarnessInventory:
             "CORE-013": "Specific exceptions - no bare except clauses",
             "CORE-019": "TDD-Master routing - all implementation intents through TDD orchestrator"
         },
-        
+
         "completion_status": {
             "implementation": "COMPLETE (580 lines)",
             "testing": "70+ assertions PASSING (100%)",
@@ -386,7 +386,7 @@ class WiringHarnessInventory:
             "documentation": "Google-style docstrings on all public APIs + dataclasses",
             "governance_compliance": "5/5 CORE rules compliant"
         },
-        
+
         "usage_patterns": {
             "single_turn": "wrapped.execute_turn(user_input, tdd_phase, context)",
             "multi_turn": "wrapped.execute_with_continuation(initial_input, initial_context, max_turns=10, token_budget=8000)",
@@ -395,7 +395,7 @@ class WiringHarnessInventory:
             "status": "wrapped.get_status() → Dict with metrics",
             "singleton": "get_wrapped_tdd_orchestrator() → WrappedTDDOrchestrator"
         },
-        
+
         "dependencies": {
             "TDDOrchestrator": "cortex.orchestrators.core.tdd_orchestrator.TDDOrchestrator",
             "ConversationProtocol": "cortex.brain.core.orchestrator.conversation_protocol.ConversationProtocol (optional)",
@@ -404,14 +404,14 @@ class WiringHarnessInventory:
             "Terminal Events": "cortex.brain.core.orchestrator.terminal_events (PhaseCompleted, ErrorOccurred, TokenLimit, etc)",
             "Result Type": "cortex.core.result (Ok, Err for error handling)"
         },
-        
+
         "integration_notes": "✅ WIRED: WrappedTDDOrchestrator extends TDDOrchestrator with multi-turn conversations, explicit continuation decisions, and event-driven architecture. Enables RED→GREEN→REFACTOR cycles with token tracking, context persistence, and governance enforcement. Ready for integration into MasterOrchestrator stage 3."
     }
-    
+
     # =========================================================================
     # SECTION 2: INTERACTION ORCHESTRATOR & LENS PROTOCOL - NOT FULLY WIRED
     # =========================================================================
-    
+
     INTERACTION_ORCHESTRATOR = UnwiredComponent(
         id="UNWIRED-INTERACTION-001",
         name="InteractionOrchestrator",
@@ -432,7 +432,7 @@ class WiringHarnessInventory:
         estimated_wiring_hours=2.0,
         integration_notes="Stage 1 of LENS protocol. Partially implemented but not called from MasterOrchestrator",
     )
-    
+
     LENS_SYNTHESIS = UnwiredComponent(
         id="UNWIRED-LENS-001",
         name="LENSSynthesis",
@@ -451,11 +451,11 @@ class WiringHarnessInventory:
         wiring_priority=1,
         governance_rules_required=["CORE-008", "CORE-011", "CORE-012"],
     )
-    
+
     # =========================================================================
     # SECTION 3: COMPONENT HEALTH & RESILIENCE - NOT WIRED
     # =========================================================================
-    
+
     COMPONENT_HEALTH_TRACKER = UnwiredComponent(
         id="UNWIRED-HEALTH-001",
         name="ComponentHealthTracker",
@@ -476,7 +476,7 @@ class WiringHarnessInventory:
         estimated_wiring_hours=1.0,
         integration_notes="Should be initialized first in MasterOrchestrator. Enables readiness probes.",
     )
-    
+
     GRACEFUL_DEGRADATION_FRAMEWORK = UnwiredComponent(
         id="UNWIRED-RESILIENCE-001",
         name="GracefulDegradationFramework",
@@ -497,7 +497,7 @@ class WiringHarnessInventory:
         estimated_wiring_hours=1.5,
 # REMOVED: Manual registry pattern - integration_notes="Critical for production resilience. Must wire fallback strategies for all critical components.",
     )
-    
+
     PARTIAL_FUNCTIONALITY_MODE = UnwiredComponent(
         id="UNWIRED-RESILIENCE-002",
         name="PartialFunctionalityMode",
@@ -516,11 +516,11 @@ class WiringHarnessInventory:
         wiring_priority=2,
         governance_rules_required=["CORE-008", "CORE-011"],
     )
-    
+
     # =========================================================================
     # SECTION 4: CONVERSATION PROTOCOL & TURN MANAGEMENT - PARTIAL
     # =========================================================================
-    
+
     CONVERSATION_PROTOCOL = UnwiredComponent(
         id="UNWIRED-PROTOCOL-001",
         name="ConversationProtocol",
@@ -541,7 +541,7 @@ class WiringHarnessInventory:
         estimated_wiring_hours=2.0,
         integration_notes="Implemented but not integrated into MasterOrchestrator execution flow",
     )
-    
+
     CONTINUATION_DECISION = UnwiredComponent(
         id="UNWIRED-PROTOCOL-002",
         name="ContinuationDecision",
@@ -560,7 +560,7 @@ class WiringHarnessInventory:
         wiring_priority=0,
         governance_rules_required=["CORE-008", "CORE-011"],
     )
-    
+
     TERMINAL_EVENT_REGISTRY = UnwiredComponent(
         id="UNWIRED-PROTOCOL-003",
         name="TerminalEventRegistry",
@@ -579,11 +579,11 @@ class WiringHarnessInventory:
         wiring_priority=2,
         governance_rules_required=["CORE-008", "CORE-011"],
     )
-    
+
     # =========================================================================
     # SECTION 5: MCP TOOL DISCOVERY & REGISTRY - NOT INTEGRATED
     # =========================================================================
-    
+
     MCP_TOOL_DISCOVERY = UnwiredComponent(
         id="UNWIRED-MCP-001",
         name="ToolDiscoveryEngine",
@@ -604,7 +604,7 @@ class WiringHarnessInventory:
         estimated_wiring_hours=1.0,
         integration_notes="Must run before MCP server initialization to auto-register all tools",
     )
-    
+
     MCP_TOOL_GOVERNANCE = UnwiredComponent(
         id="UNWIRED-MCP-002",
         name="ToolGovernanceManager",
@@ -623,11 +623,11 @@ class WiringHarnessInventory:
         wiring_priority=1,
         governance_rules_required=["CORE-008", "CORE-011", "CORE-017"],
     )
-    
+
     # =========================================================================
     # SECTION 6: INTENT ROUTING ADVANCED - PARTIAL
     # =========================================================================
-    
+
     INTENT_CANONICALIZER = UnwiredComponent(
         id="UNWIRED-INTENT-001",
         name="IntentCanonicalizer",
@@ -648,7 +648,7 @@ class WiringHarnessInventory:
         estimated_wiring_hours=0.5,
         integration_notes="Should run after intent classification, before routing",
     )
-    
+
     INTENT_REFLECTION_PROTOCOL = UnwiredComponent(
         id="UNWIRED-INTENT-002",
         name="IntentReflectionProtocol",
@@ -669,7 +669,7 @@ class WiringHarnessInventory:
         estimated_wiring_hours=1.5,
         integration_notes="Enables human-in-loop approval for high-risk operations",
     )
-    
+
     COMPREHENSION_YAML_GENERATOR = UnwiredComponent(
         id="UNWIRED-INTENT-003",
         name="ComprehensionYAMLGenerator",
@@ -689,11 +689,11 @@ class WiringHarnessInventory:
         governance_rules_required=["CORE-008", "CORE-011", "CORE-012"],
         integration_notes="Part of LENS Phase 4 output generation",
     )
-    
+
     # =========================================================================
     # SECTION 7: KNOWLEDGE MANAGEMENT - PARTIALLY WIRED
     # =========================================================================
-    
+
     UNIFIED_KNOWLEDGE_SERVICE = UnwiredComponent(
         id="UNWIRED-KNOWLEDGE-001",
         name="UnifiedKnowledgeService",
@@ -713,7 +713,7 @@ class WiringHarnessInventory:
         governance_rules_required=["CORE-008", "CORE-011"],
         integration_notes="Currently exists but not called from orchestrator pipeline",
     )
-    
+
     KNOWLEDGE_GRAPH_INTEGRATION = UnwiredComponent(
         id="UNWIRED-KNOWLEDGE-002",
         name="KnowledgeGraphIntegration",
@@ -733,11 +733,11 @@ class WiringHarnessInventory:
         governance_rules_required=["CORE-008", "CORE-011"],
         blocker_phase="PHASE-KG-001-foundation (optional eval track)",
     )
-    
+
     # =========================================================================
     # SECTION 8: ADVANCED ROUTING & PLANNING - NOT INTEGRATED
     # =========================================================================
-    
+
     INTELLIGENT_KNOWLEDGE_ROUTER = UnwiredComponent(
         id="UNWIRED-ROUTING-001",
         name="IntelligentKnowledgeRouter",
@@ -758,7 +758,7 @@ class WiringHarnessInventory:
         estimated_wiring_hours=1.5,
         integration_notes="Optional enhancement to RoutingEngine. Fallback to YAML rules if unavailable.",
     )
-    
+
     PLANNING_ORCHESTRATOR = UnwiredComponent(
         id="UNWIRED-ROUTING-002",
         name="PlanningOrchestrator",
@@ -779,11 +779,11 @@ class WiringHarnessInventory:
         estimated_wiring_hours=2.0,
         integration_notes="Available but not registered in domain orchestrator registry",
     )
-    
+
     # =========================================================================
     # SECTION 9: GOVERNANCE INTELLIGENCE - NOT INTEGRATED
     # =========================================================================
-    
+
     GOVERNANCE_INTELLIGENCE = UnwiredComponent(
         id="UNWIRED-GOVERNANCE-001",
         name="GovernanceIntelligence",
@@ -803,7 +803,7 @@ class WiringHarnessInventory:
         governance_rules_required=["CORE-008", "CORE-011", "CORE-017"],
         integration_notes="Enables context-aware governance rule selection from all tiers",
     )
-    
+
     TIER_COMPOSER = UnwiredComponent(
         id="UNWIRED-GOVERNANCE-002",
         name="TierComposer",
@@ -824,11 +824,11 @@ class WiringHarnessInventory:
         estimated_wiring_hours=1.0,
         integration_notes="Enables multi-tier governance composition per operation context",
     )
-    
+
     # =========================================================================
     # SECTION 10: ADDITIONAL MODULES - READY FOR INTEGRATION
     # =========================================================================
-    
+
     CONFLICT_RESOLVER = UnwiredComponent(
         id="UNWIRED-MISC-001",
         name="ConflictResolver",
@@ -847,7 +847,7 @@ class WiringHarnessInventory:
         wiring_priority=2,
         governance_rules_required=["CORE-008", "CORE-011"],
     )
-    
+
     ORPHAN_DETECTOR = UnwiredComponent(
         id="UNWIRED-MISC-002",
         name="OrphanDetector",
@@ -871,7 +871,7 @@ class WiringHarnessInventory:
 def get_unwired_inventory() -> List[UnwiredComponent]:
     """
     Get list of all unwired components ordered by integration priority.
-    
+
     Returns:
         Sorted list of UnwiredComponent objects (critical first)
     """
@@ -881,43 +881,43 @@ def get_unwired_inventory() -> List[UnwiredComponent]:
         WiringHarnessInventory.CHALLENGE_INTEGRATION_ORCHESTRATOR,
         WiringHarnessInventory.HOLISTIC_CONTEXT_BUILDER,
         WiringHarnessInventory.TURN_RESPONSE_WITH_CHALLENGES,
-        
+
         # Interaction & LENS protocol (CRITICAL)
         WiringHarnessInventory.INTERACTION_ORCHESTRATOR,
         WiringHarnessInventory.CONVERSATION_PROTOCOL,
         WiringHarnessInventory.CONTINUATION_DECISION,
-        
+
         # Health & resilience (HIGH)
         WiringHarnessInventory.COMPONENT_HEALTH_TRACKER,
         WiringHarnessInventory.GRACEFUL_DEGRADATION_FRAMEWORK,
         WiringHarnessInventory.PARTIAL_FUNCTIONALITY_MODE,
-        
+
         # LENS & synthesis
         WiringHarnessInventory.LENS_SYNTHESIS,
         WiringHarnessInventory.INTENT_CANONICALIZER,
         WiringHarnessInventory.COMPREHENSION_YAML_GENERATOR,
-        
+
         # Intent routing
         WiringHarnessInventory.INTENT_REFLECTION_PROTOCOL,
         WiringHarnessInventory.INTELLIGENT_KNOWLEDGE_ROUTER,
-        
+
         # MCP tools
         WiringHarnessInventory.MCP_TOOL_DISCOVERY,
         WiringHarnessInventory.MCP_TOOL_GOVERNANCE,
-        
+
         # Knowledge & governance
         WiringHarnessInventory.UNIFIED_KNOWLEDGE_SERVICE,
         WiringHarnessInventory.GOVERNANCE_INTELLIGENCE,
         WiringHarnessInventory.TIER_COMPOSER,
         WiringHarnessInventory.KNOWLEDGE_GRAPH_INTEGRATION,
-        
+
         # Advanced
         WiringHarnessInventory.PLANNING_ORCHESTRATOR,
         WiringHarnessInventory.TERMINAL_EVENT_REGISTRY,
         WiringHarnessInventory.CONFLICT_RESOLVER,
         WiringHarnessInventory.ORPHAN_DETECTOR,
     ]
-    
+
     # Sort by wiring_priority (0=critical, higher=less critical)
     return sorted(components, key=lambda c: c.wiring_priority)
 
@@ -925,7 +925,7 @@ def get_unwired_inventory() -> List[UnwiredComponent]:
 def get_critical_wiring_order() -> List[UnwiredComponent]:
     """
     Get unwired components in the order they must be integrated.
-    
+
     Returns:
         List of components in dependency/execution order
     """
@@ -935,22 +935,22 @@ def get_critical_wiring_order() -> List[UnwiredComponent]:
 def get_discovered_components(include_static: bool = True) -> List[UnwiredComponent]:
     """
     Get components discovered via discovery scanner.
-    
+
     This function integrates with discovery_scanner.py to automatically
     discover new orchestrators, modules, LENS components, and toolkit features.
-    
+
     Args:
         include_static: If True, include both discovered and static inventory
-        
+
     Returns:
         List of discovered UnwiredComponent instances
     """
     try:
         from cortex.testing.discovery_scanner import DiscoveryScanner
-        
+
         scanner = DiscoveryScanner()
         discovered = scanner.scan_all()
-        
+
         # Convert discovered components to UnwiredComponent format
         unwired_discovered = []
         for comp in discovered:
@@ -975,12 +975,12 @@ def get_discovered_components(include_static: bool = True) -> List[UnwiredCompon
                 version="1.0",
             )
             unwired_discovered.append(unwired)
-        
+
         if include_static:
             # Combine discovered with static inventory
             return unwired_discovered + get_unwired_inventory()
         return unwired_discovered
-        
+
     except Exception as e:
         # Graceful degradation - if discovery fails, return static inventory
         import logging
@@ -993,17 +993,17 @@ def get_discovered_components(include_static: bool = True) -> List[UnwiredCompon
 def get_discovery_summary() -> Dict[str, Any]:
     """
     Get summary of discovery scan results.
-    
+
     Returns:
         Dictionary with discovery statistics and component details
     """
     try:
         from cortex.testing.discovery_scanner import DiscoveryScanner
-        
+
         scanner = DiscoveryScanner()
         scanner.scan_all()
         return scanner.get_summary()
-        
+
     except Exception as e:
         import logging
         logging.debug(f"Discovery summary failed: {e}")
@@ -1019,27 +1019,27 @@ def get_discovery_summary() -> Dict[str, Any]:
 def run_discovery_and_wire() -> Dict[str, Any]:
     """
     Execute full discovery scan and wire all discovered components.
-    
+
     This is the main entry point for auto-wiring new components discovered
     during runtime. Called by TotalRecallAgent during initialization.
-    
+
     Returns:
         Dictionary with wiring results and statistics
     """
     from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
-    
+
     try:
         # Get discovery summary
         summary = get_discovery_summary()
-        
+
         # Get all discovered components
         discovered = get_discovered_components(include_static=False)
-        
+
         # Wire critical components into MasterOrchestrator
         master = MasterOrchestrator.instance()
         wired_count = 0
         failed_count = 0
-        
+
         for comp in sorted(discovered, key=lambda c: c.wiring_priority):
             try:
                 # Attempt to import and wire component
@@ -1047,19 +1047,19 @@ def run_discovery_and_wire() -> Dict[str, Any]:
                 import importlib
                 module = importlib.import_module(module_path)
                 ComponentClass = getattr(module, class_name)
-                
+
                 # Initialize instance
                 instance = ComponentClass()
-                
+
                 # Register with orchestrator (implementation-specific)
                 # This would be customized based on component type
                 wired_count += 1
-                
+
             except Exception as e:
                 import logging
                 logging.debug(f"Failed to wire {comp.name}: {e}")
                 failed_count += 1
-        
+
         return {
             "status": "success",
             "discovery_summary": summary,
@@ -1067,7 +1067,7 @@ def run_discovery_and_wire() -> Dict[str, Any]:
             "failed_components": failed_count,
             "total_components": len(discovered),
         }
-        
+
     except Exception as e:
         import logging
         logging.error(f"Discovery and wiring failed: {e}")

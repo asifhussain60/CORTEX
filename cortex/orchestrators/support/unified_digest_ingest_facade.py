@@ -20,21 +20,20 @@ Design Pattern: Composition Layer (prevents scope creep and brittleness)
 Authority: CORTEX-ARCH-013: Unified Knowledge Processing Gateway
 """
 
+import logging
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Optional, Dict, Any, Literal
-import logging
+from typing import Any, Dict, Literal, Optional
 
-from cortex.orchestrators.support.digest_session_orchestrator import (
-    DigestSessionOrchestrator,
-    DigestResult,
-)
 from cortex.brain.core.knowledge.bulk_ingestion import (
     BulkIngestionPipeline,
     BulkIngestionStats,
 )
-
+from cortex.orchestrators.support.digest_session_orchestrator import (
+    DigestResult,
+    DigestSessionOrchestrator,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -52,10 +51,10 @@ class ProcessingMode(Enum):
 @dataclass
 class UnifiedResult:
     """Unified result from either DIGEST or INGEST processing.
-    
+
     Provides a common interface for results from both orchestrators,
     enabling transparent routing and result handling.
-    
+
     Attributes:
         success: Whether operation succeeded.
         processing_mode: Which orchestrator was used (DIGEST or INGEST).
@@ -83,11 +82,11 @@ class UnifiedResult:
         cls, digest_result: DigestResult, source_file: str
     ) -> "UnifiedResult":
         """Create UnifiedResult from DigestResult.
-        
+
         Args:
             digest_result: DigestResult from DIGEST orchestrator.
             source_file: Source file path.
-            
+
         Returns:
             UnifiedResult with DIGEST mode.
         """
@@ -114,11 +113,11 @@ class UnifiedResult:
         cls, ingest_stats: BulkIngestionStats, source_file: str
     ) -> "UnifiedResult":
         """Create UnifiedResult from BulkIngestionStats.
-        
+
         Args:
             ingest_stats: BulkIngestionStats from INGEST pipeline.
             source_file: Source file path.
-            
+
         Returns:
             UnifiedResult with INGEST mode.
         """
@@ -143,7 +142,7 @@ class UnifiedResult:
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert result to dictionary for MCP response.
-        
+
         Returns:
             Dictionary representation of result.
         """
@@ -162,19 +161,19 @@ class UnifiedResult:
 
 class UnifiedDigestIngestionFacade:
     """Unified facade for DIGEST and INGEST orchestrators.
-    
+
     Provides intelligent routing and transparent coordination between:
     - DigestSessionOrchestrator (for chat file learning)
     - BulkIngestionPipeline (for knowledge base population)
-    
+
     Design Pattern: Composition (keeps orchestrators completely independent)
-    
+
     This facade prevents brittleness by:
     1. Delegating to separate, unchanged orchestrators
     2. Providing unified interface through result wrapping
     3. Enabling independent evolution of DIGEST and INGEST
     4. Maintaining CORE-035 (single canonical path per orchestrator)
-    
+
     Attributes:
         digest_orchestrator: DIGEST mode orchestrator.
         ingest_pipeline: INGEST mode pipeline.
@@ -186,7 +185,7 @@ class UnifiedDigestIngestionFacade:
         ingest_pipeline: Optional[BulkIngestionPipeline] = None,
     ) -> None:
         """Initialize unified facade.
-        
+
         Args:
             digest_orchestrator: Custom DIGEST orchestrator (uses default if None).
             ingest_pipeline: Custom INGEST pipeline (uses default if None).
@@ -204,19 +203,19 @@ class UnifiedDigestIngestionFacade:
         ] = None,
     ) -> ProcessingMode:
         """Detect processing mode from content or explicit source type.
-        
+
         If source_type is explicit, use it directly.
         Otherwise, analyze content to determine mode:
         - Contains chat markers (User:/Assistant:) → DIGEST
         - Contains structured data (JSON/YAML) → INGEST
-        
+
         Args:
             content: Content to analyze.
             source_type: Explicit source type if known.
-            
+
         Returns:
             Detected or explicit ProcessingMode.
-            
+
         Raises:
             ValueError: If mode cannot be determined.
         """
@@ -257,24 +256,24 @@ class UnifiedDigestIngestionFacade:
         **kwargs: Any,
     ) -> UnifiedResult:
         """Process knowledge source with intelligent routing.
-        
+
         Detects or uses explicit source type to route to appropriate
         orchestrator (DIGEST for chat files, INGEST for knowledge entries).
-        
+
         Keeps orchestrators completely independent:
         - Changes to DIGEST don't affect INGEST
         - Changes to INGEST don't affect DIGEST
         - Each maintains own configuration and state
-        
+
         Args:
             source_path: Path to source file.
             source_type: Explicit source type (auto-detected if None).
             auto_process: Enable auto-processing (e.g., auto-apply for DIGEST).
             **kwargs: Additional arguments passed to orchestrator.
-            
+
         Returns:
             UnifiedResult with operation outcome.
-            
+
         Raises:
             FileNotFoundError: If source file not found.
             ValueError: If mode cannot be determined.
@@ -325,12 +324,12 @@ class UnifiedDigestIngestionFacade:
         kwargs: Dict[str, Any],
     ) -> UnifiedResult:
         """Route to DIGEST orchestrator.
-        
+
         Args:
             source_path: Path to chat file.
             auto_process: Whether to auto-apply enhancements.
             kwargs: Additional arguments for digest_session.
-            
+
         Returns:
             UnifiedResult with DIGEST outcome.
         """
@@ -353,11 +352,11 @@ class UnifiedDigestIngestionFacade:
         kwargs: Dict[str, Any],
     ) -> UnifiedResult:
         """Route to INGEST orchestrator.
-        
+
         Args:
             source_path: Path to knowledge entry file.
             kwargs: Additional arguments for ingest.
-            
+
         Returns:
             UnifiedResult with INGEST outcome.
         """
@@ -374,7 +373,7 @@ class UnifiedDigestIngestionFacade:
 
     def get_status(self) -> Dict[str, Any]:
         """Get status of both orchestrators.
-        
+
         Returns:
             Status dictionary with DIGEST and INGEST status.
         """

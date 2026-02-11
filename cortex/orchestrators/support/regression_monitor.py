@@ -16,7 +16,7 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
-from typing import Dict, Any, List
+from typing import Any, Dict, List
 
 from cortex.orchestrators.core.architecture_guard import ArchitectureGuard
 from cortex.orchestrators.support.brittleness_scanner import BrittlenessScanner
@@ -27,40 +27,40 @@ logger = logging.getLogger(__name__)
 class RegressionMonitor:
     """
     Integration wrapper for regression checks in TDDOrchestrator.
-    
+
     Provides non-blocking interface to Phase 24 layers:
     - Pre-execution: ArchitectureGuard (completed phase validation)
     - Post-execution: BrittlenessScanner (runtime brittleness detection)
-    
+
     Design principle: Never raise exceptions, return warnings/scores.
     """
-    
+
     def __init__(self, registry_dir: Path):
         """
         Initialize RegressionMonitor.
-        
+
         Args:
             registry_dir: Path to cortex-registry/_cortex-master/
         """
         self.registry_dir = registry_dir
         self.architecture_guard = ArchitectureGuard()
         self.brittleness_scanner = BrittlenessScanner()
-    
+
     def check_completed_phases(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """
         Check request against completed phases (pre-execution).
-        
+
         Calls ArchitectureGuard.validate_request() and returns simplified result
         for TDDOrchestrator.
-        
+
         Non-blocking: Catches all exceptions and returns PASS status.
-        
+
         Args:
             context: Request context with:
                 - request_description (str): User's request
                 - intent_type (str): IMPLEMENT, FIX, REFACTOR, etc.
                 - scope (str): Target component/file
-        
+
         Returns:
             Dict with:
                 - status (str): PASS, WARNING, CRITICAL
@@ -74,7 +74,7 @@ class RegressionMonitor:
             request_description = context.get("request_description", "")
             intent_type = context.get("intent_type", "IMPLEMENT")
             scope = context.get("scope", "")
-            
+
             # Call ArchitectureGuard
             guard_result = self.architecture_guard.validate_request(
                 request_description=request_description,
@@ -82,7 +82,7 @@ class RegressionMonitor:
                 scope=scope,
                 registry_path=self.registry_dir
             )
-            
+
             # Map verdict to status
             if guard_result.verdict.value == "BLOCK":
                 status = "CRITICAL"
@@ -90,7 +90,7 @@ class RegressionMonitor:
                 status = "WARNING"
             else:
                 status = "PASS"
-            
+
             return {
                 "status": status,
                 "verdict": guard_result.verdict.value,
@@ -103,7 +103,7 @@ class RegressionMonitor:
                     "regression_risk": guard_result.regression_risk
                 }
             }
-            
+
         except Exception as e:
             logger.error(f"check_completed_phases failed: {e}", exc_info=True)
             # Non-blocking: Return PASS on error
@@ -114,17 +114,17 @@ class RegressionMonitor:
                 "reasoning": f"Validation error (non-blocking): {str(e)}",
                 "phase_alignment": {}
             }
-    
+
     def scan_brittleness(self, modified_files: List[str]) -> Dict[str, Any]:
         """
         Scan modified files for brittleness issues.
-        
+
         Calls BrittlenessScanner.scan() and returns simplified result
         for TDDOrchestrator.
-        
+
         Args:
             modified_files: List of file paths that were modified
-        
+
         Returns:
             Dict with:
                 - status (str): PASS, WARNING, CRITICAL
@@ -141,30 +141,30 @@ class RegressionMonitor:
                     "issues": [],
                     "details": {}
                 }
-            
+
             # Aggregate results from multiple file scans
             max_brittleness = 0.0
             all_issues = []
             scanned_count = 0
-            
+
             for file_path in modified_files:
                 file_path_obj = Path(file_path)
                 if not file_path_obj.exists():
                     continue
-                
+
                 # Scan single file/directory (scanner handles both)
                 scan_result = self.brittleness_scanner.scan(str(file_path_obj))
                 scanned_count += 1
-                
+
                 # Track max brittleness score across all files
                 max_brittleness = max(max_brittleness, scan_result.brittleness_score)
-                
+
                 # Collect circular dependency issues
                 if scan_result.circular_dependencies:
                     for dep in scan_result.circular_dependencies:
                         cycle_str = " -> ".join(dep.cycle_path)
                         all_issues.append(f"Circular dependency: {cycle_str}")
-                
+
                 # Collect coupling violations (high coupling score)
                 if scan_result.coupling_violations:
                     for violation in scan_result.coupling_violations:
@@ -173,14 +173,14 @@ class RegressionMonitor:
                                 f"High coupling in {violation.module_name}: "
                                 f"{violation.coupling_score:.2f}"
                             )
-                
+
                 # Collect anti-pattern violations
                 if scan_result.anti_pattern_violations:
                     for violation in scan_result.anti_pattern_violations:
                         all_issues.append(
                             f"Anti-pattern '{violation.pattern_name}' in {violation.location}"
                         )
-            
+
             # Determine status based on max brittleness score
             if max_brittleness > 0.7:
                 status = "CRITICAL"
@@ -188,14 +188,14 @@ class RegressionMonitor:
                 status = "WARNING"
             else:
                 status = "PASS"
-            
+
             return {
                 "status": status,
                 "brittleness_score": max_brittleness,
                 "issues": all_issues,
                 "details": f"Scanned {scanned_count} files"
             }
-            
+
         except Exception as e:
             logger.error(f"scan_brittleness failed: {e}", exc_info=True)
             # Non-blocking: Return PASS on error

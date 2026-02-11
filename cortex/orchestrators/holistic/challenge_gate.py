@@ -3,10 +3,10 @@
 Phase 48 S3: Mandatory challenge generation before implementation.
 """
 
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
-from enum import Enum
 import json
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
 
 class ChallengeType(str, Enum):
@@ -430,7 +430,7 @@ class ChallengeGateOrchestrator:
             Formatted result string.
         """
         lines = []
-        lines.append(f"\n## 🛡️  MANDATORY CHALLENGE GATE")
+        lines.append("\n## 🛡️  MANDATORY CHALLENGE GATE")
         lines.append(
             f"\n**Verdict:** {result.verdict} | Challenges: {len(result.challenges)}"
         )

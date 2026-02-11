@@ -20,11 +20,10 @@ Dashboard Components:
 """
 
 import json
-from dataclasses import dataclass, asdict
-from typing import List, Dict, Any, Optional
-from enum import Enum
+from dataclasses import asdict, dataclass
 from datetime import datetime
-
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
 # ============================================================================
 # MCP Tool Models
@@ -37,7 +36,7 @@ class MCPToolParameter:
     type: str
     required: bool = True
     description: str = ""
-    
+
     def to_dict(self):
         return asdict(self)
 
@@ -49,7 +48,7 @@ class MCPToolDefinition:
     description: str
     parameters: List[MCPToolParameter]
     returns: str
-    
+
     def to_dict(self):
         return {
             "name": self.name,
@@ -65,10 +64,10 @@ class ToolExecutionResult:
     status: str  # success, error, timeout
     output: Dict[str, Any]
     error: Optional[str] = None
-    
+
     def to_dict(self):
         return asdict(self)
-    
+
     def to_json(self) -> str:
         return json.dumps(self.to_dict(), indent=2)
 
@@ -79,7 +78,7 @@ class ToolExecutionResult:
 
 class MCPToolRegistry:
     """Registry of all MCP tools for Phase 52 orchestrators"""
-    
+
     @staticmethod
     def get_all_tools() -> List[MCPToolDefinition]:
         """Get all registered MCP tools"""
@@ -89,7 +88,7 @@ class MCPToolRegistry:
             MCPToolRegistry.get_profile_performance_tool(),
             MCPToolRegistry.get_load_test_tool(),
         ]
-    
+
     @staticmethod
     def get_review_pr_tool() -> MCPToolDefinition:
         """Get cortex_review_pr tool definition"""
@@ -103,7 +102,7 @@ class MCPToolRegistry:
             ],
             returns="PRReviewResult"
         )
-    
+
     @staticmethod
     def get_plan_migration_tool() -> MCPToolDefinition:
         """Get cortex_plan_migration tool definition"""
@@ -117,7 +116,7 @@ class MCPToolRegistry:
             ],
             returns="MigrationPlan"
         )
-    
+
     @staticmethod
     def get_profile_performance_tool() -> MCPToolDefinition:
         """Get cortex_profile_performance tool definition"""
@@ -131,7 +130,7 @@ class MCPToolRegistry:
             ],
             returns="PerformanceReport"
         )
-    
+
     @staticmethod
     def get_load_test_tool() -> MCPToolDefinition:
         """Get cortex_load_test tool definition"""
@@ -153,7 +152,7 @@ class MCPToolRegistry:
 
 class CortexReviewPRTool:
     """Wrapper for PRReviewOrchestrator via MCP"""
-    
+
     @staticmethod
     async def execute(pr_url: str, repo: str, detailed: bool = False) -> ToolExecutionResult:
         """Execute PR review tool"""
@@ -174,9 +173,9 @@ class CortexReviewPRTool:
 
 class CortexPlanMigrationTool:
     """Wrapper for MigrationOrchestrator via MCP"""
-    
+
     @staticmethod
-    async def execute(source_language: str, target_language: str, 
+    async def execute(source_language: str, target_language: str,
                      project_path: str) -> ToolExecutionResult:
         """Execute migration planning tool"""
         # Simulate execution
@@ -199,9 +198,9 @@ class CortexPlanMigrationTool:
 
 class CortexProfilePerformanceTool:
     """Wrapper for PerformanceOrchestrator via MCP"""
-    
+
     @staticmethod
-    async def execute(code_path: str, language: str, 
+    async def execute(code_path: str, language: str,
                      generate_flame_graph: bool = False) -> ToolExecutionResult:
         """Execute performance profiling tool"""
         # Simulate execution
@@ -231,9 +230,9 @@ class CortexProfilePerformanceTool:
 
 class CortexLoadTestTool:
     """Wrapper for LoadTestOrchestrator via MCP"""
-    
+
     @staticmethod
-    async def execute(spec_path: str, tool: str = "k6", 
+    async def execute(spec_path: str, tool: str = "k6",
                      baseline: str = "main") -> ToolExecutionResult:
         """Execute load test tool"""
         # Simulate execution
@@ -262,11 +261,11 @@ class PRReviewQueueWidget:
     total_pending: int
     prs: List[Dict[str, Any]]
     last_updated: str = ""
-    
+
     def __post_init__(self):
         if not self.last_updated:
             self.last_updated = datetime.utcnow().isoformat()
-    
+
     def to_dict(self):
         return asdict(self)
 
@@ -280,7 +279,7 @@ class MigrationProgressWidget:
     completed_steps: int
     total_steps: int
     current_step: str
-    
+
     def to_dict(self):
         return asdict(self)
 
@@ -293,20 +292,20 @@ class PerformanceTrendWidget:
     last_7_days: List[float]
     baseline: float
     current: float
-    
+
     def to_dict(self):
         return asdict(self)
 
 
 class DashboardGenerator:
     """Generates dashboard HTML and data"""
-    
+
     @staticmethod
     def generate_dashboard_html(pr_queue: PRReviewQueueWidget,
                                migration_progress: MigrationProgressWidget,
                                performance_trend: PerformanceTrendWidget) -> str:
         """Generate dashboard HTML"""
-        
+
         html = f"""
 <!DOCTYPE html>
 <html>
@@ -324,13 +323,13 @@ class DashboardGenerator:
 </head>
 <body>
     <h1>CORTEX Enterprise Dashboard</h1>
-    
+
     <div class="widget">
         <h2>PR Review Queue</h2>
         <p class="metric">{pr_queue.total_pending}</p>
         <p>PRs pending review</p>
     </div>
-    
+
     <div class="widget">
         <h2>Migration Progress: {migration_progress.project}</h2>
         <p class="metric">{migration_progress.progress_percent}%</p>
@@ -339,7 +338,7 @@ class DashboardGenerator:
         </div>
         <p>Step {migration_progress.completed_steps}/{migration_progress.total_steps}: {migration_progress.current_step}</p>
     </div>
-    
+
     <div class="widget">
         <h2>Performance Trend</h2>
         <p class="metric">{performance_trend.metric_name}</p>
@@ -359,7 +358,7 @@ class DashboardGenerator:
 
 class GitHubActionTemplates:
     """GitHub Action workflow templates for CORTEX integration"""
-    
+
     @staticmethod
     def get_pr_review_workflow() -> str:
         """Get PR review GitHub Action workflow"""
@@ -388,7 +387,7 @@ jobs:
               body: 'CORTEX PR Review: Passed all checks ✅'
             })
 """
-    
+
     @staticmethod
     def get_migration_workflow() -> str:
         """Get migration planning GitHub Action workflow"""
@@ -412,7 +411,7 @@ jobs:
           name: migration-plan
           path: .cortex/migration-plan.json
 """
-    
+
     @staticmethod
     def get_load_test_workflow() -> str:
         """Get load testing GitHub Action workflow"""
@@ -437,7 +436,7 @@ jobs:
           script: |
             core.setFailed('Performance regression blocks merge')
 """
-    
+
     @staticmethod
     def get_all_workflows() -> Dict[str, str]:
         """Get all workflow templates"""
@@ -454,19 +453,19 @@ jobs:
 
 class MCPIntegrationManager:
     """Manages MCP tool registration and lifecycle"""
-    
+
     def __init__(self):
         self.tools = MCPToolRegistry.get_all_tools()
         self.tool_map = {t.name: t for t in self.tools}
-    
+
     def get_tool_definition(self, tool_name: str) -> Optional[MCPToolDefinition]:
         """Get tool definition by name"""
         return self.tool_map.get(tool_name)
-    
+
     def list_tools(self) -> List[Dict[str, Any]]:
         """List all available tools"""
         return [t.to_dict() for t in self.tools]
-    
+
     def get_tool_count(self) -> int:
         """Get total number of tools"""
         return len(self.tools)

@@ -10,23 +10,23 @@ Provides intelligent educational features including:
 Authority: AC-EDUCATIONAL-INTERACTION-001
 """
 
-from cortex.brain.education.next_step_generator import (
-    NextStepGenerator,
-    NextStepOption,
-    NextStepContext,
-    KnowledgeLevel,
-    StepType,
-)
-from cortex.brain.education.knowledge_level_detector import (
-    KnowledgeLevelDetector,
-    DetectionSignals,
-)
 from cortex.brain.education.fault_detection_reporter import (
+    Fault,
+    FaultCategory,
     FaultDetectionReporter,
     FaultReport,
-    Fault,
     FaultSeverity,
-    FaultCategory,
+)
+from cortex.brain.education.knowledge_level_detector import (
+    DetectionSignals,
+    KnowledgeLevelDetector,
+)
+from cortex.brain.education.next_step_generator import (
+    KnowledgeLevel,
+    NextStepContext,
+    NextStepGenerator,
+    NextStepOption,
+    StepType,
 )
 
 __all__ = [

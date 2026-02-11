@@ -9,23 +9,25 @@ AC-ID: PHASE-25-STAGE-4-002
 AC-ID: PHASE-40-AUTONOMOUS-EXECUTION-001
 """
 
-from typing import Dict, Any, Callable, Optional
-import logging
 import asyncio
+import logging
 import sys
 from pathlib import Path
+from typing import Any, Callable, Dict, Optional
 
+from cortex.core.result import Err, Ok, Result
 from cortex.mcp.decorators import mcp_tool
-from cortex.orchestrators.support.plan_orchestrator import PlanOrchestrator
-from cortex.orchestrators.planning.autonomous_plan_executor import AutonomousPlanExecutor
 from cortex.orchestrators.domain.autonomous_execution_engine import (
     AutonomousExecutionEngine,
-    PlanSpecification,
-    PhaseDefinition,
     ExecutionEvent,
-    ExecutionEventType
+    ExecutionEventType,
+    PhaseDefinition,
+    PlanSpecification,
 )
-from cortex.core.result import Result, Ok, Err
+from cortex.orchestrators.planning.autonomous_plan_executor import (
+    AutonomousPlanExecutor,
+)
+from cortex.orchestrators.support.plan_orchestrator import PlanOrchestrator
 
 logger = logging.getLogger(__name__)
 
@@ -51,18 +53,18 @@ def cortex_plan_setup(
 ) -> Dict[str, Any]:
     """
     Execute setup hook before phase implementation.
-    
+
     Steps:
     1. Load phase specification
     2. Verify no conflicts
     3. Run VacuumOrchestrator cleanup
     4. Create git checkpoint
     5. Initialize audit trail
-    
+
     Args:
         phase_id: Phase ID to set up
         registry_root: Registry root path
-        
+
     Returns:
         Dict with setup results:
         - success: bool
@@ -74,7 +76,7 @@ def cortex_plan_setup(
     try:
         orchestrator = _get_orchestrator(registry_root)
         result = orchestrator.setup_phase(phase_id)
-        
+
         if result.success:
             return {
                 "success": True,
@@ -89,7 +91,7 @@ def cortex_plan_setup(
                 "error": result.error_message,
                 "message": f"❌ Setup failed for {phase_id}"
             }
-            
+
     except Exception as e:
         logger.error(f"Setup hook failed: {e}")
         return {
@@ -110,7 +112,7 @@ def cortex_plan_teardown(
 ) -> Dict[str, Any]:
     """
     Execute teardown hook after phase completion.
-    
+
     Steps:
     1. Verify deliverables
     2. Run VacuumOrchestrator cleanup
@@ -118,11 +120,11 @@ def cortex_plan_teardown(
     4. Update dashboard
     5. Log audit trail
     6. Commit changes
-    
+
     Args:
         phase_id: Phase ID to tear down
         registry_root: Registry root path
-        
+
     Returns:
         Dict with teardown results:
         - success: bool
@@ -134,7 +136,7 @@ def cortex_plan_teardown(
     try:
         orchestrator = _get_orchestrator(registry_root)
         result = orchestrator.teardown_phase(phase_id)
-        
+
         if result.success:
             return {
                 "success": True,
@@ -149,7 +151,7 @@ def cortex_plan_teardown(
                 "error": result.error_message,
                 "message": f"❌ Teardown failed for {phase_id}"
             }
-            
+
     except Exception as e:
         logger.error(f"Teardown hook failed: {e}")
         return {
@@ -170,17 +172,17 @@ def cortex_plan_resolve(
 ) -> Dict[str, Any]:
     """
     Intelligently resolve phase operation from user request.
-    
+
     Uses 4-step algorithm:
     1. Load context (index.yaml)
     2. Semantic analysis (keywords, components)
     3. Phase matching (score each active phase)
     4. Operation decision (CREATE/UPDATE/DEPRECATE)
-    
+
     Args:
         user_request: User's natural language request
         registry_root: Registry root path
-        
+
     Returns:
         Dict with resolution result:
         - success: bool
@@ -194,7 +196,7 @@ def cortex_plan_resolve(
     try:
         orchestrator = _get_orchestrator(registry_root)
         result = orchestrator.resolve_phase_operation(user_request)
-        
+
         return {
             "success": True,
             "operation": result.operation.value,
@@ -204,7 +206,7 @@ def cortex_plan_resolve(
             "confidence": result.confidence,
             "message": f"🎯 Resolved: {result.operation.value.upper()}"
         }
-        
+
     except Exception as e:
         logger.error(f"Phase resolution failed: {e}")
         return {
@@ -224,14 +226,14 @@ def cortex_plan_sync(
 ) -> Dict[str, Any]:
     """
     Manually trigger dashboard sync.
-    
+
     Updates:
     - plan-summary.json from index.yaml
     - dashboard HTML with current statistics
-    
+
     Args:
         registry_root: Registry root path
-        
+
     Returns:
         Dict with sync results:
         - success: bool
@@ -241,7 +243,7 @@ def cortex_plan_sync(
     try:
         orchestrator = _get_orchestrator(registry_root)
         success = orchestrator.sync_dashboard()
-        
+
         if success:
             return {
                 "success": True,
@@ -252,7 +254,7 @@ def cortex_plan_sync(
                 "success": False,
                 "message": "❌ Dashboard sync failed"
             }
-            
+
     except Exception as e:
         logger.error(f"Dashboard sync failed: {e}")
         return {
@@ -275,7 +277,7 @@ def cortex_plan_execute_autonomous(
 ) -> Dict[str, Any]:
     """
     Execute entire phase autonomously through ALL stages without stopping.
-    
+
     Features:
     - Zero user approval gates (runs to completion)
     - ASCII progress bars for each stage
@@ -284,7 +286,7 @@ def cortex_plan_execute_autonomous(
     - Governance enforcement at each stage
     - Auto-commit at stage boundaries
     - Dashboard auto-sync on completion
-    
+
     Execution Pattern:
     1. Setup hook (cortex_plan_setup)
     2. Load phase specification from registry
@@ -296,13 +298,13 @@ def cortex_plan_execute_autonomous(
        - [██████████] 100% Stage 5: Documentation & Completion
     4. Teardown hook (cortex_plan_teardown)
     5. Dashboard sync
-    
+
     Args:
         phase_id: Phase ID to execute (e.g., "phase-38", "phase-40")
         registry_root: Registry root path
         timeout_per_stage: Timeout in seconds per stage (default 30min)
         show_progress: Whether to show ASCII progress bars
-        
+
     Returns:
         Dict with execution results:
         - success: bool
@@ -313,7 +315,7 @@ def cortex_plan_execute_autonomous(
         - test_results: dict (passed, failed, coverage)
         - progress_log: list[str] (ASCII progress bars + status)
         - error: str (if failed)
-    
+
     Example Output:
         {
             "success": True,
@@ -345,29 +347,29 @@ def cortex_plan_execute_autonomous(
                 "error": f"Setup failed: {setup_result.get('error', 'Unknown')}",
                 "message": "❌ Setup hook failed"
             }
-        
+
         # Phase 1: Load phase specification
         registry_path = Path(registry_root)
         phase_file = registry_path / "phases" / "active" / f"{phase_id}.yaml"
-        
+
         if not phase_file.exists():
             # Try completed phases
             for year in ["2026", "2025"]:
                 phase_file = registry_path / "phases" / "completed" / year / f"{phase_id}.yaml"
                 if phase_file.exists():
                     break
-        
+
         if not phase_file.exists():
             return {
                 "success": False,
                 "error": f"Phase file not found: {phase_id}",
                 "message": f"❌ Phase {phase_id} not found in registry"
             }
-        
+
         import yaml
         with open(phase_file, 'r', encoding='utf-8') as f:
             phase_plan = yaml.safe_load(f)
-        
+
         # Phase 2: Build execution plan
         stages = phase_plan.get("stages", [])
         if not stages:
@@ -380,11 +382,11 @@ def cortex_plan_execute_autonomous(
                     "message": f"❌ Phase {phase_id} has no executable stages"
                 }
             stages = [{"name": task, "description": task} for task in tasks[:10]]  # Max 10
-        
+
         total_stages = len(stages)
         estimated_hours = phase_plan.get("estimated_hours", total_stages * 0.5)
         duration_per_stage = int((estimated_hours / total_stages) * 60)  # Convert to minutes
-        
+
         # Phase 3: Create PlanSpecification for AutonomousExecutionEngine
         from datetime import datetime
         plan_spec = PlanSpecification(
@@ -404,34 +406,34 @@ def cortex_plan_execute_autonomous(
                 for idx, stage in enumerate(stages)
             ]
         )
-        
+
         # Phase 4: Initialize AutonomousExecutionEngine
         engine = AutonomousExecutionEngine(timeout_per_phase=timeout_per_stage)
-        
+
         # Progress tracking
         progress_log = []
-        
+
         def progress_callback(event: ExecutionEvent):
             """Capture progress events and generate ASCII bars."""
             if not show_progress:
                 return
-            
+
             if event.event_type == ExecutionEventType.PHASE_STARTED:
                 progress_bar = _generate_progress_bar(0, total_stages, event.phase_num)
                 progress_log.append(f"{progress_bar} 🔵 {event.message}")
                 print(f"\n{progress_bar} 🔵 {event.message}", flush=True)
-                
+
             elif event.event_type == ExecutionEventType.PHASE_COMPLETE:
                 progress_bar = _generate_progress_bar(event.phase_num, total_stages, total_stages)
                 duration = event.data.get("duration_seconds", 0)
                 progress_log.append(f"{progress_bar} ✅ {event.message} ({duration:.1f}s)")
                 print(f"{progress_bar} ✅ {event.message} ({duration:.1f}s)", flush=True)
-                
+
             elif event.event_type == ExecutionEventType.EXECUTION_COMPLETE:
                 progress_log.append(f"\n🎉 Execution complete! Total: {event.elapsed_seconds}s")
                 print(f"\n🎉 Execution complete! Total: {event.elapsed_seconds}s", flush=True)
-        
-        # Phase 5: Execute autonomously  
+
+        # Phase 5: Execute autonomously
         # Note: execute_plan_autonomously has @inject_orchestrator_context decorator
         # which may convert it to sync. Try calling directly first.
         try:
@@ -461,7 +463,7 @@ def cortex_plan_execute_autonomous(
                 "progress_log": progress_log,
                 "message": f"❌ Execution engine error: {exec_error}"
             }
-        
+
         # Check result type
         if hasattr(result, 'is_err') and result.is_err():  # type: ignore
             return {
@@ -470,23 +472,23 @@ def cortex_plan_execute_autonomous(
                 "progress_log": progress_log,
                 "message": f"❌ Phase {phase_id} execution failed"
             }
-        
+
         exec_result = result.unwrap() if hasattr(result, 'unwrap') else result  # type: ignore
-        
+
         # Phase 6: Teardown hook
         teardown_result = cortex_plan_teardown(phase_id, registry_root)
         if not teardown_result["success"]:
             logger.warning(f"Teardown warning: {teardown_result.get('error', 'Unknown')}")
-        
+
         # Phase 7: Dashboard sync
         sync_result = cortex_plan_sync(registry_root)
         if not sync_result["success"]:
             logger.warning(f"Dashboard sync warning: {sync_result.get('error', 'Unknown')}")
-        
+
         # Success response
         if isinstance(exec_result, dict):
             duration_minutes = exec_result.get("total_duration_seconds", 0) / 60
-            
+
             return {
                 "success": True,
                 "phase_id": phase_id,
@@ -505,7 +507,7 @@ def cortex_plan_execute_autonomous(
                 "progress_log": progress_log,
                 "message": f"❌ Phase {phase_id} execution returned invalid result"
             }
-        
+
     except Exception as e:
         logger.error(f"Autonomous execution failed: {e}", exc_info=True)
         return {
@@ -518,19 +520,19 @@ def cortex_plan_execute_autonomous(
 def _generate_progress_bar(completed: int, total: int, current: int) -> str:
     """
     Generate ASCII progress bar.
-    
+
     Args:
         completed: Number of completed stages
         total: Total number of stages
         current: Current stage number
-        
+
     Returns:
         ASCII progress bar string: [████░░░░░░] 40%
     """
     percentage = int((completed / total) * 100) if total > 0 else 0
     filled = int((completed / total) * 10) if total > 0 else 0
     empty = 10 - filled
-    
+
     bar = f"[{'█' * filled}{'░' * empty}] {percentage:3d}%"
     return bar
 

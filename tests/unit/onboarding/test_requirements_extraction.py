@@ -139,6 +139,9 @@ phases:
 class TestACMarkerExtraction:
     """AC-PHASE43-038: Extract requirements from AC markers (4-star weight)."""
 
+    def test_extract_from_ac_markers(self) -> None:
+        """Extract requirements from AC markers in code."""
+        code_with_markers = '''
 # AC_START: AC-PHASE24.1.1-004
 # Description: Abstract base class for refactoring tool adapters
 # Authority: Phase 24 - External Refactoring Tools Integration
@@ -414,3 +417,4 @@ class TestRequirementsQuality:
         
         # Higher quality sources have higher coverage
         assert sources_quality["phase_yaml"]["coverage"] > sources_quality["git_commits"]["coverage"]
+

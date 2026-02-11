@@ -12,12 +12,12 @@ Enables orchestrator composition and vision evolution while
 maintaining consistency between vision and implementation.
 """
 
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Dict, Set, List, Optional, Tuple
-from datetime import datetime
 import json
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
 from pathlib import Path
+from typing import Dict, List, Optional, Set, Tuple
 
 
 class TierLevel(Enum):
@@ -105,7 +105,7 @@ class OrchestratorProfile:
             orchestrator_id=data["orchestrator_id"],
             name=data["name"],
             parent_orchestrator=data.get("parent_orchestrator"),
-            tier_dependencies={k: TierDependency.from_dict(v) 
+            tier_dependencies={k: TierDependency.from_dict(v)
                              for k, v in data.get("tier_dependencies", {}).items()},
             description=data.get("description", ""),
             created_timestamp=datetime.fromisoformat(data.get("created_timestamp", datetime.now().isoformat())),
@@ -158,7 +158,7 @@ class RegistryValidationReport:
 class OrchestratorDependencyRegistry:
     """
     Central registry for orchestrator-tier dependencies.
-    
+
     Manages:
     - Tracking which tiers each orchestrator depends on
     - Building transitive dependency relationships
@@ -171,7 +171,7 @@ class OrchestratorDependencyRegistry:
     def __init__(self, storage_path: Optional[Path] = None):
         """
         Initialize the dependency registry.
-        
+
         Args:
             storage_path: Path to JSON file for persistence (optional)
         """
@@ -191,13 +191,13 @@ class OrchestratorDependencyRegistry:
     ) -> Tuple[bool, str]:
         """
         Register a new orchestrator in the registry.
-        
+
         Args:
             orchestrator_id: Unique identifier for orchestrator
             name: Human-readable name
             description: Description of orchestrator
             parent_orchestrator: Optional parent orchestrator ID
-            
+
         Returns:
             Tuple of (success, message)
         """
@@ -230,14 +230,14 @@ class OrchestratorDependencyRegistry:
     ) -> Tuple[bool, str]:
         """
         Add a tier dependency for an orchestrator.
-        
+
         Args:
             orchestrator_id: ID of orchestrator
             tier: Which tier is required
             dependency_type: Type of dependency
             via_orchestrator: If transitive, which orchestrator mediates
             required_features: List of required features from tier
-            
+
         Returns:
             Tuple of (success, message)
         """
@@ -279,11 +279,11 @@ class OrchestratorDependencyRegistry:
     ) -> Tuple[bool, str]:
         """
         Remove a tier dependency from an orchestrator.
-        
+
         Args:
             orchestrator_id: ID of orchestrator
             tier: Tier to remove dependency from
-            
+
         Returns:
             Tuple of (success, message)
         """
@@ -310,11 +310,11 @@ class OrchestratorDependencyRegistry:
     ) -> Dict[str, TierDependency]:
         """
         Get tier dependencies for an orchestrator.
-        
+
         Args:
             orchestrator_id: ID of orchestrator
             include_inherited: Whether to include parent dependencies
-            
+
         Returns:
             Dictionary of tier dependencies
         """
@@ -344,10 +344,10 @@ class OrchestratorDependencyRegistry:
     def get_orchestrators_for_tier(self, tier: TierLevel) -> Set[str]:
         """
         Get all orchestrators that depend on a tier.
-        
+
         Args:
             tier: The tier to query
-            
+
         Returns:
             Set of orchestrator IDs depending on this tier
         """
@@ -359,10 +359,10 @@ class OrchestratorDependencyRegistry:
     ) -> Set[str]:
         """
         Find all transitive orchestrator dependencies.
-        
+
         Args:
             orchestrator_id: ID of orchestrator
-            
+
         Returns:
             Set of all orchestrator IDs this one depends on (transitively)
         """
@@ -389,7 +389,7 @@ class OrchestratorDependencyRegistry:
     def detect_circular_dependencies(self) -> List[List[str]]:
         """
         Detect circular dependencies in orchestrator hierarchy.
-        
+
         Returns:
             List of circular dependency paths
         """
@@ -426,7 +426,7 @@ class OrchestratorDependencyRegistry:
     def validate_registry(self) -> RegistryValidationReport:
         """
         Validate the entire registry for consistency.
-        
+
         Returns:
             RegistryValidationReport with detailed findings
         """
@@ -469,11 +469,11 @@ class OrchestratorDependencyRegistry:
     ) -> Dict:
         """
         Analyze impact of a tier change on orchestrators.
-        
+
         Args:
             tier: Which tier is changing
             change_severity: Severity of change (minor, major, breaking)
-            
+
         Returns:
             Impact analysis dictionary
         """
@@ -500,7 +500,7 @@ class OrchestratorDependencyRegistry:
     def get_registry_stats(self) -> Dict:
         """
         Get statistics about the registry.
-        
+
         Returns:
             Dictionary with registry statistics
         """
@@ -532,7 +532,7 @@ class OrchestratorDependencyRegistry:
     def export_registry(self) -> Dict:
         """
         Export entire registry as JSON-serializable dictionary.
-        
+
         Returns:
             Dictionary ready for JSON serialization
         """
@@ -570,6 +570,6 @@ class OrchestratorDependencyRegistry:
 
             for tier_str, orch_ids in data.get("tier_assignments", {}).items():
                 self.tier_assignments[tier_str] = set(orch_ids)
-        except Exception as e:
+        except Exception:
             # If loading fails, start fresh
             pass

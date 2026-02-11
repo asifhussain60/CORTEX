@@ -9,20 +9,19 @@ Attributes:
     DEFAULT_DEDUP_WINDOW: Alert deduplication window seconds (300)
 """
 
+import logging
 from dataclasses import dataclass, field
-from typing import Optional, Dict, Any, List, Callable, Set
 from datetime import datetime, timedelta
 from enum import Enum
-import logging
+from typing import Any, Callable, Dict, List, Optional, Set
+
 from cortex.models.canonical_enums import AlertSeverity
-
-
 
 
 @dataclass
 class AlertCondition:
     """Condition for alert evaluation.
-    
+
     Attributes:
         name: Condition name
         func: Callable that evaluates metrics
@@ -34,7 +33,7 @@ class AlertCondition:
 @dataclass
 class AlertRule:
     """Alert rule definition.
-    
+
     Attributes:
         name: Unique rule name
         description: Rule description
@@ -49,10 +48,10 @@ class AlertRule:
     condition: Callable[[Dict[str, Any]], bool]
     enabled: bool = True
     tags: Dict[str, str] = field(default_factory=dict)
-    
+
     def __post_init__(self) -> None:
         """Validate rule after initialization.
-        
+
         Raises:
             ValueError: If name is empty
         """
@@ -61,16 +60,16 @@ class AlertRule:
 
     def evaluate(self, metrics: Dict[str, Any]) -> bool:
         """Evaluate rule condition against metrics.
-        
+
         Args:
             metrics: Metrics dictionary
-            
+
         Returns:
             True if condition met, False otherwise
         """
         if not self.enabled:
             return False
-        
+
         try:
             return self.condition(metrics)
         except Exception as e:
@@ -81,7 +80,7 @@ class AlertRule:
 @dataclass
 class AlertNotification:
     """Alert notification.
-    
+
     Attributes:
         rule_name: Name of rule that triggered
         severity: Alert severity
@@ -97,7 +96,7 @@ class AlertNotification:
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary representation.
-        
+
         Returns:
             Dictionary with alert data
         """
@@ -112,24 +111,24 @@ class AlertNotification:
 
 class AlertManager:
     """Manages alert rules and notifications.
-    
+
     Handles rule registration, metric evaluation, alert firing,
     deduplication, and notification routing.
-    
+
     Attributes:
         rules: Dictionary of registered alert rules
         channels: Dictionary of notification channels
         active_alerts: Currently active alerts
         alert_history: Historical alert records
     """
-    
+
     def __init__(
         self,
         dedup_window_seconds: int = 300,
         retention_days: int = 7,
     ) -> None:
         """Initialize alert manager.
-        
+
         Args:
             dedup_window_seconds: Deduplication window in seconds
             retention_days: Alert retention in days
@@ -138,16 +137,16 @@ class AlertManager:
         self.channels: Dict[str, Any] = {}
         self.active_alerts: Set[str] = set()
         self.alert_history: List[AlertNotification] = []
-        
+
         self.dedup_window_seconds = dedup_window_seconds
         self.retention_days = retention_days
-        
+
         self._last_alert_time: Dict[str, datetime] = {}
         self._logger: logging.Logger = logging.getLogger(__name__)
 
     def register_rule(self, rule: AlertRule) -> None:
         """Register an alert rule.
-        
+
         Args:
             rule: AlertRule instance
         """
@@ -156,7 +155,7 @@ class AlertManager:
 
     def deregister_rule(self, rule_name: str) -> None:
         """Deregister an alert rule.
-        
+
         Args:
             rule_name: Name of rule to remove
         """
@@ -166,10 +165,10 @@ class AlertManager:
 
     def get_rule(self, rule_name: str) -> Optional[AlertRule]:
         """Get a registered rule by name.
-        
+
         Args:
             rule_name: Name of rule
-            
+
         Returns:
             AlertRule or None if not found
         """
@@ -177,7 +176,7 @@ class AlertManager:
 
     def get_rules(self) -> List[AlertRule]:
         """Get all registered rules.
-        
+
         Returns:
             List of AlertRule instances
         """
@@ -185,7 +184,7 @@ class AlertManager:
 
     def register_notification_channel(self, channel_type: str, channel: Any) -> None:
         """Register a notification channel.
-        
+
         Args:
             channel_type: Type of channel (email, slack, etc)
             channel: Channel instance
@@ -195,7 +194,7 @@ class AlertManager:
 
     def get_notification_channels(self) -> Dict[str, Any]:
         """Get all registered notification channels.
-        
+
         Returns:
             Dictionary of channels
         """
@@ -203,27 +202,27 @@ class AlertManager:
 
     def evaluate_metrics(self, metrics: Dict[str, Any]) -> List[AlertNotification]:
         """Evaluate all rules against metrics.
-        
+
         Args:
             metrics: Metrics dictionary
-            
+
         Returns:
             List of AlertNotification objects for triggered rules
         """
         alerts = []
         now = datetime.utcnow()
-        
+
         for rule in self.rules.values():
             if not rule.enabled:
                 continue
-            
+
             # Check if rule triggers
             if rule.evaluate(metrics):
                 # Check deduplication
                 last_alert = self._last_alert_time.get(rule.name)
                 if last_alert and (now - last_alert).total_seconds() < self.dedup_window_seconds:
                     continue
-                
+
                 # Create alert notification
                 alert = AlertNotification(
                     rule_name=rule.name,
@@ -232,7 +231,7 @@ class AlertManager:
                     message=rule.description,
                     metrics=metrics.copy(),
                 )
-                
+
                 alerts.append(alert)
                 self._last_alert_time[rule.name] = now
                 self.active_alerts.add(rule.name)
@@ -241,12 +240,12 @@ class AlertManager:
                 # Rule no longer triggers
                 if rule.name in self.active_alerts:
                     self.active_alerts.discard(rule.name)
-        
+
         return alerts
 
     def send_alerts(self, alerts: List[AlertNotification]) -> None:
         """Send alerts to notification channels.
-        
+
         Args:
             alerts: List of AlertNotification objects
         """
@@ -267,26 +266,26 @@ class AlertManager:
         rule_name: Optional[str] = None,
     ) -> List[AlertNotification]:
         """Get alert history.
-        
+
         Args:
             start_time: Start of time range (optional)
             end_time: End of time range (optional)
             rule_name: Filter by rule name (optional)
-            
+
         Returns:
             List of AlertNotification objects
         """
         results = self.alert_history
-        
+
         if start_time:
             results = [a for a in results if a.timestamp >= start_time]
-        
+
         if end_time:
             results = [a for a in results if a.timestamp <= end_time]
-        
+
         if rule_name:
             results = [a for a in results if a.rule_name == rule_name]
-        
+
         return results
 
     def clear_old_alerts(self) -> None:
@@ -299,7 +298,7 @@ class AlertManager:
 
     def get_active_alerts(self) -> List[str]:
         """Get currently active alert rule names.
-        
+
         Returns:
             List of active rule names
         """
@@ -307,20 +306,20 @@ class AlertManager:
 
     def get_stats(self) -> Dict[str, Any]:
         """Get alert statistics.
-        
+
         Returns:
             Dictionary with alert statistics
         """
         total_alerts = len(self.alert_history)
         active_count = len(self.active_alerts)
-        
+
         # Count by severity
         severity_counts = {
             "INFO": len([a for a in self.alert_history if a.severity == AlertSeverity.INFO]),
             "WARNING": len([a for a in self.alert_history if a.severity == AlertSeverity.WARNING]),
             "CRITICAL": len([a for a in self.alert_history if a.severity == AlertSeverity.CRITICAL]),
         }
-        
+
         return {
             "total_alerts": total_alerts,
             "active_alerts": active_count,

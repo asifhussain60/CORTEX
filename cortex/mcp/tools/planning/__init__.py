@@ -7,7 +7,7 @@ Part of ENH-059: Audit-Driven Auto-Planning.
 
 from cortex.mcp.tools.planning.planning_tools import (
     cortex_audit_remediation_plan,
-    cortex_process_remediation_selection
+    cortex_process_remediation_selection,
 )
 
 __all__ = [

@@ -6,21 +6,22 @@ Detects project type and suggests appropriate tier1 profile.
 AC-ID: AC-DEP-006-02
 """
 
-from pathlib import Path
-from typing import Dict, List, Any, Optional
 import re
-import yaml
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+import yaml
 
 
 class ProfileWizard:
     """
     Quick-start wizard for governance profiles.
-    
+
     Detects project type and suggests/applies appropriate tier1 profiles.
     Follows CORE-008 (TDD) and CORE-011 (type hints).
     """
-    
+
     # Detection patterns for project types
     DETECTION_PATTERNS = {
         "finops": {
@@ -54,7 +55,7 @@ class ProfileWizard:
             "files": ["contract*.py", "legal*.py"]
         }
     }
-    
+
     # Pre-built profile definitions
     PROFILES = {
         "finops-v1.0": {
@@ -173,25 +174,25 @@ class ProfileWizard:
             ]
         }
     }
-    
+
     def __init__(self, repo_path: Path):
         """
         Initialize ProfileWizard.
-        
+
         Args:
             repo_path: Path to the repository root.
         """
         self.repo_path = Path(repo_path)
-    
+
     def detect_project_type(self) -> str:
         """
         Detect project type based on requirements and structure.
-        
+
         Returns:
             Project type string.
         """
         scores = {ptype: 0 for ptype in self.DETECTION_PATTERNS}
-        
+
         # Check requirements.txt
         requirements_path = self.repo_path / "requirements.txt"
         if requirements_path.exists():
@@ -200,37 +201,37 @@ class ProfileWizard:
                 for req in patterns.get("requirements", []):
                     if req.lower() in content:
                         scores[ptype] += 2
-        
+
         # Check folder structure
         for ptype, patterns in self.DETECTION_PATTERNS.items():
             for folder in patterns.get("folders", []):
                 if (self.repo_path / folder).exists():
                     scores[ptype] += 3
-        
+
         # Check file patterns
         for ptype, patterns in self.DETECTION_PATTERNS.items():
             for file_pattern in patterns.get("files", []):
                 if list(self.repo_path.glob(file_pattern)):
                     scores[ptype] += 1
-        
+
         # Return highest scoring type
         max_score = max(scores.values())
         if max_score > 0:
             for ptype, score in scores.items():
                 if score == max_score:
                     return ptype
-        
+
         return "general"
-    
+
     def suggest_profile(self) -> Dict[str, Any]:
         """
         Suggest appropriate profile based on detection.
-        
+
         Returns:
             Profile suggestion dictionary.
         """
         project_type = self.detect_project_type()
-        
+
         profile_mapping = {
             "finops": "finops-v1.0",
             "auth": "auth-v1.0",
@@ -240,10 +241,10 @@ class ProfileWizard:
             "legal": "legal-v1.0",
             "general": "devops-v1.0"  # Default fallback
         }
-        
+
         suggested = profile_mapping.get(project_type, "devops-v1.0")
         profile_info = self.PROFILES.get(suggested, {})
-        
+
         return {
             "profile": suggested,
             "project_type": project_type,
@@ -252,7 +253,7 @@ class ProfileWizard:
             "rule_count": profile_info.get("rule_count", 0),
             "description": profile_info.get("description", "")
         }
-    
+
     def customize_profile(
         self,
         profile: str,
@@ -261,26 +262,26 @@ class ProfileWizard:
     ) -> Dict[str, Any]:
         """
         Customize profile by adding/removing rules.
-        
+
         Args:
             profile: Profile name to customize.
             add_rules: Rules to add.
             remove_rules: Rules to remove.
-            
+
         Returns:
             Customized profile dictionary.
         """
         profile_data = self.PROFILES.get(profile, {})
         rules = [r["id"] for r in profile_data.get("rules", [])]
-        
+
         # Remove specified rules
         if remove_rules:
             rules = [r for r in rules if r not in remove_rules]
-        
+
         # Add new rules
         if add_rules:
             rules.extend(add_rules)
-        
+
         return {
             "base_profile": profile,
             "rules": rules,
@@ -288,30 +289,30 @@ class ProfileWizard:
             "added": add_rules or [],
             "removed": remove_rules or []
         }
-    
+
     def apply_profile(self, profile: str) -> Dict[str, Any]:
         """
         Apply profile to tier1 directory.
-        
+
         Args:
             profile: Profile name to apply.
-            
+
         Returns:
             Result dictionary.
         """
         result = {"success": False, "error": None}
-        
+
         try:
             profile_data = self.PROFILES.get(profile, {})
-            
+
             if not profile_data:
                 result["error"] = f"Profile {profile} not found"
                 return result
-            
+
             # Create tier1 directory
             tier1_dir = self.repo_path / "cortex_brain" / "tier1"
             tier1_dir.mkdir(parents=True, exist_ok=True)
-            
+
             # Generate YAML content
             content = {
                 "profile": profile,
@@ -319,29 +320,29 @@ class ProfileWizard:
                 "applied_at": datetime.now().isoformat(),
                 "rules": profile_data.get("rules", [])
             }
-            
+
             # Write to file
             output_path = tier1_dir / "domain-rules.yaml"
             output_path.write_text(yaml.dump(content, default_flow_style=False))
-            
+
             result["success"] = True
             result["path"] = str(output_path)
             result["rule_count"] = len(profile_data.get("rules", []))
-            
+
         except Exception as e:
             result["error"] = str(e)
-        
+
         return result
-    
+
     def list_available_profiles(self) -> List[Dict[str, Any]]:
         """
         List all available profiles.
-        
+
         Returns:
             List of profile information dictionaries.
         """
         profiles = []
-        
+
         for name, data in self.PROFILES.items():
             profiles.append({
                 "name": name,
@@ -350,5 +351,5 @@ class ProfileWizard:
                 "description": data.get("description", ""),
                 "rule_count": data.get("rule_count", 0)
             })
-        
+
         return profiles

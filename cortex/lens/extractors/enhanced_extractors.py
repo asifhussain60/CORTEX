@@ -1,4 +1,4 @@
-"""
+r"""
 Enhanced LENS Extractors: Aggressive Pattern Mining
 
 Based on D:\PROJECTS pre-scan revealing 1,204 potential use cases.
@@ -13,12 +13,12 @@ Implements 5 P0/P1 extractors:
 AC_START: AC-LENS-ENHANCED-001 through AC-LENS-ENHANCED-005
 """
 
-import re
-import json
 import ast
+import json
+import re
+from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import List, Dict, Any
-from dataclasses import dataclass, asdict
+from typing import Any, Dict, List
 
 
 @dataclass
@@ -39,35 +39,35 @@ class ExtractedUseCase:
 
 class ThirdPartyConfigExtractor:
     """Extract use cases from third-party library configurations."""
-    
+
     def extract(self, repo_path: Path) -> List[ExtractedUseCase]:
         """Extract from froala, webpack, vite, etc. configurations."""
         use_cases = []
-        
+
         # Froala Editor configurations
         froala_configs = list(repo_path.rglob('*froala*.js')) + list(repo_path.rglob('*froala*.json'))
         for config_file in froala_configs:
             use_cases.extend(self._extract_froala_use_cases(config_file, repo_path))
-        
+
         # Webpack configurations
         webpack_configs = list(repo_path.rglob('webpack*.js')) + list(repo_path.rglob('webpack*.config.js'))
         for config_file in webpack_configs:
             use_cases.extend(self._extract_webpack_use_cases(config_file, repo_path))
-        
+
         # Vite configurations
         vite_configs = list(repo_path.rglob('vite.config.*'))
         for config_file in vite_configs:
             use_cases.extend(self._extract_vite_use_cases(config_file, repo_path))
-        
+
         return use_cases
-    
+
     def _extract_froala_use_cases(self, config_file: Path, repo_path: Path) -> List[ExtractedUseCase]:
         """Extract use cases from Froala editor config."""
         use_cases = []
-        
+
         try:
             content = config_file.read_text(encoding='utf-8', errors='ignore')
-            
+
             # Rich text editing
             use_cases.append(ExtractedUseCase(
                 id=f"uc-froala-{len(use_cases):03d}",
@@ -89,7 +89,7 @@ class ThirdPartyConfigExtractor:
                 source_file=str(config_file.relative_to(repo_path)),
                 extraction_method="third_party_config"
             ))
-            
+
             # If image upload configured
             if 'imageUpload' in content or 'image_upload' in content.lower():
                 use_cases.append(ExtractedUseCase(
@@ -112,7 +112,7 @@ class ThirdPartyConfigExtractor:
                     source_file=str(config_file.relative_to(repo_path)),
                     extraction_method="third_party_config"
                 ))
-            
+
             # If video support configured
             if 'video' in content.lower():
                 use_cases.append(ExtractedUseCase(
@@ -131,16 +131,16 @@ class ThirdPartyConfigExtractor:
                     source_file=str(config_file.relative_to(repo_path)),
                     extraction_method="third_party_config"
                 ))
-            
-        except Exception as e:
+
+        except Exception:
             pass
-        
+
         return use_cases
-    
+
     def _detect_froala_features(self, content: str) -> List[str]:
         """Detect enabled Froala features from config."""
         features = []
-        
+
         feature_keywords = {
             'bold': 'Text Formatting',
             'italic': 'Text Formatting',
@@ -155,23 +155,23 @@ class ThirdPartyConfigExtractor:
             'quote': 'Blockquotes',
             'emoticon': 'Emojis'
         }
-        
+
         for keyword, feature in feature_keywords.items():
             if keyword in content.lower():
                 features.append(feature)
-        
+
         return features
-    
+
     def _extract_webpack_use_cases(self, config_file: Path, repo_path: Path) -> List[ExtractedUseCase]:
         """Extract use cases from Webpack config."""
         use_cases = []
-        
+
         try:
             content = config_file.read_text(encoding='utf-8', errors='ignore')
-            
+
             # Build process
             use_cases.append(ExtractedUseCase(
-                id=f"uc-webpack-001",
+                id="uc-webpack-001",
                 title="Application Build and Bundling",
                 category="Development Workflow",
                 description="Developers build and bundle application assets for production deployment",
@@ -186,11 +186,11 @@ class ThirdPartyConfigExtractor:
                 source_file=str(config_file.relative_to(repo_path)),
                 extraction_method="third_party_config"
             ))
-            
+
             # Hot reload
             if 'hot' in content or 'HMR' in content or 'devServer' in content:
                 use_cases.append(ExtractedUseCase(
-                    id=f"uc-webpack-002",
+                    id="uc-webpack-002",
                     title="Live Development with Hot Module Replacement",
                     category="Development Workflow",
                     description="Developers see instant updates without full page reload during development",
@@ -205,12 +205,12 @@ class ThirdPartyConfigExtractor:
                     source_file=str(config_file.relative_to(repo_path)),
                     extraction_method="third_party_config"
                 ))
-            
-        except Exception as e:
+
+        except Exception:
             pass
-        
+
         return use_cases
-    
+
     def _extract_vite_use_cases(self, config_file: Path, repo_path: Path) -> List[ExtractedUseCase]:
         """Extract use cases from Vite config."""
         # Similar to webpack
@@ -219,55 +219,55 @@ class ThirdPartyConfigExtractor:
 
 class APIEndpointExtractor:
     """Extract use cases from API route definitions."""
-    
+
     def extract(self, repo_path: Path) -> List[ExtractedUseCase]:
         """Extract from route files, controllers, API definitions."""
         use_cases = []
-        
+
         # Python routes (Flask, FastAPI, Django)
         for route_file in repo_path.rglob('*route*.py'):
             use_cases.extend(self._extract_python_routes(route_file, repo_path))
-        
+
         for api_file in repo_path.rglob('*api*.py'):
             use_cases.extend(self._extract_python_routes(api_file, repo_path))
-        
+
         # JavaScript routes (Express, Next.js)
         for route_file in repo_path.rglob('*route*.js'):
             use_cases.extend(self._extract_js_routes(route_file, repo_path))
-        
+
         # C# controllers
         for controller_file in repo_path.rglob('*Controller.cs'):
             use_cases.extend(self._extract_cs_controllers(controller_file, repo_path))
-        
+
         return use_cases
-    
+
     def _extract_python_routes(self, file_path: Path, repo_path: Path) -> List[ExtractedUseCase]:
         """Extract use cases from Python route definitions."""
         use_cases = []
-        
+
         try:
             content = file_path.read_text(encoding='utf-8', errors='ignore')
-            
+
             # Flask/FastAPI decorators
             route_patterns = [
                 r'@app\.route\(["\']([^"\']+)',
                 r'@router\.(get|post|put|delete|patch)\(["\']([^"\']+)',
                 r'@api_view\(\[([^\]]+)\]\)',
             ]
-            
+
             for pattern in route_patterns:
                 matches = re.finditer(pattern, content)
                 for match in matches:
                     endpoint = match.group(1) if len(match.groups()) == 1 else match.group(2)
                     method = "GET"  # Default
-                    
+
                     if 'post' in match.group(0).lower():
                         method = "POST"
                     elif 'put' in match.group(0).lower():
                         method = "PUT"
                     elif 'delete' in match.group(0).lower():
                         method = "DELETE"
-                    
+
                     # Create use case
                     endpoint_name = endpoint.strip('/').replace('/', ' ').title().replace(' ', '')
                     use_cases.append(ExtractedUseCase(
@@ -287,17 +287,17 @@ class APIEndpointExtractor:
                         source_file=str(file_path.relative_to(repo_path)),
                         extraction_method="api_endpoint"
                     ))
-            
-        except Exception as e:
+
+        except Exception:
             pass
-        
+
         return use_cases
-    
+
     def _extract_js_routes(self, file_path: Path, repo_path: Path) -> List[ExtractedUseCase]:
         """Extract from Express/Node.js routes."""
         # Similar pattern to Python
         return []
-    
+
     def _extract_cs_controllers(self, file_path: Path, repo_path: Path) -> List[ExtractedUseCase]:
         """Extract from ASP.NET controllers."""
         # Similar pattern
@@ -310,11 +310,11 @@ class APIEndpointExtractor:
 def extract_enhanced_use_cases(repo_path: Path) -> List[Dict[str, Any]]:
     """
     Main entry point for enhanced extraction.
-    
+
     Returns list of use case dictionaries compatible with dashboard schema.
     """
     all_use_cases = []
-    
+
     # Run all extractors
     extractors = [
         ThirdPartyConfigExtractor(),
@@ -323,14 +323,14 @@ def extract_enhanced_use_cases(repo_path: Path) -> List[Dict[str, Any]]:
         # DatabaseModelExtractor(),
         # ServiceClassExtractor(),
     ]
-    
+
     for extractor in extractors:
         try:
             extracted = extractor.extract(repo_path)
             all_use_cases.extend(extracted)
         except Exception as e:
             print(f"Extractor {extractor.__class__.__name__} failed: {e}")
-    
+
     # Convert to dashboard format
     return [asdict(uc) for uc in all_use_cases]
 

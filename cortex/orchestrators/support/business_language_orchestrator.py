@@ -9,12 +9,12 @@ Author: Asif Hussain
 AC-ID: AC-UNIVERSAL-ONBOARD-003
 """
 
-from pathlib import Path
-from typing import Dict, Any, List, Optional, Tuple
+import logging
+import re
 from dataclasses import dataclass, field
 from datetime import datetime
-import re
-import logging
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 class ConfidenceScore:
     """
     Confidence score with evidence tracking.
-    
+
     Attributes:
         score: 0-100 confidence percentage
         level: 'high', 'medium', 'low'
@@ -34,23 +34,23 @@ class ConfidenceScore:
     level: str
     evidence: List[str] = field(default_factory=list)
     assumptions: List[str] = field(default_factory=list)
-    
+
     @classmethod
     def from_evidence(cls, evidence_count: int, assumption_count: int) -> 'ConfidenceScore':
         """Calculate confidence from evidence vs assumptions."""
         if evidence_count == 0 and assumption_count == 0:
             return cls(score=0, level='low', evidence=[], assumptions=['No data available'])
-        
+
         total = evidence_count + assumption_count
         score = int((evidence_count / total) * 100) if total > 0 else 0
-        
+
         if score >= 70:
             level = 'high'
         elif score >= 40:
             level = 'medium'
         else:
             level = 'low'
-        
+
         return cls(score=score, level=level)
 
 
@@ -58,7 +58,7 @@ class ConfidenceScore:
 class UseCase:
     """
     Business use case extracted from repository.
-    
+
     Attributes:
         title: Use case name
         description: Detailed description
@@ -79,7 +79,7 @@ class UseCase:
 class BusinessNarrative:
     """
     Complete business narrative for a repository.
-    
+
     Attributes:
         name: Repository/project name
         title: Display title
@@ -107,20 +107,20 @@ class BusinessNarrative:
 class BusinessLanguageOrchestrator:
     """
     Generate comprehensive business narratives from repository analysis.
-    
+
     Features:
     - Intelligent narrative generation from code analysis
     - Use case extraction from features/APIs
     - Confidence scoring with evidence tracking
     - Collapsible file references for transparency
-    
+
     Example:
         >>> orchestrator = BusinessLanguageOrchestrator()
         >>> narrative = orchestrator.generate_narrative(repo_path, analysis_data)
         >>> print(f"Title: {narrative.title}")
         >>> print(f"Confidence: {narrative.confidence.score}%")
     """
-    
+
     # Technology detection patterns
     TECH_PATTERNS = {
         "ASP.NET": {
@@ -194,7 +194,7 @@ class BusinessLanguageOrchestrator:
             "category": "runtime",
         },
     }
-    
+
     # Use case extraction patterns
     USE_CASE_PATTERNS = {
         "authentication": {
@@ -246,56 +246,56 @@ class BusinessLanguageOrchestrator:
             "description_template": "API endpoints for {services}",
         },
     }
-    
+
     def __init__(self):
         """Initialize Business Language Orchestrator."""
         self.logger = logging.getLogger(__name__)
-    
+
     def format_narrative_compact(self, narrative: BusinessNarrative) -> str:
         """
         Phase 33: Format business narrative in COMPACT mode.
-        
+
         AC-PHASE-33-006: BusinessLanguageOrchestrator COMPACT formatting
-        
+
         Reduces narrative verbosity by:
         - Using 1-2 lines per use case (not detailed)
         - Summarizing tech stack in one line
         - Keeping description under 150 chars
         - Omitting evidence maps
-        
+
         Args:
             narrative: BusinessNarrative to format
-            
+
         Returns:
             Compact string representation (typically <300 chars)
         """
         sections = []
-        
+
         # Title and tagline
         sections.append(f"## {narrative.title} — {narrative.tagline}")
-        
+
         # Brief description (max 100 chars)
         desc = narrative.description[:100] + ("..." if len(narrative.description) > 100 else "")
         sections.append(f"📝 {desc}")
-        
+
         # Quick use cases (max 3)
         if narrative.use_cases:
             uc_summaries = []
             for uc in narrative.use_cases[:3]:
                 uc_summaries.append(f"{uc.icon} {uc.title}")
             sections.append(f"🎯 Use Cases: {', '.join(uc_summaries)}")
-        
+
         # Tech stack (single line)
         if narrative.tech_stack:
-            tech_names = [t.get('name', t.get('language', 'unknown')) 
+            tech_names = [t.get('name', t.get('language', 'unknown'))
                          for t in narrative.tech_stack[:5]]
             sections.append(f"🔧 Stack: {', '.join(tech_names)}")
-        
+
         # Confidence summary
         sections.append(f"📊 Confidence: {narrative.confidence.level.upper()} ({narrative.confidence.score}%)")
-        
+
         return "\n".join(sections)
-    
+
     def generate_narrative(
         self,
         repo_path: Path,
@@ -303,45 +303,45 @@ class BusinessLanguageOrchestrator:
     ) -> BusinessNarrative:
         """
         Generate comprehensive business narrative from analysis data.
-        
+
         Args:
             repo_path: Path to repository
             analysis_data: Data from LENS analysis
-            
+
         Returns:
             BusinessNarrative with use cases and confidence scores
         """
         self.logger.info(f"Generating narrative for: {repo_path}")
-        
+
         # Gather evidence
         files = self._scan_repository_files(repo_path)
         readme_content = self._read_readme(repo_path)
         config_data = analysis_data.get("config_analysis", {})
         code_data = analysis_data.get("code_analysis", {})
-        
+
         # Detect technology stack
         tech_stack = self._detect_tech_stack(repo_path, files)
-        
+
         # Extract use cases
         use_cases = self._extract_use_cases(repo_path, files, analysis_data)
-        
+
         # Generate project description
         project_name = repo_path.name
         description, desc_confidence = self._generate_description(
             project_name, readme_content, tech_stack, use_cases, files
         )
-        
+
         # Generate tagline
         tagline = self._generate_tagline(project_name, tech_stack, use_cases)
-        
+
         # Generate architecture summary
         arch_summary = self._generate_architecture_summary(
             repo_path, files, tech_stack, analysis_data
         )
-        
+
         # Identify target users
         target_users = self._identify_target_users(use_cases, readme_content)
-        
+
         # Calculate overall confidence
         evidence_count = len([uc for uc in use_cases if uc.confidence.level == 'high'])
         assumption_count = len([uc for uc in use_cases if uc.confidence.level == 'low'])
@@ -350,10 +350,10 @@ class BusinessLanguageOrchestrator:
         if readme_content:
             overall_confidence.evidence.append("README.md found")
             overall_confidence.score = min(100, overall_confidence.score + 10)
-        
+
         # Build evidence map
         evidence_map = self._build_evidence_map(use_cases, tech_stack)
-        
+
         return BusinessNarrative(
             name=project_name,
             title=project_name.upper(),
@@ -366,18 +366,18 @@ class BusinessLanguageOrchestrator:
             confidence=overall_confidence,
             evidence_map=evidence_map,
         )
-    
+
     def _scan_repository_files(self, repo_path: Path) -> List[Path]:
         """Scan repository for relevant files."""
         files = []
         try:
-            for pattern in ["**/*.cs", "**/*.vb", "**/*.py", "**/*.js", "**/*.aspx", 
+            for pattern in ["**/*.cs", "**/*.vb", "**/*.py", "**/*.js", "**/*.aspx",
                           "**/*.config", "**/*.json", "**/*.xml", "**/*.sql"]:
                 files.extend(repo_path.glob(pattern))
         except Exception as e:
             self.logger.warning(f"File scan error: {e}")
         return files[:500]  # Limit for performance
-    
+
     def _read_readme(self, repo_path: Path) -> str:
         """Read README file content."""
         for name in ["README.md", "readme.md", "README.txt", "README"]:
@@ -388,7 +388,7 @@ class BusinessLanguageOrchestrator:
                 except (OSError, IOError, UnicodeDecodeError):
                     pass
         return ""
-    
+
     def _detect_tech_stack(
         self,
         repo_path: Path,
@@ -397,19 +397,19 @@ class BusinessLanguageOrchestrator:
         """Detect technology stack from files."""
         detected = []
         file_contents_cache = {}
-        
+
         for tech_name, tech_info in self.TECH_PATTERNS.items():
             evidence_files = []
-            
+
             for file_path in files:
                 rel_path = str(file_path.relative_to(repo_path))
-                
+
                 for pattern in tech_info["patterns"]:
                     # Check filename
                     if re.search(pattern, rel_path, re.IGNORECASE):
                         evidence_files.append(rel_path)
                         break
-                    
+
                     # Check file content for small files
                     if file_path.suffix in ['.cs', '.vb', '.py', '.js', '.config', '.json']:
                         if rel_path not in file_contents_cache:
@@ -418,11 +418,11 @@ class BusinessLanguageOrchestrator:
                                 file_contents_cache[rel_path] = content
                             except (OSError, IOError, UnicodeDecodeError):
                                 file_contents_cache[rel_path] = ""
-                        
+
                         if re.search(pattern, file_contents_cache[rel_path], re.IGNORECASE):
                             evidence_files.append(rel_path)
                             break
-            
+
             if evidence_files:
                 detected.append({
                     "name": tech_name,
@@ -432,11 +432,11 @@ class BusinessLanguageOrchestrator:
                     "evidence_files": list(set(evidence_files))[:5],
                     "confidence": "high" if len(set(evidence_files)) >= 3 else "medium",
                 })
-        
+
         # Sort by evidence count
         detected.sort(key=lambda x: x["evidence_count"], reverse=True)
         return detected
-    
+
     def _extract_use_cases(
         self,
         repo_path: Path,
@@ -445,26 +445,26 @@ class BusinessLanguageOrchestrator:
     ) -> List[UseCase]:
         """Extract business use cases from repository."""
         use_cases = []
-        
+
         for uc_key, uc_info in self.USE_CASE_PATTERNS.items():
             evidence_files = []
             features_found = []
-            
+
             for file_path in files:
                 rel_path = str(file_path.relative_to(repo_path))
                 file_name = file_path.stem.lower()
-                
+
                 for pattern in uc_info["patterns"]:
                     if re.search(pattern, file_name, re.IGNORECASE):
                         evidence_files.append(rel_path)
                         features_found.append(pattern)
                         break
-                    
+
                     if re.search(pattern, rel_path, re.IGNORECASE):
                         evidence_files.append(rel_path)
                         features_found.append(pattern)
                         break
-            
+
             if evidence_files:
                 # Generate description
                 features_str = ", ".join(list(set(features_found))[:3])
@@ -476,14 +476,14 @@ class BusinessLanguageOrchestrator:
                     types="documents",
                     services="backend"
                 )
-                
+
                 confidence = ConfidenceScore(
                     score=min(100, len(evidence_files) * 20),
                     level="high" if len(evidence_files) >= 5 else "medium" if len(evidence_files) >= 2 else "low",
                     evidence=evidence_files[:5],
                     assumptions=[] if len(evidence_files) >= 2 else ["Limited evidence"],
                 )
-                
+
                 use_cases.append(UseCase(
                     title=uc_info["title"],
                     description=description,
@@ -492,11 +492,11 @@ class BusinessLanguageOrchestrator:
                     evidence_files=evidence_files[:10],
                     confidence=confidence,
                 ))
-        
+
         # Sort by confidence
         use_cases.sort(key=lambda x: x.confidence.score, reverse=True)
         return use_cases[:8]  # Top 8 use cases
-    
+
     def _generate_description(
         self,
         project_name: str,
@@ -508,14 +508,14 @@ class BusinessLanguageOrchestrator:
         """Generate comprehensive project description."""
         evidence = []
         assumptions = []
-        
+
         # Start with README if available
         if readme_content:
             # Extract first paragraph or description
             lines = readme_content.split('\n')
             desc_lines = []
             in_desc = False
-            
+
             for line in lines:
                 line = line.strip()
                 if not line or line.startswith('#'):
@@ -527,7 +527,7 @@ class BusinessLanguageOrchestrator:
                     in_desc = True
                     if len(desc_lines) >= 3:
                         break
-            
+
             if desc_lines:
                 base_description = ' '.join(desc_lines)
                 evidence.append("README.md")
@@ -537,20 +537,20 @@ class BusinessLanguageOrchestrator:
         else:
             base_description = f"{project_name.upper()} is a software application"
             assumptions.append("No README found")
-        
+
         # Enhance with tech stack
         if tech_stack:
             primary_tech = [t["name"] for t in tech_stack[:3]]
             tech_str = ", ".join(primary_tech)
             base_description += f" built with {tech_str}."
             evidence.append(f"Tech stack detected: {tech_str}")
-        
+
         # Add use case summary
         if use_cases:
             uc_names = [uc.title for uc in use_cases[:3]]
             base_description += f" The application provides {', '.join(uc_names).lower()}."
             evidence.append(f"Use cases detected: {len(use_cases)}")
-        
+
         # Calculate file age
         oldest_file = None
         for f in files[:50]:
@@ -560,20 +560,20 @@ class BusinessLanguageOrchestrator:
                     oldest_file = mtime
             except (OSError, IOError):
                 pass
-        
+
         if oldest_file:
             from datetime import datetime
             age_years = (datetime.now().timestamp() - oldest_file) / (365.25 * 24 * 3600)
             if age_years >= 1:
                 base_description += f" Originally developed approximately {int(age_years)} years ago."
                 evidence.append("File timestamps analyzed")
-        
+
         confidence = ConfidenceScore.from_evidence(len(evidence), len(assumptions))
         confidence.evidence = evidence
         confidence.assumptions = assumptions
-        
+
         return base_description, confidence
-    
+
     def _generate_tagline(
         self,
         project_name: str,
@@ -587,12 +587,12 @@ class BusinessLanguageOrchestrator:
                 primary_tech = tech_stack[0]["name"]
                 return f"{primary_uc.title()} platform built with {primary_tech}"
             return f"{primary_uc.title()} platform"
-        
+
         if tech_stack:
             return f"Application built with {tech_stack[0]['name']}"
-        
+
         return "Software application"
-    
+
     def _generate_architecture_summary(
         self,
         repo_path: Path,
@@ -602,24 +602,24 @@ class BusinessLanguageOrchestrator:
     ) -> str:
         """Generate architecture overview."""
         layers = []
-        
+
         # Check for common architectural patterns
         has_web = any(t["name"] in ["ASP.NET", "ASP.NET MVC", "ASP.NET Core", "FastAPI", "Django", "React"] for t in tech_stack)
         has_db = any(t["name"] in ["SQL Server", "Entity Framework", "PostgreSQL", "MongoDB"] for t in tech_stack)
         has_api = any(f for f in files if "api" in str(f).lower() or "controller" in str(f).lower())
-        
+
         if has_web:
             layers.append("**Presentation Layer:** Web-based user interface")
         if has_api:
             layers.append("**API Layer:** RESTful services for data access")
         if has_db:
             layers.append("**Data Layer:** Persistent storage with database")
-        
+
         if layers:
             return " → ".join([l.split(':')[0].replace('**', '') for l in layers])
-        
+
         return "Standard application architecture"
-    
+
     def _identify_target_users(
         self,
         use_cases: List[UseCase],
@@ -627,7 +627,7 @@ class BusinessLanguageOrchestrator:
     ) -> List[str]:
         """Identify target user personas."""
         users = set()
-        
+
         # Common user patterns
         user_patterns = {
             r"admin": "Administrators",
@@ -638,18 +638,18 @@ class BusinessLanguageOrchestrator:
             r"student": "Students",
             r"teacher": "Teachers/Instructors",
         }
-        
+
         search_text = readme_content.lower() + " " + " ".join([uc.title.lower() for uc in use_cases])
-        
+
         for pattern, user_name in user_patterns.items():
             if re.search(pattern, search_text):
                 users.add(user_name)
-        
+
         if not users:
             users.add("General Users")
-        
+
         return list(users)[:5]
-    
+
     def _build_evidence_map(
         self,
         use_cases: List[UseCase],
@@ -657,13 +657,13 @@ class BusinessLanguageOrchestrator:
     ) -> Dict[str, List[str]]:
         """Build map of claims to evidence files."""
         evidence_map = {}
-        
+
         for uc in use_cases:
             evidence_map[uc.title] = uc.evidence_files[:5]
-        
+
         for tech in tech_stack:
             evidence_map[f"Tech: {tech['name']}"] = tech.get("evidence_files", [])[:5]
-        
+
         return evidence_map
 
 

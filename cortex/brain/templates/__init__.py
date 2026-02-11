@@ -13,12 +13,12 @@ Modules:
 
 """
 
+from .content_generator import ContentGenerator
 from .content_strategy import ContentPopulationStrategy
 from .knowledge_schema import KnowledgeBaseSchema
+from .quality_assurance import QualityAssuranceFramework
 from .template_manager import TemplateManager
 from .template_validation import TemplateContentValidator
-from .content_generator import ContentGenerator
-from .quality_assurance import QualityAssuranceFramework
 
 __all__ = [
     'ContentPopulationStrategy',

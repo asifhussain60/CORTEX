@@ -2,12 +2,13 @@
 
 import json
 from typing import Any, Union
+
 from cortex.knowledge.protocol.knowledge_protocol_spec import (
     QueryMessage,
     ResultMessage,
-    UpdateMessage,
     SubscribeMessage,
     UnsubscribeMessage,
+    UpdateMessage,
 )
 
 
@@ -29,10 +30,10 @@ class ProtocolEncoder:
         ]
     ) -> str:
         """Encode a protocol message.
-        
+
         Args:
             message: Message to encode
-            
+
         Returns:
             Encoded message string
         """
@@ -41,15 +42,15 @@ class ProtocolEncoder:
 
     def _message_to_dict(self, message: Any) -> dict[str, Any]:
         """Convert message to dictionary.
-        
+
         Args:
             message: Message to convert
-            
+
         Returns:
             Dictionary representation
         """
         msg_dict: dict[str, Any] = {}
-        
+
         if isinstance(message, QueryMessage):
             msg_dict = {
                 "type": "query",
@@ -85,5 +86,5 @@ class ProtocolEncoder:
                 "message_id": message.message_id,
                 "subscription_id": message.subscription_id,
             }
-        
+
         return msg_dict

@@ -3,11 +3,11 @@
 # Authority: CORE-008 TDD, CORE-011 type hints
 # Stage: S4 - GREEN phase implementation
 
-from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional
-from enum import Enum
 import time
 from collections import defaultdict
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
 
 class CrawlStatus(Enum):
@@ -46,27 +46,27 @@ class CrawlerOrchestrator:
     async def start_crawl(self, repository_path: str) -> CrawlReport:
         """
         Start crawl operation.
-        
+
         Args:
             repository_path: Path to repository to crawl
-            
+
         Returns:
             CrawlReport on completion
         """
         self.status = CrawlStatus.RUNNING
         self.start_time = time.time()
-        
+
         try:
             # Simulate crawl operation
             await self._run_crawl(repository_path)
             self.status = CrawlStatus.COMPLETED
-        
-        except Exception as e:
+
+        except Exception:
             self.status = CrawlStatus.FAILED
-        
+
         finally:
             self.end_time = time.time()
-        
+
         return self.get_report()
 
     async def _run_crawl(self, repository_path: str) -> None:
@@ -93,7 +93,7 @@ class CrawlerOrchestrator:
         elapsed = 0.0
         if self.start_time:
             elapsed = (self.end_time or time.time()) - self.start_time
-        
+
         return {
             "status": self.status.value,
             "elapsed_seconds": elapsed,
@@ -105,7 +105,7 @@ class CrawlerOrchestrator:
         duration = 0.0
         if self.start_time and self.end_time:
             duration = self.end_time - self.start_time
-        
+
         return CrawlReport(
             total_files=self.metrics.get("total_files", 0),
             files_processed=self.metrics.get("files_processed", 0),
@@ -147,7 +147,7 @@ class ProgressReporter:
     def get_report(self) -> Dict[str, Any]:
         """Get comprehensive progress report."""
         elapsed = time.time() - self.start_time
-        
+
         return {
             "progress_percent": self.progress_percent,
             "files_processed": self.files_processed,

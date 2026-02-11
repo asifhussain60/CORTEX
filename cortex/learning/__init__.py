@@ -14,36 +14,36 @@ Components:
 - S7: LearningDashboard - Metrics and visualization
 """
 
-from cortex.learning.universal_learning_loop import (
-    UniversalLearningLoop,
-    get_learning_loop,
-    LearningCapture,
-    PatternType,
-)
-from cortex.learning.pattern_extractor import (
-    PatternExtractor,
-    ExtractedPattern,
-)
-from cortex.learning.knowledge_merger import (
-    KnowledgeMerger,
-    MergeStrategy,
-)
 from cortex.learning.confidence_scorer import (
-    ConfidenceScorer,
     ConfidenceLevel,
-)
-from cortex.learning.orchestrator_integration_mixin import (
-    OrchestratorLearningMixin,
+    ConfidenceScorer,
 )
 from cortex.learning.intelligence_validator import (
     IntelligenceValidator,
     ValidationReport,
     get_intelligence_validator,
 )
+from cortex.learning.knowledge_merger import (
+    KnowledgeMerger,
+    MergeStrategy,
+)
 from cortex.learning.learning_dashboard import (
     LearningDashboard,
     MetricsSnapshot,
     get_learning_dashboard,
+)
+from cortex.learning.orchestrator_integration_mixin import (
+    OrchestratorLearningMixin,
+)
+from cortex.learning.pattern_extractor import (
+    ExtractedPattern,
+    PatternExtractor,
+)
+from cortex.learning.universal_learning_loop import (
+    LearningCapture,
+    PatternType,
+    UniversalLearningLoop,
+    get_learning_loop,
 )
 
 __all__ = [

@@ -10,7 +10,8 @@ Compliance: NORMAL
 Author: CORTEX Framework
 """
 
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List, Optional
+
 from cortex.mcp.decorators import mcp_tool
 from cortex.mcp.tools.knowledge.guidance_tool import get_tdd_guidance_for_module
 
@@ -22,11 +23,11 @@ from cortex.mcp.tools.knowledge.guidance_tool import get_tdd_guidance_for_module
 )
 def search_knowledge_base(query: str, domain: str = "all") -> Dict[str, Any]:
     """Search knowledge base.
-    
+
     Args:
         query: Search query
         domain: Domain to search ('all', 'governance', 'operations', 'architecture')
-        
+
     Returns:
         Dict with search results
     """
@@ -46,11 +47,11 @@ def search_knowledge_base(query: str, domain: str = "all") -> Dict[str, Any]:
 )
 def analyze_knowledge_gap(domain: str, scope: str = "full") -> Dict[str, Any]:
     """Analyze knowledge gaps.
-    
+
     Args:
         domain: Knowledge domain
         scope: Analysis scope ('full', 'critical', 'recent')
-        
+
     Returns:
         Dict with gap analysis
     """
@@ -70,11 +71,11 @@ def analyze_knowledge_gap(domain: str, scope: str = "full") -> Dict[str, Any]:
 )
 def generate_knowledge_summary(domain: str, detail_level: str = "standard") -> Dict[str, Any]:
     """Generate knowledge summary.
-    
+
     Args:
         domain: Knowledge domain
         detail_level: Level of detail ('brief', 'standard', 'detailed')
-        
+
     Returns:
         Dict with knowledge summary
     """

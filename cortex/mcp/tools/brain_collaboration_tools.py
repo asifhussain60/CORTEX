@@ -10,7 +10,7 @@ CORE-011: Full type hints
 CORE-012: Google-style docstrings
 """
 
-from typing import Dict, Any, List
+from typing import Any, Dict, List
 
 
 def cortex_brain_share(
@@ -20,19 +20,19 @@ def cortex_brain_share(
 ) -> Dict[str, Any]:
     """
     Share brain context with team members.
-    
+
     Args:
         context_id: Context ID to share
         target_users: List of user IDs to share with
         scope: Sharing scope (session/project/global)
-        
+
     Returns:
         Share result with shared_with list and share_id
     """
     import uuid
-    
+
     share_id = f"share_{uuid.uuid4().hex[:8]}"
-    
+
     return {
         "shared_with": target_users,
         "share_id": share_id,
@@ -47,18 +47,18 @@ def cortex_brain_merge(
 ) -> Dict[str, Any]:
     """
     Merge brain learnings from multiple contexts.
-    
+
     Args:
         source_contexts: List of context IDs to merge
         merge_strategy: Merge strategy (intelligent/simple)
-        
+
     Returns:
         Merge result with merged_context_id and source_count
     """
     import uuid
-    
+
     merged_id = f"merged_{uuid.uuid4().hex[:8]}"
-    
+
     return {
         "merged_context_id": merged_id,
         "source_count": len(source_contexts),
@@ -72,11 +72,11 @@ def cortex_brain_sync(
 ) -> Dict[str, Any]:
     """
     Synchronize brain state across users.
-    
+
     Args:
         user_ids: User IDs to sync
         sync_type: Sync type (bidirectional/unidirectional)
-        
+
     Returns:
         Sync result with synced_users and success status
     """

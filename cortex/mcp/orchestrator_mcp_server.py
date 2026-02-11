@@ -35,11 +35,11 @@ Author: Asif Hussain
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict, List, Optional, Set
-from dataclasses import dataclass, field
-from enum import Enum
-from datetime import datetime
 from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional, Set
 
 logger = logging.getLogger(__name__)
 
@@ -63,7 +63,7 @@ class ExecutionContext:
     session_id: Optional[str] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
     created_at: datetime = field(default_factory=datetime.now)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Serialize context to dictionary"""
         return {
@@ -91,7 +91,7 @@ class CapabilityMetadata:
     version: str = "1.0.0"
     dependencies: List[str] = field(default_factory=list)
     tags: Set[str] = field(default_factory=set)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary"""
         return {
@@ -118,7 +118,7 @@ class CapabilityRequest:
     priority: int = 100
     timeout_ms: int = 30000
     retry_count: int = 0
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary"""
         return {
@@ -144,7 +144,7 @@ class CapabilityResponse:
     orchestrator: Optional[str] = None
     execution_timestamp: datetime = field(default_factory=datetime.now)
     metadata: Dict[str, Any] = field(default_factory=dict)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary"""
         return {
@@ -163,18 +163,18 @@ class CapabilityResponse:
 class IOrchestratorAdapter(ABC):
     """
     Adapter interface for orchestrators to expose capabilities via MCP.
-    
+
     Each orchestrator implements this interface to provide:
     - Capability discovery
     - Capability execution
     - Health status
     """
-    
+
     @abstractmethod
     def get_capabilities(self) -> List[CapabilityMetadata]:
         """Get all capabilities exposed by this orchestrator"""
         pass
-    
+
     @abstractmethod
     def execute_capability(
         self,
@@ -184,12 +184,12 @@ class IOrchestratorAdapter(ABC):
     ) -> CapabilityResponse:
         """Execute a capability"""
         pass
-    
+
     @abstractmethod
     def is_healthy(self) -> bool:
         """Check if orchestrator is healthy"""
         pass
-    
+
     @abstractmethod
     def get_status(self) -> Dict[str, Any]:
         """Get detailed status information"""
@@ -199,10 +199,10 @@ class IOrchestratorAdapter(ABC):
 class OrchestratorMCPServer:
     """
     Unified MCP Server for CORTEX Orchestrators.
-    
+
     Single facade exposing all orchestrator capabilities via MCP protocol.
     Handles tool discovery, routing, execution, and observability.
-    
+
     Features:
     - **Unified Discovery**: Single endpoint for all tools/capabilities
     - **Intelligent Routing**: Routes requests to appropriate orchestrator
@@ -211,9 +211,9 @@ class OrchestratorMCPServer:
     - **Health Monitoring**: Central health checks
     - **Audit Trail**: Complete execution history
     """
-    
+
     _instance: Optional['OrchestratorMCPServer'] = None
-    
+
     def __init__(self):
         """Initialize the server"""
         self._orchestrators: Dict[str, IOrchestratorAdapter] = {}
@@ -225,14 +225,14 @@ class OrchestratorMCPServer:
         self._initialized = False
         self._max_history_size = 1000
         logger.info("OrchestratorMCPServer initialized (AC-MCP-ORCHESTRATOR-001)")
-    
+
     @classmethod
     def instance(cls) -> 'OrchestratorMCPServer':
         """Get singleton instance"""
         if cls._instance is None:
             cls._instance = cls()
         return cls._instance
-    
+
     def register_orchestrator(
         self,
         orchestrator_name: str,
@@ -240,26 +240,26 @@ class OrchestratorMCPServer:
     ) -> bool:
         """
         Register an orchestrator adapter.
-        
+
         Args:
             orchestrator_name: Name of the orchestrator
             adapter: Implementation of IOrchestratorAdapter
-            
+
         Returns:
             True if registered successfully
         """
         if orchestrator_name in self._orchestrators:
             logger.warning(f"Orchestrator already registered: {orchestrator_name}")
             return False
-        
+
         try:
             self._orchestrators[orchestrator_name] = adapter
-            
+
             # Discover and register capabilities
             capabilities = adapter.get_capabilities()
             for capability in capabilities:
                 self._register_capability(capability, orchestrator_name)
-            
+
             logger.info(
                 f"Orchestrator registered: {orchestrator_name} "
                 f"({len(capabilities)} capabilities)"
@@ -268,7 +268,7 @@ class OrchestratorMCPServer:
         except Exception as e:
             logger.error(f"Error registering orchestrator {orchestrator_name}: {e}")
             return False
-    
+
     def _register_capability(
         self,
         capability: CapabilityMetadata,
@@ -278,11 +278,11 @@ class OrchestratorMCPServer:
         if capability.name in self._capabilities:
             logger.warning(f"Capability already registered: {capability.name}")
             return
-        
+
         self._capabilities[capability.name] = capability
         self._capability_to_orchestrator[capability.name] = orchestrator_name
         logger.debug(f"Capability registered: {capability.name}")
-    
+
     def discover_capabilities(
         self,
         context: Optional[ExecutionContext] = None,
@@ -291,48 +291,48 @@ class OrchestratorMCPServer:
     ) -> List[CapabilityMetadata]:
         """
         Discover available capabilities.
-        
+
         Args:
             context: Execution context (optional)
             orchestrator_filter: Filter by orchestrator name
             keyword_filter: Filter by routing keywords
-            
+
         Returns:
             List of matching capabilities
         """
         capabilities = list(self._capabilities.values())
-        
+
         if orchestrator_filter:
             capabilities = [
                 c for c in capabilities
                 if self._capability_to_orchestrator.get(c.name) == orchestrator_filter
             ]
-        
+
         if keyword_filter:
             capabilities = [
                 c for c in capabilities
                 if any(kw in c.routing_keywords for kw in keyword_filter)
             ]
-        
+
         logger.debug(f"Discovered {len(capabilities)} capabilities")
         return capabilities
-    
+
     def execute_capability(
         self,
         request: CapabilityRequest
     ) -> CapabilityResponse:
         """
         Execute a capability.
-        
+
         Args:
             request: Capability request
-            
+
         Returns:
             Capability response
         """
         start_time = datetime.now()
         response = None
-        
+
         try:
             # Validate capability exists
             if request.capability_name not in self._capabilities:
@@ -342,7 +342,7 @@ class OrchestratorMCPServer:
                     error=f"Capability not found: {request.capability_name}",
                     error_code="CAPABILITY_NOT_FOUND"
                 )
-            
+
             # Find orchestrator
             orchestrator_name = self._capability_to_orchestrator[request.capability_name]
             if orchestrator_name not in self._orchestrators:
@@ -352,30 +352,30 @@ class OrchestratorMCPServer:
                     error=f"Orchestrator not available: {orchestrator_name}",
                     error_code="ORCHESTRATOR_NOT_AVAILABLE"
                 )
-            
+
             orchestrator = self._orchestrators[orchestrator_name]
-            
+
             # Execute capability
             response = orchestrator.execute_capability(
                 request.capability_name,
                 request.parameters,
                 request.context
             )
-            
+
             # Update execution history
             duration = (datetime.now() - start_time).total_seconds() * 1000
             response.duration_ms = duration
             response.orchestrator = orchestrator_name
             self._add_to_history(response)
-            
+
             logger.info(
                 f"Capability executed: {request.capability_name} "
                 f"(orchestrator={orchestrator_name}, duration={duration:.1f}ms, "
                 f"success={response.success})"
             )
-            
+
             return response
-            
+
         except Exception as e:
             duration = (datetime.now() - start_time).total_seconds() * 1000
             error_response = CapabilityResponse(
@@ -388,17 +388,17 @@ class OrchestratorMCPServer:
             self._add_to_history(error_response)
             logger.error(f"Error executing capability: {e}", exc_info=True)
             return error_response
-    
+
     def _add_to_history(self, response: CapabilityResponse) -> None:
         """Add response to execution history"""
         self._execution_history.append(response)
         if len(self._execution_history) > self._max_history_size:
             self._execution_history.pop(0)
-    
+
     def get_health_status(self) -> Dict[str, Any]:
         """
         Get health status of all orchestrators.
-        
+
         Returns:
             Health status dictionary
         """
@@ -407,7 +407,7 @@ class OrchestratorMCPServer:
             "timestamp": datetime.now().isoformat(),
             "orchestrators": {}
         }
-        
+
         for name, orchestrator in self._orchestrators.items():
             try:
                 is_healthy = orchestrator.is_healthy()
@@ -424,9 +424,9 @@ class OrchestratorMCPServer:
                     "status": {"error": str(e)}
                 }
                 health_status["server_healthy"] = False
-        
+
         return health_status
-    
+
     def get_execution_history(
         self,
         limit: int = 100,
@@ -435,35 +435,35 @@ class OrchestratorMCPServer:
     ) -> List[Dict[str, Any]]:
         """
         Get execution history.
-        
+
         Args:
             limit: Maximum number of entries
             orchestrator_filter: Filter by orchestrator
             success_only: Only return successful executions
-            
+
         Returns:
             List of execution history entries
         """
         history = self._execution_history[-limit:]
-        
+
         if orchestrator_filter:
             history = [h for h in history if h.orchestrator == orchestrator_filter]
-        
+
         if success_only:
             history = [h for h in history if h.success]
-        
+
         return [h.to_dict() for h in history]
-    
+
     def initialize(self) -> bool:
         """
         Initialize the MCP server.
-        
+
         Performs:
         - Loads all registered orchestrators
         - Discovers capabilities
         - Validates health
         - Prepares for requests
-        
+
         Returns:
             True if initialization successful
         """
@@ -476,7 +476,7 @@ class OrchestratorMCPServer:
         except Exception as e:
             logger.error(f"Error initializing server: {e}", exc_info=True)
             return False
-    
+
     def shutdown(self) -> bool:
         """Shutdown the MCP server"""
         try:
@@ -489,7 +489,7 @@ class OrchestratorMCPServer:
         except Exception as e:
             logger.error(f"Error during shutdown: {e}")
             return False
-    
+
     def get_server_info(self) -> Dict[str, Any]:
         """Get server information"""
         return {

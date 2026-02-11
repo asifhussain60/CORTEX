@@ -12,12 +12,12 @@ AC-ID: DASHBOARD-MGMT-MCP-001
 Authority: CORE-007 (MCP-first)
 """
 
-from pathlib import Path
-from typing import Dict, Any, List, Optional
 import json
-import shutil
 import logging
+import shutil
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 from cortex.mcp.decorators import mcp_tool
 
@@ -42,7 +42,7 @@ def _load_registry() -> Dict[str, Any]:
     registry_path = _get_registry_path()
     if not registry_path.exists():
         return {"repos": [], "generated_at": None, "version": "1.0"}
-    
+
     with open(registry_path, "r") as f:
         return json.load(f)
 
@@ -51,7 +51,7 @@ def _save_registry(registry: Dict[str, Any]) -> None:
     """Save registry.json."""
     registry["generated_at"] = datetime.now().isoformat()
     registry_path = _get_registry_path()
-    
+
     with open(registry_path, "w") as f:
         json.dump(registry, f, indent=4)
 
@@ -64,7 +64,7 @@ def _save_registry(registry: Dict[str, Any]) -> None:
 def cortex_dashboard_list_repos() -> Dict[str, Any]:
     """
     List all registered repository dashboards.
-    
+
     Returns:
         Dict with:
         - success: bool
@@ -75,7 +75,7 @@ def cortex_dashboard_list_repos() -> Dict[str, Any]:
     try:
         registry = _load_registry()
         repos = registry.get("repos", [])
-        
+
         summaries = []
         for repo in repos:
             summaries.append({
@@ -85,14 +85,14 @@ def cortex_dashboard_list_repos() -> Dict[str, Any]:
                 "icon": repo.get("icon", "📁"),
                 "dashboard_url": repo.get("dashboard_url", f"repos/{repo.get('slug')}/index.html"),
             })
-        
+
         return {
             "success": True,
             "repos": summaries,
             "count": len(summaries),
             "error": None,
         }
-        
+
     except Exception as e:
         logger.error(f"cortex_dashboard_list_repos failed: {e}", exc_info=True)
         return {
@@ -127,7 +127,7 @@ def cortex_dashboard_create_repo(
 ) -> Dict[str, Any]:
     """
     Create a new repository dashboard from template.
-    
+
     Args:
         slug: URL-safe identifier (e.g., "my-repo")
         display_name: Human-readable name
@@ -136,7 +136,7 @@ def cortex_dashboard_create_repo(
         primary_language: Primary programming language
         icon: Emoji icon
         tags: List of tags
-        
+
     Returns:
         Dict with:
         - success: bool
@@ -146,11 +146,11 @@ def cortex_dashboard_create_repo(
     try:
         if tags is None:
             tags = []
-            
+
         dashboard_root = _get_dashboard_root()
         template_path = dashboard_root / "repos" / "_template"
         repo_path = dashboard_root / "repos" / slug
-        
+
         # Check if already exists
         if repo_path.exists():
             return {
@@ -158,15 +158,15 @@ def cortex_dashboard_create_repo(
                 "dashboard_path": None,
                 "error": f"Repository '{slug}' already exists",
             }
-        
+
         # Copy template
         shutil.copytree(template_path, repo_path)
-        
+
         # Update data.json with provided info
         data_path = repo_path / "data.json"
         with open(data_path, "r") as f:
             data = json.load(f)
-        
+
         data["repo"] = {
             "slug": slug,
             "display_name": display_name,
@@ -176,10 +176,10 @@ def cortex_dashboard_create_repo(
             "last_analyzed_at": datetime.now().isoformat(),
         }
         data["overview"]["summary"] = description
-        
+
         with open(data_path, "w") as f:
             json.dump(data, f, indent=4)
-        
+
         # Add to registry
         registry = _load_registry()
         registry["repos"].append({
@@ -200,13 +200,13 @@ def cortex_dashboard_create_repo(
             "dashboard_url": f"repos/{slug}/index.html",
         })
         _save_registry(registry)
-        
+
         return {
             "success": True,
             "dashboard_path": str(repo_path / "index.html"),
             "error": None,
         }
-        
+
     except Exception as e:
         logger.error(f"cortex_dashboard_create_repo failed: {e}", exc_info=True)
         return {
@@ -230,11 +230,11 @@ def cortex_dashboard_update_repo(
 ) -> Dict[str, Any]:
     """
     Update an existing repository dashboard data.
-    
+
     Args:
         slug: Repository identifier
         data: Data to update (partial update supported)
-        
+
     Returns:
         Dict with:
         - success: bool
@@ -244,17 +244,17 @@ def cortex_dashboard_update_repo(
         dashboard_root = _get_dashboard_root()
         repo_path = dashboard_root / "repos" / slug
         data_path = repo_path / "data.json"
-        
+
         if not repo_path.exists():
             return {
                 "success": False,
                 "error": f"Repository '{slug}' not found",
             }
-        
+
         # Load existing data
         with open(data_path, "r") as f:
             existing_data = json.load(f)
-        
+
         # Deep merge data
         def deep_merge(base: dict, update: dict) -> dict:
             for key, value in update.items():
@@ -263,12 +263,12 @@ def cortex_dashboard_update_repo(
                 else:
                     base[key] = value
             return base
-        
+
         merged_data = deep_merge(existing_data, data)
-        
+
         with open(data_path, "w") as f:
             json.dump(merged_data, f, indent=4)
-        
+
         # Update registry if metrics changed
         registry = _load_registry()
         for repo in registry.get("repos", []):
@@ -281,12 +281,12 @@ def cortex_dashboard_update_repo(
                 repo["last_analyzed_at"] = datetime.now().isoformat()
                 break
         _save_registry(registry)
-        
+
         return {
             "success": True,
             "error": None,
         }
-        
+
     except Exception as e:
         logger.error(f"cortex_dashboard_update_repo failed: {e}", exc_info=True)
         return {
@@ -309,11 +309,11 @@ def cortex_dashboard_delete_repo(
 ) -> Dict[str, Any]:
     """
     Delete a repository dashboard.
-    
+
     Args:
         slug: Repository identifier
         confirm: Must be True to proceed (safety check)
-        
+
     Returns:
         Dict with:
         - success: bool
@@ -325,35 +325,35 @@ def cortex_dashboard_delete_repo(
                 "success": False,
                 "error": "Must set confirm=True to delete",
             }
-        
+
         if slug == "_template":
             return {
                 "success": False,
                 "error": "Cannot delete _template folder",
             }
-        
+
         dashboard_root = _get_dashboard_root()
         repo_path = dashboard_root / "repos" / slug
-        
+
         if not repo_path.exists():
             return {
                 "success": False,
                 "error": f"Repository '{slug}' not found",
             }
-        
+
         # Remove folder
         shutil.rmtree(repo_path)
-        
+
         # Remove from registry
         registry = _load_registry()
         registry["repos"] = [r for r in registry.get("repos", []) if r.get("slug") != slug]
         _save_registry(registry)
-        
+
         return {
             "success": True,
             "error": None,
         }
-        
+
     except Exception as e:
         logger.error(f"cortex_dashboard_delete_repo failed: {e}", exc_info=True)
         return {
@@ -370,12 +370,12 @@ def cortex_dashboard_delete_repo(
 def cortex_dashboard_validate() -> Dict[str, Any]:
     """
     Validate dashboard registry and folder structure.
-    
+
     Checks:
     - All registry entries have corresponding folders
     - All folders have required files (index.html, data.json)
     - Asset paths are correct
-    
+
     Returns:
         Dict with:
         - success: bool
@@ -387,22 +387,22 @@ def cortex_dashboard_validate() -> Dict[str, Any]:
         dashboard_root = _get_dashboard_root()
         registry = _load_registry()
         issues = []
-        
+
         # Check each registry entry
         for repo in registry.get("repos", []):
             slug = repo.get("slug")
             repo_path = dashboard_root / "repos" / slug
-            
+
             if not repo_path.exists():
                 issues.append(f"Registry entry '{slug}' has no folder at repos/{slug}/")
                 continue
-            
+
             # Check required files
             if not (repo_path / "index.html").exists():
                 issues.append(f"repos/{slug}/ missing index.html")
             if not (repo_path / "data.json").exists():
                 issues.append(f"repos/{slug}/ missing data.json")
-        
+
         # Check for orphan folders
         repos_path = dashboard_root / "repos"
         if repos_path.exists():
@@ -410,7 +410,7 @@ def cortex_dashboard_validate() -> Dict[str, Any]:
             for folder in repos_path.iterdir():
                 if folder.is_dir() and folder.name not in registry_slugs and folder.name != "_template":
                     issues.append(f"Orphan folder: repos/{folder.name}/ not in registry")
-        
+
         # Check assets
         assets_path = dashboard_root / "assets"
         if not assets_path.exists():
@@ -420,14 +420,14 @@ def cortex_dashboard_validate() -> Dict[str, Any]:
             for asset in required_assets:
                 if not (assets_path / asset).exists():
                     issues.append(f"Missing asset: assets/{asset}")
-        
+
         return {
             "success": True,
             "valid": len(issues) == 0,
             "issues": issues,
             "error": None,
         }
-        
+
     except Exception as e:
         logger.error(f"cortex_dashboard_validate failed: {e}", exc_info=True)
         return {

@@ -4,6 +4,7 @@ Author: CORTEX Framework
 """
 
 from typing import Any, Dict, List
+
 from cortex_brain.domain_brain.models import Entity, EntityType
 
 
@@ -22,7 +23,7 @@ class ASTAdapter:
 
     def query_source(self, query: str) -> List[Dict[str, Any]]:
         """Query AST source with pattern matching.
-        
+
         Supported patterns:
         - function:* - All functions
         - class:* - All classes
@@ -32,13 +33,13 @@ class ASTAdapter:
         """
         if not query or ":" not in query:
             return []
-        
+
         parts = query.split(":", 1)
         if len(parts) != 2:
             return []
-        
+
         query_type, pattern = parts
-        
+
         # For now, return empty list (can be populated later)
         return []
 
@@ -57,7 +58,7 @@ class GitAdapter:
 
     def query_source(self, query: str) -> List[Dict[str, Any]]:
         """Query Git source.
-        
+
         Supported patterns:
         - commit:recent:<n> - Recent commits
         - blame:<file> - Blame information
@@ -66,11 +67,11 @@ class GitAdapter:
         """
         if not query or ":" not in query:
             return []
-        
+
         parts = query.split(":", 1)
         if len(parts) < 2:
             return []
-        
+
         # For now, return empty list
         return []
 
@@ -89,7 +90,7 @@ class CommentsAdapter:
 
     def query_source(self, query: str) -> List[Dict[str, Any]]:
         """Query comments and documentation.
-        
+
         Supported patterns:
         - docstring:* - All docstrings
         - docstring:<name> - Specific docstring
@@ -98,11 +99,11 @@ class CommentsAdapter:
         """
         if not query or ":" not in query:
             return []
-        
+
         parts = query.split(":", 1)
         if len(parts) < 2:
             return []
-        
+
         # For now, return empty list
         return []
 
@@ -121,7 +122,7 @@ class RelationshipsAdapter:
 
     def query_source(self, query: str) -> List[Dict[str, Any]]:
         """Query service relationships.
-        
+
         Supported patterns:
         - service:* - All services
         - service:<name> - Specific service
@@ -131,11 +132,11 @@ class RelationshipsAdapter:
         """
         if not query or ":" not in query:
             return []
-        
+
         parts = query.split(":", 1)
         if len(parts) < 2:
             return []
-        
+
         # For now, return empty list
         return []
 

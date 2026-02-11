@@ -9,12 +9,12 @@ Description: Safe Deprecation system implementation
 """
 
 import re
-from pathlib import Path
-from typing import List, Dict, Optional
+import warnings
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-import warnings
+from pathlib import Path
+from typing import Dict, List, Optional
 
 
 class DeprecationLevel(Enum):
@@ -34,7 +34,7 @@ class DeprecationNotice:
     alternative: str
     level: DeprecationLevel
     days_remaining: int
-    
+
     def __post_init__(self):
         """Calculate days remaining"""
         now = datetime.utcnow()
@@ -44,7 +44,7 @@ class DeprecationNotice:
 
 class SafeDeprecationMarker:
     """Marks code as deprecated with migration guides"""
-    
+
     DEPRECATION_TEMPLATE = '''"""
 ⚠️ DEPRECATED: {reason}
 
@@ -56,12 +56,12 @@ Days Remaining: {days_remaining}
 For full migration instructions, see: docs/migration/{alternative}.md
 """
 '''
-    
+
     def __init__(self, repo_root: Path):
         """Initialize deprecation marker"""
         self.repo_root = Path(repo_root)
         self.notices: List[DeprecationNotice] = []
-    
+
     def mark_deprecated(
         self,
         module_path: Path,
@@ -71,7 +71,7 @@ For full migration instructions, see: docs/migration/{alternative}.md
     ) -> DeprecationNotice:
         """Mark module as deprecated with notice"""
         target_date = datetime.utcnow() + timedelta(days=days_notice)
-        
+
         notice = DeprecationNotice(
             module_path=module_path,
             target_date=target_date,
@@ -81,15 +81,15 @@ For full migration instructions, see: docs/migration/{alternative}.md
             level=DeprecationLevel.WARNING if days_notice >= 7 else DeprecationLevel.ERROR,
             days_remaining=days_notice
         )
-        
+
         self.notices.append(notice)
         return notice
-    
+
     def add_deprecation_warning(self, file_path: Path, notice: DeprecationNotice) -> None:
         """Add deprecation warning to file"""
         try:
             content = file_path.read_text()
-            
+
             # Create deprecation header
             header = self.DEPRECATION_TEMPLATE.format(
                 reason=notice.reason,
@@ -98,7 +98,7 @@ For full migration instructions, see: docs/migration/{alternative}.md
                 removal_date=notice.target_date.strftime("%Y-%m-%d"),
                 days_remaining=notice.days_remaining
             )
-            
+
             # Add @deprecated decorator comment if not present
             if "@deprecated" not in content:
                 # Insert after module docstring or at start
@@ -109,11 +109,11 @@ For full migration instructions, see: docs/migration/{alternative}.md
                         content = content[:end_idx+3] + "\n\n" + header + "\n" + content[end_idx+3:]
                 else:
                     content = header + "\n" + content
-            
+
             file_path.write_text(content)
         except Exception:
             pass  # Skip files that can't be modified
-    
+
     def generate_migration_guide(self, notice: DeprecationNotice) -> str:
         """Generate migration guide for deprecated code"""
         guide = f"""
@@ -152,11 +152,11 @@ Remove old imports and verify nothing broke.
 See the full API reference: docs/api/{notice.alternative}.md
 """
         return guide.strip()
-    
+
     def create_removal_date(self, notice: DeprecationNotice) -> datetime:
         """Calculate removal date (30 days from now)"""
         return notice.target_date
-    
+
     def get_notices(self) -> List[DeprecationNotice]:
         """Get all deprecation notices"""
         return list(self.notices)
@@ -164,20 +164,20 @@ See the full API reference: docs/api/{notice.alternative}.md
 
 class DeprecationWarningInjector:
     """Injects deprecation warnings into code"""
-    
+
     def __init__(self):
         """Initialize injector"""
         self.warnings_injected = 0
         self.files_modified: List[Path] = []
-    
+
     def inject_decorator(self, file_path: Path, reason: str) -> None:
         """Inject @deprecated decorator"""
         try:
             content = file_path.read_text()
-            
+
             # Add deprecation comment
             deprecation_comment = f"# @deprecated: {reason}\n"
-            
+
             if "@deprecated" not in content:
                 content = deprecation_comment + content
                 file_path.write_text(content)
@@ -185,16 +185,16 @@ class DeprecationWarningInjector:
                 self.files_modified.append(file_path)
         except Exception:
             pass
-    
+
     def inject_warning_function(self, file_path: Path, function_name: str, reason: str) -> None:
         """Inject deprecation warning in function"""
         try:
             content = file_path.read_text()
-            
+
             # Find function definition
             pattern = rf"^(def {re.escape(function_name)}\(.*?\):)"
             replacement = f"# @deprecated: {reason}\n\\1"
-            
+
             if re.search(pattern, content, re.MULTILINE):
                 content = re.sub(pattern, replacement, content, flags=re.MULTILINE)
                 file_path.write_text(content)
@@ -202,12 +202,12 @@ class DeprecationWarningInjector:
                 self.files_modified.append(file_path)
         except Exception:
             pass
-    
+
     def inject_comment_header(self, file_path: Path, notice: DeprecationNotice) -> None:
         """Add deprecation notice as file header comment"""
         try:
             content = file_path.read_text()
-            
+
             header = f"""'''
 DEPRECATED MODULE
 {notice.reason}
@@ -218,14 +218,14 @@ Days Remaining: {notice.days_remaining}
 '''
 
 """
-            
+
             content = header + content
             file_path.write_text(content)
             self.warnings_injected += 1
             self.files_modified.append(file_path)
         except Exception:
             pass
-    
+
     def get_modified_files(self) -> List[Path]:
         """Get files modified with deprecation warnings"""
         return list(self.files_modified)
@@ -233,11 +233,11 @@ Days Remaining: {notice.days_remaining}
 
 class MigrationGuideGenerator:
     """Generates migration guides for deprecated code"""
-    
+
     def __init__(self):
         """Initialize generator"""
         self.guides: Dict[str, str] = {}
-    
+
     def create_guide(
         self,
         old_module: str,
@@ -276,15 +276,15 @@ result = obj.new_method()
 
 ## Common Patterns
 """
-        
+
         for example in examples:
             guide += f"\n- {example}"
-        
+
         guide += "\n\n## Questions?\nRefer to the full documentation or contact support."
-        
+
         self.guides[old_module] = guide
         return guide
-    
+
     def generate_code_examples(self, old_code: str, new_code: str) -> Dict[str, str]:
         """Generate before/after code examples"""
         return {
@@ -292,16 +292,16 @@ result = obj.new_method()
             "after": new_code,
             "notes": "Update all references as shown above"
         }
-    
+
     def create_step_by_step_guide(self, steps: List[str]) -> str:
         """Generate step-by-step migration instructions"""
         guide = "# Step-by-Step Migration Guide\n\n"
-        
+
         for i, step in enumerate(steps, 1):
             guide += f"## Step {i}\n{step}\n\n"
-        
+
         return guide
-    
+
     def export_guide_to_markdown(self, guide: str, output_path: Path) -> None:
         """Export migration guide as Markdown"""
         output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -310,63 +310,63 @@ result = obj.new_method()
 
 class DeprecationDocumentationUpdater:
     """Updates documentation with deprecation notices"""
-    
+
     def __init__(self, docs_root: Path):
         """Initialize updater"""
         self.docs_root = Path(docs_root)
         self.updated_docs: List[Path] = []
-    
+
     def add_deprecation_section(self, doc_file: Path, notice: DeprecationNotice) -> None:
         """Add deprecation section to documentation"""
         try:
             content = doc_file.read_text()
-            
+
             deprecation_section = f"""
 
 ## ⚠️ Deprecation Notice
 
-**Status:** DEPRECATED  
-**Reason:** {notice.reason}  
-**Alternative:** Use `{notice.alternative}` instead  
+**Status:** DEPRECATED
+**Reason:** {notice.reason}
+**Alternative:** Use `{notice.alternative}` instead
 **Removal Date:** {notice.target_date.strftime("%Y-%m-%d")}
 
 This module/function will be removed on the specified date.
 Please migrate to the alternative as soon as possible.
 """
-            
+
             content = content + deprecation_section
             doc_file.write_text(content)
             self.updated_docs.append(doc_file)
         except Exception:
             pass
-    
+
     def update_api_reference(self, doc_file: Path, deprecated_items: List[str]) -> None:
         """Mark deprecated items in API reference"""
         try:
             content = doc_file.read_text()
-            
+
             for item in deprecated_items:
                 # Mark with deprecation badge
                 pattern = rf"(\n\s*-\s*{re.escape(item)})"
-                replacement = rf"\1 ~~DEPRECATED~~"
+                replacement = r"\1 ~~DEPRECATED~~"
                 content = re.sub(pattern, replacement, content)
-            
+
             doc_file.write_text(content)
             self.updated_docs.append(doc_file)
         except Exception:
             pass
-    
+
     def create_migration_guide_doc(self, doc_path: Path, guide_content: str) -> None:
         """Create migration guide documentation"""
         doc_path.parent.mkdir(parents=True, exist_ok=True)
         doc_path.write_text(guide_content)
         self.updated_docs.append(doc_path)
-    
+
     def update_changelog(self, changelog_path: Path, notice: DeprecationNotice) -> None:
         """Update CHANGELOG with deprecation notice"""
         try:
             content = changelog_path.read_text()
-            
+
             entry = f"""
 
 ## Deprecation Notice
@@ -377,14 +377,14 @@ Please migrate to the alternative as soon as possible.
 - **Removal Date:** {notice.target_date.strftime("%Y-%m-%d")}
 - **Status:** Deprecated
 """
-            
+
             # Insert after first "##" or at beginning
             if "## " in content:
                 idx = content.find("## ")
                 content = content[:idx] + entry + "\n" + content[idx:]
             else:
                 content = entry + "\n" + content
-            
+
             changelog_path.write_text(content)
             self.updated_docs.append(changelog_path)
         except Exception:
@@ -393,19 +393,19 @@ Please migrate to the alternative as soon as possible.
 
 class RemovalScheduler:
     """Schedules code for removal on target date"""
-    
+
     def __init__(self):
         """Initialize scheduler"""
         self.scheduled_removals: List[DeprecationNotice] = []
-    
+
     def schedule_removal(self, notice: DeprecationNotice) -> None:
         """Schedule module for removal"""
         self.scheduled_removals.append(notice)
-    
+
     def get_scheduled_removals(self) -> List[DeprecationNotice]:
         """Get all scheduled removals"""
         return list(self.scheduled_removals)
-    
+
     def get_due_for_removal(self) -> List[DeprecationNotice]:
         """Get modules due for removal today or earlier"""
         now = datetime.utcnow()
@@ -413,7 +413,7 @@ class RemovalScheduler:
             notice for notice in self.scheduled_removals
             if notice.target_date <= now
         ]
-    
+
     def calculate_days_remaining(self, notice: DeprecationNotice) -> int:
         """Calculate days until removal"""
         now = datetime.utcnow()

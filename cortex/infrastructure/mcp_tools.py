@@ -8,15 +8,16 @@ Description: Exposes infrastructure discovery via MCP tools with orchestrator in
              - cortex_github_discover: GitHub ecosystem queries (packages, actions, etc.)
 """
 
-from typing import Any, Dict, List, Optional
 from dataclasses import dataclass
+from typing import Any, Dict, List, Optional
+
 from cortex.infrastructure.cache_manager import CacheManager
+from cortex.infrastructure.capability_detector import CapabilityDetector
 from cortex.infrastructure.github_client import GitHubClient
 from cortex.infrastructure.infrastructure_scanner import (
-    InfrastructureScanner,
     EnvironmentType,
+    InfrastructureScanner,
 )
-from cortex.infrastructure.capability_detector import CapabilityDetector
 
 
 @dataclass

@@ -10,7 +10,8 @@ Compliance: LIGHTWEIGHT
 Author: CORTEX Framework
 """
 
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List, Optional
+
 from cortex.mcp.decorators import mcp_tool
 
 
@@ -21,10 +22,10 @@ from cortex.mcp.decorators import mcp_tool
 )
 def echo_tool(message: str) -> Dict[str, Any]:
     """Echo tool for testing.
-    
+
     Args:
         message: Message to echo
-        
+
     Returns:
         Echo response
     """
@@ -41,10 +42,10 @@ def echo_tool(message: str) -> Dict[str, Any]:
 )
 def sample_tool(input: Dict[str, Any]) -> Dict[str, Any]:
     """Sample tool.
-    
+
     Args:
         input: Input data
-        
+
     Returns:
         Processed sample result
     """
@@ -62,11 +63,11 @@ def sample_tool(input: Dict[str, Any]) -> Dict[str, Any]:
 )
 def transform_tool(data: Dict[str, Any], transformation: str) -> Dict[str, Any]:
     """Transform tool.
-    
+
     Args:
         data: Data to transform
         transformation: Transformation type
-        
+
     Returns:
         Transformed data
     """

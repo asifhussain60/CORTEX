@@ -15,7 +15,6 @@ from typing import Dict, List, Optional
 
 from pydantic import BaseModel, Field
 
-
 # ============================================================================
 # DATA MODELS FOR FRONTEND
 # ============================================================================
@@ -23,9 +22,9 @@ from pydantic import BaseModel, Field
 
 class PlanJsonSchema(BaseModel):
     """JSON schema for frontend consumption of plan data.
-    
+
     Simplified plan representation optimized for display in plan-viewer.
-    
+
     Attributes:
         plan_id: Unique plan identifier
         title: Plan title
@@ -47,9 +46,9 @@ class PlanJsonSchema(BaseModel):
 
 class MetricsCardData(BaseModel):
     """Metrics card data for dashboard visualization.
-    
+
     Provides summary metrics for the metrics cards row.
-    
+
     Attributes:
         total_plans: Total number of plans
         active_plans: Number of active plans
@@ -65,9 +64,9 @@ class MetricsCardData(BaseModel):
 
 class PlanViewerSchema(BaseModel):
     """Top-level schema for plan viewer data file.
-    
+
     Generated as JSON for frontend consumption.
-    
+
     Attributes:
         plans: List of plan JSON schemas
         metrics: Metrics card data
@@ -86,7 +85,7 @@ class PlanViewerSchema(BaseModel):
 
 class PlanViewerDataGenerator:
     """Generates JSON data for plan viewer frontend.
-    
+
     Converts plan specifications into simplified JSON format optimized
     for display in the plan-viewer.html SPA. Includes metrics calculation
     and file writing.
@@ -100,10 +99,10 @@ class PlanViewerDataGenerator:
         self, plans: List[PlanJsonSchema]
     ) -> MetricsCardData:
         """Calculate metrics from plans list.
-        
+
         Args:
             plans: List of plans
-            
+
         Returns:
             MetricsCardData with calculated summary metrics
         """
@@ -131,10 +130,10 @@ class PlanViewerDataGenerator:
 
     def generate_plans_json(self, plans: List[PlanJsonSchema]) -> str:
         """Generate JSON data for plan viewer.
-        
+
         Args:
             plans: List of plan JSON schemas
-            
+
         Returns:
             JSON string with plans and metrics
         """
@@ -157,7 +156,7 @@ class PlanViewerDataGenerator:
         self, plans: List[PlanJsonSchema], output_path: str
     ) -> None:
         """Write generated JSON to file.
-        
+
         Args:
             plans: List of plan JSON schemas
             output_path: Path to write JSON file
@@ -180,7 +179,7 @@ class PlanViewerDataGenerator:
 
 class PlanViewerHtmlGenerator:
     """Generates plan-viewer.html SPA page.
-    
+
     Creates a glassmorphism-styled HTML page that loads plans.json
     and displays plans with metrics, search, and filtering.
     """
@@ -191,7 +190,7 @@ class PlanViewerHtmlGenerator:
 
     def generate_html(self) -> str:
         """Generate plan-viewer.html content.
-        
+
         Returns:
             HTML string for plan-viewer.html
         """
@@ -651,7 +650,7 @@ class PlanViewerHtmlGenerator:
 
     def write_html(self, output_path: str) -> None:
         """Write HTML to file.
-        
+
         Args:
             output_path: Path to write HTML file
         """

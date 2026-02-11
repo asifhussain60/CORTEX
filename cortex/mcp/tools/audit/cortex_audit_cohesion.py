@@ -7,18 +7,24 @@ Phase 39 - Unified audit execution for P1.5 (Cohesion) + P1.6 (Future-Vision)
 # Description: MCP tool registration for unified audit suite
 # Related: P1.5-001 through P1.5-015, P1.6-001 through P1.6-002
 
-from typing import Dict, Any, List, Optional
-from pathlib import Path
 import time
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
-from cortex.orchestrators.audit.audit_mode_integrator import AUDITModeIntegrator
-from cortex.orchestrators.audit.prompt_cohesion_validator import PromptCohesionValidator
 from cortex.orchestrators.audit.agent_health_validator import AgentHealthValidator
-from cortex.orchestrators.audit.orchestrator_integrity_validator import OrchestratorIntegrityValidator
+from cortex.orchestrators.audit.audit_mode_integrator import AUDITModeIntegrator
 from cortex.orchestrators.audit.module_cohesion_validator import ModuleCohesionValidator
+from cortex.orchestrators.audit.orchestrator_integrity_validator import (
+    OrchestratorIntegrityValidator,
+)
+from cortex.orchestrators.audit.prompt_cohesion_validator import PromptCohesionValidator
+from cortex.orchestrators.audit.team_collaboration_validator import (
+    TeamCollaborationValidator,
+)
+from cortex.orchestrators.audit.tech_stack_evolution_planner import (
+    TechStackEvolutionPlanner,
+)
 from cortex.orchestrators.audit.test_validity_validator import TestValidityValidator
-from cortex.orchestrators.audit.team_collaboration_validator import TeamCollaborationValidator
-from cortex.orchestrators.audit.tech_stack_evolution_planner import TechStackEvolutionPlanner
 
 
 def cortex_audit_cohesion(
@@ -28,28 +34,28 @@ def cortex_audit_cohesion(
 ) -> Dict[str, Any]:
     """
     Execute unified audit suite for cohesion and future-vision checks.
-    
+
     Args:
         repo_root: Repository root path (defaults to current directory)
         priority_filters: Filter by priority (e.g., ["P1.5", "P1.6"])
         verbose: Include detailed issue information
-        
+
     Returns:
         Audit report with validation results
-        
+
     Example:
         >>> result = cortex_audit_cohesion()
         >>> print(f"Status: {result['status']}")
         >>> print(f"Total issues: {result['summary']['total_issues']}")
     """
     start_time = time.time()
-    
+
     # Resolve repo root
     root_path = Path(repo_root) if repo_root else Path.cwd()
-    
+
     # Initialize integrator
     integrator = AUDITModeIntegrator(repo_root=root_path)
-    
+
     # Register all Phase 39 validators (with repo_root parameter)
     integrator.register_validator(PromptCohesionValidator(root_path))
     integrator.register_validator(AgentHealthValidator(root_path))
@@ -58,10 +64,10 @@ def cortex_audit_cohesion(
     integrator.register_validator(TestValidityValidator(root_path))
     integrator.register_validator(TeamCollaborationValidator(root_path))
     integrator.register_validator(TechStackEvolutionPlanner(root_path))
-    
+
     # Run full audit
     report = integrator.run_full_audit()
-    
+
     # Build response from Dict report
     return {
         "status": "success" if report["success"] else "issues_found",

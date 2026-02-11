@@ -20,7 +20,7 @@ import sys
 import webbrowser
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Any, List
+from typing import Any, Dict, List
 
 
 def get_cortex_root() -> Path:
@@ -35,7 +35,7 @@ def get_cortex_root() -> Path:
 def check_asset_paths(cortex_root: Path) -> Dict[str, List[str]]:
     """
     Check for required assets for dashboard rendering.
-    
+
     Returns:
         Dict with 'found' and 'missing' lists
     """
@@ -47,17 +47,17 @@ def check_asset_paths(cortex_root: Path) -> Dict[str, List[str]]:
         "docs/assets/images/CORTEX-logo-200.png",
         "docs/assets/images/CORTEX-logo-64.png",
     ]
-    
+
     found = []
     missing = []
-    
+
     for asset in required_assets:
         asset_path = cortex_root / asset
         if asset_path.exists():
             found.append(asset)
         else:
             missing.append(asset)
-    
+
     return {"found": found, "missing": missing}
 
 
@@ -68,19 +68,19 @@ def generate_test_dashboard(
 ) -> Path:
     """
     Generate a minimal test dashboard HTML file.
-    
+
     Args:
         cortex_root: CORTEX root directory
         repo_name: Repository name for testing
         output_path: Output file path (default: test_dashboard_{timestamp}.html)
-        
+
     Returns:
         Path to generated HTML file
     """
     if output_path is None:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         output_path = cortex_root / f"test_dashboard_{repo_name}_{timestamp}.html"
-    
+
     # Sample dashboard data
     dashboard_data = {
         "repository_name": repo_name.upper(),
@@ -98,28 +98,28 @@ def generate_test_dashboard(
             "maintainability_index": 70.0
         }
     }
-    
+
     html_content = f'''<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{repo_name.upper()} | CORTEX Dashboard Test</title>
-    
+
     <!-- TEST UTILITY: Validate file:// Protocol Compatibility -->
-    
+
     <!-- Favicon -->
     <link href="docs/assets/images/CORTEX-logo-64.png" rel="icon" type="image/png">
-    
+
     <!-- CORTEX Glassmorphism Theme -->
     <link href="docs/assets/css/main.css" rel="stylesheet">
     <link href="docs/assets/css/glass-design-tokens.css" rel="stylesheet">
     <link href="docs/assets/css/glass-base-patterns.css" rel="stylesheet">
     <link href="docs/assets/css/glass-ui-components.css" rel="stylesheet">
-    
+
     <!-- Font Awesome (CDN - for icons) -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
-    
+
     <style>
         .test-banner {{
             position: fixed;
@@ -134,7 +134,7 @@ def generate_test_dashboard(
             z-index: 10000;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }}
-        
+
         body {{
             padding-top: 60px;
             font-family: 'Inter', sans-serif;
@@ -142,13 +142,13 @@ def generate_test_dashboard(
             color: #ffffff;
             min-height: 100vh;
         }}
-        
+
         .container {{
             max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
         }}
-        
+
         .dashboard-header {{
             display: flex;
             align-items: center;
@@ -159,25 +159,25 @@ def generate_test_dashboard(
             margin-bottom: 2rem;
             backdrop-filter: blur(10px);
         }}
-        
+
         .logo {{
             width: 120px;
             height: 120px;
             border-radius: 12px;
             box-shadow: 0 8px 32px rgba(0, 212, 255, 0.3);
         }}
-        
+
         .header-content h1 {{
             font-size: 2.5rem;
             color: #00d4ff;
             margin: 0 0 0.5rem 0;
         }}
-        
+
         .header-content .subtitle {{
             color: #a0a6c0;
             font-size: 1.1rem;
         }}
-        
+
         .diagnostics-panel {{
             background: rgba(26, 31, 58, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -185,12 +185,12 @@ def generate_test_dashboard(
             padding: 2rem;
             margin-bottom: 2rem;
         }}
-        
+
         .diagnostics-panel h2 {{
             color: #00d4ff;
             margin-bottom: 1.5rem;
         }}
-        
+
         .diagnostic-item {{
             display: flex;
             align-items: center;
@@ -200,30 +200,30 @@ def generate_test_dashboard(
             border-radius: 8px;
             margin-bottom: 0.75rem;
         }}
-        
+
         .diagnostic-item.success {{
             border-left: 4px solid #00ff88;
         }}
-        
+
         .diagnostic-item.error {{
             border-left: 4px solid #ff4444;
         }}
-        
+
         .diagnostic-item.warning {{
             border-left: 4px solid #ffa500;
         }}
-        
+
         .status-icon {{
             font-size: 1.5rem;
         }}
-        
+
         .metrics-grid {{
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }}
-        
+
         .metric-card {{
             background: rgba(26, 31, 58, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -231,20 +231,20 @@ def generate_test_dashboard(
             padding: 1.5rem;
             text-align: center;
         }}
-        
+
         .metric-value {{
             font-size: 2rem;
             font-weight: 700;
             color: #00d4ff;
             margin-bottom: 0.5rem;
         }}
-        
+
         .metric-label {{
             font-size: 0.875rem;
             color: #a0a6c0;
             text-transform: uppercase;
         }}
-        
+
         .console-output {{
             background: #000;
             color: #0f0;
@@ -255,7 +255,7 @@ def generate_test_dashboard(
             max-height: 400px;
             overflow-y: auto;
         }}
-        
+
         .console-output div {{
             margin-bottom: 0.5rem;
         }}
@@ -266,13 +266,13 @@ def generate_test_dashboard(
     <div class="test-banner">
         🧪 CORTEX DASHBOARD TEST UTILITY - File Protocol Validation - Generated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
     </div>
-    
+
     <div class="container">
         <!-- Header -->
         <header class="dashboard-header">
-            <img 
-                src="docs/assets/images/CORTEX-logo-200.png" 
-                alt="CORTEX Logo" 
+            <img
+                src="docs/assets/images/CORTEX-logo-200.png"
+                alt="CORTEX Logo"
                 class="logo"
                 onerror="this.style.border='3px solid red'; this.alt='❌ Logo Load Failed'"
             >
@@ -281,13 +281,13 @@ def generate_test_dashboard(
                 <p class="subtitle">Test Dashboard - File Protocol Validation</p>
             </div>
         </header>
-        
+
         <!-- Diagnostics Panel -->
         <div class="diagnostics-panel">
             <h2><i class="fas fa-stethoscope"></i> Asset Loading Diagnostics</h2>
             <div id="diagnostics-output"></div>
         </div>
-        
+
         <!-- Metrics Grid -->
         <div class="metrics-grid">
             <div class="metric-card">
@@ -307,36 +307,36 @@ def generate_test_dashboard(
                 <div class="metric-label">Quality Score</div>
             </div>
         </div>
-        
+
         <!-- Console Output -->
         <div class="diagnostics-panel">
             <h2><i class="fas fa-terminal"></i> Console Output</h2>
             <div id="console-output" class="console-output"></div>
         </div>
     </div>
-    
+
     <!-- Embedded Dashboard Data -->
     <script type="application/json" id="dashboard-data">
 {json.dumps(dashboard_data, indent=2)}
     </script>
-    
+
     <!-- Diagnostic Script -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {{
             console.log('🔍 CORTEX Dashboard Test Utility - Starting Diagnostics...');
             console.log('📍 File Location:', window.location.href);
             console.log('📍 Protocol:', window.location.protocol);
-            
+
             const diagnosticsOutput = document.getElementById('diagnostics-output');
             const consoleOutput = document.getElementById('console-output');
             const diagnostics = [];
             const logs = [];
-            
+
             function log(message, type = 'info') {{
                 console.log(message);
                 logs.push(`[${{type.toUpperCase()}}] ${{message}}`);
             }}
-            
+
             function addDiagnostic(status, icon, message) {{
                 diagnostics.push({{
                     status: status,
@@ -344,7 +344,7 @@ def generate_test_dashboard(
                     message: message
                 }});
             }}
-            
+
             // Test 1: Protocol Check
             log('Test 1: Protocol Check');
             const protocol = window.location.protocol;
@@ -358,13 +358,13 @@ def generate_test_dashboard(
                 addDiagnostic('error', '❌', `Protocol: ${{protocol}} (Unknown)`);
                 log('❌ Unknown protocol', 'error');
             }}
-            
+
             // Test 2: CSS Loading
             log('Test 2: CSS Loading');
             const cssLinks = document.querySelectorAll('link[rel="stylesheet"]:not([href*="cdnjs"])');
             let cssLoaded = 0;
             let cssFailed = 0;
-            
+
             cssLinks.forEach(link => {{
                 if (link.sheet) {{
                     cssLoaded++;
@@ -374,19 +374,19 @@ def generate_test_dashboard(
                     log(`❌ CSS Failed: ${{link.href}}`, 'error');
                 }}
             }});
-            
+
             if (cssFailed === 0) {{
                 addDiagnostic('success', '✅', `CSS: ${{cssLoaded}}/${{cssLinks.length}} stylesheets loaded`);
             }} else {{
                 addDiagnostic('error', '❌', `CSS: ${{cssFailed}}/${{cssLinks.length}} stylesheets failed`);
             }}
-            
+
             // Test 3: Image Loading
             log('Test 3: Image Loading');
             const images = document.querySelectorAll('img');
             let imagesLoaded = 0;
             let imagesFailed = 0;
-            
+
             setTimeout(() => {{
                 images.forEach(img => {{
                     if (img.complete && img.naturalHeight !== 0) {{
@@ -397,16 +397,16 @@ def generate_test_dashboard(
                         log(`❌ Image Failed: ${{img.src}}`, 'error');
                     }}
                 }});
-                
+
                 if (imagesFailed === 0) {{
                     addDiagnostic('success', '✅', `Images: ${{imagesLoaded}}/${{images.length}} loaded`);
                 }} else {{
                     addDiagnostic('error', '❌', `Images: ${{imagesFailed}}/${{images.length}} failed`);
                 }}
-                
+
                 updateDiagnosticsDisplay();
             }}, 1000);
-            
+
             // Test 4: Dashboard Data Loading
             log('Test 4: Dashboard Data Loading');
             const dataElement = document.getElementById('dashboard-data');
@@ -424,7 +424,7 @@ def generate_test_dashboard(
                 addDiagnostic('error', '❌', 'Dashboard Data: Element not found');
                 log('❌ Dashboard data element not found', 'error');
             }}
-            
+
             // Test 5: External Dependencies (CDN)
             log('Test 5: External Dependencies');
             const cdnLinks = document.querySelectorAll('link[href*="cdnjs"], link[href*="d3js"], script[src*="cdnjs"], script[src*="d3js"]');
@@ -435,7 +435,7 @@ def generate_test_dashboard(
                 addDiagnostic('success', '✅', `CDN Assets: ${{cdnLinks.length}} detected - Available via HTTP`);
                 log(`✅ CDN dependencies available: ${{cdnLinks.length}}`, 'success');
             }}
-            
+
             function updateDiagnosticsDisplay() {{
                 // Render diagnostics
                 diagnosticsOutput.innerHTML = diagnostics.map(d => `
@@ -444,15 +444,15 @@ def generate_test_dashboard(
                         <span>${{d.message}}</span>
                     </div>
                 `).join('');
-                
+
                 // Render console logs
                 consoleOutput.innerHTML = logs.map(log => `<div>${{log}}</div>`).join('');
-                
+
                 // Final summary
                 const successCount = diagnostics.filter(d => d.status === 'success').length;
                 const errorCount = diagnostics.filter(d => d.status === 'error').length;
                 const warningCount = diagnostics.filter(d => d.status === 'warning').length;
-                
+
                 log('');
                 log('='.repeat(60));
                 log('DIAGNOSTIC SUMMARY');
@@ -461,7 +461,7 @@ def generate_test_dashboard(
                 log(`⚠️ Warnings: ${{warningCount}}`);
                 log(`❌ Failed: ${{errorCount}}`);
                 log('='.repeat(60));
-                
+
                 if (errorCount === 0 && warningCount === 0) {{
                     log('🎉 All tests passed! Dashboard ready for file:// protocol.', 'success');
                 }} else if (errorCount === 0) {{
@@ -469,16 +469,16 @@ def generate_test_dashboard(
                 }} else {{
                     log('❌ Tests failed. Fix asset paths before deployment.', 'error');
                 }}
-                
+
                 consoleOutput.innerHTML = logs.map(log => `<div>${{log}}</div>`).join('');
             }}
-            
+
             updateDiagnosticsDisplay();
         }});
     </script>
 </body>
 </html>'''
-    
+
     output_path.write_text(html_content, encoding='utf-8')
     return output_path
 
@@ -508,21 +508,21 @@ def main() -> int:
         action='store_true',
         help='Check for required assets before generation'
     )
-    
+
     args = parser.parse_args()
-    
+
     cortex_root = get_cortex_root()
     print(f"📁 CORTEX Root: {cortex_root}")
-    
+
     # Check assets if requested
     if args.check_assets:
         print("\n🔍 Checking for required assets...")
         asset_status = check_asset_paths(cortex_root)
-        
+
         print(f"\n✅ Found: {len(asset_status['found'])} assets")
         for asset in asset_status['found']:
             print(f"  ✓ {asset}")
-        
+
         if asset_status['missing']:
             print(f"\n❌ Missing: {len(asset_status['missing'])} assets")
             for asset in asset_status['missing']:
@@ -530,7 +530,7 @@ def main() -> int:
             print("\n⚠️ Some assets are missing. Dashboard may not render correctly.")
         else:
             print("\n✅ All required assets found!")
-    
+
     # Generate test dashboard
     print(f"\n🔨 Generating test dashboard for '{args.repo}'...")
     output_path = generate_test_dashboard(
@@ -538,15 +538,15 @@ def main() -> int:
         repo_name=args.repo,
         output_path=args.output
     )
-    
+
     print(f"\n✅ Test dashboard generated: {output_path}")
     print(f"\n📍 File URL: file:///{output_path.as_posix()}")
-    
+
     # Open in browser if requested
     if args.open:
         print("\n🌐 Opening in default browser...")
         webbrowser.open(output_path.as_uri())
-    
+
     print("\n" + "="*70)
     print("USAGE INSTRUCTIONS")
     print("="*70)
@@ -555,7 +555,7 @@ def main() -> int:
     print("3. Open Developer Console (F12) to see detailed logs")
     print("4. Verify all assets load correctly with file:// protocol")
     print("="*70)
-    
+
     return 0
 
 

@@ -7,11 +7,12 @@ Description: Detects available capabilities in each environment and merges
              with company/domains/infrastructure best practices (PRECEDENCE).
 """
 
-from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
+from typing import Any, Dict, List, Optional
+
 from cortex.infrastructure.infrastructure_scanner import (
-    InfrastructureScanner,
     EnvironmentType,
+    InfrastructureScanner,
 )
 
 

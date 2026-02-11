@@ -1,9 +1,11 @@
 """Tests for telemetry ingest endpoint (AC-UNIFIED-DEPLOY-001-02)."""
 
-import pytest
 import json
 from datetime import datetime
-from cortex.api.telemetry.ingest import TelemetryIngestEndpoint, IngestResponse
+
+import pytest
+
+from cortex.api.telemetry.ingest import IngestResponse, TelemetryIngestEndpoint
 from cortex.api.telemetry.schema import TelemetryEventSchema
 
 
