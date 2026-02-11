@@ -46,9 +46,12 @@ class OrchestratorConfig:
 
 
 # Orchestrator counts (from wiring.yaml specification)
-CORE_ORCHESTRATORS = 6
-DOMAIN_ORCHESTRATORS = 6
-SUPPORT_ORCHESTRATORS = 11
+# WAVE-7 TRACK-3: Support layer consolidation in progress
+# Before: 26 orchestrators (8 core + 6 domain + 12 support)
+# After: 15 orchestrators (8 core + 4 domain + 3-4 support)
+CORE_ORCHESTRATORS = 8
+DOMAIN_ORCHESTRATORS = 4
+SUPPORT_ORCHESTRATORS = 4  # Unified: Onboarding, Analysis, Quality, Discovery
 ALL_ORCHESTRATORS = CORE_ORCHESTRATORS + DOMAIN_ORCHESTRATORS + SUPPORT_ORCHESTRATORS
 
 

@@ -1,8 +1,9 @@
 version: "1.0.0"
 cortex_version: "1.0.0"
-computed_at: "2026-01-25T00:00:00Z"
-checksum: "abc123def456ghi789"
-total_orchestrators: 23
+computed_at: "2026-02-11T00:00:00Z"
+checksum: "wave7-track3-unified"
+total_orchestrators: 27
+wave_7_track_3_status: "CONSOLIDATION IN PROGRESS"
 
 orchestrators:
   - name: "MasterOrchestrator"
@@ -105,6 +106,52 @@ orchestrators:
     is_optional: true
     version: "1.0.0"
 
+  # TRACK 3: Unified Support Orchestrators (NEW)
+  - name: "UnifiedOnboardingOrchestrator"
+    module: "cortex.orchestrators.support.unified_onboarding_orchestrator"
+    class_name: "UnifiedOnboardingOrchestrator"
+    category: "support"
+    priority: 105
+    capabilities: ["onboarding", "repository_profiling", "user_setup", "environment_initialization"]
+    dependencies: []
+    is_optional: false
+    version: "2.0.0"
+    replaces: ["OnboardingOrchestrator", "RepositoryOnboardingOrchestrator", "SetupOrchestrator"]
+
+  - name: "UnifiedAnalysisOrchestrator"
+    module: "cortex.orchestrators.support.unified_analysis_orchestrator"
+    class_name: "UnifiedAnalysisOrchestrator"
+    category: "support"
+    priority: 115
+    capabilities: ["code_analysis", "lens_analysis", "tool_discovery", "dependency_analysis"]
+    dependencies: []
+    is_optional: false
+    version: "2.0.0"
+    replaces: ["LENSOrchestrator", "ToolDiscoveryOrchestrator"]
+
+  - name: "UnifiedQualityAssuranceOrchestrator"
+    module: "cortex.orchestrators.support.unified_quality_orchestrator"
+    class_name: "UnifiedQualityAssuranceOrchestrator"
+    category: "support"
+    priority: 125
+    capabilities: ["quality_assurance", "challenge_generation", "recommendation_gating", "meta_audit", "code_review"]
+    dependencies: []
+    is_optional: false
+    version: "2.0.0"
+    replaces: ["RecommendationGate", "ChallengeEngine", "MetaAuditOrchestrator", "CodeReviewOrchestrator", "SecurityReviewEngine"]
+
+  - name: "UnifiedDiscoveryOrchestrator"
+    module: "cortex.orchestrators.support.unified_discovery_orchestrator"
+    class_name: "UnifiedDiscoveryOrchestrator"
+    category: "support"
+    priority: 135
+    capabilities: ["discovery", "tool_discovery", "learning_paths", "business_language", "educational"]
+    dependencies: []
+    is_optional: false
+    version: "2.0.0"
+    replaces: ["EducationalOrchestrator", "BusinessLanguageOrchestrator"]
+
+  # DEPRECATED: Old support orchestrators (consolidated into unified versions)
   - name: "OnboardingOrchestrator"
     module: "cortex.orchestrators.support.onboarding_orchestrator"
     class_name: "OnboardingOrchestrator"
@@ -114,6 +161,9 @@ orchestrators:
     dependencies: []
     is_optional: true
     version: "1.0.0"
+    status: "DEPRECATED"
+    deprecation_note: "Use UnifiedOnboardingOrchestrator instead"
+    sunset_date: "2026-03-31"
 
   - name: "ToolDiscoveryOrchestrator"
     module: "cortex.orchestrators.support.tool_discovery_orchestrator"
@@ -124,6 +174,9 @@ orchestrators:
     dependencies: []
     is_optional: true
     version: "1.0.0"
+    status: "DEPRECATED"
+    deprecation_note: "Use UnifiedAnalysisOrchestrator instead"
+    sunset_date: "2026-03-31"
 
   - name: "UpgradeOrchestrator"
     module: "cortex.orchestrators.support.upgrade_orchestrator"
@@ -154,6 +207,9 @@ orchestrators:
     dependencies: []
     is_optional: true
     version: "1.0.0"
+    status: "DEPRECATED"
+    deprecation_note: "Use UnifiedOnboardingOrchestrator instead"
+    sunset_date: "2026-03-31"
 
   - name: "ComposedOrchestrator"
     module: "cortex.orchestrators.support.composed_orchestrator"
