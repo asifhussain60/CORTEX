@@ -1,10 +1,8 @@
 {
-  "// GitHub Copilot Chat Settings - Prevent markdown file generation (CORE-002)": null,
   "github.copilot.chat.saveSession": false,
   "github.copilot.chat.welcomeMessage": "inline",
   "github.copilot.chat.localeOverride": "en",
   "github.copilot.chat.contextWindowSizeKb": 8,
-  "// File Explorer Suppression - Hide Copilot-generated markdown files": null,
   "files.exclude": {
     "**/*-summary.md": true,
     "**/*-report.md": true,
@@ -16,14 +14,12 @@
     "**/ENH-*-PHASE-*-COMPLETION.md": true,
     "**/ARCHITECT-*-SUMMARY.md": true
   },
-  "// Files Watcher - Exclude Copilot patterns from watchers": null,
   "files.watcherExclude": {
     "**/*-summary.md": true,
     "**/*-report.md": true,
     "**/*-completion.md": true,
     "**/*-COMPLETION.md": true
   },
-  "// Search Exclusions - Hide from search results": null,
   "search.exclude": {
     "**/*-summary.md": true,
     "**/*-report.md": true,
@@ -32,8 +28,6 @@
     "**/*-SUMMARY.md": true,
     "**/*-REPORT.md": true
   },
-  "// CORTEX MCP Server Configuration (Auto-Started by VS Code - Like Pylance)": null,
-  "// MCP runs locally via stdio transport, no manual server startup needed": null,
   "github.copilot.chat.mcpServers": {
     "cortex": {
       "command": "${workspaceFolder}/.venv/bin/python",
@@ -49,7 +43,6 @@
       }
     }
   },
-  "// Python Environment": null,
   "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
   "python.analysis.typeCheckingMode": "basic",
   "python.analysis.extraPaths": [
