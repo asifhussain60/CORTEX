@@ -147,6 +147,22 @@ class MCPToolsCatalog:
             if tool.status in (ToolStatus.STABLE, ToolStatus.DEPRECATED)
         ]
 
+    def list_tools(self) -> List[MCPToolMetadata]:
+        """List all registered tools.
+        
+        Returns:
+            List of all tool metadata objects
+        """
+        return list(self._tools.values())
+
+    def list_categories(self) -> List[str]:
+        """List all tool categories.
+        
+        Returns:
+            List of category names
+        """
+        return list(self._categories.keys())
+
     def deprecate_tool(
         self,
         tool_name: str,

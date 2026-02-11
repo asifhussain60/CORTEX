@@ -316,27 +316,24 @@ def cortex_detect_duplicates(
     """
     try:
         from cortex.tools.duplicate_detector import DuplicateDetector
+        from pathlib import Path as PathLib
 
-        detector = DuplicateDetector()
-
-        scan_paths = paths or ["cortex/", "cortex_brain/"]
+        detector = DuplicateDetector(workspace_root=PathLib("."))
 
         result: Dict[str, Any] = {
             "status": "success",
-            "paths_scanned": scan_paths,
+            "paths_scanned": paths or ["cortex/", "cortex_brain/"],
             "threshold": threshold,
         }
 
-        duplicates = detector.scan(
-            paths=[Path(p) for p in scan_paths],
-            threshold=threshold,
-        )
+        duplicates = detector.detect_all_duplicates()
 
         result["duplicates"] = [
             {
-                "name": d.name,
-                "locations": d.locations,
-                "canonical": d.canonical_location,
+                "class_name": d.class_name,
+                "paths": [str(p) for p in d.paths],
+                "violation_type": d.violation_type,
+                "severity": d.severity,
                 "action": "consolidate",
             }
             for d in duplicates

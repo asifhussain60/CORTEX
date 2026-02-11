@@ -160,7 +160,7 @@ class GovernanceViolationDetector:
         # Check if MasterOrchestrator calls enforcement for chat operations
         master_orch_path = Path("cortex/orchestrators/core/master_orchestrator.py")
         if master_orch_path.exists():
-            content = master_orch_path.read_text()
+            content = master_orch_path.read_text(encoding='utf-8', errors='ignore')
 
             # Check for enforcement in process_user_request
             if "process_user_request" in content:
@@ -191,7 +191,7 @@ class GovernanceViolationDetector:
         for path_str in response_paths:
             path = Path(path_str)
             if path.exists():
-                content = path.read_text()
+                content = path.read_text(encoding='utf-8', errors='ignore')
 
                 # Look for file creation without MCP wrapper
                 if re.search(r'(create_file|mkdir|Path\(.*\)\.write|open.*"w")', content):
@@ -264,7 +264,7 @@ class GovernanceViolationDetector:
         for path_str in response_paths:
             path = Path(path_str)
             if path.exists():
-                content = path.read_text()
+                content = path.read_text(encoding='utf-8', errors='ignore')
 
                 # Check for CORE-002 checks in response generation
                 if "CORE-002" not in content and "markdown" in content.lower() and \
@@ -288,7 +288,7 @@ class GovernanceViolationDetector:
         # Check if chat response format requires user choice for artifact creation
         response_format_path = Path("cortex/orchestrators/response/chat_response_policy.py")
         if response_format_path.exists():
-            content = response_format_path.read_text()
+            content = response_format_path.read_text(encoding='utf-8', errors='ignore')
 
             if "user_choice" not in content.lower() and \
                "approval" not in content.lower():
@@ -321,7 +321,7 @@ class GovernanceViolationDetector:
                 fix_strategy="Create pre-commit hook that runs cortex_audit_markdown_violations"
             ))
         else:
-            content = githooks_path.read_text()
+            content = githooks_path.read_text(encoding='utf-8', errors='ignore')
             if "CORE-002" not in content and "markdown" not in content.lower():
                 violations.append(Violation(
                     violation_id="VIO-007B",
@@ -348,7 +348,7 @@ class GovernanceViolationDetector:
         for instr_file in instruction_files:
             path = Path(instr_file)
             if path.exists():
-                content = path.read_text()
+                content = path.read_text(encoding='utf-8', errors='ignore')
 
                 # Check for file paths in instructions (CORE-047 violation)
                 if re.search(r'`cortex/[a-z_/]+\.py`', content) or \
@@ -372,7 +372,7 @@ class GovernanceViolationDetector:
         # Check if enforcement allows test skipping via flags
         enforcement_path = Path("cortex/orchestrators/core/enforcement_orchestrator.py")
         if enforcement_path.exists():
-            content = enforcement_path.read_text()
+            content = enforcement_path.read_text(encoding='utf-8', errors='ignore')
 
             # Check for --ignore or _skip_ patterns not being blocked
             if "skip" in content.lower() or "ignore" in content.lower():
@@ -396,7 +396,7 @@ class GovernanceViolationDetector:
         # Check if operations require AC markers
         governance_registry_path = Path("cortex/orchestrators/core/governance_registry.py")
         if governance_registry_path.exists():
-            content = governance_registry_path.read_text()
+            content = governance_registry_path.read_text(encoding='utf-8', errors='ignore')
 
             # Check if AC_START/AC_COMPLETE markers are mandatory
             if "AC_START" not in content or "AC_COMPLETE" not in content:
