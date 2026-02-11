@@ -464,7 +464,7 @@ active_phases:
     priority: P0
     wave: 1
     release: "R1-FOUNDATION"
-    status: planned
+    status: complete
     estimated_effort: "1 day"
     roi: "10x (Onboarding: 30 min → 3 min)"
     dependencies: []
@@ -474,13 +474,16 @@ active_phases:
       Create MCP-SETUP-GUIDE.md with cross-platform instructions.
     impact: "CRITICAL - User onboarding friction, wasted troubleshooting time"
     files:
-      - .github/prompts/MCP-SETUP-GUIDE.md (NEW)
-      - .github/prompts/cortex-architect.prompt.md (UPDATE)
-      - scripts/setup-mcp.py (ENHANCE)
+      - .github/prompts/MCP-SETUP-GUIDE.md (UPDATED - v2.0 with Pylance architecture)
+      - .github/prompts/cortex-architect.prompt.md (already has Pylance section)
+      - scripts/setup-mcp.py (already cross-platform ready)
     value_delivered:
       - "✅ 10x faster onboarding (30min → 3min)"
-      - "✅ Clear MCP architecture understanding"
-      - "✅ Cross-platform setup guide"
+      - "✅ Clear MCP Pylance-style architecture understanding"
+      - "✅ Cross-platform setup guide with auto-start clarification"
+      - "✅ Common misconceptions addressed (no manual server)"
+    completion_date: "2026-02-11"
+    actual_effort: "20 minutes"
   
   - id: ENH-064
     title: "LENS Intelligence Layer Separation"
