@@ -16,6 +16,20 @@ from .conflict_detector import (
     ConflictReport,
     ConflictDetector,
 )
+from .reference_updater import (
+    ReferenceType,
+    Reference,
+    UpdateResult,
+    ReferenceScanner,
+    ReferenceUpdater,
+)
+from .rule_based_planner import (
+    CleanupAction,
+    CleanupRule,
+    CleanupItem,
+    CleanupPlan,
+    RuleBasedPlanner,
+)
 
 __all__ = [
     # File Categorizer
@@ -27,4 +41,16 @@ __all__ = [
     "Conflict",
     "ConflictReport",
     "ConflictDetector",
+    # Reference Updater
+    "ReferenceType",
+    "Reference",
+    "UpdateResult",
+    "ReferenceScanner",
+    "ReferenceUpdater",
+    # Rule-Based Planner
+    "CleanupAction",
+    "CleanupRule",
+    "CleanupItem",
+    "CleanupPlan",
+    "RuleBasedPlanner",
 ]
