@@ -251,6 +251,82 @@ active_phases:
       - cortex/intelligence/domain_inference.py (NEW)
       - cortex/nlp/concept_extractor.py (NEW)
   
+  - id: ENH-078
+    title: "Language Refinement Layer (Request Optimization)"
+    priority: P1
+    status: planned
+    estimated_effort: "2 weeks"
+    roi: "8x (30-40% intent accuracy + 60% fewer clarifications)"
+    source: "language-orch.txt analysis (2026-02-11)"
+    description: |
+      Add Language Refinement Layer to MasterOrchestrator that automatically
+      reconstructs user requests into LLM-optimal language BEFORE LENS classification.
+      Transform vague/ambiguous requests into clear, structured, contextual prompts.
+      
+      Transformations:
+      - Vague → Specific (add context, expand scope)
+      - Fragmented → Structured (multi-part organization)
+      - Implicit → Explicit (clarify assumptions)
+      - Abbreviations → Full terms (MCP → Model Context Protocol)
+      - Single sentence → Paragraph with dimensions
+    impact: |
+      HIGH - Current flow struggles with vague requests, leading to:
+      - 35% intent classification errors
+      - 40% follow-up clarifications needed
+      - Sub-optimal orchestrator routing
+      - Poor user experience
+    phases:
+      - "Phase 1: LanguageRefinementOrchestrator + Ambiguity Detection (Week 1)"
+      - "Phase 2: Template Library + MasterOrchestrator Integration (Week 2)"
+      - "Phase 3: Validation + A/B Testing (Optional Week 3)"
+    success_metrics:
+      - "Intent classification accuracy: 65% → 90%+"
+      - "Clarification requests: 40% → <15%"
+      - "User satisfaction: 3.2/5 → 4.5/5"
+      - "Refinement latency: N/A → <50ms P95"
+      - "False refinements: N/A → <5%"
+    components:
+      orchestrator:
+        file: "cortex/orchestrators/support/language_refinement_orchestrator.py"
+        methods:
+          - "refine_request(raw_request, context) -> RefinedRequest"
+          - "detect_ambiguity_level(request) -> float (0.0-1.0)"
+          - "apply_refinement_template(request, type) -> str"
+          - "expand_technical_shorthand(request) -> str"
+      templates:
+        location: "cortex-registry/_cortex-master/templates/request-refinement/"
+        types:
+          - "analysis-templates.yaml (architecture/code review)"
+          - "implement-templates.yaml (feature implementation)"
+          - "audit-templates.yaml (system health check)"
+          - "refactor-templates.yaml (code improvement)"
+          - "plan-templates.yaml (phase planning)"
+      integration:
+        file: "cortex/orchestrators/core/master_orchestrator.py"
+        modification: "Add refinement call before LENS pipeline"
+        transparency: "3 modes: silent (default), show refinement, interactive"
+    ambiguity_scoring:
+      factors:
+        - "Short length (<10 words): weight 0.3"
+        - "Missing context (no file/component): weight 0.25"
+        - "Vague verbs (check/fix/update): weight 0.2"
+        - "Abbreviations (>2): weight 0.15"
+        - "No success criteria: weight 0.1"
+      thresholds:
+        - "0.0-0.3: Low (optional refinement)"
+        - "0.3-0.6: Medium (recommended refinement)"
+        - "0.6-1.0: High (mandatory refinement)"
+    examples:
+      - input: "check mcp tools"
+        ambiguity_score: 0.65
+        output: "Verify that all Model Context Protocol tools are fully functional and production-ready by checking their implementation status, test coverage, and operational completeness..."
+      - input: "fix lens phase 2 stub"
+        ambiguity_score: 0.55
+        output: "Refactor the LENS (Language-Examination-Navigation-Synthesis) Pipeline Phase 2 Examination implementation in cortex/brain/lens/pipeline.py. Current implementation uses hardcoded feature lists..."
+    files:
+      - cortex/intelligence/domain_inference.py (NEW)
+      - cortex/nlp/concept_extractor.py (NEW)
+  
   - id: ENH-062
     title: "Self-Optimizing CORTEX"
     priority: P1
