@@ -58,7 +58,7 @@ USER ACTION: Restart Copilot
     ├─ Command Palette → Developer: Reload Window
     └─ [Reload completes] → MCP tools available in Copilot Chat
     ↓
-✅ READY: cortex_process_request and 9 other MCP tools available
+✅ READY: cortex_process_request and 27 other MCP tools available (28 total)
 ```
 
 ---
@@ -234,22 +234,69 @@ NEXT STEP:
 
 ---
 
-## 📦 Available MCP Tools (After Restart)
+## 📦 Available MCP Tools (After Restart) — 28 Tools Total
 
 Once setup is complete and Copilot is restarted, these tools become available:
 
+**Core Orchestrator Tools (3):**
 | Tool | Purpose |
 |------|---------|
-| `cortex_process_request` | Main TDD implementation + orchestrator routing |
-| `cortex_lens_analyze` | Code intelligence (security, complexity, duplication) |
-| `cortex_challenge` | Mandatory challenge generation with alternatives |
+| `cortex_process_request` | Main TDD implementation + routing |
 | `cortex_total_recall` | Feature discovery + capability search |
-| `cortex_git_history` | Git context analysis (24h rolling window) |
+| `cortex_challenge` | Challenge gate + disagreement detection |
+
+**LENS Analysis Tools (5):**
+| Tool | Purpose |
+|------|---------|
+| `cortex_lens_analyze` | Unified code intelligence (git+AST+comments) |
+| `cortex_git_history` | Git context analysis (24h window) |
+| `cortex_ast_analyze` | AST structure + complexity analysis |
+| `cortex_extract_comments` | Comment/TODO/FIXME extraction |
 | `cortex_detect_duplicates` | CORE-035 violation detection |
+
+**Plan Lifecycle Tools (4):**
+| Tool | Purpose |
+|------|---------|
 | `cortex_plan_setup` | Pre-execution phase hook |
-| `cortex_plan_execute_autonomous` | Multi-stage autonomous phase execution |
-| `cortex_plan_teardown` | Post-execution phase cleanup + dashboard sync |
+| `cortex_plan_execute_autonomous` | Multi-stage autonomous execution |
+| `cortex_plan_teardown` | Post-execution cleanup + sync |
 | `cortex_plan_sync` | Manual dashboard synchronization |
+
+**Validation Tools (1):**
+| Tool | Purpose |
+|------|---------|
+| `cortex_validate_holistically` | Phase 48 holistic validation gate |
+
+**Governance Tools (5):**
+| Tool | Purpose |
+|------|---------|
+| `check_phase_lock` | Phase lock verification |
+| `validate_ac_id` | AC-ID validation |
+| `canonicalize_intent` | Intent normalization |
+| `enforce_operation` | Governance enforcement |
+| `get_phase_status` | Phase status query |
+
+**Knowledge Tools (3):**
+| Tool | Purpose |
+|------|---------|
+| `search_knowledge_base` | Knowledge base search |
+| `analyze_knowledge_gap` | Gap analysis |
+| `generate_knowledge_summary` | Knowledge summarization |
+
+**Orchestrator Operations Tools (4):**
+| Tool | Purpose |
+|------|---------|
+| `monitor_orchestrator_health` | Health monitoring |
+| `diagnose_orchestrator_issues` | Issue diagnostics |
+| `optimize_orchestrator_config` | Config optimization |
+| `get_operation_status` | Operation status query |
+
+**Utility Tools (1):**
+| Tool | Purpose |
+|------|---------|
+| `transform_tool` | Data format transformation (JSON/YAML/XML) |
+
+**Note:** sample_tool and echo_tool removed (dev-only, Phase 54 cleanup)
 
 ---
 
@@ -371,7 +418,7 @@ MCP integration is **complete and successful** when:
 
 1. ✅ `.vscode/settings.json` contains MCP server configuration
 2. ✅ `cortex_process_request` appears in Copilot Chat tools
-3. ✅ Other 9 MCP tools appear in tool list
+3. ✅ All 28 MCP tools appear in tool list
 4. ✅ Setup log shows "✅ SETUP COMPLETE"
 5. ✅ User can invoke MCP tools without errors
 
@@ -380,7 +427,7 @@ MCP integration is **complete and successful** when:
 /list cortex tools
 ```
 
-Should show all 10 MCP tools as available.
+Should show all 28 MCP tools as available (organized by 8 categories).
 
 ---
 

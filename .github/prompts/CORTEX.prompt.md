@@ -142,20 +142,67 @@ ${workspaceFolder}/.venv/bin/python -m cortex.mcp --help
 [2026-02-08 14:32:17] ✅ Setup complete. Restart Copilot for changes to take effect.
 ```
 
-### Available MCP Tools (After Setup)
+### Available MCP Tools (After Setup) — 28 Tools Total
 
-| Tool | Module | Purpose |
-|------|--------|---------|
-| `cortex_process_request` | cortex.mcp.tools | Main TDD implementation |
-| `cortex_lens_analyze` | cortex.lens.mcp_tools | Code intelligence |
-| `cortex_challenge` | cortex.orchestrators.holistic | Challenge gate |
-| `cortex_total_recall` | cortex.orchestrators.domain | Feature discovery |
-| `cortex_git_history` | cortex.ci_cd.git_tools | 24h git context |
-| `cortex_detect_duplicates` | cortex.refactoring.mcp_tools | CORE-035 detection |
-| `cortex_plan_setup` | cortex.registry.mcp_tools | Phase pre-execution |
-| `cortex_plan_execute_autonomous` | cortex.registry.mcp_tools | Autonomous execution |
-| `cortex_plan_teardown` | cortex.registry.mcp_tools | Phase cleanup |
-| `cortex_plan_sync` | cortex.registry.mcp_tools | Dashboard sync |
+**Core Orchestrator Tools (3):**
+| Tool | Purpose |
+|------|---------|
+| `cortex_process_request` | Main TDD implementation + routing |
+| `cortex_total_recall` | Feature discovery + capability search |
+| `cortex_challenge` | Challenge gate + disagreement detection |
+
+**LENS Analysis Tools (5):**
+| Tool | Purpose |
+|------|---------|
+| `cortex_lens_analyze` | Unified code intelligence (git+AST+comments) |
+| `cortex_git_history` | Git context analysis (24h window) |
+| `cortex_ast_analyze` | AST structure + complexity analysis |
+| `cortex_extract_comments` | Comment/TODO/FIXME extraction |
+| `cortex_detect_duplicates` | CORE-035 violation detection |
+
+**Plan Lifecycle Tools (4):**
+| Tool | Purpose |
+|------|---------|
+| `cortex_plan_setup` | Pre-execution phase hook |
+| `cortex_plan_execute_autonomous` | Multi-stage autonomous execution |
+| `cortex_plan_teardown` | Post-execution cleanup + sync |
+| `cortex_plan_sync` | Manual dashboard synchronization |
+
+**Validation Tools (1):**
+| Tool | Purpose |
+|------|---------|
+| `cortex_validate_holistically` | Phase 48 holistic validation gate |
+
+**Governance Tools (5):**
+| Tool | Purpose |
+|------|---------|
+| `check_phase_lock` | Phase lock verification |
+| `validate_ac_id` | AC-ID validation |
+| `canonicalize_intent` | Intent normalization |
+| `enforce_operation` | Governance enforcement |
+| `get_phase_status` | Phase status query |
+
+**Knowledge Tools (3):**
+| Tool | Purpose |
+|------|---------|
+| `search_knowledge_base` | Knowledge base search |
+| `analyze_knowledge_gap` | Gap analysis |
+| `generate_knowledge_summary` | Knowledge summarization |
+
+**Orchestrator Operations Tools (4):**
+| Tool | Purpose |
+|------|---------|
+| `monitor_orchestrator_health` | Health monitoring |
+| `diagnose_orchestrator_issues` | Issue diagnostics |
+| `optimize_orchestrator_config` | Config optimization |
+| `get_operation_status` | Operation status query |
+
+**Utility Tools (1):**
+| Tool | Purpose |
+|------|---------|
+| `transform_tool` | Data format transformation (JSON/YAML/XML) |
+
+**Note:** sample_tool and echo_tool removed (dev-only, Phase 54 cleanup)
 
 ### Troubleshooting
 

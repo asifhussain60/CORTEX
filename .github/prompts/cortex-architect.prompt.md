@@ -496,10 +496,10 @@ Session Start
 available_tools = get_copilot_tools_registry()
 mcp_tools = [t for t in available_tools if t.startswith("cortex_")]
 
-if len(mcp_tools) >= 10:
-    print("✅ MCP Available: All 10 tools registered")
+if len(mcp_tools) >= 28:
+    print("✅ MCP Available: All 28 tools registered")
 else:
-    print(f"⚠️ MCP Partial: Only {len(mcp_tools)}/10 tools found")
+    print(f"⚠️ MCP Partial: Only {len(mcp_tools)}/28 tools found")
 ```
 
 **Method 2: Environment Variable Check (SECONDARY)**
@@ -522,8 +522,8 @@ if "github.copilot.chat.mcpServers" in settings:
 
 | Status | User Message | Action |
 |--------|--------------|--------|
-| ✅ **AVAILABLE** | "🟢 MCP Ready: 10 tools available" | Continue with full CORTEX |
-| ⚠️ **PARTIAL** | "🟡 MCP Partial: {N}/10 tools available" | WARN user, allow read-only operations |
+| ✅ **AVAILABLE** | "🟢 MCP Ready: 28 tools available" | Continue with full CORTEX |
+| ⚠️ **PARTIAL** | "🟡 MCP Partial: {N}/28 tools available" | WARN user, allow read-only operations |
 | ❌ **UNAVAILABLE** | "🔴 MCP Not Available: Setup required" | HALT, show instructions |
 
 ### Session Halt (MCP Unavailable)
