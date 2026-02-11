@@ -228,10 +228,13 @@ class CORTEXChallengeTool(Tool):
                 return {
                     "status": "success",
                     "has_disagreement": True,
-                    "disagreement_type": challenge.disagreement_type.value,
-                    "user_interpretation": challenge.user_interpretation,
+                    "disagreement_type": challenge.disagreement_type.value if challenge.disagreement_type else "unknown",
+                    "user_request_interpretation": challenge.user_request_interpretation,
                     "cortex_analysis": challenge.cortex_analysis,
-                    "better_solution": challenge.better_solution,
+                    "recommended_alternative": challenge.recommended_alternative,
+                    "reasoning": challenge.reasoning,
+                    "evidence": challenge.evidence,
+                    "options": challenge.options,
                     "formatted_message": formatted_response
                 }
             else:

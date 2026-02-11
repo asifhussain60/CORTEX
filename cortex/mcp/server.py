@@ -225,8 +225,8 @@ class MCPServer:
         self._execution_history: List[Dict[str, Any]] = []
         self._response_cache: Dict[str, MCPResponse] = {}
         
-        # Register built-in tools
-        self._register_tool(SampleTool())
+        # NOTE: sample_tool removed (dev-only, not for production)
+        # Register CORTEX orchestrator tools only
         
         # AC-MCP-REGISTRY-001: Restore decorator-registered tools from global registry
         # Ensure tools decorated with @mcp_tool() are available on boot
