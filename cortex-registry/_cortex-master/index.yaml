@@ -1,9 +1,39 @@
-version: '1.2'
+version: '1.3'
 registry_name: _cortex-master
 description: CORTEX self-development planning with phase tracking and enhancement
   pipeline
-last_updated: '2026-02-11T12:00:00.000000Z'
-revision: 'Session Complete (2026-02-11): Phase 49 CCL verified + MCP 86 tools operational
-  | Production Readiness: ✅ COMPLETE | 152/152 Phase 49 tests passing'
-active_phases: []
-completed_phases: []
+last_updated: '2026-02-11T13:00:00.000000Z'
+revision: 'Chat01 Remediation (2026-02-11): 4 P0 bugs fixed + 4 CORE rules added + ENH-062/063 planned'
+active_phases:
+  - id: ENH-062
+    title: "Self-Optimizing CORTEX"
+    priority: P1
+    status: planned
+    estimated_effort: "3 weeks"
+    description: "Autonomous quarterly governance self-audit + enhancement pipeline"
+  - id: ENH-063
+    title: "MCP Server Selective Coexistence with Tool Budget"
+    priority: P1
+    status: partially_implemented
+    estimated_effort: "1 day"
+    description: "Auto-disable competing MCP servers + tool budget management (<=128)"
+    notes: "detect_competing_mcps() + enforce_cortex_only() already in .cortex/setup-mcp.py"
+completed_phases:
+  - id: CHAT01-REMEDIATION
+    title: "Chat01 Holistic Remediation"
+    completed: '2026-02-11'
+    items:
+      - "MCP-FIX-1: UTF-8 Console Encoding (commit 25ba6bf)"
+      - "MCP-FIX-2: Enhanced Pylance Disable (commit 25ba6bf)"
+      - "MCP-FIX-3: jsonschema dependency (commit 25ba6bf)"
+      - "MCP-FIX-4: Pre-commit JSON parser (commit 25ba6bf)"
+      - "MCP-FIX-5: CORE-013 bare except (commit 25ba6bf)"
+      - "MCP-FIX-6: Git credentials (already secure)"
+      - "CORE-051: Intelligence-Architecture Tier Coupling (commit e6a60c8)"
+      - "CORE-052: Holistic Validation Gate Mandatory (commit e6a60c8)"
+      - "CORE-053: CCL Timeout Policy (commit e6a60c8)"
+      - "CORE-054: MCP Tool Wiring Validation (commit e6a60c8)"
+      - "BUG-001: JSONC-safe settings.json (commit c2ee145)"
+      - "BUG-002: settings.json corruption fix (commit c2ee145)"
+      - "BUG-003: tree-sitter deps installed (commit c2ee145)"
+      - "BUG-004: CORE-035 setup script consolidation (commit c2ee145)"
