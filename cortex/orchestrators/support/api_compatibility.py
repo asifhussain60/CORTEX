@@ -59,7 +59,7 @@ def analyze_file_via_unified(
     
     # Read file content
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, 'r', encoding='utf-8', errors='replace') as f:
             code = f.read()
     except (FileNotFoundError, IOError) as e:
         return {"error": str(e), "success": False}

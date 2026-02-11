@@ -256,9 +256,11 @@ class TestErrorHandling:
         
         result = analyze_file_via_unified(file_path=str(test_file))
         
-        # Should handle error gracefully
+        # Should handle error gracefully via errors='replace' in adapter
         assert isinstance(result, dict)
         assert "success" in result
+        # This should now succeed because we use errors='replace'
+        assert result["success"] is True
     
     def test_onboard_with_permission_denied(self, tmp_path):
         """Test handling permission denied errors gracefully."""
@@ -315,21 +317,24 @@ class TestUnifiedOrchestratorIntegration:
 class TestPerformance:
     """Tests to ensure adapter functions meet performance requirements."""
     
-    def test_adapter_functions_have_acceptable_latency(self, tmp_path, benchmark):
+    def test_adapter_functions_complete_quickly(self, tmp_path):
         """Test adapter functions complete in acceptable time."""
+        import time
+        
         test_file = tmp_path / "perf_test.py"
         test_file.write_text("print('test')")
         
-        # Benchmark the adapter function
-        def analyze_and_measure():
-            return analyze_file_via_unified(
-                file_path=str(test_file),
-                analysis_type="complexity"
-            )
+        # Measure the adapter function execution time
+        start = time.time()
+        result = analyze_file_via_unified(
+            file_path=str(test_file),
+            analysis_type="complexity"
+        )
+        elapsed = time.time() - start
         
         # Should complete in reasonable time (< 1 second)
-        result = benchmark(analyze_and_measure)
         assert result["success"] is True
+        assert elapsed < 1.0
 
 
 if __name__ == "__main__":
