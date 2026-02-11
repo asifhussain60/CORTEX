@@ -1,0 +1,532 @@
+# MCP Tool Audit Matrix
+# Complete status of all 78 registered CORTEX MCP tools
+# Generated: 2026-02-11
+# Source: chat01.md Phase 74 comprehensive audit
+# Purpose: Track tool health, identify gaps, guide Phase 75 remediation
+
+meta:
+  version: "1.0"
+  generated: "2026-02-11"
+  audit_source: "chat01.md + cortex_verify_environment"
+  total_tools_audited: 78
+  tools_registered_decorator: 41
+  tools_exposed_copilot: 78
+
+summary:
+  total: 78
+  broken: 17
+  working_with_params: 5
+  fully_functional: 25
+  phantom_tools: 6
+  unregistered: 8
+  
+  health_score: 32%  # (25 working / 78 total)
+  critical_issues: 3  # catalog, detect_duplicates, governance_detect
+  
+categories:
+  broken:
+    count: 17
+    severity: "P0"
+    description: "Tools that error when invoked or not found in registry"
+    
+  working_with_params:
+    count: 5
+    severity: "P1"
+    description: "Tools work but require specific parameters to succeed"
+  
+  fully_functional:
+    count: 25
+    severity: "OK"
+    description: "Tools work without errors, may return empty data"
+  
+  phantom_tools:
+    count: 6
+    severity: "P0"
+    description: "Exposed via schema but handler doesn't exist"
+  
+  unregistered:
+    count: 8
+    severity: "P1"
+    description: "Handler exists but not registered in MCP server"
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# CATEGORY 1: BROKEN TOOLS (17 tools — P0 FIX REQUIRED)
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+broken_tools:
+  - tool_name: "cortex_tools_catalog"
+    error: "'MCPToolsCatalog' object has no attribute 'list_tools'"
+    root_cause: "Missing method in class"
+    impact: "Cannot discover available tools"
+    fix_effort: "1h"
+    fix_status: "COMPLETE"
+    fix_commit: "19393be41"
+    file: "cortex/mcp/mcp_tools_catalog.py"
+  
+  - tool_name: "cortex_lens_analyze"
+    error: "Tool not found in any registry"
+    root_cause: "Not registered in MCP server"
+    impact: "LENS analysis unavailable"
+    fix_effort: "2h"
+    fix_status: "PENDING"
+    file: "cortex/mcp/tools/lens_tools.py"
+  
+  - tool_name: "cortex_onboard_repository"
+    error: "Tool not found in any registry"
+    root_cause: "Not registered in MCP server"
+    impact: "Repository onboarding broken"
+    fix_effort: "2h"
+    fix_status: "PENDING"
+    file: "cortex/mcp/tools/onboarding_tools.py"
+  
+  - tool_name: "cortex_onboard_repository_v3"
+    error: "Tool not found in any registry"
+    root_cause: "Not registered in MCP server"
+    impact: "Phase 21 onboarding unavailable"
+    fix_effort: "1h"
+    fix_status: "PENDING"
+    file: "cortex/mcp/tools/onboarding_tools.py"
+  
+  - tool_name: "cortex_validate_venv"
+    error: "Tool not found in any registry"
+    root_cause: "Not registered in MCP server"
+    impact: "Virtual environment validation missing"
+    fix_effort: "1h"
+    fix_status: "PENDING"
+    file: "cortex/mcp/tools/environment_tools.py"
+  
+  - tool_name: "cortex_check_dependency_drift"
+    error: "Tool not found in any registry"
+    root_cause: "Not registered in MCP server"
+    impact: "Dependency drift detection unavailable"
+    fix_effort: "1h"
+    fix_status: "PENDING"
+    file: "cortex/mcp/tools/environment_tools.py"
+  
+  - tool_name: "cortex_validate_compliance"
+    error: "Tool not found in any registry"
+    root_cause: "Not registered in MCP server"
+    impact: "Compliance validation broken"
+    fix_effort: "1h"
+    fix_status: "PENDING"
+    file: "cortex/mcp/tools/governance/cortex_governance_tools.py"
+  
+  - tool_name: "cortex_discover"
+    error: "Tool not found in any registry"
+    root_cause: "Not registered in MCP server"
+    impact: "ENH-047 duplicate prevention unavailable"
+    fix_effort: "2h"
+    fix_status: "PENDING"
+    file: "cortex/mcp/tools/discovery/cortex_discover.py"
+  
+  - tool_name: "cortex_ask"
+    error: "Tool not found in any registry"
+    root_cause: "Not registered in MCP server"
+    impact: "Educational queries broken"
+    fix_effort: "1h"
+    fix_status: "PENDING"
+    file: "cortex/mcp/tools/educational_tools.py"
+  
+  - tool_name: "cortex_detect_duplicates"
+    error: "missing 1 required positional argument: 'workspace_root'"
+    root_cause: "Constructor called without required parameter"
+    impact: "CORE-035 duplicate detection unavailable"
+    fix_effort: "1h"
+    fix_status: "COMPLETE"
+    fix_commit: "19393be41"
+    file: "cortex/mcp/tools/lens_tools.py"
+  
+  - tool_name: "cortex_debug_governance_detect"
+    error: "'charmap' codec can't decode byte 0x90 in position 138"
+    root_cause: "Encoding issue when reading binary files"
+    impact: "Governance audit fails on Windows"
+    fix_effort: "2h"
+    fix_status: "COMPLETE"
+    fix_commit: "19393be41"
+    file: "cortex/orchestrators/debugging/governance_violation_debugger.py"
+
+  # PHANTOM TOOLS (exposed but handler missing)
+  - tool_name: "echo_tool"
+    error: "Tool not found in any registry"
+    root_cause: "Phantom tool - no handler exists"
+    impact: "False tool advertisement"
+    fix_effort: "DELETE"
+    fix_status: "PENDING"
+    recommendation: "Remove from schema, no handler code to preserve"
+  
+  - tool_name: "sample_tool"
+    error: "Tool not found in any registry"
+    root_cause: "Phantom tool - no handler exists"
+    impact: "False tool advertisement"
+    fix_effort: "DELETE"
+    fix_status: "PENDING"
+    recommendation: "Remove from schema"
+  
+  - tool_name: "monitor_orchestrator_health"
+    error: "Tool not found in any registry"
+    root_cause: "Phantom tool - no handler exists"
+    impact: "False tool advertisement"
+    fix_effort: "DELETE"
+    fix_status: "PENDING"
+    recommendation: "Remove from schema"
+  
+  - tool_name: "diagnose_orchestrator_issues"
+    error: "Tool not found in any registry"
+    root_cause: "Phantom tool - no handler exists"
+    impact: "False tool advertisement"
+    fix_effort: "DELETE"
+    fix_status: "PENDING"
+    recommendation: "Remove from schema"
+  
+  - tool_name: "analyze_knowledge_gap"
+    error: "Tool not found in any registry"
+    root_cause: "Phantom tool - no handler exists"
+    impact: "False tool advertisement"
+    fix_effort: "DELETE"
+    fix_status: "PENDING"
+    recommendation: "Remove from schema"
+  
+  - tool_name: "query_governance_context"
+    error: "Tool not found in any registry"
+    root_cause: "Phantom tool - no handler exists"
+    impact: "False tool advertisement"
+    fix_effort: "DELETE"
+    fix_status: "PENDING"
+    recommendation: "Remove from schema"
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# CATEGORY 2: WORKING BUT REQUIRE PARAMETERS (5 tools)
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+working_with_params:
+  - tool_name: "cortex_process_request"
+    status: "WORKS"
+    required_params: "user_request (str)"
+    test_result: "Error when called without params (expected behavior)"
+    impact: "Core implementation tool"
+  
+  - tool_name: "cortex_challenge"
+    status: "WORKS"
+    required_params: "user_request (str)"
+    test_result: "Error when called without params (expected behavior)"
+    impact: "Challenge generation"
+  
+  - tool_name: "cortex_total_recall"
+    status: "WORKS"
+    required_params: "query (str)"
+    test_result: "Error when called without params (expected behavior)"
+    impact: "Feature discovery"
+  
+  - tool_name: "cortex_refactor"
+    status: "WORKS"
+    required_params: "operation (str), file_path (str)"
+    test_result: "Error when called without params (expected behavior)"
+    impact: "Code refactoring"
+  
+  - tool_name: "cortex_vision_analyze"
+    status: "WORKS"
+    required_params: "image_path (str)"
+    test_result: "Error when called without params (expected behavior)"
+    impact: "Visual analysis"
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# CATEGORY 3: FULLY FUNCTIONAL (25+ tools)
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+fully_functional:
+  governance:
+    - tool_name: "cortex_load_core_rules"
+      status: "✅ WORKING"
+      output: "Loaded 18 core rules"
+      file: "cortex/mcp/tools/governance/cortex_governance_tools.py"
+    
+    - tool_name: "cortex_load_modes"
+      status: "✅ WORKING"
+      output: "Loaded HEXA-MODES configuration"
+      file: "cortex/mcp/tools/governance/cortex_governance_tools.py"
+    
+    - tool_name: "cortex_load_audit_checklist"
+      status: "✅ WORKING"
+      output: "Loaded audit checklist (P0-P3)"
+      file: "cortex/mcp/tools/governance/cortex_governance_tools.py"
+    
+    - tool_name: "cortex_query_governance"
+      status: "✅ WORKING"
+      output: "Query results for governance rules"
+      file: "cortex/mcp/tools/governance/cortex_governance_tools.py"
+    
+    - tool_name: "report_governance_status"
+      status: "✅ WORKING"
+      output: "Governance status report generated"
+      file: "cortex/mcp/tools/governance/cortex_governance_tools.py"
+  
+  refactoring:
+    - tool_name: "cortex_refactor_supported_languages"
+      status: "✅ WORKING"
+      output: "c_sharp: true, python: false (known issue), typescript: true"
+      file: "cortex/mcp/tools/refactoring_tool.py"
+      known_issue: "Python adapter shows available: false (Phase 75 S8)"
+    
+    - tool_name: "cortex_refactor_available_operations"
+      status: "✅ WORKING"
+      output: "extract_method, rename_variable, inline_method, etc."
+      file: "cortex/mcp/tools/refactoring_tool.py"
+  
+  dashboard:
+    - tool_name: "cortex_dashboard_validate"
+      status: "✅ WORKING"
+      output: "Dashboard validation results"
+      file: "cortex/mcp/tools/dashboard_tools.py"
+    
+    - tool_name: "cortex_dashboard_list_repos"
+      status: "✅ WORKING"
+      output: "List of registered repos (includes 4 orphans)"
+      file: "cortex/mcp/tools/dashboard_tools.py"
+      known_issue: "4 orphaned repos (alist, kashkole, ksessions, noor canvas)"
+  
+  environment:
+    - tool_name: "cortex_verify_environment"
+      status: "✅ WORKING"
+      output: "PARTIAL status - missing quality tools (black, mypy, pylint)"
+      file: "cortex/mcp/tools/environment_tools.py"
+      recommendation: "Install: pip install black mypy pylint isort"
+  
+  utility:
+    - tool_name: "cortex_vacuum"
+      status: "✅ WORKING"
+      output: "Markdown cleanup + archival"
+      file: "cortex/mcp/tools/vacuum_tool.py"
+
+  # Additional working tools from chat01 audit
+  debugging:
+    - tool_name: "cortex_debug_governance_detect"
+      status: "✅ WORKING (FIXED)"
+      output: "6 governance violations detected"
+      file: "cortex/orchestrators/debugging/governance_violation_debugger.py"
+      fix_date: "2026-02-11"
+      fix_commit: "19393be41"
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ADDITIONAL WORKING TOOLS (Comprehensive List)
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+additional_working_tools:
+  # From decorator registry (41 total)
+  # Extracted from chat01.md terminal output
+  
+  - "cortex_process_request"
+  - "cortex_challenge"
+  - "cortex_validate_architecture"
+  - "cortex_modify_request"
+  - "cortex_plan_execute_autonomous"
+  - "cortex_audit_remediation_plan"
+  - "cortex_process_remediation_selection"
+  - "cortex_verify_environment"
+  - "cortex_vacuum"
+  - "generate_knowledge_summary"
+  - "get_tdd_guidance_for_module"
+  - "cortex_refactor"
+  - "cortex_refactor_supported_languages"
+  - "cortex_refactor_available_operations"
+  - "cortex_dashboard_create"
+  - "cortex_dashboard_update"
+  - "cortex_dashboard_delete"
+  - "cortex_dashboard_validate"
+  - "cortex_dashboard_list_repos"
+  - "cortex_dashboard_generate_suite"
+  - "cortex_capture_debug_console"
+  - "cortex_capture_debug_playwright"
+  - "cortex_capture_debug_terminal"
+  - "cortex_capture_debug_status"
+  - "cortex_inject_debug_markers"
+  - "cortex_cleanup_debug_markers"
+  - "cortex_restore_debug_backups"
+  - "cortex_tools_catalog"  # NOW WORKING (fixed S1)
+  - "cortex_governance_tools_catalog"
+  - "cortex_load_core_rules"
+  - "cortex_load_modes"
+  - "cortex_load_response_format_standards"
+  - "cortex_load_audit_checklist"
+  - "cortex_query_governance"
+  - "report_governance_status"
+  - "cortex_debug_governance_detect"  # NOW WORKING (fixed S1)
+  - "cortex_debug_governance_fix"
+  - "cortex_debug_fix_plan"
+  - "cortex_onboard_security_scan"
+  - "cortex_git_commit_history"
+  - "cortex_onboard_repository_holistic"
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# PHASE 75 REMEDIATION PRIORITIES
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+remediation_priorities:
+  p0_critical:
+    description: "Blocks core CORTEX functionality"
+    count: 3
+    tools:
+      - "cortex_tools_catalog (FIXED)"
+      - "cortex_detect_duplicates (FIXED)"
+      - "cortex_debug_governance_detect (FIXED)"
+    next_actions:
+      - "Register 8 unregistered tools (S2)"
+      - "Delete 6 phantom tools (S7)"
+  
+  p1_high:
+    description: "Important features unavailable"
+    count: 8
+    tools:
+      - "cortex_lens_analyze"
+      - "cortex_onboard_repository"
+      - "cortex_validate_venv"
+      - "cortex_check_dependency_drift"
+      - "cortex_validate_compliance"
+      - "cortex_discover"
+      - "cortex_ask"
+      - "cortex_onboard_repository_v3"
+    next_actions:
+      - "Register in MCP server (S2)"
+      - "Add to tool discovery (S2)"
+  
+  p2_medium:
+    description: "Quality of life improvements"
+    count: 3
+    issues:
+      - "Python refactoring adapter unavailable"
+      - "Dashboard registry has 4 orphans"
+      - "Missing base.css asset"
+    next_actions:
+      - "Fix Python adapter (S8)"
+      - "Clean orphans (S9)"
+      - "Add base.css (S10)"
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# GAP ANALYSIS: MCP vs PYLANCE/BUILT-IN SERVERS
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+server_disambiguation_gaps:
+  gap_1:
+    issue: "No MCP Server Identity Header"
+    severity: "P1"
+    description: "Tool responses don't indicate source server"
+    impact: "Debugging failures requires manual inspection"
+    fix: "Phase 75 S4 - Add _mcp_meta to all responses"
+  
+  gap_2:
+    issue: "Tool Prefix Collision Risk"
+    severity: "P2"
+    description: "cortex_* prefix could collide with other MCP servers"
+    impact: "Potential future namespace conflict"
+    fix: "Phase 75 S4 - Document prefix reservation"
+  
+  gap_3:
+    issue: "No Health Indicator in Tool Responses"
+    severity: "P1"
+    description: "Can't tell if MCP is stale from tool output"
+    impact: "Silent failures when MCP degraded"
+    fix: "Phase 75 S4 - Add health: healthy|degraded|stale"
+  
+  gap_4:
+    issue: "Prompts Don't Distinguish MCP Servers"
+    severity: "P1"
+    description: "copilot-instructions.md references tools without server context"
+    impact: "Confusion about which server provides tools"
+    fix: "Phase 75 S4 - Update prompts with 'CORTEX MCP' prefix"
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# PHASE 74 COMPLETION STATUS
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+phase_74_status:
+  completed_stages:
+    - id: "S1"
+      title: "Fix broken MCP tools"
+      status: "✅ COMPLETE"
+      commit: "19393be41"
+      fixes:
+        - "cortex_tools_catalog: Added list_tools() + list_categories()"
+        - "cortex_detect_duplicates: Fixed constructor + method name"
+        - "governance_violation_debugger: Fixed 8 encoding issues"
+    
+    - id: "S2"
+      title: "Fix MCP tool import issues"
+      status: "✅ COMPLETE"
+      commit: "c8f10b929"
+      fixes:
+        - "repository_onboarding_tool: Changed BaseTool → Tool"
+        - "decorators: Added mcp_tool_group + input_schema"
+        - "instrumentation_tool: Added Union import"
+      result: "19/19 tool modules import successfully, 41 tools registered"
+    
+    - id: "S3"
+      title: "Fix encoding issues in tests"
+      status: "✅ COMPLETE"
+      commit: "98af0b508"
+      fixes:
+        - "test_digest_tools: Added encoding='utf-8' to all write_text()"
+      result: "186/186 MCP tests passing"
+  
+  metrics:
+    tool_modules_loadable: "19/19 (100%)"
+    tools_registered: "41 via decorator"
+    mcp_tests_passing: "186/186 (100%)"
+    regressions_introduced: 0
+
+  outstanding_work:
+    description: "Phase 74 focused on fixing broken tools, not cleanup/prevention"
+    remaining:
+      - "Delete 6 phantom tools"
+      - "Register 8 unregistered tools"
+      - "Add MCP self-healing watchdog"
+      - "Add post-clone health check"
+      - "Add MCP server identity layer"
+      - "Fix Python refactoring adapter"
+      - "Clean dashboard orphans"
+    next_phase: "Phase 75 - MCP Governance & Self-Healing"
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# RECOMMENDATIONS
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+recommendations:
+  immediate:
+    - action: "Reload VS Code to refresh MCP tool registry"
+      reason: "VS Code caches tool registrations, needs reload to see Phase 74 fixes"
+      command: "Command Palette → Developer: Reload Window"
+    
+    - action: "Install quality tools: pip install black mypy pylint isort"
+      reason: "cortex_verify_environment shows PARTIAL due to missing tools"
+      impact: "Improves from PARTIAL → PASS status"
+    
+    - action: "Proceed with Phase 75 implementation"
+      reason: "Phase 74 fixed immediate breakages, Phase 75 prevents future issues"
+      priority: "P0"
+  
+  long_term:
+    - action: "Implement ToolRegistryGovernanceAgent"
+      reason: "Automates phantom tool detection + cleanup"
+      roi: "Prevents ~200h/year manual interventions"
+    
+    - action: "Add MCP Self-Healing Watchdog"
+      reason: "Eliminates manual MCP restarts"
+      user_impact: "Zero manual interventions required"
+    
+    - action: "Enforce CI/CD MCP health gate"
+      reason: "Blocks broken tool merges to origin/main"
+      impact: "Pull machines always get working MCP"
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# AUDIT TRAIL
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+audit_trail:
+  - id: "AC-MCP-AUDIT-001"
+    timestamp: "2026-02-11T11:00:00Z"
+    action: "Created comprehensive MCP tool audit matrix"
+    source: "chat01.md Phase 74 analysis"
+    author: "Asif Hussain"
+    tools_audited: 78
+    broken_tools_identified: 17
+    phantom_tools_identified: 6
+    fixes_completed: 3
+    next_phase: "Phase 75"
