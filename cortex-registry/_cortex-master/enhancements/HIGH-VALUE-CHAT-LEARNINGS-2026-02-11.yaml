@@ -1,0 +1,404 @@
+version: '1.0'
+title: "High-Value Chat Learnings Extraction"
+created: '2026-02-11T15:00:00.000000Z'
+source: "_workspaces/.chats analysis"
+description: |
+  Consolidated high-value enhancements and learnings extracted from chat sessions
+  that are not yet captured in the registry. These items represent actionable
+  improvements for CORTEX architecture, orchestration, and user experience.
+
+priority: P1
+status: pending_triage
+estimated_effort: "4-8 weeks"
+
+# ============================================================================
+# CRITICAL ENHANCEMENTS (P0 - Must Implement)
+# ============================================================================
+
+critical_enhancements:
+  - id: ENH-064
+    title: "LENS Intelligence Layer Separation"
+    source: "chat01.md, violations.md"
+    priority: P0
+    effort: "2 weeks"
+    description: |
+      Current LENS implementation in brain/lens/pipeline.py has stub examination phase.
+      Phase 2 uses hardcoded feature lists instead of real codebase analysis.
+    impact: |
+      - 0% actual codebase understanding
+      - Cannot detect real dependencies
+      - Complexity scores meaningless
+    solution: |
+      - Extract intelligence layer: cortex/intelligence/
+      - Connect Phase 2 to LENSOrchestrator
+      - Real AST analysis via ASTAnalyzer
+      - Git history via GitHistoryAnalyzer
+      - Comment extraction for context
+    roi: "10x - 90% codebase understanding improvement"
+    files:
+      - cortex/brain/lens/pipeline.py (REFACTOR Phase 2)
+      - cortex/intelligence/ (NEW directory)
+      - cortex/lens/orchestrator.py (INTEGRATE)
+    
+  - id: ENH-065
+    title: "SPA Dashboard Production Readiness"
+    source: "violations.md, console-log.md, gpr-recommendation.txt"
+    priority: P0
+    effort: "7 days (6 phases)"
+    description: |
+      SPA dashboard has 15 critical production issues:
+      1. State management catastrophe (race conditions)
+      2. Loading state hell (no per-component states)
+      3. Error handling vacuum (no boundaries)
+      4. Data integrity theater (validation after render)
+      5. Concurrency hazards (no request coordination)
+      6. Scalability issues (8000-item graphs freeze browser)
+      7. Zero observability (no telemetry)
+      8. Testing impossibility (monolithic structure)
+      9. Security vulnerabilities (XSS risks)
+      10. file:// protocol breaks fetch()
+      11. CSS/SVG sizing rules (100% height on min-height parent)
+      12. Data contradictions (LOC=0 with language counts)
+      13. No explainability panel for KPIs
+      14. No virtualization for large lists
+      15. No progressive disclosure pattern
+    solution: |
+      Phase 1: State Management (state versioning + freeze pattern)
+      Phase 2: Error Boundaries (per-tab fallback UI)
+      Phase 3: Lazy Loading & Performance (virtual scrolling)
+      Phase 4: Security Hardening (DOMPurify + CSP)
+      Phase 5: Schema Validation (Zod before render)
+      Phase 6: Observability (telemetry integration)
+    roi: "Production readiness: 3.6/10 → 9/10"
+    files:
+      - company/dashboards/spa/js/state-manager.js (NEW)
+      - company/dashboards/spa/js/error-handler.js (NEW)
+      - company/dashboards/spa/js/lazy-loader.js (NEW)
+      - company/dashboards/spa/js/sanitizer.js (NEW)
+      - company/dashboards/spa/js/schema.js (NEW)
+    
+  - id: ENH-066
+    title: "MCP Pylance-Style Architecture Clarification"
+    source: "struggle.md, tdd-violations.txt"
+    priority: P0
+    effort: "1 day"
+    description: |
+      Users confused about MCP server startup. Documentation shows manual
+      'python -m cortex.mcp.server' but MCP should auto-start like Pylance.
+      Gap between documented approach and actual MCP architecture.
+    impact: |
+      - User friction during onboarding
+      - Wasted time troubleshooting
+      - Inconsistent MCP availability
+    solution: |
+      - Update all documentation to clarify Pylance-style auto-start
+      - Add VS Code MCP configuration validation
+      - Enhance pre-flight check with 3-method detection
+      - Create MCP-SETUP-GUIDE.md with cross-platform instructions
+    roi: "10x - Onboarding time: 30 min → 3 min"
+    files:
+      - .github/prompts/MCP-SETUP-GUIDE.md (NEW)
+      - .github/prompts/cortex-architect.prompt.md (UPDATE)
+      - scripts/setup-mcp.py (ENHANCE)
+
+# ============================================================================
+# HIGH-VALUE ENHANCEMENTS (P1 - Should Implement)
+# ============================================================================
+
+high_value_enhancements:
+  - id: ENH-067
+    title: "Autonomous Plan Execution with Visual Progress"
+    source: "plan.txt"
+    priority: P1
+    effort: "3 weeks"
+    status: partially_implemented
+    description: |
+      User wants fully autonomous planning orchestrator where:
+      1. User approves plan → CORTEX executes all phases autonomously
+      2. Real-time visual progress bars in GitHub Copilot
+      3. TDD-driven implementation (tests before code)
+      4. Each phase ends with UI update
+      5. Governance enforcement throughout
+    current_state: |
+      - AutonomousPlanExecutor exists (cortex/interaction/autonomous_plan_executor.py)
+      - ASCIIProgressBar exists (cortex/orchestrators/response/ascii_progress_bar.py)
+      - PlanOrchestrator exists (cortex/orchestrators/support/plan_orchestrator.py)
+      - Integration partially complete (Phase 35, Phase 40)
+    gaps: |
+      - No unified autonomous execution coordinator
+      - Progress bar updates not real-time
+      - No phase-by-phase UI reporting
+      - Missing TDD orchestrator integration per phase
+    solution: |
+      - Create AutonomousExecutionCoordinator (already exists!)
+      - Enhance phase execution with TDD enforcement
+      - Add real-time progress streaming
+      - Integrate cortex_plan_execute_autonomous MCP tool
+    roi: "5x - User can approve plan and walk away"
+    files:
+      - cortex/orchestrators/autonomous_execution_coordinator.py (ENHANCE)
+      - cortex/mcp/tools/plan_management_tool.py (INTEGRATE)
+      - cortex/orchestrators/support/plan_orchestrator.py (ENHANCE)
+    
+  - id: ENH-068
+    title: "Data Integrity Validator for Dashboard Pipeline"
+    source: "violations.md"
+    priority: P1
+    effort: "1 week"
+    description: |
+      Dashboard contradictions erode trust:
+      - LOC=0 with language counts > 0 (broken extraction)
+      - security.total_count=0 yet "13 vulnerabilities" (data mismatch)
+      - License "null: 100%" (parsing failure)
+      - Description vs summary conflicts
+    solution: |
+      - Add DataIntegrityValidator to onboarding pipeline
+      - Pre-render validation gate
+      - "Analysis Integrity" banner component
+      - Confidence scoring per KPI
+    roi: "Trust improvement, stakeholder confidence"
+    files:
+      - cortex/onboarding/data_integrity_validator.py (NEW)
+      - cortex/dashboards/renderers/integrity_banner.py (NEW)
+    
+  - id: ENH-069
+    title: "Dashboard Explainability Panel"
+    source: "violations.md"
+    priority: P1
+    effort: "1 week"
+    description: |
+      Every KPI needs "How computed" explanation:
+      - Show formula for metric calculation
+      - Display data source
+      - Indicate confidence level
+      - Link to raw data
+    solution: |
+      - Add explainability_panel to dashboard schema
+      - Standardize KPI metadata structure
+      - Create tooltip + drawer UI components
+    roi: "Transparency, debugging, stakeholder education"
+    files:
+      - cortex/dashboards/schema/explainability_schema.yaml (NEW)
+      - company/dashboards/spa/js/explainability.js (NEW)
+    
+  - id: ENH-070
+    title: "Use-Case Library Generator (5 Personas × 6 Categories)"
+    source: "violations.md"
+    priority: P1
+    effort: "1 week"
+    description: |
+      Need comprehensive use-case coverage for dashboards:
+      - 5 personas: exec, architect, developer, PM, researcher
+      - 6 categories: onboarding, analysis, debugging, planning, compliance, learning
+      - Minimum 30 use cases total
+    solution: |
+      - Create UseCaseLibraryGenerator
+      - Template per persona × category
+      - Auto-generate from repository characteristics
+    roi: "User adoption, feature discovery"
+    files:
+      - cortex/dashboards/use_case_generator.py (NEW)
+      - company/dashboards/repos/{repo}/use-cases.yaml (GENERATED)
+    
+  - id: ENH-071
+    title: "Domain Inference from Business Summary (NLP)"
+    source: "violations.md"
+    priority: P1
+    effort: "2 weeks"
+    description: |
+      Dashboard can infer domain concept map from business_summary even
+      without explicit entities extracted. Use NLP to detect:
+      - Industry terminology
+      - Technical concepts
+      - Business processes
+      - Domain relationships
+    solution: |
+      - Add NLP pipeline to business_summary processing
+      - Extract concepts, relationships, terminology
+      - Generate domain concept map
+      - Integrate with DomainEnhancementOrchestrator
+    roi: "Automatic domain knowledge capture"
+    files:
+      - cortex/intelligence/domain_inference.py (NEW)
+      - cortex/nlp/concept_extractor.py (NEW)
+
+# ============================================================================
+# ARCHITECTURAL IMPROVEMENTS (P2 - Nice to Have)
+# ============================================================================
+
+architectural_improvements:
+  - id: ENH-072
+    title: "Renderable Content Schema (Unified Output)"
+    source: "violations.md"
+    priority: P2
+    effort: "1 week"
+    description: |
+      Create unified output structure for all dashboard components:
+      - Standardize data format
+      - Consistent metadata
+      - Version control
+      - Schema validation
+    solution: |
+      - Define RenderableContentSchema
+      - Apply to all dashboard generators
+      - Add schema validation pre-render
+    roi: "Consistency, maintainability"
+    files:
+      - cortex/dashboards/schema/renderable_content.yaml (NEW)
+    
+  - id: ENH-073
+    title: "Chart Interaction Standard (Tooltip + Cross-Filter)"
+    source: "violations.md"
+    priority: P2
+    effort: "1 week"
+    description: |
+      Every chart needs standardized interactions:
+      - Tooltip with formatted values
+      - Raw data access
+      - Data source indicator
+      - Cross-filter capability
+    solution: |
+      - Create chart interaction spec
+      - ECharts as default (not D3 mix)
+      - Standardize event handlers
+    roi: "UX consistency"
+    files:
+      - company/dashboards/spa/js/chart-interactions.js (NEW)
+    
+  - id: ENH-074
+    title: "Virtualization for Large Lists (>1000 items)"
+    source: "violations.md"
+    priority: P2
+    effort: "3 days"
+    description: |
+      Dashboard freezes on 8000-item dependency graphs.
+      Implement virtual scrolling for performance.
+    solution: |
+      - Add virtual scrolling library
+      - Apply to dependency lists
+      - Apply to file trees
+      - Progressive rendering
+    roi: "Performance, scalability"
+    files:
+      - company/dashboards/spa/js/virtual-scroller.js (NEW)
+
+# ============================================================================
+# GOVERNANCE & QUALITY (P2 - Continuous Improvement)
+# ============================================================================
+
+governance_improvements:
+  - id: ENH-075
+    title: "Intelligence-Architecture Tier Coupling (CORE-051)"
+    source: "chat01.md"
+    priority: P1
+    effort: "4 hours"
+    status: completed
+    description: |
+      Validate that orchestrator architectural tier matches LENS intelligence tier.
+      Tier 3 orchestrator should get tier_4_full LENS intelligence.
+    solution: "IMPLEMENTED as CORE-051 in 2026-02-11 remediation"
+    
+  - id: ENH-076
+    title: "Holistic Validation Gate Mandatory (CORE-052)"
+    source: "chat01.md"
+    priority: P0
+    effort: "2 hours"
+    status: completed
+    description: |
+      Phase 48 holistic validation exists as MCP tool but lacks CORE rule mandate.
+    solution: "IMPLEMENTED as CORE-052 in 2026-02-11 remediation"
+    
+  - id: ENH-077
+    title: "Self-Optimizing CORTEX (Autonomous Quarterly Audit)"
+    source: "chat01.md"
+    priority: P1
+    effort: "3 weeks"
+    status: planned
+    description: |
+      Automate quarterly governance health checks:
+      1. Scan for governance gaps
+      2. Generate enhancement recommendations
+      3. Present to user for approval
+      4. Execute approved enhancements autonomously
+    solution: |
+      - Create quarterly audit trigger
+      - Enhancement pipeline automation
+      - User approval gate
+      - Autonomous execution
+    roi: "10-20x faster enhancement cycles, 95% user effort reduction"
+    files:
+      - cortex/governance/self_optimization_engine.py (NEW)
+      - cortex/orchestrators/governance/enhancement_executor.py (NEW)
+
+# ============================================================================
+# TECHNICAL DEBT & FIXES (P2 - Maintenance)
+# ============================================================================
+
+technical_debt:
+  - id: DEBT-001
+    title: "LENS Phase 2 Stub Implementation"
+    source: "chat01-corrected-format.md"
+    priority: P0
+    description: "Phase 2 examination uses hardcoded data instead of real analysis"
+    linked_to: ENH-064
+    
+  - id: DEBT-002
+    title: "SPA file:// Protocol Incompatibility"
+    source: "gpr-recommendation.txt"
+    priority: P0
+    description: "fetch() fails in file:// mode due to CORS"
+    solution: "Always serve via localhost HTTP or fully embed JSON"
+    linked_to: ENH-065
+    
+  - id: DEBT-003
+    title: "SPA SVG 100% Height on min-height Parent"
+    source: "gpr-recommendation.txt"
+    priority: P1
+    description: "SVG sizing rules cause blank visualizations"
+    solution: "Set explicit height on .viz-canvas, remove svg {height: 100%}"
+    linked_to: ENH-065
+
+# ============================================================================
+# METADATA & TRACKING
+# ============================================================================
+
+metadata:
+  total_enhancements: 17
+  critical: 3
+  high_value: 7
+  architectural: 3
+  governance: 3
+  technical_debt: 3
+  
+  estimated_total_effort: "14-20 weeks"
+  
+  implementation_priority:
+    1: [ENH-064, ENH-065, ENH-066]  # P0 - Critical
+    2: [ENH-067, ENH-068, ENH-069, ENH-070, ENH-071]  # P1 - High Value
+    3: [ENH-072, ENH-073, ENH-074, ENH-077]  # P2 - Nice to Have
+  
+  source_files_analyzed:
+    - _workspaces/.chats/chat01.md (2661 lines)
+    - _workspaces/.chats/chat01-corrected-format.md (374 lines)
+    - _workspaces/.chats/violations.md (1346 lines)
+    - _workspaces/.chats/console-log.md (1202 lines)
+    - _workspaces/.chats/gpr-recommendation.txt (193 lines)
+    - _workspaces/.chats/healthcheck.txt (333 lines)
+    - _workspaces/.chats/language-orch.txt (enhanced prompts)
+    - _workspaces/.chats/plan.txt (702 lines)
+    - _workspaces/.chats/response-I-want.md (assessment)
+    - _workspaces/.chats/spa-refactor-plan.md (195 lines)
+    - _workspaces/.chats/struggle.md (242 lines)
+    - _workspaces/.chats/tdd-violations.txt (2592 lines)
+
+  comparison_with_registry:
+    captured: [CORE-051, CORE-052, CORE-053, CORE-054, ENH-062, ENH-063]
+    new_high_value: [ENH-064, ENH-065, ENH-066, ENH-067, ENH-068, ENH-069, ENH-070, ENH-071]
+    architectural: [ENH-072, ENH-073, ENH-074, ENH-077]
+    
+  next_actions:
+    - Triage enhancements with stakeholder
+    - Prioritize based on ROI and business impact
+    - Create phase breakdown for top 3 P0 items
+    - Integrate into master plan (index.yaml)
+    - Delete low-value chat files after extraction
