@@ -18,7 +18,15 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 from cortex.brain.analysis.company_domain_loader import CompanyDomainLoader
-from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+from cortex.orchestrators.support.orchestrator_factories import (
+    get_unified_analysis_orchestrator,
+)
+from cortex.orchestrators.support.api_compatibility import (
+    analyze_file_via_unified,
+)
+from cortex.orchestrators.support.deprecation_warnings import (
+    warn_deprecated_orchestrator,
+)
 
 # Import SecretsFilter for PII sanitization (optional - graceful degradation)
 try:
@@ -107,8 +115,16 @@ class TieredLENSAnalyzer:
         Args:
             repo_path: Path to repository root
         """
+        # Emit deprecation warning for old LENSOrchestrator pattern
+        warn_deprecated_orchestrator(
+            old_name="LENSOrchestrator",
+            new_name="UnifiedAnalysisOrchestrator",
+            stacklevel=2
+        )
+        
         self.repo_path = repo_path
-        self.lens_orchestrator = LENSOrchestrator(repo_path=repo_path)
+        # Use new factory function instead of direct LENSOrchestrator import
+        self.lens_orchestrator = get_unified_analysis_orchestrator()
         self.domain_loader = CompanyDomainLoader()
         self.secrets_filter = SecretsFilter()
 
@@ -176,13 +192,18 @@ class TieredLENSAnalyzer:
         """
         start_time = time.time()
 
-        # Use existing LENS orchestrator for base analysis
-        analysis = self.lens_orchestrator.analyze_file(
-            file_path=path,
-            include_git=True,
-            include_ast=True,
-            include_comments=True
+        # Use adapter function for compatibility with new unified orchestrator
+        result = analyze_file_via_unified(
+            file_path=str(path),
+            repo_path=str(self.repo_path),
+            analysis_type="complexity"
         )
+        
+        if not result.get("success"):
+            # Fall back to empty analysis on error
+            analysis = {"error": result.get("error")}
+        else:
+            analysis = result.get("analysis", {})
 
         execution_time_ms = int((time.time() - start_time) * 1000)
 
