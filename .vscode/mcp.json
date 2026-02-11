@@ -1,12 +1,14 @@
 {
-  "$schema": "https://github.com/modelcontextprotocol/specification/blob/main/schema/mcp.json",
-  "mcpServers": {
+  "servers": {
     "cortex": {
-      "command": "python",
+      "type": "stdio",
+      "command": "${workspaceFolder}/.venv/bin/python",
       "args": ["-m", "cortex.mcp"],
-      "cwd": "c:/PROJECTS/CORTEX",
       "env": {
-        "PYTHONPATH": "c:/PROJECTS/CORTEX"
+        "CORTEX_ENV": "development",
+        "CORTEX_MCP_ENABLED": "true",
+        "PYTHONPATH": "${workspaceFolder}",
+        "CORTEX_WORKSPACE": "${workspaceFolder}"
       }
     }
   }

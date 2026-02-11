@@ -151,6 +151,52 @@ def ensure_settings_json(vscode_dir: Path) -> Tuple[bool, Path]:
         return False, settings_path
 
 
+def create_mcp_json(vscode_dir: Path) -> Tuple[bool, Path]:
+    """Create .vscode/mcp.json with proper MCP server configuration.
+    
+    MCP Architecture (Phase 53 - Pylance-Style):
+    - VS Code reads mcp.json for MCP server definitions
+    - VS Code auto-starts MCP server when Copilot invokes cortex_* tools
+    - Uses stdio transport (stdin/stdout JSON-RPC 2.0)
+    - NO manual 'python -m cortex.mcp.server' required
+    - Cross-platform: Uses ${workspaceFolder} for portability
+    """
+    mcp_json_path = vscode_dir / "mcp.json"
+
+    try:
+        # Cross-platform Python path using VS Code variable
+        if IS_WINDOWS:
+            python_path = "${workspaceFolder}/.venv/Scripts/python.exe"
+        else:
+            python_path = "${workspaceFolder}/.venv/bin/python"
+
+        # MCP configuration (VS Code mcp.json format)
+        mcp_config = {
+            "servers": {
+                "cortex": {
+                    "type": "stdio",
+                    "command": python_path,
+                    "args": ["-m", "cortex.mcp"],
+                    "env": {
+                        "CORTEX_ENV": "development",
+                        "CORTEX_MCP_ENABLED": "true",
+                        "PYTHONPATH": "${workspaceFolder}",
+                        "CORTEX_WORKSPACE": "${workspaceFolder}"
+                    }
+                }
+            }
+        }
+
+        # Write mcp.json
+        mcp_json_path.write_text(json.dumps(mcp_config, indent=2) + "\n")
+        logger.info(f"✅ Created .vscode/mcp.json with CORTEX MCP server config")
+        return True, mcp_json_path
+
+    except Exception as e:
+        logger.error(f"❌ Failed to create mcp.json: {e}")
+        return False, mcp_json_path
+
+
 def inject_mcp_config(settings_path: Path) -> Tuple[bool, Dict]:
     """Inject cross-platform MCP configuration into .vscode/settings.json.
     
@@ -233,7 +279,8 @@ def display_completion_message():
     print("  • Uses stdio transport (stdin/stdout JSON-RPC)")
     print("  • NO manual server startup required\n")
     print("What was configured:")
-    print("  ✅ .vscode/settings.json updated with cortex MCP server")
+    print("  ✅ .vscode/mcp.json created (PRIMARY - VS Code reads this)")
+    print("  ✅ .vscode/settings.json updated (SECONDARY - fallback)")
     if IS_WINDOWS:
         print("  ✅ Python: ${workspaceFolder}/.venv/Scripts/python.exe")
     else:
@@ -241,13 +288,15 @@ def display_completion_message():
     print("  ✅ MCP module: cortex.mcp (stdio transport)")
     print("  ✅ Environment variables configured")
     print("  ✅ Cross-platform: Works on macOS/Windows/Linux\n")
-    print("NEXT STEP:")
+    print("NEXT STEPS:")
     print("⚡ **Restart VS Code for changes to take effect**\n")
     print("In VS Code:")
     print("  1. Command Palette (Cmd+Shift+P / Ctrl+Shift+P)")
     print("  2. Type: Developer: Reload Window")
     print("  3. Press Enter\n")
-    print("Available Tools After Restart:")
+    print("  4. Run: MCP: List Servers (to verify CORTEX is listed)")
+    print("  5. Start the server from the MCP servers list\n")
+    print("Available Tools After Setup:")
     print("  • cortex_process_request (TDD implementation)")
     print("  • cortex_lens_analyze (Code intelligence)")
     print("  • cortex_challenge (Challenge gate)")
@@ -260,7 +309,9 @@ def display_completion_message():
     print("  • cortex_plan_sync (Dashboard sync)\n")
     print("NOTE: NO 'python -m cortex.mcp.server' needed!")
     print("      VS Code auto-starts MCP when Copilot invokes tools.\n")
-    print("Setup Log: .cortex/setup.log")
+    print("Configuration files:")
+    print("  • .vscode/mcp.json (MCP server definition)")
+    print("  • .cortex/setup.log (setup log)")
     print("=" * 80 + "\n")
 
 
@@ -304,13 +355,19 @@ def main():
         logger.error("Setup failed: JSON validation")
         return 1
 
-    # Step 7: Inject MCP configuration
+    # Step 7: Create mcp.json (PRIMARY - VS Code reads this for MCP servers)
+    mcp_json_ok, mcp_json_path = create_mcp_json(vscode_dir)
+    if not mcp_json_ok:
+        logger.error("Setup failed: mcp.json creation")
+        return 1
+
+    # Step 8: Inject MCP configuration into settings.json (SECONDARY - fallback)
     inject_ok, settings_content = inject_mcp_config(settings_path)
     if not inject_ok:
         logger.error("Setup failed: MCP configuration injection")
         return 1
 
-    # Step 8: Verify MCP startup
+    # Step 9: Verify MCP startup
     verify_ok, verify_msg = verify_mcp_startup()
     if not verify_ok:
         logger.error("Setup failed: MCP startup verification")
@@ -323,7 +380,7 @@ def main():
     # Success!
     logger.info("=" * 80)
     logger.info("✅ SETUP COMPLETE - MCP integration configured successfully")
-    logger.info("⚡ Next: Restart Copilot for changes to take effect")
+    logger.info("⚡ Next: Restart VS Code for changes to take effect")
     logger.info("=" * 80)
 
     display_completion_message()
