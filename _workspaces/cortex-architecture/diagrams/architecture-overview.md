@@ -1,305 +1,272 @@
-# CORTEX Brain Architecture Diagrams
+# CORTEX Architecture Overview Diagram
 
-**Purpose:** Visual representation of CORTEX as an AI Brain system  
-**Audience:** All Stakeholders  
-**Last Updated:** 2026-02-10
+**Updated:** 2026-02-11 | **Version:** 2.0.0
 
 ---
 
-## CORTEX AI Brain Overview
-
-**Understanding CORTEX Through Brain Analogies**
-
-Just as we can understand the human brain by looking at different views—neural networks, functional regions, information flow—we can understand CORTEX through multiple architectural perspectives. Each diagram below shows how CORTEX functions as an **AI brain for software development**.
-
-### 🧠 High-Level Brain Architecture
+## System-Level Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│                                🧠 CORTEX AI BRAIN                                        │
-│                        CO-gnitive R-eal T-ime EX-ecution System                         │
-│                              (Neural Network for Code)                                   │
-├─────────────────────────────────────────────────────────────────────────────────────────┤
-│                                                                                          │
-│  ┌────────────────────────────────────────────────────────────────────────────────┐    │
-│  │                        💬 COMMUNICATION CORTEX                                  │    │
-│  │                      (How developers connect to the brain)                     │    │
-│  │  ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌────────────┐               │    │
-│  │  │  VS Code   │  │    CLI     │  │    API     │  │  WebSocket │               │    │
-│  │  │  Copilot   │  │  Client    │  │  Clients   │  │  Clients   │               │    │
-│  │  └─────┬──────┘  └─────┬──────┘  └─────┬──────┘  └─────┬──────┘               │    │
-│  └────────┼───────────────┼───────────────┼───────────────┼───────────────────────┘    │
-│           │               │               │               │                             │
-│           └───────────────┴───────────────┴───────────────┘                             │
-│                                   │                                                      │
-│                            JSON-RPC 2.0 (Neural Signals)                                │
-│                                   ▼                                                      │
-│  ┌────────────────────────────────────────────────────────────────────────────────┐    │
-│  │                        🔗 NEURAL GATEWAY                                         │    │
-│  │                     (Brain-Computer Interface)                                  │    │
-│  │  ┌─────────────────────────────────────────────────────────────────────────┐  │    │
-│  │  │                    MCP Server (Neural Hub)                               │  │    │
-│  │  │  • Signal Authentication    • Neural Rate Limiting    • Thought Routing │  │    │
-│  │  │  • Input Validation         • Cognitive Audit Log     • Tool Discovery  │  │    │
-│  │  └─────────────────────────────────────────────────────────────────────────┘  │    │
-│  │                                   │                                            │    │
-│  │  ┌────────────────────────────────┼────────────────────────────────┐         │    │
-│  │  │                                │                                 │          │    │
-│  │  ▼                                ▼                                 ▼          │    │
-│  │  ┌────────────┐            ┌────────────┐            ┌────────────┐           │    │
-│  │  │    35+     │            │  Neural    │            │   Error    │           │    │
-│  │  │Cognitive   │◄──────────►│  Pathway   │◄──────────►│  Recovery  │           │    │
-│  │  │   Tools    │            │  Router    │            │   System   │           │    │
-│  │  └────────────┘            └────────────┘            └────────────┘           │    │
-│  └────────────────────────────────────────────────────────────────────────────────┘    │
-│                                   │                                                      │
-│                            (Neural Signal Flow)                                          │
-│                                   ▼                                                      │
-│  ┌────────────────────────────────────────────────────────────────────────────────┐    │
-│  │                    🧠 COGNITIVE PROCESSING CENTER                                │    │
-│  │                         (The Thinking Brain)                                    │    │
-│  │                                                                                 │    │
-│  │  ┌─────────────────────────────────────────────────────────────────────────┐  │    │
-│  │  │                    🎯 MasterOrchestrator                                  │    │
-│  │  │                  (Executive Control Center)                              │    │
-│  │  │              Coordinates all brain regions like a CEO                    │    │
-│  │  └───────────────────────────────┬─────────────────────────────────────────┘    │
-│  │                                  │                                             │    │
-│  │         ┌────────────────────────┼────────────────────────┐                   │    │
-│  │         │                        │                        │                    │    │
-│  │         ▼                        ▼                        ▼                    │    │
-│  │  ┌─────────────┐          ┌─────────────┐          ┌─────────────┐            │    │
-│  │  │     🧭      │          │     🔬      │          │     🎨      │            │    │
-│  │  │   Intent    │          │    TDD      │          │   Domain    │            │    │
-│  │  │   Router    │          │ Neural Net  │          │ Specialists │            │    │
-│  │  │(Recognition)│          │(Quality)    │          │(Creativity) │            │    │
-│  │  └─────────────┘          └─────────────┘          └─────────────┘            │    │
-│  │         │                        │                        │                    │    │
-│  │         │    ┌───────────────────┴───────────────────┐   │                    │    │
-│  │         │    │                                       │   │                    │    │
-│  │         ▼    ▼                                       ▼   ▼                    │    │
-│  │  ┌───────────────┐  ┌───────────────┐  ┌───────────────┐                     │    │
-│  │  │  🔧 Support   │  │  📅 Planning  │  │  🔧 System    │                     │    │
-│  │  │   Networks    │  │   Networks    │  │   Networks    │                     │    │
-│  │  │ (Maintenance) │  │ (Strategy)    │  │ (Operations)  │                     │    │
-│  │  └───────────────┘  └───────────────┘  └───────────────┘                     │    │
-│  │                                                                                │    │
-│  │                  🧠 23 Specialized Neural Networks Total 🧠                     │    │
-│  │              (8 Core, 6 Creative, 9 Support, 3 System Functions)              │    │
-│  └────────────────────────────────────────────────────────────────────────────────┘    │
-│                                   │                                                      │
-│                            (Sensory & Memory Systems)                                    │
-│                                   ▼                                                      │
-│  ┌────────────────────────────────────────────────────────────────────────────────┐    │
-│  │                    👁️ SENSORY & MEMORY SYSTEMS                                   │    │
-│  │                         (Intelligence & Storage)                                │    │
-│  │                                                                                 │    │
-│  │           ┌─────────────────────────┐    ┌─────────────────────────────┐       │    │
-│  │           │                         │    │                             │        │    │
-│  │           ▼                         ▼    ▼                             ▼        │    │
-│  │  ┌─────────────────────────┐           ┌─────────────────────────────┐        │    │
-│  │  │    👁️ LENS SENSORY       │           │      🧠 MEMORY CENTER        │        │    │
-│  │  │   (Visual Cortex)       │           │     (Knowledge Storage)      │        │    │
-│  │  │  ┌──────────┐ ┌─────────┐│           │  ┌──────────┐ ┌──────────┐ │        │    │
-│  │  │  │   Git    │ │  Code   ││           │  │Knowledge │ │ Business │ │        │    │
-│  │  │  │  Vision  │ │Analysis ││           │  │   Bank   │ │  Rules   │ │        │    │
-│  │  │  └──────────┘ └─────────┘│           │  └──────────┘ └──────────┘ │        │    │
-│  │  │  ┌──────────┐ ┌─────────┐│           │  ┌──────────┐ ┌──────────┐ │        │    │
-│  │  │  │ Comment  │ │ Pattern ││           │  │Governance│ │  Domain  │ │        │    │
-│  │  │  │ Reading  │ │Detection││           │  │  Rules   │ │  Wisdom  │ │        │    │
-│  │  │  └──────────┘ └─────────┘│           │  └──────────┘ └──────────┘ │        │    │
-│  │  └─────────────────────────┘           └─────────────────────────────┘        │    │
-│  │                                                                                │    │
-│  └────────────────────────────────────────────────────────────────────────────────┘    │
-│                                                                                          │
-│  ┌────────────────────────────────────────────────────────────────────────────────┐    │
-│  │                        🔄 NEURAL FEEDBACK LOOPS                                  │    │
-│  │                        (Continuous Learning System)                             │    │
-│  │                                                                                 │    │
-│  │  📚 Knowledge Updates ←─── 🧠 Experience ───→ 🎯 Decision Improvement           │    │
-│  │      ▲                                              ▼                           │    │
-│  │      │                   🔍 Pattern Learning                                    │    │
-│  │      └───────────────── 📊 Performance Metrics ──────────────────┘             │    │
-│  │                                                                                 │    │
-│  └────────────────────────────────────────────────────────────────────────────────┘    │
-└─────────────────────────────────────────────────────────────────────────────────────────┘
-```
-
-### 🧠 Brain Functions Explained
-
-**Communication Cortex (Input Layer)**
-- Receives requests from various development environments
-- Translates human language into neural signals (JSON-RPC)
-- Like how your ears convert sound waves to neural impulses
-
-**Neural Gateway (Processing Hub)**  
-- Acts as the brain-computer interface
-- Routes neural signals to appropriate brain regions
-- Provides security and authentication like the blood-brain barrier
-
-**Cognitive Processing Center (Executive Functions)**
-- MasterOrchestrator = CEO/Executive function (prefrontal cortex)
-- IntentRouter = Pattern recognition (temporal lobe)  
-- 23 Neural Networks = Specialized brain regions working together
-
-**Sensory Systems (LENS Intelligence)**
-- Git Vision = Seeing code history and changes
-- Code Analysis = Understanding structure and quality
-- Comment Reading = Processing human documentation
-- Pattern Detection = Recognizing code patterns and anti-patterns
-
-**Memory Center (Knowledge Storage)**
-- Knowledge Bank = Long-term memory of best practices
-- Business Rules = Domain-specific memory
-- Governance Rules = Behavioral control mechanisms
-- Domain Wisdom = Specialized expertise areas
-
-**Neural Feedback Loops (Learning System)**
-- Continuous improvement based on outcomes
-- Pattern learning from successful operations
-- Performance optimization through experience
-│                                   │                                                      │
-│                                   ▼                                                      │
-│  ┌────────────────────────────────────────────────────────────────────────────────┐    │
-│  │                           INTELLIGENCE LAYER                                    │    │
-│  │                                                                                 │    │
-│  │  ┌─────────────────────────────────────────────────────────────────────────┐  │    │
-│  │  │                         LENS Engine                                      │  │    │
-│  │  │               (Language→Examination→Navigation→Synthesis)               │  │    │
-│  │  │                                                                          │  │    │
-│  │  │  ┌───────────┐ ┌───────────┐ ┌───────────┐ ┌───────────┐              │  │    │
-│  │  │  │    Git    │ │    AST    │ │  Comment  │ │  Pattern  │              │  │    │
-│  │  │  │ Analyzer  │ │ Analyzer  │ │ Analyzer  │ │ Analyzer  │              │  │    │
-│  │  │  └───────────┘ └───────────┘ └───────────┘ └───────────┘              │  │    │
-│  │  │                                                                          │  │    │
-│  │  │  ┌───────────┐ ┌───────────┐ ┌───────────┐ ┌───────────┐              │  │    │
-│  │  │  │  Vision   │ │  Config   │ │ Database  │ │    API    │              │  │    │
-│  │  │  │ Analyzer  │ │ Analyzer  │ │ Analyzer  │ │ Analyzer  │              │  │    │
-│  │  │  └───────────┘ └───────────┘ └───────────┘ └───────────┘              │  │    │
-│  │  │                                                                          │  │    │
-│  │  │              8 Analyzers → Synthesis → Unified Context                  │  │    │
-│  │  └─────────────────────────────────────────────────────────────────────────┘  │    │
-│  └────────────────────────────────────────────────────────────────────────────────┘    │
-│                                   │                                                      │
-│                                   ▼                                                      │
-│  ┌────────────────────────────────────────────────────────────────────────────────┐    │
-│  │                           GOVERNANCE LAYER                                      │    │
-│  │                                                                                 │    │
-│  │  ┌─────────────────────────────────────────────────────────────────────────┐  │    │
-│  │  │                     EnforcementOrchestrator                              │  │    │
-│  │  │                        (7 Agents Pre-Gate)                               │  │    │
-│  │  │                                                                          │  │    │
-│  │  │  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐       │  │    │
-│  │  │  │ Governance  │ │  Security   │ │ Compliance  │ │ File Naming │       │  │    │
-│  │  │  │   Agent     │ │   Agent     │ │   Agent     │ │   Agent     │       │  │    │
-│  │  │  └─────────────┘ └─────────────┘ └─────────────┘ └─────────────┘       │  │    │
-│  │  │  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐                       │  │    │
-│  │  │  │ Incremental │ │  Markdown   │ │ Architecture│                       │  │    │
-│  │  │  │   Agent     │ │   Agent     │ │   Agent     │                       │  │    │
-│  │  │  └─────────────┘ └─────────────┘ └─────────────┘                       │  │    │
-│  │  │                                                                          │  │    │
-│  │  │                    50+ Rules (CORE, ARCH, LENS, ENH)                    │  │    │
-│  │  └─────────────────────────────────────────────────────────────────────────┘  │    │
-│  └────────────────────────────────────────────────────────────────────────────────┘    │
-│                                   │                                                      │
-│                                   ▼                                                      │
-│  ┌────────────────────────────────────────────────────────────────────────────────┐    │
-│  │                              DATA LAYER                                         │    │
-│  │                                                                                 │    │
-│  │  ┌────────────────┐  ┌────────────────┐  ┌────────────────┐                   │    │
-│  │  │     Redis      │  │   PostgreSQL   │  │  Git Registry  │                   │    │
-│  │  │     Cache      │  │    Metrics     │  │   (Config)     │                   │    │
-│  │  │                │  │                │  │                │                   │    │
-│  │  │  • L2 Cache    │  │  • Audit logs  │  │  • Orchestrator│                   │    │
-│  │  │  • Sessions    │  │  • Metrics     │  │    configs     │                   │    │
-│  │  │  • Temp data   │  │  • Analytics   │  │  • Phase defs  │                   │    │
-│  │  └────────────────┘  └────────────────┘  └────────────────┘                   │    │
-│  └────────────────────────────────────────────────────────────────────────────────┘    │
-│                                                                                          │
-└─────────────────────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           🌐 CLIENT LAYER                                    │
+│               (AI Assistants & Development Tools)                            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌────────────┐           │
+│  │  GitHub    │  │   Claude   │  │   Cursor   │  │   Custom   │           │
+│  │  Copilot   │  │  Desktop   │  │    IDE     │  │   Clients  │           │
+│  │  Chat      │  │            │  │            │  │            │           │
+│  └──────┬─────┘  └──────┬─────┘  └──────┬─────┘  └──────┬─────┘           │
+│         │                │                │                │                 │
+│         └────────────────┴────────────────┴────────────────┘                 │
+│                              │ MCP Protocol                                  │
+│                              │ (JSON-RPC 2.0)                                │
+└──────────────────────────────┼──────────────────────────────────────────────┘
+                               │
+┌──────────────────────────────┼──────────────────────────────────────────────┐
+│                         🔗 MCP GATEWAY LAYER                                 │
+│                      (Communication Interface)                               │
+├──────────────────────────────┼──────────────────────────────────────────────┤
+│  ┌───────────────────────────────────────────────────────────────────────┐  │
+│  │                     MCP Server (stdio/HTTP)                            │  │
+│  │  ┌─────────────┐  ┌──────────────┐  ┌───────────────┐               │  │
+│  │  │   Tool      │  │    Request   │  │   Response    │               │  │
+│  │  │  Registry   │  │   Validator  │  │   Formatter   │               │  │
+│  │  │  (86 tools) │  │              │  │               │               │  │
+│  │  └─────────────┘  └──────────────┘  └───────────────┘               │  │
+│  │                                                                        │  │
+│  │  Capabilities:                                                        │  │
+│  │  • Tool discovery & invocation                                       │  │
+│  │  • Request authentication & routing                                  │  │
+│  │  • Response serialization (JSON-RPC)                                 │  │
+│  │  • Health monitoring & metrics                                       │  │
+│  └───────────────────────────────────────────────────────────────────────┘  │
+└──────────────────────────────┼──────────────────────────────────────────────┘
+                               │
+┌──────────────────────────────┼──────────────────────────────────────────────┐
+│                      🧠 ORCHESTRATION LAYER                                  │
+│                    (Cognitive Processing Center)                             │
+├──────────────────────────────┼──────────────────────────────────────────────┤
+│  ┌───────────────────────────────────────────────────────────────────────┐  │
+│  │                   🎯 MasterOrchestrator                                │  │
+│  │             (Executive Coordinator - Entry Point)                      │  │
+│  │  • Environment validation                                             │  │
+│  │  • Dependency resolution                                              │  │
+│  │  • Lifecycle management                                               │  │
+│  └───────────────────────────┬───────────────────────────────────────────┘  │
+│                              ▼                                               │
+│  ┌───────────────────────────────────────────────────────────────────────┐  │
+│  │                     🧭 IntentRouter                                    │  │
+│  │              (Decision Engine - Request Classifier)                   │  │
+│  │  Classifies: IMPLEMENT │ FIX │ REFACTOR │ ANALYZE │ PLAN │ DEBUG     │  │
+│  └─┬────────────────┬────────────────┬────────────────┬──────────────────┘  │
+│    │                │                │                │                     │
+│    ▼                ▼                ▼                ▼                     │
+│  ┌────────┐    ┌────────┐      ┌────────┐      ┌────────┐                  │
+│  │🧠 Core│    │🎨 Domain│      │🔧Support│      │⚙️ Cross│                  │
+│  │  (11) │    │   (8)  │      │  (41)  │      │ Cutting│                  │
+│  └────────┘    └────────┘      └────────┘      └────────┘                  │
+│                                                                              │
+│  Core Examples:                Domain Examples:      Support Examples:      │
+│  • TDDOrchestrator            • RefactoringOrch.    • DebugOrchestrator     │
+│  • LENSSynthesis              • PlanOrchestrator    • DashboardGen.         │
+│  • EnforcementOrch.           • DocumentationOrch.  • KnowledgeQuery        │
+└──────────────────────────────────────────────────────────────────────────────┘
+         │                               │                          │
+         ▼                               ▼                          ▼
+┌──────────────────────┐  ┌────────────────────────┐  ┌──────────────────────┐
+│  👁️ LENS LAYER      │  │  💾 STORAGE LAYER      │  │  🧠 LEARNING LAYER   │
+│  (Code Intelligence) │  │  (Persistence)         │  │  (Adaptive Systems)  │
+├──────────────────────┤  ├────────────────────────┤  ├──────────────────────┤
+│ • SecurityAnalyzer   │  │ • cortex_brain/        │  │ • Pattern Learning   │
+│ • ComplexityAnalyzer │  │ • Knowledge Repos      │  │ • Test Quality Metrics│
+│ • ArchitectureAnalyz.│  │ • cortex-registry/     │  │ • Validation Loops   │
+│ • GitHistoryAnalyzer │  │ • State Management     │  │ • Adaptive Refinement│
+│ • ASTParser          │  │ • Audit Trails         │  │ • Feedback Integration│
+│ • PatternDetector    │  │ • Dashboard Data       │  │ • Continuous Improvement│
+└──────────────────────┘  └────────────────────────┘  └──────────────────────┘
 ```
 
 ---
 
-## Layer Interactions
+## Layer Responsibilities
 
+### 1. Client Layer
+**Purpose:** AI assistants and development tools that consume CORTEX capabilities
+
+**Components:**
+- GitHub Copilot Chat (VS Code)
+- Claude Desktop
+- Cursor IDE
+- Custom MCP clients
+
+**Interaction:** JSON-RPC 2.0 over stdio or HTTP
+
+---
+
+### 2. MCP Gateway Layer
+**Purpose:** Protocol translation and tool management
+
+**Key Features:**
+- **86 MCP Tools** exposed via protocol
+- Tool discovery (`tools/list`)
+- Tool invocation (`tools/call`)
+- Health checks & metrics
+- Request validation
+
+**Transport:**
+- stdio (development, VS Code)
+- HTTP (production, port 8000)
+
+---
+
+### 3. Orchestration Layer
+**Purpose:** Intelligent request processing and coordination
+
+**Architecture:**
 ```
-┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│                              REQUEST FLOW                                                │
-├─────────────────────────────────────────────────────────────────────────────────────────┤
-│                                                                                          │
-│     CLIENT                                                                               │
-│        │                                                                                 │
-│        │ 1. JSON-RPC Request                                                            │
-│        ▼                                                                                 │
-│   ┌─────────┐                                                                            │
-│   │   MCP   │◄──── 2. Authenticate + Validate                                           │
-│   │ Gateway │                                                                            │
-│   └────┬────┘                                                                            │
-│        │                                                                                 │
-│        │ 3. Route to Tool                                                               │
-│        ▼                                                                                 │
-│   ┌─────────┐                                                                            │
-│   │  Tool   │◄──── 4. Invoke Tool Handler                                               │
-│   │ Handler │                                                                            │
-│   └────┬────┘                                                                            │
-│        │                                                                                 │
-│        │ 5. Classify Intent                                                             │
-│        ▼                                                                                 │
-│   ┌─────────┐                                                                            │
-│   │ Intent  │◄──── 6. Map to Orchestrator                                               │
-│   │ Router  │                                                                            │
-│   └────┬────┘                                                                            │
-│        │                                                                                 │
-│        │ 7. Gather Context                                                              │
-│        ▼                                                                                 │
-│   ┌─────────┐                                                                            │
-│   │  LENS   │◄──── 8. Run Analyzers                                                     │
-│   │ Engine  │                                                                            │
-│   └────┬────┘                                                                            │
-│        │                                                                                 │
-│        │ 9. Validate Rules                                                              │
-│        ▼                                                                                 │
-│   ┌─────────┐                                                                            │
-│   │ Enforce │◄──── 10. Check 50+ Rules                                                  │
-│   │  Gate   │                                                                            │
-│   └────┬────┘                                                                            │
-│        │                                                                                 │
-│        │ 11. Execute Operation                                                          │
-│        ▼                                                                                 │
-│   ┌─────────┐                                                                            │
-│   │Orchestr│◄──── 12. Process Request                                                   │
-│   │  ator   │                                                                            │
-│   └────┬────┘                                                                            │
-│        │                                                                                 │
-│        │ 13. Return Result                                                              │
-│        ▼                                                                                 │
-│     CLIENT                                                                               │
-│                                                                                          │
-└─────────────────────────────────────────────────────────────────────────────────────────┘
+MasterOrchestrator (entry point)
+  ↓
+IntentRouter (classifier)
+  ↓
+Specialist Orchestrators (60 total)
+  ├─ Core (11): Fundamental operations
+  ├─ Domain (8): Business logic
+  ├─ Support (41): Infrastructure
+  └─ Cross-Cutting: Governance, Validation
 ```
 
----
-
-## Component Counts
-
-| Layer | Component | Count |
-|-------|-----------|-------|
-| MCP | Tools | 35+ |
-| Orchestration | Orchestrators | 23 |
-| Intelligence | LENS Analyzers | 8 |
-| Governance | Enforcement Agents | 7 |
-| Governance | Rules | 50+ |
-| Data | Storage Systems | 3 |
+**Key Orchestrators:**
+- **TDDOrchestrator:** RED→GREEN→REFACTOR workflow
+- **LENSSynthesis:** Deep code intelligence
+- **EnforcementOrchestrator:** CORE rules validation
+- **HolisticValidationOrchestrator:** Phase 48 gate
+- **RefactoringOrchestrator:** Code improvement
+- **PlanOrchestrator:** Phase management
 
 ---
 
-## Related Documents
+### 4. LENS Layer
+**Purpose:** Code sensory and analysis system
 
-- [Request Lifecycle](request-lifecycle.md) — Detailed flow
-- [Data Flow](data-flow.md) — Data movement
-- [Component Relationships](component-relationships.md) — Dependencies
+**Capabilities:**
+- **Security Analysis:** Vulnerability scanning, OWASP checks
+- **Complexity Analysis:** Cyclomatic complexity, cognitive load
+- **Architecture Analysis:** Pattern detection, drift identification
+- **Git History:** 24-hour context window
+- **AST Parsing:** Deep code structure understanding
 
 ---
 
-*Part of CORTEX Architecture Documentation*
+### 5. Storage Layer
+**Purpose:** Persistence and state management
+
+**Components:**
+- `cortex_brain/`: System state, learned patterns
+- `cortex-registry/`: Orchestrator wiring, phase definitions
+- `company/`: Customer-specific configurations
+- Knowledge repositories: Best practices, domain wisdom
+
+---
+
+### 6. Learning Layer
+**Purpose:** Adaptive intelligence and continuous improvement
+
+**Capabilities:**
+- Pattern learning from successful implementations
+- Test quality measurement and feedback
+- Validation loop refinement
+- Adaptive threshold tuning
+- Feedback integration from user corrections
+
+---
+
+## Data Flow: End-to-End Request
+
+```
+1. User Types: "Implement user authentication"
+   ↓
+2. GitHub Copilot → MCP Protocol
+   {
+     "tool": "cortex_process_request",
+     "args": {"request": "Implement user authentication"}
+   }
+   ↓
+3. MCP Server → Tool Registry
+   Validates request, routes to tool handler
+   ↓
+4. cortex_process_request → MasterOrchestrator
+   orchestrator.process_user_request(...)
+   ↓
+5. MasterOrchestrator → IntentRouter
+   intent = classify_request()  # Result: IMPLEMENT
+   ↓
+6. IntentRouter → TDDOrchestrator
+   Load dependencies: LENS, Enforcement, Validation
+   ↓
+7. TDDOrchestrator → LENS Layer
+   lens.analyze(security=True, complexity=True)
+   ↓
+8. TDDOrchestrator → Challenge Gate
+   Generate 3 alternative approaches
+   Return to user for selection
+   ↓
+9. User Selects → "proceed"
+   ↓
+10. TDD Cycle Execution
+    RED: Generate failing tests
+    GREEN: Implement minimal code
+    REFACTOR: Apply best practices
+   ↓
+11. EnforcementOrchestrator Validation
+    Check CORE-008, CORE-011, CORE-012
+   ↓
+12. Audit Trail Generation
+    AC_START → AC_COMPLETE markers
+   ↓
+13. Response Generation → MCP Protocol
+    {
+      "success": true,
+      "files_modified": [...],
+      "tests_passing": 12,
+      "coverage": 94.2
+    }
+   ↓
+14. GitHub Copilot Displays Result
+```
+
+---
+
+## Scalability Architecture
+
+### Horizontal Scaling
+
+```
+                        Load Balancer
+                             │
+        ┌────────────────────┼────────────────────┐
+        ▼                    ▼                    ▼
+   MCP Server 1         MCP Server 2         MCP Server 3
+   (Port 8001)          (Port 8002)          (Port 8003)
+        │                    │                    │
+        └────────────────────┴────────────────────┘
+                             │
+                   Shared Storage Layer
+                   (cortex_brain, registry)
+```
+
+### Performance Targets
+
+| Component | Target | Status |
+|-----------|--------|--------|
+| **MCP Request → Response** | <500ms | ✅ ~320ms |
+| **Tool Discovery** | <50ms | ✅ ~25ms |
+| **Orchestrator Load** | <100ms | ✅ ~80ms |
+| **LENS Analysis** | <2s | ✅ ~1.4s |
+| **TDD Cycle (small feature)** | <10s | ✅ ~7s |
+| **Concurrent Requests** | 50+ | ✅ Tested |
+
+---
+
+**Last Updated:** 2026-02-11 06:37:48  
+**Architecture Version:** 2.0.0  
+**Production Ready:** ✅ Yes

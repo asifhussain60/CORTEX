@@ -1,462 +1,354 @@
-# MCP Overview
+# Model Context Protocol (MCP) Overview
 
-**Purpose:** The neural protocol that connects minds to the CORTEX brain  
-**Audience:** All Technical Stakeholders  
-**Last Updated:** 2026-02-10
+**Version:** 2.0.0 | **Updated:** 2026-02-11  
+**Protocol:** JSON-RPC 2.0 | **Transport:** stdio / HTTP  
+**Tools Exposed:** 86
 
 ---
 
-## Overview
+## What is MCP?
 
-**MCP: The Neural Interface to the CORTEX Brain**
+The **Model Context Protocol (MCP)** is an open protocol that standardizes how AI assistants interact with external tools and services. CORTEX implements MCP to expose its cognitive capabilities to any MCP-compatible client.
 
-Just as the human nervous system uses electrical signals to communicate between the brain and the body, CORTEX uses the **Model Context Protocol (MCP)** as its neural communication system. MCP creates a **standardized neural pathway** that allows any AI assistant, development tool, or automation system to connect to and communicate with the CORTEX brain.
+### Key Benefits
 
-**Think of MCP as the Nervous System:**
-- **🧠 Brain (CORTEX)** ↔ **⚡ Neural Signals (JSON-RPC)** ↔ **🖐️ Body (Client Tools)**
-- **Consistent Communication** → All interactions use the same "neural language"
-- **Secure Transmission** → Built-in authentication and validation like the blood-brain barrier
-- **Bidirectional Flow** → Information flows both ways between brain and external tools
-- **Extensible Network** → New connections can be added without changing existing pathways
+| Benefit | Description |
+|---------|-------------|
+| **Universal Compatibility** | Works with GitHub Copilot, Claude, Cursor, and any MCP client |
+| **Standardized Interface** | JSON-RPC 2.0 protocol ensures consistency |
+| **Tool Discovery** | Clients can discover all 86 available tools dynamically |
+| **Type Safety** | Structured arguments with JSON Schema validation |
+| **Scalability** | Support stdio (development) and HTTP (production) |
 
-**The Result:** Any system can tap into CORTEX's intelligence using standard protocols—no custom integration required.
+---
+
+## CORTEX MCP Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│              🧠 MCP NEURAL COMMUNICATION SYSTEM                  │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  ┌─────────────────────────────────────────────────────────┐   │
-│  │              🖐️ External Body (Clients)                  │   │
-│  │         (Development tools & AI assistants)             │   │
-│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐              │   │
-│  │  │ VS Code  │  │   CLI    │  │  Custom  │              │   │
-│  │  │ Copilot  │  │  Tools   │  │   APIs   │              │   │
-│  │  │   🤖     │  │   ⚙️     │  │   🔧     │              │   │
-│  │  └────┬─────┘  └────┬─────┘  └────┬─────┘              │   │
-│  └───────┼─────────────┼─────────────┼─────────────────────┘   │
-│          │             │             │                          │
-│          └─────────────┴─────────────┘                          │
-│                        │                                         │
-│                ⚡ Neural Signals                                 │
-│                (JSON-RPC 2.0 Protocol)                          │
-│                        ▼                                         │
-│  ┌─────────────────────────────────────────────────────────┐   │
-│  │               🧠 CORTEX BRAIN INTERFACE                  │   │
-│  │                 (MCP Server)                            │   │
-│  │                                                          │   │
-│  │  ┌──────────────────────────────────────────────────┐   │   │
-│  │  │            ⚡ Neural Signal Router                │   │   │
-│  │  │      (Directs signals to brain regions)          │   │   │
-│  │  └──────────────────────────────────────────────────┘   │   │
-│  │                        │                                 │   │
-│  │  ┌─────────┬──────────┼──────────┬─────────┐           │   │
-│  │  │         │          │          │         │            │   │
-│  │  ▼         ▼          ▼          ▼         ▼            │   │
-│  │  ┌───────┐ ┌────────┐ ┌────────┐ ┌───────┐ ┌────────┐ │   │
-│  │  │ Core  │ │Analysis│ │Planning│ │Govern.│ │ Debug  │ │   │
-│  │  │ Tools │ │ Tools  │ │ Tools  │ │ Tools │ │ Tools  │ │   │
-│  │  └───────┘ └────────┘ └────────┘ └───────┘ └────────┘ │   │
-│  └─────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                      MCP CLIENTS                            │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  │
+│  │ Copilot  │  │  Claude  │  │  Cursor  │  │  Custom  │  │
+│  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘  │
+│       │             │             │             │         │
+│       └─────────────┴─────────────┴─────────────┘         │
+│                     │ JSON-RPC 2.0                        │
+└─────────────────────┼─────────────────────────────────────┘
+                      │
+┌─────────────────────┼─────────────────────────────────────┐
+│              CORTEX MCP SERVER                            │
+│  ┌───────────────────────────────────────────────────┐   │
+│  │                 Transport Layer                    │   │
+│  │  ┌──────────────┐         ┌──────────────┐       │   │
+│  │  │ stdio        │         │ HTTP         │       │   │
+│  │  │ (dev mode)   │         │ (production) │       │   │
+│  │  │ stdin/stdout │         │ Port 8000    │       │   │
+│  │  └──────────────┘         └──────────────┘       │   │
+│  └───────────────────────────────────────────────────┘   │
+│  ┌───────────────────────────────────────────────────┐   │
+│  │              Protocol Handler                      │   │
+│  │  • JSON-RPC 2.0 parser                           │   │
+│  │  • Request validation                            │   │
+│  │  • Response serialization                        │   │
+│  │  • Error handling                                │   │
+│  └───────────────────────────────────────────────────┘   │
+│  ┌───────────────────────────────────────────────────┐   │
+│  │              Tool Registry                         │   │
+│  │  • 86 tools registered         │   │
+│  │  • Dynamic discovery                             │   │
+│  │  • Schema validation                             │   │
+│  │  • Handler routing                               │   │
+│  └───────────────────────────────────────────────────┘   │
+│  ┌───────────────────────────────────────────────────┐   │
+│  │              Tool Handlers                         │   │
+│  │  • cortex_process_request → MasterOrchestrator   │   │
+│  │  • cortex_lens_analyze → LENSSynthesis          │   │
+│  │  • cortex_challenge → ChallengeEngine            │   │
+│  │  • ... 83 more tools                    │   │
+│  └───────────────────────────────────────────────────┘   │
+└───────────────────────────────────────────────────────────┘
+                      │
+┌─────────────────────┼─────────────────────────────────────┐
+│         CORTEX ORCHESTRATION LAYER                        │
+│              (60 orchestrators)              │
+└───────────────────────────────────────────────────────────┘
 ```
 
-### D3.js MCP Protocol Flow
+---
+
+## MCP Protocol Flow
+
+### Tool Discovery
 
 ```json
+// CLIENT REQUEST
 {
-  "type": "protocol_sequence",
-  "title": "MCP Neural Communication Protocol",
-  "phases": [
-    {
-      "name": "🤝 Neural Handshake",
-      "steps": [
-        {
-          "client": "VS Code Copilot",
-          "action": "Connect to MCP Server",
-          "protocol": "JSON-RPC 2.0 over WebSocket/HTTP",
-          "payload": {"jsonrpc": "2.0", "method": "initialize", "params": {"capabilities": ["tools"]}}
-        },
-        {
-          "server": "CORTEX Brain",
-          "action": "Send Capabilities",
-          "payload": {"tools": [{"name": "cortex_process_request", "description": "Main request processor"}]}
-        },
-        {
-          "client": "VS Code Copilot", 
-          "action": "Acknowledge",
-          "payload": {"jsonrpc": "2.0", "method": "initialized", "params": {}}
+  "jsonrpc": "2.0",
+  "method": "tools/list",
+  "id": 1
+}
+
+// SERVER RESPONSE
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "tools": [
+      {
+        "name": "cortex_process_request",
+        "description": "Primary entry point for CORTEX request processing",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "request": {"type": "string"},
+            "enable_challenge": {"type": "boolean"}
+          },
+          "required": ["request"]
         }
-      ]
-    },
-    {
-      "name": "🧠 Cognitive Request",
-      "steps": [
-        {
-          "client": "VS Code Copilot",
-          "action": "Send Thought",
-          "method": "tools/call",
-          "payload": {
-            "name": "cortex_process_request",
-            "arguments": {
-              "operation": "implement",
-              "request": "Add user authentication to the API",
-              "context": {"file_path": "src/api/auth.py", "language": "python"}
-            }
-          }
-        },
-        {
-          "server": "CORTEX Brain",
-          "action": "Process Neural Signal", 
-          "internal_flow": [
-            "Route to MasterOrchestrator",
-            "Classify intent via IntentRouter", 
-            "Analyze context via LENS",
-            "Execute via TDDOrchestrator",
-            "Apply governance checks"
-          ]
-        },
-        {
-          "server": "CORTEX Brain",
-          "action": "Return Intelligence",
-          "payload": {
-            "result": {
-              "status": "success",
-              "implementation": "Generated auth code with tests",
-              "tests_created": 8,
-              "coverage": "94%",
-              "audit_trail": "AC_START: AC-AUTH-001..."
-            }
-          }
-        }
-      ]
-    }
-  ]
+      },
+      // ... 85 more tools
+    ]
+  },
+  "id": 1
 }
 ```
 
-### D3.js Tool Ecosystem Map
+### Tool Invocation
 
 ```json
+// CLIENT REQUEST
 {
-  "type": "ecosystem_map", 
-  "title": "MCP Tool Neural Network",
-  "center": {"name": "🧠 MCP Server", "size": 100},
-  "tool_categories": [
-    {
-      "name": "🧠 Core Cognitive Tools",
-      "color": "#4CAF50",
-      "tools": [
-        {"name": "cortex_process_request", "usage": 450, "success_rate": 97.2},
-        {"name": "cortex_challenge", "usage": 120, "success_rate": 94.8},
-        {"name": "cortex_total_recall", "usage": 85, "success_rate": 96.1},
-        {"name": "cortex_lens_analyze", "usage": 380, "success_rate": 95.7}
-      ]
-    },
-    {
-      "name": "🔍 Analysis & Intelligence", 
-      "color": "#2196F3",
-      "tools": [
-        {"name": "cortex_git_history", "usage": 220, "success_rate": 98.9},
-        {"name": "cortex_ast_analyze", "usage": 195, "success_rate": 97.3},
-        {"name": "cortex_detect_duplicates", "usage": 140, "success_rate": 93.4},
-        {"name": "cortex_pattern_analysis", "usage": 165, "success_rate": 91.8}
-      ]
-    },
-    {
-      "name": "📅 Planning & Strategy",
-      "color": "#FF9800", 
-      "tools": [
-        {"name": "cortex_plan_setup", "usage": 95, "success_rate": 89.2},
-        {"name": "cortex_plan_teardown", "usage": 78, "success_rate": 92.1},
-        {"name": "cortex_plan_resolve", "usage": 65, "success_rate": 88.7},
-        {"name": "cortex_plan_sync", "usage": 55, "success_rate": 94.3}
-      ]
-    },
-    {
-      "name": "🛡️ Governance & Quality",
-      "color": "#E91E63",
-      "tools": [
-        {"name": "cortex_audit", "usage": 180, "success_rate": 99.1},
-        {"name": "cortex_governance_check", "usage": 210, "success_rate": 98.7},
-        {"name": "cortex_security_scan", "usage": 145, "success_rate": 96.8},
-        {"name": "cortex_compliance_validate", "usage": 125, "success_rate": 97.9}
-      ]
+  "jsonrpc": "2.0",
+  "method": "tools/call",
+  "params": {
+    "name": "cortex_lens_analyze",
+    "arguments": {
+      "target": "src/auth/",
+      "analysis_type": "security"
     }
-  ]
+  },
+  "id": 2
+}
+
+// SERVER RESPONSE
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Security Analysis Results:\n✅ No hardcoded secrets\n..."
+      }
+    ]
+  },
+  "id": 2
 }
 ```
 
-### Real-time MCP Metrics
+---
+
+## Configuration
+
+### VS Code (GitHub Copilot)
+
+**File:** `.vscode/mcp.json`
 
 ```json
 {
-  "type": "real_time_metrics",
-  "title": "MCP Neural Activity Monitor", 
-  "update_frequency": "1s",
-  "metrics": [
-    {
-      "name": "Neural Signal Rate",
-      "type": "line_chart",
-      "current_value": 847,
-      "unit": "requests/min",
-      "trend": "+12%",
-      "history": [820, 835, 842, 847, 851, 848, 847]
-    },
-    {
-      "name": "Cognitive Response Time",
-      "type": "histogram",
-      "p50": "245ms",
-      "p95": "890ms", 
-      "p99": "1.2s",
-      "distribution": [
-        {"range": "0-100ms", "count": 145},
-        {"range": "100-500ms", "count": 423},
-        {"range": "500ms-1s", "count": 186},
-        {"range": "1s-2s", "count": 67},
-        {"range": "2s+", "count": 12}
-      ]
-    },
-    {
-      "name": "Tool Usage Heat Map",
-      "type": "heatmap",
-      "data": {
-        "hours": ["00", "04", "08", "12", "16", "20"],
-        "tools": [
-          {"name": "process_request", "values": [45, 120, 380, 450, 420, 180]},
-          {"name": "lens_analyze", "values": [25, 85, 280, 380, 350, 150]},
-          {"name": "git_history", "values": [15, 45, 180, 220, 195, 95]},
-          {"name": "audit", "values": [30, 55, 145, 180, 160, 85]}
-        ]
+  "mcpServers": {
+    "cortex": {
+      "command": "python",
+      "args": ["-m", "cortex.mcp"],
+      "env": {
+        "CORTEX_MODE": "production",
+        "CORTEX_LOG_LEVEL": "INFO"
       }
     }
-  ]
+  }
 }
 ```
-│  │  ┌───┐   ┌───┐      ┌───┐      ┌───┐    ┌───┐         │   │
-│  │  │T1 │   │T2 │      │T3 │      │T4 │    │TN │         │   │
-│  │  └───┘   └───┘      └───┘      └───┘    └───┘         │   │
-│  │  35+ MCP Tools                                         │   │
-│  └─────────────────────────────────────────────────────────┘   │
-│                        │                                         │
-│                        ▼                                         │
-│  ┌─────────────────────────────────────────────────────────┐   │
-│  │                  Orchestrators                           │   │
-│  │              (23 registered)                             │   │
-│  └─────────────────────────────────────────────────────────┘   │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
+
+### Claude Desktop
+
+**File:** `~/.config/claude-desktop/mcp.json` (Linux/Mac)  
+**File:** `%APPDATA%\Claude\mcp.json` (Windows)
+
+```json
+{
+  "mcpServers": {
+    "cortex": {
+      "command": "python",
+      "args": ["-m", "cortex.mcp"],
+      "cwd": "/path/to/CORTEX"
+    }
+  }
+}
+```
+
+### Cursor IDE
+
+**File:** `.cursor/mcp.json`
+
+```json
+{
+  "servers": {
+    "cortex": {
+      "transport": "stdio",
+      "command": ["python", "-m", "cortex.mcp"],
+      "autoStart": true
+    }
+  }
+}
 ```
 
 ---
 
-## MCP-First Architecture
+## Production Deployment
 
-### Design Principles
+### HTTP Mode (Recommended for Production)
 
-| Principle | Description |
-|-----------|-------------|
-| **Single Interface** | All operations via MCP tools |
-| **No Direct Imports** | CORTEX = SaaS, not a library |
-| **Tool-Based Access** | Every capability is a tool |
-| **Protocol Compliance** | JSON-RPC 2.0 standard |
+```bash
+# Start MCP server in HTTP mode
+python -m cortex.mcp --transport http --port 8000
 
-### Why MCP-First?
-
-```
-Traditional Library Approach:
-  from cortex.lens import analyze
-  result = analyze("file.py")  # Direct import
-  
-MCP-First Approach:
-  POST /mcp {"method": "tools/call", "params": {"name": "cortex_lens_analyze"}}
+# With SSL (production)
+python -m cortex.mcp --transport http --port 8000   --cert /path/to/cert.pem   --key /path/to/key.pem
 ```
 
-**Benefits:**
-- ✅ Consistent API surface
-- ✅ Built-in governance enforcement
-- ✅ Audit trails for every operation
-- ✅ Security gates applied uniformly
-- ✅ Version management
-- ✅ Rate limiting
+### Docker Deployment
+
+```dockerfile
+FROM python:3.9-slim
+
+WORKDIR /app
+COPY . .
+RUN pip install -r requirements.txt
+
+EXPOSE 8000
+
+CMD ["python", "-m", "cortex.mcp", "--transport", "http", "--port", "8000"]
+```
+
+### Kubernetes Deployment
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cortex-mcp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: cortex-mcp
+  template:
+    metadata:
+      labels:
+        app: cortex-mcp
+    spec:
+      containers:
+      - name: cortex-mcp
+        image: cortex:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: CORTEX_MODE
+          value: "production"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cortex-mcp-service
+spec:
+  selector:
+    app: cortex-mcp
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8000
+  type: LoadBalancer
+```
 
 ---
 
-## Core Concepts
+## Monitoring & Observability
 
-### Tools
+### Health Checks
 
-A **tool** is a discrete capability exposed via MCP:
+```bash
+# Check server health
+curl http://localhost:8000/health
+
+# Response
+{
+  "status": "healthy",
+  "uptime_seconds": 3600,
+  "tools_registered": 86,
+  "orchestrators_loaded": 60
+}
+```
+
+### Prometheus Metrics
+
+```
+# HELP cortex_mcp_requests_total Total MCP requests processed
+# TYPE cortex_mcp_requests_total counter
+cortex_mcp_requests_total{tool="cortex_process_request"} 1247
+
+# HELP cortex_mcp_request_duration_seconds Request duration in seconds
+# TYPE cortex_mcp_request_duration_seconds histogram
+cortex_mcp_request_duration_seconds_bucket{le="0.1"} 342
+cortex_mcp_request_duration_seconds_bucket{le="0.5"} 891
+cortex_mcp_request_duration_seconds_bucket{le="1.0"} 1156
+cortex_mcp_request_duration_seconds_bucket{le="5.0"} 1247
+```
+
+---
+
+## Security
+
+### Authentication
 
 ```python
-# Tool Definition
-{
-    "name": "cortex_lens_analyze",
-    "description": "Perform comprehensive code analysis",
-    "inputSchema": {
-        "type": "object",
-        "properties": {
-            "target": {"type": "string"},
-            "analyzers": {"type": "array", "items": {"type": "string"}}
-        },
-        "required": ["target"]
-    }
+# Enable API key authentication
+export CORTEX_API_KEY="your-secret-key"
+
+# Client must include in headers
+{"Authorization": "Bearer your-secret-key"}
+```
+
+### Rate Limiting
+
+```python
+# Configure in cortex/mcp/config.py
+RATE_LIMIT = {
+    "requests_per_minute": 60,
+    "burst": 10
 }
 ```
 
-### Requests
+### HTTPS/TLS
 
-Clients invoke tools via JSON-RPC requests:
+```bash
+# Generate self-signed cert (development)
+openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365
 
-```json
-{
-    "jsonrpc": "2.0",
-    "method": "tools/call",
-    "params": {
-        "name": "cortex_lens_analyze",
-        "arguments": {
-            "target": "src/auth/service.py",
-            "analyzers": ["git", "ast"]
-        }
-    },
-    "id": "req-001"
-}
-```
-
-### Responses
-
-Tools return structured responses:
-
-```json
-{
-    "jsonrpc": "2.0",
-    "result": {
-        "content": [
-            {
-                "type": "text",
-                "text": "Analysis complete. Found 3 issues."
-            }
-        ],
-        "data": {
-            "issues": [...],
-            "metrics": {...}
-        }
-    },
-    "id": "req-001"
-}
-```
-
-### Errors
-
-Errors follow JSON-RPC conventions:
-
-```json
-{
-    "jsonrpc": "2.0",
-    "error": {
-        "code": -32004,
-        "message": "Governance validation failed",
-        "data": {
-            "violations": [
-                {"rule": "CORE-008", "message": "Tests required"}
-            ]
-        }
-    },
-    "id": "req-001"
-}
+# Start with TLS
+python -m cortex.mcp --transport http --port 8000   --cert cert.pem --key key.pem
 ```
 
 ---
 
-## Benefits
+## Performance Tuning
 
-### For Developers
-
-| Benefit | Description |
-|---------|-------------|
-| Consistent API | Same interface for all tools |
-| Self-Documenting | Tool schemas describe usage |
-| IDE Integration | Works with VS Code Copilot |
-| Error Handling | Standard error format |
-
-### For Operations
-
-| Benefit | Description |
-|---------|-------------|
-| Observability | All calls logged and traced |
-| Rate Limiting | Built-in throttling |
-| Security | Uniform authentication |
-| Versioning | Tool version management |
-
-### For Governance
-
-| Benefit | Description |
-|---------|-------------|
-| Audit Trail | Every call recorded |
-| Policy Enforcement | Gates on every operation |
-| Compliance | CORE rules applied |
-| Visibility | Full operation history |
+| Parameter | Default | Tuning |
+|-----------|---------|--------|
+| **Max Concurrent Requests** | 50 | Increase for high load |
+| **Request Timeout** | 30s | Increase for long operations |
+| **Tool Cache TTL** | 300s | Adjust based on tool stability |
+| **Max Response Size** | 10MB | Limit to prevent memory issues |
 
 ---
 
-## Quick Start
-
-### Start MCP Server
-
-```bash
-# Development
-python -m cortex.mcp.server
-
-# Production
-uvicorn cortex.mcp.server:app --host 0.0.0.0 --port 8000
-```
-
-### List Available Tools
-
-```bash
-curl -X POST http://localhost:8000/mcp \
-  -H "Content-Type: application/json" \
-  -d '{
-    "jsonrpc": "2.0",
-    "method": "tools/list",
-    "id": 1
-  }'
-```
-
-### Call a Tool
-
-```bash
-curl -X POST http://localhost:8000/mcp \
-  -H "Content-Type: application/json" \
-  -d '{
-    "jsonrpc": "2.0",
-    "method": "tools/call",
-    "params": {
-        "name": "cortex_lens_analyze",
-        "arguments": {
-            "target": "src/app.py"
-        }
-    },
-    "id": 1
-  }'
-```
-
-### Health Check
-
-```bash
-curl http://localhost:8000/health
-# {"status": "healthy", "orchestrators": 23, "tools": 35}
-```
-
----
-
-## Related Documents
-
-- [MCP Protocol](protocol.md) — Protocol details
-- [Tools Catalog](tools-catalog.md) — All tools
-- [Integration Guide](integration.md) — Client integration
-- [Versioning](versioning.md) — Version management
-
----
-
-*Part of CORTEX Architecture Documentation*
+**Last Updated:** 2026-02-11 06:41:25  
+**MCP Specification:** https://modelcontextprotocol.io  
+**CORTEX MCP Version:** 2.0.0
