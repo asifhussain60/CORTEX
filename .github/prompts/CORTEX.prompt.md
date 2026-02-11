@@ -1,5 +1,5 @@
 # CORTEX Master Orchestrator Prompt
-**Version:** 8.3 | **Updated:** 2026-02-06 | **Authority:** MCP-First SaaS Architecture | **Status:** ✅ PRODUCTION | **Token Optimization:** ✅
+**Version:** 8.4 | **Updated:** 2026-02-11 | **Authority:** MCP-First SaaS Architecture | **Status:** ✅ PRODUCTION | **Token Optimization:** ✅
 
 ---
 
@@ -197,12 +197,46 @@ ${workspaceFolder}/.venv/bin/python -m cortex.mcp --help
 | `optimize_orchestrator_config` | Config optimization |
 | `get_operation_status` | Operation status query |
 
+**Audit Tools (2):**
+| Tool | Purpose |
+|------|---------||
+| `cortex_audit_cohesion` | Codebase health scanning with auto-fix recommendations |
+| `cortex_audit_remediation_plan` | Generate remediation plans from audit results |
+
+**Learning & Digest Tools (4):**
+| Tool | Purpose |
+|------|---------||
+| `cortex_digest_session` | Extract learnings from chat sessions (auto-ingests to knowledge base) |
+| `cortex_bulk_digest_files` | Bulk markdown ingestion with intelligent routing |
+| `cortex_unified_digest_ingest` | Unified DIGEST/INGEST with auto-detection (Phase 72) |
+| `cortex_ask` | Educational queries with implementation verification |
+
+**Debugging Tools (9):**
+| Tool | Purpose |
+|------|---------||
+| `cortex_debug_inject` | Inject debug markers into source files (JS/TS/Python/HTML) |
+| `cortex_debug_capture` | Capture console logs during test execution |
+| `cortex_debug_analyze` | Analyze captured logs for race conditions and issues |
+| `cortex_debug_fix_plan` | Generate fix recommendations from debug analysis |
+| `cortex_debug_cleanup` | Remove all debug markers cleanly |
+| `cortex_debug_full_cycle` | Complete debug workflow (inject → capture → analyze → fix-plan → cleanup) |
+| `cortex_debug_status` | Get current debug session status and metadata |
+| `cortex_debug_verify` | Verify all markers removed |
+| `cortex_debug_restore` | Restore files from backup (emergency recovery) |
+
+**Cleanup Tools (1):**
+| Tool | Purpose |
+|------|---------||
+| `cortex_vacuum` | Markdown sprawl cleanup with automated archival and verification |
+
 **Utility Tools (1):**
 | Tool | Purpose |
-|------|---------|
+|------|---------||
 | `transform_tool` | Data format transformation (JSON/YAML/XML) |
 
 **Note:** sample_tool and echo_tool removed (dev-only, Phase 54 cleanup)
+
+**Total:** 28 production MCP tools available (all work universally for CORTEX repo and user production repos)
 
 ### Troubleshooting
 
@@ -655,12 +689,73 @@ Merge: Company takes precedence → CORTEX fills gaps
 
 ---
 
+## 🎯 Available Modes
+
+**All modes work universally for CORTEX repo and user production repos via MCP-FIRST architecture.**
+
+| Mode | Primary MCP Tool | Purpose | Universal? |
+|------|------------------|---------|------------|
+| **IMPLEMENT** | `cortex_process_request` | TDD implementation with RED→GREEN→REFACTOR | ✅ YES |
+| **FIX** | `cortex_process_request` | Bug fixing with root cause analysis | ✅ YES |
+| **REFACTOR** | `cortex_process_request` | Code improvement with quality gates | ✅ YES |
+| **ANALYZE** | `cortex_lens_analyze` | Code intelligence (git+AST+comments) | ✅ YES |
+| **AUDIT** | `cortex_audit_cohesion` | Codebase health scanning with auto-fix | ✅ YES |
+| **DIGEST** | `cortex_digest_session` | Chat session learning ingestion | ✅ YES |
+| **DEBUG** | `cortex_debug_full_cycle` | Complete debug workflow (multi-stack) | ✅ YES |
+| **VACUUM** | `cortex_vacuum` | Markdown sprawl cleanup with archival | ✅ YES |
+| **PLAN** | `cortex_plan_execute_autonomous` | Phase lifecycle management | ✅ YES |
+| **QUERY** | `cortex_ask` | Educational queries with truth verification | ✅ YES |
+| **ONBOARD** | `cortex_onboard_repository` | Repository onboarding + security scan | ✅ YES |
+
+### Mode Details
+
+#### 🔍 AUDIT Mode
+**Trigger:** `/audit` command  
+**Purpose:** Autonomous codebase health scanning with auto-fix recommendations  
+**Flow:** Scan → Detect issues → Generate fixes → Report inline  
+**MCP Tools:** `cortex_audit_cohesion`, `cortex_audit_remediation_plan`  
+**Output:** Inline findings with auto-fix suggestions (no markdown files)  
+**Universal:** Works on any repository (CORTEX or user production)
+
+#### 📚 DIGEST Mode
+**Trigger:** `/digest {file}` command or auto-detect chat files  
+**Purpose:** Extract learnings from chat sessions and ingest into knowledge base  
+**Flow:** Parse → Extract insights → Synthesize → Store to cortex_brain  
+**MCP Tools:** `cortex_digest_session`, `cortex_unified_digest_ingest`  
+**Auto-Routing:** Chat files → DIGEST, Knowledge entries → INGEST (Phase 72)  
+**Universal:** Works on any chat file from any repository
+
+#### 🐛 DEBUG Mode
+**Trigger:** `/debug {path}` command  
+**Purpose:** Complete debug workflow with marker injection and analysis  
+**Flow:** Inject markers → Capture logs → Analyze patterns → Fix-plan → Cleanup  
+**MCP Tools:** `cortex_debug_inject`, `cortex_debug_capture`, `cortex_debug_analyze`, `cortex_debug_fix_plan`, `cortex_debug_cleanup`  
+**Supports:** JavaScript, TypeScript, Python, HTML (multi-stack)  
+**Safety:** Automatic backups, surgical cleanup, verification  
+**Universal:** Works on any codebase (React, Angular, Vue, Django, Flask, .NET, etc.)
+
+#### 🧹 VACUUM Mode
+**Trigger:** `/vacuum` command  
+**Purpose:** Cleanup markdown sprawl with automated archival  
+**Flow:** Scan → Plan → Archive → Verify → Audit offer  
+**MCP Tools:** `cortex_vacuum`  
+**Safety:** Never deletes (only archives), age-based, conflict resolution  
+**Universal:** Works on any repository with markdown sprawl
+
+---
+
 ## 🚀 Quick Commands
 
 | Command | Action |
 |---------|--------|
 | `/implement {feature}` | TDD implementation |
 | `/fix {issue}` | Bug fixing |
+| `/audit` | **Autonomous codebase health scan** |
+| `/digest {file}` | **Extract learnings from chat session** |
+| `/ingest {file}` | **Alias for `/digest` (unified routing)** |
+| `/debug {path}` | **Full debug cycle (inject → capture → analyze → fix-plan → cleanup)** |
+| `/debug-cleanup` | **Remove all CORTEX_DEBUG markers** |
+| `/vacuum` | **Cleanup markdown sprawl with automated archival** |
 | `/dashboard generate {repo}` | Generate dashboard v3 JSON data |
 | `/dashboard serve {port}` | Serve dashboard via HTTP |
 | `/dashboard test` | Run Playwright E2E tests |
@@ -669,9 +764,9 @@ Merge: Company takes precedence → CORTEX fills gaps
 | `/analyze {scope}` | LENS analysis |
 | `/recall {feature}` | Feature discovery |
 | `/onboard {path}` | Repository onboarding + security scan |
-| `/debug {path}` | **DEBUG:** Full debug cycle (inject → capture → analyze → fix-plan) |
-| `/debug-cleanup` | **DEBUG:** Remove all CORTEX_DEBUG markers |
-| `/digest {file}` | **Extract learnings from chat session** |
+| `/ask {question}` | **Educational queries with truth verification** |
+| `/query {question}` | **Alias for `/ask`** |
+| `/check-env` | **Environment validation**
 
 ---
 
