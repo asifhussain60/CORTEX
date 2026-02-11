@@ -17,6 +17,7 @@ from .base import (
 from .phase import PhaseExecutionStrategy, PhaseState
 from .wave import WaveOrchestrationStrategy, WavePhaseInfo
 from .track import TrackParallelizationStrategy, ResourceAllocation
+from .factory import StrategyFactory, StrategyComposer, MetricsCollector
 
 __all__ = [
     # Base classes
@@ -33,4 +34,8 @@ __all__ = [
     # Track strategy
     "TrackParallelizationStrategy",
     "ResourceAllocation",
+    # Factory and composition
+    "StrategyFactory",
+    "StrategyComposer",
+    "MetricsCollector",
 ]
