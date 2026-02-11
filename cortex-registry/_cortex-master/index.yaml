@@ -228,14 +228,82 @@ master_remediation:
       file_reference: "WAVE-6-COMPREHENSIVE-CLEANUP-REFACTORING.yaml"
     
     - wave: 8
+      name: "Planning Orchestrator Capability (Registry Separation + Layered Export)"
+      release: "R8-PLANNING-CAPABILITY"
+      priority: "P0-CRITICAL"
+      duration: "12-16 days"
+      phases: 4
+      status: "planned"
+      requires: ["R1-FOUNDATION", "R7-CONSOLIDATION"]
+      roi: 8.8
+      roi_composite: 8.9
+      highlights:
+        - "ENH-090: Unified Planning Orchestrator (strategy-based, Wave 7 consolidated pattern)"
+        - "ENH-091: Registry separation + git blacklist (_cortex-master internal)"
+        - "ENH-092: Layered capability export (algorithms + templates shipped)"
+        - "ENH-093: User planning registry templates (simple, complex, 50+ wave patterns)"
+      value_delivered:
+        - "✅ CORTEX's internal master plan stays private (blacklist + governance)"
+        - "✅ Users get orchestration capability (algorithms, strategies, patterns)"
+        - "✅ Production-grade planning orchestrator for user repos"
+        - "✅ Algorithms proven on 50-wave CORTEX plan"
+        - "✅ Zero code duplication (single UnifiedPlanningOrchestrator)"
+        - "✅ Extensible forever (strategy pattern scales to N hierarchies)"
+      dependencies: ["ENH-087"]
+      blocks: ["R9-ARCH-DOCS"]
+      architectural_decisions:
+        separation_model: "Layered capability export (user-facing capability, internal artifacts blacklisted)"
+        internal_artifact_control: "Git blacklist + visibility flags (_cortex-master)"
+        release_strategy: "Capability (cortex/orchestrators/planning/) to origin/main, artifacts internal only"
+        orchestrator_count: "1 (UnifiedPlanningOrchestrator)"
+        code_reuse: "100% (shared algorithms)"
+        export_scope: "Strategies, models, templates shipped; master plan stays internal"
+      governance:
+        - "AC-REGISTRY-SEP-001: _cortex-master blacklist in .gitignore"
+        - "AC-REGISTRY-SEP-002: Pre-commit hook blocks _cortex-master release to origin/main"
+        - "AC-REGISTRY-SEP-003: Capability models in cortex/orchestrators/planning/"
+        - "AC-REGISTRY-SEP-004: User templates in cortex/templates/planning/"
+        - "AC-REGISTRY-SEP-005: Visibility metadata in registry YAML"
+      stages:
+        - stage: 1
+          name: "UnifiedPlanningOrchestrator Strategy Extraction"
+          effort: "6 hours"
+          status: "planned"
+          description: "Extract Phase/Wave/Track strategies from EnhancedPlanningOrchestrator, consolidate into single orchestrator"
+          deliverables: ["PhaseExecutionStrategy", "WaveOrchestrationStrategy", "TrackParallelizationStrategy"]
+        
+        - stage: 2
+          name: "Registry Separation + Blacklist Setup"
+          effort: "4 hours"
+          status: "planned"
+          description: "Implement git hooks, visibility flags, .gitignore rules for _cortex-master"
+          deliverables: ["Updated .gitignore", "pre-commit hook", "visibility flags in index.yaml"]
+        
+        - stage: 3
+          name: "Capability Models Export"
+          effort: "6 hours"
+          status: "planned"
+          description: "Extract algorithm implementations (ROI scoring, dependency resolution, parallelism), create public API"
+          deliverables: ["cortex/orchestrators/planning/strategies/", "cortex/orchestrators/planning/models/", "Public API surface"]
+        
+        - stage: 4
+          name: "User Templates + Documentation"
+          effort: "4 hours"
+          status: "planned"
+          description: "Simple/complex/50+ wave examples, user workflow guide, integration tests"
+          deliverables: ["cortex/templates/planning/", "User guide + examples", "Integration test suite"]
+      authority: "chat01.md (2026-02-11) + architectural challenge acceptance"
+      file_reference: "WAVE-8-PLANNING-CAPABILITY-SEPARATION.yaml"
+    
+    - wave: 9
       name: "Architecture Documentation Migration & Consolidation (Documentation SSOT)"
-      release: "R8-ARCH-DOCS"
+      release: "R9-ARCH-DOCS"
       priority: "P2-MEDIUM-HIGH"
       duration: "5-7 days"
-      phases: 2  # Architecture Migration + LENS Dashboards (Phase 53 S7-S9)
+      phases: 2
       status: "planned"
-      roi: 8.5  # High value for long-term maintainability
-      requires: ["R7-CONSOLIDATION", "R6-CLEANUP"]  # After major architecture changes
+      roi: 8.5
+      requires: ["R7-CONSOLIDATION", "R6-CLEANUP", "R8-PLANNING-CAPABILITY"]
       highlights:
         - "Migrate _workspaces/cortex-architecture → cortex-registry/architecture/"
         - "Auto-generate diagrams from wiring.yaml + EventBus topology"
@@ -249,8 +317,8 @@ master_remediation:
         - "✅ Zero documentation drift (contradictions eliminated)"
         - "✅ Automated doc generation pipeline"
         - "✅ Delete _workspaces/cortex-architecture (cleanup)"
-      dependencies: ["ENH-087", "ENH-082"]  # After orchestrator consolidation + response templates
-      blocks: ["R9-CLEANUP"]
+      dependencies: ["ENH-087", "ENH-082", "ENH-090"]
+      blocks: ["R10-CLEANUP"]
       authority: "CORE-002 (markdown suppression) + chat01.md analysis + 2026-02-11 reprioritization"
       architectural_patterns:
         - "Documentation as Code (auto-generated from wiring)"
@@ -261,7 +329,7 @@ master_remediation:
         - "Auto-generation scripts (diagrams, metrics, topology)"
         - "Phase 53 S7-S9: LENS Dashboard Suite (HTML + embedded data)"
         - "Contradiction detection report"
-        - "cortex-architect.prompt.md v16.0 (updated counts)"
+        - "cortex-architect.prompt.md v17.0 (updated counts)"
         - "DELETE: _workspaces/cortex-architecture/"
       execution_mode: "autonomous_silent_with_validation"
       
@@ -274,13 +342,14 @@ master_remediation:
         
         NEW PLAN:
         - Phase 53 S1-S6 → Wave 7 (LENS Pipeline Wiring) - 14-18 days
-        - Phase 53 S7-S9 → Wave 8 (Dashboard Suite) - DEFERRED
+        - Phase 53 S7-S9 → Wave 9 (Dashboard Suite) - DEFERRED
         
         RATIONALE:
         1. Data Dependency: S7-S9 requires validated data layer (Track 5)
         2. Visualization Priority: Dashboards are P2 (nice-to-have, not critical)
         3. Batch Efficiency: Combine with architecture docs (single context switch)
         4. Architecture Stability: Dashboards visualize orchestrator topology (stable after Wave 7)
+        5. Planning Capability: Wave 8 enables planned registry separation
         
         DELIVERABLES (S7-S9):
         - Repository onboarding dashboard (HTML + embedded data)
@@ -289,15 +358,15 @@ master_remediation:
         - Dashboard suite landing page (index.html)
         - Auto-generated from validated data layer (Track 5 ensures correctness)
     
-    - wave: 9
+    - wave: 10
       name: "Workspace Cleanup & Structure Optimization (Repository Hygiene)"
-      release: "R9-CLEANUP"
+      release: "R10-CLEANUP"
       priority: "P2-MEDIUM"
       duration: "3-4 days"
-      phases: 1  # Cleanup + Consolidation
+      phases: 1
       status: "planned"
-      roi: 7.5  # Developer experience improvement
-      requires: ["R8-ARCH-DOCS"]  # After architecture migration
+      roi: 7.5
+      requires: ["R9-ARCH-DOCS"]
       highlights:
         - "Archive development artifacts (_workspaces/__bak-docs/)"
         - "Complete cortex_brain migration (consolidate state/tier files)"
