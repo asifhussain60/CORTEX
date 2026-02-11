@@ -510,23 +510,33 @@ class UnifiedRefactoringOrchestrator:
         Raises:
             ValueError: If no strategy can handle the operation
         """
-        # Find strategy that can handle this operation
-        for strategy in self.strategies:
-            if strategy.can_handle(request.operation):
-                if strategy.can_handle_language(request.language):
-                    return strategy.execute(request)
-        
-        # No strategy found
-        error_msg = (
-            f"No strategy available for operation {request.operation.value} "
-            f"in {request.language.value}"
-        )
-        logger.error(error_msg)
-        return RefactoringResult(
-            success=False,
-            operation=request.operation,
-            error=error_msg
-        )
+        try:
+            # Find strategy that can handle this operation
+            for strategy in self.strategies:
+                if strategy.can_handle(request.operation):
+                    if strategy.can_handle_language(request.language):
+                        return strategy.execute(request)
+            
+            # No strategy found
+            error_msg = (
+                f"No strategy available for operation {request.operation.value} "
+                f"in {request.language.value}"
+            )
+            logger.error(error_msg)
+            return RefactoringResult(
+                success=False,
+                operation=request.operation,
+                error=error_msg
+            )
+        except Exception as e:
+            # Graceful error handling
+            error_msg = f"Refactoring orchestrator error: {str(e)}"
+            logger.exception(error_msg)
+            return RefactoringResult(
+                success=False,
+                operation=request.operation,
+                error=error_msg
+            )
     
     def get_supported_operations(self) -> List[RefactoringOperationType]:
         """Get all supported operations across all strategies."""
