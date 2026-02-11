@@ -14,13 +14,13 @@ category: CORTEX_CORE
 precedence: HIGHEST
 
 metadata:
-  rule_count: 50
+  rule_count: 54
   author: "Asif Hussain"
   copyright: "© 2025-2026 Asif Hussain. All rights reserved."
-  last_update: "2026-02-08 - CORE-050 added for MCP-FIRST Enforcement (Phase 51)"
-  version: "3.4"
-  consolidation_date: "2026-02-08"
-  consolidation_status: "Phase 51 Prep Complete - CORE-050 added for Quality Degradation Prevention"
+  last_update: "2026-02-11 - CORE-051 through CORE-054 added (ENH-001/002/003/004 from chat01.md remediation)"
+  version: "3.5"
+  consolidation_date: "2026-02-11"
+  consolidation_status: "Phase A Complete - 4 new CORE rules added for MCP + Governance optimization"
   naming_system: "Dual naming - CORE-* (canonical ID) + Business Principle (human-readable alias)"
 
 categories:
@@ -1434,6 +1434,340 @@ rules:
       requires: "CORE-008 (TDD), CORE-019 (MCP routing), CORE-048 (Holistic validation)"
       enables: "Phase 51 MCP-FIRST enforcement"
       blocks_until: "EnvironmentIntegrityAgent implemented"
+
+  # --------------------------------------------------------------------------
+  # CORE-051: Intelligence-Architecture Tier Coupling (ENH-004)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-051
+    principle: "Intelligence Depth Matches Architectural Tier"
+    category: architecture_integrity
+    severity: warning
+    name: Intelligence-Architecture Tier Coupling
+    created: "2026-02-11"
+    description: |
+      AC_START: AC-ENH-004-001
+      Orchestrator architectural tier MUST inform LENS intelligence tier selection.
+      Prevents tier downgrades where tier 3 orchestrator gets tier 2 LENS intelligence.
+      
+      Business Principle: Match intelligence investment to architectural importance.
+      Complex orchestrators deserve deeper analysis.
+      
+      TIER COUPLING RULES:
+      - Tier 1 (core) orchestrators → LENS tier_2_quick (10s response, baseline intelligence)
+      - Tier 2 (specialized) → LENS tier_3_targeted (30s response, enhanced intelligence)
+      - Tier 3 (enterprise) → LENS tier_4_full (60s response, maximum intelligence)
+      - NO tier downgrades: tier 3 orchestrator CANNOT use tier_2 LENS
+      
+      WHY: Higher tier orchestrators handle more complex scenarios requiring
+      deeper code intelligence, security scanning, and dependency analysis.
+      AC_COMPLETE: AC-ENH-004-001 ✅ Tier coupling defined
+    
+    scope:
+      applies_to:
+        - "LensOrchestratorTierSelection.select_tier_for_intent()"
+        - "MasterOrchestrator LENS tier selection"
+        - "wiring.yaml orchestrator tier property"
+      
+      validation_rules:
+        - "Read orchestrator.tier from wiring.yaml"
+        - "Map tier to LENS tier: {1: tier_2_quick, 2: tier_3_targeted, 3: tier_4_full}"
+        - "Block if tier downgrade detected"
+    
+    enforcement_mechanism:
+      validation_point: "LensOrchestratorTierSelection.select_tier_for_orchestrator()"
+      enforcement_agent: "OrchestratorIntegrityValidator"
+      logging: "LENS_TIER_SELECTED (orchestrator_tier=X, lens_tier=Y)"
+    
+    implementation:
+      location: "cortex/orchestrators/lens_orchestrator_integration.py"
+      method: "select_tier_for_orchestrator(orchestrator_tier, intent)"
+      wiring_property: "orchestrator.tier (1-3)"
+    
+    tests:
+      unit_tests:
+        - "test_core_051_tier1_gets_tier2_lens"
+        - "test_core_051_tier3_gets_tier4_lens"
+        - "test_core_051_no_tier_downgrade"
+      
+      integration_tests:
+        - "test_tier_coupling_end_to_end"
+
+  # --------------------------------------------------------------------------
+  # CORE-052: Holistic Validation Gate Mandatory (ENH-001 - Phase 48)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-052
+    principle: "Proactive Governance Over Reactive Enforcement"
+    category: quality_gates
+    severity: blocked
+    name: Holistic Validation Gate Mandatory
+    created: "2026-02-11"
+    description: |
+      AC_START: AC-ENH-001-001
+      ALL IMPLEMENT/FIX/REFACTOR intents MUST pass holistic validation BEFORE execution.
+      Uses Phase 48 HolisticValidationOrchestrator to detect regression risks proactively.
+      
+      Business Principle: Catch problems before they cascade. Validate dependencies,
+      registry consistency, and architecture drift BEFORE writing code.
+      
+      REQUIRED VALIDATIONS:
+      - ✅ Registry consistency (orchestrators, wiring, tests)
+      - ✅ Dependency graph analysis (circular deps, tier violations)
+      - ✅ Risk scoring (affected files, change type, test health)
+      - ✅ Architecture drift detection (deviation from master plan)
+      - ✅ Challenge Gate generation (alternatives, disagreements)
+      - ✅ cortex_brain integration (CORTEX self-development)
+      AC_COMPLETE: AC-ENH-001-001 ✅ Holistic validation mandatory
+    
+    scope:
+      applies_to:
+        - "IMPLEMENT intents (all feature implementations)"
+        - "FIX intents (all bug fixes)"
+        - "REFACTOR intents (all code improvements)"
+      
+      exempt:
+        - "ANALYZE intents (read-only operations)"
+        - "DESIGN intents (no code generation)"
+        - "AUDIT intents (discovery only)"
+    
+    validation_sequence:
+      1_registry_check:
+        - "Cross-validate orchestrators in wiring.yaml exist in codebase"
+        - "Verify MCP tools listed in wiring match MCPServer.list_tools()"
+        - "Check test coverage for affected orchestrators"
+      
+      2_dependency_analysis:
+        - "Build dependency graph for target files"
+        - "Detect circular dependencies (BLOCK if found)"
+        - "Validate tier precedence (tier0 > tier1 > tier2 > tier3)"
+      
+      3_risk_scoring:
+        - "Calculate regression risk (0-1.0 scale)"
+        - "Factors: file criticality, change size, test health, recent failures"
+        - "BLOCK if risk > 0.7 without explicit user override"
+      
+      4_architecture_drift:
+        - "Compare request against master plan (cortex-registry/_cortex-master/)"
+        - "Detect deviations from approved architecture"
+        - "Flag misalignments for user review"
+      
+      5_challenge_gate:
+        - "Generate alternative approaches (≥3 alternatives)"
+        - "Present disagreements (when CORTEX detects better solution)"
+        - "Require user confirmation of selected approach"
+    
+    mcp_tool_integration:
+      primary_tool: "cortex_validate_holistically"
+      parameters:
+        operation: "IMPLEMENT | FIX | REFACTOR"
+        target: "file path or module name"
+        scope: "['orchestrators', 'wiring', 'tests']"
+        challenge_required: true
+      
+      fallback_mechanism:
+        when: "MCP server unavailable"
+        action: "Load HolisticValidationOrchestrator from .github/agents/core/"
+        degradation: "Manual validation steps, no auto-challenge"
+        logging: "LOG: HOLISTIC_VALIDATION_FALLBACK_MODE"
+    
+    success_criteria:
+      - "100% of IMPLEMENT/FIX/REFACTOR pass holistic validation"
+      - "Zero architecture drift regressions in production"
+      - "Challenge Gate presented for all complex implementations"
+      - "<2% holistic validation false positives"
+    
+    audit_trail:
+      events:
+        - "HOLISTIC_VALIDATION_STARTED"
+        - "REGISTRY_CHECK_PASSED / REGISTRY_CHECK_FAILED"
+        - "DEPENDENCY_ANALYSIS_PASSED / CIRCULAR_DEPENDENCY_DETECTED"
+        - "RISK_SCORE_CALCULATED (score=X.XX)"
+        - "CHALLENGE_GATE_PRESENTED"
+        - "HOLISTIC_VALIDATION_PASSED / HOLISTIC_VALIDATION_BLOCKED"
+    
+    implementation:
+      orchestrator: "HolisticValidationOrchestrator"
+      location: "cortex/orchestrators/core/holistic_validation_orchestrator.py"
+      enforcement_agent: "EnvironmentIntegrityAgent"
+      enforcement_point: "MasterOrchestrator.process_request() pre-execution gate"
+      mcp_tool: "cortex_validate_holistically"
+    
+    tests:
+      unit_tests:
+        - "test_core_052_holistic_validation_passes_valid_request"
+        - "test_core_052_holistic_validation_blocks_high_risk"
+        - "test_core_052_holistic_validation_detects_circular_deps"
+        - "test_core_052_challenge_gate_generation"
+        - "test_core_052_fallback_mode_without_mcp"
+      
+      integration_tests:
+        - "test_phase_48_holistic_validation_end_to_end"
+        - "test_holistic_validation_with_mcp_tool"
+        - "test_holistic_validation_fallback_graceful"
+    
+    governance_dependency:
+      requires: "CORE-048 (Holistic Validation exists), CORE-050 (No quality degradation)"
+      enables: "Phase 48 full enforcement, proactive governance"
+      blocks_until: "HolisticValidationOrchestrator wired in registry"
+
+  # --------------------------------------------------------------------------
+  # CORE-053: Context Crystallization Layer Timeout Policy (ENH-002 - Phase 49)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-053
+    principle: "Graceful Degradation with Transparency"
+    category: orchestration_lifecycle
+    severity: warning
+    name: Context Crystallization Layer Timeout Policy
+    created: "2026-02-11"
+    description: |
+      AC_START: AC-ENH-002-001
+      Phase 49 CCL async prefetch MUST timeout gracefully without blocking execution.
+      System continues with cold context load if CCL exceeds 500ms SLA.
+      
+      Business Principle: Availability over perfection. Don't block user for performance optimization.
+      
+      CCL (Context Crystallization Layer) pre-warms context during holistic validation:
+      - Rules cache (company > tier1 > tier0)
+      - LENS warmed state (git history, AST, dependencies)
+      - Infrastructure capabilities (MCP tools, orchestrators)
+      
+      SLA:
+      - Normal: <300ms (p95)
+      - Fallback: <500ms (p99)
+      - Timeout: >500ms → Continue without pre-warmed context
+      AC_COMPLETE: AC-ENH-002-001 ✅ CCL timeout policy defined
+    
+    timeout_behavior:
+      normal_path:
+        - "CCL prefetch completes <300ms"
+        - "Stage 2 (IntentRouter) uses pre-warmed context"
+        - "Latency benefit: -15% vs cold load"
+        - "Log: CCL_PREFETCH_SUCCESS (duration=XXXms)"
+      
+      fallback_path:
+        - "CCL prefetch takes 300-500ms"
+        - "Stage 2 waits for completion (acceptable delay)"
+        - "Uses pre-warmed context despite delay"
+        - "Log: CCL_PREFETCH_SLOW (duration=XXXms)"
+      
+      timeout_path:
+        - "CCL prefetch exceeds 500ms"
+        - "Stage 2 proceeds immediately with cold context load"
+        - "Latency penalty: +15% (acceptable tradeoff)"
+        - "Log: CCL_TIMEOUT_FALLBACK (duration=XXXms)"
+        - "Audit: Track timeout rate for optimization"
+    
+    monitoring:
+      metrics:
+        - "ccl_prefetch_duration_ms (histogram)"
+        - "ccl_timeout_rate (gauge, target <5%)"
+        - "ccl_cache_hit_rate (gauge, target >70%)"
+      
+      alerts:
+        - "CCL timeout rate >5% for 10 minutes → Alert: Investigate performance"
+        - "CCL cache hit rate <50% → Alert: Cache warming ineffective"
+    
+    success_criteria:
+      - "Execution never blocked by CCL timeout"
+      - "Timeout rate <5% in production"
+      - "Cache hit rate >70% in production"
+      - "p95 latency <300ms, p99 <500ms"
+    
+    implementation:
+      module: "cortex/orchestrators/context_crystallization.py"
+      timeout_config: "CCL_TIMEOUT_MS=500 (environment variable)"
+      fallback: "Cold context load via IntentRouter"
+    
+    tests:
+      unit_tests:
+        - "test_core_053_ccl_completes_normal_path"
+        - "test_core_053_ccl_fallback_path_slow"
+        - "test_core_053_ccl_timeout_proceeds_cold_load"
+      
+      integration_tests:
+        - "test_phase_49_ccl_end_to_end_with_timeout"
+        - "test_execution_never_blocked_by_ccl"
+
+  # --------------------------------------------------------------------------
+  # CORE-054: MCP Tool Wiring Validation (ENH-003)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-054
+    principle: "Fail Fast on Configuration Errors"
+    category: architecture_integrity
+    severity: blocked
+    name: MCP Tool Wiring Validation
+    created: "2026-02-11"
+    description: |
+      AC_START: AC-ENH-003-001
+      Orchestrator wiring MUST reference only registered MCP tools.
+      Cross-validate wiring.yaml mcp_tools lists against MCPServer.list_tools().
+      
+      Business Principle: Configuration errors caught at startup, not at runtime.
+      
+      Problem: wiring.yaml can list tools that don't exist in MCP server
+      Result: Runtime errors when orchestrator attempts to use missing tool
+      Solution: Validate tool availability during registry initialization
+      AC_COMPLETE: AC-ENH-003-001 ✅ MCP tool wiring validation defined
+    
+    validation_sequence:
+      1_load_wiring:
+        - "Parse cortex/wiring/specifications/wiring.yaml"
+        - "Extract mcp_tools lists from all orchestrators"
+      
+      2_query_mcp_server:
+        - "Instantiate MCPServer()"
+        - "Call server.list_tools() → get available tools"
+      
+      3_cross_validate:
+        - "For each orchestrator.mcp_tools:"
+        - "  Check if tool in available_tools"
+        - "  If missing: Add to violations list"
+      
+      4_enforcement:
+        - "If violations: BLOCK orchestrator registration"
+        - "Display: Missing tools + suggested fix"
+        - "Prevent system startup until resolved"
+    
+    enforcement_point:
+      class: "OrchestratorIntegrityValidator"
+      method: "validate_mcp_tool_wiring()"
+      location: "cortex/orchestrators/audit/orchestrator_integrity_validator.py"
+      
+      health_check:
+        - "Run during GitBackedRegistry.initialize()"
+        - "Block if validation fails"
+        - "Log: MCP_TOOL_WIRING_VALIDATED"
+    
+    error_message_template: |
+      ❌ MCP Tool Wiring Validation Failed
+      
+      Orchestrator: {orchestrator_name}
+      Missing Tools: {missing_tools}
+      
+      Resolution:
+      1. Register tools in cortex/mcp/server.py
+      2. Remove from wiring.yaml if not needed
+      3. Verify: python -c "from cortex.mcp.server import MCPServer; print(MCPServer().list_tools())"
+    
+    success_criteria:
+      - "100% of wiring.yaml mcp_tools exist in MCPServer"
+      - "Zero runtime errors from missing tools"
+      - "Clear error messages guide resolution"
+    
+    implementation:
+      validator: "OrchestratorIntegrityValidator"
+      enforcement: "GitBackedRegistry.initialize()"
+      tests: "tests/unit/orchestrators/audit/test_mcp_tool_wiring.py"
+    
+    tests:
+      unit_tests:
+        - "test_core_054_valid_wiring_passes"
+        - "test_core_054_missing_tool_blocks_registration"
+        - "test_core_054_error_message_clear"
+    
+    governance_dependency:
+      requires: "CORE-031 (Declarative autowiring), CORE-050 (No quality degradation)"
+      enables: "Fail-fast configuration validation"
+      blocks_until: "OrchestratorIntegrityValidator enhanced"
 
 # ==============================================================================
 # ENFORCEMENT CONFIGURATION
