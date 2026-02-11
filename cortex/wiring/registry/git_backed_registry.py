@@ -73,7 +73,7 @@ class GitBackedRegistry:
             )
 
         try:
-            with open(self.wiring_file, 'r') as f:
+            with open(self.wiring_file, 'r', encoding='utf-8') as f:
                 self._spec = yaml.safe_load(f)
         except yaml.YAMLError as e:
             raise yaml.YAMLError(f"Invalid YAML in {self.wiring_file}: {e}")
