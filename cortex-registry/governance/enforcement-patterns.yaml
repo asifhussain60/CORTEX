@@ -1,0 +1,319 @@
+# CORTEX Enforcement Patterns Registry
+# Version: 1.0
+# Updated: 2026-02-11
+# Purpose: Define blocking conditions and enforcement behaviors for governance
+
+metadata:
+  version: "1.0"
+  last_updated: "2026-02-11"
+  total_patterns: 12
+  enforcement_levels:
+    - BLOCKING  # Stops execution immediately
+    - WARNING   # Logs issue, continues
+    - ADVISORY  # Informational only
+
+# MCP-FIRST Enforcement
+mcp_enforcement:
+  pattern_id: "ENF-001"
+  title: "MCP-FIRST Tool Routing"
+  enforcement_level: BLOCKING
+  trigger_intents: ["IMPLEMENT", "FIX", "REFACTOR"]
+  blocked_tools:
+    - "create_file"           # Must use cortex_process_request
+    - "replace_string_in_file" # Must use cortex_process_request
+    - "multi_replace_string_in_file"
+    - "run_in_terminal"       # For file operations only
+  allowed_tools:
+    - "read_file"             # Analysis only
+    - "semantic_search"       # Discovery only
+    - "grep_search"           # Analysis only
+    - "file_search"           # Discovery only
+    - "list_dir"              # Navigation only
+  mcp_tools_required:
+    - "cortex_process_request"
+    - "cortex_validate_holistically"
+  error_message: |
+    ❌ MCP-FIRST VIOLATION: Direct file operations blocked for {intent} intent
+    
+    Required: Route through cortex_process_request MCP tool
+    Reason: Ensures TDD, security gates, and audit trails
+    
+    Recovery: Use cortex_process_request(operation="{intent}", target="{file}", ...)
+
+# Pre-Flight Validation
+pre_flight_check:
+  pattern_id: "ENF-002"
+  title: "MCP Availability Pre-Flight"
+  enforcement_level: BLOCKING
+  trigger_intents: ["IMPLEMENT", "FIX", "REFACTOR", "AUDIT"]
+  detection_methods:
+    - method: "tool_registry_query"
+      priority: 1
+      timeout_ms: 100
+    - method: "environment_variable"
+      priority: 2
+      env_vars: ["CORTEX_MCP_ENABLED", "MCP_SERVER_PORT"]
+    - method: "configuration_file"
+      priority: 3
+      paths: [".vscode/settings.json", ".vscode/mcp.json"]
+  failure_behavior: "BLOCK_WITH_RECOVERY"
+  recovery_steps:
+    - "Run: python .cortex/setup-mcp.py"
+    - "Reload VS Code: Cmd+Shift+P → Developer: Reload Window"
+    - "Verify: Check .cortex/setup.log for ✅ SETUP COMPLETE"
+  error_message: |
+    ❌ MCP TOOLS UNAVAILABLE - OPERATION BLOCKED
+    
+    Severity: P0 - CRITICAL
+    Intent: {intent}
+    Detection: All 3 methods failed
+    
+    RECOVERY PATH:
+    1. Run setup: python .cortex/setup-mcp.py
+    2. Reload VS Code
+    3. Retry operation
+    
+    NOTE: CORTEX operates at ONE quality level. No bypasses.
+
+# TDD Enforcement
+tdd_enforcement:
+  pattern_id: "ENF-003"
+  title: "TDD-First Development"
+  enforcement_level: BLOCKING
+  trigger_intents: ["IMPLEMENT"]
+  rules:
+    - "Tests must be written BEFORE implementation code"
+    - "RED → GREEN → REFACTOR cycle mandatory"
+    - "No --ignore flags allowed for failing tests"
+    - "No test file renaming to bypass discovery"
+  blocked_actions:
+    - "pytest --ignore={path}"
+    - "mv test_*.py _skip_test_*.py"
+    - "rm test_*.py"
+  core_rule: "CORE-008"
+  error_message: |
+    ❌ TDD VIOLATION: Test bypass attempt detected
+    
+    Blocked Action: {action}
+    Reason: CORE-008 requires tests BEFORE code
+    
+    Required: Fix failing tests, don't skip them
+
+# Holistic Validation Gate
+holistic_validation:
+  pattern_id: "ENF-004"
+  title: "Holistic Validation Gate (Phase 48)"
+  enforcement_level: BLOCKING
+  trigger_intents: ["IMPLEMENT", "FIX", "REFACTOR"]
+  validation_stages:
+    - stage: "registry_check"
+      description: "Validate registry consistency"
+      timeout_ms: 500
+    - stage: "dependency_graph"
+      description: "Detect circular dependencies"
+      timeout_ms: 300
+    - stage: "regression_risk"
+      description: "Score regression risk (0.0-1.0)"
+      threshold: 0.7
+      action_if_exceeded: "BLOCK_WITH_OVERRIDE"
+    - stage: "architecture_drift"
+      description: "Validate CORE rule alignment"
+      timeout_ms: 200
+    - stage: "challenge_gate"
+      description: "Present alternatives"
+      mandatory: true
+  mcp_tool: "cortex_validate_holistically"
+  core_rule: "CORE-052"
+  error_message: |
+    ❌ HOLISTIC VALIDATION REQUIRED
+    
+    All IMPLEMENT/FIX/REFACTOR must pass validation gate
+    MCP Tool: cortex_validate_holistically
+    
+    Run validation before proceeding
+
+# Native Tool Bypass Detection
+bypass_detection:
+  pattern_id: "ENF-005"
+  title: "Native Tool Bypass Prevention"
+  enforcement_level: BLOCKING
+  trigger: "pre_tool_invocation"
+  intent_tool_matrix:
+    IMPLEMENT:
+      blocked: ["create_file", "replace_string_in_file"]
+      allowed: ["read_file", "semantic_search", "grep_search"]
+      required_mcp: "cortex_process_request"
+    FIX:
+      blocked: ["create_file", "replace_string_in_file"]
+      allowed: ["read_file", "semantic_search", "grep_search"]
+      required_mcp: "cortex_process_request"
+    REFACTOR:
+      blocked: ["create_file", "replace_string_in_file"]
+      allowed: ["read_file", "semantic_search", "grep_search"]
+      required_mcp: "cortex_process_request"
+    ANALYZE:
+      blocked: []
+      allowed: ["read_file", "semantic_search", "grep_search", "list_dir"]
+      required_mcp: "cortex_lens_analyze"
+  audit_log_format: "AC_BYPASS_ATTEMPT: {timestamp} | Intent={intent} | Tool={tool} | Status=BLOCKED"
+
+# Markdown Suppression
+markdown_suppression:
+  pattern_id: "ENF-006"
+  title: "Markdown File Generation Prohibition"
+  enforcement_level: BLOCKING
+  trigger: "file_creation"
+  blocked_patterns:
+    - "**/*-summary.md"
+    - "**/*-report.md"
+    - "**/*-analysis.md"
+    - "docs/**/*.md"  # Except allowed paths below
+  allowed_paths:
+    - ".github/prompts/*.md"
+    - ".github/agents/*.md"
+    - "README.md"
+  core_rule: "CORE-002"
+  error_message: |
+    ❌ MARKDOWN GENERATION BLOCKED
+    
+    File: {file_path}
+    Reason: CORE-002 prohibits markdown artifacts
+    
+    Required: Display findings inline in chat
+
+# JSONC Corruption Prevention
+jsonc_safety:
+  pattern_id: "ENF-007"
+  title: "JSONC-Safe Configuration Updates"
+  enforcement_level: BLOCKING
+  trigger: "settings_json_modification"
+  protected_files:
+    - ".vscode/settings.json"
+    - ".vscode/mcp.json"
+  required_parser: "jsonc_aware"
+  validation:
+    - "Preserve comments (// and /* */)"
+    - "Preserve glob patterns (**/*.md)"
+    - "Surgical key updates only"
+  test_suite: "tests/integration/test_setup_mcp_jsonc_preservation.py"
+  error_message: |
+    ❌ JSONC CORRUPTION RISK
+    
+    File: {file_path}
+    Reason: Settings.json requires JSONC-safe parser
+    
+    Use: _write_settings_safely() or _merge_mcp_servers_safely()
+
+# CCL Timeout Policy
+ccl_timeout:
+  pattern_id: "ENF-008"
+  title: "Context Crystallization Layer Timeout"
+  enforcement_level: WARNING
+  trigger: "ccl_prefetch"
+  sla_targets:
+    normal_ms: 300
+    fallback_ms: 500
+    max_ms: 1000
+  timeout_behavior:
+    - threshold: 300
+      action: "USE_FULL_CONTEXT"
+      quality_impact: "+15% accuracy"
+    - threshold: 500
+      action: "USE_PARTIAL_CONTEXT"
+      quality_impact: "+8% accuracy"
+    - threshold: 1000
+      action: "SKIP_CCL_USE_FRESH"
+      quality_impact: "0% (no penalty)"
+  monitoring:
+    - "CCL timeout rate (target: <5%)"
+    - "Cache hit rate (target: >70%)"
+  core_rule: "CORE-053"
+
+# MCP Tool Wiring Validation
+wiring_validation:
+  pattern_id: "ENF-009"
+  title: "MCP Tool Wiring Integrity"
+  enforcement_level: BLOCKING
+  trigger: "orchestrator_registration"
+  validation_steps:
+    - "Load orchestrator wiring.yaml"
+    - "Extract mcp_tools list"
+    - "Query MCPServer.list_tools()"
+    - "Cross-check existence"
+    - "Block if missing tools detected"
+  core_rule: "CORE-054"
+  error_message: |
+    ❌ MCP TOOL WIRING ERROR
+    
+    Orchestrator: {orchestrator_name}
+    Missing Tools: {missing_tools}
+    
+    Fix: Add tools to MCP server or remove from wiring.yaml
+
+# Intelligence-Architecture Tier Coupling
+tier_coupling:
+  pattern_id: "ENF-010"
+  title: "Intelligence-Architecture Tier Alignment"
+  enforcement_level: WARNING
+  trigger: "orchestrator_invocation"
+  validation:
+    - "tier_1_orchestrator → tier_4_full LENS intelligence"
+    - "tier_2_orchestrator → tier_3_context LENS intelligence"
+    - "tier_3_orchestrator → tier_2_minimal LENS intelligence"
+  core_rule: "CORE-051"
+  error_message: |
+    ⚠️ TIER MISMATCH
+    
+    Orchestrator Tier: {orchestrator_tier}
+    LENS Tier: {lens_tier}
+    Expected: {expected_lens_tier}
+    
+    Impact: Potential performance degradation
+
+# Competing MCP Server Enforcement
+mcp_coexistence:
+  pattern_id: "ENF-011"
+  title: "MCP Server Selective Coexistence"
+  enforcement_level: BLOCKING
+  trigger: "mcp_setup"
+  tool_classification:
+    conflicting:
+      - "pylance_mcp_server"  # Code modification conflicts
+      - "*ai-assistant*"      # AI conflicts
+    complementary:
+      - "gitkraken"           # Git operations (allow)
+      - "sql_server"          # Database tools (allow)
+    redundant:
+      - "generic_linter"      # CORTEX has linting
+  tool_budget: 128  # VS Code performance threshold
+  enforcement:
+    - "Always disable conflicting servers"
+    - "Disable redundant if tool count >128"
+    - "Allow complementary if tool count ≤128"
+  user_override_file: ".cortex/mcp-approved.json"
+
+# Audit Trail Integrity
+audit_trail:
+  pattern_id: "ENF-012"
+  title: "Audit Trail Completeness"
+  enforcement_level: WARNING
+  trigger: "operation_completion"
+  required_markers:
+    - "AC_START: AC-{phase_id}-{sequence}"
+    - "AC_COMPLETE: AC-{phase_id}-{sequence} ✅ {test_count} passing"
+  validation:
+    - "All file modifications have AC markers"
+    - "Git commits reference AC markers"
+    - "Test results logged"
+  core_rule: "CORE-027"
+
+# Enforcement Metrics
+metrics:
+  tracking:
+    - "mcp_bypass_attempts_blocked"
+    - "tdd_violations_prevented"
+    - "markdown_generation_blocked"
+    - "jsonc_corruption_prevented"
+    - "holistic_validation_invocations"
+  prometheus_namespace: "cortex_enforcement"
+  dashboard: "cortex-registry/_cortex-master/dashboard/"

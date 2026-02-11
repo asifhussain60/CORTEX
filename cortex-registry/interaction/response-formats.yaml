@@ -1,0 +1,285 @@
+# CORTEX Response Format Standards
+# Version: 1.0
+# Updated: 2026-02-11
+# Purpose: Standardize all response formats across CORTEX
+
+metadata:
+  version: "1.0"
+  last_updated: "2026-02-11"
+  applies_to: "All CORTEX responses"
+
+# Mandatory Response Header
+response_header:
+  format: |
+    ## {icon} {title} {mode}
+    **Author:** Asif Hussain | **Orchestrator:** {orchestrator_name} ✅
+    
+    ---
+  
+  icons:
+    CORTEX_PRODUCTION: "🧠"
+    CORTEX_ARCHITECT: "🏛️"
+  
+  modes:
+    - "IMPLEMENT"
+    - "FIX"
+    - "REFACTOR"
+    - "ANALYZE"
+    - "AUDIT"
+    - "DESIGN"
+    - "PLAN"
+    - "DEBUG"
+    - "DIGEST"
+    - "QUERY"
+    - "LIST"
+    - "RECALL"
+  
+  orchestrators:
+    - "MasterOrchestrator"
+    - "TDDOrchestrator"
+    - "LENSSynthesis"
+    - "EnforcementOrchestrator"
+    - "PlanOrchestrator"
+    - "RefactoringOrchestrator"
+    - "ChallengeEngine"
+    - "DigestOrchestrator"
+    - "RepositoryOnboardingOrchestrator"
+
+  examples:
+    production: "## 🧠 CORTEX IMPLEMENT\n**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅\n\n---"
+    architect: "## 🏛️ CORTEX Architect ANALYZE\n**Author:** Asif Hussain | **Orchestrator:** LENSSynthesis ✅\n\n---"
+
+# Status Icons
+status_icons:
+  completed: "✅"      # Work done, tests passing
+  in_progress: "🔵"   # Currently executing
+  planned: "⚪"       # Not started yet
+  blocked: "🔴"       # Blocker preventing progress
+  warning: "🟡"       # Issue detected, not blocking
+
+  usage_rules:
+    - "NEVER use ✅ for planned/pending work (misleading)"
+    - "Use 🔵 for current stage in progress bars"
+    - "Use ⚪ for future stages"
+    - "Use 🔴 for critical blockers"
+    - "Use 🟡 for warnings that don't block"
+
+# Progress Bar Format
+progress_bar:
+  format: |
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    📋 {phase_title}
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    
+    [{bar}] {percent}% {current_stage}
+    ├─ {stage_1_status} {stage_1_title}
+    ├─ {stage_2_status} {stage_2_title}
+    ├─ {stage_3_status} {stage_3_title}
+    └─ {stage_N_status} {stage_N_title}
+    
+    Tests: {passed}/{total} | Coverage: {coverage}% | Duration: {duration}
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  bar_characters:
+    filled: "█"
+    empty: "░"
+    total_length: 10  # [██████░░░░] = 10 chars
+
+  examples:
+    in_progress: |
+      [████████░░] 80% S5: Prompt Enhancement
+      ├─ ✅ S1: Orchestrator (12 tests)
+      ├─ ✅ S2: Dependency Graph (10 tests)  
+      ├─ 🔵 S5: Prompts (in progress)
+      └─ ⚪ S6: MCP Tools (pending)
+
+# Completion Summary Format
+completion_summary:
+  format: |
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    ✅ {phase_title}: COMPLETE
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    [{bar}] 100% | {tests_passed}/{tests_total} tests | {coverage}% coverage | {duration}
+    
+    Git: {commit_hash} "{commit_message}"
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  example: |
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    ✅ Phase 48: COMPLETE
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    [██████████] 100% | 60/60 tests | 94% coverage | 28m
+    
+    Git: a2fdcdc08 "Phase 48: Holistic Validation complete"
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Error/Blocking Format
+error_format:
+  format: |
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    🔴 {phase_title}: BLOCKED at {stage}
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    [{bar}] {percent}% | {tests_passed}/{tests_total} tests | {failures} failures
+    
+    Error: {error_message}
+    
+    Fix: {fix_suggestion}
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  example: |
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    🔴 Phase 48: BLOCKED at S3
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    [████░░░░░░] 40% | 36/60 tests | 2 failures
+    
+    Error: test_challenge_gate_mandatory FAILED
+    
+    Fix: Update ChallengeGate default in challenge_gate.py:45
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Linear Narrative Flow
+narrative_flow:
+  structure:
+    - "Context: What user requested + current state"
+    - "Analysis: Findings + key insights"
+    - "Action: What will be done"
+    - "Result: Outcome + metrics"
+  
+  anti_patterns:
+    - "NO repetition of user request (they know what they asked)"
+    - "NO showing same info twice in different formats"
+    - "NO redundant summaries after completion"
+  
+  completion_rules:
+    - "Show 'Implementation Complete' when done"
+    - "DO NOT show 'Next Steps' after successful completion"
+    - "NO exit options during holistic implementation"
+    - "Run to completion unless BLOCKED"
+
+# Numbered Lists (Decision Points Only)
+numbered_lists:
+  when_to_use:
+    - "User must make a choice between alternatives"
+    - "Multiple execution paths available"
+    - "Approval required before proceeding"
+  
+  when_NOT_to_use:
+    - "After completion (just show results)"
+    - "During progress (use progress bars)"
+    - "For status updates (use icons)"
+  
+  format: |
+    **Decision Required:**
+    
+    1️⃣ **Option A:** {description}
+    2️⃣ **Option B:** {description}
+    3️⃣ **Option C:** {description}
+    
+    Type the number to proceed.
+
+# Table Formats
+table_formats:
+  status_table:
+    format: |
+      | Item | Status | Priority | Notes |
+      |------|--------|----------|-------|
+      | {item} | {status_icon} | {priority} | {notes} |
+    
+    example: |
+      | Item | Status | Priority | Notes |
+      |------|--------|----------|-------|
+      | MCP-FIX-1 | ✅ | P0 | UTF-8 encoding |
+      | MCP-FIX-2 | 🔵 | P0 | In progress |
+      | MCP-FIX-3 | ⚪ | P1 | Planned |
+
+  comparison_table:
+    format: |
+      | Dimension | Option A | Option B | Winner |
+      |-----------|----------|----------|--------|
+      | {dimension} | {score_a} | {score_b} | {winner} |
+
+# Session Summary Format
+session_summary:
+  format: |
+    ## 🏁 SESSION COMPLETE
+    
+    **Summary:**
+    - ✅ **{category}:** {achievements}
+    
+    **Git Commits:** {count}
+    - {commit_hash}: {message}
+    
+    **Files Modified:** {count}
+    **Tests:** {passed}/{total} passing
+    **Duration:** {duration}
+    
+    **Impact:**
+    - {metric}: {before} → {after} ({improvement})
+
+# MCP Tool Response Format
+mcp_tool_response:
+  format: |
+    **Tool:** {tool_name}
+    **Status:** {success|failure}
+    **Duration:** {ms}
+    
+    {tool_output}
+    
+    {error_if_failed}
+
+# Challenge Gate Format
+challenge_gate:
+  format: |
+    ### ⚠️ MANDATORY CHALLENGE (CORE-048)
+    
+    **Your Request:** {summary}
+    **Analysis:** Risk {score}, Impact {radius}, Alignment {status}
+    
+    **Your Approach:**
+    - Pros: {pros}
+    - Cons: {cons}
+    - ROI: {roi}
+    
+    **Alternative A (Recommended):**
+    - Pros: {pros}
+    - Cons: {cons}
+    - ROI: {roi}
+    
+    **Decision Required:**
+    Type "proceed" to confirm or "use A" for alternative
+
+# Audit Report Format
+audit_report:
+  format: |
+    ## 🛡️ AUDIT REPORT
+    
+    **Scope:** {scope}
+    **Coverage:** {categories}
+    
+    ### Issues Found
+    
+    | ID | Severity | Issue | Recommendation |
+    |----|----------|-------|----------------|
+    | {id} | {severity} | {description} | {fix} |
+    
+    ### Metrics
+    
+    - **Health Score:** {score}/1.0
+    - **CORE Rule Compliance:** {percent}%
+    - **Test Coverage:** {percent}%
+    - **P0 Issues:** {count}
+    
+    **Verdict:** {PASS|FAIL|WARN}
+
+# Inline Code Restrictions
+inline_code:
+  rules:
+    - "NEVER show code snippets in chat unless user explicitly requests"
+    - "Use 'Applied via {tool_name}' instead of showing code"
+    - "For explanations, use pseudocode or bullet points"
+    - "Code belongs in files, not chat"
+  
+  exceptions:
+    - "User asks: 'show me the code'"
+    - "Educational queries about syntax"
+    - "Error messages requiring code context"

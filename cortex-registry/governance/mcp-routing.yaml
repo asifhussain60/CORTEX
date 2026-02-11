@@ -1,0 +1,295 @@
+# CORTEX MCP Tool Routing Registry
+# Version: 1.0
+# Updated: 2026-02-11
+# Purpose: Map user intents to appropriate MCP tools
+
+metadata:
+  version: "1.0"
+  last_updated: "2026-02-11"
+  total_intents: 12
+  total_mcp_tools: 87
+
+# Intent-to-Tool Routing Matrix
+routing:
+  IMPLEMENT:
+    primary_tool: "cortex_process_request"
+    pre_flight_tools:
+      - "cortex_validate_holistically"  # Mandatory Phase 48 gate
+      - "cortex_validate_environment"   # MCP availability check
+    execution_tools:
+      - "cortex_process_request"        # Main implementation
+    post_execution_tools:
+      - "cortex_audit"                  # Validate compliance
+    fallback_behavior: "BLOCK"          # No fallback allowed
+    core_rules: ["CORE-008", "CORE-052", "MCP-FIRST"]
+
+  FIX:
+    primary_tool: "cortex_process_request"
+    pre_flight_tools:
+      - "cortex_validate_environment"
+      - "cortex_lens_analyze"           # Root cause analysis
+    execution_tools:
+      - "cortex_process_request"
+    post_execution_tools:
+      - "cortex_audit"
+    fallback_behavior: "BLOCK"
+    core_rules: ["CORE-008", "MCP-FIRST"]
+
+  REFACTOR:
+    primary_tool: "cortex_refactor"
+    pre_flight_tools:
+      - "cortex_validate_environment"
+      - "cortex_detect_duplicates"      # CORE-035 check
+    execution_tools:
+      - "cortex_refactor"
+      - "cortex_process_request"        # If semantic refactoring needed
+    post_execution_tools:
+      - "cortex_audit"
+    fallback_behavior: "BLOCK"
+    core_rules: ["CORE-035", "MCP-FIRST"]
+
+  ANALYZE:
+    primary_tool: "cortex_lens_analyze"
+    pre_flight_tools: []
+    execution_tools:
+      - "cortex_lens_analyze"
+      - "cortex_lens_deep_analyze"      # For complex analysis
+      - "cortex_git_history"            # 24h context
+      - "cortex_ast_analyze"            # AST complexity
+    post_execution_tools: []
+    fallback_behavior: "ALLOW_READ_ONLY"  # Can use native tools
+    core_rules: []
+
+  AUDIT:
+    primary_tool: "cortex_audit"
+    pre_flight_tools:
+      - "cortex_load_audit_checklist"
+    execution_tools:
+      - "cortex_audit"
+      - "cortex_validate_compliance"
+      - "cortex_analyze_governance"
+    post_execution_tools:
+      - "cortex_report_governance"
+    fallback_behavior: "ALLOW_READ_ONLY"
+    core_rules: ["CORE-027"]
+
+  DESIGN:
+    primary_tool: "cortex_challenge"
+    pre_flight_tools:
+      - "cortex_validate_architecture"  # Check master plan
+    execution_tools:
+      - "cortex_challenge"              # Generate alternatives
+      - "cortex_lens_analyze"           # Analyze existing patterns
+    post_execution_tools: []
+    fallback_behavior: "ALLOW_NATIVE_FOR_GITHUB"  # .github/ files only
+    core_rules: ["CORE-048"]
+
+  PLAN:
+    primary_tool: "cortex_plan_resolve"
+    pre_flight_tools: []
+    execution_tools:
+      - "cortex_plan_resolve"           # Intelligent phase resolution
+      - "cortex_plan_setup"             # Pre-execution hook
+      - "cortex_plan_execute_autonomous" # Multi-stage execution
+      - "cortex_plan_teardown"          # Post-completion hook
+      - "cortex_plan_sync"              # Dashboard sync
+    post_execution_tools:
+      - "cortex_plan_sync"
+    fallback_behavior: "ALLOW_READ_ONLY"
+    core_rules: []
+
+  ONBOARD:
+    primary_tool: "cortex_onboard_repository"
+    pre_flight_tools:
+      - "cortex_validate_environment"
+    execution_tools:
+      - "cortex_onboard_repository_v3"  # With LENS + LLM + SQLite
+      - "cortex_lens_deep_analyze"
+    post_execution_tools:
+      - "cortex_dashboard_create_repo"
+    fallback_behavior: "BLOCK"
+    core_rules: []
+
+  DEBUG:
+    primary_tool: "cortex_debug_full_cycle"
+    pre_flight_tools:
+      - "cortex_debug_status"
+    execution_tools:
+      - "cortex_debug_inject"           # Add markers
+      - "cortex_debug_capture"          # Capture logs
+      - "cortex_debug_analyze"          # Analyze patterns
+      - "cortex_debug_fix_plan"         # Generate fixes
+      - "cortex_debug_cleanup"          # Remove markers
+    post_execution_tools:
+      - "cortex_debug_verify"
+    fallback_behavior: "ALLOW_READ_ONLY"
+    core_rules: []
+
+  DIGEST:
+    primary_tool: "cortex_digest_session"
+    pre_flight_tools: []
+    execution_tools:
+      - "cortex_digest_session"         # Extract learnings
+      - "cortex_ask"                    # Educational queries
+    post_execution_tools: []
+    fallback_behavior: "ALLOW_READ_ONLY"
+    core_rules: []
+
+  RECALL:
+    primary_tool: "cortex_total_recall"
+    pre_flight_tools: []
+    execution_tools:
+      - "cortex_total_recall"           # Feature discovery
+      - "cortex_tools_catalog"          # Tool discovery
+    post_execution_tools: []
+    fallback_behavior: "ALLOW_READ_ONLY"
+    core_rules: []
+
+  LIST:
+    primary_tool: "native_tools"       # Concise tabular responses
+    pre_flight_tools: []
+    execution_tools:
+      - "read_file"
+      - "semantic_search"
+      - "grep_search"
+      - "list_dir"
+    post_execution_tools: []
+    fallback_behavior: "ALLOW_NATIVE"
+    core_rules: []
+
+  QUERY:
+    primary_tool: "cortex_ask"
+    pre_flight_tools: []
+    execution_tools:
+      - "cortex_ask"                    # Educational queries
+      - "cortex_verify_claim"           # Truth verification
+    post_execution_tools: []
+    fallback_behavior: "ALLOW_NATIVE"
+    core_rules: []
+
+# Tool Dependencies
+tool_dependencies:
+  cortex_process_request:
+    requires:
+      - "cortex_validate_environment"   # Must check MCP availability first
+    optional:
+      - "cortex_validate_holistically"  # Phase 48 gate
+    orchestrator: "TDDOrchestrator"
+    
+  cortex_validate_holistically:
+    requires: []
+    optional:
+      - "cortex_lens_analyze"           # For deeper validation
+    orchestrator: "HolisticValidationOrchestrator"
+
+  cortex_lens_analyze:
+    requires: []
+    optional:
+      - "cortex_git_history"
+      - "cortex_ast_analyze"
+    orchestrator: "LENSSynthesis"
+
+  cortex_audit:
+    requires:
+      - "cortex_load_audit_checklist"
+    optional: []
+    orchestrator: "EnforcementOrchestrator"
+
+  cortex_plan_execute_autonomous:
+    requires:
+      - "cortex_plan_resolve"
+    optional:
+      - "cortex_plan_setup"
+      - "cortex_plan_teardown"
+    orchestrator: "PlanOrchestrator"
+
+# Native Tool Restrictions
+native_tool_restrictions:
+  IMPLEMENT:
+    blocked:
+      - "create_file"
+      - "replace_string_in_file"
+      - "multi_replace_string_in_file"
+      - "run_in_terminal"  # For file operations
+    allowed:
+      - "read_file"
+      - "semantic_search"
+      - "grep_search"
+      - "file_search"
+      - "list_dir"
+    reason: "MCP-FIRST: All file modifications must route through cortex_process_request"
+
+  FIX:
+    blocked:
+      - "create_file"
+      - "replace_string_in_file"
+      - "multi_replace_string_in_file"
+      - "run_in_terminal"
+    allowed:
+      - "read_file"
+      - "semantic_search"
+      - "grep_search"
+      - "file_search"
+      - "list_dir"
+    reason: "MCP-FIRST: Bug fixes require TDD enforcement via MCP"
+
+  REFACTOR:
+    blocked:
+      - "create_file"
+      - "replace_string_in_file"
+      - "multi_replace_string_in_file"
+      - "run_in_terminal"
+    allowed:
+      - "read_file"
+      - "semantic_search"
+      - "grep_search"
+      - "file_search"
+      - "list_dir"
+    reason: "MCP-FIRST: Refactoring requires semantic analysis via MCP"
+
+  ANALYZE:
+    blocked: []
+    allowed:
+      - "read_file"
+      - "semantic_search"
+      - "grep_search"
+      - "file_search"
+      - "list_dir"
+    reason: "Analysis is read-only, native tools permitted"
+
+  DESIGN:
+    blocked:
+      - "create_file"  # Except for .github/ files
+      - "replace_string_in_file"
+    allowed:
+      - "read_file"
+      - "semantic_search"
+      - "grep_search"
+      - "create_file:.github/prompts/**"
+      - "create_file:.github/agents/**"
+    reason: "Design artifacts allowed in .github/ only"
+
+# Emergency Override Protocol
+emergency_override:
+  enabled: false  # Must be explicitly enabled
+  conditions:
+    - "MCP server completely unavailable AND"
+    - "Critical production issue AND"
+    - "User explicitly requests override with reason"
+  logging:
+    - "Log override reason to audit trail"
+    - "Create GitHub issue for MCP repair"
+    - "Notify via prometheus alert"
+  duration_minutes: 30  # Auto-revert after 30 minutes
+
+# Performance Metrics
+performance:
+  tool_invocation_latency_ms:
+    cortex_process_request: 2000  # TDD cycle
+    cortex_validate_holistically: 800  # Phase 48 gate
+    cortex_lens_analyze: 500
+    cortex_audit: 1200
+  timeout_policy:
+    - "Fail if tool exceeds 3x expected latency"
+    - "Retry once with exponential backoff"
+    - "If retry fails, display error + recovery path"
