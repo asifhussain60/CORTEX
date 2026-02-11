@@ -1,0 +1,1792 @@
+# ============================================================================
+# CORTEX MASTER REMEDIATION PLAN v2.0
+# ============================================================================
+# Authority: cortex-architect.prompt.md v15.3 + CORE-049 (Silent Autonomous)
+# Purpose: Unified remediation plan consolidating ALL outstanding fixes
+# Status: ACTIVE - Wired for autonomous silent execution
+# Last Updated: 2026-02-11
+# ============================================================================
+
+version: "2.0"
+created: "2026-02-11"
+last_updated: "2026-02-11T16:30:00Z"
+execution_mode: "autonomous_silent"
+progress_tracking: "ascii_bars"
+
+metadata:
+  consolidation_source:
+    - "audit-action-plan-2026-02-09.yaml (P0-P3 findings)"
+    - "ENH-062: Production Readiness & Vacuum"
+    - "ENH-063: Production Architecture Remediation (15 fixes)"
+    - "ENH-064-069: High-value enhancements"
+  total_remediations: 45
+  p0_critical: 23
+  p1_high: 15
+  p2_medium: 7
+  estimated_total_effort: "32 days (19 days parallelized)"
+  orchestrator: "MasterRemediationOrchestrator"
+  wiring: "autonomous_execution_coordinator"
+
+# ============================================================================
+# EXECUTION STRATEGY
+# ============================================================================
+execution_strategy:
+  mode: "autonomous_silent"
+  architecture: "MCP-FIRST"
+  governance: "EnforcementOrchestrator (7-agent pre-execution gate)"
+  
+  governance_enforcement:
+    - agent: "GovernanceEnforcementAgent"
+      rules: ["CORE-008 (TDD)", "CORE-011 (type hints)", "CORE-012 (docstrings)", "CORE-029 (headers)"]
+      enforcement: "BLOCKING"
+    
+    - agent: "SecurityCheckpointAgent"
+      rules: ["CORE-025 (git discipline)", "CORE-026 (checkpoints)", "CORE-027 (audit trail)"]
+      enforcement: "BLOCKING"
+    
+    - agent: "MarkdownSuppressionAgent"
+      rules: ["CORE-002 (no markdown generation)"]
+      enforcement: "BLOCKING"
+    
+    - agent: "ArchitectureIntegrityAgent"
+      rules: ["CORE-035 (single implementation)", "MCP-FIRST", "MCP-GATE"]
+      enforcement: "BLOCKING"
+  
+  mcp_first_enforcement:
+    principle: "ALL file modifications MUST route through MCP tools"
+    forbidden:
+      - "create_file (for .py/.ts/.js files)"
+      - "replace_string_in_file (for production code)"
+      - "run_in_terminal (for file operations)"
+      - "Direct Python imports in chat"
+    required:
+      - "cortex_process_request (ALL IMPLEMENT/FIX/REFACTOR)"
+      - "cortex_lens_analyze (ANALYZE operations)"
+      - "cortex_challenge (DESIGN reviews)"
+    
+    violation_response: "HALT execution, display MCP setup instructions"
+  
+  workflow:
+    - stage: "PRE-FLIGHT"
+      mcp_tools:
+        - "cortex_validate_environment (MANDATORY)"
+        - "cortex_git_status"
+      actions:
+        - "Validate MCP availability (28 tools required)"
+        - "EnforcementOrchestrator pre-execution gate"
+        - "Check git clean state (cortex_git_status)"
+        - "Create remediation branch (via MCP)"
+        - "AC_START marker injection"
+      duration: "2 min"
+      enforcement: "BLOCKING - MCP unavailable halts session"
+    
+    - stage: "WAVE-1-QUICK-WINS"
+      priority: "P0-CRITICAL"
+      parallelizable: true
+      mcp_orchestrator: "TDDOrchestrator"
+      mcp_tools:
+        - "cortex_process_request (TDD mode)"
+        - "cortex_lens_analyze (security scan)"
+        - "cortex_detect_duplicates"
+      actions:
+        - "Execute 8 quick wins via cortex_process_request"
+        - "TDD enforcement: Tests BEFORE code (CORE-008)"
+        - "Real-time ASCII progress bars"
+        - "Auto-commit with AC markers per fix"
+      duration: "1-2 days"
+      governance:
+        - "EnforcementOrchestrator validates each fix"
+        - "SecurityCheckpointAgent scans for vulnerabilities"
+        - "NO test bypass allowed (CORE-008)"
+    
+    - stage: "WAVE-2-SECURITY"
+      priority: "P0-SECURITY"
+      parallelizable: true
+      mcp_orchestrator: "TDDOrchestrator + SecurityCheckpointAgent"
+      mcp_tools:
+        - "cortex_process_request (TDD mode)"
+        - "cortex_lens_analyze (security)"
+      actions:
+        - "MCP authentication via cortex_process_request"
+        - "RBAC implementation via cortex_process_request"
+        - "Credentials cleanup via cortex_process_request"
+        - "Security audit after each fix"
+      duration: "3-5 days"
+      governance:
+        - "OWASP compliance checks mandatory"
+        - "Secrets detection (git-secrets integration)"
+        - "Authorization audit log required"
+    
+    - stage: "WAVE-3-RELIABILITY"
+      priority: "P0-RELIABILITY"
+      parallelizable: true
+      mcp_orchestrator: "TDDOrchestrator"
+      mcp_tools:
+        - "cortex_process_request (TDD mode)"
+        - "cortex_lens_analyze (performance)"
+      actions:
+        - "Circuit breakers via cortex_process_request"
+        - "Async git operations via cortex_process_request"
+        - "Configuration consolidation via cortex_process_request"
+        - "Session persistence via cortex_process_request"
+      duration: "2-3 days"
+      governance:
+        - "Performance benchmarks mandatory"
+        - "Circuit breaker tests required"
+        - "Configuration drift validation"
+    
+    - stage: "WAVE-4-INFRASTRUCTURE"
+      priority: "P1-INFRASTRUCTURE"
+      parallelizable: true
+      mcp_orchestrator: "TDDOrchestrator"
+      mcp_tools:
+        - "cortex_process_request (TDD mode)"
+        - "cortex_lens_analyze (observability)"
+      actions:
+        - "Structured logging via cortex_process_request"
+        - "Distributed tracing via cortex_process_request"
+        - "Event history bounds via cortex_process_request"
+      duration: "3-5 days"
+      governance:
+        - "Observability metrics mandatory"
+        - "MTTR validation required"
+        - "Log format compliance checks"
+    
+    - stage: "WAVE-5-CLEANUP"
+      priority: "P2-CLEANUP"
+      parallelizable: false
+      mcp_orchestrator: "VacuumOrchestrator"
+      mcp_tools:
+        - "cortex_vacuum (comprehensive mode)"
+        - "cortex_detect_duplicates"
+      actions:
+        - "Vacuum orchestrator enhancement via cortex_process_request"
+        - "File relocation via cortex_vacuum"
+        - "Import fixing via cortex_vacuum"
+        - "Duplicate detection via cortex_detect_duplicates"
+      duration: "2-3 days"
+      governance:
+        - "CORE-035 validation (no duplicates)"
+        - "Import structure compliance"
+        - "File organization standards"
+    
+    - stage: "VALIDATION"
+      mcp_tools:
+        - "cortex_audit (comprehensive scan)"
+        - "cortex_lens_analyze (security + performance)"
+      actions:
+        - "Run full test suite via pytest (803+ tests)"
+        - "Security audit via cortex_lens_analyze"
+        - "Performance benchmarks via cortex_lens_analyze"
+        - "Generate completion report via cortex_audit"
+        - "AC_COMPLETE marker injection"
+      duration: "1 day"
+      success_criteria:
+        - "100% test pass rate (0 failures)"
+        - "0 security vulnerabilities"
+        - "Performance targets met (MCP <100ms P99)"
+        - "All AC markers present"
+  
+  progress_display:
+    format: "ascii_bars"
+    silent_mode: true
+    narration: false
+    example: |
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      📋 WAVE 1: Quick Wins (P0 Critical)
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      
+      [████████░░] 80% Complete (8/10 fixes)
+      ├─ ✅ P0-002: Command Injection (4h)
+      ├─ ✅ P0-005: Exception Handler (4h)
+      ├─ 🔵 P0-007: Liveness Probe (in progress)
+      └─ ⚪ P0-014: Path Traversal (pending)
+      
+      Tests: 803/803 ✅ | Security: 0 vulns ✅
+      MCP: cortex_process_request | TDD: RED→GREEN→REFACTOR
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  
+  error_handling:
+    - "On test failure: STOP, fix root cause (NO --ignore bypass)"
+    - "On MCP unavailable: HALT, display setup instructions"
+    - "On governance violation: BLOCK, show required fix"
+    - "On critical failure: Rollback via git reset"
+    - "On token 75%: Generate continuation prompt, commit checkpoint"
+  
+  audit_trail:
+    format: "AC markers"
+    required:
+      start: "AC_START: AC-REM-{WAVE}-{ID}"
+      complete: "AC_COMPLETE: AC-REM-{WAVE}-{ID} ✅ {test_count} passing"
+    example: |
+      # AC_START: AC-REM-WAVE1-QW-001
+      # Description: Fix command injection vulnerability
+      # MCP Tool: cortex_process_request
+      # ... implementation ...
+      # AC_COMPLETE: AC-REM-WAVE1-QW-001 ✅ 15 tests passing
+
+# ============================================================================
+# WAVE 1: QUICK WINS (P0 - 1-2 DAYS)
+# ============================================================================
+wave_1_quick_wins:
+  duration: "1-2 days"
+  parallelizable: true
+  engineers: 4
+  
+  fixes:
+    - id: "QW-001"
+      source: "ENH-063-P0-002"
+      title: "Command Injection Fix"
+      priority: "P0-CRITICAL"
+      effort: "4 hours"
+      status: "ready"
+      
+      problem: "subprocess(shell=True) with user input allows arbitrary code execution"
+      solution: "Replace with subprocess(shell=False) + argument lists"
+      
+      files:
+        - "cortex/mcp/tools/refactor_tool.py"
+        - "cortex/refactoring/semantic_refactor.py"
+      
+      orchestrator: "TDDOrchestrator"
+      mcp_tool: "cortex_process_request"
+      
+      implementation:
+        - "Find all subprocess(shell=True) with user input"
+        - "Replace with argument list syntax"
+        - "Add input validation layer"
+        - "Create security tests for injection attempts"
+      
+      acceptance_criteria:
+        - "No shell=True with user input"
+        - "Security tests pass"
+        - "Existing refactoring operations work"
+      
+      autonomous_steps:
+        - step: "AC_START marker injection"
+          mcp_tool: "cortex_process_request"
+          command: "inject_ac_marker"
+          params:
+            marker_id: "AC-REM-WAVE1-QW-001"
+            description: "Fix command injection vulnerability"
+        
+        - step: "Security vulnerability scan"
+          mcp_tool: "cortex_lens_analyze"
+          command: "security_scan"
+          params:
+            scope: ["cortex/mcp/tools/refactor_tool.py", "cortex/refactoring/semantic_refactor.py"]
+            focus: "command_injection"
+        
+        - step: "TDD implementation (RED→GREEN→REFACTOR)"
+          mcp_tool: "cortex_process_request"
+          command: "implement"
+          params:
+            operation: "fix"
+            target: "cortex/mcp/tools/refactor_tool.py"
+            request: "Replace subprocess(shell=True) with argument list syntax"
+            mode: "TDD"
+            governance: "EnforcementOrchestrator"
+        
+        - step: "AC_COMPLETE marker + commit"
+          mcp_tool: "cortex_process_request"
+          command: "complete_with_ac"
+          params:
+            marker_id: "AC-REM-WAVE1-QW-001"
+            message: "Fix command injection vulnerability ✅"
+            tests_passing: "verify_count"
+    
+    - id: "QW-002"
+      source: "ENH-063-P0-005"
+      title: "Global Exception Handler"
+      priority: "P0-CRITICAL"
+      effort: "4 hours"
+      status: "ready"
+      
+      problem: "Unhandled exceptions crash entire MCP server (all 73 tools unavailable)"
+      solution: "Add global exception handler with graceful degradation"
+      
+      files:
+        - "cortex/mcp/server.py"
+        - "cortex/mcp/gateway.py"
+      
+      implementation:
+        - "Wrap all tool invocations in try-except"
+        - "Log exceptions with full context"
+        - "Return error responses instead of crashing"
+      
+      acceptance_criteria:
+        - "Exceptions logged, don't crash server"
+        - "Failed tool returns error response"
+        - "Server continues processing"
+      
+      autonomous_steps:
+        - step: "AC_START marker"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE1-QW-002"
+            description: "Add global exception handler"
+        
+        - step: "TDD implementation"
+          mcp_tool: "cortex_process_request"
+          params:
+            operation: "implement"
+            target: "cortex/mcp/server.py"
+            request: "Wrap all tool invocations with try-except, log exceptions, graceful degradation"
+            mode: "TDD"
+            governance: "EnforcementOrchestrator"
+        
+        - step: "AC_COMPLETE + commit"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE1-QW-002"
+            message: "Add global exception handler ✅"
+            tests_passing: "verify_count"
+    
+    - id: "QW-003"
+      source: "ENH-063-P0-007"
+      title: "Liveness Probe"
+      priority: "P0-OPERABILITY"
+      effort: "3 hours"
+      status: "ready"
+      
+      problem: "Cannot detect deadlocks (server passes health checks while frozen)"
+      solution: "Add /health/live endpoint with timestamp validation"
+      
+      files:
+        - "cortex/mcp/server.py"
+        - "deployment/health_checks.yaml"
+      
+      implementation:
+        - "Create /health/live endpoint"
+        - "Update timestamp every 5s heartbeat"
+        - "Fail if timestamp >30s old"
+      
+      acceptance_criteria:
+        - "Liveness fails when event loop frozen"
+        - "Thread pool exhaustion detected"
+        - "Monitoring alerts on liveness failure"
+      
+      autonomous_steps:
+        - step: "AC_START marker"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE1-QW-003"
+            description: "Add liveness probe endpoint"
+        
+        - step: "TDD implementation"
+          mcp_tool: "cortex_process_request"
+          params:
+            operation: "implement"
+            target: "cortex/mcp/server.py"
+            request: "Create /health/live endpoint with 5s heartbeat, fail if >30s old"
+            mode: "TDD"
+            governance: "EnforcementOrchestrator"
+        
+        - step: "AC_COMPLETE + commit"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE1-QW-003"
+            message: "Add liveness probe ✅"
+            tests_passing: "verify_count"
+    
+    - id: "QW-004"
+      source: "ENH-063-P1-014"
+      title: "Path Traversal Fix"
+      priority: "P1-SECURITY"
+      effort: "4 hours"
+      status: "ready"
+      
+      problem: "Arbitrary file reads via .. in paths"
+      solution: "Validate paths, restrict to workspace boundaries"
+      
+      files:
+        - "cortex/mcp/tools/onboard_tool.py"
+        - "cortex/orchestrators/support/repository_onboarding_orchestrator.py"
+      
+      implementation:
+        - "Reject paths containing .."
+        - "Resolve paths against workspace root"
+        - "Add security tests for traversal attempts"
+      
+      acceptance_criteria:
+        - "Paths with .. rejected"
+        - "Workspace boundaries enforced"
+        - "Security tests pass"
+      
+      autonomous_steps:
+        - step: "AC_START marker"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE1-QW-004"
+            description: "Fix path traversal vulnerability"
+        
+        - step: "Security scan"
+          mcp_tool: "cortex_lens_analyze"
+          params:
+            scope: ["cortex/mcp/tools/onboard_tool.py"]
+            focus: "path_traversal"
+        
+        - step: "TDD implementation"
+          mcp_tool: "cortex_process_request"
+          params:
+            operation: "fix"
+            target: "cortex/mcp/tools/onboard_tool.py"
+            request: "Reject paths with .., validate against workspace boundaries"
+            mode: "TDD"
+            governance: "EnforcementOrchestrator"
+        
+        - step: "AC_COMPLETE + commit"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE1-QW-004"
+            message: "Fix path traversal vulnerability ✅"
+            tests_passing: "verify_count"
+    
+    - id: "QW-005"
+      source: "AUDIT-P0-3"
+      title: "Bare Except Clauses (CORE-013)"
+      priority: "P0-CODE-QUALITY"
+      effort: "2 hours"
+      status: "ready"
+      count: 16
+      
+      problem: "16 bare 'except:' clauses violate CORE-013"
+      solution: "Replace with specific exception types + logging"
+      
+      files:
+        - "cortex/*/*.py (16 files)"
+      
+      implementation:
+        - "Find all bare except: clauses"
+        - "Categorize by exception type needed"
+        - "Replace with specific exceptions + logging"
+        - "Run tests to verify behavior preserved"
+      
+      acceptance_criteria:
+        - "0 bare except: clauses remain"
+        - "All tests pass"
+        - "CORE-013 compliance"
+      
+      autonomous_steps:
+        - step: "AC_START marker"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE1-QW-005"
+            description: "Fix CORE-013 bare except clauses (16 violations)"
+        
+        - step: "Detect bare except violations"
+          mcp_tool: "cortex_lens_analyze"
+          params:
+            scope: ["cortex/"]
+            focus: "bare_except_clauses"
+            rule: "CORE-013"
+        
+        - step: "Batch refactoring (TDD)"
+          mcp_tool: "cortex_process_request"
+          params:
+            operation: "refactor"
+            target: "batch"
+            request: "Replace 16 bare except: with specific exception types + logging"
+            mode: "TDD"
+            governance: "EnforcementOrchestrator"
+        
+        - step: "AC_COMPLETE + commit"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE1-QW-005"
+            message: "Fix CORE-013 bare except clauses ✅"
+            tests_passing: "verify_count"
+    
+    - id: "QW-006"
+      source: "ENH-063-P0-004"
+      title: "Debug Race Condition Fix"
+      priority: "P0-CORRECTNESS"
+      effort: "6 hours"
+      status: "ready"
+      
+      problem: "Concurrent marker injection corrupts files"
+      solution: "Add file-level locking (fcntl/msvcrt)"
+      
+      files:
+        - "cortex/orchestrators/support/debug_orchestrator.py"
+        - "cortex/tools/debug_marker_injection.py"
+      
+      implementation:
+        - "Add fcntl (Unix) / msvcrt (Windows) locking"
+        - "Lock acquisition/release logging"
+        - "5s lock timeout"
+      
+      acceptance_criteria:
+        - "Concurrent debug sessions safe"
+        - "Lock logging present"
+        - "Timeout prevents deadlocks"
+      
+      autonomous_steps:
+        - step: "AC_START marker"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE1-QW-006"
+            description: "Fix debug marker injection race condition"
+        
+        - step: "TDD implementation"
+          mcp_tool: "cortex_process_request"
+          params:
+            operation: "fix"
+            target: "cortex/orchestrators/support/debug_orchestrator.py"
+            request: "Add fcntl/msvcrt file locking with 5s timeout"
+            mode: "TDD"
+            governance: "EnforcementOrchestrator"
+        
+        - step: "AC_COMPLETE + commit"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE1-QW-006"
+            message: "Fix debug race condition ✅"
+            tests_passing: "verify_count"
+    
+    - id: "QW-007"
+      source: "AUDIT-P0-1"
+      title: "Module Import Structure Fix"
+      priority: "P0-ARCHITECTURE"
+      effort: "15 minutes"
+      status: "ready"
+      
+      problem: "cortex/agents/ directory doesn't exist, breaks imports"
+      solution: "Create module structure, copy files from .github/agents/"
+      
+      files:
+        - "cortex/agents/__init__.py (NEW)"
+        - "cortex/agents/core/__init__.py (NEW)"
+        - "cortex/agents/core/response_template_generator.py (NEW)"
+      
+      implementation:
+        - "Create cortex/agents/core/ directory"
+        - "Copy response-template-generator.py"
+        - "Add __init__.py files"
+        - "Verify imports work"
+      
+      acceptance_criteria:
+        - "cortex.agents.core.response_template_generator imports successfully"
+        - "All tests collect without ModuleNotFoundError"
+      
+      autonomous_steps:
+        - step: "AC_START marker"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE1-QW-007"
+            description: "Fix cortex.agents import structure"
+        
+        - step: "Create module structure"
+          mcp_tool: "cortex_process_request"
+          params:
+            operation: "implement"
+            target: "cortex/agents/core/"
+            request: "Create cortex/agents/core/ directory, copy response-template-generator.py, add __init__.py files"
+            mode: "TDD"
+            governance: "EnforcementOrchestrator"
+        
+        - step: "Verify imports"
+          mcp_tool: "cortex_lens_analyze"
+          params:
+            scope: ["cortex/agents/"]
+            focus: "import_structure"
+        
+        - step: "AC_COMPLETE + commit"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE1-QW-007"
+            message: "Fix cortex.agents import structure ✅"
+            tests_passing: "verify_count"
+    
+    - id: "QW-008"
+      source: "AUDIT-P0-2"
+      title: "Test Environment Dependencies"
+      priority: "P0-INFRASTRUCTURE"
+      effort: "10 minutes"
+      status: "ready"
+      
+      problem: "Missing playwright and test dependencies"
+      solution: "Install playwright + pytest-asyncio"
+      
+      files:
+        - "requirements.txt (UPDATE)"
+      
+      implementation:
+        - "pip install playwright pytest-asyncio"
+        - "Verify playwright imports"
+        - "Re-run E2E test collection"
+      
+      acceptance_criteria:
+        - "playwright module available"
+        - "E2E tests collect successfully"
+      
+      autonomous_steps:
+        - step: "AC_START marker"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE1-QW-008"
+            description: "Install test environment dependencies"
+        
+        - step: "Install dependencies via MCP"
+          mcp_tool: "cortex_process_request"
+          params:
+            operation: "implement"
+            target: "requirements.txt"
+            request: "Add playwright and pytest-asyncio, install via pip"
+            mode: "TDD"
+            governance: "EnforcementOrchestrator"
+        
+        - step: "Verify installation"
+          mcp_tool: "cortex_lens_analyze"
+          params:
+            scope: ["tests/e2e/"]
+            focus: "dependencies"
+        
+        - step: "AC_COMPLETE + commit"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE1-QW-008"
+            message: "Install test dependencies ✅"
+            tests_passing: "verify_count"
+
+# ============================================================================
+# WAVE 2: SECURITY HARDENING (P0 - 3-5 DAYS)
+# ============================================================================
+wave_2_security:
+  duration: "3-5 days"
+  parallelizable: true
+  engineers: 4
+  
+  fixes:
+    - id: "SEC-001"
+      source: "ENH-063-P0-001"
+      title: "MCP Server Authentication"
+      priority: "P0-CRITICAL"
+      effort: "2 days"
+      status: "ready"
+      
+      problem: "Any localhost process can invoke 73 MCP tools"
+      solution: "Token-based authentication with VS Code integration"
+      
+      files:
+        - "cortex/mcp/server.py"
+        - "cortex/mcp/gateway.py"
+        - ".vscode/settings.json"
+      
+      phases:
+        - "Phase 1: Design token flow (JWT)"
+        - "Phase 2: Implement auth middleware"
+        - "Phase 3: VS Code integration"
+        - "Phase 4: Update all 73 tools"
+        - "Phase 5: Authorization audit log"
+      
+      acceptance_criteria:
+        - "Unauthenticated requests rejected"
+        - "VS Code auth seamless"
+        - "All 73 tools protected"
+        - "Auth audit log created"
+      
+      autonomous_steps:
+        - step: "AC_START marker"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE2-SEC-001"
+            description: "Implement MCP server JWT authentication"
+        
+        - step: "Phase 1-5 TDD implementation"
+          mcp_tool: "cortex_process_request"
+          params:
+            operation: "implement"
+            target: "cortex/mcp/gateway.py"
+            request: "JWT auth middleware, VS Code integration, protect all 73 tools"
+            mode: "TDD"
+            governance: "EnforcementOrchestrator + SecurityCheckpointAgent"
+        
+        - step: "Security audit"
+          mcp_tool: "cortex_lens_analyze"
+          params:
+            scope: ["cortex/mcp/"]
+            focus: "authentication"
+        
+        - step: "AC_COMPLETE + commit"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE2-SEC-001"
+            message: "Add MCP authentication ✅"
+            tests_passing: "verify_count"
+    
+    - id: "SEC-002"
+      source: "ENH-063-P0-008"
+      title: "AWS Credentials Cleanup"
+      priority: "P0-SECURITY"
+      effort: "1 day"
+      status: "ready"
+      
+      problem: "Hardcoded AWS credentials in test files (git history)"
+      solution: "Remove credentials, rotate in AWS, use env vars"
+      
+      files:
+        - "tests/integration/"
+        - ".github/workflows/ci.yml"
+      
+      phases:
+        - "Phase 1: Scan git history for credentials"
+        - "Phase 2: Remove from all test files"
+        - "Phase 3: Rotate exposed credentials in AWS"
+        - "Phase 4: Update tests to use env vars"
+        - "Phase 5: Add pre-commit hook (git-secrets)"
+      
+      acceptance_criteria:
+        - "No credentials in git history (new commits)"
+        - "Exposed credentials rotated"
+        - "Tests use environment variables"
+        - "Pre-commit hook blocks credentials"
+      
+      autonomous_steps:
+        - step: "AC_START marker"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE2-SEC-002"
+            description: "Clean AWS credentials from git history"
+        
+        - step: "Scan git history for secrets"
+          mcp_tool: "cortex_lens_analyze"
+          params:
+            scope: ["tests/integration/", ".github/workflows/"]
+            focus: "hardcoded_credentials"
+        
+        - step: "Batch refactoring + rotation"
+          mcp_tool: "cortex_process_request"
+          params:
+            operation: "refactor"
+            target: "tests/integration/"
+            request: "Remove credentials, update to env vars, install git-secrets"
+            mode: "TDD"
+            governance: "EnforcementOrchestrator + SecurityCheckpointAgent"
+        
+        - step: "AC_COMPLETE + commit"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE2-SEC-002"
+            message: "Clean AWS credentials ✅"
+            tests_passing: "verify_count"
+    
+    - id: "SEC-003"
+      source: "ENH-063-P1-011"
+      title: "RBAC Implementation"
+      priority: "P1-SECURITY"
+      effort: "2 days"
+      status: "ready"
+      
+      problem: "Anyone can deploy to production (no RBAC)"
+      solution: "Role-based access control (read-only, developer, operator, admin)"
+      
+      files:
+        - "cortex/mcp/gateway.py"
+        - "cortex/mcp/tools/deploy_tool.py"
+      
+      phases:
+        - "Phase 1: Define RBAC roles and permissions"
+        - "Phase 2: Implement authorization layer"
+        - "Phase 3: Enforce at gateway level"
+        - "Phase 4: Authorization audit log"
+      
+      acceptance_criteria:
+        - "Only admin role can deploy to prod"
+        - "RBAC enforced at gateway"
+        - "Authorization audit log"
+      
+      autonomous_steps:
+        - step: "AC_START marker"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE2-SEC-003"
+            description: "Implement RBAC authorization layer"
+        
+        - step: "Phase 1-4 TDD implementation"
+          mcp_tool: "cortex_process_request"
+          params:
+            operation: "implement"
+            target: "cortex/mcp/gateway.py"
+            request: "RBAC with 4 roles (read-only, developer, operator, admin), authorization audit log"
+            mode: "TDD"
+            governance: "EnforcementOrchestrator + SecurityCheckpointAgent"
+        
+        - step: "AC_COMPLETE + commit"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE2-SEC-003"
+            message: "Implement RBAC ✅"
+            tests_passing: "verify_count"
+
+# ============================================================================
+# WAVE 3: RELIABILITY HARDENING (P0 - 2-3 DAYS)
+# ============================================================================
+wave_3_reliability:
+  duration: "2-3 days"
+  parallelizable: true
+  engineers: 3
+  
+  fixes:
+    - id: "REL-001"
+      source: "ENH-063-P0-003"
+      title: "Circuit Breakers"
+      priority: "P0-RELIABILITY"
+      effort: "1 day"
+      status: "ready"
+      
+      problem: "Git operations can deadlock entire server"
+      solution: "Circuit breakers (50% failure, 30s trip)"
+      
+      files:
+        - "cortex/repositories/git_operations.py"
+        - "cortex/lens/analyzers/*.py"
+        - "cortex/wiring/registry/git_backed_registry.py"
+      
+      phases:
+        - "Phase 1: Install pybreaker library"
+        - "Phase 2: Wrap all git operations"
+        - "Phase 3: Wrap LENS analyzers"
+        - "Phase 4: Fail-fast behavior"
+      
+      acceptance_criteria:
+        - "Circuit trips at 50% failure rate"
+        - "Operations fail fast after trip"
+        - "Auto-recovery after cooldown"
+      
+      autonomous_steps:
+        - step: "AC_START marker"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE3-REL-001"
+            description: "Add circuit breakers for git operations"
+        
+        - step: "TDD implementation"
+          mcp_tool: "cortex_process_request"
+          params:
+            operation: "implement"
+            target: "cortex/repositories/git_operations.py"
+            request: "Wrap git operations and LENS analyzers with pybreaker (50% failure, 30s trip)"
+            mode: "TDD"
+            governance: "EnforcementOrchestrator"
+        
+        - step: "AC_COMPLETE + commit"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE3-REL-001"
+            message: "Add circuit breakers ✅"
+            tests_passing: "verify_count"
+    
+    - id: "REL-002"
+      source: "ENH-063-P0-006"
+      title: "Async Git Operations"
+      priority: "P0-PERFORMANCE"
+      effort: "1 day"
+      status: "ready"
+      
+      problem: "Git operations block event loop (2-5s)"
+      solution: "Use asyncio with executor for git operations"
+      
+      files:
+        - "cortex/repositories/git_operations.py"
+        - "cortex/wiring/registry/git_backed_registry.py"
+      
+      phases:
+        - "Phase 1: Create async git wrappers"
+        - "Phase 2: Update callers to async/await"
+        - "Phase 3: Handle concurrent git operations"
+      
+      acceptance_criteria:
+        - "Git ops don't block event loop"
+        - "Server responsive during git ops"
+        - "Concurrent git ops supported"
+      
+      autonomous_steps:
+        - step: "AC_START marker"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE3-REL-002"
+            description: "Convert git operations to async"
+        
+        - step: "TDD refactoring"
+          mcp_tool: "cortex_process_request"
+          params:
+            operation: "refactor"
+            target: "cortex/repositories/git_operations.py"
+            request: "Create async git wrappers with executor, update callers to async/await"
+            mode: "TDD"
+            governance: "EnforcementOrchestrator"
+        
+        - step: "Performance validation"
+          mcp_tool: "cortex_lens_analyze"
+          params:
+            scope: ["cortex/repositories/"]
+            focus: "performance"
+        
+        - step: "AC_COMPLETE + commit"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE3-REL-002"
+            message: "Async git operations ✅"
+            tests_passing: "verify_count"
+    
+    - id: "REL-003"
+      source: "ENH-063-P1-009"
+      title: "Configuration Drift Fix"
+      priority: "P1-RELIABILITY"
+      effort: "2 days"
+      status: "ready"
+      
+      problem: "wiring.yaml vs __wiring_contract__.yaml divergence"
+      solution: "Single source of truth (wiring.yaml), contract as validation"
+      
+      files:
+        - "cortex/__wiring_contract__.yaml"
+        - "cortex/wiring/specifications/wiring.yaml"
+        - "cortex/wiring/registry/git_backed_registry.py"
+      
+      phases:
+        - "Phase 1: Consolidate to wiring.yaml"
+        - "Phase 2: Use contract as validation schema only"
+        - "Phase 3: Add startup validation"
+      
+      acceptance_criteria:
+        - "Single wiring configuration file"
+        - "Contract validates at startup"
+        - "No drift tests pass"
+      
+      autonomous_steps:
+        - step: "AC_START marker"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE3-REL-003"
+            description: "Fix configuration drift (wiring.yaml SSOT)"
+        
+        - step: "TDD refactoring"
+          mcp_tool: "cortex_process_request"
+          params:
+            operation: "refactor"
+            target: "cortex/wiring/"
+            request: "Consolidate to wiring.yaml SSOT, contract as validation only"
+            mode: "TDD"
+            governance: "EnforcementOrchestrator"
+        
+        - step: "AC_COMPLETE + commit"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE3-REL-003"
+            message: "Fix configuration drift ✅"
+            tests_passing: "verify_count"
+    
+    - id: "REL-004"
+      source: "ENH-063-P1-010"
+      title: "Session Persistence"
+      priority: "P1-RELIABILITY"
+      effort: "1 day"
+      status: "ready"
+      
+      problem: "Session state lost on MCP restart"
+      solution: "Redis-backed session store with TTL"
+      
+      files:
+        - "cortex/interaction/comprehension_session.py"
+        - "cortex/mcp/server.py"
+      
+      phases:
+        - "Phase 1: Setup Redis session store"
+        - "Phase 2: Implement session serialization"
+        - "Phase 3: TTL-based expiration (24h)"
+      
+      acceptance_criteria:
+        - "Sessions persist across restarts"
+        - "TTL prevents unbounded growth"
+        - "Recovery tests pass"
+      
+      autonomous_steps:
+        - step: "AC_START marker"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE3-REL-004"
+            description: "Add Redis session persistence"
+        
+        - step: "TDD implementation"
+          mcp_tool: "cortex_process_request"
+          params:
+            operation: "implement"
+            target: "cortex/interaction/comprehension_session.py"
+            request: "Redis-backed session store with 24h TTL"
+            mode: "TDD"
+            governance: "EnforcementOrchestrator"
+        
+        - step: "AC_COMPLETE + commit"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE3-REL-004"
+            message: "Add session persistence ✅"
+            tests_passing: "verify_count"
+
+# ============================================================================
+# WAVE 4: INFRASTRUCTURE & OBSERVABILITY (P1 - 3-5 DAYS)
+# ============================================================================
+wave_4_infrastructure:
+  duration: "3-5 days"
+  parallelizable: true
+  engineers: 3
+  
+  fixes:
+    - id: "INF-001"
+      source: "ENH-063-P1-013"
+      title: "Structured Logging"
+      priority: "P1-OPERABILITY"
+      effort: "1 day"
+      status: "ready"
+      
+      problem: "Manual log analysis slow (30+ min MTTR)"
+      solution: "Migrate to structlog with JSON output"
+      
+      files:
+        - "cortex/*/*.py (all modules)"
+      
+      phases:
+        - "Phase 1: Install and configure structlog"
+        - "Phase 2: Migrate all logging"
+        - "Phase 3: Define structured fields"
+      
+      acceptance_criteria:
+        - "All logs in JSON format"
+        - "Structured fields present"
+        - "Queryable via jq"
+      
+      autonomous_steps:
+        - step: "AC_START marker"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE4-INF-001"
+            description: "Migrate to structlog JSON logging"
+        
+        - step: "Batch refactoring"
+          mcp_tool: "cortex_process_request"
+          params:
+            operation: "refactor"
+            target: "cortex/"
+            request: "Install structlog, migrate all logging to JSON format"
+            mode: "TDD"
+            governance: "EnforcementOrchestrator"
+        
+        - step: "AC_COMPLETE + commit"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE4-INF-001"
+            message: "Structured logging ✅"
+            tests_passing: "verify_count"
+    
+    - id: "INF-002"
+      source: "ENH-063-P1-015"
+      title: "Distributed Tracing"
+      priority: "P1-OPERABILITY"
+      effort: "2 days"
+      status: "ready"
+      
+      problem: "Multi-orchestrator failures hard to diagnose"
+      solution: "OpenTelemetry integration with Jaeger"
+      
+      files:
+        - "cortex/mcp/server.py"
+        - "cortex/orchestrators/master_orchestrator.py"
+        - "cortex/orchestrators/*/*.py"
+      
+      phases:
+        - "Phase 1: Install OpenTelemetry"
+        - "Phase 2: Instrument orchestrators"
+        - "Phase 3: Configure Jaeger exporter"
+      
+      acceptance_criteria:
+        - "End-to-end trace visible"
+        - "Orchestrator transitions logged"
+        - "Jaeger UI shows execution path"
+      
+      autonomous_steps:
+        - step: "AC_START marker"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE4-INF-002"
+            description: "Add OpenTelemetry distributed tracing"
+        
+        - step: "TDD implementation"
+          mcp_tool: "cortex_process_request"
+          params:
+            operation: "implement"
+            target: "cortex/mcp/server.py"
+            request: "Install OpenTelemetry, instrument orchestrators, Jaeger exporter"
+            mode: "TDD"
+            governance: "EnforcementOrchestrator"
+        
+        - step: "AC_COMPLETE + commit"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE4-INF-002"
+            message: "Distributed tracing ✅"
+            tests_passing: "verify_count"
+    
+    - id: "INF-003"
+      source: "ENH-063-P1-012"
+      title: "Event History Bounds"
+      priority: "P1-SCALABILITY"
+      effort: "1 day"
+      status: "ready"
+      
+      problem: "Unbounded event growth (memory leak)"
+      solution: "Ring buffer (10K events) + TTL (7 days)"
+      
+      files:
+        - "cortex/orchestrators/event_bus.py"
+        - "cortex/phase_management/event_history.py"
+      
+      phases:
+        - "Phase 1: Implement ring buffer"
+        - "Phase 2: TTL-based expiration"
+        - "Phase 3: Memory usage metrics"
+      
+      acceptance_criteria:
+        - "Event history capped at 10K"
+        - "Old events expire after 7 days"
+        - "Memory usage bounded"
+      
+      autonomous_steps:
+        - step: "AC_START marker"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE4-INF-003"
+            description: "Add event history ring buffer"
+        
+        - step: "TDD implementation"
+          mcp_tool: "cortex_process_request"
+          params:
+            operation: "implement"
+            target: "cortex/orchestrators/event_bus.py"
+            request: "Ring buffer (10K events), TTL (7 days), memory metrics"
+            mode: "TDD"
+            governance: "EnforcementOrchestrator"
+        
+        - step: "AC_COMPLETE + commit"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE4-INF-003"
+            message: "Bounded event history ✅"
+            tests_passing: "verify_count"
+
+# ============================================================================
+# WAVE 5: CLEANUP & OPTIMIZATION (P2 - 2-3 DAYS)
+# ============================================================================
+wave_5_cleanup:
+  duration: "2-3 days"
+  parallelizable: false
+  engineers: 2
+  
+  fixes:
+    - id: "CLN-001"
+      source: "ENH-062"
+      title: "Vacuum Orchestrator Enhancement"
+      priority: "P2-CLEANUP"
+      effort: "1 day"
+      status: "ready"
+      
+      problem: "VacuumOrchestrator only handles markdown files"
+      solution: "Add Python file relocation + import fixing"
+      
+      files:
+        - "cortex/orchestrators/support/vacuum_orchestrator.py"
+      
+      phases:
+        - "Phase 1: FileRelocator component"
+        - "Phase 2: ImportReferenceAnalyzer"
+        - "Phase 3: ImportReferenceFixer"
+        - "Phase 4: DuplicateDetector"
+      
+      acceptance_criteria:
+        - "Python files relocatable"
+        - "Imports auto-fixed"
+        - "Duplicates detected"
+      
+      autonomous_steps:
+        - step: "AC_START marker"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE5-CLN-001"
+            description: "Enhance VacuumOrchestrator with Python relocation"
+        
+        - step: "TDD implementation"
+          mcp_tool: "cortex_process_request"
+          params:
+            operation: "implement"
+            target: "cortex/orchestrators/support/vacuum_orchestrator.py"
+            request: "Add FileRelocator, ImportReferenceAnalyzer, ImportReferenceFixer, DuplicateDetector"
+            mode: "TDD"
+            governance: "EnforcementOrchestrator"
+        
+        - step: "AC_COMPLETE + commit"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE5-CLN-001"
+            message: "Enhanced vacuum orchestrator ✅"
+            tests_passing: "verify_count"
+    
+    - id: "CLN-002"
+      source: "ENH-062"
+      title: "Root Directory Cleanup"
+      priority: "P2-CLEANUP"
+      effort: "1 day"
+      status: "ready"
+      
+      problem: "15+ utility scripts in root directory"
+      solution: "Move to scripts/utilities/ with import updates"
+      
+      files:
+        - "Root directory (15 files)"
+        - "scripts/utilities/ (destination)"
+      
+      phases:
+        - "Phase 1: Identify all root scripts"
+        - "Phase 2: Relocate to scripts/utilities/"
+        - "Phase 3: Update all references"
+        - "Phase 4: Validate no broken imports"
+      
+      acceptance_criteria:
+        - "Root directory clean"
+        - "All references updated"
+        - "Tests pass"
+      
+      autonomous_steps:
+        - step: "AC_START marker"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE5-CLN-002"
+            description: "Clean root directory (15 files to scripts/utilities/)"
+        
+        - step: "Vacuum execution"
+          mcp_tool: "cortex_vacuum"
+          params:
+            mode: "comprehensive"
+            target: "root"
+            dry_run: false
+            governance: "EnforcementOrchestrator"
+        
+        - step: "Import validation"
+          mcp_tool: "cortex_lens_analyze"
+          params:
+            scope: ["cortex/", "tests/"]
+            focus: "import_structure"
+        
+        - step: "AC_COMPLETE + commit"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE5-CLN-002"
+            message: "Clean root directory ✅"
+            tests_passing: "verify_count"
+    
+    - id: "CLN-003"
+      source: "ENH-062 + AUDIT"
+      title: "Orphaned Files Cleanup"
+      priority: "P2-CLEANUP"
+      effort: "4 hours"
+      status: "ready"
+      
+      problem: "50+ orphaned/broken files in tests/_legacy_broken/"
+      solution: "Archive or delete with verification"
+      
+      files:
+        - "tests/_legacy_broken/"
+      
+      phases:
+        - "Phase 1: Identify all orphaned files"
+        - "Phase 2: Check for references"
+        - "Phase 3: Archive or delete"
+        - "Phase 4: Verify no regressions"
+      
+      acceptance_criteria:
+        - "0 orphaned files remain"
+        - "All tests pass"
+        - "No broken references"
+      
+      autonomous_steps:
+        - step: "AC_START marker"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE5-CLN-003"
+            description: "Clean orphaned files (50+ files in tests/_legacy_broken/)"
+        
+        - step: "Vacuum execution"
+          mcp_tool: "cortex_vacuum"
+          params:
+            mode: "orphans"
+            target: "tests/_legacy_broken/"
+            dry_run: false
+            governance: "EnforcementOrchestrator"
+        
+        - step: "Duplicate detection"
+          mcp_tool: "cortex_detect_duplicates"
+          params:
+            scope: ["cortex/", "tests/"]
+        
+        - step: "AC_COMPLETE + commit"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-WAVE5-CLN-003"
+            message: "Clean orphaned files ✅"
+            tests_passing: "verify_count"
+
+# ============================================================================
+# VALIDATION & COMPLETION
+# ============================================================================
+validation_phase:
+  duration: "1 day"
+  parallelizable: false
+  mcp_orchestrator: "MasterOrchestrator + EnforcementOrchestrator"
+  
+  steps:
+    - stage: "TEST-SUITE"
+      mcp_tools:
+        - "cortex_process_request (test execution)"
+        - "cortex_lens_analyze (coverage)"
+      actions:
+        - "Run full test suite via cortex_process_request"
+        - "Verify 100% pass rate (NO test bypass allowed)"
+        - "Check coverage metrics via cortex_lens_analyze"
+      
+      success_criteria:
+        - "803+ tests collected"
+        - "0 failures (MANDATORY - CORE-008 enforcement)"
+        - "Coverage ≥85%"
+        - "No --ignore or _skip_ patterns used"
+      
+      autonomous_steps:
+        - step: "Execute full test suite"
+          mcp_tool: "cortex_process_request"
+          params:
+            operation: "test"
+            target: "tests/"
+            exclude: ["tests/_legacy_broken"]
+            mode: "strict"
+            governance: "EnforcementOrchestrator"
+        
+        - step: "Coverage analysis"
+          mcp_tool: "cortex_lens_analyze"
+          params:
+            scope: ["cortex/"]
+            focus: "coverage"
+            threshold: "85%"
+    
+    - stage: "SECURITY-AUDIT"
+      mcp_tools:
+        - "cortex_lens_analyze (security scan)"
+        - "cortex_audit (comprehensive)"
+      actions:
+        - "Run security scanners via cortex_lens_analyze"
+        - "Verify 0 vulnerabilities"
+        - "Check OWASP compliance via cortex_audit"
+      
+      success_criteria:
+        - "0 command injection vulnerabilities"
+        - "0 path traversal vulnerabilities"
+        - "0 hardcoded credentials"
+        - "MCP authentication active"
+        - "RBAC enforcement active"
+      
+      autonomous_steps:
+        - step: "Security vulnerability scan"
+          mcp_tool: "cortex_lens_analyze"
+          params:
+            scope: ["cortex/mcp/", "cortex/orchestrators/"]
+            focus: "security"
+            rules: ["OWASP-Top-10"]
+        
+        - step: "Comprehensive audit"
+          mcp_tool: "cortex_audit"
+          params:
+            mode: "comprehensive"
+            include_governance: true
+    
+    - stage: "PERFORMANCE-BENCHMARK"
+      mcp_tools:
+        - "cortex_lens_analyze (performance)"
+      actions:
+        - "Run performance tests via cortex_lens_analyze"
+        - "Verify latency targets"
+        - "Check memory usage"
+      
+      success_criteria:
+        - "MCP request latency <100ms (P99)"
+        - "Git operations <100ms (P99)"
+        - "Event history memory <50MB"
+        - "Circuit breakers active"
+      
+      autonomous_steps:
+        - step: "Performance analysis"
+          mcp_tool: "cortex_lens_analyze"
+          params:
+            scope: ["cortex/mcp/", "cortex/repositories/"]
+            focus: "performance"
+            benchmarks:
+              - "mcp_latency_p99: <100ms"
+              - "git_ops_p99: <100ms"
+              - "event_memory: <50MB"
+    
+    - stage: "GOVERNANCE-VERIFICATION"
+      mcp_tools:
+        - "cortex_audit (governance check)"
+      actions:
+        - "Verify all AC markers present via cortex_audit"
+        - "Check CORE rules compliance"
+        - "Validate TDD enforcement (no test bypasses)"
+      
+      success_criteria:
+        - "All 21 fixes have AC_START + AC_COMPLETE markers"
+        - "CORE-008: 0 test bypasses (no --ignore, no _skip_)"
+        - "CORE-013: 0 bare except clauses"
+        - "CORE-035: 0 duplicate implementations"
+        - "MCP-FIRST: All fixes via cortex_process_request"
+      
+      autonomous_steps:
+        - step: "Governance audit"
+          mcp_tool: "cortex_audit"
+          params:
+            mode: "governance"
+            rules: ["CORE-008", "CORE-013", "CORE-035", "MCP-FIRST"]
+            enforce: "BLOCKING"
+    
+    - stage: "COMPLETION-REPORT"
+      mcp_tools:
+        - "cortex_audit (final report)"
+        - "cortex_process_request (AC_COMPLETE injection)"
+      actions:
+        - "Generate completion report via cortex_audit"
+        - "Inject final AC_COMPLETE marker"
+        - "Create git tag for release"
+      
+      autonomous_steps:
+        - step: "Final AC_COMPLETE marker"
+          mcp_tool: "cortex_process_request"
+          params:
+            marker_id: "AC-REM-MASTER-PLAN-V2"
+            description: "Master Remediation Plan v2.0 complete - 21 fixes, 100% governance compliance"
+            tests_passing: "803+"
+        
+        - step: "Generate completion report"
+          mcp_tool: "cortex_audit"
+          params:
+            mode: "completion_report"
+            output: "inline"
+        
+        - step: "Create release tag"
+          mcp_tool: "cortex_process_request"
+          params:
+            operation: "git_tag"
+            tag: "v2.0-production-ready"
+            message: "CORTEX Production Ready: 21 fixes, 803+ tests, 0 vulnerabilities"
+
+# ============================================================================
+# EXECUTION SUMMARY
+# ============================================================================
+execution_summary:
+  architecture: "MCP-FIRST (100% compliance)"
+  governance: "EnforcementOrchestrator (7-agent system)"
+  mode: "Silent Autonomous (ASCII progress bars only)"
+  
+  mcp_tools_used:
+    primary:
+      - "cortex_process_request (ALL IMPLEMENT/FIX/REFACTOR operations)"
+      - "cortex_lens_analyze (security, performance, coverage)"
+      - "cortex_audit (comprehensive health scans)"
+      - "cortex_vacuum (file cleanup + relocation)"
+      - "cortex_detect_duplicates (CORE-035 enforcement)"
+    
+    validation:
+      - "cortex_validate_environment (pre-flight check)"
+      - "cortex_git_status (git state verification)"
+      - "cortex_challenge (design reviews)"
+  
+  forbidden_operations:
+    - "❌ create_file (for .py/.ts/.js files)"
+    - "❌ replace_string_in_file (for production code)"
+    - "❌ run_in_terminal (for file operations)"
+    - "❌ Direct Python imports in chat"
+    - "❌ Manual pytest execution"
+    - "❌ Manual git commits (must use AC markers)"
+    - "❌ Test bypass (--ignore, _skip_ renaming, deletion)"
+  
+  required_patterns:
+    - "✅ cortex_process_request for ALL file modifications"
+    - "✅ TDD enforcement (tests BEFORE code - CORE-008)"
+    - "✅ AC markers (AC_START → AC_COMPLETE) for audit trail"
+    - "✅ EnforcementOrchestrator validation per fix"
+    - "✅ Silent execution with ASCII progress bars"
+    - "✅ Auto-commit after each fix success"
+    - "✅ Rollback on critical failure"
+  
+  success_metrics_before_after:
+    security:
+      before: "2 command injection, 1 path traversal, hardcoded credentials, no auth"
+      after: "0 vulnerabilities, JWT auth, RBAC, secrets cleanup"
+    
+    reliability:
+      before: "3 crashes/week, no circuit breakers, blocking git ops, config drift"
+      after: "0 crashes/month, circuit breakers, async git, single config SSOT"
+    
+    performance:
+      before: "MCP 2-5s P99, git 2-5s blocking, unbounded event memory"
+      after: "MCP <100ms P99, git <100ms async, <50MB event memory"
+    
+    operability:
+      before: "30+ min MTTR, no structured logging, no tracing"
+      after: "<5 min MTTR, JSON logs, OpenTelemetry tracing"
+    
+    code_quality:
+      before: "16 bare except, import errors, 15 root files, 50+ orphans"
+      after: "0 bare except, imports fixed, root clean, 0 orphans"
+  
+  governance_enforcement:
+    core_rules_applied:
+      - "CORE-008: TDD MANDATORY (tests before code)"
+      - "CORE-011: Type hints required"
+      - "CORE-012: Google-style docstrings"
+      - "CORE-013: No bare except clauses"
+      - "CORE-027: Audit trail (AC markers)"
+      - "CORE-035: Single canonical implementation"
+      - "MCP-FIRST: All operations via MCP tools"
+      - "MCP-GATE: IMPLEMENT via cortex_process_request only"
+    
+    enforcement_agents:
+      - "GovernanceEnforcementAgent (TDD, type hints, docstrings)"
+      - "SecurityCheckpointAgent (git discipline, audit trail)"
+      - "ComplianceValidationAgent (domain rules)"
+      - "FileNamingEnforcementAgent (naming conventions)"
+      - "MarkdownSuppressionAgent (no .md generation)"
+      - "ArchitectureIntegrityAgent (CORE-035, MCP-FIRST)"
+      - "IncrementalExecutionAgent (token budget, <500 LOC)"
+  
+  execution_guarantee:
+    statement: |
+      This master remediation plan is 100% MCP-FIRST compliant. 
+      ALL file modifications route through cortex_process_request.
+      ALL security scans use cortex_lens_analyze.
+      ALL cleanup operations use cortex_vacuum.
+      
+      ZERO direct file operations allowed.
+      ZERO test bypasses allowed (CORE-008 strictly enforced).
+      ZERO governance violations allowed (EnforcementOrchestrator blocks).
+      
+      Silent autonomous execution with ASCII progress bars only.
+      No confirmations. No narration. Just execution and completion report.
+      
+      CORTEX operates at ONE quality level: Production.
+
+# ============================================================================
+# ONE-COMMAND EXECUTION
+# ============================================================================
+one_command_execution:
+  user_command: "/implement @MASTER-REMEDIATION-PLAN-V2.yaml"
+  
+  what_happens:
+    - "CORTEX reads this YAML file"
+    - "MasterOrchestrator routes to WrappedTDDOrchestrator"
+    - "EnforcementOrchestrator validates MCP availability (BLOCKING)"
+    - "Executes Waves 1-5 sequentially via cortex_process_request"
+    - "Shows ASCII progress bars (silent mode)"
+    - "Auto-commits after each fix with AC markers"
+    - "Validates after each wave (tests, security, performance)"
+    - "Generates completion report"
+    - "Creates release tag v2.0-production-ready"
+  
+  expected_duration: "12-19 days (parallelized with 4 engineers)"
+  expected_result: "Production-ready CORTEX with 0 vulnerabilities, 803+ tests passing"
+  
+  wave_commands:
+    wave_1: "/implement @MASTER-REMEDIATION-PLAN-V2.yaml --wave 1"
+    wave_2: "/implement @MASTER-REMEDIATION-PLAN-V2.yaml --wave 2"
+    wave_3: "/implement @MASTER-REMEDIATION-PLAN-V2.yaml --wave 3"
+    wave_4: "/implement @MASTER-REMEDIATION-PLAN-V2.yaml --wave 4"
+    wave_5: "/implement @MASTER-REMEDIATION-PLAN-V2.yaml --wave 5"
+    all_waves: "/implement @MASTER-REMEDIATION-PLAN-V2.yaml"
+      
+      commands:
+        - "pytest tests/performance/ -v"
+    
+    - stage: "COMPLETION-REPORT"
+      actions:
+        - "Generate remediation summary"
+        - "Update registry status"
+        - "Create completion artifacts"
+      
+      outputs:
+        - "REMEDIATION-COMPLETE-2026-02-11.md"
+        - "Updated index.yaml with completion status"
+        - "Metrics dashboard with before/after"
+
+# ============================================================================
+# TRACKING & METRICS
+# ============================================================================
+tracking:
+  overall_progress:
+    total_fixes: 45
+    completed: 0
+    in_progress: 0
+    remaining: 45
+    percentage: 0
+  
+  wave_progress:
+    wave_1: "0/8 fixes (0%)"
+    wave_2: "0/3 fixes (0%)"
+    wave_3: "0/4 fixes (0%)"
+    wave_4: "0/3 fixes (0%)"
+    wave_5: "0/3 fixes (0%)"
+  
+  success_metrics:
+    # Security
+    - metric: "MCP authentication enabled"
+      current: false
+      target: true
+    
+    - metric: "Command injection vulnerabilities"
+      current: 2
+      target: 0
+    
+    - metric: "Hardcoded credentials"
+      current: "present"
+      target: "none"
+    
+    # Reliability
+    - metric: "Server crash rate"
+      current: "3/week"
+      target: "0/month"
+    
+    - metric: "Circuit breakers active"
+      current: false
+      target: true
+    
+    - metric: "File corruption incidents"
+      current: "2/week"
+      target: "0/month"
+    
+    # Performance
+    - metric: "MCP P99 latency"
+      current: "2-5s"
+      target: "<100ms"
+    
+    - metric: "Event loop blocking"
+      current: "yes"
+      target: "no"
+    
+    # Operability
+    - metric: "MTTR"
+      current: "30+ min"
+      target: "<5 min"
+    
+    - metric: "Structured logging"
+      current: "0%"
+      target: "100%"
+    
+    - metric: "Distributed tracing"
+      current: false
+      target: true
+  
+  autonomous_execution_log:
+    - wave: 1
+      start_time: null
+      end_time: null
+      status: "pending"
+      fixes_completed: []
+      fixes_failed: []
+    
+    - wave: 2
+      start_time: null
+      end_time: null
+      status: "pending"
+      fixes_completed: []
+      fixes_failed: []
+
+# ============================================================================
+# ORCHESTRATOR WIRING
+# ============================================================================
+orchestrator_wiring:
+  master_orchestrator: "MasterRemediationOrchestrator"
+  
+  tool_routing:
+    quick_wins: "cortex_process_request"
+    security: "cortex_process_request"
+    reliability: "cortex_process_request"
+    infrastructure: "cortex_process_request"
+    cleanup: "cortex_vacuum"
+  
+  autonomous_execution:
+    enabled: true
+    mode: "silent"
+    progress_display: "ascii_bars"
+    error_handling: "log_and_continue"
+    rollback_on_critical: true
+    commit_per_fix: true
+    branch_strategy: "remediation/wave-{n}"
+  
+  notification:
+    on_wave_complete: true
+    on_fix_complete: false
+    on_error: true
+    on_validation_fail: true
+
+# ============================================================================
+# ROLLBACK STRATEGY
+# ============================================================================
+rollback:
+  checkpoints:
+    - "pre_remediation_baseline"
+    - "post_wave_1"
+    - "post_wave_2"
+    - "post_wave_3"
+    - "post_wave_4"
+    - "post_wave_5"
+  
+  triggers:
+    - "Critical test failures (>10 failures)"
+    - "Security regression detected"
+    - "Performance degradation >50%"
+    - "Manual rollback request"
+  
+  procedure:
+    - "Stop current wave execution"
+    - "Log rollback reason + context"
+    - "git reset --hard {checkpoint}"
+    - "Verify tests pass at checkpoint"
+    - "Generate rollback report"
+    - "Alert team for manual intervention"
+
+# ============================================================================
+# COMPLETION CRITERIA
+# ============================================================================
+completion_criteria:
+  # All waves complete
+  - "Wave 1: 8/8 fixes ✅"
+  - "Wave 2: 3/3 fixes ✅"
+  - "Wave 3: 4/4 fixes ✅"
+  - "Wave 4: 3/3 fixes ✅"
+  - "Wave 5: 3/3 fixes ✅"
+  
+  # Validation gates
+  - "803+ tests passing"
+  - "0 security vulnerabilities"
+  - "Performance targets met"
+  - "Documentation updated"
+  
+  # Success metrics
+  - "MCP authentication ✅"
+  - "0 command injection vulns ✅"
+  - "0 hardcoded credentials ✅"
+  - "Circuit breakers active ✅"
+  - "Async git operations ✅"
+  - "Structured logging ✅"
+  - "Distributed tracing ✅"
+  - "Session persistence ✅"
+  - "Event history bounded ✅"
+  - "Root directory clean ✅"
+
+# AC_COMPLETE: AC-REM-MASTER-PLAN-V2 ✅
+# Status: Ready for autonomous execution
+# Next: Execute Wave 1 (Quick Wins)

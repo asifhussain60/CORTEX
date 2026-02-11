@@ -1,11 +1,136 @@
-version: '1.4'
+version: '1.5'
 registry_name: _cortex-master
-description: CORTEX self-development planning with phase tracking and enhancement
-  pipeline
-last_updated: '2026-02-11T15:30:00.000000Z'
-revision: 'Chat Digest Complete (2026-02-11): 17 high-value enhancements extracted from 13 chat sessions'
+description: CORTEX self-development planning with unified remediation tracking
+last_updated: '2026-02-11T16:45:00.000000Z'
+revision: 'Master Remediation Plan v2.0: 45 fixes consolidated for autonomous execution'
+
+# ============================================================================
+# MASTER REMEDIATION PLAN (CONSOLIDATED)
+# ============================================================================
+master_remediation:
+  plan_file: "MASTER-REMEDIATION-PLAN-V2.yaml"
+  status: "active"
+  execution_mode: "autonomous_silent"
+  progress_display: "ascii_bars"
+  
+  summary:
+    total_fixes: 45
+    p0_critical: 23
+    p1_high: 15
+    p2_medium: 7
+    estimated_effort: "32 days (19 days parallelized)"
+  
+  waves:
+    - wave: 1
+      name: "Quick Wins"
+      priority: "P0-CRITICAL"
+      duration: "1-2 days"
+      fixes: 8
+      status: "ready"
+      highlights:
+        - "Command injection fix (4h)"
+        - "Global exception handler (4h)"
+        - "Liveness probe (3h)"
+        - "Path traversal fix (4h)"
+        - "Bare except clauses (2h)"
+        - "Debug race condition (6h)"
+        - "Module imports (15min)"
+        - "Test dependencies (10min)"
+    
+    - wave: 2
+      name: "Security Hardening"
+      priority: "P0-SECURITY"
+      duration: "3-5 days"
+      fixes: 3
+      status: "ready"
+      highlights:
+        - "MCP authentication (2 days)"
+        - "AWS credentials cleanup (1 day)"
+        - "RBAC implementation (2 days)"
+    
+    - wave: 3
+      name: "Reliability Hardening"
+      priority: "P0-RELIABILITY"
+      duration: "2-3 days"
+      fixes: 4
+      status: "ready"
+      highlights:
+        - "Circuit breakers (1 day)"
+        - "Async git operations (1 day)"
+        - "Configuration drift fix (2 days)"
+        - "Session persistence (1 day)"
+    
+    - wave: 4
+      name: "Infrastructure & Observability"
+      priority: "P1-INFRASTRUCTURE"
+      duration: "3-5 days"
+      fixes: 3
+      status: "ready"
+      highlights:
+        - "Structured logging (1 day)"
+        - "Distributed tracing (2 days)"
+        - "Event history bounds (1 day)"
+    
+    - wave: 5
+      name: "Cleanup & Optimization"
+      priority: "P2-CLEANUP"
+      duration: "2-3 days"
+      fixes: 3
+      status: "ready"
+      highlights:
+        - "Vacuum orchestrator enhancement (1 day)"
+        - "Root directory cleanup (1 day)"
+        - "Orphaned files cleanup (4h)"
+  
+  success_metrics:
+    security:
+      - "MCP authentication enabled: false → true"
+      - "Command injection vulns: 2 → 0"
+      - "Hardcoded credentials: present → none"
+    reliability:
+      - "Server crash rate: 3/week → 0/month"
+      - "Circuit breakers: false → true"
+      - "File corruption: 2/week → 0/month"
+    performance:
+      - "MCP P99 latency: 2-5s → <100ms"
+      - "Event loop blocking: yes → no"
+    operability:
+      - "MTTR: 30+ min → <5 min"
+      - "Structured logging: 0% → 100%"
+      - "Distributed tracing: false → true"
+
 active_phases:
   # CRITICAL (P0) - Immediate Action Required
+  - id: ENH-063
+    title: "Production Architecture Remediation (15 Critical Fixes)"
+    priority: P0
+    status: active
+    estimated_effort: "19 days (12 days parallelized)"
+    roi: "Security + Reliability hardening → production-ready"
+    confidence: 9.5
+    source: "chat01.md digest (2026-02-11)"
+    description: |
+      Address 15 P0/P1 production-readiness findings from comprehensive
+      architecture analysis: MCP authentication, command injection, circuit
+      breakers, exception handling, async git, RBAC, structured logging,
+      distributed tracing, configuration drift, session persistence.
+    impact: "CRITICAL - Production deployment blocked by security vulnerabilities"
+    phases:
+      - "Phase 1: Critical Security Fixes (5-7 days, 4 fixes)"
+      - "Phase 2: Reliability & Performance (3 days, 3 fixes)"
+      - "Phase 3: Operability & Monitoring (2 days, 3 fixes)"
+      - "Phase 4: Authorization & Security (3 days, 2 fixes)"
+      - "Phase 5: Configuration & State (3 days, 2 fixes)"
+      - "Phase 6: Scalability & Resources (1 day, 1 fix)"
+    files:
+      - cortex/mcp/server.py (AUTH, EXCEPTION HANDLER, LIVENESS)
+      - cortex/mcp/gateway.py (AUTH, RBAC)
+      - cortex/mcp/tools/refactor_tool.py (COMMAND INJECTION FIX)
+      - cortex/repositories/git_operations.py (CIRCUIT BREAKERS, ASYNC)
+      - cortex/orchestrators/support/debug_orchestrator.py (RACE CONDITION FIX)
+      - tests/integration/ (CREDENTIALS CLEANUP)
+      - cortex/*/*.py (STRUCTURED LOGGING)
+  
   - id: ENH-064
     title: "LENS Intelligence Layer Separation"
     priority: P0

@@ -1,0 +1,1258 @@
+# ============================================================================
+# ENH-063: Production Architecture Remediation (15 Critical Fixes)
+# ============================================================================
+# Purpose: Address P0/P1 production-readiness findings from comprehensive
+#          architecture analysis (chat01.md digest 2026-02-11)
+# Authority: DIGEST session + cortex-architect.prompt.md v15.3
+# Source: _workspaces/.chats/chat01-digest.yaml
+# Approach: 6-phase remediation with parallelizable implementation
+# Priority: P0 (Production Blocker - Security + Reliability)
+# ============================================================================
+
+version: "1.0"
+created: "2026-02-11"
+updated: "2026-02-11"
+status: "active"
+priority: "P0"
+
+metadata:
+  enhancement_id: "ENH-063"
+  title: "Production Architecture Remediation (15 Critical Fixes)"
+  subtitle: "MCP security, reliability, operability, and scalability hardening"
+  author: "Asif Hussain"
+  created_date: "2026-02-11T00:00:00Z"
+  source_analysis: "_workspaces/.chats/chat01.md"
+  digest_confidence: 9.5
+  estimated_effort: "19 days (12 days parallelized)"
+  risk_level: "HIGH"
+  breaking_changes: true
+  reason: "Security vulnerabilities, reliability gaps, and operability blind spots"
+
+# ============================================================================
+# PROBLEM STATEMENT
+# ============================================================================
+problem:
+  current_state: |
+    Comprehensive production architecture analysis identified 15 critical issues
+    across security, reliability, performance, and operability dimensions:
+    
+    **Security Vulnerabilities (5 P0/P1):**
+    - MCP server has ZERO authentication (any localhost process can deploy to prod)
+    - Command injection in cortex_refactor (arbitrary code execution)
+    - AWS credentials hardcoded in test files (git history exposure)
+    - No RBAC on deployment tools (unauthorized production access)
+    - Path traversal in onboarding tool (arbitrary file reads)
+    
+    **Reliability Gaps (5 P0/P1):**
+    - No circuit breakers (git operations can deadlock entire server)
+    - Unhandled exceptions crash MCP server (all 73 tools unavailable)
+    - Race condition in DebugOrchestrator (file corruption)
+    - Configuration drift (wiring.yaml vs __wiring_contract__.yaml)
+    - Session state lost on MCP restart (retry loops)
+    
+    **Performance Bottlenecks (1 P0):**
+    - Git operations block event loop (2-5s synchronous calls)
+    
+    **Operability Blind Spots (4 P1):**
+    - No liveness probe (cannot detect deadlocks)
+    - No structured logging (30+ min MTTR)
+    - No distributed tracing (multi-orchestrator failures hard to diagnose)
+    - Unbounded event history growth (memory leak: 10MB/day → 300MB/month)
+
+  impact:
+    - "🔴 P0 CRITICAL: MCP server vulnerable to unauthorized access (authentication)"
+    - "🔴 P0 CRITICAL: Arbitrary code execution via command injection"
+    - "🔴 P0 CRITICAL: Server deadlocks from git operations (no circuit breakers)"
+    - "🔴 P0 CRITICAL: Single tool exception crashes all 73 tools"
+    - "🔴 P0 CRITICAL: Git operations block server (2-5s unresponsiveness)"
+    - "🔴 P0 CRITICAL: Concurrent debug sessions corrupt files"
+    - "🔴 P0 CRITICAL: Deadlocks undetectable (liveness probe missing)"
+    - "🔴 P0 CRITICAL: AWS credentials exposed in git history"
+    - "🟡 P1 HIGH: Configuration drift causes runtime failures"
+    - "🟡 P1 HIGH: MCP restart loses all sessions"
+    - "🟡 P1 HIGH: Anyone can deploy to production (no RBAC)"
+    - "🟡 P1 HIGH: Memory leak from unbounded event history"
+    - "🟡 P1 HIGH: Manual log analysis slow (no structured logging)"
+    - "🟡 P1 HIGH: Arbitrary file reads via path traversal"
+    - "🟡 P1 HIGH: 30+ min MTTR (no distributed tracing)"
+
+  business_justification: |
+    Production deployment is BLOCKED until security vulnerabilities fixed:
+    - Authentication required for MCP server (SOC 2 compliance)
+    - Command injection is OWASP A03 critical vulnerability
+    - AWS credential exposure violates security policy
+    - Circuit breakers required for SLA targets (99.9% uptime)
+    - Operability requirements: <5 min MTTR, structured logging
+    
+    Without ENH-063: Cannot deploy to production (security audit fail)
+    With ENH-063: Production-ready with hardened security + reliability
+
+# ============================================================================
+# SOLUTION DESIGN (6-PHASE REMEDIATION)
+# ============================================================================
+solution:
+  overview: |
+    6-phase remediation plan addressing all 15 findings in priority order:
+    
+    Phase 1: Critical Security Fixes (Week 1, 5-7 days)
+      → MCP authentication, command injection, exception handler, credentials
+    
+    Phase 2: Reliability & Performance (Week 2, 3 days)
+      → Circuit breakers, async git, debug race condition
+    
+    Phase 3: Operability & Monitoring (Week 2-3, 2 days)
+      → Liveness probe, structured logging, distributed tracing
+    
+    Phase 4: Authorization & Security (Week 3, 3 days)
+      → RBAC, path traversal fix
+    
+    Phase 5: Configuration & State (Week 4, 3 days)
+      → Configuration drift fix, session persistence
+    
+    Phase 6: Scalability & Resources (Week 4, 1 day)
+      → Event history bounds
+    
+    Parallelization Strategy: 4 engineers, 12 days total
+
+  architecture:
+    phases:
+      - phase: 1
+        name: "Critical Security Fixes"
+        duration: "5-7 days"
+        parallelizable: true
+        engineers: 4
+        fixes:
+          - P0-001-MCP-Authentication
+          - P0-002-Command-Injection-Fix
+          - P0-005-Global-Exception-Handler
+          - P0-008-AWS-Credentials-Cleanup
+      
+      - phase: 2
+        name: "Reliability & Performance"
+        duration: "3 days"
+        parallelizable: true
+        engineers: 2
+        fixes:
+          - P0-003-Circuit-Breakers
+          - P0-006-Async-Git-Operations
+          - P0-004-Debug-Race-Condition
+      
+      - phase: 3
+        name: "Operability & Monitoring"
+        duration: "2 days"
+        parallelizable: true
+        engineers: 2
+        fixes:
+          - P0-007-Liveness-Probe
+          - P1-013-Structured-Logging
+          - P1-015-Distributed-Tracing
+      
+      - phase: 4
+        name: "Authorization & Security"
+        duration: "3 days"
+        parallelizable: true
+        engineers: 2
+        fixes:
+          - P1-011-RBAC-Implementation
+          - P1-014-Path-Traversal-Fix
+      
+      - phase: 5
+        name: "Configuration & State"
+        duration: "3 days"
+        parallelizable: true
+        engineers: 2
+        fixes:
+          - P1-009-Configuration-Drift-Fix
+          - P1-010-Session-Persistence
+      
+      - phase: 6
+        name: "Scalability & Resources"
+        duration: "1 day"
+        parallelizable: false
+        engineers: 1
+        fixes:
+          - P1-012-Event-History-Bounds
+
+# ============================================================================
+# DETAILED FIX SPECIFICATIONS
+# ============================================================================
+
+fixes:
+  # =========================================================================
+  # PHASE 1: CRITICAL SECURITY FIXES
+  # =========================================================================
+  
+  - id: "P0-001-MCP-Authentication"
+    priority: "P0"
+    category: "security"
+    title: "MCP Server Lacks Authentication"
+    confidence: 10.0
+    status: "🔴 BLOCKED"
+    
+    problem: |
+      Any localhost process can invoke 73 MCP tools including cortex_deploy_to_production.
+      No authentication mechanism exists on MCP server.
+    
+    current_behavior: "MCP server accepts all localhost requests without authentication"
+    proposed_behavior: "Token-based authentication with VS Code integration"
+    
+    impact:
+      - "Unauthorized tool invocation possible"
+      - "Production deployment unprotected"
+      - "SOC 2 compliance violation"
+    
+    effort_estimate: "2 days"
+    
+    affected_components:
+      - "cortex/mcp/server.py"
+      - "cortex/mcp/gateway.py"
+      - ".vscode/settings.json (MCP config)"
+    
+    implementation_steps:
+      - title: "Design token-based auth flow"
+        tasks:
+          - "JWT tokens with VS Code integration"
+          - "Token validation middleware"
+          - "Token refresh mechanism"
+      
+      - title: "Implement authentication layer"
+        tasks:
+          - "Add auth middleware to MCP gateway"
+          - "Integrate with VS Code auth provider"
+          - "Update all 73 tool invocations"
+      
+      - title: "Add authorization audit log"
+        tasks:
+          - "Log all auth attempts"
+          - "Track token lifecycle"
+          - "Alert on repeated auth failures"
+    
+    acceptance_criteria:
+      - "MCP server rejects unauthenticated requests"
+      - "VS Code provides seamless token flow"
+      - "All 73 tools protected by authentication"
+      - "Auth audit log created"
+    
+    testing_strategy:
+      - "Unit: Auth middleware validates tokens correctly"
+      - "Integration: VS Code auth flow end-to-end"
+      - "Security: Attempt unauthorized access (expect rejection)"
+    
+    references:
+      - "OWASP_A01_Broken_Access_Control"
+      - "MCP_Security_Best_Practices"
+      - "JWT_Token_Best_Practices"
+  
+  - id: "P0-002-Command-Injection-Fix"
+    priority: "P0"
+    category: "security"
+    title: "Command Injection in cortex_refactor"
+    confidence: 10.0
+    status: "🔴 CRITICAL"
+    
+    problem: |
+      Shell commands built from unsanitized input enable arbitrary code execution.
+      subprocess(shell=True) used with user-provided input.
+    
+    current_behavior: "subprocess(shell=True) with user input allows injection"
+    proposed_behavior: "Use subprocess(shell=False) with argument lists"
+    
+    impact:
+      - "Attackers can execute arbitrary commands"
+      - "Server compromise possible"
+      - "OWASP A03 critical vulnerability"
+    
+    effort_estimate: "4 hours"
+    
+    affected_components:
+      - "cortex/mcp/tools/refactor_tool.py"
+      - "cortex/refactoring/semantic_refactor.py"
+    
+    implementation_steps:
+      - title: "Replace shell=True with argument lists"
+        tasks:
+          - "Convert all subprocess calls to shell=False"
+          - "Use list arguments instead of string commands"
+          - "Add input validation layer"
+      
+      - title: "Add security tests"
+        tasks:
+          - "Test injection attempts (expect failure)"
+          - "Validate argument escaping"
+          - "Fuzz testing with malicious inputs"
+    
+    acceptance_criteria:
+      - "No shell=True usage with user input"
+      - "All commands use argument lists"
+      - "Security tests for injection attempts pass"
+    
+    testing_strategy:
+      - "Unit: Input validation rejects malicious patterns"
+      - "Security: Injection attempts fail gracefully"
+      - "Regression: Existing refactoring operations work"
+    
+    references:
+      - "OWASP_A03_Injection"
+      - "CWE-78_OS_Command_Injection"
+      - "Python_subprocess_Security"
+  
+  - id: "P0-005-Global-Exception-Handler"
+    priority: "P0"
+    category: "reliability"
+    title: "Unhandled Exceptions Crash MCP Server"
+    confidence: 10.0
+    status: "🔴 CRITICAL"
+    
+    problem: |
+      Any tool exception kills MCP process, making all 70+ tools unavailable.
+      No global exception handler exists.
+    
+    current_behavior: "Unhandled exceptions crash entire MCP server"
+    proposed_behavior: "Global exception handler with graceful degradation"
+    
+    impact:
+      - "Single tool failure brings down all 73 tools"
+      - "No service availability during exceptions"
+      - "Cascading failures possible"
+    
+    effort_estimate: "4 hours"
+    
+    affected_components:
+      - "cortex/mcp/server.py"
+      - "cortex/mcp/gateway.py"
+    
+    implementation_steps:
+      - title: "Add global exception handler"
+        tasks:
+          - "Wrap all tool invocations in try-except"
+          - "Log exceptions with full context"
+          - "Return error responses instead of crashing"
+      
+      - title: "Implement graceful degradation"
+        tasks:
+          - "Failed tool returns error response"
+          - "Server continues processing other requests"
+          - "Circuit breaker for repeatedly failing tools"
+    
+    acceptance_criteria:
+      - "Exceptions logged but don't crash server"
+      - "Failed tool returns error response"
+      - "Server continues processing other requests"
+    
+    testing_strategy:
+      - "Unit: Exception handler catches all exception types"
+      - "Integration: Failed tool doesn't affect other tools"
+      - "Chaos: Inject random exceptions, verify recovery"
+    
+    references:
+      - "Python_Exception_Handling_Best_Practices"
+      - "Graceful_Degradation_Patterns"
+      - "Fault_Isolation_Strategies"
+  
+  - id: "P0-008-AWS-Credentials-Cleanup"
+    priority: "P0"
+    category: "security"
+    title: "Hardcoded AWS Credentials in Tests"
+    confidence: 10.0
+    status: "🔴 SECURITY"
+    
+    problem: |
+      AWS credentials hardcoded in test files, exposed in git history.
+      Enables unauthorized AWS access.
+    
+    current_behavior: "Credentials in test files, committed to git"
+    proposed_behavior: "Use environment variables, rotate exposed credentials"
+    
+    impact:
+      - "Credentials in git history enable AWS access"
+      - "Compliance violation (secrets management)"
+      - "Potential data breach"
+    
+    effort_estimate: "1 day"
+    
+    affected_components:
+      - "tests/integration/"
+      - ".github/workflows/ci.yml"
+    
+    implementation_steps:
+      - title: "Scan and remove credentials"
+        tasks:
+          - "Scan git history for exposed credentials"
+          - "Remove from all test files"
+          - "BFG Repo-Cleaner if needed (history rewrite)"
+      
+      - title: "Rotate all exposed credentials"
+        tasks:
+          - "Identify all exposed AWS keys"
+          - "Rotate in AWS IAM console"
+          - "Update CI/CD with new credentials"
+      
+      - title: "Implement secure credential handling"
+        tasks:
+          - "Use environment variables in tests"
+          - "Add pre-commit hook (git-secrets)"
+          - "Configure AWS credential scanning"
+    
+    acceptance_criteria:
+      - "No credentials in git history (new commits)"
+      - "Exposed credentials rotated in AWS"
+      - "Tests use environment variables"
+      - "Pre-commit hook blocks credential commits"
+    
+    testing_strategy:
+      - "Security: Scan for credentials (expect none)"
+      - "Integration: Tests work with env vars"
+      - "Pre-commit: Hook blocks test credentials"
+    
+    references:
+      - "AWS_Credentials_Best_Practices"
+      - "Git_Secrets_Scanner"
+      - "Secrets_Management_Patterns"
+  
+  # =========================================================================
+  # PHASE 2: RELIABILITY & PERFORMANCE
+  # =========================================================================
+  
+  - id: "P0-003-Circuit-Breakers"
+    priority: "P0"
+    category: "reliability"
+    title: "No Circuit Breakers on External Operations"
+    confidence: 9.5
+    status: "🟡 RELIABILITY"
+    
+    problem: |
+      Git operations hang → all threads blocked → server lockup.
+      No circuit breaker protection on external operations.
+    
+    current_behavior: "Git operations have no timeout or circuit breaker"
+    proposed_behavior: "Implement circuit breakers with 50% failure threshold, 30s trip"
+    
+    impact:
+      - "Slow git operations can deadlock entire server"
+      - "No automatic recovery from external failures"
+      - "Thread pool exhaustion possible"
+    
+    effort_estimate: "1 day"
+    
+    affected_components:
+      - "cortex/repositories/git_operations.py"
+      - "cortex/lens/analyzers/*.py"
+      - "cortex/wiring/registry/git_backed_registry.py"
+    
+    implementation_steps:
+      - title: "Add circuit breaker library"
+        tasks:
+          - "Install pybreaker or implement custom"
+          - "Configure thresholds (50% failure, 30s trip)"
+          - "Add circuit breaker wrapper"
+      
+      - title: "Wrap external operations"
+        tasks:
+          - "All git operations use circuit breaker"
+          - "LENS analyzers use circuit breaker"
+          - "Registry operations protected"
+      
+      - title: "Implement fail-fast behavior"
+        tasks:
+          - "Operations fail fast after trip"
+          - "Automatic recovery after cooldown"
+          - "Circuit state metrics exposed"
+    
+    acceptance_criteria:
+      - "Circuit breaker trips after 50% failure rate"
+      - "Operations fail fast after trip"
+      - "Automatic recovery after cooldown period"
+    
+    testing_strategy:
+      - "Unit: Circuit breaker trips at threshold"
+      - "Integration: Slow git ops trigger circuit"
+      - "Chaos: Inject git failures, verify recovery"
+    
+    references:
+      - "Release_It_Circuit_Breaker_Pattern"
+      - "Resilience4j_Documentation"
+      - "Pybreaker_Library"
+  
+  - id: "P0-006-Async-Git-Operations"
+    priority: "P0"
+    category: "performance"
+    title: "Git Operations Block Event Loop"
+    confidence: 9.5
+    status: "🟡 PERFORMANCE"
+    
+    problem: |
+      2-5s synchronous git calls cause server unresponsiveness.
+      Event loop blocked during git operations.
+    
+    current_behavior: "All git operations are synchronous"
+    proposed_behavior: "Use asyncio with executor for git operations"
+    
+    impact:
+      - "Long-running git ops block all other requests"
+      - "Server appears frozen during git operations"
+      - "Cannot handle concurrent git operations"
+    
+    effort_estimate: "1 day"
+    
+    affected_components:
+      - "cortex/repositories/git_operations.py"
+      - "cortex/wiring/registry/git_backed_registry.py"
+      - "cortex/governance/tools/git_checkpoint.py"
+    
+    implementation_steps:
+      - title: "Create async git wrappers"
+        tasks:
+          - "Use asyncio.to_thread() for git commands"
+          - "Executor pool for concurrent operations"
+          - "Async wrappers for all git functions"
+      
+      - title: "Update callers to async"
+        tasks:
+          - "Convert all git callers to async/await"
+          - "Update MCP gateway for async tools"
+          - "Handle concurrent git operations"
+    
+    acceptance_criteria:
+      - "Git operations don't block event loop"
+      - "Server remains responsive during git ops"
+      - "Concurrent git operations supported"
+    
+    testing_strategy:
+      - "Unit: Async git ops complete correctly"
+      - "Performance: Event loop not blocked (measure)"
+      - "Load: Concurrent git ops work correctly"
+    
+    references:
+      - "Asyncio_Executors"
+      - "Non_Blocking_IO_Patterns"
+      - "Python_Async_Best_Practices"
+  
+  - id: "P0-004-Debug-Race-Condition"
+    priority: "P0"
+    category: "correctness"
+    title: "Race Condition in DebugOrchestrator"
+    confidence: 9.0
+    status: "🟡 CORRECTNESS"
+    
+    problem: |
+      Concurrent marker injection corrupts files.
+      No file locking during CORTEX_DEBUG marker injection.
+    
+    current_behavior: "No file locking, concurrent writes corrupt files"
+    proposed_behavior: "Add file-level locking with fcntl/msvcrt"
+    
+    impact:
+      - "Concurrent debug sessions corrupt source files"
+      - "File corruption can break builds"
+      - "Data loss possible"
+    
+    effort_estimate: "6 hours"
+    
+    affected_components:
+      - "cortex/orchestrators/support/debug_orchestrator.py"
+      - "cortex/tools/debug_marker_injection.py"
+    
+    implementation_steps:
+      - title: "Implement file locking"
+        tasks:
+          - "Use fcntl on Unix, msvcrt on Windows"
+          - "Lock acquisition/release logging"
+          - "5s lock timeout to prevent deadlocks"
+      
+      - title: "Add concurrency tests"
+        tasks:
+          - "Test concurrent debug sessions"
+          - "Verify no file corruption"
+          - "Test lock timeout behavior"
+    
+    acceptance_criteria:
+      - "Concurrent debug sessions do not corrupt files"
+      - "Lock acquisition/release logged"
+      - "Lock timeout prevents deadlocks"
+    
+    testing_strategy:
+      - "Unit: File locking works correctly"
+      - "Integration: Concurrent debug sessions safe"
+      - "Stress: 10 concurrent sessions, no corruption"
+    
+    references:
+      - "Python_fcntl_module"
+      - "File_Locking_Best_Practices"
+      - "Concurrency_Patterns"
+  
+  # =========================================================================
+  # PHASE 3: OPERABILITY & MONITORING
+  # =========================================================================
+  
+  - id: "P0-007-Liveness-Probe"
+    priority: "P0"
+    category: "operability"
+    title: "No Liveness Probe"
+    confidence: 9.0
+    status: "🟡 OPERABILITY"
+    
+    problem: |
+      Cannot detect deadlocks (server passes health checks while frozen).
+      /health endpoint only checks process alive.
+    
+    current_behavior: "Health check only verifies process running"
+    proposed_behavior: "Add /health/live with timestamp validation"
+    
+    impact:
+      - "Deadlocked servers appear healthy to monitoring"
+      - "Cannot detect thread pool exhaustion"
+      - "Manual intervention required for deadlock detection"
+    
+    effort_estimate: "3 hours"
+    
+    affected_components:
+      - "cortex/mcp/server.py"
+      - "deployment/health_checks.yaml"
+    
+    implementation_steps:
+      - title: "Add liveness endpoint"
+        tasks:
+          - "Create /health/live endpoint"
+          - "Update timestamp every heartbeat (5s)"
+          - "Fail if timestamp >30s old"
+      
+      - title: "Add thread pool health check"
+        tasks:
+          - "Monitor thread pool utilization"
+          - "Fail if all threads blocked"
+          - "Expose thread metrics"
+    
+    acceptance_criteria:
+      - "Liveness probe fails when event loop frozen"
+      - "Probe detects thread pool exhaustion"
+      - "Monitoring alerts on liveness failure"
+    
+    testing_strategy:
+      - "Unit: Liveness probe returns correct status"
+      - "Integration: Deadlock detected (inject sleep)"
+      - "Monitoring: Alerts fire on liveness failure"
+    
+    references:
+      - "Kubernetes_Liveness_Probes"
+      - "Health_Check_Patterns"
+      - "Deadlock_Detection"
+  
+  - id: "P1-013-Structured-Logging"
+    priority: "P1"
+    category: "operability"
+    title: "No Structured Logging"
+    confidence: 8.0
+    status: "🟢 ENHANCEMENT"
+    
+    problem: |
+      Cannot query logs efficiently, 30+ min MTTR.
+      Plain text logging with print statements.
+    
+    current_behavior: "Unstructured text logs, manual grep required"
+    proposed_behavior: "Migrate to structlog with JSON output"
+    
+    impact:
+      - "Log analysis requires manual grep"
+      - "Slow incident response (30+ min MTTR)"
+      - "Cannot query by structured fields"
+    
+    effort_estimate: "1 day"
+    
+    affected_components:
+      - "cortex/*/*.py (all modules)"
+      - "cortex/mcp/server.py"
+    
+    implementation_steps:
+      - title: "Install and configure structlog"
+        tasks:
+          - "Install structlog library"
+          - "Configure JSON output formatter"
+          - "Define structured fields schema"
+      
+      - title: "Migrate all logging"
+        tasks:
+          - "Replace print() with logger.info()"
+          - "Add structured fields: timestamp, level, orchestrator, tool, duration"
+          - "Update log rotation config"
+    
+    acceptance_criteria:
+      - "All logs in JSON format"
+      - "Structured fields: timestamp, level, orchestrator, tool, duration"
+      - "Queryable via jq or log aggregation tools"
+    
+    testing_strategy:
+      - "Unit: Structured logs have correct fields"
+      - "Integration: End-to-end request logged correctly"
+      - "Query: jq queries work on log files"
+    
+    references:
+      - "Structured_Logging_Best_Practices"
+      - "Structlog_Documentation"
+      - "JSON_Logging_Patterns"
+  
+  - id: "P1-015-Distributed-Tracing"
+    priority: "P1"
+    category: "operability"
+    title: "No Distributed Tracing"
+    confidence: 8.5
+    status: "🟢 ENHANCEMENT"
+    
+    problem: |
+      30+ min MTTR for failures.
+      No correlation between MCP request and orchestrator execution.
+    
+    current_behavior: "No trace propagation, hard to diagnose multi-orchestrator failures"
+    proposed_behavior: "OpenTelemetry integration with trace propagation"
+    
+    impact:
+      - "Cannot diagnose multi-orchestrator failures efficiently"
+      - "Long MTTR for complex issues"
+      - "No visibility into execution path"
+    
+    effort_estimate: "2 days"
+    
+    affected_components:
+      - "cortex/mcp/server.py"
+      - "cortex/orchestrators/master_orchestrator.py"
+      - "cortex/orchestrators/*/*.py (instrumentation)"
+    
+    implementation_steps:
+      - title: "Install OpenTelemetry"
+        tasks:
+          - "Install opentelemetry-api and opentelemetry-sdk"
+          - "Configure Jaeger exporter"
+          - "Setup trace propagation"
+      
+      - title: "Instrument orchestrators"
+        tasks:
+          - "Add trace spans to all orchestrators"
+          - "Propagate trace context across calls"
+          - "Include structured attributes"
+    
+    acceptance_criteria:
+      - "Request traced from MCP gateway to completion"
+      - "Trace spans include orchestrator transitions"
+      - "Jaeger UI shows full execution path"
+    
+    testing_strategy:
+      - "Unit: Trace spans created correctly"
+      - "Integration: End-to-end trace visible in Jaeger"
+      - "Query: Can find traces by request ID"
+    
+    references:
+      - "OpenTelemetry_Python"
+      - "Distributed_Tracing_Best_Practices"
+      - "Jaeger_Integration"
+  
+  # =========================================================================
+  # PHASE 4: AUTHORIZATION & SECURITY
+  # =========================================================================
+  
+  - id: "P1-011-RBAC-Implementation"
+    priority: "P1"
+    category: "security"
+    title: "No RBAC on Deployment Tools"
+    confidence: 9.0
+    status: "🟡 SECURITY"
+    
+    problem: |
+      Anyone can deploy to production.
+      No role-based access control on MCP tools.
+    
+    current_behavior: "All authenticated users have full access"
+    proposed_behavior: "RBAC with roles: read-only, developer, operator, admin"
+    
+    impact:
+      - "Unauthorized users can deploy broken code to production"
+      - "No principle of least privilege"
+      - "Audit trail incomplete"
+    
+    effort_estimate: "2 days"
+    
+    affected_components:
+      - "cortex/mcp/gateway.py"
+      - "cortex/mcp/tools/deploy_tool.py"
+      - "cortex/mcp/tools/refactor_tool.py"
+    
+    implementation_steps:
+      - title: "Define RBAC roles"
+        tasks:
+          - "Create role definitions (read-only, developer, operator, admin)"
+          - "Map tools to required roles"
+          - "Define role hierarchy"
+      
+      - title: "Implement authorization layer"
+        tasks:
+          - "Add authorization checks at gateway"
+          - "Enforce tool-to-role mappings"
+          - "Create authorization audit log"
+    
+    acceptance_criteria:
+      - "Only admin role can use cortex_deploy_to_production"
+      - "RBAC enforced at gateway level"
+      - "Authorization audit log created"
+    
+    testing_strategy:
+      - "Unit: Authorization checks work correctly"
+      - "Integration: Roles enforced end-to-end"
+      - "Security: Unauthorized attempts blocked and logged"
+    
+    references:
+      - "RBAC_Design_Patterns"
+      - "Principle_of_Least_Privilege"
+      - "Authorization_Best_Practices"
+  
+  - id: "P1-014-Path-Traversal-Fix"
+    priority: "P1"
+    category: "security"
+    title: "Path Traversal in Onboarding Tool"
+    confidence: 9.0
+    status: "🟡 SECURITY"
+    
+    problem: |
+      Arbitrary file reads via .. in paths.
+      No path validation in cortex_onboard_repository.
+    
+    current_behavior: "Paths not validated, .. allowed"
+    proposed_behavior: "Validate paths, restrict to workspace boundaries"
+    
+    impact:
+      - "Attackers can read sensitive files outside repository"
+      - "Information disclosure vulnerability"
+      - "OWASP A01 path traversal"
+    
+    effort_estimate: "4 hours"
+    
+    affected_components:
+      - "cortex/mcp/tools/onboard_tool.py"
+      - "cortex/orchestrators/support/repository_onboarding_orchestrator.py"
+    
+    implementation_steps:
+      - title: "Add path validation"
+        tasks:
+          - "Reject paths containing .."
+          - "Resolve paths against workspace root"
+          - "Validate paths are within boundaries"
+      
+      - title: "Add security tests"
+        tasks:
+          - "Test traversal attempts (expect rejection)"
+          - "Validate boundary enforcement"
+          - "Test with various attack patterns"
+    
+    acceptance_criteria:
+      - "Rejects paths with .."
+      - "Paths resolved against workspace root"
+      - "Security tests for traversal attempts pass"
+    
+    testing_strategy:
+      - "Unit: Path validation works correctly"
+      - "Security: Traversal attempts blocked"
+      - "Regression: Valid paths still work"
+    
+    references:
+      - "OWASP_A01_Path_Traversal"
+      - "Secure_Path_Handling"
+      - "Path_Validation_Patterns"
+  
+  # =========================================================================
+  # PHASE 5: CONFIGURATION & STATE
+  # =========================================================================
+  
+  - id: "P1-009-Configuration-Drift-Fix"
+    priority: "P1"
+    category: "reliability"
+    title: "Configuration Drift Between wiring.yaml Files"
+    confidence: 8.5
+    status: "🟡 RELIABILITY"
+    
+    problem: |
+      wiring.yaml vs __wiring_contract__.yaml divergence.
+      Two separate files with overlapping config.
+    
+    current_behavior: "Two config files, drift causes runtime failures"
+    proposed_behavior: "Single source of truth (wiring.yaml), contract as validation schema"
+    
+    impact:
+      - "Configuration inconsistencies cause runtime failures"
+      - "Hard to maintain two config sources"
+      - "No validation of config correctness"
+    
+    effort_estimate: "2 days"
+    
+    affected_components:
+      - "cortex/__wiring_contract__.yaml"
+      - "cortex/wiring/specifications/wiring.yaml"
+      - "cortex/wiring/registry/git_backed_registry.py"
+    
+    implementation_steps:
+      - title: "Consolidate configuration"
+        tasks:
+          - "Designate wiring.yaml as single source of truth"
+          - "Use __wiring_contract__.yaml as validation schema only"
+          - "Migrate any contract-only config to wiring.yaml"
+      
+      - title: "Add startup validation"
+        tasks:
+          - "Validate wiring.yaml against contract at startup"
+          - "Fail fast if validation fails"
+          - "Clear error messages for validation failures"
+    
+    acceptance_criteria:
+      - "Single wiring configuration file"
+      - "Contract validates configuration at startup"
+      - "Tests verify no drift"
+    
+    testing_strategy:
+      - "Unit: Validation schema works correctly"
+      - "Integration: Invalid config fails at startup"
+      - "Regression: Existing config still works"
+    
+    references:
+      - "Single_Source_of_Truth_Principle"
+      - "Configuration_Management_Best_Practices"
+      - "JSON_Schema_Validation"
+  
+  - id: "P1-010-Session-Persistence"
+    priority: "P1"
+    category: "reliability"
+    title: "Session State Lost on MCP Restart"
+    confidence: 8.0
+    status: "🟡 RELIABILITY"
+    
+    problem: |
+      No persistence for ComprehensionSession.
+      All session state in-memory only.
+    
+    current_behavior: "MCP restart loses all sessions"
+    proposed_behavior: "Redis-backed session store with TTL"
+    
+    impact:
+      - "Server restart loses all active sessions"
+      - "Causes retry loops"
+      - "Poor user experience"
+    
+    effort_estimate: "1 day"
+    
+    affected_components:
+      - "cortex/interaction/comprehension_session.py"
+      - "cortex/mcp/server.py"
+    
+    implementation_steps:
+      - title: "Setup Redis session store"
+        tasks:
+          - "Install redis library"
+          - "Configure Redis connection"
+          - "Implement session serialization"
+      
+      - title: "Add session persistence logic"
+        tasks:
+          - "Save sessions to Redis on updates"
+          - "Load sessions from Redis on startup"
+          - "TTL-based expiration (24h)"
+    
+    acceptance_criteria:
+      - "Sessions persist across MCP restarts"
+      - "TTL prevents unbounded growth"
+      - "Session recovery tests pass"
+    
+    testing_strategy:
+      - "Unit: Session serialization works correctly"
+      - "Integration: Sessions survive MCP restart"
+      - "Performance: Redis operations don't slow requests"
+    
+    references:
+      - "Redis_Session_Store"
+      - "Stateful_Service_Patterns"
+      - "Session_Management_Best_Practices"
+  
+  # =========================================================================
+  # PHASE 6: SCALABILITY & RESOURCES
+  # =========================================================================
+  
+  - id: "P1-012-Event-History-Bounds"
+    priority: "P1"
+    category: "scalability"
+    title: "Unbounded Event History Growth"
+    confidence: 8.5
+    status: "🟡 SCALABILITY"
+    
+    problem: |
+      Event history has no size limit (10MB/day → 300MB/month).
+      OrchestratorEventBus stores all events indefinitely.
+    
+    current_behavior: "Unbounded event storage, memory leak"
+    proposed_behavior: "Ring buffer with max 10K events, TTL-based expiration"
+    
+    impact:
+      - "Memory leak causes MCP server OOM crashes"
+      - "Event history grows unbounded"
+      - "No cleanup mechanism"
+    
+    effort_estimate: "1 day"
+    
+    affected_components:
+      - "cortex/orchestrators/event_bus.py"
+      - "cortex/phase_management/event_history.py"
+    
+    implementation_steps:
+      - title: "Implement ring buffer"
+        tasks:
+          - "Add max size limit (10K events)"
+          - "Implement FIFO eviction"
+          - "Expose memory usage metrics"
+      
+      - title: "Add TTL-based expiration"
+        tasks:
+          - "Events expire after 7 days"
+          - "Background cleanup task"
+          - "Configurable retention policy"
+    
+    acceptance_criteria:
+      - "Event history capped at 10K events"
+      - "Old events expire after 7 days"
+      - "Memory usage remains bounded"
+    
+    testing_strategy:
+      - "Unit: Ring buffer works correctly"
+      - "Load: Generate 50K events, verify bounded"
+      - "Memory: Monitor memory usage over time"
+    
+    references:
+      - "Ring_Buffer_Pattern"
+      - "Memory_Management_Best_Practices"
+      - "Event_Storage_Patterns"
+
+# ============================================================================
+# SUCCESS METRICS
+# ============================================================================
+success_metrics:
+  phase_1_security:
+    - "0 unauthenticated MCP requests succeed"
+    - "0 command injection vulnerabilities in security scan"
+    - "0 AWS credentials in git history (new commits)"
+    - "100% exception handling coverage in MCP layer"
+  
+  phase_2_reliability:
+    - "0 server lockups from git operations (30-day period)"
+    - "<100ms P99 latency for git operations"
+    - "0 file corruptions from concurrent debug sessions"
+  
+  phase_3_operability:
+    - "<5 min MTTR for common failures (down from 30+ min)"
+    - "100% liveness probe detection rate for deadlocks"
+    - "100% logs queryable via structured fields"
+  
+  phase_4_authorization:
+    - "0 unauthorized production deployments"
+    - "100% tool invocations authorized and logged"
+  
+  phase_5_configuration:
+    - "0 configuration drift incidents"
+    - "0 session state lost on MCP restart"
+  
+  phase_6_scalability:
+    - "Event history memory usage <50MB (down from unbounded)"
+    - "0 OOM crashes from event history growth"
+
+# ============================================================================
+# RISK ASSESSMENT
+# ============================================================================
+risks:
+  implementation_risks:
+    - risk: "Auth breaks VS Code integration"
+      probability: "MEDIUM"
+      impact: "HIGH"
+      mitigation: "Thorough integration testing, rollback plan"
+    
+    - risk: "Async git ops introduce new race conditions"
+      probability: "LOW"
+      impact: "HIGH"
+      mitigation: "Comprehensive concurrency tests"
+    
+    - risk: "Circuit breaker too aggressive"
+      probability: "MEDIUM"
+      impact: "MEDIUM"
+      mitigation: "Tunable thresholds, monitoring"
+    
+    - risk: "Redis dependency adds complexity"
+      probability: "LOW"
+      impact: "MEDIUM"
+      mitigation: "Optional feature flag, fallback to in-memory"
+    
+    - risk: "RBAC blocks legitimate users"
+      probability: "MEDIUM"
+      impact: "MEDIUM"
+      mitigation: "Granular permissions, audit logging"
+  
+  production_impact:
+    - phase: "Phase 1 (Security)"
+      impact: "HIGH"
+      rollout: "Canary deploy, VS Code beta testing"
+    
+    - phase: "Phase 2 (Reliability)"
+      impact: "MEDIUM"
+      rollout: "Feature flags, gradual rollout"
+    
+    - phase: "Phase 3 (Operability)"
+      impact: "LOW"
+      rollout: "Deploy immediately (additive only)"
+    
+    - phase: "Phase 4 (Authorization)"
+      impact: "MEDIUM"
+      rollout: "Granular permissions first, then enforce"
+    
+    - phase: "Phase 5 (Configuration)"
+      impact: "MEDIUM"
+      rollout: "Blue-green deployment"
+    
+    - phase: "Phase 6 (Scalability)"
+      impact: "LOW"
+      rollout: "Deploy immediately (internal only)"
+
+# ============================================================================
+# SCHEDULE
+# ============================================================================
+schedule:
+  week_1:
+    name: "Phase 1 - Critical Security Fixes"
+    duration: "5-7 days"
+    tasks:
+      - "Mon-Tue: P0-001 MCP Authentication"
+      - "Wed AM: P0-002 Command Injection Fix"
+      - "Wed PM: P0-005 Global Exception Handler"
+      - "Thu-Fri: P0-008 AWS Credentials Cleanup"
+  
+  week_2:
+    name: "Phase 2 + Phase 3 (Partial)"
+    duration: "5 days"
+    tasks:
+      - "Mon: P0-003 Circuit Breakers"
+      - "Tue: P0-006 Async Git Operations"
+      - "Wed AM: P0-004 Debug Race Condition"
+      - "Wed PM: P0-007 Liveness Probe"
+      - "Thu: P1-013 Structured Logging"
+      - "Fri: P1-015 Distributed Tracing (Day 1)"
+  
+  week_3:
+    name: "Phase 3 (Complete) + Phase 4"
+    duration: "4 days"
+    tasks:
+      - "Mon: P1-015 Distributed Tracing (Day 2)"
+      - "Tue-Wed: P1-011 RBAC Implementation"
+      - "Thu AM: P1-014 Path Traversal Fix"
+  
+  week_4:
+    name: "Phase 5 + Phase 6"
+    duration: "4 days"
+    tasks:
+      - "Mon-Tue: P1-009 Configuration Drift Fix"
+      - "Wed: P1-010 Session Persistence"
+      - "Thu: P1-012 Event History Bounds"
+  
+  week_5:
+    name: "Integration Testing & Validation"
+    duration: "5 days"
+    tasks:
+      - "Mon-Tue: End-to-end testing"
+      - "Wed: Performance benchmarking"
+      - "Thu: Security audit"
+      - "Fri: Production deployment planning"
+
+# ============================================================================
+# ARCHITECTURAL CLEANUP (FUTURE)
+# ============================================================================
+future_cleanup:
+  deprecation_candidates:
+    - name: "SeleniumPlaywrightOrchestrator"
+      reason: "0 references, replace with Playwright-only"
+      effort: "1 day"
+    
+    - name: "WorkflowOrchestrator"
+      reason: "Superseded by OrchestratorEventBus"
+      effort: "1 day"
+    
+    - name: "MigrationOrchestrator"
+      reason: "One-time use, now obsolete"
+      effort: "4 hours"
+  
+  consolidation_opportunities:
+    - name: "ConversationOrchestrator"
+      overlap: "70% with InteractionOrchestrator"
+      action: "Merge into InteractionOrchestrator"
+      effort: "2 days"
+  
+  file_structure_cleanup:
+    - name: "cortex/orchestrators/ reorganization"
+      issue: "300+ misplaced files"
+      action: "Reorganize by domain (core, support, domain)"
+      effort: "1 week"
+
+# ============================================================================
+# REFERENCES
+# ============================================================================
+references:
+  source_materials:
+    - "Original Analysis: _workspaces/.chats/chat01.md"
+    - "Digest YAML: _workspaces/.chats/chat01-digest.yaml"
+    - "Implementation Plan: _workspaces/.chats/PRODUCTION-READINESS-PLAN.md"
+    - "System Manifest: _workspaces/cortex-architecture/CORTEX_SYSTEM_MANIFEST.md"
+  
+  related_documentation:
+    - "MCP Security: .github/prompts/MCP-SETUP-GUIDE.md"
+    - "Governance Rules: cortex-registry/_cortex-master/governance/core-rules.yaml"
+    - "Best Practices: cortex/knowledge/best-practices/security-first.yaml"
+    - "Architecture: cortex-architect.prompt.md v15.3"
+
+# ============================================================================
+# STATUS TRACKING
+# ============================================================================
+tracking:
+  overall_status: "🔴 ACTIVE - Phase 1 Starting"
+  last_updated: "2026-02-11"
+  completion_percentage: 0
+  phases_complete: 0
+  phases_total: 6
+  
+  phase_status:
+    - phase: 1
+      name: "Critical Security Fixes"
+      status: "🔴 NOT STARTED"
+      progress: "0/4 fixes"
+    
+    - phase: 2
+      name: "Reliability & Performance"
+      status: "⚪ PLANNED"
+      progress: "0/3 fixes"
+    
+    - phase: 3
+      name: "Operability & Monitoring"
+      status: "⚪ PLANNED"
+      progress: "0/3 fixes"
+    
+    - phase: 4
+      name: "Authorization & Security"
+      status: "⚪ PLANNED"
+      progress: "0/2 fixes"
+    
+    - phase: 5
+      name: "Configuration & State"
+      status: "⚪ PLANNED"
+      progress: "0/2 fixes"
+    
+    - phase: 6
+      name: "Scalability & Resources"
+      status: "⚪ PLANNED"
+      progress: "0/1 fix"
+  
+  next_actions:
+    - "Create 15 GitHub issues (one per fix)"
+    - "Assign owners to Phase 1 fixes"
+    - "Setup project tracking board"
+    - "Schedule team kickoff meeting"
+    - "Begin P0-002 (command injection, 4h quick win)"
+
+# AC_COMPLETE: AC-ENH-063-001 ✅ Enhancement specification created
+# CONSOLIDATED INTO: MASTER-REMEDIATION-PLAN-V2.yaml
+# Status: Ready for autonomous execution (Wave 1-4)
+# Tracking: See MASTER-REMEDIATION-PLAN-V2.yaml for unified execution

@@ -6,6 +6,27 @@
 
 ---
 
+## 🚨 NEW: Production Architecture Review
+
+### [📋 System Manifest](CORTEX_SYSTEM_MANIFEST.md)
+**Comprehensive orchestrator & MCP tool inventory with production-readiness assessment**
+
+- ✅ **35 Orchestrators** cataloged across 3 tiers (8 core, 9 domain, 18 support)
+- ✅ **73 MCP Tools** mapped with implementation status
+- ✅ **Cross-Reference Analysis** - Wiring validation, usage patterns, redundancy detection
+- ⚠️ **Production Risks** - 15 P0/P1 findings with prioritized remediation plans
+- 📊 **Health Metrics** - Test coverage, utilization rates, dependency validation
+
+**Key Findings:**
+- 🔴 **8 P0 Critical Issues** requiring immediate fix (auth, command injection, race conditions)
+- 🟡 **7 P1 High Priority** items for next sprint (RBAC, session persistence, monitoring)
+- 🟢 **60 of 73 tools** production-ready with >80% test coverage
+- ⚪ **3 orchestrators** candidates for deprecation (SeleniumPlaywright, Workflow, Migration)
+
+[**→ Read Full Production Assessment**](CORTEX_SYSTEM_MANIFEST.md)
+
+---
+
 ## Executive Summary
 
 **CORTEX: The AI Brain for Software Development**

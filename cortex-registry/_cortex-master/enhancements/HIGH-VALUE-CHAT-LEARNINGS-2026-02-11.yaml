@@ -1,21 +1,95 @@
 version: '1.0'
 title: "High-Value Chat Learnings Extraction"
 created: '2026-02-11T15:00:00.000000Z'
+updated: '2026-02-11T16:00:00.000000Z'
 source: "_workspaces/.chats analysis"
 description: |
   Consolidated high-value enhancements and learnings extracted from chat sessions
   that are not yet captured in the registry. These items represent actionable
   improvements for CORTEX architecture, orchestration, and user experience.
+  
+  UPDATE 2026-02-11 16:00: Added ENH-063 from chat01.md digest (15 production
+  architecture fixes with 9.5/10 confidence score).
 
 priority: P1
 status: pending_triage
 estimated_effort: "4-8 weeks"
 
 # ============================================================================
+# SUMMARY STATISTICS
+# ============================================================================
+
+statistics:
+  total_chat_sessions_analyzed: 14  # Updated from 13
+  enhancements_extracted: 18  # Updated from 17
+  p0_critical: 4  # Updated from 3 (added ENH-063)
+  p1_high_value: 8  # Updated from 7
+  p2_nice_to_have: 6
+  total_estimated_effort: "23 weeks"
+  average_confidence_score: 8.7
+
+# ============================================================================
 # CRITICAL ENHANCEMENTS (P0 - Must Implement)
 # ============================================================================
 
 critical_enhancements:
+  - id: ENH-063
+    title: "Production Architecture Remediation (15 Critical Fixes)"
+    source: "chat01.md"
+    priority: P0
+    effort: "19 days (12 days parallelized)"
+    confidence: 9.5
+    created: "2026-02-11"
+    description: |
+      Comprehensive production architecture analysis identified 15 critical issues
+      across security, reliability, performance, and operability dimensions.
+      
+      P0 Critical (8 issues):
+      1. MCP server lacks authentication (any localhost process can deploy to prod)
+      2. Command injection in cortex_refactor (arbitrary code execution)
+      3. No circuit breakers (git operations can deadlock server)
+      4. Race condition in DebugOrchestrator (file corruption)
+      5. Unhandled exceptions crash MCP server (all 73 tools unavailable)
+      6. Git operations block event loop (2-5s synchronous calls)
+      7. No liveness probe (cannot detect deadlocks)
+      8. Hardcoded AWS credentials in tests (git history exposure)
+      
+      P1 High Priority (7 issues):
+      9. Configuration drift (wiring.yaml vs __wiring_contract__.yaml)
+      10. Session state lost on MCP restart
+      11. No RBAC on deployment tools
+      12. Unbounded event history growth (memory leak)
+      13. No structured logging (30+ min MTTR)
+      14. Path traversal in onboarding tool
+      15. No distributed tracing
+    impact: |
+      - Production deployment BLOCKED by security vulnerabilities
+      - Server deadlocks and crashes under load
+      - 30+ min MTTR due to poor observability
+      - Memory leaks and file corruption
+      - SOC 2 compliance violations
+    solution: |
+      6-phase remediation plan:
+      - Phase 1: Critical Security Fixes (Week 1, 5-7 days)
+      - Phase 2: Reliability & Performance (Week 2, 3 days)
+      - Phase 3: Operability & Monitoring (Week 2-3, 2 days)
+      - Phase 4: Authorization & Security (Week 3, 3 days)
+      - Phase 5: Configuration & State (Week 4, 3 days)
+      - Phase 6: Scalability & Resources (Week 4, 1 day)
+    roi: "Security hardening + reliability → production-ready deployment"
+    files:
+      - cortex/mcp/server.py (AUTH, EXCEPTION HANDLER, LIVENESS)
+      - cortex/mcp/gateway.py (AUTH, RBAC)
+      - cortex/mcp/tools/refactor_tool.py (COMMAND INJECTION FIX)
+      - cortex/repositories/git_operations.py (CIRCUIT BREAKERS, ASYNC)
+      - cortex/orchestrators/support/debug_orchestrator.py (RACE CONDITION)
+      - tests/integration/ (CREDENTIALS CLEANUP)
+      - cortex/*/*.py (STRUCTURED LOGGING, TRACING)
+    status: "active"
+    tracking_file: "enhancements/active/enh-063-production-architecture-remediation.yaml"
+    implementation_plan: "_workspaces/.chats/PRODUCTION-READINESS-PLAN.md"
+    digest_file: "_workspaces/.chats/chat01-digest.yaml"
+  
   - id: ENH-064
     title: "LENS Intelligence Layer Separation"
     source: "chat01.md, violations.md"
