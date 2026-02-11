@@ -31,6 +31,19 @@ from cortex.orchestrators.strategies.refactoring_strategy_pattern import (
     ReviewRefactoringStrategy,
     UnifiedRefactoringOrchestrator,
 )
+from cortex.orchestrators.strategies.planning_strategy_pattern import (
+    PlanningLevel,
+    PlanningOperationType,
+    RiskLevel,
+    PlanningStep,
+    PlanningRequest,
+    PlanningMetrics,
+    PlanningResult,
+    PlanningStrategy,
+    MacroPlanningStrategy,
+    MicroPlanningStrategy,
+    UnifiedPlanningOrchestrator,
+)
 
 __all__ = [
     "StageContext",
@@ -51,4 +64,16 @@ __all__ = [
     "SOLIDRefactoringStrategy",
     "ReviewRefactoringStrategy",
     "UnifiedRefactoringOrchestrator",
+    # ENH-090 Track 2: Planning Strategy Pattern (Stage 2)
+    "PlanningLevel",
+    "PlanningOperationType",
+    "RiskLevel",
+    "PlanningStep",
+    "PlanningRequest",
+    "PlanningMetrics",
+    "PlanningResult",
+    "PlanningStrategy",
+    "MacroPlanningStrategy",
+    "MicroPlanningStrategy",
+    "UnifiedPlanningOrchestrator",
 ]
