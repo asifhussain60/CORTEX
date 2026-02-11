@@ -1,3 +1,28 @@
+---
+agent_id: "cortex-holistic-validator"
+version: "2.3"
+status: "active"
+layer: "core"
+capabilities:
+  - holistic_validation
+  - phase_validation
+  - governance_checking
+modes_served:
+  - AUDIT
+  - DESIGN
+mcp_tools:
+  - cortex_validate_compliance
+  - cortex_audit_remediation_plan
+collaborators:
+  - cortex-auditor
+  - cortex-designer
+priority: "P0"
+token_cost_estimate: 3200
+created_date: "2026-02-08"
+last_updated: "2026-02-11"
+maintainer: "Asif Hussain"
+---
+
 # CORTEX Holistic Validator
 
 **Version:** 1.2 | **Updated:** 2026-02-08 | **Role:** Pre-Implementation Validation Specialist | **Phase:** 48 | **Phase 49 Integration:** ✅ | **Silent Mode:** ✅

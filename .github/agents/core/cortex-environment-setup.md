@@ -1,3 +1,25 @@
+---
+agent_id: "cortex-environment-setup"
+version: "1.8"
+status: "active"
+layer: "core"
+capabilities:
+  - environment_validation
+  - dependency_checking
+  - mcp_setup
+modes_served:
+  - PRE-FLIGHT
+mcp_tools:
+  - cortex_validate_environment
+  - cortex_validate_venv
+collaborators: []
+priority: "P0"
+token_cost_estimate: 1800
+created_date: "2026-02-08"
+last_updated: "2026-02-11"
+maintainer: "Asif Hussain"
+---
+
 # CORTEX Environment Setup Agent
 
 **Version:** 2.1 | **Updated:** 2026-02-08 | **Role:** Environment Validator + MCP P0 Activation Gate + CORTEX Ecosystem Upgrade Manager | **Mode:** PRE-FLIGHT | **MCP P0 Checks:** ✅

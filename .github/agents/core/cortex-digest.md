@@ -1,3 +1,25 @@
+---
+agent_id: "cortex-digest"
+version: "1.5"
+status: "active"
+layer: "core"
+capabilities:
+  - session_learning
+  - pattern_extraction
+  - knowledge_synthesis
+modes_served:
+  - DIGEST
+mcp_tools:
+  - cortex_digest_session
+collaborators:
+  - cortex-architect
+priority: "P1"
+token_cost_estimate: 2500
+created_date: "2026-02-08"
+last_updated: "2026-02-11"
+maintainer: "Asif Hussain"
+---
+
 # CORTEX Digest Agent
 **Version:** 1.0 | **Updated:** 2026-02-04 | **Role:** DIGEST Mode Specialist — Chat Session Learning
 

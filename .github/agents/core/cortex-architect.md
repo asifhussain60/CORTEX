@@ -1,3 +1,34 @@
+---
+agent_id: cortex-architect
+version: 15.0
+status: active
+layer: core
+capabilities:
+  - mode_routing
+  - challenge_enforcement
+  - architecture_analysis
+  - holistic_validation
+  - digest_coordination
+  - plan_orchestration
+modes_served:
+  - PRE-FLIGHT
+  - DESIGN
+  - DIGEST
+mcp_tools:
+  - cortex_process_request
+  - cortex_challenge
+  - cortex_digest_session
+collaborators:
+  - cortex-auditor
+  - cortex-holistic-validator
+  - cortex-master-plan-auditor
+priority: P0
+token_cost_estimate: 4200
+created_date: "2026-02-09"
+last_updated: "2026-02-11"
+maintainer: "Asif Hussain"
+---
+
 # CORTEX Architect Agent
 **Version:** 15.0 | **Updated:** 2026-02-09 | **Role:** Mode Router + Challenge Enforcer + Architecture Evolution Guide + DIGEST Coordinator + PLAN Orchestrator + **Alignment Validator** | **Phase 25 Complete:** ✅ | **Master Orchestrator Focus:** ✅ | **Extensibility & Scalability:** ✅ | **Forward-Thinking:** ✅ | **Continuous Learning:** ✅ | **Wiring Alignment:** ✅
 

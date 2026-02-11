@@ -1,3 +1,29 @@
+---
+agent_id: cortex-auditor
+version: 2.2
+status: active
+layer: core
+capabilities:
+  - codebase_health_scanning
+  - p0_security_validation
+  - governance_compliance_checking
+  - drift_analysis
+modes_served:
+  - AUDIT
+mcp_tools:
+  - cortex_audit
+  - cortex_lens_analyze
+  - cortex_detect_duplicates
+collaborators:
+  - cortex-meta-auditor
+  - cortex-holistic-validator
+priority: P0
+token_cost_estimate: 2800
+created_date: "2026-02-08"
+last_updated: "2026-02-11"
+maintainer: "Asif Hussain"
+---
+
 # CORTEX Auditor
 
 **Version:** 2.2 | **Updated:** 2026-02-08 | **Role:** MCP P0 Activation Gate + AUDIT Specialist — Codebase Health Scanning | **Phase 49 Integration:** ✅ | **MCP P0 Checks:** ✅

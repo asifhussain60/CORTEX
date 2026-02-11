@@ -1,3 +1,25 @@
+---
+agent_id: "cortex-phase-resolver"
+version: "1.0"
+status: "active"
+layer: "core"
+capabilities:
+  - phase_resolution
+  - session_continuity
+  - context_extraction
+modes_served:
+  - PLAN
+mcp_tools:
+  - cortex_resolve_phase
+collaborators:
+  - cortex-master-plan-auditor
+priority: "P0"
+token_cost_estimate: 2300
+created_date: "2026-02-04"
+last_updated: "2026-02-11"
+maintainer: "Asif Hussain"
+---
+
 # CORTEX Phase Resolver Agent
 **Version:** 1.0 | **Updated:** 2026-02-04 | **Role:** Multi-Session Continuity & Phase Resolution | **Feature:** ENH-017
 
