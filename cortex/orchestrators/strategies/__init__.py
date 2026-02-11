@@ -18,6 +18,19 @@ from cortex.orchestrators.strategies.stage234_strategies import (
     Stage3ComplianceValidationStrategy,
     Stage4DomainExecutionStrategy,
 )
+from cortex.orchestrators.strategies.refactoring_strategy_pattern import (
+    RefactoringOperationType,
+    RefactoringLanguage,
+    StrategyExecutionMode,
+    RefactoringRequest,
+    RefactoringMetrics,
+    RefactoringResult,
+    RefactoringStrategy,
+    BasicRefactoringStrategy,
+    SOLIDRefactoringStrategy,
+    ReviewRefactoringStrategy,
+    UnifiedRefactoringOrchestrator,
+)
 
 __all__ = [
     "StageContext",
@@ -26,4 +39,16 @@ __all__ = [
     "Stage2IntentClassificationStrategy",
     "Stage3ComplianceValidationStrategy",
     "Stage4DomainExecutionStrategy",
+    # ENH-090 Track 2: Refactoring Strategy Pattern
+    "RefactoringOperationType",
+    "RefactoringLanguage",
+    "StrategyExecutionMode",
+    "RefactoringRequest",
+    "RefactoringMetrics",
+    "RefactoringResult",
+    "RefactoringStrategy",
+    "BasicRefactoringStrategy",
+    "SOLIDRefactoringStrategy",
+    "ReviewRefactoringStrategy",
+    "UnifiedRefactoringOrchestrator",
 ]
