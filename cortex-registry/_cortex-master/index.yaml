@@ -1,17 +1,19 @@
-version: '1.5'
+version: '1.6'
 registry_name: _cortex-master
-description: CORTEX self-development planning with unified remediation tracking
-last_updated: '2026-02-11T16:45:00.000000Z'
-revision: 'Master Remediation Plan v2.0: 45 fixes consolidated for autonomous execution'
+description: CORTEX self-development planning with unified remediation tracking and wave-based autonomous execution
+last_updated: '2026-02-11T18:30:00.000000Z'
+revision: 'Master Remediation Plan v2.1: Wave-based prioritization for autonomous silent execution - 2 phases completed (71, 76)'
 
 # ============================================================================
 # MASTER REMEDIATION PLAN (CONSOLIDATED)
 # ============================================================================
 master_remediation:
   plan_file: "MASTER-REMEDIATION-PLAN-V2.yaml"
+  wave_plan_file: "WAVE-BASED-EXECUTION-PLAN.yaml"
   status: "active"
   execution_mode: "autonomous_silent"
   progress_display: "ascii_bars"
+  wave_execution: true
   
   summary:
     total_fixes: 45
@@ -370,7 +372,83 @@ active_phases:
     status: planned
     estimated_effort: "3 weeks"
     description: "Automated quarterly enhancement pipeline with user approval"
+  
+  - id: phase-75
+    title: "Knowledge Persistence & Universal Learning Loop"
+    priority: P0
+    status: superseded
+    superseded_by: "phase-71"
+    reason: "Overlaps with Phase-71 learning loop architecture (already complete)"
+    estimated_effort: "7-10 days"
+    action: "Mark as complete, learning infrastructure operational"
+  
+  - id: phase-80
+    title: "MCP Tools Documentation Architect (Dual-Mode System)"
+    priority: P1
+    status: active
+    wave: "WAVE-2-DOCUMENTATION"
+    estimated_effort: "4 weeks (1 week MVP)"
+    roi: "Documentation effort: 40+ hours → 2-3 hours (85% reduction)"
+    confidence: 9.2
+    source: "chat01.md digest (2026-02-11)"
+    description: |
+      Apply Documentation Architect solution to MCP Tools with dual-mode system:
+      MODE: Refresh (git-aware delta detection) + MODE: Generate (GitHub Pages).
+      Auto-document from @mcp_tool decorators, interactive tool explorer, multi-persona
+      views, test coverage heat map, phantom tool cleanup (6 tools).
+    impact: "HIGH - Improve MCP tool health 32% → 77%, eliminate manual documentation"
+    stages:
+      - "S1: Foundation — Tool Delta Analyzer + Phantom Cleanup (1-2 days)"
+      - "S2: Intelligence — Health Score + Coverage Integration (2-3 days)"
+      - "S3: Interactive — Tool Explorer UI (3-4 days)"
+      - "S4: Multi-Persona — Developer/Architect/Security/Manager Views (2-3 days)"
+      - "S5: Searchable — Catalog + Fuzzy Search + Filters (2-3 days)"
+      - "S6: Deployment — GitHub Pages + CI/CD (1 day)"
+    success_metrics:
+      - "Health score: 32% → 77% (+45%)"
+      - "Broken tools: 17 → 3 (-14)"
+      - "Phantom tools: 6 → 0 (-6)"
+      - "Documentation refresh: 40h → 2-3h (85% reduction)"
+      - "145 tests passing"
+    files:
+      - cortex-registry/_cortex-master/mcp-tool-audit-matrix.yaml (AUTO-SYNC)
+      - cortex-registry/_cortex-master/mcp-tool-catalog.yaml (NEW)
+      - _workspaces/cortex-gitpages/tools/ (78 HTML tool pages)
+      - _workspaces/cortex-architecture/mcp/tools-catalog.md (UPDATED)
+      - _workspaces/cortex-architecture/mcp/test-coverage.md (NEW)
+    extends: "phase-74-documentation-site-generation"
+    integrated_with: "mcp-tool-audit-matrix.yaml"
+
 completed_phases:
+  - id: phase-71
+    title: "Universal Learning Loop Architecture (Enhanced)"
+    completed: '2026-02-10'
+    status: COMPLETE
+    tests_passing: "74/75 (1 timeout in integration test)"
+    stages_complete: "8/8"
+    location: "phases/completed/2026/"
+    deliverables:
+      - "cortex/learning/ infrastructure (11 modules)"
+      - "Protocol hook enforcement (OrchestratorBaseProtocol v2.0)"
+      - "TestValueScorer (5-dimension test quality)"
+      - "IntelligenceValidator (E2E verification)"
+      - "Learning dashboard with metrics"
+  
+  - id: phase-76
+    title: "Production Foundation Trilogy"
+    completed: '2026-02-10'
+    status: COMPLETE
+    tests_passing: "320/320"
+    stages_complete: "4/4"
+    location: "phases/completed/2026/"
+    consolidates: ["phase-70", "phase-48-alt", "phase-51-alt"]
+    deliverables:
+      - "Implementation ↔ Specification Alignment (S1)"
+      - "Registry Isolation Multi-Tenant (S2)"
+      - "Secrets Management Encryption (S3)"
+      - "Continuous Alignment Monitoring (S4)"
+    note: "Orchestrators (RefactoringOrchestrator, PlanningOrchestrator) verified as implemented"
+  
   - id: CHAT01-REMEDIATION-COMPLETE
     title: "Chat01 Holistic Remediation + TDD Testing"
     completed: '2026-02-11'
