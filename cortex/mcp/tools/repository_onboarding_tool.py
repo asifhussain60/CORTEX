@@ -10,14 +10,14 @@ Created: 2026-02-06
 from pathlib import Path
 from typing import Any, Dict
 
-from cortex.mcp.tools.base_tool import BaseTool
+from cortex.mcp.server import Tool, ToolDefinition, ToolParameter
 from cortex.orchestrators.support.repository_onboarding_orchestrator import (
     get_repository_onboarding_orchestrator,
 )
 from cortex_brain.onboarded_repos import ProfileStore
 
 
-class RepositoryOnboardingTool(BaseTool):
+class RepositoryOnboardingTool(Tool):
     """
     MCP Tool for repository onboarding.
 
@@ -27,44 +27,32 @@ class RepositoryOnboardingTool(BaseTool):
     """
 
     @property
-    def name(self) -> str:
-        """Tool name."""
-        return "cortex_onboard_repository"
-
-    @property
-    def description(self) -> str:
-        """Tool description."""
-        return """
-Onboard external repository with comprehensive profiling.
-
-Creates repository profile with:
-- Tech stack analysis (languages, frameworks, dependencies)
-- Company domains detection (company/domains/ structure)
-- Security baseline assessment
-- Standards extraction (coding style, test patterns)
-- Loose coupling for deletion safety
-
-Usage: /onboard /path/to/repository
-"""
-
-    @property
-    def input_schema(self) -> Dict[str, Any]:
-        """Tool input schema."""
-        return {
-            "type": "object",
-            "properties": {
-                "repo_path": {
-                    "type": "string",
-                    "description": "Absolute path to repository to onboard"
-                },
-                "profile_store_path": {
-                    "type": "string",
-                    "description": "Optional: Path to profile storage directory",
-                    "default": None
-                }
-            },
-            "required": ["repo_path"]
-        }
+    def definition(self) -> ToolDefinition:
+        """Get tool definition."""
+        return ToolDefinition(
+            name="cortex_onboard_repository",
+            description=(
+                "Onboard external repository with comprehensive profiling. "
+                "Creates repository profile with tech stack analysis, "
+                "company domains detection, security baseline assessment, "
+                "standards extraction, and loose coupling for deletion safety. "
+                "Usage: /onboard /path/to/repository"
+            ),
+            parameters=[
+                ToolParameter(
+                    name="repo_path",
+                    type="string",
+                    required=True,
+                    description="Absolute path to repository to onboard"
+                ),
+                ToolParameter(
+                    name="profile_store_path",
+                    type="string",
+                    required=False,
+                    description="Optional: Path to profile storage directory"
+                ),
+            ]
+        )
 
     def execute(self, **kwargs: Any) -> Dict[str, Any]:
         """

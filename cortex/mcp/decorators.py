@@ -20,6 +20,7 @@ def mcp_tool(
     name: str,
     description: str,
     parameters: Optional[Dict[str, str]] = None,
+    input_schema: Optional[Dict[str, Any]] = None,  # Alias for parameters (JSON Schema format)
     category: Optional[str] = None,
     inject_intelligence: bool = True,
 ) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
@@ -33,6 +34,7 @@ def mcp_tool(
         name: Unique name for the MCP tool.
         description: Human-readable description of the tool's purpose.
         parameters: Optional dict mapping parameter names to their types.
+        input_schema: Alias for parameters using JSON Schema format.
         category: Optional category for tool organization.
         inject_intelligence: Whether to inject UnifiedIntelligenceContext (default True).
 
@@ -59,6 +61,9 @@ def mcp_tool(
     if not description:
         raise ValueError("Tool description must be provided")
 
+    # Support input_schema as alias for parameters
+    effective_parameters = parameters or input_schema or {}
+
     def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
         """Register function and return it enhanced."""
         # Store tool metadata
@@ -66,7 +71,7 @@ def mcp_tool(
             "name": name,
             "description": description,
             "func": func,
-            "parameters": parameters or {},
+            "parameters": effective_parameters,
             "category": category,
             "inject_intelligence": inject_intelligence,
         }
@@ -134,6 +139,36 @@ def mcp_tool(
     return decorator
 
 
+def mcp_tool_group(
+    name: str,
+    description: str = "",
+    version: str = "1.0.0"
+):
+    """
+    Decorator to mark a class as an MCP tool group.
+    
+    Tool groups organize related tools under a common namespace.
+    Methods within the class decorated with @mcp_tool will be
+    registered as individual tools.
+    
+    Args:
+        name: Tool group name (e.g., "dashboard_server")
+        description: Human-readable description
+        version: Semantic version string
+    
+    Returns:
+        Decorated class with group metadata
+    """
+    def decorator(cls):
+        cls._mcp_tool_group = {
+            "name": name,
+            "description": description,
+            "version": version,
+        }
+        return cls
+    return decorator
+
+
 def get_registered_tools() -> Dict[str, Dict[str, Any]]:
     """Get all registered MCP tools.
 
@@ -149,4 +184,4 @@ def clear_tools() -> None:
     MCP_TOOLS_REGISTRY.clear()
 
 
-__all__ = ["mcp_tool", "get_registered_tools", "clear_tools", "MCP_TOOLS_REGISTRY"]
+__all__ = ["mcp_tool", "mcp_tool_group", "get_registered_tools", "clear_tools", "MCP_TOOLS_REGISTRY"]

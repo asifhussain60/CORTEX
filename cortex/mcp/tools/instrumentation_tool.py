@@ -10,7 +10,7 @@ Provides MCP tools for:
 - Getting enhancement recommendations based on metrics
 """
 
-from typing import Any, Literal
+from typing import Any, Literal, Union
 
 from cortex.mcp.decorators import mcp_tool
 from cortex.orchestrators.support.instrumentation_orchestrator import (
