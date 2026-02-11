@@ -351,7 +351,20 @@ class DeploymentStrategy(InfrastructureStrategy):
                     deploy["rolled_back_at"] = datetime.utcnow().isoformat()
                     result_data = {"deployment_id": deployment_id, "status": "rolled_back"}
                 else:
-                    result_data = {"deployment_id": deployment_id, "status": "not_found"}
+                    # Return error for non-existent deployment
+                    duration_ms = (time.time() - start_time) * 1000
+                    return InfrastructureResult(
+                        success=False,
+                        operation=request.operation,
+                        result_data=None,
+                        error=f"Cannot rollback non-existent deployment: {deployment_id}",
+                        metrics=InfrastructureMetrics(
+                            duration_ms=duration_ms,
+                            operation_success=False,
+                            resources_used="compute",
+                            error_count=1
+                        )
+                    )
             
             else:
                 result_data = None
