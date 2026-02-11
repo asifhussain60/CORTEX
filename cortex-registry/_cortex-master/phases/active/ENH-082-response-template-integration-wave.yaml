@@ -122,6 +122,31 @@ waves:
           - "cortex-registry/_cortex-master/WAVE-BASED-EXECUTION-PLAN.yaml (UPDATE)"
         git_checkpoint: "Plan sync: ENH-082 foundation wave ready"
 
+      - stage_id: "W1-S4-VACUUM"
+        stage_name: "Wave 1 Vacuum Pass (MANDATORY)"
+        status: "ready"
+        effort_hours: "1-2"
+        deliverables:
+          - "Run VacuumOrchestrator.scan_root_level() to identify Wave 1 artifacts"
+          - "Vacuum registry audit reports (move stale to archive)"
+          - "Clean up template analysis temp files"
+          - "Archive deprecated components (validate _deprecated/ directory)"
+          - "Remove phase markers (.phase67-*, .session-*, etc.)"
+          - "Verify zero production file deletion"
+        acceptance_criteria:
+          - "✅ All Wave 1 artifacts archived or relocated"
+          - "✅ Zero production file deletion (100% confidence)"
+          - "✅ Broken link check passes"
+          - "✅ Git status clean"
+          - "✅ Test suite still passes (no breakage)"
+        tests:
+          - "test_vacuum_wave1_artifacts.py: validates cleanup"
+          - "test_zero_production_deletion.py: confirms safety"
+        files_modified:
+          - "_deprecated/ directory (archived components)"
+          - "docs/archive/ (Wave 1 artifacts)"
+        git_checkpoint: "ENH-082-W1-VACUUM: Wave 1 artifacts cleaned"
+
 # =========================================================================
 # WAVE 2: ENGINE IMPLEMENTATION (Days 4-6, 16-20 hours)
 # =========================================================================
@@ -170,6 +195,25 @@ waves:
           - "cortex/orchestrators/response/unified_response_engine.py"
           - "tests/unit/orchestrators/response/test_unified_response_engine.py"
         git_checkpoint: "ENH-082-W2-S1: Unified Response Engine complete (25 tests ✅)"
+
+      - stage_id: "W2-S4-VACUUM"
+        stage_name: "Wave 2 Vacuum Pass (MANDATORY)"
+        status: "ready"
+        effort_hours: "1-2"
+        deliverables:
+          - "Vacuum Wave 2 artifacts (engine implementation temp files)"
+          - "Clean up response template test fixtures (outdated)"
+          - "Archive old response formatting adapters"
+          - "Remove debug markers from Wave 2 code"
+          - "Consolidate test artifacts"
+        acceptance_criteria:
+          - "✅ Wave 2 artifacts archived"
+          - "✅ Zero breakage validation (tests pass)"
+          - "✅ No orphaned test files"
+          - "✅ Debug markers removed"
+        tests:
+          - "test_vacuum_wave2_artifacts.py"
+        git_checkpoint: "ENH-082-W2-VACUUM: Wave 2 artifacts cleaned"
 
       - stage_id: "W2-S2"
         stage_name: "Injection Point Integration"
@@ -332,6 +376,27 @@ waves:
           - "docs/response-engine-validation-report.md"
         git_checkpoint: "ENH-082-W3-S3: 200+ regression tests ✅, Copilot Chat validated"
 
+      - stage_id: "W3-S4-VACUUM"
+        stage_name: "Wave 3 Vacuum Pass (MANDATORY)"
+        status: "ready"
+        effort_hours: "2-3"
+        deliverables:
+          - "Vacuum Wave 3 artifacts (migration script outputs, linter reports)"
+          - "Archive old orchestrator implementations (pre-migration backups)"
+          - "Clean up test fixtures from 200+ regression suite"
+          - "Remove orphaned template files"
+          - "Consolidate migration reports"
+          - "Validate zero production code deletion"
+        acceptance_criteria:
+          - "✅ Wave 3 artifacts archived"
+          - "✅ Zero breakage validation (all 200+ tests pass)"
+          - "✅ No orphaned orchestrator files"
+          - "✅ Migration backups consolidated"
+        tests:
+          - "test_vacuum_wave3_artifacts.py"
+          - "test_post_migration_integrity.py"
+        git_checkpoint: "ENH-082-W3-VACUUM: Wave 3 artifacts cleaned"
+
 # =========================================================================
 # WAVE 4: POLISH & DOCUMENTATION (Days 10-11, 8-10 hours)
 # =========================================================================
@@ -412,6 +477,68 @@ waves:
           - "cortex-registry/_cortex-master/WAVE-BASED-EXECUTION-PLAN.yaml"
           - "docs/architecture-diagrams.md (NEW sections)"
         git_checkpoint: "Plan sync: ENH-082 complete, 200+ tests ✅, 67/72 orchestrators"
+
+      - stage_id: "W4-S3-VACUUM-FINAL"
+        stage_name: "Final Production Vacuum Pass (MANDATORY)"
+        status: "ready"
+        effort_hours: "3-4"
+        deliverables:
+          - "Run comprehensive root-level scan (VacuumOrchestrator.scan_root_level())"
+          - "Archive ALL non-production files (100% confidence zero breakage):"
+            - "Phase markers (.phase*, .session*, *-complete, *-checkpoint)"
+            - "Test artifacts (coverage reports, test logs)"
+            - "Development utilities (root-level scripts → scripts/utilities/)"
+            - "Documentation drafts (docs-* → docs/archive/)"
+            - "Deprecated components (validate _deprecated/ complete)"
+          - "Recursive cleanup of all subfolders:"
+            - "cortex/ (remove __pycache__, .pyc files)"
+            - "tests/ (remove .pytest_cache, test artifacts)"
+            - "docs/ (archive obsolete documentation)"
+            - "_workspaces/ (archive chat logs, GPT artifacts)"
+          - "Validate production readiness:"
+            - "Zero broken links"
+            - "All tests pass (no breakage)"
+            - "Git status clean"
+            - "MCP tools functional"
+            - "Orchestrators wired correctly"
+        acceptance_criteria:
+          - "✅ 100% confidence of zero production breakage"
+          - "✅ All non-production files archived or deleted"
+          - "✅ Root directory clean (only production-essential files)"
+          - "✅ Recursive cleanup validated (all subfolders)"
+          - "✅ Broken link check passes"
+          - "✅ Complete test suite passes (zero failures)"
+          - "✅ Git repository clean"
+          - "✅ Production deployment readiness: CONFIRMED"
+        tests:
+          - "test_vacuum_final_production_pass.py: validates complete cleanup"
+          - "test_zero_production_deletion_comprehensive.py"
+          - "test_recursive_subfolder_cleanup.py"
+          - "test_production_readiness_validation.py"
+        vacuum_targets:
+          root_level:
+            - ".phase* files → cortex_brain/state/archive/phase-markers/"
+            - ".session* files → cortex_brain/state/archive/session-markers/"
+            - "*-complete files → cortex_brain/state/archive/"
+            - "test_*.py (root) → tests/"
+            - "*.log files → logs/ or DELETE"
+            - "Development scripts → scripts/utilities/"
+          recursive_cleanup:
+            - "**/__pycache__/ → DELETE"
+            - "**/*.pyc → DELETE"
+            - "**/.pytest_cache/ → DELETE"
+            - "**/.coverage → logs/coverage/"
+            - "**/CORTEX_DEBUG markers → REMOVE from code"
+          production_validation:
+            - "MCP tools available: cortex_process_request, cortex_lens_analyze"
+            - "Orchestrators functional: 72/72"
+            - "Response templates: 72/72"
+            - "Tests passing: 200+"
+        files_modified:
+          - "cortex_brain/state/archive/ (comprehensive archive)"
+          - "scripts/utilities/ (relocated root scripts)"
+          - "logs/ (consolidated logs)"
+        git_checkpoint: "ENH-082-W4-VACUUM-FINAL: Production-ready, zero non-essential files"
 
 # =========================================================================
 # SUMMARY METRICS
