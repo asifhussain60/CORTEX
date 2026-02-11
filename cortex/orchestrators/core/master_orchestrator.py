@@ -1923,6 +1923,11 @@ class MasterOrchestrator(IOrchestrator):
         3. Stage 3: Governance - validate against policies
         4. Stage 4: Execution - delegate to domain orchestrators
 
+        ENH-087 Track 1 REFACTOR: Extracted stages into pluggable strategy pattern
+        - Replaced inline logic with Stage1/2/3/4Strategy delegation
+        - Maintains behavioral parity with existing implementation
+        - Enables testability and future stage customization
+
         Args:
             operation_name: Name or type of the operation (e.g., "implement", "fix", "refactor")
             parameters: Operation parameters dictionary containing:
@@ -1945,6 +1950,203 @@ class MasterOrchestrator(IOrchestrator):
             ...     print(f"Result: {result.unwrap()}")
             ... else:
             ...     print(f"Error: {result.error}")
+        """
+        try:
+            # ═══════════════════════════════════════════════════════════════════════
+            # ENH-087 Track 1.3: 4-STAGE STRATEGY PIPELINE
+            # ═══════════════════════════════════════════════════════════════════════
+            # Refactored from inline logic to pluggable strategy pattern
+            # Benefits: Testability, maintainability, extensibility
+            
+            # Import stage strategies
+            from cortex.orchestrators.strategies import (
+                Stage1ComprehensionStrategy,
+                Stage2IntentClassificationStrategy,
+                Stage3ComplianceValidationStrategy,
+                Stage4DomainExecutionStrategy,
+                StageContext,
+            )
+            
+            # Initialize stage context with operation details
+            stage_context = StageContext(
+                operation_name=operation_name,
+                parameters=parameters,
+                metadata={},
+                result=None,
+                stage_results={}
+            )
+            
+            # Build dependency map for strategies
+            dependencies = {
+                "interaction_orchestrator": self.interaction_orchestrator,
+                "challenge_generator": getattr(self, "_challenge_generator", None),
+                "dor_gate": self._dor_gate,
+                "intent_router": self.intent_router,
+                "enforcement_orchestrator": self._enforcement,
+                "governance_registry": self._governance_registry,
+                "domain_orchestrators": self.domain_orchestrators,
+                "tdd_orchestrator": getattr(self, "tdd_orchestrator", None),
+                "logger": self.logger,
+            }
+            
+            # ═══════════════════════════════════════════════════════════════════════
+            # STAGE 1: Comprehension + Challenge + DoR Approval
+            # ═══════════════════════════════════════════════════════════════════════
+            stage1 = Stage1ComprehensionStrategy(dependencies=dependencies)
+            stage1_result = stage1.execute(stage_context)
+            
+            if stage1_result.is_err():
+                # Stage 1 failed - return error
+                self.logger.log_operation_complete(
+                    ac_id="ENH-087-TRACK-1.3",
+                    operation="STAGE_1_COMPREHENSION_FAILED",
+                    success=False,
+                    details={"error": stage1_result.error}
+                )
+                return stage1_result
+            
+            # Update context with Stage 1 results
+            stage_context = stage1_result.unwrap()
+            
+            self.logger.log_operation_complete(
+                ac_id="ENH-087-TRACK-1.3",
+                operation="STAGE_1_COMPREHENSION_COMPLETE",
+                success=True,
+                details={
+                    "comprehension_keys": list(stage_context.stage_results.get("stage1", {}).keys()),
+                    "dor_approved": stage_context.metadata.get("dor_approved", False)
+                }
+            )
+            
+            # ═══════════════════════════════════════════════════════════════════════
+            # STAGE 2: Intent Classification via IntentRouter
+            # ═══════════════════════════════════════════════════════════════════════
+            stage2 = Stage2IntentClassificationStrategy(dependencies=dependencies)
+            stage2_result = stage2.execute(stage_context)
+            
+            if stage2_result.is_err():
+                # Stage 2 failed - return error (or warn and continue based on severity)
+                self.logger.log_operation_complete(
+                    ac_id="ENH-087-TRACK-1.3",
+                    operation="STAGE_2_INTENT_CLASSIFICATION_FAILED",
+                    success=False,
+                    details={"error": stage2_result.error}
+                )
+                # For now, fail-open: continue with fallback intent = operation_name
+                stage_context.metadata["intent_classification"] = {
+                    "classified_intent": operation_name,
+                    "confidence": 1.0,
+                    "fallback": True
+                }
+            else:
+                # Update context with Stage 2 results
+                stage_context = stage2_result.unwrap()
+                
+                self.logger.log_operation_complete(
+                    ac_id="ENH-087-TRACK-1.3",
+                    operation="STAGE_2_INTENT_CLASSIFICATION_COMPLETE",
+                    success=True,
+                    details={
+                        "classified_intent": stage_context.metadata.get("intent_classification", {}).get("classified_intent"),
+                        "confidence": stage_context.metadata.get("intent_classification", {}).get("confidence")
+                    }
+                )
+            
+            # ═══════════════════════════════════════════════════════════════════════
+            # STAGE 3: Compliance Validation via EnforcementOrchestrator
+            # ═══════════════════════════════════════════════════════════════════════
+            stage3 = Stage3ComplianceValidationStrategy(dependencies=dependencies)
+            stage3_result = stage3.execute(stage_context)
+            
+            if stage3_result.is_err():
+                # Stage 3 failed - compliance violation, BLOCK execution
+                self.logger.log_operation_complete(
+                    ac_id="ENH-087-TRACK-1.3",
+                    operation="STAGE_3_COMPLIANCE_VALIDATION_BLOCKED",
+                    success=False,
+                    details={"error": stage3_result.error}
+                )
+                return stage3_result
+            
+            # Update context with Stage 3 results
+            stage_context = stage3_result.unwrap()
+            
+            self.logger.log_operation_complete(
+                ac_id="ENH-087-TRACK-1.3",
+                operation="STAGE_3_COMPLIANCE_VALIDATION_COMPLETE",
+                success=True,
+                details={
+                    "compliance_status": stage_context.metadata.get("compliance_validation", {}).get("status"),
+                    "warnings": stage_context.metadata.get("compliance_validation", {}).get("warnings", [])
+                }
+            )
+            
+            # ═══════════════════════════════════════════════════════════════════════
+            # STAGE 4: Domain Execution via Orchestrator Delegation
+            # ═══════════════════════════════════════════════════════════════════════
+            stage4 = Stage4DomainExecutionStrategy(dependencies=dependencies)
+            stage4_result = stage4.execute(stage_context)
+            
+            if stage4_result.is_err():
+                # Stage 4 failed - execution error
+                self.logger.log_operation_complete(
+                    ac_id="ENH-087-TRACK-1.3",
+                    operation="STAGE_4_DOMAIN_EXECUTION_FAILED",
+                    success=False,
+                    details={"error": stage4_result.error}
+                )
+                return stage4_result
+            
+            # Update context with Stage 4 results
+            stage_context = stage4_result.unwrap()
+            
+            self.logger.log_operation_complete(
+                ac_id="ENH-087-TRACK-1.3",
+                operation="STAGE_4_DOMAIN_EXECUTION_COMPLETE",
+                success=True,
+                details={
+                    "executed_by": stage_context.metadata.get("execution", {}).get("orchestrator"),
+                    "execution_time_ms": stage_context.metadata.get("execution", {}).get("duration_ms")
+                }
+            )
+            
+            # ═══════════════════════════════════════════════════════════════════════
+            # PIPELINE COMPLETE: Return final result from Stage 4
+            # ═══════════════════════════════════════════════════════════════════════
+            final_result = stage_context.result or Ok({"status": "completed", "stages": 4})
+            
+            self.logger.log_operation_complete(
+                ac_id="ENH-087-TRACK-1.3",
+                operation="4_STAGE_PIPELINE_COMPLETE",
+                success=final_result.is_ok(),
+                details={
+                    "operation": operation_name,
+                    "stages_executed": 4,
+                    "total_metadata_keys": len(stage_context.metadata)
+                }
+            )
+            
+            return final_result
+            
+        except Exception as pipeline_err:
+            # Catch any unexpected errors in strategy pipeline
+            self.logger.log_operation_complete(
+                ac_id="ENH-087-TRACK-1.3",
+                operation="4_STAGE_PIPELINE_ERROR",
+                success=False,
+                details={"error": str(pipeline_err)}
+            )
+            return Err(f"Pipeline execution failed: {str(pipeline_err)}")
+    
+    def execute_operation_legacy(
+        self,
+        operation_name: str,
+        parameters: Dict[str, Any],
+    ) -> Result[Any]:
+        """LEGACY: Pre-ENH-087 inline execution logic (preserved for rollback).
+        
+        DO NOT USE - This method preserved for comparison/rollback only.
+        Use execute_operation() instead (strategy pattern).
         """
         try:
             # ═══════════════════════════════════════════════════════════════════════
