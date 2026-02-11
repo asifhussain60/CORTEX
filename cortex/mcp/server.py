@@ -248,13 +248,27 @@ class MCPServer:
         except (ImportError, Exception) as e:
             self.logger.warning(f"Could not register CORTEX tools: {e}")
         
-        # Auto-discover and register MCP tools by category
-        try:
-            from cortex.mcp.tool_discovery import auto_discover_and_register_tools
-            auto_discover_and_register_tools()
-            self.logger.info("MCP tools auto-discovered and registered")
-        except (ImportError, Exception) as e:
-            self.logger.warning(f"Could not auto-discover MCP tools: {e}")
+        # Import tool modules to trigger @mcp_tool decorator registration
+        # Phase 54 S6: Auto-import all tool modules to populate decorator registry
+        tool_modules = [
+            'cortex.mcp.tools.lens_tools',
+            'cortex.brain.mcp.tools.governance_tools',
+            'cortex.brain.mcp.tools.knowledge_tools',
+            'cortex.brain.mcp.tools.orchestrator_tools',
+            'cortex.brain.mcp.tools.utility_tools',
+            'cortex.mcp.tools.plan_tools',
+            'cortex.mcp.tools.validation_tools',
+        ]
+        
+        imported_count = 0
+        for module_name in tool_modules:
+            try:
+                __import__(module_name)
+                imported_count += 1
+            except (ImportError, Exception) as e:
+                self.logger.debug(f"Could not import {module_name}: {e}")
+        
+        self.logger.info(f"Imported {imported_count}/{len(tool_modules)} tool modules")
         
         if EnhancedAuditLogger is not None:
             self._audit_logger: Optional[Any] = EnhancedAuditLogger.instance()
@@ -448,42 +462,60 @@ class MCPServer:
         Returns:
             Tuple of (valid, error) where error is None if valid
         """
-        if tool_name not in self._tools:
+        # Check if tool exists in local registry first
+        if tool_name in self._tools:
+            tool: Tool = self._tools[tool_name]
+            definition: ToolDefinition = tool.definition
+            
+            # Check required parameters for Tool objects
+            for param in definition.parameters:
+                if param.required and param.name not in params:
+                    return False, MCPError(
+                        code=self.INVALID_PARAMS,
+                        message=f"Required parameter missing: {param.name}",
+                        data={"parameter": param.name}
+                    )
+            
+            # Check parameter types (basic validation)
+            for param in definition.parameters:
+                if param.name in params:
+                    value: Any = params[param.name]
+                    if param.type == "string" and not isinstance(value, str):
+                        return False, MCPError(
+                            code=self.INVALID_PARAMS,
+                            message=f"Parameter {param.name} must be string",
+                            data={"parameter": param.name, "expected": "string"}
+                        )
+                    elif param.type == "number" and not isinstance(value, (int, float)):
+                        return False, MCPError(
+                            code=self.INVALID_PARAMS,
+                            message=f"Parameter {param.name} must be number",
+                            data={"parameter": param.name, "expected": "number"}
+                        )
+            
+            return True, None
+        
+        # Tool not in local registry - check decorator registry (Phase 54 S6)
+        try:
+            from cortex.mcp.decorators import get_registered_tools
+            decorator_tools = get_registered_tools()
+            
+            if tool_name in decorator_tools:
+                # Tool exists in decorator registry - skip detailed validation
+                # (decorator tools don't have ToolDefinition objects)
+                return True, None
+            else:
+                # Tool not found in any registry
+                return False, MCPError(
+                    code=self.METHOD_NOT_FOUND,
+                    message=f"Tool not found: {tool_name}"
+                )
+        except Exception:
+            # Decorator registry unavailable - tool not found
             return False, MCPError(
                 code=self.METHOD_NOT_FOUND,
                 message=f"Tool not found: {tool_name}"
             )
-        
-        tool: Tool = self._tools[tool_name]
-        definition: ToolDefinition = tool.definition
-        
-        # Check required parameters
-        for param in definition.parameters:
-            if param.required and param.name not in params:
-                return False, MCPError(
-                    code=self.INVALID_PARAMS,
-                    message=f"Required parameter missing: {param.name}",
-                    data={"parameter": param.name}
-                )
-        
-        # Check parameter types (basic validation)
-        for param in definition.parameters:
-            if param.name in params:
-                value: Any = params[param.name]
-                if param.type == "string" and not isinstance(value, str):
-                    return False, MCPError(
-                        code=self.INVALID_PARAMS,
-                        message=f"Parameter {param.name} must be string",
-                        data={"parameter": param.name, "expected": "string"}
-                    )
-                elif param.type == "number" and not isinstance(value, (int, float)):
-                    return False, MCPError(
-                        code=self.INVALID_PARAMS,
-                        message=f"Parameter {param.name} must be number",
-                        data={"parameter": param.name, "expected": "number"}
-                    )
-        
-        return True, None
 
     def call_tool(
         self,
@@ -518,9 +550,34 @@ class MCPServer:
             return self._response_cache[cache_key]
         
         try:
-            # Get tool and execute
-            tool: Tool = self._tools[tool_name]
-            result: Any = tool.execute(**params)
+            # Try to get tool from local registry first
+            tool: Optional[Tool] = self._tools.get(tool_name)
+            result: Any = None
+            
+            if tool is not None:
+                # Tool is in local registry (Tool object)
+                result = tool.execute(**params)
+            else:
+                # Tool not in local registry - try decorator registry
+                try:
+                    from cortex.mcp.decorators import get_registered_tools
+                    decorator_tools = get_registered_tools()
+                    
+                    if tool_name in decorator_tools:
+                        # Get the actual callable function
+                        tool_func = decorator_tools[tool_name].get("func")
+                        if tool_func is None:
+                            raise ValueError(f"Tool {tool_name} has no callable function")
+                        
+                        # Call the decorated function directly
+                        result = tool_func(**params)
+                    else:
+                        # Tool not found anywhere
+                        raise KeyError(f"Tool not found: {tool_name}")
+                        
+                except Exception as decorator_error:
+                    # Fallback failed
+                    raise KeyError(f"Tool not found in any registry: {tool_name}") from decorator_error
             
             # Record execution
             execution_time_ms: float = (time.time() - start_time) * 1000
