@@ -1,0 +1,30 @@
+# Phase P-002: Core Feature
+phase_id: "P-002"
+title: "Core Feature Implementation"
+description: "Implement main product functionality"
+
+effort:
+  hours: 50
+  days: 6.25
+
+tasks:
+  - "Design API surface"
+  - "Implement core algorithms"
+  - "Build user-facing features"
+  - "Create integration tests"
+
+success_criteria:
+  - "All core features implemented"
+  - "Integration tests passing"
+  - "API documentation complete"
+  - "Performance benchmarks met"
+
+dependencies:
+  - "P-001"  # Foundation must complete first
+
+risks:
+  - "Scope creep"
+  - "Performance issues"
+  - "Design flaws"
+
+status: "planned"
