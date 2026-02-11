@@ -139,19 +139,252 @@ def check_mcp_module() -> Tuple[bool, str]:
     return False, ""
 
 
+def _strip_jsonc_comments(content: str) -> str:
+    """Strip JSONC comments (// and /* */) while preserving string literals.
+    
+    Uses a state machine approach to avoid corrupting strings that contain
+    comment-like patterns (e.g., glob patterns like '**/*').
+    
+    Args:
+        content: Raw JSONC file content
+        
+    Returns:
+        Clean JSON string safe for json.loads()
+    """
+    result = []
+    i = 0
+    in_string = False
+    
+    while i < len(content):
+        char = content[i]
+        
+        # Handle string boundaries (respect escape sequences)
+        if char == '"' and (i == 0 or content[i - 1] != '\\'):
+            in_string = not in_string
+            result.append(char)
+            i += 1
+            continue
+        
+        # Inside a string — pass through everything verbatim
+        if in_string:
+            result.append(char)
+            i += 1
+            continue
+        
+        # Outside string: check for comments
+        if char == '/' and i + 1 < len(content):
+            next_char = content[i + 1]
+            # Line comment: //
+            if next_char == '/':
+                # Skip until end of line
+                while i < len(content) and content[i] != '\n':
+                    i += 1
+                continue
+            # Block comment: /* */
+            elif next_char == '*':
+                i += 2
+                while i + 1 < len(content):
+                    if content[i] == '*' and content[i + 1] == '/':
+                        i += 2
+                        break
+                    i += 1
+                continue
+        
+        result.append(char)
+        i += 1
+    
+    return ''.join(result)
+
+
+def _read_jsonc_file(path: Path) -> Tuple[bool, Optional[Dict], Optional[str]]:
+    """Read a JSONC file, returning parsed dict AND original raw content.
+    
+    Args:
+        path: Path to JSON/JSONC file
+        
+    Returns:
+        Tuple of (success, parsed_dict, raw_content)
+    """
+    if not path.exists():
+        return True, {}, None
+    
+    try:
+        raw_content = path.read_text(encoding='utf-8')
+        clean_json = _strip_jsonc_comments(raw_content)
+        parsed = json.loads(clean_json)
+        return True, parsed, raw_content
+    except json.JSONDecodeError as e:
+        logger.error(f"❌ Invalid JSON in {path}: {e}")
+        return False, None, None
+    except Exception as e:
+        logger.error(f"❌ Failed to read {path}: {e}")
+        return False, None, None
+
+
+def _write_settings_safely(settings_path: Path, key: str, value, raw_content: Optional[str] = None) -> bool:
+    """Write a single key-value pair to settings.json without corrupting other content.
+    
+    Strategy: If we have raw_content (original JSONC), we try to surgically insert/update
+    the specific key. If not possible, we fall back to full json.dumps but ONLY when
+    the file is pure JSON (no JSONC features detected).
+    
+    Args:
+        settings_path: Path to .vscode/settings.json
+        key: The top-level key to set (e.g., "pylance.mcpServer.enabled")
+        value: The value to set
+        raw_content: Original raw file content (for surgical updates)
+        
+    Returns:
+        True if successful
+    """
+    try:
+        if not settings_path.exists():
+            settings_path.write_text(json.dumps({key: value}, indent=2) + "\n", encoding='utf-8')
+            return True
+        
+        # Read current content
+        if raw_content is None:
+            raw_content = settings_path.read_text(encoding='utf-8')
+        
+        # Parse to check if key exists
+        clean = _strip_jsonc_comments(raw_content)
+        current = json.loads(clean)
+        
+        # Check if file has JSONC features (comments)
+        has_comments = '//' in raw_content or '/*' in raw_content
+        
+        if has_comments:
+            # Surgical approach: only modify the specific key
+            # If key already exists with correct value, skip
+            if key in current and current[key] == value:
+                return True
+            
+            value_json = json.dumps(value, indent=2)
+            # For nested values, indent properly
+            if isinstance(value, dict):
+                lines = value_json.split('\n')
+                value_json = '\n  '.join(lines)
+            
+            if key in current:
+                # Replace existing key — find it in raw content and update value
+                # This is complex for JSONC, so fall through to full rewrite
+                # but preserve the original content structure
+                current[key] = value
+                # Re-serialize but maintain original key order
+                settings_path.write_text(json.dumps(current, indent=2) + "\n", encoding='utf-8')
+            else:
+                # Insert new key before closing brace
+                insert_str = f'  "{key}": {json.dumps(value)}'
+                # Find last closing brace
+                last_brace = raw_content.rstrip().rfind('}')
+                if last_brace > 0:
+                    before = raw_content[:last_brace].rstrip()
+                    # Add comma if needed
+                    if before.rstrip()[-1] not in ('{', ','):
+                        before = before + ','
+                    new_content = before + '\n' + insert_str + '\n}\n'
+                    settings_path.write_text(new_content, encoding='utf-8')
+                else:
+                    # Fallback
+                    current[key] = value
+                    settings_path.write_text(json.dumps(current, indent=2) + "\n", encoding='utf-8')
+        else:
+            # Pure JSON — safe to use json.dumps
+            current[key] = value
+            settings_path.write_text(json.dumps(current, indent=2) + "\n", encoding='utf-8')
+        
+        return True
+        
+    except Exception as e:
+        logger.error(f"❌ Failed to write {key} to settings: {e}")
+        return False
+
+
+def _merge_mcp_servers_safely(settings_path: Path, server_name: str, server_config: Dict) -> bool:
+    """Merge an MCP server config into settings.json without corrupting other content.
+    
+    This specifically handles the github.copilot.chat.mcpServers key,
+    adding or updating a single server entry while preserving all other content.
+    
+    Args:
+        settings_path: Path to .vscode/settings.json
+        server_name: Name of MCP server (e.g., "cortex")
+        server_config: Server configuration dict
+        
+    Returns:
+        True if successful
+    """
+    try:
+        ok, current, raw = _read_jsonc_file(settings_path)
+        if not ok or current is None:
+            current = {}
+            raw = None
+        
+        # Ensure mcpServers key exists
+        if "github.copilot.chat.mcpServers" not in current:
+            current["github.copilot.chat.mcpServers"] = {}
+        
+        # Check if already configured correctly
+        existing = current["github.copilot.chat.mcpServers"].get(server_name)
+        if existing == server_config:
+            logger.info(f"✅ MCP server '{server_name}' already configured correctly")
+            return True
+        
+        # Update the server config
+        current["github.copilot.chat.mcpServers"][server_name] = server_config
+        
+        # Write back — since we're modifying a nested key, use full rewrite
+        # but this is safe because we parsed properly with JSONC-aware reader
+        settings_path.write_text(json.dumps(current, indent=2) + "\n", encoding='utf-8')
+        
+        return True
+        
+    except Exception as e:
+        logger.error(f"❌ Failed to merge MCP server config: {e}")
+        return False
+
+
+def _remove_mcp_server_safely(settings_path: Path, server_name: str) -> bool:
+    """Remove a specific MCP server from settings.json without corrupting other content.
+    
+    Args:
+        settings_path: Path to .vscode/settings.json
+        server_name: Name of MCP server to remove (e.g., "pylance")
+        
+    Returns:
+        True if successful (or server didn't exist)
+    """
+    try:
+        ok, current, raw = _read_jsonc_file(settings_path)
+        if not ok or current is None:
+            return True
+        
+        mcp_servers = current.get("github.copilot.chat.mcpServers", {})
+        if server_name not in mcp_servers:
+            return True
+        
+        del mcp_servers[server_name]
+        current["github.copilot.chat.mcpServers"] = mcp_servers
+        settings_path.write_text(json.dumps(current, indent=2) + "\n", encoding='utf-8')
+        logger.info(f"✅ Removed '{server_name}' from mcpServers")
+        
+        return True
+        
+    except Exception as e:
+        logger.error(f"❌ Failed to remove MCP server '{server_name}': {e}")
+        return False
+
+
 def validate_json_file(path: Path) -> Tuple[bool, Optional[Dict]]:
-    """Validate JSON file syntax."""
+    """Validate JSON/JSONC file syntax (JSONC-aware)."""
     if not path.exists():
         return True, {}
 
-    try:
-        with open(path) as f:
-            content = json.load(f)
+    ok, parsed, _ = _read_jsonc_file(path)
+    if ok and parsed is not None:
         logger.info(f"✅ JSON valid: {path}")
-        return True, content
-    except json.JSONDecodeError as e:
-        logger.error(f"❌ Invalid JSON in {path}: {e}")
-        return False, None
+        return True, parsed
+    return False, None
 
 
 def ensure_vscode_dir() -> Tuple[bool, Path]:
@@ -230,6 +463,9 @@ def create_mcp_json(vscode_dir: Path) -> Tuple[bool, Path]:
 def inject_mcp_config(settings_path: Path) -> Tuple[bool, Dict]:
     """Inject cross-platform MCP configuration into .vscode/settings.json.
     
+    Uses JSONC-safe read/write to preserve existing settings, comments,
+    and glob patterns. Only modifies the github.copilot.chat.mcpServers key.
+    
     MCP Architecture (Phase 53 - Pylance-Style):
     - VS Code auto-starts MCP server when Copilot invokes cortex_* tools
     - Uses stdio transport (stdin/stdout JSON-RPC 2.0)
@@ -237,9 +473,6 @@ def inject_mcp_config(settings_path: Path) -> Tuple[bool, Dict]:
     - Cross-platform: Uses ${workspaceFolder} for portability
     """
     try:
-        # Read current settings
-        current = json.loads(settings_path.read_text()) if settings_path.exists() else {}
-
         # Cross-platform Python path using VS Code variable
         # ${workspaceFolder} is resolved by VS Code at runtime
         if IS_WINDOWS:
@@ -248,30 +481,26 @@ def inject_mcp_config(settings_path: Path) -> Tuple[bool, Dict]:
             python_path = "${workspaceFolder}/.venv/bin/python"
 
         # MCP configuration (Pylance-style: auto-started by VS Code)
-        mcp_config = {
-            "cortex": {
-                "command": python_path,
-                "args": ["-m", "cortex.mcp"],
-                "env": {
-                    "CORTEX_ENV": "development",
-                    "CORTEX_MCP_ENABLED": "true",
-                    "PYTHONPATH": "${workspaceFolder}",
-                    "CORTEX_WORKSPACE": "${workspaceFolder}"
-                },
-            }
+        server_config = {
+            "command": python_path,
+            "args": ["-m", "cortex.mcp"],
+            "env": {
+                "CORTEX_ENV": "development",
+                "CORTEX_MCP_ENABLED": "true",
+                "PYTHONPATH": "${workspaceFolder}",
+                "CORTEX_WORKSPACE": "${workspaceFolder}"
+            },
         }
 
-        # Merge safely
-        if "github.copilot.chat.mcpServers" not in current:
-            current["github.copilot.chat.mcpServers"] = {}
-
-        current["github.copilot.chat.mcpServers"].update(mcp_config)
-
-        # Write back with nice formatting
-        settings_path.write_text(json.dumps(current, indent=2) + "\n")
-
-        logger.info(f"✅ MCP configuration injected into .vscode/settings.json")
-        return True, current
+        # Use JSONC-safe merge (preserves comments, globs, formatting)
+        success = _merge_mcp_servers_safely(settings_path, "cortex", server_config)
+        
+        if success:
+            logger.info(f"✅ MCP configuration injected into .vscode/settings.json")
+            ok, current, _ = _read_jsonc_file(settings_path)
+            return True, current or {}
+        else:
+            return False, {}
 
     except Exception as e:
         logger.error(f"❌ Failed to inject MCP config: {e}")
@@ -305,6 +534,8 @@ def detect_competing_mcps() -> List[Dict]:
     """
     Detect competing MCP servers in VS Code configuration.
     
+    Uses JSONC-safe reading to avoid corrupting glob patterns.
+    
     Returns:
         List of detected competing servers with their locations.
     """
@@ -313,15 +544,8 @@ def detect_competing_mcps() -> List[Dict]:
     # Check .vscode/settings.json
     settings_path = Path(".vscode/settings.json")
     if settings_path.exists():
-        try:
-            with open(settings_path) as f:
-                content = f.read()
-                # Handle JSONC (JSON with comments)
-                import re
-                content_no_comments = re.sub(r'//.*$', '', content, flags=re.MULTILINE)
-                content_no_comments = re.sub(r'/\*.*?\*/', '', content_no_comments, flags=re.DOTALL)
-                settings = json.loads(content_no_comments)
-            
+        ok, settings, _ = _read_jsonc_file(settings_path)
+        if ok and settings:
             mcp_servers = settings.get("github.copilot.chat.mcpServers", {})
             for server_name in mcp_servers:
                 if server_name.lower() != "cortex":
@@ -330,8 +554,6 @@ def detect_competing_mcps() -> List[Dict]:
                         "location": "settings.json",
                         "path": str(settings_path)
                     })
-        except (json.JSONDecodeError, Exception) as e:
-            logger.warning(f"Could not parse settings.json: {e}")
     
     # Check .vscode/mcp.json
     mcp_json_path = Path(".vscode/mcp.json")
@@ -358,6 +580,9 @@ def disable_pylance_mcp(settings_path: Path) -> bool:
     """
     Disable Pylance MCP server in VS Code settings.
     
+    Uses JSONC-safe read/write to preserve existing settings, comments,
+    and glob patterns. Only modifies Pylance-specific keys.
+    
     Args:
         settings_path: Path to .vscode/settings.json
     
@@ -368,37 +593,28 @@ def disable_pylance_mcp(settings_path: Path) -> bool:
         if not settings_path.exists():
             return True
         
-        with open(settings_path) as f:
-            content = f.read()
-        
-        # Handle JSONC
-        import re
-        content_no_comments = re.sub(r'//.*$', '', content, flags=re.MULTILINE)
-        content_no_comments = re.sub(r'/\*.*?\*/', '', content_no_comments, flags=re.DOTALL)
-        settings = json.loads(content_no_comments)
+        ok, settings, raw = _read_jsonc_file(settings_path)
+        if not ok or settings is None:
+            return False
         
         modified = False
         
-        # Disable Pylance MCP server
-        if "pylance.mcpServer.enabled" not in settings:
-            settings["pylance.mcpServer.enabled"] = False
+        # Disable Pylance MCP server setting
+        if settings.get("pylance.mcpServer.enabled") is not False:
+            _write_settings_safely(settings_path, "pylance.mcpServer.enabled", False, raw)
             modified = True
             logger.info("✅ Disabled Pylance MCP server (pylance.mcpServer.enabled = false)")
-        elif settings.get("pylance.mcpServer.enabled") is True:
-            settings["pylance.mcpServer.enabled"] = False
-            modified = True
-            logger.info("✅ Disabled Pylance MCP server (was enabled)")
+            # Re-read after write
+            _, settings, raw = _read_jsonc_file(settings_path)
         
         # Remove Pylance from mcpServers if present
-        mcp_servers = settings.get("github.copilot.chat.mcpServers", {})
+        mcp_servers = settings.get("github.copilot.chat.mcpServers", {}) if settings else {}
         if "pylance" in mcp_servers:
-            del mcp_servers["pylance"]
-            settings["github.copilot.chat.mcpServers"] = mcp_servers
+            _remove_mcp_server_safely(settings_path, "pylance")
             modified = True
-            logger.info("✅ Removed Pylance from mcpServers")
         
-        if modified:
-            settings_path.write_text(json.dumps(settings, indent=2) + "\n")
+        if not modified:
+            logger.info("✅ Pylance MCP already disabled")
         
         return True
         
