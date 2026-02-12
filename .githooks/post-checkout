@@ -32,26 +32,25 @@ echo -e "${BLUE}🔌 CORTEX Post-Checkout: MCP Environment Check${NC}"
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 
 # ============================================================================
-# CHECK 1: Verify CORTEX MCP Configuration
+# CHECK 1: Verify CORTEX MCP Configuration (Cross-Platform)
 # ============================================================================
 
 VSCODE_SETTINGS=".vscode/settings.json"
 VSCODE_MCP=".vscode/mcp.json"
 
-# Check if mcp.json exists
-if [ ! -f "$VSCODE_MCP" ]; then
-    echo -e "${YELLOW}⚠️  WARNING: .vscode/mcp.json not found${NC}"
-    echo -e "${CYAN}   Running MCP setup...${NC}"
-    python .cortex/setup-mcp.py --silent 2>/dev/null || python .cortex/setup-mcp.py
-    echo -e "${GREEN}✅ MCP configuration created${NC}"
+# CRITICAL FIX (BUG-CROSSPLATFORM-001): .vscode/settings.json is platform-specific
+# Mac uses: .venv/bin/python
+# Windows uses: .venv/Scripts/python.exe
+# Solution: Regenerate settings.json on EVERY checkout (not tracked in git)
+
+echo -e "${CYAN}🔧 Regenerating platform-specific MCP configuration...${NC}"
+python .cortex/setup-mcp.py --silent 2>/dev/null || python .cortex/setup-mcp.py
+
+# Verify CORTEX is configured
+if [ -f "$VSCODE_SETTINGS" ] && grep -q '"cortex"' "$VSCODE_SETTINGS" 2>/dev/null; then
+    echo -e "${GREEN}✅ CORTEX MCP server: Configured (platform-specific paths)${NC}"
 else
-    # Verify CORTEX is in mcp.json
-    if grep -q '"cortex"' "$VSCODE_MCP" 2>/dev/null; then
-        echo -e "${GREEN}✅ CORTEX MCP server: Configured${NC}"
-    else
-        echo -e "${YELLOW}⚠️  WARNING: CORTEX not in mcp.json, running setup...${NC}"
-        python .cortex/setup-mcp.py --silent 2>/dev/null || python .cortex/setup-mcp.py
-    fi
+    echo -e "${RED}❌ CORTEX MCP setup failed - run manually: python .cortex/setup-mcp.py${NC}"
 fi
 
 # ============================================================================
