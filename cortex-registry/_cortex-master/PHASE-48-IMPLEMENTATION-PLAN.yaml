@@ -1,0 +1,507 @@
+# PHASE 48: HOLISTIC VALIDATION GATE - IMPLEMENTATION PLAN
+# Date: 2026-02-12
+# Priority: P0-CRITICAL (HIGHEST ROI)
+# Authority: WAVE-1-IMPLEMENTATION-PLAN.yaml + cortex-architect.prompt.md v15.3
+# Execution Mode: Silent Autonomous
+
+metadata:
+  phase_id: "phase-48"
+  title: "Holistic Validation & Challenge Gate"
+  status: "ACTIVE"
+  priority: "P0-CRITICAL"
+  estimated_effort: "2 weeks"
+  roi: "Reduces rework from 30% → 5% (saves ~2 weeks/month)"
+  start_date: "2026-02-12"
+  wave: "WAVE-1-VALIDATION"
+
+# ============================================================================
+# PROBLEM STATEMENT
+# ============================================================================
+
+problem_statement:
+  current_state:
+    - "No pre-implementation validation gate"
+    - "Users proceed directly from intent to implementation"
+    - "No systematic review of implementation approach"
+    - "No alternative approaches considered"
+    - "No challenge mechanism to catch bad designs early"
+    - "Rework rate: 30% (costly)"
+  
+  pain_points:
+    - "Architectural drift detected post-implementation"
+    - "Security issues found in code review (too late)"
+    - "Performance problems after deployment"
+    - "Missed simpler alternative approaches"
+    - "Time wasted on wrong implementations"
+  
+  opportunity:
+    - "Catch design flaws BEFORE coding begins"
+    - "Generate 3 alternative approaches for every IMPLEMENT request"
+    - "Confidence scoring (0-1.0) to gate low-quality proposals"
+    - "Pre-implementation checklist (security, performance, maintainability)"
+    - "Reduce rework: 30% → 5% (6x improvement)"
+
+# ============================================================================
+# OBJECTIVES & SUCCESS CRITERIA
+# ============================================================================
+
+objectives:
+  primary:
+    - "Pre-implementation validation gate (MANDATORY for IMPLEMENT/FIX/REFACTOR)"
+    - "Challenge generation with 3 alternative approaches"
+    - "Confidence scoring (0-1.0) for proposed implementations"
+    - "Reduce rework rate: 30% → 5%"
+    - "Catch design flaws before coding begins"
+  
+  secondary:
+    - "Integration with existing MCP cortex_process_request"
+    - "Challenge presentation in Copilot Chat (formatted, actionable)"
+    - "User approval workflow (proceed/revise)"
+    - "Bypass mechanism for emergencies (with audit trail)"
+
+success_criteria:
+  quality:
+    - "Rework rate: ≤5% (down from 30%)"
+    - "100% IMPLEMENT requests pass validation gate"
+    - "Zero architectural drift issues post-implementation"
+  
+  effectiveness:
+    - "95% of generated challenges accepted as valuable by users"
+    - "Confidence scores correlate with success rate (r > 0.8)"
+    - "Design flaws caught: 90%+ before coding"
+  
+  usability:
+    - "Validation time: ≤30 seconds per request"
+    - "Challenge presentation: clear, actionable, concise"
+    - "User approval required (no auto-proceed)"
+  
+  performance:
+    - "Validation latency: ≤500ms (p95)"
+    - "Challenge generation: ≤2 seconds (p95)"
+
+# ============================================================================
+# SCOPE
+# ============================================================================
+
+scope:
+  in_scope:
+    - "HolisticValidationOrchestrator class"
+    - "ChallengeEngine enhancements (3 alternatives per request)"
+    - "ConfidenceScorer multi-factor scoring"
+    - "Pre-implementation checklist (12 categories)"
+    - "Integration with cortex_process_request"
+    - "Challenge presentation formatting"
+    - "User approval workflow"
+    - "Bypass mechanism (emergency)"
+  
+  out_of_scope:
+    - "Post-implementation validation (covered by TDD)"
+    - "Runtime validation (covered by circuit breakers)"
+    - "UI/UX changes to VS Code extension"
+    - "Copilot Chat API modifications"
+  
+  dependencies:
+    - "ENH-063: Production Architecture Remediation (COMPLETE ✅)"
+    - "Existing ChallengeIntegrationOrchestrator (EXISTS ✅)"
+    - "Existing challenge_generator.py infrastructure (EXISTS ✅)"
+
+# ============================================================================
+# ARCHITECTURE DESIGN
+# ============================================================================
+
+architecture:
+  components:
+    holistic_validation_orchestrator:
+      location: "cortex/orchestrators/validation/holistic_validation_orchestrator.py"
+      purpose: "Main orchestrator for pre-implementation validation"
+      responsibilities:
+        - "Coordinate validation stages (checklist → challenges → scoring)"
+        - "Integrate with IntentRouter"
+        - "Generate validation results"
+        - "Block low-confidence proposals (< 0.7 threshold)"
+      dependencies:
+        - "ChallengeEngine (for alternative generation)"
+        - "ConfidenceScorer (for multi-factor scoring)"
+        - "PreImplementationChecklist (for systematic review)"
+    
+    challenge_engine:
+      location: "cortex/orchestrators/validation/challenge_engine.py"
+      purpose: "Generate 3 alternative approaches per request"
+      responsibilities:
+        - "Generate 3 alternatives with pros/cons"
+        - "Rank by feasibility and ROI"
+        - "Recommend best approach"
+        - "Format for Copilot Chat presentation"
+      input: "User request + intent + code context"
+      output: "List[ChallengeAlternative] (3 alternatives)"
+    
+    confidence_scorer:
+      location: "cortex/orchestrators/validation/confidence_scorer.py"
+      purpose: "Multi-factor confidence scoring (0-1.0)"
+      factors:
+        - "Security (OWASP Top 10 compliance)"
+        - "Performance (estimated latency impact)"
+        - "Maintainability (cyclomatic complexity, SRP)"
+        - "Testability (test coverage feasibility)"
+        - "Governance (CORE rules compliance)"
+        - "Dependencies (new external deps risk)"
+      threshold: 0.7
+      action_if_below: "BLOCK with explanation"
+    
+    pre_implementation_checklist:
+      location: "cortex/orchestrators/validation/pre_implementation_checklist.py"
+      purpose: "12-category systematic review"
+      categories:
+        - "Security: OWASP, input validation, secrets handling"
+        - "Performance: Time/space complexity, caching"
+        - "Reliability: Error handling, circuit breakers"
+        - "Maintainability: SRP, DRY, SOLID principles"
+        - "Testability: Unit/integration test strategy"
+        - "Observability: Logging, metrics, tracing"
+        - "Scalability: Horizontal scaling feasibility"
+        - "Backward Compatibility: Breaking change analysis"
+        - "Governance: CORE rules compliance"
+        - "Dependencies: External library risk assessment"
+        - "Documentation: Inline comments, docstrings"
+        - "Rollback: Failure recovery strategy"
+
+  integration_points:
+    - "IntentRouter: Add pre-execution hook for IMPLEMENT/FIX/REFACTOR"
+    - "MCP cortex_process_request: Call HolisticValidationOrchestrator before execution"
+    - "MasterOrchestrator: Wire validation as Stage 0 (pre-execution gate)"
+
+# ============================================================================
+# STAGES & DELIVERABLES
+# ============================================================================
+
+stages:
+  stage_1:
+    name: "Validation Framework"
+    estimated_effort: "3 days"
+    tests: 20
+    
+    deliverables:
+      - file: "cortex/orchestrators/validation/__init__.py"
+        purpose: "Package initialization"
+        lines: ~20
+      
+      - file: "cortex/orchestrators/validation/holistic_validation_orchestrator.py"
+        purpose: "Main validation orchestrator"
+        lines: ~400
+        classes:
+          - "HolisticValidationOrchestrator"
+        methods:
+          - "validate(request, intent, context) -> ValidationResult"
+          - "run_checklist(context) -> ChecklistResult"
+          - "generate_challenges(request) -> List[ChallengeAlternative]"
+          - "score_confidence(request, alternatives) -> float"
+          - "format_result(validation_result) -> str"
+      
+      - file: "cortex/orchestrators/validation/pre_implementation_checklist.py"
+        purpose: "12-category systematic review"
+        lines: ~300
+        classes:
+          - "PreImplementationChecklist"
+        methods:
+          - "run_all_checks(context) -> ChecklistResult"
+          - "check_security(context) -> CheckResult"
+          - "check_performance(context) -> CheckResult"
+          - "check_maintainability(context) -> CheckResult"
+          - "# ... 9 more check methods"
+      
+      - file: "tests/orchestrators/validation/test_holistic_validation.py"
+        purpose: "Test validation orchestrator"
+        lines: ~600
+        tests: 20
+        categories:
+          - "Validation lifecycle (5 tests)"
+          - "Checklist integration (5 tests)"
+          - "Challenge generation (5 tests)"
+          - "Confidence scoring (5 tests)"
+    
+    success_criteria:
+      - "20/20 tests passing"
+      - "Validation orchestrator wired to IntentRouter"
+      - "Checklist runs all 12 categories"
+      - "Results formatted for Copilot Chat"
+  
+  stage_2:
+    name: "Challenge Generation"
+    estimated_effort: "3 days"
+    tests: 18
+    
+    deliverables:
+      - file: "cortex/orchestrators/validation/challenge_engine.py"
+        purpose: "Generate 3 alternative approaches"
+        lines: ~500
+        classes:
+          - "ChallengeEngine"
+          - "ChallengeAlternative (dataclass)"
+        methods:
+          - "generate_alternatives(request, context) -> List[ChallengeAlternative]"
+          - "analyze_approach(approach, context) -> ProsCons"
+          - "rank_alternatives(alternatives) -> List[ChallengeAlternative]"
+          - "recommend_best(alternatives) -> ChallengeAlternative"
+          - "format_for_chat(alternatives) -> str"
+      
+      - file: "tests/orchestrators/validation/test_challenge_engine.py"
+        purpose: "Test challenge generation"
+        lines: ~550
+        tests: 18
+        categories:
+          - "Alternative generation (6 tests)"
+          - "Pros/cons analysis (4 tests)"
+          - "Ranking logic (4 tests)"
+          - "Recommendation engine (4 tests)"
+    
+    success_criteria:
+      - "18/18 tests passing"
+      - "3 alternatives generated per request"
+      - "Pros/cons analysis comprehensive"
+      - "Recommendation clear and actionable"
+  
+  stage_3:
+    name: "Confidence Scoring"
+    estimated_effort: "2 days"
+    tests: 15
+    
+    deliverables:
+      - file: "cortex/orchestrators/validation/confidence_scorer.py"
+        purpose: "Multi-factor confidence scoring"
+        lines: ~400
+        classes:
+          - "ConfidenceScorer"
+          - "ScoreFactor (enum)"
+        methods:
+          - "score(request, alternatives, checklist) -> float"
+          - "score_security(context) -> float"
+          - "score_performance(context) -> float"
+          - "score_maintainability(context) -> float"
+          - "score_testability(context) -> float"
+          - "score_governance(context) -> float"
+          - "score_dependencies(context) -> float"
+          - "aggregate_scores(scores) -> float"
+          - "explain_score(score, factors) -> str"
+      
+      - file: "tests/orchestrators/validation/test_confidence_scorer.py"
+        purpose: "Test confidence scoring"
+        lines: ~450
+        tests: 15
+        categories:
+          - "Factor scoring (6 tests)"
+          - "Aggregation logic (3 tests)"
+          - "Threshold gating (3 tests)"
+          - "Explanation generation (3 tests)"
+    
+    success_criteria:
+      - "15/15 tests passing"
+      - "All 6 factors scored correctly"
+      - "Threshold < 0.7 blocks execution"
+      - "Explanations actionable"
+  
+  stage_4:
+    name: "MCP Integration"
+    estimated_effort: "2 days"
+    tests: 12
+    
+    deliverables:
+      - file: "cortex/orchestrators/validation/integration_adapter.py"
+        purpose: "Integrate with cortex_process_request"
+        lines: ~200
+        classes:
+          - "ValidationIntegrationAdapter"
+        methods:
+          - "validate_before_execution(request) -> ValidationResult"
+          - "format_challenge_for_mcp(challenges) -> dict"
+          - "handle_user_approval(approval) -> bool"
+          - "bypass_for_emergency(reason) -> None"
+      
+      - file: "tests/orchestrators/validation/test_integration.py"
+        purpose: "Test MCP integration"
+        lines: ~400
+        tests: 12
+        categories:
+          - "Pre-execution hook (4 tests)"
+          - "Challenge formatting (3 tests)"
+          - "User approval workflow (3 tests)"
+          - "Emergency bypass (2 tests)"
+    
+    success_criteria:
+      - "12/12 tests passing"
+      - "Integration with cortex_process_request complete"
+      - "User approval required before execution"
+      - "Emergency bypass logged in audit trail"
+
+# ============================================================================
+# TEST PLAN
+# ============================================================================
+
+test_plan:
+  total_tests: 65
+  
+  breakdown:
+    unit_tests: 55
+    integration_tests: 10
+  
+  categories:
+    validation_framework: 20
+    challenge_generation: 18
+    confidence_scoring: 15
+    mcp_integration: 12
+  
+  coverage_target: "95%"
+  
+  critical_test_scenarios:
+    - "High-confidence proposal passes gate"
+    - "Low-confidence proposal blocked (< 0.7)"
+    - "3 alternatives generated per request"
+    - "Security issues flagged in checklist"
+    - "Performance concerns raised in challenges"
+    - "User approval required before execution"
+    - "Emergency bypass creates audit trail"
+    - "Validation time ≤30 seconds"
+
+# ============================================================================
+# EXECUTION STRATEGY
+# ============================================================================
+
+execution_strategy:
+  approach: "TDD (RED → GREEN → REFACTOR)"
+  
+  stage_order:
+    - "Stage 1: Validation Framework (foundation)"
+    - "Stage 2: Challenge Generation (core feature)"
+    - "Stage 3: Confidence Scoring (gating logic)"
+    - "Stage 4: MCP Integration (wiring)"
+  
+  checkpoints:
+    - "After each stage: commit with AC marker"
+    - "After 10 tests: checkpoint commit"
+    - "After stage completion: completion report"
+  
+  session_continuity:
+    - "Create PHASE-48-SESSION-N-SUMMARY.yaml after each session"
+    - "Track progress in WAVE-1-PROGRESS-REPORT.yaml"
+    - "Update cumulative metrics every 20 tests"
+
+# ============================================================================
+# RISKS & MITIGATIONS
+# ============================================================================
+
+risks:
+  risk_1:
+    description: "Validation adds latency to IMPLEMENT requests"
+    likelihood: "MEDIUM"
+    impact: "MEDIUM"
+    mitigation:
+      - "Target validation time: ≤30 seconds (p95)"
+      - "Cache checklist results for similar requests"
+      - "Optimize challenge generation (parallel execution)"
+    acceptance: "Latency < 30s acceptable for quality gain"
+  
+  risk_2:
+    description: "Users bypass validation gate (frustration)"
+    likelihood: "LOW"
+    impact: "HIGH"
+    mitigation:
+      - "Make challenges valuable (actionable alternatives)"
+      - "Clear explanations for low-confidence scores"
+      - "Emergency bypass with audit trail (not silent)"
+    acceptance: "Bypass rate < 5% indicates good UX"
+  
+  risk_3:
+    description: "False positives (valid proposals blocked)"
+    likelihood: "MEDIUM"
+    impact: "HIGH"
+    mitigation:
+      - "Tune confidence threshold (0.7 is starting point)"
+      - "Collect feedback on blocked proposals"
+      - "Iterative refinement of scoring factors"
+    acceptance: "False positive rate < 10%"
+
+# ============================================================================
+# SUCCESS METRICS
+# ============================================================================
+
+success_metrics:
+  rework_rate:
+    baseline: "30%"
+    target: "5%"
+    measurement: "% of implementations requiring major rework post-deployment"
+  
+  design_flaw_detection:
+    baseline: "0% (no pre-implementation validation)"
+    target: "90%"
+    measurement: "% of design flaws caught before coding"
+  
+  user_satisfaction:
+    baseline: "N/A"
+    target: "95%"
+    measurement: "% of challenges rated valuable by users"
+  
+  validation_time:
+    baseline: "0s (no validation)"
+    target: "≤30s"
+    measurement: "p95 validation latency"
+  
+  confidence_correlation:
+    baseline: "N/A"
+    target: "r > 0.8"
+    measurement: "Pearson correlation: confidence score vs success rate"
+
+# ============================================================================
+# NEXT ACTIONS (IMMEDIATE)
+# ============================================================================
+
+next_actions_immediate:
+  session_1:
+    focus: "Stage 1 test suite creation"
+    tasks:
+      - "Create tests/orchestrators/validation/ directory"
+      - "Create test_holistic_validation.py (20 tests)"
+      - "Create test fixtures (sample requests, contexts)"
+      - "Run tests (expect RED phase)"
+    estimated_time: "2 hours"
+    deliverable: "20 tests created (0/20 passing)"
+  
+  session_2:
+    focus: "Stage 1 implementation"
+    tasks:
+      - "Create cortex/orchestrators/validation/ directory"
+      - "Implement HolisticValidationOrchestrator"
+      - "Implement PreImplementationChecklist"
+      - "Fix test failures (RED → GREEN)"
+    estimated_time: "4 hours"
+    deliverable: "20/20 tests passing"
+  
+  session_3:
+    focus: "Stage 2 test suite + implementation"
+    tasks:
+      - "Create test_challenge_engine.py (18 tests)"
+      - "Implement ChallengeEngine"
+      - "Integrate with validation orchestrator"
+      - "Fix test failures (RED → GREEN)"
+    estimated_time: "4 hours"
+    deliverable: "38/38 tests passing (Stage 1+2)"
+
+# ============================================================================
+# REFERENCES
+# ============================================================================
+
+references:
+  authority:
+    - "WAVE-1-IMPLEMENTATION-PLAN.yaml"
+    - "cortex-architect.prompt.md v15.3"
+    - ".github/copilot-instructions.md v8.0 (CORE-048)"
+  
+  existing_infrastructure:
+    - "cortex/core/orchestrator/challenge_integration.py"
+    - "tests/unit/core/orchestrator/test_challenge_integration.py"
+    - "cortex/core/intent/challenge_generator.py"
+  
+  related_phases:
+    - "ENH-063: Production Architecture (dependency, COMPLETE)"
+    - "Phase 54: Environment Bootstrap (parallel work, COMPLETE)"
+    - "Phase 51: Secrets Management (parallel work, 25% complete)"
+
+# AC_START: AC-PHASE48-PLAN-001 ✅ Implementation plan created
