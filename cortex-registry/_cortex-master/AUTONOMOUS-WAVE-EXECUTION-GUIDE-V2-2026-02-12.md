@@ -77,7 +77,10 @@ WAVE-H ✅ COMPLETE
    ↓
 WAVE-I ⚪ READY (3-4h) → Phase Template CLI
    ↓
-WAVE-J ⚪ READY (3-4h) → Cleanup Audit
+WAVE-J ⚪ READY (4-5h) → MCP Enforcement + Tool Consolidation (91→18)
+   ↓                     ├─ Prompt/Agent hardening
+   ↓                     ├─ Tool consolidation (80% reduction)
+   ↓                     └─ 25 high-value tests (integration+regression+e2e)
    ↓
 WAVE-K ⚪ READY (3-4h) → Architecture Verification
    ↓ [MILESTONE: Wave 6 Complete]
@@ -91,7 +94,7 @@ WAVE-O ⚪ BLOCKED (4h) → Data Integrity
    ↓ [MILESTONE: Wave 3 Complete]
 ```
 
-**Total Timeline:** 25-28 hours (7 sessions × 3-4h each)
+**Total Timeline:** 26-30 hours (7 sessions × 3-5h each)
 
 ---
 
@@ -131,47 +134,92 @@ python3 -m cortex.cli.phase_template_cli create --name "test-phase" --priority "
 
 ---
 
-### WAVE-J: Cleanup Audit (ENH-085 S1-S2)
+### WAVE-J: MCP Enforcement + Tool Consolidation (ENH-085 ENHANCED)
 
 **Status:** ⚪ READY (will be unblocked after Wave I)  
-**Duration:** 3-4 hours  
-**Token Budget:** <170k  
-**ROI:** 8.8
+**Duration:** 4-5 hours  
+**Token Budget:** <180k  
+**ROI:** 9.5 (CRITICAL - blocks all other waves if MCP broken)
 
 **Value Delivered:**
-- ✅ Codebase reduction: 15-25%
-- ✅ Duplicate code eliminated (CORE-035)
-- ✅ Dead code archived
-- ✅ 18+ detection tests
+- ✅ MCP-FIRST: Hard enforcement (cannot bypass)
+- ✅ Tool sprawl: 91→18 tools (80% reduction)
+- ✅ Prompts/Agents: Mandatory MCP pre-flight checks
+- ✅ Test harness: Integration + regression + e2e
+- ✅ Cross-platform: Windows/macOS/Linux verified
 
 **Deliverables:**
-1. `cortex/tools/duplicate_detector.py` (AST-based, 400 LOC)
-2. `cortex/tools/dead_code_analyzer.py` (import graph, 350 LOC)
-3. Phase archival workflow (automated to `.archive/`)
-4. 18+ detection tests (TDD)
+
+**Stage 1: Prompt Hardening (copilot-instructions.md)**
+1. Move MCP check to ABSOLUTE TOP (line 1-50)
+2. Visual "gate closed" ASCII when blocked
+3. Preserve DIAGNOSE/SETUP escape hatch (CORE-050 tiered)
+4. Remove ALL "fallback to native tools" language
+
+**Stage 2: Agent Enforcement (11 core agents)**
+1. Add MCP pre-flight check to EVERY agent header
+2. Standardize "MCP Required" section in all agents
+3. Remove any "work without MCP" instructions
+4. Add dependency declaration: `requires: [cortex_mcp_server]`
+
+**Stage 3: Tool Consolidation (91→18)**
+1. `cortex_debug` (13→1): Single entry with operation param
+2. `cortex_governance` (6→1): Unified governance tool
+3. `cortex_dashboard` (10→1): Single dashboard tool
+4. `cortex_plan` (5→1): Unified planning tool
+5. `cortex_validate` (5→1): Unified validation tool
+6. REMOVE: echo_tool, sample_tool, transform_tool (dev-only)
+7. Deprecation aliases for backward compatibility
+
+**Stage 4: Test Harness (HIGH VALUE - 25 tests)**
+
+| Test Type | File | Purpose | Priority |
+|-----------|------|---------|----------|
+| **Integration** | test_mcp_server_init_syncs_tools.py | Verify 18 tools registered on server start | P0 |
+| **Integration** | test_mcp_tool_invocation_e2e.py | Full roundtrip: Copilot → MCP → Orchestrator → Response | P0 |
+| **Regression** | test_mcp_required_for_implement.py | IMPLEMENT intent blocked without MCP | P0 |
+| **Regression** | test_mcp_required_for_fix.py | FIX intent blocked without MCP | P0 |
+| **Regression** | test_mcp_required_for_refactor.py | REFACTOR intent blocked without MCP | P0 |
+| **Regression** | test_diagnose_allowed_without_mcp.py | DIAGNOSE intent allowed (escape hatch) | P0 |
+| **Regression** | test_setup_allowed_without_mcp.py | SETUP intent allowed (escape hatch) | P0 |
+| **E2E** | test_cross_platform_mcp_setup.py | Windows/macOS/Linux path detection | P0 |
+| **E2E** | test_settings_json_not_tracked.py | .vscode/settings.json NOT in git | P0 |
+| **E2E** | test_post_checkout_hook_regenerates.py | Hook regenerates settings on pull | P1 |
+| **Unit** | test_tool_consolidation_aliases.py | Old tool names → new unified tools | P1 |
+| **Unit** | test_tool_registry_sync_count.py | Exactly 18 tools after consolidation | P1 |
+| **Unit** | test_dev_tools_removed.py | echo/sample/transform not in production | P1 |
+| **Governance** | test_core_050_tiered_blocking.py | Tiered blocking per CORE-050 | P0 |
+| **Governance** | test_core_051_cross_platform.py | Cross-platform compliance per CORE-051 | P0 |
+
+**Stage 5: Documentation Sync**
+1. Update MCP-SETUP-GUIDE.md with consolidated tools
+2. Update CORTEX.prompt.md tool reference (18 tools)
+3. Archive old tool documentation to .archive/
 
 **Execution Command:**
 ```
-/implement WAVE-J: ENH-085 Completed Phase Cleanup Audit
+/implement WAVE-J: MCP Enforcement + Tool Consolidation (ENH-085 ENHANCED)
 
 Authority: cortex-registry/_cortex-master/index.yaml v2.2
 Mode: Silent autonomous with ASCII progress bars
 Session: WAVE-J-20260214-01
-Token Budget: <170k
+Token Budget: <180k
 
 Scope:
-1. Duplicate code detection (AST-based, CORE-035 enforcement)
-2. Dead code identification (import graph + usage analysis)
-3. Phase archival workflow (automated archival to .archive/)
-4. 18+ detection tests (TDD: RED→GREEN→REFACTOR)
-5. Integration with VacuumOrchestrator (ENH-036)
+1. Prompt hardening (MCP check at TOP of copilot-instructions.md)
+2. Agent enforcement (11 core agents + MCP pre-flight)
+3. Tool consolidation (91→18 tools, 80% reduction)
+4. Test harness (25 tests: integration + regression + e2e + governance)
+5. Documentation sync (MCP-SETUP-GUIDE.md, CORTEX.prompt.md)
 
 Success Criteria:
-- ✅ 18/18 tests passing
-- ✅ 2 commits pushed
-- ✅ Codebase reduced 15-25% (verified via git diff --stat)
-- ✅ Zero duplicate code violations (CORE-035)
-- ✅ Dead code archived (not deleted, for rollback)
+- ✅ 25/25 tests passing (0 failures)
+- ✅ 3 commits pushed
+- ✅ Tool count: 91→18 (verified via cortex_tools_catalog)
+- ✅ MCP blocking: IMPLEMENT/FIX/REFACTOR blocked without MCP
+- ✅ Escape hatch: DIAGNOSE/SETUP allowed without MCP
+- ✅ Cross-platform: Windows/macOS/Linux verified
+- ✅ .vscode/settings.json NOT tracked in git
 
 Depends: WAVE-I complete
 ```
@@ -179,13 +227,23 @@ Depends: WAVE-I complete
 **Verification:**
 ```bash
 # After completion:
-python3 -m pytest tests/unit/tools/test_duplicate_detector.py -v
-python3 -m pytest tests/unit/tools/test_dead_code_analyzer.py -v
-# Expected: 18/18 passing
+python3 -m pytest tests/integration/mcp/ -v
+python3 -m pytest tests/regression/mcp_enforcement/ -v
+python3 -m pytest tests/e2e/cross_platform/ -v
+# Expected: 25/25 passing
 
-# Check codebase reduction:
-git diff HEAD~2 --stat | tail -5
-# Expected: Net reduction 15-25%
+# Verify tool count:
+python3 -c "
+from cortex.mcp.server import MCPServer
+from cortex.mcp.tool_registry import get_mcp_tool_registry
+server = MCPServer()
+print(f'Tools: {len(get_mcp_tool_registry().list_all())}')
+"
+# Expected: Tools: 18
+
+# Verify settings.json not tracked:
+git ls-files | grep .vscode/settings.json
+# Expected: (empty - not tracked)
 ```
 
 ---
@@ -398,14 +456,14 @@ Milestone: Wave 3 Autonomy COMPLETE ✅
 | Wave | Tests | Commits | Duration | Key Metric |
 |------|-------|---------|----------|------------|
 | I | 15/15 | 2 | 3-4h | CLI demo <2min |
-| J | 18/18 | 2 | 3-4h | 15-25% codebase reduction |
+| J | 25/25 | 3 | 4-5h | 91→18 tools + MCP blocking verified |
 | K | 15/15 | 2 | 3-4h | 30/30 CORE rules passing |
 | L | 25/25 | 3 | 4h | 60% token reduction |
 | M | 20/20 | 2 | 3h | 90% intent accuracy |
 | N | 25/25 | 3 | 4h | Approve→done working |
 | O | 30/30 | 3 | 4h | Data integrity checks passing |
 
-**Total:** 148 tests, 17 commits, 25-28 hours
+**Total:** 155 tests, 18 commits, 26-30 hours
 
 ---
 
