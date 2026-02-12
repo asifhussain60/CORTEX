@@ -263,16 +263,8 @@ class MCPServer:
         # NOTE: sample_tool removed (dev-only, not for production)
         # Register CORTEX orchestrator tools only
 
-        # AC-BUG-MCP-REGISTRY-001: Bridge decorator registry to global registry
-        # P0 FIX (2026-02-12): Sync tools from MCP_TOOLS_REGISTRY to ToolRegistry
-        # This ensures cortex_tools_catalog and all registry queries work correctly
-        try:
-            from cortex.mcp.tool_registry import sync_decorator_registry_to_global
-            synced = sync_decorator_registry_to_global()
-            if synced > 0:
-                self.logger.info(f"AC-BUG-MCP-REGISTRY-001: Synced {synced} tools to global registry")
-        except (ImportError, Exception) as e:
-            self.logger.warning(f"Registry bridge failed: {e}")
+        # AC-BUG-MCP-REGISTRY-001: MOVED to after tool imports (see AC-BUG-MCP-REGISTRY-002)
+        # Decorator registry sync must happen AFTER __import__ calls to capture all @mcp_tool
 
         # AC-MCP-REGISTRY-001: Restore decorator-registered tools from global registry
         # Ensure tools decorated with @mcp_tool() are available on boot
@@ -369,6 +361,16 @@ class MCPServer:
                 self.logger.debug(f"Could not import {module_name}: {e}")
 
         self.logger.info(f"Imported {imported_count}/{len(tool_modules)} tool modules")
+
+        # AC-BUG-MCP-REGISTRY-002: Sync decorator registry AFTER tool imports
+        # P0 FIX (2026-02-12): Must happen AFTER imports to capture all @mcp_tool decorators
+        try:
+            from cortex.mcp.tool_registry import sync_decorator_registry_to_global
+            synced = sync_decorator_registry_to_global()
+            if synced > 0:
+                self.logger.info(f"AC-BUG-MCP-REGISTRY-002: Synced {synced} tools to global registry (post-import)")
+        except (ImportError, Exception) as e:
+            self.logger.warning(f"Registry bridge failed (post-import): {e}")
 
         if EnhancedAuditLogger is not None:
             self._audit_logger: Optional[Any] = EnhancedAuditLogger.instance()
