@@ -1,0 +1,717 @@
+# =============================================================================
+# Complex Wave Template: 20-Phase Multi-Track Pattern
+# =============================================================================
+# Use Case: Large features, system refactoring, or multi-team initiatives
+# Estimated Duration: 4-8 weeks
+# Complexity: High
+# Dependencies: Complex DAG with parallel execution
+#
+# This template demonstrates:
+# - Multi-track parallel execution (3 tracks: Backend, Frontend, Infrastructure)
+# - Complex dependency graph with merge points
+# - Resource allocation and team coordination
+# - Advanced ROI optimization with blocking phases
+# - Comprehensive phase lifecycle management
+#
+# How to Use:
+# 1. Adapt track structure to your team organization
+# 2. Adjust parallelism limits based on available resources
+# 3. Customize dependencies to match your workflow
+# 4. Run via PlanningOrchestrator:
+#    orchestrator.execute_wave(wave_config=this_file)
+# =============================================================================
+
+wave:
+  id: "complex-wave-001"
+  name: "Multi-Service Feature Implementation"
+  description: "Implement complex feature spanning backend, frontend, and infrastructure"
+  
+  # Metadata
+  author: "Engineering Director"
+  created_at: "2024-02-01"
+  estimated_duration_days: 35
+  
+  # Wave-level configuration
+  max_parallel_tracks: 3  # Backend + Frontend + Infrastructure
+  allow_phase_skip: false
+  rollback_on_failure: true
+  checkpoint_frequency: "per_phase"
+  
+  # Resource pools
+  resource_pools:
+    backend_team:
+      capacity: 3  # 3 backend engineers
+      skills: ["Python", "PostgreSQL", "Redis"]
+    
+    frontend_team:
+      capacity: 2  # 2 frontend engineers
+      skills: ["React", "TypeScript", "CSS"]
+    
+    devops_team:
+      capacity: 1  # 1 DevOps engineer
+      skills: ["Kubernetes", "Terraform", "Prometheus"]
+    
+    qa_team:
+      capacity: 2  # 2 QA engineers
+      skills: ["Selenium", "Postman", "JMeter"]
+  
+  # Phases: 20-phase complex DAG
+  phases:
+    # ==========================================================================
+    # TRACK 1: Backend Development (phases 1-8)
+    # ==========================================================================
+    
+    - id: "phase-backend-001"
+      name: "Backend: Requirements & API Design"
+      description: "Define backend requirements and design RESTful API contracts"
+      track: "backend"
+      
+      effort_hours: 8
+      priority: "critical"
+      owner: "Backend Lead"
+      resource_pool: "backend_team"
+      resource_count: 1
+      
+      roi_metrics:
+        architectural_impact: 0.9
+        efficiency_gain: 0.5
+        accuracy_improvement: 0.7
+        effort_cost: 0.3
+        blocking_severity: 0.95  # Blocks all backend work
+      
+      depends_on: []
+      
+      exit_criteria:
+        - "API contract defined (OpenAPI 3.0)"
+        - "Database schema designed"
+        - "Authentication flow documented"
+        - "Design review approved"
+      
+      artifacts:
+        - "docs/backend/api-contract.yaml"
+        - "docs/backend/db-schema.sql"
+    
+    - id: "phase-backend-002"
+      name: "Backend: Database Migration Setup"
+      description: "Create database migration scripts and seed data"
+      track: "backend"
+      
+      effort_hours: 6
+      priority: "high"
+      owner: "Backend Engineer 1"
+      resource_pool: "backend_team"
+      resource_count: 1
+      
+      roi_metrics:
+        architectural_impact: 0.7
+        efficiency_gain: 0.6
+        accuracy_improvement: 0.8
+        effort_cost: 0.3
+        blocking_severity: 0.8
+      
+      depends_on:
+        - "phase-backend-001"
+      
+      exit_criteria:
+        - "Alembic migrations created"
+        - "Rollback scripts tested"
+        - "Seed data scripts ready"
+      
+      artifacts:
+        - "migrations/*.py"
+        - "scripts/seed_data.py"
+    
+    - id: "phase-backend-003"
+      name: "Backend: Authentication Service (TDD)"
+      description: "Implement JWT-based authentication with refresh tokens"
+      track: "backend"
+      
+      effort_hours: 16
+      priority: "critical"
+      owner: "Backend Engineer 2"
+      resource_pool: "backend_team"
+      resource_count: 1
+      
+      roi_metrics:
+        architectural_impact: 0.9
+        efficiency_gain: 0.7
+        accuracy_improvement: 0.9
+        effort_cost: 0.7
+        blocking_severity: 0.9  # Blocks all secured endpoints
+      
+      depends_on:
+        - "phase-backend-002"
+      
+      exit_criteria:
+        - "Unit tests ≥95% coverage"
+        - "JWT token generation/validation working"
+        - "Refresh token rotation implemented"
+        - "Security audit passed"
+      
+      artifacts:
+        - "src/backend/auth/*.py"
+        - "tests/backend/auth/*.py"
+    
+    - id: "phase-backend-004"
+      name: "Backend: Core Business Logic (Parallel 1)"
+      description: "Implement core API endpoints for feature"
+      track: "backend"
+      
+      effort_hours: 20
+      priority: "high"
+      owner: "Backend Engineer 1"
+      resource_pool: "backend_team"
+      resource_count: 1
+      
+      roi_metrics:
+        architectural_impact: 0.8
+        efficiency_gain: 0.8
+        accuracy_improvement: 0.85
+        effort_cost: 0.75
+        blocking_severity: 0.7
+      
+      depends_on:
+        - "phase-backend-003"
+      
+      exit_criteria:
+        - "CRUD endpoints implemented"
+        - "Business logic unit tested"
+        - "Integration tests passing"
+      
+      artifacts:
+        - "src/backend/api/endpoints/*.py"
+        - "tests/backend/api/*.py"
+    
+    - id: "phase-backend-005"
+      name: "Backend: Caching Layer (Parallel 2)"
+      description: "Implement Redis caching for performance optimization"
+      track: "backend"
+      
+      effort_hours: 12
+      priority: "medium"
+      owner: "Backend Engineer 3"
+      resource_pool: "backend_team"
+      resource_count: 1
+      
+      roi_metrics:
+        architectural_impact: 0.7
+        efficiency_gain: 0.9  # High performance gain
+        accuracy_improvement: 0.6
+        effort_cost: 0.5
+        blocking_severity: 0.3  # Optional optimization
+      
+      depends_on:
+        - "phase-backend-003"  # Can run parallel to 004
+      
+      exit_criteria:
+        - "Cache invalidation strategy implemented"
+        - "Cache hit rate ≥80% in tests"
+        - "Performance benchmarks met"
+      
+      artifacts:
+        - "src/backend/cache/*.py"
+        - "tests/backend/cache/*.py"
+    
+    - id: "phase-backend-006"
+      name: "Backend: Background Jobs (Parallel 3)"
+      description: "Implement async task processing with Celery"
+      track: "backend"
+      
+      effort_hours: 14
+      priority: "medium"
+      owner: "Backend Engineer 2"
+      resource_pool: "backend_team"
+      resource_count: 1
+      
+      roi_metrics:
+        architectural_impact: 0.75
+        efficiency_gain: 0.85
+        accuracy_improvement: 0.7
+        effort_cost: 0.6
+        blocking_severity: 0.4
+      
+      depends_on:
+        - "phase-backend-003"  # Can run parallel to 004, 005
+      
+      exit_criteria:
+        - "Celery workers configured"
+        - "Task monitoring setup"
+        - "Retry logic implemented"
+      
+      artifacts:
+        - "src/backend/tasks/*.py"
+        - "celery_config.py"
+    
+    - id: "phase-backend-007"
+      name: "Backend: Integration Testing"
+      description: "End-to-end integration tests for backend services"
+      track: "backend"
+      
+      effort_hours: 10
+      priority: "high"
+      owner: "Backend Lead"
+      resource_pool: "backend_team"
+      resource_count: 2
+      
+      roi_metrics:
+        architectural_impact: 0.5
+        efficiency_gain: 0.6
+        accuracy_improvement: 0.95
+        effort_cost: 0.5
+        blocking_severity: 0.8
+      
+      depends_on:
+        - "phase-backend-004"
+        - "phase-backend-005"
+        - "phase-backend-006"
+      
+      exit_criteria:
+        - "All API integration tests passing"
+        - "Database transactions tested"
+        - "Cache behavior verified"
+      
+      artifacts:
+        - "tests/backend/integration/*.py"
+    
+    - id: "phase-backend-008"
+      name: "Backend: Performance Optimization"
+      description: "Optimize database queries and API response times"
+      track: "backend"
+      
+      effort_hours: 8
+      priority: "medium"
+      owner: "Backend Engineer 1"
+      resource_pool: "backend_team"
+      resource_count: 1
+      
+      roi_metrics:
+        architectural_impact: 0.6
+        efficiency_gain: 0.9
+        accuracy_improvement: 0.5
+        effort_cost: 0.4
+        blocking_severity: 0.2
+      
+      depends_on:
+        - "phase-backend-007"
+      
+      exit_criteria:
+        - "API response time <200ms (p95)"
+        - "Database query optimization complete"
+        - "Load testing passed (1000 req/s)"
+      
+      artifacts:
+        - "docs/backend/performance-report.md"
+    
+    # ==========================================================================
+    # TRACK 2: Frontend Development (phases 9-15)
+    # ==========================================================================
+    
+    - id: "phase-frontend-001"
+      name: "Frontend: Component Design System"
+      description: "Create reusable React components and design tokens"
+      track: "frontend"
+      
+      effort_hours: 12
+      priority: "high"
+      owner: "Frontend Lead"
+      resource_pool: "frontend_team"
+      resource_count: 1
+      
+      roi_metrics:
+        architectural_impact: 0.8
+        efficiency_gain: 0.7
+        accuracy_improvement: 0.75
+        effort_cost: 0.5
+        blocking_severity: 0.85
+      
+      depends_on: []  # Can start immediately
+      
+      exit_criteria:
+        - "Design system documented"
+        - "Reusable components created"
+        - "Storybook stories complete"
+      
+      artifacts:
+        - "src/frontend/components/*.tsx"
+        - "src/frontend/design-tokens.css"
+    
+    - id: "phase-frontend-002"
+      name: "Frontend: State Management Setup"
+      description: "Configure Redux/Zustand for state management"
+      track: "frontend"
+      
+      effort_hours: 6
+      priority: "high"
+      owner: "Frontend Engineer 1"
+      resource_pool: "frontend_team"
+      resource_count: 1
+      
+      roi_metrics:
+        architectural_impact: 0.75
+        efficiency_gain: 0.6
+        accuracy_improvement: 0.8
+        effort_cost: 0.3
+        blocking_severity: 0.8
+      
+      depends_on:
+        - "phase-frontend-001"
+      
+      exit_criteria:
+        - "Store configured"
+        - "Action creators defined"
+        - "Selectors tested"
+      
+      artifacts:
+        - "src/frontend/store/*.ts"
+    
+    - id: "phase-frontend-003"
+      name: "Frontend: Authentication UI"
+      description: "Build login/signup/password-reset flows"
+      track: "frontend"
+      
+      effort_hours: 14
+      priority: "critical"
+      owner: "Frontend Engineer 2"
+      resource_pool: "frontend_team"
+      resource_count: 1
+      
+      roi_metrics:
+        architectural_impact: 0.7
+        efficiency_gain: 0.7
+        accuracy_improvement: 0.9
+        effort_cost: 0.6
+        blocking_severity: 0.9
+      
+      depends_on:
+        - "phase-frontend-002"
+        - "phase-backend-003"  # Requires backend auth API
+      
+      exit_criteria:
+        - "All auth flows working"
+        - "Form validation complete"
+        - "JWT token storage secure"
+      
+      artifacts:
+        - "src/frontend/pages/auth/*.tsx"
+    
+    - id: "phase-frontend-004"
+      name: "Frontend: Feature UI Implementation"
+      description: "Build main feature user interface"
+      track: "frontend"
+      
+      effort_hours: 18
+      priority: "high"
+      owner: "Frontend Engineer 1"
+      resource_pool: "frontend_team"
+      resource_count: 1
+      
+      roi_metrics:
+        architectural_impact: 0.75
+        efficiency_gain: 0.8
+        accuracy_improvement: 0.85
+        effort_cost: 0.7
+        blocking_severity: 0.7
+      
+      depends_on:
+        - "phase-frontend-003"
+        - "phase-backend-004"  # Requires backend API
+      
+      exit_criteria:
+        - "All UI screens complete"
+        - "API integration working"
+        - "Responsive design verified"
+      
+      artifacts:
+        - "src/frontend/pages/feature/*.tsx"
+    
+    - id: "phase-frontend-005"
+      name: "Frontend: Real-time Updates (WebSockets)"
+      description: "Implement WebSocket connection for live updates"
+      track: "frontend"
+      
+      effort_hours: 10
+      priority: "medium"
+      owner: "Frontend Engineer 2"
+      resource_pool: "frontend_team"
+      resource_count: 1
+      
+      roi_metrics:
+        architectural_impact: 0.7
+        efficiency_gain: 0.85
+        accuracy_improvement: 0.75
+        effort_cost: 0.5
+        blocking_severity: 0.3
+      
+      depends_on:
+        - "phase-frontend-004"
+      
+      exit_criteria:
+        - "WebSocket connection stable"
+        - "Reconnection logic working"
+        - "UI updates in real-time"
+      
+      artifacts:
+        - "src/frontend/services/websocket.ts"
+    
+    - id: "phase-frontend-006"
+      name: "Frontend: Unit & Integration Tests"
+      description: "Write tests for components and user flows"
+      track: "frontend"
+      
+      effort_hours: 12
+      priority: "high"
+      owner: "Frontend Lead"
+      resource_pool: "frontend_team"
+      resource_count: 2
+      
+      roi_metrics:
+        architectural_impact: 0.5
+        efficiency_gain: 0.6
+        accuracy_improvement: 0.95
+        effort_cost: 0.5
+        blocking_severity: 0.8
+      
+      depends_on:
+        - "phase-frontend-004"
+        - "phase-frontend-005"
+      
+      exit_criteria:
+        - "Unit test coverage ≥85%"
+        - "Integration tests passing"
+        - "E2E tests with Playwright"
+      
+      artifacts:
+        - "src/frontend/**/*.test.tsx"
+    
+    - id: "phase-frontend-007"
+      name: "Frontend: Accessibility Audit"
+      description: "Ensure WCAG 2.1 AA compliance"
+      track: "frontend"
+      
+      effort_hours: 6
+      priority: "medium"
+      owner: "Frontend Engineer 1"
+      resource_pool: "frontend_team"
+      resource_count: 1
+      
+      roi_metrics:
+        architectural_impact: 0.5
+        efficiency_gain: 0.4
+        accuracy_improvement: 0.8
+        effort_cost: 0.3
+        blocking_severity: 0.4
+      
+      depends_on:
+        - "phase-frontend-006"
+      
+      exit_criteria:
+        - "Axe DevTools scan passed"
+        - "Keyboard navigation working"
+        - "Screen reader compatible"
+      
+      artifacts:
+        - "docs/frontend/accessibility-report.md"
+    
+    # ==========================================================================
+    # TRACK 3: Infrastructure (phases 16-18)
+    # ==========================================================================
+    
+    - id: "phase-infra-001"
+      name: "Infrastructure: Kubernetes Manifests"
+      description: "Create k8s deployments, services, and ingress"
+      track: "infrastructure"
+      
+      effort_hours: 10
+      priority: "high"
+      owner: "DevOps Engineer"
+      resource_pool: "devops_team"
+      resource_count: 1
+      
+      roi_metrics:
+        architectural_impact: 0.85
+        efficiency_gain: 0.75
+        accuracy_improvement: 0.8
+        effort_cost: 0.5
+        blocking_severity: 0.9
+      
+      depends_on: []  # Can start immediately
+      
+      exit_criteria:
+        - "k8s manifests validated"
+        - "Helm charts created"
+        - "Resource limits configured"
+      
+      artifacts:
+        - "k8s/*.yaml"
+        - "charts/feature-service/**"
+    
+    - id: "phase-infra-002"
+      name: "Infrastructure: Monitoring & Logging"
+      description: "Setup Prometheus metrics and ELK stack"
+      track: "infrastructure"
+      
+      effort_hours: 8
+      priority: "high"
+      owner: "DevOps Engineer"
+      resource_pool: "devops_team"
+      resource_count: 1
+      
+      roi_metrics:
+        architectural_impact: 0.7
+        efficiency_gain: 0.8
+        accuracy_improvement: 0.9
+        effort_cost: 0.4
+        blocking_severity: 0.7
+      
+      depends_on:
+        - "phase-infra-001"
+      
+      exit_criteria:
+        - "Prometheus scraping configured"
+        - "Grafana dashboards created"
+        - "Log aggregation working"
+      
+      artifacts:
+        - "k8s/monitoring/*.yaml"
+        - "grafana/dashboards/*.json"
+    
+    - id: "phase-infra-003"
+      name: "Infrastructure: CI/CD Pipeline"
+      description: "Setup GitHub Actions for automated deployment"
+      track: "infrastructure"
+      
+      effort_hours: 6
+      priority: "high"
+      owner: "DevOps Engineer"
+      resource_pool: "devops_team"
+      resource_count: 1
+      
+      roi_metrics:
+        architectural_impact: 0.75
+        efficiency_gain: 0.9
+        accuracy_improvement: 0.85
+        effort_cost: 0.3
+        blocking_severity: 0.8
+      
+      depends_on:
+        - "phase-infra-001"
+      
+      exit_criteria:
+        - "CI pipeline running tests"
+        - "CD pipeline deploying to staging"
+        - "Rollback automation tested"
+      
+      artifacts:
+        - ".github/workflows/*.yml"
+    
+    # ==========================================================================
+    # TRACK 4: Integration & Deployment (phases 19-20)
+    # ==========================================================================
+    
+    - id: "phase-integration-001"
+      name: "Full System Integration Testing"
+      description: "End-to-end testing across all services"
+      track: "integration"
+      
+      effort_hours: 16
+      priority: "critical"
+      owner: "QA Lead"
+      resource_pool: "qa_team"
+      resource_count: 2
+      
+      roi_metrics:
+        architectural_impact: 0.6
+        efficiency_gain: 0.7
+        accuracy_improvement: 0.95
+        effort_cost: 0.6
+        blocking_severity: 0.95
+      
+      depends_on:
+        - "phase-backend-008"
+        - "phase-frontend-007"
+        - "phase-infra-003"
+      
+      exit_criteria:
+        - "All user flows tested"
+        - "Performance benchmarks met"
+        - "Security scan passed (OWASP)"
+        - "Zero critical/high bugs"
+      
+      artifacts:
+        - "docs/qa/integration-test-report.md"
+    
+    - id: "phase-deployment-001"
+      name: "Production Deployment"
+      description: "Deploy to production with canary rollout"
+      track: "deployment"
+      
+      effort_hours: 6
+      priority: "critical"
+      owner: "DevOps Engineer"
+      resource_pool: "devops_team"
+      resource_count: 1
+      
+      roi_metrics:
+        architectural_impact: 0.5
+        efficiency_gain: 0.9
+        accuracy_improvement: 0.85
+        effort_cost: 0.3
+        blocking_severity: 0.0  # Final phase
+      
+      depends_on:
+        - "phase-integration-001"
+      
+      exit_criteria:
+        - "Canary deployment successful (10% traffic)"
+        - "Monitoring confirms stability"
+        - "Full rollout completed"
+        - "Documentation published"
+      
+      artifacts:
+        - "docs/deployment/release-notes.md"
+        - "docs/deployment/runbook.md"
+
+# =============================================================================
+# Execution Flow Visualization (Mermaid)
+# =============================================================================
+# ```mermaid
+# graph TD
+#   B1[Backend 001: API Design] --> B2[Backend 002: DB Migration]
+#   B2 --> B3[Backend 003: Auth Service]
+#   B3 --> B4[Backend 004: Business Logic]
+#   B3 --> B5[Backend 005: Caching]
+#   B3 --> B6[Backend 006: Background Jobs]
+#   B4 --> B7[Backend 007: Integration Tests]
+#   B5 --> B7
+#   B6 --> B7
+#   B7 --> B8[Backend 008: Performance]
+#   
+#   F1[Frontend 001: Design System] --> F2[Frontend 002: State Mgmt]
+#   F2 --> F3[Frontend 003: Auth UI]
+#   F3 --> F4[Frontend 004: Feature UI]
+#   B3 -.API.-> F3
+#   B4 -.API.-> F4
+#   F4 --> F5[Frontend 005: WebSockets]
+#   F4 --> F6[Frontend 006: Tests]
+#   F5 --> F6
+#   F6 --> F7[Frontend 007: Accessibility]
+#   
+#   I1[Infra 001: k8s Manifests] --> I2[Infra 002: Monitoring]
+#   I1 --> I3[Infra 003: CI/CD]
+#   
+#   B8 --> INT[Integration 001: Full System Testing]
+#   F7 --> INT
+#   I3 --> INT
+#   INT --> DEP[Deployment 001: Production]
+# ```
+#
+# Parallel Execution:
+# - Track 1 (Backend): 8 phases, ~94 hours
+# - Track 2 (Frontend): 7 phases, ~78 hours
+# - Track 3 (Infrastructure): 3 phases, ~24 hours
+# - Track 4 (Integration/Deployment): 2 phases, ~22 hours
+#
+# Critical Path: B1→B2→B3→B4→B7→B8→INT→DEP (~102 hours)
+# Total Effort: 218 hours (~27 days with 8h workdays)
+# Estimated Calendar Time: 35 days (with parallelism + buffer)
+# =============================================================================
