@@ -8,16 +8,25 @@ Authority: Wave 8 Execution Activation
 Compliance: CORE-035 (Single canonical implementation)
 """
 
-from .base import (
+from cortex.orchestrators.planning.strategies.base import (
     ExecutionStrategy,
     ExecutionContext,
     ExecutionResult,
     ValidationResult,
+    ExecutionStatus,
 )
-from .phase import PhaseExecutionStrategy, PhaseState
-from .wave import WaveOrchestrationStrategy, WavePhaseInfo
-from .track import TrackParallelizationStrategy, ResourceAllocation
-from .factory import StrategyFactory, StrategyComposer, MetricsCollector
+from cortex.orchestrators.planning.strategies.phase import (
+    PhaseExecutionStrategy,
+    PhaseExecutionConfig,
+)
+from cortex.orchestrators.planning.strategies.wave import (
+    WaveOrchestrationStrategy,
+    WaveOrchestrationConfig,
+)
+from cortex.orchestrators.planning.strategies.track import (
+    TrackParallelizationStrategy,
+    TrackParallelizationConfig,
+)
 
 __all__ = [
     # Base classes
@@ -25,17 +34,13 @@ __all__ = [
     "ExecutionContext",
     "ExecutionResult",
     "ValidationResult",
-    # Phase strategy
+    "ExecutionStatus",
+    # Strategy implementations
     "PhaseExecutionStrategy",
-    "PhaseState",
-    # Wave strategy
+    "PhaseExecutionConfig",
     "WaveOrchestrationStrategy",
-    "WavePhaseInfo",
-    # Track strategy
+    "WaveOrchestrationConfig",
     "TrackParallelizationStrategy",
-    "ResourceAllocation",
-    # Factory and composition
-    "StrategyFactory",
-    "StrategyComposer",
-    "MetricsCollector",
+    "TrackParallelizationConfig",
 ]
+

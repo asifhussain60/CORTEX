@@ -1,42 +1,38 @@
 """
 Planning Orchestrators Module.
 
-Contains:
-- RemediationPlanGenerator: Generates remediation plans from audit findings
-- RemediationPlanFormatter: Formats plans as markdown
-- AuditRemediationCoordinator: Coordinates audit→plan→execution flow
-- UnifiedPlanningOrchestrator: Main orchestrator (Wave 8 Stage 1)
-- ROICompositeScorer: ROI scoring model (Wave 8 Stage 3)
-- DependencyResolver: Dependency resolution model (Wave 8 Stage 3)
-- ParallelismCalculator: Parallelism analysis model (Wave 8 Stage 3)
+Wave 8 Stage 1: Strategy Extraction (In Progress)
+Contains pluggable strategies for plan execution.
 """
 
-from cortex.orchestrators.planning.audit_remediation_coordinator import (
-    AuditRemediationCoordinator,
-)
-from cortex.orchestrators.planning.remediation_plan_formatter import (
-    RemediationPlanFormatter,
-)
-from cortex.orchestrators.planning.remediation_plan_generator import (
-    AuditFinding,
-    RemediationPhase,
-    RemediationPlan,
-    RemediationPlanGenerator,
-)
-from cortex.orchestrators.planning.models import (
-    ROICompositeScorer,
-    DependencyResolver,
-    ParallelismCalculator,
+# Wave 8 Stage 1: Strategy exports (✅ Complete)
+from cortex.orchestrators.planning.strategies import (
+    ExecutionStrategy,
+    ExecutionContext,
+    ExecutionResult,
+    ValidationResult,
+    ExecutionStatus,
+    PhaseExecutionStrategy,
+    PhaseExecutionConfig,
+    WaveOrchestrationStrategy,
+    WaveOrchestrationConfig,
+    TrackParallelizationStrategy,
+    TrackParallelizationConfig,
 )
 
 __all__ = [
-    "RemediationPlanGenerator",
-    "RemediationPlan",
-    "RemediationPhase",
-    "AuditFinding",
-    "RemediationPlanFormatter",
-    "AuditRemediationCoordinator",
-    "ROICompositeScorer",
-    "DependencyResolver",
-    "ParallelismCalculator",
+    # Base classes
+    "ExecutionStrategy",
+    "ExecutionContext",
+    "ExecutionResult",
+    "ValidationResult",
+    "ExecutionStatus",
+    # Strategy implementations
+    "PhaseExecutionStrategy",
+    "PhaseExecutionConfig",
+    "WaveOrchestrationStrategy",
+    "WaveOrchestrationConfig",
+    "TrackParallelizationStrategy",
+    "TrackParallelizationConfig",
 ]
+
