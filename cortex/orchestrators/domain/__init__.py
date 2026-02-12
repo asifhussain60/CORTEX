@@ -1,8 +1,7 @@
-"""
-CORTEX Domain Orchestrators
+"""CORTEX domain orchestrators package.
 
-Business domain orchestrators:
-- ac_orchestrator.py: Acceptance criteria operations
-- governance_orchestrator.py: Rule enforcement
-- audit_orchestrator.py: Audit log operations
+Wave 7 Track 4: Consolidated orchestrators.
+Legacy components purged 2026-02-12.
 """
+
+# Minimal exports - import orchestrators as needed

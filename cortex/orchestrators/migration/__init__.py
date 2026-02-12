@@ -1,26 +1,7 @@
-"""
-Migration Orchestrators - Code transformation and migration tools.
+"""CORTEX migration orchestrators package.
 
-Provides orchestrators for:
-- Selenium to Playwright migration
-- Framework upgrades
-- Code pattern transformations
-
-Author: Asif Hussain
+Wave 7 Track 4: Consolidated orchestrators.
+Legacy components purged 2026-02-12.
 """
 
-from .selenium_playwright_orchestrator import (
-    ConversionEngine,
-    ConversionReport,
-    PlaywrightCodeGenerator,
-    SeleniumPatternMatcher,
-    SeleniumPlaywrightOrchestrator,
-)
-
-__all__ = [
-    "SeleniumPlaywrightOrchestrator",
-    "SeleniumPatternMatcher",
-    "PlaywrightCodeGenerator",
-    "ConversionEngine",
-    "ConversionReport",
-]
+# Minimal exports - import orchestrators as needed
