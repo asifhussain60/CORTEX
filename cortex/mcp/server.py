@@ -222,14 +222,15 @@ class MCPServer:
     SERVER_ERROR_START: int = -32099
     UNAUTHORIZED: int = -32001  # Custom: Authentication required
 
-    def __init__(self, enable_auth: bool = True) -> None:
+    def __init__(self, enable_auth: bool = False) -> None:
         """
         Initialize MCP Server.
         
         Args:
-            enable_auth: Whether to enable authentication (default: True for production)
+            enable_auth: Whether to enable authentication (default: False for local development)
         
-        AC_NOTE: Set enable_auth=False only for local development/testing
+        AC_NOTE: Authentication disabled by default for Windows/macOS local development.
+                 Set enable_auth=True explicitly for production deployments.
         """
         self.logger: logging.Logger = logging.getLogger(__name__)
         self._tools: Dict[str, Tool] = {}

@@ -40,7 +40,8 @@ def main() -> int:
         from cortex.mcp.stdio_transport import run_stdio_server
 
         logger.info("Initializing CORTEX MCP Server with stdio transport...")
-        server: MCPServer = MCPServer()
+        # Authentication disabled for local development (Windows/macOS)
+        server: MCPServer = MCPServer(enable_auth=False)
 
         # List available tools
         tools = server.list_tools()

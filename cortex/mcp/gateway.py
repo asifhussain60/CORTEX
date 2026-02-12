@@ -92,7 +92,7 @@ class MCPGateway:
                     "repo": {"type": "string", "required": True},
                     "pr_number": {"type": "integer", "required": True},
                 },
-                required_auth=True,
+                required_auth=False,  # Disabled for local development
             ),
             "cortex_auto_approve": ToolMetadata(
                 name="cortex_auto_approve",
@@ -102,7 +102,7 @@ class MCPGateway:
                     "repo": {"type": "string", "required": True},
                     "pr_number": {"type": "integer", "required": True},
                 },
-                required_auth=True,
+                required_auth=False,  # Disabled for local development
             ),
 
             # Migration Tools
@@ -172,7 +172,7 @@ class MCPGateway:
                 parameters={
                     "repo": {"type": "string", "required": False},
                 },
-                required_auth=True,
+                required_auth=False,  # Disabled for local development
             ),
             "cortex_dashboard_migration_progress": ToolMetadata(
                 name="cortex_dashboard_migration_progress",
