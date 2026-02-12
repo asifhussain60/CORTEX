@@ -471,33 +471,35 @@ master_remediation:
         Depends: WAVE-I complete
     
     - wave: "K"
-      name: "Architecture Alignment Verification (ENH-086 Complete)"
-      release: "R6K-CLEANUP-COMPLETE"
+      name: "Architecture Alignment Verification (ENH-086 S1+S2 ✅)"
+      release: "R6K-CLEANUP-PROGRESS"
       priority: "P1-HIGH-ROI"
       duration: "3-4 hours (1 session)"
-      session_id: "WAVE-K-READY"
-      status: "ready"  # ✅ Will be unblocked after Wave J
+      session_id: "WAVE-K-20260212-IN-PROGRESS"
+      status: "in_progress"  # ✅ S1+S2 complete (15/20 tests)
       completion_date: null
       requires: ["WAVE-J"]
       roi: 9.0
       highlights:
-        - "⚪ ENH-086: Verify CORE rules compliance (30/30 rules)"
-        - "⚪ Detect MCP-FIRST violations (CORE-049)"
-        - "⚪ Architecture pattern enforcement (Strategy, EventBus, etc.)"
-      value_to_deliver:
-        - "✅ CORE rules: 100% compliance verified (30/30)"
-        - "✅ MCP-FIRST: 0 violations detected (CORE-049)"
-        - "✅ Architecture alignment complete"
-        - "✅ 15+ compliance tests (automated verification)"
+        - "✅ S1: CoreRulesVerifier enhanced (10/10 tests)"
+        - "✅ S2: MCPFirstDetector enhanced (5/5 tests)"
+        - "⚪ S3: Architecture pattern enforcement (5 tests pending)"
+      value_delivered:
+        - "✅ CORE rules: verify_all_rules() API (10 tests)"
+        - "✅ MCP-FIRST: scan_code_string() + target_path (5 tests)"
+        - "⚪ Architecture patterns: TDD, Strategy, EventBus (pending)"
       dependencies: ["WAVE-J"]
       blocks: ["WAVE-L"]  # Wave 6 completion milestone
       deliverables:
-        - "⚪ cortex/governance/compliance/core_rules_verifier.py (30/30 rules)"
-        - "⚪ cortex/governance/compliance/mcp_first_detector.py (CORE-049)"
+        - "✅ cortex/governance/core_rules_verifier.py (enhanced)"
+        - "✅ cortex/governance/mcp_first_detector.py (enhanced)"
+        - "✅ tests/unit/governance/compliance/test_core_rules_verifier.py (10 tests)"
+        - "✅ tests/unit/governance/compliance/test_mcp_first_detector.py (5 tests)"
         - "⚪ Architecture pattern checks (Strategy, EventBus, TDD)"
-        - "⚪ 15+ compliance tests (TDD)"
-      test_target: 15
-      commits_expected: 2
+      test_target: 20
+      tests_complete: 15
+      commits_pushed: 1
+      git_hash: "873c3f95e"
       autonomous_command: |
         /implement WAVE-K: ENH-086 Architecture Alignment Verification
         
