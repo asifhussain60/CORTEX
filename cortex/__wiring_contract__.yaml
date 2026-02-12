@@ -1,9 +1,12 @@
-version: "1.0.0"
+version: "2.0.0"
 cortex_version: "1.0.0"
-computed_at: "2026-02-11T00:00:00Z"
-checksum: "wave7-track3-unified"
-total_orchestrators: 27
-wave_7_track_3_status: "CONSOLIDATION IN PROGRESS"
+computed_at: "2026-02-12T00:00:00Z"
+checksum: "wave7-track4-complete"
+total_orchestrators: 15
+total_deprecated: 12
+wave_7_track_4_status: "CONSOLIDATION COMPLETE"
+consolidation_achieved: "44% reduction (27 → 15 orchestrators)"
+sunset_date: "2026-03-31"
 
 orchestrators:
   - name: "MasterOrchestrator"
@@ -187,6 +190,9 @@ orchestrators:
     dependencies: []
     is_optional: true
     version: "1.0.0"
+    status: "DEPRECATED"
+    deprecation_note: "Use UnifiedOnboardingOrchestrator for upgrade workflows"
+    sunset_date: "2026-03-31"
 
   - name: "RollbackOrchestrator"
     module: "cortex.orchestrators.support.rollback_orchestrator"
@@ -197,6 +203,9 @@ orchestrators:
     dependencies: []
     is_optional: true
     version: "1.0.0"
+    status: "DEPRECATED"
+    deprecation_note: "Use WorkflowOrchestrator for rollback operations"
+    sunset_date: "2026-03-31"
 
   - name: "SetupOrchestrator"
     module: "cortex.orchestrators.support.setup_orchestrator"
@@ -220,6 +229,9 @@ orchestrators:
     dependencies: []
     is_optional: true
     version: "1.0.0"
+    status: "DEPRECATED"
+    deprecation_note: "Use MasterOrchestrator for composition patterns"
+    sunset_date: "2026-03-31"
 
   - name: "WrappedTDDOrchestrator"
     module: "cortex.orchestrators.core.wrapped_tdd_orchestrator"
@@ -230,6 +242,9 @@ orchestrators:
     dependencies: ["TDDOrchestrator"]
     is_optional: false
     version: "1.0.0"
+    status: "DEPRECATED"
+    deprecation_note: "Use TDDOrchestrator directly (wrapper no longer needed)"
+    sunset_date: "2026-03-31"
 
   - name: "DatabaseBackedRegistry"
     module: "cortex.orchestrators.core.database_registry"
