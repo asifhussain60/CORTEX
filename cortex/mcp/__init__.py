@@ -1,11 +1,26 @@
 """
 CORTEX MCP Module: Model Context Protocol Implementation.
 
-This module provides JSON-RPC 2.0 compliant Model Context Protocol for
-tool management, discovery, and execution within the CORTEX system.
+MCP v2.0 ARCHITECTURE (WAVE-100):
+    All new code should use cortex.mcp.v2 which provides:
+    - 24 consolidated production tools (75% reduction from 98)
+    - Business capability alignment
+    - Cross-platform support
+    - Comprehensive test coverage
 
-Exports:
-    MCPServer: Main MCP protocol server
+    Usage:
+        from cortex.mcp.v2 import MCPServerV2
+        from cortex.mcp.v2.tools import CortexProcessRequest
+
+LEGACY v1 (deprecated - kept for backward compatibility):
+    The original MCP implementation is still available but deprecated.
+    Existing code will continue to work.
+
+Exports (v2 - recommended):
+    MCPServerV2: MCP v2 server with 24 production tools
+    
+Exports (v1 - deprecated):
+    MCPServer: Original MCP server (use MCPServerV2 instead)
     Tool: Abstract base class for MCP tools
     ToolDefinition: Tool definition data model
     ToolParameter: Tool parameter definition
@@ -15,10 +30,20 @@ Exports:
     MCPToolsCatalog: Unified MCP tools registry (CORE-035 SSOT)
     get_mcp_tools_catalog: Get catalog singleton
     sync_mcp_tools: Sync tools from orchestrators
-    OrchestratorMCPServer: Unified MCP facade for orchestrators (AC-MCP-ORCHESTRATOR-001)
+    OrchestratorMCPServer: Unified MCP facade for orchestrators
     get_orchestrator_mcp_server: Get orchestrator server singleton
 """
 
+# ===========================================================================
+# MCP v2 (RECOMMENDED) - Import first for fast access
+# ===========================================================================
+from cortex.mcp import v2
+from cortex.mcp.v2 import MCPServerV2
+from cortex.mcp.v2.base import ToolCategory as ToolCategoryV2
+
+# ===========================================================================
+# MCP v1 (DEPRECATED - kept for backward compatibility)
+# ===========================================================================
 from cortex.mcp.decorators import MCP_TOOLS_REGISTRY, mcp_tool
 from cortex.mcp.endpoints import (
     call_tool,
