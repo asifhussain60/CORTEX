@@ -8,6 +8,7 @@ Supports both local and remote git repositories via RemoteGitAdapter.
 
 Authority: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings)
 Phase: 10 - LENS Remote Intelligence (Enhanced in Task LENS-011)
+AC: AC-ENH-063-P2-003 - Circuit breaker integration for git operations
 """
 
 import re
@@ -27,6 +28,7 @@ from cortex.brain.analysis.remote_git_adapter import (
     RemoteFile,
     RemoteGitAdapter,
 )
+from cortex.infrastructure.git_circuit_breaker import run_git_command_safe
 
 
 @dataclass
@@ -234,12 +236,14 @@ class GitHistoryAnalyzer:
         ]
 
         try:
-            result = subprocess.run(
+            # Use circuit breaker for git operations
+            result = run_git_command_safe(
                 cmd,
-                cwd=self.repo_path,
+                cwd=str(self.repo_path) if self.repo_path else None,
                 capture_output=True,
                 text=True,
                 check=True,
+                timeout=5.0,  # 5s timeout for git log
             )
 
             commits = []
@@ -354,12 +358,14 @@ class GitHistoryAnalyzer:
         ]
 
         try:
-            result = subprocess.run(
+            # Use circuit breaker for git blame operations
+            result = run_git_command_safe(
                 cmd,
-                cwd=self.repo_path,
+                cwd=str(self.repo_path) if self.repo_path else None,
                 capture_output=True,
                 text=True,
                 check=True,
+                timeout=5.0,
             )
 
             blame_info = self._parse_blame_output(result.stdout)
@@ -480,12 +486,14 @@ class GitHistoryAnalyzer:
         ]
 
         try:
-            result = subprocess.run(
+            # Use circuit breaker for git log (repo history)
+            result = run_git_command_safe(
                 cmd,
-                cwd=self.repo_path,
+                cwd=str(self.repo_path) if self.repo_path else None,
                 capture_output=True,
                 text=True,
                 check=True,
+                timeout=5.0,
             )
 
             commits = self._parse_log_with_files(result.stdout)
@@ -589,12 +597,14 @@ class GitHistoryAnalyzer:
         ]
 
         try:
-            result = subprocess.run(
+            # Use circuit breaker for git log (author history)
+            result = run_git_command_safe(
                 cmd,
-                cwd=self.repo_path,
+                cwd=str(self.repo_path) if self.repo_path else None,
                 capture_output=True,
                 text=True,
                 check=True,
+                timeout=5.0,
             )
 
             commits = self._parse_log_with_files(result.stdout)
@@ -645,12 +655,14 @@ class GitHistoryAnalyzer:
         ]
 
         try:
-            result = subprocess.run(
+            # Use circuit breaker for git grep (search commits)
+            result = run_git_command_safe(
                 cmd,
-                cwd=self.repo_path,
+                cwd=str(self.repo_path) if self.repo_path else None,
                 capture_output=True,
                 text=True,
                 check=True,
+                timeout=5.0,
             )
 
             commits = self._parse_log_with_files(result.stdout)

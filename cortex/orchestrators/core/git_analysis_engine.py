@@ -3,6 +3,7 @@ Git Analysis Engine - Scope D Implementation
 
 AC-ID: AC-PLANNING-REFINE-QB-001 - Git Analysis (Scope D: All Scopes)
 CORE-008: TDD (tests before implementation)
+AC-ENH-063-P2-004: Circuit breaker integration for git commands
 
 Git analysis integrates four scopes:
 1. Current branch/commit state (what state are we in?)
@@ -27,6 +28,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 
 # CONSOLIDATED: Import from cortex.models.canonical_enums
 from cortex.models.canonical_enums import RiskLevel
+from cortex.infrastructure.git_circuit_breaker import run_git_command_safe
 
 
 @dataclass
@@ -94,7 +96,7 @@ class GitAnalysisEngine:
             raise ValueError(f"No git repository found at {repo_path}")
 
     def _run_git_command(self, *args: str) -> str:
-        """Execute git command safely.
+        """Execute git command safely with circuit breaker protection.
 
         Args:
             *args: Git command arguments
@@ -103,11 +105,10 @@ class GitAnalysisEngine:
             Command output
         """
         try:
-            result = subprocess.run(
+            # Use circuit breaker for all git operations
+            result = run_git_command_safe(
                 ["git", "-C", str(self.repo_path), *args],
-                capture_output=True,
-                text=True,
-                timeout=10
+                timeout=10.0,
             )
             if result.returncode != 0:
                 raise RuntimeError(f"Git command failed: {result.stderr}")
