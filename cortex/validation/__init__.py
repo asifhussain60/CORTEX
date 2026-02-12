@@ -9,9 +9,20 @@ from cortex.validation.cross_reference_validator import (
     ContradictionSeverity,
 )
 
+from cortex.validation.contradiction_resolver import (
+    ContradictionResolver,
+    Resolution,
+    ResolutionStrategy,
+    ResolutionStatus,
+)
+
 __all__ = [
     'CrossReferenceValidator',
     'ContradictionReport',
     'ContradictionType',
     'ContradictionSeverity',
+    'ContradictionResolver',
+    'Resolution',
+    'ResolutionStrategy',
+    'ResolutionStatus',
 ]
