@@ -7,7 +7,7 @@ Detects: [text](path.md) patterns in .github/ instruction files
 Auto-fix: Converts to backtick references: `path.md`
 
 Usage:
-    python cortex/governance_tools/lint_instruction_files.py [--fix]
+    python cortex/governance/tools/lint_instruction_files.py [--fix]
 
 Exit codes:
     0 - No violations or all fixed
@@ -156,7 +156,7 @@ class InstructionFileLinter:
             return 0
 
         print(f"❌ Found {total_violations} violation(s) across {len(self.violations)} file(s).")
-        print("\nTo auto-fix, run: python cortex/governance_tools/lint_instruction_files.py --fix")
+        print("\nTo auto-fix, run: python cortex/governance/tools/lint_instruction_files.py --fix")
         return 1
 
 
@@ -165,7 +165,7 @@ def main():
     auto_fix = '--fix' in sys.argv
 
     # Find CORTEX root
-    root_path = Path(__file__).resolve().parents[2]  # cortex/governance_tools/... -> CORTEX/
+    root_path = Path(__file__).resolve().parents[3]  # cortex/governance/tools/... -> CORTEX/
 
     linter = InstructionFileLinter(root_path, auto_fix=auto_fix)
     exit_code = linter.scan_all()
