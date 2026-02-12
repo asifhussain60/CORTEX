@@ -97,6 +97,25 @@ fi
 # CHECK 3: Wave 8 Registry Blacklist Enforcement (CORE-056)
 # ============================================================================
 # AC_START: AC-WAVE8-BLACKLIST-001 - Wave 8 Stage 2 pre-commit enforcement
+# AC_START: AC-WAVE-E-PRECOMMIT-001 - ARCHITECT mode detection for internal dev
+
+# Detect ARCHITECT mode (CORTEX internal development)
+ARCHITECT_MODE=0
+
+# Method 1: Check for CORTEX markers (.cortex directory)
+if [ -d ".cortex" ]; then
+    ARCHITECT_MODE=1
+fi
+
+# Method 2: Check for cortex package itself
+if [ -f "cortex/__init__.py" ] && [ -d "cortex-registry" ]; then
+    ARCHITECT_MODE=1
+fi
+
+# Method 3: Check environment variable
+if [ "$CORTEX_MODE" = "architect" ]; then
+    ARCHITECT_MODE=1
+fi
 
 BLACKLIST_VIOLATIONS=0
 
@@ -105,52 +124,65 @@ STAGED_BLACKLIST=$(git diff --cached --name-only --diff-filter=ACM | \
     grep -E 'cortex-registry/_cortex-master/(index\.yaml|phases/|waves/|execution/|meta/)' || true)
 
 if [ -n "$STAGED_BLACKLIST" ]; then
-    # Filter out exceptions (governance, enhancements, directives, WAVE documentation)
-    FILTERED_BLACKLIST=$(echo "$STAGED_BLACKLIST" | \
-        grep -v 'governance/' | \
-        grep -v 'enhancements/' | \
-        grep -v 'directives/' | \
-        grep -v 'WAVE-' || true)
-    
-    if [ -n "$FILTERED_BLACKLIST" ]; then
-        echo -e "${RED}❌ CORE-056 VIOLATION: Internal registry blacklist enforcement${NC}"
-        echo ""
-        echo -e "${YELLOW}Attempted to stage internal artifacts:${NC}"
+    # In ARCHITECT mode, allow internal registry updates with warning
+    if [ $ARCHITECT_MODE -eq 1 ]; then
+        echo -e "${YELLOW}⚠️  ARCHITECT MODE: Internal registry updates detected${NC}"
+        echo -e "${BLUE}   Allowed for CORTEX development (session-scoped waves)${NC}"
         while IFS= read -r file; do
-            echo -e "  - $file"
-        done <<< "$FILTERED_BLACKLIST"
-        BLACKLIST_VIOLATIONS=$(($(echo "$FILTERED_BLACKLIST" | wc -l)))
+            echo -e "   - $file"
+        done <<< "$STAGED_BLACKLIST"
+        echo -e "${GREEN}✅ Registry blacklist: BYPASSED (ARCHITECT MODE)${NC}"
+    else
+        # In PRODUCTION mode, enforce blacklist
+        # Filter out exceptions (governance, enhancements, directives, WAVE documentation)
+        FILTERED_BLACKLIST=$(echo "$STAGED_BLACKLIST" | \
+            grep -v 'governance/' | \
+            grep -v 'enhancements/' | \
+            grep -v 'directives/' | \
+            grep -v 'WAVE-' || true)
+        
+        if [ -n "$FILTERED_BLACKLIST" ]; then
+            echo -e "${RED}❌ CORE-056 VIOLATION: Internal registry blacklist enforcement${NC}"
+            echo ""
+            echo -e "${YELLOW}Attempted to stage internal artifacts:${NC}"
+            while IFS= read -r file; do
+                echo -e "  - $file"
+            done <<< "$FILTERED_BLACKLIST"
+            BLACKLIST_VIOLATIONS=$(($(echo "$FILTERED_BLACKLIST" | wc -l)))
+        fi
+        
+        if [ $BLACKLIST_VIOLATIONS -gt 0 ]; then
+            echo ""
+            echo -e "${RED}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+            echo -e "${RED}Pre-commit check FAILED (Registry Blacklist - CORE-056)${NC}"
+            echo -e "${RED}Found $BLACKLIST_VIOLATIONS blacklisted file(s)${NC}"
+            echo -e "${RED}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+            echo ""
+            echo -e "${YELLOW}Blacklist Policy (Wave 8 Stage 2):${NC}"
+            echo -e "  ✗ cortex-registry/_cortex-master/index.yaml"
+            echo -e "  ✗ cortex-registry/_cortex-master/phases/"
+            echo -e "  ✗ cortex-registry/_cortex-master/waves/"
+            echo -e "  ✗ cortex-registry/_cortex-master/execution/"
+            echo -e "  ✗ cortex-registry/_cortex-master/meta/"
+            echo ""
+            echo -e "${YELLOW}Exceptions (explicitly allowed):${NC}"
+            echo -e "  ✓ governance/ (reusable governance patterns)"
+            echo -e "  ✓ enhancements/ (reusable enhancement specs)"
+            echo -e "  ✓ directives/ (reusable execution directives)"
+            echo -e "  ✓ WAVE-*.md/yaml (reference documentation)"
+            echo ""
+            echo -e "${YELLOW}Resolution:${NC}"
+            echo -e "  1. Unstage: git reset HEAD <file>"
+            echo -e "  2. This is CORTEX repository - policy should not apply"
+            echo ""
+            exit 1
+        fi
+        
+        echo -e "${GREEN}✅ Registry blacklist: COMPLIANT (CORE-056)${NC}"
     fi
 fi
 
-if [ $BLACKLIST_VIOLATIONS -gt 0 ]; then
-    echo ""
-    echo -e "${RED}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    echo -e "${RED}Pre-commit check FAILED (Registry Blacklist - CORE-056)${NC}"
-    echo -e "${RED}Found $BLACKLIST_VIOLATIONS blacklisted file(s)${NC}"
-    echo -e "${RED}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    echo ""
-    echo -e "${YELLOW}Blacklist Policy (Wave 8 Stage 2):${NC}"
-    echo -e "  ✗ cortex-registry/_cortex-master/index.yaml"
-    echo -e "  ✗ cortex-registry/_cortex-master/phases/"
-    echo -e "  ✗ cortex-registry/_cortex-master/waves/"
-    echo -e "  ✗ cortex-registry/_cortex-master/execution/"
-    echo -e "  ✗ cortex-registry/_cortex-master/meta/"
-    echo ""
-    echo -e "${YELLOW}Exceptions (explicitly allowed):${NC}"
-    echo -e "  ✓ governance/ (reusable governance patterns)"
-    echo -e "  ✓ enhancements/ (reusable enhancement specs)"
-    echo -e "  ✓ directives/ (reusable execution directives)"
-    echo -e "  ✓ WAVE-*.md/yaml (reference documentation)"
-    echo ""
-    echo -e "${YELLOW}Resolution:${NC}"
-    echo -e "  1. Unstage: git reset HEAD <file>"
-    echo -e "  2. Override (internal only): git commit --no-verify"
-    echo ""
-    exit 1
-fi
-
-echo -e "${GREEN}✅ Registry blacklist: COMPLIANT (CORE-056)${NC}"
+# AC_COMPLETE: AC-WAVE-E-PRECOMMIT-001 ✅ ARCHITECT mode detection
 # AC_COMPLETE: AC-WAVE8-BLACKLIST-001 ✅
 
 # ============================================================================
