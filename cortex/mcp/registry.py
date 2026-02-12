@@ -388,7 +388,7 @@ class ToolRegistry:
         Generate MCP protocol schema for all tools.
         
         Returns:
-            List of tool definitions in MCP format
+            List of tool definitions in MCP format with category and operations
         """
         schemas = []
         for metadata in self._tools.values():
@@ -403,12 +403,18 @@ class ToolRegistry:
             schema = {
                 "name": metadata.id,
                 "description": metadata.description,
+                "category": metadata.category.value,  # Include category
                 "inputSchema": {
                     "type": "object",
                     "properties": properties,
                     "required": required,
                 },
             }
+            
+            # Include operations for consolidated tools
+            if metadata.operations:
+                schema["operations"] = metadata.operations
+            
             schemas.append(schema)
         
         return schemas
