@@ -126,6 +126,227 @@ def check_venv() -> Tuple[bool, str]:
     return False, ""
 
 
+# ============================================================================
+# PHASE 54: SELF-HEALING SETUP (Stage 2)
+# ============================================================================
+# AC_START: AC-PHASE54-S2-001
+
+
+def auto_create_venv(python_exe: Optional[str] = None) -> Tuple[bool, str]:
+    """
+    Automatically create virtual environment if missing.
+    
+    Phase 54 Stage 2: Self-healing capability
+    
+    Args:
+        python_exe: Python executable to use (defaults to sys.executable)
+    
+    Returns:
+        Tuple of (success, venv_path)
+    """
+    import subprocess
+    
+    if python_exe is None:
+        python_exe = sys.executable
+    
+    venv_dir = Path(".venv")
+    
+    try:
+        logger.info("🔧 Auto-creating virtual environment...")
+        
+        # Remove partial venv if exists
+        if venv_dir.exists():
+            logger.info("   Removing partial/corrupted venv...")
+            import shutil
+            shutil.rmtree(venv_dir)
+        
+        # Create venv
+        subprocess.run(
+            [python_exe, "-m", "venv", ".venv"],
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=60
+        )
+        
+        # Verify creation
+        if IS_WINDOWS:
+            venv_python = venv_dir / "Scripts" / "python.exe"
+        else:
+            venv_python = venv_dir / "bin" / "python"
+        
+        if venv_python.exists():
+            logger.info(f"✅ Virtual environment created: {venv_python}")
+            return True, str(venv_python)
+        else:
+            logger.error("❌ Venv creation failed: Python executable not found")
+            return False, ""
+    
+    except subprocess.TimeoutExpired:
+        logger.error("❌ Venv creation timed out (>60s)")
+        return False, ""
+    except subprocess.CalledProcessError as e:
+        logger.error(f"❌ Venv creation failed: {e.stderr}")
+        return False, ""
+    except Exception as e:
+        logger.error(f"❌ Venv creation failed: {e}")
+        return False, ""
+
+
+def install_dependencies_with_retry(venv_python: str, max_attempts: int = 3) -> bool:
+    """
+    Install dependencies with retry logic.
+    
+    Phase 54 Stage 2: Retry mechanism for network failures
+    
+    Args:
+        venv_python: Path to venv Python executable
+        max_attempts: Maximum retry attempts
+    
+    Returns:
+        True if successful
+    """
+    import subprocess
+    
+    req_file = Path("requirements.txt")
+    if not req_file.exists():
+        logger.warning("⚠️  requirements.txt not found, skipping dependency install")
+        return True
+    
+    for attempt in range(1, max_attempts + 1):
+        try:
+            logger.info(f"📦 Installing dependencies (attempt {attempt}/{max_attempts})...")
+            
+            result = subprocess.run(
+                [venv_python, "-m", "pip", "install", "-r", "requirements.txt"],
+                check=True,
+                capture_output=True,
+                text=True,
+                timeout=300  # 5 minutes
+            )
+            
+            logger.info("✅ Dependencies installed successfully")
+            return True
+        
+        except subprocess.TimeoutExpired:
+            logger.warning(f"⚠️  Attempt {attempt} timed out (>5 min)")
+            if attempt < max_attempts:
+                logger.info("   Retrying...")
+        
+        except subprocess.CalledProcessError as e:
+            logger.warning(f"⚠️  Attempt {attempt} failed: {e.stderr[:200]}")
+            if attempt < max_attempts:
+                logger.info("   Retrying...")
+        
+        except Exception as e:
+            logger.warning(f"⚠️  Attempt {attempt} error: {e}")
+            if attempt < max_attempts:
+                logger.info("   Retrying...")
+    
+    logger.error(f"❌ Dependency installation failed after {max_attempts} attempts")
+    return False
+
+
+def backup_settings_json(settings_path: Path) -> Optional[Path]:
+    """
+    Backup settings.json before modifications.
+    
+    Phase 54 Stage 4: Rollback mechanism
+    
+    Args:
+        settings_path: Path to settings.json
+    
+    Returns:
+        Path to backup file, or None if failed
+    """
+    if not settings_path.exists():
+        return None
+    
+    try:
+        backup_path = settings_path.with_suffix(".json.backup")
+        import shutil
+        shutil.copy2(settings_path, backup_path)
+        logger.info(f"💾 Backup created: {backup_path.name}")
+        return backup_path
+    except Exception as e:
+        logger.warning(f"⚠️  Backup creation failed: {e}")
+        return None
+
+
+def restore_from_backup(settings_path: Path, backup_path: Path) -> bool:
+    """
+    Restore settings.json from backup.
+    
+    Phase 54 Stage 4: Recovery mechanism
+    
+    Args:
+        settings_path: Path to settings.json
+        backup_path: Path to backup file
+    
+    Returns:
+        True if restored successfully
+    """
+    try:
+        import shutil
+        shutil.copy2(backup_path, settings_path)
+        logger.info("♻️  Settings restored from backup")
+        return True
+    except Exception as e:
+        logger.error(f"❌ Restore failed: {e}")
+        return False
+
+
+def atomic_write_json(file_path: Path, data: dict) -> bool:
+    """
+    Write JSON file atomically (write to temp, then rename).
+    
+    Phase 54 Stage 2: Atomic operations
+    
+    Args:
+        file_path: Target file path
+        data: JSON data to write
+    
+    Returns:
+        True if successful
+    """
+    try:
+        # Write to temp file
+        temp_path = file_path.with_suffix(".json.tmp")
+        temp_path.write_text(json.dumps(data, indent=2) + "\n", encoding='utf-8')
+        
+        # Atomic rename
+        temp_path.rename(file_path)
+        
+        return True
+    except Exception as e:
+        logger.error(f"❌ Atomic write failed: {e}")
+        # Clean up temp file
+        if temp_path.exists():
+            temp_path.unlink()
+        return False
+
+
+def display_progress_bar(stage: str, percentage: float):
+    """
+    Display ASCII progress bar during setup.
+    
+    Phase 54 Stage 2: Visual feedback
+    
+    Args:
+        stage: Current stage name
+        percentage: Completion percentage (0.0 to 1.0)
+    """
+    bar_length = 20
+    filled = int(bar_length * percentage)
+    bar = "█" * filled + "░" * (bar_length - filled)
+    pct = int(percentage * 100)
+    
+    logger.info(f"[{bar}] {pct}% {stage}")
+
+
+# AC_COMPLETE: AC-PHASE54-S2-001 ✅ Self-healing functions added
+
+
 def check_mcp_module() -> Tuple[bool, str]:
     """Check if cortex/mcp module exists."""
     mcp_init = Path("cortex/mcp/__init__.py")
@@ -836,7 +1057,7 @@ def display_completion_message(cleanup_mode: bool = False):
 
 
 def main():
-    """Main setup flow."""
+    """Main setup flow with self-healing capabilities (Phase 54)."""
     args = parse_args()
     
     # Configure logging for silent mode
@@ -856,23 +1077,46 @@ def main():
             logger.error(f"Cleanup failed: {message}")
             return 1
 
+    # Phase 54: Progress tracking
+    display_progress_bar("Environment check", 0.1)
+
     # Step 1: Check Python
     python_ok, python_version = check_python()
     if not python_ok:
         logger.error("Setup failed: Python version check")
         return 1
 
-    # Step 2: Check Virtual Environment
+    display_progress_bar("Virtual environment", 0.2)
+
+    # Step 2: Check Virtual Environment (with auto-create)
     venv_ok, venv_path = check_venv()
     if not venv_ok:
-        logger.error("Setup failed: Virtual environment check")
-        return 1
+        # Phase 54 Stage 2: Auto-create venv if missing
+        logger.info("🔧 Attempting to create virtual environment...")
+        venv_ok, venv_path = auto_create_venv()
+        
+        if not venv_ok:
+            logger.error("Setup failed: Virtual environment creation")
+            logger.error("Manual fix: python -m venv .venv")
+            return 1
+        
+        # Install dependencies after creating venv
+        display_progress_bar("Dependencies", 0.4)
+        deps_ok = install_dependencies_with_retry(venv_path, max_attempts=3)
+        if not deps_ok:
+            logger.error("Setup failed: Dependency installation")
+            logger.error("Manual fix: pip install -r requirements.txt")
+            return 1
+
+    display_progress_bar("MCP module", 0.5)
 
     # Step 3: Check MCP Module
     mcp_ok, mcp_path = check_mcp_module()
     if not mcp_ok:
         logger.error("Setup failed: MCP module check")
         return 1
+
+    display_progress_bar("Configuration", 0.6)
 
     # Step 4: Create .vscode directory
     vscode_ok, vscode_dir = ensure_vscode_dir()
@@ -886,26 +1130,42 @@ def main():
         logger.error("Setup failed: settings.json creation")
         return 1
 
+    # Phase 54 Stage 4: Backup before modifications
+    backup_path = backup_settings_json(settings_path)
+
     # Step 6: Validate JSON
     json_ok, json_content = validate_json_file(settings_path)
     if not json_ok:
         logger.error("Setup failed: JSON validation")
+        if backup_path:
+            logger.info("Restoring from backup...")
+            restore_from_backup(settings_path, backup_path)
         return 1
+
+    display_progress_bar("MCP configuration", 0.7)
 
     # Step 7: Create mcp.json (PRIMARY - VS Code reads this for MCP servers)
     mcp_json_ok, mcp_json_path = create_mcp_json(vscode_dir)
     if not mcp_json_ok:
         logger.error("Setup failed: mcp.json creation")
+        if backup_path:
+            logger.info("Restoring from backup...")
+            restore_from_backup(settings_path, backup_path)
         return 1
 
     # Step 8: Inject MCP configuration into settings.json (SECONDARY - fallback)
     inject_ok, settings_content = inject_mcp_config(settings_path)
     if not inject_ok:
         logger.error("Setup failed: MCP configuration injection")
+        if backup_path:
+            logger.info("Restoring from backup...")
+            restore_from_backup(settings_path, backup_path)
         return 1
     
     # Step 8.5: Disable Pylance MCP (Phase 50 policy)
     disable_pylance_mcp(settings_path)
+
+    display_progress_bar("Verification", 0.9)
 
     # Step 9: Verify MCP startup
     verify_ok, verify_msg = verify_mcp_startup()
@@ -915,13 +1175,23 @@ def main():
         logger.error(
             "Recommendation: Check that all dependencies are installed (pip install -r requirements.txt)"
         )
+        if backup_path:
+            logger.info("Restoring from backup...")
+            restore_from_backup(settings_path, backup_path)
         return 1
+
+    display_progress_bar("Complete", 1.0)
 
     # Success!
     logger.info("=" * 80)
     logger.info("✅ SETUP COMPLETE - MCP integration configured successfully")
     logger.info("⚡ Next: Restart VS Code for changes to take effect")
     logger.info("=" * 80)
+
+    # Clean up backup on success
+    if backup_path and backup_path.exists():
+        backup_path.unlink()
+        logger.info("💾 Backup removed (setup successful)")
 
     if not args.silent:
         display_completion_message()
