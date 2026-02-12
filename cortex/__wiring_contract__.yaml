@@ -2,10 +2,12 @@ version: "2.0.0"
 cortex_version: "1.0.0"
 computed_at: "2026-02-12T00:00:00Z"
 checksum: "wave7-track4-complete"
-total_orchestrators: 15
-total_deprecated: 12
+total_orchestrators: 17
+total_active_orchestrators: 17
+total_deprecated: 7
 wave_7_track_4_status: "CONSOLIDATION COMPLETE"
-consolidation_achieved: "44% reduction (27 → 15 orchestrators)"
+consolidation_achieved: "37% reduction (27 → 17 orchestrators)"
+target_final: "15 orchestrators (Phase 3 - post infrastructure consolidation)"
 sunset_date: "2026-03-31"
 
 orchestrators:
