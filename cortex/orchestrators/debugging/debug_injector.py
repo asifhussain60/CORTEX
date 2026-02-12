@@ -6,8 +6,9 @@ Language-aware debug marker injection system.
 Supports JavaScript, TypeScript, Python, and extensible for other languages.
 
 Author: CORTEX
-Version: 1.0.0
+Version: 1.0.1
 Phase: Phase 21.5 - Universal Debugging
+AC: AC-ENH-063-P2-007 - File locking for concurrent debug sessions
 
 Injection Strategy:
 - Function entry/exit tracing
@@ -16,6 +17,11 @@ Injection Strategy:
 - Event handler registration
 - Promise chain tracking
 - Error boundary detection
+
+File Safety:
+- Cross-platform file locking (fcntl/msvcrt)
+- Prevents corruption from concurrent debug sessions
+- 5s lock timeout to prevent deadlocks
 """
 
 from abc import ABC, abstractmethod
@@ -28,6 +34,8 @@ import json
 import logging
 import re
 import shutil
+
+from cortex.infrastructure.file_lock import file_lock
 
 logger = logging.getLogger(__name__)
 
@@ -582,8 +590,9 @@ class DebugInjector:
                 result = injector.inject(content, str(rel_path))
                 
                 if result.injection_points:
-                    # Write modified content
-                    file_path.write_text(result.modified_content, encoding='utf-8')
+                    # Write modified content with file locking
+                    with file_lock(str(file_path), timeout=5.0):
+                        file_path.write_text(result.modified_content, encoding='utf-8')
                     
                     # Track results
                     results["injected_files"].append(str(rel_path))
