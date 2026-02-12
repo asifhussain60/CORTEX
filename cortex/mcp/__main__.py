@@ -29,28 +29,28 @@ def main() -> int:
     """
     Main entry point for MCP server.
 
-    Runs CORTEX MCP v2 server with stdio transport for Copilot integration.
+    Runs CORTEX MCP server with stdio transport for Copilot integration.
     Handles JSON-RPC 2.0 requests via stdin/stdout.
 
     Returns:
         int: Exit code (0 for success, non-zero for failure)
     """
     try:
-        # Use MCP v2 by default (WAVE-100)
-        from cortex.mcp.v2 import MCPServerV2
+        # WAVE-100: Consolidated MCP server (24 tools)
+        from cortex.mcp import MCPServer
 
-        logger.info("Initializing CORTEX MCP Server v2 with stdio transport...")
-        logger.info("Using 24 production tools (75% reduction from v1)")
+        logger.info("Initializing CORTEX MCP Server with stdio transport...")
+        logger.info("Using 24 production tools (WAVE-100 consolidation)")
         
         # Create server
-        server = MCPServerV2()
+        server = MCPServer()
         
         # List available tools
         tools = server.list_tools()
-        logger.info(f"MCP Server v2 initialized with {len(tools)} tools")
+        logger.info(f"MCP Server initialized with {len(tools)} tools")
         
         logger.info("Starting stdio JSON-RPC transport...")
-        logger.info("CORTEX MCP Server v2 ready for Copilot integration")
+        logger.info("CORTEX MCP Server ready for Copilot integration")
 
         # Run stdio server (blocks until terminated)
         server.run_stdio()
