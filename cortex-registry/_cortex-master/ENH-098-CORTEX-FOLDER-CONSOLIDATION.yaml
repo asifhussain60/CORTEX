@@ -6,22 +6,37 @@
 metadata:
   wave: 9
   enhancement_id: ENH-098
-  title: "CORTEX Folder Consolidation & Architectural Cleanup"
+  title: "CORTEX Folder Consolidation & Architectural Cleanup (Supplemental)"
   category: "architecture-cleanup"
   priority: "P2-MEDIUM"
-  estimated_effort: "15 days"
+  estimated_effort: "6 days"  # Reduced from 15 (F1/F2 deferred to ENH-090/091)
   target_savings:
-    space: "3.15 MB"
-    files: 269
-    folders: 6
-    imports: "100+"
-  roi_score: 8.2
+    space: "0.5 MB"  # Adjusted for unique findings only
+    files: 35  # governance_tools (4) + empty folders (9) + orchestrator specifics (22)
+    folders: 4  # governance_tools, crawlers, reports, validation
+    imports: "20+"  # Reduced scope
+  roi_score: 7.5  # Adjusted for supplemental scope
+  relationship: "ENHANCES ENH-090, ENH-091, ENH-095 with detailed findings"
 
 overview:
   description: |
-    Consolidate fragmented architecture in cortex/ folder through systematic analysis
-    of 51 top-level subdirectories. Address phase management fragmentation, governance
-    split, brain duplication, orchestrator bloat, and empty folders.
+    SUPPLEMENTAL ANALYSIS for Wave 9 Ultimate Cleanup.
+    Provides detailed cortex/ folder findings that ENHANCE existing ENH-090, ENH-091, ENH-095.
+    Focuses on unique discoveries: governance_tools/ split, empty folders, specific deprecated/unused
+    orchestrator lists that complement existing Wave 9 enhancements.
+    
+    DEFERS to ENH-090 (brain), ENH-091 (phases) for primary execution.
+  
+  relationship_to_wave_9:
+    enhances:
+      - "ENH-090: Provides validation that domain_brain/ merge is correct approach"
+      - "ENH-091: Confirms phase fragmentation analysis + provides detailed import counts"
+      - "ENH-095: Adds 18 deprecated + 5 unused orchestrator specifics"
+    unique_contributions:
+      - "F3: governance_tools/ ZERO imports discovery"
+      - "F4: testing/ vs tests/ clarity (README solution)"
+      - "F6: Empty folders detection (crawlers/, reports/, validation/)"
+      - "F5/F7 specifics: Named lists of deprecated/unused orchestrators"
   
   current_state:
     folders: 51
@@ -31,13 +46,14 @@ overview:
     redundancy_estimate: "25-30%"
   
   target_state:
-    folders: 45
-    files: 2800
-    size_mb: 48.00
+    note: "Adjusted for supplemental scope (F3, F4, F6, enhance F5/F7)"
+    folders: 47  # Only unique findings
+    files: 3034  # Reduced scope
+    size_mb: 50.65
     reduction:
-      folders: -6
-      files: -269
-      size: "-3.15 MB"
+      folders: -4  # governance_tools, crawlers, reports, validation
+      files: -35
+      size: "-0.5 MB"
 
 findings:
   
@@ -46,6 +62,11 @@ findings:
     title: "Phase Management Split Across 3 Folders"
     severity: "HIGH"
     impact: "50+ scattered import statements"
+    status: "⚠️ DEFER TO ENH-091 (Wave 9 existing enhancement)"
+    note: |
+      ANALYSIS CONFIRMED but EXECUTION deferred to ENH-091.
+      ENH-091 already plans: phase_38/ + phase_executors/ + phase_management/ → cortex/phases/
+      This finding validates ENH-091's approach with detailed evidence (50+ imports, 10 grep matches).
     
     folders_affected:
       - name: "cortex/phase_38/"
@@ -95,6 +116,11 @@ findings:
       risk: "P1-CRITICAL (breaks imports)"
       estimated_effort: "4 days"
   
+    status: "⚠️ DEFER TO ENH-090 (Wave 9 existing enhancement)"
+    note: |
+      ANALYSIS CONFIRMED but EXECUTION deferred to ENH-090.
+      ENH-090 already plans: domain/ vs domain_brain/ merge + governance/ move + releases/ deletion.
+      This finding validates ENH-090's comprehensive approach (covers more than just domain_brain/).
   # Finding 2: Brain Architecture Duplication
   - id: F2-BRAIN-DUPLICATION
     title: "Brain Architecture Split Between 2 Locations"
@@ -402,13 +428,34 @@ rollback_strategy:
     - "Staged rollout to staging environment first"
 
 dependencies:
-  - "Wave 9 ENH-090, ENH-091 (cortex_brain cleanup)"
-  - "Wave 9 ENH-093 (phase folders - if overlapping)"
+  primary_enhancements:
+    - "ENH-090: Brain consolidation (F2 defers to this)"
+    - "ENH-091: Phase consolidation (F1 defers to this)"
+    - "ENH-095: Orchestrator cohesion (F5/F7 enhance this)"
+  
+  relationship:
+    - "DEFERS F1 to ENH-091 (phase management)"
+    - "DEFERS F2 to ENH-090 (brain architecture)"
+    - "ENHANCES ENH-095 with specific deprecated/unused lists"
+    - "EXECUTES F3, F4, F6 independently (unique findings)"
+  
+  coordination_notes:
+    - "Can execute Phase 1 (F3, F4, F6) independently"
+    - "Phase 2 provides details to ENH-095 during its execution"
+    - "Phases 3 & 4 are validation-only (no duplicate work)"
 
 notes:
-  - "Largest single enhancement in Wave 9 (15 days)"
-  - "High ROI due to architectural clarity gains"
-  - "Consider splitting into Wave 9A (this) and Wave 9B (future) if timeline tight"
-  - "Orchestrator cleanup aligns with existing migration scripts"
+  - "SUPPLEMENTAL enhancement (not standalone) - enhances ENH-090, ENH-091, ENH-095"
+  - "Provides detailed validation evidence for existing Wave 9 enhancements"
+  - "Unique contributions: F3 (governance_tools ZERO imports), F4 (README clarity), F6 (empty folders)"
+  - "Orchestrator specifics (F5/F7) integrate into ENH-095 execution"
+  - "Total Wave 9 effort with ENH-098: 20-26 days (was 18-24)"
+  - "ROI remains high (7.5) for architectural clarity of unique findings"
+  
+integration_strategy:
+  - "Execute ENH-098 Phase 1 (F3, F4, F6) as quick wins (2 days, low risk)"
+  - "Provide ENH-098 Phase 2 details to ENH-095 during orchestrator consolidation"
+  - "Use ENH-098 F1/F2 validation data to confirm ENH-090/091 approaches"
+  - "No duplicate work - clear separation of concerns"
 
-# AC_COMPLETE: AC-WAVE9-ENH098-DESIGN ✅
+# AC_COMPLETE: AC-WAVE9-ENH098-DESIGN-SUPPLEMENTAL ✅
