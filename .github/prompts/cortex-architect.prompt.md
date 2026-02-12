@@ -562,19 +562,34 @@ NOTE: MCP uses Pylance-style architecture (auto-started by VS Code).
 Reference: .github/prompts/MCP-SETUP-GUIDE.md
 ```
 
-### Intent-Based MCP Requirements
+### Intent-Based MCP Requirements (CORE-050: Tiered Blocking)
 
-| Intent | MCP Required | Fallback Allowed |
-|--------|--------------|------------------|
-| IMPLEMENT | ✅ YES | ❌ NO - HALT |
-| FIX | ✅ YES | ❌ NO - HALT |
-| REFACTOR | ✅ YES | ❌ NO - HALT |
-| AUDIT | ✅ YES | ❌ NO - HALT |
-| ANALYZE | ✅ YES | ❌ NO - HALT |
-| PLAN | ✅ YES | ❌ NO - HALT |
-| LIST | ⚠️ OPTIONAL | ✅ YES - read-only |
-| QUERY | ⚠️ OPTIONAL | ✅ YES - educational |
-| RECALL | ⚠️ OPTIONAL | ✅ YES - discovery |
+**Authority:** CORE-050 (MCP Circuit Breaker) | **Enforcement:** P0-BLOCKING
+
+| Intent | MCP Required | If Unavailable | Rationale |
+|--------|--------------|----------------|-----------|
+| **IMPLEMENT** | ✅ YES | ❌ **HARD BLOCK** | Code changes require TDD/security gates |
+| **FIX** | ✅ YES | ❌ **HARD BLOCK** | Bug fixes require governance |
+| **REFACTOR** | ✅ YES | ❌ **HARD BLOCK** | Restructuring requires validation |
+| **AUDIT** | ✅ YES | ❌ **HARD BLOCK** | Compliance requires MCP tools |
+| **ANALYZE** | ✅ YES | ❌ **HARD BLOCK** | LENS analysis requires MCP |
+| **PLAN** | ✅ YES | ❌ **HARD BLOCK** | Planning affects registry |
+| **DIAGNOSE** | ⚪ NO | ✅ **EXEMPT** | Users must be able to troubleshoot |
+| **QUERY** | ⚪ NO | ✅ **EXEMPT** | Educational questions always allowed |
+| **SETUP** | ⚪ NO | ✅ **EXEMPT** | Fix instructions always provided |
+| **LIST** | ⚪ NO | ✅ **EXEMPT** | Read-only discovery allowed |
+| **RECALL** | ⚪ NO | ✅ **EXEMPT** | Feature discovery allowed |
+
+**Why Tiered Blocking?**
+- **HARD BLOCK** intents modify code/state → require MCP governance
+- **EXEMPT** intents are read-only or help users fix MCP → must always work
+- This prevents users from being stuck when MCP is broken
+
+**Exempt Intent Examples:**
+- "Why isn't MCP working?" → DIAGNOSE (allowed)
+- "What is CORTEX?" → QUERY (allowed)
+- "Show me MCP setup steps" → SETUP (allowed)
+- "List all orchestrators" → LIST (allowed)
 
 ---
 

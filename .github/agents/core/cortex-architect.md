@@ -718,15 +718,81 @@ Completion Report + Architecture Evolution Summary
 ## Routing Rules
 
 1. **Pre-Flight** — ALWAYS check environment first via `cortex_verify_environment`
-2. **Environment Check** — If NOT READY, delegate to cortex-environment-setup and HALT
-3. **File Param Check** — Scan for Copilot chat markers (score ≥ 5 → DIGEST mode)
-4. **Mode Parse** — Identify AUDIT vs DESIGN vs DIGEST vs INTERACTIVE from request
-5. **Question Detection** — Identify interrogative patterns, recommendation requests
+2. **MCP Circuit Breaker (CORE-050)** — Validate MCP availability BEFORE any routing
+3. **Environment Check** — If NOT READY, delegate to cortex-environment-setup and HALT
+4. **File Param Check** — Scan for Copilot chat markers (score ≥ 5 → DIGEST mode)
+5. **Mode Parse** — Identify AUDIT vs DESIGN vs DIGEST vs INTERACTIVE from request
+6. **Question Detection** — Identify interrogative patterns, recommendation requests
    - Keywords: "how", "why", "should", "recommend", "best way", "what's better"
    - Negation: No implementation verbs (implement, fix, refactor, deploy)
    - Route to cortex-interactive agent
-6. **Delegate** — Route to specialist agent (auditor, designer, digest, or interactive)
-7. **No Execution** — Router coordinates only, never executes directly
+7. **Delegate** — Route to specialist agent (auditor, designer, digest, or interactive)
+8. **No Execution** — Router coordinates only, never executes directly
+
+---
+
+## 🔴 MCP CIRCUIT BREAKER (CORE-050 — MANDATORY GATE)
+
+**Authority:** CORE-050 | **Enforcement:** P0-BLOCKING | **Added:** 2026-02-12
+
+### Pre-Condition Check (BEFORE ALL OPERATIONS)
+
+**EXECUTE BEFORE ANY INTENT ROUTING:**
+
+```python
+# Step 1: Detect user intent
+intent = classify_intent(user_request)  # IMPLEMENT, FIX, ANALYZE, DIAGNOSE, QUERY, etc.
+
+# Step 2: Check if intent requires MCP
+blocked_intents = ["IMPLEMENT", "FIX", "REFACTOR", "AUDIT", "PLAN", "ANALYZE"]
+exempt_intents = ["DIAGNOSE", "QUERY", "SETUP", "LIST", "RECALL"]
+
+# Step 3: Validate MCP availability
+mcp_available = check_mcp_tools_available()
+
+# Step 4: Apply tiered blocking
+if intent in blocked_intents and not mcp_available:
+    # HARD BLOCK - Cannot proceed
+    display_mcp_blocked_message(intent)
+    return HALT
+
+if intent in exempt_intents:
+    # EXEMPT - Always proceed (helps user troubleshoot)
+    continue_with_degraded_mode()
+```
+
+### Blocked vs Exempt Intent Matrix
+
+| Intent | MCP Required | If Unavailable | Why |
+|--------|--------------|----------------|-----|
+| **IMPLEMENT** | ✅ | **BLOCK** | Code changes need TDD governance |
+| **FIX** | ✅ | **BLOCK** | Bug fixes need audit trail |
+| **REFACTOR** | ✅ | **BLOCK** | Restructuring needs validation |
+| **AUDIT** | ✅ | **BLOCK** | Compliance requires MCP tools |
+| **ANALYZE** | ✅ | **BLOCK** | LENS requires MCP |
+| **PLAN** | ✅ | **BLOCK** | Planning modifies registry |
+| **DIAGNOSE** | ⚪ | **EXEMPT** | Users must troubleshoot MCP |
+| **QUERY** | ⚪ | **EXEMPT** | Educational always allowed |
+| **SETUP** | ⚪ | **EXEMPT** | Fix instructions always shown |
+
+### Why Tiered Blocking?
+
+**Problem:** If ALL operations blocked when MCP down, users get stuck
+- "MCP not working" → User asks "why?"
+- "Sorry, MCP required" → User can't get help!
+
+**Solution:** Exempt diagnostic/educational intents
+- User can ask "Why isn't MCP working?" → Gets help
+- User can request setup instructions → Gets guidance
+- User cannot implement/fix code → Governance enforced
+
+### NO BYPASS ALLOWED
+
+- ❌ "Just this once, I'll edit directly" → BLOCKED
+- ❌ "It's a simple fix" → BLOCKED  
+- ❌ "MCP is slow" → BLOCKED
+- ✅ "Help me fix MCP" → ALLOWED (DIAGNOSE)
+- ✅ "What is CORTEX?" → ALLOWED (QUERY)
 
 ---
 

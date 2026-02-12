@@ -543,6 +543,52 @@ result = mcp_tool.execute(parameters)
    - READ/SEARCH → Can proceed without MCP
    - PERSONA/DETAIL → **Future MCP** (Stage 37.4)
 
+### 🔴 MCP CIRCUIT BREAKER (CORE-050) — TIERED BLOCKING
+
+**Authority:** CORE-050 (MCP Circuit Breaker) | **Enforcement:** P0-BLOCKING
+
+**Tiered Intent Blocking Matrix:**
+
+| Intent | MCP Status | Action |
+|--------|------------|--------|
+| **IMPLEMENT** | ❌ Unavailable | **HARD BLOCK** — Cannot proceed |
+| **FIX** | ❌ Unavailable | **HARD BLOCK** — Cannot proceed |
+| **REFACTOR** | ❌ Unavailable | **HARD BLOCK** — Cannot proceed |
+| **AUDIT** | ❌ Unavailable | **HARD BLOCK** — Cannot proceed |
+| **PLAN** | ❌ Unavailable | **HARD BLOCK** — Cannot proceed |
+| **ANALYZE** | ❌ Unavailable | **HARD BLOCK** — Cannot proceed |
+| **DIAGNOSE** | ❌ Unavailable | ✅ **EXEMPT** — Always allowed |
+| **QUERY** | ❌ Unavailable | ✅ **EXEMPT** — Educational allowed |
+| **SETUP** | ❌ Unavailable | ✅ **EXEMPT** — Fix instructions allowed |
+
+**When MCP unavailable for BLOCKED intents, respond:**
+```
+❌ CORTEX Session Blocked: MCP Unavailable (CORE-050)
+
+Your request: {user_intent}
+Status: CANNOT PROCEED — MCP tools required
+
+Resolution Steps:
+1. Run: python .cortex/setup-mcp.py
+2. Reload VS Code: Command Palette → Developer: Reload Window
+3. Retry your request
+
+WHY: CORTEX enforces MCP-FIRST architecture.
+     Direct file operations are FORBIDDEN for code modifications.
+     This ensures TDD, security gates, and audit trails.
+
+WHAT YOU CAN DO NOW:
+- Ask diagnostic questions: "Why isn't MCP working?"
+- Request setup help: "Show me MCP setup steps"
+- Query documentation: "What is CORTEX?"
+```
+
+**NO BYPASS ALLOWED:**
+- ❌ "It's just a simple fix, I'll edit directly" → BLOCKED
+- ❌ "MCP is slow, let me use native tools" → BLOCKED
+- ❌ "I'll use run_in_terminal to create files" → BLOCKED
+- ✅ "MCP is down, show me how to fix it" → ALLOWED (DIAGNOSE intent)
+
 ### Core MCP Tools (Production Only)
 
 | Tool | Purpose | Orchestrator |

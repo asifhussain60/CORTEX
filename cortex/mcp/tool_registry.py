@@ -260,6 +260,77 @@ class ToolRegistry:
 # Singleton instance
 _registry_instance: Optional[ToolRegistry] = None
 _registry_lock = threading.RLock()
+_bridge_executed: bool = False
+
+
+def sync_decorator_registry_to_global() -> int:
+    """Bridge decorator registry to global registry (P0 fix).
+    
+    This function syncs tools registered via @mcp_tool decorator
+    to the global ToolRegistry singleton. Called during MCP server
+    initialization to ensure both registries are in sync.
+    
+    Authority: CORE-049 (MCP-FIRST), BUG-MCP-REGISTRY-001
+    Phase: MCP Registry Bridge Fix (2026-02-12)
+    
+    Returns:
+        Number of tools synced to global registry.
+        
+    Example:
+        ```python
+        # Called during MCP server __init__
+        synced = sync_decorator_registry_to_global()
+        print(f"Synced {synced} tools from decorator registry")
+        ```
+    """
+    global _bridge_executed
+    
+    if _bridge_executed:
+        return 0  # Already synced this session
+    
+    try:
+        from cortex.mcp.decorators import get_registered_tools, MCP_TOOLS_REGISTRY
+        
+        registry = get_mcp_tool_registry()
+        decorator_tools = get_registered_tools()
+        synced_count = 0
+        
+        for tool_id, tool_info in decorator_tools.items():
+            # Check if already registered
+            if registry.get(tool_id) is not None:
+                continue
+                
+            # Determine category from tool info
+            category_str = tool_info.get("category", "utility")
+            try:
+                category = ToolCategory(category_str) if category_str else ToolCategory.UTILITY
+            except ValueError:
+                category = ToolCategory.UTILITY
+            
+            # Create metadata and register
+            metadata = ToolMetadata(
+                id=tool_id,
+                name=tool_info.get("name", tool_id),
+                category=category,
+                description=tool_info.get("description", ""),
+                parameters=tool_info.get("parameters", {}),
+                auth_required=False,
+                version="1.0.0"
+            )
+            
+            try:
+                registry.register(metadata)
+                synced_count += 1
+            except ValueError:
+                # Already registered (race condition protection)
+                pass
+        
+        _bridge_executed = True
+        return synced_count
+        
+    except ImportError as e:
+        # Decorator module not available
+        return 0
 
 
 def get_mcp_tool_registry() -> ToolRegistry:

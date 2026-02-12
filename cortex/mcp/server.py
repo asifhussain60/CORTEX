@@ -263,6 +263,17 @@ class MCPServer:
         # NOTE: sample_tool removed (dev-only, not for production)
         # Register CORTEX orchestrator tools only
 
+        # AC-BUG-MCP-REGISTRY-001: Bridge decorator registry to global registry
+        # P0 FIX (2026-02-12): Sync tools from MCP_TOOLS_REGISTRY to ToolRegistry
+        # This ensures cortex_tools_catalog and all registry queries work correctly
+        try:
+            from cortex.mcp.tool_registry import sync_decorator_registry_to_global
+            synced = sync_decorator_registry_to_global()
+            if synced > 0:
+                self.logger.info(f"AC-BUG-MCP-REGISTRY-001: Synced {synced} tools to global registry")
+        except (ImportError, Exception) as e:
+            self.logger.warning(f"Registry bridge failed: {e}")
+
         # AC-MCP-REGISTRY-001: Restore decorator-registered tools from global registry
         # Ensure tools decorated with @mcp_tool() are available on boot
         try:
