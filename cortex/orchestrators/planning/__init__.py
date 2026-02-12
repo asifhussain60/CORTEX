@@ -1,8 +1,10 @@
 """
 Planning Orchestrators Module.
 
-Wave 8 Stage 1: Strategy Extraction (In Progress)
-Contains pluggable strategies for plan execution.
+Wave 8 Stage 1: Strategy Extraction (✅ Complete)
+Wave 8 Stage 3: Models Export (✅ Complete)
+
+Contains pluggable strategies for plan execution and reusable planning models.
 """
 
 # Wave 8 Stage 1: Strategy exports (✅ Complete)
@@ -20,19 +22,31 @@ from cortex.orchestrators.planning.strategies import (
     TrackParallelizationConfig,
 )
 
+# Wave 8 Stage 3: Models exports (✅ Complete)
+from cortex.orchestrators.planning.models import (
+    ROICompositeScorer,
+    DependencyResolver,
+    ParallelismCalculator,
+)
+
 __all__ = [
-    # Base classes
+    # Base classes (Stage 1)
     "ExecutionStrategy",
     "ExecutionContext",
     "ExecutionResult",
     "ValidationResult",
     "ExecutionStatus",
-    # Strategy implementations
+    # Strategy implementations (Stage 1)
     "PhaseExecutionStrategy",
     "PhaseExecutionConfig",
     "WaveOrchestrationStrategy",
     "WaveOrchestrationConfig",
     "TrackParallelizationStrategy",
     "TrackParallelizationConfig",
+    # Planning models (Stage 3)
+    "ROICompositeScorer",
+    "DependencyResolver",
+    "ParallelismCalculator",
 ]
+
 
