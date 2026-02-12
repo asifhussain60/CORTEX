@@ -41,24 +41,55 @@ class ValidationError(Exception):
 
 
 @dataclass
-@dataclass
 class ValidationResult:
-    """Result of a validation operation.
-
-    Contains validation status and any errors encountered.
     """
-    errors: Dict[str, str] = field(default_factory=dict)
+    Canonical ValidationResult - Single Source of Truth (SSOT).
+    
+    AC-ID: AC-CORE-035-VALIDATION-001
+    Purpose: Eliminate 7 duplicate ValidationResult definitions across codebase.
+    
+    This is the ONLY place ValidationResult should be defined.
+    All other files MUST import from this module.
+    
+    Attributes:
+        is_valid: Whether validation passed (default: True)
+        errors: Dict of field_name -> error_message
+        warnings: Dict of field_name -> warning_message  
+        metadata: Additional validation metadata (file_path, context, etc.)
+        
+    Compatibility Properties:
+        passed: Alias for is_valid (environment_integrity_agent compatibility)
+        failures: Alias for errors (environment_integrity_agent compatibility)
+    
+    Governance: CORE-035 (Single Canonical Implementation)
+    """
     is_valid: bool = True
+    errors: Dict[str, str] = field(default_factory=dict)
+    warnings: Dict[str, str] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+    @property
+    def passed(self) -> bool:
+        """Alias for is_valid (environment_integrity_agent compatibility)."""
+        return self.is_valid and not self.errors
+
+    @property
+    def failures(self) -> Dict[str, str]:
+        """Alias for errors (environment_integrity_agent compatibility)."""
+        return self.errors
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert result to dictionary.
 
         Returns:
-            Dict with is_valid and errors
+            Dict with is_valid, errors, warnings, and metadata
         """
         return {
             "is_valid": self.is_valid,
+            "passed": self.passed,
             "errors": self.errors,
+            "warnings": self.warnings,
+            "metadata": self.metadata,
         }
 
 

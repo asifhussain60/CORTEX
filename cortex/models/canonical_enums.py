@@ -141,6 +141,26 @@ class CheckpointStatus(Enum):
     FAILED = "failed"
 
 
+class EnforcementLevel(str, Enum):
+    """
+    Governance enforcement level - Canonical definition.
+    
+    AC-ID: AC-CORE-035-ENFORCEMENT-001
+    Purpose: Eliminate 3 duplicate EnforcementLevel definitions.
+    
+    This is the ONLY place EnforcementLevel should be defined.
+    Replaces duplicates in:
+    - cortex/brain/core/response_format_integration.py
+    - cortex/brain/core/models/governance_models.py  
+    - cortex/orchestrators/core/enforcement_orchestrator.py
+    
+    Governance: CORE-035 (Single Canonical Implementation)
+    """
+    BLOCKING = "blocking"
+    WARNING = "warning"
+    ADVISORY = "advisory"
+
+
 # ============================================================================
 # CHALLENGE & INTENT ENUMS
 # ============================================================================

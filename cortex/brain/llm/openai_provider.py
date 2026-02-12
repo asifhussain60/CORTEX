@@ -19,16 +19,8 @@ except ImportError:
 
 from cortex.brain.llm.i_llm_provider import ILLMProvider, LLMResponse, LLMUsage
 
-# PHASE 3: Import observability metrics
-try:
-    from cortex.observability.llm_metrics import record_llm_call, record_llm_error
-    METRICS_AVAILABLE = True
-except ImportError:
-    METRICS_AVAILABLE = False
-    def record_llm_call(*args, **kwargs):
-        pass
-    def record_llm_error(*args, **kwargs):
-        pass
+# PHASE 3: Import observability metrics (REQUIRED - no fallback stubs allowed)
+from cortex.observability.llm_metrics import record_llm_call, record_llm_error
 
 
 class OpenAIProvider(ILLMProvider):
