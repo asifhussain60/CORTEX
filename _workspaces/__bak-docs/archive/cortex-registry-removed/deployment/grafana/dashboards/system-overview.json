@@ -1,0 +1,104 @@
+{
+  "dashboard": {
+    "title": "CORTEX System Overview",
+    "description": "Real-time monitoring of CORTEX system health, request metrics, and error rates",
+    "tags": ["cortex", "system-overview"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "title": "Request Rate (req/sec)",
+        "targets": [
+          {
+            "expr": "rate(http_requests_total[1m])"
+          }
+        ],
+        "type": "graph"
+      },
+      {
+        "title": "Error Rate (%)",
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{status=~\"5..\"}[1m]) / rate(http_requests_total[1m]) * 100"
+          }
+        ],
+        "type": "graph",
+        "alert_threshold": 5.0
+      },
+      {
+        "title": "P95 Latency (ms)",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) * 1000"
+          }
+        ],
+        "type": "graph",
+        "alert_threshold": 1000
+      },
+      {
+        "title": "In-Flight Requests",
+        "targets": [
+          {
+            "expr": "http_requests_in_flight"
+          }
+        ],
+        "type": "graph"
+      },
+      {
+        "title": "Active DB Connections",
+        "targets": [
+          {
+            "expr": "db_connections_active"
+          }
+        ],
+        "type": "gauge",
+        "thresholds": [0, 50, 100]
+      },
+      {
+        "title": "Connection Pool Utilization (%)",
+        "targets": [
+          {
+            "expr": "(db_connections_active) / (db_connections_active + db_connections_idle) * 100"
+          }
+        ],
+        "type": "gauge",
+        "alert_threshold": 90
+      },
+      {
+        "title": "Circuit Breaker States",
+        "targets": [
+          {
+            "expr": "circuit_breaker_state"
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "title": "Phases Completed",
+        "targets": [
+          {
+            "expr": "increase(phases_total{status=\"success\"}[1h])"
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "title": "Acceptance Criteria Completed",
+        "targets": [
+          {
+            "expr": "increase(ac_completed_total[1h])"
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "title": "Governance Decisions",
+        "targets": [
+          {
+            "expr": "increase(governance_checks_total[1h])"
+          }
+        ],
+        "type": "pie"
+      }
+    ]
+  }
+}

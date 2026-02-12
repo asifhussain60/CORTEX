@@ -1,0 +1,34 @@
+{
+  "milestones": [
+    {
+      "date": "2024-01",
+      "role": "Junior Developer",
+      "level": 1,
+      "skills": 3
+    },
+    {
+      "date": "2024-07",
+      "role": "Developer",
+      "level": 2,
+      "skills": 6
+    },
+    {
+      "date": "2025-01",
+      "role": "Senior Developer",
+      "level": 3,
+      "skills": 10
+    },
+    {
+      "date": "2025-07",
+      "role": "Tech Lead",
+      "level": 4,
+      "skills": 15
+    },
+    {
+      "date": "2026-01",
+      "role": "Architect",
+      "level": 5,
+      "skills": 20
+    }
+  ]
+}

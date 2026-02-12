@@ -1,0 +1,52 @@
+{
+  "name": "RBAC Hierarchy",
+  "children": [
+    {
+      "name": "Admin",
+      "permissions": [
+        "*"
+      ],
+      "children": [
+        {
+          "name": "Super Admin",
+          "permissions": [
+            "system.config",
+            "user.manage",
+            "security.manage"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Developer",
+      "permissions": [
+        "code.read",
+        "code.write",
+        "test.execute"
+      ],
+      "children": [
+        {
+          "name": "Senior Developer",
+          "permissions": [
+            "code.review",
+            "deploy.staging"
+          ]
+        },
+        {
+          "name": "Junior Developer",
+          "permissions": [
+            "code.read",
+            "code.write"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Viewer",
+      "permissions": [
+        "code.read",
+        "docs.read"
+      ]
+    }
+  ]
+}

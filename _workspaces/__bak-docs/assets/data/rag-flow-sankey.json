@@ -1,0 +1,61 @@
+{
+  "nodes": [
+    {
+      "id": "user_query",
+      "label": "User Query",
+      "color": "#7b61ff"
+    },
+    {
+      "id": "embedding",
+      "label": "Query Embedding",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "vector_search",
+      "label": "Vector Search",
+      "color": "#06b6d4"
+    },
+    {
+      "id": "yaml_retrieval",
+      "label": "YAML Retrieval",
+      "color": "#10b981"
+    },
+    {
+      "id": "context_ranking",
+      "label": "Context Ranking",
+      "color": "#f59e0b"
+    },
+    {
+      "id": "answer_generation",
+      "label": "Answer Generation",
+      "color": "#8b5cf6"
+    }
+  ],
+  "links": [
+    {
+      "source": "user_query",
+      "target": "embedding",
+      "value": 100
+    },
+    {
+      "source": "embedding",
+      "target": "vector_search",
+      "value": 100
+    },
+    {
+      "source": "vector_search",
+      "target": "yaml_retrieval",
+      "value": 85
+    },
+    {
+      "source": "yaml_retrieval",
+      "target": "context_ranking",
+      "value": 75
+    },
+    {
+      "source": "context_ranking",
+      "target": "answer_generation",
+      "value": 68
+    }
+  ]
+}

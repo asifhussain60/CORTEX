@@ -1,0 +1,19 @@
+graph TB
+    Interaction[Interaction Orchestrator<br/>User Interface] --> Intent[Intent Router<br/>Classification]
+    Intent --> Workflow[Workflow Orchestrator<br/>Coordination]
+    
+    Workflow --> TDD[TDD Orchestrator<br/>RED-GREEN-REFACTOR]
+    Workflow --> Enforcement[Enforcement Orchestrator<br/>CORE Rules]
+    Workflow --> Observation[Observation Orchestrator<br/>Monitoring]
+    
+    TDD --> Master[Master Orchestrator<br/>Final Coordination]
+    Enforcement --> Master
+    Observation --> Master
+    
+    style Interaction fill:#7b61ff
+    style Intent fill:#3b82f6
+    style Workflow fill:#10b981
+    style TDD fill:#f59e0b
+    style Enforcement fill:#ef4444
+    style Master fill:#8b5cf6
+    style Observation fill:#06b6d4

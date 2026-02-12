@@ -1,0 +1,22 @@
+graph TB
+    AST[AST Analyzer] --> SQL[CWE-89<br/>SQL Injection]
+    AST --> Code[CWE-94<br/>Code Injection]
+    AST --> Eval[CWE-95<br/>Eval Injection]
+    AST --> Path[CWE-22<br/>Path Traversal]
+    AST --> Command[CWE-78<br/>Command Injection]
+    AST --> Crypto[CWE-327<br/>Weak Crypto]
+    
+    SQL --> Params[Use Parameterized Queries]
+    Code --> Validate[Input Validation]
+    Eval --> Avoid[Avoid eval()]
+    Path --> Sanitize[Path Sanitization]
+    Command --> Whitelist[Command Whitelist]
+    Crypto --> Strong[Use Strong Algorithms]
+    
+    style AST fill:#7b61ff
+    style SQL fill:#ef4444
+    style Code fill:#ef4444
+    style Eval fill:#f59e0b
+    style Path fill:#f59e0b
+    style Command fill:#ef4444
+    style Crypto fill:#f59e0b

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="CORTEX Toolkit Manager - 100+ MCP Tools, Validated, Categorized" name="description"/>
+    <meta content="MCP tools, toolkit manager, tool discovery, API integration" name="keywords"/>
+    <meta content="Asif Hussain" name="author"/>
+    <title>CORTEX Toolkit | CORTEX</title>
+    <link href="../assets/images/CORTEX-logo.png" rel="icon" type="image/png"/>
+    <link href="../assets/css/main.css?v=2026-01-31" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <main class="container level1-main-a5853dbc" id="main-content">
+        <!-- Hero Section with Robot Head -->
+        <div class="hero-section-wrapper">
+            <div class="hero-robot-container">
+                <a href="../index.html" title="Back to Home">
+                    <img alt="CORTEX Robot" class="hero-robot-head" src="../assets/images/CORTEX-logo-512.png" style="width: 300px; height: 300px;"/>
+                </a>
+            </div>
+            <div class="hero-divider-line"></div>
+        </div>
+
+        <!-- Page Title Card -->
+        <section class="glass-card-display hero-introduction glass-panel-amber">
+            <h1 class="l2-page-title">
+                🛠️ CORTEX Toolkit Manager
+            </h1>
+            <p class="l2-page-subtitle cyan">
+                100+ MCP Tools, Validated, Categorized, Ready to Execute
+            </p>
+            <p class="l2-page-description">
+                Centralized tool discovery and management. All CORTEX capabilities exposed 
+                via MCP protocol with automatic validation, schema enforcement, and 
+                intelligent routing.
+            </p>
+            <div class="hero-stats">
+                <span class="stat-pill">🔌 100+ MCP Tools</span>
+                <span class="stat-pill">📂 12 Categories</span>
+                <span class="stat-pill">✅ 99.9% Uptime</span>
+                <span class="stat-pill">⚡ <200ms Response</span>
+            </div>
+        </section>
+
+        <!-- Tool Discovery Flow -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-project-diagram"></i>
+                Tool Discovery & Validation Flow
+            </h2>
+            <p class="intro-text">
+                How CORTEX discovers, validates, and executes MCP tools with automatic schema enforcement.
+            </p>
+            <div class="diagram-container">
+                <div class="mermaid">
+flowchart TD
+    A[User Request] --> B{Parse Intent}
+    B --> C[Query Tool Catalog]
+    C --> D{Tool Exists?}
+    D -->|Yes| E[Validate Parameters]
+    D -->|No| F[Suggest Alternatives]
+    E --> G{Schema Valid?}
+    G -->|Yes| H[Execute Tool]
+    G -->|No| I[Return Schema Error]
+    H --> J{Success?}
+    J -->|Yes| K[Return Result]
+    J -->|No| L[Retry Logic]
+    L --> M{Max Retries?}
+    M -->|No| H
+    M -->|Yes| N[Return Error + Logs]
+    
+    style A fill:#7b61ff,color:#fff
+    style H fill:#10b981,color:#fff
+    style K fill:#10b981,color:#fff
+    style I fill:#ef4444,color:#fff
+    style N fill:#ef4444,color:#fff
+                </div>
+            </div>
+        </section>
+
+        <!-- Tool Categories -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-sitemap"></i>
+                Tool Categories
+            </h2>
+            <p class="intro-text">
+                CORTEX organizes 100+ tools into 12 categories for easy discovery and navigation.
+            </p>
+            <div class="diagram-container">
+                <div class="mermaid">
+mindmap
+  root((CORTEX<br/>Toolkit))
+    Core
+      cortex_process_request
+      cortex_challenge
+      cortex_validate_context
+    Analysis
+      cortex_lens_analyze
+      cortex_ast_analyze
+      cortex_git_history
+    Discovery
+      cortex_total_recall
+      cortex_tools_catalog
+    Testing
+      cortex_run_tests
+      cortex_coverage_report
+    Documentation
+      cortex_generate_docs
+      cortex_validate_docs
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Features -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-star"></i>
+                Key Features
+            </h2>
+            
+            <div class="principle-card-grid columns-3">
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #7b61ff, #6366f1);"><i class="fas fa-search"></i></div>
+                    <h3 class="card-title">Auto-Discovery</h3>
+                    <p class="card-description">Automatic tool registration and catalog generation via /tools endpoint</p>
+                </div>
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #10b981, #059669);"><i class="fas fa-check-circle"></i></div>
+                    <h3 class="card-title">Schema Validation</h3>
+                    <p class="card-description">JSON Schema enforcement for all parameters and return types</p>
+                </div>
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #06b6d4, #0891b2);"><i class="fas fa-route"></i></div>
+                    <h3 class="card-title">Intelligent Routing</h3>
+                    <p class="card-description">Intent-based routing to optimal tool with fallback strategies</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="glass-card-display animation-t1 glass-panel-amber">
+            <h2 class="section-title">
+                <i class="fas fa-rocket"></i>
+                Explore the Toolkit
+            </h2>
+            <div class="principle-card-grid columns-2">
+                <div class="glass-card-clickable">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #7b61ff, #6366f1);"><i class="fas fa-book"></i></div>
+                    <h3 class="card-title">Browse Tools</h3>
+                    <ul class="feature-list">
+                        <li><a href="../11-mcp-tools/index.html" style="color: #00d4ff;">MCP Tools Documentation</a></li>
+                        <li><a href="../06-api-reference/index.html" style="color: #00d4ff;">API Reference</a></li>
+                    </ul>
+                </div>
+                <div class="glass-card-clickable">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #10b981, #059669);"><i class="fas fa-code"></i></div>
+                    <h3 class="card-title">Get Started</h3>
+                    <ul class="feature-list">
+                        <li><a href="../03-getting-started/index.html" style="color: #00d4ff;">Quick Start Guide</a></li>
+                        <li><a href="../architecture/index.html" style="color: #00d4ff;">Architecture Overview</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2026 Asif Hussain. CORTEX Toolkit Manager.</p>
+            <nav aria-label="Footer Navigation">
+                <a href="../index.html">Home</a>
+                <a href="../architecture/index.html">Architecture</a>
+                <a href="../11-mcp-tools/index.html">MCP Tools</a>
+            </nav>
+        </div>
+    </footer>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#7b61ff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#00d4ff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#10b981',
+                tertiaryColor: '#f59e0b'
+            }
+        });
+    </script>
+</body>
+</html>

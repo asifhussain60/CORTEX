@@ -1,0 +1,32 @@
+graph TB
+    Core[Core Orchestrators] --> Support[Support Orchestrators]
+    
+    Support --> UX[UX Support]
+    Support --> Analysis[Analysis Support]
+    Support --> Quality[Quality Support]
+    Support --> Knowledge[Knowledge Support]
+    Support --> Lifecycle[Lifecycle Support]
+    
+    UX --> Onboarding[Onboarding]
+    UX --> ToolDiscovery[Tool Discovery]
+    
+    Analysis --> LENS[LENS]
+    
+    Quality --> Challenge[Challenge Engine]
+    Quality --> Duplication[Duplication Detector]
+    Quality --> Recommendation[Recommendation]
+    
+    Knowledge --> DomainBrain[Domain Brain]
+    Knowledge --> TotalRecall[Total Recall]
+    
+    Lifecycle --> Governance[Governance]
+    Lifecycle --> Session[Session Manager]
+    Lifecycle --> Observation[Observation]
+    
+    style Core fill:#7b61ff
+    style Support fill:#3b82f6
+    style UX fill:#10b981
+    style Analysis fill:#8b5cf6
+    style Quality fill:#f59e0b
+    style Knowledge fill:#06b6d4
+    style Lifecycle fill:#ef4444

@@ -1,0 +1,52 @@
+{
+  "milestones": [
+    {
+      "date": "2024-01",
+      "phase": "Genesis",
+      "description": "Initial brain architecture concept",
+      "tier": 0
+    },
+    {
+      "date": "2024-03",
+      "phase": "Awakening",
+      "description": "Tier 0 SKULL governance implemented",
+      "tier": 1
+    },
+    {
+      "date": "2024-06",
+      "phase": "Memory",
+      "description": "Tier 1 Working Memory operational",
+      "tier": 2
+    },
+    {
+      "date": "2024-09",
+      "phase": "Learning",
+      "description": "Tier 2 Knowledge Graph live",
+      "tier": 3
+    },
+    {
+      "date": "2024-12",
+      "phase": "Context",
+      "description": "Tier 3 Dev Context analytics",
+      "tier": 4
+    },
+    {
+      "date": "2025-03",
+      "phase": "Orchestration",
+      "description": "23 orchestrators wired",
+      "tier": 5
+    },
+    {
+      "date": "2025-06",
+      "phase": "Intelligence",
+      "description": "MCP server architecture",
+      "tier": 6
+    },
+    {
+      "date": "2026-01",
+      "phase": "Mastery",
+      "description": "Full autonomous operation",
+      "tier": 7
+    }
+  ]
+}

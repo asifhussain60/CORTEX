@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="CORTEX LENS Analyzers - AST, Git History, Comment Extraction, and Security Scanning" name="description"/>
+    <title>LENS Analyzers | CORTEX</title>
+    <link href="../assets/images/CORTEX-logo-64.png" rel="icon" type="image/png"/>
+    <link href="../assets/css/main.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" rel="stylesheet"/>
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1>🧠 LENS Analyzers</h1>
+            <p class="subtitle">4 Specialized Code Intelligence Crawlers</p>
+        </header>
+
+        <section class="glass-card" id="ast">
+            <h2>1. AST Analyzer</h2>
+            <p><strong>Purpose:</strong> Extract code structure, functions, classes, imports</p>
+            <p><strong>Languages:</strong> Python, JavaScript, TypeScript, Java, C#, Go (6+)</p>
+            <h3>Capabilities</h3>
+            <ul>
+                <li>Function/method signatures with parameters and return types</li>
+                <li>Class hierarchies and inheritance</li>
+                <li>Import/dependency graphs</li>
+                <li>Variable declarations and scope analysis</li>
+                <li>Decorator/annotation extraction</li>
+            </ul>
+            <h3>MCP Tool</h3>
+            <pre><code>cortex_ast_analyze(file_path, language)</code></pre>
+        </section>
+
+        <section class="glass-card" id="git">
+            <h2>2. Git History Analyzer</h2>
+            <p><strong>Purpose:</strong> Extract commit history, blame, author patterns</p>
+            <p><strong>Context Window:</strong> 24 hours (configurable)</p>
+            <h3>Capabilities</h3>
+            <ul>
+                <li>Recent commits affecting file (last 24h default)</li>
+                <li>Git blame line-by-line authorship</li>
+                <li>Author contribution patterns</li>
+                <li>Commit frequency and change velocity</li>
+                <li>File modification hotspots</li>
+            </ul>
+            <h3>MCP Tool</h3>
+            <pre><code>cortex_git_history(file_path, repo_path, hours=24)</code></pre>
+        </section>
+
+        <section class="glass-card" id="comments">
+            <h2>3. Comment Extractor</h2>
+            <p><strong>Purpose:</strong> Extract TODOs, FIXMEs, intent hints from comments</p>
+            <h3>Capabilities</h3>
+            <ul>
+                <li>TODO/FIXME/HACK/NOTE pattern detection</li>
+                <li>Docstring extraction (Google, NumPy, Sphinx styles)</li>
+                <li>Inline comment analysis</li>
+                <li>Intent signals from developer notes</li>
+                <li>Technical debt markers</li>
+            </ul>
+            <h3>MCP Tool</h3>
+            <pre><code>cortex_extract_comments(file_path)</code></pre>
+        </section>
+
+        <section class="glass-card" id="security">
+            <h2>4. Security Threat Analyzer</h2>
+            <p><strong>Purpose:</strong> Detect CWE vulnerabilities in code</p>
+            <p><strong>Coverage:</strong> 6 CWE patterns</p>
+            <h3>Detected Patterns</h3>
+            <ul>
+                <li><strong>CWE-94:</strong> Code Injection</li>
+                <li><strong>CWE-95:</strong> Unsafe Deserialization</li>
+                <li><strong>CWE-78:</strong> Command Injection</li>
+                <li><strong>CWE-89:</strong> SQL Injection</li>
+                <li><strong>CWE-327:</strong> Weak Cryptography</li>
+                <li><strong>CWE-22:</strong> Path Traversal</li>
+            </ul>
+            <p><a href="security.html" class="btn-primary">See Security Details →</a></p>
+        </section>
+
+        <footer class="page-footer">
+            <a href="index.html" class="btn-back">← Back to LENS Overview</a>
+        </footer>
+    </div>
+</body>
+</html>

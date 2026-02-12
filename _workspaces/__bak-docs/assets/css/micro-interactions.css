@@ -1,0 +1,726 @@
+/**
+ * CORTEX Glassmorphism Design System - Micro-Interactions Library
+ * Version: 3.0.0 | Standard: glassmorphism-design-standard.md v3.0
+ * 
+ * Micro-Interactions Library containing:
+ * - Ripple Effect (Click Feedback)
+ * - 3D Tilt Effect (Hover)
+ * - Glow Pulse (Focus/Active)
+ * - Shimmer Effect (Loading)
+ * - Magnetic Hover (Cursor Pull)
+ * - Fade & Slide Animations
+ * - Skeleton Loading States
+ * 
+ * Author: Asif Hussain
+ * Copyright: © 2024-2025 Asif Hussain. All rights reserved.
+ * License: Source-Available (Use Allowed, No Contributions)
+ */
+
+/* ============================================
+   RIPPLE EFFECT (Click Feedback)
+   ============================================ 
+   Use Case: All clickable cards, buttons, interactive elements
+*/
+
+.ripple-glass {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.ripple-glass::after {
+    content: '';
+    position: absolute;
+    top: var(--ripple-y, 50%);
+    left: var(--ripple-x, 50%);
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    opacity: 0;
+}
+
+.ripple-glass.rippling::after {
+    animation: rippleEffect 0.6s ease-out forwards;
+}
+
+@keyframes rippleEffect {
+    0% {
+        width: 0;
+        height: 0;
+        opacity: 1;
+    }
+    100% {
+        width: 300px;
+        height: 300px;
+        opacity: 0;
+    }
+}
+
+/* Accent colored ripple */
+.ripple-glass--accent::after {
+    background: rgba(0, 212, 255, 0.4);
+}
+
+/* Large ripple for bigger elements */
+.ripple-glass--lg.rippling::after {
+    animation: rippleEffectLarge 0.8s ease-out forwards;
+}
+
+@keyframes rippleEffectLarge {
+    0% {
+        width: 0;
+        height: 0;
+        opacity: 1;
+    }
+    100% {
+        width: 600px;
+        height: 600px;
+        opacity: 0;
+    }
+}
+
+/* ============================================
+   3D TILT EFFECT (Hover)
+   ============================================ 
+   Use Case: Cards, panels, feature showcases
+*/
+
+.tilt-glass {
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
+    will-change: transform;
+}
+
+.tilt-glass:hover {
+    transform: perspective(1000px) rotateX(var(--tilt-x, 5deg)) rotateY(var(--tilt-y, 5deg));
+}
+
+/* Subtle tilt variant */
+.tilt-glass--subtle:hover {
+    transform: perspective(1000px) rotateX(var(--tilt-x, 2deg)) rotateY(var(--tilt-y, 2deg));
+}
+
+/* Intense tilt variant */
+.tilt-glass--intense:hover {
+    transform: perspective(1000px) rotateX(var(--tilt-x, 10deg)) rotateY(var(--tilt-y, 10deg));
+}
+
+/* Tilt with lift effect */
+.tilt-glass--lift:hover {
+    transform: perspective(1000px) rotateX(var(--tilt-x, 5deg)) rotateY(var(--tilt-y, 5deg)) translateZ(20px);
+}
+
+/* ============================================
+   GLOW PULSE (Focus/Active)
+   ============================================ 
+   Use Case: SKULL layers, TDD phases, focus states, active indicators
+*/
+
+.pulse-glow-glass:focus,
+.pulse-glow-glass.active,
+.pulse-glow-glass.pulsing {
+    animation: glowPulse 2s ease-in-out infinite;
+    outline: none;
+}
+
+@keyframes glowPulse {
+    0%, 100% {
+        box-shadow: 
+            0 0 20px rgba(0, 212, 255, 0.3),
+            0 0 40px rgba(0, 212, 255, 0.2);
+    }
+    50% {
+        box-shadow: 
+            0 0 40px rgba(0, 212, 255, 0.5),
+            0 0 80px rgba(0, 212, 255, 0.3);
+    }
+}
+
+/* Success glow pulse */
+.pulse-glow-glass--success:focus,
+.pulse-glow-glass--success.active,
+.pulse-glow-glass--success.pulsing {
+    animation: glowPulseSuccess 2s ease-in-out infinite;
+}
+
+@keyframes glowPulseSuccess {
+    0%, 100% {
+        box-shadow: 
+            0 0 20px rgba(0, 255, 136, 0.3),
+            0 0 40px rgba(0, 255, 136, 0.2);
+    }
+    50% {
+        box-shadow: 
+            0 0 40px rgba(0, 255, 136, 0.5),
+            0 0 80px rgba(0, 255, 136, 0.3);
+    }
+}
+
+/* Warning glow pulse */
+.pulse-glow-glass--warning:focus,
+.pulse-glow-glass--warning.active,
+.pulse-glow-glass--warning.pulsing {
+    animation: glowPulseWarning 2s ease-in-out infinite;
+}
+
+@keyframes glowPulseWarning {
+    0%, 100% {
+        box-shadow: 
+            0 0 20px rgba(255, 165, 0, 0.3),
+            0 0 40px rgba(255, 165, 0, 0.2);
+    }
+    50% {
+        box-shadow: 
+            0 0 40px rgba(255, 165, 0, 0.5),
+            0 0 80px rgba(255, 165, 0, 0.3);
+    }
+}
+
+/* Danger glow pulse */
+.pulse-glow-glass--danger:focus,
+.pulse-glow-glass--danger.active,
+.pulse-glow-glass--danger.pulsing {
+    animation: glowPulseDanger 2s ease-in-out infinite;
+}
+
+@keyframes glowPulseDanger {
+    0%, 100% {
+        box-shadow: 
+            0 0 20px rgba(255, 68, 68, 0.3),
+            0 0 40px rgba(255, 68, 68, 0.2);
+    }
+    50% {
+        box-shadow: 
+            0 0 40px rgba(255, 68, 68, 0.5),
+            0 0 80px rgba(255, 68, 68, 0.3);
+    }
+}
+
+/* Fast pulse for alerts */
+.pulse-glow-glass--fast {
+    animation-duration: 1s !important;
+}
+
+/* Slow pulse for subtle indicators */
+.pulse-glow-glass--slow {
+    animation-duration: 3s !important;
+}
+
+/* ============================================
+   SHIMMER EFFECT (Loading)
+   ============================================ 
+   Use Case: Async operations, cache hits, loading states
+*/
+
+.shimmer-glass {
+    position: relative;
+    overflow: hidden;
+}
+
+.shimmer-glass::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        90deg,
+        rgba(26, 31, 58, 0.6) 0%,
+        rgba(255, 255, 255, 0.1) 50%,
+        rgba(26, 31, 58, 0.6) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmerSlide 2s linear infinite;
+    pointer-events: none;
+    z-index: 1;
+}
+
+@keyframes shimmerSlide {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Shimmer on dark background */
+.shimmer-glass--dark::before {
+    background: linear-gradient(
+        90deg,
+        rgba(10, 14, 39, 0.8) 0%,
+        rgba(255, 255, 255, 0.08) 50%,
+        rgba(10, 14, 39, 0.8) 100%
+    );
+    background-size: 200% 100%;
+}
+
+/* Accent shimmer */
+.shimmer-glass--accent::before {
+    background: linear-gradient(
+        90deg,
+        rgba(26, 31, 58, 0.6) 0%,
+        rgba(0, 212, 255, 0.15) 50%,
+        rgba(26, 31, 58, 0.6) 100%
+    );
+    background-size: 200% 100%;
+}
+
+/* Fast shimmer */
+.shimmer-glass--fast::before {
+    animation-duration: 1s;
+}
+
+/* Slow shimmer */
+.shimmer-glass--slow::before {
+    animation-duration: 3s;
+}
+
+/* ============================================
+   MAGNETIC HOVER (Cursor Pull)
+   ============================================ 
+   Use Case: D3.js nodes, navigation links, buttons
+*/
+
+.magnetic-glass {
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform;
+}
+
+.magnetic-glass:hover {
+    transform: scale(1.05);
+}
+
+/* Subtle magnetic */
+.magnetic-glass--subtle:hover {
+    transform: scale(1.02);
+}
+
+/* Strong magnetic */
+.magnetic-glass--strong:hover {
+    transform: scale(1.1);
+}
+
+/* Magnetic with lift */
+.magnetic-glass--lift:hover {
+    transform: scale(1.05) translateY(-5px);
+}
+
+/* ============================================
+   FADE ANIMATIONS
+   ============================================ */
+
+.fade-in-glass {
+    animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.fade-out-glass {
+    animation: fadeOut 0.3s ease forwards;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* ============================================
+   SLIDE ANIMATIONS
+   ============================================ */
+
+/* Slide up */
+.slide-up-glass {
+    animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Slide down */
+.slide-down-glass {
+    animation: slideDown 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Slide left */
+.slide-left-glass {
+    animation: slideLeft 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes slideLeft {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Slide right */
+.slide-right-glass {
+    animation: slideRight 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes slideRight {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ============================================
+   SCALE ANIMATIONS
+   ============================================ */
+
+.scale-in-glass {
+    animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.scale-out-glass {
+    animation: scaleOut 0.3s ease forwards;
+}
+
+@keyframes scaleOut {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+}
+
+/* Bounce scale */
+.bounce-in-glass {
+    animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+    70% {
+        transform: scale(0.95);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* ============================================
+   STAGGER ANIMATIONS (For Lists)
+   ============================================ */
+
+.stagger-glass > * {
+    opacity: 0;
+    animation: staggerFadeIn 0.4s ease forwards;
+}
+
+.stagger-glass > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-glass > *:nth-child(2) { animation-delay: 0.1s; }
+.stagger-glass > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger-glass > *:nth-child(4) { animation-delay: 0.2s; }
+.stagger-glass > *:nth-child(5) { animation-delay: 0.25s; }
+.stagger-glass > *:nth-child(6) { animation-delay: 0.3s; }
+.stagger-glass > *:nth-child(7) { animation-delay: 0.35s; }
+.stagger-glass > *:nth-child(8) { animation-delay: 0.4s; }
+.stagger-glass > *:nth-child(9) { animation-delay: 0.45s; }
+.stagger-glass > *:nth-child(10) { animation-delay: 0.5s; }
+
+@keyframes staggerFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================
+   SKELETON LOADING STATES
+   ============================================ */
+
+.skeleton-glass {
+    background: linear-gradient(
+        90deg,
+        rgba(26, 31, 58, 0.8) 0%,
+        rgba(26, 31, 58, 0.5) 50%,
+        rgba(26, 31, 58, 0.8) 100%
+    );
+    background-size: 200% 100%;
+    animation: skeletonPulse 1.5s ease-in-out infinite;
+    border-radius: var(--radius-sm, 8px);
+}
+
+@keyframes skeletonPulse {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Skeleton variants */
+.skeleton-glass--text {
+    height: 1rem;
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+.skeleton-glass--text-lg {
+    height: 1.5rem;
+    width: 60%;
+}
+
+.skeleton-glass--avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+}
+
+.skeleton-glass--card {
+    height: 200px;
+    border-radius: var(--radius-lg, 16px);
+}
+
+/* ============================================
+   HOVER STATE TRANSITIONS
+   ============================================ */
+
+.hover-lift-glass {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift-glass:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.hover-glow-glass {
+    transition: box-shadow 0.3s ease;
+}
+
+.hover-glow-glass:hover {
+    box-shadow: 
+        0 0 30px rgba(0, 212, 255, 0.4),
+        0 8px 32px rgba(0, 0, 0, 0.37);
+}
+
+.hover-border-glass {
+    transition: border-color 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.hover-border-glass:hover {
+    border-color: var(--accent-primary, #00d4ff);
+}
+
+/* ============================================
+   ROTATE ANIMATIONS
+   ============================================ */
+
+.rotate-glass {
+    transition: transform 0.4s ease;
+}
+
+.rotate-glass:hover {
+    transform: rotate(180deg);
+}
+
+.rotate-glass--slow:hover {
+    transform: rotate(360deg);
+    transition-duration: 0.8s;
+}
+
+/* Continuous rotation */
+.spin-glass {
+    animation: spinContinuous 2s linear infinite;
+}
+
+@keyframes spinContinuous {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* ============================================
+   ATTENTION SEEKERS
+   ============================================ */
+
+/* Shake */
+.shake-glass {
+    animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-10px); }
+    40% { transform: translateX(10px); }
+    60% { transform: translateX(-10px); }
+    80% { transform: translateX(10px); }
+}
+
+/* Wiggle */
+.wiggle-glass {
+    animation: wiggle 0.5s ease;
+}
+
+@keyframes wiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-5deg); }
+    75% { transform: rotate(5deg); }
+}
+
+/* Heartbeat */
+.heartbeat-glass {
+    animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    14% { transform: scale(1.1); }
+    28% { transform: scale(1); }
+    42% { transform: scale(1.1); }
+    70% { transform: scale(1); }
+}
+
+/* ============================================
+   UTILITY: ANIMATION DELAYS
+   ============================================ */
+
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-750 { animation-delay: 750ms; }
+.delay-1000 { animation-delay: 1000ms; }
+
+/* ============================================
+   UTILITY: ANIMATION DURATIONS
+   ============================================ */
+
+.duration-fast { animation-duration: 150ms !important; }
+.duration-normal { animation-duration: 300ms !important; }
+.duration-slow { animation-duration: 500ms !important; }
+.duration-slower { animation-duration: 800ms !important; }
+.duration-slowest { animation-duration: 1200ms !important; }
+
+/* ============================================
+   REDUCED MOTION SUPPORT
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    .ripple-glass::after,
+    .shimmer-glass::before,
+    .skeleton-glass,
+    .pulse-glow-glass,
+    .tilt-glass,
+    .magnetic-glass,
+    .fade-in-glass,
+    .fade-out-glass,
+    .slide-up-glass,
+    .slide-down-glass,
+    .slide-left-glass,
+    .slide-right-glass,
+    .scale-in-glass,
+    .scale-out-glass,
+    .bounce-in-glass,
+    .stagger-glass > *,
+    .hover-lift-glass,
+    .hover-glow-glass,
+    .rotate-glass,
+    .spin-glass,
+    .shake-glass,
+    .wiggle-glass,
+    .heartbeat-glass {
+        animation: none !important;
+        transition: none !important;
+    }
+    
+    /* Provide instant feedback for users who prefer reduced motion */
+    .ripple-glass::after {
+        display: none;
+    }
+    
+    .hover-lift-glass:hover,
+    .tilt-glass:hover,
+    .magnetic-glass:hover {
+        transform: none;
+    }
+}
+
+/* ============================================
+   TOUCH DEVICE OPTIMIZATIONS
+   ============================================ */
+
+@media (hover: none) and (pointer: coarse) {
+    /* Disable hover effects on touch devices */
+    .tilt-glass:hover,
+    .magnetic-glass:hover,
+    .hover-lift-glass:hover {
+        transform: none;
+    }
+    
+    /* Faster ripple feedback on touch */
+    .ripple-glass.rippling::after {
+        animation-duration: 0.4s;
+    }
+    
+    /* Disable continuous animations that might drain battery */
+    .spin-glass,
+    .heartbeat-glass {
+        animation-play-state: paused;
+    }
+}

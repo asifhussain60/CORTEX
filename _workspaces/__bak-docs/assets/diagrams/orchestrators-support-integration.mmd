@@ -1,0 +1,18 @@
+sequenceDiagram
+    participant Core
+    participant LENS
+    participant Challenge
+    participant Duplication
+    participant Recommendation
+    participant Governance
+    
+    Core->>LENS: Analyze Code
+    LENS->>LENS: AST + Git + Comments
+    LENS->>Challenge: Code Context
+    Challenge->>Challenge: Generate Counter-Proposal
+    Challenge->>Duplication: Check Duplicates
+    Duplication->>Duplication: CORE-035 Scan
+    Duplication->>Recommendation: Duplication Report
+    Recommendation->>Recommendation: Suggest Fixes
+    Recommendation->>Governance: Validate Rules
+    Governance->>Core: Final Report

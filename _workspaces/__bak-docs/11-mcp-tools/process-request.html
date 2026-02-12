@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="cortex_process_request - Main CORTEX MCP Tool for Request Processing" name="description"/>
+    <title>cortex_process_request | MCP Tools</title>
+    <link href="../assets/images/CORTEX-logo-64.png" rel="icon" type="image/png"/>
+    <link href="../assets/css/main.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" rel="stylesheet"/>
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1>🎯 cortex_process_request</h1>
+            <p class="subtitle">Main Request Processing Tool</p>
+        </header>
+
+        <section class="glass-card">
+            <h2>Overview</h2>
+            <p><code>cortex_process_request</code> is the primary MCP tool for routing user requests through CORTEX's orchestrator pipeline. It handles intent classification, DoR validation, orchestrator routing, and evidence bundle generation.</p>
+        </section>
+
+        <section class="glass-card">
+            <h2>Function Signature</h2>
+            <pre><code>
+cortex_process_request(
+    request: str,
+    context: Optional[Dict[str, Any]] = None,
+    mode: str = "production"
+) -> Dict[str, Any]
+            </code></pre>
+        </section>
+
+        <section class="glass-card">
+            <h2>Parameters</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>request</code></td>
+                        <td>string</td>
+                        <td>User's natural language request (e.g., "implement login feature with TDD")</td>
+                    </tr>
+                    <tr>
+                        <td><code>context</code></td>
+                        <td>dict (optional)</td>
+                        <td>Additional context (file paths, repo info, constraints)</td>
+                    </tr>
+                    <tr>
+                        <td><code>mode</code></td>
+                        <td>string</td>
+                        <td>Execution mode: "production", "development", "test"</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="glass-card">
+            <h2>Returns</h2>
+            <pre><code>
+{
+    "status": "success" | "error",
+    "intent": "IMPLEMENT" | "FIX" | "REFACTOR" | "ANALYZE" | "TEST",
+    "orchestrator": "TDDOrchestrator" | "RefactoringOrchestrator" | ...,
+    "dor_validation": {
+        "passed": true,
+        "requirements": [...],
+        "missing": [...]
+    },
+    "execution_result": {
+        "files_modified": [...],
+        "tests_run": 15,
+        "tests_passed": 15,
+        "coverage": 95.2
+    },
+    "evidence_bundle_path": "cortex_brain/state/evidence/bundle_abc123.zip",
+    "audit_trail": [...]
+}
+            </code></pre>
+        </section>
+
+        <section class="glass-card">
+            <h2>Workflow</h2>
+            <ol>
+                <li><strong>Intent Classification:</strong> IntentRouter analyzes request → classifies as IMPLEMENT/FIX/REFACTOR/etc.</li>
+                <li><strong>LENS Analysis:</strong> If needed, triggers LENS analyzers for context</li>
+                <li><strong>DoR Validation:</strong> LENSSynthesis generates Definition of Ready → awaits approval</li>
+                <li><strong>Orchestrator Routing:</strong> MasterOrchestrator selects appropriate orchestrator</li>
+                <li><strong>Execution:</strong> Orchestrator executes with governance enforcement</li>
+                <li><strong>Evidence Bundle:</strong> TodoManager generates evidence bundle with audit trail</li>
+            </ol>
+        </section>
+
+        <section class="glass-card">
+            <h2>Example Usage</h2>
+            <pre><code>
+# Simple request
+result = cortex_process_request(
+    request="Implement user authentication with JWT tokens"
+)
+
+# With context
+result = cortex_process_request(
+    request="/refactor extract authentication logic into service",
+    context={
+        "file_path": "api/auth.py",
+        "target_pattern": "service_layer"
+    }
+)
+
+# Development mode (relaxed governance)
+result = cortex_process_request(
+    request="/test generate unit tests for UserService",
+    mode="development"
+)
+            </code></pre>
+        </section>
+
+        <section class="glass-card">
+            <h2>Error Handling</h2>
+            <p>Returns structured errors with remediation guidance:</p>
+            <pre><code>
+{
+    "status": "error",
+    "error_type": "GOVERNANCE_VIOLATION",
+    "rule_id": "CORE-008",
+    "message": "Tests must exist before implementation (TDD)",
+    "remediation": "Run: cortex_process_request('/test generate tests for UserService')"
+}
+            </code></pre>
+        </section>
+
+        <footer class="page-footer">
+            <a href="index.html" class="btn-back">← All MCP Tools</a>
+            <a href="lens-analyze.html" class="btn-secondary">Next: lens_analyze →</a>
+        </footer>
+    </div>
+</body>
+</html>

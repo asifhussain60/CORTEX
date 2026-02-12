@@ -1,0 +1,198 @@
+# Prometheus alerts for CORTEX system monitoring
+# AC-OPS-004-05: Operational Dashboards and Alerts
+
+groups:
+  - name: cortex_critical_alerts
+    interval: 30s
+    rules:
+      # Critical: High error rate
+      - alert: HighErrorRate
+        expr: |
+          (rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m])) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+          component: http_server
+        annotations:
+          summary: "High error rate (> 5%) detected"
+          description: "Error rate is {{ $value | humanizePercentage }} for {{ $labels.instance }}"
+
+      # Critical: High latency
+      - alert: HighLatency
+        expr: |
+          histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 1.0
+        for: 5m
+        labels:
+          severity: critical
+          component: http_server
+        annotations:
+          summary: "P95 latency exceeds 1s"
+          description: "P95 latency is {{ $value | humanizeDuration }} for {{ $labels.instance }}"
+
+      # Critical: Connection pool exhaustion
+      - alert: ConnectionPoolExhaustion
+        expr: |
+          (db_connections_active / (db_connections_active + db_connections_idle)) > 0.9
+        for: 10m
+        labels:
+          severity: critical
+          component: database
+        annotations:
+          summary: "Database connection pool > 90% utilization"
+          description: "Connection pool utilization is {{ $value | humanizePercentage }} for {{ $labels.instance }}"
+
+      # Critical: Circuit breaker open
+      - alert: CircuitBreakerOpen
+        expr: |
+          circuit_breaker_state == 1
+        for: 5m
+        labels:
+          severity: critical
+          component: circuit_breaker
+        annotations:
+          summary: "Circuit breaker {{ $labels.circuit }} is OPEN"
+          description: "Circuit breaker has been open for 5+ minutes - service may be failing"
+
+  - name: cortex_warning_alerts
+    interval: 60s
+    rules:
+      # Warning: Moderate error rate
+      - alert: ModerateErrorRate
+        expr: |
+          (rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m])) > 0.01
+        for: 10m
+        labels:
+          severity: warning
+          component: http_server
+        annotations:
+          summary: "Moderate error rate (1-5%) detected"
+          description: "Error rate is {{ $value | humanizePercentage }} for {{ $labels.instance }}"
+
+      # Warning: Elevated latency
+      - alert: ElevatedLatency
+        expr: |
+          histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 0.5
+        for: 10m
+        labels:
+          severity: warning
+          component: http_server
+        annotations:
+          summary: "P95 latency exceeds 500ms"
+          description: "P95 latency is {{ $value | humanizeDuration }}"
+
+      # Warning: High memory usage
+      - alert: HighMemoryUsage
+        expr: |
+          process_resident_memory_bytes / 1024 / 1024 / 1024 > 0.8
+        for: 5m
+        labels:
+          severity: warning
+          component: system
+        annotations:
+          summary: "Memory usage > 80%"
+          description: "Memory usage is {{ $value | humanize }}GB"
+
+      # Warning: Low disk space
+      - alert: LowDiskSpace
+        expr: |
+          (node_filesystem_avail_bytes / node_filesystem_size_bytes) < 0.2
+        for: 10m
+        labels:
+          severity: warning
+          component: system
+        annotations:
+          summary: "Disk space < 20%"
+          description: "Available disk space is {{ $value | humanizePercentage }}"
+
+      # Warning: High governance rule latency
+      - alert: HighGovernanceLatency
+        expr: |
+          histogram_quantile(0.95, rate(governance_check_duration_seconds_bucket[5m])) > 0.1
+        for: 10m
+        labels:
+          severity: warning
+          component: governance
+        annotations:
+          summary: "Governance check latency exceeds 100ms"
+          description: "P95 latency is {{ $value | humanizeDuration }}"
+
+  - name: cortex_performance_alerts
+    interval: 2m
+    rules:
+      # Performance: Slow query detection
+      - alert: SlowQueries
+        expr: |
+          rate(db_queries_total{duration_bucket="+Inf"}[5m]) > 0
+        for: 5m
+        labels:
+          severity: warning
+          component: database
+        annotations:
+          summary: "Slow queries detected (> 100ms)"
+          description: "Rate of slow queries: {{ $value }}/sec"
+
+      # Performance: High trace export failures
+      - alert: TraceExportFailures
+        expr: |
+          rate(observability_trace_export_failures_total[5m]) > 0.01
+        for: 10m
+        labels:
+          severity: warning
+          component: observability
+        annotations:
+          summary: "Trace export failures detected"
+          description: "Failure rate: {{ $value }}/sec"
+
+  - name: cortex_system_health
+    interval: 30s
+    rules:
+      # System: Service not responding
+      - alert: ServiceUnhealthy
+        expr: |
+          up{job="cortex"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: system
+        annotations:
+          summary: "CORTEX service is DOWN"
+          description: "Service {{ $labels.instance }} has not been reachable for 1+ minute"
+
+      # System: Readiness check failing
+      - alert: ServiceNotReady
+        expr: |
+          cortex_readiness_status != 1
+        for: 2m
+        labels:
+          severity: critical
+          component: system
+        annotations:
+          summary: "CORTEX service not ready"
+          description: "Service {{ $labels.instance }} is not ready to serve traffic"
+
+  - name: cortex_observability
+    interval: 60s
+    rules:
+      # Observability: High log drop rate
+      - alert: HighLogDropRate
+        expr: |
+          rate(observability_log_drops_total[5m]) > 100
+        for: 5m
+        labels:
+          severity: warning
+          component: observability
+        annotations:
+          summary: "Logs being dropped at high rate"
+          description: "Log drop rate: {{ $value }}/sec"
+
+      # Observability: High observability overhead
+      - alert: HighObservabilityOverhead
+        expr: |
+          observability_overhead_cpu_percent > 10
+        for: 10m
+        labels:
+          severity: warning
+          component: observability
+        annotations:
+          summary: "Observability overhead exceeds 10% CPU"
+          description: "CPU overhead: {{ $value }}%"

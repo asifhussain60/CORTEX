@@ -1,0 +1,124 @@
+# ENH-058: Autonomous Remediation Framework
+# Generated: 2026-02-07 via DIGEST mode (chat01.txt)
+# Category: WORKFLOW | Priority: P1 | Confidence: 9.0
+
+id: ENH-058
+title: Autonomous Remediation Framework
+description: >
+  Enable auto-execution of audit remediation phases without manual DoR gates.
+  After initial audit approval, CORTEX should autonomously execute all planned
+  phases, run tests, and commit changes without user intervention.
+
+problem: >
+  DIGEST analysis of chat01.txt revealed 0% autonomous execution during audit
+  remediation work. All phases (Phase 1, 2A, 2B) required manual "proceed"
+  commands despite being systematic fix work with clear success criteria.
+  
+  Current flow:
+    User: "audit and fix" → Audit runs → Plan displayed → "proceed" required
+    → Phase 1 executes → "proceed" required → Phase 2A executes → "proceed"
+    required → Phase 2B executes → "proceed" required → Commit
+  
+  Expected flow:
+    User: "audit and fix autonomously" → Audit runs → Plan displayed → Auto-executes
+    all phases → Auto-commits → Reports completion
+
+solution:
+  trigger: 
+    - User says "proceed autonomously"
+    - User says "auto-fix all"
+    - User provides "autonomous=true" flag
+  
+  behavior:
+    - Skip DoR approval gates for remediation tasks only
+    - Execute all planned phases sequentially
+    - Run tests after each phase
+    - Auto-commit with descriptive messages when tests pass
+    - Report completion summary at end
+    - Emergency stop on P0 test failures only
+  
+  scope_limits:
+    - Only for AUDIT → REMEDIATION workflows
+    - NOT for new feature development (DESIGN mode still requires approval)
+    - Requires initial audit approval from user
+    - Test-gated: auto-stop if tests fail
+  
+  safety_gates:
+    - Emergency stop: P0 failures, security issues, breaking changes
+    - Rollback capability if phase fails
+    - User can interrupt with Ctrl+C
+    - Dry-run mode available for preview
+
+implementation:
+  components:
+    - InteractionOrchestrator: Add `autonomous_mode: bool` flag
+    - IntentRouter: Detect autonomous intent keywords
+    - PlanOrchestrator: Execute phases without DoR when autonomous=True
+    - GitOrchestrator: Auto-commit integration
+  
+  integration_points:
+    - EnforcementOrchestrator: Skip DoR gate when autonomous_mode=True AND intent=FIX
+    - TestRunner: Auto-run after each phase
+    - AuditLogger: Log autonomous execution events
+  
+  testing:
+    - Unit tests for autonomous flag propagation
+    - Integration tests for multi-phase autonomous execution
+    - Safety tests for emergency stop scenarios
+    - Rollback tests for failed phases
+
+impact:
+  user_experience:
+    - Reduces 4+ manual interventions per audit session
+    - Enables overnight autonomous fixes
+    - Maintains safety through test gating
+  
+  technical:
+    - Requires architectural changes to DoR gate system
+    - Adds complexity to error handling
+    - Improves audit → fix cycle time by 75%
+  
+  governance:
+    - Maintains CORE-008 (TDD) compliance
+    - Maintains CORE-027 (Audit trail) compliance
+    - Audit trail shows autonomous execution clearly
+
+metrics:
+  priority: P1
+  confidence: 9.0
+  roi_estimate: High
+  effort_estimate: 3-5 days
+  category: WORKFLOW
+  
+  success_criteria:
+    - User can trigger autonomous remediation with single command
+    - Multi-phase remediation completes without manual intervention
+    - Tests run and gate each phase automatically
+    - Commits generated automatically with proper messages
+    - Emergency stop works correctly
+    - Audit trail maintained throughout
+
+evidence:
+  source_file: _workspaces/.chats/chat01.txt
+  session_date: 2026-02-07
+  manual_interventions_observed: 4
+  phases_completed: 3
+  total_duration: 105 minutes
+  autonomous_duration_estimate: 30 minutes
+  time_savings: 75 minutes per audit session
+
+dependencies:
+  - ENH-059: Audit-Driven Auto-Planning (provides execution options)
+  
+related_enhancements:
+  - ENH-060: Test-Gated Auto-Commit
+  
+core_rules:
+  - CORE-008: TDD compliance maintained
+  - CORE-027: Audit trail preserved
+  - CORE-029: Response headers maintained
+
+status: PROPOSED
+created: 2026-02-07
+updated: 2026-02-07
+author: CORTEX DIGEST (Autonomous Enhancement Detection)

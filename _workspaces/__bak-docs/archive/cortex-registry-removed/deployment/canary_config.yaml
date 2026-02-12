@@ -1,0 +1,19 @@
+canary:
+  traffic_percentage: 5
+  duration_seconds: 300
+  
+  metrics_monitored:
+    - "error_rate"
+    - "latency_p99"
+    - "cpu_usage"
+    - "memory_usage"
+  
+  rollback_threshold:
+    error_rate_increase: "50%"
+    latency_increase: "100ms"
+    cpu_usage_increase: "30%"
+    memory_usage_increase: "25%"
+  
+  auto_rollback: true
+
+status: "CONFIGURED"

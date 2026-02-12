@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="CORTEX Security Analysis - 6 CWE Pattern Detection for Code Vulnerabilities" name="description"/>
+    <title>Security Analysis | CORTEX LENS</title>
+    <link href="../assets/images/CORTEX-logo-64.png" rel="icon" type="image/png"/>
+    <link href="../assets/css/main.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" rel="stylesheet"/>
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1>🛡️ Security Threat Analyzer</h1>
+            <p class="subtitle">6 CWE Pattern Detection</p>
+        </header>
+
+        <section class="glass-card">
+            <h2>Overview</h2>
+            <p>SecurityThreatAnalyzer detects 6 critical CWE (Common Weakness Enumeration) patterns in code, providing early warning for security vulnerabilities before they reach production.</p>
+        </section>
+
+        <section class="glass-card">
+            <h2>Detected Patterns</h2>
+
+            <div class="vulnerability-item">
+                <h3>CWE-94: Code Injection</h3>
+                <p><strong>Risk:</strong> Arbitrary code execution from untrusted input</p>
+                <p><strong>Detection:</strong> <code>eval()</code>, <code>exec()</code>, dynamic code compilation</p>
+                <pre><code class="bad">
+# VULNERABLE
+user_input = request.GET['code']
+eval(user_input)  # CWE-94 detected
+                </code></pre>
+            </div>
+
+            <div class="vulnerability-item">
+                <h3>CWE-95: Unsafe Deserialization</h3>
+                <p><strong>Risk:</strong> Remote code execution via malicious serialized objects</p>
+                <p><strong>Detection:</strong> <code>pickle.loads()</code>, <code>yaml.load()</code> without SafeLoader</p>
+                <pre><code class="bad">
+# VULNERABLE
+import pickle
+data = pickle.loads(untrusted_input)  # CWE-95 detected
+                </code></pre>
+            </div>
+
+            <div class="vulnerability-item">
+                <h3>CWE-78: Command Injection</h3>
+                <p><strong>Risk:</strong> OS command execution from untrusted input</p>
+                <p><strong>Detection:</strong> <code>os.system()</code>, <code>subprocess.call()</code> with shell=True</p>
+                <pre><code class="bad">
+# VULNERABLE
+import os
+os.system(f"rm {user_file}")  # CWE-78 detected
+                </code></pre>
+            </div>
+
+            <div class="vulnerability-item">
+                <h3>CWE-89: SQL Injection</h3>
+                <p><strong>Risk:</strong> Database manipulation via SQL injection</p>
+                <p><strong>Detection:</strong> String concatenation in SQL queries</p>
+                <pre><code class="bad">
+# VULNERABLE
+query = f"SELECT * FROM users WHERE id = {user_id}"  # CWE-89 detected
+cursor.execute(query)
+                </code></pre>
+            </div>
+
+            <div class="vulnerability-item">
+                <h3>CWE-327: Weak Cryptography</h3>
+                <p><strong>Risk:</strong> Data compromise via weak encryption algorithms</p>
+                <p><strong>Detection:</strong> MD5, SHA1, DES usage</p>
+                <pre><code class="bad">
+# VULNERABLE
+import hashlib
+password_hash = hashlib.md5(password).hexdigest()  # CWE-327 detected
+                </code></pre>
+            </div>
+
+            <div class="vulnerability-item">
+                <h3>CWE-22: Path Traversal</h3>
+                <p><strong>Risk:</strong> Unauthorized file system access</p>
+                <p><strong>Detection:</strong> <code>../</code> patterns in file paths, unvalidated user paths</p>
+                <pre><code class="bad">
+# VULNERABLE
+file_path = f"/uploads/{user_filename}"  # CWE-22 if user_filename contains ../
+open(file_path, 'r')
+                </code></pre>
+            </div>
+        </section>
+
+        <section class="glass-card">
+            <h2>Integration with ChallengeEngine</h2>
+            <p>Security violations detected by LENS trigger the <strong>ChallengeEngine</strong> (Phase 8.3), which blocks execution and requires explicit override approval.</p>
+            <p>Severity levels:</p>
+            <ul>
+                <li><strong>CRITICAL:</strong> Code/SQL/Command Injection → BLOCKED</li>
+                <li><strong>HIGH:</strong> Deserialization, Weak Crypto → WARNING + Recommendation</li>
+                <li><strong>MEDIUM:</strong> Path Traversal → RECOMMENDATION</li>
+            </ul>
+        </section>
+
+        <section class="glass-card">
+            <h2>MCP Integration</h2>
+            <pre><code>
+# Security scan via MCP
+result = cortex_lens_analyze(
+    file_path="api/auth.py",
+    include_security=True
+)
+
+# Result includes detected vulnerabilities
+vulnerabilities = result['security_analysis']['threats']
+            </code></pre>
+        </section>
+
+        <footer class="page-footer">
+            <a href="crawlers.html" class="btn-back">← Back to Analyzers</a>
+            <a href="index.html" class="btn-secondary">LENS Overview</a>
+        </footer>
+    </div>
+</body>
+</html>
