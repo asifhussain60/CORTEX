@@ -1,8 +1,8 @@
 version: '2.0'
 registry_name: _cortex-master
 description: CORTEX self-development planning with wave-based incremental value delivery
-last_updated: '2026-02-11T23:45:00.000000Z'
-revision: 'Wave-Based Execution Plan v6.0: Production Value First (Wave 7 P0-CRITICAL, Documentation deferred to Wave 8, LENS Tests elevated to Track 5)'
+last_updated: '2026-02-12T14:00:00.000000Z'
+revision: 'Session-Scoped Execution Plan v8.0: Implementation Reality Sync Complete (Wave 7+8 ✅, Wave 1→A-E sessions, Wave 6→F-G sessions, Autonomous execution ready)'
 
 # ============================================================================
 # MASTER REMEDIATION PLAN (WAVE-BASED RELEASES)
@@ -18,10 +18,25 @@ master_remediation:
   
   summary:
     total_phases: 23  # 16 original + 4 wave enhancements + 3 new (Track 5, Wave 8, Wave 9)
-    p0_critical: 5  # ENH-063, ENH-064, ENH-066, ENH-087 (upgraded), Track 5 (LENS Tests)
+    p0_critical: 5  # ENH-063, ENH-064, ENH-066, ENH-087 (✅ complete), Track 5 (✅ complete)
     p1_high: 12      # phase-81, ENH-067-071, ENH-078, ENH-082/084/085/086
-    p2_medium: 6    # ENH-065, ENH-072-074, ENH-077, phase-80, Wave 8 (Arch Migration)
+    p2_medium: 6    # ENH-065, ENH-072-074, ENH-077, phase-80, Wave 8 (✅ complete)
     estimated_effort: "~135 days (58 days optimized with parallel execution + Track 5 + deferred docs)"
+    implementation_reality_sync: "2026-02-12 v2.0 (Wave 7+8 complete, Waves A-G session-scoped)"
+    
+    # Session-Scoped Execution Model (NEW)
+    execution_model: "autonomous_session_units"
+    session_waves:
+      completed: 2  # Wave 7, Wave 8
+      pending_p0: 5  # WAVE-A through WAVE-E (Foundation)
+      pending_p1: 2  # WAVE-F, WAVE-G (Cleanup)
+      pending_p2: 3  # Wave 2, 3, 4 (Intelligence, Autonomy, Enhancement)
+    session_characteristics:
+      duration: "2-4 hours per session"
+      token_budget: "<200k tokens"
+      autonomous: true
+      exit_criteria: "Tests passing + commits pushed + docs updated"
+      mode: "Silent execution with ASCII progress bars"
   
   # Wave-Based Incremental Releases
   release_strategy:
@@ -30,13 +45,198 @@ master_remediation:
     value_focus: "Foundation → Intelligence → Autonomy → Enhancement → Polish → Cleanup"
   
   waves:
+    # ========================================================================
+    # SESSION-SCOPED WAVES (P0-CRITICAL) - Single Copilot Chat Session Each
+    # Duration: 2-4 hours | Token Budget: <200k | Autonomous: Silent ✅
+    # ========================================================================
+    
+    - wave: "A"
+      name: "Critical Blockers Resolution (Test Fixes + ENH-063 Phase 2)"
+      release: "R1A-FOUNDATION-BLOCKERS"
+      priority: "P0-CRITICAL"
+      duration: "2-3 hours"
+      session_id: "WAVE-A-20260212"
+      status: "ready"
+      highlights:
+        - "Fix 4 test import errors (SharedContext) - BLOCKING 21,441 tests"
+        - "ENH-063 Phase 2: Circuit breakers, async git, race condition fix"
+      value_delivered:
+        - "✅ Test suite unblocked (21,456 tests runnable)"
+        - "✅ Git operations non-blocking (circuit breakers)"
+        - "✅ Debug orchestrator race condition fixed"
+      dependencies: []
+      blocks: ["WAVE-B", "WAVE-C", "WAVE-D", "WAVE-E"]
+      deliverables:
+        - "4 test files fixed (import errors)"
+        - "Circuit breakers for git operations"
+        - "Async git operations (asyncio)"
+        - "Debug orchestrator lock mechanism"
+        - "15+ new tests (RED→GREEN→REFACTOR)"
+      autonomous_command: |
+        /implement WAVE-A: Fix test imports + ENH-063 Phase 2
+        
+        Authority: cortex-registry/_cortex-master/SESSION-SCOPED-WAVES.md
+        Mode: Silent autonomous with ASCII progress bars
+        Session: WAVE-A-20260212-01
+        
+        Scope:
+        1. Fix 4 test import errors (SharedContext)
+        2. Circuit breakers for git operations
+        3. Async git operations
+        4. Debug orchestrator race condition fix
+        5. 15+ new tests (RED→GREEN→REFACTOR)
+        6. Update master plan documentation
+        
+        Success: All tests passing + 2 commits + docs updated
+    
+    - wave: "B"
+      name: "Operability & Monitoring (ENH-063 Phase 3+4)"
+      release: "R1B-FOUNDATION-OBSERVABILITY"
+      priority: "P0-CRITICAL"
+      duration: "2-3 hours"
+      session_id: "WAVE-B-20260212"
+      status: "blocked"
+      requires: ["WAVE-A"]
+      highlights:
+        - "ENH-063 Phase 3: Structured logging + distributed tracing"
+        - "ENH-063 Phase 4: RBAC + MCP gateway authorization"
+      value_delivered:
+        - "✅ JSON structured logging (80+ files)"
+        - "✅ OpenTelemetry tracing (Jaeger)"
+        - "✅ RBAC for MCP endpoints"
+      dependencies: ["WAVE-A"]
+      blocks: ["WAVE-C"]
+      deliverables:
+        - "Structured logging (JSON format, 80+ files)"
+        - "Distributed tracing (OpenTelemetry)"
+        - "RBAC authorization layer"
+        - "15+ new tests"
+    
+    - wave: "C"
+      name: "Configuration & Scalability (ENH-063 Phase 5+6 + Integration)"
+      release: "R1C-FOUNDATION-COMPLETE"
+      priority: "P0-CRITICAL"
+      duration: "2-3 hours"
+      session_id: "WAVE-C-20260212"
+      status: "blocked"
+      requires: ["WAVE-B"]
+      highlights:
+        - "ENH-063 Phase 5: Config drift detection + session management"
+        - "ENH-063 Phase 6: MCP server connection pooling"
+        - "ENH-063 Integration: E2E tests + production verification"
+      value_delivered:
+        - "✅ Config drift detection (10s alerts)"
+        - "✅ Session management (Redis)"
+        - "✅ Connection pooling (10x throughput)"
+        - "✅ ENH-063 COMPLETE (15/15 fixes)"
+      dependencies: ["WAVE-B"]
+      blocks: ["WAVE-D"]
+      deliverables:
+        - "Config drift detection service"
+        - "Session management (Redis)"
+        - "Connection pooling"
+        - "20+ integration tests"
+        - "ENH-063 completion report"
+    
+    - wave: "D"
+      name: "MCP Architecture + LENS Phase 2 Stub (ENH-066 + phase-54)"
+      release: "R1D-FOUNDATION-INTELLIGENCE"
+      priority: "P0-CRITICAL"
+      duration: "1-2 hours"
+      session_id: "WAVE-D-20260212"
+      status: "blocked"
+      requires: ["WAVE-C"]
+      highlights:
+        - "ENH-066: MCP Pylance-style docs validation (already complete)"
+        - "phase-54: LENS Phase 2 stub removal (2 hardcoded lines)"
+      value_delivered:
+        - "✅ MCP documentation verified"
+        - "✅ LENS fully dynamic (no hardcoded data)"
+      dependencies: ["WAVE-C"]
+      blocks: ["WAVE-E"]
+      deliverables:
+        - "ENH-066 verification tests"
+        - "LENS Phase 2 stub removal"
+        - "Integration tests (5+)"
+    
+    - wave: "E"
+      name: "Validation Gates (phase-51 + phase-48 S1-S3)"
+      release: "R1E-FOUNDATION-GATES"
+      priority: "P0-CRITICAL"
+      duration: "2-3 hours"
+      session_id: "WAVE-E-20260212"
+      status: "blocked"
+      requires: ["WAVE-D"]
+      highlights:
+        - "phase-51: Environment integrity checks"
+        - "phase-48 S1-S3: Holistic validation gate foundation"
+      value_delivered:
+        - "✅ Pre-flight MCP validation"
+        - "✅ Challenge gate integration"
+        - "✅ Holistic validation pipeline"
+      dependencies: ["WAVE-D"]
+      blocks: ["WAVE-F", "WAVE-G"]
+      deliverables:
+        - "EnvironmentIntegrityAgent"
+        - "HolisticValidationGate"
+        - "Challenge generation engine"
+        - "20+ validation tests"
+    
+    - wave: "F"
+      name: "Response Templates + Phase Standards (ENH-082 S1 + ENH-084 S1)"
+      release: "R6F-CLEANUP-STANDARDS"
+      priority: "P1-HIGH-ROI"
+      duration: "2-3 hours"
+      session_id: "WAVE-F-20260212"
+      status: "blocked"
+      requires: ["WAVE-E"]
+      highlights:
+        - "ENH-082 Stage 1: Unified Response Engine integration (72 orchestrators)"
+        - "ENH-084 Stage 1: Standard phase creation template + CLI"
+      value_delivered:
+        - "✅ 72/72 orchestrators using response templates"
+        - "✅ Standard phase creation (50% faster)"
+      dependencies: ["WAVE-E"]
+      blocks: ["WAVE-G"]
+      deliverables:
+        - "Response engine integration"
+        - "Phase creation CLI"
+        - "30+ integration tests"
+    
+    - wave: "G"
+      name: "Cleanup Audit + Architecture Alignment (ENH-085 + ENH-086)"
+      release: "R6G-CLEANUP-COMPLETE"
+      priority: "P1-HIGH-ROI"
+      duration: "2-3 hours"
+      session_id: "WAVE-G-20260212"
+      status: "blocked"
+      requires: ["WAVE-F"]
+      highlights:
+        - "ENH-085 S1-S2: Completed phase cleanup audit (15-25% reduction)"
+        - "ENH-086 S1: Architecture alignment verification (100% CORE rules)"
+      value_delivered:
+        - "✅ Codebase reduced 15-25%"
+        - "✅ 100% CORE rules compliance"
+        - "✅ MCP-FIRST violations: 0"
+      dependencies: ["WAVE-F"]
+      blocks: []
+      deliverables:
+        - "Cleanup audit report"
+        - "Architecture alignment report"
+        - "25+ compliance tests"
+    
+    # ========================================================================
+    # ORIGINAL WAVES (Multi-Session, Lower Priority)
+    # ========================================================================
+    
     - wave: 1
       name: "Foundation (Production-Critical Infrastructure)"
       release: "R1-FOUNDATION"
       priority: "P0-CRITICAL"
       duration: "12-14 days"
       phases: 3
-      status: "ready"
+      status: "in_progress"  # Split into WAVE-A through WAVE-E
+      session_scoped_replacement: "WAVE-A, WAVE-B, WAVE-C, WAVE-D, WAVE-E"
       highlights:
         - "ENH-063: Production security + reliability (15 fixes)"
         - "ENH-066: MCP onboarding clarity (10x faster)"
@@ -47,6 +247,7 @@ master_remediation:
         - "✅ Real codebase intelligence (vs hardcoded)"
       dependencies: []
       blocks: ["Wave 2", "Wave 3"]
+      note: "DECOMPOSED into session-scoped waves A-E for autonomous execution"
     
     - wave: 7
       name: "Orchestrator Consolidation + LENS Test Hardening (HIGH-ROI Architecture)"
@@ -214,9 +415,9 @@ master_remediation:
       priority: "P1-HIGH-ROI"
       duration: "14-18 days"
       phases: 4  # ENH-082, ENH-084, ENH-085, ENH-086
-      status: "ready"
-      roi: 9.2  # HIGHEST of all waves
+      status: "blocked"
       requires: ["R1-FOUNDATION"]
+      session_scoped_replacement: "WAVE-F, WAVE-G"
       highlights:
         - "ENH-082: Response Template System Integration (8.5 ROI)"
         - "ENH-084: Standard Phase Creation Practices (9.5 ROI)"
@@ -231,6 +432,7 @@ master_remediation:
       blocks: []
       authority: "chat01.md + cortex-architect.prompt.md v15.3"
       file_reference: "WAVE-6-COMPREHENSIVE-CLEANUP-REFACTORING.yaml"
+      note: "DECOMPOSED into session-scoped waves F-G for autonomous execution"
     
     - wave: 8
       name: "Planning Orchestrator Capability (Registry Separation + Layered Export)"
@@ -442,8 +644,9 @@ active_phases:
     priority: P0
     wave: 1
     release: "R1-FOUNDATION"
-    status: active
+    status: in_progress  # Phase 1 complete, Phase 2-6 remaining
     estimated_effort: "12 days (parallelized)"
+    actual_effort: "1 day (Phase 1)"
     roi: "Security + Reliability → production-ready"
     confidence: 9.5
     dependencies: []
@@ -455,24 +658,43 @@ active_phases:
       RBAC, structured logging, distributed tracing, config drift, session.
     impact: "CRITICAL - Production deployment blocked by security vulnerabilities"
     phases:
-      - "Phase 1: Critical Security Fixes (5-7 days, 4 fixes)"
-      - "Phase 2: Reliability & Performance (3 days, 3 fixes)"
-      - "Phase 3: Operability & Monitoring (2 days, 3 fixes)"
-      - "Phase 4: Authorization & Security (3 days, 2 fixes)"
-      - "Phase 5: Configuration & State (3 days, 2 fixes)"
-      - "Phase 6: Scalability & Resources (1 day, 1 fix)"
+      - "Phase 1: Critical Security Fixes (5-7 days, 4 fixes) ✅ COMPLETE"
+      - "Phase 2: Reliability & Performance (3 days, 3 fixes) ⚪ PENDING"
+      - "Phase 3: Operability & Monitoring (2 days, 3 fixes) ⚪ PENDING"
+      - "Phase 4: Authorization & Security (3 days, 2 fixes) ⚪ PENDING"
+      - "Phase 5: Configuration & State (3 days, 2 fixes) ⚪ PENDING"
+      - "Phase 6: Scalability & Resources (1 day, 1 fix) ⚪ PENDING"
+    phase_1_completion:
+      date: "2026-02-11"
+      commits: ["1e57b5076", "427750f8f"]
+      tests_passing: "20/20 (100%)"
+      fixes_complete:
+        - "✅ P0-002: Command Injection (4 vulnerabilities fixed)"
+        - "✅ P0-001: MCP Authentication (JWT tokens, audit logging)"
+        - "✅ P0-005: Global Exception Handler (verified existing)"
+        - "✅ P0-007: Liveness Probe (health checks implemented)"
+      deliverables:
+        - "cortex/mcp/authentication.py (432 lines, 20 tests)"
+        - "cortex/mcp/health.py (315 lines, Kubernetes-ready)"
+        - "MCP server integration (auth + health endpoints)"
+      security_impact:
+        - "OWASP A03 (Injection): 4 vulnerabilities eliminated"
+        - "OWASP A01 (Access Control): Authentication framework deployed"
     files:
       - cortex/mcp/server.py (AUTH, EXCEPTION HANDLER, LIVENESS)
+      - cortex/mcp/authentication.py (NEW - JWT AUTH)
+      - cortex/mcp/health.py (NEW - HEALTH CHECKS)
       - cortex/mcp/gateway.py (AUTH, RBAC)
-      - cortex/mcp/tools/refactor_tool.py (COMMAND INJECTION FIX)
+      - cortex/tools/toolkit/restore_knowledge_yamls.py (COMMAND INJECTION FIX)
+      - cortex/orchestrators/pr_review/deployment_orchestrator.py (EVAL FIX)
       - cortex/repositories/git_operations.py (CIRCUIT BREAKERS, ASYNC)
       - cortex/orchestrators/support/debug_orchestrator.py (RACE CONDITION FIX)
       - tests/integration/ (CREDENTIALS CLEANUP)
       - cortex/*/*.py (STRUCTURED LOGGING)
     value_delivered:
-      - "✅ Secure MCP server (P0 security)"
-      - "✅ Reliable git operations (P0 reliability)"
-      - "✅ Production observability (P1 ops)"
+      - "✅ Secure MCP server (P0 security) - Phase 1 complete"
+      - "⚪ Reliable git operations (P0 reliability) - Phase 2 pending"
+      - "⚪ Production observability (P1 ops) - Phase 3 pending"
   
   - id: ENH-066
     title: "MCP Pylance-Style Architecture Clarification"
