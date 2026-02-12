@@ -68,6 +68,100 @@ Result: Clean capability export + internal security ✅
 
 ---
 
+### Stage 5: Documentation Strategy (Planning) 🔵
+
+**Objective:** Establish registry-driven documentation architecture for GitHub Pages deployment
+
+**Strategy: Hybrid Registry-Driven (Option C)**
+
+**Architecture:**
+```
+┌─────────────────────────────────────────────────────────────┐
+│                   DOCUMENTATION FLOW                         │
+│                                                              │
+│  ┌─────────────────┐    ┌──────────────────────┐            │
+│  │ __wiring_       │───▶│ CortexDocsOrchestrator│            │
+│  │ contract__.yaml │    │ (Phase 74 completion) │            │
+│  └─────────────────┘    └──────────┬───────────┘            │
+│                                    │                         │
+│  ┌─────────────────┐               │ generates               │
+│  │ cortex-registry/│───────────────┤                         │
+│  │ _cortex-master/ │               │                         │
+│  └─────────────────┘               ▼                         │
+│                         ┌──────────────────────┐            │
+│                         │ _workspaces/         │            │
+│                         │ cortex-architecture/ │ ◀── MD     │
+│                         └──────────┬───────────┘            │
+│                                    │                         │
+│                                    │ Jinja2 + D3.js          │
+│                                    ▼                         │
+│                         ┌──────────────────────┐            │
+│                         │ _build/site/         │ ◀── HTML   │
+│                         │ (GitPages deploy)    │            │
+│                         └──────────────────────┘            │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Key Decisions:**
+
+1. **SSOT:** `__wiring_contract__.yaml` + registry drive technical accuracy
+2. **Dual-Layer Docs:**
+   - **Technical Layer:** Auto-generated from registry (always accurate)
+   - **Narrative Layer:** Curated brain analogies (executive-friendly)
+3. **Orchestrator:** `CortexDocsOrchestrator` handles both refresh + generation
+4. **Design System:** Dark glassmorphism from dashboard (consistency)
+5. **Build Process:** GitHub Actions → Jinja2 → `_build/site/` → gh-pages
+
+**Components to Implement:**
+
+```
+cortex/orchestrators/internal/cortex_docs_orchestrator.py
+├─ DocDeltaAnalyzer (git-aware change detection)
+├─ RegistryExtractor (parse wiring contract)
+├─ MarkdownGenerator (update cortex-architecture/*.md)
+├─ HTMLSiteBuilder (Jinja2 → HTML with glassmorphism)
+├─ NavigationBuilder (multi-level site navigation)
+├─ DiagramGenerator (D3.js interactive diagrams)
+└─ AssetOptimizer (minify CSS/JS, optimize images)
+
+cortex/templates/docs/
+├─ base.html.jinja2 (glassmorphism base layout)
+├─ components/
+│   ├─ header.html (navigation + logo)
+│   ├─ sidebar.html (documentation tree)
+│   ├─ footer.html (build info + links)
+│   └─ brain-analogy-card.html (executive summaries)
+├─ pages/
+│   ├─ landing.html (index with brain analogy)
+│   ├─ architecture-section.html (orchestration, LENS, etc.)
+│   ├─ persona-view.html (developer, manager, executive)
+│   └─ api-reference.html (interactive MCP tools)
+└─ diagrams/
+    ├─ architecture-overview.d3.js
+    ├─ request-lifecycle.d3.js
+    └─ component-relationships.d3.js
+
+.github/workflows/docs.yaml
+├─ Trigger: push to main (docs changes)
+├─ Build: CortexDocsOrchestrator.generate_site()
+├─ Deploy: gh-pages branch
+└─ Cache: templates, D3.js libs
+```
+
+**Benefits:**
+- ✅ Scalability: New orchestrators auto-documented
+- ✅ Accuracy: Generated from code, not manual
+- ✅ Extensibility: Registry schema extensions propagate
+- ✅ Efficiency: CI builds on commit, not manual refresh
+
+**Governance:**
+- CORE-057: Registry-driven documentation generation
+- AC markers: AC-WAVE8-DOC-STRATEGY-001
+
+**Status:** Planning complete, implementation deferred to Phase 74 completion
+
+---
+
 ### Stage 2: Registry Blacklist + Enforcement (4 hours) ✅
 
 **Objective:** Implement git-level protection for internal artifacts

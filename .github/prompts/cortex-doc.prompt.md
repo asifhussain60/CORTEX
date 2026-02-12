@@ -1,16 +1,18 @@
 # CORTEX Documentation Generation Prompt
 
-**Version:** 2.0 | **Updated:** 2026-02-11 | **Authority:** Documentation Architect Agent | **Mode:** Dual-Mode (Refresh + Generate) | **Integration:** Phase 74 + ENH-064
+**Version:** 3.0 | **Updated:** 2026-02-12 | **Authority:** Documentation Architect Agent + Wave 8 Stage 5 | **Mode:** Registry-Driven Dual-Mode (Refresh + Generate) | **Integration:** Phase 74 + ENH-064 + Wave 8
 
 ---
 
 ## 🎯 Prompt Purpose
 
-**Dual-Mode Documentation System:**
-1. **MODE: Refresh** — Git-aware incremental documentation updates (delta detection)
-2. **MODE: Generate** — Full HTML site generation for GitHub Pages deployment
+**Registry-Driven Dual-Mode Documentation System:**
+1. **MODE: Refresh** — Git-aware incremental documentation updates with registry extraction (delta detection)
+2. **MODE: Generate** — Full HTML site generation for GitHub Pages deployment with dark glassmorphism theme
 
-This prompt enables autonomous documentation lifecycle management with brain analogies, multi-persona views, and D3.js visualizations.
+**SSOT Architecture:** `__wiring_contract__.yaml` + `cortex-registry/` drive technical accuracy. Curated brain analogies remain manual for executive narratives.
+
+This prompt enables autonomous documentation lifecycle management with brain analogies, multi-persona views, D3.js interactive visualizations, and modern UX design with dark glassmorphism theme.
 
 ---
 
@@ -357,65 +359,496 @@ base_template = f"""
 # Save to templates/base.html.jinja2
 ```
 
-**Create component templates:**
+---
+
+### Step 2.5: Dark Glassmorphism Theme Integration (CRITICAL)
+
+**Purpose:** Extract and adapt the proven dark glassmorphism design from `cortex-registry/_cortex-master/dashboard/index.html` for use across all documentation pages.
+
+**Design System Extraction:**
+
+```css
+/* Extract from dashboard CSS - Dark Glassmorphism Variables */
+:root {
+    /* Primary Colors */
+    --primary-bg: #0a0e27;        /* Dark navy background */
+    --secondary-bg: #1a1f3a;      /* Card backgrounds */
+    --accent-blue: #4a9eff;       /* Interactive elements */
+    --accent-purple: #7b68ee;     /* Highlights */
+    --accent-cyan: #00d4ff;       /* Success states */
+    
+    /* Glassmorphism */
+    --glass-bg: rgba(26, 31, 58, 0.7);
+    --glass-border: rgba(74, 158, 255, 0.3);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    --glass-blur: blur(10px);
+    
+    /* Text Colors */
+    --text-primary: #e8eaf6;      /* Main text */
+    --text-secondary: #b0b9d1;    /* Secondary text */
+    --text-muted: #6b7280;        /* Muted text */
+    
+    /* Interactive States */
+    --hover-overlay: rgba(74, 158, 255, 0.1);
+    --active-overlay: rgba(74, 158, 255, 0.2);
+}
+
+/* Glassmorphism Card Component */
+.glassmorphism-card {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    box-shadow: var(--glass-shadow);
+    padding: 1.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glassmorphism-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5);
+    border-color: var(--accent-blue);
+}
+
+/* Body Background with Gradient */
+.glassmorphism-body {
+    background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1729 100%);
+    min-height: 100vh;
+    color: var(--text-primary);
+}
+```
+
+**Component Library (Reusable Components):**
 
 ```html
-<!-- templates/components/header.html -->
-<header class="docs-header glassmorphism-card">
-    <div class="header-content">
-        <div class="logo-section">
-            <img src="/assets/images/brain-analogy.svg" alt="CORTEX" class="logo">
-            <h1>CORTEX</h1>
-            <span class="tagline">Cognitive Real-Time Execution System</span>
-        </div>
-        <nav class="header-nav">
-            <a href="/">Home</a>
-            <a href="/architecture/">Architecture</a>
-            <a href="/personas/">Personas</a>
-            <a href="/api/">API</a>
-        </nav>
-    </div>
-</header>
-
-<!-- templates/components/navigation.html -->
-<nav class="sidebar-nav glassmorphism-card">
-    <div class="nav-section">
-        <h3>Documentation</h3>
-        <ul>
-            <li><a href="/architecture/capabilities/">Capabilities</a></li>
-            <li><a href="/architecture/orchestration/">Orchestration</a></li>
-            <li><a href="/architecture/lens/">LENS</a></li>
-            <li><a href="/architecture/toolkit/">Toolkit</a></li>
-            <li><a href="/architecture/infrastructure/">Infrastructure</a></li>
-            <li><a href="/architecture/mcp/">MCP</a></li>
-        </ul>
-    </div>
-    <div class="nav-section">
-        <h3>Personas</h3>
-        <ul>
-            <li><a href="/personas/developer/">Developer</a></li>
-            <li><a href="/personas/manager/">Manager</a></li>
-            <li><a href="/personas/executive/">Executive</a></li>
-            <li><a href="/personas/regulatory/">Regulatory</a></li>
+<!-- Component 1: Navigation Sidebar (docs tree) -->
+<nav class="docs-sidebar glassmorphism-card">
+    <div class="sidebar-section">
+        <h3 class="section-title">
+            <i class="fas fa-book"></i> Documentation
+        </h3>
+        <ul class="doc-tree">
+            <li class="doc-item">
+                <a href="/architecture/capabilities/" class="doc-link">
+                    <i class="fas fa-puzzle-piece"></i>
+                    <span>Capabilities</span>
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+                <ul class="doc-subtree">
+                    <li><a href="/architecture/capabilities/overview.html">Overview</a></li>
+                    <li><a href="/architecture/capabilities/ai-intelligence.html">AI Intelligence</a></li>
+                    <li><a href="/architecture/capabilities/governance.html">Governance</a></li>
+                </ul>
+            </li>
+            <!-- Repeat for each section -->
         </ul>
     </div>
 </nav>
 
-<!-- templates/components/footer.html -->
-<footer class="docs-footer">
-    <div class="footer-content">
-        <p>&copy; 2026 CORTEX. All rights reserved.</p>
-        <p>Generated: {{ generation_date }} | Version: 2.0.0</p>
-        <div class="footer-links">
-            <a href="/sitemap.xml">Sitemap</a>
-            <a href="/search">Search</a>
-            <a href="https://github.com/asifhussain60/CORTEX">GitHub</a>
+<!-- Component 2: Content Card (markdown content wrapper) -->
+<article class="content-card glassmorphism-card">
+    <header class="content-header">
+        <h1>{{ page.title }}</h1>
+        <div class="meta-info">
+            <span class="badge badge-category">{{ page.category }}</span>
+            <span class="last-updated">Updated: {{ page.updated }}</span>
+        </div>
+    </header>
+    
+    <div class="content-body markdown-content">
+        <!-- Markdown content from cortex-architecture/*.md injected here -->
+        {{ content | safe }}
+    </div>
+    
+    <footer class="content-footer">
+        <div class="page-navigation">
+            {% if page.prev %}
+            <a href="{{ page.prev.url }}" class="nav-btn prev">
+                <i class="fas fa-arrow-left"></i> {{ page.prev.title }}
+            </a>
+            {% endif %}
+            {% if page.next %}
+            <a href="{{ page.next.url }}" class="nav-btn next">
+                {{ page.next.title }} <i class="fas fa-arrow-right"></i>
+            </a>
+            {% endif %}
+        </div>
+    </footer>
+</article>
+
+<!-- Component 3: Interactive Diagram Container -->
+<div class="diagram-container glassmorphism-card">
+    <div class="diagram-header">
+        <h3>{{ diagram.title }}</h3>
+        <div class="diagram-controls">
+            <button class="btn-icon" data-action="zoom-in">
+                <i class="fas fa-search-plus"></i>
+            </button>
+            <button class="btn-icon" data-action="zoom-out">
+                <i class="fas fa-search-minus"></i>
+            </button>
+            <button class="btn-icon" data-action="reset">
+                <i class="fas fa-sync"></i>
+            </button>
+            <button class="btn-icon" data-action="fullscreen">
+                <i class="fas fa-expand"></i>
+            </button>
         </div>
     </div>
-</footer>
+    <div id="diagram-{{ diagram.id }}" class="diagram-canvas">
+        <!-- D3.js visualization renders here -->
+    </div>
+    <div class="diagram-legend">
+        <!-- Auto-generated legend for diagram elements -->
+    </div>
+</div>
+
+<!-- Component 4: Brain Analogy Card -->
+<div class="brain-analogy-card glassmorphism-card">
+    <div class="analogy-visual">
+        <img src="{{ brain_part.image }}" alt="{{ brain_part.name }}">
+    </div>
+    <div class="analogy-content">
+        <div class="brain-region">
+            <h4>{{ brain_part.name }}</h4>
+            <p class="brain-function">{{ brain_part.function }}</p>
+        </div>
+        <div class="cortex-mapping">
+            <span class="mapping-arrow">→</span>
+            <h4>{{ cortex_component.name }}</h4>
+            <p class="component-role">{{ cortex_component.role }}</p>
+            <a href="{{ cortex_component.docs_url }}" class="btn-learn-more">
+                Learn More <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Component 5: Code Block (syntax highlighted) -->
+<div class="code-block-wrapper glassmorphism-card">
+    <div class="code-header">
+        <span class="language-badge">{{ code.language }}</span>
+        <button class="btn-copy" data-clipboard="{{ code.content }}">
+            <i class="fas fa-copy"></i> Copy
+        </button>
+    </div>
+    <pre><code class="language-{{ code.language }}">{{ code.content }}</code></pre>
+</div>
 ```
 
-### Step 3: Brain Analogy Integration
+**Markdown Content Integration Strategy:**
+
+```python
+# cortex/orchestrators/internal/cortex_docs_orchestrator.py
+
+class MarkdownToHTMLConverter:
+    """
+    Converts Markdown from cortex-architecture/*.md to HTML
+    while preserving structure and applying glassmorphism theme.
+    """
+    
+    def convert(self, md_path: Path) -> str:
+        """
+        1. Read Markdown from cortex-architecture/
+        2. Parse with python-markdown (extensions: fenced_code, tables, toc)
+        3. Wrap content sections in glassmorphism-card divs
+        4. Apply syntax highlighting (Prism.js)
+        5. Convert Mermaid diagrams to D3.js interactive versions
+        6. Add navigation breadcrumbs
+        7. Inject brain analogy cards where relevant
+        8. Return HTML ready for Jinja2 template
+        """
+        import markdown
+        from markdown.extensions import fenced_code, tables, toc
+        
+        # Read source Markdown
+        md_content = md_path.read_text()
+        
+        # Parse Markdown to HTML
+        md_parser = markdown.Markdown(extensions=[
+            'fenced_code',
+            'tables',
+            'toc',
+            'attr_list',  # For CSS classes in markdown
+            'md_in_html'  # Allow HTML blocks
+        ])
+        
+        html_content = md_parser.convert(md_content)
+        
+        # Post-process: Wrap sections in cards
+        html_content = self._wrap_sections_in_cards(html_content)
+        
+        # Post-process: Convert diagrams
+        html_content = self._convert_diagrams_to_d3(html_content)
+        
+        # Post-process: Add brain analogies
+        html_content = self._inject_brain_analogies(html_content)
+        
+        return html_content
+    
+    def _wrap_sections_in_cards(self, html: str) -> str:
+        """
+        Wrap each ## heading and its content in a glassmorphism-card.
+        
+        Before:
+          <h2>Orchestration</h2>
+          <p>Content...</p>
+        
+        After:
+          <div class="content-section glassmorphism-card">
+            <h2>Orchestration</h2>
+            <p>Content...</p>
+          </div>
+        """
+        from bs4 import BeautifulSoup
+        
+        soup = BeautifulSoup(html, 'html.parser')
+        
+        # Find all h2 elements
+        for h2 in soup.find_all('h2'):
+            # Create card wrapper
+            card = soup.new_tag('div', **{'class': 'content-section glassmorphism-card'})
+            
+            # Move h2 and following siblings into card until next h2
+            current = h2
+            next_h2 = h2.find_next_sibling('h2')
+            
+            while current and current != next_h2:
+                next_sibling = current.next_sibling
+                card.append(current)
+                current = next_sibling
+            
+            # Insert card before h2's original position
+            h2.parent.insert(h2.parent.index(card.contents[0]), card)
+        
+        return str(soup)
+    
+    def _convert_diagrams_to_d3(self, html: str) -> str:
+        """
+        Find diagram placeholders and replace with D3.js interactive versions.
+        
+        Markdown:
+          ```diagram:architecture-overview```
+        
+        HTML Output:
+          <div class="diagram-container glassmorphism-card">
+            <div id="diagram-architecture-overview"></div>
+            <script src="/assets/js/diagrams/architecture-overview.js"></script>
+          </div>
+        """
+        import re
+        
+        pattern = r'```diagram:(\w+)```'
+        
+        def replace_diagram(match):
+            diagram_id = match.group(1)
+            return f'''
+            <div class="diagram-container glassmorphism-card">
+                <div class="diagram-header">
+                    <h3>{diagram_id.replace('-', ' ').title()}</h3>
+                    <div class="diagram-controls">
+                        <button class="btn-icon" data-action="zoom-in">
+                            <i class="fas fa-search-plus"></i>
+                        </button>
+                        <button class="btn-icon" data-action="reset">
+                            <i class="fas fa-sync"></i>
+                        </button>
+                        <button class="btn-icon" data-action="fullscreen">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="diagram-{diagram_id}" class="diagram-canvas"></div>
+            </div>
+            <script src="/assets/js/diagrams/{diagram_id}.js"></script>
+            '''
+        
+        return re.sub(pattern, replace_diagram, html)
+    
+    def _inject_brain_analogies(self, html: str) -> str:
+        """
+        Inject brain analogy cards when certain keywords detected.
+        
+        Keywords: "MasterOrchestrator", "IntentRouter", "LENS", etc.
+        
+        Inserts brain analogy card immediately after first mention.
+        """
+        brain_analogies = {
+            "MasterOrchestrator": {
+                "brain_part": "Prefrontal Cortex",
+                "image": "/assets/images/brain/prefrontal-cortex.svg",
+                "function": "Executive control center",
+                "role": "Coordinates all orchestrators and makes high-level decisions"
+            },
+            "IntentRouter": {
+                "brain_part": "Thalamus",
+                "image": "/assets/images/brain/thalamus.svg",
+                "function": "Sensory relay station",
+                "role": "Routes requests to appropriate specialist orchestrators"
+            },
+            # ... more mappings
+        }
+        
+        for component, analogy in brain_analogies.items():
+            if component in html and f"brain-analogy-{component}" not in html:
+                # Insert analogy card after first mention
+                pattern = f"(<p>.*?{component}.*?</p>)"
+                replacement = f'''\\1
+                <div class="brain-analogy-inline glassmorphism-card" id="brain-analogy-{component}">
+                    <div class="analogy-compact">
+                        <img src="{analogy["image"]}" alt="{analogy["brain_part"]}">
+                        <div>
+                            <strong>Brain Analogy:</strong> {analogy["brain_part"]}
+                            <p>{analogy["function"]} → {analogy["role"]}</p>
+                        </div>
+                    </div>
+                </div>
+                '''
+                html = re.sub(pattern, replacement, html, count=1)
+        
+        return html
+```
+
+**Navigation Builder (Multi-Level Site Nav):**
+
+```python
+class NavigationBuilder:
+    """
+    Builds hierarchical navigation from cortex-architecture/ folder structure.
+    """
+    
+    def build_navigation(self, docs_root: Path) -> Dict:
+        """
+        Scans cortex-architecture/ and builds navigation tree.
+        
+        Input:
+          cortex-architecture/
+            ├── index.md
+            ├── capabilities/
+            │   ├── overview.md
+            │   ├── ai-intelligence.md
+            ├── orchestration/
+            │   ├── overview.md
+            │   ├── master-orchestrator.md
+        
+        Output:
+          {
+            "sections": [
+              {
+                "title": "Capabilities",
+                "icon": "fa-puzzle-piece",
+                "url": "/architecture/capabilities/",
+                "children": [
+                  {"title": "Overview", "url": "/architecture/capabilities/overview.html"},
+                  {"title": "AI Intelligence", "url": "/architecture/capabilities/ai-intelligence.html"}
+                ]
+              },
+              ...
+            ]
+          }
+        """
+        sections = []
+        
+        for section_dir in sorted(docs_root.iterdir()):
+            if section_dir.is_dir():
+                section = {
+                    "title": section_dir.name.replace('-', ' ').title(),
+                    "icon": self._get_section_icon(section_dir.name),
+                    "url": f"/architecture/{section_dir.name}/",
+                    "children": []
+                }
+                
+                for md_file in sorted(section_dir.glob("*.md")):
+                    page_title = md_file.stem.replace('-', ' ').title()
+                    section["children"].append({
+                        "title": page_title,
+                        "url": f"/architecture/{section_dir.name}/{md_file.stem}.html"
+                    })
+                
+                sections.append(section)
+        
+        return {"sections": sections}
+    
+    def _get_section_icon(self, section_name: str) -> str:
+        """Map section names to Font Awesome icons."""
+        icons = {
+            "capabilities": "fa-puzzle-piece",
+            "orchestration": "fa-brain",
+            "lens": "fa-eye",
+            "toolkit": "fa-toolbox",
+            "infrastructure": "fa-server",
+            "mcp": "fa-plug",
+            "diagrams": "fa-project-diagram",
+            "learning": "fa-graduation-cap"
+        }
+        return icons.get(section_name, "fa-file-alt")
+```
+
+**Complete Build Pipeline:**
+
+```python
+def generate_html_site(self):
+    """
+    Full HTML site generation with dark glassmorphism theme.
+    
+    Pipeline:
+      1. Extract registry data (__wiring_contract__.yaml)
+      2. Scan cortex-architecture/ for Markdown files
+      3. For each MD file:
+         a. Convert to HTML with glassmorphism cards
+         b. Inject brain analogies
+         c. Convert diagrams to D3.js
+         d. Apply Jinja2 template (base + components)
+         e. Write to _build/site/
+      4. Build navigation tree
+      5. Generate landing page with brain analogy grid
+      6. Generate persona-specific views
+      7. Copy assets (CSS, JS, images)
+      8. Minify and bundle
+      9. Generate sitemap.xml
+     10. Validate all links
+    """
+    
+    # Step 1-2: Discovery
+    registry = self.extract_registry()
+    md_files = list(Path("_workspaces/cortex-architecture").rglob("*.md"))
+    
+    # Step 3: Convert Markdown to HTML
+    converter = MarkdownToHTMLConverter()
+    for md_file in md_files:
+        html_content = converter.convert(md_file)
+        
+        # Apply Jinja2 template
+        template = self.jinja_env.get_template("pages/architecture-section.html")
+        final_html = template.render(
+            page_title=md_file.stem.replace('-', ' ').title(),
+            content=html_content,
+            navigation=self.navigation_tree,
+            registry=registry
+        )
+        
+        # Write output
+        output_path = Path("_build/site") / md_file.relative_to("_workspaces/cortex-architecture").with_suffix(".html")
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(final_html)
+    
+    # Step 4-5: Build navigation + landing page
+    self.navigation_tree = NavigationBuilder().build_navigation(Path("_workspaces/cortex-architecture"))
+    self._generate_landing_page()
+    
+    # Step 6-10: Remaining steps
+    self._generate_persona_views()
+    self._copy_and_optimize_assets()
+    self._generate_sitemap()
+    self._validate_links()
+    
+    print("✅ HTML site generation complete")
+```
+
+---
+
+### Brain Analogy Integration
 
 **Add brain analogy explanations to landing page:**
 
