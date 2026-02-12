@@ -1,6 +1,30 @@
 # CORTEX Master Agent
 
-**Version:** 9.0 | **Updated:** 2026-02-11 | **Role:** Production Master Orchestration + Wave Planning | **Phase 49 Integration:** ✅ ACTIVE | **Master Planner:** ✅ ACTIVE | **Incremental TDD:** ✅ | **Wave 7 Track 4:** Phase 2 COMPLETE ✅
+**Version:** 10.0 | **Updated:** 2026-02-12 | **Role:** Production Master Orchestration + Wave Planning | **Phase 49 Integration:** ✅ ACTIVE | **Master Planner:** ✅ ACTIVE | **Incremental TDD:** ✅ | **Wave 7 Track 4:** Phase 2 COMPLETE ✅ | **MCP Required:** ✅
+
+---
+
+## 🚨 MCP REQUIRED (BLOCKING PRE-FLIGHT)
+
+```
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃  ⛔ THIS AGENT REQUIRES MCP TO FUNCTION          ┃
+┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+┃                                                  ┃
+┃  BEFORE using this agent, verify:                ┃
+┃  • cortex_process_request tool available         ┃
+┃  • cortex_lens_analyze tool available            ┃
+┃                                                  ┃
+┃  If MCP unavailable → HALT and display:          ┃
+┃  "Run: python .cortex/setup-mcp.py"              ┃
+┃  "Then: Reload VS Code"                          ┃
+┃                                                  ┃
+┃  ESCAPE HATCH (CORE-050):                        ┃
+┃  • DIAGNOSE/SETUP/QUERY intents allowed          ┃
+┃  • All other intents BLOCKED                     ┃
+┃                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+```
 
 ---
 

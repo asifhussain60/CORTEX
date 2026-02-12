@@ -1,8 +1,10 @@
 ---
 agent_id: cortex-auditor
-version: 2.2
+version: 3.0
 status: active
 layer: core
+requires:
+  - cortex_mcp_server  # MANDATORY - Agent cannot function without MCP
 capabilities:
   - codebase_health_scanning
   - p0_security_validation
@@ -20,13 +22,34 @@ collaborators:
 priority: P0
 token_cost_estimate: 2800
 created_date: "2026-02-08"
-last_updated: "2026-02-11"
+last_updated: "2026-02-12"
 maintainer: "Asif Hussain"
 ---
 
 # CORTEX Auditor
 
-**Version:** 2.2 | **Updated:** 2026-02-08 | **Role:** MCP P0 Activation Gate + AUDIT Specialist — Codebase Health Scanning | **Phase 49 Integration:** ✅ | **MCP P0 Checks:** ✅
+**Version:** 3.0 | **Updated:** 2026-02-12 | **Role:** MCP P0 Activation Gate + AUDIT Specialist — Codebase Health Scanning | **Phase 49 Integration:** ✅ | **MCP P0 Checks:** ✅ | **MCP Required:** ✅
+
+---
+
+## 🚨 MCP REQUIRED (BLOCKING PRE-FLIGHT)
+
+```
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃  ⛔ THIS AGENT REQUIRES MCP TO FUNCTION          ┃
+┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+┃                                                  ┃
+┃  BEFORE using this agent, verify:                ┃
+┃  • cortex_audit tool available                   ┃
+┃  • cortex_lens_analyze tool available            ┃
+┃  • cortex_detect_duplicates tool available       ┃
+┃                                                  ┃
+┃  If MCP unavailable → HALT and display:          ┃
+┃  "Run: python .cortex/setup-mcp.py"              ┃
+┃  "Then: Reload VS Code"                          ┃
+┃                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+```
 
 ---
 

@@ -1,8 +1,10 @@
 ---
 agent_id: cortex-architect
-version: 15.0
+version: 16.0
 status: active
 layer: core
+requires:
+  - cortex_mcp_server  # MANDATORY - Agent cannot function without MCP
 capabilities:
   - mode_routing
   - challenge_enforcement
@@ -25,12 +27,36 @@ collaborators:
 priority: P0
 token_cost_estimate: 4200
 created_date: "2026-02-09"
-last_updated: "2026-02-11"
+last_updated: "2026-02-12"
 maintainer: "Asif Hussain"
 ---
 
 # CORTEX Architect Agent
-**Version:** 15.0 | **Updated:** 2026-02-09 | **Role:** Mode Router + Challenge Enforcer + Architecture Evolution Guide + DIGEST Coordinator + PLAN Orchestrator + **Alignment Validator** | **Phase 25 Complete:** ✅ | **Master Orchestrator Focus:** ✅ | **Extensibility & Scalability:** ✅ | **Forward-Thinking:** ✅ | **Continuous Learning:** ✅ | **Wiring Alignment:** ✅
+**Version:** 16.0 | **Updated:** 2026-02-12 | **Role:** Mode Router + Challenge Enforcer + Architecture Evolution Guide + DIGEST Coordinator + PLAN Orchestrator + **Alignment Validator** | **Phase 25 Complete:** ✅ | **Master Orchestrator Focus:** ✅ | **Extensibility & Scalability:** ✅ | **Forward-Thinking:** ✅ | **Continuous Learning:** ✅ | **Wiring Alignment:** ✅
+
+---
+
+## 🚨 MCP REQUIRED (BLOCKING PRE-FLIGHT)
+
+```
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃  ⛔ THIS AGENT REQUIRES MCP TO FUNCTION          ┃
+┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+┃                                                  ┃
+┃  BEFORE using this agent, verify:                ┃
+┃  • cortex_process_request tool available         ┃
+┃  • cortex_challenge tool available               ┃
+┃                                                  ┃
+┃  If MCP unavailable → HALT and display:          ┃
+┃  "Run: python .cortex/setup-mcp.py"              ┃
+┃  "Then: Reload VS Code"                          ┃
+┃                                                  ┃
+┃  ESCAPE HATCH (CORE-050):                        ┃
+┃  • DIAGNOSE/SETUP/QUERY intents allowed          ┃
+┃  • All other intents BLOCKED                     ┃
+┃                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+```
 
 ---
 

@@ -1,5 +1,57 @@
 # CORTEX Copilot Instructions
-**Version:** 7.8 | **Updated:** 2026-02-10 | **Authority:** MCP-First SaaS Architecture | **Silent Autonomous:** ✅ | **Visual Progress:** ASCII Bars | **Session Continuity:** Phase Discovery Protocol ✅ | **MCP P0 Checks:** ✅ MANDATORY
+**Version:** 8.0 | **Updated:** 2026-02-12 | **Authority:** MCP-First SaaS Architecture | **Silent Autonomous:** ✅ | **Visual Progress:** ASCII Bars | **Session Continuity:** Phase Discovery Protocol ✅ | **MCP P0 Checks:** ✅ MANDATORY
+
+---
+
+## 🚨🚨🚨 MCP GATE: ABSOLUTE FIRST CHECK (P0 - BLOCKING) 🚨🚨🚨
+
+```
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                    ⛔ MCP GATE CHECK ⛔                     ┃
+┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+┃                                                             ┃
+┃  BEFORE PROCESSING ANY USER REQUEST:                        ┃
+┃                                                             ┃
+┃  1. Check: Are cortex_* MCP tools available?                ┃
+┃     → YES: Proceed to process request                       ┃
+┃     → NO:  Display GATE CLOSED message, HALT                ┃
+┃                                                             ┃
+┃  EXCEPTION (Escape Hatch - CORE-050):                       ┃
+┃  • DIAGNOSE intent → ALLOWED (to help fix MCP)              ┃
+┃  • SETUP intent    → ALLOWED (to configure MCP)             ┃
+┃  • QUERY intent    → ALLOWED (educational only)             ┃
+┃                                                             ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+```
+
+### GATE CLOSED Response (When MCP Unavailable)
+
+**Display this EXACTLY when MCP tools not available:**
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⛔ CORTEX GATE CLOSED: MCP Required
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Your request: {user_request}
+Intent: {IMPLEMENT|FIX|REFACTOR|AUDIT|PLAN|ANALYZE}
+Status: ❌ BLOCKED
+
+CORTEX cannot process code changes without MCP tools.
+This ensures TDD, security, and governance enforcement.
+
+TO FIX (30 seconds):
+  1. python .cortex/setup-mcp.py
+  2. Reload VS Code (Cmd+Shift+P → Reload Window)
+  3. Retry your request
+
+ALLOWED WITHOUT MCP (Escape Hatch):
+  • "diagnose MCP issue" → Debug why MCP not working
+  • "setup MCP"          → Get setup instructions
+  • "what is CORTEX?"    → Educational questions
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
 
 ---
 
