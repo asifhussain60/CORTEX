@@ -84,9 +84,12 @@ class MCPFirstDetector:
             "refactor",
         ]
     
-    def detect_violations(self) -> MCPComplianceReport:
+    def detect_violations(self, target_path: Optional[Path] = None) -> MCPComplianceReport:
         """
         Detect all MCP-FIRST violations in workspace.
+        
+        Args:
+            target_path: Optional path to scan (defaults to cortex/)
         
         Returns:
             MCPComplianceReport with violations
@@ -94,13 +97,17 @@ class MCPFirstDetector:
         self.violations = []
         self.files_checked = 0
         
+        # Use provided target or default to cortex/
+        scan_path = target_path if target_path else (self.workspace_root / "cortex")
+        if not scan_path.is_absolute():
+            scan_path = self.workspace_root / scan_path
+        
         # Check Python files for direct file operations
-        cortex_dir = self.workspace_root / "cortex"
-        if cortex_dir.exists():
-            self._check_python_files(cortex_dir)
+        if scan_path.exists():
+            self._check_python_files(scan_path)
         
         # Check orchestrator files (high-risk area)
-        orchestrators_dir = self.workspace_root / "cortex" / "orchestrators"
+        orchestrators_dir = scan_path / "orchestrators"
         if orchestrators_dir.exists():
             self._check_orchestrators(orchestrators_dir)
         
@@ -116,6 +123,54 @@ class MCPFirstDetector:
             compliance_rate=compliance_rate,
             timestamp=datetime.now()
         )
+    
+    def scan_code_string(self, code: str, filename: str = "<string>") -> List[MCPViolation]:
+        """
+        Scan code string for MCP-FIRST violations.
+        
+        Args:
+            code: Python code to scan
+            filename: Name for reporting
+        
+        Returns:
+            List of violations found
+        """
+        violations = []
+        
+        # Check for forbidden patterns
+        for pattern, description in self.forbidden_patterns.items():
+            matches = list(re.finditer(pattern, code))
+            
+            for match in matches:
+                line_num = code[:match.start()].count('\n') + 1
+                
+                # Check if in implementation context
+                if self._is_implementation_context(code, match.start()):
+                    violations.append(MCPViolation(
+                        file_path=filename,
+                        line_number=line_num,
+                        violation_type="DIRECT_FILE_OPERATION",
+                        description=f"{pattern}: {description}",
+                        detected_at=datetime.now(),
+                        severity="P0"
+                    ))
+        
+        # Check for direct file I/O (open())
+        if "open(" in code and self._is_implementation_context(code, 0):
+            # Find line number
+            idx = code.find("open(")
+            line_num = code[:idx].count('\n') + 1 if idx >= 0 else 0
+            
+            violations.append(MCPViolation(
+                file_path=filename,
+                line_number=line_num,
+                violation_type="DIRECT_FILE_IO",
+                description="Direct open() file creation (use cortex_process_request)",
+                detected_at=datetime.now(),
+                severity="P0"
+            ))
+        
+        return violations
     
     def _check_python_files(self, directory: Path):
         """
@@ -211,17 +266,22 @@ class MCPFirstDetector:
         Returns:
             True if in implementation context
         """
-        # Get surrounding context (500 chars before)
-        context_start = max(0, position - 500)
-        context = content[context_start:position]
+        # Get surrounding context (entire content for string scans)
+        context = content
         
-        # Check for implementation intent keywords
+        # Check for implementation intent keywords (case-insensitive)
+        context_lower = context.lower()
         for intent in self.implementation_intents:
-            if intent in context:
+            if intent.lower() in context_lower:
                 return True
         
         # Check for orchestrator execute/process methods
         if "def execute(" in context or "def process(" in context:
+            return True
+        
+        # Default: assume implementation context if contains open()
+        # (Conservative approach - flag for review)
+        if "open(" in content:
             return True
         
         return False

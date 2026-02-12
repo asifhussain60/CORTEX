@@ -78,10 +78,137 @@ class CoreRulesVerifier:
             "CORE-048": self._check_holistic_validation,
             "CORE-049": self._check_silent_autonomous,
         }
+        
+        # Severity mapping for rules
+        self.rule_severity_map = {
+            "CORE-002": "P0-CRITICAL",
+            "CORE-008": "P0-CRITICAL",
+            "CORE-011": "P1-HIGH",
+            "CORE-012": "P1-HIGH",
+            "CORE-013": "P1-HIGH",
+            "CORE-026": "P0-CRITICAL",
+            "CORE-027": "P1-HIGH",
+            "CORE-028": "P1-HIGH",
+            "CORE-029": "P0-CRITICAL",
+            "CORE-030": "P0-CRITICAL",
+            "CORE-035": "P0-CRITICAL",
+            "CORE-036": "P1-HIGH",
+            "CORE-047": "P1-HIGH",
+            "CORE-048": "P0-CRITICAL",
+            "CORE-049": "P0-CRITICAL",
+        }
+    
+    def get_rule_severity_map(self) -> Dict[str, str]:
+        """Get severity classification for all rules."""
+        return self.rule_severity_map.copy()
+    
+    def check_rule_002(self, target_path: Path) -> List[Dict]:
+        """Check CORE-002: No markdown generation."""
+        original_root = self.workspace_root
+        self.workspace_root = target_path if target_path.is_absolute() else self.workspace_root / target_path
+        self.violations = []
+        self._check_markdown_suppression()
+        self.workspace_root = original_root
+        return [{"file": v.file_path, "line": v.line_number, "desc": v.description} for v in self.violations]
+    
+    def check_rule_008(self, target_path: Path) -> List[Dict]:
+        """Check CORE-008: TDD mandatory."""
+        original_root = self.workspace_root
+        self.workspace_root = target_path if target_path.is_absolute() else self.workspace_root / target_path
+        self.violations = []
+        self._check_tdd_mandatory()
+        self.workspace_root = original_root
+        return [{"file": v.file_path, "line": v.line_number, "desc": v.description} for v in self.violations]
+    
+    def check_rule_011(self, target_path: Path) -> List[Dict]:
+        """Check CORE-011: Type hints mandatory."""
+        original_root = self.workspace_root
+        self.workspace_root = target_path if target_path.is_absolute() else self.workspace_root / target_path
+        self.violations = []
+        self._check_type_hints()
+        self.workspace_root = original_root
+        return [{"file": v.file_path, "line": v.line_number, "desc": v.description} for v in self.violations]
+    
+    def check_rule_029(self, target_path: Path) -> List[Dict]:
+        """Check CORE-029: Response header mandatory."""
+        original_root = self.workspace_root
+        self.workspace_root = target_path if target_path.is_absolute() else self.workspace_root / target_path
+        self.violations = []
+        self._check_response_headers()
+        self.workspace_root = original_root
+        return [{"file": v.file_path, "line": v.line_number, "desc": v.description} for v in self.violations]
+    
+    def check_rule_035(self, target_path: Path) -> List[Dict]:
+        """Check CORE-035: Single canonical implementation."""
+        original_root = self.workspace_root
+        self.workspace_root = target_path if target_path.is_absolute() else self.workspace_root / target_path
+        self.violations = []
+        self._check_single_canonical()
+        self.workspace_root = original_root
+        return [{"file": v.file_path, "line": v.line_number, "desc": v.description} for v in self.violations]
+    
+    def check_rule_049(self, target_path: Path) -> List[Dict]:
+        """Check CORE-049: MCP-FIRST enforcement."""
+        original_root = self.workspace_root
+        self.workspace_root = target_path if target_path.is_absolute() else self.workspace_root / target_path
+        self.violations = []
+        self._check_silent_autonomous()
+        self.workspace_root = original_root
+        return [{"file": v.file_path, "line": v.line_number, "desc": v.description} for v in self.violations]
+    
+    def verify_all_rules(self, target_path: Path) -> Dict:
+        """
+        Verify all CORE rules compliance.
+        
+        Args:
+            target_path: Path to verify (e.g., cortex/, cortex/orchestrators/)
+        
+        Returns:
+            Dict with rules_checked, total_violations, compliance_score
+        """
+        self.violations = []
+        self.rules_checked = 0
+        
+        # Store target path for rule checks
+        original_root = self.workspace_root
+        self.workspace_root = target_path if target_path.is_absolute() else self.workspace_root / target_path
+        
+        # Run all rule checks
+        for rule_id, check_func in self.core_rules.items():
+            try:
+                check_func()
+                self.rules_checked += 1
+            except Exception as e:
+                # Log but don't fail entire verification
+                print(f"Warning: Rule {rule_id} check failed: {e}")
+        
+        # Restore original root
+        self.workspace_root = original_root
+        
+        compliance_rate = (
+            (self.rules_checked - len(self.violations)) / self.rules_checked * 100
+            if self.rules_checked > 0 else 0.0
+        )
+        
+        return {
+            "rules_checked": self.rules_checked,
+            "total_violations": len(self.violations),
+            "compliance_score": compliance_rate,
+            "violations": [
+                {
+                    "rule_id": v.rule_id,
+                    "file_path": v.file_path,
+                    "line_number": v.line_number,
+                    "description": v.description,
+                    "severity": v.severity
+                }
+                for v in self.violations
+            ]
+        }
     
     def verify_all(self) -> ComplianceReport:
         """
-        Verify all CORE rules compliance.
+        Legacy method for compatibility.
         
         Returns:
             ComplianceReport with all violations detected
