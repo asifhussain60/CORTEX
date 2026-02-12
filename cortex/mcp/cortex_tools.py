@@ -137,36 +137,110 @@ class CORTEXTotalRecallTool(Tool):
         )
 
     def execute(self, query: str, scope: str = "all", include_usage: bool = False, **kwargs: Any) -> Dict[str, Any]:
-        """Execute feature discovery."""
+        """Execute feature discovery across CORTEX components."""
         try:
-            # Simple implementation: Search for query in orchestrators and tools
-            from cortex.mcp.mcp_tools_catalog import get_mcp_tools_catalog
-
-            catalog = get_mcp_tools_catalog()
-            # Use catalog._tools dict directly (contains MCPToolMetadata objects)
-            tools_dict = catalog._tools
-
-            # Filter tools matching query
-            matching_tools = [
-                tool for tool in tools_dict.values()
-                if query.lower() in tool.name.lower() or query.lower() in tool.description.lower()
+            results = {
+                "orchestrators": [],
+                "mcp_tools": [],
+                "agents": [],
+                "knowledge_areas": []
+            }
+            
+            query_lower = query.lower()
+            
+            # Search orchestrators
+            try:
+                from cortex.orchestrators import get_orchestrator_count_by_category
+                orch_counts = get_orchestrator_count_by_category()
+                
+                # Known orchestrator categories and their purposes
+                orchestrator_map = {
+                    "master": "Main coordination and routing",
+                    "tdd": "Test-driven development workflow",
+                    "lens": "Language→Examination→Navigation→Synthesis analysis",
+                    "enforcement": "Governance rule enforcement (7-agent system)",
+                    "challenge": "Generate AI-driven challenges to requests",
+                    "planning": "Phase and task planning",
+                    "refactoring": "Code improvement and restructuring",
+                    "intent_router": "Intent classification and routing"
+                }
+                
+                for orch_name, description in orchestrator_map.items():
+                    if query_lower in orch_name or query_lower in description.lower():
+                        results["orchestrators"].append({
+                            "name": f"{orch_name.title()}Orchestrator",
+                            "description": description,
+                            "category": "core"
+                        })
+            except Exception as e:
+                logger.debug(f"Orchestrator search skipped: {e}")
+            
+            # Search MCP tools
+            try:
+                from cortex.mcp.cortex_tools import get_cortex_tools
+                tools = get_cortex_tools()
+                
+                for tool in tools:
+                    tool_def = tool.definition
+                    if (query_lower in tool_def.name.lower() or 
+                        query_lower in tool_def.description.lower()):
+                        results["mcp_tools"].append({
+                            "name": tool_def.name,
+                            "description": tool_def.description,
+                            "category": tool_def.metadata.get("category", "unknown")
+                        })
+            except Exception as e:
+                logger.debug(f"MCP tools search skipped: {e}")
+            
+            # Search governance agents
+            if scope == "all" or scope == "governance":
+                agent_map = {
+                    "governance_enforcement": "TDD, type hints, docstrings enforcement",
+                    "security_checkpoint": "Git discipline, audit trail integrity",
+                    "compliance_validation": "Domain-specific compliance checks",
+                    "file_naming_enforcement": "kebab-case enforcement, plan file validation",
+                    "incremental_execution": "<500 LOC increments enforcement",
+                    "markdown_suppression": "Block markdown report generation",
+                    "architecture_integrity": "Versioned filenames, performance checks"
+                }
+                
+                for agent_name, description in agent_map.items():
+                    if query_lower in agent_name or query_lower in description.lower():
+                        results["agents"].append({
+                            "name": agent_name,
+                            "description": description,
+                            "category": "governance"
+                        })
+            
+            # Search knowledge areas
+            knowledge_areas = [
+                {"name": "python", "description": "Python best practices, PEP standards"},
+                {"name": "typescript", "description": "TypeScript patterns, type safety"},
+                {"name": "security", "description": "OWASP Top 10, secure coding"},
+                {"name": "tdd", "description": "Test-driven development patterns"},
+                {"name": "architecture", "description": "System design, SOLID principles"},
+                {"name": "performance", "description": "Optimization, profiling, caching"}
             ]
-
+            
+            for area in knowledge_areas:
+                if query_lower in area["name"] or query_lower in area["description"].lower():
+                    results["knowledge_areas"].append(area)
+            
+            # Calculate totals
+            total_matches = sum(len(v) for v in results.values())
+            
             return {
                 "status": "success",
                 "query": query,
                 "scope": scope,
-                "matches_found": len(matching_tools),
-                "matches": [
-                    {
-                        "name": t.name,
-                        "description": t.description,
-                        "category": t.category,
-                        "status": t.status.value
-                    }
-                    for t in matching_tools[:10]  # Limit to 10 matches
-                ],
-                "total_tools_searched": len(tools_dict)
+                "matches_found": total_matches,
+                "results": results,
+                "summary": {
+                    "orchestrators": len(results["orchestrators"]),
+                    "mcp_tools": len(results["mcp_tools"]),
+                    "agents": len(results["agents"]),
+                    "knowledge_areas": len(results["knowledge_areas"])
+                }
             }
 
         except Exception as e:
