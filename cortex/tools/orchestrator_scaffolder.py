@@ -22,6 +22,7 @@ from typing import Any, Dict, List, Optional, Set, Union
 
 import yaml
 
+from cortex.tools.naming_utils import to_class_name, to_module_name
 from cortex.tools.template_parser import ParsedTemplate, TemplateParser
 
 
@@ -1094,14 +1095,11 @@ class {class_name}:
 
     def _to_class_name(self, name: str) -> str:
         """Convert name to PascalCase class name."""
-        parts = re.split(r'[-_\s]+', name)
-        return ''.join(part.capitalize() for part in parts)
+        return to_class_name(name)
 
     def _to_module_name(self, name: str) -> str:
         """Convert name to snake_case module name."""
-        name = re.sub(r'[-\s]+', '_', name.lower())
-        name = re.sub(r'([a-z])([A-Z])', r'\1_\2', name).lower()
-        return name
+        return to_module_name(name)
 
     def _get_parameters(self, template: ParsedTemplate) -> List[Dict[str, Any]]:
         """Extract parameters from template."""

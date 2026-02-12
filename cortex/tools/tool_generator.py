@@ -18,6 +18,7 @@ from enum import Enum, auto
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Set
 
+from cortex.tools.naming_utils import to_class_name, to_module_name
 from cortex.tools.template_parser import ParsedTemplate, TemplateSection
 
 
@@ -398,17 +399,11 @@ class ToolGenerator:
 
     def _to_class_name(self, name: str) -> str:
         """Convert name to PascalCase class name."""
-        # Remove special characters and split on separators
-        parts = re.split(r'[-_\s]+', name)
-        return ''.join(part.capitalize() for part in parts)
+        return to_class_name(name)
 
     def _to_module_name(self, name: str) -> str:
         """Convert name to snake_case module name."""
-        # Convert to lowercase and replace separators
-        name = re.sub(r'[-\s]+', '_', name.lower())
-        # Handle camelCase
-        name = re.sub(r'([a-z])([A-Z])', r'\1_\2', name).lower()
-        return name
+        return to_module_name(name)
 
     def _get_parameters(self, template: ParsedTemplate) -> List[Dict[str, Any]]:
         """Extract parameter definitions from template."""
