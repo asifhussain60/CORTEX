@@ -327,6 +327,134 @@ echo -e "${GREEN}✅ Registry blacklist: No violations detected${NC}"
 
 # AC_COMPLETE: AC-WAVE-8-S2-PRECOMMIT-001 ✅
 
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# CORE-095: Folder Structure Governance (Wave 9 ENH-096)
+# AC_START: AC-WAVE-9-ENH-096-S4-001
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+echo ""
+echo -e "${BLUE}Checking CORE-095: Folder structure governance...${NC}"
+
+# Approved top-level folders (from CORE-095)
+APPROVED_FOLDERS=(
+    "cortex" "cortex_brain" "cortex_lens" "cortex-registry"
+    "tests" "docs" "company" "deployment" "scripts"
+    "_archives" "_workspaces"
+)
+
+STRUCTURE_VIOLATIONS=0
+UNAPPROVED_FOLDERS=""
+
+# Check for new top-level folders
+for folder in */ ; do
+    folder_name="${folder%/}"
+    
+    # Skip .git and hidden folders
+    if [[ "$folder_name" == .* ]]; then
+        continue
+    fi
+    
+    # Check if approved
+    is_approved=false
+    for approved in "${APPROVED_FOLDERS[@]}"; do
+        if [[ "$folder_name" == "$approved" ]]; then
+            is_approved=true
+            break
+        fi
+    done
+    
+    if [[ "$is_approved" == false ]]; then
+        # Check if any files in this folder are staged
+        if git diff --cached --name-only | grep -q "^$folder_name/"; then
+            UNAPPROVED_FOLDERS="${UNAPPROVED_FOLDERS}\n  ${RED}❌${NC} $folder_name/ (not in approved list)"
+            STRUCTURE_VIOLATIONS=$((STRUCTURE_VIOLATIONS + 1))
+        fi
+    fi
+done
+
+if [ $STRUCTURE_VIOLATIONS -gt 0 ]; then
+    echo ""
+    echo -e "${RED}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${RED}Pre-commit check FAILED (CORE-095)${NC}"
+    echo -e "${RED}Found $STRUCTURE_VIOLATIONS unapproved folder(s)${NC}"
+    echo -e "${RED}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo ""
+    echo -e "${YELLOW}Unapproved folders:${NC}"
+    echo -e "${UNAPPROVED_FOLDERS}"
+    echo ""
+    echo -e "${YELLOW}Resolution:${NC}"
+    echo -e "  1. Check: cortex_brain/tier0/governance/CORE-095-folder-structure.yaml"
+    echo -e "  2. If legitimate: Add to approved list in CORE-095"
+    echo -e "  3. If legacy: Move to _archives/ or delete"
+    echo ""
+    echo -e "${CYAN}Policy: Repository structure must be intentional${NC}"
+    echo -e "${CYAN}Reason: Prevents folder sprawl + maintains clarity${NC}"
+    echo ""
+    exit 1
+fi
+
+echo -e "${GREEN}✅ CORE-095: Folder structure verified${NC}"
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# CORE-096: Build Artifact Prevention (Wave 9 ENH-096)
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+echo ""
+echo -e "${BLUE}Checking CORE-096: Build artifact prevention...${NC}"
+
+# Blocked build artifact patterns (from CORE-096)
+ARTIFACT_PATTERNS=(
+    "dist/" "build/" ".pytest_cache/" "__pycache__/"
+    "*.egg-info/" ".eggs/" ".tox/" ".coverage"
+    "htmlcov/" ".mypy_cache/" ".pyc" ".pyo"
+)
+
+ARTIFACT_VIOLATIONS=0
+ARTIFACT_FILES=""
+
+# Check staged files for build artifacts
+for pattern in "${ARTIFACT_PATTERNS[@]}"; do
+    # Convert glob pattern to grep regex
+    grep_pattern=$(echo "$pattern" | sed 's/\*/.*/' | sed 's/\/$/./')
+    
+    while IFS= read -r file; do
+        if [[ -n "$file" ]] && echo "$file" | grep -q "$grep_pattern"; then
+            # Exclude governance rule files (CORE-096-build-artifacts.yaml is a rule, not an artifact)
+            if [[ "$file" == *"/tier0/governance/"* ]] || [[ "$file" == *"/governance/rules/"* ]]; then
+                continue
+            fi
+            
+            ARTIFACT_FILES="${ARTIFACT_FILES}\n  ${RED}❌${NC} $file"
+            ARTIFACT_VIOLATIONS=$((ARTIFACT_VIOLATIONS + 1))
+        fi
+    done <<< "$(git diff --cached --name-only)"
+done
+
+if [ $ARTIFACT_VIOLATIONS -gt 0 ]; then
+    echo ""
+    echo -e "${RED}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${RED}Pre-commit check FAILED (CORE-096)${NC}"
+    echo -e "${RED}Found $ARTIFACT_VIOLATIONS build artifact(s)${NC}"
+    echo -e "${RED}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo ""
+    echo -e "${YELLOW}Build artifacts detected:${NC}"
+    echo -e "${ARTIFACT_FILES}"
+    echo ""
+    echo -e "${YELLOW}Resolution:${NC}"
+    echo -e "  1. Unstage artifacts: git reset HEAD <file>"
+    echo -e "  2. Update .gitignore if pattern missing"
+    echo -e "  3. Run: make clean (to remove artifacts)"
+    echo ""
+    echo -e "${CYAN}Policy: Build artifacts must never be committed${NC}"
+    echo -e "${CYAN}Reason: Bloats repo + causes merge conflicts${NC}"
+    echo ""
+    exit 1
+fi
+
+echo -e "${GREEN}✅ CORE-096: No build artifacts detected${NC}"
+
+# AC_COMPLETE: AC-WAVE-9-ENH-096-S4-001 ✅
+
 echo ""
 echo -e "${GREEN}✅ All pre-commit checks passed${NC}"
 exit 0
