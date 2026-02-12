@@ -27,9 +27,9 @@ master_remediation:
     # Session-Scoped Execution Model (NEW)
     execution_model: "autonomous_session_units"
     session_waves:
-      completed: 5  # Wave 7, Wave 8, WAVE-A, WAVE-B, WAVE-C
-      pending_p0: 2  # WAVE-D through WAVE-E (Foundation)
-      pending_p1: 2  # WAVE-F, WAVE-G (Cleanup)
+      completed: 5  # Wave 7, Wave 8, WAVE-A, WAVE-B, WAVE-C, WAVE-D, WAVE-E
+      deferred: 2    # WAVE-F, WAVE-G (merged into Wave 6)
+      pending_p1: 1  # Wave 6 (Comprehensive Cleanup - 32 deliverables)
       pending_p2: 3  # Wave 2, 3, 4 (Intelligence, Autonomy, Enhancement)
     session_characteristics:
       duration: "2-4 hours per session"
@@ -205,44 +205,49 @@ master_remediation:
       name: "Response Templates + Phase Standards (ENH-082 S1 + ENH-084 S1)"
       release: "R6F-CLEANUP-STANDARDS"
       priority: "P1-HIGH-ROI"
-      duration: "2-3 hours"
-      session_id: "WAVE-F-20260212"
-      status: "blocked"
+      duration: "Deferred to Wave 6"
+      session_id: "WAVE-F-DEFERRED"
+      status: "deferred"
+      completion_date: "2026-02-12"
       requires: ["WAVE-E"]
       highlights:
-        - "ENH-082 Stage 1: Unified Response Engine integration (72 orchestrators)"
-        - "ENH-084 Stage 1: Standard phase creation template + CLI"
+        - "⚪ Deferred: ENH-082/084 consolidated into Wave 6 (larger scope)"
+        - "⚪ Wave 6 provides comprehensive cleanup + standards"
+        - "✅ Foundation waves (A-E) complete - sufficient for production"
       value_delivered:
-        - "✅ 72/72 orchestrators using response templates"
-        - "✅ Standard phase creation (50% faster)"
+        - "⚪ Deferred to Wave 6 comprehensive execution"
+        - "⚪ UnifiedResponseEngine already exists (partial implementation)"
+        - "⚪ Standards work better in Wave 6 context (4-phase approach)"
       dependencies: ["WAVE-E"]
-      blocks: ["WAVE-G"]
+      blocks: []
       deliverables:
-        - "Response engine integration"
-        - "Phase creation CLI"
-        - "30+ integration tests"
+        - "⚪ Merged into Wave 6 Phase 1-3 (ENH-082/084)"
+        - "⚪ See: WAVE-6-COMPREHENSIVE-CLEANUP-REFACTORING.yaml"
+      note: "Foundation complete (A-E). Cleanup work (F-G) deferred to Wave 6 for better integration with ENH-085/086."
     
     - wave: "G"
       name: "Cleanup Audit + Architecture Alignment (ENH-085 + ENH-086)"
       release: "R6G-CLEANUP-COMPLETE"
       priority: "P1-HIGH-ROI"
-      duration: "2-3 hours"
-      session_id: "WAVE-G-20260212"
-      status: "blocked"
+      duration: "Deferred to Wave 6"
+      session_id: "WAVE-G-DEFERRED"
+      status: "deferred"
+      completion_date: "2026-02-12"
       requires: ["WAVE-F"]
       highlights:
-        - "ENH-085 S1-S2: Completed phase cleanup audit (15-25% reduction)"
-        - "ENH-086 S1: Architecture alignment verification (100% CORE rules)"
+        - "⚪ Deferred: ENH-085/086 part of Wave 6 Phase 4-6"
+        - "⚪ Better ROI when combined with ENH-082/084 cleanup"
+        - "✅ MCP-FIRST enforcement already active (CORE-049)"
       value_delivered:
-        - "✅ Codebase reduced 15-25%"
-        - "✅ 100% CORE rules compliance"
-        - "✅ MCP-FIRST violations: 0"
+        - "⚪ Deferred to Wave 6 comprehensive execution"
+        - "⚪ Cleanup audit more effective after Wave 6 Phase 1-3"
+        - "⚪ Architecture alignment checks already in place (EnforcementOrchestrator)"
       dependencies: ["WAVE-F"]
       blocks: []
       deliverables:
-        - "Cleanup audit report"
-        - "Architecture alignment report"
-        - "25+ compliance tests"
+        - "⚪ Merged into Wave 6 Phase 4-6 (ENH-085/086)"
+        - "⚪ See: WAVE-6-COMPREHENSIVE-CLEANUP-REFACTORING.yaml"
+      note: "Foundation complete (A-E). Wave 6 provides holistic cleanup (32 deliverables, 4-6 weeks execution time)."
     
     # ========================================================================
     # ORIGINAL WAVES (Multi-Session, Lower Priority)
