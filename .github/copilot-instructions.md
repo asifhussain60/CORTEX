@@ -1,5 +1,57 @@
 # CORTEX Copilot Instructions
-**Version:** 7.8 | **Updated:** 2026-02-10 | **Authority:** MCP-First SaaS Architecture | **Silent Autonomous:** ✅ | **Visual Progress:** ASCII Bars | **Session Continuity:** Phase Discovery Protocol ✅ | **MCP P0 Checks:** ✅ MANDATORY
+**Version:** 8.0 | **Updated:** 2026-02-12 | **Authority:** MCP-First SaaS Architecture | **Silent Autonomous:** ✅ | **Visual Progress:** ASCII Bars | **Session Continuity:** Phase Discovery Protocol ✅ | **MCP P0 Checks:** ✅ MANDATORY
+
+---
+
+## 🚨🚨🚨 MCP GATE: ABSOLUTE FIRST CHECK (P0 - BLOCKING) 🚨🚨🚨
+
+```
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                    ⛔ MCP GATE CHECK ⛔                     ┃
+┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+┃                                                             ┃
+┃  BEFORE PROCESSING ANY USER REQUEST:                        ┃
+┃                                                             ┃
+┃  1. Check: Are cortex_* MCP tools available?                ┃
+┃     → YES: Proceed to process request                       ┃
+┃     → NO:  Display GATE CLOSED message, HALT                ┃
+┃                                                             ┃
+┃  EXCEPTION (Escape Hatch - CORE-050):                       ┃
+┃  • DIAGNOSE intent → ALLOWED (to help fix MCP)              ┃
+┃  • SETUP intent    → ALLOWED (to configure MCP)             ┃
+┃  • QUERY intent    → ALLOWED (educational only)             ┃
+┃                                                             ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+```
+
+### GATE CLOSED Response (When MCP Unavailable)
+
+**Display this EXACTLY when MCP tools not available:**
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⛔ CORTEX GATE CLOSED: MCP Required
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Your request: {user_request}
+Intent: {IMPLEMENT|FIX|REFACTOR|AUDIT|PLAN|ANALYZE}
+Status: ❌ BLOCKED
+
+CORTEX cannot process code changes without MCP tools.
+This ensures TDD, security, and governance enforcement.
+
+TO FIX (30 seconds):
+  1. python .cortex/setup-mcp.py
+  2. Reload VS Code (Cmd+Shift+P → Reload Window)
+  3. Retry your request
+
+ALLOWED WITHOUT MCP (Escape Hatch):
+  • "diagnose MCP issue" → Debug why MCP not working
+  • "setup MCP"          → Get setup instructions
+  • "what is CORTEX?"    → Educational questions
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
 
 ---
 
@@ -653,6 +705,8 @@ cortex-registry/_cortex-master/
 | **CORE-047** | **Instruction files MUST NOT include file paths** — Even backticks trigger VS Code auto-load (51k+ token bloat). Use directory references only. AI loads via semantic_search or read_file when explicitly needed. |
 | **CORE-048** | **Holistic Validation Gate (Phase 48)** — mandatory pre-implementation validation + challenge gate |
 | **CORE-049** | **Silent Autonomous Execution** — No confirmations, no narration, just progress bars + completion report. **CRITICAL:** Silent applies to narration ONLY, not to test rigor or code quality. Never trade quality for speed in any execution mode. |
+| **CORE-050** | **MCP Circuit Breaker (P0)** — Tiered MCP availability enforcement. **HARD BLOCK:** IMPLEMENT, FIX, REFACTOR, AUDIT, PLAN, ANALYZE intents CANNOT proceed if MCP unavailable. **EXEMPT:** DIAGNOSE, QUERY (educational), SETUP intents allowed for troubleshooting. **NO BYPASS:** Direct file operations forbidden for blocked intents even if "simpler." |
+| **CORE-051** | **Cross-Platform MCP (P0)** — `.vscode/settings.json` MUST NOT be in git (contains platform-specific Python paths). **MANDATORY AUDIT:** Every `/audit` command MUST verify settings.json not tracked. **AUTO-FIX:** `.githooks/post-checkout` regenerates settings via `setup-mcp.py` (macOS: bin/python, Windows: Scripts/python.exe). **VIOLATION:** Committing settings.json = cross-platform breakage. |
 | **MCP-FIRST** | ALL functionality exposed via MCP tools |
 | **MCP-GATE** | IMPLEMENT intents MUST use `cortex_process_request` tool (NO direct file creation) |
 | **ARCH-012** | Standards gate — 12-Factor + SOLID + Clean Code + OWASP required |

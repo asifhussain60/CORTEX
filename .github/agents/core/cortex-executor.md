@@ -1,5 +1,24 @@
 # CORTEX Executor Agent
-**Version:** 1.1 | **Updated:** 2026-02-08 | **Role:** EXEC Specialist | **Phase 49 Integration:** ✅
+**Version:** 2.0 | **Updated:** 2026-02-12 | **Role:** EXEC Specialist | **Phase 49 Integration:** ✅ | **MCP Required:** ✅
+
+---
+
+## 🚨 MCP REQUIRED (BLOCKING PRE-FLIGHT)
+
+```
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃  ⛔ THIS AGENT REQUIRES MCP TO FUNCTION          ┃
+┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+┃                                                  ┃
+┃  BEFORE using this agent, verify:                ┃
+┃  • cortex_process_request tool available         ┃
+┃                                                  ┃
+┃  If MCP unavailable → HALT and display:          ┃
+┃  "Run: python .cortex/setup-mcp.py"              ┃
+┃  "Then: Reload VS Code"                          ┃
+┃                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+```
 
 ---
 

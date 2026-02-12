@@ -35,6 +35,8 @@ from cortex.brain.analysis.security_threat_analyzer import (
 )
 from cortex.core.result import Err, Ok, Result
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
+from cortex.models.canonical_enums import IntentType
+from cortex.orchestrators.response.response_engine_adapter import ResponseEngineMixin
 
 # CORE-035: Import DisagreementType from canonical location
 # Note: Local DisagreementType kept for backward compatibility but should migrate
@@ -168,7 +170,7 @@ class SecurityThreatAssessment:
     threat_context: Dict[str, Any] = field(default_factory=dict)
 
 
-class ChallengeEngine:
+class ChallengeEngine(ResponseEngineMixin):
     """
     Generates intelligent challenges when CORTEX disagrees with user requests.
 
@@ -189,13 +191,24 @@ class ChallengeEngine:
     """
 
     def __init__(self) -> None:
-        """Initialize Challenge Engine with audit logging and Tier-3 rules."""
+        """
+        Initialize Challenge Engine with audit logging and Tier-3 rules.
+        
+        AC-ENH082-W2-S4-003: ResponseEngine integration (disabled by default)
+        """
         self.logger = EnhancedAuditLogger.instance()
 
         # Phase 8.2: Initialize SecurityThreatAnalyzer for hard security gates
         self.security_analyzer = SecurityThreatAnalyzer()
 
         logger.info("ChallengeEngine initialized with SecurityThreatAnalyzer (Phase 8.2)")
+
+        # AC-ENH082-W2-S4-003: Initialize ResponseEngine (disabled by default for safety)
+        self._init_response_engine(
+            intent_type=IntentType.GOVERNANCE,  # Challenge generation is governance-related
+            orchestrator_name="ChallengeEngine",
+            enable=False  # TODO: Enable after Wave H-S4 validation
+        )
 
         # Phase 8.1: Tier-3 Gate Logic - Define rules for each challenge type
         self.challenge_rules: Dict[ChallengeType, ChallengeRule] = {

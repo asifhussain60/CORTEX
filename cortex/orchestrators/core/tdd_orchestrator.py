@@ -58,10 +58,12 @@ from cortex.brain.core.knowledge_guidance_engine import (
 # Phase 27: Import StandardsResolver for company domain integration
 from cortex.common.standards_resolver import StandardsResolver
 from cortex.core.result import Err, Ok, Result
+from cortex.models.canonical_enums import IntentType
 from cortex.orchestrators.core.orchestrator_base_protocol import (
     OrchestratorBaseProtocol,
     ProtocolExecutionResult,
 )
+from cortex.orchestrators.response.response_engine_adapter import ResponseEngineMixin
 from cortex.orchestrators.support.brittleness_scanner import BrittlenessScanner
 from cortex.orchestrators.support.phase_completion_orchestrator import (
     PhaseCompletionOrchestrator,
@@ -262,7 +264,7 @@ class TDDKnowledgeLoader:
         return practices
 
 
-class TDDOrchestrator(OrchestratorBaseProtocol):
+class TDDOrchestrator(OrchestratorBaseProtocol, ResponseEngineMixin):
     """
     TDD Orchestrator V2 - Refactored with OrchestratorBaseProtocol.
 
@@ -300,6 +302,7 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
 
         ARCH-012: Inherits protocol initialization from base class
         ENH-088: Adds multi-cycle tracking capability
+        AC-ENH082-W2-S4-001: ResponseEngine integration (disabled by default)
         """
         # Initialize base protocol (LENS, Security, Challenge, DoR)
         super().__init__(
@@ -307,6 +310,13 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
             enable_security=True,
             enable_challenges=True,
             enable_dor_gate=True,
+        )
+
+        # AC-ENH082-W2-S4-001: Initialize ResponseEngine (disabled by default for safety)
+        self._init_response_engine(
+            intent_type=IntentType.IMPLEMENT,
+            orchestrator_name="TDDOrchestrator",
+            enable=False  # TODO: Enable after Wave H-S4 validation
         )
 
         # TDD-specific components

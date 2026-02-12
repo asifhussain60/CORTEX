@@ -30,7 +30,9 @@ from typing import Any, Dict, List, Optional, Tuple
 from cortex.agents.core.response_template_generator import ResponseTemplate
 from cortex.brain.core.result import Err, Ok, Result
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
+from cortex.models.canonical_enums import IntentType
 from cortex.orchestrators.decorators import inject_orchestrator_context
+from cortex.orchestrators.response.response_engine_adapter import ResponseEngineMixin
 
 
 class SynthesisPhase(Enum):
@@ -73,7 +75,7 @@ class SynthesisRecommendation:
     priority: str = "medium"
 
 
-class LENSSynthesis:
+class LENSSynthesis(ResponseEngineMixin):
     """
     LENS Synthesis Phase 4 - Combines all LENS phases into recommendations.
 
@@ -109,6 +111,8 @@ class LENSSynthesis:
         - Audit logger
         - Synthesis history
         - Phase weights for combining insights
+
+        AC-ENH082-W2-S4-002: ResponseEngine integration (disabled by default)
         """
         self.logger: EnhancedAuditLogger = EnhancedAuditLogger.instance()
         self.synthesis_history: List[Dict[str, Any]] = []
@@ -125,6 +129,13 @@ class LENSSynthesis:
             operation="LENS_SYNTHESIS_INIT",
             success=True,
             details={"phase_weights": self.phase_weights}
+        )
+
+        # AC-ENH082-W2-S4-002: Initialize ResponseEngine (disabled by default for safety)
+        self._init_response_engine(
+            intent_type=IntentType.ANALYZE,
+            orchestrator_name="LENSSynthesis",
+            enable=False  # TODO: Enable after Wave H-S4 validation
         )
 
     def analyze_with_directive(
