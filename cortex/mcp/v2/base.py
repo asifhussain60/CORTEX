@@ -214,51 +214,68 @@ class ConsolidatedTool(Tool):
     to different sub-functions, reducing tool count while
     maintaining functionality.
     
+    Subclasses must implement:
+    - name: Tool name property
+    - description: Tool description property
+    - category: Tool category property
+    - parameters: List of ToolParameter
+    - supported_operations: List of operation strings
+    - execute(**params): Async execution method
+    
     Example:
-        cortex_debug(operation="inject", ...) → debug_inject()
-        cortex_debug(operation="capture", ...) → debug_capture()
+        cortex_debug(operation="inject", ...) → handles inject
+        cortex_debug(operation="capture", ...) → handles capture
     """
     
     @property
     @abstractmethod
-    def operations(self) -> Dict[str, Callable]:
-        """
-        Map of operation name to implementation function.
-        
-        Returns:
-            Dictionary mapping operation names to callables
-        """
+    def name(self) -> str:
+        """Tool name (e.g., 'cortex_debug')."""
         pass
     
-    def execute(self, operation: str = "", **kwargs: Any) -> ToolResult:
+    @property
+    @abstractmethod
+    def description(self) -> str:
+        """Tool description."""
+        pass
+    
+    @property
+    @abstractmethod
+    def category(self) -> ToolCategory:
+        """Tool category."""
+        pass
+    
+    @property
+    @abstractmethod
+    def parameters(self) -> List[ToolParameter]:
+        """Tool parameters."""
+        pass
+    
+    @property
+    @abstractmethod
+    def supported_operations(self) -> List[str]:
+        """List of supported operation names."""
+        pass
+    
+    @property
+    def definition(self) -> ToolDefinition:
+        """Generate ToolDefinition from properties."""
+        return ToolDefinition(
+            name=self.name,
+            description=self.description,
+            category=self.category,
+            parameters=self.parameters,
+        )
+    
+    @abstractmethod
+    async def execute(self, **kwargs: Any) -> ToolResult:
         """
         Execute a specific operation.
         
         Args:
-            operation: Which sub-operation to execute
-            **kwargs: Operation-specific parameters
+            **kwargs: Operation-specific parameters (including 'operation')
             
         Returns:
             ToolResult from the operation
         """
-        ops = self.operations
-        
-        if not operation:
-            return ToolResult(
-                success=False,
-                error=f"Operation required. Available: {list(ops.keys())}"
-            )
-        
-        if operation not in ops:
-            return ToolResult(
-                success=False,
-                error=f"Unknown operation: {operation}. Available: {list(ops.keys())}"
-            )
-        
-        try:
-            result = ops[operation](**kwargs)
-            if isinstance(result, ToolResult):
-                return result
-            return ToolResult(success=True, data=result)
-        except Exception as e:
-            return ToolResult(success=False, error=str(e))
+        pass
