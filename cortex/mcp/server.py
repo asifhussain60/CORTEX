@@ -249,6 +249,15 @@ class MCPServer:
             except ImportError as e:
                 self.logger.error(f"Failed to initialize authentication: {e}")
                 self.logger.warning("MCP running WITHOUT authentication - not safe for production!")
+        
+        # AC-ENH063-P0-007-002: Initialize health check manager
+        self._health_manager = None
+        try:
+            from cortex.mcp.health import MCPHealthCheckManager
+            self._health_manager = MCPHealthCheckManager()
+            self.logger.info("MCP Health checks enabled")
+        except ImportError as e:
+            self.logger.warning(f"Health checks unavailable: {e}")
 
         # NOTE: sample_tool removed (dev-only, not for production)
         # Register CORTEX orchestrator tools only
@@ -754,6 +763,10 @@ class MCPServer:
                     )
                 except Exception:
                     pass  # Graceful degradation
+            
+            # AC-ENH063-P0-007-003: Record request for health monitoring
+            if self._health_manager:
+                self._health_manager.record_request()
 
             return response
 
@@ -781,6 +794,49 @@ class MCPServer:
                 },
                 id=request_id
             )
+    
+    def health_check(self) -> Dict[str, Any]:
+        """
+        Get server health status.
+        
+        AC_START: AC-ENH063-P0-007-004
+        Description: Expose health check endpoint
+        
+        Returns:
+            Dict: Health status information
+        """
+        if self._health_manager:
+            return self._health_manager.check_health().__dict__
+        else:
+            return {
+                "status": "unknown",
+                "message": "Health manager not initialized"
+            }
+        # AC_COMPLETE: AC-ENH063-P0-007-004
+    
+    def liveness_probe(self) -> Dict[str, Any]:
+        """
+        Liveness probe endpoint for Kubernetes/Docker.
+        
+        Returns:
+            Dict: Liveness status
+        """
+        if self._health_manager:
+            return self._health_manager.liveness_probe()
+        else:
+            return {"status": "alive", "timestamp": datetime.now().isoformat()}
+    
+    def readiness_probe(self) -> Dict[str, Any]:
+        """
+        Readiness probe endpoint for Kubernetes/Docker.
+        
+        Returns:
+            Dict: Readiness status
+        """
+        if self._health_manager:
+            return self._health_manager.readiness_probe()
+        else:
+            return {"status": "ready", "timestamp": datetime.now().isoformat()}
 
     def process_request(self, request: MCPRequest) -> MCPResponse:
         """

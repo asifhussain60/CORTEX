@@ -210,6 +210,9 @@ class MCPAuthenticationManager:
             import base64
             
             if '.' not in token_string:
+                if self.enable_audit_logging:
+                    self._log_auth_event("token_validation_failed", "unknown", 
+                                       success=False, reason="Invalid format")
                 return AuthResult(
                     authenticated=False,
                     error="Invalid token format"
