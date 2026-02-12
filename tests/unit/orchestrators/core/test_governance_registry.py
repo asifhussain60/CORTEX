@@ -35,17 +35,17 @@ class TestGovernanceGateChecking:
         return GovernanceRegistry.instance()
     
     def test_check_gate_returns_passed_result(self, registry):
-        """Should return passed result for stub implementation"""
+        """Should return passed result for unknown gates"""
         result = registry.check_gate(
-            gate_name="test_gate",
+            gate_name="unknown_test_gate",
             operation_spec={"operation_id": "test-001"},
             intent_type="IMPLEMENT"
         )
         
         assert result["passed"] is True
         assert result["error_code"] is None
-        assert "test_gate" in result["message"]
-        assert result["severity"] == "INFO"
+        assert "unknown_test_gate" in result["message"]
+        assert result["severity"] == "WARNING"  # Unknown gates return WARNING
     
     def test_check_gate_with_different_intents(self, registry):
         """Should handle different intent types"""
@@ -81,21 +81,32 @@ class TestGovernanceGateRegistration:
         
         gates = registry.get_gates()
         assert "security_gate" in gates
-        assert gates["security_gate"] == gate_config
+        # Check key fields (real implementation adds 'applies_to')
+        assert gates["security_gate"]["name"] == "security_gate"
+        assert gates["security_gate"]["description"] == "Security validation gate"
+        assert gates["security_gate"]["severity"] == "BLOCKING"
     
     def test_register_rule(self, registry):
         """Should register governance rule"""
         rule = {
-            "rule_id": "CORE-008",
-            "description": "TDD mandatory",
+            "rule_id": "TEST-001",
+            "name": "Test Rule",
+            "description": "Test rule description",
             "severity": "BLOCKING"
         }
         
         registry.register_rule(rule)
         
         rules = registry.get_rules()
-        assert len(rules) == 1
-        assert rules[0] == rule
+        # Real implementation pre-loads 4 CORE rules, so we should have 5 total
+        assert len(rules) >= 5
+        
+        # Find our test rule
+        test_rule = next((r for r in rules if r["rule_id"] == "TEST-001"), None)
+        assert test_rule is not None
+        assert test_rule["name"] == "Test Rule"
+        assert test_rule["description"] == "Test rule description"
+        assert test_rule["severity"] == "BLOCKING"
     
     def test_get_gates_returns_copy(self, registry):
         """Should return copy of gates to prevent mutation"""
