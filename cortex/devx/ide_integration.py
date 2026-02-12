@@ -12,7 +12,7 @@ class IDEIntegration:
 
     def get_syntax_highlighting_config(self) -> Dict[str, Any]:
         """Get syntax highlighting configuration.
-        
+
         Returns:
             Syntax highlighting configuration
         """
@@ -27,11 +27,11 @@ class IDEIntegration:
 
     def goto_definition(self, symbol: str, line: int = 0) -> Dict[str, Any]:
         """Navigate to symbol definition.
-        
+
         Args:
             symbol: Symbol name
             line: Line number
-            
+
         Returns:
             Definition location
         """
@@ -45,11 +45,11 @@ class IDEIntegration:
 
     def get_autocomplete_suggestions(self, context: str, cursor_pos: int = 0) -> List[str]:
         """Get autocomplete suggestions.
-        
+
         Args:
             context: Editor context
             cursor_pos: Cursor position
-            
+
         Returns:
             List of suggestions
         """
@@ -59,19 +59,19 @@ class IDEIntegration:
             "import": ["import sys", "from typing import", "from dataclasses import"],
             "from": ["from typing import", "from dataclasses import", "from datetime import"],
         }
-        
+
         for key, values in suggestions.items():
             if key in context:
                 return values
-        
+
         return ["# autocomplete suggestion"]
 
     def get_hover_info(self, symbol: str) -> str:
         """Get hover information for symbol.
-        
+
         Args:
             symbol: Symbol name
-            
+
         Returns:
             Hover information string
         """

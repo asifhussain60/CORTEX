@@ -1,8 +1,62 @@
 # CORTEX MCP Integration Setup Guide
 
-**Version:** 1.0 | **Authority:** Phase 25 + Phase 48 + Phase 49  
+**Version:** 2.0 | **Authority:** Phase 25 + Phase 48 + Phase 49 + ENH-066  
 **Status:** ✅ PRODUCTION | **Zero-Exception Requirement:** YES  
-**Last Updated:** 2026-02-08
+**Last Updated:** 2026-02-11
+
+---
+
+## 🏛️ MCP Architecture: Pylance-Style (NO Manual Server Startup)
+
+**CRITICAL CONCEPT:** MCP runs **locally within VS Code** just like Pylance extension.
+
+### How MCP Works (Auto-Start Architecture)
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    VS Code                                  │
+│  ┌─────────────────┐    ┌────────────────────────────────┐  │
+│  │  Copilot Chat   │───▶│  MCP Server (Auto-Started)     │  │
+│  │                 │    │  • stdio transport             │  │
+│  │  User: /impl    │◀───│  • JSON-RPC 2.0                │  │
+│  │                 │    │  • python -m cortex.mcp        │  │
+│  └─────────────────┘    └────────────────────────────────┘  │
+│                                    │                        │
+│                                    ▼                        │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │            cortex_* Tools (28 total)                 │   │
+│  │  • cortex_process_request  • cortex_lens_analyze    │   │
+│  │  • cortex_challenge        • cortex_detect_duplicates│   │
+│  │  • cortex_plan_execute_autonomous                    │   │
+│  └─────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+
+❌ OLD (Wrong): User manually runs "python -m cortex.mcp.server"
+✅ NEW (Correct): VS Code auto-starts MCP when Copilot invokes tools
+```
+
+### Key Insights
+
+| Aspect | Reality |
+|--------|---------|
+| **Server Startup** | ✅ Automatic (VS Code handles it) |
+| **Manual Launch** | ❌ NOT required (common misconception) |
+| **Configuration** | ✅ ONE-TIME via `.vscode/settings.json` |
+| **Restart Required** | ✅ YES (after setup, reload VS Code window) |
+| **Architecture Model** | 🏛️ Pylance-style (embedded extension) |
+| **Transport** | 📡 stdio (JSON-RPC 2.0) |
+| **Tool Availability** | ✅ Instant (no startup delay) |
+
+**What Users Do:**
+1. Run setup script ONCE: `python .cortex/setup-mcp.py`
+2. Reload VS Code: Command Palette → Developer: Reload Window
+3. Use Copilot Chat normally — MCP tools just work ✅
+
+**What VS Code Does (Automatic):**
+1. Reads `.vscode/settings.json` MCP configuration
+2. Spawns MCP server process when Copilot needs tools
+3. Routes tool invocations via JSON-RPC
+4. Manages server lifecycle (start/stop/restart)
 
 ---
 
@@ -17,6 +71,7 @@ CORTEX now includes a **zero-exception MCP integration setup** that:
 - ✅ Logs all setup actions for debugging
 - ✅ Idempotent (safe to run multiple times)
 - ✅ Fails gracefully with clear error messages
+- ✅ **Uses Pylance-style architecture (NO manual server startup)**
 
 **Result:** Every user gets MCP tools in Copilot Chat with ZERO manual configuration steps.
 
@@ -58,7 +113,7 @@ USER ACTION: Restart Copilot
     ├─ Command Palette → Developer: Reload Window
     └─ [Reload completes] → MCP tools available in Copilot Chat
     ↓
-✅ READY: cortex_process_request and 9 other MCP tools available
+✅ READY: cortex_process_request and 27 other MCP tools available (28 total)
 ```
 
 ---
@@ -234,22 +289,69 @@ NEXT STEP:
 
 ---
 
-## 📦 Available MCP Tools (After Restart)
+## 📦 Available MCP Tools (After Restart) — 28 Tools Total
 
 Once setup is complete and Copilot is restarted, these tools become available:
 
+**Core Orchestrator Tools (3):**
 | Tool | Purpose |
 |------|---------|
-| `cortex_process_request` | Main TDD implementation + orchestrator routing |
-| `cortex_lens_analyze` | Code intelligence (security, complexity, duplication) |
-| `cortex_challenge` | Mandatory challenge generation with alternatives |
+| `cortex_process_request` | Main TDD implementation + routing |
 | `cortex_total_recall` | Feature discovery + capability search |
-| `cortex_git_history` | Git context analysis (24h rolling window) |
+| `cortex_challenge` | Challenge gate + disagreement detection |
+
+**LENS Analysis Tools (5):**
+| Tool | Purpose |
+|------|---------|
+| `cortex_lens_analyze` | Unified code intelligence (git+AST+comments) |
+| `cortex_git_history` | Git context analysis (24h window) |
+| `cortex_ast_analyze` | AST structure + complexity analysis |
+| `cortex_extract_comments` | Comment/TODO/FIXME extraction |
 | `cortex_detect_duplicates` | CORE-035 violation detection |
+
+**Plan Lifecycle Tools (4):**
+| Tool | Purpose |
+|------|---------|
 | `cortex_plan_setup` | Pre-execution phase hook |
-| `cortex_plan_execute_autonomous` | Multi-stage autonomous phase execution |
-| `cortex_plan_teardown` | Post-execution phase cleanup + dashboard sync |
+| `cortex_plan_execute_autonomous` | Multi-stage autonomous execution |
+| `cortex_plan_teardown` | Post-execution cleanup + sync |
 | `cortex_plan_sync` | Manual dashboard synchronization |
+
+**Validation Tools (1):**
+| Tool | Purpose |
+|------|---------|
+| `cortex_validate_holistically` | Phase 48 holistic validation gate |
+
+**Governance Tools (5):**
+| Tool | Purpose |
+|------|---------|
+| `check_phase_lock` | Phase lock verification |
+| `validate_ac_id` | AC-ID validation |
+| `canonicalize_intent` | Intent normalization |
+| `enforce_operation` | Governance enforcement |
+| `get_phase_status` | Phase status query |
+
+**Knowledge Tools (3):**
+| Tool | Purpose |
+|------|---------|
+| `search_knowledge_base` | Knowledge base search |
+| `analyze_knowledge_gap` | Gap analysis |
+| `generate_knowledge_summary` | Knowledge summarization |
+
+**Orchestrator Operations Tools (4):**
+| Tool | Purpose |
+|------|---------|
+| `monitor_orchestrator_health` | Health monitoring |
+| `diagnose_orchestrator_issues` | Issue diagnostics |
+| `optimize_orchestrator_config` | Config optimization |
+| `get_operation_status` | Operation status query |
+
+**Utility Tools (1):**
+| Tool | Purpose |
+|------|---------|
+| `transform_tool` | Data format transformation (JSON/YAML/XML) |
+
+**Note:** sample_tool and echo_tool removed (dev-only, Phase 54 cleanup)
 
 ---
 
@@ -258,10 +360,22 @@ Once setup is complete and Copilot is restarted, these tools become available:
 ### Issue: "MCP tools not appearing in Copilot Chat"
 
 **Cause:** VS Code needs reload to register MCP server  
+**Architecture Note:** MCP uses Pylance-style auto-start — VS Code spawns the server when needed  
 **Fix:**
 1. Command Palette → Developer: Reload Window
 2. Wait 10 seconds for VS Code to reload
 3. Try using an MCP tool in Copilot Chat
+4. **NO manual `python -m cortex.mcp.server` needed!**
+
+### Issue: "Should I run python -m cortex.mcp.server manually?"
+
+**Cause:** Common misconception from traditional server architectures  
+**Answer:** ❌ **NO!** MCP uses Pylance-style architecture.  
+**Correct Flow:**
+- ✅ Run setup script: `python .cortex/setup-mcp.py`
+- ✅ Reload VS Code: Command Palette → Developer: Reload Window
+- ✅ VS Code auto-starts MCP when Copilot needs tools
+- ❌ NO manual server launch required
 
 ### Issue: "Python version error (need >= 3.9.0)"
 
@@ -371,7 +485,7 @@ MCP integration is **complete and successful** when:
 
 1. ✅ `.vscode/settings.json` contains MCP server configuration
 2. ✅ `cortex_process_request` appears in Copilot Chat tools
-3. ✅ Other 9 MCP tools appear in tool list
+3. ✅ All 28 MCP tools appear in tool list
 4. ✅ Setup log shows "✅ SETUP COMPLETE"
 5. ✅ User can invoke MCP tools without errors
 
@@ -380,13 +494,14 @@ MCP integration is **complete and successful** when:
 /list cortex tools
 ```
 
-Should show all 10 MCP tools as available.
+Should show all 28 MCP tools as available (organized by 8 categories).
 
 ---
 
 ## 📚 Related Documentation
 
 - **cortex-architect.prompt.md** — PRE-FLIGHT AUTO-SETUP section
+- **copilot-instructions.md** — MCP ARCHITECTURE: PYLANCE-STYLE (P0) section
 - **cortex-environment-setup.md** — MCP Integration Setup section
 - **.cortex/setup-mcp.py** — Automated setup script
 - **.cortex/setup.log** — Setup execution log
@@ -400,6 +515,10 @@ Should show all 10 MCP tools as available.
 3. **Test MCP tools:** Try `/list cortex tools` in Copilot Chat
 4. **Start using CORTEX:** Use `cortex_process_request` for implementations
 
+**Remember:** MCP uses **Pylance-style architecture** — NO manual server startup required. VS Code handles everything automatically after one-time setup.
+
 ---
 
 **Questions?** Check `.cortex/setup.log` for detailed setup information, or manually verify JSON syntax in `.vscode/settings.json`.
+
+**Architecture Confusion?** Read the "MCP Architecture: Pylance-Style" section at the top of this guide. The key insight: MCP auto-starts just like Pylance extension — no manual `python -m cortex.mcp.server` needed!

@@ -10,15 +10,15 @@ Authority: AC-EDUCATIONAL-INTERACTION-001, CORE-030 (Implementation Truth)
 Rule: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings)
 """
 
-from typing import Dict, Any, List, Optional, Tuple
+import ast
+import json
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-import ast
-import json
+from typing import Any, Dict, List, Optional, Tuple
 
-from cortex.core.result import Result, Ok, Err
+from cortex.core.result import Err, Ok, Result
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 
 
@@ -51,10 +51,10 @@ class ClaimType(Enum):
 class Evidence:
     """
     Evidence supporting verification result.
-    
+
     Contains file paths, line numbers, code snippets, and git references.
     """
-    
+
     source_type: str  # "code", "wiring", "test", "git", "docs"
     file_path: Optional[str] = None
     line_number: Optional[int] = None
@@ -70,10 +70,10 @@ class Evidence:
 class VerificationResult:
     """
     Result of truth verification.
-    
+
     Contains status, evidence, confidence, and recommendations.
     """
-    
+
     claim: str
     claim_type: ClaimType
     status: VerificationStatus
@@ -90,21 +90,21 @@ class VerificationResult:
 class TruthVerificationEngine:
     """
     Truth Verification Engine - Implementation-based claim verification.
-    
+
     Verifies claims about CORTEX architecture by inspecting:
     - Live code (AST analysis)
     - Wiring configuration (YAML parsing)
     - Test files (test coverage)
     - Git history (recent changes)
     - Documentation (drift detection)
-    
+
     Features:
     - Multi-source evidence collection
     - Confidence scoring (0.0 - 1.0)
     - Documentation drift detection
     - Recommendation generation
     - Integration with LENS for code intelligence
-    
+
     Usage:
         >>> engine = TruthVerificationEngine()
         >>> result = engine.verify_claim(
@@ -113,27 +113,27 @@ class TruthVerificationEngine:
         ... )
         >>> print(result.status)  # VERIFIED, FALSE, PARTIAL, UNKNOWN
         >>> print(result.evidence)  # List of Evidence objects
-    
+
     Authority: AC-EDUCATIONAL-INTERACTION-001, CORE-030
     """
-    
+
     def __init__(self, project_root: Optional[Path] = None):
         """
         Initialize Truth Verification Engine.
-        
+
         Args:
             project_root: Root directory of CORTEX project (auto-detected if None)
         """
         self.logger = EnhancedAuditLogger.instance()
         self.project_root = project_root or Path(__file__).parent.parent.parent.parent
         self._cache: Dict[str, Any] = {}
-        
+
         self.logger.log_operation_start(
             ac_id="AC-EDUCATIONAL-INTERACTION-001",
             operation="TRUTH_ENGINE_INIT",
             details={"project_root": str(self.project_root)}
         )
-    
+
     def verify_claim(
         self,
         claim: str,
@@ -142,15 +142,15 @@ class TruthVerificationEngine:
     ) -> VerificationResult:
         """
         Verify a claim against live implementation.
-        
+
         Args:
             claim: The claim to verify (natural language or structured)
             claim_type: Type of claim for routing verification strategy
             context: Optional context (file path, component name, etc.)
-        
+
         Returns:
             VerificationResult with status, evidence, and recommendations
-        
+
         Authority: CORE-030 (Implementation Truth)
         """
         self.logger.log_operation_start(
@@ -158,9 +158,9 @@ class TruthVerificationEngine:
             operation="VERIFY_CLAIM",
             details={"claim": claim, "type": claim_type.value}
         )
-        
+
         context = context or {}
-        
+
         try:
             # Route to appropriate verification strategy
             if claim_type == ClaimType.ORCHESTRATOR_EXISTS:
@@ -188,16 +188,16 @@ class TruthVerificationEngine:
                     evidence=[],
                     explanation=f"Verification strategy not implemented for {claim_type.value}"
                 )
-            
+
             self.logger.log_operation_complete(
                 ac_id="AC-EDUCATIONAL-INTERACTION-001",
                 operation="VERIFY_CLAIM",
                 success=True,
                 details={"status": result.status.value, "confidence": result.confidence}
             )
-            
+
             return result
-            
+
         except Exception as e:
             self.logger.log_operation_complete(
                 ac_id="AC-EDUCATIONAL-INTERACTION-001",
@@ -205,7 +205,7 @@ class TruthVerificationEngine:
                 success=False,
                 details={"error": str(e)}
             )
-            
+
             return VerificationResult(
                 claim=claim,
                 claim_type=claim_type,
@@ -214,7 +214,7 @@ class TruthVerificationEngine:
                 evidence=[],
                 explanation=f"Verification failed: {str(e)}"
             )
-    
+
     def _verify_orchestrator_exists(
         self,
         claim: str,
@@ -222,12 +222,12 @@ class TruthVerificationEngine:
     ) -> VerificationResult:
         """Verify orchestrator exists in codebase."""
         orchestrator_name = context.get("orchestrator_name", self._extract_orchestrator_name(claim))
-        
+
         evidence = []
-        
+
         # Check cortex/orchestrators directory structure
         orchestrators_path = self.project_root / "cortex" / "orchestrators"
-        
+
         if not orchestrators_path.exists():
             return VerificationResult(
                 claim=claim,
@@ -237,12 +237,12 @@ class TruthVerificationEngine:
                 evidence=[],
                 explanation=f"Orchestrators directory not found at {orchestrators_path}"
             )
-        
+
         # Search for orchestrator file - convert to snake_case for file matching
         import re
         snake_case_name = re.sub(r'(?<!^)(?=[A-Z])', '_', orchestrator_name).lower()
         found_files = list(orchestrators_path.rglob(f"*{snake_case_name}*.py"))
-        
+
         if found_files:
             for file_path in found_files:
                 if file_path.name != "__init__.py":
@@ -251,7 +251,7 @@ class TruthVerificationEngine:
                         file_path=str(file_path.relative_to(self.project_root)),
                         description=f"Orchestrator implementation found: {file_path.name}"
                     ))
-            
+
             return VerificationResult(
                 claim=claim,
                 claim_type=ClaimType.ORCHESTRATOR_EXISTS,
@@ -274,7 +274,7 @@ class TruthVerificationEngine:
                     "Add to orchestrator registry"
                 ]
             )
-    
+
     def _verify_orchestrator_capability(
         self,
         claim: str,
@@ -283,13 +283,13 @@ class TruthVerificationEngine:
         """Verify orchestrator has claimed capability via AST analysis."""
         orchestrator_name = context.get("orchestrator_name", self._extract_orchestrator_name(claim))
         capability = context.get("capability", "")
-        
+
         evidence = []
-        
+
         # Find orchestrator file
         orchestrators_path = self.project_root / "cortex" / "orchestrators"
         found_files = list(orchestrators_path.rglob(f"*{orchestrator_name.lower()}*.py"))
-        
+
         if not found_files:
             return VerificationResult(
                 claim=claim,
@@ -299,22 +299,22 @@ class TruthVerificationEngine:
                 evidence=[],
                 explanation=f"{orchestrator_name} not found, cannot verify capability"
             )
-        
+
         # Parse AST to find methods
         for file_path in found_files:
             if file_path.name == "__init__.py":
                 continue
-            
+
             try:
                 with open(file_path, 'r') as f:
                     tree = ast.parse(f.read())
-                
+
                 # Find class definition
                 for node in ast.walk(tree):
                     if isinstance(node, ast.ClassDef) and orchestrator_name in node.name:
                         # Collect method names
                         methods = [m.name for m in node.body if isinstance(m, ast.FunctionDef)]
-                        
+
                         evidence.append(Evidence(
                             source_type="code",
                             file_path=str(file_path.relative_to(self.project_root)),
@@ -322,7 +322,7 @@ class TruthVerificationEngine:
                             description=f"Found class {node.name} with methods: {', '.join(methods[:10])}",
                             metadata={"methods": methods}
                         ))
-                        
+
                         # Check if capability keyword appears in method names
                         if capability:
                             matching_methods = [m for m in methods if capability.lower() in m.lower()]
@@ -335,14 +335,14 @@ class TruthVerificationEngine:
                                     evidence=evidence,
                                     explanation=f"{orchestrator_name} has capability '{capability}' (methods: {', '.join(matching_methods)})"
                                 )
-            
+
             except Exception as e:
                 evidence.append(Evidence(
                     source_type="code",
                     file_path=str(file_path.relative_to(self.project_root)),
                     description=f"Failed to parse: {str(e)}"
                 ))
-        
+
         if evidence:
             return VerificationResult(
                 claim=claim,
@@ -352,7 +352,7 @@ class TruthVerificationEngine:
                 evidence=evidence,
                 explanation=f"{orchestrator_name} exists but specific capability '{capability}' not clearly evident"
             )
-        
+
         return VerificationResult(
             claim=claim,
             claim_type=ClaimType.ORCHESTRATOR_CAPABILITY,
@@ -361,7 +361,7 @@ class TruthVerificationEngine:
             evidence=[],
             explanation=f"Could not analyze {orchestrator_name} for capability verification"
         )
-    
+
     def _verify_wiring_config(
         self,
         claim: str,
@@ -369,7 +369,7 @@ class TruthVerificationEngine:
     ) -> VerificationResult:
         """Verify wiring configuration exists and is correct."""
         wiring_path = self.project_root / "cortex" / "wiring" / "specifications" / "wiring.yaml"
-        
+
         if not wiring_path.exists():
             return VerificationResult(
                 claim=claim,
@@ -380,18 +380,18 @@ class TruthVerificationEngine:
                 explanation="wiring.yaml not found at expected location",
                 recommendations=["Create wiring.yaml specification"]
             )
-        
+
         try:
             import yaml
             with open(wiring_path, 'r') as f:
                 wiring_data = yaml.safe_load(f)
-            
+
             evidence = [Evidence(
                 source_type="wiring",
                 file_path=str(wiring_path.relative_to(self.project_root)),
                 description="Wiring configuration loaded successfully"
             )]
-            
+
             return VerificationResult(
                 claim=claim,
                 claim_type=ClaimType.WIRING_CONFIG,
@@ -401,7 +401,7 @@ class TruthVerificationEngine:
                 explanation="Wiring configuration exists and is parseable",
                 metadata={"orchestrator_count": len(wiring_data.get("orchestrators", []))}
             )
-            
+
         except Exception as e:
             return VerificationResult(
                 claim=claim,
@@ -412,7 +412,7 @@ class TruthVerificationEngine:
                 explanation=f"Wiring configuration exists but failed to parse: {str(e)}",
                 recommendations=["Fix YAML syntax in wiring.yaml"]
             )
-    
+
     def _verify_file_exists(
         self,
         claim: str,
@@ -420,7 +420,7 @@ class TruthVerificationEngine:
     ) -> VerificationResult:
         """Verify file exists at claimed path."""
         file_path_str = context.get("file_path", self._extract_file_path(claim))
-        
+
         if not file_path_str:
             return VerificationResult(
                 claim=claim,
@@ -430,16 +430,16 @@ class TruthVerificationEngine:
                 evidence=[],
                 explanation="Could not extract file path from claim"
             )
-        
+
         file_path = self.project_root / file_path_str
-        
+
         if file_path.exists():
             evidence = [Evidence(
                 source_type="code",
                 file_path=file_path_str,
                 description=f"File exists: {file_path.name} ({file_path.stat().st_size} bytes)"
             )]
-            
+
             return VerificationResult(
                 claim=claim,
                 claim_type=ClaimType.FILE_EXISTS,
@@ -458,7 +458,7 @@ class TruthVerificationEngine:
                 explanation=f"File not found at {file_path_str}",
                 recommendations=[f"Create file at {file_path_str}"]
             )
-    
+
     def _verify_function_exists(
         self,
         claim: str,
@@ -467,7 +467,7 @@ class TruthVerificationEngine:
         """Verify function exists in specified file via AST."""
         file_path_str = context.get("file_path", "")
         function_name = context.get("function_name", self._extract_function_name(claim))
-        
+
         if not file_path_str or not function_name:
             return VerificationResult(
                 claim=claim,
@@ -477,9 +477,9 @@ class TruthVerificationEngine:
                 evidence=[],
                 explanation="Missing file path or function name for verification"
             )
-        
+
         file_path = self.project_root / file_path_str
-        
+
         if not file_path.exists():
             return VerificationResult(
                 claim=claim,
@@ -489,11 +489,11 @@ class TruthVerificationEngine:
                 evidence=[],
                 explanation=f"File not found: {file_path_str}"
             )
-        
+
         try:
             with open(file_path, 'r') as f:
                 tree = ast.parse(f.read())
-            
+
             # Find function definition
             for node in ast.walk(tree):
                 if isinstance(node, ast.FunctionDef) and node.name == function_name:
@@ -503,7 +503,7 @@ class TruthVerificationEngine:
                         line_number=node.lineno,
                         description=f"Function {function_name} found at line {node.lineno}"
                     )]
-                    
+
                     return VerificationResult(
                         claim=claim,
                         claim_type=ClaimType.FUNCTION_EXISTS,
@@ -512,7 +512,7 @@ class TruthVerificationEngine:
                         evidence=evidence,
                         explanation=f"Function {function_name} exists in {file_path_str}"
                     )
-            
+
             return VerificationResult(
                 claim=claim,
                 claim_type=ClaimType.FUNCTION_EXISTS,
@@ -522,7 +522,7 @@ class TruthVerificationEngine:
                 explanation=f"Function {function_name} not found in {file_path_str}",
                 recommendations=[f"Implement function {function_name} in {file_path_str}"]
             )
-            
+
         except Exception as e:
             return VerificationResult(
                 claim=claim,
@@ -532,7 +532,7 @@ class TruthVerificationEngine:
                 evidence=[],
                 explanation=f"Failed to parse file: {str(e)}"
             )
-    
+
     def _verify_class_exists(
         self,
         claim: str,
@@ -541,7 +541,7 @@ class TruthVerificationEngine:
         """Verify class exists in specified file via AST."""
         file_path_str = context.get("file_path", "")
         class_name = context.get("class_name", self._extract_class_name(claim))
-        
+
         if not file_path_str or not class_name:
             return VerificationResult(
                 claim=claim,
@@ -551,9 +551,9 @@ class TruthVerificationEngine:
                 evidence=[],
                 explanation="Missing file path or class name for verification"
             )
-        
+
         file_path = self.project_root / file_path_str
-        
+
         if not file_path.exists():
             return VerificationResult(
                 claim=claim,
@@ -563,17 +563,17 @@ class TruthVerificationEngine:
                 evidence=[],
                 explanation=f"File not found: {file_path_str}"
             )
-        
+
         try:
             with open(file_path, 'r') as f:
                 tree = ast.parse(f.read())
-            
+
             # Find class definition
             for node in ast.walk(tree):
                 if isinstance(node, ast.ClassDef) and node.name == class_name:
                     # Get base classes
                     bases = [base.id if isinstance(base, ast.Name) else str(base) for base in node.bases]
-                    
+
                     evidence = [Evidence(
                         source_type="code",
                         file_path=file_path_str,
@@ -581,7 +581,7 @@ class TruthVerificationEngine:
                         description=f"Class {class_name} found at line {node.lineno}, bases: {', '.join(bases) if bases else 'None'}",
                         metadata={"bases": bases}
                     )]
-                    
+
                     return VerificationResult(
                         claim=claim,
                         claim_type=ClaimType.CLASS_EXISTS,
@@ -590,7 +590,7 @@ class TruthVerificationEngine:
                         evidence=evidence,
                         explanation=f"Class {class_name} exists in {file_path_str}"
                     )
-            
+
             return VerificationResult(
                 claim=claim,
                 claim_type=ClaimType.CLASS_EXISTS,
@@ -600,7 +600,7 @@ class TruthVerificationEngine:
                 explanation=f"Class {class_name} not found in {file_path_str}",
                 recommendations=[f"Implement class {class_name} in {file_path_str}"]
             )
-            
+
         except Exception as e:
             return VerificationResult(
                 claim=claim,
@@ -610,7 +610,7 @@ class TruthVerificationEngine:
                 evidence=[],
                 explanation=f"Failed to parse file: {str(e)}"
             )
-    
+
     def _verify_test_coverage(
         self,
         claim: str,
@@ -618,18 +618,18 @@ class TruthVerificationEngine:
     ) -> VerificationResult:
         """Verify test coverage exists for component."""
         component_name = context.get("component_name", self._extract_component_name(claim))
-        
+
         # Search for test files
         tests_path = self.project_root / "tests"
         found_tests = list(tests_path.rglob(f"*test*{component_name.lower()}*.py"))
-        
+
         if found_tests:
             evidence = [Evidence(
                 source_type="test",
                 file_path=str(test_file.relative_to(self.project_root)),
                 description=f"Test file found: {test_file.name}"
             ) for test_file in found_tests]
-            
+
             return VerificationResult(
                 claim=claim,
                 claim_type=ClaimType.TEST_COVERAGE,
@@ -651,7 +651,7 @@ class TruthVerificationEngine:
                     "Follow CORE-008 (TDD) guidelines"
                 ]
             )
-    
+
     def _verify_mcp_tool(
         self,
         claim: str,
@@ -659,7 +659,7 @@ class TruthVerificationEngine:
     ) -> VerificationResult:
         """Verify MCP tool exists and is properly registered."""
         tool_name = context.get("tool_name", self._extract_tool_name(claim))
-        
+
         # Search for MCP tool files
         mcp_path = self.project_root / "cortex" / "mcp" / "tools"
         if not mcp_path.exists():
@@ -672,16 +672,16 @@ class TruthVerificationEngine:
                 explanation="MCP tools directory not found",
                 recommendations=["Create cortex/mcp/tools/ directory"]
             )
-        
+
         found_tools = list(mcp_path.rglob(f"*{tool_name}*.py"))
-        
+
         if found_tools:
             evidence = [Evidence(
                 source_type="code",
                 file_path=str(tool_file.relative_to(self.project_root)),
                 description=f"MCP tool implementation found: {tool_file.name}"
             ) for tool_file in found_tools]
-            
+
             return VerificationResult(
                 claim=claim,
                 claim_type=ClaimType.MCP_TOOL,
@@ -704,9 +704,9 @@ class TruthVerificationEngine:
                     "Register in MCP server"
                 ]
             )
-    
+
     # Helper methods for extracting entities from claims
-    
+
     def _extract_orchestrator_name(self, claim: str) -> str:
         """Extract orchestrator name from claim."""
         # Simple heuristic: look for words ending in "Orchestrator"
@@ -715,7 +715,7 @@ class TruthVerificationEngine:
             if "Orchestrator" in word:
                 return word.strip(".,!?")
         return "UnknownOrchestrator"
-    
+
     def _extract_file_path(self, claim: str) -> str:
         """Extract file path from claim."""
         # Look for patterns like "cortex/..." or "tests/..."
@@ -724,7 +724,7 @@ class TruthVerificationEngine:
         if match:
             return match.group(0)
         return ""
-    
+
     def _extract_function_name(self, claim: str) -> str:
         """Extract function name from claim."""
         # Look for patterns like "function_name()" or "def function_name"
@@ -733,7 +733,7 @@ class TruthVerificationEngine:
         if match:
             return match.group(1)
         return ""
-    
+
     def _extract_class_name(self, claim: str) -> str:
         """Extract class name from claim."""
         # Look for patterns like "class ClassName" or multi-word capitalized names
@@ -751,12 +751,12 @@ class TruthVerificationEngine:
         if match:
             return match.group(1)
         return ""
-    
+
     def _extract_component_name(self, claim: str) -> str:
         """Extract component name from claim."""
         # Similar to class name extraction
         return self._extract_class_name(claim)
-    
+
     def _extract_tool_name(self, claim: str) -> str:
         """Extract MCP tool name from claim."""
         # Look for "cortex_*" patterns

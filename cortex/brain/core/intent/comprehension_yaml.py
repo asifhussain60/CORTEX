@@ -16,13 +16,13 @@ This enables the CORTEX LENS protocol to present holistic context before
 executing user requests.
 """
 
-from dataclasses import dataclass, field, asdict
-from datetime import datetime
-from typing import List, Dict, Any, Optional
-from enum import Enum
 import uuid
-import yaml
+from dataclasses import asdict, dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
+import yaml
 
 # ============================================================================
 # DATA CLASSES
@@ -31,14 +31,14 @@ import yaml
 @dataclass
 class IntentSection:
     """Structured intent information for comprehension YAML."""
-    
+
     type: str  # IMPLEMENT, FIX, REFACTOR, QUERY, ANALYZE, VALIDATE, MIGRATE
     scope: Dict[str, Any]  # target_type, target_name, file_path, ac_ids
     confidence: float  # 0.0-1.0
     keywords: List[str]
     needs_clarification: bool = False
     clarification_prompt: Optional[str] = None
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for YAML serialization."""
         data = {
@@ -56,7 +56,7 @@ class IntentSection:
 @dataclass
 class ChallengeItem:
     """Individual challenge in comprehension YAML."""
-    
+
     id: str
     category: str  # BREAKING_CHANGE, TEST_GAP, GOVERNANCE_RISK, etc.
     severity: str  # LOW, MEDIUM, HIGH, CRITICAL
@@ -64,7 +64,7 @@ class ChallengeItem:
     affected_code: str
     remediation: str
     confidence: float = 0.8
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for YAML serialization."""
         return {
@@ -81,9 +81,9 @@ class ChallengeItem:
 @dataclass
 class ChallengeSection:
     """Structured challenges section for comprehension YAML."""
-    
+
     items: List[ChallengeItem] = field(default_factory=list)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary with summary statistics."""
         severity_counts = {
@@ -92,11 +92,11 @@ class ChallengeSection:
             "medium": sum(1 for item in self.items if item.severity == "MEDIUM"),
             "low": sum(1 for item in self.items if item.severity == "LOW"),
         }
-        
+
         category_counts = {}
         for item in self.items:
             category_counts[item.category] = category_counts.get(item.category, 0) + 1
-        
+
         return {
             "summary": {
                 "total": len(self.items),
@@ -114,7 +114,7 @@ class ChallengeSection:
 @dataclass
 class RecommendationItem:
     """Individual recommendation in comprehension YAML."""
-    
+
     id: str
     category: str  # BEST_PRACTICE, ALTERNATIVE_APPROACH, TEST_STRATEGY, etc.
     priority: str  # LOW, MEDIUM, HIGH
@@ -123,7 +123,7 @@ class RecommendationItem:
     code_context: Optional[str] = None
     alternative: Optional[str] = None
     rationale: Optional[str] = None
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for YAML serialization."""
         data = {
@@ -145,9 +145,9 @@ class RecommendationItem:
 @dataclass
 class RecommendationSection:
     """Structured recommendations section for comprehension YAML."""
-    
+
     items: List[RecommendationItem] = field(default_factory=list)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary with summary statistics."""
         priority_counts = {
@@ -155,11 +155,11 @@ class RecommendationSection:
             "medium": sum(1 for item in self.items if item.priority == "MEDIUM"),
             "low": sum(1 for item in self.items if item.priority == "LOW"),
         }
-        
+
         category_counts = {}
         for item in self.items:
             category_counts[item.category] = category_counts.get(item.category, 0) + 1
-        
+
         return {
             "summary": {
                 "total": len(self.items),
@@ -176,12 +176,12 @@ class RecommendationSection:
 @dataclass
 class ComprehensionYAML:
     """Complete comprehension YAML document."""
-    
+
     metadata: Dict[str, Any]
     intent: IntentSection
     challenges: ChallengeSection
     recommendations: RecommendationSection
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert entire document to dictionary."""
         return {
@@ -190,12 +190,12 @@ class ComprehensionYAML:
             "challenges": self.challenges.to_dict(),
             "recommendations": self.recommendations.to_dict(),
         }
-    
+
     @staticmethod
     def from_dict(data: Dict[str, Any]) -> "ComprehensionYAML":
         """Reconstruct ComprehensionYAML from dictionary."""
         metadata = data.get("metadata", {})
-        
+
         intent_data = data.get("intent", {})
         intent = IntentSection(
             type=intent_data.get("type"),
@@ -205,7 +205,7 @@ class ComprehensionYAML:
             needs_clarification=intent_data.get("needs_clarification", False),
             clarification_prompt=intent_data.get("clarification_prompt"),
         )
-        
+
         challenges_data = data.get("challenges", {})
         challenge_items = []
         for item_data in challenges_data.get("items", []):
@@ -219,7 +219,7 @@ class ComprehensionYAML:
                 confidence=item_data.get("confidence", 0.8),
             ))
         challenges = ChallengeSection(items=challenge_items)
-        
+
         recommendations_data = data.get("recommendations", {})
         recommendation_items = []
         for item_data in recommendations_data.get("items", []):
@@ -234,7 +234,7 @@ class ComprehensionYAML:
                 rationale=item_data.get("rationale"),
             ))
         recommendations = RecommendationSection(items=recommendation_items)
-        
+
         return ComprehensionYAML(
             metadata=metadata,
             intent=intent,
@@ -251,17 +251,17 @@ class CanonicalIntentComposer:
     """
     Orchestrates transformation of intent/challenges/recommendations
     into structured comprehension YAML documents.
-    
+
     Usage:
         composer = CanonicalIntentComposer()
         yaml_obj = composer.compose(intent_dict, challenges_list, recommendations_list)
         yaml_string = composer.to_yaml_string(yaml_obj)
     """
-    
+
     # CORTEX LENS Protocol version
     COMPREHENSION_VERSION = "1.0"
     CORTEX_PHASE = "PHASE-07-Intent-Router"
-    
+
     def compose(
         self,
         intent_dict: Dict[str, Any],
@@ -270,21 +270,21 @@ class CanonicalIntentComposer:
     ) -> ComprehensionYAML:
         """
         Compose comprehensive YAML from intent, challenges, and recommendations.
-        
+
         Args:
             intent_dict: Canonicalized intent with type, scope, confidence
             challenges: List of challenge dicts with id, category, severity, etc.
             recommendations: List of recommendation dicts with id, category, priority
-            
+
         Returns:
             ComprehensionYAML: Structured document ready for YAML export
         """
         # Build metadata
         metadata = self._build_metadata(intent_dict)
-        
+
         # Build intent section
         intent_section = self._build_intent_section(intent_dict)
-        
+
         # Build challenges section (sort by severity: CRITICAL → HIGH → MEDIUM → LOW)
         challenge_items = [
             ChallengeItem(
@@ -302,7 +302,7 @@ class CanonicalIntentComposer:
             key=lambda x: {"CRITICAL": 0, "HIGH": 1, "MEDIUM": 2, "LOW": 3}.get(x.severity, 4)
         )
         challenges_section = ChallengeSection(items=challenge_items)
-        
+
         # Build recommendations section (sort by priority: HIGH → MEDIUM → LOW)
         recommendation_items = [
             RecommendationItem(
@@ -321,14 +321,14 @@ class CanonicalIntentComposer:
             key=lambda x: {"HIGH": 0, "MEDIUM": 1, "LOW": 2}.get(x.priority, 3)
         )
         recommendations_section = RecommendationSection(items=recommendation_items)
-        
+
         return ComprehensionYAML(
             metadata=metadata,
             intent=intent_section,
             challenges=challenges_section,
             recommendations=recommendations_section,
         )
-    
+
     def _build_metadata(self, intent_dict: Dict[str, Any]) -> Dict[str, Any]:
         """Build metadata section with timestamp, version, tool info."""
         return {
@@ -339,7 +339,7 @@ class CanonicalIntentComposer:
             "intent_id": str(uuid.uuid4()),
             "schema": "cortex-comprehension-v1",
         }
-    
+
     def _build_intent_section(self, intent_dict: Dict[str, Any]) -> IntentSection:
         """Build intent section from canonicalized intent."""
         return IntentSection(
@@ -350,19 +350,19 @@ class CanonicalIntentComposer:
             needs_clarification=intent_dict.get("needs_clarification", False),
             clarification_prompt=intent_dict.get("clarification_prompt"),
         )
-    
+
     def to_yaml_string(self, yaml_obj: ComprehensionYAML) -> str:
         """
         Convert ComprehensionYAML to formatted YAML string.
-        
+
         Args:
             yaml_obj: ComprehensionYAML object to serialize
-            
+
         Returns:
             str: YAML-formatted string ready for output/storage
         """
         data_dict = yaml_obj.to_dict()
-        
+
         # Use safe_dump for secure YAML generation
         yaml_string = yaml.safe_dump(
             data_dict,
@@ -372,13 +372,13 @@ class CanonicalIntentComposer:
             width=100,
             default_style=None,
         )
-        
+
         return yaml_string
-    
+
     def to_file(self, yaml_obj: ComprehensionYAML, filepath: str) -> None:
         """
         Write ComprehensionYAML to file.
-        
+
         Args:
             yaml_obj: ComprehensionYAML object to write
             filepath: Path where YAML should be written
@@ -386,19 +386,19 @@ class CanonicalIntentComposer:
         yaml_string = self.to_yaml_string(yaml_obj)
         with open(filepath, "w") as f:
             f.write(yaml_string)
-    
+
     @staticmethod
     def from_file(filepath: str) -> ComprehensionYAML:
         """
         Read ComprehensionYAML from file.
-        
+
         Args:
             filepath: Path to YAML file
-            
+
         Returns:
             ComprehensionYAML: Reconstructed object
         """
         with open(filepath, "r") as f:
             data = yaml.safe_load(f)
-        
+
         return ComprehensionYAML.from_dict(data)

@@ -16,21 +16,20 @@ Phase: PHASE-VAC-001-02
 CORE Rules: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 """
 
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Set, Tuple
-from datetime import datetime
 import logging
 import re
+from datetime import datetime
 from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 # Import from cleaner interface
 from tier1.orchestrators.cleaners import (
-    CleanerInterface,
     Analysis,
+    CleanerInterface,
     Report,
     RollbackResult,
 )
-
 
 # =============================================================================
 # MD File Categories & Classification

@@ -6,7 +6,7 @@ Handles multi-turn conversation state, context persistence, and cancellation.
 
 import uuid
 from datetime import datetime
-from typing import Dict, List, Any
+from typing import Any, Dict, List
 
 
 class ConversationOrchestrator:
@@ -26,10 +26,10 @@ class ConversationOrchestrator:
     def process_turn(self, request: Dict[str, Any]) -> Dict[str, Any]:
         """
         Process a single conversation turn.
-        
+
         Args:
             request: Turn request with user_input, context, turn_number.
-            
+
         Returns:
             Response with output, context, and metadata.
         """

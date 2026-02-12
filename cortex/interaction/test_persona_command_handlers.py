@@ -4,19 +4,20 @@ Tests for Persona Command Handlers
 Authority: Phase 37 S4, CORE-008 (TDD-first)
 """
 
-import pytest
 from typing import Optional
 
-from cortex.orchestrators.persona.models import PersonaId, DepthLevel
-from cortex.orchestrators.persona.role_resolver import RoleResolver
+import pytest
+
+from cortex.interaction.persona_command_handlers import (
+    CommandResult,
+    PersonaCommandHandlers,
+)
+from cortex.orchestrators.persona.master_orchestrator import MasterOrchestrator
+from cortex.orchestrators.persona.models import DepthLevel, PersonaId
 from cortex.orchestrators.persona.persona_injector import PersonaInjector
 from cortex.orchestrators.persona.persona_loader import PersonaLoader
+from cortex.orchestrators.persona.role_resolver import RoleResolver
 from cortex.orchestrators.persona.session_context import SessionContext
-from cortex.orchestrators.persona.master_orchestrator import MasterOrchestrator
-from cortex.interaction.persona_command_handlers import (
-    PersonaCommandHandlers,
-    CommandResult,
-)
 
 
 @pytest.fixture

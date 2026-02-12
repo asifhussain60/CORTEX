@@ -331,32 +331,6 @@ class TestPhase52Integration:
 class TestPhase52AcceptanceCriteriaGREEN:
     """Verify GREEN phase AC criteria."""
     
-    def test_ac_1_implementation_present(self):
-        """AC-1: MasterOrchestrator implementation complete."""
-        # Verified by: TestMasterOrchestratorImplementation
-        pass
-    
-    def test_ac_2_implementation_present(self):
-        """AC-2: TDDOrchestrator implementation complete."""
-        # Verified by: TestTDDOrchestratorImplementation
-        pass
-    
-    def test_ac_3_implementation_present(self):
-        """AC-3: LENSSynthesis implementation complete."""
-        # Verified by: TestLENSSynthesisImplementation
-        pass
-    
-    def test_ac_4_implementation_present(self):
-        """AC-4: Rule migration complete."""
-        # Verified by: TestCoreRulesMigrationImplementation
-        pass
-    
-    def test_ac_5_implementation_present(self):
-        """AC-5: E2E path works."""
-        # Verified by: TestPhase52E2EImplementation
-        pass
-
-
 if __name__ == "__main__":
     # Run with: pytest tests/phase_52/test_s2_green_implementation.py -v
     pytest.main([__file__, "-v", "--tb=short"])

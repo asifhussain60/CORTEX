@@ -23,7 +23,7 @@ from cortex.brain.core.result import Err, Ok, Result
 
 class ComplianceFramework(str, Enum):
     """Supported compliance frameworks."""
-    
+
     SOC2 = "SOC2"
     ISO27001 = "ISO27001"
     HIPAA = "HIPAA"
@@ -34,7 +34,7 @@ class ComplianceFramework(str, Enum):
 
 class ComplianceCategory(str, Enum):
     """Compliance categories for operations."""
-    
+
     AUTHENTICATION = "AUTHENTICATION"
     AUTHORIZATION = "AUTHORIZATION"
     DATA_PROTECTION = "DATA_PROTECTION"
@@ -52,12 +52,12 @@ class ComplianceCategory(str, Enum):
 @dataclass
 class ComplianceRequirement:
     """Single compliance requirement."""
-    
+
     framework: ComplianceFramework
     requirement_id: str  # e.g., "SOC2-CC6.1", "ISO27001-A.9.1"
     description: str
     category: ComplianceCategory
-    
+
     def __hash__(self):
         return hash((self.framework, self.requirement_id))
 
@@ -65,7 +65,7 @@ class ComplianceRequirement:
 @dataclass
 class ComplianceMarker:
     """Marker for compliance-relevant operation."""
-    
+
     id: str
     timestamp: str
     operation: str  # e.g., "LOGIN", "SECRET_ACCESS", "DATA_EXPORT"
@@ -78,7 +78,7 @@ class ComplianceMarker:
     action: Optional[str] = None
     result: Optional[str] = None  # "SUCCESS" or "FAILURE"
     metadata: Dict[str, Any] = field(default_factory=dict)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
@@ -99,15 +99,15 @@ class ComplianceMarker:
 
 class ComplianceMarkerRegistry:
     """Registry of compliance requirements by framework and category."""
-    
+
     def __init__(self):
         """Initialize compliance registry."""
         self._requirements: Dict[str, ComplianceRequirement] = {}
         self._init_requirements()
-    
+
     def _init_requirements(self):
         """Initialize standard compliance requirements."""
-        
+
         # SOC2 Requirements
         soc2_requirements = [
             ComplianceRequirement(
@@ -135,7 +135,7 @@ class ComplianceMarkerRegistry:
                 ComplianceCategory.CHANGE_MANAGEMENT,
             ),
         ]
-        
+
         # ISO 27001 Requirements
         iso_requirements = [
             ComplianceRequirement(
@@ -157,7 +157,7 @@ class ComplianceMarkerRegistry:
                 ComplianceCategory.CHANGE_MANAGEMENT,
             ),
         ]
-        
+
         # GDPR Requirements
         gdpr_requirements = [
             ComplianceRequirement(
@@ -173,7 +173,7 @@ class ComplianceMarkerRegistry:
                 ComplianceCategory.DATA_PROTECTION,
             ),
         ]
-        
+
         # HIPAA Requirements
         hipaa_requirements = [
             ComplianceRequirement(
@@ -189,7 +189,7 @@ class ComplianceMarkerRegistry:
                 ComplianceCategory.ENCRYPTION,
             ),
         ]
-        
+
         # PCI-DSS Requirements
         pci_requirements = [
             ComplianceRequirement(
@@ -211,32 +211,32 @@ class ComplianceMarkerRegistry:
                 ComplianceCategory.CHANGE_MANAGEMENT,
             ),
         ]
-        
+
         for req in soc2_requirements + iso_requirements + gdpr_requirements + hipaa_requirements + pci_requirements:
             self._requirements[req.requirement_id] = req
-    
+
     def get_requirement(self, requirement_id: str) -> Optional[ComplianceRequirement]:
         """Get requirement by ID."""
         return self._requirements.get(requirement_id)
-    
+
     def get_requirements_for_framework(self, framework: ComplianceFramework) -> List[ComplianceRequirement]:
         """Get all requirements for a framework."""
         return [
             req for req in self._requirements.values()
             if req.framework == framework
         ]
-    
+
     def get_requirements_for_category(self, category: ComplianceCategory) -> List[ComplianceRequirement]:
         """Get all requirements for a category."""
         return [
             req for req in self._requirements.values()
             if req.category == category
         ]
-    
+
     def get_requirements_for_operation(self, operation: str) -> List[ComplianceRequirement]:
         """Get applicable requirements for an operation."""
         operation_upper = operation.upper()
-        
+
         # Map operations to categories
         operation_categories = {
             "LOGIN": [ComplianceCategory.AUTHENTICATION, ComplianceCategory.AUDIT_LOGGING],
@@ -247,22 +247,22 @@ class ComplianceMarkerRegistry:
             "ENCRYPTION": [ComplianceCategory.ENCRYPTION, ComplianceCategory.DATA_PROTECTION],
             "CONFIG_CHANGE": [ComplianceCategory.CHANGE_MANAGEMENT, ComplianceCategory.AUDIT_LOGGING],
         }
-        
+
         categories = operation_categories.get(operation_upper, [])
         requirements = []
         for category in categories:
             requirements.extend(self.get_requirements_for_category(category))
-        
+
         return requirements
 
 
 class ComplianceMarkerService:
     """Service for creating and managing compliance markers."""
-    
+
     def __init__(self):
         """Initialize compliance marker service."""
         self.registry = ComplianceMarkerRegistry()
-    
+
     def create_marker(
         self,
         marker_id: str,
@@ -277,7 +277,7 @@ class ComplianceMarkerService:
     ) -> ComplianceMarker:
         """
         Create a compliance marker.
-        
+
         Args:
             marker_id: Unique identifier for marker
             operation: Type of operation (e.g., "LOGIN")
@@ -288,29 +288,29 @@ class ComplianceMarkerService:
             result: Result of operation ("SUCCESS" or "FAILURE")
             evidence_refs: References to evidence bundles
             metadata: Additional metadata
-            
+
         Returns:
             ComplianceMarker instance
         """
         timestamp = datetime.now(timezone.utc).isoformat()
-        
+
         # Default to all frameworks if not specified
         marker_frameworks = set(frameworks) if frameworks else set(ComplianceFramework)
-        
+
         # Auto-detect requirements based on operation
         requirements = set()
         auto_requirements = self.registry.get_requirements_for_operation(operation)
         for req in auto_requirements:
             if req.framework in marker_frameworks:
                 requirements.add(req.requirement_id)
-        
+
         # Extract categories from requirements
         categories = set()
         for req_id in requirements:
             req = self.registry.get_requirement(req_id)
             if req:
                 categories.add(req.category)
-        
+
         return ComplianceMarker(
             id=marker_id,
             timestamp=timestamp,
@@ -325,7 +325,7 @@ class ComplianceMarkerService:
             result=result,
             metadata=metadata or {},
         )
-    
+
     def create_marker_for_frameworks(
         self,
         marker_id: str,
@@ -335,18 +335,18 @@ class ComplianceMarkerService:
     ) -> ComplianceMarker:
         """
         Create marker for specific frameworks.
-        
+
         Args:
             marker_id: Unique identifier
             operation: Operation type
             frameworks: List of frameworks to apply
             **kwargs: Additional arguments for create_marker
-            
+
         Returns:
             ComplianceMarker instance
         """
         return self.create_marker(marker_id, operation, frameworks, **kwargs)
-    
+
     def create_audit_marker(
         self,
         marker_id: str,
@@ -356,13 +356,13 @@ class ComplianceMarkerService:
     ) -> ComplianceMarker:
         """
         Create marker for audit logging requirement.
-        
+
         Args:
             marker_id: Unique identifier
             operation: Operation type
             user_id: User performing operation
             result: Result of operation
-            
+
         Returns:
             ComplianceMarker instance
         """
@@ -375,7 +375,7 @@ class ComplianceMarkerService:
         # Ensure audit logging category is present
         marker.categories.add(ComplianceCategory.AUDIT_LOGGING)
         return marker
-    
+
     def get_markers_by_framework(
         self,
         markers: List[ComplianceMarker],
@@ -383,16 +383,16 @@ class ComplianceMarkerService:
     ) -> List[ComplianceMarker]:
         """
         Filter markers by compliance framework.
-        
+
         Args:
             markers: List of markers
             framework: Framework to filter by
-            
+
         Returns:
             Filtered list of markers
         """
         return [m for m in markers if framework in m.frameworks]
-    
+
     def get_markers_by_category(
         self,
         markers: List[ComplianceMarker],
@@ -400,16 +400,16 @@ class ComplianceMarkerService:
     ) -> List[ComplianceMarker]:
         """
         Filter markers by compliance category.
-        
+
         Args:
             markers: List of markers
             category: Category to filter by
-            
+
         Returns:
             Filtered list of markers
         """
         return [m for m in markers if category in m.categories]
-    
+
     def get_markers_by_user(
         self,
         markers: List[ComplianceMarker],
@@ -417,16 +417,16 @@ class ComplianceMarkerService:
     ) -> List[ComplianceMarker]:
         """
         Filter markers by user ID.
-        
+
         Args:
             markers: List of markers
             user_id: User to filter by
-            
+
         Returns:
             Filtered list of markers
         """
         return [m for m in markers if m.user_id == user_id]
-    
+
     def generate_compliance_report(
         self,
         markers: List[ComplianceMarker],
@@ -434,20 +434,20 @@ class ComplianceMarkerService:
     ) -> Dict[str, Any]:
         """
         Generate compliance report for a framework.
-        
+
         Args:
             markers: List of markers
             framework: Framework to report on
-            
+
         Returns:
             Report dictionary
         """
         framework_markers = self.get_markers_by_framework(markers, framework)
-        
+
         # Collect requirements and their coverage
         requirements = self.registry.get_requirements_for_framework(framework)
         requirement_coverage = {}
-        
+
         for req in requirements:
             matching_markers = [
                 m for m in framework_markers
@@ -459,7 +459,7 @@ class ComplianceMarkerService:
                 'marker_count': len(matching_markers),
                 'last_occurrence': matching_markers[-1].timestamp if matching_markers else None,
             }
-        
+
         return {
             'framework': framework.value,
             'report_generated': datetime.now(timezone.utc).isoformat(),
@@ -467,17 +467,17 @@ class ComplianceMarkerService:
             'total_requirements': len(requirements),
             'coverage': requirement_coverage,
         }
-    
+
     def generate_audit_trail_summary(
         self,
         markers: List[ComplianceMarker],
     ) -> Dict[str, Any]:
         """
         Generate audit trail summary.
-        
+
         Args:
             markers: List of markers
-            
+
         Returns:
             Summary dictionary
         """

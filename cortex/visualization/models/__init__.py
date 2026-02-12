@@ -7,11 +7,11 @@ Authority: LENS-MULTI-LANGUAGE-ENHANCEMENT.yaml Phase 0
 """
 
 from cortex.visualization.models.diagram_data import (
+    D3Diagram,
     DiagramData,
     DiagramType,
     MermaidDiagram,
     PlantUMLDiagram,
-    D3Diagram
 )
 
 __all__ = [

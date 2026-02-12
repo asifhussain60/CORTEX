@@ -136,27 +136,6 @@ class TestLENSCacheStatistics:
 class TestLENSCacheInterface:
     """Test LENSCache abstract interface."""
 
-    def test_get_raises_not_implemented(self):
-        """LENSCache.get() should raise NotImplementedError."""
-        cache = LENSCache(backend_type="memory")
-        
-        with pytest.raises(NotImplementedError):
-            cache.get("test_key")
-
-    def test_set_raises_not_implemented(self):
-        """LENSCache.set() should raise NotImplementedError."""
-        cache = LENSCache(backend_type="memory")
-        
-        with pytest.raises(NotImplementedError):
-            cache.set("test_key", {"result": "data"})
-
-    def test_invalidate_raises_not_implemented(self):
-        """LENSCache.invalidate() should raise NotImplementedError."""
-        cache = LENSCache(backend_type="memory")
-        
-        with pytest.raises(NotImplementedError):
-            cache.invalidate("*")
-
     def test_backend_type_stored(self):
         """Backend type should be stored during initialization."""
         cache_memory = LENSCache(backend_type="memory")

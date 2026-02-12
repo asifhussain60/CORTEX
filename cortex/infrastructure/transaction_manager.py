@@ -6,14 +6,14 @@ levels, automatic deadlock detection and retry, nested transaction support
 via savepoints, and connection pooling.
 """
 
+import queue
 import sqlite3
 import threading
 import time
-from enum import Enum
-from typing import Optional, Any, Dict, Callable
-from dataclasses import dataclass
 from contextlib import contextmanager
-import queue
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Callable, Dict, Optional
 
 
 class IsolationLevel(Enum):
@@ -45,11 +45,11 @@ class TransactionTimeoutError(Exception):
 
 class SavepointContext:
     """Context manager for savepoint (nested transaction)."""
-    
+
     def __init__(self, connection: sqlite3.Connection, name: str):
         """
         Initialize savepoint context.
-        
+
         Args:
             connection: Database connection
             name: Savepoint name
@@ -57,12 +57,12 @@ class SavepointContext:
         self._connection = connection
         self._name = name
         self._released = False
-    
+
     def __enter__(self) -> "SavepointContext":
         """Create savepoint."""
         self._connection.execute(f"SAVEPOINT {self._name}")
         return self
-    
+
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
         """Release or rollback savepoint."""
         if exc_type is None and not self._released:
@@ -70,7 +70,7 @@ class SavepointContext:
         elif not self._released:
             self._connection.execute(f"ROLLBACK TO SAVEPOINT {self._name}")
         self._released = True
-    
+
     def execute(self, sql: str, params: tuple = ()) -> sqlite3.Cursor:
         """Execute SQL within savepoint."""
         return self._connection.execute(sql, params)
@@ -78,7 +78,7 @@ class SavepointContext:
 
 class TransactionContext:
     """Context manager for database transaction."""
-    
+
     def __init__(
         self,
         connection: sqlite3.Connection,
@@ -89,7 +89,7 @@ class TransactionContext:
     ):
         """
         Initialize transaction context.
-        
+
         Args:
             connection: Database connection
             isolation: Isolation level
@@ -106,7 +106,7 @@ class TransactionContext:
         self._rolled_back = False
         self._start_time = time.time()
         self._savepoint_counter = 0
-    
+
     def __enter__(self) -> "TransactionContext":
         """Begin transaction."""
         # Begin transaction with appropriate type
@@ -117,7 +117,7 @@ class TransactionContext:
         else:
             self._connection.execute("BEGIN IMMEDIATE")
         return self
-    
+
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
         """Commit or rollback transaction."""
         try:
@@ -127,61 +127,61 @@ class TransactionContext:
                 self._rollback()
         finally:
             self._manager._release_connection(self._connection)
-    
+
     def execute(self, sql: str, params: tuple = ()) -> sqlite3.Cursor:
         """
         Execute SQL statement.
-        
+
         Args:
             sql: SQL statement
             params: Query parameters
-            
+
         Returns:
             Cursor with results
-            
+
         Raises:
             TransactionTimeoutError: If transaction exceeds timeout
         """
         self._check_timeout()
-        
+
         if self._read_only and any(kw in sql.upper() for kw in ["INSERT", "UPDATE", "DELETE", "CREATE", "DROP", "ALTER"]):
             raise sqlite3.OperationalError("Cannot write in read-only transaction")
-        
+
         return self._connection.execute(sql, params)
-    
+
     def commit(self) -> None:
         """Explicitly commit transaction."""
         self._commit()
-    
+
     def rollback(self) -> None:
         """Explicitly rollback transaction."""
         self._rollback()
-    
+
     def savepoint(self):
         """
         Create nested transaction via savepoint.
-        
+
         Returns:
             Savepoint context manager
         """
         self._savepoint_counter += 1
         name = f"sp_{self._savepoint_counter}"
         return SavepointContext(self._connection, name)
-    
+
     def _commit(self) -> None:
         """Commit transaction."""
         if not self._committed and not self._rolled_back:
             self._connection.execute("COMMIT")
             self._committed = True
             self._manager._metrics["total_commits"] += 1
-    
+
     def _rollback(self) -> None:
         """Rollback transaction."""
         if not self._committed and not self._rolled_back:
             self._connection.execute("ROLLBACK")
             self._rolled_back = True
             self._manager._metrics["total_rollbacks"] += 1
-    
+
     def _check_timeout(self) -> None:
         """Check if transaction has exceeded timeout."""
         elapsed = time.time() - self._start_time
@@ -192,7 +192,7 @@ class TransactionContext:
 class TransactionManager:
     """
     ACID transaction manager with isolation levels and deadlock handling.
-    
+
     Provides:
     - Configurable isolation levels
     - Automatic deadlock detection and retry
@@ -200,14 +200,14 @@ class TransactionManager:
     - Connection pooling
     - Transaction timeout enforcement
     - Metrics collection
-    
+
     Thread-safe for concurrent access.
     """
-    
+
     def __init__(self, db_path: str, config: Optional[TransactionConfig] = None):
         """
         Initialize transaction manager.
-        
+
         Args:
             db_path: Path to SQLite database
             config: Transaction configuration
@@ -215,13 +215,13 @@ class TransactionManager:
         self._db_path = db_path
         self._config = config or TransactionConfig()
         self._lock = threading.RLock()
-        
+
         # Connection pool
         self._pool: queue.Queue[sqlite3.Connection] = queue.Queue(maxsize=self._config.pool_size)
         for _ in range(self._config.pool_size):
             conn = self._create_connection()
             self._pool.put(conn)
-        
+
         # Metrics
         self._metrics: Dict[str, int] = {
             "total_commits": 0,
@@ -229,7 +229,7 @@ class TransactionManager:
             "total_deadlocks": 0,
             "total_timeouts": 0,
         }
-    
+
     def begin(
         self,
         isolation: Optional[IsolationLevel] = None,
@@ -238,21 +238,21 @@ class TransactionManager:
     ) -> TransactionContext:
         """
         Begin a new transaction.
-        
+
         Args:
             isolation: Isolation level (default from config)
             read_only: Whether transaction is read-only
             timeout: Transaction timeout (default from config)
-            
+
         Returns:
             Transaction context
         """
         isolation = isolation or self._config.default_isolation
         timeout = timeout or self._config.timeout_seconds
-        
+
         conn = self._acquire_connection()
         return TransactionContext(conn, isolation, timeout, read_only, self)
-    
+
     def transaction(
         self,
         isolation: Optional[IsolationLevel] = None,
@@ -261,17 +261,17 @@ class TransactionManager:
     ) -> TransactionContext:
         """Alias for begin() for compatibility."""
         return self.begin(isolation, read_only, timeout)
-    
+
     def get_metrics(self) -> Dict[str, int]:
         """
         Get transaction metrics.
-        
+
         Returns:
             Metrics dictionary
         """
         with self._lock:
             return dict(self._metrics)
-    
+
     def close(self) -> None:
         """Close all connections in pool."""
         while not self._pool.empty():
@@ -280,7 +280,7 @@ class TransactionManager:
                 conn.close()
             except queue.Empty:
                 break
-    
+
     def _create_connection(self) -> sqlite3.Connection:
         """Create new database connection."""
         conn = sqlite3.connect(
@@ -294,14 +294,14 @@ class TransactionManager:
         conn.execute("PRAGMA synchronous=NORMAL")
         conn.execute("PRAGMA busy_timeout=5000")
         return conn
-    
+
     def _acquire_connection(self) -> sqlite3.Connection:
         """Acquire connection from pool."""
         try:
             return self._pool.get(timeout=self._config.timeout_seconds)
         except queue.Empty:
             raise TransactionTimeoutError("Connection pool exhausted")
-    
+
     def _release_connection(self, conn: sqlite3.Connection) -> None:
         """Release connection back to pool."""
         try:
@@ -309,7 +309,7 @@ class TransactionManager:
         except queue.Full:
             # Pool full, close connection
             conn.close()
-    
+
     def _execute_with_retry(self, func: Callable[[], Any]) -> Any:
         """Execute function with deadlock retry logic."""
         retries = 0

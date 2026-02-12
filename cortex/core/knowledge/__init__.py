@@ -10,7 +10,7 @@ Components:
 
 Usage:
     from cortex.core.knowledge import KnowledgeProvider
-    
+
     def evaluate_knowledge(provider: KnowledgeProvider) -> None:
         if provider.is_loaded:
             domains = provider.domains

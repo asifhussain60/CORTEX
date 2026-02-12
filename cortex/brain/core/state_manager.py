@@ -2,7 +2,7 @@
 State Manager: Cross-Phase State Consistency and Carryover.
 
 Manages state consistency across all CORTEX phases, ensuring data integrity
-and proper carryover between phases while maintaining isolation for 
+and proper carryover between phases while maintaining isolation for
 concurrent operations.
 
 CORE-011: All functions have type hints.
@@ -10,20 +10,20 @@ CORE-012: All public APIs have Google-style docstrings.
 CORE-008: Implementation follows TDD specification.
 """
 
-import threading
+import json
 import logging
-from typing import Any, Dict, List, Optional, Tuple
+import threading
+from copy import deepcopy
 from dataclasses import dataclass, field
 from datetime import datetime
-from copy import deepcopy
-import json
+from typing import Any, Dict, List, Optional, Tuple
 
 
 @dataclass
 class OperationState:
     """
     Operation state across phases.
-    
+
     Attributes:
         operation_id: Unique operation identifier
         user_intent: Original user intent
@@ -56,7 +56,7 @@ class OperationState:
 class StateManager:
     """
     Manages state consistency across CORTEX phases.
-    
+
     Maintains operation state across all 4 phases, ensuring:
     - State carryover between phases
     - Isolation between concurrent operations
@@ -81,13 +81,13 @@ class StateManager:
     ) -> OperationState:
         """
         Create new operation state.
-        
+
         Args:
             operation_id: Unique operation ID
             user_intent: User's original intent
             priority: Operation priority (default 0)
             metadata: Optional metadata
-            
+
         Returns:
             New OperationState
         """
@@ -107,10 +107,10 @@ class StateManager:
     def get_operation_state(self, operation_id: str) -> Optional[OperationState]:
         """
         Get operation state.
-        
+
         Args:
             operation_id: Operation ID
-            
+
         Returns:
             OperationState or None if not found
         """
@@ -126,13 +126,13 @@ class StateManager:
     ) -> bool:
         """
         Transition operation to next phase.
-        
+
         Args:
             operation_id: Operation ID
             from_phase: Current phase number
             to_phase: Target phase number
             phase_output: Output from current phase
-            
+
         Returns:
             True if successful, False otherwise
         """
@@ -195,11 +195,11 @@ class StateManager:
     ) -> bool:
         """
         Rollback operation to target phase.
-        
+
         Args:
             operation_id: Operation ID
             target_phase: Target phase to rollback to
-            
+
         Returns:
             True if successful, False otherwise
         """
@@ -249,11 +249,11 @@ class StateManager:
     ) -> Optional[Dict[str, Any]]:
         """
         Get context/inputs for target phase.
-        
+
         Args:
             operation_id: Operation ID
             target_phase: Target phase number
-            
+
         Returns:
             Context dict with inputs from previous phases, or None
         """
@@ -286,12 +286,12 @@ class StateManager:
     ) -> bool:
         """
         Update operation metadata.
-        
+
         Args:
             operation_id: Operation ID
             key: Metadata key
             value: Metadata value
-            
+
         Returns:
             True if successful
         """
@@ -306,10 +306,10 @@ class StateManager:
     def complete_operation(self, operation_id: str) -> bool:
         """
         Mark operation as complete and clean up.
-        
+
         Args:
             operation_id: Operation ID
-            
+
         Returns:
             True if successful
         """
@@ -325,7 +325,7 @@ class StateManager:
 
             self.logger.info(f"Completed operation: {operation_id}")
             return True
-    
+
     def track_governance_violation(
         self,
         operation_id: str,
@@ -335,44 +335,44 @@ class StateManager:
     ) -> bool:
         """
         Track governance rule violation (Layer 2: Runtime Monitoring).
-        
+
         Records CORE rule violations in real-time during operation execution.
         Enables circuit breaker pattern (trip after 3+ violations).
-        
+
         Args:
             operation_id: Operation ID
             rule_id: Governance rule ID (e.g., CORE-008)
             severity: Violation severity (CRITICAL, HIGH, MEDIUM, LOW)
             description: Human-readable violation description
-            
+
         Returns:
             True if tracked successfully, False if operation not found
-        
+
         AC-ID: REM-003-02 (Governance Defense-in-Depth Layer 2)
         """
         with self._operation_lock:
             state: Optional[OperationState] = self._operations.get(operation_id)
             if state is None:
                 return False
-            
+
             # Initialize violations list if not exists
             if "governance_violations" not in state.metadata:
                 state.metadata["governance_violations"] = []
-            
+
             violation_entry = {
                 "rule_id": rule_id,
                 "severity": severity,
                 "description": description,
                 "timestamp": datetime.now().timestamp(),
             }
-            
+
             state.metadata["governance_violations"].append(violation_entry)
-            
+
             self.logger.warning(
                 f"Governance violation tracked for {operation_id}: "
                 f"{rule_id} ({severity}) - {description}"
             )
-            
+
             # Check circuit breaker threshold
             violation_count = len(state.metadata["governance_violations"])
             if violation_count >= 3:
@@ -381,68 +381,68 @@ class StateManager:
                     f"{violation_count} violations detected"
                 )
                 state.metadata["circuit_breaker_tripped"] = True
-            
+
             return True
-    
+
     def get_violation_count(self, operation_id: str) -> int:
         """
         Get governance violation count for operation (Layer 2).
-        
+
         Args:
             operation_id: Operation ID
-            
+
         Returns:
             Number of governance violations, or 0 if operation not found
-        
+
         AC-ID: REM-003-02 (Governance Defense-in-Depth Layer 2)
         """
         with self._operation_lock:
             state: Optional[OperationState] = self._operations.get(operation_id)
             if state is None:
                 return 0
-            
+
             violations = state.metadata.get("governance_violations", [])
             return len(violations)
-    
+
     def is_circuit_breaker_tripped(self, operation_id: str) -> bool:
         """
         Check if circuit breaker tripped for operation (Layer 2).
-        
+
         Circuit breaker trips after 3+ governance violations to prevent
         cascade failures.
-        
+
         Args:
             operation_id: Operation ID
-            
+
         Returns:
             True if circuit breaker tripped, False otherwise
-        
+
         AC-ID: REM-003-02 (Governance Defense-in-Depth Layer 2)
         """
         with self._operation_lock:
             state: Optional[OperationState] = self._operations.get(operation_id)
             if state is None:
                 return False
-            
+
             return state.metadata.get("circuit_breaker_tripped", False)
-    
+
     def get_statistics(self) -> Dict[str, Any]:
         """
         Get state manager statistics.
-        
+
         Returns:
             Dict with active operations, rollbacks, governance violations, etc.
         """
         with self._operation_lock:
             total_violations = 0
             circuit_breaker_tripped_count = 0
-            
+
             for state in self._operations.values():
                 violations = state.metadata.get("governance_violations", [])
                 total_violations += len(violations)
                 if state.metadata.get("circuit_breaker_tripped", False):
                     circuit_breaker_tripped_count += 1
-            
+
             return {
                 "active_operations": len(self._operations),
                 "total_snapshots": sum(
@@ -466,36 +466,36 @@ _state_manager_lock: threading.Lock = threading.Lock()
 def get_state_manager() -> StateManager:
     """
     Get global StateManager instance (singleton).
-    
+
     Returns:
         StateManager instance
     """
     global _state_manager
-    
+
     if _state_manager is None:
         with _state_manager_lock:
             if _state_manager is None:
                 _state_manager = StateManager()
-    
+
     return _state_manager
 
 
 if __name__ == "__main__":
     # Example usage
     manager: StateManager = StateManager()
-    
+
     # Create operation
     state: OperationState = manager.create_operation(
         "op_001",
         "Implement new feature",
         priority=1
     )
-    
+
     print(f"Created operation: {state.operation_id}")
-    
+
     # Transition through phases
     manager.transition_phase("op_001", 1, 2, {"intent": "IMPLEMENT"})
-    
+
     # Get context for phase 2
     context: Optional[Dict[str, Any]] = manager.get_context_for_phase("op_001", 2)
     print(f"Phase 2 context: {json.dumps(context, default=str, indent=2)}")

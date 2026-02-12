@@ -18,29 +18,29 @@ Authority: LENS-MULTI-LANGUAGE-ENHANCEMENT.yaml Phase 0
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import List, Optional, Dict, Any
+from typing import Any, Dict, List, Optional
 
 
 class LanguageType(Enum):
     """Supported programming languages for AST analysis."""
-    
+
     PYTHON = "python"
     CSHARP = "csharp"
     JAVA = "java"
     TYPESCRIPT = "typescript"
     JAVASCRIPT = "javascript"
-    
+
     @classmethod
     def from_extension(cls, extension: str) -> "LanguageType":
         """
         Derive language type from file extension.
-        
+
         Args:
             extension: File extension (e.g., ".py", ".cs")
-            
+
         Returns:
             LanguageType enum value
-            
+
         Raises:
             ValueError: If extension is not supported
         """
@@ -53,10 +53,10 @@ class LanguageType(Enum):
             ".js": cls.JAVASCRIPT,
             ".jsx": cls.JAVASCRIPT,
         }
-        
+
         if extension not in extension_map:
             raise ValueError(f"Unsupported file extension: {extension}")
-        
+
         return extension_map[extension]
 
 
@@ -64,14 +64,14 @@ class LanguageType(Enum):
 class ImportInfo:
     """
     Represents an import/using/include statement.
-    
+
     Attributes:
         module: Module/package name (e.g., "os.path", "System.Collections")
         names: Specific names imported (e.g., ["join", "exists"])
         line: Line number where import appears
         alias: Optional alias (e.g., "import pandas as pd")
     """
-    
+
     module: str
     names: List[str]
     line: int
@@ -82,7 +82,7 @@ class ImportInfo:
 class FunctionInfo:
     """
     Represents a function/method extracted from AST.
-    
+
     Attributes:
         name: Function name
         line_start: Starting line number
@@ -93,7 +93,7 @@ class FunctionInfo:
         return_type: Return type annotation (if present)
         decorators: List of decorators/attributes (e.g., @property, [HttpGet])
     """
-    
+
     name: str
     line_start: int
     line_end: int
@@ -108,7 +108,7 @@ class FunctionInfo:
 class ClassInfo:
     """
     Represents a class/interface/struct extracted from AST.
-    
+
     Attributes:
         name: Class name
         line_start: Starting line number
@@ -122,7 +122,7 @@ class ClassInfo:
         properties: List of property names (C#, TypeScript)
         attributes: List of attributes/annotations
     """
-    
+
     name: str
     line_start: int
     line_end: int
@@ -140,11 +140,11 @@ class ClassInfo:
 class PolyglotASTResult:
     """
     Unified AST analysis result that works across all supported languages.
-    
+
     This is the primary data structure returned by language adapters.
     It provides a consistent interface for LENS orchestrators regardless
     of the underlying language being analyzed.
-    
+
     Attributes:
         file_path: Path to the analyzed file
         language: Detected language type
@@ -154,7 +154,7 @@ class PolyglotASTResult:
         raw_ast: Optional raw AST data (language-specific)
         parse_errors: List of errors encountered during parsing
         metadata: Additional language-specific metadata
-    
+
     Example:
         >>> result = PolyglotASTResult(
         ...     file_path=Path("src/services/order.py"),
@@ -164,7 +164,7 @@ class PolyglotASTResult:
         ...     imports=[ImportInfo(module="typing", ...)],
         ... )
     """
-    
+
     file_path: Path
     language: LanguageType
     classes: List[ClassInfo]
@@ -173,31 +173,31 @@ class PolyglotASTResult:
     raw_ast: Optional[Any] = None
     parse_errors: List[str] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
-    
+
     @property
     def total_classes(self) -> int:
         """Total number of classes found."""
         return len(self.classes)
-    
+
     @property
     def total_functions(self) -> int:
         """Total number of standalone functions found."""
         return len(self.functions)
-    
+
     @property
     def total_methods(self) -> int:
         """Total number of methods across all classes."""
         return sum(len(cls.methods) for cls in self.classes)
-    
+
     @property
     def has_errors(self) -> bool:
         """Whether any parse errors were encountered."""
         return len(self.parse_errors) > 0
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """
         Convert result to dictionary (for JSON serialization).
-        
+
         Returns:
             Dictionary representation of the result
         """

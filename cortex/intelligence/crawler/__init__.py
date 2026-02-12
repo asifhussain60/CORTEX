@@ -3,8 +3,8 @@
 # Authority: CORE-008, CORE-011
 
 from .base import AsyncRepositoryCrawler, CrawlerConfig, FileMetadata
-from .walker import RepositoryWalker
 from .scheduler import PatternDiscoveryScheduler, WorkItem, WorkItemStatus
+from .walker import RepositoryWalker
 
 __all__ = [
     "AsyncRepositoryCrawler",

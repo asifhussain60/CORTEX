@@ -1,0 +1,119 @@
+# CORE-097: Automated Duplicate Detection Schedule
+# AC_START: AC-WAVE-9-ENH-096-S5-001
+# Authority: Wave 9 ENH-096 Stage 5 - VacuumOrchestrator Integration
+# Author: Asif Hussain
+# Date: 2026-02-12
+
+version: "1.0"
+enabled: true
+
+schedule:
+  # Weekly duplicate detection scan
+  frequency: "weekly"
+  day_of_week: "sunday"  # Run every Sunday
+  time: "02:00"  # 2 AM local time
+  timezone: "local"
+
+detector:
+  orchestrator: "DuplicationDetectorOrchestrator"
+  min_similarity: 0.75  # 75% similarity threshold
+  include_git_analysis: true
+  
+  # Target directories
+  scan_paths:
+    - "cortex/"
+    - "cortex_brain/"
+    - "cortex_lens/"
+    - "tests/"
+  
+  # Excluded directories
+  exclude_paths:
+    - "**/__pycache__/"
+    - "**/.pytest_cache/"
+    - "**/node_modules/"
+    - "**/.git/"
+    - "_archives/"
+
+actions:
+  # What to do when duplicates detected
+  on_detection:
+    - action: "log_violation"
+      severity: "warning"
+      log_file: "cortex_brain/state/duplication_violations.log"
+    
+    - action: "create_issue"
+      enabled: false  # Manual enablement required
+      issue_tracker: "github"
+      labels: ["CORE-097", "duplicate-code", "technical-debt"]
+    
+    - action: "notify"
+      enabled: false  # Manual enablement required
+      channels: ["slack", "email"]
+    
+    - action: "generate_report"
+      enabled: true
+      output_file: "cortex_brain/state/duplicate_detection_report.yaml"
+      include_consolidation_suggestions: true
+
+thresholds:
+  # Severity levels based on duplicate count
+  low: 1-5      # 1-5 duplicate sets
+  medium: 6-15  # 6-15 duplicate sets
+  high: 16-30   # 16-30 duplicate sets
+  critical: 31+ # 31+ duplicate sets
+
+integration:
+  # VacuumOrchestrator integration
+  vacuum:
+    enabled: true
+    cleanup_strategy: "archive"  # archive | delete | consolidate
+    auto_fix: false  # Manual review required
+  
+  # CI/CD integration (Stage 6)
+  cicd:
+    enabled: false  # Enable in Stage 6
+    block_on_critical: false
+    require_approval: true
+
+reporting:
+  # Report generation settings
+  format: "yaml"
+  include_metrics: true
+  historical_comparison: true
+  trend_analysis:
+    enabled: true
+    lookback_days: 90
+
+# Metrics captured
+metrics:
+  - name: "duplicate_sets_found"
+    type: "gauge"
+    description: "Number of duplicate code sets detected"
+  
+  - name: "duplicate_similarity_avg"
+    type: "gauge"
+    description: "Average similarity score of duplicates"
+  
+  - name: "lines_of_code_duplicated"
+    type: "gauge"
+    description: "Total lines of duplicated code"
+  
+  - name: "consolidation_opportunities"
+    type: "gauge"
+    description: "Number of consolidation opportunities identified"
+
+# Governance enforcement
+enforcement:
+  rule: "CORE-097"
+  blocking: false  # Non-blocking by default
+  auto_remediation: false  # Requires manual approval
+  audit_trail: true
+
+# Last run metadata (updated by VacuumOrchestrator)
+last_run:
+  timestamp: null
+  status: "never_run"
+  duplicates_found: 0
+  report_path: null
+
+# AC_COMPLETE: AC-WAVE-9-ENH-096-S5-001 ✅

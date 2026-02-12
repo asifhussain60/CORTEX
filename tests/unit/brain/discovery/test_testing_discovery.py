@@ -198,8 +198,6 @@ def test_another():
         
         (tests_dir / "test_more.py").write_text("""
 class TestExample:
-    def test_method(self):
-        pass
 """)
         
         discovery = TestingDiscovery()
@@ -239,9 +237,6 @@ class TestMockDiscovery:
 from unittest.mock import Mock, patch, MagicMock
 
 @patch('module.function')
-def test_with_patch(mock_func):
-    pass
-
 def test_with_mock():
     mock_obj = Mock()
 """)

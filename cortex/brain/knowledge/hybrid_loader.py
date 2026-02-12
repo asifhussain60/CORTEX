@@ -49,7 +49,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class KnowledgeDomain:
     """Single knowledge domain (CORTEX or Company).
-    
+
     Supports both CORTEX core domains and Company-specific domains with
     extended metadata fields for compliance standards and domain overrides.
     """
@@ -117,7 +117,7 @@ class KnowledgeIndex:
 class HybridKnowledgeLoader:
     """
     Loads knowledge from YAML files and manages SQLite cache.
-    
+
     Thread-safe singleton with automatic cache rebuild on pull.
     """
 

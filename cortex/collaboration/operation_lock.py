@@ -54,7 +54,7 @@ class LockAcquisitionError(OperationLockError):
 class LockInfo:
     """
     Information about a held lock.
-    
+
     Attributes:
         resource_id: The resource being locked
         user_id: Who holds the lock
@@ -70,10 +70,10 @@ class LockInfo:
 def _get_lock_directory() -> Path:
     """
     Get the lock directory path.
-    
+
     Uses /app/.cortex/locks/ in Docker, or .cortex/locks/ locally.
     Creates the directory if it doesn't exist.
-    
+
     Returns:
         Path to lock directory
     """
@@ -83,7 +83,7 @@ def _get_lock_directory() -> Path:
     else:
         # Local development
         lock_dir = Path(".cortex/locks")
-    
+
     lock_dir.mkdir(parents=True, exist_ok=True)
     return lock_dir
 
@@ -91,12 +91,12 @@ def _get_lock_directory() -> Path:
 def _sanitize_resource_id(resource_id: str) -> str:
     """
     Sanitize resource ID for use as filename.
-    
+
     Replaces path separators and special characters with underscores.
-    
+
     Args:
         resource_id: Original resource identifier
-        
+
     Returns:
         Sanitized string safe for filenames
     """
@@ -104,13 +104,13 @@ def _sanitize_resource_id(resource_id: str) -> str:
     sanitized = resource_id.replace("/", "_").replace("\\", "_")
     sanitized = sanitized.replace(":", "_").replace(" ", "_")
     sanitized = sanitized.replace("..", "_")
-    
+
     # Ensure it's not too long
     if len(sanitized) > 200:
         import hashlib
         hash_suffix = hashlib.sha256(resource_id.encode()).hexdigest()[:16]
         sanitized = sanitized[:180] + "_" + hash_suffix
-    
+
     return sanitized
 
 
@@ -122,31 +122,31 @@ def operation_lock(
 ) -> Generator[LockInfo, None, None]:
     """
     Acquire exclusive lock on a resource.
-    
+
     Context manager that provides exclusive access to a resource identified
     by resource_id. Uses file-based locking (fcntl.flock) which is safe
     across processes and works in Docker containers.
-    
+
     Args:
         resource_id: Unique identifier for the resource to lock.
             Examples: "file:src/main.py", "orchestrator:refactoring", "operation:deploy"
         timeout_seconds: Maximum time to wait for lock acquisition (default: 30s)
         user_id: Optional user ID override (defaults to current user)
-        
+
     Yields:
         LockInfo with details about the acquired lock
-        
+
     Raises:
         LockTimeoutError: If lock cannot be acquired within timeout
         LockAcquisitionError: If lock cannot be acquired for other reasons
-        
+
     Example:
         >>> with operation_lock("file:src/main.py"):
         ...     # Exclusive access to file
         ...     modify_file("src/main.py")
         ...
         >>> # Lock is automatically released
-        
+
     Example with timeout:
         >>> try:
         ...     with operation_lock("operation:deploy", timeout_seconds=5.0):
@@ -158,19 +158,19 @@ def operation_lock(
     if user_id is None:
         user = get_current_user()
         user_id = user.user_id
-    
+
     # Create lock file path
     lock_dir = _get_lock_directory()
     safe_id = _sanitize_resource_id(resource_id)
     lock_file = lock_dir / f"{safe_id}.lock"
-    
+
     # Track timing
     start_time = time.time()
     acquired_at = datetime.now(timezone.utc)
-    
+
     # Open lock file (create if doesn't exist)
     fd = os.open(str(lock_file), os.O_CREAT | os.O_RDWR)
-    
+
     try:
         # Attempt to acquire lock with retry
         while True:
@@ -179,15 +179,15 @@ def operation_lock(
                 if HAS_FCNTL and fcntl is not None:
                     fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
                 # Windows fallback: no-op (file existence is the lock)
-                
+
                 # Lock acquired - write holder info
                 os.ftruncate(fd, 0)
                 os.lseek(fd, 0, os.SEEK_SET)
                 lock_info_str = f"{user_id}|{acquired_at.isoformat()}|{resource_id}"
                 os.write(fd, lock_info_str.encode())
-                
+
                 break  # Successfully acquired
-                
+
             except BlockingIOError:
                 # Lock is held by another process
                 elapsed = time.time() - start_time
@@ -200,15 +200,15 @@ def operation_lock(
                         holder_user = holder_parts[0] if holder_parts else "unknown"
                     except Exception:
                         holder_user = "unknown"
-                    
+
                     raise LockTimeoutError(
                         f"Could not acquire lock on '{resource_id}' after "
                         f"{timeout_seconds:.1f}s. Lock held by: {holder_user}"
                     )
-                
+
                 # Wait and retry
                 time.sleep(0.1)
-        
+
         # Create LockInfo to yield
         lock_info = LockInfo(
             resource_id=resource_id,
@@ -216,9 +216,9 @@ def operation_lock(
             acquired_at=acquired_at,
             lock_file=lock_file,
         )
-        
+
         yield lock_info
-        
+
     finally:
         # Always release lock and close file descriptor
         try:
@@ -226,7 +226,7 @@ def operation_lock(
                 fcntl.flock(fd, fcntl.LOCK_UN)
         except Exception:
             pass  # Best effort release
-        
+
         try:
             os.close(fd)
         except Exception:
@@ -236,23 +236,23 @@ def operation_lock(
 def check_lock_status(resource_id: str) -> Optional[LockInfo]:
     """
     Check if a resource is currently locked.
-    
+
     Non-blocking check to see if a lock exists and who holds it.
     Does not acquire the lock.
-    
+
     Args:
         resource_id: Resource to check
-        
+
     Returns:
         LockInfo if locked, None if not locked
     """
     lock_dir = _get_lock_directory()
     safe_id = _sanitize_resource_id(resource_id)
     lock_file = lock_dir / f"{safe_id}.lock"
-    
+
     if not lock_file.exists():
         return None
-    
+
     try:
         fd = os.open(str(lock_file), os.O_RDONLY)
         try:
@@ -267,7 +267,7 @@ def check_lock_status(resource_id: str) -> Optional[LockInfo]:
             os.lseek(fd, 0, os.SEEK_SET)
             holder_info = os.read(fd, 1024).decode()
             parts = holder_info.split("|")
-            
+
             if len(parts) >= 2:
                 return LockInfo(
                     resource_id=resource_id,
@@ -285,30 +285,30 @@ def check_lock_status(resource_id: str) -> Optional[LockInfo]:
 def clear_stale_locks(max_age_seconds: float = 3600.0) -> int:
     """
     Clear locks older than max_age_seconds.
-    
+
     Safety cleanup function to remove locks that may have been orphaned
     due to process crashes.
-    
+
     Args:
         max_age_seconds: Maximum age for a lock before it's considered stale
-        
+
     Returns:
         Number of stale locks cleared
     """
     lock_dir = _get_lock_directory()
     cleared = 0
     now = time.time()
-    
+
     for lock_file in lock_dir.glob("*.lock"):
         try:
             # Check file modification time
             mtime = lock_file.stat().st_mtime
             age = now - mtime
-            
+
             if age > max_age_seconds:
                 lock_file.unlink()
                 cleared += 1
         except Exception:
             pass  # Best effort cleanup
-    
+
     return cleared

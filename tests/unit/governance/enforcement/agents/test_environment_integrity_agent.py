@@ -169,8 +169,8 @@ class TestErrorMessaging:
                          return_value=MCPAvailability(available=False, detection_method='none')):
             result = agent.validate_pre_flight(IntentType.IMPLEMENT)
             
-            # Error message should include actionable fix
-            assert 'python -m cortex.mcp.server' in result.action
+            # Error message should include actionable fix (Pylance-style: Reload VS Code)
+            assert 'Reload VS Code' in result.action or 'setup-mcp.py' in result.action
             assert 'BLOCKED' in result.action
 
     def test_error_message_not_vague(self):

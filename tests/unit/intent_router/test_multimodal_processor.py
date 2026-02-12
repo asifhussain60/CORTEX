@@ -250,22 +250,6 @@ class TestErrorHandling:
         with pytest.raises(ValueError):
             processor.process("not a ModalityInput")  # type: ignore
     
-    def test_processing_error_increments_failures(self) -> None:
-        """Should track processing failures."""
-        processor = MultiModalIntentProcessor()
-        
-        # Try to process None content (will fail)
-        try:
-            input_data = ModalityInput(InputModality.TEXT, None, {})
-            processor.process(input_data)
-        except (ValueError, RuntimeError, TypeError):
-            pass
-        
-        metrics = processor.get_metrics()
-        # May or may not increment depending on conversion
-        assert metrics["conversion_failures"] >= 0
-
-
 class TestIntegration:
     """Integration tests with multiple modalities."""
     

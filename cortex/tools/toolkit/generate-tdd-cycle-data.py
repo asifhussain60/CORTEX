@@ -10,9 +10,9 @@ Usage:
 """
 
 import json
-from dataclasses import dataclass, asdict
-from typing import List
+from dataclasses import asdict, dataclass
 from enum import Enum
+from typing import List
 
 
 class PhaseType(str, Enum):

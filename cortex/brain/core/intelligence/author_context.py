@@ -15,7 +15,7 @@ from __future__ import annotations
 from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Set
 
 if TYPE_CHECKING:
     from cortex.lens.analyzers.git_history_analyzer import GitHistoryAnalyzer
@@ -29,7 +29,7 @@ if TYPE_CHECKING:
 @dataclass
 class Author:
     """Represents an author/contributor.
-    
+
     Attributes:
         name: Author name
         email: Author email
@@ -38,7 +38,7 @@ class Author:
     name: str
     email: Optional[str] = None
     commit_count: int = 0
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary representation."""
         return {
@@ -51,7 +51,7 @@ class Author:
 @dataclass
 class AuthorContribution:
     """Author's contribution statistics.
-    
+
     Attributes:
         name: Author name
         commit_count: Total commits
@@ -64,7 +64,7 @@ class AuthorContribution:
     files_touched: int = 0
     lines_added: int = 0
     lines_removed: int = 0
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary representation."""
         return {
@@ -83,13 +83,13 @@ class AuthorContribution:
 
 class AuthorContextBuilder:
     """Builds author context for expertise identification.
-    
+
     Analyzes git history to identify which authors have expertise
     in specific files or areas of the codebase.
-    
+
     Attributes:
         analyzer: GitHistoryAnalyzer instance
-        
+
     Example:
         >>> analyzer = GitHistoryAnalyzer(Path("/path/to/repo"))
         >>> builder = AuthorContextBuilder(analyzer)
@@ -97,10 +97,10 @@ class AuthorContextBuilder:
         >>> for expert in experts:
         ...     print(f"{expert.name}: {expert.commit_count} commits")
     """
-    
+
     def __init__(self, analyzer: "GitHistoryAnalyzer") -> None:
         """Initialize the author context builder.
-        
+
         Args:
             analyzer: GitHistoryAnalyzer instance to use
         """
@@ -108,99 +108,99 @@ class AuthorContextBuilder:
         self._author_files: Optional[Dict[str, Set[str]]] = None
         self._file_authors: Optional[Dict[str, Counter]] = None
         self._author_commits: Optional[Counter] = None
-    
+
     def get_author_files(self, author_name: str) -> List[str]:
         """Get files modified by a specific author.
-        
+
         Args:
             author_name: Name of the author
-            
+
         Returns:
             List of file paths modified by this author
         """
         self._build_cache()
-        
+
         if not self._author_files:
             return []
-        
+
         return list(self._author_files.get(author_name, set()))
-    
+
     def get_file_experts(
         self,
         file_path: Path,
         top_n: int = 5,
     ) -> List[Author]:
         """Get experts for a specific file based on commit history.
-        
+
         Args:
             file_path: Path to the file
             top_n: Maximum number of experts to return
-            
+
         Returns:
             List of Author objects, sorted by commit count
         """
         self._build_cache()
-        
+
         if not self._file_authors:
             return []
-        
+
         file_key = str(file_path)
         author_counts = self._file_authors.get(file_key, Counter())
-        
+
         experts = []
         for author_name, count in author_counts.most_common(top_n):
             experts.append(Author(
                 name=author_name,
                 commit_count=count,
             ))
-        
+
         return experts
-    
+
     def get_author_contribution(self, author_name: str) -> AuthorContribution:
         """Get contribution statistics for an author.
-        
+
         Args:
             author_name: Name of the author
-            
+
         Returns:
             AuthorContribution with statistics
         """
         self._build_cache()
-        
+
         commit_count = 0
         if self._author_commits:
             commit_count = self._author_commits.get(author_name, 0)
-        
+
         files_touched = 0
         if self._author_files:
             files_touched = len(self._author_files.get(author_name, set()))
-        
+
         return AuthorContribution(
             name=author_name,
             commit_count=commit_count,
             files_touched=files_touched,
         )
-    
+
     def _build_cache(self) -> None:
         """Build the author context cache."""
         if self._author_files is not None:
             return
-        
+
         commits = self.analyzer.get_commit_history(max_count=500)
-        
+
         author_files: Dict[str, Set[str]] = defaultdict(set)
         file_authors: Dict[str, Counter] = defaultdict(Counter)
         author_commits: Counter = Counter()
-        
+
         for commit in commits:
             author = commit.author
             author_commits[author] += 1
-            
+
             files = self.analyzer.get_files_changed_in_commit(commit.hash)
             for file_path in files:
                 author_files[author].add(file_path)
                 file_authors[file_path][author] += 1
-        
+
         self._author_files = dict(author_files)
         self._file_authors = dict(file_authors)
         self._author_commits = author_commits

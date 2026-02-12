@@ -1,0 +1,701 @@
+# ENH-099: Multi-Stack Test Generation Orchestrator
+# Wave: 10 (Intelligent Testing Infrastructure)
+# Created: 2026-02-12
+# Authority: cortex-architect design session - Playwright intelligence layer analysis
+
+metadata:
+  wave: 10
+  enhancement_id: ENH-099
+  title: "Multi-Stack Test Generation Orchestrator with Intelligence Layer"
+  category: "testing-infrastructure"
+  priority: "P1-HIGH"
+  estimated_effort: "13 days"
+  target_impact:
+    new_orchestrator: 1  # TestGenerationOrchestrator (domain orchestrator)
+    framework_adapters: 7  # Playwright, Selenium, pytest, Jest, Mocha, MSTest, Cypress
+    intelligence_integration: "LENS + UnifiedIntelligenceContext + TestingDiscovery"
+    mcp_tools: 1  # cortex_generate_tests
+  roi_score: 9.5  # High-value: enables intelligent test creation for all frameworks
+  relationship: "ENHANCES TDDOrchestrator, integrates with TestingDiscovery, leverages LENS"
+
+overview:
+  description: |
+    Introduces TestGenerationOrchestrator - a domain orchestrator providing framework-agnostic
+    intelligent test generation. Uses LENS analysis (git+AST+comments) to infer test types
+    (unit/integration/E2E) and generates high-value tests via pluggable framework adapters.
+    
+    Supports both CORTEX internal testing (pytest+Playwright) and dev repositories
+    (auto-detect via TestingDiscovery). Maintains Testing Pyramid compliance and prevents
+    FLUFF tests via TestQualityAnalyzer integration.
+    
+    ARCHITECTURAL PRINCIPLE: Domain orchestrator (not core) - preserves TDDOrchestrator's
+    single responsibility while adding intelligent test scaffolding capability.
+  
+  vision:
+    original_request: "Playwright-based test engine with intelligence layer"
+    refined_solution: "Framework-agnostic test generation with adapter pattern"
+    key_insight: "Test type inference > framework-specific engine = broader applicability"
+  
+  current_state:
+    testing_infrastructure:
+      - "TDDOrchestrator: TDD workflow enforcement (RED→GREEN→REFACTOR)"
+      - "TestingDiscovery: Framework topology detection (pytest, Jest, Mocha, etc.)"
+      - "SeleniumPlaywrightOrchestrator: Migration tool (Selenium → Playwright)"
+      - "TestQualityAnalyzer: FLUFF detection, coverage gap analysis"
+      - "LENS: Code intelligence (git+AST+comments)"
+      - "UnifiedIntelligenceContext (Phase 53): Knowledge synthesis"
+    gap:
+      - "No intelligent test generation capability"
+      - "Manual test scaffolding for new features"
+      - "Framework-specific test creation (no unified approach)"
+      - "Missing test type inference (unit vs integration vs E2E)"
+  
+  target_state:
+    new_capabilities:
+      - "Automatic test scaffolding from LENS analysis"
+      - "Framework-aware test generation (7 adapters)"
+      - "Test type inference (complexity + dependency analysis)"
+      - "Testing Pyramid compliance enforcement"
+      - "Quality gates (no FLUFF, coverage gap detection)"
+      - "MCP exposure: cortex_generate_tests tool"
+    architecture:
+      - "TestGenerationOrchestrator (domain orchestrator)"
+      - "Framework adapters (Playwright, Selenium, pytest, Jest, Mocha, MSTest, Cypress)"
+      - "Intelligence layer integration (LENS + UnifiedIntelligenceContext)"
+      - "Quality validation (TestQualityAnalyzer + Testing Pyramid)"
+
+# ============================================================================
+# ARCHITECTURE DESIGN
+# ============================================================================
+
+architecture:
+  
+  orchestrator_design:
+    name: "TestGenerationOrchestrator"
+    type: "domain_orchestrator"  # NOT core orchestrator
+    location: "cortex/orchestrators/domain/test_generation_orchestrator.py"
+    purpose: "Intelligent test generation with framework-agnostic intelligence + pluggable adapters"
+    
+    responsibilities:
+      - "Detect repository test topology (via TestingDiscovery)"
+      - "Analyze code structure via LENS (complexity, dependencies, user flows)"
+      - "Infer test types (unit/integration/E2E) from intelligence layer"
+      - "Select appropriate framework adapter(s)"
+      - "Generate test scaffolding via adapters"
+      - "Validate quality (TestQualityAnalyzer + Testing Pyramid compliance)"
+      - "Expose via MCP: cortex_generate_tests"
+    
+    does_not_replace:
+      - "TDDOrchestrator: Still manages TDD workflow (RED→GREEN→REFACTOR)"
+      - "TestingDiscovery: Still detects framework configurations"
+      - "SeleniumPlaywrightOrchestrator: Still handles migration patterns"
+  
+  adapter_pattern:
+    interface: "ITestFrameworkAdapter"
+    contract:
+      methods:
+        - name: "detect_framework"
+          signature: "detect_framework(repo_path: Path) -> bool"
+          purpose: "Can this adapter handle this repository?"
+        
+        - name: "infer_test_types"
+          signature: "infer_test_types(lens_data: LENSAnalysis) -> List[TestType]"
+          purpose: "Determine unit/integration/E2E from code structure"
+        
+        - name: "generate_tests"
+          signature: "generate_tests(test_spec: TestSpecification) -> List[GeneratedTest]"
+          purpose: "Create framework-specific test files"
+        
+        - name: "validate_quality"
+          signature: "validate_quality(generated_tests: List[GeneratedTest]) -> QualityReport"
+          purpose: "Framework-specific quality gates"
+    
+    adapters:
+      - name: "PlaywrightAdapter"
+        frameworks: ["Playwright"]
+        test_types: ["E2E", "integration"]
+        priority: "HIGH"  # Primary E2E solution
+        knowledge_yaml: "selenium-to-playwright-migration.yaml"
+        features:
+          - "Auto-wait pattern generation"
+          - "Page Object Model scaffolding"
+          - "Network interception setup"
+          - "Trace viewer integration"
+      
+      - name: "SeleniumAdapter"
+        frameworks: ["Selenium WebDriver"]
+        test_types: ["E2E"]
+        priority: "MEDIUM"  # Legacy support
+        knowledge_yaml: "selenium-to-playwright-migration.yaml"
+        features:
+          - "WebDriverWait patterns"
+          - "Explicit wait generation"
+          - "Page Object Model support"
+      
+      - name: "PytestAdapter"
+        frameworks: ["pytest"]
+        test_types: ["unit", "integration"]
+        priority: "HIGH"  # CORTEX primary framework
+        knowledge_yaml: "testing-pyramid.yaml, tdd-best-practices.yaml"
+        features:
+          - "Fixture generation (conftest.py patterns)"
+          - "Parametrized test creation"
+          - "Mock/stub setup (unittest.mock)"
+          - "Coverage configuration"
+      
+      - name: "JestAdapter"
+        frameworks: ["Jest"]
+        test_types: ["unit", "integration"]
+        priority: "HIGH"  # JavaScript/TypeScript primary
+        knowledge_yaml: "testing-pyramid.yaml"
+        features:
+          - "describe/it structure"
+          - "Mock function generation (jest.mock)"
+          - "Snapshot testing setup"
+          - "Coverage configuration"
+      
+      - name: "MochaAdapter"
+        frameworks: ["Mocha"]
+        test_types: ["E2E", "integration"]
+        priority: "MEDIUM"  # JavaScript E2E alternative
+        features:
+          - "describe/it structure"
+          - "Async/await patterns"
+          - "Chai assertion generation"
+      
+      - name: "MSTestAdapter"
+        frameworks: ["MSTest"]
+        test_types: ["unit", "integration"]
+        priority: "HIGH"  # C# enterprise standard
+        knowledge_yaml: "mstest-framework-patterns.yaml, qa-coding-standards.yaml"
+        features:
+          - "[TestClass]/[TestMethod] attributes"
+          - "[TestInitialize]/[TestCleanup]"
+          - "Page Object Model (C#)"
+          - "Data-driven testing"
+      
+      - name: "CypressAdapter"
+        frameworks: ["Cypress"]
+        test_types: ["E2E"]
+        priority: "MEDIUM"  # Modern E2E alternative
+        features:
+          - "cy.* command chains"
+          - "Time-travel debugging setup"
+          - "Network stubbing"
+  
+  intelligence_layer:
+    name: "TestIntelligenceEngine"
+    location: "cortex/intelligence/test_intelligence_engine.py"
+    
+    inputs:
+      - source: "LENS (LENSSynthesis)"
+        data:
+          - "git_analysis: Commit patterns, user flows, critical paths"
+          - "ast_analysis: Cyclomatic complexity, dependency graph, function signatures"
+          - "comment_analysis: Docstrings, TODOs, edge case notes"
+      
+      - source: "TestingDiscovery"
+        data:
+          - "framework_topology: Detected test frameworks, configurations"
+          - "existing_tests: Current test coverage, patterns, fixtures"
+      
+      - source: "UnifiedIntelligenceContext (Phase 53)"
+        data:
+          - "company_knowledge: Domain-specific test patterns"
+          - "cortex_knowledge: Best practices (45+ YAMLs)"
+    
+    processing:
+      - stage: "Test Type Inference"
+        logic:
+          - "Complexity < 5 + No dependencies → Unit test"
+          - "Complexity 5-15 + Internal dependencies → Integration test"
+          - "Complexity > 15 + External API/UI → E2E test"
+          - "git_analysis.user_flows → E2E test scenarios"
+      
+      - stage: "High-Value Target Identification"
+        logic:
+          - "Critical path functions (from git frequency)"
+          - "Uncovered branches (from coverage gaps)"
+          - "High complexity + Low coverage = TOP PRIORITY"
+      
+      - stage: "Test Scenario Generation"
+        logic:
+          - "Extract from docstrings (Given/When/Then patterns)"
+          - "Infer from function signature (parameter combinations)"
+          - "Detect edge cases from comments"
+    
+    outputs:
+      - "TestSpecification: test_type, target_function, scenarios, assertions"
+      - "PriorityScore: 0-100 (criticality × complexity × coverage_gap)"
+
+  quality_gates:
+    - gate: "FLUFF Detection"
+      mechanism: "TestQualityAnalyzer"
+      criteria:
+        - "No tests with zero assertions"
+        - "No tests with only trivial assertions (assert True)"
+        - "No tests with 100% mocked dependencies (no real logic tested)"
+    
+    - gate: "Testing Pyramid Compliance"
+      mechanism: "Testing Pyramid YAML validation"
+      criteria:
+        - "Unit tests: 70% of total"
+        - "Integration tests: 20% of total"
+        - "E2E tests: 10% of total"
+        - "Block generation if pyramid inverted"
+    
+    - gate: "Coverage Gap Validation"
+      mechanism: "LENS AST analysis"
+      criteria:
+        - "Generated tests target uncovered code paths"
+        - "No redundant test generation (already covered)"
+    
+    - gate: "Framework Best Practices"
+      mechanism: "Adapter-specific validation + Knowledge YAMLs"
+      criteria:
+        - "Playwright: Uses auto-wait, no explicit sleeps"
+        - "pytest: Fixtures in conftest.py, not inline"
+        - "MSTest: Proper [TestClass] structure"
+
+# ============================================================================
+# IMPLEMENTATION PHASES
+# ============================================================================
+
+phases:
+  
+  - phase: "P1-Foundation"
+    duration: "3 days"
+    effort: "16-20 hours"
+    priority: "BLOCKING"
+    
+    objectives:
+      - "Create TestGenerationOrchestrator skeleton"
+      - "Define ITestFrameworkAdapter interface"
+      - "Integrate with TestingDiscovery"
+      - "Establish TDD test suite (RED phase)"
+    
+    deliverables:
+      - file: "cortex/orchestrators/domain/test_generation_orchestrator.py"
+        lines: 200
+        tests: 10
+      
+      - file: "cortex/intelligence/test_intelligence_engine.py"
+        lines: 150
+        tests: 8
+      
+      - file: "cortex/orchestrators/domain/adapters/i_test_framework_adapter.py"
+        lines: 50
+        tests: 0  # Interface only
+      
+      - file: "tests/unit/orchestrators/test_test_generation_orchestrator.py"
+        lines: 300
+        tests: 18  # TDD RED phase
+    
+    acceptance_criteria:
+      - "AC-TGO-P1-01: TestGenerationOrchestrator implements IOrchestrator"
+      - "AC-TGO-P1-02: ITestFrameworkAdapter interface defined with 4 methods"
+      - "AC-TGO-P1-03: TestingDiscovery integration returns framework topology"
+      - "AC-TGO-P1-04: 18 RED phase tests written (TDD)"
+  
+  - phase: "P2-Adapters-Core"
+    duration: "5 days"
+    effort: "32-40 hours"
+    priority: "HIGH"
+    
+    objectives:
+      - "Implement PytestAdapter (CORTEX primary)"
+      - "Implement PlaywrightAdapter (E2E primary)"
+      - "LENS integration for test type inference"
+      - "Quality gate integration (TestQualityAnalyzer)"
+    
+    deliverables:
+      - file: "cortex/orchestrators/domain/adapters/pytest_adapter.py"
+        lines: 300
+        tests: 15
+      
+      - file: "cortex/orchestrators/domain/adapters/playwright_adapter.py"
+        lines: 350
+        tests: 18
+      
+      - file: "cortex/intelligence/test_intelligence_engine.py"
+        lines: "+200"  # LENS integration
+        tests: "+12"
+      
+      - file: "tests/unit/orchestrators/adapters/test_pytest_adapter.py"
+        lines: 400
+        tests: 15
+      
+      - file: "tests/unit/orchestrators/adapters/test_playwright_adapter.py"
+        lines: 450
+        tests: 18
+    
+    acceptance_criteria:
+      - "AC-TGO-P2-01: PytestAdapter generates unit + integration tests"
+      - "AC-TGO-P2-02: PlaywrightAdapter generates E2E tests with Page Object Model"
+      - "AC-TGO-P2-03: TestIntelligenceEngine infers test types from LENS data"
+      - "AC-TGO-P2-04: FLUFF detection blocks meaningless test generation"
+      - "AC-TGO-P2-05: Testing Pyramid compliance enforced (70/20/10 split)"
+  
+  - phase: "P3-Adapters-Extended"
+    duration: "3 days"
+    effort: "20-24 hours"
+    priority: "MEDIUM"
+    
+    objectives:
+      - "Implement JestAdapter (JavaScript/TypeScript)"
+      - "Implement MSTestAdapter (C# enterprise)"
+      - "Implement SeleniumAdapter (legacy support)"
+    
+    deliverables:
+      - file: "cortex/orchestrators/domain/adapters/jest_adapter.py"
+        lines: 280
+        tests: 12
+      
+      - file: "cortex/orchestrators/domain/adapters/mstest_adapter.py"
+        lines: 320
+        tests: 14
+      
+      - file: "cortex/orchestrators/domain/adapters/selenium_adapter.py"
+        lines: 300
+        tests: 13
+      
+      - tests: 39  # Total for 3 adapters
+    
+    acceptance_criteria:
+      - "AC-TGO-P3-01: JestAdapter generates describe/it structure with mocks"
+      - "AC-TGO-P3-02: MSTestAdapter follows mstest-framework-patterns.yaml"
+      - "AC-TGO-P3-03: SeleniumAdapter generates WebDriverWait patterns"
+  
+  - phase: "P4-MCP-Integration"
+    duration: "2 days"
+    effort: "12-16 hours"
+    priority: "HIGH"
+    
+    objectives:
+      - "Expose cortex_generate_tests MCP tool"
+      - "User approval gate for generated tests"
+      - "Repository context detection (CORTEX vs dev repos)"
+      - "Integration with TDDOrchestrator workflow"
+    
+    deliverables:
+      - file: "cortex/mcp/tools/test_generation_tool.py"
+        lines: 200
+        tests: 10
+      
+      - file: "cortex/orchestrators/domain/test_generation_orchestrator.py"
+        lines: "+100"  # MCP integration
+        tests: "+5"
+      
+      - registry_update: "cortex-registry/domains/testing/test-generation.yaml"
+    
+    acceptance_criteria:
+      - "AC-TGO-P4-01: cortex_generate_tests tool callable via MCP"
+      - "AC-TGO-P4-02: User approval gate displays generated test preview"
+      - "AC-TGO-P4-03: CORTEX repos default to pytest+Playwright"
+      - "AC-TGO-P4-04: Dev repos auto-detect via TestingDiscovery"
+      - "AC-TGO-P4-05: TDDOrchestrator can invoke for RED phase scaffolding"
+
+# ============================================================================
+# VACUUM & CLEANUP WAVE
+# ============================================================================
+
+vacuum_enhancements:
+  
+  - id: "VACUUM-TGO-01"
+    title: "Consolidate Test Generation Scattered Logic"
+    severity: "MEDIUM"
+    
+    current_issues:
+      - "ToolGenerator (cortex/tools/tool_generator.py) generates test harnesses"
+      - "TemplateTestFramework (cortex/tools/testing_framework.py) for template tests"
+      - "SeleniumPlaywrightOrchestrator converts tests (not generates)"
+      - "No unified test generation approach"
+    
+    cleanup_actions:
+      - action: "Extract common logic to TestGenerationOrchestrator"
+        files_affected:
+          - "cortex/tools/tool_generator.py (keep tool generation, delegate tests)"
+          - "cortex/tools/testing_framework.py (keep template testing, delegate generation)"
+      
+      - action: "Document relationship: SeleniumPlaywrightOrchestrator = migration, TestGenerationOrchestrator = creation"
+        file: "cortex/orchestrators/README.md"
+      
+      - action: "Deprecate standalone test generation functions"
+        files: ["cortex/testing/auto_initialization_suite.py"]
+        note: "Move to TestGenerationOrchestrator adapters"
+    
+    vacuum_metrics:
+      duplicate_logic_lines: 150
+      consolidation_target: "Single orchestrator with adapters"
+      expected_reduction: "40% code duplication"
+  
+  - id: "VACUUM-TGO-02"
+    title: "Unify Testing Intelligence Layers"
+    severity: "LOW"
+    
+    current_issues:
+      - "TestQualityAnalyzer (cortex/orchestrators/response/test_quality_analyzer.py)"
+      - "TestingDiscovery (cortex/brain/discovery/testing_discovery.py)"
+      - "LENS intelligence (cortex/lens/orchestrator.py)"
+      - "No central test intelligence coordination"
+    
+    cleanup_actions:
+      - action: "Create TestIntelligenceEngine as coordinator"
+        purpose: "Single entry point for all test-related intelligence"
+      
+      - action: "Maintain existing components (no deletions)"
+        note: "TestIntelligenceEngine USES existing components, doesn't replace"
+      
+      - action: "Document intelligence flow in architecture docs"
+        file: "docs/architecture/testing-intelligence-flow.md"
+    
+    vacuum_metrics:
+      new_integration_layer: "TestIntelligenceEngine"
+      reused_components: 3
+      new_code_lines: 200
+      documentation_pages: 1
+
+# ============================================================================
+# INTEGRATION & DEPENDENCIES
+# ============================================================================
+
+integration:
+  
+  existing_orchestrators:
+    - orchestrator: "TDDOrchestrator"
+      relationship: "ENHANCED"
+      integration: |
+        TDDOrchestrator can invoke TestGenerationOrchestrator for RED phase scaffolding.
+        User writes failing test OR asks TestGenerationOrchestrator to generate skeleton.
+        TDDOrchestrator still manages GREEN/REFACTOR phases.
+    
+    - orchestrator: "SeleniumPlaywrightOrchestrator"
+      relationship: "COMPLEMENTARY"
+      integration: |
+        SeleniumPlaywrightOrchestrator = migration tool (converts existing tests)
+        TestGenerationOrchestrator = creation tool (generates new tests)
+        No overlap, different purposes.
+    
+    - orchestrator: "EnforcementOrchestrator"
+      relationship: "VALIDATES"
+      integration: |
+        EnforcementOrchestrator validates generated tests meet CORE rules:
+        - CORE-008: TDD compliance (tests exist before code)
+        - Testing Pyramid compliance
+        - Coverage requirements
+  
+  existing_systems:
+    - system: "TestingDiscovery"
+      integration: "TestGenerationOrchestrator USES for framework detection"
+    
+    - system: "LENS (LENSSynthesis)"
+      integration: "TestIntelligenceEngine USES for code analysis"
+    
+    - system: "UnifiedIntelligenceContext (Phase 53)"
+      integration: "TestIntelligenceEngine USES for knowledge synthesis"
+    
+    - system: "TestQualityAnalyzer"
+      integration: "Quality gates ENFORCE FLUFF prevention"
+    
+    - system: "Knowledge YAMLs (45+ files)"
+      integration: "Adapters CONSULT for framework-specific best practices"
+
+  mcp_tools:
+    - tool: "cortex_generate_tests"
+      signature: |
+        cortex_generate_tests(
+          target_file: str,
+          framework: Optional[str] = None,  # Auto-detect if None
+          test_types: Optional[List[str]] = None,  # Auto-infer if None
+          preview: bool = True  # User approval gate
+        ) -> GeneratedTestsResult
+      
+      workflow:
+        - "1. Detect repository framework (TestingDiscovery)"
+        - "2. Analyze target file (LENS)"
+        - "3. Infer test types (TestIntelligenceEngine)"
+        - "4. Generate tests via adapter"
+        - "5. Validate quality (FLUFF detection, Testing Pyramid)"
+        - "6. Preview to user (if preview=True)"
+        - "7. Write files on approval"
+
+# ============================================================================
+# SUCCESS CRITERIA & METRICS
+# ============================================================================
+
+success_criteria:
+  
+  functional:
+    - "AC-TGO-001: TestGenerationOrchestrator generates tests for 7 frameworks"
+    - "AC-TGO-002: Test type inference accuracy > 90% (unit/integration/E2E)"
+    - "AC-TGO-003: FLUFF detection blocks 100% of zero-assertion tests"
+    - "AC-TGO-004: Testing Pyramid compliance enforced (70/20/10 split)"
+    - "AC-TGO-005: MCP tool cortex_generate_tests callable from Copilot Chat"
+  
+  quality:
+    - "AC-TGO-006: 100+ tests for orchestrator + adapters"
+    - "AC-TGO-007: Coverage > 85% for all components"
+    - "AC-TGO-008: CORE-008 compliance (TDD workflow preserved)"
+    - "AC-TGO-009: CORE-035 compliance (single canonical test generation path)"
+  
+  performance:
+    - "AC-TGO-010: Test generation < 5 seconds for typical file"
+    - "AC-TGO-011: LENS analysis reused (not recomputed per request)"
+    - "AC-TGO-012: Adapter selection < 100ms"
+  
+  documentation:
+    - "AC-TGO-013: Architecture docs updated (orchestrator purpose)"
+    - "AC-TGO-014: Adapter development guide (for future frameworks)"
+    - "AC-TGO-015: MCP tool usage examples"
+    - "AC-TGO-016: Knowledge YAML integration documented"
+
+metrics:
+  development:
+    total_new_lines: 3500
+    total_tests: 150+
+    adapters: 7
+    integration_points: 5
+  
+  impact:
+    manual_test_scaffolding_time_saved: "90%"
+    test_quality_improvement: "FLUFF detection + best practices"
+    framework_coverage: "7 major frameworks"
+    extensibility: "Adapter pattern enables unlimited frameworks"
+
+# ============================================================================
+# RISKS & MITIGATIONS
+# ============================================================================
+
+risks:
+  
+  - risk: "Adapter complexity exceeds estimates"
+    probability: "MEDIUM"
+    impact: "Schedule delay (2-3 days)"
+    mitigation: |
+      - Phase P3 adapters are MEDIUM priority (can defer Jest/MSTest/Selenium)
+      - Focus P2 on PytestAdapter + PlaywrightAdapter (CORTEX primary needs)
+      - Adapter pattern enables incremental delivery
+  
+  - risk: "LENS analysis too slow for real-time generation"
+    probability: "LOW"
+    impact: "User experience degradation"
+    mitigation: |
+      - LENS results cached via UnifiedIntelligenceContext
+      - Pre-warm cache during MCP session initialization
+      - Async analysis with progress indicators
+  
+  - risk: "Testing Pyramid enforcement too rigid"
+    probability: "MEDIUM"
+    impact: "User frustration (legitimate E2E test blocked)"
+    mitigation: |
+      - Warning + approval gate (not hard block)
+      - Allow override with justification
+      - Track overrides for pattern analysis
+  
+  - risk: "Framework detection false positives"
+    probability: "LOW"
+    impact: "Wrong adapter selected, invalid tests generated"
+    mitigation: |
+      - TestingDiscovery already proven (Phase 9 Discovery)
+      - Multi-signal detection (config files + imports + patterns)
+      - User confirmation for ambiguous cases
+  
+  - risk: "Generated tests too generic (not high-value)"
+    probability: "MEDIUM"
+    impact: "User rejects generated tests"
+    mitigation: |
+      - LENS intelligence provides context-specific scenarios
+      - Preview + approval gate (user validates before writing)
+      - Iterative refinement (user feedback loop)
+
+# ============================================================================
+# TIMELINE & EXECUTION
+# ============================================================================
+
+timeline:
+  total_duration: "13 days"
+  
+  schedule:
+    - phase: "P1-Foundation"
+      days: "1-3"
+      blockers: []
+    
+    - phase: "P2-Adapters-Core"
+      days: "4-8"
+      blockers: ["P1-Foundation"]
+    
+    - phase: "P3-Adapters-Extended"
+      days: "9-11"
+      blockers: ["P2-Adapters-Core"]
+      note: "Can parallelize with P4 (MSTest/Jest independent of MCP)"
+    
+    - phase: "P4-MCP-Integration"
+      days: "12-13"
+      blockers: ["P2-Adapters-Core"]
+      note: "Can start after P2 complete (doesn't need P3 adapters)"
+
+execution_mode:
+  autonomous: true
+  approval_gates:
+    - "After P1: Review orchestrator architecture"
+    - "After P2: Validate pytest + Playwright adapters"
+    - "After P4: Full system integration test"
+  
+  checkpoints:
+    - checkpoint: "P1 Complete"
+      validation: "18 TDD tests passing (RED phase)"
+    
+    - checkpoint: "P2 Complete"
+      validation: "pytest + Playwright adapters generate valid tests"
+    
+    - checkpoint: "P3 Complete"
+      validation: "7 framework adapters operational"
+    
+    - checkpoint: "P4 Complete"
+      validation: "cortex_generate_tests callable via MCP, user approval works"
+
+# ============================================================================
+# POST-IMPLEMENTATION
+# ============================================================================
+
+post_implementation:
+  
+  documentation_updates:
+    - file: ".github/prompts/cortex-architect.prompt.md"
+      section: "Orchestrator Registry"
+      change: "Add TestGenerationOrchestrator (domain orchestrator)"
+    
+    - file: "cortex/orchestrators/README.md"
+      section: "Domain Orchestrators"
+      change: "Document test generation orchestrator + adapter pattern"
+    
+    - file: "docs/architecture/testing-intelligence-flow.md"
+      status: "NEW"
+      content: "Intelligence layer architecture for test generation"
+  
+  knowledge_yaml_updates:
+    - file: "cortex/knowledge/best-practices/testing-validation/test-generation-patterns.yaml"
+      status: "NEW"
+      content: "Best practices for AI-assisted test generation"
+  
+  registry_updates:
+    - file: "cortex-registry/domains/testing/test-generation.yaml"
+      status: "NEW"
+      content: "TestGenerationOrchestrator specification + MCP tool metadata"
+  
+  future_enhancements:
+    - "ENH-100: Additional adapters (Cypress, Mocha, Puppeteer)"
+    - "ENH-101: LLM-powered test scenario generation (natural language → tests)"
+    - "ENH-102: Test mutation analysis (verify test quality via mutation testing)"
+
+# ============================================================================
+# APPROVAL & SIGN-OFF
+# ============================================================================
+
+approval:
+  design_review: "PENDING"
+  architectural_alignment: "APPROVED"  # Domain orchestrator, adapter pattern
+  governance_compliance: "APPROVED"  # CORE-008 (TDD), CORE-035 (single path)
+  priority_justification: "P1-HIGH (enables intelligent testing for all frameworks)"
+  
+ready_for_implementation: true

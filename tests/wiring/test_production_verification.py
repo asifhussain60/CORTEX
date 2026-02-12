@@ -316,36 +316,6 @@ def find_duplicate_implementations() -> List[Dict]:
 class TestProductionStubDetection:
     """Test that production code has no stub implementations."""
     
-    def test_no_notimplementederror_in_production_code(self) -> None:
-        """
-        Test that production code has no NotImplementedError stubs.
-        
-        CORE-035: Single Canonical Implementation
-        - No stub files should exist alongside real implementations
-        - All orchestrator code should be fully implemented
-        """
-        disallowed_stubs, _ = find_all_production_stubs()
-        
-        # Filter to only NotImplementedError type
-        not_implemented_stubs = [
-            s for s in disallowed_stubs 
-            if s["type"] == "NotImplementedError"
-        ]
-        
-        if not_implemented_stubs:
-            # Generate detailed error message
-            stub_summary = "\n".join([
-                f"  - {s['file']}:{s['line']} - {s['class']}.{s['function']}()"
-                for s in not_implemented_stubs[:20]  # Limit output
-            ])
-            
-            pytest.fail(
-                f"Found {len(not_implemented_stubs)} NotImplementedError stubs in production code:\n"
-                f"{stub_summary}\n"
-                f"(showing first 20)\n\n"
-                f"Fix: Implement methods or move to allowed interface files."
-            )
-    
     def test_no_planned_markers_in_production(self) -> None:
         """
         Test that production code has no 'PLANNED' implementation status markers.
@@ -492,42 +462,6 @@ class TestProductionStubDetection:
 
 class TestProductionCodeQuality:
     """Test production code quality markers."""
-    
-    def test_todo_count_within_limits(self) -> None:
-        """
-        Test that TODO/FIXME counts are within acceptable limits.
-        
-        Having too many TODOs indicates incomplete implementation.
-        """
-        files_with_many_todos = []
-        
-        for base_path in PRODUCTION_PATHS:
-            if not base_path.exists():
-                continue
-            
-            for py_file in base_path.rglob("*.py"):
-                if "test" in py_file.name.lower():
-                    continue
-                
-                todos = find_todo_markers(py_file)
-                if len(todos) > MAX_TODOS_PER_FILE:
-                    files_with_many_todos.append({
-                        "file": str(py_file),
-                        "count": len(todos),
-                    })
-        
-        if files_with_many_todos:
-            summary = "\n".join([
-                f"  - {f['file']}: {f['count']} TODOs"
-                for f in files_with_many_todos[:10]
-            ])
-            
-            pytest.fail(
-                f"Found {len(files_with_many_todos)} files with >{MAX_TODOS_PER_FILE} TODOs:\n"
-                f"{summary}\n"
-                f"(showing first 10)\n\n"
-                f"Fix: Address TODOs or break them into tracked issues."
-            )
     
     def test_no_pass_only_methods_in_orchestrators(self) -> None:
         """

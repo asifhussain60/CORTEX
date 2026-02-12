@@ -8,7 +8,8 @@ Manages domain-specific templates and their metadata.
 
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Any, Optional, Set
+from typing import Any, Dict, List, Optional, Set
+
 import yaml
 
 from cortex.common.validators import ValidationResult
@@ -39,15 +40,15 @@ class TemplateMetadata:
 class ContentPopulationStrategy:
     """
     Content population strategy and registry for tier-2 templates.
-    
+
     Manages template metadata across all domains and provides
     discovery and access to template information.
     """
-    
+
     # Supported domains with their template definitions
     DOMAIN_TEMPLATES: Dict[str, List[Dict[str, Any]]] = {
         'planning': [
-            {'id': 'planning-recommendations', 'name': 'Implementation Recommendations', 
+            {'id': 'planning-recommendations', 'name': 'Implementation Recommendations',
              'description': 'Template for implementation planning recommendations',
              'category': 'response', 'variables': ['plan_title', 'phase', 'ac_count', 'estimated_hours']},
             {'id': 'planning-impact-assessment', 'name': 'Impact Assessment',
@@ -255,11 +256,11 @@ class ContentPopulationStrategy:
              'category': 'integration', 'variables': ['scenarios', 'passed', 'failed', 'details']},
         ],
     }
-    
+
     def __init__(self, template_base_path: Optional[Path] = None):
         """
         Initialize content population strategy.
-        
+
         Args:
             template_base_path: Base path for template files (defaults to cortex_brain/tier2)
         """
@@ -267,13 +268,13 @@ class ContentPopulationStrategy:
             self.template_base_path = Path(__file__).parent.parent.parent / "cortex_brain" / "tier2"
         else:
             self.template_base_path = Path(template_base_path)
-        
+
         self._build_registry()
-    
+
     def _build_registry(self) -> None:
         """Build the template registry from domain definitions."""
         self._registry: Dict[str, TemplateMetadata] = {}
-        
+
         for domain, templates in self.DOMAIN_TEMPLATES.items():
             for template in templates:
                 metadata = TemplateMetadata(
@@ -285,30 +286,30 @@ class ContentPopulationStrategy:
                     variables=template.get('variables', []),
                 )
                 self._registry[template['id']] = metadata
-    
+
     @property
     def domains(self) -> List[str]:
         """Get list of supported domains."""
         return list(self.DOMAIN_TEMPLATES.keys())
-    
+
     @property
     def total_template_count(self) -> int:
         """Get total number of templates."""
         return len(self._registry)
-    
+
     def get_domain_templates(self, domain: str) -> List[Dict[str, Any]]:
         """
         Get templates for a specific domain.
-        
+
         Args:
             domain: Domain name
-            
+
         Returns:
             List of template metadata dictionaries
         """
         if domain not in self.DOMAIN_TEMPLATES:
             return []
-        
+
         templates = []
         for template in self.DOMAIN_TEMPLATES[domain]:
             templates.append({
@@ -320,21 +321,21 @@ class ContentPopulationStrategy:
                 'variables': template.get('variables', []),
             })
         return templates
-    
+
     def get_template_by_id(self, template_id: str) -> Optional[Dict[str, Any]]:
         """
         Get template metadata by ID.
-        
+
         Args:
             template_id: Template identifier
-            
+
         Returns:
             Template metadata dictionary or None if not found
         """
         metadata = self._registry.get(template_id)
         if metadata is None:
             return None
-        
+
         return {
             'id': metadata.id,
             'name': metadata.name,
@@ -343,14 +344,14 @@ class ContentPopulationStrategy:
             'category': metadata.category,
             'variables': metadata.variables,
         }
-    
+
     def get_templates_by_category(self, category: str) -> List[Dict[str, Any]]:
         """
         Get templates filtered by category.
-        
+
         Args:
             category: Template category
-            
+
         Returns:
             List of matching template metadata
         """
@@ -366,18 +367,18 @@ class ContentPopulationStrategy:
             for m in self._registry.values()
             if m.category == category
         ]
-    
+
     def export_registry(self) -> Dict[str, Any]:
         """
         Export complete template registry.
-        
+
         Returns:
             Registry export dictionary
         """
         domains_export = {}
         for domain in self.domains:
             domains_export[domain] = self.get_domain_templates(domain)
-        
+
         return {
             'domains': domains_export,
             'templates': [
@@ -387,34 +388,34 @@ class ContentPopulationStrategy:
             'total_count': self.total_template_count,
             'version': '1.0',
         }
-    
+
     def validate_registry(self) -> ValidationResult:
         """
         Validate registry integrity.
-        
+
         Returns:
             Validation result
         """
         errors = []
         warnings = []
-        
+
         # Check for duplicate IDs
         seen_ids: Set[str] = set()
         for tid in self._registry.keys():
             if tid in seen_ids:
                 errors.append(f"Duplicate template ID: {tid}")
             seen_ids.add(tid)
-        
+
         # Check all domains have templates
         for domain in self.domains:
             templates = self.get_domain_templates(domain)
             if len(templates) < 6:
                 warnings.append(f"Domain {domain} has < 6 templates ({len(templates)})")
-        
+
         # Check template count
         if self.total_template_count < 60:
             errors.append(f"Total templates {self.total_template_count} < 60 minimum")
-        
+
         return ValidationResult(
             valid=len(errors) == 0,
             errors=errors,

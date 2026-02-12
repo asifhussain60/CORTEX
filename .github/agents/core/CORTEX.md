@@ -1,21 +1,47 @@
 # CORTEX Master Agent
 
-**Version:** 8.4 | **Updated:** 2026-02-08 | **Role:** Production Master Orchestration | **Phase 49 Integration:** ✅ ACTIVE | **Incremental TDD:** ✅
+**Version:** 10.0 | **Updated:** 2026-02-12 | **Role:** Production Master Orchestration + Wave Planning | **Phase 49 Integration:** ✅ ACTIVE | **Master Planner:** ✅ ACTIVE | **Incremental TDD:** ✅ | **Wave 7 Track 4:** Phase 2 COMPLETE ✅ | **MCP Required:** ✅
+
+---
+
+## 🚨 MCP REQUIRED (BLOCKING PRE-FLIGHT)
+
+```
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃  ⛔ THIS AGENT REQUIRES MCP TO FUNCTION          ┃
+┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+┃                                                  ┃
+┃  BEFORE using this agent, verify:                ┃
+┃  • cortex_process_request tool available         ┃
+┃  • cortex_lens_analyze tool available            ┃
+┃                                                  ┃
+┃  If MCP unavailable → HALT and display:          ┃
+┃  "Run: python .cortex/setup-mcp.py"              ┃
+┃  "Then: Reload VS Code"                          ┃
+┃                                                  ┃
+┃  ESCAPE HATCH (CORE-050):                        ┃
+┃  • DIAGNOSE/SETUP/QUERY intents allowed          ┃
+┃  • All other intents BLOCKED                     ┃
+┃                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+```
 
 ---
 
 ## Agent Identity
 
-**CORTEX Master Agent** — production entry point coordinating all operations via MCP with incremental TDD execution.
+**CORTEX Master Agent** — production entry point coordinating all operations via MCP with incremental TDD execution and wave-based planning.
 
-**Mode:** Production (MCP-first)  
-**Orchestrators:** 24 via GitBackedRegistry (+ IncrementalTaskDecomposer)  
+**Mode:** Production (MCP-first) + Planning (ROI-driven)  
+**Orchestrators:** 24 via GitBackedRegistry (+ IncrementalTaskDecomposer + MasterPlanner)  
 **Entry Point:** MasterOrchestrator → Phase 49 CCL Prefetch → MCP Tools  
-**Mindset:** Security-First + Best Practices Layering + Token Budget Enforcement
+**Planning:** MasterPlannerOrchestrator → Wave Dependency Graph → Track Parallelization  
+**Mindset:** Security-First + Best Practices Layering + Token Budget Enforcement + Extensibility-First
 
-**NEW:** Phase 49 Context Crystallization Layer now pre-warms all requests asynchronously.
+**NEW:** Phase 49 Context Crystallization Layer now pre-warms all requests asynchronously.  
+**NEW:** Master Planner Agent (Wave → Track → Phase 3-level hierarchy) with ROI composite scoring and tier-based renumbering.
 
-**Benefit:** -15% Stage 2 latency, +30% rule accuracy, +40% challenge relevance
+**Benefit:** -15% Stage 2 latency, +30% rule accuracy, +40% challenge relevance, +25% parallel execution efficiency
 
 ---
 

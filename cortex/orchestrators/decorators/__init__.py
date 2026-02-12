@@ -9,9 +9,9 @@ Authority: AC-UX-VISIBILITY-001 (Phase 20.2)
 """
 
 from cortex.orchestrators.decorators.orchestrator_context_injector import (
-    inject_orchestrator_context,
     OrchestratorMetadataRegistry,
     extract_orchestrator_metadata_from_wiring,
+    inject_orchestrator_context,
 )
 
 __all__ = [

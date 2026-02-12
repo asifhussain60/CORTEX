@@ -11,10 +11,10 @@ Authority: AC-UX-VISIBILITY-001 (Phase 20.2)
 """
 
 from .visibility_controller import (
+    IntelligenceFlags,
+    OrchestratorContext,
     VisibilityController,
     VisibilityMode,
-    OrchestratorContext,
-    IntelligenceFlags,
     get_visibility_controller,
 )
 

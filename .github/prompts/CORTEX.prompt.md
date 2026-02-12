@@ -1,5 +1,5 @@
 # CORTEX Master Orchestrator Prompt
-**Version:** 8.3 | **Updated:** 2026-02-06 | **Authority:** MCP-First SaaS Architecture | **Status:** ✅ PRODUCTION | **Token Optimization:** ✅
+**Version:** 8.4 | **Updated:** 2026-02-11 | **Authority:** MCP-First SaaS Architecture | **Status:** ✅ PRODUCTION | **Token Optimization:** ✅
 
 ---
 
@@ -142,20 +142,101 @@ ${workspaceFolder}/.venv/bin/python -m cortex.mcp --help
 [2026-02-08 14:32:17] ✅ Setup complete. Restart Copilot for changes to take effect.
 ```
 
-### Available MCP Tools (After Setup)
+### Available MCP Tools (After Setup) — 28 Tools Total
 
-| Tool | Module | Purpose |
-|------|--------|---------|
-| `cortex_process_request` | cortex.mcp.tools | Main TDD implementation |
-| `cortex_lens_analyze` | cortex.lens.mcp_tools | Code intelligence |
-| `cortex_challenge` | cortex.orchestrators.holistic | Challenge gate |
-| `cortex_total_recall` | cortex.orchestrators.domain | Feature discovery |
-| `cortex_git_history` | cortex.ci_cd.git_tools | 24h git context |
-| `cortex_detect_duplicates` | cortex.refactoring.mcp_tools | CORE-035 detection |
-| `cortex_plan_setup` | cortex.registry.mcp_tools | Phase pre-execution |
-| `cortex_plan_execute_autonomous` | cortex.registry.mcp_tools | Autonomous execution |
-| `cortex_plan_teardown` | cortex.registry.mcp_tools | Phase cleanup |
-| `cortex_plan_sync` | cortex.registry.mcp_tools | Dashboard sync |
+**Core Orchestrator Tools (3):**
+| Tool | Purpose |
+|------|---------|
+| `cortex_process_request` | Main TDD implementation + routing |
+| `cortex_total_recall` | Feature discovery + capability search |
+| `cortex_challenge` | Challenge gate + disagreement detection |
+
+**LENS Analysis Tools (5):**
+| Tool | Purpose |
+|------|---------|
+| `cortex_lens_analyze` | Unified code intelligence (git+AST+comments) |
+| `cortex_git_history` | Git context analysis (24h window) |
+| `cortex_ast_analyze` | AST structure + complexity analysis |
+| `cortex_extract_comments` | Comment/TODO/FIXME extraction |
+| `cortex_detect_duplicates` | CORE-035 violation detection |
+
+**Plan Lifecycle Tools (4):**
+| Tool | Purpose |
+|------|---------|
+| `cortex_plan_setup` | Pre-execution phase hook |
+| `cortex_plan_execute_autonomous` | Multi-stage autonomous execution |
+| `cortex_plan_teardown` | Post-execution cleanup + sync |
+| `cortex_plan_sync` | Manual dashboard synchronization |
+
+**Validation Tools (1):**
+| Tool | Purpose |
+|------|---------|
+| `cortex_validate_holistically` | Phase 48 holistic validation gate |
+
+**Governance Tools (5):**
+| Tool | Purpose |
+|------|---------|
+| `check_phase_lock` | Phase lock verification |
+| `validate_ac_id` | AC-ID validation |
+| `canonicalize_intent` | Intent normalization |
+| `enforce_operation` | Governance enforcement |
+| `get_phase_status` | Phase status query |
+
+**Knowledge Tools (3):**
+| Tool | Purpose |
+|------|---------|
+| `search_knowledge_base` | Knowledge base search |
+| `analyze_knowledge_gap` | Gap analysis |
+| `generate_knowledge_summary` | Knowledge summarization |
+
+**Orchestrator Operations Tools (4):**
+| Tool | Purpose |
+|------|---------|
+| `monitor_orchestrator_health` | Health monitoring |
+| `diagnose_orchestrator_issues` | Issue diagnostics |
+| `optimize_orchestrator_config` | Config optimization |
+| `get_operation_status` | Operation status query |
+
+**Audit Tools (2):**
+| Tool | Purpose |
+|------|---------||
+| `cortex_audit_cohesion` | Codebase health scanning with auto-fix recommendations |
+| `cortex_audit_remediation_plan` | Generate remediation plans from audit results |
+
+**Learning & Digest Tools (4):**
+| Tool | Purpose |
+|------|---------||
+| `cortex_digest_session` | Extract learnings from chat sessions (auto-ingests to knowledge base) |
+| `cortex_bulk_digest_files` | Bulk markdown ingestion with intelligent routing |
+| `cortex_unified_digest_ingest` | Unified DIGEST/INGEST with auto-detection (Phase 72) |
+| `cortex_ask` | Educational queries with implementation verification |
+
+**Debugging Tools (9):**
+| Tool | Purpose |
+|------|---------||
+| `cortex_debug_inject` | Inject debug markers into source files (JS/TS/Python/HTML) |
+| `cortex_debug_capture` | Capture console logs during test execution |
+| `cortex_debug_analyze` | Analyze captured logs for race conditions and issues |
+| `cortex_debug_fix_plan` | Generate fix recommendations from debug analysis |
+| `cortex_debug_cleanup` | Remove all debug markers cleanly |
+| `cortex_debug_full_cycle` | Complete debug workflow (inject → capture → analyze → fix-plan → cleanup) |
+| `cortex_debug_status` | Get current debug session status and metadata |
+| `cortex_debug_verify` | Verify all markers removed |
+| `cortex_debug_restore` | Restore files from backup (emergency recovery) |
+
+**Cleanup Tools (1):**
+| Tool | Purpose |
+|------|---------||
+| `cortex_vacuum` | Markdown sprawl cleanup with automated archival and verification |
+
+**Utility Tools (1):**
+| Tool | Purpose |
+|------|---------||
+| `transform_tool` | Data format transformation (JSON/YAML/XML) |
+
+**Note:** sample_tool and echo_tool removed (dev-only, Phase 54 cleanup)
+
+**Total:** 28 production MCP tools available (all work universally for CORTEX repo and user production repos)
 
 ### Troubleshooting
 
@@ -436,9 +517,11 @@ result = mcp_tool.execute(parameters)
 
 ---
 
-## 🌐 MCP-FIRST ARCHITECTURE
+## 🌐 MCP-FIRST ARCHITECTURE (PYLANCE-STYLE)
 
 **CORTEX = SaaS behind MCP server.** Every capability is MCP-exposed.
+**Architecture:** MCP runs **locally within VS Code** (like Pylance).
+**Key:** VS Code auto-starts MCP when Copilot Chat invokes cortex_* tools.
 
 ### 🚨 MCP PRE-FLIGHT CHECK (MANDATORY)
 
@@ -448,18 +531,63 @@ result = mcp_tool.execute(parameters)
    ```
    Required tools: cortex_process_request, cortex_lens_analyze  # Updated Phase 37
    ```
-   If missing → STOP and instruct: "Start MCP: python -m cortex.mcp.server"
-   ```
+   If missing → STOP and instruct: "Run setup: python .cortex/setup-mcp.py, then reload VS Code"
 
 2. **NEVER Fallback to Direct Editing:**
    - ❌ FORBIDDEN: "MCP unavailable, editing files directly"
-   - ✅ REQUIRED: "MCP unavailable. Please start server first."
+   - ✅ REQUIRED: "MCP unavailable. Run setup script first."
 
 3. **Intent Classification:**
    - IMPLEMENT/FIX/REFACTOR → **REQUIRES MCP** (no exceptions)
    - ANALYZE → **REQUIRES MCP** (cortex_lens_analyze)
    - READ/SEARCH → Can proceed without MCP
    - PERSONA/DETAIL → **Future MCP** (Stage 37.4)
+
+### 🔴 MCP CIRCUIT BREAKER (CORE-050) — TIERED BLOCKING
+
+**Authority:** CORE-050 (MCP Circuit Breaker) | **Enforcement:** P0-BLOCKING
+
+**Tiered Intent Blocking Matrix:**
+
+| Intent | MCP Status | Action |
+|--------|------------|--------|
+| **IMPLEMENT** | ❌ Unavailable | **HARD BLOCK** — Cannot proceed |
+| **FIX** | ❌ Unavailable | **HARD BLOCK** — Cannot proceed |
+| **REFACTOR** | ❌ Unavailable | **HARD BLOCK** — Cannot proceed |
+| **AUDIT** | ❌ Unavailable | **HARD BLOCK** — Cannot proceed |
+| **PLAN** | ❌ Unavailable | **HARD BLOCK** — Cannot proceed |
+| **ANALYZE** | ❌ Unavailable | **HARD BLOCK** — Cannot proceed |
+| **DIAGNOSE** | ❌ Unavailable | ✅ **EXEMPT** — Always allowed |
+| **QUERY** | ❌ Unavailable | ✅ **EXEMPT** — Educational allowed |
+| **SETUP** | ❌ Unavailable | ✅ **EXEMPT** — Fix instructions allowed |
+
+**When MCP unavailable for BLOCKED intents, respond:**
+```
+❌ CORTEX Session Blocked: MCP Unavailable (CORE-050)
+
+Your request: {user_intent}
+Status: CANNOT PROCEED — MCP tools required
+
+Resolution Steps:
+1. Run: python .cortex/setup-mcp.py
+2. Reload VS Code: Command Palette → Developer: Reload Window
+3. Retry your request
+
+WHY: CORTEX enforces MCP-FIRST architecture.
+     Direct file operations are FORBIDDEN for code modifications.
+     This ensures TDD, security gates, and audit trails.
+
+WHAT YOU CAN DO NOW:
+- Ask diagnostic questions: "Why isn't MCP working?"
+- Request setup help: "Show me MCP setup steps"
+- Query documentation: "What is CORTEX?"
+```
+
+**NO BYPASS ALLOWED:**
+- ❌ "It's just a simple fix, I'll edit directly" → BLOCKED
+- ❌ "MCP is slow, let me use native tools" → BLOCKED
+- ❌ "I'll use run_in_terminal to create files" → BLOCKED
+- ✅ "MCP is down, show me how to fix it" → ALLOWED (DIAGNOSE intent)
 
 ### Core MCP Tools (Production Only)
 
@@ -607,12 +735,73 @@ Merge: Company takes precedence → CORTEX fills gaps
 
 ---
 
+## 🎯 Available Modes
+
+**All modes work universally for CORTEX repo and user production repos via MCP-FIRST architecture.**
+
+| Mode | Primary MCP Tool | Purpose | Universal? |
+|------|------------------|---------|------------|
+| **IMPLEMENT** | `cortex_process_request` | TDD implementation with RED→GREEN→REFACTOR | ✅ YES |
+| **FIX** | `cortex_process_request` | Bug fixing with root cause analysis | ✅ YES |
+| **REFACTOR** | `cortex_process_request` | Code improvement with quality gates | ✅ YES |
+| **ANALYZE** | `cortex_lens_analyze` | Code intelligence (git+AST+comments) | ✅ YES |
+| **AUDIT** | `cortex_audit_cohesion` | Codebase health scanning with auto-fix | ✅ YES |
+| **DIGEST** | `cortex_digest_session` | Chat session learning ingestion | ✅ YES |
+| **DEBUG** | `cortex_debug_full_cycle` | Complete debug workflow (multi-stack) | ✅ YES |
+| **VACUUM** | `cortex_vacuum` | Markdown sprawl cleanup with archival | ✅ YES |
+| **PLAN** | `cortex_plan_execute_autonomous` | Phase lifecycle management | ✅ YES |
+| **QUERY** | `cortex_ask` | Educational queries with truth verification | ✅ YES |
+| **ONBOARD** | `cortex_onboard_repository` | Repository onboarding + security scan | ✅ YES |
+
+### Mode Details
+
+#### 🔍 AUDIT Mode
+**Trigger:** `/audit` command  
+**Purpose:** Autonomous codebase health scanning with auto-fix recommendations  
+**Flow:** Scan → Detect issues → Generate fixes → Report inline  
+**MCP Tools:** `cortex_audit_cohesion`, `cortex_audit_remediation_plan`  
+**Output:** Inline findings with auto-fix suggestions (no markdown files)  
+**Universal:** Works on any repository (CORTEX or user production)
+
+#### 📚 DIGEST Mode
+**Trigger:** `/digest {file}` command or auto-detect chat files  
+**Purpose:** Extract learnings from chat sessions and ingest into knowledge base  
+**Flow:** Parse → Extract insights → Synthesize → Store to cortex_brain  
+**MCP Tools:** `cortex_digest_session`, `cortex_unified_digest_ingest`  
+**Auto-Routing:** Chat files → DIGEST, Knowledge entries → INGEST (Phase 72)  
+**Universal:** Works on any chat file from any repository
+
+#### 🐛 DEBUG Mode
+**Trigger:** `/debug {path}` command  
+**Purpose:** Complete debug workflow with marker injection and analysis  
+**Flow:** Inject markers → Capture logs → Analyze patterns → Fix-plan → Cleanup  
+**MCP Tools:** `cortex_debug_inject`, `cortex_debug_capture`, `cortex_debug_analyze`, `cortex_debug_fix_plan`, `cortex_debug_cleanup`  
+**Supports:** JavaScript, TypeScript, Python, HTML (multi-stack)  
+**Safety:** Automatic backups, surgical cleanup, verification  
+**Universal:** Works on any codebase (React, Angular, Vue, Django, Flask, .NET, etc.)
+
+#### 🧹 VACUUM Mode
+**Trigger:** `/vacuum` command  
+**Purpose:** Cleanup markdown sprawl with automated archival  
+**Flow:** Scan → Plan → Archive → Verify → Audit offer  
+**MCP Tools:** `cortex_vacuum`  
+**Safety:** Never deletes (only archives), age-based, conflict resolution  
+**Universal:** Works on any repository with markdown sprawl
+
+---
+
 ## 🚀 Quick Commands
 
 | Command | Action |
 |---------|--------|
 | `/implement {feature}` | TDD implementation |
 | `/fix {issue}` | Bug fixing |
+| `/audit` | **Autonomous codebase health scan** |
+| `/digest {file}` | **Extract learnings from chat session** |
+| `/ingest {file}` | **Alias for `/digest` (unified routing)** |
+| `/debug {path}` | **Full debug cycle (inject → capture → analyze → fix-plan → cleanup)** |
+| `/debug-cleanup` | **Remove all CORTEX_DEBUG markers** |
+| `/vacuum` | **Cleanup markdown sprawl with automated archival** |
 | `/dashboard generate {repo}` | Generate dashboard v3 JSON data |
 | `/dashboard serve {port}` | Serve dashboard via HTTP |
 | `/dashboard test` | Run Playwright E2E tests |
@@ -621,9 +810,9 @@ Merge: Company takes precedence → CORTEX fills gaps
 | `/analyze {scope}` | LENS analysis |
 | `/recall {feature}` | Feature discovery |
 | `/onboard {path}` | Repository onboarding + security scan |
-| `/debug {path}` | **DEBUG:** Full debug cycle (inject → capture → analyze → fix-plan) |
-| `/debug-cleanup` | **DEBUG:** Remove all CORTEX_DEBUG markers |
-| `/digest {file}` | **Extract learnings from chat session** |
+| `/ask {question}` | **Educational queries with truth verification** |
+| `/query {question}` | **Alias for `/ask`** |
+| `/check-env` | **Environment validation**
 
 ---
 

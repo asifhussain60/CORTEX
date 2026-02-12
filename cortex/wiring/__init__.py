@@ -12,12 +12,12 @@ Example:
     >>> registry = bootstrap_cortex()  # Initialize system
     >>> orch = registry.get_orchestrator("TDDOrchestrator")
     >>> result = orch.generate_tests(...)
-    
+
     # Check if wired
     >>> from cortex.wiring import is_wired
     >>> if not is_wired():
     ...     bootstrap_cortex()
-    
+
     # Get wiring hash for change detection
     >>> from cortex.wiring import get_wiring_hash
     >>> hash_value = get_wiring_hash()
@@ -26,8 +26,8 @@ Example:
 from cortex.wiring.bootstrap import (
     bootstrap_cortex,
     get_cortex,
-    is_wired,
     get_wiring_hash,
+    is_wired,
 )
 from cortex.wiring.registry import (
     GitBackedRegistry,
@@ -43,7 +43,7 @@ __all__ = [
     "get_cortex",
     "is_wired",
     "get_wiring_hash",
-    
+
     # Registry classes (advanced usage)
     "GitBackedRegistry",
     "LazyOrchestrator",

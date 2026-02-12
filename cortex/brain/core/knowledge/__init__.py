@@ -17,30 +17,28 @@ Also provides knowledge repository and company override capabilities:
 Used by Intent Router to build holistic understanding of user requests.
 """
 
-from .knowledge_graph import (
-    KnowledgeGraph,
-    GraphNode,
-    GraphEdge,
-    NodeType,
-    EdgeType,
-    KnowledgeGraphBuilder,
-    GraphMetadata,
-)
-
-from .knowledge_repository import (
-    KnowledgeRepository,
-    KnowledgeEntry,
-    KnowledgeQueryResult,
-    get_knowledge_repository,
-)
-
 from .company_knowledge_loader import (
+    COMPLIANCE_PATTERNS,
     CompanyKnowledgeLoader,
     ComplianceMatch,
     KnowledgeLayer,
     MergedKnowledgeResult,
     get_company_knowledge_loader,
-    COMPLIANCE_PATTERNS,
+)
+from .knowledge_graph import (
+    EdgeType,
+    GraphEdge,
+    GraphMetadata,
+    GraphNode,
+    KnowledgeGraph,
+    KnowledgeGraphBuilder,
+    NodeType,
+)
+from .knowledge_repository import (
+    KnowledgeEntry,
+    KnowledgeQueryResult,
+    KnowledgeRepository,
+    get_knowledge_repository,
 )
 
 __all__ = [

@@ -1,31 +1,7 @@
-"""
-CORTEX Core Orchestrators
+"""CORTEX core orchestrators package.
 
-Framework-level orchestrators:
-- master_orchestrator.py: Routes to appropriate domain orchestrator
-- composite_orchestrator.py: Chains multiple orchestrators
-- tdd_orchestrator.py: TDD discipline enforcer with knowledge guidance (AC-REM-011-02)
+Wave 7 Track 4: Consolidated orchestrators.
+Legacy components purged 2026-02-12.
 """
 
-from typing import Dict, List, Optional
-
-# AC-REM-011-02: Export TDD Orchestrator for knowledge integration
-try:
-    from cortex.orchestrators.core.tdd_orchestrator import (
-        TDDOrchestrator,
-        TDDKnowledgeLoader,
-        TDDPhase,
-        TDDDisciplineRule,
-        TDDImplementationGuidance,
-        get_tdd_orchestrator,
-    )
-    __all__ = [
-        "TDDOrchestrator",
-        "TDDKnowledgeLoader",
-        "TDDPhase",
-        "TDDDisciplineRule",
-        "TDDImplementationGuidance",
-        "get_tdd_orchestrator",
-    ]
-except ImportError:
-    pass
+# Minimal exports - import orchestrators as needed

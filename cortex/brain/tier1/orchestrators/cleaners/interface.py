@@ -15,17 +15,17 @@ Phase: PHASE-VAC-001-01
 CORE Rules: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 """
 
+import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional
 from datetime import datetime
-import logging
+from typing import Any, Dict, List, Optional
 
 
 @dataclass
 class Analysis:
     """Result of analyze() phase - non-destructive intelligence gathering.
-    
+
     Attributes:
         cleaner_id: Identifier of the cleaner that performed analysis
         timestamp: ISO-8601 timestamp when analysis ran
@@ -44,7 +44,7 @@ class Analysis:
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for serialization.
-        
+
         Returns:
             Dictionary representation of analysis
         """
@@ -61,7 +61,7 @@ class Analysis:
 @dataclass
 class Report:
     """Result of execute() phase - execution outcome with changes.
-    
+
     Attributes:
         cleaner_id: Identifier of the cleaner that executed
         timestamp: ISO-8601 timestamp when execution ran
@@ -82,7 +82,7 @@ class Report:
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for serialization.
-        
+
         Returns:
             Dictionary representation of report
         """
@@ -99,7 +99,7 @@ class Report:
     @property
     def is_success(self) -> bool:
         """Check if execution was successful.
-        
+
         Returns:
             True if status is SUCCESS
         """
@@ -108,7 +108,7 @@ class Report:
     @property
     def is_failed(self) -> bool:
         """Check if execution failed.
-        
+
         Returns:
             True if status is FAILED
         """
@@ -118,7 +118,7 @@ class Report:
 @dataclass
 class RollbackResult:
     """Result of rollback() phase - restoration outcome.
-    
+
     Attributes:
         cleaner_id: Identifier of the cleaner that performed rollback
         timestamp: ISO-8601 timestamp when rollback ran
@@ -135,7 +135,7 @@ class RollbackResult:
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for serialization.
-        
+
         Returns:
             Dictionary representation of rollback result
         """
@@ -150,7 +150,7 @@ class RollbackResult:
     @property
     def is_success(self) -> bool:
         """Check if rollback was successful.
-        
+
         Returns:
             True if status is SUCCESS
         """

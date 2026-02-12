@@ -11,13 +11,13 @@ Authority: Phase 36 Stage 4 specification
 
 import logging
 import time
-from typing import List, Optional
 from dataclasses import dataclass
 from enum import Enum
+from typing import List, Optional
 
-from cortex.brain.core.ml_summarizer import MLSummarizer
 from cortex.brain.core.conversation_synthesizer import ContextSynthesizer
 from cortex.brain.core.learning_extractor import LearningExtractor
+from cortex.brain.core.ml_summarizer import MLSummarizer
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +33,7 @@ class IntegrationMode(Enum):
 class MLMetrics:
     """
     ML processing metrics.
-    
+
     Attributes:
         summarization_time: Time spent on summarization
         deduplication_time: Time spent on deduplication
@@ -52,7 +52,7 @@ class MLMetrics:
 class IntegrationResult:
     """
     Integration processing result.
-    
+
     Attributes:
         processed_content: Processed content
         metrics: Processing metrics
@@ -69,7 +69,7 @@ class IntegrationResult:
 class IntegrationConfig:
     """
     Integration configuration.
-    
+
     Attributes:
         mode: Integration mode
         enable_summarization: Whether to enable summarization
@@ -85,11 +85,11 @@ class IntegrationConfig:
 class MLIntegration:
     """
     ML Summarization Integration.
-    
+
     Coordinates ML summarization, deduplication, and learning
     extraction across CORTEX.
     """
-    
+
     def __init__(
         self,
         model_name: str = "all-MiniLM-L6-v2",
@@ -97,31 +97,31 @@ class MLIntegration:
     ):
         """
         Initialize ML integration.
-        
+
         Args:
             model_name: SentenceTransformer model name
             config: Integration configuration
         """
         self.config = config or IntegrationConfig()
-        
+
         # Initialize components based on config
         if self.config.enable_summarization:
             self.summarizer = MLSummarizer(model_name=model_name)
         else:
             self.summarizer = None
-        
+
         if self.config.enable_deduplication:
             self.synthesizer = ContextSynthesizer(model_name=model_name)
         else:
             self.synthesizer = None
-        
+
         if self.config.enable_learning:
             self.extractor = LearningExtractor(model_name=model_name)
         else:
             self.extractor = None
-        
+
         logger.info(f"MLIntegration initialized with mode: {self.config.mode.value}")
-    
+
     def process(
         self,
         conversation: Optional[List[str]],
@@ -129,11 +129,11 @@ class MLIntegration:
     ) -> IntegrationResult:
         """
         Process conversation through ML pipeline.
-        
+
         Args:
             conversation: List of conversation turns
             token_budget: Optional token budget
-            
+
         Returns:
             IntegrationResult: Processing result
         """
@@ -143,20 +143,20 @@ class MLIntegration:
                 metrics=MLMetrics(0.0, 0.0, 0.0, 0.0, 0),
                 success=True,
             )
-        
+
         try:
             start_time = time.time()
-            
+
             processed_content = " ".join(conversation)
             summarization_time = 0.0
             deduplication_time = 0.0
             compression_ratio = 0.0
             insights_extracted = 0
-            
+
             # Apply processing based on mode and config
             if self.config.mode == IntegrationMode.FULL:
                 # Full pipeline: dedup → summarize → learn
-                
+
                 # 1. Deduplication
                 if self.config.enable_deduplication and self.synthesizer:
                     dedup_start = time.time()
@@ -167,7 +167,7 @@ class MLIntegration:
                     processed_content = synthesis_result.synthesized_context
                     compression_ratio = synthesis_result.compression_ratio
                     deduplication_time = time.time() - dedup_start
-                
+
                 # 2. Summarization (if still needed)
                 if self.config.enable_summarization and self.summarizer and token_budget:
                     sum_start = time.time()
@@ -178,12 +178,12 @@ class MLIntegration:
                         processed_content = summary_result.summary
                         compression_ratio = max(compression_ratio, summary_result.token_reduction)
                     summarization_time = time.time() - sum_start
-                
+
                 # 3. Learning extraction
                 if self.config.enable_learning and self.extractor:
                     extraction_result = self.extractor.extract(conversation)
                     insights_extracted = len(extraction_result.insights)
-            
+
             elif self.config.mode == IntegrationMode.SUMMARIZATION_ONLY:
                 # Summarization only
                 if self.config.enable_summarization and self.summarizer:
@@ -192,7 +192,7 @@ class MLIntegration:
                     processed_content = summary_result.summary
                     compression_ratio = summary_result.token_reduction
                     summarization_time = time.time() - sum_start
-            
+
             elif self.config.mode == IntegrationMode.DEDUPLICATION_ONLY:
                 # Deduplication only
                 if self.config.enable_deduplication and self.synthesizer:
@@ -204,9 +204,9 @@ class MLIntegration:
                     processed_content = synthesis_result.synthesized_context
                     compression_ratio = synthesis_result.compression_ratio
                     deduplication_time = time.time() - dedup_start
-            
+
             total_time = time.time() - start_time
-            
+
             return IntegrationResult(
                 processed_content=processed_content,
                 metrics=MLMetrics(
@@ -218,7 +218,7 @@ class MLIntegration:
                 ),
                 success=True,
             )
-        
+
         except Exception as e:
             logger.error(f"ML integration error: {e}")
             return IntegrationResult(

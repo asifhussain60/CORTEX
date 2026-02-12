@@ -5,10 +5,10 @@ This module is imported from dashboard_service.py for convenience.
 """
 
 from cortex.infrastructure.dashboard_service import (
-    ProgressAggregator,
-    ProgressSnapshot,
-    ProgressMetrics,
     DashboardStatus,
+    ProgressAggregator,
+    ProgressMetrics,
+    ProgressSnapshot,
 )
 
 __all__ = [

@@ -16,8 +16,7 @@ Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import List, Dict, Optional
-
+from typing import Dict, List, Optional
 
 # ============================================================================
 # ENUMS
@@ -25,7 +24,7 @@ from typing import List, Dict, Optional
 
 class FileAction(str, Enum):
     """Actions that can be performed on a file.
-    
+
     Used in FileSpec to specify what operation is planned.
     """
     CREATE = "create"
@@ -40,7 +39,7 @@ class FileAction(str, Enum):
 @dataclass
 class ParameterSpec:
     """Specification for a function parameter.
-    
+
     Attributes:
         name: Parameter name
         type_hint: Python type hint string
@@ -54,7 +53,7 @@ class ParameterSpec:
 @dataclass
 class ReturnSpec:
     """Specification for a function return value.
-    
+
     Attributes:
         type_hint: Python type hint string
         description: What the return value represents
@@ -66,9 +65,9 @@ class ReturnSpec:
 @dataclass
 class LayerSpec:
     """Specification for one side of a cross-layer interface.
-    
+
     Used in InterfaceContract to define Python or JavaScript side.
-    
+
     Attributes:
         file: File path containing the type
         type_name: Name of the type/enum/class
@@ -82,7 +81,7 @@ class LayerSpec:
 @dataclass
 class RiskItem:
     """Individual risk in a risk assessment.
-    
+
     Attributes:
         description: What the risk is
         probability: Likelihood (0.0-1.0)
@@ -102,9 +101,9 @@ class RiskItem:
 @dataclass
 class FileSpec:
     """Specification for a file to create, modify, or delete.
-    
+
     Used in CodeLevelPlan to specify what files are affected.
-    
+
     Attributes:
         path: Relative file path from repository root
         action: CREATE, MODIFY, or DELETE
@@ -124,9 +123,9 @@ class FileSpec:
 @dataclass
 class FunctionSpec:
     """Specification for a function/method to create or modify.
-    
+
     Provides detailed function signature without generating code.
-    
+
     Attributes:
         file_path: File containing this function
         name: Function name
@@ -148,9 +147,9 @@ class FunctionSpec:
 @dataclass
 class InterfaceContract:
     """Contract for cross-layer alignment (Python ↔ JavaScript).
-    
+
     Ensures consistency between backend and frontend representations.
-    
+
     Attributes:
         contract_id: Unique identifier for this contract
         python_side: Python layer specification
@@ -168,7 +167,7 @@ class InterfaceContract:
 @dataclass
 class TestSpec:
     """Specification for tests to write (TDD-first).
-    
+
     Attributes:
         file_path: Test file path
         test_count: Number of tests to write
@@ -184,7 +183,7 @@ class TestSpec:
 @dataclass
 class EffortEstimate:
     """Effort estimation with confidence level.
-    
+
     Attributes:
         hours: Estimated hours to complete
         confidence: Confidence in estimate (0.0-1.0)
@@ -198,7 +197,7 @@ class EffortEstimate:
 @dataclass
 class RiskMatrix:
     """Risk assessment matrix for a plan.
-    
+
     Attributes:
         overall_risk: Summary risk level (LOW, MEDIUM, HIGH, CRITICAL)
         risks: List of individual risk items
@@ -210,11 +209,11 @@ class RiskMatrix:
 @dataclass
 class CodeLevelPlan:
     """Complete code-level implementation plan.
-    
+
     Main output of PlanningOrchestrator.generate_code_level_plan().
     Contains all specifications needed to implement a task WITHOUT
     generating actual code.
-    
+
     Attributes:
         task_id: Unique identifier for the task
         file_specs: Files to create/modify/delete

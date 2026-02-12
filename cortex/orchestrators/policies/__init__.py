@@ -14,8 +14,8 @@ Authority: Phase 29 specification
 
 from cortex.orchestrators.policies.chat_response_policy import (
     ChatResponsePolicy,
+    NarrationDetectedError,
     ResponseStructureError,
-    NarrationDetectedError
 )
 
 __all__ = [

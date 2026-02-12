@@ -13,15 +13,15 @@ Phase: PRODUCTION-READINESS | Status: ✅ AUTO-DISCOVERY ACTIVE
 
 """
 
-import os
 import ast
 import importlib
 import inspect
-from pathlib import Path
-from typing import List, Dict, Set, Tuple, Optional, Any
+import logging
+import os
 from dataclasses import dataclass, field
 from enum import Enum
-import logging
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -65,7 +65,7 @@ class DiscoveredComponent:
     dependencies: List[str] = field(default_factory=list)
     source_file: str = ""
     line_number: int = 0
-    
+
     def to_inventory_entry(self) -> str:
         """Convert to wiring harness inventory format."""
         return f"""
@@ -93,7 +93,7 @@ class DiscoveredComponent:
 
 class DiscoveryScanner:
     """Scans CORTEX codebase for discoverable components."""
-    
+
     # Known LENS protocol components
     LENS_PATTERNS = {
         "Language": ["classifier", "parser", "analyzer", "intent"],
@@ -101,7 +101,7 @@ class DiscoveryScanner:
         "Navigation": ["router", "orchestrator", "navigator", "planner"],
         "Synthesis": ["synthesizer", "composer", "builder", "generator"],
     }
-    
+
     # Known orchestrator patterns
     ORCHESTRATOR_PATTERNS = {
         "MasterOrchestrator": "core orchestration controller",
@@ -110,26 +110,26 @@ class DiscoveryScanner:
         "IntentRouter": "intent-based routing",
         "PlanningOrchestrator": "multi-step planning",
     }
-    
+
     # Known infrastructure components
     INFRASTRUCTURE_PATTERNS = [
         "CircuitBreaker", "RetryStrategy", "ConnectionPool",
         "TransactionManager", "ResourceTracker", "HealthChecker",
         "RateLimiter", "BulkheadManager", "TimeoutManager",
     ]
-    
+
     # Known governance patterns
     GOVERNANCE_PATTERNS = [
         "GovernanceRegistry", "RuleEvaluator", "ContextExtractor",
         "GovernanceIntelligence", "TierComposer", "RuleValidator",
     ]
-    
+
     # MCP toolkit patterns
     MCP_PATTERNS = [
         "ToolRegistry", "ToolDiscovery", "ToolGovernance",
         "ToolExecutor", "ToolValidator",
     ]
-    
+
     def __init__(self, cortex_root: str = None):
         """Initialize scanner with CORTEX root path."""
         if cortex_root is None:
@@ -137,15 +137,15 @@ class DiscoveryScanner:
         self.cortex_root = Path(cortex_root)
         self.discovered_components: List[DiscoveredComponent] = []
         self.test_mapping: Dict[str, List[str]] = self._build_test_mapping()
-    
+
     def _build_test_mapping(self) -> Dict[str, List[str]]:
         """Build mapping of components to test files."""
         test_mapping = {}
         tests_dir = self.cortex_root / "tests"
-        
+
         if not tests_dir.exists():
             return test_mapping
-        
+
         for test_file in tests_dir.rglob("test_*.py"):
             try:
                 with open(test_file, 'r') as f:
@@ -163,21 +163,21 @@ class DiscoveryScanner:
                                             test_mapping[node.id].append(str(test_file))
             except Exception as e:
                 logger.debug(f"Error parsing test file {test_file}: {e}")
-        
+
         return test_mapping
-    
+
     def scan_orchestrators(self) -> List[DiscoveredComponent]:
         """Scan for orchestrator components."""
         orchestrators = []
         orchestrators_dir = self.cortex_root / "cortex" / "orchestrators"
-        
+
         if not orchestrators_dir.exists():
             return orchestrators
-        
+
         for py_file in orchestrators_dir.rglob("*.py"):
             if py_file.name.startswith("_"):
                 continue
-            
+
             try:
                 tree = ast.parse(py_file.read_text())
                 for node in ast.walk(tree):
@@ -200,13 +200,13 @@ class DiscoveryScanner:
                             orchestrators.append(comp)
             except Exception as e:
                 logger.debug(f"Error scanning {py_file}: {e}")
-        
+
         return orchestrators
-    
+
     def scan_lens_components(self) -> List[DiscoveredComponent]:
         """Scan for LENS protocol components."""
         lens_components = []
-        
+
         for phase_name, patterns in self.LENS_PATTERNS.items():
             for pattern in patterns:
                 results = self._find_classes_by_pattern(pattern)
@@ -214,59 +214,59 @@ class DiscoveryScanner:
                     comp.category = DiscoveryCategory.LENS_COMPONENT
                     comp.priority = 0 if phase_name == "Language" else 1
                     lens_components.append(comp)
-        
+
         return lens_components
-    
+
     def scan_infrastructure(self) -> List[DiscoveredComponent]:
         """Scan for infrastructure components."""
         infrastructure = []
-        
+
         for pattern in self.INFRASTRUCTURE_PATTERNS:
             results = self._find_classes_by_pattern(pattern)
             for comp in results:
                 comp.category = DiscoveryCategory.INFRASTRUCTURE
                 comp.priority = 1 if pattern in ["CircuitBreaker", "TransactionManager"] else 2
                 infrastructure.append(comp)
-        
+
         return infrastructure
-    
+
     def scan_governance(self) -> List[DiscoveredComponent]:
         """Scan for governance components."""
         governance = []
-        
+
         for pattern in self.GOVERNANCE_PATTERNS:
             results = self._find_classes_by_pattern(pattern)
             for comp in results:
                 comp.category = DiscoveryCategory.GOVERNANCE
                 comp.priority = 0 if pattern in ["GovernanceRegistry", "GovernanceIntelligence"] else 1
                 governance.append(comp)
-        
+
         return governance
-    
+
     def scan_mcp_toolkit(self) -> List[DiscoveredComponent]:
         """Scan for MCP toolkit components."""
         toolkit = []
-        
+
         for pattern in self.MCP_PATTERNS:
             results = self._find_classes_by_pattern(pattern)
             for comp in results:
                 comp.category = DiscoveryCategory.TOOLKIT
                 comp.priority = 1
                 toolkit.append(comp)
-        
+
         return toolkit
-    
+
     def scan_all(self) -> List[DiscoveredComponent]:
         """Execute full discovery scan."""
         logger.info("Starting CORTEX discovery scan...")
-        
+
         all_components = []
         all_components.extend(self.scan_orchestrators())
         all_components.extend(self.scan_lens_components())
         all_components.extend(self.scan_infrastructure())
         all_components.extend(self.scan_governance())
         all_components.extend(self.scan_mcp_toolkit())
-        
+
         # Deduplicate by full_entry_point
         seen = set()
         unique_components = []
@@ -274,24 +274,24 @@ class DiscoveryScanner:
             if comp.full_entry_point not in seen:
                 seen.add(comp.full_entry_point)
                 unique_components.append(comp)
-        
+
         self.discovered_components = unique_components
         logger.info(f"Discovery complete: {len(unique_components)} components found")
-        
+
         return unique_components
-    
+
     def _find_classes_by_pattern(self, pattern: str) -> List[DiscoveredComponent]:
         """Find classes matching a pattern."""
         components = []
         cortex_dir = self.cortex_root / "cortex"
-        
+
         if not cortex_dir.exists():
             return components
-        
+
         for py_file in cortex_dir.rglob("*.py"):
             if py_file.name.startswith("_"):
                 continue
-            
+
             try:
                 tree = ast.parse(py_file.read_text())
                 for node in ast.walk(tree):
@@ -314,9 +314,9 @@ class DiscoveryScanner:
                             components.append(comp)
             except Exception as e:
                 logger.debug(f"Error scanning {py_file}: {e}")
-        
+
         return components
-    
+
     def _get_module_path(self, file_path: Path) -> str:
         """Convert file path to module path."""
         try:
@@ -326,30 +326,30 @@ class DiscoveryScanner:
         except (ValueError, OSError) as e:
             logger.debug(f"Failed to convert path to module path: {e}")
             return str(file_path)
-    
+
     def generate_inventory_updates(self) -> str:
         """Generate inventory entries for discovered components."""
         output = "# AUTO-DISCOVERED COMPONENTS\n"
         output += "# Generated by discovery_scanner.py\n"
         output += "# Date: 2026-01-23\n\n"
-        
+
         # Group by category
         by_category = {}
         for comp in self.discovered_components:
             if comp.category not in by_category:
                 by_category[comp.category] = []
             by_category[comp.category].append(comp)
-        
+
         for category in sorted(by_category.keys()):
-            output += f"\n# =========================================================================\n"
+            output += "\n# =========================================================================\n"
             output += f"# SECTION: {category.upper()}\n"
-            output += f"# =========================================================================\n\n"
-            
+            output += "# =========================================================================\n\n"
+
             for comp in sorted(by_category[category], key=lambda x: x.priority):
                 output += comp.to_inventory_entry()
-        
+
         return output
-    
+
     def get_summary(self) -> Dict[str, Any]:
         """Get discovery summary."""
         by_category = {}
@@ -357,7 +357,7 @@ class DiscoveryScanner:
             if comp.category not in by_category:
                 by_category[comp.category] = 0
             by_category[comp.category] += 1
-        
+
         return {
             "total_discovered": len(self.discovered_components),
             "by_category": by_category,
@@ -390,7 +390,7 @@ if __name__ == "__main__":
     print("CORTEX DISCOVERY SCAN SUMMARY")
     print(f"{'='*70}")
     print(f"Total Components Discovered: {summary['total_discovered']}")
-    print(f"\nBy Category:")
+    print("\nBy Category:")
     for category, count in summary['by_category'].items():
         print(f"  - {category}: {count}")
     print(f"\nCritical Priority: {summary['critical_priority']}")

@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class ParameterInfo:
     """Function parameter information.
-    
+
     Attributes:
         name: Parameter name
         type_hint: Type annotation if present
@@ -37,7 +37,7 @@ class ParameterInfo:
 @dataclass
 class FunctionInfo:
     """Function definition information.
-    
+
     Attributes:
         name: Function name
         parameters: List of parameters
@@ -57,7 +57,7 @@ class FunctionInfo:
 @dataclass
 class ClassInfo:
     """Class definition information.
-    
+
     Attributes:
         name: Class name
         bases: List of base class names
@@ -77,7 +77,7 @@ class ClassInfo:
 @dataclass
 class ConstantInfo:
     """Module-level constant information.
-    
+
     Attributes:
         name: Constant name
         value: String representation of value
@@ -91,7 +91,7 @@ class ConstantInfo:
 @dataclass
 class ParseResult:
     """Result of AST parsing operation.
-    
+
     Attributes:
         success: Whether parsing succeeded
         ast_tree: Parsed AST module (if successful)
@@ -118,10 +118,10 @@ class ParseResult:
     error_line: Optional[int] = None
     error_column: Optional[int] = None
     source_path: Optional[Path] = None
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Serialize parse result to dictionary.
-        
+
         Returns:
             Dictionary representation of parse result
         """
@@ -180,14 +180,14 @@ class ParseResult:
 
 class ASTIntelligenceEngine:
     """Production-ready AST analysis engine for Python code.
-    
+
     Provides comprehensive code intelligence through AST parsing:
     - Robust error handling for syntax errors and file I/O
     - Complete extraction of functions, classes, imports
     - Type hint and docstring preservation
     - Optional caching for performance
     - Structured results for downstream analysis
-    
+
     Example:
         >>> engine = ASTIntelligenceEngine()
         >>> result = engine.parse_file(Path("module.py"))
@@ -195,10 +195,10 @@ class ASTIntelligenceEngine:
         ...     for func in result.functions:
         ...         print(f"{func.name}: {func.docstring}")
     """
-    
+
     def __init__(self, enable_cache: bool = False) -> None:
         """Initialize AST intelligence engine.
-        
+
         Args:
             enable_cache: Enable result caching for repeated analyses
         """
@@ -208,13 +208,13 @@ class ASTIntelligenceEngine:
             "ASTIntelligenceEngine initialized",
             extra={"cache_enabled": enable_cache}
         )
-    
+
     def parse_file(self, file_path: Path) -> ParseResult:
         """Parse Python file and extract AST information.
-        
+
         Args:
             file_path: Path to Python source file
-            
+
         Returns:
             ParseResult with extracted information or error details
         """
@@ -224,7 +224,7 @@ class ASTIntelligenceEngine:
             if cache_key in self._cache:
                 logger.debug(f"Cache hit for {file_path}")
                 return self._cache[cache_key]
-        
+
         # Validate file existence
         if not file_path.exists():
             logger.error(f"File not found: {file_path}")
@@ -233,7 +233,7 @@ class ASTIntelligenceEngine:
                 error=f"File not found: {file_path}",
                 source_path=file_path,
             )
-        
+
         # Read file content
         try:
             source_code = file_path.read_text(encoding="utf-8")
@@ -251,24 +251,24 @@ class ASTIntelligenceEngine:
                 error=f"Error reading file: {e}",
                 source_path=file_path,
             )
-        
+
         # Parse the source code
         result = self.parse_string(source_code)
         result.source_path = file_path
-        
+
         # Cache result
         if self.enable_cache:
             cache_key = f"file:{file_path}"
             self._cache[cache_key] = result
-        
+
         return result
-    
+
     def parse_string(self, source_code: str) -> ParseResult:
         """Parse Python source code string and extract AST information.
-        
+
         Args:
             source_code: Python source code as string
-            
+
         Returns:
             ParseResult with extracted information or error details
         """
@@ -289,34 +289,34 @@ class ASTIntelligenceEngine:
                 success=False,
                 error=f"Parse error: {e}",
             )
-        
+
         # Extract information
         result = ParseResult(
             success=True,
             ast_tree=tree,
             module_docstring=ast.get_docstring(tree),
         )
-        
+
         # Extract top-level elements
         for node in tree.body:
             if isinstance(node, ast.Import):
                 for alias in node.names:
                     result.imports.add(alias.name)
-            
+
             elif isinstance(node, ast.ImportFrom):
                 if node.module:
                     result.imports.add(node.module)
                     imported_names = [alias.name for alias in node.names]
                     result.from_imports[node.module] = imported_names
-            
+
             elif isinstance(node, ast.FunctionDef):
                 func_info = self._extract_function_info(node)
                 result.functions.append(func_info)
-            
+
             elif isinstance(node, ast.ClassDef):
                 class_info = self._extract_class_info(node)
                 result.classes.append(class_info)
-            
+
             elif isinstance(node, ast.Assign):
                 # Extract module-level constants (uppercase names)
                 for target in node.targets:
@@ -327,7 +327,7 @@ class ASTIntelligenceEngine:
                             line_number=node.lineno,
                         )
                         result.constants.append(constant)
-        
+
         logger.info(
             "Successfully parsed source",
             extra={
@@ -336,15 +336,15 @@ class ASTIntelligenceEngine:
                 "imports": len(result.imports),
             }
         )
-        
+
         return result
-    
+
     def _extract_function_info(self, node: ast.FunctionDef) -> FunctionInfo:
         """Extract function information from AST node.
-        
+
         Args:
             node: FunctionDef AST node
-            
+
         Returns:
             FunctionInfo with extracted details
         """
@@ -356,7 +356,7 @@ class ASTIntelligenceEngine:
                 type_hint=ast.unparse(arg.annotation) if arg.annotation else None,
             )
             parameters.append(param)
-        
+
         # Add defaults to parameters
         defaults = node.args.defaults
         if defaults:
@@ -366,7 +366,7 @@ class ASTIntelligenceEngine:
                 param_index = len(parameters) - num_defaults + i
                 if param_index >= 0:
                     parameters[param_index].default = ast.unparse(default) if hasattr(ast, 'unparse') else str(default)
-        
+
         # Extract decorators
         decorators = []
         for decorator in node.decorator_list:
@@ -379,7 +379,7 @@ class ASTIntelligenceEngine:
                     decorators.append(ast.unparse(decorator) if hasattr(ast, 'unparse') else "decorator")
             else:
                 decorators.append(ast.unparse(decorator) if hasattr(ast, 'unparse') else "decorator")
-        
+
         return FunctionInfo(
             name=node.name,
             parameters=parameters,
@@ -388,13 +388,13 @@ class ASTIntelligenceEngine:
             line_number=node.lineno,
             decorators=decorators,
         )
-    
+
     def _extract_class_info(self, node: ast.ClassDef) -> ClassInfo:
         """Extract class information from AST node.
-        
+
         Args:
             node: ClassDef AST node
-            
+
         Returns:
             ClassInfo with extracted details
         """
@@ -405,14 +405,14 @@ class ASTIntelligenceEngine:
                 bases.append(base.id)
             else:
                 bases.append(ast.unparse(base) if hasattr(ast, 'unparse') else "Base")
-        
+
         # Extract methods
         methods = []
         for item in node.body:
             if isinstance(item, ast.FunctionDef):
                 method_info = self._extract_function_info(item)
                 methods.append(method_info)
-        
+
         # Extract decorators
         decorators = []
         for decorator in node.decorator_list:
@@ -425,7 +425,7 @@ class ASTIntelligenceEngine:
                     decorators.append(ast.unparse(decorator) if hasattr(ast, 'unparse') else "decorator")
             else:
                 decorators.append(ast.unparse(decorator) if hasattr(ast, 'unparse') else "decorator")
-        
+
         return ClassInfo(
             name=node.name,
             bases=bases,

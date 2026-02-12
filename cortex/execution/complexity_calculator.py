@@ -1,7 +1,7 @@
 """Complexity score calculation engine."""
 
-from typing import Any, Dict, Optional
 from dataclasses import dataclass
+from typing import Any, Dict, Optional
 
 
 @dataclass
@@ -11,7 +11,7 @@ class ComplexityScore:
     score: float
     category: str  # "simple", "moderate", "complex"
     factors: Optional[Dict[str, float]] = None
-    
+
     def __post_init__(self) -> None:
         """Validate score is in valid range."""
         if not 0 <= self.score <= 100:
@@ -36,7 +36,7 @@ class ComplexityCalculator:
         timeout_seconds: int = 300
     ) -> ComplexityScore:
         """Calculate complexity score for an operation.
-        
+
         Args:
             operation_type: Type of operation
             data_size_mb: Data size in megabytes
@@ -44,14 +44,14 @@ class ComplexityCalculator:
             parallel_tasks: Number of parallel tasks
             retry_count: Number of retries configured
             timeout_seconds: Operation timeout in seconds
-            
+
         Returns:
             ComplexityScore object with score and category
         """
         from cortex.execution.complexity_metrics import ComplexityMetrics
-        
+
         metrics = ComplexityMetrics()
-        
+
         # Get all factors
         factors = metrics.calculate_factors(
             operation_type=operation_type,
@@ -60,16 +60,16 @@ class ComplexityCalculator:
             parallel_tasks=parallel_tasks,
             retry_count=retry_count
         )
-        
+
         # Add timeout factor
         factors["timeout_factor"] = self._get_timeout_factor(timeout_seconds)
-        
+
         # Calculate weighted score
         score = self._calculate_weighted_score(factors)
-        
+
         # Clamp to 0-100
         score = max(0, min(100, score))
-        
+
         # Determine category
         if score < self.simple_threshold:
             category = "simple"
@@ -77,7 +77,7 @@ class ComplexityCalculator:
             category = "moderate"
         else:
             category = "complex"
-        
+
         return ComplexityScore(
             score=score,
             category=category,
@@ -86,10 +86,10 @@ class ComplexityCalculator:
 
     def _get_timeout_factor(self, timeout_seconds: int) -> float:
         """Get complexity factor for timeout configuration.
-        
+
         Args:
             timeout_seconds: Timeout in seconds
-            
+
         Returns:
             Complexity factor
         """
@@ -106,10 +106,10 @@ class ComplexityCalculator:
 
     def _calculate_weighted_score(self, factors: Dict[str, float]) -> float:
         """Calculate weighted complexity score from factors.
-        
+
         Args:
             factors: Dictionary of complexity factors
-            
+
         Returns:
             Calculated complexity score (0-100)
         """
@@ -122,10 +122,10 @@ class ComplexityCalculator:
             "retry_factor": 0.05,
             "timeout_factor": 0.05
         }
-        
+
         # Factors are already scaled 0-100, normalize timeout
         max_timeout = 5
-        
+
         normalized_factors = {
             "operation_type_factor": min(100, factors.get("operation_type_factor", 0)),
             "data_size_factor": min(100, factors.get("data_size_factor", 0)),
@@ -134,10 +134,10 @@ class ComplexityCalculator:
             "retry_factor": min(100, factors.get("retry_factor", 0)),
             "timeout_factor": min(100, (factors.get("timeout_factor", 0) / max_timeout) * 100)
         }
-        
+
         weighted_score = 0.0
         for factor_name, weight in weights.items():
             factor_value = normalized_factors.get(factor_name, 0)
             weighted_score += factor_value * weight
-        
+
         return weighted_score

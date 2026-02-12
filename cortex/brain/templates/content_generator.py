@@ -6,11 +6,12 @@ Supports batch generation and format transformation.
 
 """
 
-from dataclasses import dataclass, field
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Union
-from datetime import datetime
 import json
+from dataclasses import dataclass, field
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Union
+
 import yaml
 
 
@@ -34,15 +35,15 @@ class ImportResult:
 class ContentGenerator:
     """
     Content generator for templates.
-    
+
     Provides utilities for creating template skeletons,
     generating content from patterns, and managing bundles.
     """
-    
+
     def __init__(self, template_base_path: Optional[Path] = None):
         """
         Initialize content generator.
-        
+
         Args:
             template_base_path: Base path for templates
         """
@@ -50,7 +51,7 @@ class ContentGenerator:
             self.template_base_path = Path(__file__).parent.parent.parent / "cortex_brain" / "tier2"
         else:
             self.template_base_path = Path(template_base_path)
-    
+
     def generate_skeleton(
         self,
         template_id: str,
@@ -61,19 +62,19 @@ class ContentGenerator:
     ) -> Dict[str, Any]:
         """
         Generate template skeleton.
-        
+
         Args:
             template_id: Template identifier
             domain: Domain name
             category: Template category
             description: Template description
             variables: List of variable names
-            
+
         Returns:
             Template skeleton dictionary
         """
         variables = variables or []
-        
+
         return {
             'metadata': {
                 'template_id': template_id,
@@ -109,19 +110,19 @@ class ContentGenerator:
                 'variables': {var: {'type': 'string', 'required': True} for var in variables}
             }
         }
-    
+
     def _generate_body_format(self, variables: List[str]) -> str:
         """Generate body format with variable placeholders."""
         if not variables:
             return "Content placeholder.\n"
-        
+
         lines = ["### Details\n"]
         for var in variables:
             label = var.replace('_', ' ').title()
             lines.append(f"**{label}:** {{{var}}}\n")
-        
+
         return '\n'.join(lines)
-    
+
     def generate_from_pattern(
         self,
         pattern: str,
@@ -131,25 +132,25 @@ class ContentGenerator:
     ) -> Dict[str, Any]:
         """
         Generate template from existing pattern.
-        
+
         Args:
             pattern: Pattern template ID to use as base
             new_id: New template ID
             domain: Domain for new template
             overrides: Optional overrides for template
-            
+
         Returns:
             Generated template dictionary
         """
         from .content_strategy import ContentPopulationStrategy
-        
+
         strategy = ContentPopulationStrategy(self.template_base_path)
         pattern_template = strategy.get_template_by_id(pattern)
-        
+
         if not pattern_template:
             # Create from scratch if pattern not found
             return self.generate_skeleton(new_id, domain)
-        
+
         # Clone pattern with new ID
         new_template = self.generate_skeleton(
             template_id=new_id,
@@ -158,13 +159,13 @@ class ContentGenerator:
             description=f"Based on {pattern}",
             variables=pattern_template.get('variables', []),
         )
-        
+
         # Apply overrides
         if overrides:
             new_template = self.merge(new_template, overrides)
-        
+
         return new_template
-    
+
     def generate_section(
         self,
         section_type: str,
@@ -174,18 +175,18 @@ class ContentGenerator:
     ) -> str:
         """
         Generate a template section.
-        
+
         Args:
             section_type: Type of section (header, body, footer)
             title: Section title
             variables: Variables to include
             content: Additional content
-            
+
         Returns:
             Section content string
         """
         variables = variables or []
-        
+
         if section_type == 'header':
             if variables:
                 var_refs = ', '.join(f'{{{v}}}' for v in variables)
@@ -201,49 +202,49 @@ class ContentGenerator:
             return f"\n---\n*{title}*\n"
         else:
             return f"<!-- {section_type}: {title} -->\n{content}\n"
-    
+
     def generate_variable_docs(self, variables: Dict[str, str]) -> str:
         """
         Generate variable documentation.
-        
+
         Args:
             variables: Dict of variable name to type
-            
+
         Returns:
             Documentation string
         """
         lines = ["## Template Variables\n"]
         lines.append("| Variable | Type | Description |")
         lines.append("|----------|------|-------------|")
-        
+
         for var_name, var_type in variables.items():
             description = var_name.replace('_', ' ').title()
             lines.append(f"| `{var_name}` | {var_type} | {description} |")
-        
+
         return '\n'.join(lines)
-    
+
     def generate_batch(
         self,
         specs: List[Dict[str, Any]],
     ) -> List[Dict[str, Any]]:
         """
         Generate batch of templates.
-        
+
         Args:
             specs: List of template specifications
-            
+
         Returns:
             List of generated templates
         """
         templates = []
-        
+
         for spec in specs:
             template_id = spec.get('id', f"template-{len(templates)}")
             domain = spec.get('domain', 'default')
             category = spec.get('category', 'response')
             description = spec.get('description', '')
             variables = spec.get('variables', [])
-            
+
             template = self.generate_skeleton(
                 template_id=template_id,
                 domain=domain,
@@ -252,9 +253,9 @@ class ContentGenerator:
                 variables=variables,
             )
             templates.append(template)
-        
+
         return templates
-    
+
     def merge(
         self,
         base: Dict[str, Any],
@@ -262,25 +263,25 @@ class ContentGenerator:
     ) -> Dict[str, Any]:
         """
         Merge template content (overlay over base).
-        
+
         Args:
             base: Base template
             overlay: Overlay to apply
-            
+
         Returns:
             Merged template
         """
         result = base.copy()
-        
+
         for key, value in overlay.items():
             if key in result and isinstance(result[key], dict) and isinstance(value, dict):
                 # Deep merge for dicts
                 result[key] = self.merge(result[key], value)
             else:
                 result[key] = value
-        
+
         return result
-    
+
     def transform(
         self,
         content: str,
@@ -288,11 +289,11 @@ class ContentGenerator:
     ) -> str:
         """
         Transform template content to different format.
-        
+
         Args:
             content: Source content (YAML or JSON)
             target_format: Target format ('json' or 'yaml')
-            
+
         Returns:
             Transformed content string
         """
@@ -304,29 +305,29 @@ class ContentGenerator:
                 data = json.loads(content)
             except json.JSONDecodeError:
                 raise ValueError("Content must be valid YAML or JSON")
-        
+
         if target_format.lower() == 'json':
             return json.dumps(data, indent=2)
         elif target_format.lower() == 'yaml':
             return yaml.dump(data, default_flow_style=False)
         else:
             raise ValueError(f"Unsupported format: {target_format}")
-    
+
     def export_bundle(self, domain: str) -> Dict[str, Any]:
         """
         Export templates for a domain as a bundle.
-        
+
         Args:
             domain: Domain name
-            
+
         Returns:
             Bundle dictionary
         """
         from .content_strategy import ContentPopulationStrategy
-        
+
         strategy = ContentPopulationStrategy(self.template_base_path)
         templates = strategy.get_domain_templates(domain)
-        
+
         return {
             'manifest': {
                 'version': '1.0',
@@ -336,25 +337,25 @@ class ContentGenerator:
             },
             'templates': templates,
         }
-    
+
     def import_bundle(self, bundle_path: str) -> ImportResult:
         """
         Import templates from a bundle file.
-        
+
         Args:
             bundle_path: Path to bundle file
-            
+
         Returns:
             Import result
         """
         path = Path(bundle_path)
-        
+
         if not path.exists():
             return ImportResult(
                 success=False,
                 errors=[f"Bundle file not found: {bundle_path}"],
             )
-        
+
         try:
             with open(path, 'r') as f:
                 bundle = yaml.safe_load(f)
@@ -363,16 +364,16 @@ class ContentGenerator:
                 success=False,
                 errors=[f"Failed to read bundle: {e}"],
             )
-        
+
         if 'templates' not in bundle:
             return ImportResult(
                 success=False,
                 errors=["Bundle missing 'templates' key"],
             )
-        
+
         templates = bundle['templates']
         imported_ids = [t.get('id', f"unknown-{i}") for i, t in enumerate(templates)]
-        
+
         return ImportResult(
             success=True,
             imported_count=len(templates),

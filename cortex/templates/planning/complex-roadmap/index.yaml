@@ -1,0 +1,82 @@
+# Complex Wave Index (5 Waves, 15 Phases, 3 Tracks)
+
+registry_version: 1.0
+wave_count: 5
+
+waves:
+  # Wave 1: Foundation (Sequential, Track A)
+  - wave_id: "WAVE-1"
+    title: "Foundation & Infrastructure"
+    effort_hours: 80
+    roi_value: 8.0
+    unblock_value: 9.0
+    risk_level: 3.0
+    phases:
+      - "P-001"
+      - "P-002"
+      - "P-003"
+    tracks: 1
+  
+  # Wave 2: Core (Parallel tracks A + B)
+  - wave_id: "WAVE-2"
+    title: "Core Features (Backend + Frontend)"
+    effort_hours: 150
+    roi_value: 9.0
+    unblock_value: 7.0
+    risk_level: 5.0
+    depends_on: ["WAVE-1"]
+    phases:
+      - "P-004"  # Track A
+      - "P-005"  # Track A
+      - "P-006"  # Track B
+      - "P-007"  # Track B
+    tracks: 2
+  
+  # Wave 3: Features (Parallel tracks B + C)
+  - wave_id: "WAVE-3"
+    title: "Advanced Features (Auth + Reporting)"
+    effort_hours: 120
+    roi_value: 7.0
+    unblock_value: 5.0
+    risk_level: 4.0
+    depends_on: ["WAVE-2"]
+    phases:
+      - "P-008"  # Track B
+      - "P-009"  # Track B
+      - "P-010"  # Track C
+      - "P-011"  # Track C
+    tracks: 2
+  
+  # Wave 4: Integration
+  - wave_id: "WAVE-4"
+    title: "System Integration"
+    effort_hours: 90
+    roi_value: 6.0
+    unblock_value: 4.0
+    risk_level: 6.0
+    depends_on: ["WAVE-2", "WAVE-3"]
+    phases:
+      - "P-012"
+      - "P-013"
+    tracks: 1
+  
+  # Wave 5: Release
+  - wave_id: "WAVE-5"
+    title: "Stabilization & Release"
+    effort_hours: 50
+    roi_value: 8.0
+    unblock_value: 0.0
+    risk_level: 2.0
+    depends_on: ["WAVE-4"]
+    phases:
+      - "P-014"
+      - "P-015"
+    tracks: 1
+
+metadata:
+  created: 2026-02-12
+  template_type: "complex"
+  total_effort: 490
+  parallelism_max: 3
+  target_audience: "intermediate"
+  scaling_pattern: "multi-track parallelization"

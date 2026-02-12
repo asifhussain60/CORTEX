@@ -5,10 +5,11 @@ Formats LENS reflection responses into various output formats (JSON, YAML, Markd
 Author: CORTEX Framework
 """
 
-from typing import Dict, List, Optional, Any
+import json
 from dataclasses import dataclass, field
 from enum import Enum
-import json
+from typing import Any, Dict, List, Optional
+
 import yaml
 
 
@@ -31,7 +32,7 @@ class SeverityColor(Enum):
 @dataclass
 class FormattedResponse:
     """Formatted response data.
-    
+
     Attributes:
         format_type: The format type used.
         content: The formatted content string.
@@ -44,25 +45,25 @@ class FormattedResponse:
 
 class LENSResponseFormatter:
     """Formatter for LENS reflection responses.
-    
+
     Converts reflection responses into various output formats for display.
     """
-    
+
     def __init__(self) -> None:
         """Initialize the formatter."""
         self._default_format = ResponseFormat.JSON
-    
+
     def format(
         self,
         response: Any,
         output_format: ResponseFormat = ResponseFormat.JSON,
     ) -> str:
         """Format a response.
-        
+
         Args:
             response: The response object to format.
             output_format: The desired output format.
-            
+
         Returns:
             Formatted string content.
         """
@@ -75,18 +76,18 @@ class LENSResponseFormatter:
         else:
             result = self._format_text(response)
         return result.content
-    
+
     def format_response(
         self,
         response: Any,
         output_format: ResponseFormat = ResponseFormat.JSON,
     ) -> FormattedResponse:
         """Format a response and return full FormattedResponse object.
-        
+
         Args:
             response: The response object to format.
             output_format: The desired output format.
-            
+
         Returns:
             FormattedResponse with the formatted content.
         """
@@ -98,7 +99,7 @@ class LENSResponseFormatter:
             return self._format_markdown(response)
         else:
             return self._format_text(response)
-    
+
     def _format_json(self, response: Any) -> FormattedResponse:
         """Format as JSON."""
         try:
@@ -109,12 +110,12 @@ class LENSResponseFormatter:
             content = json.dumps(data, indent=2, default=str)
         except (TypeError, ValueError):
             content = str(response)
-        
+
         return FormattedResponse(
             format_type=ResponseFormat.JSON,
             content=content,
         )
-    
+
     def _format_yaml(self, response: Any) -> FormattedResponse:
         """Format as YAML."""
         try:
@@ -125,12 +126,12 @@ class LENSResponseFormatter:
             content = yaml.safe_dump(data, default_flow_style=False)
         except (TypeError, ValueError):
             content = str(response)
-        
+
         return FormattedResponse(
             format_type=ResponseFormat.YAML,
             content=content,
         )
-    
+
     def _format_markdown(self, response: Any) -> FormattedResponse:
         """Format as Markdown."""
         if hasattr(response, '__dict__'):
@@ -141,19 +142,19 @@ class LENSResponseFormatter:
             content = "\n".join(lines)
         else:
             content = f"# Response\n\n{response}"
-        
+
         return FormattedResponse(
             format_type=ResponseFormat.MARKDOWN,
             content=content,
         )
-    
+
     def _format_text(self, response: Any) -> FormattedResponse:
         """Format as plain text."""
         return FormattedResponse(
             format_type=ResponseFormat.TEXT,
             content=str(response),
         )
-    
+
     def _to_dict(self, obj: Any) -> Dict[str, Any]:
         """Convert object to dictionary."""
         if hasattr(obj, 'to_dict'):

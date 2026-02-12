@@ -15,11 +15,11 @@ from unittest.mock import patch
 
 import pytest
 
-# Import will work at runtime when package is installed
-import sys
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "cortex-lens"))
-
-from backend.cache_manager import CacheManager, CacheEntry, get_cache_manager
+# Fix: Import from correct package path
+try:
+    from cortex_lens.backend.cache_manager import CacheManager, CacheEntry, get_cache_manager
+except ImportError:
+    pytest.skip("cortex_lens backend module not available", allow_module_level=True)
 
 
 class TestCacheEntry:

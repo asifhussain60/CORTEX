@@ -13,11 +13,11 @@ Governance Tables Affected:
 Execution: Deploy via cron job (daily at 2 AM)
 """
 
-import sqlite3
 import logging
+import sqlite3
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, Any
+from typing import Any, Dict
 
 # Configure logging
 logging.basicConfig(
@@ -46,7 +46,7 @@ class DatabaseLogRotationPolicy:
 
     def __init__(self, db_path: str) -> None:
         """Initialize policy manager.
-        
+
         Args:
             db_path: Path to governance.db
         """
@@ -56,7 +56,7 @@ class DatabaseLogRotationPolicy:
 
     def connect(self) -> bool:
         """Connect to database.
-        
+
         Returns:
             True if connection successful
         """
@@ -77,7 +77,7 @@ class DatabaseLogRotationPolicy:
 
     def get_table_stats(self) -> Dict[str, Dict[str, Any]]:
         """Get size and row count for all tables.
-        
+
         Returns:
             Dictionary with table statistics
         """
@@ -100,9 +100,9 @@ class DatabaseLogRotationPolicy:
                 row_count = cursor.fetchone()[0]
 
                 # Get table size (pages * page_size)
-                cursor.execute(f"PRAGMA page_count;")
+                cursor.execute("PRAGMA page_count;")
                 page_count = cursor.fetchone()[0]
-                cursor.execute(f"PRAGMA page_size;")
+                cursor.execute("PRAGMA page_size;")
                 page_size = cursor.fetchone()[0]
                 table_size_bytes = page_count * page_size
 
@@ -121,7 +121,7 @@ class DatabaseLogRotationPolicy:
 
     def rotate_audit_trail(self) -> int:
         """Rotate audit trail - archive old entries.
-        
+
         Returns:
             Number of rows archived
         """
@@ -153,7 +153,7 @@ class DatabaseLogRotationPolicy:
 
             # Archive old entries
             cursor.execute("""
-                INSERT INTO governance_audit_trail_archive 
+                INSERT INTO governance_audit_trail_archive
                 SELECT id, operation_id, ac_id, timestamp, status, details, CURRENT_TIMESTAMP
                 FROM governance_audit_trail
                 WHERE timestamp < ?
@@ -181,7 +181,7 @@ class DatabaseLogRotationPolicy:
 
     def rotate_operation_logs(self) -> int:
         """Rotate operation logs - keep 14 days only.
-        
+
         Returns:
             Number of rows deleted
         """
@@ -211,7 +211,7 @@ class DatabaseLogRotationPolicy:
 
     def rotate_health_snapshots(self) -> int:
         """Rotate health snapshots - keep 60 days only.
-        
+
         Returns:
             Number of rows deleted
         """
@@ -241,7 +241,7 @@ class DatabaseLogRotationPolicy:
 
     def vacuum_database(self) -> bool:
         """Vacuum database to reclaim space.
-        
+
         Returns:
             True if successful
         """
@@ -260,7 +260,7 @@ class DatabaseLogRotationPolicy:
 
     def execute_rotation_policy(self) -> Dict[str, Any]:
         """Execute complete rotation policy.
-        
+
         Returns:
             Summary of rotation results
         """

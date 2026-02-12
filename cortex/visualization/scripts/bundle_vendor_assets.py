@@ -12,7 +12,7 @@ Assets:
 
 Usage:
     python -m cortex.visualization.scripts.bundle_vendor_assets
-    
+
     Or via CLI:
     cortex lens vendor bundle
 """
@@ -269,46 +269,46 @@ def get_vendor_dir() -> Path:
 
 def download_asset(asset: VendorAsset, vendor_dir: Path) -> bool:
     """Download a single vendor asset.
-    
+
     Args:
         asset: Asset definition to download
         vendor_dir: Directory to save the asset
-        
+
     Returns:
         True if download successful
     """
     output_path = vendor_dir / asset.filename
-    
+
     # Check if already exists
     if output_path.exists():
         logger.info(f"  ✓ {asset.name} already exists")
         return True
-    
+
     logger.info(f"  ↓ Downloading {asset.name} (~{asset.size_kb}KB)...")
-    
+
     try:
         # Download with timeout
         req = urllib.request.Request(
             asset.url,
             headers={"User-Agent": "CORTEX-LENS-Dashboard/1.0"},
         )
-        
+
         with urllib.request.urlopen(req, timeout=30) as response:
             content = response.read()
-        
+
         # Verify hash if provided
         if asset.sha256:
             actual_hash = hashlib.sha256(content).hexdigest()
             if actual_hash != asset.sha256:
                 logger.error(f"  ✗ {asset.name} hash mismatch!")
                 return False
-        
+
         # Save to file
         output_path.write_bytes(content)
         actual_size = len(content) // 1024
         logger.info(f"  ✓ {asset.name} downloaded ({actual_size}KB)")
         return True
-        
+
     except Exception as e:
         logger.error(f"  ✗ {asset.name} download failed: {e}")
         return False
@@ -316,28 +316,28 @@ def download_asset(asset: VendorAsset, vendor_dir: Path) -> bool:
 
 def bundle_vendor_assets(vendor_dir: Optional[Path] = None) -> Dict[str, bool]:
     """Download all vendor assets for offline operation.
-    
+
     Args:
         vendor_dir: Optional override for vendor directory
-        
+
     Returns:
         Dictionary mapping asset names to success status
     """
     if vendor_dir is None:
         vendor_dir = get_vendor_dir()
-    
+
     # Ensure vendor directory exists
     vendor_dir.mkdir(parents=True, exist_ok=True)
-    
+
     logger.info(f"Bundling vendor assets to {vendor_dir}")
     logger.info("=" * 50)
-    
+
     results: Dict[str, bool] = {}
-    
+
     # Download JavaScript assets
     for asset in VENDOR_ASSETS:
         results[asset.name] = download_asset(asset, vendor_dir)
-    
+
     # Write Tailwind CSS
     tailwind_path = vendor_dir / "tailwind-3.4.0.min.css"
     if not tailwind_path.exists():
@@ -347,59 +347,59 @@ def bundle_vendor_assets(vendor_dir: Optional[Path] = None) -> Dict[str, bool]:
     else:
         logger.info("  ✓ Tailwind CSS already exists")
     results["Tailwind CSS"] = True
-    
+
     # Summary
     logger.info("=" * 50)
     success_count = sum(1 for v in results.values() if v)
     total_count = len(results)
-    
+
     if success_count == total_count:
         logger.info(f"✅ All {total_count} assets bundled successfully!")
     else:
         failed = [k for k, v in results.items() if not v]
         logger.warning(f"⚠️  {success_count}/{total_count} assets bundled. Failed: {failed}")
-    
+
     return results
 
 
 def verify_vendor_assets(vendor_dir: Optional[Path] = None) -> Dict[str, bool]:
     """Verify all vendor assets are present.
-    
+
     Args:
         vendor_dir: Optional override for vendor directory
-        
+
     Returns:
         Dictionary mapping asset names to existence status
     """
     if vendor_dir is None:
         vendor_dir = get_vendor_dir()
-    
+
     results: Dict[str, bool] = {}
-    
+
     for asset in VENDOR_ASSETS:
         path = vendor_dir / asset.filename
         results[asset.name] = path.exists()
-    
+
     # Check Tailwind
     tailwind_path = vendor_dir / "tailwind-3.4.0.min.css"
     results["Tailwind CSS"] = tailwind_path.exists()
-    
+
     return results
 
 
 def main() -> None:
     """CLI entry point for vendor bundling."""
     import sys
-    
+
     if len(sys.argv) > 1 and sys.argv[1] == "verify":
         results = verify_vendor_assets()
         all_present = all(results.values())
-        
+
         print("\nVendor Asset Status:")
         for name, present in results.items():
             status = "✓" if present else "✗"
             print(f"  {status} {name}")
-        
+
         sys.exit(0 if all_present else 1)
     else:
         results = bundle_vendor_assets()

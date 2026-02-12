@@ -1,9 +1,10 @@
 """Tests for manifest system and deployment (AC-UNIFIED-DEPLOY-003-01, AC-002-03)."""
 
-import pytest
 from datetime import datetime
-from cortex.lib.manifest_diff import ManifestSchema, ManifestDiff, OrchestratorInfo
+
+import pytest
 from cortex.lib.context_switcher import ContextSwitcher
+from cortex.lib.manifest_diff import ManifestDiff, ManifestSchema, OrchestratorInfo
 
 
 class TestManifestSchema:

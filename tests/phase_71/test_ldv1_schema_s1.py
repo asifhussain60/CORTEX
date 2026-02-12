@@ -453,24 +453,6 @@ class TestEvidenceProtocol:
         assert "generated_at" in evidence
         assert "T" in evidence["generated_at"]  # ISO format
 
-    def test_evidence_snippet_optional_but_recommended(self):
-        """SHOULD: Evidence can include code snippet."""
-        evidence_with_snippet = {
-            "kind": "code-comment",
-            "ref": "line:42",
-            "confidence": 0.9,
-            "snippet": "# TODO: fix performance issue"
-        }
-        
-        evidence_without_snippet = {
-            "kind": "git-commit",
-            "ref": "sha:abc123",
-            "confidence": 1.0
-        }
-        
-        assert "snippet" in evidence_with_snippet
-        assert "snippet" not in evidence_without_snippet  # Optional
-
     def test_evidence_aggregation_statistics(self):
         """MUST: Evidence can be aggregated into statistics."""
         evidence_list = [

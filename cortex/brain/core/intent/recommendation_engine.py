@@ -13,8 +13,8 @@ Provides:
 - Governance compliance recommendations
 """
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
 from enum import Enum
+from typing import Any, Dict, List, Optional
 
 
 class RecommendationType(Enum):
@@ -36,7 +36,7 @@ class Priority(Enum):
 @dataclass
 class Recommendation:
     """A single recommendation from the engine."""
-    
+
     recommendation_type: RecommendationType
     title: str
     description: str
@@ -45,7 +45,7 @@ class Recommendation:
     code_example: Optional[str] = None
     affected_lines: List[int] = field(default_factory=list)
     tags: List[str] = field(default_factory=list)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert recommendation to dictionary."""
         return {
@@ -63,11 +63,11 @@ class Recommendation:
 @dataclass
 class RecommendationResult:
     """Result from recommendation engine analysis."""
-    
+
     recommendations: List[Recommendation] = field(default_factory=list)
     analyzed_code_length: int = 0
     analysis_time_ms: float = 0.0
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert result to dictionary."""
         return {
@@ -79,7 +79,7 @@ class RecommendationResult:
 
 class RecommendationEngine:
     """Engine for generating code recommendations.
-    
+
     Analyzes Python code and generates recommendations for:
     - Design pattern improvements (singleton, factory, etc.)
     - Error handling improvements
@@ -88,11 +88,11 @@ class RecommendationEngine:
     - Documentation needs
     - Governance compliance
     """
-    
+
     def __init__(self) -> None:
         """Initialize recommendation engine."""
         self._patterns = self._load_patterns()
-    
+
     def _load_patterns(self) -> Dict[str, Any]:
         """Load recommendation patterns."""
         return {
@@ -109,22 +109,22 @@ class RecommendationEngine:
                 "recommendation": "Use context managers (with statement)"
             }
         }
-    
+
     def analyze(self, code: str, intent: Optional[str] = None) -> RecommendationResult:
         """Analyze code and generate recommendations.
-        
+
         Args:
             code: Python source code to analyze
             intent: Optional intent context for more relevant recommendations
-            
+
         Returns:
             RecommendationResult with list of recommendations
         """
         import time
         start = time.time()
-        
+
         recommendations = []
-        
+
         # Check for singleton pattern opportunities
         if self._needs_singleton(code):
             recommendations.append(Recommendation(
@@ -135,7 +135,7 @@ class RecommendationEngine:
                 priority=Priority.MEDIUM,
                 tags=["design-pattern", "singleton"]
             ))
-        
+
         # Check for error handling needs
         if self._needs_error_handling(code):
             recommendations.append(Recommendation(
@@ -146,7 +146,7 @@ class RecommendationEngine:
                 priority=Priority.HIGH,
                 tags=["error-handling", "robustness"]
             ))
-        
+
         # Check for context manager opportunities
         if self._needs_context_manager(code):
             recommendations.append(Recommendation(
@@ -157,7 +157,7 @@ class RecommendationEngine:
                 priority=Priority.MEDIUM,
                 tags=["context-manager", "resource-management"]
             ))
-        
+
         # Check for list comprehension opportunities
         if self._can_use_list_comprehension(code):
             recommendations.append(Recommendation(
@@ -168,7 +168,7 @@ class RecommendationEngine:
                 priority=Priority.LOW,
                 tags=["pythonic", "list-comprehension"]
             ))
-        
+
         # Check for dict.get() opportunities
         if self._can_use_dict_get(code):
             recommendations.append(Recommendation(
@@ -179,7 +179,7 @@ class RecommendationEngine:
                 priority=Priority.LOW,
                 tags=["pythonic", "dict-access"]
             ))
-        
+
         # Check for API test needs
         if self._needs_api_tests(code):
             recommendations.append(Recommendation(
@@ -190,7 +190,7 @@ class RecommendationEngine:
                 priority=Priority.HIGH,
                 tags=["testing", "api"]
             ))
-        
+
         # Check for edge case tests
         if self._needs_edge_case_tests(code):
             recommendations.append(Recommendation(
@@ -201,7 +201,7 @@ class RecommendationEngine:
                 priority=Priority.MEDIUM,
                 tags=["testing", "edge-cases"]
             ))
-        
+
         # Check for documentation needs
         if self._needs_class_docstring(code):
             recommendations.append(Recommendation(
@@ -212,7 +212,7 @@ class RecommendationEngine:
                 priority=Priority.MEDIUM,
                 tags=["documentation", "docstring"]
             ))
-        
+
         # Check for API documentation needs
         if self._needs_api_documentation(code):
             recommendations.append(Recommendation(
@@ -223,7 +223,7 @@ class RecommendationEngine:
                 priority=Priority.HIGH,
                 tags=["documentation", "api"]
             ))
-        
+
         # Check for type hints
         if self._needs_type_hints(code):
             recommendations.append(Recommendation(
@@ -234,42 +234,42 @@ class RecommendationEngine:
                 priority=Priority.HIGH,
                 tags=["governance", "type-hints", "CORE-011"]
             ))
-        
+
         # Sort by priority
         recommendations.sort(key=lambda r: r.priority.value)
-        
+
         elapsed = (time.time() - start) * 1000
-        
+
         return RecommendationResult(
             recommendations=recommendations,
             analyzed_code_length=len(code),
             analysis_time_ms=elapsed
         )
-    
+
     def _needs_singleton(self, code: str) -> bool:
         """Check if code could benefit from singleton pattern."""
-        return ("class " in code and 
+        return ("class " in code and
                 ("Connection" in code or "Manager" in code) and
                 "__init__" in code and
                 "def get_" in code)
-    
+
     def _needs_error_handling(self, code: str) -> bool:
         """Check if code needs better error handling."""
         risky_patterns = ["open(", "json.load", "int(", "float(", ".read("]
         has_risky = any(p in code for p in risky_patterns)
         has_try = "try:" in code
         return has_risky and not has_try
-    
+
     def _needs_context_manager(self, code: str) -> bool:
         """Check if code could use context managers."""
         return "open(" in code and "with " not in code
-    
+
     def _can_use_list_comprehension(self, code: str) -> bool:
         """Check if loop could be list comprehension."""
-        return ("for " in code and 
-                "append(" in code and 
+        return ("for " in code and
+                "append(" in code and
                 "[" in code)
-    
+
     def _can_use_dict_get(self, code: str) -> bool:
         """Check if dict access could use .get()."""
         # Look for patterns like data['key'] or data[key] without .get()
@@ -280,14 +280,14 @@ class RecommendationEngine:
         # Also detect the if key in data: return data[key] pattern
         if_in_pattern = "if " in code and " in " in code and "[" in code
         return (dict_access is not None or if_in_pattern) and not has_get
-    
+
     def _needs_api_tests(self, code: str) -> bool:
         """Check if API endpoints need tests."""
-        return ("@app.route" in code or 
+        return ("@app.route" in code or
                 "@router." in code or
                 "Flask" in code or
                 "FastAPI" in code)
-    
+
     def _needs_edge_case_tests(self, code: str) -> bool:
         """Check if code has edge cases to test."""
         # Detect code that processes input and could have edge cases
@@ -298,14 +298,14 @@ class RecommendationEngine:
         ]
         # Lower threshold - any code with potential failure points needs edge case tests
         return sum(1 for i in edge_indicators if i in code) >= 2
-    
+
     def _needs_class_docstring(self, code: str) -> bool:
         """Check if class needs docstring."""
         import re
         # Find class without immediate docstring
         class_without_doc = re.search(r'class \w+.*:\s*\n\s*(?!""")', code)
         return class_without_doc is not None
-    
+
     def _needs_api_documentation(self, code: str) -> bool:
         """Check if API needs documentation."""
         # API code (Flask/FastAPI routes) should have comprehensive docs
@@ -314,7 +314,7 @@ class RecommendationEngine:
             return False
         # Even if it has some docstrings, recommend more comprehensive API docs
         return True
-    
+
     def _needs_type_hints(self, code: str) -> bool:
         """Check if functions need type hints."""
         import re

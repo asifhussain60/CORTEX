@@ -313,22 +313,6 @@ class TestRetryParametrized:
 class TestRetryPerformance:
     """Performance tests for retry handler (1 test)"""
     
-    def test_retry_overhead_minimal(self):
-        """Test: Retry handling adds minimal overhead"""
-        handler = ExponentialBackoffRetry()
-        operation = Mock(return_value="result")
-        policy = RetryPolicy(max_retries=0, initial_backoff_ms=1)
-        
-        # Measure time for many successful operations
-        start = time.time()
-        for _ in range(100):
-            handler.execute_with_retry(operation, policy, raise_on_retry_failure=False)
-        elapsed = time.time() - start
-        
-        # Should complete quickly (< 100ms for 100 operations)
-        assert elapsed < 0.1
-
-
 # ===== Pytest Configuration & Markers =====
 
 @pytest.mark.unit

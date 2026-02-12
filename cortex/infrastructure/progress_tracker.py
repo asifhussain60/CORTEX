@@ -23,7 +23,7 @@ from datetime import datetime, timezone
 from enum import Enum, auto
 from typing import Any, Dict, List, Optional
 
-from cortex.brain.core.result import Result, Ok, Err
+from cortex.brain.core.result import Err, Ok, Result
 from cortex.models.canonical_enums import AlertPriority
 
 
@@ -60,11 +60,11 @@ class Blocker:
     resolved_at: Optional[str] = None
     resolution_notes: Optional[str] = None
     estimated_impact_hours: float = 0.0
-    
+
     def is_active(self) -> bool:
         """Check if blocker is still active."""
         return self.resolved_at is None
-    
+
     def resolve(self, resolution_notes: str) -> None:
         """Mark blocker as resolved."""
         self.resolved_at = datetime.now(timezone.utc).isoformat()
@@ -96,13 +96,13 @@ class PhaseProgress:
     completion_percentage: float = 0.0
     active_blockers: int = 0
     estimated_completion_hours: float = 0.0
-    
+
     def calculate_progress(self) -> float:
         """Calculate completion percentage."""
         if self.total_acs == 0:
             return 0.0
         return (self.completed_acs / self.total_acs) * 100
-    
+
     def get_status(self) -> str:
         """Get current phase status."""
         if self.completion_percentage >= 100:
@@ -120,16 +120,16 @@ class PhaseProgress:
 class ProgressTrackerManager:
     """
     Manages phase progress tracking.
-    
+
     Thread-safe singleton for:
     - Progress calculation
     - Blocker management
     - Alert escalation
     """
-    
+
     _instance: Optional['ProgressTrackerManager'] = None
     _lock = threading.Lock()
-    
+
     def __init__(self):
         """
         Initialize progress tracker.
@@ -138,7 +138,7 @@ class ProgressTrackerManager:
         self._blockers: Dict[str, Blocker] = {}
         self._alerts: Dict[str, Alert] = {}
         self._progress_lock = threading.Lock()
-    
+
     @classmethod
     def instance(cls) -> 'ProgressTrackerManager':
         """Get singleton instance."""
@@ -147,13 +147,13 @@ class ProgressTrackerManager:
                 if cls._instance is None:
                     cls._instance = cls()
         return cls._instance
-    
+
     @classmethod
     def reset_instance(cls) -> None:
         """Reset singleton instance (for testing)."""
         with cls._lock:
             cls._instance = None
-    
+
     def initialize_phase(
         self,
         phase_id: str,
@@ -161,18 +161,18 @@ class ProgressTrackerManager:
     ) -> Result[PhaseProgress]:
         """
         Initialize phase progress tracking.
-        
+
         Args:
             phase_id: Phase ID
             total_acs: Total AC-IDs in phase
-        
+
         Returns:
             Result containing phase progress
         """
         with self._progress_lock:
             if phase_id in self._phase_progress:
                 return Err(f"Phase {phase_id} already initialized")
-            
+
             progress = PhaseProgress(
                 phase_id=phase_id,
                 total_acs=total_acs,
@@ -181,11 +181,11 @@ class ProgressTrackerManager:
                 blocked_acs=0,
                 not_started_acs=total_acs,
             )
-            
+
             self._phase_progress[phase_id] = progress
-            
+
             return Ok(progress)
-    
+
     def update_ac_status(
         self,
         phase_id: str,
@@ -194,21 +194,21 @@ class ProgressTrackerManager:
     ) -> Result[PhaseProgress]:
         """
         AC-FR-005-01: Update AC status and recalculate progress
-        
+
         Args:
             phase_id: Phase ID
             ac_id: AC-ID
             status: New status
-        
+
         Returns:
             Result containing updated phase progress
         """
         with self._progress_lock:
             if phase_id not in self._phase_progress:
                 return Err(f"Phase {phase_id} not initialized")
-            
+
             progress = self._phase_progress[phase_id]
-            
+
             # For simplicity, assume each AC was previously not_started
             # In real implementation, would track previous status
             if status == "COMPLETED":
@@ -220,42 +220,42 @@ class ProgressTrackerManager:
             elif status == "BLOCKED":
                 progress.blocked_acs += 1
                 progress.not_started_acs -= 1
-            
+
             # Recalculate completion percentage
             progress.completion_percentage = progress.calculate_progress()
-            
+
             # Persist if database available
             if self._db:
                 self._persist_progress(progress)
-            
+
             return Ok(progress)
-    
+
     def get_phase_progress(self, phase_id: str) -> Result[PhaseProgress]:
         """
         AC-FR-005-01: Get current phase progress
-        
+
         Args:
             phase_id: Phase ID
-        
+
         Returns:
             Result containing phase progress
         """
         with self._progress_lock:
             if phase_id not in self._phase_progress:
                 return Err(f"Phase {phase_id} not found")
-            
+
             progress = self._phase_progress[phase_id]
             progress.completion_percentage = progress.calculate_progress()
-            
+
             # Count active blockers for this phase
             active_blocker_count = sum(
                 1 for b in self._blockers.values()
                 if b.phase_id == phase_id and b.is_active()
             )
             progress.active_blockers = active_blocker_count
-            
+
             return Ok(progress)
-    
+
     def add_blocker(
         self,
         ac_id: str,
@@ -267,7 +267,7 @@ class ProgressTrackerManager:
     ) -> Result[Blocker]:
         """
         AC-FR-005-02: Add blocker and detect issues
-        
+
         Args:
             ac_id: AC-ID affected
             phase_id: Phase ID
@@ -275,14 +275,14 @@ class ProgressTrackerManager:
             severity: Severity level
             description: Blocker description
             estimated_impact_hours: Estimated impact on timeline
-        
+
         Returns:
             Result containing created blocker
         """
         with self._progress_lock:
             # Generate blocker ID
             blocker_id = f"BLK-{ac_id}-{len(self._blockers)}"
-            
+
             blocker = Blocker(
                 blocker_id=blocker_id,
                 ac_id=ac_id,
@@ -292,23 +292,23 @@ class ProgressTrackerManager:
                 description=description,
                 estimated_impact_hours=estimated_impact_hours,
             )
-            
+
             self._blockers[blocker_id] = blocker
-            
+
             # Update phase blocker count
             if phase_id in self._phase_progress:
                 self._phase_progress[phase_id].active_blockers += 1
-            
+
             # Create alert if critical or high
             if severity in [BlockerSeverity.CRITICAL, BlockerSeverity.HIGH]:
                 self._create_alert_for_blocker(blocker)
-            
+
             # Persist if database available
             if self._db:
                 self._persist_blocker(blocker)
-            
+
             return Ok(blocker)
-    
+
     def resolve_blocker(
         self,
         blocker_id: str,
@@ -316,48 +316,48 @@ class ProgressTrackerManager:
     ) -> Result[Blocker]:
         """
         AC-FR-005-02: Resolve blocker
-        
+
         Args:
             blocker_id: Blocker ID
             resolution_notes: Resolution notes
-        
+
         Returns:
             Result containing resolved blocker
         """
         with self._progress_lock:
             if blocker_id not in self._blockers:
                 return Err(f"Blocker {blocker_id} not found")
-            
+
             blocker = self._blockers[blocker_id]
             blocker.resolve(resolution_notes)
-            
+
             # Update phase blocker count
             phase_id = blocker.phase_id
             if phase_id in self._phase_progress:
                 self._phase_progress[phase_id].active_blockers -= 1
-            
+
             # Persist if database available
             if self._db:
                 self._persist_blocker(blocker)
-            
+
             return Ok(blocker)
-    
+
     def get_active_blockers(self, phase_id: Optional[str] = None) -> Result[List[Blocker]]:
         """
         AC-FR-005-02: Get active blockers
-        
+
         Args:
             phase_id: Optional phase ID filter
-        
+
         Returns:
             Result containing list of active blockers
         """
         with self._progress_lock:
             blockers = [b for b in self._blockers.values() if b.is_active()]
-            
+
             if phase_id:
                 blockers = [b for b in blockers if b.phase_id == phase_id]
-            
+
             # Sort by severity
             severity_order = {
                 BlockerSeverity.CRITICAL: 0,
@@ -366,16 +366,16 @@ class ProgressTrackerManager:
                 BlockerSeverity.LOW: 3,
             }
             blockers.sort(key=lambda b: severity_order.get(b.severity, 99))
-            
+
             return Ok(blockers)
-    
+
     def get_alerts(self, acknowledged: bool = False) -> Result[List[Alert]]:
         """
         Get alerts (optionally filtered by acknowledgment status).
-        
+
         Args:
             acknowledged: If True, get acknowledged alerts; if False, get unacknowledged
-        
+
         Returns:
             Result containing list of alerts
         """
@@ -384,9 +384,9 @@ class ProgressTrackerManager:
                 alerts = [a for a in self._alerts.values() if a.acknowledged_at is not None]
             else:
                 alerts = [a for a in self._alerts.values() if a.acknowledged_at is None]
-            
+
             return Ok(alerts)
-    
+
     def acknowledge_alert(
         self,
         alert_id: str,
@@ -394,32 +394,32 @@ class ProgressTrackerManager:
     ) -> Result[Alert]:
         """
         Acknowledge an alert.
-        
+
         Args:
             alert_id: Alert ID
             acknowledged_by: User acknowledging
-        
+
         Returns:
             Result containing acknowledged alert
         """
         with self._progress_lock:
             if alert_id not in self._alerts:
                 return Err(f"Alert {alert_id} not found")
-            
+
             alert = self._alerts[alert_id]
             alert.acknowledged_at = datetime.now(timezone.utc).isoformat()
             alert.acknowledged_by = acknowledged_by
-            
+
             return Ok(alert)
-    
+
     def get_progress_history(self, phase_id: str, limit: int = 10) -> Result[List[PhaseProgress]]:
         """
         Get progress history for a phase.
-        
+
         Args:
             phase_id: Phase ID
             limit: Maximum number of snapshots to return
-        
+
         Returns:
             Result containing list of progress snapshots
         """
@@ -427,11 +427,11 @@ class ProgressTrackerManager:
         # For now, return current snapshot
         if phase_id not in self._phase_progress:
             return Err(f"Phase {phase_id} not found")
-        
+
         with self._progress_lock:
             current = self._phase_progress[phase_id]
             return Ok([current])
-    
+
     def _create_alert_for_blocker(self, blocker: Blocker) -> None:
         """Create alert for critical/high blocker."""
         priority = (
@@ -439,23 +439,23 @@ class ProgressTrackerManager:
             if blocker.severity == BlockerSeverity.CRITICAL
             else AlertPriority.HIGH
         )
-        
+
         alert_id = f"ALT-{blocker.blocker_id}"
-        
+
         alert = Alert(
             alert_id=alert_id,
             blocker_id=blocker.blocker_id,
             priority=priority,
             message=f"[{blocker.severity.name}] Blocker in {blocker.ac_id}: {blocker.description}",
         )
-        
+
         self._alerts[alert_id] = alert
-    
+
     def _persist_progress(self, progress: PhaseProgress) -> None:
         """Persist progress to database."""
         if not self._db:
             return
-        
+
         try:
             self._db.insert_audit(
                 operation="PROGRESS_UPDATE",
@@ -474,12 +474,12 @@ class ProgressTrackerManager:
             )
         except Exception:
             pass  # Silently fail on persistence errors
-    
+
     def _persist_blocker(self, blocker: Blocker) -> None:
         """Persist blocker to database."""
         if not self._db:
             return
-        
+
         try:
             self._db.insert_audit(
                 operation="BLOCKER_" + ("RESOLVED" if not blocker.is_active() else "CREATED"),

@@ -5,14 +5,13 @@ This module provides the core adaptive execution engine that learns from
 execution patterns and automatically selects the best execution strategy.
 """
 
-from enum import Enum
+import statistics
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import List, Dict, Any
-import statistics
+from enum import Enum
+from typing import Any, Dict, List
+
 from cortex.models.canonical_enums import ExecutionStrategy
-
-
 
 
 @dataclass
@@ -29,7 +28,7 @@ class ExecutionContext:
 class AdaptiveExecutionEngine:
     """
     Adaptive execution engine that learns from execution patterns.
-    
+
     This engine tracks execution history and adapts strategy selection
     based on observed performance patterns and success rates.
     """
@@ -47,7 +46,7 @@ class AdaptiveExecutionEngine:
     def record_execution(self, context: ExecutionContext) -> None:
         """
         Record an execution in the history.
-        
+
         Args:
             context: ExecutionContext containing execution details.
         """
@@ -57,7 +56,7 @@ class AdaptiveExecutionEngine:
     def _update_strategy_scores(self) -> None:
         """
         Update strategy scores based on recent execution history.
-        
+
         Uses success rate and average duration to score each strategy.
         """
         if not self.execution_history:
@@ -68,7 +67,7 @@ class AdaptiveExecutionEngine:
                 ex for ex in self.execution_history
                 if ex.strategy == strategy
             ]
-            
+
             if not relevant_executions:
                 continue
 
@@ -85,7 +84,7 @@ class AdaptiveExecutionEngine:
     def recommend_strategy(self) -> ExecutionStrategy:
         """
         Recommend the best execution strategy based on history.
-        
+
         Returns:
             ExecutionStrategy with highest score.
         """
@@ -102,7 +101,7 @@ class AdaptiveExecutionEngine:
     def get_statistics(self) -> Dict[str, Any]:
         """
         Get execution statistics from history.
-        
+
         Returns:
             Dictionary containing execution statistics.
         """

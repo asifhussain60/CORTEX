@@ -1,10 +1,10 @@
 """Phase Finalization Orchestrators - Holistic review & automatic activation."""
 
 from cortex.orchestrators.phase_finalization.phase_finalizer import (
-    PhaseFinalizationOrchestrator,
     HolisticReviewValidator,
-    WiringIntegrator,
     MasterOrchestratorActivator,
+    PhaseFinalizationOrchestrator,
+    WiringIntegrator,
 )
 
 __all__ = [

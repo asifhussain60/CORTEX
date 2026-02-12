@@ -201,17 +201,6 @@ class TestWiringHarnessCanAutoWire:
         tracker.register_component('test_component', ComponentType.CRITICAL)
         assert len(tracker.get_initialization_status()) > 0
     
-    def test_holistic_context_builder_can_be_wired(self) -> None:
-        """Test that HolisticContextBuilder can be instantiated."""
-        try:
-            from cortex.brain.core.orchestrator.holistic_context_builder import HolisticContextBuilder
-            builder = HolisticContextBuilder()
-            assert builder is not None
-        except (ImportError, ModuleNotFoundError):
-            # Module planned but not yet created - expected during build-out
-            pass
-
-
 class TestWiringIntegrationChecklist:
     """Checklist-style tests for wiring integration readiness."""
     

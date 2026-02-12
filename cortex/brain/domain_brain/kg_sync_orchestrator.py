@@ -4,11 +4,15 @@ Orchestrates the end-to-end process of syncing domain brain entities to the
 knowledge graph, including deduplication, ingestion, and error handling.
 """
 
-from typing import Any, Dict, List, Optional
 from datetime import datetime
-from cortex.brain.core.knowledge.graph.interface import IGraphAdapter, GraphQueryError
+from typing import Any, Dict, List, Optional
+
+from cortex.brain.core.knowledge.graph.interface import GraphQueryError, IGraphAdapter
+from cortex.brain.domain_brain.kg_deduplicator import (
+    DeduplicationResult,
+    EntityDeduplicator,
+)
 from cortex.brain.domain_brain.kg_ingest_adapter import EntityIngestAdapter
-from cortex.brain.domain_brain.kg_deduplicator import EntityDeduplicator, DeduplicationResult
 
 
 class SyncAuditEntry:

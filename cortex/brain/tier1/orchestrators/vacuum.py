@@ -22,22 +22,22 @@ Phase: PHASE-VAC-001-04
 CORE Rules: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 """
 
-from pathlib import Path
-from typing import Dict, List, Any, Optional
-from datetime import datetime
 import logging
 from dataclasses import dataclass
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
 import yaml
 
 # Import cleaner interface and registry
 from tier1.orchestrators.cleaners import (
+    Analysis,
     CleanerInterface,
     CleanerRegistry,
-    Analysis,
     Report,
     RollbackResult,
 )
-
 
 # =============================================================================
 # ORCHESTRATOR STATE & REPORTING
@@ -203,14 +203,14 @@ class VacuumOrchestrator:
         try:
             # Register with registry (this will determine domain)
             self.registry.register_cleaner(cleaner_class)
-            
+
             # Get domain from the class
             temp_instance = cleaner_class({})
             domain = temp_instance.domain
-            
+
             # Store config for later use
             self._cleaner_configs[domain] = cleaner_config
-            
+
             self.logger.info(f"Registered cleaner: {cleaner_class.__name__}")
         except Exception as e:
             self.logger.error(f"Failed to register cleaner: {str(e)}")

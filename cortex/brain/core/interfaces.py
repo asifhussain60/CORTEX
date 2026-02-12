@@ -10,7 +10,7 @@ Author: Asif Hussain
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Dict, List, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 from cortex.brain.core.result import Result
 
@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 
 class IAuditLogger(ABC):
     """Interface for audit logging."""
-    
+
     @abstractmethod
     def log(
         self,
@@ -32,7 +32,7 @@ class IAuditLogger(ABC):
     ) -> Result[None]:
         """Log an audit entry."""
         pass
-    
+
     @abstractmethod
     def query(
         self,
@@ -58,17 +58,17 @@ class GovernanceRule:
 
 class IGovernanceRegistry(ABC):
     """Interface for governance registry."""
-    
+
     @abstractmethod
     def load_rules(self) -> Result[None]:
         """Load all governance rules."""
         pass
-    
+
     @abstractmethod
     def get_rule(self, rule_id: str) -> Result[GovernanceRule]:
         """Get a specific rule by ID."""
         pass
-    
+
     @abstractmethod
     def evaluate(self, context: Dict[str, Any]) -> Result[List[GovernanceRule]]:
         """Evaluate context against all rules."""
@@ -85,24 +85,27 @@ class ExecutionResult:
 
 
 # Re-export canonical IOrchestrator from interfaces/i_orchestrator.py (CORE-035)
-from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, OperationMode  # noqa: F401
+from cortex.brain.core.interfaces.i_orchestrator import (  # noqa: F401
+    IOrchestrator,
+    OperationMode,
+)
 
 
 class ITool(ABC):
     """Interface for CLI tools."""
-    
+
     @property
     @abstractmethod
     def name(self) -> str:
         """Tool name."""
         pass
-    
+
     @property
     @abstractmethod
     def description(self) -> str:
         """Tool description."""
         pass
-    
+
     @abstractmethod
     def execute(self, args: Dict[str, Any]) -> Result[Dict[str, Any]]:
         """Execute the tool."""

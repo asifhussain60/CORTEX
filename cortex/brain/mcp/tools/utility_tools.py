@@ -2,43 +2,19 @@
 MCP Utility Tools - General Purpose Utilities via MCP
 
 MCP-exposed utility tools:
-- echo_tool: Echo input for testing
 - transform_tool: Transform data between formats
+
+NOTE: echo_tool removed (dev-only, Phase 54 S2 cleanup)
 
 Author: CORTEX Framework
 """
 
 from typing import Any, Dict
 
-from cortex.brain.core.result import Result, Ok, Err
+from cortex.brain.core.result import Err, Ok, Result
 from cortex.brain.mcp.decorator import mcp_tool
 
-
-@mcp_tool(
-    name="echo_tool",
-    description="Echo the input message back (useful for testing MCP connectivity).",
-    parameters={
-        "message": {
-            "type": "string",
-            "description": "Message to echo",
-            "required": True
-        }
-    }
-)
-def echo_tool(message: str) -> Result[Dict[str, Any]]:
-    """Echo a message.
-    
-    Args:
-        message: Message to echo
-        
-    Returns:
-        Result containing echoed message
-    """
-    return Ok({
-        "echoed": message,
-        "timestamp": "2026-01-23T00:00:00Z",
-        "status": "success"
-    })
+# echo_tool removed - dev/test only, not needed in production
 
 
 @mcp_tool(
@@ -64,12 +40,12 @@ def echo_tool(message: str) -> Result[Dict[str, Any]]:
 )
 def transform_tool(data: str, source_format: str, target_format: str) -> Result[Dict[str, Any]]:
     """Transform data between formats.
-    
+
     Args:
         data: Input data
         source_format: Source format (json, yaml, xml)
         target_format: Target format (json, yaml, xml)
-        
+
     Returns:
         Result containing transformed data
     """

@@ -17,7 +17,7 @@ from typing import Any, Dict, List, Optional
 
 class RefactoringLanguage(Enum):
     """Supported programming languages for refactoring.
-    
+
     Maps to external tool adapters (Rope, Roslyn, TypeScript LS, Java LSP).
     """
     PYTHON = "python"
@@ -30,13 +30,13 @@ class RefactoringLanguage(Enum):
 @dataclass
 class RefactoringRequest:
     """Request for a refactoring operation.
-    
+
     Attributes:
         operation: Refactoring operation name (e.g., "extract_method")
         file_path: Path to file to refactor
         language: Programming language of the file
         parameters: Operation-specific parameters (e.g., line ranges, names)
-        
+
     Example:
         >>> request = RefactoringRequest(
         ...     operation="extract_method",
@@ -54,7 +54,7 @@ class RefactoringRequest:
 @dataclass
 class RefactoringResult:
     """Result of a refactoring operation.
-    
+
     Attributes:
         success: Whether the refactoring completed successfully
         modified_files: List of files modified by the refactoring
@@ -62,7 +62,7 @@ class RefactoringResult:
         warnings: List of warnings generated during refactoring
         errors: List of errors encountered (if success=False)
         metadata: Additional tool-specific metadata
-        
+
     Example:
         >>> result = RefactoringResult(
         ...     success=True,

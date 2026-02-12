@@ -8,15 +8,15 @@ Dashboard Generator for ML Pattern Clustering
 Transforms clustering results and fingerprints into dashboard-ready data.
 """
 
-from typing import Dict, List, Any, Optional
 import json
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
+from typing import Any, Dict, List, Optional
 
 
 @dataclass
 class DashboardRepository:
     """Dashboard representation of a repository."""
-    
+
     id: str
     complexity: float
     modularity: float
@@ -27,7 +27,7 @@ class DashboardRepository:
 @dataclass
 class DashboardCluster:
     """Dashboard representation of a cluster."""
-    
+
     id: int
     repository_count: int
     avg_complexity: float
@@ -38,13 +38,13 @@ class DashboardCluster:
 class DashboardGenerator:
     """
     Generates visualization data for clustering results.
-    
+
     Produces:
     - Repository metrics for plotting
     - Cluster metadata
     - Interactive dashboard data
     """
-    
+
     def generate(
         self,
         fingerprints: Dict[str, Dict[str, Any]],
@@ -52,17 +52,17 @@ class DashboardGenerator:
     ) -> Dict[str, Any]:
         """
         Generate dashboard data from fingerprints and clusters.
-        
+
         Args:
             fingerprints: Dict mapping repo_id to fingerprint data
             clusters: Dict mapping cluster_id (str) to list of repo_ids
-            
+
         Returns:
             Dashboard data dictionary
         """
         repos = []
         cluster_metrics = {}
-        
+
         # Process each cluster
         for cluster_id_str, repo_ids in clusters.items():
             cluster_id = int(cluster_id_str)
@@ -71,17 +71,17 @@ class DashboardGenerator:
                 "modularity_values": [],
                 "repos": repo_ids,
             }
-            
+
             # Process repositories in this cluster
             for repo_id in repo_ids:
                 if repo_id not in fingerprints:
                     continue
-                
+
                 fp = fingerprints[repo_id]
                 complexity = fp.get("total_complexity", 0.5)
                 modularity = fp.get("total_modularity", 0.75)
                 component_count = fp.get("component_count", 1)
-                
+
                 repos.append({
                     "id": repo_id,
                     "complexity": complexity,
@@ -89,10 +89,10 @@ class DashboardGenerator:
                     "component_count": component_count,
                     "cluster": cluster_id,
                 })
-                
+
                 cluster_metrics[cluster_id]["complexity_values"].append(complexity)
                 cluster_metrics[cluster_id]["modularity_values"].append(modularity)
-        
+
         # Calculate cluster statistics
         clusters_data = []
         for cluster_id, metrics in cluster_metrics.items():
@@ -106,7 +106,7 @@ class DashboardGenerator:
             else:
                 avg_complexity = 0.5
                 avg_modularity = 0.75
-            
+
             clusters_data.append({
                 "id": cluster_id,
                 "repository_count": len(metrics["repos"]),
@@ -114,7 +114,7 @@ class DashboardGenerator:
                 "avg_modularity": avg_modularity,
                 "repositories": metrics["repos"],
             })
-        
+
         return {
             "repos": repos,
             "clusters": clusters_data,
@@ -124,33 +124,33 @@ class DashboardGenerator:
                 "avg_cluster_size": len(repos) / len(clusters) if clusters else 0,
             },
         }
-    
+
     def to_json(self, data: Dict[str, Any]) -> str:
         """
         Convert dashboard data to JSON string.
-        
+
         Args:
             data: Dashboard data dictionary
-            
+
         Returns:
             JSON string
         """
         return json.dumps(data, indent=2)
-    
+
     def to_html(self, data: Dict[str, Any]) -> str:
         """
         Generate standalone HTML dashboard.
-        
+
         Args:
             data: Dashboard data dictionary
-            
+
         Returns:
             HTML string for visualization
         """
         repos_json = json.dumps(data.get("repos", []))
         clusters_json = json.dumps(data.get("clusters", []))
         summary = data.get("summary", {})
-        
+
         html = f"""
 <!DOCTYPE html>
 <html>
@@ -184,7 +184,7 @@ class DashboardGenerator:
             <h1>🎯 CORTEX Pattern Clustering Dashboard</h1>
             <p>ML-based architectural pattern analysis and repository clustering</p>
         </header>
-        
+
         <div class="summary">
             <div class="metric">
                 <div class="metric-value">{summary.get('total_repositories', 0)}</div>
@@ -199,11 +199,11 @@ class DashboardGenerator:
                 <div class="metric-label">Avg Cluster Size</div>
             </div>
         </div>
-        
+
         {self._generate_cluster_sections(data)}
-        
+
     </div>
-    
+
     <script>
         const repos = {repos_json};
         const clusters = {clusters_json};
@@ -213,12 +213,12 @@ class DashboardGenerator:
 </html>
 """
         return html
-    
+
     def _generate_cluster_sections(self, data: Dict[str, Any]) -> str:
         """Generate HTML for cluster sections."""
         clusters = data.get("clusters", [])
         repos_by_id = {r["id"]: r for r in data.get("repos", [])}
-        
+
         html = ""
         for cluster in clusters:
             repos_html = ""
@@ -241,7 +241,7 @@ class DashboardGenerator:
                 </div>
             </div>
             """
-            
+
             html += f"""
         <div class="cluster-section">
             <div class="cluster-title">Cluster {cluster['id']} ({cluster['repository_count']} repos)</div>
@@ -250,7 +250,7 @@ class DashboardGenerator:
             </div>
         </div>
         """
-        
+
         return html
 
 

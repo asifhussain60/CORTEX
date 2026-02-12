@@ -14,8 +14,8 @@ Phase: 56 - LENS/Intelligence Hybrid Architecture + Audit Enhancement
 # ============================================================================
 
 from dataclasses import dataclass
-from typing import List, Dict
 from enum import Enum
+from typing import Dict, List
 
 
 class CleanupPriority(Enum):
@@ -48,7 +48,7 @@ PROMPT_CLEANUP_TASKS: List[CleanupTask] = [
         ac_marker="AC-PROMPT-CLEANUP-001",
         title="Deprecated Orchestrator Removal",
         description="Detect references to orchestrators removed from __wiring_contract__.yaml but still mentioned in prompts/agents",
-        detection_method="""
+        detection_method=r"""
         1. Load cortex/__wiring_contract__.yaml → extract active orchestrators
         2. Scan .github/prompts/*.md and .github/agents/core/*.md
         3. Extract orchestrator references (regex: \w+Orchestrator)
@@ -59,7 +59,7 @@ PROMPT_CLEANUP_TASKS: List[CleanupTask] = [
         priority=CleanupPriority.P1_HIGH,
         frequency="every_audit"
     ),
-    
+
     # AC-PROMPT-CLEANUP-002: MCP Tool Signature Drift
     CleanupTask(
         ac_marker="AC-PROMPT-CLEANUP-002",
@@ -75,7 +75,7 @@ PROMPT_CLEANUP_TASKS: List[CleanupTask] = [
         priority=CleanupPriority.P0_CRITICAL,
         frequency="every_audit"
     ),
-    
+
     # AC-PROMPT-CLEANUP-003: Agent Capability Coverage
     CleanupTask(
         ac_marker="AC-PROMPT-CLEANUP-003",
@@ -91,7 +91,7 @@ PROMPT_CLEANUP_TASKS: List[CleanupTask] = [
         priority=CleanupPriority.P1_HIGH,
         frequency="every_audit"
     ),
-    
+
     # AC-PROMPT-CLEANUP-004: Challenge Gate Documentation Sync
     CleanupTask(
         ac_marker="AC-PROMPT-CLEANUP-004",
@@ -110,7 +110,7 @@ PROMPT_CLEANUP_TASKS: List[CleanupTask] = [
         priority=CleanupPriority.P2_MEDIUM,
         frequency="every_audit"
     ),
-    
+
     # AC-PROMPT-CLEANUP-005: Response Format DRY Principle
     CleanupTask(
         ac_marker="AC-PROMPT-CLEANUP-005",
@@ -136,81 +136,81 @@ PROMPT_CLEANUP_TASKS: List[CleanupTask] = [
 class PromptCleanupOrchestrator:
     """
     Orchestrates prompt cleanup cycle execution.
-    
+
     Usage:
         orchestrator = PromptCleanupOrchestrator()
         results = orchestrator.run_cleanup_cycle(trigger="audit")
         orchestrator.generate_report(results)
     """
-    
+
     def __init__(self):
         """Initialize cleanup orchestrator."""
         self.tasks = PROMPT_CLEANUP_TASKS
-    
+
     def run_cleanup_cycle(self, trigger: str = "audit") -> Dict[str, List[str]]:
         """
         Execute cleanup cycle based on trigger.
-        
+
         Args:
             trigger: "audit" | "weekly" | "monthly"
-        
+
         Returns:
             Dictionary of {ac_marker: [issues_found]}
         """
         results = {}
-        
+
         for task in self.tasks:
             # Filter by frequency
             if trigger == "audit" and task.frequency != "every_audit":
                 continue
-            
+
             # Execute detection (placeholder - implement in Phase 56-E)
             issues = self._execute_detection(task)
-            
+
             if issues:
                 results[task.ac_marker] = issues
-        
+
         return results
-    
+
     def _execute_detection(self, task: CleanupTask) -> List[str]:
         """
         Execute detection method for task.
-        
+
         Returns:
             List of issues found (empty if none)
         """
         # Placeholder - actual implementation in Phase 56-E
         return []
-    
+
     def generate_report(self, results: Dict[str, List[str]]) -> str:
         """
         Generate markdown report of cleanup cycle results.
-        
+
         Args:
             results: Dictionary from run_cleanup_cycle()
-        
+
         Returns:
             Markdown formatted report
         """
         report = "# Prompt Cleanup Cycle Report\n\n"
-        
+
         if not results:
             report += "✅ **All checks passed. No cleanup required.**\n"
             return report
-        
+
         report += f"⚠️ **Found {len(results)} cleanup tasks with issues:**\n\n"
-        
+
         for ac_marker, issues in results.items():
             task = next(t for t in self.tasks if t.ac_marker == ac_marker)
             report += f"## {task.title} ({ac_marker})\n\n"
             report += f"**Priority:** {task.priority.value}\n\n"
             report += f"**Issues Found:** {len(issues)}\n\n"
-            
+
             for issue in issues:
                 report += f"- {issue}\n"
-            
+
             report += f"\n**Auto-Fix:** {task.auto_fix}\n\n"
-        
+
         return report
 
 
@@ -221,17 +221,17 @@ class PromptCleanupOrchestrator:
 def audit_trigger_cleanup():
     """
     Trigger cleanup cycle during AUDIT operations.
-    
+
     Called by cortex-architect.prompt.md AUDIT mode.
     """
     orchestrator = PromptCleanupOrchestrator()
     results = orchestrator.run_cleanup_cycle(trigger="audit")
-    
+
     if results:
         report = orchestrator.generate_report(results)
         print(report)
         return False  # Cleanup required
-    
+
     return True  # All clean
 
 

@@ -9,9 +9,9 @@ Description: Discovers APIs, tools, services from health checks and registries.
 """
 
 import json
-from typing import Any, Dict, List, Optional
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any, Dict, List, Optional
 
 
 class EnvironmentType(str, Enum):

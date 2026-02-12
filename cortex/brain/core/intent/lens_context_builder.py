@@ -18,14 +18,13 @@ Core responsibilities:
 5. Query and traverse context for intelligence extraction
 """
 
-from dataclasses import dataclass, field, asdict
-from datetime import datetime
-from typing import List, Dict, Any, Optional, Set, Tuple
-from enum import Enum
-import uuid
 import json
+import uuid
+from dataclasses import asdict, dataclass, field
+from datetime import datetime
+from enum import Enum
 from functools import lru_cache
-
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 # ============================================================================
 # ENUMS
@@ -124,7 +123,7 @@ class KnowledgeGraph:
         """Add an edge to the graph."""
         if edge.source not in self.nodes or edge.target not in self.nodes:
             raise ValueError(
-                f"Cannot add edge: source or target node not in graph"
+                "Cannot add edge: source or target node not in graph"
             )
         self.edges.append(edge)
 
@@ -157,17 +156,17 @@ class LENSContext:
 
     id: str = field(default_factory=lambda: str(uuid.uuid4()))
     timestamp: datetime = field(default_factory=datetime.now)
-    
+
     # Raw findings from each source
     ast_findings: Optional[Dict[str, Any]] = None
     git_findings: Optional[Dict[str, Any]] = None
     comment_findings: Optional[Dict[str, Any]] = None
     relationship_findings: Optional[Dict[str, Any]] = None
-    
+
     # Computed data
     computed_data: Dict[str, Any] = field(default_factory=dict)
     knowledge_graph: Optional[KnowledgeGraph] = None
-    
+
     # Metadata
     metadata: Dict[str, Any] = field(default_factory=dict)
 
@@ -202,7 +201,7 @@ class LENSContext:
             computed_data=data.get("computed_data", {}),
             metadata=data.get("metadata", {}),
         )
-        
+
         # Reconstruct knowledge graph if present
         if "knowledge_graph" in data and data["knowledge_graph"]:
             kg_data = data["knowledge_graph"]
@@ -225,7 +224,7 @@ class LENSContext:
                 )
                 kg.add_edge(edge)
             context.knowledge_graph = kg
-        
+
         return context
 
     @staticmethod

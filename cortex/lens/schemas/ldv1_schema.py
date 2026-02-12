@@ -12,14 +12,14 @@ Created: 2026-02-10
 Status: GREEN (implementation)
 """
 
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Dict, List, Any, Optional, Protocol
-from abc import ABC, abstractmethod
-from pydantic import BaseModel, field_validator
-from datetime import datetime
 import json
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional, Protocol
 
+from pydantic import BaseModel, field_validator
 
 # ============================================================================
 # ENUMERATIONS
@@ -55,7 +55,7 @@ class ConfidenceLevel(float, Enum):
 class EvidenceItem:
     """
     Evidence item representing a single fact or finding.
-    
+
     Every piece of intelligence extracted by LENS must be traceable
     back to its source with a confidence score.
     """
@@ -67,7 +67,7 @@ class EvidenceItem:
     source_file: Optional[str] = None           # Source file in analyzer
     source_line: Optional[int] = None           # Source line in analyzer
     generated_at: Optional[str] = None          # ISO timestamp
-    
+
     def __post_init__(self):
         """Validate evidence item after initialization."""
         if not (0.0 <= self.confidence <= 1.0):
@@ -86,7 +86,7 @@ class LensNode(BaseModel):
     node_type: str
     label: str
     evidence: List[Dict[str, Any]] = []
-    
+
     @field_validator("id")
     @classmethod
     def id_not_empty(cls, v):
@@ -119,7 +119,7 @@ class LensArtifact(BaseModel):
     metadata: Dict[str, Any]
     nodes: List[Dict[str, Any]] = []
     edges: List[Dict[str, Any]] = []
-    
+
     class Config:
         """Pydantic model configuration."""
         json_schema_extra = {
@@ -157,7 +157,7 @@ class ArtifactManifest(BaseModel):
     version: str = "1.0"
     timestamp: str
     artifacts: Dict[str, Dict[str, Any]]
-    
+
     @classmethod
     def create_default(cls) -> "ArtifactManifest":
         """Create default manifest with all standard artifacts."""
@@ -269,31 +269,31 @@ class AnalysisIndex(BaseModel):
 class EvidenceProtocol(ABC):
     """
     Interface that all LENS analyzers must implement.
-    
+
     Ensures consistent evidence emission across all analyzers.
     """
-    
+
     @abstractmethod
     def emit_evidence(self, finding: Dict[str, Any]) -> List[EvidenceItem]:
         """
         Transform a finding into one or more evidence items.
-        
+
         Args:
             finding: Raw finding from analyzer
-            
+
         Returns:
             List of evidence items with confidence scores
         """
         pass
-    
+
     @abstractmethod
     def get_confidence_for_finding(self, finding: Dict[str, Any]) -> float:
         """
         Compute confidence score for a finding.
-        
+
         Args:
             finding: Raw finding
-            
+
         Returns:
             Confidence score 0.0-1.0
         """
@@ -388,45 +388,45 @@ LDVL_JSON_SCHEMA = {
 
 class LDv1Validator:
     """Validates LENS artifacts against LDv1 schema."""
-    
+
     @staticmethod
     def validate_evidence_item(evidence: Dict[str, Any]) -> bool:
         """Validate a single evidence item."""
         required_fields = ["kind", "ref", "confidence", "source_type"]
-        
+
         for field in required_fields:
             if field not in evidence:
                 raise ValueError(f"Missing required field: {field}")
-        
+
         if not (0.0 <= evidence["confidence"] <= 1.0):
             raise ValueError(f"Invalid confidence: {evidence['confidence']}")
-        
+
         if evidence["kind"] not in [e.value for e in EvidenceKind]:
             raise ValueError(f"Invalid evidence kind: {evidence['kind']}")
-        
+
         return True
-    
+
     @staticmethod
     def validate_artifact(artifact: Dict[str, Any]) -> bool:
         """Validate entire artifact against LDv1 schema."""
         if "schema_version" not in artifact:
             raise ValueError("Missing schema_version")
-        
+
         if artifact.get("schema_version") != "1.0":
             raise ValueError(f"Unsupported schema version: {artifact.get('schema_version')}")
-        
+
         if "metadata" not in artifact:
             raise ValueError("Missing metadata")
-        
+
         # Validate all evidence items
         for node in artifact.get("nodes", []):
             for evidence in node.get("evidence", []):
                 LDv1Validator.validate_evidence_item(evidence)
-        
+
         for edge in artifact.get("edges", []):
             for evidence in edge.get("evidence", []):
                 LDv1Validator.validate_evidence_item(evidence)
-        
+
         return True
 
 
@@ -437,10 +437,10 @@ class LDv1Validator:
 class BackwardCompatibilityWrapper:
     """
     Wraps existing LENS outputs as LDv1 artifacts.
-    
+
     Enables gradual migration from old format to LDv1.
     """
-    
+
     @staticmethod
     def wrap_existing_result(old_result: Dict[str, Any]) -> Dict[str, Any]:
         """Wrap old format result as LDv1."""
@@ -450,7 +450,7 @@ class BackwardCompatibilityWrapper:
             "legacy_data": old_result,
             "migration_status": "pending"
         }
-    
+
     @staticmethod
     def mark_as_legacy(result: Dict[str, Any]) -> Dict[str, Any]:
         """Mark analyzer output as legacy (no evidence field yet)."""
@@ -461,7 +461,7 @@ class BackwardCompatibilityWrapper:
 if __name__ == "__main__":
     # Quick validation test
     print("✅ LDv1 Schema module loaded successfully")
-    
+
     # Test evidence item creation
     evidence = EvidenceItem(
         kind=EvidenceKind.GIT_COMMIT,
@@ -471,11 +471,11 @@ if __name__ == "__main__":
         snippet="commit message here"
     )
     print(f"✅ EvidenceItem created: {evidence}")
-    
+
     # Test manifest creation
     manifest = ArtifactManifest.create_default()
     print(f"✅ ArtifactManifest created with {len(manifest.artifacts)} artifacts")
-    
+
     # Test validation
     test_artifact = {
         "schema_version": "1.0",
@@ -488,6 +488,6 @@ if __name__ == "__main__":
         "nodes": [],
         "edges": []
     }
-    
+
     LDv1Validator.validate_artifact(test_artifact)
     print("✅ Artifact validation passed")

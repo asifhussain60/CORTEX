@@ -1,105 +1,34 @@
 """
 CORTEX MCP Module: Model Context Protocol Implementation.
 
-This module provides JSON-RPC 2.0 compliant Model Context Protocol for
-tool management, discovery, and execution within the CORTEX system.
+Consolidated MCP Server (WAVE-100):
+    - 24 production tools (75% reduction from 98)
+    - Business capability alignment
+    - Cross-platform support (macOS, Windows, Linux)
+    - Comprehensive test coverage
 
-Exports:
-    MCPServer: Main MCP protocol server
-    Tool: Abstract base class for MCP tools
-    ToolDefinition: Tool definition data model
-    ToolParameter: Tool parameter definition
-    MCPRequest: JSON-RPC request model
-    MCPResponse: JSON-RPC response model
-    MCPError: JSON-RPC error model
-    MCPToolsCatalog: Unified MCP tools registry (CORE-035 SSOT)
-    get_mcp_tools_catalog: Get catalog singleton
-    sync_mcp_tools: Sync tools from orchestrators
-    OrchestratorMCPServer: Unified MCP facade for orchestrators (AC-MCP-ORCHESTRATOR-001)
-    get_orchestrator_mcp_server: Get orchestrator server singleton
+Usage:
+    from cortex.mcp import MCPServer
+    from cortex.mcp.base import Tool, ToolCategory
+    from cortex.mcp.registry import get_registry
+
+Authority: WAVE-100 MCP Consolidation
 """
 
-from cortex.mcp.server import (
-    MCPServer,
-    Tool,
-    SampleTool,
-    ToolDefinition,
-    ToolParameter,
-    MCPRequest,
-    MCPResponse,
-    MCPError,
-)
-from cortex.mcp.decorators import mcp_tool, MCP_TOOLS_REGISTRY
-from cortex.mcp.endpoints import (
-    list_tools_endpoint,
-    get_tool_metadata,
-    filter_tools_by_domain,
-    get_tool_count,
-    is_tool_registered,
-    call_tool,
-)
-from cortex.mcp.mcp_tools_catalog import (
-    MCPToolsCatalog,
-    get_mcp_tools_catalog,
-    sync_mcp_tools,
-    MCPToolMetadata,
-    ToolStatus,
-)
-from cortex.mcp.orchestrator_mcp_server import (
-    OrchestratorMCPServer,
-    get_orchestrator_mcp_server,
-    IOrchestratorAdapter,
-    ExecutionContext,
-    CapabilityMetadata,
-    CapabilityRequest,
-    CapabilityResponse,
-    ContextType,
-)
-from cortex.mcp.unified_tool_discovery import (
-    UnifiedMCPToolDiscovery,
-    get_unified_discovery,
-    MCPTool,
-    ToolCategory,
-)
+from cortex.mcp.server import MCPServer, MCPRequest, MCPResponse
+from cortex.mcp.base import Tool, ToolResult, ToolCategory
+from cortex.mcp.registry import ToolRegistry, get_registry
+
+MCPServerV2 = MCPServer
 
 __all__ = [
-    # Core MCP server and tools
     "MCPServer",
-    "Tool",
-    "SampleTool",
-    "ToolDefinition",
-    "ToolParameter",
+    "MCPServerV2",
     "MCPRequest",
     "MCPResponse",
-    "MCPError",
-    # MCP decorators and registry
-    "mcp_tool",
-    "MCP_TOOLS_REGISTRY",
-    # MCP endpoints
-    "list_tools_endpoint",
-    "get_tool_metadata",
-    "filter_tools_by_domain",
-    "get_tool_count",
-    "is_tool_registered",
-    "call_tool",
-    # Unified MCP catalog (CORE-035 SSOT)
-    "MCPToolsCatalog",
-    "get_mcp_tools_catalog",
-    "sync_mcp_tools",
-    "MCPToolMetadata",
-    "ToolStatus",
-    # Unified orchestrator MCP server (AC-MCP-ORCHESTRATOR-001)
-    "OrchestratorMCPServer",
-    "get_orchestrator_mcp_server",
-    "IOrchestratorAdapter",
-    "ExecutionContext",
-    "CapabilityMetadata",
-    "CapabilityRequest",
-    "CapabilityResponse",
-    "ContextType",
-    # Unified tool discovery (AC-MCP-CENTRALIZED-DISCOVERY - CORE-035)
-    "UnifiedMCPToolDiscovery",
-    "get_unified_discovery",
-    "MCPTool",
+    "Tool",
+    "ToolResult",
     "ToolCategory",
+    "ToolRegistry",
+    "get_registry",
 ]

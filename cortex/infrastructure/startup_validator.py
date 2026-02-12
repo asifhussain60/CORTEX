@@ -20,13 +20,13 @@ by enforcing mandatory startup validation with auto-remediation.
 import json
 import logging
 import threading
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from cortex.brain.core.result import Result, Ok, Err
 from cortex.brain.core.path_resolver import resolve_path
+from cortex.brain.core.result import Err, Ok, Result
 
 logger = logging.getLogger(__name__)
 
@@ -58,7 +58,7 @@ class StartupValidationStatus:
 
 class StartupValidator:
     """Comprehensive startup validation with auto-remediation.
-    
+
     Docker-first architecture: Uses YAML-backed wiring configuration.
     """
 
@@ -186,7 +186,7 @@ class StartupValidator:
     def _check_database_integrity(self) -> Result:
         """
         Check configuration integrity.
-        
+
         Docker-first: Validates YAML config instead of SQLite database.
 
         Returns:
@@ -217,7 +217,7 @@ class StartupValidator:
     def _check_orchestrator_wiring(self) -> Result:
         """
         Check orchestrator wiring status.
-        
+
         Docker-first: Uses YAML-backed configuration instead of database.
 
         Returns:
@@ -231,7 +231,7 @@ class StartupValidator:
             # Get stats from YAML-backed registry
             counts = get_orchestrator_count_by_category()
             total = counts.get('total', 0)
-            
+
             # In YAML-backed config, all defined orchestrators are "wired"
             stats = {
                 "wired": total,
@@ -287,24 +287,25 @@ class StartupValidator:
             Result indicating protocol is properly wired
         """
         try:
+            import inspect
+
             from cortex.orchestrators.core.interaction_orchestrator import (
                 InteractionOrchestrator,
             )
-            import inspect
 
             # Verify class exists and has required attributes in signature
             # Note: We check class definition, not instantiation, since
             # InteractionOrchestrator requires conversation_protocol parameter
             required_attrs = [
                 "conversation_protocol",
-                "challenge_engine", 
+                "challenge_engine",
                 "lens_synthesis",
             ]
 
             # Check __init__ signature for required parameters
             sig = inspect.signature(InteractionOrchestrator.__init__)
             params = list(sig.parameters.keys())
-            
+
             # conversation_protocol should be a required parameter
             if "conversation_protocol" not in params:
                 return Err(
@@ -403,5 +404,5 @@ if not _startup_validation_complete:
         if validation_result.is_err():
             logger.error(f"Startup validation failed: {validation_result.error}")
             # Don't fail import, but log warning
-    except Exception as e:
+    except Exception:
         logger.exception("Startup validation exception on import")

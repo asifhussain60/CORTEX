@@ -23,15 +23,15 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from cortex.brain.core.interfaces import IAuditLogger
-from cortex.infrastructure.enhanced_audit_logger import AuditEntry
 from cortex.brain.core.path_resolver import audit_logs_path, get_project_root
 from cortex.brain.core.result import Err, Ok, Result
+from cortex.infrastructure.enhanced_audit_logger import AuditEntry
 
 
 @dataclass
 class AuditLogEntry:
     """Internal audit log entry with hash chain."""
-    
+
     id: str
     timestamp: str
     operation: str
@@ -43,11 +43,11 @@ class AuditLogEntry:
     metadata: Optional[Dict[str, Any]]
     previous_hash: str
     entry_hash: str
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return asdict(self)
-    
+
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "AuditLogEntry":
         """Create from dictionary."""
@@ -57,16 +57,16 @@ class AuditLogEntry:
 class CrossPlatformFileLock:
     """
     Cross-platform file locking.
-    
+
     Uses msvcrt on Windows, fcntl on Unix.
     Falls back to no-op if neither available.
     """
-    
+
     def __init__(self, lock_file: Path):
         self.lock_file = lock_file
         self._file = None
         self._lock_type = self._detect_platform()
-    
+
     def _detect_platform(self) -> str:
         """Detect platform and available locking mechanism."""
         try:
@@ -74,20 +74,20 @@ class CrossPlatformFileLock:
             return "windows"
         except ImportError:
             pass
-        
+
         try:
             import fcntl
             return "unix"
         except ImportError:
             pass
-        
+
         return "none"
-    
+
     def acquire(self):
         """Acquire the lock."""
         self.lock_file.parent.mkdir(parents=True, exist_ok=True)
         self._file = open(self.lock_file, "w")
-        
+
         if self._lock_type == "windows":
             import msvcrt
             msvcrt.locking(self._file.fileno(), msvcrt.LK_LOCK, 1)
@@ -95,7 +95,7 @@ class CrossPlatformFileLock:
             import fcntl
             fcntl.flock(self._file.fileno(), fcntl.LOCK_EX)
         # "none" - no locking available
-    
+
     def release(self):
         """Release the lock."""
         if self._file:
@@ -112,14 +112,14 @@ class CrossPlatformFileLock:
             elif self._lock_type == "unix":
                 import fcntl
                 fcntl.flock(self._file.fileno(), fcntl.LOCK_UN)
-            
+
             self._file.close()
             self._file = None
-    
+
     def __enter__(self):
         self.acquire()
         return self
-    
+
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.release()
         return False
@@ -128,7 +128,7 @@ class CrossPlatformFileLock:
 class EnhancedAuditLogger(IAuditLogger):
     """
     Production-grade audit logger with hash chain integrity.
-    
+
     Features:
     - SHA-256 hash chain (tamper detection)
     - Cross-platform file locking
@@ -136,10 +136,10 @@ class EnhancedAuditLogger(IAuditLogger):
     - Correlation ID tracking
     - Thread-safe operations
     """
-    
+
     _instance = None
     _lock = threading.Lock()
-    
+
     def __new__(cls, *args, **kwargs):
         """Singleton pattern for global audit logger."""
         if cls._instance is None:
@@ -147,7 +147,7 @@ class EnhancedAuditLogger(IAuditLogger):
                 if cls._instance is None:
                     cls._instance = super().__new__(cls)
         return cls._instance
-    
+
     def __init__(
         self,
         component: str = "CORTEX",
@@ -156,7 +156,7 @@ class EnhancedAuditLogger(IAuditLogger):
     ):
         """
         Initialize the audit logger.
-        
+
         Args:
             component: Component name for log entries
             db_path: Path to SQLite database (default: audit-logs/audit.db)
@@ -165,23 +165,23 @@ class EnhancedAuditLogger(IAuditLogger):
         # Prevent re-initialization
         if hasattr(self, "_initialized") and self._initialized:
             return
-        
+
         self.component = component
         self.db_path = db_path or (audit_logs_path() / "audit.db")
         self.lock_path = self.db_path.parent / ".audit.lock"
         self._previous_hash = "GENESIS"
         self._correlation_id = str(uuid.uuid4())
         self._file_lock = CrossPlatformFileLock(self.lock_path)
-        
+
         if auto_init:
             self._init_database()
-        
+
         self._initialized = True
-    
+
     def _init_database(self):
         """Initialize SQLite database schema."""
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
-        
+
         with self._get_connection() as conn:
             conn.execute("""
                 CREATE TABLE IF NOT EXISTS audit_log (
@@ -198,24 +198,24 @@ class EnhancedAuditLogger(IAuditLogger):
                     entry_hash TEXT NOT NULL
                 )
             """)
-            
+
             conn.execute("""
-                CREATE INDEX IF NOT EXISTS idx_timestamp 
+                CREATE INDEX IF NOT EXISTS idx_timestamp
                 ON audit_log(timestamp)
             """)
-            
+
             conn.execute("""
-                CREATE INDEX IF NOT EXISTS idx_ac_id 
+                CREATE INDEX IF NOT EXISTS idx_ac_id
                 ON audit_log(ac_id)
             """)
-            
+
             conn.execute("""
-                CREATE INDEX IF NOT EXISTS idx_correlation_id 
+                CREATE INDEX IF NOT EXISTS idx_correlation_id
                 ON audit_log(correlation_id)
             """)
-            
+
             conn.commit()
-            
+
             # Get last hash for chain continuity
             cursor = conn.execute(
                 "SELECT entry_hash FROM audit_log ORDER BY timestamp DESC LIMIT 1"
@@ -223,7 +223,7 @@ class EnhancedAuditLogger(IAuditLogger):
             row = cursor.fetchone()
             if row:
                 self._previous_hash = row[0]
-    
+
     @contextmanager
     def _get_connection(self):
         """Get SQLite connection with proper cleanup."""
@@ -233,7 +233,7 @@ class EnhancedAuditLogger(IAuditLogger):
             yield conn
         finally:
             conn.close()
-    
+
     def _compute_hash(self, entry: AuditLogEntry) -> str:
         """Compute SHA-256 hash for entry."""
         # Create deterministic string for hashing
@@ -248,18 +248,18 @@ class EnhancedAuditLogger(IAuditLogger):
             "correlation_id": entry.correlation_id,
             "previous_hash": entry.previous_hash
         }, sort_keys=True)
-        
+
         return hashlib.sha256(data.encode()).hexdigest()
-    
+
     def set_correlation_id(self, correlation_id: str):
         """Set correlation ID for subsequent log entries."""
         self._correlation_id = correlation_id
-    
+
     def new_correlation_id(self) -> str:
         """Generate and set new correlation ID."""
         self._correlation_id = str(uuid.uuid4())
         return self._correlation_id
-    
+
     def log(
         self,
         operation: str,
@@ -270,14 +270,14 @@ class EnhancedAuditLogger(IAuditLogger):
     ) -> Result[None]:
         """
         Log an audit entry with hash chain integrity.
-        
+
         Args:
             operation: Operation being performed
             message: Human-readable message
             level: Log level (DEBUG, INFO, WARN, ERROR)
             ac_id: Optional acceptance criteria ID
             metadata: Optional additional data
-        
+
         Returns:
             Result indicating success or error
         """
@@ -295,13 +295,13 @@ class EnhancedAuditLogger(IAuditLogger):
                 previous_hash=self._previous_hash,
                 entry_hash=""  # Computed below
             )
-            
+
             entry.entry_hash = self._compute_hash(entry)
-            
+
             with self._file_lock:
                 with self._get_connection() as conn:
                     conn.execute("""
-                        INSERT INTO audit_log 
+                        INSERT INTO audit_log
                         (id, timestamp, operation, component, level, message,
                          ac_id, correlation_id, metadata, previous_hash, entry_hash)
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -319,13 +319,13 @@ class EnhancedAuditLogger(IAuditLogger):
                         entry.entry_hash
                     ))
                     conn.commit()
-            
+
             self._previous_hash = entry.entry_hash
             return Ok(None)
-        
+
         except Exception as e:
             return Err(f"Failed to log audit entry: {e}")
-    
+
     def query(
         self,
         ac_id: Optional[str] = None,
@@ -336,40 +336,40 @@ class EnhancedAuditLogger(IAuditLogger):
     ) -> Result[List[AuditEntry]]:
         """
         Query audit logs with filters.
-        
+
         Args:
             ac_id: Filter by acceptance criteria ID
             component: Filter by component
             start_time: Filter by start timestamp
             end_time: Filter by end timestamp
             limit: Maximum entries to return
-        
+
         Returns:
             Result containing list of audit entries or error
         """
         try:
             query = "SELECT * FROM audit_log WHERE 1=1"
             params = []
-            
+
             if ac_id:
                 query += " AND ac_id = ?"
                 params.append(ac_id)
-            
+
             if component:
                 query += " AND component = ?"
                 params.append(component)
-            
+
             if start_time:
                 query += " AND timestamp >= ?"
                 params.append(start_time.isoformat())
-            
+
             if end_time:
                 query += " AND timestamp <= ?"
                 params.append(end_time.isoformat())
-            
+
             query += " ORDER BY timestamp DESC LIMIT ?"
             params.append(limit)
-            
+
             entries = []
             with self._get_connection() as conn:
                 cursor = conn.execute(query, params)
@@ -384,16 +384,16 @@ class EnhancedAuditLogger(IAuditLogger):
                         message=row["message"],
                         metadata=json.loads(row["metadata"]) if row["metadata"] else None
                     ))
-            
+
             return Ok(entries)
-        
+
         except Exception as e:
             return Err(f"Failed to query audit logs: {e}")
-    
+
     def verify_chain(self) -> Result[bool]:
         """
         Verify hash chain integrity.
-        
+
         Returns:
             Result containing True if valid, False if tampered
         """
@@ -402,9 +402,9 @@ class EnhancedAuditLogger(IAuditLogger):
                 cursor = conn.execute(
                     "SELECT * FROM audit_log ORDER BY timestamp ASC"
                 )
-                
+
                 expected_previous = "GENESIS"
-                
+
                 for row in cursor.fetchall():
                     entry = AuditLogEntry(
                         id=row["id"],
@@ -419,23 +419,23 @@ class EnhancedAuditLogger(IAuditLogger):
                         previous_hash=row["previous_hash"],
                         entry_hash=row["entry_hash"]
                     )
-                    
+
                     # Verify previous hash
                     if entry.previous_hash != expected_previous:
                         return Ok(False)
-                    
+
                     # Verify entry hash
                     computed = self._compute_hash(entry)
                     if computed != entry.entry_hash:
                         return Ok(False)
-                    
+
                     expected_previous = entry.entry_hash
-                
+
                 return Ok(True)
-        
+
         except Exception as e:
             return Err(f"Failed to verify chain: {e}")
-    
+
     @classmethod
     def reset(cls):
         """Reset singleton instance (for testing)."""

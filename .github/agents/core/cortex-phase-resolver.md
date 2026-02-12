@@ -1,3 +1,25 @@
+---
+agent_id: "cortex-phase-resolver"
+version: "1.0"
+status: "active"
+layer: "core"
+capabilities:
+  - phase_resolution
+  - session_continuity
+  - context_extraction
+modes_served:
+  - PLAN
+mcp_tools:
+  - cortex_resolve_phase
+collaborators:
+  - cortex-master-plan-auditor
+priority: "P0"
+token_cost_estimate: 2300
+created_date: "2026-02-04"
+last_updated: "2026-02-11"
+maintainer: "Asif Hussain"
+---
+
 # CORTEX Phase Resolver Agent
 **Version:** 1.0 | **Updated:** 2026-02-04 | **Role:** Multi-Session Continuity & Phase Resolution | **Feature:** ENH-017
 
@@ -302,6 +324,133 @@ Result: Seamless continuation, instant context, happy user
 | Ambiguous letter reference (A=1 or letter-phase?) | Use context to disambiguate; document assumption |
 | Malformed phase references | Suggest corrections: "Did you mean 'phase 7' or 'phase-7'?" |
 | Confidence < 0.7 | Flag as uncertain, ask for confirmation |
+
+---
+
+## Collaboration Protocol (Phase 81 Integration)
+
+**NEW:** Phase 81 introduces two-phase planning with explicit agent roles:
+
+### Role Division
+
+| Agent | Responsibility | Input | Output |
+|-------|----------------|-------|--------|
+| **Phase Resolver** | Identifies WHAT | User request + chat context | Phase ID + requirements |
+| **Master Plan Auditor** | Determines HOW | Phase requirements + state | Wave plan + execution order |
+
+### Handoff Pattern (Request Flow)
+
+```
+User: /plan execute phase-47
+      ↓
+PHASE RESOLVER: "Identify phase"
+  ├─ Extract: Phase ID = "phase-47"
+  ├─ Load: Requirements, acceptance criteria
+  ├─ Validate: Dependencies satisfied? (Yes/No)
+  └─ Output: PhaseContext {
+       phase_id: "phase-47",
+       title: "Enterprise Orchestrator Suite",
+       requirements: [...],
+       dependencies: [],
+       estimated_tokens: 8000,
+       roi_score: 92,
+     }
+      ↓
+MASTER PLAN AUDITOR: "Determine execution strategy"
+  ├─ Analyze: Current token budget, wave organization
+  ├─ Check: Can execute in parallel with other phases?
+  ├─ Plan: Wave structure (phases 45-47 in wave-3)
+  ├─ State: Save checkpoint at 75% tokens
+  └─ Output: ExecutionPlan {
+       wave_id: "wave-3",
+       phases: ["phase-45", "phase-46", "phase-47"],
+       parallelizable: true,
+       token_budget: 150000,
+       checkpoint_threshold: 75%,
+     }
+      ↓
+SHARED CONTEXT (optimize communication):
+  ├─ LENS analysis cache key: "phase-47-enterprise"
+  ├─ Previous phase metrics: (phase-46 used 7200 tokens)
+  ├─ Plan state: "wave-3 in progress"
+  └─ Allows both agents to avoid duplicate analysis
+      ↓
+EXECUTION: Auditor runs phases with resolver monitoring
+```
+
+### Shared Context Schema
+
+**To avoid re-analysis, both agents share context:**
+
+```yaml
+shared_context:
+  lens_cache:
+    key: "phase-{id}-{domain}"
+    contains:
+      - code_analysis (AST, complexity, metrics)
+      - git_history (recent changes, pattern)
+      - dependency_graph (inter-file relationships)
+      - performance_baseline (benchmarks)
+    ttl: "session"  # Valid for entire session
+  
+  phase_requirements:
+    acceptance_criteria: [...]
+    success_metrics: [...]
+    integration_points: [...]
+  
+  plan_state:
+    current_wave_id: "wave-3"
+    phases_completed: ["phase-45", "phase-46"]
+    token_budget_remaining: 35000
+    checkpoint_threshold: 75%
+```
+
+### Collaboration Handoff Example
+
+**Pseudocode for seamless handoff:**
+
+```python
+# Step 1: Phase Resolver identifies phase
+context = phase_resolver.extract_context(request="execute phase-47")
+# Returns: PhaseContext { phase_id, requirements, metrics }
+
+# Step 2: Build shared context (avoid re-analysis)
+shared_context = build_shared_context(context)
+shared_context.lens_cache = lens_analyze_phase(context, caching=True)
+
+# Step 3: Pass to Master Plan Auditor
+execution_plan = plan_auditor.create_execution_plan(
+    phase_context=context,
+    shared_context=shared_context  # ← Auditor reuses LENS analysis
+)
+
+# Step 4: Execute
+result = execute_phase_tdd(
+    plan=execution_plan,
+    shared_context=shared_context  # ← Executor reuses cached LENS
+)
+
+# Step 5: Update plan state
+update_plan_status(
+    phase_id=context.phase_id,
+    new_status="COMPLETED",
+    metrics=result.metrics
+)
+```
+
+### Integration Points
+
+1. **MCP Tool Contract:**
+   - Phase Resolver: `cortex_resolve_phase` (returns PhaseContext)
+   - Master Plan Auditor: `cortex_audit_plan` + `cortex_execute_wave_autonomous`
+
+2. **Registry Integration:**
+   - Phase Resolver reads: `cortex-registry/_cortex-master/phases/`
+   - Plan Auditor reads/updates: `cortex-registry/_cortex-master/dashboard/plan-summary.json`
+
+3. **State Management:**
+   - Resolver: Stateless (reads chat/registry only)
+   - Auditor: Manages wave state + token budget tracking
 
 ---
 

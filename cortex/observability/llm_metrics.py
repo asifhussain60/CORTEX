@@ -9,7 +9,7 @@ Compliance: CORE-011 (Type hints), CORE-012 (Docstrings)
 from typing import Optional
 
 try:
-    from prometheus_client import Counter, Histogram, Gauge
+    from prometheus_client import Counter, Gauge, Histogram
     PROMETHEUS_AVAILABLE = True
 except ImportError:
     PROMETHEUS_AVAILABLE = False
@@ -21,7 +21,7 @@ except ImportError:
             return self
         def inc(self, *args, **kwargs):
             pass
-    
+
     class Histogram:
         def __init__(self, *args, **kwargs):
             pass
@@ -29,7 +29,7 @@ except ImportError:
             return self
         def observe(self, *args, **kwargs):
             pass
-    
+
     class Gauge:
         def __init__(self, *args, **kwargs):
             pass
@@ -95,7 +95,7 @@ def record_llm_call(
 ) -> None:
     """
     Record LLM call metrics.
-    
+
     Args:
         provider: LLM provider name (openai, anthropic, etc.)
         model: Model name (gpt-4, claude-3-opus, etc.)
@@ -108,7 +108,7 @@ def record_llm_call(
     """
     if not PROMETHEUS_AVAILABLE:
         return  # Silently skip if prometheus not installed
-    
+
     # Record call
     llm_calls_total.labels(
         provider=provider,
@@ -116,26 +116,26 @@ def record_llm_call(
         tier=tier,
         status=status
     ).inc()
-    
+
     # Record tokens
     llm_tokens_used.labels(
         provider=provider,
         model=model,
         type="prompt"
     ).inc(prompt_tokens)
-    
+
     llm_tokens_used.labels(
         provider=provider,
         model=model,
         type="completion"
     ).inc(completion_tokens)
-    
+
     # Record latency
     llm_latency_seconds.labels(
         provider=provider,
         model=model
     ).observe(latency_seconds)
-    
+
     # Record cost
     llm_cost_usd.labels(
         provider=provider,
@@ -146,14 +146,14 @@ def record_llm_call(
 def record_llm_error(provider: str, error_type: str) -> None:
     """
     Record LLM error.
-    
+
     Args:
         provider: LLM provider name
         error_type: Error type (timeout, rate_limit, api_error, etc.)
     """
     if not PROMETHEUS_AVAILABLE:
         return
-    
+
     llm_errors_total.labels(
         provider=provider,
         error_type=error_type
@@ -167,7 +167,7 @@ def update_budget_metrics(
 ) -> None:
     """
     Update budget remaining metrics.
-    
+
     Args:
         per_request_remaining: Tokens remaining for request
         per_user_remaining: Tokens remaining for user today
@@ -175,7 +175,7 @@ def update_budget_metrics(
     """
     if not PROMETHEUS_AVAILABLE:
         return
-    
+
     llm_budget_remaining.labels(scope="per_request").set(per_request_remaining)
     llm_budget_remaining.labels(scope="per_user").set(per_user_remaining)
     llm_budget_remaining.labels(scope="global").set(global_remaining)

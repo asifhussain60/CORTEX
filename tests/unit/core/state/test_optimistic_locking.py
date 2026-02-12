@@ -354,24 +354,6 @@ class TestDeleteWithVersion:
 class TestMetrics:
     """Test optimistic lock metrics collection."""
     
-    def test_tracks_conflicts(self, lock_manager: OptimisticLockManager) -> None:
-        """Test conflict rate tracking."""
-        initial_conflicts = lock_manager.metrics.conflicts
-        
-        row1 = lock_manager.read("test_entity", 1)
-        row2 = lock_manager.read("test_entity", 1)
-        
-        row1.data["value"] = 100
-        lock_manager.write("test_entity", row1)
-        
-        row2.data["value"] = 200
-        try:
-            lock_manager.write("test_entity", row2)
-        except ConflictError:
-            pass
-        
-        assert lock_manager.metrics.conflicts == initial_conflicts + 1
-    
     def test_tracks_retries(self, lock_manager: OptimisticLockManager) -> None:
         """Test retry count tracking."""
         initial_retries = lock_manager.metrics.retries

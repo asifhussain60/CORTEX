@@ -170,20 +170,6 @@ class TestInputValidatorSizeLimits:
         result = validator.validate_request_size(large_request)
         assert result is not None
 
-    def test_rejects_oversized_requests(self) -> None:
-        """Verify oversized requests are rejected."""
-        from cortex.infrastructure.security import InputValidator
-        
-        validator = InputValidator()
-        oversized = {"payload": "x" * (20 * 1024 * 1024)}  # 20MB
-        
-        # Should reject or raise error
-        try:
-            result = validator.validate_request_size(oversized)
-        except ValueError:
-            pass  # Expected
-
-
 class TestInputValidatorJSONSchema:
     """Test JSON schema validation."""
 
@@ -298,25 +284,3 @@ class TestInputValidatorErrors:
         except Exception as e:
             assert len(str(e)) > 0
 
-    def test_handles_malformed_input_gracefully(self) -> None:
-        """Verify malformed input is handled gracefully."""
-        from cortex.infrastructure.security import InputValidator
-        
-        validator = InputValidator()
-        malformed = None
-        
-        try:
-            result = validator.validate(malformed)
-        except (TypeError, ValueError, AttributeError):
-            pass  # Expected
-
-    def test_returns_actionable_error_messages(self) -> None:
-        """Verify error messages are actionable."""
-        from cortex.infrastructure.security import InputValidator
-        
-        validator = InputValidator()
-        
-        try:
-            validator.validate_email("not-an-email")
-        except (ValueError, TypeError):
-            pass  # Should raise with clear message

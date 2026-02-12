@@ -18,9 +18,10 @@ from cortex.models.phase_detail_schema import (
 )
 
 
-# Paths
-TEMPLATE_DIR = Path(__file__).parent.parent.parent.parent / "cortex-registry/_cortex-master/dashboard/templates"
-OUTPUT_DIR = Path(__file__).parent.parent.parent.parent / "cortex-registry/_cortex-master/dashboard/phases"
+# Paths - resolve from workspace root (go up 2 levels from tests/integration/)
+_workspace_root = Path(__file__).parent.parent.parent
+TEMPLATE_DIR = _workspace_root / "cortex-registry/_cortex-master/dashboard/templates"
+OUTPUT_DIR = _workspace_root / "cortex-registry/_cortex-master/dashboard/phases"
 
 
 @pytest.fixture
@@ -311,7 +312,7 @@ def test_render_phase_01_html(phase_01_data):
     print(f"   Size: {len(html)} bytes")
     print(f"   Objectives: {len(phase_01_data.objectives)}")
     print(f"   Features: {len(phase_01_data.key_features)}")
-    print(f"   Diagrams: {phase_01_data.architecture.get_diagram_count()}")
+    print(f"   Diagrams: {len(phase_01_data.architecture.diagrams)}")
     print(f"   Tests: {phase_01_data.testing.test_count}")
     
     # Validate file was written

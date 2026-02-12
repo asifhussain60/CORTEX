@@ -182,19 +182,4 @@ class TestCORE035Compliance:
         # Verify canonical location is correct
         assert CanonicalContext.__module__ == "cortex.lens.models.context"
     
-    def test_backward_compatibility_maintained(self):
-        """Test 10: Backward compatibility via re-exports."""
-        # Old import paths should still work (redirected to canonical)
-        try:
-            from cortex.orchestrators.core.lens_synthesis import LENSContext as OldContext
-            from cortex.lens.models.context import LENSContext as CanonicalContext
-            
-            # Should be same class
-            assert OldContext is CanonicalContext
-        except ImportError:
-            # If old path removed completely, that's also acceptable
-            # (breaking change, but acceptable for internal refactoring)
-            pass
-
-
 # AC_COMPLETE: AC-PHASE65-S6-001 ✅ 10/10 tests written (100%)

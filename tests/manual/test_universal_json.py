@@ -14,7 +14,3 @@ def get_universal_dashboard_generator(): pass
 def get_business_language_orchestrator(): pass
 
 
-def test_universal_dashboard_json_generation():
-    """Test that universal dashboard generates proper JSON data."""
-    # This test is skipped during Phase 38.0 remediation
-    pass

@@ -12,16 +12,16 @@ Purpose: Enable users to define and manage custom architectural patterns via YAM
 Tests Target: 12 tests (pattern loading, schema validation, registry operations)
 """
 
-import json
-import yaml
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass, field, asdict
-from enum import Enum
 import hashlib
+import json
+from dataclasses import asdict, dataclass, field
 from datetime import datetime
-import jsonschema
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
+import jsonschema
+import yaml
 
 # ============================================================================
 # Enums and Constants
@@ -56,7 +56,7 @@ class DetectionRule:
     confidence_threshold: float = 0.75
     ast_patterns: List[Dict[str, Any]] = field(default_factory=list)
     semantic_rules: List[Dict[str, Any]] = field(default_factory=list)
-    
+
     def __post_init__(self):
         """Validate confidence threshold."""
         if not 0.0 <= self.confidence_threshold <= 1.0:
@@ -84,24 +84,24 @@ class PatternMetadata:
     updated_at: str = field(default_factory=lambda: datetime.utcnow().isoformat())
     author: str = ""
     version: str = "1.0"
-    
+
     def __post_init__(self):
         """Validate pattern metadata."""
         if not self.id or not isinstance(self.id, str):
             raise ValueError("Pattern ID must be a non-empty string")
-        
+
         if not self.name or not isinstance(self.name, str):
             raise ValueError("Pattern name must be a non-empty string")
-        
+
         if not isinstance(self.category, PatternCategory):
             raise ValueError(f"Invalid pattern category: {self.category}")
-        
+
         if not 0 <= self.impact_score <= 10:
             raise ValueError("Impact score must be between 0 and 10")
-        
+
         if not 0 <= self.effort_score <= 10:
             raise ValueError("Effort score must be between 0 and 10")
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         data = asdict(self)
@@ -112,7 +112,7 @@ class PatternMetadata:
             if self.detection_rules.type:
                 data['detection_rules']['type'] = self.detection_rules.type.value
         return data
-    
+
     def compute_hash(self) -> str:
         """Compute hash of pattern for versioning."""
         data = json.dumps(self.to_dict(), sort_keys=True)
@@ -125,10 +125,10 @@ class PatternMetadata:
 
 class CustomPatternRegistry:
     """Registry for managing custom pattern definitions."""
-    
+
     def __init__(self, registry_path: Optional[Path] = None):
         """Initialize pattern registry.
-        
+
         Args:
             registry_path: Path to registry directory (defaults to cortex/intelligence/patterns/registry)
         """
@@ -136,7 +136,7 @@ class CustomPatternRegistry:
         self.patterns: Dict[str, PatternMetadata] = {}
         self._schema_validator: Optional[jsonschema.Draft7Validator] = None
         self._load_schema()
-    
+
     def _load_schema(self) -> None:
         """Load JSON schema from schema.yaml."""
         schema_file = Path(__file__).parent / "schema.yaml"
@@ -147,91 +147,91 @@ class CustomPatternRegistry:
                     self._schema_validator = jsonschema.Draft7Validator(
                         schema_data['json_schema']
                     )
-    
+
     def validate_pattern(self, pattern_data: Dict[str, Any]) -> Tuple[bool, List[str]]:
         """Validate pattern definition against schema.
-        
+
         Args:
             pattern_data: Pattern definition to validate
-        
+
         Returns:
             Tuple of (is_valid, error_messages)
         """
         if not self._schema_validator:
             return True, []
-        
+
         errors = []
         for error in self._schema_validator.iter_errors(pattern_data):
             errors.append(f"{'.'.join(str(p) for p in error.path)}: {error.message}")
-        
+
         return len(errors) == 0, errors
-    
+
     def load_from_yaml(self, yaml_path: Path) -> Tuple[bool, str, Optional[PatternMetadata]]:
         """Load pattern from YAML file.
-        
+
         Args:
             yaml_path: Path to YAML file
-        
+
         Returns:
             Tuple of (success, message, pattern_metadata)
         """
         try:
             with open(yaml_path) as f:
                 data = yaml.safe_load(f)
-            
+
             # Validate against schema
             is_valid, errors = self.validate_pattern(data)
             if not is_valid:
                 return False, f"Validation errors: {', '.join(errors)}", None
-            
+
             # Create pattern metadata
             pattern = self._dict_to_pattern(data)
             self.patterns[pattern.id] = pattern
             return True, f"Pattern '{pattern.id}' loaded successfully", pattern
-        
+
         except FileNotFoundError:
             return False, f"File not found: {yaml_path}", None
         except yaml.YAMLError as e:
             return False, f"YAML parse error: {str(e)}", None
         except Exception as e:
             return False, f"Error loading pattern: {str(e)}", None
-    
+
     def load_from_json(self, json_path: Path) -> Tuple[bool, str, Optional[PatternMetadata]]:
         """Load pattern from JSON file.
-        
+
         Args:
             json_path: Path to JSON file
-        
+
         Returns:
             Tuple of (success, message, pattern_metadata)
         """
         try:
             with open(json_path) as f:
                 data = json.load(f)
-            
+
             # Validate against schema
             is_valid, errors = self.validate_pattern(data)
             if not is_valid:
                 return False, f"Validation errors: {', '.join(errors)}", None
-            
+
             # Create pattern metadata
             pattern = self._dict_to_pattern(data)
             self.patterns[pattern.id] = pattern
             return True, f"Pattern '{pattern.id}' loaded successfully", pattern
-        
+
         except FileNotFoundError:
             return False, f"File not found: {json_path}", None
         except json.JSONDecodeError as e:
             return False, f"JSON parse error: {str(e)}", None
         except Exception as e:
             return False, f"Error loading pattern: {str(e)}", None
-    
+
     def register_pattern(self, pattern: PatternMetadata) -> Tuple[bool, str]:
         """Register a custom pattern.
-        
+
         Args:
             pattern: Pattern metadata to register
-        
+
         Returns:
             Tuple of (success, message)
         """
@@ -241,71 +241,71 @@ class CustomPatternRegistry:
             is_valid, errors = self.validate_pattern(pattern_dict)
             if not is_valid:
                 return False, f"Validation errors: {', '.join(errors)}"
-            
+
             # Check for duplicate
             if pattern.id in self.patterns:
                 return False, f"Pattern '{pattern.id}' already exists"
-            
+
             self.patterns[pattern.id] = pattern
             return True, f"Pattern '{pattern.id}' registered successfully"
-        
+
         except Exception as e:
             return False, f"Error registering pattern: {str(e)}"
-    
+
     def get_pattern(self, pattern_id: str) -> Optional[PatternMetadata]:
         """Get pattern by ID.
-        
+
         Args:
             pattern_id: Pattern identifier
-        
+
         Returns:
             Pattern metadata or None if not found
         """
         return self.patterns.get(pattern_id)
-    
+
     def get_patterns_by_category(self, category: PatternCategory) -> List[PatternMetadata]:
         """Get patterns by category.
-        
+
         Args:
             category: Pattern category
-        
+
         Returns:
             List of patterns in category
         """
         return [p for p in self.patterns.values() if p.category == category]
-    
+
     def get_patterns_by_tag(self, tag: str) -> List[PatternMetadata]:
         """Get patterns by tag.
-        
+
         Args:
             tag: Search tag
-        
+
         Returns:
             List of patterns with tag
         """
         return [p for p in self.patterns.values() if tag in p.tags]
-    
+
     def list_patterns(self) -> List[PatternMetadata]:
         """List all registered patterns.
-        
+
         Returns:
             List of all patterns
         """
         return list(self.patterns.values())
-    
+
     def export_registry(self, output_path: Path, format: str = "yaml") -> Tuple[bool, str]:
         """Export registry to file.
-        
+
         Args:
             output_path: Path to output file
             format: Export format ('yaml' or 'json')
-        
+
         Returns:
             Tuple of (success, message)
         """
         try:
             output_path.parent.mkdir(parents=True, exist_ok=True)
-            
+
             data = {
                 'metadata': {
                     'exported_at': datetime.utcnow().isoformat(),
@@ -314,25 +314,25 @@ class CustomPatternRegistry:
                 },
                 'patterns': [p.to_dict() for p in self.patterns.values()]
             }
-            
+
             if format == "yaml":
                 with open(output_path, 'w') as f:
                     yaml.dump(data, f, default_flow_style=False)
             else:  # json
                 with open(output_path, 'w') as f:
                     json.dump(data, f, indent=2)
-            
+
             return True, f"Registry exported to {output_path}"
-        
+
         except Exception as e:
             return False, f"Error exporting registry: {str(e)}"
-    
+
     def _dict_to_pattern(self, data: Dict[str, Any]) -> PatternMetadata:
         """Convert dictionary to PatternMetadata.
-        
+
         Args:
             data: Pattern dictionary
-        
+
         Returns:
             PatternMetadata instance
         """
@@ -340,7 +340,7 @@ class CustomPatternRegistry:
         category = data.get('category')
         if isinstance(category, str):
             category = PatternCategory(category)
-        
+
         # Handle detection rules
         detection_rules_data = data.get('detection_rules')
         detection_rules = None
@@ -354,7 +354,7 @@ class CustomPatternRegistry:
                 ast_patterns=detection_rules_data.get('ast_patterns', []),
                 semantic_rules=detection_rules_data.get('semantic_rules', [])
             )
-        
+
         return PatternMetadata(
             id=data['id'],
             name=data['name'],

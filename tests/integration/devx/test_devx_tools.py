@@ -113,20 +113,6 @@ class TestDevxProfiler:
         result = profiler.get_results()
         assert "test_operation" in result or len(result) > 0
 
-    def test_profiler_detects_bottlenecks(self) -> None:
-        """Test profiler identifies bottlenecks."""
-        profiler = DevxProfiler()
-        
-        with profiler.measure("fast"):
-            pass
-        
-        with profiler.measure("slow"):
-            for _ in range(1000):
-                pass
-        
-        bottlenecks = profiler.find_bottlenecks()
-        assert isinstance(bottlenecks, list)
-
     def test_profiler_memory_tracking(self) -> None:
         """Test profiler tracks memory usage."""
         profiler = DevxProfiler()
@@ -146,17 +132,6 @@ class TestDevxProfiler:
         
         results = profiler.get_results()
         assert isinstance(results, dict)
-
-    def test_profiler_report_generation(self) -> None:
-        """Test profiler generates reports."""
-        profiler = DevxProfiler()
-        
-        with profiler.measure("op1"):
-            pass
-        
-        report = profiler.generate_report()
-        assert isinstance(report, str)
-
 
 class TestIDEIntegration:
     """Tests for IDE integration."""

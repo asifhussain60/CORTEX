@@ -1,0 +1,208 @@
+# =============================================================================
+# Simple Wave Template: 5-Phase Linear Pattern
+# =============================================================================
+# Use Case: Small features, bug fixes, or straightforward enhancements
+# Estimated Duration: 2-5 days
+# Complexity: Low
+# Dependencies: Minimal (linear execution)
+#
+# This template demonstrates:
+# - Simple linear dependency chain (A → B → C → D → E)
+# - Standard ROI metrics for prioritization
+# - Basic phase structure with clear objectives
+# - Minimal complexity suitable for newcomers
+#
+# How to Use:
+# 1. Copy this template to your project
+# 2. Customize phase names and descriptions
+# 3. Adjust effort estimates and ROI metrics
+# 4. Run via PlanningOrchestrator:
+#    orchestrator.execute_wave(wave_config=this_file)
+# =============================================================================
+
+wave:
+  id: "simple-wave-001"
+  name: "Simple Feature Implementation"
+  description: "Implement a straightforward feature with minimal dependencies"
+  
+  # Metadata
+  author: "Team Lead"
+  created_at: "2024-02-01"
+  estimated_duration_days: 3
+  
+  # Wave-level configuration
+  max_parallel_tracks: 1  # Linear execution
+  allow_phase_skip: false
+  rollback_on_failure: true
+  
+  # Phases: Linear A → B → C → D → E
+  phases:
+    - id: "phase-A"
+      name: "Requirements Analysis"
+      description: "Gather and document requirements for the feature"
+      
+      # Execution metadata
+      effort_hours: 4
+      priority: "high"
+      owner: "Product Manager"
+      
+      # ROI Metrics (0.0-1.0 scale)
+      roi_metrics:
+        architectural_impact: 0.3      # Low arch impact
+        efficiency_gain: 0.4           # Moderate efficiency
+        accuracy_improvement: 0.5      # Good clarity improvement
+        effort_cost: 0.2              # Low effort
+        blocking_severity: 0.8         # Blocks all other phases
+      
+      # Dependencies
+      depends_on: []  # No dependencies (starting phase)
+      
+      # Success criteria
+      exit_criteria:
+        - "Requirements documented in Markdown"
+        - "User stories defined with acceptance criteria"
+        - "Edge cases identified"
+      
+      # Deliverables
+      artifacts:
+        - "docs/requirements/feature-spec.md"
+        - "docs/requirements/user-stories.md"
+    
+    - id: "phase-B"
+      name: "Design Architecture"
+      description: "Design the technical architecture and API contracts"
+      
+      effort_hours: 6
+      priority: "high"
+      owner: "Tech Lead"
+      
+      roi_metrics:
+        architectural_impact: 0.8      # High arch impact
+        efficiency_gain: 0.5           # Moderate efficiency
+        accuracy_improvement: 0.6      # Good design clarity
+        effort_cost: 0.3              # Moderate effort
+        blocking_severity: 0.7         # Blocks implementation
+      
+      depends_on:
+        - "phase-A"  # Requires requirements
+      
+      exit_criteria:
+        - "Architecture diagram created"
+        - "API contracts defined (OpenAPI/Swagger)"
+        - "Database schema designed"
+        - "Design review completed"
+      
+      artifacts:
+        - "docs/design/architecture-diagram.png"
+        - "docs/design/api-contracts.yaml"
+        - "docs/design/database-schema.sql"
+    
+    - id: "phase-C"
+      name: "TDD Implementation"
+      description: "Implement feature using Test-Driven Development"
+      
+      effort_hours: 12
+      priority: "high"
+      owner: "Developer Team"
+      
+      roi_metrics:
+        architectural_impact: 0.6      # Good implementation quality
+        efficiency_gain: 0.7           # High efficiency gain
+        accuracy_improvement: 0.8      # TDD ensures correctness
+        effort_cost: 0.6              # Significant effort
+        blocking_severity: 0.6         # Blocks testing
+      
+      depends_on:
+        - "phase-B"  # Requires design
+      
+      exit_criteria:
+        - "All unit tests passing (≥95% coverage)"
+        - "Integration tests passing"
+        - "Code reviewed and approved"
+        - "No lint errors or warnings"
+        - "Documentation strings complete"
+      
+      artifacts:
+        - "src/feature/*.py"
+        - "tests/unit/feature/*.py"
+        - "tests/integration/feature/*.py"
+    
+    - id: "phase-D"
+      name: "QA Testing"
+      description: "Quality assurance and end-to-end testing"
+      
+      effort_hours: 8
+      priority: "high"
+      owner: "QA Team"
+      
+      roi_metrics:
+        architectural_impact: 0.2      # Low arch impact
+        efficiency_gain: 0.3           # Prevents bugs (indirect efficiency)
+        accuracy_improvement: 0.9      # High accuracy verification
+        effort_cost: 0.4              # Moderate effort
+        blocking_severity: 0.5         # Blocks deployment
+      
+      depends_on:
+        - "phase-C"  # Requires implementation
+      
+      exit_criteria:
+        - "All test cases executed"
+        - "Zero critical bugs"
+        - "Performance benchmarks met"
+        - "Security scan passed"
+        - "Regression tests passing"
+      
+      artifacts:
+        - "docs/qa/test-report.md"
+        - "docs/qa/bug-tracker-export.csv"
+        - "docs/qa/performance-results.json"
+    
+    - id: "phase-E"
+      name: "Deployment"
+      description: "Deploy feature to production with monitoring"
+      
+      effort_hours: 4
+      priority: "high"
+      owner: "DevOps Team"
+      
+      roi_metrics:
+        architectural_impact: 0.4      # Deployment automation
+        efficiency_gain: 0.8           # High user value delivery
+        accuracy_improvement: 0.7      # Monitoring ensures reliability
+        effort_cost: 0.2              # Low effort (automated)
+        blocking_severity: 0.0         # No downstream dependencies
+      
+      depends_on:
+        - "phase-D"  # Requires QA approval
+      
+      exit_criteria:
+        - "Feature deployed to production"
+        - "Monitoring dashboards configured"
+        - "Rollback plan tested"
+        - "User documentation published"
+        - "Release notes published"
+      
+      artifacts:
+        - "deployment/feature-release-notes.md"
+        - "deployment/monitoring-dashboard.json"
+        - "deployment/rollback-plan.md"
+
+# =============================================================================
+# Execution Flow Visualization (Mermaid)
+# =============================================================================
+# ```mermaid
+# graph LR
+#   A[Phase A: Requirements] --> B[Phase B: Design]
+#   B --> C[Phase C: Implementation]
+#   C --> D[Phase D: QA Testing]
+#   D --> E[Phase E: Deployment]
+# ```
+#
+# Estimated Timeline:
+# - Phase A: Day 1 (4h)
+# - Phase B: Day 1-2 (6h)
+# - Phase C: Day 2-3 (12h)
+# - Phase D: Day 3-4 (8h)
+# - Phase E: Day 4 (4h)
+# Total: 34 hours (~3 days with buffer)
+# =============================================================================

@@ -5,17 +5,18 @@ This directory provides i_orchestrator.py.
 Other interfaces (IAuditLogger, GovernanceRule) are in parent cortex.brain.core.interfaces module.
 """
 
-from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
-
 # Import from parent module (consolidation - i_audit_logger.py deleted)
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
+
+from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.brain.core.result import Result
+
 
 class IAuditLogger(ABC):
     """Interface for audit logging."""
-    
+
     @abstractmethod
     def log(
         self,
@@ -27,7 +28,7 @@ class IAuditLogger(ABC):
     ) -> Result[None]:
         """Log an audit entry."""
         pass
-    
+
     @abstractmethod
     def query(
         self,

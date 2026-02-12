@@ -14,9 +14,9 @@ WIRING: Git-backed YAML (cortex/wiring/specifications/wiring.yaml)
 See: cortex-registry/_cortex-master/phases/completed/2025/ (migration plan)
 """
 
-from typing import Dict, Any, List, Optional
-from enum import Enum
 from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
 
 class OrchestratorCategory(Enum):
@@ -37,7 +37,7 @@ class OrchestratorConfig:
     priority: int = 50
     dependencies: List[str] = None
     capabilities: List[str] = None
-    
+
     def __post_init__(self):
         if self.dependencies is None:
             self.dependencies = []
@@ -46,15 +46,18 @@ class OrchestratorConfig:
 
 
 # Orchestrator counts (from wiring.yaml specification)
-CORE_ORCHESTRATORS = 6
-DOMAIN_ORCHESTRATORS = 6
-SUPPORT_ORCHESTRATORS = 11
+# WAVE-7 TRACK-3: Support layer consolidation in progress
+# Before: 26 orchestrators (8 core + 6 domain + 12 support)
+# After: 15 orchestrators (8 core + 4 domain + 3-4 support)
+CORE_ORCHESTRATORS = 8
+DOMAIN_ORCHESTRATORS = 4
+SUPPORT_ORCHESTRATORS = 4  # Unified: Onboarding, Analysis, Quality, Discovery
 ALL_ORCHESTRATORS = CORE_ORCHESTRATORS + DOMAIN_ORCHESTRATORS + SUPPORT_ORCHESTRATORS
 
 
 def get_orchestrator_count_by_category() -> Dict[str, int]:
     """Get orchestrator counts by category.
-    
+
     Returns:
         Dictionary with counts per category.
     """
@@ -72,7 +75,7 @@ __all__ = [
     "OrchestratorCategory",
     # Constants
     "ALL_ORCHESTRATORS",
-    "CORE_ORCHESTRATORS", 
+    "CORE_ORCHESTRATORS",
     "DOMAIN_ORCHESTRATORS",
     "SUPPORT_ORCHESTRATORS",
     # Functions

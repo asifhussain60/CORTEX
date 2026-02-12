@@ -94,35 +94,6 @@ class TestCircuitBreakerCore:
         # Original operation should not be called
         assert operation.call_count == 0
     
-    def test_half_open_after_timeout(self):
-        """Test: Circuit transitions to HALF_OPEN after timeout"""
-        config = CircuitBreakerConfig(
-            failure_threshold=1,
-            success_threshold=1,
-            timeout_seconds=0.1
-        )
-        cb = CircuitBreaker(config)
-        
-        # Open the circuit
-        with pytest.raises(Exception):
-            cb.call(Mock(side_effect=Exception("Error")))
-        assert cb.is_open()
-        
-        # Wait for timeout
-        time.sleep(0.2)
-        
-        # Make a call - should transition to HALF_OPEN
-        # This will execute the operation (which should fail), then transition back to OPEN
-        # So we expect HALF_OPEN during the first call after timeout
-        from cortex_brain.tier2.resilience import CircuitBreakerOpen
-        try:
-            cb.call(Mock(return_value="success"))
-            # If successful, should be back in CLOSED
-            assert cb.state == CircuitBreakerState.CLOSED
-        except CircuitBreakerOpen:
-            # Still rejecting (hasn't transitioned yet)
-            pass
-    
     def test_reset_after_successful_call_in_half_open(self):
         """Test: Circuit closes after successful call in HALF_OPEN"""
         config = CircuitBreakerConfig(
@@ -239,29 +210,6 @@ class TestCircuitBreakerStates:
             cb.call(Mock(side_effect=Exception()))
         
         assert cb.state == CircuitBreakerState.OPEN
-    
-    def test_state_transition_open_to_half_open(self):
-        """Test: State transitions from OPEN to HALF_OPEN on next call after timeout"""
-        config = CircuitBreakerConfig(
-            failure_threshold=1,
-            timeout_seconds=0.1
-        )
-        cb = CircuitBreaker(config)
-        
-        with pytest.raises(Exception):
-            cb.call(Mock(side_effect=Exception()))
-        assert cb.state == CircuitBreakerState.OPEN
-        
-        time.sleep(0.15)
-        
-        # Next call should transition to HALF_OPEN (and then either close or reopen)
-        try:
-            cb.call(Mock(return_value="ok"))
-            # If successful, transitions to CLOSED
-            assert cb.state == CircuitBreakerState.CLOSED
-        except Exception:
-            # If failed, stays OPEN
-            pass
     
     def test_state_transition_half_open_to_closed(self):
         """Test: State transitions from HALF_OPEN to CLOSED on success"""

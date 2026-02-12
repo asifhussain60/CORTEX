@@ -11,13 +11,13 @@ Components:
 - ValidationError: Custom exception for validation failures
 """
 
+import json
+import logging
 import re
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Dict, List, Optional, Set, Any
-import json
-import logging
+from typing import Any, Dict, List, Optional, Set
 
 from cortex.orchestrators.core.governance_registry import GovernanceRegistry
 
@@ -115,7 +115,7 @@ class ValidationResult:
 class InputValidator:
     """
     Main validator for LLM inputs.
-    
+
     Implements:
     - AC-VALIDATE-001: Intent canonicalization
     - AC-VALIDATE-002: AC-ID existence check
@@ -126,7 +126,7 @@ class InputValidator:
 
     # AC-ID pattern: AC-{CATEGORY}-{NNN}
     AC_ID_PATTERN = re.compile(r"^AC-[A-Z0-9]+-\d{3}$")
-    
+
     # Common intent canonicalization mappings
     INTENT_MAPPINGS = {
         "impl": "implement",
@@ -156,24 +156,24 @@ class InputValidator:
     def validate_input(self, input_text: str, input_id: str = None) -> ValidationResult:
         """
         Comprehensive input validation orchestrator.
-        
+
         Applies all validation checks in sequence:
         1. Intent canonicalization (AC-VALIDATE-001)
         2. AC-ID existence (AC-VALIDATE-002)
         3. Evidence bundle structure (AC-VALIDATE-003)
         4. Cross-reference coherence (AC-VALIDATE-004)
         5. Semantic validation (AC-VALIDATE-005)
-        
+
         Args:
             input_text: The input text to validate
             input_id: Optional unique identifier for this input
-        
+
         Returns:
             ValidationResult with all validation checks
         """
         start_time = datetime.now()
         input_id = input_id or f"input_{datetime.now().isoformat()}"
-        
+
         result = ValidationResult(
             input_id=input_id,
             valid=True,
@@ -184,19 +184,19 @@ class InputValidator:
         try:
             # AC-VALIDATE-001: Intent canonicalization
             self._validate_intent_canonicalization(input_text, result)
-            
+
             # AC-VALIDATE-002: AC-ID existence check
             self._validate_ac_id_existence(input_text, result)
-            
+
             # AC-VALIDATE-003: Evidence bundle structure
             self._validate_evidence_bundle_structure(input_text, result)
-            
+
             # AC-VALIDATE-004: Cross-reference coherence
             self._validate_cross_reference_coherence(input_text, result)
-            
+
             # AC-VALIDATE-005: Semantic output validation
             self._validate_semantic_output(input_text, result)
-            
+
         except Exception as e:
             self.logger.error(f"Validation error for {input_id}: {str(e)}")
             result.errors.append(ValidationError(
@@ -208,7 +208,7 @@ class InputValidator:
 
         # Set final validity based on critical errors
         result.valid = not result.has_errors()
-        
+
         # Calculate validation time
         result.validation_time_ms = (datetime.now() - start_time).total_seconds() * 1000
 
@@ -222,13 +222,13 @@ class InputValidator:
         return result
 
     def _validate_intent_canonicalization(
-        self, 
-        input_text: str, 
+        self,
+        input_text: str,
         result: ValidationResult
     ) -> None:
         """
         AC-VALIDATE-001: Intent canonicalization.
-        
+
         Resolves intent ambiguity by standardizing user intent to canonical form.
         Maps colloquial terms to standard intent types.
         """
@@ -266,12 +266,12 @@ class InputValidator:
     ) -> None:
         """
         AC-VALIDATE-002: AC-ID existence check.
-        
+
         Verifies that all referenced AC-IDs exist in the governance registry.
         """
         # Find all AC-IDs in the input
         ac_ids = self._extract_ac_ids(input_text)
-        
+
         if not ac_ids:
             # No AC-IDs mentioned - this is fine
             result.metadata["ac_ids_found"] = 0
@@ -302,16 +302,16 @@ class InputValidator:
     ) -> None:
         """
         AC-VALIDATE-003: Evidence bundle pre-check.
-        
+
         Validates structure of evidence bundles mentioned in input.
         """
         # Look for evidence bundle patterns in the input
         # Evidence bundles typically contain JSON or structured data
-        
+
         try:
             # Try to find JSON structures
             json_patterns = re.findall(r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}', input_text)
-            
+
             for json_str in json_patterns:
                 try:
                     json.loads(json_str)
@@ -325,7 +325,7 @@ class InputValidator:
                     ))
 
             result.metadata["evidence_bundles_checked"] = len(json_patterns)
-            
+
         except Exception as e:
             result.warnings.append(ValidationError(
                 code="EVIDENCE_CHECK_ERROR",
@@ -340,11 +340,11 @@ class InputValidator:
     ) -> None:
         """
         AC-VALIDATE-004: Cross-reference coherence.
-        
+
         Verifies that AC-ID references are consistent and resolve correctly.
         """
         ac_ids = self._extract_ac_ids(input_text)
-        
+
         if not ac_ids:
             return
 
@@ -373,7 +373,7 @@ class InputValidator:
     ) -> None:
         """
         AC-VALIDATE-005: Semantic output validation.
-        
+
         Validates semantic correctness of the input (no contradictions, etc.)
         """
         # Check for common semantic issues
@@ -418,11 +418,11 @@ class InputValidator:
     def _canonicalize_intent(self, input_text: str) -> CanonicalIntent:
         """
         Convert colloquial input intent to canonical form.
-        
+
         Returns CanonicalIntent with standardized intent type.
         """
         text_lower = input_text.lower()
-        
+
         # Default intent type
         intent_type = "query"
         confidence_score = 0.5
@@ -432,7 +432,7 @@ class InputValidator:
         # First check for exact word boundaries (highest priority)
         best_match = None
         best_score = -1  # Start at -1 so we can prioritize word boundaries
-        
+
         for colloquial, canonical in self.INTENT_MAPPINGS.items():
             if colloquial in text_lower:
                 # Check if it's a complete word (word boundary) - give it higher priority
@@ -441,11 +441,11 @@ class InputValidator:
                     match_score = len(colloquial) * 10  # 10x priority for word boundary
                 else:
                     match_score = len(colloquial)
-                
+
                 if match_score > best_score:
                     best_score = match_score
                     best_match = canonical
-        
+
         if best_match:
             intent_type = best_match
             confidence_score = 0.9
@@ -492,12 +492,12 @@ class InputValidator:
     def _has_contradictions(self, text: str) -> bool:
         """Detect obvious contradictions in text"""
         text_lower = text.lower()
-        
+
         contradictions = [
             ("must not" in text_lower and "must" in text_lower),
             ("cannot" in text_lower and "should" in text_lower and "required" in text_lower),
         ]
-        
+
         return any(contradictions)
 
     def _has_circular_references(self, ac_ids: Set[str]) -> bool:
@@ -550,13 +550,13 @@ class InputValidator:
     def _validate_ac_id_format(self, ac_ids: Set[str]) -> bool:
         """
         AC-VALIDATE-006: AC-ID format validation.
-        
+
         Validates that all AC-IDs follow the pattern AC-{CATEGORY}-{NNN}
         or AC-{CATEGORY}-{NNN}-{NN} for sub-requirements.
-        
+
         Args:
             ac_ids: Set of AC-IDs to validate
-        
+
         Returns:
             True if all AC-IDs are valid format, False otherwise
         """
@@ -580,14 +580,14 @@ class InputValidator:
     ) -> bool:
         """
         AC-VALIDATE-007: Phase alignment enforcement.
-        
+
         Validates that request AC-IDs match the current phase.
         E.g., PHASE-02 requests should only reference AC-IDs from PHASE-02.
-        
+
         Args:
             ac_ids: Set of AC-IDs to validate
             current_phase: Current phase (e.g., "PHASE-02")
-        
+
         Returns:
             True if all AC-IDs align with current phase, False otherwise
         """
@@ -636,13 +636,13 @@ class InputValidator:
     def _validate_no_ac_id_conflicts(self, ac_ids: Set[str]) -> bool:
         """
         AC-VALIDATE-008: Request contradiction detection.
-        
+
         Detects conflicting or contradictory AC-IDs in the request.
         Checks for semantic contradictions and mutual exclusivity.
-        
+
         Args:
             ac_ids: Set of AC-IDs to validate
-        
+
         Returns:
             True if no contradictions detected, False if conflicts found
         """
@@ -661,13 +661,13 @@ class InputValidator:
                         if conflicts:
                             if ac_id not in conflict_map:
                                 conflict_map[ac_id] = set()
-                            
+
                             for conflict in conflicts:
                                 if isinstance(conflict, dict):
                                     conflict_ac_id = conflict.get("ac_id")
                                 else:
                                     conflict_ac_id = str(conflict)
-                                
+
                                 if conflict_ac_id:
                                     conflict_map[ac_id].add(conflict_ac_id)
                 except Exception:
@@ -689,12 +689,12 @@ class InputValidator:
     def _validate_schema_compliance(self, request_data: Any) -> bool:
         """
         AC-VALIDATE-009: Schema validation.
-        
+
         Validates that the request matches the expected orchestrator input schema.
-        
+
         Args:
             request_data: The request data to validate
-        
+
         Returns:
             True if schema is valid, False otherwise
         """
@@ -711,7 +711,7 @@ class InputValidator:
             if isinstance(request_data, dict):
                 # Required fields for a valid request
                 required_fields = ["action", "context"]
-                
+
                 for field in required_fields:
                     if field not in request_data:
                         return False
@@ -744,12 +744,12 @@ class InputValidator:
     def _validate_backward_compatibility(self, version: Optional[str] = None) -> bool:
         """
         AC-VALIDATE-010: Backward compatibility checks.
-        
+
         Validates version compatibility of the request with CORTEX components.
-        
+
         Args:
             version: Version string to validate (e.g., "1.0", "2.1")
-        
+
         Returns:
             True if version is compatible, False otherwise
         """
@@ -759,11 +759,11 @@ class InputValidator:
         try:
             # Current CORTEX version
             current_version = "1.0"
-            
+
             # Parse version string
             version_pattern = r"^(\d+)\.(\d+)(?:\.(\d+))?$"
             match = re.match(version_pattern, version.strip())
-            
+
             if not match:
                 return False  # Invalid version format
 

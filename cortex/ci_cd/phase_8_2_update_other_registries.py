@@ -35,29 +35,29 @@ print()
 for registry_name, config in updates.items():
     print(f"\n📦 {registry_name}")
     print("-" * 40)
-    
+
     for file_path in config["files"]:
         full_path = repo_root / file_path
-        
+
         if not full_path.exists():
             print(f"  ❌ NOT FOUND: {file_path}")
             failed.append(file_path)
             continue
-        
+
         try:
             content = full_path.read_text()
             original = content
-            
+
             # Replace import statement
             content = content.replace(config["from"], config["to"])
-            
+
             if content != original:
                 full_path.write_text(content)
                 print(f"  ✅ UPDATED: {file_path}")
                 updated += 1
             else:
                 print(f"  ⚠️  NO CHANGES: {file_path}")
-                
+
         except Exception as e:
             print(f"  ❌ ERROR: {file_path} - {e}")
             failed.append(file_path)

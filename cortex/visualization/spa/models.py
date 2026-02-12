@@ -10,12 +10,12 @@ AC-ID: SPA-SUITE-001
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Dict, List, Optional, Any
+from typing import Any, Dict, List, Optional
 
 
 class Severity(Enum):
     """Severity levels for findings and use cases."""
-    
+
     INFO = "info"
     LOW = "low"
     MEDIUM = "medium"
@@ -25,7 +25,7 @@ class Severity(Enum):
 
 class UseCasePersona(Enum):
     """Target personas for use cases."""
-    
+
     LEADERSHIP = "leadership"
     PRODUCTION_OWNER = "production_owner"
     ENGINEER = "engineer"
@@ -35,7 +35,7 @@ class UseCasePersona(Enum):
 
 class UseCaseCategory(Enum):
     """Categories for use case classification."""
-    
+
     DELIVERY = "delivery"
     RISK = "risk"
     COMPLIANCE = "compliance"
@@ -49,9 +49,9 @@ class UseCaseCategory(Enum):
 class UseCase:
     """
     Use case definition for dashboard.
-    
+
     Supports GPT-specified filtering by persona, category, severity.
-    
+
     Attributes:
         id: Unique identifier
         title: Short title (displayed)
@@ -64,7 +64,7 @@ class UseCase:
         actions: Recommended actions
         related_tabs: Tabs where related data can be found
     """
-    
+
     id: str
     title: str
     summary: str
@@ -80,7 +80,7 @@ class UseCase:
 @dataclass
 class VulnerabilityFinding:
     """Security vulnerability finding."""
-    
+
     id: str
     title: str
     description: str
@@ -94,7 +94,7 @@ class VulnerabilityFinding:
 @dataclass
 class DependencyInfo:
     """Package dependency information."""
-    
+
     name: str
     version: str
     latest_version: Optional[str] = None
@@ -103,10 +103,10 @@ class DependencyInfo:
     vulnerability_count: int = 0
 
 
-@dataclass 
+@dataclass
 class QualityMetric:
     """Code quality metric."""
-    
+
     name: str
     value: float
     threshold: Optional[float] = None
@@ -116,7 +116,7 @@ class QualityMetric:
 @dataclass
 class ArchitectureLayer:
     """Architecture layer definition."""
-    
+
     name: str
     module_count: int
     loc: int
@@ -127,7 +127,7 @@ class ArchitectureLayer:
 @dataclass
 class TestingMetrics:
     """Testing coverage and metrics."""
-    
+
     coverage_pct: float
     unit_tests: int
     integration_tests: int
@@ -139,7 +139,7 @@ class TestingMetrics:
 @dataclass
 class Recommendation:
     """Actionable recommendation."""
-    
+
     id: str
     title: str
     description: str
@@ -153,10 +153,10 @@ class Recommendation:
 class RepoDashboardData:
     """
     Complete dashboard data model for a repository.
-    
+
     This model is embedded as JSON into each repo's dashboard HTML.
     Matches GPT specification section 3.
-    
+
     Attributes:
         repo_slug: URL-safe identifier
         display_name: Human-readable name
@@ -180,13 +180,13 @@ class RepoDashboardData:
         use_cases: Use case definitions
         recommendations: Actionable recommendations
     """
-    
+
     # Core identifiers
     repo_slug: str
     display_name: str
     owner: str
     primary_language: str
-    
+
     # Summary metrics
     health_score: int
     risk_score: int
@@ -194,12 +194,12 @@ class RepoDashboardData:
     files: int
     services_count: int
     coverage_pct: float
-    
+
     # Metadata
     last_analyzed_at: str
     version: str = "8.0"
     tags: List[str] = field(default_factory=list)
-    
+
     # Tab data
     overview_metrics: Dict[str, Any] = field(default_factory=dict)
     architecture: List[ArchitectureLayer] = field(default_factory=list)
@@ -215,11 +215,11 @@ class RepoDashboardData:
 class RepoManifestEntry:
     """
     Landing page manifest entry for a repository.
-    
+
     Embedded into landing page for tile rendering.
     Matches GPT specification section 3.
     """
-    
+
     slug: str
     display_name: str
     owner: str
@@ -240,7 +240,7 @@ class RepoManifestEntry:
 class DashboardSuiteConfig:
     """
     Configuration for dashboard suite generation.
-    
+
     Attributes:
         repos: List of repo manifest entries
         output_dir: Output directory path
@@ -249,7 +249,7 @@ class DashboardSuiteConfig:
         version: CORTEX version
         logo_path: Path to logo image
     """
-    
+
     repos: List[RepoManifestEntry]
     output_dir: str
     title: str = "CORTEX Repository Intelligence"
@@ -261,12 +261,12 @@ class DashboardSuiteConfig:
 def to_dict(obj: Any) -> Any:
     """
     Convert dataclass to dictionary recursively.
-    
+
     Handles nested dataclasses, enums, and datetime objects.
-    
+
     Args:
         obj: Object to convert
-        
+
     Returns:
         Dictionary representation
     """

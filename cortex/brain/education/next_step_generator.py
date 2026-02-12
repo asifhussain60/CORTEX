@@ -15,10 +15,10 @@ Authority: AC-EDUCATIONAL-INTERACTION-001, PHASE-22-ASK-MODE-SYSTEM.yaml
 Rules: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings)
 """
 
+import re
 from dataclasses import dataclass
 from enum import Enum
-from typing import List, Dict, Set, Optional
-import re
+from typing import Dict, List, Optional, Set
 
 
 class KnowledgeLevel(Enum):
@@ -60,13 +60,13 @@ class NextStepContext:
 class NextStepGenerator:
     """
     Generates intelligent next-step suggestions for educational interaction.
-    
+
     Strategy:
     1. Option #1: Always deeper dive on current topic
     2. Options #2-3: Related concepts (lateral exploration)
     3. Option #4: Practical example or hands-on exercise
     4. Option #5: Context-dependent (advanced extension, FAQ, or customization)
-    
+
     Adapts suggestions based on:
     - User knowledge level
     - Conversation history (avoid repetition)
@@ -89,52 +89,52 @@ class NextStepGenerator:
             "Wiring": ["wiring.yaml", "Orchestrator Registration", "GitBackedRegistry"],
             "CORTEX Architecture": ["Orchestrators", "Brain Components", "MCP Gateway"],
         }
-        
+
         # Common beginner topics
         self._beginner_topics: Set[str] = {
             "Getting Started", "Basic Concepts", "Overview", "Introduction"
         }
-        
+
         # Track suggested topics to avoid repetition
         self._suggested_topics: Set[str] = set()
 
     def generate_next_steps(self, context: NextStepContext) -> List[NextStepOption]:
         """
         Generate 3-5 intelligent next-step suggestions.
-        
+
         Args:
             context: Current conversation context
-            
+
         Returns:
             List of 3-5 NextStepOption objects, numbered 1-5
         """
         options: List[NextStepOption] = []
-        
+
         # Option #1: Always deeper dive on current topic
         options.append(self._generate_deeper_dive(context))
-        
+
         # Options #2-3: Related concepts
         related_options = self._generate_related_concepts(context, count=2)
         options.extend(related_options)
-        
+
         # Option #4: Practical example
         options.append(self._generate_practical_example(context))
-        
+
         # Option #5: Context-dependent (advanced/FAQ/customization)
         final_option = self._generate_context_dependent(context, len(options))
         if final_option:
             options.append(final_option)
-        
+
         # Number the options
         for i, option in enumerate(options, start=1):
             option.number = i
-        
+
         return options[:5]  # Cap at 5 options
 
     def _generate_deeper_dive(self, context: NextStepContext) -> NextStepOption:
         """Generate deeper dive option on current topic."""
         topic = context.current_topic
-        
+
         if context.knowledge_level == KnowledgeLevel.BEGINNER:
             title = f"Learn more about {topic} basics"
             description = f"Understand the fundamentals of {topic} and how it fits into CORTEX"
@@ -147,7 +147,7 @@ class NextStepGenerator:
             title = f"Deep dive into {topic} architecture"
             description = f"Examine {topic}'s design patterns, extension points, and advanced usage"
             time = "15 min"
-        
+
         return NextStepOption(
             number=1,
             title=title,
@@ -157,38 +157,38 @@ class NextStepGenerator:
         )
 
     def _generate_related_concepts(
-        self, 
-        context: NextStepContext, 
+        self,
+        context: NextStepContext,
         count: int = 2
     ) -> List[NextStepOption]:
         """Generate related concept options."""
         options: List[NextStepOption] = []
         topic = context.current_topic
-        
+
         # Get related topics
         related = self._related_topics.get(topic, [])
-        
+
         # Filter out topics already discussed
         available = [
-            t for t in related 
+            t for t in related
             if t not in context.conversation_history and t not in self._suggested_topics
         ]
-        
+
         # If no specific mappings, infer related topics
         if not available:
             available = self._infer_related_topics(topic, context)
-        
+
         # Generate options for up to 'count' topics
         for i, related_topic in enumerate(available[:count]):
             self._suggested_topics.add(related_topic)
-            
+
             if context.knowledge_level == KnowledgeLevel.BEGINNER:
                 title = f"What is {related_topic}?"
                 description = f"Learn about {related_topic} and its role in CORTEX"
             else:
                 title = f"How {related_topic} integrates with {topic}"
                 description = f"Understand the relationship between {topic} and {related_topic}"
-            
+
             options.append(NextStepOption(
                 number=0,  # Will be set later
                 title=title,
@@ -196,7 +196,7 @@ class NextStepGenerator:
                 step_type=StepType.RELATED_CONCEPT,
                 estimated_time="7 min"
             ))
-        
+
         # If we don't have enough, add a generic exploration option
         while len(options) < count:
             options.append(NextStepOption(
@@ -206,13 +206,13 @@ class NextStepGenerator:
                 step_type=StepType.RELATED_CONCEPT,
                 estimated_time="8 min"
             ))
-        
+
         return options[:count]
 
     def _generate_practical_example(self, context: NextStepContext) -> NextStepOption:
         """Generate practical example option."""
         topic = context.current_topic
-        
+
         # Check if topic is an orchestrator
         if "Orchestrator" in topic:
             title = f"See {topic} in action"
@@ -223,7 +223,7 @@ class NextStepGenerator:
         else:
             title = f"Practical example: {topic}"
             description = f"See {topic} in a real CORTEX workflow with code examples"
-        
+
         return NextStepOption(
             number=0,
             title=title,
@@ -233,13 +233,13 @@ class NextStepGenerator:
         )
 
     def _generate_context_dependent(
-        self, 
+        self,
         context: NextStepContext,
         current_count: int
     ) -> Optional[NextStepOption]:
         """Generate context-dependent final option."""
         topic = context.current_topic
-        
+
         # For beginners, offer FAQ
         if context.knowledge_level == KnowledgeLevel.BEGINNER:
             return NextStepOption(
@@ -249,7 +249,7 @@ class NextStepGenerator:
                 step_type=StepType.FAQ,
                 estimated_time="5 min"
             )
-        
+
         # For advanced users, offer extension/customization
         elif context.knowledge_level == KnowledgeLevel.ADVANCED:
             if "Orchestrator" in topic:
@@ -268,7 +268,7 @@ class NextStepGenerator:
                     step_type=StepType.ADVANCED_EXTENSION,
                     estimated_time="12 min"
                 )
-        
+
         # For intermediate, context-dependent
         else:
             if len(context.conversation_history) > 3:
@@ -291,60 +291,60 @@ class NextStepGenerator:
                 )
 
     def _infer_related_topics(
-        self, 
-        topic: str, 
+        self,
+        topic: str,
         context: NextStepContext
     ) -> List[str]:
         """Infer related topics when no explicit mapping exists."""
         related = []
-        
+
         # If it's an orchestrator, suggest other orchestrators
         if "Orchestrator" in topic:
             related = ["Wiring Configuration", "IOrchestrator Interface", "MCP Integration"]
-        
+
         # If it's an MCP tool, suggest tool usage
         elif "cortex_" in topic.lower():
             related = ["MCP Server", "Tool Discovery", "Other MCP Tools"]
-        
+
         # If it's architecture, break down into components
         elif "architecture" in topic.lower():
             related = ["Orchestrators", "Brain Components", "LENS Protocol"]
-        
+
         # Generic fallback
         else:
             related = ["CORTEX Overview", "Getting Started Guide", "Common Workflows"]
-        
+
         return related
 
     def format_options(self, options: List[NextStepOption]) -> str:
         """
         Format options for display to user.
-        
+
         Args:
             options: List of NextStepOption objects
-            
+
         Returns:
             Formatted string with numbered options
         """
         lines = ["**What would you like to explore next?**\n"]
-        
+
         for option in options:
             lines.append(f"{option.number}. **{option.title}** ({option.estimated_time})")
             lines.append(f"   {option.description}\n")
-        
+
         return "\n".join(lines)
 
 
 # Example usage for testing
 if __name__ == "__main__":
     generator = NextStepGenerator()
-    
+
     context = NextStepContext(
         current_topic="MasterOrchestrator",
         knowledge_level=KnowledgeLevel.BEGINNER,
         user_query="What is MasterOrchestrator?",
         conversation_history=[]
     )
-    
+
     options = generator.generate_next_steps(context)
     print(generator.format_options(options))

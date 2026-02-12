@@ -6,7 +6,7 @@ Author: CORTEX Framework
 """
 
 from dataclasses import dataclass, field
-from typing import List, Optional, Dict, Any
+from typing import Any, Dict, List, Optional
 
 
 @dataclass
@@ -36,25 +36,25 @@ class ApprovalGateLogic:
     gate_id: str
     conditions: list = field(default_factory=list)
     decision_history: Dict[str, ApprovalDecision] = field(default_factory=dict)
-    
+
     def evaluate(self) -> bool:
         """Evaluate approval gate."""
         return True
-    
+
     def evaluate_approval(self, assessment: Any, operation_id: str, alternatives: Optional[List] = None) -> ApprovalDecision:
         """Evaluate approval based on complexity assessment.
-        
+
         Args:
             assessment: Complexity assessment object with complexity_level
             operation_id: Operation ID for tracking
             alternatives: Optional list of alternative recommendations
-            
+
         Returns:
             ApprovalDecision with approval status and requirements
         """
         alternatives = alternatives or []
         complexity_level = getattr(assessment, 'complexity_level', 'unknown')
-        
+
         # Convert alternative dict list to AlternativeRecommendation objects
         alt_recommendations = []
         for alt in alternatives:
@@ -67,7 +67,7 @@ class ApprovalGateLogic:
                 ))
             else:
                 alt_recommendations.append(alt)
-        
+
         if complexity_level == 'trivial':
             decision = ApprovalDecision(
                 approved=True,
@@ -131,18 +131,18 @@ class ApprovalGateLogic:
                 requires_confirmation=False,
                 escalated=False
             )
-        
+
         # Store in history
         self.decision_history[operation_id] = decision
         return decision
-    
+
     def check_threshold_crossing(self, prev_complexity: float, curr_complexity: float) -> Dict[str, Any]:
         """Check if complexity crosses a threshold boundary.
-        
+
         Args:
             prev_complexity: Previous complexity score (0-1)
             curr_complexity: Current complexity score (0-1)
-            
+
         Returns:
             Dictionary with crossing information
         """
@@ -157,11 +157,11 @@ class ApprovalGateLogic:
                 return 'COMPLEX'
             else:
                 return 'CRITICAL'
-        
+
         from_level = get_level(prev_complexity)
         to_level = get_level(curr_complexity)
         crossed = from_level != to_level
-        
+
         return {
             'crossed_boundary': crossed,
             'from_level': from_level,
@@ -169,13 +169,13 @@ class ApprovalGateLogic:
             'prev_complexity': prev_complexity,
             'curr_complexity': curr_complexity
         }
-    
+
     def ensure_consistency(self, decision: ApprovalDecision) -> bool:
         """Ensure approval decision is consistent with complexity level.
-        
+
         Args:
             decision: Approval decision to validate
-            
+
         Returns:
             True if decision is consistent, False otherwise
         """
@@ -183,22 +183,22 @@ class ApprovalGateLogic:
         # - Trivial/Simple: should be approved and not require confirmation
         # - Moderate: should require confirmation
         # - Complex/Critical: should be escalated and require confirmation
-        
+
         if "trivial" in decision.reason.lower() or "simple" in decision.reason.lower():
             return decision.approved and not decision.requires_confirmation
         elif "moderate" in decision.reason.lower():
             return decision.requires_confirmation
         elif "escalat" in decision.reason.lower() or "complex" in decision.reason.lower():
             return decision.escalated and decision.requires_confirmation
-        
+
         return True  # Default to consistent for unclassified
-    
+
     def handle_missing_signals(self, assessment: Any) -> ApprovalDecision:
         """Handle approval when confidence in signals is low.
-        
+
         Args:
             assessment: Assessment with low confidence signals
-            
+
         Returns:
             Conservative ApprovalDecision requiring confirmation
         """
@@ -214,22 +214,22 @@ class ApprovalGateLogic:
             )
         )
         return decision
-    
+
     def get_confirmation_request(self, decision: ApprovalDecision, description: str, operation_id: Optional[str] = None, complexity_level: Optional[str] = None) -> Optional['ConfirmationRequest']:
         """Get confirmation request if needed.
-        
+
         Args:
             decision: Approval decision
             description: Operation description for context
             operation_id: Operation ID (optional, for enrichment)
             complexity_level: Complexity level (optional, for enrichment)
-            
+
         Returns:
             ConfirmationRequest if confirmation needed, None otherwise
         """
         if not decision.requires_confirmation:
             return None
-        
+
         if decision.confirmation_request:
             # Enrich the existing confirmation request if provided
             if operation_id:
@@ -237,7 +237,7 @@ class ApprovalGateLogic:
             if complexity_level:
                 decision.confirmation_request.complexity_level = complexity_level
             return decision.confirmation_request
-        
+
         # Create a generic confirmation request
         return ConfirmationRequest(
             request_id="generic-confirmation",
@@ -246,28 +246,28 @@ class ApprovalGateLogic:
             operation_id=operation_id,
             complexity_level=complexity_level
         )
-    
+
     def get_decision_history(self, limit: Optional[int] = None) -> Dict[str, ApprovalDecision]:
         """Get decision history.
-        
+
         Args:
             limit: Maximum number of decisions to return (most recent first)
-            
+
         Returns:
             Dictionary of operation_id -> ApprovalDecision
         """
         history = self.decision_history
-        
+
         if limit:
             # Return the most recent 'limit' items
             items = list(history.items())
             return dict(items[-limit:])
-        
+
         return history
-    
+
     def get_approval_statistics(self) -> Dict[str, Any]:
         """Get approval statistics from decision history.
-        
+
         Returns:
             Dictionary with approval statistics
         """
@@ -281,12 +281,12 @@ class ApprovalGateLogic:
                 'escalation_rate': 0.0,
                 'by_complexity_level': {}
             }
-        
+
         total = len(self.decision_history)
         approved = sum(1 for d in self.decision_history.values() if d.approved)
         rejected = total - approved
         escalated = sum(1 for d in self.decision_history.values() if d.escalated)
-        
+
         # Count by complexity level from confirmation requests
         by_complexity = {}
         for decision in self.decision_history.values():
@@ -297,7 +297,7 @@ class ApprovalGateLogic:
                 by_complexity[level]['count'] += 1
                 if decision.approved:
                     by_complexity[level]['approved'] += 1
-        
+
         return {
             'total_decisions': total,
             'approved_count': approved,

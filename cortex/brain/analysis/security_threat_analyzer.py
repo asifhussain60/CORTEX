@@ -22,13 +22,13 @@ Authority: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings)
 """
 
 import ast
+import logging
 import re
+import time
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import List, Dict, Any, Optional
-import logging
-import time
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -40,25 +40,25 @@ class ThreatSeverity(Enum):
     MEDIUM = 3    # Moderate risk
     LOW = 2       # Low risk
     INFO = 1      # Informational
-    
+
     def __ge__(self, other: 'ThreatSeverity') -> bool:
         """Support >= comparison between severity levels."""
         if not isinstance(other, ThreatSeverity):
             return NotImplemented
         return self.value >= other.value
-    
+
     def __gt__(self, other: 'ThreatSeverity') -> bool:
         """Support > comparison between severity levels."""
         if not isinstance(other, ThreatSeverity):
             return NotImplemented
         return self.value > other.value
-    
+
     def __le__(self, other: 'ThreatSeverity') -> bool:
         """Support <= comparison between severity levels."""
         if not isinstance(other, ThreatSeverity):
             return NotImplemented
         return self.value <= other.value
-    
+
     def __lt__(self, other: 'ThreatSeverity') -> bool:
         """Support < comparison between severity levels."""
         if not isinstance(other, ThreatSeverity):
@@ -70,7 +70,7 @@ class ThreatSeverity(Enum):
 class ThreatFinding:
     """
     Represents a single security threat found in code.
-    
+
     Attributes:
         cwe_id: CWE identifier (e.g., "CWE-94")
         severity: ThreatSeverity level
@@ -97,7 +97,7 @@ class ThreatFinding:
 class SecurityAnalysisResult:
     """
     Result of security threat analysis.
-    
+
     Attributes:
         success: Whether analysis succeeded
         threat_findings: List of threats found
@@ -117,7 +117,7 @@ class SecurityAnalysisResult:
 class SecurityThreatAnalyzer:
     """
     Analyzes Python code for security threats and CWE vulnerabilities.
-    
+
     Combines AST inspection with regex pattern matching to detect:
     - Dangerous built-in functions (eval, exec, compile, __import__)
     - Unsafe deserialization (pickle, marshal)
@@ -125,18 +125,18 @@ class SecurityThreatAnalyzer:
     - SQL injection patterns
     - Weak cryptography
     - Path traversal issues
-    
+
     Integrates into LENS analysis pipeline (Phase 8.2):
     1. GitHistoryAnalyzer → commit history
     2. ASTAnalyzer → code structure
     3. CommentExtractor → intent hints
     4. **SecurityThreatAnalyzer** → CWE threats (NEW)
     """
-    
+
     def __init__(self) -> None:
         """Initialize SecurityThreatAnalyzer with CWE pattern library."""
         self._init_threat_patterns()
-    
+
     def _init_threat_patterns(self) -> None:
         """Initialize threat detection patterns."""
         # CWE-94: Code Injection (eval, exec, compile)
@@ -146,7 +146,7 @@ class SecurityThreatAnalyzer:
             r'\bcompile\s*\(',
             r'__import__\s*\(',
         ]
-        
+
         # CWE-95: Deserialization (pickle, marshal)
         self._cwe95_patterns = [
             r'pickle\.loads\s*\(',
@@ -155,7 +155,7 @@ class SecurityThreatAnalyzer:
             r'marshal\.load\s*\(',
             r'dill\.loads\s*\(',
         ]
-        
+
         # CWE-78: Command Injection (os.system, subprocess with shell=True)
         self._cwe78_patterns = [
             r'os\.system\s*\(',
@@ -164,7 +164,7 @@ class SecurityThreatAnalyzer:
             r'subprocess\.run.*shell\s*=\s*True',
             r'subprocess\.Popen.*shell\s*=\s*True',
         ]
-        
+
         # CWE-89: SQL Injection (string concatenation in SQL)
         self._cwe89_patterns = [
             r'(?:SELECT|INSERT)|UPDATE|DELETE).*[f"\'].*{',
@@ -172,7 +172,7 @@ class SecurityThreatAnalyzer:
             r'cursor\.execute\s*\(\s*f["\']',
             r'connection\.execute\s*\(\s*f["\']',
         ]
-        
+
         # CWE-327: Weak Cryptography (MD5, DES, weak hashes)
         self._cwe327_patterns = [
             r'hashlib\.md5\s*\(',
@@ -181,32 +181,32 @@ class SecurityThreatAnalyzer:
             r'Blowfish\s*\(',
             r'RC4\s*\(',
         ]
-        
+
         # CWE-22: Path Traversal (unsafe file operations)
         self._cwe22_patterns = [
             r'open\s*\(\s*f["\'].*{',
             r'open\s*\(\s*["\'].*\s*\+\s*',
             r'pathlib\.Path\s*\(\s*f["\'].*{',
         ]
-    
+
     def analyze_code(
-        self, 
-        code: str, 
+        self,
+        code: str,
         file_path: str = "unknown.py"
     ) -> SecurityAnalysisResult:
         """
         Analyze Python code for security threats.
-        
+
         Args:
             code: Python source code to analyze
             file_path: Path to the file (for reporting)
-            
+
         Returns:
             SecurityAnalysisResult with threat findings
         """
         start_time = time.time()
         findings: List[ThreatFinding] = []
-        
+
         try:
             if not code.strip():
                 return SecurityAnalysisResult(
@@ -215,11 +215,11 @@ class SecurityThreatAnalyzer:
                     analysis_time_ms=0.0,
                     patterns_checked=6,
                 )
-            
+
             # Parse code into AST
             tree = ast.parse(code)
             lines = code.split('\n')
-            
+
             # Check each threat pattern category
             findings.extend(self._check_cwe94(code, lines, file_path))
             findings.extend(self._check_cwe95(code, lines, file_path))
@@ -227,9 +227,9 @@ class SecurityThreatAnalyzer:
             findings.extend(self._check_cwe89(code, lines, file_path))
             findings.extend(self._check_cwe327(code, lines, file_path))
             findings.extend(self._check_cwe22(code, lines, file_path))
-            
+
             analysis_time = (time.time() - start_time) * 1000
-            
+
             return SecurityAnalysisResult(
                 success=True,
                 threat_findings=findings,
@@ -237,7 +237,7 @@ class SecurityThreatAnalyzer:
                 analysis_time_ms=analysis_time,
                 patterns_checked=6,
             )
-            
+
         except SyntaxError as e:
             analysis_time = (time.time() - start_time) * 1000
             return SecurityAnalysisResult(
@@ -257,16 +257,16 @@ class SecurityThreatAnalyzer:
                 analysis_time_ms=analysis_time,
                 patterns_checked=0,
             )
-    
+
     def _check_cwe94(
-        self, 
-        code: str, 
-        lines: List[str], 
+        self,
+        code: str,
+        lines: List[str],
         file_path: str
     ) -> List[ThreatFinding]:
         """Check for CWE-94 (Code Injection) vulnerabilities."""
         findings = []
-        
+
         for pattern in self._cwe94_patterns:
             for line_num, line in enumerate(lines, 1):
                 if re.search(pattern, line, re.IGNORECASE):
@@ -282,18 +282,18 @@ class SecurityThreatAnalyzer:
                         context={"function": self._extract_function_name(line_num, lines)},
                     )
                     findings.append(finding)
-        
+
         return findings
-    
+
     def _check_cwe95(
-        self, 
-        code: str, 
-        lines: List[str], 
+        self,
+        code: str,
+        lines: List[str],
         file_path: str
     ) -> List[ThreatFinding]:
         """Check for CWE-95 (Deserialization of Untrusted Data) vulnerabilities."""
         findings = []
-        
+
         for pattern in self._cwe95_patterns:
             for line_num, line in enumerate(lines, 1):
                 if re.search(pattern, line, re.IGNORECASE):
@@ -309,18 +309,18 @@ class SecurityThreatAnalyzer:
                         context={"function": self._extract_function_name(line_num, lines)},
                     )
                     findings.append(finding)
-        
+
         return findings
-    
+
     def _check_cwe78(
-        self, 
-        code: str, 
-        lines: List[str], 
+        self,
+        code: str,
+        lines: List[str],
         file_path: str
     ) -> List[ThreatFinding]:
         """Check for CWE-78 (Command Injection) vulnerabilities."""
         findings = []
-        
+
         for pattern in self._cwe78_patterns:
             for line_num, line in enumerate(lines, 1):
                 if re.search(pattern, line, re.IGNORECASE):
@@ -336,18 +336,18 @@ class SecurityThreatAnalyzer:
                         context={"function": self._extract_function_name(line_num, lines)},
                     )
                     findings.append(finding)
-        
+
         return findings
-    
+
     def _check_cwe89(
-        self, 
-        code: str, 
-        lines: List[str], 
+        self,
+        code: str,
+        lines: List[str],
         file_path: str
     ) -> List[ThreatFinding]:
         """Check for CWE-89 (SQL Injection) vulnerabilities."""
         findings = []
-        
+
         for pattern in self._cwe89_patterns:
             for line_num, line in enumerate(lines, 1):
                 if re.search(pattern, line, re.IGNORECASE):
@@ -363,18 +363,18 @@ class SecurityThreatAnalyzer:
                         context={"function": self._extract_function_name(line_num, lines)},
                     )
                     findings.append(finding)
-        
+
         return findings
-    
+
     def _check_cwe327(
-        self, 
-        code: str, 
-        lines: List[str], 
+        self,
+        code: str,
+        lines: List[str],
         file_path: str
     ) -> List[ThreatFinding]:
         """Check for CWE-327 (Use of a Broken or Risky Cryptographic Algorithm) vulnerabilities."""
         findings = []
-        
+
         for pattern in self._cwe327_patterns:
             for line_num, line in enumerate(lines, 1):
                 if re.search(pattern, line, re.IGNORECASE):
@@ -390,18 +390,18 @@ class SecurityThreatAnalyzer:
                         context={"function": self._extract_function_name(line_num, lines)},
                     )
                     findings.append(finding)
-        
+
         return findings
-    
+
     def _check_cwe22(
-        self, 
-        code: str, 
-        lines: List[str], 
+        self,
+        code: str,
+        lines: List[str],
         file_path: str
     ) -> List[ThreatFinding]:
         """Check for CWE-22 (Path Traversal) vulnerabilities."""
         findings = []
-        
+
         for pattern in self._cwe22_patterns:
             for line_num, line in enumerate(lines, 1):
                 if re.search(pattern, line, re.IGNORECASE):
@@ -417,17 +417,17 @@ class SecurityThreatAnalyzer:
                         context={"function": self._extract_function_name(line_num, lines)},
                     )
                     findings.append(finding)
-        
+
         return findings
-    
+
     def _extract_function_name(self, line_num: int, lines: List[str]) -> Optional[str]:
         """
         Extract function name from line context.
-        
+
         Args:
             line_num: Current line number
             lines: All lines of code
-            
+
         Returns:
             Function name if found, None otherwise
         """
@@ -443,7 +443,7 @@ class SecurityThreatAnalyzer:
 def get_security_threat_analyzer() -> SecurityThreatAnalyzer:
     """
     Factory function for SecurityThreatAnalyzer singleton.
-    
+
     Returns:
         SecurityThreatAnalyzer instance
     """

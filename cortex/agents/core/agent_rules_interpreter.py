@@ -9,7 +9,7 @@ Purpose: Interpret agent behavioral instructions from YAML rules registry,
          without duplication or coupling.
 
 Implementation Pattern:
-  Agent (Markdown interface) 
+  Agent (Markdown interface)
     → AgentRulesInterpreter (this module)
     → MachineReadableRulesRegistry (YAML-based)
     → Master Orchestrator (execution delegation)
@@ -17,17 +17,18 @@ Implementation Pattern:
 
 from __future__ import annotations
 
-from typing import Dict, List, Any, Optional, Set, Tuple, Union, Literal
-from dataclasses import dataclass, field
-from enum import Enum
-from pathlib import Path
-import yaml
 import json
 import logging
-from datetime import datetime
 from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Literal, Optional, Set, Tuple, Union
 
-from cortex.core.result import Ok, Err
+import yaml
+
+from cortex.core.result import Err, Ok
 
 # Phase 51: Simple logger for MVP (upgrade to EnhancedAuditLogger in Phase 52)
 logger = logging.getLogger("cortex.agents.rules_interpreter")
@@ -126,33 +127,33 @@ class AgentConfiguration:
 
 class RulesRegistry:
     """Machine-readable rules registry (YAML-based)."""
-    
+
     def __init__(self, registry_path: Path):
         self.registry_path = registry_path
         self._rules_cache: Dict[str, Any] = {}
         self._load_registry()
-    
+
     def _load_registry(self) -> None:
         """Load all rules from YAML files."""
         core_rules_file = self.registry_path / "core-rules.yaml"
-        
+
         if not core_rules_file.exists():
             raise FileNotFoundError(f"Core rules file not found: {core_rules_file}")
-        
+
         with open(core_rules_file, 'r') as f:
             registry = yaml.safe_load(f)
-        
+
         # Index rules by ID for O(1) lookup
         for rule in registry.get("core_rules", []):
             rule_id = rule.get("id")
             self._rules_cache[rule_id] = rule
-        
+
         logger.debug(f"Loaded {len(self._rules_cache)} rules from registry")
-    
+
     def get_rule(self, rule_id: str) -> Optional[Dict[str, Any]]:
         """Get rule by ID."""
         return self._rules_cache.get(rule_id)
-    
+
     def get_rules_for_context(self, context: ExecutionContext) -> List[Dict[str, Any]]:
         """Get all applicable rules for a given context."""
         applicable = []
@@ -161,7 +162,7 @@ class RulesRegistry:
             if not context_list or context.value in context_list:
                 applicable.append(rule)
         return applicable
-    
+
     def get_rules_by_enforcement_level(self, level: RuleEnforcementLevel) -> List[Dict[str, Any]]:
         """Get all rules with given enforcement level."""
         return [r for r in self._rules_cache.values() if r.get("enforcement") == level.value]
@@ -173,7 +174,7 @@ class RulesRegistry:
 
 class AgentConfigRegistry:
     """Registry of agent configurations and their rule associations."""
-    
+
     AGENT_CONFIGS: Dict[str, AgentConfiguration] = {
         # Phase 51: Initial 5 agents migrated to rules-driven approach
         "cortex-architect": AgentConfiguration(
@@ -255,17 +256,17 @@ class AgentConfigRegistry:
             last_updated=datetime(2026, 2, 9),
         ),
     }
-    
+
     @classmethod
     def get_agent_config(cls, agent_id: str) -> Optional[AgentConfiguration]:
         """Get agent configuration by ID."""
         return cls.AGENT_CONFIGS.get(agent_id)
-    
+
     @classmethod
     def get_agents_by_role(cls, role: AgentRole) -> List[AgentConfiguration]:
         """Get all agents with given role."""
         return [cfg for cfg in cls.AGENT_CONFIGS.values() if cfg.role == role]
-    
+
     @classmethod
     def get_agents_for_context(cls, context: ExecutionContext) -> List[AgentConfiguration]:
         """Get all agents applicable to given context."""
@@ -279,20 +280,20 @@ class AgentConfigRegistry:
 class AgentRulesInterpreter:
     """
     Interprets agent behavior from machine-readable YAML rules.
-    
+
     Bridges between:
     - User-facing agents (Markdown in .github/agents/core/)
     - Machine-readable rules (YAML in cortex-registry/_cortex-master/governance/)
     - Orchestrator execution (cortex/orchestrators/core/)
-    
+
     Supports both CORTEX self-development and production repo contexts.
     """
-    
+
     def __init__(self, registry_path: Path):
         self.registry_path = registry_path
         self.rules_registry = RulesRegistry(registry_path)
         self._violation_cache: Dict[str, List[RuleViolation]] = {}
-    
+
     def interpret_agent_request(
         self,
         agent_id: str,
@@ -302,22 +303,22 @@ class AgentRulesInterpreter:
     ) -> Union[Ok[ExecutionDirective], Err[str]]:
         """
         Interpret an agent request and generate execution directive.
-        
+
         Args:
             agent_id: Which agent is handling this request
             request: User request/intent
             context: Execution context (CORTEX internal vs production)
             target_orchestrator: Optional override for orchestrator routing
-        
+
         Returns:
             ExecutionDirective with rules, constraints, and orchestrator routing
         """
-        
+
         # Load agent configuration
         agent_config = AgentConfigRegistry.get_agent_config(agent_id)
         if not agent_config:
             return Err(f"Unknown agent: {agent_id}")
-        
+
         # Verify context is supported by this agent
         if context not in agent_config.context_requirements:
             logger.warning(
@@ -327,21 +328,21 @@ class AgentRulesInterpreter:
             relevant_rules = agent_config.fallback_rules
         else:
             relevant_rules = agent_config.rules
-        
+
         # Load rules for this agent
         rules_to_apply: List[Dict[str, Any]] = []
         for rule_id in relevant_rules:
             rule = self.rules_registry.get_rule(rule_id)
             if rule:
                 rules_to_apply.append(rule)
-        
+
         # Compile constraints from applicable rules
         constraints = self._compile_constraints(rules_to_apply, context)
-        
+
         # Determine target orchestrator
         if not target_orchestrator:
             target_orchestrator = self._determine_orchestrator(agent_config, request)
-        
+
         # Build execution directive
         directive = ExecutionDirective(
             agent_id=agent_id,
@@ -357,15 +358,15 @@ class AgentRulesInterpreter:
                 "interpreted_at": datetime.now().isoformat(),
             }
         )
-        
+
         # Log interpretation
         logger.info(
             f"Agent {agent_id} interpretation: context={context.value}, "
             f"orchestrator={target_orchestrator}, rules={len(rules_to_apply)}"
         )
-        
+
         return Ok(directive)
-    
+
     def validate_against_rules(
         self,
         rules: List[str],
@@ -374,23 +375,23 @@ class AgentRulesInterpreter:
     ) -> Union[Ok[List[RuleViolation]], Err[str]]:
         """
         Validate code against specified rules.
-        
+
         Args:
             rules: List of rule IDs to validate against
             code_snippet: Code to validate
             context: Execution context
-        
+
         Returns:
             List of violations found (empty = all valid)
         """
         violations: List[RuleViolation] = []
-        
+
         for rule_id in rules:
             rule = self.rules_registry.get_rule(rule_id)
             if not rule:
                 logger.warning(f"Rule not found: {rule_id}")
                 continue
-            
+
             # Check detection patterns
             patterns = rule.get("detection_patterns", [])
             for pattern in patterns:
@@ -403,13 +404,13 @@ class AgentRulesInterpreter:
                         remediation=self._get_remediation(rule),
                     )
                     violations.append(violation)
-        
+
         return Ok(violations)
-    
+
     # ========================================================================
     # PRIVATE HELPERS
     # ========================================================================
-    
+
     def _compile_constraints(
         self,
         rules: List[Dict[str, Any]],
@@ -417,7 +418,7 @@ class AgentRulesInterpreter:
     ) -> List[RuleConstraint]:
         """Compile constraints from applicable rules."""
         constraints: List[RuleConstraint] = []
-        
+
         for rule in rules:
             patterns = rule.get("detection_patterns", [])
             for pattern in patterns:
@@ -427,9 +428,9 @@ class AgentRulesInterpreter:
                     description=rule.get("description", ""),
                 )
                 constraints.append(constraint)
-        
+
         return constraints
-    
+
     def _determine_orchestrator(
         self,
         agent_config: AgentConfiguration,
@@ -440,7 +441,7 @@ class AgentRulesInterpreter:
         # In production, this would use NLP/intent classification
         orchestrators = list(agent_config.orchestrator_mapping.values())
         return orchestrators[0] if orchestrators else "MasterOrchestrator"
-    
+
     def _pattern_matches(self, pattern: str, code: str) -> bool:
         """Check if pattern matches code (regex-based)."""
         import re
@@ -449,7 +450,7 @@ class AgentRulesInterpreter:
         except Exception as e:
             logger.error(f"Pattern matching error: {e}")
             return False
-    
+
     def _extract_evidence(self, pattern: str, code: str) -> str:
         """Extract evidence of pattern match from code."""
         import re
@@ -457,7 +458,7 @@ class AgentRulesInterpreter:
         if match:
             return match.group(0)
         return code[:100]
-    
+
     def _get_remediation(self, rule: Dict[str, Any]) -> str:
         """Get remediation guidance from rule."""
         return rule.get("remediation_guidance", "Fix per rule specification")
@@ -469,35 +470,35 @@ class AgentRulesInterpreter:
 
 class OrchestratorInvocationHelper:
     """Helper to invoke orchestrators based on execution directives."""
-    
+
     def __init__(self, interpreter: AgentRulesInterpreter):
         self.interpreter = interpreter
-    
+
     def invoke_for_directive(
         self,
         directive: ExecutionDirective,
     ) -> Union[Ok[Dict[str, Any]], Err[str]]:
         """
         Invoke appropriate orchestrator based on directive.
-        
+
         This is the integration point between agent interpretation
         and actual orchestrator execution.
         """
-        
+
         orchestrator_name = directive.target_orchestrator
-        
+
         if not orchestrator_name:
             return Err("No target orchestrator specified in directive")
-        
+
         # In Phase 51, we'll implement orchestrator lookup and invocation
         # This placeholder shows the interface
-        
+
         logger.info(
             f"Invoking orchestrator {orchestrator_name} "
             f"for agent {directive.agent_id} "
             f"in context {directive.context.value}"
         )
-        
+
         # Placeholder: actual implementation routes to MasterOrchestrator
         # which dispatches to specific orchestrator
         return Ok({"status": "pending", "orchestrator": orchestrator_name})

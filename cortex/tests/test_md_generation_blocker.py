@@ -18,8 +18,8 @@ Test Suite: CORE-039 MD File Generation Blocker
 import tempfile
 from pathlib import Path
 from typing import Any, Optional
-import pytest
 
+import pytest
 
 # ============================================================================
 # CORE-039 Enforcement Exceptions
@@ -208,7 +208,7 @@ class TestAutonomousExecutionMDBlocking:
         Scenario: Autonomous execution completes and attempts report write
         Expectation: CORE-039 blocks MD write
         """
-        report_path = temp_cortex_workspace / "reports" / f"execution-report.md"
+        report_path = temp_cortex_workspace / "reports" / "execution-report.md"
 
         with pytest.raises(CORE039Violation) as exc_info:
             report_content = "# Execution Report\n\nAll phases complete."

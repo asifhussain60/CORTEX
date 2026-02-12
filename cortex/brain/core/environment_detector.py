@@ -12,14 +12,13 @@ CORE-012: Google-style docstrings
 Implements graceful degradation: MCP (primary) → Copilot (fallback) → Development
 """
 
+import logging
 import os
 import sys
-from enum import Enum
 from dataclasses import dataclass
-from typing import Optional, Dict, Any
+from enum import Enum
 from pathlib import Path
-
-import logging
+from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +41,7 @@ class EnvironmentConfig:
     is_development: bool
     cortex_root: Path
     tool_adapter_class: str  # Qualified class name (e.g., 'cortex.brain.core.tool_adapter.MCPToolAdapter')
-    
+
     def __str__(self) -> str:
         """Return human-readable environment description."""
         env_names = {
@@ -51,11 +50,11 @@ class EnvironmentConfig:
             EnvironmentType.DEVELOPMENT: "Local Development",
         }
         return env_names.get(self.environment_type, "Unknown")
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """
         Convert configuration to dictionary.
-        
+
         Returns:
             Dict representation suitable for JSON serialization
         """
@@ -267,20 +266,20 @@ class EnvironmentDetector:
         """
         config = self.get_environment_config()
         return config.environment_type == EnvironmentType.MCP_SERVER
-    
+
     def is_mcp_available(self) -> bool:
         """
         Public wrapper to check if MCP tools are available.
-        
+
         Returns:
             True if MCP server environment detected
         """
         return self._is_mcp_server()
-    
+
     def is_copilot_available(self) -> bool:
         """
         Public wrapper to check if Copilot tools are available.
-        
+
         Returns:
             True if Copilot environment detected
         """

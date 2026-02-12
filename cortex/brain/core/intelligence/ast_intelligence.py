@@ -22,7 +22,6 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
-
 # =============================================================================
 # DATA CLASSES
 # =============================================================================
@@ -31,7 +30,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple, Union
 @dataclass
 class Parameter:
     """Represents a function parameter.
-    
+
     Attributes:
         name: Parameter name
         type_hint: Type annotation if present
@@ -44,7 +43,7 @@ class Parameter:
     default: Optional[str] = None
     is_args: bool = False
     is_kwargs: bool = False
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary representation."""
         return {
@@ -59,7 +58,7 @@ class Parameter:
 @dataclass
 class FunctionInfo:
     """Information about a function definition.
-    
+
     Attributes:
         name: Function name
         parameters: List of parameters
@@ -80,7 +79,7 @@ class FunctionInfo:
     is_async: bool = False
     is_method: bool = False
     class_name: Optional[str] = None
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary representation."""
         return {
@@ -94,7 +93,7 @@ class FunctionInfo:
             "is_method": self.is_method,
             "class_name": self.class_name,
         }
-    
+
     def __eq__(self, other: object) -> bool:
         """Compare two FunctionInfo objects by name and parameters."""
         if not isinstance(other, FunctionInfo):
@@ -109,7 +108,7 @@ class FunctionInfo:
 @dataclass
 class ClassInfo:
     """Information about a class definition.
-    
+
     Attributes:
         name: Class name
         bases: List of base class names
@@ -126,7 +125,7 @@ class ClassInfo:
     decorators: List[str] = field(default_factory=list)
     line_number: int = 0
     class_variables: List[str] = field(default_factory=list)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary representation."""
         return {
@@ -143,7 +142,7 @@ class ClassInfo:
 @dataclass
 class ConstantInfo:
     """Information about a module-level constant.
-    
+
     Attributes:
         name: Constant name
         value: String representation of value
@@ -152,7 +151,7 @@ class ConstantInfo:
     name: str
     value: Optional[str] = None
     line_number: int = 0
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary representation."""
         return {
@@ -165,7 +164,7 @@ class ConstantInfo:
 @dataclass
 class ParseResult:
     """Result of parsing a Python file or string.
-    
+
     Attributes:
         success: True if parsing succeeded
         ast_tree: The AST tree if successful
@@ -192,7 +191,7 @@ class ParseResult:
     error_line: Optional[int] = None
     error_column: Optional[int] = None
     file_path: Optional[Path] = None
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary representation."""
         return {
@@ -217,49 +216,49 @@ class ParseResult:
 
 class ASTIntelligenceEngine:
     """AST-based code intelligence engine for Python files.
-    
+
     Parses Python source code and extracts structured information about
     functions, classes, imports, and other code elements.
-    
+
     Attributes:
         enable_cache: Whether to cache parse results
-        
+
     Example:
         >>> engine = ASTIntelligenceEngine()
         >>> result = engine.parse_file(Path("my_module.py"))
         >>> for func in result.functions:
         ...     print(f"{func.name}: {func.return_type}")
     """
-    
+
     def __init__(self, enable_cache: bool = False) -> None:
         """Initialize the AST intelligence engine.
-        
+
         Args:
             enable_cache: If True, cache parse results by file content hash
         """
         self.enable_cache = enable_cache
         self._cache: Dict[str, ParseResult] = {}
-    
+
     def parse_file(self, file_path: Union[Path, str]) -> ParseResult:
         """Parse a Python file and extract code intelligence.
-        
+
         Args:
             file_path: Path to the Python file to parse (accepts str or Path)
-            
+
         Returns:
             ParseResult containing extracted information or error details
         """
         # Ensure file_path is a Path object
         if isinstance(file_path, str):
             file_path = Path(file_path)
-        
+
         if not file_path.exists():
             return ParseResult(
                 success=False,
                 error=f"File not found: {file_path}",
                 file_path=file_path,
             )
-        
+
         try:
             content = file_path.read_text(encoding="utf-8")
         except UnicodeDecodeError as e:
@@ -274,7 +273,7 @@ class ASTIntelligenceEngine:
                 error=f"Failed to read file: {e}",
                 file_path=file_path,
             )
-        
+
         # Check cache if enabled
         if self.enable_cache:
             cache_key = self._compute_cache_key(content)
@@ -296,23 +295,23 @@ class ASTIntelligenceEngine:
                     file_path=file_path,
                 )
                 return result
-        
+
         result = self.parse_string(content)
         result.file_path = file_path
-        
+
         # Store in cache if enabled
         if self.enable_cache and result.success:
             cache_key = self._compute_cache_key(content)
             self._cache[cache_key] = result
-        
+
         return result
-    
+
     def parse_string(self, source: str) -> ParseResult:
         """Parse Python source code from a string.
-        
+
         Args:
             source: Python source code string
-            
+
         Returns:
             ParseResult containing extracted information or error details
         """
@@ -328,7 +327,7 @@ class ASTIntelligenceEngine:
                 constants=[],
                 module_docstring=None,
             )
-        
+
         try:
             tree = ast.parse(source)
         except SyntaxError as e:
@@ -343,11 +342,11 @@ class ASTIntelligenceEngine:
                 success=False,
                 error=f"Parse error: {str(e)}",
             )
-        
+
         # Extract information from AST
         extractor = _ASTExtractor()
         extractor.visit(tree)
-        
+
         return ParseResult(
             success=True,
             ast_tree=tree,
@@ -358,7 +357,7 @@ class ASTIntelligenceEngine:
             constants=extractor.constants,
             module_docstring=extractor.module_docstring,
         )
-    
+
     def _compute_cache_key(self, content: str) -> str:
         """Compute cache key from file content."""
         return hashlib.sha256(content.encode()).hexdigest()
@@ -371,11 +370,11 @@ class ASTIntelligenceEngine:
 
 class _ASTExtractor(ast.NodeVisitor):
     """AST visitor that extracts code intelligence.
-    
+
     Walks the AST and collects information about functions, classes,
     imports, and other code elements.
     """
-    
+
     def __init__(self) -> None:
         """Initialize the extractor."""
         self.functions: List[FunctionInfo] = []
@@ -386,7 +385,7 @@ class _ASTExtractor(ast.NodeVisitor):
         self.module_docstring: Optional[str] = None
         self._current_class: Optional[str] = None
         self._processed_module_docstring = False
-    
+
     def visit_Module(self, node: ast.Module) -> None:
         """Visit module node to extract docstring."""
         if node.body and isinstance(node.body[0], ast.Expr):
@@ -396,35 +395,35 @@ class _ASTExtractor(ast.NodeVisitor):
                     self.module_docstring = value
                     self._processed_module_docstring = True
         self.generic_visit(node)
-    
+
     def visit_Import(self, node: ast.Import) -> None:
         """Visit import statement."""
         for alias in node.names:
             self.imports.add(alias.name.split(".")[0])
-    
+
     def visit_ImportFrom(self, node: ast.ImportFrom) -> None:
         """Visit from...import statement."""
         if node.module:
             module_name = node.module.split(".")[0]
             self.imports.add(module_name)
-            
+
             if node.module not in self.from_imports:
                 self.from_imports[node.module] = []
-            
+
             for alias in node.names:
                 if alias.name != "*":
                     self.from_imports[node.module].append(alias.name)
-    
+
     def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
         """Visit function definition."""
         self._extract_function(node, is_async=False)
         self.generic_visit(node)
-    
+
     def visit_AsyncFunctionDef(self, node: ast.AsyncFunctionDef) -> None:
         """Visit async function definition."""
         self._extract_function(node, is_async=True)
         self.generic_visit(node)
-    
+
     def _extract_function(
         self,
         node: Union[ast.FunctionDef, ast.AsyncFunctionDef],
@@ -433,20 +432,20 @@ class _ASTExtractor(ast.NodeVisitor):
         """Extract function information from AST node."""
         # Extract parameters
         parameters = self._extract_parameters(node.args)
-        
+
         # Extract return type
         return_type = None
         if node.returns:
             return_type = self._annotation_to_string(node.returns)
-        
+
         # Extract docstring
         docstring = ast.get_docstring(node)
-        
+
         # Extract decorators
         decorators = []
         for decorator in node.decorator_list:
             decorators.append(self._decorator_to_string(decorator))
-        
+
         func_info = FunctionInfo(
             name=node.name,
             parameters=parameters,
@@ -458,7 +457,7 @@ class _ASTExtractor(ast.NodeVisitor):
             is_method=self._current_class is not None,
             class_name=self._current_class,
         )
-        
+
         # Add to appropriate list
         if self._current_class is not None:
             # Method will be added by ClassDef handler
@@ -466,33 +465,33 @@ class _ASTExtractor(ast.NodeVisitor):
         else:
             self.functions.append(func_info)
             return func_info
-    
+
     def _extract_parameters(self, args: ast.arguments) -> List[Parameter]:
         """Extract parameter information from function arguments."""
         parameters = []
-        
+
         # Calculate defaults offset
         num_args = len(args.args)
         num_defaults = len(args.defaults)
         defaults_offset = num_args - num_defaults
-        
+
         # Regular arguments
         for i, arg in enumerate(args.args):
             type_hint = None
             if arg.annotation:
                 type_hint = self._annotation_to_string(arg.annotation)
-            
+
             default = None
             default_index = i - defaults_offset
             if default_index >= 0 and default_index < len(args.defaults):
                 default = self._value_to_string(args.defaults[default_index])
-            
+
             parameters.append(Parameter(
                 name=arg.arg,
                 type_hint=type_hint,
                 default=default,
             ))
-        
+
         # *args
         if args.vararg:
             type_hint = None
@@ -503,26 +502,26 @@ class _ASTExtractor(ast.NodeVisitor):
                 type_hint=type_hint,
                 is_args=True,
             ))
-        
+
         # Keyword-only arguments
         num_kwonly = len(args.kwonlyargs)
         num_kw_defaults = len(args.kw_defaults)
-        
+
         for i, arg in enumerate(args.kwonlyargs):
             type_hint = None
             if arg.annotation:
                 type_hint = self._annotation_to_string(arg.annotation)
-            
+
             default = None
             if i < num_kw_defaults and args.kw_defaults[i] is not None:
                 default = self._value_to_string(args.kw_defaults[i])
-            
+
             parameters.append(Parameter(
                 name=arg.arg,
                 type_hint=type_hint,
                 default=default,
             ))
-        
+
         # **kwargs
         if args.kwarg:
             type_hint = None
@@ -533,24 +532,24 @@ class _ASTExtractor(ast.NodeVisitor):
                 type_hint=type_hint,
                 is_kwargs=True,
             ))
-        
+
         return parameters
-    
+
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """Visit class definition."""
         # Extract base classes
         bases = []
         for base in node.bases:
             bases.append(self._annotation_to_string(base))
-        
+
         # Extract docstring
         docstring = ast.get_docstring(node)
-        
+
         # Extract decorators
         decorators = []
         for decorator in node.decorator_list:
             decorators.append(self._decorator_to_string(decorator))
-        
+
         # Extract class variables
         class_variables = []
         for item in node.body:
@@ -561,11 +560,11 @@ class _ASTExtractor(ast.NodeVisitor):
             elif isinstance(item, ast.AnnAssign):
                 if isinstance(item.target, ast.Name):
                     class_variables.append(item.target.id)
-        
+
         # Extract methods
         old_class = self._current_class
         self._current_class = node.name
-        
+
         methods = []
         for item in node.body:
             if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef)):
@@ -574,9 +573,9 @@ class _ASTExtractor(ast.NodeVisitor):
                     is_async=isinstance(item, ast.AsyncFunctionDef),
                 )
                 methods.append(method_info)
-        
+
         self._current_class = old_class
-        
+
         class_info = ClassInfo(
             name=node.name,
             bases=bases,
@@ -586,9 +585,9 @@ class _ASTExtractor(ast.NodeVisitor):
             line_number=node.lineno,
             class_variables=class_variables,
         )
-        
+
         self.classes.append(class_info)
-    
+
     def visit_Assign(self, node: ast.Assign) -> None:
         """Visit assignment to detect module-level constants."""
         # Only process module-level assignments (not inside functions/classes)
@@ -603,7 +602,7 @@ class _ASTExtractor(ast.NodeVisitor):
                             value=value,
                             line_number=node.lineno,
                         ))
-    
+
     def _annotation_to_string(self, node: ast.expr) -> str:
         """Convert annotation AST node to string."""
         if isinstance(node, ast.Name):
@@ -634,7 +633,7 @@ class _ASTExtractor(ast.NodeVisitor):
             return f"{left} | {right}"
         else:
             return ast.unparse(node)
-    
+
     def _value_to_string(self, node: ast.expr) -> str:
         """Convert value AST node to string."""
         if isinstance(node, ast.Constant):
@@ -659,7 +658,7 @@ class _ASTExtractor(ast.NodeVisitor):
                 return ast.unparse(node)
             except Exception:
                 return "<complex>"
-    
+
     def _decorator_to_string(self, node: ast.expr) -> str:
         """Convert decorator AST node to string."""
         if isinstance(node, ast.Name):

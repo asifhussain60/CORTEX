@@ -9,13 +9,13 @@ Description: GitHub API wrapper supporting GraphQL queries for packages, actions
              secure token management (environment variables only).
 """
 
-import os
 import json
+import os
 import time
-from typing import Any, Dict, List, Optional
-from dataclasses import dataclass, asdict
-from enum import Enum
+from dataclasses import asdict, dataclass
 from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
 try:
     from github import Github, GithubException  # type: ignore

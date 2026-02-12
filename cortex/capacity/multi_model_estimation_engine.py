@@ -8,10 +8,9 @@ Implements three estimation models for consensus:
 
 import logging
 import math
-from typing import Dict, Any, List, Optional, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
-
+from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +26,7 @@ class SkillLevel(Enum):
 @dataclass
 class EstimationResult:
     """Result of multi-model estimation.
-    
+
     Attributes:
         task_id: Task identifier
         pert_hours: PERT model estimate (hours)
@@ -51,62 +50,62 @@ class EstimationResult:
 
 class PERTEstimator:
     """PERT (Program Evaluation and Review Technique) estimator.
-    
+
     Formula: Expected = (Optimistic + 4*MostLikely + Pessimistic) / 6
     Standard Deviation = (Pessimistic - Optimistic) / 6
     """
-    
+
     @staticmethod
     def estimate(optimistic: float, likely: float, pessimistic: float) -> Tuple[float, float]:
         """Estimate using PERT formula.
-        
+
         Phase 12 AC-CAP-2-01: PERT estimator calculates expected hours correctly
-        
+
         Args:
             optimistic: Best-case hours
             likely: Most likely hours
             pessimistic: Worst-case hours
-            
+
         Returns:
             (expected_hours, standard_deviation)
         """
         if optimistic > likely or likely > pessimistic:
             raise ValueError("Must have: optimistic <= likely <= pessimistic")
-        
+
         expected = (optimistic + 4 * likely + pessimistic) / 6
         std_dev = (pessimistic - optimistic) / 6
-        
+
         return (expected, std_dev)
-    
+
     @staticmethod
     def get_confidence_interval(expected: float, std_dev: float, confidence: float = 0.80) -> Tuple[float, float]:
         """Get confidence interval for estimate.
-        
+
         Args:
             expected: Expected value
             std_dev: Standard deviation
             confidence: Confidence level (0.80 for 80%)
-            
+
         Returns:
             (low_bound, high_bound)
         """
         # For 80% confidence, z-score ≈ 1.28
         z_score = 1.28 if confidence == 0.80 else 1.96
         margin = z_score * std_dev
-        
+
         return (expected - margin, expected + margin)
 
 
 class StoryPointEstimator:
     """Story point estimator with skill-level conversion.
-    
+
     Converts story points to hours based on team skill levels:
     - Junior (1): 6-8 hours/pt
     - MidLevel (2): 4-5 hours/pt
     - Senior (3): 2-3 hours/pt
     - Architect (4): 1-2 hours/pt
     """
-    
+
     # Story point to hours conversion matrix
     CONVERSION_MATRIX = {
         SkillLevel.JUNIOR: {"min": 6, "max": 8, "avg": 7},
@@ -114,41 +113,41 @@ class StoryPointEstimator:
         SkillLevel.SENIOR: {"min": 2, "max": 3, "avg": 2.5},
         SkillLevel.ARCHITECT: {"min": 1, "max": 2, "avg": 1.5},
     }
-    
+
     @staticmethod
     def estimate_hours(story_points: int, skill_level: SkillLevel) -> float:
         """Convert story points to hours based on skill level.
-        
+
         Phase 12 AC-CAP-2-02: Story point converter calculates hours per skill
-        
+
         Args:
             story_points: Number of story points
             skill_level: Team skill level
-            
+
         Returns:
             Estimated hours
         """
         conversion = StoryPointEstimator.CONVERSION_MATRIX.get(skill_level)
         if not conversion:
             conversion = StoryPointEstimator.CONVERSION_MATRIX[SkillLevel.MIDLEVEL]
-        
+
         return story_points * conversion["avg"]
-    
+
     @staticmethod
     def estimate_range(story_points: int, skill_level: SkillLevel) -> Tuple[float, float]:
         """Get range of hours for story points.
-        
+
         Args:
             story_points: Number of story points
             skill_level: Team skill level
-            
+
         Returns:
             (min_hours, max_hours)
         """
         conversion = StoryPointEstimator.CONVERSION_MATRIX.get(skill_level)
         if not conversion:
             conversion = StoryPointEstimator.CONVERSION_MATRIX[SkillLevel.MIDLEVEL]
-        
+
         return (
             story_points * conversion["min"],
             story_points * conversion["max"]
@@ -157,11 +156,11 @@ class StoryPointEstimator:
 
 class CriticalPathEstimator:
     """Critical Path Method (CPM) estimator.
-    
+
     Analyzes task dependencies to calculate critical path.
     Accounts for parallelization opportunities.
     """
-    
+
     @dataclass
     class Task:
         """Task for CPM analysis."""
@@ -170,22 +169,22 @@ class CriticalPathEstimator:
         dependencies: List[str] = field(default_factory=list)
         earliest_start: float = 0.0
         earliest_finish: float = 0.0
-    
+
     @staticmethod
     def calculate_critical_path(tasks: Dict[str, Dict[str, Any]]) -> float:
         """Calculate critical path through task network.
-        
+
         Phase 12 AC-CAP-2-03: CPM calculates parallel path optimization
-        
+
         Args:
             tasks: Dictionary of {task_id: {duration, dependencies}}
-            
+
         Returns:
             Total project duration in hours
         """
         if not tasks:
             return 0.0
-        
+
         # Initialize
         task_objects = {}
         for task_id, task_data in tasks.items():
@@ -194,12 +193,12 @@ class CriticalPathEstimator:
                 duration_hours=task_data.get("duration", 0),
                 dependencies=task_data.get("dependencies", [])
             )
-        
+
         # Forward pass - calculate earliest start/finish
         def calculate_earliest(task_id: str) -> float:
             """Calculate earliest finish time for task."""
             task = task_objects[task_id]
-            
+
             if not task.dependencies:
                 task.earliest_start = 0.0
             else:
@@ -207,44 +206,44 @@ class CriticalPathEstimator:
                 task.earliest_start = max(
                     calculate_earliest(dep) for dep in task.dependencies
                 )
-            
+
             task.earliest_finish = task.earliest_start + task.duration_hours
             return task.earliest_finish
-        
+
         # Calculate for all tasks
         critical_path_length = 0.0
         for task_id in task_objects:
             finish_time = calculate_earliest(task_id)
             critical_path_length = max(critical_path_length, finish_time)
-        
+
         return critical_path_length
 
 
 class MultiModelEstimationEngine:
     """Phase 12 CAP-2: Multi-Model Estimation Engine.
-    
+
     Combines three independent estimation models:
     1. PERT: Statistical model for uncertainty
     2. Story Points: Team velocity-based estimation
     3. CPM: Dependency-based project scheduling
-    
+
     Produces consensus estimate with:
     - 80% confidence intervals
     - Risk factor identification
     - Model agreement metrics
-    
+
     AC-CAP-2-01: PERT estimator produces expected value + std dev
     AC-CAP-2-02: Story point converter handles 4 skill levels
     AC-CAP-2-03: CPM calculates parallel path optimization
     AC-CAP-2-04: Consensus produce 80% CI recommendations
     """
-    
+
     def __init__(self):
         """Initialize MultiModelEstimationEngine."""
         self.pert = PERTEstimator()
         self.story_points = StoryPointEstimator()
         self.cpm = CriticalPathEstimator()
-    
+
     def estimate_task(
         self,
         task_id: str,
@@ -256,9 +255,9 @@ class MultiModelEstimationEngine:
         dependencies: Optional[Dict[str, float]] = None
     ) -> EstimationResult:
         """Estimate task using all three models.
-        
+
         Phase 12 AC-CAP-2-04: Produce consensus estimate
-        
+
         Args:
             task_id: Task identifier
             optimistic: PERT optimistic estimate
@@ -267,18 +266,18 @@ class MultiModelEstimationEngine:
             story_points: Story point estimate
             skill_level: Team skill level
             dependencies: Dict of {dep_task_id: duration}
-            
+
         Returns:
             EstimationResult with all models
         """
         # PERT estimation
         pert_hours, pert_std = self.pert.estimate(optimistic, likely, pessimistic)
         pert_low, pert_high = self.pert.get_confidence_interval(pert_hours, pert_std)
-        
+
         # Story points estimation
         sp_hours = self.story_points.estimate_hours(story_points, skill_level)
         sp_low, sp_high = self.story_points.estimate_range(story_points, skill_level)
-        
+
         # CPM estimation
         cpm_hours = 0.0
         if dependencies:
@@ -296,21 +295,21 @@ class MultiModelEstimationEngine:
             cpm_hours = self.cpm.calculate_critical_path(task_graph)
         else:
             cpm_hours = likely
-        
+
         # Calculate consensus
         model_estimates = [pert_hours, sp_hours, cpm_hours]
         recommended = sum(model_estimates) / len(model_estimates)
-        
+
         # Calculate agreement
         variance = sum((x - recommended) ** 2 for x in model_estimates) / len(model_estimates)
         std_dev_models = math.sqrt(variance)
         agreement = max(0, 100 - (std_dev_models / recommended * 100)) if recommended > 0 else 0
-        
+
         # Confidence interval
         all_estimates = [pert_low, pert_high, sp_low, sp_high, cpm_hours]
         ci_low = min(all_estimates)
         ci_high = max(all_estimates)
-        
+
         return EstimationResult(
             task_id=task_id,
             pert_hours=pert_hours,
@@ -321,13 +320,13 @@ class MultiModelEstimationEngine:
             recommended_hours=recommended,
             model_agreement=agreement,
         )
-    
+
     def get_estimation_summary(self, result: EstimationResult) -> Dict[str, Any]:
         """Get summary of estimation.
-        
+
         Args:
             result: Estimation result
-            
+
         Returns:
             Summary dictionary
         """

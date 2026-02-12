@@ -11,8 +11,8 @@ Authority: Phase 29 Stage 3 specification
 
 import logging
 from dataclasses import dataclass, field
-from typing import Optional, Dict, Any
 from enum import Enum
+from typing import Any, Dict, Optional
 
 from cortex.brain.core.response_format_validator import ResponseFormatValidator
 from cortex.brain.core.response_optimizer import ResponseOptimizer
@@ -36,7 +36,7 @@ class EnforcementLevel(Enum):
 class IntegrationResult:
     """
     Integration processing result.
-    
+
     Attributes:
         final_response: Final formatted response
         corrections_applied: Number of corrections
@@ -49,12 +49,12 @@ class IntegrationResult:
     corrections_applied: int
     validation_score: float
     metrics: Optional[Dict[str, Any]] = None
-    
+
     @property
     def corrected(self) -> bool:
         """Whether corrections were applied."""
         return self.corrections_applied > 0
-    
+
     @property
     def response(self) -> str:
         """Alias for final_response."""
@@ -64,21 +64,21 @@ class IntegrationResult:
 class FormatEnforcer:
     """
     Format enforcer with configurable levels.
-    
+
     Enforces format standards with auto-correction.
     """
-    
+
     def __init__(self, level: EnforcementLevel = EnforcementLevel.MODERATE):
         """
         Initialize enforcer.
-        
+
         Args:
             level: Enforcement strictness level
         """
         self.level = level
         self.optimizer = ResponseOptimizer()
         logger.info(f"FormatEnforcer initialized with level: {level.value}")
-    
+
     def enforce(
         self,
         response: str,
@@ -86,11 +86,11 @@ class FormatEnforcer:
     ) -> IntegrationResult:
         """
         Enforce format standards.
-        
+
         Args:
             response: Response to enforce
             orchestrator: Orchestrator name
-            
+
         Returns:
             IntegrationResult: Enforcement result
         """
@@ -104,7 +104,7 @@ class FormatEnforcer:
         else:  # LENIENT
             # Minimal corrections (header only if missing)
             optimization = self.optimizer.optimize(response, orchestrator, improve_flow=False)
-        
+
         return IntegrationResult(
             final_response=optimization.optimized_text,
             corrections_applied=len(optimization.corrections),
@@ -115,17 +115,17 @@ class FormatEnforcer:
 class FormatGate:
     """
     Production format gate.
-    
+
     Validates responses meet quality threshold before release.
     """
-    
+
     DEFAULT_THRESHOLD = 0.7  # 70% quality minimum
     PRODUCTION_THRESHOLD = 0.85  # 85% for production
-    
+
     def __init__(self, production_mode: bool = False):
         """
         Initialize format gate.
-        
+
         Args:
             production_mode: Whether in production mode
         """
@@ -133,44 +133,44 @@ class FormatGate:
         self.validator = ResponseFormatValidator()
         self.threshold = self.PRODUCTION_THRESHOLD if production_mode else self.DEFAULT_THRESHOLD
         logger.info(f"FormatGate initialized (production={production_mode}, threshold={self.threshold})")
-    
+
     def check(self, response: str, threshold: Optional[float] = None) -> bool:
         """
         Check if response passes gate.
-        
+
         Args:
             response: Response to check
             threshold: Optional custom threshold
-            
+
         Returns:
             bool: True if passes gate
         """
         validation = self.validator.validate(response)
-        
+
         used_threshold = threshold if threshold is not None else self.threshold
-        
+
         passed = validation.score >= used_threshold and validation.is_valid
-        
+
         if not passed:
             logger.warning(
                 f"Response failed gate: score={validation.score:.2f}, "
                 f"threshold={used_threshold:.2f}, violations={len(validation.violations)}"
             )
-        
+
         return passed
 
 
 class ResponseFormatIntegration:
     """
     Response Format Integration System.
-    
+
     Coordinates validation, optimization, and enforcement across CORTEX.
     """
-    
+
     def __init__(self, enforcement_level: EnforcementLevel = EnforcementLevel.MODERATE):
         """
         Initialize integration system.
-        
+
         Args:
             enforcement_level: Enforcement strictness level
         """
@@ -178,9 +178,9 @@ class ResponseFormatIntegration:
         self.optimizer = ResponseOptimizer()
         self.enforcer = FormatEnforcer(level=enforcement_level)
         self.gate = FormatGate()
-        
+
         logger.info(f"ResponseFormatIntegration initialized with {enforcement_level.value}")
-    
+
     def process(
         self,
         response: Optional[str],
@@ -190,23 +190,23 @@ class ResponseFormatIntegration:
     ) -> IntegrationResult:
         """
         Process response through full format pipeline.
-        
+
         Args:
             response: Response to process
             orchestrator: Orchestrator name
             enforce: Whether to enforce corrections
             collect_metrics: Whether to collect detailed metrics
-            
+
         Returns:
             IntegrationResult: Processing result
         """
         if not response:
             response = "No content provided."
-        
+
         try:
             # Validate
             validation = self.validator.validate(response)
-            
+
             if enforce and not validation.is_valid:
                 # Optimize/correct
                 optimization = self.optimizer.optimize(response, orchestrator)
@@ -215,10 +215,10 @@ class ResponseFormatIntegration:
             else:
                 final_response = response
                 corrections_applied = 0
-            
+
             # Re-validate
             final_validation = self.validator.validate(final_response)
-            
+
             # Collect metrics if requested
             metrics = None
             if collect_metrics:
@@ -228,14 +228,14 @@ class ResponseFormatIntegration:
                     'violations': len(final_validation.violations),
                     'corrections_applied': corrections_applied,
                 }
-            
+
             return IntegrationResult(
                 final_response=final_response,
                 corrections_applied=corrections_applied,
                 validation_score=final_validation.score,
                 metrics=metrics,
             )
-            
+
         except Exception as e:
             logger.error(f"Integration processing error: {e}")
             # Return original with error metrics
@@ -245,7 +245,7 @@ class ResponseFormatIntegration:
                 validation_score=0.0,
                 metrics={'error': str(e)} if collect_metrics else None,
             )
-    
+
     def process_gateway_response(
         self,
         gateway_response: Any,
@@ -253,11 +253,11 @@ class ResponseFormatIntegration:
     ) -> IntegrationResult:
         """
         Process gateway response.
-        
+
         Args:
             gateway_response: Gateway response object
             orchestrator: Orchestrator name
-            
+
         Returns:
             IntegrationResult: Processing result
         """
@@ -270,5 +270,5 @@ class ResponseFormatIntegration:
                 response_text = str(gateway_response)
         except Exception:
             response_text = "Gateway response processing"
-        
+
         return self.process(response_text, orchestrator, enforce=True)

@@ -11,20 +11,19 @@ Governance:
   - CORE-013: Specific exception handling (no bare except)
 """
 
-from typing import Dict, List, Optional, Any, Callable, Set
-from dataclasses import dataclass, field
-from enum import Enum
-from datetime import datetime
-import uuid
 import logging
-
+import uuid
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any, Callable, Dict, List, Optional, Set
 
 logger = logging.getLogger(__name__)
 
 
 class SeverityLevel(Enum):
     """Severity levels for alerts."""
-    
+
     CRITICAL = 0.9
     HIGH = 0.7
     MEDIUM = 0.5
@@ -33,7 +32,7 @@ class SeverityLevel(Enum):
 
 class ChannelType(Enum):
     """Types of notification channels."""
-    
+
     EMAIL = "email"
     WEBHOOK = "webhook"
     SLACK = "slack"
@@ -44,7 +43,7 @@ class ChannelType(Enum):
 @dataclass
 class NotificationChannel:
     """Represents a notification channel."""
-    
+
     channel_id: str
     name: str
     channel_type: ChannelType
@@ -56,7 +55,7 @@ class NotificationChannel:
 @dataclass
 class AlertMessage:
     """Represents an alert message."""
-    
+
     alert_id: str
     severity: SeverityLevel
     message: str
@@ -70,18 +69,18 @@ class AlertMessage:
 
 class AlertPipeline:
     """Service for managing alert routing and notification channels.
-    
+
     Handles alert threshold configuration, channel registration,
     alert routing, and audit trail logging.
     """
-    
+
     def __init__(
         self,
         backends: Optional[Dict[str, Any]] = None,
         thresholds: Optional[Dict[str, float]] = None,
     ) -> None:
         """Initialize AlertPipeline.
-        
+
         Args:
             backends: Dictionary of notification backends.
             thresholds: Alert severity thresholds (CRITICAL, HIGH, MEDIUM, LOW).
@@ -105,7 +104,7 @@ class AlertPipeline:
             'acknowledged': 0,
         }
         logger.info(f"AlertPipeline initialized with {len(self.backends)} backends")
-    
+
     def register_channel(
         self,
         name: str,
@@ -114,13 +113,13 @@ class AlertPipeline:
         severity_filter: Optional[List[SeverityLevel]] = None,
     ) -> str:
         """Register a notification channel.
-        
+
         Args:
             name: Channel name.
             channel_type: Type of channel.
             config: Channel configuration.
             severity_filter: Severity levels this channel accepts.
-            
+
         Returns:
             Channel ID.
         """
@@ -135,13 +134,13 @@ class AlertPipeline:
         self.channels[channel_id] = channel
         logger.info(f"Channel registered: {name} ({channel_id})")
         return channel_id
-    
+
     def deregister_channel(self, channel_id: str) -> bool:
         """Deregister a notification channel.
-        
+
         Args:
             channel_id: Channel ID to remove.
-            
+
         Returns:
             True if removed, False if not found.
         """
@@ -151,7 +150,7 @@ class AlertPipeline:
             logger.info(f"Channel deregistered: {channel_name}")
             return True
         return False
-    
+
     def route_alert(
         self,
         severity: SeverityLevel,
@@ -160,13 +159,13 @@ class AlertPipeline:
         metadata: Optional[Dict[str, Any]] = None,
     ) -> bool:
         """Route an alert to configured channels.
-        
+
         Args:
             severity: Alert severity level.
             message: Alert message.
             source: Alert source.
             metadata: Additional metadata.
-            
+
         Returns:
             True if routed successfully, False otherwise.
         """
@@ -177,28 +176,28 @@ class AlertPipeline:
             source=source,
             metadata=metadata or {},
         )
-        
+
         # Check deduplication
         alert_hash = f"{source}:{message}"
         if alert_hash in self.deduplication_cache:
             self.alert_metrics['deduplicated'] += 1
             logger.info(f"Alert deduplicated: {alert.alert_id}")
             return True
-        
+
         self.deduplication_cache.add(alert_hash)
         self.alert_history.append(alert)
         self.alert_metrics['total_alerts'] += 1
-        
+
         # Route to applicable channels
         routed_count = 0
         for channel_id, channel in self.channels.items():
             if not channel.enabled:
                 continue
-            
+
             # Check severity filter
             if channel.severity_filter and severity not in channel.severity_filter:
                 continue
-            
+
             try:
                 self._send_to_channel(channel, alert)
                 routed_count += 1
@@ -206,16 +205,16 @@ class AlertPipeline:
                 logger.error(f"Failed to route to channel {channel_id}: {e}")
                 self.failed_alerts.append(alert)
                 self.alert_metrics['failed_routes'] += 1
-        
+
         if routed_count > 0:
             self.alert_metrics['routed_successfully'] += 1
-        
+
         logger.info(f"Alert routed to {routed_count} channels: {alert.alert_id}")
         return routed_count > 0
-    
+
     def _send_to_channel(self, channel: NotificationChannel, alert: AlertMessage) -> None:
         """Send alert to a specific channel.
-        
+
         Args:
             channel: Notification channel.
             alert: Alert to send.
@@ -223,29 +222,29 @@ class AlertPipeline:
         backend = self.backends.get(channel.channel_type.value)
         if backend and hasattr(backend, 'send'):
             backend.send(alert)
-    
+
     def filter_by_severity(self, severity: SeverityLevel) -> List[AlertMessage]:
         """Filter alerts by severity level.
-        
+
         Args:
             severity: Severity level to filter by.
-            
+
         Returns:
             List of alerts matching severity.
         """
         return [a for a in self.alert_history if a.severity == severity]
-    
+
     def acknowledge_alert(
         self,
         alert_id: str,
         acknowledged_by: str = "system",
     ) -> bool:
         """Acknowledge an alert.
-        
+
         Args:
             alert_id: Alert ID to acknowledge.
             acknowledged_by: User or system acknowledging the alert.
-            
+
         Returns:
             True if acknowledged, False if not found.
         """
@@ -258,7 +257,7 @@ class AlertPipeline:
                 logger.info(f"Alert acknowledged: {alert_id}")
                 return True
         return False
-    
+
     def override_alert(
         self,
         alert_id: str,
@@ -266,12 +265,12 @@ class AlertPipeline:
         suppress: bool = False,
     ) -> bool:
         """Override alert decision.
-        
+
         Args:
             alert_id: Alert ID to override.
             new_severity: New severity level if changing.
             suppress: Whether to suppress this alert.
-            
+
         Returns:
             True if overridden, False if not found.
         """
@@ -284,16 +283,16 @@ class AlertPipeline:
                 logger.info(f"Alert overridden: {alert_id}")
                 return True
         return False
-    
+
     def retry_failed_alerts(self) -> int:
         """Retry routing of failed alerts.
-        
+
         Returns:
             Number of alerts successfully rerouted.
         """
         success_count = 0
         remaining_failed = []
-        
+
         for alert in self.failed_alerts:
             try:
                 routed = self.route_alert(
@@ -309,40 +308,40 @@ class AlertPipeline:
             except Exception as e:
                 logger.error(f"Retry failed for alert {alert.alert_id}: {e}")
                 remaining_failed.append(alert)
-        
+
         self.failed_alerts = remaining_failed
         logger.info(f"Retry completed: {success_count} alerts rerouted")
         return success_count
-    
+
     def deduplicate_alerts(self, window_seconds: int = 60) -> int:
         """Deduplicate recent alerts.
-        
+
         Args:
             window_seconds: Time window for deduplication.
-            
+
         Returns:
             Number of duplicate alerts removed.
         """
         cutoff_time = datetime.now() - __import__('datetime').timedelta(seconds=window_seconds)
         recent_alerts = [a for a in self.alert_history if a.timestamp >= cutoff_time]
-        
+
         # Simple deduplication by source and message
         seen = {}
         duplicates = []
-        
+
         for alert in recent_alerts:
             key = f"{alert.source}:{alert.message}"
             if key in seen:
                 duplicates.append(alert)
             else:
                 seen[key] = alert
-        
+
         logger.info(f"Deduplicated {len(duplicates)} alerts")
         return len(duplicates)
-    
+
     def get_metrics(self) -> Dict[str, Any]:
         """Get alert pipeline metrics.
-        
+
         Returns:
             Dictionary with metrics.
         """
@@ -353,7 +352,7 @@ class AlertPipeline:
             'alert_history_size': len(self.alert_history),
             'failed_alerts_pending': len(self.failed_alerts),
         }
-    
+
     def log_alert_event(
         self,
         alert_id: str,
@@ -361,7 +360,7 @@ class AlertPipeline:
         details: Optional[Dict[str, Any]] = None,
     ) -> None:
         """Log an alert event to audit trail.
-        
+
         Args:
             alert_id: Alert ID.
             event_type: Type of event.
@@ -379,7 +378,7 @@ class AlertPipeline:
                     })
                 except Exception as e:
                     logger.error(f"Failed to log alert event: {e}")
-        
+
         logger.info(f"Alert event logged: {alert_id} - {event_type}")
 
 

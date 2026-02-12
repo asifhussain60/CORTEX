@@ -7,13 +7,12 @@ Authority: phase-45-enhanced-planning-system.yaml § Stage 3
 Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings), CORE-041 (event-driven)
 """
 
+import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, List, Optional
-import logging
 
 from cortex.models.plan_models import PlanSpec
-
 
 # ============================================================================
 # ENRICHMENT DATA STRUCTURES
@@ -23,9 +22,9 @@ from cortex.models.plan_models import PlanSpec
 @dataclass
 class GitEnrichment:
     """Git history context enrichment.
-    
+
     Provides: recent files, authors, change velocity.
-    
+
     Attributes:
         recent_files: List of recently modified files
         recent_authors: List of recent commit authors
@@ -42,9 +41,9 @@ class GitEnrichment:
 @dataclass
 class CodeEnrichment:
     """Code analysis enrichment.
-    
+
     Provides: complexity scores, dependency map, risk areas.
-    
+
     Attributes:
         complexity_scores: Complexity score per file
         dependency_map: File dependencies
@@ -59,9 +58,9 @@ class CodeEnrichment:
 @dataclass
 class PolicyEnrichment:
     """Company policy enrichment.
-    
+
     Provides: compliance requirements, policy references.
-    
+
     Attributes:
         compliance_checklist: Required compliance items (GDPR, SOC2, etc.)
         policy_references: Policy document references
@@ -74,9 +73,9 @@ class PolicyEnrichment:
 @dataclass
 class BestPracticesEnrichment:
     """Best practices knowledge enrichment.
-    
+
     Provides: recommended patterns, anti-patterns to avoid.
-    
+
     Attributes:
         recommended_patterns: Suggested design patterns
         anti_patterns_to_avoid: Anti-patterns to avoid
@@ -89,9 +88,9 @@ class BestPracticesEnrichment:
 @dataclass
 class DomainEnrichment:
     """Domain brain enrichment.
-    
+
     Provides: domain terminology, related concepts.
-    
+
     Attributes:
         domain_terminology: Domain-specific terms and definitions
         related_concepts: Related domain concepts
@@ -104,9 +103,9 @@ class DomainEnrichment:
 @dataclass
 class EnrichedPlanSpec:
     """Complete enriched plan specification.
-    
+
     Combines original plan with all LENS enrichment sources.
-    
+
     Attributes:
         plan: Original plan specification
         git_context: Git history enrichment
@@ -135,7 +134,7 @@ class EnrichedPlanSpec:
 
 class GitLensEnricher:
     """Enriches plans with git history context.
-    
+
     Sources: Git log, file history, author commits
     """
 
@@ -145,10 +144,10 @@ class GitLensEnricher:
 
     def enrich(self, plan: PlanSpec) -> GitEnrichment:
         """Enrich plan with git context.
-        
+
         Args:
             plan: Plan specification to enrich
-            
+
         Returns:
             GitEnrichment with git history context
         """
@@ -166,10 +165,10 @@ class GitLensEnricher:
 
     def _get_git_context(self, plan: PlanSpec) -> Dict[str, Any]:
         """Get git context for plan.
-        
+
         Args:
             plan: Plan specification
-            
+
         Returns:
             Dictionary with git context data
         """
@@ -185,7 +184,7 @@ class GitLensEnricher:
 
 class CodeLensEnricher:
     """Enriches plans with code analysis context.
-    
+
     Sources: AST analysis, complexity metrics, dependencies
     """
 
@@ -195,10 +194,10 @@ class CodeLensEnricher:
 
     def enrich(self, plan: PlanSpec) -> CodeEnrichment:
         """Enrich plan with code analysis context.
-        
+
         Args:
             plan: Plan specification to enrich
-            
+
         Returns:
             CodeEnrichment with code analysis context
         """
@@ -215,10 +214,10 @@ class CodeLensEnricher:
 
     def _analyze_code(self, plan: PlanSpec) -> Dict[str, Any]:
         """Analyze code for plan scope.
-        
+
         Args:
             plan: Plan specification
-            
+
         Returns:
             Dictionary with code analysis data
         """
@@ -233,7 +232,7 @@ class CodeLensEnricher:
 
 class PolicyEnricher:
     """Enriches plans with company policy context.
-    
+
     Sources: Company domains, governance rules, compliance requirements
     """
 
@@ -243,10 +242,10 @@ class PolicyEnricher:
 
     def enrich(self, plan: PlanSpec) -> PolicyEnrichment:
         """Enrich plan with policy context.
-        
+
         Args:
             plan: Plan specification to enrich
-            
+
         Returns:
             PolicyEnrichment with compliance requirements
         """
@@ -262,10 +261,10 @@ class PolicyEnricher:
 
     def _get_policy_context(self, plan: PlanSpec) -> Dict[str, Any]:
         """Get policy context for plan.
-        
+
         Args:
             plan: Plan specification
-            
+
         Returns:
             Dictionary with policy context data
         """
@@ -279,7 +278,7 @@ class PolicyEnricher:
 
 class BestPracticesEnricher:
     """Enriches plans with best practices knowledge.
-    
+
     Sources: CORTEX knowledge base, design patterns, anti-patterns
     """
 
@@ -289,10 +288,10 @@ class BestPracticesEnricher:
 
     def enrich(self, plan: PlanSpec) -> BestPracticesEnrichment:
         """Enrich plan with best practices.
-        
+
         Args:
             plan: Plan specification to enrich
-            
+
         Returns:
             BestPracticesEnrichment with patterns and anti-patterns
         """
@@ -308,10 +307,10 @@ class BestPracticesEnricher:
 
     def _get_best_practices(self, plan: PlanSpec) -> Dict[str, Any]:
         """Get best practices for plan scope.
-        
+
         Args:
             plan: Plan specification
-            
+
         Returns:
             Dictionary with best practices data
         """
@@ -325,7 +324,7 @@ class BestPracticesEnricher:
 
 class DomainEnricher:
     """Enriches plans with domain brain context.
-    
+
     Sources: Domain brain, terminology, related concepts
     """
 
@@ -335,10 +334,10 @@ class DomainEnricher:
 
     def enrich(self, plan: PlanSpec) -> DomainEnrichment:
         """Enrich plan with domain context.
-        
+
         Args:
             plan: Plan specification to enrich
-            
+
         Returns:
             DomainEnrichment with domain terminology and concepts
         """
@@ -354,10 +353,10 @@ class DomainEnricher:
 
     def _get_domain_context(self, plan: PlanSpec) -> Dict[str, Any]:
         """Get domain context for plan.
-        
+
         Args:
             plan: Plan specification
-            
+
         Returns:
             Dictionary with domain context data
         """
@@ -376,10 +375,10 @@ class DomainEnricher:
 
 class PlanEnrichmentPipeline:
     """Composable pipeline for multi-source plan enrichment.
-    
+
     Runs enrichers in sequence, collecting results into EnrichedPlanSpec.
     New enrichers can be registered without modifying existing code.
-    
+
     CORE-041: Event-driven architecture pattern.
     """
 
@@ -396,7 +395,7 @@ class PlanEnrichmentPipeline:
 
     def register_enricher(self, enricher: Any) -> None:
         """Register a new enricher to the pipeline.
-        
+
         Args:
             enricher: Enricher object with enrich(plan) method
         """
@@ -407,13 +406,13 @@ class PlanEnrichmentPipeline:
 
     def enrich(self, plan: PlanSpec) -> EnrichedPlanSpec:
         """Enrich a plan with all registered LENS sources.
-        
+
         Runs all enrichers in sequence. Failures are logged and skipped
         (graceful degradation). Pipeline completes even if some enrichers fail.
-        
+
         Args:
             plan: Plan specification to enrich
-            
+
         Returns:
             EnrichedPlanSpec with all enrichments collected
         """
@@ -427,7 +426,7 @@ class PlanEnrichmentPipeline:
         for enricher in self.enrichers:
             try:
                 result = enricher.enrich(plan)
-                
+
                 if isinstance(result, GitEnrichment):
                     git_context = result
                 elif isinstance(result, CodeEnrichment):
@@ -438,7 +437,7 @@ class PlanEnrichmentPipeline:
                     practices_context = result
                 elif isinstance(result, DomainEnrichment):
                     domain_context = result
-                
+
                 self.logger.debug(
                     f"Enricher {enricher.__class__.__name__} completed"
                 )

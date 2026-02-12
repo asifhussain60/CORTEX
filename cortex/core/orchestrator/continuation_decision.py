@@ -15,9 +15,8 @@ Author: Asif Hussain
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional
+
 from cortex.models.canonical_enums import ContinuationReason
-
-
 
 
 @dataclass(frozen=True)
@@ -25,7 +24,7 @@ class ContinuationDecision:
     """Continuation decision for a conversation turn.
 
     Frozen dataclass to ensure immutability.
-    
+
     Attributes:
         should_continue: Whether to continue the conversation.
         reason: The reason for the decision (ContinuationReason enum).
@@ -49,7 +48,7 @@ class ContinuationDecision:
     @property
     def is_halt_by_governance(self) -> bool:
         """Check if halt was due to governance violation.
-        
+
         Returns:
             True if governance violation caused halt, False otherwise.
         """
@@ -57,20 +56,20 @@ class ContinuationDecision:
             self.reason == ContinuationReason.GOVERNANCE_HALT
             or len(self.governance_violations) > 0
         )
-    
+
     @property
     def is_user_action_required(self) -> bool:
         """Check if user action is required to continue.
-        
+
         Returns:
             True if user interaction needed, False otherwise.
         """
         return self.reason == ContinuationReason.INTERACTION_REQUIRED
-    
+
     @property
     def is_safe_to_resume(self) -> bool:
         """Check if it's safe to resume operation later.
-        
+
         Returns:
             True if safe to resume, False if error or halt.
         """
@@ -80,10 +79,10 @@ class ContinuationDecision:
             ContinuationReason.INTERACTION_REQUIRED,
         }
         return self.reason in safe_reasons
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary representation.
-        
+
         Returns:
             Dictionary representation of decision.
         """
@@ -97,21 +96,21 @@ class ContinuationDecision:
             "audit_entry_id": self.audit_entry_id,
             "governance_violations": self.governance_violations.copy(),
         }
-    
+
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "ContinuationDecision":
         """Create ContinuationDecision from dictionary.
-        
+
         Args:
             data: Dictionary with decision data
-        
+
         Returns:
             ContinuationDecision instance
         """
         reason = data.get("reason", "COMPLETION")
         if isinstance(reason, str):
             reason = ContinuationReason.from_string(reason)
-        
+
         return cls(
             should_continue=data.get("should_continue", False),
             reason=reason,

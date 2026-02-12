@@ -1,13 +1,12 @@
 """REST endpoint for batch telemetry ingestion (AC-UNIFIED-DEPLOY-001-02)."""
 
-from typing import Dict, List, Any, Optional
-from dataclasses import dataclass
-from datetime import datetime, timedelta
 import json
 import logging
+from dataclasses import dataclass
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional
 
 from .schema import TelemetryEventSchema
-
 
 logger = logging.getLogger(__name__)
 

@@ -17,18 +17,18 @@ Task: 018 - Dependency Bundling
 
 import hashlib
 import json
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Dict, List, Optional
-from urllib.request import urlopen, Request
-from urllib.error import URLError, HTTPError
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
 
 
 @dataclass
 class DependencyAsset:
     """
     Represents a single downloadable asset.
-    
+
     Attributes:
         name: Human-readable name (e.g., "Alpine.js")
         version: Semantic version (e.g., "3.13.3")
@@ -85,28 +85,28 @@ DEPENDENCIES: List[DependencyAsset] = [
 class DependencyBundler:
     """
     Downloads and bundles external dependencies for offline dashboard operation.
-    
+
     Features:
     - Downloads from CDN with retry logic
     - Verifies SHA-256 checksums
     - Saves checksums manifest for future verification
     - Detects already-downloaded assets
     - Provides progress feedback
-    
+
     Example:
         ```python
         bundler = DependencyBundler()
         bundler.download_all_dependencies()
-        
+
         # Verify existing bundle
         is_valid = bundler.verify_bundle_integrity()
         ```
     """
-    
+
     def __init__(self, vendor_dir: Optional[Path] = None):
         """
         Initialize dependency bundler.
-        
+
         Args:
             vendor_dir: Path to vendor directory (default: cortex/visualization/static/vendor/)
         """
@@ -114,42 +114,42 @@ class DependencyBundler:
             # Default to cortex/visualization/static/vendor/
             script_dir = Path(__file__).parent
             vendor_dir = script_dir.parent / "static" / "vendor"
-        
+
         self.vendor_dir = vendor_dir
         self.checksums_file = vendor_dir / ".checksums.json"
         self.user_agent = "CORTEX-LENS-Dashboard/1.0"
-    
+
     def download_all_dependencies(self, force: bool = False) -> Dict[str, bool]:
         """
         Download all dependencies from CDN.
-        
+
         Args:
             force: If True, re-download even if files exist
-        
+
         Returns:
             Dict mapping asset name to success status
         """
         self.vendor_dir.mkdir(parents=True, exist_ok=True)
-        
+
         results = {}
         for asset in DEPENDENCIES:
             print(f"📦 Downloading {asset.name} v{asset.version}...")
-            
+
             file_path = self.vendor_dir / asset.filename
-            
+
             # Skip if already exists and not forcing
             if file_path.exists() and not force:
                 print(f"   ✅ Already exists: {asset.filename}")
                 results[asset.name] = True
                 continue
-            
+
             try:
                 content = self._download_asset(asset)
                 checksum = self._compute_checksum(content)
-                
+
                 # Write to file
                 file_path.write_bytes(content)
-                
+
                 # Verify checksum if expected is set
                 if asset.expected_checksum:
                     if checksum != asset.expected_checksum:
@@ -158,33 +158,33 @@ class DependencyBundler:
                             f"Expected: {asset.expected_checksum}\n"
                             f"Got: {checksum}"
                         )
-                
+
                 size_kb = len(content) / 1024
                 print(f"   ✅ Downloaded: {asset.filename} ({size_kb:.1f} KB)")
                 print(f"   🔐 SHA-256: {checksum[:16]}...")
-                
+
                 results[asset.name] = True
-                
+
             except Exception as e:
                 print(f"   ❌ Failed: {e}")
                 results[asset.name] = False
-        
+
         # Save checksums manifest
         self._save_checksums_manifest()
-        
+
         return results
-    
+
     def _download_asset(self, asset: DependencyAsset, retries: int = 3) -> bytes:
         """
         Download asset from URL with retry logic.
-        
+
         Args:
             asset: Asset to download
             retries: Number of retry attempts
-        
+
         Returns:
             Downloaded content as bytes
-        
+
         Raises:
             URLError: If download fails after retries
         """
@@ -193,30 +193,30 @@ class DependencyBundler:
                 request = Request(asset.url, headers={"User-Agent": self.user_agent})
                 with urlopen(request, timeout=30) as response:
                     return response.read()
-            
+
             except (URLError, HTTPError) as e:
                 if attempt == retries - 1:
                     raise URLError(f"Failed to download after {retries} attempts: {e}")
                 print(f"   ⚠️  Retry {attempt + 1}/{retries}...")
-        
+
         raise URLError("Download failed (should not reach here)")
-    
+
     def _compute_checksum(self, content: bytes) -> str:
         """
         Compute SHA-256 checksum of content.
-        
+
         Args:
             content: Bytes to checksum
-        
+
         Returns:
             Hex-encoded SHA-256 checksum
         """
         return hashlib.sha256(content).hexdigest()
-    
+
     def _save_checksums_manifest(self) -> None:
         """Save checksums manifest for all downloaded assets."""
         manifest = {}
-        
+
         for asset in DEPENDENCIES:
             file_path = self.vendor_dir / asset.filename
             if file_path.exists():
@@ -228,55 +228,55 @@ class DependencyBundler:
                     "checksum": checksum,
                     "size_bytes": len(content),
                 }
-        
+
         self.checksums_file.write_text(json.dumps(manifest, indent=2))
         print(f"\n💾 Checksums saved to: {self.checksums_file}")
-    
+
     def verify_bundle_integrity(self) -> bool:
         """
         Verify integrity of existing bundle against checksums manifest.
-        
+
         Returns:
             True if all files match checksums, False otherwise
         """
         if not self.checksums_file.exists():
             print("❌ No checksums manifest found. Run download first.")
             return False
-        
+
         manifest = json.loads(self.checksums_file.read_text())
         all_valid = True
-        
+
         print("🔍 Verifying bundle integrity...")
-        
+
         for filename, info in manifest.items():
             file_path = self.vendor_dir / filename
-            
+
             if not file_path.exists():
                 print(f"   ❌ Missing: {filename}")
                 all_valid = False
                 continue
-            
+
             content = file_path.read_bytes()
             checksum = self._compute_checksum(content)
-            
+
             if checksum == info["checksum"]:
                 print(f"   ✅ Valid: {filename}")
             else:
                 print(f"   ❌ Corrupted: {filename}")
                 all_valid = False
-        
+
         return all_valid
-    
+
     def list_bundled_dependencies(self) -> List[Dict[str, str]]:
         """
         List all bundled dependencies with metadata.
-        
+
         Returns:
             List of dependency info dicts
         """
         if not self.checksums_file.exists():
             return []
-        
+
         manifest = json.loads(self.checksums_file.read_text())
         return [
             {
@@ -293,10 +293,10 @@ class DependencyBundler:
 def bundle_dependencies(force: bool = False) -> bool:
     """
     Convenience function to download all dependencies.
-    
+
     Args:
         force: If True, re-download even if files exist
-    
+
     Returns:
         True if all downloads succeeded, False otherwise
     """
@@ -304,16 +304,16 @@ def bundle_dependencies(force: bool = False) -> bool:
     results = bundler.download_all_dependencies(force=force)
     success_count = sum(results.values())
     total_count = len(results)
-    
+
     print(f"\n📊 Summary: {success_count}/{total_count} dependencies downloaded")
-    
+
     return all(results.values())
 
 
 def verify_bundle() -> bool:
     """
     Convenience function to verify bundle integrity.
-    
+
     Returns:
         True if bundle is valid, False otherwise
     """
@@ -323,7 +323,7 @@ def verify_bundle() -> bool:
 
 if __name__ == "__main__":
     import sys
-    
+
     if len(sys.argv) > 1 and sys.argv[1] == "verify":
         # Verify existing bundle
         is_valid = verify_bundle()

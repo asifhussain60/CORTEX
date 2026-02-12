@@ -20,8 +20,8 @@ import json
 import logging
 import os
 import shutil
-import sys
 import subprocess
+import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Set, Tuple

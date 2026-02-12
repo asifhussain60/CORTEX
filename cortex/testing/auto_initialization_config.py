@@ -3,8 +3,8 @@ CORTEX Auto-Initialization Integration Module
 Hooks into CORTEX Total Recall prompt to auto-execute all initialization tasks
 Status: ✅ PRODUCTION READY
 """
-from typing import Dict, Any
 import asyncio
+from typing import Any, Dict
 
 # Auto-Initialization Hook Points (called by cortex-total-recall.prompt.md)
 
@@ -105,7 +105,7 @@ Auto-Initialization Suite Starts
    ```
    IMPORT: cortex.testing.enhanced_wiring_harness.EnhancedWiringHarness
    IMPORT: cortex.testing.auto_initialization_suite.AutoInitializationSuite
-   
+
    ON_LOAD:
      harness = EnhancedWiringHarness()
      suite = AutoInitializationSuite()
@@ -168,32 +168,32 @@ Recovery: Run auto-initialization with verbose=True for detailed logs
 
 class AutoInitializationConfig:
     """Configuration for auto-initialization behavior"""
-    
+
     # Enable/disable auto-initialization
     ENABLED: bool = True
-    
+
     # Verbosity level (0=silent, 1=summary, 2=detailed)
     VERBOSITY: int = 1
-    
+
     # Run test suites during initialization
     RUN_TESTS: bool = True
-    
+
     # Validate CORE-029 compliance
     VALIDATE_CORE_029: bool = True
-    
+
     # Auto-repair CORE-029 violations
     AUTO_REPAIR_CORE_029: bool = False
-    
+
     # Git sync before initialization
     GIT_SYNC_BEFORE_INIT: bool = True
-    
+
     # Timeout for each phase (seconds)
     PHASE_TIMEOUT: int = 60
-    
+
     # Log to file
     LOG_TO_FILE: bool = True
     LOG_FILE: str = "cortex_auto_initialization.log"
-    
+
     @classmethod
     def to_dict(cls) -> Dict[str, Any]:
         """Return configuration as dictionary"""
@@ -217,11 +217,11 @@ def install_auto_initialization_hooks():
     """
     import sys
     from pathlib import Path
-    
+
     # Add auto-initialization modules to path
     cortex_path = Path(__file__).parent
     sys.path.insert(0, str(cortex_path))
-    
+
     print("✅ Auto-initialization hooks installed")
     print("   Enhanced Wiring Harness: Ready")
     print("   Auto-Initialization Suite: Ready")
@@ -246,34 +246,34 @@ async def execute_auto_initialization():
     Main auto-initialization entry point
     Called automatically by cortex-total-recall.prompt.md
     """
-    
+
     if not AutoInitializationConfig.ENABLED:
         print("⚠️  Auto-initialization disabled, skipping")
         return False
-    
+
     print("\n" + "=" * 80)
     print("🧠 EXECUTING AUTO-INITIALIZATION")
     print("=" * 80 + "\n")
-    
+
     # Import and execute initialization
-    from cortex.testing.enhanced_wiring_harness import auto_initialize_cortex
     from cortex.testing.auto_initialization_suite import AutoInitializationSuite
-    
+    from cortex.testing.enhanced_wiring_harness import auto_initialize_cortex
+
     try:
         # Step 1: Auto-wire components
         wiring_results: Dict[str, Any] = await auto_initialize_cortex()
-        
+
         if AutoInitializationConfig.VERBOSITY > 0:
             wired_count = wiring_results.get('wired_successfully', 0)
             print(f"✅ Auto-wiring complete: {wired_count} components")
-        
+
         # Step 2: Run initialization suite
         suite = AutoInitializationSuite(
             verbose=(AutoInitializationConfig.VERBOSITY > 1)
         )
-        
+
         initialization_success = await suite.execute_full_initialization()
-        
+
         if initialization_success:
             print("\n✅ AUTO-INITIALIZATION SUCCESSFUL")
             print("   CORTEX is ready for operation")
@@ -282,7 +282,7 @@ async def execute_auto_initialization():
             print("\n❌ AUTO-INITIALIZATION FAILED")
             print("   Review logs for details")
             return False
-            
+
     except Exception as e:
         print(f"\n❌ AUTO-INITIALIZATION ERROR: {str(e)}")
         return False
@@ -290,7 +290,7 @@ async def execute_auto_initialization():
 
 if __name__ == "__main__":
     import asyncio
-    
+
     install_auto_initialization_hooks()
     success = asyncio.run(execute_auto_initialization())
     exit(0 if success else 1)

@@ -17,14 +17,13 @@ Phase: 10 - LENS Remote Intelligence
 Task: LENS-010
 """
 
+import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Dict, Any, List, Optional, Protocol
-import logging
-
+from typing import Any, Dict, List, Optional, Protocol
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +39,7 @@ class ProviderType(Enum):
 class RemoteFile:
     """
     Represents a file from a remote repository.
-    
+
     Attributes:
         path: File path in repository
         content: File content (text or base64)
@@ -59,7 +58,7 @@ class RemoteFile:
 class RemoteCommit:
     """
     Represents a commit from a remote repository.
-    
+
     Attributes:
         sha: Commit SHA
         message: Commit message
@@ -80,7 +79,7 @@ class RemoteCommit:
 class RemoteBlame:
     """
     Git blame information for a file.
-    
+
     Attributes:
         file_path: Path to file
         lines: List of (line_number, commit_sha, author, date) tuples
@@ -93,7 +92,7 @@ class RemoteBlame:
 class ProviderConfig:
     """
     Configuration for remote provider authentication.
-    
+
     Attributes:
         provider_type: Type of provider (GitHub, GitLab, etc.)
         base_url: Base API URL (for self-hosted instances)
@@ -113,21 +112,21 @@ class ProviderConfig:
 class RemoteGitProvider(ABC):
     """
     Abstract base class for remote git providers.
-    
+
     All providers must implement these methods to support
     remote repository analysis via LENS.
     """
-    
+
     def __init__(self, config: ProviderConfig):
         """
         Initialize provider with configuration.
-        
+
         Args:
             config: Provider configuration including auth
         """
         self.config = config
         self.logger = logging.getLogger(f"{__name__}.{self.__class__.__name__}")
-    
+
     @abstractmethod
     def fetch_file(
         self,
@@ -137,22 +136,22 @@ class RemoteGitProvider(ABC):
     ) -> RemoteFile:
         """
         Fetch a file from remote repository.
-        
+
         Args:
             repo: Repository identifier (e.g., "owner/repo")
             file_path: Path to file in repository
             ref: Git ref (branch, tag, commit SHA)
-            
+
         Returns:
             RemoteFile with content and metadata
-            
+
         Raises:
             FileNotFoundError: If file doesn't exist
             AuthenticationError: If credentials invalid
             RateLimitError: If rate limit exceeded
         """
         pass
-    
+
     @abstractmethod
     def fetch_commits(
         self,
@@ -163,18 +162,18 @@ class RemoteGitProvider(ABC):
     ) -> List[RemoteCommit]:
         """
         Fetch commit history for repository or file.
-        
+
         Args:
             repo: Repository identifier
             file_path: Optional path to filter commits
             ref: Git ref to start from
             max_count: Maximum commits to fetch
-            
+
         Returns:
             List of RemoteCommit objects
         """
         pass
-    
+
     @abstractmethod
     def fetch_blame(
         self,
@@ -184,30 +183,30 @@ class RemoteGitProvider(ABC):
     ) -> RemoteBlame:
         """
         Fetch git blame for a file.
-        
+
         Args:
             repo: Repository identifier
             file_path: Path to file
             ref: Git ref
-            
+
         Returns:
             RemoteBlame with line-by-line attribution
         """
         pass
-    
+
     @abstractmethod
     def list_branches(self, repo: str) -> List[str]:
         """
         List all branches in repository.
-        
+
         Args:
             repo: Repository identifier
-            
+
         Returns:
             List of branch names
         """
         pass
-    
+
     @abstractmethod
     def compare_branches(
         self,
@@ -217,12 +216,12 @@ class RemoteGitProvider(ABC):
     ) -> Dict[str, Any]:
         """
         Compare two branches.
-        
+
         Args:
             repo: Repository identifier
             base_branch: Base branch name
             head_branch: Head branch name
-            
+
         Returns:
             Dictionary with comparison data:
             - commits: List of commits in head but not base
@@ -231,11 +230,11 @@ class RemoteGitProvider(ABC):
             - deletions: Total lines deleted
         """
         pass
-    
+
     def validate_auth(self) -> bool:
         """
         Validate authentication credentials.
-        
+
         Returns:
             True if credentials valid, False otherwise
         """
@@ -250,10 +249,10 @@ class RemoteGitProvider(ABC):
 class RemoteGitAdapter:
     """
     Unified adapter for remote git operations.
-    
+
     Automatically selects appropriate provider based on repository URL
     and manages provider lifecycle.
-    
+
     Example:
         ```python
         from cortex.brain.analysis.remote_git_adapter import (
@@ -261,22 +260,22 @@ class RemoteGitAdapter:
             ProviderConfig,
             ProviderType,
         )
-        
+
         # Configure GitHub provider
         config = ProviderConfig(
             provider_type=ProviderType.GITHUB,
             token=os.getenv("GITHUB_TOKEN"),
         )
-        
+
         adapter = RemoteGitAdapter(config)
-        
+
         # Fetch file from remote
         file = adapter.fetch_file(
             repo="owner/repo",
             file_path="src/main.py",
             ref="feature-branch",
         )
-        
+
         # Compare branches
         comparison = adapter.compare_branches(
             repo="owner/repo",
@@ -285,17 +284,17 @@ class RemoteGitAdapter:
         )
         ```
     """
-    
+
     def __init__(self, provider: RemoteGitProvider):
         """
         Initialize adapter with provider.
-        
+
         Args:
             provider: Remote git provider instance
         """
         self.provider = provider
         self.logger = logging.getLogger(__name__)
-    
+
     def fetch_file(
         self,
         repo: str,
@@ -304,18 +303,18 @@ class RemoteGitAdapter:
     ) -> RemoteFile:
         """
         Fetch file from remote repository.
-        
+
         Args:
             repo: Repository identifier
             file_path: Path to file
             ref: Git ref (branch, tag, SHA)
-            
+
         Returns:
             RemoteFile with content and metadata
         """
         self.logger.info(f"Fetching {file_path} from {repo}@{ref}")
         return self.provider.fetch_file(repo, file_path, ref)
-    
+
     def fetch_commits(
         self,
         repo: str,
@@ -325,19 +324,19 @@ class RemoteGitAdapter:
     ) -> List[RemoteCommit]:
         """
         Fetch commit history.
-        
+
         Args:
             repo: Repository identifier
             file_path: Optional file path filter
             ref: Git ref
             max_count: Maximum commits
-            
+
         Returns:
             List of commits
         """
         self.logger.info(f"Fetching commits from {repo}@{ref}")
         return self.provider.fetch_commits(repo, file_path, ref, max_count)
-    
+
     def fetch_blame(
         self,
         repo: str,
@@ -346,30 +345,30 @@ class RemoteGitAdapter:
     ) -> RemoteBlame:
         """
         Fetch git blame for file.
-        
+
         Args:
             repo: Repository identifier
             file_path: Path to file
             ref: Git ref
-            
+
         Returns:
             Blame information
         """
         self.logger.info(f"Fetching blame for {file_path} from {repo}@{ref}")
         return self.provider.fetch_blame(repo, file_path, ref)
-    
+
     def list_branches(self, repo: str) -> List[str]:
         """
         List repository branches.
-        
+
         Args:
             repo: Repository identifier
-            
+
         Returns:
             List of branch names
         """
         return self.provider.list_branches(repo)
-    
+
     def compare_branches(
         self,
         repo: str,
@@ -378,12 +377,12 @@ class RemoteGitAdapter:
     ) -> Dict[str, Any]:
         """
         Compare two branches.
-        
+
         Args:
             repo: Repository identifier
             base_branch: Base branch
             head_branch: Head branch
-            
+
         Returns:
             Comparison data
         """
@@ -394,13 +393,13 @@ class RemoteGitAdapter:
 def create_adapter(config: ProviderConfig) -> RemoteGitAdapter:
     """
     Factory function to create adapter with appropriate provider.
-    
+
     Args:
         config: Provider configuration
-        
+
     Returns:
         Configured RemoteGitAdapter
-        
+
     Raises:
         ValueError: If provider type not supported
     """
@@ -408,12 +407,12 @@ def create_adapter(config: ProviderConfig) -> RemoteGitAdapter:
         GitHubProvider,
         GitLabProvider,
     )
-    
+
     if config.provider_type == ProviderType.GITHUB:
         provider = GitHubProvider(config)
     elif config.provider_type == ProviderType.GITLAB:
         provider = GitLabProvider(config)
     else:
         raise ValueError(f"Unsupported provider: {config.provider_type}")
-    
+
     return RemoteGitAdapter(provider)

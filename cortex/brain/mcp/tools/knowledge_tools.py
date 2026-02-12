@@ -11,7 +11,7 @@ Author: CORTEX Framework
 
 from typing import Any, Dict, List
 
-from cortex.brain.core.result import Result, Ok, Err
+from cortex.brain.core.result import Err, Ok, Result
 from cortex.brain.mcp.decorator import mcp_tool
 
 
@@ -33,11 +33,11 @@ from cortex.brain.mcp.decorator import mcp_tool
 )
 def search_knowledge_base(query: str, max_results: int = 10) -> Result[Dict[str, Any]]:
     """Search knowledge base.
-    
+
     Args:
         query: Search query string
         max_results: Maximum results to return
-        
+
     Returns:
         Result containing search results
     """
@@ -73,10 +73,10 @@ def search_knowledge_base(query: str, max_results: int = 10) -> Result[Dict[str,
 )
 def analyze_knowledge_gap(topic: str) -> Result[Dict[str, Any]]:
     """Analyze knowledge gaps.
-    
+
     Args:
         topic: Topic to analyze
-        
+
     Returns:
         Result containing gap analysis
     """
@@ -114,11 +114,11 @@ def analyze_knowledge_gap(topic: str) -> Result[Dict[str, Any]]:
 )
 def generate_knowledge_summary(area: str, depth: str = "standard") -> Result[Dict[str, Any]]:
     """Generate knowledge summary.
-    
+
     Args:
         area: Knowledge area
         depth: Summary depth level
-        
+
     Returns:
         Result containing summary
     """

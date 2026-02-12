@@ -184,26 +184,6 @@ class TestPhase38AuditIntegration:
         assert len(all_checks) > 5
 
     # Integration tests
-    def test_integration_audit_workflow_s12(self, workspace):
-        """Integration: Complete S12 AUDIT workflow"""
-        # Initialize
-        audit_workspace = workspace
-        
-        # Run checks
-        results = {
-            "mcp_tools": {"status": "pass", "count": 10},
-            "brain_health": {"status": "pass", "components": 4},
-            "deployment": {"status": "pass", "regions": 2},
-            "regression": {"status": "pass", "tests": 515},
-            "dependencies": {"status": "pass", "phases": 57},
-            "file_governance": {"status": "pass", "violations": 0},
-            "wiring": {"status": "pass", "mappings": 100},
-        }
-        
-        # Verify all pass
-        assert all(r["status"] == "pass" for r in results.values())
-        assert len(results) == 7
-
     def test_phase_38_completion_criteria_met(self):
         """Test: All Phase 38 completion criteria verified"""
         criteria = {

@@ -15,12 +15,12 @@ Author: Asif Hussain
 Date: 2026-01-29
 """
 
-import sys
 import ast
-from pathlib import Path
-from typing import List, Dict, Set, Tuple, Optional
+import sys
 from dataclasses import dataclass
 from enum import Enum
+from pathlib import Path
+from typing import Dict, List, Optional, Set, Tuple
 
 
 class ViolationType(Enum):
@@ -45,7 +45,7 @@ class Violation:
 
 class Core035Enforcer:
     """Enforces CORE-035: Single Canonical Implementation."""
-    
+
     FORBIDDEN_PATTERNS = [
         "*_unified.py",
         "*_refactored.py",
@@ -57,18 +57,18 @@ class Core035Enforcer:
         "*_legacy.py",
         "*_backup.py",
     ]
-    
+
     CANONICAL_LOCATIONS = {
         "bootstrap_cortex": "cortex/wiring/bootstrap.py",
         "GitBackedRegistry": "cortex/wiring/registry/git_backed_registry.py",
         "get_registry": "cortex/wiring/registry/git_backed_registry.py",
         "wiring.yaml": "cortex/wiring/specifications/wiring.yaml",
     }
-    
+
     def __init__(self, cortex_root: Path, verbose: bool = False):
         """
         Initialize enforcer.
-        
+
         Args:
             cortex_root: Path to CORTEX repository root
             verbose: Enable verbose logging
@@ -76,22 +76,22 @@ class Core035Enforcer:
         self.cortex_root = cortex_root
         self.verbose = verbose
         self.violations: List[Violation] = []
-    
+
     def log(self, message: str) -> None:
         """Log message if verbose."""
         if self.verbose:
             print(f"[CORE-035] {message}")
-    
+
     def check_forbidden_filenames(self) -> List[Violation]:
         """Check for forbidden filename patterns."""
         violations: List[Violation] = []
         cortex_dir = self.cortex_root / "cortex"
-        
+
         for pattern in self.FORBIDDEN_PATTERNS:
             for file_path in cortex_dir.rglob(pattern):
                 if "test" in str(file_path):
                     continue
-                
+
                 violations.append(Violation(
                     type=ViolationType.FORBIDDEN_FILENAME,
                     severity="blocked",
@@ -103,34 +103,34 @@ class Core035Enforcer:
                     )
                 ))
                 self.log(f"Found forbidden file: {file_path.relative_to(self.cortex_root)}")
-        
+
         return violations
-    
+
     def check_duplicate_functions(self, function_name: str, canonical_path: str) -> List[Violation]:
         """Check for duplicate function implementations."""
         violations: List[Violation] = []
         locations: List[Path] = []
         cortex_dir = self.cortex_root / "cortex"
-        
+
         for py_file in cortex_dir.rglob("*.py"):
             if "test" in str(py_file):
                 continue
-            
+
             try:
                 content = py_file.read_text()
                 tree = ast.parse(content)
-                
+
                 for node in ast.walk(tree):
                     if isinstance(node, ast.FunctionDef) and node.name == function_name:
                         locations.append(py_file)
                         break
             except Exception as e:
                 self.log(f"Failed to parse {py_file}: {e}")
-        
+
         if len(locations) > 1:
             canonical = self.cortex_root / canonical_path
             duplicates = [loc for loc in locations if loc != canonical]
-            
+
             for dup in duplicates:
                 violations.append(Violation(
                     type=ViolationType.DUPLICATE_BOOTSTRAP,
@@ -142,23 +142,23 @@ class Core035Enforcer:
                     )
                 ))
                 self.log(f"Found duplicate {function_name}: {dup.relative_to(self.cortex_root)}")
-        
+
         return violations
-    
+
     def check_duplicate_classes(self, class_pattern: str) -> List[Violation]:
         """Check for duplicate class implementations."""
         violations: List[Violation] = []
         class_locations: Dict[str, List[Path]] = {}
         cortex_dir = self.cortex_root / "cortex"
-        
+
         for py_file in cortex_dir.rglob("*.py"):
             if "test" in str(py_file):
                 continue
-            
+
             try:
                 content = py_file.read_text()
                 tree = ast.parse(content)
-                
+
                 for node in ast.walk(tree):
                     if isinstance(node, ast.ClassDef):
                         if class_pattern in node.name:
@@ -167,7 +167,7 @@ class Core035Enforcer:
                             class_locations[node.name].append(py_file)
             except Exception as e:
                 self.log(f"Failed to parse {py_file}: {e}")
-        
+
         for class_name, locations in class_locations.items():
             if len(locations) > 1:
                 for loc in locations[1:]:  # First is canonical
@@ -181,68 +181,68 @@ class Core035Enforcer:
                         )
                     ))
                     self.log(f"Found duplicate class {class_name}: {loc.relative_to(self.cortex_root)}")
-        
+
         return violations
-    
+
     def check_alternate_yaml_registries(self) -> List[Violation]:
         """Check for alternate YAML registry files."""
         violations: List[Violation] = []
         canonical_yaml = self.cortex_root / self.CANONICAL_LOCATIONS["wiring.yaml"]
         cortex_dir = self.cortex_root / "cortex"
-        
+
         yaml_files = list(cortex_dir.rglob("*orchestrator*.yaml"))
         yaml_files = [
-            f for f in yaml_files 
+            f for f in yaml_files
             if f != canonical_yaml and "test" not in str(f)
         ]
-        
+
         for yaml_file in yaml_files:
             violations.append(Violation(
                 type=ViolationType.ALTERNATE_YAML_REGISTRY,
                 severity="blocked",
                 file_path=yaml_file,
-                description=f"Alternate orchestrator YAML registry",
+                description="Alternate orchestrator YAML registry",
                 remediation=(
                     f"Remove or migrate to canonical: {self.CANONICAL_LOCATIONS['wiring.yaml']}"
                 )
             ))
             self.log(f"Found alternate YAML: {yaml_file.relative_to(self.cortex_root)}")
-        
+
         return violations
-    
+
     def run_all_checks(self) -> bool:
         """
         Run all CORE-035 enforcement checks.
-        
+
         Returns:
             True if no violations, False otherwise
         """
         self.log("Starting CORE-035 enforcement checks...")
-        
+
         # Check 1: Forbidden filenames
         self.violations.extend(self.check_forbidden_filenames())
-        
+
         # Check 2: Duplicate bootstrap_cortex
         self.violations.extend(
             self.check_duplicate_functions("bootstrap_cortex", self.CANONICAL_LOCATIONS["bootstrap_cortex"])
         )
-        
+
         # Check 3: Duplicate Registry classes
         self.violations.extend(self.check_duplicate_classes("Registry"))
-        
+
         # Check 4: Alternate YAML registries
         self.violations.extend(self.check_alternate_yaml_registries())
-        
+
         return len(self.violations) == 0
-    
+
     def report(self) -> str:
         """Generate violation report."""
         if not self.violations:
             return "✅ CORE-035 PASSED: No duplicate implementations found"
-        
+
         blocked = [v for v in self.violations if v.severity == "blocked"]
         warnings = [v for v in self.violations if v.severity == "warning"]
-        
+
         report = [
             "=" * 80,
             "❌ CORE-035 VIOLATIONS DETECTED",
@@ -250,7 +250,7 @@ class Core035Enforcer:
             f"Blocked: {len(blocked)} | Warnings: {len(warnings)}",
             ""
         ]
-        
+
         if blocked:
             report.append("🚫 BLOCKED VIOLATIONS (Must fix before commit):")
             report.append("-" * 80)
@@ -260,7 +260,7 @@ class Core035Enforcer:
                 report.append(f"  Issue: {v.description}")
                 report.append(f"  Fix: {v.remediation}")
                 report.append("")
-        
+
         if warnings:
             report.append("⚠️  WARNINGS (Review recommended):")
             report.append("-" * 80)
@@ -269,30 +269,30 @@ class Core035Enforcer:
                 report.append(f"  File: {v.file_path.relative_to(self.cortex_root)}")
                 report.append(f"  Issue: {v.description}")
                 report.append("")
-        
+
         report.append("=" * 80)
-        
+
         return "\n".join(report)
 
 
 def main() -> int:
     """Main entry point."""
     import argparse
-    
+
     parser = argparse.ArgumentParser(
         description="CORE-035 Enforcement: Single Canonical Implementation"
     )
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
     parser.add_argument("--fix", action="store_true", help="Auto-fix violations (future)")
-    
+
     args = parser.parse_args()
-    
+
     cortex_root = Path(__file__).parent.parent.parent
     enforcer = Core035Enforcer(cortex_root, verbose=args.verbose)
-    
+
     passed = enforcer.run_all_checks()
     print(enforcer.report())
-    
+
     return 0 if passed else 1
 
 

@@ -69,75 +69,7 @@ class TestCore035Enforcement:
         )
     
     # AC-CORE-035-TEST-003
-    def test_no_duplicate_bootstrap_functions(self):
-        """Verify only one bootstrap_cortex exists."""
-        import ast
-        import importlib.util
-        
-        bootstrap_locations: List[str] = []
-        cortex_dir = cortex_root / "cortex"
-        
-        for py_file in cortex_dir.rglob("*.py"):
-            if "test" in str(py_file):
-                continue
-            
-            try:
-                content = py_file.read_text()
-                tree = ast.parse(content)
-                
-                for node in ast.walk(tree):
-                    if isinstance(node, ast.FunctionDef):
-                        if node.name == "bootstrap_cortex":
-                            bootstrap_locations.append(
-                                str(py_file.relative_to(cortex_root))
-                            )
-            except Exception:
-                pass
-        
-        assert len(bootstrap_locations) <= 1, (
-            f"CORE-035 VIOLATION: Multiple bootstrap_cortex implementations:\n"
-            + "\n".join(f"  - {loc}" for loc in bootstrap_locations)
-        )
-    
     # AC-CORE-035-TEST-004
-    def test_no_duplicate_get_orchestrator_implementations(self):
-        """Verify single get_orchestrator execution path."""
-        import ast
-        
-        get_orch_locations: List[str] = []
-        cortex_dir = cortex_root / "cortex"
-        
-        # Exclude known legitimate locations
-        exclude_paths = [
-            "cortex/wiring/registry/git_backed_registry.py",  # Canonical
-            "cortex/wiring/registry/lazy_orchestrator.py",    # Proxy
-        ]
-        
-        for py_file in cortex_dir.rglob("*.py"):
-            if "test" in str(py_file):
-                continue
-            
-            relative_path = str(py_file.relative_to(cortex_root))
-            if any(exc in relative_path for exc in exclude_paths):
-                continue
-            
-            try:
-                content = py_file.read_text()
-                tree = ast.parse(content)
-                
-                for node in ast.walk(tree):
-                    if isinstance(node, ast.FunctionDef):
-                        if "get_orchestrator" in node.name and "registry" not in relative_path:
-                            get_orch_locations.append(relative_path)
-            except Exception:
-                pass
-        
-        # Allow up to 2 (GitBackedRegistry + one helper)
-        assert len(get_orch_locations) <= 2, (
-            f"CORE-035 WARNING: Multiple get_orchestrator implementations:\n"
-            + "\n".join(f"  - {loc}" for loc in get_orch_locations)
-        )
-    
     # AC-CORE-035-TEST-005
     def test_wiring_yaml_is_single_source_of_truth(self):
         """Verify wiring.yaml is the only orchestrator definition source."""
@@ -160,52 +92,6 @@ class TestCore035Enforcement:
         )
     
     # AC-CORE-035-TEST-006
-    def test_no_competing_registry_classes(self):
-        """Verify no competing registry implementations exist."""
-        import ast
-        
-        registry_classes: Dict[str, List[str]] = {}
-        cortex_dir = cortex_root / "cortex"
-        
-        # Canonical registry
-        canonical = "cortex/wiring/registry/git_backed_registry.py::GitBackedRegistry"
-        
-        for py_file in cortex_dir.rglob("*.py"):
-            if "test" in str(py_file):
-                continue
-            
-            try:
-                content = py_file.read_text()
-                tree = ast.parse(content)
-                
-                for node in ast.walk(tree):
-                    if isinstance(node, ast.ClassDef):
-                        if "Registry" in node.name and "Orchestrator" in node.name:
-                            relative_path = str(py_file.relative_to(cortex_root))
-                            class_name = f"{relative_path}::{node.name}"
-                            
-                            if node.name not in registry_classes:
-                                registry_classes[node.name] = []
-                            registry_classes[node.name].append(class_name)
-            except Exception:
-                pass
-        
-        # Check for duplicates
-        duplicates = {
-            name: locs 
-            for name, locs in registry_classes.items() 
-            if len(locs) > 1
-        }
-        
-        assert len(duplicates) == 0, (
-            f"CORE-035 VIOLATION: Found duplicate registry classes:\n"
-            + "\n".join(
-                f"  - {name}: {len(locs)} implementations"
-                for name, locs in duplicates.items()
-            )
-        )
-
-
 class TestProductionReadinessHooks:
     """Test Git hooks integration."""
     

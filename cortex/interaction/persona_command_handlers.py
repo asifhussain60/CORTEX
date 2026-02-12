@@ -11,11 +11,11 @@ Handles:
 - /detail sticky {level} — Persist depth for session
 """
 
-from typing import Optional, Tuple, Dict, Any
 from dataclasses import dataclass
+from typing import Any, Dict, Optional, Tuple
 
-from cortex.orchestrators.persona.models import PersonaId, DepthLevel
 from cortex.orchestrators.persona.master_orchestrator import MasterOrchestrator
+from cortex.orchestrators.persona.models import DepthLevel, PersonaId
 
 
 @dataclass

@@ -6,12 +6,12 @@ allowing system to continue with reduced functionality through
 FULL → PARTIAL → MINIMAL degradation levels.
 """
 
-from enum import Enum
-from typing import Callable, Optional, Any, Dict
-from dataclasses import dataclass, field
-import time
 import threading
+import time
+from dataclasses import dataclass, field
 from datetime import datetime
+from enum import Enum
+from typing import Any, Callable, Dict, Optional
 
 
 class DegradationLevel(Enum):
@@ -42,7 +42,7 @@ class ServiceHealth:
 
 class FallbackStrategy:
     """Encapsulates fallback logic."""
-    
+
     def __init__(
         self,
         fresh_fn: Callable[[], Any],
@@ -52,7 +52,7 @@ class FallbackStrategy:
     ):
         """
         Initialize fallback strategy.
-        
+
         Args:
             fresh_fn: Function to fetch fresh data
             cached_value: Cached fallback value
@@ -68,19 +68,19 @@ class FallbackStrategy:
 class DegradationManager:
     """
     Manages graceful degradation with automatic fallback.
-    
+
     Provides three-level degradation:
     - FULL: Fresh data from services
     - PARTIAL: Cached data (read-only)
     - MINIMAL: Default/safe values
-    
+
     Thread-safe for concurrent access.
     """
-    
+
     def __init__(self, config: Optional[DegradationConfig] = None):
         """
         Initialize degradation manager.
-        
+
         Args:
             config: Degradation configuration
         """
@@ -89,23 +89,23 @@ class DegradationManager:
         self._lock = threading.RLock()
         self._services: Dict[str, ServiceHealth] = {}
         self._manual_override = False
-        
+
         # Metrics
         self._total_degradations = 0
         self._total_recoveries = 0
         self._degradation_start_time: Optional[float] = None
         self._total_time_degraded = 0.0
-    
+
     @property
     def current_level(self) -> DegradationLevel:
         """Get current degradation level."""
         with self._lock:
             return self._current_level
-    
+
     def record_success(self, service_name: str) -> None:
         """
         Record successful service operation.
-        
+
         Args:
             service_name: Name of service
         """
@@ -115,15 +115,15 @@ class DegradationManager:
             service.consecutive_failures = 0
             service.last_check = time.time()
             service.is_healthy = True
-            
+
             # Check for recovery
             if not self._manual_override:
                 self._check_recovery()
-    
+
     def record_failure(self, service_name: str) -> None:
         """
         Record failed service operation.
-        
+
         Args:
             service_name: Name of service
         """
@@ -133,11 +133,11 @@ class DegradationManager:
             service.consecutive_successes = 0
             service.last_check = time.time()
             service.is_healthy = False
-            
+
             # Check for degradation
             if not self._manual_override:
                 self._check_degradation()
-    
+
     def execute_with_fallback(
         self,
         fresh_fn: Callable[[], Any],
@@ -148,30 +148,30 @@ class DegradationManager:
     ) -> Any:
         """
         Execute operation with automatic fallback based on degradation level.
-        
+
         Args:
             fresh_fn: Function to fetch fresh data
             cached_value: Cached fallback value
             default_value: Default fallback value
             cache_timestamp: When cache was created
             raise_on_all_failed: Raise exception if all fallbacks fail
-            
+
         Returns:
             Result from appropriate source based on degradation level
-            
+
         Raises:
             Exception: If raise_on_all_failed=True and all sources fail
         """
         level = self.current_level
-        
+
         # Try fresh data at FULL level
         if level == DegradationLevel.FULL:
             try:
                 return fresh_fn()
-            except Exception as e:
+            except Exception:
                 # Fall through to cached/default
                 pass
-        
+
         # Try cached data at PARTIAL level
         if level in [DegradationLevel.FULL, DegradationLevel.PARTIAL]:
             if cached_value is not None:
@@ -182,21 +182,21 @@ class DegradationManager:
                         # Log warning but still serve
                         pass
                 return cached_value
-        
+
         # Try default value at MINIMAL level
         if default_value is not None:
             return default_value
-        
+
         # All fallbacks exhausted
         if raise_on_all_failed:
             raise RuntimeError("All fallback strategies exhausted")
-        
+
         return None
-    
+
     def set_level(self, level: DegradationLevel, manual: bool = False) -> None:
         """
         Manually set degradation level.
-        
+
         Args:
             level: Target degradation level
             manual: Whether this is a manual override
@@ -205,7 +205,7 @@ class DegradationManager:
             old_level = self._current_level
             self._current_level = level
             self._manual_override = manual
-            
+
             if level.value < old_level.value:
                 self._total_degradations += 1
                 if self._degradation_start_time is None:
@@ -215,11 +215,11 @@ class DegradationManager:
                 if level == DegradationLevel.FULL and self._degradation_start_time:
                     self._total_time_degraded += time.time() - self._degradation_start_time
                     self._degradation_start_time = None
-    
+
     def get_health(self) -> Dict[str, Any]:
         """
         Get current health status.
-        
+
         Returns:
             Health status including level and services
         """
@@ -238,11 +238,11 @@ class DegradationManager:
                     for name, svc in self._services.items()
                 }
             }
-    
+
     def get_metrics(self) -> Dict[str, Any]:
         """
         Get degradation metrics.
-        
+
         Returns:
             Metrics including degradation counts and time
         """
@@ -250,7 +250,7 @@ class DegradationManager:
             time_degraded = self._total_time_degraded
             if self._degradation_start_time:
                 time_degraded += time.time() - self._degradation_start_time
-            
+
             return {
                 "current_level": self._current_level.value,
                 "total_degradations": self._total_degradations,
@@ -258,13 +258,13 @@ class DegradationManager:
                 "time_degraded_seconds": time_degraded,
                 "services_count": len(self._services),
             }
-    
+
     def _get_or_create_service(self, name: str) -> ServiceHealth:
         """Get or create service health tracker."""
         if name not in self._services:
             self._services[name] = ServiceHealth(name=name)
         return self._services[name]
-    
+
     def _check_degradation(self) -> None:
         """Check if system should degrade."""
         # Count unhealthy services
@@ -272,13 +272,13 @@ class DegradationManager:
             1 for svc in self._services.values()
             if svc.consecutive_failures >= self.config.degradation_threshold
         )
-        
+
         if unhealthy_count == 0:
             return
-        
+
         # Degrade based on severity - single service can degrade through all levels
         old_level = self._current_level
-        
+
         # For single service, degrade progressively based on failure count
         if len(self._services) == 1:
             service = list(self._services.values())[0]
@@ -292,7 +292,7 @@ class DegradationManager:
                 self.set_level(DegradationLevel.MINIMAL)
             elif unhealthy_count >= 1 and self._current_level == DegradationLevel.FULL:
                 self.set_level(DegradationLevel.PARTIAL)
-    
+
     def _check_recovery(self) -> None:
         """Check if system can recover."""
         # Count healthy services
@@ -300,17 +300,17 @@ class DegradationManager:
             1 for svc in self._services.values()
             if svc.consecutive_successes >= self.config.recovery_threshold
         )
-        
+
         if healthy_count == 0:
             return
-        
+
         # Recover gradually
         total_services = len(self._services)
         if total_services == 0:
             return
-        
+
         health_ratio = healthy_count / total_services
-        
+
         if health_ratio >= 0.8 and self._current_level != DegradationLevel.FULL:
             self.set_level(DegradationLevel.FULL)
         elif health_ratio >= 0.5 and self._current_level == DegradationLevel.MINIMAL:

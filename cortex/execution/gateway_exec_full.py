@@ -19,17 +19,17 @@ File Naming: CORE-028 ✅
 from __future__ import annotations
 
 import json
+import logging
 import time
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
 from enum import Enum
-import logging
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
 
 if TYPE_CHECKING:
     from cortex.execution.spec_registry_impl import SpecRegistry
-    from cortex.orchestrators.core.governance_registry import GovernanceRegistry
     from cortex.execution.structured_decision import StructuredDecisionFormatter
+    from cortex.orchestrators.core.governance_registry import GovernanceRegistry
 
 
 logger = logging.getLogger(__name__)
@@ -160,10 +160,16 @@ class MasterGatewayExecutor:
             governance_registry: GovernanceRegistry singleton (default: get_registry())
         """
         # Import at runtime to avoid circular dependencies
-        from cortex.execution.spec_registry_impl import get_registry as _get_spec_registry  # type: ignore
-        from cortex.orchestrators.core.governance_registry import GovernanceRegistry as _GovRegistry  # type: ignore
-        from cortex.execution.structured_decision import StructuredDecisionFormatter as _SDF  # type: ignore
-        
+        from cortex.execution.spec_registry_impl import (
+            get_registry as _get_spec_registry,  # type: ignore
+        )
+        from cortex.execution.structured_decision import (
+            StructuredDecisionFormatter as _SDF,  # type: ignore
+        )
+        from cortex.orchestrators.core.governance_registry import (
+            GovernanceRegistry as _GovRegistry,  # type: ignore
+        )
+
         self.spec_registry = spec_registry or _get_spec_registry()
         self.governance_registry = governance_registry or _GovRegistry.instance()
         self.decision_formatter = _SDF()
@@ -820,7 +826,7 @@ class MasterGatewayExecutor:
 
             # routing-rules-intent.yaml has structure: {routing_rules: {intents: [...]}}
             routing_rules = routing_rules_data.get("routing_rules", routing_rules_data)
-            
+
             intent_lower = intent_text.lower()
             best_match = None
             best_match_count = 0

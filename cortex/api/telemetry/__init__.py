@@ -2,8 +2,8 @@
 
 __version__ = "1.0.0"
 
-from .ingest import TelemetryIngestEndpoint
 from .aggregator import TelemetryAggregator
+from .ingest import TelemetryIngestEndpoint
 from .schema import TelemetryEventSchema
 
 __all__ = [

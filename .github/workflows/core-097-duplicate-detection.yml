@@ -1,0 +1,197 @@
+# CORE-097: Duplicate Detection CI/CD Workflow
+# AC_START: AC-WAVE-9-ENH-096-S6-001
+# Authority: Wave 9 ENH-096 Stage 6 - CI/CD Integration
+# Author: Asif Hussain
+# Date: 2026-02-12
+#
+# Runs duplicate detection on:
+# - Every pull request (informational)
+# - Weekly schedule (Sunday 2 AM UTC)
+# - Manual trigger
+
+name: CORE-097 Duplicate Detection
+
+on:
+  pull_request:
+    branches: [main, CORTEX]
+    paths:
+      - 'cortex/**'
+      - 'cortex_brain/**'
+      - 'cortex_lens/**'
+      - 'tests/**'
+  
+  schedule:
+    # Weekly: Every Sunday at 2:00 AM UTC
+    - cron: '0 2 * * 0'
+  
+  workflow_dispatch:
+    inputs:
+      min_similarity:
+        description: 'Minimum similarity threshold (0.0-1.0)'
+        required: false
+        default: '0.75'
+      include_git_analysis:
+        description: 'Include git history analysis'
+        required: false
+        default: 'true'
+
+jobs:
+  duplicate-detection:
+    name: Duplicate Code Detection
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for git analysis
+      
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Run CORE-097 Duplicate Detection
+        id: detection
+        run: |
+          python -m cortex.orchestrators.support.duplication_detector_orchestrator \
+            --min-similarity ${{ github.event.inputs.min_similarity || '0.75' }} \
+            --include-git-analysis ${{ github.event.inputs.include_git_analysis || 'true' }} \
+            --output duplicate_detection_report.json
+      
+      - name: Parse detection results
+        id: parse
+        run: |
+          # Parse JSON report
+          DUPLICATE_COUNT=$(jq '.summary.duplicate_sets_found' duplicate_detection_report.json)
+          SIMILARITY_AVG=$(jq '.summary.average_similarity' duplicate_detection_report.json)
+          LOC_DUPLICATED=$(jq '.summary.lines_of_code_duplicated' duplicate_detection_report.json)
+          
+          echo "duplicate_count=$DUPLICATE_COUNT" >> $GITHUB_OUTPUT
+          echo "similarity_avg=$SIMILARITY_AVG" >> $GITHUB_OUTPUT
+          echo "loc_duplicated=$LOC_DUPLICATED" >> $GITHUB_OUTPUT
+      
+      - name: Upload detection report
+        uses: actions/upload-artifact@v4
+        with:
+          name: duplicate-detection-report
+          path: duplicate_detection_report.json
+          retention-days: 90
+      
+      - name: Comment on PR (if applicable)
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = JSON.parse(fs.readFileSync('duplicate_detection_report.json', 'utf8'));
+            
+            const duplicateCount = report.summary.duplicate_sets_found;
+            const avgSimilarity = report.summary.average_similarity.toFixed(2);
+            const locDuplicated = report.summary.lines_of_code_duplicated;
+            
+            // Determine severity
+            let severity = '🟢 LOW';
+            let icon = '✅';
+            if (duplicateCount > 30) {
+              severity = '🔴 CRITICAL';
+              icon = '❌';
+            } else if (duplicateCount > 15) {
+              severity = '🟡 HIGH';
+              icon = '⚠️';
+            } else if (duplicateCount > 5) {
+              severity = '🟠 MEDIUM';
+              icon = '⚠️';
+            }
+            
+            const body = `
+            ## ${icon} CORE-097: Duplicate Detection Report
+            
+            **Severity:** ${severity}
+            
+            | Metric | Value |
+            |--------|-------|
+            | Duplicate Sets Found | **${duplicateCount}** |
+            | Average Similarity | ${avgSimilarity}% |
+            | Lines of Code Duplicated | ${locDuplicated} |
+            
+            ${duplicateCount > 0 ? `
+            ### 🔍 Top Duplicates
+            
+            ${report.duplicates.slice(0, 5).map((dup, i) => `
+            ${i + 1}. **${dup.file1}** ↔️ **${dup.file2}**
+               - Similarity: ${(dup.similarity * 100).toFixed(1)}%
+               - Severity: ${dup.severity}
+            `).join('\n')}
+            
+            ${duplicateCount > 5 ? `\n_...and ${duplicateCount - 5} more duplicate sets_` : ''}
+            
+            ### 📋 Recommendations
+            
+            ${report.consolidation_suggestions.slice(0, 3).map(sug => `
+            - **${sug.action}**: ${sug.description}
+              - Priority: ${sug.priority}
+            `).join('\n')}
+            ` : `
+            ### ✅ No Duplicates Detected
+            
+            Great work! CORE-097 compliance verified.
+            `}
+            
+            <details>
+            <summary>View Full Report</summary>
+            
+            Download the full report from the [workflow artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}).
+            
+            </details>
+            
+            ---
+            
+            **Authority:** CORE-097 | Wave 9 ENH-096
+            **Threshold:** ${report.config.min_similarity * 100}% similarity
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+      
+      - name: Check thresholds
+        run: |
+          DUPLICATE_COUNT=${{ steps.parse.outputs.duplicate_count }}
+          
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "CORE-097: Duplicate Detection Results"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "Duplicate Sets: $DUPLICATE_COUNT"
+          echo "Average Similarity: ${{ steps.parse.outputs.similarity_avg }}%"
+          echo "Lines Duplicated: ${{ steps.parse.outputs.loc_duplicated }}"
+          echo
+          
+          if [ "$DUPLICATE_COUNT" -eq 0 ]; then
+            echo "✅ No duplicates detected - CORE-097 compliant"
+            exit 0
+          elif [ "$DUPLICATE_COUNT" -le 5 ]; then
+            echo "🟢 Low duplicate count ($DUPLICATE_COUNT) - informational"
+            exit 0
+          elif [ "$DUPLICATE_COUNT" -le 15 ]; then
+            echo "🟠 Medium duplicate count ($DUPLICATE_COUNT) - review recommended"
+            exit 0
+          elif [ "$DUPLICATE_COUNT" -le 30 ]; then
+            echo "🟡 High duplicate count ($DUPLICATE_COUNT) - action recommended"
+            exit 0
+          else
+            echo "🔴 Critical duplicate count ($DUPLICATE_COUNT) - immediate action required"
+            # Non-blocking by default (CORE-097 enforcement.blocking: false)
+            exit 0
+          fi
+
+# AC_COMPLETE: AC-WAVE-9-ENH-096-S6-001 ✅

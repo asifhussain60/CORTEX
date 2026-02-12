@@ -5,11 +5,12 @@ and edges for ingestion into the KG system.
 """
 
 from typing import Any, Dict, List, Optional
+
 from cortex.brain.core.knowledge.graph.interface import (
-    IGraphAdapter,
     EntityNode,
-    Relationship,
     GraphQueryError,
+    IGraphAdapter,
+    Relationship,
 )
 
 

@@ -17,10 +17,11 @@ Author: Asif Hussain
 Created: 2026-01-30
 """
 
-from typing import List, Dict, Any, Optional
+import re
 from dataclasses import dataclass
 from pathlib import Path
-import re
+from typing import Any, Dict, List, Optional
+
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 
 
@@ -28,7 +29,7 @@ from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 class AngularAnalysisResult:
     """
     Result of Angular/TypeScript code analysis.
-    
+
     Attributes:
         file_path: Path to analyzed file
         components: List of Angular components
@@ -52,27 +53,27 @@ class AngularAnalysisResult:
 class AngularTypeScriptAnalyzer:
     """
     Analyzes Angular/TypeScript code for structure, patterns, and edge cases.
-    
+
     Expert in:
     - Angular components (lifecycle hooks, templates)
     - RxJS observables (subscriptions, memory leaks)
     - Router configuration (lazy loading, guards)
     - HTTP client (error handling, interceptors)
     - Edge cases (unsafe innerHTML, memory leaks, unsubscribed observables)
-    
+
     Example:
         analyzer = AngularTypeScriptAnalyzer()
         result = analyzer.analyze_file(Path("app.component.ts"))
-        
+
         print(f"Components: {len(result.components)}")
         print(f"Observables: {len(result.observables)}")
         print(f"Edge cases: {len(result.edge_cases)}")
     """
-    
+
     def __init__(self) -> None:
         """Initialize Angular/TypeScript analyzer."""
         self.logger = EnhancedAuditLogger.instance()
-        
+
         # Angular pattern regexes
         self.patterns = {
             "component": re.compile(r"@Component\s*\(\{"),
@@ -85,56 +86,56 @@ class AngularTypeScriptAnalyzer:
             "inner_html": re.compile(r"\[innerHTML\]|\binnerHTML\s*="),
             "any_type": re.compile(r":\s*any\b"),
         }
-        
+
         self.logger.log_operation_complete(
             ac_id="AC-PHASE-8.5-03",
             operation="ANGULAR_ANALYZER_INIT",
             success=True,
             details={"patterns_loaded": len(self.patterns)},
         )
-    
+
     def analyze_file(self, file_path: Path) -> AngularAnalysisResult:
         """
         Analyze Angular/TypeScript file for structure and patterns.
-        
+
         AC-PHASE-8.5-03: Extract Angular code intelligence
-        
+
         Args:
             file_path: Path to TypeScript source file
-        
+
         Returns:
             AngularAnalysisResult: Analysis results with edge cases
-        
+
         Raises:
             FileNotFoundError: If file doesn't exist
             ValueError: If file is not TypeScript (.ts extension)
         """
         if not file_path.exists():
             raise FileNotFoundError(f"File not found: {file_path}")
-        
+
         if file_path.suffix.lower() != ".ts":
             raise ValueError(f"Not a TypeScript file: {file_path}")
-        
+
         try:
             # Read file content
             content = file_path.read_text(encoding="utf-8")
             lines = content.split("\n")
-            
+
             # Extract components
             components = self._extract_components(content, lines)
             services = self._extract_services(content, lines)
             observables = self._extract_observables(content, lines)
             http_calls = self._extract_http_calls(content, lines)
             router_config = self._extract_router_config(content, lines)
-            
+
             # Detect edge cases
             edge_cases = self._detect_edge_cases(content, lines)
-            
+
             # Calculate complexity
             complexity = self._calculate_complexity(
                 len(components), len(services), len(observables), len(http_calls)
             )
-            
+
             result = AngularAnalysisResult(
                 file_path=str(file_path),
                 components=components,
@@ -145,7 +146,7 @@ class AngularTypeScriptAnalyzer:
                 edge_cases=edge_cases,
                 complexity_score=complexity,
             )
-            
+
             self.logger.log_operation_complete(
                 ac_id="AC-PHASE-8.5-03",
                 operation="ANGULAR_ANALYSIS_COMPLETE",
@@ -158,9 +159,9 @@ class AngularTypeScriptAnalyzer:
                     "complexity": complexity,
                 },
             )
-            
+
             return result
-        
+
         except Exception as e:
             self.logger.log_operation_complete(
                 ac_id="AC-PHASE-8.5-03",
@@ -169,7 +170,7 @@ class AngularTypeScriptAnalyzer:
                 details={"file": str(file_path), "error": str(e)},
             )
             raise
-    
+
     def _extract_components(self, content: str, lines: List[str]) -> List[Dict[str, Any]]:
         """Extract Angular component definitions."""
         components = []
@@ -182,14 +183,14 @@ class AngularTypeScriptAnalyzer:
                     if class_match:
                         class_name = class_match.group(1)
                         break
-                
+
                 components.append({
                     "name": class_name or "UnknownComponent",
                     "line": i,
                     "type": "component",
                 })
         return components
-    
+
     def _extract_services(self, content: str, lines: List[str]) -> List[Dict[str, Any]]:
         """Extract service definitions."""
         services = []
@@ -201,14 +202,14 @@ class AngularTypeScriptAnalyzer:
                     if class_match:
                         class_name = class_match.group(1)
                         break
-                
+
                 services.append({
                     "name": class_name or "UnknownService",
                     "line": i,
                     "type": "service",
                 })
         return services
-    
+
     def _extract_observables(self, content: str, lines: List[str]) -> List[Dict[str, Any]]:
         """Extract RxJS observable usage."""
         observables = []
@@ -221,7 +222,7 @@ class AngularTypeScriptAnalyzer:
                     "has_pipe": ".pipe(" in line,
                 })
         return observables
-    
+
     def _extract_http_calls(self, content: str, lines: List[str]) -> List[Dict[str, Any]]:
         """Extract HTTP client calls."""
         http_calls = []
@@ -234,7 +235,7 @@ class AngularTypeScriptAnalyzer:
                     "snippet": line.strip(),
                 })
         return http_calls
-    
+
     def _extract_router_config(self, content: str, lines: List[str]) -> List[Dict[str, Any]]:
         """Extract router configuration."""
         router_config = []
@@ -246,11 +247,11 @@ class AngularTypeScriptAnalyzer:
                     "snippet": line.strip(),
                 })
         return router_config
-    
+
     def _detect_edge_cases(self, content: str, lines: List[str]) -> List[Dict[str, Any]]:
         """
         Detect Angular edge cases and anti-patterns.
-        
+
         Edge cases:
         - Memory leaks (unsubscribed observables)
         - Unsafe innerHTML bindings (XSS risk)
@@ -259,10 +260,10 @@ class AngularTypeScriptAnalyzer:
         - Any type usage (type safety)
         """
         edge_cases = []
-        
+
         # Check for unsubscribed observables
         subscribe_lines = [i for i, line in enumerate(lines, 1) if ".subscribe(" in line]
-        
+
         for sub_line in subscribe_lines:
             # Check if there's unsubscribe in next 20 lines or ngOnDestroy
             has_cleanup = False
@@ -270,13 +271,13 @@ class AngularTypeScriptAnalyzer:
                 if self.patterns["unsubscribe"].search(lines[j]):
                     has_cleanup = True
                     break
-            
+
             # Also check for ngOnDestroy in class
             has_ng_destroy = any(
                 "ngOnDestroy" in line
                 for line in lines[max(0, sub_line - 50):min(sub_line + 50, len(lines))]
             )
-            
+
             if not has_cleanup and not has_ng_destroy:
                 edge_cases.append({
                     "type": "memory_leak",
@@ -284,7 +285,7 @@ class AngularTypeScriptAnalyzer:
                     "line": sub_line,
                     "message": "Observable subscription without cleanup - memory leak",
                 })
-        
+
         # Check for unsafe innerHTML
         for i, line in enumerate(lines, 1):
             if self.patterns["inner_html"].search(line):
@@ -294,7 +295,7 @@ class AngularTypeScriptAnalyzer:
                     "line": i,
                     "message": "Unsafe innerHTML binding - XSS vulnerability",
                 })
-        
+
         # Check for HTTP calls without error handling
         for i, line in enumerate(lines, 1):
             if self.patterns["http_call"].search(line):
@@ -304,7 +305,7 @@ class AngularTypeScriptAnalyzer:
                     for j in range(i, min(i + 5, len(lines)))
                     if j < len(lines)
                 )
-                
+
                 if not has_error_handler:
                     edge_cases.append({
                         "type": "missing_error_handler",
@@ -312,7 +313,7 @@ class AngularTypeScriptAnalyzer:
                         "line": i,
                         "message": "HTTP call without error handling",
                     })
-        
+
         # Check for 'any' type usage
         for i, line in enumerate(lines, 1):
             if self.patterns["any_type"].search(line):
@@ -322,9 +323,9 @@ class AngularTypeScriptAnalyzer:
                     "line": i,
                     "message": "Using 'any' type - reduces type safety",
                 })
-        
+
         return edge_cases
-    
+
     def _calculate_complexity(
         self,
         component_count: int,
@@ -339,5 +340,5 @@ class AngularTypeScriptAnalyzer:
             (observable_count * 3) +
             (http_count * 4)
         )
-        
+
         return min(100, complexity)

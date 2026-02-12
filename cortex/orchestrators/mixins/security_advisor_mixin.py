@@ -1,336 +1,379 @@
 """
-SecurityAdvisor Mixin for all orchestrators.
+Security Advisor Mixin for Orchestrators
+Provides security-first capabilities with P0/P1/P2 risk assessment
 
-Provides:
-- Automatic security assessment on every operation
-- P0/P1/P2 risk classification
-- OWASP Top 10 + CWE pattern detection
-- Compliance gap detection (HIPAA, PCI-DSS, SOC2)
-
-AC-ID: AC-LENS-V2-SECURITY-001
-Authority: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings)
+Implements OWASP Top 10 checks, risk assessment, and security recommendations
+for all orchestrator operations.
 """
-
-from typing import Dict, Any, List, Optional
+import re
+from typing import Dict, Any, List, Optional, Set
+from enum import Enum
 from pathlib import Path
-import logging
-import yaml
 
-from cortex.brain.analysis.security_threat_analyzer import (
-    SecurityThreatAnalyzer,
-    ThreatSeverity,
-    get_security_threat_analyzer,
-)
-from cortex.lens.analyzers.config_analyzer import (
-    ConfigAnalyzer,
-    ConfigSeverity,
-    get_config_analyzer,
-)
 
-logger = logging.getLogger(__name__)
+class SecurityLevel(Enum):
+    """Security risk levels (P0-P3)"""
+    P0_CRITICAL = "P0_CRITICAL"  # SQL injection, RCE, auth bypass
+    P1_HIGH = "P1_HIGH"          # XSS, insecure deserialization
+    P2_MEDIUM = "P2_MEDIUM"      # Weak crypto, missing validation
+    P3_LOW = "P3_LOW"            # Info disclosure, missing hardening
+
+
+class VulnerabilityType(Enum):
+    """OWASP Top 10 vulnerability types"""
+    SQL_INJECTION = "SQL_INJECTION"
+    XSS = "XSS"
+    BROKEN_AUTH = "BROKEN_AUTH"
+    SENSITIVE_DATA_EXPOSURE = "SENSITIVE_DATA_EXPOSURE"
+    XXE = "XXE"
+    BROKEN_ACCESS_CONTROL = "BROKEN_ACCESS_CONTROL"
+    SECURITY_MISCONFIGURATION = "SECURITY_MISCONFIGURATION"
+    INSECURE_DESERIALIZATION = "INSECURE_DESERIALIZATION"
+    VULNERABLE_COMPONENTS = "VULNERABLE_COMPONENTS"
+    INSUFFICIENT_LOGGING = "INSUFFICIENT_LOGGING"
 
 
 class SecurityAdvisorMixin:
     """
-    Mixin to add security-first capabilities to all orchestrators.
+    Mixin providing security-first capabilities for orchestrators.
     
-    Provides automatic security assessment with P0/P1/P2 classification
-    and compliance checking against OWASP Top 10 and company standards.
-    
-    Usage:
-        ```python
-        class MyOrchestrator(SecurityAdvisorMixin, IOrchestrator):
-            def execute(self, params):
-                # Auto-run security assessment
-                security = self.assess_security_risks(params)
-                if security["block_execution"]:
-                    return Err(f"⛔ SECURITY BLOCK: {security['summary']}")
-                # ... continue operation
-        ```
-    
-    Attributes:
-        security_analyzer: SecurityThreatAnalyzer instance
-        config_analyzer: ConfigAnalyzer instance
-        security_knowledge: Loaded security knowledge from YAMLs
+    Provides comprehensive security assessment:
+    - OWASP Top 10 vulnerability detection
+    - P0/P1/P2/P3 risk assessment
+    - Context-aware security recommendations
+    - Input validation and sanitization checks
     """
     
-    def __init__(self, *args, **kwargs):
-        """Initialize SecurityAdvisorMixin."""
-        super().__init__(*args, **kwargs)
-        self.security_analyzer = get_security_threat_analyzer()
-        self.config_analyzer = get_config_analyzer()
-        self.security_knowledge = self._load_security_knowledge()
+    # SQL injection patterns (basic detection)
+    SQL_INJECTION_PATTERNS = [
+        r"execute\s*\(\s*['\"].*?%s.*?['\"]",  # String interpolation in SQL
+        r"execute\s*\(\s*f['\"].*?\{.*?\}.*?['\"]",  # F-string in SQL
+        r"cursor\.execute\s*\(\s*['\"].*?\+",  # String concatenation
+        r"\.raw\s*\(\s*['\"].*?\+",  # Django ORM raw queries
+        r"\.execute\s*\(\s*['\"]SELECT.*?WHERE.*?\+",  # Direct concatenation
+    ]
     
-    def assess_security_risks(
+    # XSS patterns
+    XSS_PATTERNS = [
+        r"\.innerHTML\s*=",  # Direct innerHTML assignment
+        r"document\.write\s*\(",  # document.write usage
+        r"eval\s*\(",  # eval() usage
+        r"dangerouslySetInnerHTML",  # React dangerous HTML
+        r"v-html\s*=",  # Vue v-html directive
+    ]
+    
+    # Hardcoded secrets patterns
+    SECRET_PATTERNS = [
+        r"password\s*=\s*['\"][^'\"]+['\"]",
+        r"api_key\s*=\s*['\"][^'\"]+['\"]",
+        r"secret\s*=\s*['\"][^'\"]+['\"]",
+        r"token\s*=\s*['\"][^'\"]+['\"]",
+        r"private_key\s*=\s*['\"][^'\"]+['\"]",
+    ]
+    
+    # Insecure deserialization patterns
+    DESERIALIZATION_PATTERNS = [
+        r"pickle\.loads",
+        r"yaml\.load\s*\(",  # Should use safe_load
+        r"eval\s*\(",
+        r"exec\s*\(",
+        r"__import__",
+    ]
+    
+    def assess_security_risk(
         self,
-        context: Dict[str, Any],
-        code: Optional[str] = None,
-        config_path: Optional[Path] = None,
+        operation: str,
+        context: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         """
-        Assess security risks in operation context.
-        
-        Performs multi-layer security analysis:
-        1. Code threat analysis (CWE patterns)
-        2. Config security analysis (secrets, insecure defaults)
-        3. OWASP Top 10 compliance check
-        4. Company compliance check (HIPAA, PCI-DSS, etc.)
+        Assess security risk of an operation with OWASP checks.
         
         Args:
-            context: Operation context (lens_context, user_request, etc.)
-            code: Optional code to analyze
-            config_path: Optional config file to analyze
-            
+            operation: Operation being performed (IMPLEMENT, FIX, etc.)
+            context: Operation context (code, file_path, intent, etc.)
+        
         Returns:
-            Dict with:
-            - has_risks: bool
-            - block_execution: bool (True for P0/CRITICAL)
-            - p0_risks: List of critical risks
-            - p1_risks: List of high risks
-            - p2_risks: List of medium risks
-            - p3_risks: List of low risks
-            - compliance_gaps: List of compliance violations
-            - summary: Human-readable summary
-            
-        Example:
-            >>> security = self.assess_security_risks(
-            ...     context={"operation": "deploy"},
-            ...     code="eval(user_input)"
-            ... )
-            >>> if security["block_execution"]:
-            ...     print(f"BLOCKED: {security['summary']}")
+            Dict with risk_level, vulnerabilities, recommendations, confidence
         """
-        risks = {
-            "has_risks": False,
-            "block_execution": False,
-            "p0_risks": [],
-            "p1_risks": [],
-            "p2_risks": [],
-            "p3_risks": [],
-            "compliance_gaps": [],
-            "summary": "",
-            "details": {},
+        context = context or {}
+        vulnerabilities: List[Dict[str, Any]] = []
+        
+        # Extract code for analysis
+        code_snippet = context.get("code", "")
+        file_path = context.get("file_path", "")
+        intent = context.get("intent", "")
+        
+        # Run OWASP Top 10 checks
+        if code_snippet:
+            vulnerabilities.extend(self.check_owasp_top_10(code_snippet, context))
+        
+        # Determine risk level based on vulnerabilities
+        risk_level = self._calculate_risk_level(vulnerabilities, operation, intent)
+        
+        # Generate context-aware recommendations
+        recommendations = self.get_security_recommendations(operation, risk_level.value)
+        
+        # Add vulnerability-specific recommendations
+        for vuln in vulnerabilities:
+            vuln_type = vuln.get("type")
+            if vuln_type:
+                recommendations.extend(self._get_mitigation_for_vuln(vuln_type))
+        
+        return {
+            "risk_level": risk_level.value,
+            "vulnerabilities": vulnerabilities,
+            "recommendations": list(set(recommendations)),  # Deduplicate
+            "assessment_confidence": self._calculate_confidence(code_snippet, vulnerabilities),
+            "operation": operation,
+            "files_analyzed": [file_path] if file_path else [],
         }
-        
-        # 1. Code threat analysis
-        if code:
-            code_risks = self._analyze_code_threats(code, context)
-            risks["p0_risks"].extend(code_risks.get("p0", []))
-            risks["p1_risks"].extend(code_risks.get("p1", []))
-            risks["p2_risks"].extend(code_risks.get("p2", []))
-            risks["details"]["code_analysis"] = code_risks
-        
-        # 2. Config security analysis
-        if config_path:
-            config_risks = self._analyze_config_security(config_path)
-            risks["p0_risks"].extend(config_risks.get("p0", []))
-            risks["p1_risks"].extend(config_risks.get("p1", []))
-            risks["p2_risks"].extend(config_risks.get("p2", []))
-            risks["details"]["config_analysis"] = config_risks
-        
-        # 3. OWASP Top 10 check
-        owasp_gaps = self._check_owasp_compliance(context)
-        risks["compliance_gaps"].extend(owasp_gaps)
-        
-        # 4. Company compliance check
-        company_gaps = self._check_company_compliance(context)
-        risks["compliance_gaps"].extend(company_gaps)
-        
-        # 5. Determine if execution should be blocked
-        risks["has_risks"] = (
-            len(risks["p0_risks"]) > 0 or 
-            len(risks["p1_risks"]) > 0
-        )
-        risks["block_execution"] = len(risks["p0_risks"]) > 0
-        
-        # 6. Generate summary
-        risks["summary"] = self._generate_risk_summary(risks)
-        
-        logger.info(
-            "Security assessment complete: P0=%d, P1=%d, P2=%d, block=%s",
-            len(risks["p0_risks"]),
-            len(risks["p1_risks"]),
-            len(risks["p2_risks"]),
-            risks["block_execution"]
-        )
-        
-        return risks
     
-    def _analyze_code_threats(self, code: str, context: Dict[str, Any]) -> Dict[str, List]:
+    def check_owasp_top_10(
+        self,
+        code_snippet: str,
+        context: Optional[Dict[str, Any]] = None
+    ) -> List[Dict[str, Any]]:
         """
-        Analyze code for security threats using SecurityThreatAnalyzer.
+        Check code against OWASP Top 10 vulnerabilities.
         
-        Returns dict with p0, p1, p2, p3 lists.
+        Args:
+            code_snippet: Code to analyze
+            context: Optional analysis context
+        
+        Returns:
+            List of detected vulnerabilities with type, severity, line, description
         """
-        file_path = context.get("file_path", "user_code.py")
-        result = self.security_analyzer.analyze_code(code, file_path)
+        vulnerabilities = []
+        lines = code_snippet.split('\n')
         
-        risks = {"p0": [], "p1": [], "p2": [], "p3": []}
-        
-        if not result.success:
-            logger.warning("Code threat analysis failed: %s", result.error)
-            return risks
-        
-        for threat in result.threat_findings:
-            priority = self._map_severity_to_priority(threat.severity)
-            risks[priority].append({
-                "cwe_id": threat.cwe_id,
-                "description": threat.description,
-                "recommendation": threat.recommendation,
-                "line_number": threat.line_number,
-                "severity": threat.severity.name,
-                "code_snippet": threat.code_snippet,
-            })
-        
-        return risks
-    
-    def _analyze_config_security(self, config_path: Path) -> Dict[str, List]:
-        """
-        Analyze config file for security issues using ConfigAnalyzer.
-        
-        Returns dict with p0, p1, p2, p3 lists.
-        """
-        result = self.config_analyzer.analyze_file(config_path)
-        
-        risks = {"p0": [], "p1": [], "p2": [], "p3": []}
-        
-        if not result.success:
-            logger.warning("Config analysis failed: %s", result.error)
-            return risks
-        
-        for finding in result.findings:
-            priority = finding.severity.value.lower()  # P0 -> p0
-            risks[priority].append({
-                "category": finding.category.value,
-                "description": finding.description,
-                "recommendation": finding.recommendation,
-                "line_number": finding.line_number,
-                "file_path": finding.file_path,
-            })
-        
-        return risks
-    
-    def _check_owasp_compliance(self, context: Dict[str, Any]) -> List[Dict]:
-        """
-        Check for OWASP Top 10 violations.
-        
-        Loads from cortex_brain/tier3/knowledge/SECURITY/owasp-top-10.yaml
-        """
-        gaps = []
-        
-        try:
-            owasp_knowledge = self.security_knowledge.get("owasp_top_10", {})
-            
-            # Basic checks based on context
-            # (Full implementation would analyze code patterns)
-            
-            # Example: Check for authentication requirements
-            if context.get("operation") in ["deploy", "production"]:
-                if not context.get("auth_enabled"):
-                    gaps.append({
-                        "standard": "OWASP A01:2021",
-                        "name": "Broken Access Control",
-                        "description": "Authentication not verified for production deployment",
-                        "recommendation": "Ensure authentication is enabled and tested",
-                        "severity": "P1",
+        # Check for SQL injection
+        for i, line in enumerate(lines, 1):
+            for pattern in self.SQL_INJECTION_PATTERNS:
+                if re.search(pattern, line, re.IGNORECASE):
+                    vulnerabilities.append({
+                        "type": VulnerabilityType.SQL_INJECTION.value,
+                        "severity": SecurityLevel.P0_CRITICAL.value,
+                        "line": i,
+                        "description": "Potential SQL injection via string concatenation/interpolation",
+                        "code": line.strip(),
                     })
-            
-        except Exception as e:
-            logger.warning("OWASP compliance check failed: %s", e)
         
-        return gaps
-    
-    def _check_company_compliance(self, context: Dict[str, Any]) -> List[Dict]:
-        """
-        Check for company-specific compliance gaps.
+        # Check for XSS
+        for i, line in enumerate(lines, 1):
+            for pattern in self.XSS_PATTERNS:
+                if re.search(pattern, line, re.IGNORECASE):
+                    vulnerabilities.append({
+                        "type": VulnerabilityType.XSS.value,
+                        "severity": SecurityLevel.P1_HIGH.value,
+                        "line": i,
+                        "description": "Potential XSS vulnerability via unsafe HTML rendering",
+                        "code": line.strip(),
+                    })
         
-        Loads from company/domains/compliance-standards/*.yaml
-        """
-        gaps = []
-        
-        try:
-            company_path = Path("company/domains/compliance-standards")
-            
-            if not company_path.exists():
-                return gaps
-            
-            # Load compliance standards
-            for yaml_file in company_path.glob("*.yaml"):
-                with open(yaml_file, "r") as f:
-                    standard = yaml.safe_load(f)
-                    
-                # Basic compliance checks
-                # (Full implementation would check specific requirements)
-                
-                # Example: HIPAA check
-                if yaml_file.stem == "hipaa" and context.get("handles_phi"):
-                    if not context.get("encryption_enabled"):
-                        gaps.append({
-                            "standard": "HIPAA",
-                            "description": "PHI encryption not verified",
-                            "recommendation": "Ensure PHI is encrypted at rest and in transit",
-                            "severity": "P0",
+        # Check for hardcoded secrets
+        for i, line in enumerate(lines, 1):
+            for pattern in self.SECRET_PATTERNS:
+                if re.search(pattern, line, re.IGNORECASE):
+                    # Exclude test files and examples
+                    if not any(x in line.lower() for x in ['example', 'test', 'dummy', 'placeholder']):
+                        vulnerabilities.append({
+                            "type": VulnerabilityType.SENSITIVE_DATA_EXPOSURE.value,
+                            "severity": SecurityLevel.P1_HIGH.value,
+                            "line": i,
+                            "description": "Hardcoded secret detected - use environment variables",
+                            "code": line.strip()[:50] + "...",  # Truncate for safety
                         })
         
-        except Exception as e:
-            logger.warning("Company compliance check failed: %s", e)
+        # Check for insecure deserialization
+        for i, line in enumerate(lines, 1):
+            for pattern in self.DESERIALIZATION_PATTERNS:
+                if re.search(pattern, line):
+                    vulnerabilities.append({
+                        "type": VulnerabilityType.INSECURE_DESERIALIZATION.value,
+                        "severity": SecurityLevel.P1_HIGH.value,
+                        "line": i,
+                        "description": "Insecure deserialization pattern detected",
+                        "code": line.strip(),
+                    })
         
-        return gaps
+        # Check for missing input validation
+        if "request." in code_snippet and not any(x in code_snippet for x in ["validate", "sanitize", "clean"]):
+            vulnerabilities.append({
+                "type": VulnerabilityType.BROKEN_ACCESS_CONTROL.value,
+                "severity": SecurityLevel.P2_MEDIUM.value,
+                "line": 0,
+                "description": "Request data used without apparent validation",
+                "code": "",
+            })
+        
+        # Check for insufficient logging
+        if any(x in code_snippet for x in ["password", "secret", "token"]):
+            if "log" not in code_snippet.lower():
+                vulnerabilities.append({
+                    "type": VulnerabilityType.INSUFFICIENT_LOGGING.value,
+                    "severity": SecurityLevel.P2_MEDIUM.value,
+                    "line": 0,
+                    "description": "Security-sensitive operation without audit logging",
+                    "code": "",
+                })
+        
+        return vulnerabilities
     
-    def _map_severity_to_priority(self, severity: ThreatSeverity) -> str:
-        """Map ThreatSeverity to priority string (p0/p1/p2/p3)."""
-        mapping = {
-            ThreatSeverity.CRITICAL: "p0",
-            ThreatSeverity.HIGH: "p1",
-            ThreatSeverity.MEDIUM: "p2",
-            ThreatSeverity.LOW: "p3",
-            ThreatSeverity.INFO: "p3",
+    def get_security_recommendations(
+        self,
+        operation_type: str,
+        risk_level: str
+    ) -> List[str]:
+        """
+        Get security recommendations based on operation and risk level.
+        
+        Args:
+            operation_type: Type of operation (IMPLEMENT, FIX, etc.)
+            risk_level: Current risk level (P0/P1/P2/P3)
+        
+        Returns:
+            List of actionable security recommendations
+        """
+        recommendations = []
+        
+        # Base recommendations for all operations
+        recommendations.extend([
+            "Follow principle of least privilege",
+            "Validate and sanitize all inputs",
+            "Use parameterized queries for database operations",
+            "Enable comprehensive audit logging",
+        ])
+        
+        # Risk-level specific recommendations
+        if risk_level in [SecurityLevel.P0_CRITICAL.value, SecurityLevel.P1_HIGH.value]:
+            recommendations.extend([
+                "⚠️  CRITICAL: Address P0/P1 vulnerabilities before deployment",
+                "Implement security testing in CI/CD pipeline",
+                "Conduct security code review",
+                "Add integration tests for security controls",
+            ])
+        
+        # Operation-specific recommendations
+        if operation_type in ["IMPLEMENT", "FIX"]:
+            recommendations.extend([
+                "Use established security libraries (don't roll your own crypto)",
+                "Implement defense in depth",
+                "Add error handling without information leakage",
+            ])
+        elif operation_type == "REFACTOR":
+            recommendations.extend([
+                "Preserve existing security controls",
+                "Review access control after structural changes",
+                "Update security tests to match new structure",
+            ])
+        
+        return recommendations
+    
+    def validate_security_context(
+        self,
+        context: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        Validate security context before operation execution.
+        
+        Args:
+            context: Operation context to validate
+        
+        Returns:
+            Dict with valid flag, issues list, warnings list
+        """
+        issues = []
+        warnings = []
+        
+        # Check for required security metadata
+        if "user_id" not in context:
+            warnings.append("No user_id in context - audit trail incomplete")
+        
+        if "intent" not in context:
+            issues.append("Missing intent - cannot assess security risk")
+        
+        # Check for dangerous operations without confirmation
+        dangerous_operations = ["DELETE", "DROP", "TRUNCATE", "EXECUTE"]
+        code = context.get("code", "")
+        if any(op in code.upper() for op in dangerous_operations):
+            if not context.get("confirmed", False):
+                issues.append("Dangerous operation requires explicit confirmation")
+        
+        # Check for security-sensitive files
+        file_path = context.get("file_path", "")
+        if file_path:
+            sensitive_paths = ["auth", "security", "secrets", "credentials", "config"]
+            if any(x in file_path.lower() for x in sensitive_paths):
+                warnings.append(f"Modifying security-sensitive file: {file_path}")
+        
+        return {
+            "valid": len(issues) == 0,
+            "issues": issues,
+            "warnings": warnings,
         }
-        return mapping.get(severity, "p3")
     
-    def _generate_risk_summary(self, risks: Dict[str, Any]) -> str:
-        """Generate human-readable risk summary."""
-        p0_count = len(risks["p0_risks"])
-        p1_count = len(risks["p1_risks"])
-        p2_count = len(risks["p2_risks"])
-        compliance_count = len(risks["compliance_gaps"])
+    def _calculate_risk_level(
+        self,
+        vulnerabilities: List[Dict[str, Any]],
+        operation: str,
+        intent: str
+    ) -> SecurityLevel:
+        """Calculate overall risk level from vulnerabilities."""
+        if not vulnerabilities:
+            return SecurityLevel.P3_LOW
         
-        if p0_count > 0:
-            return (
-                f"⛔ CRITICAL: {p0_count} P0 risk(s) detected. "
-                f"Execution BLOCKED. Address immediately."
-            )
-        elif p1_count > 0:
-            return (
-                f"⚠️  HIGH: {p1_count} P1 risk(s) detected. "
-                f"Address within current sprint."
-            )
-        elif p2_count > 0 or compliance_count > 0:
-            return (
-                f"ℹ️  MODERATE: {p2_count} P2 risk(s), {compliance_count} compliance gap(s). "
-                f"Review and address."
-            )
+        # Get highest severity from vulnerabilities
+        severities = [v.get("severity") for v in vulnerabilities]
+        
+        if SecurityLevel.P0_CRITICAL.value in severities:
+            return SecurityLevel.P0_CRITICAL
+        elif SecurityLevel.P1_HIGH.value in severities:
+            return SecurityLevel.P1_HIGH
+        elif SecurityLevel.P2_MEDIUM.value in severities:
+            return SecurityLevel.P2_MEDIUM
         else:
-            return "✅ No security risks detected."
+            return SecurityLevel.P3_LOW
     
-    def _load_security_knowledge(self) -> Dict[str, Any]:
-        """
-        Load security knowledge from YAML files.
+    def _calculate_confidence(
+        self,
+        code_snippet: str,
+        vulnerabilities: List[Dict[str, Any]]
+    ) -> float:
+        """Calculate confidence score for security assessment."""
+        if not code_snippet:
+            return 0.0
         
-        Loads from:
-        - cortex_brain/tier3/knowledge/SECURITY/owasp-top-10.yaml
-        - Other security knowledge files
-        """
-        knowledge = {}
+        # Higher confidence with more code analyzed
+        code_length_factor = min(len(code_snippet) / 1000, 1.0)
         
-        try:
-            # Load OWASP Top 10
-            owasp_path = Path("cortex_brain/tier3/knowledge/SECURITY/owasp-top-10.yaml")
-            if owasp_path.exists():
-                with open(owasp_path, "r") as f:
-                    knowledge["owasp_top_10"] = yaml.safe_load(f)
+        # Higher confidence with clear vulnerability signals
+        vuln_clarity_factor = 0.8 if vulnerabilities else 0.6
         
-        except Exception as e:
-            logger.warning("Failed to load security knowledge: %s", e)
+        return round(code_length_factor * vuln_clarity_factor, 2)
+    
+    def _get_mitigation_for_vuln(self, vuln_type: str) -> List[str]:
+        """Get specific mitigation recommendations for vulnerability type."""
+        mitigations = {
+            VulnerabilityType.SQL_INJECTION.value: [
+                "Use parameterized queries or ORMs",
+                "Never concatenate user input into SQL",
+                "Apply input validation and whitelist allowed characters",
+            ],
+            VulnerabilityType.XSS.value: [
+                "Use framework-provided escaping (e.g., Jinja2 autoescape)",
+                "Implement Content Security Policy (CSP)",
+                "Sanitize user input on both client and server",
+            ],
+            VulnerabilityType.SENSITIVE_DATA_EXPOSURE.value: [
+                "Move secrets to environment variables",
+                "Use secret management systems (Vault, AWS Secrets Manager)",
+                "Never commit secrets to version control",
+            ],
+            VulnerabilityType.INSECURE_DESERIALIZATION.value: [
+                "Use safe deserialization methods (yaml.safe_load)",
+                "Validate data structure before deserializing",
+                "Avoid pickle for untrusted data",
+            ],
+        }
         
-        return knowledge
+        return mitigations.get(vuln_type, [])

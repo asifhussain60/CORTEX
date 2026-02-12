@@ -8,7 +8,8 @@ Author: CORTEX Framework
 
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Set
-from cortex.core.result import Result, Ok, Err
+
+from cortex.core.result import Err, Ok, Result
 
 
 @dataclass
@@ -186,7 +187,7 @@ class UnifiedKnowledgeService:
         source_metadata: Optional[Dict[str, Any]] = None
     ) -> None:
         """Add source attribution information to a result.
-        
+
         Args:
             result: Knowledge result to annotate.
             source_metadata: Additional metadata for the source.
@@ -201,18 +202,18 @@ class UnifiedKnowledgeService:
         backends: Optional[List[str]] = None
     ) -> Any:
         """Execute domain-aware query.
-        
+
         Args:
             query_text: Query string.
             domain: Business domain for query routing.
             backends: Optional list of specific backends.
-        
+
         Returns:
             Result with domain-filtered results.
         """
         # Execute normal query, optionally filtered by domain
         result = self.query(query_text, backends)
-        
+
         if result.is_ok():
             # Filter results by domain if router supports it
             results = result.value
@@ -220,7 +221,7 @@ class UnifiedKnowledgeService:
                 filtered = self.router.route_to_domain(results, domain)
                 return Ok(filtered)
             return result
-        
+
         return result
 
     def get_result_confidence(
@@ -228,10 +229,10 @@ class UnifiedKnowledgeService:
         result: KnowledgeResult
     ) -> float:
         """Get confidence score for a result.
-        
+
         Args:
             result: Knowledge result.
-        
+
         Returns:
             Confidence score between 0 and 1.
         """
@@ -243,11 +244,11 @@ class UnifiedKnowledgeService:
         criteria: str = "confidence"
     ) -> List[KnowledgeResult]:
         """Rank and filter results by specified criteria.
-        
+
         Args:
             results: List of knowledge results.
             criteria: Ranking criteria ("confidence", "recency", "source").
-        
+
         Returns:
             Ranked list of results.
         """
@@ -265,11 +266,11 @@ class UnifiedKnowledgeService:
         backends: Optional[List[str]] = None
     ) -> List[Any]:
         """Execute batch queries efficiently.
-        
+
         Args:
             queries: List of query strings.
             backends: Optional list of specific backends.
-        
+
         Returns:
             List of results, one per query.
         """
@@ -285,11 +286,11 @@ class UnifiedKnowledgeService:
         backends: Optional[List[str]] = None
     ) -> Any:
         """Execute async query across backends.
-        
+
         Args:
             query_text: Query string.
             backends: Optional list of specific backends.
-        
+
         Returns:
             Coroutine that returns result.
         """
@@ -299,7 +300,7 @@ class UnifiedKnowledgeService:
 
     def get_query_metrics(self) -> Dict[str, Any]:
         """Get metrics about query performance and cache usage.
-        
+
         Returns:
             Dictionary with cache size, hit rate, etc.
         """
@@ -316,7 +317,7 @@ class UnifiedKnowledgeService:
         query: Optional[str] = None
     ) -> None:
         """Handle errors from a backend gracefully.
-        
+
         Args:
             backend_name: Name of backend that failed.
             error: Exception that occurred.
@@ -335,10 +336,10 @@ class UnifiedKnowledgeService:
         result: KnowledgeResult
     ) -> Dict[str, Any]:
         """Get the lineage/provenance information for a result.
-        
+
         Args:
             result: Knowledge result.
-        
+
         Returns:
             Dictionary with source lineage information.
         """
@@ -355,7 +356,7 @@ class UnifiedKnowledgeService:
         results: List[KnowledgeResult]
     ) -> None:
         """Manually cache results with a given key.
-        
+
         Args:
             key: Cache key.
             results: Results to cache.

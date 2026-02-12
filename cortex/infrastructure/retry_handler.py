@@ -9,10 +9,10 @@ AC-NFR-002-02: Automatic retry with exponential backoff
 
 import logging
 import time
-from typing import Any, Callable, Optional, TypeVar
-from enum import Enum
 from dataclasses import dataclass
 from datetime import datetime
+from enum import Enum
+from typing import Any, Callable, Optional, TypeVar
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +35,7 @@ class RetryConfig:
     backoff_multiplier: float = 2.0
     policy: RetryPolicy = RetryPolicy.EXPONENTIAL_BACKOFF
     retryable_exceptions: tuple = (Exception,)
-    
+
     def validate(self):
         """Validate retry configuration."""
         if self.max_attempts < 1:
@@ -58,7 +58,7 @@ class RetryResult:
     final_exception: Optional[Exception] = None
     total_delay_seconds: float = 0.0
     timestamp: datetime = None
-    
+
     def __post_init__(self):
         if self.timestamp is None:
             self.timestamp = datetime.utcnow()
@@ -66,12 +66,12 @@ class RetryResult:
 
 class RetryHandler:
     """Manages retry logic with various backoff strategies."""
-    
+
     def __init__(self, config: Optional[RetryConfig] = None):
         self.config = config or RetryConfig()
         self.config.validate()
         self.retry_history: list[tuple[int, float, Optional[Exception]]] = []
-    
+
     def execute_with_retry(
         self,
         fn: Callable[..., T],
@@ -81,22 +81,22 @@ class RetryHandler:
     ) -> RetryResult:
         """
         Execute function with retry logic.
-        
+
         Args:
             fn: Function to execute
             *args: Positional arguments for function
             config: Optional retry config override
             **kwargs: Keyword arguments for function
-        
+
         Returns:
             RetryResult with success, data, and attempt count
         """
         config = config or self.config
         config.validate()
-        
+
         last_exception: Optional[Exception] = None
         total_delay = 0.0
-        
+
         for attempt in range(1, config.max_attempts + 1):
             try:
                 result = fn(*args, **kwargs)
@@ -109,7 +109,7 @@ class RetryHandler:
                 )
             except Exception as e:
                 last_exception = e
-                
+
                 # Check if exception is retryable
                 if not isinstance(e, config.retryable_exceptions):
                     logger.error(f"Non-retryable exception: {type(e).__name__}")
@@ -120,7 +120,7 @@ class RetryHandler:
                         final_exception=e,
                         total_delay_seconds=total_delay
                     )
-                
+
                 # Last attempt
                 if attempt == config.max_attempts:
                     logger.error(f"Failed after {attempt} attempts: {str(e)}")
@@ -131,18 +131,18 @@ class RetryHandler:
                         final_exception=e,
                         total_delay_seconds=total_delay
                     )
-                
+
                 # Calculate delay for next attempt
                 delay = self._calculate_delay(attempt, config)
                 logger.warning(
                     f"Attempt {attempt} failed ({type(e).__name__}). "
                     f"Retrying in {delay:.2f}s (max attempts: {config.max_attempts})"
                 )
-                
+
                 self.retry_history.append((attempt, delay, e))
                 total_delay += delay
                 time.sleep(delay)
-        
+
         # Should never reach here
         return RetryResult(
             success=False,
@@ -151,7 +151,7 @@ class RetryHandler:
             final_exception=last_exception,
             total_delay_seconds=total_delay
         )
-    
+
     def _calculate_delay(self, attempt: int, config: RetryConfig) -> float:
         """Calculate delay for given attempt number."""
         if config.policy == RetryPolicy.EXPONENTIAL_BACKOFF:
@@ -162,19 +162,19 @@ class RetryHandler:
             delay = config.initial_delay
         else:
             delay = config.initial_delay
-        
+
         # Cap at max delay
         delay = min(delay, config.max_delay)
         return delay
-    
+
     def get_retry_history(self) -> list[tuple[int, float, Optional[Exception]]]:
         """Get retry history."""
         return self.retry_history.copy()
-    
+
     def clear_history(self):
         """Clear retry history."""
         self.retry_history.clear()
-    
+
     @staticmethod
     def create_exponential_config(
         max_attempts: int = 3,
@@ -188,7 +188,7 @@ class RetryHandler:
             backoff_multiplier=backoff_multiplier,
             policy=RetryPolicy.EXPONENTIAL_BACKOFF
         )
-    
+
     @staticmethod
     def create_linear_config(
         max_attempts: int = 3,
@@ -200,7 +200,7 @@ class RetryHandler:
             initial_delay=initial_delay,
             policy=RetryPolicy.LINEAR_BACKOFF
         )
-    
+
     @staticmethod
     def create_fixed_config(
         max_attempts: int = 3,

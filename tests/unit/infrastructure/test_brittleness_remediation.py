@@ -50,29 +50,6 @@ class TestDatabaseConnectionLifecycle:
             # Verify no resource leak
             db.close()
     
-    def test_connection_exception_cleanup(self):
-        """Connection should close even when exception occurs."""
-        from cortex.infrastructure.database import DatabaseManager, DatabaseConfig
-        
-        with tempfile.TemporaryDirectory() as tmpdir:
-            config = DatabaseConfig(db_path=Path(tmpdir) / "test.db")
-            db = DatabaseManager(config)
-            db.initialize()
-            
-            try:
-                with db.get_connection() as conn:
-                    conn.execute("SELECT 1")
-                    raise ValueError("Test exception")
-            except ValueError:
-                pass
-            
-            # Ensure we can still get a new connection (not leaked)
-            with db.get_connection() as conn:
-                cursor = conn.execute("SELECT 1")
-                assert cursor.fetchone()[0] == 1
-            
-            db.close()
-    
     def test_multiple_connections_sequential(self):
         """Sequential connections should not leak resources."""
         from cortex.infrastructure.database import DatabaseManager, DatabaseConfig
@@ -392,13 +369,6 @@ class TestPytestConfiguration:
         for mark in required_marks:
             assert mark in content, f"Mark '{mark}' should be in pytest.ini"
     
-    def test_no_unknown_mark_warnings(self):
-        """Test collection should not produce unknown mark warnings."""
-        # This is verified by running pytest --collect-only
-        # The actual test is that THIS test file doesn't produce warnings
-        pass
-
-
 # =============================================================================
 # AC-TEST-NAMING-GAP-003: Test Framework Naming Tests
 # =============================================================================

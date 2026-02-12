@@ -13,18 +13,17 @@ Task: LENS-010
 """
 
 import base64
-from datetime import datetime
-from typing import Dict, Any, List, Optional
 import logging
+from datetime import datetime
+from typing import Any, Dict, List, Optional
 
 from cortex.brain.analysis.remote_git_adapter import (
-    RemoteGitProvider,
-    RemoteFile,
-    RemoteCommit,
-    RemoteBlame,
     ProviderConfig,
+    RemoteBlame,
+    RemoteCommit,
+    RemoteFile,
+    RemoteGitProvider,
 )
-
 
 logger = logging.getLogger(__name__)
 
@@ -32,10 +31,10 @@ logger = logging.getLogger(__name__)
 class GitLabProvider(RemoteGitProvider):
     """
     GitLab API provider for remote git operations.
-    
+
     Uses GitLab REST API v4 for repository access.
     Supports both gitlab.com and self-hosted GitLab.
-    
+
     Example:
         ```python
         from cortex.brain.analysis.providers import GitLabProvider
@@ -43,33 +42,33 @@ class GitLabProvider(RemoteGitProvider):
             ProviderConfig,
             ProviderType,
         )
-        
+
         config = ProviderConfig(
             provider_type=ProviderType.GITLAB,
             token=os.getenv("GITLAB_TOKEN"),
         )
-        
+
         provider = GitLabProvider(config)
         file = provider.fetch_file("group/project", "README.md", "main")
         ```
-    
+
     Attributes:
         config: Provider configuration
         base_url: GitLab API base URL
         session: Requests session with auth
     """
-    
+
     def __init__(self, config: ProviderConfig):
         """
         Initialize GitLab provider.
-        
+
         Args:
             config: Provider configuration with token
         """
         super().__init__(config)
         self.base_url = config.base_url or "https://gitlab.com/api/v4"
         self._setup_session()
-    
+
     def _setup_session(self) -> None:
         """Setup requests session with authentication."""
         try:
@@ -82,23 +81,23 @@ class GitLabProvider(RemoteGitProvider):
         except ImportError:
             self.logger.error("requests library not installed")
             raise ImportError("requests is required for GitLab provider")
-    
+
     def _encode_project_path(self, project: str) -> str:
         """
         URL-encode project path for GitLab API.
-        
+
         GitLab requires project paths to be URL-encoded.
         Example: "group/project" → "group%2Fproject"
-        
+
         Args:
             project: Project path (group/project)
-            
+
         Returns:
             URL-encoded project path
         """
         import urllib.parse
         return urllib.parse.quote(project, safe='')
-    
+
     def fetch_file(
         self,
         repo: str,
@@ -107,40 +106,40 @@ class GitLabProvider(RemoteGitProvider):
     ) -> RemoteFile:
         """
         Fetch file from GitLab repository.
-        
+
         Args:
             repo: Repository in format "group/project"
             file_path: Path to file in repository
             ref: Branch, tag, or commit SHA
-            
+
         Returns:
             RemoteFile with content and metadata
-            
+
         Raises:
             FileNotFoundError: If file doesn't exist
             requests.HTTPError: If API request fails
         """
         project_encoded = self._encode_project_path(repo)
         file_path_encoded = self._encode_project_path(file_path)
-        
+
         url = f"{self.base_url}/projects/{project_encoded}/repository/files/{file_path_encoded}"
         params = {"ref": ref}
-        
+
         self.logger.debug(f"Fetching {file_path} from {repo}@{ref}")
-        
+
         response = self.session.get(url, params=params)
         response.raise_for_status()
-        
+
         data = response.json()
-        
+
         # Decode content if base64
         content = data["content"]
         encoding = data["encoding"]
-        
+
         if encoding == "base64":
             content = base64.b64decode(content).decode("utf-8")
             encoding = "utf-8"
-        
+
         return RemoteFile(
             path=file_path,
             content=content,
@@ -148,7 +147,7 @@ class GitLabProvider(RemoteGitProvider):
             size=data["size"],
             encoding=encoding,
         )
-    
+
     def fetch_commits(
         self,
         repo: str,
@@ -158,32 +157,32 @@ class GitLabProvider(RemoteGitProvider):
     ) -> List[RemoteCommit]:
         """
         Fetch commit history from GitLab.
-        
+
         Args:
             repo: Repository identifier
             file_path: Optional file path filter
             ref: Git ref (branch, tag, SHA)
             max_count: Maximum commits to fetch
-            
+
         Returns:
             List of RemoteCommit objects
         """
         project_encoded = self._encode_project_path(repo)
         url = f"{self.base_url}/projects/{project_encoded}/repository/commits"
-        
+
         params = {
             "ref_name": ref,
             "per_page": min(max_count, 100),
         }
-        
+
         if file_path:
             params["path"] = file_path
-        
+
         self.logger.debug(f"Fetching commits from {repo}@{ref}")
-        
+
         response = self.session.get(url, params=params)
         response.raise_for_status()
-        
+
         commits = []
         for commit_data in response.json():
             commit = RemoteCommit(
@@ -197,9 +196,9 @@ class GitLabProvider(RemoteGitProvider):
                 files_changed=[],
             )
             commits.append(commit)
-        
+
         return commits
-    
+
     def fetch_blame(
         self,
         repo: str,
@@ -208,37 +207,37 @@ class GitLabProvider(RemoteGitProvider):
     ) -> RemoteBlame:
         """
         Fetch git blame for file from GitLab.
-        
+
         GitLab provides a blame endpoint that returns line-by-line attribution.
-        
+
         Args:
             repo: Repository identifier
             file_path: Path to file
             ref: Git ref
-            
+
         Returns:
             RemoteBlame with line attribution
         """
         project_encoded = self._encode_project_path(repo)
         file_path_encoded = self._encode_project_path(file_path)
-        
+
         url = f"{self.base_url}/projects/{project_encoded}/repository/files/{file_path_encoded}/blame"
         params = {"ref": ref}
-        
+
         self.logger.debug(f"Fetching blame for {file_path} from {repo}@{ref}")
-        
+
         response = self.session.get(url, params=params)
         response.raise_for_status()
-        
+
         blame_data = response.json()
-        
+
         lines = []
         line_num = 1
-        
+
         for range_data in blame_data:
             commit_info = range_data["commit"]
             line_content = range_data["lines"]
-            
+
             # Each range may contain multiple lines
             for _ in line_content:
                 lines.append((
@@ -250,32 +249,32 @@ class GitLabProvider(RemoteGitProvider):
                     ),
                 ))
                 line_num += 1
-        
+
         return RemoteBlame(
             file_path=file_path,
             lines=lines,
         )
-    
+
     def list_branches(self, repo: str) -> List[str]:
         """
         List all branches in repository.
-        
+
         Args:
             repo: Repository identifier
-            
+
         Returns:
             List of branch names
         """
         project_encoded = self._encode_project_path(repo)
         url = f"{self.base_url}/projects/{project_encoded}/repository/branches"
-        
+
         self.logger.debug(f"Listing branches for {repo}")
-        
+
         response = self.session.get(url)
         response.raise_for_status()
-        
+
         return [branch["name"] for branch in response.json()]
-    
+
     def compare_branches(
         self,
         repo: str,
@@ -284,30 +283,30 @@ class GitLabProvider(RemoteGitProvider):
     ) -> Dict[str, Any]:
         """
         Compare two branches using GitLab compare API.
-        
+
         Args:
             repo: Repository identifier
             base_branch: Base branch name
             head_branch: Head branch name
-            
+
         Returns:
             Comparison data with commits and file changes
         """
         project_encoded = self._encode_project_path(repo)
         url = f"{self.base_url}/projects/{project_encoded}/repository/compare"
-        
+
         params = {
             "from": base_branch,
             "to": head_branch,
         }
-        
+
         self.logger.debug(f"Comparing {base_branch}...{head_branch} in {repo}")
-        
+
         response = self.session.get(url, params=params)
         response.raise_for_status()
-        
+
         data = response.json()
-        
+
         return {
             "commits": [
                 RemoteCommit(
@@ -325,11 +324,11 @@ class GitLabProvider(RemoteGitProvider):
             "files_changed": [d["new_path"] for d in data.get("diffs", [])],
             "total_commits": len(data.get("commits", [])),
         }
-    
+
     def validate_auth(self) -> bool:
         """
         Validate GitLab authentication.
-        
+
         Returns:
             True if token is valid
         """

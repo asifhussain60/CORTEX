@@ -271,28 +271,3 @@ class TestSecretsFilterLogging:
 class TestSecretsFilterErrors:
     """Test error handling."""
 
-    def test_handles_none_input_gracefully(self) -> None:
-        """Verify None inputs are handled gracefully."""
-        from cortex.infrastructure.security import SecretsFilter
-        
-        filter_instance = SecretsFilter()
-        
-        try:
-            redacted = filter_instance.mask_sensitive_data(None)
-            # Should handle gracefully (return empty string or raise TypeError)
-        except (TypeError, AttributeError):
-            pass  # Expected
-
-    def test_handles_encoding_errors(self) -> None:
-        """Verify encoding errors are handled gracefully."""
-        from cortex.infrastructure.security import SecretsFilter
-        
-        filter_instance = SecretsFilter()
-        
-        try:
-            # Invalid UTF-8 sequence
-            bad_text = b'\xff\xfe'.decode('utf-8', errors='ignore')
-            redacted = filter_instance.mask_sensitive_data(bad_text)
-            assert isinstance(redacted, str)
-        except (UnicodeDecodeError, AttributeError):
-            pass  # Expected

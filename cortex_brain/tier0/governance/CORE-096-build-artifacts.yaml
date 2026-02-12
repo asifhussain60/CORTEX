@@ -1,0 +1,186 @@
+"""
+CORE-096: Build Artifact Prevention
+Authority: Wave 9 Ultimate Cleanup & Consolidation
+Created: 2026-02-12
+Status: ACTIVE
+"""
+
+rule_id: CORE-096
+title: Build Artifact Prevention
+category: repository-hygiene
+severity: P1-HIGH
+auto_fix: true
+
+description: |
+  Prevent build artifacts, cache files, and ephemeral content from being committed to git.
+  
+  BLOCKED PATTERNS:
+  - dist/ (Python distribution packages)
+  - build/ (build outputs)
+  - .pytest_cache/ (pytest cache)
+  - __pycache__/ (Python bytecode cache)
+  - *.pyc, *.pyo (compiled Python)
+  - .coverage, htmlcov/ (coverage reports)
+  - node_modules/ (Node.js dependencies)
+  - .DS_Store (macOS Finder files)
+  - *.db-shm, *.db-wal (SQLite temp files)
+  
+  These should be in .gitignore, not committed.
+
+rationale: |
+  Wave 9 ENH-094 found .pytest_cache/ (128 KB) committed to repository.
+  Build artifacts cause:
+  - Merge conflicts on builds
+  - Repository bloat
+  - Cross-platform incompatibility
+  - Confusion about source vs generated files
+  
+  This rule enforces .gitignore compliance at commit time.
+
+violations:
+  - pattern: "^dist/"
+    severity: ERROR
+    message: "dist/ folder detected. Should be in .gitignore."
+    auto_fix: true
+    fix_action: "Block commit, verify .gitignore contains 'dist/'"
+  
+  - pattern: "^build/"
+    severity: ERROR
+    message: "build/ folder detected. Should be in .gitignore."
+    auto_fix: true
+    fix_action: "Block commit, verify .gitignore contains 'build/'"
+  
+  - pattern: "^\\.pytest_cache/"
+    severity: ERROR
+    message: ".pytest_cache/ detected. Should be in .gitignore."
+    auto_fix: true
+    fix_action: "Block commit, verify .gitignore contains '.pytest_cache/'"
+  
+  - pattern: "/__pycache__/"
+    severity: ERROR
+    message: "__pycache__/ detected. Should be in .gitignore."
+    auto_fix: true
+    fix_action: "Block commit, verify .gitignore contains '__pycache__/'"
+  
+  - pattern: "\\.pyc$"
+    severity: ERROR
+    message: ".pyc file detected. Should be in .gitignore."
+    auto_fix: true
+    fix_action: "Block commit, verify .gitignore contains '*.pyc'"
+  
+  - pattern: "\\.coverage$|^htmlcov/"
+    severity: ERROR
+    message: "Coverage files detected. Should be in .gitignore."
+    auto_fix: true
+    fix_action: "Block commit, verify .gitignore contains '.coverage' and 'htmlcov/'"
+  
+  - pattern: "^node_modules/"
+    severity: ERROR
+    message: "node_modules/ detected. Should be in .gitignore."
+    auto_fix: true
+    fix_action: "Block commit, verify .gitignore contains 'node_modules/'"
+  
+  - pattern: "\\.DS_Store$"
+    severity: ERROR
+    message: ".DS_Store detected. Should be in .gitignore."
+    auto_fix: true
+    fix_action: "Block commit, verify .gitignore contains '.DS_Store'"
+
+enforcement:
+  pre_commit: true
+  ci_cd: true
+  gitignore_validation: true
+  
+  pre_commit_hook: |
+    # .githooks/pre-commit (CORE-096 enforcement)
+    
+    # Check for build artifacts in staged files
+    BLOCKED_PATTERNS=(
+      "^dist/"
+      "^build/"
+      "^\\.pytest_cache/"
+      "/__pycache__/"
+      "\\.pyc$"
+      "\\.pyo$"
+      "\\.coverage$"
+      "^htmlcov/"
+      "^node_modules/"
+      "\\.DS_Store$"
+      "\\.db-shm$"
+      "\\.db-wal$"
+    )
+    
+    VIOLATIONS=0
+    for pattern in "${BLOCKED_PATTERNS[@]}"; do
+      MATCHES=$(git diff --cached --name-only | grep -E "$pattern" || true)
+      if [ -n "$MATCHES" ]; then
+        echo "❌ CORE-096 VIOLATION: Build artifact detected (pattern: $pattern)"
+        echo "$MATCHES"
+        VIOLATIONS=$((VIOLATIONS+1))
+      fi
+    done
+    
+    if [ $VIOLATIONS -gt 0 ]; then
+      echo ""
+      echo "Build artifacts should be in .gitignore, not committed."
+      echo "Run: git reset HEAD <file> to unstage"
+      echo "Then add pattern to .gitignore"
+      exit 1
+    fi
+  
+  gitignore_validation: |
+    # Verify .gitignore contains required patterns
+    REQUIRED_PATTERNS=(
+      "dist/"
+      "build/"
+      ".pytest_cache/"
+      "__pycache__/"
+      "*.pyc"
+      ".coverage"
+      "htmlcov/"
+      "node_modules/"
+      ".DS_Store"
+    )
+    
+    for pattern in "${REQUIRED_PATTERNS[@]}"; do
+      if ! grep -q "^$pattern" .gitignore; then
+        echo "⚠️ WARNING: .gitignore missing pattern: $pattern"
+      fi
+    done
+
+examples:
+  violations:
+    - file: "dist/cortex-1.0.0.tar.gz"
+      reason: "Distribution package should not be committed"
+      fix: "Add dist/ to .gitignore, run: git reset HEAD dist/"
+    
+    - file: ".pytest_cache/v/cache/nodeids"
+      reason: "Pytest cache should not be committed"
+      fix: "Add .pytest_cache/ to .gitignore, run: rm -rf .pytest_cache/"
+    
+    - file: "cortex/__pycache__/utils.cpython-39.pyc"
+      reason: "Python bytecode should not be committed"
+      fix: "Add __pycache__/ to .gitignore, run: find . -type d -name __pycache__ -exec rm -rf {} +"
+
+metrics:
+  wave_9_cleanup:
+    pytest_cache_removed: "128 KB"
+    dist_verified: "already gitignored"
+  
+  prevention_target:
+    build_artifacts_committed: "= 0"
+    gitignore_coverage: "100%"
+
+references:
+  - enhancement: ENH-094
+    title: "Build Artifact Cleanup"
+    url: "cortex-registry/_cortex-master/WAVE-9-PHASE-1-COMPLETION.yaml"
+  
+  - gitignore: ".gitignore"
+    lines: "34 (dist/), 104 (.pytest_cache/)"
+
+audit_trail:
+  created: "2026-02-12T14:15:00Z"
+  created_by: "CORTEX Architect (Wave 9 ENH-096)"
+  status: ACTIVE
+  enforcement_start: "2026-02-12"

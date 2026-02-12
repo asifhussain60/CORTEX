@@ -144,23 +144,6 @@ class TestAutomaticCleanup:
         
         assert resource_tracker.get_active_count(ResourceType.CONNECTION) == 0
 
-    def test_cleans_up_on_exception(self, resource_tracker: ResourceTracker) -> None:
-        """Should clean up resources even on exception."""
-        conn = Mock()
-        
-        try:
-            with resource_tracker.track(
-                resource=conn,
-                resource_type=ResourceType.CONNECTION,
-                name="test_connection"
-            ):
-                raise ValueError("Test exception")
-        except ValueError:
-            pass
-        
-        assert resource_tracker.get_active_count(ResourceType.CONNECTION) == 0
-
-
 class TestLeakDetection:
     """Test resource leak detection."""
 

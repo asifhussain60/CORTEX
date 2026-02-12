@@ -1,0 +1,37 @@
+version: '1.0'
+last_sync: null
+protected_patterns:
+- cortex_brain/tier0/**
+- cortex_brain/tier1/**
+- cortex_brain/tier2/**
+- cortex_brain/tier3/**
+- cortex_brain/domain/**
+- cortex_brain/domain_brain/**
+- cortex_brain/state/**
+- company/domains/**/*.yaml
+- company/dashboards/**
+- cortex-registry/**
+cleanup_operations:
+- operation_id: CLEANUP-20260210-TEST-SUITE
+  timestamp: '2026-02-10T15:34:25.631520'
+  description: Cleanup operation CLEANUP-20260210-TEST-SUITE
+  files_count: 3
+  deleted_files:
+  - path: tests/unit/test_import_update_scripts.py
+    reason: Obsolete - tests non-existent update-imports.py script
+    hash_at_deletion: ''
+    timestamp: '2026-02-10T15:34:25.631529'
+    operation_id: CLEANUP-20260210-TEST-SUITE
+    category: test
+  - path: tests/unit/test_migration_script.py
+    reason: Obsolete - tests non-existent migration script
+    hash_at_deletion: ''
+    timestamp: '2026-02-10T15:34:25.631548'
+    operation_id: CLEANUP-20260210-TEST-SUITE
+    category: test
+  - path: tests/unit/test_phase_readiness_checker.py
+    reason: Obsolete - uses legacy src module path
+    hash_at_deletion: ''
+    timestamp: '2026-02-10T15:34:25.631559'
+    operation_id: CLEANUP-20260210-TEST-SUITE
+    category: test

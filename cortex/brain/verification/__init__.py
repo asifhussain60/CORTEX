@@ -7,17 +7,17 @@ Phase 22: ASK Mode System
 Authority: AC-EDUCATIONAL-INTERACTION-001, CORE-030
 """
 
+from cortex.brain.verification.implementation_verifier import (
+    ImplementationIssue,
+    ImplementationReport,
+    ImplementationStatus,
+    ImplementationVerifier,
+)
 from cortex.brain.verification.truth_verification_engine import (
+    ClaimType,
     TruthVerificationEngine,
     VerificationResult,
     VerificationStatus,
-    ClaimType,
-)
-from cortex.brain.verification.implementation_verifier import (
-    ImplementationVerifier,
-    ImplementationReport,
-    ImplementationStatus,
-    ImplementationIssue,
 )
 
 __all__ = [

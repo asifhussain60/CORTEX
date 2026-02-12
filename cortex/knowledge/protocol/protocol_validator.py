@@ -1,13 +1,14 @@
 """Protocol validator for validating knowledge protocol messages."""
 
-from typing import Union, Any
+from typing import Any, Union
+
 from cortex.knowledge.protocol.knowledge_protocol_spec import (
+    KnowledgeProtocolSpec,
     QueryMessage,
     ResultMessage,
-    UpdateMessage,
     SubscribeMessage,
     UnsubscribeMessage,
-    KnowledgeProtocolSpec,
+    UpdateMessage,
 )
 
 
@@ -29,10 +30,10 @@ class ProtocolValidator:
         ]
     ) -> bool:
         """Validate a protocol message.
-        
+
         Args:
             message: Message to validate
-            
+
         Returns:
             True if valid, False otherwise
         """
@@ -54,21 +55,21 @@ class ProtocolValidator:
 
     def _validate_query(self, message: QueryMessage) -> bool:
         """Validate query message.
-        
+
         Args:
             message: Query message
-            
+
         Returns:
             True if valid
         """
         # Validate message ID
         if not self.spec.validate_message_id(message.message_id):
             return False
-        
+
         # Validate query length
         if not self.spec.validate_query_length(message.query):
             return False
-        
+
         # Validate filters
         if message.filters:
             if "limit" in message.filters:
@@ -79,95 +80,95 @@ class ProtocolValidator:
                 offset = message.filters["offset"]
                 if not isinstance(offset, int) or offset < 0:
                     return False
-        
+
         return True
 
     def _validate_result(self, message: ResultMessage) -> bool:
         """Validate result message.
-        
+
         Args:
             message: Result message
-            
+
         Returns:
             True if valid
         """
         if not self.spec.validate_message_id(message.message_id):
             return False
-        
+
         if not self.spec.validate_message_id(message.query_id):
             return False
-        
+
         if not self.spec.validate_result_count(message.count):
             return False
-        
+
         if len(message.results) != message.count:
             return False
-        
+
         return True
 
     def _validate_update(self, message: UpdateMessage) -> bool:
         """Validate update message.
-        
+
         Args:
             message: Update message
-            
+
         Returns:
             True if valid
         """
         if not self.spec.validate_message_id(message.message_id):
             return False
-        
+
         if not message.entity_id:
             return False
-        
+
         if not isinstance(message.changes, dict):
             return False
-        
+
         return True
 
     def _validate_subscribe(self, message: SubscribeMessage) -> bool:
         """Validate subscribe message.
-        
+
         Args:
             message: Subscribe message
-            
+
         Returns:
             True if valid
         """
         if not self.spec.validate_message_id(message.message_id):
             return False
-        
+
         if not message.subscription_id:
             return False
-        
+
         if not message.topic:
             return False
-        
+
         return True
 
     def _validate_unsubscribe(self, message: UnsubscribeMessage) -> bool:
         """Validate unsubscribe message.
-        
+
         Args:
             message: Unsubscribe message
-            
+
         Returns:
             True if valid
         """
         if not self.spec.validate_message_id(message.message_id):
             return False
-        
+
         if not message.subscription_id:
             return False
-        
+
         return True
 
     def validate_format(self, data: dict[str, Any]) -> bool:
         """Validate message format.
-        
+
         Args:
             data: Message data dictionary
-            
+
         Returns:
             True if valid format
         """

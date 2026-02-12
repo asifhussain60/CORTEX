@@ -11,10 +11,10 @@ from typing import List, Optional
 
 # Import only core components that exist
 try:
+    from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
+    from cortex.infrastructure.structured_logger import StructuredLogger
     from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
     from cortex.orchestrators.tools.todo_manager import TodoManager
-    from cortex.infrastructure.structured_logger import StructuredLogger
-    from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 except ImportError as e:
     print(f"⚠️  Some imports unavailable: {e}")
     MasterOrchestrator = None
@@ -25,7 +25,7 @@ except ImportError as e:
 
 class WiringHarnessComponent:
     """Represents a component to be wired"""
-    
+
     def __init__(
         self,
         component_id: str,
@@ -52,7 +52,7 @@ class EnhancedWiringHarness:
     Enhanced wiring harness that auto-discovers and wires components
     with automatic initialization on startup
     """
-    
+
     # CRITICAL PRIORITY (0) - Must be wired first
     CRITICAL_COMPONENTS = [
         WiringHarnessComponent(
@@ -112,7 +112,7 @@ class EnhancedWiringHarness:
             orchestrator_hook_type="register_stage_4_component"
         ),
     ]
-    
+
     # HIGH PRIORITY (1)
     HIGH_PRIORITY_COMPONENTS = [
         WiringHarnessComponent(
@@ -165,7 +165,7 @@ class EnhancedWiringHarness:
             required=False,
         ),
     ]
-    
+
     # MEDIUM PRIORITY (2+)
     MEDIUM_PRIORITY_COMPONENTS = [
         WiringHarnessComponent(
@@ -211,7 +211,7 @@ class EnhancedWiringHarness:
             required=False,
         ),
     ]
-    
+
     def __init__(self, verbose: bool = True):
         """Initialize enhanced wiring harness"""
         self.verbose = verbose
@@ -219,7 +219,7 @@ class EnhancedWiringHarness:
         self.audit_logger = EnhancedAuditLogger.instance() if EnhancedAuditLogger else None
         self.orchestrator = None
         self.wired_components = {}
-        
+
     def get_critical_wiring_order(self) -> List[WiringHarnessComponent]:
         """Get all components in wiring priority order"""
         all_components = (
@@ -228,23 +228,23 @@ class EnhancedWiringHarness:
             self.MEDIUM_PRIORITY_COMPONENTS
         )
         return sorted(all_components, key=lambda c: (c.priority, c.category))
-    
+
     async def auto_wire_components(self, orchestrator=None) -> dict:
         """
         Automatically wire all components during initialization
-        
+
         Args:
             orchestrator: Optional MasterOrchestrator instance
-            
+
         Returns:
             Dict with wiring results
         """
         import importlib
-        
+
         self.orchestrator = orchestrator or (
             MasterOrchestrator.instance() if MasterOrchestrator else None
         )
-        
+
         results = {
             "total_components": 0,
             "wired_successfully": 0,
@@ -252,18 +252,18 @@ class EnhancedWiringHarness:
             "failed_components": [],
             "skipped_components": [],
         }
-        
+
         if self.verbose:
             print("\n🔧 AUTO-WIRING COMPONENTS (CRITICAL PRIORITY)")
             print("=" * 80 + "\n")
-        
+
         for component in self.get_critical_wiring_order():
             results["total_components"] += 1
-            
+
             try:
                 # Attempt to import and instantiate component
                 module_path, class_name = component.entry_point.rsplit(".", 1)
-                
+
                 try:
                     module = importlib.import_module(module_path)
                     ComponentClass = getattr(module, class_name)
@@ -278,7 +278,7 @@ class EnhancedWiringHarness:
                         })
                         if self.logger:
                             self.logger.error(
-                                f"Required component import failed",
+                                "Required component import failed",
                                 component_id=component.component_id,
                                 entry_point=component.entry_point
                             )
@@ -287,14 +287,14 @@ class EnhancedWiringHarness:
                             print(f"⏭️  SKIPPED {component.category}: {component.component_id}")
                         results["skipped_components"].append(component.component_id)
                     continue
-                
+
                 # Instantiate component
                 try:
                     instance = ComponentClass()
                     component.instance = instance
                     component.wired = True
                     self.wired_components[component.component_id] = component
-                    
+
                     # Register with orchestrator if hook provided
                     if self.orchestrator and component.orchestrator_hook_type:
                         hook_method = getattr(
@@ -304,20 +304,20 @@ class EnhancedWiringHarness:
                         )
                         if hook_method:
                             hook_method(instance)
-                    
+
                     if self.verbose:
                         print(f"✅ WIRED {component.category}: {component.component_id}")
-                    
+
                     results["wired_successfully"] += 1
                     results["wired_components"].append(component.component_id)
-                    
+
                     if self.audit_logger:
                         self.audit_logger.log_operation_complete(
                             ac_id=component.component_id,
                             operation="COMPONENT_WIRED",
                             success=True
                         )
-                    
+
                 except Exception as e:
                     if component.required:
                         if self.verbose:
@@ -329,7 +329,7 @@ class EnhancedWiringHarness:
                         })
                         if self.logger:
                             self.logger.error(
-                                f"Required component instantiation failed",
+                                "Required component instantiation failed",
                                 component_id=component.component_id,
                                 error=str(e)
                             )
@@ -337,11 +337,11 @@ class EnhancedWiringHarness:
                         if self.verbose:
                             print(f"⏭️  SKIPPED {component.category}: {component.component_id}")
                         results["skipped_components"].append(component.component_id)
-                
+
             except Exception as e:
                 if self.logger:
                     self.logger.error(
-                        f"Component wiring error",
+                        "Component wiring error",
                         component_id=component.component_id,
                         error=str(e)
                     )
@@ -349,7 +349,7 @@ class EnhancedWiringHarness:
                     "component_id": component.component_id,
                     "reason": str(e)
                 })
-        
+
         # Print summary
         if self.verbose:
             print("\n" + "=" * 80)
@@ -359,32 +359,32 @@ class EnhancedWiringHarness:
             print(f"Wired Successfully: {results['wired_successfully']} ✅")
             print(f"Skipped: {len(results['skipped_components'])} ⏭️")
             print(f"Failed: {len(results['failed_components'])} ❌")
-            
+
             if results["failed_components"]:
                 print("\nFailed Components:")
                 for failed in results["failed_components"]:
                     print(f"  ❌ {failed['component_id']}: {failed['reason']}")
-            
+
             print("=" * 80 + "\n")
-        
+
         return results
-    
+
     def get_wired_component(self, component_id: str):
         """Get a wired component by ID"""
         component = self.wired_components.get(component_id)
         return component.instance if component else None
-    
+
     def get_wiring_status(self) -> dict:
         """Get current wiring status"""
         return {
             "wired_count": len(self.wired_components),
             "components": list(self.wired_components.keys()),
             "critical_wired": [
-                c for c in self.CRITICAL_COMPONENTS 
+                c for c in self.CRITICAL_COMPONENTS
                 if c.component_id in self.wired_components
             ],
             "high_priority_wired": [
-                c for c in self.HIGH_PRIORITY_COMPONENTS 
+                c for c in self.HIGH_PRIORITY_COMPONENTS
                 if c.component_id in self.wired_components
             ],
         }
@@ -398,7 +398,7 @@ async def auto_initialize_cortex():
     print("\n" + "=" * 80)
     print("🧠 CORTEX AUTO-INITIALIZATION STARTED")
     print("=" * 80 + "\n")
-    
+
     # Step 1: Initialize MasterOrchestrator
     if MasterOrchestrator:
         print("📍 Initializing MasterOrchestrator...")
@@ -407,47 +407,47 @@ async def auto_initialize_cortex():
     else:
         print("⚠️  MasterOrchestrator not available\n")
         master = None
-    
+
     # Step 2: Auto-wire components
     print("📍 Auto-wiring components...")
     harness = EnhancedWiringHarness(verbose=True)
     wiring_results = await harness.auto_wire_components(orchestrator=master)
-    
+
     # Step 3: Verify wiring status
     status = harness.get_wiring_status()
     print(f"📍 Wiring status: {status['wired_count']} components wired")
-    
+
     # Step 4: Initialize auto-initialization suite
     print("\n📍 Running comprehensive initialization suite...")
     try:
         from cortex.testing.auto_initialization_suite import AutoInitializationSuite
-        
+
         suite = AutoInitializationSuite(verbose=False)
         initialization_success = await suite.execute_full_initialization()
-        
+
         if initialization_success:
             print("✅ Full initialization suite completed successfully")
         else:
             print("⚠️  Some initialization phases failed (see details above)")
-            
+
     except ImportError:
         print("⚠️  Auto-initialization suite not available")
-    
+
     print("\n" + "=" * 80)
     print("🧠 CORTEX AUTO-INITIALIZATION COMPLETE")
     print("=" * 80 + "\n")
-    
+
     return wiring_results
 
 
 if __name__ == "__main__":
     # Run auto-initialization
     results = asyncio.run(auto_initialize_cortex())
-    
+
     # Exit with success if critical components wired
     critical_success = len([
         c for c in EnhancedWiringHarness.CRITICAL_COMPONENTS
         if c.component_id in results.get("wired_components", [])
     ]) > 0
-    
+
     sys.exit(0 if critical_success else 1)

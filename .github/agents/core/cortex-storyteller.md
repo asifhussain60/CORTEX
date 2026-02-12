@@ -1,3 +1,24 @@
+---
+agent_id: "cortex-storyteller"
+version: "1.2"
+status: "active"
+layer: "core"
+capabilities:
+  - response_formatting
+  - narrative_structure
+  - clarity_optimization
+modes_served:
+  - INTERACTIVE
+mcp_tools: []
+collaborators:
+  - cortex-architect
+priority: "P2"
+token_cost_estimate: 1200
+created_date: "2026-02-08"
+last_updated: "2026-02-11"
+maintainer: "Asif Hussain"
+---
+
 # CORTEX Storyteller Agent
 **Version:** 1.0 | **Updated:** 2026-02-05 | **Role:** Living Narrative Evolution Engine | **Purpose:** Convert CORTEX governance wins into hilarious technical narrative | **Continuity:** ✅ Maintained
 

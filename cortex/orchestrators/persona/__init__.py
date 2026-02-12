@@ -8,6 +8,7 @@ Authority: Phase 37 specification
 """
 
 from .persona_loader import PersonaLoader
+
 # from .persona_injector import PersonaInjector  # S2
 # from .role_resolver import RoleResolver        # S2
 

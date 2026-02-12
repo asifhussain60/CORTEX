@@ -4,11 +4,11 @@ Pre-commit hook for detecting CORE governance violations
 """
 
 import ast
-import re
 import logging
-from pathlib import Path
-from typing import List, Dict, Tuple
+import re
 from dataclasses import dataclass
+from pathlib import Path
+from typing import Dict, List, Tuple
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -42,7 +42,7 @@ class ViolationDetector(ast.NodeVisitor):
             if handler.type is None:  # bare except:
                 line_num = handler.lineno
                 code_line = self.lines[line_num - 1] if line_num <= len(self.lines) else ""
-                
+
                 # Check if except body is only 'pass'
                 if len(handler.body) == 1 and isinstance(handler.body[0], ast.Pass):
                     self.violations.append(Violation(
@@ -82,7 +82,7 @@ class ViolationDetector(ast.NodeVisitor):
                             message=f"Catching {exception_type} without logging the error",
                             code_snippet=code_line.strip()
                         ))
-        
+
         self.generic_visit(node)
 
     def visit_FunctionDef(self, node):
@@ -100,7 +100,7 @@ class ViolationDetector(ast.NodeVisitor):
                 message=f"Function '{node.name}' missing return type hint",
                 code_snippet=code_line.strip()
             ))
-        
+
         # Check for docstring (CORE-012)
         docstring = ast.get_docstring(node)
         if not docstring:
@@ -115,7 +115,7 @@ class ViolationDetector(ast.NodeVisitor):
                 message=f"Function '{node.name}' missing docstring",
                 code_snippet=code_line.strip()
             ))
-        
+
         self.generic_visit(node)
 
     def visit_ClassDef(self, node):
@@ -134,7 +134,7 @@ class ViolationDetector(ast.NodeVisitor):
                 message=f"Class '{node.name}' missing docstring",
                 code_snippet=code_line.strip()
             ))
-        
+
         self.generic_visit(node)
 
     @staticmethod
@@ -172,26 +172,26 @@ class PreCommitViolationDetector:
         for file_path in self.files_to_check:
             if not file_path.endswith('.py') or '__pycache__' in file_path:
                 continue
-            
+
             try:
                 with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
                     content = f.read()
-                
+
                 # Parse and detect violations
                 tree = ast.parse(content, filename=file_path)
                 detector = ViolationDetector(file_path, content)
                 detector.visit(tree)
-                
+
                 # Also detect regex-based violations (CORE-008: TDD)
                 self._detect_tdd_violations(file_path, content, detector)
-                
+
                 if detector.violations:
                     self.all_violations[file_path] = detector.violations
             except SyntaxError as e:
                 logger.warning(f"Syntax error in {file_path}: {e}")
             except Exception as e:
                 logger.warning(f"Error analyzing {file_path}: {e}")
-        
+
         return self.all_violations
 
     @staticmethod
@@ -238,16 +238,16 @@ class PreCommitViolationDetector:
 def main():
     """Main entry point for pre-commit hook"""
     import sys
-    
+
     files = sys.argv[1:] if len(sys.argv) > 1 else []
     if not files:
         logger.info("No files to check")
         return 0
-    
+
     detector = PreCommitViolationDetector(files)
     detector.detect_violations()
     success = detector.report_violations(severity_threshold="HIGH")
-    
+
     return 0 if success else 1
 
 

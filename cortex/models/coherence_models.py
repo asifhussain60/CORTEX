@@ -16,14 +16,13 @@ from datetime import datetime
 from enum import Enum
 from typing import List, Optional
 
-
 # ============================================================================
 # ENUMS
 # ============================================================================
 
 class IssueType(str, Enum):
     """Types of coherence issues that can be detected.
-    
+
     Used to categorize cross-layer alignment problems.
     """
     ENUM_MISMATCH = "enum_mismatch"
@@ -34,7 +33,7 @@ class IssueType(str, Enum):
 
 class CoherenceStatus(str, Enum):
     """Overall status of a coherence validation.
-    
+
     PASS: All validations passed
     FAIL: Critical issues found
     WARNING: Non-critical issues found
@@ -51,9 +50,9 @@ class CoherenceStatus(str, Enum):
 @dataclass
 class CoherenceIssue:
     """A specific coherence issue found during validation.
-    
+
     Represents a mismatch between Python and JavaScript layers.
-    
+
     Attributes:
         issue_type: Category of the issue
         python_value: Value on the Python side
@@ -71,7 +70,7 @@ class CoherenceIssue:
 @dataclass
 class ContractValidation:
     """Result of validating a single interface contract.
-    
+
     Attributes:
         contract_id: Which contract was validated
         is_valid: Whether validation passed
@@ -89,9 +88,9 @@ class ContractValidation:
 @dataclass
 class CoherenceReport:
     """Overall coherence validation report.
-    
+
     Main output of validate_cross_layer_coherence().
-    
+
     Attributes:
         status: Overall status (PASS, FAIL, WARNING)
         issues: List of coherence issues found
@@ -107,9 +106,9 @@ class CoherenceReport:
 @dataclass
 class IntegrationValidation:
     """Aggregate validation result across all contracts.
-    
+
     Used by cortex_validate_integration MCP tool.
-    
+
     Attributes:
         overall_valid: Whether all validations passed
         contract_validations: Individual contract results

@@ -4,9 +4,9 @@ Author: CORTEX Framework
 """
 
 from dataclasses import dataclass, field
-from enum import Enum
-from typing import List, Callable, Optional
 from datetime import datetime
+from enum import Enum
+from typing import Callable, List, Optional
 
 
 class DeploymentSlot(Enum):
@@ -33,10 +33,10 @@ class Deployment:
     started_at: datetime
     completed_at: Optional[datetime] = None
     error_message: Optional[str] = None
-    
+
     def get_duration(self) -> float:
         """Get deployment duration in seconds.
-        
+
         Returns:
             Duration in seconds
         """
@@ -58,10 +58,10 @@ class DeploymentConfig:
 
 class BlueGreenDeploymentManager:
     """Manage blue-green deployments."""
-    
+
     def __init__(self, config: DeploymentConfig):
         """Initialize deployment manager.
-        
+
         Args:
             config: Deployment configuration
         """
@@ -70,13 +70,13 @@ class BlueGreenDeploymentManager:
         self.standby_slot = DeploymentSlot.GREEN
         self.deployments: List[Deployment] = []
         self.current_deployment: Optional[Deployment] = None
-    
+
     def start_deployment(self, version: str) -> Deployment:
         """Start a new deployment.
-        
+
         Args:
             version: Version to deploy
-            
+
         Returns:
             Deployment object
         """
@@ -89,18 +89,18 @@ class BlueGreenDeploymentManager:
         self.deployments.append(deployment)
         self.current_deployment = deployment
         return deployment
-    
+
     def execute_deployment(self, deployment: Deployment) -> bool:
         """Execute deployment with checks.
-        
+
         Args:
             deployment: Deployment to execute
-            
+
         Returns:
             True if successful
         """
         deployment.status = DeploymentStatus.IN_PROGRESS
-        
+
         # Pre-deployment checks
         for check in self.config.pre_deployment_checks:
             if not check():
@@ -108,7 +108,7 @@ class BlueGreenDeploymentManager:
                 deployment.error_message = "Pre-deployment check failed"
                 deployment.completed_at = datetime.now()
                 return False
-        
+
         # Post-deployment checks
         for check in self.config.post_deployment_checks:
             if not check():
@@ -116,34 +116,34 @@ class BlueGreenDeploymentManager:
                 deployment.error_message = "Post-deployment check failed"
                 deployment.completed_at = datetime.now()
                 return False
-        
+
         deployment.status = DeploymentStatus.COMPLETED
         deployment.completed_at = datetime.now()
         return True
-    
+
     def switch_traffic(self, deployment: Deployment) -> bool:
         """Switch traffic to new deployment.
-        
+
         Args:
             deployment: Deployment to switch to
-            
+
         Returns:
             True if successful
         """
         if deployment.status != DeploymentStatus.COMPLETED:
             return False
-        
+
         # Swap slots
         self.active_slot, self.standby_slot = self.standby_slot, self.active_slot
-        
+
         # Update current deployment
         self.current_deployment = deployment
-        
+
         return True
-    
+
     def get_active_deployment(self) -> Optional[Deployment]:
         """Get currently active deployment.
-        
+
         Returns:
             Active deployment or None
         """
@@ -151,10 +151,10 @@ class BlueGreenDeploymentManager:
             if deployment.slot == self.active_slot and deployment.status == DeploymentStatus.COMPLETED:
                 return deployment
         return None
-    
+
     def get_standby_deployment(self) -> Optional[Deployment]:
         """Get deployment in standby slot.
-        
+
         Returns:
             Standby deployment or None
         """
@@ -162,32 +162,32 @@ class BlueGreenDeploymentManager:
             if deployment.slot == self.standby_slot:
                 return deployment
         return None
-    
+
     def rollback(self) -> bool:
         """Rollback to previous deployment.
-        
+
         Returns:
             True if successful
         """
         if not self.config.rollback_enabled:
             return False
-        
+
         # Get standby deployment and mark as rolled back
         standby = self.get_standby_deployment()
         if standby:
             standby.status = DeploymentStatus.ROLLED_BACK
-        
+
         # Swap back
         self.active_slot, self.standby_slot = self.standby_slot, self.active_slot
-        
+
         return True
-    
+
     def deploy(self, deployment: Deployment) -> bool:
         """Execute deployment (legacy method).
-        
+
         Args:
             deployment: Deployment to execute
-            
+
         Returns:
             True if successful
         """

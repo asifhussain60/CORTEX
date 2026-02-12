@@ -1,7 +1,7 @@
 """Intent Classifier for multi-dimensional intent categorization."""
 
 from enum import Enum
-from typing import List, Dict, Any, Callable
+from typing import Any, Callable, Dict, List
 
 
 class IntentCategory(Enum):
@@ -48,15 +48,15 @@ class IntentClassifier:
 
     def classify(self, text: str) -> str:
         """Classify intent into category.
-        
+
         Args:
             text: Intent text to classify
-            
+
         Returns:
             Category name: "api", "domain", "workflow", "config", or "diagnostic"
         """
         text_lower = text.lower()
-        
+
         # Count keyword matches for each category
         scores: Dict[str, int] = {
             "api": self._count_keyword_matches(text_lower, self.API_KEYWORDS),
@@ -65,18 +65,18 @@ class IntentClassifier:
             "configuration": self._count_keyword_matches(text_lower, self.CONFIG_KEYWORDS),
             "diagnostic": self._count_keyword_matches(text_lower, self.DIAGNOSTIC_KEYWORDS)
         }
-        
+
         # Return category with highest score
         best_category: str = max(scores, key=lambda k: scores[k])
         return best_category
 
     def _count_keyword_matches(self, text: str, keywords: List[str]) -> int:
         """Count keyword matches in text.
-        
+
         Args:
             text: Text to search
             keywords: Keywords to match
-            
+
         Returns:
             Number of keyword matches
         """
@@ -88,15 +88,15 @@ class IntentClassifier:
 
     def classify_with_confidence(self, text: str) -> Dict[str, Any]:
         """Classify intent with confidence scores for all categories.
-        
+
         Args:
             text: Intent text to classify
-            
+
         Returns:
             Dictionary with category and scores
         """
         text_lower = text.lower()
-        
+
         # Calculate scores and normalize
         scores: Dict[str, int] = {
             "api": self._count_keyword_matches(text_lower, self.API_KEYWORDS),
@@ -105,12 +105,12 @@ class IntentClassifier:
             "configuration": self._count_keyword_matches(text_lower, self.CONFIG_KEYWORDS),
             "diagnostic": self._count_keyword_matches(text_lower, self.DIAGNOSTIC_KEYWORDS)
         }
-        
+
         total = sum(scores.values()) or 1
         normalized_scores: Dict[str, float] = {k: v / total for k, v in scores.items()}
-        
+
         best_category: str = max(scores, key=lambda k: scores[k])
-        
+
         return {
             "category": best_category,
             "confidence": normalized_scores[best_category],

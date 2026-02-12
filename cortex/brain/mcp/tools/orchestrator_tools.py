@@ -12,7 +12,7 @@ Author: CORTEX Framework
 
 from typing import Any, Dict
 
-from cortex.brain.core.result import Result, Ok, Err
+from cortex.brain.core.result import Err, Ok, Result
 from cortex.brain.mcp.decorator import mcp_tool
 
 
@@ -29,10 +29,10 @@ from cortex.brain.mcp.decorator import mcp_tool
 )
 def get_operation_status(operation_id: str) -> Result[Dict[str, Any]]:
     """Get operation status.
-    
+
     Args:
         operation_id: Operation identifier
-        
+
     Returns:
         Result containing operation status
     """
@@ -51,7 +51,7 @@ def get_operation_status(operation_id: str) -> Result[Dict[str, Any]]:
 )
 def monitor_orchestrator_health() -> Result[Dict[str, Any]]:
     """Monitor orchestrator health.
-    
+
     Returns:
         Result containing health status
     """
@@ -84,10 +84,10 @@ def monitor_orchestrator_health() -> Result[Dict[str, Any]]:
 )
 def optimize_orchestrator_config(orchestrator_type: str = "all") -> Result[Dict[str, Any]]:
     """Optimize orchestrator configuration.
-    
+
     Args:
         orchestrator_type: Type of orchestrator (default: all)
-        
+
     Returns:
         Result containing optimization recommendations
     """
@@ -115,10 +115,10 @@ def optimize_orchestrator_config(orchestrator_type: str = "all") -> Result[Dict[
 )
 def diagnose_orchestrator_issues(include_history: bool = False) -> Result[Dict[str, Any]]:
     """Diagnose orchestrator issues.
-    
+
     Args:
         include_history: Whether to include historical analysis
-        
+
     Returns:
         Result containing diagnostic information
     """

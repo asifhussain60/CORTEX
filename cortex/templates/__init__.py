@@ -7,8 +7,8 @@ Content population strategy and template management.
 
 from cortex.templates.content_strategy import (
     ContentPopulationStrategy,
-    TemplateMetadata,
     ContentSource,
+    TemplateMetadata,
 )
 
 __all__ = [

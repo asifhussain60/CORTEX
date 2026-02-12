@@ -14,17 +14,22 @@ Supports:
 Authority: ENH-017 Phase 2 (Multi-Language AST Parsing)
 """
 
-from pathlib import Path
-from typing import Dict, Any, List, Optional
-from dataclasses import dataclass, field
 import logging
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
-from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer, ASTAnalysisResult, FunctionInfo, ClassInfo
 from cortex.lens.adapters.csharp_adapter import CSharpAdapter
 from cortex.lens.adapters.java_adapter import JavaAdapter
-from cortex.lens.adapters.typescript_adapter import TypeScriptAdapter
 from cortex.lens.adapters.javascript_adapter import JavaScriptAdapter
-from cortex.lens.models.polyglot_ast_result import PolyglotASTResult, LanguageType
+from cortex.lens.adapters.typescript_adapter import TypeScriptAdapter
+from cortex.lens.analyzers.ast_analyzer import (
+    ASTAnalysisResult,
+    ASTAnalyzer,
+    ClassInfo,
+    FunctionInfo,
+)
+from cortex.lens.models.polyglot_ast_result import LanguageType, PolyglotASTResult
 
 logger = logging.getLogger(__name__)
 
@@ -33,9 +38,9 @@ logger = logging.getLogger(__name__)
 class PolyglotAnalysisResult:
     """
     Unified result format for multi-language AST analysis.
-    
+
     Compatible with LENSOrchestrator's expected format.
-    
+
     Attributes:
         success: Whether analysis succeeded
         language: Detected language
@@ -57,58 +62,58 @@ class PolyglotAnalysisResult:
 class PolyglotAnalyzer:
     """
     Multi-language AST analyzer that routes to appropriate language adapter.
-    
+
     Detects language from file extension and delegates to:
     - ASTAnalyzer for Python files
     - CSharpAdapter for C# files
     - More adapters in future phases
-    
+
     Converts language-specific results to unified format compatible with
     LENSOrchestrator's existing interface.
-    
+
     Example:
         ```python
         analyzer = PolyglotAnalyzer()
-        
+
         # Analyze Python file
         py_result = analyzer.analyze_file(Path("module.py"))
         print(f"Functions: {len(py_result.functions)}")
-        
+
         # Analyze C# file
         cs_result = analyzer.analyze_file(Path("UserService.cs"))
         print(f"Classes: {len(cs_result.classes)}")
         ```
     """
-    
+
     def __init__(self):
         """Initialize polyglot analyzer with all language adapters."""
         self.python_analyzer = ASTAnalyzer()
-        
+
         # Initialize language adapters with graceful degradation (Phase 65)
         try:
             self.csharp_adapter = CSharpAdapter()
         except Exception as e:
             logger.warning(f"CSharpAdapter unavailable: {e}")
             self.csharp_adapter = None
-        
+
         try:
             self.java_adapter = JavaAdapter()
         except Exception as e:
             logger.warning(f"JavaAdapter unavailable: {e}")
             self.java_adapter = None
-        
+
         try:
             self.typescript_adapter = TypeScriptAdapter()
         except Exception as e:
             logger.warning(f"TypeScriptAdapter unavailable: {e}")
             self.typescript_adapter = None
-        
+
         try:
             self.javascript_adapter = JavaScriptAdapter()
         except Exception as e:
             logger.warning(f"JavaScriptAdapter unavailable: {e}")
             self.javascript_adapter = None
-        
+
         # Language detection map
         self.language_map = {
             ".py": "python",
@@ -120,23 +125,23 @@ class PolyglotAnalyzer:
             ".js": "javascript",
             ".jsx": "javascript",
         }
-    
+
     def analyze_file(self, file_path: Path) -> PolyglotAnalysisResult:
         """
         Analyze file with appropriate language adapter.
-        
+
         Detects language from extension, routes to adapter, and converts
         result to unified format compatible with LENSOrchestrator.
-        
+
         Args:
             file_path: Path to source file
-        
+
         Returns:
             PolyglotAnalysisResult with unified format
         """
         # Detect language
         language = self._detect_language(file_path)
-        
+
         if language == "python":
             return self._analyze_python(file_path)
         elif language == "csharp":
@@ -154,34 +159,34 @@ class PolyglotAnalyzer:
                 error=f"Unsupported language: {file_path.suffix}",
                 metadata={"file_path": str(file_path)},
             )
-    
+
     def _detect_language(self, file_path: Path) -> str:
         """
         Detect programming language from file extension.
-        
+
         Args:
             file_path: Path to file
-        
+
         Returns:
             Language identifier (python, csharp, etc.) or "unknown"
         """
         suffix = file_path.suffix.lower()
         return self.language_map.get(suffix, "unknown")
-    
+
     def _analyze_python(self, file_path: Path) -> PolyglotAnalysisResult:
         """
         Analyze Python file using ASTAnalyzer.
-        
+
         Converts ASTAnalysisResult to PolyglotAnalysisResult format.
-        
+
         Args:
             file_path: Path to Python file
-        
+
         Returns:
             PolyglotAnalysisResult
         """
         result = self.python_analyzer.analyze_file(file_path)
-        
+
         # Convert to unified format
         functions = [
             {
@@ -194,7 +199,7 @@ class PolyglotAnalyzer:
             }
             for func in result.functions
         ]
-        
+
         classes = [
             {
                 "name": cls.name,
@@ -205,7 +210,7 @@ class PolyglotAnalyzer:
             }
             for cls in result.classes
         ]
-        
+
         imports = [
             {
                 "module": imp.module,
@@ -215,7 +220,7 @@ class PolyglotAnalyzer:
             }
             for imp in result.imports
         ]
-        
+
         return PolyglotAnalysisResult(
             success=result.success,
             language="Python",
@@ -228,16 +233,16 @@ class PolyglotAnalyzer:
                 "analyzer": "ASTAnalyzer",
             },
         )
-    
+
     def _analyze_csharp(self, file_path: Path) -> PolyglotAnalysisResult:
         """
         Analyze C# file using CSharpAdapter.
-        
+
         Converts PolyglotASTResult to PolyglotAnalysisResult format.
-        
+
         Args:
             file_path: Path to C# file
-        
+
         Returns:
             PolyglotAnalysisResult
         """
@@ -252,9 +257,9 @@ class PolyglotAnalyzer:
                     imports=[],
                     error="CSharpAdapter not available (tree-sitter-c-sharp not installed)"
                 )
-            
+
             result = self.csharp_adapter.parse_file(file_path)
-            
+
             # Convert to unified format
             functions = [
                 {
@@ -267,7 +272,7 @@ class PolyglotAnalyzer:
                 }
                 for func in result.functions
             ]
-            
+
             classes = [
                 {
                     "name": cls.name,
@@ -282,7 +287,7 @@ class PolyglotAnalyzer:
                 }
                 for cls in result.classes
             ]
-            
+
             imports = [
                 {
                     "module": imp.module,
@@ -292,7 +297,7 @@ class PolyglotAnalyzer:
                 }
                 for imp in result.imports
             ]
-            
+
             return PolyglotAnalysisResult(
                 success=True,
                 language="C#",
@@ -306,7 +311,7 @@ class PolyglotAnalyzer:
                     "parse_errors": result.parse_errors,
                 },
             )
-        
+
         except Exception as e:
             return PolyglotAnalysisResult(
                 success=False,
@@ -314,16 +319,16 @@ class PolyglotAnalyzer:
                 error=str(e),
                 metadata={"file_path": str(file_path)},
             )
-    
+
     def _analyze_java(self, file_path: Path) -> PolyglotAnalysisResult:
         """
         Analyze Java file using JavaAdapter.
-        
+
         Converts PolyglotASTResult to PolyglotAnalysisResult format.
-        
+
         Args:
             file_path: Path to Java file
-        
+
         Returns:
             PolyglotAnalysisResult
         """
@@ -338,9 +343,9 @@ class PolyglotAnalyzer:
                     imports=[],
                     error="JavaAdapter not available (tree-sitter-java not installed)"
                 )
-            
+
             result = self.java_adapter.parse_file(file_path)
-            
+
             # Convert to unified format
             functions = [
                 {
@@ -353,7 +358,7 @@ class PolyglotAnalyzer:
                 }
                 for func in result.functions
             ]
-            
+
             classes = [
                 {
                     "name": cls.name,
@@ -368,7 +373,7 @@ class PolyglotAnalyzer:
                 }
                 for cls in result.classes
             ]
-            
+
             imports = [
                 {
                     "module": imp.module,
@@ -378,7 +383,7 @@ class PolyglotAnalyzer:
                 }
                 for imp in result.imports
             ]
-            
+
             return PolyglotAnalysisResult(
                 success=True,
                 language="Java",
@@ -392,7 +397,7 @@ class PolyglotAnalyzer:
                     "parse_errors": result.parse_errors,
                 },
             )
-        
+
         except Exception as e:
             return PolyglotAnalysisResult(
                 success=False,
@@ -400,16 +405,16 @@ class PolyglotAnalyzer:
                 error=str(e),
                 metadata={"file_path": str(file_path)},
             )
-    
+
     def _analyze_typescript(self, file_path: Path) -> PolyglotAnalysisResult:
         """
         Analyze TypeScript file using TypeScriptAdapter.
-        
+
         Converts PolyglotASTResult to PolyglotAnalysisResult format.
-        
+
         Args:
             file_path: Path to TypeScript file
-        
+
         Returns:
             PolyglotAnalysisResult
         """
@@ -424,9 +429,9 @@ class PolyglotAnalyzer:
                     imports=[],
                     error="TypeScriptAdapter not available (tree-sitter-typescript installed but init failed)"
                 )
-            
+
             result = self.typescript_adapter.parse_file(file_path)
-            
+
             # Convert to unified format
             functions = [
                 {
@@ -439,7 +444,7 @@ class PolyglotAnalyzer:
                 }
                 for func in result.functions
             ]
-            
+
             classes = [
                 {
                     "name": cls.name,
@@ -454,7 +459,7 @@ class PolyglotAnalyzer:
                 }
                 for cls in result.classes
             ]
-            
+
             imports = [
                 {
                     "module": imp.module,
@@ -464,7 +469,7 @@ class PolyglotAnalyzer:
                 }
                 for imp in result.imports
             ]
-            
+
             return PolyglotAnalysisResult(
                 success=True,
                 language="TypeScript",
@@ -478,7 +483,7 @@ class PolyglotAnalyzer:
                     "parse_errors": result.parse_errors,
                 },
             )
-        
+
         except Exception as e:
             return PolyglotAnalysisResult(
                 success=False,
@@ -486,16 +491,16 @@ class PolyglotAnalyzer:
                 error=str(e),
                 metadata={"file_path": str(file_path)},
             )
-    
+
     def _analyze_javascript(self, file_path: Path) -> PolyglotAnalysisResult:
         """
         Analyze JavaScript file using JavaScriptAdapter.
-        
+
         Converts PolyglotASTResult to PolyglotAnalysisResult format.
-        
+
         Args:
             file_path: Path to JavaScript file
-        
+
         Returns:
             PolyglotAnalysisResult
         """
@@ -510,9 +515,9 @@ class PolyglotAnalyzer:
                     imports=[],
                     error="JavaScriptAdapter not available (tree-sitter-javascript installed but init failed)"
                 )
-            
+
             result = self.javascript_adapter.parse_file(file_path)
-            
+
             # Convert to unified format
             functions = [
                 {
@@ -525,7 +530,7 @@ class PolyglotAnalyzer:
                 }
                 for func in result.functions
             ]
-            
+
             classes = [
                 {
                     "name": cls.name,
@@ -540,7 +545,7 @@ class PolyglotAnalyzer:
                 }
                 for cls in result.classes
             ]
-            
+
             imports = [
                 {
                     "module": imp.module,
@@ -550,7 +555,7 @@ class PolyglotAnalyzer:
                 }
                 for imp in result.imports
             ]
-            
+
             return PolyglotAnalysisResult(
                 success=True,
                 language="JavaScript",
@@ -564,7 +569,7 @@ class PolyglotAnalyzer:
                     "parse_errors": result.parse_errors,
                 },
             )
-        
+
         except Exception as e:
             return PolyglotAnalysisResult(
                 success=False,
@@ -572,23 +577,23 @@ class PolyglotAnalyzer:
                 error=str(e),
                 metadata={"file_path": str(file_path)},
             )
-    
+
     def get_supported_extensions(self) -> List[str]:
         """
         Get list of supported file extensions.
-        
+
         Returns:
             List of extensions (e.g., [".py", ".cs", ".java"])
         """
         return list(self.language_map.keys())
-    
+
     def is_supported(self, file_path: Path) -> bool:
         """
         Check if file is supported for analysis.
-        
+
         Args:
             file_path: Path to file
-        
+
         Returns:
             True if file extension is supported
         """

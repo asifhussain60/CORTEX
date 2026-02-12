@@ -1,0 +1,690 @@
+version: '1.0'
+enhancement_id: WAVE-REPRIORITIZATION-2026-02-11
+title: "Wave Reprioritization: Production Value First, Documentation Last"
+created: '2026-02-11'
+authority:
+  - chat01.md Copilot Session Digest
+  - User directive: "defer documentation to end, prioritize high-value tested capabilities"
+  - CORE-002 (markdown suppression)
+  - Phase 81 (Agent Architecture Redesign)
+
+# ============================================================================
+# EXECUTIVE SUMMARY
+# ============================================================================
+summary: |
+  REPRIORITIZATION RATIONALE:
+  
+  **Current Plan Issues:**
+  - Wave 8 (Architecture Docs) and Phase 53 S7-S9 (LENS Dashboard) block production value
+  - Documentation work is LOW ROI until architecture stabilizes (post-Wave 7)
+  - LENS physical file testing (Track 5) has HIGHER ROI than dashboards (prevents data loss)
+  - Orchestrator consolidation (Wave 7) should complete BEFORE agent redesign (Wave 2)
+  
+  **New Execution Order:**
+  1. Wave 1: Foundation (security, onboarding, LENS intelligence) - UNCHANGED
+  2. Wave 7: Orchestrator Consolidation + LENS Tests - PRIORITY BOOST (P0)
+  3. Wave 2: Intelligence (agent redesign after orchestrator stabilization)
+  4. Wave 3: Autonomy (execution improvements)
+  5. Wave 4: Enhancement (domain improvements)
+  6. Wave 5: UX Polish (user experience)
+  7. Wave 6: Cleanup (standards enforcement)
+  8. Wave 8: Architecture Docs (DEFERRED - after consolidation complete) - NEW
+  9. Wave 9: Workspace Cleanup (DEFERRED - final polish) - NEW
+  
+  **Key Changes:**
+  - ✅ Wave 7 Track 5 (LENS Tests) elevated to P0-CRITICAL
+  - ✅ Phase 53 S7-S9 (LENS Dashboard) moved to Wave 8 (P2-MEDIUM)
+  - ✅ Wave 8/9 (Documentation/Cleanup) deferred to end (after architecture stable)
+  - ✅ Parallel execution opportunities maintained (Wave 7 Track 2-5 can run concurrently)
+  
+  **Timeline Impact:**
+  - Original: 62 days (with parallel execution)
+  - New: 58 days (documentation deferred, LENS tests prioritized)
+  - Savings: 4 days (documentation batched at end vs distributed)
+
+# ============================================================================
+# DETAILED WAVE REPRIORITIZATION
+# ============================================================================
+
+waves:
+  # --------------------------------------------------------------------------
+  # WAVE 1: FOUNDATION (UNCHANGED)
+  # --------------------------------------------------------------------------
+  wave_1:
+    name: "Foundation (Production-Critical Infrastructure)"
+    priority: "P0-CRITICAL"
+    duration: "12-14 days"
+    status: "ready"
+    changes: "NONE - remains first priority"
+    phases:
+      - ENH-063: Production Security + Reliability (15 fixes)
+      - ENH-066: MCP Onboarding Clarity (10x faster)
+      - ENH-064: LENS Intelligence (0% → 90% understanding)
+    
+    rationale: |
+      Security and onboarding are foundational blockers. No changes needed.
+  
+  # --------------------------------------------------------------------------
+  # WAVE 7: ORCHESTRATOR CONSOLIDATION + LENS TESTS (PRIORITY BOOST)
+  # --------------------------------------------------------------------------
+  wave_7:
+    name: "Orchestrator Consolidation + LENS Physical File Testing"
+    priority: "P0-CRITICAL"  # UPGRADED from P1-HIGH
+    duration: "18-24 days"  # Extended to include Track 5
+    status: "in_progress"  # Track 1 COMPLETE (55/55 tests)
+    changes:
+      - "PRIORITY BOOST: P1-HIGH → P0-CRITICAL"
+      - "SCOPE EXPANSION: Added Track 5 (LENS Physical File Testing)"
+      - "DURATION INCREASE: 14-22 days → 18-24 days (Track 5 adds 3-4 days)"
+      - "ROI INCREASE: 9.2 → 9.5 (LENS tests prevent production data loss)"
+    
+    tracks:
+      track_1_core:
+        name: "Core Layer Consolidation"
+        status: "COMPLETE ✅"
+        completion_date: "2026-02-11"
+        tests_passing: "55/55"
+        commits:
+          - "c64727763: StageExecutionStrategy base (20 tests)"
+          - "6e3449f7e: Stage1ComprehensionStrategy (8 tests)"
+          - "f5adb57d7: Stage2/3/4 strategies (17 tests)"
+          - "601b33371: MasterOrchestrator refactor (10 integration tests)"
+        deliverables:
+          - "StageExecutionStrategy pattern (base + 4 implementations)"
+          - "MasterOrchestrator refactored (600 lines → strategy delegation)"
+          - "Behavioral contract tests (100% passing)"
+          - "Integration tests (Stage 1→2→3→4 pipeline)"
+      
+      track_2_domain:
+        name: "Domain Layer Consolidation"
+        status: "planned"
+        duration: "8-12 days"
+        consolidations:
+          - "EnhancedRefactoringOrchestrator (absorbs 3 orchestrators)"
+          - "EnhancedPlanningOrchestrator (absorbs 2 orchestrators)"
+          - "EnhancedDocumentationOrchestrator"
+          - "AutonomousExecutionEngine (gains multi-step TDD)"
+      
+      track_3_support:
+        name: "Support Layer Elimination"
+        status: "planned"
+        duration: "6-9 days"
+        actions:
+          - "15 support orchestrators → 2 consolidated"
+          - "ToolDiscoveryOrchestrator + OnboardingOrchestrator preserved"
+          - "13 orchestrators eliminated via Strategy Pattern"
+      
+      track_4_cleanup:
+        name: "Orphan Cleanup"
+        status: "planned"
+        duration: "3-4 days"
+        actions:
+          - "88 orphaned orchestrators deleted"
+          - "File reduction: 114 → 20-25 files"
+          - "Class reduction: 201+ → 35-45 classes"
+      
+      track_5_lens_tests:
+        name: "LENS Physical File Testing (NEW - ELEVATED PRIORITY)"
+        priority: "P0-CRITICAL"  # HIGHEST within Wave 7
+        status: "planned"
+        duration: "3-4 days"
+        roi: 9.5  # Prevents production data loss
+        rationale: |
+          **WHY P0-CRITICAL:**
+          - LENS creates 15+ YAML/JSON files across 3 directories during onboarding
+          - Current tests use mocking/stubbing (no physical validation)
+          - Production risk: Silent failures (profiles vanish, corrupt data)
+          - Prevents: Repository onboarding failures, knowledge graph gaps, dashboard data loss
+          
+          **HIGHER VALUE THAN DASHBOARDS:**
+          - Dashboards (Phase 53 S7-S9) are VISUALIZATION ONLY (P2)
+          - Physical file tests are DATA INTEGRITY (P0)
+          - Dashboards can be built on corrupt data without this validation
+          
+          **BLOCKING RELATIONSHIP:**
+          - Wave 8 (Architecture Docs) requires stable architecture (after Wave 7)
+          - Phase 53 LENS Dashboard requires validated data layer (Track 5)
+          - Therefore: Track 5 MUST complete BEFORE Wave 8 or dashboards
+        
+        scope:
+          - "Physical file lifecycle testing pattern (create → validate → delete)"
+          - "RepositoryOnboardingOrchestrator profile validation"
+          - "DomainBrainController state file validation"
+          - "LENSOrchestrator analysis cache validation"
+          - "KnowledgeSynthesisEngine YAML aggregation validation"
+          - "AST analyzers tree-sitter binary validation"
+        
+        test_strategy:
+          approach: "Integration-First Testing (reverse pyramid)"
+          rationale: "LENS is integration-heavy (AST + Git + Files + Knowledge)"
+          new_test_ratio:
+            integration_tests: "40% (physical files, real repos)"
+            unit_tests: "35% (pure logic)"
+            end_to_end_tests: "25% (full onboarding → dashboard)"
+          
+          test_pattern_template: |
+            @pytest.fixture
+            def temp_repo_fixture(tmp_path):
+                # Create temporary repo with git history
+                repo_path = tmp_path / "test_repo"
+                repo_path.mkdir()
+                init_git_repo(repo_path)
+                yield repo_path
+                # Cleanup: Verify all YAML/JSON files deleted
+                assert not list(repo_path.glob("**/*.yaml"))
+            
+            def test_onboarding_creates_profile_yaml(temp_repo_fixture):
+                orchestrator = RepositoryOnboardingOrchestrator()
+                result = orchestrator.onboard_repository(temp_repo_fixture)
+                
+                # CRITICAL: Validate physical file exists
+                profile_path = cortex_brain / "onboarded_repos" / "test_repo.yaml"
+                assert profile_path.exists()
+                assert profile_path.stat().st_size > 0
+                
+                # Validate YAML structure
+                with open(profile_path) as f:
+                    profile = yaml.safe_load(f)
+                    assert "repository_name" in profile
+                    assert "technologies" in profile
+        
+        deliverables:
+          - "tests/fixtures/temp_repos/ (test isolation framework)"
+          - "25 new integration tests (physical file validation)"
+          - "12 retrofitted existing tests (add physical checks)"
+          - "E2E test: Onboard → Analyze → Dashboard (full stack)"
+          - "95% file I/O path coverage (up from 40%)"
+        
+        blocking_issues_prevented:
+          - "Repository profiles vanish after restart (production bug)"
+          - "Knowledge graph incomplete (missing YAML aggregations)"
+          - "Dashboard displays stale data (cache not validated)"
+          - "AST analysis fails silently (tree-sitter binaries missing)"
+    
+    dependencies: ["Wave 1"]
+    blocks: ["Wave 2", "Wave 8"]  # Architecture docs require stable orchestrators
+    
+    rationale_for_priority_boost: |
+      **ORIGINAL PRIORITY:** P1-HIGH (based on ROI 9.2)
+      **NEW PRIORITY:** P0-CRITICAL (based on ROI 9.5 + data integrity risk)
+      
+      **JUSTIFICATION:**
+      1. **Data Integrity Risk (P0):**
+         - LENS creates production data (repository profiles, knowledge graphs)
+         - Without physical validation, silent failures corrupt data layer
+         - Dashboards and analytics depend on this data (downstream cascade)
+      
+      2. **Architectural Stability Requirement:**
+         - Wave 8 (Architecture Docs) documents orchestrator topology
+         - Cannot document architecture until consolidation complete
+         - Therefore: Wave 7 MUST complete before Wave 8
+      
+      3. **Agent Redesign Dependency (Wave 2):**
+         - Agent redesign (Wave 2) depends on orchestrator count
+         - Consolidating 26→15 orchestrators changes agent interaction patterns
+         - Therefore: Wave 7 MUST complete before Wave 2
+      
+      4. **ROI Justification:**
+         - Original ROI 9.2 (code reduction + EventBus decoupling)
+         - Track 5 adds +0.3 ROI (prevents production data loss)
+         - New ROI 9.5 (highest of all waves)
+  
+  # --------------------------------------------------------------------------
+  # WAVE 2: INTELLIGENCE (UNCHANGED - But now after Wave 7)
+  # --------------------------------------------------------------------------
+  wave_2:
+    name: "Intelligence (Enhanced Decision Making)"
+    priority: "P1-HIGH"
+    duration: "10-14 days"
+    status: "planned"
+    changes:
+      - "DEPENDENCY CHANGE: Now depends on Wave 7 (was independent)"
+      - "RATIONALE: Agent redesign needs stable orchestrator count"
+    
+    phases:
+      - "phase-81: Agent Architecture Redesign"
+      - "ENH-067: Recommendation Gate"
+      - "ENH-068: Multi-Agent Orchestration"
+    
+    dependencies: ["Wave 1", "Wave 7"]  # CHANGED: Added Wave 7 dependency
+    blocks: []
+    
+    rationale_for_dependency_change: |
+      **ORIGINAL:** Wave 2 could start after Wave 1 (independent of Wave 7)
+      **NEW:** Wave 2 depends on Wave 7 completion
+      
+      **JUSTIFICATION:**
+      - Agent redesign (phase-81) involves agent-orchestrator interaction patterns
+      - Consolidating 26→15 orchestrators changes these patterns significantly
+      - Redesigning agents BEFORE consolidation = rework when orchestrators change
+      - Therefore: Complete orchestrator consolidation FIRST, then redesign agents
+  
+  # --------------------------------------------------------------------------
+  # WAVE 3-6: UNCHANGED (Sequential execution)
+  # --------------------------------------------------------------------------
+  wave_3:
+    name: "Autonomy (Execution Improvements)"
+    priority: "P1-HIGH"
+    duration: "8-12 days"
+    status: "planned"
+    changes: "NONE"
+    dependencies: ["Wave 1"]  # Independent of Wave 2/7
+  
+  wave_4:
+    name: "Enhancement (Domain Improvements)"
+    priority: "P1-MEDIUM"
+    duration: "8-10 days"
+    status: "planned"
+    changes: "NONE"
+    dependencies: ["Wave 1"]
+  
+  wave_5:
+    name: "UX Polish (User Experience)"
+    priority: "P2-MEDIUM"
+    duration: "5-7 days"
+    status: "planned"
+    changes: "NONE"
+    dependencies: ["Wave 3"]
+  
+  wave_6:
+    name: "Cleanup (Standards Enforcement)"
+    priority: "P1-HIGH"
+    duration: "10-12 days"
+    status: "planned"
+    changes: "NONE"
+    dependencies: ["Wave 1"]
+  
+  # --------------------------------------------------------------------------
+  # WAVE 8: ARCHITECTURE DOCS (DEFERRED - NEW POSITION)
+  # --------------------------------------------------------------------------
+  wave_8:
+    name: "Architecture Documentation Migration & Consolidation"
+    priority: "P2-MEDIUM"  # DOWNGRADED from implicit P1 in Phase 53
+    duration: "5-7 days"
+    status: "planned"
+    changes:
+      - "POSITION CHANGE: Moved to end of execution plan (was distributed)"
+      - "SCOPE INCLUDES: Phase 53 S7-S9 (LENS Dashboard generation)"
+      - "RATIONALE: Document AFTER architecture stabilizes"
+    
+    scope:
+      architecture_migration:
+        source: "_workspaces/cortex-architecture/"
+        destination: "cortex-registry/architecture/"
+        actions:
+          - "Migrate existing architecture docs to registry"
+          - "Auto-generate diagrams from wiring.yaml"
+          - "Detect + resolve documentation contradictions"
+          - "Create living architecture (SSOT in registry)"
+      
+      lens_dashboard_generation:
+        source: "Phase 53 S7-S9 (deferred from original plan)"
+        deliverables:
+          - "Repository onboarding dashboard (HTML + embedded data)"
+          - "LENS analysis visualization (complexity, security, dependencies)"
+          - "Knowledge graph visualization (technology stack, relationships)"
+          - "Dashboard suite landing page (index.html)"
+        
+        rationale_for_deferral: |
+          **ORIGINAL:** Phase 53 S7-S9 in main execution flow (blocks other work)
+          **NEW:** Deferred to Wave 8 (after architecture stable)
+          
+          **JUSTIFICATION:**
+          1. **Data Dependency:** Dashboards require validated data layer (Track 5)
+          2. **Architecture Stability:** Dashboard structure depends on orchestrator topology
+          3. **Low Priority:** Visualization is NICE-TO-HAVE, not production-critical
+          4. **Batch Efficiency:** Combine with architecture docs (single wave)
+          5. **User Impact:** Developers don't need dashboards for daily work
+      
+      prompt_updates:
+        target: ".github/prompts/cortex-architect.prompt.md"
+        actions:
+          - "Update orchestrator counts (26→15)"
+          - "Update file counts (114→20-25)"
+          - "Update test counts (include Track 1-5 results)"
+          - "Add architecture diagrams (Mermaid)"
+          - "Increment version: v15.3 → v16.0"
+      
+      deliverables:
+        - "cortex-registry/architecture/ (complete migration)"
+        - "Auto-generation pipeline (diagrams, metrics, topology)"
+        - "LENS dashboards (repository, analysis, knowledge graph)"
+        - "Contradiction detection report"
+        - "cortex-architect.prompt.md v16.0"
+        - "DELETE: _workspaces/cortex-architecture/"
+    
+    dependencies: ["Wave 7", "Wave 6"]  # After consolidation + cleanup
+    blocks: []
+    
+    rationale_for_deferral: |
+      **WHY DEFER TO END:**
+      
+      1. **Architecture Must Stabilize First:**
+         - Wave 7 consolidates 26→15 orchestrators (massive topology change)
+         - Documenting topology BEFORE consolidation = outdated immediately
+         - Therefore: Complete consolidation, THEN document
+      
+      2. **Low ROI Until Stable:**
+         - Documentation has ROI 8.5 (high for maintenance)
+         - But ROI is ZERO if architecture changes before docs complete
+         - Deferring to end maximizes ROI (document once, stable state)
+      
+      3. **Batch Efficiency:**
+         - Combining architecture docs + LENS dashboards = single context switch
+         - Reduces cognitive load (one "documentation sprint" vs distributed)
+         - Estimated savings: 2-3 days (batched vs distributed)
+      
+      4. **CORE-002 Alignment:**
+         - CORE-002 mandates markdown suppression (inline chat only)
+         - Architecture docs are EXCEPTION (registry YAML + auto-generation)
+         - Handling all documentation at end simplifies CORE-002 compliance
+      
+      5. **Parallel Execution Window:**
+         - Waves 2-6 can execute independently (no docs required)
+         - Wave 8 is pure documentation (no code dependencies)
+         - Therefore: Defer to end without blocking value delivery
+  
+  # --------------------------------------------------------------------------
+  # WAVE 9: WORKSPACE CLEANUP (DEFERRED - NEW POSITION)
+  # --------------------------------------------------------------------------
+  wave_9:
+    name: "Workspace Cleanup & Structure Optimization"
+    priority: "P2-MEDIUM"
+    duration: "3-4 days"
+    status: "planned"
+    changes:
+      - "POSITION CHANGE: Final wave (was distributed)"
+      - "RATIONALE: Clean up after all architecture work complete"
+    
+    scope:
+      - "Archive _workspaces/__bak-docs/"
+      - "Complete cortex_brain migration"
+      - "Consolidate root scripts into scripts/"
+      - "Evaluate cortex-lens/ and company/ for optimization"
+    
+    dependencies: ["Wave 8"]  # After documentation complete
+    blocks: []
+    
+    rationale_for_deferral: |
+      **WHY FINAL WAVE:**
+      - Cleanup is cosmetic (no production impact)
+      - Better to clean AFTER all major changes (avoid re-cleanup)
+      - Low priority (P2-MEDIUM) vs production value (P0-P1)
+
+# ============================================================================
+# EXECUTION PLAN: REVISED TIMELINE
+# ============================================================================
+
+execution_plan:
+  original_timeline:
+    total_duration: "62 days (with parallel execution)"
+    wave_order: "1 → 7 → 2 → 3 → 4 → 5 → 6 → 8 → 9"
+    parallel_opportunities:
+      - "Wave 7 Track 2-5 (concurrent execution)"
+      - "Wave 2 + Wave 3 (independent streams)"
+  
+  revised_timeline:
+    total_duration: "58 days (4 days saved)"
+    wave_order: "1 → 7 (with Track 5) → 2 → 3 → 4 → 5 → 6 → 8 (docs+dashboards) → 9"
+    critical_path:
+      - "Wave 1: Foundation (12-14 days)"
+      - "Wave 7: Consolidation + LENS Tests (18-24 days)"
+      - "Wave 2: Intelligence (10-14 days, after Wave 7)"
+      - "Wave 8: Documentation (5-7 days, after Wave 6+7)"
+    
+    parallel_execution:
+      window_1:
+        name: "Wave 7 Tracks (concurrent)"
+        tracks:
+          - "Track 2: Domain (8-12 days)"
+          - "Track 3: Support (6-9 days)"
+          - "Track 4: Cleanup (3-4 days)"
+          - "Track 5: LENS Tests (3-4 days)"
+        coordination: "Track 1 COMPLETE ✅, Tracks 2-5 can run in parallel"
+      
+      window_2:
+        name: "Wave 3 + Wave 4 + Wave 6 (independent)"
+        waves:
+          - "Wave 3: Autonomy (8-12 days)"
+          - "Wave 4: Enhancement (8-10 days)"
+          - "Wave 6: Cleanup (10-12 days)"
+        coordination: "All depend on Wave 1, independent of each other"
+    
+    time_savings:
+      documentation_batching: "2-3 days (Wave 8 combined vs distributed)"
+      lens_dashboard_deferral: "1-2 days (not blocking other work)"
+      total_savings: "4 days"
+
+# ============================================================================
+# PHASE 53 IMPACT ANALYSIS
+# ============================================================================
+
+phase_53_changes:
+  original_plan:
+    stages: "S1-S11 (Foundation → Dashboard → Testing)"
+    duration: "18-22 days"
+    dashboard_stages: "S7-S9 (Dashboard Suite Generation)"
+    position: "Middle of Phase 53 execution"
+  
+  revised_plan:
+    stages_wave_7: "S1-S6 (Foundation → Performance → Migration)"
+    stages_wave_8: "S7-S9 (Dashboard Suite Generation) - DEFERRED"
+    duration_wave_7: "14-18 days (S1-S6 only)"
+    duration_wave_8: "4-6 days (S7-S9 + architecture docs)"
+    position_s7_s9: "Deferred to Wave 8 (after Wave 6+7 complete)"
+  
+  rationale:
+    data_dependency: |
+      S7-S9 (Dashboards) require validated data layer from Track 5 (LENS Tests).
+      Track 5 is part of Wave 7, but S7-S9 can execute later (visualization only).
+      Therefore: Split Phase 53 into two waves (S1-S6 now, S7-S9 later).
+    
+    blocking_relationship: |
+      S7-S9 dashboards visualize orchestrator topology + LENS data.
+      Both topology (Wave 7) and data validation (Track 5) must complete first.
+      Executing S7-S9 BEFORE Wave 7 complete = outdated visualizations.
+    
+    efficiency_gain: |
+      S7-S9 is visualization work (5-7 days of HTML/CSS/JavaScript).
+      Batching with architecture docs (Wave 8) = single context switch.
+      Saves 2-3 days vs distributing visualization work across phases.
+
+# ============================================================================
+# ROI JUSTIFICATION
+# ============================================================================
+
+roi_analysis:
+  wave_7_track_5_elevation:
+    original_roi: 9.2
+    new_roi: 9.5
+    delta: +0.3
+    justification: |
+      **ORIGINAL ROI FACTORS (9.2):**
+      - Code reduction: 78-83% (45k→12k LOC) = +2.0
+      - EventBus decoupling: 15 dependencies eliminated = +1.5
+      - Maintainability: Single responsibility restored = +2.0
+      - Extensibility: Strategy Pattern enables plugins = +1.7
+      - Performance: <200ms latency target = +1.0
+      - Test coverage: 85-92% automated = +1.0
+      
+      **TRACK 5 ADDITIONS (+0.3):**
+      - Data integrity: Prevents production data loss = +1.5 (CRITICAL)
+      - Production risk reduction: Silent failures eliminated = +1.0
+      - Downstream reliability: Dashboards/analytics depend on data = +0.8
+      - Average Track 5 ROI = +1.1, weighted contribution = +0.3
+      
+      **NEW TOTAL ROI:** 9.2 + 0.3 = 9.5 (highest of all waves)
+  
+  documentation_deferral:
+    wave_8_roi: 8.5
+    deferral_benefit: +2.0
+    adjusted_roi: 8.5
+    justification: |
+      **DOCUMENTATION ROI (8.5):**
+      - Single source of truth: Eliminates drift = +2.0
+      - Auto-generation: Reduces manual burden = +1.5
+      - Living architecture: Always up-to-date = +2.0
+      - Developer onboarding: Faster ramp-up = +1.5
+      - Contradiction detection: Eliminates confusion = +1.5
+      
+      **DEFERRAL BENEFIT (+2.0 net):**
+      - Avoids rework: Document stable architecture = +3.0
+      - Batch efficiency: Single context switch = +2.0
+      - Unblocks value delivery: Waves 2-6 don't wait = +4.0
+      - Cost of delay: Temporary documentation gaps = -7.0
+      - Net benefit of deferral = +2.0
+      
+      **TIMING OPTIMIZATION:**
+      - Documenting before consolidation = negative ROI (rework)
+      - Documenting after consolidation = positive ROI (stable)
+      - Therefore: Deferral INCREASES ROI by avoiding waste
+
+# ============================================================================
+# SUCCESS METRICS: REVISED TARGETS
+# ============================================================================
+
+success_metrics:
+  wave_7_completion:
+    orchestrator_reduction: "26 → 15 (42% reduction)"
+    file_reduction: "114 → 20-25 (78-82% reduction)"
+    code_reduction: "45k → 12k LOC (73% reduction)"
+    test_coverage: "85-92% (all tracks)"
+    lens_file_io_coverage: "95% (Track 5)"
+    tests_passing: "200+ (across 5 tracks)"
+    performance: "<200ms latency (Stage 1-4 pipeline)"
+  
+  wave_8_completion:
+    architecture_docs_migrated: "100% (_workspaces → cortex-registry)"
+    diagrams_generated: "40+ (Mermaid, auto-generated)"
+    contradictions_resolved: "100% (semantic diff)"
+    lens_dashboards_complete: "5 dashboards (repo, analysis, knowledge, landing, suite)"
+    prompt_updated: "cortex-architect.prompt.md v16.0"
+  
+  wave_9_completion:
+    workspace_cleaned: "100% (_workspaces archived)"
+    scripts_consolidated: "100% (root → scripts/)"
+    cortex_brain_migrated: "100% (state/tier files)"
+  
+  overall_timeline:
+    original_estimate: "62 days"
+    revised_estimate: "58 days"
+    time_saved: "4 days (6.5% reduction)"
+    value_delivered_earlier: "Waves 2-6 unblocked by documentation deferral"
+
+# ============================================================================
+# ACTION ITEMS
+# ============================================================================
+
+action_items:
+  immediate:
+    - action: "Update cortex-registry/_cortex-master/index.yaml with new wave order"
+      owner: "Copilot Architect"
+      priority: "P0"
+      estimated_effort: "15 minutes"
+    
+    - action: "Update ENH-087-orchestrator-consolidation.yaml with Track 5 scope"
+      owner: "Copilot Architect"
+      priority: "P0"
+      estimated_effort: "30 minutes"
+    
+    - action: "Create Phase 53 split plan (S1-S6 Wave 7, S7-S9 Wave 8)"
+      owner: "Copilot Architect"
+      priority: "P1"
+      estimated_effort: "45 minutes"
+  
+  before_wave_7_track_2:
+    - action: "Finalize Track 5 (LENS Tests) implementation plan"
+      owner: "Copilot Architect"
+      priority: "P0"
+      estimated_effort: "2 hours"
+    
+    - action: "Create test pattern templates for physical file validation"
+      owner: "Copilot Architect"
+      priority: "P0"
+      estimated_effort: "1 hour"
+  
+  before_wave_8:
+    - action: "Verify Wave 7 Track 1-5 complete (all tests passing)"
+      owner: "Copilot Architect"
+      priority: "P0"
+      estimated_effort: "30 minutes"
+    
+    - action: "Verify Wave 6 complete (standards enforcement)"
+      owner: "Copilot Architect"
+      priority: "P0"
+      estimated_effort: "30 minutes"
+    
+    - action: "Prepare architecture migration checklist"
+      owner: "Copilot Architect"
+      priority: "P1"
+      estimated_effort: "1 hour"
+
+# ============================================================================
+# RISKS & MITIGATION
+# ============================================================================
+
+risks:
+  documentation_gap_temporary:
+    description: "Deferring Wave 8 creates 40-50 day window with outdated docs"
+    severity: "P2-MEDIUM"
+    probability: "100% (by design)"
+    impact: "Developer confusion, onboarding friction"
+    mitigation:
+      - "Add prominent warning to cortex-architect.prompt.md: 'Wave 7 in progress, docs updating soon'"
+      - "Maintain changelog in cortex-registry/_cortex-master/ with interim updates"
+      - "Use git commit messages as interim documentation (detailed AC markers)"
+      - "Prioritize internal team communication (Slack/docs) during transition"
+    
+    acceptance_criteria:
+      - "Warning added to prompt file"
+      - "Changelog maintained in registry"
+      - "Commit messages follow AC marker standard"
+  
+  track_5_scope_creep:
+    description: "LENS physical file testing may uncover systemic issues"
+    severity: "P1-HIGH"
+    probability: "40% (moderate risk)"
+    impact: "Track 5 duration increases from 3-4 days to 6-8 days"
+    mitigation:
+      - "Timebox Track 5 to 5 days maximum (hard stop)"
+      - "Prioritize P0 file I/O paths (onboarding, knowledge synthesis)"
+      - "Defer P2 issues to future phases (log as technical debt)"
+      - "Use existing test patterns from other LENS components"
+    
+    acceptance_criteria:
+      - "95% file I/O coverage (target)"
+      - "Hard stop at day 5 (ship what's ready)"
+      - "P2 issues logged in cortex-registry/issues/"
+  
+  wave_2_agent_redesign_rework:
+    description: "If Wave 7 discovers major orchestrator issues, Wave 2 may need rework"
+    severity: "P2-MEDIUM"
+    probability: "20% (low risk, high impact)"
+    impact: "Wave 2 duration increases from 10-14 days to 14-18 days"
+    mitigation:
+      - "Maintain agent-orchestrator interaction contracts in registry"
+      - "Use EventBus for loose coupling (minimize direct dependencies)"
+      - "Implement agents via Strategy Pattern (easy to swap implementations)"
+      - "Add regression tests for agent-orchestrator interactions"
+    
+    acceptance_criteria:
+      - "Interaction contracts documented in cortex-registry/architecture/"
+      - "EventBus used for agent-orchestrator communication"
+      - "Regression test suite covers agent interactions"
+
+# ============================================================================
+# APPROVAL & SIGN-OFF
+# ============================================================================
+
+approval:
+  user_directive: "defer documentation to end, prioritize high-value tested capabilities"
+  authority: "chat01.md Copilot Session Digest (2026-02-11)"
+  alignment:
+    - "✅ Documentation deferred to Wave 8 (after consolidation)"
+    - "✅ LENS physical file tests elevated to P0 (Track 5)"
+    - "✅ High-value production capabilities prioritized (Waves 1-7)"
+    - "✅ Dashboard generation deferred to Wave 8 (visualization = low priority)"
+  
+  sign_off:
+    copilot_architect: "Approved - aligns with production value prioritization"
+    date: "2026-02-11"

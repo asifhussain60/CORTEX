@@ -1,0 +1,22 @@
+rules:
+- action: keep
+  description: Keep utility scripts in scripts/utilities/
+  name: utility_scripts
+  pattern: scripts/utilities/*.py
+  priority: 1
+- action: archive
+  description: Archive phase completion markers
+  destination: cortex_brain/state/archive/phase-markers/
+  name: phase_markers
+  pattern: .phase*
+  priority: 2
+- action: delete
+  description: Remove macOS artifacts
+  name: macos_artifacts
+  pattern: .DS_Store
+  priority: 1
+- action: delete
+  description: Remove Python cache directories
+  name: pycache
+  pattern: __pycache__
+  priority: 1

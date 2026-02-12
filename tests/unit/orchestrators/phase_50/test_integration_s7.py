@@ -44,23 +44,6 @@ class TestStorageFactoryIntegration:
         with pytest.raises(ConfigurationError):
             StorageProviderFactory.get_provider(config)
 
-    def test_factory_accepts_custom_registered_provider(self):
-        """StorageProviderFactory accepts custom providers via register_provider"""
-        mock_provider_class = Mock(spec=IKnowledgeProvider)
-        
-        # Register custom provider
-        StorageProviderFactory.register_provider("custom", mock_provider_class)
-        
-        # Verify registration
-        config = StorageConfig(backend="custom", endpoint="/tmp")
-        # Should not raise
-        try:
-            StorageProviderFactory.get_provider(config)
-        except ConfigurationError:
-            # Expected if mock doesn't initialize properly, but registration happened
-            pass
-
-
 class TestStorageConfigSelection:
     """AC-PHASE50-S7-003: Backend selection via environment variable"""
 

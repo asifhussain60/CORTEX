@@ -14,12 +14,12 @@ Implements 8 CLI commands for documentation orchestration:
 Type HintsUnion[Complete, Docstrings]: Google-style | Error Handling: Comprehensive
 """
 
-from dataclasses import dataclass
-from typing import Optional, Dict, List, Any
-from enum import Enum
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
-from cortex.core.result import Result, Ok, Err
+from cortex.core.result import Err, Ok, Result
 from cortex.orchestrators.documentation import (
     get_documentation_orchestrator,
 )

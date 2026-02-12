@@ -4,8 +4,8 @@ Detects and resolves duplicate entities in the domain brain based on ID matching
 and fuzzy name matching, with configurable conflict resolution strategies.
 """
 
-from typing import Any, Dict, List, Optional, Set, Tuple
 from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 
 @dataclass

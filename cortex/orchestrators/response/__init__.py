@@ -2,24 +2,30 @@
 
 # ✅ CONS-008: Unified Response Composer (consolidates 5 implementations)
 from .unified_response_composer import (
-    UnifiedResponseComposer,
-    get_unified_response_composer,
-    ResponseMode,
-    ResponseTone,
-    FormattingProfile,
-    ResponseType,
-    VariableType,
+    Challenge as UnifiedChallenge,
+)
+from .unified_response_composer import (
     ChallengeType as UnifiedChallengeType,
+)
+from .unified_response_composer import (
+    FormattingOptions,
+    FormattingProfile,
     QualityMetricType,
     ResponseComposerConfig,
     ResponseMetadata,
-    ResponseSegment,
-    TurnResponse,
+    ResponseMode,
     ResponseQualityMetrics,
-    FormattingOptions,
-    VariableSpec,
+    ResponseSegment,
     ResponseTemplate,
-    Challenge as UnifiedChallenge,
+    ResponseTone,
+    ResponseType,
+    TurnResponse,
+    UnifiedResponseComposer,
+    VariableSpec,
+    VariableType,
+    get_unified_response_composer,
+)
+from .unified_response_composer import (
     ResponseWithChallenges as UnifiedResponseWithChallenges,
 )
 

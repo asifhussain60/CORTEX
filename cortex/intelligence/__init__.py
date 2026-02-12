@@ -12,7 +12,11 @@ Deep computation engines for code analysis:
 Authority: Phase 56 - LENS/Intelligence Hybrid Architecture
 """
 
-from cortex.intelligence.base import BaseIntelligenceEngine, AnalysisContext, AnalysisResult
+from cortex.intelligence.base import (
+    AnalysisContext,
+    AnalysisResult,
+    BaseIntelligenceEngine,
+)
 
 __all__ = [
     "BaseIntelligenceEngine",

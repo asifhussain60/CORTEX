@@ -1,109 +1,539 @@
 {
-  "total_phases": 65,
-  "active_phases": 12,
-  "completed_phases": 53,
-  "completion_rate": 81.5,
-  "in_progress_count": 0,
-  "planned_count": 9,
-  "phases": [
+  "metadata": {
+    "version": "1.0.0",
+    "last_updated": "2026-02-10T16:01:30.030769Z",
+    "variance_score": 100.0,
+    "variance_threshold": 10.0,
+    "silent_sync": true
+  },
+  "statistics": {
+    "total_phases": 81,
+    "active_phases": 34,
+    "completed_2026": 36,
+    "completed_2025": 11,
+    "completion_rate": 58,
+    "overall_status": "ATTENTION_NEEDED"
+  },
+  "active_phases": [
     {
-      "id": "phase-45",
+      "number": 76,
+      "name": "Production Foundation Trilogy",
+      "status": "next_activation",
+      "progress": 0,
+      "start_date": "",
+      "estimated_completion": ""
+    },
+    {
+      "number": 77,
+      "name": "Intelligence & Learning Core",
+      "status": "planned",
+      "progress": 0,
+      "start_date": "",
+      "estimated_completion": ""
+    },
+    {
+      "number": 78,
+      "name": "Enterprise Orchestrator Maturity",
+      "status": "planned",
+      "progress": 0,
+      "start_date": "",
+      "estimated_completion": ""
+    },
+    {
+      "number": 75,
+      "name": "Knowledge Persistence & Universal Learning Loop",
+      "status": "superseded",
+      "progress": 0,
+      "start_date": "",
+      "estimated_completion": ""
+    },
+    {
+      "number": 74,
+      "name": "Multi-Role Documentation Portal (Git-Aware Incremental Builds + Delta Intelligence)",
+      "status": "planned",
+      "progress": 0,
+      "start_date": "",
+      "estimated_completion": ""
+    },
+    {
+      "number": 71,
+      "name": "LENS Intelligence Integration Framework (LDv1 Schema + Evidence Protocol)",
+      "status": "planned",
+      "progress": 0,
+      "start_date": "",
+      "estimated_completion": ""
+    },
+    {
+      "number": 72,
+      "name": "Unified Digest-Ingest Facade - Composition Layer",
+      "status": "completed",
+      "progress": 0,
+      "start_date": "2026-02-10",
+      "estimated_completion": ""
+    },
+    {
+      "number": 70,
+      "name": "Implementation \u2194 Specification Alignment Remediation",
+      "status": "superseded",
+      "progress": 0,
+      "start_date": "",
+      "estimated_completion": ""
+    },
+    {
+      "number": 66,
+      "name": "LENS Knowledge Graph & Domain Intelligence",
+      "status": "superseded",
+      "progress": 0,
+      "start_date": "2026-02-09",
+      "estimated_completion": ""
+    },
+    {
+      "number": 67,
+      "name": ".NET Roslyn Deep Intelligence",
+      "status": "planned",
+      "progress": 0,
+      "start_date": "",
+      "estimated_completion": ""
+    },
+    {
+      "number": 68,
+      "name": "Angular Deep Analysis",
+      "status": "planned",
+      "progress": 0,
+      "start_date": "",
+      "estimated_completion": ""
+    },
+    {
+      "number": 69,
+      "name": "Runtime Correlation Engine",
+      "status": "planned",
+      "progress": 0,
+      "start_date": "",
+      "estimated_completion": ""
+    },
+    {
+      "number": 65,
+      "name": "LENS Intelligence Remediation",
+      "status": "superseded",
+      "progress": 0,
+      "start_date": "2026-02-09",
+      "estimated_completion": ""
+    },
+    {
+      "number": 45,
       "name": "Enhanced Planning System",
       "status": "completed",
-      "priority": "P0",
-      "progress": "0%",
-      "description": "✅ COMPLETED: Production-grade plan lifecycle management (6/6 stages).\n- S1: Plan Registry SSOT + Pydantic Schema (17 tests) ✅\n- S2: Event-Driven Orchestrator Composition (15 tests) ✅\n- S3: LENS Enrichment Pipeline + DoR (22 tests) ✅\n- S4: Plan Viewer SPA Glassmorphism (19 tests) ✅\n- S5: MCP Tools + Plan Templates (21 tests) ✅\n- S6: Integration Testing + Documentation (16 tests) ✅\n\nKey deliverables:\n- PlanEnrichmentPipeline with 5 LENS sources\n- plan-viewer.html with metrics, search, filtering\n- Full plan lifecycle: create → enrich → view → archive\n- 110/110 tests passing (100%)\n- 515+ regression tests maintained"
+      "progress": 0,
+      "start_date": "",
+      "estimated_completion": ""
     },
     {
-      "id": "phase-46",
+      "number": 46,
       "name": "Infrastructure Discovery & GitHub Integration",
       "status": "completed",
-      "priority": "P1",
-      "progress": "0%",
-      "description": "✅ COMPLETED: Dynamic infrastructure awareness system — 6/6 stages.\n- S1: Infrastructure Registry Foundation (26 tests) ✅\n  Cache manager with TTL, invalidation, thread-safety, LRU, metrics\n- S2: GitHub API Client (27 tests) ✅\n  GraphQL/REST wrapper, rate limiting, caching, mock mode\n- S3: Infrastructure Scanner (19 tests) ✅\n  API/tool/service discovery, environment-specific capabilities\n- S4: MCP Tools (23 tests) ✅\n  cortex_discover_infrastructure, cortex_github_discover\n- S5: LENS Integration (6 tests) ✅\n  Internal package recommendations, Dependabot security gates\n- S6: Orchestrator Integration (8 tests) ✅\n  PlanningOrchestrator environment-aware plans, InteractionOrchestrator tooling\n\nKEY DELIVERABLES:\n- cortex/infrastructure/: Cache manager, GitHub client, scanner, detector, MCP tools\n- cortex/lens/infrastructure_integration.py: LENS-aware recommendations\n- cortex/orchestrators/planning/infrastructure_integration.py: Environment-aware planning\n- cortex/interaction/tooling_suggestions.py: Tooling suggestions\n- 109/109 tests passing (136% of 80-test target)\n\nCAPABILITIES ENABLED:\n- Real-time infrastructure discovery (APIs, tooling, services)\n- GitHub ecosystem integration (Packages, Actions, Environments, Dependabot)\n- Environment-specific awareness (dev/staging/prod capabilities)\n- LENS recommends internal packages, blocks vulnerable dependencies\n- PlanningOrchestrator adjusts deployment plans per environment\n- InteractionOrchestrator suggests available company tooling\n- Security gates: Dependabot CVE detection prevents deployment\n\nARCHITECTURE:\n- Static best practices: company/domains/infrastructure/ (PRECEDENCE)\n- Dynamic state: cortex/infrastructure/ (runtime discovery)\n- Cache with TTL: 5-min for deployments, 1-hour for packages\n- Graceful degradation: Fallback to static on API failures\n- MCP-FIRST: All functionality via MCP tools\n- Thread-safe: RLock-protected cache operations\n- Mock mode: Testing without real GitHub API calls"
+      "progress": 0,
+      "start_date": "2026-02-08",
+      "estimated_completion": ""
     },
     {
-      "id": "phase-47",
+      "number": 47,
       "name": "Company/CORTEX Separation & Registry Consolidation",
-      "status": "planned",
-      "priority": "P1",
-      "progress": "0%",
-      "description": "⚪ PLANNED: Company/CORTEX architectural separation — 6 stages:\nS1: Registry structure setup (cortex-registry/company/)\nS2: Dual-path resolution (registry first, legacy fallback)\nS3: Code references update (20+ files)\nS4: Tier cleanup (extract company overrides)\nS5: Integration + regression testing (515+ tests)\nS6: Documentation + deprecation warnings\n\nKEY OBJECTIVES:\n- Separate company-specific from CORTEX universal code\n- Consolidate company/ → cortex-registry/company/\n- Cleanup cortex_brain/ tiers (CORTEX defaults only)\n- Zero regression (all 450+ tests passing)\n- Phase 46 alignment (infrastructure + company in registry)\n\nMIGRATION:\n- Root company/ → cortex-registry/company/ (domains, dashboards, governance)\n- Dual-path resolution (new registry, legacy fallback)\n- Precedence preserved (company > cortex > defaults unchanged)\n- cortex_brain/ tiers cleaned (no company overrides)\n- .gitignore: cortex-registry/company/ (per-client)\n\nBENEFITS:\n- ✅ Portability: CORTEX ships without company data\n- ✅ Multi-tenant ready: Per-company registries\n- ✅ Phase 46 aligned: Unified registry structure\n- ✅ Clean separation: Universal vs company-specific"
+      "status": "completed",
+      "progress": 0,
+      "start_date": "2026-02-08",
+      "estimated_completion": ""
     },
     {
-      "id": "phase-37",
+      "number": 55,
+      "name": ".NET Enterprise LENS Enhancement",
+      "status": "completed",
+      "progress": 0,
+      "start_date": "2026-02-09",
+      "estimated_completion": ""
+    },
+    {
+      "number": 56,
+      "name": "LENS/Intelligence Hybrid Architecture (PILOT)",
+      "status": "completed",
+      "progress": 0,
+      "start_date": "2026-02-09",
+      "estimated_completion": ""
+    },
+    {
+      "number": 57,
+      "name": "Architectural Pattern Detection & Classification",
+      "status": "completed",
+      "progress": 0,
+      "start_date": "2026-02-09",
+      "estimated_completion": ""
+    },
+    {
+      "number": 58,
+      "name": "Async Crawler Framework & Repository Pattern Learning",
+      "status": "completed",
+      "progress": 0,
+      "start_date": "2026-02-09",
+      "estimated_completion": ""
+    },
+    {
+      "number": 59,
+      "name": "ML-Based Pattern Similarity & Clustering",
+      "status": "completed",
+      "progress": 0,
+      "start_date": "2026-02-09",
+      "estimated_completion": ""
+    },
+    {
+      "number": 60,
+      "name": "Enterprise Pattern Registry & Policy Engine",
+      "status": "completed",
+      "progress": 0,
+      "start_date": "2026-02-09",
+      "estimated_completion": ""
+    },
+    {
+      "number": 37,
       "name": "Role-Adaptive Persona System",
-      "status": "planned",
-      "priority": "P1",
-      "progress": "0%",
-      "description": "⚪ PLANNED: Hybrid role-adaptive persona system with context inference.\n- 6 personas: business_leader, product_owner, scrum_master, tech_lead, engineer, unknown\n- 4 depth levels: executive, standard, detailed, full\n- Dynamic switching: /persona and /detail commands\n- Natural language triggers: \"show me the code\", \"give me the BLUF\"\n- Persistent storage: cross-session user preferences\n- Introduction template with role discovery\n- CORE-029 header compliance fix"
+      "status": "completed",
+      "progress": 0,
+      "start_date": "2026-02-07",
+      "estimated_completion": ""
     },
     {
-      "id": "phase-38",
+      "number": 38,
       "name": "Brain Cohesion & Health System",
-      "status": "planned",
-      "priority": "P0",
-      "progress": "0%",
-      "description": "⚪ PLANNED: Phase 38.0 prerequisite complete. Ready for implementation.\n(12 gaps, 260 tests, 20 days estimated effort)\n🟢 AUTONOMOUS EXECUTION: Enabled with visual progress tracking"
+      "status": "completed",
+      "progress": 0,
+      "start_date": "2026-02-08",
+      "estimated_completion": ""
     },
     {
-      "id": "phase-24",
+      "number": 54,
+      "name": "Repository Onboarding Incremental Refactoring",
+      "status": "completed",
+      "progress": 0,
+      "start_date": "2026-02-09",
+      "estimated_completion": ""
+    },
+    {
+      "number": 24,
       "name": "External Refactoring Tools Integration",
-      "status": "planned",
-      "priority": "P2",
-      "progress": "0%",
-      "description": "⚪ PLANNED: Partially superseded by Phase 43 stages S5-S6 (refactoring bridge).\nRemaining scope: advanced multi-language refactoring patterns."
+      "status": "superseded",
+      "progress": 0,
+      "start_date": null,
+      "estimated_completion": ""
     },
     {
-      "id": "phase-48",
-      "name": "Intelligent Code Review Orchestrator",
-      "status": "pending_approval",
-      "priority": "P0",
-      "progress": "0%",
-      "description": "🟡 PENDING APPROVAL: Intelligent PR validation with security-first CORTEX tooling.\n\n**CRITICAL GAP:** No automated PR review for enterprise collaboration.\n\nKEY CAPABILITIES:\n- ✅ Security-first validation (OWASP, CWE-89/94/327/etc)\n- ✅ LENS integration (AST, Git history, security threats)\n- ✅ Cross-layer coherence (Python↔JS↔SQL)\n- ✅ Company domain compliance checking\n- ✅ TDD-based fix suggestions\n- ✅ MCP tool: cortex_review_pr\n- ✅ GitHub Actions integration\n- ✅ Multi-tenant support (future enterprise)\n\n**8 STAGES:**\nS1: Core review engine + diff parsing (1 day, 20 tests)\nS2: LENS integration - security & intelligence (1.5 days, 25 tests)\nS3: Company domain compliance (1 day, 20 tests)\nS4: Cross-layer coherence validation (1 day, 18 tests)\nS5: Fix suggestion generation with TDD (1.5 days, 22 tests)\nS6: Review report synthesis + MCP tool (1 day, 15 tests)\nS7: CI/CD integration & GitHub Actions (1 day, 10 tests)\nS8: Enterprise extensions & multi-tenant (1 day, 10 tests)\n\n**ROI DRIVERS:**\n- PR review time: 30min → 3s (automated)\n- Security vulnerabilities: 100% P0 blocking before merge\n- Cross-layer bugs: Caught early (prevent production issues)\n- Team velocity: Faster reviews, fewer conflicts\n- Compliance: Automated domain validation\n\n**INTEGRATION:**\n- ReviewOrchestrator (plan fidelity)\n- CoherenceValidator (cross-layer checks)\n- SecurityThreatAnalyzer (CWE detection)\n- LENSOrchestrator (code intelligence)\n- TDDOrchestrator (fix generation)\n\n**APPROVAL REQUIRED:**\n- Architect: Architecture design + CORTEX integration\n- Security Lead: CWE patterns + detection accuracy\n- Platform Team: CI/CD integration + GitHub Actions"
+      "number": 48,
+      "name": "Intelligent Code Review Orchestrator (REJECTED)",
+      "status": "rejected",
+      "progress": 0,
+      "start_date": "",
+      "estimated_completion": ""
     },
     {
-      "id": "phase-48",
+      "number": 48,
       "name": "Registry Isolation & Multi-Tenant Foundation",
-      "status": "planned",
-      "priority": "P0",
-      "progress": "0%",
-      "description": "⚪ PLANNED: Eliminate singleton registry hell, enable multi-tenant deployment.\nContext-scoped registries with workspace isolation. Zero regression for individual\ndevelopers (local mode = default). Foundation for SaaS + >1000 concurrent users.\n6 stages: Architecture, GitBackedRegistry, KnowledgeLoader, ToolRegistry, Stress Tests, Migration."
+      "status": "superseded",
+      "progress": 0,
+      "start_date": "",
+      "estimated_completion": ""
     },
     {
-      "id": "phase-49",
+      "number": 49,
       "name": "Document Ingestion & Knowledge Extraction Pipeline",
-      "status": "planned",
-      "priority": "P1",
-      "progress": "0%",
-      "description": "⚪ PLANNED: Multi-format document ingestion (Word/Excel/PPT/PDF/Markdown) → knowledge extraction\n→ YAML generation. Async pipeline with human approval workflow. Enables 10x faster knowledge base\ngrowth. 7 stages: Upload, Extraction, NLP Parsing, YAML Generation, Approval Workflow, Incremental Updates, Security."
+      "status": "next_activation_tier2",
+      "progress": 0,
+      "start_date": "",
+      "estimated_completion": ""
     },
     {
-      "id": "phase-50",
+      "number": 50,
       "name": "Storage Backend Abstraction & Cloud Integration",
-      "status": "planned",
-      "priority": "P1",
-      "progress": "0%",
-      "description": "⚪ PLANNED: Pluggable storage backends (LocalFileSystem, S3, Azure Blob). Write-through caching + offline mode.\nIndividual devs continue using local files, enterprise gains cloud storage + DR. Zero breaking changes.\n7 stages: Interface, LocalFS, S3, Azure, Cache Layer, Offline Mode, Migration."
+      "status": "next_activation_tier3",
+      "progress": 0,
+      "start_date": "",
+      "estimated_completion": ""
     },
     {
-      "id": "phase-51",
+      "number": 51,
+      "name": "MCP-FIRST Enforcement",
+      "status": "completed",
+      "progress": 0,
+      "start_date": "",
+      "estimated_completion": ""
+    },
+    {
+      "number": 51,
       "name": "Secrets Management & Audit Trail Hardening",
-      "status": "planned",
-      "priority": "P0",
-      "progress": "0%",
-      "description": "⚪ PLANNED: Integrate AWS Secrets Manager, Azure Key Vault, HashiCorp Vault. Eliminate secrets from git.\nImmutable audit trail with hash-chained append-only logs for SOX/HIPAA/PCI-DSS compliance.\n8 stages: Abstraction, AWS, Azure, Vault, Git Scanning, Migration, Audit Trail, Compliance Reporting."
+      "status": "superseded",
+      "progress": 0,
+      "start_date": "",
+      "estimated_completion": ""
     },
     {
-      "id": "phase-52",
+      "number": 52,
       "name": "Enterprise Orchestrator Suite",
-      "status": "planned",
-      "priority": "P1",
-      "progress": "0%",
-      "description": "⚪ PLANNED: 3 new orchestrators for enterprise teams:\n- PRReviewOrchestrator: Automated PR review (70% time reduction)\n- MigrationOrchestrator: Safe incremental migrations (Python 2→3, Angular→React)\n- PerformanceOrchestrator: Profiling + load testing + regression detection\n7 stages: PR Review Foundation, Review Rules, Migration Foundation, Execution, Performance Foundation, Load Testing, MCP Tools."
+      "status": "superseded",
+      "progress": 0,
+      "start_date": "2026-02-08",
+      "estimated_completion": ""
+    },
+    {
+      "number": 53,
+      "name": "Dashboard Orchestrator & SPA Consolidation",
+      "status": "completed",
+      "progress": 0,
+      "start_date": "2026-02-08",
+      "estimated_completion": ""
     }
   ],
-  "generated_at": "2026-02-08T12:50:21.983087Z",
-  "source": "index.yaml",
-  "version": "1.0"
+  "completed_phases_2026": [
+    {
+      "name": "Phase 01 Orchestrator Event Bus",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 02 Complexity Classifier",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 03 Code Level Planner",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 04 Coherence Validator",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 05 Review Orchestrator",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 06 Interaction Orchestrator Enhancement",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 19 Lens Unified Intelligence",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 20 Lens Company Integration",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 20 Orch Visibility",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 20 Knowledge Synthesis",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 20 Instrumentation Layer",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 21 Json First Rewrite",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 22 Ask Mode System",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 24 Architecture Integrity System",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 25 Plan Mode Cortex Architect",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 26 Context Loading Optimization",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 27 Company Domain Integration",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 28 Repository Onboarding System",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 29 Copilot Chat Response Format",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 31 Chat Response Markdown Ban Policies",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 31A Minimal Plan Spine Enhancement",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 32 Glassmorphism Dashboard Generator Fix",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 33 Architecture Alignment Governance",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 34 Advanced Response Optimization",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 34 Continuous Tech Intelligence System",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 35 Autonomous Execution Enhancement",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 36 Ml Summarization",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 36 Unified Response Engine",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 39 Audit Mode Cohesion Integrity System",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 40 Intelligent Upgrade Changelog System",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 41 Digest Mode Enhancement System",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 42 Interactive Approval Workflow System",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 43 Lens Tooling Knowledge Intelligence",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 44 Cortex Production Readiness",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 45 Enhanced Planning System",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 46 Infrastructure Discovery",
+      "completion_date": ""
+    }
+  ],
+  "active_enhancements": [
+    {
+      "id": "enh-029",
+      "name": "Capability Feasibility Gate",
+      "file": "enhancements/active/enh-029-capability-feasibility-gate.yaml",
+      "status": "active",
+      "priority": "P1"
+    },
+    {
+      "id": "enh-046",
+      "name": "Context Consumption Governance (Token Optimizer Integration)",
+      "file": "enhancements/active/enh-046-context-consumption-governance.yaml",
+      "status": "PRODUCTION_READY",
+      "priority": "P1",
+      "version": "5.0",
+      "phase": "ALL PHASES COMPLETE \u2705 | 107/107 tests passing",
+      "started": "2026-02-06",
+      "completed": "2026-02-07",
+      "updated": "2026-02-07",
+      "scope": "ALL orchestrators via MasterOrchestrator EXIT GATE",
+      "tests_total": 107,
+      "tests_passing": 107,
+      "description": "\u2705 PRODUCTION READY: EXIT GATE operational with 107/107 tests passing\n\nTest Results:\n- test_copilot_context_optimizer.py: 20/20 \u2705\n- test_context_synthesizer.py: 25/25 \u2705\n- test_context_synthesis_gateway.py: 29/29 \u2705\n- test_context_cache_layer.py: 21/21 \u2705\n- test_master_orchestrator_exit_gate.py: 13/13 \u2705\n\nPerformance:\n- Token budget: 20K tokens per turn (enforced)\n- Compression: 60-99% achieved\n- Synthesis time: <100ms (validated)\n- Cache hit rate: 70% target\n\nArchitecture:\n- Single EXIT GATE in MasterOrchestrator.execute_operation()\n- Automatic coverage for ALL 10+ orchestrators\n- Fail-safe: Returns original on error\n- Session tracking: Cumulative token monitoring\n",
+      "critical_issue": {
+        "issue_id": "PHASE-25-TOKEN-001",
+        "status": "RESOLVED",
+        "evidence": "17 summarization events in 233-line chat (73x over budget)",
+        "target": "\u22641 summarization per 1000 lines",
+        "resolution": "EXIT GATE deployed, token budget enforced at 20K per turn"
+      }
+    },
+    {
+      "id": "enh-047",
+      "name": "Dashboard Data Loading Verification",
+      "file": "enhancements/active/enh-047-dashboard-data-loading-verification.yaml",
+      "status": "planned",
+      "priority": "P1",
+      "version": "1.0",
+      "created": "2026-02-06",
+      "updated": "2026-02-06",
+      "scope": "cortex-registry/_cortex-master/dashboard/",
+      "phases": 4,
+      "estimated_days": 6,
+      "tests_total": 36
+    },
+    {
+      "id": "enh-048",
+      "name": "Prompt Unbloating System",
+      "file": "enhancements/active/enh-048-prompt-unbloating-system.yaml",
+      "status": "planned",
+      "priority": "P1",
+      "version": "1.0",
+      "created": "2026-02-06",
+      "updated": "2026-02-06",
+      "scope": ".github/prompts/ + cortex-registry/_cortex-master/governance/",
+      "phases": 5,
+      "estimated_hours": 10,
+      "token_reduction": "73% (30k \u2192 8k tokens)",
+      "related_enhancements": [
+        "enh-046"
+      ],
+      "description": "Reduce cortex-architect.prompt.md from 2,982 lines to ~800 lines by\nextracting CORE rules, audit checklists, mode specs to machine-readable YAML.\nEnables single source of truth + lazy loading via MCP tools.\n"
+    },
+    {
+      "id": "enh-061",
+      "name": "Universal Role-Based Response System",
+      "file": "enhancements/active/enh-061-universal-role-based-response.yaml",
+      "status": "approved",
+      "priority": "P0",
+      "version": "1.0",
+      "created": "2026-02-08",
+      "updated": "2026-02-08",
+      "scope": "Response formatting + persona system",
+      "estimated_hours": 12,
+      "description": "Universal role-based response system with 15 professional roles.\n"
+    },
+    {
+      "id": "enh-062",
+      "name": "CORTEX Production Readiness & Vacuum Enhancement",
+      "file": "enhancements/active/enh-062-cortex-production-readiness-vacuum.yaml",
+      "status": "active",
+      "priority": "P0",
+      "version": "1.0",
+      "created": "2026-02-08",
+      "updated": "2026-02-08",
+      "scope": "VacuumOrchestrator + cross-cutting refactor",
+      "stages": 6,
+      "estimated_hours": 8,
+      "breaking_changes": true,
+      "production_blocker": true,
+      "related_phases": [
+        "phase-44"
+      ],
+      "description": "Comprehensive production readiness enhancement:\n\nNEW CAPABILITIES:\n1. Python file relocation (not just markdown)\n2. Import reference fixing (AST-based analysis)\n3. Duplicate detection (similarity scoring > 0.7)\n4. Comprehensive cleanup (Python, markdown, configs, orphans)\n\nRELOCATION RULES:\n- Root utilities \u2192 scripts/utilities/ (15+ files)\n- Legacy tests \u2192 tests/_archive/ or delete (13+ files)\n- Markdown sprawl \u2192 docs/archive/2026/02/ (20+ files)\n- Duplicate implementations \u2192 consolidate (2,400 LOC)\n\nWORKFLOW:\nSCAN \u2192 ANALYZE \u2192 PLAN \u2192 VERIFY \u2192 EXECUTE \u2192 FIX IMPORTS \u2192 VALIDATE\n\nSAFETY:\n- Dry-run mode (preview before execution)\n- Git checkpoint (rollback capability)\n- Import validation (try importing post-fix)\n- Test suite validation (450+ tests must pass)\n"
+    }
+  ],
+  "roadmap": {},
+  "registry_config": {
+    "auto_sync_enabled": true,
+    "variance_check_interval": 300,
+    "variance_threshold": 10.0
+  }
 }

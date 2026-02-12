@@ -2,7 +2,7 @@
 Knowledge Indexer - Index entities and relationships for fast retrieval.
 """
 
-from typing import Dict, List, Any
+from typing import Any, Dict, List
 
 
 class KnowledgeIndexer:
@@ -17,16 +17,16 @@ class KnowledgeIndexer:
     def add_entity(self, entity: Dict[str, Any]) -> None:
         """
         Add entity to index.
-        
+
         Args:
             entity: Entity with id, type, and other properties.
         """
         entity_id = str(entity.get("id", ""))
         if not entity_id:
             return
-            
+
         self.entity_index[entity_id] = entity
-        
+
         # Build full-text index
         text_fields = [
             str(entity.get("name", "")),
@@ -43,11 +43,11 @@ class KnowledgeIndexer:
         """Full-text search for entities."""
         query_words = query.lower().split()
         results = []
-        
+
         for entity_id, words in self.full_text_index.items():
             if any(word in words for word in query_words):
                 results.append(self.entity_index[entity_id])
-        
+
         return results
 
     def add_relationship(self, relationship: Dict[str, Any]) -> None:
@@ -55,7 +55,7 @@ class KnowledgeIndexer:
         source = str(relationship.get("source_id", ""))
         if not source:
             return
-            
+
         if source not in self.relationship_index:
             self.relationship_index[source] = []
         self.relationship_index[source].append(relationship)

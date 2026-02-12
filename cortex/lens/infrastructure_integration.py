@@ -9,10 +9,11 @@ Description: Wire infrastructure awareness into LENS for recommendations.
              - Security gates for CVE detection
 """
 
-from typing import Dict, List, Optional, Any
+from typing import Any, Dict, List, Optional
+
 from cortex.infrastructure.capability_detector import CapabilityDetector
-from cortex.infrastructure.infrastructure_scanner import EnvironmentType
 from cortex.infrastructure.github_client import GitHubClient
+from cortex.infrastructure.infrastructure_scanner import EnvironmentType
 
 
 class InfrastructureLENSIntegration:
@@ -72,7 +73,7 @@ class InfrastructureLENSIntegration:
                 "name": matches[0],
                 "version": capability.get("version") if capability else "latest",
                 "reason": f"Package '{matches[0]}' available in {environment}",
-                "recommendation": f"Use internal package instead of npm/pip install",
+                "recommendation": "Use internal package instead of npm/pip install",
             }
 
         return {

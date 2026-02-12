@@ -24,20 +24,22 @@ from typing import Dict, List, Optional
 # Add parent directory for imports when run as script
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from cortex.visualization.spa.suite_generator import DashboardSuiteGenerator, GenerationResult
 from cortex.visualization.spa.models import (
+    ArchitectureLayer,
     DashboardSuiteConfig,
+    QualityMetric,
     RepoDashboardData,
     RepoManifestEntry,
     Severity,
-    UseCase,
-    UseCasePersona,
-    UseCaseCategory,
     TestingMetrics,
-    QualityMetric,
-    ArchitectureLayer,
+    UseCase,
+    UseCaseCategory,
+    UseCasePersona,
 )
-
+from cortex.visualization.spa.suite_generator import (
+    DashboardSuiteGenerator,
+    GenerationResult,
+)
 
 logging.basicConfig(
     level=logging.INFO,
@@ -141,7 +143,7 @@ def create_default_config(repos: Optional[List[str]] = None, output_dir: str = "
     """Create default suite configuration."""
     if repos is None:
         repos = ["cortex", "cortex-brain", "cortex-lens"]
-    
+
     repo_entries = [
         RepoManifestEntry(
             slug=slug,
@@ -160,7 +162,7 @@ def create_default_config(repos: Optional[List[str]] = None, output_dir: str = "
         )
         for slug in repos
     ]
-    
+
     return DashboardSuiteConfig(
         repos=repo_entries,
         output_dir=output_dir,
@@ -193,30 +195,30 @@ def main() -> int:
         action="store_true",
         help="Enable verbose logging",
     )
-    
+
     args = parser.parse_args()
-    
+
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
-    
+
     logger.info(f"Generating dashboard suite to: {args.output}")
-    
+
     # Create configuration
     config = create_default_config(args.repos, str(args.output))
     logger.info(f"Configuration: {len(config.repos)} repositories")
-    
+
     # Create sample data for each repo
     repo_data: Dict[str, RepoDashboardData] = {}
     for repo in config.repos:
         repo_data[repo.slug] = create_sample_repo_data(repo)
         logger.debug(f"Created sample data for: {repo.slug}")
-    
+
     # Initialize generator
     generator = DashboardSuiteGenerator(output_dir=args.output)
-    
+
     # Generate suite
     result: GenerationResult = generator.generate_suite(config, repo_data)
-    
+
     # Report results
     if result.success:
         logger.info("✅ Dashboard suite generated successfully!")

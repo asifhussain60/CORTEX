@@ -2,15 +2,16 @@
 FastAPI backend for CORTEX Neural Observatory
 NO-004-01: FastAPI Backend Service with REST and WebSocket endpoints
 """
+import asyncio
+import json
+import os
+import sqlite3
+from datetime import datetime
+from typing import Dict, List, Optional
+
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-import asyncio
-import json
-from typing import Dict, List, Optional
-from datetime import datetime
-import os
-import sqlite3
 
 app = FastAPI(
     title="CORTEX Neural Observatory API",
@@ -30,19 +31,19 @@ app.add_middleware(
 # WebSocket connection manager
 class ConnectionManager:
     """Manages WebSocket connections for audit streaming"""
-    
+
     def __init__(self) -> None:
         self.active_connections: List[WebSocket] = []
-    
+
     async def connect(self, websocket: WebSocket) -> None:
         """Accept and register new WebSocket connection"""
         await websocket.accept()
         self.active_connections.append(websocket)
-    
+
     async def disconnect(self, websocket: WebSocket) -> None:
         """Remove disconnected WebSocket"""
         self.active_connections.remove(websocket)
-    
+
     async def broadcast(self, message: dict) -> None:
         """Broadcast message to all connected clients"""
         for connection in self.active_connections:
@@ -254,7 +255,7 @@ async def websocket_audit_stream(websocket: WebSocket) -> None:
             "message": "Connected to audit stream",
             "timestamp": datetime.now().isoformat()
         })
-        
+
         # Keep connection alive and send mock audit entries
         counter = 0
         while True:
@@ -270,7 +271,7 @@ async def websocket_audit_stream(websocket: WebSocket) -> None:
             })
     except WebSocketDisconnect:
         await manager.disconnect(websocket)
-    except Exception as e:
+    except Exception:
         await manager.disconnect(websocket)
 
 # ============================================================================

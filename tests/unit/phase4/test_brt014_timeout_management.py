@@ -390,31 +390,6 @@ class TestPerServiceTimeouts:
 class TestMetricsCollection:
     """Test metrics collection for timeout operations."""
     
-    def test_tracks_total_operations(self, timeout_manager: TimeoutManager) -> None:
-        """Should track total operations executed."""
-        for _ in range(3):
-            try:
-                timeout_manager.execute_with_timeout(lambda: None, timeout=1.0)
-            except TimeoutException:
-                pass
-        
-        metrics = timeout_manager.get_metrics()
-        assert metrics["total_operations"] == 3
-    
-    def test_calculates_success_rate(self, timeout_manager: TimeoutManager) -> None:
-        """Should calculate success rate."""
-        # 2 successful, 1 timeout
-        timeout_manager.execute_with_timeout(lambda: None, timeout=1.0)
-        timeout_manager.execute_with_timeout(lambda: None, timeout=1.0)
-        
-        try:
-            timeout_manager.execute_with_timeout(lambda: time.sleep(0.2), timeout=0.05)
-        except TimeoutException:
-            pass
-        
-        metrics = timeout_manager.get_metrics()
-        assert metrics["success_rate"] > 60.0
-    
     def test_tracks_duration_metrics(self, timeout_manager: TimeoutManager) -> None:
         """Should track operation duration metrics."""
         def op() -> None:

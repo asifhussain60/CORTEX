@@ -177,27 +177,6 @@ class TestTDDOrchestratorDirectiveSupport:
         for constraint in sample_execution_directive.constraints:
             assert constraint.constraint_type == "pattern"
     
-    def test_tdd_validates_against_rules_in_refactor(self, sample_execution_directive):
-        """Test rules validation during REFACTOR phase."""
-        # After implementation, REFACTOR phase should:
-        # 1. Extract rules from directive.rule_id
-        # 2. Validate generated code against rules
-        # 3. Report violations or pass
-        
-        rules_list = sample_execution_directive.rule_id.split("|")
-        assert len(rules_list) > 0
-        assert all(isinstance(r, str) for r in rules_list)
-    
-    def test_tdd_logs_rule_violations_with_directive_metadata(self):
-        """Test violations logged with directive metadata."""
-        # After implementation, violations should be logged with:
-        # - directive.agent_id
-        # - directive.rule_id
-        # - directive.metadata (original request, etc.)
-        
-        pass  # Verified by integration test
-
-
 # ============================================================================
 # TASK 3: LENSSynthesis ExecutionDirective Support Tests (3 tests)
 # ============================================================================
@@ -412,37 +391,6 @@ class TestPhase52Performance:
 class TestPhase52AcceptanceCriteria:
     """Verify Phase 52 acceptance criteria met."""
     
-    def test_ac_1_master_orchestrator_routes_directive(self):
-        """AC-1: MasterOrchestrator routes ExecutionDirective to correct orchestrator."""
-        # Verified by: TestMasterOrchestratorIntegration tests
-        pass
-    
-    def test_ac_2_tdd_applies_constraints(self):
-        """AC-2: TDDOrchestrator applies constraints during RED→GREEN→REFACTOR."""
-        # Verified by: TestTDDOrchestratorDirectiveSupport tests
-        pass
-    
-    def test_ac_3_lens_scopes_analysis(self):
-        """AC-3: LENSSynthesis scopes analysis by context."""
-        # Verified by: TestLENSSynthesisDirectiveSupport tests
-        pass
-    
-    def test_ac_4_five_rules_migrated(self):
-        """AC-4: 5 CORE rules migrated to rules-driven."""
-        # Verified by: TestCoreRulesMigration tests
-        pass
-    
-    def test_ac_5_e2e_scenarios_pass(self):
-        """AC-5: 4 E2E test scenarios pass."""
-        # Verified by: TestPhase52E2EIntegration tests
-        pass
-    
-    def test_ac_6_latency_under_threshold(self):
-        """AC-6: No performance regression (latency <100ms P95)."""
-        # Verified by: TestPhase52Performance tests
-        pass
-
-
 # ============================================================================
 # DIAGNOSTICS & DEBUGGING
 # ============================================================================

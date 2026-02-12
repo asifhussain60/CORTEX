@@ -11,16 +11,16 @@ Authority: CORE-035 (Consolidation)
 """
 
 from cortex.lens.discovery.config_discovery import (
+    ConfigTopology,
     ConfigurationDiscovery,
     ConnectionString,
-    ConfigTopology,
 )
 from cortex.lens.discovery.database_discovery import (
-    DatabaseDiscovery,
     ConnectionInfo,
-    ORMType,
-    ModelInfo,
+    DatabaseDiscovery,
     DatabaseTopology,
+    ModelInfo,
+    ORMType,
 )
 
 __all__ = [

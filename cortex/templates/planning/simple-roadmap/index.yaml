@@ -1,0 +1,41 @@
+# Simple Wave Index
+
+registry_version: 1.0
+wave_count: 1
+
+waves:
+  - wave_id: "WAVE-1"
+    title: "Foundation & Core Features"
+    description: "Simple 3-phase wave for template demonstration"
+    status: "planned"
+    roi:
+      business_value: 8.0
+      unblock_factor: 3.0
+      risk_level: 4.0
+      composite_score: 7.1
+    
+    phases:
+      - phase_id: "P-001"
+        title: "Foundation"
+        effort_hours: 40
+        depends_on: []
+      
+      - phase_id: "P-002"
+        title: "Core Feature"
+        effort_hours: 50
+        depends_on: ["P-001"]
+      
+      - phase_id: "P-003"
+        title: "Stabilization"
+        effort_hours: 30
+        depends_on: ["P-002"]
+    
+    total_effort: 120
+    critical_path: 3
+    tracks: 1
+
+metadata:
+  created: 2026-02-12
+  template_type: "simple"
+  parallelism: "none"
+  target_audience: "beginners"

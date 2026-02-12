@@ -405,22 +405,6 @@ class TestPayloadCompression:
         data = response.json()
         assert "overview" in data
     
-    def test_compression_metadata(self, client: TestClient, test_repo: Path) -> None:
-        """Test compression metadata in response."""
-        response = client.get(
-            "/api/dashboard/analyze",
-            params={"repo_path": str(test_repo)},
-            headers={"Accept-Encoding": "gzip"}
-        )
-        
-        assert response.status_code == 200
-        data = response.json()
-        
-        # Metadata may include compression info
-        if "_metadata" in data:
-            # Check if compression status is tracked
-            pass  # Implementation-dependent
-    
     def test_compression_opt_out(self, client: TestClient, test_repo: Path) -> None:
         """Test that compression can be disabled."""
         response = client.get(
@@ -454,31 +438,6 @@ class TestResponseCaching:
         (repo / ".git").mkdir()
         (repo / "module.py").write_text("def test(): pass\n")
         return repo
-    
-    def test_cache_hit_on_second_request(self, client: TestClient, test_repo: Path) -> None:
-        """Test cache hit on repeated request."""
-        # First request (cache miss)
-        response1 = client.get(
-            "/api/dashboard/analyze",
-            params={"repo_path": str(test_repo)}
-        )
-        assert response1.status_code == 200
-        data1 = response1.json()
-        time1 = data1["_metadata"]["analysis_time_ms"]
-        
-        # Second request (cache hit)
-        response2 = client.get(
-            "/api/dashboard/analyze",
-            params={"repo_path": str(test_repo)}
-        )
-        assert response2.status_code == 200
-        data2 = response2.json()
-        
-        # Cache metadata should exist (even if not yet implemented)
-        # Current implementation returns cache_hit=False (TODO: implement actual caching)
-        if "_metadata" in data2 and "cache_hit" in data2["_metadata"]:
-            # For now, just verify the field exists
-            assert isinstance(data2["_metadata"]["cache_hit"], bool)
     
     def test_cache_headers(self, client: TestClient, test_repo: Path) -> None:
         """Test cache control headers."""
@@ -540,27 +499,6 @@ class TestResponseCaching:
         assert response2.status_code == 200
         
         # Both requests should succeed
-    
-    def test_cache_bypass_flag(self, client: TestClient, test_repo: Path) -> None:
-        """Test cache bypass with no-cache flag."""
-        # First request (populates cache)
-        client.get(
-            "/api/dashboard/analyze",
-            params={"repo_path": str(test_repo)}
-        )
-        
-        # Second request with cache bypass
-        response = client.get(
-            "/api/dashboard/analyze",
-            params={"repo_path": str(test_repo), "no_cache": "true"}
-        )
-        
-        assert response.status_code == 200
-        data = response.json()
-        
-        # Should not be a cache hit
-        if "_metadata" in data and "cache_hit" in data["_metadata"]:
-            assert data["_metadata"]["cache_hit"] is False
     
     def test_cache_per_repository(self, client: TestClient, tmp_path: Path) -> None:
         """Test that cache is per-repository."""

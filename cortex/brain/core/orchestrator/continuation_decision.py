@@ -7,23 +7,22 @@ to another turn, and provides context about why the decision was made.
 This replaces fragile implicit loop conditions with declarative, auditable decisions.
 """
 
-from dataclasses import dataclass, field, asdict
-from enum import Enum
-from typing import Dict, Any, List, Optional
+from dataclasses import asdict, dataclass, field
 from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional
+
 from cortex.models.canonical_enums import ContinuationReason
-
-
 
 
 @dataclass(frozen=True)
 class ContinuationDecision:
     """
     Explicit decision about whether orchestrator should continue after a turn.
-    
+
     This dataclass replaces implicit loop conditions with declarative, auditable
     decisions that can be tested, logged, and reasoned about.
-    
+
     Attributes:
         should_continue: bool - Continue to next turn or stop
         reason: ContinuationReason - Why the decision was made
@@ -51,7 +50,7 @@ class ContinuationDecision:
     def is_halt_by_governance(self) -> bool:
         """
         Property: Is the decision to halt due to governance violation?
-        
+
         Returns:
             True if reason is GOVERNANCE_HALT, False otherwise
         """
@@ -61,7 +60,7 @@ class ContinuationDecision:
     def is_user_action_required(self) -> bool:
         """
         Property: Does the decision require user action to continue?
-        
+
         Returns:
             True if reason is INTERACTION_REQUIRED or USER_REJECTION, False otherwise
         """
@@ -74,10 +73,10 @@ class ContinuationDecision:
     def is_safe_to_resume(self) -> bool:
         """
         Property: Can the workflow safely resume from this decision?
-        
+
         Safe to resume: TOKEN_LIMIT, INTERACTION_REQUIRED, COMPLETION
         NOT safe: ERROR_UNRECOVERABLE, GOVERNANCE_HALT, MAX_ROUNDS_REACHED
-        
+
         Returns:
             True if workflow can be resumed, False otherwise
         """
@@ -91,7 +90,7 @@ class ContinuationDecision:
     def to_dict(self) -> Dict[str, Any]:
         """
         Convert ContinuationDecision to dictionary for JSON serialization.
-        
+
         Returns:
             Dictionary representation suitable for JSON encoding
         """
@@ -110,13 +109,13 @@ class ContinuationDecision:
     def from_dict(cls, data: Dict[str, Any]) -> "ContinuationDecision":
         """
         Create ContinuationDecision from dictionary (JSON deserialization).
-        
+
         Args:
             data: Dictionary with ContinuationDecision fields
-        
+
         Returns:
             ContinuationDecision instance
-        
+
         Raises:
             KeyError: If required fields missing
             ValueError: If reason string invalid

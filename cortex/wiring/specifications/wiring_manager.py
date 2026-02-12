@@ -5,20 +5,20 @@ Authority: Phase 37 S5
 Register persona tools in MCP and wiring system
 """
 
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
 
 def register_persona_tools() -> bool:
     """
     Register persona MCP tools in the system.
-    
+
     Returns:
         True if registration successful, False otherwise
     """
     try:
         # Import MCP tool system
         from cortex.mcp.tools.persona_tools import PersonaTools
-        
+
         # Define tool specifications
         tools_spec = [
             {
@@ -52,10 +52,10 @@ def register_persona_tools() -> bool:
                 "returns": "PersonaHistory",
             },
         ]
-        
+
         # Verify all tools registered
         registered = len(tools_spec) == 5
-        
+
         return registered
     except Exception as e:
         print(f"Error registering persona tools: {str(e)}")
@@ -65,7 +65,7 @@ def register_persona_tools() -> bool:
 def get_persona_tools_metadata() -> Dict[str, Any]:
     """
     Get metadata for persona tools.
-    
+
     Returns:
         Dictionary with tool metadata
     """
@@ -115,7 +115,7 @@ def get_persona_tools_metadata() -> Dict[str, Any]:
 
 class WiringManager:
     """Manage wiring configuration for persona system"""
-    
+
     def __init__(self):
         """Initialize WiringManager"""
         self.agents = self._load_agents()
@@ -145,7 +145,7 @@ class WiringManager:
     def list_agents(self) -> List[str]:
         """
         Get list of registered agents.
-        
+
         Returns:
             List of agent names
         """
@@ -154,7 +154,7 @@ class WiringManager:
     def list_mcp_tools(self) -> List[str]:
         """
         Get list of registered MCP tools.
-        
+
         Returns:
             List of tool names
         """
@@ -163,7 +163,7 @@ class WiringManager:
     def detect_dependency_cycle(self) -> bool:
         """
         Detect if there are dependency cycles.
-        
+
         Returns:
             True if cycle detected, False otherwise
         """
@@ -175,20 +175,20 @@ class WiringManager:
     def validate_wiring(self) -> bool:
         """
         Validate wiring configuration.
-        
+
         Returns:
             True if valid, False otherwise
         """
         # Check agents loaded
         if len(self.agents) == 0:
             return False
-        
+
         # Check tools loaded
         if len(self.tools) == 0:
             return False
-        
+
         # Check no cycles
         if self.detect_dependency_cycle():
             return False
-        
+
         return True

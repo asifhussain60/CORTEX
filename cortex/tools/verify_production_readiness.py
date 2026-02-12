@@ -7,6 +7,7 @@ import subprocess
 import sys
 from datetime import datetime
 
+
 def main():
     print("\n" + "="*80)
     print("🚀 CORTEX PRODUCTION READINESS VERIFICATION - 2026-01-24")
@@ -30,7 +31,7 @@ def main():
     print("\n✅ PRODUCTION READINESS TESTS")
     try:
         result = subprocess.run(
-            ["python", "-m", "pytest", 
+            ["python", "-m", "pytest",
              "tests/unit/orchestrators/test_orchestrator_discovery.py",
              "-q", "--tb=no"],
             capture_output=True,
@@ -38,10 +39,10 @@ def main():
             timeout=30
         )
         if "passed" in result.stdout.lower() or result.returncode == 0:
-            print(f"   - Suite 1 (Orchestrator Discovery): ✓ 37/37 PASSED")
+            print("   - Suite 1 (Orchestrator Discovery): ✓ 37/37 PASSED")
     except Exception as e:
         print(f"   - Suite 1 (Orchestrator Discovery): ⚠️  {str(e)[:50]}")
-    
+
     print("   - Suite 2 (Module Dependencies): ✓ Available")
     print("   - Suite 3 (Production Readiness): ✓ Available")
 

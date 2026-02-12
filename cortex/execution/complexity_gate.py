@@ -1,7 +1,7 @@
 """Complexity gate for evaluating operation acceptability."""
 
-from typing import TYPE_CHECKING, Any, Dict, List, Optional
 from dataclasses import dataclass
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 if TYPE_CHECKING:
     from cortex.execution.complexity_calculator import ComplexityScore
@@ -29,7 +29,7 @@ class ComplexityGate:
         warn_on_moderate: bool = True
     ) -> None:
         """Initialize complexity gate.
-        
+
         Args:
             simple_threshold: Score threshold for simple operations
             moderate_threshold: Score threshold for complex operations
@@ -48,22 +48,22 @@ class ComplexityGate:
         allow_override: bool = False
     ) -> GateDecision:
         """Evaluate if operation should be allowed.
-        
+
         Args:
             score: ComplexityScore to evaluate
             available_resources: Available resources (optional)
             allow_override: Whether to allow override of block decision
-            
+
         Returns:
             GateDecision with allow/block/warn and reasoning
         """
         from cortex.execution.complexity_calculator import ComplexityScore
-        
+
         complexity_level = score.category
         complexity_score = score.score
-        
+
         recommendations = []
-        
+
         # Determine action based on complexity level
         if complexity_score < self.simple_threshold:
             return GateDecision(
@@ -72,15 +72,15 @@ class ComplexityGate:
                 complexity_level="simple",
                 reason=f"Operation complexity {complexity_score:.1f} is below simple threshold {self.simple_threshold}"
             )
-        
+
         elif complexity_score < self.moderate_threshold:
             action = "warn" if self.warn_on_moderate else "allow"
             allowed = True
             reason = f"Operation complexity {complexity_score:.1f} is moderate (threshold: {self.moderate_threshold})"
-            
+
             recommendations.append("Consider breaking into smaller operations")
             recommendations.append("Monitor resource usage during execution")
-            
+
             return GateDecision(
                 allowed=allowed,
                 action=action,
@@ -88,7 +88,7 @@ class ComplexityGate:
                 reason=reason,
                 recommendations=recommendations
             )
-        
+
         else:  # Complex operation
             if self.allow_complex or allow_override:
                 allowed = True
@@ -98,11 +98,11 @@ class ComplexityGate:
                 allowed = False
                 action = "block"
                 reason = f"Complex operation (score: {complexity_score:.1f}) blocked. Complexity exceeds threshold {self.moderate_threshold}"
-            
+
             recommendations.append("Reduce operation scope or break into smaller tasks")
             recommendations.append("Increase retry thresholds if fault tolerance needed")
             recommendations.append("Ensure sufficient resources are available")
-            
+
             return GateDecision(
                 allowed=allowed,
                 action=action,
@@ -117,20 +117,20 @@ class ComplexityReporter:
 
     def distribution_report(self, scores: List["ComplexityScore"]) -> Dict[str, Any]:
         """Generate complexity distribution report.
-        
+
         Args:
             scores: List of ComplexityScore objects
-            
+
         Returns:
             Report dictionary with distribution statistics
         """
         simple_count = sum(1 for s in scores if s.category == "simple")
         moderate_count = sum(1 for s in scores if s.category == "moderate")
         complex_count = sum(1 for s in scores if s.category == "complex")
-        
+
         total = len(scores)
         avg_score = sum(s.score for s in scores) / total if total > 0 else 0
-        
+
         return {
             "total_operations": total,
             "simple_count": simple_count,
@@ -148,11 +148,11 @@ class ComplexityReporter:
         threshold: float = 75
     ) -> List["ComplexityScore"]:
         """Identify operations exceeding complexity threshold.
-        
+
         Args:
             scores: List of ComplexityScore objects
             threshold: Complexity threshold
-            
+
         Returns:
             List of high-complexity scores
         """
@@ -160,10 +160,10 @@ class ComplexityReporter:
 
     def average_complexity(self, scores: List["ComplexityScore"]) -> float:
         """Calculate average complexity.
-        
+
         Args:
             scores: List of ComplexityScore objects
-            
+
         Returns:
             Average complexity score
         """
@@ -181,7 +181,7 @@ class RuleEngine:
 
     def _initialize_default_rules(self) -> List[Dict[str, Any]]:
         """Initialize default complexity rules.
-        
+
         Returns:
             List of default business rules
         """
@@ -214,7 +214,7 @@ class RuleEngine:
 
     def load_rules(self) -> List[Dict[str, Any]]:
         """Load all complexity rules.
-        
+
         Returns:
             List of business rules
         """
@@ -222,18 +222,18 @@ class RuleEngine:
 
     def add_rule(self, rule: Dict[str, Any]) -> None:
         """Add a custom business rule.
-        
+
         Args:
             rule: Rule dictionary with name, condition, adjustment
         """
         if "name" not in rule or "condition" not in rule or "adjustment" not in rule:
             raise ValueError("Rule must have name, condition, and adjustment")
-        
+
         self.rules.append(rule)
 
     def get_rules(self) -> List[Dict[str, Any]]:
         """Get all rules.
-        
+
         Returns:
             List of rules
         """
@@ -246,25 +246,25 @@ class RuleEngine:
         data_size_mb: float = 0
     ) -> float:
         """Apply business rule adjustments to complexity score.
-        
+
         Args:
             base_score: Base complexity score
             operation_type: Type of operation
             data_size_mb: Data size in MB
-            
+
         Returns:
             Adjusted complexity score
         """
         adjusted_score = base_score
-        
+
         # Apply adjustments based on rules
         if operation_type == "critical":
             adjusted_score -= 10
         elif operation_type == "read":
             adjusted_score -= 5
-        
+
         if data_size_mb > 1000:
             adjusted_score += 15
-        
+
         # Clamp between 0-100
         return max(0, min(100, adjusted_score))

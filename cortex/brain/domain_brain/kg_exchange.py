@@ -3,7 +3,7 @@ Knowledge Exchange - Protocol for knowledge sharing and exchange.
 """
 
 import json
-from typing import Dict, List, Any
+from typing import Any, Dict, List
 
 
 class KnowledgeExchange:

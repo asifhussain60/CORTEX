@@ -10,12 +10,12 @@ Handles Directory.Build.props and Directory.Packages.props parsing:
 AC-PHASE55-S3: DependencyAnalyzer supports Directory.Packages.props
 """
 
+import logging
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional, Set
 from xml.etree import ElementTree as ET
-import logging
-import re
 
 logger = logging.getLogger(__name__)
 

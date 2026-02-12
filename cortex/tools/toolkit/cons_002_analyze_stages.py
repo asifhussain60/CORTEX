@@ -14,7 +14,7 @@ This script will:
 import os
 import sys
 from pathlib import Path
-from typing import List, Dict, Set
+from typing import Dict, List, Set
 
 # The consolidation will merge:
 # - master_orchestrator_stage_1.py (Comprehension)
@@ -65,7 +65,7 @@ Files to Merge:
     - cortex/orchestrators/core/master_orchestrator_stage_4.py
   Target:
     - cortex/orchestrators/core/master_orchestrator.py (enhanced)
-  
+
 Delete After Merge:
     - master_orchestrator_stage_1.py
     - master_orchestrator_stage_2.py
@@ -95,14 +95,14 @@ for stage_file in stage_files:
     if path.exists():
         with open(path, 'r') as f:
             content = f.read()
-        
+
         # Extract class names
         import re
         classes = re.findall(r'^class (\w+)', content, re.MULTILINE)
-        
+
         stage_num = stage_file.split('_')[-1].split('.')[0]
         classes_by_stage[f"Stage {stage_num}"] = classes
-        
+
         print(f"\n{stage_file}:")
         print(f"  Size: {len(content):,} bytes")
         print(f"  Classes: {', '.join(classes)}")
@@ -118,21 +118,21 @@ master_path = root / "cortex/orchestrators/core/master_orchestrator.py"
 if master_path.exists():
     with open(master_path, 'r') as f:
         content = f.read()
-    print(f"\n✅ master_orchestrator.py exists")
+    print("\n✅ master_orchestrator.py exists")
     print(f"   Size: {len(content):,} bytes")
     print(f"   Lines: {len(content.splitlines())}")
-    
+
     # Check for stage methods
     if "execute_stage_1" in content:
-        print(f"   ✅ Has execute_stage_1() method")
+        print("   ✅ Has execute_stage_1() method")
     if "execute_stage_2" in content:
-        print(f"   ✅ Has execute_stage_2() method")
+        print("   ✅ Has execute_stage_2() method")
     if "execute_stage_3" in content:
-        print(f"   ✅ Has execute_stage_3() method")
+        print("   ✅ Has execute_stage_3() method")
     if "execute_stage_4" in content:
-        print(f"   ✅ Has execute_stage_4() method")
+        print("   ✅ Has execute_stage_4() method")
 else:
-    print(f"\n❌ master_orchestrator.py NOT FOUND")
+    print("\n❌ master_orchestrator.py NOT FOUND")
 
 print("\n" + "="*80)
 print("NEXT STEPS")
@@ -142,7 +142,7 @@ print("""
    - Merge all Stage1Output, Stage2Output, Stage3Output, Stage4Output classes
    - Create unified execute() method
    - Keep execute_stage_1(), execute_stage_2(), etc. for backward compatibility
-   
+
 2. Delete stage files:
    - master_orchestrator_stage_1.py
    - master_orchestrator_stage_2.py

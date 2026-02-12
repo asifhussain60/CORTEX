@@ -2,21 +2,19 @@
 # Purpose: Embeddings, similarity metrics, clustering for architectural patterns
 
 from cortex.lens.ml_patterns.pattern_embedder import (
+    EmbeddingModel,
     PatternEmbedder,
     PatternFeatures,
-    EmbeddingModel,
 )
-
+from cortex.lens.ml_patterns.repository_fingerprinting import (
+    FingerprintComponent,
+    RepositoryFingerprint,
+    RepositoryFingerprinter,
+)
 from cortex.lens.ml_patterns.similarity_clustering import (
-    SimilarityAnalyzer,
     ClusteringEngine,
     ClusterResult,
-)
-
-from cortex.lens.ml_patterns.repository_fingerprinting import (
-    RepositoryFingerprinter,
-    RepositoryFingerprint,
-    FingerprintComponent,
+    SimilarityAnalyzer,
 )
 
 __all__ = [

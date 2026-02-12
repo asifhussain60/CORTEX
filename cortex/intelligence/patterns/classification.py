@@ -4,8 +4,8 @@
 # Stage: S3 - GREEN phase implementation
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple
 from enum import Enum
+from typing import Dict, List, Optional, Tuple
 
 from cortex.intelligence.patterns.base import PatternMatch
 
@@ -29,7 +29,7 @@ class ArchitectureClassification:
     confidence: float
     patterns: List[str] = field(default_factory=list)
     reasoning: str = ""
-    
+
     def __post_init__(self):
         """Validate classification data."""
         if not 0.0 <= self.confidence <= 1.0:
@@ -39,7 +39,7 @@ class ArchitectureClassification:
 class ArchitectureClassifier:
     """
     Classify architecture types based on detected patterns.
-    
+
     Recognizes 7+ architecture types:
     - MVC/MVVM (Model-View-Controller/ViewModel)
     - DDD (Domain-Driven Design)
@@ -60,18 +60,18 @@ class ArchitectureClassifier:
         self.cqrs_signatures = ["CommandModel", "QueryModel", "EventStore"]
 
     def classify_architecture(
-        self, 
+        self,
         patterns: List[PatternMatch]
     ) -> Dict[str, any]:
         """
         Classify architecture based on detected patterns.
-        
+
         Args:
             patterns: List of detected PatternMatch objects
-            
+
         Returns:
             Dictionary with type, confidence, patterns, reasoning
-            
+
         Raises:
             ValueError: If patterns list is invalid
         """
@@ -85,52 +85,52 @@ class ArchitectureClassifier:
 
         # Extract pattern names
         pattern_names = [p.pattern_name for p in patterns]
-        
+
         # Check architectures in order of specificity
         classifications = []
-        
+
         # Check CQRS (most specific)
         score = self._score_match(pattern_names, self.cqrs_signatures)
         if score > 0.0:
             classifications.append((ArchitectureType.CQRS.value, score))
-        
+
         # Check DDD
         score = self._score_match(pattern_names, self.ddd_signatures)
         if score > 0.0:
             classifications.append((ArchitectureType.DDD.value, score))
-        
+
         # Check Microservices
         score = self._score_match(pattern_names, self.microservices_signatures)
         if score > 0.0:
             classifications.append((ArchitectureType.MICROSERVICES.value, score))
-        
+
         # Check Event-Driven
         score = self._score_match(pattern_names, self.event_driven_signatures)
         if score > 0.0:
             classifications.append((ArchitectureType.EVENT_DRIVEN.value, score))
-        
+
         # Check Layered
         score = self._score_match(pattern_names, self.layered_signatures)
         if score > 0.0:
             classifications.append((ArchitectureType.LAYERED.value, score))
-        
+
         # Check MVC
         score = self._score_match(pattern_names, self.mvc_signatures)
         if score > 0.0:
             classifications.append((ArchitectureType.MVC.value, score))
-        
+
         # Check MVVM
         score = self._score_match(pattern_names, self.mvvm_signatures)
         if score > 0.0:
             classifications.append((ArchitectureType.MVVM.value, score))
-        
+
         # Get highest scoring classification
         if classifications:
             arch_type, confidence = max(classifications, key=lambda x: x[1])
         else:
             arch_type = "Unknown"
             confidence = 0.0
-        
+
         return {
             "type": arch_type,
             "confidence": confidence,
@@ -141,17 +141,17 @@ class ArchitectureClassifier:
     def _score_match(self, detected: List[str], signatures: List[str]) -> float:
         """
         Score how well detected patterns match architecture signatures.
-        
+
         Args:
             detected: List of detected pattern names
             signatures: List of signature patterns for architecture
-            
+
         Returns:
             Confidence score (0.0-1.0) based on pattern matches
         """
         if not signatures:
             return 0.0
-        
+
         matches = sum(1 for sig in signatures if sig in detected)
         return matches / len(signatures)
 

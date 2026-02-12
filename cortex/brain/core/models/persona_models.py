@@ -10,13 +10,14 @@ Provides typed validation for personas.yaml schema including:
 AC_START: AC-PHASE37.1-003
 """
 
-from typing import Dict, List, Optional, Any, Literal, Union
+from typing import Any, Dict, List, Literal, Optional, Union
+
 from pydantic import BaseModel, Field, validator
 
 
 class PersonaCommandParameter(BaseModel):
     """Command parameter definition."""
-    
+
     name: str
     type: str
     required: bool
@@ -25,14 +26,14 @@ class PersonaCommandParameter(BaseModel):
 
 class PersonaSubCommand(BaseModel):
     """Subcommand definition."""
-    
+
     usage: str
     description: str
 
 
 class PersonaCommand(BaseModel):
     """Command schema with parameters and subcommands."""
-    
+
     command: str
     aliases: List[str] = Field(default_factory=list)
     usage: str
@@ -43,7 +44,7 @@ class PersonaCommand(BaseModel):
 
 class Persona(BaseModel):
     """User persona definition with formatting rules."""
-    
+
     id: str
     display_name: str
     description: str
@@ -56,7 +57,7 @@ class Persona(BaseModel):
     onboarding: Union[bool, str]
     onboarding_focus: Optional[List[str]] = None
     trigger_discovery: bool = False
-    
+
     @validator('depth')
     def validate_depth(cls, v):
         """Validate depth is one of allowed values."""
@@ -67,7 +68,7 @@ class Persona(BaseModel):
                     f"depth must be one of {allowed}, got: {v}"
                 )
         return v
-    
+
     @validator('show_code')
     def validate_show_code(cls, v):
         """Validate show_code is bool or allowed string."""
@@ -82,13 +83,13 @@ class Persona(BaseModel):
 
 class DepthLevel(BaseModel):
     """Detail level definition."""
-    
+
     id: str
     description: str
     word_limit: Optional[int]
     show_code: Union[bool, str]
     metrics: str
-    
+
     @validator('show_code')
     def validate_show_code(cls, v):
         """Validate show_code is bool or allowed string."""
@@ -99,7 +100,7 @@ class DepthLevel(BaseModel):
                     f"show_code must be bool or one of {allowed}, got: {v}"
                 )
         return v
-    
+
     @validator('metrics')
     def validate_metrics(cls, v):
         """Validate metrics level."""
@@ -113,38 +114,38 @@ class DepthLevel(BaseModel):
 
 class NaturalLanguageTrigger(BaseModel):
     """Natural language pattern trigger."""
-    
+
     pattern: str
     action: str
 
 
 class NaturalLanguageTriggers(BaseModel):
     """Collection of NL triggers."""
-    
+
     depth_overrides: List[NaturalLanguageTrigger] = Field(default_factory=list)
     persona_overrides: List[NaturalLanguageTrigger] = Field(default_factory=list)
 
 
 class PersonasYAML(BaseModel):
     """Root schema model for personas.yaml."""
-    
+
     personas: Dict[str, Persona]
     depth_levels: Dict[str, DepthLevel]
     commands: Dict[str, PersonaCommand]
     nl_triggers: Optional[NaturalLanguageTriggers] = None
-    
+
     def get_persona(self, persona_id: str) -> Optional[Persona]:
         """Retrieve persona by ID."""
         return self.personas.get(persona_id)
-    
+
     def list_personas(self) -> List[str]:
         """List all persona IDs."""
         return list(self.personas.keys())
-    
+
     def get_depth_level(self, depth_id: str) -> Optional[DepthLevel]:
         """Retrieve depth level by ID."""
         return self.depth_levels.get(depth_id)
-    
+
     def get_command(self, command_name: str) -> Optional[PersonaCommand]:
         """Retrieve command by name."""
         return self.commands.get(command_name)

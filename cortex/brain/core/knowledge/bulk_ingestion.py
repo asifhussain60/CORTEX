@@ -19,13 +19,13 @@ Performance Targets:
 - Rollback: Full transaction rollback on failure
 """
 
+import logging
 from abc import ABC, abstractmethod
+from copy import deepcopy
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Callable, Tuple
-import logging
-from copy import deepcopy
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -397,7 +397,7 @@ class BulkIngestionPipeline:
 
     Manages adapters, filters, transformers, and coordinates batch processing
     with transaction support.
-    
+
     Includes visual feedback via VisualFeedbackMixin integration.
     """
 
@@ -415,7 +415,7 @@ class BulkIngestionPipeline:
         self.batch_counter = 0
         self.stats = BulkIngestionStats()
         self.transactions: Dict[str, List[IngestionEntry]] = {}
-        
+
         # Visual feedback support
         self._show_progress = True
         self.on_progress: Optional[callable] = None
@@ -454,6 +454,7 @@ class BulkIngestionPipeline:
             Ingestion statistics.
         """
         import time
+
         from cortex.orchestrators.response.ascii_progress_bar import ASCIIProgressBar
 
         start_time = time.time()
@@ -467,7 +468,7 @@ class BulkIngestionPipeline:
 
             # Calculate total batches
             total_batches = (len(entries) + self.batch_size - 1) // self.batch_size
-            
+
             # Show progress header
             if progress_bar and total_batches > 0:
                 print(f"\n🔄 Bulk Ingestion: {len(entries)} entries in {total_batches} batches")
@@ -486,13 +487,13 @@ class BulkIngestionPipeline:
                     bar = progress_bar.generate_bar(progress)
                     percentage = int(progress * 100)
                     print(f"\r{bar} {percentage:3d}% | Batch {batch_num}/{total_batches}", end="", flush=True)
-                
+
                 # Call progress callback if registered
                 if self.on_progress:
                     self.on_progress(batch_num, total_batches, progress)
 
                 self._process_batch(batch_entries)
-            
+
             # Complete progress
             if progress_bar:
                 print()  # New line
@@ -512,7 +513,7 @@ class BulkIngestionPipeline:
             self.stats.duration_seconds = elapsed
 
         return self.stats
-    
+
     def _format_time(self, seconds: float) -> str:
         """Format seconds into human-readable time."""
         if seconds < 1:

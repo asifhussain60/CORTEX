@@ -10,18 +10,17 @@ Enhanced with progress feedback for long-running operations.
 Author: CORTEX Framework
 """
 
-from typing import Any, Dict, List, Optional, Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
+from typing import Any, Callable, Dict, List, Optional
 
 from cortex.common.progress_reporter import (
     ProgressReporter,
     ProgressStyle,
-    track_environment_setup,
     get_time_estimator,
+    track_environment_setup,
 )
-
 
 # ================================================================================
 # DATA MODELS (unified from all components)
@@ -56,7 +55,7 @@ class Journey:
     created_at: datetime = field(default_factory=datetime.now)
     started_at: Optional[datetime] = None
     completed_at: Optional[datetime] = None
-    
+
     def __post_init__(self):
         if self.total_activities == 0:
             self.total_activities = len(self.activities)
@@ -85,7 +84,7 @@ class ToolDiscoveryResult:
 class UnifiedOnboarding:
     """
     Unified interface consolidating 8-11 onboarding implementations:
-    
+
     1. OnboardingOrchestrator - journey management
     2. SetupOrchestrator - environment setup
     3. MCPBootstrapper - MCP bootstrapping
@@ -97,20 +96,20 @@ class UnifiedOnboarding:
     9. DependencyValidator - dependency validation
     10. HealthCheck - health monitoring
     11. TelemetryProvider - telemetry collection
-    
+
     Pattern: Composition-based with lazy-loaded internal handlers
     Compatibility: 100% backward compatible with existing APIs
     """
-    
+
     def __init__(self, config: Optional[OnboardingConfig] = None):
         """Initialize unified onboarding system.
-        
+
         Args:
             config: Optional configuration (defaults to all features enabled)
         """
         self.config = config or OnboardingConfig()
         self.audit_log: List[Dict[str, Any]] = []
-        
+
         # Internal handlers (lazy initialized)
         self._journey_handler = None
         self._setup_handler = None
@@ -120,11 +119,11 @@ class UnifiedOnboarding:
         self._vscode_handler = None
         self._health_handler = None
         self._telemetry_handler = None
-        
+
     # ========================================================================
     # JOURNEY MANAGEMENT (from OnboardingOrchestrator)
     # ========================================================================
-    
+
     def create_journey(
         self,
         journey_id: str,
@@ -132,23 +131,23 @@ class UnifiedOnboarding:
         activities: List[str]
     ) -> Dict[str, Any]:
         """Create new onboarding journey.
-        
+
         Args:
             journey_id: Unique journey identifier
             user_id: User identifier
             activities: List of activity identifiers
-            
+
         Returns:
             Result dict with journey details
         """
         self._log_audit("create_journey", {"journey_id": journey_id, "user_id": user_id})
-        
+
         journey = Journey(
             journey_id=journey_id,
             user_id=user_id,
             activities=activities
         )
-        
+
         return {
             "success": True,
             "journey_id": journey_id,
@@ -156,36 +155,36 @@ class UnifiedOnboarding:
             "state": journey.state.value,
             "total_activities": len(activities)
         }
-    
+
     def start_journey(self, journey_id: str) -> Dict[str, Any]:
         """Start an onboarding journey.
-        
+
         Args:
             journey_id: Journey to start
-            
+
         Returns:
             Result dict with journey state
         """
         self._log_audit("start_journey", {"journey_id": journey_id})
-        
+
         return {
             "success": True,
             "journey_id": journey_id,
             "state": JourneyState.IN_PROGRESS.value,
             "started_at": datetime.now().isoformat()
         }
-    
+
     def complete_activity(
         self,
         journey_id: str,
         activity_id: str
     ) -> Dict[str, Any]:
         """Mark activity as complete.
-        
+
         Args:
             journey_id: Journey identifier
             activity_id: Activity identifier
-            
+
         Returns:
             Result dict with updated progress
         """
@@ -193,20 +192,20 @@ class UnifiedOnboarding:
             "journey_id": journey_id,
             "activity_id": activity_id
         })
-        
+
         return {
             "success": True,
             "journey_id": journey_id,
             "activity_id": activity_id,
             "completed": True
         }
-    
+
     def get_journey_progress(self, journey_id: str) -> Dict[str, Any]:
         """Get journey progress.
-        
+
         Args:
             journey_id: Journey identifier
-            
+
         Returns:
             Journey progress data
         """
@@ -216,36 +215,36 @@ class UnifiedOnboarding:
             "activities_completed": 0,
             "total_activities": 0
         }
-    
+
     # ========================================================================
     # SETUP ORCHESTRATION (from SetupOrchestrator)
     # ========================================================================
-    
+
     def setup_environment(
         self,
         show_progress: bool = True,
         progress_style: ProgressStyle = ProgressStyle.DETAILED,
     ) -> Dict[str, Any]:
         """Setup runtime environment with progress feedback.
-        
+
         Args:
             show_progress: Whether to show progress feedback
             progress_style: Style of progress output
-        
+
         Returns:
             Setup result dict
         """
         self._log_audit("setup_environment", {"show_progress": show_progress})
-        
+
         style = progress_style if show_progress else ProgressStyle.SILENT
-        
+
         progress = ProgressReporter(
             operation_name="Environment Setup",
             total_steps=4,
             style=style,
             time_estimator=get_time_estimator(),
         )
-        
+
         with progress:
             # Step 1: Pre-validation
             progress.start_step(
@@ -255,7 +254,7 @@ class UnifiedOnboarding:
             )
             # Simulate validation
             progress.complete_step()
-            
+
             # Step 2: Environment configuration
             progress.start_step(
                 "Environment Configuration",
@@ -264,7 +263,7 @@ class UnifiedOnboarding:
             )
             # Simulate configuration
             progress.complete_step()
-            
+
             # Step 3: Dependency check
             progress.start_step(
                 "Dependency Check",
@@ -273,7 +272,7 @@ class UnifiedOnboarding:
             )
             # Simulate dependency check
             progress.complete_step()
-            
+
             # Step 4: Finalization
             progress.start_step(
                 "Finalization",
@@ -281,17 +280,17 @@ class UnifiedOnboarding:
                 estimated_seconds=2.0,
             )
             progress.complete_step()
-        
+
         return {
             "success": True,
             "message": "Environment setup complete",
             "environment": "ready",
             "elapsed_seconds": progress.elapsed_seconds,
         }
-    
+
     def validate_setup(self) -> Dict[str, Any]:
         """Validate environment setup.
-        
+
         Returns:
             Validation result dict
         """
@@ -300,68 +299,68 @@ class UnifiedOnboarding:
             "message": "Environment setup valid",
             "valid": True
         }
-    
+
     # ========================================================================
     # BOOTSTRAP (from OrchestratorBootstrap)
     # ========================================================================
-    
+
     def bootstrap_orchestrators(self) -> Dict[str, Any]:
         """Bootstrap all orchestrators.
-        
+
         Returns:
             Bootstrap result dict
         """
         self._log_audit("bootstrap_orchestrators", {})
-        
+
         return {
             "success": True,
             "message": "Orchestrators bootstrapped",
             "orchestrators_initialized": 0
         }
-    
+
     def register_orchestrator(
         self,
         name: str,
         orchestrator: Any
     ) -> Dict[str, Any]:
         """Register orchestrator.
-        
+
         Args:
             name: Orchestrator name
             orchestrator: Orchestrator instance
-            
+
         Returns:
             Registration result
         """
         self._log_audit("register_orchestrator", {"name": name})
-        
+
         return {
             "success": True,
             "name": name,
             "registered": True
         }
-    
+
     # ========================================================================
     # DISCOVERY (from ToolDiscovery, DependencyResolver)
     # ========================================================================
-    
+
     def discover_tools(self) -> Dict[str, Any]:
         """Discover available tools.
-        
+
         Returns:
             Discovered tools dict
         """
         self._log_audit("discover_tools", {})
-        
+
         return {
             "success": True,
             "tools_found": [],
             "count": 0
         }
-    
+
     def discover_dependencies(self) -> Dict[str, Any]:
         """Discover available dependencies.
-        
+
         Returns:
             Discovered dependencies dict
         """
@@ -370,29 +369,29 @@ class UnifiedOnboarding:
             "dependencies": {},
             "count": 0
         }
-    
+
     # ========================================================================
     # VALIDATION (from ToolchainValidator, DependencyValidator)
     # ========================================================================
-    
+
     def validate_toolchain(self) -> Dict[str, Any]:
         """Validate toolchain.
-        
+
         Returns:
             Validation result dict
         """
         self._log_audit("validate_toolchain", {})
-        
+
         return {
             "success": True,
             "message": "Toolchain valid",
             "valid": True,
             "issues": []
         }
-    
+
     def validate_dependencies(self) -> Dict[str, Any]:
         """Validate dependencies.
-        
+
         Returns:
             Validation result dict
         """
@@ -402,32 +401,32 @@ class UnifiedOnboarding:
             "valid": True,
             "missing": []
         }
-    
+
     # ========================================================================
     # CONFIGURATION (from VSCodeConfigurator)
     # ========================================================================
-    
+
     def configure_vscode(self) -> Dict[str, Any]:
         """Configure VS Code.
-        
+
         Returns:
             Configuration result dict
         """
         self._log_audit("configure_vscode", {})
-        
+
         return {
             "success": True,
             "message": "VS Code configured",
             "settings_updated": 0
         }
-    
+
     # ========================================================================
     # HEALTH & TELEMETRY
     # ========================================================================
-    
+
     def health_check(self) -> Dict[str, Any]:
         """Perform health check on all onboarding components.
-        
+
         Returns:
             Health status dict
         """
@@ -440,10 +439,10 @@ class UnifiedOnboarding:
                 "validation": "operational"
             }
         }
-    
+
     def start_telemetry(self) -> Dict[str, Any]:
         """Start telemetry collection.
-        
+
         Returns:
             Start result dict
         """
@@ -452,10 +451,10 @@ class UnifiedOnboarding:
             "message": "Telemetry started",
             "collecting": True
         }
-    
+
     def stop_telemetry(self) -> Dict[str, Any]:
         """Stop telemetry collection.
-        
+
         Returns:
             Stop result dict
         """
@@ -464,14 +463,14 @@ class UnifiedOnboarding:
             "message": "Telemetry stopped",
             "collecting": False
         }
-    
+
     # ========================================================================
     # INTERNAL HELPERS
     # ========================================================================
-    
+
     def _log_audit(self, operation: str, details: Dict[str, Any]) -> None:
         """Log operation to audit trail.
-        
+
         Args:
             operation: Operation name
             details: Operation details
@@ -495,10 +494,10 @@ def get_unified_onboarding(
     config: Optional[OnboardingConfig] = None
 ) -> UnifiedOnboarding:
     """Get or create unified onboarding instance.
-    
+
     Args:
         config: Optional configuration
-        
+
     Returns:
         UnifiedOnboarding instance
     """

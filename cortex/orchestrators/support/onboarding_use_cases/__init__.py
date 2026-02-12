@@ -15,10 +15,10 @@ Author: Phase 54-A Implementation
 Created: 2026-02-09
 """
 
-from .load_repo_overview import LoadRepoOverviewUseCase
 from .analyze_security_threats import AnalyzeSecurityThreatsUseCase
-from .generate_business_narrative import GenerateBusinessNarrativeUseCase
 from .build_dependency_graph import BuildDependencyGraphUseCase
+from .generate_business_narrative import GenerateBusinessNarrativeUseCase
+from .load_repo_overview import LoadRepoOverviewUseCase
 from .render_dashboard_json import RenderDashboardJSONUseCase
 from .update_landing_page import UpdateLandingPageUseCase
 

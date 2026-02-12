@@ -1,16 +1,16 @@
 """Models for CORTEX brain core components."""
 
 from cortex.brain.core.models.governance_models import (
+    AuditCheck,
+    AuditChecklistYAML,
     CoreRule,
     CoreRulesYAML,
-    AuditCheck,
-    PriorityCategory,
-    AuditChecklistYAML,
+    EnforcementLevel,
     ModeDefinition,
     ModesYAML,
-    ResponseFormatYAML,
-    EnforcementLevel,
     Priority,
+    PriorityCategory,
+    ResponseFormatYAML,
 )
 
 __all__ = [

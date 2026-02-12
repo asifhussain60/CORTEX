@@ -6,7 +6,7 @@ exceptions. Supports both Ok(value) and Err(error) cases.
 Author: CORTEX Framework
 """
 
-from typing import Generic, TypeVar, Union, Callable, Optional, Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Callable, Generic, Optional, TypeVar, Union
 
 T = TypeVar("T")
 E = TypeVar("E")
@@ -205,13 +205,13 @@ class Err(Generic[E], metaclass=_ResultMeta):
 # Create a ResultType that supports subscripting
 class _ResultType(type):
     """Metaclass that allows Result[T] syntax for type hints."""
-    
+
     def __getitem__(cls, item: Any) -> type:
         """Allow Result[T] subscripting.
-        
+
         Args:
             item: Type parameter.
-        
+
         Returns:
             Union type for type checking.
         """
@@ -221,7 +221,7 @@ class _ResultType(type):
         else:
             # Result[T] syntax - error type defaults to Any
             return Union[Ok[item], Err[Any]]
-    
+
     def __instancecheck__(cls, instance: Any) -> bool:
         """Check if instance is Ok or Err."""
         return isinstance(instance, (Ok, Err))
@@ -229,10 +229,10 @@ class _ResultType(type):
 
 class Result(metaclass=_ResultType):
     """Result type for type hints.
-    
+
     Use Result[T] or Result[T, E] in type annotations.
     At runtime, use Ok(value) or Err(error).
-    
+
     Example:
         def divide(a: int, b: int) -> Result[float, str]:
             if b == 0:

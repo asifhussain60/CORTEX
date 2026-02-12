@@ -8,12 +8,12 @@ Provides comprehensive health verification for orchestrators:
 - Recovery recommendations
 """
 
-import logging
 import asyncio
-from typing import Any, Dict, List, Optional, Coroutine
+import logging
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
+from typing import Any, Coroutine, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -121,7 +121,7 @@ class HealthCheckExecutor:
                 return HealthCheckResult(
                     orchestrator_name=orch_name,
                     status=HealthStatus.UNHEALTHY,
-                    message=f"Health check raised exception",
+                    message="Health check raised exception",
                     timestamp=datetime.now(),
                     checks_performed=checks_performed,
                     error=error,
@@ -287,7 +287,7 @@ class SystemHealthMonitor:
             return "No health report available"
 
         lines = [
-            f"System Health Report",
+            "System Health Report",
             f"  Status: {self.last_report.overall_status.value.upper()}",
             f"  Timestamp: {self.last_report.timestamp}",
             f"  Orchestrators: {self.last_report.healthy_orchestrators}/{self.last_report.total_orchestrators} healthy",

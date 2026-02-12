@@ -6,12 +6,13 @@ Stage: S2 - Design Pattern Detectors
 AC Marker: AC-PHASE57-S2-003
 """
 
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
+
 from cortex.intelligence.patterns.base import (
     BasePatternDetector,
+    PatternCategory,
     PatternInfo,
     PatternMatch,
-    PatternCategory,
 )
 
 

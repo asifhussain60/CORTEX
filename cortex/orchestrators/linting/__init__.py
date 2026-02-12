@@ -7,10 +7,10 @@ Author: Asif Hussain
 """
 
 from .naming_conventions import (
+    LintReport,
+    LintResult,
     NamingConvention,
     NamingLinter,
-    LintResult,
-    LintReport,
     NamingViolation,
 )
 

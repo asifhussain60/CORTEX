@@ -21,7 +21,6 @@ Migration Strategy:
 
 from enum import Enum, IntEnum
 
-
 # ============================================================================
 # ACTION & EXECUTION ENUMS
 # ============================================================================
@@ -140,6 +139,26 @@ class CheckpointStatus(Enum):
     COMMITTED = "committed"
     ROLLED_BACK = "rolled_back"
     FAILED = "failed"
+
+
+class EnforcementLevel(str, Enum):
+    """
+    Governance enforcement level - Canonical definition.
+    
+    AC-ID: AC-CORE-035-ENFORCEMENT-001
+    Purpose: Eliminate 3 duplicate EnforcementLevel definitions.
+    
+    This is the ONLY place EnforcementLevel should be defined.
+    Replaces duplicates in:
+    - cortex/brain/core/response_format_integration.py
+    - cortex/brain/core/models/governance_models.py  
+    - cortex/orchestrators/core/enforcement_orchestrator.py
+    
+    Governance: CORE-035 (Single Canonical Implementation)
+    """
+    BLOCKING = "blocking"
+    WARNING = "warning"
+    ADVISORY = "advisory"
 
 
 # ============================================================================
@@ -505,10 +524,10 @@ class WorkflowStage(Enum):
 
 class ValidationSeverity(Enum):
     """Validation severity levels.
-    
+
     CORE-035: Canonical definition - import from here, not redefine.
     Used by: Integration validators, domain validation, output validators
-    
+
     Values ordered by severity (INFO < WARNING < ERROR < CRITICAL)
     """
     INFO = "info"
@@ -519,10 +538,10 @@ class ValidationSeverity(Enum):
 
 class SeverityLevel(str, Enum):
     """Severity levels for duplication detection and performance bottlenecks.
-    
+
     CORE-035: Canonical definition - import from here, not redefine.
     Used by: Duplication registry, performance profiler
-    
+
     Note: Uses (str, Enum) for string comparison and JSON serialization.
     """
     LOW = "LOW"
@@ -533,7 +552,7 @@ class SeverityLevel(str, Enum):
 
 class VariableType(str, Enum):
     """Template variable types.
-    
+
     CORE-035: Canonical definition - import from here, not redefine.
     Used by: Response templates, unified response composer
     """
@@ -550,7 +569,7 @@ class VariableType(str, Enum):
 
 class RiskLevel(Enum):
     """Operation risk classification.
-    
+
     CORE-035: Canonical definition - import from here, not redefine.
     Used by: BLUF orchestrators, challenge engine, DoR approval gate
     """
@@ -562,7 +581,7 @@ class RiskLevel(Enum):
 
 class ComplexityLevel(Enum):
     """Operation complexity classification.
-    
+
     CORE-035: Canonical definition - import from here, not redefine.
     Used by: BLUF orchestrators, capacity planning, LENS analysis
     """
@@ -574,7 +593,7 @@ class ComplexityLevel(Enum):
 
 class OrchestratorComplexityLevel(Enum):
     """Orchestrator setup/configuration complexity (1-4 scale).
-    
+
     CORE-035: Canonical definition for orchestrator complexity.
     Used by: SetupOrchestrator, UpgradeOrchestrator, RollbackOrchestrator,
              ComposedOrchestrator, BootstrapOrchestrator, ToolDiscoveryOrchestrator
@@ -587,7 +606,7 @@ class OrchestratorComplexityLevel(Enum):
 
 class DisagreementType(Enum):
     """Types of challenge/disagreement.
-    
+
     CORE-035: Canonical definition.
     Used by: ChallengeEngine, challenge_engine_plugins
     """
@@ -600,7 +619,7 @@ class DisagreementType(Enum):
 
 class EntityType(Enum):
     """Types of entities in codebase.
-    
+
     CORE-035: Canonical definition.
     Used by: relationship_analyzer, repository_scanner
     """
@@ -616,7 +635,7 @@ class EntityType(Enum):
 
 class HealthStatus(Enum):
     """Health check status.
-    
+
     CORE-035: Canonical definition.
     Used by: health_monitor, production_readiness_manager
     """
@@ -628,7 +647,7 @@ class HealthStatus(Enum):
 
 class LENSPhase(Enum):
     """LENS analysis phases.
-    
+
     CORE-035: Canonical definition.
     Used by: LENS orchestrators, rollback/setup/upgrade orchestrators
     """
@@ -640,7 +659,7 @@ class LENSPhase(Enum):
 
 class ResponseFormat(Enum):
     """Response format options.
-    
+
     CORE-035: Canonical definition.
     Used by: BLUF orchestrators, response composers
     """
@@ -651,7 +670,7 @@ class ResponseFormat(Enum):
 
 class UserPreferenceMode(Enum):
     """User response format preference mode.
-    
+
     CORE-035: Canonical definition.
     Used by: BLUF orchestrators, adaptive router
     """

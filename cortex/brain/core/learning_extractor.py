@@ -11,15 +11,15 @@ Authority: Phase 36 Stage 3 specification
 
 import logging
 import re
-from typing import List, Optional, Dict, Any
+from collections import Counter
 from dataclasses import dataclass, field
 from enum import Enum
-from collections import Counter
+from typing import Any, Dict, List, Optional
 
 try:
+    import numpy as np
     from sentence_transformers import SentenceTransformer
     from sklearn.metrics.pairwise import cosine_similarity
-    import numpy as np
     DEPENDENCIES_AVAILABLE = True
 except ImportError:
     DEPENDENCIES_AVAILABLE = False
@@ -52,7 +52,7 @@ class PatternType(Enum):
 class LearningInsight:
     """
     Learning insight from conversation.
-    
+
     Attributes:
         insight_type: Type of insight
         description: Insight description
@@ -71,7 +71,7 @@ class LearningInsight:
 class RecognizedPattern:
     """
     Recognized conversation pattern.
-    
+
     Attributes:
         pattern_type: Type of pattern
         description: Pattern description
@@ -90,7 +90,7 @@ class RecognizedPattern:
 class ExtractionResult:
     """
     Learning extraction result.
-    
+
     Attributes:
         insights: Extracted insights
         patterns: Recognized patterns
@@ -105,7 +105,7 @@ class ExtractionResult:
 class ExtractionConfig:
     """
     Extraction configuration.
-    
+
     Attributes:
         min_confidence: Minimum confidence threshold
         extract_patterns: Whether to extract patterns
@@ -119,11 +119,11 @@ class ExtractionConfig:
 class LearningExtractor:
     """
     Learning extraction engine.
-    
+
     Extracts insights and patterns from conversations for
     continuous improvement.
     """
-    
+
     # Pattern keywords for detection
     PATTERN_KEYWORDS = {
         PatternType.IMPLEMENTATION: [
@@ -147,7 +147,7 @@ class LearningExtractor:
             "explain", "describe",
         ],
     }
-    
+
     # Insight keywords for detection
     INSIGHT_KEYWORDS = {
         InsightType.FEATURE_REQUEST: [
@@ -171,7 +171,7 @@ class LearningExtractor:
             "guideline", "should", "prefer",
         ],
     }
-    
+
     def __init__(
         self,
         model_name: str = "all-MiniLM-L6-v2",
@@ -179,11 +179,11 @@ class LearningExtractor:
     ):
         """
         Initialize learning extractor.
-        
+
         Args:
             model_name: SentenceTransformer model name
             config: Extraction configuration
-            
+
         Raises:
             ImportError: If dependencies not installed
         """
@@ -192,19 +192,19 @@ class LearningExtractor:
                 "Required dependencies not installed. "
                 "Install with: pip install sentence-transformers scikit-learn"
             )
-        
+
         self.model = SentenceTransformer(model_name)
         self.config = config or ExtractionConfig()
-        
+
         logger.info(f"LearningExtractor initialized with model: {model_name}")
-    
+
     def extract(self, conversation: List[str]) -> ExtractionResult:
         """
         Extract learnings from conversation.
-        
+
         Args:
             conversation: List of conversation turns
-            
+
         Returns:
             ExtractionResult: Extraction result
         """
@@ -214,55 +214,55 @@ class LearningExtractor:
                 patterns=[],
                 total_processed=0,
             )
-        
+
         insights = []
         patterns = []
-        
+
         if self.config.extract_insights:
             insights = self.extract_insights(conversation)
-        
+
         if self.config.extract_patterns:
             patterns = self.recognize_patterns(conversation)
-        
+
         return ExtractionResult(
             insights=insights,
             patterns=patterns,
             total_processed=len(conversation),
         )
-    
+
     def extract_insights(self, conversation: List[str]) -> List[LearningInsight]:
         """
         Extract insights from conversation.
-        
+
         Args:
             conversation: List of conversation turns
-            
+
         Returns:
             List[LearningInsight]: Extracted insights
         """
         if not conversation:
             return []
-        
+
         insights = []
-        
+
         # Combine conversation for full context
         full_text = " ".join(conversation).lower()
-        
+
         # Check each insight type
         for insight_type, keywords in self.INSIGHT_KEYWORDS.items():
             matches = []
             for keyword in keywords:
                 if keyword in full_text:
                     matches.append(keyword)
-            
+
             if matches:
                 # Calculate confidence based on keyword frequency
                 confidence = min(1.0, len(matches) / len(keywords) * 2)
-                
+
                 if confidence >= self.config.min_confidence:
                     # Find evidence turns
                     evidence = self._find_evidence(conversation, matches)
-                    
+
                     insight = LearningInsight(
                         insight_type=insight_type,
                         description=f"{insight_type.value.replace('_', ' ').title()} detected",
@@ -271,29 +271,29 @@ class LearningExtractor:
                         metadata={"matched_keywords": matches[:5]},
                     )
                     insights.append(insight)
-        
+
         return insights
-    
+
     def recognize_patterns(self, conversation: List[str]) -> List[RecognizedPattern]:
         """
         Recognize patterns in conversation.
-        
+
         Args:
             conversation: List of conversation turns
-            
+
         Returns:
             List[RecognizedPattern]: Recognized patterns
         """
         if not conversation:
             return []
-        
+
         patterns = []
-        
+
         # Check each pattern type
         for pattern_type, keywords in self.PATTERN_KEYWORDS.items():
             occurrences = 0
             examples = []
-            
+
             for turn in conversation:
                 turn_lower = turn.lower()
                 for keyword in keywords:
@@ -302,11 +302,11 @@ class LearningExtractor:
                         if len(examples) < 3:
                             examples.append(turn[:100])  # First 100 chars
                         break  # Count each turn only once
-            
+
             if occurrences > 0:
                 # Calculate confidence based on occurrence frequency
                 confidence = min(1.0, occurrences / len(conversation) + 0.5)
-                
+
                 if confidence >= self.config.min_confidence:
                     pattern = RecognizedPattern(
                         pattern_type=pattern_type,
@@ -316,27 +316,27 @@ class LearningExtractor:
                         examples=examples,
                     )
                     patterns.append(pattern)
-        
+
         return patterns
-    
+
     def _find_evidence(self, conversation: List[str], keywords: List[str]) -> List[str]:
         """
         Find evidence turns containing keywords.
-        
+
         Args:
             conversation: List of conversation turns
             keywords: Keywords to search for
-            
+
         Returns:
             List[str]: Evidence turns
         """
         evidence = []
-        
+
         for turn in conversation:
             turn_lower = turn.lower()
             for keyword in keywords:
                 if keyword in turn_lower:
                     evidence.append(turn)
                     break  # Add each turn only once
-        
+
         return evidence

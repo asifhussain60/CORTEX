@@ -28,16 +28,16 @@ Example Usage:
     from cortex.core.knowledge import KnowledgeProvider
     from cortex.brain.core.knowledge import KnowledgeRepository
     from cortex.brain.domain_brain import BusinessKnowledgeRepository
-    
+
     def process_with_provider(provider: KnowledgeProvider) -> None:
         \"\"\"Works with any knowledge provider.\"\"\"
         if not provider.is_loaded:
             return
-        
+
         domains = provider.domains
         technical_knowledge = provider.query(keywords=["design", "patterns"])
         architecture_knowledge = provider.get_by_domain("ARCHITECTURE")
-        
+
         relevant = provider.get_relevant_knowledge(
             domains=["ARCHITECTURE", "SECURITY"],
             keywords=["microservices", "authentication"]
@@ -60,7 +60,6 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Protocol, runtime_checkable
 
-
 # =============================================================================
 # DATA CLASSES
 # =============================================================================
@@ -69,7 +68,7 @@ from typing import Any, Dict, List, Optional, Protocol, runtime_checkable
 class KnowledgeQuery:
     """
     Structured knowledge query parameters.
-    
+
     Attributes:
         domains: List of domain names to filter by
         keywords: Keywords to search for
@@ -84,7 +83,7 @@ class KnowledgeQuery:
     entity_types: Optional[List[str]] = None
     limit: Optional[int] = None
     offset: int = 0
-    
+
     def has_filters(self) -> bool:
         """Check if query has any active filters."""
         return any([
@@ -99,7 +98,7 @@ class KnowledgeQuery:
 class KnowledgeQueryResult:
     """
     Unified result from a knowledge query.
-    
+
     Attributes:
         entries: List of knowledge entries (dicts to support both repos)
         total_matches: Total number of matches found
@@ -124,13 +123,13 @@ class KnowledgeQueryResult:
 class KnowledgeProvider(Protocol):
     """
     Protocol for knowledge repository providers.
-    
+
     All knowledge repositories must implement this protocol to be usable
     by the MasterOrchestrator and other CORTEX components.
-    
+
     This is a structural protocol: any class with these methods and properties
     automatically satisfies the protocol, no inheritance required.
-    
+
     Methods:
         is_loaded: Check if repository is ready
         entry_count: Get total entries available
@@ -138,59 +137,59 @@ class KnowledgeProvider(Protocol):
         query: Query by keywords, tags, or entity types
         get_by_domain: Get all knowledge in a specific domain
         get_relevant_knowledge: Multi-criteria query combining domains + keywords
-    
+
     CORE Governance:
       - CORE-004: Tier0 protocol (all tiers depend on)
       - CORE-011: Type hints enforced (Protocol enforces signatures)
       - CORE-012: Docstrings required (this docstring validates)
     """
-    
+
     @property
     def is_loaded(self) -> bool:
         """
         Check if the knowledge repository is loaded and ready.
-        
+
         Returns:
             True if repository is loaded, False otherwise.
-            
+
         Examples:
             >>> provider = KnowledgeRepository()
             >>> if provider.is_loaded:
             ...     entries = provider.entry_count
         """
         ...
-    
+
     @property
     def entry_count(self) -> int:
         """
         Get total number of knowledge entries available.
-        
+
         Returns:
             Total count of entries in repository.
             Must return 0 if repository is not loaded.
-            
+
         Examples:
             >>> count = provider.entry_count
             >>> assert count >= 0
         """
         ...
-    
+
     @property
     def domains(self) -> List[str]:
         """
         Get list of available knowledge domains.
-        
+
         Returns:
             List of domain names (e.g., ["ARCHITECTURE", "SECURITY"]).
             Must return empty list if repository is not loaded.
-            
+
         Examples:
             >>> domains = provider.domains
             >>> if "SECURITY" in domains:
             ...     security_knowledge = provider.get_by_domain("SECURITY")
         """
         ...
-    
+
     def query(
         self,
         keywords: Optional[List[str]] = None,
@@ -201,7 +200,7 @@ class KnowledgeProvider(Protocol):
     ) -> KnowledgeQueryResult:
         """
         Query knowledge by keywords, tags, or entity types.
-        
+
         Args:
             keywords: List of keywords to search for. Supports AND semantics
                 (all keywords must be present in entry). Optional.
@@ -211,50 +210,50 @@ class KnowledgeProvider(Protocol):
                 only, e.g., "SERVICE", "API"). Optional.
             limit: Maximum number of results to return. If None, return all.
             offset: Pagination offset (default: 0).
-        
+
         Returns:
             KnowledgeQueryResult with matching entries and metadata.
-        
+
         Examples:
             >>> result = provider.query(keywords=["design", "patterns"])
             >>> print(f"Found {result.total_matches} entries")
-            
+
             >>> api_knowledge = provider.query(tags=["api"])
             >>> business_result = provider.query(entity_types=["SERVICE"])
-        
+
         Notes:
             - Query with no filters should return all entries (respecting limit/offset)
             - Query result must include response_time_ms for performance tracking
             - Empty result should return total_matches=0, entries=[]
         """
         ...
-    
+
     def get_by_domain(self, domain: str) -> KnowledgeQueryResult:
         """
         Get all knowledge entries for a specific domain.
-        
+
         Args:
             domain: Domain name (must match exactly, case-sensitive).
-        
+
         Returns:
             KnowledgeQueryResult with entries for the domain.
-            
+
         Raises:
             ValueError: If domain is not available in this provider.
-        
+
         Examples:
             >>> security_knowledge = provider.get_by_domain("SECURITY")
             >>> print(f"Security entries: {security_knowledge.total_matches}")
-            
+
             >>> if "ARCHITECTURE" in provider.domains:
             ...     arch_knowledge = provider.get_by_domain("ARCHITECTURE")
-        
+
         Notes:
             - Raises ValueError if domain doesn't exist
             - Query result provider_type should indicate source (TECHNICAL/BUSINESS)
         """
         ...
-    
+
     def get_relevant_knowledge(
         self,
         domains: Optional[List[str]] = None,
@@ -262,34 +261,34 @@ class KnowledgeProvider(Protocol):
     ) -> KnowledgeQueryResult:
         """
         Get knowledge matching both domain and keyword criteria.
-        
+
         This is the primary method for knowledge retrieval in MasterOrchestrator.
         It combines domain filtering with keyword search.
-        
+
         Args:
             domains: Specific domains to include (OR semantics: any domain match).
                 If None, search all domains.
             keywords: Keywords to search for (AND semantics: all must be present).
                 If None, return all in selected domains.
-        
+
         Returns:
             KnowledgeQueryResult with entries matching criteria.
-        
+
         Examples:
             >>> knowledge = provider.get_relevant_knowledge(
             ...     domains=["ARCHITECTURE", "SECURITY"],
             ...     keywords=["microservices", "authentication"]
             ... )
             >>> print(f"Relevant entries: {knowledge.total_matches}")
-            
+
             >>> # Get all security knowledge without keywords
             >>> security_all = provider.get_relevant_knowledge(domains=["SECURITY"])
-            
+
             >>> # Search all domains for specific keywords
             >>> keywords_search = provider.get_relevant_knowledge(
             ...     keywords=["design", "patterns"]
             ... )
-        
+
         Notes:
             - If both domains and keywords are None, returns all entries
             - Empty domains list means no domain filter (search all)
@@ -307,25 +306,25 @@ class KnowledgeProvider(Protocol):
 def is_knowledge_provider(obj: Any) -> bool:
     """
     Check if an object implements the KnowledgeProvider protocol.
-    
+
     This uses structural subtyping, so any object with the required
     methods and properties will return True.
-    
+
     Args:
         obj: Object to check.
-    
+
     Returns:
         True if object implements KnowledgeProvider protocol, False otherwise.
-    
+
     Examples:
         >>> from cortex.brain.core.knowledge import KnowledgeRepository
         >>> repo = KnowledgeRepository()
         >>> assert is_knowledge_provider(repo)
-        
+
         >>> from cortex.brain.domain_brain import BusinessKnowledgeRepository
         >>> business_repo = BusinessKnowledgeRepository()
         >>> assert is_knowledge_provider(business_repo)
-        
+
         >>> assert not is_knowledge_provider("not a provider")
     """
     return isinstance(obj, KnowledgeProvider)

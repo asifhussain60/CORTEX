@@ -1,0 +1,192 @@
+"""
+CORE-097: Automated Duplicate Detection
+Authority: Wave 9 Ultimate Cleanup & Consolidation + CORE-035
+Created: 2026-02-12
+Status: ACTIVE
+"""
+
+rule_id: CORE-097
+title: Automated Duplicate Detection
+category: code-quality
+severity: P2-MEDIUM
+auto_fix: false
+
+description: |
+  Automate detection of duplicate code patterns to maintain CORE-035 compliance.
+  
+  DETECTION STRATEGIES:
+  - Semantic similarity analysis (LENS)
+  - AST-based duplicate detection
+  - Pattern matching for common duplications
+  - Cross-module duplication detection
+  
+  TRIGGERS:
+  - Pre-commit: Check files being committed
+  - CI/CD: Full repository scan
+  - Weekly: Automated duplicate audit via VacuumOrchestrator
+  
+  INTEGRATION:
+  - cortex_lens.analyzers for semantic analysis
+  - cortex.tools.detect_duplicates for pattern matching
+  - cortex.orchestrators.VacuumOrchestrator for scheduled scans
+
+rationale: |
+  CORE-035 establishes single canonical implementation principle.
+  Wave 9 cleanup revealed multiple instances of duplication:
+  - governance/ vs governance_tools/ (consolidated in ENH-095)
+  - domain/ vs domain_brain/ (to be addressed in ENH-090)
+  - Scattered phase management folders (to be addressed in ENH-091)
+  
+  This rule prevents future duplication by automated detection and reporting.
+
+violations:
+  - type: "semantic_duplication"
+    severity: WARNING
+    threshold: "similarity > 85%"
+    message: "High semantic similarity detected between files"
+    guidance: |
+      Review files for consolidation opportunities.
+      If intentional duplication, document rationale in code comments.
+  
+  - type: "duplicate_folders"
+    severity: ERROR
+    pattern: "similar folder names (e.g., governance/ + governance_tools/)"
+    message: "Duplicate folder structure detected"
+    guidance: |
+      Consolidate into single module with subdirectories.
+      Example: governance_tools/ → governance/tools/
+  
+  - type: "copy_paste_code"
+    severity: WARNING
+    threshold: "> 50 lines identical"
+    message: "Copy-paste code detected"
+    guidance: |
+      Extract to shared utility function or base class.
+      Ensure DRY (Don't Repeat Yourself) principle compliance.
+
+enforcement:
+  pre_commit: false  # Too slow for commit-time
+  ci_cd: true  # Run on PR
+  vacuum_orchestrator: true  # Weekly automated scan
+  lens_integration: true
+  
+  ci_cd_check: |
+    # .github/workflows/duplicate-detection.yml
+    
+    name: Duplicate Detection (CORE-097)
+    on: [pull_request]
+    
+    jobs:
+      detect-duplicates:
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v2
+          
+          - name: Run LENS Duplicate Detection
+            run: |
+              python -m cortex.lens.analyzers.duplicate_detector \
+                --threshold 0.85 \
+                --report duplicates-report.json
+          
+          - name: Check for Violations
+            run: |
+              VIOLATIONS=$(jq '.violations | length' duplicates-report.json)
+              if [ $VIOLATIONS -gt 0 ]; then
+                echo "❌ $VIOLATIONS duplicate patterns detected"
+                jq '.violations' duplicates-report.json
+                exit 1
+              fi
+  
+  vacuum_orchestrator_integration: |
+    # Weekly automated scan
+    
+    schedule:
+      frequency: weekly
+      day: sunday
+      time: "02:00"
+    
+    action:
+      tool: cortex_detect_duplicates
+      parameters:
+        threshold: 0.85
+        scope: "full_repository"
+        report_format: "yaml"
+        output: "docs/meta/duplicate-audit-{date}.yaml"
+    
+    notification:
+      on_violations: true
+      channels: ["github_issue", "slack"]
+      severity_threshold: "WARNING"
+
+detection_methods:
+  semantic_similarity:
+    tool: "cortex.lens.analyzers.semantic_similarity"
+    threshold: 0.85
+    scope: ["cortex/", "cortex_brain/", "cortex_lens/"]
+  
+  ast_based:
+    tool: "cortex.lens.analyzers.ast_duplicate_detector"
+    min_lines: 50
+    scope: ["cortex/", "tests/"]
+  
+  pattern_matching:
+    patterns:
+      - name: "duplicate_folder_names"
+        regex: "^([a-z_]+)/$.*^\\1_[a-z]+/$"
+        example: "governance/ + governance_tools/"
+      
+      - name: "similar_class_names"
+        regex: "class ([A-Z][a-zA-Z]+).*class \\1[A-Z]"
+        example: "class Manager + class ManagerV2"
+
+examples:
+  violations:
+    - type: "duplicate_folders"
+      files: ["cortex/governance/", "cortex/governance_tools/"]
+      similarity: 95%
+      fix: "Consolidated in ENH-095: governance_tools/ → governance/tools/"
+    
+    - type: "semantic_duplication"
+      files: ["cortex/utils/formatter.py", "cortex/tools/format_helper.py"]
+      similarity: 88%
+      fix: "Extract to shared cortex/common/formatting.py"
+    
+    - type: "copy_paste_code"
+      files: ["cortex/orchestrators/a.py:100-150", "cortex/orchestrators/b.py:200-250"]
+      lines: 50
+      fix: "Extract to shared base class: BaseOrchestrator"
+
+metrics:
+  wave_9_eliminations:
+    governance_tools: "consolidated"
+    workspaces_legacy: "archived"
+  
+  ongoing_targets:
+    duplicate_folders: "= 0"
+    semantic_similarity: "< 85%"
+    copy_paste_instances: "< 5"
+
+references:
+  - core_rule: CORE-035
+    title: "Single Canonical Implementation"
+    enforcement: "No duplicate implementations"
+  
+  - enhancement: ENH-095
+    title: "governance_tools consolidation"
+    eliminated_duplication: true
+  
+  - tool: cortex_detect_duplicates
+    mcp_tool: true
+    command: "cortex_detect_duplicates"
+
+future_enhancements:
+  - "AI-powered duplicate detection using LLM embeddings"
+  - "Automatic refactoring suggestions"
+  - "IDE integration (VS Code extension)"
+  - "Real-time duplicate warning during coding"
+
+audit_trail:
+  created: "2026-02-12T14:30:00Z"
+  created_by: "CORTEX Architect (Wave 9 ENH-096)"
+  status: ACTIVE
+  enforcement_start: "2026-02-12"

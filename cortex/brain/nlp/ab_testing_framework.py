@@ -17,10 +17,11 @@ Author: Asif Hussain
 Created: 2026-01-30
 """
 
-from typing import Dict, Any, List, Optional
+import time
 from dataclasses import dataclass
 from enum import Enum
-import time
+from typing import Any, Dict, List, Optional
+
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 
 
@@ -34,7 +35,7 @@ class Variant(Enum):
 class RoutingDecision:
     """
     Routing decision result.
-    
+
     Attributes:
         variant: Test variant used
         orchestrator: Selected orchestrator
@@ -57,7 +58,7 @@ class RoutingDecision:
 class ABTestResult:
     """
     A/B test results.
-    
+
     Attributes:
         control_decisions: Decisions made by control variant
         treatment_decisions: Decisions made by treatment variant
@@ -79,19 +80,19 @@ class ABTestResult:
 class ABTestingFramework:
     """
     A/B testing framework for NLP routing comparison.
-    
+
     Compares routing decisions with/without NLP enhancements:
     - Control: Standard keyword matching
     - Treatment: NLP-enhanced (embeddings, synonyms)
-    
+
     Metrics tracked:
     - Routing confidence
     - Decision latency
     - Orchestrator selection consistency
-    
+
     Example:
         framework = ABTestingFramework()
-        
+
         # Record control decision
         framework.record_decision(
             variant=Variant.CONTROL,
@@ -100,7 +101,7 @@ class ABTestingFramework:
             latency_ms=12.5,
             keywords=["implement", "feature"],
         )
-        
+
         # Record treatment decision
         framework.record_decision(
             variant=Variant.TREATMENT,
@@ -110,11 +111,11 @@ class ABTestingFramework:
             keywords=["implement", "feature"],
             expanded_keywords=["implement", "create", "build", "feature"],
         )
-        
+
         # Get results
         results = framework.get_results()
     """
-    
+
     def __init__(self) -> None:
         """Initialize A/B testing framework."""
         self.logger = EnhancedAuditLogger.instance()
@@ -122,14 +123,14 @@ class ABTestingFramework:
             Variant.CONTROL: [],
             Variant.TREATMENT: [],
         }
-        
+
         self.logger.log_operation_complete(
             ac_id="AC-PHASE-8.4-03",
             operation="AB_TEST_FRAMEWORK_INIT",
             success=True,
             details={"variants": [v.value for v in Variant]},
         )
-    
+
     def record_decision(
         self,
         variant: Variant,
@@ -141,9 +142,9 @@ class ABTestingFramework:
     ) -> None:
         """
         Record routing decision.
-        
+
         AC-PHASE-8.4-03: Decision tracking
-        
+
         Args:
             variant: Test variant
             orchestrator: Selected orchestrator
@@ -161,21 +162,21 @@ class ABTestingFramework:
             keywords=keywords,
             expanded_keywords=expanded_keywords,
         )
-        
+
         self.decisions[variant].append(decision)
-    
+
     def get_results(self) -> ABTestResult:
         """
         Get A/B test results.
-        
+
         AC-PHASE-8.4-03: Results aggregation with statistical comparison
-        
+
         Returns:
             ABTestResult: Test results
         """
         control = self.decisions[Variant.CONTROL]
         treatment = self.decisions[Variant.TREATMENT]
-        
+
         # Calculate averages
         control_avg_confidence = (
             sum(d.confidence for d in control) / len(control)
@@ -185,7 +186,7 @@ class ABTestingFramework:
             sum(d.confidence for d in treatment) / len(treatment)
             if treatment else 0.0
         )
-        
+
         control_avg_latency = (
             sum(d.latency_ms for d in control) / len(control)
             if control else 0.0
@@ -194,7 +195,7 @@ class ABTestingFramework:
             sum(d.latency_ms for d in treatment) / len(treatment)
             if treatment else 0.0
         )
-        
+
         # Calculate improvement
         improvement = 0.0
         if control_avg_confidence > 0:
@@ -203,7 +204,7 @@ class ABTestingFramework:
                 / control_avg_confidence
                 * 100
             )
-        
+
         result = ABTestResult(
             control_decisions=control,
             treatment_decisions=treatment,
@@ -213,7 +214,7 @@ class ABTestingFramework:
             treatment_avg_latency=treatment_avg_latency,
             treatment_improvement=improvement,
         )
-        
+
         self.logger.log_operation_complete(
             ac_id="AC-PHASE-8.4-03",
             operation="AB_TEST_RESULTS",
@@ -224,25 +225,25 @@ class ABTestingFramework:
                 "improvement_pct": improvement,
             },
         )
-        
+
         return result
-    
+
     def reset(self) -> None:
         """Reset all recorded decisions."""
         self.decisions = {
             Variant.CONTROL: [],
             Variant.TREATMENT: [],
         }
-    
+
     def format_report(self) -> str:
         """
         Format human-readable A/B test report.
-        
+
         Returns:
             str: Formatted report
         """
         results = self.get_results()
-        
+
         lines = [
             "═" * 80,
             "A/B TEST RESULTS: NLP ROUTING ENHANCEMENT",
@@ -266,5 +267,5 @@ class ABTestingFramework:
             "",
             "═" * 80,
         ]
-        
+
         return "\n".join(lines)

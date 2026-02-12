@@ -1,0 +1,752 @@
+# ============================================================================
+# WAVE 9: ULTIMATE CLEANUP & CONSOLIDATION (FINAL REFACTORING WAVE)
+# ============================================================================
+# Authority: cortex-architect.prompt.md + Implementation Reality Sync 2026-02-12
+# Purpose: Deep analysis + consolidation of entire CORTEX repo structure
+# Status: DESIGN COMPLETE - EXECUTE LAST (after all other waves)
+# Created: 2026-02-12
+# AC-ID: AC-WAVE9-001
+# Priority: P2-POST-MVP (execute after production deployment)
+# ============================================================================
+
+version: "1.0"
+created: "2026-02-12T15:00:00Z"
+last_updated: "2026-02-12T15:00:00Z"
+wave_id: "WAVE-9"
+name: "Ultimate Cleanup & Consolidation Wave"
+priority: "P2-POST-MVP"
+roi_score: 7.8  # High maintainability gains, but non-blocking
+
+metadata:
+  total_enhancements: 8
+  estimated_effort: "18-24 days"
+  parallelizable: true
+  blocking_dependencies: ["WAVE-1", "WAVE-2", "WAVE-3", "WAVE-6", "WAVE-7"]
+  value_delivery: "Repository coherence + technical debt elimination + 30% size reduction"
+  execution_timing: "POST-DEPLOYMENT (after MVP release)"
+  
+objectives:
+  primary: "Eliminate all duplicate/legacy structures + consolidate folder hierarchy"
+  secondary: "Establish coherent cortex/ module organization + reduce cognitive load"
+  tertiary: "Automate future cleanup via governance rules + vacuum integration"
+  strategic: "Prepare repository for open-source release (clean house first)"
+
+# ============================================================================
+# CURRENT STATE ANALYSIS (2026-02-12)
+# ============================================================================
+
+repository_metrics:
+  total_size_mb: 208.51
+  total_files: 13571
+  
+  folder_breakdown:
+    production_critical:
+      - name: "cortex/"
+        size_mb: 51.15
+        files: 3044
+        health: "NEEDS CONSOLIDATION"
+        issues: ["3 phase-related folders", "duplicate orchestrator patterns"]
+      
+      - name: "cortex_brain/"
+        size_mb: 2.50
+        files: 253
+        health: "GOOD (minor cleanup)"
+        issues: ["domain vs domain_brain duplication", "unused releases/ folder"]
+      
+      - name: "cortex-registry/"
+        size_mb: 5.75
+        files: 276
+        health: "EXCELLENT"
+        issues: []
+      
+      - name: "tests/"
+        size_mb: 67.13
+        files: 2712
+        health: "GOOD"
+        issues: ["minor cleanup needed"]
+    
+    workspace_experimental:
+      - name: "_workspaces/"
+        size_mb: 12.92
+        files: 706
+        health: "LEGACY - DELETE CANDIDATE"
+        purpose: "Historical experiments + backup docs"
+      
+      - name: "src/"
+        size_mb: 0.47
+        files: 56
+        health: "LEGACY - ZERO IMPORTS"
+        purpose: "Old folder structure (pre-consolidation)"
+      
+      - name: "_archives/"
+        size_mb: 0.37
+        files: 39
+        health: "GOOD (keep for audits)"
+        purpose: "Archived markdown cleanup"
+    
+    build_artifacts:
+      - name: ".venv/"
+        size_mb: 52.89
+        files: 6128
+        health: "GITIGNORED"
+        purpose: "Python virtual environment"
+      
+      - name: "dist/"
+        size_mb: 2.54
+        files: 24
+        health: "BUILD ARTIFACT - DELETE"
+        purpose: "Built packages (should be in .gitignore)"
+      
+      - name: ".pytest_cache/"
+        size_mb: 0.27
+        files: 5
+        health: "CACHE - DELETE"
+        purpose: "Test cache (regenerated)"
+
+# ============================================================================
+# ENHANCEMENT 1: cortex_brain/ CONSOLIDATION
+# ============================================================================
+
+enhancements:
+  - enhancement_id: "ENH-090"
+    title: "cortex_brain/ Folder Consolidation"
+    priority: "P1-HIGH"
+    roi: 8.5
+    estimated_effort: "3 days"
+    
+    problem:
+      current_state: "10 top-level folders with duplication + unused artifacts"
+      gaps:
+        - "domain/ vs domain_brain/ - duplicate domain model definitions"
+        - "governance/ - single YAML (should be in tier0/)"
+        - "releases/ - unused version manifests (zero imports)"
+        - "Inconsistent tier hierarchy (tier0-3 mixed with other folders)"
+      impact: "Confusing structure, maintenance burden, cognitive load"
+    
+    solution:
+      approach: "3-phase consolidation"
+      benefits:
+        - "Single source of truth for domain models"
+        - "Clearer tier hierarchy (tier0-3 + support folders)"
+        - "30% reduction in top-level complexity"
+        - "Governance centralized in tier0/"
+    
+    phases:
+      - phase: "P1-Safe-Deletions"
+        duration: "1 day"
+        actions:
+          - action: "Delete releases/"
+            reason: "Zero imports found (verified 2026-02-12)"
+            safety: "100% safe"
+            validation: "grep -r 'cortex_brain.releases' . --include='*.py'"
+          
+          - action: "Move governance/precedence.yaml → tier0/governance/"
+            reason: "Governance is a Tier 0 concept"
+            safety: "99% safe (no code imports)"
+            validation: "File is pure config, update docs if needed"
+        
+        tests: 3
+        deliverables:
+          - "releases/ removed"
+          - "governance/ folder removed"
+          - "precedence.yaml in tier0/governance/"
+      
+      - phase: "P2-Domain-Merge"
+        duration: "1.5 days"
+        actions:
+          - action: "Merge domain_brain/models.py → domain/models.py"
+            reason: "Both define domain models, consolidate into single file"
+            affected_imports: 11
+            files_to_update:
+              - "cortex/domain_brain/*.py (6 files)"
+              - "cortex/domain_brain/adapters.py"
+              - "tests/unit/brain/*.py (4 files)"
+          
+          - action: "Delete domain_brain/ folder"
+            reason: "All content merged into domain/"
+            safety: "95% safe (requires careful import updates)"
+        
+        tests: 15
+        deliverables:
+          - "Unified domain/models.py (355 lines total)"
+          - "11 import statements updated"
+          - "domain_brain/ folder removed"
+          - "Re-export in cortex/domain_brain/ updated"
+      
+      - phase: "P3-Structure-Documentation"
+        duration: "0.5 days"
+        actions:
+          - action: "Update cortex_brain/__init__.py docstring"
+            reason: "Reflect new structure post-consolidation"
+          
+          - action: "Add ARCHITECTURE.md in cortex_brain/"
+            reason: "Document tier hierarchy + folder purposes"
+        
+        tests: 2
+        deliverables:
+          - "Updated __init__.py documentation"
+          - "cortex_brain/ARCHITECTURE.md created"
+
+# ============================================================================
+# ENHANCEMENT 2: cortex/ PHASE FOLDER CONSOLIDATION
+# ============================================================================
+
+  - enhancement_id: "ENH-091"
+    title: "cortex/ Phase Folders Consolidation"
+    priority: "P1-HIGH"
+    roi: 8.2
+    estimated_effort: "4 days"
+    
+    problem:
+      current_state: "3 phase-related folders with overlapping responsibilities"
+      gaps:
+        - "phase_38/ - Single baseline_metrics_collector.py (why separate folder?)"
+        - "phase_executors/ - Generic phase execution (4 files)"
+        - "phase_management/ - Single autonomous_executor.py"
+        - "Functionality overlap: phase execution vs management"
+      impact: "Fragmented phase logic, unclear ownership, hard to discover"
+    
+    solution:
+      approach: "Consolidate into unified cortex/phases/ module"
+      benefits:
+        - "Single source of truth for phase operations"
+        - "Clearer ownership (execution + management + metrics)"
+        - "Better discoverability (all phase code in one place)"
+        - "Aligned with orchestrators/ pattern"
+    
+    target_structure: |
+      cortex/phases/
+      ├── __init__.py
+      ├── executor.py           # From phase_executors/
+      ├── orchestrator.py       # From phase_executors/
+      ├── autonomous.py         # From phase_management/
+      ├── metrics.py            # From phase_38/
+      ├── factory.py            # From phase_executors/
+      └── archived/             # Legacy phase executors
+    
+    phases:
+      - phase: "P1-Analysis"
+        duration: "1 day"
+        actions:
+          - "Analyze import dependencies across 3 folders"
+          - "Identify external references (tests/, mcp/, orchestrators/)"
+          - "Map functionality overlap"
+        tests: 0
+        deliverables:
+          - "Dependency graph"
+          - "Migration plan with risk assessment"
+      
+      - phase: "P2-Migration"
+        duration: "2 days"
+        actions:
+          - "Create cortex/phases/ module"
+          - "Migrate 7 files to new structure"
+          - "Update 50+ import statements"
+          - "Update test references"
+        tests: 25
+        deliverables:
+          - "cortex/phases/ created and populated"
+          - "All imports updated"
+          - "Tests passing"
+      
+      - phase: "P3-Cleanup"
+        duration: "1 day"
+        actions:
+          - "Delete phase_38/, phase_executors/, phase_management/"
+          - "Update wiring registry (if needed)"
+          - "Update documentation"
+        tests: 10
+        deliverables:
+          - "3 folders removed"
+          - "Documentation updated"
+
+# ============================================================================
+# ENHANCEMENT 3: LEGACY WORKSPACE ELIMINATION
+# ============================================================================
+
+  - enhancement_id: "ENH-092"
+    title: "Legacy Workspace Elimination"
+    priority: "P2-MEDIUM"
+    roi: 7.5
+    estimated_effort: "2 days"
+    
+    problem:
+      current_state: "_workspaces/ contains 12.92 MB of experimental/backup content"
+      gaps:
+        - "__bak-docs/ - 706 files of backup documentation"
+        - "cortex-doc-* - Multiple doc generation experiments"
+        - "approved-orchestrator-view/ - Single-use analysis"
+        - "gpt/ - Experiment artifacts"
+      impact: "13 MB wasted, confusing for new contributors, tech debt"
+    
+    solution:
+      approach: "Archive valuable content, delete rest"
+      benefits:
+        - "13 MB freed (6% total repo size)"
+        - "Cleaner repo root (only production folders)"
+        - "Faster git operations"
+    
+    phases:
+      - phase: "P1-Audit"
+        duration: "0.5 days"
+        actions:
+          - "Scan _workspaces/ for production references"
+          - "Identify if any content referenced by active code"
+          - "Extract valuable patterns (if any)"
+        tests: 0
+        deliverables:
+          - "Audit report: safe-to-delete list"
+      
+      - phase: "P2-Archive"
+        duration: "0.5 days"
+        actions:
+          - "Create _archives/workspaces-2026-02-12.tar.gz"
+          - "Compress _workspaces/ for historical reference"
+          - "Update .gitignore to exclude _workspaces/"
+        tests: 0
+        deliverables:
+          - "Compressed archive in _archives/"
+      
+      - phase: "P3-Delete"
+        duration: "1 day"
+        actions:
+          - "Delete _workspaces/ folder"
+          - "Verify no broken imports"
+          - "Update README.md (remove references)"
+        tests: 5
+        deliverables:
+          - "_workspaces/ removed"
+          - "All tests passing"
+
+# ============================================================================
+# ENHANCEMENT 4: src/ FOLDER ELIMINATION
+# ============================================================================
+
+  - enhancement_id: "ENH-093"
+    title: "src/ Folder Elimination (Zero-Import Legacy)"
+    priority: "P1-HIGH"
+    roi: 9.0
+    estimated_effort: "1 day"
+    
+    problem:
+      current_state: "src/ contains 0.47 MB, 56 files, ZERO production imports"
+      gaps:
+        - "All imports are 'from src.*' in _workspaces/ (backup docs)"
+        - "Legacy pre-consolidation folder structure"
+        - "Confusion: is this src/ active? (NO!)"
+      impact: "Cognitive load, false positives in searches, tech debt"
+    
+    solution:
+      approach: "Immediate deletion (zero risk)"
+      benefits:
+        - "0.47 MB freed"
+        - "Eliminates confusion about 'src' vs 'cortex'"
+        - "Cleaner repo root"
+    
+    phases:
+      - phase: "P1-Verification"
+        duration: "0.25 days"
+        actions:
+          - "Run: grep -r 'from src.' cortex/ tests/ --include='*.py'"
+          - "Verify zero matches (all imports in _workspaces/ only)"
+          - "Document findings"
+        tests: 0
+        deliverables:
+          - "Verification report (expected: 0 production imports)"
+      
+      - phase: "P2-Delete"
+        duration: "0.5 days"
+        actions:
+          - "Create backup: _archives/src-2026-02-12.tar.gz"
+          - "Delete src/ folder"
+          - "Run full test suite"
+        tests: 10
+        deliverables:
+          - "src/ removed"
+          - "All tests passing"
+      
+      - phase: "P3-Documentation"
+        duration: "0.25 days"
+        actions:
+          - "Update README.md (remove src/ references)"
+          - "Add migration note in CHANGELOG.md"
+        tests: 0
+        deliverables:
+          - "Documentation updated"
+
+# ============================================================================
+# ENHANCEMENT 5: BUILD ARTIFACT CLEANUP
+# ============================================================================
+
+  - enhancement_id: "ENH-094"
+    title: "Build Artifact & Cache Cleanup"
+    priority: "P3-LOW"
+    roi: 6.5
+    estimated_effort: "0.5 days"
+    
+    problem:
+      current_state: "dist/ + .pytest_cache/ committed (should be gitignored)"
+      gaps:
+        - "dist/ - 2.54 MB of built packages"
+        - ".pytest_cache/ - 0.27 MB of test cache"
+        - "Both should NEVER be in git"
+      impact: "Wasted repo size, merge conflicts on builds"
+    
+    solution:
+      approach: "Delete + update .gitignore"
+      benefits:
+        - "2.81 MB freed"
+        - "Faster git operations"
+        - "No more cache merge conflicts"
+    
+    phases:
+      - phase: "P1-Cleanup"
+        duration: "0.25 days"
+        actions:
+          - "Delete dist/"
+          - "Delete .pytest_cache/"
+          - "Verify .gitignore has both entries"
+        tests: 0
+        deliverables:
+          - "Artifacts removed"
+          - ".gitignore updated"
+      
+      - phase: "P2-Prevention"
+        duration: "0.25 days"
+        actions:
+          - "Add pre-commit hook to block dist/ commits"
+          - "Update CI/CD to clean artifacts before push"
+        tests: 0
+        deliverables:
+          - "Pre-commit hook added"
+          - "CI/CD updated"
+
+# ============================================================================
+# ENHANCEMENT 6: CORTEX ORCHESTRATOR FOLDER COHESION
+# ============================================================================
+
+  - enhancement_id: "ENH-095"
+    title: "cortex/ Orchestrator Folder Cohesion Analysis"
+    priority: "P2-MEDIUM"
+    roi: 7.8
+    estimated_effort: "5 days"
+    
+    problem:
+      current_state: "51.15 MB, 3044 files - complex structure with overlap"
+      gaps:
+        - "orchestrators/ vs domain_orchestrators/ - unclear boundary"
+        - "governance/ vs governance_tools/ - redundancy?"
+        - "brain/ vs intelligence/ vs learning/ - AI logic scattered"
+        - "Too many top-level folders (40+ in cortex/)"
+      impact: "Hard to navigate, duplication risk, cognitive overload"
+    
+    solution:
+      approach: "Multi-phase consolidation with strict boundaries"
+      benefits:
+        - "Clearer module hierarchy"
+        - "Reduced cognitive load (30% fewer top-level folders)"
+        - "Improved discoverability"
+        - "Better alignment with CORE-038 (file placement)"
+    
+    analysis_targets:
+      - target: "orchestrators/ vs domain_orchestrators/"
+        investigation: "Can domain orchestrators merge into orchestrators/domain/?"
+        estimated_savings: "1 top-level folder removed"
+      
+      - target: "governance/ vs governance_tools/"
+        investigation: "Tools should be in governance/tools/, not separate"
+        estimated_savings: "1 top-level folder removed"
+      
+      - target: "brain/ vs intelligence/ vs learning/"
+        investigation: "AI/ML logic consolidation into brain/ai/"
+        estimated_savings: "2 top-level folders removed"
+      
+      - target: "mcp/ structure optimization"
+        investigation: "Current: 4 subdirs. Can middleware/ merge with core/?"
+        estimated_savings: "Better internal organization"
+    
+    phases:
+      - phase: "P1-Deep-Analysis"
+        duration: "2 days"
+        actions:
+          - "Analyze import graphs for 4 consolidation targets"
+          - "Identify external dependencies"
+          - "Risk assessment per consolidation"
+          - "Create detailed migration plans"
+        tests: 0
+        deliverables:
+          - "4 detailed migration plans"
+          - "Import dependency graphs"
+          - "Risk matrix"
+      
+      - phase: "P2-orchestrators-domain-merge"
+        duration: "1.5 days"
+        actions:
+          - "Move domain_orchestrators/ → orchestrators/domain/"
+          - "Update imports (estimated 20 files)"
+          - "Update wiring registry"
+        tests: 30
+        deliverables:
+          - "domain_orchestrators/ removed"
+          - "orchestrators/domain/ created"
+      
+      - phase: "P3-governance-merge"
+        duration: "1 day"
+        actions:
+          - "Move governance_tools/ → governance/tools/"
+          - "Update imports (estimated 15 files)"
+        tests: 20
+        deliverables:
+          - "governance_tools/ removed"
+          - "governance/tools/ created"
+      
+      - phase: "P4-documentation"
+        duration: "0.5 days"
+        actions:
+          - "Update cortex/__init__.py with new structure"
+          - "Create cortex/ARCHITECTURE.md"
+          - "Document module boundaries"
+        tests: 0
+        deliverables:
+          - "Architecture documentation"
+
+# ============================================================================
+# ENHANCEMENT 7: AUTOMATED CLEANUP GOVERNANCE
+# ============================================================================
+
+  - enhancement_id: "ENH-096"
+    title: "Automated Cleanup Governance Rules"
+    priority: "P2-MEDIUM"
+    roi: 8.0
+    estimated_effort: "2 days"
+    
+    problem:
+      current_state: "Manual cleanup required, no prevention of future drift"
+      gaps:
+        - "No pre-commit hooks for artifact prevention"
+        - "No automated duplicate detection"
+        - "No folder structure validation"
+      impact: "Tech debt accumulates, cleanup becomes recurring task"
+    
+    solution:
+      approach: "Governance rules + automation integration"
+      benefits:
+        - "Prevent future cleanup drift"
+        - "Automated detection of violations"
+        - "Self-healing capabilities"
+    
+    phases:
+      - phase: "P1-Rules-Definition"
+        duration: "1 day"
+        actions:
+          - "Define CORE-095: Folder structure governance"
+          - "Define CORE-096: Build artifact prevention"
+          - "Define CORE-097: Duplicate detection automation"
+        tests: 0
+        deliverables:
+          - "3 new CORE rules in tier0/governance/"
+      
+      - phase: "P2-Automation"
+        duration: "1 day"
+        actions:
+          - "Integrate with VacuumOrchestrator"
+          - "Add pre-commit hooks"
+          - "CI/CD validation stage"
+        tests: 15
+        deliverables:
+          - "Automated enforcement active"
+          - "Pre-commit hooks deployed"
+
+# ============================================================================
+# ENHANCEMENT 8: POST-CLEANUP OPTIMIZATION
+# ============================================================================
+
+  - enhancement_id: "ENH-097"
+    title: "Post-Cleanup Repository Optimization"
+    priority: "P3-LOW"
+    roi: 7.0
+    estimated_effort: "1 day"
+    
+    problem:
+      current_state: "After cleanup, optimize remaining structure"
+      gaps:
+        - "Git history bloat from deleted files"
+        - "No size metrics tracking"
+        - "No cleanup audit trail"
+      impact: "Missed optimization opportunities"
+    
+    solution:
+      approach: "Git optimization + metrics dashboard"
+      benefits:
+        - "Smaller .git/ folder"
+        - "Trackable cleanup metrics"
+        - "Audit trail for future reference"
+    
+    phases:
+      - phase: "P1-Git-Optimization"
+        duration: "0.5 days"
+        actions:
+          - "Run: git gc --aggressive --prune=now"
+          - "Repack objects"
+          - "Measure size reduction"
+        tests: 0
+        deliverables:
+          - "Optimized .git/ folder"
+          - "Size reduction report"
+      
+      - phase: "P2-Metrics-Dashboard"
+        duration: "0.5 days"
+        actions:
+          - "Create cleanup metrics YAML"
+          - "Track: files removed, MB freed, folders consolidated"
+          - "Add to cortex-registry/"
+        tests: 0
+        deliverables:
+          - "Cleanup metrics tracked"
+          - "Dashboard-ready data"
+
+# ============================================================================
+# EXECUTION PLAN
+# ============================================================================
+
+execution_plan:
+  sequence: "Execute AFTER all production-critical waves complete"
+  
+  dependencies:
+    required_before:
+      - "WAVE-1: Security + Stability Fixes"
+      - "WAVE-2: MCP Production Readiness"
+      - "WAVE-6: Response Template System"
+      - "WAVE-7: Orchestrator Consolidation"
+    
+    blocking_for:
+      - "Open-source release preparation"
+      - "External contributor onboarding"
+  
+  risk_mitigation:
+    strategy: "Incremental execution with rollback points"
+    checkpoints:
+      - "After each ENH completion: git tag + full test suite"
+      - "Backup archives created before deletions"
+      - "Import validation before folder removals"
+    
+    rollback_plan:
+      - "All deletions archived in _archives/"
+      - "Git tags allow instant rollback"
+      - "Documentation preserved in cortex-registry/"
+
+# ============================================================================
+# SUCCESS METRICS
+# ============================================================================
+
+success_metrics:
+  quantitative:
+    - metric: "Repository size reduction"
+      target: "≥ 20 MB (10% reduction)"
+      measurement: "du -sh before/after"
+    
+    - metric: "Top-level folder reduction"
+      target: "cortex/ folders: 40 → 28 (30% reduction)"
+      measurement: "ls cortex/ | wc -l"
+    
+    - metric: "cortex_brain/ simplification"
+      target: "10 folders → 7 folders"
+      measurement: "ls cortex_brain/ | wc -l"
+    
+    - metric: "Zero legacy imports"
+      target: "0 imports from src/ or _workspaces/"
+      measurement: "grep -r 'from src.' cortex/ tests/"
+  
+  qualitative:
+    - metric: "Developer onboarding clarity"
+      target: "New contributors understand structure in < 30 min"
+      measurement: "Onboarding feedback survey"
+    
+    - metric: "Reduced cognitive load"
+      target: "Fewer 'where does X go?' questions"
+      measurement: "Issue tracker analysis"
+    
+    - metric: "Governance enforcement"
+      target: "Automated prevention of drift"
+      measurement: "Pre-commit hook rejection rate"
+
+# ============================================================================
+# DELIVERABLES
+# ============================================================================
+
+deliverables:
+  code:
+    - "cortex_brain/ consolidated (7 folders, clearer hierarchy)"
+    - "cortex/phases/ unified module (3 folders → 1)"
+    - "cortex/ orchestrator cohesion (4 folders merged)"
+    - "Legacy workspaces eliminated (13 MB freed)"
+    - "src/ folder removed (0.47 MB freed)"
+    - "Build artifacts removed (2.81 MB freed)"
+  
+  governance:
+    - "3 new CORE rules (folder structure, artifacts, duplication)"
+    - "Pre-commit hooks for artifact prevention"
+    - "VacuumOrchestrator integration"
+  
+  documentation:
+    - "cortex_brain/ARCHITECTURE.md"
+    - "cortex/ARCHITECTURE.md"
+    - "CLEANUP-METRICS.yaml in cortex-registry/"
+    - "Migration guides for each consolidation"
+  
+  archives:
+    - "_archives/workspaces-2026-02-12.tar.gz"
+    - "_archives/src-2026-02-12.tar.gz"
+    - "_archives/pre-consolidation-structure.yaml"
+
+# ============================================================================
+# AUDIT TRAIL
+# ============================================================================
+
+audit_trail:
+  created_by: "CORTEX Architect (LENSSynthesis)"
+  analysis_date: "2026-02-12"
+  repository_state: "Post-Phase-73, Pre-MVP-Release"
+  analysis_scope: "Full repository (208.51 MB, 13571 files)"
+  
+  findings_summary:
+    critical:
+      - "src/ folder unused (0 production imports)"
+      - "3 phase folders with overlapping responsibilities"
+      - "domain vs domain_brain duplication"
+    
+    high:
+      - "_workspaces/ legacy content (13 MB)"
+      - "dist/ + .pytest_cache/ committed to git"
+      - "40+ top-level cortex/ folders (cognitive overload)"
+    
+    medium:
+      - "governance vs governance_tools redundancy"
+      - "orchestrators vs domain_orchestrators boundary unclear"
+      - "releases/ folder unused (0 imports)"
+  
+  methodology:
+    - "File system analysis (du, ls, tree)"
+    - "Import graph analysis (grep, semantic search)"
+    - "Dependency validation (Python imports)"
+    - "Size metrics collection (PowerShell Get-ChildItem)"
+    - "Legacy code audit patterns"
+
+# ============================================================================
+# NOTES
+# ============================================================================
+
+notes:
+  timing: |
+    Execute this wave LAST, after production deployment.
+    Cleanup is important but non-blocking for MVP.
+  
+  philosophy: |
+    "Clean house before inviting guests" - prepare repo for open-source.
+    Every folder should have clear purpose and zero redundancy.
+  
+  future_work: |
+    After Wave 9, establish quarterly cleanup audits to prevent drift.
+    Integrate cleanup metrics into cortex-registry dashboards.
+
+# AC_COMPLETE: AC-WAVE9-001 ✅ Ultimate cleanup wave designed

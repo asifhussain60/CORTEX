@@ -3,11 +3,11 @@
 # Authority: CORE-008 TDD, CORE-011 type hints, CORE-012 docstrings
 # Stage: S1 - GREEN phase implementation
 
+import asyncio
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional, Callable
 from pathlib import Path
-import asyncio
+from typing import Any, Callable, Dict, List, Optional
 
 
 @dataclass
@@ -33,7 +33,7 @@ class FileMetadata:
 class AsyncRepositoryCrawler(ABC):
     """
     Abstract base class for async repository crawlers.
-    
+
     Provides foundation for non-blocking file system traversal
     with filtering, progress tracking, and cancellation support.
     """
@@ -41,7 +41,7 @@ class AsyncRepositoryCrawler(ABC):
     def __init__(self, config: Optional[CrawlerConfig] = None):
         """
         Initialize AsyncRepositoryCrawler.
-        
+
         Args:
             config: Crawler configuration
         """
@@ -54,7 +54,7 @@ class AsyncRepositoryCrawler(ABC):
     async def crawl(self, path: str, context: Optional[Dict] = None) -> None:
         """
         Main crawl method - traverse repository and discover files.
-        
+
         Args:
             path: Root path to crawl
             context: Optional analysis context
@@ -65,7 +65,7 @@ class AsyncRepositoryCrawler(ABC):
     async def on_file_discovered(self, file_path: str, metadata: FileMetadata) -> None:
         """
         Callback when file is discovered.
-        
+
         Args:
             file_path: Path to discovered file
             metadata: File metadata

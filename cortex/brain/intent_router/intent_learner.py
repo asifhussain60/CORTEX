@@ -1,14 +1,16 @@
 """AC-PHX-007-08: Intent Learning Loop"""
 from typing import Dict, List, Tuple
+
 from cortex.brain.intent_router.classifier import IntentCategory
+
 
 class IntentLearner:
     """Learning loop for improving classifications."""
-    
+
     def __init__(self) -> None:
         self.feedback_log: List[Tuple[str, IntentCategory, bool]] = []
         self.accuracy_history: List[float] = []
-    
+
     def record_feedback(
         self,
         text: str,
@@ -17,7 +19,7 @@ class IntentLearner:
     ) -> None:
         """Record user feedback."""
         self.feedback_log.append((text, predicted, correct))
-    
+
     def get_accuracy(self) -> float:
         """Calculate accuracy from feedback."""
         if not self.feedback_log:

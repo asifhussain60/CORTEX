@@ -7,9 +7,12 @@ This module handles:
 - Audit logging integration
 """
 
+from .audit_logger_connector import AuditLogEntry, AuditLoggerConnector
 from .domain_brain_connector import DomainBrainConnector, DomainBrainResult
-from .knowledge_router_connector import KnowledgeRouterConnector, KnowledgeSynthesisResult
-from .audit_logger_connector import AuditLoggerConnector, AuditLogEntry
+from .knowledge_router_connector import (
+    KnowledgeRouterConnector,
+    KnowledgeSynthesisResult,
+)
 
 __all__ = [
     "DomainBrainConnector",

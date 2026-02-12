@@ -1,32 +1,52 @@
 """
 Planning Orchestrators Module.
 
-Contains:
-- RemediationPlanGenerator: Generates remediation plans from audit findings
-- RemediationPlanFormatter: Formats plans as markdown
-- AuditRemediationCoordinator: Coordinates audit→plan→execution flow
+Wave 8 Stage 1: Strategy Extraction (✅ Complete)
+Wave 8 Stage 3: Models Export (✅ Complete)
+
+Contains pluggable strategies for plan execution and reusable planning models.
 """
 
-from cortex.orchestrators.planning.remediation_plan_generator import (
-    RemediationPlanGenerator,
-    RemediationPlan,
-    RemediationPhase,
-    AuditFinding
+# Wave 8 Stage 1: Strategy exports (✅ Complete)
+from cortex.orchestrators.planning.strategies import (
+    ExecutionStrategy,
+    ExecutionContext,
+    ExecutionResult,
+    ValidationResult,
+    ExecutionStatus,
+    PhaseExecutionStrategy,
+    PhaseExecutionConfig,
+    WaveOrchestrationStrategy,
+    WaveOrchestrationConfig,
+    TrackParallelizationStrategy,
+    TrackParallelizationConfig,
 )
 
-from cortex.orchestrators.planning.remediation_plan_formatter import (
-    RemediationPlanFormatter
-)
-
-from cortex.orchestrators.planning.audit_remediation_coordinator import (
-    AuditRemediationCoordinator
+# Wave 8 Stage 3: Models exports (✅ Complete)
+from cortex.orchestrators.planning.models import (
+    ROICompositeScorer,
+    DependencyResolver,
+    ParallelismCalculator,
 )
 
 __all__ = [
-    "RemediationPlanGenerator",
-    "RemediationPlan",
-    "RemediationPhase",
-    "AuditFinding",
-    "RemediationPlanFormatter",
-    "AuditRemediationCoordinator"
+    # Base classes (Stage 1)
+    "ExecutionStrategy",
+    "ExecutionContext",
+    "ExecutionResult",
+    "ValidationResult",
+    "ExecutionStatus",
+    # Strategy implementations (Stage 1)
+    "PhaseExecutionStrategy",
+    "PhaseExecutionConfig",
+    "WaveOrchestrationStrategy",
+    "WaveOrchestrationConfig",
+    "TrackParallelizationStrategy",
+    "TrackParallelizationConfig",
+    # Planning models (Stage 3)
+    "ROICompositeScorer",
+    "DependencyResolver",
+    "ParallelismCalculator",
 ]
+
+

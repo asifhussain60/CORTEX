@@ -10,11 +10,11 @@
 S1 Foundation: Solution file parsing, project structure analysis.
 """
 
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Set, Any
-from pathlib import Path
-from enum import Enum
 import re
+from dataclasses import dataclass, field
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Set
 
 
 class ProjectType(Enum):
@@ -263,7 +263,7 @@ class DotNetLensAnalyzer:
 
     def __init__(self, semantic_mode: bool = False):
         """Initialize analyzer.
-        
+
         Args:
             semantic_mode: Enable Roslyn semantic model extraction (Phase 67 S1)
         """
@@ -271,12 +271,14 @@ class DotNetLensAnalyzer:
         self.project_parser = ProjectFileParser()
         self.monolith_analyzer = MonolithAnalyzer()
         self.semantic_mode = semantic_mode
-        
+
         # Phase 67 S1: Roslyn semantic integration
         self.roslyn_builder = None
         if semantic_mode:
             try:
-                from cortex_lens.dotnet.roslyn_workspace_builder import RoslynWorkspaceBuilder
+                from cortex_lens.dotnet.roslyn_workspace_builder import (
+                    RoslynWorkspaceBuilder,
+                )
                 self.roslyn_builder = RoslynWorkspaceBuilder()
             except ImportError as e:
                 # Fallback to syntax-only mode if Roslyn components unavailable
@@ -306,7 +308,7 @@ class DotNetLensAnalyzer:
         analysis["solution_name"] = solution.name
         analysis["project_count"] = len(solution.projects)
         analysis["mode"] = "syntax" if not self.semantic_mode else "semantic"
-        
+
         # Phase 67 S1: Semantic analysis integration
         if self.semantic_mode and self.roslyn_builder:
             semantic_data = self._analyze_solution_semantic(solution_file_path)
@@ -316,56 +318,61 @@ class DotNetLensAnalyzer:
 
         # AC_COMPLETE: AC-PHASE55-S1-solution_analysis
         return analysis
-    
+
     def _analyze_solution_semantic(self, solution_path: str) -> Dict[str, Any]:
         """
         Extract semantic model data using Roslyn (Phase 67 S1).
-        
+
         Args:
             solution_path: Path to .sln file
-            
+
         Returns:
             Semantic analysis results with type hierarchies, methods, attributes
         """
         # AC_START: AC-PHASE67-S1-SEMANTIC-INTEGRATION-001
         try:
-            from pathlib import Path
-            from cortex_lens.dotnet.type_symbol_resolver import TypeSymbolResolver
-            from cortex_lens.dotnet.method_signature_analyzer import MethodSignatureAnalyzer
-            from cortex_lens.dotnet.attribute_data_extractor import AttributeDataExtractor
-            from cortex_lens.dotnet.cross_assembly_resolver import CrossAssemblyResolver
             import logging
-            
+            from pathlib import Path
+
+            from cortex_lens.dotnet.attribute_data_extractor import (
+                AttributeDataExtractor,
+            )
+            from cortex_lens.dotnet.cross_assembly_resolver import CrossAssemblyResolver
+            from cortex_lens.dotnet.method_signature_analyzer import (
+                MethodSignatureAnalyzer,
+            )
+            from cortex_lens.dotnet.type_symbol_resolver import TypeSymbolResolver
+
             logger = logging.getLogger(__name__)
-            
+
             # Guard against None roslyn_builder
             if not self.roslyn_builder:
                 return {"error": "Roslyn builder not initialized"}
-            
+
             # Load solution with semantic model
             solution_data = self.roslyn_builder.load_solution(
-                Path(solution_path), 
+                Path(solution_path),
                 include_semantic=True
             )
-            
+
             if not solution_data or "Projects" not in solution_data:
                 return {"error": "Failed to load semantic model"}
-            
+
             # Extract semantic models from all projects
             semantic_models = []
             for project in solution_data["Projects"]:
                 if "Types" in project:
                     semantic_models.append(project)
-            
+
             if not semantic_models:
                 return {"error": "No semantic data available"}
-            
+
             # Initialize semantic analyzers
             type_resolver = TypeSymbolResolver(semantic_models)
             method_analyzer = MethodSignatureAnalyzer()
             attribute_extractor = AttributeDataExtractor()
             assembly_resolver = CrossAssemblyResolver(solution_data)
-            
+
             # Build comprehensive semantic analysis
             all_types = type_resolver.get_all_types()
             analysis = {
@@ -384,11 +391,11 @@ class DotNetLensAnalyzer:
                     "static_methods": 0
                 }
             }
-            
+
             # Extract API controllers, authorization info, and method stats
             for type_info in all_types[:100]:  # Process first 100 types
                 type_name = type_info.get("Name", "Unknown")
-                
+
                 # Check for API controllers
                 if attribute_extractor.is_api_controller(type_info):
                     analysis["api_controllers"].append({
@@ -396,27 +403,27 @@ class DotNetLensAnalyzer:
                         "route": attribute_extractor.extract_route_template(type_info),
                         "attributes": attribute_extractor.detect_api_controller_attributes(type_info)
                     })
-                
+
                 # Check authorization
                 if attribute_extractor.is_authorized(type_info):
                     analysis["authorized_types"].append({
                         "name": type_name,
                         "attributes": attribute_extractor.detect_authorization_attributes(type_info)
                     })
-                
+
                 # Aggregate method statistics
                 if "Methods" in type_info:
                     analysis["method_summary"]["total_methods"] += len(type_info["Methods"])
-                    
+
                     public_methods = method_analyzer.get_all_public_methods(type_info)
                     analysis["method_summary"]["public_methods"] += len(public_methods)
-                    
+
                     static_methods = method_analyzer.get_static_methods(type_info)
                     analysis["method_summary"]["static_methods"] += len(static_methods)
-            
+
             # AC_COMPLETE: AC-PHASE67-S1-SEMANTIC-INTEGRATION-001
             return analysis
-            
+
         except Exception as e:
             import logging
             logging.getLogger(__name__).error(f"Semantic analysis failed: {e}")

@@ -13,13 +13,14 @@ AC-ID: AC-LENS-V2-API-001
 Authority: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings)
 """
 
-from pathlib import Path
-from typing import Dict, Any, List, Optional, Set
-from dataclasses import dataclass, field
-from enum import Enum
+import json
 import logging
 import re
-import json
+from dataclasses import dataclass, field
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Set
+
 import yaml
 
 logger = logging.getLogger(__name__)
@@ -111,7 +112,7 @@ class APIAnalysisResult:
 class APIAnalyzer:
     """
     REST API and OpenAPI specification analyzer.
-    
+
     Provides comprehensive API security analysis including:
     - OpenAPI/Swagger 2.0, 3.0, 3.1 specification parsing
     - OWASP API Security Top 10 vulnerability detection
@@ -120,7 +121,7 @@ class APIAnalyzer:
     - Rate limiting and throttling configuration analysis
     - CORS policy security review
     - API versioning strategy detection
-    
+
     Example:
         >>> analyzer = APIAnalyzer()
         >>> result = analyzer.analyze_openapi_spec(Path("openapi.yaml"))
@@ -128,7 +129,7 @@ class APIAnalyzer:
         >>> p0_findings = [f for f in result.security_findings if f.priority == APISecurityPriority.P0]
         >>> print(f"P0 vulnerabilities: {len(p0_findings)}")
     """
-    
+
     # OWASP API Security Top 10 patterns
     OWASP_API_PATTERNS = {
         "API1_BROKEN_OBJECT_LEVEL_AUTH": [
@@ -160,28 +161,28 @@ class APIAnalyzer:
             "default_credentials",
         ],
     }
-    
+
     def __init__(self):
         """Initialize APIAnalyzer."""
         pass
-    
+
     def analyze_openapi_spec(
         self,
         spec_path: Path,
     ) -> APIAnalysisResult:
         """
         Analyze OpenAPI/Swagger specification file.
-        
+
         Supports:
         - OpenAPI 3.0/3.1 (YAML/JSON)
         - Swagger 2.0 (YAML/JSON)
-        
+
         Args:
             spec_path: Path to OpenAPI specification file
-            
+
         Returns:
             APIAnalysisResult with endpoints, security schemes, and findings
-            
+
         Example:
             >>> analyzer = APIAnalyzer()
             >>> result = analyzer.analyze_openapi_spec(Path("api/openapi.yaml"))
@@ -192,38 +193,38 @@ class APIAnalyzer:
         """
         import time
         start_time = time.time()
-        
+
         # Check path exists
         if not spec_path.exists():
             return APIAnalysisResult(
                 success=False,
                 error=f"OpenAPI spec not found: {spec_path}"
             )
-        
+
         result = APIAnalysisResult(success=True)
-        
+
         try:
             # Parse spec file
             spec_data = self._load_spec_file(spec_path)
-            
+
             # Detect version
             result.spec_version = self._detect_openapi_version(spec_data)
-            
+
             # Extract API version
             result.api_version = self._extract_api_version(spec_data)
-            
+
             # Parse security schemes
             result.security_schemes = self._parse_security_schemes(spec_data, result.spec_version)
-            
+
             # Parse global security
             result.global_security = spec_data.get("security", [])
-            
+
             # Parse servers
             result.servers = self._parse_servers(spec_data, result.spec_version)
-            
+
             # Parse endpoints
             result.endpoints = self._parse_endpoints(spec_data, result.spec_version)
-            
+
             # Security analysis
             result.security_findings = self._analyze_security(
                 spec_data,
@@ -231,22 +232,22 @@ class APIAnalyzer:
                 result.security_schemes,
                 result.global_security
             )
-            
+
             # Detect rate limiting
             result.has_rate_limiting = self._detect_rate_limiting(spec_data)
-            
+
             # Detect CORS configuration
             result.has_cors_config = self._detect_cors_config(spec_data)
-            
+
             result.analysis_time_ms = (time.time() - start_time) * 1000
-            
+
         except Exception as e:
             logger.error(f"OpenAPI analysis failed: {e}", exc_info=True)
             result.success = False
             result.error = str(e)
-        
+
         return result
-    
+
     def analyze_api_code(
         self,
         code_path: Path,
@@ -254,20 +255,20 @@ class APIAnalyzer:
     ) -> APIAnalysisResult:
         """
         Analyze API code directly (without OpenAPI spec).
-        
+
         Supports:
         - FastAPI (Python)
         - Flask (Python)
         - Express.js (Node.js) - basic
         - ASP.NET Core (C#) - basic
-        
+
         Args:
             code_path: Path to API code directory
             framework: API framework ("fastapi", "flask", "express", "aspnet")
-            
+
         Returns:
             APIAnalysisResult with discovered endpoints and findings
-            
+
         Example:
             >>> analyzer = APIAnalyzer()
             >>> result = analyzer.analyze_api_code(
@@ -278,20 +279,20 @@ class APIAnalyzer:
         """
         import time
         start_time = time.time()
-        
+
         # Check path exists
         if not code_path.exists():
             return APIAnalysisResult(
                 success=False,
                 error=f"API code path not found: {code_path}"
             )
-        
+
         # Validate framework
         if framework not in ("fastapi", "flask", "express", "aspnet"):
             raise ValueError(f"Unsupported framework: {framework}")
-        
+
         result = APIAnalysisResult(success=True)
-        
+
         try:
             # Discover endpoints from code
             if framework == "fastapi":
@@ -300,7 +301,7 @@ class APIAnalyzer:
                 result.endpoints = self._discover_flask_endpoints(code_path)
             else:
                 logger.info(f"Code analysis for {framework}: Basic implementation")
-            
+
             # Security analysis on discovered endpoints
             result.security_findings = self._analyze_security(
                 {},
@@ -308,20 +309,20 @@ class APIAnalyzer:
                 result.security_schemes,
                 result.global_security
             )
-            
+
             result.analysis_time_ms = (time.time() - start_time) * 1000
-            
+
         except Exception as e:
             logger.error(f"API code analysis failed: {e}", exc_info=True)
             result.success = False
             result.error = str(e)
-        
+
         return result
-    
+
     def _load_spec_file(self, spec_path: Path) -> Dict[str, Any]:
         """Load and parse OpenAPI spec file (YAML or JSON)."""
         content = spec_path.read_text(encoding="utf-8")
-        
+
         if spec_path.suffix in (".yaml", ".yml"):
             return yaml.safe_load(content)
         elif spec_path.suffix == ".json":
@@ -332,7 +333,7 @@ class APIAnalyzer:
                 return yaml.safe_load(content)
             except yaml.YAMLError:
                 return json.loads(content)
-    
+
     def _detect_openapi_version(self, spec_data: Dict[str, Any]) -> OpenAPIVersion:
         """Detect OpenAPI/Swagger version."""
         # OpenAPI 3.x
@@ -342,18 +343,18 @@ class APIAnalyzer:
                 return OpenAPIVersion.OPENAPI_3_0
             elif version_str.startswith("3.1"):
                 return OpenAPIVersion.OPENAPI_3_1
-        
+
         # Swagger 2.0
         if "swagger" in spec_data:
             return OpenAPIVersion.SWAGGER_2_0
-        
+
         return OpenAPIVersion.UNKNOWN
-    
+
     def _extract_api_version(self, spec_data: Dict[str, Any]) -> Optional[str]:
         """Extract API version from spec."""
         info = spec_data.get("info", {})
         return info.get("version")
-    
+
     def _parse_security_schemes(
         self,
         spec_data: Dict[str, Any],
@@ -361,7 +362,7 @@ class APIAnalyzer:
     ) -> List[SecurityScheme]:
         """Parse security scheme definitions."""
         schemes = []
-        
+
         if spec_version == OpenAPIVersion.SWAGGER_2_0:
             # Swagger 2.0: securityDefinitions
             security_defs = spec_data.get("securityDefinitions", {})
@@ -369,10 +370,10 @@ class APIAnalyzer:
             # OpenAPI 3.x: components.securitySchemes
             components = spec_data.get("components", {})
             security_defs = components.get("securitySchemes", {})
-        
+
         for name, definition in security_defs.items():
             scheme_type_str = definition.get("type", "")
-            
+
             # Map to SecuritySchemeType
             if scheme_type_str == "apiKey":
                 scheme_type = SecuritySchemeType.API_KEY
@@ -390,7 +391,7 @@ class APIAnalyzer:
                 scheme_type = SecuritySchemeType.OPENID_CONNECT
             else:
                 scheme_type = SecuritySchemeType.NONE
-            
+
             schemes.append(SecurityScheme(
                 name=name,
                 scheme_type=scheme_type,
@@ -400,9 +401,9 @@ class APIAnalyzer:
                 bearer_format=definition.get("bearerFormat"),
                 flows=definition.get("flows"),
             ))
-        
+
         return schemes
-    
+
     def _parse_servers(
         self,
         spec_data: Dict[str, Any],
@@ -414,7 +415,7 @@ class APIAnalyzer:
             host = spec_data.get("host", "")
             base_path = spec_data.get("basePath", "")
             schemes = spec_data.get("schemes", ["https"])
-            
+
             if host:
                 return [{
                     "url": f"{schemes[0]}://{host}{base_path}",
@@ -424,7 +425,7 @@ class APIAnalyzer:
         else:
             # OpenAPI 3.x: servers
             return spec_data.get("servers", [])
-    
+
     def _parse_endpoints(
         self,
         spec_data: Dict[str, Any],
@@ -433,15 +434,15 @@ class APIAnalyzer:
         """Parse API endpoints from spec."""
         endpoints = []
         paths = spec_data.get("paths", {})
-        
+
         for path, path_item in paths.items():
             # HTTP methods
             for method in ["get", "post", "put", "patch", "delete", "options", "head"]:
                 if method not in path_item:
                     continue
-                
+
                 operation = path_item[method]
-                
+
                 endpoints.append(APIEndpoint(
                     path=path,
                     method=method.upper(),
@@ -454,9 +455,9 @@ class APIAnalyzer:
                     tags=operation.get("tags", []),
                     deprecated=operation.get("deprecated", False),
                 ))
-        
+
         return endpoints
-    
+
     def _analyze_security(
         self,
         spec_data: Dict[str, Any],
@@ -466,30 +467,30 @@ class APIAnalyzer:
     ) -> List[APISecurityFinding]:
         """Analyze API security and generate findings."""
         findings = []
-        
+
         # Check for missing authentication
         findings.extend(self._check_missing_authentication(endpoints, global_security))
-        
+
         # Check for weak authentication
         findings.extend(self._check_weak_authentication(security_schemes))
-        
+
         # Check for BOLA vulnerabilities (API1)
         findings.extend(self._check_bola_vulnerabilities(endpoints))
-        
+
         # Check for excessive data exposure (API3)
         findings.extend(self._check_excessive_data_exposure(endpoints))
-        
+
         # Check for missing rate limiting (API4)
         findings.extend(self._check_missing_rate_limiting(spec_data))
-        
+
         # Check for broken function-level auth (API5)
         findings.extend(self._check_broken_function_auth(endpoints))
-        
+
         # Check for security misconfigurations (API7)
         findings.extend(self._check_security_misconfigurations(spec_data, endpoints))
-        
+
         return sorted(findings, key=lambda f: f.priority.value)
-    
+
     def _check_missing_authentication(
         self,
         endpoints: List[APIEndpoint],
@@ -497,11 +498,11 @@ class APIAnalyzer:
     ) -> List[APISecurityFinding]:
         """Check for endpoints without authentication (OWASP API2)."""
         findings = []
-        
+
         for endpoint in endpoints:
             # Check if endpoint has security defined
             has_security = bool(endpoint.security or global_security)
-            
+
             if not has_security and not endpoint.deprecated:
                 findings.append(APISecurityFinding(
                     finding_id=f"AUTH_MISSING_{endpoint.method}_{endpoint.path}",
@@ -512,16 +513,16 @@ class APIAnalyzer:
                     recommendation="Add authentication requirement (OAuth2, API Key, or JWT)",
                     owasp_api_top_10="API2:2023 Broken Authentication",
                 ))
-        
+
         return findings
-    
+
     def _check_weak_authentication(
         self,
         security_schemes: List[SecurityScheme],
     ) -> List[APISecurityFinding]:
         """Check for weak authentication schemes (OWASP API2)."""
         findings = []
-        
+
         for scheme in security_schemes:
             # HTTP Basic Auth is weak
             if scheme.scheme_type == SecuritySchemeType.HTTP_BASIC:
@@ -534,7 +535,7 @@ class APIAnalyzer:
                     cwe_id="CWE-287",
                     owasp_api_top_10="API2:2023 Broken Authentication",
                 ))
-            
+
             # API Key in query/path is weak
             if scheme.scheme_type == SecuritySchemeType.API_KEY:
                 if scheme.in_location in ("query", "path"):
@@ -547,16 +548,16 @@ class APIAnalyzer:
                         cwe_id="CWE-522",
                         owasp_api_top_10="API2:2023 Broken Authentication",
                     ))
-        
+
         return findings
-    
+
     def _check_bola_vulnerabilities(
         self,
         endpoints: List[APIEndpoint],
     ) -> List[APISecurityFinding]:
         """Check for Broken Object Level Authorization (OWASP API1)."""
         findings = []
-        
+
         # Patterns that indicate potential BOLA
         bola_patterns = [
             (r"/users/\{[^}]+\}", "user ID"),
@@ -565,7 +566,7 @@ class APIAnalyzer:
             (r"/documents/\{[^}]+\}", "document ID"),
             (r"/files/\{[^}]+\}", "file ID"),
         ]
-        
+
         for endpoint in endpoints:
             for pattern, resource_type in bola_patterns:
                 if re.search(pattern, endpoint.path, re.IGNORECASE):
@@ -579,32 +580,32 @@ class APIAnalyzer:
                         cwe_id="CWE-639",
                         owasp_api_top_10="API1:2023 Broken Object Level Authorization",
                     ))
-        
+
         return findings
-    
+
     def _check_excessive_data_exposure(
         self,
         endpoints: List[APIEndpoint],
     ) -> List[APISecurityFinding]:
         """Check for excessive data exposure (OWASP API3)."""
         findings = []
-        
+
         # GET endpoints without field filtering
         get_endpoints = [e for e in endpoints if e.method == "GET"]
-        
+
         for endpoint in get_endpoints:
             # Check if endpoint has field filtering parameters
             has_field_param = any(
                 p.get("name", "").lower() in ("fields", "select", "projection")
                 for p in endpoint.parameters
             )
-            
+
             # Check if endpoint returns list without pagination
             has_pagination = any(
                 p.get("name", "").lower() in ("limit", "offset", "page", "per_page", "page_size")
                 for p in endpoint.parameters
             )
-            
+
             if not has_field_param and "/list" in endpoint.path.lower():
                 findings.append(APISecurityFinding(
                     finding_id=f"DATA_EXPOSURE_{endpoint.method}_{endpoint.path}",
@@ -615,7 +616,7 @@ class APIAnalyzer:
                     recommendation="Add 'fields' or 'select' parameter for field filtering",
                     owasp_api_top_10="API3:2023 Broken Object Property Level Authorization",
                 ))
-            
+
             if not has_pagination and "/list" in endpoint.path.lower():
                 findings.append(APISecurityFinding(
                     finding_id=f"NO_PAGINATION_{endpoint.method}_{endpoint.path}",
@@ -626,23 +627,23 @@ class APIAnalyzer:
                     recommendation="Add pagination parameters (limit, offset, page)",
                     owasp_api_top_10="API4:2023 Unrestricted Resource Consumption",
                 ))
-        
+
         return findings
-    
+
     def _check_missing_rate_limiting(
         self,
         spec_data: Dict[str, Any],
     ) -> List[APISecurityFinding]:
         """Check for missing rate limiting (OWASP API4)."""
         findings = []
-        
+
         # Check for rate limiting in extensions or headers
         has_rate_limit = (
             "x-rate-limit" in spec_data or
             "rateLimit" in spec_data or
             any("rate" in str(k).lower() for k in spec_data.keys())
         )
-        
+
         if not has_rate_limit:
             findings.append(APISecurityFinding(
                 finding_id="RATE_LIMITING_MISSING",
@@ -653,16 +654,16 @@ class APIAnalyzer:
                 cwe_id="CWE-770",
                 owasp_api_top_10="API4:2023 Unrestricted Resource Consumption",
             ))
-        
+
         return findings
-    
+
     def _check_broken_function_auth(
         self,
         endpoints: List[APIEndpoint],
     ) -> List[APISecurityFinding]:
         """Check for broken function-level authorization (OWASP API5)."""
         findings = []
-        
+
         # Admin/internal endpoints
         admin_patterns = [
             r"/admin/",
@@ -670,7 +671,7 @@ class APIAnalyzer:
             r"/manage/",
             r"/configure/",
         ]
-        
+
         for endpoint in endpoints:
             for pattern in admin_patterns:
                 if re.search(pattern, endpoint.path, re.IGNORECASE):
@@ -679,7 +680,7 @@ class APIAnalyzer:
                         "scope" in str(s) or "role" in str(s).lower()
                         for s in endpoint.security
                     )
-                    
+
                     if not has_role_check:
                         findings.append(APISecurityFinding(
                             finding_id=f"FUNC_AUTH_{endpoint.method}_{endpoint.path}",
@@ -691,9 +692,9 @@ class APIAnalyzer:
                             cwe_id="CWE-285",
                             owasp_api_top_10="API5:2023 Broken Function Level Authorization",
                         ))
-        
+
         return findings
-    
+
     def _check_security_misconfigurations(
         self,
         spec_data: Dict[str, Any],
@@ -701,7 +702,7 @@ class APIAnalyzer:
     ) -> List[APISecurityFinding]:
         """Check for security misconfigurations (OWASP API7)."""
         findings = []
-        
+
         # Check for insecure HTTP (should use HTTPS)
         servers = spec_data.get("servers", [])
         for server in servers:
@@ -716,12 +717,12 @@ class APIAnalyzer:
                     cwe_id="CWE-319",
                     owasp_api_top_10="API7:2023 Server Side Request Forgery",
                 ))
-        
+
         # Check for verbose error responses
         for endpoint in endpoints:
             responses = endpoint.responses
             error_responses = {k: v for k, v in responses.items() if k.startswith("4") or k.startswith("5")}
-            
+
             for status_code, response in error_responses.items():
                 description = response.get("description", "").lower()
                 if any(word in description for word in ["stack", "trace", "debug", "exception"]):
@@ -735,9 +736,9 @@ class APIAnalyzer:
                         cwe_id="CWE-209",
                         owasp_api_top_10="API7:2023 Server Side Request Forgery",
                     ))
-        
+
         return findings
-    
+
     def _detect_rate_limiting(self, spec_data: Dict[str, Any]) -> bool:
         """Detect if API has rate limiting configuration."""
         # Check extensions
@@ -746,7 +747,7 @@ class APIAnalyzer:
             "x-ratelimit" in spec_data or
             "rateLimit" in spec_data
         )
-    
+
     def _detect_cors_config(self, spec_data: Dict[str, Any]) -> bool:
         """Detect if API has CORS configuration."""
         # Check extensions or headers
@@ -755,45 +756,45 @@ class APIAnalyzer:
             "cors" in spec_data or
             any("cors" in str(k).lower() for k in spec_data.keys())
         )
-    
+
     def _discover_fastapi_endpoints(self, code_path: Path) -> List[APIEndpoint]:
         """Discover FastAPI endpoints from code (basic implementation)."""
         endpoints = []
-        
+
         # Scan Python files for FastAPI route decorators
         for py_file in code_path.rglob("*.py"):
             try:
                 content = py_file.read_text(encoding="utf-8")
-                
+
                 # Match @app.get("/path"), @router.post("/path"), etc.
                 route_pattern = r'@(?:app|router))\.(get|post|put|patch|delete)\(["\']([^"\']+)["\']\)'
                 matches = re.findall(route_pattern, content)
-                
+
                 for method, path in matches:
                     endpoints.append(APIEndpoint(
                         path=path,
                         method=method.upper(),
                         summary=f"FastAPI endpoint from {py_file.name}",
                     ))
-                
+
             except Exception as e:
                 logger.warning(f"Failed to parse FastAPI file {py_file}: {e}")
-        
+
         return endpoints
-    
+
     def _discover_flask_endpoints(self, code_path: Path) -> List[APIEndpoint]:
         """Discover Flask endpoints from code (basic implementation)."""
         endpoints = []
-        
+
         # Scan Python files for Flask route decorators
         for py_file in code_path.rglob("*.py"):
             try:
                 content = py_file.read_text(encoding="utf-8")
-                
+
                 # Match @app.route("/path", methods=["GET"])
                 route_pattern = r'@(?:app|bp)|blueprint)\.route\(["\']([^"\']+)["\']\)'
                 matches = re.findall(route_pattern, content)
-                
+
                 for path in matches:
                     # Default to GET if not specified
                     endpoints.append(APIEndpoint(
@@ -801,10 +802,10 @@ class APIAnalyzer:
                         method="GET",
                         summary=f"Flask endpoint from {py_file.name}",
                     ))
-                
+
             except Exception as e:
                 logger.warning(f"Failed to parse Flask file {py_file}: {e}")
-        
+
         return endpoints
 
 

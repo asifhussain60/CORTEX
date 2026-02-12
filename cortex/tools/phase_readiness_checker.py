@@ -20,15 +20,13 @@ Copyright © 2025 Asif Hussain. All rights reserved.
 
 import json
 import re
+import sqlite3
 import subprocess
 import sys
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
-
-import sqlite3
-
 
 # ================================================================================
 # CORE-029: Response Header Enforcement (TIER 0 - IMMUTABLE)
@@ -39,26 +37,26 @@ import sqlite3
 
 class ResponseHeaderEnforcer:
     """Enforces CORE-029 response header formatting on readiness reports."""
-    
+
     @staticmethod
     def wrap_response(response: str, operation: str, phase: str = "PHASE-PRODUCTION-READY") -> str:
         """
         Wrap readiness report with mandatory CORTEX header.
-        
+
         Args:
             response: The report content to wrap
             operation: Name of the operation (e.g., "Phase Readiness Check")
             phase: Execution phase (default: PHASE-PRODUCTION-READY)
-        
+
         Returns:
             Report with prepended CORTEX header
-        
+
         Raises:
             ValueError: If response already has header (prevent double-wrapping)
         """
         if response.startswith("## 🧠 CORTEX"):
             raise ValueError("Response already has header - avoid double wrapping")
-        
+
         header = (
             f"## 🧠 CORTEX {operation}\n"
             f"**Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** MasterOrchestrator ✅\n"
@@ -155,7 +153,7 @@ class PhaseReadinessChecker:
     def check_phase_readiness(self, phase_id: str) -> PhaseReadinessReport:
         """
         Check if a phase is ready for lock.
-        
+
         Per CORE-029: Callers should convert the returned PhaseReadinessReport to
         string (via to_yaml() or to_markdown()) and wrap with ResponseHeaderEnforcer
         before returning to user/orchestrator to ensure header compliance.

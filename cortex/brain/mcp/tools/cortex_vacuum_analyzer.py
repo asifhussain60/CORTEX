@@ -7,14 +7,14 @@ Generates migration plans without modifying any files.
 Author: Asif Hussain
 """
 
+import hashlib
 import json
 import os
 import re
-from pathlib import Path
-from typing import Dict, List, Set, Tuple, Optional
-from dataclasses import dataclass, asdict, field
+from dataclasses import asdict, dataclass, field
 from datetime import datetime
-import hashlib
+from pathlib import Path
+from typing import Dict, List, Optional, Set, Tuple
 
 
 @dataclass
@@ -67,7 +67,7 @@ class MigrationPlan:
 class CortexVacuumAnalyzer:
     """
     Analyzes CORTEX repository structure and generates migration plans.
-    
+
     This tool:
     - Scans all files and folders
     - Identifies naming violations
@@ -90,7 +90,7 @@ class CortexVacuumAnalyzer:
 
     def analyze(self) -> Dict:
         """Execute full analysis pipeline."""
-        print(f"🔍 Starting CORTEX Vacuum Analysis...")
+        print("🔍 Starting CORTEX Vacuum Analysis...")
         print(f"   Root: {self.repo_root}")
 
         # Phase 1: Inventory
@@ -200,7 +200,7 @@ class CortexVacuumAnalyzer:
                 issue_type='name_violation',
                 severity='warning',
                 description=f"Filename too long ({len(name_no_ext)} chars): {filename}",
-                suggested_action=f'Shorten to ≤25 chars with meaningful names'
+                suggested_action='Shorten to ≤25 chars with meaningful names'
             ))
 
     def _find_all_references(self) -> None:
@@ -313,7 +313,7 @@ class CortexVacuumAnalyzer:
 
     def _determine_destination(self, file_path: str) -> Tuple[str, str]:
         """Determine the destination folder for a file with intelligent routing.
-        
+
         Routing logic (evaluated in order):
         1. Executive documents (high-level decision/brief documents)
         2. Phase documentation (phase planning, vision, strategy)
@@ -330,7 +330,7 @@ class CortexVacuumAnalyzer:
             pass  # Fall through to non-markdown handling below
 
         # INTELLIGENT ROUTING FOR DOCUMENTATION FILES
-        
+
         # 1. EXECUTIVE DOCUMENTS → docs/executive/
         # High-level decision and brief documents
         executive_patterns = ['executive', 'decision', '-brief', 'brief.md']
@@ -379,7 +379,7 @@ class CortexVacuumAnalyzer:
             return 'docs/reviews', 'Report documentation'
 
         # LEGACY ROUTING (for non-markdown or previously handled patterns)
-        
+
         # Explicitly stated patterns (legacy)
         if filename.startswith('EXECUTIVE'):
             return 'docs/executive', 'Executive documentation'
@@ -427,10 +427,10 @@ class CortexVacuumAnalyzer:
     def _suggest_filename(self, name_stem: str, ext: str) -> str:
         """
         Suggest an intelligently abbreviated kebab-case filename for docs/configs (max 25 chars).
-        
+
         Note: Python files (.py) should use snake_case per CORE-028 and PEP 8.
         This method suggests kebab-case for markdown and configuration files.
-        
+
         Strategy:
         1. Remove nonsemantic words (old, new, fixed, etc.)
         2. Keep complete words unless they cause > 25 char overflow
@@ -444,7 +444,7 @@ class CortexVacuumAnalyzer:
         # Split and clean
         words = re.split(r'[-_\s]+', name_stem.lower())
         words = [w for w in words if w and w not in remove_words]
-        
+
         if not words:
             return f'untitled{ext}'
 
@@ -477,7 +477,7 @@ class CortexVacuumAnalyzer:
             'verification': 'verify',
             'executive': 'exec',
         }
-        
+
         words_pass2 = [aggressive_abbrev.get(w, w) for w in words]
         suggested = '-'.join(words_pass2)
 
@@ -487,7 +487,7 @@ class CortexVacuumAnalyzer:
             while len(suggested) > 25 and len(words_pass2) > 1:
                 words_pass2 = words_pass2[:-1]
                 suggested = '-'.join(words_pass2)
-                
+
         return suggested + ext
 
     def _is_marked_for_deletion(self, file_path: str) -> bool:
@@ -576,11 +576,11 @@ class CortexVacuumAnalyzer:
 def run_analysis(repo_root: str, output_dir: Optional[str] = None) -> Dict:
     """
     Run complete analysis and save results.
-    
+
     Args:
         repo_root: Root directory of CORTEX repository
         output_dir: Directory to save analysis results
-        
+
     Returns:
         Analysis report dictionary
     """
@@ -610,8 +610,8 @@ def run_analysis(repo_root: str, output_dir: Optional[str] = None) -> Dict:
             }, f, indent=2, default=str)
 
         print(f"\n✓ Analysis saved to {output_path}")
-        print(f"  - analysis-report.json")
-        print(f"  - migration-plan.json")
-        print(f"  - reference-map.json")
+        print("  - analysis-report.json")
+        print("  - migration-plan.json")
+        print("  - reference-map.json")
 
     return report

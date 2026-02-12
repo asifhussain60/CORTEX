@@ -17,7 +17,7 @@ Rules: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings)
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
 
 
 class FaultSeverity(Enum):
@@ -63,14 +63,14 @@ class FaultReport:
 class FaultDetectionReporter:
     """
     Detects and reports implementation faults in CORTEX components.
-    
+
     Strategy:
     1. Analyze verification results from TruthVerificationEngine
     2. Categorize issues by type (wiring, testing, docs, etc.)
     3. Assign severity levels
     4. Generate actionable recommendations
     5. Sort by priority (errors first)
-    
+
     Use Cases:
     - Missing orchestrator files
     - Unregistered wiring
@@ -85,22 +85,22 @@ class FaultDetectionReporter:
         pass
 
     def detect_faults(
-        self, 
-        topic: str, 
+        self,
+        topic: str,
         verification_results: Dict[str, Any]
     ) -> FaultReport:
         """
         Detect faults from verification results.
-        
+
         Args:
             topic: Component or topic being analyzed
             verification_results: Results from TruthVerificationEngine
-            
+
         Returns:
             FaultReport with detected issues and recommendations
         """
         faults: List[Fault] = []
-        
+
         # Check for missing orchestrator
         if not verification_results.get("orchestrator_exists", True):
             faults.append(Fault(
@@ -117,7 +117,7 @@ class FaultDetectionReporter:
                 ),
                 file_path=verification_results.get("file_path")
             ))
-        
+
         # Check for missing wiring registration
         if verification_results.get("orchestrator_exists") and not verification_results.get("wiring_registered", True):
             faults.append(Fault(
@@ -134,7 +134,7 @@ class FaultDetectionReporter:
                 ),
                 file_path="cortex/wiring/specifications/wiring.yaml"
             ))
-        
+
         # Check for missing test coverage
         test_coverage = verification_results.get("test_coverage", 100)
         if test_coverage == 0:
@@ -166,7 +166,7 @@ class FaultDetectionReporter:
                     f"4. Current: {test_coverage}%, Target: 80%"
                 )
             ))
-        
+
         # Check for missing documentation
         if verification_results.get("documentation") is None:
             faults.append(Fault(
@@ -183,7 +183,7 @@ class FaultDetectionReporter:
                 ),
                 file_path=verification_results.get("file_path")
             ))
-        
+
         # Check for interface compliance
         if not verification_results.get("implements_interface", True):
             faults.append(Fault(
@@ -199,20 +199,20 @@ class FaultDetectionReporter:
                     "4. Add type hints for all methods"
                 )
             ))
-        
+
         # Sort faults by severity (errors first)
         faults.sort(key=lambda f: f.severity.value, reverse=True)
-        
+
         # Generate summary
         error_count = sum(1 for f in faults if f.severity == FaultSeverity.ERROR)
         warning_count = sum(1 for f in faults if f.severity == FaultSeverity.WARNING)
         info_count = sum(1 for f in faults if f.severity == FaultSeverity.INFO)
-        
+
         if not faults:
             summary = f"✅ {topic} has no detected issues"
         else:
             summary = f"⚠️ {topic} has {len(faults)} issue(s): {error_count} errors, {warning_count} warnings"
-        
+
         return FaultReport(
             topic=topic,
             faults=faults,
@@ -225,10 +225,10 @@ class FaultDetectionReporter:
     def format_report(self, report: FaultReport) -> str:
         """
         Format fault report for user display.
-        
+
         Args:
             report: FaultReport to format
-            
+
         Returns:
             Formatted string ready for display
         """
@@ -238,10 +238,10 @@ class FaultDetectionReporter:
             report.summary,
             ""
         ]
-        
+
         if report.faults:
             lines.append("### Issues Detected\n")
-            
+
             for i, fault in enumerate(report.faults, start=1):
                 # Severity emoji
                 severity_emoji = {
@@ -249,59 +249,59 @@ class FaultDetectionReporter:
                     FaultSeverity.WARNING: "⚠️",
                     FaultSeverity.INFO: "ℹ️"
                 }[fault.severity]
-                
+
                 lines.append(f"**{i}. {severity_emoji} {fault.title}** ({fault.category.value})")
                 lines.append(f"   {fault.description}")
                 lines.append("")
-                lines.append(f"   **Fix:**")
+                lines.append("   **Fix:**")
                 for line in fault.recommendation.split('\n'):
                     lines.append(f"   {line}")
-                
+
                 if fault.file_path:
                     lines.append(f"   **File:** `{fault.file_path}`")
-                
+
                 lines.append("")
         else:
             lines.append("No issues detected! ✅")
-        
+
         return "\n".join(lines)
 
     def get_fault_priority(self, fault: Fault) -> int:
         """
         Get priority score for a fault (higher = more urgent).
-        
+
         Args:
             fault: Fault to score
-            
+
         Returns:
             Priority score (0-10)
         """
         base_score = fault.severity.value * 3
-        
+
         # Critical categories get priority boost
         if fault.category == FaultCategory.IMPLEMENTATION:
             base_score += 2
         elif fault.category == FaultCategory.INTERFACE:
             base_score += 1
-        
+
         return min(base_score, 10)
 
 
 # Example usage for testing
 if __name__ == "__main__":
     reporter = FaultDetectionReporter()
-    
+
     # Test with missing orchestrator
     verification = {
         "orchestrator_exists": False,
         "file_path": None
     }
-    
+
     report = reporter.detect_faults("NonExistentOrchestrator", verification)
     print(reporter.format_report(report))
-    
+
     print("\n" + "="*60 + "\n")
-    
+
     # Test with wiring issue
     verification2 = {
         "orchestrator_exists": True,
@@ -309,6 +309,6 @@ if __name__ == "__main__":
         "test_coverage": 0,
         "documentation": None
     }
-    
+
     report2 = reporter.detect_faults("UnwiredOrchestrator", verification2)
     print(reporter.format_report(report2))

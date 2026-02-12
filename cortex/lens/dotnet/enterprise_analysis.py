@@ -6,12 +6,12 @@ visualization, and repository onboarding integration.
 AC-PHASE55-S4-S9: Multi-stage .NET analyzers + integration
 """
 
-from dataclasses import dataclass, field
-from pathlib import Path
-from typing import Dict, List, Optional, Set, Any
-from xml.etree import ElementTree as ET
 import logging
 import re
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Set
+from xml.etree import ElementTree as ET
 
 logger = logging.getLogger(__name__)
 

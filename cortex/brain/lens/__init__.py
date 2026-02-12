@@ -15,16 +15,16 @@ Exports:
 """
 
 from cortex.brain.lens.pipeline import (
-    LENSPipeline,
-    LanguagePhaseOutput,
-    ExaminationPhaseOutput,
-    SynthesisPhaseOutput,
-    KnowledgePhaseOutput,
-    LENSPipelineOutput,
-    LanguagePhase,
     ExaminationPhase,
-    SynthesisPhase,
+    ExaminationPhaseOutput,
     KnowledgePhase,
+    KnowledgePhaseOutput,
+    LanguagePhase,
+    LanguagePhaseOutput,
+    LENSPipeline,
+    LENSPipelineOutput,
+    SynthesisPhase,
+    SynthesisPhaseOutput,
 )
 
 __all__ = [

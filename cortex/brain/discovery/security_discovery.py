@@ -19,14 +19,14 @@ Governance: CORE-008, CORE-011, CORE-012, CORE-030
 import json
 import logging
 import re
-import yaml
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Dict, Any, List, Optional
+from typing import Any, Dict, List, Optional
+
+import yaml
 
 from cortex.brain.discovery import DiscoveryPlugin
-
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +34,7 @@ logger = logging.getLogger(__name__)
 class AuthProviderType(Enum):
     """
     Authentication provider types.
-    
+
     Attributes:
         JWT: JSON Web Token
         OAUTH: OAuth 2.0
@@ -50,7 +50,7 @@ class AuthProviderType(Enum):
 class LoggingFramework(Enum):
     """
     Logging framework types.
-    
+
     Attributes:
         SERILOG: Serilog (C#)
         WINSTON: Winston (Node.js)
@@ -66,65 +66,65 @@ class LoggingFramework(Enum):
 class SecurityDiscovery(DiscoveryPlugin):
     """
     Discovers security and monitoring configurations.
-    
+
     Analyzes authentication providers, authorization policies,
     logging frameworks, APM integrations, and security scanning tools.
-    
+
     Features:
     - Multi-auth provider support (JWT, OAuth, SAML)
     - Authorization policy detection (RBAC, ABAC)
     - Logging framework discovery
     - APM integration detection
     - Security scanning tool discovery
-    
+
     Example:
         ```python
         discovery = SecurityDiscovery()
         topology = discovery.discover(Path("/my/repo"))
-        
+
         for auth in topology["authentication"]:
             print(f"Auth provider: {auth['type']}")
         ```
     """
-    
+
     def __init__(self) -> None:
         """Initialize security discovery."""
         self.supported_features = ["authentication", "authorization", "logging", "apm", "security_scanning"]
         logger.info("SecurityDiscovery initialized")
-    
+
     def get_supported_features(self) -> List[str]:
         """
         Get list of supported security features.
-        
+
         Returns:
             List of feature names
         """
         return self.supported_features
-    
+
     def discover(self, repo_path: Path) -> Dict[str, Any]:
         """
         Discover security and monitoring topology in repository.
-        
+
         Args:
             repo_path: Path to repository to scan
-            
+
         Returns:
             Dictionary containing security topology
         """
         logger.info(f"Discovering security topology in {repo_path}")
-        
+
         authentication = self.detect_authentication(repo_path)
         authorization = self.detect_authorization(repo_path)
         logging_config = self.detect_logging(repo_path)
         apm_config = self.detect_apm(repo_path)
         security_scanning = self.detect_security_scanning(repo_path)
-        
+
         logger.info(
             f"Discovered {len(authentication)} auth providers, "
             f"logging: {logging_config['framework'] if logging_config else 'none'}, "
             f"APM: {apm_config['provider'] if apm_config else 'none'}"
         )
-        
+
         return {
             "authentication": authentication,
             "authorization": authorization,
@@ -134,19 +134,19 @@ class SecurityDiscovery(DiscoveryPlugin):
             "total_auth_providers": len(authentication),
             "total_security_tools": len(security_scanning) if security_scanning else 0,
         }
-    
+
     def detect_authentication(self, repo_path: Path) -> List[Dict[str, Any]]:
         """
         Detect authentication providers.
-        
+
         Args:
             repo_path: Path to repository
-            
+
         Returns:
             List of authentication providers
         """
         providers = []
-        
+
         # Check for JWT
         for config_file in repo_path.rglob("appsettings*.json"):
             try:
@@ -160,7 +160,7 @@ class SecurityDiscovery(DiscoveryPlugin):
                             })
             except Exception as e:
                 logger.debug(f"Error reading auth config from {config_file}: {e}")
-        
+
         # Check for OAuth
         for env_file in repo_path.rglob(".env*"):
             try:
@@ -172,7 +172,7 @@ class SecurityDiscovery(DiscoveryPlugin):
                     })
             except Exception as e:
                 logger.debug(f"Error reading OAuth config from {env_file}: {e}")
-        
+
         # Check for SAML
         for saml_file in repo_path.rglob("*.xml"):
             if "saml" in saml_file.name.lower():
@@ -185,17 +185,17 @@ class SecurityDiscovery(DiscoveryPlugin):
                         })
                 except Exception as e:
                     logger.debug(f"Error reading SAML config from {saml_file}: {e}")
-        
+
         logger.debug(f"Detected {len(providers)} authentication providers")
         return providers
-    
+
     def detect_authorization(self, repo_path: Path) -> Optional[Dict[str, Any]]:
         """
         Detect authorization policies.
-        
+
         Args:
             repo_path: Path to repository
-            
+
         Returns:
             Authorization policy information or None
         """
@@ -211,7 +211,7 @@ class SecurityDiscovery(DiscoveryPlugin):
                     }
             except Exception:
                 pass
-        
+
         # Check for ABAC
         for policy_file in repo_path.rglob("*authorization*.yaml"):
             try:
@@ -225,16 +225,16 @@ class SecurityDiscovery(DiscoveryPlugin):
                         }
             except Exception:
                 pass
-        
+
         return None
-    
+
     def detect_logging(self, repo_path: Path) -> Optional[Dict[str, Any]]:
         """
         Detect logging framework.
-        
+
         Args:
             repo_path: Path to repository
-            
+
         Returns:
             Logging framework information or None
         """
@@ -250,7 +250,7 @@ class SecurityDiscovery(DiscoveryPlugin):
                     }
             except Exception:
                 pass
-        
+
         # Check for Winston
         for js_file in repo_path.rglob("*.js"):
             try:
@@ -263,7 +263,7 @@ class SecurityDiscovery(DiscoveryPlugin):
                     }
             except Exception:
                 pass
-        
+
         # Check for Loguru
         for py_file in repo_path.rglob("*.py"):
             try:
@@ -276,16 +276,16 @@ class SecurityDiscovery(DiscoveryPlugin):
                     }
             except Exception:
                 pass
-        
+
         return None
-    
+
     def detect_apm(self, repo_path: Path) -> Optional[Dict[str, Any]]:
         """
         Detect APM integration.
-        
+
         Args:
             repo_path: Path to repository
-            
+
         Returns:
             APM provider information or None
         """
@@ -297,7 +297,7 @@ class SecurityDiscovery(DiscoveryPlugin):
                 "provider": "datadog",
                 "config_file": str(datadog_config),
             }
-        
+
         # Check for New Relic
         newrelic_config = repo_path / "newrelic.ini"
         if newrelic_config.exists():
@@ -306,7 +306,7 @@ class SecurityDiscovery(DiscoveryPlugin):
                 "provider": "newrelic",
                 "config_file": str(newrelic_config),
             }
-        
+
         # Check for Prometheus
         for prometheus_file in repo_path.rglob("prometheus*.yml"):
             logger.debug(f"Detected Prometheus: {prometheus_file}")
@@ -314,28 +314,28 @@ class SecurityDiscovery(DiscoveryPlugin):
                 "provider": "prometheus",
                 "config_file": str(prometheus_file),
             }
-        
+
         for prometheus_file in repo_path.rglob("prometheus*.yaml"):
             logger.debug(f"Detected Prometheus: {prometheus_file}")
             return {
                 "provider": "prometheus",
                 "config_file": str(prometheus_file),
             }
-        
+
         return None
-    
+
     def detect_security_scanning(self, repo_path: Path) -> List[Dict[str, Any]]:
         """
         Detect security scanning tools.
-        
+
         Args:
             repo_path: Path to repository
-            
+
         Returns:
             List of security scanning tools
         """
         tools = []
-        
+
         # Check for Snyk
         snyk_file = repo_path / ".snyk"
         if snyk_file.exists():
@@ -343,7 +343,7 @@ class SecurityDiscovery(DiscoveryPlugin):
                 "tool": "snyk",
                 "config_file": str(snyk_file),
             })
-        
+
         # Check for SonarQube
         sonar_file = repo_path / "sonar-project.properties"
         if sonar_file.exists():
@@ -351,6 +351,6 @@ class SecurityDiscovery(DiscoveryPlugin):
                 "tool": "sonarqube",
                 "config_file": str(sonar_file),
             })
-        
+
         logger.debug(f"Detected {len(tools)} security scanning tools")
         return tools

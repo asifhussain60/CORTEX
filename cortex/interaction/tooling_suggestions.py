@@ -9,11 +9,12 @@ Description: Wire infrastructure awareness into InteractionOrchestrator.
              - Environment-specific tool suggestions
 """
 
-from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
+from typing import Any, Dict, List, Optional
+
 from cortex.infrastructure.capability_detector import CapabilityDetector
-from cortex.infrastructure.infrastructure_scanner import EnvironmentType
 from cortex.infrastructure.github_client import GitHubClient
+from cortex.infrastructure.infrastructure_scanner import EnvironmentType
 
 
 @dataclass

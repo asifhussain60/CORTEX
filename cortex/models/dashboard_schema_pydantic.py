@@ -10,10 +10,10 @@ Canonical name: dashboard_schema_pydantic.py (no version numbers per CORE-035)
 Replaces: Old dataclass-based dashboard_schema.py (migration planned for Phase-1)
 """
 
-from typing import Optional, List, Dict, Any
 from datetime import datetime
-from pydantic import BaseModel, Field, validator
+from typing import Any, Dict, List, Optional
 
+from pydantic import BaseModel, Field, validator
 
 # ============================================================================
 # METRICS MODELS
@@ -26,7 +26,7 @@ class CodeMetrics(BaseModel):
     maintainability_index: Optional[float] = Field(None, ge=0, le=100)
     test_coverage_percent: Optional[float] = Field(None, ge=0, le=100)
     duplication_percent: Optional[float] = Field(None, ge=0, le=100)
-    
+
     class Config:
         title = "Code Metrics"
         description = "Code quality, complexity, and coverage metrics"
@@ -38,7 +38,7 @@ class DependencyMetrics(BaseModel):
     up_to_date: Optional[int] = Field(None, ge=0)
     outdated: Optional[int] = Field(None, ge=0)
     vulnerable: Optional[int] = Field(None, ge=0)
-    
+
     class Config:
         title = "Dependency Metrics"
         description = "Dependency version and vulnerability tracking"
@@ -51,7 +51,7 @@ class SecurityMetrics(BaseModel):
     medium_vulnerabilities: Optional[int] = Field(None, ge=0)
     low_vulnerabilities: Optional[int] = Field(None, ge=0)
     security_score: Optional[float] = Field(None, ge=0, le=100)
-    
+
     class Config:
         title = "Security Metrics"
         description = "Vulnerability counts and security scoring"
@@ -63,7 +63,7 @@ class PerformanceMetrics(BaseModel):
     test_execution_time_seconds: Optional[float] = Field(None, ge=0)
     deployment_frequency_days: Optional[float] = Field(None, ge=0)
     mean_time_to_recovery_hours: Optional[float] = Field(None, ge=0)
-    
+
     class Config:
         title = "Performance Metrics"
         description = "Build, test, and deployment performance indicators"
@@ -84,7 +84,7 @@ class Repository(BaseModel):
     file_count: Optional[int] = Field(None, ge=0, description="Total file count")
     health_score: Optional[float] = Field(None, ge=0, le=100, description="0-100 health score")
     last_analyzed_at: Optional[datetime] = Field(None, description="Last analysis timestamp")
-    
+
     @validator('slug')
     def slug_must_be_kebab_case(cls, v):
         """Enforce kebab-case for slug"""
@@ -93,7 +93,7 @@ class Repository(BaseModel):
         if v.startswith('-') or v.endswith('-'):
             raise ValueError("slug cannot start or end with hyphen")
         return v.lower()
-    
+
     class Config:
         title = "Repository"
         description = "Repository metadata and core information"
@@ -114,7 +114,7 @@ class UseCase(BaseModel):
     technical_details: Dict[str, List[str]] = Field(default_factory=dict, description="endpoints, data_stores, integrations")
     business_value: str = Field("", description="Why this use case matters")
     confidence_score: float = Field(0.5, ge=0.0, le=1.0, description="Detection confidence 0-1")
-    
+
     class Config:
         title = "Use Case"
         description = "Business use case with actors, flows, and value proposition"
@@ -130,7 +130,7 @@ class Overview(BaseModel):
     critical_issues: Optional[List[str]] = Field(None, description="Active critical issues")
     upcoming_maintenance: Optional[List[str]] = Field(None, description="Scheduled maintenance")
     use_cases: Optional[List[UseCase]] = Field(None, description="Business use cases")
-    
+
     class Config:
         title = "Overview"
         description = "Repository summary and key information"
@@ -146,7 +146,7 @@ class LensAnalysis(BaseModel):
     pattern_violations: Optional[List[str]] = Field(None)
     anti_patterns_detected: Optional[List[Dict[str, Any]]] = Field(None)
     recommendations: Optional[List[str]] = Field(None)
-    
+
     class Config:
         title = "LENS Analysis"
         description = "Code intelligence and pattern analysis"
@@ -164,26 +164,26 @@ class Dashboard(BaseModel):
     schema_version: str = Field("3.0", description="Schema version (3.0)")
     repo: Repository = Field(..., description="Repository metadata")
     overview: Overview = Field(..., description="Repository overview")
-    
+
     # Metrics sections
     metrics: Optional[Dict[str, Any]] = Field(None, description="Code metrics")
     dependencies: Optional[Dict[str, Any]] = Field(None, description="Dependency info")
     security: Optional[Dict[str, Any]] = Field(None, description="Security metrics")
     performance: Optional[Dict[str, Any]] = Field(None, description="Performance metrics")
-    
+
     # Analysis sections
     lens: Optional[LensAnalysis] = Field(None, description="LENS analysis")
-    
+
     # Metadata
     metadata: Optional[Dict[str, Any]] = Field(None, description="Generation metadata")
-    
+
     @validator('schema_version')
     def schema_version_must_be_v3(cls, v):
         """Enforce schema version 3.0"""
         if v != "3.0":
             raise ValueError("schema_version must be '3.0'")
         return v
-    
+
     class Config:
         title = "Dashboard"
         description = "Complete repository intelligence dashboard (schema v3.0)"
@@ -223,7 +223,7 @@ class Registry(BaseModel):
     schema_version: str = Field("3.0")
     repositories: List[RepositoryTile] = Field(default_factory=list)
     last_updated: datetime = Field(default_factory=datetime.now)
-    
+
     class Config:
         title = "Repository Registry"
         description = "Index of all repository dashboards"
@@ -240,7 +240,7 @@ class GenerationMetadata(BaseModel):
     generator_name: str = Field(default="cortex-v3.0")
     analysis_duration_seconds: Optional[float] = Field(None, ge=0)
     adapter_type: str = Field(default="json", description="Data adapter used")
-    
+
     class Config:
         title = "Generation Metadata"
         description = "Dashboard generation tracking and metadata"
@@ -253,11 +253,11 @@ class GenerationMetadata(BaseModel):
 def create_empty_dashboard(slug: str, display_name: str) -> Dashboard:
     """
     Create minimal dashboard with required fields only
-    
+
     Args:
         slug: Repository slug (kebab-case)
         display_name: Human-readable repo name
-    
+
     Returns:
         Dashboard with required fields populated
     """
@@ -280,7 +280,7 @@ def create_full_dashboard(
 ) -> Dashboard:
     """
     Create fully-populated dashboard with common fields
-    
+
     Args:
         slug: Repository slug
         display_name: Human-readable name
@@ -290,7 +290,7 @@ def create_full_dashboard(
         tech_stack: Technology list
         total_loc: Total lines of code
         file_count: Total file count
-    
+
     Returns:
         Fully populated Dashboard
     """

@@ -10,12 +10,11 @@ CORE-011: Type hints mandatory
 CORE-012: Google-style docstrings
 """
 
+import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import List, Dict, Optional, Any
 from enum import Enum
-
-import logging
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 

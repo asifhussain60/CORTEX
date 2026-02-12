@@ -6,8 +6,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 import logging
+
 from cortex.mcp.server import MCPServer
-from cortex.mcp.tool_registry import get_mcp_tool_registry, ToolCategory
+from cortex.mcp.tool_registry import ToolCategory, get_mcp_tool_registry
 
 logging.basicConfig(level=logging.ERROR)
 

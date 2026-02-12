@@ -9,10 +9,10 @@ Author: CORTEX Framework
 
 import ast
 import logging
+from collections import defaultdict
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Set, Tuple
-from dataclasses import dataclass
-from collections import defaultdict
 
 logger = logging.getLogger(__name__)
 
@@ -30,48 +30,48 @@ class DuplicateViolation:
 
 class DuplicateDetector:
     """Detects duplicate implementations across CORTEX codebase."""
-    
+
     def __init__(self, workspace_root: Path):
         self.workspace_root = workspace_root
         self.cortex_root = workspace_root / "cortex"
         self.violations: List[DuplicateViolation] = []
-        
+
     def detect_all_duplicates(self) -> List[DuplicateViolation]:
         """Detect all types of duplicate implementations."""
         logger.info("Starting comprehensive duplicate detection...")
-        
+
         # Reset violations
         self.violations = []
-        
+
         # Detect different types of duplicates
         self._detect_class_duplicates()
         self._detect_interface_duplicates()
         self._detect_mcp_tool_duplicates()
-        
+
         logger.info(f"Found {len(self.violations)} duplicate violations")
         return self.violations
-    
+
     def _detect_class_duplicates(self) -> None:
         """Detect duplicate class definitions."""
         class_locations: Dict[str, List[Path]] = defaultdict(list)
-        
+
         # Scan all Python files for class definitions
         for py_file in self.cortex_root.rglob("*.py"):
             if py_file.name.startswith("test_") or "/test" in str(py_file):
                 continue  # Skip test files
-                
+
             try:
                 with open(py_file, 'r', encoding='utf-8') as f:
                     content = f.read()
                     tree = ast.parse(content)
-                    
+
                 for node in ast.walk(tree):
                     if isinstance(node, ast.ClassDef):
                         class_locations[node.name].append(py_file)
-                        
+
             except (SyntaxError, UnicodeDecodeError) as e:
                 logger.warning(f"Could not parse {py_file}: {e}")
-        
+
         # Find duplicates
         for class_name, paths in class_locations.items():
             if len(paths) > 1:
@@ -79,7 +79,7 @@ class DuplicateDetector:
                 severity = "CRITICAL" if class_name in {
                     "ConversationProtocol", "MasterOrchestrator", "InteractionOrchestrator"
                 } else "HIGH"
-                
+
                 violation = DuplicateViolation(
                     class_name=class_name,
                     paths=paths,
@@ -89,7 +89,7 @@ class DuplicateDetector:
                     remediation=f"Consolidate {class_name} into single canonical implementation"
                 )
                 self.violations.append(violation)
-    
+
     def _detect_interface_duplicates(self) -> None:
         """Detect multiple implementations of same interface with different behavior."""
         # Look for common interface patterns
@@ -98,7 +98,7 @@ class DuplicateDetector:
             ("Tool", "definition"),
             ("ConversationProtocol", "execute_turn")
         ]
-        
+
         for interface_name, method_name in interface_patterns:
             implementations = self._find_interface_implementations(interface_name, method_name)
             if len(implementations) > 1:
@@ -113,19 +113,19 @@ class DuplicateDetector:
                         remediation=f"Standardize {interface_name} implementation behavior"
                     )
                     self.violations.append(violation)
-    
+
     def _detect_mcp_tool_duplicates(self) -> None:
         """Detect duplicate MCP tool names or schemas."""
         tool_names: Dict[str, List[Path]] = defaultdict(list)
-        
+
         # Scan for MCP tool definitions
         mcp_patterns = ["get_mcp_tools", "ToolDefinition", "name="]
-        
+
         for py_file in self.cortex_root.rglob("*.py"):
             try:
                 with open(py_file, 'r', encoding='utf-8') as f:
                     content = f.read()
-                    
+
                 # Simple pattern matching for tool names
                 if any(pattern in content for pattern in mcp_patterns):
                     # Extract tool names (simplified approach)
@@ -139,10 +139,10 @@ class DuplicateDetector:
                                 tool_name = line[start:end]
                                 if tool_name.startswith("cortex_"):
                                     tool_names[tool_name].append(py_file)
-                                    
+
             except (UnicodeDecodeError, FileNotFoundError):
                 continue
-        
+
         # Find tool name duplicates
         for tool_name, paths in tool_names.items():
             if len(paths) > 1:
@@ -155,37 +155,37 @@ class DuplicateDetector:
                     remediation=f"Consolidate MCP tool {tool_name} to single definition"
                 )
                 self.violations.append(violation)
-    
+
     def _find_interface_implementations(self, interface_name: str, method_name: str) -> List[Dict]:
         """Find all implementations of a given interface method."""
         implementations = []
-        
+
         for py_file in self.cortex_root.rglob("*.py"):
             try:
                 with open(py_file, 'r', encoding='utf-8') as f:
                     content = f.read()
-                    
+
                 if interface_name in content and f"def {method_name}" in content:
                     implementations.append({
                         "file": str(py_file),
                         "content": content
                     })
-                    
+
             except (UnicodeDecodeError, FileNotFoundError):
                 continue
-        
+
         return implementations
-    
+
     def _implementations_differ(self, implementations: List[Dict]) -> bool:
         """Check if implementations have significantly different behavior."""
         # Simplified heuristic: check if method bodies are significantly different
         if len(implementations) < 2:
             return False
-        
+
         # Compare method body lengths as simple heuristic
         contents = [impl["content"] for impl in implementations]
         lengths = [len(content) for content in contents]
-        
+
         # If implementations vary by more than 50%, consider them different
         min_len, max_len = min(lengths), max(lengths)
         return (max_len - min_len) / max_len > 0.5 if max_len > 0 else False
@@ -200,10 +200,10 @@ def detect_class_conflicts() -> List[DuplicateViolation]:
 def main():
     """CLI entry point for duplicate detection."""
     import sys
-    
+
     detector = DuplicateDetector(Path.cwd())
     violations = detector.detect_all_duplicates()
-    
+
     if violations:
         print(f"🚨 CORE-035 VIOLATIONS: Found {len(violations)} duplicate implementations")
         for violation in violations:

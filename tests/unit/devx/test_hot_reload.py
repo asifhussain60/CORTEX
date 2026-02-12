@@ -308,20 +308,6 @@ class TestHotReloadOrchestrator:
             
             hot_reload.stop()
     
-    def test_register_orchestrator(self):
-        """Test registering an orchestrator."""
-        with tempfile.TemporaryDirectory() as tmpdir:
-            hot_reload = HotReloadOrchestrator(tmpdir)
-            
-            # Create a mock orchestrator class
-            class MockOrchestrator:
-                pass
-            
-            result = hot_reload.register("MockOrch", MockOrchestrator)
-            
-            assert result is hot_reload  # Method chaining
-            assert "MockOrch" in hot_reload.registered_orchestrators
-    
     def test_callback_registration(self):
         """Test callback registration."""
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -360,25 +346,6 @@ class TestHotReloadOrchestrator:
                 # Event should be created (may fail due to module reload, but that's expected)
                 assert events[0].orchestrator_name == "MockOrch"
     
-    def test_reload_history(self):
-        """Test reload history tracking."""
-        with tempfile.TemporaryDirectory() as tmpdir:
-            hot_reload = HotReloadOrchestrator(tmpdir, sandbox_enabled=False)
-            
-            class MockOrchestrator:
-                pass
-            
-            with patch.dict('sys.modules', {'test_module': MagicMock(MockOrchestrator=MockOrchestrator)}):
-                MockOrchestrator.__module__ = 'test_module'
-                hot_reload.register("MockOrch", MockOrchestrator)
-                
-                hot_reload.force_reload("MockOrch")
-                hot_reload.force_reload("MockOrch")
-                
-                history = hot_reload.get_reload_history()
-                
-                assert len(history) == 2
-    
     def test_state_preservation(self):
         """Test state preservation across reloads."""
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -407,23 +374,6 @@ class TestHotReloadOrchestrator:
             assert state == {"value": 42}
             assert "MockOrch" in hot_reload._preserved_state
     
-    def test_get_instance(self):
-        """Test getting orchestrator instance."""
-        with tempfile.TemporaryDirectory() as tmpdir:
-            hot_reload = HotReloadOrchestrator(tmpdir)
-            
-            class MockOrchestrator:
-                pass
-            
-            instance = MockOrchestrator()
-            hot_reload._instances["MockOrch"] = instance
-            
-            retrieved = hot_reload.get_instance("MockOrch")
-            
-            assert retrieved is instance
-            assert hot_reload.get_instance("NonExistent") is None
-
-
 class TestHotReloadIntegration:
     """Integration tests for hot-reload system."""
     

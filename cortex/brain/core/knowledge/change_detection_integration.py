@@ -18,19 +18,19 @@ Integration Points:
 - Governance: Registry of anomaly rules
 """
 
+import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional, Tuple
-import logging
 from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
 
 from cortex.brain.core.knowledge.change_detection import (
-    ChangeDetectionService,
     AnomalyDetection,
     AnomalyType,
-    SeverityLevel,
+    ChangeDetectionService,
     ChangeHistory,
+    SeverityLevel,
 )
 from cortex.models.canonical_enums import ActionType
 

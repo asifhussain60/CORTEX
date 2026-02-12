@@ -8,18 +8,22 @@ Stage: S1-S5 - Architectural Pattern Detection & Classification
 
 from .base import (
     BasePatternDetector,
+    PatternCategory,
     PatternInfo,
     PatternMatch,
     SignatureMatcher,
-    PatternCategory,
 )
 from .catalog import PatternCatalog
-from .classification import ArchitectureClassifier, ArchitectureClassification, ArchitectureType
+from .classification import (
+    ArchitectureClassification,
+    ArchitectureClassifier,
+    ArchitectureType,
+)
 from .registry import (
     CustomPatternRegistry,
-    PatternMetadata,
     DetectionRule,
     DetectionRuleType,
+    PatternMetadata,
 )
 
 __all__ = [

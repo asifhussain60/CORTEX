@@ -5,15 +5,16 @@ Authority: Phase 37 S5
 Implements /persona and /detail command handlers
 """
 
-from typing import Optional, Dict, Any, Tuple
-from cortex.orchestrators.persona.master_orchestrator import MasterOrchestrator
-from cortex.orchestrators.persona.models import PersonaId, DepthLevel
+from typing import Any, Dict, Optional, Tuple
+
 from cortex.interaction.persona_store import PersonaStore
+from cortex.orchestrators.persona.master_orchestrator import MasterOrchestrator
+from cortex.orchestrators.persona.models import DepthLevel, PersonaId
 
 
 class CommandParseResult:
     """Result of command parsing"""
-    
+
     def __init__(
         self,
         success: bool,
@@ -37,7 +38,7 @@ class CommandParseResult:
 
 class CommandResponse:
     """Response from command execution"""
-    
+
     def __init__(
         self,
         success: bool,
@@ -61,7 +62,7 @@ class CommandResponse:
 
 class CommandParser:
     """Parse and validate user commands"""
-    
+
     def __init__(self):
         """Initialize CommandParser"""
         self.valid_personas = [p.value for p in PersonaId]
@@ -70,28 +71,28 @@ class CommandParser:
     def parse_persona_command(self, user_input: str) -> CommandParseResult:
         """
         Parse /persona command.
-        
+
         Syntax:
         - /persona engineer
         - /persona tech_lead
         - /persona business_leader
-        
+
         Args:
             user_input: Full user input
-        
+
         Returns:
             CommandParseResult with parsed arguments
         """
         parts = user_input.strip().split()
-        
+
         if len(parts) < 2:
             return CommandParseResult(
                 success=False,
                 error="Usage: /persona {role}",
             )
-        
+
         persona_arg = parts[1].upper()
-        
+
         # Validate persona
         try:
             persona_enum = PersonaId[persona_arg]
@@ -105,7 +106,7 @@ class CommandParser:
                     success=False,
                     error=f"Unknown persona: {parts[1]}. Valid: {', '.join(self.valid_personas)}",
                 )
-        
+
         return CommandParseResult(
             success=True,
             command="persona",
@@ -115,7 +116,7 @@ class CommandParser:
     def parse_detail_command(self, user_input: str) -> CommandParseResult:
         """
         Parse /detail command.
-        
+
         Syntax:
         - /detail executive
         - /detail standard
@@ -123,37 +124,37 @@ class CommandParser:
         - /detail full
         - /detail sticky detailed
         - /detail sticky full
-        
+
         Args:
             user_input: Full user input
-        
+
         Returns:
             CommandParseResult with parsed arguments
         """
         parts = user_input.strip().split()
-        
+
         if len(parts) < 2:
             return CommandParseResult(
                 success=False,
                 error="Usage: /detail {level} or /detail sticky {level}",
             )
-        
+
         sticky = False
         depth_idx = 1
-        
+
         # Check for sticky modifier
         if parts[1].lower() == "sticky":
             sticky = True
             depth_idx = 2
-            
+
             if len(parts) < 3:
                 return CommandParseResult(
                     success=False,
                     error="Usage: /detail sticky {level}",
                 )
-        
+
         depth_arg = parts[depth_idx].upper()
-        
+
         # Validate depth
         try:
             depth_enum = DepthLevel[depth_arg]
@@ -162,7 +163,7 @@ class CommandParser:
                 success=False,
                 error=f"Unknown depth: {parts[depth_idx]}. Valid: {', '.join(self.valid_depths)}",
             )
-        
+
         return CommandParseResult(
             success=True,
             command="detail",
@@ -175,7 +176,7 @@ class CommandParser:
 
 class PersonaCommandHandler:
     """Handle /persona commands"""
-    
+
     def __init__(
         self,
         orchestrator: MasterOrchestrator,
@@ -183,7 +184,7 @@ class PersonaCommandHandler:
     ):
         """
         Initialize PersonaCommandHandler.
-        
+
         Args:
             orchestrator: MasterOrchestrator instance
             store: Optional PersonaStore for persistence
@@ -199,42 +200,42 @@ class PersonaCommandHandler:
     ) -> CommandResponse:
         """
         Handle /persona command.
-        
+
         Args:
             user_input: Full command line
             user_id: User identifier
-        
+
         Returns:
             CommandResponse with result
         """
         # Parse command
         parse_result = self.parser.parse_persona_command(user_input)
-        
+
         if not parse_result.success:
             return CommandResponse(
                 success=False,
                 message=parse_result.error,
             )
-        
+
         try:
             # Extract persona
             persona_str = parse_result.args["persona"]
             persona_enum = PersonaId[persona_str.upper()]
-            
+
             # Get current depth
             current_state = self.orchestrator.get_current_state()
             depth_str = current_state.get("depth", "STANDARD") if current_state else "STANDARD"
             depth_enum = DepthLevel[depth_str.upper()]
-            
+
             # Switch persona
             self.orchestrator.switch_persona(persona_enum, user_id)
-            
+
             # Save preference
             self.store.update_user_persona(user_id, persona_enum, depth_enum)
-            
+
             # Get new state
             new_state = self.orchestrator.get_current_state()
-            
+
             return CommandResponse(
                 success=True,
                 message=f"✅ Persona set to {persona_enum.value}",
@@ -250,7 +251,7 @@ class PersonaCommandHandler:
 
 class DetailCommandHandler:
     """Handle /detail commands"""
-    
+
     def __init__(
         self,
         orchestrator: MasterOrchestrator,
@@ -258,7 +259,7 @@ class DetailCommandHandler:
     ):
         """
         Initialize DetailCommandHandler.
-        
+
         Args:
             orchestrator: MasterOrchestrator instance
             store: Optional PersonaStore for persistence
@@ -274,33 +275,33 @@ class DetailCommandHandler:
     ) -> CommandResponse:
         """
         Handle /detail command.
-        
+
         Args:
             user_input: Full command line
             user_id: User identifier
-        
+
         Returns:
             CommandResponse with result
         """
         # Parse command
         parse_result = self.parser.parse_detail_command(user_input)
-        
+
         if not parse_result.success:
             return CommandResponse(
                 success=False,
                 message=parse_result.error,
             )
-        
+
         try:
             # Extract depth and sticky flag
             depth_str = parse_result.args["depth"]
             sticky = parse_result.args["sticky"]
-            
+
             depth_enum = DepthLevel[depth_str.upper()]
-            
+
             # Set depth
             self.orchestrator.set_depth(depth_enum)
-            
+
             if sticky:
                 # Add override to store
                 self.store.add_depth_override(
@@ -315,12 +316,12 @@ class DetailCommandHandler:
                     override_level=depth_enum,
                     context="/detail command (single-turn)",
                 )
-            
+
             # Get new state
             new_state = self.orchestrator.get_current_state()
-            
+
             mode = "sticky" if sticky else "single-turn"
-            
+
             return CommandResponse(
                 success=True,
                 message=f"✅ Detail level set to {depth_enum.value} ({mode})",
@@ -336,7 +337,7 @@ class DetailCommandHandler:
 
 class IntroductionHandler:
     """Handle introduction template on first interaction"""
-    
+
     @staticmethod
     def should_show_introduction(
         user_id: str,
@@ -344,24 +345,24 @@ class IntroductionHandler:
     ) -> bool:
         """
         Determine if introduction should be shown.
-        
+
         Args:
             user_id: User identifier
             store: PersonaStore for checking history
-        
+
         Returns:
             True if introduction should be shown
         """
         # Check if user has persona preference
         persona = store.get_user_persona(user_id)
-        
+
         return persona is None
 
     @staticmethod
     def get_introduction_template() -> str:
         """
         Get introduction template.
-        
+
         Returns:
             Introduction text
         """
@@ -394,12 +395,12 @@ To optimize our collaboration, what's your primary role?
     ) -> CommandResponse:
         """
         Handle first interaction flow.
-        
+
         Args:
             user_id: User identifier
             orchestrator: MasterOrchestrator instance
             store: PersonaStore for persistence
-        
+
         Returns:
             CommandResponse with introduction template
         """
@@ -408,9 +409,9 @@ To optimize our collaboration, what's your primary role?
                 success=False,
                 message="User already has persona preference",
             )
-        
+
         introduction = IntroductionHandler.get_introduction_template()
-        
+
         return CommandResponse(
             success=True,
             message=introduction,

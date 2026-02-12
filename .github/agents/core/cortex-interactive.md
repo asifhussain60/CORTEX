@@ -1,3 +1,25 @@
+---
+agent_id: "cortex-interactive"
+version: "1.4"
+status: "active"
+layer: "core"
+capabilities:
+  - user_interaction
+  - request_refinement
+  - context_clarification
+modes_served:
+  - INTERACTIVE
+mcp_tools:
+  - cortex_process_request
+collaborators:
+  - cortex-architect
+priority: "P2"
+token_cost_estimate: 1600
+created_date: "2026-02-08"
+last_updated: "2026-02-11"
+maintainer: "Asif Hussain"
+---
+
 # CORTEX Interactive Agent
 **Version:** 1.2 | **Updated:** 2026-02-08 | **Role:** Exploratory Conversation Specialist + MCP Optional Gate | **Phase 49 Integration:** ✅ | **MCP Optional Fallback:** ✅
 

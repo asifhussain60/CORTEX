@@ -13,7 +13,7 @@ Entrypoint for automatic cache rebuilds triggered by:
 Usage:
     # Auto-triggered by git post-merge hook
     python -m cortex.brain.knowledge.cache_builder rebuild
-    
+
     # Manual trigger
     from cortex.brain.knowledge.cache_builder import rebuild_knowledge_cache
     rebuild_knowledge_cache()
@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 def rebuild_knowledge_cache() -> bool:
     """
     Rebuild knowledge cache from YAML files.
-    
+
     Returns:
         True if rebuild successful, False otherwise.
     """

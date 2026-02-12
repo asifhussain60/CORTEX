@@ -12,10 +12,11 @@ Example:
 """
 
 import logging
-import yaml
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, List, Optional, Tuple
+
+import yaml
 
 logger = logging.getLogger(__name__)
 
@@ -63,7 +64,7 @@ class TechStackMapper:
             )
 
         self._load_config()
-        self.logger.info(f"AC_START: AC-PHASE54-S3-T1 | TechStackMapper initialized")
+        self.logger.info("AC_START: AC-PHASE54-S3-T1 | TechStackMapper initialized")
 
     def _load_config(self) -> None:
         """Load tech stack mapping configuration from YAML."""

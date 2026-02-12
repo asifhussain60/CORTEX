@@ -12,9 +12,10 @@ Usage:
 import sys
 from datetime import datetime
 
+
 class CopilotRequest:
     """Generate efficient Copilot requests for track:eval execution."""
-    
+
     SHELL_COMMAND = """#!/bin/bash
 # Auto-generated CORTEX Track:Eval Request - {timestamp}
 cd /Users/asifhussain/PROJECTS/CORTEX
@@ -54,7 +55,7 @@ try:
     passed = sum(1 for p in data['phases'].values() if p['status'] == 'PASS')
     total = len(data['phases'])
     blockers = len(data['blockers'])
-    
+
     print(f"✓ {passed}/{total} phases passed")
     if blockers > 0:
         print(f"⚠ {blockers} blocker(s) detected")
@@ -119,29 +120,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      
+
       - name: Install dependencies
         run: pip install -r requirements.txt
-      
+
       - name: Execute track:eval
         run: |
           python scripts/execute-track-eval-silent.py > eval-results.json 2>eval.log
           EXIT_CODE=$?
           echo "EVAL_EXIT_CODE=$EXIT_CODE" >> $GITHUB_ENV
           exit $EXIT_CODE
-      
+
       - name: Upload results
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: eval-results
           path: eval-results.json
-      
+
       - name: Comment on PR
         if: always()
         run: |
@@ -154,23 +155,23 @@ jobs:
     def generate_shell(cls):
         """Generate shell command."""
         return cls.SHELL_COMMAND.format(timestamp=datetime.now().isoformat())
-    
+
     @classmethod
     def generate_python(cls):
         """Generate Python code."""
         python_path = "python3"
         return cls.PYTHON_REQUEST.format(python=python_path)
-    
+
     @classmethod
     def generate_copilot_prompt(cls):
         """Generate Copilot prompt."""
         return cls.COPILOT_PROMPT
-    
+
     @classmethod
     def generate_makefile(cls):
         """Generate Makefile recipes."""
         return cls.MAKEFILE_RECIPE
-    
+
     @classmethod
     def generate_github_action(cls):
         """Generate GitHub Action."""
@@ -180,7 +181,7 @@ jobs:
 def main():
     """Main entry point."""
     format_type = sys.argv[1] if len(sys.argv) > 1 else "shell"
-    
+
     if format_type == "shell":
         print(CopilotRequest.generate_shell())
     elif format_type == "python":

@@ -409,7 +409,7 @@ class TestConvenienceFunctions:
         """record_measurement convenience function should work."""
         # Reset global monitor
         get_monitor().clear_violations()
-        get_monitor().measurements.clear()
+        get_monitor()._measurements.clear()
         
         record_measurement(
             ComponentName.INTENT_ROUTER.value,
@@ -434,10 +434,11 @@ class TestRealWorldScenarios:
         """Track intent router performance across multiple requests."""
         monitor = PerformanceMonitor()
         
-        # Simulate 100 requests
+        # Simulate 100 requests within SLA (target=50ms, p99=200ms)
+        # Use times that are within p99 threshold
         response_times = [
-            150, 200, 180, 220, 190, 160, 210, 175, 185, 195,
-            200, 220, 190, 170, 210, 195, 180, 200, 185, 210,
+            40, 50, 45, 55, 48, 42, 52, 44, 46, 49,
+            50, 55, 48, 43, 52, 49, 45, 50, 46, 52,
             # ... add more simulated times
         ] * 5  # 100 requests
         
@@ -462,7 +463,7 @@ class TestRealWorldScenarios:
         
         # All times should be well within SLA
         assert stats["count"] == 100
-        assert stats["max"] < 500  # All within target
+        assert stats["max"] < 200  # All within p99 threshold
         assert violations_count == 0
     
     def test_degraded_performance_detection(self):

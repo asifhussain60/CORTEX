@@ -1,3 +1,28 @@
+---
+agent_id: cortex-designer
+version: 2.1
+status: active
+layer: core
+capabilities:
+  - challenge_generation
+  - design_pattern_analysis
+  - architectural_review
+  - alternative_proposal_generation
+modes_served:
+  - DESIGN
+mcp_tools:
+  - cortex_challenge
+  - cortex_process_request
+collaborators:
+  - cortex-holistic-validator
+  - cortex-architect
+priority: P1
+token_cost_estimate: 2200
+created_date: "2026-02-08"
+last_updated: "2026-02-11"
+maintainer: "Asif Hussain"
+---
+
 # CORTEX Designer Agent
 **Version:** 2.1 | **Updated:** 2026-02-08 | **Role:** DESIGN Specialist (with Challenge) | **Phase 49 Integration:** ✅
 

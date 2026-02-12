@@ -14,14 +14,15 @@ AC-ID: AC-LENS-V2-CONFIG-001
 Authority: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings)
 """
 
-import re
 import json
-import yaml
-from pathlib import Path
-from typing import Dict, Any, List, Optional, Union
+import logging
+import re
 from dataclasses import dataclass, field
 from enum import Enum
-import logging
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Union
+
+import yaml
 
 logger = logging.getLogger(__name__)
 
@@ -48,7 +49,7 @@ class ConfigCategory(Enum):
 class ConfigFinding:
     """
     Represents a single configuration issue.
-    
+
     Attributes:
         file_path: Path to config file
         line_number: Line number where issue occurs
@@ -73,7 +74,7 @@ class ConfigFinding:
 class ConfigAnalysisResult:
     """
     Result of config analysis.
-    
+
     Attributes:
         success: Whether analysis succeeded
         file_path: Path analyzed
@@ -93,9 +94,9 @@ class ConfigAnalysisResult:
 class ConfigAnalyzer:
     """
     Multi-format configuration analyzer.
-    
+
     Provides security and best practice analysis for configuration files.
-    
+
     Example:
         >>> analyzer = ConfigAnalyzer()
         >>> result = analyzer.analyze_file(Path("config.yaml"))
@@ -103,7 +104,7 @@ class ConfigAnalyzer:
         ...     if finding.severity == ConfigSeverity.P0:
         ...         print(f"CRITICAL: {finding.description}")
     """
-    
+
     # Secret patterns (P0 severity)
     SECRET_PATTERNS = {
         "aws_access_key": (
@@ -163,7 +164,7 @@ class ConfigAnalyzer:
             "Use a dedicated service account with least privilege, never use 'sa'"
         ),
     }
-    
+
     # Insecure defaults (P1 severity)
     INSECURE_DEFAULTS = {
         "debug_enabled": (
@@ -218,21 +219,21 @@ class ConfigAnalyzer:
             "Disable tracing in production environments"
         ),
     }
-    
+
     def __init__(self):
         """Initialize ConfigAnalyzer."""
         self.findings: List[ConfigFinding] = []
-    
+
     def analyze_file(self, config_path: Path) -> ConfigAnalysisResult:
         """
         Analyze single config file for security and best practices.
-        
+
         Args:
             config_path: Path to config file
-            
+
         Returns:
             ConfigAnalysisResult with findings
-            
+
         Example:
             >>> analyzer = ConfigAnalyzer()
             >>> result = analyzer.analyze_file(Path("docker-compose.yml"))
@@ -240,9 +241,9 @@ class ConfigAnalyzer:
         """
         import time
         start_time = time.time()
-        
+
         self.findings = []
-        
+
         try:
             if not config_path.exists():
                 return ConfigAnalysisResult(
@@ -250,21 +251,21 @@ class ConfigAnalyzer:
                     file_path=str(config_path),
                     error=f"File not found: {config_path}"
                 )
-            
+
             # Determine config type
             config_type = self._detect_config_type(config_path)
-            
+
             # Read file content
             with open(config_path, "r", encoding="utf-8") as f:
                 content = f.read()
-            
+
             # Run analyzers
             self._detect_secrets(content, str(config_path))
             self._detect_insecure_defaults(content, str(config_path))
             self._detect_missing_fields(content, str(config_path), config_type)
-            
+
             analysis_time_ms = (time.time() - start_time) * 1000
-            
+
             return ConfigAnalysisResult(
                 success=True,
                 file_path=str(config_path),
@@ -272,7 +273,7 @@ class ConfigAnalyzer:
                 analysis_time_ms=analysis_time_ms,
                 config_type=config_type
             )
-            
+
         except Exception as e:
             logger.error(f"Config analysis failed for {config_path}: {e}")
             return ConfigAnalysisResult(
@@ -280,17 +281,17 @@ class ConfigAnalyzer:
                 file_path=str(config_path),
                 error=str(e)
             )
-    
+
     def analyze_repository(self, repo_path: Path) -> Dict[str, Any]:
         """
         Analyze all config files in repository.
-        
+
         Args:
             repo_path: Path to repository root
-            
+
         Returns:
             Dict with aggregated results
-            
+
         Example:
             >>> analyzer = ConfigAnalyzer()
             >>> results = analyzer.analyze_repository(Path("/repo"))
@@ -298,7 +299,7 @@ class ConfigAnalyzer:
         """
         all_findings: List[ConfigFinding] = []
         analyzed_files = 0
-        
+
         # Config file patterns to search
         patterns = [
             "**/*.yaml",
@@ -317,24 +318,24 @@ class ConfigAnalyzer:
             "**/*.csproj",
             "**/*.vbproj",
         ]
-        
+
         for pattern in patterns:
             for config_file in repo_path.glob(pattern):
                 # Skip test files, node_modules, venv, etc.
                 if self._should_skip_file(config_file):
                     continue
-                
+
                 result = self.analyze_file(config_file)
                 if result.success:
                     all_findings.extend(result.findings)
                     analyzed_files += 1
-        
+
         # Categorize by severity
         p0_findings = [f for f in all_findings if f.severity == ConfigSeverity.P0]
         p1_findings = [f for f in all_findings if f.severity == ConfigSeverity.P1]
         p2_findings = [f for f in all_findings if f.severity == ConfigSeverity.P2]
         p3_findings = [f for f in all_findings if f.severity == ConfigSeverity.P3]
-        
+
         return {
             "analyzed_files": analyzed_files,
             "total_findings": len(all_findings),
@@ -344,12 +345,12 @@ class ConfigAnalyzer:
             "p3_findings": [self._finding_to_dict(f) for f in p3_findings],
             "summary": f"Found {len(all_findings)} issues across {analyzed_files} files",
         }
-    
+
     def _detect_config_type(self, path: Path) -> str:
         """Detect config file type from extension or filename."""
         name = path.name.lower()
         suffix = path.suffix.lower()
-        
+
         # .NET config files
         if name in ["web.config", "app.config"]:
             return "dotnet-xml"
@@ -357,7 +358,7 @@ class ConfigAnalyzer:
             return "dotnet-json"
         if suffix in [".csproj", ".vbproj"]:
             return "dotnet-project"
-        
+
         # Standard config types
         if suffix in [".yaml", ".yml"]:
             return "yaml"
@@ -370,11 +371,11 @@ class ConfigAnalyzer:
         elif suffix == ".xml" or suffix == ".config":
             return "xml"
         return "unknown"
-    
+
     def _detect_secrets(self, content: str, file_path: str) -> None:
         """Detect hardcoded secrets in config content."""
         lines = content.split("\n")
-        
+
         for pattern_name, (pattern, description, recommendation) in self.SECRET_PATTERNS.items():
             for line_num, line in enumerate(lines, start=1):
                 match = re.search(pattern, line)
@@ -389,11 +390,11 @@ class ConfigAnalyzer:
                         pattern_matched=pattern_name,
                         context={"line": line.strip()}
                     ))
-    
+
     def _detect_insecure_defaults(self, content: str, file_path: str) -> None:
         """Detect insecure default configurations."""
         lines = content.split("\n")
-        
+
         for pattern_name, (pattern, description, recommendation) in self.INSECURE_DEFAULTS.items():
             for line_num, line in enumerate(lines, start=1):
                 match = re.search(pattern, line)
@@ -408,7 +409,7 @@ class ConfigAnalyzer:
                         pattern_matched=pattern_name,
                         context={"line": line.strip()}
                     ))
-    
+
     def _detect_missing_fields(self, content: str, file_path: str, config_type: str) -> None:
         """Detect missing required fields (basic implementation)."""
         # For docker-compose files, check for common missing fields
@@ -423,25 +424,25 @@ class ConfigAnalyzer:
                     recommendation="Add security_opt to limit container capabilities",
                     context={"config_type": "docker-compose"}
                 ))
-    
+
     def _should_skip_file(self, path: Path) -> bool:
         """Determine if file should be skipped."""
         skip_dirs = {
-            "node_modules", "venv", ".venv", "__pycache__", 
+            "node_modules", "venv", ".venv", "__pycache__",
             ".git", ".pytest_cache", "dist", "build", ".tox"
         }
-        
+
         # Check if any parent is in skip_dirs
         for parent in path.parents:
             if parent.name in skip_dirs:
                 return True
-        
+
         # Skip test files
         if "test" in path.name.lower():
             return True
-        
+
         return False
-    
+
     def _finding_to_dict(self, finding: ConfigFinding) -> Dict[str, Any]:
         """Convert ConfigFinding to dict."""
         return {

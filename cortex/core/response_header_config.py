@@ -7,8 +7,8 @@ Author: CORTEX Framework
 """
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any
 from enum import Enum
+from typing import Any, Dict, List, Optional
 
 
 class HeaderFormat(Enum):
@@ -172,6 +172,6 @@ class HeaderConfigLoader:
     """Load header configurations."""
     def __init__(self):
         self.configs = {}
-    
+
     def load(self, config_path):
         return {}

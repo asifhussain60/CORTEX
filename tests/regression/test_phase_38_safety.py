@@ -159,11 +159,6 @@ class TestPreCommitRegressionHook:
 class TestIntegrationTestExpansion:
     """Test suite for expanded integration test coverage."""
 
-    def test_end_to_end_implement_flow(self) -> None:
-        """Test complete IMPLEMENT flow from user request to code generation."""
-        # This test should be in tests/integration/ but we verify it exists
-        pass  # Placeholder for E2E test
-
     def test_audit_mode_with_p1_5_checks(self) -> None:
         """Test AUDIT mode includes all P1.5 cohesion checks."""
         from cortex.governance.regression_safety_orchestrator import verify_audit_mode_checks
@@ -177,12 +172,6 @@ class TestIntegrationTestExpansion:
         
         for check_id in required_checks:
             assert check_id in audit_checks, f"Missing required check: {check_id}"
-
-    def test_multi_orchestrator_workflows(self) -> None:
-        """Test workflows involving multiple orchestrators cooperating."""
-        # Placeholder for multi-orchestrator integration tests
-        pass
-
 
 # AC_COMPLETE: AC-PHASE38-027 ✅ 10/10 tests
 

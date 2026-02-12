@@ -9,15 +9,15 @@ AC-ID: AC-DASHBOARD-SCHEMA-002
 Authority: CORE-011 (Type hints), CORE-012 (Docstrings), CORE-035 (Single implementation)
 """
 
-from dataclasses import dataclass, field, asdict
-from typing import Dict, List, Any, Optional, Tuple
 import json
+from dataclasses import asdict, dataclass, field
 from datetime import datetime
+from typing import Any, Dict, List, Optional, Tuple
 
 from cortex.common.debug_logger import (
+    dashboard_debug,
     log_dashboard_debug,
     log_dashboard_schema_validation,
-    dashboard_debug
 )
 
 
@@ -25,7 +25,7 @@ from cortex.common.debug_logger import (
 class RepoMetadata:
     """
     Repository metadata section.
-    
+
     Attributes:
         slug: URL-safe repository identifier (lowercase, no spaces)
         display_name: Human-readable repository name
@@ -42,11 +42,11 @@ class RepoMetadata:
     primary_language: str
     version: str
     last_analyzed_at: str
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
         return asdict(self)
-    
+
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "RepoMetadata":
         """Deserialize from dictionary."""
@@ -57,10 +57,10 @@ class RepoMetadata:
 class OverviewSection:
     """
     Overview section with business context.
-    
+
     AC_START: AC-KSESSIONS-HYBRID-007
     ENHANCEMENT: Added fields to match Pydantic Overview model for comprehensive executive summary.
-    
+
     Attributes:
         summary: Technical summary
         business_summary: Business-oriented summary
@@ -85,11 +85,11 @@ class OverviewSection:
     technical_highlights: List[str] = field(default_factory=list)
     business_outcomes: List[str] = field(default_factory=list)
     integration_points: List[str] = field(default_factory=list)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
         return asdict(self)
-    
+
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "OverviewSection":
         """Deserialize from dictionary."""
@@ -114,11 +114,11 @@ class OverviewSection:
 class MetricsSection:
     """
     Code metrics section.
-    
+
     AC_START: AC-DASHBOARD-9TAB-002
     ENHANCEMENT: Added visualizations field for pre-computed visualization coordinates.
     Client no longer computes metrics - all computation moved to orchestrator.
-    
+
     Attributes:
         health_score: Overall health (0-100)
         risk_score: Risk level (0-100)
@@ -141,7 +141,7 @@ class MetricsSection:
     coverage_pct: float
     languages: Dict[str, int] = field(default_factory=dict)
     visualizations: Dict[str, Any] = field(default_factory=dict)
-    
+
     def __post_init__(self):
         """Validate score ranges."""
         if not (0 <= self.health_score <= 100):
@@ -150,11 +150,11 @@ class MetricsSection:
             raise ValueError(f"risk_score must be 0-100, got {self.risk_score}")
         if not (0 <= self.coverage_pct <= 100):
             raise ValueError(f"coverage_pct must be 0-100, got {self.coverage_pct}")
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
         return asdict(self)
-    
+
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "MetricsSection":
         """Deserialize from dictionary."""
@@ -169,7 +169,7 @@ class MetricsSection:
 class SecurityVulnerability:
     """
     Individual security vulnerability.
-    
+
     Attributes:
         id: Unique vulnerability ID
         title: Vulnerability title
@@ -186,17 +186,17 @@ class SecurityVulnerability:
     location: str
     status: str
     description: str
-    
+
     def __post_init__(self):
         """Validate severity."""
         valid_severities = {"critical", "high", "medium", "low"}
         if self.severity not in valid_severities:
             raise ValueError(f"severity must be one of {valid_severities}")
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
         return asdict(self)
-    
+
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "SecurityVulnerability":
         """Deserialize from dictionary."""
@@ -207,7 +207,7 @@ class SecurityVulnerability:
 class SecuritySection:
     """
     Security analysis section.
-    
+
     Attributes:
         total_count: Total vulnerability count
         critical_count: Critical vulnerabilities
@@ -222,13 +222,13 @@ class SecuritySection:
     medium_count: int
     low_count: int
     vulnerabilities: List[SecurityVulnerability] = field(default_factory=list)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
         data = asdict(self)
         data["vulnerabilities"] = [v.to_dict() for v in self.vulnerabilities]
         return data
-    
+
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "SecuritySection":
         """Deserialize from dictionary."""
@@ -245,7 +245,7 @@ class SecuritySection:
 class PackageDependency:
     """
     Package dependency information.
-    
+
     Attributes:
         name: Package name
         version: Package version
@@ -256,11 +256,11 @@ class PackageDependency:
     version: str
     license: str
     is_direct: bool
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
         return asdict(self)
-    
+
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "PackageDependency":
         """Deserialize from dictionary."""
@@ -271,11 +271,11 @@ class PackageDependency:
 class DependenciesSection:
     """
     Dependencies analysis section.
-    
+
     AC_START: AC-DASHBOARD-9TAB-003
     ENHANCEMENT: Added visualizations field for pre-computed dependency graph.
     Graph edges are now REAL (AST-based imports), not fake prefix heuristics.
-    
+
     Attributes:
         total_count: Total dependency count
         direct_count: Direct dependencies
@@ -290,13 +290,13 @@ class DependenciesSection:
     packages: List[PackageDependency] = field(default_factory=list)
     licenses: Dict[str, int] = field(default_factory=dict)
     visualizations: Dict[str, Any] = field(default_factory=dict)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
         data = asdict(self)
         data["packages"] = [p.to_dict() for p in self.packages]
         return data
-    
+
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "DependenciesSection":
         """Deserialize from dictionary."""
@@ -317,7 +317,7 @@ class DependenciesSection:
 class CodeSmell:
     """
     Code quality issue.
-    
+
     Attributes:
         id: Unique issue ID
         title: Issue title
@@ -332,11 +332,11 @@ class CodeSmell:
     category: str
     location: str
     description: str
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
         return asdict(self)
-    
+
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "CodeSmell":
         """Deserialize from dictionary."""
@@ -347,7 +347,7 @@ class CodeSmell:
 class QualitySection:
     """
     Code quality section.
-    
+
     Attributes:
         maintainability: Maintainability score (0-100)
         readability: Readability score (0-100)
@@ -362,13 +362,13 @@ class QualitySection:
     complexity: int
     code_smells: List[CodeSmell] = field(default_factory=list)
     hotspots: List[Dict[str, Any]] = field(default_factory=list)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
         data = asdict(self)
         data["code_smells"] = [cs.to_dict() for cs in self.code_smells]
         return data
-    
+
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "QualitySection":
         """Deserialize from dictionary."""
@@ -385,7 +385,7 @@ class QualitySection:
 class UseCase:
     """
     Dashboard use case.
-    
+
     Attributes:
         id: Unique use case ID
         title: Use case title
@@ -406,11 +406,11 @@ class UseCase:
     recommended_actions: List[str]
     tags: List[str]
     severity: str
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
         return asdict(self)
-    
+
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "UseCase":
         """Deserialize from dictionary."""
@@ -421,16 +421,16 @@ class UseCase:
 class LensSection:
     """
     LENS analysis section.
-    
+
     Attributes:
         analysis_summary: Summary of LENS analysis
     """
     analysis_summary: str
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
         return asdict(self)
-    
+
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "LensSection":
         """Deserialize from dictionary."""
@@ -441,16 +441,16 @@ class LensSection:
 class RefactoringSection:
     """
     Refactoring recommendations section.
-    
+
     Attributes:
         recommendations: List of refactoring recommendations
     """
     recommendations: List[Dict[str, Any]] = field(default_factory=list)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
         return asdict(self)
-    
+
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "RefactoringSection":
         """Deserialize from dictionary."""
@@ -461,12 +461,12 @@ class RefactoringSection:
 class ArchitectureSection:
     """
     Architecture analysis section (NEW - Tab 9).
-    
+
     AC_START: AC-DASHBOARD-9TAB-004
-    
+
     Provides pre-computed architecture layer graph and coupling metrics.
     Client renders pre-computed coordinates (no D3 computation on client).
-    
+
     Attributes:
         coupling_score: Coupling score 0-100 (lower is better)
         cohesion_score: Cohesion score 0-100 (higher is better)
@@ -479,18 +479,18 @@ class ArchitectureSection:
     total_dependencies: int
     circular_dependencies: int
     visualizations: Dict[str, Any] = field(default_factory=dict)
-    
+
     def __post_init__(self):
         """Validate scores."""
         if not (0 <= self.coupling_score <= 100):
             raise ValueError(f"coupling_score must be 0-100, got {self.coupling_score}")
         if not (0 <= self.cohesion_score <= 100):
             raise ValueError(f"cohesion_score must be 0-100, got {self.cohesion_score}")
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
         return asdict(self)
-    
+
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "ArchitectureSection":
         """Deserialize from dictionary."""
@@ -505,12 +505,12 @@ class ArchitectureSection:
 class DataQualitySection:
     """
     Data quality and confidence section (NEW - Honest Dashboard).
-    
+
     AC_START: AC-DASHBOARD-9TAB-005
-    
+
     Provides transparency about data completeness and contradictions.
     Enables "degraded state" UI when confidence is low.
-    
+
     Attributes:
         confidence_score: Overall data confidence 0-100
         coverage_pct: Percentage of expected fields populated
@@ -521,18 +521,18 @@ class DataQualitySection:
     coverage_pct: float
     contradictions: List[str] = field(default_factory=list)
     missing_fields: List[str] = field(default_factory=list)
-    
+
     def __post_init__(self):
         """Validate scores."""
         if not (0 <= self.confidence_score <= 100):
             raise ValueError(f"confidence_score must be 0-100, got {self.confidence_score}")
         if not (0 <= self.coverage_pct <= 100):
             raise ValueError(f"coverage_pct must be 0-100, got {self.coverage_pct}")
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
         return asdict(self)
-    
+
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "DataQualitySection":
         """Deserialize from dictionary."""
@@ -544,14 +544,14 @@ class DataQualitySection:
 class RepoDashboardModel:
     """
     Complete repository dashboard data model v3.0.
-    
+
     AC_START: AC-DASHBOARD-9TAB-006
     UPGRADE: v2.0 → v3.0 (9 tabs + data quality)
-    
+
     This is the canonical schema for all dashboard data.
     Onboarding orchestrators MUST generate this schema.
     Dashboard templates MUST consume this schema.
-    
+
     Attributes:
         repo: Repository metadata
         overview: Overview section (Tab 1)
@@ -564,7 +564,7 @@ class RepoDashboardModel:
         refactoring: Refactoring recommendations (Tab 8)
         architecture: Architecture analysis (Tab 9 - NEW)
         data_quality: Data quality/confidence (NEW)
-    
+
     Example:
         >>> model = RepoDashboardModel(
         ...     repo=RepoMetadata(...),
@@ -592,17 +592,17 @@ class RepoDashboardModel:
     refactoring: RefactoringSection
     architecture: ArchitectureSection
     data_quality: DataQualitySection
-    
+
     @dashboard_debug
     def to_dict(self) -> Dict[str, Any]:
         """
         Serialize to dictionary.
-        
+
         Returns:
             Dictionary representation
         """
         log_dashboard_debug("Serializing RepoDashboardModel v3.0", repo=self.repo.slug)
-        
+
         data = {
             "repo": self.repo.to_dict(),
             "overview": self.overview.to_dict(),
@@ -616,38 +616,38 @@ class RepoDashboardModel:
             "architecture": self.architecture.to_dict(),
             "data_quality": self.data_quality.to_dict(),
         }
-        
+
         log_dashboard_debug("Serialization complete", sections=len(data))
         return data
-    
+
     @dashboard_debug
     def to_json(self, indent: int = 2) -> str:
         """
         Serialize to JSON string.
-        
+
         Args:
             indent: JSON indentation level
-            
+
         Returns:
             JSON string representation
         """
         log_dashboard_debug("Converting to JSON", repo=self.repo.slug, indent=indent)
         return json.dumps(self.to_dict(), indent=indent)
-    
+
     @classmethod
     @dashboard_debug
     def from_dict(cls, data: Dict[str, Any]) -> "RepoDashboardModel":
         """
         Deserialize from dictionary.
-        
+
         Args:
             data: Dictionary data
-            
+
         Returns:
             RepoDashboardModel instance
         """
         log_dashboard_debug("Deserializing RepoDashboardModel", keys=list(data.keys()))
-        
+
         # Handle legacy v2.0 data (backward compatibility)
         architecture_data = data.get("architecture")
         if architecture_data is None:
@@ -659,7 +659,7 @@ class RepoDashboardModel:
                 "circular_dependencies": 0,
                 "visualizations": {}
             }
-        
+
         data_quality_data = data.get("data_quality")
         if data_quality_data is None:
             # Create default data_quality section
@@ -669,7 +669,7 @@ class RepoDashboardModel:
                 "contradictions": [],
                 "missing_fields": []
             }
-        
+
         return cls(
             repo=RepoMetadata.from_dict(data["repo"]),
             overview=OverviewSection.from_dict(data["overview"]),
@@ -684,15 +684,15 @@ class RepoDashboardModel:
             data_quality=DataQualitySection.from_dict(data_quality_data),
         )
     # AC_COMPLETE: AC-DASHBOARD-9TAB-006 ✅ RepoDashboardModel v3.0 with 9 tabs + data_quality
-    
+
     @classmethod
     def from_json(cls, json_str: str) -> "RepoDashboardModel":
         """
         Deserialize from JSON string.
-        
+
         Args:
             json_str: JSON string
-            
+
         Returns:
             RepoDashboardModel instance
         """
@@ -704,32 +704,32 @@ class RepoDashboardModel:
 def validate_dashboard_model(data: Dict[str, Any]) -> Tuple[bool, List[str]]:
     """
     Validate dashboard model data structure.
-    
+
     Args:
         data: Data to validate
-        
+
     Returns:
         Tuple of (is_valid, error_list)
-        
+
     Example:
         >>> is_valid, errors = validate_dashboard_model(data)
         >>> if not is_valid:
         ...     print(f"Validation failed: {errors}")
     """
     errors = []
-    
+
     log_dashboard_debug("Starting schema validation", data_keys=list(data.keys()))
-    
+
     # Required top-level sections
     required_sections = [
         "repo", "overview", "metrics", "security",
         "dependencies", "quality", "use_cases", "lens", "refactoring"
     ]
-    
+
     for section in required_sections:
         if section not in data:
             errors.append(f"Missing required section: {section}")
-    
+
     # Validate repo section
     if "repo" in data:
         repo_required = [
@@ -739,7 +739,7 @@ def validate_dashboard_model(data: Dict[str, Any]) -> Tuple[bool, List[str]]:
         for field in repo_required:
             if field not in data["repo"]:
                 errors.append(f"repo.{field} is required")
-    
+
     # Validate metrics section
     if "metrics" in data:
         metrics_required = [
@@ -749,7 +749,7 @@ def validate_dashboard_model(data: Dict[str, Any]) -> Tuple[bool, List[str]]:
         for field in metrics_required:
             if field not in data["metrics"]:
                 errors.append(f"metrics.{field} is required")
-    
+
     # Validate security section
     if "security" in data:
         security_required = [
@@ -759,16 +759,16 @@ def validate_dashboard_model(data: Dict[str, Any]) -> Tuple[bool, List[str]]:
         for field in security_required:
             if field not in data["security"]:
                 errors.append(f"security.{field} is required")
-    
+
     is_valid = len(errors) == 0
-    
+
     log_dashboard_schema_validation(
         "RepoDashboardModel",
         data,
         is_valid,
         errors
     )
-    
+
     return is_valid, errors
 
 

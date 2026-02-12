@@ -5,9 +5,10 @@ Part of ENH-048: Prompt Unbloating System
 Provides type-safe models for YAML-based governance files.
 """
 
-from typing import List, Dict, Optional, Any
-from pydantic import BaseModel, Field
 from enum import Enum
+from typing import Any, Dict, List, Optional
+
+from pydantic import BaseModel, Field
 
 
 class EnforcementLevel(str, Enum):
@@ -22,7 +23,7 @@ class EnforcementLevel(str, Enum):
 class CoreRule(BaseModel):
     """Single CORE rule model."""
     model_config = {'extra': 'allow'}  # Allow extra fields
-    
+
     id: str
     name: str
     description: str
@@ -31,7 +32,7 @@ class CoreRule(BaseModel):
     examples: List[str] = Field(default_factory=list)
     related_rules: List[str] = Field(default_factory=list)
     agent: Optional[str] = None
-    
+
     @property
     def enforcement_level(self) -> Optional[EnforcementLevel]:
         """Get enforcement level as enum."""
@@ -46,7 +47,7 @@ class CoreRule(BaseModel):
 class CoreRulesYAML(BaseModel):
     """Root model for core-rules.yaml."""
     model_config = {'extra': 'allow'}
-    
+
     meta: Dict[str, Any]
     core_rules: List[CoreRule]
     special_rules: Optional[List[CoreRule]] = Field(default_factory=list)
@@ -64,7 +65,7 @@ class Priority(str, Enum):
 class AuditCheck(BaseModel):
     """Single audit check model."""
     model_config = {'extra': 'allow'}
-    
+
     id: str
     name: str
     description: str
@@ -81,7 +82,7 @@ class AuditCheck(BaseModel):
 class PriorityCategory(BaseModel):
     """Priority category with multiple checks."""
     model_config = {'extra': 'allow'}
-    
+
     name: str
     description: str
     mandatory: Optional[bool] = None
@@ -92,7 +93,7 @@ class PriorityCategory(BaseModel):
 class AuditChecklistYAML(BaseModel):
     """Root model for audit-checklist.yaml."""
     model_config = {'extra': 'allow'}
-    
+
     meta: Dict[str, Any]
     priority_checks: Dict[str, PriorityCategory]  # Changed to use PriorityCategory
     execution_flow: Dict[str, Any]
@@ -104,7 +105,7 @@ class AuditChecklistYAML(BaseModel):
 class ModeDefinition(BaseModel):
     """Single mode definition model."""
     model_config = {'extra': 'allow'}
-    
+
     name: str
     trigger: str
     description: str
@@ -120,7 +121,7 @@ class ModeDefinition(BaseModel):
 class ModesYAML(BaseModel):
     """Root model for modes.yaml."""
     model_config = {'extra': 'allow'}
-    
+
     meta: Dict[str, Any]
     modes: Dict[str, ModeDefinition]
 
@@ -128,7 +129,7 @@ class ModesYAML(BaseModel):
 class ResponseFormatYAML(BaseModel):
     """Root model for response-format.yaml."""
     model_config = {'extra': 'allow'}
-    
+
     meta: Dict[str, Any]
     header: Dict[str, Any]  # Changed to Any since it has mixed types
     icons: Dict[str, Any]  # Changed to Any since nested structure varies

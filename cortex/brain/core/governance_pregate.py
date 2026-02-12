@@ -1,7 +1,7 @@
 """
 Governance Pre-Execution Gates (AC-FIX-002-01).
 
-Implements pre-execution governance validation to prevent unauthorized 
+Implements pre-execution governance validation to prevent unauthorized
 orchestrator operations BEFORE they execute (not after).
 
 ISSUE ADDRESSED:
@@ -30,8 +30,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-from cortex.brain.core.result import Result, Ok, Err
-
+from cortex.brain.core.result import Err, Ok, Result
 
 # ============================================================================
 # PRE-GATE DECISION STRUCTURE
@@ -41,32 +40,32 @@ from cortex.brain.core.result import Result, Ok, Err
 class PreGateDecision:
     """
     Result of a pre-gate evaluation.
-    
+
     Represents the decision whether an operation is allowed to proceed
     based on governance validation checks.
     """
-    
+
     allowed: bool
     """Whether the operation is allowed to proceed."""
-    
+
     reason: str
     """Human-readable explanation of the decision."""
-    
+
     violation_type: Optional[str] = None
     """Type of violation if blockedUnion[RESOURCE_QUOTA, AUTHORIZATION] | TIER_ACCESS | None."""
-    
+
     audit_context: Dict[str, Any] = field(default_factory=dict)
     """Context for audit logging (timestamp, actor_id, checks_performed, etc.)."""
-    
+
     def __post_init__(self) -> None:
         """Initialize audit context with defaults."""
         if not self.audit_context:
             self.audit_context = {}
-        
+
         # Always include timestamp
         if "timestamp" not in self.audit_context:
             self.audit_context["timestamp"] = datetime.utcnow().isoformat()
-        
+
         # If blocked, set violation_type if not provided
         if not self.allowed and not self.violation_type:
             self.violation_type = "UNKNOWN"
@@ -79,21 +78,21 @@ class PreGateDecision:
 class GovernancePregate(ABC):
     """
     Abstract base class for pre-execution governance gates.
-    
+
     Pre-gates validate that operations are authorized to proceed BEFORE
     the orchestrator executes them. This prevents unauthorized operations
     from executing (proactive prevention) rather than just logging violations
     (reactive detection).
-    
+
     Implementing classes should override the abstract methods to provide
     specific validation logic.
     """
-    
+
     def __init__(self) -> None:
         """Initialize base pre-gate."""
         self._logger = logging.getLogger(self.__class__.__name__)
         self._lock = threading.RLock()
-    
+
     @abstractmethod
     def check_resource_quota(
         self,
@@ -103,20 +102,20 @@ class GovernancePregate(ABC):
     ) -> PreGateDecision:
         """
         Check if operation has sufficient resource quota.
-        
+
         Validates that the operation's estimated token cost doesn't exceed
         available quota for the current session/actor.
-        
+
         Args:
             operation_id: Unique identifier for the operation
             estimated_token_cost: Estimated tokens needed for operation
             context: Optional context (actor_id, session_id, etc.)
-        
+
         Returns:
             PreGateDecision with allowed=True or False, with reason
         """
         pass
-    
+
     @abstractmethod
     def check_authorization(
         self,
@@ -127,21 +126,21 @@ class GovernancePregate(ABC):
     ) -> PreGateDecision:
         """
         Check if actor is authorized for the operation.
-        
+
         Validates that the actor has necessary permissions to perform
         the operation on the target resource.
-        
+
         Args:
             operation_id: Unique identifier for the operation
             actor_id: Identifier of the actor (user, system, etc.)
             target_resource: Resource the operation targets
             context: Optional context for authorization check
-        
+
         Returns:
             PreGateDecision with allowed=True or False, with reason
         """
         pass
-    
+
     @abstractmethod
     def check_tier_access(
         self,
@@ -152,23 +151,23 @@ class GovernancePregate(ABC):
     ) -> PreGateDecision:
         """
         Check if operation is authorized to access the tier.
-        
+
         Validates that:
         1. TIER-0 rules cannot be modified (immutability)
         2. Operation only accesses tiers it declared in context
         3. Access respects tier hierarchy (0 > 1 > 2)
-        
+
         Args:
             tier_id: Tier being accessed (TIER-0, TIER-1, TIER-2)
             operation_id: Operation requesting access
             declared_access: List of tiers operation declared it needs
             context: Optional context
-        
+
         Returns:
             PreGateDecision with allowed=True or False, with reason
         """
         pass
-    
+
     def evaluate_all_gates(
         self,
         operation_id: str,
@@ -180,10 +179,10 @@ class GovernancePregate(ABC):
     ) -> PreGateDecision:
         """
         Evaluate all pre-gates for an operation.
-        
+
         Runs all three gate checks and returns combined decision.
         If ANY gate blocks, operation is blocked.
-        
+
         Args:
             operation_id: Operation identifier
             actor_id: Actor identifier
@@ -191,7 +190,7 @@ class GovernancePregate(ABC):
             estimated_token_cost: Estimated token cost
             tier_access: Declared tier access
             context: Optional context
-        
+
         Returns:
             PreGateDecision allowing or blocking operation
         """
@@ -204,11 +203,11 @@ class GovernancePregate(ABC):
                 "checks_performed": [],
                 "all_passed": True
             }
-            
+
             # Check 1: Resource quota
             quota_decision = self.check_resource_quota(
-                operation_id, 
-                estimated_token_cost, 
+                operation_id,
+                estimated_token_cost,
                 context
             )
             audit_context["checks_performed"].append("RESOURCE_QUOTA")
@@ -221,7 +220,7 @@ class GovernancePregate(ABC):
                     violation_type="RESOURCE_QUOTA",
                     audit_context=audit_context
                 )
-            
+
             # Check 2: Authorization
             auth_decision = self.check_authorization(
                 operation_id,
@@ -239,7 +238,7 @@ class GovernancePregate(ABC):
                     violation_type="AUTHORIZATION",
                     audit_context=audit_context
                 )
-            
+
             # Check 3: Tier access
             if tier_access:
                 for tier in tier_access:
@@ -259,7 +258,7 @@ class GovernancePregate(ABC):
                             violation_type="TIER_ACCESS",
                             audit_context=audit_context
                         )
-            
+
             # All gates passed
             audit_context["decision"] = "ALLOWED"
             return PreGateDecision(
@@ -277,15 +276,15 @@ class GovernancePregate(ABC):
 class DefaultGovernancePregate(GovernancePregate):
     """
     Default implementation of governance pre-gate.
-    
+
     Provides basic gate implementations with configurable quotas and
     authorization rules.
     """
-    
+
     def __init__(self, max_token_quota: int = 100000) -> None:
         """
         Initialize default pre-gate.
-        
+
         Args:
             max_token_quota: Maximum tokens allowed per session
         """
@@ -294,7 +293,7 @@ class DefaultGovernancePregate(GovernancePregate):
         self.used_tokens: Dict[str, int] = {}
         self._auth_rules: Dict[str, List[str]] = {}
         self._tier0_immutable = True
-    
+
     def check_resource_quota(
         self,
         operation_id: str,
@@ -303,11 +302,11 @@ class DefaultGovernancePregate(GovernancePregate):
     ) -> PreGateDecision:
         """Check resource quota."""
         actor_id = context.get("actor_id", "unknown") if context else "unknown"
-        
+
         # Get used tokens for this actor
         used = self.used_tokens.get(actor_id, 0)
         available = self.max_token_quota - used
-        
+
         if estimated_token_cost > available:
             return PreGateDecision(
                 allowed=False,
@@ -321,10 +320,10 @@ class DefaultGovernancePregate(GovernancePregate):
                     "tokens_used": used
                 }
             )
-        
+
         # Deduct tokens
         self.used_tokens[actor_id] = used + estimated_token_cost
-        
+
         return PreGateDecision(
             allowed=True,
             reason=f"Quota check passed: {estimated_token_cost} tokens "
@@ -336,7 +335,7 @@ class DefaultGovernancePregate(GovernancePregate):
                 "tokens_after": available - estimated_token_cost
             }
         )
-    
+
     def check_authorization(
         self,
         operation_id: str,
@@ -357,7 +356,7 @@ class DefaultGovernancePregate(GovernancePregate):
                     "check": "default_allow"
                 }
             )
-        
+
         allowed_resources = self._auth_rules[actor_id]
         if target_resource not in allowed_resources:
             return PreGateDecision(
@@ -370,7 +369,7 @@ class DefaultGovernancePregate(GovernancePregate):
                     "allowed_resources": allowed_resources
                 }
             )
-        
+
         return PreGateDecision(
             allowed=True,
             reason=f"Actor {actor_id} authorized for {target_resource}",
@@ -380,7 +379,7 @@ class DefaultGovernancePregate(GovernancePregate):
                 "check": "explicit_allow"
             }
         )
-    
+
     def check_tier_access(
         self,
         tier_id: str,
@@ -401,7 +400,7 @@ class DefaultGovernancePregate(GovernancePregate):
                     "violation": "tier0_immutability"
                 }
             )
-        
+
         # Check if tier was declared
         if declared_access and tier_id not in declared_access:
             return PreGateDecision(
@@ -415,7 +414,7 @@ class DefaultGovernancePregate(GovernancePregate):
                     "declared_access": declared_access
                 }
             )
-        
+
         return PreGateDecision(
             allowed=True,
             reason=f"Tier access check passed for {tier_id}",
@@ -425,12 +424,12 @@ class DefaultGovernancePregate(GovernancePregate):
                 "check": "tier_access_allowed"
             }
         )
-    
+
     def set_authorization_rule(self, actor_id: str, allowed_resources: List[str]) -> None:
         """Set authorization rules for an actor."""
         with self._lock:
             self._auth_rules[actor_id] = allowed_resources
-    
+
     def reset_quota(self, actor_id: str) -> None:
         """Reset token quota for an actor."""
         with self._lock:
@@ -448,24 +447,24 @@ _pregate_lock = threading.RLock()
 def get_governance_pregate() -> GovernancePregate:
     """
     Get the singleton GovernancePregate instance.
-    
+
     Returns:
         GovernancePregate: Singleton pre-gate instance
     """
     global _pregate_instance
-    
+
     if _pregate_instance is None:
         with _pregate_lock:
             if _pregate_instance is None:
                 _pregate_instance = DefaultGovernancePregate()
-    
+
     return _pregate_instance
 
 
 def set_governance_pregate(pregate: GovernancePregate) -> None:
     """
     Set the singleton GovernancePregate instance (for testing).
-    
+
     Args:
         pregate: GovernancePregate instance to use
     """

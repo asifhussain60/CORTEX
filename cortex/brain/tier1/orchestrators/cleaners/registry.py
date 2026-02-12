@@ -15,8 +15,9 @@ CORE Rules: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 """
 
 import logging
-from typing import Dict, Type, List, Optional, Any
 from pathlib import Path
+from typing import Any, Dict, List, Optional, Type
+
 import yaml
 
 from .interface import CleanerInterface

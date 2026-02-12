@@ -12,9 +12,9 @@ This module provides:
 """
 
 from cortex.bootstrap.orchestrator_factory import (
-    OrchestratorFactory,
     CircularDependencyDetector,
     DependencyResolver,
+    OrchestratorFactory,
 )
 
 __all__ = [

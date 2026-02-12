@@ -8,15 +8,16 @@ All methods follow the same semantics as production implementations but
 operate on in-memory data structures.
 """
 
-from typing import Any, Dict, List, Optional
 import time
+from typing import Any, Dict, List, Optional
+
 from cortex.brain.core.knowledge.graph.interface import (
-    IGraphAdapter,
     EntityNode,
-    Relationship,
-    Path,
-    HealthStatus,
     GraphQueryError,
+    HealthStatus,
+    IGraphAdapter,
+    Path,
+    Relationship,
 )
 
 

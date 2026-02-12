@@ -6,8 +6,9 @@ ambiguous intent classifications.
 Author: CORTEX Framework
 """
 
-from typing import List
 from enum import Enum
+from typing import List
+
 from cortex.intent_router.classifier import IntentCategory
 
 
@@ -21,25 +22,25 @@ class FallbackType(Enum):
 
 class FallbackStrategy:
     """Fallback routing strategies.
-    
+
     Provides fallback chains for intent categories and confidence-based
     fallback decisions.
-    
+
     Attributes:
         DEFAULT_FALLBACK: Default fallback handler name
         CONFIDENCE_THRESHOLD: Threshold for using fallback
     """
-    
+
     DEFAULT_FALLBACK = "GeneralHandler"
     CONFIDENCE_THRESHOLD = 0.7
-    
+
     @staticmethod
     def get_fallback_chain(intent: IntentCategory) -> List[str]:
         """Get fallback chain for an intent.
-        
+
         Args:
             intent: Primary intent category
-            
+
         Returns:
             List of fallback handler names in order of preference
         """
@@ -58,15 +59,15 @@ class FallbackStrategy:
             IntentCategory.UNKNOWN: ["GeneralHandler"],
         }
         return chains.get(intent, ["GeneralHandler"])
-    
+
     @staticmethod
     def apply_fallback(confidence: float, primary_handler: str) -> str:
         """Apply fallback strategy based on confidence.
-        
+
         Args:
             confidence: Classification confidence score
             primary_handler: Primary handler name
-            
+
         Returns:
             Handler name to use (primary or fallback)
         """

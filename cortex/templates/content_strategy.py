@@ -6,9 +6,10 @@ Manages domain templates, content sources, and template metadata.
 """
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional, Set, NamedTuple
 from enum import Enum
 from pathlib import Path
+from typing import Any, Dict, List, NamedTuple, Optional, Set
+
 import yaml
 
 
@@ -40,10 +41,10 @@ class TemplateMetadata:
     source: ContentSource = ContentSource.STATIC_CONTENT
     variables: List[str] = field(default_factory=list)
     tags: Set[str] = field(default_factory=set)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary.
-        
+
         Returns:
             Dictionary representation.
         """
@@ -62,17 +63,17 @@ class TemplateMetadata:
 
 class ContentPopulationStrategy:
     """Content population strategy and template registry.
-    
+
     Manages domain templates, content sources, and template metadata.
     """
-    
+
     def __init__(self) -> None:
         """Initialize content population strategy."""
         self._templates: Dict[str, TemplateMetadata] = {}
         self._domain_index: Dict[str, List[str]] = {}
         self._category_index: Dict[str, List[str]] = {}
         self._initialize_default_templates()
-    
+
     def _initialize_default_templates(self) -> None:
         """Initialize default templates for each domain."""
         # Planning domain templates (12 templates)
@@ -162,7 +163,7 @@ class ContentPopulationStrategy:
                 category='execution',
             ),
         ]
-        
+
         # Governance domain templates (10 templates)
         governance_templates = [
             TemplateMetadata(
@@ -236,7 +237,7 @@ class ContentPopulationStrategy:
                 category='monitoring',
             ),
         ]
-        
+
         # Analysis domain templates (12 templates)
         analysis_templates = [
             TemplateMetadata(
@@ -324,7 +325,7 @@ class ContentPopulationStrategy:
                 category='analysis',
             ),
         ]
-        
+
         # Integration domain templates (10 templates)
         integration_templates = [
             TemplateMetadata(
@@ -398,7 +399,7 @@ class ContentPopulationStrategy:
                 category='validation',
             ),
         ]
-        
+
         # Validation domain templates (10 templates)
         validation_templates = [
             TemplateMetadata(
@@ -472,7 +473,7 @@ class ContentPopulationStrategy:
                 category='validation',
             ),
         ]
-        
+
         # Execution domain templates (10 templates)
         execution_templates = [
             TemplateMetadata(
@@ -546,7 +547,7 @@ class ContentPopulationStrategy:
                 category='execution',
             ),
         ]
-        
+
         # System domain templates (8 templates)
         system_templates = [
             TemplateMetadata(
@@ -606,7 +607,7 @@ class ContentPopulationStrategy:
                 category='execution',
             ),
         ]
-        
+
         # Register all templates
         all_templates = (
             planning_templates +
@@ -617,71 +618,71 @@ class ContentPopulationStrategy:
             execution_templates +
             system_templates
         )
-        
+
         for template in all_templates:
             self._register_template(template)
-    
+
     def _register_template(self, template: TemplateMetadata) -> None:
         """Register a template in the registry.
-        
+
         Args:
             template: Template metadata to register.
         """
         self._templates[template.id] = template
-        
+
         # Update domain index
         if template.domain not in self._domain_index:
             self._domain_index[template.domain] = []
         self._domain_index[template.domain].append(template.id)
-        
+
         # Update category index
         if template.category:
             if template.category not in self._category_index:
                 self._category_index[template.category] = []
             self._category_index[template.category].append(template.id)
-    
+
     @property
     def domains(self) -> List[str]:
         """Get list of all domains.
-        
+
         Returns:
             List of domain names.
         """
         return list(self._domain_index.keys())
-    
+
     @property
     def total_template_count(self) -> int:
         """Get total template count.
-        
+
         Returns:
             Total number of templates.
         """
         return len(self._templates)
-    
+
     def get_domain_templates(self, domain: str) -> List[Dict[str, Any]]:
         """Get templates for a specific domain.
-        
+
         Args:
             domain: Domain name.
-            
+
         Returns:
             List of template dictionaries.
         """
         if domain not in self._domain_index:
             return []
-        
+
         template_ids = self._domain_index[domain]
         return [
             self._templates[tid].to_dict()
             for tid in template_ids
         ]
-    
+
     def get_template_by_id(self, template_id: str) -> Optional[Dict[str, Any]]:
         """Get template by ID.
-        
+
         Args:
             template_id: Template ID.
-            
+
         Returns:
             Template dictionary or None if not found.
         """
@@ -689,28 +690,28 @@ class ContentPopulationStrategy:
         if template:
             return template.to_dict()
         return None
-    
+
     def get_templates_by_category(self, category: str) -> List[Dict[str, Any]]:
         """Get templates by category.
-        
+
         Args:
             category: Category name.
-            
+
         Returns:
             List of template dictionaries.
         """
         if category not in self._category_index:
             return []
-        
+
         template_ids = self._category_index[category]
         return [
             self._templates[tid].to_dict()
             for tid in template_ids
         ]
-    
+
     def export_registry(self) -> Dict[str, Any]:
         """Export complete template registry.
-        
+
         Returns:
             Registry dictionary.
         """
@@ -726,21 +727,21 @@ class ContentPopulationStrategy:
                 for domain in self.domains
             },
         }
-    
+
     def validate_registry(self) -> ValidationResult:
         """Validate registry integrity.
-        
+
         Returns:
             Validation result.
         """
         errors = []
         warnings = []
-        
+
         # Check for duplicate IDs
         all_ids = list(self._templates.keys())
         if len(all_ids) != len(set(all_ids)):
             errors.append("Duplicate template IDs found")
-        
+
         # Check domain coverage
         for domain in self.domains:
             count = len(self._domain_index[domain])
@@ -748,13 +749,13 @@ class ContentPopulationStrategy:
                 warnings.append(f"Domain {domain} has only {count} templates (< 8)")
             elif count > 15:
                 warnings.append(f"Domain {domain} has {count} templates (> 15)")
-        
+
         # Check total count
         if self.total_template_count < 60:
             warnings.append(f"Total template count {self.total_template_count} < 60")
         elif self.total_template_count > 90:
             warnings.append(f"Total template count {self.total_template_count} > 90")
-        
+
         return ValidationResult(
             valid=len(errors) == 0,
             errors=errors,

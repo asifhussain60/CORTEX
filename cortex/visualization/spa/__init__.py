@@ -6,28 +6,26 @@ Includes GPT-spec compliant dashboard suite generation.
 """
 
 from cortex.visualization.spa.dependency_bundler import (
-    DependencyBundler,
     Dependency,
+    DependencyBundler,
     bundle_dependencies,
 )
-
 from cortex.visualization.spa.models import (
-    Severity,
-    UseCasePersona,
-    UseCaseCategory,
-    UseCase,
-    VulnerabilityFinding,
+    ArchitectureLayer,
+    DashboardSuiteConfig,
     DependencyInfo,
     QualityMetric,
-    ArchitectureLayer,
-    TestingMetrics,
     Recommendation,
     RepoDashboardData,
     RepoManifestEntry,
-    DashboardSuiteConfig,
+    Severity,
+    TestingMetrics,
+    UseCase,
+    UseCaseCategory,
+    UseCasePersona,
+    VulnerabilityFinding,
     to_dict,
 )
-
 from cortex.visualization.spa.suite_generator import (
     DashboardSuiteGenerator,
     GenerationResult,

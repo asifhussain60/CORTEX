@@ -24,7 +24,7 @@ from cortex.visualization.repository_detector import is_cortex_repository
 class DashboardTab:
     """
     Represents a single dashboard tab configuration.
-    
+
     Attributes:
         id: Unique identifier for the tab (lowercase_with_underscores)
         name: Display name for the tab
@@ -42,59 +42,59 @@ class DashboardTab:
 class DashboardConfiguration:
     """
     Manages context-aware dashboard tab configuration.
-    
+
     Determines which tabs to display based on repository type:
     - External repository → 5 universal tabs
     - CORTEX repository → 8 tabs (5 universal + 3 CORTEX-specific)
-    
+
     Example:
         ```python
         config = DashboardConfiguration()
-        
+
         # Get tabs for external repository
         tabs = config.get_tabs_for_repo(Path("/path/to/flask-app"))
         # Returns: 5 tabs
-        
+
         # Get tabs for CORTEX repository
         tabs = config.get_tabs_for_repo(Path("/path/to/CORTEX"))
         # Returns: 8 tabs
-        
+
         # Check if specific tab is applicable
         is_applicable = config.is_tab_applicable("brain_architecture", repo_path)
         ```
     """
-    
+
     def get_tabs_for_repo(self, repo_path: Path) -> List[DashboardTab]:
         """
         Get applicable dashboard tabs based on repository type.
-        
+
         Args:
             repo_path: Path to repository root
-        
+
         Returns:
             List of DashboardTab objects (5 for external, 8 for CORTEX)
         """
         tabs = get_universal_tabs()
-        
+
         if is_cortex_repository(repo_path):
             tabs.extend(get_cortex_tabs())
-        
+
         return tabs
-    
+
     def is_tab_applicable(self, tab_id: str, repo_path: Path) -> bool:
         """
         Check if a specific tab is applicable to the repository.
-        
+
         Args:
             tab_id: Tab identifier (e.g., "brain_architecture")
             repo_path: Path to repository root
-        
+
         Returns:
             True if tab should be shown, False otherwise
         """
         # Get all applicable tabs for this repo
         applicable_tabs = self.get_tabs_for_repo(repo_path)
-        
+
         # Check if tab_id is in the list
         return any(tab.id == tab_id for tab in applicable_tabs)
 
@@ -102,14 +102,14 @@ class DashboardConfiguration:
 def get_universal_tabs() -> List[DashboardTab]:
     """
     Get universal dashboard tabs (applicable to ALL repositories).
-    
+
     Returns 5 tabs:
     1. Repository Overview - Business language description
     2. Dependency Graph - Call graph + import graph
     3. Class Diagrams - UML, ERD, interfaces
     4. Temporal Analysis - Git timeline, change heatmap
     5. Impact Analysis - Change propagation
-    
+
     Returns:
         List of 5 universal DashboardTab objects
     """
@@ -155,12 +155,12 @@ def get_universal_tabs() -> List[DashboardTab]:
 def get_cortex_tabs() -> List[DashboardTab]:
     """
     Get CORTEX-specific dashboard tabs.
-    
+
     Returns 3 tabs (only shown for CORTEX repository):
     6. Brain Architecture - 4-tier brain system
     7. Governance Compliance - CORE rule heatmap
     8. Orchestrator Constellation - Orchestrator wiring
-    
+
     Returns:
         List of 3 CORTEX-specific DashboardTab objects
     """

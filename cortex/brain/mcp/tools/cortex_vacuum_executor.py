@@ -11,11 +11,11 @@ import json
 import os
 import re
 import shutil
-from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+import tempfile
 from dataclasses import dataclass, field
 from datetime import datetime
-import tempfile
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
 
 
 @dataclass
@@ -42,7 +42,7 @@ class ExecutionLog:
 class CortexVacuumExecutor:
     """
     Executes repository reorganization with safety guarantees.
-    
+
     Features:
     - Pre-execution snapshots
     - Dependency-aware ordering
@@ -54,7 +54,7 @@ class CortexVacuumExecutor:
     def __init__(self, repo_root: str, migration_plan: Dict, dry_run: bool = False):
         """
         Initialize executor.
-        
+
         Args:
             repo_root: Repository root directory
             migration_plan: Migration plan from analyzer
@@ -70,14 +70,14 @@ class CortexVacuumExecutor:
     def execute(self, auto_approve: bool = False) -> Dict:
         """
         Execute the migration plan.
-        
+
         Args:
             auto_approve: If True, don't ask for confirmation
-            
+
         Returns:
             Execution report
         """
-        print(f"🚀 CORTEX Vacuum Executor")
+        print("🚀 CORTEX Vacuum Executor")
         print(f"   Mode: {'DRY RUN' if self.dry_run else 'LIVE EXECUTION'}")
         print(f"   Root: {self.repo_root}")
 
@@ -93,11 +93,11 @@ class CortexVacuumExecutor:
                 'error': 'Migration plan validation failed',
                 'details': validation_result
             }
-        print(f"   ✓ Migration plan validated")
+        print("   ✓ Migration plan validated")
 
         # Step 3: Show plan summary
         summary = self._summarize_plan()
-        print(f"\n📋 Migration Summary:")
+        print("\n📋 Migration Summary:")
         print(f"   Files to delete: {summary['deletions']}")
         print(f"   Files to move: {summary['moves']}")
         print(f"   Files to rename: {summary['renames']}")
@@ -442,13 +442,13 @@ class CortexVacuumExecutor:
 def run_execution(repo_root: str, migration_plan_path: str, dry_run: bool = False, auto_approve: bool = False) -> Dict:
     """
     Run migration execution.
-    
+
     Args:
         repo_root: Repository root directory
         migration_plan_path: Path to migration plan JSON file
         dry_run: If True, simulate without making changes
         auto_approve: If True, skip confirmation
-        
+
     Returns:
         Execution report
     """

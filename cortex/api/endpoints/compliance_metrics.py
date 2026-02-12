@@ -5,11 +5,12 @@ Provides REST endpoints for real-time compliance metrics, domain coverage,
 timeline analysis, and individual AC details.
 """
 
-from fastapi import APIRouter, HTTPException
-from datetime import datetime
-import sqlite3
-from typing import Dict, List, Any
 import os
+import sqlite3
+from datetime import datetime
+from typing import Any, Dict, List
+
+from fastapi import APIRouter, HTTPException
 
 router = APIRouter(prefix="/api/compliance", tags=["compliance"])
 
@@ -31,7 +32,7 @@ def get_db_connection():
 async def get_coverage_metrics() -> Dict[str, Any]:
     """
     Get current acceptance criteria coverage statistics.
-    
+
     Returns:
         - total_acs: Total number of acceptance criteria
         - covered_acs: Number of covered ACs
@@ -41,19 +42,19 @@ async def get_coverage_metrics() -> Dict[str, Any]:
     try:
         with sqlite3.connect(DB_PATH, timeout=10.0) as conn:
             cursor = conn.cursor()
-            
+
             # Get total unique ACs
             cursor.execute("SELECT COUNT(DISTINCT ac_id) FROM audit_log")
             total_acs = cursor.fetchone()[0] or 0
-            
+
             # Get completed ACs
             cursor.execute(
                 "SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE operation = 'AC_COMPLETE'"
             )
             covered_acs = cursor.fetchone()[0] or 0
-        
+
         coverage_percentage = (covered_acs / total_acs * 100) if total_acs > 0 else 0
-        
+
         return {
             "total_acs": total_acs,
             "covered_acs": covered_acs,
@@ -68,46 +69,46 @@ async def get_coverage_metrics() -> Dict[str, Any]:
 async def get_coverage_by_domain() -> Dict[str, Dict[str, Any]]:
     """
     Get AC coverage broken down by domain (AR, BR, FR, etc.).
-    
+
     Returns:
         Dictionary with domain codes as keys and coverage stats as values
     """
     try:
         with sqlite3.connect(DB_PATH, timeout=10.0) as conn:
             cursor = conn.cursor()
-            
+
             # Get all unique domains
             cursor.execute(
                 "SELECT DISTINCT SUBSTR(ac_id, 1, INSTR(ac_id, '-')-1) as domain FROM audit_log"
             )
             domains_raw = cursor.fetchall()
-            
+
             domains_result = {}
-            
+
             for domain_row in domains_raw:
                 domain = domain_row[0]
-                
+
                 # Get total ACs for domain
                 cursor.execute(
                     f"SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE ac_id LIKE '{domain}-%'"
                 )
                 total = cursor.fetchone()[0] or 0
-                
+
                 # Get covered ACs for domain
                 cursor.execute(
                     f"SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE ac_id LIKE '{domain}-%' AND operation = 'AC_COMPLETE'"
                 )
                 covered = cursor.fetchone()[0] or 0
-                
+
                 percentage = (covered / total * 100) if total > 0 else 0
-                
+
                 domains_result[domain] = {
                     "total": total,
                     "covered": covered,
                     "percentage": round(percentage, 1),
                     "status": "COMPLETE" if percentage == 100 else "IN_PROGRESS"
                 }
-        
+
         return domains_result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -118,7 +119,7 @@ async def get_compliance_timeline() -> Dict[str, Any]:
     """
     Get compliance growth over phases (Phase 1-5).
     Shows progression from initial state to 100% coverage.
-    
+
     Returns:
         List of phases with entries, ACs, and coverage percentage
     """
@@ -174,10 +175,10 @@ async def get_compliance_timeline() -> Dict[str, Any]:
 async def get_ac_details(ac_id: str) -> Dict[str, Any]:
     """
     Get detailed information for a specific acceptance criterion.
-    
+
     Args:
         ac_id: Acceptance criterion ID (e.g., 'AR-001-01')
-    
+
     Returns:
         AC details including entries, status, history
     """
@@ -185,21 +186,21 @@ async def get_ac_details(ac_id: str) -> Dict[str, Any]:
         with sqlite3.connect(DB_PATH, timeout=10.0) as conn:
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
-            
+
             # Get AC entries
             cursor.execute(
                 "SELECT operation, context, timestamp FROM audit_log WHERE ac_id = ? ORDER BY timestamp",
                 (ac_id,)
             )
             entries = [dict(row) for row in cursor.fetchall()]
-            
+
             if not entries:
                 raise HTTPException(status_code=404, detail=f"AC {ac_id} not found")
-            
+
             # Determine status
             statuses = [e['operation'] for e in entries]
             status = "COMPLETE" if "AC_COMPLETE" in statuses else "IN_PROGRESS"
-            
+
             return {
                 "ac_id": ac_id,
                 "status": status,
@@ -218,35 +219,35 @@ async def get_overall_stats() -> Dict[str, Any]:
     try:
         with sqlite3.connect(DB_PATH, timeout=10.0) as conn:
             cursor = conn.cursor()
-            
+
             # Total entries
             cursor.execute("SELECT COUNT(*) FROM audit_log")
             total_entries = cursor.fetchone()[0] or 0
-            
+
             # Total unique ACs
             cursor.execute("SELECT COUNT(DISTINCT ac_id) FROM audit_log")
             total_acs = cursor.fetchone()[0] or 0
-            
+
             # Completed ACs
             cursor.execute(
                 "SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE operation = 'AC_COMPLETE'"
             )
             completed_acs = cursor.fetchone()[0] or 0
-            
+
             # Operations breakdown
             cursor.execute(
                 "SELECT operation, COUNT(*) FROM audit_log GROUP BY operation"
             )
             operations = {row[0]: row[1] for row in cursor.fetchall()}
-            
+
             # Unique domains
             cursor.execute(
                 "SELECT COUNT(DISTINCT SUBSTR(ac_id, 1, INSTR(ac_id, '-')-1)) FROM audit_log"
             )
             domains_count = cursor.fetchone()[0] or 0
-        
+
         coverage = (completed_acs / total_acs * 100) if total_acs > 0 else 0
-        
+
         return {
             "total_entries": total_entries,
             "total_acs": total_acs,

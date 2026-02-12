@@ -12,7 +12,7 @@ AC-ID: LENS-DASH-003
 """
 
 import json
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
@@ -21,7 +21,7 @@ from typing import Dict, List, Optional, Tuple
 class ComplexityMetrics:
     """
     Complexity metrics for a single function or method.
-    
+
     Attributes:
         name: Function name
         file_path: Relative path to file containing function
@@ -46,7 +46,7 @@ class ComplexityMetrics:
 class ComplexityVisualization:
     """
     Data structure for D3.js complexity visualization.
-    
+
     Attributes:
         scatter_data: List of complexity metrics for scatter plot
         heatmap_data: Nested dict for file-based heatmap
@@ -62,54 +62,54 @@ class ComplexityVisualization:
 class ComplexityRenderer:
     """
     Renders complexity visualizations from AST analysis.
-    
+
     Generates:
     - Scatter plot: X=LOC, Y=Complexity
     - Heatmap: File-grouped complexity visualization
     - Refactor candidates: Functions exceeding thresholds
-    
+
     Example:
         >>> renderer = ComplexityRenderer()
         >>> ast_data = {"functions": [...]}
         >>> viz = renderer.render_complexity_scatter(ast_data)
         >>> json_output = renderer.format_for_d3(viz)
     """
-    
+
     # Risk thresholds (industry standards)
     COMPLEXITY_THRESHOLDS = {
         "low": 10,      # Green: Complexity < 10
         "medium": 10,   # Yellow: 10 <= Complexity < 20
         "high": 20,     # Red: Complexity >= 20
     }
-    
+
     LOC_THRESHOLDS = {
         "low": 50,      # Small functions
         "medium": 100,  # Medium functions
         "high": 100,    # Large functions
     }
-    
+
     def __init__(self, repo_path: Optional[Path] = None) -> None:
         """
         Initialize complexity renderer.
-        
+
         Args:
             repo_path: Optional repository path for relative file paths
         """
         self.repo_path = repo_path or Path.cwd()
-    
+
     def render_complexity_scatter(
         self,
         ast_analysis: Dict
     ) -> ComplexityVisualization:
         """
         Generate scatter plot data from AST analysis.
-        
+
         Args:
             ast_analysis: AST analysis dict with 'functions' key
-        
+
         Returns:
             ComplexityVisualization with scatter plot data
-        
+
         Example:
             >>> ast_data = {"functions": [{"name": "foo", "complexity": 15}]}
             >>> viz = renderer.render_complexity_scatter(ast_data)
@@ -117,31 +117,31 @@ class ComplexityRenderer:
             True
         """
         functions = ast_analysis.get("functions", [])
-        
+
         scatter_data = []
         for func in functions:
             metrics = self._extract_metrics(func)
             scatter_data.append(asdict(metrics))
-        
+
         # Generate heatmap grouped by file
         heatmap_data = self._generate_heatmap(scatter_data)
-        
+
         # Identify refactor candidates
         candidates = self.identify_refactor_candidates(
             scatter_data,
             complexity_threshold=self.COMPLEXITY_THRESHOLDS["medium"]
         )
-        
+
         # Calculate statistics
         stats = self._calculate_statistics(scatter_data)
-        
+
         return ComplexityVisualization(
             scatter_data=scatter_data,
             heatmap_data=heatmap_data,
             refactor_candidates=candidates,
             statistics=stats
         )
-    
+
     def identify_refactor_candidates(
         self,
         metrics_list: List[Dict],
@@ -150,15 +150,15 @@ class ComplexityRenderer:
     ) -> List[Dict]:
         """
         Identify functions exceeding complexity or LOC thresholds.
-        
+
         Args:
             metrics_list: List of complexity metric dicts
             complexity_threshold: Maximum acceptable complexity
             loc_threshold: Maximum acceptable LOC
-        
+
         Returns:
             List of refactor candidate dicts sorted by risk
-        
+
         Example:
             >>> data = [{"complexity": 25, "loc": 50, "risk_level": "red"}]
             >>> candidates = renderer.identify_refactor_candidates(data, 20, 40)
@@ -166,7 +166,7 @@ class ComplexityRenderer:
             True
         """
         candidates = []
-        
+
         for metric in metrics_list:
             if (
                 metric["complexity"] >= complexity_threshold
@@ -180,28 +180,28 @@ class ComplexityRenderer:
                     loc_threshold
                 )
                 candidates.append(candidate)
-        
+
         # Sort by combined risk score (complexity + LOC normalized)
         candidates.sort(
             key=lambda x: (x["complexity"] + x["loc"] / 10),
             reverse=True
         )
-        
+
         return candidates
-    
+
     def generate_complexity_heatmap(
         self,
         ast_analysis: Dict
     ) -> Dict[str, List[Dict]]:
         """
         Generate file-grouped complexity heatmap data.
-        
+
         Args:
             ast_analysis: AST analysis dict with 'functions' key
-        
+
         Returns:
             Dict mapping file paths to complexity metrics
-        
+
         Example:
             >>> ast_data = {"functions": [{"file": "main.py", "complexity": 5}]}
             >>> heatmap = renderer.generate_complexity_heatmap(ast_data)
@@ -214,17 +214,17 @@ class ComplexityRenderer:
             for func in functions
         ]
         return self._generate_heatmap(scatter_data)
-    
+
     def format_for_d3(self, visualization: ComplexityVisualization) -> str:
         """
         Format visualization data as JSON for D3.js consumption.
-        
+
         Args:
             visualization: ComplexityVisualization instance
-        
+
         Returns:
             JSON string for D3.js
-        
+
         Example:
             >>> viz = ComplexityVisualization([], {}, [], {})
             >>> json_str = renderer.format_for_d3(viz)
@@ -232,9 +232,9 @@ class ComplexityRenderer:
             True
         """
         return json.dumps(asdict(visualization), indent=2)
-    
+
     # Private methods
-    
+
     def _extract_metrics(self, func_data: Dict) -> ComplexityMetrics:
         """Extract complexity metrics from function AST data."""
         name = func_data.get("name", "unknown")
@@ -244,9 +244,9 @@ class ComplexityRenderer:
         complexity = func_data.get("complexity", 1)
         parameters = len(func_data.get("parameters", []))
         returns_count = func_data.get("returns_count", 0)
-        
+
         risk_level = self._calculate_risk_level(complexity, loc)
-        
+
         return ComplexityMetrics(
             name=name,
             file_path=file_path,
@@ -257,7 +257,7 @@ class ComplexityRenderer:
             returns_count=returns_count,
             risk_level=risk_level
         )
-    
+
     def _calculate_risk_level(self, complexity: int, loc: int) -> str:
         """Determine risk level based on thresholds."""
         if complexity >= self.COMPLEXITY_THRESHOLDS["high"]:
@@ -268,29 +268,29 @@ class ComplexityRenderer:
             return "yellow"
         else:
             return "green"
-    
+
     def _generate_heatmap(
         self,
         scatter_data: List[Dict]
     ) -> Dict[str, List[Dict]]:
         """Group metrics by file for heatmap visualization."""
         heatmap: Dict[str, List[Dict]] = {}
-        
+
         for metric in scatter_data:
             file_path = metric["file_path"]
             if file_path not in heatmap:
                 heatmap[file_path] = []
             heatmap[file_path].append(metric)
-        
+
         # Sort functions within each file by complexity
         for file_path in heatmap:
             heatmap[file_path].sort(
                 key=lambda x: x["complexity"],
                 reverse=True
             )
-        
+
         return heatmap
-    
+
     def _calculate_statistics(self, scatter_data: List[Dict]) -> Dict[str, float]:
         """Calculate summary statistics for complexity metrics."""
         if not scatter_data:
@@ -302,14 +302,14 @@ class ComplexityRenderer:
                 "total_functions": 0,
                 "high_risk_count": 0,
             }
-        
+
         complexities = [d["complexity"] for d in scatter_data]
         locs = [d["loc"] for d in scatter_data]
         high_risk = sum(
             1 for d in scatter_data
             if d["risk_level"] == "red"
         )
-        
+
         sorted_complexities = sorted(complexities)
         n = len(sorted_complexities)
         median = (
@@ -317,7 +317,7 @@ class ComplexityRenderer:
             if n % 2 == 1
             else (sorted_complexities[n // 2 - 1] + sorted_complexities[n // 2]) / 2
         )
-        
+
         return {
             "mean_complexity": sum(complexities) / len(complexities),
             "median_complexity": median,
@@ -326,7 +326,7 @@ class ComplexityRenderer:
             "total_functions": len(scatter_data),
             "high_risk_count": high_risk,
         }
-    
+
     def _determine_refactor_reason(
         self,
         complexity: int,
@@ -336,11 +336,11 @@ class ComplexityRenderer:
     ) -> str:
         """Determine why function is a refactor candidate."""
         reasons = []
-        
+
         if complexity >= complexity_threshold:
             reasons.append(f"High complexity ({complexity})")
-        
+
         if loc >= loc_threshold:
             reasons.append(f"Large function ({loc} LOC)")
-        
+
         return ", ".join(reasons) if reasons else "Unknown"

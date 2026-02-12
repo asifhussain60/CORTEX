@@ -13,12 +13,13 @@ Key components:
 - PromptVersionConfig: Version management
 """
 
-import os
 import logging
+import os
 import re
 from datetime import datetime, timedelta
-from typing import Dict, Optional, Any, List
 from threading import Lock
+from typing import Any, Dict, List, Optional
+
 import yaml
 
 logger = logging.getLogger(__name__)
@@ -289,8 +290,8 @@ class ServiceDiscovery:
             return False
 
         try:
-            import urllib.request
             import urllib.error
+            import urllib.request
 
             try:
                 response = urllib.request.urlopen(

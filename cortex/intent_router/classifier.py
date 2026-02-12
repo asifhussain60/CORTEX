@@ -6,11 +6,11 @@ signal detection, and confidence scoring.
 Author: CORTEX Framework
 """
 
-from enum import Enum
-from dataclasses import dataclass, field
-from typing import Dict, List, Set, Optional, Any
 import re
+from dataclasses import dataclass, field
 from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional, Set
 
 
 class IntentCategory(str, Enum):
@@ -54,17 +54,17 @@ class ClassificationResult:
 
 class IntentClassifier:
     """Classify user intents from natural language text.
-    
+
     Uses keyword matching, signal detection, and confidence scoring to
     determine primary and secondary intents with multi-label support.
-    
+
     Attributes:
         keyword_mappings: Dict mapping intents to keyword sets
         signal_patterns: Dict mapping signals to compiled regex patterns
         classification_cache: LRU cache of recent classifications
         metrics: Classification performance metrics
     """
-    
+
     def __init__(self):
         """Initialize intent classifier."""
         self.keyword_mappings: Dict[IntentCategory, Set[str]] = self._build_keyword_mappings()
@@ -77,7 +77,7 @@ class IntentClassifier:
             "confidence_sum": 0.0
         }
         self._cache_max_size = 1000
-    
+
     def _build_keyword_mappings(self) -> Dict[IntentCategory, Set[str]]:
         """Build keyword mappings for each intent category."""
         return {
@@ -106,8 +106,8 @@ class IntentClassifier:
                 "redesign"
             },
             IntentCategory.TEST: {
-                "test", "tests", "testing", "verify", "validate", "check", 
-                "ensure", "confirm", "assert", "coverage", "unit test", 
+                "test", "tests", "testing", "verify", "validate", "check",
+                "ensure", "confirm", "assert", "coverage", "unit test",
                 "integration test"
             },
             IntentCategory.DOCUMENT: {
@@ -138,7 +138,7 @@ class IntentClassifier:
                 "scan repo", "discover", "inventory", "profile", "assess"
             }
         }
-    
+
     def _compile_signal_patterns(self) -> Dict[IntentSignal, re.Pattern]:
         """Compile regex patterns for signal detection."""
         return {
@@ -163,16 +163,16 @@ class IntentClassifier:
                 re.IGNORECASE
             )
         }
-    
+
     def classify(self, text: str) -> ClassificationResult:
         """Classify intent from text.
-        
+
         Args:
             text: Input text to classify
-            
+
         Returns:
             ClassificationResult with primary intent, confidence, and metadata
-            
+
         Raises:
             ValueError: If text is None, empty, or non-string
         """
@@ -183,21 +183,21 @@ class IntentClassifier:
             raise ValueError(f"Text must be string, got {type(text).__name__}")
         if text.strip() == "":
             raise ValueError("Text cannot be empty")
-        
+
         # Check cache
         cache_key = text.lower().strip()
         if cache_key in self.classification_cache:
             self.metrics["cache_hits"] += 1
             return self.classification_cache[cache_key]
-        
+
         # Normalize text
         normalized = text.lower().strip()
-        
+
         # Score all intents
         intent_scores: Dict[IntentCategory, float] = {}
         words = normalized.split()
         total_words = max(len(words), 1)
-        
+
         for intent, keywords in self.keyword_mappings.items():
             matches = 0.0
             # Use whole-word matching to avoid substring issues (e.g., "go" in "governance")
@@ -206,7 +206,7 @@ class IntentClassifier:
                 pattern = r'\b' + re.escape(keyword) + r'\b'
                 if re.search(pattern, normalized):
                     matches += 1.0
-            
+
             if matches > 0:
                 # Base score: keyword density
                 density = matches / len(keywords)
@@ -214,13 +214,13 @@ class IntentClassifier:
                 word_ratio = matches / total_words
                 # Combined score with higher weight on density
                 intent_scores[intent] = (density * 0.7) + (word_ratio * 0.3)
-        
+
         # Detect signals
         detected_signals = []
         for signal, pattern in self.signal_patterns.items():
             if pattern.search(normalized):
                 detected_signals.append(signal)
-        
+
         # Determine primary intent
         if not intent_scores:
             # No clear intent = query with LOW confidence for ambiguous text
@@ -229,23 +229,23 @@ class IntentClassifier:
         else:
             sorted_intents = sorted(intent_scores.items(), key=lambda x: x[1], reverse=True)
             primary = sorted_intents[0][0]
-            
+
             # Confidence calculation
             base_score = sorted_intents[0][1]
-            
+
             # Boost for clear intents (multiple keyword matches)
             if base_score > 0.15:
                 confidence = min(base_score * 2.0, 0.95)
             else:
                 confidence = base_score * 1.5
-            
+
             # Signal boost
             signal_boost = len(detected_signals) * 0.05
             confidence = min(confidence + signal_boost, 0.99)
-        
+
         # Extract keywords (up to 5, filter short words)
         keywords_list = [w for w in words if len(w) > 2][:5]
-        
+
         # Build secondary intents
         # Must be at least 50% of primary score to be considered secondary
         if intent_scores:
@@ -255,7 +255,7 @@ class IntentClassifier:
                         if intent != primary and score >= threshold][:3]
         else:
             secondary = []
-        
+
         # Create result
         result = ClassificationResult(
             primary_intent=primary,
@@ -265,30 +265,30 @@ class IntentClassifier:
             keywords=words,
             reasoning=f"Detected {len(intent_scores)} intent signals, confidence={confidence:.2f}"
         )
-        
+
         # Update metrics
         self.metrics["total_classifications"] += 1
         self.metrics["confidence_sum"] += confidence
         self.metrics["avg_confidence"] = (
             self.metrics["confidence_sum"] / self.metrics["total_classifications"]
         )
-        
+
         # Cache result
         if len(self.classification_cache) >= self._cache_max_size:
             # Simple LRU: remove oldest
             self.classification_cache.pop(next(iter(self.classification_cache)))
         self.classification_cache[cache_key] = result
-        
+
         return result
-    
+
     def get_metrics(self) -> Dict[str, Any]:
         """Get classification metrics.
-        
+
         Returns:
             Dictionary with performance metrics
         """
         return self.metrics.copy()
-    
+
     def clear_cache(self) -> None:
         """Clear classification cache."""
         self.classification_cache.clear()

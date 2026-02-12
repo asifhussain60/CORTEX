@@ -7,9 +7,8 @@ and property requirements.
 Enables schema enforcement across all adapter implementations.
 """
 
-from typing import Any, Dict, List, Set
 from dataclasses import dataclass
-
+from typing import Any, Dict, List, Set
 
 # Schema definitions
 VALID_ENTITY_TYPES: Set[str] = {"Entity", "Rule", "Service", "API", "Domain"}

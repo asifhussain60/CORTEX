@@ -1,0 +1,112 @@
+{
+  "total_imports": 11,
+  "total_files": 9,
+  "by_module": {
+    "cortex.orchestrators.core.challenge_engine": 11
+  },
+  "by_severity": {
+    "WARNING": 11
+  },
+  "last_audit": "2026-02-11T14:16:55.138145",
+  "imports": [
+    {
+      "file_path": "cortex/mcp/cortex_tools.py",
+      "line_number": 209,
+      "import_statement": "from cortex.orchestrators.core.challenge_engine import get_challenge_engine",
+      "deprecated_module": "cortex.orchestrators.core.challenge_engine",
+      "replacement_module": "cortex.orchestrators.support.orchestrator_factories.get_unified_quality_orchestrator",
+      "severity": "WARNING",
+      "discovered_date": "2026-02-11T14:16:58.038384"
+    },
+    {
+      "file_path": "cortex/mcp/adapters/generated/challengeengine_adapter.py",
+      "line_number": 18,
+      "import_statement": "from cortex.orchestrators.core.challenge_engine import ChallengeEngine",
+      "deprecated_module": "cortex.orchestrators.core.challenge_engine",
+      "replacement_module": "cortex.orchestrators.support.orchestrator_factories.get_unified_quality_orchestrator",
+      "severity": "WARNING",
+      "discovered_date": "2026-02-11T14:16:58.057081"
+    },
+    {
+      "file_path": "cortex/orchestrators/core/orchestrator_base_protocol.py",
+      "line_number": 91,
+      "import_statement": "from cortex.orchestrators.core.challenge_engine import (",
+      "deprecated_module": "cortex.orchestrators.core.challenge_engine",
+      "replacement_module": "cortex.orchestrators.support.orchestrator_factories.get_unified_quality_orchestrator",
+      "severity": "WARNING",
+      "discovered_date": "2026-02-11T14:16:59.690645"
+    },
+    {
+      "file_path": "cortex/orchestrators/core/challenge_engine_plugins.py",
+      "line_number": 17,
+      "import_statement": "from cortex.orchestrators.core.challenge_engine import DisagreementType",
+      "deprecated_module": "cortex.orchestrators.core.challenge_engine",
+      "replacement_module": "cortex.orchestrators.support.orchestrator_factories.get_unified_quality_orchestrator",
+      "severity": "WARNING",
+      "discovered_date": "2026-02-11T14:16:59.759983"
+    },
+    {
+      "file_path": "cortex/orchestrators/core/interaction_orchestrator.py",
+      "line_number": 27,
+      "import_statement": "from cortex.orchestrators.core.challenge_engine import (",
+      "deprecated_module": "cortex.orchestrators.core.challenge_engine",
+      "replacement_module": "cortex.orchestrators.support.orchestrator_factories.get_unified_quality_orchestrator",
+      "severity": "WARNING",
+      "discovered_date": "2026-02-11T14:16:59.821081"
+    },
+    {
+      "file_path": "tests/unit/orchestrators/core/test_challenge_engine_tier3.py",
+      "line_number": 18,
+      "import_statement": "from cortex.orchestrators.core.challenge_engine import (",
+      "deprecated_module": "cortex.orchestrators.core.challenge_engine",
+      "replacement_module": "cortex.orchestrators.support.orchestrator_factories.get_unified_quality_orchestrator",
+      "severity": "WARNING",
+      "discovered_date": "2026-02-11T14:17:11.595979"
+    },
+    {
+      "file_path": "tests/unit/orchestrators/core/test_challenge_engine.py",
+      "line_number": 27,
+      "import_statement": "from cortex.orchestrators.core.challenge_engine import (",
+      "deprecated_module": "cortex.orchestrators.core.challenge_engine",
+      "replacement_module": "cortex.orchestrators.support.orchestrator_factories.get_unified_quality_orchestrator",
+      "severity": "WARNING",
+      "discovered_date": "2026-02-11T14:17:11.826952"
+    },
+    {
+      "file_path": "tests/unit/orchestrators/core/test_challenge_engine.py",
+      "line_number": 629,
+      "import_statement": "from cortex.orchestrators.core.challenge_engine import (",
+      "deprecated_module": "cortex.orchestrators.core.challenge_engine",
+      "replacement_module": "cortex.orchestrators.support.orchestrator_factories.get_unified_quality_orchestrator",
+      "severity": "WARNING",
+      "discovered_date": "2026-02-11T14:17:11.843967"
+    },
+    {
+      "file_path": "tests/unit/orchestrators/core/test_challenge_engine.py",
+      "line_number": 658,
+      "import_statement": "assert \"from cortex.orchestrators.core.challenge_engine import\" in content",
+      "deprecated_module": "cortex.orchestrators.core.challenge_engine",
+      "replacement_module": "cortex.orchestrators.support.orchestrator_factories.get_unified_quality_orchestrator",
+      "severity": "WARNING",
+      "discovered_date": "2026-02-11T14:17:11.844820"
+    },
+    {
+      "file_path": "tests/unit/orchestrators/test_challenge_engine_lens_phase65.py",
+      "line_number": 23,
+      "import_statement": "from cortex.orchestrators.core.challenge_engine import (",
+      "deprecated_module": "cortex.orchestrators.core.challenge_engine",
+      "replacement_module": "cortex.orchestrators.support.orchestrator_factories.get_unified_quality_orchestrator",
+      "severity": "WARNING",
+      "discovered_date": "2026-02-11T14:17:12.645589"
+    },
+    {
+      "file_path": "tests/unit/orchestrators/test_tdd_orchestrator.py",
+      "line_number": 235,
+      "import_statement": "from cortex.orchestrators.core.challenge_engine import GateType",
+      "deprecated_module": "cortex.orchestrators.core.challenge_engine",
+      "replacement_module": "cortex.orchestrators.support.orchestrator_factories.get_unified_quality_orchestrator",
+      "severity": "WARNING",
+      "discovered_date": "2026-02-11T14:17:13.142997"
+    }
+  ]
+}

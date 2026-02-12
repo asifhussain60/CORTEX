@@ -13,10 +13,10 @@ class DevxFormatter:
 
     def format_code(self, code: str) -> str:
         """Format Python code.
-        
+
         Args:
             code: Code string
-            
+
         Returns:
             Formatted code
         """
@@ -26,10 +26,10 @@ class DevxFormatter:
 
     def format_output(self, data: Any) -> str:
         """Format output for display.
-        
+
         Args:
             data: Data to format
-            
+
         Returns:
             Formatted output string
         """
@@ -46,10 +46,10 @@ class DevxFormatter:
 
     def format_logs(self, logs: List[str]) -> str:
         """Format log entries.
-        
+
         Args:
             logs: List of log entries
-            
+
         Returns:
             Formatted logs
         """

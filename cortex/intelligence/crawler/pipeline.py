@@ -4,14 +4,14 @@
 # Stage: S2 - GREEN phase implementation
 
 import asyncio
-from dataclasses import dataclass, field
-from typing import Dict, List, Any, Callable, Optional
-from collections import defaultdict
 import time
+from collections import defaultdict
+from dataclasses import dataclass, field
+from typing import Any, Callable, Dict, List, Optional
 
+from cortex.intelligence.patterns.antipatterns import AntiPatternDetector
 from cortex.intelligence.patterns.catalog import PatternCatalog
 from cortex.intelligence.patterns.classification import ArchitectureClassifier
-from cortex.intelligence.patterns.antipatterns import AntiPatternDetector
 
 
 @dataclass
@@ -27,7 +27,7 @@ class DiscoveryResult:
 class PatternDiscoveryPipeline:
     """
     Pipeline for discovering patterns in source files.
-    
+
     Integrates Phase 57 pattern detection with AST parsing
     and result aggregation.
     """
@@ -42,28 +42,28 @@ class PatternDiscoveryPipeline:
     async def process_file(self, file_path: str, metadata: Dict[str, Any]) -> Optional[DiscoveryResult]:
         """
         Process single file for pattern discovery.
-        
+
         Args:
             file_path: Path to file
             metadata: File metadata
-            
+
         Returns:
             DiscoveryResult or None
         """
         if not file_path:
             return None
-        
+
         # Check cache
         if file_path in self.results_cache:
             return self.results_cache[file_path]
-        
+
         start_time = time.time()
-        
+
         try:
             # Simulate pattern detection
             patterns_found = []
             anti_patterns = []
-            
+
             # Simple heuristic for demo
             if "model" in file_path.lower():
                 patterns_found.append("Model")
@@ -71,11 +71,11 @@ class PatternDiscoveryPipeline:
                 patterns_found.append("View")
             if "controller" in file_path.lower():
                 patterns_found.append("Controller")
-            
+
             architecture = None
             if len(patterns_found) >= 2:
                 architecture = "MVC"
-            
+
             result = DiscoveryResult(
                 file_path=file_path,
                 patterns_found=patterns_found,
@@ -83,10 +83,10 @@ class PatternDiscoveryPipeline:
                 anti_patterns=anti_patterns,
                 discovery_time=time.time() - start_time,
             )
-            
+
             self.results_cache[file_path] = result
             return result
-        
+
         except Exception:
             return None
 
@@ -94,7 +94,7 @@ class PatternDiscoveryPipeline:
 class BatchProcessor:
     """
     Concurrent batch processor for pipeline tasks.
-    
+
     Features:
     - Configurable pool size
     - Timeout handling
@@ -104,7 +104,7 @@ class BatchProcessor:
     def __init__(self, pool_size: int = 10, timeout: float = 30.0):
         """
         Initialize BatchProcessor.
-        
+
         Args:
             pool_size: Maximum concurrent tasks
             timeout: Timeout per task
@@ -120,11 +120,11 @@ class BatchProcessor:
     ) -> List[Any]:
         """
         Process batch of items concurrently.
-        
+
         Args:
             items: Items to process
             handler: Async handler function
-            
+
         Returns:
             List of results
         """
@@ -139,7 +139,7 @@ class BatchProcessor:
                     return None
                 except Exception:
                     return None
-        
+
         tasks = [bounded_handler(item) for item in items]
         return await asyncio.gather(*tasks, return_exceptions=False)
 
@@ -181,7 +181,7 @@ class DiscoveryMetrics:
         elapsed = 0.0
         if self.start_time and self.end_time:
             elapsed = self.end_time - self.start_time
-        
+
         return {
             "elapsed_time": elapsed,
             "files_processed": self.files_processed,

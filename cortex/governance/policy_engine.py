@@ -13,14 +13,14 @@ Tests Target: 12 tests (policy loading, rule evaluation, compliance checking)
 """
 
 import json
-import yaml
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass, field, asdict
-from enum import Enum
+from dataclasses import asdict, dataclass, field
 from datetime import datetime
-import jsonschema
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
+import jsonschema
+import yaml
 
 # ============================================================================
 # Enums and Constants
@@ -68,18 +68,18 @@ class PolicyRule:
     value: Any
     severity: str = "error"  # error, warning, info
     error_message: Optional[str] = None
-    
+
     def matches(self, data: Dict[str, Any]) -> Tuple[bool, str]:
         """Evaluate rule against data.
-        
+
         Args:
             data: Data to evaluate against
-        
+
         Returns:
             Tuple of (rule_passed, reason)
         """
         field_value = data.get(self.field)
-        
+
         try:
             if self.operator == RuleOperator.EQUALS:
                 passed = field_value == self.value
@@ -102,10 +102,10 @@ class PolicyRule:
                 passed = bool(re.match(self.value, str(field_value)))
             else:
                 return False, f"Unknown operator: {self.operator}"
-            
+
             reason = self.error_message or f"Rule {self.id}: {self.description}"
             return passed, reason
-        
+
         except Exception as e:
             return False, f"Error evaluating rule {self.id}: {str(e)}"
 
@@ -124,18 +124,18 @@ class PolicyMetadata:
     updated_at: str = field(default_factory=lambda: datetime.utcnow().isoformat())
     author: str = ""
     version: str = "1.0"
-    
+
     def __post_init__(self):
         """Validate policy metadata."""
         if not self.id or not isinstance(self.id, str):
             raise ValueError("Policy ID must be a non-empty string")
-        
+
         if not self.name or not isinstance(self.name, str):
             raise ValueError("Policy name must be a non-empty string")
-        
+
         if not isinstance(self.level, PolicyLevel):
             raise ValueError(f"Invalid policy level: {self.level}")
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         data = asdict(self)
@@ -169,7 +169,7 @@ class ComplianceReport:
     violations: List[ComplianceViolation] = field(default_factory=list)
     warnings: List[str] = field(default_factory=list)
     score: float = 1.0  # 0-1, 1.0 = fully compliant
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
@@ -189,38 +189,38 @@ class ComplianceReport:
 
 class PolicyEngine:
     """Engine for evaluating policies and compliance."""
-    
+
     def __init__(self):
         """Initialize policy engine."""
         self.policies: Dict[str, PolicyMetadata] = {}
         self._evaluation_history: List[ComplianceReport] = []
-    
+
     def register_policy(self, policy: PolicyMetadata) -> Tuple[bool, str]:
         """Register a policy.
-        
+
         Args:
             policy: Policy to register
-        
+
         Returns:
             Tuple of (success, message)
         """
         try:
             if policy.id in self.policies:
                 return False, f"Policy '{policy.id}' already exists"
-            
+
             self.policies[policy.id] = policy
             return True, f"Policy '{policy.id}' registered successfully"
-        
+
         except Exception as e:
             return False, f"Error registering policy: {str(e)}"
-    
+
     def evaluate_data(self, policy_id: str, data: Dict[str, Any]) -> ComplianceReport:
         """Evaluate data against policy.
-        
+
         Args:
             policy_id: ID of policy to evaluate
             data: Data to evaluate
-        
+
         Returns:
             ComplianceReport with results
         """
@@ -234,14 +234,14 @@ class PolicyEngine:
                 violations=[],
                 warnings=[f"Policy '{policy_id}' not found"]
             )
-        
+
         violations: List[ComplianceViolation] = []
         warnings: List[str] = []
-        
+
         # Evaluate all rules
         for rule in policy.rules:
             passed, reason = rule.matches(data)
-            
+
             if not passed:
                 violation = ComplianceViolation(
                     policy_id=policy_id,
@@ -251,10 +251,10 @@ class PolicyEngine:
                     data=data
                 )
                 violations.append(violation)
-                
+
                 if rule.severity == "warning":
                     warnings.append(reason)
-        
+
         # Determine compliance status
         if not violations:
             status = ComplianceStatus.COMPLIANT
@@ -268,9 +268,9 @@ class PolicyEngine:
             else:
                 status = ComplianceStatus.WARNING
                 compliant = False
-            
+
             score = max(0.0, 1.0 - (len(violations) / len(policy.rules)))
-        
+
         report = ComplianceReport(
             evaluated_at=datetime.utcnow().isoformat(),
             policy_id=policy_id,
@@ -280,51 +280,51 @@ class PolicyEngine:
             warnings=warnings,
             score=score
         )
-        
+
         self._evaluation_history.append(report)
         return report
-    
+
     def evaluate_multiple_policies(
         self,
         policy_ids: List[str],
         data: Dict[str, Any]
     ) -> List[ComplianceReport]:
         """Evaluate data against multiple policies.
-        
+
         Args:
             policy_ids: List of policy IDs to evaluate
             data: Data to evaluate
-        
+
         Returns:
             List of ComplianceReports
         """
         return [self.evaluate_data(policy_id, data) for policy_id in policy_ids]
-    
+
     def get_policy(self, policy_id: str) -> Optional[PolicyMetadata]:
         """Get policy by ID.
-        
+
         Args:
             policy_id: Policy identifier
-        
+
         Returns:
             PolicyMetadata or None
         """
         return self.policies.get(policy_id)
-    
+
     def list_policies(self) -> List[PolicyMetadata]:
         """List all registered policies.
-        
+
         Returns:
             List of policies
         """
         return list(self.policies.values())
-    
+
     def get_policies_by_framework(self, framework: str) -> List[PolicyMetadata]:
         """Get policies for a compliance framework.
-        
+
         Args:
             framework: Framework name (e.g., 'SOC2', 'HIPAA')
-        
+
         Returns:
             List of policies
         """
@@ -332,13 +332,13 @@ class PolicyEngine:
             p for p in self.policies.values()
             if framework in p.frameworks
         ]
-    
+
     def get_evaluation_history(self, policy_id: Optional[str] = None) -> List[ComplianceReport]:
         """Get evaluation history.
-        
+
         Args:
             policy_id: Optional filter by policy ID
-        
+
         Returns:
             List of ComplianceReports
         """

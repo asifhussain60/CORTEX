@@ -8,9 +8,10 @@ AC_START: AC-INTELLIGENCE-WIRING-001
 Authority: Phase 49 | MCP-FIRST | CORE-035 (Single Source)
 """
 
-from typing import Dict, Any, List, Optional
-from pathlib import Path
 import logging
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
 import yaml
 
 from cortex.brain.core.intelligence_routing_engine import (
@@ -25,7 +26,7 @@ logger = logging.getLogger(__name__)
 class IntelligenceRoutingWiring:
     """
     Wires IntelligenceRoutingEngine into orchestrator system.
-    
+
     Responsibilities:
     - Load wiring configuration
     - Initialize routing engine
@@ -36,14 +37,14 @@ class IntelligenceRoutingWiring:
     def __init__(self, wiring_config_path: Optional[Path] = None):
         """
         Initialize intelligence routing wiring.
-        
+
         Args:
             wiring_config_path: Path to wiring.yaml (if None, uses default)
         """
         self.wiring_config = self._load_wiring_config(wiring_config_path)
         self.routing_engine = IntelligenceRoutingEngine()
         self._routing_cache: Dict[str, RoutingDecision] = {}
-        
+
         logger.info("IntelligenceRoutingWiring initialized")
 
     @staticmethod
@@ -51,7 +52,7 @@ class IntelligenceRoutingWiring:
         """Load wiring configuration."""
         if config_path is None:
             config_path = Path(__file__).parent.parent.parent / "wiring" / "specifications" / "wiring.yaml"
-        
+
         try:
             if config_path.exists():
                 with open(config_path, 'r', encoding='utf-8') as f:
@@ -66,19 +67,19 @@ class IntelligenceRoutingWiring:
             return {}
 
     def route_to_resources(
-        self, 
-        intent: str, 
-        request: str = "", 
+        self,
+        intent: str,
+        request: str = "",
         context: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         """
         Route intent to prompts and agents.
-        
+
         Args:
             intent: Intent string (e.g., "IMPLEMENT", "ANALYZE")
             request: User request text
             context: Optional context dict
-        
+
         Returns:
             Dict with routing result including:
                 - decision: RoutingDecision object
@@ -91,10 +92,10 @@ class IntelligenceRoutingWiring:
         try:
             # Convert intent string to IntentType
             intent_type = self._parse_intent(intent)
-            
+
             # Get routing decision
             decision = self.routing_engine.route(intent_type, request, context)
-            
+
             # Load content
             prompt_content = self.routing_engine.get_prompt_content(
                 decision.primary_prompt.path
@@ -102,19 +103,19 @@ class IntelligenceRoutingWiring:
             agent_content = self.routing_engine.get_agent_content(
                 decision.primary_agent.path
             )
-            
+
             secondary_prompts = [
                 self.routing_engine.get_prompt_content(p.path)
                 for p in decision.secondary_prompts
                 if self.routing_engine.get_prompt_content(p.path)
             ]
-            
+
             secondary_agents = [
                 self.routing_engine.get_agent_content(a.path)
                 for a in decision.secondary_agents
                 if self.routing_engine.get_agent_content(a.path)
             ]
-            
+
             result = {
                 "success": True,
                 "decision": decision,
@@ -126,14 +127,14 @@ class IntelligenceRoutingWiring:
                 "confidence": decision.confidence_score,
                 "requires_unified_intelligence": decision.requires_unified_intelligence,
             }
-            
+
             logger.info(
                 f"Routed {intent} to {decision.primary_prompt.name} + "
                 f"{decision.primary_agent.name}"
             )
-            
+
             return result
-            
+
         except Exception as e:
             logger.error(f"Error routing intent {intent}: {e}")
             return {
@@ -148,15 +149,15 @@ class IntelligenceRoutingWiring:
     def _parse_intent(intent_str: str) -> IntentType:
         """
         Parse intent string to IntentType.
-        
+
         Args:
             intent_str: Intent string (e.g., "IMPLEMENT", "implement")
-        
+
         Returns:
             IntentType or raises ValueError
         """
         intent_upper = intent_str.upper().strip()
-        
+
         try:
             return IntentType[intent_upper]
         except KeyError:
@@ -164,22 +165,22 @@ class IntelligenceRoutingWiring:
             for intent_type in IntentType:
                 if intent_type.value.startswith(intent_upper):
                     return intent_type
-            
+
             raise ValueError(f"Unknown intent: {intent_str}")
 
     def get_intent_handler_orchestrator(self, intent: str) -> Optional[str]:
         """
         Get primary orchestrator for intent.
-        
+
         Args:
             intent: Intent string
-        
+
         Returns:
             Orchestrator name or None
         """
         try:
             intent_type = self._parse_intent(intent)
-            
+
             # Map intent to orchestrator in wiring config
             orchestrator_map = {
                 IntentType.IMPLEMENT: "TDDOrchestrator",
@@ -193,9 +194,9 @@ class IntelligenceRoutingWiring:
                 IntentType.DEBUG: "DebuggingOrchestrator",
                 IntentType.DIGEST: "DigestEnhancementOrchestrator",
             }
-            
+
             return orchestrator_map.get(intent_type)
-            
+
         except Exception as e:
             logger.error(f"Error getting orchestrator for intent {intent}: {e}")
             return None
@@ -207,15 +208,15 @@ class IntelligenceRoutingWiring:
     def get_prompts_for_intent(self, intent: str) -> Dict[str, Any]:
         """
         Get all prompts associated with intent.
-        
+
         Args:
             intent: Intent string
-        
+
         Returns:
             Dict with prompt metadata
         """
         result = self.route_to_resources(intent)
-        
+
         if result["success"]:
             return {
                 "success": True,
@@ -238,15 +239,15 @@ class IntelligenceRoutingWiring:
     def get_agents_for_intent(self, intent: str) -> Dict[str, Any]:
         """
         Get all agents associated with intent.
-        
+
         Args:
             intent: Intent string
-        
+
         Returns:
             Dict with agent metadata
         """
         result = self.route_to_resources(intent)
-        
+
         if result["success"]:
             return {
                 "success": True,
@@ -271,26 +272,26 @@ class IntelligenceRoutingWiring:
     def validate_routing_integrity(self) -> Dict[str, Any]:
         """
         Validate that all intents have valid routing paths.
-        
+
         Returns:
             Validation result with issues list
         """
         issues = []
-        
+
         for intent in IntentType:
             decision = self.routing_engine.route(intent)
-            
+
             if decision.primary_prompt is None:
                 issues.append(f"No primary prompt for {intent.value}")
-            
+
             if decision.primary_agent is None:
                 issues.append(f"No primary agent for {intent.value}")
-            
+
             if decision.confidence_score < 0.5:
                 issues.append(
                     f"Low confidence ({decision.confidence_score:.2f}) for {intent.value}"
                 )
-        
+
         return {
             "success": len(issues) == 0,
             "total_intents": len(IntentType),
@@ -302,7 +303,7 @@ class IntelligenceRoutingWiring:
         """Get wiring statistics."""
         engine_stats = self.routing_engine.get_routing_stats()
         integrity = self.validate_routing_integrity()
-        
+
         return {
             **engine_stats,
             "integrity": integrity,

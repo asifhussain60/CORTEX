@@ -11,8 +11,7 @@ AC_DEPRECATION: Phase 65 S6-T3 (2026-02-09)
 """
 
 import warnings
-from typing import Dict, Any, Optional
-
+from typing import Any, Dict, Optional
 
 __deprecated__ = True  # Marker for test detection
 
@@ -30,10 +29,10 @@ warnings.warn(
 class LENSAnalyzer:
     """
     LENS Analyzer interface for backward compatibility
-    
+
     **DEPRECATED**: Use LENSOrchestrator instead.
     """
-    
+
     def __init__(self):
         """Initialize LENS Analyzer"""
         warnings.warn(
@@ -43,16 +42,16 @@ class LENSAnalyzer:
         )
         self.name = "LENSAnalyzer"
         self.version = "1.0.0-deprecated"
-    
+
     def analyze(self, context: Dict[str, Any]) -> Dict[str, Any]:
         """
         Analyze code using available intelligence engines
-        
+
         **DEPRECATED**: Use LENSOrchestrator.analyze_file() instead.
-        
+
         Args:
             context: Analysis context
-        
+
         Returns:
             Analysis results
         """
@@ -60,14 +59,14 @@ class LENSAnalyzer:
             "status": "analyzed",
             "source": "LENSAnalyzer-deprecated"
         }
-    
+
     def can_delegate_to(self, engine_name: str) -> bool:
         """
         Check if we can delegate to an intelligence engine
-        
+
         Args:
             engine_name: Engine identifier
-        
+
         Returns:
             True if engine is available
         """

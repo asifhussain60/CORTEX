@@ -93,23 +93,6 @@ def process():
         # Verify operations are supported (would be in actual adapter)
         assert len(operations) > 0
 
-    def test_fallback_when_libcst_unavailable(self) -> None:
-        """AC-PHASE43-029-1: Falls back gracefully when LibCST unavailable."""
-        # Simulate unavailable LibCST
-        try:
-            import libcst as cst
-            has_libcst = True
-        except ImportError:
-            has_libcst = False
-        
-        # Code should handle both cases
-        if not has_libcst:
-            # System should degrade gracefully
-            pass
-        else:
-            # LibCST available, should use it
-            pass
-
     def test_libcst_vs_rope_choice(self) -> None:
         """AC-PHASE43-029-2: Choose LibCST for formatting, Rope for cross-file."""
         # LibCST preferred for single-file formatting-safe transforms
@@ -145,23 +128,6 @@ def process():
         assert elapsed < 0.5  # Under 500ms
         assert module is not None
 
-    def test_libcst_error_handling(self) -> None:
-        """AC-PHASE43-027-2: LibCST handles invalid code gracefully."""
-        try:
-            import libcst as cst
-        except ImportError:
-            pytest.skip("libcst not installed")
-
-        invalid_code = "def broken( invalid"
-
-        try:
-            module = cst.parse_module(invalid_code)
-            # LibCST may or may not parse depending on version
-            # The important thing is it doesn't crash
-        except Exception:
-            # Expected - graceful failure
-            pass
-
     def test_rope_adapter_available(self) -> None:
         """AC-PHASE43-029-3: Rope adapter available for fallback."""
         from cortex.refactoring.adapters.rope_adapter import RopeAdapter
@@ -170,37 +136,6 @@ def process():
         # Adapter should have standard interface
         assert hasattr(adapter, "execute_refactoring")
         assert hasattr(adapter, "get_supported_operations")
-
-    def test_refactoring_strategy_selection(self) -> None:
-        """LibCST vs Rope strategy selection."""
-        scenarios = [
-            {
-                "operation": "rename_variable",
-                "scope": "single_file",
-                "strategy": "libcst",
-                "reason": "Preserves formatting and comments"
-            },
-            {
-                "operation": "extract_method",
-                "scope": "single_file",
-                "strategy": "libcst",
-                "reason": "Preserves code structure"
-            },
-            {
-                "operation": "rename_module",
-                "scope": "cross_file",
-                "strategy": "rope",
-                "reason": "Needs cross-file analysis"
-            },
-        ]
-        
-        # Verify strategy selection logic
-        for scenario in scenarios:
-            if scenario["scope"] == "single_file":
-                assert scenario["strategy"] == "libcst"
-            else:
-                assert scenario["strategy"] == "rope"
-
 
 class TestRefactoringStrategyDecision:
     pass
