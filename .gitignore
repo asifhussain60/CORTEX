@@ -178,3 +178,13 @@ _archives/
 # CORE-038: Prevent root .py files (use cortex/phase-executors/)
 # Phase executors must be in proper module, never in root
 /execute_phase_*.py
+
+# Wave 8 Stage 2: Registry Blacklist (CORTEX-internal planning state)
+# Planning orchestrator state lives in local cortex-registry only
+# Should NEVER be committed to git (prevents merge conflicts + reduces noise)
+# EXCEPTION: Template files in cortex/templates/planning/ ARE committed
+cortex-registry/_cortex-master/index.yaml
+cortex-registry/_cortex-master/phases/
+cortex-registry/_cortex-master/waves/
+cortex-registry/_cortex-master/execution/
+cortex-registry/_cortex-master/meta/
