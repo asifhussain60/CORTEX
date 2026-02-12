@@ -7,7 +7,7 @@ Test: Naming utilities extracted to eliminate duplicates
 
 import pytest
 
-from cortex.tools.naming_utils import to_class_name, to_module_name
+from cortex.tools.naming_utils import to_class_name, to_module_name, yaml_type_to_python
 
 
 class TestToClassName:
@@ -74,6 +74,44 @@ class TestToModuleName:
         """Handle single word."""
         assert to_module_name("tool") == "tool"
         assert to_module_name("TOOL") == "tool"
+
+
+class TestYamlTypeToPython:
+    """Tests for yaml_type_to_python function."""
+    
+    def test_string_types(self):
+        """Convert string types."""
+        assert yaml_type_to_python("str") == "str"
+        assert yaml_type_to_python("string") == "str"
+        assert yaml_type_to_python("STRING") == "str"
+    
+    def test_integer_types(self):
+        """Convert integer types."""
+        assert yaml_type_to_python("int") == "int"
+        assert yaml_type_to_python("integer") == "int"
+        assert yaml_type_to_python("INTEGER") == "int"
+    
+    def test_float_types(self):
+        """Convert float types."""
+        assert yaml_type_to_python("float") == "float"
+        assert yaml_type_to_python("number") == "float"
+    
+    def test_boolean_types(self):
+        """Convert boolean types."""
+        assert yaml_type_to_python("bool") == "bool"
+        assert yaml_type_to_python("boolean") == "bool"
+    
+    def test_collection_types(self):
+        """Convert collection types."""
+        assert yaml_type_to_python("list") == "List[Any]"
+        assert yaml_type_to_python("array") == "List[Any]"
+        assert yaml_type_to_python("dict") == "Dict[str, Any]"
+        assert yaml_type_to_python("object") == "Dict[str, Any]"
+    
+    def test_unknown_type(self):
+        """Handle unknown types."""
+        assert yaml_type_to_python("unknown") == "Any"
+        assert yaml_type_to_python("custom") == "Any"
 
 
 # AC_COMPLETE: AC-AUDIT-2026-02-12-002 ✅ Tests added

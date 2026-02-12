@@ -18,6 +18,8 @@ from enum import Enum, auto
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Set
 
+from cortex.tools.naming_utils import yaml_type_to_python
+
 
 class TemplateType(Enum):
     """Types of scaffolder templates."""
@@ -510,15 +512,7 @@ class {class_name}(BaseOrchestrator):
 
     def _yaml_type_to_python(self, type_str: str) -> str:
         """Convert YAML type to Python type."""
-        type_map = {
-            'str': 'str', 'string': 'str',
-            'int': 'int', 'integer': 'int',
-            'float': 'float', 'number': 'float',
-            'bool': 'bool', 'boolean': 'bool',
-            'list': 'List[Any]', 'array': 'List[Any]',
-            'dict': 'Dict[str, Any]', 'object': 'Dict[str, Any]',
-        }
-        return type_map.get(type_str.lower(), 'Any')
+        return yaml_type_to_python(type_str)
 
 
 class TestTemplate(ScaffolderTemplate):

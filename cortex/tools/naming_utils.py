@@ -57,4 +57,39 @@ def to_module_name(name: str) -> str:
     return name
 
 
+def yaml_type_to_python(type_str: str) -> str:
+    """
+    Convert YAML type specification to Python type.
+    
+    Args:
+        type_str: YAML type string (e.g., 'string', 'int', 'array')
+        
+    Returns:
+        Python type string (e.g., 'str', 'int', 'List[Any]')
+        
+    Examples:
+        >>> yaml_type_to_python("string")
+        'str'
+        >>> yaml_type_to_python("array")
+        'List[Any]'
+        >>> yaml_type_to_python("object")
+        'Dict[str, Any]'
+    """
+    type_map = {
+        'str': 'str',
+        'string': 'str',
+        'int': 'int',
+        'integer': 'int',
+        'float': 'float',
+        'number': 'float',
+        'bool': 'bool',
+        'boolean': 'bool',
+        'list': 'List[Any]',
+        'array': 'List[Any]',
+        'dict': 'Dict[str, Any]',
+        'object': 'Dict[str, Any]',
+    }
+    return type_map.get(type_str.lower(), 'Any')
+
+
 # AC_COMPLETE: AC-AUDIT-2026-02-12-002 ✅
