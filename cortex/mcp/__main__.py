@@ -38,9 +38,18 @@ def main() -> int:
     try:
         from cortex.mcp.server import MCPServer
         from cortex.mcp.stdio_transport import run_stdio_server
+        import os
 
         logger.info("Initializing CORTEX MCP Server with stdio transport...")
-        server: MCPServer = MCPServer()
+        
+        # Disable authentication for local VS Code Copilot usage
+        # Production deployments should use enable_auth=True with proper token management
+        enable_auth = os.getenv("CORTEX_MCP_AUTH_ENABLED", "false").lower() == "true"
+        
+        server: MCPServer = MCPServer(enable_auth=enable_auth)
+        
+        if not enable_auth:
+            logger.info("MCP Authentication DISABLED (local development mode)")
 
         # List available tools
         tools = server.list_tools()
