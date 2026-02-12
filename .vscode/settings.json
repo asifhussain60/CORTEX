@@ -30,7 +30,7 @@
   },
   "github.copilot.chat.mcpServers": {
     "cortex": {
-      "command": "${workspaceFolder}/.venv/bin/python",
+      "command": "${workspaceFolder}/.venv/Scripts/python.exe",
       "args": [
         "-m",
         "cortex.mcp"
