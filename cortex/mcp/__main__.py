@@ -29,39 +29,32 @@ def main() -> int:
     """
     Main entry point for MCP server.
 
-    Runs CORTEX MCP server with stdio transport for Copilot integration.
+    Runs CORTEX MCP v2 server with stdio transport for Copilot integration.
     Handles JSON-RPC 2.0 requests via stdin/stdout.
 
     Returns:
         int: Exit code (0 for success, non-zero for failure)
     """
     try:
-        from cortex.mcp.server import MCPServer
-        from cortex.mcp.stdio_transport import run_stdio_server
-        import os
+        # Use MCP v2 by default (WAVE-100)
+        from cortex.mcp.v2 import MCPServerV2
 
-        logger.info("Initializing CORTEX MCP Server with stdio transport...")
+        logger.info("Initializing CORTEX MCP Server v2 with stdio transport...")
+        logger.info("Using 24 production tools (75% reduction from v1)")
         
-        # Disable authentication for local VS Code Copilot usage
-        # Production deployments should set CORTEX_MCP_AUTH_ENABLED=true
-        enable_auth = os.getenv("CORTEX_MCP_AUTH_ENABLED", "false").lower() == "true"
+        # Create server
+        server = MCPServerV2()
         
-        server: MCPServer = MCPServer(enable_auth=enable_auth)
-        
-        if not enable_auth:
-            logger.info("MCP Authentication DISABLED (local development mode)")
-
         # List available tools
         tools = server.list_tools()
-        logger.info(f"MCP Server initialized with {len(tools)} tools:")
-        for tool in tools:
-            logger.info(f"  - {tool['name']}: {tool['description']}")
-
+        logger.info(f"MCP Server v2 initialized with {len(tools)} tools")
+        
         logger.info("Starting stdio JSON-RPC transport...")
-        logger.info("CORTEX MCP Server ready for Copilot integration")
+        logger.info("CORTEX MCP Server v2 ready for Copilot integration")
 
         # Run stdio server (blocks until terminated)
-        return run_stdio_server(server)
+        server.run_stdio()
+        return 0
 
     except ImportError as e:
         logger.error(f"Failed to import MCP server components: {e}")
