@@ -83,7 +83,7 @@ def generate_mcp_config(python_path: str, workspace_root: Path) -> Dict[str, Any
         "cortex": {
             "type": "stdio",
             "command": python_path,
-            "args": ["-m", "cortex.mcp.v2"],
+            "args": ["-m", "cortex.mcp"],  # Uses v2 by default via __init__.py redirect
             "cwd": str(workspace_root),
             "env": {
                 "PYTHONPATH": str(workspace_root),
