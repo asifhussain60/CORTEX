@@ -44,12 +44,48 @@ maintainer: "Asif Hussain"
 
 | Check | Command | Expected | Action if Failed |
 |-------|---------|----------|------------------|
+| **Cross-Platform MCP (CORE-051)** | `git ls-files \| grep ".vscode/settings.json"` | (empty) | `git rm --cached .vscode/settings.json` |
+| **Git Hooks Configured** | `git config core.hooksPath` | `.githooks` | `git config core.hooksPath .githooks` |
 | **Wiring ↔ Implementation** | `cortex_audit_wiring()` | 100% match | Generate gap list, create remediation plan |
 | **Stub Test Detection** | `grep -rn "assert True" tests/` | 0 stubs | Flag for deletion/replacement |
 | **Skipped Test Audit** | `grep -rn "pytest.skip" tests/` | <5% of suite | Review and resolve blockers |
 | **STUB Code Detection** | `grep -rn "NotImplementedError\|# STUB\|# TODO" cortex/` | 0 production stubs | Flag for implementation |
 | **MCP Adapter Coverage** | Check @mcp_tool decorators | 100% core coverage | Generate missing adapters |
 | **LENS Integration** | Verify UnifiedIntelligenceProvider usage | All orchestrators use LENS | Wire missing orchestrators |
+
+### 🔴 CROSS-PLATFORM MCP AUDIT (CORE-051 - P0 MANDATORY)
+
+**Execute on EVERY `/audit` command BEFORE other checks:**
+
+```bash
+# Step 1: Check if .vscode/settings.json is tracked in git
+tracked=$(git ls-files | grep ".vscode/settings.json")
+if [ -n "$tracked" ]; then
+    echo "❌ CORE-051 VIOLATION: .vscode/settings.json in git"
+    echo "   Windows users will get broken MCP (macOS paths)"
+    echo "   FIX: git rm --cached .vscode/settings.json"
+    return BLOCKED
+fi
+
+# Step 2: Check git hooks configured
+hooks_path=$(git config core.hooksPath)
+if [ "$hooks_path" != ".githooks" ]; then
+    echo "⚠️ Git hooks not configured"
+    echo "   FIX: git config core.hooksPath .githooks"
+fi
+
+# Step 3: Check post-checkout regenerates settings
+if ! grep -q "setup-mcp.py" .githooks/post-checkout; then
+    echo "⚠️ Post-checkout missing setup-mcp.py call"
+fi
+
+echo "✅ CORE-051: Cross-platform MCP configuration verified"
+```
+
+**Why P0?**
+- macOS path: `.venv/bin/python`
+- Windows path: `.venv/Scripts/python.exe`
+- Wrong path committed → MCP breaks on other platform → CORTEX unusable
 
 ### Current Status Dashboard (Updated: 2026-02-09)
 

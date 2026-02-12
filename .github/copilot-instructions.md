@@ -654,6 +654,7 @@ cortex-registry/_cortex-master/
 | **CORE-048** | **Holistic Validation Gate (Phase 48)** — mandatory pre-implementation validation + challenge gate |
 | **CORE-049** | **Silent Autonomous Execution** — No confirmations, no narration, just progress bars + completion report. **CRITICAL:** Silent applies to narration ONLY, not to test rigor or code quality. Never trade quality for speed in any execution mode. |
 | **CORE-050** | **MCP Circuit Breaker (P0)** — Tiered MCP availability enforcement. **HARD BLOCK:** IMPLEMENT, FIX, REFACTOR, AUDIT, PLAN, ANALYZE intents CANNOT proceed if MCP unavailable. **EXEMPT:** DIAGNOSE, QUERY (educational), SETUP intents allowed for troubleshooting. **NO BYPASS:** Direct file operations forbidden for blocked intents even if "simpler." |
+| **CORE-051** | **Cross-Platform MCP (P0)** — `.vscode/settings.json` MUST NOT be in git (contains platform-specific Python paths). **MANDATORY AUDIT:** Every `/audit` command MUST verify settings.json not tracked. **AUTO-FIX:** `.githooks/post-checkout` regenerates settings via `setup-mcp.py` (macOS: bin/python, Windows: Scripts/python.exe). **VIOLATION:** Committing settings.json = cross-platform breakage. |
 | **MCP-FIRST** | ALL functionality exposed via MCP tools |
 | **MCP-GATE** | IMPLEMENT intents MUST use `cortex_process_request` tool (NO direct file creation) |
 | **ARCH-012** | Standards gate — 12-Factor + SOLID + Clean Code + OWASP required |
