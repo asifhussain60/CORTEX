@@ -1,0 +1,414 @@
+# ENH-098: CORTEX Folder Consolidation & Architectural Cleanup
+# Wave: 9 (Ultimate Cleanup)
+# Created: 2026-02-12
+# Analysis: Recursive cortex/ folder review (51.15 MB, 3,069 files, 51 subdirectories)
+
+metadata:
+  wave: 9
+  enhancement_id: ENH-098
+  title: "CORTEX Folder Consolidation & Architectural Cleanup"
+  category: "architecture-cleanup"
+  priority: "P2-MEDIUM"
+  estimated_effort: "15 days"
+  target_savings:
+    space: "3.15 MB"
+    files: 269
+    folders: 6
+    imports: "100+"
+  roi_score: 8.2
+
+overview:
+  description: |
+    Consolidate fragmented architecture in cortex/ folder through systematic analysis
+    of 51 top-level subdirectories. Address phase management fragmentation, governance
+    split, brain duplication, orchestrator bloat, and empty folders.
+  
+  current_state:
+    folders: 51
+    files: 3069
+    size_mb: 51.15
+    largest_folder: "orchestrators (839 files, 45 subdirectories)"
+    redundancy_estimate: "25-30%"
+  
+  target_state:
+    folders: 45
+    files: 2800
+    size_mb: 48.00
+    reduction:
+      folders: -6
+      files: -269
+      size: "-3.15 MB"
+
+findings:
+  
+  # Finding 1: Phase Management Fragmentation
+  - id: F1-PHASE-FRAGMENTATION
+    title: "Phase Management Split Across 3 Folders"
+    severity: "HIGH"
+    impact: "50+ scattered import statements"
+    
+    folders_affected:
+      - name: "cortex/phase_38/"
+        files: 4
+        size_mb: 0.04
+        purpose: "Phase 38-specific metrics (baseline_metrics_collector, orchestrator_inventory_auditor)"
+      
+      - name: "cortex/phase_executors/"
+        files: 32
+        size_mb: 0.32
+        purpose: "Phase orchestration framework (phase_executor_base, phase_orchestrator, archived/ with 24 phase scripts)"
+      
+      - name: "cortex/phase_management/"
+        files: 1
+        size_mb: 0.01
+        purpose: "Single file: autonomous_executor.py"
+    
+    evidence:
+      imports_affected: 50+
+      grep_results:
+        - "10 matches for 'from cortex.phase_' pattern"
+        - "phase_38 referenced only in tests and __init__.py"
+        - "phase_executors has archived/ with 24 completed phase scripts"
+    
+    solution:
+      target: "cortex/phase_management/"
+      structure: |
+        cortex/phase_management/
+        ├── orchestration/
+        │   ├── phase_executor_base.py
+        │   ├── phase_executor_factory.py
+        │   └── phase_orchestrator.py
+        ├── metrics/
+        │   ├── baseline_metrics_collector.py
+        │   └── orchestrator_inventory_auditor.py
+        ├── archived/
+        │   └── [24 completed phase scripts]
+        └── autonomous_executor.py
+      
+      actions:
+        - "Move cortex/phase_38/* to phase_management/metrics/"
+        - "Move cortex/phase_executors/* to phase_management/orchestration/"
+        - "Move phase_executors/archived/ to phase_management/archived/"
+        - "Delete empty phase_38/, phase_executors/ folders"
+        - "Update 50+ import statements"
+      
+      risk: "P1-CRITICAL (breaks imports)"
+      estimated_effort: "4 days"
+  
+  # Finding 2: Brain Architecture Duplication
+  - id: F2-BRAIN-DUPLICATION
+    title: "Brain Architecture Split Between 2 Locations"
+    severity: "MEDIUM"
+    impact: "Architectural redundancy"
+    
+    folders_affected:
+      - name: "cortex/brain/"
+        files: 558
+        size_mb: 8.5
+        purpose: "Massive brain implementation with 32 subfolders including domain_brain/ subfolder"
+      
+      - name: "cortex/domain_brain/"
+        files: 27
+        size_mb: 0.25
+        purpose: "Domain-specific brain logic (business_knowledge_repository, lens_integration, version_manager)"
+    
+    evidence:
+      analysis: |
+        - cortex/brain/ already has domain_brain/ subfolder
+        - cortex/domain_brain/ exists at root level
+        - Architectural redundancy: two paths for same concept
+      imports_found: "20+ matches for 'from cortex.brain' and 'from cortex.domain_brain'"
+    
+    solution:
+      action: "Merge cortex/domain_brain/ → cortex/brain/domain_brain/"
+      rationale: "Consolidate under single brain architecture"
+      
+      steps:
+        - "Move cortex/domain_brain/*.py to cortex/brain/domain_brain/"
+        - "Update imports from 'cortex.domain_brain' to 'cortex.brain.domain_brain'"
+        - "Delete empty cortex/domain_brain/ folder"
+        - "Verify orchestrator dependencies"
+      
+      risk: "P3-MEDIUM (orchestrator dependencies)"
+      estimated_effort: "3 days"
+  
+  # Finding 3: Governance Tools Split
+  - id: F3-GOVERNANCE-SPLIT
+    title: "Governance Tools Fragmented (ZERO Imports Found)"
+    severity: "LOW"
+    impact: "Organizational clutter"
+    
+    folders_affected:
+      - name: "cortex/governance/"
+        files: 40
+        size_mb: 0.45
+        purpose: "Extensive enforcement framework (policy_engine, compliance_reporter, enforcement/ agents)"
+      
+      - name: "cortex/governance_tools/"
+        files: 4
+        size_mb: 0.02
+        purpose: "Only lint_instruction_files.py + __init__.py + __pycache__"
+    
+    evidence:
+      imports_found: "ZERO matches for 'from cortex.governance_tools'"
+      analysis: "governance_tools/ folder has no external usage"
+    
+    solution:
+      action: "Merge governance_tools/ → governance/tools/"
+      
+      steps:
+        - "Create cortex/governance/tools/ subfolder"
+        - "Move lint_instruction_files.py to governance/tools/"
+        - "Delete cortex/governance_tools/ folder"
+        - "No import updates needed (zero usage)"
+      
+      risk: "P4-LOW (zero impact)"
+      estimated_effort: "0.5 days"
+  
+  # Finding 4: Testing vs Tests Clarity
+  - id: F4-TESTING-TESTS-CONFUSION
+    title: "Testing vs Tests Naming Collision"
+    severity: "LOW"
+    impact: "Developer confusion"
+    
+    folders:
+      - name: "cortex/testing/"
+        files: 28
+        purpose: "Testing infrastructure (pytest plugins, wiring_harness, test_value_scorer, regression_detector)"
+      
+      - name: "cortex/tests/"
+        files: 9
+        purpose: "Actual test implementations (deployment/, telemetry/, test_md_generation_blocker.py)"
+    
+    decision: "KEEP BOTH (legitimate separation)"
+    
+    solution:
+      action: "Add README.md to clarify purpose"
+      
+      readmes:
+        - location: "cortex/testing/README.md"
+          content: "Testing Infrastructure - Pytest plugins, harnesses, regression detection"
+        
+        - location: "cortex/tests/README.md"
+          content: "Test Implementations - Unit/integration tests for cortex modules"
+      
+      risk: "P4-LOW (documentation only)"
+      estimated_effort: "0.25 days"
+  
+  # Finding 5: Orchestrators Bloat
+  - id: F5-ORCHESTRATORS-BLOAT
+    title: "Orchestrators Folder Massive (839 files, 45 subdirectories)"
+    severity: "HIGH"
+    impact: "Navigation difficulty, deprecated code accumulation"
+    
+    folder: "cortex/orchestrators/"
+    metrics:
+      files: 839
+      subdirectories: 45
+      size_mb: 12.5
+      orchestrator_classes: "100+"
+    
+    problems:
+      - deprecated_orchestrators: 18
+        source: "deprecated_orchestrators_migration.py (378 lines)"
+        examples:
+          - "composition_engine.py"
+          - "composed_orchestrator.py"
+          - "module_cohesion_validator.py"
+      
+      - unused_orchestrators: 5
+        source: "unused_orchestrators_remover.py (262 lines)"
+        examples:
+          - "conversation_continuer.py (ZERO imports)"
+          - "continuation_chain.py (ZERO imports)"
+          - "orchestrator_composite.py (ZERO imports)"
+          - "state_recovery.py (ZERO imports)"
+      
+      - archived_phases: 24
+        location: "phase_executors/archived/"
+        note: "Completed phase scripts should move to cortex-registry/"
+    
+    solution:
+      phase_1:
+        action: "Execute deprecated orchestrator removal"
+        files_removed: 18
+        source: "Follow deprecated_orchestrators_migration.py plan"
+        effort: "3 days"
+      
+      phase_2:
+        action: "Execute unused orchestrator removal"
+        files_removed: 5
+        source: "Follow unused_orchestrators_remover.py plan"
+        effort: "2 days"
+      
+      phase_3:
+        action: "Archive completed phase executors"
+        target: "cortex-registry/_cortex-master/phases/completed/"
+        files_moved: 24
+        effort: "1 day"
+      
+      total_reduction: "-47 files (839 → 792)"
+      risk: "P2-HIGH (registry updates required)"
+      estimated_effort: "6 days"
+  
+  # Finding 6: Empty/Minimal Folders
+  - id: F6-EMPTY-FOLDERS
+    title: "Empty or Minimal Content Folders"
+    severity: "LOW"
+    impact: "Organizational clutter"
+    
+    folders:
+      - name: "cortex/crawlers/"
+        files: 0
+        action: "DELETE (empty folder)"
+      
+      - name: "cortex/reports/"
+        files: 1
+        action: "EVALUATE (single file - can be moved?)"
+      
+      - name: "cortex/validation/"
+        files: 1
+        action: "EVALUATE (single file - merge into governance?)"
+    
+    solution:
+      - "Delete cortex/crawlers/ (empty)"
+      - "Move reports/*.py to observability/reports/"
+      - "Move validation/*.py to governance/validation/"
+      
+      risk: "P4-LOW (minimal impact)"
+      estimated_effort: "0.5 days"
+  
+  # Finding 7: Domain Orchestrators Underutilized
+  - id: F7-DOMAIN-ORCHESTRATORS-SPLIT
+    title: "Domain Orchestrators Folder Redundant"
+    severity: "LOW"
+    impact: "Architectural inconsistency"
+    
+    folders:
+      - name: "cortex/domain_orchestrators/"
+        files: 7
+        subfolders: ["business/"]
+        purpose: "Domain-specific orchestrators"
+      
+      - name: "cortex/orchestrators/domain/"
+        files: "Many"
+        purpose: "Domain orchestrators subfolder already exists"
+    
+    analysis: "Architectural redundancy - domain orchestrators should be under orchestrators/domain/"
+    
+    solution:
+      action: "Merge domain_orchestrators/ → orchestrators/domain/"
+      
+      steps:
+        - "Move cortex/domain_orchestrators/* to orchestrators/domain/"
+        - "Update imports"
+        - "Delete empty domain_orchestrators/"
+      
+      risk: "P3-MEDIUM (import updates)"
+      estimated_effort: "1 day"
+
+implementation_plan:
+  
+  phase_1:
+    name: "Quick Wins (Low Risk)"
+    duration: "3 days"
+    enhancements:
+      - F6: Delete crawlers/, move reports/, validation/
+      - F3: Merge governance_tools/ → governance/tools/
+      - F4: Add README.md to testing/, tests/
+      - F7: Merge domain_orchestrators/ → orchestrators/domain/
+    
+    deliverables:
+      - "-4 folders (51 → 47)"
+      - "-9 files at root level"
+      - "Documentation added"
+    
+    risk: "LOW"
+  
+  phase_2:
+    name: "Orchestrator Cleanup (Medium Risk)"
+    duration: "6 days"
+    enhancements:
+      - F5-Phase1: Remove 18 deprecated orchestrators
+      - F5-Phase2: Remove 5 unused orchestrators
+      - F5-Phase3: Archive 24 phase executors
+    
+    deliverables:
+      - "-47 orchestrator files"
+      - "Registry updates"
+      - "Test suite validation"
+    
+    risk: "MEDIUM (registry updates)"
+  
+  phase_3:
+    name: "Phase Management Consolidation (High Risk)"
+    duration: "4 days"
+    enhancements:
+      - F1: Consolidate phase_38/, phase_executors/, phase_management/
+    
+    deliverables:
+      - "-2 folders (47 → 45)"
+      - "50+ import updates"
+      - "Clear phase management structure"
+    
+    risk: "HIGH (breaks imports)"
+  
+  phase_4:
+    name: "Brain Architecture Cleanup (Medium Risk)"
+    duration: "3 days"
+    enhancements:
+      - F2: Merge domain_brain/ folders
+    
+    deliverables:
+      - "-1 folder (45 → 44)"
+      - "20+ import updates"
+      - "Unified brain architecture"
+    
+    risk: "MEDIUM (orchestrator dependencies)"
+
+success_metrics:
+  quantitative:
+    folders_reduced: 7
+    files_reduced: 269
+    space_freed: "3.15 MB"
+    imports_updated: "100+"
+  
+  qualitative:
+    navigation: "Clearer folder structure"
+    architecture: "Consistent organization patterns"
+    maintainability: "Reduced redundancy"
+    onboarding: "Easier for new developers"
+  
+  validation:
+    - "Zero test failures after each phase"
+    - "All AC markers preserved"
+    - "CI/CD pipeline green"
+    - "No broken imports"
+    - "Documentation updated"
+
+rollback_strategy:
+  git_checkpoints:
+    - "Commit after each phase completion"
+    - "Tag: WAVE-9-ENH-098-PHASE-{N}"
+  
+  rollback_procedure:
+    - "git revert to phase checkpoint"
+    - "Restore imports from backup"
+    - "Re-run test suite"
+  
+  risk_mitigation:
+    - "Backup all moved files before deletion"
+    - "Test each phase independently"
+    - "Staged rollout to staging environment first"
+
+dependencies:
+  - "Wave 9 ENH-090, ENH-091 (cortex_brain cleanup)"
+  - "Wave 9 ENH-093 (phase folders - if overlapping)"
+
+notes:
+  - "Largest single enhancement in Wave 9 (15 days)"
+  - "High ROI due to architectural clarity gains"
+  - "Consider splitting into Wave 9A (this) and Wave 9B (future) if timeline tight"
+  - "Orchestrator cleanup aligns with existing migration scripts"
+
+# AC_COMPLETE: AC-WAVE9-ENH098-DESIGN ✅
