@@ -18,6 +18,8 @@ from pathlib import Path
 
 from cortex.orchestrators.core.tdd_orchestrator import TDDOrchestrator
 from cortex.orchestrators.core.lens_synthesis import LENSSynthesis
+from cortex.orchestrators.core.challenge_engine import ChallengeEngine
+from cortex.orchestrators.core.intent_router import IntentRouter
 
 
 # ============================================================================
@@ -92,6 +94,85 @@ class TestLENSSynthesisIntegration:
         assert hasattr(orchestrator, 'logger')
         assert hasattr(orchestrator, 'synthesis_history')
         assert hasattr(orchestrator, 'phase_weights')
+        
+        # Response engine present but disabled = backward compatible
+        assert orchestrator._response_config.enable_response_engine is False
+
+
+# ============================================================================
+# TEST: ChallengeEngine Integration
+# ============================================================================
+
+
+class TestChallengeEngineIntegration:
+    """Test ResponseEngine integration with ChallengeEngine."""
+
+    def test_challenge_engine_has_response_engine_methods(self):
+        """Test ChallengeEngine has ResponseEngine mixin methods."""
+        orchestrator = ChallengeEngine()
+        
+        # Verify mixin methods present
+        assert hasattr(orchestrator, '_init_response_engine')
+        assert hasattr(orchestrator, '_compose_response')
+        assert hasattr(orchestrator, '_response_config')
+        assert hasattr(orchestrator, '_response_engine')
+
+    def test_challenge_engine_response_engine_disabled_by_default(self):
+        """Test response engine is disabled by default for safety."""
+        orchestrator = ChallengeEngine()
+        
+        # Verify disabled by default
+        assert orchestrator._response_config.enable_response_engine is False
+        
+    def test_challenge_engine_backward_compatibility(self):
+        """Test ChallengeEngine works without response engine (backward compat)."""
+        orchestrator = ChallengeEngine()
+        
+        # Verify orchestrator can initialize successfully
+        assert orchestrator is not None
+        assert hasattr(orchestrator, 'logger')
+        assert hasattr(orchestrator, 'security_analyzer')
+        assert hasattr(orchestrator, 'challenge_rules')
+        
+        # Response engine present but disabled = backward compatible
+        assert orchestrator._response_config.enable_response_engine is False
+
+
+# ============================================================================
+# TEST: IntentRouter Integration
+# ============================================================================
+
+
+class TestIntentRouterIntegration:
+    """Test ResponseEngine integration with IntentRouter."""
+
+    def test_intent_router_has_response_engine_methods(self):
+        """Test IntentRouter has ResponseEngine mixin methods."""
+        orchestrator = IntentRouter()
+        
+        # Verify mixin methods present
+        assert hasattr(orchestrator, '_init_response_engine')
+        assert hasattr(orchestrator, '_compose_response')
+        assert hasattr(orchestrator, '_response_config')
+        assert hasattr(orchestrator, '_response_engine')
+
+    def test_intent_router_response_engine_disabled_by_default(self):
+        """Test response engine is disabled by default for safety."""
+        orchestrator = IntentRouter()
+        
+        # Verify disabled by default
+        assert orchestrator._response_config.enable_response_engine is False
+        
+    def test_intent_router_backward_compatibility(self):
+        """Test IntentRouter works without response engine (backward compat)."""
+        orchestrator = IntentRouter()
+        
+        # Verify orchestrator can initialize successfully
+        assert orchestrator is not None
+        assert hasattr(orchestrator, 'logger')
+        assert hasattr(orchestrator, 'operation_type_mappings')
+        assert hasattr(orchestrator, 'routing_rules')
+        assert hasattr(orchestrator, 'cached_decisions')
         
         # Response engine present but disabled = backward compatible
         assert orchestrator._response_config.enable_response_engine is False

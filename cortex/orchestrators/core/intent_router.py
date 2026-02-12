@@ -40,6 +40,7 @@ from cortex.orchestrators.core.routing_enforcement import (
     RoutingEnforcementEngine,
     RoutingViolation,
 )
+from cortex.orchestrators.response.response_engine_adapter import ResponseEngineMixin
 
 # Note: SpecRegistry import removed - not yet implemented (AC-PERMANENT-FIX-010)
 # Phase 8.2: Import orchestrator lookup and enforcement
@@ -222,7 +223,7 @@ class CompositeIntentDetector:
         return list(set(intents))  # Remove duplicates, maintain order
 
 
-class IntentRouter(IOrchestrator):
+class IntentRouter(IOrchestrator, ResponseEngineMixin):
     """
     Routes operations based on intent type and context.
 
@@ -397,6 +398,13 @@ class IntentRouter(IOrchestrator):
                 "orchestrator_lookup_enabled": True,  # AC-PHASE-8.2-01
                 "enforcement_enabled": enforcement_config.get("blocking_enabled", True)  # AC-PHASE-8.2-01
             }
+        )
+
+        # AC-ENH082-W2-S4-004: Initialize ResponseEngine (disabled by default for safety)
+        self._init_response_engine(
+            intent_type=IntentType.QUERY,  # Intent routing is query-like analysis
+            orchestrator_name="IntentRouter",
+            enable=False  # TODO: Enable after Wave H-S4 validation
         )
 
     def _load_routing_config(self) -> Dict[str, Any]:
