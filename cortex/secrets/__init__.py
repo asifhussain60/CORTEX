@@ -45,6 +45,7 @@ from cortex.secrets.management import (
     get_secret_history,
     get_rotation_metrics,
     rotate_encryption_key,
+    send_notification,  # Added for test compatibility
     
     # Audit trail
     get_audit_log,

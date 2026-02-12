@@ -460,6 +460,15 @@ def check_rotation_status(key: str, vault_path: Optional[Path] = None) -> Dict[s
     }
 
 
+def send_notification(message: str) -> None:
+    """Send notification (placeholder implementation)"""
+    # Store in module-level list for testing
+    if not hasattr(send_notification, "calls"):
+        send_notification.calls = []
+    send_notification.calls.append(message)
+    print(f"[NOTIFICATION] {message}")
+
+
 def rotate_secret(
     key: str,
     vault_path: Optional[Path] = None,
@@ -603,6 +612,19 @@ def _log_audit_entry(
             f.write(json.dumps(asdict(entry)) + "\n")
         finally:
             _release_file_lock(f)
+    
+    # Update checksum after each entry
+    _update_audit_checksum(audit_log_path)
+
+
+def _update_audit_checksum(audit_log_path: Path) -> None:
+    """Update audit log checksum"""
+    import hashlib
+    with open(audit_log_path, "rb") as f:
+        checksum = hashlib.sha256(f.read()).hexdigest()
+    
+    checksum_path = audit_log_path.with_suffix(".audit.log.sha256")
+    checksum_path.write_text(checksum)
 
 
 def get_audit_log(audit_log_path: Path) -> List[Dict[str, Any]]:
@@ -652,28 +674,48 @@ def query_audit_log(
 
 def rotate_audit_log(audit_log_path: Path, compress: bool = False) -> None:
     """Rotate audit log"""
-    archive_path = audit_log_path.with_suffix(".audit.log.archive")
+    if not audit_log_path.exists():
+        return  # Nothing to rotate
     
     if compress:
-        archive_path = archive_path.with_suffix(".gz")
+        archive_path = audit_log_path.parent / f"{audit_log_path.name}.archive.gz"
         with open(audit_log_path, "rb") as f_in:
             with gzip.open(archive_path, "wb") as f_out:
                 f_out.writelines(f_in)
     else:
+        archive_path = audit_log_path.parent / f"{audit_log_path.name}.archive"
         import shutil
-        shutil.move(audit_log_path, archive_path)
+        shutil.copy(audit_log_path, archive_path)
     
-    # Create new empty log
+    # Clear original log
     audit_log_path.write_text("")
 
 
 def verify_audit_log(audit_log_path: Path) -> Dict[str, Any]:
-    """Verify audit log integrity (placeholder - check for JSON validity)"""
-    try:
-        get_audit_log(audit_log_path)
+    """Verify audit log integrity (checksum-based tamper detection)"""
+    if not audit_log_path.exists():
         return {"tampered": False}
-    except Exception:
+    
+    # Compute checksum
+    import hashlib
+    with open(audit_log_path, "rb") as f:
+        checksum = hashlib.sha256(f.read()).hexdigest()
+    
+    # Check if checksum file exists
+    checksum_path = audit_log_path.with_suffix(".audit.log.sha256")
+    
+    if not checksum_path.exists():
+        # First verification, store checksum
+        checksum_path.write_text(checksum)
+        return {"tampered": False}
+    
+    # Compare checksums
+    stored_checksum = checksum_path.read_text().strip()
+    
+    if checksum != stored_checksum:
         return {"tampered": True}
+    
+    return {"tampered": False}
 
 
 # ============================================================================
