@@ -46,7 +46,6 @@ BLOCKED_MD_PATTERNS = [
 
 ALLOWED_MD_LOCATIONS = [
     "docs/",
-    "_workspaces/docs/",
 ]
 
 

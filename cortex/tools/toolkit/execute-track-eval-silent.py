@@ -173,25 +173,18 @@ def audit_004_governance_compliance() -> Dict:
 
 
 def cleanup_001_roadmap_maintenance() -> Dict:
-    """CLEANUP-PHASE-001: Remove duplicates and consolidate roadmap."""
+    """CLEANUP-PHASE-001: Remove duplicates and consolidate roadmap (DEPRECATED - roadmap removed)."""
     result = {
         "phase": "CLEANUP-PHASE-001-ROADMAP-MAINTENANCE",
-        "status": "RUNNING"
+        "status": "SKIPPED",
+        "reason": "Legacy roadmap file removed during Wave 9 cleanup"
     }
 
-    # Find duplicate phase definitions
-    rc, out, err = run_cmd("grep -n '^  - id:' _workspaces/roadmap/cortex-impl-map.yaml | awk -F: '{print $3}' | sort | uniq -d")
-    duplicates = [d.strip().strip('"').strip("'") for d in out.split('\n') if d.strip()]
-
-    result["duplicates_found"] = len(duplicates)
-    result["duplicate_ids"] = duplicates[:5] if duplicates else []
-
-    # Check if file is valid YAML
-    rc, _, _ = run_cmd("python -c \"import yaml; yaml.safe_load(open('_workspaces/roadmap/cortex-impl-map.yaml'))\"")
-    result["yaml_valid"] = "PASS" if rc == 0 else "FAIL"
-
-    result["ac_001_02"] = "PASS" if rc == 0 else "FAIL"
-    result["status"] = "PASS" if rc == 0 and len(duplicates) == 0 else "CONDITIONAL"
+    # Legacy function - roadmap file no longer exists
+    result["duplicates_found"] = 0
+    result["duplicate_ids"] = []
+    result["yaml_valid"] = "N/A"
+    result["ac_001_02"] = "N/A"
 
     return result
 

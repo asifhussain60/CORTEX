@@ -317,7 +317,7 @@ class CortexVacuum(ConsolidatedTool):
                 data={
                     "path": path,
                     "files_archived": [],
-                    "archive_location": "_workspaces/__bak-docs/",
+                    "archive_location": "_archives/",
                 },
                 metadata={"operation": "archive"},
             )
