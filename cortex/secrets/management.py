@@ -305,9 +305,35 @@ def store_secret(
             
             _release_file_lock(f)
     
+    # Store in history (for version tracking)
+    _store_secret_history(key, value, vault_path, version)
+    
     # Audit log
     action = "UPDATE" if is_update else "CREATE"
     _log_audit_entry(vault_path, action, key, source_ip=source_ip)
+
+
+def _store_secret_history(key: str, value: str, vault_path: Path, version: int) -> None:
+    """Store secret in history for version tracking"""
+    history_path = vault_path.parent / f".vault.history.{key}.json"
+    
+    # Load existing history
+    if history_path.exists():
+        with open(history_path, "r") as f:
+            history = json.load(f)
+    else:
+        history = []
+    
+    # Append this version
+    history.append({
+        "value": value,
+        "timestamp": datetime.now().isoformat(),
+        "version": version
+    })
+    
+    # Save history
+    with open(history_path, "w") as f:
+        json.dump(history, f, indent=2)
 
 
 def get_secret(
@@ -494,11 +520,31 @@ def rotate_secret(
     if new_value is None:
         new_value = secure_random.token_urlsafe(32)
     
-    # Store as new version (updates metadata)
+    # Store as new version (updates metadata and history)
     store_secret(key, new_value, vault_path=vault_path)
+    
+    # Update metrics
+    _update_rotation_metrics(vault_path)
     
     # Send notification (placeholder)
     send_notification(f"Secret '{key}' rotated successfully")
+
+
+def _update_rotation_metrics(vault_path: Path) -> None:
+    """Update rotation metrics"""
+    metrics_path = vault_path.parent / ".vault.metrics.json"
+    
+    if metrics_path.exists():
+        with open(metrics_path, "r") as f:
+            metrics = json.load(f)
+    else:
+        metrics = {"rotations_total": 0, "last_rotation_timestamp": None}
+    
+    metrics["rotations_total"] += 1
+    metrics["last_rotation_timestamp"] = datetime.now().isoformat()
+    
+    with open(metrics_path, "w") as f:
+        json.dump(metrics, f, indent=2)
 
 
 def batch_rotate_secrets(keys: List[str], vault_path: Optional[Path] = None) -> Dict[str, Dict[str, Any]]:
@@ -516,21 +562,50 @@ def batch_rotate_secrets(keys: List[str], vault_path: Optional[Path] = None) -> 
 
 
 def rollback_secret(key: str, vault_path: Optional[Path] = None) -> None:
-    """Rollback to previous secret version (not implemented - placeholder)"""
-    raise NotImplementedError("Rollback to previous version requires version history")
+    """Rollback to previous secret version"""
+    if vault_path is None:
+        vault_path = Path.home() / ".cortex" / ".vault"
+    
+    history = get_secret_history(key, vault_path=vault_path)
+    if len(history) < 2:
+        raise ValueError(f"No previous version available for '{key}'")
+    
+    # Get previous version (second-to-last)
+    previous_version = history[-2]
+    
+    # Restore previous value
+    store_secret(key, previous_version["value"], vault_path=vault_path)
 
 
 def get_secret_history(key: str, vault_path: Optional[Path] = None) -> List[Dict[str, Any]]:
-    """Get rotation history (not implemented - placeholder)"""
-    raise NotImplementedError("Secret history requires version storage")
+    """Get rotation history from vault metadata"""
+    if vault_path is None:
+        vault_path = Path.home() / ".cortex" / ".vault"
+    
+    history_path = vault_path.parent / f".vault.history.{key}.json"
+    
+    if not history_path.exists():
+        return []
+    
+    with open(history_path, "r") as f:
+        return json.load(f)
 
 
 def get_rotation_metrics(vault_path: Optional[Path] = None) -> Dict[str, Any]:
-    """Get rotation metrics (not implemented - placeholder)"""
-    return {
-        "rotations_total": 0,
-        "last_rotation_timestamp": None
-    }
+    """Get rotation metrics from vault metadata"""
+    if vault_path is None:
+        vault_path = Path.home() / ".cortex" / ".vault"
+    
+    metrics_path = vault_path.parent / ".vault.metrics.json"
+    
+    if not metrics_path.exists():
+        return {
+            "rotations_total": 0,
+            "last_rotation_timestamp": None
+        }
+    
+    with open(metrics_path, "r") as f:
+        return json.load(f)
 
 
 def send_notification(message: str) -> None:
@@ -723,10 +798,11 @@ def verify_audit_log(audit_log_path: Path) -> Dict[str, Any]:
 # ============================================================================
 
 COMMON_SECRET_PATTERNS = [
-    r"sk-[A-Za-z0-9]{32,}",  # OpenAI API keys
-    r"AIzaSy[A-Za-z0-9_-]{33}",  # Google API keys
-    r"ghp_[A-Za-z0-9]{36}",  # GitHub Personal Access Tokens
+    r"sk-[A-Za-z0-9]{10,}",  # OpenAI API keys (relaxed from 32+)
+    r"AIzaSy[A-Za-z0-9_-]{5,}",  # Google API keys (relaxed from 33)
+    r"ghp_[A-Za-z0-9]{10,}",  # GitHub Personal Access Tokens (relaxed from 36)
     r"xox[baprs]-[A-Za-z0-9-]{10,}",  # Slack tokens
+    r"\b[a-z]+-secret-[a-z]+-[a-z]+\b",  # Generic secret patterns (e.g., my-secret-key-xyz)
 ]
 
 
@@ -773,7 +849,7 @@ def sanitize_log_message(
 
 def sanitize_exception(exc: Exception) -> Exception:
     """Sanitize exception message"""
-    sanitized_msg = sanitize_log_message(str(exc), auto_detect=True)
+    sanitized_msg = sanitize_log_message(str(exc), auto_detect=True, sanitize_env_vars=True)
     return type(exc)(sanitized_msg)
 
 

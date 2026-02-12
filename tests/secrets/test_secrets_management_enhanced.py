@@ -636,7 +636,7 @@ class TestSecretsRotation:
         
         vault_path = tmp_path / ".vault"
         
-        with patch("cortex.secrets.send_notification") as mock_notify:
+        with patch("cortex.secrets.management.send_notification") as mock_notify:
             rotate_secret("api_key", vault_path=vault_path)
             
             mock_notify.assert_called_once()
@@ -761,7 +761,7 @@ class TestSecretsRotation:
     # Test 47: Rotation dry-run mode (preview changes)
     def test_rotation_dry_run_mode_preview_changes(self, tmp_path):
         """Test: Dry-run rotation (no actual changes)"""
-        from cortex.secrets import rotate_secret, get_secret
+        from cortex.secrets import rotate_secret, get_secret, store_secret
         
         vault_path = tmp_path / ".vault"
         
