@@ -250,11 +250,11 @@ class TestMCPServer:
         assert not result.success
         assert "Unknown tool" in result.error
     
-    def test_call_unimplemented_tool_returns_helpful_error(self, server):
-        """Calling defined but unimplemented tool returns helpful message."""
+    def test_call_implemented_tool_succeeds(self, server):
+        """Calling implemented tool returns success."""
         result = server.call_tool("cortex_lens", operation="analyze", target=".")
-        assert not result.success
-        assert "not yet implemented" in result.error
+        assert result.success
+        assert "lens" in result.data
     
     def test_health_check(self, server):
         """Health check returns server status."""
@@ -438,14 +438,14 @@ class TestToolBase:
         tool = TestConsolidated()
         
         # Valid operation
-        result = asyncio.get_event_loop().run_until_complete(
+        result = asyncio.run(
             tool.execute(operation="op1")
         )
         assert result.success
         assert result.data["result"] == "op1_executed"
         
         # Unknown operation
-        result = asyncio.get_event_loop().run_until_complete(
+        result = asyncio.run(
             tool.execute(operation="unknown")
         )
         assert not result.success

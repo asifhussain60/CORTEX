@@ -305,6 +305,7 @@ class ToolRegistry:
     
     def _register_production_tools(self) -> None:
         """Register all production tools from PRODUCTION_TOOLS."""
+        # Step 1: Register metadata for all tools
         for tool_id, spec in PRODUCTION_TOOLS.items():
             params = [
                 ToolParameter(
@@ -326,7 +327,21 @@ class ToolRegistry:
             )
             self._tools[tool_id] = metadata
         
-        self.logger.info(f"Registered {len(self._tools)} production tools")
+        self.logger.info(f"Registered {len(self._tools)} production tool metadata")
+        
+        # Step 2: Register tool implementations
+        self._register_implementations()
+    
+    def _register_implementations(self) -> None:
+        """Register all tool implementations."""
+        try:
+            from cortex.mcp.tools import register_all_tools
+            count = register_all_tools(self)
+            self.logger.info(f"Registered {count} tool implementations")
+        except ImportError as e:
+            self.logger.warning(f"Could not import tool implementations: {e}")
+        except Exception as e:
+            self.logger.error(f"Failed to register implementations: {e}")
     
     def register(self, tool: Tool) -> None:
         """

@@ -68,7 +68,14 @@ from cortex.mcp.base import ToolCategory, ToolResult
 
 def run_async(coro):
     """Helper to run async functions in tests."""
-    return asyncio.get_event_loop().run_until_complete(coro)
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        # No running loop, create a new one
+        return asyncio.run(coro)
+    else:
+        # Use existing loop
+        return loop.run_until_complete(coro)
 
 
 # =============================================================================

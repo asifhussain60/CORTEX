@@ -13,6 +13,8 @@ import json
 import logging
 import sys
 import time
+import asyncio
+import inspect
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, List, Optional
@@ -193,6 +195,18 @@ class MCPServer:
         # Execute tool
         try:
             result = tool.execute(**params)
+            
+            # Handle async coroutines
+            if inspect.iscoroutine(result):
+                try:
+                    loop = asyncio.get_running_loop()
+                    # If we're already in an async context, schedule it
+                    import concurrent.futures
+                    with concurrent.futures.ThreadPoolExecutor() as pool:
+                        result = pool.submit(asyncio.run, result).result()
+                except RuntimeError:
+                    # No running loop, use asyncio.run
+                    result = asyncio.run(result)
             
             # Add execution metadata
             result.metadata["execution_time_ms"] = int((time.time() - start_time) * 1000)
