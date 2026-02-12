@@ -23,6 +23,15 @@ from cortex.orchestrators.validation.pre_implementation_checklist import (
     ChecklistResult,
     CheckResult,
 )
+from cortex.orchestrators.validation.challenge_engine import (
+    ChallengeEngine,
+    Challenge,
+)
+from cortex.orchestrators.validation.confidence_scorer import (
+    ConfidenceScorer,
+    ConfidenceResult,
+    ConfidenceFactor,
+)
 
 __all__ = [
     "HolisticValidationOrchestrator",
@@ -30,6 +39,11 @@ __all__ = [
     "PreImplementationChecklist",
     "ChecklistResult",
     "CheckResult",
+    "ChallengeEngine",
+    "Challenge",
+    "ConfidenceScorer",
+    "ConfidenceResult",
+    "ConfidenceFactor",
 ]
 
 __version__ = "1.0.0"
