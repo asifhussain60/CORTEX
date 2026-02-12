@@ -70,34 +70,34 @@ PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
     # TIER 2: CODE INTELLIGENCE (3 tools)
     # =========================================================================
     "cortex_lens": {
-        "description": "Unified code intelligence: analysis, AST parsing, pattern discovery, deep analysis.",
+        "description": "Unified code intelligence: analysis, AST parsing, pattern discovery, duplicate detection.",
         "category": ToolCategory.INTELLIGENCE,
         "parameters": [
-            {"name": "operation", "type": "string", "required": True, "enum": ["analyze", "deep_analyze", "ast", "discover", "extract_comments"], "description": "Analysis operation"},
+            {"name": "operation", "type": "string", "required": True, "enum": ["analyze", "search", "graph", "duplicates", "ast"], "description": "Analysis operation"},
             {"name": "target", "type": "string", "required": True, "description": "File or directory path"},
-            {"name": "options", "type": "object", "required": False, "description": "Operation-specific options"},
+            {"name": "options", "type": "object", "required": False, "description": "Operation-specific options (e.g., depth: shallow/standard/deep)"},
         ],
-        "operations": ["analyze", "deep_analyze", "ast", "discover", "extract_comments"],
+        "operations": ["analyze", "search", "graph", "duplicates", "ast"],
     },
     "cortex_knowledge": {
-        "description": "Knowledge base operations: search, gap analysis, TDD guidance, summary generation.",
+        "description": "Knowledge base operations: search, domain analysis, best practices, gap detection.",
         "category": ToolCategory.INTELLIGENCE,
         "parameters": [
-            {"name": "operation", "type": "string", "required": True, "enum": ["search", "analyze_gap", "tdd_guidance", "generate_summary"], "description": "Knowledge operation"},
+            {"name": "operation", "type": "string", "required": True, "enum": ["search", "domain", "best_practices", "gaps"], "description": "Knowledge operation"},
             {"name": "query", "type": "string", "required": True, "description": "Search query or topic"},
             {"name": "domain", "type": "string", "required": False, "description": "Domain filter"},
         ],
-        "operations": ["search", "analyze_gap", "tdd_guidance", "generate_summary"],
+        "operations": ["search", "domain", "best_practices", "gaps"],
     },
     "cortex_git": {
-        "description": "Git operations: history analysis, duplicate detection, blame.",
+        "description": "Git operations: history analysis, blame, diff, context extraction.",
         "category": ToolCategory.INTELLIGENCE,
         "parameters": [
-            {"name": "operation", "type": "string", "required": True, "enum": ["history", "detect_duplicates", "blame"], "description": "Git operation"},
+            {"name": "operation", "type": "string", "required": True, "enum": ["history", "blame", "diff", "context", "changes"], "description": "Git operation"},
             {"name": "path", "type": "string", "required": False, "description": "File or directory path"},
             {"name": "hours", "type": "number", "required": False, "description": "Hours of history (default: 24)"},
         ],
-        "operations": ["history", "detect_duplicates", "blame"],
+        "operations": ["history", "blame", "diff", "context", "changes"],
     },
     
     # =========================================================================
