@@ -17,7 +17,7 @@ Authority: ENH-064 + cortex-architect.prompt.md
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 from cortex.orchestrators.core.base_response_template import (
     BaseResponseTemplate,

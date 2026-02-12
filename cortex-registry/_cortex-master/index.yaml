@@ -212,8 +212,8 @@ master_remediation:
       release: "R6H-CLEANUP-TEMPLATES"
       priority: "P1-HIGH-ROI"
       duration: "3-4 hours"
-      session_id: "WAVE-H-PENDING"
-      status: "ready"
+      session_id: "WAVE-H-20260212-01"
+      status: "in_progress"
       completion_date: null
       requires: ["WAVE-E"]
       roi: 8.5
