@@ -1,11 +1,11 @@
 """
 Phase 52 S7: MCP Gateway & Tools Implementation
-Authority: AC-PHASE52-S7-001
-Purpose: Expose all 5 orchestrators via MCP server endpoints
+Authority: AC-PHASE52-S7-001 + AC-WAVEB-006
+Purpose: Expose all 5 orchestrators via MCP server endpoints with RBAC
 
 MCP Endpoints:
 - /tools - Tool discovery
-- /tools/{name} - Tool metadata & execution
+- /tools/{name} - Tool metadata & execution (with RBAC)
 - /health - Server health
 - /metrics - Performance metrics
 
@@ -20,6 +20,11 @@ Tool Registry:
 8. cortex_identify_bottleneck - Bottleneck analysis
 9. cortex_dashboard_pr_queue - PR dashboard widget
 10. cortex_dashboard_migration_progress - Migration dashboard widget
+
+ENH-063 Phase 4: RBAC Authorization Integration
+- Role-based tool execution (ADMIN, USER, READONLY)
+- Authorization context from JWT tokens
+- Audit logging for authorization decisions
 """
 
 import time
@@ -28,6 +33,13 @@ from datetime import datetime
 from typing import Any, Callable, Dict, List, Optional
 
 from cortex.brain.core.result import Err, Ok
+from cortex.mcp.rbac import (
+    Action,
+    AuthorizationContext,
+    Resource,
+    Role,
+    authorize,
+)
 
 # ============================================================================
 # TOOL DEFINITIONS
@@ -213,8 +225,22 @@ class MCPGateway:
             "required_auth": tool.required_auth,
         }
 
-    def execute_tool(self, request: Dict[str, Any]) -> Any:
-        """Execute a tool"""
+    def execute_tool(
+        self,
+        request: Dict[str, Any],
+        user_id: Optional[str] = None,
+        user_role: Optional[Role] = None,
+    ) -> Any:
+        """Execute a tool with RBAC authorization.
+        
+        Args:
+            request: Tool execution request
+            user_id: User identifier (from JWT)
+            user_role: User role (from JWT)
+            
+        Returns:
+            Tool execution result or error
+        """
         tool_name = request.get("tool")
         params = request.get("params", {})
         timeout = request.get("timeout_seconds", self.timeout_seconds)
@@ -222,6 +248,20 @@ class MCPGateway:
         # Validate tool exists
         if tool_name not in self.tools:
             return Err(f"Unknown tool: {tool_name}")
+
+        # RBAC Authorization Check (ENH-063 Phase 4)
+        if user_id and user_role:
+            auth_context = AuthorizationContext(
+                user_id=user_id,
+                role=user_role,
+                resource=Resource.TOOL,
+                action=Action.EXECUTE,
+                resource_id=tool_name,
+            )
+            auth_result = authorize(auth_context)
+            
+            if not auth_result.allowed:
+                return Err(f"Authorization failed: {auth_result.reason}")
 
         # Validate parameters
         tool_meta = self.tools[tool_name]
@@ -300,7 +340,7 @@ class MCPGateway:
     def _handle_review_pr(self, params: Dict[str, Any]) -> Any:
         """Handle PR review tool"""
         repo = params.get("repo")
-        pr_number = params.get("pr_number")
+        pr_number = params.get("pr_number", 1)
 
         # Simulate PR review
         review_result = {
