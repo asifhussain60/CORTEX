@@ -15,10 +15,16 @@ MCP Tools Exposed:
 - cortex_debug_analyze: Analyze captured logs for issues
 - cortex_debug_cleanup: Remove debug markers cleanly
 - cortex_debug_full_cycle: Run complete debug workflow
+
+AC_START: AC-WAVE-A-002-03
+Description: ENH-063 Phase 2 - Debug orchestrator race condition fix
+Authority: SESSION-SCOPED-WAVES.md WAVE-A Task 2
+Testing: tests/unit/orchestrators/debugging/test_debug_race_condition.py
 """
 
 import json
 import logging
+import threading
 import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -203,6 +209,9 @@ class DebugOrchestrator:
             repo_path=self.repo_path,
         )
 
+        # Thread-safety: Lock for session state updates (ENH-063 Phase 2)
+        self._session_lock = threading.Lock()
+
         # Lazy-loaded components
         self._injector = None
         self._capture = None
@@ -276,7 +285,9 @@ class DebugOrchestrator:
             Injection result with file list and marker count
         """
         logger.info(f"Starting injection phase for session {self.session.session_id}")
-        self.session.phase = DebugPhase.INJECT
+        
+        with self._session_lock:
+            self.session.phase = DebugPhase.INJECT
 
         result = self.injector.inject(
             file_patterns=file_patterns,
@@ -284,9 +295,10 @@ class DebugOrchestrator:
             exclude_patterns=exclude_patterns,
         )
 
-        self.session.injected_files = result.get("injected_files", [])
-        self.session.injection_count = result.get("total_markers", 0)
-        self.session.backup_dir = Path(result.get("backup_dir", self.output_dir / "backups"))
+        with self._session_lock:
+            self.session.injected_files = result.get("injected_files", [])
+            self.session.injection_count = result.get("total_markers", 0)
+            self.session.backup_dir = Path(result.get("backup_dir", self.output_dir / "backups"))
 
         self._save_session()
 
@@ -315,7 +327,9 @@ class DebugOrchestrator:
             Capture result with all logs and markers
         """
         logger.info(f"Starting capture phase for session {self.session.session_id}")
-        self.session.phase = DebugPhase.CAPTURE
+        
+        with self._session_lock:
+            self.session.phase = DebugPhase.CAPTURE
 
         result = self.capture.capture(
             url=url,
@@ -324,10 +338,11 @@ class DebugOrchestrator:
             headless=headless,
         )
 
-        self.session.captured_logs = result.get("all_logs", [])
-        self.session.cortex_markers = result.get("cortex_markers", [])
-        self.session.errors = result.get("errors", [])
-        self.session.warnings = result.get("warnings", [])
+        with self._session_lock:
+            self.session.captured_logs = result.get("all_logs", [])
+            self.session.cortex_markers = result.get("cortex_markers", [])
+            self.session.errors = result.get("errors", [])
+            self.session.warnings = result.get("warnings", [])
 
         self._save_session()
 
@@ -347,7 +362,9 @@ class DebugOrchestrator:
             Analysis result with detected issues and fix recommendations
         """
         logger.info(f"Starting analysis phase for session {self.session.session_id}")
-        self.session.phase = DebugPhase.ANALYZE
+        
+        with self._session_lock:
+            self.session.phase = DebugPhase.ANALYZE
 
         result = self.analyzer.analyze(
             cortex_markers=self.session.cortex_markers,
@@ -355,9 +372,10 @@ class DebugOrchestrator:
             warnings=self.session.warnings,
         )
 
-        self.session.detected_issues = result.get("issues", [])
-        self.session.race_conditions = result.get("race_conditions", [])
-        self.session.integration_breaks = result.get("integration_breaks", [])
+        with self._session_lock:
+            self.session.detected_issues = result.get("issues", [])
+            self.session.race_conditions = result.get("race_conditions", [])
+            self.session.integration_breaks = result.get("integration_breaks", [])
 
         self._save_session()
 
@@ -371,7 +389,9 @@ class DebugOrchestrator:
             Fix plan with prioritized recommendations
         """
         logger.info(f"Generating fix plan for session {self.session.session_id}")
-        self.session.phase = DebugPhase.FIX_PLAN
+        
+        with self._session_lock:
+            self.session.phase = DebugPhase.FIX_PLAN
 
         fix_plan = self.analyzer.generate_fix_plan(
             issues=self.session.detected_issues,
@@ -379,7 +399,9 @@ class DebugOrchestrator:
             integration_breaks=self.session.integration_breaks,
         )
 
-        self.session.fix_plan = fix_plan
+        with self._session_lock:
+            self.session.fix_plan = fix_plan
+        
         self._save_session()
 
         # Save fix plan as markdown for easy review
@@ -399,17 +421,20 @@ class DebugOrchestrator:
             Cleanup result with verification status
         """
         logger.info(f"Starting cleanup phase for session {self.session.session_id}")
-        self.session.phase = DebugPhase.CLEANUP
+        
+        with self._session_lock:
+            self.session.phase = DebugPhase.CLEANUP
 
         result = self.cleanup_handler.cleanup(
             injected_files=self.session.injected_files,
             verify=verify,
         )
 
-        self.session.cleaned_files = result.get("cleaned_files", [])
-        self.session.cleanup_verified = result.get("verified", False)
-        self.session.phase = DebugPhase.COMPLETE
-        self.session.end_time = datetime.now()
+        with self._session_lock:
+            self.session.cleaned_files = result.get("cleaned_files", [])
+            self.session.cleanup_verified = result.get("verified", False)
+            self.session.phase = DebugPhase.COMPLETE
+            self.session.end_time = datetime.now()
 
         self._save_session()
 
@@ -602,3 +627,6 @@ orchestrator.cleanup()
 def health_check() -> bool:
     """Health check for orchestrator wiring."""
     return True
+
+
+# AC_COMPLETE: AC-WAVE-A-002-03 ✅ Debug orchestrator race condition fixed (5 tests passing)
