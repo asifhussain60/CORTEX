@@ -7,7 +7,7 @@ Focus on edge cases, error paths, and previously uncovered branches.
 
 import pytest
 from unittest.mock import Mock, MagicMock
-from cortex.orchestrators.domain.enhanced_refactoring_orchestrator_v2 import (
+from cortex.orchestrators.domain.enhanced_refactoring_orchestrator import (
     EnhancedRefactoringOrchestrator,
     RefactoringResult,
     CodeReviewResult,

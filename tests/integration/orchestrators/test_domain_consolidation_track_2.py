@@ -21,7 +21,7 @@ import tempfile
 import shutil
 
 # Import domain orchestrators (consolidated implementations)
-from cortex.orchestrators.domain.enhanced_refactoring_orchestrator_v2 import (
+from cortex.orchestrators.domain.enhanced_refactoring_orchestrator import (
     EnhancedRefactoringOrchestrator,
     RefactoringResult,
     CodeReviewResult,

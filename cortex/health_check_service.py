@@ -31,7 +31,7 @@ from datetime import datetime
 import asyncio
 
 # Simulated imports (would come from actual cortex modules)
-from cortex.intent_router.router_v2 import EnhancedIntentRouter, IntentRoutingRequest
+from cortex.intent_router.router import EnhancedIntentRouter, IntentRoutingRequest
 from cortex.intent_router.capability_matcher import IntentType
 
 

@@ -54,7 +54,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 # Local imports (adjust based on actual router structure)
-from cortex.intent_router.router_v2 import EnhancedIntentRouter, IntentRoutingRequest, IntentRoutingResult
+from cortex.intent_router.router import EnhancedIntentRouter, IntentRoutingRequest, IntentRoutingResult
 from cortex.intent_router.capability_matcher import IntentType
 
 

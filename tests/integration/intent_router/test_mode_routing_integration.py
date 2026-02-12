@@ -14,7 +14,7 @@ from unittest.mock import Mock, MagicMock, patch, call
 from typing import Dict, Any, List
 from dataclasses import dataclass
 
-from cortex.intent_router.router_v2 import (
+from cortex.intent_router.router import (
     EnhancedIntentRouter,
     IntentRoutingRequest,
     IntentRoutingResult,

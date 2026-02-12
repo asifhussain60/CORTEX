@@ -19,7 +19,7 @@ from cortex.intent_router.collaboration_coordinator import (
     CollaborationPattern,
     AgentContext
 )
-from cortex.intent_router.router_v2 import EnhancedIntentRouter, IntentRoutingRequest
+from cortex.intent_router.router import EnhancedIntentRouter, IntentRoutingRequest
 
 
 class TestCapabilityMatchingIntegration:

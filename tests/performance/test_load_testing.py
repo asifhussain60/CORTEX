@@ -52,7 +52,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from cortex.intent_router.router_v2 import (
+from cortex.intent_router.router import (
     EnhancedIntentRouter,
     IntentRoutingRequest,
     IntentRoutingResult,
