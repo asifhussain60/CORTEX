@@ -82,7 +82,8 @@ class TrackParallelizationStrategy(ExecutionStrategy):
             )
         
         try:
-            tracks = context.metadata.get("tracks", [])
+            # Get tracks/phases from data or metadata
+            tracks = context.data.get("tracks", context.data.get("phases", context.metadata.get("tracks", context.metadata.get("phases", []))))
             
             # Initialize resource pool if enabled
             if self.config.resource_pooling:
@@ -104,25 +105,27 @@ class TrackParallelizationStrategy(ExecutionStrategy):
                         result = future.result()
                         track_results.append(result)
                         
-                        # Update track state
-                        track_id = track.get("id", "unknown")
+                        # Update track state (track may be string or dict)
+                        track_id = track if isinstance(track, str) else track.get("id", "unknown")
                         self.track_states[track_id] = "completed" if result.get("success") else "failed"
                         
                     except Exception as e:
-                        logger.error(f"Track {track.get('id')} failed: {str(e)}")
+                        # Get track ID (track may be string or dict)
+                        track_id = track if isinstance(track, str) else track.get("id", "unknown")
+                        logger.error(f"Track {track_id} failed: {str(e)}")
                         if not self.config.failure_isolation:
                             # Propagate failure if isolation disabled
                             raise
                         
                         track_results.append({
-                            "track_id": track.get("id"),
+                            "track_id": track_id,
                             "success": False,
                             "error": str(e),
                         })
             
-            # Check completion
+            # Check completion (track may be string or dict)
             all_completed = all(
-                self.track_states.get(t.get("id", ""), "") in ["completed", "failed"]
+                self.track_states.get(t if isinstance(t, str) else t.get("id", ""), "") in ["completed", "failed"]
                 for t in tracks
             )
             
@@ -165,17 +168,16 @@ class TrackParallelizationStrategy(ExecutionStrategy):
         errors = []
         warnings = []
         
-        # Check required metadata
-        if "tracks" not in context.metadata:
-            errors.append("tracks list required in metadata")
-        
-        tracks = context.metadata.get("tracks", [])
+        # Check for tracks or phases in either data or metadata
+        tracks = context.data.get("tracks", context.data.get("phases", context.metadata.get("tracks", context.metadata.get("phases", []))))
+        if not tracks:
+            errors.append("tracks or phases list required in data or metadata")
         
         # Check track count
-        if len(tracks) == 0:
-            errors.append("At least one track required")
+        if tracks and len(tracks) == 0:
+            errors.append("At least one track/phase required")
         
-        if len(tracks) > self.config.max_parallel_tracks:
+        if tracks and len(tracks) > self.config.max_parallel_tracks:
             warnings.append(
                 f"Track count ({len(tracks)}) exceeds max parallel "
                 f"({self.config.max_parallel_tracks}), will execute in batches"
@@ -201,18 +203,22 @@ class TrackParallelizationStrategy(ExecutionStrategy):
         self.resource_pool = resources.copy()
         logger.debug(f"Initialized resource pool: {self.resource_pool}")
     
-    def _execute_track(self, track: Dict[str, Any], context: ExecutionContext) -> Dict[str, Any]:
+    def _execute_track(self, track: Any, context: ExecutionContext) -> Dict[str, Any]:
         """
         Execute a single track.
         
         Args:
-            track: Track data
+            track: Track data (string or dict)
             context: Execution context
         
         Returns:
             Track execution result
         """
-        track_id = track.get("id", "unknown")
+        # Handle string tracks/phases
+        if isinstance(track, str):
+            track_id = track
+        else:
+            track_id = track.get("id", "unknown")
         
         # Update state
         self.track_states[track_id] = "in_progress"

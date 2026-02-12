@@ -140,16 +140,24 @@ class PhaseExecutionStrategy(ExecutionStrategy):
                 error=str(e),
             )
     
-    def validate(self, context: ExecutionContext) -> ValidationResult:
+    def validate(self, context: Optional[ExecutionContext] = None) -> ValidationResult:
         """
         Validate phase execution preconditions.
         
         Args:
-            context: Execution context to validate
+            context: Execution context to validate (optional, creates default if None)
         
         Returns:
             ValidationResult with any errors/warnings
         """
+        # Create minimal context if none provided (for testing)
+        if context is None:
+            context = ExecutionContext(
+                strategy_type="phase",
+                phase_id="default",
+                data={}
+            )
+        
         errors = []
         warnings = []
         

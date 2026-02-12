@@ -30,7 +30,7 @@ class ExecutionContext:
     
     Attributes:
         strategy_type: Type of strategy (phase/wave/track)
-        phase_id: Unique phase identifier  
+        phase_id: Unique phase identifier (optional, defaults to wave_id or track_id)
         data: Context data dictionary
         wave_id: Wave identifier (optional, for wave strategies)
         track_id: Track identifier (optional, for track strategies)
@@ -42,7 +42,7 @@ class ExecutionContext:
         metadata: Additional context data
     """
     strategy_type: str
-    phase_id: str
+    phase_id: str = ""
     data: Dict[str, Any] = field(default_factory=dict)
     wave_id: Optional[str] = None
     track_id: Optional[str] = None
@@ -52,6 +52,11 @@ class ExecutionContext:
     dependencies: List[str] = field(default_factory=list)
     resources: Dict[str, Any] = field(default_factory=dict)
     metadata: Dict[str, Any] = field(default_factory=dict)
+    
+    def __post_init__(self):
+        """Auto-populate phase_id from wave_id or track_id if not provided."""
+        if not self.phase_id:
+            self.phase_id = self.wave_id or self.track_id or "unknown"
 
 
 @dataclass

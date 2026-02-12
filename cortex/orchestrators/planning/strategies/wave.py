@@ -157,14 +157,15 @@ class WaveOrchestrationStrategy(ExecutionStrategy):
         warnings = []
         
         # Check required metadata
-        if "wave_id" not in context.metadata:
-            warnings.append("wave_id not in metadata, using phase_id")
+        if "wave_id" not in context.metadata and not context.wave_id:
+            warnings.append("wave_id not in metadata or context, using phase_id")
         
-        if "phases" not in context.metadata:
-            errors.append("phases list required in metadata")
+        # Check for phases in either data or metadata
+        phases = context.data.get("phases", context.metadata.get("phases", []))
+        if not phases:
+            errors.append("phases list required in data or metadata")
         
         # Check parallelization constraints
-        phases = context.metadata.get("phases", [])
         if len(phases) > self.config.max_parallel_phases:
             warnings.append(
                 f"Phase count ({len(phases)}) exceeds max parallel "
