@@ -5221,6 +5221,218 @@ Score < 5 → Continue to DESIGN MODE
 
 ---
 
+## 📝 DIGEST MODE: Chat Consolidation (NEW - Phase Enhancement)
+
+**Trigger:** User requests chat file consolidation or provides chat markdown for digest  
+**Purpose:** Transform verbose multi-session chat transcripts into clean, human-readable narratives  
+**Authority:** Phase 2026-02-12 Enhancement - Chat Session Distillation
+
+### When to Apply Consolidation
+
+| Indicator | Action |
+|-----------|--------|
+| File contains multiple Copilot chat sessions | Consolidate |
+| Content has extensive back-and-forth exchanges | Consolidate |
+| User explicitly requests "clean up chat" | Consolidate |
+| File size >1000 lines with repetitive content | Consolidate |
+
+### Consolidation Strategy
+
+**REMOVE (Noise Reduction):**
+- ❌ AI narration ("I'll now...", "Let me explain...")
+- ❌ Redundant approval cycles ("Shall I proceed?", "Yes, proceed")
+- ❌ Verbose progress updates during execution
+- ❌ Duplicate information across sessions
+- ❌ Command outputs (unless critical to understanding)
+- ❌ ASCII progress bars from execution
+- ❌ Tool invocation details
+
+**PRESERVE (Information Retention):**
+- ✅ All decisions made (with brief rationale)
+- ✅ Technical details (file paths, key changes, commits)
+- ✅ User's original intent and requests
+- ✅ Important disagreements/challenges
+- ✅ Where knowledge was absorbed (company/domains/, cortex/knowledge/)
+- ✅ Artifacts created (files, tests, documentation)
+- ✅ Metrics (before/after states)
+- ✅ Open items or deferred work
+
+### Consolidated Format Template
+
+```markdown
+# Chat Session Digest: [Topic]
+**Date:** [Date] | **Sessions:** [Number] merged | **Branch:** [Git branch if applicable]
+
+---
+
+## 📋 Context
+[Why this work started - 1-2 paragraphs]
+
+**Initial Goal:** [Original user request]
+
+---
+
+## 🎯 Key Decisions
+
+### 1. **[Decision Title]**
+- **Decision:** [What was chosen]
+- **Rationale:** [Why it was chosen]
+- **Alternative Considered:** [What was rejected, if applicable]
+- **Impact:** [Effect on system]
+
+[Repeat for each major decision]
+
+---
+
+## 🚀 Implementation
+
+### **Phase 1: [Phase Name]**
+
+#### Files Created/Modified:
+- `path/to/file` ([changes summary])
+  - [Key change 1]
+  - [Key change 2]
+
+**Git Commits:**
+- `[commit_hash]` - [Commit message]
+
+[Repeat for each phase]
+
+---
+
+## 💡 Challenges & Resolutions
+
+### Challenge 1: [Challenge Title]
+- **Problem:** [What went wrong]
+- **Investigation:** [How it was diagnosed]
+- **Resolution:** [How it was fixed]
+- **Learning:** [Key takeaway]
+
+[Repeat for each challenge]
+
+---
+
+## 📊 Knowledge Absorbed
+
+### Into CORTEX Brain (cortex/knowledge/):
+- **[Category]:** [Specific knowledge added]
+
+### Into Company Domain (company/domains/):
+- **[Category]:** [Domain-specific knowledge]
+
+### Into Registry (cortex-registry/):
+- **[Category]:** [Registry updates]
+
+---
+
+## 📦 Artifacts Created
+
+### Documentation ([count] files, [lines] total):
+1. **[Filename]** ([lines])
+   - [Purpose]
+
+### Code Changes:
+- **[Component]:** [Before] → [After] ([% change])
+- **[Component]:** [Changes summary]
+
+### Git Commits ([count] total):
+- [Summary of commit categories]
+
+---
+
+## 📈 Metrics Summary
+
+```
+Before:
+- [Metric]: [Value]
+
+After:
+- [Metric]: [Value]
+
+Impact:
+✅ [Key achievement 1]
+✅ [Key achievement 2]
+```
+
+---
+
+## 🎯 System State After Session
+
+### ✅ Active Components:
+- **[Component]:** [Status/Details]
+
+### ✅ Ready for Execution:
+- **[Item]:** [Details]
+
+### ⚪ Open Items:
+- [Deferred work or unresolved issues]
+
+---
+
+## 🔄 What This Digest Replaces
+
+This consolidated summary replaces **[original_lines] lines of verbose chat transcript** containing:
+- [List of removed content types]
+
+**Original Content:** [What it was]  
+**Distilled Version:** [What it became]  
+**Compression Ratio:** [% reduction]
+
+---
+
+**Maintained by:** CORTEX Architect  
+**Authority:** [Git commits or implementation reference]  
+**Next Session:** [Recommended next action]
+```
+
+### Logical Ordering Rules
+
+**Information Flow (Not Chronological):**
+1. **Context/Intent** → Why work started
+2. **Decisions** → What was chosen (strategic level)
+3. **Implementation** → What was built (tactical level)
+4. **Challenges** → Problems solved (learning level)
+5. **Knowledge** → What was learned/absorbed
+6. **Artifacts** → What was created (deliverables)
+7. **Metrics** → Quantitative impact
+8. **System State** → Current status
+9. **What Replaced** → Compression summary
+
+### Execution Instructions
+
+**When user says "consolidate chat" or provides chat file:**
+
+1. **Scan file** for chat session markers
+2. **Extract key information** using preservation rules
+3. **Organize** information by logical flow (not chronology)
+4. **Generate consolidated markdown** using template
+5. **Replace original file content** (no backup unless requested)
+6. **Report compression ratio** (original → consolidated lines)
+
+**CRITICAL:** This is a **REPLACEMENT operation**, not additive. User receives one clean file that tells the story without the noise.
+
+### Success Criteria
+
+- ✅ 85%+ reduction in file size
+- ✅ All decisions preserved with rationale
+- ✅ All artifacts/commits documented
+- ✅ Challenges and resolutions captured
+- ✅ Knowledge absorption mapped
+- ✅ Metrics showing before/after
+- ✅ Logical narrative flow (human-readable)
+- ✅ Zero information loss on critical items
+
+### Example Compression Achievement
+
+```
+Before: 5,072 lines (verbose chat transcript)
+After: 251 lines (consolidated narrative)
+Compression: 95% reduction
+Information Loss: 0% on critical items
+```
+
+---
+
 # 🎨 MODE 2: DESIGN (User Request Provided)
 
 **Pre-Requisite:** PRE-FLIGHT check must pass (environment READY)  
