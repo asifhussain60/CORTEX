@@ -1,283 +1,178 @@
-# Chat Session Digest: CORE-035 Audit & Duplicate Elimination
-**Date:** 2026-02-12  
-**Type:** Audit + Fix  
-**Orchestrator:** EnforcementOrchestrator  
-**Mode:** Silent Autonomous  
+asifhussain60: Follow instructions in [cortex-architect.prompt.md](file:///Users/asifhussain/PROJECTS/CORTEX/.github/prompts/cortex-architect.prompt.md).
+find the wave in coretx master that had the doc site design from cortex-doc-gemini
+
+GitHub Copilot: ## 🏛️ CORTEX Architect ANALYZE
+**Author:** Asif Hussain | **Orchestrator:** MasterOrchestrator ✅
 
 ---
 
-## 📋 Session Overview
+I'll search for the wave in the CORTEX master registry that contains the doc site design from cortex-doc-gemini. 
 
-**Objective:** Holistic audit to find and fix duplicates and stub implementations masquerading as real code.
+Searched text for `cortex-doc-gemini|doc site|documentation site` (`**/cortex-registry/_cortex-master/**/*.yaml`), 6 results
 
-**Outcome:** ✅ COMPLETE — 3 critical duplicates eliminated, 17 tests added, 100% passing.
+Let me read the relevant wave files: 
 
----
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/_cortex-master/WAVE-9-PHASE-1-COMPLETION.yaml#1-1), lines 1 to 150
 
-## 🔧 Fixes Applied
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/_cortex-master/WAVE-BASED-EXECUTION-PLAN.yaml#350-350), lines 350 to 450
 
-### 1. ISecretsProvider Duplicate (CORE-035 Violation)
-**Problem:** Duplicate abstract base class in two locations
-- `cortex/secrets/provider.py` (canonical)
-- `cortex/secrets/__init__.py` (duplicate - 108 lines)
+Perfect! Let me also check ENH-092 to get more details: 
 
-**Solution:**
-```python
-# Before: Duplicate class definition
-class ISecretsProvider(ABC):
-    # ... 108 lines ...
-
-# After: Import from canonical source
-from cortex.secrets.provider import ISecretsProvider
-```
-
-**Impact:** 6 provider implementations already importing from correct location, no breakage.
-
-**Commit:** `ba0a2b397`
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/_cortex-master/ENH-092-COMPLETION.yaml#1-1), lines 1 to 100
 
 ---
 
-### 2. Naming Utilities Duplication (CORE-035 Violation)
-**Problem:** Identical helper functions in 2 locations
-- `cortex/tools/tool_generator.py::_to_class_name()`, `_to_module_name()`
-- `cortex/tools/orchestrator_scaffolder.py::_to_class_name()`, `_to_module_name()`
+## 📋 Analysis Complete
 
-**Solution:** Extracted to shared utility module
-- **New Module:** `cortex/tools/naming_utils.py`
-  - `to_class_name(name: str) -> str` — Convert to PascalCase
-  - `to_module_name(name: str) -> str` — Convert to snake_case
-  
-**Tests:** 11 new tests covering edge cases:
-- `test_to_class_name_from_snake_case()`
-- `test_to_class_name_from_kebab_case()`
-- `test_to_class_name_from_spaces()`
-- `test_to_class_name_handles_numbers()`
-- `test_to_module_name_from_pascal_case()`
-- `test_to_module_name_from_camel_case()`
-- `test_to_module_name_from_kebab_case()`
-- `test_to_module_name_from_spaces()`
-- `test_to_module_name_preserves_underscores()`
-- `test_to_module_name_handles_consecutive_caps()`
-- `test_to_module_name_handles_numbers()`
+### 🎯 Answer: **WAVE 5 - ARCHITECTURAL IMPROVEMENTS**
 
-**Commit:** `ba0a2b397`
+**The doc site design from `cortex-doc-gemini` was part of Wave 5 (P2-MEDIUM priority).**
 
 ---
 
-### 3. YAML Type Conversion Duplication (CORE-035 Violation)
-**Problem:** Identical `_yaml_type_to_python()` function in 3 locations
-- `cortex/tools/tool_generator.py` (15 lines)
-- `cortex/tools/scaffolder_templates.py` (12 lines)
-- `cortex/tools/orchestrator_scaffolder.py` (15 lines)
-- **Total:** 42 duplicate lines
+### 📊 Wave Details
 
-**Solution:** Centralized in `naming_utils.py`
-```python
-def yaml_type_to_python(yaml_type: str) -> str:
-    """Convert YAML type to Python type hint."""
-    type_map = {
-        "string": "str",
-        "integer": "int",
-        "boolean": "bool",
-        "array": "List",
-        "object": "Dict",
-        "number": "float",
-    }
-    return type_map.get(yaml_type, "Any")
-```
-
-**Tests:** 6 additional tests (17 total):
-- `test_yaml_type_to_python_string()`
-- `test_yaml_type_to_python_integer()`
-- `test_yaml_type_to_python_boolean()`
-- `test_yaml_type_to_python_array()`
-- `test_yaml_type_to_python_object()`
-- `test_yaml_type_to_python_unknown()`
-
-**Savings:** 42 duplicate lines → 19 centralized lines = **-55% code duplication**
-
-**Commit:** `7ce32526e`
+| Field | Value |
+|-------|-------|
+| **Wave** | WAVE 5: Architectural Improvements & Long-term Enhancements |
+| **Priority** | P2-MEDIUM |
+| **Duration** | 6 weeks (4 weeks parallelized) |
+| **Timeline** | Week 21-26 |
+| **Phase ID** | `phase-74-documentation-site` |
+| **Phase Title** | "Documentation Site Generation" |
+| **Estimated Effort** | 2 weeks |
+| **Status** | Planned (never implemented) |
 
 ---
 
-## 📊 Stub Analysis
+### 🗂️ What Happened to cortex-doc-gemini
 
-**Scanned:** 1,085 Python files
+The workspace folder cortex-doc-gemini was:
 
-| Category | Count | Assessment |
-|----------|-------|------------|
-| **Placeholder Comments** | 143 | 🟢 Documented future features |
-| **Empty `pass` Statements** | 560 | 🟢 Mostly exception handlers & protocols |
-| **`NotImplementedError`** | 10 | 🟢 Abstract method placeholders |
-
-### Key Findings (Acceptable Stubs)
-
-1. **Database Stub** (`cortex/infrastructure/database.py`)
-   - **Status:** Intentional backward compatibility stub
-   - **Reason:** Docker-first migration strategy
-
-2. **LLM Placeholders** (`cortex/intent_router/hybrid_router.py`)
-   - **Status:** Documented future integration points
-   - **Reason:** LLM-enhanced routing planned for future phase
-
-3. **Agent Tool Mappings** (`cortex/intent_router/router.py`)
-   - **Status:** Placeholder for metadata-driven resolution
-   - **Reason:** Architecture decision for future enhancement
-
-4. **Protocol Methods** (Multiple locations)
-   - **Status:** Legitimate interface definitions
-   - **Reason:** Required for type system and plugin architecture
+1. **Created:** As part of Wave 5 documentation site generation experiments
+2. **Size:** 1 KB (1 file only) 
+3. **Purpose:** Gemini-based doc generation experiment
+4. **Status:** Experimental workspace that was never productionized
+5. **Eliminated:** In **ENH-092** (Wave 9 - Ultimate Cleanup & Consolidation) on 2026-02-12
+6. **Archived:** Included in `workspaces-legacy-2026-02-12.tar.gz` (6.8 MB compressed)
 
 ---
 
-## 🟢 Acceptable Duplication (Not Fixed)
+### 📦 Related Workspaces (Also Wave 5)
 
-| Item | Instances | Reason |
-|------|-----------|--------|
-| **`Result.__class_getitem__`** | 2 (Ok, Err classes) | Required for generic type hints |
-| **Protocol methods** | Multiple | Interface definitions across different contexts |
-| **AuditTrail classes** | 5 classes | Architecture requires broader refactor |
-| **Validation methods** | Multiple | Different result classes with distinct semantics |
+| Workspace | Size | Purpose | Status |
+|-----------|------|---------|--------|
+| `cortex-doc-gemini/` | 1 KB | Doc generation experiment | ✅ Archived |
+| `cortex-doc-site-fixed/` | 48 KB | Doc site experiments | ✅ Archived |
+| `cortex-architecture/` | 764 KB | Architecture docs | ✅ Archived |
 
-**Recommendation:** Address in dedicated refactoring phase, not critical for production.
-
----
-
-## ✅ Compliance Status
-
-| Rule | Status | Evidence |
-|------|--------|----------|
-| **CORE-002** | ✅ ENFORCED | Pre-commit hook blocked unauthorized markdown generation |
-| **CORE-008** | ✅ PASS | TDD: 17 tests written before code, all passing |
-| **CORE-035** | ✅ IMPROVED | 3 critical duplicates eliminated (-138 lines) |
-| **CORE-095** | ✅ PASS | Folder structure verified across 3 commits |
-| **CORE-096** | ✅ PASS | No build artifacts detected |
+All three were part of **Wave 5's documentation track** and were archived together during ENH-092 cleanup.
 
 ---
 
-## 📈 Impact Metrics
+### 💡 Key Finding
 
-| Metric | Value |
-|--------|-------|
-| **Files Scanned** | 1,085 Python files |
-| **Duplicates Found** | 37 function duplicates |
-| **Critical Fixes** | 3 major duplicates |
-| **Lines Eliminated** | 138 duplicate lines |
-| **Tests Added** | 17 (100% passing) |
-| **Commits** | 3 successful commits |
-| **Execution Time** | ~15 minutes |
-| **Code Reduction** | 42 duplicate lines → 19 centralized (-55%) |
+The documentation site generation (phase-74) was **planned but never completed**. The `cortex-doc-gemini/` workspace contains only experimental artifacts (1 file) that didn't reach production status before being superseded by Wave 9's cleanup initiative.
+
+asifhussain60: what other work is pending? Show a single list
+
+GitHub Copilot: ## 🏛️ CORTEX Architect ANALYZE
+**Author:** Asif Hussain | **Orchestrator:** MasterOrchestrator ✅
 
 ---
 
-## 🚀 Commits
+Let me search the registry for pending work across all waves and phases. 
 
-```bash
-7ce32526e Fix CORE-035 violations: Extract yaml_type_to_python utility
-ba0a2b397 Fix CORE-035 violations: Extract duplicate naming utilities
-a8a1368c2 AC_START: AC-CORE-035-AUDIT-001 Phase: Audit & Fix
-```
+Searched text for `status.*planned|status.*pending|status.*ready|status.*blocked` (`**/cortex-registry/_cortex-master/**/*.yaml`), 20 results
 
-**Audit Markers:**
-- `AC-AUDIT-2026-02-12` (main session)
-- `AC-AUDIT-2026-02-12-001` (ISecretsProvider fix)
-- `AC-AUDIT-2026-02-12-002` (Naming utils fix)
-- `AC-AUDIT-2026-02-12-003` (YAML type fix)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/_cortex-master/WAVE-BASED-EXECUTION-PLAN.yaml#1-1), lines 1 to 150
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/_cortex-master/WAVE-BASED-EXECUTION-PLAN.yaml#151-151), lines 151 to 578
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/_cortex-master/ENH-063-COMPLETION.yaml#430-430), lines 430 to 500
 
 ---
 
-## 🎯 Key Learnings
+## 📋 CORTEX Pending Work (Single Consolidated List)
 
-### 1. **Duplicate Detection Strategy**
-- Use AST-based analysis to find identical function bodies across files
-- Hash function bodies to detect exact duplicates
-- Prioritize duplicates in different files/directories (cross-cutting concerns)
-- Acceptable: Protocol methods, type hint helpers in different contexts
+### 🔴 **WAVE 1: Production Blockers (P0) - 6 Phases**
 
-### 2. **Stub vs. Real Implementation**
-- **Red Flags:** 
-  - Empty `pass` with no docstring
-  - `raise NotImplementedError` in non-abstract methods
-  - Placeholder comments without tracking (no TODO/FIXME/ENH)
-  
-- **Acceptable:**
-  - Documented backward compatibility stubs
-  - Future feature placeholders with clear tracking
-  - Abstract base class methods
-  - Exception handlers with graceful degradation
-
-### 3. **Utility Module Design**
-- **When to Extract:**
-  - 3+ instances of identical code
-  - Used across different modules/packages
-  - Clear, reusable purpose
-  
-- **Naming Convention:**
-  - Use descriptive module names (`naming_utils.py`, not `utils.py`)
-  - Public functions without underscore prefix
-  - Comprehensive docstrings with examples
-  - Edge case handling
-
-### 4. **TDD for Refactoring**
-- Write tests BEFORE extracting duplicates
-- Cover edge cases discovered in original implementations
-- Verify all call sites work with shared implementation
-- Add regression tests for fixed bugs
-
-### 5. **Pre-Commit Hook Value**
-- Caught unauthorized markdown generation (CORE-002)
-- Enforced governance without manual review
-- Prevented technical debt accumulation
+1. **ENH-063** - Production Architecture Remediation (15 Critical Fixes) | ✅ READY | 19 days
+2. **Phase-54** - Environment Bootstrap Reboot | ✅ READY | 1 week
+3. **Phase-51** - Secrets Management Audit Hardening | ✅ READY | 1 week
+4. **ENH-066** - MCP Pylance-Style Architecture Clarification | ✅ READY | 1 day
+5. **Phase-48** - Holistic Validation & Challenge Gate | 📋 PLANNED | 2 weeks
+6. **Phase-48-Registry** - Registry Isolation Multi-Tenant | 📋 PLANNED | 1 week
 
 ---
 
-## 📋 Remaining Work (Optional, Low Priority)
+### 🟠 **WAVE 2: High-Value Features (P1) - 11 Phases**
 
-**Low-Priority Duplicates (15 instances):**
-- Utility helpers in different contexts
-- Could be consolidated in future refactoring phase
-- Not blocking production readiness
-
-**Architecture Review Needed:**
-- `AuditTrail` class hierarchy (5 implementations)
-- Requires broader design decision
-- Current implementations are functional
-
-**Documented Placeholders:**
-- LLM integration in HybridRouter
-- Agent metadata-driven tool resolution
-- Intentional future features
+7. **ENH-064** - LENS Intelligence Layer Separation | ✅ READY | 2 weeks
+8. **ENH-065** - SPA Dashboard Production Readiness (15 Issues) | ✅ READY | 7 days
+9. **Phase-80** - MCP Tools Documentation Architect | 🔵 ACTIVE | 4 weeks (1 week MVP)
+10. **ENH-067** - Autonomous Plan Execution with Visual Progress | 🔵 PARTIAL | 3 weeks
+11. **Phase-53** - LENS Intelligence Upgrade | 📋 PLANNED | 2 weeks
+12. **Phase-49** - Context Crystallization Layer | 📋 PLANNED | 2 weeks
+13. **Phase-52** - Enterprise Orchestrator Suite | 📋 PLANNED | 3 weeks
+14. **ENH-068** - Data Integrity Validator for Dashboard | 📋 PLANNED | 1 week
+15. **ENH-069** - Dashboard Explainability Panel | 📋 PLANNED | 1 week
+16. **ENH-070** - Use-Case Library Generator (5 Personas × 6 Categories) | 📋 PLANNED | 1 week
+17. **ENH-071** - Domain Inference from Business Summary (NLP) | 📋 PLANNED | 2 weeks
 
 ---
 
-## 🎯 Final Assessment
+### 🟡 **WAVE 3: Reliability & Performance (P1) - 5 Phases**
 
-**Status:** ✅ **PRODUCTION-READY**
-
-**Quality:** All critical duplicates eliminated, 17 passing tests, governance enforced  
-**Security:** No exposed stubs, intentional placeholders documented  
-**Maintainability:** Centralized utilities, consistent patterns  
-
-**Next Steps:** Optional refactoring phase to address low-priority duplicates and architecture consolidation.
+18. **Phase-50** - Storage Backend Abstraction | 📋 PLANNED | 2 weeks
+19. **Phase-56** - LENS Intelligence Hybrid Architecture | 📋 PLANNED | 3 weeks
+20. **Phase-58** - Async Crawler Framework | 📋 PLANNED | 2 weeks
+21. **Phase-54-Onboarding** - Incremental Onboarding Refactor | 📋 PLANNED | 2 weeks
+22. **Phase-72** - Unified Digest Ingest Facade | 📋 PLANNED | 1 week
 
 ---
 
-## 🔍 MCP Tool Issue (Identified, Not Fixed)
+### 🔵 **WAVE 4: Advanced Intelligence (P1-P2) - 8 Phases**
 
-**Problem:** MCP tool name changes after WAVE-100 consolidation caused errors:
-- ❌ `cortex_audit_remediation_plan` (old) → doesn't exist
-- ❌ `cortex_validate_compliance` (old) → doesn't exist
-
-**Current Mapping:**
-- ✅ `cortex_governance` (operation="remediation_plan")
-- ✅ `cortex_validate` (operation="compliance")
-
-**Error Symptom:** `TypeError: o.content is not iterable`
-
-**Resolution:** Update Copilot instructions to use consolidated tool names with operation parameters.
-
-**Status:** Documented, not fixed in this session (requires instruction update).
+23. **Phase-57** - Architectural Pattern Detection | 📋 PLANNED | 3 weeks
+24. **Phase-59** - ML Pattern Similarity | 📋 PLANNED | 3 weeks
+25. **Phase-60** - Enterprise Pattern Registry | 📋 PLANNED | 2 weeks
+26. **Phase-65** - LENS Intelligence Remediation | 📋 PLANNED | 2 weeks
+27. **Phase-66** - LENS Knowledge Graph Domain Intelligence | 📋 PLANNED | 3 weeks
+28. **Phase-67** - DotNet Roslyn Deep Intelligence | 📋 PLANNED | 3 weeks
+29. **Phase-68** - Angular Deep Analysis | 📋 PLANNED | 2 weeks
+30. **Phase-69** - Runtime Correlation Engine | 📋 PLANNED | 3 weeks
 
 ---
 
-**Session Summary:** Holistic audit successfully eliminated critical code duplication, added comprehensive test coverage, and validated all stubs as intentional or acceptable. System is production-ready with 100% test pass rate and all governance checks passing.
+### 🟢 **WAVE 5: Architectural Improvements (P2) - 8 Phases**
+
+31. **ENH-072** - Renderable Content Schema (Unified Output) | 📋 PLANNED | 1 week
+32. **ENH-073** - Chart Interaction Standard | 📋 PLANNED | 1 week
+33. **ENH-074** - Virtualization for Large Lists (>1000 items) | 📋 PLANNED | 3 days
+34. **ENH-077** - Self-Optimizing CORTEX (Quarterly Audit) | 📋 PLANNED | 3 weeks
+35. **Phase-74** - Documentation Site Generation | 📋 PLANNED | 2 weeks
+36. **Phase-77** - Intelligence Learning Core | 📋 PLANNED | 3 weeks
+37. **Phase-78** - Enterprise Orchestrator Maturity | 📋 PLANNED | 3 weeks
+38. **Phase-79** - Enterprise Support Framework | 📋 PLANNED | 2 weeks
+
+---
+
+## 📊 **Summary Statistics**
+
+| Status | Count | Symbol |
+|--------|-------|--------|
+| **READY** | 6 | ✅ |
+| **ACTIVE** | 2 | 🔵 |
+| **PLANNED** | 30 | 📋 |
+| **TOTAL** | **38 phases** | |
+
+| Wave | Priority | Duration | Phases |
+|------|----------|----------|--------|
+| Wave 1 | P0-CRITICAL | 4 weeks | 6 |
+| Wave 2 | P1-HIGH | 6 weeks | 11 |
+| Wave 3 | P1-RELIABILITY | 4 weeks | 5 |
+| Wave 4 | P1-P2 | 6 weeks | 8 |
+| Wave 5 | P2-MEDIUM | 6 weeks | 8 |
+
+**Total Estimated Effort:** 26 weeks (18 weeks parallelized)
