@@ -19,11 +19,12 @@ roi_score: 9.5  # Highest ROI - confidence in production quality
 
 metadata:
   total_tracks: 5
-  estimated_effort: "21-28 days"
+  estimated_effort: "23-32 days"
   parallelizable: "partial"  # Track 1-3 parallel, Track 4 depends on 1-3, Track 5 final
   blocking_dependencies: []  # No blockers - can start immediately
-  value_delivery: "Real production confidence + 40% test suite reduction + Golden Path coverage"
+  value_delivery: "Real production confidence + 40% test suite reduction + Golden Path coverage + Audit Truth Layer"
   execution_timing: "IMMEDIATE (foundational to all other work)"
+  enhancement_summary: "Added Audit Truth Layer - tests verify against SQLite audit.db for hard evidence"
   
 objectives:
   primary: "Replace 15,016 quantity-rich tests with high-value, production-proving tests"
@@ -101,8 +102,8 @@ tracks:
   - track_id: "T1"
     name: "Golden Path Truth Tests"
     priority: "P0-CRITICAL"
-    duration: "5-7 days"
-    effort: "30-40h"
+    duration: "7-9 days"
+    effort: "40-50h"
     parallelizable: true
     
     description: |
@@ -118,11 +119,21 @@ tracks:
           Load real company/domains/*.yaml + cortex/knowledge/*.yaml
           Run through KnowledgeSynthesisEngine
           Assert company standards override CORTEX defaults
+          VERIFY via audit log (hard evidence)
         assertions:
           - "company_rule.precedence > cortex_rule.precedence"
           - "merged_output.security_standards == company_standards"
           - "no data loss in merge"
+        audit_requirements:
+          - "audit log contains 'rule_resolution' entry"
+          - "entry timestamp within 5 seconds of test run"
+          - "audit data shows company precedence=100, cortex=50"
         mocks_allowed: 0
+        red_phase_criteria: |
+          Test MUST FAIL if:
+          1. audit.db has zero entries for this operation
+          2. latest audit timestamp > 5 seconds old (stale/cached)
+          3. audit record missing expected precedence values
         
       - id: "T1-D2"
         name: "Tier Cascade Truth Test"
@@ -131,12 +142,22 @@ tracks:
           Insert a rule at tier0 (cortex_brain/tier0/)
           Trace propagation through tier1, tier2, tier3
           Verify rule appears correctly at tier3 output
+          VERIFY via audit log (hard evidence)
         assertions:
           - "tier0_rule propagates to tier1"
           - "tier1 enrichment applied"
           - "tier2 domain context added"
           - "tier3 output contains enriched rule"
+        audit_requirements:
+          - "audit log shows tier0→tier1→tier2→tier3 cascade"
+          - "each tier has timestamp progression"
+          - "rule ID consistent across all tiers"
         mocks_allowed: 0
+        red_phase_criteria: |
+          Test MUST FAIL if:
+          1. audit log missing any tier transition entry
+          2. tier timestamps not in ascending order
+          3. rule ID changes between tiers (data loss)
         
       - id: "T1-D3"
         name: "Multi-Analyzer Integration Truth Test"
@@ -145,11 +166,21 @@ tracks:
           Run ALL LENS analyzers (12) on reference repository
           Verify synthesized output is coherent (no conflicts)
           Assert each analyzer contributes non-overlapping insights
+          VERIFY via audit log (hard evidence)
         assertions:
           - "all 12 analyzers produce output"
           - "no conflicting metadata"
           - "synthesis produces unified result"
+        audit_requirements:
+          - "audit log has 12 'analyzer_completed' entries"
+          - "each analyzer has unique execution timestamp"
+          - "synthesis_completed entry after all analyzers"
         mocks_allowed: 0
+        red_phase_criteria: |
+          Test MUST FAIL if:
+          1. audit log shows <12 analyzer completions
+          2. any analyzer timestamp missing
+          3. synthesis timestamp before last analyzer completion
         
       - id: "T1-D4"
         name: "Governance + Domain Truth Test"
@@ -158,11 +189,21 @@ tracks:
           Apply security rule to domain code snippet
           Run through EnforcementOrchestrator
           Verify violation detected and reported correctly
+          VERIFY via audit log (hard evidence)
         assertions:
           - "CORE-008 TDD violation detected"
           - "correct file + line reported"
           - "remediation suggestion provided"
+        audit_requirements:
+          - "audit log has 'governance_violation' entry"
+          - "entry contains rule_id=CORE-008"
+          - "entry contains exact file path + line number"
         mocks_allowed: 0
+        red_phase_criteria: |
+          Test MUST FAIL if:
+          1. audit log has zero governance_violation entries
+          2. rule_id in audit ≠ CORE-008
+          3. file path or line number missing from audit
         
       - id: "T1-D5"
         name: "Conflict Resolution Truth Test"
@@ -171,11 +212,21 @@ tracks:
           Create conflicting rules (company vs CORTEX, tier1 vs tier2)
           Run resolution pipeline
           Assert correct winner based on precedence rules
+          VERIFY via audit log (hard evidence)
         assertions:
           - "company wins over CORTEX"
           - "higher tier wins within same source"
           - "audit trail captures resolution"
+        audit_requirements:
+          - "audit log shows conflict_detected entry"
+          - "audit log shows resolution_applied entry"
+          - "winning rule + losing rule both recorded"
         mocks_allowed: 0
+        red_phase_criteria: |
+          Test MUST FAIL if:
+          1. audit log missing conflict_detected entry
+          2. resolution_applied entry missing
+          3. winning_rule_id not equal to expected winner
         
       - id: "T1-D6"
         name: "MCP End-to-End Truth Test"
@@ -184,11 +235,22 @@ tracks:
           Send real request through MCP gateway
           Trace through IntentRouter → Orchestrator → Execution
           Verify complete request/response cycle
+          VERIFY via audit log (hard evidence)
         assertions:
           - "request classified correctly"
           - "correct orchestrator invoked"
           - "response formatted per standards"
+        audit_requirements:
+          - "audit log has request_received entry"
+          - "audit log has intent_classified entry"
+          - "audit log has orchestrator_invoked entry"
+          - "audit log has response_sent entry"
         mocks_allowed: 0
+        red_phase_criteria: |
+          Test MUST FAIL if:
+          1. audit log missing any of 4 lifecycle entries
+          2. timestamps not in ascending order
+          3. request_id not consistent across all entries
         
       - id: "T1-D7"
         name: "LENS Full Pipeline Truth Test"
@@ -197,15 +259,33 @@ tracks:
           Run LENS on real repository (tests/fixtures/reference_repo)
           Verify AST + Git + Domain + Knowledge extraction
           Assert unified LENSResult contains all expected data
+          VERIFY via audit log (hard evidence)
         assertions:
           - "AST analysis complete"
           - "Git history extracted (24h)"
           - "Domain patterns detected"
           - "Knowledge synthesis correct"
+        audit_requirements:
+          - "audit log has lens_pipeline_started entry"
+          - "audit log has ast_analysis_completed entry"
+          - "audit log has git_extraction_completed entry"
+          - "audit log has lens_pipeline_completed entry"
         mocks_allowed: 0
+        red_phase_criteria: |
+          Test MUST FAIL if:
+          1. audit log missing pipeline_started entry
+          2. any stage completion entry missing
+          3. pipeline_completed timestamp before last stage
         
     tests_created: 7
     tests_deleted: 0
+    audit_enhancement: |
+      CRITICAL ADDITION: Every Golden Path test includes "Audit Truth Layer"
+      - Tests query SQLite audit.db for hard evidence
+      - RED phase fails if audit entries missing/stale/incorrect
+      - Proves production behavior, not just test behavior
+      - Creates permanent record for debugging
+    effort_adjustment: "+2 days for audit verification implementation"
     
 # ============================================================================
 # TRACK 2: REFERENCE REPOSITORY FIXTURE (NEW - ENABLE SCALE)
@@ -293,11 +373,19 @@ tracks:
       - phase_id: "T3-P2"
         name: "Heavy-Mock Test Consolidation"
         action: "REFACTOR or DELETE"
-        criteria: "Mock-to-test ratio > 2.0"
+        criteria: "Mock-to-test ratio > 2.0 AND no audit log verification"
         files_affected:
           - "unit/domain_brain/test_synthesis_domain_integration.py (303 mocks)"
           - "unit/orchestrators/test_master_orchestrator_spof_fix.py (266 mocks)"
           - "unit/orchestrators/test_intent_orchestrator_routing.py (259 mocks)"
+        audit_criteria: |
+          KEEP test if: Writes to audit.db (proves real behavior)
+          DELETE test if: No audit writes (just testing mocks)
+        approach: |
+          1. Run each test with audit log monitoring
+          2. If audit.db has new entries → KEEP (refactor to reduce mocks)
+          3. If audit.db unchanged → DELETE (not testing real behavior)
+          4. Priority: Delete highest mock-ratio tests first
           - "unit/domain_brain/test_knowledge_graph_query.py (198 mocks)"
           - "unit/integration/test_e2e_workflows.py (161 mocks)"
         approach: |
