@@ -1,56 +1,29 @@
 """
-Tech Intelligence Orchestrator Module.
+Intelligence Orchestrator Module.
 
-Provides proactive tech stack monitoring, readiness scoring,
-and knowledge synthesis capabilities.
+WAVE-2 (2026-02-13): Intelligent test generation components
+- test_value_scorer: Calculate test priority scores
+- blind_spot_detector: Find untested code paths (WAVE-2 S2)
+- edge_case_generator: Generate boundary tests (WAVE-2 S3)
+- security_test_generator: Generate OWASP tests (WAVE-2 S4)
+- test_generator: Main test generation orchestrator (WAVE-2 S5)
 
-Author: CORTEX Team
-Created: 2026-02-06
+Authority: MASTER-5-WAVE-PLAN-2026-02-13.yaml
 """
 
-from cortex.orchestrators.intelligence.ecosystem_scanner import (
-    DetectedTech,
-    EcosystemScanner,
-    ScanResult,
+from cortex.orchestrators.intelligence.test_value_scorer import (
+    IssueSeverity,
+    ScenarioLikelihood,
+    TestCandidate,
+    TestValueScore,
+    TestValueScorer,
 )
-from cortex.orchestrators.intelligence.knowledge_synthesizer import (
-    KnowledgeSource,
-    KnowledgeSynthesizer,
-    SynthesisResult,
-    TemplateType,
-)
-from cortex.orchestrators.intelligence.learning_trigger import (
-    LearningTrigger,
-    TriggerAction,
-    TriggerEvent,
-    TriggerReason,
-)
-from cortex.orchestrators.intelligence.readiness_engine import (
-    ReadinessAction,
-    ReadinessComponents,
-    ReadinessEngine,
-)
-from cortex.orchestrators.intelligence.tech_intelligence_orchestrator import (
-    TechIntelligenceOrchestrator,
-)
-from cortex.orchestrators.intelligence.types import ReadinessScore, TechStack
 
 __all__ = [
-    "TechIntelligenceOrchestrator",
-    "TechStack",
-    "ReadinessScore",
-    "EcosystemScanner",
-    "DetectedTech",
-    "ScanResult",
-    "ReadinessEngine",
-    "ReadinessComponents",
-    "ReadinessAction",
-    "KnowledgeSynthesizer",
-    "SynthesisResult",
-    "KnowledgeSource",
-    "TemplateType",
-    "LearningTrigger",
-    "TriggerEvent",
-    "TriggerReason",
-    "TriggerAction",
+    # WAVE-2 S1: Test Value Scoring
+    "TestValueScorer",
+    "TestCandidate",
+    "TestValueScore",
+    "IssueSeverity",
+    "ScenarioLikelihood",
 ]
