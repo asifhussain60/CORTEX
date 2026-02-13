@@ -34,9 +34,9 @@ Unified response format for **all CORTEX operations** across modes: PRE-FLIGHT, 
 ### Progress Bar Format (ONLY OUTPUT)
 
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 📋 {Phase Name}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 [████████░░] 80% {Current Stage}
 ├─ ✅ S1: {name} ({n} tests)
@@ -45,27 +45,27 @@ Unified response format for **all CORTEX operations** across modes: PRE-FLIGHT, 
 └─ ⚪ S4: {name} (pending)
 
 Tests: {passed}/{total} | Coverage: {pct}%
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ```
 
 ### Completion Summary (FINAL OUTPUT)
 
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ✅ {Phase Name}: COMPLETE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 [██████████] 100% | {n}/{n} tests | {pct}% coverage
 
 Git: {commit_hash} "{commit_message}"
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ```
 
 ### Error Report (ON FAILURE)
 
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 🔴 {Phase Name}: BLOCKED at {Stage}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 [████░░░░░░] 40% | {passed}/{total} tests | {failures} failures
 
 Error: {error_message}
@@ -73,7 +73,7 @@ Error: {error_message}
   - Actual: {actual}
 
 Fix: {fix_suggestion}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ```
 
 ### FORBIDDEN in Silent Mode
@@ -103,7 +103,7 @@ Fix: {fix_suggestion}
 
 **Example:**
 ```markdown
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ```
 
 **Validation:**
@@ -138,9 +138,9 @@ Box Separator (final)
 ### Standard Completion Template
 
 ```markdown
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ✅ {WAVE/PHASE NAME} Complete
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 **Commits:** {hash1} → {hash2}
 **Pushed:** origin/CORTEX
@@ -153,7 +153,7 @@ Box Separator (final)
 | {metric1} | {val} | {val} | {status} ✅ |
 | {metric2} | {val} | {val} | {status} ✅ |
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 ### Track 1: {Track Name} ✅
 
@@ -166,7 +166,7 @@ Box Separator (final)
 - Coverage: {pct}%
 - Impact: {description}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 ### Track 2: {Track Name} ✅
 
@@ -182,7 +182,7 @@ Box Separator (final)
 - {impact1}
 - {impact2}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ```
 
 ### Field Label Standards
@@ -249,7 +249,7 @@ Commits - abc123 → def456       (wrong separator)
 
 **Example:**
 ```markdown
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 [1 blank line above]
 ### Track 1: Example ✅
 [1 blank line below]
@@ -259,15 +259,15 @@ Commits - abc123 → def456       (wrong separator)
 - file2.py
 [NO blank lines between bullets]
 [1 blank line below before next box]
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ```
 
 ### Single-Track Completion Template
 
 ```markdown
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ✅ {OPERATION NAME} Complete
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 **Commit:** {hash}
 **Pushed:** origin/CORTEX
@@ -282,21 +282,21 @@ Commits - abc123 → def456       (wrong separator)
 - Files: {n} modified
 - Impact: {description}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ```
 
 ### Multi-Track Wave Completion Template
 
 ```markdown
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ✅ {WAVE NAME} Complete
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 **Commits:** {hash1} → {hash2} → {hash3}
 **Pushed:** origin/CORTEX
 **Duration:** ~{time} total
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 ### Track 1: {Name} ✅
 
@@ -310,7 +310,7 @@ Commits - abc123 → def456       (wrong separator)
 - Tests: {n}/{n} passing ✅
 - Coverage: {pct}%
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 ### Track 2: {Name} ✅
 
@@ -324,7 +324,7 @@ Commits - abc123 → def456       (wrong separator)
 - {impact1}
 - {impact2}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 ### Track 3: {Name} ✅
 
@@ -337,7 +337,7 @@ Commits - abc123 → def456       (wrong separator)
 | {metric1} | {val} | {val} | {pct}% ✅ |
 | {metric2} | {val} | {val} | {pct}% ✅ |
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ```
 
 ### Common Violations & Fixes

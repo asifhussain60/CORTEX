@@ -47,9 +47,9 @@
 
 ---
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 📋 WAVE-R Stage 5: MCP Tools Complete
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 [██████████] 100% All Stages Complete
 
@@ -62,7 +62,7 @@
 Tests: 68/69 | Coverage: 99%
 Commits: 3 (all pushed to remote)
 ENH-089: ✅ COMPLETE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ```
 
 **KEY RULES:**
@@ -118,9 +118,9 @@ User: "proceed with WAVE-S implementation"
 
 Response 1 (Analysis + Challenge):
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 📋 WAVE-S Analysis: Holistic Validation
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 [██████████] 100% Analysis Complete
 
@@ -129,16 +129,16 @@ Challenge: Alternative approach detected
 💡 Alternative: Dedicated ValidationOrchestrator (SOLID SRP)
 
 Proceed with current or switch to alternative?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ```
 
 User: "proceed"
 
 Response 2 (Implementation - Silent):
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 📋 WAVE-S Stage 1: Pre-Implementation Gate
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 [████████░░] 80% Stage 1 In Progress
 
@@ -148,7 +148,7 @@ Response 2 (Implementation - Silent):
 └─ ⚪ MCP Tools (pending)
 
 Tests: 27/42 | Coverage: 85%
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ```
 
 **FORBIDDEN (Text-heavy responses during implementation):**
@@ -1346,15 +1346,15 @@ status_icons = fmt.icons["status"]
 [████████░░] 80% Stage 4: Component D
 [██████████] 100% Complete
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ✅ Implementation Complete
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 Tests: 68/68 passing
 Commits: 3
 Files: 5 modified
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ```
 
 **Note:** Header appears ONCE at top. Progress bars and completion use box format (━━━), NOT additional headers.
@@ -1390,15 +1390,15 @@ Files: 5 modified
 
 **DO THIS:**
 ```markdown
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ✅ Stage 1 Complete
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 **Tests:** 24/24 passing
 **Files:** 3 modified
 **Commit:** abc123f
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ```
 
 **Key Rules:**
@@ -2197,9 +2197,9 @@ Advanced Level:
 **ONLY ALLOWED FORMAT:**
 
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 📋 WAVE-R Stage 5: MCP Tools Complete
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 [██████████] 100% All Stages Complete
 
@@ -2212,7 +2212,7 @@ Advanced Level:
 Tests: 68/69 | Coverage: 99%
 Commits: 3 (all pushed to remote)
 ENH-089: ✅ COMPLETE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ```
 
 **FORBIDDEN during silent execution:**

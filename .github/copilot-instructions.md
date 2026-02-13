@@ -6,9 +6,9 @@
 ## 🚨🚨🚨 MCP GATE: ABSOLUTE FIRST CHECK (P0 - BLOCKING) 🚨🚨🚨
 
 ```
-┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┏----------------------------------------━━━━━━━┓
 ┃                    ⛔ MCP GATE CHECK ⛔                     ┃
-┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+┣----------------------------------------━━━━━━━┫
 ┃                                                             ┃
 ┃  BEFORE PROCESSING ANY USER REQUEST:                        ┃
 ┃                                                             ┃
@@ -21,7 +21,7 @@
 ┃  • SETUP intent    → ALLOWED (to configure MCP)             ┃
 ┃  • QUERY intent    → ALLOWED (educational only)             ┃
 ┃                                                             ┃
-┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┗----------------------------------------━━━━━━━┛
 ```
 
 ### GATE CLOSED Response (When MCP Unavailable)
@@ -29,9 +29,9 @@
 **Display this EXACTLY when MCP tools not available:**
 
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ⛔ CORTEX GATE CLOSED: MCP Required
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 Your request: {user_request}
 Intent: {IMPLEMENT|FIX|REFACTOR|AUDIT|PLAN|ANALYZE}
@@ -50,7 +50,7 @@ ALLOWED WITHOUT MCP (Escape Hatch):
   • "setup MCP"          → Get setup instructions
   • "what is CORTEX?"    → Educational questions
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ```
 
 ---
@@ -426,9 +426,9 @@ increment_metric("cortex_bypass_attempts_blocked_total")
 **When bypass blocked:**
 
 ```markdown
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ❌ NATIVE TOOL BYPASS BLOCKED (MCP-FIRST VIOLATION)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 **Intent:** {intent}
 **Tool:** {tool_name}
@@ -468,7 +468,7 @@ python .cortex/setup-mcp.py
 
 CORTEX operates at ONE quality level: Production.
 Fix infrastructure. No bypasses allowed.
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ```
 
 ---
@@ -490,9 +490,9 @@ Fix infrastructure. No bypasses allowed.
 **CRITICAL: During silent autonomous execution, use ONLY this format:**
 
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 📋 WAVE-R Stage 4: Integration Testing
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 [██████████] 100% Stage 4 Complete
 
@@ -504,7 +504,7 @@ Fix infrastructure. No bypasses allowed.
 
 Tests: 58/69 | Coverage: 84%
 Fixed: Session ID timestamp collision (microseconds)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ```
 
 **FORBIDDEN FORMATS during silent execution:**

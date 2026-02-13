@@ -93,9 +93,9 @@ cortex_plan_execute_autonomous(
 
 ### Execution Output (Example)
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 📋 WAVE-1: Foundation (Security Infrastructure)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 [░░░░░░░░░░]   0% 🔵 Starting WAVE-1 execution
 
@@ -123,7 +123,7 @@ cortex_plan_execute_autonomous(
 
 [██████████] 100% ✅ WAVE-1 COMPLETE
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ```
 
 ### CHECKPOINT-1a: Architecture Review (Strategic Documentation)
@@ -166,9 +166,9 @@ Content:
 
 ### Wave-1 Completion Summary
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ✅ WAVE-1 COMPLETE: Foundation (Security Infrastructure)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 📊 DELIVERABLES
 
@@ -221,7 +221,7 @@ Content:
 ✅ MCP tools registered: PASS (2 tools)
 ✅ Documentation: PASS (2 checkpoints complete)
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 ⚠️ NEXT STEPS
 
@@ -246,7 +246,7 @@ Content:
    - [ ] Governance enforcement telemetry confirms 100% coverage
    - [ ] Prepare WAVE-2 execution environment
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 **Status:** Ready for WAVE-2 | **Timestamp:** {timestamp} | **Branch:** CORTEX
 ```
@@ -393,9 +393,9 @@ Content:
 
 **FINAL SUMMARY:**
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ✅ ALL WAVES COMPLETE: CORTEX Production Delivery
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 📊 OVERALL DELIVERY SUMMARY
 
@@ -427,7 +427,7 @@ Content:
 
 Ready for operations team handoff and long-term support.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ```
 
 ---

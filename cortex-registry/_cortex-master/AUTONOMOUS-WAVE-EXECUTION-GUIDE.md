@@ -73,9 +73,9 @@ Success Criteria:
 - [ ] Master plan updated (index.yaml + ENH-063.yaml)
 
 Expected Output:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 📋 WAVE-A: Critical Blockers Resolution
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 [████████░░] 80% Task 2: ENH-063 Phase 2
 ├─ ✅ Task 1: Test import fixes (4 files)
@@ -85,7 +85,7 @@ Expected Output:
 └─ ⚪ Documentation updates (pending)
 
 Tests: 14/15 | Coverage: 87%
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ```
 
 ### Commit Templates

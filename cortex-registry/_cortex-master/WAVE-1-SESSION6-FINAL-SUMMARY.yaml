@@ -45,9 +45,9 @@ phase_48_registry:
     token_usage: "~50k tokens"
     efficiency: "Very High"
 
-  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  # ----------------------------------------━━━━━━
   # STAGE 1: Multi-Tenant Architecture (PRE-EXISTING)
-  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  # ----------------------------------------━━━━━━
   
   stage_1:
     name: "Multi-Tenant Architecture"
@@ -72,9 +72,9 @@ phase_48_registry:
       ac_3: "✅ 100 concurrent workspaces stress tested"
       ac_4: "✅ No cross-tenant data leakage"
 
-  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  # ----------------------------------------━━━━━━
   # STAGE 2: Registry Loader Refactor
-  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  # ----------------------------------------━━━━━━
   
   stage_2:
     name: "Registry Loader Refactor"
@@ -125,9 +125,9 @@ phase_48_registry:
       ac_3: "✅ No cross-tenant cache contamination"
       ac_4: "✅ Backward compatible with existing registry (workspace_id='local')"
 
-  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  # ----------------------------------------━━━━━━
   # STAGE 3: MCP Integration
-  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  # ----------------------------------------━━━━━━
   
   stage_3:
     name: "MCP Integration"
@@ -173,9 +173,9 @@ phase_48_registry:
       ac_3: "✅ Request-scoped context (no cross-request leakage)"
       ac_4: "✅ Transparent to MCP tools (automatic injection)"
 
-  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  # ----------------------------------------━━━━━━
   # STAGE 4: Migration & Validation
-  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  # ----------------------------------------━━━━━━
   
   stage_4:
     name: "Migration & Validation"

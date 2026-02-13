@@ -109,10 +109,10 @@ class ResponseTemplate:
         
         emoji, _, _ = overall_status.value
         
-        summary = f"""━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        summary = f"""----------------------------------------
 ## {emoji} SESSION SUMMARY
 **Session:** {session_name} | **Status:** {emoji} {overall_status.name}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 """
         
@@ -155,7 +155,7 @@ class ResponseTemplate:
                 summary += f"{i}. {step}\n"
             summary += "\n"
         
-        summary += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+        summary += "----------------------------------------\n"
         
         return summary
 

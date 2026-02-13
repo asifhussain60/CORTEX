@@ -45,9 +45,9 @@ phase_54:
     token_usage: "~25k tokens"
     efficiency: "Very High"
 
-  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  # ----------------------------------------━━━━━━
   # FOUNDATION (PRE-EXISTING)
-  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  # ----------------------------------------━━━━━━
   
   foundation:
     name: "Environment Setup Foundation"
@@ -109,9 +109,9 @@ phase_54:
       - "100% coverage of required functionality"
       - "Cross-platform compatible"
 
-  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  # ----------------------------------------━━━━━━
   # INTEGRATION TESTS (SESSION 7 - NEW)
-  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  # ----------------------------------------━━━━━━
   
   integration:
     name: "Environment Bootstrap Integration Testing"

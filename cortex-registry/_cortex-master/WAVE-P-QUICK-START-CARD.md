@@ -181,9 +181,9 @@ git log --oneline cortex-registry/ | head -10
 ## 📊 Expected Execution Output
 
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 📋 WAVE-P: Post-WAVE-O Cleanup & Registry Sync
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 [░░░░░░░░░░]   0% 🔵 Starting WAVE-P execution
 
@@ -205,9 +205,9 @@ git log --oneline cortex-registry/ | head -10
 ├─ README.md updated ✅
 └─ WAVE-P completion report created ✅
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ✅ WAVE-P COMPLETE: 2.6 hours
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 **Git Commits:**
 - a1b2c3d4 AC-WAVE-P-001: Stage 1 - Registry sync complete ✅

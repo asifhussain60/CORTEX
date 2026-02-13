@@ -482,9 +482,9 @@ git commit -m "Docs: Checkpoint-1a Security Gates Architecture complete
 
 **After WAVE-1 completes, user will see:**
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ✅ CHECKPOINT-1a: Security Gates Architecture Complete
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 File Created: cortex-architecture/security-gates.md (1,450 words)
 
@@ -517,7 +517,7 @@ Content:
 👥 Audience: QA, architects, compliance
 🔄 Next Update: Wave-8
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 Total Checkpoint Time: 2 hours
 Total Knowledge Documented: 3,100 words across 2 files
 Ready for WAVE-2

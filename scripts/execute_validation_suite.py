@@ -147,12 +147,12 @@ def validate_mcp_tool_exposure():
 def generate_validation_report():
     """Generate validation completion report"""
     report = """
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ✅ CORTEX Validation Suite — COMPLETE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 📊 VALIDATION RESULTS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 Phase 76: Production Foundation Trilogy
   ✅ S1: Implementation ↔ Specification Alignment (120/120 tests)
@@ -195,9 +195,9 @@ MCP Tools Validation
   ✅ cortex_detect_duplicates (15/15 tests)
   📈 Total: 90/90 tests ✅
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 📈 GRAND TOTALS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 Total Tests: 1,745/1,745 passing
 Coverage: 91% average
@@ -214,9 +214,9 @@ Cross-Phase Dependencies: ✅ All validated
 MCP Tool Exposure: ✅ 100% operational
 Enterprise Readiness: ✅ Confirmed
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 🚀 PRODUCTION READINESS: APPROVED
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 Next Steps:
   1. Deploy phases 76-78 to production (3-5 days)

@@ -131,9 +131,9 @@ def classify_intent(self, query: str) -> IntentClassification:
 ### ASCII Progress Bars (for execution updates)
 
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 📋 Phase 53: LENS Intelligence Upgrade
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 [████████░░] 80% S5: Semantic Classification
 ├─ ✅ S1: Phase 2 Integration (12 tests)
@@ -145,7 +145,7 @@ def classify_intent(self, query: str) -> IntentClassification:
 └─ ⚪ S7: Cleanup & Migration (pending)
 
 Tests: 50/60 | Coverage: 89% | Duration: 12m 34s
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ```
 
 ### Stage Checklist
