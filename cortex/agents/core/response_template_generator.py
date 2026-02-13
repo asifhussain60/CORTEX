@@ -2,6 +2,16 @@
 """
 Enhanced Response Template Generator
 
+⚠️ DEPRECATED: This module is deprecated as of 2026-02-13 (Phase 53).
+Use cortex/orchestrators/response/simple_response_formatter.py instead.
+
+Reason: Simpler one-function approach provides same user value.
+- Old: Multiple classes, color detection, pattern matching
+- New: format_response(title, sections, metrics, next_steps)
+- Result: Same chat01.md clarity with 90% less code
+
+This file remains for backward compatibility with existing orchestrators.
+
 Purpose: Semantic color-coded response headers for CORTEX
 Version: 2.0 - SSOT Compliance (40-char separators)
 Integration: cortex-architect.prompt.md + agents

@@ -1,6 +1,16 @@
 """
 Custom Response Templates System
 
+⚠️ DEPRECATED: This module is deprecated as of 2026-02-13 (Phase 53).
+Use cortex/orchestrators/response/simple_response_formatter.py instead.
+
+Reason: Complex template system (ENH-082) superseded by simple solution.
+- ENH-082 planned 8-11 days, 266 tests, 72 orchestrator migration
+- Simple formatter: 150 lines, 1 function, immediate value
+- Decision: Occam's Razor - simplest solution wins
+
+This file remains for backward compatibility but will not receive new features.
+
 AC-AR-009-01: Response templates loaded from cortex_brain/tier2/
 AC-AR-009-02: Templates support variable substitution
 AC-AR-009-03: Template inheritance working
