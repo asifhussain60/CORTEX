@@ -8,21 +8,78 @@
 # AC-ID: AC-WAVE-EXEC-001
 # ============================================================================
 
-version: "1.0"
+version: "1.1"
 created: "2026-02-11T18:30:00Z"
-last_updated: "2026-02-11T18:30:00Z"
+last_updated: "2026-02-13T02:00:00Z"
 execution_mode: "autonomous_silent"
 progress_tracking: "ascii_bars"
 
 metadata:
   total_phases: 35
   p0_critical: 8
-  p1_high: 18
-  p2_medium: 9
-  estimated_total_effort: "26 weeks (18 weeks parallelized)"
-  wave_count: 5
+  p1_high: 19  # Added WAVE-10 (P1-CRITICAL)
+  p2_medium: 8  # Adjusted after WAVE-10 addition
+  estimated_total_effort: "30 weeks (22 weeks parallelized)"  # +4 weeks for WAVE-10
+  wave_count: 8  # Added WAVE-10 Test Suite Deep Remediation
   completed_phases: 2  # Phase-71, Phase-76
   in_progress: 3      # Phase-75, Phase-80, Phase-54
+  completed_waves: 5  # WAVE-1, WAVE-7-T1, WAVE-P, WAVE-7-CLEANUP, WAVE-Q
+  pending_high_priority: 1  # WAVE-10 (tech debt elimination)
+
+# ============================================================================
+# WAVE EXECUTION HISTORY
+# ============================================================================
+wave_execution_history:
+  - wave_id: "WAVE-1"
+    status: "complete"
+    completion_date: "2026-02-11"
+    duration: "3 weeks"
+    phases_completed: 6
+    
+  - wave_id: "WAVE-7-TRACK-1"
+    status: "complete"
+    completion_date: "2026-02-11"
+    duration: "4 days"
+    phases_completed: 1
+    notes: "Core layer consolidation, introduced IOrchestrator interface"
+    
+  - wave_id: "WAVE-P"
+    status: "complete"
+    completion_date: "2026-02-12"
+    duration: "3 hours"
+    phases_completed: 1
+    notes: "Registry documentation sync v6.0"
+    
+  - wave_id: "WAVE-7-CLEANUP"
+    status: "complete"
+    completion_date: "2026-02-13"
+    duration: "1.5 hours"
+    phases_completed: 1
+    notes: "Emergency fix for IOrchestrator compliance (TDDOrchestrator + PlanningOrchestrator)"
+    impact: "Unblocked WAVE-Q/R/S"
+    efficiency: "2x faster than estimated"
+    
+  - wave_id: "WAVE-Q"
+    status: "complete"
+    completion_date: "2026-02-13"
+    duration: "5 minutes"
+    phases_completed: 1
+    notes: "ENH-088 Multi-Cycle TDD verification (24/24 tests passing)"
+    impact: "Unblocked WAVE-R (EventBus debugger) and WAVE-S (Track 4-5 consolidation)"
+    tests: 24
+    test_duration: "1.54s"
+  
+  - wave_id: "WAVE-10"
+    status: "design_complete"
+    priority: "P1-CRITICAL"
+    estimated_duration: "21-28 days"
+    tracks: 5
+    notes: "Test Suite Deep Remediation - Quality over Quantity transformation"
+    impact: "40% test reduction (15,016 → 9,000), Golden Path truth tests, eliminate mock-heavy syndrome"
+    roi_score: 9.5
+    blocking_dependencies: []
+    value_delivery: "Real production confidence + tech debt elimination"
+    execution_readiness: "READY - Can start immediately after WAVE-R or in parallel"
 
 # ============================================================================
 # WAVE 1: PRODUCTION BLOCKERS (P0) - Week 1-4
@@ -443,6 +500,199 @@ wave_5:
       - "Manual effort: 40h/quarter → 2h/quarter"
 
 # ============================================================================
+# WAVE 10: TEST SUITE DEEP REMEDIATION (P1-CRITICAL) - Week 24-28
+# ============================================================================
+wave_10:
+  name: "Test Suite Deep Remediation (Quality > Quantity)"
+  priority: "P1-CRITICAL"
+  duration: "21-28 days (4 weeks)"
+  parallelizable: "partial"  # Tracks 1-3 parallel, Track 4 depends on 1-3
+  roi_score: 9.5
+  authority: "chat01.md digest analysis + cortex-architect.prompt.md v15.3"
+  
+  problem_statement: |
+    Test suite is quantity-rich (15,016 tests, 791 files) but depth-poor.
+    Tests heavily mock components, proving mocks work rather than production code.
+    No end-to-end "truth tests" verify complete intelligence/LENS pipeline.
+    Target: Transform to quality-rich (8,000-10,000 high-value tests).
+  
+  strategic_value:
+    confidence: "Real production confidence (not false positives)"
+    velocity: "Faster development with trusted test failures"
+    maintenance: "40% reduction in test maintenance burden"
+    quality: "Golden Path tests prove end-to-end synthesis"
+    foundation: "Enables all future development with confidence"
+  
+  tracks:
+    - track_id: "T1"
+      name: "Golden Path Truth Tests (NEW)"
+      priority: "P0-CRITICAL"
+      duration: "5-7 days"
+      status: "design_complete"
+      deliverables: 7
+      description: "Create 7 strategic truth tests (zero mocks, real pipeline)"
+      tests_created: 7
+      tests_deleted: 0
+      mocks_allowed: 0
+      value: "Single failing truth test = production will fail"
+      
+    - track_id: "T2"
+      name: "Reference Repository Fixture (NEW)"
+      priority: "P1-HIGH"
+      duration: "3-4 days"
+      status: "design_complete"
+      deliverables: 3
+      description: "500-file realistic repo for all integration tests"
+      tests_created: 3
+      tests_deleted: 0
+      value: "Replaces tiny synthetic fixtures, enables scale testing"
+      
+    - track_id: "T3"
+      name: "Low-Value Test Deletion (CLEANUP)"
+      priority: "P1-HIGH"
+      duration: "5-7 days"
+      status: "design_complete"
+      target_reduction: "40% (15,016 → 9,000)"
+      categories:
+        - "Assertion-free tests (~100)"
+        - "Heavy-mock tests (mock ratio > 2.0)"
+        - "Duplicate test names (24 instances)"
+        - "Phase-dated files (16 files)"
+        - "Stub/placeholder tests (7)"
+      tests_created: 0
+      tests_deleted: "~6,000"
+      value: "Eliminate false confidence, focus on real behavior"
+      
+    - track_id: "T4"
+      name: "Mock Reduction Refactoring"
+      priority: "P2-MEDIUM"
+      duration: "5-7 days"
+      status: "design_complete"
+      depends_on: ["T1", "T3"]
+      target: "Mock-to-test ratio < 0.5"
+      approach: "Mock only external services (not internal CORTEX)"
+      tests_created: 0
+      tests_deleted: 0
+      tests_refactored: "~50"
+      value: "Tests prove real component integration"
+      
+    - track_id: "T5"
+      name: "RGR Loop Final Verification (GATE)"
+      priority: "P0-CRITICAL"
+      duration: "3-4 days"
+      status: "design_complete"
+      depends_on: ["T1", "T2", "T3", "T4"]
+      description: "Red-Green-Refactor loop until 100% pass"
+      iteration_limit: 5
+      exit_criteria:
+        - "100% test pass rate"
+        - "Zero assertion-free tests"
+        - "Mock ratio < 0.5 average"
+        - "All 7 Golden Path tests passing"
+        - "No duplicate test names"
+        - "No phase-dated files"
+      tests_created: 0
+      tests_deleted: "variable (during RGR)"
+      value: "Final gate before declaring victory"
+  
+  phases:
+    - phase_id: "WAVE-10-T1"
+      title: "Golden Path Truth Tests"
+      estimated_effort: "5-7 days"
+      deliverables:
+        - "test_company_override_truth.py"
+        - "test_tier_cascade_truth.py"
+        - "test_multi_analyzer_truth.py"
+        - "test_governance_domain_truth.py"
+        - "test_conflict_resolution_truth.py"
+        - "test_mcp_e2e_truth.py"
+        - "test_lens_full_pipeline_truth.py"
+      wave_assignment: "WAVE-10-QUALITY"
+      
+    - phase_id: "WAVE-10-T2"
+      title: "Reference Repository Fixture"
+      estimated_effort: "3-4 days"
+      deliverables:
+        - "tests/fixtures/reference_repo/ (500 files)"
+        - "reference_repo_loader.py"
+        - "Reference repo README.md"
+      wave_assignment: "WAVE-10-INFRASTRUCTURE"
+      
+    - phase_id: "WAVE-10-T3"
+      title: "Low-Value Test Deletion"
+      estimated_effort: "5-7 days"
+      deliverables:
+        - "40% test reduction (6,000 tests deleted)"
+        - "Assertion-free elimination"
+        - "Duplicate consolidation"
+        - "Phase-dated cleanup"
+      wave_assignment: "WAVE-10-CLEANUP"
+      
+    - phase_id: "WAVE-10-T4"
+      title: "Mock Reduction Refactoring"
+      estimated_effort: "5-7 days"
+      deliverables:
+        - "50 tests refactored"
+        - "Mock ratio < 0.5 achieved"
+        - "Real component integration"
+      wave_assignment: "WAVE-10-REFACTOR"
+      
+    - phase_id: "WAVE-10-T5"
+      title: "RGR Loop Final Verification"
+      estimated_effort: "3-4 days"
+      deliverables:
+        - "100% test pass rate"
+        - "8,000-10,000 high-value tests"
+        - "Coverage >= 85%"
+        - "All quality gates passed"
+      wave_assignment: "WAVE-10-GATE"
+  
+  success_criteria:
+    quantitative:
+      - metric: "Total Test Count"
+        before: 15016
+        after: "8,000-10,000"
+        improvement: "33-47% reduction"
+      - metric: "Golden Path Tests"
+        before: 0
+        after: 7
+        improvement: "∞ (new capability)"
+      - metric: "Average Mock Ratio"
+        before: ">1.0"
+        after: "<0.5"
+        improvement: "50% reduction"
+      - metric: "Assertion-Free Tests"
+        before: "~100"
+        after: 0
+        improvement: "100% elimination"
+      - metric: "Duplicate Test Names"
+        before: 24
+        after: 0
+        improvement: "100% elimination"
+    
+    qualitative:
+      - "Developers trust test failures = real bugs"
+      - "Test suite runs in <10 minutes"
+      - "New tests follow Golden Path pattern"
+      - "Mocking reserved for external services only"
+  
+  execution_timing:
+    recommendation: "IMMEDIATE or parallel with WAVE-R"
+    rationale: "Foundational to all future development confidence"
+    blocking_dependencies: []
+    can_parallelize_with: ["WAVE-R", "WAVE-2 phases"]
+    
+  risk_mitigation:
+    - risk: "Delete test catching real bugs"
+      mitigation: "Git history check before deletion"
+    - risk: "Coverage drops below acceptable"
+      mitigation: "Track coverage per-track, pause if <80%"
+    - risk: "Team resistance to deletion"
+      mitigation: "Show Golden Path tests first (quality > quantity)"
+  
+  detailed_spec: "See WAVE-10-TEST-SUITE-DEEP-REMEDIATION.yaml for full implementation details"
+
+# ============================================================================
 # SUPERSEDED PHASES (Completed or Consolidated)
 # ============================================================================
 superseded_phases:
@@ -558,11 +808,28 @@ overall_success_metrics:
 # ============================================================================
 next_actions:
   immediate:
-    - "Update index.yaml with wave assignments"
-    - "Mark phase-75 as superseded by phase-71"
-    - "Create Wave 1 execution kickoff plan"
-    - "Set up ASCII progress bar infrastructure"
-    - "Git commit: AC-WAVE-EXEC-001 (wave-based reprioritization)"
+    - "WAVE-10: Evaluate execution timing (immediate vs post-WAVE-R)"
+    - "WAVE-10: Review 7 Golden Path truth tests design"
+    - "WAVE-R: Continue ENH-089 EventBus Debugger (Stage 2+)"
+    - "Update index.yaml with WAVE-10 assignments"
+    - "Mark WAVE-10 as high-priority tech debt elimination"
+    - "Set up WAVE-10 execution tracking (5 tracks, 21-28 days)"
+  
+  wave_10_decision:
+    options:
+      - "Option A: Start WAVE-10 immediately (highest ROI 9.5)"
+      - "Option B: Complete WAVE-R first, then WAVE-10"
+      - "Option C: Parallel execution (WAVE-R + WAVE-10 Track 1-2)"
+    recommendation: "Option C - Parallel execution"
+    rationale: |
+      WAVE-10 Track 1-2 (Golden Path + Reference Repo) are foundational
+      and can run parallel to WAVE-R Stage 2-5. Track 3-5 can follow
+      WAVE-R completion. This maximizes velocity while managing risk.
+    estimated_timeline:
+      parallel_duration: "3-4 weeks (vs 7-8 weeks sequential)"
+      wave_r_completion: "Week 1"
+      wave_10_t1_t2_completion: "Week 1"
+      wave_10_t3_t4_t5_completion: "Week 2-4"
   
   wave_1_prep:
     - "Validate ENH-063 is ready (MCP pre-flight check)"
@@ -575,3 +842,6 @@ next_actions:
     - "Set up MCP-FIRST violation detection"
     - "Configure TDD enforcement (no test bypass)"
     - "Enable AC marker auto-injection for audit trail"
+    - "WAVE-10: Add CI gate for assertion-free tests"
+    - "WAVE-10: Add CI gate for mock ratio > 1.0"
+    - "WAVE-10: Require all 7 Golden Path tests pass before merge"

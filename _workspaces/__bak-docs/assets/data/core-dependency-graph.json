@@ -1,0 +1,71 @@
+{
+  "nodes": [
+    {
+      "id": "interaction",
+      "label": "Interaction",
+      "priority": 1
+    },
+    {
+      "id": "intent",
+      "label": "Intent Router",
+      "priority": 1
+    },
+    {
+      "id": "workflow",
+      "label": "Workflow",
+      "priority": 2
+    },
+    {
+      "id": "tdd",
+      "label": "TDD",
+      "priority": 2
+    },
+    {
+      "id": "enforcement",
+      "label": "Enforcement",
+      "priority": 3
+    },
+    {
+      "id": "master",
+      "label": "Master",
+      "priority": 3
+    },
+    {
+      "id": "observation",
+      "label": "Observation",
+      "priority": 2
+    }
+  ],
+  "links": [
+    {
+      "source": "interaction",
+      "target": "intent",
+      "type": "calls"
+    },
+    {
+      "source": "intent",
+      "target": "workflow",
+      "type": "routes"
+    },
+    {
+      "source": "workflow",
+      "target": "tdd",
+      "type": "coordinates"
+    },
+    {
+      "source": "tdd",
+      "target": "enforcement",
+      "type": "validates"
+    },
+    {
+      "source": "enforcement",
+      "target": "master",
+      "type": "reports"
+    },
+    {
+      "source": "workflow",
+      "target": "observation",
+      "type": "monitors"
+    }
+  ]
+}

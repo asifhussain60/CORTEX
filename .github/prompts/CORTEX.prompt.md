@@ -357,11 +357,108 @@ If token usage > 400k before user request:
 
 ## 🏗️ Response Header (MANDATORY)
 
+**SSOT:** See `.github/prompts/.archive/phase-docs/response-format-standards.md` § Completion Response Template for comprehensive formatting rules.
+
 ```markdown
 ## 🧠 CORTEX {operation}
 **Author:** Asif Hussain | **Orchestrator:** {orchestrator} ✅
 
 ---
+```
+
+**Key Rules:**
+- Header appears ONCE per response (at top)
+- Box separators: exactly 60 `━` (U+2501) characters
+- Completion sections use box format, NOT ## headers
+- Field labels: `**Label:**` format (bold with colon)
+- Track sections use `###` headers
+
+### 🚨 CRITICAL: ONE HEADER PER RESPONSE RULE (P0 - MANDATORY)
+
+**Authority:** User Requirement 2026-02-13 | **Enforcement:** BLOCKING
+
+**RULE:** The response header MUST appear **EXACTLY ONCE** per user-facing response.
+
+#### Display Behavior Matrix
+
+| Context | Header Display | Format to Use |
+|---------|----------------|---------------|
+| **Analysis phase (tool calls)** | ❌ NO HEADER | Internal work, not user-facing |
+| **User-facing response begins** | ✅ SHOW HEADER ONCE | At top of response only |
+| **Progress bars (autonomous)** | ❌ NO HEADER | Part of same response |
+| **Completion summary** | ❌ NO HEADER | Use box format (━━━) instead |
+| **Mid-execution updates** | ❌ NO HEADER | Use compact progress format |
+| **Status updates within response** | ❌ NO HEADER | Use box format (━━━) instead |
+| **Next user request (new response)** | ✅ SHOW HEADER ONCE | New response = new header |
+
+#### Correct Pattern (Autonomous Implementation)
+
+```markdown
+## 🧠 CORTEX IMPLEMENT
+**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
+
+---
+
+[██░░░░░░░░] 20% Stage 1: Component A
+[████░░░░░░] 40% Stage 2: Component B
+[██████░░░░] 60% Stage 3: Component C
+[████████░░] 80% Stage 4: Component D
+[██████████] 100% Complete
+
+----------------------------------------
+✅ Implementation Complete
+----------------------------------------
+
+Tests: 68/68 passing
+Commits: 3
+Files: 5 modified
+
+----------------------------------------
+```
+
+**Note:** Header appears ONCE at top. Progress bars and completion use box format (━━━), NOT additional headers.
+
+#### FORBIDDEN Pattern (Bug - DO NOT USE)
+
+```markdown
+## 🧠 CORTEX EXECUTE
+**Author:** Asif Hussain | **Orchestrator:** MasterOrchestrator ✅
+
+---
+
+[progress bars...]
+
+## 🧠 CORTEX UPDATE COMPLETE  ← ❌ WRONG: Second header
+**Author:** Asif Hussain | **Session:** Registry Status ✅
+
+---
+```
+
+**Issue:** Multiple headers within a single response violates the ONE HEADER rule.
+
+#### Completion Section Format (Use Box Instead of Header)
+
+**DO THIS:**
+```markdown
+----------------------------------------
+✅ Stage 1 Complete
+----------------------------------------
+
+Tests: 24/24 passing
+Files: 3 modified
+Commit: abc123f
+
+----------------------------------------
+```
+
+**NOT THIS:**
+```markdown
+## 🧠 CORTEX STAGE 1 COMPLETE  ← ❌ WRONG
+**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
+
+---
+
+Tests: 24/24 passing
 ```
 
 ---
@@ -489,7 +586,7 @@ result = mcp_tool.execute(parameters)
 
 **BEFORE outputting any recommendation:**
 
-1. Load enhancement-history.yaml from docs/meta/ directory
+1. Load enhancements from cortex-registry/_cortex-master/enhancements/active/
 2. Cross-check against `rejected_recommendations`
 3. Calculate regression risk score
 4. IF blocked → suppress recommendation, log reason

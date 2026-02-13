@@ -75,9 +75,9 @@ Commit range: 247 commits covering:
 
 **Example categorization output:**
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 📊 Documentation Refresh Analysis
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 Changes since 0506774b0 (247 commits):
 
@@ -107,7 +107,7 @@ infrastructure/ (18 files changed)
 └─ Action: Update deployment.md + add ccl section
 
 Estimated effort: 4-6 hours (incremental, not full rewrite)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ```
 
 ### Step 3: Extract New Orchestrators/Tools
@@ -1692,9 +1692,9 @@ def main():
     
     categories = categorize_changes(changed_files)
     
-    print(f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+    print(f"----------------------------------------")
     print(f"📊 Documentation Refresh Analysis")
-    print(f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+    print(f"----------------------------------------")
     print(f"")
     print(f"Baseline: {last_commit[:8]}")
     print(f"Total changes: {len(changed_files)} files")
@@ -1704,7 +1704,7 @@ def main():
         print(f"{category}/ ({len(files)} files changed)")
     
     print(f"")
-    print(f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+    print(f"----------------------------------------")
     
     print("::set-output name=needs_refresh::true")
     print(f"::set-output name=baseline_commit::{last_commit}")
@@ -1738,9 +1738,9 @@ def main():
     # Generate refresh plan
     plan = analyzer.generate_refresh_plan()
     
-    print(f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+    print(f"----------------------------------------")
     print(f"📚 Documentation Refresh")
-    print(f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+    print(f"----------------------------------------")
     print(f"")
     print(f"Baseline: {plan['baseline_commit'][:8]}")
     print(f"Changes: {plan['total_changes']} files")
@@ -1757,7 +1757,7 @@ def main():
     
     print(f"")
     print(f"✅ Documentation refresh complete")
-    print(f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+    print(f"----------------------------------------")
 
 if __name__ == "__main__":
     main()
@@ -1785,9 +1785,9 @@ def main():
     
     generator = HTMLSiteGenerator(md_root, html_root, template_dir)
     
-    print(f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+    print(f"----------------------------------------")
     print(f"🏗️ Generating HTML Site")
-    print(f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+    print(f"----------------------------------------")
     print(f"")
     print(f"Source: {md_root}")
     print(f"Output: {html_root}")
@@ -1797,7 +1797,7 @@ def main():
     
     print(f"")
     print(f"✅ HTML site generation complete")
-    print(f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+    print(f"----------------------------------------")
 
 if __name__ == "__main__":
     main()
@@ -1811,9 +1811,9 @@ if __name__ == "__main__":
 
 **Expected Output:**
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 📚 Documentation Refresh Complete
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 📊 Changes Analyzed: 247 commits since 0506774b0
 📝 Sections Updated: 12/24 (50%)
@@ -1828,16 +1828,16 @@ Updated Sections:
 └─ infrastructure/deployment.md (Pylance MCP + CCL)
 
 Git: a2fdcdc "docs: Refresh architecture docs (247 commits)"
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ```
 
 ### MODE: Generate
 
 **Expected Output:**
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 🏗️ HTML Site Generation Complete
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 📄 Files Generated: 127
 📁 Personas: 4 (Developer, Manager, Executive, Regulatory)
@@ -1856,7 +1856,7 @@ Output: _workspaces/cortex-gitpages/
 Site URL: https://cortex-docs.yourdomain.com
 
 Git: b3efc2d "docs: Generate GitHub Pages HTML site"
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ```
 
 ---

@@ -1,0 +1,87 @@
+graph TD
+    subgraph defined["DEFINED State"]
+        d1["AC-ID Created"]
+        d2["Status: DEFINED"]
+        d3["Evidence: None yet"]
+    end
+    
+    subgraph ready["READY State"]
+        r1["Dependencies Satisfied"]
+        r2["Status: READY"]
+        r3["Audit: AC_READY"]
+    end
+    
+    subgraph in_progress["IN_PROGRESS State"]
+        ip1["Execution Started"]
+        ip2["Status: IN_PROGRESS"]
+        ip3["Audit: AC_START"]
+    end
+    
+    subgraph blocked["BLOCKED State (Optional)"]
+        b1["Dependency Found"]
+        b2["Status: BLOCKED"]
+        b3["Audit: AC_BLOCKED"]
+    end
+    
+    subgraph complete["COMPLETE State"]
+        c1["Work Finished"]
+        c2["Status: COMPLETE"]
+        c3["Audit: AC_EXECUTE"]
+        c4["Evidence: Collected"]
+    end
+    
+    subgraph verified["VERIFIED State"]
+        v1["Audit Verification"]
+        v2["Status: VERIFIED"]
+        v3["Audit: AC_COMPLETE"]
+        v4["Hash-Chain Valid"]
+    end
+    
+    subgraph locked["LOCKED State"]
+        l1["Phase Locked"]
+        l2["Status: LOCKED"]
+        l3["Audit: AC_LOCKED"]
+        l4["No modifications allowed"]
+    end
+    
+    subgraph audit_trail["Audit Trail Formation"]
+        a1["AC_START<br/>hash_001"]
+        a2["AC_EXECUTE<br/>hash_002 refs hash_001"]
+        a3["AC_COMPLETE<br/>hash_003 refs hash_002"]
+        a4["AC_VERIFIED<br/>hash_004 refs hash_003"]
+        a5["AC_LOCKED<br/>hash_005 refs hash_004"]
+    end
+    
+    defined -->|Dependencies OK| ready
+    ready -->|Execution starts| in_progress
+    
+    in_progress -->|Dependency found| blocked
+    blocked -->|Dependency resolved| ready
+    
+    in_progress -->|Work finished| complete
+    complete -->|Audit passes| verified
+    verified -->|Phase lock| locked
+    
+    ready -->|Start| a1
+    in_progress -->|Execute| a2
+    complete -->|Complete| a3
+    verified -->|Verify| a4
+    locked -->|Lock| a5
+    
+    a1 --> a2
+    a2 --> a3
+    a3 --> a4
+    a4 --> a5
+    
+    style defined fill:#e0e0e0
+    style ready fill:#ffe0e0
+    style in_progress fill:#ffee99
+    style blocked fill:#ff9999
+    style complete fill:#99ff99
+    style verified fill:#99ccff
+    style locked fill:#cc99ff
+    style a1 fill:#fff0e0
+    style a2 fill:#fff0cc
+    style a3 fill:#fffcc0
+    style a4 fill:#fffbb0
+    style a5 fill:#fffaa0

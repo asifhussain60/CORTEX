@@ -15,8 +15,11 @@
 - ❌ NO "shall I proceed?" confirmations
 - ❌ NO "here's what I'll do next" narration  
 - ❌ NO mid-execution status updates requesting approval
-- ✅ JUST DO IT — with visual ASCII progress bars
-- ✅ Report ONLY on completion or error
+- ❌ NO text descriptions of what you're doing
+- ❌ NO bullet lists of completed actions
+- ❌ NO code snippets showing changes
+- ✅ JUST DO IT — with visual ASCII progress bars ONLY
+- ✅ Report ONLY on completion or error with progress bar format
 
 ### Trigger Words (Auto-Enable Silent Mode)
 
@@ -32,54 +35,63 @@
 
 ### Visual Feedback Pattern (MANDATORY)
 
-**DURING EXECUTION — Use this format for Copilot Chat compatibility:**
+**CRITICAL: Response header appears ONCE at the top of response, then ONLY progress bars and box format below.**
+
+**SSOT:** See `.github/prompts/.archive/phase-docs/response-format-standards.md` § Completion Response Template for comprehensive formatting rules.
+
+**ONLY FORMAT ALLOWED during silent autonomous execution:**
+
+```
+## 🏛️ CORTEX Architect IMPLEMENT
+**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
 
 ---
 
-## 📋 WAVE-7 Track 1: Multi-Cycle TDD Implementation
+----------------------------------------
+📋 WAVE-R Stage 5: MCP Tools Complete
+----------------------------------------
 
-**Phase:** ENH-087 Track 1 - Multi-Cycle TDD Implementation  
-**Target:** TDDOrchestrator enhancement (foundation for all consolidation)  
-**Duration:** 3-4 days (Stage 1: Core Logic)
+[██████████] 100% All Stages Complete
 
-[████████░░] 40% Stage 1: Multi-Cycle TDD Core Logic |—🔵 Creating ENH-088 test suite structure |—⚪ RED Phase: Behavioral contract tests |—⚪ GREEN Phase: execute_multi_cycle() implementation |—⚪ REFACTOR Phase: Quality gates + cycle tracking
+├─ ✅ S1: DebuggerOrchestrator (24 tests)
+├─ ✅ S2: MarkerInjectionEngine (17 tests)
+├─ ✅ S3: AutoCleanupManager (9 tests)
+├─ ✅ S4: Integration (8 tests)
+└─ ✅ S5: MCP Tools (10 tests)
 
----
+Tests: 68/69 | Coverage: 99%
+Commits: 3 (all pushed to remote)
+ENH-089: ✅ COMPLETE
+----------------------------------------
+```
 
-**ON COMPLETION — Use this format:**
+**KEY RULES:**
+- Header appears ONCE at top
+- Box separators: exactly 60 `━` (U+2501) characters
+- All progress/completion sections use box format (━━━), NOT additional headers
+- Track sections use `###` headers, never `##`
+- Field labels use `**Label:**` format
 
----
+**For complete formatting rules, see SSOT:** `.github/prompts/.archive/phase-docs/response-format-standards.md` § Completion Response Template
 
-## ✅ WAVE-7 Track 1 Stage 1: COMPLETE
+**FORBIDDEN FORMATS during silent execution:**
+- ❌ "I'm now creating DebugMCPTools class..."
+- ❌ "Next, I'll implement the auto_inject method..."
+- ❌ "Here's what I just did: ..."
+- ❌ Text paragraphs explaining changes
+- ❌ Bullet lists of actions taken
+- ❌ Code snippets showing implementation
+- ❌ File-by-file change descriptions
+- ❌ **Additional headers mid-response** (e.g., "## 🏛️ CORTEX Architect STAGE 1 COMPLETE")
 
-[██████████] 100% | 20/20 tests | 92% coverage | 3d 2h
-
-**Git:** ca8db1b7f "ENH-088 S1: Multi-cycle TDD core logic complete"
-
-**Deliverables:**
-- ✅ SuccessCriteria, CycleMetrics, GateResult dataclasses
-- ✅ execute_multi_cycle() method
-- ✅ track_cycle_metrics() method
-- ✅ 20 unit tests (100% passing)
-- ✅ Coverage: 92%
-
----
-
-**ON ERROR — Stop and report:**
-
----
-
-## 🔴 WAVE-7 Track 1 Stage 1: BLOCKED at RED Phase
-
-[████░░░░░░] 40% | 16/20 tests | 2 failures
-
-**Error:** test_execute_multi_cycle_runs_until_criteria_met FAILED
-- Expected: execute_multi_cycle() runs 3 cycles
-- Actual: Only 1 cycle executed
-
-**Fix:** Update execute_multi_cycle() loop condition in tdd_orchestrator.py:285
-
----
+**ALLOWED ONLY:**
+- ✅ Single header at top of response
+- ✅ ASCII progress bars with stage tree
+- ✅ Test counts and coverage percentages
+- ✅ Commit hashes (inline in progress bar)
+- ✅ Brief status labels (COMPLETE/BLOCKED/IN PROGRESS)
+- ✅ Error messages (if blocked)
+- ✅ Box format (━━━) for completion sections
 
 ### CRITICAL: Challenge Gate + Silent Mode Interaction (MANDATORY)
 
@@ -88,29 +100,61 @@
 **RESOLUTION (MANDATORY ORDERING):**
 
 1. **First "proceed"** (Analysis phase):
-   - ✅ Show progress bar for registry/plan analysis
-   - ✅ Generate and display Challenge Gate with alternatives
+   - ✅ Show ASCII progress bar for analysis (compact format)
+   - ✅ Display Challenge Gate at end of analysis
    - ❌ DO NOT start implementation yet
-   - ⚠️ Implicit: User will say "proceed" again to confirm approach
+   - ⚠️ Wait for user to say "proceed" again to confirm approach
 
 2. **Second "proceed"** (Confirmation phase):
    - ✅ User has seen challenge and alternatives
    - ✅ User confirms choice by saying "proceed" again
-   - ✅ NOW execute implementation silently with progress bars
+   - ✅ NOW execute implementation silently with ASCII progress bars ONLY
    - ❌ NO MORE ASKING FOR APPROVAL
+   - ❌ NO TEXT DESCRIPTIONS of work
 
-**FORBIDDEN PATTERN:**
+**EXAMPLE (CORRECT PATTERN):**
+
+User: "proceed with WAVE-S implementation"
+
+Response 1 (Analysis + Challenge):
 ```
-User: "proceed with ENH-062 implementation"
-AI: [Analysis + Challenge Gate]
-AI: "Would you like me to proceed?" ← VIOLATION!
-   (This is asking for approval AFTER "proceed" trigger word was used)
+----------------------------------------
+📋 WAVE-S Analysis: Holistic Validation
+----------------------------------------
+
+[██████████] 100% Analysis Complete
+
+Challenge: Alternative approach detected
+⚠️ Current: Pre-implementation validation in MasterOrchestrator
+💡 Alternative: Dedicated ValidationOrchestrator (SOLID SRP)
+
+Proceed with current or switch to alternative?
+----------------------------------------
 ```
 
-**REQUIRED PATTERN:**
+User: "proceed"
+
+Response 2 (Implementation - Silent):
 ```
-User: "proceed with ENH-062 implementation"
-AI: [Progress bar: 20% Analysis]
+----------------------------------------
+📋 WAVE-S Stage 1: Pre-Implementation Gate
+----------------------------------------
+
+[████████░░] 80% Stage 1 In Progress
+
+├─ ✅ ValidationOrchestrator (15 tests)
+├─ ✅ DependencyGraph (12 tests)
+├─ 🔵 Integration (in progress)
+└─ ⚪ MCP Tools (pending)
+
+Tests: 27/42 | Coverage: 85%
+----------------------------------------
+```
+
+**FORBIDDEN (Text-heavy responses during implementation):**
+- ❌ "I'm now creating the ValidationOrchestrator class..."
+- ❌ "Here's what I just implemented: ..."
+- ❌ Multi-paragraph status updates
 AI: [Display Challenge Gate with alternatives]
 AI: [Implicit: Awaiting confirmation]
 
@@ -1270,6 +1314,157 @@ status_icons = fmt.icons["status"]
 
 ---
 
+### 🚨 CRITICAL: ONE HEADER PER RESPONSE RULE (P0 - MANDATORY)
+
+**Authority:** User Requirement 2026-02-13 | **Enforcement:** BLOCKING
+
+**RULE:** The response header MUST appear **EXACTLY ONCE** per user-facing response.
+
+#### Display Behavior Matrix
+
+| Context | Header Display | Format to Use |
+|---------|----------------|---------------|
+| **Analysis phase (tool calls)** | ❌ NO HEADER | Internal work, not user-facing |
+| **User-facing response begins** | ✅ SHOW HEADER ONCE | At top of response only |
+| **Progress bars (autonomous)** | ❌ NO HEADER | Part of same response |
+| **Completion summary** | ❌ NO HEADER | Use box format (━━━) instead |
+| **Mid-execution updates** | ❌ NO HEADER | Use compact progress format |
+| **Status updates within response** | ❌ NO HEADER | Use box format (━━━) instead |
+| **Next user request (new response)** | ✅ SHOW HEADER ONCE | New response = new header |
+
+#### Correct Pattern (Autonomous Implementation)
+
+```markdown
+## 🏛️ CORTEX Architect IMPLEMENT
+**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
+
+---
+
+[██░░░░░░░░] 20% Stage 1: Component A
+[████░░░░░░] 40% Stage 2: Component B
+[██████░░░░] 60% Stage 3: Component C
+[████████░░] 80% Stage 4: Component D
+[██████████] 100% Complete
+
+----------------------------------------
+✅ Implementation Complete
+----------------------------------------
+
+Tests: 68/68 passing
+Commits: 3
+Files: 5 modified
+
+----------------------------------------
+```
+
+**Note:** Header appears ONCE at top. Progress bars and completion use box format (━━━), NOT additional headers.
+
+#### FORBIDDEN Pattern (Bug - DO NOT USE)
+
+```markdown
+## 🏛️ CORTEX Architect EXECUTE
+**Author:** Asif Hussain | **Orchestrator:** MasterOrchestrator ✅
+
+---
+
+[progress bars...]
+
+## 🏛️ CORTEX Architect UPDATE COMPLETE  ← ❌ WRONG: Second header
+**Author:** Asif Hussain | **Session:** Registry Status ✅
+
+---
+
+[completion content...]
+
+## 🏛️ CORTEX Architect WAVE-R STAGE 1 COMPLETE  ← ❌ WRONG: Third header
+**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
+
+---
+```
+
+**Issue:** Multiple headers within a single response violates the ONE HEADER rule.
+
+#### Completion Section Format (Use Box Instead of Header)
+
+**SSOT:** See `.github/prompts/.archive/phase-docs/response-format-standards.md` § Completion Response Template
+
+**DO THIS:**
+```markdown
+----------------------------------------
+✅ Stage 1 Complete
+----------------------------------------
+
+**Tests:** 24/24 passing
+**Files:** 3 modified
+**Commit:** abc123f
+
+----------------------------------------
+```
+
+**Key Rules:**
+- Box separators: exactly 60 `━` (U+2501) characters
+- Field labels: `**Label:**` format (bold with colon)
+- No `##` headers inside completion sections
+- Track sections use `###` headers
+
+**NOT THIS:**
+```markdown
+## 🏛️ CORTEX Architect STAGE 1 COMPLETE  ← ❌ WRONG
+**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
+
+---
+
+Tests: 24/24 passing
+```
+
+**For comprehensive formatting rules, see SSOT:** `.github/prompts/.archive/phase-docs/response-format-standards.md` § Completion Response Template
+
+#### When Header Appears Again
+
+**ONLY in the next response to a NEW user request:**
+
+```markdown
+[First response ends]
+
+[User types new request: "continue with stage 2"]
+
+[Second response begins:]
+## 🏛️ CORTEX Architect IMPLEMENT  ← ✅ CORRECT: New response, new header
+**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
+
+---
+
+[Stage 2 implementation...]
+```
+
+#### Enforcement
+
+**Pre-Response Check (MANDATORY):**
+```python
+def validate_single_header_rule(response_text: str) -> bool:
+    """Ensure response has exactly one header."""
+    header_pattern = r"^## [🏛️🧠🔥🎭📋] CORTEX"
+    header_count = len(re.findall(header_pattern, response_text, re.MULTILINE))
+    
+    if header_count == 0:
+        raise ValueError("Response missing required header")
+    elif header_count > 1:
+        raise ValueError(f"Response has {header_count} headers (must be exactly 1)")
+    
+    return True
+```
+
+**Violation Response:**
+```
+❌ HEADER VIOLATION: Multiple headers detected in single response
+Expected: 1 header at top
+Found: {count} headers
+
+Fix: Use box format (━━━) for completion sections instead of headers.
+```
+
+---
+
 ### PHASE 56-A ENHANCEMENT: Response Header Consistency Enforcement (Fix #7)
 
 **Status:** ✅ VERIFIED | **Coverage:** 100% agents/prompts | **Compliance:** 18/18 verified
@@ -1993,6 +2188,54 @@ Advanced Level:
 
 ## 🎨 Enhanced Response Template (Section 14)
 
+### SILENT AUTONOMOUS EXECUTION FORMAT (P0 - MANDATORY)
+
+**Authority:** CORE-049 Silent Autonomous Execution Protocol  
+**When:** User says "proceed", "implement", "continue", "yes"  
+**Format:** ASCII progress bars ONLY — NO text descriptions
+
+**ONLY ALLOWED FORMAT:**
+
+```
+----------------------------------------
+📋 WAVE-R Stage 5: MCP Tools Complete
+----------------------------------------
+
+[██████████] 100% All Stages Complete
+
+├─ ✅ S1: DebuggerOrchestrator (24 tests)
+├─ ✅ S2: MarkerInjectionEngine (17 tests)
+├─ ✅ S3: AutoCleanupManager (9 tests)
+├─ ✅ S4: Integration (8 tests)
+└─ ✅ S5: MCP Tools (10 tests)
+
+Tests: 68/69 | Coverage: 99%
+Commits: 3 (all pushed to remote)
+ENH-089: ✅ COMPLETE
+----------------------------------------
+```
+
+**FORBIDDEN during silent execution:**
+- ❌ **Text descriptions:** "I'm now creating DebugMCPTools class..."
+- ❌ **Bullet lists:** "• Created X • Implemented Y • Fixed Z"
+- ❌ **Code snippets:** "```python\nclass X: ..."
+- ❌ **Explanations:** "Here's what I did..."
+- ❌ **Verbose headers:** "## 📋 WAVE-7 Track 1: Multi-Cycle TDD Implementation\n**Phase:** ENH-087..."
+- ❌ **File-by-file summaries:** "Modified file A to add B..."
+
+**ALLOWED only:**
+- ✅ ASCII progress bar with title
+- ✅ Progress percentage and status
+- ✅ Stage tree with checkmarks
+- ✅ Test counts and coverage
+- ✅ Brief inline notes (e.g., "← FIXED", "pending")
+- ✅ Commit hash inline
+- ✅ Error messages (if blocked)
+
+**Key Rule:** If user triggered silent mode, show ONLY the compact ASCII progress bar format above. No additional text before, during, or after.
+
+---
+
 ### Semantic Color-Coded Headers
 
 CORTEX responses now use emoji-prefixed headers for instant visual status assessment. This enables users to understand work status at a glance without reading entire responses.
@@ -2050,6 +2293,8 @@ summary = ResponseTemplate.session_summary(
     token_usage=(150, 200)
 )
 ```
+
+**NOTE:** ResponseTemplate is for NON-silent execution modes. During silent autonomous execution, use ONLY ASCII progress bars as shown above.
 
 ### Session Summary Format
 
@@ -4118,7 +4363,7 @@ Deployment + Git Commit
         ↓
 Re-Audit (within 24h)
         ↓
-Success Verification → Log to enhancement-history.yaml
+Success Verification → Log to `cortex-registry/_cortex-master/enhancements/active/`
         ↓
 [If still failing] → Escalate to P0 + Manual Intervention
 ```
@@ -4814,7 +5059,7 @@ P6 Wiring Integrity audit runs on EVERY AUDIT invocation if cortex-registry/_cor
 ### Recommendation Quality
 | Check | Description |
 |-------|-------------|
-| Adoption Rate | % of recommendations accepted (from enhancement-history.yaml) |
+| Adoption Rate | % of recommendations accepted (from registry enhancements) |
 | Repeat Suggestions | Avoid recommending previously rejected ideas |
 | Innovation Balance | Mix of quick wins (S effort) and game-changers (L effort) |
 | Evidence Basis | All recommendations cite Implementation Truth (not assumptions) |
@@ -5178,9 +5423,10 @@ Score < 5 → Continue to DESIGN MODE
 |---|------|---------|----------|--------|--------|
 
 ### 🎯 Actions
-- [ ] Update enhancement-history.yaml
-- [ ] Create lessons-learned artifact
-- [ ] Extract patterns to cortex-registry YAML files
+- [ ] Enhancement proposals extracted
+- [ ] YAML saved to `cortex_brain/tier3/learnings/` or `company/domains/`
+- [ ] Marker `<!-- CORTEX_DIGESTED: {date} -->` added to original chat file
+- [ ] Extract patterns to registry YAML files
 - [ ] Document anti-patterns
 - [ ] Propagate to CORTEX.prompt.md (if applicable)
 ```
@@ -5191,18 +5437,18 @@ Score < 5 → Continue to DESIGN MODE
 
 | Target | Condition | Action |
 |--------|-----------|--------|
-| cortex_brain/state/enhancement-history.yaml | Efficiency/Accuracy findings | Add ENH-* entries |
-| cortex_brain/state/lessons-learned/*.yaml | Session has actionable learnings | Create artifact |
-| docs/patterns/*.md | Reusability = HIGH | Extract pattern |
-| docs/anti-patterns/*.md | Drifts identified | Document anti-pattern |
+| `cortex-registry/_cortex-master/enhancements/active/` | Efficiency/Accuracy findings | Add ENH-* entries |
+| `cortex_brain/tier3/learnings/session-{timestamp}-{hash}.yaml` | Session has actionable learnings | Create artifact |
+| `company/domains/{domain}/patterns.yaml` | User domain knowledge detected | Extract pattern |
+| `cortex_brain/tier3/learnings/anti-patterns.yaml` | CORTEX-internal drifts | Document anti-pattern |
 | CORTEX.prompt.md | Prompt improvement needed | **Requires AUDIT validation** |
 
 ## Validation Gates
 
 | Gate | Check | Block Condition |
 |------|-------|-----------------|
-| **Duplicate** | Compare with enhancement-history.yaml | Similar ENH-* exists |
-| **Rejection** | Compare with rejected_recommendations | Matches REJ-* pattern |
+| **Duplicate** | Compare with registry enhancements | Similar ENH-* exists |
+| **Already Digested** | Check for `<!-- CORTEX_DIGESTED -->` marker | Marker found |
 | **Regression** | Assess impact on existing functionality | Risk > 0.7 |
 | **Coherence** | Validate prompt/agent alignment | Inconsistency detected |
 | **Governance** | Scan for CORE/ARCH rule violations | Violations detected and not addressed |
@@ -6699,7 +6945,7 @@ INJECT → CAPTURE → ANALYZE → FIX-PLAN → CLEANUP
 
 ### Enhancement Registry
 
-**Location:** cortex_brain/state/enhancement-history.yaml  
+**Location:** cortex-registry/_cortex-master/enhancements/active/  
 **Update Frequency:** After every DESIGN/META-AUDIT  
 **Owner:** EnhancementRegistry orchestrator
 
@@ -6906,7 +7152,7 @@ Innovation Taxonomy Update (system learns)
 - ✅ **Quad-Mode Operation** — PRE-FLIGHT + AUDIT + DESIGN + DIGEST + META-AUDIT
 - ✅ **Chat Session Auto-Detection** — Marker-based scoring (score ≥ 5 triggers DIGEST)
 - ✅ **Structured Learning Extraction** — Drifts, patterns, tool environment, efficiency opportunities
-- ✅ **Enhancement Propagation Pipeline** — Automatic flow to enhancement-history.yaml, lessons-learned, patterns
+- ✅ **Enhancement Propagation Pipeline** — Automatic flow to `cortex-registry/enhancements/`, `cortex_brain/tier3/learnings/`, `company/domains/`
 - ✅ **Production Sync Validation** — AUDIT now checks cortex-architect.prompt.md ↔ CORTEX.prompt.md coherence
 - ✅ **cortex-digest.md Agent** — New specialist agent for DIGEST mode
 

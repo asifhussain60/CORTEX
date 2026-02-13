@@ -1,0 +1,61 @@
+```mermaid
+---
+title: Error Recovery & Resilience Flow
+---
+sequenceDiagram
+    participant Client
+    participant Retry as Retry Handler
+    participant CB as Circuit Breaker
+    participant Fallback as Graceful Degradation
+    participant Service
+    
+    Client->>Retry: Request
+    
+    rect rgb(200, 220, 255)
+        Note over Retry,Service: Retry Loop (max 3 attempts)
+        loop Retry Attempts
+            Retry->>CB: Check Circuit State
+            
+            alt Circuit CLOSED (Normal)
+                CB->>Service: Forward Request
+                alt Success
+                    Service-->>CB: Response
+                    CB-->>Retry: Success
+                    Retry-->>Client: Result
+                else Transient Failure
+                    Service-->>CB: Error
+                    CB->>CB: Record Failure
+                    Note over CB: failure_count++
+                    alt Failures > Threshold (5)
+                        CB->>CB: OPEN Circuit
+                        Note over CB: Block requests for 30s
+                    else Under Threshold
+                        Retry->>Retry: Exponential Backoff
+                        Note over Retry: Wait 1s, 2s, 4s...
+                    end
+                end
+            else Circuit OPEN (Tripped)
+                CB-->>Retry: Circuit Open Error
+                Retry->>Fallback: Get Fallback Response
+                Fallback-->>Client: Degraded Response
+                Note over Client: Cached/Default data
+            else Circuit HALF-OPEN (Testing)
+                CB->>Service: Probe Request
+                alt Probe Success
+                    Service-->>CB: OK
+                    CB->>CB: CLOSE Circuit
+                    Note over CB: Reset failure_count
+                else Probe Fail
+                    CB->>CB: OPEN Circuit
+                    Note over CB: Reset timeout
+                end
+            end
+        end
+    end
+    
+    rect rgb(255, 220, 220)
+        Note over Client,Service: Max Retries Exceeded
+        Retry->>Fallback: All retries failed
+        Fallback-->>Client: Final Fallback Response
+    end
+```

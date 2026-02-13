@@ -29,9 +29,9 @@ ROI Score: 8.5/10 (HIGH IMPACT - Extensibility, Scalability, Efficiency)
 WAVE BREAKDOWN (4 SEQUENTIAL WAVES)
 ================================================================================
 
-┌─────────────────────────────────────────────────────────────────────────────┐
+----------------------------------------
 │ WAVE 1: FOUNDATION & CLEANUP (Days 1-3, 8-12 hours)                       │
-├─────────────────────────────────────────────────────────────────────────────┤
+----------------------------------------
 │ Stage 1: Registry Audit & Consolidation (3-4h)                            │
 │   • Audit both registries (OrchestratorTemplateRegistry vs              │
 │     ResponseTemplateRegistry)                                            │
@@ -60,11 +60,11 @@ WAVE BREAKDOWN (4 SEQUENTIAL WAVES)
 │   ✅ Plan synchronized with reality                                    │
 │   ✅ Foundation established for W2-W4                                  │
 │   �� Status: READY → COMPLETE (6 tests)                                │
-└─────────────────────────────────────────────────────────────────────────────┘
+----------------------------------------
 
-┌─────────────────────────────────────────────────────────────────────────────┐
+----------------------------------------
 │ WAVE 2: RESPONSEENGINE IMPLEMENTATION (Days 4-6, 16-20 hours)             │
-├─────────────────────────────────────────────────────────────────────────────┤
+----------------------------------------
 │ Stage 1: ResponseEngine Core Implementation (6-8h)                         │
 │   • Create unified_response_engine.py (role detection, template           │
 │     fusion, variable auto-binding)                                      │
@@ -98,11 +98,11 @@ WAVE BREAKDOWN (4 SEQUENTIAL WAVES)
 │   ✅ Approach validated before scaling to 67 orchestrators             │
 │   ✅ Foundation for W3 migration work                                  │
 │   🟢 Status: READY → COMPLETE (90 tests)                               │
-└─────────────────────────────────────────────────────────────────────────────┘
+----------------------------------------
 
-┌─────────────────────────────────────────────────────────────────────────────┐
+----------------------------------------
 │ WAVE 3: ORCHESTRATOR MIGRATION (Days 7-9, 20-24 hours)                    │
-├─────────────────────────────────────────────────────────────────────────────┤
+----------------------------------------
 │ Stage 1: Linter & Migration Script Creation (6-8h)                        │
 │   • Create ResponseFormatLinter with 12 compliance checks:              │
 │     ✅ Has BaseResponseTemplate inheritance                             │
@@ -147,11 +147,11 @@ WAVE BREAKDOWN (4 SEQUENTIAL WAVES)
 │   ✅ Copilot Chat validated for production use                        │
 │   ✅ Quality validated at scale                                        │
 │   🟢 Status: READY → COMPLETE (200+ tests)                             │
-└─────────────────────────────────────────────────────────────────────────────┘
+----------------------------------------
 
-┌─────────────────────────────────────────────────────────────────────────────┐
+----------------------------------------
 │ WAVE 4: POLISH & DOCUMENTATION (Days 10-11, 8-10 hours)                   │
-├─────────────────────────────────────────────────────────────────────────────┤
+----------------------------------------
 │ Stage 1: Developer Guide & Examples (4-5h)                                │
 │   • Create response-engine-developer-guide.md (10+ pages)               │
 │   • Architecture overview (Lego model, role fusion, engine flow)        │
@@ -187,7 +187,7 @@ WAVE BREAKDOWN (4 SEQUENTIAL WAVES)
 │   ✅ Long-term maintainability ensured                                 │
 │   ✅ Master plan closed (synchronous with reality)                    │
 │   🟢 Status: READY → COMPLETE (5 tests)                                │
-└─────────────────────────────────────────────────────────────────────────────┘
+----------------------------------------
 
 ================================================================================
 CONSOLIDATED METRICS (ALL 4 WAVES)

@@ -1,0 +1,71 @@
+{
+  "nodes": [
+    {
+      "id": "request",
+      "label": "Request",
+      "color": "#7b61ff"
+    },
+    {
+      "id": "authentication",
+      "label": "Authentication",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "authorization",
+      "label": "Authorization",
+      "color": "#10b981"
+    },
+    {
+      "id": "validation",
+      "label": "Input Validation",
+      "color": "#f59e0b"
+    },
+    {
+      "id": "allowed",
+      "label": "Allowed",
+      "color": "#22c55e"
+    },
+    {
+      "id": "denied",
+      "label": "Denied",
+      "color": "#ef4444"
+    }
+  ],
+  "links": [
+    {
+      "source": "request",
+      "target": "authentication",
+      "value": 1000
+    },
+    {
+      "source": "authentication",
+      "target": "authorization",
+      "value": 850
+    },
+    {
+      "source": "authentication",
+      "target": "denied",
+      "value": 150
+    },
+    {
+      "source": "authorization",
+      "target": "validation",
+      "value": 750
+    },
+    {
+      "source": "authorization",
+      "target": "denied",
+      "value": 100
+    },
+    {
+      "source": "validation",
+      "target": "allowed",
+      "value": 700
+    },
+    {
+      "source": "validation",
+      "target": "denied",
+      "value": 50
+    }
+  ]
+}

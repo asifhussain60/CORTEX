@@ -532,11 +532,268 @@ class CortexLoad(ConsolidatedTool):
         )
 
 
+
 # Export all governance tools
 __all__ = [
     "CortexGovernance",
     "CortexValidate",
     "CortexLoad",
+    "CortexValidateRequest",
 ]
+
+
+# ============================================================================
+# PHASE 48 STAGE 4: HOLISTIC VALIDATION MCP TOOL
+# ============================================================================
+
+class CortexValidateRequest(ConsolidatedTool):
+    """
+    Phase 48: Holistic validation with challenge generation and confidence scoring.
+    
+    Pre-implementation validation gate that:
+    1. Runs 12-category checklist (security, performance, etc.)
+    2. Generates 3 alternative implementation approaches
+    3. Calculates confidence score (0.0-1.0)
+    4. Gates execution at 0.7 threshold
+    
+    Integrates with cortex_process_request workflow to ensure high-quality implementations.
+    
+    Operations:
+    - validate: Full validation with all stages
+    - quick: Fast validation (checklist only)
+    - challenges: Generate alternatives without full validation
+    
+    Author: Asif Hussain
+    Authority: PHASE-48-IMPLEMENTATION-PLAN.yaml Stage 4
+    AC-ID: AC-PHASE48-S4-IMPL-001
+    """
+    
+    @property
+    def name(self) -> str:
+        return "cortex_validate_request"
+    
+    @property
+    def description(self) -> str:
+        return (
+            "Phase 48 holistic validation: Pre-implementation checklist + "
+            "challenge generation + confidence scoring with 0.7 threshold gating. "
+            "Ensures high-quality implementations before execution."
+        )
+    
+    @property
+    def category(self) -> ToolCategory:
+        return ToolCategory.GOVERNANCE
+    
+    @property
+    def parameters(self) -> List[ToolParameter]:
+        return [
+            ToolParameter(
+                name="intent",
+                type="string",
+                description="User intent: IMPLEMENT, FIX, REFACTOR",
+                required=True,
+                enum=["IMPLEMENT", "FIX", "REFACTOR", "ANALYZE"],
+            ),
+            ToolParameter(
+                name="request",
+                type="string",
+                description="User's implementation request",
+                required=True,
+            ),
+            ToolParameter(
+                name="target",
+                type="string",
+                description="Target file or component",
+                required=False,
+            ),
+            ToolParameter(
+                name="context",
+                type="object",
+                description="Additional context (security_critical, effort, etc.)",
+                required=False,
+            ),
+            ToolParameter(
+                name="operation",
+                type="string",
+                description="Validation operation: validate (full), quick (checklist only), challenges (alternatives only)",
+                required=False,
+                enum=["validate", "quick", "challenges"],
+            ),
+        ]
+    
+    @property
+    def supported_operations(self) -> List[str]:
+        return ["validate", "quick", "challenges"]
+    
+    async def execute(self, **params) -> ToolResult:
+        """Execute holistic validation."""
+        intent = params.get("intent", "IMPLEMENT")
+        request = params.get("request", "")
+        target = params.get("target", "")
+        context = params.get("context", {})
+        operation = params.get("operation", "validate")
+        
+        # Import orchestrator (lazy load to avoid circular imports)
+        from cortex.orchestrators.validation import HolisticValidationOrchestrator
+        
+        orchestrator = HolisticValidationOrchestrator()
+        
+        try:
+            if operation == "validate":
+                # Full validation: all 3 stages
+                # Note: target is stored in context, not passed separately
+                validation_context = context.copy()
+                validation_context["target"] = target
+                
+                validation_result = orchestrator.validate(
+                    request=request,
+                    intent=intent,
+                    context=validation_context,
+                )
+                
+                return ToolResult(
+                    success=True,
+                    data={
+                        "operation": "validate",
+                        "passed": validation_result.passed,
+                        "confidence_score": validation_result.confidence_score,
+                        "checklist_result": {
+                            "overall_score": (
+                                validation_result.checklist_result.overall_score
+                                if hasattr(validation_result.checklist_result, 'overall_score')
+                                else 0.0
+                            ),
+                            "category_scores": (
+                                {
+                                    cat: result.score
+                                    for cat, result in validation_result.checklist_result.results.items()
+                                }
+                                if hasattr(validation_result.checklist_result, 'results')
+                                else {}
+                            ),
+                        },
+                        "challenges": [
+                            {
+                                "title": alt.get("title", "") if isinstance(alt, dict) else getattr(alt, "title", ""),
+                                "description": alt.get("description", "") if isinstance(alt, dict) else getattr(alt, "description", ""),
+                                "effort": alt.get("effort", "") if isinstance(alt, dict) else getattr(alt, "effort", ""),
+                                "feasibility": alt.get("feasibility_score", 0.0) if isinstance(alt, dict) else getattr(alt, "feasibility_score", 0.0),
+                                "pros": alt.get("pros", []) if isinstance(alt, dict) else getattr(alt, "pros", []),
+                                "cons": alt.get("cons", []) if isinstance(alt, dict) else getattr(alt, "cons", []),
+                            }
+                            for alt in validation_result.challenges[:3]
+                        ],
+                        "recommendations": (
+                            validation_result.recommendations
+                            if hasattr(validation_result, 'recommendations')
+                            else []
+                        ),
+                        "explanation": validation_result.explanation,
+                        "bypass_available": context.get("bypass_validation", False),
+                    },
+                    metadata={
+                        "intent": intent,
+                        "target": target,
+                        "validation_version": "1.0.0",
+                        "phase": "48-stage-4",
+                    },
+                )
+            
+            elif operation == "quick":
+                # Quick validation: checklist only
+                validation_context = context.copy()
+                validation_context["target"] = target
+                
+                validation_result = orchestrator.validate(
+                    request=request,
+                    intent=intent,
+                    context=validation_context,
+                )
+                
+                return ToolResult(
+                    success=True,
+                    data={
+                        "operation": "quick",
+                        "checklist_score": (
+                            validation_result.checklist_result.overall_score
+                            if hasattr(validation_result.checklist_result, 'overall_score')
+                            else 0.0
+                        ),
+                        "category_scores": (
+                            {
+                                cat: result.score
+                                for cat, result in validation_result.checklist_result.results.items()
+                            }
+                            if hasattr(validation_result.checklist_result, 'results')
+                            else {}
+                        ),
+                        "passed": (
+                            validation_result.checklist_result.overall_score >= 0.7
+                            if hasattr(validation_result.checklist_result, 'overall_score')
+                            else False
+                        ),
+                    },
+                    metadata={"intent": intent},
+                )
+            
+            elif operation == "challenges":
+                # Challenges only: alternative generation
+                validation_context = context.copy()
+                validation_context["target"] = target
+                
+                validation_result = orchestrator.validate(
+                    request=request,
+                    intent=intent,
+                    context=validation_context,
+                )
+                
+                return ToolResult(
+                    success=True,
+                    data={
+                        "operation": "challenges",
+                        "alternatives": [
+                            {
+                                "title": alt.get("title", "") if isinstance(alt, dict) else getattr(alt, "title", ""),
+                                "description": alt.get("description", "") if isinstance(alt, dict) else getattr(alt, "description", ""),
+                                "effort": alt.get("effort", "") if isinstance(alt, dict) else getattr(alt, "effort", ""),
+                                "feasibility": alt.get("feasibility_score", 0.0) if isinstance(alt, dict) else getattr(alt, "feasibility_score", 0.0),
+                                "pros": alt.get("pros", []) if isinstance(alt, dict) else getattr(alt, "pros", []),
+                                "cons": alt.get("cons", []) if isinstance(alt, dict) else getattr(alt, "cons", []),
+                                "implementation_notes": alt.get("implementation_notes", "") if isinstance(alt, dict) else getattr(alt, "implementation_notes", ""),
+                            }
+                            for alt in validation_result.challenges
+                        ],
+                        "recommended": (
+                            validation_result.challenges[0].get("title")
+                            if validation_result.challenges and isinstance(validation_result.challenges[0], dict)
+                            else (
+                                getattr(validation_result.challenges[0], "title", None)
+                                if validation_result.challenges
+                                else None
+                            )
+                        ),
+                    },
+                    metadata={"intent": intent},
+                )
+            
+            else:
+                return ToolResult(
+                    success=False,
+                    data={"error": f"Unknown operation: {operation}"},
+                    metadata={"operation": operation},
+                )
+        
+        except Exception as e:
+            # Graceful error handling
+            return ToolResult(
+                success=False,
+                data={
+                    "error": str(e),
+                    "error_type": type(e).__name__,
+                    "fallback": "Validation failed, proceeding with caution recommended",
+                },
+                metadata={"intent": intent, "operation": operation},
+            )
+
 
 # AC_COMPLETE: AC-WAVE100-S2-003 ✅ Governance tools implemented

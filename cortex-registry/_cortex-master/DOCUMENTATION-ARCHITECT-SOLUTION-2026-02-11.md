@@ -57,7 +57,7 @@ Status: Up-to-date as of today
 ## 🏗️ Solution Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
+----------------------------------------
 │                    CORTEX DOCUMENTATION ARCHITECT                        │
 │                         (Dual-Mode System)                              │
 └────────────────┬───────────────────────────────────┬────────────────────┘
@@ -119,15 +119,15 @@ Status: Up-to-date as of today
                                         │ Time: 5 minutes (automated)  │
                                         └───────────────────────────────┘
 
-┌─────────────────────────────────────────────────────────────────────────┐
+----------------------------------------
 │                         INTEGRATION POINTS                               │
-├─────────────────────────────────────────────────────────────────────────┤
+----------------------------------------
 │ • Phase 74: Multi-Role Documentation Portal (reuse components)          │
 │ • Dashboard: Glassmorphism design system (extract templates)            │
 │ • CORTEX Brain: Knowledge base content (populate templates)             │
 │ • Wiring Contract: Orchestrator metadata (validate accuracy)            │
 │ • MCP Tools: Tool definitions (auto-generate API docs)                  │
-└─────────────────────────────────────────────────────────────────────────┘
+----------------------------------------
 ```
 
 ---

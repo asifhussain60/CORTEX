@@ -1,0 +1,14 @@
+sequenceDiagram
+    participant Code
+    participant AST Analyzer
+    participant CWE Detector
+    participant STRIDE Analyzer
+    participant Report
+    
+    Code->>AST Analyzer: Parse Code
+    AST Analyzer->>CWE Detector: Check Patterns
+    CWE Detector->>CWE Detector: Scan for 6 CWEs
+    CWE Detector->>STRIDE Analyzer: Security Context
+    STRIDE Analyzer->>STRIDE Analyzer: Map to STRIDE
+    STRIDE Analyzer->>Report: Vulnerabilities + Mitigations
+    Report->>Code: Actionable Fixes

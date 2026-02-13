@@ -16,7 +16,7 @@ INSTRUCTIONS_FILE=".github/copilot-instructions.md"
 ERRORS=0
 
 echo "🔍 Validating Copilot Response Rendering Format..."
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "----------------------------------------"
 
 # Check 1: No code fences in copilot-instructions.md
 echo "✓ Check 1: copilot-instructions.md should have NO code fences"
@@ -62,7 +62,7 @@ fi
 
 # Summary
 echo ""
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "----------------------------------------"
 if [ $ERRORS -eq 0 ]; then
     echo "✅ ALL CHECKS PASSED"
     echo ""

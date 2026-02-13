@@ -9,26 +9,42 @@
 
 ## 🏗️ Architecture: MCP-First Service-Oriented Design
 
-**CORTEX is NOT a monolithic application.** It operates as a **service-oriented architecture** where all 28 orchestrators are exposed as independent MCP (Model Context Protocol) tools.
+**CORTEX operates as a MCP-First architecture** where all 28 orchestrators are exposed as MCP (Model Context Protocol) tools.
+
+### MCP Architecture: Pylance-Style (ENH-066)
+
+**CORTEX MCP runs locally within VS Code, similar to how Pylance operates:**
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│              MCP Server (Port 8000)                     │
-│                                                         │
-│  ┌───────────────────────────────────────────────┐    │
-│  │     MCP Gateway (cortex_process_request)      │    │
-│  └───────────────────────────────────────────────┘    │
-│                        │                               │
-│      ┌─────────────────┼─────────────────┐           │
-│      ▼                 ▼                 ▼             │
-│  ┌────────┐      ┌────────┐      ┌────────┐         │
-│  │  Core  │      │ Domain │      │Support │         │
-│  │  (8)   │      │  (6)   │      │  (14)  │         │
-│  └────────┘      └────────┘      └────────┘         │
-│                                                         │
-│            28 Independent Services                     │
-└─────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                    VS Code                                  │
+│  ┌─────────────────┐    ┌────────────────────────────────┐  │
+│  │  Copilot Chat   │───▶│  MCP Server (Auto-Started)     │  │
+│  │                 │    │  • stdio transport             │  │
+│  │  User: /impl    │◀───│  • JSON-RPC 2.0                │  │
+│  │                 │    │  • python -m cortex.mcp        │  │
+│  └─────────────────┘    └────────────────────────────────┘  │
+│                                    │                        │
+│                                    ▼                        │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │            cortex_* Tools                            │   │
+│  │  • cortex_process_request  • cortex_lens_analyze    │   │
+│  │  • cortex_challenge        • cortex_detect_duplicates│   │
+│  │  • cortex_plan_execute_autonomous                    │   │
+│  └─────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+
+❌ OLD (Wrong): User manually runs "python -m cortex.mcp.server"
+✅ NEW (Correct): VS Code auto-starts MCP when Copilot invokes tools
 ```
+
+**Key Characteristics:**
+- 🔄 **Auto-Started:** VS Code launches MCP automatically (no manual startup)
+- 📡 **stdio Transport:** Uses stdin/stdout for JSON-RPC communication
+- 🔒 **Process Isolation:** MCP runs as child process of VS Code
+- 🎯 **Zero Configuration:** Just run setup script, then reload VS Code
+
+**Setup Time:** 30 seconds (down from 30 minutes)
 
 **Key Benefits:**
 - ✅ **Independent Scaling:** Each orchestrator scales horizontally via replicas
@@ -51,13 +67,18 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 
-# 3. Start MCP Server (REQUIRED for IMPLEMENT/FIX/REFACTOR operations)
-python -m cortex.mcp.server
+# 3. Configure MCP for VS Code (Pylance-Style Architecture)
+# MCP runs locally within VS Code - NO manual server startup needed!
+python .cortex/setup-mcp.py
 
-# 4. Verify MCP Server (in new terminal)
-curl http://localhost:8000/health
+# 4. Reload VS Code to activate MCP
+# Command Palette → Developer: Reload Window
 
-# 5. Configure git hooks (IMPORTANT for team collaboration)
+# 5. Verify MCP integration
+# In Copilot Chat, you should see cortex_* tools available
+# Check .cortex/setup.log for confirmation
+
+# 6. Configure git hooks (IMPORTANT for team collaboration)
 make setup-hooks
 # or: ./scripts/setup-hooks.sh
 ```

@@ -1,0 +1,267 @@
+Got it. You’re asking for a single-file:// runnable HTML5 documentation “microsite” (no server, no fetch), with a dark-blue glassmorphism aesthetic + subtle animation, that’s role-guided (Business Leader / PO / Manager / Engineer / Quality) and visually rich (D3-driven) so each role can “graduate” from a friendly overview to deep wiring/testing/ops truth—without overpromising beyond what’s implemented.
+
+You also want me to borrow your design language from the existing CORTEX site/index and orchestrator pages (glass cards, shimmer, subtle motion, D3 visuals) but modernize it and avoid the “row-table museum.” Your current index already leans into glassmorphism + multi-panel storytelling + D3, so we’ll keep that vibe while tightening role-based pedagogy. 
+
+index
+
+ 
+
+index
+
+What I will build (the final offline app)
+Deliverable format
+
+A zip containing a static site that runs via file://:
+
+cortex-doc-site/
+  index.html
+  assets/
+    css/
+      theme.css
+      layout.css
+      tabs.css
+      viz.css
+      animations.css
+    js/
+      app.js
+      router.js
+      content.js
+      viz-architecture.js
+      viz-risk.js
+      viz-pipeline.js
+      viz-tiers.js
+      viz-orchestrators.js
+      vendor/
+        d3.v7.min.js
+        (optional) force-graph / dagre / tinycolor / tippy-lite (all local)
+    data/
+      cortex-doc-data.js   (window.CORTEX_DOC = {...})
+      cortex-doc-evidence.js (small evidence index + “truth badges”)
+  README.md (how to open offline)
+
+
+No fetch(): all data is embedded as JS objects (window.CORTEX_DOC) and referenced locally.
+
+No inline CSS: everything goes into the CSS files. (Your current index uses some inline styles for overlays—cool, but we’ll move that into external stylesheets.) 
+
+index
+
+Navigation concept: “Role Tour” + “Explorer Mode”
+
+This is the part that makes it impressive to multiple audiences without turning into chaos.
+
+1) Starting Page: Role Tiles (Role Tour entry)
+
+A landing page with 5 large tiles:
+
+Business Leader
+
+Product Owner
+
+Dev Manager
+
+Software Engineer
+
+Quality / SET
+
+Selecting a role does 3 things:
+
+Sets the navigation path (recommended tab order)
+
+Sets the language lens (business-first vs engineering-first copy)
+
+Turns on “Guided Tour” UI: progress indicator + “Next recommended step”
+
+2) Tabs remain consistent across roles
+
+We keep a stable 9-tab layout (so the app is learnable and scalable), but each role gets:
+
+different default entry tab
+
+different “what to look at here” callouts
+
+different depth toggles (“Executive / Standard / Deep”)
+
+This aligns with the LENS dashboard philosophy: decision-grade clarity per audience, not UML spam. 
+
+cortex_lens_generalized_instruc…
+
+ 
+
+cortex_lens_universal_playbook
+
+3) Explorer Mode (for engineers and curious leaders)
+
+At any time, a user can exit the guided path and use:
+
+global search (“orchestrator”, “wiring.yaml”, “DoR”, “AC markers”)
+
+diagram filters (Implemented vs Partial vs Aspirational)
+
+“Truth Badges” that prevent overcommitment
+
+This is key because your comparison doc explicitly notes the difference between “architecture described” vs “wiring completed.” We’ll make that visible and honest. 
+
+CORTEX_Architecture_Comparison_…
+
+Tabs & the “impress each role” strategy
+
+Below is how each view will be designed to land well for different audiences while staying true to implementation.
+
+Tab 1 — Overview (Role-tailored)
+
+Goal: “What is CORTEX and why should I care?”
+
+“What CORTEX does” in business language (governed AI development, fewer defects, less drift)
+
+A “Truth Meter” card: Implemented / Partial / Convention-based / Assumption-heavy
+
+A big interactive “CORTEX brain” metaphor diagram: Tier 0–3 as layers (D3 radial)
+
+Truthfulness comes from your comparison analysis: architecture is strong; brittleness stems from incomplete wiring/enforcement. 
+
+CORTEX_Architecture_Comparison_…
+
+Tab 2 — Capabilities
+
+Goal: capabilities map > feature list.
+
+D3 bubble/cluster map of capabilities (Governance, LENS, TDD, Registry, Challenge, Audit)
+
+Each capability expands into:
+
+“What it enables”
+
+“Who benefits”
+
+“Evidence & maturity badge”
+
+“Risks if bypassed”
+
+This matches your LENS extraction “high value filtering” rules. 
+
+cortex_lens_generalized_instruc…
+
+Tab 3 — Architecture (C4-ish, interactive)
+
+Goal: show structure + flow, not just components.
+
+D3 directed graph of: IntentRouter → LENS → Enforcement → MasterOrchestrator → Domain Orchestrators
+
+Hover cards: responsibilities + “wired?” indicator
+
+“Blast radius” mini-tool: click node → highlights dependencies
+
+This directly aligns with your architecture truth doc’s stated flow, while also allowing “partial wiring” flags. 
+
+CORTEX-ARCHITECTURE-TRUTH-DOCUM…
+
+ 
+
+CORTEX_Architecture_Comparison_…
+
+Tab 4 — Intelligence (CORTEX LENS)
+
+Goal: show how “context knowing” is built.
+
+Pipeline visualization: Evidence collection → analyzers → synthesis → DoR gate → output shaping
+
+“Two-track truth” concept (static truth + optional runtime truth) presented as a split-lane diagram (from your LENS generalized doc). 
+
+cortex_lens_generalized_instruc…
+
+“Crystallization” as caching/pre-warming (presented honestly as “designed/partially integrated” if needed)
+
+Tab 5 — Wiring & Registry (Brittleness spotlight)
+
+Goal: answer: “Will this stay wired in production?”
+
+Registry model explanation (wiring.yaml as source of truth)
+
+“Wiring Integrity Checklist” card (what must be validated at startup)
+
+A D3 “wiring completeness matrix”:
+
+orchestrators declared vs importable vs healthcheck reachable vs used-by-flow
+
+A “deployment assumptions” panel (filesystem, env vars, container/CI risks)
+
+This is the tab that makes leaders trust the platform because it shows you understand operational reality.
+
+Tab 6 — Quality & Testing (TDD + regression)
+
+Goal: prove CORTEX improves delivery outcomes.
+
+Test pyramid chart (simple SVG + counts, not fake precision)
+
+“High-value tests CORTEX should generate” (wiring tests, golden path, break-the-wiring tests)
+
+Regression matrix concept (capability × tests heatmap)
+This maps directly to your requested “intelligent tests” integration with TDD/Refactor/Operational orchestrators.
+
+Tab 7 — Security & Risk
+
+Goal: make security feel native, not bolted on.
+
+Risk heatmap (severity × likelihood)
+
+Attack surface map (conceptual unless you provide real endpoint inventory)
+
+“Prompt injection / repo-content injection” risks and mitigations called out explicitly
+This is straight from the brittleness + risk concerns you emphasized.
+
+Tab 8 — Ops & Deployment
+
+Goal: “Can we run this repeatedly and safely?”
+
+Deployment readiness checklist (container/CI/workspaces)
+
+Observability story (logs/decisions/audit trails)
+
+“Debug playbook” cards for top failure modes
+
+Tab 9 — Next Steps (Role-specific)
+
+Goal: convert understanding into action.
+
+For leaders: adoption + governance + change management
+
+For PO: workflows + templates + definition of ready
+
+For managers: rollout plan + quality KPIs
+
+For engineers: wiring completion backlog + validation tests
+
+For quality: regression strategy + gating hardening
+
+A better alternative (where I’ll challenge your idea)
+
+Your “multi-tab dashboard” approach is correct. The enhancement I strongly recommend is:
+
+Add a “Role Journey” narrative layer on top of tabs
+
+Tabs are structure; journeys are story.
+
+So the app will have:
+
+Tabs (9, stable, consistent)
+
+Journeys (role-based guided progression through those tabs)
+
+This avoids the trap where each tab becomes a dump of diagrams. It also matches how different stakeholders learn: they want a path, not a library.
+
+Your existing orchestrator page already uses strong “executive summary → visual → drilldown” sequencing; we’ll apply that pattern consistently across the whole site. 
+
+index
+
+What I need from you (only if you want extra accuracy)
+
+I can build the app now using the documents you uploaded (and keep “truth badges” where implementation may be partial). To get even closer to “real implementation,” the best additions would be:
+
+the actual orchestrator inventory (names/categories from wiring.yaml)
+
+the analyzer list currently wired
+
+any existing dashboard index.html variants you want me to mirror visually (you already provided one)
+
+No need to answer this to proceed—the site can still be built, but those inputs let diagrams be less “conceptual” and more “repo-backed.”

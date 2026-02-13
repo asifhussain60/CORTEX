@@ -1,0 +1,71 @@
+{
+  "nodes": [
+    {
+      "id": "interaction",
+      "label": "Interaction Orchestrator",
+      "color": "#7b61ff"
+    },
+    {
+      "id": "intent",
+      "label": "Intent Router",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "workflow",
+      "label": "Workflow Orchestrator",
+      "color": "#10b981"
+    },
+    {
+      "id": "tdd",
+      "label": "TDD Orchestrator",
+      "color": "#f59e0b"
+    },
+    {
+      "id": "enforcement",
+      "label": "Enforcement Orchestrator",
+      "color": "#ef4444"
+    },
+    {
+      "id": "master",
+      "label": "Master Orchestrator",
+      "color": "#8b5cf6"
+    },
+    {
+      "id": "output",
+      "label": "Response",
+      "color": "#22c55e"
+    }
+  ],
+  "links": [
+    {
+      "source": "interaction",
+      "target": "intent",
+      "value": 1000
+    },
+    {
+      "source": "intent",
+      "target": "workflow",
+      "value": 800
+    },
+    {
+      "source": "workflow",
+      "target": "tdd",
+      "value": 600
+    },
+    {
+      "source": "tdd",
+      "target": "enforcement",
+      "value": 500
+    },
+    {
+      "source": "enforcement",
+      "target": "master",
+      "value": 450
+    },
+    {
+      "source": "master",
+      "target": "output",
+      "value": 400
+    }
+  ]
+}

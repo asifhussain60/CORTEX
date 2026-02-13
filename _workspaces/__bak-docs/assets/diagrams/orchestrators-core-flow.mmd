@@ -1,0 +1,16 @@
+sequenceDiagram
+    participant User
+    participant Interaction
+    participant Intent Router
+    participant Workflow
+    participant TDD
+    participant Enforcement
+    participant Master
+    
+    User->>Interaction: Request
+    Interaction->>Intent Router: Classify Intent
+    Intent Router->>Workflow: Route to Workflow
+    Workflow->>TDD: Execute TDD
+    TDD->>Enforcement: Validate Rules
+    Enforcement->>Master: Coordinate
+    Master->>User: Response

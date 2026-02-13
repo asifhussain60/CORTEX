@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX Duplication Metrics Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            color: #1e3c72;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 4px solid;
+        }
+
+        .metric-card.critical {
+            border-left-color: #e74c3c;
+        }
+
+        .metric-card.high {
+            border-left-color: #f39c12;
+        }
+
+        .metric-card.medium {
+            border-left-color: #f1c40f;
+        }
+
+        .metric-card.low {
+            border-left-color: #27ae60;
+        }
+
+        .metric-card.total {
+            border-left-color: #3498db;
+        }
+
+        .metric-value {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .metric-card.critical .metric-value {
+            color: #e74c3c;
+        }
+
+        .metric-card.high .metric-value {
+            color: #f39c12;
+        }
+
+        .metric-card.medium .metric-value {
+            color: #f1c40f;
+        }
+
+        .metric-card.low .metric-value {
+            color: #27ae60;
+        }
+
+        .metric-card.total .metric-value {
+            color: #3498db;
+        }
+
+        .metric-label {
+            font-size: 14px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .chart-section {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .chart-section h2 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .charts-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        .status-section {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .status-section h2 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .status-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .status-table th {
+            background: #f5f5f5;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .status-table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .status-table tbody tr:hover {
+            background: #f9f9f9;
+        }
+
+        .severity-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .severity-badge.critical {
+            background: #ffe6e6;
+            color: #e74c3c;
+        }
+
+        .severity-badge.high {
+            background: #fff3e6;
+            color: #f39c12;
+        }
+
+        .severity-badge.medium {
+            background: #fffef0;
+            color: #f1c40f;
+        }
+
+        .severity-badge.low {
+            background: #e6f7e6;
+            color: #27ae60;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-badge.detected {
+            background: #e8f4f8;
+            color: #3498db;
+        }
+
+        .status-badge.in_progress {
+            background: #fff9e6;
+            color: #f39c12;
+        }
+
+        .status-badge.completed {
+            background: #e6f7e6;
+            color: #27ae60;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1e3c72;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        footer {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .refresh-info {
+            text-align: right;
+            color: #999;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .charts-row {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔍 CORTEX Duplication Metrics Dashboard</h1>
+            <p>Real-time monitoring of code duplications and consolidation progress (Phase 8.3A)</p>
+            <div class="refresh-info">
+                Last updated: <span id="lastUpdated">loading...</span>
+            </div>
+        </header>
+
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card total">
+                <div class="metric-label">Total Duplications</div>
+                <div class="metric-value" id="totalDups">0</div>
+            </div>
+            <div class="metric-card critical">
+                <div class="metric-label">P0 Critical</div>
+                <div class="metric-value" id="criticalCount">0</div>
+            </div>
+            <div class="metric-card high">
+                <div class="metric-label">P1 High</div>
+                <div class="metric-value" id="highCount">0</div>
+            </div>
+            <div class="metric-card medium">
+                <div class="metric-label">P2 Medium</div>
+                <div class="metric-value" id="mediumCount">0</div>
+            </div>
+            <div class="metric-card low">
+                <div class="metric-label">P3 Low</div>
+                <div class="metric-value" id="lowCount">0</div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="chart-section">
+            <h2>Distribution Analysis</h2>
+            <div class="charts-row">
+                <div class="chart-container">
+                    <canvas id="severityChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Section -->
+        <div class="chart-section">
+            <h2>Consolidation Progress (Phase 8.3C)</h2>
+            <div class="stats-row">
+                <div class="stat">
+                    <div class="stat-value" id="plannedCount">0</div>
+                    <div class="stat-label">Planned</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="inProgressCount">0</div>
+                    <div class="stat-label">In Progress</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="completedCount">0</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="progressPercent">0%</div>
+                    <div class="stat-label">Progress Rate</div>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="progressChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Status Table -->
+        <div class="status-section">
+            <h2>Duplication Registry (All Discovered Duplications)</h2>
+            <table class="status-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Category</th>
+                        <th>Severity</th>
+                        <th>Files</th>
+                        <th>Status</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody id="registryTable">
+                    <!-- Populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <footer>
+            <p>CORTEX Phase 8.3A: Detection & Prevention Infrastructure | Updated: <span id="footerTime"></span></p>
+            <p>Data source: <code>cortex/orchestrators/support/duplication_registry.py</code></p>
+        </footer>
+    </div>
+
+    <script>
+        // Mock data matching Phase 8.3A discovery audit
+        const mockData = {
+            timestamp: new Date().toISOString(),
+            duplications: [
+                {
+                    id: "DUP-P0-001",
+                    category: "ExecutionContext",
+                    severity: "CRITICAL",
+                    status: "DETECTED",
+                    files: 6,
+                    description: "6 ExecutionContext implementations across modules (core/interfaces, adaptive_execution_engine, mcp/executor, etc.)",
+                    file_list: ["cortex/core/interfaces.py", "cortex/execution/adaptive_execution_engine.py", "cortex/mcp/executor.py", "cortex/mcp/orchestrator_mcp_server.py", "cortex/orchestrators/adaptive/execution_context_analyzer.py", "cortex/orchestrators/refactored_architecture.py"]
+                },
+                {
+                    id: "DUP-P1-001",
+                    category: "bootstrap",
+                    severity: "HIGH",
+                    status: "IN_PROGRESS",
+                    files: 2,
+                    description: "Duplicate bootstrap implementations",
+                    file_list: ["cortex/bootstrap.py", "cortex/wiring/bootstrap.py"]
+                },
+                {
+                    id: "DUP-P1-002",
+                    category: "version_manager",
+                    severity: "HIGH",
+                    status: "PLANNED",
+                    files: 2,
+                    description: "Duplicate version management implementations",
+                    file_list: ["domain_brain/version_manager.py", "orchestrators/version_manager.py"]
+                },
+                {
+                    id: "DUP-P1-003",
+                    category: "lens_integration",
+                    severity: "HIGH",
+                    status: "PLANNED",
+                    files: 2,
+                    description: "Duplicate LENS integration implementations",
+                    file_list: ["domain_brain/lens_integration.py", "brain/discovery/lens_integration.py"]
+                },
+                {
+                    id: "DUP-P2-001",
+                    category: "core_layering",
+                    severity: "MEDIUM",
+                    status: "DETECTED",
+                    files: 15,
+                    description: "Architectural layering: core/ vs brain/core/ (INTENTIONAL separation)",
+                    file_list: ["Multiple files in core/ and brain/core/"]
+                },
+            ],
+            stats: {
+                total: 5,
+                by_severity: {
+                    "CRITICAL": 1,
+                    "HIGH": 3,
+                    "MEDIUM": 1,
+                    "LOW": 0
+                },
+                by_status: {
+                    "DETECTED": 2,
+                    "PLANNED": 2,
+                    "IN_PROGRESS": 1,
+                    "COMPLETED": 0
+                },
+                by_category: {
+                    "ExecutionContext": 1,
+                    "bootstrap": 1,
+                    "version_manager": 1,
+                    "lens_integration": 1,
+                    "core_layering": 1
+                }
+            }
+        };
+
+        // Initialize dashboard
+        function initDashboard() {
+            updateMetrics();
+            populateTable();
+            createCharts();
+            updateTimestamp();
+        }
+
+        function updateMetrics() {
+            const stats = mockData.stats;
+            document.getElementById('totalDups').textContent = stats.total;
+            document.getElementById('criticalCount').textContent = stats.by_severity["CRITICAL"] || 0;
+            document.getElementById('highCount').textContent = stats.by_severity["HIGH"] || 0;
+            document.getElementById('mediumCount').textContent = stats.by_severity["MEDIUM"] || 0;
+            document.getElementById('lowCount').textContent = stats.by_severity["LOW"] || 0;
+
+            document.getElementById('plannedCount').textContent = stats.by_status["PLANNED"] || 0;
+            document.getElementById('inProgressCount').textContent = stats.by_status["IN_PROGRESS"] || 0;
+            document.getElementById('completedCount').textContent = stats.by_status["COMPLETED"] || 0;
+
+            const total = stats.by_status["PLANNED"] + stats.by_status["IN_PROGRESS"] + stats.by_status["COMPLETED"];
+            const completed = stats.by_status["COMPLETED"];
+            const progressPercent = total > 0 ? Math.round((completed / total) * 100) : 0;
+            document.getElementById('progressPercent').textContent = progressPercent + '%';
+        }
+
+        function populateTable() {
+            const tbody = document.getElementById('registryTable');
+            tbody.innerHTML = '';
+
+            mockData.duplications.forEach(dup => {
+                const row = document.createElement('tr');
+                const severityLower = dup.severity.toLowerCase();
+                const statusLower = dup.status.toLowerCase();
+
+                row.innerHTML = `
+                    <td><code>${dup.id}</code></td>
+                    <td>${dup.category}</td>
+                    <td><span class="severity-badge ${severityLower}">${dup.severity}</span></td>
+                    <td>${dup.files} files</td>
+                    <td><span class="status-badge ${statusLower.replace('_', '-')}">${dup.status.replace('_', ' ')}</span></td>
+                    <td>${dup.description}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function createCharts() {
+            // Severity Distribution Chart
+            const severityCtx = document.getElementById('severityChart').getContext('2d');
+            const stats = mockData.stats;
+
+            new Chart(severityCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['P0 Critical', 'P1 High', 'P2 Medium', 'P3 Low'],
+                    datasets: [{
+                        data: [
+                            stats.by_severity["CRITICAL"] || 0,
+                            stats.by_severity["HIGH"] || 0,
+                            stats.by_severity["MEDIUM"] || 0,
+                            stats.by_severity["LOW"] || 0
+                        ],
+                        backgroundColor: [
+                            '#e74c3c',
+                            '#f39c12',
+                            '#f1c40f',
+                            '#27ae60'
+                        ],
+                        borderColor: 'white',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 15,
+                                font: { size: 12 }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Category Distribution Chart
+            const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+            const categories = stats.by_category;
+
+            new Chart(categoryCtx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(categories),
+                    datasets: [{
+                        label: 'Duplications by Category',
+                        data: Object.values(categories),
+                        backgroundColor: '#3498db',
+                        borderColor: '#2980b9',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1 }
+                        }
+                    }
+                }
+            });
+
+            // Progress Chart
+            const progressCtx = document.getElementById('progressChart').getContext('2d');
+            const progressData = stats.by_status;
+
+            new Chart(progressCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Detected', 'Planned', 'In Progress', 'Completed'],
+                    datasets: [{
+                        label: 'Consolidation Status',
+                        data: [
+                            progressData["DETECTED"] || 0,
+                            progressData["PLANNED"] || 0,
+                            progressData["IN_PROGRESS"] || 0,
+                            progressData["COMPLETED"] || 0
+                        ],
+                        backgroundColor: [
+                            '#3498db',
+                            '#f39c12',
+                            '#f1c40f',
+                            '#27ae60'
+                        ],
+                        borderColor: 'white',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { padding: 15, font: { size: 12 } }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1 }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateTimestamp() {
+            const now = new Date();
+            const timeStr = now.toLocaleString();
+            document.getElementById('lastUpdated').textContent = timeStr;
+            document.getElementById('footerTime').textContent = timeStr;
+        }
+
+        // Auto-refresh every 5 minutes
+        setInterval(() => {
+            updateTimestamp();
+        }, 5 * 60 * 1000);
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initDashboard);
+    </script>
+</body>
+</html>

@@ -83,16 +83,18 @@ maintainer: "Asif Hussain"
 
 **FORBIDDEN:**
 - ❌ `cat > file.md << 'EOF'` patterns  
-- ❌ `create_file` tool invocations
+- ❌ `create_file` tool invocations for reports
 - ❌ Terminal file generation (`Ran terminal command: cat > ...`)
 - ❌ Completion/summary/report markdown files
-- ❌ YAML file generation to _workspaces/
+- ❌ YAML file generation to `_workspaces/`
+- ❌ Creating `{filename}-digest.yaml` files
 
 **REQUIRED:**
 - ✅ Inline analysis in chat only
 - ✅ Use markdown tables for findings (these are chat content, not files)
 - ✅ Extract learnings via MCP `cortex_digest_session` tool (not file writes)
-- ✅ Programmatic enhancement updates via MCP, not manual file creation
+- ✅ Store YAML learnings to `cortex_brain/tier3/learnings/` OR `company/domains/{domain}/`
+- ✅ Add `<!-- CORTEX_DIGESTED: {date} -->` marker to original chat file (in-place update)
 
 **Violation Detection:**
 If response contains any "Ran terminal command: cat" or "Created [" patterns → BLOCK and regenerate response without file generation.
@@ -201,10 +203,10 @@ If response contains any "Ran terminal command: cat" or "Created [" patterns →
 
 | Target | Update | Condition |
 |--------|--------|-----------|
-| `docs/meta/enhancement-history.yaml` | Add new ENH-* entries | Efficiency/Accuracy findings |
-| `docs/meta/lessons-learned/*.yaml` | Create session artifact | Session has learnings |
-| `docs/patterns/*.md` | Extract new patterns | Reusability = HIGH |
-| `docs/anti-patterns/*.md` | Document anti-patterns | Drifts identified |
+| `cortex-registry/_cortex-master/enhancements/active/` | Add new ENH-* entries | Efficiency/Accuracy findings |
+| `cortex_brain/tier3/learnings/session-{timestamp}-{hash}.yaml` | Create session artifact | Session has learnings |
+| `company/domains/{domain}/patterns.yaml` | Extract new patterns | User domain knowledge |
+| `cortex_brain/tier3/learnings/anti-patterns.yaml` | Document anti-patterns | CORTEX-internal drifts |
 
 ### Manual Review Queue
 
@@ -222,8 +224,8 @@ If response contains any "Ran terminal command: cat" or "Created [" patterns →
 
 | Gate | Check | Block Condition |
 |------|-------|-----------------|
-| **Duplicate Check** | Compare with enhancement-history.yaml | Similar ENH-* exists (>0.7 similarity) |
-| **Rejection Check** | Compare with rejected_recommendations | Matches REJ-* pattern |
+| **Duplicate Check** | Compare with registry enhancements | Similar ENH-* exists (>0.7 similarity) |
+| **Already Digested** | Check for `<!-- CORTEX_DIGESTED -->` marker in first 10 lines | Marker found → skip processing |
 | **Regression Risk** | Assess impact on existing functionality | Risk score > 0.7 |
 | **Coherence Check** | Validate prompt/agent/wiring alignment | Inconsistency detected |
 
@@ -232,9 +234,9 @@ If response contains any "Ran terminal command: cat" or "Created [" patterns →
 | Check | Validation |
 |-------|------------|
 | **YAML Syntax** | All YAML files parse correctly |
-| **Markdown Lint** | MD040, MD060, MD022 pass |
-| **Link Validation** | All relative paths resolve |
-| **Schema Compliance** | lessons-learned matches schema |
+| **Storage Location** | YAML in `cortex_brain/tier3/learnings/` or `company/domains/` |
+| **Marker Injection** | `<!-- CORTEX_DIGESTED -->` added to original chat file |
+| **Schema Compliance** | YAML matches learnings schema |
 
 ---
 
@@ -260,11 +262,11 @@ If response contains any "Ran terminal command: cat" or "Created [" patterns →
 
 | Rule | Enforcement |
 |------|-------------|
-| CORE-002 | NO markdown file generation (except to docs/meta/, docs/patterns/, docs/anti-patterns/) |
+| CORE-002 | NO markdown file generation — inline chat ONLY |
 | CORE-008 | N/A (no code implementation) |
 | CORE-029 | Response header MANDATORY |
-| CORE-030 | Implementation Truth — learn from actual execution results |
-| CORE-035 | Single extraction pipeline, single storage format |
+| CORE-030 | Implementation Truth — learn from actual execution results, original chat file = evidence trail |
+| CORE-035 | Single extraction pipeline, single storage format, structured YAML only |
 
 ---
 
@@ -287,21 +289,20 @@ If response contains any "Ran terminal command: cat" or "Created [" patterns →
 **Session:** {filename}  
 **Extractions:** {count} learnings  
 **Actions Taken:**
-- [ ] Enhancement history updated ({n} entries)
-- [ ] Lessons-learned artifact created
-- [ ] Patterns extracted ({n})
-- [ ] Anti-patterns documented ({n})
-- [ ] Tool environment logged
+- [ ] YAML saved to `cortex_brain/tier3/learnings/session-{hash}.yaml`
+- [ ] Marker added to original file: `<!-- CORTEX_DIGESTED: {date} -->`
+- [ ] Enhancement proposals: {n} entries
+- [ ] Patterns extracted: {n}
+- [ ] Anti-patterns documented: {n}
 
-**Recommendations for Review:**
-| # | Type | Description | Priority |
-|---|------|-------------|----------|
-| 1 | {Prompt|Code|Wiring} | {recommendation} | {P0|P1|P2} |
+**Storage Locations:**
+- **CORTEX-Internal:** `cortex_brain/tier3/learnings/`
+- **User Domain:** `company/domains/{detected_domain}/`
 
 **Next Steps:**
+- Original chat file preserved with marker (Implementation Truth)
 - Run `/audit` to validate coherence
-- Review recommendations above
-- Implement approved changes via `/implement`
+- Implement approved enhancements via `/implement`
 ```
 
 ---

@@ -1,0 +1,13 @@
+sequenceDiagram
+    participant Master
+    participant Domain Orchestrator
+    participant Support Orchestrator
+    participant Brain
+    
+    Master->>Domain Orchestrator: Delegate Task
+    Domain Orchestrator->>Support Orchestrator: Request Analysis
+    Support Orchestrator->>Brain: Query Context
+    Brain->>Support Orchestrator: Context Data
+    Support Orchestrator->>Domain Orchestrator: Analysis Result
+    Domain Orchestrator->>Domain Orchestrator: Execute Logic
+    Domain Orchestrator->>Master: Task Complete

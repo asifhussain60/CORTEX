@@ -1,0 +1,178 @@
+# MCP Self-Healing Issue Registry
+# Authority: CORE-049 + ENH-067 (Self-Healing MCP Infrastructure)
+# Purpose: Extensible registry of known MCP issues with auto-fix strategies
+# Updated: 2026-02-13
+
+metadata:
+  version: "1.0"
+  authority: "ENH-067"
+  last_updated: "2026-02-13"
+  auto_fix_enabled: true
+  default_retry_count: 2
+  max_retry_count: 3
+
+# Issue Registry (Extensible)
+issues:
+  - issue_id: "MCP-ERR-001"
+    name: "r.content Not Iterable"
+    pattern: "TypeError: r.content is not iterable"
+    severity: "CRITICAL"
+    detection_method: "error_message_match"
+    root_cause: |
+      MCP server response handling bug in VS Code's MCP client.
+      The client expects r.content to be iterable but server
+      is returning a non-iterable response object. This occurs when
+      VS Code's MCP client/server communication layer has a version
+      mismatch or the server is in a corrupted state.
+    fix_strategy: "restart_mcp_server"
+    auto_fix: true
+    retry_count: 1
+    estimated_fix_duration_ms: 5000
+    fix_steps:
+      - "Detect error in MCP tool response"
+      - "Kill existing MCP server process (if any)"
+      - "Clear MCP client cache"
+      - "Trigger VS Code to restart MCP server"
+      - "Retry original tool invocation"
+      - "If still fails after 2 retries, escalate to user"
+    success_rate: 0.95
+    references:
+      - "https://github.com/microsoft/vscode/issues/mcp-client"
+      - ".cortex/setup-mcp.py"
+  
+  - issue_id: "MCP-ERR-002"
+    name: "Connection Refused"
+    pattern: "Connection refused|ECONNREFUSED|Cannot connect to MCP server"
+    severity: "HIGH"
+    detection_method: "error_message_match"
+    root_cause: |
+      MCP server process is not running or has crashed.
+      VS Code should auto-start it but sometimes fails to do so,
+      especially after system sleep/wake or VS Code restart.
+    fix_strategy: "restart_mcp_server"
+    auto_fix: true
+    retry_count: 2
+    estimated_fix_duration_ms: 7000
+    fix_steps:
+      - "Check if MCP server process is running"
+      - "If not running, trigger VS Code reload"
+      - "Wait 5 seconds for auto-start"
+      - "Verify MCP server is listening on expected port"
+      - "Retry original operation"
+    success_rate: 0.90
+  
+  - issue_id: "MCP-ERR-003"
+    name: "MCP Timeout"
+    pattern: "timeout|timed out|MCP tool execution exceeded"
+    severity: "MEDIUM"
+    detection_method: "error_message_match"
+    root_cause: |
+      MCP server is taking too long to respond (>30s).
+      May indicate server is in deadlock, processing heavy load,
+      or stuck on a blocking I/O operation.
+    fix_strategy: "restart_mcp_server"
+    auto_fix: true
+    retry_count: 1
+    estimated_fix_duration_ms: 6000
+    fix_steps:
+      - "Log timeout event with stack trace"
+      - "Kill MCP server process"
+      - "Clear any pending MCP requests in queue"
+      - "Wait for VS Code to restart server"
+      - "Retry with shorter timeout (15s)"
+    success_rate: 0.85
+  
+  - issue_id: "MCP-ERR-004"
+    name: "Module Not Found"
+    pattern: "ModuleNotFoundError.*cortex|No module named 'cortex'"
+    severity: "CRITICAL"
+    detection_method: "error_message_match"
+    root_cause: |
+      MCP server cannot find cortex modules.
+      Python environment not properly configured or
+      virtual environment not activated.
+    fix_strategy: "reconfigure_python_path"
+    auto_fix: true
+    retry_count: 1
+    estimated_fix_duration_ms: 10000
+    fix_steps:
+      - "Check virtual environment activation"
+      - "Run setup-mcp.py to reconfigure paths"
+      - "Verify PYTHONPATH includes cortex package"
+      - "Update .vscode/settings.json with correct Python path"
+      - "Reload VS Code"
+      - "Retry operation"
+    success_rate: 0.80
+  
+  - issue_id: "MCP-ERR-005"
+    name: "JSON Parse Error"
+    pattern: "JSONDecodeError|Invalid JSON response|Cannot parse MCP response"
+    severity: "HIGH"
+    detection_method: "error_message_match"
+    root_cause: |
+      MCP server returned malformed JSON response.
+      May indicate server crash, buffer overflow, or
+      response truncation.
+    fix_strategy: "restart_mcp_server"
+    auto_fix: true
+    retry_count: 2
+    estimated_fix_duration_ms: 5000
+    fix_steps:
+      - "Log malformed response for debugging"
+      - "Restart MCP server"
+      - "Clear response cache"
+      - "Retry with smaller payload (if applicable)"
+    success_rate: 0.88
+  
+  - issue_id: "MCP-ERR-006"
+    name: "Permission Denied"
+    pattern: "PermissionError|EACCES|Access denied"
+    severity: "HIGH"
+    detection_method: "error_message_match"
+    root_cause: |
+      MCP server process lacks permissions to access
+      required files or directories. May occur on
+      Windows with restrictive security policies.
+    fix_strategy: "fix_permissions"
+    auto_fix: true
+    retry_count: 1
+    estimated_fix_duration_ms: 3000
+    fix_steps:
+      - "Identify file/directory causing permission error"
+      - "Check if user has read/write access"
+      - "Attempt to grant permissions (if safe)"
+      - "Fallback: Suggest running VS Code as admin"
+    success_rate: 0.70
+
+# Fix Strategies Configuration
+fix_strategies:
+  restart_mcp_server:
+    description: "Kill and restart MCP server process"
+    safe: true
+    requires_user_confirmation: false
+    platforms: ["windows", "macos", "linux"]
+    
+  reconfigure_python_path:
+    description: "Reconfigure Python paths and reload VS Code"
+    safe: true
+    requires_user_confirmation: false
+    platforms: ["windows", "macos", "linux"]
+    
+  fix_permissions:
+    description: "Fix file permissions for MCP access"
+    safe: true
+    requires_user_confirmation: true  # May modify file system
+    platforms: ["windows", "macos", "linux"]
+
+# Telemetry Configuration
+telemetry:
+  enabled: true
+  log_path: ".cortex/mcp-self-healing.log"
+  max_log_size_mb: 10
+  rotation_count: 5
+  metrics:
+    - "issue_detection_count"
+    - "auto_fix_success_count"
+    - "auto_fix_failure_count"
+    - "retry_count"
+    - "average_fix_duration_ms"

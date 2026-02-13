@@ -255,7 +255,7 @@ class TestCortexLens:
         tool = CortexLens()
         result = run_async(tool.execute(
             operation="analyze",
-            target="cortex/mcp/v2/",
+            target="cortex/mcp/",
             depth="standard",
         ))
         assert result.success is True
@@ -359,7 +359,7 @@ class TestCortexValidate:
         tool = CortexValidate()
         result = run_async(tool.execute(
             operation="compliance",
-            target="cortex/mcp/v2/",
+            target="cortex/mcp/",
         ))
         assert result.success is True
         assert "checks" in result.data

@@ -34,9 +34,9 @@ Unified response format for **all CORTEX operations** across modes: PRE-FLIGHT, 
 ### Progress Bar Format (ONLY OUTPUT)
 
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 📋 {Phase Name}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 [████████░░] 80% {Current Stage}
 ├─ ✅ S1: {name} ({n} tests)
@@ -45,27 +45,27 @@ Unified response format for **all CORTEX operations** across modes: PRE-FLIGHT, 
 └─ ⚪ S4: {name} (pending)
 
 Tests: {passed}/{total} | Coverage: {pct}%
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ```
 
 ### Completion Summary (FINAL OUTPUT)
 
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ✅ {Phase Name}: COMPLETE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 [██████████] 100% | {n}/{n} tests | {pct}% coverage
 
 Git: {commit_hash} "{commit_message}"
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ```
 
 ### Error Report (ON FAILURE)
 
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 🔴 {Phase Name}: BLOCKED at {Stage}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 [████░░░░░░] 40% | {passed}/{total} tests | {failures} failures
 
 Error: {error_message}
@@ -73,7 +73,7 @@ Error: {error_message}
   - Actual: {actual}
 
 Fix: {fix_suggestion}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 ```
 
 ### FORBIDDEN in Silent Mode
@@ -88,7 +88,298 @@ Fix: {fix_suggestion}
 ---
 
 
-## 🖥️ Chat UI Rendering Rules
+## � COMPLETION RESPONSE TEMPLATE (SSOT)
+
+**Authority:** This section is the SINGLE SOURCE OF TRUTH for completion response formatting.  
+**Scope:** All WAVE/PHASE/TRACK completion responses across all modes.  
+**Enforcement:** Prompt files reference this section (no duplicate examples).
+
+### Box Separator Rules (CRITICAL)
+
+**Character:** `-` (regular dash/hyphen)  
+**Count:** Exactly **40 characters** per line  
+**Placement:** Before and after major sections  
+**Rendering:** Should appear as continuous horizontal line in Copilot Chat (fits display width)
+
+**Example:**
+```markdown
+----------------------------------------
+```
+
+**Validation:**
+```python
+# Python check
+line = "-" * 40
+assert len(line) == 40
+assert all(c == '-' for c in line)
+```
+
+### Header Hierarchy (MANDATORY)
+
+**Structure:**
+```
+Box Separator (top)
+  ↓
+Title (bold or emoji, NO ## header)
+  ↓
+Box Separator (bottom)
+  ↓
+Content with ### Track headers
+  ↓
+Box Separator (final)
+```
+
+**Rules:**
+1. **NO `##` headers** inside completion box (violates hierarchy)
+2. **Track sections** use `###` headers
+3. **Field labels** use `**Label:**` format (bold colon)
+4. **Single opening box** with title, not multiple ## headers
+
+### Standard Completion Template
+
+```markdown
+----------------------------------------
+✅ {WAVE/PHASE NAME} Complete
+----------------------------------------
+
+**Commits:** {hash1} → {hash2}
+**Pushed:** origin/CORTEX
+**Duration:** ~{time} total
+
+**Metrics:**
+
+| Metric | Before | After | Result |
+|--------|--------|-------|--------|
+| {metric1} | {val} | {val} | {status} ✅ |
+| {metric2} | {val} | {val} | {status} ✅ |
+
+----------------------------------------
+
+### Track 1: {Track Name} ✅
+
+**Files Modified:**
+- {file1} → {action}
+- {file2} → {action}
+
+**Results:**
+- Tests: {n}/{n} passing ✅
+- Coverage: {pct}%
+- Impact: {description}
+
+----------------------------------------
+
+### Track 2: {Track Name} ✅
+
+**Deliverables:**
+- {deliverable1} ({n} lines)
+- {deliverable2} ({n} lines)
+
+**Key Changes:**
+- {change1}
+- {change2}
+
+**Impact:**
+- {impact1}
+- {impact2}
+
+----------------------------------------
+```
+
+### Field Label Standards
+
+**Format:** `**Label:**` (bold with colon, space after colon)
+
+**Examples:**
+```markdown
+✅ CORRECT:
+**Commits:** abc123 → def456
+**Pushed:** origin/CORTEX
+**Duration:** ~1 hour
+
+❌ WRONG:
+Commits: abc123 → def456        (not bold)
+**Commits**: abc123 → def456    (colon inside bold)
+**Commits:**abc123 → def456     (no space after colon)
+Commits - abc123 → def456       (wrong separator)
+```
+
+**Standard Labels:**
+- `**Commits:**`
+- `**Pushed:**`
+- `**Duration:**`
+- `**Files Modified:**`
+- `**Results:**`
+- `**Deliverables:**`
+- `**Key Changes:**`
+- `**Impact:**`
+- `**Metrics:**`
+- `**Tests:**`
+- `**Coverage:**`
+
+### Status Icon Standards
+
+**Emoji Set:**
+- ✅ `✅` = Complete / Success / Passing
+- 🔵 `🔵` = In Progress / Active
+- ⚪ `⚪` = Pending / Planned
+- 🔴 `🔴` = Blocked / Failed / Critical
+- 🟡 `🟡` = Warning / Degraded
+
+**Usage:**
+```markdown
+✅ CORRECT:
+- Tests: 17/17 passing ✅
+- Coverage: 99% ✅
+- Track 1: Version Cleanup ✅
+
+❌ WRONG:
+- Tests: 17/17 passing (passed)     (text instead of emoji)
+- Coverage: 99%                     (no status indicator)
+- Track 1: Version Cleanup [done]   (inconsistent format)
+```
+
+### Spacing Rules
+
+**Between Sections:**
+- 1 blank line before/after box separators
+- 1 blank line before `###` track headers
+- 1 blank line after `**Field:**` labels before content
+- NO blank lines inside bullet lists
+- NO blank lines between table rows
+
+**Example:**
+```markdown
+----------------------------------------
+[1 blank line above]
+### Track 1: Example ✅
+[1 blank line below]
+**Files Modified:**
+[1 blank line below]
+- file1.py
+- file2.py
+[NO blank lines between bullets]
+[1 blank line below before next box]
+----------------------------------------
+```
+
+### Single-Track Completion Template
+
+```markdown
+----------------------------------------
+✅ {OPERATION NAME} Complete
+----------------------------------------
+
+**Commit:** {hash}
+**Pushed:** origin/CORTEX
+
+**Changes:**
+- {change1}
+- {change2}
+- {change3}
+
+**Results:**
+- Tests: {n}/{n} passing ✅
+- Files: {n} modified
+- Impact: {description}
+
+----------------------------------------
+```
+
+### Multi-Track Wave Completion Template
+
+```markdown
+----------------------------------------
+✅ {WAVE NAME} Complete
+----------------------------------------
+
+**Commits:** {hash1} → {hash2} → {hash3}
+**Pushed:** origin/CORTEX
+**Duration:** ~{time} total
+
+----------------------------------------
+
+### Track 1: {Name} ✅
+
+**Summary:** {one-line description}
+
+**Changes:**
+- {change1}
+- {change2}
+
+**Metrics:**
+- Tests: {n}/{n} passing ✅
+- Coverage: {pct}%
+
+----------------------------------------
+
+### Track 2: {Name} ✅
+
+**Summary:** {one-line description}
+
+**Deliverables:**
+- {deliverable1} ({n} lines)
+- {deliverable2} ({n} lines)
+
+**Impact:**
+- {impact1}
+- {impact2}
+
+----------------------------------------
+
+### Track 3: {Name} ✅
+
+**Summary:** {one-line description}
+
+**ROI Analysis:**
+
+| Metric | Before | After | Improvement |
+|--------|--------|-------|-------------|
+| {metric1} | {val} | {val} | {pct}% ✅ |
+| {metric2} | {val} | {val} | {pct}% ✅ |
+
+----------------------------------------
+```
+
+### Common Violations & Fixes
+
+| Violation | Example (WRONG) | Fix (CORRECT) |
+|-----------|-----------------|---------------|
+| **Box length wrong** | `━━━━━━` (6 chars) | `━━━━━━━━━━...` (60 chars) |
+| **## after opening box** | `## Track 1` | `### Track 1: Name ✅` |
+| **Field label not bold** | `Commits: abc` | `**Commits:** abc` |
+| **No status emoji** | `Track 1: Name` | `Track 1: Name ✅` |
+| **Wrong spacing** | 0 or 2+ lines | 1 blank line (per rules) |
+| **Inline git info** | `Commits: abc Pushed: origin` | Separate lines with labels |
+
+### Validation Checklist
+
+Before marking response complete, verify:
+
+- [ ] Box separators exactly 60 `━` characters
+- [ ] Title inside opening box (no ## header)
+- [ ] Track sections use ### headers
+- [ ] All field labels use `**Label:**` format
+- [ ] Status emojis consistent (✅🔵⚪🔴🟡)
+- [ ] Spacing follows 1-blank-line rules
+- [ ] Tables use proper markdown format
+- [ ] Bullet lists use `-` consistently
+- [ ] No text descriptions during silent execution
+- [ ] Final box separator closes response
+
+### Cross-Reference
+
+**Prompt files must reference this section as SSOT:**
+- `cortex-architect.prompt.md` § Visual Feedback Pattern
+- `cortex-architect.prompt.md` § Response Header § Completion Format
+- `CORTEX.prompt.md` § Response Header (Mandatory)
+
+**DO NOT duplicate examples in prompt files.**  
+**Reference:** "SSOT: See response-format-standards.md § Completion Response Template"
+
+---
+
+
+## �🖥️ Chat UI Rendering Rules
 
 ### 📏 Spacing Guidelines
 

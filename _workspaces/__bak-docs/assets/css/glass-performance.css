@@ -1,0 +1,142 @@
+/**
+ * CORTEX Glassmorphism - Performance Optimizations
+ * Auto-generated performance hints for production deployment.
+ */
+
+/* ============================================
+   GPU ACCELERATION
+   ============================================
+   Force GPU acceleration for glassmorphism elements
+   Reduces CPU rendering overhead for backdrop-filter
+*/
+
+.glass-card,
+.glass-panel,
+.panel-tetris,
+.panel-intro,
+.panel-compact-cards,
+.panel-grid-cards,
+.panel-hero-glass,
+.panel-sidebar-glass,
+.panel-modal-glass,
+.panel-toast-glass,
+.panel-neon-glass {
+    /* Force GPU layer */
+    transform: translateZ(0);
+    /* Optimize rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   MOBILE OPTIMIZATION
+   ============================================
+   Reduce backdrop-filter intensity on mobile
+   30% blur reduction improves performance
+*/
+
+@media (max-width: 768px) {
+    :root {
+        /* Reduce blur for mobile performance */
+        --glass-blur-sm: 7px !important;   /* was 10px */
+        --glass-blur-md: 14px !important;  /* was 20px */
+        --glass-blur-lg: 21px !important;  /* was 30px */
+    }
+    
+    /* Disable blob animations on mobile */
+    .panel-blob-glass,
+    .liquid-blob {
+        animation: none;
+    }
+    
+    /* Simplify shadows */
+    .glass-card,
+    .glass-panel,
+    [class*="panel-"] {
+        box-shadow: var(--shadow-glass-sm) !important;
+    }
+}
+
+/* ============================================
+   LOW-END DEVICE FALLBACK
+   ============================================
+   Detect low-performance devices and disable effects
+   Uses media query for devices with reduced performance
+*/
+
+@media (prefers-reduced-motion: reduce) {
+    /* Disable all backdrop-filters */
+    * {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+    
+    /* Use solid backgrounds instead */
+    .glass-card,
+    .glass-panel,
+    [class*="panel-"] {
+        background: var(--glass-bg-fallback, rgba(10, 15, 30, 0.95)) !important;
+    }
+}
+
+/* ============================================
+   CONTAINMENT OPTIMIZATION
+   ============================================
+   Use CSS containment to isolate repaint areas
+   Prevents full-page repaints on glass element changes
+*/
+
+.glass-card,
+.glass-panel,
+[class*="panel-"] {
+    /* Isolate layout calculations */
+    contain: layout style paint;
+}
+
+/* Modal/overlay should allow size changes */
+.panel-modal-glass,
+.glass-modal-overlay {
+    contain: layout style;
+}
+
+/* ============================================
+   COMPOSITOR HINTS
+   ============================================
+   Hint to browser compositor for optimized rendering
+*/
+
+.glass-hover-lift:hover,
+.glass-card:hover,
+[class*="panel-"]:hover {
+    /* Prepare for animation */
+    will-change: transform, box-shadow;
+}
+
+/* Remove hint after hover */
+.glass-hover-lift,
+.glass-card,
+[class*="panel-"] {
+    will-change: auto;
+}
+
+/* ============================================
+   CRITICAL CSS LOADING
+   ============================================
+   Preload backdrop-filter support detection
+*/
+
+@supports (backdrop-filter: blur(10px)) {
+    /* Browser supports backdrop-filter */
+    .glass-supported {
+        --glass-supported: 1;
+    }
+}
+
+@supports not (backdrop-filter: blur(10px)) {
+    /* Fallback for unsupported browsers */
+    .glass-card,
+    .glass-panel,
+    [class*="panel-"] {
+        background: var(--glass-bg-fallback, rgba(10, 15, 30, 0.95)) !important;
+    }
+}

@@ -4720,4 +4720,3 @@ class MasterOrchestrator(IOrchestrator):
                 details={"error": str(e)}
             )
             return Err(f"Tech intelligence readiness check failed: {str(e)}")
-

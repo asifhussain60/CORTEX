@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="cortex_challenge - Security Gates and Threat Blocking" name="description"/>
+    <title>cortex_challenge | MCP Tools</title>
+    <link href="../assets/images/CORTEX-logo-64.png" rel="icon" type="image/png"/>
+    <link href="../assets/css/main.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" rel="stylesheet"/>
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1>⚔️ cortex_challenge</h1>
+            <p class="subtitle">Security Gates & Threat Blocking (Phase 8.3)</p>
+        </header>
+
+        <section class="glass-card">
+            <h2>Overview</h2>
+            <p><code>cortex_challenge</code> enforces hard security gates that prevent critical vulnerabilities from progressing. When LENS detects CWE threats, ChallengeEngine blocks execution until explicit override approval is provided.</p>
+        </section>
+
+        <section class="glass-card">
+            <h2>Function Signature</h2>
+            <pre><code>
+cortex_challenge(
+    threat_id: str,
+    action: str = "EVALUATE",
+    override_reason: Optional[str] = None
+) -> Dict[str, Any]
+            </code></pre>
+        </section>
+
+        <section class="glass-card">
+            <h2>Parameters</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>threat_id</code></td>
+                        <td>string</td>
+                        <td>Threat identifier from LENS security analysis</td>
+                    </tr>
+                    <tr>
+                        <td><code>action</code></td>
+                        <td>string</td>
+                        <td>"EVALUATE" (default), "OVERRIDE", "BLOCK", "REMEDIATE"</td>
+                    </tr>
+                    <tr>
+                        <td><code>override_reason</code></td>
+                        <td>string (optional)</td>
+                        <td>Justification for override (required if action=OVERRIDE)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="glass-card">
+            <h2>Actions</h2>
+            <ul>
+                <li><strong>EVALUATE:</strong> Check threat severity and get recommendations</li>
+                <li><strong>OVERRIDE:</strong> Explicitly approve proceeding despite threat (requires justification)</li>
+                <li><strong>BLOCK:</strong> Permanently block this threat pattern</li>
+                <li><strong>REMEDIATE:</strong> Get automated fix suggestions</li>
+            </ul>
+        </section>
+
+        <section class="glass-card">
+            <h2>Returns</h2>
+            <pre><code>
+{
+    "status": "blocked" | "approved" | "remediated",
+    "threat_id": "THREAT-abc123",
+    "cwe": "CWE-89",
+    "severity": "CRITICAL",
+    "recommendation": {
+        "action": "Use parameterized queries",
+        "code_example": "cursor.execute('SELECT * FROM users WHERE id = ?', (user_id,))",
+        "references": [
+            "OWASP Top 10: A03 Injection",
+            "CWE-89: SQL Injection"
+        ]
+    },
+    "override_granted": false,
+    "override_reason": null,
+    "audit_logged": true
+}
+            </code></pre>
+        </section>
+
+        <section class="glass-card">
+            <h2>Example Usage</h2>
+            <pre><code>
+# Step 1: LENS detects SQL injection
+lens_result = cortex_lens_analyze("api/users.py", include_security=True)
+threat_id = lens_result['security_analysis']['threats'][0]['id']
+
+# Step 2: Evaluate threat
+challenge_result = cortex_challenge(
+    threat_id=threat_id,
+    action="EVALUATE"
+)
+# Returns: status="blocked", recommendation with fix
+
+# Step 3a: Apply automated remediation
+remediation = cortex_challenge(
+    threat_id=threat_id,
+    action="REMEDIATE"
+)
+# Returns: code patches to fix vulnerability
+
+# Step 3b: OR override with justification (NOT RECOMMENDED)
+override = cortex_challenge(
+    threat_id=threat_id,
+    action="OVERRIDE",
+    override_reason="Legacy code, scheduled for refactor in Sprint 23"
+)
+# Returns: override_granted=true, audit_logged=true
+            </code></pre>
+        </section>
+
+        <section class="glass-card">
+            <h2>Security Gates (Phase 8.3)</h2>
+            <p>ChallengeEngine enforces these severity-based gates:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Severity</th>
+                        <th>CWE Patterns</th>
+                        <th>Default Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>CRITICAL</td>
+                        <td>CWE-94 (Code Injection), CWE-89 (SQL Injection), CWE-78 (Command Injection)</td>
+                        <td>BLOCK (requires override)</td>
+                    </tr>
+                    <tr>
+                        <td>HIGH</td>
+                        <td>CWE-95 (Deserialization), CWE-327 (Weak Crypto)</td>
+                        <td>WARN + Recommendation</td>
+                    </tr>
+                    <tr>
+                        <td>MEDIUM</td>
+                        <td>CWE-22 (Path Traversal)</td>
+                        <td>RECOMMENDATION</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="glass-card">
+            <h2>Audit Trail</h2>
+            <p>All challenge actions are logged to EnhancedAuditLogger with category <code>GOVERNANCE</code>:</p>
+            <pre><code>
+# Audit entry example
+{
+    "timestamp": "2026-02-01T12:00:00Z",
+    "category": "GOVERNANCE",
+    "action": "CHALLENGE_OVERRIDE",
+    "threat_id": "THREAT-abc123",
+    "cwe": "CWE-89",
+    "user": "asif.codenstein",
+    "reason": "Legacy code, scheduled for refactor",
+    "hash_chain": "abc123...def456"
+}
+            </code></pre>
+        </section>
+
+        <footer class="page-footer">
+            <a href="lens-analyze.html" class="btn-back">← lens_analyze</a>
+            <a href="index.html" class="btn-secondary">All MCP Tools</a>
+        </footer>
+    </div>
+</body>
+</html>

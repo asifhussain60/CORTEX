@@ -1,0 +1,509 @@
+---
+enhancement_id: ENH-100
+title: Real-Time Feedback Hub - Universal Progress Streaming
+status: PLANNED
+priority: P1-HIGH
+created: 2026-02-13
+author: Asif Hussain
+orchestrator: LENSSynthesis
+
+# ============================================================================
+# ARCHITECTURAL REVIEW FINDINGS
+# ============================================================================
+
+current_state:
+  discovered_components:
+    - pytest_progress_plugin: Terminal progress reporter (isolated)
+    - dashboard_service: Manual progress aggregation (isolated)
+    - progress_tracker: Phase completion monitoring (isolated)
+    - feedback_agent: Post-execution feedback collection (isolated)
+    - real_time_dashboard: Live metrics display (isolated)
+    - event_bus: Basic pub-sub (feature registry only)
+    - orchestrator_event_bus: Extended event bus (orchestrators only)
+  
+  critical_gaps:
+    - no_universal_feedback_channel: Each component has own output mechanism
+    - no_test_integration: Pytest plugin writes stdout with no consumers
+    - no_process_abstraction: Each long-running process implements own progress
+    - isolated_components: Dashboard, tracker, feedback agent don't communicate
+    - post_execution_only: Feedback collected after completion, not during
+    - single_purpose_buses: EventBus limited to specific domains
+  
+  architectural_debt:
+    - three_progress_systems: Pytest, dashboard, tracker all do similar work
+    - five_feedback_mechanisms: Plugin, service, tracker, agent, dashboard
+    - tight_coupling: Components know about specific consumers
+    - no_replay: Cannot reconstruct progress history
+    - no_multiplexing: Single producer can't feed multiple consumers
+
+# ============================================================================
+# RECOMMENDED SOLUTION: FEEDBACK HUB ARCHITECTURE
+# ============================================================================
+
+architecture:
+  name: UniversalFeedbackHub
+  pattern: Event-Driven Pub-Sub with Replay
+  
+  core_responsibilities:
+    - accept_events: Any process can emit progress/status/error events
+    - route_events: Distribute to all registered consumers simultaneously
+    - persist_history: Store event stream for replay and debugging
+    - provide_adapters: Simple injection interface for any process type
+    - guarantee_delivery: Ensure consumers receive events (with fallback)
+    - enable_discovery: Consumers can query hub for available event sources
+  
+  key_principles:
+    - zero_coupling: Producers don't know about consumers
+    - pluggable: Any process can inject hub in 1-2 lines
+    - optional: Graceful degradation if hub unavailable
+    - lightweight: Minimal overhead, async-first
+    - testable: Easy to verify events with mock consumers
+
+# ============================================================================
+# COMPONENTS BREAKDOWN
+# ============================================================================
+
+components:
+  
+  1_feedback_hub_core:
+    file: cortex/infrastructure/feedback_hub.py
+    classes:
+      - FeedbackHub: Main event coordinator
+      - EventStream: Per-source event queue
+      - ConsumerRegistry: Manages subscribers
+      - EventStore: Persistent event history
+    
+    features:
+      - thread_safe: RLock protection for concurrent access
+      - async_dispatch: Non-blocking event delivery
+      - backpressure: Queue limits prevent memory overflow
+      - health_check: Monitor consumer responsiveness
+      - replay: Query past events by time/source/type
+  
+  2_event_models:
+    file: cortex/models/feedback_events.py
+    types:
+      - ProgressEvent: Percentage, items, ETA
+      - StatusEvent: State changes (started, paused, complete)
+      - ErrorEvent: Failures with context
+      - MetricEvent: Performance data (duration, throughput)
+      - AlertEvent: Warnings requiring attention
+    
+    metadata:
+      - source_id: Who generated event
+      - timestamp: When event occurred
+      - correlation_id: Link related events
+      - sequence_number: Order within source
+  
+  3_process_adapters:
+    file: cortex/infrastructure/feedback_adapters.py
+    adapters:
+      - PytestAdapter: Inject into pytest execution
+      - OrchestratorAdapter: Wrap orchestrator methods
+      - TestSuiteAdapter: Batch test execution
+      - MigrationAdapter: Long-running migrations
+      - BuildAdapter: CI/CD pipelines
+    
+    interface:
+      - emit_progress: Report completion percentage
+      - emit_status: Report state change
+      - emit_error: Report failure
+      - emit_metric: Report performance data
+  
+  4_consumer_implementations:
+    file: cortex/infrastructure/feedback_consumers.py
+    consumers:
+      - TerminalConsumer: ASCII progress bars (like pytest plugin)
+      - DashboardConsumer: Feed real-time dashboard
+      - MetricsConsumer: Export to Prometheus/OpenTelemetry
+      - LogConsumer: Write to structured logs
+      - TestReporterConsumer: Generate test reports
+      - AlertConsumer: Trigger escalation alerts
+    
+    capabilities:
+      - filtering: Subscribe to specific event types
+      - throttling: Limit update frequency
+      - buffering: Batch events for efficiency
+      - fallback: Handle missing hub gracefully
+
+# ============================================================================
+# MIGRATION STRATEGY
+# ============================================================================
+
+migration:
+  
+  phase_1_foundation:
+    tasks:
+      - build_feedback_hub: Core hub with event routing
+      - build_event_models: Typed event classes
+      - build_test_adapter: Pytest integration
+      - build_terminal_consumer: ASCII progress display
+    
+    validation:
+      - hub_routes_events: Events reach consumers
+      - pytest_emits_events: Tests report progress to hub
+      - terminal_displays: Progress bars work like current plugin
+      - graceful_fallback: Works without hub
+  
+  phase_2_integration:
+    tasks:
+      - migrate_pytest_plugin: Use hub instead of stdout
+      - add_dashboard_consumer: Feed existing dashboard service
+      - add_orchestrator_adapter: Inject into orchestrators
+      - add_metrics_consumer: Export to observability
+    
+    validation:
+      - pytest_feeds_dashboard: Dashboard shows test progress
+      - orchestrators_emit: Long operations report progress
+      - metrics_exported: Prometheus receives data
+      - consumers_concurrent: Multiple consumers work simultaneously
+  
+  phase_3_consolidation:
+    tasks:
+      - retire_isolated_systems: Remove duplicate progress mechanisms
+      - unify_feedback_agent: Use hub for real-time collection
+      - consolidate_progress_tracker: Consume from hub
+      - integrate_event_bus: Bridge orchestrator events to hub
+    
+    validation:
+      - single_source_truth: One event stream
+      - backward_compatible: Existing code still works
+      - performance_maintained: No latency regression
+      - full_coverage: All long operations report
+  
+  phase_4_enhancement:
+    tasks:
+      - add_replay: Query historical events
+      - add_correlation: Link related events
+      - add_filtering: Advanced consumer queries
+      - add_mcp_exposure: Expose hub via MCP tool
+    
+    validation:
+      - replay_works: Can reconstruct past sessions
+      - correlation_tracks: Related events linked
+      - mcp_accessible: External tools can consume
+      - audit_trail: Complete event history
+
+# ============================================================================
+# TEST STRATEGY (RED-GREEN-REFACTOR)
+# ============================================================================
+
+test_strategy:
+  
+  red_phase_tests:
+    file: tests/unit/infrastructure/test_feedback_hub.py
+    
+    core_hub_tests:
+      - test_hub_initializes: Hub instance creation
+      - test_hub_accepts_events: Can receive events
+      - test_hub_routes_to_consumers: Events reach subscribers
+      - test_hub_handles_no_consumers: Graceful when empty
+      - test_hub_concurrent_safe: Thread-safe operations
+      - test_hub_backpressure: Handles queue overflow
+      - test_hub_health_check: Monitor consumer health
+    
+    adapter_tests:
+      - test_pytest_adapter_emits: Pytest tests emit events
+      - test_adapter_tracks_progress: Progress calculation works
+      - test_adapter_reports_errors: Failures captured
+      - test_adapter_graceful_fallback: Works without hub
+      - test_adapter_minimal_overhead: Performance impact <5%
+    
+    consumer_tests:
+      - test_terminal_displays_progress: ASCII bars render
+      - test_terminal_shows_failures: Errors highlighted
+      - test_terminal_calculates_eta: Time estimates accurate
+      - test_dashboard_updates_live: Dashboard receives events
+      - test_metrics_exports: Prometheus format correct
+    
+    integration_tests:
+      - test_pytest_to_terminal: End-to-end pytest → display
+      - test_multiple_consumers: Hub → 3+ consumers simultaneously
+      - test_event_ordering: Sequence preserved
+      - test_error_recovery: Failed consumer doesn't block others
+      - test_replay_reconstruction: Historical events queryable
+  
+  acceptance_criteria:
+    display_requirements:
+      - terminal_shows_live_progress: Progress bar updates during test run
+      - terminal_shows_test_count: "Running test 42/100"
+      - terminal_shows_pass_fail: "✓ 95 passed, ✗ 5 failed"
+      - terminal_shows_duration: "Elapsed: 12.5s, ETA: 2.3s"
+      - terminal_shows_current_test: "test_user_authentication..."
+    
+    functionality_requirements:
+      - zero_config: Works with pytest --progress flag
+      - multiple_outputs: Terminal + dashboard + logs simultaneously
+      - real_time: <100ms latency from event to display
+      - thread_safe: Concurrent test execution supported
+      - history: Last 1000 events stored for replay
+    
+    quality_requirements:
+      - 95_percent_coverage: Core hub + adapters
+      - no_flaky_tests: All tests deterministic
+      - performance: <5% overhead vs current system
+      - backward_compatible: Existing dashboards still work
+
+# ============================================================================
+# MCP TOOL EXPOSURE
+# ============================================================================
+
+mcp_tool:
+  name: cortex_feedback_stream
+  description: Subscribe to real-time progress events from long-running operations
+  
+  operations:
+    - subscribe: Get live event stream
+    - query_history: Retrieve past events
+    - list_sources: Discover active event producers
+    - get_stats: Hub health and performance metrics
+  
+  use_cases:
+    - external_monitoring: CI/CD dashboards consume events
+    - debugging: Replay test execution for failure analysis
+    - analytics: Track test performance trends
+    - alerts: Trigger notifications on specific events
+
+# ============================================================================
+# CHALLENGE & RECOMMENDATIONS
+# ============================================================================
+
+architectural_challenge:
+  current_vision_assessment:
+    strength: Correct identification that feedback is scattered
+    weakness: Proposed hub might be too generic, losing domain context
+    risk: Over-engineering if most operations don't need streaming
+  
+  counter_proposal:
+    option_a_hybrid:
+      approach: Keep specialized collectors, add streaming layer
+      rationale: Rich domain logic (test stats, orchestrator metrics) stays in collectors
+      benefit: Best of both worlds - streaming + domain expertise
+      cost: Two systems to maintain (hub + collectors)
+    
+    option_b_hub_only:
+      approach: Single hub, consumers add domain logic
+      rationale: Simpler architecture, cleaner separation
+      benefit: One source of truth, easier debugging
+      cost: Lose existing specialized feedback logic
+    
+    recommendation: OPTION A (Hybrid)
+      reasoning:
+        - existing_investment: Dashboard service has valuable logic
+        - gradual_migration: Lower risk than rewrite
+        - specialization: Some domains (tests) need rich context
+        - streaming: Hub adds real-time layer existing systems lack
+      
+      implementation:
+        - hub_is_transport: Just moves events, doesn't analyze
+        - consumers_are_smart: Domain logic lives in consumers
+        - collectors_consume: Existing agents become hub consumers
+        - gradual_rollout: One process type at a time
+
+  final_recommendation:
+    build: Lightweight feedback hub (150-200 LOC core)
+    reuse: Keep dashboard service, progress tracker, feedback agent
+    integrate: Make existing components consume from hub
+    expose: Add MCP tool for external consumption
+    test: Focus on display verification with dummy data
+    
+    success_metric: "Pytest progress visible in terminal + dashboard simultaneously with <100ms latency"
+
+# ============================================================================
+# IMPLEMENTATION PRIORITIES
+# ============================================================================
+
+priorities:
+  p0_critical:
+    - feedback_hub_core: Event routing and consumer registry
+    - pytest_adapter: Tests emit progress events
+    - terminal_consumer: ASCII display like current plugin
+    - test_suite: Verify terminal display with dummy data
+  
+  p1_high:
+    - dashboard_consumer: Feed real-time dashboard
+    - orchestrator_adapter: Long operations report progress
+    - event_models: Typed event classes
+    - integration_tests: Multi-consumer scenarios
+  
+  p2_medium:
+    - metrics_consumer: Prometheus export
+    - replay_capability: Historical event query
+    - mcp_tool: External consumption
+    - migration_docs: Usage guides
+  
+  p3_nice_to_have:
+    - correlation_tracking: Link related events
+    - filtering_dsl: Advanced consumer queries
+    - performance_dashboard: Hub health metrics
+    - auto_discovery: Find all event sources
+
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+
+success_criteria:
+  technical:
+    - hub_routes_events: ✓ Events reach all consumers
+    - pytest_integrated: ✓ Tests emit to hub
+    - terminal_displays: ✓ Progress visible like current plugin
+    - dashboard_updates: ✓ Real-time dashboard works
+    - thread_safe: ✓ Concurrent access safe
+    - performance: ✓ <5% overhead
+  
+  functional:
+    - zero_config: ✓ Works with --progress flag
+    - multiple_consumers: ✓ 3+ consumers simultaneously
+    - graceful_fallback: ✓ Works without hub
+    - error_handling: ✓ Failed consumers don't block
+    - history: ✓ Last 1000 events stored
+  
+  quality:
+    - test_coverage: ✓ 95%+ for hub + adapters
+    - no_flaky: ✓ All tests deterministic
+    - documented: ✓ Usage guide + architecture doc
+    - mcp_exposed: ✓ External consumption enabled
+
+# ============================================================================
+# EXECUTION PLAN
+# ============================================================================
+
+execution:
+  stage_1_analysis:
+    duration: COMPLETE
+    deliverables:
+      - architectural_review: This document
+      - gap_analysis: Current vs target state
+      - recommendation: Hybrid hub + consumers approach
+  
+  stage_2_design:
+    duration: 1 session
+    tasks:
+      - finalize_event_models: Event type hierarchy
+      - design_hub_api: Public interface
+      - design_adapter_interface: Process injection pattern
+      - design_consumer_interface: Subscription pattern
+    deliverables:
+      - design_doc: Detailed component specs
+      - interface_definitions: API contracts
+  
+  stage_3_implementation:
+    duration: 2-3 sessions
+    tasks:
+      - build_hub_core: Event routing (RED → GREEN)
+      - build_pytest_adapter: Test integration (RED → GREEN)
+      - build_terminal_consumer: Display component (RED → GREEN)
+      - integration_testing: End-to-end validation
+    deliverables:
+      - working_hub: Core functionality
+      - pytest_integration: Tests emit events
+      - terminal_display: Progress visible
+      - test_suite: 95%+ coverage
+  
+  stage_4_migration:
+    duration: 1-2 sessions
+    tasks:
+      - migrate_dashboard: Consume from hub
+      - migrate_orchestrators: Inject adapters
+      - retire_isolated: Remove duplicate systems
+      - documentation: Usage guides
+    deliverables:
+      - unified_system: Single event stream
+      - backward_compatible: Existing code works
+      - docs: Migration guide
+  
+  stage_5_enhancement:
+    duration: 1 session (optional)
+    tasks:
+      - add_mcp_tool: External consumption
+      - add_replay: Historical queries
+      - performance_tuning: Optimize hot paths
+    deliverables:
+      - mcp_exposed: External access
+      - replay_working: Event history queryable
+      - performance_report: Benchmark results
+
+# ============================================================================
+# FILES TO CREATE
+# ============================================================================
+
+files_to_create:
+  implementation:
+    - cortex/infrastructure/feedback_hub.py: Core hub (200 LOC)
+    - cortex/models/feedback_events.py: Event models (150 LOC)
+    - cortex/infrastructure/feedback_adapters.py: Process adapters (300 LOC)
+    - cortex/infrastructure/feedback_consumers.py: Consumer implementations (400 LOC)
+  
+  testing:
+    - tests/unit/infrastructure/test_feedback_hub.py: Hub tests (500 LOC)
+    - tests/unit/infrastructure/test_feedback_adapters.py: Adapter tests (300 LOC)
+    - tests/unit/infrastructure/test_feedback_consumers.py: Consumer tests (300 LOC)
+    - tests/integration/test_feedback_hub_integration.py: E2E tests (400 LOC)
+  
+  mcp:
+    - cortex/mcp/tools/feedback_stream_tool.py: MCP exposure (200 LOC)
+    - tests/unit/mcp/tools/test_feedback_stream_tool.py: MCP tests (150 LOC)
+  
+  documentation:
+    - docs/FEEDBACK-HUB-ARCHITECTURE.md: Architecture guide
+    - docs/FEEDBACK-HUB-USAGE.md: User guide
+    - docs/FEEDBACK-HUB-MIGRATION.md: Migration guide
+
+total_estimated_loc: ~2900 LOC (implementation + tests)
+
+# ============================================================================
+# RISKS & MITIGATION
+# ============================================================================
+
+risks:
+  performance_overhead:
+    description: Event routing adds latency
+    probability: MEDIUM
+    impact: LOW
+    mitigation: Async dispatch, benchmark vs current system, <5% threshold
+  
+  consumer_failures:
+    description: One consumer blocks others
+    probability: LOW
+    impact: MEDIUM
+    mitigation: Isolated error handling, dead letter queue, timeout
+  
+  migration_complexity:
+    description: Existing systems hard to integrate
+    probability: MEDIUM
+    impact: MEDIUM
+    mitigation: Gradual rollout, feature flags, backward compatibility
+  
+  over_engineering:
+    description: Hub too complex for actual needs
+    probability: LOW
+    impact: HIGH
+    mitigation: Start minimal (core routing only), add features as needed
+
+# ============================================================================
+# APPROVAL & NEXT STEPS
+# ============================================================================
+
+approval:
+  status: PENDING
+  reviewer: Asif Hussain
+  questions:
+    - hybrid_vs_hub_only: Prefer hybrid approach or pure hub?
+    - pytest_priority: Is pytest integration highest priority?
+    - mcp_requirement: Is external consumption required now?
+    - timeline: Target completion within 3-5 sessions?
+
+next_steps:
+  immediate:
+    - review_plan: Approve architecture and approach
+    - answer_questions: Clarify priorities and requirements
+    - approve_execution: Authorize implementation start
+  
+  after_approval:
+    - create_design_doc: Detailed component specifications
+    - create_test_plan: RGR test suite outline
+    - start_red_phase: Write failing tests first
+    - implement_green: Make tests pass
+    - refactor: Optimize and clean
+
+---

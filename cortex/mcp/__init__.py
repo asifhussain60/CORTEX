@@ -19,11 +19,8 @@ from cortex.mcp.server import MCPServer, MCPRequest, MCPResponse
 from cortex.mcp.base import Tool, ToolResult, ToolCategory
 from cortex.mcp.registry import ToolRegistry, get_registry
 
-MCPServerV2 = MCPServer
-
 __all__ = [
     "MCPServer",
-    "MCPServerV2",
     "MCPRequest",
     "MCPResponse",
     "Tool",

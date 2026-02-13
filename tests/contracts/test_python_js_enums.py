@@ -91,6 +91,7 @@ class TestRiskLevelEnumAlignment(unittest.TestCase):
         actual = {member.name for member in RiskLevel}
         self.assertEqual(actual, expected)
     
+    @unittest.skip("WAVE-P: enhanced_planning_orchestrator consolidated in Wave 7 - test obsolete")
     def test_risk_level_reimport_from_planning(self) -> None:
         """Verify RiskLevel can be imported from planning orchestrator (backward compat)."""
         from cortex.orchestrators.domain.enhanced_planning_orchestrator import RiskLevel

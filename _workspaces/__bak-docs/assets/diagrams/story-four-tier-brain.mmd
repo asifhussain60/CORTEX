@@ -1,0 +1,14 @@
+graph TB
+    T0[Tier 0: SKULL<br/>Governance] --> T1[Tier 1: Working Memory<br/>70-Conv Buffer]
+    T1 --> T2[Tier 2: Knowledge Graph<br/>Pattern Learning]
+    T2 --> T3[Tier 3: Dev Context<br/>Analytics]
+    
+    T0 -.->|Enforces| Rules[TDD + Git Isolation + Safety]
+    T1 -.->|Provides| Speed[Sub-100ms Access]
+    T2 -.->|Learns| Patterns[Relationships + Semantics]
+    T3 -.->|Tracks| Metrics[Per-Repo Insights]
+    
+    style T0 fill:#ef4444
+    style T1 fill:#10b981
+    style T2 fill:#3b82f6
+    style T3 fill:#f59e0b

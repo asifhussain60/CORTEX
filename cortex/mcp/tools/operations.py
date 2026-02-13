@@ -91,17 +91,94 @@ class CortexDebug(ConsolidatedTool):
         markers = params.get("markers", [])
         log_level = params.get("log_level", "debug")
         
+        # WAVE-R Integration: Use DebugMCPTools for operations
         if operation == "inject":
-            return ToolResult(
-                success=True,
-                data={
-                    "target": target,
-                    "markers_injected": len(markers) or 5,
-                    "marker_prefix": "CORTEX_DEBUG",
-                    "message": "Debug markers injected",
-                },
-                metadata={"operation": "inject"},
-            )
+            try:
+                from cortex.mcp.tools.debug_tools import DebugMCPTools
+                from cortex.core.event_bus import EventBus
+                from cortex.orchestrators.support.debugger_orchestrator import DebuggerOrchestrator
+                
+                # Initialize infrastructure
+                event_bus = EventBus()
+                orchestrator = DebuggerOrchestrator(event_bus)
+                tools = DebugMCPTools(event_bus, orchestrator)
+                
+                # Extract marker injection parameters
+                trigger_type = params.get("trigger_type", "test_failure")
+                file_path = target or "/tmp/unknown.py"
+                line_number = params.get("line_number", 1)
+                context = params.get("context", {})
+                
+                # Inject markers via DebugMCPTools
+                result = tools.auto_inject(
+                    trigger_type=trigger_type,
+                    file_path=file_path,
+                    line_number=line_number,
+                    context=context
+                )
+                
+                return ToolResult(
+                    success=result["status"] == "success",
+                    data=result,
+                    metadata={"operation": "inject", "wave_r": True},
+                )
+            except Exception as e:
+                return ToolResult(
+                    success=False,
+                    error=f"Debug marker injection failed: {str(e)}",
+                    metadata={"operation": "inject"}
+                )
+        
+        elif operation == "list_sessions":
+            try:
+                from cortex.mcp.tools.debug_tools import DebugMCPTools
+                from cortex.core.event_bus import EventBus
+                from cortex.orchestrators.support.debugger_orchestrator import DebuggerOrchestrator
+                
+                event_bus = EventBus()
+                orchestrator = DebuggerOrchestrator(event_bus)
+                tools = DebugMCPTools(event_bus, orchestrator)
+                
+                status_filter = params.get("status_filter", "all")
+                result = tools.list_sessions(status_filter=status_filter)
+                
+                return ToolResult(
+                    success=True,
+                    data=result,
+                    metadata={"operation": "list_sessions", "wave_r": True}
+                )
+            except Exception as e:
+                return ToolResult(
+                    success=False,
+                    error=f"Session listing failed: {str(e)}",
+                    metadata={"operation": "list_sessions"}
+                )
+        
+        elif operation == "cleanup":
+            try:
+                from cortex.mcp.tools.debug_tools import DebugMCPTools
+                from cortex.core.event_bus import EventBus
+                from cortex.orchestrators.support.debugger_orchestrator import DebuggerOrchestrator
+                
+                event_bus = EventBus()
+                orchestrator = DebuggerOrchestrator(event_bus)
+                tools = DebugMCPTools(event_bus, orchestrator)
+                
+                session_id = params.get("session_id")
+                cleanup_all = params.get("cleanup_all", False)
+                result = tools.cleanup(session_id=session_id, cleanup_all=cleanup_all)
+                
+                return ToolResult(
+                    success=result["status"] == "success",
+                    data=result,
+                    metadata={"operation": "cleanup", "wave_r": True}
+                )
+            except Exception as e:
+                return ToolResult(
+                    success=False,
+                    error=f"Debug cleanup failed: {str(e)}",
+                    metadata={"operation": "cleanup"}
+                )
         
         elif operation == "capture":
             return ToolResult(
@@ -137,18 +214,6 @@ class CortexDebug(ConsolidatedTool):
                     "auto_fixable": True,
                 },
                 metadata={"operation": "fix_plan"},
-            )
-        
-        elif operation == "cleanup":
-            return ToolResult(
-                success=True,
-                data={
-                    "target": target,
-                    "markers_removed": 0,
-                    "files_cleaned": [],
-                    "message": "All debug markers removed",
-                },
-                metadata={"operation": "cleanup"},
             )
         
         return ToolResult(success=False, error=f"Unknown operation: {operation}")

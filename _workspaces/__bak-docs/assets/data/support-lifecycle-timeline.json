@@ -1,0 +1,44 @@
+{
+  "phases": [
+    {
+      "name": "Discovery",
+      "orchestrators": [
+        "Tool Discovery",
+        "Total Recall"
+      ],
+      "duration_ms": 100
+    },
+    {
+      "name": "Analysis",
+      "orchestrators": [
+        "LENS",
+        "Domain Brain"
+      ],
+      "duration_ms": 250
+    },
+    {
+      "name": "Quality Check",
+      "orchestrators": [
+        "Challenge",
+        "Duplication",
+        "Recommendation"
+      ],
+      "duration_ms": 300
+    },
+    {
+      "name": "Governance",
+      "orchestrators": [
+        "Governance",
+        "Session"
+      ],
+      "duration_ms": 150
+    },
+    {
+      "name": "Monitoring",
+      "orchestrators": [
+        "Observation"
+      ],
+      "duration_ms": 80
+    }
+  ]
+}

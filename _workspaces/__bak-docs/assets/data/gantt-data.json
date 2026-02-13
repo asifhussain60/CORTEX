@@ -1,0 +1,48 @@
+{
+  "generated_at": "2025-12-10T10:02:24.168659",
+  "tasks": [
+    {
+      "id": "milestone-0",
+      "name": "CORTEX 3.1",
+      "start": "2026-01-01",
+      "end": "2026-03-28",
+      "progress": 0,
+      "type": "milestone",
+      "dependencies": "",
+      "custom_class": "milestone-bar"
+    },
+    {
+      "id": "milestone-1",
+      "name": "CORTEX 3.2",
+      "start": "2026-04-01",
+      "end": "2026-06-28",
+      "progress": 0,
+      "type": "milestone",
+      "dependencies": "",
+      "custom_class": "milestone-bar"
+    },
+    {
+      "id": "milestone-2",
+      "name": "CORTEX 4.0",
+      "start": "2026-10-01",
+      "end": "2026-12-28",
+      "progress": 0,
+      "type": "milestone",
+      "dependencies": "",
+      "custom_class": "milestone-bar"
+    }
+  ],
+  "statistics": {
+    "total_tasks": 3,
+    "completed_tasks": 0,
+    "in_progress_tasks": 0,
+    "pending_tasks": 3,
+    "average_progress": 0.0
+  },
+  "view_mode": "Month",
+  "metadata": {
+    "version": "1.0.0",
+    "source": "CORTEX 4.0 vision + git branch analysis",
+    "chart_library": "Frappe Gantt"
+  }
+}
