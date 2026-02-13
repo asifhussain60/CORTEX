@@ -1,0 +1,103 @@
+═══════════════════════════════════════════════════════════════
+  🔧 MCP CONSOLIDATION COMPLETE - QUICK REFERENCE
+═══════════════════════════════════════════════════════════════
+
+✅ FIXED: MCP tool discovery (1 tool → 24 tools)
+✅ FIXED: CORE-035 violation (duplicate implementation removed)
+✅ READY: Wave 3 autonomous execution
+
+───────────────────────────────────────────────────────────────
+ VERIFICATION (Run anytime to check MCP health)
+───────────────────────────────────────────────────────────────
+
+  python .cortex/verify-mcp-tools.py
+
+Expected: ✅ MCP VERIFICATION COMPLETE - ALL CHECKS PASSED
+
+───────────────────────────────────────────────────────────────
+ NEXT STEPS (Required before Wave 3)
+───────────────────────────────────────────────────────────────
+
+1. RELOAD VS CODE
+   Cmd+Shift+P → "Developer: Reload Window"
+   
+2. VERIFY MCP CONNECTION
+   - Check bottom-right corner of VS Code
+   - Should show: "cortex" MCP server running
+   
+3. TEST TOOL DISCOVERY
+   - Open Copilot Chat
+   - Type: "list all cortex tools"
+   - Should see: 24 tools (not 1)
+   
+4. CONFIRM CATEGORIES
+   Expected tool counts:
+   ├─ Core: 4 tools
+   ├─ Intelligence: 3 tools
+   ├─ Governance: 3 tools
+   ├─ Operations: 5 tools
+   └─ Utilities: 9 tools
+
+───────────────────────────────────────────────────────────────
+ RESUME WAVE 3 (After MCP verification)
+───────────────────────────────────────────────────────────────
+
+In Copilot Chat, type:
+
+  /implement WAVE-3: ENH-088/089 Multi-Cycle TDD + EventBus Debugger
+  
+  Authority: cortex-registry/_cortex-master/MASTER-WAVE-PLAN-5-WAVES-2026-02-13.md
+  Mode: Silent autonomous with ASCII progress bars
+  Duration: 7 hours
+  Tests: 75 new (45 multi-cycle + 30 eventbus)
+  Commits: 6
+
+───────────────────────────────────────────────────────────────
+ WHAT WAS FIXED
+───────────────────────────────────────────────────────────────
+
+BEFORE:
+  • Two MCP implementations (cortex/mcp + cortex/brain/mcp)
+  • VS Code discovering only 1 tool
+  • CORE-035 violation (duplicate code)
+  
+AFTER:
+  • Single MCP implementation (cortex/mcp only)
+  • All 24 production tools discoverable
+  • CORE-035 compliant
+  • Verification script available
+
+───────────────────────────────────────────────────────────────
+ COMMITS (Pushed to origin/CORTEX)
+───────────────────────────────────────────────────────────────
+
+1. 85586bfdd - FIX: Remove duplicate MCP implementation
+   • 14 files deleted (4,694 lines)
+   • cortex/brain/mcp/ removed entirely
+   
+2. 81e27c073 - ADD: MCP tool discovery verification script
+   • .cortex/verify-mcp-tools.py created
+   
+3. 3c9909690 - DOC: Session complete summary
+   • Wave 3 plan documented
+
+───────────────────────────────────────────────────────────────
+ TROUBLESHOOTING
+───────────────────────────────────────────────────────────────
+
+IF MCP STILL SHOWS 1 TOOL AFTER RELOAD:
+  1. Check .vscode/settings.json exists
+  2. Verify python path: .venv/bin/python
+  3. Kill any orphaned MCP processes:
+     pkill -f "cortex.mcp"
+  4. Reload VS Code again
+  5. Re-run verification script
+
+IF TOOLS NOT APPEARING IN COPILOT:
+  1. Check MCP server status (bottom-right)
+  2. View MCP logs: Cmd+Shift+P → "MCP: Show Server Output"
+  3. Look for "24 tools" in initialization logs
+
+═══════════════════════════════════════════════════════════════
+  📋 Ready for Wave 3: Multi-Cycle TDD + EventBus Debugger
+═══════════════════════════════════════════════════════════════
