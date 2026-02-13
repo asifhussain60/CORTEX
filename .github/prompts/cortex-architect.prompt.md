@@ -6945,7 +6945,7 @@ INJECT → CAPTURE → ANALYZE → FIX-PLAN → CLEANUP
 
 ### Enhancement Registry
 
-**Location:** cortex_brain/state/enhancement-history.yaml  
+**Location:** cortex-registry/_cortex-master/enhancements/active/  
 **Update Frequency:** After every DESIGN/META-AUDIT  
 **Owner:** EnhancementRegistry orchestrator
 

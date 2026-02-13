@@ -488,7 +488,7 @@ pytest tests/unit/orchestrators/core/test_phase_context_resolver.py --cov=cortex
 - `.github/prompts/cortex-architect.prompt.md` — DESIGN mode enhancement
 - `.github/agents/core/cortex-architect.md` — Workflow diagram update
 - `cortex/wiring/specifications/wiring.yaml` — Orchestrator registration
-- `docs/meta/enhancement-history.yaml` — ENH-017 entry
+- `cortex-registry/_cortex-master/enhancements/active/` — ENH-017 entry
 
 ---
 
