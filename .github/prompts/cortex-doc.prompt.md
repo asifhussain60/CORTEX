@@ -1,14 +1,15 @@
 # CORTEX Documentation Generation Prompt
 
-**Version:** 3.0 | **Updated:** 2026-02-12 | **Authority:** Documentation Architect Agent + Wave 8 Stage 5 | **Mode:** Registry-Driven Dual-Mode (Refresh + Generate) | **Integration:** Phase 74 + ENH-064 + Wave 8
+**Version:** 4.0 | **Updated:** 2026-02-13 | **Authority:** Documentation Architect Agent + Wave 8 Stage 5 | **Mode:** Registry-Driven Tri-Mode (Refresh + Generate + Story) | **Integration:** Phase 74 + ENH-064 + Wave 8
 
 ---
 
 ## 🎯 Prompt Purpose
 
-**Registry-Driven Dual-Mode Documentation System:**
+**Registry-Driven Tri-Mode Documentation System:**
 1. **MODE: Refresh** — Git-aware incremental documentation updates with registry extraction (delta detection)
 2. **MODE: Generate** — Full HTML site generation for GitHub Pages deployment with dark glassmorphism theme
+3. **MODE: Story Regeneration** — Git-history-driven update of "The Awakening of CORTEX" narrative with DALL-E prompt standardization
 
 **SSOT Architecture:** `__wiring_contract__.yaml` + `cortex-registry/` drive technical accuracy. Curated brain analogies remain manual for executive narratives.
 
@@ -278,6 +279,308 @@ Effort: 4 hours
 AC_COMPLETE: AC-DOC-REFRESH-2026-02-11-001 ✅
 "
 ```
+
+---
+
+## 📖 MODE: Story Regeneration
+
+**Trigger:** "regenerate awakening" | "update cortex story" | "refresh awakening of cortex"
+
+**Purpose:** Regenerate "The Awakening of CORTEX" story chapters and DALL-E image prompts to reflect the latest CORTEX architecture evolution, using git history as the source of truth and subagent orchestration for autonomous execution.
+
+**Output Location:** `_workspaces/gitpages-docs/.awakening-of-cortex/`
+
+**Execution Model:** Uses `runSubagent` tool for autonomous multi-step research and generation.
+
+### Workflow Overview
+
+```
+User: "regenerate awakening of cortex"
+         ↓
+┌──────────────────────────────────────────────┐
+│  PHASE 1: Intelligence Gathering (subagent)  │
+│  • git log full timeline (oldest→newest)     │
+│  • Read all existing chapters                │
+│  • Read CHARACTER-DESIGN-SHEET.md            │
+│  • Read cortex-architecture docs             │
+│  • Map git eras to technical milestones      │
+└──────────────────┬───────────────────────────┘
+                   ↓
+┌──────────────────────────────────────────────┐
+│  PHASE 2: Gap Analysis (subagent)            │
+│  • Compare chapter coverage vs git timeline  │
+│  • Identify missing eras/features            │
+│  • Score each gap by narrative value         │
+│  • Produce chapter plan (new + updates)      │
+└──────────────────┬───────────────────────────┘
+                   ↓
+┌──────────────────────────────────────────────┐
+│  PHASE 3: Chapter Generation (subagent/each) │
+│  • Write new chapters matching voice/style   │
+│  • Update existing chapters for flow         │
+│  • Ensure chapter-to-chapter bridges         │
+└──────────────────┬───────────────────────────┘
+                   ↓
+┌──────────────────────────────────────────────┐
+│  PHASE 4: Image Prompt Standardization       │
+│  • Rewrite ALL DALL-E prompts to B&W cartoon │
+│  • Ensure CHARACTER-DESIGN-SHEET compliance  │
+│  • Embed prompts in chapter YAML frontmatter │
+│  • Update standalone prompts file            │
+└──────────────────┬───────────────────────────┘
+                   ↓
+┌──────────────────────────────────────────────┐
+│  PHASE 5: Validation & Commit                │
+│  • Verify narrative continuity               │
+│  • Verify image prompt style consistency     │
+│  • Git commit with AC markers                │
+└──────────────────────────────────────────────┘
+```
+
+### Phase 1: Intelligence Gathering (runSubagent)
+
+**Subagent Prompt Template:**
+
+```
+You are researching the CORTEX project to build a complete development timeline.
+Do NOT create or modify any files. This is RESEARCH ONLY.
+
+Perform these steps and return ALL findings:
+
+1. RUN in terminal: git log with --reverse --date=short --format="%h %ad %s"
+   on origin/CORTEX to get the FULL commit history (oldest first).
+   Paginate with --skip and -n 150 if needed to capture everything.
+
+2. READ all chapter files in:
+   _workspaces/gitpages-docs/.awakening-of-cortex/chapters/
+   Summarize each: title, technical concept covered, git era covered,
+   narrative beats, characters involved, line count.
+
+3. READ the CHARACTER-DESIGN-SHEET.md for visual style rules.
+
+4. READ _workspaces/cortex-architecture/index.md for current architecture.
+
+5. READ the existing DALL-E prompts file:
+   _workspaces/gitpages-docs/.awakening-of-cortex/prompts/image-prompts-dalle.md
+
+RETURN a structured report with:
+- TIMELINE: Date-bucketed milestones from git (group by week/phase)
+- CHAPTER_MAP: What each chapter covers and which git era it maps to
+- GAPS: Technical milestones NOT covered by any chapter
+- STYLE_ISSUES: Any DALL-E prompts that don't match B&W cartoon standard
+- RECOMMENDED_CHAPTERS: New chapters needed with title, era, concept, hook
+- RECOMMENDED_UPDATES: Existing chapters needing revision with reason
+```
+
+**Expected Output:** A structured intelligence report covering the full CORTEX timeline, chapter coverage map, identified gaps, and recommendations.
+
+### Phase 2: Gap Analysis & Chapter Planning (runSubagent)
+
+**Subagent Prompt Template:**
+
+```
+You are planning new chapters for "The Awakening of CORTEX" story.
+Do NOT create or modify any files. This is PLANNING ONLY.
+
+You will receive the intelligence report from Phase 1 (provided below).
+
+{PHASE_1_REPORT}
+
+Based on this, produce a CHAPTER PLAN:
+
+1. For each RECOMMENDED NEW CHAPTER, define:
+   - Chapter number and title (follow naming: XX-Title-With-Dashes.md)
+   - Git era it covers (date range + key commits)
+   - Technical concept (what CORTEX feature is the narrative vehicle)
+   - Narrative hook (how it connects to previous chapter's ending)
+   - Key scenes (3-5 bullet points)
+   - Characters involved and their role in this chapter
+   - Miss G's numbered expression (continue the catalogue)
+   - Copilot Bot's arc in this chapter (what does he learn/fail at)
+   - 2 image prompt concepts (scored ≥4 on value rubric)
+
+2. For each EXISTING CHAPTER TO UPDATE, define:
+   - Which chapter and what section to modify
+   - What to add/change and why
+   - How it bridges to new chapters
+
+3. NARRATIVE RULES (enforce these):
+   - Prologue (Ch 0) MUST NOT change
+   - First-person Asif monologue + third-person narrator switching
+   - Miss G speaks in italicized thought dialogue
+   - Copilot Bot speaks with confident incompetence, gradually improving
+   - Humor: coffee addiction, Wi-Fi router sentience, ADHD chaos→brilliance
+   - Each chapter ends with a setup line for the next
+   - Technical depth: real CORTEX concepts in accessible metaphors
+   - Brain analogy from cortex-architecture docs should inform metaphors
+
+4. IMAGE PROMPT RULES (enforce these):
+   - ALL prompts: B&W cartoon, clean lines, expressive faces
+   - Strategic color highlights ONLY: coffee=warm brown, router=red,
+     CB LEDs=emotional color, Miss G=silver glow, sticky notes=yellow
+   - Max 2 images per chapter, scored ≥4 on value rubric
+   - Reference CHARACTER-DESIGN-SHEET.md in every prompt
+   - Character name "Miss G" not "Miss Governance"
+   - Include narrative_moment, value_score, rationale, dall_e_prompt
+
+RETURN the complete chapter plan as structured output.
+```
+
+### Phase 3: Chapter Generation (runSubagent per chapter)
+
+**Subagent Prompt Template (one per new chapter):**
+
+```
+You are writing Chapter {N} of "The Awakening of CORTEX" story.
+CREATE the chapter file at the specified path.
+
+CHAPTER PLAN:
+{CHAPTER_PLAN_FROM_PHASE_2}
+
+STYLE REFERENCE — Read these files for voice/tone matching:
+- Previous chapter: _workspaces/gitpages-docs/.awakening-of-cortex/chapters/{PREV}.md
+- Character sheet: _workspaces/gitpages-docs/.awakening-of-cortex/CHARACTER-DESIGN-SHEET.md
+
+WRITING RULES:
+1. YAML frontmatter with: chapter, title, phase, image_prompts (2 prompts)
+2. First-person Asif internal monologue in regular text
+3. Miss G speaks in *italicized thought dialogue*
+4. Copilot Bot speaks in quoted dialogue with LED descriptions
+5. Narrator uses third person for scene-setting paragraphs
+6. Technical concepts explained through metaphors (hotel, symphony, brain)
+7. Humor density: at least 3 laugh moments per chapter
+8. Wi-Fi router appears at least once as emotional barometer
+9. Coffee references: minimum 2 per chapter
+10. Chapter ends with a line that sets up the next chapter
+11. Target length: 400-600 lines
+12. DALL-E prompts in frontmatter follow B&W cartoon standard
+    with strategic color highlights per CHARACTER-DESIGN-SHEET.md
+
+OUTPUT: Create the file at:
+_workspaces/gitpages-docs/.awakening-of-cortex/chapters/{FILENAME}
+```
+
+### Phase 4: Image Prompt Standardization (runSubagent)
+
+**Subagent Prompt Template:**
+
+```
+You are standardizing ALL DALL-E image prompts for
+"The Awakening of CORTEX" to match the CHARACTER-DESIGN-SHEET.md.
+
+STEPS:
+1. READ CHARACTER-DESIGN-SHEET.md for the canonical visual style.
+
+2. READ the standalone prompts file:
+   _workspaces/gitpages-docs/.awakening-of-cortex/prompts/image-prompts-dalle.md
+
+3. REWRITE the entire image-prompts-dalle.md file with:
+   - ALL prompts converted to B&W cartoon style
+   - Strategic color highlights ONLY (coffee=brown, router=red,
+     CB LEDs=emotional, Miss G=silver, sticky notes=yellow)
+   - Character names: "Asif" not "Asif Codenstien",
+     "Miss G" not "Miss Governance"
+   - Every prompt ends with:
+     "Reference: CHARACTER-DESIGN-SHEET.md for character specifications."
+   - Remove any cyberpunk/neon/glowing/fantasy/sci-fi styling
+   - Add prompts for any new chapters generated in Phase 3
+   - Organize by chapter number
+   - Include prompts for Prologue if not present
+
+4. VERIFY every chapter's YAML frontmatter image_prompts match
+   the standalone file (they should be identical).
+
+STYLE TEMPLATE for each prompt:
+"Black and white cartoon illustration. [Scene description with
+character actions and expressions per design sheet]. [Strategic
+color highlight: warm brown coffee mug / red router LED / blue|orange|
+red|green CB LED eyes / silver Miss G glow]. Clean line art,
+expressive faces, comic book style.
+Reference: CHARACTER-DESIGN-SHEET.md for character specifications."
+
+OUTPUT: Rewrite the file at:
+_workspaces/gitpages-docs/.awakening-of-cortex/prompts/image-prompts-dalle.md
+```
+
+### Phase 5: Validation & Commit
+
+**Execute directly (not subagent):**
+
+```bash
+# Verify all chapters exist and are ordered
+ls -la _workspaces/gitpages-docs/.awakening-of-cortex/chapters/
+
+# Verify no SCREAMING_CASE filenames
+Get-ChildItem _workspaces/gitpages-docs/.awakening-of-cortex/ -Recurse -File |
+  Where-Object { $_.Name -cmatch '[A-Z]{3,}' -and $_.Extension -ne '.md' }
+
+# Verify DALL-E prompts mention CHARACTER-DESIGN-SHEET
+Select-String -Path _workspaces/gitpages-docs/.awakening-of-cortex/prompts/image-prompts-dalle.md \
+  -Pattern "CHARACTER-DESIGN-SHEET" | Measure-Object
+
+# Commit
+git add _workspaces/gitpages-docs/.awakening-of-cortex/
+git commit -m "AC_START: AC-STORY-REGEN-001 Regenerate Awakening of CORTEX
+
+- New chapters covering [era] through [era]
+- Updated existing chapters for narrative flow
+- Standardized ALL DALL-E prompts to B&W cartoon (CHARACTER-DESIGN-SHEET)
+- Verified chapter continuity and image prompt consistency"
+```
+
+### Execution Example
+
+**When user says "regenerate awakening of cortex":**
+
+```python
+# Step 1: Intelligence Gathering
+phase1_report = runSubagent(
+    description="Story intelligence gathering",
+    prompt=PHASE_1_TEMPLATE  # Full git history + chapter analysis
+)
+
+# Step 2: Gap Analysis & Planning
+chapter_plan = runSubagent(
+    description="Story chapter planning",
+    prompt=PHASE_2_TEMPLATE.format(PHASE_1_REPORT=phase1_report)
+)
+
+# Step 3: Generate each new chapter
+for chapter in chapter_plan.new_chapters:
+    runSubagent(
+        description=f"Write chapter {chapter.number}",
+        prompt=PHASE_3_TEMPLATE.format(
+            N=chapter.number,
+            CHAPTER_PLAN_FROM_PHASE_2=chapter.plan,
+            PREV=chapter.previous_filename,
+            FILENAME=chapter.filename
+        )
+    )
+
+# Step 4: Standardize all image prompts
+runSubagent(
+    description="Standardize DALL-E prompts",
+    prompt=PHASE_4_TEMPLATE
+)
+
+# Step 5: Validate & commit (direct execution)
+# Run validation commands and git commit
+```
+
+### Key Constraints
+
+| Constraint | Rule |
+|-----------|------|
+| **Prologue** | NEVER modify Chapter 0 |
+| **Character Names** | Miss G (not Miss Governance), Copilot Bot (not CB) |
+| **Image Style** | B&W cartoon ONLY per CHARACTER-DESIGN-SHEET.md |
+| **Chapter Flow** | Each chapter must end with setup for next |
+| **Technical Accuracy** | Real CORTEX concepts from git history/architecture docs |
+| **Humor Density** | ≥3 laugh moments per chapter |
+| **Max Images** | 2 per chapter, scored ≥4 on value rubric |
+| **POV** | First-person Asif + third-person narrator, switching |
+| **Miss G Dialogue** | Always *italicized*, always cataloguing expressions |
+| **Router** | Wi-Fi router appears in every chapter as emotional barometer |
 
 ---
 
@@ -1828,6 +2131,35 @@ Updated Sections:
 └─ infrastructure/deployment.md (Pylance MCP + CCL)
 
 Git: a2fdcdc "docs: Refresh architecture docs (247 commits)"
+----------------------------------------
+```
+
+### MODE: Story Regeneration
+
+**Expected Output:**
+```
+----------------------------------------
+📖 Story Regeneration Complete
+----------------------------------------
+
+📊 Git Timeline: {N} commits analyzed ({earliest_date} → {latest_date})
+📝 Chapters: {existing} existing + {new} new = {total} total
+🎨 DALL-E Prompts: {prompt_count} standardized to B&W cartoon
+✅ Validation: Character sheet compliance 100%
+
+New Chapters:
+├─ 15-The-Great-Pruning.md (Wave 7 consolidation)
+├─ 16-The-Nervous-System.md (MCP Pylance architecture)
+├─ 17-The-Immune-System.md (8 enforcement agents)
+└─ 18-The-Self-Healing.md (autonomous recovery)
+
+Updated Chapters:
+├─ 12-The-Promise.md (bridge to new content)
+├─ 13-EPILOGUE → 13-The-Intermission.md (reframed)
+└─ 14-The-Vertical-Vision.md (connected to reality)
+
+Image Prompts: {prompt_count} (all B&W cartoon, CHARACTER-DESIGN-SHEET compliant)
+Git: {commit_hash} "AC_START: AC-STORY-REGEN-001"
 ----------------------------------------
 ```
 
