@@ -1,0 +1,278 @@
+"""
+MCP Tools for Debug Marker Management
+
+Purpose:
+    Expose DebuggerOrchestrator capabilities via MCP for external control
+    of debug marker injection, session management, and cleanup.
+
+Authority:
+    - ENH-089 (EventBus-Driven Debugger) Stage 5
+    - WAVE-R Execution Plan
+    - MCP-FIRST Architecture
+
+MCP Tools:
+    - cortex_debug_auto_inject: Trigger manual marker injection
+    - cortex_debug_list_sessions: List active debug sessions
+    - cortex_debug_cleanup: Remove markers for resolved sessions
+
+AC-ID: AC-WAVE-R-007
+"""
+
+from typing import Dict, Any, List
+import logging
+
+from cortex.core.event_bus import EventBus, Event
+from cortex.orchestrators.support.debugger_orchestrator import DebuggerOrchestrator
+
+
+logger = logging.getLogger(__name__)
+
+
+class DebugMCPTools:
+    """MCP tools for debug marker management."""
+    
+    def __init__(self, event_bus: EventBus, orchestrator: DebuggerOrchestrator):
+        """
+        Initialize DebugMCPTools.
+        
+        Args:
+            event_bus: EventBus instance for publishing events
+            orchestrator: DebuggerOrchestrator instance for session access
+        """
+        self.event_bus = event_bus
+        self.orchestrator = orchestrator
+        
+        logger.info("DebugMCPTools initialized")
+    
+    def auto_inject(
+        self,
+        trigger_type: str,
+        file_path: str,
+        line_number: int,
+        context: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        Manually trigger debug marker injection.
+        
+        Use Case:
+            Developer wants to inject markers without waiting for test failure.
+            Useful for proactive debugging or investigation.
+        
+        Args:
+            trigger_type: Type of trigger (test_failure | refactor_regression | governance_violation)
+            file_path: Path to file for marker injection
+            line_number: Line number for marker placement
+            context: Additional context (test_name, failure_reason, etc.)
+        
+        Returns:
+            Result dict with session_id and status
+        
+        Example:
+            >>> tools.auto_inject(
+            ...     trigger_type="test_failure",
+            ...     file_path="/path/to/file.py",
+            ...     line_number=42,
+            ...     context={"test_name": "test_example", "failure_reason": "AssertionError"}
+            ... )
+            {'status': 'success', 'session_id': 'session-test_failure-...', 'message': 'Markers injected'}
+        """
+        logger.info(f"Manual debug injection requested: {trigger_type} at {file_path}:{line_number}")
+        
+        # Validate trigger type
+        valid_triggers = ["test_failure", "refactor_regression", "governance_violation"]
+        if trigger_type not in valid_triggers:
+            return {
+                "status": "error",
+                "message": f"Invalid trigger_type. Must be one of: {', '.join(valid_triggers)}"
+            }
+        
+        # Publish appropriate event
+        event_type_map = {
+            "test_failure": "TEST_FAILURE",
+            "refactor_regression": "REFACTOR_REGRESSION",
+            "governance_violation": "GOVERNANCE_VIOLATION"
+        }
+        
+        event = Event(
+            type=event_type_map[trigger_type],
+            payload={
+                "file_path": file_path,
+                "line_number": line_number,
+                **context
+            }
+        )
+        
+        # Publish event (orchestrator handles via subscription)
+        self.event_bus.publish(event)
+        
+        # Get most recent session ID
+        sessions = self.orchestrator.get_active_sessions()
+        session_id = sessions[-1].session_id if sessions else "unknown"
+        
+        return {
+            "status": "success",
+            "session_id": session_id,
+            "message": f"Debug markers injected at {file_path}:{line_number}"
+        }
+    
+    def list_sessions(self, status_filter: str = "all") -> Dict[str, Any]:
+        """
+        List active debug sessions.
+        
+        Use Case:
+            Developer wants to see all ongoing debug sessions before cleanup.
+            Useful for understanding current debugging state.
+        
+        Args:
+            status_filter: Filter by status (all | active | resolved | stale)
+        
+        Returns:
+            Result dict with sessions list
+        
+        Example:
+            >>> tools.list_sessions(status_filter="active")
+            {
+                'status': 'success',
+                'sessions': [
+                    {
+                        'session_id': 'session-test_failure-...',
+                        'trigger_event': 'TEST_FAILURE',
+                        'file_paths': ['/path/to/file.py'],
+                        'created_at': '2026-02-13T06:30:00',
+                        'status': 'active'
+                    }
+                ],
+                'count': 1
+            }
+        """
+        logger.info(f"Listing debug sessions: filter={status_filter}")
+        
+        sessions = self.orchestrator.get_active_sessions()
+        
+        # Apply status filter
+        if status_filter != "all":
+            sessions = [s for s in sessions if s.status == status_filter]
+        
+        # Serialize sessions
+        session_list = [
+            {
+                "session_id": s.session_id,
+                "trigger_event": s.trigger_event,
+                "file_paths": s.file_paths,
+                "created_at": s.created_at.isoformat(),
+                "status": s.status
+            }
+            for s in sessions
+        ]
+        
+        return {
+            "status": "success",
+            "sessions": session_list,
+            "count": len(session_list),
+            "filter": status_filter
+        }
+    
+    def cleanup(self, session_id: str = None, cleanup_all: bool = False) -> Dict[str, Any]:
+        """
+        Remove debug markers for resolved sessions.
+        
+        Use Case:
+            Developer fixed issue and wants to clean up markers.
+            Can target specific session or all resolved sessions.
+        
+        Args:
+            session_id: Specific session ID to clean up (optional)
+            cleanup_all: Clean up all resolved sessions (default: False)
+        
+        Returns:
+            Result dict with cleanup status
+        
+        Example:
+            >>> tools.cleanup(session_id="session-test_failure-20260213-063000")
+            {'status': 'success', 'message': 'Session session-test_failure-... cleaned up', 'removed_markers': 1}
+            
+            >>> tools.cleanup(cleanup_all=True)
+            {'status': 'success', 'message': 'All resolved sessions cleaned up', 'removed_markers': 3}
+        """
+        logger.info(f"Debug cleanup requested: session_id={session_id}, cleanup_all={cleanup_all}")
+        
+        if cleanup_all:
+            # Clean up all resolved sessions
+            resolved_sessions = [
+                s.session_id
+                for s in self.orchestrator.get_active_sessions()
+                if s.status == "resolved"
+            ]
+            
+            removed_count = 0
+            for sid in resolved_sessions:
+                self.orchestrator.auto_cleanup_manager.cleanup_session(sid)
+                removed_count += 1
+            
+            return {
+                "status": "success",
+                "message": f"Cleaned up {removed_count} resolved sessions",
+                "removed_markers": removed_count
+            }
+        
+        elif session_id:
+            # Clean up specific session
+            self.orchestrator.auto_cleanup_manager.cleanup_session(session_id)
+            
+            return {
+                "status": "success",
+                "message": f"Session {session_id} cleaned up",
+                "removed_markers": 1
+            }
+        
+        else:
+            return {
+                "status": "error",
+                "message": "Must provide session_id or set cleanup_all=True"
+            }
+
+
+# ========================================================================
+# MCP Tool Registration (for MCP server)
+# ========================================================================
+
+def register_debug_tools(event_bus: EventBus, orchestrator: DebuggerOrchestrator) -> Dict[str, Any]:
+    """
+    Register debug MCP tools for server exposure.
+    
+    Args:
+        event_bus: EventBus instance
+        orchestrator: DebuggerOrchestrator instance
+    
+    Returns:
+        Tool registry dict for MCP server
+    """
+    tools = DebugMCPTools(event_bus, orchestrator)
+    
+    return {
+        "cortex_debug_auto_inject": {
+            "handler": tools.auto_inject,
+            "description": "Manually trigger debug marker injection",
+            "parameters": {
+                "trigger_type": {"type": "string", "required": True},
+                "file_path": {"type": "string", "required": True},
+                "line_number": {"type": "integer", "required": True},
+                "context": {"type": "object", "required": False}
+            }
+        },
+        "cortex_debug_list_sessions": {
+            "handler": tools.list_sessions,
+            "description": "List active debug sessions",
+            "parameters": {
+                "status_filter": {"type": "string", "required": False, "default": "all"}
+            }
+        },
+        "cortex_debug_cleanup": {
+            "handler": tools.cleanup,
+            "description": "Remove debug markers for resolved sessions",
+            "parameters": {
+                "session_id": {"type": "string", "required": False},
+                "cleanup_all": {"type": "boolean", "required": False, "default": False}
+            }
+        }
+    }
