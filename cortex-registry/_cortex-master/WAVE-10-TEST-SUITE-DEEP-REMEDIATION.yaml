@@ -1,0 +1,636 @@
+# ============================================================================
+# WAVE 10: TEST SUITE DEEP REMEDIATION (QUALITY > QUANTITY)
+# ============================================================================
+# Authority: chat01.md digest + cortex-architect.prompt.md v15.3
+# Purpose: Transform test suite from quantity-rich to quality-rich
+# Status: DESIGN COMPLETE - HIGH PRIORITY (TECH DEBT ELIMINATION)
+# Created: 2026-02-13
+# AC-ID: AC-WAVE10-001
+# Priority: P1-CRITICAL (enables all future development confidence)
+# ============================================================================
+
+version: "1.0"
+created: "2026-02-13T09:00:00Z"
+last_updated: "2026-02-13T09:00:00Z"
+wave_id: "WAVE-10"
+name: "Test Suite Deep Remediation Wave"
+priority: "P1-CRITICAL"
+roi_score: 9.5  # Highest ROI - confidence in production quality
+
+metadata:
+  total_tracks: 5
+  estimated_effort: "21-28 days"
+  parallelizable: "partial"  # Track 1-3 parallel, Track 4 depends on 1-3, Track 5 final
+  blocking_dependencies: []  # No blockers - can start immediately
+  value_delivery: "Real production confidence + 40% test suite reduction + Golden Path coverage"
+  execution_timing: "IMMEDIATE (foundational to all other work)"
+  
+objectives:
+  primary: "Replace 15,016 quantity-rich tests with high-value, production-proving tests"
+  secondary: "Eliminate mock-heavy syndrome - tests must prove real behavior"
+  tertiary: "Establish Golden Path Truth Tests that verify end-to-end synthesis"
+  strategic: "Enable confident rapid development by trusting the test suite"
+
+# ============================================================================
+# PROBLEM STATEMENT (from chat01.md analysis)
+# ============================================================================
+
+problem_analysis:
+  summary: |
+    The test suite is quantity-rich (15,016 tests, 791 files) but depth-poor.
+    Tests heavily mock components, proving mocks work rather than production code.
+    No end-to-end "truth tests" verify the complete intelligence/LENS pipeline.
+    
+  critical_gaps:
+    - id: "GAP-1"
+      name: "Heavy Mocking Syndrome"
+      evidence: "40+ files with mock-to-test ratio > 1.5"
+      risk: "HIGH"
+      impact: "Tests pass but production fails - no real behavior verification"
+      
+    - id: "GAP-2"
+      name: "No Real Data Synthesis Tests"
+      evidence: "Zero tests load actual company/*.yaml + cortex/*.yaml and verify merge"
+      risk: "HIGH"
+      impact: "Core value proposition (business + CORTEX merge) untested"
+      
+    - id: "GAP-3"
+      name: "Missing Tier Cascade Tests"
+      evidence: "No single test proves data flows tier0 → tier1 → tier2 → tier3"
+      risk: "HIGH"
+      impact: "Tiered architecture unverified in production scenarios"
+      
+    - id: "GAP-4"
+      name: "No Multi-Analyzer Integration"
+      evidence: "LENS has 12 analyzers, no test runs all together"
+      risk: "MEDIUM"
+      impact: "Analyzer conflicts undetected until production"
+      
+    - id: "GAP-5"
+      name: "Duplicate Test Functions"
+      evidence: "24x test_initialization, 9x test_confidence_scoring, etc."
+      risk: "MEDIUM"
+      impact: "Maintenance burden, false coverage confidence"
+      
+    - id: "GAP-6"
+      name: "Phase-Dated Test Sprawl"
+      evidence: "16+ files with _phase65, _phase20_5, _v2 suffixes"
+      risk: "MEDIUM"
+      impact: "Confusion about canonical test, duplicate coverage"
+      
+    - id: "GAP-7"
+      name: "Assertion-Free Tests"
+      evidence: "100+ tests without assertions (from analysis)"
+      risk: "HIGH"
+      impact: "False green - tests pass without verifying anything"
+
+  statistics:
+    total_tests: 15016
+    total_test_files: 791
+    average_tests_per_file: 19
+    files_with_mock_ratio_over_1_5: 43
+    duplicate_test_names: 24
+    phase_dated_files: 16
+    assertion_free_tests: "~100+"
+
+# ============================================================================
+# TRACK 1: GOLDEN PATH TRUTH TESTS (NEW - HIGH VALUE)
+# ============================================================================
+
+tracks:
+  - track_id: "T1"
+    name: "Golden Path Truth Tests"
+    priority: "P0-CRITICAL"
+    duration: "5-7 days"
+    effort: "30-40h"
+    parallelizable: true
+    
+    description: |
+      Create 7 strategic "truth tests" that run the real production pipeline.
+      These tests use NO mocks and verify actual component integration.
+      A single failing truth test indicates production will fail.
+      
+    deliverables:
+      - id: "T1-D1"
+        name: "Company Override Truth Test"
+        file: "tests/golden/test_company_override_truth.py"
+        description: |
+          Load real company/domains/*.yaml + cortex/knowledge/*.yaml
+          Run through KnowledgeSynthesisEngine
+          Assert company standards override CORTEX defaults
+        assertions:
+          - "company_rule.precedence > cortex_rule.precedence"
+          - "merged_output.security_standards == company_standards"
+          - "no data loss in merge"
+        mocks_allowed: 0
+        
+      - id: "T1-D2"
+        name: "Tier Cascade Truth Test"
+        file: "tests/golden/test_tier_cascade_truth.py"
+        description: |
+          Insert a rule at tier0 (cortex_brain/tier0/)
+          Trace propagation through tier1, tier2, tier3
+          Verify rule appears correctly at tier3 output
+        assertions:
+          - "tier0_rule propagates to tier1"
+          - "tier1 enrichment applied"
+          - "tier2 domain context added"
+          - "tier3 output contains enriched rule"
+        mocks_allowed: 0
+        
+      - id: "T1-D3"
+        name: "Multi-Analyzer Integration Truth Test"
+        file: "tests/golden/test_multi_analyzer_truth.py"
+        description: |
+          Run ALL LENS analyzers (12) on reference repository
+          Verify synthesized output is coherent (no conflicts)
+          Assert each analyzer contributes non-overlapping insights
+        assertions:
+          - "all 12 analyzers produce output"
+          - "no conflicting metadata"
+          - "synthesis produces unified result"
+        mocks_allowed: 0
+        
+      - id: "T1-D4"
+        name: "Governance + Domain Truth Test"
+        file: "tests/golden/test_governance_domain_truth.py"
+        description: |
+          Apply security rule to domain code snippet
+          Run through EnforcementOrchestrator
+          Verify violation detected and reported correctly
+        assertions:
+          - "CORE-008 TDD violation detected"
+          - "correct file + line reported"
+          - "remediation suggestion provided"
+        mocks_allowed: 0
+        
+      - id: "T1-D5"
+        name: "Conflict Resolution Truth Test"
+        file: "tests/golden/test_conflict_resolution_truth.py"
+        description: |
+          Create conflicting rules (company vs CORTEX, tier1 vs tier2)
+          Run resolution pipeline
+          Assert correct winner based on precedence rules
+        assertions:
+          - "company wins over CORTEX"
+          - "higher tier wins within same source"
+          - "audit trail captures resolution"
+        mocks_allowed: 0
+        
+      - id: "T1-D6"
+        name: "MCP End-to-End Truth Test"
+        file: "tests/golden/test_mcp_e2e_truth.py"
+        description: |
+          Send real request through MCP gateway
+          Trace through IntentRouter → Orchestrator → Execution
+          Verify complete request/response cycle
+        assertions:
+          - "request classified correctly"
+          - "correct orchestrator invoked"
+          - "response formatted per standards"
+        mocks_allowed: 0
+        
+      - id: "T1-D7"
+        name: "LENS Full Pipeline Truth Test"
+        file: "tests/golden/test_lens_full_pipeline_truth.py"
+        description: |
+          Run LENS on real repository (tests/fixtures/reference_repo)
+          Verify AST + Git + Domain + Knowledge extraction
+          Assert unified LENSResult contains all expected data
+        assertions:
+          - "AST analysis complete"
+          - "Git history extracted (24h)"
+          - "Domain patterns detected"
+          - "Knowledge synthesis correct"
+        mocks_allowed: 0
+        
+    tests_created: 7
+    tests_deleted: 0
+    
+# ============================================================================
+# TRACK 2: REFERENCE REPOSITORY FIXTURE (NEW - ENABLE SCALE)
+# ============================================================================
+
+  - track_id: "T2"
+    name: "Reference Repository Fixture"
+    priority: "P1-HIGH"
+    duration: "3-4 days"
+    effort: "16-24h"
+    parallelizable: true
+    
+    description: |
+      Create a realistic reference repository (500 files, mixed languages)
+      that all integration tests can use. Replaces tiny synthetic fixtures.
+      
+    deliverables:
+      - id: "T2-D1"
+        name: "Reference Repository Structure"
+        path: "tests/fixtures/reference_repo/"
+        structure:
+          python_module: "100 files - realistic service"
+          typescript_app: "150 files - React frontend"
+          csharp_service: "100 files - .NET API"
+          shared_configs: "50 files - YAML/JSON configs"
+          docs: "100 files - markdown documentation"
+        characteristics:
+          - "Real-world naming patterns"
+          - "Actual import relationships"
+          - "Intentional code smells (for detection)"
+          - "Governance violations embedded (for testing)"
+          - "Multiple design patterns"
+          
+      - id: "T2-D2"
+        name: "Fixture Loading Utilities"
+        file: "tests/fixtures/reference_repo_loader.py"
+        utilities:
+          - "load_reference_repo() -> Path"
+          - "get_python_files() -> List[Path]"
+          - "get_typescript_files() -> List[Path]"
+          - "get_files_with_violations() -> List[Path]"
+          
+      - id: "T2-D3"
+        name: "Fixture Documentation"
+        file: "tests/fixtures/reference_repo/README.md"
+        contents:
+          - "Repository structure explanation"
+          - "Intentional violations list"
+          - "Expected analyzer outputs"
+          
+    tests_created: 3
+    tests_deleted: 0
+
+# ============================================================================
+# TRACK 3: LOW-VALUE TEST DELETION (CLEANUP - 40% REDUCTION TARGET)
+# ============================================================================
+
+  - track_id: "T3"
+    name: "Low-Value Test Deletion"
+    priority: "P1-HIGH"
+    duration: "5-7 days"
+    effort: "30-40h"
+    parallelizable: true
+    
+    description: |
+      Systematically delete tests that provide false confidence:
+      - Assertion-free tests (verify nothing)
+      - Heavy-mock tests (verify mocks work)
+      - Duplicate tests (redundant coverage)
+      - Phase-dated superseded tests
+      Target: 40% reduction (15,016 → ~9,000 high-value tests)
+      
+    phases:
+      - phase_id: "T3-P1"
+        name: "Assertion-Free Test Removal"
+        action: "DELETE"
+        criteria: "Tests without assert/expect/raise statements"
+        estimated_count: 100
+        approach: |
+          1. Run detection script (already created)
+          2. Manual review each test
+          3. If truly no-value → DELETE
+          4. If has implicit assertion → ADD explicit assertion
+          
+      - phase_id: "T3-P2"
+        name: "Heavy-Mock Test Consolidation"
+        action: "REFACTOR or DELETE"
+        criteria: "Mock-to-test ratio > 2.0"
+        files_affected:
+          - "unit/domain_brain/test_synthesis_domain_integration.py (303 mocks)"
+          - "unit/orchestrators/test_master_orchestrator_spof_fix.py (266 mocks)"
+          - "unit/orchestrators/test_intent_orchestrator_routing.py (259 mocks)"
+          - "unit/domain_brain/test_knowledge_graph_query.py (198 mocks)"
+          - "unit/integration/test_e2e_workflows.py (161 mocks)"
+        approach: |
+          1. Identify what real behavior the test should verify
+          2. Reduce mocks to only external dependencies (DB, network)
+          3. If test only verifies mock wiring → DELETE
+          4. Consolidate 3+ similar tests into 1 parameterized test
+          
+      - phase_id: "T3-P3"
+        name: "Duplicate Test Name Resolution"
+        action: "CONSOLIDATE"
+        duplicates:
+          - name: "test_initialization"
+            count: 24
+            action: "Rename to component-specific names or consolidate"
+          - name: "test_confidence_scoring"
+            count: 9
+            action: "Keep best implementation, delete others"
+          - name: "test_orchestrator_initialization"
+            count: 8
+            action: "Consolidate into single parameterized test"
+        approach: |
+          1. Find all instances of duplicate names
+          2. Identify which test is most comprehensive
+          3. Merge unique assertions into best test
+          4. DELETE redundant tests
+          
+      - phase_id: "T3-P4"
+        name: "Phase-Dated File Cleanup"
+        action: "DELETE superseded versions"
+        files_to_evaluate:
+          - "test_knowledge_synthesis_engine_phase20_5.py"
+          - "test_response_header_injector_phase20_2.py"
+          - "test_yaml_loader_phase65.py"
+          - "test_core035_lens_unification_phase65.py"
+          - "test_tiered_mcp_api_wiring_phase65.py"
+          - "test_turn_context_accumulation_phase65.py"
+          - "test_unified_intelligence_provider_phase65.py"
+          - "test_vacuum_enhancements_phase1.py"
+          - "test_vacuum_enhancements_phase2.py"
+          - "test_intent_classifier_v2.py"
+          - "test_dashboard_schema_v3.py"
+        approach: |
+          1. Check if non-phase-dated version exists
+          2. If yes → Merge unique tests, DELETE phase-dated file
+          3. If no → Rename to remove phase suffix
+          
+      - phase_id: "T3-P5"
+        name: "Stub/Placeholder Test Removal"
+        action: "DELETE"
+        criteria: "Test name contains 'placeholder', 'stub', 'dummy'"
+        estimated_count: 7
+        
+      - phase_id: "T3-P6"
+        name: "Test File Consolidation"
+        action: "MERGE small files"
+        criteria: "Files with 1-2 tests only"
+        approach: |
+          1. Find files with 1-2 tests
+          2. Merge into related test modules
+          3. DELETE original small files
+          
+    target_reduction:
+      before: 15016
+      after: 9000
+      reduction_percent: 40
+      
+    deletion_rules:
+      never_delete:
+        - "Tests with real assertions on production code"
+        - "Golden Path truth tests"
+        - "Tests that caught real bugs (git history check)"
+      always_delete:
+        - "Tests with zero assertions"
+        - "Tests that only verify mock setup"
+        - "Exact duplicate tests"
+        
+    tests_created: 0
+    tests_deleted: "~6000"
+
+# ============================================================================
+# TRACK 4: MOCK REDUCTION REFACTORING (DEPENDS ON T1-T3)
+# ============================================================================
+
+  - track_id: "T4"
+    name: "Mock Reduction Refactoring"
+    priority: "P2-MEDIUM"
+    duration: "5-7 days"
+    effort: "30-40h"
+    parallelizable: false
+    depends_on: ["T1", "T3"]
+    
+    description: |
+      For remaining tests, systematically reduce mock usage.
+      Target: Mock-to-test ratio < 0.5 for all files.
+      
+    approach:
+      principle: "Mock only what you don't own (external services)"
+      mock_categories:
+        keep_mocked:
+          - "External APIs (GitHub, GitLab, Azure)"
+          - "LLM providers (OpenAI, Anthropic)"
+          - "Cloud storage (S3, Blob)"
+          - "Network I/O"
+        remove_mocks:
+          - "Internal CORTEX modules"
+          - "Knowledge synthesis engine"
+          - "LENS analyzers"
+          - "Orchestrators"
+          - "Registry lookups"
+          
+    phases:
+      - phase_id: "T4-P1"
+        name: "Domain Brain De-Mocking"
+        files:
+          - "test_synthesis_domain_integration.py"
+          - "test_knowledge_graph_query.py"
+        current_mock_ratio: 1.9
+        target_mock_ratio: 0.4
+        
+      - phase_id: "T4-P2"
+        name: "Orchestrator De-Mocking"
+        files:
+          - "test_master_orchestrator_spof_fix.py"
+          - "test_intent_orchestrator_routing.py"
+          - "test_analysis_execution_orchestrators.py"
+        current_mock_ratio: 1.8
+        target_mock_ratio: 0.4
+        
+      - phase_id: "T4-P3"
+        name: "Integration Test Real Wiring"
+        files:
+          - "test_e2e_workflows.py"
+          - "test_cortex_sdlc_e2e.py"
+        current_mock_ratio: 2.0
+        target_mock_ratio: 0.3
+        
+    validation:
+      - "All refactored tests still pass"
+      - "Coverage remains >= current levels"
+      - "No new test failures introduced"
+      
+    tests_created: 0
+    tests_deleted: 0
+    tests_refactored: "~50"
+
+# ============================================================================
+# TRACK 5: RGR LOOP FINAL VERIFICATION (FINAL GATE)
+# ============================================================================
+
+  - track_id: "T5"
+    name: "RGR Loop Final Verification"
+    priority: "P0-CRITICAL"
+    duration: "3-4 days"
+    effort: "20-24h"
+    parallelizable: false
+    depends_on: ["T1", "T2", "T3", "T4"]
+    
+    description: |
+      Red-Green-Refactor loop on entire remaining test suite.
+      Iterate until 100% pass rate with only high-value tests.
+      This is the final gate before declaring victory.
+      
+    process:
+      iteration_limit: 5
+      
+      step_1_red:
+        name: "Run Full Suite"
+        command: "pytest tests/ --tb=short -q"
+        expected: "Some failures from refactoring"
+        
+      step_2_green:
+        name: "Fix Failures"
+        approach: |
+          For each failure:
+          1. Is test still valuable? → Fix production code or test
+          2. Is test low-value? → DELETE (not fix)
+          3. Is test redundant? → DELETE (covered elsewhere)
+        goal: "100% pass"
+        
+      step_3_refactor:
+        name: "Consolidate Similar Tests"
+        approach: |
+          1. Find tests with similar assertions
+          2. Parameterize into single test
+          3. Delete originals
+        goal: "DRY test suite"
+        
+      exit_criteria:
+        - "100% test pass rate"
+        - "Zero assertion-free tests"
+        - "Mock-to-test ratio < 0.5 average"
+        - "All 7 Golden Path tests passing"
+        - "No duplicate test names"
+        - "No phase-dated test files"
+        
+    final_metrics:
+      target_test_count: "8,000-10,000"
+      target_pass_rate: "100%"
+      target_coverage: ">= 85%"
+      target_mock_ratio: "< 0.5"
+      
+    verification:
+      commands:
+        - "pytest tests/ -v --tb=short"
+        - "pytest tests/golden/ -v --no-cov"  # Truth tests separately
+        - "coverage report --fail-under=85"
+        
+    tests_created: 0
+    tests_deleted: "variable (during RGR)"
+
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+
+success_criteria:
+  quantitative:
+    - metric: "Total Test Count"
+      before: 15016
+      after: "8,000-10,000"
+      improvement: "33-47% reduction"
+      
+    - metric: "Golden Path Truth Tests"
+      before: 0
+      after: 7
+      improvement: "∞ (new capability)"
+      
+    - metric: "Average Mock Ratio"
+      before: ">1.0"
+      after: "<0.5"
+      improvement: "50% reduction in mocking"
+      
+    - metric: "Assertion-Free Tests"
+      before: "~100"
+      after: 0
+      improvement: "100% elimination"
+      
+    - metric: "Duplicate Test Names"
+      before: 24
+      after: 0
+      improvement: "100% elimination"
+      
+    - metric: "Phase-Dated Files"
+      before: 16
+      after: 0
+      improvement: "100% elimination"
+      
+  qualitative:
+    - "Developers trust test failures = real bugs"
+    - "Test suite runs in <10 minutes"
+    - "New tests follow Golden Path pattern"
+    - "Mocking reserved for external services only"
+
+# ============================================================================
+# EXECUTION GUIDANCE
+# ============================================================================
+
+execution:
+  autonomous_mode: true
+  
+  daily_targets:
+    day_1_3: "Track 1 - Golden Path Truth Tests (7 tests)"
+    day_4_6: "Track 2 - Reference Repository Fixture"
+    day_7_12: "Track 3 - Low-Value Test Deletion (parallel)"
+    day_13_18: "Track 4 - Mock Reduction Refactoring"
+    day_19_24: "Track 5 - RGR Loop Final Verification"
+    
+  checkpoints:
+    after_track_1: "7 Golden Path tests passing"
+    after_track_2: "Reference repo loads in all tests"
+    after_track_3: "40% test reduction achieved"
+    after_track_4: "Mock ratio < 0.5"
+    after_track_5: "100% pass rate, suite complete"
+    
+  rollback_strategy: |
+    Git tag before each track starts.
+    If track fails → revert to tag, analyze, retry.
+    Never ship broken test suite.
+
+# ============================================================================
+# GOVERNANCE INTEGRATION
+# ============================================================================
+
+governance:
+  core_rules_applied:
+    - "CORE-008: TDD-first (Golden Path tests before deletion)"
+    - "CORE-027: Audit trail (AC markers on all changes)"
+    - "CORE-035: Single canonical (no duplicate tests)"
+    
+  ac_markers:
+    - "AC-WAVE10-T1-001 through T1-007 (Golden Path)"
+    - "AC-WAVE10-T2-001 through T2-003 (Reference Repo)"
+    - "AC-WAVE10-T3-001 through T3-006 (Deletion Phases)"
+    - "AC-WAVE10-T4-001 through T4-003 (De-Mocking)"
+    - "AC-WAVE10-T5-001 (Final RGR)"
+
+# ============================================================================
+# RISKS & MITIGATIONS
+# ============================================================================
+
+risks:
+  - risk: "Delete test that was catching real bugs"
+    probability: "LOW"
+    mitigation: "Git history check before deletion - did this test ever catch a bug?"
+    
+  - risk: "Reference repo too complex to maintain"
+    probability: "MEDIUM"
+    mitigation: "Keep minimal (500 files), document structure, auto-generate where possible"
+    
+  - risk: "Team resistance to 40% test deletion"
+    probability: "HIGH"
+    mitigation: "Show Golden Path tests first - demonstrate quality > quantity"
+    
+  - risk: "Coverage drops below acceptable"
+    probability: "MEDIUM"
+    mitigation: "Track coverage per-track, pause if drops below 80%"
+
+# ============================================================================
+# POST-COMPLETION
+# ============================================================================
+
+post_completion:
+  documentation:
+    - "Update testing guidelines in cortex/knowledge/best-practices/"
+    - "Add Golden Path pattern to test templates"
+    - "Document reference repository usage"
+    
+  automation:
+    - "CI gate: Reject PR with assertion-free tests"
+    - "CI gate: Reject PR with mock ratio > 1.0"
+    - "CI gate: All 7 Golden Path tests must pass"
+    
+  continuous_improvement:
+    - "Weekly test quality metrics in dashboard"
+    - "Quarterly Golden Path test review"
+    - "Annual test suite audit"
