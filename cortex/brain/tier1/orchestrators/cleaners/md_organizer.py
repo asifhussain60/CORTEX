@@ -444,11 +444,17 @@ class MDOrganizerCleaner(CleanerInterface):
         """
         md_files: Dict[str, Path] = {}
 
+        # Exclusion list: directories to skip during scanning
+        exclude_dirs = {
+            "node_modules", "venv", ".venv",
+            "_workspaces", "workspaces", "workspace", "_workspace"
+        }
+
         for md_file in self.repo_root.rglob("*.md"):
             # Skip hidden directories and common exclusions
             if any(part.startswith(".") for part in md_file.parts):
                 continue
-            if any(part in ["node_modules", "venv", ".venv"] for part in md_file.parts):
+            if any(part.lower() in exclude_dirs for part in md_file.parts):
                 continue
 
             md_files[md_file.name] = md_file

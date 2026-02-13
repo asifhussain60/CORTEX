@@ -69,7 +69,10 @@ class MDOrganizerCleaner(CleanerInterface):
         """Scan repository for Markdown files."""
         repo_root = Path(self.config.get("repo_root", "."))
         md_files: Dict[str, Path] = {}
-        exclude_dirs = {".git", ".hidden", "venv", "__pycache__", ".venv", "node_modules"}
+        exclude_dirs = {
+            ".git", ".hidden", "venv", "__pycache__", ".venv", "node_modules",
+            "_workspaces", "workspaces", "workspace", "_workspace"
+        }
         for md_file in repo_root.rglob("*.md"):
             if any(part in exclude_dirs for part in md_file.parts):
                 continue
