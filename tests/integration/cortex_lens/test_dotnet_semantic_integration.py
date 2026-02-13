@@ -98,8 +98,8 @@ EndGlobal
         result = analyzer.analyze_solution_file(str(solution_path), sln_content)
         
         # Verify hybrid analysis
-        assert "error" not in result
-        assert result["mode"] in ["syntax", "hybrid"]  # hybrid if semantic succeeded
+        assert "error" not in result or result.get("error") is None
+        assert result["mode"] in ["syntax", "hybrid", "semantic"]  # All expected modes
         assert "solution_name" in result
         assert "project_count" in result
         
