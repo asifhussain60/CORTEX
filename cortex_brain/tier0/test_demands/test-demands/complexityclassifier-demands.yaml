@@ -1,0 +1,217 @@
+demands:
+- audit_requirements: []
+  blocks: []
+  category: silent_operation
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 1 for ComplexityClassifier
+  estimated_test_lines: 25
+  expected_behavior: YAML file exists, no console output, audit trail logged
+  id: COMPLEXITYCLASSIFIER-DEMAND-001
+  is_golden_path: false
+  orchestrator: ComplexityClassifier
+  priority: 1
+  scenario: "User invokes ComplexityClassifier.execute() \u2192 YAML file created"
+  title: 'Silent operation: ComplexityClassifier creates YAML without console output'
+  validation_rules:
+    audit_marker: AC_COMPLEXITYCLASSIFIER_EXECUTE
+    file_pattern: complexityclassifier_*.yaml
+  validation_type: file_system
+- audit_requirements: []
+  blocks: []
+  category: silent_operation
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 2 for ComplexityClassifier
+  estimated_test_lines: 25
+  expected_behavior: YAML file exists, no console output, audit trail logged
+  id: COMPLEXITYCLASSIFIER-DEMAND-002
+  is_golden_path: false
+  orchestrator: ComplexityClassifier
+  priority: 1
+  scenario: "User invokes ComplexityClassifier.execute() \u2192 YAML file created"
+  title: 'Silent operation: ComplexityClassifier creates YAML without console output'
+  validation_rules:
+    audit_marker: AC_COMPLEXITYCLASSIFIER_EXECUTE
+    file_pattern: complexityclassifier_*.yaml
+  validation_type: file_system
+- audit_requirements: []
+  blocks: []
+  category: silent_operation
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 3 for ComplexityClassifier
+  estimated_test_lines: 25
+  expected_behavior: YAML file exists, no console output, audit trail logged
+  id: COMPLEXITYCLASSIFIER-DEMAND-003
+  is_golden_path: false
+  orchestrator: ComplexityClassifier
+  priority: 1
+  scenario: "User invokes ComplexityClassifier.execute() \u2192 YAML file created"
+  title: 'Silent operation: ComplexityClassifier creates YAML without console output'
+  validation_rules:
+    audit_marker: AC_COMPLEXITYCLASSIFIER_EXECUTE
+    file_pattern: complexityclassifier_*.yaml
+  validation_type: file_system
+- audit_requirements: []
+  blocks: []
+  category: context_synthesis
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 4 for ComplexityClassifier
+  estimated_test_lines: 25
+  expected_behavior: 'Context dict has keys: lens_data, git_history, registry_entry'
+  id: COMPLEXITYCLASSIFIER-DEMAND-004
+  is_golden_path: false
+  orchestrator: ComplexityClassifier
+  priority: 2
+  scenario: ComplexityClassifier loads context from 3 sources
+  title: 'Context synthesis: ComplexityClassifier merges LENS + Git + Registry'
+  validation_rules:
+    required_keys:
+    - lens_data
+    - git_history
+    - registry_entry
+  validation_type: output_structure
+- audit_requirements: []
+  blocks: []
+  category: context_synthesis
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 5 for ComplexityClassifier
+  estimated_test_lines: 25
+  expected_behavior: 'Context dict has keys: lens_data, git_history, registry_entry'
+  id: COMPLEXITYCLASSIFIER-DEMAND-005
+  is_golden_path: false
+  orchestrator: ComplexityClassifier
+  priority: 2
+  scenario: ComplexityClassifier loads context from 3 sources
+  title: 'Context synthesis: ComplexityClassifier merges LENS + Git + Registry'
+  validation_rules:
+    required_keys:
+    - lens_data
+    - git_history
+    - registry_entry
+  validation_type: output_structure
+- audit_requirements: []
+  blocks: []
+  category: gate_enforcement
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 6 for ComplexityClassifier
+  estimated_test_lines: 25
+  expected_behavior: Execution stops, error returned, no partial state
+  id: COMPLEXITYCLASSIFIER-DEMAND-006
+  is_golden_path: false
+  orchestrator: ComplexityClassifier
+  priority: 1
+  scenario: ComplexityClassifier encounters failing DoD check
+  title: 'Gate enforcement: ComplexityClassifier blocks on DoD failure'
+  validation_rules:
+    expected_error: DoD_CHECK_FAILED
+    no_partial_writes: true
+  validation_type: execution_path
+- audit_requirements: []
+  blocks: []
+  category: gate_enforcement
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 7 for ComplexityClassifier
+  estimated_test_lines: 25
+  expected_behavior: Execution stops, error returned, no partial state
+  id: COMPLEXITYCLASSIFIER-DEMAND-007
+  is_golden_path: false
+  orchestrator: ComplexityClassifier
+  priority: 1
+  scenario: ComplexityClassifier encounters failing DoD check
+  title: 'Gate enforcement: ComplexityClassifier blocks on DoD failure'
+  validation_rules:
+    expected_error: DoD_CHECK_FAILED
+    no_partial_writes: true
+  validation_type: execution_path
+- audit_requirements: []
+  blocks: []
+  category: template_quality
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 8 for ComplexityClassifier
+  estimated_test_lines: 25
+  expected_behavior: Response contains no code snippets, uses domain terms
+  id: COMPLEXITYCLASSIFIER-DEMAND-008
+  is_golden_path: false
+  orchestrator: ComplexityClassifier
+  priority: 2
+  scenario: ComplexityClassifier.execute() returns formatted response
+  title: 'Template quality: ComplexityClassifier response uses business language'
+  validation_rules:
+    domain_terms_present: true
+    no_code_markers:
+    - '```'
+    - 'def '
+    - 'class '
+  validation_type: output_structure
+- audit_requirements: []
+  blocks: []
+  category: error_recovery
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 9 for ComplexityClassifier
+  estimated_test_lines: 25
+  expected_behavior: Graceful failure, error logged, cleanup performed
+  id: COMPLEXITYCLASSIFIER-DEMAND-009
+  is_golden_path: false
+  orchestrator: ComplexityClassifier
+  priority: 2
+  scenario: ComplexityClassifier.execute() when dependency unavailable
+  title: 'Error recovery: ComplexityClassifier handles missing dependencies'
+  validation_rules:
+    cleanup_marker: AC_COMPLEXITYCLASSIFIER_CLEANUP
+    error_logged: true
+  validation_type: audit_log
+- audit_requirements: []
+  blocks: []
+  category: integration_coupling
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 10 for ComplexityClassifier
+  estimated_test_lines: 25
+  expected_behavior: Event {spec.name.upper()}_COMPLETE published
+  id: COMPLEXITYCLASSIFIER-DEMAND-010
+  is_golden_path: false
+  orchestrator: ComplexityClassifier
+  priority: 2
+  scenario: ComplexityClassifier.execute() completes successfully
+  title: 'Integration: ComplexityClassifier publishes events to EventBus'
+  validation_rules:
+    event_data_keys:
+    - orchestrator
+    - status
+    - duration
+    event_type: COMPLEXITYCLASSIFIER_COMPLETE
+  validation_type: event_emission
+orchestrator: ComplexityClassifier
+summary:
+  coverage: 0.0
+  generated_at: '2026-02-13'
+  total_demands: 10
+  total_test_code_lines: 250

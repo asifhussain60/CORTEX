@@ -1,0 +1,226 @@
+demands:
+- audit_requirements: []
+  blocks: []
+  category: silent_operation
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 1 for CortexBrainIntegrationOrchestrator
+  estimated_test_lines: 25
+  expected_behavior: YAML file exists, no console output, audit trail logged
+  id: CORTEXBRAININTEGRATIONORCHESTRATOR-DEMAND-001
+  is_golden_path: false
+  orchestrator: CortexBrainIntegrationOrchestrator
+  priority: 1
+  scenario: "User invokes CortexBrainIntegrationOrchestrator.execute() \u2192 YAML\
+    \ file created"
+  title: 'Silent operation: CortexBrainIntegrationOrchestrator creates YAML without
+    console output'
+  validation_rules:
+    audit_marker: AC_CORTEXBRAININTEGRATIONORCHESTRATOR_EXECUTE
+    file_pattern: cortexbrainintegrationorchestrator_*.yaml
+  validation_type: file_system
+- audit_requirements: []
+  blocks: []
+  category: silent_operation
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 2 for CortexBrainIntegrationOrchestrator
+  estimated_test_lines: 25
+  expected_behavior: YAML file exists, no console output, audit trail logged
+  id: CORTEXBRAININTEGRATIONORCHESTRATOR-DEMAND-002
+  is_golden_path: false
+  orchestrator: CortexBrainIntegrationOrchestrator
+  priority: 1
+  scenario: "User invokes CortexBrainIntegrationOrchestrator.execute() \u2192 YAML\
+    \ file created"
+  title: 'Silent operation: CortexBrainIntegrationOrchestrator creates YAML without
+    console output'
+  validation_rules:
+    audit_marker: AC_CORTEXBRAININTEGRATIONORCHESTRATOR_EXECUTE
+    file_pattern: cortexbrainintegrationorchestrator_*.yaml
+  validation_type: file_system
+- audit_requirements: []
+  blocks: []
+  category: silent_operation
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 3 for CortexBrainIntegrationOrchestrator
+  estimated_test_lines: 25
+  expected_behavior: YAML file exists, no console output, audit trail logged
+  id: CORTEXBRAININTEGRATIONORCHESTRATOR-DEMAND-003
+  is_golden_path: false
+  orchestrator: CortexBrainIntegrationOrchestrator
+  priority: 1
+  scenario: "User invokes CortexBrainIntegrationOrchestrator.execute() \u2192 YAML\
+    \ file created"
+  title: 'Silent operation: CortexBrainIntegrationOrchestrator creates YAML without
+    console output'
+  validation_rules:
+    audit_marker: AC_CORTEXBRAININTEGRATIONORCHESTRATOR_EXECUTE
+    file_pattern: cortexbrainintegrationorchestrator_*.yaml
+  validation_type: file_system
+- audit_requirements: []
+  blocks: []
+  category: context_synthesis
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 4 for CortexBrainIntegrationOrchestrator
+  estimated_test_lines: 25
+  expected_behavior: 'Context dict has keys: lens_data, git_history, registry_entry'
+  id: CORTEXBRAININTEGRATIONORCHESTRATOR-DEMAND-004
+  is_golden_path: false
+  orchestrator: CortexBrainIntegrationOrchestrator
+  priority: 2
+  scenario: CortexBrainIntegrationOrchestrator loads context from 3 sources
+  title: 'Context synthesis: CortexBrainIntegrationOrchestrator merges LENS + Git
+    + Registry'
+  validation_rules:
+    required_keys:
+    - lens_data
+    - git_history
+    - registry_entry
+  validation_type: output_structure
+- audit_requirements: []
+  blocks: []
+  category: context_synthesis
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 5 for CortexBrainIntegrationOrchestrator
+  estimated_test_lines: 25
+  expected_behavior: 'Context dict has keys: lens_data, git_history, registry_entry'
+  id: CORTEXBRAININTEGRATIONORCHESTRATOR-DEMAND-005
+  is_golden_path: false
+  orchestrator: CortexBrainIntegrationOrchestrator
+  priority: 2
+  scenario: CortexBrainIntegrationOrchestrator loads context from 3 sources
+  title: 'Context synthesis: CortexBrainIntegrationOrchestrator merges LENS + Git
+    + Registry'
+  validation_rules:
+    required_keys:
+    - lens_data
+    - git_history
+    - registry_entry
+  validation_type: output_structure
+- audit_requirements: []
+  blocks: []
+  category: gate_enforcement
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 6 for CortexBrainIntegrationOrchestrator
+  estimated_test_lines: 25
+  expected_behavior: Execution stops, error returned, no partial state
+  id: CORTEXBRAININTEGRATIONORCHESTRATOR-DEMAND-006
+  is_golden_path: false
+  orchestrator: CortexBrainIntegrationOrchestrator
+  priority: 1
+  scenario: CortexBrainIntegrationOrchestrator encounters failing DoD check
+  title: 'Gate enforcement: CortexBrainIntegrationOrchestrator blocks on DoD failure'
+  validation_rules:
+    expected_error: DoD_CHECK_FAILED
+    no_partial_writes: true
+  validation_type: execution_path
+- audit_requirements: []
+  blocks: []
+  category: gate_enforcement
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 7 for CortexBrainIntegrationOrchestrator
+  estimated_test_lines: 25
+  expected_behavior: Execution stops, error returned, no partial state
+  id: CORTEXBRAININTEGRATIONORCHESTRATOR-DEMAND-007
+  is_golden_path: false
+  orchestrator: CortexBrainIntegrationOrchestrator
+  priority: 1
+  scenario: CortexBrainIntegrationOrchestrator encounters failing DoD check
+  title: 'Gate enforcement: CortexBrainIntegrationOrchestrator blocks on DoD failure'
+  validation_rules:
+    expected_error: DoD_CHECK_FAILED
+    no_partial_writes: true
+  validation_type: execution_path
+- audit_requirements: []
+  blocks: []
+  category: template_quality
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 8 for CortexBrainIntegrationOrchestrator
+  estimated_test_lines: 25
+  expected_behavior: Response contains no code snippets, uses domain terms
+  id: CORTEXBRAININTEGRATIONORCHESTRATOR-DEMAND-008
+  is_golden_path: false
+  orchestrator: CortexBrainIntegrationOrchestrator
+  priority: 2
+  scenario: CortexBrainIntegrationOrchestrator.execute() returns formatted response
+  title: 'Template quality: CortexBrainIntegrationOrchestrator response uses business
+    language'
+  validation_rules:
+    domain_terms_present: true
+    no_code_markers:
+    - '```'
+    - 'def '
+    - 'class '
+  validation_type: output_structure
+- audit_requirements: []
+  blocks: []
+  category: error_recovery
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 9 for CortexBrainIntegrationOrchestrator
+  estimated_test_lines: 25
+  expected_behavior: Graceful failure, error logged, cleanup performed
+  id: CORTEXBRAININTEGRATIONORCHESTRATOR-DEMAND-009
+  is_golden_path: false
+  orchestrator: CortexBrainIntegrationOrchestrator
+  priority: 2
+  scenario: CortexBrainIntegrationOrchestrator.execute() when dependency unavailable
+  title: 'Error recovery: CortexBrainIntegrationOrchestrator handles missing dependencies'
+  validation_rules:
+    cleanup_marker: AC_CORTEXBRAININTEGRATIONORCHESTRATOR_CLEANUP
+    error_logged: true
+  validation_type: audit_log
+- audit_requirements: []
+  blocks: []
+  category: integration_coupling
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 10 for CortexBrainIntegrationOrchestrator
+  estimated_test_lines: 25
+  expected_behavior: Event {spec.name.upper()}_COMPLETE published
+  id: CORTEXBRAININTEGRATIONORCHESTRATOR-DEMAND-010
+  is_golden_path: false
+  orchestrator: CortexBrainIntegrationOrchestrator
+  priority: 2
+  scenario: CortexBrainIntegrationOrchestrator.execute() completes successfully
+  title: 'Integration: CortexBrainIntegrationOrchestrator publishes events to EventBus'
+  validation_rules:
+    event_data_keys:
+    - orchestrator
+    - status
+    - duration
+    event_type: CORTEXBRAININTEGRATIONORCHESTRATOR_COMPLETE
+  validation_type: event_emission
+orchestrator: CortexBrainIntegrationOrchestrator
+summary:
+  coverage: 0.0
+  generated_at: '2026-02-13'
+  total_demands: 10
+  total_test_code_lines: 250
