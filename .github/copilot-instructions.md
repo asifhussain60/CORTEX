@@ -813,6 +813,8 @@ Fix infrastructure. No bypasses allowed.
 
 **CRITICAL: During silent autonomous execution, use ONLY this format:**
 
+**RENDERING RULE:** Each stage line MUST be on its own line. Do NOT concatenate.
+
 ```
 ────────────────────────────────────────
 📋 WAVE-R Stage 4: Integration Testing
@@ -831,18 +833,26 @@ Fixed: Session ID timestamp collision (microseconds)
 ────────────────────────────────────────
 ```
 
+**VALIDATION:** Before output, verify each `├─` or `└─` line has newline after it (not concatenated on single line).
+
 **FORBIDDEN FORMATS during silent execution:**
 - ❌ Text paragraphs ("I'm now implementing...")
 - ❌ Bullet lists of actions taken
 - ❌ Detailed file change descriptions
 - ❌ Code snippets showing what changed
 - ❌ "Here's what I did" summaries
+- ❌ Concatenated stage tree lines (each stage MUST have newline)
 
 **ALLOWED ONLY:**
-- ✅ ASCII progress bars with stage tree
+- ✅ ASCII progress bars with stage tree (each line separate)
 - ✅ Test counts and coverage percentages
 - ✅ Commit hashes (inline in progress bar)
 - ✅ Error messages (if blocked)
+
+**LINE OVERFLOW PREVENTION:**
+- Stage names: <30 chars
+- Total line length: <70 chars  
+- Box separator: exactly 40 `─` chars
 
 ---
 

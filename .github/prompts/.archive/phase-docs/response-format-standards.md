@@ -33,6 +33,8 @@ Unified response format for **all CORTEX operations** across modes: PRE-FLIGHT, 
 
 ### Progress Bar Format (ONLY OUTPUT)
 
+**CRITICAL RENDERING RULE:** Each stage tree line MUST be on its own line with newline character. Do NOT concatenate.
+
 ```
 ----------------------------------------
 📋 {Phase Name}
@@ -47,6 +49,12 @@ Unified response format for **all CORTEX operations** across modes: PRE-FLIGHT, 
 Tests: {passed}/{total} | Coverage: {pct}%
 ----------------------------------------
 ```
+
+**Rendering Validation:**
+- ✅ CORRECT: Each `├─` or `└─` line on separate line
+- ❌ WRONG: `├─ ✅ S1: Name (n tests) ├─ ✅ S2: Name (n tests)` (concatenated)
+- Stage names: Keep <30 chars to prevent overflow
+- Total line length: <70 chars per stage line
 
 ### Completion Summary (FINAL OUTPUT)
 

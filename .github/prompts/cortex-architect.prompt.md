@@ -72,8 +72,49 @@ ENH-089: ✅ COMPLETE
 - All progress/completion sections use box format (────), NOT additional headers
 - Track sections use `###` headers, never `##`
 - Field labels use `**Label:**` format
+- **CRITICAL:** Each stage tree line MUST be on its own line (newline after each `├─` or `└─` line)
+  - ✅ CORRECT: Each stage on separate line
+  - ❌ WRONG: `├─ ✅ S1: Name (n tests) ├─ ✅ S2: Name (n tests)` (concatenated)
 
 **For complete formatting rules, see SSOT:** `.github/prompts/.archive/phase-docs/response-format-standards.md` § Completion Response Template
+
+### RENDERING ENFORCEMENT (CRITICAL)
+
+**PROBLEM:** Stage tree lines may concatenate on single line in Copilot Chat if not properly formatted.
+
+**MANDATORY RENDERING RULES:**
+
+1. **Stage Tree Lines - Each Stage on Separate Line:**
+   ```
+   ├─ ✅ S1: Name (n tests)
+   ├─ ✅ S2: Name (n tests)
+   └─ ✅ S3: Name (n tests)
+   ```
+   - MUST have newline character after each line
+   - NEVER write as: `├─ ✅ S1: Name (n tests) ├─ ✅ S2: Name (n tests)`
+   - Keep stage names <30 chars to prevent overflow
+
+2. **Box Separators - Exact Length:**
+   - MUST be exactly 40 `─` characters (U+2500)
+   - NOT 50, NOT 60, EXACTLY 40
+   - Verify: `────────────────────────────────────────` (40 chars)
+
+3. **Progress Bar - Inline Code Block:**
+   - MUST use inline code: `` `██████████` 100% ``
+   - Prevents markdown from parsing as link
+
+4. **Line Length Limits:**
+   - Stage tree lines: <70 chars total
+   - Box separator: exactly 40 chars
+   - Title lines: <60 chars
+   - If stage name too long, abbreviate
+
+**VALIDATION BEFORE OUTPUT:**
+- [ ] Count `─` in box separator = 40
+- [ ] Each `├─` or `└─` line ends with newline
+- [ ] Progress bar wrapped in `` ` ` ``
+- [ ] No stage name >30 chars
+- [ ] No line >100 chars total
 
 **FORBIDDEN FORMATS during silent execution:**
 - ❌ "I'm now creating DebugMCPTools class..."
@@ -84,6 +125,7 @@ ENH-089: ✅ COMPLETE
 - ❌ Code snippets showing implementation
 - ❌ File-by-file change descriptions
 - ❌ **Additional headers mid-response** (e.g., "## 🏛️ CORTEX Architect STAGE 1 COMPLETE")
+- ❌ **Concatenated stage tree lines** (must have newline after each stage)
 
 **ALLOWED ONLY:**
 - ✅ Single header at top of response
