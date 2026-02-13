@@ -1,8 +1,8 @@
 # Observability
 
-**Purpose:** Monitoring, logging, and tracing for CORTEX  
+**Purpose:** Interoception — the brain's awareness of its own internal state. Metrics are vital signs, logs are neural activity traces, and alerts are pain signals demanding attention  
 **Audience:** SRE, DevOps  
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-13
 
 ---
 

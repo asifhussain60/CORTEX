@@ -1,8 +1,8 @@
 # MCP Protocol
 
-**Purpose:** Detailed MCP protocol specification  
+**Purpose:** Detailed MCP protocol specification — the electrochemical signaling standard of CORTEX  
 **Audience:** Developers, Integration Engineers  
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-13
 
 ---
 
@@ -20,7 +20,13 @@
 
 ## Overview
 
-CORTEX implements the Model Context Protocol using JSON-RPC 2.0 over HTTP and WebSocket transports.
+### Brain Analogy: The Action Potential
+
+Neurons communicate through **action potentials** — standardized electrical signals that travel along axons at up to 120 m/s. Every action potential follows the same pattern: a depolarization wave, a threshold check, an all-or-nothing firing, and a refractory period. This standardization is what makes the nervous system reliable.
+
+CORTEX's MCP protocol is this action potential standard. Every message follows JSON-RPC 2.0 — a request fires, the server processes or rejects, and a response returns. The protocol layer ensures that every "nerve impulse" between client and server is well-formed, validated, and reliably delivered.
+
+CORTEX implements the Model Context Protocol using JSON-RPC 2.0 over stdio and HTTP transports.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -405,4 +411,4 @@ echo '{"jsonrpc":"2.0","method":"tools/list","id":1}' | python -m cortex.mcp.ser
 
 ---
 
-*Part of CORTEX Architecture Documentation*
+*Part of CORTEX Architecture Documentation — Updated 2026-02-13*

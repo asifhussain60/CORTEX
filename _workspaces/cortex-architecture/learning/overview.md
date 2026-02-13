@@ -1,7 +1,8 @@
 # CORTEX Learning System: Adaptive Intelligence Infrastructure
 
+**Purpose:** The limbic system and long-term potentiation circuits — how CORTEX forms memories from experience, strengthening successful pathways and weakening ineffective ones, just as the hippocampus consolidates episodic memories into lasting cortical knowledge  
 **Version:** 1.0.0 | **Phase:** 71 — Universal Learning Loop | **Status:** PRODUCTION  
-**Last Updated:** 2026-02-10 | **Authority:** Phase 71 Architecture Specification
+**Last Updated:** 2026-02-13 | **Authority:** Phase 71 Architecture Specification
 
 ---
 
@@ -544,4 +545,4 @@ Decision:   ❌ Ignore    ⚠️ Log       ⚠️ Caveat    ✅ Use       ✅ Hi
 ---
 
 *Phase 71: Universal Learning Loop — Production Ready*  
-*Last Updated: 2026-02-10 | Authority: CORTEX Architecture Team*
+*Last Updated: 2026-02-13 | Authority: CORTEX Architecture Team*

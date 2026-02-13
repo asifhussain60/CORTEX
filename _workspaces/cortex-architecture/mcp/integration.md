@@ -1,8 +1,8 @@
 # MCP Integration Guide
 
-**Purpose:** Guide for integrating with CORTEX MCP  
+**Purpose:** Guide for integrating with CORTEX MCP — connecting new sensory organs to the nervous system  
 **Audience:** Developers, Integration Engineers  
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-13
 
 ---
 
@@ -20,7 +20,11 @@
 
 ## Overview
 
-This guide covers integrating with the CORTEX MCP server from various clients.
+### Brain Analogy: Connecting New Sensory Organs
+
+When evolution develops a new sensory organ — like the pit viper's heat-sensing pit or the platypus's electroreception — it must connect to the existing nervous system through standardized nerve pathways. The organ is novel, but the wiring protocol is conserved.
+
+Integrating with CORTEX MCP follows the same pattern: your client (the new sensory organ) connects through a standardized protocol (the nervous system), and CORTEX's 17 orchestrators process the signals regardless of their origin.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -88,7 +92,7 @@ CORTEX_PORT=9000 CORTEX_LOG_LEVEL=DEBUG python -m cortex.mcp.server
 curl http://localhost:8000/health
 
 # Expected response
-{"status": "healthy", "orchestrators": 23, "tools": 35}
+{"status": "healthy", "orchestrators": 17, "tools": 86}
 ```
 
 ---
@@ -437,4 +441,4 @@ async def call_with_timeout(client, tool, args, timeout=30):
 
 ---
 
-*Part of CORTEX Architecture Documentation*
+*Part of CORTEX Architecture Documentation — Updated 2026-02-13*

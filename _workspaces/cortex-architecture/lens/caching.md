@@ -1,8 +1,8 @@
 # LENS Caching Strategy
 
-**Purpose:** Documentation of LENS caching for performance optimization  
+**Purpose:** Documentation of LENS caching for performance optimization — short-term memory for perception  
 **Audience:** Developers, Operations  
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-13
 
 ---
 
@@ -19,6 +19,10 @@
 ---
 
 ## Overview
+
+### Brain Analogy: Visual Short-Term Memory
+
+When you look at a scene, you don't re-process every pixel each time you blink. Your **visual short-term memory** (VSTM) holds the processed representation for several hundred milliseconds, allowing rapid recognition without full reprocessing. LENS caching serves the same function — it holds analysis results so that repeated queries don't require full re-analysis.
 
 LENS caching is critical for performance. Without caching, every request would require full re-analysis of the codebase. The caching system provides:
 

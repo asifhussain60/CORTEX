@@ -1,8 +1,8 @@
 # Infrastructure Overview
 
-**Purpose:** The nervous system that keeps the CORTEX brain running  
+**Purpose:** The life-support systems that keep the CORTEX brain alive — circulation, respiration, and homeostasis for a cognitive architecture  
 **Audience:** SRE, DevOps, Architects  
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-13
 
 ---
 

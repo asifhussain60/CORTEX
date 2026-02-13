@@ -1,8 +1,8 @@
 # Decisioning & Routing Capabilities
 
-**Purpose:** Detailed documentation of CORTEX intent classification and routing  
-**Audience:** Architects, Developers  
-**Last Updated:** 2026-02-10
+**Purpose:** Detailed documentation of CORTEX intent classification and routing — the thalamic relay  
+**Audience:** Architects, Senior Developers  
+**Last Updated:** 2026-02-13
 
 ---
 
@@ -33,23 +33,21 @@ The Decisioning layer is responsible for understanding user intent and routing r
 
 ### Supported Intent Types
 
-CORTEX classifies requests into 14 distinct intent types:
+CORTEX classifies requests into 12 distinct intent types:
 
 | Intent | Description | Primary Orchestrator |
 |--------|-------------|---------------------|
 | **IMPLEMENT** | New feature development | TDDOrchestrator |
 | **FIX** | Bug fixes and issue resolution | TDDOrchestrator |
 | **REFACTOR** | Code improvement and restructuring | RefactoringOrchestrator |
-| **ANALYZE** | Code analysis requests | LENSOrchestrator |
-| **DOCUMENT** | Documentation generation | DocumentationOrchestrator |
+| **ANALYZE** | Code analysis requests | UnifiedAnalysisOrchestrator |
 | **TEST** | Test creation | TDDOrchestrator |
-| **DEPLOY** | Deployment operations | DeploymentOrchestrator |
-| **GOVERNANCE** | Governance checks | GovernanceOrchestrator |
-| **QUERY** | Information requests | KnowledgeOrchestrator |
-| **VALIDATE** | Validation operations | ValidationOrchestrator |
-| **MIGRATE** | Migration operations | MigrationOrchestrator |
-| **ONBOARD** | Repository onboarding | OnboardingOrchestrator |
+| **GOVERNANCE** | Governance checks | UnifiedQualityAssuranceOrchestrator |
+| **QUERY** | Information requests | UnifiedDiscoveryOrchestrator |
+| **VALIDATE** | Validation operations | UnifiedQualityAssuranceOrchestrator |
+| **ONBOARD** | Repository onboarding | UnifiedOnboardingOrchestrator |
 | **PLAN** | Development planning | PlanningOrchestrator |
+| **WORKFLOW** | Multi-step automated workflows | WorkflowOrchestrator |
 | **UNKNOWN** | Unclassified (requires clarification) | MasterOrchestrator |
 
 ### Classification Process
@@ -177,7 +175,7 @@ routing:
     requires_tdd: true
     
   analyze:
-    primary: LENSOrchestrator
+    primary: UnifiedAnalysisOrchestrator
     fallback: [MasterOrchestrator]
     keywords: [analyze, review, examine]
     requires_tdd: false
@@ -363,7 +361,7 @@ fallback_chains:
     strategy: "sequential"
     
   analyze:
-    chain: [LENSOrchestrator, MasterOrchestrator]
+    chain: [UnifiedAnalysisOrchestrator, MasterOrchestrator]
     strategy: "sequential"
     
   unknown:

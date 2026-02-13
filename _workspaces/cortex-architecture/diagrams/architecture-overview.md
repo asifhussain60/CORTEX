@@ -1,6 +1,6 @@
 # CORTEX Architecture Overview Diagram
 
-**Updated:** 2026-02-11 | **Version:** 2.0.0
+**Updated:** 2026-02-13 | **Version:** 2.0.0
 
 ---
 

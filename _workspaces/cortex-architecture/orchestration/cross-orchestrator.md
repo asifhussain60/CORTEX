@@ -1,8 +1,8 @@
 # Cross-Orchestrator Coordination
 
-**Purpose:** Documentation of orchestrator coordination patterns  
+**Purpose:** Documentation of orchestrator coordination patterns — the neural pathways of CORTEX  
 **Audience:** Architects, Senior Developers  
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-13 | **Orchestrators:** 17 active
 
 ---
 
@@ -20,15 +20,19 @@
 
 ## Overview
 
-CORTEX orchestrators coordinate through well-defined patterns that ensure consistency, performance, and reliability. This document describes how orchestrators communicate and work together.
+### Brain Analogy: White Matter Tracts
+
+In the brain, individual regions don't operate in isolation — they communicate through **white matter tracts**, bundles of myelinated axons that form the brain's internal wiring. The arcuate fasciculus connects Broca's and Wernicke's areas for language. The corpus callosum bridges the two hemispheres. These pathways determine how fast and reliably information flows between regions.
+
+CORTEX's cross-orchestrator coordination patterns are these white matter tracts — the communication infrastructure that allows 17 orchestrators to work together as a unified cognitive system. Without these patterns, each orchestrator would be an isolated island of capability. With them, CORTEX achieves emergent intelligence that no single orchestrator could deliver alone.
 
 ### Coordination Principles
 
-1. **Single Responsibility** — Each orchestrator owns its domain
-2. **Loose Coupling** — Minimal direct dependencies
-3. **Event-Driven** — Async communication where possible
-4. **Hierarchical Authority** — MasterOrchestrator as coordinator
-5. **Graceful Degradation** — Fallback chains
+1. **Single Responsibility** — Each orchestrator owns its brain region (no overlap after Wave 7 consolidation)
+2. **Loose Coupling** — Minimal direct dependencies (like brain regions communicating through defined tracts)
+3. **Event-Driven** — Async communication where possible (like neurotransmitter signaling)
+4. **Hierarchical Authority** — MasterOrchestrator as prefrontal cortex coordinator
+5. **Graceful Degradation** — Fallback chains (like the brain rerouting around damaged areas)
 
 ---
 
@@ -36,30 +40,27 @@ CORTEX orchestrators coordinate through well-defined patterns that ensure consis
 
 ### Pattern 1: Hierarchical Delegation
 
+Like the prefrontal cortex delegating tasks to specialized brain regions through top-down control signals:
+
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                HIERARCHICAL DELEGATION                           │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│                  ┌─────────────────────┐                        │
-│                  │  MasterOrchestrator │                        │
-│                  └──────────┬──────────┘                        │
-│                             │                                    │
-│            ┌────────────────┼────────────────┐                  │
-│            ▼                ▼                ▼                  │
-│  ┌─────────────────┐ ┌─────────────┐ ┌─────────────────┐       │
-│  │  IntentRouter   │ │   LENS     │ │ Enforcement     │       │
-│  └─────────────────┘ └─────────────┘ └─────────────────┘       │
-│            │                                                     │
-│            ▼                                                     │
-│  ┌─────────────────┐                                            │
-│  │ Target Handler  │                                            │
-│  └─────────────────┘                                            │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
+             ┌───────────────────────┐
+             │  MasterOrchestrator   │  ← Prefrontal cortex
+             │  (executive control)  │
+             └───────────┬───────────┘
+                         │
+        ┌────────────────┼────────────────┐
+        ▼                ▼                ▼
+ ┌─────────────┐ ┌──────────────┐ ┌─────────────────┐
+ │ IntentRouter │ │   Unified    │ │  Unified QA     │
+ │ (thalamus)   │ │  Analysis    │ │ (error detect)  │
+ └──────┬──────┘ └──────────────┘ └─────────────────┘
+        ▼
+ ┌──────────────┐
+ │Target Handler│  ← Specialized brain region
+ └──────────────┘
 ```
 
-**Usage:** Standard request processing flow.
+**Usage:** Standard request processing flow. The prefrontal cortex (MasterOrchestrator) maintains executive oversight while delegating to specialized regions.
 
 **Implementation:**
 ```python
@@ -435,10 +436,10 @@ def negotiate_capabilities(
         if required.issubset(set(orchestrator.capabilities)):
             return orchestrator
     
-    # Try combination
+    # Try combination via MasterOrchestrator coordination
     combination = self._find_combination(required, available)
     if combination:
-        return CompositeOrchestrator(combination)
+        return self.master_orchestrator.compose(combination)
     
     return None
 ```
@@ -468,10 +469,10 @@ def negotiate_capabilities(
 
 ## Related Documents
 
-- [Orchestration Overview](overview.md) — Architecture
-- [MasterOrchestrator](master-orchestrator.md) — Coordinator
-- [End-to-End Flow](end-to-end-flow.md) — Complete lifecycle
+- [Orchestration Overview](overview.md) — Brain region atlas
+- [MasterOrchestrator](master-orchestrator.md) — Prefrontal cortex coordinator
+- [End-to-End Flow](end-to-end-flow.md) — Complete cognitive lifecycle
 
 ---
 
-*Part of CORTEX Architecture Documentation*
+*Part of CORTEX Architecture Documentation — Updated 2026-02-13*

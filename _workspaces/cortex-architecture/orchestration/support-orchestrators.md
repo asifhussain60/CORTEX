@@ -1,473 +1,236 @@
 # Support Orchestrators
 
-**Purpose:** Documentation of support and infrastructure orchestrators  
+**Purpose:** Documentation of unified support orchestrators — the consolidated association areas of CORTEX  
 **Audience:** Developers, Operations  
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-13 | **Wave 7 Track 4:** CONSOLIDATION COMPLETE
 
 ---
 
 ## Table of Contents
 
 - [Overview](#overview)
-- [OnboardingOrchestrator](#onboardingorchestrator)
-- [ToolDiscoveryOrchestrator](#tooldiscoveryorchestrator)
-- [UpgradeOrchestrator](#upgradeorchestrator)
-- [RollbackOrchestrator](#rollbackorchestrator)
-- [DiagnosticsOrchestrator](#diagnosticsorchestrator)
-- [CacheOrchestrator](#cacheorchestrator)
-- [HealthOrchestrator](#healthorchestrator)
+- [UnifiedOnboardingOrchestrator](#unifiedonboardingorchestrator)
+- [UnifiedAnalysisOrchestrator](#unifiedanalysisorchestrator)
+- [UnifiedQualityAssuranceOrchestrator](#unifiedqualityassuranceorchestrator)
+- [UnifiedDiscoveryOrchestrator](#unifieddiscoveryorchestrator)
+- [Deprecated Predecessors](#deprecated-predecessors)
 - [Related Documents](#related-documents)
 
 ---
 
 ## Overview
 
-Support orchestrators provide auxiliary functions that enable smooth CORTEX operations. They handle infrastructure, maintenance, and operational concerns.
+### Neural Pruning: From 12 Regions to 4 Association Areas
 
-| Orchestrator | Priority | Purpose |
-|--------------|----------|---------|
-| OnboardingOrchestrator | 110 | Repository setup |
-| ToolDiscoveryOrchestrator | 120 | Tool catalog |
-| UpgradeOrchestrator | 130 | Version upgrades |
-| RollbackOrchestrator | 140 | Version rollbacks |
-| DiagnosticsOrchestrator | 150 | System diagnostics |
-| CacheOrchestrator | 160 | Cache management |
-| HealthOrchestrator | 170 | Health monitoring |
+In a developing brain, **synaptic pruning** eliminates redundant neural connections to create faster, more efficient pathways. A child's brain has twice as many synapses as an adult's — it's the pruning that creates expertise.
+
+CORTEX underwent the same maturation. During **Wave 7 Track 4**, 12 overlapping support orchestrators were consolidated into **4 unified orchestrators** — a 37% reduction that created faster routing, lower memory overhead, and clearer cognitive boundaries.
+
+Each unified orchestrator is like a mature **association area** in the brain — a region that integrates input from multiple simpler areas into a single, more capable processing center. The temporal-parietal junction combines auditory, visual, and spatial information. Similarly, the UnifiedQualityAssuranceOrchestrator combines challenge generation, code review, recommendation gating, meta-audit, and security review into one coherent quality judgment center.
+
+### The 4 Unified Support Orchestrators
+
+| Orchestrator | Priority | Absorbed | Brain Analogy |
+|--------------|----------|----------|---------------|
+| **UnifiedOnboardingOrchestrator** | 105 | 3 predecessors | Hippocampal formation — memory encoding for new repos |
+| **UnifiedAnalysisOrchestrator** | 115 | 2 predecessors | Visual association cortex — unified perception |
+| **UnifiedQualityAssuranceOrchestrator** | 125 | 5 predecessors | Anterior cingulate cortex — error & quality judgment |
+| **UnifiedDiscoveryOrchestrator** | 135 | 2 predecessors | Curiosity circuit — exploration & learning |
 
 ---
 
-## OnboardingOrchestrator
+## UnifiedOnboardingOrchestrator
 
-### Purpose
+### Brain Analogy: Hippocampal Formation
 
-Handles repository onboarding, including project analysis, security scanning, and initial configuration.
+The **hippocampus** is where new memories are formed. When you visit a new city, the hippocampus encodes the layout, landmarks, and routes into a mental map. The UnifiedOnboardingOrchestrator does the same for new repositories — scanning, mapping, and encoding everything CORTEX needs to know about a codebase.
+
+### Absorbed Capabilities
+
+| Predecessor | What It Did | Now Handled By |
+|------------|-------------|----------------|
+| **OnboardingOrchestrator** | Basic repository onboarding | `onboard()` method |
+| **RepositoryOnboardingOrchestrator** | Security scanning + profiling | `profile_and_scan()` method |
+| **SetupOrchestrator** | Environment initialization | `setup_environment()` method |
 
 ### Capabilities
 
-- **Project Analysis** — Detect project type, frameworks
-- **Security Scan** — Initial vulnerability assessment
-- **Configuration** — Generate CORTEX config
-- **Knowledge Extraction** — Extract domain knowledge
+- **Project Analysis** — Detect project type, frameworks, languages
+- **Security Scan** — Initial vulnerability assessment (OWASP, dependency CVEs)
+- **Configuration** — Generate `.cortex/` config, MCP setup
+- **Knowledge Extraction** — Extract domain terminology, API patterns, conventions
+- **Environment Setup** — Git hooks, virtual environment, dependency installation
 
 ### Onboarding Flow
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                  ONBOARDING WORKFLOW                             │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  1. SCAN: Project structure analysis                            │
-│     ├── Language detection                                      │
-│     ├── Framework identification                                │
-│     └── Dependency analysis                                     │
-│                                                                  │
-│  2. SECURITY: Vulnerability assessment                          │
-│     ├── Dependency vulnerabilities                              │
-│     ├── Secrets detection                                       │
-│     └── OWASP compliance check                                  │
-│                                                                  │
-│  3. CONFIGURE: CORTEX setup                                     │
-│     ├── Generate .cortex config                                 │
-│     ├── Setup MCP integration                                   │
-│     └── Configure git hooks                                     │
-│                                                                  │
-│  4. EXTRACT: Knowledge extraction                               │
-│     ├── API patterns                                            │
-│     ├── Domain terminology                                      │
-│     └── Coding conventions                                      │
-│                                                                  │
-│  5. REPORT: Onboarding summary                                  │
-│     ├── Health score                                            │
-│     ├── Security findings                                       │
-│     └── Recommendations                                         │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
+1. SCAN: Project structure analysis
+   ├── Language detection   ├── Framework identification
+   └── Dependency analysis
+           ↓
+2. SECURITY: Vulnerability assessment
+   ├── Dependency CVEs     ├── Secrets detection
+   └── OWASP compliance
+           ↓
+3. CONFIGURE: CORTEX setup
+   ├── Generate .cortex/   ├── Setup MCP integration
+   └── Configure git hooks
+           ↓
+4. EXTRACT: Knowledge extraction
+   ├── API patterns        ├── Domain terminology
+   └── Coding conventions
+           ↓
+5. REPORT: Onboarding summary with health score
 ```
 
 ### MCP Tool
 
 ```python
-# cortex_onboard_repository
-{
-    "name": "cortex_onboard_repository",
-    "description": "Onboard a new repository to CORTEX",
-    "parameters": {
-        "path": "Repository path",
-        "scan_security": "Run security scan (default: true)",
-        "extract_knowledge": "Extract domain knowledge (default: true)"
-    }
-}
+cortex_onboard_repository(
+    path="./my-project",
+    scan_security=True,
+    extract_knowledge=True
+)
 ```
 
 ---
 
-## ToolDiscoveryOrchestrator
+## UnifiedAnalysisOrchestrator
 
-### Purpose
+### Brain Analogy: Visual Association Cortex
 
-Manages the MCP tool catalog, enabling discovery and documentation of available tools.
+The **visual association cortex** doesn't just see raw pixels — it recognizes patterns, objects, and meaning in visual input. It integrates low-level visual features into high-level understanding. The UnifiedAnalysisOrchestrator does the same for code: it combines LENS analysis, AST parsing, tool discovery, and dependency analysis into a unified perception of your codebase.
 
-### Capabilities
+### Absorbed Capabilities
 
-- **Catalog Management** — Maintain tool registry
-- **Search** — Find tools by capability
-- **Documentation** — Tool usage guides
-- **Versioning** — Track tool versions
-
-### Tool Catalog Structure
-
-```python
-@dataclass
-class ToolCatalogEntry:
-    """Entry in the tool catalog."""
-    
-    name: str
-    category: ToolCategory
-    description: str
-    parameters: List[ToolParameter]
-    examples: List[ToolExample]
-    version: str
-    deprecated: bool = False
-    replacement: Optional[str] = None
-```
-
-### Discovery API
-
-```python
-async def discover_tools(
-    self,
-    category: Optional[ToolCategory] = None,
-    capability: Optional[str] = None
-) -> List[ToolCatalogEntry]:
-    """
-    Discover tools matching criteria.
-    
-    Args:
-        category: Filter by category
-        capability: Filter by capability keyword
-    
-    Returns:
-        Matching tool entries
-    """
-    tools = self.catalog.list_all()
-    
-    if category:
-        tools = [t for t in tools if t.category == category]
-    
-    if capability:
-        tools = [
-            t for t in tools
-            if capability.lower() in t.description.lower()
-        ]
-    
-    return tools
-```
-
----
-
-## UpgradeOrchestrator
-
-### Purpose
-
-Manages CORTEX version upgrades, including migration and compatibility checks.
+| Predecessor | What It Did | Now Handled By |
+|------------|-------------|----------------|
+| **LENSOrchestrator** | Coordinated LENS analyzers | `analyze_with_lens()` method |
+| **ToolDiscoveryOrchestrator** | Tool catalog and search | `discover_tools()` method |
 
 ### Capabilities
 
-- **Version Check** — Detect available upgrades
-- **Compatibility** — Assess upgrade impact
-- **Migration** — Execute upgrade steps
-- **Validation** — Verify upgrade success
+- **Code Analysis** — Full LENS pipeline (8 analyzers in parallel)
+- **LENS Coordination** — Orchestrate Git, AST, Comment, Pattern, Config, DB, API, Security analyzers
+- **Tool Discovery** — Search and catalog MCP tools by capability
+- **Dependency Analysis** — Map code dependencies and detect drift
 
-### Upgrade Process
+### Analysis Pipeline
 
 ```python
-async def execute_upgrade(
-    self,
-    target_version: str
-) -> UpgradeResult:
+async def analyze(self, target: str, depth: str = "full") -> AnalysisResult:
     """
-    Execute CORTEX upgrade.
-    """
-    current = self.get_current_version()
+    Unified analysis combining LENS + tool discovery + dependencies.
     
-    # Check compatibility
-    compatibility = await self.check_compatibility(
-        current,
-        target_version
+    Like the visual association cortex processing multiple visual streams
+    simultaneously and integrating them into a coherent perception.
+    """
+    # Parallel perception (like visual processing streams)
+    lens_result, tool_result, dep_result = await asyncio.gather(
+        self.analyze_with_lens(target, depth),
+        self.discover_relevant_tools(target),
+        self.analyze_dependencies(target)
     )
     
-    if not compatibility.compatible:
-        return UpgradeResult(
-            success=False,
-            error=f"Incompatible upgrade: {compatibility.reason}"
-        )
-    
-    # Create backup
-    backup = await self.create_backup()
-    
-    try:
-        # Execute migration steps
-        for step in compatibility.migration_steps:
-            await self.execute_step(step)
-        
-        # Validate upgrade
-        validation = await self.validate_upgrade(target_version)
-        
-        if not validation.success:
-            await self.restore_backup(backup)
-            return UpgradeResult(
-                success=False,
-                error=validation.error
-            )
-        
-        return UpgradeResult(
-            success=True,
-            from_version=current,
-            to_version=target_version,
-            steps_executed=len(compatibility.migration_steps)
-        )
-        
-    except Exception as e:
-        await self.restore_backup(backup)
-        raise
+    # Synthesize into unified understanding
+    return self.synthesize(lens_result, tool_result, dep_result)
 ```
 
 ---
 
-## RollbackOrchestrator
+## UnifiedQualityAssuranceOrchestrator
 
-### Purpose
+### Brain Analogy: Anterior Cingulate Cortex
 
-Handles version rollbacks when upgrades fail or issues are discovered.
+The **anterior cingulate cortex (ACC)** is the brain's error detection and quality control center. It monitors for conflicts between what you intended and what actually happened, flagging mistakes before they become problems. It's why you feel that "something's wrong" sensation when you make a typo — the ACC caught the error before your conscious mind did.
+
+The UnifiedQualityAssuranceOrchestrator is CORTEX's ACC — continuously monitoring code quality, detecting errors, generating challenges for risky decisions, and ensuring every output meets production standards.
+
+### Absorbed Capabilities
+
+| Predecessor | What It Did | Now Handled By |
+|------------|-------------|----------------|
+| **RecommendationGate** | Filtered unsafe recommendations | `gate_recommendation()` method |
+| **ChallengeEngine** | Generated decision challenges | `generate_challenges()` method |
+| **MetaAuditOrchestrator** | Audited the audit system itself | `meta_audit()` method |
+| **CodeReviewOrchestrator** | Automated code review | `review_code()` method |
+| **SecurityReviewEngine** | Security-focused review | `review_security()` method |
 
 ### Capabilities
 
-- **Backup Management** — Track rollback points
-- **Safe Rollback** — Execute rollback safely
-- **Data Preservation** — Protect user data
-- **Validation** — Verify rollback success
+- **Quality Assurance** — Comprehensive code quality validation
+- **Challenge Generation** — Generate alternatives for risky decisions
+- **Recommendation Gating** — Block unsafe suggestions (REJ-history check)
+- **Meta-Audit** — Audit the audit system for completeness
+- **Code Review** — Automated review against CORE rules and best practices
+- **Security Review** — OWASP compliance, secrets detection, injection prevention
 
-### Rollback Strategy
+### Challenge Flow
 
-```python
-class RollbackStrategy(Enum):
-    """Rollback strategies."""
-    
-    FULL = "full"           # Complete rollback to previous version
-    PARTIAL = "partial"     # Rollback specific components
-    CONFIG_ONLY = "config"  # Rollback configuration only
-    DATA_PRESERVE = "data"  # Rollback code, preserve data
+```
+DETECT: Identify challengeable decision
+  └── Confidence < 0.7? Conflicting signals? High-impact operation?
+          ↓
+GENERATE: Create challenge with alternatives
+  └── Formulate question, provide evidence, present options
+          ↓
+PRESENT: Display to user for decision
+          ↓
+RESOLVE: Handle user's choice
+          ↓
+LEARN: Record outcome for future accuracy improvement
 ```
 
 ---
 
-## DiagnosticsOrchestrator
+## UnifiedDiscoveryOrchestrator
 
-### Purpose
+### Brain Analogy: The Curiosity Circuit
 
-Provides system diagnostics and debugging capabilities.
+Neuroscience has identified a **curiosity circuit** in the brain — a network connecting the prefrontal cortex, hippocampus, and dopamine system that drives exploration and learning. When you encounter something novel, this circuit fires, creating the urge to investigate and the reward when you learn something new.
+
+The UnifiedDiscoveryOrchestrator is CORTEX's curiosity circuit — it drives exploration of new tools, generates learning paths, translates business language into technical terms, and helps users discover capabilities they didn't know existed.
+
+### Absorbed Capabilities
+
+| Predecessor | What It Did | Now Handled By |
+|------------|-------------|----------------|
+| **EducationalOrchestrator** | Learning paths and tutorials | `generate_learning_path()` method |
+| **BusinessLanguageOrchestrator** | Business ↔ tech translation | `translate_business_terms()` method |
 
 ### Capabilities
 
-- **Health Check** — System health assessment
-- **Log Analysis** — Parse and analyze logs
-- **Performance Profiling** — Identify bottlenecks
-- **Debug Injection** — Insert debug markers
-
-### Diagnostic Commands
-
-```python
-# Debug injection for troubleshooting
-DIAGNOSTIC_COMMANDS = {
-    "/debug {path}": "Full debug cycle",
-    "/debug-cleanup": "Remove debug markers",
-    "/diagnose": "System health check",
-    "/profile": "Performance profiling",
-    "/logs": "Recent log analysis",
-}
-```
-
-### Debug Marker Injection
-
-```python
-async def inject_debug_markers(
-    self,
-    target_file: str
-) -> InjectionResult:
-    """
-    Inject CORTEX_DEBUG markers for troubleshooting.
-    """
-    content = await self.read_file(target_file)
-    
-    # Identify injection points
-    points = self.identify_injection_points(content)
-    
-    # Inject markers
-    for point in points:
-        content = self.inject_at_point(content, point, "CORTEX_DEBUG")
-    
-    await self.write_file(target_file, content)
-    
-    return InjectionResult(
-        file=target_file,
-        markers_injected=len(points)
-    )
-```
+- **Feature Discovery** — Surface relevant CORTEX capabilities
+- **Learning Paths** — Generate personalized learning sequences
+- **Business Language** — Translate domain terminology to technical concepts
+- **Educational Content** — Explain complex CORTEX concepts accessibly
+- **Tool Discovery** — Find and explain available MCP tools
 
 ---
 
-## CacheOrchestrator
+## Deprecated Predecessors
 
-### Purpose
+The following orchestrators are **deprecated** and scheduled for removal on **2026-03-31**. They still function but are superseded by unified orchestrators:
 
-Manages CORTEX caching layers for performance optimization.
+| Predecessor | Priority | Replaced By | Status |
+|------------|----------|-------------|--------|
+| OnboardingOrchestrator | 110 | UnifiedOnboardingOrchestrator | ⚠️ Deprecated |
+| ToolDiscoveryOrchestrator | 120 | UnifiedAnalysisOrchestrator | ⚠️ Deprecated |
+| UpgradeOrchestrator | 130 | UnifiedOnboardingOrchestrator | ⚠️ Deprecated |
+| RollbackOrchestrator | 140 | WorkflowOrchestrator | ⚠️ Deprecated |
+| SetupOrchestrator | 150 | UnifiedOnboardingOrchestrator | ⚠️ Deprecated |
+| ComposedOrchestrator | 160 | MasterOrchestrator | ⚠️ Deprecated |
+| WrappedTDDOrchestrator | 170 | TDDOrchestrator | ⚠️ Deprecated |
 
-### Capabilities
-
-- **LENS Cache** — Cache LENS analysis results
-- **Knowledge Cache** — Cache knowledge queries
-- **Invalidation** — Smart cache invalidation
-- **Warming** — Proactive cache warming
-
-### Cache Layers
-
-| Layer | TTL | Purpose |
-|-------|-----|---------|
-| **L1: Request** | 1min | Same-request deduplication |
-| **L2: Session** | 1hr | Session-scoped caching |
-| **L3: Workspace** | 24hr | Workspace-scoped caching |
-| **L4: Global** | 7d | Cross-workspace caching |
-
-### Cache Operations
-
-```python
-async def manage_cache(
-    self,
-    operation: CacheOperation,
-    layer: Optional[CacheLayer] = None,
-    key: Optional[str] = None
-) -> CacheResult:
-    """
-    Manage cache operations.
-    """
-    if operation == CacheOperation.CLEAR:
-        if layer:
-            return await self._clear_layer(layer)
-        return await self._clear_all()
-    
-    if operation == CacheOperation.WARM:
-        return await self._warm_cache(layer or CacheLayer.WORKSPACE)
-    
-    if operation == CacheOperation.STATS:
-        return await self._get_stats()
-    
-    if operation == CacheOperation.INVALIDATE:
-        return await self._invalidate_key(key)
-```
-
----
-
-## HealthOrchestrator
-
-### Purpose
-
-Monitors CORTEX system health and provides health endpoints.
-
-### Capabilities
-
-- **Liveness** — System alive check
-- **Readiness** — System ready for requests
-- **Dependency Health** — External service status
-- **Metrics** — Health metrics collection
-
-### Health Endpoints
-
-```python
-# Health endpoint responses
-HEALTH_ENDPOINTS = {
-    "/health": "Basic liveness check",
-    "/health/ready": "Readiness probe",
-    "/health/wiring": "Wiring contract status",
-    "/health/orchestrators": "Orchestrator status",
-    "/health/dependencies": "External dependencies",
-}
-```
-
-### Health Check Implementation
-
-```python
-async def check_health(self) -> HealthStatus:
-    """
-    Comprehensive health check.
-    """
-    checks = {}
-    
-    # Core components
-    checks["mcp_server"] = await self._check_mcp()
-    checks["wiring_contract"] = await self._check_wiring()
-    checks["orchestrators"] = await self._check_orchestrators()
-    
-    # External dependencies
-    checks["database"] = await self._check_database()
-    checks["cache"] = await self._check_cache()
-    
-    # Calculate overall status
-    all_healthy = all(c.healthy for c in checks.values())
-    
-    return HealthStatus(
-        healthy=all_healthy,
-        checks=checks,
-        timestamp=datetime.utcnow()
-    )
-```
-
-### Health Metrics
-
-| Metric | Type | Labels |
-|--------|------|--------|
-| `cortex_health_check_total` | Counter | component, status |
-| `cortex_health_check_duration` | Histogram | component |
-| `cortex_component_up` | Gauge | component |
-
----
-
-## Orchestrator Coordination
-
-### Support Orchestrator Triggers
-
-| Trigger | Orchestrator | Automatic |
-|---------|--------------|-----------|
-| New repository | OnboardingOrchestrator | Yes |
-| Version mismatch | UpgradeOrchestrator | Prompt |
-| Health failure | DiagnosticsOrchestrator | Yes |
-| Cache miss rate > 50% | CacheOrchestrator | Yes |
-| Tool query | ToolDiscoveryOrchestrator | Yes |
-
-### Priority Resolution
-
-```python
-def resolve_support_priority(
-    orchestrators: List[SupportOrchestrator],
-    context: OperationContext
-) -> List[SupportOrchestrator]:
-    """
-    Order support orchestrators by priority.
-    
-    Lower priority number = higher precedence.
-    """
-    return sorted(
-        orchestrators,
-        key=lambda o: o.priority
-    )
-```
+> **Migration:** If you depend on any deprecated orchestrator, migrate to the unified replacement before the sunset date. The unified orchestrators expose the same capabilities through consolidated interfaces.
 
 ---
 
 ## Related Documents
 
-- [Orchestration Overview](overview.md) — Architecture
-- [Domain Orchestrators](domain-orchestrators.md) — Domain functions
-- [Infrastructure Overview](../infrastructure/overview.md) — Infrastructure
+- [Orchestration Overview](overview.md) — Complete orchestrator atlas
+- [Domain Orchestrators](domain-orchestrators.md) — Specialized brain lobes
+- [Infrastructure Overview](../infrastructure/overview.md) — Brain life support systems
 
 ---
 

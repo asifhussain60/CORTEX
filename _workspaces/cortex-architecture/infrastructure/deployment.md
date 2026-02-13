@@ -1,8 +1,8 @@
 # Deployment Guide
 
-**Purpose:** CORTEX deployment procedures  
+**Purpose:** Neural development and maturation — how CORTEX grows from embryonic code to a fully-formed production brain  
 **Audience:** DevOps, SRE  
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-13
 
 ---
 

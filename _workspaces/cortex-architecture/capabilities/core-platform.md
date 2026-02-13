@@ -1,8 +1,8 @@
 # Core Platform Capabilities
 
-**Purpose:** Detailed documentation of CORTEX foundation capabilities  
-**Audience:** Architects, Developers  
-**Last Updated:** 2026-02-10
+**Purpose:** Detailed documentation of CORTEX foundation capabilities — the brainstem and core neural infrastructure  
+**Audience:** Architects, Senior Developers  
+**Last Updated:** 2026-02-13
 
 ---
 
@@ -72,9 +72,9 @@ CORTEX implements a service-oriented architecture (SOA) where each orchestrator 
 
 | Category | Count | Purpose | Examples |
 |----------|-------|---------|----------|
-| **Core** | 8 | Central coordination | MasterOrchestrator, IntentRouter, TDDOrchestrator |
-| **Domain** | 6 | Domain-specific logic | RefactoringOrchestrator, PlanningOrchestrator |
-| **Support** | 9 | Auxiliary functions | OnboardingOrchestrator, ToolDiscoveryOrchestrator |
+| **Core** | 5 | Central coordination | MasterOrchestrator, IntentRouter, TDDOrchestrator |
+| **Domain** | 5 | Domain-specific logic | RefactoringOrchestrator, PlanningOrchestrator |
+| **Unified Support** | 4 | Consolidated support functions | UnifiedOnboardingOrchestrator, UnifiedAnalysisOrchestrator |
 | **Infrastructure** | 3 | System operations | DatabaseBackedRegistry, HealthChecker |
 
 ---

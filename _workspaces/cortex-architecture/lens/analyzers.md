@@ -1,8 +1,8 @@
 # LENS Analyzers
 
-**Purpose:** Detailed documentation of each LENS analyzer  
+**Purpose:** Detailed documentation of each LENS analyzer — the 8 visual processing streams  
 **Audience:** Developers, Contributors  
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-13
 
 ---
 
@@ -22,6 +22,8 @@
 ---
 
 ## Analyzer Overview
+
+Like the brain's parallel visual processing streams — where the ventral stream identifies *what* an object is while the dorsal stream identifies *where* it is — LENS runs 8 analyzers in parallel, each extracting a different dimension of understanding from the codebase.
 
 | Analyzer | Purpose | Performance | Languages |
 |----------|---------|-------------|-----------|

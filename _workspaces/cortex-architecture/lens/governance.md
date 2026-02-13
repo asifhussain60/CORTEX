@@ -1,8 +1,8 @@
 # LENS Governance Integration
 
-**Purpose:** How LENS integrates with CORTEX governance  
+**Purpose:** How LENS integrates with CORTEX governance — the visual cortex informing the immune system  
 **Audience:** Architects, Security Teams  
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-13
 
 ---
 
@@ -19,7 +19,9 @@
 
 ## Overview
 
-LENS provides contextual intelligence that powers governance enforcement. Without LENS context, governance rules would operate blindly. With LENS, enforcement agents have full visibility into code structure, history, and patterns.
+### Brain Analogy: Vision Informing the Immune Response
+
+Just as seeing a wound triggers the body's immune response — the visual cortex identifies the injury, and the immune system mobilizes to heal it — LENS provides the perceptual intelligence that powers CORTEX's governance (immune) system. Without LENS context, governance rules would operate blindly. With LENS, the UnifiedQualityAssuranceOrchestrator's enforcement agents have full visibility into code structure, history, and patterns.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐

@@ -1,7 +1,8 @@
 # Learning System Infrastructure Architecture
 
+**Purpose:** The limbic system and memory consolidation circuits — how CORTEX encodes experiences, strengthens useful pathways, and prunes ineffective ones  
 **Version:** 1.0.0 | **Phase:** 71 — Universal Learning Loop  
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-13
 
 ---
 
@@ -411,4 +412,4 @@ Learning System Health:
 ---
 
 *Phase 71: Universal Learning Loop — Infrastructure Ready*  
-*Last Updated: 2026-02-10 | Authority: CORTEX Architecture Team*
+*Last Updated: 2026-02-13 | Authority: CORTEX Architecture Team*
