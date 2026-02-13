@@ -135,11 +135,49 @@ active_wave:
 planned_waves:
   wave_2:
     name: "Scaffolder Integration + Scale"
-    status: "PLANNED"
-    duration: "6 hours"
+    status: "IN_PROGRESS"
+    started_date: "2026-02-13T20:00:00Z"
+    duration_estimate: "6 hours"
     scope: "Wire intelligence layers → scaffolder + generate 280 tests for 28 orchestrators"
     priority: "P0"
     dependencies: ["WAVE-1"]
+    
+    completed_stages:
+      stage_1:
+        name: "Scaffolder Intelligence Adapter"
+        status: "COMPLETE"
+        completed_date: "2026-02-13T21:30:00Z"
+        duration: "1.5 hours"
+        deliverables:
+          - "✅ ScaffolderIntelligenceAdapter (483 lines)"
+          - "✅ OrchestratorSpec + GeneratedTestSuite models"
+          - "✅ 20 unit tests (100% passing)"
+          - "✅ DemandRegistry.save_demands() method"
+        commits: ["4f4235f54", "cc1280bdf"]
+        tests: 20
+    
+    remaining_stages:
+      stage_2:
+        name: "28-Orchestrator Batch Generation"
+        status: "PLANNED"
+        duration: "2 hours"
+        deliverables:
+          - "Generate specs for 28 orchestrators"
+          - "Batch generate 280 tests (10 per orchestrator)"
+          - "Validate quality > 70% threshold"
+          - "Write tests to files"
+        tests: 280
+      
+      stage_3:
+        name: "Scaffolder Integration"
+        status: "PLANNED"
+        duration: "2.5 hours"
+        deliverables:
+          - "Wire adapter into OrchestratorScaffolder"
+          - "Update scaffolder to use adapter"
+          - "Integration tests (10 tests)"
+          - "End-to-end validation"
+        tests: 10
     
   wave_3:
     name: "ENH-088/089 + Multi-Cycle TDD"
