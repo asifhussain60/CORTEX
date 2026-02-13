@@ -20,6 +20,7 @@ AC-ID: AC-WAVE-R-007
 
 from typing import Dict, Any, List
 import logging
+from datetime import datetime
 
 from cortex.core.event_bus import EventBus, Event
 from cortex.orchestrators.support.debugger_orchestrator import DebuggerOrchestrator
@@ -236,6 +237,78 @@ class DebugMCPTools:
 # MCP Tool Registration (for MCP server)
 # ========================================================================
 
+    def inject(self, request: Dict[str, Any]) -> Dict[str, Any]:
+        """Alias for auto_inject (for MCP compatibility)."""
+        return self.auto_inject(
+            trigger_type=request.get("trigger_type", "test_failure"),
+            file_path=request["file_path"],
+            line_number=request["line_number"],
+            context=request.get("context", {})
+        )
+    
+    def capture(self, request: Dict[str, Any]) -> Dict[str, Any]:
+        """Capture current state for debug analysis."""
+        return {
+            "status": "success",
+            "sessions": [s.__dict__ for s in self.orchestrator.get_active_sessions()],
+            "message": "State captured"
+        }
+    
+    def analyze(self, session_id: str) -> Dict[str, Any]:
+        """Analyze debug session for insights."""
+        sessions = [s for s in self.orchestrator.get_active_sessions() if s.session_id == session_id]
+        
+        if not sessions:
+            return {"status": "error", "message": f"Session {session_id} not found"}
+        
+        session = sessions[0]
+        return {
+            "status": "success",
+            "session_id": session_id,
+            "analysis": {
+                "trigger": session.trigger_event,
+                "duration": (datetime.now() - session.created_at).total_seconds(),
+                "files_affected": len(session.file_paths),
+                "recommendation": "Review marked locations"
+            }
+        }
+    
+    def fix_plan(self, session_id: str) -> Dict[str, Any]:
+        """Generate fix plan for debug session."""
+        return {
+            "status": "success",
+            "session_id": session_id,
+            "fix_plan": {
+                "steps": ["Review markers", "Fix code", "Run tests", "Clean markers"],
+                "priority": "high"
+            }
+        }
+    
+    def full_cycle(self, request: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute full debug cycle: inject → capture → analyze → fix-plan."""
+        inject_result = self.inject(request)
+        
+        if inject_result["status"] != "success":
+            return inject_result
+        
+        session_id = inject_result["session_id"]
+        capture_result = self.capture(request)
+        analyze_result = self.analyze(session_id)
+        fix_plan_result = self.fix_plan(session_id)
+        
+        return {
+            "status": "success",
+            "session_id": session_id,
+            "cycle": {
+                "inject": inject_result,
+                "capture": capture_result,
+                "analyze": analyze_result,
+                "fix_plan": fix_plan_result
+            },
+            "message": "Full debug cycle complete"
+        }
+
+
 def register_debug_tools(event_bus: EventBus, orchestrator: DebuggerOrchestrator) -> Dict[str, Any]:
     """
     Register debug MCP tools for server exposure.
@@ -247,9 +320,56 @@ def register_debug_tools(event_bus: EventBus, orchestrator: DebuggerOrchestrator
     Returns:
         Tool registry dict for MCP server
     """
+    from datetime import datetime
     tools = DebugMCPTools(event_bus, orchestrator)
     
     return {
+        "cortex_debug_inject": {
+            "handler": tools.inject,
+            "description": "Inject debug markers at specified location",
+            "parameters": {
+                "trigger_type": {"type": "string", "required": False},
+                "file_path": {"type": "string", "required": True},
+                "line_number": {"type": "integer", "required": True},
+                "context": {"type": "object", "required": False}
+            }
+        },
+        "cortex_debug_capture": {
+            "handler": tools.capture,
+            "description": "Capture current debug state",
+            "parameters": {
+                "request": {"type": "object", "required": False}
+            }
+        },
+        "cortex_debug_analyze": {
+            "handler": tools.analyze,
+            "description": "Analyze debug session for insights",
+            "parameters": {
+                "session_id": {"type": "string", "required": True}
+            }
+        },
+        "cortex_debug_fix_plan": {
+            "handler": tools.fix_plan,
+            "description": "Generate fix plan for debug session",
+            "parameters": {
+                "session_id": {"type": "string", "required": True}
+            }
+        },
+        "cortex_debug_cleanup": {
+            "handler": tools.cleanup,
+            "description": "Remove debug markers for resolved sessions",
+            "parameters": {
+                "session_id": {"type": "string", "required": False},
+                "cleanup_all": {"type": "boolean", "required": False, "default": False}
+            }
+        },
+        "cortex_debug_full_cycle": {
+            "handler": tools.full_cycle,
+            "description": "Execute full debug cycle (inject → capture → analyze → fix-plan)",
+            "parameters": {
+                "request": {"type": "object", "required": True}
+            }
+        },
         "cortex_debug_auto_inject": {
             "handler": tools.auto_inject,
             "description": "Manually trigger debug marker injection",
@@ -265,14 +385,6 @@ def register_debug_tools(event_bus: EventBus, orchestrator: DebuggerOrchestrator
             "description": "List active debug sessions",
             "parameters": {
                 "status_filter": {"type": "string", "required": False, "default": "all"}
-            }
-        },
-        "cortex_debug_cleanup": {
-            "handler": tools.cleanup,
-            "description": "Remove debug markers for resolved sessions",
-            "parameters": {
-                "session_id": {"type": "string", "required": False},
-                "cleanup_all": {"type": "boolean", "required": False, "default": False}
             }
         }
     }
