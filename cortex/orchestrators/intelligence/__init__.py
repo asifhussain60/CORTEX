@@ -30,6 +30,13 @@ from cortex.orchestrators.intelligence.edge_case_generator import (
     EdgeCaseType,
     ParameterInfo,
 )
+from cortex.orchestrators.intelligence.security_test_generator import (
+    EndpointInfo,
+    SecurityTest,
+    SecurityTestGenerator,
+    SecurityTestType,
+    VulnerabilityClass,
+)
 
 __all__ = [
     # WAVE-2 S1: Test Value Scoring
@@ -48,4 +55,10 @@ __all__ = [
     "EdgeCase",
     "EdgeCaseType",
     "ParameterInfo",
+    # WAVE-2 S4: Security Test Generation
+    "SecurityTestGenerator",
+    "SecurityTest",
+    "SecurityTestType",
+    "VulnerabilityClass",
+    "EndpointInfo",
 ]
