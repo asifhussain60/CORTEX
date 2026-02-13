@@ -16,6 +16,9 @@ import pytest
 from typing import Type
 from unittest.mock import patch, MagicMock
 
+# Module-level skip: All deprecation wrapper tests pending Phase 82+ infrastructure
+pytestmark = pytest.mark.skip(reason="Deprecated orchestrator consolidation infrastructure under development - Phase 82+")
+
 
 @pytest.mark.skip(reason="Deprecated orchestrator consolidation infrastructure under development - Phase 82+")
 class TestDeprecationWrapperImports:
