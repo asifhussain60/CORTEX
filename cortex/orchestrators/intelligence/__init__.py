@@ -37,6 +37,12 @@ from cortex.orchestrators.intelligence.security_test_generator import (
     SecurityTestType,
     VulnerabilityClass,
 )
+from cortex.orchestrators.intelligence.intelligent_test_generator import (
+    GeneratedTest,
+    IntelligentTestGenerator,
+    TestGenerationRequest,
+    TestGenerationResult,
+)
 
 __all__ = [
     # WAVE-2 S1: Test Value Scoring
@@ -61,4 +67,9 @@ __all__ = [
     "SecurityTestType",
     "VulnerabilityClass",
     "EndpointInfo",
+    # WAVE-2 S5: Intelligent Test Generator Core
+    "IntelligentTestGenerator",
+    "GeneratedTest",
+    "TestGenerationRequest",
+    "TestGenerationResult",
 ]
