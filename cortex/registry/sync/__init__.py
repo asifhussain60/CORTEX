@@ -1,0 +1,1 @@
+"""Registry sync package initialization."""
