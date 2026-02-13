@@ -597,6 +597,168 @@ class MarkdownSuppressionAgent:
         )
 
 
+class ResponseContentValidationAgent:
+    """
+    Enforces CORE-002-RESPONSE: No markdown file suggestions in response text.
+
+    Validates response CONTENT (not just output_files) for forbidden patterns:
+    - "cat > *.md" suggestions
+    - "create_file" recommendations for .md files
+    - "save this as" patterns
+    - "generate markdown" instructions
+
+    Complements MarkdownSuppressionAgent (validates output_files list).
+    This agent validates actual response text to Copilot Chat.
+
+    Phase: CORTEX Inline-First (Response-Level Gate)
+    Authority: CORE-002-RESPONSE (new sub-rule for chat responses)
+    """
+
+    # Forbidden patterns that suggest markdown file creation
+    FORBIDDEN_PATTERNS = [
+        r"cat\s*>\s*[^\s]+\.md",           # cat > file.md
+        r"cat\s*>>\s*[^\s]+\.md",          # cat >> file.md
+        r"echo\s+.+>\s*[^\s]+\.md",        # echo ... > file.md
+        r"printf\s+.+>\s*[^\s]+\.md",      # printf ... > file.md
+        r"create_file\s*\(\s*['\"][^'\"]*\.md['\"]",  # create_file("file.md")
+        r"create\s+.*\.md.*file",          # create markdown file
+        r"generate.*markdown.*report",     # generate markdown report
+        r"save\s+.*as\s+.*\.md",           # save this as file.md
+        r"write\s+.*to\s+.*\.md",          # write to file.md
+        r"output\s+.*to\s+.*\.md",         # output to file.md
+        r"generated?\s+.*\.md.*file",      # generated file.md
+    ]
+
+    ALLOWED_CONTEXTS = [
+        ".github/prompts/",
+        ".github/agents/",
+        "README.md",
+    ]
+
+    def validate(self, context: Dict[str, Any]) -> EnforcementResult:
+        """
+        Validate response content for markdown file suggestions.
+
+        Args:
+            context: Operation context including:
+                - response_text: The response being validated (required)
+                - allow_markdown_suggestions: Override to allow (optional, default False)
+
+        Returns:
+            EnforcementResult with BLOCKED if violations, PASS otherwise
+        """
+        import re
+
+        violations = []
+        response_text = context.get("response_text", "")
+        allow_markdown = context.get("allow_markdown_suggestions", False)
+
+        # Skip if explicitly allowed
+        if allow_markdown:
+            return EnforcementResult(
+                level=EnforcementLevel.PASS,
+                violations=[],
+                warnings=[],
+                metadata={
+                    "agent": "ResponseContentValidationAgent",
+                    "rules_checked": ["CORE-002-RESPONSE"],
+                    "explicit_override": True,
+                }
+            )
+
+        if not response_text:
+            return EnforcementResult(
+                level=EnforcementLevel.PASS,
+                violations=[],
+                warnings=[],
+                metadata={
+                    "agent": "ResponseContentValidationAgent",
+                    "rules_checked": ["CORE-002-RESPONSE"],
+                    "response_length": 0,
+                }
+            )
+
+        # Check for forbidden patterns
+        for pattern in self.FORBIDDEN_PATTERNS:
+            matches = re.finditer(pattern, response_text, re.IGNORECASE)
+            for match in matches:
+                matched_text = match.group(0)
+
+                # Check if match is in allowed context
+                is_allowed = False
+                for allowed_ctx in self.ALLOWED_CONTEXTS:
+                    if allowed_ctx in matched_text:
+                        is_allowed = True
+                        break
+
+                if not is_allowed:
+                    violations.append(
+                        f"CORE-002-RESPONSE VIOLATION: Response suggests markdown file creation: "
+                        f"'{matched_text}'. Use inline chat display instead."
+                    )
+
+        # Determine enforcement level
+        level = EnforcementLevel.BLOCKED if violations else EnforcementLevel.PASS
+
+        return EnforcementResult(
+            level=level,
+            violations=violations,
+            warnings=[],
+            metadata={
+                "agent": "ResponseContentValidationAgent",
+                "rules_checked": ["CORE-002-RESPONSE"],
+                "response_length": len(response_text),
+                "violations_count": len(violations),
+                "patterns_checked": len(self.FORBIDDEN_PATTERNS),
+            }
+        )
+
+    @staticmethod
+    def transform_response_to_inline(response_text: str) -> str:
+        """
+        Transform response that suggests file creation to inline-only alternatives.
+
+        Args:
+            response_text: Original response
+
+        Returns:
+            Transformed response suggesting inline display
+        """
+        import re
+
+        transformed = response_text
+
+        # Replace "create_file" suggestions
+        transformed = re.sub(
+            r"(?i)(use\s+)?create_file\s*\(\s*['\"]([^'\"]*\.md)['\"]",
+            r"Display the content inline in this chat (don't create files)",
+            transformed
+        )
+
+        # Replace "cat >" patterns
+        transformed = re.sub(
+            r"(?i)cat\s*>\s*([^\s]+\.md)",
+            r"Display the content inline in this chat instead of file output",
+            transformed
+        )
+
+        # Replace "save as" patterns
+        transformed = re.sub(
+            r"(?i)save\s+.*as\s+.*\.md",
+            r"Display the result inline; user can save chat transcript if needed",
+            transformed
+        )
+
+        # Replace "generate report" suggestions
+        transformed = re.sub(
+            r"(?i)generate\s+.*markdown.*report",
+            r"Display findings as a markdown table inline in chat",
+            transformed
+        )
+
+        return transformed
+
+
 class ArchitectureIntegrityAgent:
     """
     Enforces architectural integrity rules (CORE-017-020, 032, 034, 035, 038-041, ENH-064).
@@ -863,8 +1025,9 @@ class EnforcementOrchestrator:
             MarkdownSuppressionAgent(),  # CORE-002
             ArchitectureIntegrityAgent(),  # CORE-017-020, 032, 034, 035, 038-041
             DiscoveryEnforcementAgent(),  # CORE-030, 035 (ENH-047)
+            ResponseContentValidationAgent(),  # CORE-002-RESPONSE (new response-level gate)
         ]
-        logger.info(f"EnforcementOrchestrator initialized with {len(self.agents)} agents (27/29 CORE rules)")
+        logger.info(f"EnforcementOrchestrator initialized with {len(self.agents)} agents (28/29 CORE rules)")
 
 
     def validate_operation(self, operation: Dict[str, Any]) -> Result[EnforcementResult, EnforcementResult]:
@@ -1012,6 +1175,59 @@ class EnforcementOrchestrator:
         )
 
         return Ok(enforcement_result)
+
+    def validate_response_content(self, response_text: str, allow_markdown: bool = False) -> Result[EnforcementResult, EnforcementResult]:
+        """
+        Validate response content for markdown file suggestions (CORE-002-RESPONSE).
+
+        This is the response-level gate that catches file suggestions in actual chat responses.
+        Complements validate_operation() which validates output_files lists.
+
+        Args:
+            response_text: The response being sent to Copilot Chat
+            allow_markdown: Override to allow markdown suggestions (default False)
+
+        Returns:
+            Ok(result) if no violations, Err(result) if CORE-002-RESPONSE violated
+
+        Phase: CORTEX Inline-First Architecture (Response-Level Gate)
+        Authority: CORE-002-RESPONSE
+        """
+        start_time = time.time()
+
+        # Use ResponseContentValidationAgent
+        agent = ResponseContentValidationAgent()
+        validation_result = agent.validate({
+            "response_text": response_text,
+            "allow_markdown_suggestions": allow_markdown,
+        })
+
+        execution_time_ms = (time.time() - start_time) * 1000
+        validation_result.metadata["execution_time_ms"] = round(execution_time_ms, 2)
+
+        if validation_result.is_blocked():
+            logger.warning(
+                f"Response contains markdown file suggestions: "
+                f"{len(validation_result.violations)} violations"
+            )
+            return Err(validation_result)
+
+        logger.debug(f"Response content validation passed in {execution_time_ms:.2f}ms")
+        return Ok(validation_result)
+
+    def transform_response_to_inline(self, response_text: str) -> str:
+        """
+        Transform response that suggests file creation to inline-only alternatives.
+
+        Replaces file creation suggestions with inline chat display recommendations.
+
+        Args:
+            response_text: Original response
+
+        Returns:
+            Transformed response suggesting inline display
+        """
+        return ResponseContentValidationAgent.transform_response_to_inline(response_text)
 
     def validate_intent_classification(self, intent_reflection: Dict[str, Any]) -> Result[List[str], List[str]]:
         """

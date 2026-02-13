@@ -1699,6 +1699,53 @@ class MasterOrchestrator(IOrchestrator):
                 details={"error": f"Policy application failed: {str(policy_err)}"}
             )
 
+        # ═══════════════════════════════════════════════════════════════════════
+        # GATE: Response Content Validation (CORE-002-RESPONSE - Inline-First)
+        # ═══════════════════════════════════════════════════════════════════════
+        # Validates response text for markdown file suggestions before sending to Copilot Chat
+        # This is the response-level enforcement gate for 100% inline-first architecture
+        if self._enforcement:
+            try:
+                validation_result = self._enforcement.validate_response_content(response)
+                
+                if validation_result.is_err():
+                    # Response contains forbidden file suggestions - transform to inline
+                    enforcement_result = validation_result.error
+                    self.logger.log_operation_complete(
+                        ac_id="AC-CORE-002-RESPONSE-001",
+                        operation="RESPONSE_CONTENT_VIOLATION_DETECTED",
+                        success=False,
+                        details={
+                            "violations": enforcement_result.violations,
+                            "count": len(enforcement_result.violations),
+                        }
+                    )
+                    
+                    # Transform response to suggest inline display instead
+                    response = self._enforcement.transform_response_to_inline(response)
+                    self.logger.log_operation_complete(
+                        ac_id="AC-CORE-002-RESPONSE-002",
+                        operation="RESPONSE_TRANSFORMED_TO_INLINE",
+                        success=True,
+                        details={"action": "Replaced file suggestions with inline alternatives"}
+                    )
+                else:
+                    # Response passed validation - inline-first compliant
+                    self.logger.log_operation_complete(
+                        ac_id="AC-CORE-002-RESPONSE-001",
+                        operation="RESPONSE_CONTENT_VALIDATION_PASSED",
+                        success=True,
+                        details={"message": "Response is inline-first compliant"}
+                    )
+            except Exception as validation_err:
+                # Log but continue - validation error shouldn't break response
+                self.logger.log_operation_complete(
+                    ac_id="AC-CORE-002-RESPONSE-001",
+                    operation="RESPONSE_CONTENT_VALIDATION",
+                    success=False,
+                    details={"error": f"Response validation error: {str(validation_err)}"}
+                )
+
         # AC-ENH-002-01: Apply header injection (existing behavior)
         if not self.header_injector:
             return response
