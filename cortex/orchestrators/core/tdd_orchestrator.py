@@ -49,7 +49,7 @@ from typing import Any, Callable, Dict, List, Optional
 import yaml
 
 # Phase 51: Enhanced response template with semantic color coding
-from cortex.agents.core.response_template_generator import ResponseTemplate
+# REMOVED: ResponseTemplate import (deprecated, unused - Phase 53 cleanup)
 from cortex.brain.core.knowledge_guidance_engine import (
     KnowledgeGuidanceEngine,
     ModuleGuidance,

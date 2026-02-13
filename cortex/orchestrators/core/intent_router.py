@@ -28,7 +28,7 @@ from typing import Any, Dict, List, Optional, Tuple
 import yaml
 
 # Phase 51: Enhanced response template with semantic color coding
-from cortex.agents.core.response_template_generator import ResponseTemplate
+# REMOVED: ResponseTemplate import (deprecated, unused - Phase 53 cleanup)
 from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.brain.knowledge.unified_intelligence_context import (
     UnifiedIntelligenceContext,

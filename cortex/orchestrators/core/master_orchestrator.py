@@ -24,7 +24,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 # Phase 51: Enhanced response template with semantic color coding
-from cortex.agents.core.response_template_generator import ResponseTemplate
+# REMOVED: ResponseTemplate import (deprecated, unused - Phase 53 cleanup)
 from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.brain.core.knowledge.knowledge_repository import KnowledgeRepository
 from cortex.brain.core.response_header_config import HeaderConfigurationManager
