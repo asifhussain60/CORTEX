@@ -1,0 +1,369 @@
+# ============================================================================
+# WAVE-7-CLEANUP: Fix Wave 7 Orchestrator Consolidation Side Effects
+# ============================================================================
+# Authority: WAVE-REPRIORITIZATION-2026-02-11.yaml + chat01-digest.md
+# Purpose: Emergency cleanup to fix IOrchestrator interface compliance issues
+# Status: ACTIVE - P0-CRITICAL blocker for WAVE-Q/R/S
+# Created: 2026-02-13
+# AC-ID: AC-WAVE-7-CLEANUP-001
+# ============================================================================
+
+version: "1.0"
+created: "2026-02-13T00:00:00Z"
+last_updated: "2026-02-13T00:00:00Z"
+execution_mode: "autonomous_silent"
+progress_tracking: "ascii_bars"
+
+metadata:
+  wave_id: "WAVE-7-CLEANUP"
+  title: "Fix Wave 7 Orchestrator Consolidation Side Effects"
+  priority: "P0-CRITICAL"
+  duration: "3-4 hours"
+  roi: 9.8
+  status: "in_progress"
+  blocks:
+    - "WAVE-Q (ENH-088 Multi-Cycle TDD)"
+    - "WAVE-R (ENH-089 Track Consolidation)"
+    - "WAVE-S (ENH-090 Track Consolidation)"
+  
+  context:
+    discovery_date: "2026-02-12"
+    discovered_during: "WAVE-Q execution (ENH-088 implementation)"
+    root_cause: "Wave 7 Track 1 introduced IOrchestrator interface without updating existing orchestrators"
+    impact: "TDDOrchestrator missing 7 stub methods, breaks multi-cycle TDD functionality"
+    symptom: "AttributeError when calling methods not in old orchestrator contract"
+    
+  problem_statement: |
+    During WAVE-Q execution (ENH-088 Multi-Cycle TDD implementation), tests revealed that
+    WAVE-7 Track 1's orchestrator consolidation introduced a breaking change:
+    
+    1. New IOrchestrator interface created with 7 required methods
+    2. TDDOrchestrator (and potentially others) not updated to implement interface
+    3. Tests fail with AttributeError for missing methods
+    4. WAVE-Q blocked until all orchestrators comply with new interface
+    
+    This is a P0-CRITICAL issue because:
+    - Blocks 3 waves (Q, R, S) in execution pipeline
+    - TDD is core to CORTEX development methodology (CORE-008)
+    - Breaks existing functionality that was working pre-Wave 7
+    - Affects 14,751 tests if not fixed correctly
+
+# ============================================================================
+# STAGE BREAKDOWN
+# ============================================================================
+
+stages:
+  stage_1_analyze_interface:
+    name: "Analyze IOrchestrator Interface Requirements"
+    duration: "20 minutes"
+    priority: "P0"
+    status: "ready"
+    
+    objectives:
+      - "Read IOrchestrator interface definition from cortex/orchestrators/"
+      - "Identify all 7 required stub methods"
+      - "Document method signatures and expected behavior"
+      - "Create compliance checklist for orchestrators"
+    
+    deliverables:
+      - "IOrchestrator interface documentation"
+      - "Method signature reference"
+      - "Compliance checklist (7 methods)"
+    
+    tests:
+      count: 0
+      type: "analysis"
+    
+    acceptance_criteria:
+      - "All 7 interface methods documented"
+      - "Method signatures verified against Wave 7 Track 1 code"
+      - "Checklist ready for orchestrator audits"
+  
+  stage_2_fix_tdd_orchestrator:
+    name: "Fix TDDOrchestrator Interface Compliance"
+    duration: "30 minutes"
+    priority: "P0"
+    status: "ready"
+    depends_on: ["stage_1_analyze_interface"]
+    
+    objectives:
+      - "Add 7 missing stub methods to TDDOrchestrator"
+      - "Maintain backward compatibility with existing tests"
+      - "Verify ENH-088 multi-cycle TDD tests pass"
+      - "Run TDD orchestrator regression suite"
+    
+    deliverables:
+      - "TDDOrchestrator updated with interface compliance"
+      - "All 55 Wave 7 Track 1 tests passing"
+      - "ENH-088 tests passing (42 tests expected)"
+    
+    tests:
+      count: 97  # 55 Track 1 + 42 ENH-088
+      commands:
+        - "pytest tests/orchestrators/test_tdd_orchestrator.py -v"
+        - "pytest tests/unit/orchestrators/test_multi_cycle_tdd.py -v"
+    
+    acceptance_criteria:
+      - "TDDOrchestrator implements IOrchestrator interface"
+      - "All 7 stub methods added with proper signatures"
+      - "97/97 tests passing (no regression)"
+      - "AC markers: AC-WAVE-7-CLEANUP-S2-001"
+  
+  stage_3_audit_all_orchestrators:
+    name: "Audit All 26 Orchestrators for Compliance"
+    duration: "1 hour"
+    priority: "P0"
+    status: "ready"
+    depends_on: ["stage_2_fix_tdd_orchestrator"]
+    
+    objectives:
+      - "Scan all 26 orchestrators for IOrchestrator interface"
+      - "Identify any other orchestrators missing methods"
+      - "Fix non-compliant orchestrators (add stubs)"
+      - "Create interface compliance test suite"
+    
+    orchestrators_to_audit:
+      core_layer:
+        - "MasterOrchestrator (already compliant - Wave 7 Track 1)"
+        - "InteractionOrchestrator"
+        - "IntentRouter"
+        - "LENSSynthesis"
+        - "EnforcementOrchestrator"
+        - "TDDOrchestrator (fixing in Stage 2)"
+        - "IncrementalTaskDecomposer"
+        - "WorkflowOrchestrator"
+      
+      domain_layer:
+        - "RefactoringOrchestrator"
+        - "PlanningOrchestrator"
+        - "DomainOrchestrator"
+        - "ConversationOrchestrator"
+        - "DocumentationOrchestrator"
+        - "ChallengeEngine"
+      
+      support_layer:
+        - "OnboardingOrchestrator"
+        - "ToolDiscoveryOrchestrator"
+        - "LENSOrchestrator"
+        - "RecommendationGate"
+        - "EducationalOrchestrator"
+        - "PlanOrchestrator"
+        - "RepositoryOnboardingOrchestrator"
+        - "PhaseManager"
+        - "DashboardGenerator"
+        - "AutonomousExecutionEngine"
+        - "DigestOrchestrator"
+        - "ContextCrystallizationLayer"
+    
+    deliverables:
+      - "Compliance audit report (26 orchestrators)"
+      - "Fixed orchestrators (estimate 3-5 needing updates)"
+      - "Interface compliance test suite (52 tests: 26 × 2)"
+    
+    tests:
+      count: 52
+      pattern: |
+        def test_orchestrator_implements_interface():
+            orchestrator = XYZOrchestrator()
+            assert isinstance(orchestrator, IOrchestrator)
+            assert hasattr(orchestrator, 'method_1')
+            # ... 7 methods
+        
+        def test_orchestrator_methods_callable():
+            orchestrator = XYZOrchestrator()
+            assert callable(getattr(orchestrator, 'method_1'))
+            # ... 7 methods
+    
+    acceptance_criteria:
+      - "All 26 orchestrators audited"
+      - "100% compliance with IOrchestrator interface"
+      - "52 new compliance tests passing"
+      - "AC markers: AC-WAVE-7-CLEANUP-S3-001"
+  
+  stage_4_regression_suite:
+    name: "Full Regression Test Suite"
+    duration: "1 hour"
+    priority: "P0"
+    status: "ready"
+    depends_on: ["stage_3_audit_all_orchestrators"]
+    
+    objectives:
+      - "Run complete test suite (14,751 tests)"
+      - "Verify no breaking changes from interface additions"
+      - "Document any new failures (should be 0)"
+      - "Measure test execution time baseline"
+    
+    test_strategy:
+      approach: "Full suite with early exit on failure"
+      parallelization: "8 workers (pytest-xdist)"
+      timeout: "60 minutes max"
+      failure_tolerance: "0 new failures allowed"
+    
+    deliverables:
+      - "Full regression report (14,751 tests)"
+      - "Test execution metrics (time, coverage)"
+      - "Failure analysis (if any)"
+    
+    tests:
+      count: 14751
+      commands:
+        - "pytest tests/ -v -n 8 --maxfail=5"
+        - "pytest tests/ --cov=cortex --cov-report=html"
+    
+    acceptance_criteria:
+      - "14,751/14,751 tests passing (or same pass rate as pre-cleanup)"
+      - "No new failures introduced by interface changes"
+      - "Test execution time < 60 minutes"
+      - "Coverage maintained or improved"
+      - "AC markers: AC-WAVE-7-CLEANUP-S4-001"
+  
+  stage_5_documentation:
+    name: "Update Documentation & Master Plan"
+    duration: "30 minutes"
+    priority: "P1"
+    status: "ready"
+    depends_on: ["stage_4_regression_suite"]
+    
+    objectives:
+      - "Document IOrchestrator interface contract"
+      - "Create implementation guide for new orchestrators"
+      - "Update Wave 7 completion notes"
+      - "Update master plan sequence (insert WAVE-7-CLEANUP)"
+    
+    deliverables:
+      - "IOrchestrator interface documentation (cortex/orchestrators/README.md)"
+      - "Orchestrator implementation checklist"
+      - "Wave 7 Track 1 completion report (updated)"
+      - "Master plan update (WAVE-BASED-EXECUTION-PLAN.yaml)"
+    
+    documentation_sections:
+      - "IOrchestrator Interface Contract (7 required methods)"
+      - "Implementation Guide (step-by-step checklist)"
+      - "Compliance Testing Pattern (template test suite)"
+      - "Common Pitfalls (lessons from WAVE-7-CLEANUP)"
+    
+    acceptance_criteria:
+      - "IOrchestrator interface fully documented"
+      - "Implementation guide available for future orchestrators"
+      - "Master plan updated with WAVE-7-CLEANUP insertion"
+      - "Wave 7 marked as 100% complete (all tracks)"
+      - "AC markers: AC-WAVE-7-CLEANUP-S5-001"
+
+# ============================================================================
+# SUCCESS METRICS
+# ============================================================================
+
+success_metrics:
+  functional:
+    - "TDDOrchestrator: 97/97 tests passing"
+    - "All 26 orchestrators: IOrchestrator compliant"
+    - "Interface compliance tests: 52/52 passing"
+    - "Full regression: 14,751/14,751 passing (or pre-cleanup rate)"
+  
+  non_functional:
+    - "Total execution time: < 4 hours"
+    - "Zero new test failures introduced"
+    - "WAVE-Q unblocked for execution"
+    - "Documentation complete for future orchestrators"
+  
+  governance:
+    - "AC markers on all commits"
+    - "Git commits: 5 (1 per stage)"
+    - "Registry updated with completion status"
+    - "Master plan sequence corrected"
+
+# ============================================================================
+# RISK MITIGATION
+# ============================================================================
+
+risks:
+  high:
+    - risk: "Fixing TDDOrchestrator breaks existing functionality"
+      mitigation: "Run 55 Wave 7 Track 1 tests + 42 ENH-088 tests after each change"
+      contingency: "Revert to last known good commit, analyze failure"
+    
+    - risk: "Other orchestrators have complex dependencies on missing methods"
+      mitigation: "Add stub methods first (return NotImplemented), implement later if needed"
+      contingency: "Document which stubs need implementation, create follow-up phases"
+  
+  medium:
+    - risk: "Full regression suite reveals unrelated failures"
+      mitigation: "Document pre-cleanup baseline, only fix interface-related issues"
+      contingency: "Create separate cleanup phases for unrelated failures"
+    
+    - risk: "Token budget exceeded before completion (4 hours estimated)"
+      mitigation: "Checkpoint after each stage, create continuation prompt"
+      contingency: "Split into 2 sessions if needed (Stages 1-3, then 4-5)"
+
+# ============================================================================
+# BLOCKING RELATIONSHIP
+# ============================================================================
+
+blocks:
+  immediate:
+    - wave_id: "WAVE-Q"
+      phase_id: "ENH-088"
+      title: "Multi-Cycle TDD Implementation"
+      reason: "TDDOrchestrator must implement IOrchestrator for execute_multi_cycle()"
+    
+    - wave_id: "WAVE-R"
+      phase_id: "ENH-089"
+      title: "Track 2-3 Consolidation"
+      reason: "Requires stable orchestrator interface before domain layer changes"
+    
+    - wave_id: "WAVE-S"
+      phase_id: "ENH-090"
+      title: "Track 4-5 Consolidation"
+      reason: "Support layer orchestrators must be interface-compliant"
+  
+  dependencies:
+    - wave_id: "WAVE-7-TRACK-1"
+      status: "complete"
+      note: "Created IOrchestrator interface + MasterOrchestrator compliance"
+
+# ============================================================================
+# COMPLETION CRITERIA
+# ============================================================================
+
+completion_criteria:
+  mandatory:
+    - "All 5 stages complete"
+    - "TDDOrchestrator implements IOrchestrator (7 methods)"
+    - "26 orchestrators audited for compliance"
+    - "52 compliance tests passing"
+    - "14,751 regression tests passing (or pre-cleanup rate)"
+    - "Documentation complete"
+    - "Master plan updated"
+    - "Git commits with AC markers"
+  
+  optional:
+    - "Coverage improvement (if achievable)"
+    - "Performance optimization (if time permits)"
+    - "Refactoring suggestions (document for future)"
+
+# ============================================================================
+# CONTINUATION PROTOCOL (If Token Budget Exceeded)
+# ============================================================================
+
+continuation_protocol:
+  checkpoint_stages:
+    - "After Stage 2: TDDOrchestrator fixed + 97 tests passing"
+    - "After Stage 3: All orchestrators audited + 52 compliance tests"
+    - "After Stage 4: Full regression complete"
+  
+  continuation_prompt_template: |
+    ## WAVE-7-CLEANUP Continuation (Session 2)
+    
+    **Status:** Stage {X} complete, continuing from Stage {X+1}
+    **Tests Passing:** {count}/{total}
+    **Git Hash:** {commit_hash}
+    
+    **Completed:**
+    - [List completed stages]
+    
+    **Remaining:**
+    - [List remaining stages]
+    
+    **Next Action:** Continue autonomously from Stage {X+1}
+    
+    Command: "proceed with WAVE-7-CLEANUP from Stage {X+1}"

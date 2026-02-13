@@ -59,7 +59,7 @@ from cortex.brain.core.knowledge_guidance_engine import (
 from cortex.common.standards_resolver import StandardsResolver
 from cortex.core.result import Err, Ok, Result
 from cortex.models.canonical_enums import IntentType
-from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator
+from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.refactoring.models import (
     RefactoringLanguage,
     RefactoringRequest,
@@ -326,6 +326,207 @@ class TDDOrchestrator(IOrchestrator):
             f"PhaseCompletionOrchestrator (AC-PHASE24-007) + "
             f"StandardsResolver (Phase 27)"
         )
+
+    # =========================================================================
+    # IOrchestrator Interface Implementation (WAVE-7-CLEANUP)
+    # AC-WAVE-7-CLEANUP-S2-001: Add 7 required interface methods
+    # =========================================================================
+
+    def get_name(self) -> str:
+        """
+        Get orchestrator name.
+
+        Returns:
+            Orchestrator name identifier
+
+        AC-WAVE-7-CLEANUP-S2-001: IOrchestrator interface compliance
+        """
+        return "TDDOrchestrator"
+
+    def get_version(self) -> str:
+        """
+        Get orchestrator version.
+
+        Returns:
+            Version string (semver format)
+
+        AC-WAVE-7-CLEANUP-S2-001: IOrchestrator interface compliance
+        """
+        return "2.0.0"
+
+    def initialize(self) -> Result[str]:
+        """
+        Initialize orchestrator.
+
+        Returns:
+            Result with initialization status
+
+        AC-WAVE-7-CLEANUP-S2-001: IOrchestrator interface compliance
+
+        Note: TDDOrchestrator initialization handled in __init__,
+        this method provides Result-based confirmation for interface compliance.
+        """
+        try:
+            # Verify components initialized
+            if self.knowledge_loader and self.guidance_engine:
+                return Ok("TDDOrchestrator initialized successfully")
+            else:
+                return Err("TDDOrchestrator initialization incomplete")
+        except Exception as e:
+            return Err(f"TDDOrchestrator initialization failed: {str(e)}")
+
+    def get_mode(self) -> OperationMode:
+        """
+        Get current operation mode.
+
+        Returns:
+            OperationMode.EXECUTION (TDD is execution-focused)
+
+        AC-WAVE-7-CLEANUP-S2-001: IOrchestrator interface compliance
+        """
+        return OperationMode.EXECUTION
+
+    def get_mcp_tools(self) -> Result[Dict[str, Any]]:
+        """
+        Get exposed MCP tools.
+
+        Returns:
+            Result with MCP tool definitions for TDD operations
+
+        AC-WAVE-7-CLEANUP-S2-001: IOrchestrator interface compliance
+        AC-AR-011-02: MCP tool exposure requirement
+        """
+        try:
+            tools = {
+                "cortex_tdd_execute": {
+                    "name": "cortex_tdd_execute",
+                    "description": "Execute TDD workflow (RED→GREEN→REFACTOR)",
+                    "parameters": {
+                        "user_request": {"type": "string", "required": True},
+                        "module_path": {"type": "string", "required": True},
+                        "coverage_target": {"type": "number", "default": 0.8}
+                    }
+                },
+                "cortex_tdd_multi_cycle": {
+                    "name": "cortex_tdd_multi_cycle",
+                    "description": "Execute multi-cycle TDD until success criteria met (ENH-088)",
+                    "parameters": {
+                        "user_request": {"type": "string", "required": True},
+                        "module_path": {"type": "string", "required": True},
+                        "success_criteria": {"type": "object", "required": True}
+                    }
+                },
+                "cortex_tdd_guidance": {
+                    "name": "cortex_tdd_guidance",
+                    "description": "Get TDD guidance for module from knowledge base",
+                    "parameters": {
+                        "module_path": {"type": "string", "required": True}
+                    }
+                }
+            }
+            return Ok(tools)
+        except Exception as e:
+            return Err(f"Failed to get MCP tools: {str(e)}")
+
+    def execute_operation(
+        self,
+        operation_name: str,
+        parameters: Dict[str, Any],
+    ) -> Result[Any]:
+        """
+        Execute operation with audit logging.
+
+        Routes to appropriate TDD method based on operation name.
+
+        Args:
+            operation_name: Name of operation to execute
+            parameters: Operation parameters
+
+        Returns:
+            Result with operation outcome
+
+        AC-WAVE-7-CLEANUP-S2-001: IOrchestrator interface compliance
+        AC-AR-011-03: Audit logging requirement
+
+        Supported operations:
+        - "tdd_execute": Single TDD cycle
+        - "tdd_multi_cycle": Multi-cycle TDD (ENH-088)
+        - "tdd_guidance": Get knowledge guidance
+        """
+        try:
+            logger.info(f"TDDOrchestrator executing operation: {operation_name}")
+
+            if operation_name == "tdd_execute":
+                # Single TDD cycle via domain logic
+                user_request = parameters.get("user_request", "")
+                context = {
+                    "module_path": parameters.get("module_path", ""),
+                    "coverage_target": parameters.get("coverage_target", 0.8),
+                    "source": "mcp_gateway"  # Mark as MCP invocation
+                }
+                # Execute domain logic (RED→GREEN→REFACTOR)
+                return self._execute_domain_logic(user_request, None, context)
+
+            elif operation_name == "tdd_multi_cycle":
+                # Multi-cycle TDD (ENH-088)
+                test_suite = parameters.get("test_suite", "")
+                success_criteria_dict = parameters.get("success_criteria", {})
+                
+                # Convert dict to SuccessCriteria
+                success_criteria = SuccessCriteria(
+                    min_coverage=success_criteria_dict.get("min_coverage", 0.8),
+                    max_latency_ms=success_criteria_dict.get("max_latency_ms", 100.0),
+                    all_tests_pass=success_criteria_dict.get("all_tests_pass", True),
+                    max_complexity=success_criteria_dict.get("max_complexity", 10)
+                )
+                
+                result_dict = self.execute_multi_cycle(
+                    test_suite=test_suite,
+                    success_criteria=success_criteria,
+                    max_cycles=parameters.get("max_cycles", 5)
+                )
+                return Ok(result_dict)
+
+            elif operation_name == "tdd_guidance":
+                # Get knowledge guidance
+                module_path = parameters.get("module_path", "")
+                guidance = self.guidance_engine.get_tdd_guidance_for_module(
+                    Path(module_path)
+                )
+                return Ok(guidance)
+
+            else:
+                return Err(f"Unknown operation: {operation_name}")
+
+        except Exception as e:
+            logger.error(f"Operation {operation_name} failed: {str(e)}")
+            return Err(f"Operation failed: {str(e)}")
+
+    def get_audit_trail(self, limit: int = 100) -> Result[list]:
+        """
+        Get audit trail with hash chain.
+
+        Returns:
+            Result with audit trail entries (most recent first)
+
+        AC-WAVE-7-CLEANUP-S2-001: IOrchestrator interface compliance
+        AC-AR-011-03: Hash chain audit logging
+
+        Note: TDDOrchestrator currently logs to standard logger.
+        Full audit trail with hash chain is a future enhancement.
+        For now, returns empty list with success status.
+        """
+        try:
+            # TODO: Implement hash-chained audit trail storage
+            # For now, return empty list (no audit trail stored)
+            audit_entries = []
+            return Ok(audit_entries)
+        except Exception as e:
+            return Err(f"Failed to get audit trail: {str(e)}")
+
+    # =========================================================================
+    # End IOrchestrator Interface Implementation
+    # =========================================================================
 
     def execute_with_directive(
         self,
