@@ -216,8 +216,8 @@ pytest tests/integration/test_clarification_flow.py::test_clarification_rate_bel
 
 # 3. Sample classification
 python -c "
-from cortex.intelligence.intent_classifier_v2 import IntentClassifierV2
-classifier = IntentClassifierV2()
+from cortex.intelligence.intent_classifier import IntentClassifier
+classifier = IntentClassifier()
 result = classifier.classify('implement user authentication')
 print(f'Intent: {result.intent}, Confidence: {result.confidence:.2f}')
 # Expected: Intent: IMPLEMENT, Confidence: >0.85

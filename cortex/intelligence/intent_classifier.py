@@ -1,5 +1,5 @@
 """
-Enhanced Intent Classifier v2 (WAVE-M: ENH-078).
+Enhanced Intent Classifier (WAVE-M: ENH-078).
 
 Improves intent classification accuracy from 65% → 90% through advanced
 NLP techniques, confidence scoring, and pattern recognition.
@@ -61,7 +61,7 @@ class IntentClassification:
         return self.is_ambiguous or self.confidence < threshold
 
 
-class IntentClassifierV2:
+class IntentClassifier:
     """
     Enhanced intent classifier with 90% accuracy target.
     
@@ -207,7 +207,7 @@ class IntentClassifierV2:
             IntentClassification with confidence and alternatives
         
         Example:
-            >>> classifier = IntentClassifierV2()
+            >>> classifier = IntentClassifier()
             >>> result = classifier.classify("implement authentication system")
             >>> assert result.intent == IntentType.IMPLEMENT
             >>> assert result.confidence > 0.85
@@ -443,5 +443,5 @@ def classify_intent(
         >>> result = classify_intent("fix the login bug")
         >>> assert result.intent == IntentType.FIX
     """
-    classifier = IntentClassifierV2()
+    classifier = IntentClassifier()
     return classifier.classify(user_request, context)

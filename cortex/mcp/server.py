@@ -400,7 +400,7 @@ class MCPServer:
 # ============================================================================
 
 def main() -> None:
-    """Entry point for python -m cortex.mcp.v2"""
+    """Entry point for python -m cortex.mcp"""
     # Configure logging
     logging.basicConfig(
         level=logging.INFO,

@@ -12,7 +12,7 @@ AC-ID: AC-WAVE-M-001
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 from cortex.intelligence.intent_classifier import (
-    IntentClassifierV2,
+    IntentClassifier,
     IntentClassification,
     IntentType,
 )
@@ -72,7 +72,7 @@ class ClarificationReducer:
     
     def __init__(self):
         """Initialize the reducer."""
-        self.classifier = IntentClassifierV2()
+        self.classifier = IntentClassifier()
         self.context = ConversationContext()
     
     def process_request(

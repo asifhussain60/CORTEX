@@ -12,7 +12,7 @@ from cortex.intelligence.clarification_reducer import (
     ConversationContext,
     reduce_clarifications,
 )
-from cortex.intelligence.intent_classifier_v2 import IntentType, IntentClassification
+from cortex.intelligence.intent_classifier import IntentType, IntentClassification
 
 
 class TestConversationContext:

@@ -1,5 +1,5 @@
 """
-Tests for Enhanced Intent Classifier v2 (WAVE-M: ENH-078).
+Tests for Enhanced Intent Classifier (WAVE-M: ENH-078).
 
 Authority: cortex-registry/_cortex-master/index.yaml WAVE-M
 Created: 2026-02-12
@@ -8,19 +8,19 @@ AC-ID: AC-WAVE-M-001
 
 import pytest
 from cortex.intelligence.intent_classifier import (
-    IntentClassifierV2,
+    IntentClassifier,
     IntentType,
     IntentClassification,
     classify_intent,
 )
 
 
-class TestIntentClassifierV2:
-    """Tests for IntentClassifierV2 class."""
+class TestIntentClassifier:
+    """Tests for IntentClassifier class."""
     
     def test_classify_implement_intent_high_confidence(self):
         """Test classifying IMPLEMENT intent with high confidence."""
-        classifier = IntentClassifierV2()
+        classifier = IntentClassifier()
         
         result = classifier.classify("implement authentication system")
         
@@ -30,7 +30,7 @@ class TestIntentClassifierV2:
     
     def test_classify_fix_intent_high_confidence(self):
         """Test classifying FIX intent with high confidence."""
-        classifier = IntentClassifierV2()
+        classifier = IntentClassifier()
         
         result = classifier.classify("fix the login bug that's preventing users from signing in")
         
@@ -40,7 +40,7 @@ class TestIntentClassifierV2:
     
     def test_classify_refactor_intent(self):
         """Test classifying REFACTOR intent."""
-        classifier = IntentClassifierV2()
+        classifier = IntentClassifier()
         
         result = classifier.classify("refactor the database connection code to improve performance")
         
@@ -49,7 +49,7 @@ class TestIntentClassifierV2:
     
     def test_classify_analyze_intent(self):
         """Test classifying ANALYZE intent."""
-        classifier = IntentClassifierV2()
+        classifier = IntentClassifier()
         
         result = classifier.classify("analyze the code quality of the authentication module")
         
@@ -58,7 +58,7 @@ class TestIntentClassifierV2:
     
     def test_classify_audit_intent(self):
         """Test classifying AUDIT intent."""
-        classifier = IntentClassifierV2()
+        classifier = IntentClassifier()
         
         result = classifier.classify("/audit")
         
@@ -67,7 +67,7 @@ class TestIntentClassifierV2:
     
     def test_classify_ambiguous_triggers_clarification(self):
         """Test that ambiguous requests trigger clarification."""
-        classifier = IntentClassifierV2()
+        classifier = IntentClassifier()
         
         # Vague request that could be multiple intents
         result = classifier.classify("change the login code")
@@ -77,7 +77,7 @@ class TestIntentClassifierV2:
     
     def test_classify_with_context_improves_confidence(self):
         """Test that context from previous turn improves confidence."""
-        classifier = IntentClassifierV2()
+        classifier = IntentClassifier()
         
         # Without context
         result_no_context = classifier.classify("also add validation")
@@ -93,7 +93,7 @@ class TestIntentClassifierV2:
     
     def test_classify_query_intent(self):
         """Test classifying QUERY intent."""
-        classifier = IntentClassifierV2()
+        classifier = IntentClassifier()
         
         result = classifier.classify("what is the purpose of the MasterOrchestrator?")
         
@@ -102,7 +102,7 @@ class TestIntentClassifierV2:
     
     def test_classify_empty_request(self):
         """Test classifying empty request."""
-        classifier = IntentClassifierV2()
+        classifier = IntentClassifier()
         
         result = classifier.classify("")
         
@@ -112,7 +112,7 @@ class TestIntentClassifierV2:
     
     def test_classify_command_prefix(self):
         """Test that command prefixes are strongly recognized."""
-        classifier = IntentClassifierV2()
+        classifier = IntentClassifier()
         
         # Test various command prefixes
         commands = [
@@ -131,7 +131,7 @@ class TestIntentClassifierV2:
     
     def test_alternative_intents_populated(self):
         """Test that alternative intents are populated."""
-        classifier = IntentClassifierV2()
+        classifier = IntentClassifier()
         
         # Request with multiple possible intents
         result = classifier.classify("improve the code quality")
@@ -145,7 +145,7 @@ class TestIntentClassifierV2:
     
     def test_accuracy_benchmark_90_percent(self):
         """Test that classifier achieves 90% accuracy on benchmark set."""
-        classifier = IntentClassifierV2()
+        classifier = IntentClassifier()
         
         # Benchmark dataset (labeled requests)
         benchmark_data = [

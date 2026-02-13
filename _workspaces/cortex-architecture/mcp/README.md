@@ -24,7 +24,7 @@ The Model Context Protocol (MCP) Server is the **SINGLE entry point** for ALL CO
                                  │
                                  ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                       MCP SERVER v2                                      │
+│                       MCP SERVER                                         │
 │ ┌─────────────────────────────────────────────────────────────────────┐ │
 │ │                      TOOL REGISTRY (24 Tools)                        │ │
 │ │ ┌───────────┐ ┌───────────────┐ ┌────────────┐ ┌──────────────────┐ │ │
@@ -127,7 +127,7 @@ git clone https://github.com/org/CORTEX.git
 cd CORTEX
 
 # Run setup script
-python .cortex/setup-mcp-v2.py
+python .cortex/setup-mcp.py
 
 # Reload VS Code
 # Command Palette → Developer: Reload Window
@@ -205,7 +205,7 @@ MCP uses JSON-RPC 2.0 over stdio:
 
 Run tests:
 ```bash
-pytest cortex/mcp/v2/tests/test_mcp_v2.py -v
+pytest cortex/mcp/tests/ -v
 ```
 
 ## Migration from v1
