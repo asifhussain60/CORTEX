@@ -1,0 +1,396 @@
+# ============================================================================
+# ENH-101: Change Coherence Engine
+# ============================================================================
+# Authority: chat01.md analysis - Copilot edits fragments without holistic awareness
+# Purpose: Ensure ALL file modifications maintain coherence across entire file
+# Status: ACTIVE - READY FOR IMPLEMENTATION
+# Created: 2026-02-13
+# Priority: P1-CRITICAL (foundational to all development quality)
+# ============================================================================
+
+version: "1.0"
+created: "2026-02-13T12:00:00Z"
+last_updated: "2026-02-13T12:00:00Z"
+enhancement_id: "ENH-101"
+name: "Change Coherence Engine"
+priority: "P1-CRITICAL"
+roi_score: 9.2  # High ROI - prevents all fragmentary edit problems
+
+metadata:
+  author: "Asif Hussain"
+  source: "chat01.md analysis - copilot-instructions.md refactoring session"
+  related_phases:
+    - "Phase 48: HolisticValidationOrchestrator"
+    - "Phase 49: ContextCrystallizationLayer"
+  related_enhancements:
+    - "ENH-048: Prompt Unbloating System"
+    - "WAVE-10: Test Suite Deep Remediation"
+  
+objectives:
+  primary: "Ensure every file edit maintains coherence with the entire file"
+  secondary: "Detect and prevent duplications before they are created"
+  tertiary: "Enforce best practices from knowledge YAMLs during edits"
+  strategic: "Turn CORTEX into a holistic development system, not fragment editor"
+
+# ============================================================================
+# PROBLEM STATEMENT
+# ============================================================================
+
+problem_analysis:
+  summary: |
+    Copilot (and AI assistants generally) edit files section-by-section without 
+    full-file awareness. This leads to accumulating technical debt:
+    - Duplicate sections (GAP-001 appeared 3x in copilot-instructions.md)
+    - Version mismatches (header v8.0, footer v7.0)
+    - Contradictory content across sections
+    - Bloat from never-cleaned orphaned content
+    
+  evidence:
+    source_file: "chat01.md"
+    observed_issues:
+      - issue: "Triple duplicate GAP-001 sections"
+        lines_wasted: 350
+        root_cause: "Edit added section without checking if it existed"
+      - issue: "MCP Detection pseudo-code duplicated"
+        lines_wasted: 200
+        root_cause: "No cross-reference validation before edit"
+      - issue: "Version mismatch header/footer"
+        root_cause: "Edit touched header, never checked footer"
+      - issue: "Quick Commands duplicated"
+        lines_wasted: 30
+        root_cause: "No full-file scan before adding content"
+    
+  total_waste: "1,041 lines (52% of original file)"
+  
+  impact:
+    - "Increased token consumption (bloated files in context)"
+    - "Maintenance burden (finding canonical version)"
+    - "Confusion (contradictory rules in same file)"
+    - "Technical debt accumulation over time"
+
+# ============================================================================
+# SOLUTION: CHANGE COHERENCE ENGINE
+# ============================================================================
+
+solution:
+  name: "ChangeCoherenceEngine"
+  type: "Orchestrator + Validation Layer"
+  
+  architecture:
+    description: |
+      Three-phase coherence enforcement around every file modification:
+      
+      1. PRE-EDIT: Load full file context + detect existing structure
+      2. EDIT: Apply change with cross-reference awareness
+      3. POST-EDIT: Validate coherence + best practice compliance
+      
+    flow: |
+      User Request
+           │
+           ▼
+      IntentRouter (IMPLEMENT/FIX/REFACTOR)
+           │
+           ▼
+      ChangeCoherenceEngine.pre_edit()
+           │
+           ├── ContextCrystallizationLayer.load_full_file()
+           ├── StructureAnalyzer.detect_sections()
+           ├── DuplicateScanner.find_existing_patterns()
+           └── BestPracticeLoader.load_relevant_rules()
+           │
+           ▼
+      TDDOrchestrator / RefactoringOrchestrator (apply edit)
+           │
+           ▼
+      ChangeCoherenceEngine.post_edit()
+           │
+           ├── CoherenceValidator.check_duplicates()
+           ├── VersionConsistencyChecker.validate()
+           ├── CrossReferenceValidator.detect_contradictions()
+           └── BestPracticeCompliance.verify()
+           │
+           ▼
+      Result (PASS/FAIL with remediation)
+
+  components:
+    existing_reused:
+      - name: "ContextCrystallizationLayer"
+        location: "cortex/orchestrators/context_crystallization/"
+        purpose: "Pre-warms full file context asynchronously"
+        reuse: "Direct - call crystallize() before edit"
+        
+      - name: "CrossReferenceValidator"
+        location: "cortex/validation/cross_reference_validator.py"
+        purpose: "Detects contradictions across files"
+        reuse: "Extend - add intra-file contradiction detection"
+        
+      - name: "RefactoringOrchestrator"
+        location: "cortex/orchestrators/refactoring_orchestrator.py"
+        purpose: "Handles REFACTOR intents"
+        reuse: "Coordinate - CCE wraps refactoring operations"
+        
+      - name: "Knowledge YAMLs"
+        location: "cortex/knowledge/best-practices/"
+        purpose: "40+ best practice guides"
+        reuse: "Load relevant rules: refactoring.yaml, clean-code.yaml"
+        
+      - name: "EnforcementOrchestrator"
+        location: "cortex/governance/"
+        purpose: "7-agent pre-execution gate"
+        reuse: "CCE becomes 8th agent for edit coherence"
+        
+      - name: "HolisticValidationOrchestrator"
+        location: ".github/agents/core/"
+        purpose: "Phase 48 pre-implementation validation"
+        reuse: "Complementary - runs BEFORE CCE, different scope"
+    
+    new_components:
+      - name: "ChangeCoherenceEngine"
+        location: "cortex/orchestrators/coherence/change_coherence_engine.py"
+        purpose: "Main orchestrator coordinating pre/post edit validation"
+        methods:
+          - "pre_edit(file_path: Path, proposed_changes: List[Change]) -> PreEditContext"
+          - "post_edit(file_path: Path, changes_applied: List[Change]) -> CoherenceReport"
+          - "validate_coherence(file_content: str) -> ValidationResult"
+        
+      - name: "StructureAnalyzer"
+        location: "cortex/orchestrators/coherence/structure_analyzer.py"
+        purpose: "Detect file structure (sections, headers, version markers)"
+        methods:
+          - "analyze_structure(content: str) -> FileStructure"
+          - "detect_sections(content: str) -> List[Section]"
+          - "find_version_markers(content: str) -> List[VersionMarker]"
+        
+      - name: "DuplicateScanner"
+        location: "cortex/orchestrators/coherence/duplicate_scanner.py"
+        purpose: "Find duplicate/similar content before adding more"
+        methods:
+          - "scan_for_duplicates(content: str, pattern: str) -> List[DuplicateMatch]"
+          - "calculate_similarity(text_a: str, text_b: str) -> float"
+          - "suggest_consolidation(duplicates: List[DuplicateMatch]) -> ConsolidationPlan"
+        
+      - name: "CoherenceValidator"
+        location: "cortex/orchestrators/coherence/coherence_validator.py"
+        purpose: "Post-edit validation for coherence"
+        methods:
+          - "validate_no_new_duplicates(before: str, after: str) -> ValidationResult"
+          - "validate_version_consistency(content: str) -> ValidationResult"
+          - "validate_cross_references(content: str) -> ValidationResult"
+        
+      - name: "BestPracticeCompliance"
+        location: "cortex/orchestrators/coherence/best_practice_compliance.py"
+        purpose: "Check edits against knowledge YAML rules"
+        methods:
+          - "load_relevant_practices(file_type: str) -> List[Practice]"
+          - "check_compliance(changes: List[Change], practices: List[Practice]) -> ComplianceReport"
+
+# ============================================================================
+# IMPLEMENTATION STAGES
+# ============================================================================
+
+stages:
+  - stage_id: "S1"
+    name: "Foundation - ChangeCoherenceEngine Core"
+    duration: "4-5 hours"
+    tdd_cycles: 8
+    
+    deliverables:
+      - file: "cortex/orchestrators/coherence/__init__.py"
+        tests: 0
+        description: "Package initialization"
+        
+      - file: "cortex/orchestrators/coherence/models.py"
+        tests: 5
+        description: "Data models (FileStructure, Section, Change, CoherenceReport)"
+        
+      - file: "cortex/orchestrators/coherence/change_coherence_engine.py"
+        tests: 12
+        description: "Main orchestrator with pre_edit/post_edit methods"
+        
+      - file: "tests/unit/orchestrators/coherence/test_change_coherence_engine.py"
+        description: "Unit tests for CCE"
+    
+    acceptance_criteria:
+      - "CCE.pre_edit() loads full file context"
+      - "CCE.post_edit() returns coherence validation result"
+      - "All tests pass with 0 mocks of core logic"
+      
+  - stage_id: "S2"
+    name: "StructureAnalyzer - File Structure Detection"
+    duration: "3-4 hours"
+    tdd_cycles: 6
+    
+    deliverables:
+      - file: "cortex/orchestrators/coherence/structure_analyzer.py"
+        tests: 10
+        description: "Detect sections, headers, version markers"
+        
+      - file: "tests/unit/orchestrators/coherence/test_structure_analyzer.py"
+        description: "Unit tests for structure analysis"
+    
+    acceptance_criteria:
+      - "Detects markdown sections (##, ###)"
+      - "Detects Python class/function boundaries"
+      - "Detects YAML top-level keys"
+      - "Finds version markers in headers/footers"
+      
+  - stage_id: "S3"
+    name: "DuplicateScanner - Similarity Detection"
+    duration: "3-4 hours"
+    tdd_cycles: 6
+    
+    deliverables:
+      - file: "cortex/orchestrators/coherence/duplicate_scanner.py"
+        tests: 10
+        description: "Find duplicates using similarity algorithms"
+        
+      - file: "tests/unit/orchestrators/coherence/test_duplicate_scanner.py"
+        description: "Unit tests for duplicate detection"
+    
+    acceptance_criteria:
+      - "Detects exact duplicates (100% match)"
+      - "Detects near-duplicates (>80% similarity)"
+      - "Returns consolidation suggestions"
+      - "Works on markdown, Python, YAML"
+      
+  - stage_id: "S4"
+    name: "CoherenceValidator + BestPracticeCompliance"
+    duration: "4-5 hours"
+    tdd_cycles: 8
+    
+    deliverables:
+      - file: "cortex/orchestrators/coherence/coherence_validator.py"
+        tests: 8
+        description: "Post-edit coherence validation"
+        
+      - file: "cortex/orchestrators/coherence/best_practice_compliance.py"
+        tests: 8
+        description: "Check against knowledge YAMLs"
+        
+      - file: "tests/unit/orchestrators/coherence/test_coherence_validator.py"
+        description: "Unit tests"
+        
+      - file: "tests/unit/orchestrators/coherence/test_best_practice_compliance.py"
+        description: "Unit tests"
+    
+    acceptance_criteria:
+      - "Validates no new duplicates introduced"
+      - "Validates version consistency (header=footer)"
+      - "Loads relevant best practices from knowledge YAMLs"
+      - "Reports compliance violations with fix suggestions"
+      
+  - stage_id: "S5"
+    name: "Integration + MCP Tool"
+    duration: "4-5 hours"
+    tdd_cycles: 8
+    
+    deliverables:
+      - file: "cortex/mcp/tools/coherence_tools.py"
+        tests: 6
+        description: "MCP tool: cortex_validate_coherence"
+        
+      - file: "cortex/orchestrators/coherence/integration.py"
+        tests: 6
+        description: "Wire CCE into TDDOrchestrator, RefactoringOrchestrator"
+        
+      - file: "tests/integration/test_change_coherence_integration.py"
+        description: "Integration tests with real files"
+    
+    acceptance_criteria:
+      - "cortex_validate_coherence MCP tool available"
+      - "TDDOrchestrator calls CCE.pre_edit() before file changes"
+      - "RefactoringOrchestrator calls CCE.post_edit() after changes"
+      - "Integration tests pass with real file modifications"
+      
+  - stage_id: "S6"
+    name: "Golden Path Truth Tests"
+    duration: "3-4 hours"
+    tdd_cycles: 4
+    
+    deliverables:
+      - file: "tests/golden/test_change_coherence_truth.py"
+        description: "Truth tests with 0 mocks"
+        tests:
+          - name: "test_duplicate_prevention_truth"
+            description: "Add content that already exists → CCE blocks it"
+            mocks: 0
+          - name: "test_version_consistency_truth"
+            description: "Edit header → CCE ensures footer matches"
+            mocks: 0
+          - name: "test_best_practice_compliance_truth"
+            description: "Refactor code → CCE verifies refactoring.yaml rules"
+            mocks: 0
+          - name: "test_full_coherence_workflow_truth"
+            description: "End-to-end: pre_edit → edit → post_edit → report"
+            mocks: 0
+    
+    acceptance_criteria:
+      - "4 Golden Path Truth Tests with 0 mocks"
+      - "Tests use real files, real knowledge YAMLs"
+      - "Audit trail captured in test assertions"
+
+# ============================================================================
+# SUCCESS METRICS
+# ============================================================================
+
+success_metrics:
+  duplicate_prevention:
+    target: "100% of duplicate additions blocked"
+    measurement: "CCE.post_edit() catches all new duplicates"
+    
+  version_consistency:
+    target: "100% header/footer version sync"
+    measurement: "No version mismatches after CCE-validated edits"
+    
+  best_practice_compliance:
+    target: "≥95% compliance with knowledge YAML rules"
+    measurement: "BestPracticeCompliance reports ≥95% pass rate"
+    
+  test_coverage:
+    target: "≥95% coverage for CCE components"
+    measurement: "pytest-cov shows ≥95%"
+    
+  integration:
+    target: "All IMPLEMENT/FIX/REFACTOR intents route through CCE"
+    measurement: "Audit log shows CCE invocation for every edit"
+
+# ============================================================================
+# TIMELINE
+# ============================================================================
+
+timeline:
+  total_effort: "21-27 hours"
+  stages_breakdown:
+    - stage: "S1 Foundation"
+      hours: "4-5"
+      tests: 17
+    - stage: "S2 StructureAnalyzer"
+      hours: "3-4"
+      tests: 10
+    - stage: "S3 DuplicateScanner"
+      hours: "3-4"
+      tests: 10
+    - stage: "S4 Validators"
+      hours: "4-5"
+      tests: 16
+    - stage: "S5 Integration"
+      hours: "4-5"
+      tests: 12
+    - stage: "S6 Truth Tests"
+      hours: "3-4"
+      tests: 4
+  
+  total_tests: 69
+  parallelizable: "S2 and S3 can run in parallel after S1"
+
+# ============================================================================
+# EXECUTION COMMAND
+# ============================================================================
+
+execution:
+  command: "/implement ENH-101-S1"
+  description: "Start Stage 1: Foundation - ChangeCoherenceEngine Core"
+  prerequisites:
+    - "MCP server running"
+    - "Virtual environment activated"
+    - "All existing tests passing"
