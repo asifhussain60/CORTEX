@@ -41,7 +41,6 @@ from cortex.brain.knowledge.knowledge_synthesis_engine import (
 from cortex.brain.knowledge.unified_intelligence_context import (
     UnifiedIntelligenceContext,
 )
-from cortex.brain.mcp.decorator import mcp_tool
 
 # Phase 27: Import StandardsResolver for company domain integration
 from cortex.common.standards_resolver import StandardsResolver

@@ -50,7 +50,6 @@ from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
 from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.brain.core.result import Err, Ok, Result, err, ok
-from cortex.brain.mcp.decorator import mcp_tool
 
 
 @dataclass
@@ -539,11 +538,6 @@ class SeleniumPlaywrightOrchestrator(IOrchestrator):
         except Exception as e:
             return Err(f"Initialization failed: {str(e)}")
 
-    @mcp_tool(
-        name="convert_file",
-        description="Convert a Selenium test file to Playwright format",
-        parameters={"input_file": "string", "output_file": "string"}
-    )
     def convert_file(
         self,
         input_file: str,
@@ -622,11 +616,6 @@ class SeleniumPlaywrightOrchestrator(IOrchestrator):
         except Exception as e:
             return Err(f"Conversion failed: {str(e)}")
 
-    @mcp_tool(
-        name="analyze_selenium_code",
-        description="Analyze Selenium code for patterns and conversion readiness",
-        parameters={"code": "string"}
-    )
     def analyze_selenium_code(
         self,
         code: str,
@@ -660,11 +649,6 @@ class SeleniumPlaywrightOrchestrator(IOrchestrator):
         except Exception as e:
             return Err(f"Analysis failed: {str(e)}")
 
-    @mcp_tool(
-        name="convert_directory",
-        description="Convert all Selenium tests in a directory to Playwright",
-        parameters={"input_dir": "string", "output_dir": "string"}
-    )
     def convert_directory(
         self,
         input_dir: str,
