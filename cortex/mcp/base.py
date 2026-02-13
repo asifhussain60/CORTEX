@@ -1,3 +1,8 @@
+# CORTEX_DEBUG_START: session-test_failure-20260213-085955-088215
+# Trigger: TEST_FAILURE
+# Context: TEST_FAILURE in unknown: 
+# Injected: 2026-02-13T08:59:55.088320
+# CORTEX_DEBUG_END: session-test_failure-20260213-085955-088215
 """
 MCP Tool Base Classes and Data Models.
 
