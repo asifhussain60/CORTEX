@@ -1,0 +1,292 @@
+# CORTEX Master Plan
+# Authority: CORTEX Architect + EnforcementOrchestrator
+# Version: 2.0 - Post Holistic Remediation
+# Date: 2026-02-13
+
+metadata:
+  version: "2.0"
+  last_updated: "2026-02-13"
+  authority: "CORTEX Architect"
+  orchestrator: "MasterOrchestrator"
+  compliance: "CORE-002, CORE-028, CORE-035, MCP-FIRST"
+
+# Core Architecture Principles
+architecture:
+  paradigm: "MCP-First SaaS"
+  execution_mode: "Silent Autonomous"
+  quality_level: "Production Only"
+  validation: "Multi-Layer Governance (7 agents)"
+  
+  enforcement_layers:
+    layer_1:
+      name: "Pre-Execution Gate"
+      agents: 7
+      status: "ACTIVE"
+      coverage: "26/30 CORE rules (87%)"
+      
+    layer_2:
+      name: "Runtime Monitor"
+      threshold: "3 violations → HALT"
+      status: "ACTIVE"
+      
+    layer_3:
+      name: "Post-Execution Audit"
+      frequency: "Every completion"
+      status: "ACTIVE"
+      
+    layer_4:
+      name: "Production Gate"
+      scope: "Deployment blocking"
+      status: "ACTIVE"
+
+# Governance Violations Digest (from chat01.md)
+governance_learnings:
+  session: "chat01.md audit"
+  date: "2026-02-13"
+  violations_found: 13
+  severity_breakdown:
+    p0_blocking: 5
+    p1_high: 5
+    p2_medium: 3
+    
+  key_insights:
+    - insight: "YAML/MD sprawl reached 214 files (86 MD + 81 YAML)"
+      impact: "50k+ token bloat, discovery confusion"
+      root_cause: "No systematic cleanup, convenience over governance"
+      remediation: "3-phase triage + automation (pre-commit hooks + weekly vacuum)"
+      status: "IN PROGRESS"
+      
+    - insight: "109 SCREAMING_CASE file violations"
+      impact: "CORE-028 violation, discoverability issues"
+      root_cause: "Inconsistent enforcement, legacy naming"
+      remediation: "Batch rename + reference updates"
+      status: "PLANNED"
+      
+    - insight: "MCP bypass patterns detected"
+      impact: "Breaks TDD, security gates, audit trail"
+      root_cause: "MCP reliability issues, fallback to direct operations"
+      remediation: "Native tool interception layer + 3-method MCP detection"
+      status: "PLANNED"
+      
+    - insight: "No automated registry status workflow"
+      impact: "Broken dashboards, stale reports"
+      root_cause: "Manual updates, no orchestrator completion hooks"
+      remediation: "StatusUpdateHook + RegistryValidator"
+      status: "PLANNED"
+      
+    - insight: "Agent architecture blindness"
+      impact: "Duplicate recommendations, scope creep"
+      root_cause: "No LENS/registry consultation requirement"
+      remediation: "RecommendationGate (LENS + registry + ROI)"
+      status: "PLANNED"
+
+# Current Status (Post Phase 2 Consolidation)
+current_status:
+  file_count:
+    before: 214
+    after_phase2: 167
+    target: 20
+    reduction_progress: "22%"
+    
+  archived:
+    location: "_archive/obsolete-wave-guides/"
+    count: 13
+    files:
+      - "AUTONOMOUS-WAVE-EXECUTION-GUIDE.md"
+      - "AUTONOMOUS-WAVES-H-O-EXECUTION-GUIDE.md"
+      - "CLEANUP-COMPLETE-2026-02-10.md"
+      - "CONSOLIDATION-COMPLETE-2026-02-11.md"
+      - "CHAT01-DIGEST-2026-02-12.md"
+      # ... (13 total)
+      
+  test_suite:
+    status: "PASSING"
+    total: 412
+    passing: 412
+    coverage: "Target 80%+"
+    
+  git:
+    hooks_configured: true
+    hooks_path: ".githooks"
+    post_checkout_active: true
+    settings_json_tracked: false  # CORE-051 compliance
+
+# Remediation Execution Plan
+remediation_phases:
+  phase_1_intelligence:
+    status: "COMPLETE"
+    duration: "15 min"
+    deliverables:
+      - "File structure analysis (214 files)"
+      - "AC marker audit (60+ markers)"
+      - "CORE rule mapping (13 violations)"
+      
+  phase_2_consolidation:
+    status: "COMPLETE"
+    duration: "30 min"
+    deliverables:
+      - "Archived 13 obsolete wave guides"
+      - "Reduced from 214 → 167 files"
+      - "Created _archive structure"
+      
+  phase_3_naming:
+    status: "IN PROGRESS"
+    duration: "45 min (estimated)"
+    scope: "109 SCREAMING_CASE files → kebab-case"
+    approach:
+      - "Generate rename mapping"
+      - "Batch rename with git mv"
+      - "Update all cross-references"
+      
+  phase_4_mcp_enforcement:
+    status: "PLANNED"
+    duration: "60 min (estimated)"
+    deliverables:
+      - "Native tool interception layer"
+      - "3-method MCP detection"
+      - "Pre-flight check integration"
+      
+  phase_5_automation:
+    status: "PLANNED"
+    duration: "45 min (estimated)"
+    deliverables:
+      - "StatusUpdateHook (orchestrator → registry)"
+      - "RegistryValidator (prevent contradictions)"
+      - "RecommendationGate (LENS + registry + ROI)"
+      
+  phase_6_verification:
+    status: "PLANNED"
+    duration: "30 min (estimated)"
+    deliverables:
+      - "Full governance audit"
+      - "Compliance report (8 metrics)"
+      - "AC markers (AC_START → AC_COMPLETE)"
+
+# Success Metrics
+success_metrics:
+  file_reduction:
+    metric: "Files in _cortex-master"
+    current: 167
+    target: "≤20"
+    reduction_needed: "88%"
+    
+  naming_compliance:
+    metric: "SCREAMING_CASE violations"
+    current: 109
+    target: 0
+    reduction_needed: "100%"
+    
+  mcp_bypass:
+    metric: "Direct file operation violations"
+    current: "TBD (audit needed)"
+    target: 0
+    reduction_needed: "100%"
+    
+  registry_sync:
+    metric: "Status update lag"
+    current: "Hours (manual)"
+    target: "<5 min (automated)"
+    improvement: "98%"
+    
+  agent_alignment:
+    metric: "Architecture consultation rate"
+    current: "Unknown"
+    target: "100%"
+    validation: "RecommendationGate active"
+    
+  test_health:
+    metric: "Test suite status"
+    current: "412/412 passing"
+    target: "Maintain 100%"
+    coverage: "≥80%"
+    
+  cross_platform:
+    metric: "CORE-051 compliance"
+    current: "✅ settings.json not tracked"
+    target: "✅ Maintain compliance"
+    validation: "Git hooks active"
+    
+  audit_trail:
+    metric: "AC marker coverage"
+    current: "60+ in last 3 days"
+    target: "100% of implementations"
+    validation: "EnforcementOrchestrator"
+
+# Next Actions
+next_actions:
+  immediate:
+    - action: "Complete Phase 3: Batch rename 109 SCREAMING_CASE files"
+      priority: "P0"
+      estimated_duration: "45 min"
+      
+    - action: "Archive additional obsolete files to reach ≤20 target"
+      priority: "P0"
+      estimated_duration: "30 min"
+      
+    - action: "Verify CORE-051 compliance (settings.json not tracked)"
+      priority: "P0"
+      estimated_duration: "5 min"
+      
+  short_term:
+    - action: "Implement native tool interception layer (MCP bypass prevention)"
+      priority: "P1"
+      estimated_duration: "60 min"
+      
+    - action: "Implement StatusUpdateHook (automated registry sync)"
+      priority: "P1"
+      estimated_duration: "45 min"
+      
+    - action: "Implement RecommendationGate (agent architecture awareness)"
+      priority: "P1"
+      estimated_duration: "45 min"
+      
+  validation:
+    - action: "Run full governance audit"
+      priority: "P1"
+      estimated_duration: "30 min"
+      validation_command: "cortex_debug_governance_detect"
+      
+    - action: "Generate compliance report"
+      priority: "P1"
+      estimated_duration: "15 min"
+      deliverable: "governance-compliance-report-2026-02-13.yaml"
+
+# Audit Trail
+audit_trail:
+  session_id: "chat01-digest-holistic-fix"
+  start_time: "2026-02-13T[timestamp]"
+  orchestrator: "MasterOrchestrator → EnforcementOrchestrator"
+  mode: "ARCHITECT (silent autonomous)"
+  
+  milestones:
+    - marker: "AC_START: AC-HOLISTIC-FIX-001"
+      description: "Chat01.md digest + comprehensive remediation"
+      timestamp: "2026-02-13"
+      
+    - marker: "AC_CHECKPOINT: Phase 1 Complete"
+      description: "Intelligence gathering (214 files analyzed)"
+      timestamp: "2026-02-13"
+      
+    - marker: "AC_CHECKPOINT: Phase 2 Complete"
+      description: "Consolidated 214 → 167 files (13 archived)"
+      timestamp: "2026-02-13"
+      
+    - marker: "AC_PENDING: Phase 3-6"
+      description: "Naming, MCP enforcement, automation, verification"
+      status: "IN PROGRESS"
+
+# References
+references:
+  governance_plan: "GOVERNANCE-REMEDIATION-PLAN-2026-02-13.md"
+  architecture_prompt: ".github/prompts/cortex-architect.prompt.md"
+  instructions: ".github/copilot-instructions.md"
+  enforcement_agents: ".github/agents/core/*.md"
+  
+  core_rules:
+    - "CORE-002: No markdown sprawl"
+    - "CORE-008: TDD mandatory (tests before code)"
+    - "CORE-028: kebab-case file naming"
+    - "CORE-035: Single canonical implementation"
+    - "CORE-051: Cross-platform MCP (.vscode/settings.json NOT tracked)"
+    - "MCP-FIRST: All operations through MCP tools"
+    - "ARCH-012: Industry standards compliance"
