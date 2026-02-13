@@ -47,11 +47,11 @@
 
 ---
 
-----------------------------------------
+────────────────────────────────────────
 📋 WAVE-R Stage 5: MCP Tools Complete
-----------------------------------------
+────────────────────────────────────────
 
-[██████████] 100% All Stages Complete
+`██████████` 100% All Stages Complete
 
 ├─ ✅ S1: DebuggerOrchestrator (24 tests)
 ├─ ✅ S2: MarkerInjectionEngine (17 tests)
@@ -62,13 +62,14 @@
 Tests: 68/69 | Coverage: 99%
 Commits: 3 (all pushed to remote)
 ENH-089: ✅ COMPLETE
-----------------------------------------
+────────────────────────────────────────
 ```
 
 **KEY RULES:**
 - Header appears ONCE at top
-- Box separators: exactly 60 `━` (U+2501) characters
-- All progress/completion sections use box format (━━━), NOT additional headers
+- Box separators: exactly 40 `─` (U+2500) characters
+- Progress bar uses inline code block: `` `██████` `` (prevents markdown link interpretation)
+- All progress/completion sections use box format (────), NOT additional headers
 - Track sections use `###` headers, never `##`
 - Field labels use `**Label:**` format
 
@@ -118,25 +119,25 @@ User: "proceed with WAVE-S implementation"
 
 Response 1 (Analysis + Challenge):
 ```
-----------------------------------------
+────────────────────────────────────────
 📋 WAVE-S Analysis: Holistic Validation
-----------------------------------------
+────────────────────────────────────────
 
-[██████████] 100% Analysis Complete
+`██████████` 100% Analysis Complete
 
 Challenge: Alternative approach detected
 ⚠️ Current: Pre-implementation validation in MasterOrchestrator
 💡 Alternative: Dedicated ValidationOrchestrator (SOLID SRP)
 
 Proceed with current or switch to alternative?
-----------------------------------------
+────────────────────────────────────────
 ```
 
 User: "proceed"
 
 Response 2 (Implementation - Silent):
 ```
-----------------------------------------
+────────────────────────────────────────
 📋 WAVE-S Stage 1: Pre-Implementation Gate
 ----------------------------------------
 

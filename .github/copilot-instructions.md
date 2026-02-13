@@ -814,11 +814,11 @@ Fix infrastructure. No bypasses allowed.
 **CRITICAL: During silent autonomous execution, use ONLY this format:**
 
 ```
-----------------------------------------
+────────────────────────────────────────
 📋 WAVE-R Stage 4: Integration Testing
-----------------------------------------
+────────────────────────────────────────
 
-[██████████] 100% Stage 4 Complete
+`██████████` 100% Stage 4 Complete
 
 ├─ ✅ S1: DebuggerOrchestrator (24 tests)
 ├─ ✅ S2: MarkerInjectionEngine (17 tests)
@@ -828,7 +828,7 @@ Fix infrastructure. No bypasses allowed.
 
 Tests: 58/69 | Coverage: 84%
 Fixed: Session ID timestamp collision (microseconds)
-----------------------------------------
+────────────────────────────────────────
 ```
 
 **FORBIDDEN FORMATS during silent execution:**

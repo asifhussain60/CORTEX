@@ -618,7 +618,11 @@ class ProgressReporter:
         total: int,
         width: int = 40,
     ) -> str:
-        """Create ASCII progress bar."""
+        """Create ASCII progress bar.
+        
+        Uses inline code block to prevent VS Code markdown renderer
+        from interpreting [...] as link reference (renders as "Pasted Image").
+        """
         if total == 0:
             percentage = 0
         else:
@@ -626,7 +630,8 @@ class ProgressReporter:
 
         filled = int(width * current / total) if total > 0 else 0
         bar = "█" * filled + "░" * (width - filled)
-        return f"[{bar}] {percentage:5.1f}%"
+        # Use inline code block to prevent markdown link interpretation
+        return f"`{bar}` {percentage:5.1f}%"
 
 
 # =============================================================================

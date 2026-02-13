@@ -10,13 +10,17 @@ import time
 from datetime import datetime
 
 def print_progress_bar(stage, current, total, substage=""):
-    """Print ASCII progress bar (CORE-049 silent mode)"""
+    """Print ASCII progress bar (CORE-049 silent mode)
+    
+    Uses inline code block to prevent VS Code markdown renderer
+    from interpreting [...] as link reference (renders as "Pasted Image").
+    """
     percent = (current / total) * 100
     bars = int(percent / 5)
     empty = 20 - bars
     status = "✅" if current == total else "🔵" if current > 0 else "⚪"
     
-    print(f"\r[{'█' * bars}{'░' * empty}] {percent:5.1f}% {status} {stage}: {substage}", end="", flush=True)
+    print(f"\r`{'█' * bars}{'░' * empty}` {percent:5.1f}% {status} {stage}: {substage}", end="", flush=True)
 
 def validate_phase_76():
     """Validate Phase 76: Production Foundation Trilogy"""

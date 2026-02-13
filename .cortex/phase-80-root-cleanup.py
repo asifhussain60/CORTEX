@@ -139,9 +139,9 @@ def main():
         print(f"  • {f.name}")
 
     # Move files
-    print(f"\n[{'█'*10}] 50% Moving files...")
+    print(f"\n`{'█'*10}` 50% Moving files...")
     moved, errors = manager.move_to_archive(root_files)
-    print(f"[{'█'*10}] 100% Migration complete\n")
+    print(f"`{'█'*10}` 100% Migration complete\n")
 
     print(f"✅ Moved: {moved}/{len(root_files)} files")
     if errors:
@@ -150,13 +150,13 @@ def main():
             print(f"  {err}")
 
     # Update governance
-    print(f"\n[{'█'*10}] 75% Updating governance...")
+    print(f"\n`{'█'*10}` 75% Updating governance...")
     manager.update_git_ignore()
     manager.create_migration_record(moved)
-    print(f"[{'█'*10}] 100% Governance updated\n")
+    print(f"`{'█'*10}` 100% Governance updated\n")
 
     # Git commit
-    print("[" + "█" * 10 + "] 90% Committing changes...")
+    print("`" + "█" * 10 + "` 90% Committing changes...")
     try:
         subprocess.run(
             ["git", "add", "-A"],

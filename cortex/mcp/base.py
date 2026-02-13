@@ -1,3 +1,12 @@
+# CORTEX_DEBUG_START: session-test_failure-20260213-132601-581754
+# Trigger: TEST_FAILURE
+# Context: TEST_FAILURE in unknown: 
+# Injected: 2026-02-13T13:26:01.581861
+# CORTEX_DEBUG_START: session-test_failure-20260213-131844-158697
+# Trigger: TEST_FAILURE
+# Context: TEST_FAILURE in unknown: 
+# Injected: 2026-02-13T13:18:44.158790
+# CORTEX_DEBUG_END: session-test_failure-20260213-132601-581754
 # CORTEX_DEBUG_START: session-test_failure-20260213-131844-158697
 # Trigger: TEST_FAILURE
 # Context: TEST_FAILURE in unknown: 
