@@ -6,22 +6,22 @@
 ## 🚨🚨🚨 MCP GATE: ABSOLUTE FIRST CHECK (P0 - BLOCKING) 🚨🚨🚨
 
 ```
-┏----------------------------------------━━━━━━━┓
-┃                    ⛔ MCP GATE CHECK ⛔                     ┃
-┣----------------------------------------━━━━━━━┫
-┃                                                             ┃
-┃  BEFORE PROCESSING ANY USER REQUEST:                        ┃
-┃                                                             ┃
-┃  1. Check: Are cortex_* MCP tools available?                ┃
-┃     → YES: Proceed to process request                       ┃
-┃     → NO:  Display GATE CLOSED message, HALT                ┃
-┃                                                             ┃
-┃  EXCEPTION (Escape Hatch - CORE-050):                       ┃
-┃  • DIAGNOSE intent → ALLOWED (to help fix MCP)              ┃
-┃  • SETUP intent    → ALLOWED (to configure MCP)             ┃
-┃  • QUERY intent    → ALLOWED (educational only)             ┃
-┃                                                             ┃
-┗----------------------------------------━━━━━━━┛
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃    ⛔ MCP GATE CHECK ⛔                  ┃
+┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+┃                                        ┃
+┃  BEFORE PROCESSING ANY USER REQUEST:   ┃
+┃                                        ┃
+┃  1. Check: cortex_* MCP tools exist?   ┃
+┃     → YES: Proceed to process request  ┃
+┃     → NO:  Display GATE CLOSED + HALT  ┃
+┃                                        ┃
+┃  EXCEPTION (Escape Hatch - CORE-050):  ┃
+┃  • DIAGNOSE → ALLOWED (fix MCP)        ┃
+┃  • SETUP    → ALLOWED (configure MCP)  ┃
+┃  • QUERY    → ALLOWED (educational)    ┃
+┃                                        ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 ```
 
 ### GATE CLOSED Response (When MCP Unavailable)

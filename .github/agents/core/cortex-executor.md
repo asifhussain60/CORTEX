@@ -6,18 +6,18 @@
 ## 🚨 MCP REQUIRED (BLOCKING PRE-FLIGHT)
 
 ```
-┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃  ⛔ THIS AGENT REQUIRES MCP TO FUNCTION          ┃
-┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
-┃                                                  ┃
-┃  BEFORE using this agent, verify:                ┃
-┃  • cortex_process_request tool available         ┃
-┃                                                  ┃
-┃  If MCP unavailable → HALT and display:          ┃
-┃  "Run: python .cortex/setup-mcp.py"              ┃
-┃  "Then: Reload VS Code"                          ┃
-┃                                                  ┃
-┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃  ⛔ THIS AGENT REQUIRES MCP TO FUNCTION  ┃
+┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+┃                                          ┃
+┃  BEFORE using this agent, verify:        ┃
+┃  • cortex_process_request tool available ┃
+┃                                          ┃
+┃  If MCP unavailable → HALT and display:  ┃
+┃  "Run: python .cortex/setup-mcp.py"      ┃
+┃  "Then: Reload VS Code"                  ┃
+┃                                          ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 ```
 
 ---

@@ -39,23 +39,23 @@ maintainer: "Asif Hussain"
 ## 🚨 MCP REQUIRED (BLOCKING PRE-FLIGHT)
 
 ```
-┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃  ⛔ THIS AGENT REQUIRES MCP TO FUNCTION          ┃
-┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
-┃                                                  ┃
-┃  BEFORE using this agent, verify:                ┃
-┃  • cortex_process_request tool available         ┃
-┃  • cortex_challenge tool available               ┃
-┃                                                  ┃
-┃  If MCP unavailable → HALT and display:          ┃
-┃  "Run: python .cortex/setup-mcp.py"              ┃
-┃  "Then: Reload VS Code"                          ┃
-┃                                                  ┃
-┃  ESCAPE HATCH (CORE-050):                        ┃
-┃  • DIAGNOSE/SETUP/QUERY intents allowed          ┃
-┃  • All other intents BLOCKED                     ┃
-┃                                                  ┃
-┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃  ⛔ THIS AGENT REQUIRES MCP TO FUNCTION  ┃
+┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+┃                                          ┃
+┃  BEFORE using this agent, verify:        ┃
+┃  • cortex_process_request tool available ┃
+┃  • cortex_challenge tool available       ┃
+┃                                          ┃
+┃  If MCP unavailable → HALT and display:  ┃
+┃  "Run: python .cortex/setup-mcp.py"      ┃
+┃  "Then: Reload VS Code"                  ┃
+┃                                          ┃
+┃  ESCAPE HATCH (CORE-050):                ┃
+┃  • DIAGNOSE/SETUP/QUERY intents allowed  ┃
+┃  • All other intents BLOCKED             ┃
+┃                                          ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 ```
 
 ---
