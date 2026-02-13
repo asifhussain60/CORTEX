@@ -1062,6 +1062,7 @@ cortex-registry/_cortex-master/
 | **CORE-049** | **Silent Autonomous Execution** — No confirmations, no narration, just progress bars + completion report. **CRITICAL:** Silent applies to narration ONLY, not to test rigor or code quality. Never trade quality for speed in any execution mode. |
 | **CORE-050** | **MCP Circuit Breaker (P0)** — Tiered MCP availability enforcement. **HARD BLOCK:** IMPLEMENT, FIX, REFACTOR, AUDIT, PLAN, ANALYZE intents CANNOT proceed if MCP unavailable. **EXEMPT:** DIAGNOSE, QUERY (educational), SETUP intents allowed for troubleshooting. **NO BYPASS:** Direct file operations forbidden for blocked intents even if "simpler." |
 | **CORE-051** | **Cross-Platform MCP (P0)** — `.vscode/settings.json` MUST NOT be in git (contains platform-specific Python paths). **MANDATORY AUDIT:** Every `/audit` command MUST verify settings.json not tracked. **AUTO-FIX:** `.githooks/post-checkout` regenerates settings via `setup-mcp.py` (macOS: bin/python, Windows: Scripts/python.exe). **VIOLATION:** Committing settings.json = cross-platform breakage. |
+| **CORE-052** | **Single Branch Policy (P0)** — ALL work MUST be done on the `CORTEX` branch. ❌ FORBIDDEN: `git checkout -b`, `git switch -c`, creating feature/backup/wave branches. ✅ REQUIRED: Use `git commit` for checkpoints (not branches). Use `git tag` for release markers. Use `git stash` for temporary saves. **VIOLATION:** Creating any new local branch = governance violation. Only `CORTEX` branch exists locally. |
 | **MCP-FIRST** | ALL functionality exposed via MCP tools |
 | **MCP-GATE** | IMPLEMENT intents MUST use `cortex_process_request` tool (NO direct file creation) |
 | **ARCH-012** | Standards gate — 12-Factor + SOLID + Clean Code + OWASP required |
@@ -1782,7 +1783,7 @@ cortex_process_request(
 | CORE-011 | Type hints mandatory |
 | CORE-012 | Google-style docstrings |
 | CORE-013 | No bare except |
-| CORE-026 | Git checkpoint before major changes |
+| CORE-026 | Git **commit** checkpoint before major changes (NEVER create branches — all work on CORTEX branch) |
 | CORE-027 | Audit trail (AC_START → AC_COMPLETE) |
 | CORE-028 | **File naming** — kebab-case, no SCREAMING_CASE, plan files ≤40 chars |
 | CORE-036 | **Industry standards compliance** — verify via orchestrators at runtime |

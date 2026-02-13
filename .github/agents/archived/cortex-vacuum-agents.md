@@ -407,7 +407,7 @@ Core:
   - Create archive backups before deletion
   - Update .gitignore for excluded patterns
   - Generate audit trails (AC_START, AC_EXECUTE, AC_COMPLETE)
-  - Create git checkpoints per CORE-026
+  - Create git commit checkpoints per CORE-026 (no branches — CORE-052)
 
 Advanced:
   - Validate no system files deleted
@@ -421,7 +421,7 @@ Advanced:
 
 ```yaml
 Pre-Deletion Phase:
-  1. Create feature branch: vacuum/repo-sanitization-YYYYMMDD
+  1. Create git commit checkpoint: git commit -m "CHECKPOINT: pre-vacuum-YYYYMMDD"
   2. Verify working tree clean (git status)
   3. Create backup manifest:
      _workspaces/_vacuum-backups/backup-TIMESTAMP.manifest
@@ -445,7 +445,7 @@ Validation Phase:
 
 Post-Deletion Phase:
   1. Git add + commit with vacuum message
-  2. Create git checkpoint (tag) CORE-026
+  2. Create git tag checkpoint CORE-026 (no branches — CORE-052)
   3. Log AC_COMPLETE with metrics
   4. Generate sanitization report
 ```

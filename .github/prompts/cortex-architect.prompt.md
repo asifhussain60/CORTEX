@@ -3130,7 +3130,7 @@ RETURN PHASE_CREATE  # No match found
 1. Load phase specification
 2. Verify no conflicting active phases
 3. Run VacuumOrchestrator.cleanup_stale_artifacts()
-4. Create git checkpoint (CORE-026)
+4. Create git commit checkpoint (CORE-026) — NEVER create branches, use `git commit` only
 5. Initialize AC_START audit trail (CORE-027)
 
 **MCP Tool:** `cortex_plan_setup`
@@ -3613,7 +3613,7 @@ CORTEX/
 
 **Cleanup Verification Checklist:**
 - [ ] Full test suite passing before Phase 2
-- [ ] Create backup branch: `git checkout -b backup-pre-cleanup`
+- [ ] Create git commit checkpoint: `git commit -m "CHECKPOINT: pre-cleanup"`
 - [ ] Archive (not delete) for reversibility
 - [ ] Run `pytest` after each phase
 - [ ] Update documentation if paths change
@@ -5577,7 +5577,7 @@ Score < 5 → Continue to DESIGN MODE
 
 ```markdown
 # Chat Session Digest: [Topic]
-**Date:** [Date] | **Sessions:** [Number] merged | **Branch:** [Git branch if applicable]
+**Date:** [Date] | **Sessions:** [Number] merged | **Branch:** CORTEX (single branch policy)
 
 ---
 

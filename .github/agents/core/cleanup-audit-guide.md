@@ -225,8 +225,8 @@ Phase Lifecycle:
 ### With Git Workflow
 
 ```bash
-# Before major release
-git checkout -b cleanup-wave-j
+# Before major release — commit checkpoint (CORE-052: single branch policy)
+git commit -m "CHECKPOINT: pre-cleanup"
 
 # Run audit
 python3 -m cortex.cli.cleanup_auditor audit --format yaml --output audit.yaml
@@ -347,7 +347,7 @@ python3 -m cortex.cli.cleanup_auditor audit \
 
 ### Before Running Cleanup
 
-1. ✅ **Backup workspace** (git commit or branch)
+1. ✅ **Backup workspace** (git commit checkpoint — NEVER create branches)
 2. ✅ **Run full test suite** (establish baseline)
 3. ✅ **Review audit report** (verify classification)
 4. ✅ **Dry-run migration** (preview changes)

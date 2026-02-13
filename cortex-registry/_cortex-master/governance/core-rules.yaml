@@ -198,11 +198,12 @@ core_rules:
       - "MCP-GATE"
   
   - id: "CORE-026"
-    name: "Git Checkpoint Before Major Changes"
+    name: "Git Commit Checkpoint Before Major Changes"
     category: "version_control"
     priority: "P1"
     description: |
       Create git commit checkpoint BEFORE major architectural changes.
+      Use `git commit` for checkpoints. NEVER create branches (CORE-052).
       
       Major changes include:
       - Refactoring > 500 LOC
@@ -216,7 +217,28 @@ core_rules:
     auto_fix: false
     enforced_by:
       - "SecurityCheckpointAgent"
-  
+
+  - id: "CORE-052"
+    name: "Single Branch Policy"
+    category: "version_control"
+    priority: "P0"
+    description: |
+      ALL work MUST be done on the CORTEX branch. No feature, backup,
+      wave, or cleanup branches allowed. Use git commit for checkpoints,
+      git tag for release markers, git stash for temporary saves.
+      
+      FORBIDDEN: git checkout -b, git switch -c, creating any new branch.
+      VIOLATION: Creating any new local branch = governance violation.
+    enforcement: "BLOCKED"
+    violation_action: "Block branch creation"
+    detection_patterns:
+      - "git checkout -b"
+      - "git switch -c"
+      - "git branch "
+    auto_fix: false
+    enforced_by:
+      - "SecurityCheckpointAgent"
+
   - id: "CORE-027"
     name: "Audit Trail Integrity"
     category: "governance"

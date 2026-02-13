@@ -744,7 +744,7 @@ next_steps:
     - "Allocate resources (dev time, testing environment)"
   
   wave_1_preparation:
-    - "Create feature branch: wave-1-foundation"
+    - "Create git commit checkpoint on CORTEX branch (CORE-052: single branch policy)"
     - "Set up test infrastructure for 83 tests"
     - "Review event bus current implementation"
   

@@ -792,7 +792,7 @@ Layer 4: Production Gate        → PREVENTS broken deployment
 | CORE-011 | Type hints mandatory |
 | CORE-012 | Google-style docstrings |
 | CORE-013 | No bare except |
-| CORE-026 | Git checkpoint before major changes |
+| CORE-026 | Git **commit** checkpoint before major changes (NEVER create branches — all work on CORTEX branch) |
 | CORE-027 | Audit trail (AC_START → AC_COMPLETE) |
 | CORE-028 | File naming — kebab-case, no SCREAMING_CASE, plan files ≤40 chars |
 | CORE-036 | Best practices — Company + CORTEX merged |

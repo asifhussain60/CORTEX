@@ -130,41 +130,151 @@ class DiscoveryScanner:
         "ToolExecutor", "ToolValidator",
     ]
 
+    # Max file size (bytes) to parse — skip huge generated files
+    _MAX_PARSE_SIZE = 100_000  # 100KB
+
+    # Directories to always skip during scanning
+    _SKIP_DIRS = frozenset({
+        '.venv', 'venv', 'node_modules', '__pycache__',
+        '.git', '_archived', '_quarantine', '.pytest_cache',
+        'generated', '_archives', '_workspaces',
+    })
+
     def __init__(self, cortex_root: str = None):
         """Initialize scanner with CORTEX root path."""
         if cortex_root is None:
             cortex_root = str(Path(__file__).parent.parent.parent)
         self.cortex_root = Path(cortex_root)
         self.discovered_components: List[DiscoveredComponent] = []
-        self.test_mapping: Dict[str, List[str]] = self._build_test_mapping()
+        self._py_file_cache: Optional[List[Path]] = None
+        self._class_index: Optional[Dict[str, List[Dict]]] = None
+        # Lazy — built on first access via property
+        self._test_mapping: Optional[Dict[str, List[str]]] = None
+
+    @property
+    def test_mapping(self) -> Dict[str, List[str]]:
+        """Lazy-loaded test mapping (built on first access)."""
+        if self._test_mapping is None:
+            self._test_mapping = self._build_test_mapping()
+        return self._test_mapping
 
     def _build_test_mapping(self) -> Dict[str, List[str]]:
-        """Build mapping of components to test files."""
-        test_mapping = {}
+        """Build mapping of components to test files.
+
+        Skips generated/archived dirs and files larger than _MAX_PARSE_SIZE.
+        """
+        test_mapping: Dict[str, List[str]] = {}
         tests_dir = self.cortex_root / "tests"
 
         if not tests_dir.exists():
             return test_mapping
 
-        for test_file in tests_dir.rglob("test_*.py"):
+        for test_file in self._safe_rglob(tests_dir, "test_*.py", self._SKIP_DIRS):
+            # Skip oversized files (generated tests can be 18k+ lines)
             try:
-                with open(test_file, 'r') as f:
-                    content = f.read()
-                    # Extract class names tested
-                    for match in ast.walk(ast.parse(content)):
-                        if isinstance(match, ast.ClassDef):
-                            if match.name.startswith("Test"):
-                                # Extract what's being tested
-                                for node in ast.walk(match):
-                                    if isinstance(node, ast.Name):
-                                        if node.id not in test_mapping:
-                                            test_mapping[node.id] = []
-                                        if str(test_file) not in test_mapping[node.id]:
-                                            test_mapping[node.id].append(str(test_file))
+                if test_file.stat().st_size > self._MAX_PARSE_SIZE:
+                    logger.debug(f"Skipping large test file: {test_file}")
+                    continue
+            except OSError:
+                continue
+
+            try:
+                content = test_file.read_text(encoding="utf-8", errors="ignore")
+                tree = ast.parse(content)
+                for node in ast.walk(tree):
+                    if isinstance(node, ast.ClassDef) and node.name.startswith("Test"):
+                        for child in ast.walk(node):
+                            if isinstance(child, ast.Name):
+                                if child.id not in test_mapping:
+                                    test_mapping[child.id] = []
+                                if str(test_file) not in test_mapping[child.id]:
+                                    test_mapping[child.id].append(str(test_file))
             except Exception as e:
                 logger.debug(f"Error parsing test file {test_file}: {e}")
 
         return test_mapping
+
+    @staticmethod
+    def _safe_rglob(directory: Path, pattern: str, skip_dirs: set = None) -> List[Path]:
+        """Recursively glob files while skipping excluded directories.
+
+        This avoids scanning .venv, node_modules, __pycache__, generated, etc.
+        which can cause extreme slowdowns or hangs.
+        """
+        if skip_dirs is None:
+            skip_dirs = DiscoveryScanner._SKIP_DIRS
+        results: List[Path] = []
+        try:
+            for item in directory.iterdir():
+                if item.is_dir():
+                    if item.name in skip_dirs:
+                        continue
+                    results.extend(DiscoveryScanner._safe_rglob(item, pattern, skip_dirs))
+                elif item.is_file() and item.match(pattern):
+                    results.append(item)
+        except PermissionError:
+            logger.debug(f"Permission denied scanning {directory}")
+        except OSError as e:
+            logger.debug(f"OS error scanning {directory}: {e}")
+        return results
+
+    def _get_class_index(self) -> Dict[str, List[Dict]]:
+        """Build a class index by scanning .py files under cortex/ once.
+
+        Returns a dict mapping lowercased class name to list of
+        {class_name, module_path, source_file, line_number, docstring, methods}.
+        Cached so repeated pattern lookups are O(1).
+
+        Performance guards:
+        - Skips files > _MAX_PARSE_SIZE (100KB)
+        - Skips __init__.py, __pycache__, generated dirs
+        - Uses encoding='utf-8' with errors='ignore'
+        """
+        if self._class_index is not None:
+            return self._class_index
+
+        self._class_index = {}
+        cortex_dir = self.cortex_root / "cortex"
+
+        if not cortex_dir.exists():
+            return self._class_index
+
+        py_files = self._safe_rglob(cortex_dir, "*.py", self._SKIP_DIRS)
+
+        for py_file in py_files:
+            if py_file.name.startswith("_"):
+                continue
+
+            # Skip oversized files
+            try:
+                if py_file.stat().st_size > self._MAX_PARSE_SIZE:
+                    logger.debug(f"Skipping large file: {py_file}")
+                    continue
+            except OSError:
+                continue
+
+            try:
+                source = py_file.read_text(encoding="utf-8", errors="ignore")
+                tree = ast.parse(source)
+                for node in ast.walk(tree):
+                    if isinstance(node, ast.ClassDef):
+                        key = node.name.lower()
+                        entry = {
+                            "class_name": node.name,
+                            "module_path": self._get_module_path(py_file),
+                            "source_file": str(py_file),
+                            "line_number": node.lineno,
+                            "docstring": ast.get_docstring(node) or "",
+                            "methods": [n.name for n in node.body if isinstance(n, ast.FunctionDef)],
+                        }
+                        if key not in self._class_index:
+                            self._class_index[key] = []
+                        self._class_index[key].append(entry)
+            except Exception as e:
+                logger.debug(f"Error indexing {py_file}: {e}")
+
+        logger.info(f"Class index built: {len(self._class_index)} unique class names from {len(py_files)} files")
+        return self._class_index
 
     def scan_orchestrators(self) -> List[DiscoveredComponent]:
         """Scan for orchestrator components."""
@@ -174,12 +284,20 @@ class DiscoveryScanner:
         if not orchestrators_dir.exists():
             return orchestrators
 
-        for py_file in orchestrators_dir.rglob("*.py"):
+        for py_file in self._safe_rglob(orchestrators_dir, "*.py", self._SKIP_DIRS):
             if py_file.name.startswith("_"):
                 continue
 
+            # Skip oversized files
             try:
-                tree = ast.parse(py_file.read_text())
+                if py_file.stat().st_size > self._MAX_PARSE_SIZE:
+                    continue
+            except OSError:
+                continue
+
+            try:
+                source = py_file.read_text(encoding="utf-8", errors="ignore")
+                tree = ast.parse(source)
                 for node in ast.walk(tree):
                     if isinstance(node, ast.ClassDef):
                         if "Orchestrator" in node.name or node.name == "IntentRouter":
@@ -281,39 +399,29 @@ class DiscoveryScanner:
         return unique_components
 
     def _find_classes_by_pattern(self, pattern: str) -> List[DiscoveredComponent]:
-        """Find classes matching a pattern."""
+        """Find classes matching a pattern using cached class index."""
         components = []
-        cortex_dir = self.cortex_root / "cortex"
+        class_index = self._get_class_index()
+        pattern_lower = pattern.lower()
 
-        if not cortex_dir.exists():
-            return components
-
-        for py_file in cortex_dir.rglob("*.py"):
-            if py_file.name.startswith("_"):
-                continue
-
-            try:
-                tree = ast.parse(py_file.read_text())
-                for node in ast.walk(tree):
-                    if isinstance(node, ast.ClassDef):
-                        if pattern.lower() in node.name.lower():
-                            comp = DiscoveredComponent(
-                                name=node.name.lower(),
-                                module_path=self._get_module_path(py_file),
-                                class_name=node.name,
-                                full_entry_point=f"{self._get_module_path(py_file)}.{node.name}",
-                                category=DiscoveryCategory.UNKNOWN,
-                                priority=2,
-                                docstring=ast.get_docstring(node) or "",
-                                test_files=self.test_mapping.get(node.name, []),
-                                test_count=len(self.test_mapping.get(node.name, [])),
-                                source_file=str(py_file),
-                                line_number=node.lineno,
-                                methods=[n.name for n in node.body if isinstance(n, ast.FunctionDef)],
-                            )
-                            components.append(comp)
-            except Exception as e:
-                logger.debug(f"Error scanning {py_file}: {e}")
+        for class_name_lower, entries in class_index.items():
+            if pattern_lower in class_name_lower:
+                for entry in entries:
+                    comp = DiscoveredComponent(
+                        name=entry["class_name"].lower(),
+                        module_path=entry["module_path"],
+                        class_name=entry["class_name"],
+                        full_entry_point=f"{entry['module_path']}.{entry['class_name']}",
+                        category=DiscoveryCategory.UNKNOWN,
+                        priority=2,
+                        docstring=entry["docstring"],
+                        test_files=self.test_mapping.get(entry["class_name"], []),
+                        test_count=len(self.test_mapping.get(entry["class_name"], [])),
+                        source_file=entry["source_file"],
+                        line_number=entry["line_number"],
+                        methods=entry["methods"],
+                    )
+                    components.append(comp)
 
         return components
 

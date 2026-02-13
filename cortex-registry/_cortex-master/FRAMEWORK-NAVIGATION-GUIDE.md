@@ -240,7 +240,7 @@ REFERENCE DOCUMENTS
 - [ ] Read ORCHESTRATION-MASTER.md → "WAVE-1" section → Understand Wave-1 specifically
 - [ ] Read CHECKPOINT-FRAMEWORK.md → Understand documentation checkpoints
 - [ ] Confirmed prerequisites (Python 3.9+, MCP server, dependencies)
-- [ ] Created git branch for Wave-1
+- [ ] Working on CORTEX branch (single branch policy — CORE-052)
 - [ ] Reviewed governance rules (CORE-008 TDD-first mandatory)
 
 **Ready?** → Command: `"start wave 1"`

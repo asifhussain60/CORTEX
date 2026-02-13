@@ -113,10 +113,10 @@ Phase 3: Content Migration (30 sec)
 └─ Update references
 
 Phase 4: Sanitization (1-2 min)
-├─ Create git branch
+├─ Create git commit checkpoint
 ├─ Archive files
 ├─ Delete files (git rm)
-└─ Create checkpoint
+└─ Verify checkpoint
 
 Phase 5: Reporting (30 sec)
 ├─ Calculate metrics
@@ -186,7 +186,7 @@ POST-DELETION:
 - ✅ Response header enforcement (CORE-029)
 - ✅ CORTEX LENS protocol integration
 - ✅ DoR (Definition of Ready) approval gate
-- ✅ Git checkpoint requirement (CORE-026)
+- ✅ Git commit checkpoint requirement (CORE-026 — commits only, no branches per CORE-052)
 - ✅ Audit trail logging (CORE-027)
 
 ---
