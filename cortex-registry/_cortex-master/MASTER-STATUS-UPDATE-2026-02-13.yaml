@@ -108,50 +108,40 @@ completed_waves:
   
   - wave_id: "WAVE-R"
     name: "EventBus-Driven Debugger (ENH-089)"
-    status: "🔵 IN PROGRESS (72% - Stage 3/5)"
+    status: "✅ COMPLETE (100% - All 5 Stages)"
     started: "2026-02-13T03:15:00Z"
-    duration: "4 hours (Stages 1-3)"
+    completed: "2026-02-13T06:35:00Z"
+    duration: "3.3 hours"
     phases: 1
-    tests: "50/69 passing"
+    tests: "68/69 passing (99%)"
     
     deliverables:
       - "✅ DebuggerOrchestrator foundation (EventBus subscriptions)"
       - "✅ Event handlers (TEST_FAILURE, REFACTOR_REGRESSION, GOVERNANCE_VIOLATION)"
       - "✅ IOrchestrator compliance (6 abstract methods)"
-      - "✅ MarkerInjectionEngine (Strategy Pattern, 3 strategies)"
-      - "✅ AutoCleanupManager (resolved session detection, stale markers)"
-      - "⚪ Integration wiring (Stage 4 pending)"
-      - "⚪ MCP tools (Stage 5 pending)"
+      - "✅ MarkerInjectionEngine with Strategy Pattern (3 strategies)"
+      - "✅ AutoCleanupManager for marker removal"
+      - "✅ Integration tests (8 tests, 100% passing)"
+      - "✅ DebugMCPTools for MCP exposure (3 operations)"
+      - "✅ CortexDebug integration (cortex_debug tool)"
     
     impact:
       - "Zero-friction debugging (5-10 min → 0 min setup)"
       - "Auto-marker injection on test failures"
       - "20% developer productivity gain projected"
+    
+    commits:
+      - "b21600ffb: AC-WAVE-R-002 Stage 1 DebuggerOrchestrator"
+      - "e8d9d3588: AC-WAVE-R-004 Stage 2 MarkerInjectionEngine"
+      - "3717604bc: AC-WAVE-R-005 Stage 3 AutoCleanupManager"
+      - "603f4e962: AC-WAVE-R-006 Stage 4 Integration"
+      - "1cdd52aa1: AC-WAVE-R-007 Stage 5 MCP Tools"
 
 # ============================================================================
-# READY WAVES (3)
+# READY WAVES (2 remaining)
 # ============================================================================
 
 ready_waves:
-  - wave_id: "WAVE-R"
-    name: "EventBus-Driven Debugger (ENH-089)"
-    status: "🟢 READY"
-    priority: "P1-HIGH"
-    estimated_effort: "3-4 days"
-    roi: 9.3
-    depends_on: ["WAVE-Q"]
-    
-    deliverables:
-      - "Auto-inject debug markers on test failure"
-      - "EventBus integration (TEST_FAILURE, REFACTOR_REGRESSION, GOVERNANCE_VIOLATION)"
-      - "Zero-friction debugging (5-10 min → 0 min manual setup)"
-    
-    impact:
-      - "Eliminates 5-10 min per debug session"
-      - "50 sessions/week = 4-8 hours/week saved"
-      - "20% developer productivity gain"
-  
-  - wave_id: "WAVE-S"
     name: "Track 4-5 Consolidation (ENH-090)"
     status: "🟢 READY"
     priority: "P1-HIGH"
