@@ -11,33 +11,24 @@ Single source of truth for CORTEX registry documentation. Links to all master pl
 
 ## 🚀 START HERE: Execute Next Wave
 
-### WAVE-P (READY NOW)
+### WAVE-1 (THEME-A): Intelligence Foundation (IN PROGRESS)
 
-**Quick Start:** [WAVE-P-QUICK-START-CARD.md](./WAVE-P-QUICK-START-CARD.md)
+**Status:** ✅ WAVE-O Complete | 🔵 WAVE-1 Stage 1 In Progress
 
-**Command:** Copy into GitHub Copilot Chat
-```markdown
-/implement WAVE-P: Post-WAVE-O Cleanup & Registry Sync
+**Quick Start:** [MASTER-WAVE-PLAN-5-WAVES-2026-02-13.md](./MASTER-WAVE-PLAN-5-WAVES-2026-02-13.md)
 
-Authority: cortex-registry/_cortex-master/MASTER-IMPLEMENTATION-REALITY-SYNC-2026-02-13.md
-Mode: Silent autonomous with ASCII progress bars
-Session: WAVE-P-20260213-01
-Token Budget: <150k
-Precedent: WAVE-O complete (15eeb6478), Wave 1 complete (07c84a4c1)
+**Current Stage:** Stage 1 - Registry Documentation Sync (1h)
 
-Scope:
-- Stage 1: Registry documentation sync (1h)
-- Stage 2: Test cleanup & validation (1h)
-- Stage 3: Documentation archival (30m)
+**Completed Waves:**
+- ✅ WAVE-O: Orchestrator Intelligence + MCP Consolidation (Complete 2026-02-13)
+  - 28 orchestrators wired via GitBackedRegistry
+  - 7-agent enforcement layer active
+  - 412/412 tests passing
 
-Success Criteria:
-- ✅ All registry files reflect WAVE-O completion
-- ✅ 14,781 tests pass (0 failures)
-- ✅ Documentation lag eliminated
-- ✅ 3 commits pushed (1 per stage)
-
-Timeline: 2-3 hours (single session)
-```
+**Active:** WAVE-1 (THEME-A) - Intelligence Foundation
+- 🔵 Stage 1: Registry sync (in progress)
+- ⚪ Stage 2: Test validation (planned)
+- ⚪ Stage 3: Test intelligence layers 1-3 (planned)
 
 ---
 
