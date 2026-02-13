@@ -84,22 +84,6 @@ ENH-089: ✅ COMPLETE
 - ✅ Error messages (if blocked)
 - ✅ Box format (━━━) for completion sections
 
-**OLD FORMAT (WRONG - DO NOT USE):**
-
----
-
-## 📋 WAVE-7 Track 1: Multi-Cycle TDD Implementation
-
-**Phase:** ENH-087 Track 1 - Multi-Cycle TDD Implementation  
-**Target:** TDDOrchestrator enhancement (foundation for all consolidation)  
-**Duration:** 3-4 days (Stage 1: Core Logic)
-
-[████████░░] 40% Stage 1: Multi-Cycle TDD Core Logic |—🔵 Creating ENH-088 test suite structure |—⚪ RED Phase: Behavioral contract tests |—⚪ GREEN Phase: execute_multi_cycle() implementation |—⚪ REFACTOR Phase: Quality gates + cycle tracking
-
----
-
-**This format is VERBOSE and FORBIDDEN. Use ONLY the compact format shown above.**
-
 ### CRITICAL: Challenge Gate + Silent Mode Interaction (MANDATORY)
 
 **SITUATION:** User says "proceed" → System enters silent mode → But CORE-048 requires Challenge Gate
