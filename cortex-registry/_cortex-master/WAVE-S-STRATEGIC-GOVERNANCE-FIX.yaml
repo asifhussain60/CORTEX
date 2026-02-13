@@ -1,0 +1,664 @@
+# WAVE-S: Strategic Governance Fix
+# Authority: CORE-002, CORE-028, CORE-048, CORE-049, ENH-067, MCP-FIRST
+# Created: 2026-02-13
+# Status: PLANNED
+# Type: HOLISTIC_REMEDIATION
+# Duration: 4 weeks (4 phases)
+# Test Protocol: END_TO_END_WITH_RGR_LOOPS
+
+metadata:
+  wave_id: "WAVE-S"
+  title: "Strategic Governance Fix with Event-Driven Architecture"
+  status: "PLANNED"
+  priority: "P0_CRITICAL"
+  created: "2026-02-13"
+  estimated_duration: "4 weeks"
+  phases: 4
+  tracks: 4
+  deliverables: 8
+  architecture_enhancement: "Two-tier planning + event-driven status sync + adaptive workflows"
+
+vision:
+  description: |
+    Transform CORTEX planning into an integrated "nervous system" that operates
+    invisibly across all orchestrators. Implement two-tier planning (strategic
+    for multi-session projects, tactical for single-session tasks) with event-driven
+    status synchronization, ensuring automatic registry updates, file governance,
+    and holistic validation with regression prevention.
+  
+  key_principles:
+    - "Planning as invisible coordination layer"
+    - "Event-driven decoupling (broadcast, don't call)"
+    - "Adaptive workflows (context-aware, not rigid)"
+    - "Automatic everything (status, cleanup, archival)"
+    - "RGR loops at every level (continuous improvement)"
+    - "202 files → 4 core files (radical simplification)"
+
+violations_addressed:
+  - id: "V-001"
+    name: "YAML/MD Sprawl"
+    severity: "P0"
+    current: "202 files in _cortex-master"
+    target: "4 core workflow files + index"
+    reduction: "50x"
+  
+  - id: "V-002"
+    name: "SCREAMING_CASE Files"
+    severity: "P0"
+    current: "109 files violate CORE-028"
+    target: "0 violations (all kebab-case)"
+    automation: "Pre-commit hook + batch rename"
+  
+  - id: "V-003"
+    name: "MCP Bypass Patterns"
+    severity: "P0"
+    current: "15% bypass rate"
+    target: "0% (all via MCP + self-healing)"
+    enhancement: "ENH-067 self-healing layer"
+  
+  - id: "V-004"
+    name: "Registry Status Desync"
+    severity: "P1"
+    current: "60% accuracy, manual updates"
+    target: "100% accuracy, event-driven auto-update"
+    architecture: "Event bus + RegistrySyncService"
+  
+  - id: "V-005"
+    name: "Missing Workflow Definition"
+    severity: "P1"
+    current: "No canonical workflow.yaml"
+    target: "4 core workflow files (strategic + tactical)"
+    structure: "workflow-core + workflow-tactical + events + coordination"
+  
+  - id: "V-006"
+    name: "Agent Architecture Blindness"
+    severity: "P1"
+    current: "70% recommendation accuracy"
+    target: "95% accuracy via RecommendationGate"
+    intelligence: "LENS + registry consultation before recommendations"
+  
+  - id: "V-007"
+    name: "MCP Self-Healing Not Active"
+    severity: "P2"
+    current: "User-facing MCP errors"
+    target: "Automatic recovery with audit trail"
+    implementation: "MCPSelfHealing class + registry + auto-retry"
+  
+  - id: "V-008"
+    name: "Incomplete AC Markers"
+    severity: "P2"
+    current: "40% commit coverage"
+    target: "95% coverage via automation"
+    enforcement: "Pre-commit hook + auto-injection"
+
+architecture:
+  two_tier_planning:
+    strategic:
+      description: "Multi-session, multi-phase initiatives"
+      orchestrator: "PlanningOrchestrator"
+      file: "workflow-core.yaml"
+      hierarchy: "INITIATIVE → PHASE → STAGE → TASK"
+      examples:
+        - "Modernize authentication architecture"
+        - "Implement event-driven observability"
+        - "WAVE-S governance fix"
+    
+    tactical:
+      description: "Single-session execution"
+      orchestrators:
+        - "TDDOrchestrator"
+        - "RefactoringOrchestrator"
+        - "AnalysisOrchestrator"
+      file: "workflow-tactical.yaml"
+      hierarchy: "OPERATION → STEP → ACTION"
+      examples:
+        - "Implement user authentication"
+        - "Fix MCP connection error"
+        - "Refactor DebuggerOrchestrator"
+  
+  event_driven_sync:
+    description: "Orchestrators broadcast events, registry subscribes passively"
+    components:
+      event_bus:
+        location: "cortex/infrastructure/event_bus.py"
+        status: "EXISTS (enhance)"
+      
+      registry_sync_service:
+        location: "cortex/registry/sync/registry_sync_service.py"
+        status: "NEW"
+        purpose: "Subscribe to orchestrator events, update registry automatically"
+      
+      event_definitions:
+        file: "registry-events.yaml"
+        status: "NEW"
+        events:
+          - "PlanCreated"
+          - "StageStarted"
+          - "StageCompleted"
+          - "PhasePaused"
+          - "PhaseResumed"
+          - "PhaseCompleted"
+          - "OperationCompleted"
+          - "ValidationFailed"
+          - "RegressionDetected"
+    
+    benefits:
+      - "Decoupling: Orchestrators don't know registry exists"
+      - "Resilience: Registry failure doesn't stop orchestrators"
+      - "Extensibility: Add new subscribers without touching orchestrators"
+      - "Audit trail: All events logged automatically"
+  
+  adaptive_workflows:
+    description: "Context-aware workflow templates, not rigid universal stages"
+    interface:
+      required_methods:
+        - "create_plan(request) → Plan"
+        - "execute_stage(stage) → StageResult"
+        - "report_progress() → ProgressReport"
+        - "handle_failure(error) → RecoveryAction"
+    
+    customization:
+      complexity_based:
+        simple: "3-stage fast track"
+        medium: "5-stage standard"
+        complex: "7-stage deep validation"
+      
+      risk_based:
+        low: "Parallel execution allowed"
+        medium: "Sequential with checkpoints"
+        high: "Stage-by-stage approval"
+      
+      domain_based:
+        tdd: "RED → GREEN → REFACTOR cycle"
+        refactoring: "Extract → Verify → Consolidate"
+        analysis: "Scan → Correlate → Report"
+
+phases:
+  phase_1:
+    id: "PHASE-S1"
+    title: "Event Infrastructure Foundation"
+    duration: "Week 1 (5 days)"
+    status: "PLANNED"
+    priority: "P0"
+    
+    objectives:
+      - "Wire EventBus to all orchestrators"
+      - "Create RegistrySyncService as event subscriber"
+      - "Define core events in registry-events.yaml"
+      - "Add event emission to orchestrator completion points"
+      - "Zero changes to orchestrator logic (just emit events)"
+    
+    deliverables:
+      - file: "cortex-registry/_cortex-master/registry-events.yaml"
+        description: "All event definitions with schemas"
+        tests: "Event schema validation"
+      
+      - file: "cortex/registry/sync/registry_sync_service.py"
+        description: "Event subscriber that updates registry"
+        tests: "Event handling, YAML updates, error recovery"
+      
+      - file: "cortex/orchestrators/core/master_orchestrator.py"
+        changes: "Add event emission at completion"
+        tests: "Event emission verification"
+      
+      - file: "cortex/orchestrators/domain/tdd_orchestrator.py"
+        changes: "Add stage completion events"
+        tests: "Stage event emission"
+    
+    success_criteria:
+      - "All 28 orchestrators emit completion events"
+      - "RegistrySyncService processes events within 100ms"
+      - "Registry status updates automatically on event receipt"
+      - "No orchestrator logic changes (only event emission added)"
+      - "100% test coverage for event handling"
+    
+    rgr_loop:
+      red: "Write tests expecting events on completion"
+      green: "Add event emission to orchestrators"
+      refactor: "Extract event emission to base class decorator"
+  
+  phase_2:
+    id: "PHASE-S2"
+    title: "Tactical Workflow Implementation"
+    duration: "Week 2 (5 days)"
+    status: "PLANNED"
+    priority: "P0"
+    dependencies: ["PHASE-S1"]
+    
+    objectives:
+      - "Create workflow-tactical.yaml with operation templates"
+      - "Enhance TDDOrchestrator with tactical workflow"
+      - "Add silent plan building to InteractionOrchestrator"
+      - "Implement context-aware workflow adaptation"
+      - "Test with IMPLEMENT/FIX/REFACTOR intents"
+    
+    deliverables:
+      - file: "cortex-registry/_cortex-master/workflow-tactical.yaml"
+        description: "Tactical workflow templates for single-session operations"
+        tests: "Schema validation, template completeness"
+      
+      - file: "cortex/orchestrators/domain/tdd_orchestrator.py"
+        changes: "Load tactical workflow, adapt based on complexity"
+        tests: "Workflow loading, adaptation logic, execution"
+      
+      - file: "cortex/orchestrators/core/interaction_orchestrator.py"
+        changes: "Silent plan building during LENS analysis"
+        tests: "Plan creation timing, shadow execution"
+      
+      - file: "cortex/planning/tactical_planner.py"
+        description: "Tactical plan creation and adaptation engine"
+        tests: "Plan generation, complexity detection, risk scoring"
+    
+    success_criteria:
+      - "TDDOrchestrator uses tactical workflow for all IMPLEMENT intents"
+      - "InteractionOrchestrator builds plan during user interaction"
+      - "Workflow adapts to complexity (simple=3 stages, complex=7 stages)"
+      - "User sees no change in experience (planning invisible)"
+      - "100% test coverage for tactical planning"
+    
+    rgr_loop:
+      red: "Write tests for workflow loading and adaptation"
+      green: "Implement tactical workflow in TDDOrchestrator"
+      refactor: "Extract common patterns to TacticalPlanner base class"
+  
+  phase_3:
+    id: "PHASE-S3"
+    title: "Strategic Workflow + File Governance"
+    duration: "Week 3 (5 days)"
+    status: "PLANNED"
+    priority: "P0"
+    dependencies: ["PHASE-S2"]
+    
+    objectives:
+      - "Create workflow-core.yaml for multi-session planning"
+      - "Enhance PlanningOrchestrator with event emission"
+      - "Wire MasterOrchestrator to detect strategic vs tactical"
+      - "Implement SCREAMING_CASE batch rename (109 files)"
+      - "Create auto-vacuum for completed plans"
+      - "Test with PLAN intents"
+    
+    deliverables:
+      - file: "cortex-registry/_cortex-master/workflow-core.yaml"
+        description: "Strategic workflow for PHASE → STAGE → TASK hierarchy"
+        tests: "Schema validation, hierarchy integrity"
+      
+      - file: "cortex/orchestrators/domain/planning_orchestrator.py"
+        changes: "Use workflow-core.yaml, emit phase events"
+        tests: "Phase lifecycle, event emission, status sync"
+      
+      - file: "cortex/orchestrators/core/master_orchestrator.py"
+        changes: "Route to strategic vs tactical based on scope"
+        tests: "Routing logic, scope detection"
+      
+      - file: "cortex/brain/vacuum/auto_vacuum.py"
+        changes: "Trigger on PhaseCompleted event, archive to _archive/"
+        tests: "Completion detection, archival, reference updates"
+      
+      - script: "scripts/fix-screaming-case.sh"
+        description: "Batch rename 109 files to kebab-case"
+        tests: "Rename validation, reference updates, no broken links"
+    
+    success_criteria:
+      - "PlanningOrchestrator uses workflow-core.yaml"
+      - "MasterOrchestrator routes correctly (strategic vs tactical)"
+      - "Completed plans auto-archive to _archive/YYYY-MM/"
+      - "109 SCREAMING_CASE files renamed to kebab-case"
+      - "All cross-references updated (no broken links)"
+      - "File count: 202 → 50 (75% reduction in Phase 3)"
+    
+    rgr_loop:
+      red: "Write tests for strategic routing and file governance"
+      green: "Implement strategic workflow and batch rename"
+      refactor: "Consolidate vacuum logic, optimize file operations"
+  
+  phase_4:
+    id: "PHASE-S4"
+    title: "Intelligence Layer + Final Cleanup"
+    duration: "Week 4 (5 days)"
+    status: "PLANNED"
+    priority: "P1"
+    dependencies: ["PHASE-S3"]
+    
+    objectives:
+      - "Create RecommendationGate with LENS + registry integration"
+      - "Implement MCP self-healing layer (ENH-067)"
+      - "Add AC marker automation"
+      - "Create orchestrator-coordination.yaml"
+      - "Archive 198 obsolete files → keep 4 core + index"
+      - "Run holistic audit to verify integration"
+    
+    deliverables:
+      - file: "cortex/governance/recommendation_gate.py"
+        description: "Pre-recommendation validation with regression risk scoring"
+        tests: "LENS consultation, risk calculation, blocking logic"
+      
+      - file: "cortex/mcp/self_healing.py"
+        description: "Auto-recovery for known MCP error patterns"
+        tests: "Error detection, fix strategies, retry logic, audit trail"
+      
+      - file: "cortex/observability/ac_marker_injector.py"
+        description: "Auto-generate AC_START/AC_COMPLETE markers"
+        tests: "Marker generation, format validation, git integration"
+      
+      - file: "cortex-registry/_cortex-master/orchestrator-coordination.yaml"
+        description: "How orchestrators collaborate and hand off work"
+        tests: "Collaboration rules, handoff validation"
+      
+      - file: "cortex-registry/_cortex-master/index.yaml"
+        description: "Master index pointing to 4 core workflow files"
+        tests: "Index integrity, file references"
+      
+      - script: "scripts/archive-obsolete-files.sh"
+        description: "Move 198 files to _archive/wave-s-consolidation/"
+        tests: "Archival validation, no data loss"
+    
+    success_criteria:
+      - "RecommendationGate blocks recommendations with risk > 0.7"
+      - "MCP self-healing recovers from known errors automatically"
+      - "AC markers auto-injected in 95% of commits"
+      - "File count: 50 → 4 core + 1 index (91% total reduction)"
+      - "All orchestrators use 4 core workflow files"
+      - "Holistic audit shows 0 P0 violations"
+      - "End-to-end tests pass (user journey validation)"
+    
+    rgr_loop:
+      red: "Write end-to-end tests for complete user journeys"
+      green: "Implement intelligence layer and final cleanup"
+      refactor: "Optimize performance, reduce complexity, improve maintainability"
+
+tracks:
+  track_1_mcp_hardening:
+    phases: ["PHASE-S1", "PHASE-S4"]
+    deliverables:
+      - "MCP self-healing layer"
+      - "Native tool interception"
+      - "Pre-flight check integration"
+    tests:
+      - "tests/mcp/test_self_healing.py"
+      - "tests/governance/test_native_tool_gate.py"
+      - "tests/orchestrators/test_pre_flight_check.py"
+  
+  track_2_workflow_architecture:
+    phases: ["PHASE-S2", "PHASE-S3"]
+    deliverables:
+      - "workflow-tactical.yaml"
+      - "workflow-core.yaml"
+      - "orchestrator-coordination.yaml"
+    tests:
+      - "tests/planning/test_tactical_workflow.py"
+      - "tests/planning/test_strategic_workflow.py"
+      - "tests/orchestrators/test_workflow_routing.py"
+  
+  track_3_event_infrastructure:
+    phases: ["PHASE-S1", "PHASE-S4"]
+    deliverables:
+      - "registry-events.yaml"
+      - "RegistrySyncService"
+      - "Event emission in all orchestrators"
+    tests:
+      - "tests/registry/test_event_definitions.py"
+      - "tests/registry/test_sync_service.py"
+      - "tests/integration/test_event_flow.py"
+  
+  track_4_file_governance:
+    phases: ["PHASE-S3", "PHASE-S4"]
+    deliverables:
+      - "SCREAMING_CASE batch rename"
+      - "Auto-vacuum on completion"
+      - "Archive obsolete files"
+    tests:
+      - "tests/governance/test_file_naming.py"
+      - "tests/brain/test_auto_vacuum.py"
+      - "tests/scripts/test_archival.py"
+
+test_protocol:
+  quality_standards:
+    - "100% coverage for new code"
+    - "RGR loop at every deliverable (RED → GREEN → REFACTOR)"
+    - "End-to-end tests for user journeys"
+    - "Regression tests for all 8 violations"
+    - "Performance tests (event latency < 100ms)"
+    - "Integration tests for orchestrator collaboration"
+  
+  test_pyramid:
+    unit_tests:
+      count: 120
+      coverage: "100%"
+      examples:
+        - "Event schema validation"
+        - "Workflow template loading"
+        - "Risk score calculation"
+    
+    integration_tests:
+      count: 40
+      coverage: "90%"
+      examples:
+        - "Event flow through bus to registry"
+        - "Orchestrator handoff scenarios"
+        - "File rename with reference updates"
+    
+    end_to_end_tests:
+      count: 12
+      coverage: "80%"
+      scenarios:
+        - "User request → IMPLEMENT → Event emission → Registry update"
+        - "Multi-phase plan → Stage execution → Auto-archive"
+        - "MCP error → Self-healing → Retry → Success"
+  
+  rgr_checkpoints:
+    - phase: "PHASE-S1"
+      checkpoint: "After event infrastructure"
+      validation: "All orchestrators emit events, registry updates automatically"
+    
+    - phase: "PHASE-S2"
+      checkpoint: "After tactical workflow"
+      validation: "TDDOrchestrator uses tactical workflow, silent planning works"
+    
+    - phase: "PHASE-S3"
+      checkpoint: "After strategic workflow + file governance"
+      validation: "Strategic routing works, files renamed, auto-vacuum active"
+    
+    - phase: "PHASE-S4"
+      checkpoint: "After intelligence layer + cleanup"
+      validation: "202→4 file reduction, all violations fixed, end-to-end tests pass"
+
+automation:
+  status_updates:
+    trigger: "PhaseCompleted | StageCompleted | OperationCompleted events"
+    handler: "RegistrySyncService.on_event()"
+    updates:
+      - "status field in YAML"
+      - "completion_date timestamp"
+      - "test_results summary"
+      - "coverage_percentage"
+  
+  file_cleanup:
+    trigger: "PhaseCompleted event"
+    handler: "AutoVacuum.on_phase_complete()"
+    actions:
+      - "Move completed artifacts to _archive/YYYY-MM/"
+      - "Update cross-references"
+      - "Generate archival index"
+      - "Verify no broken links"
+  
+  file_naming_enforcement:
+    trigger: "Pre-commit hook"
+    handler: "FileNamingEnforcementAgent.validate()"
+    checks:
+      - "No SCREAMING_CASE files"
+      - "kebab-case for all YAML/MD files"
+      - "Plan files ≤ 40 characters"
+    action_on_violation: "BLOCK commit with fix instructions"
+  
+  ac_marker_injection:
+    trigger: "Operation start/complete"
+    handler: "ACMarkerInjector.inject()"
+    markers:
+      - "AC_START: AC-{phase_id}-{sequence}"
+      - "AC_COMPLETE: AC-{phase_id}-{sequence} ✅ {test_count} passing"
+    integration: "Git commit message templates"
+
+success_metrics:
+  file_reduction:
+    before: 202
+    target: 4
+    reduction: "98%"
+    validation: "find cortex-registry/_cortex-master -type f | wc -l"
+  
+  naming_compliance:
+    before: "109 violations"
+    target: "0 violations"
+    validation: "find . -name '*[A-Z][A-Z][A-Z]*' | wc -l"
+  
+  registry_sync_accuracy:
+    before: "60%"
+    target: "100%"
+    validation: "Compare registry status vs actual completion"
+  
+  mcp_bypass_rate:
+    before: "15%"
+    target: "0%"
+    validation: "Audit logs analysis"
+  
+  ac_marker_coverage:
+    before: "40%"
+    target: "95%"
+    validation: "git log analysis"
+  
+  recommendation_accuracy:
+    before: "70%"
+    target: "95%"
+    validation: "RecommendationGate logs"
+  
+  event_latency:
+    target: "< 100ms"
+    validation: "Prometheus metrics"
+  
+  test_coverage:
+    target: "100% new code, 90% integration, 80% e2e"
+    validation: "pytest --cov report"
+
+rollback_plan:
+  phase_1_rollback:
+    condition: "Event infrastructure causes orchestrator failures"
+    action: "Disable event emission, revert to manual status updates"
+    data_loss: "None (events are additive)"
+  
+  phase_2_rollback:
+    condition: "Tactical workflow breaks TDDOrchestrator"
+    action: "Revert TDDOrchestrator changes, keep events"
+    data_loss: "Tactical plans created during phase"
+  
+  phase_3_rollback:
+    condition: "File rename breaks references"
+    action: "Revert git mv commits, restore original filenames"
+    data_loss: "None (git preserves history)"
+  
+  phase_4_rollback:
+    condition: "File archival loses critical data"
+    action: "Restore from _archive/, rebuild index"
+    data_loss: "None (archival preserves all files)"
+
+integration_points:
+  orchestrators:
+    - name: "MasterOrchestrator"
+      changes: "Add strategic vs tactical routing logic"
+      tests: "Routing decision tests"
+    
+    - name: "InteractionOrchestrator"
+      changes: "Add silent plan building during LENS analysis"
+      tests: "Shadow plan creation tests"
+    
+    - name: "TDDOrchestrator"
+      changes: "Load tactical workflow, emit stage events"
+      tests: "Workflow execution tests"
+    
+    - name: "PlanningOrchestrator"
+      changes: "Load strategic workflow, emit phase events"
+      tests: "Phase lifecycle tests"
+    
+    - name: "RefactoringOrchestrator"
+      changes: "Adapt tactical workflow for refactoring cycles"
+      tests: "Refactoring workflow tests"
+  
+  governance:
+    - component: "EnforcementOrchestrator"
+      changes: "Add RecommendationGate to 7-agent system"
+      tests: "Gate invocation tests"
+    
+    - component: "FileNamingEnforcementAgent"
+      changes: "Wire to pre-commit hook"
+      tests: "Pre-commit blocking tests"
+    
+    - component: "EnvironmentIntegrityAgent"
+      changes: "Add MCP self-healing check"
+      tests: "Self-healing integration tests"
+  
+  infrastructure:
+    - component: "EventBus"
+      changes: "Add event persistence for audit trail"
+      tests: "Event logging tests"
+    
+    - component: "RegistrySyncService"
+      changes: "NEW - create as event subscriber"
+      tests: "Event handling, YAML updates"
+    
+    - component: "AutoVacuum"
+      changes: "Add event-triggered archival"
+      tests: "Archive on completion tests"
+
+documentation_updates:
+  - file: ".github/copilot-instructions.md"
+    changes: "Update workflow section, add event-driven architecture"
+  
+  - file: ".github/prompts/cortex-architect.prompt.md"
+    changes: "Document two-tier planning, adaptive workflows"
+  
+  - file: "cortex-registry/_cortex-master/README.md"
+    changes: "Explain 4 core files, archival process, workflow hierarchy"
+  
+  - file: "docs/architecture/event-driven-orchestration.md"
+    changes: "NEW - document event architecture, orchestrator integration"
+
+approval_checkpoints:
+  checkpoint_1:
+    phase: "PHASE-S1"
+    timing: "End of week 1"
+    validation: "Event infrastructure working, no orchestrator regressions"
+    user_approval: "REQUIRED"
+  
+  checkpoint_2:
+    phase: "PHASE-S2"
+    timing: "End of week 2"
+    validation: "Tactical workflow working, silent planning functional"
+    user_approval: "REQUIRED"
+  
+  checkpoint_3:
+    phase: "PHASE-S3"
+    timing: "End of week 3"
+    validation: "Strategic workflow working, 109 files renamed, vacuum active"
+    user_approval: "REQUIRED"
+  
+  checkpoint_4:
+    phase: "PHASE-S4"
+    timing: "End of week 4"
+    validation: "All 8 violations fixed, 202→4 files, end-to-end tests pass"
+    user_approval: "REQUIRED for production deployment"
+
+next_steps:
+  immediate:
+    - "User approval to proceed with WAVE-S"
+    - "Schedule 4-week execution window"
+    - "Allocate resources (dev time, testing environment)"
+  
+  phase_1_start:
+    - "Create feature branch: wave-s-event-infrastructure"
+    - "Write event schema tests (RED phase)"
+    - "Implement RegistrySyncService (GREEN phase)"
+    - "Refactor event emission to decorator (REFACTOR phase)"
+  
+  continuous:
+    - "Daily progress reports with ASCII bars"
+    - "Weekly checkpoint reviews"
+    - "RGR loop at every deliverable"
+    - "Real-time registry status updates via events"
