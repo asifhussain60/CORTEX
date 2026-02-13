@@ -1,5 +1,5 @@
 # 📋 CORTEX Master Registry Index
-**Version:** 7.0 | **Updated:** 2026-02-13T18:25:00Z | **Authority:** cortex-architect.prompt.md v15.3 | **Status:** ✅ ACTIVE
+**Version:** 8.0 | **Updated:** 2026-02-13T23:30:00Z | **Authority:** cortex-architect.prompt.md v15.3 | **Status:** ✅ ACTIVE
 
 ---
 
@@ -9,26 +9,45 @@ Single source of truth for CORTEX registry documentation. Links to all master pl
 
 ---
 
-## 🚀 START HERE: Execute Next Wave
+## 🚀 START HERE: Autonomous Execution
 
-### WAVE-1 (THEME-A): Intelligence Foundation (IN PROGRESS)
+### ⚡ One-Command Execution (READY NOW)
 
-**Status:** ✅ WAVE-O Complete | 🔵 WAVE-1 Stage 1 In Progress
+```markdown
+User: "implement the remaining 3 waves autonomously"
+```
 
-**Quick Start:** [MASTER-WAVE-PLAN-5-WAVES-2026-02-13.md](./MASTER-WAVE-PLAN-5-WAVES-2026-02-13.md)
+**CORTEX will execute silently:**
+- ✅ WAVE-3: Multi-Cycle TDD + Security (5-6h, 150 tests)
+- ✅ WAVE-4: Intelligence Loop + DoD Gates (6-7h, 120 tests)
+- ✅ WAVE-5: Document Coherence Engine (4-5h, 80 tests)
 
-**Current Stage:** Stage 1 - Registry Documentation Sync (1h)
+**Total:** 15-18 hours, 350+ tests, full autonomous execution
 
-**Completed Waves:**
-- ✅ WAVE-O: Orchestrator Intelligence + MCP Consolidation (Complete 2026-02-13)
-  - 28 orchestrators wired via GitBackedRegistry
-  - 7-agent enforcement layer active
-  - 412/412 tests passing
+### 📚 Primary Documentation (SSOT)
 
-**Active:** WAVE-1 (THEME-A) - Intelligence Foundation
-- 🔵 Stage 1: Registry sync (in progress)
-- ⚪ Stage 2: Test validation (planned)
-- ⚪ Stage 3: Test intelligence layers 1-3 (planned)
+| Document | Purpose | Status |
+|----------|---------|--------|
+| **[AUTONOMOUS-EXECUTION-SYNC-2026-02-13.md](./AUTONOMOUS-EXECUTION-SYNC-2026-02-13.md)** | **SSOT:** Complete autonomous execution guide + implementation reality | ✅ PRIMARY |
+| **[AUTONOMOUS-EXECUTION-QUICK-REF.md](./AUTONOMOUS-EXECUTION-QUICK-REF.md)** | Quick reference card (30-second start) | ✅ READY NOW |
+| **[MASTER-5-WAVE-PLAN-2026-02-13.yaml](./MASTER-5-WAVE-PLAN-2026-02-13.yaml)** | 5-wave master plan (YAML spec) | ✅ ACTIVE |
+| **[WAVE-STATUS-2026-02-13.yaml](./WAVE-STATUS-2026-02-13.yaml)** | Current wave status | ✅ ACTIVE |
+
+### 📊 Current Status (2026-02-13T23:30:00Z)
+
+**Completed Waves:** 19/24 (79%)
+- ✅ WAVE-1 (Theme A): Intelligence Foundation (58 tests, 3 commits)
+- ✅ WAVE-2: Scaffolder Integration (198 tests, 7 commits)
+- ✅ Historical Waves: Wave 1-9, O, P, R (1,054+ tests)
+
+**Pending Waves:** 5/24 (21%)
+- ⚪ WAVE-3: Multi-Cycle TDD + Security (150 tests, 5-6h)
+- ⚪ WAVE-4: Intelligence Loop + DoD Gates (120 tests, 6-7h)
+- ⚪ WAVE-5: Document Coherence Engine (80 tests, 4-5h)
+
+**Test Collection:** 14,369 tests (99.92% pass rate)  
+**MCP Status:** ✅ 10 tools available  
+**Git Branch:** CORTEX (clean workspace)
 
 ---
 
