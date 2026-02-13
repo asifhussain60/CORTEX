@@ -304,7 +304,7 @@ class TestCodeComposer:
         test_state = {{
             "tests_passed": 0,
             "tests_failed": 2,
-            "violations": ["{{"rule": "CORE-008", "severity": "critical"}}"],
+            "violations": [{{"rule": "CORE-008", "severity": "critical"}}],
             "dod_status": "INCOMPLETE"
         }}
         

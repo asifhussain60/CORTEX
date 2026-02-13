@@ -121,11 +121,28 @@ def write_test_files(results: Dict[str, Any]):
         
         # Combine all test code from ComposedTest objects
         all_test_code = []
-        all_test_code.append('"""Auto-generated tests for {}."""\n'.format(name))
-        all_test_code.append('import pytest\n\n')
+        all_test_code.append(f'"""Auto-generated tests for {name}."""\n')
+        all_test_code.append('import pytest\n')
+        all_test_code.append('from pathlib import Path\n')
+        all_test_code.append('import yaml\n')
+        all_test_code.append('from unittest.mock import Mock, patch\n\n')
+        
+        # Create test class
+        class_name = f'Test{name}'
+        all_test_code.append(f'class {class_name}:\n')
+        all_test_code.append('    """Test suite for {}."""\n\n'.format(name))
+        all_test_code.append('    @pytest.fixture(autouse=True)\n')
+        all_test_code.append('    def setup(self):\n')
+        all_test_code.append('        """Setup test fixtures."""\n')
+        all_test_code.append('        self.orchestrator_class = Mock\n')
+        all_test_code.append('        self.state_dir = Path("/tmp/cortex_test")\n')
+        all_test_code.append('        self.state_dir.mkdir(exist_ok=True)\n\n')
         
         for test in suite.tests:
-            all_test_code.append(test.test_code)
+            # Indent test code for class
+            indented_code = '\n'.join('    ' + line if line.strip() else '' 
+                                     for line in test.test_code.split('\n'))
+            all_test_code.append(indented_code)
             all_test_code.append('\n\n')
         
         with open(test_file, 'w', encoding='utf-8') as f:
