@@ -405,15 +405,15 @@ If token usage > 400k before user request:
 [████████░░] 80% Stage 4: Component D
 [██████████] 100% Complete
 
-----------------------------------------
+<hr>
 ✅ Implementation Complete
-----------------------------------------
+<hr>
 
 Tests: 68/68 passing
 Commits: 3
 Files: 5 modified
 
-----------------------------------------
+<hr>
 ```
 
 **Note:** Header appears ONCE at top. Progress bars and completion use box format (━━━), NOT additional headers.
@@ -440,15 +440,15 @@ Files: 5 modified
 
 **DO THIS:**
 ```markdown
-----------------------------------------
+<hr>
 ✅ Stage 1 Complete
-----------------------------------------
+<hr>
 
 Tests: 24/24 passing
 Files: 3 modified
 Commit: abc123f
 
-----------------------------------------
+<hr>
 ```
 
 **NOT THIS:**

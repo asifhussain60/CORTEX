@@ -51,14 +51,14 @@ maintainer: "Asif Hussain"
 
 **When validation blocks:**
 ```
-----------------------------------------
+<hr>
 🔴 VALIDATION BLOCKED
-----------------------------------------
+<hr>
 Phase 49 CCL Status: Ready / Timeout (graceful fallback)
 Risk Score: 0.8 (threshold: 0.7)
 Issue: {description}
 Remediation: {fix_suggestion}
-----------------------------------------
+<hr>
 ```
 
 ---

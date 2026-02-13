@@ -109,10 +109,10 @@ class ResponseTemplate:
         
         emoji, _, _ = overall_status.value
         
-        summary = f"""----------------------------------------
+        summary = f"""<hr>
+
 ## {emoji} SESSION SUMMARY
 **Session:** {session_name} | **Status:** {emoji} {overall_status.name}
-----------------------------------------
 
 """
         

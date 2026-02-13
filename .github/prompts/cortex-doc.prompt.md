@@ -75,9 +75,9 @@ Commit range: 247 commits covering:
 
 **Example categorization output:**
 ```
-----------------------------------------
+<hr>
 📊 Documentation Refresh Analysis
-----------------------------------------
+<hr>
 
 Changes since 0506774b0 (247 commits):
 
@@ -107,7 +107,7 @@ infrastructure/ (18 files changed)
 └─ Action: Update deployment.md + add ccl section
 
 Estimated effort: 4-6 hours (incremental, not full rewrite)
-----------------------------------------
+<hr>
 ```
 
 ### Step 3: Extract New Orchestrators/Tools
@@ -1811,9 +1811,9 @@ if __name__ == "__main__":
 
 **Expected Output:**
 ```
-----------------------------------------
+<hr>
 📚 Documentation Refresh Complete
-----------------------------------------
+<hr>
 
 📊 Changes Analyzed: 247 commits since 0506774b0
 📝 Sections Updated: 12/24 (50%)
@@ -1828,16 +1828,16 @@ Updated Sections:
 └─ infrastructure/deployment.md (Pylance MCP + CCL)
 
 Git: a2fdcdc "docs: Refresh architecture docs (247 commits)"
-----------------------------------------
+<hr>
 ```
 
 ### MODE: Generate
 
 **Expected Output:**
 ```
-----------------------------------------
+<hr>
 🏗️ HTML Site Generation Complete
-----------------------------------------
+<hr>
 
 📄 Files Generated: 127
 📁 Personas: 4 (Developer, Manager, Executive, Regulatory)
@@ -1856,7 +1856,7 @@ Output: _workspaces/cortex-gitpages/
 Site URL: https://cortex-docs.yourdomain.com
 
 Git: b3efc2d "docs: Generate GitHub Pages HTML site"
-----------------------------------------
+<hr>
 ```
 
 ---

@@ -131,9 +131,9 @@ cortex/legacy/response_builder.py
 ### Text Report
 
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+<hr>
 📊 WAVE-J CLEANUP AUDIT REPORT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+<hr>
 
 ## Summary
 
@@ -162,7 +162,7 @@ Phases to Migrate: 12
     Age: 245 days
     Recommendation: Archive to __cleanup-archive/
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+<hr>
 
 📋 Next Actions:
 

@@ -114,37 +114,35 @@ Fix: {fix_suggestion}
 
 ### Box Separator Rules (CRITICAL)
 
-**Character:** `-` (regular dash/hyphen)  
-**Count:** Exactly **40 characters** per line  
-**Placement:** Before and after major sections  
-**Rendering:** Should appear as continuous horizontal line in Copilot Chat (fits display width)
+**Format:** Use `<hr>` HTML tag for all box separators.
+
+**Why `<hr>` instead of dashes or box-drawing characters:**
+- `────────────────────────────────────────` — Overflows in Copilot Chat (box-drawing chars render wide)
+- `----------------------------------------` — Can trigger markdown horizontal rule rendering inconsistently
+- `<hr>` — Renders as clean thin line, never overflows, semantic HTML
 
 **Example:**
 ```markdown
-----------------------------------------
-```
+<hr>
 
-**Validation:**
-```python
-# Python check
-line = "-" * 40
-assert len(line) == 40
-assert all(c == '-' for c in line)
+✅ **Phase Name: COMPLETE**
+
+Content here
+
+<hr>
 ```
 
 ### Header Hierarchy (MANDATORY)
 
 **Structure:**
 ```
-Box Separator (top)
+<hr> (top separator)
   ↓
 Title (bold or emoji, NO ## header)
   ↓
-Box Separator (bottom)
-  ↓
 Content with ### Track headers
   ↓
-Box Separator (final)
+<hr> (final separator)
 ```
 
 **Rules:**
@@ -156,9 +154,9 @@ Box Separator (final)
 ### Standard Completion Template
 
 ```markdown
-----------------------------------------
-✅ {WAVE/PHASE NAME} Complete
-----------------------------------------
+<hr>
+
+✅ **{WAVE/PHASE NAME} Complete**
 
 **Commits:** {hash1} → {hash2}
 **Pushed:** origin/CORTEX
@@ -171,8 +169,6 @@ Box Separator (final)
 | {metric1} | {val} | {val} | {status} ✅ |
 | {metric2} | {val} | {val} | {status} ✅ |
 
-----------------------------------------
-
 ### Track 1: {Track Name} ✅
 
 **Files Modified:**
@@ -183,8 +179,6 @@ Box Separator (final)
 - Tests: {n}/{n} passing ✅
 - Coverage: {pct}%
 - Impact: {description}
-
-----------------------------------------
 
 ### Track 2: {Track Name} ✅
 
@@ -200,7 +194,7 @@ Box Separator (final)
 - {impact1}
 - {impact2}
 
-----------------------------------------
+<hr>
 ```
 
 ### Field Label Standards
@@ -267,7 +261,7 @@ Commits - abc123 → def456       (wrong separator)
 
 **Example:**
 ```markdown
-----------------------------------------
+<hr>
 [1 blank line above]
 ### Track 1: Example ✅
 [1 blank line below]
@@ -277,15 +271,15 @@ Commits - abc123 → def456       (wrong separator)
 - file2.py
 [NO blank lines between bullets]
 [1 blank line below before next box]
-----------------------------------------
+<hr>
 ```
 
 ### Single-Track Completion Template
 
 ```markdown
-----------------------------------------
+<hr>
 ✅ {OPERATION NAME} Complete
-----------------------------------------
+<hr>
 
 **Commit:** {hash}
 **Pushed:** origin/CORTEX
@@ -300,21 +294,21 @@ Commits - abc123 → def456       (wrong separator)
 - Files: {n} modified
 - Impact: {description}
 
-----------------------------------------
+<hr>
 ```
 
 ### Multi-Track Wave Completion Template
 
 ```markdown
-----------------------------------------
+<hr>
 ✅ {WAVE NAME} Complete
-----------------------------------------
+<hr>
 
 **Commits:** {hash1} → {hash2} → {hash3}
 **Pushed:** origin/CORTEX
 **Duration:** ~{time} total
 
-----------------------------------------
+<hr>
 
 ### Track 1: {Name} ✅
 
@@ -328,7 +322,7 @@ Commits - abc123 → def456       (wrong separator)
 - Tests: {n}/{n} passing ✅
 - Coverage: {pct}%
 
-----------------------------------------
+<hr>
 
 ### Track 2: {Name} ✅
 
@@ -342,7 +336,7 @@ Commits - abc123 → def456       (wrong separator)
 - {impact1}
 - {impact2}
 
-----------------------------------------
+<hr>
 
 ### Track 3: {Name} ✅
 
@@ -355,26 +349,28 @@ Commits - abc123 → def456       (wrong separator)
 | {metric1} | {val} | {val} | {pct}% ✅ |
 | {metric2} | {val} | {val} | {pct}% ✅ |
 
-----------------------------------------
+<hr>
 ```
 
 ### Common Violations & Fixes
 
 | Violation | Example (WRONG) | Fix (CORRECT) |
 |-----------|-----------------|---------------|
-| **Box length wrong** | `━━━━━━` (6 chars) | `━━━━━━━━━━...` (60 chars) |
+| **Box-drawing separator** | `────────────────` | `<hr>` |
+| **40-dash separator** | `----------------------------------------` | `<hr>` |
 | **## after opening box** | `## Track 1` | `### Track 1: Name ✅` |
 | **Field label not bold** | `Commits: abc` | `**Commits:** abc` |
 | **No status emoji** | `Track 1: Name` | `Track 1: Name ✅` |
 | **Wrong spacing** | 0 or 2+ lines | 1 blank line (per rules) |
 | **Inline git info** | `Commits: abc Pushed: origin` | Separate lines with labels |
+| **Concatenated stages** | `├─ ✅ S1 ├─ ✅ S2` | Each `├─` on own line |
 
 ### Validation Checklist
 
 Before marking response complete, verify:
 
-- [ ] Box separators exactly 60 `━` characters
-- [ ] Title inside opening box (no ## header)
+- [ ] Box separators use `<hr>` (not `────` or `----`)
+- [ ] Title uses `**bold**` (no ## header inside box)
 - [ ] Track sections use ### headers
 - [ ] All field labels use `**Label:**` format
 - [ ] Status emojis consistent (✅🔵⚪🔴🟡)
@@ -382,7 +378,8 @@ Before marking response complete, verify:
 - [ ] Tables use proper markdown format
 - [ ] Bullet lists use `-` consistently
 - [ ] No text descriptions during silent execution
-- [ ] Final box separator closes response
+- [ ] Each stage tree line on its own line
+- [ ] Stage names <30 chars, line length <70 chars
 
 ### Cross-Reference
 

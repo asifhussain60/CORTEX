@@ -111,9 +111,9 @@
 
 **Output:**
 ```
-----------------------------------------
+<hr>
 📚 Documentation Refresh Complete
-----------------------------------------
+<hr>
 
 📊 Changes Analyzed: 247 commits since 0506774b0
 📝 Sections Updated: 12/24 (50%)
@@ -127,7 +127,7 @@ Updated Sections:
 └─ diagrams/architecture-overview.md (updated counts)
 
 Git: a2fdcdc "docs: Refresh architecture docs (247 commits)"
-----------------------------------------
+<hr>
 ```
 
 ---

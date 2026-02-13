@@ -29,9 +29,9 @@
 **Display this EXACTLY when MCP tools not available:**
 
 ```
-----------------------------------------
+<hr>
 ⛔ CORTEX GATE CLOSED: MCP Required
-----------------------------------------
+<hr>
 
 Your request: {user_request}
 Intent: {IMPLEMENT|FIX|REFACTOR|AUDIT|PLAN|ANALYZE}
@@ -50,7 +50,7 @@ ALLOWED WITHOUT MCP (Escape Hatch):
   • "setup MCP"          → Get setup instructions
   • "what is CORTEX?"    → Educational questions
 
-----------------------------------------
+<hr>
 ```
 
 ---
@@ -750,9 +750,9 @@ increment_metric("cortex_bypass_attempts_blocked_total")
 **When bypass blocked:**
 
 ```markdown
-----------------------------------------
+<hr>
 ❌ NATIVE TOOL BYPASS BLOCKED (MCP-FIRST VIOLATION)
-----------------------------------------
+<hr>
 
 **Intent:** {intent}
 **Tool:** {tool_name}
@@ -792,7 +792,7 @@ python .cortex/setup-mcp.py
 
 CORTEX operates at ONE quality level: Production.
 Fix infrastructure. No bypasses allowed.
-----------------------------------------
+<hr>
 ```
 
 ---

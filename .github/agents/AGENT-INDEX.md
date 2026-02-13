@@ -18,9 +18,9 @@ completion_report: minimal
 ### Progress Bar Format (UNIVERSAL)
 
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+<hr>
 📋 {phase_name}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+<hr>
 
 [████████░░] 80% {current_stage}
 ├─ ✅ S1: {stage_1_name} ({tests} tests)
@@ -29,7 +29,7 @@ completion_report: minimal
 └─ ⚪ S4: {stage_4_name} (pending)
 
 Tests: {passed}/{total} | Coverage: {pct}% | {duration}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+<hr>
 ```
 
 ### Status Icons

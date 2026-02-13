@@ -108,9 +108,9 @@ response_format = rules["response_format"]
 
 **PROGRESS BARS (Silent Execution):**
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+<hr>
 📋 {Phase Title}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+<hr>
 
 [████████░░] 80% {Current Stage}
 ├─ ✅ S1: {Title} ({tests} tests)
@@ -118,7 +118,7 @@ response_format = rules["response_format"]
 └─ ⚪ S6: {Title} (pending)
 
 Tests: {passed}/{total} | Coverage: {percent}%
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+<hr>
 ```
 
 **STATUS ICONS:**

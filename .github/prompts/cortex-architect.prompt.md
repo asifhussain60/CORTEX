@@ -172,9 +172,9 @@ User: "proceed with WAVE-S implementation"
 
 Response 1 (Analysis + Challenge):
 ```
-────────────────────────────────────────
-📋 WAVE-S Analysis: Holistic Validation
-────────────────────────────────────────
+<hr>
+
+📋 **WAVE-S Analysis: Holistic Validation**
 
 `██████████` 100% Analysis Complete
 
@@ -183,18 +183,19 @@ Challenge: Alternative approach detected
 💡 Alternative: Dedicated ValidationOrchestrator (SOLID SRP)
 
 Proceed with current or switch to alternative?
-────────────────────────────────────────
+
+<hr>
 ```
 
 User: "proceed"
 
 Response 2 (Implementation - Silent):
 ```
-────────────────────────────────────────
-📋 WAVE-S Stage 1: Pre-Implementation Gate
-----------------------------------------
+<hr>
 
-[████████░░] 80% Stage 1 In Progress
+📋 **WAVE-S Stage 1: Pre-Implementation Gate**
+
+`████████░░` 80% Stage 1 In Progress
 
 ├─ ✅ ValidationOrchestrator (15 tests)
 ├─ ✅ DependencyGraph (12 tests)
@@ -202,7 +203,8 @@ Response 2 (Implementation - Silent):
 └─ ⚪ MCP Tools (pending)
 
 Tests: 27/42 | Coverage: 85%
-----------------------------------------
+
+<hr>
 ```
 
 **FORBIDDEN (Text-heavy responses during implementation):**
@@ -580,17 +582,20 @@ grep "setup-mcp.py" .githooks/post-checkout
 ### Audit Result Template
 
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🔍 CROSS-PLATFORM MCP AUDIT (CORE-051)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+<hr>
+
+🔍 **CROSS-PLATFORM MCP AUDIT (CORE-051)**
+
 | Check | Status | Action |
 |-------|--------|--------|
 | settings.json NOT in git | ✅/❌ | git rm --cached |
 | Cross-platform paths | ✅/❌ | Update setup-mcp.py |
 | Git hooks configured | ✅/❌ | git config core.hooksPath .githooks |
 | Post-checkout auto-regen | ✅/❌ | Update .githooks/post-checkout |
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 Verdict: PASS / FAIL
+
+<hr>
 ```
 
 ---
@@ -1400,15 +1405,15 @@ status_icons = fmt.icons["status"]
 [████████░░] 80% Stage 4: Component D
 [██████████] 100% Complete
 
-----------------------------------------
+<hr>
 ✅ Implementation Complete
-----------------------------------------
+<hr>
 
 Tests: 68/68 passing
 Commits: 3
 Files: 5 modified
 
-----------------------------------------
+<hr>
 ```
 
 **Note:** Header appears ONCE at top. Progress bars and completion use box format (━━━), NOT additional headers.
@@ -1444,15 +1449,15 @@ Files: 5 modified
 
 **DO THIS:**
 ```markdown
-----------------------------------------
+<hr>
 ✅ Stage 1 Complete
-----------------------------------------
+<hr>
 
 **Tests:** 24/24 passing
 **Files:** 3 modified
 **Commit:** abc123f
 
-----------------------------------------
+<hr>
 ```
 
 **Key Rules:**
@@ -2251,9 +2256,9 @@ Advanced Level:
 **ONLY ALLOWED FORMAT:**
 
 ```
-----------------------------------------
+<hr>
 📋 WAVE-R Stage 5: MCP Tools Complete
-----------------------------------------
+<hr>
 
 [██████████] 100% All Stages Complete
 
@@ -2266,7 +2271,7 @@ Advanced Level:
 Tests: 68/69 | Coverage: 99%
 Commits: 3 (all pushed to remote)
 ENH-089: ✅ COMPLETE
-----------------------------------------
+<hr>
 ```
 
 **FORBIDDEN during silent execution:**
@@ -2355,10 +2360,10 @@ summary = ResponseTemplate.session_summary(
 All session summaries MUST follow this structure:
 
 ```markdown
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+<hr>
+
 ## {emoji} SESSION SUMMARY
 **Session:** {name} | **Status:** {overall_status}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ## 📊 Token Usage
 **Used:** {used}k / {total}k ({percentage}%)
@@ -2378,7 +2383,7 @@ All session summaries MUST follow this structure:
 1. Next action 1
 2. Next action 2
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+<hr>
 ```
 
 ### Integration Points
