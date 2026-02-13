@@ -2005,6 +2005,17 @@ Choose an option to continue learning:
 
 ## 📊 Supported Query Types
 
+**NOTE:** For DIGEST, DESIGN/PLAN, QUERY/REFINEMENT, and COMPLETION responses,  
+use the **User-Preferred Templates (A-E)** defined in SSOT:  
+`.github/prompts/.archive/phase-docs/response-format-standards.md` § USER-PREFERRED RESPONSE TEMPLATES
+
+These templates were derived from production chat sessions and are the SSOT for:
+- **Template A:** DIGEST — Concern-Resolution Analysis (concern tables + architecture trees)
+- **Template B:** DESIGN/PLAN — Multi-Wave Roadmap (named waves + stage trees + metrics)
+- **Template C:** QUERY/REFINEMENT — Question→Answer Structured (mirror questions + evidence)
+- **Template D:** COMPLETION — Wave/Phase Complete (deliverables + enhancement mapping)
+- **Template E:** ENHANCEMENT — Feature Enrichment (original request → 4 quality dimensions)
+
 | Query Type | Example | Auto-Detected Format |
 |------------|---------|---------------------|
 | **List Capabilities** | `/query cortex capabilities` | LIST (table) |

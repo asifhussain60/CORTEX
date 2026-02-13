@@ -1,6 +1,6 @@
 # 🎨 CORTEX Response Format Standards
 
-> **Version:** 1.4 | **Updated:** 2026-02-09 | **Authority:** ENH-028 + ENH-032 + CORE-049 + Concise Decision Mode
+> **Version:** 2.0 | **Updated:** 2026-02-13 | **Authority:** ENH-028 + ENH-032 + CORE-049 + Concise Decision Mode + Chat01 User Preferences
 
 
 ---
@@ -8,7 +8,9 @@
 
 ## 📋 Document Purpose
 
-Unified response format for **all CORTEX operations** across modes: PRE-FLIGHT, AUDIT, DESIGN, DIGEST, META-AUDIT, PLAN.
+Unified response format for **all CORTEX operations** across modes: PRE-FLIGHT, AUDIT, DESIGN, DIGEST, META-AUDIT, PLAN, QUERY, REFINEMENT.
+
+**Source of Truth:** User-preferred templates extracted from production chat sessions (chat01.md).
 
 
 **Core Principles:**
@@ -22,6 +24,8 @@ Unified response format for **all CORTEX operations** across modes: PRE-FLIGHT, 
 | 🎯 **Icon Consistency** | Precise visual status indicators |
 | 🔢 **Numbered Actions** | Easy decision-making format |
 | ⚖️ **Adaptive Density** | Complexity matches request scope |
+| 🧠 **Intent-Adaptive Templates** | Template auto-selected by operation type (DIGEST/DESIGN/QUERY/IMPLEMENT) |
+| 📦 **Structured Deliverables** | Metrics tables, stage trees, concern-resolution matrices |
 
 
 ---
@@ -997,6 +1001,517 @@ DoD confidence: [X%] — [short reason].
 
 ---
 
+## 🧠 USER-PREFERRED RESPONSE TEMPLATES (Chat01 Derived)
+
+**Authority:** Extracted from production chat sessions (chat01.md) — user-validated patterns  
+**Purpose:** Intelligent template selection based on operation type  
+**Rule:** Auto-select template based on intent classification. Each template is proven effective in live sessions.
+
+### Template Selection Matrix
+
+| User Intent | Template | When to Use |
+|-------------|----------|-------------|
+| **DIGEST** | Concern-Resolution Analysis | Chat review, session digestion, concern validation |
+| **DESIGN/PLAN** | Multi-Wave Roadmap | Wave planning, strategic breakdown, execution scoping |
+| **QUERY/REFINEMENT** | Question→Answer Structured | User asks specific questions, needs clear answers |
+| **IMPLEMENT (silent)** | ASCII Progress Bar | Active execution after "proceed" trigger |
+| **COMPLETION** | Metrics + Deliverables Summary | Wave/phase completion, ready-to-execute handoff |
+
+---
+
+### Template A: DIGEST — Concern-Resolution Analysis
+
+**Trigger:** `/digest`, review requests, "have concerns been addressed?", session analysis  
+**Pattern:** Status summary → Concern table → Architecture visualization → Wave breakdown → Metrics
+
+```markdown
+## 🏛️ CORTEX Architect DIGEST
+**Author:** Asif Hussain | **Orchestrator:** LENSSynthesis ✅
+
+---
+
+<hr>
+
+📋 **{SESSION_ID} DIGEST: COMPLETE ANALYSIS**
+
+`██████████` 100% Chat Review Complete
+
+**Source:** {file} ({line_count} lines)
+**Duration:** Full conversation analysis
+**Status:** ✅ ALL CONCERNS ADDRESSED
+
+<hr>
+
+## ✅ YOUR {N} ORIGINAL CONCERNS — RESOLVED
+
+| Concern | Challenge You Raised | Solution Delivered | Status |
+|---------|---------------------|-------------------|--------|
+| **{concern_1}** | {user_challenge} | {solution} | ✅ SOLVED |
+| **{concern_2}** | {user_challenge} | {solution} | ✅ SOLVED |
+| **{concern_3}** | {user_challenge} | {solution} | ✅ SOLVED |
+
+---
+
+## 🧠 {N}-LAYER SYSTEM (PROVEN)
+
+{Use code tree visualization for architecture layers:}
+
+Layer 1: {Layer Name} [{test_count} tests ✅]
+├─ {capability_1}
+├─ {capability_2}
+└─ Proven: {evidence}
+
+Layer 2: {Layer Name} [{test_count} tests ✅]
+├─ {capability_1}
+├─ {capability_2}
+└─ Proven: {evidence}
+
+TOTAL: {n}/{n} Tests Passing ✅ Foundation Proven ✅
+
+---
+
+## 📁 DIGEST DOCUMENTATION CREATED
+
+| File | Purpose | Status |
+|------|---------|--------|
+| **{file_1}** | {purpose} | ✅ Created |
+| **{file_2}** | {purpose} | ✅ Created |
+
+**All committed:** `{commit_hash}`
+
+---
+
+## ⚡ READY FOR AUTONOMOUS EXECUTION
+
+### Prerequisites All Met ✅
+- ✅ {prerequisite_1}
+- ✅ {prerequisite_2}
+- ✅ {prerequisite_3}
+
+### Next Action
+**Type "proceed" to begin {next_action} autonomously.**
+```
+
+**Key Rules:**
+- Always include concern-resolution table (maps user concerns → solutions)
+- Architecture visualization uses code tree format (├─ └─)
+- Test counts with pass status embedded in layer names
+- Commit hashes referenced inline
+- End with clear "proceed" trigger
+
+---
+
+### Template B: DESIGN/PLAN — Multi-Wave Roadmap
+
+**Trigger:** `/plan`, "divide work into waves", strategic planning, execution scoping  
+**Pattern:** Scope summary → Named waves with stage trees → Metrics table → Concerns table → Execution command
+
+```markdown
+## 🏛️ CORTEX Architect DESIGN
+**Author:** Asif Hussain | **Orchestrator:** MasterOrchestrator ✅
+
+---
+
+<hr>
+
+📋 **COMPLETE MASTER WAVE PLAN: {SCOPE}**
+
+`██████████` 100% Comprehensive Analysis Complete
+
+**Scope:** {description}
+**Duration:** {total_hours} hours autonomous execution
+**Token Budget:** <{total_tokens} total (<{per_wave_tokens} per wave)
+**Deliverable:** {primary_deliverable}
+
+<hr>
+
+## 🌊 {N}-WAVE COMPREHENSIVE ROADMAP
+
+### WAVE-1: {Meaningful Name} ({hours}h)
+
+Stage 1: {Stage Name} [{time}, {test_count} tests]
+├─ {action_1}
+├─ {action_2}
+└─ {action_3}
+
+Stage 2: {Stage Name} [{time}, {test_count} tests]
+├─ {action_1}
+├─ {action_2}
+└─ {action_3}
+
+Deliverable: {wave_deliverable}
+Success: {test_count}/{test_count} tests passing
+Commits: {n} (AC-marked)
+
+**What It Does:** {one_sentence_description}
+
+### WAVE-2: {Meaningful Name} ({hours}h)
+
+{Same stage tree structure...}
+
+---
+
+## 📊 COMPLETE METRICS
+
+| Wave | Duration | Token | Tests | Commits | Scope | Pass Rate |
+|------|----------|-------|-------|---------|-------|-----------|
+| **1** | {h}h | {k}k | {n} | {n} | {scope} | 100% ✅ |
+| **2** | {h}h | {k}k | {n} | {n} | {scope} | 100% ✅ |
+| **TOTAL** | **{h}h** | **<{k}k** | **{n}+** | **{n}** | **{scope}** | **100%** |
+
+---
+
+## ✅ ALL CONCERNS ADDRESSED
+
+| Original Concern | Resolution in Wave Plan | Wave | Status |
+|------------------|------------------------|------|--------|
+| **{concern_1}** | {resolution} | {wave_n} | ✅ Solved |
+| **{concern_2}** | {resolution} | {wave_n} | ✅ Solved |
+
+---
+
+## 🎯 EXECUTION MODEL
+
+**Sequential Waves:**
+WAVE-1 ({h}h) → WAVE-2 ({h}h) → WAVE-{N} ({h}h)
+   ✅           ✅           ✅
+
+**Checkpoint Strategy:**
+- Token budget 75% → Commit + continue
+- Each wave independent but sequential
+- No dependencies between waves
+
+**Non-Breaking:**
+- ✅ Existing API unchanged
+- ✅ All tests backward compatible
+- ✅ Gradual rollout possible
+
+---
+
+## ⚡ EXECUTION COMMAND
+
+/implement {PLAN_ID}: {Title}
+
+Authority: {authority_file}
+Mode: Silent autonomous with ASCII progress bars
+Total Duration: {hours} hours
+Token Budget: <{tokens}
+
+{Wave tree summary}
+
+Result: {expected_deliverable}
+
+---
+
+**Ready to proceed?**
+**Type: "proceed {PLAN_ID}" to start autonomous execution**
+```
+
+**Key Rules:**
+- Every wave has a meaningful name (not generic "WAVE-1")
+- Stage trees use consistent format: `Stage N: {Name} [{time}, {test_count} tests]`
+- "What It Does" one-liner after each wave
+- Metrics table MUST include all waves + TOTAL row
+- Concern-resolution table cross-references wave numbers
+- Execution command block at bottom (copy-paste ready)
+- End with clear "proceed" trigger with plan ID
+
+---
+
+### Template C: QUERY/REFINEMENT — Question→Answer Structured
+
+**Trigger:** User asks specific questions, "what best practices?", "have you created X?", tool audits  
+**Pattern:** Questions asked → Answers with evidence → Documents created → Success metrics
+
+```markdown
+## 🏛️ CORTEX Architect {OPERATION}
+**Author:** Asif Hussain | **Orchestrator:** {orchestrator} ✅
+
+---
+
+## 📋 What You Asked For
+
+You requested {n} specific questions:
+
+1. **{question_1}** ({brief_context})
+2. **{question_2}** ({brief_context})
+3. **{question_3}** ({brief_context})
+
+---
+
+## ✅ What You Got
+
+### 📚 {N} Comprehensive Documents Created
+
+| Document | Lines | Key Content |
+|----------|-------|------------|
+| **{doc_1}** | {n} | {content_summary} |
+| **{doc_2}** | {n} | {content_summary} |
+| **TOTAL** | **{n}+** | Complete package |
+
+All committed: `{commit_hashes}`
+
+---
+
+## 🎯 Your {N} Questions → Our {N} Answers
+
+### ❓ **Question 1:** "{original_question}"
+
+✅ **ANSWER:** {concise_answer}
+
+{Supporting evidence: code trees, tables, formulas, examples}
+
+**Why This Matters:** {one_sentence_significance}
+
+---
+
+### ❓ **Question 2:** "{original_question}"
+
+✅ **ANSWER:** {concise_answer}
+
+| # | Item | Detail | Status |
+|---|------|--------|--------|
+| 1 | **{item}** | {detail} | ✅ |
+| 2 | **{item}** | {detail} | ✅ |
+
+**Each Item Includes:**
+- {aspect_1}
+- {aspect_2}
+
+---
+
+### ❓ **Question 3:** "{original_question}"
+
+✅ **ANSWER:** {concise_answer}
+
+**Active ✅ ({n} Total)**
+{tool_1} ({score}/10)    {tool_2} ({score}/10)
+
+**Underutilized ⚠️ ({n} Total)**
+{tool_3} → Activate in {wave} for {benefit}
+
+**Recommended 🔴 ({n} Total)**
+{tool_4} ({wave}) → {benefit}
+
+---
+
+## 📊 Complete Documentation Package
+
+### Quick Entry Points
+
+1. **START HERE:** `{file_1}` ({n} lines, quick ref)
+2. **Details:** `{file_2}` ({n} lines, deep dive)
+3. **Algorithm:** `{file_3}` ({n} lines, specs)
+
+---
+
+## ✅ Validation Status
+
+### All Proven ✅
+
+- ✅ **{validation_1}** ({evidence})
+- ✅ **{validation_2}** ({evidence})
+- ✅ **{validation_3}** ({evidence})
+
+---
+
+## 📈 Success Metrics
+
+| Metric | Expected | Status |
+|--------|----------|--------|
+| **{metric_1}** | {expected} | ✅ Complete |
+| **{metric_2}** | {expected} | ✅ Complete |
+
+---
+
+## 💡 Key Takeaway
+
+{System/feature} is:
+- **Proven** ({evidence} ✅)
+- **Documented** ({n}+ lines ✅)
+- **Non-Breaking** ({evidence} ✅)
+- **Scalable** ({evidence} ✅)
+- **Production-Ready** ({evidence} ✅)
+
+**All that's needed:** Your approval to execute.
+
+---
+
+**📍 Location:** {file_location}
+**📦 Package:** {n} documents, {n}+ lines, {n} git commits
+**✅ Status:** {STATUS} | Ready for execution
+**⏱️ Timeline:** {hours} hours, {waves}
+```
+
+**Key Rules:**
+- Mirror user's questions back explicitly ("What You Asked For")
+- Answer each question with ✅ **ANSWER:** prefix
+- Use appropriate evidence format per question (tables, trees, formulas)
+- "Why This Matters" one-liner after significant answers
+- Tool audits use Active/Underutilized/Recommended tiers with scores
+- End with Key Takeaway bullet list (Proven/Documented/Non-Breaking/Scalable/Production-Ready)
+- Footer with location, package size, status
+
+---
+
+### Template D: COMPLETION — Wave/Phase Complete
+
+**Trigger:** Wave completed, phase finished, work delivered  
+**Pattern:** Deliverables summary → What gets delivered per wave → Metrics → Ready confirmation
+
+```markdown
+## 🏛️ CORTEX Architect {OPERATION}
+**Author:** Asif Hussain | **Orchestrator:** {orchestrator} ✅
+
+---
+
+<hr>
+
+✅ **{WAVE/PHASE NAME}: COMPLETE**
+
+`██████████` 100% | {n}/{n} tests | {pct}% coverage
+
+**Commits:** {hash1} → {hash2}
+**Pushed:** origin/{branch}
+**Duration:** ~{time} total
+
+<hr>
+
+### What Gets Delivered
+
+**By {Wave/Phase} End:**
+- ✅ {deliverable_1}
+- ✅ {deliverable_2}
+- ✅ {deliverable_3}
+
+### Enhancements to Your Vision
+
+**Your Original Request:**
+"{user_original_request}"
+
+**What We Deliver:**
+
+**✅ {Quality_1}**
+- {detail_1}
+- {detail_2}
+
+**✅ {Quality_2}**
+- {detail_1}
+- {detail_2}
+
+**✅ {Quality_3}**
+- {detail_1}
+- {detail_2}
+
+**✅ Non-Breaking**
+- {backward_compat_detail}
+- {gradual_rollout_detail}
+
+<hr>
+```
+
+**Key Rules:**
+- Start with completion badge + progress bar at 100%
+- "What Gets Delivered" section maps deliverables to user expectations
+- "Enhancements to Your Vision" maps back to user's original request
+- Qualities listed with ✅ prefix (Automatic, Quality Guaranteed, Future-Proof, Non-Breaking)
+- Always confirm non-breaking backward compatibility
+
+---
+
+### Template E: ENHANCEMENT DESCRIPTION — Feature Enrichment
+
+**Trigger:** Describing what an enhancement delivers beyond what was asked  
+**Pattern:** Original request → Enhanced delivery → Quality guarantees
+
+```markdown
+## 🎯 ENHANCEMENTS TO YOUR VISION
+
+### Your Original Request
+"{user_request_verbatim}"
+
+### What We Deliver
+
+**✅ Fully Automatic**
+- {auto_capability_1}
+- {auto_capability_2}
+- {auto_capability_3}
+
+**✅ Quality Guaranteed**
+- {quality_gate_1}
+- {quality_gate_2}
+- {quality_gate_3}
+
+**✅ Future-Proof**
+- {scaling_capability_1}
+- {scaling_capability_2}
+- {scaling_capability_3}
+
+**✅ Non-Breaking**
+- {compat_guarantee_1}
+- {compat_guarantee_2}
+- {compat_guarantee_3}
+```
+
+**Key Rules:**
+- Quote user's original request verbatim
+- Four quality dimensions: Automatic, Quality Guaranteed, Future-Proof, Non-Breaking
+- Three evidence points per dimension
+- Each point is a concrete capability (not abstract)
+
+---
+
+### Template Selection Logic (Auto-Detect)
+
+```python
+def select_response_template(intent: str, context: dict) -> str:
+    """
+    Auto-select response template based on user intent and context.
+    
+    Returns template name: A|B|C|D|E
+    """
+    # Template A: DIGEST
+    if intent in ["DIGEST"] or "concerns addressed" in context.get("query", ""):
+        return "TEMPLATE_A_DIGEST"
+    
+    # Template B: DESIGN/PLAN
+    if intent in ["DESIGN", "PLAN"] or "wave" in context.get("query", ""):
+        return "TEMPLATE_B_WAVE_ROADMAP"
+    
+    # Template C: QUERY/REFINEMENT
+    if intent in ["QUERY"] or context.get("question_count", 0) > 1:
+        return "TEMPLATE_C_QUESTION_ANSWER"
+    
+    # Template D: COMPLETION
+    if context.get("is_completion", False):
+        return "TEMPLATE_D_COMPLETION"
+    
+    # Template E: ENHANCEMENT
+    if context.get("is_enhancement", False):
+        return "TEMPLATE_E_ENHANCEMENT"
+    
+    # Default: use existing mode templates
+    return "DEFAULT"
+```
+
+---
+
+### Template Composition Rules
+
+Templates can be **composed** (combined) for complex responses:
+
+| Scenario | Templates Combined | Example |
+|----------|--------------------|---------|
+| DIGEST + PLAN | A + B | Session analysis → Wave plan (chat01 pattern) |
+| PLAN + COMPLETION | B + D | Wave plan → What gets delivered |
+| QUERY + PLAN | C + B | Answer questions → Updated wave plan |
+| COMPLETION + ENHANCEMENT | D + E | Phase complete → Enhancement description |
+
+**Composition Rule:** When combining, use `---` separator between template sections. Each template retains its own structure — do NOT merge fields.
+
+---
+
+
 ## 🚫 Anti-Patterns (NEVER DO)
 
 | Anti-Pattern | Why Wrong | Correct Alternative |
@@ -1011,6 +1526,12 @@ DoD confidence: [X%] — [short reason].
 | >5 options in one decision | Decision paralysis | Categorize or phase decisions |
 | Technical jargon without definition | Excludes non-experts | Use `<abbr>` tooltips |
 | Embedded full file contents | Context overflow | Link with `#file:` or use excerpts |
+| **Generic wave names (WAVE-1)** | **No strategic meaning, harder to track** | **Meaningful names (Foundation & Bootstrap)** |
+| **Answering without mirroring question** | **User unsure if concern was understood** | **Quote user's question → provide answer** |
+| **Missing concern-resolution mapping** | **User can't verify all concerns addressed** | **Table: Concern → Solution → Status** |
+| **Architecture without visualization** | **Abstract, hard to grasp** | **Code tree format (├─ └─) with test counts** |
+| **Missing "What It Does" per wave** | **User can't quickly scan wave purpose** | **One-sentence description after each wave** |
+| **No execution command at bottom** | **User must compose command manually** | **Copy-paste ready /implement command** |
 
 ---
 
@@ -1182,6 +1703,7 @@ Before sending any response, verify:
 
 ## 🔄 Version History
 
+- **v2.0** (2026-02-13) — Added 5 user-preferred response templates (A-E) from chat01 production sessions: DIGEST, DESIGN/PLAN, QUERY/REFINEMENT, COMPLETION, ENHANCEMENT. Added template selection matrix, composition rules, auto-detect logic. Extended anti-patterns with 6 new patterns from user feedback.
 - **v1.1** (2026-02-05) — Added narrative flow principle, completion confirmation format, holistic implementation principle
 - **v1.0** (2026-02-05) — Initial response format standards (ENH-028)
 

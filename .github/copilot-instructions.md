@@ -1695,6 +1695,16 @@ cortex_process_request(
 - ✅ Show "Implementation Complete" when done (not "Next Steps")
 - 🔒 NO exit options during holistic implementation (run to completion)
 
+**Intent-Adaptive Templates (SSOT: response-format-standards.md § USER-PREFERRED RESPONSE TEMPLATES):**
+
+| Intent | Template | Key Pattern |
+|--------|----------|-------------|
+| **DIGEST** | Template A | Concern-resolution table → Architecture tree → Wave breakdown |
+| **DESIGN/PLAN** | Template B | Named waves → Stage trees → Metrics table → Execution command |
+| **QUERY** | Template C | Mirror questions → ✅ ANSWER per question → Evidence → Key Takeaway |
+| **COMPLETION** | Template D | Deliverables → Enhancement mapping → Non-breaking guarantees |
+| **ENHANCEMENT** | Template E | Original request → 4 quality dimensions (Automatic/Quality/Future-Proof/Non-Breaking) |
+
 ---
 
 ## 🔄 Interaction Protocol
