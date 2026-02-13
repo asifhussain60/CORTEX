@@ -4,7 +4,7 @@
 
 The Model Context Protocol (MCP) Server is the **nervous system** of CORTEX — the SINGLE entry point for ALL cognitive functionality. Just as every thought, sensation, and action in the body flows through the nervous system's standardized electrical signaling, every operation in CORTEX — whether implementing features, analyzing code, validating governance, or debugging — flows through MCP's JSON-RPC 2.0 synaptic connections.
 
-The MCP layer connects external clients (VS Code Copilot, Claude, Cursor) to CORTEX's **17 active orchestrators** through 86 tool endpoints.
+The MCP layer connects external clients (VS Code Copilot, Claude, Cursor) to CORTEX's **17 active orchestrators** through 24 consolidated tool endpoints (86+ distinct operations).
 
 ## Design Principles
 

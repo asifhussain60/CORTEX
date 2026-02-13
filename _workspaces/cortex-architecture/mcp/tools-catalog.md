@@ -1,7 +1,8 @@
 # CORTEX MCP Tools Catalog
 
-**Total Tools:** 86 | **Updated:** 2026-02-13  
-**MCP Server:** stdio/HTTP (Port 8000) | **Protocol:** JSON-RPC 2.0
+**Consolidated Tools:** 24 | **Total Operations:** 86+ | **Updated:** 2026-02-13  
+**MCP Server:** stdio/HTTP (Port 8000) | **Protocol:** JSON-RPC 2.0  
+**Architecture:** Consolidated tool design (Phase Wave 100) for improved organization
 
 ---
 
@@ -11,23 +12,65 @@
 
 The brain communicates through **neurotransmitters** — chemical messengers that carry specific signals across synaptic gaps. Dopamine drives reward and motivation. Serotonin regulates mood. GABA inhibits overexcitation. Each neurotransmitter has a precise receptor, a specific function, and a measurable effect.
 
-CORTEX's 86 MCP tools are its neurotransmitter library — each tool carries a specific signal to a specific orchestrator, triggering a precise cognitive action. `cortex_process_request` is like acetylcholine at the neuromuscular junction: the primary signal that triggers action. `cortex_lens_analyze` is like glutamate: the main excitatory signal that activates deep analysis.
+CORTEX's **24 consolidated MCP tools** are its neurotransmitter library — each tool is like a neurotransmitter family (e.g., all serotonin receptors) with multiple specific operations (5-HT1A, 5-HT2A, etc.). `cortex_process_request` is like acetylcholine at the neuromuscular junction: the primary signal that triggers action with 5 distinct operations. `cortex_lens` is like glutamate: the main excitatory signal with 5 specialized operations.
 
-This catalog documents all **86** MCP tools exposed by CORTEX. These tools enable AI assistants (GitHub Copilot, Claude, Cursor) to leverage CORTEX's cognitive capabilities through the Model Context Protocol.
+### From 86 to 24: The Consolidation Story
 
-### Tool Distribution
+**What Changed:** Previously, CORTEX exposed 86 individual MCP tools — one for each specific operation (e.g., `cortex_lens_analyze`, `cortex_lens_deep_analyze`, `cortex_lens_diff`, etc.). This created cognitive overload for users and fragmented related functionality.
 
-| Category | Count | Purpose |
-|----------|-------|---------|
-| **Core Operations** | 4 | Primary entry points for request processing |
-| **LENS Intelligence** | 11 | Deep code analysis and intelligence |
-| **Governance & Compliance** | 19 | Rule enforcement and validation |
-| **Planning & Execution** | 7 | Phase management and autonomous execution |
-| **Debugging & Analysis** | 7 | Debug injection, capture, and analysis |
-| **Dashboard & Reporting** | 6 | Visualization and reporting generation |
-| **Knowledge & Learning** | 3 | Knowledge base queries and learning |
-| **Refactoring & Code Quality** | 3 | Code improvement and refactoring |
-| **Utility & System** | 26 | System utilities and support |
+**Wave 100 Consolidation:** CORTEX underwent a major reorganization, grouping related operations under **parent tools**. Instead of 86 separate tools, there are now **24 consolidated tools**, each containing multiple related **operations**. For example:
+
+- **Before:** `cortex_lens_analyze`, `cortex_lens_deep_analyze`, `cortex_lens_diff`, `cortex_lens_summarize`, `cortex_lens_validate` (5 separate tools)
+- **After:** `cortex_lens` (1 tool with 5 operations: `analyze`, `deep_analyze`, `diff`, `summarize`, `validate`)
+
+**Benefits:**
+- 🧠 **Cognitive clarity:** Group related functionality under intuitive parent concepts
+- 📦 **Easier discovery:** Browse by domain (debug, lens, governance) instead of searching 86 flat tools
+- 🔄 **Consistent patterns:** All consolidated tools follow `cortex_{domain}` naming with `operation` parameter
+- 📊 **Better organization:** Natural hierarchy matches how users think about functionality
+
+This catalog documents all **86+ operations** available across **24 consolidated tools**. These tools enable AI assistants (GitHub Copilot, Claude, Cursor) to leverage CORTEX's cognitive capabilities through the Model Context Protocol.
+
+### Tool Distribution (24 Consolidated Tools)
+
+| Category | Tools | Operations | Purpose |
+|----------|-------|------------|---------|
+| **Core Operations** | 4 | 15+ | Primary entry points for request processing |
+| **Intelligence (LENS)** | 3 | 15+ | Deep code analysis and intelligence |
+| **Governance & Validation** | 4 | 12+ | Rule enforcement and compliance validation |
+| **Operations (Debug, Refactor, Plan)** | 5 | 20+ | Debugging, refactoring, and phase management |
+| **Utilities & System** | 5 | 15+ | System utilities, verification, and support |
+| **Dashboard & Knowledge** | 3 | 9+ | Visualization, reporting, and knowledge queries |
+
+**Total:** 24 consolidated tools with 86+ distinct operations
+
+---
+
+## Consolidated Tool Structure
+
+All consolidated tools follow a consistent pattern:
+
+```json
+{
+  "tool": "cortex_{domain}",
+  "arguments": {
+    "operation": "specific_operation",
+    // Operation-specific parameters
+  }
+}
+```
+
+**Example:** `cortex_lens` tool with multiple operations:
+```json
+// Operation 1: analyze
+{"tool": "cortex_lens", "arguments": {"operation": "analyze", "file_path": "src/app.py"}}
+
+// Operation 2: deep_analyze  
+{"tool": "cortex_lens", "arguments": {"operation": "deep_analyze", "scope": "module"}}
+
+// Operation 3: diff
+{"tool": "cortex_lens", "arguments": {"operation": "diff", "before": "hash1", "after": "hash2"}}
+```
 
 ---
 

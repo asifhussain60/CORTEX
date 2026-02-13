@@ -4,6 +4,122 @@
 
 ---
 
+## Visual Overview
+
+### Request Flow: From User to Implementation
+
+```mermaid
+graph TD
+    A[👤 User: Implement login with OAuth2] -->|MCP JSON-RPC| B[MCP Server]
+    B -->|Tool: cortex_process_request| C[🧠 MasterOrchestrator]
+    C -->|Validate Environment| D{Environment OK?}
+    D -->|❌ No| E[Error Response]
+    D -->|✅ Yes| F[🧭 IntentRouter]
+    F -->|Classify Intent| G{Intent Type?}
+    G -->|IMPLEMENT| H[🔴 TDDOrchestrator]
+    G -->|ANALYZE| I[👁️ LENS Engine]
+    G -->|REFACTOR| J[🔄 RefactoringOrch]
+    H -->|Phase 48| K[Holistic Validation Gate]
+    K -->|Phase 49| L[Context Crystallization]
+    L -->|Challenge Generation| M[⚡ ChallengeEngine]
+    M -->|User: Approve| N[RED → GREEN → REFACTOR]
+    N -->|Enforcement| O[🛡️ 8 Governance Agents]
+    O -->|✅ Passed| P[Implementation Complete]
+    O -->|❌ Failed| Q[Block + Remediation]
+    P -->|MCP Response| R[👤 User Receives Code]
+    Q -->|Fix Required| H
+    
+    style A fill:#e1f5ff
+    style C fill:#fff4e1
+    style F fill:#ffe1f5
+    style H fill:#ffe1e1
+    style I fill:#e1ffe1
+    style M fill:#fff4e1
+    style O fill:#f5e1ff
+    style P fill:#e1ffe1
+    style Q fill:#ffe1e1
+```
+
+### MCP Tool Architecture
+
+```mermaid
+graph LR
+    A[24 Consolidated MCP Tools] --> B[Core Operations 4]
+    A --> C[Intelligence 3]
+    A --> D[Governance 4]
+    A --> E[Operations 5]
+    A --> F[Utilities 5]
+    A --> G[Dashboard/Knowledge 3]
+    
+    B --> B1[cortex_process_request<br/>5 operations]
+    B --> B2[cortex_challenge<br/>3 operations]
+    B --> B3[cortex_classify<br/>2 operations]
+    B --> B4[cortex_request_lifecycle<br/>5 operations]
+    
+    C --> C1[cortex_lens<br/>5 operations]
+    C --> C2[cortex_knowledge<br/>4 operations]
+    C --> C3[cortex_git<br/>3 operations]
+    
+    D --> D1[cortex_governance<br/>5 operations]
+    D --> D2[cortex_validate<br/>8 operations]
+    D --> D3[cortex_load<br/>4 operations]
+    D --> D4[cortex_validate_request<br/>3 operations]
+    
+    E --> E1[cortex_debug<br/>7 operations]
+    E --> E2[cortex_refactor<br/>4 operations]
+    E --> E3[cortex_plan<br/>6 operations]
+    E --> E4[cortex_onboard<br/>5 operations]
+    E --> E5[cortex_dashboard<br/>6 operations]
+    
+    style A fill:#fff4e1
+    style B fill:#e1f5ff
+    style C fill:#e1ffe1
+    style D fill:#ffe1f5
+    style E fill:#f5e1ff
+    style F fill:#ffe1e1
+```
+
+### Orchestrator Cognitive Pipeline
+
+```mermaid
+graph TB
+    A[🎯 MasterOrchestrator<br/>Priority: 10] --> B[🧭 IntentRouter<br/>Priority: 20]
+    
+    B --> C1[🧠 Core Orchestrators<br/>5 regions]
+    B --> C2[🎨 Domain Orchestrators<br/>5 regions]
+    B --> C3[🔧 Unified Support<br/>4 regions]
+    
+    C1 --> D1[TDDOrchestrator<br/>P: 30]
+    C1 --> D2[WorkflowOrchestrator<br/>P: 40]
+    C1 --> D3[InteractionOrchestrator<br/>P: 50]
+    
+    C2 --> E1[RefactoringOrch<br/>P: 60]
+    C2 --> E2[PlanningOrch<br/>P: 70]
+    C2 --> E3[DomainOrch<br/>P: 80]
+    C2 --> E4[ConversationOrch<br/>P: 90]
+    C2 --> E5[SeleniumPlaywrightOrch<br/>P: 100]
+    
+    C3 --> F1[UnifiedOnboardingOrch<br/>P: 105]
+    C3 --> F2[UnifiedAnalysisOrch<br/>P: 115]
+    C3 --> F3[UnifiedQualityOrch<br/>P: 125]
+    C3 --> F4[UnifiedDiscoveryOrch<br/>P: 135]
+    
+    D1 --> G[👁️ LENS Engine]
+    D1 --> H[🛡️ Governance Agents]
+    D1 --> I[🧬 Learning Loop]
+    
+    style A fill:#ffd700
+    style B fill:#ff6b6b
+    style C1 fill:#4ecdc4
+    style C2 fill:#95e1d3
+    style C3 fill:#f38181
+    style G fill:#a8e6cf
+    style H fill:#dcedc1
+    style I fill:#ffd3b6
+```
+
+---
+
 ## Complete Request Lifecycle
 
 This document traces a complete request from user input through CORTEX processing to final response.
@@ -25,6 +141,7 @@ GitHub Copilot prepares MCP request:
     "params": {
       "name": "cortex_process_request",
       "arguments": {
+        "operation": "implement",
         "request": "Implement login feature with OAuth2",
         "enable_challenge": true,
         "context": {
@@ -51,9 +168,10 @@ MCP Server receives request:
 
 Tool Registry Query:
   tool = registry.get_tool("cortex_process_request")
-  # Returns: MCPTool(
+  # Returns: ConsolidatedTool(
   #   name="cortex_process_request",
-  #   handler=cortex.mcp.cortex_tools:process_request_handler
+  #   operations=["implement", "fix", "refactor", "analyze", "test"],
+  #   handler=CortexProcessRequest
   # )
 
 Route to handler:

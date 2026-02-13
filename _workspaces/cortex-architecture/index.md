@@ -25,7 +25,7 @@ CORTEX isn't just a tool. It's a **cognitive architecture** — a thinking syste
 | **Active Orchestrators** | 17 | Neural processing regions |
 | **Deprecated (sunset 2026-03-31)** | 7 | Vestigial brain structures being pruned |
 | **Infrastructure Components** | 3 | Brain stem (bootstrap, registry, health) |
-| **MCP Tools** | 86 | Synaptic connections to the outside world |
+| **MCP Tools** | 24 consolidated (86 total operations) | Primary synaptic pathways with specialized operations |
 | **LENS Analyzers** | 8 | Sensory receptor types |
 | **Enforcement Agents** | 8 | Immune system defenders |
 | **CORE Governance Rules** | 50+ | DNA-level behavioral encoding |
@@ -87,7 +87,8 @@ CORTEX's architecture mirrors the layered structure of a biological brain. Infor
   ║   │ Copilot │  │ Desktop │  │  IDE    │  │ Client  │          ║
   ║   └────┬────┘  └────┬────┘  └────┬────┘  └────┬────┘          ║
   ║        └────────────┴─────┬──────┴────────────┘                ║
-  ║                  86 MCP Synapses │                              ║
+  ║                  24 Consolidated MCP Tools │                   ║
+  ║              (86 total operations across tools)                ║
   ╚════════════════════════════╤════════════════════════════════════╝
                                │
   ╔════════════════════════════╧════════════════════════════════════╗
@@ -148,7 +149,7 @@ CORTEX's architecture mirrors the layered structure of a biological brain. Infor
 | Section | Description | Brain Analogy |
 |---------|-------------|---------------|
 | [MCP Overview](./mcp/overview.md) | Model Context Protocol — the nervous system | Peripheral nerves connecting brain to body |
-| [MCP Tools Catalog](./mcp/tools-catalog.md) | Complete 86-tool synapse reference | Map of every neural connection |
+| [MCP Tools Catalog](./mcp/tools-catalog.md) | Complete 24-tool catalog (86+ operations) | Map of every neural connection |
 | [Orchestration Overview](./orchestration/overview.md) | 17-orchestrator cognitive system | Brain region atlas |
 | [LENS Intelligence](./lens/overview.md) | Code analysis & synthesis engine | Visual cortex documentation |
 
@@ -189,11 +190,11 @@ CORTEX's architecture mirrors the layered structure of a biological brain. Infor
    - **TDDOrchestrator** — motor cortex, enforces disciplined test-first execution
    - **UnifiedQualityAssuranceOrchestrator** — anterior cingulate, validates quality & governance
 
-3. **🌐 Action Layer (86 MCP Tools)** — *The Motor Cortex* — Executes validated operations
-   - `cortex_process_request` — primary motor output
-   - `cortex_lens_analyze` — deep perception query
+3. **🌐 Action Layer (24 MCP Tools with 86 Operations)** — *The Motor Cortex* — Executes validated operations
+   - `cortex_process_request` — primary motor output (5 operations: implement, fix, refactor, analyze, test)
+   - `cortex_lens` — deep perception query (5 operations: analyze, deep_analyze, diff, summarize, validate)
    - `cortex_challenge` — generates alternative cognitive approaches
-   - `cortex_manage_todo` — working memory for task tracking
+   - `cortex_debug` — comprehensive debugging cycle (7 operations: inject, capture, analyze, fix-plan, full_cycle, cleanup, status)
 
 ### Example: How CORTEX Processes "Implement Login Feature"
 

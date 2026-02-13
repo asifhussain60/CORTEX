@@ -31,7 +31,7 @@
 │  │  ┌─────────────┐  ┌──────────────┐  ┌───────────────┐               │  │
 │  │  │   Tool      │  │    Request   │  │   Response    │               │  │
 │  │  │  Registry   │  │   Validator  │  │   Formatter   │               │  │
-│  │  │  (86 tools) │  │              │  │               │               │  │
+│  │  │ (24 tools)  │  │              │  │               │               │  │
 │  │  └─────────────┘  └──────────────┘  └───────────────┘               │  │
 │  │                                                                        │  │
 │  │  Capabilities:                                                        │  │
@@ -107,7 +107,7 @@
 **Purpose:** Protocol translation and tool management
 
 **Key Features:**
-- **86 MCP Tools** exposed via protocol
+- **24 Consolidated MCP Tools** (86+ operations) exposed via protocol
 - Tool discovery (`tools/list`)
 - Tool invocation (`tools/call`)
 - Health checks & metrics

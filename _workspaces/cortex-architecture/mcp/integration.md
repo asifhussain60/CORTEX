@@ -92,7 +92,7 @@ CORTEX_PORT=9000 CORTEX_LOG_LEVEL=DEBUG python -m cortex.mcp.server
 curl http://localhost:8000/health
 
 # Expected response
-{"status": "healthy", "orchestrators": 17, "tools": 86}
+{"status": "healthy", "orchestrators": 17, "tools": 24, "operations": 86}
 ```
 
 ---

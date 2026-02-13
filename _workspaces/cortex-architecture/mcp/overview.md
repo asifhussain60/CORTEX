@@ -2,7 +2,7 @@
 
 **Version:** 2.0.0 | **Updated:** 2026-02-13  
 **Protocol:** JSON-RPC 2.0 | **Transport:** stdio / HTTP  
-**Tools Exposed:** 86 | **Orchestrators:** 17 active
+**Tools Exposed:** 24 consolidated (86+ operations) | **Orchestrators:** 17 active
 
 ---
 
@@ -20,7 +20,7 @@ The **Model Context Protocol (MCP)** is CORTEX's nervous system. It's the standa
 |---------|-------------|---------------|
 | **Universal Compatibility** | Works with GitHub Copilot, Claude, Cursor, and any MCP client | Like how any sensory organ can send signals through the same nervous system |
 | **Standardized Interface** | JSON-RPC 2.0 protocol ensures consistency | Like the electrochemical standard of nerve impulses |
-| **Tool Discovery** | Clients can discover all 86 available tools dynamically | Like proprioception — knowing what capabilities are available |
+| **Tool Discovery** | Clients can discover all 24 consolidated tools (86+ operations) dynamically | Like proprioception — knowing what capabilities are available |
 | **Type Safety** | Structured arguments with JSON Schema validation | Like neurotransmitter lock-and-key specificity |
 | **Scalability** | Support stdio (development) and HTTP (production) | Like the peripheral vs central nervous system |
 
@@ -58,7 +58,7 @@ The **Model Context Protocol (MCP)** is CORTEX's nervous system. It's the standa
 │  └───────────────────────────────────────────────────┘   │
 │  ┌───────────────────────────────────────────────────┐   │
 │  │              Tool Registry                         │   │
-│  │  • 86 tools registered         │   │
+│  │  • 24 consolidated tools (86+ operations)         │   │
 │  │  • Dynamic discovery                             │   │
 │  │  • Schema validation                             │   │
 │  │  • Handler routing                               │   │
@@ -66,7 +66,7 @@ The **Model Context Protocol (MCP)** is CORTEX's nervous system. It's the standa
 │  ┌───────────────────────────────────────────────────┐   │
 │  │              Tool Handlers                         │   │
 │  │  • cortex_process_request → MasterOrchestrator   │   │
-│  │  • cortex_lens_analyze → LENSSynthesis          │   │
+│  │  • cortex_lens → LENSSynthesis (5 operations)    │   │
 │  │  • cortex_challenge → ChallengeEngine            │   │
 │  │  • ... 83 more tools                    │   │
 │  └───────────────────────────────────────────────────┘   │
@@ -286,7 +286,8 @@ curl http://localhost:8000/health
 {
   "status": "healthy",
   "uptime_seconds": 3600,
-  "tools_registered": 86,
+  "tools_registered": 24,
+  "total_operations": 86,
   "orchestrators_loaded": 17
 }
 ```
