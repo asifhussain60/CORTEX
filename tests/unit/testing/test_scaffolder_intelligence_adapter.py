@@ -71,7 +71,7 @@ class TestAdapterInitialization:
         
         assert adapter.registry_path == registry_path
         assert adapter.quality_threshold == 0.8
-        assert adapter.analyzer is not None
+        assert adapter.registry is not None
         assert adapter.composer is not None
         assert adapter.validator is not None
         # AC_COMPLETE: AC-WAVE2-S1-ADAPTER-001-T01
@@ -232,8 +232,8 @@ class TestDemandGeneration:
         # AC_START: AC-WAVE2-S1-ADAPTER-001-T12
         demands = adapter._generate_demands(sample_orchestrator_spec, target_count=5)
         
-        # Check registry file created
-        registry_files = list(adapter.registry_path.glob("*.yaml"))
+        # Check registry file created (demands are stored in registry.demands_dir)
+        registry_files = list(adapter.registry.demands_dir.glob("*.yaml"))
         assert len(registry_files) > 0
         # AC_COMPLETE: AC-WAVE2-S1-ADAPTER-001-T12
 

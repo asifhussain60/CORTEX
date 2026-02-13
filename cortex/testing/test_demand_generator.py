@@ -364,6 +364,41 @@ class DemandRegistry:
             f"Registered {len(analysis_result.demands)} demands for {orchestrator_name}"
         )
         return file_path
+    
+    def save_demands(self, demands: List[TestDemand]) -> Path:
+        """
+        Save demands directly (simpler API for adapter usage).
+        
+        Args:
+            demands: List of TestDemand objects
+        
+        Returns:
+            Path to created YAML file
+        """
+        if not demands:
+            raise ValueError("Cannot save empty demands list")
+        
+        orchestrator_name = demands[0].orchestrator
+        file_path = self.demands_dir / f"{orchestrator_name.lower()}-demands.yaml"
+        
+        # Convert to YAML-friendly format
+        demands_data = {
+            "orchestrator": orchestrator_name,
+            "demands": [d.to_dict() for d in demands],
+            "summary": {
+                "total_demands": len(demands),
+                "total_test_code_lines": sum(d.estimated_test_lines for d in demands),
+                "coverage": (len([d for d in demands if d.is_golden_path]) / len(demands)) * 100,
+                "generated_at": demands[0].created_at,
+            },
+        }
+        
+        # Write to registry
+        file_path.write_text(yaml.dump(demands_data, default_flow_style=False))
+        self._cache[orchestrator_name] = demands
+        
+        logger.info(f"Saved {len(demands)} demands for {orchestrator_name}")
+        return file_path
 
     def get_demands(self, orchestrator_name: str) -> List[TestDemand]:
         """

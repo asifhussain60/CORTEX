@@ -38,6 +38,7 @@ from cortex.testing.test_demand_generator import (
     DemandCategory,
     DemandRegistry,
     TestDemand,
+    ValidationType,
 )
 from cortex.testing.test_composer import (
     ComposedTest,
@@ -295,7 +296,7 @@ class ScaffolderIntelligenceAdapter:
                 "title": f"Silent operation: {spec.name} creates YAML without console output",
                 "scenario": f"User invokes {spec.name}.execute() → YAML file created",
                 "expected_behavior": "YAML file exists, no console output, audit trail logged",
-                "validation_type": "file_system",
+                "validation_type": ValidationType.FILE_SYSTEM,
                 "validation_rules": {
                     "file_pattern": f"{spec.name.lower()}_*.yaml",
                     "audit_marker": f"AC_{spec.name.upper()}_EXECUTE",
@@ -305,7 +306,7 @@ class ScaffolderIntelligenceAdapter:
                 "title": f"Context synthesis: {spec.name} merges LENS + Git + Registry",
                 "scenario": f"{spec.name} loads context from 3 sources",
                 "expected_behavior": "Context dict has keys: lens_data, git_history, registry_entry",
-                "validation_type": "output_structure",
+                "validation_type": ValidationType.OUTPUT_STRUCTURE,
                 "validation_rules": {
                     "required_keys": ["lens_data", "git_history", "registry_entry"],
                 },
@@ -314,7 +315,7 @@ class ScaffolderIntelligenceAdapter:
                 "title": f"Gate enforcement: {spec.name} blocks on DoD failure",
                 "scenario": f"{spec.name} encounters failing DoD check",
                 "expected_behavior": "Execution stops, error returned, no partial state",
-                "validation_type": "execution_path",
+                "validation_type": ValidationType.EXECUTION_PATH,
                 "validation_rules": {
                     "expected_error": "DoD_CHECK_FAILED",
                     "no_partial_writes": True,
@@ -324,7 +325,7 @@ class ScaffolderIntelligenceAdapter:
                 "title": f"Template quality: {spec.name} response uses business language",
                 "scenario": f"{spec.name}.execute() returns formatted response",
                 "expected_behavior": "Response contains no code snippets, uses domain terms",
-                "validation_type": "output_structure",
+                "validation_type": ValidationType.OUTPUT_STRUCTURE,
                 "validation_rules": {
                     "no_code_markers": ["```", "def ", "class "],
                     "domain_terms_present": True,
@@ -334,7 +335,7 @@ class ScaffolderIntelligenceAdapter:
                 "title": f"Error recovery: {spec.name} handles missing dependencies",
                 "scenario": f"{spec.name}.execute() when dependency unavailable",
                 "expected_behavior": "Graceful failure, error logged, cleanup performed",
-                "validation_type": "audit_log",
+                "validation_type": ValidationType.AUDIT_LOG,
                 "validation_rules": {
                     "error_logged": True,
                     "cleanup_marker": f"AC_{spec.name.upper()}_CLEANUP",
@@ -344,7 +345,7 @@ class ScaffolderIntelligenceAdapter:
                 "title": f"Integration: {spec.name} publishes events to EventBus",
                 "scenario": f"{spec.name}.execute() completes successfully",
                 "expected_behavior": "Event {spec.name.upper()}_COMPLETE published",
-                "validation_type": "event_emission",
+                "validation_type": ValidationType.EVENT_EMISSION,
                 "validation_rules": {
                     "event_type": f"{spec.name.upper()}_COMPLETE",
                     "event_data_keys": ["orchestrator", "status", "duration"],
