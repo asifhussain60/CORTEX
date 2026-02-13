@@ -105,6 +105,27 @@ completed_waves:
       - "Unblocked WAVE-R (EventBus debugger)"
       - "Unblocked WAVE-S (Track 4-5 consolidation)"
       - "Foundation for orchestrator consolidation"
+  
+  - wave_id: "WAVE-R"
+    name: "EventBus-Driven Debugger (ENH-089)"
+    status: "🔵 IN PROGRESS (40% - Stage 1/5)"
+    started: "2026-02-13T03:15:00Z"
+    duration: "2 hours (Stage 1)"
+    phases: 1
+    tests: "24/69 passing"
+    
+    deliverables:
+      - "✅ DebuggerOrchestrator foundation (EventBus subscriptions)"
+      - "✅ Event handlers (TEST_FAILURE, REFACTOR_REGRESSION, GOVERNANCE_VIOLATION)"
+      - "✅ IOrchestrator compliance (6 abstract methods)"
+      - "⚪ MarkerInjectionEngine (Stage 2 pending)"
+      - "⚪ AutoCleanupManager (Stage 3 pending)"
+      - "⚪ Integration + MCP tools (Stages 4-5 pending)"
+    
+    impact:
+      - "Zero-friction debugging (5-10 min → 0 min setup)"
+      - "Auto-marker injection on test failures"
+      - "20% developer productivity gain projected"
 
 # ============================================================================
 # READY WAVES (3)
