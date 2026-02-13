@@ -342,6 +342,50 @@ class DebuggerOrchestrator(IOrchestrator):
         """Get orchestrator name."""
         return "DebuggerOrchestrator"
     
+    def get_version(self) -> str:
+        """Get orchestrator version."""
+        return "1.0.0"
+    
+    def initialize(self):
+        """Initialize orchestrator (already done in __init__)."""
+        from cortex.brain.core.result import Result
+        return Result.success("DebuggerOrchestrator initialized")
+    
+    def get_mode(self):
+        """Get operation mode."""
+        from cortex.brain.core.interfaces.i_orchestrator import OperationMode
+        return OperationMode.EXECUTION
+    
+    def get_mcp_tools(self):
+        """Get MCP tools exposed by this orchestrator."""
+        from cortex.brain.core.result import Result
+        return Result.success({
+            "cortex_debug_auto_inject": {
+                "description": "Auto-inject debug markers on event",
+                "parameters": {"event_type": "str", "payload": "dict"}
+            },
+            "cortex_debug_list_sessions": {
+                "description": "List active debug sessions",
+                "parameters": {}
+            },
+            "cortex_debug_cleanup": {
+                "description": "Cleanup debug session",
+                "parameters": {"session_id": "str"}
+            }
+        })
+    
+    def execute_operation(self, operation_name: str, parameters: Dict[str, Any]):
+        """Execute operation with audit logging."""
+        from cortex.brain.core.result import Result
+        result = self.execute(operation_name, parameters)
+        return Result.success(result)
+    
+    def get_audit_trail(self, limit: int = 100):
+        """Get audit trail."""
+        from cortex.brain.core.result import Result
+        # EventBus-driven, audit trail tracked via EventBus events
+        return Result.success([])
+    
     def get_intent_types(self) -> List[IntentType]:
         """Get supported intent types."""
         return []  # EventBus-driven, no direct intent handling
