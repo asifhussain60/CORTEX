@@ -1,53 +1,12 @@
-# CORTEX_DEBUG_START: session-test_failure-20260213-132601-581754
+# CORTEX_DEBUG_START: session-test_failure-20260213-133653-141691
 # Trigger: TEST_FAILURE
 # Context: TEST_FAILURE in unknown: 
-# Injected: 2026-02-13T13:26:01.581861
-# CORTEX_DEBUG_START: session-test_failure-20260213-131844-158697
-# Trigger: TEST_FAILURE
-# Context: TEST_FAILURE in unknown: 
-# Injected: 2026-02-13T13:18:44.158790
-# CORTEX_DEBUG_END: session-test_failure-20260213-132601-581754
-# CORTEX_DEBUG_START: session-test_failure-20260213-131844-158697
-# Trigger: TEST_FAILURE
-# Context: TEST_FAILURE in unknown: 
-# Injected: 2026-02-13T13:18:44.158790
-# CORTEX_DEBUG_START: session-test_failure-20260213-102651-761025
-# Trigger: TEST_FAILURE
-# Context: TEST_FAILURE in unknown: 
-# Injected: 2026-02-13T10:26:51.761133
-# CORTEX_DEBUG_END: session-test_failure-20260213-131844-158697
-# CORTEX_DEBUG_START: session-test_failure-20260213-102651-761025
-# Trigger: TEST_FAILURE
-# Context: TEST_FAILURE in unknown: 
-# Injected: 2026-02-13T10:26:51.761133
-# CORTEX_DEBUG_START: session-test_failure-20260213-101613-242289
-# Trigger: TEST_FAILURE
-# Context: TEST_FAILURE in unknown: 
-# Injected: 2026-02-13T10:16:13.242404
-# CORTEX_DEBUG_END: session-test_failure-20260213-102651-761025
-# CORTEX_DEBUG_START: session-test_failure-20260213-101613-242289
-# Trigger: TEST_FAILURE
-# Context: TEST_FAILURE in unknown: 
-# Injected: 2026-02-13T10:16:13.242404
-# CORTEX_DEBUG_START: session-test_failure-20260213-095921-016210
-# Trigger: TEST_FAILURE
-# Context: TEST_FAILURE in unknown: 
-# Injected: 2026-02-13T09:59:21.016310
-# CORTEX_DEBUG_END: session-test_failure-20260213-101613-242289
-# CORTEX_DEBUG_START: session-test_failure-20260213-095921-016210
-# Trigger: TEST_FAILURE
-# Context: TEST_FAILURE in unknown: 
-# Injected: 2026-02-13T09:59:21.016310
-# CORTEX_DEBUG_START: session-test_failure-20260213-085955-088215
-# Trigger: TEST_FAILURE
-# Context: TEST_FAILURE in unknown: 
-# Injected: 2026-02-13T08:59:55.088320
-# CORTEX_DEBUG_END: session-test_failure-20260213-095921-016210
-# CORTEX_DEBUG_START: session-test_failure-20260213-085955-088215
-# Trigger: TEST_FAILURE
-# Context: TEST_FAILURE in unknown: 
-# Injected: 2026-02-13T08:59:55.088320
-# CORTEX_DEBUG_END: session-test_failure-20260213-085955-088215
+# Injected: 2026-02-13T13:36:53.141764
+"""
+MCP Tool Base Classes and Data Models.
+
+Provides the foundation for all MCP tools with:
+# CORTEX_DEBUG_END: session-test_failure-20260213-133653-141691
 """
 MCP Tool Base Classes and Data Models.
 
