@@ -18,6 +18,12 @@ from cortex.orchestrators.intelligence.test_value_scorer import (
     TestValueScore,
     TestValueScorer,
 )
+from cortex.orchestrators.intelligence.blind_spot_detector import (
+    BlindSpot,
+    BlindSpotDetector,
+    BlindSpotType,
+    CoverageData,
+)
 
 __all__ = [
     # WAVE-2 S1: Test Value Scoring
@@ -26,4 +32,9 @@ __all__ = [
     "TestValueScore",
     "IssueSeverity",
     "ScenarioLikelihood",
+    # WAVE-2 S2: Blind Spot Detection
+    "BlindSpotDetector",
+    "BlindSpot",
+    "BlindSpotType",
+    "CoverageData",
 ]
