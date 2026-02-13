@@ -192,3 +192,9 @@ cortex-registry/_cortex-master/phases/
 cortex-registry/_cortex-master/waves/
 cortex-registry/_cortex-master/execution/
 cortex-registry/_cortex-master/meta/
+
+# Reports directory (generated session artifacts - CORE-002 compliant)
+# Contains audit reports, status updates, phase tracking, and session artifacts
+# These are generated during execution and should not be committed to git
+# Keep reports/ structure but ignore all content
+reports/

@@ -202,3 +202,105 @@
 ---
 
 **Usage:** Reference this document for every DALL-E prompt generation to ensure visual continuity across all 15 chapters.
+
+---
+
+## 🆕 NEW CHARACTERS (Chapters 15-18, Wave 7-11 Era)
+
+### 8 Enforcement Agents (Chapter 17)
+
+**Form:** Humanoid guardian figures, semi-abstract representation  
+**Visual Style:** Simplified silhouettes with LED chest indicators
+
+**Core Design:**
+- Black & white body outlines (clean geometric shapes)
+- Height: 6-8 feet tall (imposing but not threatening)
+- LED chest indicator (color highlight: green = pass, red = block, yellow = warn)
+- Stance: Standing guard around CORTEX brain diagram
+
+**Individual Agent Variations:**
+
+1. **GovernanceEnforcementAgent** — Shield symbol on chest, sturdy stance
+2. **SecurityCheckpointAgent** — Lock symbol, vigilant posture
+3. **ComplianceValidationAgent** — Checkmark symbol, precise gestures
+4. **FileNamingEnforcementAgent** — Nameplate symbol, detail-oriented
+5. **IncrementalExecutionAgent** — Progress bar symbol, measured stance
+6. **MarkdownSuppressionAgent** — Document with X symbol, firm denial pose
+7. **ArchitectureIntegrityAgent** — Building blocks symbol, structural stability
+8. **EnvironmentIntegrityAgent** — Gear symbol, foundation checking
+
+**Composition:** Often shown as circle of 8 figures surrounding codebase/CORTEX brain, LED indicators synchronized to show collective decision (all green = pass, one red = block)
+
+**Color Highlights:** LED chest indicators ONLY (green/red/yellow strategic use)
+
+---
+
+### MCP Nervous System (Chapter 16)
+
+**Visual Metaphor:** Neural pathways connecting VS Code to CORTEX tools  
+**Style:** Glowing circuit paths, stdio connections
+
+**Design Elements:**
+- Red glowing pathways (color highlight) showing JSON-RPC signals
+- Connecting lines between VS Code (left) and MCP tools (right)
+- Pylance-style architecture diagram (auto-started components)
+- Circuit board aesthetic meets biological neural network
+
+**Key Visual:** Split screen showing macOS vs Windows Python paths converging to same MCP output (cross-platform unity)
+
+**Color Highlights:** Red circuit paths ONLY
+
+---
+
+### Self-Healing Glow (Chapter 18)
+
+**Visual Metaphor:** Blue healing aura around CORTEX brain during autonomous recovery  
+**Style:** Soft blue glow (medical/healing aesthetic)
+
+**Design Elements:**
+- CORTEX brain diagram at center
+- Blue neural pathways (color highlight) showing repair activity
+- 6 holographic issue cards (MCP-ERR-001 through 006) floating around brain
+- Cards dissolving/healing as fixes applied
+- Nighttime setting (3 AM scene, developer asleep in background)
+
+**Color Highlights:** Blue healing glow ONLY (soft, medical, calming)
+
+**Mood:** Silent guardian healing itself, autonomy beyond creator
+
+---
+
+### Orchestrator Consolidation Visual (Chapter 15)
+
+**Visual Metaphor:** 27 smaller figures merging into 17 unified larger figures  
+**Style:** Abstract silhouettes, vortex effect
+
+**Design Elements:**
+- Swirling code fragments labeled "Deprecated"
+- 4 glowing unified orchestrator figures emerging from vortex
+- Small Copilot Bot watching transformation (LED eyes blue, awe)
+- Neural pruning metaphor (brain synapses disappearing but system stronger)
+
+**Color Highlights:** 
+- Copilot Bot LED eyes (blue) ONLY
+- Golden glow around unified orchestrators (epiphany color)
+
+---
+
+## 🎨 UPDATED Color Palette (Strategic Highlights)
+
+| Element | Color | When Used |
+|---------|-------|-----------|
+| Coffee mug | Warm brown/orange | Asif's constant companion |
+| Router LED | Red | Tension/urgency indicator |
+| Copilot Bot LEDs | Blue/Orange/Red/Green | Emotional state |
+| Miss G glow | Soft white/silver | Ethereal presence |
+| Golden accents | Gold | Epiphany moments, knowledge connections |
+| **NEW: Enforcement Agent LEDs** | **Green/Red/Yellow** | **Governance decisions** |
+| **NEW: MCP pathways** | **Red circuits** | **Nervous system signals** |
+| **NEW: Self-healing glow** | **Blue aura** | **Autonomous recovery** |
+| **NEW: Unified orchestrators** | **Golden emergence** | **Consolidation success** |
+
+---
+
+**Updated:** 2026-02-13 | **Version:** 2.0 | **Chapters Covered:** 00-18

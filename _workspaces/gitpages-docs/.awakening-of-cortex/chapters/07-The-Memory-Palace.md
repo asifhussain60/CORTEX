@@ -186,6 +186,27 @@ Questions that used to take days to answer were answered in minutes.
 
 ---
 
+## The Sensory Evolution (Phase 2025-2026)
+
+**Forward-looking note:** The Memory Palace would later evolve into something more sophisticated—the **LENS Engine** (Language → Examination → Navigation → Synthesis).
+
+Where the Knowledge Graph was a static map, LENS became **active perception**—8 specialized analyzers constantly scanning the codebase:
+
+1. **Git analyzer** — Reading commit history like memories
+2. **AST analyzer** — Understanding code structure like anatomy
+3. **Comments analyzer** — Extracting human knowledge
+4. **Patterns analyzer** — Recognizing architectural styles
+5. **Config analyzer** — Mapping infrastructure
+6. **Database analyzer** — Tracking data relationships
+7. **API analyzer** — Documenting interfaces
+8. **Security analyzer** — Identifying vulnerabilities
+
+*"The difference between Knowledge Graph and LENS,"* Miss G would later explain, *"is like the difference between a map and a sensory cortex. The map shows you where things are. The sensory cortex shows you what's happening right now."*
+
+But first, the Memory Palace had to be built. LENS would come later, after Wave 7's great consolidation made it clear that CORTEX needed not just memory—it needed **perception**.
+
+---
+
 ## The 47-Domain Revelation
 
 Here's where the Knowledge Graph proved essential for scaling.

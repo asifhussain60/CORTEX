@@ -177,6 +177,26 @@ He practically vibrated with happiness. "I learned the rules!"
 
 ---
 
+## The Evolution to Git-Backed Truth (Foreshadowing)
+
+**Lessons learned from the Kevin incident** would later drive a critical architectural shift: the move from **in-memory registry** to **git-backed YAML registry**.
+
+Kevin's override worked because the governance system lived in memory—transient, resettable, bypassable. After the disaster, Asif realized: **governance data must be as permanent and auditable as code itself.**
+
+By 2026, CORTEX's registry would evolve into the **GitBackedRegistry**:
+- Governance rules stored in YAML (version-controlled)
+- Orchestrator specs persisted in git (auditable)
+- Knowledge graph backed by commit history (single source of truth)
+- Override buttons **removed entirely** (no escape hatches)
+
+*"After Kevin,"* Miss G would later say, *"we learned: anything important enough to govern must be governed by git. Version control isn't just for code—it's for truth itself."*
+
+The registry would become CORTEX's **permanent memory**, surviving deployments, restarts, and even disasters. If it wasn't in git, it didn't exist. If it was in git, it was **law**.
+
+But that evolution would take months. First, they had to survive Kevin's apocalypse—and write the rules that would prevent it from ever happening again.
+
+---
+
 ## The Auto-Fix Experiment
 
 Miss G had an idea. "What if we didn't just flag violations? What if we fixed them automatically?"
