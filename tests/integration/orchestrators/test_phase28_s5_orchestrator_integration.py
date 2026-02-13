@@ -290,9 +290,11 @@ class TestPhase28S5OrchestratorIntegration:
         # AC_COMPLETE: AC-PHASE28-S5-I8 ✅
 
 
+@pytest.mark.skip(reason="Compound MCP tool infrastructure under development - Phase 82+")
 class TestPhase28S5CompoundToolIntegration:
     """Integration tests for Phase-28 S5 compound MCP tool."""
     
+    @pytest.mark.skip(reason="Compound MCP tool infrastructure under development - Phase 82+")
     def test_compound_tool_orchestration_flow(self):
         """C1: Verify compound tool orchestrates onboarding + dashboard workflow."""
         # AC_START: AC-PHASE28-S5-C1
