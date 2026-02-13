@@ -813,7 +813,7 @@ Fix infrastructure. No bypasses allowed.
 
 **CRITICAL: During silent autonomous execution, use ONLY this format:**
 
-**RENDERING RULE:** Each stage line MUST be on its own line. Do NOT concatenate.
+**COMPLETION FORMAT:** Use markdown table for stage results (tree characters `├─ └─` collapse in Copilot Chat).
 
 **SEPARATOR FORMAT:** Use `<hr>` HTML tag (prevents overflow in Copilot Chat).
 
@@ -824,19 +824,21 @@ Fix infrastructure. No bypasses allowed.
 
 `██████████` 100% Stage 4 Complete
 
-├─ ✅ S1: DebuggerOrchestrator (24 tests)
-├─ ✅ S2: MarkerInjectionEngine (17 tests)
-├─ ✅ S3: AutoCleanupManager (9 tests)
-├─ ✅ S4: Integration (8 tests) ← FIXED
-└─ ⚪ S5: MCP Tools (pending)
+| # | Status | Stage | Detail |
+|---|--------|-------|--------|
+| 1 | ✅ | DebuggerOrchestrator | 24 tests |
+| 2 | ✅ | MarkerInjectionEngine | 17 tests |
+| 3 | ✅ | AutoCleanupManager | 9 tests |
+| 4 | ✅ | Integration | 8 tests ← FIXED |
+| 5 | ⚪ | MCP Tools | pending |
 
-Tests: 58/69 | Coverage: 84%
-Fixed: Session ID timestamp collision (microseconds)
+**Tests:** 58/69 | **Coverage:** 84%
+**Fixed:** Session ID timestamp collision (microseconds)
 
 <hr>
 ```
 
-**VALIDATION:** Before output, verify each `├─` or `└─` line has newline after it (not concatenated on single line).
+**WHY TABLE FORMAT:** Tree characters (`├─ └─`) get concatenated into a single line in Copilot Chat. Markdown tables render reliably on every platform.
 
 **FORBIDDEN FORMATS during silent execution:**
 - ❌ Text paragraphs ("I'm now implementing...")
@@ -844,10 +846,10 @@ Fixed: Session ID timestamp collision (microseconds)
 - ❌ Detailed file change descriptions
 - ❌ Code snippets showing what changed
 - ❌ "Here's what I did" summaries
-- ❌ Concatenated stage tree lines (each stage MUST have newline)
+- ❌ Tree-drawing characters (`├─ └─`) — they collapse into one line
 
 **ALLOWED ONLY:**
-- ✅ ASCII progress bars with stage tree (each line separate)
+- ✅ Markdown tables for stage results
 - ✅ Test counts and coverage percentages
 - ✅ Commit hashes (inline in progress bar)
 - ✅ Error messages (if blocked)

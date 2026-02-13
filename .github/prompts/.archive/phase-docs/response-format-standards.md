@@ -25,7 +25,7 @@ Unified response format for **all CORTEX operations** across modes: PRE-FLIGHT, 
 | 🔢 **Numbered Actions** | Easy decision-making format |
 | ⚖️ **Adaptive Density** | Complexity matches request scope |
 | 🧠 **Intent-Adaptive Templates** | Template auto-selected by operation type (DIGEST/DESIGN/QUERY/IMPLEMENT) |
-| 📦 **Structured Deliverables** | Metrics tables, stage trees, concern-resolution matrices |
+| 📦 **Structured Deliverables** | Metrics tables, markdown tables for stage results |
 
 
 ---
@@ -37,7 +37,7 @@ Unified response format for **all CORTEX operations** across modes: PRE-FLIGHT, 
 
 ### Progress Bar Format (ONLY OUTPUT)
 
-**CRITICAL RENDERING RULE:** Each stage tree line MUST be on its own line with newline character. Do NOT concatenate.
+**CRITICAL:** Use markdown tables for stage results. Tree characters (`├─ └─`) collapse into one line in Copilot Chat.
 
 **SEPARATOR FORMAT:** Use `<hr>` HTML tag to prevent overflow in Copilot Chat (box-drawing characters render too wide).
 
@@ -46,14 +46,16 @@ Unified response format for **all CORTEX operations** across modes: PRE-FLIGHT, 
 
 📋 **{Phase Name}**
 
-[████████░░] 80% {Current Stage}
+`[████████░░]` 80% {Current Stage}
 
-├─ ✅ S1: {name} ({n} tests)
-├─ ✅ S2: {name} ({n} tests)
-├─ 🔵 S3: {name} (in progress)
-└─ ⚪ S4: {name} (pending)
+| # | Status | Stage | Detail |
+|---|--------|-------|--------|
+| 1 | ✅ | {name} | {n} tests |
+| 2 | ✅ | {name} | {n} tests |
+| 3 | 🔵 | {name} | in progress |
+| 4 | ⚪ | {name} | pending |
 
-Tests: {passed}/{total} | Coverage: {pct}%
+**Tests:** {passed}/{total} | **Coverage:** {pct}%
 
 <hr>
 ```
@@ -61,10 +63,9 @@ Tests: {passed}/{total} | Coverage: {pct}%
 **Rendering Validation:**
 - ✅ CORRECT: Use `<hr>` for box separators
 - ❌ WRONG: `────────────────────────────────────────` (overflows in UI)
-- ✅ CORRECT: Each `├─` or `└─` line on separate line
-- ❌ WRONG: `├─ ✅ S1: Name (n tests) ├─ ✅ S2: Name (n tests)` (concatenated)
+- ✅ CORRECT: Markdown table for stage results
+- ❌ WRONG: `├─ ✅ S1: Name ├─ ✅ S2: Name` (tree chars collapse into one line)
 - Stage names: Keep <30 chars to prevent overflow
-- Total line length: <70 chars per stage line
 
 ### Completion Summary (FINAL OUTPUT)
 
@@ -367,7 +368,7 @@ Commits - abc123 → def456       (wrong separator)
 | **No status emoji** | `Track 1: Name` | `Track 1: Name ✅` |
 | **Wrong spacing** | 0 or 2+ lines | 1 blank line (per rules) |
 | **Inline git info** | `Commits: abc Pushed: origin` | Separate lines with labels |
-| **Concatenated stages** | `├─ ✅ S1 ├─ ✅ S2` | Each `├─` on own line |
+| **Concatenated stages** | `├─ ✅ S1 ├─ ✅ S2` | Use markdown table instead |
 
 ### Validation Checklist
 
@@ -382,8 +383,8 @@ Before marking response complete, verify:
 - [ ] Tables use proper markdown format
 - [ ] Bullet lists use `-` consistently
 - [ ] No text descriptions during silent execution
-- [ ] Each stage tree line on its own line
-- [ ] Stage names <30 chars, line length <70 chars
+- [ ] Stage results use markdown table (NOT `├─ └─` tree characters)
+- [ ] Stage names <30 chars
 
 ### Cross-Reference
 

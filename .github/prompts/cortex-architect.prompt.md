@@ -53,15 +53,17 @@
 
 `██████████` 100% All Stages Complete
 
-├─ ✅ S1: DebuggerOrchestrator (24 tests)
-├─ ✅ S2: MarkerInjectionEngine (17 tests)
-├─ ✅ S3: AutoCleanupManager (9 tests)
-├─ ✅ S4: Integration (8 tests)
-└─ ✅ S5: MCP Tools (10 tests)
+| # | Status | Stage | Detail |
+|---|--------|-------|--------|
+| 1 | ✅ | DebuggerOrchestrator | 24 tests |
+| 2 | ✅ | MarkerInjectionEngine | 17 tests |
+| 3 | ✅ | AutoCleanupManager | 9 tests |
+| 4 | ✅ | Integration | 8 tests |
+| 5 | ✅ | MCP Tools | 10 tests |
 
-Tests: 68/69 | Coverage: 99%
-Commits: 3 (all pushed to remote)
-ENH-089: ✅ COMPLETE
+**Tests:** 68/69 | **Coverage:** 99%
+**Commits:** 3 (all pushed to remote)
+**ENH-089:** ✅ COMPLETE
 
 <hr>
 ```
@@ -73,17 +75,17 @@ ENH-089: ✅ COMPLETE
 - All progress/completion sections use `<hr>` separator, NOT box-drawing characters
 - Track sections use `###` headers, never `##`
 - Field labels use `**Label:**` format
-- **CRITICAL:** Each stage tree line MUST be on its own line (newline after each `├─` or `└─` line)
-  - ✅ CORRECT: Each stage on separate line
+- **CRITICAL:** Use markdown tables for stage results — tree characters (`├─ └─`) collapse into one line in Copilot Chat
+  - ✅ CORRECT: Markdown table with | # | Status | Stage | Detail | columns
   - ❌ WRONG: `├─ ✅ S1: Name (n tests) ├─ ✅ S2: Name (n tests)` (concatenated)
 
 **For complete formatting rules, see SSOT:** `.github/prompts/.archive/phase-docs/response-format-standards.md` § Completion Response Template
 
 ### RENDERING ENFORCEMENT (CRITICAL)
 
-**PROBLEM:** Long separators overflow in Copilot Chat UI (box-drawing characters render wider than ASCII).
+**PROBLEM:** Tree-drawing characters (`├─ └─`) collapse into a single concatenated line in Copilot Chat UI.
 
-**SOLUTION:** Use HTML `<hr>` tag for all progress/completion boxes.
+**SOLUTION:** Use markdown tables for all stage/step results. Use HTML `<hr>` tag for all separators.
 
 **MANDATORY RENDERING RULES:**
 
@@ -101,28 +103,30 @@ ENH-089: ✅ COMPLETE
    - Prevents visual overflow in Copilot Chat
    - Renders as thin horizontal line
 
-2. **Stage Tree Lines - Each Stage on Separate Line:**
+2. **Stage Results - Use Markdown Tables (NOT tree characters):**
+   ```markdown
+   | # | Status | Stage | Detail |
+   |---|--------|-------|--------|
+   | 1 | ✅ | DebuggerOrchestrator | 24 tests |
+   | 2 | ✅ | MarkerInjectionEngine | 17 tests |
+   | 3 | ⚪ | MCP Tools | pending |
    ```
-   ├─ ✅ S1: Name (n tests)
-   ├─ ✅ S2: Name (n tests)
-   └─ ✅ S3: Name (n tests)
-   ```
-   - MUST have newline character after each line
-   - NEVER write as: `├─ ✅ S1: Name (n tests) ├─ ✅ S2: Name (n tests)`
-   - Keep stage names <30 chars to prevent overflow
+   - MUST use markdown table format
+   - NEVER use `├─` or `└─` tree characters (they collapse)
+   - Keep stage names <30 chars
 
 3. **Progress Bar - Inline Code Block:**
    - MUST use inline code: `` `██████████` 100% ``
    - Prevents markdown from parsing as link
 
 4. **Line Length Limits:**
-   - Stage tree lines: <70 chars total
+   - Table cells: <30 chars
    - Title lines: <60 chars
    - If stage name too long, abbreviate
 
 **VALIDATION BEFORE OUTPUT:**
 - [ ] All box separators use `<hr>` (not `────` or `----`)
-- [ ] Each `├─` or `└─` line ends with newline
+- [ ] Stage results use markdown table (not `├─` tree characters)
 - [ ] Progress bar wrapped in `` ` ` ``
 - [ ] No stage name >30 chars
 - [ ] No line >100 chars total
@@ -136,16 +140,16 @@ ENH-089: ✅ COMPLETE
 - ❌ Code snippets showing implementation
 - ❌ File-by-file change descriptions
 - ❌ **Additional headers mid-response** (e.g., "## 🏛️ CORTEX Architect STAGE 1 COMPLETE")
-- ❌ **Concatenated stage tree lines** (must have newline after each stage)
+- ❌ **Tree-drawing characters** (`├─ └─`) — they collapse into one line
 
 **ALLOWED ONLY:**
 - ✅ Single header at top of response
-- ✅ ASCII progress bars with stage tree
+- ✅ Markdown tables for stage results
+- ✅ ASCII progress bars (`██████████`)
 - ✅ Test counts and coverage percentages
 - ✅ Commit hashes (inline in progress bar)
 - ✅ Brief status labels (COMPLETE/BLOCKED/IN PROGRESS)
 - ✅ Error messages (if blocked)
-- ✅ Box format (━━━) for completion sections
 
 ### CRITICAL: Challenge Gate + Silent Mode Interaction (MANDATORY)
 
