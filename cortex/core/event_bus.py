@@ -1,17 +1,34 @@
 """Event bus for feature registry notifications and orchestrator communication."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Dict, Optional
 from datetime import datetime
 from pathlib import Path
 import json
+import uuid
 
 
 @dataclass
 class Event:
-    """Event data structure for EventBus communication."""
+    """
+    Event data structure for EventBus communication with debugging support.
+    
+    Attributes:
+        type: Event type identifier (e.g., 'feature.enabled', 'test.failed')
+        payload: Event data dictionary
+        correlation_id: Request correlation ID for distributed tracing
+        event_id: Unique event identifier for deduplication
+        source: Originating component (e.g., 'TDDOrchestrator', 'EnforcementAgent')
+        priority: Event priority (0=critical, 1=high, 2=normal, 3=low)
+        timestamp: Event creation timestamp
+    """
     type: str
     payload: Dict[str, Any]
+    correlation_id: Optional[str] = None
+    event_id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    source: Optional[str] = None
+    priority: int = 2  # 0=critical, 1=high, 2=normal, 3=low
+    timestamp: datetime = field(default_factory=datetime.now)
 
 
 class EventBus:
