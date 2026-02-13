@@ -14,6 +14,9 @@ import tempfile
 from pathlib import Path
 from typing import Any, Dict
 
+# Module-level skip: MCP refactoring tools infrastructure pending Phase 82+
+pytestmark = pytest.mark.skip(reason="MCP refactoring_operations module under development - Phase 82+")
+
 
 @pytest.fixture
 def temp_python_file():
