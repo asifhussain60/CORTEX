@@ -243,6 +243,54 @@ class OrchestratorScaffolder:
             self._scaffold_orchestrator(template, config, result)
 
         if config.scaffold_type in (ScaffoldType.TEST, ScaffoldType.FULL) and config.include_tests:
+            # PHASE-51-S4: Integrate intelligent test generation (Layer 3)
+            try:
+                from cortex.testing.test_demand_generator import InteractionOrchestratorAnalyzer, DemandRegistry
+                from cortex.testing.test_composer import TestCodeComposer
+                from cortex.testing.test_quality_validator import InteractionOrchestratorQualityAnalyzer
+                
+                # Generate demands from template
+                analyzer = InteractionOrchestratorAnalyzer()
+                orchestrator_spec = {
+                    'name': template.name,
+                    'domain': template.domain,
+                    'purpose': template.purpose or '',
+                    'stages': self._get_stages(template),
+                }
+                demands_result = analyzer.analyze(orchestrator_spec)
+                
+                # Register demands to YAML
+                registry = DemandRegistry()
+                registry.register(demands_result.demands)
+                
+                # Compose intelligent tests from demands
+                composer = TestCodeComposer()
+                quality_analyzer = InteractionOrchestratorQualityAnalyzer()
+                
+                composed_tests = []
+                for demand in demands_result.demands:
+                    composed = composer.compose(demand)
+                    report = quality_analyzer.analyze_test(composed, demand)
+                    if report.passes_quality_gate:
+                        composed_tests.append(composed)
+                
+                # Store composed tests in result for later use
+                result.metadata['intelligent_tests_generated'] = len(composed_tests)
+                result.metadata['composed_tests'] = [
+                    {
+                        'name': t.name,
+                        'demand_id': t.demand_id,
+                        'category': t.demand_id,
+                    }
+                    for t in composed_tests
+                ]
+                
+            except ImportError:
+                # Intelligence layer not available, fall back to legacy test scaffolding
+                result.add_warning("Intelligence layer not available, using legacy test scaffolding")
+            except Exception as e:
+                result.add_warning(f"Intelligent test generation failed ({str(e)}), falling back to legacy tests")
+            
             self._scaffold_tests(template, config, result)
 
         if config.scaffold_type in (ScaffoldType.CONFIG, ScaffoldType.FULL) and config.include_config:
