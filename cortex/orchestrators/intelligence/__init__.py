@@ -24,6 +24,12 @@ from cortex.orchestrators.intelligence.blind_spot_detector import (
     BlindSpotType,
     CoverageData,
 )
+from cortex.orchestrators.intelligence.edge_case_generator import (
+    EdgeCase,
+    EdgeCaseGenerator,
+    EdgeCaseType,
+    ParameterInfo,
+)
 
 __all__ = [
     # WAVE-2 S1: Test Value Scoring
@@ -37,4 +43,9 @@ __all__ = [
     "BlindSpot",
     "BlindSpotType",
     "CoverageData",
+    # WAVE-2 S3: Edge Case Generation
+    "EdgeCaseGenerator",
+    "EdgeCase",
+    "EdgeCaseType",
+    "ParameterInfo",
 ]
