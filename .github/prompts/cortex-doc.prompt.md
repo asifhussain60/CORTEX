@@ -2172,21 +2172,20 @@ const lifecycleData = {
 
 ---
 
-## 🔧 Generation Workflow
+## 🔧 Documentation Workflow (INLINE ONLY)
 
-1. **Create folder structure** — All directories first
-2. **Generate index.md** — Navigation hub
-3. **Generate overviews** — Each section's overview.md
-4. **Generate detail docs** — Individual topic documents
-5. **Generate diagrams** — Visual architecture docs
-6. **Cross-reference audit** — Verify all links work
-7. **Final review** — Quality checklist
+**CORE-002 ENFORCEMENT:** All documentation responses MUST be inline in chat only.
+NO markdown file generation allowed. References should be via semantic_search.
+
+**Prohibited:** `cat > index.md`, `create_file` tool, terminal generation, markdown reports
+
+**Approved:** Inline documentation, semantic_search references, code comments, documentation strings
 
 ---
 
-## 📁 Output Location
+## 📁 Context Location
 
-All documentation generated to:
+All documentation context available via semantic_search:
 ```
 _workspaces/cortex-architecture/
 ```

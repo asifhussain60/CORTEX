@@ -86,7 +86,8 @@ pytest tests/unit/orchestrators/test_fix_verification.py::test_registry_persiste
    → If non-critical fix reverted: WARN ONLY
 
 4. REPORT (Status)
-   → Generate markdown status report
+   → Display inline status report in chat
+   ⚠️ CORE-002: NO markdown status files allowed
 ```
 
 ---
