@@ -9,13 +9,13 @@
 
 | Wave | Name | Duration | Token | Tests | Commits | Scope | Priority |
 |------|------|----------|-------|-------|---------|-------|----------|
-| **WAVE-1** | **Cleanup + Test Intelligence Foundation** | 5h | 200k | 90 | 5 | WAVE-P + Test Layers 1-3 | **P0** |
-| **WAVE-2** | **Scaffolder Integration + Scale** | 6h | 250k | 310+ | 7 | Intelligent test generation (all 28 orchestrators) | **P0** |
+| **WAVE-1** | **Cleanup + Test Intelligence Foundation** | 5h | 200k | 90 | 5 | WAVE-P + Test Layers 1-3 + Audit Trail | **P0** |
+| **WAVE-2** | **Scaffolder Integration + Scale + Intelligence Audit** | 6.75h | 275k | 340+ | 8 | Intelligent test generation + duplicate prevention + audit logging | **P0** |
 | **WAVE-3** | **ENH-088/089 + Multi-Cycle TDD** | 7h | 300k | 75 | 6 | Multi-cycle TDD + EventBus debugger | **P1** |
 | **WAVE-4** | **ENH-087 Consolidation + Performance** | 6h | 250k | 85 | 5 | Orchestrator consolidation tracks 2-4 | **P1** |
 | **WAVE-5** | **RGR + Final Validation + Production Ready** | 5h | 200k | varies | 5 | Final cleanup, enforcement, documentation | **P1** |
 
-**TOTAL:** 29 hours, <1.2M tokens, 560+ tests, 28 commits, **PRODUCTION READY**
+**TOTAL:** 29.75 hours, <1.3M tokens, 590+ tests, 29 commits, **PRODUCTION READY + AUDIT VERIFIED**
 
 ---
 
@@ -118,7 +118,7 @@ Total: 5 hours ✅
 
 **Goal:** Intelligent test generation auto-wired into scaffolding pipeline
 
-**Stage 1: Scaffolder Integration [2h, 30 tests]**
+**Stage 1: Scaffolder Integration [2.75h, 50 tests]**
 
 ```
 Deliverables:
@@ -126,19 +126,121 @@ Deliverables:
 ├─ Call Demand Generator with orchestrator spec
 ├─ Integrate Test Composer output
 ├─ Add Quality Validator gate (70% threshold)
+├─ PRE-SCAFFOLDING DUPLICATE CHECK (ENHANCED)
+├─ HOLISTIC REPLACEMENT MODE (ENHANCED)
+├─ COMPREHENSIVE AUDIT TRAIL LOGGING (ENHANCED) ← NEW
 └─ Backward compatibility verified
+
+Audit Intelligence Logging:
+├─ Registry Query Logs (who, when, what found)
+├─ Duplicate Detection Logs (collision type, location, decision)
+├─ Quality Score Logs (test ID, score breakdown, gate verdict)
+├─ Scaffolder Decision Logs (upgrade/replace/cancel + rationale)
+├─ All logs → governance.db with AC markers
+└─ Queryable via audit MCP tool
 
 Tests:
 ├─ Demand generator hook integration (8 tests)
 ├─ Test composer output substitution (12 tests)
 ├─ Quality validator gate enforcement (6 tests)
+├─ Pre-scaffolding registry query (8 tests) ← NEW
+├─ Holistic replacement workflow (12 tests) ← NEW
+├─ Audit trail logging verification (4 tests) ← NEW
 ├─ E2E scaffolder test (4 tests)
 
 Commits:
 ├─ AC-WAVE-2-S1-DEMAND-HOOK
 ├─ AC-WAVE-2-S1-COMPOSER-INTEGRATION
 ├─ AC-WAVE-2-S1-QUALITY-GATE
+├─ AC-WAVE-2-S1-DUPLICATE-PREVENTION ← NEW (DIGEST ENHANCEMENT)
+├─ AC-WAVE-2-S1-AUDIT-TRAIL ← NEW (VERIFIED LOGGING)
 └─ AC-WAVE-2-S1-E2E-TEST
+```
+
+**DIGEST ENHANCEMENT: Registry-First Duplicate Prevention**
+
+New Sub-Stage 1A: Pre-Scaffolding Check [30m, 8 tests]
+```
+Before scaffolding:
+├─ Query wiring registry for orchestrator name
+├─ Check existing implementations (by name + capability)
+├─ If exists → Display upgrade workflow options
+├─ If doesn't exist → Continue scaffolding
+├─ Log decision for audit trail (CORE-035 prevention)
+└─ Audit logging: Record all queries + results
+
+Audit Log Schema:
+{
+  "timestamp": "ISO-8601",
+  "operation": "pre_scaffolding_check",
+  "orchestrator_name": "string",
+  "registry_query_result": {
+    "found": boolean,
+    "location": "path or null",
+    "capability_overlap": "percentage",
+    "name_collision": boolean
+  },
+  "decision": "upgrade|replace|create_new|cancel",
+  "decision_rationale": "string",
+  "user_override": boolean,
+  "ac_marker": "AC-WAVE-2-S1A-{sequence}"
+}
+
+Tests:
+├─ Registry query returns existing orchestrators (2 tests)
+├─ Name collision detection (2 tests)
+├─ Capability collision detection (2 tests)
+├─ Upgrade workflow display (2 tests)
+└─ All tests verify audit logs written correctly
+```
+
+New Sub-Stage 1B: Holistic Replacement Mode [45m, 12 tests]
+```
+If duplicate detected:
+├─ Show current implementation location
+├─ Offer: [Replace] / [Create Version] / [Cancel]
+├─ If Replace chosen:
+│  ├─ Backup old implementation to _archives/
+│  ├─ Scaffold new implementation in same location
+│  ├─ Migrate existing tests
+│  ├─ Update registry with new version
+│  └─ Log holistic replacement event
+├─ If Create Version chosen:
+│  ├─ Block with CORE-035 violation warning
+│  └─ Log violation attempt with rationale
+└─ If Cancel → Exit gracefully + log cancellation
+
+Audit Log Schema:
+{
+  "timestamp": "ISO-8601",
+  "operation": "holistic_replacement",
+  "orchestrator_name": "string",
+  "duplicate_details": {
+    "old_location": "path",
+    "old_version": "string",
+    "collision_type": "name|capability|both"
+  },
+  "user_choice": "replace|version|cancel",
+  "actions_taken": [
+    {"action": "backup", "path": "string", "success": boolean},
+    {"action": "scaffold", "path": "string", "success": boolean},
+    {"action": "migrate_tests", "count": number, "success": boolean}
+  ],
+  "registry_updated": boolean,
+  "core_035_violation": boolean,
+  "ac_marker": "AC-WAVE-2-S1B-{sequence}"
+}
+
+Tests:
+├─ Upgrade workflow selection (3 tests)
+├─ Backup old implementation (2 tests)
+├─ Scaffold in-place replacement (3 tests)
+├─ Test migration (2 tests)
+├─ CORE-035 blocking on version creation (2 tests)
+└─ All tests verify audit logs + AC markers written
+
+Authority: DIGEST-2026-02-13 (chat01.md analysis)
+Purpose: Prevent duplicate MCP-style issues proactively
 ```
 
 **Stage 2: Core Orchestrator Generation [1.5h, 80 tests]**
@@ -156,7 +258,37 @@ Orchestrators (8):
 
 Total: 80 tests generated + validated
 
-Commit: AC-WAVE-2-S2-CORE-BATCH
+Audit Intelligence Logging (Per Orchestrator):
+{
+  "timestamp": "ISO-8601",
+  "operation": "intelligent_test_generation",
+  "orchestrator_name": "string",
+  "stage": "demand|compose|validate",
+  "demand_analysis": {
+    "spec_source": "wiring/specifications/file.yaml",
+    "capabilities_identified": number,
+    "edge_cases_detected": number,
+    "demand_yaml_generated": boolean
+  },
+  "composition": {
+    "tests_composed": number,
+    "golden_path_limited": boolean,
+    "realistic_data_injected": boolean,
+    "mocks_minimized": boolean
+  },
+  "quality_validation": {
+    "coverage_score": float,
+    "realism_score": float,
+    "maintainability_score": float,
+    "brittleness_score": float,
+    "composite_score": float,
+    "gate_passed": boolean,
+    "brittleness_patterns_detected": []
+  },
+  "ac_marker": "AC-WAVE-2-S2-CORE-{orchestrator}"
+}
+
+Commit: AC-WAVE-2-S2-CORE-BATCH (includes audit logs for all 8)
 ```
 
 **Stage 3: Domain Orchestrator Generation [1.5h, 60 tests]**
@@ -172,7 +304,13 @@ Orchestrators (6):
 
 Total: 60 tests generated + validated
 
-Commit: AC-WAVE-2-S3-DOMAIN-BATCH
+Audit Intelligence Logging:
+├─ Same schema as Stage 2 (demand → compose → validate)
+├─ Track domain-specific patterns (refactoring, planning, conversation)
+├─ Quality scores per orchestrator
+└─ AC markers: AC-WAVE-2-S3-DOMAIN-{orchestrator}
+
+Commit: AC-WAVE-2-S3-DOMAIN-BATCH (includes audit logs for all 6)
 ```
 
 **Stage 4: Support Orchestrator Generation [1h, 140 tests]**
@@ -196,16 +334,48 @@ Orchestrators (14):
 
 Total: 140 tests generated + validated
 
-Commit: AC-WAVE-2-S4-SUPPORT-BATCH
+Audit Intelligence Logging:
+├─ Same schema as Stages 2-3 (demand → compose → validate)
+├─ Track support patterns (onboarding, recovery, monitoring)
+├─ Quality scores per orchestrator
+└─ AC markers: AC-WAVE-2-S4-SUPPORT-{orchestrator}
+
+Intelligence Metrics Summary (All Stages):
+{
+  "total_orchestrators": 28,
+  "total_tests_generated": 280,
+  "avg_quality_score": float,
+  "gate_pass_rate": "percentage",
+  "brittleness_patterns_found": number,
+  "registry_collisions_detected": number,
+  "holistic_replacements_performed": number,
+  "core_035_violations_prevented": number
+}
+
+Commit: AC-WAVE-2-S4-SUPPORT-BATCH (includes audit logs for all 14)
 ```
 
 **Success Criteria:**
-- ✅ 30 integration tests for scaffolder (all passing)
+- ✅ 54 integration tests for scaffolder (all passing, includes 4 audit tests)
 - ✅ 280 intelligent tests generated (10 per orchestrator)
 - ✅ All 280 tests pass Quality Validator (≥70%)
 - ✅ Zero brittleness warnings
-- ✅ 4 commits (scaffolder + 3 batches)
+- ✅ Comprehensive audit trail logged (governance.db)
+- ✅ All intelligence decisions queryable via MCP tool
+- ✅ Pre-scaffolding duplicate check prevents CORE-035 violations
+- ✅ Holistic replacement mode validated with backup/migrate/update workflow
+- ✅ 6 commits (scaffolder + audit trail + 3 batches)
 - ✅ Ready for Wave 3 (RGR + Multi-Cycle TDD)
+
+Audit Verification Checklist:
+- [ ] All registry queries logged with timestamp + result
+- [ ] All duplicate detections logged with collision details
+- [ ] All quality scores logged per test generated
+- [ ] All scaffolder decisions logged with rationale
+- [ ] All holistic replacements logged with actions taken
+- [ ] All CORE-035 violation attempts logged
+- [ ] AC markers present on all audit entries
+- [ ] Audit logs queryable via `cortex_audit` MCP tool
 
 **Execution:**
 ```bash
