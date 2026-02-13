@@ -18,13 +18,18 @@ priority: "P1-CRITICAL"
 roi_score: 9.5  # Highest ROI - confidence in production quality
 
 metadata:
-  total_tracks: 5
-  estimated_effort: "23-32 days"
-  parallelizable: "partial"  # Track 1-3 parallel, Track 4 depends on 1-3, Track 5 final
+  total_tracks: 6
+  estimated_effort: "27-38 days"
+  parallelizable: "partial"  # Track 1-3 parallel, Track 4 depends on 1-3, Track 5.5 depends on T1, Track 5 final
   blocking_dependencies: []  # No blockers - can start immediately
-  value_delivery: "Real production confidence + 40% test suite reduction + Golden Path coverage + Audit Truth Layer"
+  value_delivery: "Real production confidence + 40% test suite reduction + Golden Path coverage + Audit Truth Layer + RGR Intelligence Loop"
   execution_timing: "IMMEDIATE (foundational to all other work)"
-  enhancement_summary: "Added Audit Truth Layer - tests verify against SQLite audit.db for hard evidence"
+  enhancement_summary: |
+    Added Audit Truth Layer - tests verify against SQLite audit.db for hard evidence.
+    Added RGR Intelligence Engine (Track 5.5) - iterative ScanStrategy-driven loop 
+    that re-scans after every fix cycle until convergence (zero violations).
+    Integrates with ENH-088 execute_multi_cycle, ENH-100 FeedbackHub for visual progress.
+  rgr_intelligence_version: "1.0"
   
 objectives:
   primary: "Replace 15,016 quantity-rich tests with high-value, production-proving tests"
@@ -277,7 +282,110 @@ tracks:
           2. any stage completion entry missing
           3. pipeline_completed timestamp before last stage
         
-    tests_created: 7
+    # ========================================================================
+    # T1-D8 through T1-D10: RGR CROSS-ORCHESTRATOR PRODUCTION SCENARIOS
+    # ========================================================================
+
+      - id: "T1-D8"
+        name: "RGR Cross-Orchestrator Chain Truth Test"
+        file: "tests/golden/test_rgr_cross_orchestrator_truth.py"
+        description: |
+          Validates the full orchestrator chain under RGR loop conditions.
+          Injects 5 governance violations across 3 orchestrators (TDD, Enforcement, Master).
+          Runs RGR loop. Each RED cycle must discover remaining violations.
+          GREEN cycle fixes one. Loop continues until zero remain.
+          VERIFY: audit log has one entry per fix cycle per orchestrator.
+        production_scenario: |
+          SCENARIO: Developer submits PR touching auth module.
+          - TDDOrchestrator finds 2 missing test files
+          - EnforcementOrchestrator finds 1 CORE-008 violation (impl before test)
+          - MasterOrchestrator finds 2 stale refs to deprecated module
+          - RGR Cycle 1: Fix missing tests → re-scan → still 3 violations
+          - RGR Cycle 2: Fix CORE-008 → re-scan → still 2 violations
+          - RGR Cycle 3: Fix stale refs → re-scan → 0 violations → EXIT
+        assertions:
+          - "exactly 3 RGR cycles executed (convergence in 3)"
+          - "each cycle audit log shows decreasing violation count"
+          - "final audit entry has violation_count=0"
+          - "all 3 orchestrators invoked per scan cycle"
+        audit_requirements:
+          - "audit log has rgr_cycle_start entries: exactly 3"
+          - "audit log has rgr_scan_result entries with monotonically decreasing issue_count"
+          - "audit log has rgr_fix_applied entries: exactly 5 (one per violation)"
+          - "audit log has rgr_convergence_reached entry with final_cycle=3"
+        mocks_allowed: 0
+        red_phase_criteria: |
+          Test MUST FAIL if:
+          1. RGR loop exits after cycle 1 (premature termination)
+          2. audit log missing any rgr_cycle_start entry
+          3. violation count not monotonically decreasing
+          4. convergence entry missing or final_cycle != expected
+
+      - id: "T1-D9"
+        name: "RGR Non-Convergence Safety Gate Truth Test"
+        file: "tests/golden/test_rgr_non_convergence_truth.py"
+        description: |
+          Validates RGR loop safety when fixes introduce new issues (non-convergent).
+          Injects circular dependency: fixing issue A creates issue B, fixing B recreates A.
+          RGR loop must detect non-convergence and halt with diagnostic report.
+          VERIFY: audit log records cycle-over-cycle issue fingerprints.
+        production_scenario: |
+          SCENARIO: Refactoring creates oscillating import cycle.
+          - Cycle 1: Fix circular import in module_a → creates new import in module_b
+          - Cycle 2: Fix module_b import → re-introduces module_a import
+          - Cycle 3: Same pattern detected (fingerprint match) → HALT
+          - Report: "Non-convergent: issues {A,B} oscillating since cycle 1"
+        assertions:
+          - "RGR loop halts at max_cycles or convergence detection"
+          - "halt reason is NON_CONVERGENT not MAX_CYCLES_REACHED"
+          - "diagnostic includes issue fingerprints across cycles"
+          - "audit log records identical fingerprints in consecutive cycles"
+        audit_requirements:
+          - "audit log has rgr_convergence_check entries per cycle"
+          - "at least 2 entries show matching issue_fingerprint sets"
+          - "audit log has rgr_non_convergent_halt entry"
+          - "halt entry includes oscillating_issues list"
+        mocks_allowed: 0
+        red_phase_criteria: |
+          Test MUST FAIL if:
+          1. RGR loop runs to max_cycles without detecting oscillation
+          2. halt reason is MAX_CYCLES_REACHED instead of NON_CONVERGENT
+          3. audit log missing fingerprint comparison entries
+
+      - id: "T1-D10"
+        name: "RGR Multi-Scope Depth Scan Truth Test"
+        file: "tests/golden/test_rgr_depth_scan_truth.py"
+        description: |
+          Validates that each RGR RED phase deepens its scan across layers.
+          Cycle 1: Surface scan (file-level issues).
+          Cycle 2: Structural scan (cross-file dependency issues).
+          Cycle 3: Semantic scan (behavioral inconsistencies).
+          Each cycle's scan depth must exceed the previous.
+          VERIFY: audit log records scan_depth per cycle.
+        production_scenario: |
+          SCENARIO: Cleaning up stale references after orchestrator rename.
+          - Cycle 1 (surface): Finds 8 direct import references → fixes all 8
+          - Cycle 2 (structural): Finds 3 registry entries + 2 wiring refs → fixes 5
+          - Cycle 3 (semantic): Finds 1 docstring ref + 1 test fixture name → fixes 2
+          - Cycle 4: Re-scan at all depths → 0 found → EXIT
+        assertions:
+          - "4 RGR cycles executed"
+          - "scan_depth increases: SURFACE → STRUCTURAL → SEMANTIC → ALL"
+          - "total fixes = 15 across all cycles"
+          - "final all-depth scan finds 0 issues"
+        audit_requirements:
+          - "audit log has rgr_scan entries with depth field"
+          - "depth values are SURFACE, STRUCTURAL, SEMANTIC, ALL in order"
+          - "each scan entry has issues_found count"
+          - "final scan has issues_found=0"
+        mocks_allowed: 0
+        red_phase_criteria: |
+          Test MUST FAIL if:
+          1. all cycles use same scan depth (no deepening)
+          2. audit log scan entries don't show progressive depth
+          3. final cycle issues_found > 0
+
+    tests_created: 10
     tests_deleted: 0
     audit_enhancement: |
       CRITICAL ADDITION: Every Golden Path test includes "Audit Truth Layer"
@@ -285,7 +393,14 @@ tracks:
       - RED phase fails if audit entries missing/stale/incorrect
       - Proves production behavior, not just test behavior
       - Creates permanent record for debugging
-    effort_adjustment: "+2 days for audit verification implementation"
+      
+      RGR INTELLIGENCE ADDITION: Tests T1-D8 through T1-D10 validate the
+      RGR loop engine itself via production-realistic scenarios:
+      - Cross-orchestrator chain validation (TDD + Enforcement + Master)
+      - Non-convergence safety gate (oscillation detection)
+      - Progressive depth scanning (surface → structural → semantic)
+      - Audit log as single source of truth for cycle-over-cycle behavior
+    effort_adjustment: "+4 days for audit verification + RGR intelligence tests"
     
 # ============================================================================
 # TRACK 2: REFERENCE REPOSITORY FIXTURE (NEW - ENABLE SCALE)
@@ -458,10 +573,12 @@ tracks:
         - "Tests with real assertions on production code"
         - "Golden Path truth tests"
         - "Tests that caught real bugs (git history check)"
+        - "Tests that write to audit.db (proving real behavior)"
       always_delete:
         - "Tests with zero assertions"
         - "Tests that only verify mock setup"
         - "Exact duplicate tests"
+        - "Tests where audit.db is unchanged after execution (not testing real behavior)"
         
     tests_created: 0
     tests_deleted: "~6000"
@@ -533,54 +650,405 @@ tracks:
     tests_refactored: "~50"
 
 # ============================================================================
-# TRACK 5: RGR LOOP FINAL VERIFICATION (FINAL GATE)
+# TRACK 5: RGR INTELLIGENCE ENGINE (CORE - SCAN-FIX-VERIFY LOOP)
 # ============================================================================
 
   - track_id: "T5"
-    name: "RGR Loop Final Verification"
+    name: "RGR Intelligence Engine"
     priority: "P0-CRITICAL"
-    duration: "3-4 days"
-    effort: "20-24h"
+    duration: "5-7 days"
+    effort: "30-42h"
     parallelizable: false
-    depends_on: ["T1", "T2", "T3", "T4"]
+    depends_on: ["T1", "T2"]
     
     description: |
-      Red-Green-Refactor loop on entire remaining test suite.
-      Iterate until 100% pass rate with only high-value tests.
-      This is the final gate before declaring victory.
+      Implements the RGR (Red-Green-Refactor) Intelligence Engine as a
+      Strategy Pattern injected into TDDOrchestrator.execute_multi_cycle().
+      Replaces mock cycle body with real ScanStrategy.scan() → fix() → verify() calls.
+      
+      Each RED phase creates DEEPER tests across layers to find ALL instances.
+      Each GREEN phase fixes one batch of issues.
+      Each REFACTOR phase verifies no regressions and no new issues.
+      Loop continues until convergence (zero violations) or safety halt.
+      
+      Integrates with:
+      - ENH-088: execute_multi_cycle infrastructure (CycleMetrics, GateResult)
+      - ENH-100: FeedbackHub for visual progress (color indicators, ASCII bars)
+      - ENH-099: TestGenerationOrchestrator for intelligent test scaffolding
+      
+    architecture:
+      pattern: "Strategy Pattern (ScanStrategy interface)"
+      location: "cortex/orchestrators/strategies/"
+      
+      scan_strategy_interface:
+        name: "IScanStrategy"
+        file: "cortex/orchestrators/strategies/scan_strategy.py"
+        methods:
+          - name: "scan"
+            signature: "scan(scope: ScanScope, depth: ScanDepth) -> ScanResult"
+            purpose: "Discover all violations/issues at given depth"
+            returns: "List of Issue objects with fingerprints for convergence tracking"
+          - name: "fix"
+            signature: "fix(issues: List[Issue]) -> List[FixResult]"
+            purpose: "Apply fixes for discovered issues"
+            returns: "Fix results with before/after state for verification"
+          - name: "verify"
+            signature: "verify(fix_results: List[FixResult]) -> VerifyResult"
+            purpose: "Confirm fixes applied correctly, no regressions"
+            returns: "Verification result with regression check"
+          - name: "get_scan_depth_progression"
+            signature: "get_scan_depth_progression() -> List[ScanDepth]"
+            purpose: "Define depth escalation per cycle (surface → structural → semantic)"
+            returns: "Ordered list of scan depths for progressive deepening"
+
+      scan_depths:
+        SURFACE: "Direct references (imports, file-level)"
+        STRUCTURAL: "Cross-file dependencies (registry, wiring, config)"
+        SEMANTIC: "Behavioral consistency (docstrings, test fixtures, naming)"
+        ALL: "Combined scan at all depths (final verification)"
+        
+      convergence_detector:
+        name: "ConvergenceDetector"
+        file: "cortex/orchestrators/strategies/convergence.py"
+        purpose: "Detects when RGR loop should halt"
+        detection_modes:
+          CONVERGED: "Zero issues found → exit with success"
+          NON_CONVERGENT: "Same issue fingerprints appearing across cycles → halt with diagnostic"
+          MAX_CYCLES: "Hard limit reached → halt with remaining gaps"
+        algorithm: |
+          For each cycle N:
+            current_fingerprints = set(issue.fingerprint for issue in scan_result)
+            if current_fingerprints == empty_set:
+              return CONVERGED
+            if current_fingerprints.intersection(previous_fingerprints) > threshold:
+              if oscillation_count >= 2:
+                return NON_CONVERGENT(oscillating=current_fingerprints & previous_fingerprints)
+            previous_fingerprints = current_fingerprints
+          return MAX_CYCLES
+    
+      built_in_strategies:
+        - name: "ReferenceCleanupStrategy"
+          scope: "Stale references across .md/.yaml/.py files"
+          used_by: "REFACTOR intent, DIGEST mode cleanup"
+          scan_depths: [SURFACE, STRUCTURAL, SEMANTIC]
+          production_scenario: |
+            After renaming WrappedTDDOrchestrator → TDDOrchestrator:
+            Cycle 1 (SURFACE): grep for 'WrappedTDD' in imports → 8 hits
+            Cycle 2 (STRUCTURAL): scan registry YAML, wiring specs → 3 hits
+            Cycle 3 (SEMANTIC): scan docstrings, test names, dashboard HTML → 2 hits
+            Cycle 4: All-depth re-scan → 0 → converged
+            
+        - name: "GovernanceViolationStrategy"
+          scope: "CORE rule violations across codebase"
+          used_by: "AUDIT intent, EnforcementOrchestrator"
+          scan_depths: [SURFACE, STRUCTURAL, SEMANTIC]
+          production_scenario: |
+            Running /audit on a PR branch:
+            Cycle 1: Find CORE-008 violations (tests missing) → fix 4
+            Cycle 2: Find CORE-011 violations (type hints missing on new code) → fix 6
+            Cycle 3: Find CORE-035 violations (duplicate impl created by fix) → fix 1
+            Cycle 4: Re-scan → 0 → converged
+            
+        - name: "TestCoverageStrategy"
+          scope: "Uncovered code paths requiring new tests"
+          used_by: "IMPLEMENT intent, TDDOrchestrator"
+          scan_depths: [SURFACE, STRUCTURAL]
+          production_scenario: |
+            Implementing new MCP tool:
+            Cycle 1: Coverage 72% → generate tests for uncovered methods → 82%
+            Cycle 2: Coverage 82% → generate edge case tests → 89%
+            Cycle 3: Coverage 89% → coverage gate passes (85% threshold) → converged
+            
+        - name: "DuplicateDetectionStrategy"
+          scope: "CORE-035 violations (duplicate implementations)"
+          used_by: "REFACTOR intent, any consolidation"
+          scan_depths: [SURFACE, STRUCTURAL, SEMANTIC]
+          production_scenario: |
+            Consolidating 3 progress reporter implementations:
+            Cycle 1: Find 3 classes with >80% similarity → merge into 1
+            Cycle 2: Find 5 callers still referencing old classes → update imports
+            Cycle 3: Find 2 test files testing old classes → consolidate
+            Cycle 4: Re-scan → 0 → converged
+
+      feedback_integration:
+        hub: "ENH-100 FeedbackHub"
+        events_emitted:
+          - event: "RGR_CYCLE_START"
+            data: "cycle_number, strategy_name, scan_depth, scope"
+            visual: "🔴 RGR Cycle {n} — {strategy} — Depth: {depth}"
+          - event: "RGR_SCAN_COMPLETE"
+            data: "issues_found, fingerprints, scan_duration_ms"
+            visual: "[█████░░░░░] {n} issues found ({depth} scan)"
+          - event: "RGR_FIX_APPLIED"
+            data: "issue_id, fix_type, files_modified"
+            visual: "  ├─ ✅ Fixed: {issue_summary} ({files} files)"
+          - event: "RGR_FIX_FAILED"
+            data: "issue_id, error, rollback_applied"
+            visual: "  ├─ 🔴 FAILED: {issue_summary} — {error}"
+          - event: "RGR_VERIFY_COMPLETE"
+            data: "regressions_found, test_pass_rate"
+            visual: "  └─ 🟢 Verified: {pass_rate}% tests passing, 0 regressions"
+          - event: "RGR_CONVERGENCE"
+            data: "final_cycle, total_fixes, convergence_type"
+            visual: "[██████████] 100% Converged in {n} cycles ({fixes} fixes)"
+          - event: "RGR_NON_CONVERGENT"
+            data: "oscillating_issues, cycles_run"
+            visual: "⚠️ Non-convergent after {n} cycles — {issues} oscillating"
+        
+        visual_template: |
+          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          🔄 RGR Intelligence: {strategy_name}
+          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          
+          🔴 Cycle 1 — SURFACE scan
+          [██████████] Found: 8 issues
+            ├─ ✅ Fixed: Import ref in orchestrators/core/ (3 files)
+            ├─ ✅ Fixed: Import ref in mcp/tools/ (2 files)
+            └─ ✅ Fixed: Import ref in agents/ (3 files)
+          🟢 Verified: 100% pass, 0 regressions
+          
+          🔴 Cycle 2 — STRUCTURAL scan
+          [██████████] Found: 3 issues
+            ├─ ✅ Fixed: Registry YAML entry (1 file)
+            ├─ ✅ Fixed: Wiring spec reference (1 file)
+            └─ ✅ Fixed: Dashboard graph node (1 file)
+          🟢 Verified: 100% pass, 0 regressions
+          
+          🔴 Cycle 3 — SEMANTIC scan
+          [██████████] Found: 2 issues
+            ├─ ✅ Fixed: Docstring reference (1 file)
+            └─ ✅ Fixed: Test fixture name (1 file)
+          🟢 Verified: 100% pass, 0 regressions
+          
+          🔴 Cycle 4 — ALL depth re-scan
+          [██████████] Found: 0 issues
+          
+          ✅ CONVERGED in 4 cycles | 13 fixes | 0 regressions
+          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    deliverables:
+      - id: "T5-D1"
+        name: "IScanStrategy Interface + Base Classes"
+        file: "cortex/orchestrators/strategies/scan_strategy.py"
+        tests: "tests/unit/orchestrators/strategies/test_scan_strategy.py"
+        test_scenarios:
+          - name: "test_scan_strategy_interface_enforced"
+            scenario: "Concrete strategy missing scan() method"
+            expected: "TypeError at instantiation"
+            audit_check: "No audit entry (construction failure)"
+            
+          - name: "test_scan_returns_fingerprinted_issues"
+            scenario: "Strategy scans reference repo with known violations"
+            expected: "Each Issue has unique fingerprint (sha256 of location+type)"
+            audit_check: "audit log has scan_executed entry with issue_count"
+            
+          - name: "test_scan_depth_progression_respected"
+            scenario: "Strategy defines [SURFACE, STRUCTURAL, SEMANTIC]"
+            expected: "Cycle 1 uses SURFACE, Cycle 2 uses STRUCTURAL, etc."
+            audit_check: "audit log scan entries show depth escalation"
+        
+      - id: "T5-D2"
+        name: "ConvergenceDetector"
+        file: "cortex/orchestrators/strategies/convergence.py"
+        tests: "tests/unit/orchestrators/strategies/test_convergence.py"
+        test_scenarios:
+          - name: "test_convergence_detected_on_zero_issues"
+            scenario: "Scan returns empty issue list"
+            expected: "ConvergenceResult.type == CONVERGED"
+            audit_check: "audit log has convergence_reached entry"
+            
+          - name: "test_non_convergence_detected_on_oscillation"
+            scenario: "Cycle N issues == Cycle N-2 issues (fingerprint match)"
+            expected: "ConvergenceResult.type == NON_CONVERGENT"
+            audit_check: "audit log has non_convergent_halt with oscillating_fingerprints"
+            
+          - name: "test_max_cycles_halt_with_remaining_gaps"
+            scenario: "Issues decreasing but not zero after max_cycles"
+            expected: "ConvergenceResult.type == MAX_CYCLES, remaining_issues populated"
+            audit_check: "audit log has max_cycles_reached with remaining_count"
+            
+          - name: "test_fingerprint_tracking_across_cycles"
+            scenario: "3 cycles with overlapping but shifting issue sets"
+            expected: "Fingerprint history maintained, diff computed per cycle"
+            audit_check: "audit log has fingerprint_delta entries per cycle"
+
+      - id: "T5-D3"
+        name: "ReferenceCleanupStrategy"
+        file: "cortex/orchestrators/strategies/reference_cleanup.py"
+        tests: "tests/unit/orchestrators/strategies/test_reference_cleanup.py"
+        test_scenarios:
+          - name: "test_surface_scan_finds_direct_imports"
+            scenario: "Reference repo has 8 imports of deprecated OldOrchestrator"
+            expected: "scan(depth=SURFACE) returns 8 issues"
+            audit_check: "audit log has 8 issue_detected entries"
+            
+          - name: "test_structural_scan_finds_registry_refs"
+            scenario: "Reference repo has YAML registry entries for OldOrchestrator"
+            expected: "scan(depth=STRUCTURAL) returns registry + wiring refs"
+            audit_check: "audit log entries include file_type=yaml"
+            
+          - name: "test_fix_applies_rename_across_files"
+            scenario: "Fix all 8 surface imports"
+            expected: "All files updated, no partial application"
+            audit_check: "audit log has fix_applied entries with before/after content"
+            
+          - name: "test_verify_confirms_no_regressions"
+            scenario: "After fix, run affected test suite"
+            expected: "All tests pass, no new failures"
+            audit_check: "audit log has verify_passed entry with test_count"
+            
+          - name: "test_full_rgr_loop_cleans_all_refs"
+            scenario: "Run complete RGR loop on deprecated orchestrator"
+            expected: "Converges in 3-4 cycles, zero remaining refs"
+            audit_check: "audit log shows full lifecycle: scan→fix→verify per cycle"
+
+      - id: "T5-D4"
+        name: "GovernanceViolationStrategy"
+        file: "cortex/orchestrators/strategies/governance_violation.py"
+        tests: "tests/unit/orchestrators/strategies/test_governance_violation.py"
+        test_scenarios:
+          - name: "test_scans_all_core_rules"
+            scenario: "Reference repo with CORE-008, CORE-011, CORE-035 violations"
+            expected: "All violation types detected with correct rule_id"
+            audit_check: "audit log entries have rule_id field matching CORE-XXX"
+            
+          - name: "test_fix_respects_orchestrator_boundaries"
+            scenario: "CORE-008 violation fix must go through TDDOrchestrator"
+            expected: "Fix delegates to correct orchestrator, not direct file edit"
+            audit_check: "audit log has orchestrator_delegated entry"
+            
+          - name: "test_cross_orchestrator_chain_validation"
+            scenario: "Violation spans TDD + Enforcement + Master orchestrators"
+            expected: "Each orchestrator validates its domain, all three audit logged"
+            audit_check: "audit log has entries from 3 different orchestrator sources"
+
+      - id: "T5-D5"
+        name: "TDDOrchestrator Integration (execute_multi_cycle enhancement)"
+        file: "cortex/orchestrators/core/tdd_orchestrator.py"
+        tests: "tests/unit/orchestrators/test_rgr_integration.py"
+        test_scenarios:
+          - name: "test_execute_multi_cycle_uses_scan_strategy"
+            scenario: "Pass ReferenceCleanupStrategy to execute_multi_cycle"
+            expected: "Real scan→fix→verify calls replace mock body"
+            audit_check: "audit log has strategy_executed entries, not mock_executed"
+            
+          - name: "test_backward_compatible_without_strategy"
+            scenario: "Call execute_multi_cycle without strategy (legacy)"
+            expected: "Falls back to original mock behavior (no regression)"
+            audit_check: "audit log has legacy_mode=true entry"
+            
+          - name: "test_feedback_events_emitted_per_cycle"
+            scenario: "Strategy runs 3 cycles"
+            expected: "FeedbackHub receives RGR_CYCLE_START, RGR_SCAN_COMPLETE per cycle"
+            audit_check: "audit log has event_emitted entries matching FeedbackHub events"
+            
+          - name: "test_convergence_detector_integrated"
+            scenario: "Strategy converges after 2 cycles"
+            expected: "ConvergenceDetector called after each cycle, exits on CONVERGED"
+            audit_check: "audit log has convergence_check entries per cycle"
+
+      - id: "T5-D6"
+        name: "Production Scenario Integration Tests"
+        file: "tests/golden/test_rgr_production_scenarios.py"
+        test_scenarios:
+          - name: "test_pr_review_rgr_loop"
+            scenario: |
+              Simulates PR review pipeline:
+              1. Developer submits code with 3 violations
+              2. RGR loop runs with GovernanceViolationStrategy
+              3. Each cycle fixes one violation type
+              4. Final cycle confirms zero violations
+            expected: "3 cycles, 3 fixes, converged"
+            audit_check: "Full audit trail: pr_submitted → rgr_started → 3x(scan→fix→verify) → converged"
+            
+          - name: "test_orchestrator_consolidation_rgr_loop"
+            scenario: |
+              Simulates orchestrator rename/consolidation:
+              1. Old name has 15 references across 12 files
+              2. RGR loop with ReferenceCleanupStrategy
+              3. Progressive depth: surface(8) → structural(5) → semantic(2)
+              4. Final all-depth scan: 0 remaining
+            expected: "4 cycles, 15 fixes, converged"
+            audit_check: "Depth escalation visible in audit, fix_count per cycle matches"
+            
+          - name: "test_test_suite_quality_rgr_loop"
+            scenario: |
+              Simulates test quality remediation:
+              1. Suite has 10 assertion-free tests + 5 heavy-mock tests
+              2. RGR loop with TestCoverageStrategy
+              3. Cycle 1: Delete assertion-free tests
+              4. Cycle 2: Refactor heavy-mock tests
+              5. Cycle 3: Verify coverage maintained
+            expected: "3 cycles, 15 test fixes, coverage >= baseline"
+            audit_check: "audit log shows test_deleted vs test_refactored counts"
+
+    tests_created: 28
+    tests_deleted: 0
+    
+    success_gate: |
+      Track 5 is COMPLETE when:
+      1. IScanStrategy interface usable by any orchestrator
+      2. ConvergenceDetector prevents infinite loops
+      3. At least 2 built-in strategies working (ReferenceCleanup + GovernanceViolation)
+      4. TDDOrchestrator.execute_multi_cycle() wired to real strategies
+      5. FeedbackHub receives RGR events with visual rendering
+      6. All 28 tests passing with audit log verification
+      7. Production scenario tests prove realistic workflows
+
+# ============================================================================
+# TRACK 5.5: RGR FINAL SWEEP (DEPENDS ON ALL TRACKS)
+# ============================================================================
+
+  - track_id: "T5.5"
+    name: "RGR Final Sweep"
+    priority: "P0-CRITICAL"
+    duration: "2-3 days"
+    effort: "12-18h"
+    parallelizable: false
+    depends_on: ["T1", "T2", "T3", "T4", "T5"]
+    
+    description: |
+      Uses the RGR Intelligence Engine (Track 5) to sweep the entire test suite.
+      This is the final gate — eat your own dogfood by running the RGR loop
+      on the test suite itself using TestCoverageStrategy + GovernanceViolationStrategy.
       
     process:
       iteration_limit: 5
+      strategies_used:
+        - "TestCoverageStrategy (ensure coverage >= 85%)"
+        - "GovernanceViolationStrategy (ensure CORE compliance)"
+        - "DuplicateDetectionStrategy (ensure no duplicate tests)"
       
       step_1_red:
-        name: "Run Full Suite"
-        command: "pytest tests/ --tb=short -q"
-        expected: "Some failures from refactoring"
+        name: "Run RGR Loop with all 3 strategies (chained)"
+        expected: "Discovers remaining gaps from Track 1-4 work"
+        audit_check: "rgr_sweep_started entry with strategy_chain list"
         
       step_2_green:
-        name: "Fix Failures"
+        name: "Auto-fix discovered issues"
         approach: |
-          For each failure:
-          1. Is test still valuable? → Fix production code or test
-          2. Is test low-value? → DELETE (not fix)
-          3. Is test redundant? → DELETE (covered elsewhere)
-        goal: "100% pass"
+          For each issue:
+          1. Strategy.fix() applies correction
+          2. Strategy.verify() confirms no regression
+          3. Continue to next issue
+        audit_check: "rgr_sweep_fix entries per issue"
         
       step_3_refactor:
-        name: "Consolidate Similar Tests"
+        name: "Convergence verification"
         approach: |
-          1. Find tests with similar assertions
-          2. Parameterize into single test
-          3. Delete originals
-        goal: "DRY test suite"
+          1. ConvergenceDetector confirms zero issues across all strategies
+          2. Final all-depth scan at SEMANTIC level
+          3. Exit with full audit trail
+        audit_check: "rgr_sweep_converged entry with total_cycles and total_fixes"
         
       exit_criteria:
-        - "100% test pass rate"
-        - "Zero assertion-free tests"
-        - "Mock-to-test ratio < 0.5 average"
-        - "All 7 Golden Path tests passing"
+        - "Zero violations from all 3 strategies"
+        - "Coverage >= 85%"
+        - "Mock ratio < 0.5 average"
+        - "All 10 Golden Path tests passing"
         - "No duplicate test names"
         - "No phase-dated test files"
+        - "Audit log complete for every fix"
         
     final_metrics:
       target_test_count: "8,000-10,000"
@@ -591,11 +1059,11 @@ tracks:
     verification:
       commands:
         - "pytest tests/ -v --tb=short"
-        - "pytest tests/golden/ -v --no-cov"  # Truth tests separately
+        - "pytest tests/golden/ -v --no-cov"
         - "coverage report --fail-under=85"
         
     tests_created: 0
-    tests_deleted: "variable (during RGR)"
+    tests_deleted: "variable (during RGR sweep)"
 
 # ============================================================================
 # SUCCESS CRITERIA
@@ -610,8 +1078,8 @@ success_criteria:
       
     - metric: "Golden Path Truth Tests"
       before: 0
-      after: 7
-      improvement: "∞ (new capability)"
+      after: 10
+      improvement: "10 production-proving tests (7 core + 3 RGR intelligence)"
       
     - metric: "Average Mock Ratio"
       before: ">1.0"
@@ -633,11 +1101,30 @@ success_criteria:
       after: 0
       improvement: "100% elimination"
       
+    - metric: "RGR Scan Strategies"
+      before: 0
+      after: 4
+      improvement: "4 pluggable strategies (Reference, Governance, Coverage, Duplicate)"
+      
+    - metric: "Audit Truth Coverage"
+      before: 0
+      after: "100% of Golden Path tests"
+      improvement: "Every golden test verifies audit.db entries"
+      
+    - metric: "Cross-Orchestrator Chain Tests"
+      before: 0
+      after: 3
+      improvement: "TDD + Enforcement + Master chain validated in production scenarios"
+      
   qualitative:
     - "Developers trust test failures = real bugs"
     - "Test suite runs in <10 minutes"
     - "New tests follow Golden Path pattern"
     - "Mocking reserved for external services only"
+    - "RGR loop prevents 'fix one, miss ten' anti-pattern"
+    - "Convergence detection prevents infinite loops"
+    - "Audit log provides hard evidence for every fix cycle"
+    - "Visual progress via FeedbackHub during long RGR runs"
 
 # ============================================================================
 # EXECUTION GUIDANCE
@@ -647,18 +1134,20 @@ execution:
   autonomous_mode: true
   
   daily_targets:
-    day_1_3: "Track 1 - Golden Path Truth Tests (7 tests)"
+    day_1_3: "Track 1 - Golden Path Truth Tests (10 tests incl. RGR scenarios)"
     day_4_6: "Track 2 - Reference Repository Fixture"
     day_7_12: "Track 3 - Low-Value Test Deletion (parallel)"
     day_13_18: "Track 4 - Mock Reduction Refactoring"
-    day_19_24: "Track 5 - RGR Loop Final Verification"
+    day_19_24: "Track 5 - RGR Intelligence Engine (28 tests)"
+    day_25_27: "Track 5.5 - RGR Final Sweep (dogfooding)"
     
   checkpoints:
-    after_track_1: "7 Golden Path tests passing"
+    after_track_1: "10 Golden Path tests passing (incl. 3 RGR intelligence tests)"
     after_track_2: "Reference repo loads in all tests"
     after_track_3: "40% test reduction achieved"
     after_track_4: "Mock ratio < 0.5"
-    after_track_5: "100% pass rate, suite complete"
+    after_track_5: "IScanStrategy + 4 strategies + ConvergenceDetector working"
+    after_track_5_5: "100% pass rate, RGR sweep converged, suite complete"
     
   rollback_strategy: |
     Git tag before each track starts.
@@ -671,16 +1160,26 @@ execution:
 
 governance:
   core_rules_applied:
-    - "CORE-008: TDD-first (Golden Path tests before deletion)"
-    - "CORE-027: Audit trail (AC markers on all changes)"
-    - "CORE-035: Single canonical (no duplicate tests)"
+    - "CORE-008: TDD-first (Golden Path tests before deletion, RGR loop enforces RED before GREEN)"
+    - "CORE-027: Audit trail (AC markers on all changes, audit.db verification in every golden test)"
+    - "CORE-035: Single canonical (no duplicate tests, DuplicateDetectionStrategy enforces)"
+    - "CORE-030: Implementation Truth (audit.db is the evidence, not mocks)"
     
   ac_markers:
-    - "AC-WAVE10-T1-001 through T1-007 (Golden Path)"
+    - "AC-WAVE10-T1-001 through T1-010 (Golden Path incl. RGR Intelligence)"
     - "AC-WAVE10-T2-001 through T2-003 (Reference Repo)"
     - "AC-WAVE10-T3-001 through T3-006 (Deletion Phases)"
     - "AC-WAVE10-T4-001 through T4-003 (De-Mocking)"
-    - "AC-WAVE10-T5-001 (Final RGR)"
+    - "AC-WAVE10-T5-001 through T5-006 (RGR Intelligence Engine)"
+    - "AC-WAVE10-T5.5-001 (RGR Final Sweep)"
+    
+  rgr_governance_integration: |
+    The RGR Intelligence Engine (Track 5) is itself governed:
+    - IScanStrategy implementations must emit audit entries
+    - ConvergenceDetector must log halt reasons
+    - FeedbackHub events are audit-logged
+    - Non-convergent halts trigger governance alert
+    - Every fix applied through RGR has an AC marker
 
 # ============================================================================
 # RISKS & MITIGATIONS
@@ -702,6 +1201,22 @@ risks:
   - risk: "Coverage drops below acceptable"
     probability: "MEDIUM"
     mitigation: "Track coverage per-track, pause if drops below 80%"
+    
+  - risk: "RGR loop infinite cycling (non-convergent edge case)"
+    probability: "LOW"
+    mitigation: "ConvergenceDetector with oscillation detection + hard max_cycles=5 limit"
+    
+  - risk: "ScanStrategy.fix() introduces new violations"
+    probability: "MEDIUM"
+    mitigation: "verify() step after every fix batch + regression test suite run"
+    
+  - risk: "FeedbackHub not ready when RGR Engine implemented"
+    probability: "MEDIUM"
+    mitigation: "Graceful fallback — stdout logging if FeedbackHub unavailable"
+    
+  - risk: "Strategy proliferation (too many strategies, maintenance burden)"
+    probability: "LOW"
+    mitigation: "Start with 2 strategies (Reference + Governance), add only when proven need"
 
 # ============================================================================
 # POST-COMPLETION
@@ -712,13 +1227,93 @@ post_completion:
     - "Update testing guidelines in cortex/knowledge/best-practices/"
     - "Add Golden Path pattern to test templates"
     - "Document reference repository usage"
+    - "Add RGR Intelligence Engine usage guide to architect prompt"
+    - "Document ScanStrategy creation pattern for custom strategies"
     
   automation:
     - "CI gate: Reject PR with assertion-free tests"
     - "CI gate: Reject PR with mock ratio > 1.0"
-    - "CI gate: All 7 Golden Path tests must pass"
+    - "CI gate: All 10 Golden Path tests must pass"
+    - "CI gate: RGR loop must converge (no NON_CONVERGENT exits in CI)"
+    - "Pre-commit: Run GovernanceViolationStrategy on changed files"
     
   continuous_improvement:
     - "Weekly test quality metrics in dashboard"
     - "Quarterly Golden Path test review"
     - "Annual test suite audit"
+    - "New ScanStrategy per quarter (community-contributed)"
+    
+  prompt_agent_integration:
+    cortex_architect_prompt: |
+      Add RGR Intelligence visual template to Silent Autonomous Execution section.
+      Reference IScanStrategy for all REFACTOR/AUDIT intents.
+      Add '/rgr {scope}' command trigger.
+    cortex_prompt: |
+      Add RGR loop trigger words to intent detection:
+      "run until clean", "fix all instances", "loop until done"
+      Map to IMPLEMENT intent with multi_cycle=true, strategy=auto-detect.
+    copilot_instructions: |
+      Add RGR Intelligence section explaining:
+      - When RGR loop activates (multi-instance fixes, cleanup, refactoring)
+      - How convergence detection prevents infinite loops
+      - Visual progress format reference
+    cortex_digest_agent: |
+      Reference ReferenceCleanupStrategy for digest-triggered cleanups.
+      DigestOrchestrator can invoke RGR loop to clean stale references
+      found during chat session analysis.
+
+# ============================================================================
+# ENHANCEMENT DEPENDENCIES & INTEGRATION MAP
+# ============================================================================
+
+integration_map:
+  enh_088_multi_cycle_tdd:
+    relationship: "EXTENDS"
+    description: "Track 5 replaces mock body in execute_multi_cycle with real ScanStrategy dispatch"
+    shared_infrastructure:
+      - "CycleMetrics dataclass (reused as-is)"
+      - "GateResult dataclass (extended with convergence_type)"
+      - "SuccessCriteria dataclass (extended with strategy field)"
+      - "_emit_event() method (extended with RGR-specific events)"
+    backward_compatible: true
+    
+  enh_099_test_generation:
+    relationship: "CONSUMES"
+    description: "TestCoverageStrategy can invoke TestGenerationOrchestrator to scaffold missing tests"
+    integration_point: "TestCoverageStrategy.fix() → TestGenerationOrchestrator.generate()"
+    
+  enh_100_feedback_hub:
+    relationship: "EMITS TO"
+    description: "RGR Intelligence Engine emits progress events to FeedbackHub for visual rendering"
+    events: ["RGR_CYCLE_START", "RGR_SCAN_COMPLETE", "RGR_FIX_APPLIED", "RGR_CONVERGENCE"]
+    fallback: "Graceful degradation if FeedbackHub unavailable (log to stdout)"
+
+# ============================================================================
+# ORCHESTRATOR ALIGNMENT CHECK
+# ============================================================================
+
+orchestrator_alignment:
+  tdd_orchestrator:
+    change: "execute_multi_cycle() gets optional strategy parameter"
+    purpose_preserved: "Still manages RED→GREEN→REFACTOR — now with real scan/fix/verify"
+    regression_risk: "LOW (backward compatible, strategy is opt-in)"
+    
+  enforcement_orchestrator:
+    change: "GovernanceViolationStrategy delegates to it for CORE rule checking"
+    purpose_preserved: "Still validates governance rules — now invokable from RGR loop"
+    regression_risk: "NONE (read-only consumer)"
+    
+  master_orchestrator:
+    change: "Routes 'rgr' intent to TDDOrchestrator with strategy"
+    purpose_preserved: "Still routes intents — RGR is a new intent type"
+    regression_risk: "LOW (additive routing only)"
+    
+  refactoring_orchestrator:
+    change: "Can invoke RGR loop with ReferenceCleanupStrategy"
+    purpose_preserved: "Still handles refactoring — RGR is a deeper refactor mode"
+    regression_risk: "LOW (opt-in invocation)"
+    
+  digest_orchestrator:
+    change: "Can trigger RGR loop for stale reference cleanup"
+    purpose_preserved: "Still extracts learnings — RGR is post-digest cleanup"
+    regression_risk: "NONE (optional enhancement)"
