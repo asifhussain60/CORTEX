@@ -13,9 +13,9 @@ The Knowledge Protocol defines how CORTEX ingests, stores, queries, and maintain
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
+----------------------------------------
 │                        Knowledge Protocol Architecture                       │
-├─────────────────────────────────────────────────────────────────────────────┤
+----------------------------------------
 │                                                                              │
 │   INTELLIGENCE SOURCES              BKIO PIPELINE              STORAGE       │
 │   ┌─────────────────┐           ┌─────────────────┐      ┌─────────────────┐│
@@ -25,7 +25,7 @@ The Knowledge Protocol defines how CORTEX ingests, stores, queries, and maintain
 │   │ Relations Adapter│─────────▶│ Conflict Resolve│      └─────────────────┘│
 │   └─────────────────┘           └─────────────────┘                         │
 │                                                                              │
-└─────────────────────────────────────────────────────────────────────────────┘
+----------------------------------------
 ```
 
 ## BKIO Pipeline

@@ -24,9 +24,9 @@ CORTEX exposes 14 MCP (Model Context Protocol) tools for AI-native tool discover
 ## Tool Registry Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
+----------------------------------------
 │                           MCP Tool Registry                                  │
-├─────────────────────────────────────────────────────────────────────────────┤
+----------------------------------------
 │                                                                              │
 │   cortex/mcp/                                                                │
 │   ├── server.py           # MCP server entry point                          │
@@ -40,7 +40,7 @@ CORTEX exposes 14 MCP (Model Context Protocol) tools for AI-native tool discover
 │       ├── knowledge/      # search_tool, index_tool                         │
 │       └── utility/        # echo_tool, transform_tool                       │
 │                                                                              │
-└─────────────────────────────────────────────────────────────────────────────┘
+----------------------------------------
 ```
 
 ## Tool Categories

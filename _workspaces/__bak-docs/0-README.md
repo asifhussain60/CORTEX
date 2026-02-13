@@ -177,7 +177,7 @@ These phases are fully designed with 121 acceptance criteria and 664 tests pre-w
 ## System Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
+----------------------------------------
 │                              CORTEX Platform                                 │
 ├──────────────────┬──────────────────┬──────────────────┬───────────────────┤
 │   REST API       │   MCP Server     │      CLI         │   Copilot Chat    │

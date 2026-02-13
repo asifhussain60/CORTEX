@@ -11,7 +11,7 @@ The Domain Brain is CORTEX's centralized knowledge management system that ingest
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
+----------------------------------------
 │                           INTELLIGENCE SOURCES                               │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐ │
 │  │AST Adapter  │  │Git Adapter  │  │Comments     │  │Relationships        │ │

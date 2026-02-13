@@ -11,7 +11,7 @@ The CORTEX Orchestration Engine coordinates execution of business processes thro
 ## Architecture Overview
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
+----------------------------------------
 │                     User Request (REST/MCP/CLI/Chat)                         │
 └─────────────────────────────────────┬───────────────────────────────────────┘
                                       │

@@ -96,10 +96,10 @@ Fix: {fix_suggestion}
 
 ### Box Separator Rules (CRITICAL)
 
-**Character:** `━` (Unicode U+2501 BOX DRAWINGS HEAVY HORIZONTAL)  
-**Count:** Exactly **60 characters** per line  
+**Character:** `-` (regular dash/hyphen)  
+**Count:** Exactly **40 characters** per line  
 **Placement:** Before and after major sections  
-**Rendering:** Should appear as continuous horizontal line in Copilot Chat
+**Rendering:** Should appear as continuous horizontal line in Copilot Chat (fits display width)
 
 **Example:**
 ```markdown
@@ -109,9 +109,9 @@ Fix: {fix_suggestion}
 **Validation:**
 ```python
 # Python check
-line = "━" * 60
-assert len(line) == 60
-assert all(c == '━' for c in line)
+line = "-" * 40
+assert len(line) == 40
+assert all(c == '-' for c in line)
 ```
 
 ### Header Hierarchy (MANDATORY)

@@ -15,9 +15,9 @@ The Intent Router is the intelligent entry point for all CORTEX operations. It u
 LENS (Language, Examination, Navigation, Synthesis) is a four-phase protocol for comprehensive intent comprehension:
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
+----------------------------------------
 │                           LENS Protocol Pipeline                             │
-├─────────────────────────────────────────────────────────────────────────────┤
+----------------------------------------
 │                                                                              │
 │   ┌──────────────┐    ┌──────────────┐    ┌──────────────┐    ┌────────────┐│
 │   │   LANGUAGE   │    │ EXAMINATION  │    │  NAVIGATION  │    │ SYNTHESIS  ││
@@ -27,7 +27,7 @@ LENS (Language, Examination, Navigation, Synthesis) is a four-phase protocol for
 │   │ • Entities   │    │ • Deps       │    │ • Authors    │    │ • Score    ││
 │   └──────────────┘    └──────────────┘    └──────────────┘    └────────────┘│
 │                                                                              │
-└─────────────────────────────────────────────────────────────────────────────┘
+----------------------------------------
 ```
 
 ### Phase 1: Language

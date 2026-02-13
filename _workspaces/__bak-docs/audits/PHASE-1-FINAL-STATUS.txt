@@ -21,9 +21,9 @@ STATUS: ✅ COMPLETE - All Phase 1 objectives achieved
 QUALITY: 100% test pass rate, zero regressions, full compliance
 
 
-┌───────────────────────────────────────────────────────────────────────┐
+----------------------------------------
 │ METRICS DASHBOARD                                                     │
-├───────────────────────────────────────────────────────────────────────┤
+----------------------------------------
 │                                                                       │
 │  Test Pass Rate:        75% ──────────► 100% ✅  (+25%)              │
 │  Core Tools Exposed:    3/4 ──────────► 4/4  ✅  (+25%)              │
@@ -31,7 +31,7 @@ QUALITY: 100% test pass rate, zero regressions, full compliance
 │  Discovery Errors:      2   ──────────► 0    ✅  (-100%)             │
 │  MCP Compliance:        Partial ──────► FULL ✅  (Verified)           │
 │                                                                       │
-└───────────────────────────────────────────────────────────────────────┘
+----------------------------------------
 
 
 ═══════════════════════════════════════════════════════════════════════════
@@ -61,44 +61,44 @@ Comprehensive audit identified:
  ✅ FIXES DELIVERED (Phase 1)
 ═══════════════════════════════════════════════════════════════════════════
 
-┌───────────────────────────────────────────────────────────────────────┐
+----------------------------------------
 │ FIX 1: Tool Discovery Error - RESOLVED ✅                             │
-├───────────────────────────────────────────────────────────────────────┤
+----------------------------------------
 │ Issue:       'str' object has no attribute 'value' crash             │
 │ Root Cause:  Category type incompatibility (governance vs registry)  │
 │ Solution:    Safe category conversion with UTILITY fallback          │
 │ File:        cortex/mcp/tool_discovery.py (Lines 142-201)           │
 │ Impact:      Zero crashes, graceful degradation                      │
-└───────────────────────────────────────────────────────────────────────┘
+----------------------------------------
 
-┌───────────────────────────────────────────────────────────────────────┐
+----------------------------------------
 │ FIX 2: Missing Orchestrator Wiring Module - RESOLVED ✅              │
-├───────────────────────────────────────────────────────────────────────┤
+----------------------------------------
 │ Issue:       No module named 'orchestrator_wiring'                   │
 │ Impact:      MCP server couldn't query orchestrators                 │
 │ Solution:    Created module with MockWiringRegistry fallback         │
 │ File:        cortex/orchestrators/core/orchestrator_wiring.py (81)  │
 │ Features:    Multiple registry patterns, graceful degradation        │
-└───────────────────────────────────────────────────────────────────────┘
+----------------------------------------
 
-┌───────────────────────────────────────────────────────────────────────┐
+----------------------------------------
 │ FIX 3: Core MCP Tool Exposure Gap - RESOLVED ✅                       │
-├───────────────────────────────────────────────────────────────────────┤
+----------------------------------------
 │ Issue:       cortex_lens_analyze not exposed via MCP                │
 │ Root Cause:  list_tools() didn't integrate decorator-registered     │
 │ Solution:    Added Step 2.5 decorator integration                    │
 │ File:        cortex/mcp/server.py (Lines 312-355)                   │
 │ Result:      17 tools exposed (4 local + 13 decorator)              │
-└───────────────────────────────────────────────────────────────────────┘
+----------------------------------------
 
-┌───────────────────────────────────────────────────────────────────────┐
+----------------------------------------
 │ FIX 4: Integration Tests - UPDATED ✅                                 │
-├───────────────────────────────────────────────────────────────────────┤
+----------------------------------------
 │ Issue:       Tests expected tools in ToolRegistry                    │
 │ Solution:    Aligned expectations with decorator architecture        │
 │ File:        tests/integration/mcp/test_core_tool_exposure.py (159) │
 │ Result:      8/8 tests passing (100%)                                │
-└───────────────────────────────────────────────────────────────────────┘
+----------------------------------------
 
 
 ═══════════════════════════════════════════════════════════════════════════
@@ -123,9 +123,9 @@ tests/integration/mcp/test_core_tool_exposure.py:
   ✅ test_tool_parameter_schemas            PASSED [100%]
      └─ All tools have valid schemas
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 RESULT: 8 PASSED, 0 FAILED (100%) ✅
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+----------------------------------------
 
 
 ═══════════════════════════════════════════════════════════════════════════
@@ -254,9 +254,9 @@ VERIFICATION:
 Next Session: Phase 2 - Orchestrator Adapter Generation & Wiring Alignment
 
 
-───────────────────────────────────────────────────────────────────────────
+----------------------------------------
 Generated by CORTEX MasterOrchestrator
 Date: 2026-02-07
 Session ID: MCP-AUDIT-PHASE-1
 Authority: CORE-008, CORE-030, MCP-FIRST
-───────────────────────────────────────────────────────────────────────────
+----------------------------------------

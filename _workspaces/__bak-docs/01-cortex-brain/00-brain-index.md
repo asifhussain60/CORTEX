@@ -23,34 +23,34 @@ The **CORTEX Brain** is a 4-tier hierarchical intelligence system that transform
 The CORTEX Brain operates as a hierarchical system where each tier builds upon the previous, creating increasingly specialized knowledge contexts.
 
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
+----------------------------------------
 │                        COMPOSITE REQUEST GENERATION                     │
 │           (Efficient prompts overlaying ALL tier contexts)              │
-├─────────────────────────────────────────────────────────────────────────┤
+----------------------------------------
 │  TIER 3: Knowledge Library (Domain-Specific Knowledge Base)            │
 │  ├─ Semantic search, caching, retrieval optimization                   │
 │  ├─ Business knowledge repository                                       │
 │  ├─ Pattern library, best practices, domain rules                      │
 │  └─ Context-aware knowledge injection                                  │
-├─────────────────────────────────────────────────────────────────────────┤
+----------------------------------------
 │  TIER 2: Response Templates (Adaptive Output Formatting)               │
 │  ├─ Response templates (v4.0+), adaptive minimalism                    │
 │  ├─ Token optimization algorithms, compression rules                   │
 │  ├─ Domain-specific response patterns                                  │
 │  └─ Efficiency metrics and scaling strategies                          │
-├─────────────────────────────────────────────────────────────────────────┤
+----------------------------------------
 │  TIER 1: Acceptance Criteria & Tracking (Project Governance)           │
 │  ├─ AC-ID lifecycle management, evidence tracking                      │
 │  ├─ Governance compliance rules, validation gates                      │
 │  ├─ State persistence, phase checkpoints                               │
 │  └─ Audit logging, hash-chain verification                            │
-├─────────────────────────────────────────────────────────────────────────┤
+----------------------------------------
 │  TIER 0: Immutable Core Rules (Brain Protection - 29 CORE Rules)       │
 │  ├─ Immutable, non-overridable SKULL governance                        │
 │  ├─ Type hints, docstrings, error handling                            │
 │  ├─ Response headers, path portability, TDD enforcement               │
 │  └─ Strict enforcement, highest precedence                            │
-└─────────────────────────────────────────────────────────────────────────┘
+----------------------------------------
 ```
 
 ### Tier Precedence & Immutability

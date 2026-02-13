@@ -23,7 +23,7 @@ Before Release (before merge to main):
 📊 EXECUTION STRATEGIES
 
 Strategy        Time      Duration      Use Case
-────────────────────────────────────────────────────────────────────────────
+----------------------------------------
 SMOKE           ████      ~30s          Quick health check during coding
 FAST            ██████    ~2-3 min      Unit tests only, pre-commit
 STANDARD        ███████   ~5-8 min      Full unit tests, PR validation ⭐

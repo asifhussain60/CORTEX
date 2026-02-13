@@ -19,9 +19,9 @@ Each wave is designed to execute **autonomously and silently** with:
 ## 🎯 Wave Execution Timeline (Optimized)
 
 ```
-┌───────────────────────────────────────────────────────────────────────┐
+----------------------------------------
 │                    CORTEX PRODUCTION WAVES                            │
-├───────────────────────────────────────────────────────────────────────┤
+----------------------------------------
 │ WAVE-1: Foundation (Security)                12-14d      P0-CRITICAL │
 │ ├─ CHECKPOINT-1a: Architecture Review (1h) ✅                        │
 │ ├─ CHECKPOINT-1b: Governance Enforcement (1h) ✅                     │
@@ -63,9 +63,9 @@ Each wave is designed to execute **autonomously and silently** with:
 │ ├─ CHECKPOINT-8b: Knowledge Synthesis (1h) ✅                       │
 │ └─ FINAL SUMMARY + PRODUCTION HANDOFF                               │
 │                                                                       │
-├───────────────────────────────────────────────────────────────────────┤
+----------------------------------------
 │ TOTAL: 77-97 days | Optimized: 55-62 days (with parallel execution) │
-└───────────────────────────────────────────────────────────────────────┘
+----------------------------------------
 ```
 
 ---

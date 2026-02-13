@@ -12,9 +12,9 @@ This guide covers horizontal and vertical scaling strategies for CORTEX, includi
 ## Architecture Scaling Points
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
+----------------------------------------
 │                           CORTEX Scaling Architecture                        │
-├─────────────────────────────────────────────────────────────────────────────┤
+----------------------------------------
 │                                                                              │
 │   ┌──────────────┐     ┌──────────────┐     ┌──────────────┐               │
 │   │ Load Balancer│────▶│ MCP Server   │────▶│ Orchestrators│               │
@@ -33,7 +33,7 @@ This guide covers horizontal and vertical scaling strategies for CORTEX, includi
 │                        │ (SQLite→PG)  │                                    │
 │                        └──────────────┘                                    │
 │                                                                              │
-└─────────────────────────────────────────────────────────────────────────────┘
+----------------------------------------
 ```
 
 ## Scaling Dimensions

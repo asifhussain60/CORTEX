@@ -15,7 +15,7 @@ The Model Context Protocol (MCP) Server is the **SINGLE entry point** for ALL CO
 ## Architecture Diagram
 
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
+----------------------------------------
 │                         EXTERNAL CLIENTS                                │
 │   VS Code Copilot  │  CLI  │  REST API  │  CI/CD  │  Other IDEs         │
 └────────────────────────────────┬────────────────────────────────────────┘
@@ -23,7 +23,7 @@ The Model Context Protocol (MCP) Server is the **SINGLE entry point** for ALL CO
                          JSON-RPC 2.0 / stdio
                                  │
                                  ▼
-┌─────────────────────────────────────────────────────────────────────────┐
+----------------------------------------
 │                       MCP SERVER                                         │
 │ ┌─────────────────────────────────────────────────────────────────────┐ │
 │ │                      TOOL REGISTRY (24 Tools)                        │ │
@@ -38,10 +38,10 @@ The Model Context Protocol (MCP) Server is the **SINGLE entry point** for ALL CO
 └────────────────────────────────┬────────────────────────────────────────┘
                                  │
                                  ▼
-┌─────────────────────────────────────────────────────────────────────────┐
+----------------------------------------
 │                      ORCHESTRATOR LAYER                                  │
 │   MasterOrchestrator → IntentRouter → Domain Orchestrators              │
-└─────────────────────────────────────────────────────────────────────────┘
+----------------------------------------
 ```
 
 ## Tool Categories

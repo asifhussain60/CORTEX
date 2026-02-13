@@ -2,13 +2,18 @@
 """
 Enhanced Response Template Generator
 Purpose: Semantic color-coded response headers for CORTEX
-Version: 1.0
+Version: 2.0 - SSOT Compliance (40-char separators)
 Integration: cortex-architect.prompt.md + agents
 """
 
 from dataclasses import dataclass
 from enum import Enum
 from typing import Optional
+
+
+# SSOT Constants (response-format-standards.md)
+BOX_SEPARATOR = "-" * 40  # Exactly 40 chars per SSOT
+BOX_WIDTH = 40
 
 
 class SectionStatus(Enum):
@@ -90,6 +95,27 @@ class ResponseTemplate:
         return header.render()
 
     @staticmethod
+    def create_box_header(title: str, status: Optional[SectionStatus] = None) -> str:
+        """Create box-framed header with separator lines (SSOT compliant)."""
+        if status is None:
+            status = ResponseTemplate.detect_status(title)
+        emoji, _, _ = status.value
+        return f"""{BOX_SEPARATOR}
+{emoji} {title}
+{BOX_SEPARATOR}"""
+
+    @staticmethod
+    def create_box_section(title: str, content: str) -> str:
+        """Create box-framed section with content."""
+        return f"""{BOX_SEPARATOR}
+{title}
+{BOX_SEPARATOR}
+
+{content}
+
+{BOX_SEPARATOR}"""
+
+    @staticmethod
     def session_summary(
         session_name: str,
         completed_items: list,
@@ -110,10 +136,10 @@ class ResponseTemplate:
 
         emoji, _, _ = overall_status.value
 
-        summary = f"""━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        summary = f"""{BOX_SEPARATOR}
 ## {emoji} SESSION SUMMARY
 **Session:** {session_name} | **Status:** {emoji} {overall_status.name}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+{BOX_SEPARATOR}
 
 """
 
