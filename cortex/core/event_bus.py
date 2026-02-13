@@ -1,7 +1,10 @@
 """Event bus for feature registry notifications and orchestrator communication."""
 
 from dataclasses import dataclass
-from typing import Any, Dict
+from typing import Any, Dict, Optional
+from datetime import datetime
+from pathlib import Path
+import json
 
 
 @dataclass
@@ -12,11 +15,24 @@ class Event:
 
 
 class EventBus:
-    """Publish/subscribe event bus for feature changes."""
+    """Publish/subscribe event bus for feature changes with audit trail logging."""
 
-    def __init__(self):
-        """Initialize event bus."""
+    def __init__(self, log_file: Optional[str] = None):
+        """
+        Initialize event bus with optional event logging.
+        
+        Args:
+            log_file: Optional path to JSONL file for event audit trail.
+                      If provided, all events will be logged for audit purposes.
+        """
         self.subscribers = {}
+        self.log_file = log_file
+        self.logging_enabled = log_file is not None
+        
+        if self.logging_enabled:
+            # Create log directory if it doesn't exist
+            log_path = Path(log_file)
+            log_path.parent.mkdir(parents=True, exist_ok=True)
 
     def subscribe(self, event_type, handler):
         """Subscribe to event type."""
@@ -24,21 +40,26 @@ class EventBus:
             self.subscribers[event_type] = []
         self.subscribers[event_type].append(handler)
 
-    def publish(self, event):
+    def publish(self, event, data=None):
         """
-        Publish event to subscribers.
+        Publish event to subscribers with audit trail logging.
         
         Args:
             event: Event object or event_type string (for backward compatibility)
+            data: Event data (for backward compatibility with legacy format)
         """
         # Support both Event objects and legacy (event_type, data) format
         if isinstance(event, Event):
             event_type = event.type
-            data = event.payload
+            payload = event.payload
         else:
             # Legacy format: publish(event_type, data)
             event_type = event
-            data = {}
+            payload = data or {}
+        
+        # Log event for audit trail
+        if self.logging_enabled:
+            self._log_event(event_type, payload)
         
         if event_type in self.subscribers:
             for handler in self.subscribers[event_type]:
@@ -47,10 +68,34 @@ class EventBus:
                     if isinstance(event, Event):
                         handler(event)
                     else:
-                        handler(data)
+                        handler(payload)
                 except TypeError:
                     # Handler expects data, not Event
-                    handler(data)
+                    handler(payload)
+                except Exception as e:
+                    # Don't let handler errors break event delivery
+                    print(f"Warning: Event handler error for {event_type}: {e}")
+    
+    def _log_event(self, event_type: str, payload: Dict[str, Any]):
+        """
+        Log event to audit trail file.
+        
+        Args:
+            event_type: Type of event
+            payload: Event payload data
+        """
+        try:
+            log_entry = {
+                "timestamp": datetime.now().isoformat(),
+                "type": event_type,
+                "payload": payload
+            }
+            
+            with open(self.log_file, 'a') as f:
+                f.write(json.dumps(log_entry) + '\n')
+        except Exception as e:
+            # Don't let logging errors break event delivery
+            print(f"Warning: Event logging error: {e}")
 
     def feature_enabled(self, feature_id):
         """Publish feature enabled event."""
