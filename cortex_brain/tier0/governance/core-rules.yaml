@@ -280,6 +280,7 @@ rules:
   # --------------------------------------------------------------------------
   - rule_id: CORE-020
     principle: "Separation of Concerns"
+    book_reference: "Clean Architecture by Robert C. Martin"
     category: response_formatting
     severity: blocked
     name: No Markdown in Brain
