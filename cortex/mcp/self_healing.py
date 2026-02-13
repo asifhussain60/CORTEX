@@ -106,6 +106,61 @@ class MCPSelfHealing:
             "log_path", ".cortex/mcp-self-healing.log"
         )
     
+    def detect_mcp_availability(self) -> Tuple[bool, str]:
+        """
+        Detect MCP availability using 3 fallback methods.
+        
+        Returns:
+            Tuple of (is_available, message)
+        """
+        # Method 1: Tool registry check (primary)
+        if self._check_tool_registry():
+            return (True, "MCP tools available via tool registry")
+        
+        # Method 2: Environment variable check (secondary)
+        if self._check_environment_vars():
+            return (True, "MCP detected via environment variables")
+        
+        # Method 3: Network port check (tertiary)
+        if self._check_network_port():
+            return (True, "MCP detected on network port")
+        
+        # All methods failed
+        return (False, "MCP not available (all detection methods failed)")
+    
+    def _check_tool_registry(self) -> bool:
+        """Check if MCP tools are available in tool registry."""
+        try:
+            # In production, would query VS Code's tool registry
+            # For now, check environment variable as proxy
+            return os.getenv("CORTEX_MCP_ENABLED") == "true"
+        except Exception:
+            return False
+    
+    def _check_environment_vars(self) -> bool:
+        """Check if MCP environment variables are set."""
+        indicators = [
+            "MCP_SERVER_PORT",
+            "MCP_SERVER_HOST",
+            "CORTEX_MCP_ENABLED"
+        ]
+        return any(os.getenv(var) for var in indicators)
+    
+    def _check_network_port(self) -> bool:
+        """Check if MCP server is listening on network port."""
+        try:
+            import socket
+            host = "localhost"
+            port = int(os.getenv("MCP_SERVER_PORT", "8000"))
+            
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(1)
+            result = sock.connect_ex((host, port))
+            sock.close()
+            return result == 0
+        except Exception:
+            return False
+    
     def _load_registry(self) -> Dict[str, Any]:
         """Load issue registry from YAML"""
         try:
@@ -192,6 +247,22 @@ class MCPSelfHealing:
         
         # Apply fix
         logger.info(f"Applying fix for {issue.issue_id} using {issue.fix_strategy}")
+        
+        try:
+            start_time = time.time()
+            success = fix_strategy(issue)
+            duration_ms = int((time.time() - start_time) * 1000)
+            
+            # Log fix attempt
+            log_entry = self._build_log_entry(issue, success, duration_ms)
+            self._log_fix_event(log_entry)
+            
+            return success
+        except Exception as e:
+            logger.error(f"Fix failed with exception: {e}")
+            log_entry = self._build_log_entry(issue, False, 0)
+            self._log_fix_event(log_entry)
+            return False
         
         try:
             start_time = time.time()
@@ -317,6 +388,123 @@ class MCPSelfHealing:
         except Exception as e:
             logger.error(f"Failed to fix permissions: {e}")
             return False
+    
+    def retry_mcp_tool(
+        self, 
+        tool_callable: Callable,
+        params: Dict[str, Any],
+        max_retries: int = 2,
+        backoff_base: int = 1
+    ) -> Optional[Any]:
+        """
+        Retry MCP tool with exponential backoff.
+        
+        Args:
+            tool_callable: Tool function to retry
+            params: Parameters to pass to tool
+            max_retries: Maximum number of retries
+            backoff_base: Base for exponential backoff (seconds)
+        
+        Returns:
+            Tool result if successful, None if all retries exhausted
+        """
+        for attempt in range(max_retries):
+            try:
+                result = tool_callable(**params)
+                return result
+            except Exception as e:
+                if attempt < max_retries - 1:
+                    # Calculate backoff
+                    sleep_time = backoff_base * (2 ** attempt)
+                    logger.info(f"Retry {attempt + 1}/{max_retries} after {sleep_time}s...")
+                    time.sleep(sleep_time)
+                else:
+                    logger.error(f"All {max_retries} retries exhausted")
+                    return None
+    
+    def _build_log_entry(
+        self,
+        issue: MCPIssue,
+        success: bool,
+        duration_ms: int
+    ) -> Dict[str, Any]:
+        """
+        Build log entry dictionary for audit trail.
+        
+        Args:
+            issue: MCPIssue that was fixed
+            success: Whether fix was successful
+            duration_ms: Duration of fix in milliseconds
+        
+        Returns:
+            Log entry dictionary
+        """
+        return {
+            "timestamp": datetime.now().isoformat(),
+            "issue_id": issue.issue_id,
+            "fix_strategy": issue.fix_strategy,
+            "fix_result": "SUCCESS" if success else "FAILED",
+            "duration_ms": duration_ms
+        }
+    
+    def _log_fix_event(self, log_entry: Dict[str, Any]):
+        """
+        Write fix event to audit log.
+        
+        Args:
+            log_entry: Log entry dictionary
+        """
+        if not self.telemetry_enabled:
+            return
+        
+        try:
+            log_path = Path(self.log_path)
+            log_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            with open(log_path, 'a') as f:
+                f.write(yaml.dump([log_entry], default_flow_style=False))
+        except Exception as e:
+            logger.error(f"Failed to write audit log: {e}")
+    
+    def handle_mcp_tool_error(
+        self,
+        error: Exception,
+        tool_name: str,
+        params: Dict[str, Any]
+    ) -> Optional[Any]:
+        """
+        Handle MCP tool error with self-healing workflow.
+        
+        Args:
+            error: Exception raised by MCP tool
+            tool_name: Name of tool that failed
+            params: Parameters passed to tool
+        
+        Returns:
+            Tool result if successful, None if escalation needed
+        """
+        error_msg = str(error)
+        
+        # Detect issue
+        issue = self.detect_issue(error_msg)
+        
+        if not issue:
+            # Unknown error, escalate
+            return None
+        
+        if not issue.auto_fix:
+            # Manual fix required, escalate
+            return None
+        
+        # Apply fix
+        success = self.apply_fix(issue)
+        
+        if not success:
+            # Fix failed, escalate
+            return None
+        
+        # Fix succeeded, retry tool
+        return {"status": "fix_applied_retry_needed"}
     
     def _log_fix_attempt(
         self,
