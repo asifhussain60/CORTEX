@@ -76,8 +76,20 @@ class DebuggerOrchestrator(IOrchestrator):
             auto_cleanup_manager: Manager for auto-cleanup (injected for testing)
         """
         self.event_bus = event_bus
-        self.marker_injection_engine = marker_injection_engine
-        self.auto_cleanup_manager = auto_cleanup_manager
+        
+        # Initialize engine and manager if not provided
+        if marker_injection_engine is None:
+            from cortex.debugging.marker_injection_engine import MarkerInjectionEngine
+            self.marker_injection_engine = MarkerInjectionEngine()
+        else:
+            self.marker_injection_engine = marker_injection_engine
+        
+        if auto_cleanup_manager is None:
+            from cortex.debugging.auto_cleanup_manager import AutoCleanupManager
+            self.auto_cleanup_manager = AutoCleanupManager()
+        else:
+            self.auto_cleanup_manager = auto_cleanup_manager
+        
         self.active_sessions: Dict[str, DebugSession] = {}
         
         # Setup EventBus subscriptions
@@ -314,7 +326,7 @@ class DebuggerOrchestrator(IOrchestrator):
         Generate unique session ID.
         
         Format: session-{trigger}-{timestamp}
-        Example: session-test_failure-20260213-031500
+        Example: session-test_failure-20260213-031500-123456
         
         Args:
             trigger: Trigger type (test_failure | refactor_regression | governance_violation)
@@ -322,7 +334,7 @@ class DebuggerOrchestrator(IOrchestrator):
         Returns:
             Unique session ID
         """
-        timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+        timestamp = datetime.now().strftime("%Y%m%d-%H%M%S-%f")
         return f"session-{trigger}-{timestamp}"
     
     def get_active_sessions(self) -> List[DebugSession]:

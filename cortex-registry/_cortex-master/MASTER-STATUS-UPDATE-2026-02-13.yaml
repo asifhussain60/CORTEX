@@ -108,19 +108,20 @@ completed_waves:
   
   - wave_id: "WAVE-R"
     name: "EventBus-Driven Debugger (ENH-089)"
-    status: "🔵 IN PROGRESS (40% - Stage 1/5)"
+    status: "🔵 IN PROGRESS (72% - Stage 3/5)"
     started: "2026-02-13T03:15:00Z"
-    duration: "2 hours (Stage 1)"
+    duration: "4 hours (Stages 1-3)"
     phases: 1
-    tests: "24/69 passing"
+    tests: "50/69 passing"
     
     deliverables:
       - "✅ DebuggerOrchestrator foundation (EventBus subscriptions)"
       - "✅ Event handlers (TEST_FAILURE, REFACTOR_REGRESSION, GOVERNANCE_VIOLATION)"
       - "✅ IOrchestrator compliance (6 abstract methods)"
-      - "⚪ MarkerInjectionEngine (Stage 2 pending)"
-      - "⚪ AutoCleanupManager (Stage 3 pending)"
-      - "⚪ Integration + MCP tools (Stages 4-5 pending)"
+      - "✅ MarkerInjectionEngine (Strategy Pattern, 3 strategies)"
+      - "✅ AutoCleanupManager (resolved session detection, stale markers)"
+      - "⚪ Integration wiring (Stage 4 pending)"
+      - "⚪ MCP tools (Stage 5 pending)"
     
     impact:
       - "Zero-friction debugging (5-10 min → 0 min setup)"
