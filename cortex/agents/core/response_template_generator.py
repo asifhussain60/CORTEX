@@ -1,9 +1,47 @@
 #!/usr/bin/env python3
 """
 Enhanced Response Template Generator
+
 Purpose: Semantic color-coded response headers for CORTEX
 Version: 2.0 - SSOT Compliance (40-char separators)
 Integration: cortex-architect.prompt.md + agents
+
+Response Flow:
+  ┌──────────────────────────────────────────────────────┐
+  │  1. User request → MasterOrchestrator                │
+  ├──────────────────────────────────────────────────────┤
+  │  2. Detect section status from title keywords        │
+  │     (complete, blocked, pending, etc.)               │
+  ├──────────────────────────────────────────────────────┤
+  │  3. Assign semantic emoji + color                    │
+  │     ✅ Complete | 🔵 In Progress | 🔴 Blocked       │
+  ├──────────────────────────────────────────────────────┤
+  │  4. Generate markdown header with status emoji       │
+  ├──────────────────────────────────────────────────────┤
+  │  5. Render to chat (Copilot processes markdown)      │
+  └──────────────────────────────────────────────────────┘
+
+Status Mappings:
+  • Complete/Success: ✅ (Green) - Done, passed, ready
+  • In Progress: 🔵 (Orange) - Pending, next, todo
+  • Blocked: 🔴 (Red) - Failed, error, critical
+  • Planned: ➡️ (Orange) - Upcoming work
+  • Design/Info: 🎨 (Blue) - Analysis, information
+  • Warning: ⚠️ (Yellow) - Caution, attention needed
+  • Critical: 🚨 (Red) - Emergency, blocker
+
+Usage Examples:
+  # Auto-detect status from title
+  header = ResponseTemplate.create_header("Refactoring Complete")
+  # → "## ✅ Refactoring Complete"
+  
+  # Create box-framed section with 40-char border
+  box = ResponseTemplate.create_box_section("Summary", "Implementation done")
+  # → ────────────────────────────────────────
+  #   Summary
+  #   ────────────────────────────────────────
+  #   Implementation done
+  #   ────────────────────────────────────────
 """
 
 from dataclasses import dataclass
@@ -17,7 +55,54 @@ BOX_WIDTH = 40
 
 
 class SectionStatus(Enum):
-    """Section status types with emoji mappings."""
+    """
+    Section status types with semantic emoji mappings.
+    
+    Format: (emoji, color, keywords)
+    
+    Status Types:
+      COMPLETE (✅):
+        • Visual: Green checkmark
+        • Usage: Finished operations, passed tests, ready states
+        • Keywords: complete, completed, success, passed, ready, done
+        • Example: "## ✅ Testing Complete"
+        
+      IN_PROGRESS (🔵):
+        • Visual: Blue circle
+        • Usage: Current work, pending operations, next steps
+        • Keywords: in progress, pending, next, todo, working
+        • Example: "## 🔵 Implementation In Progress"
+        
+      BLOCKED (🔴):
+        • Visual: Red circle
+        • Usage: Critical failures, blocked operations
+        • Keywords: blocked, failed, error, critical
+        • Example: "## 🔴 Test Execution Blocked"
+        
+      PLANNED (➡️):
+        • Visual: Right arrow (orange)
+        • Usage: Upcoming work, future steps, planning
+        • Keywords: planned, upcoming, next steps
+        • Example: "## ➡️ Planned Refactoring"
+        
+      DESIGN (🎨):
+        • Visual: Artist palette (blue)
+        • Usage: Analysis, design docs, informational content
+        • Keywords: design, analysis, information, overview
+        • Example: "## 🎨 Architecture Analysis"
+        
+      WARNING (⚠️):
+        • Visual: Warning triangle (yellow)
+        • Usage: Caution needed, attention required
+        • Keywords: warning, caution, attention
+        • Example: "## ⚠️ Deprecation Warning"
+        
+      CRITICAL (🚨):
+        • Visual: Siren/emergency (red)
+        • Usage: Emergency situations, critical blockers
+        • Keywords: critical, emergency, blocker
+        • Example: "## 🚨 Critical Security Issue"
+    """
     COMPLETE = ("✅", "green", "Completion, success, PASSED, READY")
     IN_PROGRESS = ("🔵", "orange", "In Progress, PENDING, NEXT, TODO")
     BLOCKED = ("🔴", "red", "Critical, BLOCKED, FAILED, ERROR")

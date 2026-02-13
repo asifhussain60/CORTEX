@@ -13,6 +13,39 @@ Implementation Pattern:
     → AgentRulesInterpreter (this module)
     → MachineReadableRulesRegistry (YAML-based)
     → Master Orchestrator (execution delegation)
+
+Execution Flow:
+  ┌─────────────────────────────────────────────────────────────┐
+  │  1. Agent receives user request in CORTEX context           │
+  ├─────────────────────────────────────────────────────────────┤
+  │  2. AgentRulesInterpreter loads rules from registry         │
+  │     (ExecutionContext: CORTEX_INTERNAL or PRODUCTION_REPO)  │
+  ├─────────────────────────────────────────────────────────────┤
+  │  3. Rules validation: enforcement level + constraints       │
+  │     • BLOCKED: halt immediately on violation               │
+  │     • PRE_EXECUTION: validate before orchestration         │
+  │     • WARNING: log but continue                            │
+  │     • RUNTIME: monitor during execution                    │
+  ├─────────────────────────────────────────────────────────────┤
+  │  4. ExecutionDirective compiled (action → orchestrator)     │
+  ├─────────────────────────────────────────────────────────────┤
+  │  5. Master Orchestrator delegates to target orchestrator    │
+  │     (TDD, Refactoring, LENS, etc.)                         │
+  ├─────────────────────────────────────────────────────────────┤
+  │  6. Violation logged in audit trail (AC markers)            │
+  └─────────────────────────────────────────────────────────────┘
+
+Key Concepts:
+  • ExecutionContext: CORTEX vs production repo rules differ
+  • RuleEnforcementLevel: Controls violation handling (block/warn/log)
+  • AgentRole: Architect, Auditor, Designer, Executor, Validator, Digest
+  • RulesRegistry: YAML-based SSOT for all rules
+
+Example Usage:
+  interpreter = AgentRulesInterpreter(registry_path)
+  directives = interpreter.interpret(request, context=ExecutionContext.CORTEX_INTERNAL)
+  for directive in directives:
+      orchestrator.execute(directive)  # Route to appropriate orchestrator
 """
 
 from __future__ import annotations
@@ -40,14 +73,86 @@ logger.setLevel(logging.DEBUG)
 # ============================================================================
 
 class ExecutionContext(str, Enum):
-    """Execution context determines which rules/validation apply."""
+    """
+    Execution context determines which rules/validation apply.
+    
+    Context Behaviors:
+      CORTEX_INTERNAL:
+        • Stricter rules (infrastructure, architecture patterns)
+        • Self-development constraints (no direct file ops)
+        • Full governance enforcement
+        • Example: Implementing new MCP tools
+      
+      PRODUCTION_REPO:
+        • User domain rules (business logic, APIs)
+        • Production constraints (backwards compatibility)
+        • Relaxed governance (user's rules apply)
+        • Example: Implementing user feature
+      
+      HYBRID:
+        • Both CORTEX and user rules apply
+        • Union of constraints (stricter interpretation)
+        • Used for cross-cutting concerns
+        • Example: Security hardening affecting both
+    
+    Usage:
+      context = ExecutionContext.CORTEX_INTERNAL
+      if context == ExecutionContext.CORTEX_INTERNAL:
+          # Load stricter rules from cortex-internal registry
+    """
     CORTEX_INTERNAL = "cortex_internal"  # CORTEX self-development
     PRODUCTION_REPO = "production_repo"  # User's production repository
     HYBRID = "hybrid"                     # Both contexts
 
 
 class RuleEnforcementLevel(str, Enum):
-    """Enforcement level determines action on violation."""
+    """
+    Enforcement level determines action on violation.
+    
+    Enforcement Hierarchy (Strict → Lenient):
+    
+      BLOCKED (P0 - Critical)
+        • Immediately halt execution
+        • Log critical violation to audit trail
+        • Return error to user
+        • Example: MCP-FIRST violations (direct file ops on prod code)
+        
+      PRE_EXECUTION (P1 - High)
+        • Validate before execution starts
+        • Collect all violations, report together
+        • User can acknowledge and override (logged)
+        • Example: TDD test count minimum
+        
+      RUNTIME (P2 - Medium)
+        • Monitor during execution
+        • Warning at violation
+        • Allow continuation (logged)
+        • Example: Code comment density below target
+        
+      WARNING (P3 - Low)
+        • Log warning, never block
+        • Suggests best practice
+        • Execution unaffected
+        • Example: File naming convention
+        
+      PRINCIPLE (P4 - Aspirational)
+        • No enforcement, guidance only
+        • Contributes to quality score
+        • No blocking or warnings
+        • Example: Future best practice
+    
+    Decision Logic:
+      if violation.severity == BLOCKED:
+          raise BlockedViolationException()  # Stop immediately
+      elif violation.severity == PRE_EXECUTION:
+          collect_violation()  # Continue validation phase
+      elif violation.severity == RUNTIME:
+          warn()  # Log and continue
+      elif violation.severity == WARNING:
+          log()   # Silent logging
+      elif violation.severity == PRINCIPLE:
+          pass    # Aspirational only
+    """
     BLOCKED = "BLOCKED"           # Halt execution immediately
     PRE_EXECUTION = "PRE_EXECUTION"  # Validate before execution
     WARNING = "WARNING"            # Log warning, continue
@@ -56,7 +161,63 @@ class RuleEnforcementLevel(str, Enum):
 
 
 class AgentRole(str, Enum):
-    """Agent roles define their primary responsibility."""
+    """
+    Agent roles define their primary responsibility and execution pattern.
+    
+    Agent Role Descriptions:
+    
+      ARCHITECT
+        • Responsibilities: Mode routing, environment validation, context setup
+        • Execution: Synchronous, non-blocking
+        • Used by: Initial session setup
+        • Example: Detect CORTEX vs production repo
+        
+      AUDITOR
+        • Responsibilities: Codebase health scanning, governance compliance
+        • Execution: Batch processing, violations collected
+        • Used by: /audit command
+        • Example: Scan for CORE rule violations
+        
+      DESIGNER
+        • Responsibilities: Challenge generation, solution review
+        • Execution: Interactive, awaits approval
+        • Used by: Design/Challenge operations
+        • Example: Generate holistic validation challenges
+        
+      EXECUTOR
+        • Responsibilities: Direct implementation (approved operations)
+        • Execution: Async, TDD workflow (RED→GREEN→REFACTOR)
+        • Used by: /implement, /fix, /refactor
+        • Example: Implement feature via TDDOrchestrator
+        
+      VALIDATOR
+        • Responsibilities: Holistic validation gate before execution
+        • Execution: Pre-flight checks, gate decision
+        • Used by: All implementation operations
+        • Example: CORE-048 Holistic Validation Gate
+        
+      DIGEST
+        • Responsibilities: Chat session learning extraction
+        • Execution: Post-session, file analysis
+        • Used by: /digest command
+        • Example: Extract enhancements from chat markers
+        
+      PLAN_ORCHESTRATOR
+        • Responsibilities: Phase lifecycle management
+        • Execution: Setup/teardown hooks, dashboard sync
+        • Used by: /plan command
+        • Example: Create phase, resolve operations
+        
+      MCP_GATEWAY
+        • Responsibilities: MCP tool routing + availability checking
+        • Execution: Pre-flight MCP validation
+        • Used by: All cortex_* tool invocations
+        • Example: Verify MCP available before IMPLEMENT
+    
+    Role Execution Pattern:
+      ARCHITECT → VALIDATOR → DESIGNER → EXECUTOR → DIGEST
+      (Each role hands off to next based on operation type)
+    """
     ARCHITECT = "architect"        # Mode routing + environment validation
     AUDITOR = "auditor"            # Codebase health scanning
     DESIGNER = "designer"          # Challenge generation + approval
