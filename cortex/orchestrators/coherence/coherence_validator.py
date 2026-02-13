@@ -156,7 +156,13 @@ class CoherenceValidator:
         # Build issue details
         issue_details = {
             "issues": [
-                {"type": i.issue_type, "severity": i.severity, "message": i.message}
+                {
+                    "type": i.issue_type,
+                    "severity": i.severity,
+                    "message": i.message,
+                    "location": i.location,
+                    "suggestion": i.suggestion,
+                }
                 for i in issues
             ],
             "recommendations": [i.suggestion for i in issues if i.suggestion],
