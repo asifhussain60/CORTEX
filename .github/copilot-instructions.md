@@ -1468,9 +1468,9 @@ cortex_process_request(
 
 **BEFORE emitting any recommendation:**
 
-1. Check rejection history from docs/meta/ directory → look for rejected_recommendations
+1. Check enhancement registry from cortex-registry/_cortex-master/enhancements/ for similar proposals
 2. Calculate regression risk score (0-1.0)
-3. BLOCK if risk > 0.7 OR matches REJ-* pattern (similarity > 0.3)
+3. BLOCK if risk > 0.7 OR matches similar pattern (similarity > 0.3)
 
 **Gate Checks:**
 
