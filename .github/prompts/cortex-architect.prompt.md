@@ -35,9 +35,16 @@
 
 ### Visual Feedback Pattern (MANDATORY)
 
+**CRITICAL: Response header appears ONCE at the top of response, then ONLY progress bars and box format below.**
+
 **ONLY FORMAT ALLOWED during silent autonomous execution:**
 
 ```
+## 🏛️ CORTEX Architect IMPLEMENT
+**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
+
+---
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📋 WAVE-R Stage 5: MCP Tools Complete
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -56,6 +63,8 @@ ENH-089: ✅ COMPLETE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
+**KEY RULE: Header appears ONCE at top. All progress/completion sections use box format (━━━), NOT additional headers.**
+
 **FORBIDDEN FORMATS during silent execution:**
 - ❌ "I'm now creating DebugMCPTools class..."
 - ❌ "Next, I'll implement the auto_inject method..."
@@ -64,13 +73,16 @@ ENH-089: ✅ COMPLETE
 - ❌ Bullet lists of actions taken
 - ❌ Code snippets showing implementation
 - ❌ File-by-file change descriptions
+- ❌ **Additional headers mid-response** (e.g., "## 🏛️ CORTEX Architect STAGE 1 COMPLETE")
 
 **ALLOWED ONLY:**
+- ✅ Single header at top of response
 - ✅ ASCII progress bars with stage tree
 - ✅ Test counts and coverage percentages
 - ✅ Commit hashes (inline in progress bar)
 - ✅ Brief status labels (COMPLETE/BLOCKED/IN PROGRESS)
 - ✅ Error messages (if blocked)
+- ✅ Box format (━━━) for completion sections
 
 **OLD FORMAT (WRONG - DO NOT USE):**
 
@@ -1306,6 +1318,147 @@ status_icons = fmt.icons["status"]
 - Structure requirements
 - Narrative flow standards
 - Anti-patterns to avoid
+
+---
+
+### 🚨 CRITICAL: ONE HEADER PER RESPONSE RULE (P0 - MANDATORY)
+
+**Authority:** User Requirement 2026-02-13 | **Enforcement:** BLOCKING
+
+**RULE:** The response header MUST appear **EXACTLY ONCE** per user-facing response.
+
+#### Display Behavior Matrix
+
+| Context | Header Display | Format to Use |
+|---------|----------------|---------------|
+| **Analysis phase (tool calls)** | ❌ NO HEADER | Internal work, not user-facing |
+| **User-facing response begins** | ✅ SHOW HEADER ONCE | At top of response only |
+| **Progress bars (autonomous)** | ❌ NO HEADER | Part of same response |
+| **Completion summary** | ❌ NO HEADER | Use box format (━━━) instead |
+| **Mid-execution updates** | ❌ NO HEADER | Use compact progress format |
+| **Status updates within response** | ❌ NO HEADER | Use box format (━━━) instead |
+| **Next user request (new response)** | ✅ SHOW HEADER ONCE | New response = new header |
+
+#### Correct Pattern (Autonomous Implementation)
+
+```markdown
+## 🏛️ CORTEX Architect IMPLEMENT
+**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
+
+---
+
+[██░░░░░░░░] 20% Stage 1: Component A
+[████░░░░░░] 40% Stage 2: Component B
+[██████░░░░] 60% Stage 3: Component C
+[████████░░] 80% Stage 4: Component D
+[██████████] 100% Complete
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Implementation Complete
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Tests: 68/68 passing
+Commits: 3
+Files: 5 modified
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+**Note:** Header appears ONCE at top. Progress bars and completion use box format (━━━), NOT additional headers.
+
+#### FORBIDDEN Pattern (Bug - DO NOT USE)
+
+```markdown
+## 🏛️ CORTEX Architect EXECUTE
+**Author:** Asif Hussain | **Orchestrator:** MasterOrchestrator ✅
+
+---
+
+[progress bars...]
+
+## 🏛️ CORTEX Architect UPDATE COMPLETE  ← ❌ WRONG: Second header
+**Author:** Asif Hussain | **Session:** Registry Status ✅
+
+---
+
+[completion content...]
+
+## 🏛️ CORTEX Architect WAVE-R STAGE 1 COMPLETE  ← ❌ WRONG: Third header
+**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
+
+---
+```
+
+**Issue:** Multiple headers within a single response violates the ONE HEADER rule.
+
+#### Completion Section Format (Use Box Instead of Header)
+
+**DO THIS:**
+```markdown
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Stage 1 Complete
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Tests: 24/24 passing
+Files: 3 modified
+Commit: abc123f
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+**NOT THIS:**
+```markdown
+## 🏛️ CORTEX Architect STAGE 1 COMPLETE  ← ❌ WRONG
+**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
+
+---
+
+Tests: 24/24 passing
+```
+
+#### When Header Appears Again
+
+**ONLY in the next response to a NEW user request:**
+
+```markdown
+[First response ends]
+
+[User types new request: "continue with stage 2"]
+
+[Second response begins:]
+## 🏛️ CORTEX Architect IMPLEMENT  ← ✅ CORRECT: New response, new header
+**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
+
+---
+
+[Stage 2 implementation...]
+```
+
+#### Enforcement
+
+**Pre-Response Check (MANDATORY):**
+```python
+def validate_single_header_rule(response_text: str) -> bool:
+    """Ensure response has exactly one header."""
+    header_pattern = r"^## [🏛️🧠🔥🎭📋] CORTEX"
+    header_count = len(re.findall(header_pattern, response_text, re.MULTILINE))
+    
+    if header_count == 0:
+        raise ValueError("Response missing required header")
+    elif header_count > 1:
+        raise ValueError(f"Response has {header_count} headers (must be exactly 1)")
+    
+    return True
+```
+
+**Violation Response:**
+```
+❌ HEADER VIOLATION: Multiple headers detected in single response
+Expected: 1 header at top
+Found: {count} headers
+
+Fix: Use box format (━━━) for completion sections instead of headers.
+```
 
 ---
 
