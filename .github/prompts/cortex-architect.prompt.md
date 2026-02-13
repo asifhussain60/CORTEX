@@ -47,9 +47,9 @@
 
 ---
 
-────────────────────────────────────────
-📋 WAVE-R Stage 5: MCP Tools Complete
-────────────────────────────────────────
+<hr>
+
+📋 **WAVE-R Stage 5: MCP Tools Complete**
 
 `██████████` 100% All Stages Complete
 
@@ -62,14 +62,15 @@
 Tests: 68/69 | Coverage: 99%
 Commits: 3 (all pushed to remote)
 ENH-089: ✅ COMPLETE
-────────────────────────────────────────
+
+<hr>
 ```
 
 **KEY RULES:**
 - Header appears ONCE at top
-- Box separators: exactly 40 `─` (U+2500) characters
+- Box separators: Use `<hr>` HTML tag (prevents overflow in Copilot Chat)
 - Progress bar uses inline code block: `` `██████` `` (prevents markdown link interpretation)
-- All progress/completion sections use box format (────), NOT additional headers
+- All progress/completion sections use `<hr>` separator, NOT box-drawing characters
 - Track sections use `###` headers, never `##`
 - Field labels use `**Label:**` format
 - **CRITICAL:** Each stage tree line MUST be on its own line (newline after each `├─` or `└─` line)
@@ -80,11 +81,27 @@ ENH-089: ✅ COMPLETE
 
 ### RENDERING ENFORCEMENT (CRITICAL)
 
-**PROBLEM:** Stage tree lines may concatenate on single line in Copilot Chat if not properly formatted.
+**PROBLEM:** Long separators overflow in Copilot Chat UI (box-drawing characters render wider than ASCII).
+
+**SOLUTION:** Use HTML `<hr>` tag for all progress/completion boxes.
 
 **MANDATORY RENDERING RULES:**
 
-1. **Stage Tree Lines - Each Stage on Separate Line:**
+1. **Box Separators - Use HTML:**
+   ```markdown
+   <hr>
+   
+   📋 **Stage Name**
+   
+   [Progress content]
+   
+   <hr>
+   ```
+   - MUST use `<hr>` (not box-drawing characters)
+   - Prevents visual overflow in Copilot Chat
+   - Renders as thin horizontal line
+
+2. **Stage Tree Lines - Each Stage on Separate Line:**
    ```
    ├─ ✅ S1: Name (n tests)
    ├─ ✅ S2: Name (n tests)
@@ -94,23 +111,17 @@ ENH-089: ✅ COMPLETE
    - NEVER write as: `├─ ✅ S1: Name (n tests) ├─ ✅ S2: Name (n tests)`
    - Keep stage names <30 chars to prevent overflow
 
-2. **Box Separators - Exact Length:**
-   - MUST be exactly 40 `─` characters (U+2500)
-   - NOT 50, NOT 60, EXACTLY 40
-   - Verify: `────────────────────────────────────────` (40 chars)
-
 3. **Progress Bar - Inline Code Block:**
    - MUST use inline code: `` `██████████` 100% ``
    - Prevents markdown from parsing as link
 
 4. **Line Length Limits:**
    - Stage tree lines: <70 chars total
-   - Box separator: exactly 40 chars
    - Title lines: <60 chars
    - If stage name too long, abbreviate
 
 **VALIDATION BEFORE OUTPUT:**
-- [ ] Count `─` in box separator = 40
+- [ ] All box separators use `<hr>` (not `────` or `----`)
 - [ ] Each `├─` or `└─` line ends with newline
 - [ ] Progress bar wrapped in `` ` ` ``
 - [ ] No stage name >30 chars

@@ -815,10 +815,12 @@ Fix infrastructure. No bypasses allowed.
 
 **RENDERING RULE:** Each stage line MUST be on its own line. Do NOT concatenate.
 
-```
-────────────────────────────────────────
-📋 WAVE-R Stage 4: Integration Testing
-────────────────────────────────────────
+**SEPARATOR FORMAT:** Use `<hr>` HTML tag (prevents overflow in Copilot Chat).
+
+```markdown
+<hr>
+
+📋 **WAVE-R Stage 4: Integration Testing**
 
 `██████████` 100% Stage 4 Complete
 
@@ -830,7 +832,8 @@ Fix infrastructure. No bypasses allowed.
 
 Tests: 58/69 | Coverage: 84%
 Fixed: Session ID timestamp collision (microseconds)
-────────────────────────────────────────
+
+<hr>
 ```
 
 **VALIDATION:** Before output, verify each `├─` or `└─` line has newline after it (not concatenated on single line).
@@ -850,9 +853,10 @@ Fixed: Session ID timestamp collision (microseconds)
 - ✅ Error messages (if blocked)
 
 **LINE OVERFLOW PREVENTION:**
+- Use `<hr>` HTML tag for all box separators
 - Stage names: <30 chars
 - Total line length: <70 chars  
-- Box separator: exactly 40 `─` chars
+- NO box-drawing characters `────` (renders too wide in UI)
 
 ---
 

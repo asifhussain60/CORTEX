@@ -35,22 +35,28 @@ Unified response format for **all CORTEX operations** across modes: PRE-FLIGHT, 
 
 **CRITICAL RENDERING RULE:** Each stage tree line MUST be on its own line with newline character. Do NOT concatenate.
 
-```
-----------------------------------------
-📋 {Phase Name}
-----------------------------------------
+**SEPARATOR FORMAT:** Use `<hr>` HTML tag to prevent overflow in Copilot Chat (box-drawing characters render too wide).
+
+```markdown
+<hr>
+
+📋 **{Phase Name}**
 
 [████████░░] 80% {Current Stage}
+
 ├─ ✅ S1: {name} ({n} tests)
 ├─ ✅ S2: {name} ({n} tests)
 ├─ 🔵 S3: {name} (in progress)
 └─ ⚪ S4: {name} (pending)
 
 Tests: {passed}/{total} | Coverage: {pct}%
-----------------------------------------
+
+<hr>
 ```
 
 **Rendering Validation:**
+- ✅ CORRECT: Use `<hr>` for box separators
+- ❌ WRONG: `────────────────────────────────────────` (overflows in UI)
 - ✅ CORRECT: Each `├─` or `└─` line on separate line
 - ❌ WRONG: `├─ ✅ S1: Name (n tests) ├─ ✅ S2: Name (n tests)` (concatenated)
 - Stage names: Keep <30 chars to prevent overflow
@@ -58,22 +64,25 @@ Tests: {passed}/{total} | Coverage: {pct}%
 
 ### Completion Summary (FINAL OUTPUT)
 
-```
-----------------------------------------
-✅ {Phase Name}: COMPLETE
-----------------------------------------
+```markdown
+<hr>
+
+✅ **{Phase Name}: COMPLETE**
+
 [██████████] 100% | {n}/{n} tests | {pct}% coverage
 
 Git: {commit_hash} "{commit_message}"
-----------------------------------------
+
+<hr>
 ```
 
 ### Error Report (ON FAILURE)
 
-```
-----------------------------------------
-🔴 {Phase Name}: BLOCKED at {Stage}
-----------------------------------------
+```markdown
+<hr>
+
+🔴 **{Phase Name}: BLOCKED at {Stage}**
+
 [████░░░░░░] 40% | {passed}/{total} tests | {failures} failures
 
 Error: {error_message}
@@ -81,7 +90,8 @@ Error: {error_message}
   - Actual: {actual}
 
 Fix: {fix_suggestion}
-----------------------------------------
+
+<hr>
 ```
 
 ### FORBIDDEN in Silent Mode

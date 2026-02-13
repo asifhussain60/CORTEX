@@ -29,15 +29,49 @@ it may not preserve newlines correctly in Copilot Chat rendering context.
 
 ## Solution
 
-### 1. Enforce Explicit Line Breaks
+### 1. Use HTML `<hr>` Tag for Box Separators
+
+**Root Cause:** Box-drawing characters (`U+2500 ─`) render visually wider in Copilot Chat than ASCII, causing horizontal overflow.
+
+**Solution:** Replace all box separators with HTML `<hr>` tag which renders as a thin line that doesn't overflow.
+
+**Before (overflow issue):**
+```markdown
+────────────────────────────────────────
+📋 WAVE-R Stage 1: Implementation
+────────────────────────────────────────
+```
+
+**After (no overflow):**
+```markdown
+<hr>
+
+📋 **WAVE-R Stage 1: Implementation**
+
+<hr>
+```
+
+**Benefits:**
+- ✅ Renders as thin horizontal line (doesn't overflow)
+- ✅ Semantic HTML (proper separator element)
+- ✅ Consistent width across all markdown renderers
+- ✅ No character counting needed (40 chars vs `<hr>`)
+
+### 2. Enforce Explicit Line Breaks for Stage Trees
 
 **Current template (cortex-architect.prompt.md:56-60):**
 ```markdown
+<hr>
+
+📋 **Stage Name**
+
 ├─ ✅ S1: DebuggerOrchestrator (24 tests)
 ├─ ✅ S2: MarkerInjectionEngine (17 tests)
 ├─ ✅ S3: AutoCleanupManager (9 tests)
 ├─ ✅ S4: Integration (8 tests)
 └─ ✅ S5: MCP Tools (10 tests)
+
+<hr>
 ```
 
 **Enhanced with blank line guidance:**
@@ -87,65 +121,32 @@ Add to cortex-architect.prompt.md § Visual Feedback Pattern:
 **Add after line 44 (Stage Tree section):**
 
 ```markdown
-### Stage Tree Rendering (CRITICAL)
+### Box Separator Format (CRITICAL)
 
-**Each stage MUST appear on its own line** to prevent overflow in Copilot Chat.
+**Use HTML `<hr>` tag** instead of box-drawing characters to prevent UI overflow.
 
-**Template Structure:**
+**Why `<hr>` instead of `────────────────────────────────────────`:**
+- Box-drawing character (U+2500) renders wider than ASCII in Copilot Chat
+- Creates horizontal scrolling and visual overflow
+- HTML `<hr>` renders as thin line that fits display width
+- Semantic HTML (proper separator element)
+
+**Template:**
 ```markdown
-├─ {status} S{n}: {name} ({tests} tests)
-├─ {status} S{n}: {name} ({tests} tests)
-└─ {status} S{n}: {name} ({tests} tests)
+<hr>
+
+📋 **{Section Title}**
+
+{Content}
+
+<hr>
 ```
 
-**Character Breakdown:**
-- `├─` or `└─` : Tree connector (2 chars)
-- ` ` : Space (1 char)
-- `✅` or `🔵` or `⚪` : Status emoji
-- ` S{n}: ` : Stage label with space
-- `{name}` : Stage name (keep concise, <30 chars)
-- ` ({tests} tests)` : Test count in parentheses
-
-**Line Length Targets:**
-- Ideal: 50-60 characters per stage line
-- Maximum: 70 characters (to fit in Copilot Chat display)
-- If stage name >30 chars, abbreviate or split
-
-**Examples:**
-
-✅ **CORRECT:**
-```
-├─ ✅ S1: Adapter Creation (20 tests)
-├─ ✅ S2: Batch Generation (174 tests)
-└─ ✅ S3: Integration (4 tests)
-```
-
-❌ **WRONG (too long):**
-```
-├─ ✅ S1: ScaffolderIntelligenceAdapter with full wiring integration (20 tests)
-```
-
-✅ **FIXED (abbreviated):**
-```
-├─ ✅ S1: Scaffolder Adapter (20 tests)
-```
-
-**Validation Regex:**
-```python
-import re
-
-# Each line should match this pattern
-pattern = r'^[├└]─ [✅🔵⚪🔴] S\d+: .{1,40} \(\d+ tests\)$'
-
-lines = [
-    "├─ ✅ S1: Adapter Creation (20 tests)",
-    "├─ ✅ S2: Batch Generation (174 tests)",
-    "└─ ✅ S3: Integration (4 tests)",
-]
-
-for line in lines:
-    assert re.match(pattern, line), f"Invalid format: {line}"
-```
+**Character Limits:**
+- Stage names: <30 chars
+- Line length: <70 chars total
+- NO box-drawing characters (`────`)
+- NO long dash sequences (`----------------------------------------`)
 ```
 
 ### 4. Enforcement Checklist
@@ -155,11 +156,11 @@ Add to prompt files:
 ```markdown
 **Before generating completion response, verify:**
 
+- [ ] All box separators use `<hr>` tag (NO `────` or `----`)
 - [ ] Each stage tree line on separate line (no concatenation)
 - [ ] Stage names abbreviated if >30 chars
-- [ ] Box separators exactly 40 `─` characters
-- [ ] Progress bar in inline code blocks
-- [ ] Total line length <100 chars (for Copilot Chat width)
+- [ ] Progress bar in inline code blocks: `` `██████` ``
+- [ ] Total line length <70 chars
 - [ ] No `##` headers inside completion boxes
 - [ ] Field labels use `**Label:**` format
 ```
@@ -167,9 +168,9 @@ Add to prompt files:
 ## Implementation Plan
 
 1. ✅ Document issue and solution (this file)
-2. ⚪ Update cortex-architect.prompt.md with rendering rules
-3. ⚪ Update response-format-standards.md with line length targets
-4. ⚪ Add validation checklist to both prompt files
+2. ✅ Update cortex-architect.prompt.md with `<hr>` separator format
+3. ✅ Update response-format-standards.md with `<hr>` format
+4. ✅ Update copilot-instructions.md with `<hr>` format
 5. ⚪ Test with next completion response
 6. ⚪ Commit changes with AC marker
 
@@ -177,10 +178,10 @@ Add to prompt files:
 
 **Next completion response should render as:**
 
-```
-────────────────────────────────────────
-📋 WAVE-3 Stage 1: Feature Implementation
-────────────────────────────────────────
+```markdown
+<hr>
+
+📋 **WAVE-3 Stage 1: Feature Implementation**
 
 `██████████` 100% Complete
 
@@ -189,13 +190,15 @@ Add to prompt files:
 └─ ✅ S3: Validation (12 tests)
 
 Tests: 35/35 | Coverage: 98%
-────────────────────────────────────────
+
+<hr>
 ```
 
 **Verify in Copilot Chat:**
+- Horizontal lines render as thin separators (no overflow)
 - Each stage line appears on its own line
 - No horizontal scrolling required
 - Tree connectors aligned vertically
-- Box separators fit display width
+- Separator fits display width
 
 # AC_COMPLETE: AC-RESPONSE-FORMAT-FIX-001 ✅
