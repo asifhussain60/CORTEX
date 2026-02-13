@@ -32,6 +32,14 @@ from pathlib import Path
 from datetime import datetime
 from typing import Dict, Tuple, Optional, List
 
+# Fix Windows console encoding for emoji support
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+        sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+    except Exception:
+        pass  # Fallback: emojis may not display correctly
+
 # Configure logging
 LOG_DIR = Path(".cortex")
 LOG_DIR.mkdir(exist_ok=True)
@@ -41,7 +49,7 @@ logging.basicConfig(
     level=logging.INFO,
     format="[%(asctime)s] %(levelname)s: %(message)s",
     handlers=[
-        logging.FileHandler(LOG_FILE),
+        logging.FileHandler(LOG_FILE, encoding='utf-8'),
         logging.StreamHandler(sys.stdout),
     ],
 )
