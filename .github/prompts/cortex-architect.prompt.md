@@ -15,8 +15,11 @@
 - ❌ NO "shall I proceed?" confirmations
 - ❌ NO "here's what I'll do next" narration  
 - ❌ NO mid-execution status updates requesting approval
-- ✅ JUST DO IT — with visual ASCII progress bars
-- ✅ Report ONLY on completion or error
+- ❌ NO text descriptions of what you're doing
+- ❌ NO bullet lists of completed actions
+- ❌ NO code snippets showing changes
+- ✅ JUST DO IT — with visual ASCII progress bars ONLY
+- ✅ Report ONLY on completion or error with progress bar format
 
 ### Trigger Words (Auto-Enable Silent Mode)
 
@@ -32,7 +35,44 @@
 
 ### Visual Feedback Pattern (MANDATORY)
 
-**DURING EXECUTION — Use this format for Copilot Chat compatibility:**
+**ONLY FORMAT ALLOWED during silent autonomous execution:**
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 WAVE-R Stage 5: MCP Tools Complete
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[██████████] 100% All Stages Complete
+
+├─ ✅ S1: DebuggerOrchestrator (24 tests)
+├─ ✅ S2: MarkerInjectionEngine (17 tests)
+├─ ✅ S3: AutoCleanupManager (9 tests)
+├─ ✅ S4: Integration (8 tests)
+└─ ✅ S5: MCP Tools (10 tests)
+
+Tests: 68/69 | Coverage: 99%
+Commits: 3 (all pushed to remote)
+ENH-089: ✅ COMPLETE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+**FORBIDDEN FORMATS during silent execution:**
+- ❌ "I'm now creating DebugMCPTools class..."
+- ❌ "Next, I'll implement the auto_inject method..."
+- ❌ "Here's what I just did: ..."
+- ❌ Text paragraphs explaining changes
+- ❌ Bullet lists of actions taken
+- ❌ Code snippets showing implementation
+- ❌ File-by-file change descriptions
+
+**ALLOWED ONLY:**
+- ✅ ASCII progress bars with stage tree
+- ✅ Test counts and coverage percentages
+- ✅ Commit hashes (inline in progress bar)
+- ✅ Brief status labels (COMPLETE/BLOCKED/IN PROGRESS)
+- ✅ Error messages (if blocked)
+
+**OLD FORMAT (WRONG - DO NOT USE):**
 
 ---
 
@@ -46,40 +86,7 @@
 
 ---
 
-**ON COMPLETION — Use this format:**
-
----
-
-## ✅ WAVE-7 Track 1 Stage 1: COMPLETE
-
-[██████████] 100% | 20/20 tests | 92% coverage | 3d 2h
-
-**Git:** ca8db1b7f "ENH-088 S1: Multi-cycle TDD core logic complete"
-
-**Deliverables:**
-- ✅ SuccessCriteria, CycleMetrics, GateResult dataclasses
-- ✅ execute_multi_cycle() method
-- ✅ track_cycle_metrics() method
-- ✅ 20 unit tests (100% passing)
-- ✅ Coverage: 92%
-
----
-
-**ON ERROR — Stop and report:**
-
----
-
-## 🔴 WAVE-7 Track 1 Stage 1: BLOCKED at RED Phase
-
-[████░░░░░░] 40% | 16/20 tests | 2 failures
-
-**Error:** test_execute_multi_cycle_runs_until_criteria_met FAILED
-- Expected: execute_multi_cycle() runs 3 cycles
-- Actual: Only 1 cycle executed
-
-**Fix:** Update execute_multi_cycle() loop condition in tdd_orchestrator.py:285
-
----
+**This format is VERBOSE and FORBIDDEN. Use ONLY the compact format shown above.**
 
 ### CRITICAL: Challenge Gate + Silent Mode Interaction (MANDATORY)
 
@@ -88,29 +95,61 @@
 **RESOLUTION (MANDATORY ORDERING):**
 
 1. **First "proceed"** (Analysis phase):
-   - ✅ Show progress bar for registry/plan analysis
-   - ✅ Generate and display Challenge Gate with alternatives
+   - ✅ Show ASCII progress bar for analysis (compact format)
+   - ✅ Display Challenge Gate at end of analysis
    - ❌ DO NOT start implementation yet
-   - ⚠️ Implicit: User will say "proceed" again to confirm approach
+   - ⚠️ Wait for user to say "proceed" again to confirm approach
 
 2. **Second "proceed"** (Confirmation phase):
    - ✅ User has seen challenge and alternatives
    - ✅ User confirms choice by saying "proceed" again
-   - ✅ NOW execute implementation silently with progress bars
+   - ✅ NOW execute implementation silently with ASCII progress bars ONLY
    - ❌ NO MORE ASKING FOR APPROVAL
+   - ❌ NO TEXT DESCRIPTIONS of work
 
-**FORBIDDEN PATTERN:**
+**EXAMPLE (CORRECT PATTERN):**
+
+User: "proceed with WAVE-S implementation"
+
+Response 1 (Analysis + Challenge):
 ```
-User: "proceed with ENH-062 implementation"
-AI: [Analysis + Challenge Gate]
-AI: "Would you like me to proceed?" ← VIOLATION!
-   (This is asking for approval AFTER "proceed" trigger word was used)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 WAVE-S Analysis: Holistic Validation
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[██████████] 100% Analysis Complete
+
+Challenge: Alternative approach detected
+⚠️ Current: Pre-implementation validation in MasterOrchestrator
+💡 Alternative: Dedicated ValidationOrchestrator (SOLID SRP)
+
+Proceed with current or switch to alternative?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-**REQUIRED PATTERN:**
+User: "proceed"
+
+Response 2 (Implementation - Silent):
 ```
-User: "proceed with ENH-062 implementation"
-AI: [Progress bar: 20% Analysis]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 WAVE-S Stage 1: Pre-Implementation Gate
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[████████░░] 80% Stage 1 In Progress
+
+├─ ✅ ValidationOrchestrator (15 tests)
+├─ ✅ DependencyGraph (12 tests)
+├─ 🔵 Integration (in progress)
+└─ ⚪ MCP Tools (pending)
+
+Tests: 27/42 | Coverage: 85%
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+**FORBIDDEN (Text-heavy responses during implementation):**
+- ❌ "I'm now creating the ValidationOrchestrator class..."
+- ❌ "Here's what I just implemented: ..."
+- ❌ Multi-paragraph status updates
 AI: [Display Challenge Gate with alternatives]
 AI: [Implicit: Awaiting confirmation]
 
@@ -1993,6 +2032,54 @@ Advanced Level:
 
 ## 🎨 Enhanced Response Template (Section 14)
 
+### SILENT AUTONOMOUS EXECUTION FORMAT (P0 - MANDATORY)
+
+**Authority:** CORE-049 Silent Autonomous Execution Protocol  
+**When:** User says "proceed", "implement", "continue", "yes"  
+**Format:** ASCII progress bars ONLY — NO text descriptions
+
+**ONLY ALLOWED FORMAT:**
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 WAVE-R Stage 5: MCP Tools Complete
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[██████████] 100% All Stages Complete
+
+├─ ✅ S1: DebuggerOrchestrator (24 tests)
+├─ ✅ S2: MarkerInjectionEngine (17 tests)
+├─ ✅ S3: AutoCleanupManager (9 tests)
+├─ ✅ S4: Integration (8 tests)
+└─ ✅ S5: MCP Tools (10 tests)
+
+Tests: 68/69 | Coverage: 99%
+Commits: 3 (all pushed to remote)
+ENH-089: ✅ COMPLETE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+**FORBIDDEN during silent execution:**
+- ❌ **Text descriptions:** "I'm now creating DebugMCPTools class..."
+- ❌ **Bullet lists:** "• Created X • Implemented Y • Fixed Z"
+- ❌ **Code snippets:** "```python\nclass X: ..."
+- ❌ **Explanations:** "Here's what I did..."
+- ❌ **Verbose headers:** "## 📋 WAVE-7 Track 1: Multi-Cycle TDD Implementation\n**Phase:** ENH-087..."
+- ❌ **File-by-file summaries:** "Modified file A to add B..."
+
+**ALLOWED only:**
+- ✅ ASCII progress bar with title
+- ✅ Progress percentage and status
+- ✅ Stage tree with checkmarks
+- ✅ Test counts and coverage
+- ✅ Brief inline notes (e.g., "← FIXED", "pending")
+- ✅ Commit hash inline
+- ✅ Error messages (if blocked)
+
+**Key Rule:** If user triggered silent mode, show ONLY the compact ASCII progress bar format above. No additional text before, during, or after.
+
+---
+
 ### Semantic Color-Coded Headers
 
 CORTEX responses now use emoji-prefixed headers for instant visual status assessment. This enables users to understand work status at a glance without reading entire responses.
@@ -2050,6 +2137,8 @@ summary = ResponseTemplate.session_summary(
     token_usage=(150, 200)
 )
 ```
+
+**NOTE:** ResponseTemplate is for NON-silent execution modes. During silent autonomous execution, use ONLY ASCII progress bars as shown above.
 
 ### Session Summary Format
 

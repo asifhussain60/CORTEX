@@ -482,26 +482,43 @@ Fix infrastructure. No bypasses allowed.
 | DO | DON'T |
 |----|-------|
 | ✅ Kickoff Phase 49 CCL async prefetch | ❌ Ask "shall I proceed?" |
-| ✅ Show ASCII progress bars | ❌ Narrate what you're doing |
-| ✅ Report on completion/error | ❌ Request mid-execution approval |
+| ✅ Show ONLY ASCII progress bars | ❌ Narrate what you're doing |
+| ✅ Report on completion with progress bar | ❌ Request mid-execution approval |
 | ✅ Commit progress automatically | ❌ Multi-paragraph explanations |
-| ✅ Merge pre-warmed CCL context into Stage 2 | ❌ Wait for CCL if timeout |
+| ✅ Merge pre-warmed CCL context into Stage 2 | ❌ Text descriptions of work |
 
-**Progress Bar Format:**
+**CRITICAL: During silent autonomous execution, use ONLY this format:**
+
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📋 Phase 48: Holistic Validation
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 WAVE-R Stage 4: Integration Testing
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-[████████░░] 80% S5: Prompt Enhancement
-├─ ✅ S1: Orchestrator (12 tests)
-├─ ✅ S2: Dependency Graph (10 tests)  
-├─ 🔵 S5: Prompts (in progress)
-└─ ⚪ S6: MCP Tools (pending)
+[██████████] 100% Stage 4 Complete
 
-Tests: 50/60 | Coverage: 89%
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+├─ ✅ S1: DebuggerOrchestrator (24 tests)
+├─ ✅ S2: MarkerInjectionEngine (17 tests)
+├─ ✅ S3: AutoCleanupManager (9 tests)
+├─ ✅ S4: Integration (8 tests) ← FIXED
+└─ ⚪ S5: MCP Tools (pending)
+
+Tests: 58/69 | Coverage: 84%
+Fixed: Session ID timestamp collision (microseconds)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+**FORBIDDEN FORMATS during silent execution:**
+- ❌ Text paragraphs ("I'm now implementing...")
+- ❌ Bullet lists of actions taken
+- ❌ Detailed file change descriptions
+- ❌ Code snippets showing what changed
+- ❌ "Here's what I did" summaries
+
+**ALLOWED ONLY:**
+- ✅ ASCII progress bars with stage tree
+- ✅ Test counts and coverage percentages
+- ✅ Commit hashes (inline in progress bar)
+- ✅ Error messages (if blocked)
 
 ---
 
