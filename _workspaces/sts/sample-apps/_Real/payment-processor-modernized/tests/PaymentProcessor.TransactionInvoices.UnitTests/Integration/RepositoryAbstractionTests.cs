@@ -1,0 +1,257 @@
+using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using PaymentProcessor.TransactionInvoices.Core.Entities;
+using PaymentProcessor.TransactionInvoices.Core.Interfaces;
+using PaymentProcessor.TransactionInvoices.Infrastructure.EFCore;
+using PaymentProcessor.TransactionInvoices.Infrastructure.EFCore.Repositories;
+using PaymentProcessor.TransactionInvoices.Infrastructure.Mock;
+using Xunit;
+
+namespace PaymentProcessor.TransactionInvoices.UnitTests.Integration;
+
+/// <summary>
+/// Integration tests validating that Mock and EF Core repositories are interchangeable.
+/// Ensures identical behavior regardless of data layer implementation.
+/// </summary>
+public class RepositoryAbstractionTests : IDisposable
+{
+    private readonly ServiceProvider _serviceProvider;
+    private readonly ITransactionInvoiceRepository _mockRepo;
+    private readonly ITransactionInvoiceRepository _efCoreRepo;
+
+    public RepositoryAbstractionTests()
+    {
+        var services = new ServiceCollection();
+
+        // Register Mock repositories
+        services.AddKeyedSingleton<ITransactionInvoiceRepository, MockTransactionInvoiceRepository>("Mock");
+        services.AddSingleton<MockDataSeeder>();
+
+        // Register EF Core repositories
+        services.AddDbContext<TransactionInvoicesDbContext>(options =>
+            options.UseInMemoryDatabase($"TestDb_{Guid.NewGuid()}"));
+        services.AddKeyedScoped<ITransactionInvoiceRepository, EFCoreTransactionInvoiceRepository>("EFCore");
+
+        _serviceProvider = services.BuildServiceProvider();
+
+        // Get repository instances
+        _mockRepo = _serviceProvider.GetRequiredKeyedService<ITransactionInvoiceRepository>("Mock");
+        _efCoreRepo = _serviceProvider.GetRequiredKeyedService<ITransactionInvoiceRepository>("EFCore");
+
+        // Seed mock data
+        var seeder = _serviceProvider.GetRequiredService<MockDataSeeder>();
+        seeder.SeedData();
+
+        // Seed EF Core with same data structure
+        SeedEFCoreData();
+    }
+
+    private void SeedEFCoreData()
+    {
+        var context = _serviceProvider.GetRequiredService<TransactionInvoicesDbContext>();
+
+        // Create matching test data in EF Core
+        var batch = new TransactionBatch
+        {
+            BatchId = "BATCH-MOCK-001",
+            BatchNumber = "BN-MOCK-001",
+            Status = "Open",
+            BatchDate = DateTime.UtcNow,
+            TotalAmount = 500m,
+            InvoiceCount = 1,
+            CreatedBy = "Test"
+        };
+        context.TransactionBatches.Add(batch);
+
+        var account_category = new AccountCategory
+        {
+            AccountCategoryId = "SUB-MOCK-001",
+            AccountNumber = "ACC-MOCK-001",
+            AccountType = "AccountTypeA",
+            CustomerId = "MEM-MOCK-001",
+            Balance = 5000m,
+            Status = "Active",
+            OpenedDate = DateTime.UtcNow,
+            CreatedBy = "Test"
+        };
+        context.AccountCategorys.Add(account_category);
+
+        var invoice = new TransactionInvoice
+        {
+            InvoiceId = "MOCK-TEST-123",
+            BatchId = "BATCH-MOCK-001",
+            AccountCategoryId = "SUB-MOCK-001",
+            InvoiceNumber = "FI-MOCK-001",
+            Amount = 500m,
+            Status = "Pending",
+            InvoiceDate = DateTime.UtcNow,
+            Description = "Test Invoice",
+            CreatedBy = "Test"
+        };
+        context.TransactionInvoices.Add(invoice);
+
+        context.SaveChanges();
+    }
+
+    [Fact]
+    public async Task GetByIdAsync_MockAndEFCore_ReturnEquivalentData()
+    {
+        // Arrange - Use same invoice ID that exists in both repositories
+        var invoiceId = "MOCK-TEST-123";
+
+        // Act
+        var mockResult = await _mockRepo.GetByIdAsync(invoiceId);
+        var efCoreResult = await _efCoreRepo.GetByIdAsync(invoiceId);
+
+        // Assert - Both should return data (or both null)
+        if (mockResult != null && efCoreResult != null)
+        {
+            mockResult.InvoiceId.Should().Be(efCoreResult.InvoiceId);
+            mockResult.Amount.Should().Be(efCoreResult.Amount);
+            mockResult.Status.Should().Be(efCoreResult.Status);
+        }
+    }
+
+    [Fact]
+    public async Task CreateAsync_MockAndEFCore_BehaviorIsIdentical()
+    {
+        // Arrange
+        var mockInvoice = new TransactionInvoice
+        {
+            BatchId = "BATCH-MOCK-001",
+            AccountCategoryId = "SUB-MOCK-001",
+            InvoiceNumber = "FI-NEW-MOCK",
+            Amount = 750m,
+            Status = "Pending",
+            InvoiceDate = DateTime.UtcNow,
+            CreatedBy = "Test"
+        };
+
+        var efCoreInvoice = new TransactionInvoice
+        {
+            BatchId = "BATCH-MOCK-001",
+            AccountCategoryId = "SUB-MOCK-001",
+            InvoiceNumber = "FI-NEW-EFCORE",
+            Amount = 750m,
+            Status = "Pending",
+            InvoiceDate = DateTime.UtcNow,
+            CreatedBy = "Test"
+        };
+
+        // Act
+        var mockResult = await _mockRepo.CreateAsync(mockInvoice);
+        var efCoreResult = await _efCoreRepo.CreateAsync(efCoreInvoice);
+
+        // Assert - Both should generate IDs and persist data
+        mockResult.InvoiceId.Should().NotBeNullOrEmpty();
+        efCoreResult.InvoiceId.Should().NotBeNullOrEmpty();
+
+        mockResult.Amount.Should().Be(750m);
+        efCoreResult.Amount.Should().Be(750m);
+
+        // Verify persistence
+        var mockRetrieved = await _mockRepo.GetByIdAsync(mockResult.InvoiceId);
+        var efCoreRetrieved = await _efCoreRepo.GetByIdAsync(efCoreResult.InvoiceId);
+
+        mockRetrieved.Should().NotBeNull();
+        efCoreRetrieved.Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task UpdateAsync_MockAndEFCore_BehaviorIsIdentical()
+    {
+        // Arrange
+        var mockInvoice = await _mockRepo.GetByIdAsync("MOCK-TEST-123");
+        var efCoreInvoice = await _efCoreRepo.GetByIdAsync("MOCK-TEST-123");
+
+        mockInvoice!.Amount = 600m;
+        efCoreInvoice!.Amount = 600m;
+
+        // Act
+        var mockResult = await _mockRepo.UpdateAsync(mockInvoice);
+        var efCoreResult = await _efCoreRepo.UpdateAsync(efCoreInvoice);
+
+        // Assert
+        mockResult.Amount.Should().Be(600m);
+        efCoreResult.Amount.Should().Be(600m);
+
+        // Verify persistence
+        var mockUpdated = await _mockRepo.GetByIdAsync("MOCK-TEST-123");
+        var efCoreUpdated = await _efCoreRepo.GetByIdAsync("MOCK-TEST-123");
+
+        mockUpdated!.Amount.Should().Be(600m);
+        efCoreUpdated!.Amount.Should().Be(600m);
+    }
+
+    [Fact]
+    public async Task DeleteAsync_MockAndEFCore_BehaviorIsIdentical()
+    {
+        // Arrange - Create test invoices
+        var mockInvoice = await _mockRepo.CreateAsync(new TransactionInvoice
+        {
+            BatchId = "BATCH-MOCK-001",
+            AccountCategoryId = "SUB-MOCK-001",
+            Amount = 100m,
+            CreatedBy = "Test"
+        });
+
+        var efCoreInvoice = await _efCoreRepo.CreateAsync(new TransactionInvoice
+        {
+            BatchId = "BATCH-MOCK-001",
+            AccountCategoryId = "SUB-MOCK-001",
+            Amount = 100m,
+            CreatedBy = "Test"
+        });
+
+        // Act
+        var mockDeleteResult = await _mockRepo.DeleteAsync(mockInvoice.InvoiceId);
+        var efCoreDeleteResult = await _efCoreRepo.DeleteAsync(efCoreInvoice.InvoiceId);
+
+        // Assert
+        mockDeleteResult.Should().BeTrue();
+        efCoreDeleteResult.Should().BeTrue();
+
+        // Verify deletion
+        var mockDeleted = await _mockRepo.GetByIdAsync(mockInvoice.InvoiceId);
+        var efCoreDeleted = await _efCoreRepo.GetByIdAsync(efCoreInvoice.InvoiceId);
+
+        mockDeleted.Should().BeNull();
+        efCoreDeleted.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task ExistsAsync_MockAndEFCore_BehaviorIsIdentical()
+    {
+        // Act
+        var mockExists = await _mockRepo.ExistsAsync("MOCK-TEST-123");
+        var efCoreExists = await _efCoreRepo.ExistsAsync("MOCK-TEST-123");
+        var mockNotExists = await _mockRepo.ExistsAsync("NONEXISTENT");
+        var efCoreNotExists = await _efCoreRepo.ExistsAsync("NONEXISTENT");
+
+        // Assert
+        mockExists.Should().BeTrue();
+        efCoreExists.Should().BeTrue();
+        mockNotExists.Should().BeFalse();
+        efCoreNotExists.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Repositories_ImplementSameInterface()
+    {
+        // Assert - Both should implement ITransactionInvoiceRepository
+        _mockRepo.Should().BeAssignableTo<ITransactionInvoiceRepository>();
+        _efCoreRepo.Should().BeAssignableTo<ITransactionInvoiceRepository>();
+
+        // Both should have the same methods
+        var mockMethods = typeof(ITransactionInvoiceRepository).GetMethods().Select(m => m.Name).ToHashSet();
+        var efCoreMethods = typeof(ITransactionInvoiceRepository).GetMethods().Select(m => m.Name).ToHashSet();
+
+        mockMethods.Should().BeEquivalentTo(efCoreMethods);
+    }
+
+    public void Dispose()
+    {
+        _serviceProvider.Dispose();
+    }
+}

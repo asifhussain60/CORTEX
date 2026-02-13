@@ -1,0 +1,10 @@
+C:\PROJECTS\Product.Example\Libs\App.Example.Domain\Entities\PercentPlanLedger.cs
+C:\PROJECTS\Product.Example\Libs\App.Example.Domain\Entities\Product.cs
+C:\PROJECTS\Product.Example\Libs\App.Example.Domain\Entities\PaymentAccount.cs
+C:\PROJECTS\Product.Example\Libs\App.Example.Domain\Entities\PaymentPlan.cs
+C:\PROJECTS\Product.Example\Libs\App.Example.Domain\Entities\RolloverSettings.cs
+C:\PROJECTS\Product.Example\Libs\App.Example.Domain\Entities\ScheduledItem.cs
+C:\PROJECTS\Product.Example\Libs\App.Example.Domain\Entities\SubAccount.cs
+C:\PROJECTS\Product.Example\Libs\App.Example.Domain\Entities\SubaccountType.cs
+C:\PROJECTS\Product.Example\Libs\App.Example.Domain\Entities\TransferLine.cs
+C:\PROJECTS\Product.Example\Tests\App.Example.Domain.Tests\Entities\ReimbursementAccountTests.cs

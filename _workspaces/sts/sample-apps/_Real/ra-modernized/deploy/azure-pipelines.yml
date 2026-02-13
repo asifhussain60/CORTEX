@@ -1,0 +1,312 @@
+# Azure DevOps Pipeline for RA Funding Invoices
+# Multi-stage pipeline: Build → Test → Deploy (Dev → Staging → Prod)
+
+trigger:
+  branches:
+    include:
+      - main
+      - develop
+  paths:
+    include:
+      - cortex/ra-modernized/**
+    exclude:
+      - cortex/ra-modernized/docs/**
+      - cortex/ra-modernized/README.md
+
+pr:
+  branches:
+    include:
+      - main
+      - develop
+  paths:
+    include:
+      - cortex/ra-modernized/**
+
+variables:
+  buildConfiguration: 'Release'
+  dotnetVersion: '8.x'
+  projectPath: 'cortex/ra-modernized'
+  apiProject: '$(projectPath)/src/RA.FundingInvoices.API/RA.FundingInvoices.API.csproj'
+  testProject: '$(projectPath)/tests/**/*.csproj'
+
+stages:
+  # ============================================================================
+  # Build & Test Stage
+  # ============================================================================
+  - stage: BuildAndTest
+    displayName: 'Build & Test'
+    jobs:
+      - job: Build
+        displayName: 'Build and Test'
+        pool:
+          vmImage: 'ubuntu-latest'
+        
+        steps:
+          - task: UseDotNet@2
+            displayName: 'Install .NET SDK'
+            inputs:
+              version: $(dotnetVersion)
+              packageType: 'sdk'
+          
+          - task: DotNetCoreCLI@2
+            displayName: 'Restore NuGet Packages'
+            inputs:
+              command: 'restore'
+              projects: '$(projectPath)/**/*.csproj'
+          
+          - task: DotNetCoreCLI@2
+            displayName: 'Build Solution'
+            inputs:
+              command: 'build'
+              projects: '$(apiProject)'
+              arguments: '--configuration $(buildConfiguration) --no-restore'
+          
+          - task: DotNetCoreCLI@2
+            displayName: 'Run Unit Tests'
+            inputs:
+              command: 'test'
+              projects: '$(testProject)'
+              arguments: '--configuration $(buildConfiguration) --no-build --filter "FullyQualifiedName!~IntegrationTests" --collect:"XPlat Code Coverage" --logger "trx;LogFileName=unit-test-results.trx"'
+              publishTestResults: true
+          
+          - task: DotNetCoreCLI@2
+            displayName: 'Run Integration Tests'
+            inputs:
+              command: 'test'
+              projects: '$(testProject)'
+              arguments: '--configuration $(buildConfiguration) --no-build --filter "FullyQualifiedName~IntegrationTests" --logger "trx;LogFileName=integration-test-results.trx"'
+              publishTestResults: true
+          
+          - task: PublishCodeCoverageResults@1
+            displayName: 'Publish Code Coverage'
+            inputs:
+              codeCoverageTool: 'Cobertura'
+              summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
+              failIfCoverageEmpty: false
+          
+          - task: DotNetCoreCLI@2
+            displayName: 'Publish API'
+            inputs:
+              command: 'publish'
+              projects: '$(apiProject)'
+              arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/api --no-build'
+              zipAfterPublish: true
+          
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Build Artifacts'
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: 'drop'
+              publishLocation: 'Container'
+
+  # ============================================================================
+  # Deploy to Dev Stage
+  # ============================================================================
+  - stage: DeployDev
+    displayName: 'Deploy to Dev'
+    dependsOn: BuildAndTest
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+    jobs:
+      - deployment: DeployDevEnvironment
+        displayName: 'Deploy to Dev Environment'
+        pool:
+          vmImage: 'ubuntu-latest'
+        environment: 'RA-FundingInvoices-Dev'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureCLI@2
+                  displayName: 'Deploy Azure Resources (Dev)'
+                  inputs:
+                    azureSubscription: 'Azure-ServiceConnection-Dev'
+                    scriptType: 'pscore'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: '$(Pipeline.Workspace)/drop/deploy/azure/deploy.ps1'
+                    arguments: '-Environment dev -SkipConfirmation'
+                
+                - task: AzureWebApp@1
+                  displayName: 'Deploy API to App Service (Dev)'
+                  inputs:
+                    azureSubscription: 'Azure-ServiceConnection-Dev'
+                    appType: 'webApp'
+                    appName: 'ra-funding-invoices-api-dev'
+                    package: '$(Pipeline.Workspace)/drop/api/**/*.zip'
+                    deploymentMethod: 'auto'
+                
+                - task: AzureCLI@2
+                  displayName: 'Smoke Test (Dev)'
+                  inputs:
+                    azureSubscription: 'Azure-ServiceConnection-Dev'
+                    scriptType: 'bash'
+                    inlineScript: |
+                      # Wait for app to start
+                      sleep 30
+                      
+                      # Health check
+                      response=$(curl -s -o /dev/null -w "%{http_code}" https://ra-funding-invoices-api-dev.azurewebsites.net/health)
+                      if [ $response -eq 200 ]; then
+                        echo "✅ Health check passed"
+                      else
+                        echo "❌ Health check failed with status $response"
+                        exit 1
+                      fi
+
+  # ============================================================================
+  # Deploy to Staging Stage
+  # ============================================================================
+  - stage: DeployStaging
+    displayName: 'Deploy to Staging'
+    dependsOn: DeployDev
+    condition: succeeded()
+    jobs:
+      - deployment: DeployStagingEnvironment
+        displayName: 'Deploy to Staging Environment'
+        pool:
+          vmImage: 'ubuntu-latest'
+        environment: 'RA-FundingInvoices-Staging'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureCLI@2
+                  displayName: 'Deploy Azure Resources (Staging)'
+                  inputs:
+                    azureSubscription: 'Azure-ServiceConnection-Staging'
+                    scriptType: 'pscore'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: '$(Pipeline.Workspace)/drop/deploy/azure/deploy.ps1'
+                    arguments: '-Environment staging -SkipConfirmation'
+                
+                - task: AzureWebApp@1
+                  displayName: 'Deploy API to App Service (Staging)'
+                  inputs:
+                    azureSubscription: 'Azure-ServiceConnection-Staging'
+                    appType: 'webApp'
+                    appName: 'ra-funding-invoices-api-staging'
+                    package: '$(Pipeline.Workspace)/drop/api/**/*.zip'
+                    deploymentMethod: 'auto'
+                    deployToSlotOrASE: true
+                    resourceGroupName: 'rg-ra-funding-invoices-staging'
+                    slotName: 'staging'
+                
+                - task: AzureAppServiceManage@0
+                  displayName: 'Swap Staging Slot to Production (Staging Env)'
+                  inputs:
+                    azureSubscription: 'Azure-ServiceConnection-Staging'
+                    action: 'Swap Slots'
+                    webAppName: 'ra-funding-invoices-api-staging'
+                    resourceGroupName: 'rg-ra-funding-invoices-staging'
+                    sourceSlot: 'staging'
+                    targetSlot: 'production'
+                
+                - task: AzureCLI@2
+                  displayName: 'Smoke Test (Staging)'
+                  inputs:
+                    azureSubscription: 'Azure-ServiceConnection-Staging'
+                    scriptType: 'bash'
+                    inlineScript: |
+                      sleep 30
+                      response=$(curl -s -o /dev/null -w "%{http_code}" https://ra-funding-invoices-api-staging.azurewebsites.net/health)
+                      if [ $response -eq 200 ]; then
+                        echo "✅ Health check passed"
+                      else
+                        echo "❌ Health check failed"
+                        exit 1
+                      fi
+
+  # ============================================================================
+  # Deploy to Production Stage (Manual Approval Required)
+  # ============================================================================
+  - stage: DeployProduction
+    displayName: 'Deploy to Production'
+    dependsOn: DeployStaging
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    jobs:
+      - deployment: DeployProductionEnvironment
+        displayName: 'Deploy to Production Environment'
+        pool:
+          vmImage: 'ubuntu-latest'
+        environment: 'RA-FundingInvoices-Production' # Requires manual approval
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureCLI@2
+                  displayName: 'Deploy Azure Resources (Production)'
+                  inputs:
+                    azureSubscription: 'Azure-ServiceConnection-Production'
+                    scriptType: 'pscore'
+                    scriptLocation: 'scriptPath'
+                    scriptPath: '$(Pipeline.Workspace)/drop/deploy/azure/deploy.ps1'
+                    arguments: '-Environment prod -SkipConfirmation'
+                
+                - task: AzureWebApp@1
+                  displayName: 'Deploy API to Staging Slot (Production)'
+                  inputs:
+                    azureSubscription: 'Azure-ServiceConnection-Production'
+                    appType: 'webApp'
+                    appName: 'ra-funding-invoices-api-prod'
+                    package: '$(Pipeline.Workspace)/drop/api/**/*.zip'
+                    deploymentMethod: 'auto'
+                    deployToSlotOrASE: true
+                    resourceGroupName: 'rg-ra-funding-invoices-prod'
+                    slotName: 'staging'
+                
+                - task: AzureCLI@2
+                  displayName: 'Smoke Test (Production Staging Slot)'
+                  inputs:
+                    azureSubscription: 'Azure-ServiceConnection-Production'
+                    scriptType: 'bash'
+                    inlineScript: |
+                      sleep 30
+                      response=$(curl -s -o /dev/null -w "%{http_code}" https://ra-funding-invoices-api-prod-staging.azurewebsites.net/health)
+                      if [ $response -eq 200 ]; then
+                        echo "✅ Staging slot health check passed"
+                      else
+                        echo "❌ Staging slot health check failed"
+                        exit 1
+                      fi
+                
+                - task: AzureAppServiceManage@0
+                  displayName: 'Swap Staging to Production (Blue-Green Deployment)'
+                  inputs:
+                    azureSubscription: 'Azure-ServiceConnection-Production'
+                    action: 'Swap Slots'
+                    webAppName: 'ra-funding-invoices-api-prod'
+                    resourceGroupName: 'rg-ra-funding-invoices-prod'
+                    sourceSlot: 'staging'
+                    targetSlot: 'production'
+                
+                - task: AzureCLI@2
+                  displayName: 'Post-Deployment Health Check (Production)'
+                  inputs:
+                    azureSubscription: 'Azure-ServiceConnection-Production'
+                    scriptType: 'bash'
+                    inlineScript: |
+                      sleep 60
+                      
+                      # Health check
+                      response=$(curl -s -o /dev/null -w "%{http_code}" https://ra-funding-invoices-api-prod.azurewebsites.net/health)
+                      if [ $response -eq 200 ]; then
+                        echo "✅ Production health check passed"
+                      else
+                        echo "❌ Production health check failed"
+                        echo "🚨 Manual rollback required"
+                        exit 1
+                      fi
+                      
+                      # Check Application Insights for errors (last 5 minutes)
+                      echo "Checking Application Insights for recent errors..."
+                      # Query would go here using Azure CLI
+                
+                - task: PowerShell@2
+                  displayName: 'Send Deployment Notification'
+                  inputs:
+                    targetType: 'inline'
+                    script: |
+                      Write-Host "✅ Production deployment complete"
+                      Write-Host "Environment: Production"
+                      Write-Host "Build: $(Build.BuildNumber)"
+                      Write-Host "Deployed by: $(Build.RequestedFor)"
+                      # Add Teams/Slack notification here
