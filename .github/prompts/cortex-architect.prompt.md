@@ -4363,7 +4363,7 @@ Deployment + Git Commit
         ↓
 Re-Audit (within 24h)
         ↓
-Success Verification → Log to enhancement-history.yaml
+Success Verification → Log to `cortex-registry/_cortex-master/enhancements/active/`
         ↓
 [If still failing] → Escalate to P0 + Manual Intervention
 ```
@@ -5059,7 +5059,7 @@ P6 Wiring Integrity audit runs on EVERY AUDIT invocation if cortex-registry/_cor
 ### Recommendation Quality
 | Check | Description |
 |-------|-------------|
-| Adoption Rate | % of recommendations accepted (from enhancement-history.yaml) |
+| Adoption Rate | % of recommendations accepted (from registry enhancements) |
 | Repeat Suggestions | Avoid recommending previously rejected ideas |
 | Innovation Balance | Mix of quick wins (S effort) and game-changers (L effort) |
 | Evidence Basis | All recommendations cite Implementation Truth (not assumptions) |
@@ -5423,9 +5423,10 @@ Score < 5 → Continue to DESIGN MODE
 |---|------|---------|----------|--------|--------|
 
 ### 🎯 Actions
-- [ ] Update enhancement-history.yaml
-- [ ] Create lessons-learned artifact
-- [ ] Extract patterns to cortex-registry YAML files
+- [ ] Enhancement proposals extracted
+- [ ] YAML saved to `cortex_brain/tier3/learnings/` or `company/domains/`
+- [ ] Marker `<!-- CORTEX_DIGESTED: {date} -->` added to original chat file
+- [ ] Extract patterns to registry YAML files
 - [ ] Document anti-patterns
 - [ ] Propagate to CORTEX.prompt.md (if applicable)
 ```
@@ -5436,18 +5437,18 @@ Score < 5 → Continue to DESIGN MODE
 
 | Target | Condition | Action |
 |--------|-----------|--------|
-| cortex_brain/state/enhancement-history.yaml | Efficiency/Accuracy findings | Add ENH-* entries |
-| cortex_brain/state/lessons-learned/*.yaml | Session has actionable learnings | Create artifact |
-| docs/patterns/*.md | Reusability = HIGH | Extract pattern |
-| docs/anti-patterns/*.md | Drifts identified | Document anti-pattern |
+| `cortex-registry/_cortex-master/enhancements/active/` | Efficiency/Accuracy findings | Add ENH-* entries |
+| `cortex_brain/tier3/learnings/session-{timestamp}-{hash}.yaml` | Session has actionable learnings | Create artifact |
+| `company/domains/{domain}/patterns.yaml` | User domain knowledge detected | Extract pattern |
+| `cortex_brain/tier3/learnings/anti-patterns.yaml` | CORTEX-internal drifts | Document anti-pattern |
 | CORTEX.prompt.md | Prompt improvement needed | **Requires AUDIT validation** |
 
 ## Validation Gates
 
 | Gate | Check | Block Condition |
 |------|-------|-----------------|
-| **Duplicate** | Compare with enhancement-history.yaml | Similar ENH-* exists |
-| **Rejection** | Compare with rejected_recommendations | Matches REJ-* pattern |
+| **Duplicate** | Compare with registry enhancements | Similar ENH-* exists |
+| **Already Digested** | Check for `<!-- CORTEX_DIGESTED -->` marker | Marker found |
 | **Regression** | Assess impact on existing functionality | Risk > 0.7 |
 | **Coherence** | Validate prompt/agent alignment | Inconsistency detected |
 | **Governance** | Scan for CORE/ARCH rule violations | Violations detected and not addressed |
@@ -7151,7 +7152,7 @@ Innovation Taxonomy Update (system learns)
 - ✅ **Quad-Mode Operation** — PRE-FLIGHT + AUDIT + DESIGN + DIGEST + META-AUDIT
 - ✅ **Chat Session Auto-Detection** — Marker-based scoring (score ≥ 5 triggers DIGEST)
 - ✅ **Structured Learning Extraction** — Drifts, patterns, tool environment, efficiency opportunities
-- ✅ **Enhancement Propagation Pipeline** — Automatic flow to enhancement-history.yaml, lessons-learned, patterns
+- ✅ **Enhancement Propagation Pipeline** — Automatic flow to `cortex-registry/enhancements/`, `cortex_brain/tier3/learnings/`, `company/domains/`
 - ✅ **Production Sync Validation** — AUDIT now checks cortex-architect.prompt.md ↔ CORTEX.prompt.md coherence
 - ✅ **cortex-digest.md Agent** — New specialist agent for DIGEST mode
 
