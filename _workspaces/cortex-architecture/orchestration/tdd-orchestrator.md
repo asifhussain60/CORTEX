@@ -1,8 +1,8 @@
 # TDDOrchestrator
 
-**Purpose:** Documentation of the Test-Driven Development workflow orchestrator  
+**Purpose:** Documentation of the Test-Driven Development workflow orchestrator — the motor cortex of CORTEX  
 **Audience:** Developers, Team Leads  
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-13
 
 ---
 
@@ -20,13 +20,21 @@
 
 ## Overview
 
-The **TDDOrchestrator** enforces Test-Driven Development for all IMPLEMENT, FIX, and TEST operations. It ensures that tests are written before implementation code, following the RED → GREEN → REFACTOR cycle.
+### The Brain's Motor Cortex: Disciplined Execution
+
+When you decide to reach for a glass of water, your **primary motor cortex** doesn't just fire random muscle signals. It follows a precise, disciplined sequence: plan the trajectory, activate the shoulder, extend the arm, open the hand, grasp, lift. Each step must succeed before the next begins. Skip a step and you knock the glass over.
+
+The **TDDOrchestrator** is CORTEX's motor cortex — the region responsible for converting intent into disciplined action. It enforces a strict **RED → GREEN → REFACTOR** cycle that is the mandatory muscle memory for every code change. Just as the motor cortex will not let you move your hand without first planning the movement, the TDDOrchestrator will not let you write implementation code without first writing a failing test.
+
+This isn't optional. CORE-008 makes TDD the **non-negotiable motor pattern** for all IMPLEMENT, FIX, and TEST operations. Like a skilled athlete whose muscle memory is so deeply ingrained it becomes automatic, TDD becomes the unconscious discipline that ensures every line of code is born tested.
 
 **Key Facts:**
-- **Category:** Core
+- **Category:** Core (essential motor function)
 - **Priority:** 30
+- **Brain Analogy:** Primary motor cortex — disciplined sequential execution
 - **Capabilities:** tdd, testing, implementation
 - **Dependencies:** None (can operate independently)
+- **Governance:** CORE-008 (tests before code — no exceptions)
 
 ---
 

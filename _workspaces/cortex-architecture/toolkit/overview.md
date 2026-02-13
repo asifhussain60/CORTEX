@@ -1,8 +1,8 @@
 # Toolkit Overview
 
-**Purpose:** The cognitive tools that give CORTEX its capabilities  
+**Purpose:** The cognitive toolbox — every specialized instrument the CORTEX brain can wield, from surgical forceps (code analysis) to MRI scanners (deep LENS inspection)  
 **Audience:** All Technical Stakeholders  
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-13
 
 ---
 

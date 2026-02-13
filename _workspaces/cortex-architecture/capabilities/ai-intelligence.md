@@ -2,7 +2,7 @@
 
 **Purpose:** Detailed documentation of CORTEX AI/ML reasoning capabilities  
 **Audience:** Architects, Data Scientists, Developers  
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-13
 
 ---
 
@@ -79,8 +79,8 @@ LENS employs eight specialized analyzers:
 ### Analyzer Coordination
 
 ```python
-class LENSOrchestrator:
-    """Coordinates all LENS analyzers for unified analysis."""
+class UnifiedAnalysisOrchestrator:
+    """Coordinates all LENS analyzers for unified analysis (Wave 7 consolidated)."""
     
     def analyze_file(self, file_path: Path) -> LENSContext:
         """

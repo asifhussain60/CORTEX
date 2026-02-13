@@ -2,7 +2,7 @@
 
 **Purpose:** Dependencies and interactions between CORTEX components  
 **Audience:** Architects, Developers  
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-13
 
 ---
 
@@ -147,7 +147,7 @@
 ----------------------------------------
 │                                                                                          │
 │                              ┌─────────────────────┐                                    │
-│                              │   LENSOrchestrator  │                                    │
+│                              │ UnifiedAnalysisOrch │                                    │
 │                              │                     │                                    │
 │                              │  • Coordinates      │                                    │
 │                              │  • Aggregates       │                                    │
@@ -207,7 +207,7 @@
 | ToolRegistry | Tools, Metadata | MCPServer |
 | MasterOrchestrator | IntentRouter, LENS, Enforcement | MCPServer |
 | IntentRouter | — | MasterOrchestrator |
-| LENSOrchestrator | Analyzers, Synthesizer, Cache | MasterOrchestrator |
+| UnifiedAnalysisOrchestrator | Analyzers, Synthesizer, Cache | MasterOrchestrator |
 | EnforcementOrchestrator | Agents, Rules | MasterOrchestrator |
 | TDDOrchestrator | LENS, Governance | MasterOrchestrator |
 | Redis | — | CacheManager, Sessions |

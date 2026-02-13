@@ -1,8 +1,8 @@
 # Scalability
 
-**Purpose:** CORTEX scaling strategies and patterns  
+**Purpose:** Brain growth and adaptation — how CORTEX scales like a developing brain adding neurons and strengthening synaptic pathways under load  
 **Audience:** Architects, SRE  
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-13
 
 ---
 

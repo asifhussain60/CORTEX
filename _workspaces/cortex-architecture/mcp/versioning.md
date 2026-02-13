@@ -1,8 +1,8 @@
 # MCP Versioning
 
-**Purpose:** Version management for CORTEX MCP tools  
+**Purpose:** Version management for CORTEX MCP tools — evolving the nervous system safely  
 **Audience:** Developers, Operations  
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-13
 
 ---
 
@@ -18,6 +18,12 @@
 ---
 
 ## Overview
+
+### Brain Analogy: Evolutionary Conservation
+
+Evolution doesn't rewrite the nervous system with each generation — it **extends** it. The basic neurotransmitters (serotonin, dopamine) have been conserved for hundreds of millions of years. New capabilities are added through new receptor subtypes and new neural circuits, while old pathways remain functional.
+
+CORTEX versions its MCP tools the same way. Breaking changes are rare and well-announced (like a major evolutionary transition). New capabilities are added as backward-compatible extensions. Deprecated tools continue to function during a sunset period, like vestigial structures that still work but are no longer primary.
 
 CORTEX uses semantic versioning for both the MCP protocol and individual tools.
 
@@ -343,4 +349,4 @@ curl -X POST http://localhost:8000/mcp \
 
 ---
 
-*Part of CORTEX Architecture Documentation*
+*Part of CORTEX Architecture Documentation — Updated 2026-02-13*

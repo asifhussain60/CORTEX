@@ -1,8 +1,8 @@
 # End-to-End Request Flow
 
-**Purpose:** Complete documentation of the CORTEX request lifecycle  
+**Purpose:** Complete documentation of the CORTEX request lifecycle — from stimulus to response  
 **Audience:** All Technical Stakeholders  
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-13 | **Orchestrators:** 17 active
 
 ---
 
@@ -25,7 +25,22 @@
 
 ## Overview
 
-This document traces a complete request through CORTEX, from client submission to response delivery. Understanding this flow is essential for architects, developers, and operations teams.
+### Brain Analogy: The Perception-Action Cycle
+
+When you see a ball flying toward you, your brain executes a rapid sequence: the retina captures photons (reception), the visual cortex identifies the object (classification), the parietal cortex maps its trajectory (enrichment), the prefrontal cortex decides to catch or dodge (governance), and the motor cortex fires the muscles (execution). This entire **perception-action cycle** completes in under 200 milliseconds.
+
+CORTEX processes every request through an analogous 8-stage cognitive pipeline. Each stage maps to a brain function, and like the biological brain, many stages overlap through parallel processing and pre-warming (Phase 49 Context Crystallization Layer).
+
+| Stage | Brain Region | Cognitive Function |
+|-------|-------------|--------------------|
+| 1. Reception | Sensory neurons | Stimulus capture |
+| 2. Authentication | Blood-brain barrier | Access control |
+| 3. Classification | Thalamus (IntentRouter) | Sensory relay & routing |
+| 4. Enrichment | Association cortex (UnifiedAnalysis) | Context integration |
+| 5. Governance | Anterior cingulate (UnifiedQA) | Error detection & quality gate |
+| 6. Execution | Motor cortex (target orchestrator) | Action execution |
+| 7. Processing | Hippocampus | Memory formation & audit |
+| 8. Delivery | Broca’s area (InteractionOrch) | Response articulation |
 
 ---
 
@@ -232,7 +247,9 @@ async def classify_intent(
 
 ## Stage 4: Context Enrichment
 
-### LENS Analysis
+### LENS Analysis via UnifiedAnalysisOrchestrator
+
+Like the **association cortex** integrating sensory streams into a unified perception, this stage combines Git history, AST structure, and code comments into a coherent understanding of the workspace. **Phase 49 Context Crystallization Layer (CCL)** pre-warms this data asynchronously, reducing enrichment latency by ~15%.
 
 ```python
 async def enrich_context(
@@ -241,9 +258,11 @@ async def enrich_context(
     session: SessionContext
 ) -> UnifiedIntelligenceContext:
     """
-    Enrich request with LENS intelligence.
+    Enrich request with LENS intelligence via UnifiedAnalysisOrchestrator.
+    
+    Phase 49 CCL may have pre-warmed this data asynchronously.
     """
-    lens = LENSOrchestrator(repo_path=session.workspace_path)
+    analyzer = UnifiedAnalysisOrchestrator(repo_path=session.workspace_path)
     
     # Check cache first
     cache_key = f"{session.workspace_path}:{request[:100]}"
@@ -504,11 +523,11 @@ async def deliver_response(
 
 ## Related Documents
 
-- [MasterOrchestrator](master-orchestrator.md) — Coordination details
-- [IntentRouter](intent-router.md) — Classification details
-- [LENS Overview](../lens/overview.md) — Context enrichment
-- [Governance](../capabilities/governance-compliance.md) — Validation
+- [MasterOrchestrator](master-orchestrator.md) — Prefrontal cortex coordination
+- [IntentRouter](intent-router.md) — Thalamus classification
+- [LENS Overview](../lens/overview.md) — Visual cortex enrichment
+- [Governance](../capabilities/governance-compliance.md) — Immune system validation
 
 ---
 
-*Part of CORTEX Architecture Documentation*
+*Part of CORTEX Architecture Documentation — Updated 2026-02-13*

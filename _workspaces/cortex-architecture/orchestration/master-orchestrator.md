@@ -1,8 +1,8 @@
 # MasterOrchestrator
 
-**Purpose:** Deep-dive documentation of the central coordination orchestrator  
+**Purpose:** Deep-dive documentation of the central coordination orchestrator — the prefrontal cortex of CORTEX  
 **Audience:** Architects, Senior Developers  
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-13
 
 ---
 
@@ -286,14 +286,14 @@ def process_request_with_challenge(
 
 ### Downstream Dependencies
 
-| Component | Purpose | Protocol |
-|-----------|---------|----------|
-| **IntentRouter** | Intent classification | Direct call |
-| **LENSOrchestrator** | Code context | Direct call |
-| **KnowledgeRepository** | Domain knowledge | Direct call |
-| **EnforcementOrchestrator** | Governance | Direct call |
-| **Target Orchestrators** | Operation execution | Direct call |
-| **AuditLogger** | Audit trail | Internal |
+| Component | Purpose | Brain Analogy | Protocol |
+|-----------|---------|---------------|----------|
+| **IntentRouter** | Intent classification | Thalamus — routes signals | Direct call |
+| **UnifiedAnalysisOrchestrator** | Code context via LENS | Visual association cortex | Direct call |
+| **KnowledgeRepository** | Domain knowledge | Hippocampus — long-term memory | Direct call |
+| **UnifiedQualityAssuranceOrchestrator** | Governance & quality | Anterior cingulate — error detection | Direct call |
+| **Target Orchestrators** | Operation execution | Specialist brain regions | Direct call |
+| **AuditLogger** | Audit trail | Episodic memory recorder | Internal |
 
 ### Wiring Configuration
 
@@ -371,19 +371,23 @@ class OrchestratorCircuitBreaker:
 
 ### Fallback Chain
 
+Like the brain rerouting neural signals when a pathway is damaged, CORTEX has fallback chains for orchestrator failures:
+
 ```python
 FALLBACK_CHAINS = {
     "TDDOrchestrator": [
         "WorkflowOrchestrator",
-        "MasterOrchestrator"
+        "MasterOrchestrator"  # Last resort — CEO handles it directly
     ],
     "RefactoringOrchestrator": [
         "TDDOrchestrator",
         "WorkflowOrchestrator"
     ],
-    "OnboardingOrchestrator": [
-        "SetupOrchestrator",
-        "MasterOrchestrator"
+    "UnifiedOnboardingOrchestrator": [
+        "MasterOrchestrator"  # No secondary onboarding path
+    ],
+    "UnifiedAnalysisOrchestrator": [
+        "MasterOrchestrator"  # Minimal analysis via master
     ]
 }
 ```

@@ -1,8 +1,8 @@
 # Technology Stack
 
-**Purpose:** Complete technology inventory for CORTEX  
+**Purpose:** The neurochemical substrate — every molecule (library), ion channel (framework), and neurotransmitter (protocol) that makes the CORTEX brain function  
 **Audience:** Architects, Developers, DevOps  
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-13
 
 ---
 

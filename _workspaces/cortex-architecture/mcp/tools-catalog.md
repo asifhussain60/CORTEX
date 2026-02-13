@@ -1,11 +1,17 @@
 # CORTEX MCP Tools Catalog
 
-**Total Tools:** 86 | **Updated:** 2026-02-11  
+**Total Tools:** 86 | **Updated:** 2026-02-13  
 **MCP Server:** stdio/HTTP (Port 8000) | **Protocol:** JSON-RPC 2.0
 
 ---
 
 ## Overview
+
+### Brain Analogy: The Neurotransmitter Library
+
+The brain communicates through **neurotransmitters** — chemical messengers that carry specific signals across synaptic gaps. Dopamine drives reward and motivation. Serotonin regulates mood. GABA inhibits overexcitation. Each neurotransmitter has a precise receptor, a specific function, and a measurable effect.
+
+CORTEX's 86 MCP tools are its neurotransmitter library — each tool carries a specific signal to a specific orchestrator, triggering a precise cognitive action. `cortex_process_request` is like acetylcholine at the neuromuscular junction: the primary signal that triggers action. `cortex_lens_analyze` is like glutamate: the main excitatory signal that activates deep analysis.
 
 This catalog documents all **86** MCP tools exposed by CORTEX. These tools enable AI assistants (GitHub Copilot, Claude, Cursor) to leverage CORTEX's cognitive capabilities through the Model Context Protocol.
 
@@ -1597,6 +1603,6 @@ result = server.call_tool('cortex_lens_analyze', {
 
 ---
 
-**Last Updated:** 2026-02-11 06:35:29  
+**Last Updated:** 2026-02-13  
 **Source:** Live MCP Server introspection  
 **Accuracy:** 100% current (auto-generated from running system)

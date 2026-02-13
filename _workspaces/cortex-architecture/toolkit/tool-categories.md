@@ -1,8 +1,8 @@
 # Tool Categories
 
-**Purpose:** Detailed documentation of CORTEX tool categories  
+**Purpose:** The Brodmann areas of CORTEX — a systematic map of functionally distinct tool regions, each specialized for a class of cognitive operations  
 **Audience:** Developers, Architects  
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-13
 
 ---
 

@@ -1,8 +1,8 @@
 # Extensibility Capabilities
 
-**Purpose:** Documentation of CORTEX extension mechanisms and customization  
+**Purpose:** Documentation of CORTEX extension mechanisms — neuroplasticity and synaptic growth  
 **Audience:** Developers, Architects  
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-13
 
 ---
 

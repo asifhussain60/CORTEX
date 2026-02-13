@@ -1,6 +1,6 @@
 # CORTEX Data Flow & Request Lifecycle
 
-**Updated:** 2026-02-11 | **Version:** 2.0.0
+**Updated:** 2026-02-13 | **Version:** 2.0.0
 
 ---
 
@@ -75,7 +75,7 @@ MasterOrchestrator.process_user_request():
 
   Step 2: Dependency Loading
     • GitBackedRegistry loaded
-    • 60 orchestrators available
+    • 17 active orchestrators available
     • wiring.yaml parsed successfully
 
   Step 3: Delegate to IntentRouter

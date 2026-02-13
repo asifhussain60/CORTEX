@@ -1,8 +1,8 @@
 # CI/CD Pipeline
 
-**Purpose:** Continuous Integration and Deployment for CORTEX  
+**Purpose:** The neural quality-control pipeline — like the blood-brain barrier filtering harmful agents, CI/CD gates ensure only healthy code enters the CORTEX production brain  
 **Audience:** DevOps, Developers  
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-13
 
 ---
 

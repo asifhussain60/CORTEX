@@ -2,7 +2,7 @@
 
 **Purpose:** Comprehensive inventory of platform capabilities with business value articulation  
 **Audience:** All Stakeholders  
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-13
 
 ---
 
@@ -439,11 +439,9 @@ The IntentRouter classifies user requests into actionable intents:
 | IMPLEMENT | New feature development | TDDOrchestrator |
 | FIX | Bug fixes and issue resolution | TDDOrchestrator |
 | REFACTOR | Code improvement | RefactoringOrchestrator |
-| ANALYZE | Code analysis requests | LENSOrchestrator |
-| DOCUMENT | Documentation generation | DocumentationOrchestrator |
+| ANALYZE | Code analysis requests | UnifiedAnalysisOrchestrator |
 | TEST | Test creation | TDDOrchestrator |
-| DEPLOY | Deployment operations | DeploymentOrchestrator |
-| ONBOARD | Repository onboarding | OnboardingOrchestrator |
+| ONBOARD | Repository onboarding | UnifiedOnboardingOrchestrator |
 | PLAN | Development planning | PlanningOrchestrator |
 
 **Dependencies:** MasterOrchestrator  

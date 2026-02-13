@@ -1,24 +1,28 @@
 # Model Context Protocol (MCP) Overview
 
-**Version:** 2.0.0 | **Updated:** 2026-02-11  
+**Version:** 2.0.0 | **Updated:** 2026-02-13  
 **Protocol:** JSON-RPC 2.0 | **Transport:** stdio / HTTP  
-**Tools Exposed:** 86
+**Tools Exposed:** 86 | **Orchestrators:** 17 active
 
 ---
 
 ## What is MCP?
 
-The **Model Context Protocol (MCP)** is an open protocol that standardizes how AI assistants interact with external tools and services. CORTEX implements MCP to expose its cognitive capabilities to any MCP-compatible client.
+### Brain Analogy: The Nervous System
+
+The **nervous system** is the body's communication infrastructure. It doesn't think — it *transmits*. Sensory neurons carry signals from your fingertips to your brain; motor neurons carry commands from your brain to your muscles. Without the nervous system, the brain would be a brilliant organ trapped in silence.
+
+The **Model Context Protocol (MCP)** is CORTEX's nervous system. It's the standardized communication layer that connects external clients (VS Code, Claude, Cursor) to CORTEX's 17 orchestrators. Every command, every analysis request, every governance check travels through MCP's synaptic connections — JSON-RPC 2.0 messages flowing like action potentials along neural pathways.
 
 ### Key Benefits
 
-| Benefit | Description |
-|---------|-------------|
-| **Universal Compatibility** | Works with GitHub Copilot, Claude, Cursor, and any MCP client |
-| **Standardized Interface** | JSON-RPC 2.0 protocol ensures consistency |
-| **Tool Discovery** | Clients can discover all 86 available tools dynamically |
-| **Type Safety** | Structured arguments with JSON Schema validation |
-| **Scalability** | Support stdio (development) and HTTP (production) |
+| Benefit | Description | Brain Analogy |
+|---------|-------------|---------------|
+| **Universal Compatibility** | Works with GitHub Copilot, Claude, Cursor, and any MCP client | Like how any sensory organ can send signals through the same nervous system |
+| **Standardized Interface** | JSON-RPC 2.0 protocol ensures consistency | Like the electrochemical standard of nerve impulses |
+| **Tool Discovery** | Clients can discover all 86 available tools dynamically | Like proprioception — knowing what capabilities are available |
+| **Type Safety** | Structured arguments with JSON Schema validation | Like neurotransmitter lock-and-key specificity |
+| **Scalability** | Support stdio (development) and HTTP (production) | Like the peripheral vs central nervous system |
 
 ---
 
@@ -70,7 +74,7 @@ The **Model Context Protocol (MCP)** is an open protocol that standardizes how A
                       │
 ┌─────────────────────┼─────────────────────────────────────┐
 │         CORTEX ORCHESTRATION LAYER                        │
-│              (60 orchestrators)              │
+│              (17 active orchestrators)           │
 └───────────────────────────────────────────────────────────┘
 ```
 
@@ -283,7 +287,7 @@ curl http://localhost:8000/health
   "status": "healthy",
   "uptime_seconds": 3600,
   "tools_registered": 86,
-  "orchestrators_loaded": 60
+  "orchestrators_loaded": 17
 }
 ```
 
@@ -349,6 +353,6 @@ python -m cortex.mcp --transport http --port 8000   --cert cert.pem --key key.pe
 
 ---
 
-**Last Updated:** 2026-02-11 06:41:25  
+**Last Updated:** 2026-02-13  
 **MCP Specification:** https://modelcontextprotocol.io  
 **CORTEX MCP Version:** 2.0.0

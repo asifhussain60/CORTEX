@@ -1,8 +1,8 @@
 # Tool Registry
 
-**Purpose:** Documentation of the CORTEX tool registration system  
+**Purpose:** The connectome registry — a living map of every tool-neuron, its synaptic connections, and activation patterns within the CORTEX brain  
 **Audience:** Developers, Contributors  
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-13
 
 ---
 
@@ -165,7 +165,7 @@ class LENSAnalyzeTool(Tool):
         target = arguments["target"]
         analyzers = arguments.get("analyzers", ["all"])
         
-        lens = LENSOrchestrator()
+        lens = UnifiedAnalysisOrchestrator()  # Formerly LENSOrchestrator
         result = await lens.analyze(target, analyzers)
         
         return ToolResult(

@@ -1,8 +1,8 @@
 # Governance & Compliance Capabilities
 
-**Purpose:** Detailed documentation of CORTEX security, audit, and compliance features  
+**Purpose:** Detailed documentation of CORTEX security, audit, and compliance features — the immune system  
 **Audience:** Security Teams, Compliance Officers, Architects  
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-13
 
 ---
 
@@ -42,6 +42,7 @@ CORTEX implements a comprehensive governance framework that ensures code quality
 │  Layer 1: PRE-EXECUTION GATE                                    │
 │  ┌───────────────────────────────────────────────────────────┐ │
 │  │               EnforcementOrchestrator                      │ │
+│  │  (now part of UnifiedQualityAssuranceOrchestrator)         │ │
 │  │  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐        │ │
 │  │  │Governance│ │Security │ │Compliance│ │ File   │        │ │
 │  │  │  Agent  │ │  Agent  │ │  Agent  │ │ Agent  │        │ │
@@ -106,7 +107,7 @@ CORTEX defines 50+ governance rules organized by category:
 
 ### Agent Architecture
 
-The EnforcementOrchestrator coordinates seven specialized agents:
+The UnifiedQualityAssuranceOrchestrator (anterior cingulate cortex — error detection) coordinates seven specialized enforcement agents:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐

@@ -1,8 +1,8 @@
 # LENS Architecture
 
-**Purpose:** Technical architecture of the LENS intelligence layer  
+**Purpose:** Technical architecture of the LENS intelligence layer — wiring the visual cortex  
 **Audience:** Architects, Senior Developers  
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-13
 
 ---
 
@@ -19,6 +19,12 @@
 
 ## Architecture Overview
 
+### Brain Analogy: Visual Cortex Wiring
+
+The visual cortex is organized in a strict hierarchy: V1 (edge detection) → V2 (shape recognition) → V4 (color and form) → IT (object identification). Each layer processes in parallel, feeds forward, and the results are integrated by association areas. The LENS architecture follows this same layered, parallel-then-synthesize pattern.
+
+> **Note:** Since Wave 7 Track 4, LENS coordination has been absorbed into the **UnifiedAnalysisOrchestrator** (priority 115), which combines LENS orchestration with tool discovery into a single association area.
+
 ### High-Level Architecture
 
 ```
@@ -27,10 +33,10 @@
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                  │
 │  ┌──────────────────────────────────────────────────────────┐  │
-│  │                    LENSOrchestrator                       │  │
-│  │  • Analyzer coordination                                  │  │
-│  │  • Result aggregation                                     │  │
-│  │  • Cache management                                       │  │
+│  │              UnifiedAnalysisOrchestrator               │  │
+│  │  • LENS analyzer coordination                          │  │
+│  │  • Result aggregation + tool discovery                  │  │
+│  │  • Cache management                                     │  │
 │  └──────────────────────────────────────────────────────────┘  │
 │                              │                                   │
 │         ┌────────────────────┼────────────────────┐             │
@@ -67,7 +73,7 @@
 
 | Layer | Responsibility | Key Classes |
 |-------|----------------|-------------|
-| **Orchestration** | Coordination, aggregation | LENSOrchestrator |
+| **Orchestration** | Coordination, aggregation | LENSOrchestrator (now UnifiedAnalysisOrchestrator) |
 | **Analysis** | Code inspection | GitHistoryAnalyzer, ASTAnalyzer, etc. |
 | **Synthesis** | Result merging | ContextSynthesizer |
 | **Caching** | Performance | LENSCache, CacheStrategy |
@@ -76,7 +82,9 @@
 
 ## Component Design
 
-### LENSOrchestrator
+### LENSOrchestrator (→ UnifiedAnalysisOrchestrator)
+
+> **Wave 7 Note:** The wiring contract now registers this as `UnifiedAnalysisOrchestrator` (P115), absorbing the former `LENSOrchestrator` and `ToolDiscoveryOrchestrator` into a single unified analysis surface. The internal class name may still appear as `LENSOrchestrator` in source code.
 
 ```python
 class LENSOrchestrator:

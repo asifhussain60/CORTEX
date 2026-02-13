@@ -1,8 +1,8 @@
 # Domain Orchestrators
 
-**Purpose:** Documentation of domain-specific orchestrators  
+**Purpose:** Documentation of domain-specific orchestrators — the specialized brain lobes of CORTEX  
 **Audience:** Architects, Domain Experts  
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-13
 
 ---
 
@@ -13,8 +13,8 @@
 - [PlanningOrchestrator](#planningorchestrator)
 - [DomainOrchestrator](#domainorchestrator)
 - [ConversationOrchestrator](#conversationorchestrator)
-- [DocumentationOrchestrator](#documentationorchestrator)
-- [ChallengeEngine](#challengeengine)
+- [SeleniumPlaywrightOrchestrator](#seleniumplaywrightorchestrator)
+- [Absorbed Capabilities](#absorbed-capabilities)
 - [Cross-Domain Coordination](#cross-domain-coordination)
 - [Related Documents](#related-documents)
 
@@ -22,22 +22,29 @@
 
 ## Overview
 
-Domain orchestrators handle specialized operations within specific problem spaces. Unlike core orchestrators that handle fundamental request processing, domain orchestrators provide deep expertise in particular areas.
+### The Brain’s Specialized Lobes
 
-| Orchestrator | Priority | Focus Area |
-|--------------|----------|------------|
-| RefactoringOrchestrator | 50 | Code improvement |
-| PlanningOrchestrator | 60 | Phase/roadmap management |
-| DomainOrchestrator | 70 | Business logic operations |
-| ConversationOrchestrator | 80 | Multi-turn dialogue |
-| DocumentationOrchestrator | 90 | Documentation generation |
-| ChallengeEngine | 100 | Decision challenges |
+Just as the human brain has specialized lobes — the temporal lobe for language comprehension, the parietal lobe for spatial reasoning, the occipital lobe for vision — CORTEX has **5 domain orchestrators** that provide deep expertise in specific cognitive domains.
+
+Unlike core orchestrators (which handle fundamental processing like a brain stem handles breathing), domain orchestrators are **expert systems** that understand the nuances of their specific problem space. The RefactoringOrchestrator doesn’t just move code around — it *understands* code structure the way Wernicke’s area understands language. The PlanningOrchestrator doesn’t just list tasks — it *strategizes* the way the dorsolateral prefrontal cortex plans complex behavior.
+
+> **Wave 7 Note:** DocumentationOrchestrator and ChallengeEngine were absorbed into the unified support orchestrators during consolidation. Their capabilities now live within UnifiedQualityAssuranceOrchestrator and UnifiedDiscoveryOrchestrator respectively.
+
+| Orchestrator | Priority | Brain Analogy | Focus Area |
+|--------------|----------|---------------|------------|
+| **RefactoringOrchestrator** | 60 | Wernicke’s area — comprehension & restructuring | Code improvement |
+| **PlanningOrchestrator** | 70 | Dorsolateral prefrontal — strategic planning | Phase/roadmap management |
+| **DomainOrchestrator** | 80 | Angular gyrus — cross-modal integration | Business logic operations |
+| **ConversationOrchestrator** | 90 | Superior temporal sulcus — social cognition | Multi-turn dialogue |
+| **SeleniumPlaywrightOrchestrator** | 100 | Cerebellum — precision motor control | Browser automation |
 
 ---
 
 ## RefactoringOrchestrator
 
 ### Purpose
+
+**Brain Analogy: Wernicke’s Area** — Just as Wernicke’s area comprehends and restructures language (understanding the *meaning* of sentences, not just individual words), the RefactoringOrchestrator comprehends code structure at a deep level and restructures it while preserving behavioral meaning.
 
 Orchestrates code improvement operations while preserving behavior. Ensures refactoring follows best practices and maintains test coverage.
 
@@ -256,7 +263,35 @@ async def process_turn(
 
 ---
 
-## DocumentationOrchestrator
+## SeleniumPlaywrightOrchestrator
+
+### Purpose
+
+**Brain Analogy: Cerebellum** — The cerebellum controls fine motor coordination — the precise, timed movements needed to thread a needle or play a piano concerto. The SeleniumPlaywrightOrchestrator provides the same kind of precision for browser automation: clicking elements at exact coordinates, waiting for precise DOM states, and orchestrating complex multi-step browser interactions.
+
+### Capabilities
+
+- **Browser Automation** — Selenium and Playwright test execution
+- **Visual Verification** — Screenshot comparison and visual regression
+- **Multi-Browser Testing** — Cross-browser compatibility checks
+- **Performance Measurement** — Page load timing and resource monitoring
+
+### Key Facts
+
+| Attribute | Value |
+|-----------|-------|
+| **Priority** | 100 |
+| **Category** | domain |
+| **Optional** | Yes (not all projects need browser testing) |
+| **Capabilities** | browser_automation, selenium, playwright |
+
+---
+
+## Absorbed Capabilities
+
+The following domain orchestrators were absorbed during Wave 7 consolidation. Their capabilities are documented here for reference, but are now provided by unified support orchestrators.
+
+### DocumentationOrchestrator → UnifiedDiscoveryOrchestrator
 
 ### Purpose
 
@@ -312,7 +347,7 @@ def validate_documentation(self, doc: Documentation) -> ValidationResult:
 
 ---
 
-## ChallengeEngine
+### ChallengeEngine → UnifiedQualityAssuranceOrchestrator
 
 ### Purpose
 

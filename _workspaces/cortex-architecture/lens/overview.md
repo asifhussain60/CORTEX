@@ -1,13 +1,17 @@
 # LENS Intelligence Overview
 
 **L**anguage **E**xamination **N**avigation **S**ynthesis  
-**Updated:** 2026-02-11 | **Version:** 2.0.0
+**Updated:** 2026-02-13 | **Version:** 2.0.0 | **Orchestrator:** UnifiedAnalysisOrchestrator
 
 ---
 
 ## What is LENS?
 
-LENS is CORTEX's **sensory and analysis system** — like the visual cortex of a brain, it observes, analyzes, and synthesizes information about codebases.
+### Brain Analogy: The Visual Cortex
+
+The **visual cortex** doesn't just "see" — it processes. Raw photons hit the retina, but it takes the primary visual cortex (V1) to detect edges, the secondary visual cortex (V2) to recognize shapes, and the inferotemporal cortex to identify objects. Each layer adds meaning to raw sensory data.
+
+LENS is CORTEX's visual cortex. It observes codebases through 8 specialized analyzers (like the brain's visual processing streams), then synthesizes their outputs into a unified intelligence context — turning raw code into understanding.
 
 ### Four-Stage Intelligence Pipeline
 
