@@ -5651,9 +5651,9 @@ This consolidated summary replaces **[original_lines] lines of verbose chat tran
 1. **Scan file** for chat session markers
 2. **Extract key information** using preservation rules
 3. **Organize** information by logical flow (not chronology)
-4. **Generate consolidated markdown** using template
-5. **Replace original file content** (no backup unless requested)
-6. **Report compression ratio** (original → consolidated lines)
+4. **Display consolidated summary** inline using chat markdown
+5. **Guide user** to save if desired (no automatic replacement)
+6. **Report compression ratio** inline (original → consolidated lines)
 
 **CRITICAL:** This is a **REPLACEMENT operation**, not additive. User receives one clean file that tells the story without the noise.
 
@@ -5695,7 +5695,7 @@ Information Loss: 0% on critical items
 | Activity | Tool | Purpose | Constraint |
 |----------|------|---------|------------|
 | **Read code** | `read_file`, `semantic_search` | Analysis only | No modifications |
-| **Generate diagrams** | Chat markdown (Mermaid) | Architecture visualization | Inline chat display |
+| **Generate diagrams** | Inline markdown (Mermaid) | Architecture visualization | Chat content only |
 | **Create design docs** | Inline display | Documentation | Chat content only |
 | **Propose file structure** | Chat markdown (list) | Architecture planning | No actual file creation |
 | **Write test specs** | Chat markdown | TDD preparation | NOT .py files |
