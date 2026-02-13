@@ -1,34 +1,42 @@
-"""Auto-generated tests for IntentRouter."""
+"""Auto-generated tests for CoherenceValidator."""
 import pytest
 from pathlib import Path
 import yaml
 from unittest.mock import Mock, patch
 
-class TestIntentRouter:
-    """Test suite for IntentRouter."""
+# Import actual orchestrator
+try:
+    from cortex.orchestrators.coherence.coherence_validator import CoherenceValidator
+    ORCHESTRATOR_AVAILABLE = True
+except ImportError:
+    CoherenceValidator = Mock
+    ORCHESTRATOR_AVAILABLE = False
+
+class TestCoherenceValidator:
+    """Test suite for CoherenceValidator."""
 
     @pytest.fixture(autouse=True)
     def setup(self):
         """Setup test fixtures."""
-        self.orchestrator_class = Mock
+        self.orchestrator_class = CoherenceValidator
         self.state_dir = Path("/tmp/cortex_test")
         self.state_dir.mkdir(exist_ok=True)
 
-    def test_intentrouter_demand_001_silent_creation(self):
-        """DEMAND: Silent operation: IntentRouter creates YAML without console output
+    def test_coherencevalidator_demand_001_silent_creation(self):
+        """DEMAND: Silent operation: CoherenceValidator creates YAML without console output
 
-        Validates: Generated demand 1 for IntentRouter
-        Scenario: User invokes IntentRouter.execute() → YAML file created
+        Validates: Generated demand 1 for CoherenceValidator
+        Scenario: User invokes CoherenceValidator.execute() → YAML file created
         Expected: YAML file exists, no console output, audit trail logged
         """
-        # AC_START: AC-INTENTROUTER-DEMAND-001
+        # AC_START: AC-COHERENCEVALIDATOR-DEMAND-001
 
         # Setup
         orchestrator = self.orchestrator_class()
         initial_files = set(Path(self.state_dir).glob("*.yaml"))
 
         # Execute (silent - no prompts)
-        result = orchestrator.execute(request="User invokes IntentRouter.execute() → YAML file created")
+        result = orchestrator.execute(request="User invokes CoherenceValidator.execute() → YAML file created")
 
         # Validate: File created
         final_files = set(Path(self.state_dir).glob("*.yaml"))
@@ -52,23 +60,23 @@ class TestIntentRouter:
             "Audit trail missing file creation event"
 
         assert result.status == "success"
-        # AC_COMPLETE: AC-INTENTROUTER-DEMAND-001 ✅
+        # AC_COMPLETE: AC-COHERENCEVALIDATOR-DEMAND-001 ✅
 
-    def test_intentrouter_demand_002_silent_creation(self):
-        """DEMAND: Silent operation: IntentRouter creates YAML without console output
+    def test_coherencevalidator_demand_002_silent_creation(self):
+        """DEMAND: Silent operation: CoherenceValidator creates YAML without console output
 
-        Validates: Generated demand 2 for IntentRouter
-        Scenario: User invokes IntentRouter.execute() → YAML file created
+        Validates: Generated demand 2 for CoherenceValidator
+        Scenario: User invokes CoherenceValidator.execute() → YAML file created
         Expected: YAML file exists, no console output, audit trail logged
         """
-        # AC_START: AC-INTENTROUTER-DEMAND-002
+        # AC_START: AC-COHERENCEVALIDATOR-DEMAND-002
 
         # Setup
         orchestrator = self.orchestrator_class()
         initial_files = set(Path(self.state_dir).glob("*.yaml"))
 
         # Execute (silent - no prompts)
-        result = orchestrator.execute(request="User invokes IntentRouter.execute() → YAML file created")
+        result = orchestrator.execute(request="User invokes CoherenceValidator.execute() → YAML file created")
 
         # Validate: File created
         final_files = set(Path(self.state_dir).glob("*.yaml"))
@@ -92,23 +100,23 @@ class TestIntentRouter:
             "Audit trail missing file creation event"
 
         assert result.status == "success"
-        # AC_COMPLETE: AC-INTENTROUTER-DEMAND-002 ✅
+        # AC_COMPLETE: AC-COHERENCEVALIDATOR-DEMAND-002 ✅
 
-    def test_intentrouter_demand_003_silent_creation(self):
-        """DEMAND: Silent operation: IntentRouter creates YAML without console output
+    def test_coherencevalidator_demand_003_silent_creation(self):
+        """DEMAND: Silent operation: CoherenceValidator creates YAML without console output
 
-        Validates: Generated demand 3 for IntentRouter
-        Scenario: User invokes IntentRouter.execute() → YAML file created
+        Validates: Generated demand 3 for CoherenceValidator
+        Scenario: User invokes CoherenceValidator.execute() → YAML file created
         Expected: YAML file exists, no console output, audit trail logged
         """
-        # AC_START: AC-INTENTROUTER-DEMAND-003
+        # AC_START: AC-COHERENCEVALIDATOR-DEMAND-003
 
         # Setup
         orchestrator = self.orchestrator_class()
         initial_files = set(Path(self.state_dir).glob("*.yaml"))
 
         # Execute (silent - no prompts)
-        result = orchestrator.execute(request="User invokes IntentRouter.execute() → YAML file created")
+        result = orchestrator.execute(request="User invokes CoherenceValidator.execute() → YAML file created")
 
         # Validate: File created
         final_files = set(Path(self.state_dir).glob("*.yaml"))
@@ -132,17 +140,17 @@ class TestIntentRouter:
             "Audit trail missing file creation event"
 
         assert result.status == "success"
-        # AC_COMPLETE: AC-INTENTROUTER-DEMAND-003 ✅
+        # AC_COMPLETE: AC-COHERENCEVALIDATOR-DEMAND-003 ✅
 
 
-        def test_intentrouter_demand_004_synthesis(self):
-            """DEMAND: Context synthesis: IntentRouter merges LENS + Git + Registry
+        def test_coherencevalidator_demand_004_synthesis(self):
+            """DEMAND: Context synthesis: CoherenceValidator merges LENS + Git + Registry
 
-            Validates: Generated demand 4 for IntentRouter
-            Scenario: IntentRouter loads context from 3 sources
+            Validates: Generated demand 4 for CoherenceValidator
+            Scenario: CoherenceValidator loads context from 3 sources
             Expected: Context dict has keys: lens_data, git_history, registry_entry
             """
-            # AC_START: AC-INTENTROUTER-DEMAND-004
+            # AC_START: AC-COHERENCEVALIDATOR-DEMAND-004
 
             # Setup - mock each knowledge source
             governance_rules = {"CORE-008": "TDD-first", "CORE-011": "Type hints"}
@@ -152,7 +160,7 @@ class TestIntentRouter:
             # Execute - LENS synthesis merges all three
             orchestrator = self.orchestrator_class()
             result = orchestrator.execute(
-                request="IntentRouter loads context from 3 sources",
+                request="CoherenceValidator loads context from 3 sources",
                 governance=governance_rules,
                 domain=domain_rules,
                 company_standards=company_standards
@@ -186,18 +194,18 @@ class TestIntentRouter:
             synthesis_events = [e for e in audit if "synthesis" in str(e).lower()]
             assert len(synthesis_events) > 0, "No synthesis events in audit"
 
-            # AC_COMPLETE: AC-INTENTROUTER-DEMAND-004 ✅
+            # AC_COMPLETE: AC-COHERENCEVALIDATOR-DEMAND-004 ✅
 
 
 
-        def test_intentrouter_demand_005_synthesis(self):
-            """DEMAND: Context synthesis: IntentRouter merges LENS + Git + Registry
+        def test_coherencevalidator_demand_005_synthesis(self):
+            """DEMAND: Context synthesis: CoherenceValidator merges LENS + Git + Registry
 
-            Validates: Generated demand 5 for IntentRouter
-            Scenario: IntentRouter loads context from 3 sources
+            Validates: Generated demand 5 for CoherenceValidator
+            Scenario: CoherenceValidator loads context from 3 sources
             Expected: Context dict has keys: lens_data, git_history, registry_entry
             """
-            # AC_START: AC-INTENTROUTER-DEMAND-005
+            # AC_START: AC-COHERENCEVALIDATOR-DEMAND-005
 
             # Setup - mock each knowledge source
             governance_rules = {"CORE-008": "TDD-first", "CORE-011": "Type hints"}
@@ -207,7 +215,7 @@ class TestIntentRouter:
             # Execute - LENS synthesis merges all three
             orchestrator = self.orchestrator_class()
             result = orchestrator.execute(
-                request="IntentRouter loads context from 3 sources",
+                request="CoherenceValidator loads context from 3 sources",
                 governance=governance_rules,
                 domain=domain_rules,
                 company_standards=company_standards
@@ -241,18 +249,18 @@ class TestIntentRouter:
             synthesis_events = [e for e in audit if "synthesis" in str(e).lower()]
             assert len(synthesis_events) > 0, "No synthesis events in audit"
 
-            # AC_COMPLETE: AC-INTENTROUTER-DEMAND-005 ✅
+            # AC_COMPLETE: AC-COHERENCEVALIDATOR-DEMAND-005 ✅
 
 
 
-        def test_intentrouter_demand_006_approval_blocked(self):
-            """DEMAND: Gate enforcement: IntentRouter blocks on DoD failure
+        def test_coherencevalidator_demand_006_approval_blocked(self):
+            """DEMAND: Gate enforcement: CoherenceValidator blocks on DoD failure
 
-            Validates: Generated demand 6 for IntentRouter
-            Scenario: IntentRouter encounters failing DoD check
+            Validates: Generated demand 6 for CoherenceValidator
+            Scenario: CoherenceValidator encounters failing DoD check
             Expected: Execution stops, error returned, no partial state
             """
-            # AC_START: AC-INTENTROUTER-DEMAND-006
+            # AC_START: AC-COHERENCEVALIDATOR-DEMAND-006
 
             # Setup - create state with failing tests
             orchestrator = self.orchestrator_class()
@@ -298,18 +306,18 @@ class TestIntentRouter:
 
             assert result.approved is True
 
-            # AC_COMPLETE: AC-INTENTROUTER-DEMAND-006 ✅
+            # AC_COMPLETE: AC-COHERENCEVALIDATOR-DEMAND-006 ✅
 
 
 
-        def test_intentrouter_demand_007_approval_blocked(self):
-            """DEMAND: Gate enforcement: IntentRouter blocks on DoD failure
+        def test_coherencevalidator_demand_007_approval_blocked(self):
+            """DEMAND: Gate enforcement: CoherenceValidator blocks on DoD failure
 
-            Validates: Generated demand 7 for IntentRouter
-            Scenario: IntentRouter encounters failing DoD check
+            Validates: Generated demand 7 for CoherenceValidator
+            Scenario: CoherenceValidator encounters failing DoD check
             Expected: Execution stops, error returned, no partial state
             """
-            # AC_START: AC-INTENTROUTER-DEMAND-007
+            # AC_START: AC-COHERENCEVALIDATOR-DEMAND-007
 
             # Setup - create state with failing tests
             orchestrator = self.orchestrator_class()
@@ -355,18 +363,18 @@ class TestIntentRouter:
 
             assert result.approved is True
 
-            # AC_COMPLETE: AC-INTENTROUTER-DEMAND-007 ✅
+            # AC_COMPLETE: AC-COHERENCEVALIDATOR-DEMAND-007 ✅
 
 
 
-        def test_intentrouter_demand_008_format_standards(self):
-            """DEMAND: Template quality: IntentRouter response uses business language
+        def test_coherencevalidator_demand_008_format_standards(self):
+            """DEMAND: Template quality: CoherenceValidator response uses business language
 
-            Validates: Generated demand 8 for IntentRouter
-            Scenario: IntentRouter.execute() returns formatted response
+            Validates: Generated demand 8 for CoherenceValidator
+            Scenario: CoherenceValidator.execute() returns formatted response
             Expected: Response contains no code snippets, uses domain terms
             """
-            # AC_START: AC-INTENTROUTER-DEMAND-008
+            # AC_START: AC-COHERENCEVALIDATOR-DEMAND-008
 
             # Setup
             orchestrator = self.orchestrator_class()
@@ -411,40 +419,40 @@ class TestIntentRouter:
             response_structures = [r.split("\n")[0] for r in responses]
             assert len(set(response_structures)) == 1, "Response structure inconsistent"
 
-            # AC_COMPLETE: AC-INTENTROUTER-DEMAND-008 ✅
+            # AC_COMPLETE: AC-COHERENCEVALIDATOR-DEMAND-008 ✅
 
 
 
-        def test_intentrouter_demand_009(self):
-            """DEMAND: Error recovery: IntentRouter handles missing dependencies
+        def test_coherencevalidator_demand_009(self):
+            """DEMAND: Error recovery: CoherenceValidator handles missing dependencies
 
-            Generated demand 9 for IntentRouter
+            Generated demand 9 for CoherenceValidator
             """
-            # AC_START: AC-INTENTROUTER-DEMAND-009
+            # AC_START: AC-COHERENCEVALIDATOR-DEMAND-009
 
             # TODO: Implement test for error_recovery
-            # Scenario: IntentRouter.execute() when dependency unavailable
+            # Scenario: CoherenceValidator.execute() when dependency unavailable
             # Expected: Graceful failure, error logged, cleanup performed
 
             pytest.skip("Generic test stub - needs implementation")
 
-            # AC_COMPLETE: AC-INTENTROUTER-DEMAND-009 ✅
+            # AC_COMPLETE: AC-COHERENCEVALIDATOR-DEMAND-009 ✅
 
 
 
-        def test_intentrouter_demand_010(self):
-            """DEMAND: Integration: IntentRouter publishes events to EventBus
+        def test_coherencevalidator_demand_010(self):
+            """DEMAND: Integration: CoherenceValidator publishes events to EventBus
 
-            Generated demand 10 for IntentRouter
+            Generated demand 10 for CoherenceValidator
             """
-            # AC_START: AC-INTENTROUTER-DEMAND-010
+            # AC_START: AC-COHERENCEVALIDATOR-DEMAND-010
 
             # TODO: Implement test for integration_coupling
-            # Scenario: IntentRouter.execute() completes successfully
+            # Scenario: CoherenceValidator.execute() completes successfully
             # Expected: Event {spec.name.upper()}_COMPLETE published
 
             pytest.skip("Generic test stub - needs implementation")
 
-            # AC_COMPLETE: AC-INTENTROUTER-DEMAND-010 ✅
+            # AC_COMPLETE: AC-COHERENCEVALIDATOR-DEMAND-010 ✅
 
 
