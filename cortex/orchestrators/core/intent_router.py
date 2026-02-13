@@ -40,7 +40,7 @@ from cortex.orchestrators.core.routing_enforcement import (
     RoutingEnforcementEngine,
     RoutingViolation,
 )
-from cortex.orchestrators.response.response_engine_adapter import ResponseEngineMixin
+# REMOVED: ResponseEngineMixin import (unused - Phase 53 cleanup)
 
 # Note: SpecRegistry import removed - not yet implemented (AC-PERMANENT-FIX-010)
 # Phase 8.2: Import orchestrator lookup and enforcement
@@ -223,7 +223,7 @@ class CompositeIntentDetector:
         return list(set(intents))  # Remove duplicates, maintain order
 
 
-class IntentRouter(IOrchestrator, ResponseEngineMixin):
+class IntentRouter(IOrchestrator):
     """
     Routes operations based on intent type and context.
 
