@@ -336,6 +336,7 @@ rules:
   # --------------------------------------------------------------------------
   - rule_id: CORE-026
     principle: "Always Have an Escape Route"
+    book_reference: "Site Reliability Engineering by Google (Betsy Beyer et al.)"
     category: development_workflow
     severity: blocked
     name: Git Checkpoint Required
@@ -384,6 +385,7 @@ rules:
   # --------------------------------------------------------------------------
   - rule_id: CORE-028
     principle: "Self-Documenting Systems"
+    book_reference: "The Pragmatic Programmer by Andrew Hunt & David Thomas"
     category: architecture_integrity
     severity: blocked
     name: Intelligent File Naming with Python Module Compliance
@@ -528,6 +530,7 @@ rules:
   # --------------------------------------------------------------------------
   - rule_id: CORE-029
     principle: "Documentation as Code"
+    book_reference: "The DevOps Handbook by Gene Kim, Jez Humble, Patrick Debois, John Willis"
     category: quality_gates
     severity: blocked
     name: Documentation Drift Prevention
@@ -583,6 +586,7 @@ rules:
   # --------------------------------------------------------------------------
   - rule_id: CORE-032
     principle: "Hedgehog Concept"
+    book_reference: "Good to Great by Jim Collins"
     category: orchestration_lifecycle
     severity: blocked
     name: Mandatory Intent Classification (DoR Checkpoint)
@@ -731,6 +735,7 @@ rules:
   # --------------------------------------------------------------------------
   - rule_id: CORE-039
     principle: "Prevention Over Cure"
+    book_reference: "The Lean Startup by Eric Ries"
     category: response_formatting
     severity: blocked
     name: MD File Generation Prohibition
@@ -798,6 +803,7 @@ rules:
   # --------------------------------------------------------------------------
   - rule_id: CORE-040
     principle: "Design for Decay"
+    book_reference: "Building Evolutionary Architectures by Neal Ford, Rebecca Parsons, Patrick Kua"
     category: architecture_integrity
     severity: blocked
     name: Documentation Lifecycle Management
@@ -896,6 +902,7 @@ rules:
   # --------------------------------------------------------------------------
   - rule_id: AC-PERMANENT-FIX-006
     principle: "Built-In Quality"
+    book_reference: "Lean Software Development by Mary & Tom Poppendieck"
     category: architectural_enforcement
     severity: blocked
     name: Challenge System Permanent Wiring
@@ -939,6 +946,7 @@ rules:
   # --------------------------------------------------------------------------
   - rule_id: CORE-030
     principle: "Confront Brutal Facts"
+    book_reference: "Good to Great by Jim Collins"
     category: quality_gates
     severity: blocked
     name: Implementation Truth Enforcement
@@ -1016,6 +1024,7 @@ rules:
   # --------------------------------------------------------------------------
   - rule_id: CORE-034
     principle: "Measure What Matters"
+    book_reference: "Measure What Matters by John Doerr"
     category: auditability
     severity: blocked
     name: Mandatory Audit Logging (Observability)"
@@ -1051,6 +1060,7 @@ rules:
   # --------------------------------------------------------------------------
   - rule_id: CORE-035
     principle: "One Source of Truth"
+    book_reference: "The Phoenix Project by Gene Kim"
     category: architecture
     severity: blocked
     name: Single Canonical Implementation
@@ -1201,6 +1211,7 @@ rules:
   # --------------------------------------------------------------------------
   - rule_id: CORE-042
     principle: "Clear Hierarchy Eliminates Confusion"
+    book_reference: "The Goal by Eliyahu Goldratt"
     category: planning_governance
     severity: blocked
     name: Hierarchical Terminology Standard
