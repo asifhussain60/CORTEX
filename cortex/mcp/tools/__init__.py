@@ -1,9 +1,9 @@
 """
 CORTEX MCP v2 - Tool Implementations
 
-25 production tools organized by category:
+26 production tools organized by category:
 - Core (4): process_request, challenge, classify, request_lifecycle
-- Intelligence (3): lens, knowledge, git
+- Intelligence (4): lens, knowledge, git, generate_tests
 - Governance (4): governance, validate, load, validate_request (Phase 48)
 - Operations (5): debug, refactor, plan, onboard, dashboard
 - Utilities (9): verify, ask, vacuum, tools_catalog, total_recall, metrics, check, vision, orchestrator
@@ -24,6 +24,9 @@ from cortex.mcp.tools.intelligence import (
     CortexLens,
     CortexKnowledge,
     CortexGit,
+)
+from cortex.mcp.tools.intelligence_generation import (
+    CortexGenerateTests,
 )
 
 # Governance tools
@@ -64,10 +67,11 @@ ALL_TOOLS = [
     CortexChallenge,
     CortexClassify,
     CortexRequestLifecycle,
-    # Intelligence (3)
+    # Intelligence (4)
     CortexLens,
     CortexKnowledge,
     CortexGit,
+    CortexGenerateTests,  # WAVE-2 Stage 6
     # Governance (4)
     CortexGovernance,
     CortexValidate,
@@ -124,6 +128,7 @@ __all__ = [
     "CortexLens",
     "CortexKnowledge",
     "CortexGit",
+    "CortexGenerateTests",  # WAVE-2 Stage 6
     # Governance
     "CortexGovernance",
     "CortexValidate",
