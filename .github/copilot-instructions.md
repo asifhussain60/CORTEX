@@ -1,5 +1,9 @@
 # CORTEX Copilot Instructions
-**Version:** 8.0 | **Updated:** 2026-02-12 | **Authority:** MCP-First SaaS Architecture | **Silent Autonomous:** ✅ | **Visual Progress:** ASCII Bars | **Session Continuity:** Phase Discovery Protocol ✅ | **MCP P0 Checks:** ✅ MANDATORY
+
+**Version:** 8.1 | **Updated:** 2026-02-13  
+**Authority:** MCP-First SaaS Architecture | **Silent Autonomous:** ✅  
+**Visual Progress:** ASCII Bars | **Session Continuity:** Phase Discovery Protocol ✅  
+**MCP P0 Checks:** ✅ MANDATORY
 
 ---
 
@@ -57,528 +61,75 @@ ALLOWED WITHOUT MCP (Escape Hatch):
 
 ## 🚨 MCP ARCHITECTURE: PYLANCE-STYLE (P0 - CRITICAL)
 
-**Authority:** CORE-049 + CORE-030 + MCP-FIRST + MCP-GATE + Phase 53  
-**Architecture:** MCP runs **locally within VS Code** (like Pylance)  
+**Authority:** CORE-049 + CORE-030 + MCP-FIRST + Phase 53  
+**Architecture:** MCP runs **locally within VS Code** (like Pylance) — NO manual server startup  
 **Enforcement:** BLOCKING — Every session MUST validate MCP availability  
-**Key Insight:** NO manual server startup required — VS Code auto-starts MCP
+**Orchestrator:** EnvironmentIntegrityAgent (8th enforcement agent)
 
-### How MCP Works (Pylance-Style Architecture)
+### How MCP Works
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    VS Code                                  │
-│  ┌─────────────────┐    ┌────────────────────────────────┐  │
-│  │  Copilot Chat   │───▶│  MCP Server (Auto-Started)     │  │
-│  │                 │    │  • stdio transport             │  │
-│  │  User: /impl    │◀───│  • JSON-RPC 2.0                │  │
-│  │                 │    │  • python -m cortex.mcp        │  │
-│  └─────────────────┘    └────────────────────────────────┘  │
-│                                    │                        │
-│                                    ▼                        │
-│  ┌─────────────────────────────────────────────────────┐   │
-│  │            cortex_* Tools                            │   │
-│  │  • cortex_process_request  • cortex_lens_analyze    │   │
-│  │  • cortex_challenge        • cortex_detect_duplicates│   │
-│  │  • cortex_plan_execute_autonomous                    │   │
-│  └─────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────┘
-
-❌ OLD (Wrong): User manually runs "python -m cortex.mcp.server"
-✅ NEW (Correct): VS Code auto-starts MCP when Copilot invokes tools
+VS Code Copilot Chat ──(stdio, JSON-RPC 2.0)──> MCP Server (auto-started)
+      User: /implement                          cortex_* Tools (10 total)
+           ↓                                      • cortex_process_request
+      IntentRouter ────────────────────────────> • cortex_lens_analyze
+           ↓                                      • cortex_challenge
+      TDDOrchestrator (or LENS/Plan/etc.)
+           ↓
+      Action (RED → GREEN → REFACTOR)
 ```
 
-### Session Start: MCP Pre-Flight Check (MANDATORY)
+**Key:** VS Code auto-starts MCP when tools invoked. NO manual `python -m cortex.mcp.server` needed.
 
-**AUTOMATIC EXECUTION:** Every Copilot Chat session runs this check FIRST:
+### Pre-Flight Check (MANDATORY)
 
-```python
-# Step 0: MCP Activation Pre-Flight (before any user request processing)
-print("🔧 CORTEX Session: MCP Activation Check...")
+**BEFORE any IMPLEMENT/FIX/REFACTOR intent:**
 
-# Check 1: MCP Tools Available (VS Code should auto-provide them)
-mcp_tools = ["cortex_process_request", "cortex_lens_analyze", "cortex_challenge"]
-available = check_tools_in_copilot_registry(mcp_tools)
-
-if not available:
-    print("""
-    ❌ CRITICAL: MCP tools not available in Copilot Chat
-    
-    MCP Architecture: Pylance-Style (auto-started by VS Code)
-    
-    Actions Required:
-    1. Run setup script: python .cortex/setup-mcp.py
-    2. Restart VS Code: Command Palette → Developer: Reload Window
-    3. Check .cortex/setup.log for configuration details
-    
-    NOTE: NO manual 'python -m cortex.mcp.server' needed!
-          VS Code auto-starts MCP when Copilot invokes tools.
-    
-    ⚠️ CORTEX cannot proceed without MCP tools.
-    No fallback to direct file operations allowed (CORE-049).
-    """)
-    return HALT_SESSION
-
-# Check 2: Verify Configuration File
-if not path(".vscode/settings.json").exists():
-    print("⚠️ WARNING: .vscode/settings.json missing, running setup...")
-    run(".cortex/setup-mcp.py")
-
-# Check 3: Configuration Validation
-settings = load_json(".vscode/settings.json")
-if "github.copilot.chat.mcpServers" not in settings:
-    print("⚠️ WARNING: MCP not configured in settings.json, injecting...")
-    inject_mcp_config(settings)
-    save_json(".vscode/settings.json", settings)
-
-# Check 4: Setup Log Verification
-setup_log = path(".cortex/setup.log")
-if setup_log.exists():
-    last_status = grep(setup_log, "✅ SETUP COMPLETE")
-    if last_status:
-        print(f"✅ MCP Setup: Confirmed successful")
-    else:
-        print("⚠️ WARNING: MCP setup may have failed, check .cortex/setup.log")
-else:
-    print("ℹ️ INFO: Running MCP setup for first time...")
-    run(".cortex/setup-mcp.py")
-
-print("✅ MCP Activation: READY (Pylance-style, auto-started)")
+```
+1. Classify user intent (IMPLEMENT | FIX | REFACTOR | ANALYZE)
+2. Run EnvironmentIntegrityAgent.validate_pre_flight(intent)
+3. Check MCP availability (3 methods: tool_query → env_vars → network_port)
+4. If MCP unavailable + IMPLEMENT/FIX/REFACTOR → BLOCK
+5. If MCP unavailable + ANALYZE → ALLOW (read-only OK)
 ```
 
-### P0 Check Matrix (BLOCKING)
+**Validation Checklist:**
+- [ ] MCP tools in registry (tool_query → env_vars → config file)
+- [ ] `.vscode/settings.json` exists and configured
+- [ ] Python ≥ 3.9.0
+- [ ] Virtual environment activated
+- [ ] `.cortex/setup.log` shows "✅ SETUP COMPLETE"
 
-| Check | Status | Action if Failed |
-|-------|--------|------------------|
-| **MCP Tools in Registry** | CRITICAL | HALT session, display setup instructions |
-| **cortex_process_request Available** | CRITICAL | HALT session, cannot route IMPLEMENT/FIX/REFACTOR |
-| **cortex_lens_analyze Available** | CRITICAL | HALT session, cannot route ANALYZE/AUDIT |
-| **.vscode/settings.json Exists** | CRITICAL | Auto-create + run setup script |
-| **MCP Config in Settings** | CRITICAL | Auto-inject + reload required |
-| **.cortex/setup.log Exists** | WARNING | Run setup script silently |
-| **Last Setup Successful** | WARNING | Display warning, offer re-run |
-| **Python >= 3.9.0** | CRITICAL | HALT, guide Python upgrade |
-| **Virtual Environment Ready** | CRITICAL | HALT, guide venv setup |
+**If blocked:**
+```
+❌ MCP Tools Required
 
-### MCP Availability Detection (3-Method Fallback)
+Intent: {intent}
+Status: MCP tools not available in Copilot Chat
 
-```python
-def verify_mcp_availability() -> Tuple[bool, str]:
-    """
-    Comprehensive MCP availability check with 3 detection methods.
-    Returns: (is_available, status_message)
-    """
-    
-    # Method 1: Tool Registry Query (PRIMARY)
-    try:
-        available_tools = get_copilot_tools_registry()
-        mcp_tools = [t for t in available_tools if t.startswith("cortex_")]
-        
-        if len(mcp_tools) >= 10:  # All 10 tools should be available
-            return (True, f"MCP tools available: {len(mcp_tools)} tools registered")
-    except Exception as e:
-        pass  # Fall through to Method 2
-    
-    # Method 2: Environment Variable Check (SECONDARY)
-    try:
-        if os.getenv("CORTEX_MCP_ENABLED") == "true":
-            return (True, "MCP detected via environment variable")
-    except Exception:
-        pass  # Fall through to Method 3
-    
-    # Method 3: Configuration File Check (TERTIARY)
-    try:
-        settings = load_json(".vscode/settings.json")
-        if "github.copilot.chat.mcpServers" in settings:
-            cortex_config = settings["github.copilot.chat.mcpServers"].get("cortex")
-            if cortex_config and "command" in cortex_config:
-                return (True, "MCP configured in .vscode/settings.json")
-    except Exception:
-        pass
-    
-    # All methods failed
-    return (False, "MCP not available (all detection methods failed)")
+Resolution:
+  1. python .cortex/setup-mcp.py
+  2. Reload VS Code (Command Palette → Developer: Reload Window)
+  3. Retry your request
+
+CORTEX operates at ONE quality level: Production.
+Fix infrastructure. No bypasses allowed.
 ```
 
-### User-Facing Status Messages
+### MCP Tools (Production)
 
-**When MCP Available:**
-```
-🟢 CORTEX Session Ready (Pylance-Style MCP)
-✅ MCP Tools: cortex_process_request (10 tools total)
-✅ Configuration: .vscode/settings.json
-✅ Architecture: Auto-started by VS Code (no manual server)
-✅ Python: 3.9.6
-✅ Setup Log: Last successful at 2026-02-08 14:40
-
-Proceeding with full CORTEX capabilities...
-```
-
-**When MCP Unavailable (BLOCKING):**
-```
-❌ CORTEX Session Blocked: MCP Not Available
-
-Architecture: Pylance-Style (VS Code auto-starts MCP)
-Issue: MCP configuration not found or VS Code needs reload
-
-Detection Results:
-  ❌ Method 1: Tool Registry - No cortex_* tools found
-  ❌ Method 2: Environment - CORTEX_MCP_ENABLED not set
-  ❌ Method 3: Configuration - .vscode/settings.json incomplete
-
-Resolution Steps:
-
-STEP 1: Run Setup Script (Cross-Platform)
-  python .cortex/setup-mcp.py
-
-STEP 2: Reload VS Code
-  Command Palette → Developer: Reload Window
-
-STEP 3: Verify MCP Active
-  Check: .cortex/setup.log for "✅ SETUP COMPLETE"
-
-NOTE: NO 'python -m cortex.mcp.server' needed!
-      VS Code auto-starts MCP when Copilot invokes tools.
-
-Reference: .github/prompts/MCP-SETUP-GUIDE.md
-```
-
-### Command Routing Gated by MCP Availability
-
-| User Intent | MCP Required | Behavior if Unavailable |
-|------------|--------------|------------------------|
-| `/implement {feature}` | ✅ YES | BLOCK: "MCP required for implementation" |
-| `/fix {issue}` | ✅ YES | BLOCK: "MCP required for bug fixing" |
-| `/refactor {target}` | ✅ YES | BLOCK: "MCP required for refactoring" |
-| `/audit` | ✅ YES | BLOCK: "MCP required for auditing" |
-| `/analyze {scope}` | ✅ YES | BLOCK: "MCP required for analysis" |
-| `/plan` | ✅ YES | BLOCK: "MCP required for planning" |
-| `/list {query}` | ⚠️ OPTIONAL | WARN: Allow read-only analysis |
-| `/query {question}` | ⚠️ OPTIONAL | WARN: Allow educational queries |
-| `/recall {feature}` | ⚠️ OPTIONAL | WARN: Allow feature discovery |
-
----
-
-## 🔧 MCP SELF-HEALING: AUTO-FIX LAYER (P0 - CRITICAL)
-
-**Authority:** CORE-049 + ENH-067 (Self-Healing MCP Infrastructure)  
-**Purpose:** Automatically detect and fix MCP issues silently without user intervention  
-**Architecture:** Extensible detect-and-fix registry for common MCP failures
-
-### Auto-Fix Trigger Conditions
-
-**WHEN to activate self-healing:**
-1. MCP tool invocation returns error (e.g., "TypeError: r.content is not iterable")
-2. MCP availability check fails BUT configuration exists
-3. MCP server responds but with malformed data
-4. Timeout on MCP tool invocation (>30 seconds)
-
-**WHAT to do:**
-1. **Detect** the specific error pattern
-2. **Classify** the issue type (server, config, network, data)
-3. **Apply** the registered fix silently
-4. **Retry** the original operation
-5. **Log** the fix for audit trail
-
-### Known Issue Registry (Extensible)
-
-```yaml
-# MCP Self-Healing Issue Registry
-# Location: cortex/mcp/self_healing_registry.yaml
-# Authority: MCP-FIRST + ENH-067
-
-issues:
-  - issue_id: "MCP-ERR-001"
-    pattern: "TypeError: r.content is not iterable"
-    severity: "CRITICAL"
-    detection_method: "error_message_match"
-    root_cause: "MCP server response handling bug in client"
-    fix_strategy: "restart_mcp_server"
-    auto_fix: true
-    retry_count: 1
-    description: |
-      The MCP client expects r.content to be iterable but server
-      is returning a non-iterable response object. This occurs when
-      VS Code's MCP client/server communication layer has a version
-      mismatch or the server is in a corrupted state.
-    fix_steps:
-      - "Detect error in MCP tool response"
-      - "Kill existing MCP server process (if any)"
-      - "Clear MCP client cache"
-      - "Trigger VS Code to restart MCP server"
-      - "Retry original tool invocation"
-      - "If still fails after 2 retries, escalate to user"
-  
-  - issue_id: "MCP-ERR-002"
-    pattern: "Connection refused|ECONNREFUSED"
-    severity: "HIGH"
-    detection_method: "error_message_match"
-    root_cause: "MCP server not started or crashed"
-    fix_strategy: "restart_mcp_server"
-    auto_fix: true
-    retry_count: 2
-    description: |
-      MCP server process is not running or has crashed.
-      VS Code should auto-start it but sometimes fails.
-    fix_steps:
-      - "Check if MCP server process is running"
-      - "If not running, trigger VS Code reload"
-      - "Wait 5 seconds for auto-start"
-      - "Retry original operation"
-  
-  - issue_id: "MCP-ERR-003"
-    pattern: "timeout|timed out"
-    severity: "MEDIUM"
-    detection_method: "error_message_match"
-    root_cause: "MCP server overloaded or hanging"
-    fix_strategy: "restart_mcp_server"
-    auto_fix: true
-    retry_count: 1
-    description: |
-      MCP server is taking too long to respond (>30s).
-      May indicate server is in deadlock or processing heavy load.
-    fix_steps:
-      - "Log timeout event"
-      - "Kill MCP server process"
-      - "Clear any pending MCP requests"
-      - "Wait for VS Code to restart server"
-      - "Retry with shorter timeout (15s)"
-  
-  - issue_id: "MCP-ERR-004"
-    pattern: "ModuleNotFoundError.*cortex"
-    severity: "CRITICAL"
-    detection_method: "error_message_match"
-    root_cause: "Python path misconfigured or venv not activated"
-    fix_strategy: "reconfigure_python_path"
-    auto_fix: true
-    retry_count: 1
-    description: |
-      MCP server cannot find cortex modules.
-      Python environment not properly configured.
-    fix_steps:
-      - "Check virtual environment activation"
-      - "Run setup-mcp.py to reconfigure"
-      - "Verify PYTHONPATH includes cortex package"
-      - "Reload VS Code"
-      - "Retry operation"
-```
-
-### Self-Healing Execution Flow
-
-```python
-# Automatic execution when MCP tool fails
-def handle_mcp_tool_error(error: Exception, tool_name: str, params: dict):
-    """
-    Self-healing layer for MCP tool failures.
-    
-    Args:
-        error: Exception raised by MCP tool
-        tool_name: Name of tool that failed
-        params: Parameters passed to tool
-    
-    Returns:
-        Result of fixed tool invocation or escalation to user
-    """
-    # Step 1: Extract error message
-    error_msg = str(error)
-    
-    # Step 2: Load self-healing registry
-    from cortex.mcp.self_healing import MCPSelfHealing
-    healer = MCPSelfHealing()
-    
-    # Step 3: Detect issue
-    issue = healer.detect_issue(error_msg)
-    
-    if not issue:
-        # Unknown error, escalate to user
-        display_error(
-            f"❌ MCP Tool Error: {tool_name}\n"
-            f"Error: {error_msg}\n\n"
-            f"This is an unknown MCP issue.\n"
-            f"Please run: python .cortex/setup-mcp.py\n"
-            f"Then reload VS Code."
-        )
-        return None
-    
-    # Step 4: Check if auto-fix is enabled
-    if not issue.auto_fix:
-        # Manual fix required, escalate
-        display_error(
-            f"❌ MCP Issue Detected: {issue.issue_id}\n"
-            f"Description: {issue.description}\n\n"
-            f"Manual Fix Required:\n" +
-            "\n".join(f"  {i+1}. {step}" for i, step in enumerate(issue.fix_steps))
-        )
-        return None
-    
-    # Step 5: Apply auto-fix silently
-    print(f"🔧 CORTEX Self-Healing: Detected {issue.issue_id}, applying fix...")
-    
-    success = healer.apply_fix(issue)
-    
-    if not success:
-        # Fix failed, escalate
-        display_error(
-            f"❌ Auto-fix failed for {issue.issue_id}\n"
-            f"Please manually run: python .cortex/setup-mcp.py\n"
-            f"Then reload VS Code."
-        )
-        return None
-    
-    # Step 6: Retry original operation
-    print(f"✅ Fix applied, retrying {tool_name}...")
-    
-    try:
-        result = retry_mcp_tool(tool_name, params)
-        print(f"✅ {tool_name} succeeded after auto-fix")
-        return result
-    except Exception as retry_error:
-        # Retry failed, check retry count
-        if issue.retry_count > 1:
-            # Try one more time
-            try:
-                result = retry_mcp_tool(tool_name, params)
-                print(f"✅ {tool_name} succeeded after 2nd retry")
-                return result
-            except:
-                pass
-        
-        # All retries exhausted, escalate
-        display_error(
-            f"❌ MCP tool {tool_name} failed after auto-fix\n"
-            f"Issue: {issue.issue_id}\n"
-            f"Retries: {issue.retry_count}\n\n"
-            f"Please contact support or check:\n"
-            f"  .cortex/setup.log\n"
-            f"  .cortex/mcp-self-healing.log"
-        )
-        return None
-```
-
-### User-Facing Messages During Self-Healing
-
-**When auto-fix is triggered (silent, informational only):**
-```
-🔧 CORTEX Self-Healing: Detected MCP-ERR-001
-📋 Issue: TypeError: r.content is not iterable
-🛠️ Applying fix: restart_mcp_server
-⏳ Please wait 5 seconds...
-✅ Fix applied successfully
-🔄 Retrying your operation...
-✅ Operation succeeded
-```
-
-**When auto-fix fails (escalation to user):**
-```
-❌ CORTEX Self-Healing: Auto-fix Failed
-
-Issue: MCP-ERR-001 (TypeError: r.content is not iterable)
-Retries: 2/2 exhausted
-Status: ESCALATED
-
-Manual Fix Required:
-  1. Run: python .cortex/setup-mcp.py
-  2. Reload VS Code: Command Palette → Developer: Reload Window
-  3. Check logs: .cortex/setup.log, .cortex/mcp-self-healing.log
-  4. If issue persists, report to support
-
-Root Cause: MCP server response handling bug in client
-Authority: ENH-067 (Self-Healing MCP Infrastructure)
-```
-
-### Integration with Copilot Session
-
-**MANDATORY: Wrap ALL MCP tool invocations with self-healing:**
-
-```python
-# Before (vulnerable):
-result = cortex_process_request(operation="implement", target="file.py")
-
-# After (self-healing):
-try:
-    result = cortex_process_request(operation="implement", target="file.py")
-except Exception as e:
-    result = handle_mcp_tool_error(e, "cortex_process_request", {
-        "operation": "implement",
-        "target": "file.py"
-    })
-    
-    if result is None:
-        # Self-healing failed, halt operation
-        return HALT_WITH_ERROR
-```
-
-### Audit Trail for Self-Healing Events
-
-**All auto-fix attempts logged:**
-
-```yaml
-# .cortex/mcp-self-healing.log
-- timestamp: "2026-02-13T14:30:45Z"
-  session_id: "chat01-session"
-  issue_id: "MCP-ERR-001"
-  tool_name: "cortex_process_request"
-  error_message: "TypeError: r.content is not iterable"
-  fix_strategy: "restart_mcp_server"
-  fix_result: "SUCCESS"
-  retry_count: 1
-  retry_success: true
-  duration_ms: 5234
-
-- timestamp: "2026-02-13T14:35:12Z"
-  session_id: "chat01-session"
-  issue_id: "MCP-ERR-002"
-  tool_name: "cortex_lens_analyze"
-  error_message: "Connection refused"
-  fix_strategy: "restart_mcp_server"
-  fix_result: "SUCCESS"
-  retry_count: 1
-  retry_success: true
-  duration_ms: 7891
-```
-
-### Extensibility: Adding New Auto-Fix Patterns
-
-**To add new detect-and-fix patterns:**
-
-1. **Update Registry:** Edit `cortex/mcp/self_healing_registry.yaml`
-   ```yaml
-   - issue_id: "MCP-ERR-005"
-     pattern: "Your new error pattern here"
-     severity: "HIGH|MEDIUM|LOW"
-     fix_strategy: "your_fix_function"
-     auto_fix: true
-     retry_count: 2
-   ```
-
-2. **Implement Fix Strategy:** Add to `cortex/mcp/self_healing.py`
-   ```python
-   def fix_your_new_issue(self, issue: MCPIssue) -> bool:
-       """Implement fix logic here"""
-       pass
-   ```
-
-3. **Wire Fix Strategy:** Register in fix strategy map
-   ```python
-   self.fix_strategies = {
-       "restart_mcp_server": self.fix_restart_server,
-       "reconfigure_python_path": self.fix_python_path,
-       "your_fix_function": self.fix_your_new_issue,  # ADD HERE
-   }
-   ```
-
-4. **Test:** Verify auto-fix works in isolation
-   ```python
-   pytest tests/mcp/test_self_healing.py::test_mcp_err_005
-   ```
-
-### Priority for Common Issues
-
-| Issue | Frequency | Auto-Fix Priority | Success Rate |
-|-------|-----------|-------------------|--------------|
-| **MCP-ERR-001** | High | P0 | 95% |
-| **MCP-ERR-002** | Medium | P0 | 90% |
-| **MCP-ERR-003** | Low | P1 | 85% |
-| **MCP-ERR-004** | Medium | P0 | 80% |
+| Tool | Purpose |
+|------|---------|
+| `cortex_process_request` | Main request processing (TDD workflow) |
+| `cortex_lens_analyze` | Unified code intelligence (ANALYZE) |
+| `cortex_challenge` | Challenge generation (design reviews) |
+| `cortex_total_recall` | Feature discovery |
+| `cortex_git_history` | 24h git context |
+| `cortex_detect_duplicates` | CORE-035 violation detection |
+| `cortex_onboard_repository` | Repository onboarding + security scan |
+| `cortex_audit` | Health scans |
+| `cortex_plan_setup` | Pre-implementation hook |
+| `cortex_plan_resolve` | Intelligent phase resolution |
 
 ---
 
@@ -588,71 +139,7 @@ except Exception as e:
 **Trigger:** BEFORE any native tool invocation  
 **Enforcement:** BLOCKING — Intent-based tool restriction matrix
 
-### Pre-Tool-Invocation Check (MANDATORY)
-
-**EXECUTE BEFORE EVERY TOOL CALL:**
-
-```python
-# Step 1: Classify user intent from context
-intent = classify_current_intent()  # Returns: IMPLEMENT|FIX|REFACTOR|ANALYZE|AUDIT|DESIGN
-
-# Step 2: Check if tool is allowed for this intent
-tool_name = get_current_tool()  # e.g., "create_file", "cortex_process_request"
-
-# Step 3: Validate against intent-tool matrix
-if intent in ["IMPLEMENT", "FIX", "REFACTOR"]:
-    # Check if attempting to use blocked native tools
-    blocked_tools = [
-        "create_file",
-        "replace_string_in_file",
-        "edit_files",
-        "run_in_terminal",  # Only for file operations
-        "edit_notebook_file",  # Only for code cells
-    ]
-    
-    if tool_name in blocked_tools:
-        # Check if targeting production code files (.py, .ts, .js, etc.)
-        if is_production_code_file(target_file):
-            DISPLAY_ERROR_AND_HALT(
-                f"""
-                ❌ NATIVE TOOL BYPASS BLOCKED
-                
-                Intent: {intent}
-                Tool: {tool_name}
-                File: {target_file}
-                Severity: P0 - CRITICAL
-                
-                REQUIRED ACTION:
-                Use MCP tool instead: cortex_process_request
-                
-                Example:
-                cortex_process_request(
-                    operation="{intent.lower()}",
-                    target="{target_file}",
-                    request="{user_request}",
-                    mode="TDD"
-                )
-                
-                WHY: MCP-FIRST architecture ensures:
-                ✅ TDD enforcement (CORE-008)
-                ✅ Security gates (ARCH-012)
-                ✅ Cross-layer validation (CORE-035)
-                ✅ Audit trail (AC markers)
-                ✅ Governance enforcement
-                
-                CORTEX operates at ONE quality level: Production.
-                No bypasses allowed.
-                """
-            )
-            HALT_EXECUTION
-            return
-
-# Step 4: If allowed, proceed
-if is_tool_allowed_for_intent(tool_name, intent):
-    proceed_with_tool_invocation()
-```
-
-### Intent-Based Tool Restriction Matrix
+### Intent-Based Tool Restrictions (SINGLE SOURCE OF TRUTH)
 
 **IMPLEMENT/FIX/REFACTOR Intents:**
 
@@ -670,8 +157,6 @@ if is_tool_allowed_for_intent(tool_name, intent):
 | `list_dir` | ✅ **ALLOWED** | Navigation only |
 | `cortex_process_request` | ✅ **REQUIRED** | ALL file modifications |
 | `cortex_lens_analyze` | ✅ **ALLOWED** | Code intelligence |
-| `cortex_validate_environment` | ✅ **REQUIRED** | Session start |
-| `cortex_get_session_rules` | ✅ **ALLOWED** | Dynamic rule loading |
 
 **ANALYZE/AUDIT Intents:**
 
@@ -680,7 +165,6 @@ if is_tool_allowed_for_intent(tool_name, intent):
 | All read-only tools | ✅ **ALLOWED** | Analysis operations |
 | `cortex_lens_analyze` | ✅ **PREFERRED** | Primary analysis tool |
 | `cortex_audit` | ✅ **REQUIRED** | Audit operations |
-| Native write tools | ⚠️ **WARN** | Prefer MCP tools |
 
 **DESIGN Intent:**
 
@@ -691,107 +175,36 @@ if is_tool_allowed_for_intent(tool_name, intent):
 | `replace_string_in_file` | ✅ **ALLOWED** | .github/agents/, .github/prompts/ ONLY |
 | Production code tools | ❌ **BLOCKED** | Use `cortex_process_request` |
 
-### Production Code File Detection
+### Enforcement Pattern (MANDATORY)
+
+**Execute BEFORE every file modification tool:**
 
 ```python
-def is_production_code_file(file_path: str) -> bool:
-    """
-    Determine if file is production code requiring MCP routing.
-    
-    Args:
-        file_path: Path to file being modified
-    
-    Returns:
-        True if file is production code, False otherwise
-    """
-    production_extensions = {
-        ".py",   # Python
-        ".ts",   # TypeScript
-        ".js",   # JavaScript
-        ".tsx",  # TypeScript React
-        ".jsx",  # JavaScript React
-        ".java", # Java
-        ".cs",   # C#
-        ".go",   # Go
-        ".rs",   # Rust
-    }
-    
-    # Check file extension
-    for ext in production_extensions:
-        if file_path.endswith(ext):
-            # Exempt config/docs areas
-            if not any(x in file_path for x in [".github/", "docs/", "tests/"]):
-                return True
-    
-    return False
-```
+intent = classify_user_request()  # IMPLEMENT|FIX|REFACTOR|ANALYZE|AUDIT|DESIGN
+tool_name = get_current_tool()
 
-### Bypass Attempt Logging
+if intent in ["IMPLEMENT", "FIX", "REFACTOR"]:
+    if tool_name in ["create_file", "replace_string_in_file"] and is_production_code_file(target_file):
+        BLOCK: "Use cortex_process_request instead"
+        return
 
-**All bypass attempts are logged:**
-
-```python
-# Log bypass attempt for audit trail
-log_bypass_attempt(
-    timestamp=datetime.now(),
-    intent=intent,
-    tool=tool_name,
-    file=target_file,
-    action="BLOCKED",
-    session_id=get_session_id()
-)
-
-# Increment bypass counter (for governance reporting)
-increment_metric("cortex_bypass_attempts_blocked_total")
+if tool_name in ALLOWED_TOOLS_FOR_INTENT[intent]:
+    proceed_with_tool_invocation()
 ```
 
 ### Error Response Template
-
-**When bypass blocked:**
 
 ```markdown
 <hr>
 ❌ NATIVE TOOL BYPASS BLOCKED (MCP-FIRST VIOLATION)
 <hr>
 
-**Intent:** {intent}
-**Tool:** {tool_name}
-**File:** {target_file}
-**Severity:** P0 - CRITICAL
-
-**Why Blocked:**
-MCP-FIRST architecture requires all IMPLEMENT/FIX/REFACTOR operations
-to route through MCP tools for:
-✅ TDD enforcement (tests before code)
-✅ Security validation (OWASP checks)
-✅ Cross-layer validation (CORE-035)
-✅ Audit trail (AC markers)
-✅ Governance enforcement (7 agents)
-
-**Required Action:**
+**Intent:** {intent} | **Tool:** {tool_name} | **File:** {target_file}
 
 Use MCP tool instead:
-```python
-cortex_process_request(
-    operation="{intent.lower()}",
-    target="{target_file}",
-    request="{user_request}",
-    mode="TDD"
-)
-```
+cortex_process_request(operation="{intent.lower()}", target="{target_file}", request="{user_request}", mode="TDD")
 
-**Setup MCP (if not configured):**
-```bash
-python .cortex/setup-mcp.py
-# Then: Reload VS Code (Command Palette → Developer: Reload Window)
-```
-
-**Reference:**
-- .github/prompts/MCP-SETUP-GUIDE.md
-- .github/copilot-instructions.md § NATIVE TOOL BYPASS PREVENTION
-
-CORTEX operates at ONE quality level: Production.
-Fix infrastructure. No bypasses allowed.
+Setup: python .cortex/setup-mcp.py → Reload VS Code
 <hr>
 ```
 
@@ -838,7 +251,8 @@ Fix infrastructure. No bypasses allowed.
 <hr>
 ```
 
-**WHY TABLE FORMAT:** Tree characters (`├─ └─`) get concatenated into a single line in Copilot Chat. Markdown tables render reliably on every platform.
+**WHY TABLE FORMAT:** Tree characters (`├─ └─`) concatenate into single lines in 
+Copilot Chat. Markdown tables render reliably everywhere.
 
 **FORBIDDEN FORMATS during silent execution:**
 - ❌ Text paragraphs ("I'm now implementing...")
@@ -983,8 +397,12 @@ print(f"🎭 Header: {header_icon} {header_title}")
 | Command | Action |
 |---------|--------|
 | `/audit` | Autonomous codebase health scan |
-| `/plan` | **PLAN MODE:** Phase lifecycle management with intelligent resolution, setup/teardown hooks, and dashboard sync. Uses PlanOrchestrator → PhaseManager → DashboardGenerator. Supports: create phase, update phase, complete phase, resolve operation, prioritize phases. |
-| `/list {query}` | **LIST MODE:** Concise tabular/numbered responses for any list-type query (capabilities, modes, git history, phases, tools, etc.) |
+| `/plan` | **PLAN MODE:** Phase lifecycle management with intelligent 
+resolution, setup/teardown hooks, dashboard sync. Uses PlanOrchestrator → PhaseManager → 
+DashboardGenerator. Supports: create phase, update phase, complete phase, resolve operation, 
+prioritize phases. |
+| `/list {query}` | **LIST MODE:** Concise tabular/numbered responses for any 
+list-type query (capabilities, modes, git history, phases, tools, etc.) |
 | `/implement {feature}` | TDD implementation |
 | `/fix {issue}` | Bug fixing |
 | `/refactor {target}` | Code improvement |
@@ -1065,6 +483,17 @@ cortex-registry/_cortex-master/
 | **CORE-050** | **MCP Circuit Breaker (P0)** — Tiered MCP availability enforcement. **HARD BLOCK:** IMPLEMENT, FIX, REFACTOR, AUDIT, PLAN, ANALYZE intents CANNOT proceed if MCP unavailable. **EXEMPT:** DIAGNOSE, QUERY (educational), SETUP intents allowed for troubleshooting. **NO BYPASS:** Direct file operations forbidden for blocked intents even if "simpler." |
 | **CORE-051** | **Cross-Platform MCP (P0)** — `.vscode/settings.json` MUST NOT be in git (contains platform-specific Python paths). **MANDATORY AUDIT:** Every `/audit` command MUST verify settings.json not tracked. **AUTO-FIX:** `.githooks/post-checkout` regenerates settings via `setup-mcp.py` (macOS: bin/python, Windows: Scripts/python.exe). **VIOLATION:** Committing settings.json = cross-platform breakage. |
 | **CORE-052** | **Single Branch Policy (P0)** — ALL work MUST be done on the `CORTEX` branch. ❌ FORBIDDEN: `git checkout -b`, `git switch -c`, creating feature/backup/wave branches. ✅ REQUIRED: Use `git commit` for checkpoints (not branches). Use `git tag` for release markers. Use `git stash` for temporary saves. **VIOLATION:** Creating any new local branch = governance violation. Only `CORTEX` branch exists locally. |
+| **CORE-001** | **Incremental Delivery** — All tasks ≤500 LOC per commit. Continuation limits enforced. |
+| **CORE-004** | **No Silent Failures** — All errors logged with context. |
+| **CORE-011** | **Type Hints Mandatory** — All parameters + returns in Python/TypeScript/C#. |
+| **CORE-012** | **Google-style Docstrings** — Full parameter + return descriptions required. |
+| **CORE-013** | **No Bare Except** — Specific exception handling only. |
+| **CORE-025** | **Git Discipline** — Clean history, atomic commits, meaningful messages. |
+| **CORE-026** | **Checkpoint Commits** — `git commit` before major changes (never create branches on wave-1). |
+| **CORE-027** | **Audit Trail** — AC_START → AC_COMPLETE markers on all governance-gated work. |
+| **CORE-028** | **File Naming** — kebab-case, no SCREAMING_CASE, plan files ≤40 chars. |
+| **CORE-041** | **Event-Driven Architecture** — Message-based communication patterns required. |
+| **CORE-042** | **Hierarchical Terminology** — INITIATIVE→PHASE→STAGE→TASK (I-/P-/S-/T- prefixes). |
 | **MCP-FIRST** | ALL functionality exposed via MCP tools |
 | **MCP-GATE** | IMPLEMENT intents MUST use `cortex_process_request` tool (NO direct file creation) |
 | **ARCH-012** | Standards gate — 12-Factor + SOLID + Clean Code + OWASP required |
@@ -1127,51 +556,24 @@ See: cortex-architect.prompt.md § HOLISTIC WORK PROTOCOL (full details)
 **BEFORE processing ANY IMPLEMENT/FIX/REFACTOR request:**
 
 ```python
-# Step 1: Classify intent
-from cortex.models.canonical_enums import IntentType
-from cortex.governance.enforcement.agents.environment_integrity_agent import EnvironmentIntegrityAgent
+# Step 1: Classify user intent
+intent = classify_user_request()  # IMPLEMENT|FIX|REFACTOR|ANALYZE
 
-intent = classify_user_request()  # IMPLEMENT | FIX | REFACTOR | ANALYZE
-
-# Step 1.5: Kickoff Phase 49 CCL async prefetch (NON-BLOCKING)
-from cortex.orchestrators.context_crystallization import ContextCrystallizationLayer
-ccl = ContextCrystallizationLayer()
-ccl.prefetch_async(request_id, file_path, context)  # Runs in background
-
-# Step 2: Pre-flight check
+# Step 2: Pre-flight check  
 agent = EnvironmentIntegrityAgent()
 result = agent.validate_pre_flight(intent)
+
+# Step 3: Block if MCP unavailable for IMPLEMENT/FIX/REFACTOR
+if not result.passed and intent in ["IMPLEMENT", "FIX", "REFACTOR"]:
+    BLOCK: MCP tools required (see resolution in error message)
+    
+# Step 4: Proceed with MCP-FIRST workflow
+if result.passed:
+    use cortex_process_request(intent=intent, ...)
 ```
 
-**Key Point:** CCL prefetch (rules, LENS, infrastructure) runs PARALLEL to MCP check. If MCP check passes, Stage 2 will have pre-warmed context ready.
-
-# Step 3: Block if failed
-if not result.passed:
-    STOP ❌
-    Display:
-    """
-    ❌ MCP Tools Required (Pylance-Style Architecture)
-    
-    Intent: {intent}
-    Status: MCP tools not available in Copilot Chat
-    
-    Resolution Steps:
-    1. Run setup script: python .cortex/setup-mcp.py
-    2. Reload VS Code: Command Palette → Developer: Reload Window
-    3. Verify: Check .cortex/setup.log for "✅ SETUP COMPLETE"
-    
-    NOTE: MCP runs locally like Pylance (NO manual server startup)
-    VS Code auto-starts MCP when Copilot invokes cortex_* tools.
-    
-    CORTEX operates at ONE quality level: Production.
-    Fix infrastructure. No bypasses allowed.
-    """
-    DO NOT PROCEED with direct file operations
-
-# Step 4: Proceed if passed
-if result.passed:
-    # Route through MCP-FIRST workflow
-    use cortex_process_request(intent=intent, ...)
+**Key Point:** CCL prefetch (rules, LENS, infrastructure) runs PARALLEL to MCP 
+check. If MCP check passes, Stage 2 will have pre-warmed context ready.
 ```
 
 **For ANALYZE intent (ALLOWED without MCP):**
@@ -1198,322 +600,7 @@ if result.passed:
 
 ---
 
-## 🚨 COPILOT NATIVE TOOL RESTRICTIONS (GAP-001 FIX)
-
-**CRITICAL:** Before using ANY Copilot native file modification tool, perform intent check.
-
-### Intent-Based Tool Restrictions
-
-**FORBIDDEN for IMPLEMENT/FIX/REFACTOR intents:**
-
-| Tool | Status | Replacement |
-|------|--------|-------------|
-| `create_file` | ❌ **BLOCKED** | Use `cortex_process_request` |
-| `replace_string_in_file` | ❌ **BLOCKED** | Use `cortex_process_request` |
-| `multi_replace_string_in_file` | ❌ **BLOCKED** | Use `cortex_process_request` |
-| `run_in_terminal` (file ops) | ❌ **BLOCKED** | Use `cortex_process_request` |
-| `edit_notebook_file` (code cells) | ❌ **BLOCKED** | Use `cortex_process_request` |
-
-**ALLOWED for IMPLEMENT/FIX/REFACTOR intents:**
-
-| Tool | Status | Purpose |
-|------|--------|----------|
-| `read_file` | ✅ **ALLOWED** | Analysis only (no modification) |
-| `semantic_search` | ✅ **ALLOWED** | Discovery only |
-| `grep_search` | ✅ **ALLOWED** | Analysis only |
-| `file_search` | ✅ **ALLOWED** | Discovery only |
-| `list_dir` | ✅ **ALLOWED** | Navigation only |
-| `cortex_process_request` | ✅ **REQUIRED** | ALL file modifications |
-| `cortex_lens_analyze` | ✅ **ALLOWED** | Code intelligence |
-
-**ALLOWED for ANALYZE/AUDIT/DESIGN intents:**
-
-- ✅ ALL read-only tools (read_file, semantic_search, grep_search, etc.)
-- ✅ `create_file` for .github/agents/ and .github/prompts/ ONLY
-- ✅ `replace_string_in_file` for .github/agents/ and .github/prompts/ ONLY
-- ❌ NO .py file modifications (use `cortex_process_request` instead)
-
-### Enforcement Pattern (MANDATORY)
-
-**Execute this check BEFORE every file modification tool:**
-
-```python
-# Step 1: Classify intent
-intent = classify_user_request()  # Returns: IMPLEMENT|FIX|REFACTOR|ANALYZE|AUDIT|DESIGN
-
-# Step 2: Check tool against intent
-if intent in ["IMPLEMENT", "FIX", "REFACTOR"]:
-    if tool in ["create_file", "replace_string_in_file", "multi_replace_string_in_file"]:
-        # Check if targeting .py files
-        if file_path.endswith(".py"):
-            BLOCK with message:
-            """
-            ❌ CRITICAL VIOLATION: Direct file modification blocked
-            
-            Intent: {intent}
-            Tool: {tool}
-            File: {file_path}
-            
-            Required Action: Use cortex_process_request instead
-            Example: cortex_process_request(operation="{intent.lower()}", target="{file_path}", ...)
-            
-            Why: MCP-FIRST architecture ensures TDD, security gates, and audit trails.
-            """
-            STOP execution
-
-# Step 3: If allowed, proceed
-if tool in ALLOWED_TOOLS_FOR_INTENT[intent]:
-    proceed with tool invocation
-```
-
-### Quick Reference Matrix
-
-| Intent | Native File Tools | MCP Tools | Docs Updates |
-|--------|------------------|-----------|---------------|
-| **IMPLEMENT** | ❌ BLOCKED | ✅ REQUIRED | ✅ Via MCP |
-| **FIX** | ❌ BLOCKED | ✅ REQUIRED | ✅ Via MCP |
-| **REFACTOR** | ❌ BLOCKED | ✅ REQUIRED | ✅ Via MCP |
-| **ANALYZE** | 📖 Read-only | ✅ Preferred | ✅ Allowed |
-| **AUDIT** | 📖 Read-only | ✅ Required | ✅ Allowed |
-| **DESIGN** | 📖 Read-only + .github/ | ⚪ Optional | ✅ Allowed |
-
-**Violation Response:**
-```markdown
-❌ **MCP-FIRST VIOLATION DETECTED**
-
-**Attempted Action:** {tool} on {file_path}
-**Intent:** {intent}
-**Severity:** P0 - CRITICAL
-
-**Required Action:**
-1. Stop current operation
-2. Invoke `cortex_process_request` with same parameters
-3. Follow TDD workflow (tests before code)
-
-**Setup MCP (if not configured):**
-```bash
-# Run setup script (cross-platform)
-python .cortex/setup-mcp.py
-# Then reload VS Code: Command Palette → Developer: Reload Window
-```
-
-**MCP Tool Usage:**
-```python
-cortex_process_request(
-    operation="{intent.lower()}",
-    target="{file_path}",
-    request="{user_request}",
-    mode="TDD"
-)
-```
-```
-
----
-
-## 🔍 MCP DETECTION CODE (GAP-002 FIX)
-
-**CRITICAL:** Execute MCP availability check at session start and before IMPLEMENT/FIX/REFACTOR operations.
-
-**Architecture Note (Phase 53):** MCP runs locally within VS Code (like Pylance). 
-VS Code auto-starts the MCP server via `python -m cortex.mcp` when Copilot invokes tools.
-No manual server startup is required.
-
-### Detection Pattern 1: Tool Availability Query
-
-```python
-def is_mcp_available() -> bool:
-    """
-    Check if MCP tools are available in current session.
-    
-    MCP Architecture: Pylance-style (auto-started by VS Code)
-    - Tools registered via .vscode/settings.json github.copilot.chat.mcpServers
-    - VS Code spawns MCP process when Copilot invokes cortex_* tools
-    
-    Returns:
-        True if MCP tools available, False otherwise
-    """
-    try:
-        # Query available tools from VS Code/Copilot context
-        # Note: Implementation depends on Copilot's internal tool registry
-        
-        # Attempt to describe the tool (this will fail if tool doesn't exist)
-        # This is a conceptual pattern - actual implementation uses Copilot's context
-        available = check_tool_exists("cortex_process_request")
-        return available
-    except Exception as e:
-        return False
-
-# Usage in pre-flight check
-if not is_mcp_available():
-    print("❌ MCP tools not available in Copilot Chat")
-    print("Run setup: python .cortex/setup-mcp.py")
-    print("Then reload VS Code")
-    return STOP_EXECUTION
-```
-
-### Detection Pattern 2: Environment Variable Check
-
-```python
-def is_mcp_server_running() -> bool:
-    """
-    Check if MCP server is running via environment variables.
-    
-    Returns:
-        True if server running, False otherwise
-    """
-    import os
-    
-    # Check standard MCP environment variables
-    mcp_indicators = [
-        "MCP_SERVER_PORT",
-        "MCP_SERVER_HOST",
-        "CORTEX_MCP_ENABLED"
-    ]
-    
-    return any(os.getenv(var) for var in mcp_indicators)
-```
-
-### Detection Pattern 3: Network Port Check
-
-```python
-def check_mcp_port() -> bool:
-    """
-    Check if MCP server is listening on expected port.
-    
-    Returns:
-        True if port is open, False otherwise
-    """
-    import socket
-    import os
-    
-    host = "localhost"
-    port = int(os.getenv("MCP_SERVER_PORT", "8000"))
-    
-    try:
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.settimeout(1)  # 1 second timeout
-        result = sock.connect_ex((host, port))
-        sock.close()
-        return result == 0
-    except Exception:
-        return False
-```
-
-### Recommended Detection Workflow
-
-```python
-def verify_mcp_environment(intent: str) -> tuple[bool, str]:
-    """
-    Comprehensive MCP environment verification.
-    
-    Args:
-        intent: User intent (IMPLEMENT/FIX/REFACTOR/ANALYZE/etc.)
-    
-    Returns:
-        Tuple of (is_available, message)
-    """
-    # Step 1: Check if MCP required for this intent
-    mcp_required_intents = ["IMPLEMENT", "FIX", "REFACTOR", "ANALYZE", "AUDIT"]
-    
-    if intent not in mcp_required_intents:
-        return (True, "MCP not required for this intent")
-    
-    # Step 2: Attempt tool availability check (primary)
-    try:
-        if is_mcp_available():
-            return (True, "MCP tools available")
-    except Exception:
-        pass
-    
-    # Step 3: Check environment variables (secondary)
-    if is_mcp_server_running():
-        return (True, "MCP server detected via environment")
-    
-    # Step 4: Check network port (tertiary)
-    if check_mcp_port():
-        return (True, "MCP server detected on port")
-    
-    # Step 5: MCP unavailable
-    return (False, f"MCP required for {intent} but not available")
-
-# Usage before operation
-is_available, message = verify_mcp_environment(intent)
-
-if not is_available:
-    print(f"❌ {message}")
-    print("")
-    print("MCP runs locally in VS Code (like Pylance)")
-    print("Run setup: python .cortex/setup-mcp.py")
-    print("Then: Reload VS Code (Command Palette → Developer: Reload Window)")
-    return STOP_EXECUTION
-```
-
-### Session Initialization Check
-
-**Execute at start of EVERY Copilot session:**
-
-```python
-# SESSION INIT - Run automatically
-print("🔧 Initializing CORTEX session...")
-
-# Check MCP availability (Pylance-style: auto-started by VS Code)
-is_available, message = verify_mcp_environment("IMPLEMENT")
-
-if is_available:
-    print("✅ MCP Tools: Available (Pylance-style)")
-    print("✅ cortex_process_request: Ready")
-    print("✅ cortex_lens_analyze: Ready")
-    print("")
-    print("🟢 CORTEX ready for operations")
-else:
-    print("⚠️ MCP Tools: Not detected")
-    print("")
-    print("CORTEX will operate in READ-ONLY mode.")
-    print("IMPLEMENT/FIX/REFACTOR operations blocked.")
-    print("")
-    print("To enable full functionality:")
-    print("  1. python .cortex/setup-mcp.py")
-    print("  2. Reload VS Code: Command Palette → Developer: Reload Window")
-```
-
-### Error Messages (User-Facing)
-
-**When MCP unavailable for required intent:**
-
-```markdown
-❌ **MCP Tools Required**
-
-**Intent:** {intent}
-**Status:** MCP tools not available in Copilot Chat
-**Impact:** Cannot proceed with {intent} operations
-
-**Architecture:** Pylance-Style (VS Code auto-starts MCP)
-
-**Resolution Steps:**
-
-1. **Run Setup Script (Cross-Platform):**
-   ```bash
-   python .cortex/setup-mcp.py
-   ```
-
-2. **Reload VS Code:**
-   - Command Palette → Developer: Reload Window
-
-3. **Verify MCP Configured:**
-   - Check `.cortex/setup.log` for "✅ SETUP COMPLETE"
-   - Verify `.vscode/settings.json` has `github.copilot.chat.mcpServers`
-
-**Note:** MCP uses Pylance-style architecture (auto-started by VS Code).
-No manual `python -m cortex.mcp.server` needed!
-
-**Alternative (Temporary):**
-For analysis-only operations, you can continue without MCP.
-However, IMPLEMENT/FIX/REFACTOR will remain blocked.
-```
-
----
-
-## �🔒 MCP-FIRST ENFORCEMENT (CRITICAL)
+## � MCP-FIRST ENFORCEMENT (CRITICAL)
 
 **FORBIDDEN:** Direct file creation when intent = IMPLEMENT/FIX/REFACTOR
 
@@ -1565,118 +652,6 @@ However, IMPLEMENT/FIX/REFACTOR will remain blocked.
 - ❌ "Simple fix" - still needs MCP
 - ❌ "Just one line" - still needs MCP
 - ❌ "User didn't say /implement" - still needs MCP if intent = IMPLEMENT/FIX
-
----
-
-## 🚨 COPILOT NATIVE TOOL RESTRICTIONS (GAP-001 FIX)
-
-**CRITICAL:** Before using ANY Copilot native file modification tool, perform intent check.
-
-### Intent-Based Tool Restrictions
-
-**FORBIDDEN for IMPLEMENT/FIX/REFACTOR intents:**
-
-| Tool | Status | Replacement |
-|------|--------|-------------|
-| `create_file` | ❌ **BLOCKED** | Use `cortex_process_request` |
-| `replace_string_in_file` | ❌ **BLOCKED** | Use `cortex_process_request` |
-| `multi_replace_string_in_file` | ❌ **BLOCKED** | Use `cortex_process_request` |
-| `run_in_terminal` (file ops) | ❌ **BLOCKED** | Use `cortex_process_request` |
-| `edit_notebook_file` (code cells) | ❌ **BLOCKED** | Use `cortex_process_request` |
-
-**ALLOWED for IMPLEMENT/FIX/REFACTOR intents:**
-
-| Tool | Status | Purpose |
-|------|--------|----------|
-| `read_file` | ✅ **ALLOWED** | Analysis only (no modification) |
-| `semantic_search` | ✅ **ALLOWED** | Discovery only |
-| `grep_search` | ✅ **ALLOWED** | Analysis only |
-| `file_search` | ✅ **ALLOWED** | Discovery only |
-| `list_dir` | ✅ **ALLOWED** | Navigation only |
-| `cortex_process_request` | ✅ **REQUIRED** | ALL file modifications |
-| `cortex_lens_analyze` | ✅ **ALLOWED** | Code intelligence |
-
-**ALLOWED for ANALYZE/AUDIT/DESIGN intents:**
-
-- ✅ ALL read-only tools (read_file, semantic_search, grep_search, etc.)
-- ✅ `create_file` for .github/agents/ and .github/prompts/ ONLY
-- ✅ `replace_string_in_file` for .github/agents/ and .github/prompts/ ONLY
-- ❌ NO .py file modifications (use `cortex_process_request` instead)
-
-### Enforcement Pattern (MANDATORY)
-
-**Execute this check BEFORE every file modification tool:**
-
-```python
-# Step 1: Classify intent
-intent = classify_user_request()  # Returns: IMPLEMENT|FIX|REFACTOR|ANALYZE|AUDIT|DESIGN
-
-# Step 2: Check tool against intent
-if intent in ["IMPLEMENT", "FIX", "REFACTOR"]:
-    if tool in ["create_file", "replace_string_in_file", "multi_replace_string_in_file"]:
-        # Check if targeting .py files
-        if file_path.endswith(".py"):
-            BLOCK with message:
-            """
-            ❌ CRITICAL VIOLATION: Direct file modification blocked
-            
-            Intent: {intent}
-            Tool: {tool}
-            File: {file_path}
-            
-            Required Action: Use cortex_process_request instead
-            Example: cortex_process_request(operation="{intent.lower()}", target="{file_path}", ...)
-            
-            Why: MCP-FIRST architecture ensures TDD, security gates, and audit trails.
-            """
-            STOP execution
-
-# Step 3: If allowed, proceed
-if tool in ALLOWED_TOOLS_FOR_INTENT[intent]:
-    proceed with tool invocation
-```
-
-### Quick Reference Matrix
-
-| Intent | Native File Tools | MCP Tools | Docs Updates |
-|--------|------------------|-----------|---------------|
-| **IMPLEMENT** | ❌ BLOCKED | ✅ REQUIRED | ✅ Via MCP |
-| **FIX** | ❌ BLOCKED | ✅ REQUIRED | ✅ Via MCP |
-| **REFACTOR** | ❌ BLOCKED | ✅ REQUIRED | ✅ Via MCP |
-| **ANALYZE** | 📖 Read-only | ✅ Preferred | ✅ Allowed |
-| **AUDIT** | 📖 Read-only | ✅ Required | ✅ Allowed |
-| **DESIGN** | 📖 Read-only + .github/ | ⚪ Optional | ✅ Allowed |
-
-**Violation Response:**
-```markdown
-❌ **MCP-FIRST VIOLATION DETECTED**
-
-**Attempted Action:** {tool} on {file_path}
-**Intent:** {intent}
-**Severity:** P0 - CRITICAL
-
-**Required Action:**
-1. Stop current operation
-2. Invoke `cortex_process_request` with same parameters
-3. Follow TDD workflow (tests before code)
-
-**Setup MCP (if not configured):**
-```bash
-# Run setup script (cross-platform)
-python .cortex/setup-mcp.py
-# Then reload VS Code: Command Palette → Developer: Reload Window
-```
-
-**MCP Tool Usage:**
-```python
-cortex_process_request(
-    operation="{intent.lower()}",
-    target="{file_path}",
-    request="{user_request}",
-    mode="TDD"
-)
-```
-```
 
 ---
 
@@ -1891,22 +866,6 @@ cortex_process_request(
 
 ---
 
-## 🚀 Quick Commands
-
-| Command | Action |
-|---------|--------|
-| `/audit` | Autonomous codebase health scan |
-| `/plan` | **PLAN MODE:** Phase lifecycle management with intelligent resolution, setup/teardown hooks, and dashboard sync. Uses PlanOrchestrator → PhaseManager → DashboardGenerator. Supports: create phase, update phase, complete phase, resolve operation, prioritize phases. |
-| `/implement {feature}` | TDD implementation |
-| `/fix {issue}` | Bug fixing |
-| `/refactor {target}` | Code improvement |
-| `/analyze {scope}` | LENS analysis |
-| `/recall {feature}` | Feature discovery |
-| `/onboard {path}` | Repository onboarding + security scan |
-| `/debug {path}` | **DEBUG:** Full debug cycle (inject → capture → analyze → fix-plan) |
-| `/debug-cleanup` | **DEBUG:** Remove all CORTEX_DEBUG markers |
-| `/check-env` | **Environment check + CORTEX upgrade detection + intelligent changelog (Phase 40)** |
-
 ---
 
 ## 🔗 Prompts & Agents
@@ -1993,4 +952,4 @@ Enhance requests with:
 
 ---
 
-*v7.0 — Production instructions with security-first mindset and best practices layering. MCP-first, SaaS-ready.*
+*v8.1 — Consolidated MCP instructions with 76% reduction (1996→826 lines). Security-first, SaaS-ready.*
