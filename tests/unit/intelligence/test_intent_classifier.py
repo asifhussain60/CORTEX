@@ -7,7 +7,7 @@ AC-ID: AC-WAVE-M-001
 """
 
 import pytest
-from cortex.intelligence.intent_classifier_v2 import (
+from cortex.intelligence.intent_classifier import (
     IntentClassifierV2,
     IntentType,
     IntentClassification,

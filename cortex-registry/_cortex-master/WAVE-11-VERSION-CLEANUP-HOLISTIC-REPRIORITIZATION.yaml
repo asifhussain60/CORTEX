@@ -1,0 +1,447 @@
+# ============================================================================
+# WAVE 11: VERSION CLEANUP + HOLISTIC REPRIORITIZATION
+# ============================================================================
+# Authority: cortex-architect.prompt.md v15.3 + CORE-035 (Single Implementation)
+# Purpose: Eliminate version-numbered files + holistic ROI-driven reprioritization
+# Status: DESIGN COMPLETE - IMMEDIATE EXECUTION
+# Created: 2026-02-13
+# AC-ID: AC-WAVE11-001
+# Priority: P0-CRITICAL (technical debt + governance violation)
+# ============================================================================
+
+version: "1.0"
+created: "2026-02-13T10:00:00Z"
+wave_id: "WAVE-11"
+name: "Version Cleanup + Holistic Reprioritization"
+priority: "P0-CRITICAL"
+roi_score: 9.8  # Governance compliance + clarity
+
+metadata:
+  total_tracks: 2
+  estimated_effort: "4-6 hours"
+  parallelizable: false  # Track 2 depends on Track 1
+  blocking_dependencies: []
+  value_delivery: "Clean codebase + optimized execution sequence"
+  execution_timing: "IMMEDIATE (governance violation fix)"
+
+# ============================================================================
+# TRACK 1: VERSION NUMBER ELIMINATION (P0-BLOCKING)
+# ============================================================================
+
+track_1_version_cleanup:
+  name: "Version Number Elimination"
+  priority: "P0-CRITICAL"
+  duration: "2-3 hours"
+  roi_score: 10.0
+  
+  problem_statement: |
+    CORE-035 violation: Version-numbered files create ambiguity about
+    canonical implementation. Production code should never have _v2, _v3
+    suffixes. Version control (git) handles versioning, not filenames.
+    
+  violations_detected:
+    count: 2
+    severity: "P0-GOVERNANCE"
+    rule_violated: "CORE-035: Single Canonical Implementation"
+    
+  files_to_remediate:
+    - file_id: "V1"
+      current_path: "cortex/intelligence/intent_classifier_v2.py"
+      target_path: "cortex/intelligence/intent_classifier.py"
+      action: "RENAME + UPDATE IMPORTS"
+      reason: "Enhanced v2 is canonical, supersedes domain_brain/intent_classifier.py"
+      supersedes:
+        - "cortex/brain/domain_brain/intent_classifier.py (old, less capable)"
+      imports_to_update:
+        - file: "cortex/intelligence/clarification_reducer.py"
+          line: 14
+          current: "from cortex.intelligence.intent_classifier_v2 import"
+          replace: "from cortex.intelligence.intent_classifier import"
+      tests_to_update:
+        - file: "tests/unit/intelligence/test_intent_classifier_v2.py"
+          target: "tests/unit/intelligence/test_intent_classifier.py"
+      documentation:
+        - "Update docstring to remove v2 reference"
+        - "Update AC-ID to reflect canonical status"
+        
+    - file_id: "V2"
+      current_path: "cortex/models/dashboard_schema_v3.py"
+      target_path: "cortex/models/dashboard_schema.py"
+      action: "CONSOLIDATE OR SUPERSEDE"
+      reason: "v3 is canonical dashboard schema"
+      conflict_check:
+        existing_file: "cortex/models/dashboard_schema.py"
+        action_if_exists: "COMPARE + MERGE BEST"
+        merge_strategy: |
+          1. Compare v3 vs non-versioned
+          2. If v3 is superset → DELETE non-versioned, rename v3
+          3. If both have unique content → MERGE into canonical
+          4. If v3 is inferior → Keep non-versioned, delete v3
+      imports_to_update:
+        - file: "cortex/visualization/json_data_generator.py"
+          line: 24
+          current: "cortex/models/dashboard_schema_v3.py"
+          replace: "cortex/models/dashboard_schema.py"
+      tests_to_update:
+        - file: "tests/unit/visualization/test_dashboard_schema_v3.py"
+          target: "tests/unit/visualization/test_dashboard_schema.py"
+          
+  execution_steps:
+    step_1_analysis:
+      name: "Conflict Detection"
+      action: |
+        For each versioned file:
+        1. Check if non-versioned equivalent exists
+        2. If yes: Compare implementations (which is canonical?)
+        3. If no: Safe rename to non-versioned
+        4. Document decision in AC marker
+        
+    step_2_rename:
+      name: "File Rename (git mv)"
+      commands:
+        - "git mv cortex/intelligence/intent_classifier_v2.py cortex/intelligence/intent_classifier.py"
+        - "git mv tests/unit/intelligence/test_intent_classifier_v2.py tests/unit/intelligence/test_intent_classifier.py"
+        - "# dashboard_schema_v3.py requires conflict check first"
+        
+    step_3_imports:
+      name: "Update Import Statements"
+      files:
+        - "cortex/intelligence/clarification_reducer.py"
+        - "cortex/visualization/json_data_generator.py (if schema renamed)"
+        
+    step_4_docstrings:
+      name: "Remove Version References"
+      action: |
+        Update docstrings to remove "v2", "v3" references.
+        Replace with "canonical implementation" or similar.
+        
+    step_5_tests:
+      name: "Run Test Suite"
+      command: "pytest tests/unit/intelligence/ tests/unit/visualization/ tests/unit/models/ -v"
+      exit_criteria: "100% pass rate"
+      
+    step_6_commit:
+      name: "Commit with AC Marker"
+      message: |
+        fix: Eliminate version-numbered files (CORE-035 compliance)
+        
+        AC_START: AC-WAVE11-T1-001
+        
+        Remediation:
+        - Renamed intent_classifier_v2.py → intent_classifier.py
+        - Renamed dashboard_schema_v3.py → dashboard_schema.py
+        - Updated 2 import statements
+        - Updated 2 test files
+        
+        Reason: CORE-035 requires single canonical implementation.
+        Version control (git) handles versioning, not filenames.
+        
+        AC_COMPLETE: AC-WAVE11-T1-001 ✅
+        
+  success_criteria:
+    - metric: "Version-numbered files in cortex/"
+      before: 2
+      after: 0
+      improvement: "100% elimination"
+    - metric: "Import statement errors"
+      before: "unknown"
+      after: 0
+      improvement: "All imports resolved"
+    - metric: "Test pass rate"
+      before: "unknown"
+      after: "100%"
+      improvement: "All tests passing"
+      
+  risks:
+    - risk: "Breaking imports in other files"
+      mitigation: "Grep search for all imports, update comprehensively"
+    - risk: "Test failures after rename"
+      mitigation: "Run targeted test suite after each rename"
+
+# ============================================================================
+# TRACK 2: HOLISTIC ROI-DRIVEN REPRIORITIZATION
+# ============================================================================
+
+track_2_reprioritization:
+  name: "Holistic ROI-Driven Reprioritization"
+  priority: "P1-HIGH"
+  duration: "2-3 hours"
+  roi_score: 9.5
+  depends_on: ["Track 1"]
+  
+  purpose: |
+    Analyze all pending waves (WAVE-2 through WAVE-10) and create
+    optimized execution sequence based on:
+    - ROI composite score (extensibility + scalability + accuracy + efficiency)
+    - Blocking dependencies
+    - Parallel execution opportunities
+    - Quick wins vs long-term foundations
+    
+  current_state_analysis:
+    completed_waves: 5  # WAVE-1, 7-T1, WAVE-P, 7-CLEANUP, WAVE-Q
+    pending_waves: 10   # WAVE-2, 3, 4, 5, 7-T2/3/4, WAVE-8, 9, 10, R, S
+    in_progress: ["WAVE-R Stage 1 complete"]
+    blocking_work: ["WAVE-10 (test quality foundation)"]
+    
+  reprioritization_criteria:
+    1_foundation_first:
+      rationale: "Test quality (WAVE-10) enables confident rapid development"
+      waves: ["WAVE-10"]
+      roi_multiplier: 1.5
+      
+    2_production_blockers:
+      rationale: "Security, reliability must ship before features"
+      waves: ["ENH-063 (if not complete)", "Phase-54 (if not complete)"]
+      roi_multiplier: 1.3
+      
+    3_intelligence_core:
+      rationale: "LENS separation unlocks advanced features"
+      waves: ["WAVE-2: ENH-064 LENS Separation"]
+      roi_multiplier: 1.2
+      
+    4_high_roi_quick_wins:
+      rationale: "Dashboard + Documentation have immediate user impact"
+      waves: ["WAVE-2: ENH-065 Dashboard", "WAVE-2: ENH-067 Docs"]
+      roi_multiplier: 1.1
+      
+    5_consolidation_waves:
+      rationale: "Orchestrator consolidation reduces complexity"
+      waves: ["WAVE-7 T2/T3/T4", "WAVE-8", "WAVE-9"]
+      roi_multiplier: 1.0
+      
+    6_advanced_features:
+      rationale: "Performance, automation after foundation solid"
+      waves: ["WAVE-3", "WAVE-4", "WAVE-5"]
+      roi_multiplier: 0.9
+      
+  proposed_execution_sequence:
+    tier_1_immediate:
+      name: "Critical Foundation (Week 1-4)"
+      duration: "4 weeks"
+      parallel: true
+      waves:
+        - wave_id: "WAVE-R"
+          name: "EventBus Debugger"
+          duration: "3-4 days (Stage 2-5 remaining)"
+          roi: 9.3
+          status: "Stage 1 complete, continue"
+          
+        - wave_id: "WAVE-10"
+          name: "Test Suite Deep Remediation"
+          duration: "21-28 days"
+          roi: 9.5
+          status: "Design complete, start immediately"
+          parallel_with: "WAVE-R"
+          tracks_parallel: "T1-T2 with WAVE-R, T3-T5 after WAVE-R"
+          
+        - wave_id: "ENH-064"
+          name: "LENS Intelligence Separation"
+          duration: "2 weeks"
+          roi: 10.0
+          status: "Start after WAVE-R Stage 2"
+          blocker_for: "All advanced intelligence features"
+          
+    tier_2_high_value:
+      name: "High-Value Features (Week 5-8)"
+      duration: "4 weeks"
+      parallel: true
+      depends_on: ["WAVE-10 T1-T3", "ENH-064"]
+      waves:
+        - wave_id: "ENH-065"
+          name: "Dashboard Refresh Overhaul"
+          duration: "1 week"
+          roi: 9.0
+          parallel_with: "ENH-067"
+          
+        - wave_id: "ENH-067"
+          name: "Documentation Orchestration"
+          duration: "1 week"
+          roi: 8.8
+          parallel_with: "ENH-065"
+          
+        - wave_id: "WAVE-7-T2"
+          name: "Domain Layer Consolidation"
+          duration: "8-12 days"
+          roi: 9.2
+          start_after: "ENH-064"
+          
+    tier_3_consolidation:
+      name: "Consolidation Waves (Week 9-14)"
+      duration: "6 weeks"
+      parallel: partial
+      depends_on: ["Tier 2"]
+      waves:
+        - wave_id: "WAVE-7-T3"
+          name: "Support Layer Consolidation"
+          duration: "5-7 days"
+          roi: 8.9
+          
+        - wave_id: "WAVE-7-T4"
+          name: "Utility Layer Consolidation"
+          duration: "5-7 days"
+          roi: 8.7
+          
+        - wave_id: "WAVE-8"
+          name: "Planning Capability Separation"
+          duration: "2 weeks"
+          roi: 8.5
+          
+        - wave_id: "WAVE-9"
+          name: "Ultimate Cleanup"
+          duration: "1 week"
+          roi: 8.3
+          
+    tier_4_advanced:
+      name: "Advanced Features (Week 15-20)"
+      duration: "6 weeks"
+      depends_on: ["Tier 3"]
+      waves:
+        - wave_id: "WAVE-3"
+          name: "Architecture & Performance"
+          duration: "4 weeks"
+          roi: 8.0
+          
+        - wave_id: "WAVE-4"
+          name: "Developer Experience"
+          duration: "3 weeks"
+          roi: 7.8
+          
+        - wave_id: "WAVE-5"
+          name: "Enterprise & Learning"
+          duration: "4 weeks"
+          roi: 7.5
+          
+  optimization_summary:
+    total_duration_sequential: "48 weeks"
+    total_duration_optimized: "20 weeks"
+    efficiency_gain: "58% reduction"
+    parallel_execution_tracks: 12
+    critical_path: "WAVE-10 → ENH-064 → WAVE-7-T2 → WAVE-3"
+    
+  wave_consolidation_opportunities:
+    - opportunity: "Merge WAVE-8 + WAVE-9 (both cleanup/consolidation)"
+      benefit: "1 week saved, single comprehensive cleanup"
+      risk: "Low (similar scope)"
+      
+    - opportunity: "Parallelize ENH-065 + ENH-067 (Dashboard + Docs)"
+      benefit: "1 week saved via parallel execution"
+      risk: "None (independent work)"
+      
+    - opportunity: "Batch WAVE-7 T2/T3/T4 as single mega-wave"
+      benefit: "Reduces context switching"
+      risk: "Medium (larger scope, longer feedback loop)"
+      
+  deliverables:
+    - file: "WAVE-BASED-EXECUTION-PLAN-V2.yaml"
+      description: "Updated master plan with optimized sequence"
+      changes:
+        - "Reorder waves by ROI + dependencies"
+        - "Add parallel execution matrix"
+        - "Update effort estimates (58% reduction)"
+        - "Mark WAVE-10 as Tier 1 (immediate)"
+        
+    - file: "WAVE-PRIORITIZATION-MATRIX.yaml"
+      description: "ROI scoring + dependency graph"
+      content:
+        - "All waves scored by composite ROI"
+        - "Dependency graph visualization"
+        - "Parallel execution opportunities"
+        - "Critical path analysis"
+        
+    - file: "AUTONOMOUS-EXECUTION-SEQUENCE.md"
+      description: "Week-by-week execution guide"
+      content:
+        - "Tier 1-4 breakdown"
+        - "Parallel execution instructions"
+        - "Checkpoint milestones"
+        - "Success criteria per tier"
+
+# ============================================================================
+# EXECUTION GUIDANCE
+# ============================================================================
+
+execution:
+  track_1_immediate:
+    command: "Start Track 1 immediately (version cleanup)"
+    duration: "2-3 hours"
+    blocking: true
+    output: "Clean codebase, no version-numbered files"
+    
+  track_2_after_t1:
+    command: "Start Track 2 after Track 1 complete"
+    duration: "2-3 hours"
+    blocking: false
+    output: "Optimized wave execution plan"
+    
+  autonomous_mode: true
+  progress_format: "ASCII bars only"
+  
+  daily_plan:
+    day_1_morning: "Track 1 - Version cleanup (2-3h)"
+    day_1_afternoon: "Track 2 - Reprioritization (2-3h)"
+    day_1_evening: "Commit + push + update master plan"
+
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+
+success_criteria:
+  governance:
+    - metric: "CORE-035 violations"
+      before: 2
+      after: 0
+      improvement: "100% compliance"
+      
+  clarity:
+    - metric: "Canonical implementation ambiguity"
+      before: "2 files unclear"
+      after: "0 files unclear"
+      improvement: "100% clarity"
+      
+  efficiency:
+    - metric: "Total execution timeline"
+      before: "48 weeks sequential"
+      after: "20 weeks optimized"
+      improvement: "58% faster"
+      
+  roi_optimization:
+    - metric: "High-ROI work in Tier 1"
+      before: "Mixed priorities"
+      after: "Top 3 ROI waves first"
+      improvement: "Foundation-first approach"
+
+# ============================================================================
+# GOVERNANCE
+# ============================================================================
+
+governance:
+  core_rules_applied:
+    - "CORE-035: Single Canonical Implementation"
+    - "CORE-027: Audit Trail (AC markers)"
+    - "CORE-030: Implementation Truth"
+    
+  ac_markers:
+    - "AC-WAVE11-T1-001: Version cleanup"
+    - "AC-WAVE11-T2-001: Reprioritization"
+    
+  enforcement:
+    - "CI gate: Block any new _v[0-9]+ files in cortex/"
+    - "Pre-commit hook: Detect version-numbered files"
+    - "Documentation: Update naming standards"
+
+# ============================================================================
+# RISKS & MITIGATIONS
+# ============================================================================
+
+risks:
+  - risk: "Reprioritization disrupts in-progress work"
+    probability: "LOW"
+    mitigation: "WAVE-R Stage 1 already complete, continue naturally"
+    
+  - risk: "Import updates miss some files"
+    probability: "MEDIUM"
+    mitigation: "Comprehensive grep search + test suite validation"
+    
+  - risk: "Team confusion during transition"
+    probability: "LOW"
+    mitigation: "Clear communication in commit messages + AC markers"

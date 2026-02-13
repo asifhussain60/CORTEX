@@ -11,7 +11,7 @@ AC-ID: AC-WAVE-M-001
 
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
-from cortex.intelligence.intent_classifier_v2 import (
+from cortex.intelligence.intent_classifier import (
     IntentClassifierV2,
     IntentClassification,
     IntentType,
