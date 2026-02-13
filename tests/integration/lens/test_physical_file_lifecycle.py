@@ -189,21 +189,29 @@ class TestPhysicalFileInfrastructure:
         assert physical_test_context.verify_cleanup() is True, \
             "Cleanup verification failed for nonexistent file"
     
-    def test_cleanup_verification_artifact_remains(self, physical_test_context: PhysicalFileTestContext) -> None:
+    def test_cleanup_verification_artifact_remains(self, temp_repo_workspace: Path) -> None:
         """
         Test: Cleanup verification fails when artifacts remain.
         
         RED: Verify cleanup check fails if files not deleted
         Expected: verify_cleanup() returns False
+        
+        NOTE: Uses temp_repo_workspace directly to avoid fixture cleanup assertion
         """
+        # Create isolated context (not using physical_test_context fixture to avoid teardown check)
+        context = PhysicalFileTestContext(temp_dir=temp_repo_workspace, artifact_paths=[])
+        
         # Create artifact that will remain
-        artifact = physical_test_context.temp_dir / "remaining_artifact.yaml"
+        artifact = context.temp_dir / "remaining_artifact.yaml"
         artifact.write_text("remaining content")
-        physical_test_context.add_artifact(artifact)
+        context.add_artifact(artifact)
         
         # Cleanup verification should fail
-        assert physical_test_context.verify_cleanup() is False, \
+        assert context.verify_cleanup() is False, \
             "Cleanup verification should fail when artifact exists"
+        
+        # Manual cleanup to not pollute test environment
+        artifact.unlink()
     
     def test_yaml_schema_validation_helper(self, temp_repo_workspace: Path) -> None:
         """

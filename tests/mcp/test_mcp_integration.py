@@ -128,9 +128,12 @@ class TestMCPIntegration:
         lens = next((t for t in tools if t["name"] == "cortex_lens"), None)
         assert lens is not None
         assert "operations" in lens
-        assert len(lens["operations"]) == 5
+        assert len(lens["operations"]) == 5  # analyze, search, graph, duplicates, ast
         assert "analyze" in lens["operations"]
-        assert "deep_analyze" in lens["operations"]
+        assert "search" in lens["operations"]
+        assert "graph" in lens["operations"]
+        assert "duplicates" in lens["operations"]
+        assert "ast" in lens["operations"]
         
         # Find cortex_debug (consolidated tool)
         debug = next((t for t in tools if t["name"] == "cortex_debug"), None)
