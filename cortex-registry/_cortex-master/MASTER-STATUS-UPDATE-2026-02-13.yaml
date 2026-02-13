@@ -4,11 +4,11 @@
 # Date: 2026-02-13T03:00:00Z
 # Purpose: Consolidated status of all waves, phases, and enhancements
 # Authority: All session completion files + WAVE-BASED-EXECUTION-PLAN.yaml
-# Status: CURRENT - Reflects state after Chat01 digest + WAVE-Q verification
+# Status: CURRENT - Reflects state after Chat01 digest + WAVE-R + Doc Update
 # ============================================================================
 
-version: "2.0"
-last_updated: "2026-02-13T07:00:00Z"
+version: "2.1"
+last_updated: "2026-02-13T10:30:00Z"
 sessions_completed: 6
 total_duration: "~5.7 hours"
 token_usage: "240k / 1M (24%)"
@@ -18,14 +18,14 @@ token_usage: "240k / 1M (24%)"
 # ============================================================================
 
 wave_status:
-  completed: 6
+  completed: 7
   in_progress: 0
   ready: 2
   planned: 2
-  total: 10
+  total: 11
 
 # ============================================================================
-# COMPLETED WAVES (6)
+# COMPLETED WAVES (7)
 # ============================================================================
 
 completed_waves:
@@ -134,6 +134,32 @@ completed_waves:
       - "f43a0a61e: Stage 2-5 complete (643 insertions)"
       - "9917b5376: Completion report"
       - "4a2843b4f: Registry update (AC-WAVE-R-008)"
+  
+  - wave_id: "DOC-UPDATE"
+    name: "CORTEX Architecture Documentation Refresh"
+    status: "✅ COMPLETE"
+    completion_date: "2026-02-13"
+    duration: "N/A (external)"
+    phases: 1
+    tests: "N/A (documentation)"
+    
+    deliverables:
+      - "44 documentation files refreshed"
+      - "Brain analogies for MasterOrchestrator"
+      - "Wiring contract alignment"
+      - "Orchestrator role clarity (28 orchestrators)"
+      - "Enhanced flow diagrams and integration docs"
+    
+    impact:
+      - "Improved onboarding experience for contributors"
+      - "Reduced confusion about orchestrator roles"
+      - "Better alignment between docs and code"
+      - "Foundation for external documentation site"
+      - "772 insertions, 1036 deletions (net -264, consolidation)"
+    
+    commits:
+      - "0435c7cdc: docs(cortex-architecture): refresh with brain analogies and wiring contract alignment"
+      - "37a4c08f0: Merge commit"
 
 # ============================================================================
 # READY WAVES (2)
