@@ -37,6 +37,8 @@
 
 **CRITICAL: Response header appears ONCE at the top of response, then ONLY progress bars and box format below.**
 
+**SSOT:** See `.github/prompts/.archive/phase-docs/response-format-standards.md` § Completion Response Template for comprehensive formatting rules.
+
 **ONLY FORMAT ALLOWED during silent autonomous execution:**
 
 ```
@@ -63,7 +65,14 @@ ENH-089: ✅ COMPLETE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-**KEY RULE: Header appears ONCE at top. All progress/completion sections use box format (━━━), NOT additional headers.**
+**KEY RULES:**
+- Header appears ONCE at top
+- Box separators: exactly 60 `━` (U+2501) characters
+- All progress/completion sections use box format (━━━), NOT additional headers
+- Track sections use `###` headers, never `##`
+- Field labels use `**Label:**` format
+
+**For complete formatting rules, see SSOT:** `.github/prompts/.archive/phase-docs/response-format-standards.md` § Completion Response Template
 
 **FORBIDDEN FORMATS during silent execution:**
 - ❌ "I'm now creating DebugMCPTools class..."
@@ -1377,18 +1386,26 @@ Files: 5 modified
 
 #### Completion Section Format (Use Box Instead of Header)
 
+**SSOT:** See `.github/prompts/.archive/phase-docs/response-format-standards.md` § Completion Response Template
+
 **DO THIS:**
 ```markdown
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ✅ Stage 1 Complete
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Tests: 24/24 passing
-Files: 3 modified
-Commit: abc123f
+**Tests:** 24/24 passing
+**Files:** 3 modified
+**Commit:** abc123f
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+**Key Rules:**
+- Box separators: exactly 60 `━` (U+2501) characters
+- Field labels: `**Label:**` format (bold with colon)
+- No `##` headers inside completion sections
+- Track sections use `###` headers
 
 **NOT THIS:**
 ```markdown
@@ -1399,6 +1416,8 @@ Commit: abc123f
 
 Tests: 24/24 passing
 ```
+
+**For comprehensive formatting rules, see SSOT:** `.github/prompts/.archive/phase-docs/response-format-standards.md` § Completion Response Template
 
 #### When Header Appears Again
 

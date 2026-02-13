@@ -357,12 +357,21 @@ If token usage > 400k before user request:
 
 ## 🏗️ Response Header (MANDATORY)
 
+**SSOT:** See `.github/prompts/.archive/phase-docs/response-format-standards.md` § Completion Response Template for comprehensive formatting rules.
+
 ```markdown
 ## 🧠 CORTEX {operation}
 **Author:** Asif Hussain | **Orchestrator:** {orchestrator} ✅
 
 ---
 ```
+
+**Key Rules:**
+- Header appears ONCE per response (at top)
+- Box separators: exactly 60 `━` (U+2501) characters
+- Completion sections use box format, NOT ## headers
+- Field labels: `**Label:**` format (bold with colon)
+- Track sections use `###` headers
 
 ### 🚨 CRITICAL: ONE HEADER PER RESPONSE RULE (P0 - MANDATORY)
 
