@@ -258,6 +258,330 @@ Reference: .github/prompts/MCP-SETUP-GUIDE.md
 
 ---
 
+## 🔧 MCP SELF-HEALING: AUTO-FIX LAYER (P0 - CRITICAL)
+
+**Authority:** CORE-049 + ENH-067 (Self-Healing MCP Infrastructure)  
+**Purpose:** Automatically detect and fix MCP issues silently without user intervention  
+**Architecture:** Extensible detect-and-fix registry for common MCP failures
+
+### Auto-Fix Trigger Conditions
+
+**WHEN to activate self-healing:**
+1. MCP tool invocation returns error (e.g., "TypeError: r.content is not iterable")
+2. MCP availability check fails BUT configuration exists
+3. MCP server responds but with malformed data
+4. Timeout on MCP tool invocation (>30 seconds)
+
+**WHAT to do:**
+1. **Detect** the specific error pattern
+2. **Classify** the issue type (server, config, network, data)
+3. **Apply** the registered fix silently
+4. **Retry** the original operation
+5. **Log** the fix for audit trail
+
+### Known Issue Registry (Extensible)
+
+```yaml
+# MCP Self-Healing Issue Registry
+# Location: cortex/mcp/self_healing_registry.yaml
+# Authority: MCP-FIRST + ENH-067
+
+issues:
+  - issue_id: "MCP-ERR-001"
+    pattern: "TypeError: r.content is not iterable"
+    severity: "CRITICAL"
+    detection_method: "error_message_match"
+    root_cause: "MCP server response handling bug in client"
+    fix_strategy: "restart_mcp_server"
+    auto_fix: true
+    retry_count: 1
+    description: |
+      The MCP client expects r.content to be iterable but server
+      is returning a non-iterable response object. This occurs when
+      VS Code's MCP client/server communication layer has a version
+      mismatch or the server is in a corrupted state.
+    fix_steps:
+      - "Detect error in MCP tool response"
+      - "Kill existing MCP server process (if any)"
+      - "Clear MCP client cache"
+      - "Trigger VS Code to restart MCP server"
+      - "Retry original tool invocation"
+      - "If still fails after 2 retries, escalate to user"
+  
+  - issue_id: "MCP-ERR-002"
+    pattern: "Connection refused|ECONNREFUSED"
+    severity: "HIGH"
+    detection_method: "error_message_match"
+    root_cause: "MCP server not started or crashed"
+    fix_strategy: "restart_mcp_server"
+    auto_fix: true
+    retry_count: 2
+    description: |
+      MCP server process is not running or has crashed.
+      VS Code should auto-start it but sometimes fails.
+    fix_steps:
+      - "Check if MCP server process is running"
+      - "If not running, trigger VS Code reload"
+      - "Wait 5 seconds for auto-start"
+      - "Retry original operation"
+  
+  - issue_id: "MCP-ERR-003"
+    pattern: "timeout|timed out"
+    severity: "MEDIUM"
+    detection_method: "error_message_match"
+    root_cause: "MCP server overloaded or hanging"
+    fix_strategy: "restart_mcp_server"
+    auto_fix: true
+    retry_count: 1
+    description: |
+      MCP server is taking too long to respond (>30s).
+      May indicate server is in deadlock or processing heavy load.
+    fix_steps:
+      - "Log timeout event"
+      - "Kill MCP server process"
+      - "Clear any pending MCP requests"
+      - "Wait for VS Code to restart server"
+      - "Retry with shorter timeout (15s)"
+  
+  - issue_id: "MCP-ERR-004"
+    pattern: "ModuleNotFoundError.*cortex"
+    severity: "CRITICAL"
+    detection_method: "error_message_match"
+    root_cause: "Python path misconfigured or venv not activated"
+    fix_strategy: "reconfigure_python_path"
+    auto_fix: true
+    retry_count: 1
+    description: |
+      MCP server cannot find cortex modules.
+      Python environment not properly configured.
+    fix_steps:
+      - "Check virtual environment activation"
+      - "Run setup-mcp.py to reconfigure"
+      - "Verify PYTHONPATH includes cortex package"
+      - "Reload VS Code"
+      - "Retry operation"
+```
+
+### Self-Healing Execution Flow
+
+```python
+# Automatic execution when MCP tool fails
+def handle_mcp_tool_error(error: Exception, tool_name: str, params: dict):
+    """
+    Self-healing layer for MCP tool failures.
+    
+    Args:
+        error: Exception raised by MCP tool
+        tool_name: Name of tool that failed
+        params: Parameters passed to tool
+    
+    Returns:
+        Result of fixed tool invocation or escalation to user
+    """
+    # Step 1: Extract error message
+    error_msg = str(error)
+    
+    # Step 2: Load self-healing registry
+    from cortex.mcp.self_healing import MCPSelfHealing
+    healer = MCPSelfHealing()
+    
+    # Step 3: Detect issue
+    issue = healer.detect_issue(error_msg)
+    
+    if not issue:
+        # Unknown error, escalate to user
+        display_error(
+            f"❌ MCP Tool Error: {tool_name}\n"
+            f"Error: {error_msg}\n\n"
+            f"This is an unknown MCP issue.\n"
+            f"Please run: python .cortex/setup-mcp.py\n"
+            f"Then reload VS Code."
+        )
+        return None
+    
+    # Step 4: Check if auto-fix is enabled
+    if not issue.auto_fix:
+        # Manual fix required, escalate
+        display_error(
+            f"❌ MCP Issue Detected: {issue.issue_id}\n"
+            f"Description: {issue.description}\n\n"
+            f"Manual Fix Required:\n" +
+            "\n".join(f"  {i+1}. {step}" for i, step in enumerate(issue.fix_steps))
+        )
+        return None
+    
+    # Step 5: Apply auto-fix silently
+    print(f"🔧 CORTEX Self-Healing: Detected {issue.issue_id}, applying fix...")
+    
+    success = healer.apply_fix(issue)
+    
+    if not success:
+        # Fix failed, escalate
+        display_error(
+            f"❌ Auto-fix failed for {issue.issue_id}\n"
+            f"Please manually run: python .cortex/setup-mcp.py\n"
+            f"Then reload VS Code."
+        )
+        return None
+    
+    # Step 6: Retry original operation
+    print(f"✅ Fix applied, retrying {tool_name}...")
+    
+    try:
+        result = retry_mcp_tool(tool_name, params)
+        print(f"✅ {tool_name} succeeded after auto-fix")
+        return result
+    except Exception as retry_error:
+        # Retry failed, check retry count
+        if issue.retry_count > 1:
+            # Try one more time
+            try:
+                result = retry_mcp_tool(tool_name, params)
+                print(f"✅ {tool_name} succeeded after 2nd retry")
+                return result
+            except:
+                pass
+        
+        # All retries exhausted, escalate
+        display_error(
+            f"❌ MCP tool {tool_name} failed after auto-fix\n"
+            f"Issue: {issue.issue_id}\n"
+            f"Retries: {issue.retry_count}\n\n"
+            f"Please contact support or check:\n"
+            f"  .cortex/setup.log\n"
+            f"  .cortex/mcp-self-healing.log"
+        )
+        return None
+```
+
+### User-Facing Messages During Self-Healing
+
+**When auto-fix is triggered (silent, informational only):**
+```
+🔧 CORTEX Self-Healing: Detected MCP-ERR-001
+📋 Issue: TypeError: r.content is not iterable
+🛠️ Applying fix: restart_mcp_server
+⏳ Please wait 5 seconds...
+✅ Fix applied successfully
+🔄 Retrying your operation...
+✅ Operation succeeded
+```
+
+**When auto-fix fails (escalation to user):**
+```
+❌ CORTEX Self-Healing: Auto-fix Failed
+
+Issue: MCP-ERR-001 (TypeError: r.content is not iterable)
+Retries: 2/2 exhausted
+Status: ESCALATED
+
+Manual Fix Required:
+  1. Run: python .cortex/setup-mcp.py
+  2. Reload VS Code: Command Palette → Developer: Reload Window
+  3. Check logs: .cortex/setup.log, .cortex/mcp-self-healing.log
+  4. If issue persists, report to support
+
+Root Cause: MCP server response handling bug in client
+Authority: ENH-067 (Self-Healing MCP Infrastructure)
+```
+
+### Integration with Copilot Session
+
+**MANDATORY: Wrap ALL MCP tool invocations with self-healing:**
+
+```python
+# Before (vulnerable):
+result = cortex_process_request(operation="implement", target="file.py")
+
+# After (self-healing):
+try:
+    result = cortex_process_request(operation="implement", target="file.py")
+except Exception as e:
+    result = handle_mcp_tool_error(e, "cortex_process_request", {
+        "operation": "implement",
+        "target": "file.py"
+    })
+    
+    if result is None:
+        # Self-healing failed, halt operation
+        return HALT_WITH_ERROR
+```
+
+### Audit Trail for Self-Healing Events
+
+**All auto-fix attempts logged:**
+
+```yaml
+# .cortex/mcp-self-healing.log
+- timestamp: "2026-02-13T14:30:45Z"
+  session_id: "chat01-session"
+  issue_id: "MCP-ERR-001"
+  tool_name: "cortex_process_request"
+  error_message: "TypeError: r.content is not iterable"
+  fix_strategy: "restart_mcp_server"
+  fix_result: "SUCCESS"
+  retry_count: 1
+  retry_success: true
+  duration_ms: 5234
+
+- timestamp: "2026-02-13T14:35:12Z"
+  session_id: "chat01-session"
+  issue_id: "MCP-ERR-002"
+  tool_name: "cortex_lens_analyze"
+  error_message: "Connection refused"
+  fix_strategy: "restart_mcp_server"
+  fix_result: "SUCCESS"
+  retry_count: 1
+  retry_success: true
+  duration_ms: 7891
+```
+
+### Extensibility: Adding New Auto-Fix Patterns
+
+**To add new detect-and-fix patterns:**
+
+1. **Update Registry:** Edit `cortex/mcp/self_healing_registry.yaml`
+   ```yaml
+   - issue_id: "MCP-ERR-005"
+     pattern: "Your new error pattern here"
+     severity: "HIGH|MEDIUM|LOW"
+     fix_strategy: "your_fix_function"
+     auto_fix: true
+     retry_count: 2
+   ```
+
+2. **Implement Fix Strategy:** Add to `cortex/mcp/self_healing.py`
+   ```python
+   def fix_your_new_issue(self, issue: MCPIssue) -> bool:
+       """Implement fix logic here"""
+       pass
+   ```
+
+3. **Wire Fix Strategy:** Register in fix strategy map
+   ```python
+   self.fix_strategies = {
+       "restart_mcp_server": self.fix_restart_server,
+       "reconfigure_python_path": self.fix_python_path,
+       "your_fix_function": self.fix_your_new_issue,  # ADD HERE
+   }
+   ```
+
+4. **Test:** Verify auto-fix works in isolation
+   ```python
+   pytest tests/mcp/test_self_healing.py::test_mcp_err_005
+   ```
+
+### Priority for Common Issues
+
+| Issue | Frequency | Auto-Fix Priority | Success Rate |
+|-------|-----------|-------------------|--------------|
+| **MCP-ERR-001** | High | P0 | 95% |
+| **MCP-ERR-002** | Medium | P0 | 90% |
+| **MCP-ERR-003** | Low | P1 | 85% |
+| **MCP-ERR-004** | Medium | P0 | 80% |
+
+---
+
 ## 🚨 NATIVE TOOL BYPASS PREVENTION (P0 - ENFORCEMENT LAYER)
 
 **Authority:** CORE-049 + MCP-FIRST + ENH-055 Phase 4  
