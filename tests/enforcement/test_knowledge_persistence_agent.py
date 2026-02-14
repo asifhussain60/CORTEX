@@ -92,8 +92,17 @@ class TestLearningCaptureValidation:
         """Test validation passes when learning capture present."""
         result = agent.validate_learning_capture(valid_onboarding_context)
         
+        # Enhanced assertions for validation result
         assert result.passed
         assert result.level != ViolationLevel.BLOCKING
+        assert result.level == ViolationLevel.INFO
+        assert result.rule_id == "KP-001"
+        assert "patterns captured" in result.message.lower()
+        assert len(result.message) > 0
+        # Verify result can be serialized
+        result_dict = result.to_dict()
+        assert result_dict["passed"] is True
+        assert result_dict["rule_id"] == "KP-001"
 
     def test_validate_learning_capture_missing(
         self,

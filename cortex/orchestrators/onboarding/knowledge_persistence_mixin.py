@@ -72,11 +72,14 @@ class KnowledgePersistenceMixin:
             # Capture each pattern
             captured_patterns = []
             for pattern in patterns:
-                capture_result = self.learning_loop.capture_pattern(
-                    pattern_type=pattern["type"],
-                    pattern_data=pattern["data"],
-                    confidence=pattern.get("confidence", 0.8),
-                    source=f"onboarding:{repository_path}"
+                capture_result = self.learning_loop.capture_from_operation(
+                    operation=f"onboarding:{repository_path}",
+                    operation_data={
+                        "pattern_type": pattern["type"],
+                        **pattern["data"]
+                    },
+                    operation_result={"status": "success"},
+                    confidence=pattern.get("confidence", 0.8)
                 )
                 captured_patterns.append(capture_result)
 
@@ -115,19 +118,19 @@ class KnowledgePersistenceMixin:
         try:
             # Detect similar patterns
             detected_patterns = self.pattern_registry.detect_patterns(
-                context=repository_context,
+                repository_context,
                 threshold=0.6
             )
 
             # Select strategies based on context
             strategies = self.strategy_selector.select_strategies(
-                context=repository_context,
+                repository_context,
                 max_strategies=5
             )
 
             # Generate execution plan
             execution_plan = self.execution_planner.generate_plan(
-                strategy_context=repository_context
+                repository_context
             )
 
             logger.info(
@@ -195,6 +198,8 @@ class KnowledgePersistenceMixin:
             return {
                 "artifacts_generated": len(artifacts),
                 "artifacts": artifacts,
+                "templates_generated": sum(1 for a in artifacts if a.get("type") == "template"),
+                "yaml_files_created": sum(1 for a in artifacts if a.get("type") == "best_practices"),
                 "status": "success"
             }
 
