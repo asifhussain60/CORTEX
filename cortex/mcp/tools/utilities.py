@@ -111,6 +111,9 @@ class CortexVerify(ConsolidatedTool):
     
     async def execute(self, **params) -> ToolResult:
         """Execute verify operation."""
+        # ENFORCEMENT: Validate orchestrator routing
+        validate_orchestrator_context(params.get("orchestrator_context"))
+        
         operation = params.get("operation", "environment")
         target = params.get("target")
         auto_fix = params.get("auto_fix", False)
@@ -240,6 +243,9 @@ class CortexAsk(ConsolidatedTool):
     
     async def execute(self, **params) -> ToolResult:
         """Execute ask operation."""
+        # ENFORCEMENT: Validate orchestrator routing
+        validate_orchestrator_context(params.get("orchestrator_context"))
+        
         operation = params.get("operation", "architecture")
         question = params.get("question", "")
         
@@ -313,6 +319,9 @@ class CortexVacuum(ConsolidatedTool):
     
     async def execute(self, **params) -> ToolResult:
         """Execute vacuum operation."""
+        # ENFORCEMENT: Validate orchestrator routing
+        validate_orchestrator_context(params.get("orchestrator_context"))
+        
         operation = params.get("operation", "scan")
         path = params.get("path", ".")
         dry_run = params.get("dry_run", False)
@@ -421,6 +430,9 @@ class CortexToolsCatalog(ConsolidatedTool):
     
     async def execute(self, **params) -> ToolResult:
         """Execute catalog operation."""
+        # ENFORCEMENT: Validate orchestrator routing
+        validate_orchestrator_context(params.get("orchestrator_context"))
+        
         operation = params.get("operation", "list")
         query = params.get("query")
         category = params.get("category")
@@ -556,6 +568,9 @@ class CortexTotalRecall(ConsolidatedTool):
     
     async def execute(self, **params) -> ToolResult:
         """Execute total recall operation."""
+        # ENFORCEMENT: Validate orchestrator routing
+        validate_orchestrator_context(params.get("orchestrator_context"))
+        
         operation = params.get("operation", "discover")
         feature = params.get("feature")
         category = params.get("category")
@@ -676,6 +691,9 @@ class CortexMetrics(ConsolidatedTool):
     
     async def execute(self, **params) -> ToolResult:
         """Execute metrics operation."""
+        # ENFORCEMENT: Validate orchestrator routing
+        validate_orchestrator_context(params.get("orchestrator_context"))
+        
         operation = params.get("operation", "query")
         metric_type = params.get("metric_type")
         data = params.get("data", {})
@@ -772,6 +790,9 @@ class CortexCheck(ConsolidatedTool):
     
     async def execute(self, **params) -> ToolResult:
         """Execute check operation."""
+        # ENFORCEMENT: Validate orchestrator routing
+        validate_orchestrator_context(params.get("orchestrator_context"))
+        
         operation = params.get("operation", "health")
         operation_id = params.get("operation_id")
         
@@ -871,6 +892,9 @@ class CortexVision(ConsolidatedTool):
     
     async def execute(self, **params) -> ToolResult:
         """Execute vision operation."""
+        # ENFORCEMENT: Validate orchestrator routing
+        validate_orchestrator_context(params.get("orchestrator_context"))
+        
         operation = params.get("operation", "analyze")
         image = params.get("image", "")
         options = params.get("options", {})
@@ -947,6 +971,9 @@ class CortexOrchestrator(ConsolidatedTool):
     
     async def execute(self, **params) -> ToolResult:
         """Execute orchestrator operation."""
+        # ENFORCEMENT: Validate orchestrator routing
+        validate_orchestrator_context(params.get("orchestrator_context"))
+        
         operation = params.get("operation", "list")
         orchestrator = params.get("orchestrator")
         invoke_params = params.get("params", {})
