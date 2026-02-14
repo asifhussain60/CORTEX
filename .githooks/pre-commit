@@ -158,11 +158,13 @@ fi
 # CHECK 5: CORE-095/096 Governance (Optimized)
 # ============================================================================
 
-# Only run if staging files in monitored paths
-if echo "$STAGED_FILES" | grep -qE '^[^/]+/'; then
+# Only check files that are in subdirectories (have folder prefix)
+FOLDER_FILES=$(echo "$STAGED_FILES" | grep -E '^[^/]+/' || true)
+
+if [ -n "$FOLDER_FILES" ]; then
     # CORE-095: Folder structure (fast check)
     APPROVED_FOLDERS="cortex|cortex_brain|cortex_lens|cortex-registry|tests|docs|company|deployment|scripts|_archives|_workspaces"
-    UNAPPROVED=$(echo "$STAGED_FILES" | grep -v '^\.' | sed 's|/.*||' | sort -u | grep -vE "^($APPROVED_FOLDERS)$" || true)
+    UNAPPROVED=$(echo "$FOLDER_FILES" | grep -v '^\.' | sed 's|/.*||' | sort -u | grep -vE "^($APPROVED_FOLDERS)$" || true)
     
     if [ -n "$UNAPPROVED" ]; then
         echo -e "${RED}❌ CORE-095: Unapproved folders: $(echo $UNAPPROVED | tr '\n' ' ')${NC}"
@@ -170,7 +172,7 @@ if echo "$STAGED_FILES" | grep -qE '^[^/]+/'; then
     fi
     
     # CORE-096: Build artifacts (fast check)
-    if echo "$STAGED_FILES" | grep -qE '(dist/|build/|__pycache__|\.pyc$|\.egg-info/)'; then
+    if echo "$FOLDER_FILES" | grep -qE '(dist/|build/|__pycache__|\.pyc$|\.egg-info/)'; then
         echo -e "${RED}❌ CORE-096: Build artifacts detected${NC}"
         exit 1
     fi
