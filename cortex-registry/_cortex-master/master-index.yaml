@@ -6,9 +6,12 @@ metadata:
   active: 2
   completed: 1
   deferred: 10
+  note: "Phase 10 intentionally skipped (deployment-orchestrator merged into phase 73)"
   
 # Quick Navigation:
 # - Active work: _views/active/
 # - Done: _views/completed/
 # - Backlog: _views/deferred/
 # - All phases: phases/
+# 
+# Update views: Run scripts/update-phase-views.sh from CORTEX root
