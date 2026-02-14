@@ -1176,6 +1176,53 @@ class EnforcementOrchestrator:
 
         return Ok(enforcement_result)
 
+    def _format_governance_rule_with_book(self, rule_id: str) -> str:
+        """
+        Format governance rule with book reference for inline display.
+        
+        Uses BusinessWisdomFormatter to enrich governance messages with
+        authoritative book citations, enhancing user education.
+        
+        Args:
+            rule_id: CORE rule ID (e.g., "CORE-008")
+        
+        Returns:
+            Formatted string with book reference. Falls back to rule_id if formatting fails.
+        
+        Example:
+            >>> orchestrator._format_governance_rule_with_book("CORE-008")
+            '**Red-Green-Refactor Discipline** → CORE-008 (TDD by Kent Beck)'
+        
+        Authority:
+            - business-wisdom-wiring.md (Stage 2)
+            - phase-06-business-wisdom-display-enhancement.yaml
+        
+        AC-ID: AC-PHASE-06-S2-001
+        """
+        try:
+            from cortex.interaction.business_wisdom_formatter import BusinessWisdomFormatter
+            
+            formatter = BusinessWisdomFormatter()
+            markdown = formatter.format_governance_with_books(
+                rule_ids=[rule_id],
+                max_display=1,
+                include_icon=False
+            )
+            
+            if markdown:
+                # Strip list marker and header for inline display
+                lines = markdown.split("\n")
+                for line in lines:
+                    if line.startswith("- "):
+                        return line[2:].strip()  # Remove "- " prefix
+            
+            # Fallback to rule ID only
+            return rule_id
+            
+        except Exception as e:
+            logger.warning(f"Failed to format rule {rule_id} with book reference: {e}")
+            return rule_id
+
     def validate_response_content(self, response_text: str, allow_markdown: bool = False) -> Result[EnforcementResult, EnforcementResult]:
         """
         Validate response content for markdown file suggestions (CORE-002-RESPONSE).
