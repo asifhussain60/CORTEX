@@ -249,7 +249,7 @@ If response contains any "Ran terminal command: cat" or "Created [" patterns →
    - Flag semantic drift between architect and production prompts
 
 2. **New P2 Check:** Tool Environment Health
-   - Track tool success/failure rates from digested sessions
+   - stages tool success/failure rates from digested sessions
    - Alert on tools with >50% failure rate
 
 3. **New P3 Check:** Pattern Library Freshness

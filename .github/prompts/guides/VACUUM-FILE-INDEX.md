@@ -197,7 +197,7 @@ python .github/scripts/vacuum-cli.py /vacuum-full --execute
 **How They Work Together:**
 - Vacuum removes obsolete documentation
 - Documentation generator creates new docs
-- Manifest tracks "current" vs "historical" versions
+- Manifest stages "current" vs "historical" versions
 - Both use docs/ folder as source of truth
 
 **Example:** Roadmap moves from `_workspaces/roadmap/` → `docs/06-roadmap/`
@@ -326,7 +326,7 @@ cortex_brain/tier1/**/*.yaml             (Acceptance criteria)
 
 ## 🚀 Getting Started Path
 
-### Path 1: Fast Track (10 minutes)
+### Path 1: Fast stages (10 minutes)
 1. Read: VACUUM-IMPLEMENTATION-SUMMARY.md
 2. Skim: VACUUM-QUICK-OPERATIONS.md
 3. Run: `cortex-vacuum /vacuum-analyze`

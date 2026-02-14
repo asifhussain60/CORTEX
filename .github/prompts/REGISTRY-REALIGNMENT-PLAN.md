@@ -39,24 +39,24 @@ cortex-registry/_cortex-master/
 │   └── enhancements/       ← SECONDARY (ENH-XXX groupings)
 ├── history/
 │   └── _archive/
-│       └── obsolete-wave-guides/  ← MOVE all wave content here
+│       └── obsolete-plans/  ← MOVE all wave content here
 ```
 
 **Actions:**
-1. Move `work/waves/*` → `history/_archive/obsolete-wave-guides/`
+1. Move `work/waves/*` → `history/_archive/obsolete-plans/`
 2. Add deprecation notice to README
 3. Create wave→phase mapping file
 4. Update all references in README.md
 
 ### Phase 2: README.md Realignment
 
-**Current:** "Wave Status Summary" with 16 completed waves  
+**Current:** "phase status Summary" with 16 completed phases  
 **New:** "Phase Status Summary" with phases grouped by completion date
 
 **Mapping Strategy:**
-- Wave 1 → Phase-01 (Foundation Security)
-- Wave 7 → Phase-07 (Orchestrator Consolidation)
-- Wave 8 → Phase-08 (Planning Capability)
+- Phase 1 → Phase-01 (Foundation Security)
+- Phase 7 → Phase-07 (Orchestrator Consolidation)
+- Phase 8 → Phase-08 (Planning Capability)
 - WAVE-A → Phase-10 (Critical Blockers)
 - WAVE-B → Phase-11 (Operability & Monitoring)
 - ... etc
@@ -115,14 +115,14 @@ HIERARCHY = {
 ### Registry Operations
 
 ```bash
-# 1. Archive wave files (preserve history)
-mkdir -p cortex-registry/_cortex-master/history/_archive/obsolete-wave-guides/
+# 1. Archive phase files (preserve history)
+mkdir -p cortex-registry/_cortex-master/history/_archive/obsolete-plans/
 mv cortex-registry/_cortex-master/work/waves/* \
-   cortex-registry/_cortex-master/history/_archive/obsolete-wave-guides/
+   cortex-registry/_cortex-master/history/_archive/obsolete-plans/
 
 # 2. Create deprecation notice
-cat > cortex-registry/_cortex-master/history/_archive/obsolete-wave-guides/README.md <<EOF
-# Deprecated Wave Files
+cat > cortex-registry/_cortex-master/history/_archive/obsolete-plans/README.md <<EOF
+# Deprecated phase files
 
 **Deprecated:** 2026-02-14  
 **Reason:** CORE-042 simplified hierarchy (PHASE→STAGE→TASK)
@@ -134,13 +134,13 @@ See: WAVE-TO-PHASE-MAPPING.yaml for new phase IDs
 EOF
 
 # 3. Create mapping file
-cat > cortex-registry/_cortex-master/history/_archive/obsolete-wave-guides/WAVE-TO-PHASE-MAPPING.yaml <<EOF
+cat > cortex-registry/_cortex-master/history/_archive/obsolete-plans/WAVE-TO-PHASE-MAPPING.yaml <<EOF
 # Wave → Phase Mapping
 # Generated: 2026-02-14
 # Authority: CORE-042 Simplification
 
 mappings:
-  - old_id: "Wave 1"
+  - old_id: "Phase 1"
     new_id: "PHASE-01"
     name: "Foundation Security"
     tests: 336
@@ -148,7 +148,7 @@ mappings:
     date: "2026-02-13"
     git_hash: "07c84a4c1"
     
-  - old_id: "Wave 7"
+  - old_id: "Phase 7"
     new_id: "PHASE-07"
     name: "Orchestrator Consolidation"
     tests: 233
@@ -167,9 +167,9 @@ EOF
 Remaining items (lines 180-370):
 - Line 187: `dependencies: ["ENH-063", "WAVE-H"]` → `["ENH-063", "PHASE-XX"]`
 - Line 188: `blocks: ["WAVE-J"]` → `["PHASE-YY"]`
-- Line 195: "single-wave execution" → "single-phase execution"
+- Line 195: "single-Phase Execution" → "single-phase execution"
 - Line 266-276: Remove entire Wave template section
-- Line 301: "wave execution plan" → "phase execution plan"
+- Line 301: "Phase Execution plan" → "phase execution plan"
 - Line 314: "wave-i.yaml" → "phase-i.yaml"
 - Line 341: "Multi-Wave Enhancement" → "Multi-Stage Enhancement"
 - Line 354: "Wave breakdown" → "Stage breakdown"
@@ -178,10 +178,10 @@ Remaining items (lines 180-370):
 **File: `.github/agents/core/cortex-phase-resolver.md`**
 
 Updates needed:
-- Line 339: "Wave plan + execution order" → "Phase plan + execution order"
-- Line 360: "wave organization" → "phase organization"
-- Line 362: "Wave structure (phases 45-47 in wave-3)" → "Phase group (phases 45-47)"
-- Line 365: `wave_id: "wave-3"` → Remove (not needed)
+- Line 339: "phase plan + execution order" → "Phase plan + execution order"
+- Line 360: "phase organization" → "phase organization"
+- Line 362: "Phase Structure (phases 45-47 in wave-3)" → "Phase group (phases 45-47)"
+- Line 365: `phase_id: "wave-3"` → Remove (not needed)
 - Line 375: "wave-3 in progress" → "phase-group-3 in progress"
 - Line 402: `current_wave_id: "wave-3"` → Remove
 - Line 445: `cortex_execute_wave_autonomous` → `cortex_execute_phase_group`
@@ -204,7 +204,7 @@ Updates needed:
 
 ### Data Preservation Checklist
 
-- [ ] All wave YAML files moved (not deleted)
+- [ ] All Phase YAML files moved (not deleted)
 - [ ] Wave→Phase mapping created
 - [ ] Git hashes preserved
 - [ ] Test counts preserved
@@ -234,10 +234,10 @@ grep -r "wave\|Wave\|WAVE" .github/agents/core/*.md | grep -v "deprecated"
 grep -r "wave\|Wave\|WAVE" .github/prompts/*.md | grep -v "deprecated"
 
 # 2. Verify archive exists
-ls -la cortex-registry/_cortex-master/history/_archive/obsolete-wave-guides/
+ls -la cortex-registry/_cortex-master/history/_archive/obsolete-plans/
 
 # 3. Verify mapping file
-cat cortex-registry/_cortex-master/history/_archive/obsolete-wave-guides/WAVE-TO-PHASE-MAPPING.yaml
+cat cortex-registry/_cortex-master/history/_archive/obsolete-plans/WAVE-TO-PHASE-MAPPING.yaml
 
 # 4. Verify README updated
 grep "Phase Status Summary" cortex-registry/_cortex-master/README.md
@@ -251,7 +251,7 @@ pytest tests/ -v --tb=short
 ## 🚀 Execution Order
 
 1. **Create archive directory** (30 sec)
-2. **Move wave files** (1 min)
+2. **Move phase files** (1 min)
 3. **Create mapping file** (10 min)
 4. **Update README.md** (30 min)
 5. **Fix agent specs** (30 min)
@@ -272,9 +272,9 @@ Authority: CORE-042 + User Request (full realignment)
 Scope: Registry, agents, prompts - all wave references
 
 Changes:
-1. Archived work/waves/ → history/_archive/obsolete-wave-guides/
+1. Archived work/waves/ → history/_archive/obsolete-plans/
 2. Created WAVE-TO-PHASE-MAPPING.yaml (16 mappings)
-3. Updated README.md "Wave Status" → "Phase Status"
+3. Updated README.md "phase status" → "Phase Status"
 4. Fixed agent specs (2 files, 15+ references)
 5. Fixed prompt files (5-8 files)
 

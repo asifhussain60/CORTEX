@@ -437,7 +437,7 @@ Run validation:
 
 ### 3. Audit Trail Maintenance
 
-- 📝 **Log all resolutions** - Track what changed and why
+- 📝 **Log all resolutions** - stages what changed and why
 - 🔍 **Review audit trails weekly** - Spot patterns
 - 🔄 **Archive old decisions** - Keep history manageable
 - 🚨 **Alert on high rejection rates** - Investigate root causes
@@ -447,7 +447,7 @@ Run validation:
 - 📊 **Show KPI explanations** - Transparency builds trust
 - 📁 **Link to data sources** - Enable verification
 - ⚡ **Cache explanations** - Avoid redundant calculations
-- 📈 **Track confidence trends** - Improve data quality over time
+- 📈 **stages confidence trends** - Improve data quality over time
 
 ---
 

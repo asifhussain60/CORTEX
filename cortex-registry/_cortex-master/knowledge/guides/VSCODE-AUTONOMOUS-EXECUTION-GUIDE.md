@@ -26,15 +26,15 @@ Before starting, verify:
 
 ---
 
-## 📋 5-WAVE EXECUTION PLAN
+## 📋 5-Phase Execution PLAN
 
-### Wave 1: Documentation Vacuum (45 min)
+### Phase 1: Documentation Vacuum (45 min)
 
 **Goal:** Reduce 167 files → ≤20 files in `_cortex-master/`
 
 **VSCode Command:**
 ```
-/implement WAVE-1: Documentation vacuum - archive 47+ obsolete files, consolidate wave status to single tracker, achieve ≤20 files in _cortex-master root
+/implement WAVE-1: Documentation vacuum - archive 47+ obsolete files, consolidate phase status to single tracker, achieve ≤20 files in _cortex-master root
 ```
 
 **Success Criteria:**
@@ -50,7 +50,7 @@ Before starting, verify:
 
 ---
 
-### Wave 2: MCP Enforcement (60 min)
+### Phase 2: MCP Enforcement (60 min)
 
 **Goal:** Implement native tool interception layer to prevent MCP bypass
 
@@ -73,7 +73,7 @@ Before starting, verify:
 
 ---
 
-### Wave 3: Automation Hooks (45 min)
+### Phase 3: Automation Hooks (45 min)
 
 **Goal:** Implement automated registry sync hooks
 
@@ -96,7 +96,7 @@ Before starting, verify:
 
 ---
 
-### Wave 4: Governance Audit (30 min)
+### Phase 4: Governance Audit (30 min)
 
 **Goal:** Comprehensive compliance verification
 
@@ -119,7 +119,7 @@ Before starting, verify:
 
 ---
 
-### Wave 5: Final Consolidation (30 min)
+### Phase 5: Final Consolidation (30 min)
 
 **Goal:** Archive session, generate production handoff
 
@@ -159,7 +159,7 @@ WAVE-4 (Governance Audit)
 WAVE-5 (Final Consolidation) ← END
 ```
 
-### Each Wave Execution Flow
+### Each Phase Execution Flow
 
 1. **Copy the VSCode Command** from wave section above
 2. **Open VSCode Copilot Chat** (Cmd+I or ⌘+I on Mac)

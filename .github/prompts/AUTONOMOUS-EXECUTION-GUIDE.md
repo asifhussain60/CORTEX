@@ -1,6 +1,6 @@
 # Autonomous Execution Guide (ENH-067)
 
-**Authority:** WAVE-N Implementation | **Status:** Complete ✅
+**Authority:** Phase-N Implementation | **Status:** Complete ✅
 
 ## Overview
 
@@ -58,7 +58,7 @@ from cortex.models.canonical_enums import IntentType
 
 # Create plan
 plan = Plan(
-    id="WAVE-N",
+    id="Phase-N",
     name="Autonomous Implementation",
     description="Multi-stage feature implementation",
     stages=[
@@ -148,7 +148,7 @@ if something_went_wrong:
 **Threshold:** 75% of 1M token budget (750,000 tokens)
 
 **Behavior:**
-1. Executor tracks token usage across stages
+1. Executor stages token usage across stages
 2. Before each stage, checks: `current_usage + next_stage_tokens >= 750k`
 3. If threshold exceeded, creates checkpoint and stops
 4. Generates continuation prompt with:
@@ -254,7 +254,7 @@ cursor.execute("""
     WHERE plan_id = ?
     ORDER BY timestamp DESC
     LIMIT 1
-""", ("WAVE-N",))
+""", ("Phase-N",))
 progress = cursor.fetchone()
 
 # Get stage timings
@@ -263,7 +263,7 @@ cursor.execute("""
     FROM execution_stages
     WHERE plan_id = ? AND end_time IS NOT NULL
     ORDER BY start_time
-""", ("WAVE-N",))
+""", ("Phase-N",))
 timings = cursor.fetchall()
 ```
 
@@ -362,7 +362,7 @@ class MasterOrchestrator:
 ## Related Documentation
 
 - `.github/copilot-instructions.md` § Silent Autonomous Execution
-- `cortex-registry/_cortex-master/index.yaml` § WAVE-N specification
+- `cortex-registry/_cortex-master/index.yaml` § Phase-N specification
 - `.github/prompts/CORTEX.prompt.md` § MCP-FIRST architecture
 
 ---
@@ -370,4 +370,4 @@ class MasterOrchestrator:
 **Version:** 1.0.0  
 **Updated:** 2026-02-12  
 **Authors:** Asif Hussain  
-**Reviewed:** WAVE-N-20260212-01
+**Reviewed:** Phase-N-20260212-01

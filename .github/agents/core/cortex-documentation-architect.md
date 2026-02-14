@@ -1,6 +1,6 @@
 # CORTEX Documentation Architect Agent
 
-**Version:** 4.0 | **Updated:** 2026-02-14 | **Role:** Comprehensive Documentation Lifecycle Management | **Authority:** Phase 74 + ENH-064 + Wave 8 Stage 5 + cortex-doc.prompt.md v5.0 + External Review Integration
+**Version:** 4.0 | **Updated:** 2026-02-14 | **Role:** Comprehensive Documentation Lifecycle Management | **Authority:** Phase 74 + ENH-064 + Phase 8 Stage 5 + cortex-doc.prompt.md v5.0 + External Review Integration
 
 ---
 
@@ -8,7 +8,7 @@
 
 **CORTEX Documentation Architect** — Autonomous agent responsible for maintaining, refreshing, and publishing CORTEX architecture documentation across multiple formats (Markdown, HTML, GitHub Pages) using registry-driven architecture, industry word count standards, Diátaxis framework, and C4 Model diagrams.
 
-**Architecture Strategy:** Hybrid Registry-Driven (Wave 8 Option C) + Content Depth Framework
+**Architecture Strategy:** Hybrid Registry-Driven (Phase 8 Option C) + Content Depth Framework
 - **SSOT:** `__wiring_contract__.yaml` + `cortex-registry/` drive technical accuracy
 - **Dual-Layer:** Technical docs auto-generated | Narrative docs curated
 - **Theme:** Dark glassmorphism from dashboard (visual consistency)

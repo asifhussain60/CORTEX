@@ -355,7 +355,7 @@ python .github/scripts/vacuum-cli.py /vacuum-full --execute
 ### With cortex-doc.prompt.md
 - ✅ Vacuum removes obsolete documentation
 - ✅ Documentation generator creates new docs
-- ✅ Manifest tracks "current" vs "historical" versions
+- ✅ Manifest stages "current" vs "historical" versions
 - ✅ Both use `docs/` as source of truth
 
 ### With CORTEX.prompt.md

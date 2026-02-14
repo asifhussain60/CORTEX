@@ -1,50 +1,50 @@
 # Planning Orchestrator Agent
 
-**Version:** 1.0 | **Updated:** 2026-02-11 | **Role:** Wave Execution & Phase Orchestration | **Architecture:** Dependency-Aware Scheduling | **Status:** ACTIVE ✅
+**Version:** 2.0 | **Updated:** 2026-02-14 | **Role:** Phase Execution & Stage Orchestration | **Architecture:** Dependency-Aware Scheduling | **Status:** ACTIVE ✅
 
 ---
 
 ## Agent Identity
 
-**Planning Orchestrator Agent (PlanningOrchestrator)** — Executes wave-based plans by reading wave metadata from WaveArchitectureAgent registry, evaluating dependencies, orchestrating parallel track execution, and maintaining real-time synchronization with master plan.
+**Planning Orchestrator Agent (PlanningOrchestrator)** — Executes phase-based plans by reading phase metadata from registry, evaluating dependencies, orchestrating parallel stage execution, and maintaining real-time synchronization with master plan.
 
 **Mode:** Execution Orchestration (imperative)  
-**Input Source:** WaveArchitectureAgent (wave registry metadata)  
-**Output:** Track + Phase execution coordination  
+**Input Source:** Phase Registry (phase metadata)  
+**Output:** Stage + Task execution coordination  
 **Paradigm:** Dependency-aware scheduling + Real-time sync  
-**Core Responsibility:** Transform declarative wave plans into executable orchestrated tasks
+**Core Responsibility:** Transform declarative phase plans into executable orchestrated tasks
 
 ---
 
 ## Execution Model
 
-### Wave Lifecycle (Planning Orchestrator Owns)
+### Phase Lifecycle (Planning Orchestrator Owns)
 
 ```
-Wave Registration (WaveArchitectureAgent) 
+Phase Registration (Phase Registry) 
     ↓
-Planning Orchestrator: READ wave metadata
+Planning Orchestrator: READ phase metadata
     ├─ Check: All dependencies satisfied?
     └─ IF YES → READY | IF NO → BLOCKED
     ↓
 Planning Orchestrator: EVALUATE dependency gate
-    ├─ Hard blocks: Wait for Wave-N 100%
-    ├─ Soft gates: Wait for Wave-N-Track-M ≥ 70%
-    └─ Parallel: Can start immediately with Track-N
+    ├─ Hard blocks: Wait for Phase-N 100%
+    ├─ Soft gates: Wait for Phase-N-Stage-M ≥ 70%
+    └─ Parallel: Can start immediately with Stage-N
     ↓
 Planning Orchestrator: ALLOCATE resources
-    ├─ Assign Track-1, Track-2, ... (up to max_parallel_tracks)
+    ├─ Assign Stage-1, Stage-2, ... (up to max_parallel_stages)
     └─ Spawn independent executors
     ↓
-Planning Orchestrator: EXECUTE tracks (parallel)
-    ├─ Track executor: Sequential phases within track
-    ├─ Phase executor: TDD cycle (tests → code → refactor)
+Planning Orchestrator: EXECUTE stages (parallel)
+    ├─ Stage executor: Sequential tasks within stage
+    ├─ Task executor: TDD cycle (tests → code → refactor)
     └─ Status updates: Real-time sync to master plan
     ↓
 Planning Orchestrator: SYNC completion
-    ├─ Verify: All phases complete, tests passing
-    ├─ Update: Wave status → COMPLETE
-    └─ Unblock: Dependent waves now ready
+    ├─ Verify: All tasks complete, tests passing
+    ├─ Update: Phase status → COMPLETE
+    └─ Unblock: Dependent phases now ready
 ```
 
 ---
@@ -52,29 +52,29 @@ Planning Orchestrator: SYNC completion
 ## Component: Dependency Gate Evaluator
 
 ### Responsibility
-Determine if a wave can start based on its dependency declarations.
+Determine if a phase can start based on its dependency declarations.
 
 ### Algorithm
 
 ```python
-def evaluate_wave_start_condition(wave: Wave) -> bool:
+def evaluate_phase_start_condition(phase: Phase) -> bool:
     """
-    Evaluate if wave can start. Returns True if all dependencies satisfied.
+    Evaluate if phase can start. Returns True if all dependencies satisfied.
     """
-    if not wave.dependencies:
+    if not phase.dependencies:
         return True  # No dependencies, can start immediately
     
-    for dependency in wave.dependencies:
-        status = get_wave_status(dependency.wave_id)
+    for dependency in phase.dependencies:
+        status = get_phase_status(dependency.phase_id)
         
         if dependency.type == "blocks":
-            # Hard block: Wave must be 100% complete
+            # Hard block: Phase must be 100% complete
             if status != "COMPLETE":
                 return False
         
         elif dependency.type == "requires_partial":
             # Soft gate: Check percentage
-            progress = get_wave_progress(dependency.wave_id)
+            progress = get_phase_progress(dependency.phase_id)
             required_pct = extract_percentage(dependency.condition)
             if progress < required_pct:
                 return False
@@ -90,8 +90,8 @@ def evaluate_wave_start_condition(wave: Wave) -> bool:
                 continue
         
         elif dependency.type == "conflicts_with":
-            # Mutual exclusion: Other wave must NOT be running
-            other_status = get_wave_status(dependency.wave_id)
+            # Mutual exclusion: Other phase must NOT be running
+            other_status = get_phase_status(dependency.phase_id)
             if other_status in ["in_progress", "blocked"]:
                 return False
     
@@ -100,80 +100,80 @@ def evaluate_wave_start_condition(wave: Wave) -> bool:
 
 ### Examples
 
-**Hard Block Example (Wave-7 depends on Wave-1):**
+**Hard Block Example (Phase-7 depends on Phase-1):**
 ```yaml
 dependencies:
-  - wave_id: 1
+  - phase_id: 1
     type: "blocks"
-    condition: "Wave-1 100% COMPLETE"
+    condition: "Phase-1 100% COMPLETE"
 ```
-**Evaluation:** Wave-1 must be fully complete before Wave-7 starts.
+**Evaluation:** Phase-1 must be fully complete before Phase-7 starts.
 
-**Soft Gate Example (Wave-2 partial gate):**
+**Soft Gate Example (Phase-2 partial gate):**
 ```yaml
 dependencies:
-  - wave_id: 1
+  - phase_id: 1
     type: "requires_partial"
-    condition: "Wave-1-Track-1 >= 70%"
+    condition: "Phase-1-Stage-1 >= 70%"
 ```
-**Evaluation:** Wave-2 can start once Track-1 (not entire Wave-1) reaches 70%.
-**Benefit:** Parallelization opportunity; don't wait for all tracks to complete.
+**Evaluation:** Phase-2 can start once Stage-1 (not entire Phase-1) reaches 70%.
+**Benefit:** Parallelization opportunity; don't wait for all stages to complete.
 
 **Parallel with Sync Example:**
 ```yaml
 dependencies:
-  - wave_id: 3
+  - phase_id: 3
     type: "parallel_with_gate"
-    condition: "Wave-3-Track-2 completion blocks Wave-7-Track-5 start"
+    condition: "Phase-3-Stage-2 completion blocks Phase-7-Stage-5 start"
 ```
-**Evaluation:** Wave-7 and Wave-3 run in parallel, but Track-5 (Wave-7) waits for Track-2 (Wave-3) completion.
+**Evaluation:** Phase-7 and Phase-3 run in parallel, but Stage-5 (Phase-7) waits for Stage-2 (Phase-3) completion.
 
 ---
 
-## Component: Track Executor (Parallel Coordinator)
+## Component: Stage executor (Parallel Coordinator)
 
 ### Responsibility
-Spawn independent executors for each track, coordinate progress, handle failures.
+Spawn independent executors for each stages, coordinate progress, handle failures.
 
 ### Algorithm
 
 ```python
-def execute_wave_tracks(wave: Wave) -> WaveExecutionResult:
+def execute_wave_tracks(phase: Phase) -> WaveExecutionResult:
     """
-    Execute all tracks in wave. Respects max_parallel_tracks limit.
+    Execute all stages in wave. Respects max_parallel_stages limit.
     Returns aggregated result.
     """
     # Step 1: Wait for wave to be ready
     if not evaluate_wave_start_condition(wave):
-        mark_wave_blocked(wave)
+        mark_phase_blocked(wave)
         return WaveExecutionResult(status="BLOCKED", reason="Dependencies not met")
     
     # Step 2: Mark wave as in_progress
-    update_master_plan(wave.id, status="in_progress", start_date=now())
+    update_master_plan(phase.id, status="in_progress", start_date=now())
     
-    # Step 3: Prepare track executors
+    # Step 3: Prepare stages executors
     track_executors = []
-    for track in wave.tracks:
-        if track.dependency_gate and not meets_track_gate(track):
-            mark_track_blocked(track)
+    for stages in wave.stages:
+        if stages.dependency_gate and not meets_track_gate(stages):
+            mark_track_blocked(stages)
             continue
         
-        executor = create_track_executor(track)
+        executor = create_track_executor(stages)
         track_executors.append(executor)
     
-    # Step 4: Execute tracks with parallelism limit
-    concurrent = min(len(track_executors), wave.max_parallel_tracks)
+    # Step 4: Execute stages with parallelism limit
+    concurrent = min(len(track_executors), wave.max_parallel_stages)
     results = parallel_map(execute_track, track_executors, max_workers=concurrent)
     
     # Step 5: Aggregate results
     all_passed = all(r.status == "COMPLETE" for r in results)
     
     if all_passed:
-        update_master_plan(wave.id, status="complete", completion_date=now())
+        update_master_plan(phase.id, status="complete", completion_date=now())
         return WaveExecutionResult(status="COMPLETE", results=results)
     else:
         failed_tracks = [r for r in results if r.status != "COMPLETE"]
-        update_master_plan(wave.id, status="blocked", blocker=failed_tracks)
+        update_master_plan(phase.id, status="blocked", blocker=failed_tracks)
         return WaveExecutionResult(status="BLOCKED", blocker=failed_tracks)
 ```
 
@@ -182,19 +182,19 @@ def execute_wave_tracks(wave: Wave) -> WaveExecutionResult:
 ## Component: Real-Time Sync to Master Plan
 
 ### Responsibility
-Keep master registry (WaveArchitectureAgent) updated with execution progress.
+Keep master registry (PhaseArchitectureAgent) updated with execution progress.
 
 ### Sync Events
 
 | Event | Action | Commit Message |
 |-------|--------|-----------------|
-| Wave starts | Set `status: in_progress`, `start_date` | "Plan sync: Wave-N started" |
-| Track starts | Update track progress from 0% | "Plan sync: Wave-N Track-M started" |
-| Phase 50% | Update phase progress, increment test count | "Plan sync: Wave-N Phase-X 50%" |
-| Phase complete | Set phase status, aggregate coverage | "Plan sync: Wave-N Phase-X complete" |
-| Track complete | Aggregate track metrics, unblock dependent tracks | "Plan sync: Wave-N Track-M complete" |
-| Wave complete | Archive to `completed/`, unblock dependent waves | "Plan sync: Wave-N complete (moved to completed/)" |
-| Blocker found | Set `status: blocked`, document reason | "Plan sync: Wave-N blocked - {reason}" |
+| phase starts | Set `status: in_progress`, `start_date` | "Plan sync: Phase-N started" |
+| stages starts | Update stages progress from 0% | "Plan sync: Phase-N Stage-N started" |
+| Phase 50% | Update phase progress, increment test count | "Plan sync: Phase-N Phase-X 50%" |
+| Phase complete | Set phase status, aggregate coverage | "Plan sync: Phase-N Phase-X complete" |
+| stages complete | Aggregate stages metrics, unblock dependent stages | "Plan sync: Phase-N Stage-N complete" |
+| Wave complete | Archive to `completed/`, unblock dependent phases | "Plan sync: Phase-N complete (moved to completed/)" |
+| Blocker found | Set `status: blocked`, document reason | "Plan sync: Phase-N blocked - {reason}" |
 
 ### Sync Protocol (Per Phase Completion)
 
@@ -207,42 +207,42 @@ def sync_phase_completion(phase: Phase, execution_result: ExecutionResult):
     index = read_yaml("cortex-registry/_cortex-master/index.yaml")
     
     # Step 2: Locate phase entry
-    wave = index.waves[phase.parent_wave]
-    track = wave.tracks[phase.parent_track]
+    wave = index.phases[phase.parent_phase]
+    stages = wave.stages[phase.parent_stage]
     
     # Step 3: Update phase metrics
-    track.phases[phase.id].status = "complete"
-    track.phases[phase.id].completion_date = now()
-    track.phases[phase.id].tests_passing = execution_result.test_count
-    track.phases[phase.id].coverage_pct = execution_result.coverage
+    stages.phases[phase.id].status = "complete"
+    stages.phases[phase.id].completion_date = now()
+    stages.phases[phase.id].tests_passing = execution_result.test_count
+    stages.phases[phase.id].coverage_pct = execution_result.coverage
     
-    # Step 4: Recalculate track progress
-    track.progress_pct = (count_complete_phases(track) / len(track.phases)) * 100
-    track.tests_passing = sum(p.tests_passing for p in track.phases)
-    track.last_updated = now()
+    # Step 4: Recalculate stages progress
+    stages.progress_pct = (count_complete_phases(stages) / len(stages.phases)) * 100
+    stages.tests_passing = sum(p.tests_passing for p in stages.phases)
+    stages.last_updated = now()
     
-    # Step 5: Recalculate wave progress
-    wave.progress_pct = (sum(t.progress_pct for t in wave.tracks) / len(wave.tracks))
+    # Step 5: Recalculate phase progress
+    wave.progress_pct = (sum(t.progress_pct for t in wave.stages) / len(wave.stages))
     wave.last_updated = now()
     
     # Step 6: Write updated registry
     write_yaml("cortex-registry/_cortex-master/index.yaml", index)
     
     # Step 7: Git commit (immutable history)
-    git_commit(f"Plan sync: {phase.parent_wave}-{phase.parent_track}-{phase.id} complete")
+    git_commit(f"Plan sync: {phase.parent_phase}-{phase.parent_stage}-{phase.id} complete")
     
     # Step 8: Verify Implementation Truth
     verify_phase_completion_integrity(phase, execution_result)
     
     # Step 9: Check for newly unblocked waves
-    for dependent_wave in find_dependent_waves(phase.parent_wave):
+    for dependent_wave in find_dependent_waves(phase.parent_phase):
         if evaluate_wave_start_condition(dependent_wave):
             notify_wave_ready(dependent_wave)
 ```
 
 ---
 
-## Component: Wave Readiness Broadcaster
+## Component: Phase Readiness Broadcaster
 
 ### Responsibility
 Notify downstream orchestrators when waves become ready (dependency gates satisfied).
@@ -263,14 +263,14 @@ def notify_dependent_waves(completed_wave: Wave):
         if evaluate_wave_start_condition(wave):
             # Notify MasterOrchestrator that wave is ready
             event = WaveReadyEvent(
-                wave_id=wave.id,
+                phase_id=phase.id,
                 trigger_wave=completed_wave.id,
                 timestamp=now()
             )
             publish_event("wave.ready", event)
             
             # Log for audit trail
-            log_audit(f"Wave {wave.id} unblocked by Wave {completed_wave.id}")
+            log_audit(f"Wave {phase.id} unblocked by Wave {completed_wave.id}")
 ```
 
 ---
@@ -278,7 +278,7 @@ def notify_dependent_waves(completed_wave: Wave):
 ## Component: Failure Recovery & Retry
 
 ### Responsibility
-Handle phase/track failures gracefully, enable retries, prevent cascading failures.
+Handle phase/stages failures gracefully, enable retries, prevent cascading failures.
 
 ### Recovery Strategy
 
@@ -314,20 +314,20 @@ def handle_phase_failure(phase: Phase, error: Exception) -> PhaseRecoveryAction:
 ### Cascading Failure Prevention
 
 ```python
-def execute_track(track: Track) -> TrackExecutionResult:
+def execute_track(stages: stages) -> TrackExecutionResult:
     """
-    Execute track phases sequentially. Stop on first failure to prevent cascade.
+    Execute stages phases sequentially. Stop on first failure to prevent cascade.
     """
     results = []
     
-    for phase in track.phases:
+    for phase in stages.phases:
         try:
             result = execute_phase(phase)
             results.append(result)
             
             if result.status != "COMPLETE":
                 # Stop execution; don't cascade failure to next phases
-                mark_track_blocked(track, reason=f"Phase {phase.id} failed")
+                mark_track_blocked(stages, reason=f"Phase {phase.id} failed")
                 return TrackExecutionResult(
                     status="BLOCKED",
                     failed_phase=phase.id,
@@ -341,8 +341,8 @@ def execute_track(track: Track) -> TrackExecutionResult:
                 # Retry this phase
                 continue  # Will retry in next iteration
             else:
-                # Escalate - stop track
-                mark_track_blocked(track, reason=recovery.reason)
+                # Escalate - stop stages
+                mark_track_blocked(stages, reason=recovery.reason)
                 return TrackExecutionResult(
                     status="BLOCKED",
                     failed_phase=phase.id,
@@ -364,28 +364,28 @@ User Request (e.g., "/plan implement wave-7")
     ↓
 MasterOrchestrator: Route to Planning Orchestrator
     ├─ Intent: PLAN
-    └─ Target: Wave-7
+    └─ Target: Phase-7
     ↓
-Planning Orchestrator: Evaluate wave readiness
-    ├─ Check dependencies: Wave-1 complete? YES
-    └─ Allocate tracks: 5 concurrent
+Planning Orchestrator: Evaluate Phase Readiness
+    ├─ Check dependencies: Phase-1 complete? YES
+    └─ Allocate stages: 5 concurrent
     ↓
-Planning Orchestrator: Spawn TDDOrchestrator for each Track
-    ├─ Track-1: TDDOrchestrator (Phase-1 → Phase-2 → Phase-3)
-    ├─ Track-2: TDDOrchestrator (Phase-4 → Phase-5)
+Planning Orchestrator: Spawn TDDOrchestrator for each stages
+    ├─ Stage-1: TDDOrchestrator (Phase-1 → Phase-2 → Phase-3)
+    ├─ Stage-2: TDDOrchestrator (Phase-4 → Phase-5)
     └─ ...
     ↓
 Planning Orchestrator: Real-time sync + blocker handling
     ├─ Phase complete → Update master registry
-    ├─ Track complete → Notify dependent tracks
+    ├─ stages complete → Notify dependent stages
     └─ Wave complete → Unblock downstream waves
     ↓
-Result: Wave execution complete, master plan synchronized
+Result: Phase Execution complete, master plan synchronized
 ```
 
-### Track-to-Phase Delegation
+### stages-to-Phase Delegation
 ```
-Track Executor
+Stage executor
     ├─ Phase-1: Delegate to PhaseExecutor (TDD)
     │   ├─ Setup environment
     │   ├─ RED: Failing tests
@@ -395,68 +395,68 @@ Track Executor
     │
     └─ Phase-2: Delegate to PhaseExecutor (TDD)
         ├─ Same TDD cycle
-        └─ On completion, resume Track flow
+        └─ On completion, resume stages flow
 ```
 
 ---
 
-## Parallel Execution Example: Wave-7
+## Parallel Execution Example: Phase-7
 
 ### Wave Configuration
 ```yaml
 wave: 7
 name: "Orchestrator Consolidation"
-max_parallel_tracks: 5
+max_parallel_stages: 5
 duration_estimate: 18 days
 
-tracks:
-  - track: 1
+stages:
+  - stages: 1
     name: "Core Strategies"
     phases: [Phase-1, Phase-2, Phase-3]
-    can_parallel_with: [Track-2, Track-3, Track-4, Track-5]
+    can_parallel_with: [Stage-2, Stage-3, Stage-4, Stage-5]
   
-  - track: 2
+  - stages: 2
     name: "Domain Orchestrators"
     phases: [Phase-4, Phase-5, Phase-6]
-    dependency_gate: "Wave-7-Track-1 >= 70%"  # Soft gate
-    can_parallel_with: [Track-3, Track-4, Track-5]
+    dependency_gate: "Phase-7-Stage-1 >= 70%"  # Soft gate
+    can_parallel_with: [Stage-3, Stage-4, Stage-5]
   
-  - track: 3
+  - stages: 3
     name: "Support Elimination"
     phases: [Phase-7, Phase-8]
-    dependency_gate: "Wave-7-Track-1 >= 70%"
-    can_parallel_with: [Track-2, Track-4, Track-5]
+    dependency_gate: "Phase-7-Stage-1 >= 70%"
+    can_parallel_with: [Stage-2, Stage-4, Stage-5]
   
-  - track: 4
+  - stages: 4
     name: "Orphan Cleanup"
     phases: [Phase-9, Phase-10]
-    can_parallel_with: [Track-2, Track-3, Track-5]
+    can_parallel_with: [Stage-2, Stage-3, Stage-5]
   
-  - track: 5
+  - stages: 5
     name: "LENS Physical Testing"
     phases: [Phase-11, Phase-12]
-    can_parallel_with: [Track-1, Track-2, Track-3, Track-4]
+    can_parallel_with: [Stage-1, Stage-2, Stage-3, Stage-4]
 ```
 
 ### Execution Timeline
 ```
-Day 0: Wave-7 starts
-├─ Track-1 (Core): Phase-1 → Phase-2 → Phase-3 (Days 1-7)
-├─ Track-5 (LENS): Phase-11 → Phase-12 (Days 1-5, parallel)
+Day 0: Phase-7 starts
+├─ Stage-1 (Core): Phase-1 → Phase-2 → Phase-3 (Days 1-7)
+├─ Stage-5 (LENS): Phase-11 → Phase-12 (Days 1-5, parallel)
 │
-Day 3: Track-1 reaches 70%, gates open
-├─ Track-2 (Domain): Phase-4 → Phase-5 → Phase-6 (Days 3-10)
-├─ Track-3 (Support): Phase-7 → Phase-8 (Days 3-9)
+Day 3: Stage-1 reaches 70%, gates open
+├─ Stage-2 (Domain): Phase-4 → Phase-5 → Phase-6 (Days 3-10)
+├─ Stage-3 (Support): Phase-7 → Phase-8 (Days 3-9)
 │
-Day 8: Track-1 complete (100%)
-├─ All tracks continue independently
+Day 8: Stage-1 complete (100%)
+├─ All stages continue independently
 │
-Day 10: Track-5 (LENS) complete, Track-2 midway
+Day 10: Stage-5 (LENS) complete, Stage-2 midway
 ├─ No blocking dependency; continue
 │
-Day 14: Track-2, Track-3, Track-4 complete
+Day 14: Stage-2, Stage-3, Stage-4 complete
 │
-Day 18: Wave-7 complete
+Day 18: Phase-7 complete
 
 Total Timeline: 18 days (vs 24 sequential)
 Efficiency Gain: 25% timeline reduction
@@ -469,13 +469,13 @@ Efficiency Gain: 25% timeline reduction
 ### Wave Configuration (Per-Wave)
 ```yaml
 wave: N
-max_parallel_tracks: 5           # How many tracks concurrent
+max_parallel_stages: 5           # How many stages concurrent
 retry_policy:
   max_retries: 3
   backoff_seconds: 60
 timeout_policy:
   per_phase: 3600                # Seconds per phase
-  per_track: 86400               # Seconds per track
+  per_track: 86400               # Seconds per stages
   per_wave: 1728000              # Seconds per wave (20 days)
 sync_frequency: 300              # Sync to master plan every 5 min
 blocker_escalation_delay: 600    # Escalate to engineer after 10 min
@@ -487,7 +487,7 @@ planning_orchestrator:
   max_concurrent_waves: 2        # Run max 2 waves in parallel
   phase_executor_pool_size: 10   # Executor thread pool
   sync_buffer_size: 100          # Buffer phase events before flush
-  dependency_check_interval: 60  # Check wave readiness every 60s
+  dependency_check_interval: 60  # Check Phase Readiness every 60s
 ```
 
 ---
@@ -496,17 +496,17 @@ planning_orchestrator:
 
 ### Metrics Emitted
 ```
-planning_orchestrator_waves_active{wave_id="7"}
-planning_orchestrator_tracks_running{wave_id="7", track_id="1"}
-planning_orchestrator_phase_duration_seconds{wave_id="7", phase_id="1"}
+planning_orchestrator_waves_active{phase_id="7"}
+planning_orchestrator_tracks_running{phase_id="7", stage_id="1"}
+planning_orchestrator_phase_duration_seconds{phase_id="7", phase_id="1"}
 planning_orchestrator_sync_lag_seconds  # Lag between execution and registry update
-planning_orchestrator_dependency_gates_blocking{wave_id="8"}
+planning_orchestrator_dependency_gates_blocking{phase_id="8"}
 planning_orchestrator_failures_total{failure_type="transient|test|infrastructure"}
 ```
 
 ### Dashboard Views
-- Wave progress (% complete, ETA)
-- Track parallelism utilization (active tracks vs max)
+- phase progress (% complete, ETA)
+- Stage Parallelism utilization (active stages vs max)
 - Dependency graph (visual, unblocking events)
 - Blocker alerts (escalation triggers)
 - Phase execution timeline (Gantt chart)
@@ -517,8 +517,8 @@ planning_orchestrator_failures_total{failure_type="transient|test|infrastructure
 
 | Concept | Definition | Owner |
 |---------|-----------|-------|
-| **Wave** | ROI batch (2-4 weeks) | WaveArchitectureAgent |
-| **Track** | Parallel execution unit | PlanningOrchestrator |
+| **Wave** | ROI batch (2-4 weeks) | PhaseArchitectureAgent |
+| **stages** | Parallel execution unit | PlanningOrchestrator |
 | **Phase** | TDD deliverable | TDDOrchestrator (delegated) |
 | **Dependency** | Condition for wave start | PlanningOrchestrator (evaluates) |
 | **Sync** | Registry update | PlanningOrchestrator (executes) |
@@ -526,4 +526,4 @@ planning_orchestrator_failures_total{failure_type="transient|test|infrastructure
 
 ---
 
-*v1.0 — Planning Orchestrator for dependency-aware wave execution, parallel track orchestration, real-time registry sync, and failure recovery. Consumes declarative wave plans from WaveArchitectureAgent, transforms to executable orchestrated tasks.*
+*v1.0 — Planning Orchestrator for dependency-aware Phase Execution, parallel stage orchestration, real-time registry sync, and failure recovery. Consumes declarative wave plans from PhaseArchitectureAgent, transforms to executable orchestrated tasks.*

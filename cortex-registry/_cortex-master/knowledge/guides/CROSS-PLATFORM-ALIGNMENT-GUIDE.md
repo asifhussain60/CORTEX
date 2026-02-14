@@ -239,7 +239,7 @@ python -m cortex.mcp.health_check
 
 **This guide implements:**
 - V005 fix (Cross-Platform MCP Risk)
-- Track 1 of RGR Cycle 3 (Critical Fixes)
+- Stage 1 of RGR Cycle 3 (Critical Fixes)
 - Session 1 validation checklist item 1
 
 **Status:** P0 COMPLETE ✅

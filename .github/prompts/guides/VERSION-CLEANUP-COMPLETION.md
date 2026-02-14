@@ -152,7 +152,7 @@ cortex-doc.prompt.md
 ## ✨ Benefits
 
 1. **Reduced Maintenance Overhead**
-   - No need to track multiple version numbers across files
+   - No need to stages multiple version numbers across files
    - Single source of truth for version information
    - Simpler updates going forward
 

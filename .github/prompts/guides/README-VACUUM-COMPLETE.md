@@ -317,7 +317,7 @@ cortex-vacuum /vacuum-migrate --target roadmap --execute
 ### With cortex-doc.prompt.md
 - Vacuum removes obsolete documentation
 - Documentation generator creates new guides
-- Manifest tracks "current" vs "historical" versions
+- Manifest stages "current" vs "historical" versions
 
 ### With cortex-review.prompt.md
 - Review agents can flag files for cleanup

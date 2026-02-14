@@ -466,13 +466,13 @@ Low-Value Tests (LOW tier <0.4):
 
 ---
 
-## 🚀 Future Evolution (Post-Wave-5)
+## 🚀 Future Evolution (Post-Phase-5)
 
 ### Potential Enhancements
 
 1. **Machine Learning Scoring** - Use neural networks to predict which dimension matters most for each orchestrator
 2. **Adaptive Weights** - Adjust weights based on domain (e.g., financial systems weight brittleness higher)
-3. **Temporal Scoring** - Track how test quality changes over time (does score decay?)
+3. **Temporal Scoring** - stages how test quality changes over time (does score decay?)
 4. **Orchestrator-Specific Dimensions** - Add domain-specific dimensions for specialized orchestrators
 5. **Predictive Scoring** - Estimate which dimensions will improve most with effort
 

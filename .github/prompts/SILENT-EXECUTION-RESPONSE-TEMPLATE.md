@@ -184,7 +184,7 @@ Use this template for ANY autonomous wave/plan completion report. Replace bracke
 1. **Autonomous Wave Completion** — After `/implement phase X` completes
 2. **Plan Stage Completion** — After `/plan resolve X` finishes
 3. **Multi-Stage Progress** — Showing interim results during long operations
-4. **Master Plan Waves** — Reporting WAVE-N completion status
+4. **Master Plan Waves** — Reporting Phase-N completion status
 
 ### How to Generate Dynamically
 

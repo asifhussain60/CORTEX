@@ -215,15 +215,15 @@ Link to:
 
 **Reference in DESIGN section:**
 - When major feature ships → Suggest story chapter
-- Track adoption metrics → Feed into character decisions
+- stages adoption metrics → Feed into character decisions
 
 **Reference in DIGEST section:**
 - Extract learnings from chat sessions → Potential chapter moments
-- Track user feedback → Refine character voice
+- stages user feedback → Refine character voice
 
 ### Links to cortex-auditor.md
 
-- Track story continuity errors (meta-audit)
+- stages story continuity errors (meta-audit)
 - Verify tone consistency across chapters
 - Detect plot holes or character inconsistencies
 

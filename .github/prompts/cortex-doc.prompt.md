@@ -1,6 +1,6 @@
 # CORTEX Documentation Generation Prompt
 
-**Version:** 5.0 | **Updated:** 2026-02-14 | **Authority:** Documentation Architect Agent + External Review Integration | **Mode:** Registry-Driven Tri-Mode (Refresh + Generate + Story) | **Integration:** Phase 74 + ENH-064 + Wave 8 + Diátaxis Framework + C4 Model
+**Version:** 5.0 | **Updated:** 2026-02-14 | **Authority:** Documentation Architect Agent + External Review Integration | **Mode:** Registry-Driven Tri-Mode (Refresh + Generate + Story) | **Integration:** Phase 74 + ENH-064 + Phase 8 + Diátaxis Framework + C4 Model
 
 ---
 
@@ -2394,7 +2394,7 @@ Git: a2fdcdc "docs: Refresh architecture docs (247 commits)"
 ✅ Validation: Character sheet compliance 100%
 
 New Chapters:
-├─ 15-The-Great-Pruning.md (Wave 7 consolidation)
+├─ 15-The-Great-Pruning.md (Phase 7 consolidation)
 ├─ 16-The-Nervous-System.md (MCP Pylance architecture)
 ├─ 17-The-Immune-System.md (8 enforcement agents)
 └─ 18-The-Self-Healing.md (autonomous recovery)
@@ -3331,7 +3331,7 @@ Reset orchestrator state, ready for next request.
 - **Multi-Gate:** PreFlight + Validating provide defense in depth
 - **Fail-Fast:** Early states can block without execution
 - **Audited:** All terminal states (Completed/Failed/Blocked) logged
-- **Stateful:** Orchestrator tracks current state for observability
+- **Stateful:** Orchestrator stages current state for observability
 
 **Related Diagrams:**
 - [Sequence: Request Lifecycle](#template-4-sequence-diagram-request-lifecycle)

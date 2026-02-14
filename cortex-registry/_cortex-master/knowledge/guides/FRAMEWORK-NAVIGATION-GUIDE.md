@@ -9,7 +9,7 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    WAVE EXECUTION FRAMEWORK                     │
+│                    Phase Execution FRAMEWORK                     │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
 │  1. WAVE-EXECUTION-FRAMEWORK-SUMMARY.md (THIS FILE)            │
@@ -47,7 +47,7 @@
 |-----------|----------|-----|
 | **New to framework** | WAVE-EXECUTION-FRAMEWORK-SUMMARY.md (this file) | Overview + getting started |
 | **Starting a wave** | WAVE-EXECUTION-ORCHESTRATION-MASTER.md | Execution protocol + format |
-| **During wave execution** | STRATEGIC-DOCUMENTATION-CHECKPOINT-FRAMEWORK.md | How to write checkpoint docs |
+| **During Phase Execution** | STRATEGIC-DOCUMENTATION-CHECKPOINT-FRAMEWORK.md | How to write checkpoint docs |
 | **After wave completes** | WAVE-EXECUTION-ORCHESTRATION-MASTER.md | Deployment reminder + summary |
 | **Planning improvements** | WAVE-REPRIORITIZATION-2026-02-11.yaml | Dependencies + constraints |
 | **Detailed wave specs** | WAVE-BASED-EXECUTION-PLAN.yaml | Technical specifications |
@@ -119,15 +119,15 @@ User says: "start wave 1"
 - Checkpoint-1b triggers → Read same framework doc → "CHECKPOINT-1b" section
 
 **After Completion:**
-- Read: ORCHESTRATION-MASTER.md → "Wave-1 Completion Summary" section
+- Read: ORCHESTRATION-MASTER.md → "Phase-1 Completion Summary" section
 - Deploy to production
 - Record deployment date
 
 ### WAVE-2 Execution
-- Same pattern as Wave-1
+- Same pattern as Phase-1
 - Before: ORCHESTRATION-MASTER.md → "WAVE-2" section
 - During: CHECKPOINT-FRAMEWORK.md → "WAVE-2" checkpoints (2a, 2b)
-- After: ORCHESTRATION-MASTER.md → "Wave-2 Completion Summary"
+- After: ORCHESTRATION-MASTER.md → "Phase-2 Completion Summary"
 
 *And so on for WAVE-3 through WAVE-8*
 
@@ -139,7 +139,7 @@ User says: "start wave 1"
 When you see:
 - **Checkpoint-1a: Architecture Review** → See CHECKPOINT-FRAMEWORK.md for template
 - **Dependency Graph** → See WAVE-REPRIORITIZATION-2026-02-11.yaml for detailed deps
-- **ROI Analysis** → See HIGH-ROI-WAVE-PRIORITIZATION.md for Wave-6 breakdown
+- **ROI Analysis** → See HIGH-ROI-WAVE-PRIORITIZATION.md for Phase-6 breakdown
 
 ### From CHECKPOINT-FRAMEWORK
 When you see:
@@ -156,13 +156,13 @@ When you see:
 
 ## 📊 Decision Trees: Which Doc Do I Need?
 
-### "I want to start Wave-2"
+### "I want to start Phase-2"
 ```
 Start here: ORCHESTRATION-MASTER.md
 └─ Find: "WAVE-2: Intelligence Layer" section
    ├─ Scope: What gets built
    ├─ Checkpoints: 2a (Agent Architecture), 2b (MCP Integration)
-   └─ When to deploy: After 10-14 days + 24h monitoring of Wave-1
+   └─ When to deploy: After 10-14 days + 24h monitoring of Phase-1
 
 Ready? → Command: "start wave 2"
 ```
@@ -179,7 +179,7 @@ Start here: CHECKPOINT-FRAMEWORK.md
       └─ Commit: "Docs: Checkpoint-4a Use Case Documentation complete"
 ```
 
-### "I want to understand Wave-6 ROI"
+### "I want to understand Phase-6 ROI"
 ```
 Start here: HIGH-ROI-WAVE-PRIORITIZATION.md
 └─ Find: "WAVE-6 ROI Analysis" section
@@ -196,7 +196,7 @@ Then: ORCHESTRATION-MASTER.md → "WAVE-6" section for execution details
 Start here: WAVE-ORCHESTRATION-MASTER.md
 └─ Find: "Wave Dependency Graph" section
    ├─ Shows: Which waves can run together
-   ├─ Example: Wave-3 (Autonomy) independent from Wave-2 (Intelligence)
+   ├─ Example: Phase-3 (Autonomy) independent from Phase-2 (Intelligence)
    ├─ Result: 77-97 days → 55-62 days optimization
 
 Then: WAVE-REPRIORITIZATION-2026-02-11.yaml for detailed dependencies
@@ -233,11 +233,11 @@ REFERENCE DOCUMENTS
 
 ## ✅ Verification Checklist
 
-**Before Starting Wave-1, Verify You Have:**
+**Before Starting Phase-1, Verify You Have:**
 
 - [ ] Read WAVE-EXECUTION-FRAMEWORK-SUMMARY.md (this file) → Understand 3-doc structure
-- [ ] Read ORCHESTRATION-MASTER.md → "Overview" section → Know what Wave-1 builds
-- [ ] Read ORCHESTRATION-MASTER.md → "WAVE-1" section → Understand Wave-1 specifically
+- [ ] Read ORCHESTRATION-MASTER.md → "Overview" section → Know what Phase-1 builds
+- [ ] Read ORCHESTRATION-MASTER.md → "WAVE-1" section → Understand Phase-1 specifically
 - [ ] Read CHECKPOINT-FRAMEWORK.md → Understand documentation checkpoints
 - [ ] Confirmed prerequisites (Python 3.9+, MCP server, dependencies)
 - [ ] Working on CORTEX branch (single branch policy — CORE-052)
@@ -251,7 +251,7 @@ REFERENCE DOCUMENTS
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│                 WAVE EXECUTION FRAMEWORK                         │
+│                 Phase Execution FRAMEWORK                         │
 │                                                                  │
 │  ORCHESTRATION (MASTER.md)                                       │
 │  ├─ What gets built: 8 waves with specific deliverables         │
@@ -292,10 +292,10 @@ REFERENCE DOCUMENTS
 
 ### Short-term (Next 30 Minutes)
 1. Read ORCHESTRATION-MASTER.md overview
-2. Understand 8-wave structure + dependencies
+2. Understand 8-Phase Structure + dependencies
 3. Read WAVE-1 section in detail
 
-### Before Starting Wave-1 (Before Next Day)
+### Before Starting Phase-1 (Before Next Day)
 1. Read CHECKPOINT-FRAMEWORK.md once (understand checkpoint structure)
 2. Set up production deployment procedure (git tags, monitoring, etc.)
 3. Execute: `"start wave 1"`
@@ -307,13 +307,13 @@ REFERENCE DOCUMENTS
 | Document | File | Section |
 |----------|------|---------|
 | Framework Overview | **THIS FILE** | (entire file) |
-| Wave Execution | ORCHESTRATION-MASTER.md | Timeline + 8 Waves |
+| Phase Execution | ORCHESTRATION-MASTER.md | Timeline + 8 Waves |
 | WAVE-1 Details | ORCHESTRATION-MASTER.md | WAVE-1 section |
 | Documentation | CHECKPOINT-FRAMEWORK.md | All checkpoints |
-| Wave 1 Checkpoints | CHECKPOINT-FRAMEWORK.md | WAVE-1 section |
+| Phase 1 Checkpoints | CHECKPOINT-FRAMEWORK.md | WAVE-1 section |
 | Dependencies | WAVE-REPRIORITIZATION-2026-02-11.yaml | Full dependency graph |
 | Technical Specs | WAVE-BASED-EXECUTION-PLAN.yaml | Complete specifications |
-| ROI Analysis | HIGH-ROI-WAVE-PRIORITIZATION.md | Wave-6 justification |
+| ROI Analysis | HIGH-ROI-WAVE-PRIORITIZATION.md | Phase-6 justification |
 
 ---
 

@@ -192,7 +192,7 @@ benefits:
     - "Distinguish CORTEX MCP from Pylance in VS Code"
     - "Monitor server health programmatically"
     - "Detect stale servers automatically"
-    - "Track tool count over time"
+    - "stages tool count over time"
   
   development:
     - "Clear namespace ownership (cortex_* = CORTEX MCP)"

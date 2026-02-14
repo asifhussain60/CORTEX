@@ -75,7 +75,7 @@
 - Box separators: Use `<hr>` HTML tag (prevents overflow in Copilot Chat)
 - Progress bar uses inline code block: `` `██████` `` (prevents markdown link interpretation)
 - All progress/completion sections use `<hr>` separator, NOT box-drawing characters
-- Track sections use `###` headers, never `##`
+- stages sections use `###` headers, never `##`
 - Field labels use `**Label:**` format
 - **CRITICAL:** Use markdown tables for stage results — tree characters (`├─ └─`) collapse into one line in Copilot Chat
   - ✅ CORRECT: Markdown table with | # | Status | Stage | Detail | columns
@@ -1470,7 +1470,7 @@ Files: 5 modified
 - Box separators: exactly 60 `━` (U+2501) characters
 - Field labels: `**Label:**` format (bold with colon)
 - No `##` headers inside completion sections
-- Track sections use `###` headers
+- stages sections use `###` headers
 
 **NOT THIS:**
 ```markdown
@@ -5538,7 +5538,7 @@ Score < 5 → Continue to DESIGN MODE
    - Flag semantic drift between architect and production prompts
 
 2. **P2 Check (NEW):** Tool Environment Health
-   - Track tool success/failure rates from digested sessions
+   - stages tool success/failure rates from digested sessions
    - Alert on tools with >50% failure rate
 
 ---

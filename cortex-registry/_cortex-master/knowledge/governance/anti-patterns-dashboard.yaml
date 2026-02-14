@@ -11,7 +11,7 @@ anti_patterns:
     description: |
       Dashboard generation script runs outside orchestrator ecosystem.
       No MCP wiring, no audit trail, no integration with operational orchestrators.
-      Blocks governance, makes it impossible to track generation ROI or failures.
+      Blocks governance, makes it impossible to stages generation ROI or failures.
     
     detection:
       patterns:

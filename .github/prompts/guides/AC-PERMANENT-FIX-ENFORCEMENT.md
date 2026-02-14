@@ -210,7 +210,7 @@ result = agent.recall(
     verify_ac_permanent_fixes=False  # Skip verification (ONLY FOR DEBUGGING)
 )
 
-# Always document the reason and create new AC-PERMANENT-FIX to track change
+# Always document the reason and create new AC-PERMANENT-FIX to stages change
 # git commit -m "AC-PERMANENT-FIX-005: [reason for reverting AC-PERMANENT-FIX-001]"
 ```
 

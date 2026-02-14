@@ -13,14 +13,16 @@
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃    ⛔ MCP GATE CHECK ⛔                  ┃
 ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
-┃                                        ┃
+┃                 | **CORE-041** | **Event-Driven Architecture** — message-based communication patterns required. |
+| **CORE-042** | **Hierarchical Terminology** — PHASE→STAGE→TASK (P-/S-/T- prefixes). Simple, universal. Works across all orchestrators (planning, interaction, TDD, etc.). No wave/epic/feature concepts. |
+| **MCP-FIRST** | ALL functionality exposed via MCP tools |                    ┃
 ┃  BEFORE PROCESSING ANY USER REQUEST:   ┃
 ┃                                        ┃
 ┃  1. Check: cortex_* MCP tools exist?   ┃
 ┃     → YES: Proceed to process request  ┃
 ┃     → NO:  Display GATE CLOSED + HALT  ┃
 ┃                             | CORE-041 | **Event-Driven Architecture** — Message-based communication patterns |
-| CORE-042 | **Hierarchical Terminology** — PHASE→STAGE→TASK (P-/S-/T- prefixes). Simple, universal. |
+| CORE-042 | **Hierarchical Terminology** — PHASE→STAGE→TASK (P-/S-/T- prefixes). Simple, universal. No wave/epic/feature concepts. |
 | CORE-048 | **Holistic Validation Gate (Phase 48)** — mandatory pre-implementation validation + challenge gate |        ┃
 ┃  EXCEPTION (Escape Hatch - CORE-050):  ┃
 ┃  • DIAGNOSE → ALLOWED (fix MCP)        ┃
@@ -759,7 +761,7 @@ check. If MCP check passes, Stage 2 will have pre-warmed context ready.
 | CORE-028 | **File naming** — kebab-case, no SCREAMING_CASE, plan files ≤40 chars |
 | CORE-036 | **Industry standards compliance** — verify via orchestrators at runtime |
 | CORE-041 | **Event-Driven Architecture** — message-based communication patterns |
-| CORE-042 | **Hierarchical Terminology** — INITIATIVE→PHASE→STAGE→TASK (I-/P-/S-/T- prefixes required) |
+| CORE-042 | **Hierarchical Terminology** — PHASE→STAGE→TASK (P-/S-/T- prefixes). Simple, universal. No wave/epic/feature concepts. |
 | CORE-048 | **Holistic Validation Gate (Phase 48)** — mandatory pre-implementation validation + challenge gate |
 
 ---

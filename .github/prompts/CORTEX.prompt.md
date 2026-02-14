@@ -373,7 +373,7 @@ If token usage > 400k before user request:
 - Box separators: exactly 60 `━` (U+2501) characters
 - Completion sections use box format, NOT ## headers
 - Field labels: `**Label:**` format (bold with colon)
-- Track sections use `###` headers
+- stages sections use `###` headers
 
 ### 🚨 CRITICAL: ONE HEADER PER RESPONSE RULE (P0 - MANDATORY)
 

@@ -26,7 +26,7 @@ token_cost_estimate: 4500
 
 # CORTEX Master Plan Auditor Agent
 
-**Version:** 1.0 | **Role:** Plan-Reality Synchronization & Wave Orchestration | **Authority:** Phase 81 + ENH-087 | **Status:** ACTIVE
+**Version:** 1.0 | **Role:** Plan-Reality Synchronization & phase orchestration | **Authority:** Phase 81 + ENH-087 | **Status:** ACTIVE
 
 ---
 
@@ -34,7 +34,7 @@ token_cost_estimate: 4500
 
 **CORTEX Master Plan Auditor** — Bridges the gap between planned waves and actual execution. Continuously synchronizes plan state with implementation reality, detects drift, and autonomously reorganizes execution for ROI optimization.
 
-**Purpose:** Close PLAN mode governance gap and enable autonomous wave execution with state management  
+**Purpose:** Close PLAN mode governance gap and enable autonomous Phase Execution with state management  
 **Mode:** PLAN  
 **MCP Tools:** `cortex_audit_plan`, `cortex_sync_plan_status`, `cortex_reorganize_waves`, `cortex_execute_wave_autonomous`  
 **Mindset:** Reality-driven + ROI-optimized + Continuous sync + Progressive autonomy
@@ -95,7 +95,7 @@ def audit_plan_reality_delta():
             if dependency.status == "INCOMPLETE" and wave.status == "WAITING":
                 report.add_drift(
                     type="BLOCKED_DEPENDENCY",
-                    wave_id=wave.id,
+                    phase_id=phase.id,
                     blocker=dependency.id,
                     recommendation="Unblock or reorder wave"
                 )
@@ -108,7 +108,7 @@ def audit_plan_reality_delta():
     return report
 ```
 
-### 2. Wave Reorganization Engine
+### 2. phase reorganization Engine
 
 **Intelligently restructure waves based on ROI + dependencies + token budgets**
 
@@ -117,7 +117,7 @@ def reorganize_waves():
     """
     Regroup phases into optimal waves using PERT analysis + ROI clustering.
     
-    Returns: ReorganizedWavesPlan with new wave structure
+    Returns: ReorganizedWavesPlan with new Phase Structure
     """
     # Input: All phases with effort, duration, ROI, dependencies
     phases = load_all_phases()
@@ -174,7 +174,7 @@ def reorganize_waves():
         wave.continuation_checkpoint = {
             "phase_index": i,
             "token_budget_used": token_budget - current_token_budget,
-            "next_phases": [p.id for p in waves[i+1:][0].phases] if i+1 < len(waves) else []
+            "next_phases": [p.id for p in phases[i+1:][0].phases] if i+1 < len(waves) else []
         }
     
     return ReorganizedWavesPlan(waves=waves, coherence_score=compute_coherence(waves))
@@ -185,7 +185,7 @@ def reorganize_waves():
 **Execute phases autonomously with state management and resumption**
 
 ```python
-async def execute_wave_autonomous(wave_id: str):
+async def execute_wave_autonomous(phase_id: str):
     """
     Execute entire wave autonomously, managing state and continuation.
     
@@ -199,8 +199,8 @@ async def execute_wave_autonomous(wave_id: str):
     3. Save continuation checkpoint if token budget exceeded
     4. Return execution report
     """
-    wave = load_wave(wave_id)
-    report = ExecutionReport(wave_id=wave_id)
+    wave = load_wave(phase_id)
+    report = ExecutionReport(phase_id=phase_id)
     
     # Initialize token tracker
     tokens_used = 0
@@ -211,11 +211,11 @@ async def execute_wave_autonomous(wave_id: str):
         if tokens_used > token_limit:
             report.status = "CHECKPOINT_REACHED"
             report.continuation_point = {
-                "wave_id": wave_id,
+                "phase_id": phase_id,
                 "next_phase_index": wave.phases.index(phase),
                 "tokens_used": tokens_used,
                 "phases_completed": [p.id for p in wave.phases[:wave.phases.index(phase)]],
-                "command": f"@cortex /plan continue wave-{wave_id}"
+                "command": f"@cortex /plan continue wave-{phase_id}"
             }
             return report
         
@@ -356,7 +356,7 @@ sync_dashboard_with_plan()
 
 ```yaml
 continuation_checkpoint:
-  wave_id: wave-3
+  phase_id: wave-3
   next_phase_index: 47
   token_budget_used: 126000
   phases_completed:
@@ -452,7 +452,7 @@ OutputSchema = {
 """Execute wave phases autonomously with state management."""
 
 InputSchema = {
-    "wave_id": str,
+    "phase_id": str,
     "checkpoint": CheckpointData,  # Optional, for resumption
     "auto_checkpoint_at_pct": 75,  # Token budget percentage
 }
@@ -472,7 +472,7 @@ OutputSchema = {
 
 ## Success Criteria (Phase 81 S1)
 
-- ✅ Wave reorganization algorithm with token budget constraints
+- ✅ phase reorganization algorithm with token budget constraints
 - ✅ Continuation protocol for autonomous execution (75% checkpoint)
 - ✅ Phase 49 CCL integration for context pre-warming
 - ✅ Implementation Truth validation via LENS
@@ -490,4 +490,4 @@ OutputSchema = {
 
 ---
 
-*v1.0 — Phase 81 S1: Master plan auditor for autonomous wave execution*
+*v1.0 — Phase 81 S1: Master plan auditor for autonomous Phase Execution*

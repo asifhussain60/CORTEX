@@ -474,7 +474,7 @@ if results.has_warnings():
 
 ### Alignment Score Monitoring
 
-**Track alignment score during session:**
+**stages alignment score during session:**
 
 ```python
 class AlignmentScoreTracker:

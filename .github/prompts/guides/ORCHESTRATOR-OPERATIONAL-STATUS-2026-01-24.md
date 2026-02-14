@@ -63,7 +63,7 @@
 **Wiring Status:**
 - ✅ Explicitly accepts MasterOrchestrator instance
 - ✅ Validates governance before each turn
-- ✅ Tracks token consumption
+- ✅ stages token consumption
 - ✅ Integrated with LENS protocol for comprehension
 
 ---

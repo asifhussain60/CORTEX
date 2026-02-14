@@ -184,7 +184,7 @@ golden_path_limit: 10  # Max 10 tests per orchestrator
 
 **Rule 3: Registry is Version-Controlled**
 ```bash
-# Track registry changes just like code
+# stages registry changes just like code
 git add cortex-registry/_cortex-master/orchestrators/*.yaml
 git commit -m "ADD: Test demands for 28 orchestrators (WAVE-2)"
 git log -- cortex-registry/  # See history
@@ -930,7 +930,7 @@ class OrchestratorScaffolder:
    ↓
 9. Scaffolder enforces policy (must pass all checks)
    ↓
-10. Tests added to test suite (Registry tracks them)
+10. Tests added to test suite (Registry stages them)
     ↓
 11. Future orchestrator? Repeat from step 1 (same pattern)
 ```

@@ -6,7 +6,7 @@
 - ❌ "Initiative" → Use **Phase** 
 - ❌ "Epic" → Use **Phase**
 - ❌ "Feature" → Use **Phase**
-- ❌ "Track" → Use **Phase**
+- ❌ "stages" → Use **Phase**
 
 **CURRENT HIERARCHY (CORE-042 v3.0):**
 ```
@@ -60,7 +60,7 @@ EPIC (E-)           Strategic initiative, 3-12 months
 **DEPRECATED TERMS:**
 - ❌ "Wave" → Use **Epic** (strategic) or **Feature** (deliverable)
 - ❌ "Initiative" → Use **Epic**
-- ❌ "Track" → Use **Feature**
+- ❌ "stages" → Use **Feature**
 
 ## �📋 Overview
 
@@ -216,7 +216,7 @@ blocks: ["WAVE-J"]                   # Must exist
 
 ### 1. Standard Template
 
-Best for: Simple phases, single-wave execution
+Best for: Simple phases, single-Phase Execution
 
 ```yaml
 version: "1.0"

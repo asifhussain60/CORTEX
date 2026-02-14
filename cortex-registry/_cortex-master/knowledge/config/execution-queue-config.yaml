@@ -16,12 +16,12 @@ description: |
 # Machine/OS tracking for execution continuity
 machine_config:
   version: "1.0"
-  hostname: "WINDOWS-TRACK"  # Windows execution environment
+  hostname: "WINDOWS-stages"  # Windows execution environment
   os_type: "Windows"
   os_version: "10 (Build 19045)"
   arch: "arm64"
   python_version: "3.13.7"
-  machine_hash: "WIN-20260209-TRACK-001"  # Deterministic hash for continuity
+  machine_hash: "WIN-20260209-stages-001"  # Deterministic hash for continuity
   initialized_at: "2026-02-09T00:00:00Z"
 
 # Sequential execution chain
@@ -95,8 +95,8 @@ execution_records:
   phase-52:
     approved_for_execution: true
     status: "in_progress"
-    machine_started_on: "WIN-20260209-TRACK-001"
-    machine_should_continue_on: "WIN-20260209-TRACK-001"
+    machine_started_on: "WIN-20260209-stages-001"
+    machine_should_continue_on: "WIN-20260209-stages-001"
     initiated_timestamp: "2026-02-09T00:00:00Z"
     last_heartbeat: "2026-02-09T02:45:00Z"
     stage_progress:

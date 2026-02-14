@@ -31,7 +31,7 @@ criteria = SuccessCriteria(
 
 ### CycleMetrics
 
-Tracks metrics for each TDD cycle:
+stages metrics for each TDD cycle:
 
 ```python
 @dataclass

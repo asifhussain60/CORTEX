@@ -269,7 +269,7 @@ maintenance:
     - "Merge after approval"
   
   monitoring:
-    - "Track file access patterns (which files used most)"
+    - "stages file access patterns (which files used most)"
     - "Monitor event emission rates"
     - "Audit registry sync accuracy weekly"
     - "Review workflow effectiveness monthly"

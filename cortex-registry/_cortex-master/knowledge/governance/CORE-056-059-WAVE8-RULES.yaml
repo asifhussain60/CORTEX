@@ -1,4 +1,4 @@
-# Wave 8 Stage 2: Governance Rules (CORE-056 through CORE-059)
+# Phase 8 Stage 2: Governance Rules (CORE-056 through CORE-059)
 # Authority: WAVE-8-PLANNING-CAPABILITY-SEPARATION.yaml
 # Implementation: Registry Separation + Layered Capability Export
 # Date: 2026-02-12
@@ -50,7 +50,7 @@ Files in `cortex-registry/_cortex-master/` containing internal planning artifact
 CORTEX's internal 50-wave master plan must remain internal.
 Users receive only the capability (exported strategies, templates, docs).
 This separation prevents accidental exposure of:
-- Internal roadmap priorities (Wave 1-10 executive planning)
+- Internal roadmap priorities (Phase 1-10 executive planning)
 - Resource allocation decisions
 - Strategic timing and dependencies
 - Internal governance rules (vs. reusable rules shared in governance/)
@@ -91,7 +91,7 @@ Public algorithms exported in `cortex/orchestrators/planning/models/` MUST maint
    - Tests written before implementation
    - All tests passing before merge
 
-**Exported Models (Track for Validation):**
+**Exported Models (stages for Validation):**
 - `cortex/orchestrators/planning/models/roi_composite_scorer.py`
 - `cortex/orchestrators/planning/models/dependency_resolver.py`
 - `cortex/orchestrators/planning/models/parallelism_calculator.py`
@@ -108,8 +108,8 @@ Public algorithms exported in `cortex/orchestrators/planning/models/` MUST maint
    - User documentation complete in `docs/guides/`
 
 3. **Post-release audit:** Monthly governance review
-   - Track: Number of users importing exported models
-   - Track: Support requests related to model APIs
+   - stages: Number of users importing exported models
+   - stages: Support requests related to model APIs
    - Adjust validation thresholds based on adoption patterns
 
 **Audit Trail:**
@@ -151,7 +151,7 @@ AC_REGISTRY_SEP_COMPLETE: AC-WAVE8-{DATE}-{SEQ} ✅ {Status}
 # AC_START: AC-WAVE8-0212-001 (Feb 12, 2026, sequence 001)
 # Description: Extract PhaseExecutionStrategy from EnhancedPlanningOrchestrator
 # Files Modified: cortex/orchestrators/planning/strategies/phase.py (new)
-# Reason: Wave 8 Stage 1 strategy extraction + consolidation
+# Reason: Phase 8 Stage 1 strategy extraction + consolidation
 # Governance Impact: Preserves 12 AC fixes (AC-DOMAIN-PLAN-001 to 012)
 
 class PhaseExecutionStrategy:
@@ -162,7 +162,7 @@ class PhaseExecutionStrategy:
 ```
 
 **Logging Requirements:**
-1. **Internal Development:** AC markers in code for all Wave 8 changes
+1. **Internal Development:** AC markers in code for all Phase 8 changes
    - Prefix: `AC_REGISTRY_SEP_` for registry separation changes
    - Include in: `.py` files, `.yaml` specifications, setup scripts
    - Log to: `.cortex/registry-separation-audit.log`
@@ -173,8 +173,8 @@ class PhaseExecutionStrategy:
 
 3. **Governance Database:** Monthly sync to master audit registry
    - Location: `cortex-registry/_cortex-master/governance/CORE-058-audit-trail.yaml`
-   - Aggregates: All AC markers from Wave 8 implementation
-   - Tracks: Status (COMPLETE, IN-PROGRESS, BLOCKED)
+   - Aggregates: All AC markers from Phase 8 implementation
+   - stages: Status (COMPLETE, IN-PROGRESS, BLOCKED)
 
 **Reporting:**
 - **Weekly Report:** AC marker status dashboard
@@ -183,7 +183,7 @@ class PhaseExecutionStrategy:
   - Next week's planned markers
 
 - **Monthly Report:** Governance compliance
-  - All Wave 8 changes logged and traced
+  - All Phase 8 changes logged and traced
   - Zero blacklist violations (git hooks audit)
   - Export validation passed
   - User adoption metrics (if applicable)
@@ -254,9 +254,9 @@ User templates in `cortex/templates/planning/` MUST maintain same quality and go
 - Deprecation notices 90 days before removal
 - User feedback tracked for future template design
 
-**Templates Shipped (Wave 8):**
+**Templates Shipped (Phase 8):**
 - `cortex/templates/planning/simple-roadmap/` (1 wave, 3 phases)
-- `cortex/templates/planning/complex-roadmap/` (5 waves, 15 phases, 3 tracks)
+- `cortex/templates/planning/complex-roadmap/` (5 waves, 15 phases, 3 stages)
 - `cortex/templates/planning/scaled-50wave-roadmap/` (50 waves, governance)
 
 **Rationale:**
@@ -273,7 +273,7 @@ Deprecation warnings prevent support surprises.
 
 ---
 
-## Implementation Checklist (Wave 8 Stage 2)
+## Implementation Checklist (Phase 8 Stage 2)
 
 - [x] `.gitignore` updated with blacklist entries (CORE-056)
 - [x] `.githooks/pre-commit` extended with blacklist check (CORE-056)
@@ -286,7 +286,7 @@ Deprecation warnings prevent support surprises.
 
 ---
 
-**Wave 8 Stage 2 Status:** ✅ COMPLETE (Git Blacklist + Enforcement)
+**Phase 8 Stage 2 Status:** ✅ COMPLETE (Git Blacklist + Enforcement)
 **Completed:** 2026-02-12 (estimated)
 **Tests:** All enforcement gates validated
 **Governance:** CORE-056 through CORE-059 established

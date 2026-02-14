@@ -67,21 +67,21 @@ EPIC (E-)           Strategic initiative, 3-12 months
 
 ### Phase 1: Archive Legacy "Wave" Files (NON-DESTRUCTIVE)
 
-**Location:** `cortex-registry/_cortex-master/history/_archive/obsolete-wave-guides/`
+**Location:** `cortex-registry/_cortex-master/history/_archive/obsolete-plans/`
 
 **Files to Archive:**
 ```
-WAVE-*.yaml                          → obsolete-wave-guides/WAVE-*.yaml.deprecated
-WAVE-*-SUMMARY.md                    → obsolete-wave-guides/WAVE-*-SUMMARY.md.deprecated
-SESSION-SCOPED-WAVES.md              → obsolete-wave-guides/SESSION-SCOPED-WAVES.md.deprecated
-AUTONOMOUS-WAVE-EXECUTION-GUIDE.md   → obsolete-wave-guides/AUTONOMOUS-WAVE-EXECUTION-GUIDE.md.deprecated
-HIGH-ROI-WAVE-PRIORITIZATION.md      → obsolete-wave-guides/HIGH-ROI-WAVE-PRIORITIZATION.md.deprecated
+WAVE-*.yaml                          → obsolete-plans/WAVE-*.yaml.deprecated
+WAVE-*-SUMMARY.md                    → obsolete-plans/WAVE-*-SUMMARY.md.deprecated
+SESSION-SCOPED-WAVES.md              → obsolete-plans/SESSION-SCOPED-WAVES.md.deprecated
+AUTONOMOUS-WAVE-EXECUTION-GUIDE.md   → obsolete-plans/AUTONOMOUS-WAVE-EXECUTION-GUIDE.md.deprecated
+HIGH-ROI-WAVE-PRIORITIZATION.md      → obsolete-plans/HIGH-ROI-WAVE-PRIORITIZATION.md.deprecated
 ```
 
 **Preservation Strategy:**
 - ✅ Keep all content (no deletion)
 - ✅ Add deprecation notices
-- ✅ Map old Wave IDs to new Epic/Feature IDs
+- ✅ Map old phase IDs to new Epic/Feature IDs
 - ✅ Update references in README
 
 ### Phase 2: Update Core Documentation
@@ -92,7 +92,7 @@ HIGH-ROI-WAVE-PRIORITIZATION.md      → obsolete-wave-guides/HIGH-ROI-WAVE-PRIO
 
 **OLD:**
 ```markdown
-| **CORE-042** | **Hierarchical Terminology** — INITIATIVE→PHASE→STAGE→TASK (I-/P-/S-/T- prefixes). |
+| **CORE-042** | **Hierarchical Terminology** — PHASE→STAGE→TASK (I-/P-/S-/T- prefixes). |
 ```
 
 **NEW:**
@@ -106,16 +106,16 @@ HIGH-ROI-WAVE-PRIORITIZATION.md      → obsolete-wave-guides/HIGH-ROI-WAVE-PRIO
 
 **Search/Replace:**
 - `WAVE-X` → `E-XXX` or `F-XXX` (context-dependent)
-- `wave_id` → `epic_id` or `feature_id`
-- "Wave 7" → "Epic 001" (example)
-- "wave execution" → "epic execution" or "feature delivery"
+- `phase_id` → `epic_id` or `feature_id`
+- "Phase 7" → "Epic 001" (example)
+- "Phase Execution" → "epic execution" or "feature delivery"
 
 #### 2.3 Update Agent Specifications
 
 **Files:** `.github/agents/core/*.md`
 
 **Updates:**
-- `phase-creation-standards.md` § Wave Structure → Remove wave references
+- `phase-creation-standards.md` § Phase Structure → Remove wave references
 - `cortex-phase-resolver.md` § Wave planning → Epic/Feature planning
 
 ### Phase 3: Update Registry Structure
@@ -136,7 +136,7 @@ cortex-registry/_cortex-master/
 │   └── completed/
 └── history/
     └── _archive/
-        └── obsolete-wave-guides/  # Deprecated wave files
+        └── obsolete-plans/  # Deprecated phase files
 ```
 
 #### 3.2 Migration Mapping
@@ -162,7 +162,7 @@ class PlanningLevel(Enum):
     INITIATIVE = "initiative"
     PHASE = "phase"
     WAVE = "wave"
-    TRACK = "track"
+    stages = "stages"
     STAGE = "stage"
     TASK = "task"
 ```
@@ -178,7 +178,7 @@ class PlanningLevel(Enum):
     # Deprecated levels (remove in Phase 2)
     INITIATIVE = "initiative"  # → EPIC
     WAVE = "wave"              # → EPIC or FEATURE
-    TRACK = "track"            # → FEATURE
+    stages = "stages"            # → FEATURE
     METHOD = "method"          # Too granular, remove
     CLASS = "class"            # Too granular, remove
 ```
@@ -200,7 +200,7 @@ class PlanningLevel(Enum):
 **Remove Wave Template:**
 ```python
 WAVE = {
-    "wave_id": "",        # DEPRECATED
+    "phase_id": "",        # DEPRECATED
     "name": "",
     ...
 }
@@ -261,7 +261,7 @@ Add deprecation notice:
 EPIC (E-) → FEATURE (F-) → PHASE (P-) → STAGE (S-) → TASK (T-)
 ```
 
-**Legacy Wave files archived:** `history/_archive/obsolete-wave-guides/`
+**Legacy phase files archived:** `history/_archive/obsolete-plans/`
 ```
 
 ---
@@ -270,7 +270,7 @@ EPIC (E-) → FEATURE (F-) → PHASE (P-) → STAGE (S-) → TASK (T-)
 
 ### Non-Destructive Phase (Day 1)
 
-- [ ] Create archive directory: `history/_archive/obsolete-wave-guides/`
+- [ ] Create archive directory: `history/_archive/obsolete-plans/`
 - [ ] Move all WAVE-*.yaml files (preserve content)
 - [ ] Add deprecation notices to moved files
 - [ ] Create WAVE-ID-MAPPING.yaml (old → new mapping)

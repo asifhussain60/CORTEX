@@ -89,11 +89,11 @@ governance_learnings:
 # Documentation Alignment Analysis
 documentation_status:
   claims_vs_reality:
-    - claim: "16 completed waves"
+    - claim: "16 completed phases"
       reality: "Phases 1-6 planned + 5 waves pending (WAVE-P through WAVE-T)"
       documentation_source: "README.md, wave-*.yaml files"
       reality_source: "master-plan.yaml phases + wave-consolidation-7day-remediation.yaml"
-      alignment_action: "Consolidate wave documentation into 5-wave execution track"
+      alignment_action: "Consolidate wave documentation into 5-Phase Execution stages"
       
   file_sprawl_issue:
     total_files_in_master: 167
@@ -121,10 +121,10 @@ current_status:
     next_target: "85 files (50% reduction with VACUUM-2026-02-14)"
     
   archived:
-    location: "cortex-registry/_cortex-master/_archive/obsolete-wave-guides/"
+    location: "cortex-registry/_cortex-master/_archive/obsolete-plans/"
     count: 47  # Updated with new understanding
     scope: "AUTONOMOUS-WAVE-EXECUTION-*.md, WAVE-[0-9]-*, consolidated reports"
-    note: "Only active wave execution files retained in _cortex-master root"
+    note: "Only active Phase Execution files retained in _cortex-master root"
       
   test_suite:
     status: "✅ PASSING"
@@ -334,7 +334,7 @@ autonomous_execution_setup:
       - "Branch validation (CORTEX branch only)"
     
     execution_sequence:
-      - "Copy WAVE execution trigger from wave_X_* sections above"
+      - "Copy Phase Execution trigger from wave_X_* sections above"
       - "Paste into VSCode Copilot Chat"
       - "Copilot auto-starts MCP → TDDOrchestrator → silent execution"
       - "Monitor progress via ASCII bars (no narration)"
@@ -356,7 +356,7 @@ autonomous_execution_setup:
         - "Retry: Paste wave trigger in Copilot chat"
     
     tests_failing:
-      symptom: "WAVE execution halts on test failure"
+      symptom: "Phase Execution halts on test failure"
       resolution:
         - "Do NOT skip tests (CORE-008 violation)"
         - "Read error completely"
