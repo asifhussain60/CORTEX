@@ -74,6 +74,191 @@ All consolidated tools follow a consistent pattern:
 
 ---
 
+## 🚀 Quick Start: Runnable Python Examples
+
+These examples demonstrate how to invoke CORTEX MCP tools from Python code. Copy and run these in your development environment.
+
+### Setup: MCP Client Connection
+
+```python
+import asyncio
+from cortex.mcp.client import MCPClient
+
+async def connect_to_cortex():
+    """Connect to CORTEX MCP server (auto-started by VS Code)."""
+    client = MCPClient()
+    await client.connect()  # Connects to localhost:9000 by default
+    return client
+
+# Usage
+client = asyncio.run(connect_to_cortex())
+```
+
+### Example 1: Code Analysis with LENS
+
+```python
+"""Analyze a Python file for complexity, patterns, and issues."""
+async def analyze_code():
+    client = await connect_to_cortex()
+    
+    # Basic analysis
+    result = await client.call_tool("cortex_lens_analyze", {
+        "file_path": "cortex/orchestrators/master_orchestrator.py",
+        "analysis_type": "comprehensive",
+        "include_metrics": True
+    })
+    
+    print(f"Complexity Score: {result.data['complexity_score']}")
+    print(f"Functions: {len(result.data['functions'])}")
+    print(f"Issues Found: {len(result.data['issues'])}")
+    
+    # Deep analysis with AI enhancement
+    deep_result = await client.call_tool("cortex_lens_deep_analyze", {
+        "scope": "module",
+        "target": "cortex/mcp/",
+        "include_recommendations": True
+    })
+    
+    for rec in deep_result.data['recommendations']:
+        print(f"💡 {rec['category']}: {rec['suggestion']}")
+
+asyncio.run(analyze_code())
+```
+
+### Example 2: TDD Implementation Request
+
+```python
+"""Submit an implementation request through TDD workflow."""
+async def implement_feature():
+    client = await connect_to_cortex()
+    
+    result = await client.call_tool("cortex_process_request", {
+        "intent": "IMPLEMENT",
+        "request": "Add rate limiting to the MCP server endpoints",
+        "context": {
+            "target_file": "cortex/mcp/server.py",
+            "constraints": ["<500 LOC", "100% test coverage"],
+            "tdd_required": True
+        }
+    })
+    
+    # Process returns staged execution plan
+    print(f"Plan ID: {result.data['plan_id']}")
+    print(f"Stages: {len(result.data['stages'])}")
+    for stage in result.data['stages']:
+        print(f"  {stage['phase']}: {stage['description']} ({stage['estimated_loc']} LOC)")
+
+asyncio.run(implement_feature())
+```
+
+### Example 3: Governance Validation
+
+```python
+"""Check if proposed changes comply with governance rules."""
+async def validate_governance():
+    client = await connect_to_cortex()
+    
+    result = await client.call_tool("analyze_governance_impact", {
+        "operation": "IMPLEMENT",
+        "target_files": [
+            "cortex/orchestrators/new_orchestrator.py",
+            "tests/unit/test_new_orchestrator.py"
+        ],
+        "check_rules": ["CORE-002", "CORE-008", "CORE-035"]
+    })
+    
+    print(f"Verdict: {result.data['verdict']}")  # PASS, WARN, or BLOCK
+    
+    if result.data['violations']:
+        print("Violations detected:")
+        for v in result.data['violations']:
+            print(f"  ❌ {v['rule']}: {v['message']}")
+    else:
+        print("✅ All governance checks passed")
+
+asyncio.run(validate_governance())
+```
+
+### Example 4: Duplicate Detection
+
+```python
+"""Find duplicate implementations across the codebase."""
+async def detect_duplicates():
+    client = await connect_to_cortex()
+    
+    result = await client.call_tool("cortex_detect_duplicates", {
+        "scope": "cortex/",
+        "threshold": 0.8,  # 80% similarity threshold
+        "include_patterns": ["*_v2.py", "*_old.py", "*_backup.py"]
+    })
+    
+    print(f"Duplicates Found: {len(result.data['duplicates'])}")
+    for dup in result.data['duplicates']:
+        print(f"\n🔍 {dup['pattern']}:")
+        print(f"   Original: {dup['original']}")
+        print(f"   Duplicate: {dup['duplicate']}")
+        print(f"   Similarity: {dup['similarity']*100:.1f}%")
+        print(f"   Action: {dup['recommended_action']}")
+
+asyncio.run(detect_duplicates())
+```
+
+### Example 5: Git History Analysis
+
+```python
+"""Get intelligent summary of recent changes."""
+async def analyze_git_history():
+    client = await connect_to_cortex()
+    
+    result = await client.call_tool("cortex_git_history", {
+        "days": 7,
+        "scope": "cortex/orchestrators/",
+        "include_metrics": True
+    })
+    
+    print(f"Commits (last 7 days): {result.data['commit_count']}")
+    print(f"Files Changed: {result.data['files_changed']}")
+    print(f"Lines Added: {result.data['lines_added']}")
+    print(f"Lines Removed: {result.data['lines_removed']}")
+    
+    print("\nTop Contributors:")
+    for contributor in result.data['contributors'][:5]:
+        print(f"  {contributor['name']}: {contributor['commits']} commits")
+
+asyncio.run(analyze_git_history())
+```
+
+### Example 6: Challenge Generation (Design Review)
+
+```python
+"""Generate AI-driven challenges for a proposed design."""
+async def challenge_design():
+    client = await connect_to_cortex()
+    
+    result = await client.call_tool("cortex_challenge", {
+        "proposal": "Add a new CachingOrchestrator to cache LENS results",
+        "context": {
+            "target_directory": "cortex/orchestrators/",
+            "related_components": ["LENSSynthesis", "ContextSynthesisGateway"]
+        }
+    })
+    
+    print("⚡ Challenge Generated:")
+    print(f"   Confidence: {result.data['confidence']}")
+    print(f"   Agreement: {result.data['agrees']}")
+    
+    if result.data['counter_proposal']:
+        print(f"\n💡 Counter-Proposal: {result.data['counter_proposal']}")
+        
+    print("\n🎯 Considerations:")
+    for consideration in result.data['considerations']:
+        print(f"   - {consideration}")
+
+asyncio.run(challenge_design())
+```
+
+---
+
 ## Tool Categories
 
 ### Core Operations (4 tools)
@@ -1646,6 +1831,29 @@ result = server.call_tool('cortex_lens_analyze', {
 
 ---
 
-**Last Updated:** 2026-02-13  
-**Source:** Live MCP Server introspection  
+**Last Updated:** 2026-02-13
+**Source:** Live MCP Server introspection
+
+---
+
+## See Also
+
+**MCP Documentation:**
+- [MCP Overview](./overview.md) — Architecture and Pylance-style auto-start
+- [MCP Protocol](./protocol.md) — JSON-RPC 2.0 specification
+- [MCP Integration](./integration.md) — Client integration patterns
+- [MCP Versioning](./versioning.md) — Tool versioning strategy
+
+**Orchestration:**
+- [Master Orchestrator](../orchestration/master-orchestrator.md) — `cortex_process_request` handler
+- [TDD Orchestrator](../orchestration/tdd-orchestrator.md) — TDD workflow tools
+- [Intent Router](../orchestration/intent-router.md) — Request classification
+
+**Governance:**
+- [Governance Compliance](../capabilities/governance-compliance.md) — Enforcement tools
+- [CORE Rules](../../cortex-registry/_cortex-master/governance/core-rules.yaml) — Rule definitions
+
+**Reference:**
+- [CORTEX Glossary](../glossary.md) — Term definitions (MCP, LENS, Consolidated Tools)
+- [Architecture Index](../index.md) — Full documentation map
 **Accuracy:** 100% current (auto-generated from running system)
