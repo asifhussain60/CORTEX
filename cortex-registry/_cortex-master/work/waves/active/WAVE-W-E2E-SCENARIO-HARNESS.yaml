@@ -1,0 +1,804 @@
+# WAVE-W: E2E Scenario Harness
+# Priority: P0-CRITICAL (Proves system coherence)
+# Duration: 4-5 hours (1-2 sessions)
+# Status: READY
+
+version: "1.0"
+wave_id: "WAVE-W"
+name: "E2E Scenario Harness: Audit-Log-Verified Test Coverage for All CORTEX Scenarios"
+priority: "P0-CRITICAL"
+status: "ready"
+created: "2026-02-14T12:00:00Z"
+updated: "2026-02-14T12:00:00Z"
+author: "CORTEX Architect"
+authority: "cortex-architect.prompt.md v15.3"
+
+# ============================================================================
+# EXECUTIVE SUMMARY
+# ============================================================================
+summary:
+  problem: |
+    CORTEX needs 100% confidence in E2E functionality across all orchestrators
+    for TDD, security-first development, refactoring, testing, documentation,
+    and all practical software development scenarios. Current testing is 
+    component-focused but lacks holistic E2E verification.
+    
+  solution: |
+    Build comprehensive E2E scenario harness with 40 audit-log-verified tests
+    covering 5 categories:
+    - CORTEX Self-Development (10 scenarios)
+    - Production Repository Development (10 scenarios)
+    - Cross-Cutting Concerns (10 scenarios)
+    - Security-First Scenarios (5 scenarios)
+    - Edge Cases & Recovery (5 scenarios)
+    
+  value: |
+    - 100% confidence in system coherence
+    - Automated regression detection via audit logs
+    - Self-documenting test scenarios from real operations
+    - Sunshine AND rainy day path coverage
+    - Foundation for continuous E2E validation
+
+# ============================================================================
+# DEPENDENCIES
+# ============================================================================
+dependencies:
+  prerequisite_waves:
+    - WAVE-V  # Holistic Workflow Engine (provides WorkflowComposer, AuditVerifier)
+    
+  required_components:
+    - cortex/execution/workflow_composer.py  # From WAVE-V
+    - cortex/verification/audit_verifier.py  # From WAVE-V
+    - cortex/verification/e2e_path_generator.py  # From WAVE-V
+    - cortex/infrastructure/orchestrator_event_bus.py  # EventBus
+    - cortex/testing/test_value_scorer.py  # TestValueScorer
+
+# ============================================================================
+# SCENARIO CATEGORIES
+# ============================================================================
+scenario_categories:
+
+  # ==========================================================================
+  # CATEGORY 1: CORTEX SELF-DEVELOPMENT (10 scenarios)
+  # ==========================================================================
+  cortex_self_development:
+    description: "Scenarios for developing CORTEX itself"
+    count: 10
+    scenarios:
+      - id: "E2E-001"
+        name: "Implement new orchestrator"
+        path_type: "SUNSHINE"
+        description: "Complete TDD cycle for new orchestrator development"
+        orchestrators:
+          - IntentRouter
+          - TDDOrchestrator
+          - CoherenceValidator
+          - UniversalLearningLoop
+        expected_events:
+          - INTENT_CLASSIFIED
+          - CONTEXT_READY
+          - WORKFLOW_CREATED
+          - RGR_GATE_PASSED
+          - TDD_RED_COMPLETE
+          - TDD_GREEN_COMPLETE
+          - TDD_REFACTOR_COMPLETE
+          - COHERENCE_VALIDATED
+          - LEARNING_CAPTURED
+          - OPERATION_COMPLETE
+        proves: "TDD-first development works E2E"
+        
+      - id: "E2E-002"
+        name: "Fix failing test"
+        path_type: "SUNSHINE"
+        description: "Bug fix workflow with test verification"
+        orchestrators:
+          - IntentRouter
+          - TDDOrchestrator
+          - TestValueScorer
+        expected_events:
+          - INTENT_CLASSIFIED
+          - TEST_FAILURE_ANALYZED
+          - FIX_IMPLEMENTED
+          - TEST_PASSED
+          - OPERATION_COMPLETE
+        proves: "Bug fix workflow complete"
+        
+      - id: "E2E-003"
+        name: "Refactor orchestrator"
+        path_type: "SUNSHINE"
+        description: "Safe refactoring with coherence validation"
+        orchestrators:
+          - IntentRouter
+          - RefactoringOrchestrator
+          - CoherenceValidator
+        expected_events:
+          - INTENT_CLASSIFIED
+          - REFACTOR_PLAN_CREATED
+          - REFACTOR_EXECUTED
+          - COHERENCE_VALIDATED
+          - OPERATION_COMPLETE
+        proves: "Refactoring maintains coherence"
+        
+      - id: "E2E-004"
+        name: "Add CORE rule"
+        path_type: "SUNSHINE"
+        description: "Governance self-evolution"
+        orchestrators:
+          - IntentRouter
+          - EnforcementOrchestrator
+          - GovernanceRegistry
+        expected_events:
+          - INTENT_CLASSIFIED
+          - RULE_PROPOSED
+          - RULE_VALIDATED
+          - RULE_REGISTERED
+          - OPERATION_COMPLETE
+        proves: "Governance self-evolves"
+        
+      - id: "E2E-005"
+        name: "Onboard new phase"
+        path_type: "SUNSHINE"
+        description: "Phase lifecycle management"
+        orchestrators:
+          - PhaseOrchestrator
+          - TemplateManager
+          - RegistryManager
+        expected_events:
+          - PHASE_CREATED
+          - TEMPLATE_APPLIED
+          - REGISTRY_UPDATED
+          - OPERATION_COMPLETE
+        proves: "Phase lifecycle complete"
+        
+      - id: "E2E-006"
+        name: "Implement fails RGR gate"
+        path_type: "RAINY_DAY"
+        description: "RGR enforcement blocks non-TDD implementation"
+        orchestrators:
+          - IntentRouter
+          - TDDOrchestrator
+          - RGRGate
+        expected_events:
+          - INTENT_CLASSIFIED
+          - WORKFLOW_CREATED
+          - RGR_GATE_FAILED
+          - WORKFLOW_BLOCKED
+          - ERROR_LOGGED
+        proves: "RGR enforcement works"
+        
+      - id: "E2E-007"
+        name: "Security violation detected"
+        path_type: "RAINY_DAY"
+        description: "Security-first enforcement"
+        orchestrators:
+          - LENSSynthesis
+          - SecurityAnalyzer
+        expected_events:
+          - CODE_ANALYZED
+          - SECURITY_VIOLATION_DETECTED
+          - OPERATION_BLOCKED
+          - USER_NOTIFIED
+        proves: "Security-first enforced"
+        
+      - id: "E2E-008"
+        name: "Coherence check fails"
+        path_type: "RAINY_DAY"
+        description: "Coherence validation prevents broken code"
+        orchestrators:
+          - CoherenceValidator
+          - RecoveryOrchestrator
+        expected_events:
+          - COHERENCE_CHECK_FAILED
+          - OPERATION_STOPPED
+          - RECOVERY_INITIATED
+        proves: "Broken code prevented"
+        
+      - id: "E2E-009"
+        name: "Token budget exceeded"
+        path_type: "RAINY_DAY"
+        description: "Session continuity on token exhaustion"
+        orchestrators:
+          - WorkflowRuntime
+          - CheckpointManager
+        expected_events:
+          - TOKEN_WARNING
+          - CHECKPOINT_CREATED
+          - SESSION_PAUSED
+          - CONTINUATION_PROMPT_GENERATED
+        proves: "Session continuity works"
+        
+      - id: "E2E-010"
+        name: "MCP unavailable"
+        path_type: "RAINY_DAY"
+        description: "MCP-first enforcement"
+        orchestrators:
+          - MasterOrchestrator
+          - MCPGate
+        expected_events:
+          - MCP_CHECK_FAILED
+          - OPERATION_BLOCKED
+          - SETUP_INSTRUCTIONS_PROVIDED
+        proves: "MCP-first enforced"
+
+  # ==========================================================================
+  # CATEGORY 2: PRODUCTION REPOSITORY DEVELOPMENT (10 scenarios)
+  # ==========================================================================
+  production_repository:
+    description: "Scenarios for developing production applications"
+    count: 10
+    scenarios:
+      - id: "E2E-011"
+        name: "Implement API endpoint"
+        path_type: "SUNSHINE"
+        description: "Full feature lifecycle for API development"
+        orchestrators:
+          - IntentRouter
+          - TDDOrchestrator
+          - CoherenceValidator
+          - DocumentationOrchestrator
+        expected_events:
+          - INTENT_CLASSIFIED
+          - TDD_CYCLE_COMPLETE
+          - COHERENCE_VALIDATED
+          - DOCS_GENERATED
+          - OPERATION_COMPLETE
+        proves: "Full feature lifecycle"
+        
+      - id: "E2E-012"
+        name: "Fix production bug"
+        path_type: "SUNSHINE"
+        description: "Bug fix from detection to deployment"
+        orchestrators:
+          - IntentRouter
+          - TDDOrchestrator
+          - TestValueScorer
+          - DeploymentOrchestrator
+        expected_events:
+          - BUG_ANALYZED
+          - FIX_IMPLEMENTED
+          - TESTS_PASSED
+          - DEPLOYMENT_READY
+        proves: "Bug fix to production"
+        
+      - id: "E2E-013"
+        name: "Refactor legacy module"
+        path_type: "SUNSHINE"
+        description: "Safe modernization of legacy code"
+        orchestrators:
+          - RefactoringOrchestrator
+          - LENSSynthesis
+          - CoherenceValidator
+        expected_events:
+          - LEGACY_ANALYZED
+          - REFACTOR_PLAN_APPROVED
+          - REFACTOR_EXECUTED
+          - TESTS_PASSED
+        proves: "Safe legacy modernization"
+        
+      - id: "E2E-014"
+        name: "Add unit tests"
+        path_type: "SUNSHINE"
+        description: "Test creation with quality scoring"
+        orchestrators:
+          - TDDOrchestrator
+          - TestValueScorer
+          - PatternLibrary
+        expected_events:
+          - TESTS_GENERATED
+          - TESTS_SCORED
+          - HIGH_VALUE_TESTS_SAVED
+        proves: "Test quality validated"
+        
+      - id: "E2E-015"
+        name: "Generate documentation"
+        path_type: "SUNSHINE"
+        description: "Automated documentation generation"
+        orchestrators:
+          - DocumentationOrchestrator
+          - IntentRouter
+        expected_events:
+          - DOCS_ANALYZED
+          - DOCS_GENERATED
+          - DOCS_VALIDATED
+        proves: "Docs generated correctly"
+        
+      - id: "E2E-016"
+        name: "Code review assist"
+        path_type: "SUNSHINE"
+        description: "AI-assisted code review"
+        orchestrators:
+          - LENSSynthesis
+          - SecurityAnalyzer
+          - RecommendationEngine
+        expected_events:
+          - CODE_ANALYZED
+          - RECOMMENDATIONS_GENERATED
+          - REVIEW_COMPLETE
+        proves: "AI-assisted review works"
+        
+      - id: "E2E-017"
+        name: "Dependency update"
+        path_type: "SUNSHINE"
+        description: "Safe dependency updates"
+        orchestrators:
+          - IntentRouter
+          - TDDOrchestrator
+          - CoherenceValidator
+        expected_events:
+          - DEPS_ANALYZED
+          - DEPS_UPDATED
+          - TESTS_PASSED
+          - COHERENCE_VALIDATED
+        proves: "Deps updated safely"
+        
+      - id: "E2E-018"
+        name: "CI/CD integration"
+        path_type: "SUNSHINE"
+        description: "Deployment readiness validation"
+        orchestrators:
+          - DeploymentOrchestrator
+          - ValidationGate
+        expected_events:
+          - CICD_TRIGGERED
+          - VALIDATION_PASSED
+          - DEPLOYMENT_READY
+        proves: "Deployment ready"
+        
+      - id: "E2E-019"
+        name: "User provides wrong intent"
+        path_type: "RAINY_DAY"
+        description: "Intent clarification and recovery"
+        orchestrators:
+          - IntentRouter
+          - InteractionOrchestrator
+        expected_events:
+          - INTENT_AMBIGUOUS
+          - CLARIFICATION_REQUESTED
+          - INTENT_REFINED
+          - OPERATION_RESUMED
+        proves: "Intent recovery works"
+        
+      - id: "E2E-020"
+        name: "File conflict during edit"
+        path_type: "RAINY_DAY"
+        description: "Conflict detection and resolution"
+        orchestrators:
+          - CoherenceValidator
+          - ConflictResolver
+        expected_events:
+          - CONFLICT_DETECTED
+          - RESOLUTION_PROPOSED
+          - USER_CONFIRMED
+          - CONFLICT_RESOLVED
+        proves: "Conflicts handled"
+
+  # ==========================================================================
+  # CATEGORY 3: CROSS-CUTTING CONCERNS (10 scenarios)
+  # ==========================================================================
+  cross_cutting:
+    description: "Scenarios spanning multiple system aspects"
+    count: 10
+    scenarios:
+      - id: "E2E-021"
+        name: "Learning captured and promoted"
+        path_type: "SUNSHINE"
+        description: "Full learning digestive cycle"
+        orchestrators:
+          - AnyOrchestrator
+          - UniversalLearningLoop
+          - ConfidenceScorer
+          - KnowledgeMerger
+        expected_events:
+          - OPERATION_COMPLETE
+          - LEARNING_CAPTURED
+          - CONFIDENCE_SCORED
+          - KNOWLEDGE_PROMOTED
+        proves: "Learning digestive system works"
+        
+      - id: "E2E-022"
+        name: "Pattern flushed (low confidence)"
+        path_type: "SUNSHINE"
+        description: "Low-value pattern cleanup"
+        orchestrators:
+          - UniversalLearningLoop
+          - FlushManager
+          - ArchiveManager
+        expected_events:
+          - PATTERN_EVALUATED
+          - CONFIDENCE_BELOW_THRESHOLD
+          - PATTERN_ARCHIVED
+          - PATTERN_FLUSHED
+        proves: "Cleanup mechanism works"
+        
+      - id: "E2E-023"
+        name: "Company domain augmentation"
+        path_type: "SUNSHINE"
+        description: "Business rules applied to decisions"
+        orchestrators:
+          - UnifiedIntelligenceProvider
+          - DomainLoader
+        expected_events:
+          - CONTEXT_REQUESTED
+          - COMPANY_DOMAIN_LOADED
+          - RULES_APPLIED
+        proves: "Business rules applied"
+        
+      - id: "E2E-024"
+        name: "Best practice applied"
+        path_type: "SUNSHINE"
+        description: "Knowledge augments decisions"
+        orchestrators:
+          - UnifiedIntelligenceProvider
+          - Tier3Loader
+        expected_events:
+          - CONTEXT_REQUESTED
+          - BEST_PRACTICES_LOADED
+          - PRACTICES_APPLIED
+        proves: "Knowledge augments decisions"
+        
+      - id: "E2E-025"
+        name: "Audit trail complete"
+        path_type: "SUNSHINE"
+        description: "Full event correlation"
+        orchestrators:
+          - OrchestratorEventBus
+          - AuditVerifier
+        expected_events:
+          - ALL_EVENTS_CORRELATED
+          - AUDIT_VERIFIED
+        proves: "All events correlated"
+        
+      - id: "E2E-026"
+        name: "Workflow template saved"
+        path_type: "SUNSHINE"
+        description: "Template persistence"
+        orchestrators:
+          - WorkflowComposer
+          - TemplateManager
+          - RegistryManager
+        expected_events:
+          - WORKFLOW_COMPLETE
+          - TEMPLATE_SAVED
+          - REGISTRY_UPDATED
+        proves: "Templates persist correctly"
+        
+      - id: "E2E-027"
+        name: "Workflow destroyed after use"
+        path_type: "SUNSHINE"
+        description: "Ad-hoc workflow cleanup"
+        orchestrators:
+          - WorkflowRuntime
+          - CleanupManager
+        expected_events:
+          - WORKFLOW_COMPLETE
+          - CLEANUP_TRIGGERED
+          - WORKFLOW_DESTROYED
+        proves: "Ad-hoc cleanup works"
+        
+      - id: "E2E-028"
+        name: "Multi-step workflow executes"
+        path_type: "SUNSHINE"
+        description: "Complex workflow execution"
+        orchestrators:
+          - WorkflowComposer
+          - PhaseExecutionStrategy
+        expected_events:
+          - WORKFLOW_CREATED
+          - STEP_1_COMPLETE
+          - STEP_2_COMPLETE
+          - STEP_N_COMPLETE
+          - WORKFLOW_COMPLETE
+        proves: "Complex workflows work"
+        
+      - id: "E2E-029"
+        name: "Parallel track execution"
+        path_type: "SUNSHINE"
+        description: "Parallel execution lanes"
+        orchestrators:
+          - WorkflowComposer
+          - TrackParallelizationStrategy
+        expected_events:
+          - TRACKS_STARTED
+          - TRACK_A_COMPLETE
+          - TRACK_B_COMPLETE
+          - ALL_TRACKS_COMPLETE
+        proves: "Parallelism works"
+        
+      - id: "E2E-030"
+        name: "Governance violation mid-workflow"
+        path_type: "RAINY_DAY"
+        description: "Governance stops bad work"
+        orchestrators:
+          - WorkflowRuntime
+          - EnforcementOrchestrator
+        expected_events:
+          - WORKFLOW_IN_PROGRESS
+          - GOVERNANCE_VIOLATION_DETECTED
+          - WORKFLOW_ROLLED_BACK
+        proves: "Governance stops bad work"
+
+  # ==========================================================================
+  # CATEGORY 4: SECURITY-FIRST SCENARIOS (5 scenarios)
+  # ==========================================================================
+  security_first:
+    description: "Security enforcement scenarios"
+    count: 5
+    scenarios:
+      - id: "E2E-031"
+        name: "Secrets detected in code"
+        path_type: "RAINY_DAY"
+        description: "Prevent secrets from being committed"
+        orchestrators:
+          - LENSSynthesis
+          - SecurityAnalyzer
+        expected_events:
+          - CODE_SCANNED
+          - SECRET_DETECTED
+          - COMMIT_BLOCKED
+        proves: "Secrets never committed"
+        
+      - id: "E2E-032"
+        name: "OWASP violation detected"
+        path_type: "RAINY_DAY"
+        description: "OWASP Top 10 enforcement"
+        orchestrators:
+          - SecurityAnalyzer
+          - EnforcementOrchestrator
+        expected_events:
+          - SECURITY_SCAN_COMPLETE
+          - OWASP_VIOLATION_FOUND
+          - OPERATION_BLOCKED
+        proves: "Security standards enforced"
+        
+      - id: "E2E-033"
+        name: "SQL injection pattern found"
+        path_type: "RAINY_DAY"
+        description: "Vulnerability detection"
+        orchestrators:
+          - LENSSynthesis
+          - SecurityAnalyzer
+        expected_events:
+          - CODE_ANALYZED
+          - INJECTION_PATTERN_DETECTED
+          - RECOMMENDATION_PROVIDED
+        proves: "Vulnerabilities caught"
+        
+      - id: "E2E-034"
+        name: "Dependency CVE detected"
+        path_type: "RAINY_DAY"
+        description: "CVE awareness"
+        orchestrators:
+          - SecurityAnalyzer
+          - DependencyChecker
+        expected_events:
+          - DEPS_SCANNED
+          - CVE_DETECTED
+          - USER_ALERTED
+        proves: "CVEs surfaced"
+        
+      - id: "E2E-035"
+        name: "Security test generated"
+        path_type: "SUNSHINE"
+        description: "Auto-generate security tests"
+        orchestrators:
+          - TDDOrchestrator
+          - SecurityAnalyzer
+          - TestValueScorer
+        expected_events:
+          - SECURITY_CONTEXT_ANALYZED
+          - SECURITY_TESTS_GENERATED
+          - TESTS_SCORED_HIGH
+        proves: "Security tests auto-created"
+
+  # ==========================================================================
+  # CATEGORY 5: EDGE CASES & RECOVERY (5 scenarios)
+  # ==========================================================================
+  edge_cases:
+    description: "Edge cases and recovery scenarios"
+    count: 5
+    scenarios:
+      - id: "E2E-036"
+        name: "Orchestrator not found"
+        path_type: "RAINY_DAY"
+        description: "Auto-healing for missing orchestrators"
+        orchestrators:
+          - IntentRouter
+          - RegistryIntelligenceAgent
+        expected_events:
+          - ORCHESTRATOR_NOT_FOUND
+          - AUTO_DISCOVERY_TRIGGERED
+          - ORCHESTRATOR_REGISTERED
+          - OPERATION_RESUMED
+        proves: "Auto-healing works"
+        
+      - id: "E2E-037"
+        name: "Knowledge YAML malformed"
+        path_type: "RAINY_DAY"
+        description: "Graceful degradation on bad data"
+        orchestrators:
+          - UnifiedIntelligenceProvider
+          - FallbackProvider
+        expected_events:
+          - YAML_PARSE_ERROR
+          - FALLBACK_ACTIVATED
+          - OPERATION_CONTINUED
+        proves: "Graceful degradation"
+        
+      - id: "E2E-038"
+        name: "EventBus handler fails"
+        path_type: "RAINY_DAY"
+        description: "Event resilience"
+        orchestrators:
+          - OrchestratorEventBus
+          - DeadLetterQueue
+        expected_events:
+          - HANDLER_FAILED
+          - EVENT_TO_DLQ
+          - RETRY_SCHEDULED
+        proves: "Event resilience"
+        
+      - id: "E2E-039"
+        name: "Database locked"
+        path_type: "RAINY_DAY"
+        description: "Transient error handling"
+        orchestrators:
+          - AnyOrchestrator
+          - RetryManager
+        expected_events:
+          - DB_LOCKED_ERROR
+          - RETRY_INITIATED
+          - BACKOFF_APPLIED
+          - OPERATION_SUCCEEDED
+        proves: "Transient errors handled"
+        
+      - id: "E2E-040"
+        name: "Full E2E: Request to Learning"
+        path_type: "SUNSHINE"
+        description: "Complete system coherence test"
+        orchestrators:
+          - ALL_ORCHESTRATORS
+        expected_events:
+          - USER_REQUEST_RECEIVED
+          - INTENT_CLASSIFIED
+          - CONTEXT_READY
+          - WORKFLOW_CREATED
+          - EXECUTION_COMPLETE
+          - COHERENCE_VALIDATED
+          - LEARNING_CAPTURED
+          - AUDIT_VERIFIED
+        proves: "Complete system coherence"
+
+# ============================================================================
+# STAGE BREAKDOWN
+# ============================================================================
+stages:
+  - stage_id: "S1"
+    name: "Scenario Framework & Fixtures"
+    duration: "1.5-2 hours"
+    tests_target: 10
+    description: |
+      Build test framework and shared fixtures for E2E scenarios.
+      
+    deliverables:
+      - name: "E2EScenarioFramework"
+        file: "tests/e2e/scenario_framework.py"
+        description: |
+          Base framework for E2E scenario tests.
+          - ScenarioRunner: Executes scenarios with event capture
+          - EventExpectation: Defines expected event sequences
+          - AuditAssertion: Verifies audit trail completeness
+          - ReportGenerator: Creates scenario execution reports
+          
+      - name: "SharedFixtures"
+        file: "tests/e2e/conftest.py"
+        description: |
+          Shared pytest fixtures for all E2E tests.
+          - workflow_runtime: Configured WorkflowRuntime
+          - event_bus: Clean EventBus instance
+          - audit_verifier: AuditVerifier instance
+          - mock_orchestrators: Configurable orchestrator mocks
+
+  - stage_id: "S2"
+    name: "CORTEX Self-Dev & Production Scenarios"
+    duration: "1.5-2 hours"
+    tests_target: 20
+    description: |
+      Implement scenarios 1-20 (Categories 1 & 2).
+      
+    deliverables:
+      - name: "SelfDevScenarios"
+        file: "tests/e2e/test_cortex_self_development.py"
+        tests: 10
+        scenarios: "E2E-001 through E2E-010"
+        
+      - name: "ProductionScenarios"
+        file: "tests/e2e/test_production_repository.py"
+        tests: 10
+        scenarios: "E2E-011 through E2E-020"
+
+  - stage_id: "S3"
+    name: "Cross-Cutting, Security & Edge Cases"
+    duration: "1.5-2 hours"
+    tests_target: 20
+    description: |
+      Implement scenarios 21-40 (Categories 3, 4 & 5).
+      
+    deliverables:
+      - name: "CrossCuttingScenarios"
+        file: "tests/e2e/test_cross_cutting_concerns.py"
+        tests: 10
+        scenarios: "E2E-021 through E2E-030"
+        
+      - name: "SecurityScenarios"
+        file: "tests/e2e/test_security_first.py"
+        tests: 5
+        scenarios: "E2E-031 through E2E-035"
+        
+      - name: "EdgeCaseScenarios"
+        file: "tests/e2e/test_edge_cases_recovery.py"
+        tests: 5
+        scenarios: "E2E-036 through E2E-040"
+
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+success_criteria:
+  tests:
+    total: 40
+    by_category:
+      cortex_self_dev: 10
+      production_repo: 10
+      cross_cutting: 10
+      security_first: 5
+      edge_cases: 5
+    coverage_target: 100%  # All scenarios must pass
+    
+  path_coverage:
+    sunshine: 25  # 62.5%
+    rainy_day: 15  # 37.5%
+    
+  orchestrator_coverage:
+    - IntentRouter: 18 scenarios
+    - TDDOrchestrator: 15 scenarios
+    - MasterOrchestrator: 12 scenarios
+    - CoherenceValidator: 10 scenarios
+    - LENSSynthesis: 8 scenarios
+    - SecurityAnalyzer: 7 scenarios
+    - EnforcementOrchestrator: 6 scenarios
+    - WorkflowRuntime: 10 scenarios
+    - AuditVerifier: 40 scenarios (all)
+
+# ============================================================================
+# EXECUTION COMMANDS
+# ============================================================================
+execution:
+  single_session:
+    duration: "4-5 hours"
+    token_budget: "<200k"
+    command: |
+      /implement WAVE-W: E2E Scenario Harness
+      
+      Authority: WAVE-W-E2E-SCENARIO-HARNESS.yaml
+      Mode: Silent autonomous execution
+      Tests: 40 target (10 per category, 5 for security, 5 for edge cases)
+      Prerequisite: WAVE-V complete
+      
+      Stages:
+      - S1: Framework & Fixtures (10 tests)
+      - S2: Self-Dev & Production (20 tests)
+      - S3: Cross-Cutting & Security (20 tests)
+
+# ============================================================================
+# COMPLETION CHECKLIST
+# ============================================================================
+completion_checklist:
+  - "[ ] S1: E2EScenarioFramework + SharedFixtures (10 tests)"
+  - "[ ] S2: Self-Dev + Production scenarios (20 tests)"
+  - "[ ] S3: Cross-Cutting + Security + Edge Cases (20 tests)"
+  - "[ ] All 40 scenarios passing"
+  - "[ ] Sunshine paths: 25/25 verified"
+  - "[ ] Rainy day paths: 15/15 verified"
+  - "[ ] All orchestrators covered"
+  - "[ ] Audit trail verification working"
+  - "[ ] 3 commits (1 per stage) with AC markers"
+  - "[ ] WAVE-W marked complete in registry"

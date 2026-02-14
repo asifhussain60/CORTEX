@@ -1,0 +1,456 @@
+# ENH-083: Enhanced Vacuum Orchestration for Production Readiness
+# ============================================================================
+# Authority: User directive + VacuumOrchestrator capabilities
+# Purpose: Recursive production cleanup with 100% zero-breakage guarantee
+# Vision: CORTEX root clean for production deployment
+# Status: DESIGN (Ready to implement)
+# Created: 2026-02-11
+# AC-ID: AC-ENH083-001
+# ============================================================================
+
+metadata:
+  enhancement_id: "ENH-083"
+  title: "Enhanced Vacuum Orchestration - Production Readiness Cleanup"
+  category: "Infrastructure | Production | Cleanup"
+  priority: "P0-CRITICAL"
+  roi_score: 9.0  # Critical for production deployment
+  strategic_value: "Enables safe production deployment with confidence"
+  
+  problem_statement: |
+    Current state: CORTEX repository contains development artifacts, phase markers,
+    test logs, deprecated components scattered across root and subfolders. No
+    systematic cleanup process with zero-breakage guarantee.
+    
+    Impact: Cannot deploy to production with confidence. Risk of accidentally
+    deploying non-production files. Manual cleanup error-prone and time-consuming.
+    
+  vision: |
+    Enhanced VacuumOrchestrator that performs recursive cleanup with 100% confidence
+    of zero breakage. Analyzes file purpose, validates dependencies, archives safely,
+    and confirms production readiness before cleanup. Integrated into wave completion
+    as mandatory step.
+
+# ============================================================================
+# WAVE STRUCTURE: Integration with existing waves + standalone capability
+# ============================================================================
+
+integration_strategy: |
+  ENH-083 operates in TWO modes:
+  
+  MODE 1: WAVE-INTEGRATED (Mandatory cleanup after each wave)
+  - W1/W2/W3/W4 of ANY enhancement automatically triggers wave-specific vacuum
+  - Incremental cleanup reduces final cleanup burden
+  - Validates wave artifacts don't break production
+  
+  MODE 2: STANDALONE (Full production readiness sweep)
+  - Can be invoked independently: `cortex_vacuum_production_sweep()`
+  - Performs comprehensive root + recursive cleanup
+  - 100% confidence validation before any deletion
+  - Generates production readiness report
+
+# ============================================================================
+# VACUUM ORCHESTRATION STAGES
+# ============================================================================
+
+stages:
+
+  # =========================================================================
+  # STAGE 1: ANALYSIS & CATEGORIZATION (Pre-Cleanup)
+  # =========================================================================
+  
+  - stage_id: "ENH-083-S1"
+    stage_name: "Comprehensive File Analysis & Categorization"
+    status: "ready"
+    effort_hours: "4-6"
+    description: |
+      Scan entire CORTEX repository and categorize every file by:
+      - Production essential (KEEP)
+      - Development utility (RELOCATE)
+      - Test artifact (ARCHIVE or DELETE)
+      - Phase/session marker (ARCHIVE)
+      - Deprecated component (ARCHIVE)
+      - Unknown (FLAG FOR REVIEW)
+    
+    deliverables:
+      - "Implement enhanced scan_root_level() with deep analysis"
+      - "Implement recursive subfolder scanner"
+      - "Create file categorization matrix (production vs non-production)"
+      - "Analyze dependencies (which files reference which)"
+      - "Generate comprehensive cleanup plan with confidence scores"
+    
+    acceptance_criteria:
+      - "✅ Every file categorized with action (keep/relocate/archive/delete/review)"
+      - "✅ Dependency graph generated (file → referenced files)"
+      - "✅ Confidence scores calculated (0.0-1.0) for each action"
+      - "✅ Zero false positives in production-essential detection"
+      - "✅ Cleanup plan generated with rollback strategy"
+    
+    tests:
+      - "test_comprehensive_file_analysis.py: validates categorization accuracy"
+      - "test_dependency_graph_generation.py: validates dependency detection"
+      - "test_confidence_score_calculation.py: validates scoring algorithm"
+    
+    files_created:
+      - "cortex/orchestrators/support/enhanced_vacuum_analysis.py"
+      - "cortex/models/vacuum_models.py (FileCategoryEnum, CleanupAction, ConfidenceScore)"
+      - "tests/unit/orchestrators/support/test_enhanced_vacuum_analysis.py"
+    
+    git_checkpoint: "ENH-083-S1: Comprehensive file analysis complete"
+
+  # =========================================================================
+  # STAGE 2: SAFETY VALIDATION (Pre-Execution Gate)
+  # =========================================================================
+  
+  - stage_id: "ENH-083-S2"
+    stage_name: "Zero-Breakage Validation & Safety Gate"
+    status: "ready"
+    effort_hours: "3-4"
+    description: |
+      Before executing any cleanup, validate that planned actions will NOT break
+      production. Run comprehensive safety checks.
+    
+    deliverables:
+      - "Implement SafetyValidator with 10 validation checks:"
+        - "✅ No production .py files marked for deletion"
+        - "✅ No __init__.py files marked for deletion"
+        - "✅ No files imported by production code marked for deletion"
+        - "✅ No test files with active tests marked for deletion"
+        - "✅ No orchestrator files marked for deletion"
+        - "✅ No MCP tool files marked for deletion"
+        - "✅ No registry files marked for deletion"
+        - "✅ No configuration files marked for deletion"
+        - "✅ Validate archive destinations exist"
+        - "✅ Validate no circular dependencies in relocations"
+      - "Create rollback plan for every action"
+      - "Generate safety report with PASS/FAIL status"
+    
+    acceptance_criteria:
+      - "✅ All 10 safety checks pass before cleanup"
+      - "✅ Rollback plan generated for every file action"
+      - "✅ Zero false positives (production files marked safe)"
+      - "✅ 100% confidence in safety validation"
+      - "✅ Safety report human-readable + actionable"
+    
+    tests:
+      - "test_safety_validator.py: 10+ tests for each validation check"
+      - "test_rollback_plan_generation.py: validates rollback strategy"
+    
+    files_created:
+      - "cortex/orchestrators/support/vacuum_safety_validator.py"
+      - "tests/unit/orchestrators/support/test_vacuum_safety_validator.py"
+    
+    git_checkpoint: "ENH-083-S2: Safety validation complete, zero-breakage guaranteed"
+
+  # =========================================================================
+  # STAGE 3: EXECUTION & VERIFICATION (Safe Cleanup)
+  # =========================================================================
+  
+  - stage_id: "ENH-083-S3"
+    stage_name: "Safe Cleanup Execution & Real-Time Verification"
+    status: "ready"
+    effort_hours: "4-5"
+    description: |
+      Execute cleanup actions with real-time verification after each operation.
+      Stop immediately if any verification fails.
+    
+    deliverables:
+      - "Implement staged cleanup executor:"
+        - "Stage 3.1: Archive phase/session markers"
+        - "Stage 3.2: Relocate development utilities"
+        - "Stage 3.3: Clean __pycache__ and .pyc files"
+        - "Stage 3.4: Archive deprecated components"
+        - "Stage 3.5: Clean test artifacts"
+        - "Stage 3.6: Final validation pass"
+      - "Real-time verification after each stage"
+      - "Automatic rollback if any stage fails"
+      - "Comprehensive cleanup report"
+    
+    acceptance_criteria:
+      - "✅ Each cleanup stage completes with verification"
+      - "✅ Tests pass after each stage (no breakage)"
+      - "✅ Rollback triggers automatically on failure"
+      - "✅ Git status tracked throughout cleanup"
+      - "✅ Cleanup report shows before/after metrics"
+    
+    tests:
+      - "test_staged_cleanup_execution.py: validates each cleanup stage"
+      - "test_real_time_verification.py: validates verification logic"
+      - "test_automatic_rollback.py: validates rollback on failure"
+    
+    files_created:
+      - "cortex/orchestrators/support/vacuum_staged_executor.py"
+      - "tests/unit/orchestrators/support/test_vacuum_staged_executor.py"
+    
+    git_checkpoint: "ENH-083-S3: Staged cleanup execution complete, verified"
+
+  # =========================================================================
+  # STAGE 4: PRODUCTION READINESS VALIDATION (Post-Cleanup)
+  # =========================================================================
+  
+  - stage_id: "ENH-083-S4"
+    stage_name: "Production Readiness Final Validation"
+    status: "ready"
+    effort_hours: "2-3"
+    description: |
+      After cleanup, validate CORTEX is production-ready with comprehensive checks.
+    
+    deliverables:
+      - "Implement ProductionReadinessValidator with 15 checks:"
+        - "✅ All tests pass (pytest suite)"
+        - "✅ No broken imports"
+        - "✅ No broken links in documentation"
+        - "✅ Git repository clean"
+        - "✅ MCP tools available and functional"
+        - "✅ All orchestrators wired correctly"
+        - "✅ No CORTEX_DEBUG markers in code"
+        - "✅ No phase markers in root"
+        - "✅ No test artifacts in root"
+        - "✅ Coverage reports archived"
+        - "✅ Development utilities relocated"
+        - "✅ Deprecated components archived"
+        - "✅ Root directory production-clean"
+        - "✅ Recursive subfolders clean"
+        - "✅ Production deployment checklist complete"
+      - "Generate production readiness report"
+      - "Issue deployment green light or red flag"
+    
+    acceptance_criteria:
+      - "✅ All 15 production readiness checks pass"
+      - "✅ Deployment green light issued"
+      - "✅ Production readiness report generated"
+      - "✅ Zero breakage confirmed"
+    
+    tests:
+      - "test_production_readiness_validator.py: 15+ validation tests"
+    
+    files_created:
+      - "cortex/orchestrators/support/production_readiness_validator.py"
+      - "tests/unit/orchestrators/support/test_production_readiness_validator.py"
+      - "docs/production-readiness-report.md (GENERATED)"
+    
+    git_checkpoint: "ENH-083-S4: Production readiness CONFIRMED ✅"
+
+# ============================================================================
+# VACUUM RULES BY FILE TYPE (Comprehensive Categorization)
+# ============================================================================
+
+vacuum_rules:
+  
+  # Root-level Python scripts
+  root_python_scripts:
+    patterns:
+      - "check_dashboard.py"
+      - "generate_dashboard*.py"
+      - "onboard_ksessions.py"
+      - "run_vacuum.py"
+      - "verify_*.py"
+      - "test_*.py"
+    action: "RELOCATE"
+    destination: "scripts/utilities/"
+    confidence: 1.0
+    reason: "Development utilities belong in scripts/"
+  
+  # Phase/session markers (HIGH PRIORITY)
+  phase_markers:
+    patterns:
+      - ".phase*"
+      - ".session*"
+      - "*-complete"
+      - "*-checkpoint"
+      - "*-progress"
+    action: "ARCHIVE"
+    destination: "cortex_brain/state/archive/phase-markers/"
+    confidence: 1.0
+    reason: "Temporary phase tracking files"
+  
+  # Python cache files
+  python_cache:
+    patterns:
+      - "**/__pycache__/"
+      - "**/*.pyc"
+      - "**/*.pyo"
+    action: "DELETE"
+    confidence: 1.0
+    reason: "Auto-generated cache files"
+  
+  # Test artifacts
+  test_artifacts:
+    patterns:
+      - "**/.pytest_cache/"
+      - "**/.coverage"
+      - "**/htmlcov/"
+      - "**/*.coverage"
+    action: "ARCHIVE or DELETE"
+    destination: "logs/coverage/"
+    confidence: 0.95
+    reason: "Test execution artifacts"
+  
+  # Log files
+  log_files:
+    patterns:
+      - "**/*.log"
+      - "**/logs/*.txt"
+    action: "ARCHIVE or DELETE"
+    destination: "logs/"
+    confidence: 0.9
+    reason: "Development log files"
+  
+  # Documentation drafts
+  doc_drafts:
+    patterns:
+      - "docs-*"
+      - "*-draft.md"
+      - "*-wip.md"
+    action: "ARCHIVE"
+    destination: "docs/archive/drafts/"
+    confidence: 0.85
+    reason: "Work-in-progress documentation"
+  
+  # Deprecated components
+  deprecated:
+    patterns:
+      - "**/_deprecated/**"
+      - "**/.archive/**"
+    action: "VALIDATE"
+    confidence: 1.0
+    reason: "Already in archive, validate structure"
+  
+  # macOS artifacts
+  macos_artifacts:
+    patterns:
+      - "**/.DS_Store"
+      - "**/.AppleDouble"
+      - "**/.LSOverride"
+    action: "DELETE"
+    confidence: 1.0
+    reason: "macOS system files"
+  
+  # Production essential (NEVER DELETE)
+  production_essential:
+    patterns:
+      - "**/__init__.py"
+      - "**/cortex/**/*.py"
+      - "**/tests/**/*.py"
+      - "requirements.txt"
+      - "pytest.ini"
+      - "Makefile"
+      - "README.md"
+      - ".gitignore"
+      - ".pre-commit-config.yaml"
+    action: "KEEP"
+    confidence: 1.0
+    reason: "Production-critical files"
+
+# ============================================================================
+# INTEGRATION WITH EXISTING WAVES
+# ============================================================================
+
+wave_integration:
+  
+  mandatory_vacuum_stages:
+    description: |
+      Every wave MUST end with a vacuum stage that cleans up wave-specific artifacts.
+      This ensures incremental cleanup and reduces final production sweep burden.
+    
+    wave_vacuum_template:
+      stage_id: "W{n}-S{m}-VACUUM"
+      stage_name: "Wave {n} Vacuum Pass (MANDATORY)"
+      effort_hours: "1-3 (scales with wave complexity)"
+      deliverables:
+        - "Scan wave-specific artifacts"
+        - "Categorize for archive/deletion"
+        - "Execute staged cleanup"
+        - "Verify zero breakage"
+        - "Update registry with cleanup status"
+      acceptance_criteria:
+        - "✅ Wave artifacts cleaned"
+        - "✅ Zero production breakage"
+        - "✅ Tests still pass"
+        - "✅ Git status clean"
+      tests:
+        - "test_vacuum_wave{n}_artifacts.py"
+    
+    examples:
+      - wave_id: "ENH-082-W1"
+        vacuum_stage: "W1-S4-VACUUM"
+        artifacts: "Registry audit reports, template analysis temp files"
+      
+      - wave_id: "ENH-082-W2"
+        vacuum_stage: "W2-S4-VACUUM"
+        artifacts: "Engine implementation temp files, old adapters"
+      
+      - wave_id: "ENH-082-W3"
+        vacuum_stage: "W3-S4-VACUUM"
+        artifacts: "Migration outputs, linter reports, test fixtures"
+      
+      - wave_id: "ENH-082-W4"
+        vacuum_stage: "W4-S3-VACUUM-FINAL"
+        artifacts: "ALL non-production files, comprehensive cleanup"
+
+# ============================================================================
+# SUCCESS METRICS
+# ============================================================================
+
+success_metrics:
+  before_cleanup:
+    root_files: "50+ files (many non-production)"
+    phase_markers: "15+ scattered files"
+    test_artifacts: "20+ files in various locations"
+    deprecated_components: "12 orphaned files"
+    production_confidence: "60% (manual review required)"
+  
+  after_cleanup:
+    root_files: "10 essential files only"
+    phase_markers: "0 (all archived)"
+    test_artifacts: "0 in root, consolidated in logs/"
+    deprecated_components: "0 (all in _deprecated/)"
+    production_confidence: "100% (validated automatically)"
+  
+  deployment_readiness:
+    - "✅ Zero non-production files in root"
+    - "✅ All tests passing"
+    - "✅ No broken imports/links"
+    - "✅ Git repository clean"
+    - "✅ MCP tools functional"
+    - "✅ Orchestrators wired"
+    - "✅ Production checklist complete"
+
+# ============================================================================
+# ACCEPTANCE CRITERIA (FINAL)
+# ============================================================================
+
+acceptance_criteria:
+  - "✅ Enhanced VacuumOrchestrator implemented with 4 stages"
+  - "✅ Safety validation guarantees zero breakage (100% confidence)"
+  - "✅ Recursive cleanup of all subfolders"
+  - "✅ Production readiness validation passes all 15 checks"
+  - "✅ Integration with wave-based execution (mandatory vacuum stages)"
+  - "✅ Rollback strategy tested and functional"
+  - "✅ Comprehensive test coverage (50+ tests)"
+  - "✅ Production deployment green light issued"
+
+# ============================================================================
+# AC MARKERS (GOVERNANCE AUDIT TRAIL)
+# ============================================================================
+
+audit_trail:
+  - ac_marker: "AC-ENH083-001"
+    description: "ENH-083 design complete, vacuum orchestration enhanced"
+    timestamp: "2026-02-11"
+    status: "DESIGN-COMPLETE"
+  
+  - ac_marker: "AC-ENH083-S1-COMPLETE"
+    description: "File analysis & categorization complete"
+    status: "PENDING"
+  
+  - ac_marker: "AC-ENH083-S2-COMPLETE"
+    description: "Safety validation complete, zero-breakage guaranteed"
+    status: "PENDING"
+  
+  - ac_marker: "AC-ENH083-S3-COMPLETE"
+    description: "Staged cleanup execution complete, verified"
+    status: "PENDING"
+  
+  - ac_marker: "AC-ENH083-S4-COMPLETE"
+    description: "Production readiness validated, deployment green light"
+    status: "PENDING"

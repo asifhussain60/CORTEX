@@ -1,18 +1,48 @@
 # Phase Creation Standards Guide
 
-**Version:** 1.0 | **Created:** 2026-02-12 | **Authority:** ENH-084
+**Version:** 2.0 | **Created:** 2026-02-12 | **Updated:** 2026-02-14 | **Authority:** ENH-084 + CORE-042
 
 ---
 
 ## 🎯 Purpose
 
-This guide establishes standard practices for creating CORTEX phases, ensuring consistency, completeness, and maintainability across all phase specifications.
+This guide establ### 7. Dependency Validation
 
-## 📋 Overview
+Dependencies must exist in registry:
+
+```yaml
+dependencies: ["ENH-063", "FEATURE-H"]  # Must exist
+blocks: ["FEATURE-J"]                   # Must exist
+```
+
+## 🎨 Phase Templates
+
+### Standard Template
+
+Best for: Simple phases, single-feature execution practices for creating CORTEX phases, ensuring consistency, completeness, and maintainability across all phase specifications.
+
+## � Hierarchical Terminology (CORE-042)
+
+**Industry-Aligned Hierarchy (Scrum/SAFe):**
+
+```
+EPIC (E-)           Strategic initiative, 3-12 months
+  └─ FEATURE (F-)   Deliverable capability, 2-8 weeks
+      └─ PHASE (P-) Milestone/increment, 1-4 weeks  
+          └─ STAGE (S-) Work unit, 2-5 days
+              └─ TASK (T-) Atomic work, 2-8 hours
+```
+
+**DEPRECATED TERMS:**
+- ❌ "Wave" → Use **Epic** (strategic) or **Feature** (deliverable)
+- ❌ "Initiative" → Use **Epic**
+- ❌ "Track" → Use **Feature**
+
+## �📋 Overview
 
 Every CORTEX phase must follow a standardized structure with:
-- ✅ Wave-based execution plan (Foundation → Core → Migration → Polish)
-- ✅ Cleanup requirements (vacuum per wave)
+- ✅ Feature/Epic-based execution plan (Foundation → Core → Migration → Polish)
+- ✅ Cleanup requirements (vacuum per feature)
 - ✅ Registry synchronization checkpoints
 - ✅ Minimum 80% test coverage
 - ✅ ROI justification with evidence
@@ -39,25 +69,24 @@ python -m cortex.cli.phase_creator create \
   --output phases/active/enh-100.yaml
 ```
 
-#### Enhancement Phase (Complex with Waves)
+#### Enhancement Phase (Complex with Features)
 
 ```bash
 python -m cortex.cli.phase_creator create \
   --template enhancement \
   --id ENH-200 \
-  --title "Multi-Wave Enhancement" \
+  --title "Multi-Feature Enhancement" \
   --output phases/active/enh-200.yaml \
   --interactive
 ```
 
-#### Wave Phase (Session-Scoped)
+#### Feature Phase (Session-Scoped)
+
+**DEPRECATED:** Use Epic/Feature templates instead
 
 ```bash
-python -m cortex.cli.phase_creator create \
-  --template wave \
-  --id WAVE-A \
-  --title "Foundation Track" \
-  --output phases/active/wave-a.yaml
+# Old Wave template deprecated
+# python -m cortex.cli.phase_creator create --template wave
 ```
 
 ### Validating a Phase Specification
@@ -104,20 +133,20 @@ tests:                          # Required
   coverage_minimum: 0.80         # Min 0.80
 ```
 
-### 3. Wave Structure (Enhancement Template)
+### 3. Feature Structure (Enhancement Template)
 
-For complex phases, use wave-based structure:
+For complex phases, use feature-based structure:
 
 ```yaml
-waves:
-  - wave: "W1-Foundation"
+features:
+  - feature: "F1-Foundation"
     duration: "3 days"
     deliverables:
       - "Registry audit"
       - "Cleanup script"
     tests: 6
     
-  - wave: "W2-Core"
+  - feature: "F2-Core"
     duration: "3 days"
     deliverables:
       - "Core implementation"
@@ -126,11 +155,11 @@ waves:
 
 ### 4. Cleanup Requirements
 
-Every wave must include cleanup stage:
+Every feature must include cleanup stage:
 
 ```yaml
 cleanup_requirements:
-  vacuum_per_wave: true           # Mandatory
+  vacuum_per_feature: true         # Mandatory
   registry_sync: true             # Mandatory
   documentation_update: true      # Recommended
 ```
@@ -218,35 +247,37 @@ success_metrics:
 
 ### 2. Enhancement Template
 
-Best for: Complex phases with multiple waves
+Best for: Complex phases with multiple features
 
 ```yaml
 version: "1.0"
 enhancement_id: "ENH-XXX"
 title: "Complex Enhancement"
 
-waves:
-  - wave: "W1-Foundation"
+features:
+  - feature: "F1-Foundation"
     duration: "3 days"
     deliverables: []
     tests: 6
     
-  - wave: "W2-Core"
+  - feature: "F2-Core"
     duration: "3 days"
     deliverables: []
     tests: 50
 
 cleanup_requirements:
-  vacuum_per_wave: true
+  vacuum_per_feature: true
   registry_sync: true
   documentation_update: true
 
 # ... (other fields same as standard)
 ```
 
-### 3. Wave Template
+### 3. Epic/Feature Template
 
-Best for: Session-scoped execution tracks
+**DEPRECATED (2026-02-14):** Old "Wave Template" removed per CORE-042
+
+Use **Epic** or **Feature** level in registry structure instead.
 
 ```yaml
 wave_id: "WAVE-X"

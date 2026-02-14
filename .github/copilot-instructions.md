@@ -19,7 +19,9 @@
 ┃  1. Check: cortex_* MCP tools exist?   ┃
 ┃     → YES: Proceed to process request  ┃
 ┃     → NO:  Display GATE CLOSED + HALT  ┃
-┃                                        ┃
+┃                             | CORE-041 | **Event-Driven Architecture** — Message-based communication patterns |
+| CORE-042 | **Hierarchical Terminology** — EPIC→FEATURE→PHASE→STAGE→TASK (E-/F-/P-/S-/T- prefixes required). Industry-aligned (Scrum/SAFe). "Wave" deprecated. |
+| CORE-048 | **Holistic Validation Gate (Phase 48)** — mandatory pre-implementation validation + challenge gate |        ┃
 ┃  EXCEPTION (Escape Hatch - CORE-050):  ┃
 ┃  • DIAGNOSE → ALLOWED (fix MCP)        ┃
 ┃  • SETUP    → ALLOWED (configure MCP)  ┃
@@ -485,7 +487,7 @@ cortex-registry/_cortex-master/
 | **CORE-027** | **Audit Trail** — AC_START → AC_COMPLETE markers on all governance-gated work. |
 | **CORE-028** | **File Naming** — kebab-case, no SCREAMING_CASE, plan files ≤40 chars. |
 | **CORE-041** | **Event-Driven Architecture** — Message-based communication patterns required. |
-| **CORE-042** | **Hierarchical Terminology** — INITIATIVE→PHASE→STAGE→TASK (I-/P-/S-/T- prefixes). |
+| **CORE-042** | **Hierarchical Terminology** — EPIC→FEATURE→PHASE→STAGE→TASK (E-/F-/P-/S-/T- prefixes). Industry-aligned (Scrum/SAFe). "Wave" deprecated (use Epic for strategic, Feature for deliverable scope). |
 | **MCP-FIRST** | ALL functionality exposed via MCP tools |
 | **MCP-GATE** | IMPLEMENT intents MUST use `cortex_process_request` tool (NO direct file creation) |
 | **ARCH-012** | Standards gate — 12-Factor + SOLID + Clean Code + OWASP required |

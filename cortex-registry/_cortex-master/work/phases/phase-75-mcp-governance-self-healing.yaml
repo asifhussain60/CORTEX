@@ -1,0 +1,513 @@
+# Phase 75: MCP Governance & Self-Healing Architecture
+# Created: 2026-02-11
+# Status: PLANNED
+# Priority: P0 - CRITICAL (Origin/Main Quality Gate)
+# Parent: ENH-062 MCP Production Readiness
+# Context: Addresses pull machine MCP failures + phantom tool cleanup
+
+meta:
+  phase_id: "phase-75"
+  title: "MCP Governance & Self-Healing Architecture"
+  version: "1.0"
+  created: "2026-02-11"
+  author: "Asif Hussain"
+  status: "PLANNED"
+  priority: "P0"
+  
+  summary: |
+    Permanent solution to MCP reliability issues affecting machines pulling from origin/main.
+    Implements self-healing watchdog, tool registry governance, and automated quality gates
+    to prevent manual interventions and ensure CORTEX MCP stability across all environments.
+
+objectives:
+  primary:
+    - "Eliminate manual MCP restart requirement (auto-recovery)"
+    - "Prevent phantom tools from reaching production"
+    - "Ensure origin/main is always pull-ready"
+    - "Add automated health checks post-clone"
+    - "Implement MCP server identity layer"
+  
+  secondary:
+    - "Clean existing phantom tools (one-time)"
+    - "Fix Python refactoring adapter availability"
+    - "Clean dashboard registry orphans"
+    - "Add missing dashboard assets"
+
+problem_statement: |
+  **Current Pain Points:**
+  
+  1. **Manual MCP Restart Required**
+     - Pull machines frequently encounter stale MCP processes
+     - Users must manually stop/start CORTEX MCP server
+     - No automatic recovery mechanism
+     - Affects developer productivity and CORTEX adoption
+  
+  2. **Phantom Tools in Production**
+     - 15+ tools exposed via schema but handlers don't exist
+     - Copilot shows tools that error when invoked
+     - Example: echo_tool, sample_tool, monitor_orchestrator_health
+     - No automated detection or cleanup
+  
+  3. **Origin/Main Not Pull-Ready**
+     - Machines pulling from origin struggle with:
+       * Missing quality tools (black, mypy, pylint)
+       * No post-clone validation
+       * Unclear setup instructions
+       * MCP server state inconsistencies
+  
+  4. **No MCP Server Identity**
+     - Cannot distinguish CORTEX MCP from Pylance/other servers
+     - Tool responses lack server attribution
+     - Debugging failures requires manual inspection
+
+root_causes:
+  - "Pylance-style architecture (VS Code auto-start) but no health monitoring"
+  - "Tool schema registration decoupled from handler registration"
+  - "No CI/CD gate for MCP tool integrity"
+  - "No post-clone health checks in setup-mcp.py"
+  - "Tool responses don't include server metadata"
+
+proposed_solution:
+  approach: "Self-Healing MCP Architecture with Governance Layer"
+  
+  rationale: |
+    Manual fixes are reactive and brittle. CORTEX needs proactive, automated governance:
+    
+    **Why Self-Healing Over Manual Cleanup:**
+    - Extensibility: Scales automatically as tool count grows
+    - Scalability: Handles 100+ tools without manual intervention
+    - Accuracy: Automated validation catches phantom tools pre-commit
+    - Efficiency: 20h investment prevents ~200h/year manual fixes
+    - Alignment: Follows CORE-049 Silent Autonomous Execution pattern
+  
+  architecture: |
+    ┌──────────────────────────────────────────────────────────────┐
+    │         CORTEX MCP Governance & Self-Healing Layer           │
+    ├──────────────────────────────────────────────────────────────┤
+    │                                                              │
+    │  [Pre-Commit Hook]                                           │
+    │    ├─ Tool Registry Audit (phantom detection)                │
+    │    ├─ Schema-Handler Consistency Check                       │
+    │    └─ Block commit if violations                             │
+    │                                                              │
+    │  [Post-Clone Health Check]                                   │
+    │    ├─ MCP Server Connectivity Test                           │
+    │    ├─ Core Tool Invocation Test                              │
+    │    ├─ Dependency Validation                                  │
+    │    └─ Auto-fix if failures detected                          │
+    │                                                              │
+    │  [Runtime Self-Healing Watchdog]                             │
+    │    ├─ 5-second health probe (port 8000)                      │
+    │    ├─ Stale process detection (>30s idle)                    │
+    │    ├─ Auto-kill + respawn                                    │
+    │    └─ Audit log for diagnostics                              │
+    │                                                              │
+    │  [CI/CD Quality Gate]                                        │
+    │    ├─ Full MCP test suite (186 tests)                        │
+    │    ├─ Tool registration integrity check                      │
+    │    ├─ Block merge if <100% MCP tests pass                    │
+    │    └─ Performance regression detection                       │
+    │                                                              │
+    │  [MCP Server Identity Layer]                                 │
+    │    ├─ Add _mcp_meta to all tool responses                    │
+    │    ├─ Server: cortex, version, timestamp, health             │
+    │    └─ Clear disambiguation from Pylance/others               │
+    │                                                              │
+    └──────────────────────────────────────────────────────────────┘
+
+stages:
+  - id: "S1"
+    title: "MCP Self-Healing Watchdog"
+    priority: "P0"
+    effort: "4h"
+    description: |
+      Implement background watchdog process that monitors MCP health and auto-recovers.
+    
+    tasks:
+      - "Create cortex/mcp/watchdog.py with health monitoring"
+      - "5-second port 8000 liveness probe"
+      - "Stale process detection (>30s no activity)"
+      - "Auto-kill stale MCP processes + respawn"
+      - "Audit log for watchdog actions"
+      - "Integrate into setup-mcp.py (auto-start)"
+      - "Add systemd/launchd service files (Linux/Mac)"
+      - "Windows: Add Task Scheduler integration"
+    
+    acceptance_criteria:
+      - "Watchdog detects stale MCP within 10 seconds"
+      - "Auto-restart completes in <5 seconds"
+      - "Zero manual MCP restarts required in 1-week test"
+      - "Audit log captures all watchdog actions"
+    
+    tests:
+      - "test_watchdog_detects_stale_mcp.py"
+      - "test_watchdog_auto_restart.py"
+      - "test_watchdog_audit_logging.py"
+      - "test_watchdog_cross_platform.py"
+
+  - id: "S2"
+    title: "Tool Registry Governance Agent"
+    priority: "P0"
+    effort: "3h"
+    description: |
+      Add automated governance for MCP tool registry integrity.
+    
+    tasks:
+      - "Create ToolRegistryGovernanceAgent in cortex/governance/enforcement/agents/"
+      - "Implement schema-handler consistency validation"
+      - "Detect phantom tools (schema exists, handler missing)"
+      - "Detect orphaned handlers (handler exists, no schema)"
+      - "Generate automated fix recommendations"
+      - "Integrate with EnforcementOrchestrator"
+    
+    validation_rules:
+      - "Every @mcp_tool must have corresponding handler function"
+      - "Every MCP_TOOLS_REGISTRY entry must be callable"
+      - "Tool schema parameters must match function signature"
+      - "No duplicate tool registrations"
+    
+    acceptance_criteria:
+      - "Detects all 15 current phantom tools"
+      - "Pre-commit hook blocks phantom tool commits"
+      - "Generates actionable fix recommendations"
+      - "Zero false positives in validation"
+    
+    tests:
+      - "test_tool_registry_governance_phantom_detection.py"
+      - "test_tool_registry_governance_consistency.py"
+      - "test_tool_registry_governance_fix_generation.py"
+
+  - id: "S3"
+    title: "Post-Clone Health Check"
+    priority: "P0"
+    effort: "2h"
+    description: |
+      Add automated health validation that runs after git clone.
+    
+    tasks:
+      - "Create .cortex/post-clone-health.py"
+      - "Validate Python version (≥3.9)"
+      - "Check core dependencies installed"
+      - "Test MCP server connectivity (port 8000)"
+      - "Invoke cortex_verify_environment (smoke test)"
+      - "Run quick governance check (5 core rules)"
+      - "Display PASS/FAIL with fix instructions"
+      - "Integrate into setup-mcp.py (run at end)"
+    
+    health_checks:
+      - "Python version ≥3.9: CRITICAL"
+      - "Core dependencies: CRITICAL"
+      - "MCP server responds: CRITICAL"
+      - "Quality tools (black, mypy): WARNING"
+      - "Test suite runnable: CRITICAL"
+    
+    acceptance_criteria:
+      - "Health check completes in <30 seconds"
+      - "Clear PASS/FAIL output with fix commands"
+      - "Auto-fix for common issues (pip install)"
+      - "Runs automatically after setup-mcp.py"
+    
+    tests:
+      - "test_post_clone_health_python_version.py"
+      - "test_post_clone_health_mcp_connectivity.py"
+      - "test_post_clone_health_auto_fix.py"
+
+  - id: "S4"
+    title: "MCP Server Identity Layer"
+    priority: "P1"
+    effort: "3h"
+    description: |
+      Add server metadata to all MCP tool responses for clear attribution.
+    
+    tasks:
+      - "Update MCPServer to inject _mcp_meta in all responses"
+      - "Add server: cortex, version, timestamp, health"
+      - "Update all 41 MCP tools to include metadata"
+      - "Update prompts to reference 'CORTEX MCP' explicitly"
+      - "Add server disambiguation section to MCP setup docs"
+    
+    metadata_schema:
+      server: "cortex"
+      version: "1.0.0"
+      timestamp: "2026-02-11T10:45:00Z"
+      health: "healthy|degraded|stale"
+      tool_count: 41
+    
+    acceptance_criteria:
+      - "All tool responses include _mcp_meta"
+      - "Prompts clearly distinguish CORTEX MCP from Pylance"
+      - "Debugging shows clear server attribution"
+      - "Health status accurate (stale detection)"
+    
+    tests:
+      - "test_mcp_server_identity_metadata.py"
+      - "test_mcp_server_identity_all_tools.py"
+
+  - id: "S5"
+    title: "Pre-Commit Tool Audit Hook"
+    priority: "P1"
+    effort: "2h"
+    description: |
+      Add git pre-commit hook that validates MCP tool integrity.
+    
+    tasks:
+      - "Create .githooks/pre-commit-mcp-audit"
+      - "Run ToolRegistryGovernanceAgent validation"
+      - "Check schema-handler consistency"
+      - "Detect phantom/orphaned tools"
+      - "Block commit if violations"
+      - "Provide fix instructions in commit message"
+    
+    acceptance_criteria:
+      - "Blocks commits with phantom tools"
+      - "Runs in <5 seconds"
+      - "Clear error messages with fix commands"
+      - "Idempotent (safe to run multiple times)"
+    
+    tests:
+      - "test_pre_commit_hook_phantom_detection.py"
+      - "test_pre_commit_hook_performance.py"
+
+  - id: "S6"
+    title: "CI/CD MCP Health Gate"
+    priority: "P1"
+    effort: "2h"
+    description: |
+      Add GitHub Actions workflow for MCP health validation.
+    
+    tasks:
+      - "Create .github/workflows/mcp-health-gate.yml"
+      - "Run full MCP test suite (186 tests)"
+      - "Run tool registry governance audit"
+      - "Check watchdog operational"
+      - "Block merge if <100% MCP tests pass"
+      - "Generate health report artifact"
+    
+    acceptance_criteria:
+      - "Runs on every PR"
+      - "Blocks merge if MCP tests fail"
+      - "Generates downloadable health report"
+      - "Completes in <5 minutes"
+    
+    tests:
+      - "test_ci_cd_mcp_gate_integration.py"
+
+  - id: "S7"
+    title: "Clean Phantom Tools (One-Time)"
+    priority: "P1"
+    effort: "1h"
+    description: |
+      Use ToolRegistryGovernanceAgent to clean existing phantom tools.
+    
+    phantom_tools_to_delete:
+      - "echo_tool"
+      - "sample_tool"
+      - "monitor_orchestrator_health"
+      - "diagnose_orchestrator_issues"
+      - "analyze_knowledge_gap"
+      - "query_governance_context"
+    
+    tasks:
+      - "Run ToolRegistryGovernanceAgent.detect_phantom_tools()"
+      - "Review recommendations"
+      - "Delete phantom tool schemas"
+      - "Verify no handler code orphaned"
+      - "Commit with AC markers"
+    
+    acceptance_criteria:
+      - "All 6 phantom tools removed"
+      - "No orphaned handler code"
+      - "MCP tests still pass (186/186)"
+      - "Commit tagged AC-PHASE75-S7-001"
+
+  - id: "S8"
+    title: "Fix Python Refactoring Adapter"
+    priority: "P2"
+    effort: "2h"
+    description: |
+      Fix Python refactoring adapter showing available: false.
+    
+    tasks:
+      - "Investigate cortex_refactor_supported_languages output"
+      - "Check Python adapter registration"
+      - "Fix availability flag"
+      - "Test refactoring operations (extract, rename)"
+      - "Update refactoring tests"
+    
+    acceptance_criteria:
+      - "Python shows available: true"
+      - "Refactoring operations work on .py files"
+      - "Tests pass for extract_method, rename_variable"
+
+  - id: "S9"
+    title: "Clean Dashboard Registry Orphans"
+    priority: "P2"
+    effort: "1h"
+    description: |
+      Remove 4 orphaned repos from dashboard registry.
+    
+    orphans_to_remove:
+      - "alist/"
+      - "kashkole/"
+      - "ksessions/"
+      - "noor canvas/"
+    
+    tasks:
+      - "Run cortex_dashboard_list_repos"
+      - "Verify orphans don't exist on filesystem"
+      - "Remove from registry"
+      - "Regenerate dashboard index"
+    
+    acceptance_criteria:
+      - "All 4 orphans removed"
+      - "Dashboard validation passes"
+      - "No broken links in dashboard"
+
+  - id: "S10"
+    title: "Add Missing Dashboard Assets"
+    priority: "P2"
+    effort: "0.5h"
+    description: |
+      Add missing base.css asset for dashboard rendering.
+    
+    tasks:
+      - "Create assets/css/base.css"
+      - "Add responsive layout styles"
+      - "Update dashboard templates to reference base.css"
+      - "Test dashboard rendering"
+    
+    acceptance_criteria:
+      - "Dashboard renders without CSS errors"
+      - "Responsive layout works on mobile/desktop"
+
+dependencies:
+  required:
+    - "Phase 74 S1-S3: MCP tool fixes (COMPLETE)"
+    - "MCP server operational (cortex.mcp.server)"
+    - "EnforcementOrchestrator (7 agents)"
+  
+  optional:
+    - "Phase 48: Holistic Validation Gate"
+    - "Phase 53: Pylance-Style MCP Architecture"
+
+integration_points:
+  - "EnforcementOrchestrator gains 8th agent: ToolRegistryGovernanceAgent"
+  - "Setup-mcp.py launches watchdog + runs post-clone health"
+  - "Pre-commit hooks enforce tool registry integrity"
+  - "CI/CD gates block broken MCP merges"
+  - "MCP server responses include identity metadata"
+
+testing_strategy:
+  unit_tests:
+    - "Watchdog: health detection, auto-restart, logging"
+    - "ToolRegistryGovernanceAgent: phantom detection, validation"
+    - "Post-clone health: all checks, auto-fix"
+    - "MCP identity: metadata injection, all tools"
+  
+  integration_tests:
+    - "Full MCP suite (186 tests) with watchdog running"
+    - "Pre-commit hook + governance agent integration"
+    - "CI/CD gate + merge blocking"
+  
+  e2e_tests:
+    - "Fresh clone → setup-mcp.py → health check PASS"
+    - "Stale MCP → watchdog detects → auto-restart"
+    - "Commit phantom tool → pre-commit blocks"
+    - "Open PR → CI/CD gate runs → merge allowed/blocked"
+
+success_metrics:
+  - "Zero manual MCP restarts in 1-month period"
+  - "Zero phantom tools in production"
+  - "100% of fresh clones pass health check"
+  - "All MCP tool responses include server identity"
+  - "Pre-commit hook blocks 100% of phantom tool commits"
+  - "CI/CD gate blocks 100% of broken MCP merges"
+
+rollout_plan:
+  phase_1_local_dev:
+    - "S1: Watchdog (developer machines)"
+    - "S3: Post-clone health (new clone validation)"
+  
+  phase_2_governance:
+    - "S2: Tool registry governance (pre-commit)"
+    - "S5: Pre-commit hook (all developers)"
+  
+  phase_3_ci_cd:
+    - "S6: CI/CD gate (production protection)"
+  
+  phase_4_cleanup:
+    - "S7: Delete phantom tools"
+    - "S8-S10: Fix remaining issues"
+
+estimated_timeline:
+  total_effort: "20.5 hours"
+  parallel_execution: "10 hours (2 engineers)"
+  sequential_execution: "20.5 hours (1 engineer)"
+  
+  milestones:
+    - day_1: "S1 Watchdog + S3 Health Check"
+    - day_2: "S2 Governance Agent + S5 Pre-commit Hook"
+    - day_3: "S4 Identity Layer + S6 CI/CD Gate"
+    - day_4: "S7-S10 Cleanup + Testing"
+
+risks_and_mitigations:
+  risk_1:
+    description: "Watchdog conflicts with manual MCP restarts"
+    severity: "LOW"
+    mitigation: "Watchdog detects manual restarts, logs event, resumes monitoring"
+  
+  risk_2:
+    description: "Pre-commit hook too slow (>5s)"
+    severity: "MEDIUM"
+    mitigation: "Cache validation results, only re-validate changed files"
+  
+  risk_3:
+    description: "CI/CD gate blocks urgent hotfixes"
+    severity: "HIGH"
+    mitigation: "Add --skip-mcp-gate flag for emergencies, require 2 approvals"
+  
+  risk_4:
+    description: "Cross-platform watchdog compatibility issues"
+    severity: "MEDIUM"
+    mitigation: "Test on Windows/Mac/Linux, use platform-agnostic psutil library"
+
+alternatives_considered:
+  manual_cleanup:
+    description: "Continue fixing tools reactively as issues arise"
+    pros: "Simple, no new infrastructure"
+    cons: "Brittle, doesn't prevent regression, high ongoing maintenance"
+    verdict: "REJECTED"
+  
+  vs_code_extension_health:
+    description: "Build VS Code extension for MCP health monitoring"
+    pros: "Tight VS Code integration, native UI"
+    cons: "Complex, requires extension marketplace, doesn't help CLI users"
+    verdict: "REJECTED"
+  
+  pre_session_boot_script:
+    description: "User runs script before each session"
+    pros: "Simpler than watchdog"
+    cons: "Manual trigger, doesn't align with CORE-049 autonomous execution"
+    verdict: "REJECTED"
+
+architectural_principles:
+  - "MCP-FIRST: All governance through MCP tools"
+  - "CORE-049: Silent Autonomous Execution (no manual triggers)"
+  - "CORE-048: Holistic Validation (pre-commit + CI/CD gates)"
+  - "ENH-055 Phase 4: Enforcement layer prevents regressions"
+  - "Pylance-Style: Auto-start, self-heal, zero config"
+
+references:
+  - "chat01.md: User request + Phase 74 analysis"
+  - "CORE-049: Silent Autonomous Execution Protocol"
+  - "CORE-048: Holistic Validation Gate"
+  - "ENH-055 Phase 4: Tool Interception Gap Fix"
+  - "Phase 53: Pylance-Style MCP Architecture"
+  - "Phase 74: MCP Toolkit Stabilization (COMPLETE)"
+
+audit_trail:
+  - id: "AC-PHASE75-PLAN-001"
+    timestamp: "2026-02-11T10:50:00Z"
+    action: "Created Phase 75 remediation plan"
+    author: "Asif Hussain"
+    context: "Response to chat01 user request for permanent MCP fixes"

@@ -1,0 +1,980 @@
+# Wave: Unified Intelligence System
+# Authority: Chat01 Digest - Full Consolidation
+# Status: ACTIVE
+# Type: Multi-Track (5 Tracks, Hybrid Parallel/Sequential)
+# Timeline: 34 hours total (5 execution waves)
+# Supersedes: wave-intelligence-consolidation.yaml
+
+metadata:
+  wave_id: WAVE-UIS-001
+  wave_name: Unified Intelligence System
+  created: 2026-02-14
+  author: Asif Hussain
+  status: ACTIVE
+  priority: P0
+  execution_strategy: four_holistic_waves
+  estimated_duration_hours: NO_TIME_CONSTRAINT
+  supersedes:
+    - WAVE-IC-001 (intelligence-consolidation)
+    - WAVE-CHAT01-IMPLEMENTATION (pattern learning + prompt consolidation)
+  absorbs:
+    - wave_id: "WAVE-GAP-REMEDIATION-001 WAVE-A"
+      title: "E2E Intelligence Testing"
+      authority: "GAP-INV-20260214-001"
+      merged_date: "2026-02-14"
+      tests_count: 12
+      reason: "Overlaps with Track 3 intelligence testing - merged to avoid duplication"
+
+# ============================================================================
+# EXECUTIVE SUMMARY
+# ============================================================================
+# This wave consolidates ALL concerns from chat01.md into a unified plan:
+#
+# 1. INTELLIGENCE AUDIT TRAIL - Every intelligence decision logged with AC markers
+# 2. INTELLIGENT LENS TRIGGERS - 70% fewer unnecessary LENS calls
+# 3. MULTI-CYCLE RGR LOOPS - Bounded RED→GREEN→REFACTOR until quality met
+# 4. PROMPT CONSOLIDATION - 9,078 → 660 lines (93% reduction)
+# 5. PATTERN LIBRARY - Learning layer for cross-domain intelligence
+# 6. TEST INTELLIGENCE - Patterns that historically catch bugs
+# 7. REGISTRY ORGANIZATION - 87 files → 6 organized folders
+# 8. HOLISTIC CLEANUP - Vacuum, intelligence finalization, wiring verification
+#
+# Architecture: Pattern Library as Learning Layer feeding all intelligence areas
+# Execution: 4 holistic waves (no time constraints)
+# ============================================================================
+
+# ============================================================================
+# CONCERNS FROM CHAT01.MD (ADDRESSED)
+# ============================================================================
+
+concerns_addressed:
+  concern_1:
+    statement: "I want intelligence created in the intelligence layer with end to end audit trace log verified test"
+    solution: "Track 1: Add EnhancedAuditLogger to UnifiedIntelligenceProvider with AC_START/AC_COMPLETE markers"
+    track: T1
+    status: PLANNED
+    
+  concern_2:
+    statement: "I want CORTEX to intelligently decide when to engage CORTEX LENS"
+    solution: "Track 1: Extract _should_engage_lens() as extensible policy with LENSTriggerPolicy interface"
+    track: T1
+    status: PLANNED
+    
+  concern_3:
+    statement: "I want the RGR loop engaged strategically for TDD, refactor and other orchestrators"
+    solution: "Track 1: Wire ENH-088 multi-cycle pattern to RefactoringOrchestrator with bounded loops"
+    track: T1
+    status: PLANNED
+    
+  concern_4:
+    statement: "Both cortex and cortex-architect should be light wrappers with centralized functionality"
+    solution: "Track 2: 3-tier prompt consolidation (core protocol + thin wrappers)"
+    track: T2
+    status: PLANNED
+    
+  concern_5:
+    statement: "Cleanup master registry, ensure no files in root of _cortex-master"
+    solution: "Prerequisite: Organize into 6 folders (waves/enhancements/phases/specifications/audit/reference)"
+    track: PREREQUISITE
+    status: PLANNED
+    
+  concern_6:
+    statement: "Create comprehensive intelligent high value tests"
+    solution: "Track 3: Test effectiveness patterns + 88 new intelligence tests with edge cases"
+    track: T3
+    status: PLANNED
+    
+  concern_7:
+    statement: "Create pattern library from git history for audit integration"
+    solution: "Track 4: User request patterns + Challenge gate integration"
+    track: T4
+    status: PLANNED
+    
+  concern_8:
+    statement: "Enhance test intelligence with pattern library"
+    solution: "Track 5: Test effectiveness patterns feeding IntelligentTestGenerator"
+    track: T5
+    status: PLANNED
+    
+  concern_9:
+    statement: "LENS filtering with pattern library (not integration)"
+    solution: "Track 5: LENS focus patterns filtering findings by user preference"
+    track: T5
+    status: PLANNED
+
+# ============================================================================
+# ARCHITECTURE DECISION: UNIFIED PATTERN SYSTEM
+# ============================================================================
+
+architecture_decision:
+  approach: "Unified Pattern System (Option A from chat01.md)"
+  rationale: |
+    Pattern library as learning layer feeding all intelligence areas:
+    - Single source of patterns (CORE-035 compliant)
+    - Cross-domain learning (tests inform LENS, LENS informs tests)
+    - Self-improving (patterns evolve with usage)
+    - Existing architecture (registry + agents + intelligence layer)
+    
+  alternatives_rejected:
+    - option_b: "Domain-specific pattern files - No cross-learning"
+    - option_c: "LENS-integrated patterns - Scope creep"
+    
+  integration_model: |
+    Pattern Library (Learning Layer)
+        ↓
+        Feeds into:
+        1. Test Intelligence (which tests work)
+        2. LENS Filters (which findings matter)
+        3. Challenge Gate (which alternatives preferred)
+        4. Scaffolder (which customizations needed)
+        5. Documentation (which style preferred)
+
+# ============================================================================
+# WAVE STRUCTURE (4 Holistic Waves)
+# ============================================================================
+# CONSOLIDATION: 5 tracks → 4 waves (no time constraints)
+# WAVE 1: Core Intelligence (Registry + Intelligence + Testing)
+# WAVE 2: Prompt Consolidation (3-tier architecture)
+# WAVE 3: Pattern Learning System (Git analysis + 5 domain integrations)
+# WAVE 4: Holistic Cleanup & Finalization (Vacuum + Intelligence + Wiring)
+# ============================================================================
+
+waves:
+  wave_1:
+    name: "Intelligence Foundation"
+    scope: "Audit trail + LENS triggers + RGR + Testing"
+    duration: NO_TIME_CONSTRAINT
+    execution: holistic
+    description: |
+      Complete intelligence layer enhancement with full testing.
+      Combines registry cleanup, intelligence enhancements, and 
+      comprehensive testing into single cohesive wave.
+    
+  wave_2:
+    name: "Prompt & Registry Consolidation"
+    scope: "9,078 → 660 lines + 87 files → 6 folders"
+    duration: NO_TIME_CONSTRAINT
+    execution: holistic
+    dependencies: [wave_1]
+    description: |
+      Complete consolidation of prompts (3-tier architecture) and
+      final registry organization. Single source of truth established.
+    
+  wave_3:
+    name: "Pattern Library & Cross-Domain Learning"
+    scope: "Git analysis + 5 domain integrations"
+    duration: NO_TIME_CONSTRAINT
+    execution: holistic
+    dependencies: [wave_2]
+    description: |
+      Unified pattern system with cross-domain intelligence.
+      Test patterns, LENS patterns, Challenge gate, Scaffolder,
+      Documentation all fed by single learning layer.
+      
+  wave_4:
+    name: "Holistic Cleanup & Finalization"
+    scope: "Vacuum + Intelligence optimization + Wiring verification"
+    duration: NO_TIME_CONSTRAINT
+    execution: holistic
+    dependencies: [wave_3]
+    description: |
+      Complete system cleanup and finalization after all enhancements.
+      Vacuum markdown sprawl, optimize intelligence layer, verify all
+      wiring connections, run full audit, ensure production readiness.
+
+# ============================================================================
+# WAVE 1: INTELLIGENCE FOUNDATION (HOLISTIC)
+# ============================================================================
+# Combines: Prerequisite + Track 1 + Track 3
+# Scope: Registry cleanup, Intelligence enhancements, Comprehensive testing
+# Result: Production-ready intelligence layer with full audit trail
+# ============================================================================
+
+wave_1_intelligence_foundation:
+  name: Intelligence Foundation (Registry + Intelligence + Testing)
+  duration: NO_TIME_CONSTRAINT
+  priority: P0
+  execution_strategy: holistic_completion
+  
+  current_state:
+    root_files: 87
+    structure: "chaotic mix of waves, enhancements, phases, specs, audits"
+    
+  target_state:
+    root_files: 1  # Only README.md
+    structure: "6 organized folders"
+    
+  folder_structure:
+    waves:
+      - completed/  # Archived waves with metrics
+      - active/     # Current executing waves
+      - planned/    # Future waves
+    enhancements:
+      - "ENH-*.yaml"
+    phases:
+      - active/
+      - completed/
+    specifications:
+      - "*-spec.yaml"
+    audit:
+      - "*-audit-*.yaml"
+      - "*-compliance-*.yaml"
+    reference:
+      - "*.md guides"
+      - "status updates"
+
+  files_to_move:
+    enhancements: 15  # All ENH-* files
+    phases: 12        # All PHASE-* files
+    specifications: 8 # All *-spec files
+    audits: 10        # All audit/compliance files
+    references: 40    # All .md guides and status docs
+    waves: 2          # Existing wave files
+    
+  governance:
+    - CORE-028: Organized file structure
+    - README.md in each folder
+
+  stage_1_registry_organization:
+    name: Registry Cleanup
+    description: "Organize _cortex-master root (87 files → 6 folders)"
+    files_to_move:
+      enhancements: 15
+      phases: 12
+      specifications: 8
+      audits: 10
+      references: 40
+      waves: 2
+
+  stage_2_intelligence_enhancements:
+    name: Intelligence Layer Enhancements
+    duration: NO_TIME_CONSTRAINT
+    execution: holistic
+  
+    components:
+      audit_trail:
+        name: Intelligence Audit Trail + Phase 65 Integration
+        duration: NO_TIME_CONSTRAINT
+        priority: P0
+      
+      description: |
+        Add EnhancedAuditLogger to UnifiedIntelligenceProvider for full
+        traceability of every intelligence decision.
+        
+      deliverables:
+        - AC_START/AC_COMPLETE markers on all operations
+        - Session-scoped profile storage
+        - TurnContext integration for turn-over-turn tracking
+        - Queryable audit trail by session_id, operation_id
+        
+        tests: 24
+      
+      lens_triggers:
+        name: LENS Trigger Extraction + Lifecycle Hooks
+        duration: NO_TIME_CONSTRAINT
+        priority: P0
+      
+      description: |
+        Extract _should_engage_lens() as extensible policy.
+        Wire to LifecycleHookSystem for automatic cleanup.
+        
+      deliverables:
+        - LENSTriggerPolicy interface (Default, Never, Always, Custom)
+        - Policy injection via constructor
+        - 70% reduction in unnecessary LENS calls
+        - Lifecycle hooks log LENS decisions
+        
+        tests: 28
+      
+      multi_cycle_rgr:
+        name: Refactoring Multi-Cycle RGR
+        duration: NO_TIME_CONSTRAINT
+        priority: P1
+      
+      description: |
+        Wire ENH-088 multi-cycle pattern to RefactoringOrchestrator.
+        
+      deliverables:
+        - execute_multi_cycle() method
+        - SuccessCriteria with max_cycles safety
+        - Bounded loops (max 5 cycles, 30min timeout)
+        - CycleMetrics tracking per cycle
+        
+        tests: 22
+
+  stage_3_comprehensive_testing:
+    name: Intelligence Testing (100 tests)
+    duration: NO_TIME_CONSTRAINT
+    execution: holistic
+    
+    test_categories:
+      unit: 44
+      integration: 24
+      edge_case: 12
+      chaos: 8
+      e2e_intelligence: 12  # Merged from WAVE-GAP-REM-001 WAVE-A
+      
+    e2e_intelligence_tests:
+      description: |
+        End-to-end intelligence validation via audit traces.
+        Merged from WAVE-GAP-REMEDIATION-001 WAVE-A (GAP-INV-20260214-001).
+        
+      authority: "GAP-INV-20260214-001"
+      merged_from: "WAVE-GAP-REMEDIATION-001 WAVE-A"
+      merged_date: "2026-02-14"
+      
+      test_file: "tests/e2e/intelligence/test_intelligence_audit_integration.py"
+      
+      tests:
+        - name: "test_implement_request_full_intelligence_pipeline"
+          description: "User request → TDD → Audit → Intelligence → Dashboard"
+          validates:
+            - "Audit entries created"
+            - "Intelligence data extracted"
+            - "Dashboard receives data"
+            - "Hash chain integrity maintained"
+            
+        - name: "test_multi_orchestrator_intelligence_correlation"
+          description: "Multiple orchestrators → Correlated intelligence"
+          validates:
+            - "IntentRouter → TDD → LENS correlation"
+            - "Cross-orchestrator duration analysis"
+            - "Error propagation intelligence"
+            
+        - name: "test_forensic_intelligence_query"
+          description: "Historical audit → Intelligence reconstruction"
+          validates:
+            - "Query audit log for time range"
+            - "Reconstruct intelligence from history"
+            - "Insights match original execution"
+            
+        - name: "test_tamper_detection_and_recovery"
+          description: "Hash chain break → Detection → Recovery"
+          validates:
+            - "Tamper detection (modified audit entry)"
+            - "Automatic repair mechanism"
+            - "Intelligence accuracy post-repair"
+            
+        - name: "test_concurrent_audit_integrity"
+          description: "Concurrent writes → Hash chain integrity"
+          validates:
+            - "10+ threads writing concurrently"
+            - "No hash chain breaks"
+            - "All entries validated"
+            
+        - name: "test_intent_router_tdd_lens_correlation"
+          description: "Multi-orchestrator correlation"
+          validates:
+            - "Intent classification → TDD execution → LENS analysis"
+            - "Duration intelligence across orchestrators"
+            
+        - name: "test_cross_orchestrator_duration_analysis"
+          description: "Duration intelligence aggregation"
+          validates:
+            - "Average duration per orchestrator"
+            - "Performance trends over time"
+            
+        - name: "test_error_propagation_intelligence"
+          description: "Error intelligence tracking"
+          validates:
+            - "Error cascade detection"
+            - "Root cause identification"
+            
+        - name: "test_intelligence_to_dashboard_pipeline"
+          description: "Intelligence → Dashboard integration"
+          validates:
+            - "Real-time intelligence updates"
+            - "Dashboard metrics accuracy"
+            
+        - name: "test_dashboard_metrics_accuracy"
+          description: "Dashboard data validation"
+          validates:
+            - "Metrics match audit trail"
+            - "No data loss in pipeline"
+            
+        - name: "test_historical_audit_reconstruction"
+          description: "Forensic query capabilities"
+          validates:
+            - "Time-range queries accurate"
+            - "Operation type filtering works"
+            
+        - name: "test_high_frequency_logging_1000_ops"
+          description: "Stress test with 1000+ operations"
+          validates:
+            - "Hash chain integrity under load"
+            - "Performance within SLA (<100ms)"
+      
+      phases:
+        phase_1:
+          name: "E2E Framework Setup"
+          duration: "2-3h"
+          tasks:
+            - "Create tests/e2e/intelligence/ directory"
+            - "Add TestIntelligenceE2EValidation base class"
+            - "Implement 5 core E2E tests"
+          tests: 5
+          
+        phase_2:
+          name: "Cross-System Validation"
+          duration: "2-3h"
+          tasks:
+            - "Multi-orchestrator correlation tests"
+            - "Dashboard integration validation"
+            - "Forensic query tests"
+          tests: 4
+          
+        phase_3:
+          name: "Resilience Testing"
+          duration: "1-2h"
+          tasks:
+            - "Hash chain integrity tests"
+            - "Concurrent write stress tests"
+          tests: 3
+      
+      acceptance_criteria:
+        - "All 12 E2E tests passing (RED→GREEN→REFACTOR)"
+        - "95%+ coverage of intelligence extraction paths"
+        - "Hash chain integrity validated under concurrent load"
+        - "Forensic query patterns documented"
+        - "Dashboard integration verified end-to-end"
+      
+    blind_spots_coverage:
+      - meta_failures
+      - cascade_failures
+      - concurrency_issues
+      - memory_leaks
+      - boundary_conditions
+      - file_system_edge_cases
+      - performance_degradation
+      - integration_failures
+      - audit_trail_e2e_validation  # Added from WAVE-A
+      - intelligence_dashboard_pipeline  # Added from WAVE-A
+      - forensic_query_accuracy  # Added from WAVE-A
+
+  wave_1_deliverables:
+    - "Registry organized (6 folders)"
+    - "Intelligence audit trail complete (100% coverage)"
+    - "LENS triggers extensible (70% call reduction)"
+    - "Multi-cycle RGR bounded (max 5 cycles)"
+    - "100 tests passing (95% coverage)"  # Updated from 88 to 100
+    - "12 E2E intelligence tests passing (merged from WAVE-GAP-REM-001)"
+    - "All blind spots addressed"
+    - "Phase 65 S4/S5 + ENH-092 integrated"
+    - "Audit trail E2E validation complete"
+    - "Forensic query capabilities validated"
+
+# ============================================================================
+# WAVE 2: PROMPT & REGISTRY CONSOLIDATION (HOLISTIC)
+# ============================================================================
+# Combines: Track 2 (Prompt Consolidation)
+# Scope: 9,078 → 660 lines, 3-tier architecture
+# Result: Single source of truth for both ARCHITECT and PRODUCTION modes
+# ============================================================================
+
+wave_2_consolidation:
+  name: Prompt & Registry Consolidation
+  duration: NO_TIME_CONSTRAINT
+  execution: holistic
+  dependencies: [wave_1]
+  
+  current_state:
+    cortex_architect_prompt: 7266  # lines
+    cortex_prompt: 986
+    copilot_instructions: 826
+    total_lines: 9078
+    duplication_percent: 40
+    
+  target_state:
+    core_protocol: 400       # Shared MCP-FIRST, LENS, RGR, governance
+    architect_prompt: 80     # Thin wrapper + ARCHITECT context
+    production_prompt: 80    # Thin wrapper + PRODUCTION context
+    entry_point: 100         # MCP gate + mode routing
+    total_lines: 660
+    reduction_percent: 93
+    
+  stages:
+    stage_1_core_protocol:
+      name: Extract Core Protocol
+      duration: NO_TIME_CONSTRAINT
+      priority: P0
+      
+      description: |
+        Create cortex-core.md with shared patterns:
+        - MCP-FIRST enforcement
+        - Intelligence synthesis (LENS + RGR + audit)
+        - Silent autonomous execution
+        - Challenge gate
+        - Governance rules (CORE-*)
+        
+      deliverables:
+        - .github/prompts/_protocol/cortex-core.md (400 lines)
+        - Removes 40% duplication
+        
+      tests: 8
+      
+    stage_2_mode_prompts:
+      name: Refactor Mode Prompts
+      duration: NO_TIME_CONSTRAINT
+      priority: P0
+      
+      description: |
+        Reduce both prompts to thin wrappers loading core protocol.
+        
+      deliverables:
+        - cortex-architect.prompt.md (80 lines)
+        - CORTEX.prompt.md (80 lines)
+        - Both load _protocol/cortex-core.md
+        
+      tests: 4
+      
+    stage_3_entry_point:
+      name: Update Entry Point
+      duration: NO_TIME_CONSTRAINT
+      priority: P0
+      
+      description: |
+        Reduce copilot-instructions.md to MCP gate + routing only.
+        
+      deliverables:
+        - copilot-instructions.md (100 lines)
+        - MCP gate check (P0 blocking)
+        - Mode detection (ARCHITECT vs PRODUCTION)
+        - Load appropriate prompt
+        
+      tests: 6
+
+  wave_2_deliverables:
+    - "Core protocol extracted (400 lines)"
+    - "ARCHITECT prompt reduced (80 lines)"
+    - "PRODUCTION prompt reduced (80 lines)"
+    - "Entry point minimal (100 lines)"
+    - "Total: 660 lines (93% reduction from 9,078)"
+    - "Single source of truth established"
+    - "Both modes load shared protocol"
+    - "18 tests passing (prompt loading + routing)"
+
+# ============================================================================
+# WAVE 3: PATTERN LIBRARY & CROSS-DOMAIN LEARNING (HOLISTIC)
+# ============================================================================
+# Combines: Track 4 + Track 5
+# Scope: Git history → 50-100 patterns → 5 domain integrations
+# Result: Learning layer feeding all intelligence areas
+# ============================================================================
+
+wave_3_pattern_learning:
+  name: Pattern Library & Cross-Domain Learning
+  duration: NO_TIME_CONSTRAINT
+  execution: holistic
+  dependencies: [wave_2]
+  
+  description: |
+    Create unified pattern library from git history analysis.
+    Extract 50-100 high-level patterns from user preferences.
+    Store in registry, integrate with audit/design agents.
+    
+  stage_1_pattern_extraction:
+    name: Git History Analysis & Pattern Extraction
+    duration: NO_TIME_CONSTRAINT
+    priority: P0
+      
+      description: |
+        Analyze 10,178 commits to extract patterns.
+        
+    deliverables:
+      - "user-request-patterns.yaml (500 lines)"
+      - "50-100 patterns extracted from 10,178 commits"
+      - "Categories: architecture, workflow, quality, communication, anti-patterns"
+      - "Pattern schema: category, pattern, evidence, confidence"
+      - "_cortex-master/patterns/ folder structure"
+      - "README.md with pattern usage guide"
+
+  stage_2_agent_integration:
+    name: Agent Integration (Auditor, Architect, Validator)
+    duration: NO_TIME_CONSTRAINT
+    priority: P0
+  
+    deliverables:
+      - "cortex-auditor.md loads patterns before recommendations"
+      - "cortex-architect.md checks patterns during design"
+      - "cortex-holistic-validator.md compares alternatives vs patterns"
+      - "Pattern matching during challenge gate"
+      - "70% fewer repetitive challenges"
+
+  stage_3_domain_integration:
+    name: Cross-Domain Pattern Integration (5 Domains)
+    duration: NO_TIME_CONSTRAINT
+    priority: P0
+      
+    description: |
+      Integrate pattern library into all 5 intelligence domains.
+      Create self-reinforcing learning loop.
+      
+    domains:
+      challenge_gate:
+        description: "Pattern matching in challenge recommendations"
+        deliverable: "Challenge gate skips historically rejected alternatives"
+        benefit: "70% fewer repetitive challenges"
+        
+      test_intelligence:
+        description: "Test effectiveness patterns"
+        deliverable: "test-effectiveness-patterns.yaml"
+        benefit: "IntelligentTestGenerator prioritizes effective patterns (3x ROI)"
+        
+      lens_filtering:
+        description: "LENS focus patterns"
+        deliverable: "lens-focus-patterns.yaml"
+        benefit: "LENS reports priority findings (80% noise reduction)"
+        
+      scaffolder:
+        description: "Scaffolder customization patterns"
+        deliverable: "scaffolding-customization-patterns.yaml"
+        benefit: "Pre-customized orchestrators (75% less post-gen editing)"
+        
+      documentation:
+        description: "Documentation preference patterns"
+        deliverable: "documentation-preference-patterns.yaml"
+        benefit: "Auto-adjusted documentation style (50% faster comprehension)"
+
+  stage_4_cross_domain_learning:
+    name: Cross-Domain Learning Loop
+    duration: NO_TIME_CONSTRAINT
+    priority: P1
+    
+    description: |
+      Connect patterns across domains for self-reinforcing intelligence.
+      
+    learning_flows:
+      - "Test patterns → LENS (tests catching auth bugs inform LENS priorities)"
+      - "LENS patterns → Tests (CORE-035 violations inform test generation)"
+      - "Challenge patterns → Scaffolder (preferred architectures inform templates)"
+      - "Documentation patterns → All (style preferences propagate)"
+
+  wave_3_deliverables:
+    - "50-100 user patterns extracted and categorized"
+    - "Pattern library infrastructure (_cortex-master/patterns/)"
+    - "3 agents integrated (auditor, architect, validator)"
+    - "5 domain integrations complete"
+    - "Cross-domain learning active"
+    - "Self-improving intelligence system operational"
+
+# ============================================================================
+# WAVE 4: HOLISTIC CLEANUP & FINALIZATION (HOLISTIC)
+# ============================================================================
+# Scope: System-wide cleanup, intelligence optimization, wiring verification
+# Result: Production-ready CORTEX with all enhancements finalized
+# ============================================================================
+
+wave_4_holistic_finalization:
+  name: Holistic Cleanup & Finalization
+  duration: NO_TIME_CONSTRAINT
+  execution: holistic
+  dependencies: [wave_3]
+  
+  description: |
+    Complete system cleanup and finalization after all enhancements
+    integrated. Ensure production readiness, clean state, verified wiring.
+    
+  stage_1_vacuum_cleanup:
+    name: Markdown Vacuum & Cleanup
+    priority: P0
+    
+    description: |
+      Run comprehensive vacuum to remove markdown sprawl.
+      Clean up any temporary files, logs, or artifacts.
+      
+    operations:
+      - cortex_vacuum (automatic markdown cleanup)
+      - Remove CORTEX_DEBUG markers (if any)
+      - Clean _archives/ and _workspaces/ obsolete content
+      - Verify no .md files outside allowed paths
+      - Archive completed session artifacts
+      
+    allowed_md_paths:
+      - .github/prompts/*.md
+      - .github/agents/*.md
+      - README.md (root only)
+      - cortex-registry/**/*.md (registry docs)
+      
+    forbidden_md_generation:
+      - docs/*.md (use inline chat instead)
+      - *-summary.md (CORE-002 violation)
+      - *-report.md (CORE-002 violation)
+      
+    deliverables:
+      - "Zero markdown files in forbidden paths"
+      - "Vacuum report showing cleanup metrics"
+      - "All AC markers verified complete"
+      
+  stage_2_intelligence_optimization:
+    name: Intelligence Layer Optimization
+    priority: P0
+    
+    description: |
+      Optimize intelligence layer performance and finalize all enhancements.
+      Verify all integrations operational.
+      
+    operations:
+      - Verify UnifiedIntelligenceProvider operational
+      - Test audit trail queryable (search by session_id, operation_id)
+      - Verify LENS triggers extensible (policy injection working)
+      - Test multi-cycle RGR bounded (max cycles enforced)
+      - Verify turn-over-turn accumulation (TurnContext)
+      - Test lifecycle hooks triggering correctly
+      - Benchmark intelligence layer performance
+      
+    performance_targets:
+      audit_overhead: "<5ms per operation"
+      lens_trigger_decision: "<10ms"
+      pattern_lookup: "<50ms"
+      session_profile_access: "<20ms"
+      
+    deliverables:
+      - "All intelligence components operational"
+      - "Performance benchmarks met"
+      - "Zero memory leaks detected"
+      - "Audit trail searchable and complete"
+      
+  stage_3_wiring_verification:
+    name: Wiring & Integration Verification
+    priority: P0
+    
+    description: |
+      Verify all orchestrator wiring connections.
+      Ensure MCP tools properly integrated.
+      Test end-to-end workflows.
+      
+    verification_checks:
+      orchestrator_wiring:
+        - "MasterOrchestrator → IntentRouter connection"
+        - "IntentRouter → TDDOrchestrator routing"
+        - "IntentRouter → RefactoringOrchestrator routing"
+        - "IntentRouter → LENSSynthesis connection"
+        - "EnforcementOrchestrator → 7 agent integration"
+        - "PlanOrchestrator → PhaseManager connection"
+        
+      mcp_tools:
+        - "cortex_process_request operational"
+        - "cortex_lens_analyze operational"
+        - "cortex_challenge operational"
+        - "cortex_total_recall operational"
+        - "cortex_audit operational"
+        
+      intelligence_layer:
+        - "UnifiedIntelligenceProvider singleton"
+        - "LENSOrchestrator lazy loading"
+        - "EnhancedAuditLogger integration"
+        - "TurnContext session tracking"
+        - "LifecycleHookSystem event emission"
+        
+      pattern_library:
+        - "User patterns loaded by agents"
+        - "Test patterns feeding generator"
+        - "LENS patterns filtering findings"
+        - "Challenge patterns matching alternatives"
+        
+    deliverables:
+      - "All wiring connections verified"
+      - "MCP tools operational"
+      - "End-to-end workflows tested"
+      - "Zero broken integrations"
+      
+  stage_4_full_audit:
+    name: Comprehensive System Audit
+    priority: P0
+    
+    description: |
+      Run full CORTEX audit to verify governance compliance.
+      Ensure all CORE rules satisfied.
+      
+    audit_checks:
+      governance:
+        - "CORE-002: No markdown in forbidden paths"
+        - "CORE-008: TDD enforced (all tests passing)"
+        - "CORE-027: Full audit trail (AC markers complete)"
+        - "CORE-028: Organized file structure"
+        - "CORE-035: Single canonical implementations"
+        - "CORE-036: Industry standards compliance"
+        - "MCP-FIRST: All functionality via MCP tools"
+        
+      code_quality:
+        - "Type hints present (CORE-011)"
+        - "Docstrings complete (CORE-012)"
+        - "No bare except (CORE-013)"
+        - "Test coverage ≥95%"
+        
+      architecture:
+        - "Orchestrator pattern compliance"
+        - "Registry as single source of truth"
+        - "Intelligence layer unified"
+        - "Pattern library integrated"
+        
+    deliverables:
+      - "Full audit report (inline chat, not file)"
+      - "All P0/P1 issues resolved"
+      - "Zero governance violations"
+      - "Production readiness confirmed"
+      
+  stage_5_production_readiness:
+    name: Production Readiness Gate
+    priority: P0
+    
+    description: |
+      Final verification before marking wave complete.
+      Ensure all enhancements operational.
+      
+    readiness_checklist:
+      - "All 88+ intelligence tests passing"
+      - "18+ prompt tests passing"
+      - "Pattern library operational"
+      - "Vacuum cleanup complete"
+      - "Wiring verified"
+      - "Audit passed"
+      - "Performance benchmarks met"
+      - "Zero regressions detected"
+      - "Documentation complete"
+      - "All waves 1-3 deliverables verified"
+      
+    final_deliverables:
+      - "CORTEX fully operational with all enhancements"
+      - "Intelligence layer production-ready"
+      - "Prompts consolidated (660 lines)"
+      - "Pattern library learning from usage"
+      - "Clean codebase (no sprawl)"
+      - "All wiring verified"
+      - "Governance compliant"
+      
+  wave_4_deliverables:
+    - "Zero markdown sprawl (vacuum complete)"
+    - "Intelligence layer optimized (performance targets met)"
+    - "All wiring verified (orchestrators + MCP + intelligence)"
+    - "Full audit passed (zero violations)"
+    - "Production ready (all tests passing, no regressions)"
+    - "Documentation complete (inline, not files)"
+    - "System in clean state"
+
+# ============================================================================
+# EXECUTION STRATEGY (4 HOLISTIC WAVES)
+# ============================================================================
+
+execution_strategy:
+  model: four_holistic_waves
+  time_constraint: NONE
+  
+  wave_sequence:
+    wave_1:
+      name: Intelligence Foundation
+      scope: "Registry + Intelligence + Testing"
+      result: "Production-ready intelligence layer"
+      ready_when:
+        - "87 files organized into 6 folders"
+        - "Audit trail complete (100% coverage)"
+        - "LENS triggers extensible"
+        - "Multi-cycle RGR bounded"
+        - "88 tests passing (95% coverage)"
+        
+    wave_2:
+      name: Prompt & Registry Consolidation
+      scope: "9,078 → 660 lines"
+      result: "Single source of truth"
+      ready_when:
+        - "Core protocol extracted (400 lines)"
+        - "Mode prompts reduced (80 lines each)"
+        - "Entry point minimal (100 lines)"
+        - "18 tests passing"
+        
+    wave_3:
+      name: Pattern Library & Learning
+      scope: "Git history → Patterns → 5 domains"
+      result: "Self-improving intelligence"
+      ready_when:
+        - "50-100 patterns extracted"
+        - "3 agents integrated"
+        - "5 domain integrations complete"
+        - "Cross-domain learning active"
+        
+    wave_4:
+      name: Holistic Cleanup & Finalization
+      scope: "Vacuum + Intelligence + Wiring + Audit"
+      result: "Production-ready CORTEX"
+      ready_when:
+        - "Vacuum cleanup complete (zero sprawl)"
+        - "Intelligence optimized (benchmarks met)"
+        - "Wiring verified (all connections operational)"
+        - "Full audit passed (zero violations)"
+        - "Production readiness confirmed"
+
+# ============================================================================
+# SUCCESS METRICS
+# ============================================================================
+
+success_metrics:
+  intelligence_layer:
+    audit_coverage: 100%  # All operations logged
+    lens_call_reduction: 70%  # Fewer unnecessary calls
+    rgr_bounded: true  # Max cycles enforced
+    
+  prompts:
+    line_reduction: 93%  # 9,078 → 660
+    duplication: 0%  # Single source of truth
+    
+  testing:
+    new_tests: 88
+    coverage: 95%
+    blind_spots_addressed: 27
+    
+  patterns:
+    patterns_extracted: 50-100
+    domains_covered: 5  # Test, LENS, Challenge, Scaffold, Docs
+    cross_learning: true
+    
+  registry:
+    root_files: 1  # Only README.md
+    folders: 6
+
+# ============================================================================
+# RISK MANAGEMENT
+# ============================================================================
+
+risks:
+  risk_1:
+    description: "Breaking changes to orchestrators"
+    impact: HIGH
+    probability: LOW
+    mitigation: "Opt-in audit logging, feature flags"
+    
+  risk_2:
+    description: "Prompt loading failures after consolidation"
+    impact: HIGH
+    probability: MEDIUM
+    mitigation: "Test in isolated environment before deployment"
+    
+  risk_3:
+    description: "Pattern library becomes stale"
+    impact: MEDIUM
+    probability: MEDIUM
+    mitigation: "Auto-update patterns on user approval"
+    
+  risk_4:
+    description: "Cross-domain patterns cause confusion"
+    impact: LOW
+    probability: LOW
+    mitigation: "Clear pattern attribution (source domain)"
+
+# ============================================================================
+# GOVERNANCE COMPLIANCE
+# ============================================================================
+
+governance:
+  core_rules:
+    - CORE-002: "No markdown file generation (patterns in YAML)"
+    - CORE-008: "TDD (tests before implementation)"
+    - CORE-027: "Full audit trail (AC markers)"
+    - CORE-028: "Organized file structure (6 folders)"
+    - CORE-035: "Single canonical implementation"
+    - CORE-036: "Industry standards compliance"
+    
+  validation:
+    - "All tests passing before merge"
+    - "Zero regression in existing functionality"
+    - "95%+ coverage for new code"
+    - "Pattern library reviewed before integration"

@@ -1,0 +1,225 @@
+# WAVE: Chat01 Digest Implementation
+# Authority: DIGEST mode analysis from chat01.md session
+# Created: 2026-02-14
+# Status: ACTIVE
+
+metadata:
+  wave_id: "wave-chat01"
+  title: "Pattern Learning Library + Prompt Consolidation"
+  status: "active"
+  priority: "P1"
+  created: "2026-02-14"
+  roi_score: 0.88
+  estimated_duration: "3-4 hours"
+  autonomous_execution: true
+  source: "chat01.md digest analysis"
+
+overview:
+  vision: |
+    Complete the pattern learning infrastructure identified in chat01.md:
+    1. Wire existing pattern learning foundation into orchestrators
+    2. Create PatternLibrary storage class with registry persistence
+    3. Expose pattern learning via MCP tools
+    4. Extract shared prompt content to reduce duplication (~200 lines)
+    
+    This closes the gap between pattern learning foundation (COMPLETE) and
+    production wiring (MISSING).
+
+  learnings_from_chat01:
+    - "Pattern extractor exists (271 LOC) but NOT wired"
+    - "No MCP tool exposure for pattern learning"
+    - "No persistent storage in registry"
+    - "CORTEX.prompt.md and cortex-architect.prompt.md have ~200 lines duplication"
+    - "User wants pattern library + prompt consolidation"
+    - "5 waves executed in chat01 (vacuum, MCP enforcement, automation, audit, consolidation)"
+
+stages:
+  - stage_id: "S1"
+    name: "PatternLibrary Storage Layer"
+    status: "pending"
+    effort_hours: 1.0
+    dependencies: []
+    deliverables:
+      - "cortex/learning/pattern_library.py (PatternLibrary class)"
+      - "cortex/learning/pattern_storage.py (Registry YAML persistence)"
+      - "tests/unit/learning/test_pattern_library.py (15 tests)"
+    tasks:
+      - "Create PatternLibrary class (CRUD operations)"
+      - "Add YAML persistence to cortex-registry/patterns/"
+      - "Pattern deduplication (similarity threshold 0.3)"
+      - "Pattern retrieval by type/orchestrator/confidence"
+      - "15 TDD tests (RED→GREEN→REFACTOR)"
+    acceptance_criteria:
+      - "PatternLibrary.store(pattern) persists to YAML"
+      - "PatternLibrary.retrieve(filters) returns matching patterns"
+      - "Patterns deduplicated on storage"
+      - "15/15 tests passing"
+
+  - stage_id: "S2"
+    name: "Orchestrator Wiring"
+    status: "pending"
+    effort_hours: 1.5
+    dependencies: ["S1"]
+    deliverables:
+      - "cortex/orchestrators/mixins/learning_mixin.py (updated)"
+      - "Wire TDDOrchestrator → PatternLibrary"
+      - "Wire RefactoringOrchestrator → PatternLibrary"
+      - "Wire EnforcementOrchestrator → PatternLibrary"
+      - "tests/unit/orchestrators/test_pattern_learning_integration.py (20 tests)"
+    tasks:
+      - "Update OrchestratorLearningMixin to use PatternLibrary"
+      - "Wire post_operation_hook in 3 orchestrators"
+      - "Add pattern extraction on operation completion"
+      - "20 integration tests"
+    acceptance_criteria:
+      - "TDDOrchestrator auto-stores test patterns on RED→GREEN→REFACTOR"
+      - "RefactoringOrchestrator stores code smell patterns"
+      - "EnforcementOrchestrator stores governance violation patterns"
+      - "20/20 tests passing"
+
+  - stage_id: "S3"
+    name: "MCP Tool Exposure"
+    status: "pending"
+    effort_hours: 0.75
+    dependencies: ["S1", "S2"]
+    deliverables:
+      - "cortex/mcp/tools/pattern_learning_tools.py"
+      - "cortex_learn_pattern MCP tool"
+      - "cortex_query_patterns MCP tool"
+      - "cortex_pattern_stats MCP tool"
+      - "tests/unit/mcp/test_pattern_learning_tools.py (12 tests)"
+    tasks:
+      - "Create cortex_learn_pattern (manual pattern injection)"
+      - "Create cortex_query_patterns (retrieve by filters)"
+      - "Create cortex_pattern_stats (dashboard metrics)"
+      - "Register in MCP tool registry"
+      - "12 MCP integration tests"
+    acceptance_criteria:
+      - "MCP tools discoverable via cortex_tools_catalog"
+      - "cortex_learn_pattern stores pattern to library"
+      - "cortex_query_patterns returns filtered results"
+      - "12/12 tests passing"
+
+  - stage_id: "S4"
+    name: "Prompt Consolidation"
+    status: "pending"
+    effort_hours: 1.0
+    dependencies: []
+    deliverables:
+      - ".github/prompts/shared/CORE-RULES.md"
+      - ".github/prompts/shared/MCP-ARCHITECTURE.md"
+      - ".github/prompts/shared/SILENT-EXECUTION.md"
+      - "Updated CORTEX.prompt.md (reference shared files)"
+      - "Updated cortex-architect.prompt.md (reference shared files)"
+    tasks:
+      - "Extract CORE rules to shared/CORE-RULES.md (~80 lines)"
+      - "Extract MCP architecture to shared/MCP-ARCHITECTURE.md (~60 lines)"
+      - "Extract silent execution protocol to shared/SILENT-EXECUTION.md (~40 lines)"
+      - "Update both prompts to reference shared files"
+      - "Validate no functionality lost"
+    acceptance_criteria:
+      - "~200 lines extracted to shared/"
+      - "CORTEX.prompt.md reduced by ~200 lines"
+      - "cortex-architect.prompt.md reduced by ~200 lines"
+      - "Both prompts reference shared files"
+      - "Manual validation: functionality preserved"
+
+  - stage_id: "S5"
+    name: "Integration & Documentation"
+    status: "pending"
+    effort_hours: 0.75
+    dependencies: ["S1", "S2", "S3", "S4"]
+    deliverables:
+      - "cortex-registry/patterns/ directory created"
+      - "cortex-registry/patterns/README.md (usage guide)"
+      - "Updated CORTEX-STATUS-2026-02-14.yaml"
+      - "WAVE-CHAT01-COMPLETION-REPORT.md"
+    tasks:
+      - "Create patterns/ registry directory structure"
+      - "Document pattern YAML schema"
+      - "Update system status YAML"
+      - "Generate completion report"
+      - "Run full test suite validation"
+    acceptance_criteria:
+      - "All 15,644 + 47 new tests passing"
+      - "Pattern library operational"
+      - "MCP tools discoverable"
+      - "Prompts consolidated"
+      - "Documentation complete"
+
+test_targets:
+  total_new_tests: 62
+  breakdown:
+    - "S1: 15 tests (PatternLibrary)"
+    - "S2: 20 tests (Orchestrator wiring)"
+    - "S3: 12 tests (MCP tools)"
+    - "S4: 0 tests (manual validation)"
+    - "S5: 15 tests (integration validation)"
+
+execution_metrics:
+  estimated_duration: "5 hours"
+  estimated_loc_added: 1200
+  estimated_files_modified: 8
+  estimated_files_created: 12
+  complexity: "Medium"
+
+governance:
+  core_rules_enforced:
+    - "CORE-008: TDD mandatory (all 62 tests written first)"
+    - "CORE-011: Type hints on all functions"
+    - "CORE-012: Google-style docstrings"
+    - "CORE-002: No markdown file generation (inline only)"
+    - "CORE-027: AC markers on all commits"
+  
+  audit_checkpoints:
+    - "After S1: Validate pattern persistence"
+    - "After S2: Validate orchestrator integration"
+    - "After S3: Validate MCP tool registration"
+    - "After S5: Full system audit"
+
+dependencies:
+  required_phases:
+    - "phase-71: Universal Learning Loop (COMPLETE)"
+    - "phase-77: Intelligence Learning Core (COMPLETE)"
+  
+  required_infrastructure:
+    - "cortex/learning/pattern_extractor.py (EXISTS)"
+    - "cortex/learning/universal_learning_loop.py (EXISTS)"
+    - "MCP server operational"
+
+risk_assessment:
+  low_risk:
+    - "Pattern learning foundation already exists"
+    - "UniversalLearningLoop proven architecture"
+    - "MCP tool patterns well-established"
+  
+  medium_risk:
+    - "Orchestrator wiring may reveal edge cases"
+    - "Pattern deduplication algorithm performance"
+  
+  mitigation:
+    - "Start with TDD (tests first)"
+    - "Use existing learning infrastructure"
+    - "Incremental wiring (one orchestrator at a time)"
+
+success_criteria:
+  technical:
+    - "62/62 new tests passing"
+    - "15,644 existing tests still passing"
+    - "Pattern library stores/retrieves patterns"
+    - "3 orchestrators auto-learn patterns"
+    - "3 MCP tools operational"
+    - "Prompts reduced by ~400 lines total"
+  
+  business:
+    - "CORTEX learns from every operation"
+    - "Pattern knowledge persists across sessions"
+    - "Reduced prompt duplication"
+    - "MCP-accessible pattern intelligence"
+
+next_steps:
+  after_completion:
+    - "Monitor pattern library growth (weekly)"
+    - "Analyze pattern quality (monthly audit)"
+    - "Expand to remaining orchestrators (Phase 78)"
+    - "Create pattern recommendation engine (Phase 79)"
