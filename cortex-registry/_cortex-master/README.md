@@ -1,53 +1,79 @@
 # 📋 CORTEX Master Registry Index
-**Version:** 7.0 | **Updated:** 2026-02-13T18:25:00Z | **Authority:** cortex-architect.prompt.md v15.3 | **Status:** ✅ ACTIVE
+**Version:** 8.0 | **Updated:** 2026-02-14T09:15:00Z | **Authority:** cortex-architect.prompt.md v15.3 | **Status:** ✅ ACTIVE
 
 ---
 
 ## 🎯 Purpose
 
-Single source of truth for CORTEX registry documentation. Links to all master planning, execution, and status documents.
+Single source of truth for CORTEX registry documentation. All files organized in themed folders with clear purpose and governance rules.
+
+## 📁 Folder Structure
+
+```
+_cortex-master/
+├── README.md                  ← You are here
+├── waves/                     ← Active implementation waves
+│   ├── active/               ← Current waves (WAVE-UIS-001, etc.)
+│   └── archived/             ← Completed/superseded waves
+├── phases/                    ← Phase specifications
+│   ├── active/               ← Current phases
+│   └── completed/            ← Historical phases
+├── enhancements/              ← Feature enhancements
+│   ├── active/               ← Active ENH-* specs
+│   └── completed/            ← Completed enhancements
+├── specifications/            ← Technical specifications
+├── guides/                    ← User documentation
+├── governance/                ← CORE rules & compliance
+├── config/                    ← System configuration
+├── design/                    ← Architecture planning
+├── investigations/            ← Gap analysis & research
+├── reports/                   ← Status reports & audits
+├── dashboard/                 ← Phase dashboard system
+├── directives/                ← Execution directives
+├── baselines/                 ← Historical snapshots
+├── _archive/                  ← Old versions
+└── _superseded/               ← Deprecated content
+```
 
 ---
 
-## 🚀 START HERE: Execute Next Wave
+## 🚀 Quick Start
 
-### WAVE-1 (THEME-A): Intelligence Foundation (IN PROGRESS)
+### Current Active Work
 
-**Status:** ✅ WAVE-O Complete | 🔵 WAVE-1 Stage 1 In Progress
+**Wave:** WAVE-UIS-001 (Unified Intelligence System)  
+**Status:** Ready for execution  
+**Location:** `waves/active/WAVE-UNIFIED-INTELLIGENCE-SYSTEM.yaml`
 
-**Quick Start:** [MASTER-WAVE-PLAN-5-WAVES-2026-02-13.md](./MASTER-WAVE-PLAN-5-WAVES-2026-02-13.md)
+**Enhancement:** ENH-100 (Realtime Feedback Hub)  
+**Location:** `enhancements/active/ENH-100-REALTIME-FEEDBACK-HUB.yaml`
 
-**Current Stage:** Stage 1 - Registry Documentation Sync (1h)
+### Key References
 
-**Completed Waves:**
-- ✅ WAVE-O: Orchestrator Intelligence + MCP Consolidation (Complete 2026-02-13)
-  - 28 orchestrators wired via GitBackedRegistry
-  - 7-agent enforcement layer active
-  - 412/412 tests passing
-
-**Active:** WAVE-1 (THEME-A) - Intelligence Foundation
-- 🔵 Stage 1: Registry sync (in progress)
-- ⚪ Stage 2: Test validation (planned)
-- ⚪ Stage 3: Test intelligence layers 1-3 (planned)
+| Resource | Location | Purpose |
+|----------|----------|---------|
+| **Master Plan** | `config/master-plan.yaml` | Overall system planning |
+| **Latest Status** | `reports/CORTEX-STATUS-2026-02-14.yaml` | System health snapshot |
+| **Governance Rules** | `governance/core-rules.yaml` | CORE-001 through CORE-052 |
+| **Wave Summary** | `waves/WAVE-CONSOLIDATION-SUMMARY-2026-02-14.md` | Wave consolidation report |
+| **Gap Investigation** | `investigations/GAP-INVESTIGATION-INTELLIGENCE-VSCODE-TODOS.md` | Intelligence & VSCode TODOs |
 
 ---
 
-## 📊 Key Documents (Priority Order)
+## 📊 Registry Statistics
 
-### 1. Master Planning & Status
+**Files Organized:** 29 files moved from root → themed folders  
+**Folders Created:** guides/, investigations/, design/, config/  
+**Folders Removed:** test-demands/, workflows/ (empty)  
+**Root Files:** 1 (README.md only)  
+**Cleanup Date:** 2026-02-14
 
-| Document | Purpose | Status |
-|----------|---------|--------|
-| **[MASTER-IMPLEMENTATION-REALITY-SYNC-2026-02-13.md](./MASTER-IMPLEMENTATION-REALITY-SYNC-2026-02-13.md)** | **PRIMARY:** Master sync of implementation reality + reprioritized waves | ✅ ACTIVE (Updated 2026-02-14) |
-| **[WAVE-CONSOLIDATION-7DAY-REMEDIATION.yaml](./WAVE-CONSOLIDATION-7DAY-REMEDIATION.yaml)** | 7-day work integration + lifecycle hooks | ✅ IN PROGRESS |
-| **[reports/7-day-work-audit-2026-02-14.yaml](./reports/7-day-work-audit-2026-02-14.yaml)** | Comprehensive audit of recent work | ✅ COMPLETE |
+**Governance Compliance:**
+- ✅ CORE-028: File naming (kebab-case enforced)
+- ✅ CORE-035: Single canonical location (no duplicates)
+- ✅ CORE-002: No markdown sprawl (organized in folders)
 
-### 2. Wave Execution Guides
-
-| Document | Waves Covered | Status |
-|----------|---------------|--------|
-| [AUTONOMOUS-WAVES-H-O-EXECUTION-GUIDE.md](./AUTONOMOUS-WAVES-H-O-EXECUTION-GUIDE.md) | WAVE-H through WAVE-O | ✅ REFERENCE (historical) |
-| [AUTONOMOUS-WAVES-L-O-EXECUTION-GUIDE.md](./AUTONOMOUS-WAVES-L-O-EXECUTION-GUIDE.md) | WAVE-L through WAVE-O | ✅ REFERENCE (historical) |
+---
 | [WAVE-EXECUTION-ORCHESTRATION-MASTER.md](./WAVE-EXECUTION-ORCHESTRATION-MASTER.md) | Wave 1-8 master plan | ✅ REFERENCE (original strategy) |
 
 ### 3. Implementation Status (Historical)
