@@ -1853,6 +1853,73 @@ class IntentRouter(IOrchestrator):
 
         return result
 
+    def _format_routing_message_with_books(self, rule_id: str) -> str:
+        """
+        Format routing message with book reference for inline display.
+        
+        AC-PHASE-06-S2-002: IntentRouter book reference enrichment
+        
+        Uses BusinessWisdomFormatter to enrich routing messages with
+        authoritative book citations, enhancing user education during
+        intent classification.
+        
+        Args:
+            rule_id: CORE rule ID (e.g., "CORE-008")
+        
+        Returns:
+            Formatted string with book reference. Falls back to rule_id if formatting fails.
+        
+        Example:
+            >>> router._format_routing_message_with_books("CORE-008")
+            '**Red-Green-Refactor Discipline** → CORE-008 (TDD by Kent Beck)'
+        
+        Authority:
+            - business-wisdom-wiring.md (Stage 2)
+            - phase-06-business-wisdom-display-enhancement.yaml
+        
+        AC-ID: AC-PHASE-06-S2-002
+        """
+        try:
+            from cortex.interaction.business_wisdom_formatter import BusinessWisdomFormatter
+            
+            formatter = BusinessWisdomFormatter()
+            markdown = formatter.format_governance_with_books(
+                rule_ids=[rule_id],
+                max_display=1,
+                include_icon=False
+            )
+            
+            if markdown:
+                # Strip list marker for inline display
+                lines = markdown.split("\n")
+                for line in lines:
+                    if line.startswith("- "):
+                        return line[2:].strip()  # Remove "- " prefix
+            
+            # Fallback to rule ID only
+            return rule_id
+            
+        except Exception as e:
+            # Graceful degradation on any error
+            return rule_id
+
+    def _init_response_engine(self, intent_type: IntentType, orchestrator_name: str, enable: bool = False) -> None:
+        """
+        Stub for response engine initialization (Wave H-S4 feature).
+        
+        AC-ENH082-W2-S4-004: ResponseEngine initialization
+        
+        This is a placeholder for future response engine integration.
+        Currently disabled for safety until Wave H-S4 validation complete.
+        
+        Args:
+            intent_type: Intent type for response formatting
+            orchestrator_name: Name of orchestrator
+            enable: Whether to enable response engine (default False)
+        """
+        # TODO: Implement response engine integration after Wave H-S4 validation
+        pass
+
     def execute(self, parameters: Dict[str, Any]) -> Result[str]:
         """
         Execute routing operation (IOrchestrator interface).
