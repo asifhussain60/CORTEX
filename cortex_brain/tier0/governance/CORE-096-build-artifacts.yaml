@@ -1,9 +1,9 @@
-"""
+# 
 CORE-096: Build Artifact Prevention
 Authority: Wave 9 Ultimate Cleanup & Consolidation
 Created: 2026-02-12
 Status: ACTIVE
-"""
+# 
 
 rule_id: CORE-096
 title: Build Artifact Prevention

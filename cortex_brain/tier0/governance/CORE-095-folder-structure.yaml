@@ -1,9 +1,9 @@
-"""
+# 
 CORE-095: Repository Folder Structure Governance
 Authority: Wave 9 Ultimate Cleanup & Consolidation
 Created: 2026-02-12
 Status: ACTIVE
-"""
+# 
 
 rule_id: CORE-095
 title: Repository Folder Structure Governance

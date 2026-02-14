@@ -1,9 +1,7 @@
-"""
-CORE-097: Automated Duplicate Detection
-Authority: Wave 9 Ultimate Cleanup & Consolidation + CORE-035
-Created: 2026-02-12
-Status: ACTIVE
-"""
+# CORE-097: Automated Duplicate Detection
+# Authority: Wave 9 Ultimate Cleanup & Consolidation + CORE-035
+# Created: 2026-02-12
+# Status: ACTIVE
 
 rule_id: CORE-097
 title: Automated Duplicate Detection
