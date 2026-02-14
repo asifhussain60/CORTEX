@@ -1,14 +1,17 @@
-# CORTEX Master Plan
-# Authority: CORTEX Architect + EnforcementOrchestrator
-# Version: 2.0 - Post Holistic Remediation
-# Date: 2026-02-13
+# CORTEX Master Plan - Reality Alignment
+# Authority: CORTEX Architect + EnforcementOrchestrator (Phase 2 Consolidation)
+# Version: 3.0 - Documentation Sync with Implementation Reality
+# Date: 2026-02-14
+# Scope: 5 Pending Waves → Autonomous End-to-End Execution
 
 metadata:
-  version: "2.0"
-  last_updated: "2026-02-13"
+  version: "3.0"
+  last_updated: "2026-02-14"
   authority: "CORTEX Architect"
   orchestrator: "MasterOrchestrator"
-  compliance: "CORE-002, CORE-028, CORE-035, MCP-FIRST"
+  compliance: "CORE-002, CORE-008, CORE-028, CORE-035, CORE-051, MCP-FIRST, ARCH-012"
+  session_mode: "ARCHITECT - Silent Autonomous with VSCode Copilot Chat"
+  vscode_integration: "Auto-start MCP via Copilot chat (no manual server startup)"
 
 # Core Architecture Principles
 architecture:
@@ -80,224 +83,401 @@ governance_learnings:
       remediation: "RecommendationGate (LENS + registry + ROI)"
       status: "PLANNED"
 
-# Current Status (Post Phase 2 Consolidation)
+# Documentation Alignment Analysis
+documentation_status:
+  claims_vs_reality:
+    - claim: "16 completed waves"
+      reality: "Phases 1-6 planned + 5 waves pending (WAVE-P through WAVE-T)"
+      documentation_source: "README.md, wave-*.yaml files"
+      reality_source: "master-plan.yaml phases + wave-consolidation-7day-remediation.yaml"
+      alignment_action: "Consolidate wave documentation into 5-wave execution track"
+      
+  file_sprawl_issue:
+    total_files_in_master: 167
+    markdown_files: 86
+    yaml_files: 81
+    target_files: "≤20"
+    reduction_needed: "88%"
+    root_cause: "Wave guides not consolidated, separate status docs for each phase"
+    solution: "VACUUM-2026-02-14: Archive all superseded docs, create single WAVES-EXECUTION-TRACKER.yaml"
+
+# Current Status (Phase 2 Complete, Phase 3 Initiated)
 current_status:
+  completion_levels:
+    phase_1_complete: "✅ Intelligence gathering & consolidation (Wave O-S complete)"
+    phase_2_complete: "✅ Registry sync & documentation (167 files after reduction)"
+    phase_3_in_progress: "🔵 Pending 5 waves execution (WAVE-1 through WAVE-5 scope)"
+    phase_4_planned: "⚪ MCP enforcement & automation"
+    phase_5_planned: "⚪ Verification & compliance reporting"
+    
   file_count:
-    before: 214
+    before_consolidation: 214
     after_phase2: 167
-    target: 20
+    target_final: 20
     reduction_progress: "22%"
+    next_target: "85 files (50% reduction with VACUUM-2026-02-14)"
     
   archived:
-    location: "_archive/obsolete-wave-guides/"
-    count: 13
-    files:
-      - "AUTONOMOUS-WAVE-EXECUTION-GUIDE.md"
-      - "AUTONOMOUS-WAVES-H-O-EXECUTION-GUIDE.md"
-      - "CLEANUP-COMPLETE-2026-02-10.md"
-      - "CONSOLIDATION-COMPLETE-2026-02-11.md"
-      - "CHAT01-DIGEST-2026-02-12.md"
-      # ... (13 total)
+    location: "cortex-registry/_cortex-master/_archive/obsolete-wave-guides/"
+    count: 47  # Updated with new understanding
+    scope: "AUTONOMOUS-WAVE-EXECUTION-*.md, WAVE-[0-9]-*, consolidated reports"
+    note: "Only active wave execution files retained in _cortex-master root"
       
   test_suite:
-    status: "PASSING"
+    status: "✅ PASSING"
     total: 412
     passing: 412
     coverage: "Target 80%+"
+    enforcement: "CI/CD blocks on failures"
     
   git:
-    hooks_configured: true
+    branch_policy: "✅ CORTEX branch only (CORE-052)"
+    hooks_configured: "✅ .githooks active"
     hooks_path: ".githooks"
-    post_checkout_active: true
-    settings_json_tracked: false  # CORE-051 compliance
+    post_checkout_active: "✅ Auto-regenerates settings.json"
+    settings_json_tracked: "❌ NOT tracked (CORE-051 compliance)"
+    mcp_auto_start: "✅ Copilot chat triggers MCP via stdio (no manual server startup)"
 
-# Remediation Execution Plan
-remediation_phases:
-  phase_1_wave_o_complete:
-    status: "COMPLETE"
-    duration: "15 hours"
-    milestone: "Wave 3 Autonomy (L/M/N/O) complete"
-    deliverables:
-      - "Agent lazy loading (88% token reduction)"
-      - "Language refinement (90% accuracy)"
-      - "Autonomous execution (approve→done)"
-      - "Data integrity (zero contradictions)"
+# Autonomous Execution Plan: 5 Pending Waves
+# VSCode Integration: Silent Mode - No Manual Server Startup
+# Authority: cortex-architect.prompt.md § SILENT AUTONOMOUS EXECUTION (P0)
+
+autonomous_execution_waves:
   
-  phase_2_wave_1_registry_sync:
-    status: "IN_PROGRESS"
-    duration: "1 hour (Stage 1 of WAVE-1)"
+  wave_1_documentation_vacuum:
+    label: "WAVE-1: DOCUMENTATION VACUUM"
+    status: "READY FOR AUTONOMOUS EXECUTION"
+    duration_estimate: "45 min"
+    token_budget: "80K"
+    vscode_trigger: "/implement WAVE-1: Documentation vacuum and file consolidation"
+    
+    context: |
+      Phase 2 left 167 files in _cortex-master (target ≤20).
+      Root cause: Separate status docs for each wave, consolidated guides not archived.
+      Implementation Reality: Only 5 waves pending, not 16 documented.
+    
     deliverables:
-      - "Update master-plan.yaml (mark WAVE-O complete)"
-      - "Update master registry status"
-      - "Archive old sync docs to baselines/"
-      - "Update README.md (16 waves complete milestone)"
-      
-  phase_2_consolidation:
-    status: "COMPLETE"
-    duration: "30 min"
+      - "Archive 47+ obsolete wave guides → _archive/superseded/"
+      - "Consolidate WAVE-1..WAVE-12 status into WAVES-EXECUTION-TRACKER.yaml"
+      - "Update master-plan.yaml with 5-wave scope (WAVE-1 through WAVE-5)"
+      - "Final file count: ≤20 in _cortex-master root"
+      - "Generate archive manifest (audit trail)"
+    
+    validation:
+      command: "ls -la cortex-registry/_cortex-master/ | wc -l"
+      success_criteria: "≤25 files in root (includes . and ..)"
+      tests: "CORE-002 compliance check (no markdown sprawl)"
+    
+    automation:
+      tool: "cortex_process_request"
+      mode: "TDD-First (tests before implementation)"
+      orchestrator: "TDDOrchestrator → MarkdownSuppressionAgent"
+      ac_markers: "AC_START: AC-WAVE-1-VACUUM-001 → AC_COMPLETE"
+    
+  wave_2_mcp_enforcement:
+    label: "WAVE-2: MCP-FIRST ENFORCEMENT"
+    status: "READY FOR AUTONOMOUS EXECUTION"
+    duration_estimate: "60 min"
+    token_budget: "100K"
+    vscode_trigger: "/implement WAVE-2: MCP bypass prevention and tool interception"
+    
+    context: |
+      MCP bypass patterns detected in chat01.md audit.
+      Impact: Breaks TDD (CORE-008), security gates, audit trail.
+      Solution: Native tool interception + 3-method MCP detection (tool_query, env_vars, network_port).
+    
     deliverables:
-      - "Archived 13 obsolete wave guides"
-      - "Reduced from 214 → 167 files"
-      - "Created _archive structure"
-      
-  phase_3_naming:
-    status: "IN PROGRESS"
-    duration: "45 min (estimated)"
-    scope: "109 SCREAMING_CASE files → kebab-case"
-    approach:
-      - "Generate rename mapping"
-      - "Batch rename with git mv"
-      - "Update all cross-references"
-      
-  phase_4_mcp_enforcement:
-    status: "PLANNED"
-    duration: "60 min (estimated)"
-    deliverables:
-      - "Native tool interception layer"
-      - "3-method MCP detection"
-      - "Pre-flight check integration"
-      
-  phase_5_automation:
-    status: "PLANNED"
-    duration: "45 min (estimated)"
-    deliverables:
-      - "StatusUpdateHook (orchestrator → registry)"
-      - "RegistryValidator (prevent contradictions)"
-      - "RecommendationGate (LENS + registry + ROI)"
-      
-  phase_6_verification:
-    status: "PLANNED"
-    duration: "30 min (estimated)"
-    deliverables:
-      - "Full governance audit"
-      - "Compliance report (8 metrics)"
-      - "AC markers (AC_START → AC_COMPLETE)"
+      - "Implement native_tool_interception_layer.py (blocks direct file ops for IMPLEMENT/FIX)"
+      - "3-method MCP detector (tool_query → env_vars → localhost:9000)"
+      - "Pre-flight check integration (EnforcementOrchestrator agent)"
+      - "Unit tests (16 tests, 100% coverage)"
+      - "Integration tests (MCP unavailable scenarios)"
+    
+    validation:
+      command: "pytest tests/mcp/test_interception_layer.py -v"
+      success_criteria: "16/16 tests passing"
+      coverage: "≥95%"
+    
+    automation:
+      tool: "cortex_process_request"
+      mode: "TDD-First"
+      orchestrator: "TDDOrchestrator → SecurityCheckpointAgent"
+      ac_markers: "AC_START: AC-WAVE-2-MCP-ENFORCE-001"
+      core_rules: "CORE-049 (Silent Autonomous), CORE-050 (MCP Circuit Breaker)"
 
-# Success Metrics
-success_metrics:
-  file_reduction:
-    metric: "Files in _cortex-master"
-    current: 167
-    target: "≤20"
-    reduction_needed: "88%"
+  wave_3_automation_hooks:
+    label: "WAVE-3: AUTOMATION HOOKS"
+    status: "READY FOR AUTONOMOUS EXECUTION"
+    duration_estimate: "45 min"
+    token_budget: "90K"
+    vscode_trigger: "/implement WAVE-3: StatusUpdateHook and RegistryValidator automation"
     
-  naming_compliance:
-    metric: "SCREAMING_CASE violations"
-    current: 109
-    target: 0
-    reduction_needed: "100%"
+    context: |
+      No automated registry status workflow (manual updates only).
+      Impact: Broken dashboards, stale reports, status lag in hours.
+      Solution: Orchestrator completion hooks that sync registry automatically.
     
-  mcp_bypass:
-    metric: "Direct file operation violations"
-    current: "TBD (audit needed)"
-    target: 0
-    reduction_needed: "100%"
+    deliverables:
+      - "StatusUpdateHook: Triggered on phase completion, updates registry (5 min SLA)"
+      - "RegistryValidator: Prevents contradictions, detects stale data"
+      - "RecommendationGate: LENS + registry consultation before suggestions"
+      - "Unit tests (12 tests for hooks, 8 for validator)"
+      - "Integration tests (E2E: completion → registry sync)"
     
-  registry_sync:
-    metric: "Status update lag"
-    current: "Hours (manual)"
-    target: "<5 min (automated)"
-    improvement: "98%"
+    validation:
+      command: "pytest tests/automation/test_automation_hooks.py -v"
+      success_criteria: "20/20 tests passing"
+      coverage: "≥90%"
     
-  agent_alignment:
-    metric: "Architecture consultation rate"
-    current: "Unknown"
-    target: "100%"
-    validation: "RecommendationGate active"
-    
-  test_health:
-    metric: "Test suite status"
-    current: "412/412 passing"
-    target: "Maintain 100%"
-    coverage: "≥80%"
-    
-  cross_platform:
-    metric: "CORE-051 compliance"
-    current: "✅ settings.json not tracked"
-    target: "✅ Maintain compliance"
-    validation: "Git hooks active"
-    
-  audit_trail:
-    metric: "AC marker coverage"
-    current: "60+ in last 3 days"
-    target: "100% of implementations"
-    validation: "EnforcementOrchestrator"
+    automation:
+      tool: "cortex_process_request"
+      mode: "TDD-First"
+      orchestrator: "TDDOrchestrator → IncrementalExecutionAgent"
+      ac_markers: "AC_START: AC-WAVE-3-AUTOMATION-HOOKS-001"
 
-# Next Actions
+  wave_4_governance_audit:
+    label: "WAVE-4: GOVERNANCE AUDIT & COMPLIANCE"
+    status: "READY FOR AUTONOMOUS EXECUTION"
+    duration_estimate: "30 min"
+    token_budget: "60K"
+    vscode_trigger: "/audit WAVE-4: Full governance compliance check and reporting"
+    
+    context: |
+      13 violations detected in chat01.md audit (5 P0, 5 P1, 3 P2).
+      Core issues: File naming (109 SCREAMING_CASE), MCP bypass, registry sync, agent blindness.
+      Status: Phase 3 remediation in progress, need comprehensive verification.
+    
+    deliverables:
+      - "Run cortex_audit with P0/P1/P2 checklist"
+      - "Verify CORE rules compliance (25/29 automated)"
+      - "Generate governance-compliance-report-2026-02-14.yaml"
+      - "CORE-051 verification (settings.json not tracked)"
+      - "CORE-052 verification (CORTEX branch only)"
+    
+    validation:
+      command: "cortex_audit --mode comprehensive"
+      success_criteria: "0 P0 violations, ≤2 P1 warnings"
+      coverage: "8 compliance metrics"
+    
+    automation:
+      tool: "cortex_lens_analyze" (read-only, AUDIT intent allowed without MCP strict check)
+      mode: "Context-blind audit (no prior assumptions)"
+      orchestrator: "MasterOrchestrator → ComplianceValidationAgent"
+      ac_markers: "AC_START: AC-WAVE-4-AUDIT-001"
+
+  wave_5_final_consolidation:
+    label: "WAVE-5: FINAL CONSOLIDATION & HANDOFF"
+    status: "READY FOR AUTONOMOUS EXECUTION"
+    duration_estimate: "30 min"
+    token_budget: "50K"
+    vscode_trigger: "/plan WAVE-5: Final consolidation and production handoff"
+    
+    context: |
+      After 4 waves complete, consolidate into production-ready state.
+      Ensure: Zero contradictions, complete automation, verified compliance.
+      Handoff to continuous improvement cycle.
+    
+    deliverables:
+      - "Update master-plan.yaml → status: COMPLETE"
+      - "Archive all session docs → _archive/2026-02-14-session/"
+      - "Generate final CORTEX-STATUS-2026-02-14.yaml (single source of truth)"
+      - "Update README.md with new architecture status"
+      - "Generate production deployment checklist"
+    
+    validation:
+      command: "cortex_validate_compliance --rules CORE-002,CORE-008,CORE-028,CORE-035,CORE-051,CORE-052"
+      success_criteria: "100% compliance on all CORE rules"
+    
+    automation:
+      tool: "cortex_process_request"
+      mode: "Plan orchestration"
+      orchestrator: "PlanOrchestrator → ArchitectureIntegrityAgent"
+      ac_markers: "AC_START: AC-WAVE-5-CONSOLIDATION-001 → AC_COMPLETE"
+
+# Autonomous Execution Instructions for VSCode Copilot Chat
+autonomous_execution_setup:
+  
+  vscode_integration:
+    architecture: "MCP Auto-Start (Pylance-style)"
+    mode: "stdio transport, JSON-RPC 2.0"
+    trigger: "Copilot chat invokes cortex_* tools"
+    auto_start: "✅ YES - VS Code auto-starts MCP server"
+    manual_startup: "❌ NOT REQUIRED"
+    setup_time: "30 seconds (setup-mcp.py)"
+    
+  preparation_steps:
+    - step: 1
+      action: "Verify Python 3.9+ installed"
+      command: "python --version"
+      
+    - step: 2
+      action: "Run setup script (one-time)"
+      command: "python .cortex/setup-mcp.py"
+      expected_output: "✅ SETUP COMPLETE"
+      
+    - step: 3
+      action: "Reload VS Code"
+      action_detail: "Command Palette → Developer: Reload Window"
+      
+    - step: 4
+      action: "Verify MCP availability"
+      command: "In Copilot Chat: type '@cortex' to auto-complete tools"
+      
+  session_execution:
+    pre_flight_check:
+      - "MCP tools availability (automatic on first chat message)"
+      - "Python environment (venv or conda)"
+      - "Git hooks configured (.githooks active)"
+      - "Branch validation (CORTEX branch only)"
+    
+    execution_sequence:
+      - "Copy WAVE execution trigger from wave_X_* sections above"
+      - "Paste into VSCode Copilot Chat"
+      - "Copilot auto-starts MCP → TDDOrchestrator → silent execution"
+      - "Monitor progress via ASCII bars (no narration)"
+      - "On completion: Review AC markers and test results"
+    
+    silent_mode_defaults:
+      progress_bars: "✅ Enabled (inline code blocks)"
+      narration: "❌ Disabled"
+      mid_execution_prompts: "❌ Disabled"
+      completion_report: "✅ Table format with AC markers"
+      test_output: "✅ Summary table (full output in AC markers)"
+    
+  troubleshooting:
+    mcp_not_available:
+      symptom: "MCP tools not appearing in Copilot chat"
+      resolution:
+        - "Run: python .cortex/setup-mcp.py"
+        - "Reload: Command Palette → Developer: Reload Window"
+        - "Retry: Paste wave trigger in Copilot chat"
+    
+    tests_failing:
+      symptom: "WAVE execution halts on test failure"
+      resolution:
+        - "Do NOT skip tests (CORE-008 violation)"
+        - "Read error completely"
+        - "Fix root cause in source code"
+        - "Re-run tests to verify"
+        - "Resume via /continue in Copilot chat"
+    
+    token_budget_exceeded:
+      symptom: "Response truncated or execution incomplete"
+      resolution:
+        - "Session automatically commits progress (git commit)"
+        - "Copy continuation prompt from AC markers"
+        - "Start new Copilot chat session"
+        - "Paste: /continue {wave_number} {checkpoint}"
+        - "Execution resumes from saved point"
+
+# Immediate Next Actions (VSCODE COPILOT CHAT READY)
 next_actions:
-  immediate:
-    - action: "Complete Phase 3: Batch rename 109 SCREAMING_CASE files"
+  
+  ready_now:
+    - action: "WAVE-1: Documentation Vacuum"
+      vscode_command: "/implement WAVE-1: Documentation vacuum - archive 47+ obsolete files, consolidate to ≤20 files in _cortex-master"
       priority: "P0"
-      estimated_duration: "45 min"
+      estimated_time: "45 min"
       
-    - action: "Archive additional obsolete files to reach ≤20 target"
-      priority: "P0"
-      estimated_duration: "30 min"
-      
-    - action: "Verify CORE-051 compliance (settings.json not tracked)"
-      priority: "P0"
-      estimated_duration: "5 min"
-      
-  short_term:
-    - action: "Implement native tool interception layer (MCP bypass prevention)"
+    - action: "WAVE-2: MCP Enforcement"
+      vscode_command: "/implement WAVE-2: MCP bypass prevention - native tool interception layer with 3-method detection"
       priority: "P1"
-      estimated_duration: "60 min"
+      estimated_time: "60 min"
       
-    - action: "Implement StatusUpdateHook (automated registry sync)"
+    - action: "WAVE-3: Automation Hooks"
+      vscode_command: "/implement WAVE-3: StatusUpdateHook and RegistryValidator - automated registry sync"
       priority: "P1"
-      estimated_duration: "45 min"
+      estimated_time: "45 min"
       
-    - action: "Implement RecommendationGate (agent architecture awareness)"
+    - action: "WAVE-4: Governance Audit"
+      vscode_command: "/audit WAVE-4: Run comprehensive governance compliance check - verify 25/29 CORE rules"
       priority: "P1"
-      estimated_duration: "45 min"
+      estimated_time: "30 min"
       
-  validation:
-    - action: "Run full governance audit"
+    - action: "WAVE-5: Final Consolidation"
+      vscode_command: "/plan WAVE-5: Final consolidation - archive session docs, generate production handoff checklist"
       priority: "P1"
-      estimated_duration: "30 min"
-      validation_command: "cortex_debug_governance_detect"
-      
-    - action: "Generate compliance report"
-      priority: "P1"
-      estimated_duration: "15 min"
-      deliverable: "governance-compliance-report-2026-02-13.yaml"
+      estimated_time: "30 min"
 
-# Audit Trail
+# Execution Context
+execution_context:
+  total_pending_waves: 5
+  total_estimated_duration: "210 min (3.5 hours)"
+  total_token_budget: "380K tokens"
+  parallel_execution: "Sequential (dependencies exist: WAVE-1 → WAVE-2 → WAVE-3 → WAVE-4 → WAVE-5)"
+  
+  vscode_setup_checklist:
+    - "✅ Python 3.9+ available"
+    - "✅ Virtual environment created (.venv or conda)"
+    - "✅ setup-mcp.py executed"
+    - "✅ VS Code reloaded (Developer: Reload Window)"
+    - "✅ Copilot chat open and ready"
+    - "⚪ Ready to execute WAVE-1"
+    
+  governance_enforcement:
+    - "CORE-002: Zero markdown sprawl (WAVE-1 achieves this)"
+    - "CORE-008: TDD-First (all implementations via TDDOrchestrator)"
+    - "CORE-028: kebab-case naming (validated in WAVE-4 audit)"
+    - "CORE-035: Single canonical implementation (RecommendationGate in WAVE-3)"
+    - "CORE-051: settings.json not tracked (verified active)"
+    - "CORE-052: CORTEX branch only (pre-flight validates)"
+    - "MCP-FIRST: All via cortex_* tools (WAVE-2 enforces)"
+
+# Audit Trail (Session 2026-02-14: Documentation Reality Alignment)
 audit_trail:
-  session_id: "chat01-digest-holistic-fix"
-  start_time: "2026-02-13T[timestamp]"
-  orchestrator: "MasterOrchestrator → EnforcementOrchestrator"
-  mode: "ARCHITECT (silent autonomous)"
+  session_id: "chat02-documentation-reality-sync"
+  date: "2026-02-14"
+  start_marker: "AC_START: AC-DOC-REALITY-SYNC-001"
   
-  milestones:
-    - marker: "AC_START: AC-HOLISTIC-FIX-001"
-      description: "Chat01.md digest + comprehensive remediation"
-      timestamp: "2026-02-13"
-      
-    - marker: "AC_CHECKPOINT: Phase 1 Complete"
-      description: "Intelligence gathering (214 files analyzed)"
-      timestamp: "2026-02-13"
-      
-    - marker: "AC_CHECKPOINT: Phase 2 Complete"
-      description: "Consolidated 214 → 167 files (13 archived)"
-      timestamp: "2026-02-13"
-      
-    - marker: "AC_PENDING: Phase 3-6"
-      description: "Naming, MCP enforcement, automation, verification"
-      status: "IN PROGRESS"
+  objectives:
+    - "Align documentation claims with implementation reality"
+    - "Consolidate 16 wave claims into 5 pending waves"
+    - "Setup autonomous execution in VSCode Copilot Chat"
+    - "Define end-to-end workflow with clear vscode_command triggers"
+    
+  key_changes:
+    - "Version: 2.0 → 3.0 (Reality Alignment)"
+    - "Scope: 6 phases → 5 autonomous execution waves"
+    - "File count target: Current 167 → ≤20 (WAVE-1)"
+    - "MCP architecture: Manual startup → Auto-start via Copilot chat"
+    - "Execution mode: Phase-based → Wave-based (atomic deliverables)"
+    
+  compliance_validation:
+    - "CORE-002: Markdown sprawl tracking (WAVE-1 target: ≤20 files)"
+    - "CORE-008: TDD-First enforcement (all waves use TDDOrchestrator)"
+    - "CORE-028: File naming validation (WAVE-4 audit)"
+    - "CORE-051: settings.json not tracked (verified)"
+    - "CORE-052: CORTEX branch only (verified)"
+    - "MCP-FIRST: All via cortex_* tools (WAVE-2 gates)"
+    
+  next_session_marker: "AC_PENDING: 5 waves ready for autonomous execution via /implement, /audit, /plan commands in VSCode Copilot Chat"
 
-# References
+# References & Quick Links
 references:
-  governance_plan: "GOVERNANCE-REMEDIATION-PLAN-2026-02-13.md"
-  architecture_prompt: ".github/prompts/cortex-architect.prompt.md"
-  instructions: ".github/copilot-instructions.md"
-  enforcement_agents: ".github/agents/core/*.md"
-  
-  core_rules:
-    - "CORE-002: No markdown sprawl"
-    - "CORE-008: TDD mandatory (tests before code)"
-    - "CORE-028: kebab-case file naming"
-    - "CORE-035: Single canonical implementation"
-    - "CORE-051: Cross-platform MCP (.vscode/settings.json NOT tracked)"
-    - "MCP-FIRST: All operations through MCP tools"
-    - "ARCH-012: Industry standards compliance"
+  documentation:
+    - ".github/prompts/cortex-architect.prompt.md (SILENT AUTONOMOUS EXECUTION § P0)"
+    - ".github/copilot-instructions.md (MCP GATE § ABSOLUTE FIRST CHECK)"
+    - ".github/agents/core/CORTEX.md (Master Agent § MCP REQUIRED)"
+    
+  governance_framework:
+    - "cortex-registry/_cortex-master/GOVERNANCE-REMEDIATION-PLAN-2026-02-13.md"
+    - "CORE rules: CORE-002, CORE-008, CORE-028, CORE-035, CORE-051, CORE-052"
+    - "MCP-FIRST: All operations through cortex_* tools"
+    
+  execution_framework:
+    - "TDDOrchestrator: Tests before implementation"
+    - "EnforcementOrchestrator: 7-agent pre-execution gate"
+    - "WAVE model: Atomic deliverables with token budgets"
+    
+  automation_tools:
+    - "cortex_process_request: Main implementation tool"
+    - "cortex_lens_analyze: Code intelligence (AUDIT mode)"
+    - "cortex_audit: Governance compliance verification"
+    - "cortex_challenge: Design review + disagreement detection"
+    
+  vscode_triggers:
+    wave_1: "/implement WAVE-1: Documentation vacuum - archive 47+ obsolete files"
+    wave_2: "/implement WAVE-2: MCP enforcement - native tool interception"
+    wave_3: "/implement WAVE-3: Automation hooks - status update + registry validator"
+    wave_4: "/audit WAVE-4: Governance compliance - verify CORE rules"
+    wave_5: "/plan WAVE-5: Final consolidation - archive session, generate handoff"
