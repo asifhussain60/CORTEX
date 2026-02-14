@@ -145,6 +145,10 @@ class IncrementalBuilder:
         """
         start_time = time.time()
         
+        # Reset build state for this build
+        self._files_rebuilt = set()
+        self._total_files = 0
+        
         # Detect changed files
         changed_files = self.detect_changed_files()
         
@@ -277,6 +281,11 @@ class IncrementalBuilder:
         current_hash = self.compute_hash(file_path)
         cached_hash = self.cache.file_hashes.get(file_str)
         
+        # If no cached hash, this is first build - rebuild
+        if cached_hash is None:
+            return True
+        
+        # If hash changed, rebuild
         if current_hash != cached_hash:
             return True
         
@@ -286,6 +295,7 @@ class IncrementalBuilder:
             if dep in self._files_rebuilt:
                 return True
         
+        # Cache hit - no rebuild needed
         return False
     
     def _rebuild_file(self, file_path: Path, file_str: str) -> None:
