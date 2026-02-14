@@ -1,8 +1,8 @@
 # CORTEX MCP Tools Catalog
 
-**Consolidated Tools:** 24 | **Total Operations:** 86+ | **Updated:** 2026-02-13  
+**Consolidated Tools:** 24 | **Total Operations:** 86+ | **Updated:** 2026-02-14  
 **MCP Server:** stdio/HTTP (Port 8000) | **Protocol:** JSON-RPC 2.0  
-**Architecture:** Consolidated tool design (Phase Wave 100) for improved organization
+**Architecture:** Consolidated tool design with orchestrator validation (Phase 23 MEGA-B)
 
 ---
 
@@ -18,16 +18,20 @@ CORTEX's **24 consolidated MCP tools** are its neurotransmitter library — each
 
 **What Changed:** Previously, CORTEX exposed 86 individual MCP tools — one for each specific operation (e.g., `cortex_lens_analyze`, `cortex_lens_deep_analyze`, `cortex_lens_diff`, etc.). This created cognitive overload for users and fragmented related functionality.
 
-**Wave 100 Consolidation:** CORTEX underwent a major reorganization, grouping related operations under **parent tools**. Instead of 86 separate tools, there are now **24 consolidated tools**, each containing multiple related **operations**. For example:
+**Wave 100 + Phase 23 MEGA-B:** CORTEX underwent major reorganization, grouping related operations under **parent tools** with orchestrator validation. Instead of 86 separate tools, there are now **24 consolidated tools**, each containing multiple related **operations**. For example:
 
 - **Before:** `cortex_lens_analyze`, `cortex_lens_deep_analyze`, `cortex_lens_diff`, `cortex_lens_summarize`, `cortex_lens_validate` (5 separate tools)
 - **After:** `cortex_lens` (1 tool with 5 operations: `analyze`, `deep_analyze`, `diff`, `summarize`, `validate`)
+
+**NEW in Phase 23 MEGA-B:** All MCP tools now include orchestrator validation context injection, ensuring proper governance enforcement and audit trail integration.
 
 **Benefits:**
 - 🧠 **Cognitive clarity:** Group related functionality under intuitive parent concepts
 - 📦 **Easier discovery:** Browse by domain (debug, lens, governance) instead of searching 86 flat tools
 - 🔄 **Consistent patterns:** All consolidated tools follow `cortex_{domain}` naming with `operation` parameter
 - 📊 **Better organization:** Natural hierarchy matches how users think about functionality
+- ✅ **Orchestrator validation:** Every tool invocation validated against wiring contract
+- 📝 **Audit logging:** Comprehensive tracking through super-orchestrators
 
 This catalog documents all **86+ operations** available across **24 consolidated tools**. These tools enable AI assistants (GitHub Copilot, Claude, Cursor) to leverage CORTEX's cognitive capabilities through the Model Context Protocol.
 
