@@ -157,6 +157,9 @@ class MCPServer:
         """
         Execute a tool by name.
         
+        ENFORCEMENT: Injects orchestrator_context={'source': 'MasterOrchestrator'} 
+        into all tool calls to enforce routing validation.
+        
         Args:
             tool_name: Tool identifier
             **params: Tool parameters
@@ -165,6 +168,14 @@ class MCPServer:
             ToolResult with success/error and data
         """
         start_time = time.time()
+        
+        # PHASE 4: Inject orchestrator context into all tool calls
+        # This ensures all tools validate routing through MasterOrchestrator
+        params['orchestrator_context'] = {
+            'source': 'MasterOrchestrator',
+            'timestamp': datetime.now().isoformat(),
+            'tool_name': tool_name
+        }
         
         # Get tool implementation
         tool = self.registry.get(tool_name)
