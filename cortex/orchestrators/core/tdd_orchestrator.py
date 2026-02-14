@@ -112,6 +112,7 @@ class SuccessCriteria:
     max_latency_ms: float
     extensibility_required: bool
     custom_checks: List[Callable[[Any], bool]] = field(default_factory=list)
+    goal_predicate: Optional[Callable[[Any], bool]] = None
 
 
 @dataclass
@@ -1270,7 +1271,17 @@ class TDDOrchestrator(IOrchestrator):
                     recommendations.append("Review custom criteria requirements")
             except Exception as e:
                 logger.warning(f"Custom check failed with exception: {e}")
-        
+
+        # Check goal_predicate (Phase 83: ConvergenceNeuron integration)
+        if criteria.goal_predicate is not None:
+            try:
+                if not criteria.goal_predicate(metrics):
+                    gaps.append("Goal predicate not satisfied")
+                    recommendations.append("Review goal criteria — target not yet met")
+            except Exception as e:
+                logger.warning(f"Goal predicate check failed with exception: {e}")
+                gaps.append(f"Goal predicate raised exception: {e}")
+
         passed = len(gaps) == 0
         
         return GateResult(
@@ -1278,6 +1289,167 @@ class TDDOrchestrator(IOrchestrator):
             gaps=gaps,
             recommendations=recommendations
         )
+
+    # ============================================================
+    # Phase 83: Convergence Loop — Holistic TDD Outer Loop
+    # AC-P83-S2-T2-001: Convergence-aware multi-cycle execution
+    # ============================================================
+
+    def execute_convergence_loop(
+        self,
+        scan_function: Callable[[], Any],
+        fix_function: Callable[[], None],
+        target_predicate: Callable[[Any], bool],
+        max_cycles: int = 10,
+        stagnation_threshold: float = 0.01,
+        stagnation_patience: int = 2,
+    ) -> Dict[str, Any]:
+        """Execute convergence loop: scan → fix → re-scan → repeat until done.
+
+        Outer TDD loop that wraps inner RGR cycles. Uses ConvergenceNeuron
+        to re-measure progress between cycles and detect convergence or
+        stagnation.
+
+        Args:
+            scan_function: Callable returning current measurement (e.g., count of issues).
+            fix_function: Callable that attempts to fix issues (one batch per call).
+            target_predicate: Callable returning True when convergence achieved.
+            max_cycles: Maximum number of fix cycles before giving up.
+            stagnation_threshold: Minimum improvement rate to consider progress.
+                If improvement_rate < this for stagnation_patience consecutive
+                cycles, the loop exits early with stagnation warning.
+            stagnation_patience: Number of consecutive stagnant cycles before exit.
+
+        Returns:
+            Dictionary with:
+                - success (bool): Whether convergence was achieved.
+                - cycles_executed (int): Number of fix cycles run.
+                - progress_history (List[ConvergenceSignal]): Signal per cycle.
+                - already_converged (bool): True if target met before any fix.
+                - stagnation_detected (bool): True if loop exited due to stagnation.
+
+        Example:
+            >>> result = orchestrator.execute_convergence_loop(
+            ...     scan_function=lambda: count_wave_refs(),
+            ...     fix_function=lambda: fix_batch_of_refs(),
+            ...     target_predicate=lambda v: v <= 0,
+            ...     max_cycles=10,
+            ... )
+            >>> result["success"]
+            True
+        """
+        from cortex.orchestrators.core.convergence_neuron import (
+            ConvergenceNeuron,
+            ConvergenceSignal,
+        )
+
+        logger.info(f"Phase 83: Starting convergence loop (max_cycles={max_cycles})")
+
+        neuron = ConvergenceNeuron(
+            scan_function=scan_function,
+            target_predicate=target_predicate,
+        )
+
+        # Initial scan — check if already converged
+        initial_signal = neuron.check()
+        self._emit_event("CONVERGENCE_CHECK", {
+            "cycle": 0,
+            "current_value": initial_signal.current_value,
+            "converged": initial_signal.converged,
+        })
+
+        if initial_signal.converged:
+            logger.info("Phase 83: Already converged before any fix cycles")
+            self._emit_event("PHASE_CONVERGED", {
+                "cycles_executed": 0,
+                "already_converged": True,
+            })
+            return {
+                "success": True,
+                "cycles_executed": 0,
+                "progress_history": neuron.get_history(),
+                "already_converged": True,
+                "stagnation_detected": False,
+            }
+
+        # Execute fix cycles
+        consecutive_stagnant = 0
+        previous_value = initial_signal.current_value
+
+        for cycle in range(1, max_cycles + 1):
+            logger.info(f"Phase 83: Cycle {cycle}/{max_cycles}")
+
+            # Execute fix function (catch errors, continue)
+            try:
+                fix_function()
+            except Exception as e:
+                logger.warning(f"Phase 83: Fix function error in cycle {cycle}: {e}")
+
+            # Re-scan after fix
+            signal = neuron.check()
+            self._emit_event("CONVERGENCE_CHECK", {
+                "cycle": cycle,
+                "current_value": signal.current_value,
+                "converged": signal.converged,
+                "improvement_rate": signal.improvement_rate,
+            })
+
+            # Check convergence
+            if signal.converged:
+                logger.info(f"Phase 83: Converged in cycle {cycle}")
+                self._emit_event("PHASE_CONVERGED", {
+                    "cycles_executed": cycle,
+                    "final_value": signal.current_value,
+                })
+                return {
+                    "success": True,
+                    "cycles_executed": cycle,
+                    "progress_history": neuron.get_history(),
+                    "already_converged": False,
+                    "stagnation_detected": False,
+                }
+
+            # Check stagnation: compare delta between consecutive cycles
+            # If value barely changed from previous cycle, count as stagnant
+            try:
+                prev = float(previous_value)
+                curr = float(signal.current_value)
+                if prev == 0:
+                    cycle_delta = 0.0
+                else:
+                    cycle_delta = abs(prev - curr) / abs(prev)
+            except (TypeError, ValueError):
+                cycle_delta = 0.0
+
+            if cycle_delta < stagnation_threshold:
+                consecutive_stagnant += 1
+            else:
+                consecutive_stagnant = 0
+
+            previous_value = signal.current_value
+
+            if consecutive_stagnant >= stagnation_patience:
+                logger.warning(
+                    f"Phase 83: Stagnation detected after {cycle} cycles "
+                    f"({consecutive_stagnant} consecutive stagnant)"
+                )
+                return {
+                    "success": False,
+                    "cycles_executed": cycle,
+                    "progress_history": neuron.get_history(),
+                    "already_converged": False,
+                    "stagnation_detected": True,
+                }
+
+        # Max cycles reached
+        logger.warning(f"Phase 83: Max cycles ({max_cycles}) reached")
+        return {
+            "success": False,
+            "cycles_executed": max_cycles,
+            "progress_history": neuron.get_history(),
+            "already_converged": False,
+            "stagnation_detected": False,
+        }
 
     # ============================================================
     # ENH-088 Stage 2: Quality Gates Enhancement

@@ -131,11 +131,12 @@ class TestConvergenceNeuronCheck:
         neuron = ConvergenceNeuron(
             scan_function=lambda: 30,
             target_predicate=lambda v: v <= 5,
+            target_value=5,
         )
         signal = neuron.check()
         assert isinstance(signal, ConvergenceSignal)
         assert signal.current_value == 30
-        assert signal.target_value is not None
+        assert signal.target_value == 5
 
     @pytest.mark.skipif(ConvergenceNeuron is None, reason="ConvergenceNeuron not yet implemented")
     def test_check_detects_convergence_when_target_met(self):
