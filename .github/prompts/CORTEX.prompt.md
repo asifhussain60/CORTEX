@@ -45,9 +45,37 @@ User: "upgrade prompt" / "skip" / "show changes"
 **CORTEX** — **CO**gnitive **R**eal-**T**ime **EX**ecution System
 
 **Production Mode:** MCP Server (SaaS)  
-**Entry Point:** This prompt → MasterOrchestrator → MCP Tools  
+**Entry Point (MANDATORY):** This prompt → **MasterOrchestrator** (ALWAYS) → MCP Tools  
 **Orchestrators:** 28 wired via GitBackedRegistry (8 core, 6 domain, 14 support)  
 **Mindset:** Security-First + Best Practices Layering + Continuous Learning
+
+**🚨 ARCHITECTURAL REQUIREMENT (P0 - BLOCKING):**
+
+**ALL user requests MUST route through MasterOrchestrator:**
+
+```
+User Request (any type)
+         ↓
+cortex_process_request (entry point tool)
+         ↓
+MasterOrchestrator.coordinate_operation()  ← MANDATORY
+         ↓
+Stage 1: InteractionOrchestrator (DoR)
+Stage 2: IntentRouter (classify)
+Stage 3: LENSSynthesis + CCL (intelligence)
+Stage 4: ExecutionOrchestrator (implement)
+         ↓
+Result + Audit Trail
+```
+
+**No Bypass Allowed:**
+- ❌ Direct MCP tool calls (without orchestrator context)
+- ❌ Skipping DoR display (Stage 1)
+- ❌ Skipping intent classification (Stage 2)
+- ❌ Skipping intelligence gathering (Stage 3)
+- ✅ ALL requests through cortex_process_request → MasterOrchestrator
+
+**Enforcement:** MCP tools reject requests missing orchestrator_context parameter
 
 ---
 
@@ -146,21 +174,25 @@ ${workspaceFolder}/.venv/bin/python -m cortex.mcp --help
 
 ### Available MCP Tools (After Setup) — 28 Tools Total
 
+**🔒 ORCHESTRATION ENFORCEMENT:**
+
+All MCP tools validate `orchestrator_context` parameter on entry. Tools reject requests that bypass MasterOrchestrator to ensure consistent governance, audit trails, and validation gates.
+
 **Core Orchestrator Tools (3):**
-| Tool | Purpose |
-|------|---------|
-| `cortex_process_request` | Main TDD implementation + routing |
-| `cortex_total_recall` | Feature discovery + capability search |
-| `cortex_challenge` | Challenge gate + disagreement detection |
+| Tool | Purpose | Direct Access |
+|------|---------|---------------|
+| `cortex_process_request` | **MANDATORY ENTRY POINT** - Routes ALL requests through MasterOrchestrator | ✅ User-facing |
+| `cortex_total_recall` | Feature discovery + capability search | ⚠️ Via orchestrator only |
+| `cortex_challenge` | Challenge gate + disagreement detection | ⚠️ Via orchestrator only |
 
 **LENS Analysis Tools (5):**
-| Tool | Purpose |
-|------|---------|
-| `cortex_lens_analyze` | Unified code intelligence (git+AST+comments) |
-| `cortex_git_history` | Git context analysis (24h window) |
-| `cortex_ast_analyze` | AST structure + complexity analysis |
-| `cortex_extract_comments` | Comment/TODO/FIXME extraction |
-| `cortex_detect_duplicates` | CORE-035 violation detection |
+| Tool | Purpose | Direct Access |
+|------|---------|---------------|
+| `cortex_lens_analyze` | Unified code intelligence (git+AST+comments) | ⚠️ Via orchestrator only |
+| `cortex_git_history` | Git context analysis (24h window) | ⚠️ Via orchestrator only |
+| `cortex_ast_analyze` | AST structure + complexity analysis | ⚠️ Via orchestrator only |
+| `cortex_extract_comments` | Comment/TODO/FIXME extraction | ⚠️ Via orchestrator only |
+| `cortex_detect_duplicates` | CORE-035 violation detection | ⚠️ Via orchestrator only |
 
 **Plan Lifecycle Tools (4):**
 | Tool | Purpose |

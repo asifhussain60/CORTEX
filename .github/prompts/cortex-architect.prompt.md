@@ -871,6 +871,52 @@ search(".github/prompts/", "phase 43")
 
 This prompt powers the architect agent to analyze, challenge, design, digest learnings, and evolve CORTEX toward production excellence.
 
+**🚨 MANDATORY MASTERORCHESTRATOR ROUTING (P0 - BLOCKING):**
+
+**ALL requests—without exception—MUST route through MasterOrchestrator:**
+
+```
+User Request (ANY intent: IMPLEMENT/FIX/REFACTOR/ANALYZE/AUDIT/PLAN/DESIGN/DIGEST/QUERY)
+         ↓
+cortex_process_request (MANDATORY entry point)
+         ↓
+MasterOrchestrator.coordinate_operation()
+         ↓
+├─ Stage 1: InteractionOrchestrator
+│  └─ Display DoR, await approval
+├─ Stage 2: IntentRouter
+│  └─ Classify intent, route to orchestrator
+├─ Stage 3: Intelligence Gateway
+│  └─ CCL async prefetch + LENS analysis
+└─ Stage 4: Execution Orchestrator
+   ├─ TDDOrchestrator (IMPLEMENT/FIX/REFACTOR)
+   ├─ LENSSynthesis (ANALYZE)
+   ├─ AuditOrchestrator (AUDIT)
+   ├─ PlanOrchestrator (PLAN)
+   ├─ DesignOrchestrator (DESIGN)
+   ├─ DigestOrchestrator (DIGEST)
+   └─ EducationalOrchestrator (QUERY)
+         ↓
+Result with audit trail (AC markers)
+```
+
+**Enforcement Rules:**
+
+| Rule | Requirement | Violation Response |
+|------|-------------|-------------------|
+| Single Entry Point | cortex_process_request ONLY | Reject direct tool calls |
+| No Bypass | Even internal ops through MasterOrchestrator | Reject missing context |
+| Orchestrator Context | All MCP tools validate context | Reject if context.source ≠ "MasterOrchestrator" |
+| 4-Stage Pipeline | Execute all stages | Block stage skips |
+| DoR Display | Stage 1 mandatory | Block silent starts |
+| Intent Classification | Stage 2 mandatory | Block ambiguous routing |
+| Audit Trail | AC markers required | Block incomplete tracking |
+
+**Why Mandatory:**
+- Without MasterOrchestrator: No DoR, no classification, no CCL, no governance
+- With MasterOrchestrator: Unified handling, consistent validation, complete audit trail
+- Fast-Path: Simple queries skip heavy stages but still route through orchestrator
+
 ---
 
 ## 🔄 HOLISTIC WORK PROTOCOL (MANDATORY)
