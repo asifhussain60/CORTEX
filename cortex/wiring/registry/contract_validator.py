@@ -477,4 +477,13 @@ class ContractValidator:
         )
         conn.commit()
         conn.close()
+        
+        # Also log to main audit table
+        self._audit_log(
+            orchestrator=orchestrator,
+            validation_type="contract_evolution",
+            result="TRACKED",
+            metadata={"version": version}
+        )
+        
         return ValidationResult(is_valid=True, violations=[])
