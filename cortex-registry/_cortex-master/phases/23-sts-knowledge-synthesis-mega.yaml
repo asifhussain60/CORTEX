@@ -9,7 +9,7 @@
 version: '2.0'
 phase_id: phase-23
 mega_phase_id: MEGA-B
-title: "STS Knowledge Synthesis & Component Registration — Domain Transformation Engine"
+title: "STS Knowledge Synthesis & Component Registration — Cloud-Native Transformation Engine"
 status: active
 priority: P1
 created: '2026-02-14T23:30:00.000000Z'
@@ -45,11 +45,11 @@ metadata:
 
 overview:
   vision: |
-    Transform CORTEX into a production-ready domain transformation engine:
+    Transform CORTEX into a cloud-native transformation engine covering modern application stacks:
     
-    1. **Knowledge YAML Synthesis** — Download authoritative sources (Microsoft .NET,
-       Angular, OWASP ASVS), convert to CORTEX YAML schema, integrate with intelligence
-       layer. Create 18 new domain-specific YAMLs (54 total).
+    1. **Knowledge YAML Synthesis** — Download authoritative sources (Microsoft .NET/Azure,
+       Angular, OWASP, Databricks, LaunchDarkly), convert to CORTEX schema. Create 23 new 
+       domain YAMLs (59 total covering 90% of enterprise tech stacks).
     
     2. **Component Registration** — Consolidate 296 unregistered components into 4
        super-orchestrators (IntelligenceOrchestrator, SOLIDOrchestrator, StateOrchestrator,
@@ -59,7 +59,8 @@ overview:
        create cortex_analyze_sts_app MCP tool, generate automated showcase with metrics.
     
     4. **Knowledge Packs** — Bundle domain knowledge into versioned packs (sts-dotnet-pack,
-       sts-angular-pack, sts-python-pack) with dependency resolution.
+       sts-angular-pack, sts-python-pack, cloud-azure-pack, data-engineering-pack) with 
+       dependency resolution.
     
     5. **Learning Integration** — Integrate DigestOrchestrator with STS workflow, track
        pattern frequency, enhance Phase 49 CCL with STS pattern cache.
@@ -68,10 +69,10 @@ overview:
     CURRENT STATE (P1 GAPS):
     
     **Knowledge Management:**
-    - 36 YAML files cover 60% of STS needs (missing .NET, Angular, SQL-specific)
-    - No systematic external knowledge curation process
-    - Knowledge YAMLs not versioned or packaged
-    - Manual discovery of applicable patterns (no auto-routing)
+    - 36 YAML files cover 60% of enterprise needs (missing Azure, Databricks, LaunchDarkly, advanced .NET)
+    - No data engineering patterns (Spark, Delta Lake, data pipelines)
+    - No feature flag governance (LaunchDarkly architecture patterns)
+    - No cloud-native security baselines (Azure Security Benchmark missing)
     
     **Component Architecture:**
     - 296 components exist but not in wiring registry (21% coverage)
@@ -92,11 +93,11 @@ overview:
     - Repeated analysis of similar codebases (zero reuse)
     
     IMPACT:
-    - ❌ CORTEX cannot refactor .NET or Angular apps (missing domain knowledge)
+    - ❌ CORTEX cannot refactor Azure/Databricks/LaunchDarkly apps (missing domain knowledge)
+    - ❌ No data engineering best practices (Spark, Delta Lake, data quality patterns)
     - ❌ 71 critical components invisible to orchestrators
     - ❌ STS showcase requires manual effort (not scalable)
-    - ❌ No quantifiable transformation metrics (cannot prove ROI)
-    - ❌ Cannot answer "How many times have we seen this pattern?"
+    - ❌ Cannot answer "How do I implement Azure Well-Architected pillars?"
 
   success_criteria:
     - "✅ 18 new knowledge YAMLs created (54 total, 90% STS coverage)"
@@ -121,8 +122,8 @@ stages:
     priority: P0
     description: |
       Download authoritative knowledge sources, convert to CORTEX YAML schema,
-      validate against existing 36 YAMLs. Create 18 new domain YAMLs covering
-      .NET, Angular, SQL Server, Oracle, and STS-specific patterns.
+      validate against existing 36 YAMLs. Create 23 new domain YAMLs covering
+      .NET, Angular, Azure, Databricks, LaunchDarkly, and STS-specific patterns.
     
     deliverables:
       - path: "cortex/knowledge/best-practices/backend-dotnet/csharp-best-practices.yaml"
@@ -153,19 +154,49 @@ stages:
         description: "RxJS reactive patterns"
         loc: 0
         tests: 5
-        source: "https://rxjs.dev/guide/overview"
+        source: "https://angular.io/guide/rx-library"
       
       - path: "cortex/knowledge/best-practices/database-sqlserver/tsql-best-practices.yaml"
         description: "T-SQL query optimization"
         loc: 0
         tests: 5
-        source: "Microsoft SQL Server documentation"
+        source: "https://learn.microsoft.com/en-us/sql/t-sql/queries/performance-tuning"
       
       - path: "cortex/knowledge/best-practices/database-oracle/plsql-best-practices.yaml"
         description: "PL/SQL coding standards"
         loc: 0
         tests: 5
         source: "Oracle PL/SQL documentation"
+      
+      - path: "cortex/knowledge/best-practices/cloud-azure/azure-well-architected.yaml"
+        description: "Azure Well-Architected Framework (5 pillars)"
+        loc: 0
+        tests: 8
+        source: "https://learn.microsoft.com/en-us/azure/well-architected/"
+      
+      - path: "cortex/knowledge/best-practices/cloud-azure/azure-security-baseline.yaml"
+        description: "Azure security best practices and baselines"
+        loc: 0
+        tests: 8
+        source: "https://learn.microsoft.com/en-us/security/benchmark/azure/"
+      
+      - path: "cortex/knowledge/best-practices/data-engineering/databricks-best-practices.yaml"
+        description: "Databricks architecture patterns and optimization"
+        loc: 0
+        tests: 6
+        source: "https://docs.databricks.com/best-practices.html"
+      
+      - path: "cortex/knowledge/best-practices/data-engineering/spark-optimization.yaml"
+        description: "Apache Spark performance tuning and patterns"
+        loc: 0
+        tests: 6
+        source: "https://spark.apache.org/docs/latest/tuning.html"
+      
+      - path: "cortex/knowledge/best-practices/feature-flags/launchdarkly-patterns.yaml"
+        description: "LaunchDarkly feature flag architecture and governance"
+        loc: 0
+        tests: 5
+        source: "https://docs.launchdarkly.com/guides/best-practices"
       
       - path: "cortex/knowledge/best-practices/sts/security-anti-patterns.yaml"
         description: "12 security anti-patterns from STS catalog"
@@ -215,8 +246,8 @@ stages:
     
     acceptance_criteria:
       - id: AC-MEGA-B-S1-001
-        description: "18 new knowledge YAMLs created with consistent schema"
-        test: "yaml_validator passes all 54 YAMLs"
+        description: "23 new knowledge YAMLs created covering cloud-native + data engineering stacks"
+        test: "yaml_validator passes all 59 YAMLs (36 existing + 23 new)"
         priority: P0
       
       - id: AC-MEGA-B-S1-002
@@ -230,8 +261,8 @@ stages:
         priority: P0
       
       - id: AC-MEGA-B-S1-004
-        description: "KnowledgeSynthesisEngine auto-discovers new YAMLs"
-        test: "Integration test loads 54 YAMLs (no code changes)"
+        description: "KnowledgeSynthesisEngine auto-discovers all 59 YAMLs"
+        test: "Integration test loads 59 YAMLs covering 12 domains (no code changes)"
         priority: P0
     
     dependencies: []
@@ -747,7 +778,7 @@ success_metrics:
   quantitative:
     - metric: "Knowledge YAML count"
       baseline: 36
-      target: 54
+      target: 59
       measurement: "File count in cortex/knowledge/best-practices/"
     
     - metric: "Component registration coverage"
@@ -777,6 +808,9 @@ success_metrics:
     - metric: "Knowledge discoverability"
       measurement: "Auto-routing to applicable patterns"
     
+    - metric: "Cloud-native expertise"
+      measurement: "Azure Well-Architected pillars + Databricks patterns available"
+    
     - metric: "Developer experience"
       measurement: "One-command STS analysis vs manual"
     
@@ -785,7 +819,7 @@ success_metrics:
 
 expected_outcomes:
   immediate:
-    - "CORTEX can analyze .NET and Angular apps"
+    - "CORTEX can analyze .NET, Angular, Azure, Databricks, LaunchDarkly apps"
     - "STS showcase auto-generates with metrics"
     - "Component unwiring becomes impossible"
     - "Knowledge packs enable team sharing"
