@@ -91,40 +91,43 @@ _cortex-master/
 
 ---
 
-## 🌊 Wave Status Summary
+## 📋 Phase Status Summary
 
-### ✅ Completed Waves (16/22 - 73%)
+**Authority:** CORE-042 (PHASE→STAGE→TASK hierarchy)  
+**Migration:** Wave IDs deprecated, see `history/_archive/obsolete-wave-guides/WAVE-TO-PHASE-MAPPING.yaml`
 
-| Wave | Name | Tests | Commits | Date | Git Hash |
-|------|------|-------|---------|------|----------|
-| Wave 1 | Foundation Security | 336 | 15+ | 2026-02-13 | `07c84a4c1` |
-| Wave 7 | Orchestrator Consolidation | 233 | 8 | 2026-02-11 | Multiple |
-| Wave 8 | Planning Capability | 108 | 4 | 2026-02-12 | Multiple |
-| WAVE-A | Critical Blockers | 30 | 2 | 2026-02-12 | Multiple |
-| WAVE-B | Operability & Monitoring | 32 | 2 | 2026-02-12 | Multiple |
-| WAVE-C | Config & Scalability | 14 | 2 | 2026-02-12 | Multiple |
-| WAVE-D | MCP Architecture + LENS | 18 | 1 | 2026-02-12 | Multiple |
-| WAVE-E | Validation Gates | 54 | 1 | 2026-02-12 | Multiple |
-| WAVE-H | Response Templates | 65 | 5 | 2026-02-12 | Multiple |
-| WAVE-I | Phase Template CLI | 15 | 2 | 2026-02-12 | Multiple |
-| WAVE-J | MCP Enforcement | 23 | 3 | 2026-02-12 | Multiple |
-| WAVE-K | Architecture Verification | 20 | 2 | 2026-02-12 | Multiple |
-| WAVE-L | Agent Architecture | 25 | 2 | 2026-02-12 | `2b75a4825`, `89f927a60` |
-| WAVE-M | Language Refinement | 20 | 1 | 2026-02-12 | `277c6afd1` |
-| WAVE-N | Autonomous Execution | 31 | 1 | 2026-02-12 | `6ea2086a8` |
-| WAVE-O | Data Integrity | 30 | 3 | 2026-02-13 | `15eeb6478` |
+### ✅ Completed Phases (16/22 - 73%)
+
+| Phase ID | Name | Tests | Commits | Date | Git Hash |
+|----------|------|-------|---------|------|----------|
+| PHASE-01 | Foundation Security | 336 | 15+ | 2026-02-13 | `07c84a4c1` |
+| PHASE-07 | Orchestrator Consolidation | 233 | 8 | 2026-02-11 | Multiple |
+| PHASE-08 | Planning Capability | 108 | 4 | 2026-02-12 | Multiple |
+| PHASE-10 | Critical Blockers | 30 | 2 | 2026-02-12 | Multiple |
+| PHASE-11 | Operability & Monitoring | 32 | 2 | 2026-02-12 | Multiple |
+| PHASE-12 | Config & Scalability | 14 | 2 | 2026-02-12 | Multiple |
+| PHASE-13 | MCP Architecture + LENS | 18 | 1 | 2026-02-12 | Multiple |
+| PHASE-14 | Validation Gates | 54 | 1 | 2026-02-12 | Multiple |
+| PHASE-17 | Response Templates | 65 | 5 | 2026-02-12 | Multiple |
+| PHASE-18 | Phase Template CLI | 15 | 2 | 2026-02-12 | Multiple |
+| PHASE-19 | MCP Enforcement | 23 | 3 | 2026-02-12 | Multiple |
+| PHASE-20 | Architecture Verification | 20 | 2 | 2026-02-12 | Multiple |
+| PHASE-21 | Agent Architecture | 25 | 2 | 2026-02-12 | `2b75a4825`, `89f927a60` |
+| PHASE-22 | Language Refinement | 20 | 1 | 2026-02-12 | `277c6afd1` |
+| PHASE-23 | Autonomous Execution | 31 | 1 | 2026-02-12 | `6ea2086a8` |
+| PHASE-24 | Data Integrity | 30 | 3 | 2026-02-13 | `15eeb6478` |
 
 **Total:** 1,054 tests, 48+ commits
 
-### ⚪ Pending Waves (6/22 - 27%)
+### ⚪ Planned Phases (6/22 - 27%)
 
-| Priority | Wave | Name | Duration | Token | Tests | Ready |
-|----------|------|------|----------|-------|-------|-------|
-| **P0** | **WAVE-P** | Cleanup & Registry Sync | 2-3h | <150k | 0 | ✅ NOW |
-| **P1** | **WAVE-Q** | ENH-088 Multi-Cycle TDD | 4-5h | <200k | 45 | After WAVE-P |
-| **P1** | **WAVE-R** | ENH-089 EventBus Debugger | 3-4h | <180k | 30 | After WAVE-Q |
-| **P1** | **WAVE-S** | ENH-087 Tracks 2-4 | 6-8h | <250k | 60 | After WAVE-Q+R |
-| **P2** | **WAVE-T** | Performance Optimization | 3-4h | <180k | 25 | After WAVE-S |
+| Priority | Phase ID | Name | Duration | Token | Tests | Ready |
+|----------|----------|------|----------|-------|-------|-------|
+| **P0** | **PHASE-25** | Cleanup & Registry Sync | 2-3h | <150k | 0 | ✅ NOW |
+| **P1** | **PHASE-26** | ENH-088 Multi-Cycle TDD | 4-5h | <200k | 45 | After PHASE-25 |
+| **P1** | **PHASE-27** | ENH-089 EventBus Debugger | 3-4h | <180k | 30 | After PHASE-26 |
+| **P1** | **PHASE-28** | ENH-087 Tracks 2-4 | 6-8h | <250k | 60 | After PHASE-26+27 |
+| **P2** | **PHASE-29** | Performance Optimization | 3-4h | <180k | 25 | After PHASE-28 |
 | **P2** | **WAVE-U** | Enhanced Testing | 4-5h | <200k | 40 | After WAVE-T |
 
 **Total Remaining:** 22-29 hours, 8-10 sessions

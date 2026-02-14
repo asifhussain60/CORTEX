@@ -336,7 +336,7 @@ Result: Seamless continuation, instant context, happy user
 | Agent | Responsibility | Input | Output |
 |-------|----------------|-------|--------|
 | **Phase Resolver** | Identifies WHAT | User request + chat context | Phase ID + requirements |
-| **Master Plan Auditor** | Determines HOW | Phase requirements + state | Wave plan + execution order |
+| **Master Plan Auditor** | Determines HOW | Phase requirements + state | Execution plan + order |
 
 ### Handoff Pattern (Request Flow)
 
@@ -357,13 +357,13 @@ PHASE RESOLVER: "Identify phase"
      }
       ↓
 MASTER PLAN AUDITOR: "Determine execution strategy"
-  ├─ Analyze: Current token budget, wave organization
+  ├─ Analyze: Current token budget, resource allocation
   ├─ Check: Can execute in parallel with other phases?
-  ├─ Plan: Wave structure (phases 45-47 in wave-3)
+  ├─ Plan: Stage structure (S1-Foundation → S2-Core → S3-Integration)
   ├─ State: Save checkpoint at 75% tokens
   └─ Output: ExecutionPlan {
-       wave_id: "wave-3",
-       phases: ["phase-45", "phase-46", "phase-47"],
+       phase_id: "phase-47",
+       stages: ["S1-Foundation", "S2-Core", "S3-Integration"],
        parallelizable: true,
        token_budget: 150000,
        checkpoint_threshold: 75%,
@@ -372,7 +372,7 @@ MASTER PLAN AUDITOR: "Determine execution strategy"
 SHARED CONTEXT (optimize communication):
   ├─ LENS analysis cache key: "phase-47-enterprise"
   ├─ Previous phase metrics: (phase-46 used 7200 tokens)
-  ├─ Plan state: "wave-3 in progress"
+  ├─ Plan state: "phase-47 in progress"
   └─ Allows both agents to avoid duplicate analysis
       ↓
 EXECUTION: Auditor runs phases with resolver monitoring
@@ -399,8 +399,8 @@ shared_context:
     integration_points: [...]
   
   plan_state:
-    current_wave_id: "wave-3"
-    phases_completed: ["phase-45", "phase-46"]
+    current_phase_id: "phase-47"
+    stages_completed: ["S1-Foundation", "S2-Core"]
     token_budget_remaining: 35000
     checkpoint_threshold: 75%
 ```
@@ -442,7 +442,7 @@ update_plan_status(
 
 1. **MCP Tool Contract:**
    - Phase Resolver: `cortex_resolve_phase` (returns PhaseContext)
-   - Master Plan Auditor: `cortex_audit_plan` + `cortex_execute_wave_autonomous`
+   - Master Plan Auditor: `cortex_audit_plan` + `cortex_execute_phase_autonomous`
 
 2. **Registry Integration:**
    - Phase Resolver reads: `cortex-registry/_cortex-master/phases/`
@@ -450,7 +450,7 @@ update_plan_status(
 
 3. **State Management:**
    - Resolver: Stateless (reads chat/registry only)
-   - Auditor: Manages wave state + token budget tracking
+   - Auditor: Manages phase state + token budget tracking
 
 ---
 

@@ -1,6 +1,30 @@
 # Phase Creation Standards Guide
+```
 
-**Version:** 2.0 | **Created:** 2026-02-12 | **Updated:** 2026-02-14 | **Authority:** ENH-084 + CORE-042
+**DEPRECATED (CORE-042 Simplification):**
+- ❌ "Wave" → Use **Phase** (work milestone, 1-4 weeks)
+- ❌ "Initiative" → Use **Phase** 
+- ❌ "Epic" → Use **Phase**
+- ❌ "Feature" → Use **Phase**
+- ❌ "Track" → Use **Phase**
+
+**CURRENT HIERARCHY (CORE-042 v3.0):**
+```
+PHASE (P-)   Work milestone, 1-4 weeks
+  └─ STAGE (S-) Work unit, 2-5 days
+      └─ TASK (T-) Atomic work, 2-8 hours
+```
+
+## 📋 Overview
+
+Every CORTEX phase must follow a standardized structure with:
+- ✅ Stage-based execution plan (Foundation → Core → Migration → Polish)
+- ✅ Cleanup requirements (vacuum per stage)
+- ✅ Registry synchronization checkpoints
+- ✅ Minimum 80% test coverage
+- ✅ ROI justification with evidence
+
+## 🛠️ CLI Tool Usage | **Created:** 2026-02-12 | **Updated:** 2026-02-14 | **Authority:** ENH-084 + CORE-042
 
 ---
 
@@ -262,18 +286,24 @@ cleanup_requirements:
   documentation_update: true
 
 # ... (other fields same as standard)
+```
+
+### 3. Phase Template
+
+Best for: Single milestone work units
+
 ```yaml
-wave_id: "WAVE-X"
-name: "Wave Name"
+phase_id: "PHASE-XX"
+name: "Phase Name"
 release: "R1-RELEASE-NAME"
 priority: "P0-CRITICAL"
-duration: "3-4 hours"
-session_id: "WAVE-X-20260212-01"
+duration: "1-4 weeks"
+session_id: "PHASE-XX-20260212-01"
 status: "planned"
 roi: 8.0
 
-requires: ["WAVE-Y"]
-blocks: ["WAVE-Z"]
+requires: ["PHASE-YY"]
+blocks: ["PHASE-ZZ"]
 
 highlights:
   - "Highlight 1"
@@ -298,7 +328,7 @@ The phase creator integrates with `cortex-architect.prompt.md`:
 3. **Generate** phase spec from template with user input
 4. **Validate** using 50+ rules
 5. **Sync** with registry (update `index.yaml`)
-6. **Display** wave execution plan + ROI estimate
+6. **Display** phase execution plan + ROI estimate
 7. **Approve** → phase enters `active/` folder
 
 ### With Registry
@@ -311,7 +341,7 @@ cortex-registry/
     phases/
       active/          # Current phases
         enh-084.yaml
-        wave-i.yaml
+        phase-100.yaml
       completed/       # Finished phases
         enh-082.yaml
 ```
@@ -338,7 +368,7 @@ python -m cortex.cli.phase_creator create \
   --output phases/active/phase-100.yaml
 ```
 
-### Example 2: Complex Multi-Wave Enhancement
+### Example 2: Complex Multi-Stage Enhancement
 
 ```bash
 python -m cortex.cli.phase_creator create \
@@ -351,18 +381,18 @@ python -m cortex.cli.phase_creator create \
 Interactive prompts will guide you through:
 - Problem description
 - Solution approach
-- Wave breakdown
+- Stage breakdown
 - Deliverables
 - Test targets
 
-### Example 3: Session-Scoped Wave
+### Example 3: Session-Scoped Phase
 
 ```bash
 python -m cortex.cli.phase_creator create \
-  --template wave \
-  --id WAVE-M \
+  --template phase \
+  --id PHASE-89 \
   --title "Language Refinement" \
-  --output phases/active/wave-m.yaml
+  --output phases/active/phase-89.yaml
 ```
 
 ## 🔍 Validation Examples
@@ -399,9 +429,9 @@ tests:
 
 ## 📚 Related Documentation
 
-- **ENH-084 Specification:** `WAVE-6-COMPREHENSIVE-CLEANUP-REFACTORING.yaml`
+- **ENH-084 Specification:** Phase creation automation (see registry)
 - **Registry Master Index:** `cortex-registry/_cortex-master/index.yaml`
-- **Autonomous Execution Guide:** `AUTONOMOUS-WAVES-H-O-EXECUTION-GUIDE.md`
+- **CORE-042:** Hierarchical terminology (PHASE→STAGE→TASK)
 
 ## 🆘 Troubleshooting
 
