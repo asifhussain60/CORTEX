@@ -249,8 +249,20 @@ class MCPServer:
                 tool_name = params.get("name", "")
                 tool_params = params.get("arguments", {})
                 
-                result = self.call_tool(tool_name, **tool_params)
-                return MCPResponse(result=result.to_dict(), id=request.id)
+                tool_result = self.call_tool(tool_name, **tool_params)
+                
+                # Format response according to MCP protocol
+                # Must have 'content' array with text items
+                mcp_result = {
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": tool_result.to_json()
+                        }
+                    ]
+                }
+                
+                return MCPResponse(result=mcp_result, id=request.id)
             
             elif method == "initialize":
                 # MCP initialization handshake
