@@ -202,9 +202,10 @@ class TestNomenclatureConsistency:
     
     def test_hierarchy_consistency_in_core_files(self, prompts_root: Path):
         """
-        Test: CORE-042 should specify EPIC→FEATURE→PHASE→STAGE→TASK.
+        Test: CORE-042 should specify PHASE→STAGE→TASK (simplified hierarchy).
         
-        Expected: FAIL (RED) - currently shows INITIATIVE→PHASE→STAGE→TASK
+        Authority: CORE-042 explicitly states "Simple, universal. No wave/epic/feature concepts."
+        Expected: PASS (GREEN) - should show PHASE→STAGE→TASK
         """
         copilot_instructions = prompts_root.parent / "copilot-instructions.md"
         
@@ -214,19 +215,24 @@ class TestNomenclatureConsistency:
         with open(copilot_instructions, 'r', encoding='utf-8') as f:
             content = f.read()
         
-        # Should have EPIC→FEATURE→PHASE→STAGE→TASK
-        expected_pattern = r'EPIC.*?FEATURE.*?PHASE.*?STAGE.*?TASK'
+        # Should have PHASE→STAGE→TASK (simplified)
+        expected_pattern = r'PHASE→STAGE→TASK'
+        
+        # Should explicitly say "No wave/epic/feature concepts"
+        no_concepts_pattern = r'No wave/epic/feature concepts'
         
         # Should NOT have INITIATIVE→PHASE
         incorrect_pattern = r'INITIATIVE.*?→.*?PHASE'
         
-        has_correct = re.search(expected_pattern, content, re.DOTALL)
+        has_correct = re.search(expected_pattern, content)
+        has_no_concepts = re.search(no_concepts_pattern, content)
         has_incorrect = re.search(incorrect_pattern, content)
         
         if has_incorrect or not has_correct:
             pytest.fail(
-                "❌ CORE-042 should specify EPIC→FEATURE→PHASE→STAGE→TASK hierarchy, "
+                "❌ CORE-042 should specify PHASE→STAGE→TASK hierarchy (simplified), "
                 f"but found incorrect hierarchy. Has correct: {has_correct is not None}, "
+                f"Has 'no concepts': {has_no_concepts is not None}, "
                 f"Has incorrect: {has_incorrect is not None}"
             )
     
