@@ -2,8 +2,8 @@
 # Auto-generated: 2026-02-14
 
 metadata:
-  total_phases: 17
-  active: 2
+  total_phases: 18
+  active: 3
   completed: 1
   deferred: 10
   note: "Phase 10 intentionally skipped (deployment-orchestrator merged into phase 73)"
