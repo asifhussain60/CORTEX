@@ -447,6 +447,145 @@ orchestrators:
       - lens
       - knowledge
   support:
+  - name: LifecycleHookSystem
+    module: cortex.orchestrators.core.lifecycle_hook_system
+    class: LifecycleHookSystem
+    tier: 3
+    priority: 200
+    dependencies: []
+    capabilities:
+    - lifecycle_event_management
+    - automatic_cleanup_triggering
+    - hook_registration
+    - execution_history_tracking
+    health_check: get_execution_history
+    mcp_adapter: none
+    metadata:
+      icon: 🔄
+      phase: '53.3'
+      stage: 3
+      authority: ENH-092 (WAVE-CONSOLIDATION S3)
+      enhancement: ENH-092
+    description: Triggers automatic cleanup on wave/phase/session completions
+    events:
+    - wave_complete
+    - phase_complete
+    - stage_complete
+    - session_end
+  - name: TenantContext
+    module: cortex.registry.tenant_context
+    class: TenantContext
+    tier: 3
+    priority: 201
+    dependencies: []
+    capabilities:
+    - multi_tenant_isolation
+    - tenant_aware_operations
+    - rbac_enforcement
+    health_check: get_current_tenant
+    mcp_adapter: none
+    metadata:
+      icon: 🏢
+      phase: '76'
+      stage: 2
+      authority: AC-PHASE76-S2-001
+      enhancement: none
+    description: Multi-tenant isolation for registry operations
+  - name: RegistryHealthMonitor
+    module: cortex.registry.health_monitor
+    class: RegistryHealthMonitor
+    tier: 3
+    priority: 202
+    dependencies: []
+    capabilities:
+    - registry_health_checks
+    - artifact_validation
+    - corruption_detection
+    health_check: check_health
+    mcp_adapter: none
+    metadata:
+      icon: 🏥
+      phase: '76'
+      stage: 3
+      authority: AC-PHASE76-S3-001
+      enhancement: none
+    description: Monitors registry health and detects corruption
+  - name: AgentMetadataParser
+    module: cortex.agents.metadata_parser
+    class: AgentMetadataParser
+    tier: 3
+    priority: 203
+    dependencies: []
+    capabilities:
+    - agent_metadata_parsing
+    - capability_discovery
+    - agent_validation
+    health_check: load_all_agents
+    mcp_adapter: none
+    metadata:
+      icon: 🤖
+      phase: '81'
+      stage: 2
+      authority: AC-PHASE81-S2-001
+      enhancement: none
+    description: Parses agent metadata from markdown files for capability routing
+  - name: HealthCheckService
+    module: cortex.health_check_service
+    class: HealthCheckService
+    tier: 3
+    priority: 204
+    dependencies: []
+    capabilities:
+    - system_health_monitoring
+    - component_health_aggregation
+    - health_endpoint_serving
+    health_check: get_system_health
+    mcp_adapter: cortex.api.health_endpoints
+    metadata:
+      icon: 🏥
+      phase: '82'
+      stage: 1
+      authority: AC-PHASE82-S1-001
+      enhancement: none
+    description: System-wide health monitoring service with FastAPI endpoints
+  - name: PrometheusMetrics
+    module: cortex.prometheus_metrics
+    class: PrometheusMetrics
+    tier: 3
+    priority: 205
+    dependencies: []
+    capabilities:
+    - metrics_collection
+    - prometheus_integration
+    - performance_monitoring
+    health_check: get_metrics
+    mcp_adapter: none
+    metadata:
+      icon: 📊
+      phase: '82'
+      stage: 2
+      authority: AC-PHASE82-S2-001
+      enhancement: none
+    description: Prometheus metrics integration for production monitoring
+  - name: OpenTelemetryTracing
+    module: cortex.opentelemetry_tracing
+    class: OpenTelemetryTracing
+    tier: 3
+    priority: 206
+    dependencies: []
+    capabilities:
+    - distributed_tracing
+    - span_management
+    - trace_context_propagation
+    health_check: get_tracer
+    mcp_adapter: none
+    metadata:
+      icon: 🔍
+      phase: '82'
+      stage: 3
+      authority: AC-PHASE82-S3-001
+      enhancement: none
+    description: OpenTelemetry distributed tracing for request tracking
   - name: OrchestratorEventBus
     module: cortex.infrastructure.orchestrator_event_bus
     class: OrchestratorEventBus
