@@ -1,39 +1,39 @@
 # 📋 CORTEX Master Registry Index
-**Version:** 8.0 | **Updated:** 2026-02-14T09:15:00Z | **Authority:** cortex-architect.prompt.md v15.3 | **Status:** ✅ ACTIVE
+**Version:** 9.0 | **Updated:** 2026-02-14T09:30:00Z | **Authority:** cortex-architect.prompt.md v15.3 | **Status:** ✅ ACTIVE
 
 ---
 
 ## 🎯 Purpose
 
-Single source of truth for CORTEX registry documentation. All files organized in themed folders with clear purpose and governance rules.
+Single source of truth for CORTEX registry documentation. Ultra-simplified 3-folder structure for maximum clarity.
 
-## 📁 Folder Structure
+## 📁 Folder Structure (SIMPLIFIED)
 
 ```
 _cortex-master/
-├── README.md                  ← You are here
-├── waves/                     ← Active implementation waves
-│   ├── active/               ← Current waves (WAVE-UIS-001, etc.)
-│   └── archived/             ← Completed/superseded waves
-├── phases/                    ← Phase specifications
-│   ├── active/               ← Current phases
-│   └── completed/            ← Historical phases
-├── enhancements/              ← Feature enhancements
-│   ├── active/               ← Active ENH-* specs
-│   └── completed/            ← Completed enhancements
-├── specifications/            ← Technical specifications
-├── guides/                    ← User documentation
-├── governance/                ← CORE rules & compliance
-├── config/                    ← System configuration
-├── design/                    ← Architecture planning
-├── investigations/            ← Gap analysis & research
-├── reports/                   ← Status reports & audits
-├── dashboard/                 ← Phase dashboard system
-├── directives/                ← Execution directives
-├── baselines/                 ← Historical snapshots
-├── _archive/                  ← Old versions
-└── _superseded/               ← Deprecated content
+├── README.md              ← You are here (visible at root)
+├── work/                  ← Everything for current operations
+│   ├── waves/            ← Active implementation waves
+│   ├── phases/           ← Phase specifications  
+│   ├── enhancements/     ← Feature enhancements (ENH-*)
+│   ├── dashboard/        ← Phase dashboard system
+│   ├── specifications/   ← Technical specs
+│   ├── guides/           ← User documentation
+│   ├── governance/       ← CORE rules & compliance
+│   ├── config/           ← System configuration
+│   ├── directives/       ← Execution directives
+│   ├── design/           ← Architecture planning
+│   └── investigations/   ← Gap analysis & research
+└── history/              ← Everything completed/archived
+    ├── reports/          ← Status reports & audits
+    ├── baselines/        ← Historical snapshots
+    ├── _archive/         ← Old versions
+    └── _superseded/      ← Deprecated content
 ```
+
+**Mental Model:** 2 questions only
+- "Is this work I'm doing or referencing?" → `work/`
+- "Is this old/completed?" → `history/`
 
 ---
 
@@ -43,35 +43,40 @@ _cortex-master/
 
 **Wave:** WAVE-UIS-001 (Unified Intelligence System)  
 **Status:** Ready for execution  
-**Location:** `waves/active/WAVE-UNIFIED-INTELLIGENCE-SYSTEM.yaml`
+**Location:** `work/waves/active/WAVE-UNIFIED-INTELLIGENCE-SYSTEM.yaml`
 
 **Enhancement:** ENH-100 (Realtime Feedback Hub)  
-**Location:** `enhancements/active/ENH-100-REALTIME-FEEDBACK-HUB.yaml`
+**Location:** `work/enhancements/active/ENH-100-REALTIME-FEEDBACK-HUB.yaml`
 
 ### Key References
 
 | Resource | Location | Purpose |
 |----------|----------|---------|
-| **Master Plan** | `config/master-plan.yaml` | Overall system planning |
-| **Latest Status** | `reports/CORTEX-STATUS-2026-02-14.yaml` | System health snapshot |
-| **Governance Rules** | `governance/core-rules.yaml` | CORE-001 through CORE-052 |
-| **Wave Summary** | `waves/WAVE-CONSOLIDATION-SUMMARY-2026-02-14.md` | Wave consolidation report |
-| **Gap Investigation** | `investigations/GAP-INVESTIGATION-INTELLIGENCE-VSCODE-TODOS.md` | Intelligence & VSCode TODOs |
+| **Master Plan** | `work/config/master-plan.yaml` | Overall system planning |
+| **Latest Status** | `history/reports/CORTEX-STATUS-2026-02-14.yaml` | System health snapshot |
+| **Governance Rules** | `work/governance/core-rules.yaml` | CORE-001 through CORE-052 |
+| **Wave Summary** | `work/waves/WAVE-CONSOLIDATION-SUMMARY-2026-02-14.md` | Wave consolidation report |
+| **Gap Investigation** | `work/investigations/GAP-INVESTIGATION-INTELLIGENCE-VSCODE-TODOS.md` | Intelligence & VSCode TODOs |
 
 ---
 
 ## 📊 Registry Statistics
 
-**Files Organized:** 29 files moved from root → themed folders  
-**Folders Created:** guides/, investigations/, design/, config/  
-**Folders Removed:** test-demands/, workflows/ (empty)  
-**Root Files:** 1 (README.md only)  
-**Cleanup Date:** 2026-02-14
+**Folder Reduction:** 15 → 3 (80% simplification)  
+**Structure:** work/ + history/ + README.md  
+**Root Files:** 1 (README.md only - visible by default)  
+**Consolidation Dates:** 2026-02-14
+
+**Changes:**
+- Phase 1: Moved 29 scattered root files → themed folders
+- Phase 2: Consolidated 15 folders → 3 top-level folders
+- Result: Ultra-simplified structure with full git history preserved
 
 **Governance Compliance:**
 - ✅ CORE-028: File naming (kebab-case enforced)
 - ✅ CORE-035: Single canonical location (no duplicates)
 - ✅ CORE-002: No markdown sprawl (organized in folders)
+- ✅ Git history: All file moves preserved with `git mv`
 
 ---
 | [WAVE-EXECUTION-ORCHESTRATION-MASTER.md](./WAVE-EXECUTION-ORCHESTRATION-MASTER.md) | Wave 1-8 master plan | ✅ REFERENCE (original strategy) |
