@@ -1,0 +1,210 @@
+---
+metadata:
+  domain: "ASP.NET Core Best Practices"
+  version: "1.0.0"
+  source: "Microsoft Learn - ASP.NET Core Documentation"
+  authority: "Microsoft"
+  date: "2026-02-14"
+  description: "Essential patterns and practices for ASP.NET Core web applications"
+  tags: ["aspnet-core", "web-api", "middleware", "dependency-injection", "mvc"]
+
+patterns:
+  dependency_injection:
+    - id: "ASPNET-DI-001"
+      name: "Register Services by Lifetime"
+      category: "dependency-injection"
+      description: "Choose correct service lifetime (Transient, Scoped, Singleton)"
+      guidance:
+        - "Transient: Stateless services, lightweight objects"
+        - "Scoped: Per-request services (DbContext, HttpContext)"
+        - "Singleton: Stateless shared services, caches"
+      example_use_cases:
+        transient: "Logger, email sender, utility services"
+        scoped: "Entity Framework DbContext, repository per request"
+        singleton: "Configuration, IMemoryCache, background services"
+      pitfalls:
+        - "Don't inject Scoped into Singleton (captive dependency)"
+        - "Don't inject DbContext as Singleton (connection issues)"
+      validation: "Use ServiceLifetimeValidator to detect captive dependencies"
+
+    - id: "ASPNET-DI-002"
+      name: "Constructor Injection Over Service Locator"
+      category: "dependency-injection"
+      description: "Use constructor injection, avoid IServiceProvider.GetService() (anti-pattern)"
+      why: "Constructor injection makes dependencies explicit and testable"
+      bad_example: "private readonly IServiceProvider _provider; var service = _provider.GetService<IMyService>();"
+      good_example: "private readonly IMyService _service; public MyController(IMyService service) => _service = service;"
+
+  middleware:
+    - id: "ASPNET-MW-001"
+      name: "Order Middleware Correctly"
+      category: "middleware-pipeline"
+      description: "Middleware order matters: Exception → HTTPS → Static Files → Routing → Auth → Endpoints"
+      standard_order:
+        1: "UseExceptionHandler or UseDeveloperExceptionPage"
+        2: "UseHttpsRedirection"
+        3: "UseStaticFiles"
+        4: "UseRouting"
+        5: "UseCors (if needed)"
+        6: "UseAuthentication"
+        7: "UseAuthorization"
+        8: "UseEndpoints"
+      rationale: "Exception handling must be first, auth after routing"
+
+    - id: "ASPNET-MW-002"
+      name: "Custom Middleware Best Practices"
+      category: "middleware"
+      description: "Write maintainable custom middleware"
+      guidelines:
+        - "Use InvokeAsync method (not Invoke)"
+        - "Accept RequestDelegate next in constructor"
+        - "Don't modify response after next() called"
+        - "Use IMiddleware interface for testability"
+      testing: "Use TestServer from Microsoft.AspNetCore.TestHost"
+
+  api_design:
+    - id: "ASPNET-API-001"
+      name: "Use ActionResult<T> for API Responses"
+      category: "web-api"
+      description: "ActionResult<T> enables OpenAPI generation and type safety"
+      benefits:
+        - "Type-safe return values"
+        - "Automatic Swagger documentation"
+        - "IntelliSense support"
+      example: "public ActionResult<UserDto> GetUser(int id) => Ok(userDto);"
+
+    - id: "ASPNET-API-002"
+      name: "Use [ApiController] Attribute"
+      category: "web-api"
+      description: "Enables automatic model validation and binding behavior"
+      features:
+        - "Automatic HTTP 400 on ModelState errors"
+        - "Binding source inference ([FromBody], [FromRoute], etc.)"
+        - "Problem details for errors"
+      example: "[ApiController] [Route('api/[controller]')] public class UsersController"
+
+    - id: "ASPNET-API-003"
+      name: "Version Your APIs"
+      category: "web-api"
+      description: "Use API versioning for backward compatibility"
+      strategies:
+        - "URL path: /api/v1/users"
+        - "Query string: /api/users?api-version=1.0"
+        - "Header: X-API-Version: 1.0"
+      library: "Microsoft.AspNetCore.Mvc.Versioning"
+
+  configuration:
+    - id: "ASPNET-CFG-001"
+      name: "Use Options Pattern"
+      category: "configuration"
+      description: "Strongly-typed configuration with IOptions<T>"
+      benefits:
+        - "Type safety"
+        - "Validation"
+        - "Testability"
+      example: "services.Configure<MySettings>(Configuration.GetSection('MySettings'));"
+
+    - id: "ASPNET-CFG-002"
+      name: "Never Store Secrets in appsettings.json"
+      category: "security"
+      description: "Use User Secrets (dev) and Azure Key Vault (prod)"
+      alternatives:
+        development: "dotnet user-secrets set 'ConnectionStrings:Default' 'value'"
+        production: "Azure Key Vault + Managed Identity"
+      why: "appsettings.json is committed to source control"
+
+  performance:
+    - id: "ASPNET-PERF-001"
+      name: "Use Response Caching and Compression"
+      category: "performance"
+      description: "Enable output caching and gzip compression"
+      middleware:
+        - "UseResponseCaching()"
+        - "UseResponseCompression()"
+      attributes: "[ResponseCache(Duration = 60)]"
+
+    - id: "ASPNET-PERF-002"
+      name: "Use Async Controllers"
+      category: "performance"
+      description: "Always use async/await for I/O operations in controllers"
+      why: "Frees threads for other requests, improves scalability"
+      example: "public async Task<ActionResult> GetUsers() => Ok(await _repo.GetAllAsync());"
+
+  security:
+    - id: "ASPNET-SEC-001"
+      name: "Enable HTTPS Redirection"
+      category: "security"
+      description: "Force HTTPS in production"
+      middleware: "app.UseHttpsRedirection();"
+      config: "services.AddHttpsRedirection(options => options.HttpsPort = 443);"
+
+    - id: "ASPNET-SEC-002"
+      name: "Use Anti-Forgery Tokens"
+      category: "security"
+      description: "Protect against CSRF attacks"
+      attributes: "[ValidateAntiForgeryToken] on POST actions"
+      automatic: "[ApiController] enables automatic validation for non-GET"
+
+    - id: "ASPNET-SEC-003"
+      name: "Implement Rate Limiting"
+      category: "security"
+      description: "Prevent abuse with rate limiting"
+      net7_builtin: "services.AddRateLimiter() in .NET 7+"
+      library: "AspNetCoreRateLimit (pre-.NET 7)"
+
+  testing:
+    - id: "ASPNET-TEST-001"
+      name: "Use WebApplicationFactory for Integration Tests"
+      category: "testing"
+      description: "Test entire HTTP pipeline with in-memory test server"
+      example: "var client = factory.CreateClient();"
+      benefits:
+        - "Tests middleware, routing, model binding"
+        - "Can override dependencies for testing"
+        - "Fast (in-memory, no network)"
+
+best_practices:
+  startup_configuration:
+    - "Keep Startup.cs/Program.cs clean (use extension methods)"
+    - "Separate ConfigureServices by feature (AddDatabase, AddAuth, etc.)"
+    - "Use IHostBuilder for background services"
+  
+  error_handling:
+    - "Use global exception handler (UseExceptionHandler)"
+    - "Return Problem Details (RFC 7807) for API errors"
+    - "Log exceptions with correlation IDs"
+  
+  logging:
+    - "Use built-in ILogger<T>, not third-party initially"
+    - "Structure logs with semantic logging"
+    - "Use log levels appropriately (Trace/Debug/Info/Warning/Error/Critical)"
+  
+  deployment:
+    - "Use environment-specific appsettings (appsettings.Production.json)"
+    - "Enable HealthChecks (UseHealthChecks)"
+    - "Configure Kestrel limits (max request size, timeouts)"
+
+anti_patterns:
+  - name: "Blocking calls with .Result or .Wait()"
+    why: "Causes thread pool starvation and deadlocks"
+    fix: "Use async/await throughout"
+  
+  - name: "Service Locator (IServiceProvider.GetService)"
+    why: "Hides dependencies, hard to test"
+    fix: "Use constructor injection"
+  
+  - name: "Fat controllers"
+    why: "Violates Single Responsibility Principle"
+    fix: "Move logic to services or use MediatR (CQRS)"
+  
+  - name: "Returning entity models from API"
+    why: "Exposes internal structure, breaks encapsulation"
+    fix: "Use DTOs and AutoMapper"
+
+references:
+  - name: "ASP.NET Core Best Practices"
+    url: "https://learn.microsoft.com/en-us/aspnet/core/fundamentals/best-practices"
+  - name: "ASP.NET Core Dependency Injection"
+    url: "https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection"
+  - name: "ASP.NET Core Security"
+    url: "https://learn.microsoft.com/en-us/aspnet/core/security/"

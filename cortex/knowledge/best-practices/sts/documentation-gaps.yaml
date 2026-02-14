@@ -1,0 +1,158 @@
+---
+metadata:
+  domain: "STS Documentation Gaps"
+  version: "1.0.0"
+  source: "CORTEX STS Catalog - Documentation Issues"
+  authority: "Asif Hussain"
+  date: "2026-02-14"
+  description: "3 documentation improvement areas from STS transformation showcase"
+  tags: ["documentation", "api", "code-comments", "architecture", "sts"]
+
+anti_patterns:
+  - id: "DOC-001"
+    name: "Missing XML Documentation"
+    severity: "MEDIUM"
+    category: "code-documentation"
+    description: "Public APIs lack XML documentation comments (summary, params, returns)"
+    detection:
+      indicators:
+        - "Public methods without /// comments"
+        - "No IntelliSense documentation"
+        - "CS1591 warnings suppressed in .csproj"
+      code_smells:
+        - "public methods with no <summary>"
+        - "Parameters without <param> tags"
+        - "Return values without <returns> tags"
+    impact:
+      usability: "Developers must read source code to understand API"
+      maintainability: "Intent unclear, harder to modify safely"
+      onboarding: "Slower learning curve for new team members"
+    fix:
+      pattern: "Add XML documentation to all public members"
+      example: "/// <summary>Calculates...</summary>"
+      effort: "LOW (manual but straightforward)"
+    related_standards:
+      - "CORE-012: Google-style Docstrings (Python equivalent)"
+      - "C# Documentation Comments"
+
+  - id: "DOC-002"
+    name: "No API Documentation (Swagger)"
+    severity: "HIGH"
+    category: "api-documentation"
+    description: "REST API lacks interactive documentation (Swagger/OpenAPI)"
+    detection:
+      indicators:
+        - "No /swagger endpoint"
+        - "No OpenAPI specification file"
+        - "Frontend team manually testing endpoints"
+      code_smells:
+        - "Missing Swashbuckle NuGet package"
+        - "No [ProducesResponseType] attributes"
+        - "No API examples or descriptions"
+    impact:
+      developer_experience: "Frontend/mobile teams struggle with API integration"
+      testing: "Manual testing required (no Swagger UI)"
+      documentation_drift: "Docs outdated immediately after code changes"
+    fix:
+      pattern: "Add Swashbuckle + XML comments for Swagger generation"
+      example: "services.AddSwaggerGen() + UseSwagger()"
+      effort: "LOW"
+    related_standards:
+      - "OpenAPI Specification 3.0"
+      - "REST API Design: Documentation"
+
+  - id: "DOC-003"
+    name: "Missing Architecture Documentation"
+    severity: "MEDIUM"
+    category: "architecture-documentation"
+    description: "No high-level architecture diagrams or decision records (ADRs)"
+    detection:
+      indicators:
+        - "No README.md with architecture overview"
+        - "No C4 diagrams or architecture diagrams"
+        - "No ADRs for major design decisions"
+      code_smells:
+        - "New developers ask 'why is it designed this way?'"
+        - "Onboarding requires verbal knowledge transfer"
+        - "Architecture decisions lost in Slack/email"
+    impact:
+      knowledge_transfer: "Tribal knowledge, hard to onboard"
+      decision_quality: "Repeat past mistakes, no context for changes"
+      maintainability: "Unclear why certain patterns used"
+    fix:
+      pattern: "Create docs/ folder with README, ADRs, diagrams"
+      example: "C4 context/container diagrams + ADR-001.md"
+      effort: "MEDIUM (requires analysis + diagramming)"
+    related_standards:
+      - "C4 Model: Architecture Diagrams"
+      - "ADR (Architecture Decision Records)"
+
+best_practices:
+  code_documentation:
+    xml_comments:
+      - "/// <summary>: What does this do?"
+      - "/// <param name='x'>: What is this parameter?"
+      - "/// <returns>: What does this return?"
+      - "/// <exception>: What exceptions can be thrown?"
+    
+    when_to_document:
+      - "Always: Public APIs, complex algorithms"
+      - "Sometimes: Internal methods if logic non-obvious"
+      - "Never: Self-documenting code (e.g., GetUserById)"
+    
+    quality:
+      - "Explain WHY, not just WHAT (code shows what)"
+      - "Keep up-to-date (wrong docs worse than no docs)"
+      - "Use examples for complex APIs"
+  
+  api_documentation:
+    swagger_setup:
+      - "Install: Swashbuckle.AspNetCore"
+      - "Configure: AddSwaggerGen() + UseSwaggerUI()"
+      - "Enhance: XML comments + response types"
+      - "Secure: Swagger in dev only or behind auth"
+    
+    response_types:
+      - "[ProducesResponseType(200, Type = typeof(UserDto))]"
+      - "[ProducesResponseType(404)]"
+      - "[ProducesResponseType(400)]"
+    
+    examples:
+      - "Use [SwaggerRequestExample] for complex requests"
+      - "Provide sample responses"
+  
+  architecture_documentation:
+    essential_docs:
+      - "README.md: Project overview, setup, run instructions"
+      - "docs/ARCHITECTURE.md: High-level design"
+      - "docs/adr/: Architecture decision records"
+      - "diagrams/: C4 context, container, component"
+    
+    adr_structure:
+      - "Title: ADR-001: Use CQRS for read/write separation"
+      - "Status: Accepted | Superseded | Deprecated"
+      - "Context: What problem are we solving?"
+      - "Decision: What did we decide?"
+      - "Consequences: What are the tradeoffs?"
+    
+    maintenance:
+      - "Update README when setup changes"
+      - "Create ADR when making major design decisions"
+      - "Keep diagrams current (use PlantUML or Mermaid for version control)"
+
+  tools:
+    - "Swashbuckle: Swagger/OpenAPI generation for ASP.NET Core"
+    - "DocFX: Static site generator for .NET API docs"
+    - "PlantUML / Mermaid: Diagram as code (version controllable)"
+    - "ADR Tools: CLI for creating ADRs"
+    - "MarkdownLint: Ensure documentation quality"
+
+references:
+  - name: "C# XML Documentation Comments"
+    url: "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/"
+  - name: "Swashbuckle for ASP.NET Core"
+    url: "https://github.com/domaindrivendev/Swashbuckle.AspNetCore"
+  - name: "Architecture Decision Records"
+    url: "https://adr.github.io/"
+  - name: "C4 Model for Software Architecture"
+    url: "https://c4model.com/"

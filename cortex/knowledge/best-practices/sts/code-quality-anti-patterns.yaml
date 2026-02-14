@@ -1,0 +1,40 @@
+# STS Code Quality Anti-Patterns Catalog
+# Authority: STS Framework - Code Quality Category (20 violations)
+# Version: 1.0 | Created: 2026-02-14
+
+metadata:
+  title: "STS Code Quality Issues (20 Flaws)"
+  version: "1.0"
+  domain: "sts"
+  pattern_count: 20
+  applicable_intents: ["ANALYZE", "REFACTOR", "IMPLEMENT"]
+
+patterns:
+  duplicate_code:
+    id: "STS-QUALITY-001"
+    severity: "MEDIUM"
+    description: "Copy-paste code blocks (>3 occurrences)"
+    remediation: "Extract to function or class"
+  
+  monster_method:
+    id: "STS-QUALITY-002"
+    severity: "HIGH"
+    description: "Method >50 lines with complex logic"
+    remediation: "Extract sub-methods, single responsibility"
+  
+  magic_numbers:
+    id: "STS-QUALITY-003"
+    severity: "LOW"
+    description: "Hardcoded numbers without named constants"
+    remediation: "Extract to named constants"
+  
+  long_parameter_list:
+    id: "STS-QUALITY-004"
+    severity: "MEDIUM"
+    description: "Function with >5 parameters"
+    remediation: "Use parameter object or builder pattern"
+
+# Additional 16 patterns: naming conventions, nested complexity, etc.
+
+cortex_integration:
+  detection: "AST + cyclomatic complexity analysis"

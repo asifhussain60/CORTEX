@@ -1,0 +1,185 @@
+---
+metadata:
+  domain: "Angular Best Practices"
+  version: "1.0.0"
+  source: "Angular Official Style Guide + Community Best Practices"
+  authority: "Angular Team (Google)"
+  date: "2026-02-14"
+  description: "Essential patterns for Angular applications"
+  tags: ["angular", "typescript", "component", "rxjs", "architecture"]
+
+patterns:
+  component_architecture:
+    - id: "NG-COMP-001"
+      name: "Smart vs Presentational Components"
+      category: "component-design"
+      description: "Separate stateful container components from presentational components"
+      smart_components:
+        - "Manage state and business logic"
+        - "Use services and observables"
+        - "Pass data to presentational components via @Input"
+      presentational_components:
+        - "Display data only (no business logic)"
+        - "Emit events via @Output"
+        - "Reusable and testable"
+      example: "UserListComponent (smart) contains UserCardComponent (presentational)"
+
+    - id: "NG-COMP-002"
+      name: "Use OnPush Change Detection"
+      category: "performance"
+      description: "Use ChangeDetectionStrategy.OnPush for better performance"
+      decorator: "@Component({ changeDetection: ChangeDetectionStrategy.OnPush })"
+      when_to_use: "Components with immutable inputs or async pipe"
+      benefit: "Reduces change detection cycles, improves performance"
+
+    - id: "NG-COMP-003"
+      name: "Avoid Logic in Templates"
+      category: "maintainability"
+      description: "Keep templates simple, move complex logic to component class"
+      bad: "{{ (user.age > 18 && user.verified) ? 'Adult' : 'Minor' }}"
+      good: "{{ userStatus }} // computed in component"
+
+  rxjs_patterns:
+    - id: "NG-RX-001"
+      name: "Always Unsubscribe from Observables"
+      category: "memory-management"
+      description: "Prevent memory leaks by unsubscribing"
+      strategies:
+        - "async pipe (preferred): automatic unsubscribe"
+        - "takeUntilDestroyed() operator (Angular 16+)"
+        - "takeUntil(destroy$) + Subject in ngOnDestroy"
+        - "Subscription.unsubscribe() in ngOnDestroy"
+      recommended: "Use async pipe whenever possible"
+
+    - id: "NG-RX-002"
+      name: "Use RxJS Operators Instead of Imperative Code"
+      category: "rxjs"
+      description: "Leverage RxJS operators for data transformation"
+      operators:
+        transformation: "map, switchMap, mergeMap, concatMap"
+        filtering: "filter, distinctUntilChanged, debounceTime"
+        combination: "combineLatest, forkJoin, merge"
+      example: "Use switchMap for API calls in search (cancels previous)"
+
+    - id: "NG-RX-003"
+      name: "Avoid Nested Subscriptions"
+      category: "rxjs"
+      description: "Use higher-order operators instead of nested subscribe()"
+      bad: "obs1.subscribe(val => obs2.subscribe(val2 => ...)))"
+      good: "obs1.pipe(switchMap(val => obs2)).subscribe(val2 => ...)"
+
+  dependency_injection:
+    - id: "NG-DI-001"
+      name: "Use providedIn: 'root' for Services"
+      category: "dependency-injection"
+      description: "Make services tree-shakable"
+      decorator: "@Injectable({ providedIn: 'root' })"
+      benefit: "Singleton by default, tree-shaking removes unused services"
+      when_not_to: "Component-specific services (provide in component)"
+
+    - id: "NG-DI-002"
+      name: "Inject Services in Constructor"
+      category: "dependency-injection"
+      description: "Constructor injection for testability"
+      example: "constructor(private userService: UserService) {}"
+      why: "Makes dependencies explicit, supports mocking in tests"
+
+  forms:
+    - id: "NG-FORM-001"
+      name: "Use Reactive Forms Over Template-Driven"
+      category: "forms"
+      description: "Reactive forms are more testable and scalable"
+      when_reactive:
+        - "Complex forms with validation"
+        - "Dynamic forms"
+        - "Unit testable form logic"
+      when_template_driven:
+        - "Very simple forms"
+        - "Rapid prototyping"
+
+    - id: "NG-FORM-002"
+      name: "Use FormBuilder for Cleaner Code"
+      category: "forms"
+      description: "FormBuilder reduces boilerplate"
+      example: "this.form = this.fb.group({ name: ['', Validators.required] });"
+
+  routing:
+    - id: "NG-ROUTE-001"
+      name: "Use Lazy Loading for Feature Modules"
+      category: "performance"
+      description: "Load feature modules on-demand"
+      syntax: "{ path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule) }"
+      benefit: "Smaller initial bundle, faster load time"
+
+    - id: "NG-ROUTE-002"
+      name: "Use Route Guards for Authorization"
+      category: "security"
+      description: "CanActivate, CanDeactivate guards for route protection"
+      guards:
+        - "CanActivate: Prevent navigation to route"
+        - "CanDeactivate: Warn before leaving (unsaved changes)"
+        - "Resolve: Pre-load data before activating route"
+
+  state_management:
+    - id: "NG-STATE-001"
+      name: "Use NgRx/Signals for Complex State"
+      category: "state-management"
+      description: "Service with BehaviorSubject sufficient for simple apps"
+      when_ngrx:
+        - "Large app with complex state"
+        - "Many components share state"
+        - "Time-travel debugging needed"
+      when_service:
+        - "Small to medium apps"
+        - "State isolated to feature"
+
+best_practices:
+  project_structure:
+    - "Feature-based folder structure (not by type)"
+    - "Shared module for common components/pipes/directives"
+    - "Core module for singleton services"
+    - "Standalone components for new projects (Angular 14+)"
+  
+  performance:
+    - "Use OnPush change detection"
+    - "TrackBy in *ngFor for lists"
+    - "Lazy load feature modules"
+    - "Use async pipe to avoid manual subscriptions"
+    - "Preload modules with PreloadAllModules strategy"
+  
+  testing:
+    - "Use TestBed for component testing"
+    - "Mock services with jasmine.createSpyObj"
+    - "Test observables with jasmine-marbles"
+    - "E2E tests with Cypress (preferred over Protractor)"
+  
+  accessibility:
+    - "Use semantic HTML (button, not div with click)"
+    - "ARIA labels for screen readers"
+    - "Keyboard navigation support"
+    - "Color contrast compliance (WCAG)"
+
+anti_patterns:
+  - name: "Mutating Input Properties"
+    why: "Breaks immutability, hard to track changes"
+    fix: "Use @Output events to notify parent of changes"
+  
+  - name: "Directly Manipulating DOM"
+    why: "Breaks Angular's abstraction, SSR issues"
+    fix: "Use Renderer2 or template references"
+  
+  - name: "Memory Leaks (Not Unsubscribing)"
+    why: "Subscriptions continue after component destroyed"
+    fix: "Use async pipe or takeUntilDestroyed()"
+  
+  - name: "Logic in ngOnInit That Should Be in Constructor"
+    why: "Unclear initialization order"
+    fix: "Constructor for DI, ngOnInit for initialization with inputs"
+
+references:
+  - name: "Angular Style Guide"
+    url: "https://angular.io/guide/styleguide"
+  - name: "Angular Performance Guide"
+    url: "https://angular.io/guide/performance-best-practices"
+  - name: "RxJS Best Practices"
+    url: "https://www.learnrxjs.io/learn-rxjs/concepts/rxjs-primer"

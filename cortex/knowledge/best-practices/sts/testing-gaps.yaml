@@ -1,0 +1,138 @@
+---
+metadata:
+  domain: "STS Testing Gaps"
+  version: "1.0.0"
+  source: "CORTEX STS Catalog - Testing Issues"
+  authority: "Asif Hussain"
+  date: "2026-02-14"
+  description: "3 test coverage gaps from STS transformation showcase"
+  tags: ["testing", "tdd", "coverage", "integration", "sts"]
+
+anti_patterns:
+  - id: "TEST-001"
+    name: "Missing Integration Tests"
+    severity: "HIGH"
+    category: "testing-strategy"
+    description: "Unit tests exist but no integration tests for API/database/external services"
+    detection:
+      indicators:
+        - "100% unit test coverage but production bugs"
+        - "No tests with [IntegrationTest] attribute"
+        - "No WebApplicationFactory usage"
+      code_smells:
+        - "Tests only mock DbContext, never use real database"
+        - "No API endpoint tests with HTTP client"
+        - "Missing E2E tests for critical flows"
+    impact:
+      quality: "Integration bugs slip to production"
+      confidence: "Cannot verify component interaction"
+      deployment: "Higher rollback rate"
+    fix:
+      pattern: "Add integration test suite with test database"
+      example: "Use WebApplicationFactory + TestContainers"
+      effort: "MEDIUM to HIGH"
+    related_standards:
+      - "Testing Pyramid: 70% unit, 20% integration, 10% E2E"
+      - "ASP.NET Core: Integration Testing"
+
+  - id: "TEST-002"
+    name: "Low Test Coverage (<70%)"
+    severity: "MEDIUM"
+    category: "coverage"
+    description: "Insufficient test coverage allows regressions in untested code paths"
+    detection:
+      indicators:
+        - "Code coverage <70% (industry standard minimum)"
+        - "Critical business logic untested"
+        - "No coverage reports in CI/CD"
+      code_smells:
+        - "Services without corresponding test files"
+        - "Exception handling paths not covered"
+        - "Edge cases ignored in tests"
+    impact:
+      quality: "Regressions slip through"
+      refactoring: "Fear of breaking untested code"
+      technical_debt: "Hard to maintain long-term"
+    fix:
+      pattern: "TDD for new code, add tests for legacy incrementally"
+      example: "Use coverlet + ReportGenerator"
+      effort: "HIGH (ongoing effort)"
+    related_standards:
+      - "CORE-008: TDD Mandatory"
+      - "Testing Pyramid: Coverage Targets"
+
+  - id: "TEST-003"
+    name: "Brittle Tests (High Coupling)"
+    severity: "MEDIUM"
+    category: "test-quality"
+    description: "Tests break frequently with minor code changes (tight coupling to implementation)"
+    detection:
+      indicators:
+        - "Tests verify internal implementation, not behavior"
+        - "Tests use concrete classes instead of interfaces"
+        - "Tests access private methods via reflection"
+      code_smells:
+        - "Tests mock every dependency"
+        - "Tests assert on internal state, not outputs"
+        - "Setup code longer than test code"
+    impact:
+      maintainability: "Tests become burden instead of safety net"
+      refactoring: "Fear of changing code due to test breakage"
+      velocity: "Slow development due to test maintenance"
+    fix:
+      pattern: "Test behavior, not implementation. Use test doubles wisely"
+      example: "Mock only external dependencies, use real objects for internal"
+      effort: "MEDIUM (refactor existing tests)"
+    related_standards:
+      - "Test Doubles: When to Mock vs Real"
+      - "London vs Chicago TDD Schools"
+
+best_practices:
+  testing_strategy:
+    pyramid:
+      - "70% Unit Tests: Fast, isolated, test single components"
+      - "20% Integration Tests: Test component interactions (DB, API, services)"
+      - "10% E2E Tests: Test critical user flows (login, checkout, etc.)"
+    
+    coverage_targets:
+      - "Critical paths: 100% coverage"
+      - "Business logic: 90% coverage"
+      - "Overall codebase: ≥70% coverage"
+      - "New code: 80% coverage minimum"
+    
+    test_quality:
+      - "Arrange-Act-Assert pattern"
+      - "One assertion per test (logical assertion)"
+      - "Test names describe behavior: Given_When_Then"
+      - "Fast tests (<1s per unit test)"
+  
+  tools:
+    unit_testing:
+      - "xUnit: Test framework"
+      - "FluentAssertions: Readable assertions"
+      - "AutoFixture: Test data generation"
+    
+    integration_testing:
+      - "WebApplicationFactory: ASP.NET Core integration"
+      - "TestContainers: Docker-based test dependencies"
+      - "Respawn: Database cleanup between tests"
+    
+    coverage:
+      - "coverlet: .NET coverage collector"
+      - "ReportGenerator: HTML coverage reports"
+      - "SonarQube: Quality gate enforcement"
+  
+  prevention:
+    - "Write tests BEFORE code (TDD RED-GREEN-REFACTOR)"
+    - "Enforce coverage thresholds in CI/CD"
+    - "Review test quality in code reviews"
+    - "Refactor tests when refactoring code"
+    - "Use mutation testing to validate test strength"
+
+references:
+  - name: "Microsoft: Unit Testing Best Practices"
+    url: "https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-best-practices"
+  - name: "Microsoft: Integration Tests in ASP.NET Core"
+    url: "https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests"
+  - name: "Testing Pyramid: Martin Fowler"
+    url: "https://martinfowler.com/articles/practical-test-pyramid.html"

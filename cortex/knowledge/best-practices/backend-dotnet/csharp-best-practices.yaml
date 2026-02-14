@@ -1,0 +1,337 @@
+# C# Coding Conventions and Best Practices
+# Authority: Microsoft C# Coding Conventions
+# Source: https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions
+# Version: 1.0
+# Created: 2026-02-14
+
+metadata:
+  title: "C# Language Best Practices"
+  version: "1.0"
+  domain: "backend-dotnet"
+  source: "https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions"
+  tech_stack: ["csharp", "dotnet", "backend"]
+  applicable_intents: ["IMPLEMENT", "REFACTOR", "ANALYZE"]
+  created: "2026-02-14"
+  author: "CORTEX Phase 23"
+
+overview:
+  description: |
+    Microsoft's official C# coding conventions covering naming, layout, commenting,
+    and language usage. These standards improve code readability and maintainability
+    across .NET projects.
+  
+  core_principles:
+    - "Use meaningful, descriptive names for identifiers"
+    - "Follow consistent layout and formatting conventions"
+    - "Write clear, focused comments explaining intent"
+    - "Leverage C# language features appropriately"
+    - "Prefer implicit typing when obvious"
+
+# ============================================================================
+# NAMING CONVENTIONS
+# ============================================================================
+
+naming_conventions:
+  pascal_case:
+    description: "Use PascalCase for class names, method names, and public members"
+    examples:
+      - "public class DataService"
+      - "public void ProcessData()"
+      - "public string FirstName { get; set; }"
+    rationale: "Industry standard for .NET, improves readability"
+  
+  camel_case:
+    description: "Use camelCase for local variables and method parameters"
+    examples:
+      - "string firstName"
+      - "int recordCount"
+      - "var employeeList"
+    rationale: "Distinguishes local scope from class-level identifiers"
+  
+  interface_naming:
+    description: "Prefix interface names with 'I'"
+    examples:
+      - "public interface IDataRepository"
+      - "public interface IMessageHandler"
+    rationale: "Clearly identifies interfaces in type declarations"
+  
+  async_methods:
+    description: "Suffix async method names with 'Async'"
+    examples:
+      - "public async Task<string> GetDataAsync()"
+      - "public async Task ProcessOrderAsync()"
+    rationale: "Indicates asynchronous operation at call site"
+  
+  private_fields:
+    description: "Prefix private fields with underscore"
+    examples:
+      - "private readonly ILogger _logger"
+      - "private int _retryCount"
+    rationale: "Distinguishes fields from local variables and parameters"
+
+# ============================================================================
+# LAYOUT CONVENTIONS
+# ============================================================================
+
+layout:
+  indentation:
+    description: "Use 4 spaces for indentation (not tabs)"
+    rationale: "Consistent rendering across editors"
+  
+  braces:
+    description: "Place opening brace on new line (Allman style)"
+    good_example: |
+      if (condition)
+      {
+          DoSomething();
+      }
+    bad_example: |
+      if (condition) {
+          DoSomething();
+      }
+    rationale: "Microsoft convention for C# codebases"
+  
+  single_line_statements:
+    description: "Avoid single-line if/for/while without braces"
+    good_example: |
+      if (condition)
+      {
+          DoSomething();
+      }
+    bad_example: |
+      if (condition) DoSomething();
+    rationale: "Prevents errors when adding statements"
+  
+  line_length:
+    description: "Keep lines under 120 characters when practical"
+    rationale: "Improves readability, especially in code reviews"
+
+# ============================================================================
+# COMMENTING CONVENTIONS
+# ============================================================================
+
+commenting:
+  xml_documentation:
+    description: "Use XML comments for public APIs"
+    example: |
+      /// <summary>
+      /// Processes customer order and generates invoice.
+      /// </summary>
+      /// <param name="order">The order to process.</param>
+      /// <returns>Generated invoice ID.</returns>
+      public async Task<int> ProcessOrderAsync(Order order)
+    rationale: "Enables IntelliSense and API documentation generation"
+  
+  inline_comments:
+    description: "Use // for inline comments explaining non-obvious logic"
+    good_example: |
+      // Retry with exponential backoff for transient failures
+      await RetryAsync(() => SaveDataAsync());
+    bad_example: |
+      // Increment counter
+      counter++;
+    rationale: "Explain WHY, not WHAT (code shows what)"
+  
+  todo_comments:
+    description: "Use TODO: format for future work markers"
+    example: "// TODO: Implement caching layer for performance"
+    rationale: "Searchable, standardized format"
+
+# ============================================================================
+# LANGUAGE USAGE
+# ============================================================================
+
+language_usage:
+  var_keyword:
+    description: "Use 'var' when type is obvious from right side"
+    good_example: |
+      var customers = new List<Customer>();
+      var name = GetCustomerName();
+    bad_example: |
+      var result = repository.GetData(); // Type unclear
+    rationale: "Reduces redundancy while maintaining clarity"
+  
+  string_interpolation:
+    description: "Prefer string interpolation over concatenation"
+    good_example: |
+      var message = $"Hello, {userName}!";
+    bad_example: |
+      var message = "Hello, " + userName + "!";
+    rationale: "More readable, less error-prone"
+  
+  null_handling:
+    description: "Use null-conditional operators and null-coalescing"
+    examples:
+      - "var length = name?.Length ?? 0;"
+      - "customer?.ProcessOrder();"
+    rationale: "Concise null checks reduce boilerplate"
+  
+  linq_usage:
+    description: "Use LINQ for collection operations"
+    good_example: |
+      var activeUsers = users
+          .Where(u => u.IsActive)
+          .OrderBy(u => u.Name)
+          .ToList();
+    rationale: "Declarative, readable, optimizable"
+  
+  async_await:
+    description: "Use async/await for I/O-bound operations"
+    good_example: |
+      public async Task<Data> LoadDataAsync()
+      {
+          return await _repository.GetDataAsync();
+      }
+    bad_example: |
+      public Data LoadData()
+      {
+          return _repository.GetDataAsync().Result; // Deadlock risk
+      }
+    rationale: "Avoids thread blocking and deadlocks"
+
+# ============================================================================
+# EXCEPTION HANDLING
+# ============================================================================
+
+exception_handling:
+  specific_exceptions:
+    description: "Catch specific exception types, not generic Exception"
+    good_example: |
+      try
+      {
+          await SaveAsync();
+      }
+      catch (DbUpdateException ex)
+      {
+          _logger.LogError(ex, "Database save failed");
+      }
+    bad_example: |
+      catch (Exception ex) // Too broad
+    rationale: "Precise handling, avoids masking bugs"
+  
+  exception_filters:
+    description: "Use exception filters for conditional catching"
+    example: |
+      catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+      {
+          return null;
+      }
+    rationale: "Declarative, preserves stack trace"
+  
+  rethrow:
+    description: "Use 'throw;' not 'throw ex;' when rethrowing"
+    good_example: |
+      catch (Exception ex)
+      {
+          _logger.LogError(ex, "Failed");
+          throw; // Preserves stack trace
+      }
+    bad_example: |
+      throw ex; // Loses original stack trace
+    rationale: "Preserves debugging information"
+
+# ============================================================================
+# SECURITY & PERFORMANCE
+# ============================================================================
+
+security:
+  input_validation:
+    description: "Validate all external input"
+    example: |
+      if (string.IsNullOrWhiteSpace(userInput))
+          throw new ArgumentException("Input required");
+    rationale: "Prevents injection attacks and crashes"
+  
+  secrets_management:
+    description: "Never hardcode credentials or API keys"
+    good_example: |
+      var apiKey = _configuration["ApiSettings:Key"];
+    bad_example: |
+      var apiKey = "sk-1234567890"; // Hardcoded
+    rationale: "Security compliance, prevents credential leaks"
+
+performance:
+  string_builder:
+    description: "Use StringBuilder for multiple concatenations"
+    when: "Concatenating 3+ strings in loop"
+    example: |
+      var sb = new StringBuilder();
+      foreach (var item in items)
+      {
+          sb.AppendLine($"Item: {item}");
+      }
+    rationale: "Avoids excessive string allocations"
+  
+  collection_capacity:
+    description: "Specify collection capacity when size known"
+    example: |
+      var list = new List<int>(capacity: 1000);
+    rationale: "Reduces array resizing overhead"
+  
+  dispose_pattern:
+    description: "Use 'using' statements for IDisposable resources"
+    example: |
+      using (var connection = new SqlConnection(connectionString))
+      {
+          // Use connection
+      }
+    rationale: "Ensures proper resource cleanup"
+
+# ============================================================================
+# ANTI-PATTERNS (AVOID)
+# ============================================================================
+
+anti_patterns:
+  - pattern: "Hungarian notation (strName, intCount)"
+    reason: "Outdated, type system provides this information"
+  
+  - pattern: "Regions (#region/#endregion) to hide code"
+    reason: "Indicates class doing too much, refactor instead"
+  
+  - pattern: "Public fields instead of properties"
+    reason: "Breaks encapsulation, can't add validation later"
+  
+  - pattern: "Magic numbers without named constants"
+    reason: "Reduces readability and maintainability"
+  
+  - pattern: "Swallowing exceptions (empty catch blocks)"
+    reason: "Hides bugs, makes debugging impossible"
+  
+  - pattern: "Synchronous blocking (.Result, .Wait()) on async code"
+    reason: "Deadlock risk in UI/ASP.NET contexts"
+
+# ============================================================================
+# INTEGRATION WITH CORTEX
+# ============================================================================
+
+cortex_integration:
+  knowledge_synthesis:
+    description: "Loaded by KnowledgeSynthesisEngine for .NET projects"
+    applicable_intents: ["IMPLEMENT", "REFACTOR", "ANALYZE"]
+  
+  violation_detection:
+    patterns:
+      - "Hungarian notation detection via regex"
+      - "Public field detection via AST analysis"
+      - "Hardcoded credential detection"
+      - "Async suffix missing on Task-returning methods"
+  
+  auto_fix_candidates:
+    - "Convert concatenation to interpolation"
+    - "Add async suffix to method names"
+    - "Replace .Result with await"
+    - "Add braces to single-line statements"
+
+# ============================================================================
+# REFERENCES
+# ============================================================================
+
+references:
+  - title: "C# Coding Conventions"
+    url: "https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions"
+  
+  - title: ".NET Naming Guidelines"
+    url: "https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/naming-guidelines"
+  
+  - title: "Async Programming Best Practices"
+    url: "https://learn.microsoft.com/en-us/archive/msdn-magazine/2013/march/async-await-best-practices-in-asynchronous-programming"

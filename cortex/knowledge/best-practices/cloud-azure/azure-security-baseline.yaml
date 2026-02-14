@@ -1,0 +1,255 @@
+---
+metadata:
+  domain: "Azure Security Baseline"
+  version: "1.0.0"
+  source: "Microsoft Azure Security Baseline"
+  authority: "Microsoft"
+  date: "2026-02-14"
+  description: "Security controls based on Azure Security Benchmark v3"
+  tags: ["azure", "security", "compliance", "cis", "nist"]
+
+security_controls:
+  network_security:
+    - id: "AZ-NS-001"
+      control: "Network Segmentation"
+      description: "Use VNets and NSGs to isolate resources"
+      implementation:
+        - "Create separate VNets for prod/staging/dev"
+        - "Use Network Security Groups (NSGs) for subnet-level filtering"
+        - "Use Application Security Groups (ASGs) for resource grouping"
+      azure_services: "Virtual Network, NSG, ASG"
+      compliance: "CIS Azure 6.1, NIST SC-7"
+
+    - id: "AZ-NS-002"
+      control: "Private Endpoints"
+      description: "Use Private Link for PaaS services"
+      implementation:
+        - "Enable Private Endpoints for Storage, SQL, Key Vault"
+        - "Disable public endpoints when possible"
+        - "Use Private DNS zones for name resolution"
+      azure_services: "Private Link, Private Endpoints"
+      compliance: "CIS Azure 6.5"
+
+    - id: "AZ-NS-003"
+      control: "Network Traffic Encryption"
+      description: "Encrypt all network traffic"
+      implementation:
+        - "Use HTTPS/TLS 1.2+ for all endpoints"
+        - "Enable SSL/TLS for databases"
+        - "Use VPN or ExpressRoute for hybrid connectivity"
+      azure_services: "Application Gateway, Front Door, VPN Gateway"
+      compliance: "NIST SC-8"
+
+  identity_access:
+    - id: "AZ-IA-001"
+      control: "Azure AD Integration"
+      description: "Use Azure AD for authentication"
+      implementation:
+        - "Enable Azure AD authentication for all services"
+        - "Use Managed Identities (no secrets in code)"
+        - "Implement Conditional Access policies"
+      azure_services: "Azure AD, Managed Identity"
+      compliance: "CIS Azure 1.1, NIST IA-2"
+
+    - id: "AZ-IA-002"
+      control: "Least Privilege Access (RBAC)"
+      description: "Grant minimum required permissions"
+      implementation:
+        - "Use built-in RBAC roles when possible"
+        - "Create custom roles for specific needs"
+        - "Regularly review and revoke unnecessary permissions"
+      azure_services: "Azure RBAC"
+      compliance: "CIS Azure 1.23, NIST AC-6"
+
+    - id: "AZ-IA-003"
+      control: "Multi-Factor Authentication"
+      description: "Require MFA for all users"
+      implementation:
+        - "Enable MFA for all Azure AD users"
+        - "Use Conditional Access to enforce MFA"
+        - "Block legacy authentication protocols"
+      azure_services: "Azure AD MFA, Conditional Access"
+      compliance: "CIS Azure 1.2, NIST IA-2(1)"
+
+    - id: "AZ-IA-004"
+      control: "Privileged Identity Management"
+      description: "Just-in-time admin access"
+      implementation:
+        - "Use PIM for admin role assignments"
+        - "Require approval for privileged access"
+        - "Set time-bound access (max 8 hours)"
+      azure_services: "Azure AD PIM"
+      compliance: "CIS Azure 1.20"
+
+  data_protection:
+    - id: "AZ-DP-001"
+      control: "Encryption at Rest"
+      description: "Encrypt all data at rest"
+      implementation:
+        - "Enable Azure Storage encryption (default)"
+        - "Use customer-managed keys (CMK) for sensitive data"
+        - "Enable Transparent Data Encryption (TDE) for SQL"
+      azure_services: "Storage Service Encryption, Azure Key Vault, SQL TDE"
+      compliance: "CIS Azure 3.1, NIST SC-28"
+
+    - id: "AZ-DP-002"
+      control: "Encryption in Transit"
+      description: "Use TLS 1.2+ for all connections"
+      implementation:
+        - "Enforce HTTPS-only for web apps"
+        - "Disable TLS 1.0/1.1"
+        - "Use secure transfer for Storage Accounts"
+      azure_services: "App Service, Storage Account"
+      compliance: "CIS Azure 2.1, NIST SC-8"
+
+    - id: "AZ-DP-003"
+      control: "Key Management"
+      description: "Centralize secrets in Key Vault"
+      implementation:
+        - "Store all secrets, keys, certificates in Key Vault"
+        - "Use Managed Identity to access Key Vault"
+        - "Enable soft-delete and purge protection"
+      azure_services: "Azure Key Vault"
+      compliance: "CIS Azure 8.1, NIST SC-12"
+
+    - id: "AZ-DP-004"
+      control: "Data Classification"
+      description: "Classify and label sensitive data"
+      implementation:
+        - "Use Azure Information Protection labels"
+        - "Implement DLP policies"
+        - "Tag resources with sensitivity levels"
+      azure_services: "Azure Information Protection, Purview"
+      compliance: "NIST MP-4"
+
+  logging_monitoring:
+    - id: "AZ-LM-001"
+      control: "Centralized Logging"
+      description: "Enable diagnostic logs for all services"
+      implementation:
+        - "Send logs to Log Analytics workspace"
+        - "Enable diagnostic settings for all resources"
+        - "Retain logs for 90+ days"
+      azure_services: "Azure Monitor, Log Analytics"
+      compliance: "CIS Azure 5.1, NIST AU-3"
+
+    - id: "AZ-LM-002"
+      control: "Security Monitoring"
+      description: "Enable Microsoft Defender for Cloud"
+      implementation:
+        - "Enable Defender for all resource types"
+        - "Configure security alerts"
+        - "Remediate security recommendations"
+      azure_services: "Microsoft Defender for Cloud"
+      compliance: "CIS Azure 2.1, NIST SI-4"
+
+    - id: "AZ-LM-003"
+      control: "Activity Log Monitoring"
+      description: "Monitor administrative actions"
+      implementation:
+        - "Enable Activity Log retention"
+        - "Create alerts for critical operations"
+        - "Review activity logs regularly"
+      azure_services: "Azure Activity Log, Azure Monitor"
+      compliance: "CIS Azure 5.2, NIST AU-6"
+
+  governance:
+    - id: "AZ-GOV-001"
+      control: "Azure Policy"
+      description: "Enforce organizational standards"
+      implementation:
+        - "Assign built-in policies for security baseline"
+        - "Create custom policies for specific requirements"
+        - "Use Deny effect for critical policies"
+      azure_services: "Azure Policy"
+      compliance: "CIS Azure 2.12"
+
+    - id: "AZ-GOV-002"
+      control: "Resource Tagging"
+      description: "Tag resources for governance"
+      required_tags:
+        - "Environment (prod/staging/dev)"
+        - "Owner (team/individual)"
+        - "CostCenter"
+        - "Application"
+      enforcement: "Use Azure Policy to require tags"
+
+    - id: "AZ-GOV-003"
+      control: "Management Groups"
+      description: "Organize subscriptions hierarchically"
+      implementation:
+        - "Create management group structure"
+        - "Apply policies at management group level"
+        - "Inherit policies to child subscriptions"
+      azure_services: "Azure Management Groups"
+
+  backup_recovery:
+    - id: "AZ-BR-001"
+      control: "Automated Backups"
+      description: "Enable automated backups for critical data"
+      implementation:
+        - "Enable Azure Backup for VMs"
+        - "Configure backup retention policies"
+        - "Test restore procedures regularly"
+      azure_services: "Azure Backup, Azure Site Recovery"
+      compliance: "CIS Azure 7.1, NIST CP-9"
+
+    - id: "AZ-BR-002"
+      control: "Geo-Redundant Storage"
+      description: "Use geo-redundancy for critical data"
+      implementation:
+        - "Use GRS or GZRS for Storage Accounts"
+        - "Enable geo-replication for SQL databases"
+        - "Document failover procedures"
+      azure_services: "Storage Account (GRS/GZRS), SQL Geo-Replication"
+      compliance: "NIST CP-6"
+
+best_practices:
+  deployment:
+    - "Use Infrastructure as Code (Bicep/Terraform)"
+    - "Implement CI/CD with security gates"
+    - "Use Azure Blueprints for repeatable deployments"
+    - "Enable Resource Locks for production resources"
+  
+  cost_optimization:
+    - "Use Azure Cost Management + Billing"
+    - "Set up budget alerts"
+    - "Right-size resources based on usage"
+    - "Use Reserved Instances for predictable workloads"
+  
+  compliance:
+    - "Enable Regulatory Compliance dashboard in Defender"
+    - "Use Azure Compliance Manager"
+    - "Conduct regular security assessments"
+    - "Document security controls in ADRs"
+
+security_checklist:
+  pre_deployment:
+    - "[ ] Review ARM template for security issues"
+    - "[ ] No secrets in source code or templates"
+    - "[ ] Enable diagnostic logging"
+    - "[ ] Configure NSGs and firewalls"
+    - "[ ] Use Managed Identities (no service principals)"
+  
+  post_deployment:
+    - "[ ] Enable Microsoft Defender for Cloud"
+    - "[ ] Configure security alerts"
+    - "[ ] Review and remediate security recommendations"
+    - "[ ] Enable Azure Policy compliance"
+    - "[ ] Test backup and restore procedures"
+  
+  ongoing:
+    - "[ ] Monthly security review"
+    - "[ ] Quarterly access review (PIM)"
+    - "[ ] Patch management (OS + dependencies)"
+    - "[ ] Incident response drills"
+
+references:
+  - name: "Azure Security Benchmark v3"
+    url: "https://learn.microsoft.com/en-us/security/benchmark/azure/"
+  - name: "Microsoft Cloud Security Benchmark"
+    url: "https://learn.microsoft.com/en-us/security/benchmark/azure/introduction"
+  - name: "CIS Azure Foundations Benchmark"
+    url: "https://www.cisecurity.org/benchmark/azure"
+  - name: "Azure Security Best Practices"
+    url: "https://learn.microsoft.com/en-us/azure/security/fundamentals/best-practices-and-patterns"

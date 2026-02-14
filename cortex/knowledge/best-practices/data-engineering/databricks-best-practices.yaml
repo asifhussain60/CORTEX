@@ -1,0 +1,372 @@
+# Databricks Architecture and Optimization Best Practices
+# Authority: Databricks Documentation and Best Practices
+# Source: https://docs.databricks.com/best-practices.html
+# Version: 1.0
+# Created: 2026-02-14
+
+metadata:
+  title: "Databricks Architecture Patterns and Optimization"
+  version: "1.0"
+  domain: "data-engineering"
+  source: "https://docs.databricks.com/best-practices.html"
+  tech_stack: ["databricks", "spark", "data-engineering", "delta-lake"]
+  applicable_intents: ["IMPLEMENT", "REFACTOR", "ANALYZE", "DESIGN"]
+  created: "2026-02-14"
+  author: "CORTEX Phase 23"
+
+overview:
+  description: |
+    Databricks best practices covering workspace organization, cluster configuration,
+    Delta Lake optimization, job orchestration, and security patterns. Focuses on
+    production-grade data engineering and analytics workloads.
+  
+  core_principles:
+    - "Use Delta Lake for ACID transactions and time travel"
+    - "Optimize cluster sizing and autoscaling"
+    - "Implement medallion architecture (Bronze/Silver/Gold)"
+    - "Use Unity Catalog for data governance"
+    - "Cache frequently accessed data"
+
+# ============================================================================
+# WORKSPACE ORGANIZATION
+# ============================================================================
+
+workspace_organization:
+  folder_structure:
+    description: "Organize notebooks and code by domain and environment"
+    pattern: |
+      /Workspace
+        /Production
+          /ETL
+          /Analytics
+          /ML
+        /Development
+          /ETL
+          /Analytics
+        /Shared
+          /Libraries
+          /Utilities
+    rationale: "Separates production from dev, enables access control"
+  
+  notebook_guidelines:
+    description: "Structure notebooks for reusability and maintainability"
+    best_practices:
+      - "Keep notebooks focused on single responsibility"
+      - "Use widgets for parameterization"
+      - "Extract common logic to shared libraries"
+      - "Include documentation cells explaining purpose"
+      - "Use %run for importing shared notebooks"
+    anti_patterns:
+      - "Monolithic notebooks (>500 lines)"
+      - "Hardcoded parameters"
+      - "Copy-paste code across notebooks"
+  
+  version_control:
+    description: "Use Git integration (Repos) for notebook versioning"
+    workflow:
+      - "Create feature branch"
+      - "Develop in branch"
+      - "Pull request for review"
+      - "Merge to main"
+    tools: ["Databricks Repos", "GitHub", "Azure DevOps"]
+
+# ============================================================================
+# CLUSTER CONFIGURATION
+# ============================================================================
+
+cluster_configuration:
+  cluster_types:
+    all_purpose:
+      description: "Interactive cluster for notebooks and exploration"
+      use_case: "Development and ad-hoc analysis"
+      cost: "Higher cost, persistent availability"
+      auto_termination: "Terminate after 120 minutes idle"
+    
+    job_cluster:
+      description: "Ephemeral cluster created per job run"
+      use_case: "Production ETL and scheduled jobs"
+      cost: "Lower cost, spin up only when needed"
+      recommendation: "Always use for production jobs"
+  
+  cluster_sizing:
+    worker_nodes:
+      description: "Size based on data volume and parallelism needs"
+      formula: "Workers = Data Size (GB) / (Worker Memory * 0.7)"
+      example: "100 GB data → 100 / (16 GB * 0.7) = 9 workers"
+    
+    driver_node:
+      description: "Size based on aggregation and collection operations"
+      guidance: "Use larger driver for heavy aggregations, joins"
+      typical: "Same size as worker for balanced workloads"
+  
+  autoscaling:
+    description: "Enable autoscaling for variable workloads"
+    configuration:
+      min_workers: 2
+      max_workers: 10
+    benefits: "Optimize cost while handling peak loads"
+    when_to_use: "ETL jobs with variable data volumes"
+    when_not_to_use: "Streaming jobs (prefer fixed cluster)"
+  
+  spot_instances:
+    description: "Use spot instances for fault-tolerant workloads"
+    savings: "Up to 80% cost reduction"
+    applicable: ["Batch ETL", "Machine learning training"]
+    not_applicable: ["Streaming jobs", "Interactive notebooks"]
+    configuration: "Use spot for workers, on-demand for driver"
+
+# ============================================================================
+# DELTA LAKE OPTIMIZATION
+# ============================================================================
+
+delta_lake:
+  table_optimization:
+    optimize_command:
+      description: "Compact small files into larger files"
+      syntax: "OPTIMIZE delta.`/path/to/table`"
+      when: "After many small writes (streaming, append)"
+      frequency: "Daily for active tables"
+    
+    z_ordering:
+      description: "Co-locate related data for faster queries"
+      syntax: "OPTIMIZE table_name ZORDER BY (column1, column2)"
+      use_cases: ["Columns used in WHERE clauses", "Join keys"]
+      example: "ZORDER BY (date, customer_id) for date-filtered queries"
+    
+    vacuum:
+      description: "Remove old file versions to reclaim storage"
+      syntax: "VACUUM table_name RETAIN 168 HOURS"
+      retention: "7 days (168 hours) minimum for time travel"
+      frequency: "Weekly or monthly"
+  
+  partitioning:
+    description: "Partition by commonly filtered columns"
+    best_practices:
+      - "Partition by date for time-series data"
+      - "Avoid high cardinality columns"
+      - "Target partition size: 1 GB"
+      - "Limit partitions to < 10,000"
+    example: |
+      df.write.format("delta")
+        .partitionBy("date")
+        .save("/delta/sales")
+    anti_pattern: "Partitioning by user_id (millions of partitions)"
+  
+  table_properties:
+    description: "Configure Delta table properties for optimization"
+    properties:
+      delta.autoOptimize.optimizeWrite: "true  # Compact files during write"
+      delta.autoOptimize.autoCompact: "true  # Auto-compact after write"
+      delta.deletedFileRetentionDuration: "interval 7 days"
+      delta.logRetentionDuration: "interval 30 days"
+
+# ============================================================================
+# DATA ARCHITECTURE PATTERNS
+# ============================================================================
+
+medallion_architecture:
+  bronze_layer:
+    description: "Raw ingested data, minimal transformation"
+    format: "Delta Lake, schema on read"
+    quality: "No validation, preserve source fidelity"
+    retention: "Long-term (months to years)"
+    example: |
+      # Ingest JSON from source
+      df = spark.read.json("/source/data")
+      df.write.format("delta").mode("append").save("/bronze/raw_data")
+  
+  silver_layer:
+    description: "Cleaned and validated data"
+    transformations:
+      - "Remove duplicates"
+      - "Fix data types"
+      - "Apply business rules"
+      - "Filter invalid records"
+    quality: "Validation with expectations"
+    example: |
+      bronze = spark.read.format("delta").load("/bronze/raw_data")
+      silver = bronze.dropDuplicates(["id"]) \
+                     .filter(col("amount") > 0)
+      silver.write.format("delta").mode("append").save("/silver/cleaned_data")
+  
+  gold_layer:
+    description: "Business-level aggregations and analytics"
+    purpose: "Optimized for consumption by BI tools and ML models"
+    quality: "Production-ready, SLA-backed"
+    example: |
+      silver = spark.read.format("delta").load("/silver/cleaned_data")
+      gold = silver.groupBy("customer_id", "date") \
+                   .agg(sum("amount").alias("total_sales"))
+      gold.write.format("delta").mode("overwrite").save("/gold/daily_sales")
+
+# ============================================================================
+# PERFORMANCE OPTIMIZATION
+# ============================================================================
+
+performance:
+  caching:
+    description: "Cache frequently accessed DataFrames"
+    syntax: "df.cache()"
+    when: "Reusing DataFrame in multiple actions"
+    storage_levels: ["MEMORY_ONLY", "MEMORY_AND_DISK"]
+    example: |
+      customers = spark.read.format("delta").load("/silver/customers")
+      customers.cache()
+      # Use customers multiple times
+      customers.count()
+      customers.filter(col("country") == "US").count()
+  
+  broadcast_joins:
+    description: "Broadcast small tables to all workers"
+    syntax: "broadcast(small_df)"
+    when: "Joining large table with small (<10 MB)"
+    example: |
+      from pyspark.sql.functions import broadcast
+      large_df.join(broadcast(small_df), "key")
+  
+  repartitioning:
+    description: "Control partition count for optimal parallelism"
+    guidelines:
+      - "Partitions = 2-3x number of cores"
+      - "Partition size: 128 MB - 1 GB"
+    operations:
+      repartition: "Increase partitions, full shuffle"
+      coalesce: "Decrease partitions, minimize shuffle"
+    example: |
+      df.repartition(200).write.format("delta").save("/output")
+  
+  predicate_pushdown:
+    description: "Filter data as early as possible"
+    good_example: |
+      df = spark.read.format("delta").load("/data") \
+               .filter(col("date") == "2026-02-14")  # Early filter
+    bad_example: |
+      df = spark.read.format("delta").load("/data")  # Load all
+      df.filter(col("date") == "2026-02-14")  # Late filter
+
+# ============================================================================
+# SECURITY & GOVERNANCE
+# ============================================================================
+
+security:
+  unity_catalog:
+    description: "Unified governance for data and AI assets"
+    capabilities:
+      - "Fine-grained access control"
+      - "Data lineage tracking"
+      - "Audit logging"
+      - "Centralized metadata"
+    syntax: |
+      GRANT SELECT ON TABLE catalog.schema.table TO `user@company.com`;
+  
+  secrets_management:
+    description: "Store credentials in Databricks Secrets"
+    scope: "Create secret scope backed by Azure Key Vault"
+    usage: |
+      password = dbutils.secrets.get(scope="prod", key="db_password")
+      jdbc_url = f"jdbc:sqlserver://...;password={password}"
+  
+  cluster_policies:
+    description: "Enforce cluster configuration standards"
+    controls:
+      - "Maximum cluster size"
+      - "Allowed instance types"
+      - "Tag requirements"
+      - "Auto-termination"
+    example: "Prevent data scientists from creating >10 node clusters"
+
+# ============================================================================
+# JOB ORCHESTRATION
+# ============================================================================
+
+job_orchestration:
+  workflows:
+    description: "Use Databricks Workflows for job dependencies"
+    benefits:
+      - "Visual DAG representation"
+      - "Automatic retries"
+      - "Job parameter passing"
+      - "Email notifications"
+    example: |
+      # Job 1: Ingest → Job 2: Transform → Job 3: Aggregate
+  
+  task_dependencies:
+    description: "Define dependencies between tasks"
+    patterns:
+      - "Sequential: Task B depends on Task A"
+      - "Fan-out: Task B and C depend on Task A"
+      - "Fan-in: Task D depends on Task B and C"
+  
+  error_handling:
+    description: "Configure retry logic and alerts"
+    configuration:
+      max_retries: 3
+      retry_policy: "exponential"
+      alert_on_failure: "team@company.com"
+
+# ============================================================================
+# ANTI-PATTERNS (AVOID)
+# ============================================================================
+
+anti_patterns:
+  - pattern: "Calling collect() on large DataFrames"
+    reason: "Brings all data to driver, causes OOM"
+    alternative: "Use show(), take(), or write to storage"
+  
+  - pattern: "Using RDDs instead of DataFrames"
+    reason: "Loses Catalyst optimizer benefits"
+    alternative: "Use DataFrame API for 10x performance"
+  
+  - pattern: "Writing many small files"
+    reason: "Degrades query performance"
+    alternative: "Use OPTIMIZE and autoCompact"
+  
+  - pattern: "Not partitioning time-series data"
+    reason: "Full table scans on date queries"
+    alternative: "Partition by date, use ZORDER"
+  
+  - pattern: "Using Parquet instead of Delta Lake"
+    reason: "No ACID, no time travel, no schema enforcement"
+    alternative: "Always use Delta Lake for production"
+  
+  - pattern: "Hardcoding credentials in notebooks"
+    reason: "Security violation, audit failure"
+    alternative: "Use Databricks Secrets"
+
+# ============================================================================
+# CORTEX INTEGRATION
+# ============================================================================
+
+cortex_integration:
+  onboarding:
+    description: "Analyze Databricks notebooks during repository onboarding"
+    checks:
+      - "Detect hardcoded credentials"
+      - "Identify missing Delta optimization"
+      - "Find large collect() operations"
+      - "Check for medallion architecture"
+  
+  refactoring:
+    description: "Suggest optimizations for Databricks code"
+    recommendations:
+      - "Convert Parquet to Delta Lake"
+      - "Add OPTIMIZE and ZORDER commands"
+      - "Replace collect() with write operations"
+      - "Add partitioning to large tables"
+  
+  knowledge_synthesis:
+    description: "Load patterns when analyzing Spark/Databricks repos"
+    triggers: ["pyspark imports", "databricks notebooks", ".dbc files"]
+
+references:
+  - title: "Databricks Best Practices"
+    url: "https://docs.databricks.com/best-practices.html"
+  
+  - title: "Delta Lake Best Practices"
+    url: "https://docs.databricks.com/delta/best-practices.html"
+  
+  - title: "Spark Performance Tuning"
+    url: "https://spark.apache.org/docs/latest/tuning.html"
+  
+  - title: "Medallion Architecture"
+    url: "https://www.databricks.com/glossary/medallion-architecture"

@@ -1,0 +1,179 @@
+---
+metadata:
+  domain: "Entity Framework Core Best Practices"
+  version: "1.0.0"
+  source: "Microsoft Learn - EF Core Documentation"
+  authority: "Microsoft"
+  date: "2026-02-14"
+  description: "Patterns and practices for Entity Framework Core data access"
+  tags: ["ef-core", "orm", "database", "linq", "performance"]
+
+patterns:
+  configuration:
+    - id: "EF-CFG-001"
+      name: "Configure DbContext Lifetime as Scoped"
+      category: "dependency-injection"
+      description: "DbContext must be Scoped, never Singleton"
+      registration: "services.AddDbContext<AppDbContext>(options => options.UseSqlServer(conn));"
+      why: "DbContext not thread-safe, tracks entities per unit-of-work"
+
+    - id: "EF-CFG-002"
+      name: "Use Fluent API Over Data Annotations"
+      category: "configuration"
+      description: "Fluent API is more powerful and keeps entities clean"
+      location: "OnModelCreating method in DbContext"
+      example: "modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();"
+      when_annotations_ok: "Simple properties ([Required], [MaxLength])"
+
+  query_optimization:
+    - id: "EF-QUERY-001"
+      name: "Use AsNoTracking for Read-Only Queries"
+      category: "performance"
+      description: "Disable change tracking when you don't need to update entities"
+      example: "var users = await context.Users.AsNoTracking().ToListAsync();"
+      benefit: "30-40% faster queries, lower memory usage"
+
+    - id: "EF-QUERY-002"
+      name: "Use Eager Loading to Avoid N+1"
+      category: "performance"
+      description: "Load related entities with Include() to prevent multiple queries"
+      example: "var orders = await context.Orders.Include(o => o.Items).ToListAsync();"
+      alternatives:
+        - "Explicit Loading: context.Entry(order).Collection(o => o.Items).Load()"
+        - "Projection: Select only needed fields"
+
+    - id: "EF-QUERY-003"
+      name: "Project to DTOs with Select"
+      category: "performance"
+      description: "Use Select() to load only needed columns, not entire entity"
+      example: "var dtos = await context.Users.Select(u => new UserDto { Id = u.Id, Name = u.Name }).ToListAsync();"
+      benefit: "Smaller payloads, better performance"
+
+    - id: "EF-QUERY-004"
+      name: "Use Compiled Queries for Repeated Queries"
+      category: "performance"
+      description: "Pre-compile LINQ queries that execute frequently"
+      example: "private static readonly Func<AppDbContext, int, Task<User>> GetUserById = EF.CompileAsyncQuery(...);"
+      benefit: "Eliminates query translation overhead"
+
+  change_tracking:
+    - id: "EF-TRACK-001"
+      name: "Understand Change Tracker States"
+      category: "change-tracking"
+      description: "Entity states: Added, Unchanged, Modified, Deleted, Detached"
+      usage: "context.Entry(entity).State to inspect or set state"
+      when_to_set_manually: "Disconnected scenarios (Web API, DTOs)"
+
+    - id: "EF-TRACK-002"
+      name: "Use Update() for Disconnected Updates"
+      category: "change-tracking"
+      description: "For entities loaded outside current context"
+      example: "context.Users.Update(user); await context.SaveChangesAsync();"
+      caveat: "Updates ALL properties, use Attach + modify specific properties if needed"
+
+  migrations:
+    - id: "EF-MIG-001"
+      name: "Use Migrations for Schema Changes"
+      category: "migrations"
+      description: "Never manually edit database, always use migrations"
+      commands:
+        create: "dotnet ef migrations add MigrationName"
+        apply: "dotnet ef database update"
+        rollback: "dotnet ef database update PreviousMigrationName"
+
+    - id: "EF-MIG-002"
+      name: "Review Generated Migrations"
+      category: "migrations"
+      description: "Always review Up() and Down() methods before applying"
+      why: "EF Core may not detect all changes (renames, custom SQL)"
+      customization: "Add custom SQL with migrationBuilder.Sql()"
+
+  repository_pattern:
+    - id: "EF-REPO-001"
+      name: "Repository Pattern is Optional"
+      category: "architecture"
+      description: "DbContext already implements Unit of Work and Repository patterns"
+      when_to_use:
+        - "Multiple data sources (EF + Dapper)"
+        - "Complex domain logic"
+        - "Testing isolation (though DbContext can be mocked)"
+      when_to_skip:
+        - "Simple CRUD apps"
+        - "Thin controllers with business logic in services"
+
+  testing:
+    - id: "EF-TEST-001"
+      name: "Use In-Memory Database for Unit Tests"
+      category: "testing"
+      description: "EF Core In-Memory provider for fast unit tests"
+      setup: "options.UseInMemoryDatabase('TestDb')"
+      limitation: "Not a real database (no constraints, no SQL validation)"
+
+    - id: "EF-TEST-002"
+      name: "Use SQLite or TestContainers for Integration Tests"
+      category: "testing"
+      description: "Use real database for integration tests"
+      options:
+        - "SQLite in-memory: Fast, close to real SQL"
+        - "TestContainers: Docker-based SQL Server for true integration tests"
+
+best_practices:
+  query_performance:
+    - "Use AsNoTracking() for read-only queries"
+    - "Batch multiple queries with SplitQuery() for large includes"
+    - "Use pagination (Skip/Take) instead of loading all data"
+    - "Profile queries with EF Core logging (EnableSensitiveDataLogging in dev)"
+  
+  model_design:
+    - "Use value objects for related properties (Address, Money)"
+    - "Configure indexes on foreign keys and frequently queried columns"
+    - "Use table-per-hierarchy (TPH) for simple inheritance"
+    - "Avoid table-per-type (TPT) unless necessary (performance cost)"
+  
+  concurrency:
+    - "Use optimistic concurrency with [ConcurrencyCheck] or rowversion"
+    - "Handle DbUpdateConcurrencyException gracefully"
+    - "Don't use pessimistic locking unless absolutely required"
+  
+  global_query_filters:
+    - "Use for soft deletes: HasQueryFilter(e => !e.IsDeleted)"
+    - "Use for multi-tenancy: HasQueryFilter(e => e.TenantId == currentTenantId)"
+
+anti_patterns:
+  - name: "Lazy Loading (Proxies)"
+    why: "Causes N+1 queries, hidden performance issues"
+    fix: "Use explicit Include() or projection"
+    exception: "Acceptable for rapid prototyping, disable in production"
+  
+  - name: "Executing Queries in Loops"
+    why: "N+1 problem, exponential slowdown"
+    fix: "Load all data with single query using Include() or batch"
+  
+  - name: "Using .ToList() Before Filtering"
+    why: "Brings entire table into memory"
+    fix: "Apply Where() before ToList()/ToListAsync()"
+  
+  - name: "Tracking Entities Unnecessarily"
+    why: "Memory overhead, slower queries"
+    fix: "Use AsNoTracking() for read-only operations"
+  
+  - name: "Not Using Async Methods"
+    why: "Blocks threads, poor scalability"
+    fix: "Always use ToListAsync(), SaveChangesAsync(), etc."
+
+performance_checklist:
+  - "[ ] Use AsNoTracking() for reads"
+  - "[ ] Use Include() to avoid N+1"
+  - "[ ] Project to DTOs with Select()"
+  - "[ ] Add indexes on foreign keys"
+  - "[ ] Use pagination for large datasets"
+  - "[ ] Profile queries with logging"
+  - "[ ] Avoid lazy loading in production"
+
+references:
+  - name: "EF Core Performance"
+    url: "https://learn.microsoft.com/en-us/ef/core/performance/"
+  - name: "EF Core Querying Data"
+    url: "https://learn.microsoft.com/en-us/ef/core/querying/"
+  - name: "EF Core Migrations"
+    url: "https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/"

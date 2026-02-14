@@ -1,0 +1,301 @@
+# STS Security Anti-Patterns Catalog
+# Authority: STS (Sharpen The Saw) Framework
+# Source: CORTEX STS Showcase - Security Category
+# Version: 1.0
+# Created: 2026-02-14
+
+metadata:
+  title: "STS Security Anti-Patterns (12 Flaws)"
+  version: "1.0"
+  domain: "sts"
+  source: "CORTEX STS Framework"
+  tech_stack: ["security", "cryptography", "authentication", "injection"]
+  applicable_intents: ["ANALYZE", "AUDIT", "FIX", "REFACTOR"]
+  created: "2026-02-14"
+  author: "CORTEX Phase 23"
+  pattern_count: 12
+
+overview:
+  description: |
+    Security anti-patterns from STS catalog covering cryptography weaknesses,
+    injection vulnerabilities, authentication bypasses, and access control failures.
+    Each pattern includes detection logic and remediation guidance.
+  
+  categories:
+    - "Hardcoded credentials and secrets"
+    - "Weak cryptography and hashing"
+    - "SQL and command injection"
+    - "Authentication and session management"
+    - "Access control and authorization"
+
+# ============================================================================
+# PATTERN 1: HARDCODED CREDENTIALS
+# ============================================================================
+
+hardcoded_credentials:
+  id: "STS-SEC-001"
+  severity: "CRITICAL"
+  cwe: ["CWE-798"]
+  owasp: "A07:2021 - Identification and Authentication Failures"
+  
+  description: |
+    Credentials (passwords, API keys, tokens) hardcoded in source code or
+    configuration files. Exposes secrets in version control and makes
+    rotation impossible without code changes.
+  
+  bad_example: |
+    # Hardcoded database password
+    DB_PASSWORD = "MySecretPassword123!"
+    connection_string = f"Server=db;User=admin;Password={DB_PASSWORD}"
+    
+    # Hardcoded API key
+    api_key = "sk-1234567890abcdef"
+    headers = {"Authorization": f"Bearer {api_key}"}
+  
+  good_example: |
+    import os
+    
+    # Load from environment variables
+    db_password = os.environ["DB_PASSWORD"]
+    connection_string = f"Server=db;User=admin;Password={db_password}"
+    
+    # Load API key from secret manager
+    api_key = secret_manager.get_secret("api_key")
+    headers = {"Authorization": f"Bearer {api_key}"}
+  
+  detection:
+    patterns:
+      - 'password\s*=\s*["\'][^"\']+["\']'
+      - 'api_key\s*=\s*["\'][^"\']+["\']'
+      - 'secret\s*=\s*["\'][^"\']+["\']'
+    false_positives: "password = os.environ[...] is OK"
+  
+  remediation:
+    steps:
+      - "Move secrets to environment variables"
+      - "Use secret management service (Azure Key Vault, AWS Secrets Manager)"
+      - "Never commit secrets to version control"
+      - "Rotate compromised credentials immediately"
+    tools: ["Azure Key Vault", "AWS Secrets Manager", "HashiCorp Vault"]
+
+# ============================================================================
+# PATTERN 2: WEAK CRYPTOGRAPHIC HASH (MD5, SHA1)
+# ============================================================================
+
+weak_crypto_hash:
+  id: "STS-SEC-002"
+  severity: "HIGH"
+  cwe: ["CWE-327"]
+  owasp: "A02:2021 - Cryptographic Failures"
+  
+  description: |
+    Using cryptographically broken hash functions (MD5, SHA1) for security-
+    sensitive operations like password hashing or integrity verification.
+  
+  bad_example: |
+    import hashlib
+    
+    # MD5 for password hashing (WEAK)
+    password_hash = hashlib.md5(password.encode()).hexdigest()
+    
+    # SHA1 for integrity check (VULNERABLE)
+    file_hash = hashlib.sha1(file_data).hexdigest()
+  
+  good_example: |
+    from passlib.hash import argon2
+    import hashlib
+    
+    # Argon2 for password hashing (STRONG)
+    password_hash = argon2.hash(password)
+    
+    # SHA256 for integrity (ACCEPTABLE)
+    file_hash = hashlib.sha256(file_data).hexdigest()
+  
+  detection:
+    patterns:
+      - 'hashlib\\.md5\\('
+      - 'hashlib\\.sha1\\('
+      - 'Crypto\\.Hash\\.MD5'
+  
+  remediation:
+    steps:
+      - "Replace MD5/SHA1 with SHA256/SHA512 for integrity"
+      - "Use Argon2, bcrypt, or PBKDF2 for password hashing"
+      - "Add salt to password hashes"
+      - "Migrate existing hashes to secure algorithm"
+    alternatives: ["Argon2id", "bcrypt", "PBKDF2-HMAC-SHA256"]
+
+# ============================================================================
+# PATTERN 3: SQL INJECTION VULNERABILITY
+# ============================================================================
+
+sql_injection:
+  id: "STS-SEC-003"
+  severity: "CRITICAL"
+  cwe: ["CWE-89"]
+  owasp: "A03:2021 - Injection"
+  
+  description: |
+    Constructing SQL queries using string concatenation with user input,
+    allowing attackers to inject malicious SQL commands.
+  
+  bad_example: |
+    # String concatenation (VULNERABLE)
+    query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
+    cursor.execute(query)
+    
+    # .format() still vulnerable
+    query = "SELECT * FROM products WHERE id = {}".format(product_id)
+  
+  good_example: |
+    # Parameterized query (SAFE)
+    query = "SELECT * FROM users WHERE username = ? AND password = ?"
+    cursor.execute(query, (username, password))
+    
+    # ORM with safe query builder
+    user = session.query(User).filter_by(username=username, password=password).first()
+  
+  detection:
+    patterns:
+      - 'f".*SELECT.*{[^}]+}"'
+      - '".*SELECT.*"\\.format\\('
+      - 'query.*\\+.*username'
+  
+  remediation:
+    steps:
+      - "Use parameterized queries (? placeholders)"
+      - "Use ORM query builders (SQLAlchemy, Entity Framework)"
+      - "Validate and sanitize user input"
+      - "Apply principle of least privilege to database user"
+
+# ============================================================================
+# PATTERN 4: COMMAND INJECTION
+# ============================================================================
+
+command_injection:
+  id: "STS-SEC-004"
+  severity: "CRITICAL"
+  cwe: ["CWE-78"]
+  owasp: "A03:2021 - Injection"
+  
+  description: |
+    Executing system commands with user-controlled input without proper
+    validation, allowing arbitrary command execution.
+  
+  bad_example: |
+    import os
+    
+    # Shell injection (DANGEROUS)
+    os.system(f"ping -c 4 {user_input}")
+    
+    # subprocess with shell=True (DANGEROUS)
+    subprocess.call(f"tar -czf backup.tar.gz {directory}", shell=True)
+  
+  good_example: |
+    import subprocess
+    import shlex
+    
+    # Use list with shell=False (SAFE)
+    subprocess.run(["ping", "-c", "4", user_input], check=True)
+    
+    # Escape shell arguments
+    safe_dir = shlex.quote(directory)
+    subprocess.call(f"tar -czf backup.tar.gz {safe_dir}", shell=True)
+  
+  detection:
+    patterns:
+      - 'os\\.system\\(.*f"'
+      - 'subprocess.*shell=True'
+      - 'eval\\(.*user'
+  
+  remediation:
+    steps:
+      - "Use subprocess with list arguments, shell=False"
+      - "Validate input against whitelist"
+      - "Use shlex.quote() when shell=True required"
+      - "Avoid os.system() entirely"
+
+# ============================================================================
+# ADDITIONAL PATTERNS (5-12)
+# ============================================================================
+
+insecure_deserialization:
+  id: "STS-SEC-005"
+  severity: "HIGH"
+  cwe: ["CWE-502"]
+  description: "Using pickle.loads() on untrusted data"
+  remediation: "Use JSON or validated Protocol Buffers"
+
+missing_auth_checks:
+  id: "STS-SEC-006"
+  severity: "HIGH"
+  description: "API endpoints without authentication"
+  remediation: "Add @require_auth decorator to all endpoints"
+
+weak_session_management:
+  id: "STS-SEC-007"
+  severity: "MEDIUM"
+  description: "Sessions without expiration or regeneration"
+  remediation: "Set session timeout, regenerate ID on login"
+
+path_traversal:
+  id: "STS-SEC-008"
+  severity: "HIGH"
+  cwe: ["CWE-22"]
+  description: "File access using user-provided paths"
+  remediation: "Validate paths, use os.path.abspath() + whitelist"
+
+xxe_vulnerability:
+  id: "STS-SEC-009"
+  severity: "HIGH"
+  cwe: ["CWE-611"]
+  description: "XML parsing without disabling external entities"
+  remediation: "Use defusedxml library or disable DTD processing"
+
+csrf_missing:
+  id: "STS-SEC-010"
+  severity: "MEDIUM"
+  description: "State-changing endpoints without CSRF tokens"
+  remediation: "Use Flask-WTF or Django CSRF middleware"
+
+cors_misconfiguration:
+  id: "STS-SEC-011"
+  severity: "MEDIUM"
+  description: "Access-Control-Allow-Origin: *"
+  remediation: "Whitelist specific origins, not wildcard"
+
+timing_attack:
+  id: "STS-SEC-012"
+  severity: "LOW"
+  description: "Password comparison using == instead of constant-time"
+  remediation: "Use secrets.compare_digest() for comparisons"
+
+# ============================================================================
+# CORTEX INTEGRATION
+# ============================================================================
+
+cortex_integration:
+  analyzer:
+    description: "cortex_analyze_sts_app detects these 12 patterns"
+    engine: "SecurityCheckpointAgent + AST analysis"
+  
+  metrics:
+    description: "Quantify security posture"
+    calculation: "security_score = 100 - (violations_count * 8.33)"
+  
+  remediation:
+    description: "Auto-fix candidates"
+    auto_fixable:
+      - "STS-SEC-002: Replace MD5 with SHA256"
+      - "STS-SEC-003: Convert to parameterized query"
+      - "STS-SEC-007: Add session timeout configuration"
+
+references:
+  - title: "OWASP Top 10 2021"
+    url: "https://owasp.org/Top10/"
+  
+  - title: "CWE Top 25"
+    url: "https://cwe.mitre.org/top25/"
+  
+  - title: "STS Security Showcase"
+    url: "file://_workspaces/sts/docs/showcase/security.html"

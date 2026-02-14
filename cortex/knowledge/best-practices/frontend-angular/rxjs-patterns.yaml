@@ -1,0 +1,185 @@
+---
+metadata:
+  domain: "RxJS Patterns for Angular"
+  version: "1.0.0"
+  source: "RxJS Documentation + Angular Community"
+  authority: "ReactiveX Community"
+  date: "2026-02-14"
+  description: "Essential RxJS operators and patterns for Angular apps"
+  tags: ["rxjs", "observables", "operators", "reactive", "angular"]
+
+operators:
+  transformation:
+    - id: "RX-MAP-001"
+      name: "map"
+      category: "transformation"
+      description: "Transform each emitted value"
+      use_case: "Transform API response to DTO"
+      example: "obs$.pipe(map(user => user.name))"
+
+    - id: "RX-SWITCHMAP-001"
+      name: "switchMap"
+      category: "transformation"
+      description: "Map to inner observable, cancel previous inner observable"
+      use_case: "Search autocomplete (cancel old search when new typed)"
+      example: "search$.pipe(switchMap(term => this.api.search(term)))"
+      when_to_use: "Only latest result matters"
+
+    - id: "RX-MERGEMAP-001"
+      name: "mergeMap (flatMap)"
+      category: "transformation"
+      description: "Map to inner observable, don't cancel previous"
+      use_case: "Parallel API calls (all should complete)"
+      example: "ids$.pipe(mergeMap(id => this.api.getUser(id)))"
+      when_to_use: "All results needed, order doesn't matter"
+
+    - id: "RX-CONCATMAP-001"
+      name: "concatMap"
+      category: "transformation"
+      description: "Map to inner observable, wait for previous to complete"
+      use_case: "Sequential API calls (e.g., upload files one by one)"
+      example: "files$.pipe(concatMap(file => this.api.upload(file)))"
+      when_to_use: "Order matters, no concurrency"
+
+  filtering:
+    - id: "RX-FILTER-001"
+      name: "filter"
+      category: "filtering"
+      description: "Emit only values that pass condition"
+      example: "obs$.pipe(filter(val => val > 0))"
+
+    - id: "RX-DEBOUNCE-001"
+      name: "debounceTime"
+      category: "filtering"
+      description: "Emit after silence period (no new values)"
+      use_case: "Search input (wait for user to stop typing)"
+      example: "input$.pipe(debounceTime(300))"
+      typical_values: "300ms for search, 500ms for autosave"
+
+    - id: "RX-DISTINCT-001"
+      name: "distinctUntilChanged"
+      category: "filtering"
+      description: "Emit only if value different from previous"
+      use_case: "Avoid duplicate API calls"
+      example: "obs$.pipe(distinctUntilChanged())"
+
+  combination:
+    - id: "RX-COMBINE-001"
+      name: "combineLatest"
+      category: "combination"
+      description: "Combine latest values from multiple observables"
+      use_case: "Form that depends on multiple inputs"
+      example: "combineLatest([name$, age$]).pipe(map(([name, age]) => ...))"
+      emit_when: "Any source emits (after all emitted at least once)"
+
+    - id: "RX-FORKJOIN-001"
+      name: "forkJoin"
+      category: "combination"
+      description: "Wait for all observables to complete, emit last values"
+      use_case: "Parallel API calls, wait for all"
+      example: "forkJoin([api1$, api2$, api3$])"
+      caveat: "Only completes when ALL complete (use with caution)"
+
+  error_handling:
+    - id: "RX-CATCH-001"
+      name: "catchError"
+      category: "error-handling"
+      description: "Handle errors, return fallback observable"
+      example: "obs$.pipe(catchError(err => of(defaultValue)))"
+      use_case: "Graceful degradation on API failure"
+
+    - id: "RX-RETRY-001"
+      name: "retry"
+      category: "error-handling"
+      description: "Retry observable on error"
+      example: "api$.pipe(retry(3))"
+      use_case: "Retry failed API calls"
+
+  utility:
+    - id: "RX-TAP-001"
+      name: "tap"
+      category: "utility"
+      description: "Perform side effects without modifying stream"
+      use_case: "Logging, analytics"
+      example: "obs$.pipe(tap(val => console.log(val)))"
+
+    - id: "RX-TAKEUNTIL-001"
+      name: "takeUntil"
+      category: "utility"
+      description: "Complete when notifier emits"
+      use_case: "Unsubscribe on component destroy"
+      example: "obs$.pipe(takeUntil(destroy$))"
+      pattern: "private destroy$ = new Subject(); ngOnDestroy() { this.destroy$.next(); }"
+
+patterns:
+  component_patterns:
+    - id: "RX-PATTERN-001"
+      name: "Async Pipe Pattern"
+      category: "best-practice"
+      description: "Use async pipe in template to avoid manual subscription"
+      template: "{{ user$ | async }}"
+      component: "user$: Observable<User> = this.service.getUser();"
+      benefit: "Automatic unsubscribe, cleaner code"
+
+    - id: "RX-PATTERN-002"
+      name: "Destroy Subject Pattern"
+      category: "memory-management"
+      description: "Use Subject + takeUntil for manual subscriptions"
+      implementation: |
+        private destroy$ = new Subject<void>();
+        ngOnInit() {
+          this.obs$.pipe(takeUntil(this.destroy$)).subscribe(...);
+        }
+        ngOnDestroy() {
+          this.destroy$.next();
+          this.destroy$.complete();
+        }
+      alternative: "Use takeUntilDestroyed() in Angular 16+"
+
+    - id: "RX-PATTERN-003"
+      name: "Loading State Pattern"
+      category: "ui-state"
+      description: "Manage loading/error/success states"
+      implementation: |
+        data$ = this.service.getData().pipe(
+          map(data => ({ loading: false, data, error: null })),
+          startWith({ loading: true, data: null, error: null }),
+          catchError(error => of({ loading: false, data: null, error }))
+        );
+
+  anti_patterns:
+    - id: "RX-ANTI-001"
+      name: "Nested Subscriptions"
+      problem: "Hard to read, memory leaks"
+      bad: "obs1$.subscribe(v1 => obs2$.subscribe(v2 => ...))"
+      good: "obs1$.pipe(switchMap(v1 => obs2$)).subscribe(v2 => ...)"
+
+    - id: "RX-ANTI-002"
+      name: "Not Unsubscribing"
+      problem: "Memory leaks, multiple executions"
+      fix: "Use async pipe, takeUntil, or takeUntilDestroyed"
+
+    - id: "RX-ANTI-003"
+      name: "Overusing Subjects"
+      problem: "Subjects are imperative, prefer operators"
+      when_ok: "Event bus, destroy$, form control values"
+      avoid: "Using Subject when map/filter operators would work"
+
+best_practices:
+  - "Prefer async pipe over manual subscribe"
+  - "Always unsubscribe (async pipe, takeUntilDestroyed, takeUntil)"
+  - "Use switchMap for search/autocomplete"
+  - "Use debounceTime for user input"
+  - "Use distinctUntilChanged to avoid duplicates"
+  - "Use combineLatest for dependent streams"
+  - "Use forkJoin for parallel API calls (when ALL needed)"
+  - "Handle errors with catchError"
+  - "Log with tap, not in subscribe"
+
+references:
+  - name: "Learn RxJS"
+    url: "https://www.learnrxjs.io/"
+  - name: "RxJS Official Docs"
+    url: "https://rxjs.dev/guide/overview"
+  - name: "Angular RxJS Best Practices"
+    url: "https://angular.io/guide/rx-library"
