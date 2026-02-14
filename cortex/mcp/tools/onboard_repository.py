@@ -196,22 +196,29 @@ def onboard_repository_tool(
     repository_path: str,
     capture_learning: bool = True,
     apply_brain_enhancement: bool = True,
-    generate_artifacts: bool = True
+    generate_artifacts: bool = True,
+    orchestrator_context: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     """
     Enhanced MCP tool for repository onboarding with knowledge persistence.
+    
+    ENFORCEMENT: Validates orchestrator_context on entry.
 
     Args:
         repository_path: Path to repository
         capture_learning: Whether to capture learning patterns
         apply_brain_enhancement: Whether to apply brain intelligence
         generate_artifacts: Whether to generate knowledge artifacts
+        orchestrator_context: Context from MasterOrchestrator (required)
 
     Returns:
         OnboardingResult dictionary with metrics and artifacts
 
     AC-PHASE71-014: MCP tool enhancement
     """
+    # ENFORCEMENT: Validate orchestrator routing
+    validate_orchestrator_context(orchestrator_context)
+    
     try:
         # Initialize components
         orchestrator = EnhancedOnboardingOrchestrator()

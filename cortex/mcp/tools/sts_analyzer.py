@@ -484,19 +484,26 @@ class ShowcaseGenerator:
 def analyze_sts_app(
     app_path: str,
     pattern_types: Optional[List[str]] = None,
-    output_showcase: bool = True
+    output_showcase: bool = True,
+    orchestrator_context: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     """
     Analyze an application for STS anti-patterns.
+    
+    ENFORCEMENT: Validates orchestrator_context on entry.
     
     Args:
         app_path: Path to application directory
         pattern_types: Filter by types (security, solid, quality) or None for all
         output_showcase: Generate HTML showcase
+        orchestrator_context: Context from MasterOrchestrator (required)
         
     Returns:
         Analysis results with violations, metrics, and showcase path
     """
+    # ENFORCEMENT: Validate orchestrator routing
+    validate_orchestrator_context(orchestrator_context)
+    
     app_dir = Path(app_path)
     app_name = app_dir.name
     
