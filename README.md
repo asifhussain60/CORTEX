@@ -97,6 +97,49 @@ make setup-hooks
 # or: ./scripts/setup-hooks.sh
 ```
 
+### 🔧 After Pulling from Git (Cross-Platform MCP Setup)
+
+**CORTEX uses platform-specific Python paths that CANNOT be committed to git:**
+- macOS/Linux: `.venv/bin/python`
+- Windows: `.venv/Scripts/python.exe`
+
+**Automatic (via git hooks):**
+```bash
+# Post-checkout hook auto-runs after every git pull/checkout:
+python .cortex/setup-mcp.py --silent
+
+# This regenerates .vscode/settings.json with correct platform paths
+# Then reload VS Code: Cmd+Shift+P → Developer: Reload Window
+```
+
+**Manual (if hook fails or first-time setup):**
+```bash
+# Regenerate platform-specific MCP configuration
+python .cortex/setup-mcp.py
+
+# Reload VS Code
+# Command Palette → Developer: Reload Window
+
+# Verify MCP tools are available
+python .cortex/verify-setup.py
+```
+
+**Troubleshooting:**
+```bash
+# If MCP tools not available after reload:
+python .cortex/diagnose-mcp.py  # Diagnostic report
+
+# Or check logs:
+cat .cortex/setup.log           # Last setup attempt
+cat .vscode/settings.json       # Verify Python path
+
+# Common fix: Delete and regenerate
+rm .vscode/settings.json
+python .cortex/setup-mcp.py
+```
+
+**Why this matters:** Without correct paths, MCP tools won't be available in Copilot Chat, blocking all IMPLEMENT/FIX/REFACTOR operations (CORE-051).
+
 ## MCP-FIRST Enforcement (Phase 51)
 
 CORTEX enforces production-quality standards through **MCP-FIRST** architecture:

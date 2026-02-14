@@ -176,6 +176,41 @@ if echo "$STAGED_FILES" | grep -qE '^[^/]+/'; then
     fi
 fi
 
+# ============================================================================
+# CHECK 6: MCP Environment Validation (EnvironmentIntegrityAgent)
+# ============================================================================
+
+echo -e "${BLUE}🔍 Validating MCP environment integrity...${NC}"
+
+# Only run MCP validation if Python code is being committed
+PYTHON_FILES=$(echo "$STAGED_FILES" | grep '\.py$' || true)
+
+if [ -n "$PYTHON_FILES" ]; then
+    # Check if MasterOrchestrator can be imported
+    if ! python3 -c "
+from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+import cortex.mcp.decorators as dec
+try:
+    tools = dec.get_mcp_tools(MasterOrchestrator)
+    if len(tools) < 16:
+        print(f'❌ Only {len(tools)}/16 MCP tools available')
+        exit(1)
+    print(f'✅ {len(tools)} MCP tools validated')
+except Exception as e:
+    print(f'❌ MCP validation failed: {e}')
+    exit(1)
+" 2>/dev/null; then
+        echo -e "${RED}❌ MCP ENVIRONMENT VALIDATION FAILED${NC}"
+        echo -e "${YELLOW}Resolution:${NC}"
+        echo -e "  1. Run: python .cortex/setup-mcp.py"
+        echo -e "  2. Reload VS Code: Cmd+Shift+P → Developer: Reload Window"
+        echo -e "  3. Verify: python .cortex/verify-setup.py"
+        echo ""
+        exit 1
+    fi
+    echo -e "${GREEN}✅ MCP environment validated (16 tools)${NC}"
+fi
+
 echo ""
 echo -e "${GREEN}✅ All pre-commit checks passed${NC}"
 exit 0

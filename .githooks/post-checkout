@@ -51,6 +51,8 @@ if [ -f "$VSCODE_SETTINGS" ] && grep -q '"cortex"' "$VSCODE_SETTINGS" 2>/dev/nul
     echo -e "${GREEN}✅ CORTEX MCP server: Configured (platform-specific paths)${NC}"
 else
     echo -e "${RED}❌ CORTEX MCP setup failed - run manually: python .cortex/setup-mcp.py${NC}"
+    echo -e "${RED}BLOCKING: Checkout cannot proceed without valid MCP configuration${NC}"
+    exit 1
 fi
 
 # ============================================================================
