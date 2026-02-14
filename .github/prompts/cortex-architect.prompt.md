@@ -1497,7 +1497,7 @@ Files: 5 modified
 
 #### Completion Section Format (Use Box Instead of Header)
 
-**SSOT:** See `.github/prompts/.archive/phase-docs/response-format-standards.md` § Completion Response Template
+**SSOT:** See `.github/prompts/response-format-standards.md` § Completion Response Template
 
 **DO THIS:**
 ```markdown
