@@ -1,6 +1,6 @@
 # Multi-Cycle TDD User Guide
 
-**Authority:** PHASE-3 Stage 3 - PHASE-3-ENH-088 Documentation  
+**Authority:** WAVE-3 Stage 3 - ENH-088 Documentation  
 **Version:** 1.0  
 **Date:** 2026-02-13
 
@@ -435,4 +435,4 @@ result = orchestrator.execute_multi_cycle(
 ---
 
 **Version:** 1.0 | **Last Updated:** 2026-02-13  
-**Authority:** PHASE-3 Stage 3 - PHASE-3-ENH-088 Multi-Cycle TDD Documentation
+**Authority:** WAVE-3 Stage 3 - ENH-088 Multi-Cycle TDD Documentation

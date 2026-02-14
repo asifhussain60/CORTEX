@@ -151,19 +151,19 @@ def execute_wave_tracks(phase: Phase) -> WaveExecutionResult:
     # Step 2: Mark phase as in_progress
     update_master_plan(phase.id, status="in_progress", start_date=now())
     
-    # Step 3: Prepare stages executors
-    track_executors = []
-    for stages in wave.stages:
-        if stages.dependency_gate and not meets_track_gate(stages):
-            mark_track_blocked(stages)
+    # Step 3: Prepare stage executors
+    stage_executors = []
+    for stage in phase.stages:
+        if stage.dependency_gate and not meets_stage_gate(stage):
+            mark_stage_blocked(stage)
             continue
         
-        executor = create_track_executor(stages)
-        track_executors.append(executor)
+        executor = create_stage_executor(stage)
+        stage_executors.append(executor)
     
     # Step 4: Execute stages with parallelism limit
-    concurrent = min(len(track_executors), wave.max_parallel_stages)
-    results = parallel_map(execute_track, track_executors, max_workers=concurrent)
+    concurrent = min(len(stage_executors), phase.max_parallel_stages)
+    results = parallel_map(execute_stage, stage_executors, max_workers=concurrent)
     
     # Step 5: Aggregate results
     all_passed = all(r.status == "COMPLETE" for r in results)
@@ -193,7 +193,7 @@ Keep master registry (PhaseArchitectureAgent) updated with execution progress.
 | Phase 50% | Update phase progress, increment test count | "Plan sync: Phase-N Phase-X 50%" |
 | Phase complete | Set phase status, aggregate coverage | "Plan sync: Phase-N Phase-X complete" |
 | stages complete | Aggregate stages metrics, unblock dependent stages | "Plan sync: Phase-N Stage-N complete" |
-| Wave complete | Archive to `completed/`, unblock dependent phases | "Plan sync: Phase-N complete (moved to completed/)" |
+| Phase complete | Archive to `completed/`, unblock dependent phases | "Plan sync: Phase-N complete (moved to completed/)" |
 | Blocker found | Set `status: blocked`, document reason | "Plan sync: Phase-N blocked - {reason}" |
 
 ### Sync Protocol (Per Phase Completion)
@@ -207,8 +207,8 @@ def sync_phase_completion(phase: Phase, execution_result: ExecutionResult):
     index = read_yaml("cortex-registry/_cortex-master/index.yaml")
     
     # Step 2: Locate phase entry
-    wave = index.phases[phase.parent_phase]
-    stages = wave.stages[phase.parent_stage]
+    phase_obj = index.phases[phase.parent_phase]
+    stages = phase_obj.stages[phase.parent_stage]
     
     # Step 3: Update phase metrics
     stages.phases[phase.id].status = "complete"
@@ -222,8 +222,8 @@ def sync_phase_completion(phase: Phase, execution_result: ExecutionResult):
     stages.last_updated = now()
     
     # Step 5: Recalculate phase progress
-    wave.progress_pct = (sum(t.progress_pct for t in wave.stages) / len(phase_obj.stages))
-    wave.last_updated = now()
+    phase_obj.progress_pct = (sum(t.progress_pct for t in phase_obj.stages) / len(phase_obj.stages))
+    phase_obj.last_updated = now()
     
     # Step 6: Write updated registry
     write_yaml("cortex-registry/_cortex-master/index.yaml", index)
@@ -250,27 +250,27 @@ Notify downstream orchestrators when waves become ready (dependency gates satisf
 ### Notification Protocol
 
 ```python
-def notify_dependent_phases(completed_phase: Wave):
+def notify_dependent_phases(completed_phase: Phase):
     """
-    After wave completes, check all downstream waves for readiness.
-    Send notifications to any waves that became ready.
+    After phase completes, check all downstream phases for readiness.
+    Send notifications to any phases that became ready.
     """
-    # Find all waves that depend on completed_phase
+    # Find all phases that depend on completed_phase
     dependent_phases = find_phases_depending_on(completed_phase.id)
     
-    for wave in dependent_phases:
-        # Evaluate if this wave can now start
+    for phase_obj in dependent_phases:
+        # Evaluate if this phase can now start
         if evaluate_phase_start_condition(phase_obj):
-            # Notify MasterOrchestrator that wave is ready
-            event = WaveReadyEvent(
-                phase_id=phase.id,
-                trigger_wave=completed_phase.id,
+            # Notify MasterOrchestrator that phase is ready
+            event = PhaseReadyEvent(
+                phase_id=phase_obj.id,
+                trigger_phase=completed_phase.id,
                 timestamp=now()
             )
-            publish_event("wave.ready", event)
+            publish_event("phase.ready", event)
             
             # Log for audit trail
-            log_audit(f"Wave {phase.id} unblocked by Wave {completed_phase.id}")
+            log_audit(f"Phase {phase_obj.id} unblocked by Phase {completed_phase.id}")
 ```
 
 ---

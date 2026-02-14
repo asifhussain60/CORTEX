@@ -275,7 +275,7 @@ maintenance:
     - "Review workflow effectiveness monthly"
 
 links:
-  legacy_wave_plan: "cortex-registry/_cortex-master/waves/phase-s-strategic-governance-fix.yaml"
+  legacy_wave_plan: "cortex-registry/_cortex-master/waves/wave-s-strategic-governance-fix.yaml"
   archive_location: "_archive/phase-s-consolidation/"
   documentation: "docs/architecture/event-driven-orchestration.md"
   copilot_instructions: ".github/copilot-instructions.md § Workflow Architecture"

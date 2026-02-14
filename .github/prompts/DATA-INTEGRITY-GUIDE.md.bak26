@@ -1,12 +1,12 @@
 # Data Integrity & Explainability Guide
 
-**PHASE-O Implementation Guide** | **Version:** 1.0 | **Date:** 2026-02-12
+**WAVE-O Implementation Guide** | **Version:** 1.0 | **Date:** 2026-02-12
 
 ---
 
 ## Overview
 
-PHASE-O delivers **Data Integrity Foundation** with automated contradiction detection, resolution, and explainability. This guide covers the complete system for maintaining registry integrity and transparency.
+WAVE-O delivers **Data Integrity Foundation** with automated contradiction detection, resolution, and explainability. This guide covers the complete system for maintaining registry integrity and transparency.
 
 ## System Components
 
@@ -361,7 +361,7 @@ dashboard_metadata = {
 
 ## Testing
 
-### Run All PHASE-O Tests
+### Run All WAVE-O Tests
 
 ```bash
 # Stage 1: Cross-reference validator (10 tests)
@@ -376,7 +376,7 @@ python3 -m pytest tests/unit/explainability/test_kpi_transparency.py -v
 # Stage 4: Decision logger (6 tests)
 python3 -m pytest tests/integration/explainability/test_decision_logger.py -v
 
-# All PHASE-O tests (31 tests)
+# All WAVE-O tests (31 tests)
 python3 -m pytest tests/unit/validation/ tests/integration/validation/ tests/unit/explainability/ tests/integration/explainability/ -v
 ```
 
@@ -557,4 +557,4 @@ tests/
 
 ---
 
-**PHASE-O Complete** | **ENH-068** | **Date:** 2026-02-12
+**WAVE-O Complete** | **ENH-068** | **Date:** 2026-02-12

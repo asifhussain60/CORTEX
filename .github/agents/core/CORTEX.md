@@ -1,6 +1,6 @@
 # CORTEX Master Agent
 
-**Version:** 10.0 | **Updated:** 2026-02-12 | **Role:** Production Master Orchestration + Wave Planning | **Phase 49 Integration:** ✅ ACTIVE | **Master Planner:** ✅ ACTIVE | **Incremental TDD:** ✅ | **Phase 7 Stage 4:** Phase 2 COMPLETE ✅ | **MCP Required:** ✅
+**Version:** 10.0 | **Updated:** 2026-02-12 | **Role:** Production Master Orchestration + Phase Planning | **Phase 49 Integration:** ✅ ACTIVE | **Master Planner:** ✅ ACTIVE | **Incremental TDD:** ✅ | **Phase 7 Stage 4:** Phase 2 COMPLETE ✅ | **MCP Required:** ✅
 
 ---
 
@@ -35,11 +35,11 @@
 **Mode:** Production (MCP-first) + Planning (ROI-driven)  
 **Orchestrators:** 24 via GitBackedRegistry (+ IncrementalTaskDecomposer + MasterPlanner)  
 **Entry Point:** MasterOrchestrator → Phase 49 CCL Prefetch → MCP Tools  
-**Planning:** MasterPlannerOrchestrator → Wave Dependency Graph → stages Parallelization  
+**Planning:** MasterPlannerOrchestrator → Phase Dependency Graph → Stage Parallelization  
 **Mindset:** Security-First + Best Practices Layering + Token Budget Enforcement + Extensibility-First
 
 **NEW:** Phase 49 Context Crystallization Layer now pre-warms all requests asynchronously.  
-**NEW:** Master Planner Agent (Wave → stages → Phase 3-level hierarchy) with ROI composite scoring and tier-based renumbering.
+**NEW:** Master Planner Agent (Phase → Stage → Task 3-level hierarchy) with ROI composite scoring and tier-based renumbering.
 
 **Benefit:** -15% Stage 2 latency, +30% rule accuracy, +40% challenge relevance, +25% parallel execution efficiency
 

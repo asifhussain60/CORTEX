@@ -224,7 +224,7 @@ core_rules:
     priority: "P0"
     description: |
       ALL work MUST be done on the CORTEX branch. No feature, backup,
-      phase, or cleanup branches allowed. Use git commit for checkpoints,
+      wave, or cleanup branches allowed. Use git commit for checkpoints,
       git tag for release markers, git stash for temporary saves.
       
       FORBIDDEN: git checkout -b, git switch -c, creating any new branch.

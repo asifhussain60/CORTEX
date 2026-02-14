@@ -90,10 +90,10 @@ governance_learnings:
 documentation_status:
   claims_vs_reality:
     - claim: "16 completed phases"
-      reality: "Phases 1-6 planned + 5 phases pending (PHASE-P through PHASE-T)"
+      reality: "Phases 1-6 planned + 5 waves pending (PHASE-P through PHASE-T)"
       documentation_source: "README.md, phase-*.yaml files"
       reality_source: "master-plan.yaml phases + phase-consolidation-7day-remediation.yaml"
-      alignment_action: "Consolidate phase documentation into 5-Phase Execution stages"
+      alignment_action: "Consolidate wave documentation into 5-Phase Execution stages"
       
   file_sprawl_issue:
     total_files_in_master: 167
@@ -102,14 +102,14 @@ documentation_status:
     target_files: "≤20"
     reduction_needed: "88%"
     root_cause: "Phase guides not consolidated, separate status docs for each phase"
-    solution: "VACUUM-2026-02-14: Archive all superseded docs, create single PHASES-EXECUTION-TRACKER.yaml"
+    solution: "VACUUM-2026-02-14: Archive all superseded docs, create single WAVES-EXECUTION-TRACKER.yaml"
 
 # Current Status (Phase 2 Complete, Phase 3 Initiated)
 current_status:
   completion_levels:
-    phase_1_complete: "✅ Intelligence gathering & consolidation (Phase O-S complete)"
+    phase_1_complete: "✅ Intelligence gathering & consolidation (Wave O-S complete)"
     phase_2_complete: "✅ Registry sync & documentation (167 files after reduction)"
-    phase_3_in_progress: "🔵 Pending 5 phases execution (PHASE-1 through PHASE-5 scope)"
+    phase_3_in_progress: "🔵 Pending 5 waves execution (WAVE-1 through WAVE-5 scope)"
     phase_4_planned: "⚪ MCP enforcement & automation"
     phase_5_planned: "⚪ Verification & compliance reporting"
     
@@ -123,7 +123,7 @@ current_status:
   archived:
     location: "cortex-registry/_cortex-master/_archive/obsolete-plans/"
     count: 47  # Updated with new understanding
-    scope: "AUTONOMOUS-PHASE-EXECUTION-*.md, WAVE-[0-9]-*, consolidated reports"
+    scope: "AUTONOMOUS-WAVE-EXECUTION-*.md, WAVE-[0-9]-*, consolidated reports"
     note: "Only active Phase Execution files retained in _cortex-master root"
       
   test_suite:
@@ -148,21 +148,21 @@ current_status:
 autonomous_execution_waves:
   
   wave_1_documentation_vacuum:
-    label: "PHASE-1: DOCUMENTATION VACUUM"
+    label: "WAVE-1: DOCUMENTATION VACUUM"
     status: "COMPLETE"
     duration_estimate: "45 min"
     token_budget: "80K"
-    vscode_trigger: "/implement PHASE-1: Documentation vacuum and file consolidation"
+    vscode_trigger: "/implement WAVE-1: Documentation vacuum and file consolidation"
     
     context: |
       Phase 2 left 167 files in _cortex-master (target ≤20).
-      Root cause: Separate status docs for each phase, consolidated guides not archived.
-      Implementation Reality: Only 5 phases pending, not 16 documented.
+      Root cause: Separate status docs for each wave, consolidated guides not archived.
+      Implementation Reality: Only 5 waves pending, not 16 documented.
     
     deliverables:
-      - "Archive 47+ obsolete phase guides → _archive/superseded/"
-      - "Consolidate PHASE-1..PHASE-12 status into PHASES-EXECUTION-TRACKER.yaml"
-      - "Update master-plan.yaml with 5-phase scope (PHASE-1 through PHASE-5)"
+      - "Archive 47+ obsolete wave guides → _archive/superseded/"
+      - "Consolidate WAVE-1..WAVE-12 status into WAVES-EXECUTION-TRACKER.yaml"
+      - "Update master-plan.yaml with 5-wave scope (WAVE-1 through WAVE-5)"
       - "Final file count: ≤20 in _cortex-master root"
       - "Generate archive manifest (audit trail)"
     
@@ -175,7 +175,7 @@ autonomous_execution_waves:
       tool: "cortex_process_request"
       mode: "TDD-First (tests before implementation)"
       orchestrator: "TDDOrchestrator → MarkdownSuppressionAgent"
-      ac_markers: "AC_START: AC-PHASE-1-VACUUM-001 → AC_COMPLETE"
+      ac_markers: "AC_START: AC-WAVE-1-VACUUM-001 → AC_COMPLETE"
     
   wave_2_mcp_enforcement:
     label: "PHASE-2: MCP-FIRST ENFORCEMENT"
@@ -205,15 +205,15 @@ autonomous_execution_waves:
       tool: "cortex_process_request"
       mode: "TDD-First"
       orchestrator: "TDDOrchestrator → SecurityCheckpointAgent"
-      ac_markers: "AC_START: AC-PHASE-2-MCP-ENFORCE-001"
+      ac_markers: "AC_START: AC-WAVE-2-MCP-ENFORCE-001"
       core_rules: "CORE-049 (Silent Autonomous), CORE-050 (MCP Circuit Breaker)"
 
   wave_3_automation_hooks:
-    label: "PHASE-3: AUTOMATION HOOKS"
+    label: "WAVE-3: AUTOMATION HOOKS"
     status: "COMPLETE"
     duration_estimate: "45 min"
     token_budget: "90K"
-    vscode_trigger: "/implement PHASE-3: StatusUpdateHook and RegistryValidator automation"
+    vscode_trigger: "/implement WAVE-3: StatusUpdateHook and RegistryValidator automation"
     
     context: |
       No automated registry status workflow (manual updates only).
@@ -236,14 +236,14 @@ autonomous_execution_waves:
       tool: "cortex_process_request"
       mode: "TDD-First"
       orchestrator: "TDDOrchestrator → IncrementalExecutionAgent"
-      ac_markers: "AC_START: AC-PHASE-3-AUTOMATION-HOOKS-001"
+      ac_markers: "AC_START: AC-WAVE-3-AUTOMATION-HOOKS-001"
 
   wave_4_governance_audit:
-    label: "PHASE-4: GOVERNANCE AUDIT & COMPLIANCE"
+    label: "WAVE-4: GOVERNANCE AUDIT & COMPLIANCE"
     status: "COMPLETE"
     duration_estimate: "30 min"
     token_budget: "60K"
-    vscode_trigger: "/audit PHASE-4: Full governance compliance check and reporting"
+    vscode_trigger: "/audit WAVE-4: Full governance compliance check and reporting"
     
     context: |
       13 violations detected in chat01.md audit (5 P0, 5 P1, 3 P2).
@@ -266,14 +266,14 @@ autonomous_execution_waves:
       tool: "cortex_lens_analyze" (read-only, AUDIT intent allowed without MCP strict check)
       mode: "Context-blind audit (no prior assumptions)"
       orchestrator: "MasterOrchestrator → ComplianceValidationAgent"
-      ac_markers: "AC_START: AC-PHASE-4-AUDIT-001"
+      ac_markers: "AC_START: AC-WAVE-4-AUDIT-001"
 
   wave_5_final_consolidation:
-    label: "PHASE-5: FINAL CONSOLIDATION & HANDOFF"
+    label: "WAVE-5: FINAL CONSOLIDATION & HANDOFF"
     status: "COMPLETE"
     duration_estimate: "30 min"
     token_budget: "50K"
-    vscode_trigger: "/plan PHASE-5: Final consolidation and production handoff"
+    vscode_trigger: "/plan WAVE-5: Final consolidation and production handoff"
     
     context: |
       After 4 waves complete, consolidate into production-ready state.
@@ -295,7 +295,7 @@ autonomous_execution_waves:
       tool: "cortex_process_request"
       mode: "Plan orchestration"
       orchestrator: "PlanOrchestrator → ArchitectureIntegrityAgent"
-      ac_markers: "AC_START: AC-PHASE-5-CONSOLIDATION-001 → AC_COMPLETE"
+      ac_markers: "AC_START: AC-WAVE-5-CONSOLIDATION-001 → AC_COMPLETE"
 
 # Autonomous Execution Instructions for VSCode Copilot Chat
 autonomous_execution_setup:
@@ -353,7 +353,7 @@ autonomous_execution_setup:
       resolution:
         - "Run: python .cortex/setup-mcp.py"
         - "Reload: Command Palette → Developer: Reload Window"
-        - "Retry: Paste phase trigger in Copilot chat"
+        - "Retry: Paste wave trigger in Copilot chat"
     
     tests_failing:
       symptom: "Phase Execution halts on test failure"
@@ -377,8 +377,8 @@ autonomous_execution_setup:
 next_actions:
   
   ready_now:
-    - action: "PHASE-1: Documentation Vacuum"
-      vscode_command: "/implement PHASE-1: Documentation vacuum - archive 47+ obsolete files, consolidate to ≤20 files in _cortex-master"
+    - action: "WAVE-1: Documentation Vacuum"
+      vscode_command: "/implement WAVE-1: Documentation vacuum - archive 47+ obsolete files, consolidate to ≤20 files in _cortex-master"
       priority: "P0"
       estimated_time: "45 min"
       
@@ -387,18 +387,18 @@ next_actions:
       priority: "P1"
       estimated_time: "60 min"
       
-    - action: "PHASE-3: Automation Hooks"
-      vscode_command: "/implement PHASE-3: StatusUpdateHook and RegistryValidator - automated registry sync"
+    - action: "WAVE-3: Automation Hooks"
+      vscode_command: "/implement WAVE-3: StatusUpdateHook and RegistryValidator - automated registry sync"
       priority: "P1"
       estimated_time: "45 min"
       
-    - action: "PHASE-4: Governance Audit"
-      vscode_command: "/audit PHASE-4: Run comprehensive governance compliance check - verify 25/29 CORE rules"
+    - action: "WAVE-4: Governance Audit"
+      vscode_command: "/audit WAVE-4: Run comprehensive governance compliance check - verify 25/29 CORE rules"
       priority: "P1"
       estimated_time: "30 min"
       
-    - action: "PHASE-5: Final Consolidation"
-      vscode_command: "/plan PHASE-5: Final consolidation - archive session docs, generate production handoff checklist"
+    - action: "WAVE-5: Final Consolidation"
+      vscode_command: "/plan WAVE-5: Final consolidation - archive session docs, generate production handoff checklist"
       priority: "P1"
       estimated_time: "30 min"
 
@@ -407,7 +407,7 @@ execution_context:
   total_pending_waves: 5
   total_estimated_duration: "210 min (3.5 hours)"
   total_token_budget: "380K tokens"
-  parallel_execution: "Sequential (dependencies exist: PHASE-1 → PHASE-2 → PHASE-3 → PHASE-4 → PHASE-5)"
+  parallel_execution: "Sequential (dependencies exist: WAVE-1 → WAVE-2 → WAVE-3 → WAVE-4 → WAVE-5)"
   
   vscode_setup_checklist:
     - "✅ Python 3.9+ available"
@@ -415,16 +415,16 @@ execution_context:
     - "✅ setup-mcp.py executed"
     - "✅ VS Code reloaded (Developer: Reload Window)"
     - "✅ Copilot chat open and ready"
-    - "⚪ Ready to execute PHASE-1"
+    - "⚪ Ready to execute WAVE-1"
     
   governance_enforcement:
-    - "CORE-002: Zero markdown sprawl (PHASE-1 achieves this)"
+    - "CORE-002: Zero markdown sprawl (WAVE-1 achieves this)"
     - "CORE-008: TDD-First (all implementations via TDDOrchestrator)"
-    - "CORE-028: kebab-case naming (validated in PHASE-4 audit)"
-    - "CORE-035: Single canonical implementation (RecommendationGate in PHASE-3)"
+    - "CORE-028: kebab-case naming (validated in WAVE-4 audit)"
+    - "CORE-035: Single canonical implementation (RecommendationGate in WAVE-3)"
     - "CORE-051: settings.json not tracked (verified active)"
     - "CORE-052: CORTEX branch only (pre-flight validates)"
-    - "MCP-FIRST: All via cortex_* tools (PHASE-2 enforces)"
+    - "MCP-FIRST: All via cortex_* tools (WAVE-2 enforces)"
 
 # Audit Trail (Session 2026-02-14: Documentation Reality Alignment)
 audit_trail:
@@ -434,24 +434,24 @@ audit_trail:
   
   objectives:
     - "Align documentation claims with implementation reality"
-    - "Consolidate 16 phase claims into 5 pending phases"
+    - "Consolidate 16 wave claims into 5 pending waves"
     - "Setup autonomous execution in VSCode Copilot Chat"
     - "Define end-to-end workflow with clear vscode_command triggers"
     
   key_changes:
     - "Version: 2.0 → 3.0 (Reality Alignment)"
     - "Scope: 6 phases → 5 autonomous execution waves"
-    - "File count target: Current 167 → ≤20 (PHASE-1)"
+    - "File count target: Current 167 → ≤20 (WAVE-1)"
     - "MCP architecture: Manual startup → Auto-start via Copilot chat"
-    - "Execution mode: Phase-based → Phase-based (atomic deliverables)"
+    - "Execution mode: Phase-based → Wave-based (atomic deliverables)"
     
   compliance_validation:
-    - "CORE-002: Markdown sprawl tracking (PHASE-1 target: ≤20 files)"
+    - "CORE-002: Markdown sprawl tracking (WAVE-1 target: ≤20 files)"
     - "CORE-008: TDD-First enforcement (all waves use TDDOrchestrator)"
-    - "CORE-028: File naming validation (PHASE-4 audit)"
+    - "CORE-028: File naming validation (WAVE-4 audit)"
     - "CORE-051: settings.json not tracked (verified)"
     - "CORE-052: CORTEX branch only (verified)"
-    - "MCP-FIRST: All via cortex_* tools (PHASE-2 gates)"
+    - "MCP-FIRST: All via cortex_* tools (WAVE-2 gates)"
     
   next_session_marker: "AC_PENDING: 5 waves ready for autonomous execution via /implement, /audit, /plan commands in VSCode Copilot Chat"
 
@@ -479,8 +479,8 @@ references:
     - "cortex_challenge: Design review + disagreement detection"
     
   vscode_triggers:
-    wave_1: "/implement PHASE-1: Documentation vacuum - archive 47+ obsolete files"
+    wave_1: "/implement WAVE-1: Documentation vacuum - archive 47+ obsolete files"
     wave_2: "/implement PHASE-2: MCP enforcement - native tool interception"
-    wave_3: "/implement PHASE-3: Automation hooks - status update + registry validator"
-    wave_4: "/audit PHASE-4: Governance compliance - verify CORE rules"
-    wave_5: "/plan PHASE-5: Final consolidation - archive session, generate handoff"
+    wave_3: "/implement WAVE-3: Automation hooks - status update + registry validator"
+    wave_4: "/audit WAVE-4: Governance compliance - verify CORE rules"
+    wave_5: "/plan WAVE-5: Final consolidation - archive session, generate handoff"

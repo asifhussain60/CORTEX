@@ -34,7 +34,7 @@ Before starting, verify:
 
 **VSCode Command:**
 ```
-/implement PHASE-1: Documentation vacuum - archive 47+ obsolete files, consolidate phase status to single tracker, achieve ≤20 files in _cortex-master root
+/implement WAVE-1: Documentation vacuum - archive 47+ obsolete files, consolidate phase status to single tracker, achieve ≤20 files in _cortex-master root
 ```
 
 **Success Criteria:**
@@ -56,7 +56,7 @@ Before starting, verify:
 
 **VSCode Command:**
 ```
-/implement PHASE-2: MCP bypass prevention - implement native tool interception layer with 3-method MCP detection (tool_query, env_vars, network_port), block IMPLEMENT/FIX intents from direct file operations
+/implement WAVE-2: MCP bypass prevention - implement native tool interception layer with 3-method MCP detection (tool_query, env_vars, network_port), block IMPLEMENT/FIX intents from direct file operations
 ```
 
 **Success Criteria:**
@@ -79,7 +79,7 @@ Before starting, verify:
 
 **VSCode Command:**
 ```
-/implement PHASE-3: Automation hooks - implement StatusUpdateHook (phase completion → registry sync, 5 min SLA), RegistryValidator (prevent contradictions), RecommendationGate (LENS + registry + ROI consultation)
+/implement WAVE-3: Automation hooks - implement StatusUpdateHook (phase completion → registry sync, 5 min SLA), RegistryValidator (prevent contradictions), RecommendationGate (LENS + registry + ROI consultation)
 ```
 
 **Success Criteria:**
@@ -102,7 +102,7 @@ Before starting, verify:
 
 **VSCode Command:**
 ```
-/audit PHASE-4: Governance compliance check - run comprehensive audit against CORE-002,CORE-008,CORE-028,CORE-035,CORE-051,CORE-052, verify settings.json NOT tracked, verify CORTEX branch only, generate compliance report
+/audit WAVE-4: Governance compliance check - run comprehensive audit against CORE-002,CORE-008,CORE-028,CORE-035,CORE-051,CORE-052, verify settings.json NOT tracked, verify CORTEX branch only, generate compliance report
 ```
 
 **Success Criteria:**
@@ -125,7 +125,7 @@ Before starting, verify:
 
 **VSCode Command:**
 ```
-/plan PHASE-5: Final consolidation - archive all session docs to _archive/2026-02-14-session/, update master-plan.yaml status to COMPLETE, generate CORTEX-STATUS-2026-02-14.yaml (single source of truth), update README.md with new architecture status, create production deployment checklist
+/plan WAVE-5: Final consolidation - archive all session docs to _archive/2026-02-14-session/, update master-plan.yaml status to COMPLETE, generate CORTEX-STATUS-2026-02-14.yaml (single source of truth), update README.md with new architecture status, create production deployment checklist
 ```
 
 **Success Criteria:**
@@ -148,15 +148,15 @@ Before starting, verify:
 ### Sequential Execution (Waves must run in order)
 
 ```
-PHASE-1 (Documentation) ✅ COMPLETE
+WAVE-1 (Documentation) ✅ COMPLETE
    ↓
-PHASE-2 (MCP Enforcement) ← START HERE
+WAVE-2 (MCP Enforcement) ← START HERE
    ↓
-PHASE-3 (Automation Hooks)
+WAVE-3 (Automation Hooks)
    ↓
-PHASE-4 (Governance Audit)
+WAVE-4 (Governance Audit)
    ↓
-PHASE-5 (Final Consolidation) ← END
+WAVE-5 (Final Consolidation) ← END
 ```
 
 ### Each Phase Execution Flow
@@ -168,7 +168,7 @@ PHASE-5 (Final Consolidation) ← END
 5. **Monitor progress** via ASCII progress bars
 6. **No mid-execution prompts** (silent autonomous mode)
 7. **On completion:**
-   - Review AC markers: `AC_START: AC-PHASE-X-*-001 → AC_COMPLETE`
+   - Review AC markers: `AC_START: AC-WAVE-X-*-001 → AC_COMPLETE`
    - Check test results in completion table
    - Verify success criteria above
    - **Copy AC_COMPLETE marker** (needed for continuation if token limit hit)
@@ -218,10 +218,10 @@ PHASE-5 (Final Consolidation) ← END
 ### Symptom: Response truncated (token limit hit)
 
 **Resolution:**
-1. Response shows AC_COMPLETE marker: `AC_COMPLETE: AC-PHASE-X-*-001 ✅`
+1. Response shows AC_COMPLETE marker: `AC_COMPLETE: AC-WAVE-X-*-001 ✅`
 2. Progress committed to git automatically
 3. Start new Copilot chat
-4. Paste: `/continue wave_{number} AC-PHASE-X-*-001`
+4. Paste: `/continue wave_{number} AC-WAVE-X-*-001`
 
 ### Symptom: Git hooks not configured
 
@@ -248,12 +248,12 @@ git config core.hooksPath
 ### On Completion
 
 ```markdown
-## 🏛️ CORTEX Architect PHASE-X
+## 🏛️ CORTEX Architect WAVE-X
 **Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
 
 <hr>
 
-📋 **PHASE-X Stage N: [Component]**
+📋 **WAVE-X Stage N: [Component]**
 
 `██████████` 100% Complete
 
@@ -263,7 +263,7 @@ git config core.hooksPath
 | 2 | ✅ | Component 2 | Result |
 
 **Tests:** 20/20 | **Coverage:** 95%
-**AC Marker:** AC-PHASE-X-*-001 ✅ COMPLETE
+**AC Marker:** AC-WAVE-X-*-001 ✅ COMPLETE
 
 <hr>
 ```
@@ -274,10 +274,10 @@ git config core.hooksPath
 
 | Scenario | Command |
 |----------|---------|
-| Start PHASE-1 | `/implement PHASE-1: ...` |
-| Start PHASE-2+ | `/implement PHASE-2: ...` |
-| Run audit (PHASE-4) | `/audit PHASE-4: ...` |
-| Plan/consolidate (PHASE-5) | `/plan PHASE-5: ...` |
+| Start WAVE-1 | `/implement WAVE-1: ...` |
+| Start WAVE-2+ | `/implement WAVE-2: ...` |
+| Run audit (WAVE-4) | `/audit WAVE-4: ...` |
+| Plan/consolidate (WAVE-5) | `/plan WAVE-5: ...` |
 | Resume after interruption | `/continue wave_{N} AC-MARKER` |
 | Check MCP status | Type `@cortex` in Copilot chat |
 | Force reload MCP | Reload VS Code window + retry |
@@ -291,15 +291,15 @@ Session Start
    ↓
 Pre-flight check (checklist above)
    ↓
-PHASE-1: Copy command → Paste → Execute
-   ↓ (after PHASE-1 complete)
-PHASE-2: Copy command → Paste → Execute
-   ↓ (after PHASE-2 complete)
-PHASE-3: Copy command → Paste → Execute
-   ↓ (after PHASE-3 complete)
-PHASE-4: Copy command → Paste → Execute
-   ↓ (after PHASE-4 complete)
-PHASE-5: Copy command → Paste → Execute
+WAVE-1: Copy command → Paste → Execute
+   ↓ (after WAVE-1 complete)
+WAVE-2: Copy command → Paste → Execute
+   ↓ (after WAVE-2 complete)
+WAVE-3: Copy command → Paste → Execute
+   ↓ (after WAVE-3 complete)
+WAVE-4: Copy command → Paste → Execute
+   ↓ (after WAVE-4 complete)
+WAVE-5: Copy command → Paste → Execute
    ↓
 Session Complete ✅
 All governance rules verified

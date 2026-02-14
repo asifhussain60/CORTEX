@@ -199,7 +199,7 @@ file_lifecycle:
   
   obsolete_files:
     trigger: "PHASE-S Stage 4 completion"
-    action: "Archive 198 files to _archive/phase-s-consolidation/"
+    action: "Archive 198 files to _archive/wave-s-consolidation/"
     documentation: "README.md in archive explains migration"
 
 validation:
@@ -224,7 +224,7 @@ migration_guide:
     step_2: "Extract still-relevant content"
     step_3: "Merge into appropriate core file section"
     step_4: "Update all references to point to core files"
-    step_5: "Archive old file to _archive/phase-s-consolidation/"
+    step_5: "Archive old file to _archive/wave-s-consolidation/"
   
   reference_mapping:
     strategic_plans: "→ workflow-core.yaml"
@@ -275,7 +275,7 @@ maintenance:
     - "Review workflow effectiveness monthly"
 
 links:
-  legacy_wave_plan: "cortex-registry/_cortex-master/waves/phase-s-strategic-governance-fix.yaml"
-  archive_location: "_archive/phase-s-consolidation/"
+  wave_plan: "cortex-registry/_cortex-master/waves/wave-s-strategic-governance-fix.yaml"
+  archive_location: "_archive/wave-s-consolidation/"
   documentation: "docs/architecture/event-driven-orchestration.md"
   copilot_instructions: ".github/copilot-instructions.md § Workflow Architecture"

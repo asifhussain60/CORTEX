@@ -93,7 +93,7 @@ documentation_status:
       reality: "Phases 1-6 planned + 5 phases pending (PHASE-P through PHASE-T)"
       documentation_source: "README.md, phase-*.yaml files"
       reality_source: "master-plan.yaml phases + phase-consolidation-7day-remediation.yaml"
-      alignment_action: "Consolidate phase documentation into 5-Phase Execution stages"
+      alignment_action: "Consolidate wave documentation into 5-Phase Execution stages"
       
   file_sprawl_issue:
     total_files_in_master: 167
@@ -353,7 +353,7 @@ autonomous_execution_setup:
       resolution:
         - "Run: python .cortex/setup-mcp.py"
         - "Reload: Command Palette → Developer: Reload Window"
-        - "Retry: Paste phase trigger in Copilot chat"
+        - "Retry: Paste wave trigger in Copilot chat"
     
     tests_failing:
       symptom: "Phase Execution halts on test failure"
@@ -434,7 +434,7 @@ audit_trail:
   
   objectives:
     - "Align documentation claims with implementation reality"
-    - "Consolidate 16 phase claims into 5 pending phases"
+    - "Consolidate 16 wave claims into 5 pending waves"
     - "Setup autonomous execution in VSCode Copilot Chat"
     - "Define end-to-end workflow with clear vscode_command triggers"
     
@@ -443,7 +443,7 @@ audit_trail:
     - "Scope: 6 phases → 5 autonomous execution waves"
     - "File count target: Current 167 → ≤20 (PHASE-1)"
     - "MCP architecture: Manual startup → Auto-start via Copilot chat"
-    - "Execution mode: Phase-based → Phase-based (atomic deliverables)"
+    - "Execution mode: Phase-based → Wave-based (atomic deliverables)"
     
   compliance_validation:
     - "CORE-002: Markdown sprawl tracking (PHASE-1 target: ≤20 files)"

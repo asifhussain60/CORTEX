@@ -57,7 +57,7 @@ EPIC (E-)           Strategic initiative, 3-12 months
    - Aligns with user stories/features in Scrum
 
 3. **"Wave" deprecated as execution concept**
-   - Historical "PHASE-X" files → archived
+   - Historical "WAVE-X" files → archived
    - Concept absorbed into EPIC or FEATURE
    - Session-scoped execution → use PHASE directly
 
@@ -71,11 +71,11 @@ EPIC (E-)           Strategic initiative, 3-12 months
 
 **Files to Archive:**
 ```
-PHASE-*.yaml                          → obsolete-plans/PHASE-*.yaml.deprecated
-PHASE-*-SUMMARY.md                    → obsolete-plans/PHASE-*-SUMMARY.md.deprecated
+WAVE-*.yaml                          → obsolete-plans/WAVE-*.yaml.deprecated
+WAVE-*-SUMMARY.md                    → obsolete-plans/WAVE-*-SUMMARY.md.deprecated
 SESSION-SCOPED-WAVES.md              → obsolete-plans/SESSION-SCOPED-WAVES.md.deprecated
-AUTONOMOUS-PHASE-EXECUTION-GUIDE.md   → obsolete-plans/AUTONOMOUS-PHASE-EXECUTION-GUIDE.md.deprecated
-HIGH-ROI-PHASE-PRIORITIZATION.md      → obsolete-plans/HIGH-ROI-PHASE-PRIORITIZATION.md.deprecated
+AUTONOMOUS-WAVE-EXECUTION-GUIDE.md   → obsolete-plans/AUTONOMOUS-WAVE-EXECUTION-GUIDE.md.deprecated
+HIGH-ROI-WAVE-PRIORITIZATION.md      → obsolete-plans/HIGH-ROI-WAVE-PRIORITIZATION.md.deprecated
 ```
 
 **Preservation Strategy:**
@@ -105,7 +105,7 @@ HIGH-ROI-PHASE-PRIORITIZATION.md      → obsolete-plans/HIGH-ROI-PHASE-PRIORITI
 **File:** `.github/prompts/cortex-architect.prompt.md`
 
 **Search/Replace:**
-- `PHASE-X` → `E-XXX` or `F-XXX` (context-dependent)
+- `WAVE-X` → `E-XXX` or `F-XXX` (context-dependent)
 - `phase_id` → `epic_id` or `feature_id`
 - "Phase 7" → "Epic 001" (example)
 - "Phase Execution" → "epic execution" or "feature delivery"
@@ -145,10 +145,10 @@ cortex-registry/_cortex-master/
 
 | Old Wave ID | New Hierarchy | Rationale |
 |-------------|---------------|-----------|
-| PHASE-1 | E-001: Production Foundation | Strategic scope (months) |
-| PHASE-Q | F-010: Multi-Cycle TDD | Feature-level (weeks) |
-| PHASE-R | F-011: Debug Tooling | Feature-level (weeks) |
-| PHASE-7-CLEANUP | P-052: Interface Compliance | Phase-level (days) |
+| WAVE-1 | E-001: Production Foundation | Strategic scope (months) |
+| WAVE-Q | F-010: Multi-Cycle TDD | Feature-level (weeks) |
+| WAVE-R | F-011: Debug Tooling | Feature-level (weeks) |
+| WAVE-7-CLEANUP | P-052: Interface Compliance | Phase-level (days) |
 
 ### Phase 4: Update Code References
 
@@ -271,9 +271,9 @@ EPIC (E-) → FEATURE (F-) → PHASE (P-) → STAGE (S-) → TASK (T-)
 ### Non-Destructive Phase (Day 1)
 
 - [ ] Create archive directory: `history/_archive/obsolete-plans/`
-- [ ] Move all PHASE-*.yaml files (preserve content)
+- [ ] Move all WAVE-*.yaml files (preserve content)
 - [ ] Add deprecation notices to moved files
-- [ ] Create PHASE-ID-MAPPING.yaml (old → new mapping)
+- [ ] Create WAVE-ID-MAPPING.yaml (old → new mapping)
 - [ ] Update README with deprecation notice
 
 ### Core Documentation Phase (Day 1-2)

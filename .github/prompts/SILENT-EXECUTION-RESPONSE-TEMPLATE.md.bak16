@@ -8,14 +8,14 @@
 
 ## Generic Template (Copy & Adapt)
 
-Use this template for ANY autonomous phase/plan completion report. Replace bracketed variables with actual values.
+Use this template for ANY autonomous wave/plan completion report. Replace bracketed variables with actual values.
 
 ### Format
 
 ```markdown
 ---
 
-📋 **[PHASE/PLAN NAME] [STAGE NUMBER]: [STAGE TITLE]**
+📋 **[WAVE/PLAN NAME] [STAGE NUMBER]: [STAGE TITLE]**
 
 `██████████` [COMPLETION %]% [STAGE NAME] Complete
 
@@ -39,7 +39,7 @@ Use this template for ANY autonomous phase/plan completion report. Replace brack
 
 | Variable | Description | Examples |
 |----------|-------------|----------|
-| `[PHASE/PLAN NAME]` | Plan or wave identifier | `PHASE-R`, `PHASE-52`, `MASTER-PLAN-V5` |
+| `[WAVE/PLAN NAME]` | Plan or wave identifier | `WAVE-R`, `PHASE-52`, `MASTER-PLAN-V5` |
 | `[STAGE NUMBER]` | Numeric stage identifier | `4`, `Stage 2`, `S3` |
 | `[STAGE TITLE]` | Descriptive stage name | `Integration Testing`, `Schema Migration`, `Auth Implementation` |
 | `[COMPLETION %]` | Percentage (0-100) | `100`, `75`, `50` |
@@ -54,12 +54,12 @@ Use this template for ANY autonomous phase/plan completion report. Replace brack
 
 ## Real-World Examples
 
-### Example 1: Phase Completion
+### Example 1: Wave Completion
 
 ```markdown
 ---
 
-📋 **PHASE-R Stage 4: Integration Testing**
+📋 **WAVE-R Stage 4: Integration Testing**
 
 `██████████` 100% Stage 4 Complete
 
@@ -105,7 +105,7 @@ Use this template for ANY autonomous phase/plan completion report. Replace brack
 ```markdown
 ---
 
-📋 **MASTER-PLAN-V5 Phase A: Foundation Infrastructure**
+📋 **MASTER-PLAN-V5 Wave A: Foundation Infrastructure**
 
 `██████████` 100% Foundation Complete
 
@@ -181,7 +181,7 @@ Use this template for ANY autonomous phase/plan completion report. Replace brack
 
 ### When to Use This Template
 
-1. **Autonomous Phase Completion** — After `/implement phase X` completes
+1. **Autonomous Wave Completion** — After `/implement phase X` completes
 2. **Plan Stage Completion** — After `/plan resolve X` finishes
 3. **Multi-Stage Progress** — Showing interim results during long operations
 4. **Master Plan Waves** — Reporting Phase-N completion status
