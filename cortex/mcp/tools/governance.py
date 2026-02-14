@@ -6,7 +6,12 @@ Rule enforcement, compliance validation, and configuration:
 - cortex_validate: Validate code compliance
 - cortex_load: Load configurations and rules
 
+ORCHESTRATION ENFORCEMENT:
+All tools validate orchestrator_context. Direct invocations bypass
+MasterOrchestrator routing and are rejected.
+
 AC_START: AC-WAVE100-S2-003
+AC_CONTINUE: AC-MASTERORCH-ROUTING-001
 """
 
 from typing import Any, Dict, List, Optional
@@ -18,6 +23,30 @@ from cortex.mcp.base import (
     ToolParameter,
     ToolResult,
 )
+
+
+def validate_orchestrator_context(context: Optional[Dict[str, Any]]) -> None:
+    """
+    Validate request comes from MasterOrchestrator.
+    
+    Args:
+        context: Orchestrator context dict with 'source' key
+        
+    Raises:
+        ValueError: If context missing or source != MasterOrchestrator
+    """
+    if not context:
+        raise ValueError(
+            "BLOCKED: Missing orchestrator_context. All requests MUST route "
+            "through MasterOrchestrator via cortex_process_request entry point."
+        )
+    
+    source = context.get("source")
+    if source != "MasterOrchestrator":
+        raise ValueError(
+            f"BLOCKED: Request from '{source}'. Only MasterOrchestrator can "
+            "invoke MCP tools directly. Use cortex_process_request entry point."
+        )
 
 
 class CortexGovernance(ConsolidatedTool):
