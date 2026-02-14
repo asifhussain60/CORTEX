@@ -1,0 +1,220 @@
+---
+metadata:
+  domain: "PL/SQL Optimization"
+  version: "1.0.0"
+  source: "Oracle Database Documentation + Tom Kyte Best Practices"
+  authority: "Oracle Corporation"
+  date: "2026-02-14"
+  description: "Performance optimization patterns for Oracle PL/SQL"
+  tags: ["plsql", "oracle", "performance", "tuning", "bulk-operations"]
+
+patterns:
+  bulk_operations:
+    - id: "PLSQL-BULK-001"
+      name: "Use BULK COLLECT for Multi-Row Fetches"
+      category: "performance"
+      description: "Fetch multiple rows in single context switch"
+      bad: "FOR rec IN cursor LOOP ... END LOOP;"
+      good: "BULK COLLECT INTO collection LIMIT 1000"
+      benefit: "10-100x faster for large result sets"
+
+    - id: "PLSQL-BULK-002"
+      name: "Use FORALL for Bulk DML"
+      category: "performance"
+      description: "Execute DML for entire collection in single operation"
+      example: "FORALL i IN 1..ids.COUNT INSERT INTO table VALUES (ids(i));"
+      benefit: "Reduces context switches between PL/SQL and SQL engine"
+
+    - id: "PLSQL-BULK-003"
+      name: "Use LIMIT Clause in BULK COLLECT"
+      category: "memory-management"
+      description: "Prevent memory overflow with large datasets"
+      implementation: "FETCH cursor BULK COLLECT INTO collection LIMIT 1000;"
+      why: "Process data in chunks, prevents PGA exhaustion"
+
+  cursor_management:
+    - id: "PLSQL-CUR-001"
+      name: "Use Implicit Cursors for Single-Row Queries"
+      category: "simplicity"
+      description: "Simpler than explicit cursor for single row"
+      example: "SELECT col INTO var FROM table WHERE id = 1;"
+      when: "Expecting exactly one row (use exception handling)"
+
+    - id: "PLSQL-CUR-002"
+      name: "Always Close Explicit Cursors"
+      category: "resource-management"
+      description: "Prevent cursor leaks"
+      pattern: |
+        CURSOR c IS SELECT ...;
+        BEGIN
+          OPEN c;
+          -- fetch
+          CLOSE c;
+        EXCEPTION
+          WHEN OTHERS THEN
+            IF c%ISOPEN THEN CLOSE c; END IF;
+            RAISE;
+        END;
+
+    - id: "PLSQL-CUR-003"
+      name: "Use Cursor FOR Loops for Simple Iteration"
+      category: "simplicity"
+      description: "Automatically opens, fetches, closes"
+      example: "FOR rec IN (SELECT * FROM table) LOOP ... END LOOP;"
+      benefit: "Cleaner code, automatic resource management"
+
+  collections:
+    - id: "PLSQL-COLL-001"
+      name: "Choose Correct Collection Type"
+      category: "data-structures"
+      types:
+        associative_array: "Sparse, index by VARCHAR2 or INTEGER"
+        nested_table: "Dense, stored in DB, can query with TABLE()"
+        varray: "Fixed size, stored contiguously"
+      use_cases:
+        - "Associative Array: Temporary lookup tables"
+        - "Nested Table: Persistent collections in DB"
+        - "VARRAY: Fixed-size lists (rare)"
+
+    - id: "PLSQL-COLL-002"
+      name: "DELETE vs TRIM for Collection Cleanup"
+      category: "memory-management"
+      description: "DELETE keeps space allocated, TRIM releases"
+      delete: "collection.DELETE(i); -- removes element, keeps space"
+      trim: "collection.TRIM(n); -- releases last n elements"
+      when_delete: "Sparse collections, need to preserve indexes"
+      when_trim: "Dense collections, memory-constrained"
+
+  exception_handling:
+    - id: "PLSQL-EX-001"
+      name: "Use Named Exceptions"
+      category: "maintainability"
+      description: "Define custom exceptions for business logic"
+      example: |
+        insufficient_funds EXCEPTION;
+        PRAGMA EXCEPTION_INIT(insufficient_funds, -20001);
+
+    - id: "PLSQL-EX-002"
+      name: "Log Errors with DBMS_UTILITY"
+      category: "debugging"
+      description: "Capture full error stack"
+      implementation: "DBMS_UTILITY.FORMAT_ERROR_STACK || DBMS_UTILITY.FORMAT_ERROR_BACKTRACE"
+      benefit: "Shows exact line number of error"
+
+  sql_optimization:
+    - id: "PLSQL-SQL-001"
+      name: "Use Bind Variables"
+      category: "performance"
+      description: "Enables SQL statement caching"
+      bad: "EXECUTE IMMEDIATE 'SELECT * FROM t WHERE id = ' || v_id;"
+      good: "EXECUTE IMMEDIATE 'SELECT * FROM t WHERE id = :id' USING v_id;"
+      benefit: "Query plan reuse, prevents hard parsing"
+
+    - id: "PLSQL-SQL-002"
+      name: "Minimize Context Switches"
+      category: "performance"
+      description: "Single SQL statement better than PL/SQL loop"
+      bad: "FOR i IN 1..1000 LOOP UPDATE ... WHERE id = i; END LOOP;"
+      good: "UPDATE table SET ... WHERE id IN (SELECT ...);"
+      benefit: "100x faster for bulk operations"
+
+  autonomous_transactions:
+    - id: "PLSQL-AUTO-001"
+      name: "Use PRAGMA AUTONOMOUS_TRANSACTION Carefully"
+      category: "transactions"
+      description: "Independent transaction, commits separately"
+      use_cases:
+        - "Audit logging (must survive parent rollback)"
+        - "Error logging"
+      caution: "Can cause inconsistent state if misused"
+      requirement: "Must COMMIT or ROLLBACK before returning"
+
+  function_optimization:
+    - id: "PLSQL-FUNC-001"
+      name: "Use Deterministic Hint for Pure Functions"
+      category: "performance"
+      description: "Oracle caches results for identical inputs"
+      example: "FUNCTION calculate(n NUMBER) RETURN NUMBER DETERMINISTIC IS"
+      when: "Function always returns same result for same input, no DML"
+
+    - id: "PLSQL-FUNC-002"
+      name: "Use Result Cache for Expensive Functions"
+      category: "performance"
+      description: "Cross-session caching of function results"
+      example: "FUNCTION expensive_calc(...) RETURN NUMBER RESULT_CACHE IS"
+      benefit: "Shared cache across all sessions"
+
+  result_caching:
+    - id: "PLSQL-CACHE-001"
+      name: "Enable Result Cache for Read-Heavy Queries"
+      category: "performance"
+      description: "Cache query results in SGA"
+      hint: "SELECT /*+ RESULT_CACHE */ ..."
+      when: "Static or slowly-changing lookup data"
+      caveat: "Invalidated on any DML to underlying tables"
+
+best_practices:
+  coding_standards:
+    - "Use meaningful names (not single letters)"
+    - "Add comments for complex logic"
+    - "Use package specifications to hide implementation"
+    - "Declare constants at package level"
+    - "Use exceptions, not return codes"
+  
+  performance:
+    - "Use BULK COLLECT and FORALL for set operations"
+    - "Minimize context switches (SQL over PL/SQL loops)"
+    - "Use bind variables in dynamic SQL"
+    - "Add DETERMINISTIC or RESULT_CACHE to pure functions"
+    - "Close cursors explicitly"
+  
+  memory:
+    - "Use LIMIT with BULK COLLECT (avoid PGA exhaustion)"
+    - "Clean up collections with TRIM or DELETE"
+    - "Use REF CURSORS to return large datasets"
+    - "Monitor PGA usage with V$PROCESS"
+  
+  security:
+    - "Use bind variables (prevent SQL injection)"
+    - "Grant EXECUTE only, not table access"
+    - "Use AUTHID CURRENT_USER for invoker rights"
+    - "Validate input parameters"
+
+anti_patterns:
+  - name: "Row-by-Row Processing Instead of Bulk"
+    why: "Context switch for every row (very slow)"
+    fix: "Use BULK COLLECT + FORALL"
+  
+  - name: "SELECT COUNT(*) to Check Existence"
+    why: "Scans entire table/index"
+    fix: "SELECT 1 WHERE EXISTS (subquery)"
+  
+  - name: "Using WHEN OTHERS Without Re-Raising"
+    why: "Swallows errors silently"
+    fix: "Log error details then RAISE"
+  
+  - name: "Not Closing Cursors"
+    why: "Cursor leak, session hits OPEN_CURSORS limit"
+    fix: "Always close in EXCEPTION block"
+  
+  - name: "String Concatenation for Dynamic SQL"
+    why: "SQL injection risk, no plan reuse"
+    fix: "Use bind variables with USING clause"
+
+performance_checklist:
+  - "[ ] Use BULK COLLECT with LIMIT for large datasets"
+  - "[ ] Use FORALL instead of loops for DML"
+  - "[ ] Use bind variables in dynamic SQL"
+  - "[ ] Add DETERMINISTIC to pure functions"
+  - "[ ] Close all cursors explicitly"
+  - "[ ] Minimize PL/SQL loops (use SQL)"
+  - "[ ] Use RESULT_CACHE for read-heavy functions"
+  - "[ ] Monitor PGA usage"
+
+references:
+  - name: "Oracle PL/SQL Performance Tuning"
+    url: "https://docs.oracle.com/en/database/oracle/oracle-database/19/lnpls/plsql-optimization-and-tuning.html"
+  - name: "Tom Kyte's Ask Tom"
+    url: "https://asktom.oracle.com/"
+  - name: "Oracle PL/SQL Best Practices"
+    url: "https://docs.oracle.com/en/database/oracle/oracle-database/19/lnpls/"

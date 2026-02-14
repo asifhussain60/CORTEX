@@ -1,0 +1,217 @@
+---
+metadata:
+  domain: "Apache Spark Optimization"
+  version: "1.0.0"
+  source: "Databricks Best Practices + Apache Spark Documentation"
+  authority: "Databricks + Apache Software Foundation"
+  date: "2026-02-14"
+  description: "Performance optimization patterns for Apache Spark workloads"
+  tags: ["spark", "pyspark", "scala", "performance", "distributed-computing"]
+
+patterns:
+  partitioning:
+    - id: "SPARK-PART-001"
+      name: "Repartition for Balanced Workload"
+      category: "partitioning"
+      description: "Ensure even data distribution across executors"
+      when: "After filter operations that create skewed partitions"
+      example: "df.repartition(200)"
+      guideline: "Target 100-200MB per partition"
+
+    - id: "SPARK-PART-002"
+      name: "Use coalesce for Reducing Partitions"
+      category: "partitioning"
+      description: "coalesce doesn't shuffle, repartition does"
+      when: "Reducing partition count (e.g., before writing small files)"
+      example: "df.coalesce(10).write.parquet(path)"
+      benefit: "Faster than repartition (no shuffle)"
+
+    - id: "SPARK-PART-003"
+      name: "Partition By High-Cardinality Columns"
+      category: "data-layout"
+      description: "Partition data on disk by frequently-filtered columns"
+      example: "df.write.partitionBy('year', 'month').parquet(path)"
+      benefit: "Partition pruning reduces data scanned"
+      avoid: "Low-cardinality columns (too many small files)"
+
+  caching:
+    - id: "SPARK-CACHE-001"
+      name: "Cache Datasets Used Multiple Times"
+      category: "performance"
+      description: "Persist intermediate results to avoid recomputation"
+      example: "df.cache() or df.persist(StorageLevel.MEMORY_AND_DISK)"
+      when: "DataFrame accessed 2+ times in same job"
+      unpersist: "Call df.unpersist() when done to free memory"
+
+    - id: "SPARK-CACHE-002"
+      name: "Choose Appropriate Storage Level"
+      category: "caching"
+      storage_levels:
+        MEMORY_ONLY: "Fastest, but spills if not enough RAM"
+        MEMORY_AND_DISK: "Spills to disk if needed (recommended)"
+        DISK_ONLY: "Slow, use only if memory-constrained"
+        MEMORY_ONLY_SER: "Serialized, saves memory but slower"
+      default: "MEMORY_AND_DISK for most cases"
+
+  joins:
+    - id: "SPARK-JOIN-001"
+      name: "Use Broadcast Join for Small Tables"
+      category: "joins"
+      description: "Broadcast small table to all executors (no shuffle)"
+      example: "large_df.join(broadcast(small_df), 'key')"
+      threshold: "< 10MB (configurable via spark.sql.autoBroadcastJoinThreshold)"
+      benefit: "Eliminates shuffle, much faster"
+
+    - id: "SPARK-JOIN-002"
+      name: "Handle Data Skew with Salting"
+      category: "joins"
+      description: "Add random salt to skewed keys"
+      problem: "Single key has millions of rows (all go to one executor)"
+      solution: "Replicate small table with salt, join on salted key"
+      implementation: "Add random suffix to key, join multiple times"
+
+    - id: "SPARK-JOIN-003"
+      name: "Use Sort-Merge Join for Large-Large Joins"
+      category: "joins"
+      description: "Default for large table joins"
+      requirement: "Both datasets partitioned and sorted on join key"
+      hint: "spark.sql.join.preferSortMergeJoin=true"
+
+  file_formats:
+    - id: "SPARK-FILE-001"
+      name: "Use Parquet for Analytics Workloads"
+      category: "file-format"
+      description: "Columnar format, compressed, predicate pushdown"
+      benefits:
+        - "10x faster than CSV/JSON"
+        - "Compression built-in"
+        - "Columnar layout (read only needed columns)"
+        - "Statistics enable partition pruning"
+      when: "Batch processing, analytical queries"
+
+    - id: "SPARK-FILE-002"
+      name: "Use Delta Lake for Mutable Data"
+      category: "file-format"
+      description: "ACID transactions, time travel, schema evolution"
+      benefits:
+        - "ACID guarantees"
+        - "UPSERT/DELETE support"
+        - "Time travel (read old versions)"
+        - "Schema enforcement and evolution"
+      when: "Data updates, CDC, versioning needed"
+
+  memory_optimization:
+    - id: "SPARK-MEM-001"
+      name: "Tune Executor Memory"
+      category: "memory"
+      description: "Balance executor memory and cores"
+      guideline: "4-8 cores per executor, 4-8GB RAM per core"
+      example: "--executor-memory 32g --executor-cores 5"
+
+    - id: "SPARK-MEM-002"
+      name: "Use Serialized Data Structures"
+      category: "memory"
+      description: "Kryo serialization saves 50% memory vs Java"
+      config: "spark.serializer = org.apache.spark.serializer.KryoSerializer"
+      benefit: "Smaller memory footprint, faster serialization"
+
+  transformations:
+    - id: "SPARK-TRANS-001"
+      name: "Filter Early in Pipeline"
+      category: "optimization"
+      description: "Apply filters before expensive operations"
+      good: "df.filter(condition).groupBy(...).agg(...)"
+      bad: "df.groupBy(...).agg(...).filter(condition)"
+      benefit: "Reduces data volume for downstream ops"
+
+    - id: "SPARK-TRANS-002"
+      name: "Avoid UDFs When Possible"
+      category: "performance"
+      description: "UDFs don't benefit from Catalyst optimizer"
+      alternative: "Use built-in functions (F.when, F.col, etc.)"
+      when_udf_ok: "Complex logic not expressible with built-ins"
+      pandas_udf: "Use Pandas UDF (vectorized) instead of row-by-row UDF"
+
+  shuffle_optimization:
+    - id: "SPARK-SHUF-001"
+      name: "Minimize Shuffles"
+      category: "performance"
+      description: "Shuffle is expensive (network + disk I/O)"
+      shuffle_ops: "groupBy, join, repartition, distinct, sort"
+      strategies:
+        - "Filter before shuffle operations"
+        - "Use broadcast join for small tables"
+        - "Increase spark.sql.shuffle.partitions (default 200)"
+
+    - id: "SPARK-SHUF-002"
+      name: "Tune Shuffle Partitions"
+      category: "performance"
+      description: "Default 200 often too high or too low"
+      config: "spark.sql.shuffle.partitions"
+      guideline: "Target 100-200MB per partition"
+      example: "For 100GB shuffle: 100GB / 128MB = ~800 partitions"
+
+best_practices:
+  cluster_configuration:
+    - "Use dynamic allocation if workload varies"
+    - "Set executor memory to 80% of node memory"
+    - "Use 4-5 cores per executor (better parallelism)"
+    - "Enable adaptive query execution (AQE) in Spark 3+"
+  
+  data_engineering:
+    - "Use Parquet or Delta for storage"
+    - "Partition by date or high-cardinality columns"
+    - "Avoid small files (<128MB, use coalesce)"
+    - "Use Z-ordering in Delta for multi-column filters"
+  
+  development:
+    - "Use DataFrame API over RDDs"
+    - "Use built-in functions over UDFs"
+    - "Cache datasets accessed 2+ times"
+    - "Use explain() to understand query plan"
+    - "Monitor Spark UI for slow stages"
+  
+  cost_optimization:
+    - "Use spot instances for non-critical workloads"
+    - "Terminate clusters after job completion"
+    - "Right-size clusters (don't over-provision)"
+    - "Use caching to avoid recomputation"
+
+anti_patterns:
+  - name: "Reading CSV Without Schema"
+    why: "Spark infers schema by scanning entire file (slow)"
+    fix: "Provide explicit schema or use Parquet"
+  
+  - name: "Writing Too Many Small Files"
+    why: "Slows down future reads, metadata overhead"
+    fix: "Use coalesce before write (target 128MB-1GB per file)"
+  
+  - name: "Using collect() on Large Datasets"
+    why: "Brings all data to driver (OOM crash)"
+    fix: "Use take(n) or sample, or write to storage"
+  
+  - name: "Not Caching Reused Datasets"
+    why: "Recomputes entire DAG for each action"
+    fix: "Cache after expensive transformation if used 2+ times"
+  
+  - name: "Using Cartesian Joins"
+    why: "Produces rows = left_count × right_count (explodes)"
+    fix: "Always specify join condition"
+
+performance_checklist:
+  - "[ ] Partitions are 100-200MB (not too small/large)"
+  - "[ ] Broadcast join for tables < 10MB"
+  - "[ ] Cache datasets used 2+ times"
+  - "[ ] Use Parquet or Delta format"
+  - "[ ] Filter early in pipeline"
+  - "[ ] Avoid UDFs (use built-in functions)"
+  - "[ ] Tune shuffle partitions for data size"
+  - "[ ] Monitor Spark UI for skew/bottlenecks"
+
+references:
+  - name: "Databricks Performance Tuning"
+    url: "https://docs.databricks.com/optimizations/index.html"
+  - name: "Apache Spark Performance Tuning"
+    url: "https://spark.apache.org/docs/latest/tuning.html"
+  - name: "Delta Lake Best Practices"
+    url: "https://docs.delta.io/latest/best-practices.html"
