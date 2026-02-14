@@ -1,0 +1,309 @@
+# MCP Server Identity Layer Specification
+# Phase 75 S4: Add server metadata to all MCP tool responses
+# Created: 2026-02-11
+# Purpose: Disambiguate CORTEX MCP from Pylance/other servers
+
+meta:
+  version: "1.0"
+  created: "2026-02-11"
+  phase: "75"
+  stage: "S4"
+  priority: "P1"
+  author: "Asif Hussain"
+
+problem:
+  description: |
+    Currently, MCP tool responses don't include server attribution.
+    Users cannot distinguish CORTEX MCP from Pylance or other MCP servers.
+    Debugging tool failures requires manual inspection of server logs.
+    
+  gaps:
+    - "No _mcp_meta field in tool responses"
+    - "Prompts reference tools without 'CORTEX MCP' prefix"
+    - "No health indicator in responses"
+    - "Namespace collision risk (cortex_* prefix not unique)"
+
+solution:
+  approach: "Inject server metadata into all MCP tool responses"
+  
+  architecture: |
+    ┌──────────────────────────────────────────────────────┐
+    │            MCP Server Identity Layer                 │
+    ├──────────────────────────────────────────────────────┤
+    │                                                      │
+    │  Tool Response (Before):                             │
+    │  {                                                   │
+    │    "result": "...",                                  │
+    │    "data": {...}                                     │
+    │  }                                                   │
+    │                                                      │
+    │  Tool Response (After):                              │
+    │  {                                                   │
+    │    "result": "...",                                  │
+    │    "data": {...},                                    │
+    │    "_mcp_meta": {                                    │
+    │      "server": "cortex",                             │
+    │      "version": "1.0.0",                             │
+    │      "timestamp": "2026-02-11T11:05:00Z",            │
+    │      "health": "healthy",                            │
+    │      "tool_count": 41,                               │
+    │      "session_id": "abc123"                          │
+    │    }                                                 │
+    │  }                                                   │
+    │                                                      │
+    └──────────────────────────────────────────────────────┘
+
+metadata_schema:
+  fields:
+    server:
+      type: "string"
+      description: "MCP server name (always 'cortex')"
+      required: true
+      value: "cortex"
+    
+    version:
+      type: "string"
+      description: "MCP server version (semantic versioning)"
+      required: true
+      format: "X.Y.Z"
+      example: "1.0.0"
+    
+    timestamp:
+      type: "string"
+      description: "ISO 8601 timestamp of response generation"
+      required: true
+      format: "YYYY-MM-DDTHH:MM:SSZ"
+      example: "2026-02-11T11:05:00Z"
+    
+    health:
+      type: "string"
+      description: "MCP server health status"
+      required: true
+      enum: ["healthy", "degraded", "stale"]
+      definition:
+        healthy: "All systems operational, <5s response time"
+        degraded: "Partial functionality, 5-15s response time"
+        stale: "No activity >30s, needs restart"
+    
+    tool_count:
+      type: "integer"
+      description: "Number of tools currently registered"
+      required: true
+      example: 41
+    
+    session_id:
+      type: "string"
+      description: "Unique session identifier for tracing"
+      required: false
+      format: "8-character alphanumeric"
+      example: "abc123de"
+    
+    uptime_seconds:
+      type: "integer"
+      description: "Seconds since MCP server started"
+      required: false
+      example: 3600
+
+implementation:
+  file: "cortex/mcp/server.py"
+  
+  changes:
+    - location: "MCPServer class"
+      action: "Add _inject_metadata() method"
+      code_snippet: |
+        def _inject_metadata(self, response: Dict[str, Any]) -> Dict[str, Any]:
+            """Inject server identity metadata into response."""
+            from datetime import datetime, timezone
+            
+            response["_mcp_meta"] = {
+                "server": "cortex",
+                "version": self.version,
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "health": self._get_health_status(),
+                "tool_count": len(self.tools),
+                "session_id": self.session_id,
+            }
+            return response
+    
+    - location: "All tool invocation methods"
+      action: "Call _inject_metadata() before returning"
+      example: |
+        # Before
+        return {"result": result}
+        
+        # After
+        return self._inject_metadata({"result": result})
+    
+    - location: "MCPServer.__init__"
+      action: "Add session_id generation"
+      code_snippet: |
+        import secrets
+        self.session_id = secrets.token_hex(4)  # 8-char hex
+        self.start_time = time.time()
+
+health_status_logic:
+  healthy:
+    conditions:
+      - "Response time <5 seconds"
+      - "No errors in last 10 requests"
+      - "Watchdog reports healthy"
+      - "Port 8000 responds"
+    
+  degraded:
+    conditions:
+      - "Response time 5-15 seconds"
+      - "1-3 errors in last 10 requests"
+      - "Watchdog reports degraded"
+    
+  stale:
+    conditions:
+      - "No activity >30 seconds"
+      - "Response time >15 seconds"
+      - ">3 errors in last 10 requests"
+      - "Watchdog reports stale"
+
+prompt_updates:
+  copilot_instructions:
+    file: ".github/copilot-instructions.md"
+    changes:
+      - section: "MCP-FIRST ARCHITECTURE"
+        change: "Add 'CORTEX MCP' prefix to all tool references"
+        example: "Use CORTEX MCP tool: cortex_process_request"
+      
+      - section: "NATIVE TOOL BYPASS PREVENTION"
+        change: "Clarify CORTEX MCP vs Pylance distinction"
+        example: "CORTEX MCP tools (cortex_*) handle implementation, Pylance handles code intelligence"
+  
+  cortex_architect:
+    file: ".github/prompts/cortex-architect.prompt.md"
+    changes:
+      - section: "MCP Tools"
+        change: "Prefix all tool lists with 'CORTEX MCP:'"
+        example: "CORTEX MCP: cortex_process_request, cortex_challenge, ..."
+
+benefits:
+  debugging:
+    - "Immediate server identification in tool responses"
+    - "Health status visible without logs"
+    - "Session tracing via session_id"
+    - "Timestamp for request correlation"
+  
+  operations:
+    - "Distinguish CORTEX MCP from Pylance in VS Code"
+    - "Monitor server health programmatically"
+    - "Detect stale servers automatically"
+    - "Track tool count over time"
+  
+  development:
+    - "Clear namespace ownership (cortex_* = CORTEX MCP)"
+    - "Version tracking for compatibility"
+    - "Session-based debugging"
+    - "Uptime monitoring"
+
+testing:
+  unit_tests:
+    - file: "tests/unit/mcp/test_server_identity.py"
+      tests:
+        - "test_metadata_injection_all_tools"
+        - "test_health_status_healthy"
+        - "test_health_status_degraded"
+        - "test_health_status_stale"
+        - "test_session_id_generation"
+        - "test_timestamp_format"
+  
+  integration_tests:
+    - file: "tests/integration/mcp/test_server_identity_integration.py"
+      tests:
+        - "test_all_tools_include_metadata"
+        - "test_health_status_updates_dynamically"
+        - "test_metadata_persists_across_requests"
+        - "test_session_id_unique_per_session"
+
+rollout:
+  phase_1:
+    description: "Add metadata to core tools (10 tools)"
+    effort: "2h"
+    tools:
+      - "cortex_process_request"
+      - "cortex_challenge"
+      - "cortex_lens_analyze"
+      - "cortex_verify_environment"
+      - "cortex_tools_catalog"
+    validation: "Verify metadata in Copilot Chat responses"
+  
+  phase_2:
+    description: "Add metadata to all remaining tools (31 tools)"
+    effort: "1h"
+    validation: "Run test_metadata_injection_all_tools"
+  
+  phase_3:
+    description: "Update prompts with 'CORTEX MCP' prefix"
+    effort: "1h"
+    files:
+      - ".github/copilot-instructions.md"
+      - ".github/prompts/cortex-architect.prompt.md"
+      - ".github/prompts/CORTEX.prompt.md"
+
+acceptance_criteria:
+  - "All 41 MCP tools include _mcp_meta in responses"
+  - "Health status accurate (matches watchdog state)"
+  - "Prompts clearly reference 'CORTEX MCP' not just 'MCP'"
+  - "Tests pass: test_metadata_injection_all_tools"
+  - "Session ID unique per VS Code session"
+  - "Timestamp within 1 second of actual response time"
+
+example_response:
+  before: |
+    {
+      "status": "PARTIAL",
+      "python_version": "3.13.7",
+      "missing_packages": ["black", "mypy"]
+    }
+  
+  after: |
+    {
+      "status": "PARTIAL",
+      "python_version": "3.13.7",
+      "missing_packages": ["black", "mypy"],
+      "_mcp_meta": {
+        "server": "cortex",
+        "version": "1.0.0",
+        "timestamp": "2026-02-11T11:05:34Z",
+        "health": "healthy",
+        "tool_count": 41,
+        "session_id": "f3a2b8c1",
+        "uptime_seconds": 3600
+      }
+    }
+
+user_visible_changes:
+  copilot_chat:
+    - "Tool responses include server attribution"
+    - "Health status visible (⚫ healthy | 🟡 degraded | 🔴 stale)"
+    - "Session ID for support tickets"
+  
+  prompts:
+    - "Clear distinction: 'Use CORTEX MCP tool: cortex_*'"
+    - "'Pylance provides code intelligence, CORTEX MCP provides orchestration'"
+
+compatibility:
+  backward_compatible: true
+  reason: "_mcp_meta is additive, doesn't break existing consumers"
+  migration_path: "Consumers can ignore _mcp_meta if not needed"
+
+monitoring:
+  metrics_to_add:
+    - "cortex_mcp_health_status (gauge: 0=stale, 1=degraded, 2=healthy)"
+    - "cortex_mcp_session_duration_seconds (histogram)"
+    - "cortex_mcp_tool_response_time_seconds (histogram by tool)"
+  
+  alerts:
+    - "cortex_mcp_health_status == 0 for >1 minute (stale server)"
+    - "cortex_mcp_tool_response_time_seconds > 15s (degraded)"
+
+audit_trail:
+  - id: "AC-PHASE75-S4-SPEC-001"
+    timestamp: "2026-02-11T11:10:00Z"
+    action: "Created MCP Server Identity Layer specification"
+    author: "Asif Hussain"
+    context: "Phase 75 S4 - Server disambiguation"

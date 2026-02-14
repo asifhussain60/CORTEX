@@ -1,0 +1,284 @@
+# CORTEX Governance Gates Specification (Phase C)
+# Authority: EnforcementOrchestrator + cortex-architect.prompt.md
+# Purpose: Define all validation and enforcement gates for production deployment
+# Status: ACTIVE (Phase C Production Deployment)
+
+version: "1.0"
+generated_at: 2026-02-09
+authority: "CORTEX Governance Team"
+
+# Primary Validation Gates
+validation_gates:
+  
+  DoRApprovalGate:
+    description: "Definition of Ready approval gate for implementation intents"
+    intent_types: ["IMPLEMENT", "FIX", "REFACTOR"]
+    execution_stage: "STAGE_3A"
+    blocking: true
+    
+    required_checks:
+      - acceptance_criteria_defined:
+          description: "User story has clear acceptance criteria"
+          severity: "CRITICAL"
+          check_fn: "has_acceptance_criteria()"
+      
+      - test_framework_available:
+          description: "Testing framework installed and configured"
+          severity: "CRITICAL"
+          check_fn: "verify_test_framework()"
+      
+      - module_path_specified:
+          description: "Target module or file path specified"
+          severity: "CRITICAL"
+          check_fn: "validate_module_path()"
+      
+      - estimation_provided:
+          description: "Time/effort estimation included"
+          severity: "HIGH"
+          check_fn: "has_estimation()"
+      
+      - no_blockers:
+          description: "No known blockers identified"
+          severity: "HIGH"
+          check_fn: "check_blockers()"
+    
+    user_approval_required: true
+    approval_timeout_seconds: 300
+    cache_decision: true
+    cache_ttl_seconds: 3600
+  
+  ChallengeGate:
+    description: "Architecture challenge generation gate"
+    intent_types: ["ANALYZE", "DESIGN", "AUDIT", "PLAN"]
+    execution_stage: "STAGE_3B"
+    blocking: false  # Non-blocking, generates alternative perspectives
+    
+    challenge_types:
+      - architecture_challenges:
+          count: 1
+          severity: "MEDIUM"
+      
+      - edge_case_detection:
+          count: 2
+          severity: "MEDIUM"
+      
+      - performance_concerns:
+          count: 1
+          severity: "LOW"
+      
+      - security_implications:
+          count: 1
+          severity: "CRITICAL"
+    
+    challenge_engine: "cortex.orchestrators.domain_orchestrators.challenge_engine.ChallengeEngine"
+    auto_response_timeout_seconds: 60
+  
+  PlanValidationGate:
+    description: "Phase plan validation and sequencing gate"
+    intent_types: ["PLAN"]
+    execution_stage: "STAGE_3C"
+    blocking: true
+    
+    required_checks:
+      - phases_sequenced:
+          description: "Phases in logical order"
+          severity: "CRITICAL"
+      
+      - dependencies_resolved:
+          description: "Cross-phase dependencies identified"
+          severity: "CRITICAL"
+      
+      - resources_allocated:
+          description: "Resources assigned per phase"
+          severity: "HIGH"
+      
+      - success_criteria_defined:
+          description: "Success criteria for each phase"
+          severity: "CRITICAL"
+      
+      - timeline_realistic:
+          description: "Timeline achievable with team capacity"
+          severity: "HIGH"
+    
+    workflow_validator: "cortex.orchestrators.core.workflow_orchestrator.WorkflowOrchestrator"
+
+# Enforcement Gates (Pre-Execution)
+enforcement_gates:
+  
+  GovernanceEnforcementGate:
+    description: "CORE rules enforcement (TDD, types, docstrings, headers)"
+    core_rules: ["CORE-008", "CORE-011", "CORE-012", "CORE-013", "CORE-029", "CORE-030"]
+    blocking: true
+    agents: 7
+    coverage: 0.87  # 87% of CORE rules automated
+    
+  SecurityCheckpointGate:
+    description: "Git discipline and audit trail integrity"
+    core_rules: ["CORE-025", "CORE-026", "CORE-027"]
+    blocking: true
+    checks:
+      - git_clean_status: "No uncommitted changes before major ops"
+      - audit_markers: "AC_START/AC_COMPLETE markers present"
+      - git_history: "24-hour git history preserved"
+    
+  ComplianceValidationGate:
+    description: "Domain-specific compliance checks"
+    core_rules: ["TIER-1-RULES"]
+    blocking: true
+    per_domain: true
+    
+  ArchitectureIntegrityGate:
+    description: "Architecture and wiring validation"
+    core_rules: ["CORE-035", "CORE-036", "CORE-038", "CORE-041", "CORE-042"]
+    blocking: true
+    checks:
+      - no_duplicate_implementations: "CORE-035"
+      - standards_compliance: "CORE-036"
+      - event_driven_patterns: "CORE-041"
+      - hierarchical_terminology: "CORE-042"
+
+# Post-Execution Audit Gates
+audit_gates:
+  
+  TestCoverageGate:
+    description: "Minimum test coverage for implementation"
+    minimum_coverage: 0.80  # 80% minimum
+    test_types: ["unit", "integration", "e2e"]
+    blocking: true
+  
+  LintComplianceGate:
+    description: "Code quality and style enforcement"
+    checkers: ["pylint", "black", "mypy"]
+    max_violations: 0
+    blocking: true
+  
+  PerformanceGate:
+    description: "Performance regression detection"
+    baseline_available: true
+    regression_tolerance: 0.10  # 10% tolerance
+    blocking_threshold: 0.20    # Block if >20% regression
+  
+  SecurityScanGate:
+    description: "Security vulnerability scanning"
+    scanners: ["bandit", "safety"]
+    max_critical: 0
+    max_high: 2
+    blocking: true
+
+# Gate Orchestration (Execution Order)
+gate_execution_flow:
+  
+  stage_1_pre_comprehension:
+    gates: ["SecurityCheckpointGate"]
+    order: 1
+    continue_on_failure: false
+  
+  stage_2_intent_verification:
+    gates: ["GovernanceEnforcementGate"]
+    order: 2
+    continue_on_failure: true
+  
+  stage_3_approval:
+    gates: ["DoRApprovalGate", "ChallengeGate"]
+    order: 3
+    continue_on_failure: false
+  
+  stage_4_planning:
+    gates: ["PlanValidationGate"]
+    order: 4
+    continue_on_failure: false
+  
+  stage_5_execution:
+    gates: []  # No gates during execution
+    order: 5
+  
+  stage_6_validation:
+    gates: ["TestCoverageGate", "LintComplianceGate", "PerformanceGate"]
+    order: 6
+    continue_on_failure: false
+  
+  stage_7_post_audit:
+    gates: ["SecurityScanGate", "ArchitectureIntegrityGate"]
+    order: 7
+    continue_on_failure: true  # Non-blocking post-audit
+
+# Gate Configuration Per Intent
+intent_gate_configuration:
+  
+  IMPLEMENT:
+    primary_gate: "DoRApprovalGate"
+    secondary_gates: ["ChallengeGate", "ArchitectureIntegrityGate"]
+    audit_gates: ["TestCoverageGate", "SecurityScanGate"]
+    estimated_overhead: "120 seconds"
+  
+  FIX:
+    primary_gate: "DoRApprovalGate"
+    secondary_gates: ["ArchitectureIntegrityGate"]
+    audit_gates: ["TestCoverageGate"]
+    estimated_overhead: "60 seconds"
+  
+  REFACTOR:
+    primary_gate: "DoRApprovalGate"
+    secondary_gates: ["ChallengeGate", "ArchitectureIntegrityGate"]
+    audit_gates: ["TestCoverageGate", "PerformanceGate"]
+    estimated_overhead: "90 seconds"
+  
+  ANALYZE:
+    primary_gate: "ChallengeGate"
+    secondary_gates: []
+    audit_gates: []
+    estimated_overhead: "30 seconds"
+  
+  AUDIT:
+    primary_gate: "GovernanceEnforcementGate"
+    secondary_gates: ["SecurityScanGate"]
+    audit_gates: []
+    estimated_overhead: "45 seconds"
+  
+  PLAN:
+    primary_gate: "PlanValidationGate"
+    secondary_gates: []
+    audit_gates: []
+    estimated_overhead: "30 seconds"
+  
+  ONBOARD:
+    primary_gate: "SecurityCheckpointGate"
+    secondary_gates: ["ArchitectureIntegrityGate"]
+    audit_gates: []
+    estimated_overhead: "60 seconds"
+  
+  DEBUG:
+    primary_gate: "GovernanceEnforcementGate"
+    secondary_gates: []
+    audit_gates: ["TestCoverageGate"]
+    estimated_overhead: "45 seconds"
+
+# SQLite Audit Configuration
+audit_configuration:
+  enabled: true
+  table_name: "governance_gates_audit"
+  retention_days: 90
+  sampling_rate: 1.0
+  
+  columns:
+    - timestamp: "ISO8601 execution time"
+    - intent: "User intent (IMPLEMENT, FIX, etc.)"
+    - gate_name: "Gate executed (DoRApprovalGate, ChallengeGate, etc.)"
+    - gate_result: "PASS/FAIL/SKIP"
+    - duration_seconds: "Gate execution time"
+    - user_id: "User making request"
+    - session_id: "Session identifier"
+    - ac_marker: "Audit trail marker"
+
+# Phase C Metadata
+metadata:
+  version: "1.0"
+  created_at: "2026-02-09"
+  updated_at: "2026-02-09"
+  author: "CORTEX Governance Team"
+  phase: "Phase C (Orchestrator Wiring Completion)"
+  status: "ACTIVE"
+  total_gates: 9
+  validation_gates: 3
+  enforcement_gates: 4
+  audit_gates: 4

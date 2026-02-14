@@ -1,0 +1,14 @@
+# CORTEX Master Registry Index
+# Auto-generated: 2026-02-14
+
+metadata:
+  total_phases: 17
+  active: 2
+  completed: 1
+  deferred: 10
+  
+# Quick Navigation:
+# - Active work: _views/active/
+# - Done: _views/completed/
+# - Backlog: _views/deferred/
+# - All phases: phases/

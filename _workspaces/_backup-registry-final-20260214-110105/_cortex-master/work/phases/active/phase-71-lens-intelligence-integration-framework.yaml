@@ -1,0 +1,498 @@
+# Phase 71: LENS Intelligence Integration Framework
+# Authority: cortex-architect.prompt.md v15.3 + GPT Workspace Analysis (2026-02-10)
+# Strategic Enhancement: Schema + Evidence + Incremental Extraction
+# Created: 2026-02-10
+# AC-ID: AC-PHASE71-001
+
+metadata:
+  phase_id: "phase-71"
+  title: "LENS Intelligence Integration Framework (LDv1 Schema + Evidence Protocol + Incremental Extraction)"
+  subtitle: "Foundational intelligence layer enabling enterprise-scale LENS visualization and multi-repo analysis"
+  status: "in-progress"
+  priority: "P1"
+  created: "2026-02-10"
+  estimated_duration: "3-4 weeks"
+  roi_score: 0.92
+  execution_order: 22
+  test_target: 180
+  coverage_target: 90
+  stages_complete: "1/5"
+  autonomous_execution: true
+  approval_required: true
+  breaking_changes: false
+  s1_completed: "2026-02-10T08:00:00Z"
+  s1_tests_passing: 42
+  enables_phases:
+    - "phase-72"
+    - "phase-73-multi-repo-lens-consolidation"
+    - "phase-74-role-based-lens-dashboard"
+
+overview:
+  vision: |
+    Establish CORTEX LENS as an enterprise-grade intelligent analysis framework by implementing:
+    
+    1. **LDv1 Schema Definition** — Standardized JSON contract for all extracted intelligence
+    2. **Evidence Protocol** — Mandatory confidence + evidence tracking on every node/edge
+    3. **Incremental Extraction** — Git-diff keyed analysis regenerating only changed components
+    4. **Manifest-Based Publishing** — Index-driven artifact navigation enabling lazy-loading
+    5. **Analyzer Standardization** — All analyzers expose evidence + confidence uniformly
+    
+    Strategic outcome: LENS becomes the unified intelligence backbone, enabling:
+    - Accurate multi-repo visualization (no hallucination)
+    - Incremental updates at scale (no full re-scan)
+    - Role-based knowledge rendering (business + engineering views)
+    - Cross-repo capability analysis (dependency mapping)
+    - Compliance-ready audit trails (every fact traceable)
+
+  problem_statement: |
+    Current LENS implementation has strong foundations (4 analyzers, 28 orchestrators consuming it)
+    but lacks enterprise-scale architectural maturity:
+    
+    **Gap 1: No Formal Schema**
+    - Dashboard JSON is ad-hoc (dashboard_schema_v3.py)
+    - No standardized contract for new analyzers
+    - Makes extending LENS for new domains expensive
+    - Visualization layer cannot assume consistent structure
+    - Cross-analyzer reconciliation requires custom logic
+    
+    **Gap 2: Missing Evidence Tracking**
+    - Analyzers return results but omit source/confidence
+    - LensAnalysisResult has no evidence[] field
+    - Cannot distinguish "high confidence" from "guess"
+    - Visualization cannot label uncertainty
+    - Audit trail incomplete (violates governance requirements)
+    
+    **Gap 3: Full Regeneration Required**
+    - Every invocation re-scans entire repo (even unchanged files)
+    - Slow for enterprise monorepos (1000+ files = 30+ seconds)
+    - No caching based on git commits
+    - Wastes computation on unchanged code
+    - Scales poorly beyond ~500 files
+    
+    **Gap 4: Monolithic Output**
+    - Single dashboard.json file for all insights
+    - Hard to version, diff, or cache incrementally
+    - Cannot lazy-load per-tab data
+    - Forces full JSON load even for single-tab view
+    - Breaks down at enterprise scale (multi-repo scenarios)
+    
+    **Gap 5: Analyzer Inconsistency**
+    - GitHistoryAnalyzer exports one structure
+    - ASTAnalyzer exports different structure
+    - CommentExtractor has its own format
+    - SecurityThreatAnalyzer yet another
+    - Integration layer must normalize—expensive and error-prone
+
+  success_criteria:
+    - "LDv1 schema defined + validated (JSON Schema in cortex/lens/schemas/)"
+    - "All 4 LENS analyzers emit evidence[] + confidence on every output"
+    - "Incremental extraction working (git commit SHA keys cached results)"
+    - "Manifest-based publishing with lazy-loadable artifacts"
+    - "180 tests passing (45 per analyzer + 45 integration + 45 end-to-end)"
+    - "Documentation: LDv1 specification + analyzer adapter protocol"
+    - "Zero breaking changes to existing MCP tools"
+
+stages:
+  - stage_id: "S1"
+    name: "LDv1 Schema Definition & Tooling"
+    duration: "4-5 days"
+    effort_hours: 16
+    status: "planned"
+    description: |
+      Define standardized JSON schema for all LENS artifacts.
+      
+      Deliverables:
+      1. cortex/lens/schemas/ldv1_schema.json
+         - Core entity definitions (Repository, Artifact, Node, Edge, Evidence)
+         - Validator with pydantic models
+         - Version + metadata requirements
+      
+      2. cortex/lens/schemas/evidence_protocol.py
+         - EvidenceItem dataclass (kind, ref, snippet, confidence, source_type)
+         - EvidenceValidator protocol for all analyzers
+         - Confidence scoring guide (0-1 scale)
+      
+      3. cortex/lens/schemas/artifact_registry.yaml
+         - Manifest structure (index.json)
+         - Per-artifact schemas (overview, architecture, domain, etc.)
+         - Validation rules (required fields, cross-references)
+      
+      4. Tests (45 total)
+         - Schema validation (15 tests)
+         - Evidence protocol compliance (15 tests)
+         - Artifact registry conformance (15 tests)
+      
+      Risks & Mitigations:
+      - Risk: Schema too strict, breaks backward compatibility
+        Mitigation: Mark v1 as "beta," add schemaVersion to all outputs
+      - Risk: Evidence protocol overhead slows analyzers
+        Mitigation: Measure perf; optimize hot paths; accept 5-10% overhead
+    
+    acceptance_criteria:
+      - "AC-PHASE71-S1-001: LDv1 schema JSON Schema file exists + passes validation"
+      - "AC-PHASE71-S1-002: EvidenceProtocol interface defined + documented"
+      - "AC-PHASE71-S1-003: Artifact registry YAML complete + all artifacts defined"
+      - "AC-PHASE71-S1-004: 45 tests passing (schema + evidence + artifact)"
+      - "AC-PHASE71-S1-005: Backward compatibility check (existing outputs parse as LDv1)"
+
+  - stage_id: "S2"
+    name: "Analyzer Standardization & Evidence Emissions"
+    duration: "5-6 days"
+    effort_hours: 20
+    status: "planned"
+    description: |
+      Retrofit all 4 LENS analyzers to emit evidence + confidence uniformly.
+      
+      Deliverables:
+      1. GitHistoryAnalyzer (cortex/lens/analyzers/git_history_analyzer.py)
+         - Output: commits[] with evidence (commit SHA, author, date)
+         - Confidence: 1.0 (deterministic from git log)
+         - Evidence format: { kind: "git-commit", ref: "sha:...", confidence: 1.0 }
+      
+      2. ASTAnalyzer (cortex/brain/analysis/ast_analyzer.py)
+         - Output: functions[], classes[], imports[] with evidence (file:line)
+         - Confidence: 1.0 (deterministic from AST)
+         - Evidence format: { kind: "file-symbol", ref: "file.py#line:col", confidence: 1.0 }
+      
+      3. CommentExtractor (cortex/brain/analysis/comment_extractor.py)
+         - Output: todos[], fixmes[], intent_markers[] with evidence (file:line + snippet)
+         - Confidence: 0.9 (depends on regex quality)
+         - Evidence format: { kind: "comment", ref: "file.py#line", snippet: "...", confidence: 0.9 }
+      
+      4. SecurityThreatAnalyzer (cortex/brain/analysis/security_threat_analyzer.py)
+         - Output: vulnerabilities[] with evidence (file:line + CWE + pattern)
+         - Confidence: 0.7-0.95 (varies by pattern match quality)
+         - Evidence format: { kind: "security-pattern", ref: "file.py#line", cwe: "CWE-89", confidence: 0.85 }
+      
+      5. Tests (45 total)
+         - GitHistoryAnalyzer: 10 tests (output format, evidence structure, edge cases)
+         - ASTAnalyzer: 10 tests
+         - CommentExtractor: 10 tests
+         - SecurityThreatAnalyzer: 10 tests
+         - Integration: 5 tests (all analyzers together, normalize outputs)
+      
+      Risks & Mitigations:
+      - Risk: Confidence scoring is subjective/debatable
+        Mitigation: Document scoring rationale per analyzer; allow tuning via config
+      - Risk: Analyzer performance regression
+        Mitigation: Baseline + measure; optimize if >10% regression
+    
+    acceptance_criteria:
+      - "AC-PHASE71-S2-001: All 4 analyzers updated to emit evidence[] + confidence"
+      - "AC-PHASE71-S2-002: GitHistoryAnalyzer confidence = 1.0 (deterministic)"
+      - "AC-PHASE71-S2-003: ASTAnalyzer confidence = 1.0 (deterministic)"
+      - "AC-PHASE71-S2-004: CommentExtractor confidence = 0.9 (regex-based)"
+      - "AC-PHASE71-S2-005: SecurityThreatAnalyzer confidence = 0.7-0.95 (per-pattern)"
+      - "AC-PHASE71-S2-006: 45 tests passing (per-analyzer + integration)"
+      - "AC-PHASE71-S2-007: Backward compatibility (old callers still work)"
+
+  - stage_id: "S3"
+    name: "Incremental Extraction & Caching"
+    duration: "5-7 days"
+    effort_hours: 24
+    status: "planned"
+    description: |
+      Implement git-diff keyed incremental extraction, avoiding full repo re-analysis.
+      
+      Deliverables:
+      1. cortex/lens/incremental_extraction.py
+         - IncrementalExtractor class
+         - Cache key strategy: git commit SHA (deterministic)
+         - Changed file detection (git diff HEAD~1..HEAD)
+         - Selective analyzer invocation (only on changed files)
+         - Fallback to full extract if cache miss
+      
+      2. cortex/lens/cache/lens_cache.py (enhance existing)
+         - Storage: ~/.cortex/cache/lens/{repo_id}/{commit_sha}/
+         - TTL: 30 days (after which re-validate)
+         - Invalidation: git hook (on commit, mark old cache for re-check)
+         - Stats: hit rate, cache size, invalidation rate
+      
+      3. Integration with LENSOrchestrator
+         - analyze(repo_path) → check cache first
+         - If hit: load cached results + validate (quick hash check)
+         - If miss: run extractors, cache, return
+         - Metric: "Cache hit rate" in dashboard
+      
+      4. Tests (45 total)
+         - Cache key generation (5 tests)
+         - Incremental detection (10 tests)
+         - Cache hit/miss flow (10 tests)
+         - Fallback on cache corruption (10 tests)
+         - Performance comparison (10 tests)
+      
+      Expected improvements:
+      - Small repos (<50 files, no change): 30s → 0.5s (60x speedup)
+      - Medium repos (500 files, 10% change): 30s → 5s (6x speedup)
+      - Large repos (5000 files, 1% change): 120s → 10s (12x speedup)
+      
+      Risks & Mitigations:
+      - Risk: Cache invalidation miss (stale results used)
+        Mitigation: Versioning + explicit invalidate command; hash-check before use
+      - Risk: Cache pollution (disk space)
+        Mitigation: TTL + size limits; cleanup job
+    
+    acceptance_criteria:
+      - "AC-PHASE71-S3-001: IncrementalExtractor implemented + tested"
+      - "AC-PHASE71-S3-002: Cache key strategy deterministic (git commit SHA)"
+      - "AC-PHASE71-S3-003: Changed file detection working (git diff)"
+      - "AC-PHASE71-S3-004: Cache hit rate > 70% on repeated runs"
+      - "AC-PHASE71-S3-005: Performance: 10% change = 6x speedup minimum"
+      - "AC-PHASE71-S3-006: 45 tests passing (cache, incremental, perf)"
+      - "AC-PHASE71-S3-007: Backward compatibility (full extract still works)"
+
+  - stage_id: "S4"
+    name: "Manifest-Based Publishing & Lazy-Loading"
+    duration: "4-5 days"
+    effort_hours: 18
+    status: "planned"
+    description: |
+      Implement manifest-driven artifact publishing, enabling per-tab lazy-loading.
+      
+      Deliverables:
+      1. cortex/lens/publisher/lens_manifest_publisher.py
+         - Output structure: lens-data/{repo_id}/
+           ├── index.json (manifest: metadata + artifact pointers)
+           ├── overview/ (summary.json, badges.json)
+           ├── architecture/ (components.json, dependencies.json)
+           ├── domain/ (domain-model.json)
+           ├── data/ (erd.json, lineage.json)
+           ├── security/ (findings.json, threat-model.json)
+           ├── quality/ (metrics.json, hotspots.json)
+           └── evidence/ (evidence-index.json + raw/)
+      
+      2. index.json manifest structure
+         - schemaVersion: "LDv1"
+         - generatedAt: ISO timestamp
+         - hash: SHA256 of full output
+         - artifacts: { overview: "...", architecture: "...", ... }
+         - statistics: { total_nodes, total_edges, extraction_time_ms }
+      
+      3. cortex/lens/loader/lens_manifest_loader.py
+         - Lazy-load per artifact (don't load all tabs upfront)
+         - Fetch artifact JSON on-demand
+         - Cache in-memory after load
+         - Fallback to embedded data if file missing
+      
+      4. Integration with LENS MCP tools
+         - cortex_lens_analyze → outputs manifest
+         - cortex_lens_repos → lists manifests
+         - cortex_lens_artifact_{name} → lazy-load specific artifact
+      
+      5. Tests (45 total)
+         - Manifest generation (10 tests)
+         - Lazy-loading (10 tests)
+         - Fallback behavior (10 tests)
+         - Schema validation (10 tests)
+         - SPA integration (5 tests)
+      
+      Risks & Mitigations:
+      - Risk: Artifact files out-of-sync with manifest
+        Mitigation: Hash verification on load; regenerate if mismatch
+      - Risk: Missing artifacts break SPA
+        Mitigation: Fallback to defaults; render "loading" state
+    
+    acceptance_criteria:
+      - "AC-PHASE71-S4-001: Manifest publisher implemented + tested"
+      - "AC-PHASE71-S4-002: All 9 tab artifacts published correctly"
+      - "AC-PHASE71-S4-003: Manifest schema valid per LDv1"
+      - "AC-PHASE71-S4-004: Lazy-loader works (per-artifact on-demand)"
+      - "AC-PHASE71-S4-005: 45 tests passing (manifest + lazy-load)"
+      - "AC-PHASE71-S4-006: SPA integration verified (dashboard loads from manifest)"
+
+  - stage_id: "S5"
+    name: "Integration, Documentation & Rollout"
+    duration: "3-4 days"
+    effort_hours: 16
+    status: "planned"
+    description: |
+      Integrate all components, document LDv1 standard, and prepare for Phase 72+.
+      
+      Deliverables:
+      1. cortex/lens/ldv1_integration_guide.md
+         - LDv1 specification (schema + evidence protocol)
+         - Analyzer adapter protocol (how to add new analyzer)
+         - Example: Building a custom analyzer for domain X
+         - Migration guide (old → new LENS outputs)
+      
+      2. cortex-registry/_cortex-master/specifications/ldv1-standard.yaml
+         - Canonical LDv1 specification
+         - Version history
+         - Backward compatibility notes
+      
+      3. Dashboard update (minimal)
+         - cortex/lens/dashboard_data_aggregator.py → read from manifest
+         - Lazy-load tabs as user clicks
+         - "Extraction time" metric displayed
+      
+      4. End-to-end tests (15 total)
+         - Full LENS pipeline with all components
+         - Repository analysis → manifest generation → lazy-loading → dashboard render
+         - Multi-repo scenario (if Phase 73 prep needed)
+      
+      5. Performance & scalability verification
+         - Measure on CORTEX repo (156 files, 892 functions)
+         - Measure on sample monorepo (1000+ files)
+         - Cache hit rates, extraction times, memory usage
+      
+      6. Team communication
+         - "LDv1 Ready" announcement
+         - Analyzer adapter protocol documented
+         - Phase 72+ roadmap clarified
+      
+      Risks & Mitigations:
+      - Risk: Discovery of new gap during integration
+        Mitigation: Buffer 2-3 days for fixes; split Phase 71 S5 if needed
+    
+    acceptance_criteria:
+      - "AC-PHASE71-S5-001: LDv1 integration guide complete + published"
+      - "AC-PHASE71-S5-002: ldv1-standard.yaml in registry"
+      - "AC-PHASE71-S5-003: Dashboard reads manifest + lazy-loads tabs"
+      - "AC-PHASE71-S5-004: 15 end-to-end tests passing"
+      - "AC-PHASE71-S5-005: Performance verified (10x improvement on incremental)"
+      - "AC-PHASE71-S5-006: Zero breaking changes; backward compat confirmed"
+      - "AC-PHASE71-S5-007: Phase 72 ready (all dependencies met)"
+
+technical_approach:
+  architecture: |
+    Layer 0 (Foundation):
+    ├── LDv1 Schema (cortex/lens/schemas/)
+    │   ├── Core entities (Repository, Artifact, Node, Edge, Evidence)
+    │   └── Validation (pydantic models + JSON Schema)
+    
+    Layer 1 (Analysis):
+    ├── LENS Analyzers (enhanced)
+    │   ├── GitHistoryAnalyzer (evidence: commit SHA)
+    │   ├── ASTAnalyzer (evidence: file:line)
+    │   ├── CommentExtractor (evidence: file:line + snippet)
+    │   └── SecurityThreatAnalyzer (evidence: CWE + pattern)
+    
+    Layer 2 (Extraction):
+    ├── Incremental Extraction (git-diff keyed)
+    │   ├── Cache (TTL + hash-check)
+    │   └── Selective analyzer invocation
+    
+    Layer 3 (Publishing):
+    ├── Manifest Publisher (9 artifacts)
+    │   ├── index.json (manifest + metadata)
+    │   └── Per-tab JSON files (lazy-loadable)
+    
+    Layer 4 (Consumption):
+    ├── LENS MCP Tools (enhanced)
+    │   ├── cortex_lens_analyze (returns manifest)
+    │   ├── cortex_lens_artifact_{name} (lazy-load)
+    │   └── cortex_lens_repos (multi-repo registry)
+    
+    Layer 5 (Visualization):
+    ├── Dashboard (manifest-aware)
+    │   ├── Lazy-load per tab
+    │   └── Fallback to embedded data
+  
+  dependencies:
+    - Phase 70 (Alignment Remediation) — must complete first
+    - cortex/lens/ (existing analyzers)
+    - cortex/brain/analysis/ (AST, comments)
+    - cortex-registry/ (manifest storage)
+  
+  deployment_strategy: |
+    1. Develop in feature branch (phase-71-lens-ldv1)
+    2. Incremental PR review (S1 → S2 → S3 → S4 → S5)
+    3. Integration testing on CORTEX repo (self-dogfooding)
+    4. Measurement & optimization (perf baseline)
+    5. Merge to main when all stages complete + 180 tests passing
+    6. Announce "LDv1 Ready" + enable Phase 72
+
+dependencies:
+  blocks_phases:
+    - "phase-72-unified-digest-ingest-facade"
+    - "phase-73-multi-repo-lens-consolidation"
+    - "phase-74-role-based-lens-dashboard"
+  depends_on_phases:
+    - "phase-70-alignment-remediation"
+  related_phases:
+    - "phase-66-lens-knowledge-graph-domain-intelligence"
+    - "phase-65-lens-intelligence-remediation"
+
+effort_estimate:
+  s1_schema: "16 hours"
+  s2_analyzers: "20 hours"
+  s3_incremental: "24 hours"
+  s4_manifest: "18 hours"
+  s5_integration: "16 hours"
+  total: "94 hours (~2.5 weeks at 40 hrs/week)"
+  buffer: "10 hours (overhead, reviews, fixes)"
+  contingency: "20 hours (if new gaps discovered)"
+
+risks_and_mitigations:
+  - risk: "Schema too restrictive; breaks existing LENS outputs"
+    severity: "HIGH"
+    mitigation: |
+      - Mark v1 as "beta"
+      - Add explicit schemaVersion to all outputs
+      - Maintain backward compat mode (old outputs parse as LDv1)
+      - Test against existing dashboard.json
+  
+  - risk: "Evidence protocol adds 5-10% overhead"
+    severity: "MEDIUM"
+    mitigation: |
+      - Measure baseline (git log, AST parse, comment scan)
+      - Profile hot paths
+      - Optimize if overhead > 10%
+      - Accept slight overhead for accuracy benefit
+  
+  - risk: "Cache invalidation miss (stale results)"
+    severity: "HIGH"
+    mitigation: |
+      - Versioning + explicit invalidate command
+      - Hash-check before using cached results
+      - TTL expiration (30 days max age)
+      - Integration tests verify cache consistency
+  
+  - risk: "Discovery of new gap during S3-S4"
+    severity: "MEDIUM"
+    mitigation: |
+      - Buffer 2-3 days in schedule
+      - Split Phase 71 if needed (S1-S2 core, S3-S5 defer)
+      - Pivot to Phase 70 if blockers emerge
+
+success_metrics:
+  - "180 tests passing (schema + analyzers + cache + manifest + e2e)"
+  - "90%+ test coverage (cortex/lens/)"
+  - "Zero breaking changes to existing MCP tools"
+  - "10x speedup on incremental analysis (small repos, no change)"
+  - "Evidence present on 100% of extracted nodes"
+  - "LDv1 standard published + documented"
+  - "Dashboard lazy-loads per-tab (verify with SPA)"
+  - "Phase 72+ unblocked and ready to proceed"
+
+approval_gates:
+  - gate: "Schema approval"
+    owner: "Asif Hussain"
+    criteria: "LDv1 schema aligns with orchestrator needs; no breaking changes"
+  
+  - gate: "Evidence protocol acceptance"
+    owner: "Asif Hussain"
+    criteria: "Confidence scoring rationale documented; acceptable overhead measured"
+  
+  - gate: "Performance validation"
+    owner: "Asif Hussain"
+    criteria: "10x improvement confirmed; cache hit rate > 70%"
+  
+  - gate: "Integration sign-off"
+    owner: "Asif Hussain"
+    criteria: "All 180 tests passing; backward compat confirmed; Phase 72 ready"
+
+notes: |
+  Phase 71 is the **foundational intelligence layer** for CORTEX's enterprise vision.
+  Once complete, it enables:
+  
+  - Phase 72: UnifiedDigestIngestionFacade (composition layer)
+  - Phase 73: Multi-repo LENS consolidation (cross-repo analysis)
+  - Phase 74: Role-based LENS dashboard (business + engineering views)
+  - Phase 75+: Advanced visualization & compliance reporting
+  
+  This phase is **not** about visualization (that's Phase 74). It's about making LENS
+  data accurate, traceable, incremental, and enterprise-ready.
+  
+  **Strategic Value**: Once LDv1 is production-grade, CORTEX becomes the source of truth
+  for intelligent analysis across the entire development lifecycle.

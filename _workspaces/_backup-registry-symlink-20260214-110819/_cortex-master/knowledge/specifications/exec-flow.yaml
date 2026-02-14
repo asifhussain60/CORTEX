@@ -1,0 +1,305 @@
+# CORTEX Execution Flow Specification (Phase C)
+# Authority: MasterOrchestrator + WorkflowOrchestrator
+# Purpose: Define stage-based execution flow for all operations
+# Status: ACTIVE (Phase C Production Deployment)
+
+version: "1.0"
+generated_at: 2026-02-09
+authority: "CORTEX Execution Team"
+
+# Master Execution Flow (7-Stage Model)
+execution_stages:
+  
+  STAGE_1_COMPREHENSION:
+    ordinal: 1
+    name: "Comprehension & Context Loading"
+    orchestrator: "MasterOrchestrationStage1"
+    timeout_seconds: 60
+    
+    tasks:
+      - load_user_request:
+          description: "Parse and understand user intent"
+          expected_duration_seconds: 5
+      
+      - load_session_context:
+          description: "Load 24-hour session history"
+          expected_duration_seconds: 10
+      
+      - load_codebase_context:
+          description: "Load relevant code context via LENS"
+          expected_duration_seconds: 30
+      
+      - generate_comprehension_summary:
+          description: "Summarize context for downstream stages"
+          expected_duration_seconds: 15
+    
+    output: "ComprehensionResult (parsed intent, session context, code context)"
+    next_stage: "STAGE_2_INTENT_VERIFICATION"
+    on_failure: "HALT (comprehension is critical)"
+  
+  STAGE_2_INTENT_VERIFICATION:
+    ordinal: 2
+    name: "Intent Verification & Classification"
+    orchestrator: "IntentRouter"
+    timeout_seconds: 30
+    
+    tasks:
+      - classify_intent:
+          description: "Classify user intent (IMPLEMENT, FIX, REFACTOR, ANALYZE, AUDIT, PLAN, ONBOARD, DEBUG)"
+          expected_duration_seconds: 5
+      
+      - verify_intent_validity:
+          description: "Verify intent is valid for current context"
+          expected_duration_seconds: 5
+      
+      - load_routing_specification:
+          description: "Load intent-routing.yaml for orchestrator selection"
+          expected_duration_seconds: 5
+      
+      - select_primary_orchestrator:
+          description: "Select primary orchestrator based on routing spec"
+          expected_duration_seconds: 5
+      
+      - extract_intent_metadata:
+          description: "Extract confidence, prerequisites, validation gates"
+          expected_duration_seconds: 5
+    
+    output: "IntentVerificationResult (classified intent, primary orchestrator, prerequisites)"
+    next_stage: "STAGE_3_APPROVAL_GATES"
+    on_failure: "REROUTE (try alternative orchestrator)"
+  
+  STAGE_3_APPROVAL_GATES:
+    ordinal: 3
+    name: "Validation & Approval Gates"
+    orchestrator: "EnforcementOrchestrator"
+    timeout_seconds: 300  # 5 minutes for user approval
+    
+    subtasks:
+      STAGE_3A_DoRGate:
+        description: "DoR (Definition of Ready) approval for implementation intents"
+        applicable_intents: ["IMPLEMENT", "FIX", "REFACTOR"]
+        gate_class: "DoRApprovalGate"
+        user_approval_required: true
+        approval_timeout_seconds: 300
+        
+      STAGE_3B_ChallengeGate:
+        description: "Generate architecture challenges"
+        applicable_intents: ["ANALYZE", "DESIGN", "AUDIT", "PLAN"]
+        gate_class: "ChallengeGate"
+        user_approval_required: false
+        auto_timeout_seconds: 60
+        
+      STAGE_3C_GovernanceGate:
+        description: "Enforce CORE rules and governance"
+        applicable_intents: ["IMPLEMENT", "FIX", "REFACTOR", "AUDIT"]
+        gate_class: "GovernanceEnforcementGate"
+        user_approval_required: false
+    
+    output: "ApprovalResult (gates passed/failed, user decisions)"
+    next_stage: "STAGE_4_PRE_EXECUTION"
+    on_failure: "HALT_WITH_FEEDBACK (show required actions)"
+  
+  STAGE_4_PRE_EXECUTION:
+    ordinal: 4
+    name: "Pre-Execution Setup & Planning"
+    orchestrator: "PlanOrchestrator"
+    timeout_seconds: 120
+    
+    tasks:
+      - validate_prerequisites:
+          description: "Verify all prerequisites from routing spec are met"
+          expected_duration_seconds: 10
+      
+      - setup_execution_environment:
+          description: "Prepare environment (install deps, configure systems)"
+          expected_duration_seconds: 60
+      
+      - generate_execution_plan:
+          description: "Create detailed execution plan with stages and checkpoints"
+          expected_duration_seconds: 30
+      
+      - decompose_into_incremental_tasks:
+          description: "Break into <500 LOC increments if needed"
+          expected_duration_seconds: 20
+    
+    output: "ExecutionPlan (tasks, increments, checkpoints, estimated duration)"
+    next_stage: "STAGE_5_EXECUTION"
+    on_failure: "HALT (cannot proceed without valid plan)"
+  
+  STAGE_5_EXECUTION:
+    ordinal: 5
+    name: "Primary Orchestrator Execution"
+    orchestrator: "Selected via routing (TDDOrchestrator, RefactoringOrchestrator, etc.)"
+    timeout_seconds: 3600  # Varies by operation, 1 hour max for incremental
+    
+    execution_modes:
+      INCREMENTAL:
+        description: "Execute in <500 LOC increments with checkpoints"
+        orchestrator: "WrappedTDDOrchestrator"
+        max_tokens_per_subtask: 10000
+        checkpoint_frequency: "after each increment"
+      
+      STANDARD:
+        description: "Execute in single operation"
+        orchestrator: "Primary orchestrator directly"
+        checkpoint_frequency: "none"
+    
+    output: "ExecutionResult (success/failure, artifacts, metrics)"
+    next_stage: "STAGE_6_VALIDATION"
+    on_failure: "CAPTURE_DEBUG_CONTEXT (for /debug workflow)"
+  
+  STAGE_6_VALIDATION:
+    ordinal: 6
+    name: "Post-Execution Validation"
+    orchestrator: "EnforcementOrchestrator"
+    timeout_seconds: 120
+    
+    tasks:
+      - run_unit_tests:
+          description: "Execute unit tests (minimum 80% coverage required)"
+          expected_duration_seconds: 30
+      
+      - run_lint_checks:
+          description: "Run pylint, black, mypy (zero violations)"
+          expected_duration_seconds: 20
+      
+      - run_integration_tests:
+          description: "Run integration tests if available"
+          expected_duration_seconds: 40
+      
+      - check_performance:
+          description: "Verify no performance regression >20%"
+          expected_duration_seconds: 15
+      
+      - security_scan:
+          description: "Run bandit + safety (zero critical violations)"
+          expected_duration_seconds: 15
+    
+    output: "ValidationResult (all checks passed/failed, metrics)"
+    next_stage: "STAGE_7_CONTEXT_SYNTHESIS"
+    on_failure: "HALT_WITH_VALIDATION_REPORT (show failures)"
+  
+  STAGE_7_CONTEXT_SYNTHESIS:
+    ordinal: 7
+    name: "Context Synthesis & Copilot Handoff"
+    orchestrator: "ContextCrystallizationLayer"
+    timeout_seconds: 30
+    
+    tasks:
+      - synthesize_result_context:
+          description: "Synthesize all outputs into coherent context"
+          expected_duration_seconds: 10
+      
+      - optimize_token_usage:
+          description: "Apply cost optimization (target 20KB max)"
+          expected_duration_seconds: 10
+      
+      - format_copilot_response:
+          description: "Format for Copilot chat (markdown, code, tables)"
+          expected_duration_seconds: 5
+      
+      - log_session_completion:
+          description: "Log session metrics and completion status"
+          expected_duration_seconds: 5
+    
+    output: "CopilotResponse (formatted, optimized, ready for user)"
+    next_stage: "COMPLETE"
+    on_failure: "LOG_ERROR_AND_DELIVER_PARTIAL (best effort)"
+
+# Stage Flow Variations by Intent
+intent_stage_flows:
+  
+  IMPLEMENT:
+    stages: ["STAGE_1", "STAGE_2", "STAGE_3", "STAGE_4", "STAGE_5", "STAGE_6", "STAGE_7"]
+    primary_orchestrator: "TDDOrchestrator"
+    execution_mode: "INCREMENTAL"
+    estimated_duration_minutes: 30
+    
+  FIX:
+    stages: ["STAGE_1", "STAGE_2", "STAGE_3", "STAGE_4", "STAGE_5", "STAGE_6", "STAGE_7"]
+    primary_orchestrator: "TDDOrchestrator"
+    execution_mode: "STANDARD"
+    estimated_duration_minutes: 15
+    
+  REFACTOR:
+    stages: ["STAGE_1", "STAGE_2", "STAGE_3", "STAGE_4", "STAGE_5", "STAGE_6", "STAGE_7"]
+    primary_orchestrator: "RefactoringOrchestrator"
+    execution_mode: "INCREMENTAL"
+    estimated_duration_minutes: 20
+    
+  ANALYZE:
+    stages: ["STAGE_1", "STAGE_2", "STAGE_3", "STAGE_7"]
+    primary_orchestrator: "LensAnalysisOrchestrator"
+    execution_mode: "STANDARD"
+    estimated_duration_minutes: 5
+    skip_validation: true
+    
+  AUDIT:
+    stages: ["STAGE_1", "STAGE_2", "STAGE_3", "STAGE_4", "STAGE_6", "STAGE_7"]
+    primary_orchestrator: "EnforcementOrchestrator"
+    execution_mode: "STANDARD"
+    estimated_duration_minutes: 10
+    
+  PLAN:
+    stages: ["STAGE_1", "STAGE_2", "STAGE_3", "STAGE_4", "STAGE_7"]
+    primary_orchestrator: "PlanOrchestrator"
+    execution_mode: "STANDARD"
+    estimated_duration_minutes: 8
+    skip_validation: true
+    
+  ONBOARD:
+    stages: ["STAGE_1", "STAGE_2", "STAGE_3", "STAGE_4", "STAGE_5", "STAGE_7"]
+    primary_orchestrator: "RepositoryOnboardingOrchestrator"
+    execution_mode: "STANDARD"
+    estimated_duration_minutes: 15
+    skip_validation: true
+    
+  DEBUG:
+    stages: ["STAGE_1", "STAGE_2", "STAGE_5", "STAGE_6", "STAGE_7"]
+    primary_orchestrator: "TDDOrchestrator"
+    execution_mode: "INCREMENTAL"
+    estimated_duration_minutes: 10
+
+# Cross-Stage Dependencies
+dependencies:
+  STAGE_2_requires_STAGE_1: "Intent verification needs comprehension context"
+  STAGE_3_requires_STAGE_2: "Approval gates need verified intent"
+  STAGE_4_requires_STAGE_3: "Execution planning needs approval"
+  STAGE_5_requires_STAGE_4: "Execution needs valid plan"
+  STAGE_6_requires_STAGE_5: "Validation needs execution artifacts"
+  STAGE_7_requires_STAGE_6: "Context synthesis needs validation results"
+
+# Error Handling & Recovery
+error_handling:
+  STAGE_1_failure: "HALT_SESSION - comprehension critical"
+  STAGE_2_failure: "REROUTE_TO_SECONDARY - try alternative orchestrator"
+  STAGE_3_failure: "HALT_WITH_FEEDBACK - show approval/gate failures"
+  STAGE_4_failure: "HALT - cannot proceed without valid plan"
+  STAGE_5_failure: "CAPTURE_DEBUG_CONTEXT - enable /debug workflow"
+  STAGE_6_failure: "HALT_WITH_VALIDATION_REPORT - show test/lint failures"
+  STAGE_7_failure: "LOG_ERROR_AND_DELIVER_PARTIAL - best effort delivery"
+
+# SQLite Trace Configuration
+tracing:
+  enabled: true
+  table_name: "execution_flow_stages"
+  columns:
+    - timestamp: "ISO8601 stage start time"
+    - stage_name: "STAGE_1, STAGE_2, etc."
+    - intent: "User intent type"
+    - duration_seconds: "Actual execution time"
+    - result: "PASS/FAIL/SKIP"
+    - ac_marker: "Audit trail marker"
+  retention_days: 90
+
+# Phase C Metadata
+metadata:
+  version: "1.0"
+  created_at: "2026-02-09"
+  updated_at: "2026-02-09"
+  author: "CORTEX Execution Team"
+  phase: "Phase C (Orchestrator Wiring Completion)"
+  status: "ACTIVE"
+  total_stages: 7
+  core_orchestrators_involved: 8
+  integration_complexity: "HIGH"

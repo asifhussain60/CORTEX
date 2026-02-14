@@ -1,0 +1,322 @@
+# CORTEX Intent Routing Specification (Phase 55)
+# Authority: MasterOrchestrator v2.0 + cortex-architect.prompt.md v15.3
+# Purpose: Disambiguate overlapping intent handlers with priority-based selection
+# Status: ACTIVE (Phase B Production Deployment)
+
+version: "1.0"
+generated_at: 2026-02-09
+authority: "MasterOrchestrator intent routing"
+
+# Intent Routing Matrix with Priority Levels
+# Priority determines orchestrator selection when multiple candidates exist
+# Level 1 (HIGHEST): Primary handler
+# Level 2: Secondary handler (when primary unavailable)
+# Level 3: Fallback handler (when primary + secondary unavailable)
+
+routing_matrix:
+  IMPLEMENT:
+    description: "Implement new feature with TDD approach"
+    primary:
+      orchestrator: "TDDOrchestrator"
+      priority: 1
+      prerequisites:
+        - user_story_present: true
+        - test_framework_available: true
+      validation_gate: "DoRApprovalGate"
+      stage_flow: ["RED", "GREEN", "REFACTOR"]
+      expected_duration_hours: 4.0
+    secondary:
+      orchestrator: "CodePlannerOrchestrator"
+      priority: 2
+      when_primary_unavailable: "Can help with planning phase"
+    fallback:
+      orchestrator: "RefactoringOrchestrator"
+      priority: 3
+      when_primary_unavailable: "Can implement via refactoring pattern"
+
+  FIX:
+    description: "Fix identified bug or issue"
+    primary:
+      orchestrator: "TDDOrchestrator"
+      priority: 1
+      prerequisites:
+        - bug_ticket_present: true
+        - root_cause_identified: true
+      validation_gate: "DoRApprovalGate"
+      stage_flow: ["IDENTIFY", "FIX", "VERIFY"]
+      expected_duration_hours: 2.0
+    secondary:
+      orchestrator: "EnforcementOrchestrator"
+      priority: 2
+      when_primary_unavailable: "Can detect + prioritize fixes"
+    fallback:
+      orchestrator: "RefactoringOrchestrator"
+      priority: 3
+      when_primary_unavailable: "Can fix via code rewrite"
+
+  REFACTOR:
+    description: "Improve code quality and structure"
+    primary:
+      orchestrator: "RefactoringOrchestrator"
+      priority: 1
+      prerequisites:
+        - target_code_identified: true
+        - quality_metrics_available: true
+      validation_gate: "ChallengGate"
+      stage_flow: ["ANALYZE", "EXTRACT", "TEST", "VALIDATE"]
+      expected_duration_hours: 3.0
+    secondary:
+      orchestrator: "TDDOrchestrator"
+      priority: 2
+      when_primary_unavailable: "Can refactor with tests"
+    fallback:
+      orchestrator: "LENSSynthesis"
+      priority: 3
+      when_primary_unavailable: "Can suggest refactoring patterns"
+
+  ANALYZE:
+    description: "Analyze code for patterns, duplication, quality"
+    primary:
+      orchestrator: "LENSSynthesis"
+      priority: 1
+      prerequisites:
+        - code_path_provided: true
+      validation_gate: null
+      stage_flow: ["LANGUAGE", "EXAMINATION", "NAVIGATION", "SYNTHESIS"]
+      expected_duration_hours: 1.0
+    secondary:
+      orchestrator: "MasterOrchestrator"
+      priority: 2
+      when_primary_unavailable: "Can delegate to MCP tools"
+    fallback:
+      mcp_tool: "cortex_lens_analyze"
+      priority: 3
+      when_primary_unavailable: "MCP tool provides basic analysis"
+
+  AUDIT:
+    description: "Perform codebase health audit"
+    primary:
+      orchestrator: "EnforcementOrchestrator"
+      priority: 1
+      prerequisites:
+        - governance_framework_active: true
+      validation_gate: null
+      stage_flow: ["SCAN", "CLASSIFY", "REPORT"]
+      expected_duration_hours: 2.0
+    secondary:
+      orchestrator: "MasterOrchestrator"
+      priority: 2
+      when_primary_unavailable: "Can coordinate audit agents"
+    fallback:
+      orchestrator: "LENSSynthesis"
+      priority: 3
+      when_primary_unavailable: "Can analyze code quality"
+
+  PLAN:
+    description: "Create or update project plan"
+    primary:
+      orchestrator: "PlanOrchestrator"
+      priority: 1
+      prerequisites:
+        - phase_registry_available: true
+        - git_repo_available: true
+      validation_gate: "PlanValidationGate"
+      stage_flow: ["SETUP", "EXECUTE", "MONITOR", "TEARDOWN"]
+      expected_duration_hours: 1.5
+    secondary:
+      orchestrator: "MasterOrchestrator"
+      priority: 2
+      when_primary_unavailable: "Can execute via execute_operation"
+    fallback: null
+
+  ONBOARD:
+    description: "Onboard new repository to CORTEX"
+    primary:
+      orchestrator: "RepositoryOnboardingOrchestrator"
+      priority: 1
+      prerequisites:
+        - repo_url_provided: true
+        - access_verified: true
+      validation_gate: "SecurityCheckpointAgent"
+      stage_flow: ["SCAN", "ANALYZE", "CONFIGURE", "VALIDATE"]
+      expected_duration_hours: 3.0
+    secondary: null
+    fallback: null
+
+  DEBUG:
+    description: "Debug failing code or test"
+    primary:
+      orchestrator: "DebugOrchestrator"
+      priority: 1
+      prerequisites:
+        - error_trace_available: true
+        - test_case_reproducible: true
+      validation_gate: null
+      stage_flow: ["INJECT", "CAPTURE", "ANALYZE", "SUGGEST"]
+      expected_duration_hours: 2.0
+    secondary:
+      orchestrator: "TDDOrchestrator"
+      priority: 2
+      when_primary_unavailable: "Can use TDD for debugging"
+    fallback: null
+
+# Intent Disambiguation Rules (used when multiple intents ambiguous)
+disambiguation:
+  similar_intents:
+    - {pair: [IMPLEMENT, REFACTOR], priority: "Choose IMPLEMENT if new feature, REFACTOR if code improvement"}
+    - {pair: [ANALYZE, AUDIT], priority: "Choose ANALYZE for code review, AUDIT for governance check"}
+    - {pair: [FIX, REFACTOR], priority: "Choose FIX if bug reported, REFACTOR if code quality"}
+    - {pair: [PLAN, IMPLEMENT], priority: "Choose PLAN if high-level, IMPLEMENT if detailed"}
+
+# Orchestrator Availability Checks (executed before routing)
+prerequisite_checks:
+  TDDOrchestrator:
+    - user_story_clear: true
+    - test_framework_installed: true
+    - git_repo_initialized: true
+  
+  RefactoringOrchestrator:
+    - target_code_identified: true
+    - refactoring_rules_loaded: true
+  
+  LENSSynthesis:
+    - code_path_provided: true
+    - lens_parser_active: true
+  
+  PlanOrchestrator:
+    - phase_registry_exists: true
+    - git_config_valid: true
+
+# Fallback Strategy (when primary orchestrator unavailable)
+fallback_strategy:
+  level_1_failure: "Try secondary orchestrator"
+  level_2_failure: "Try fallback orchestrator"
+  level_3_failure: "Try MCP tool equivalent"
+  all_failed: "Return user-friendly error with next steps"
+
+# Trace Logging Configuration (for audit trail)
+tracing:
+  enabled: true
+  log_orchestrator_selection: true
+  log_reasoning: true
+  log_prerequisites_checked: true
+  sqlite_table: "orchestrator_intent_routing"
+  fields:
+    - timestamp
+    - user_intent
+    - candidates_evaluated
+    - primary_selected
+    - priority_score
+    - prerequisites_met
+    - execution_status
+
+# Validation Gates (ensure intent routed safely)
+validation_gates:
+  DoRApprovalGate:
+    description: "Definition of Ready approval for IMPLEMENT/FIX"
+    triggers_on_intents: [IMPLEMENT, FIX]
+    required_checks:
+      - story_description_clear: true
+      - acceptance_criteria_defined: true
+      - design_reviewed: true
+    approval_required: true
+  
+  ChallengeGate:
+    description: "Challenge gate for risky refactorings"
+    triggers_on_intents: [REFACTOR]
+    required_checks:
+      - impact_analysis_complete: true
+      - test_coverage_sufficient: true
+      - rollback_plan_ready: true
+    approval_required: true
+  
+  PlanValidationGate:
+    description: "Validate plan before execution"
+    triggers_on_intents: [PLAN]
+    required_checks:
+      - phases_sequenced: true
+      - dependencies_resolved: true
+      - resources_allocated: true
+    approval_required: false
+
+# Validation Gates Configuration
+validation_gates:
+  DoRApprovalGate:
+    description: "Requires Definition of Ready approval before proceeding"
+    intents: ["IMPLEMENT", "FIX", "REFACTOR"]
+    required_checks:
+      - acceptance_criteria_defined: true
+      - test_plan_created: true
+      - resource_estimation_done: true
+  
+  ChallengeGate:
+    description: "Enables architectural challenge generation"
+    intents: ["ANALYZE", "DESIGN", "AUDIT"]
+    required_checks:
+      - scope_defined: true
+  
+  PlanValidationGate:
+    description: "Validates plan completeness"
+    intents: ["PLAN"]
+    required_checks:
+      - phases_sequenced: true
+      - dependencies_resolved: true
+
+# Execution Flow Stages
+execution_flow:
+  IMPLEMENT:
+    stages: ["RED", "GREEN", "REFACTOR", "DOCUMENTATION"]
+    average_duration_hours: 4.0
+  
+  FIX:
+    stages: ["IDENTIFY", "FIX", "VERIFY", "REGRESSION_TEST"]
+    average_duration_hours: 2.0
+  
+  REFACTOR:
+    stages: ["ANALYZE", "PLAN", "IMPLEMENT", "TEST"]
+    average_duration_hours: 3.0
+  
+  ANALYZE:
+    stages: ["SCAN", "CLASSIFY", "REPORT"]
+    average_duration_hours: 1.0
+  
+  AUDIT:
+    stages: ["SCAN", "DETECT", "REPORT"]
+    average_duration_hours: 2.0
+  
+  PLAN:
+    stages: ["DISCOVER", "STRUCTURE", "VALIDATE"]
+    average_duration_hours: 1.5
+  
+  ONBOARD:
+    stages: ["SCAN", "REGISTER", "SYNC"]
+    average_duration_hours: 1.0
+  
+  DEBUG:
+    stages: ["CAPTURE", "ANALYZE", "SUGGEST_FIX"]
+    average_duration_hours: 1.0
+
+# SQLite Trace Configuration
+tracing:
+  enabled: true
+  table_name: "orchestrator_intent_routing"
+  columns:
+    - timestamp: "ISO8601 format"
+    - intent: "Classified user intent (IMPLEMENT, FIX, etc.)"
+    - primary_orchestrator: "Selected orchestrator name"
+    - prerequisites_met: "Boolean - prerequisites validation result"
+    - validation_gate_used: "Validation gate name if applicable"
+    - ac_marker: "Audit trail marker (AC-PHASE-B-001)"
+  retention_days: 90
+  sampling_rate: 1.0
+
+# Phase B Metadata
+metadata:
+  version: "1.0"
+  created_at: "2026-02-09"
+  updated_at: "2026-02-09"
+  author: "CORTEX Orchestrator Wiring Team"
+  authority: "MasterOrchestrator v2.0 + cortex-architect.prompt.md v15.3"
+  status: "ACTIVE"
+  phase: "Phase 55 (Autonomous Execution Phase B)"
+  purpose: "Disambiguate overlapping intent handlers with priority-based selection"

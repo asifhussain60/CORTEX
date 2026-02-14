@@ -1,0 +1,339 @@
+# ============================================================================
+# PHASE 48-REGISTRY: REGISTRY ISOLATION MULTI-TENANT
+# ============================================================================
+# Priority: P0-CRITICAL | Wave: WAVE-1-INFRASTRUCTURE
+# Status: ACTIVE | Unblocked by: Phase 48 Complete ✅
+# ROI: 0.93 | Tests Target: 55
+# ============================================================================
+
+phase_metadata:
+  phase_id: "phase-48-registry-isolation"
+  title: "Registry Isolation Multi-Tenant"
+  status: "ACTIVE"
+  priority: "P0-CRITICAL"
+  wave: "WAVE-1-INFRASTRUCTURE"
+  estimated_effort: "1 week (5-7 sessions)"
+  roi: 0.93
+  tests_target: 55
+  created_at: "2026-02-12"
+  updated_at: "2026-02-12"
+  blocked_by: []  # Unblocked by Phase 48 completion
+  blocks: []
+  tags: ["multi-tenant", "registry", "isolation", "security"]
+
+# ============================================================================
+# PROBLEM STATEMENT
+# ============================================================================
+
+problem_statement: |
+  Current registry is single-tenant (cortex-registry/):
+  - Cannot isolate user-specific configurations
+  - No support for multi-workspace scenarios
+  - Cross-workspace pollution (phases/agents shared globally)
+  - No tenant-based access control
+  - Enterprise clients need data isolation guarantees
+  - Onboarding multiple teams to same CORTEX instance risky
+
+# ============================================================================
+# OBJECTIVES
+# ============================================================================
+
+objectives:
+  primary:
+    - "Multi-tenant registry architecture with workspace isolation"
+    - "Per-workspace registry paths (cortex-registry/{workspace_id}/)"
+    - "Tenant-based access control and security boundaries"
+    - "Backward compatibility with single-tenant mode"
+    - "Zero cross-workspace pollution guarantees"
+  
+  secondary:
+    - "Registry migration tool (single → multi-tenant)"
+    - "Tenant-specific knowledge base support"
+    - "Per-tenant audit logs and metrics"
+    - "Performance: ≤100ms registry load per tenant"
+    - "Caching: ≥70% cache hit rate"
+
+# ============================================================================
+# SCOPE
+# ============================================================================
+
+scope:
+  in_scope:
+    - "TenantContext class for workspace identification"
+    - "MultiTenantRegistry class with isolation guarantees"
+    - "Workspace-based registry loader (cortex-registry/{workspace_id}/)"
+    - "Tenant context injection in MCP tools"
+    - "Registry migration utility (single → multi-tenant)"
+    - "Tenant-aware knowledge loader"
+    - "Per-tenant tool registry scoping"
+    - "Access control policies per tenant"
+  
+  out_of_scope:
+    - "Cloud-based registry storage (future phase)"
+    - "Registry replication across machines (future phase)"
+    - "Cross-tenant collaboration features (future phase)"
+    - "Tenant billing/metering (future phase)"
+
+# ============================================================================
+# STAGE BREAKDOWN
+# ============================================================================
+
+stages:
+  stage_1:
+    name: "Multi-Tenant Architecture"
+    estimated_effort: "2 days (1-2 sessions)"
+    status: "NOT STARTED"
+    tests: 18
+    
+    deliverables:
+      - "TenantContext class (workspace_id, tenant_id, isolation_mode)"
+      - "WorkspaceContext dataclass with isolation detection"
+      - "RegistryFactory for creating isolated instances"
+      - "Workspace ID generation and validation"
+      - "Tenant-based path resolution"
+      - "Cache key generation (workspace_id:tenant_id)"
+    
+    files_to_create:
+      - "cortex/registry/tenant_context.py"
+      - "cortex/registry/workspace_context.py"
+      - "cortex/registry/registry_factory.py"
+      - "tests/unit/registry/test_tenant_context.py"
+      - "tests/unit/registry/test_workspace_context.py"
+      - "tests/unit/registry/test_registry_factory.py"
+    
+    acceptance_criteria:
+      - "AC-PHASE48-REG-S1-001: TenantContext identifies unique isolation boundaries"
+      - "AC-PHASE48-REG-S1-002: RegistryFactory creates isolated instances per workspace"
+      - "AC-PHASE48-REG-S1-003: Default workspace_id='local' for individual devs"
+      - "AC-PHASE48-REG-S1-004: Cache keys unique per workspace+tenant"
+      - "AC-PHASE48-REG-S1-005: Isolation mode detection (local vs multi-tenant)"
+  
+  stage_2:
+    name: "Registry Loader Refactor"
+    estimated_effort: "2 days (1-2 sessions)"
+    status: "NOT STARTED"
+    tests: 15
+    
+    deliverables:
+      - "Enhanced GitBackedRegistry with tenant support"
+      - "Tenant-aware YAML loading (cortex-registry/{workspace_id}/)"
+      - "Fallback to global registry for shared resources"
+      - "Registry caching per tenant (70% hit rate target)"
+      - "Path resolution: workspace → global fallback"
+    
+    files_to_modify:
+      - "cortex/registry/git_backed_registry.py"
+    
+    files_to_create:
+      - "cortex/registry/multi_tenant_registry.py"
+      - "tests/unit/registry/test_multi_tenant_registry.py"
+      - "tests/integration/registry/test_multi_tenant_integration.py"
+    
+    acceptance_criteria:
+      - "AC-PHASE48-REG-S2-001: Load workspace-specific YAML from cortex-registry/{workspace_id}/"
+      - "AC-PHASE48-REG-S2-002: Fallback to global registry if workspace registry empty"
+      - "AC-PHASE48-REG-S2-003: Cache per tenant with ≥70% hit rate"
+      - "AC-PHASE48-REG-S2-004: No cross-tenant data leakage (validated by tests)"
+      - "AC-PHASE48-REG-S2-005: Backward compatibility with single-tenant mode"
+  
+  stage_3:
+    name: "MCP Integration"
+    estimated_effort: "1 day (1 session)"
+    status: "NOT STARTED"
+    tests: 10
+    
+    deliverables:
+      - "Tenant context injection in MCP tools"
+      - "Workspace-scoped MCP tool execution"
+      - "Per-tenant tool registry (isolated tool instances)"
+      - "MCP tools respect workspace boundaries"
+    
+    files_to_modify:
+      - "cortex/mcp/server.py"
+      - "cortex/mcp/tools/__init__.py"
+    
+    files_to_create:
+      - "tests/unit/mcp/test_tenant_injection.py"
+      - "tests/integration/mcp/test_multi_tenant_mcp.py"
+    
+    acceptance_criteria:
+      - "AC-PHASE48-REG-S3-001: MCP tools receive workspace context automatically"
+      - "AC-PHASE48-REG-S3-002: Tool execution isolated per workspace"
+      - "AC-PHASE48-REG-S3-003: No cross-workspace tool state leakage"
+  
+  stage_4:
+    name: "Migration & Validation"
+    estimated_effort: "2 days (1-2 sessions)"
+    status: "NOT STARTED"
+    tests: 12
+    
+    deliverables:
+      - "Migration tool: single-tenant → multi-tenant"
+      - "Backward compatibility mode for existing users"
+      - "Validation: 100% workspace isolation (no cross-contamination)"
+      - "Per-tenant audit logs"
+      - "Tenant-based metrics collection"
+    
+    files_to_create:
+      - "cortex/registry/migration.py"
+      - "tests/unit/registry/test_migration.py"
+      - "tests/integration/registry/test_isolation_guarantees.py"
+    
+    acceptance_criteria:
+      - "AC-PHASE48-REG-S4-001: Migration tool successfully converts single → multi-tenant"
+      - "AC-PHASE48-REG-S4-002: 100% backward compatibility (no breaking changes)"
+      - "AC-PHASE48-REG-S4-003: Zero cross-workspace pollution (validated by stress tests)"
+      - "AC-PHASE48-REG-S4-004: Performance: Registry load ≤100ms per tenant"
+      - "AC-PHASE48-REG-S4-005: Caching: ≥70% cache hit rate under load"
+
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+
+success_criteria:
+  isolation:
+    - "100% workspace isolation (no cross-contamination)"
+    - "Tenant-specific configurations isolated"
+    - "No shared mutable state across workspaces"
+  
+  compatibility:
+    - "100% backward compatibility with single-tenant mode"
+    - "Zero breaking changes for existing users"
+    - "Seamless migration path from single → multi-tenant"
+  
+  performance:
+    - "Registry load time: ≤100ms per tenant"
+    - "Caching effectiveness: ≥70% cache hit rate"
+    - "No degradation for single-tenant users"
+  
+  security:
+    - "Tenant-based access control enforced"
+    - "Cross-tenant data access blocked (validated)"
+    - "Audit logs per tenant operational"
+
+# ============================================================================
+# TESTS REQUIRED
+# ============================================================================
+
+tests_required:
+  total: 55
+  breakdown:
+    stage_1: 18
+    stage_2: 15
+    stage_3: 10
+    stage_4: 12
+  
+  categories:
+    unit_tests: 35
+    integration_tests: 15
+    stress_tests: 5
+
+# ============================================================================
+# FILES TO CREATE
+# ============================================================================
+
+files_to_create:
+  implementation:
+    - "cortex/registry/tenant_context.py"
+    - "cortex/registry/workspace_context.py"
+    - "cortex/registry/registry_factory.py"
+    - "cortex/registry/multi_tenant_registry.py"
+    - "cortex/registry/migration.py"
+  
+  tests:
+    - "tests/unit/registry/test_tenant_context.py"
+    - "tests/unit/registry/test_workspace_context.py"
+    - "tests/unit/registry/test_registry_factory.py"
+    - "tests/unit/registry/test_multi_tenant_registry.py"
+    - "tests/unit/registry/test_migration.py"
+    - "tests/unit/mcp/test_tenant_injection.py"
+    - "tests/integration/registry/test_multi_tenant_integration.py"
+    - "tests/integration/registry/test_isolation_guarantees.py"
+    - "tests/integration/mcp/test_multi_tenant_mcp.py"
+
+# ============================================================================
+# FILES TO MODIFY
+# ============================================================================
+
+files_to_modify:
+  - "cortex/registry/git_backed_registry.py"
+  - "cortex/mcp/server.py"
+  - "cortex/mcp/tools/__init__.py"
+  - "cortex/registry/__init__.py"
+
+# ============================================================================
+# DEPENDENCIES
+# ============================================================================
+
+dependencies:
+  internal:
+    - "GitBackedRegistry (cortex/registry/git_backed_registry.py)"
+    - "MCP Server (cortex/mcp/server.py)"
+    - "MCP Tools (cortex/mcp/tools/__init__.py)"
+  
+  external:
+    - "pyyaml (YAML parsing)"
+    - "dataclasses (Python 3.9+)"
+    - "typing (type hints)"
+
+# ============================================================================
+# RISKS & MITIGATION
+# ============================================================================
+
+risks:
+  risk_1:
+    description: "Breaking changes for existing users"
+    severity: "HIGH"
+    mitigation: "Backward compatibility mode + comprehensive migration testing"
+    status: "MITIGATED"
+  
+  risk_2:
+    description: "Performance degradation with many tenants"
+    severity: "MEDIUM"
+    mitigation: "Per-tenant caching + lazy loading + 70% hit rate target"
+    status: "PLANNED"
+  
+  risk_3:
+    description: "Cross-tenant data leakage"
+    severity: "CRITICAL"
+    mitigation: "100% isolation validation + security tests + audit logs"
+    status: "PLANNED"
+
+# ============================================================================
+# COMPLETION CRITERIA
+# ============================================================================
+
+completion_criteria:
+  code:
+    - "All 55 tests passing (100% coverage)"
+    - "No lint errors (flake8, mypy)"
+    - "Type hints 100% coverage"
+    - "Docstrings 100% coverage (Google-style)"
+  
+  functionality:
+    - "Multi-tenant registry operational"
+    - "Workspace isolation validated (no cross-contamination)"
+    - "Backward compatibility confirmed"
+    - "Migration tool tested"
+  
+  documentation:
+    - "Inline documentation complete"
+    - "Migration guide written"
+    - "API documentation updated"
+  
+  governance:
+    - "All CORE rules enforced"
+    - "AC markers present (AC_START → AC_COMPLETE)"
+    - "Pre-commit checks passing"
+    - "Registry status updated"
+
+# ============================================================================
+# NOTES
+# ============================================================================
+
+notes:
+  - "Phase 48 completion unblocked this phase"
+  - "Existing tests/unit/registry/test_workspace_isolation_s1.py provides Stage 1 foundation"
+  - "Existing cortex/registry/ module has multi-tenant components (TenantContext, WorkspaceManager)"
+  - "Integration tests in tests/integration/registry/test_multi_tenant_integration.py exist"
+  - "Focus on enhancing existing foundation, not starting from scratch"

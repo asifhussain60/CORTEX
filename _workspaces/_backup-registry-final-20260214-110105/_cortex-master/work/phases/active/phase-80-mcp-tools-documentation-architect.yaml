@@ -1,0 +1,612 @@
+# ============================================================================
+# PHASE-80: MCP Tools Documentation Architect (Dual-Mode System)
+# ============================================================================
+# Purpose: Apply Documentation Architect solution (Phase 74) to MCP Tools with
+#          git-aware delta detection, auto-documentation from decorators, and
+#          interactive tool explorer with searchable GitHub Pages catalog.
+# Authority: chat01.md digest analysis + DOCUMENTATION-ARCHITECT-SOLUTION-2026-02-11.md
+# Approach: Dual-mode (Refresh + Generate), TDD-First, Incremental
+# Status: ACTIVE | Priority: P1 | Target Start: 2026-02-11
+# ============================================================================
+
+phase_id: "phase-80"
+name: "MCP Tools Documentation Architect"
+version: "1.0"
+created: "2026-02-11"
+updated: "2026-02-11"
+status: "active"
+priority: "P1"
+execution_order: 26
+roi_score: 0.92
+coverage_target: 90
+
+metadata:
+  title: "MCP Tools Documentation Architect (Dual-Mode System)"
+  subtitle: "Git-aware incremental tool catalog with interactive explorer and multi-persona views"
+  author: "CORTEX Architect"
+  created_date: "2026-02-11T00:00:00Z"
+  target_start: "2026-02-11"
+  estimated_duration: "4 weeks (1 week MVP)"
+  test_target: 145
+  extends: "phase-74-documentation-site-generation"
+  integrated_with: "mcp-tool-audit-matrix.yaml"
+  autonomous_execution: true
+  execution_mode: "phased_delivery"
+  status_updated: "2026-02-11T00:00:00Z"
+
+governance:
+  core_rules:
+    - "CORE-002: NO markdown file generation (inline chat only for planning)"
+    - "CORE-008: TDD-first (tests BEFORE code)"
+    - "CORE-029: Response header MANDATORY"
+    - "CORE-030: Implementation Truth — verify code, not docs"
+    - "CORE-035: Single canonical implementation (decorator metadata SSOT)"
+    - "CORE-036: Industry standards compliance"
+    - "MCP-FIRST: All functionality via MCP tools"
+    - "ARCH-012: Security-first (AuthLevel badges, attack surface analysis)"
+  enforcement:
+    - "EnforcementOrchestrator: 7-agent pre-execution validation"
+    - "EXIT GATE: ContextSynthesisGateway for all context loading"
+    - "TDD enforcement: Tests pass before merge"
+    - "Decorator metadata validation: All @mcp_tool decorators validated"
+
+# ============================================================================
+# VISION & GOALS
+# ============================================================================
+
+overview:
+  vision: |
+    Transform MCP Tools documentation from manual audit matrix (32% healthy, 17 broken)
+    to automated, git-aware system with:
+    
+    1. **Dual-Mode Architecture** — MODE: Refresh (git-aware delta detection for incremental 
+       updates) + MODE: Generate (GitHub Pages HTML with interactive tool explorer)
+    
+    2. **Auto-Documentation from Decorators** — Extract metadata from @mcp_tool decorator 
+       (parameters, types, docstrings) to generate accurate API docs with zero drift risk
+    
+    3. **Interactive Tool Explorer** — Live parameter input forms with JSON Schema validation, 
+       "Try it" sandbox, request/response preview for all 78 tools
+    
+    4. **Multi-Persona Views** — Developer (API reference), Architect (tool topology), 
+       Security Auditor (AuthLevel + compliance), Manager (health dashboard)
+    
+    5. **Test Coverage Heat Map** — Visual matrix showing unit/integration/e2e coverage 
+       per tool with 🟢🟡🔴 health indicators
+    
+    6. **Phantom Tool Cleanup** — Auto-detect and generate cleanup PR for 6 phantom tools 
+       (exposed via schema but no handler exists)
+    
+    7. **GitHub Pages Deployment** — Searchable catalog with fuzzy search, category filters, 
+       version history, and accessibility (WCAG AA)
+
+  problem_statement: |
+    Current State (mcp-tool-audit-matrix.yaml analysis):
+    - 78 MCP tools registered, only 25 fully functional (32% health score)
+    - 17 broken tools, 6 phantom tools (exposed but no handler)
+    - Manual documentation effort (40+ hours for full catalog refresh)
+    - No searchable catalog, no interactive explorer
+    - No security auditor view (AuthLevel/compliance not visible)
+    - No test coverage visualization (hard to identify gaps)
+    - Documentation drift risk (manual updates lag code changes)
+    
+    Impact:
+    - ❌ Developers waste time discovering broken tools
+    - ❌ Security risks hidden (no AuthLevel visibility)
+    - ❌ No prioritization data for fixing broken tools
+    - ❌ Manual audit matrix updates (error-prone, time-consuming)
+    - ❌ External users cannot browse/search tool catalog
+
+  success_criteria:
+    - "MODE: Refresh implemented — git-aware delta detection (update only changed tools)"
+    - "MODE: Generate implemented — GitHub Pages HTML site with 78+ tool pages"
+    - "@mcp_tool decorator metadata extraction automated (zero manual input)"
+    - "Interactive tool explorer functional (parameter forms + 'Try it' sandbox)"
+    - "Multi-persona views deployed (developer, architect, security, manager)"
+    - "Test coverage heat map generated (unit/integration/e2e per tool)"
+    - "Phantom tool cleanup PR auto-generated (6 tools removed)"
+    - "mcp-tool-audit-matrix.yaml auto-sync (health scores, counts updated)"
+    - "GitHub Pages deployment successful (searchable catalog live)"
+    - "145 tests passing (35 refresh + 40 generate + 30 explorer + 20 personas + 20 coverage)"
+    - "Health score improved: 32% → 77% (target: 60+ tools fully functional)"
+    - "Documentation refresh time: 40+ hours → 2-3 hours (85% reduction)"
+
+# ============================================================================
+# DUAL-MODE ARCHITECTURE
+# ============================================================================
+
+architecture:
+  mode_refresh:
+    description: "Git-aware delta detection for incremental tool catalog updates"
+    components:
+      - name: "Tool Delta Analyzer"
+        purpose: "Detect MCP tool changes since last documentation commit"
+        inputs:
+          - "git log since last docs commit"
+          - "cortex/mcp/tools/**/*.py file diffs"
+          - "@mcp_tool decorator changes"
+        outputs:
+          - "List of changed tool IDs"
+          - "Category rebalancing recommendations"
+        
+      - name: "Tool Intelligence Sync"
+        purpose: "Update mcp-tool-audit-matrix.yaml with current health status"
+        inputs:
+          - "cortex/mcp/decorators.py MCP_TOOLS_REGISTRY"
+          - "tests/mcp/ coverage reports"
+          - "cortex/mcp/server.py tool list"
+        outputs:
+          - "Updated health scores per tool"
+          - "Broken tool detection"
+          - "Phantom tool list"
+        
+      - name: "Coverage Integration"
+        purpose: "Map tests to tools and generate heat map"
+        inputs:
+          - "tests/mcp/ test files"
+          - "pytest coverage data"
+          - "Integration test discovery"
+        outputs:
+          - "Coverage matrix (unit/integration/e2e)"
+          - "Missing test detection"
+          - "Heat map visualization data"
+        
+      - name: "Validator + Linter"
+        purpose: "Validate tool metadata completeness"
+        checks:
+          - "Required parameters documented"
+          - "Docstring completeness"
+          - "Type hint validation"
+          - "Naming convention (cortex_*)"
+        
+      - name: "YAML Manifest Sync"
+        purpose: "Update mcp-tool-audit-matrix.yaml automatically"
+        updates:
+          - "summary.total, summary.broken, summary.health_score"
+          - "broken_tools list with current status"
+          - "working_with_params list"
+          - "fully_functional list"
+    
+    time_estimate: "2-3 hours (incremental update)"
+    
+  mode_generate:
+    description: "GitHub Pages HTML generation with interactive explorer"
+    components:
+      - name: "Decorator Extractor"
+        purpose: "Extract metadata from @mcp_tool decorators"
+        sources:
+          - "cortex/mcp/decorators.py MCP_TOOLS_REGISTRY"
+          - "Function signatures (inspect module)"
+          - "Docstrings (Google-style parsing)"
+          - "Parameter schemas (JSON Schema)"
+        outputs:
+          - "Tool metadata JSON"
+          - "Parameter type mappings"
+          - "Return type documentation"
+        
+      - name: "Interactive Explorer"
+        purpose: "Browser-based tool testing UI"
+        features:
+          - "Live parameter input forms"
+          - "JSON Schema validation (client-side)"
+          - "'Try it' button → MCP server invocation"
+          - "Request/response preview (syntax highlighting)"
+          - "Error handling demonstration"
+        
+      - name: "Security Auditor View"
+        purpose: "Security-focused dashboard"
+        displays:
+          - "AuthLevel distribution (PUBLIC/AUTHENTICATED/PRIVILEGED)"
+          - "Rate limiting configuration"
+          - "Compliance mode mapping"
+          - "Injection attack surface analysis"
+          - "Tool governance policy matrix"
+        
+      - name: "Multi-Persona Views"
+        personas:
+          - name: "Developer"
+            view: "API reference with code examples"
+            sections:
+              - "Parameters (types, required, defaults)"
+              - "Return values (schemas, examples)"
+              - "Error codes (handling patterns)"
+              - "Usage examples (Python + REST)"
+          
+          - name: "Architect"
+            view: "Tool topology and orchestrator integration"
+            sections:
+              - "Tool category taxonomy"
+              - "Orchestrator dependency graph"
+              - "Data flow diagrams"
+              - "Integration patterns"
+          
+          - name: "Security Auditor"
+            view: "AuthLevel + compliance matrix"
+            sections:
+              - "Privileged tools list"
+              - "Command injection risks"
+              - "Rate limit enforcement"
+              - "Audit trail requirements"
+          
+          - name: "Manager"
+            view: "Health dashboard with metrics"
+            sections:
+              - "Tool health summary (broken/working)"
+              - "Test coverage percentages"
+              - "Usage analytics (if available)"
+              - "Maintenance recommendations"
+        
+      - name: "Searchable Catalog"
+        purpose: "Fuzzy search with filters"
+        features:
+          - "Full-text search across tool descriptions"
+          - "Category filters (execution, intelligence, management)"
+          - "Tag cloud (common patterns)"
+          - "Version history (decorator changes over time)"
+    
+    time_estimate: "8 minutes (automated generation)"
+
+# ============================================================================
+# INTEGRATION POINTS
+# ============================================================================
+
+integration:
+  existing_systems:
+    - name: "mcp-tool-audit-matrix.yaml"
+      purpose: "Single source of truth for tool health"
+      sync_strategy: "Automatic updates on MODE: Refresh"
+      fields_updated:
+        - "summary.total, summary.broken, summary.health_score"
+        - "broken_tools list"
+        - "fully_functional list"
+        - "phantom_tools list"
+    
+    - name: "Phase 74 Documentation Site"
+      purpose: "Reuse glassmorphism design + Jinja2 templates"
+      components_reused:
+        - "CSS framework (dark blue glassmorphism)"
+        - "Jinja2 template system"
+        - "D3.js diagram library"
+        - "GitHub Actions CI/CD pipeline"
+    
+    - name: "CORTEX Brain Knowledge Base"
+      purpose: "Auto-populate tool metadata in tier3/knowledge/"
+      generated_files:
+        - "cortex_brain/tier3/knowledge/mcp-tools-catalog.yaml"
+        - "Metadata: intelligence_level, latency_profile, caching_strategy"
+    
+    - name: "Wiring Contract"
+      purpose: "Validate tool counts against orchestrator exposure"
+      validation:
+        - "Cross-reference __wiring_contract__.yaml tool_count"
+        - "Ensure all orchestrator @mcp_tool methods registered"
+
+# ============================================================================
+# STAGES (PHASED DELIVERY)
+# ============================================================================
+
+stages:
+  - stage_id: "S1"
+    name: "Foundation — Tool Delta Analyzer + Phantom Cleanup"
+    priority: "P0"
+    duration: "1-2 days"
+    test_count: 25
+    deliverables:
+      - "Tool Delta Analyzer implemented"
+      - "Phantom tool detection (6 tools)"
+      - "Cleanup PR auto-generated"
+      - "Basic catalog generation (YAML)"
+    acceptance_criteria:
+      - "Detect tool changes since last commit"
+      - "Generate list of 6 phantom tools"
+      - "Create GitHub PR to remove phantom tools"
+      - "25 tests passing"
+  
+  - stage_id: "S2"
+    name: "Intelligence — Health Score + Coverage Integration"
+    priority: "P0"
+    duration: "2-3 days"
+    test_count: 35
+    deliverables:
+      - "Health score automation"
+      - "Test coverage mapping"
+      - "Heat map generation"
+      - "mcp-tool-audit-matrix.yaml auto-sync"
+    acceptance_criteria:
+      - "Calculate health score per tool"
+      - "Map tests to tools (unit/integration/e2e)"
+      - "Generate coverage heat map"
+      - "60 tests passing (25 + 35)"
+  
+  - stage_id: "S3"
+    name: "Interactive — Tool Explorer UI"
+    priority: "P1"
+    duration: "3-4 days"
+    test_count: 30
+    deliverables:
+      - "Parameter input forms"
+      - "JSON Schema validation"
+      - "'Try it' sandbox"
+      - "Request/response preview"
+    acceptance_criteria:
+      - "Forms generated for all 78 tools"
+      - "Client-side validation working"
+      - "MCP server invocation functional"
+      - "90 tests passing (60 + 30)"
+  
+  - stage_id: "S4"
+    name: "Multi-Persona — Developer + Architect + Security + Manager Views"
+    priority: "P1"
+    duration: "2-3 days"
+    test_count: 20
+    deliverables:
+      - "Developer API reference"
+      - "Architect topology diagrams"
+      - "Security auditor dashboard"
+      - "Manager health metrics"
+    acceptance_criteria:
+      - "4 persona views implemented"
+      - "Navigation between views functional"
+      - "Data segregation correct per persona"
+      - "110 tests passing (90 + 20)"
+  
+  - stage_id: "S5"
+    name: "Searchable — Catalog + Fuzzy Search + Filters"
+    priority: "P2"
+    duration: "2-3 days"
+    test_count: 20
+    deliverables:
+      - "Full-text search index"
+      - "Fuzzy search implementation"
+      - "Category filters"
+      - "Tag cloud"
+    acceptance_criteria:
+      - "Search returns relevant tools"
+      - "Filters work (category, AuthLevel)"
+      - "Performance: <100ms search latency"
+      - "130 tests passing (110 + 20)"
+  
+  - stage_id: "S6"
+    name: "Deployment — GitHub Pages + CI/CD"
+    priority: "P2"
+    duration: "1 day"
+    test_count: 15
+    deliverables:
+      - "GitHub Pages configuration"
+      - "Asset optimization"
+      - "GitHub Actions workflow"
+      - "Accessibility validation"
+    acceptance_criteria:
+      - "Site deployed to GitHub Pages"
+      - "Lighthouse score >90"
+      - "WCAG AA compliant"
+      - "145 tests passing (130 + 15)"
+
+# ============================================================================
+# OUTPUT STRUCTURE
+# ============================================================================
+
+outputs:
+  mode_refresh:
+    location: "cortex-registry/_cortex-master/"
+    files:
+      - path: "mcp-tool-audit-matrix.yaml"
+        type: "YAML"
+        description: "Auto-updated health scores, broken tool list"
+      
+      - path: "mcp-tool-catalog.yaml"
+        type: "YAML"
+        description: "Auto-generated from @mcp_tool decorators"
+      
+      - path: "reports/mcp-tool-refresh-YYYY-MM-DD.md"
+        type: "Markdown"
+        description: "Refresh report (delta summary)"
+    
+    workspace_updates:
+      location: "_workspaces/cortex-architecture/mcp/"
+      files:
+        - "tools-catalog.md (UPDATED: +12 tools, -6 phantom)"
+        - "tool-governance.md (UPDATED: security policies)"
+        - "tool-discovery.md (NEW: decorator system docs)"
+        - "test-coverage.md (NEW: heat map + missing tests)"
+        - "integration-patterns.md (UPDATED: MCP → Orchestrator flows)"
+    
+    git_commit:
+      audit_marker: "AC-MCP-TOOLS-DOC-2026-02-11-001"
+      message: "docs: Refresh MCP tools catalog (git-aware delta)"
+      files_changed: "6 updated, 3 new"
+  
+  mode_generate:
+    location: "_workspaces/cortex-gitpages/tools/"
+    files:
+      - path: "index.html"
+        description: "Tool catalog landing page"
+      
+      - path: "explorer.html"
+        description: "Interactive playground"
+      
+      - path: "security.html"
+        description: "Security auditor dashboard"
+      
+      - path: "coverage.html"
+        description: "Test coverage heat map"
+      
+      - path: "categories/"
+        files:
+          - "execution.html (8 tools)"
+          - "intelligence.html (15 tools)"
+          - "management.html (18 tools)"
+          - "knowledge.html (14 tools)"
+      
+      - path: "tools/"
+        description: "78 individual tool pages"
+        examples:
+          - "cortex-process-request.html"
+          - "cortex-lens-analyze.html"
+          - "cortex-audit.html"
+      
+      - path: "assets/"
+        files:
+          - "tool-playground.js"
+          - "json-schema-validator.js"
+          - "mcp-tool-catalog.css"
+
+# ============================================================================
+# SUCCESS METRICS
+# ============================================================================
+
+success_metrics:
+  before:
+    total_tools: 78
+    healthy_tools: 25
+    health_score: "32%"
+    broken_tools: 17
+    phantom_tools: 6
+    documentation_effort: "40+ hours (full rewrite)"
+    searchable_catalog: false
+    security_view: false
+  
+  after:
+    total_tools: 78
+    healthy_tools: 60
+    health_score: "77%"
+    broken_tools: 3
+    phantom_tools: 0
+    documentation_effort: "2-3 hours (incremental)"
+    searchable_catalog: true
+    security_view: true
+  
+  improvements:
+    health_score_increase: "+45%"
+    broken_tools_reduced: "-14"
+    phantom_tools_eliminated: "-6"
+    documentation_time_reduction: "85%"
+    new_capabilities:
+      - "Interactive tool explorer"
+      - "Multi-persona views (4 personas)"
+      - "Test coverage heat map"
+      - "Searchable GitHub Pages catalog"
+
+# ============================================================================
+# RISK MITIGATION
+# ============================================================================
+
+risks:
+  - risk: "Decorator parsing fails"
+    probability: "Medium"
+    impact: "High"
+    mitigation: "Fallback to docstring extraction + manual override YAML"
+  
+  - risk: "Test coverage data incomplete"
+    probability: "High"
+    impact: "Medium"
+    mitigation: "Mark as '⚪ Unknown' not '🔴 Failing'"
+  
+  - risk: "Phantom tool removal breaks MCP server"
+    probability: "Low"
+    impact: "High"
+    mitigation: "Validate with integration tests before PR merge"
+  
+  - risk: "GitHub Pages deployment fails"
+    probability: "Low"
+    impact: "Low"
+    mitigation: "Deploy to _build/ first, test locally with serve-docs.sh"
+  
+  - risk: "Performance: 78 HTML pages slow"
+    probability: "Low"
+    impact: "Medium"
+    mitigation: "Asset bundling + lazy loading + CDN caching"
+
+# ============================================================================
+# DEPENDENCIES & BLOCKERS
+# ============================================================================
+
+dependencies:
+  phases:
+    - phase_id: "phase-74"
+      name: "Documentation Site Generation"
+      reason: "Reuse glassmorphism CSS + Jinja2 templates"
+      status: "active"
+  
+  external:
+    - name: "mcp-tool-audit-matrix.yaml"
+      location: "cortex-registry/_cortex-master/"
+      reason: "Baseline health data"
+      status: "available"
+    
+    - name: "@mcp_tool decorator"
+      location: "cortex/mcp/decorators.py"
+      reason: "Metadata source of truth"
+      status: "available"
+    
+    - name: "pytest coverage reports"
+      location: "tests/mcp/"
+      reason: "Coverage heat map data"
+      status: "available"
+
+blockers:
+  current: []
+  
+  potential:
+    - blocker: "Decorator metadata incomplete"
+      impact: "Cannot auto-generate tool docs"
+      workaround: "Manual YAML override per tool"
+    
+    - blocker: "GitHub Pages quota exceeded"
+      impact: "Cannot deploy to GitHub"
+      workaround: "Self-hosted alternative or Netlify"
+
+# ============================================================================
+# EXECUTION TIMELINE
+# ============================================================================
+
+timeline:
+  mvp:
+    name: "Foundation + Intelligence (S1-S2)"
+    duration: "1 week"
+    deliverables:
+      - "Phantom tool cleanup"
+      - "Auto-generated catalog"
+      - "Test coverage heat map"
+      - "Health score automation"
+    value: "80% of benefit in 25% of time"
+  
+  full:
+    name: "All Stages (S1-S6)"
+    duration: "4 weeks"
+    deliverables:
+      - "Interactive tool explorer"
+      - "Multi-persona views"
+      - "Searchable GitHub Pages catalog"
+      - "Full CI/CD integration"
+    value: "100% of benefit"
+
+# ============================================================================
+# APPROVALS & TRACKING
+# ============================================================================
+
+approvals:
+  approved_by: "User"
+  approved_date: "2026-02-11"
+  approval_mode: "Full Plan"
+  execution_authorized: true
+
+tracking:
+  jira_epic: "CORTEX-80"
+  git_branch: "phase-80-mcp-tools-doc-architect"
+  slack_channel: "#cortex-phase-80"
+  status_dashboard: "cortex-registry/_cortex-master/dashboard/phase-80.html"
+
+# ============================================================================
+# CHANGE LOG
+# ============================================================================
+
+changelog:
+  - version: "1.0"
+    date: "2026-02-11"
+    changes:
+      - "Initial phase registration"
+      - "Dual-mode architecture defined"
+      - "6-stage delivery plan created"
+      - "145 test targets set"
+      - "MVP timeline: 1 week"

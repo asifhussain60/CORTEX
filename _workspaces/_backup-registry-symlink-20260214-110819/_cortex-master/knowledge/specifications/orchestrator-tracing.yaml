@@ -1,0 +1,325 @@
+# Orchestrator Tracing Configuration
+# AC-TRACE-001-004: SQLite trace logging for all orchestrators
+# Status: ACTIVE
+
+version: "1.0"
+authority: "AC-TRACE series"
+generated_at: "2026-02-13"
+
+# Global tracing configuration
+global_config:
+  enabled: true
+  database_path: ".cortex/traces/orchestrator-traces.db"
+  max_rows_per_table: 10000
+  flush_interval_hours: 24
+  async_flush_enabled: true
+  production_mode:
+    enabled: false
+    env_var: "CORTEX_PRODUCTION"
+  test_mode:
+    enabled: true
+    env_var: "PYTEST_RUNNING"
+    max_rows_per_table: 50000
+    database_path: ".cortex/traces/test-orchestrator-traces.db"
+
+# Environment variables for control
+environment_variables:
+  CORTEX_TRACE_ENABLED:
+    description: "Enable/disable tracing globally"
+    default: "true"
+    production_default: "false"
+    type: "boolean"
+  
+  CORTEX_TRACE_DB:
+    description: "Path to trace database"
+    default: ".cortex/traces/orchestrator-traces.db"
+    type: "path"
+  
+  CORTEX_TRACE_MAX_ROWS:
+    description: "Maximum rows per trace table before flush"
+    default: "10000"
+    type: "integer"
+    min: "1000"
+    max: "100000"
+  
+  CORTEX_TRACE_FLUSH_INTERVAL:
+    description: "Flush interval in hours"
+    default: "24"
+    type: "integer"
+    min: "1"
+    max: "168"
+  
+  CORTEX_TRACE_ASYNC_FLUSH:
+    description: "Enable async trace flushing"
+    default: "true"
+    type: "boolean"
+
+# Orchestrator-specific trace configurations
+orchestrator_traces:
+  # CORE ORCHESTRATORS (8)
+  MasterOrchestrator:
+    orchestrator_id: "master"
+    table_name: "trace_master"
+    trace_level: "ACTION"
+    track_violations: true
+    correlation_tracking: true
+    context_fields:
+      - "intent"
+      - "operation"
+      - "domain"
+      - "status"
+      - "duration_ms"
+      - "error_message"
+    retention_policy: "24h"
+
+  InteractionOrchestrator:
+    orchestrator_id: "interaction"
+    table_name: "trace_interaction"
+    trace_level: "ACTION"
+    track_violations: false
+    correlation_tracking: true
+    context_fields:
+      - "interaction_type"
+      - "user_context"
+      - "response_length"
+      - "formatting_applied"
+    retention_policy: "24h"
+
+  IntentRouter:
+    orchestrator_id: "intent_router"
+    table_name: "trace_intent"
+    trace_level: "ACTION"
+    track_violations: true
+    correlation_tracking: true
+    context_fields:
+      - "intent_detected"
+      - "confidence_score"
+      - "user_input"
+      - "classification_time_ms"
+    retention_policy: "24h"
+
+  LENSSynthesis:
+    orchestrator_id: "lens"
+    table_name: "trace_lens"
+    trace_level: "ACTION"
+    track_violations: true
+    correlation_tracking: true
+    context_fields:
+      - "analysis_type"
+      - "scope"
+      - "findings_count"
+      - "security_issues"
+      - "duplicates_found"
+    retention_policy: "24h"
+
+  EnforcementOrchestrator:
+    orchestrator_id: "enforcement"
+    table_name: "trace_enforcement"
+    trace_level: "VIOLATION"
+    track_violations: true
+    correlation_tracking: true
+    context_fields:
+      - "rule_checked"
+      - "violation_detected"
+      - "violation_type"
+      - "severity_level"
+      - "remediation_applied"
+      - "agent_name"
+    retention_policy: "7d"  # Longer retention for violations
+
+  TDDOrchestrator:
+    orchestrator_id: "tdd"
+    table_name: "trace_tdd"
+    trace_level: "ACTION"
+    track_violations: true
+    correlation_tracking: true
+    context_fields:
+      - "phase"
+      - "test_status"
+      - "coverage_percentage"
+      - "failed_tests"
+      - "implementation_status"
+    retention_policy: "24h"
+
+  IncrementalTaskDecomposer:
+    orchestrator_id: "incremental"
+    table_name: "trace_incremental"
+    trace_level: "ACTION"
+    track_violations: false
+    correlation_tracking: true
+    context_fields:
+      - "task_count"
+      - "total_loc"
+      - "avg_loc_per_task"
+      - "decomposition_depth"
+    retention_policy: "24h"
+
+  WorkflowOrchestrator:
+    orchestrator_id: "workflow"
+    table_name: "trace_workflow"
+    trace_level: "ACTION"
+    track_violations: true
+    correlation_tracking: true
+    context_fields:
+      - "workflow_id"
+      - "phase_number"
+      - "phase_status"
+      - "dependency_count"
+      - "execution_order"
+    retention_policy: "7d"
+
+  # DOMAIN ORCHESTRATORS (6)
+  RefactoringOrchestrator:
+    orchestrator_id: "refactoring"
+    table_name: "trace_refactoring"
+    trace_level: "ACTION"
+    track_violations: true
+    correlation_tracking: true
+    retention_policy: "24h"
+
+  PlanningOrchestrator:
+    orchestrator_id: "planning"
+    table_name: "trace_planning"
+    trace_level: "ACTION"
+    track_violations: false
+    correlation_tracking: true
+    retention_policy: "24h"
+
+  DomainOrchestrator:
+    orchestrator_id: "domain"
+    table_name: "trace_domain"
+    trace_level: "ACTION"
+    track_violations: false
+    correlation_tracking: true
+    retention_policy: "24h"
+
+  ConversationOrchestrator:
+    orchestrator_id: "conversation"
+    table_name: "trace_conversation"
+    trace_level: "ACTION"
+    track_violations: false
+    correlation_tracking: true
+    retention_policy: "24h"
+
+  DocumentationOrchestrator:
+    orchestrator_id: "documentation"
+    table_name: "trace_documentation"
+    trace_level: "ACTION"
+    track_violations: true
+    correlation_tracking: true
+    retention_policy: "24h"
+
+  ChallengeEngine:
+    orchestrator_id: "challenge"
+    table_name: "trace_challenge"
+    trace_level: "ACTION"
+    track_violations: false
+    correlation_tracking: true
+    retention_policy: "24h"
+
+  # SUPPORT ORCHESTRATORS (14+)
+  # Pattern: trace_[orchestrator_name]
+
+# Flush policy configurations
+flush_policies:
+  size_based:
+    enabled: true
+    trigger: "table_row_count >= max_rows"
+    action: "delete oldest 50%"
+    log_flush_event: true
+
+  time_based:
+    enabled: true
+    trigger: "timestamp > now - flush_interval_hours"
+    action: "delete old rows"
+    log_flush_event: true
+
+  manual:
+    enabled: true
+    trigger: "explicit call to flush_traces()"
+    action: "flush based on policy"
+    log_flush_event: true
+
+  startup:
+    enabled: true
+    trigger: "OrchestratorTraceLogger.__init__()"
+    action: "cleanup stale traces"
+    log_flush_event: true
+
+# Violation tracking configuration
+violation_tracking:
+  enabled: true
+  table_name: "trace_violations"
+  retention_policy: "7d"
+  tracked_violations:
+    - "CORE-002"  # Markdown generation
+    - "CORE-008"  # TDD enforcement
+    - "CORE-027"  # Audit trail
+    - "CORE-028"  # File naming
+    - "CORE-035"  # Duplication
+    - "MCP-FIRST" # MCP enforcement
+    - "NATIVE_TOOL_BYPASS" # Native tool restrictions
+
+# Integration points
+integration:
+  decorators:
+    - "@trace_orchestrator_action(action_name)"
+    - "automatic tracing for decorated methods"
+
+  functions:
+    - "trace_violation(orchestrator_id, violation_type, context)"
+    - "trace_action(orchestrator_id, action, context, result, duration_ms)"
+
+  context_managers:
+    - "TraceContext(...)"
+    - "with TraceContext(...) as ctx: ..."
+
+  fixtures:
+    - "trace_logger_instance"
+    - "trace_statistics"
+    - "orchestrator_trace_writer"
+
+# Testing configuration
+testing:
+  auto_enable_tracing: true
+  pytest_plugin: "conftest.py"
+  fixtures:
+    - "enable_traces_for_session (autouse)"
+    - "flush_traces_after_test (autouse)"
+  test_database: ".cortex/traces/test-orchestrator-traces.db"
+  test_max_rows: 50000
+
+# Monitoring and alerts
+monitoring:
+  statistics_available: true
+  query_capabilities: true
+  export_formats:
+    - "JSON"
+    - "CSV"
+  alert_conditions:
+    - "database_size > 500MB"
+    - "violation_count > threshold"
+    - "flush_frequency > expected"
+
+# Database schema summary
+database_schema:
+  tables:
+    trace_metadata: "Orchestrator registry (1 per system)"
+    trace_flush_log: "Flush event audit trail"
+    trace_ORCHESTRATOR_ID: "Per-orchestrator trace table (28 total)"
+  
+  indexes:
+    timestamp: "Timestamp-based queries"
+    correlation_id: "Request tracing"
+    level: "Severity filtering"
+
+# Documentation references
+references:
+  spec: "orchestrator-tracing-spec.md"
+  implementation:
+    - "cortex/infrastructure/orchestrator_trace_logger.py"
+    - "cortex/infrastructure/trace_integration.py"
+    - "conftest.py"
+  tests:
+    - "tests/unit/infrastructure/test_orchestrator_trace_logger.py"
+    - "tests/integration/test_orchestrator_tracing.py"

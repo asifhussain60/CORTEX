@@ -1,0 +1,433 @@
+# MCP Self-Healing Watchdog Specification
+# Phase 75 S1: Automatic MCP server recovery
+# Created: 2026-02-11
+# Purpose: Eliminate manual MCP restart requirement
+
+meta:
+  version: "1.0"
+  created: "2026-02-11"
+  phase: "75"
+  stage: "S1"
+  priority: "P0"
+  author: "Asif Hussain"
+
+problem:
+  description: |
+    Pull machines frequently encounter stale MCP processes requiring manual restart.
+    Users must stop and restart CORTEX MCP server manually.
+    No automatic recovery mechanism exists.
+    Affects developer productivity and CORTEX adoption.
+    
+  symptoms:
+    - "MCP tools timeout after 30+ seconds"
+    - "VS Code shows 'Tool not responding'"
+    - "Port 8000 accepts connections but doesn't respond"
+    - "MCP process idle but not releasing port"
+  
+  root_cause: |
+    Pylance-style architecture: VS Code auto-starts MCP, but no health monitoring.
+    MCP process can become stale without detection/recovery.
+
+solution:
+  approach: "Self-Healing Watchdog with automatic restart"
+  
+  architecture: |
+    ┌────────────────────────────────────────────────────────┐
+    │          MCP Self-Healing Watchdog                     │
+    ├────────────────────────────────────────────────────────┤
+    │                                                        │
+    │  [Health Probe] ──5s──▶ [Port 8000 Check]             │
+    │         │                      │                       │
+    │         │                      ▼                       │
+    │         │              [Response Time]                 │
+    │         │              < 5s: HEALTHY ✅                │
+    │         │              5-15s: DEGRADED 🟡              │
+    │         │              >15s: STALE 🔴                  │
+    │         │                      │                       │
+    │         ▼                      ▼                       │
+    │  [Stale Detection] ────▶ [Auto-Restart]               │
+    │   • >30s no activity        ├─ Kill stale process     │
+    │   • >3 consecutive fails    ├─ Wait 2s                │
+    │   • Port not responding     ├─ Respawn fresh          │
+    │                             └─ Log action              │
+    │                                      │                 │
+    │                                      ▼                 │
+    │                              [Audit Trail]             │
+    │                              ✓ Timestamp               │
+    │                              ✓ Reason                  │
+    │                              ✓ Old PID → New PID       │
+    │                              ✓ Recovery duration       │
+    │                                                        │
+    └────────────────────────────────────────────────────────┘
+
+implementation:
+  file: "cortex/mcp/watchdog.py"
+  
+  class_structure: |
+    class MCPWatchdog:
+        """Self-healing watchdog for MCP server."""
+        
+        def __init__(
+            self,
+            host: str = "localhost",
+            port: int = 8000,
+            probe_interval: int = 5,
+            stale_threshold: int = 30,
+            max_failures: int = 3,
+        ):
+            ...
+        
+        async def start(self) -> None:
+            """Start watchdog monitoring loop."""
+            ...
+        
+        async def _health_check(self) -> HealthStatus:
+            """Check MCP server health via port probe."""
+            ...
+        
+        async def _detect_stale(self) -> bool:
+            """Detect stale MCP process."""
+            ...
+        
+        async def _auto_restart(self) -> None:
+            """Kill stale process and respawn fresh."""
+            ...
+        
+        async def _audit_log(self, event: WatchdogEvent) -> None:
+            """Log watchdog actions for diagnostics."""
+            ...
+        
+        async def _get_mcp_process(self) -> Optional[psutil.Process]:
+            """Find MCP server process by port or command."""
+            ...
+
+health_check_logic:
+  probe_method: "HTTP GET to http://localhost:8000/health"
+  
+  healthy:
+    conditions:
+      - "HTTP 200 response"
+      - "Response time <5 seconds"
+      - "No consecutive failures"
+    action: "Continue monitoring"
+  
+  degraded:
+    conditions:
+      - "HTTP 200 but response time 5-15s"
+      - "1-2 consecutive failures"
+    action: "Log warning, continue monitoring"
+  
+  stale:
+    conditions:
+      - "HTTP timeout (>15s)"
+      - "3+ consecutive failures"
+      - "No activity >30s"
+      - "Port not responding"
+    action: "Trigger auto-restart"
+
+auto_restart_procedure:
+  step_1:
+    action: "Identify MCP process"
+    method: "psutil.net_connections() → filter port 8000"
+    fallback: "psutil.process_iter() → filter 'python -m cortex.mcp'"
+  
+  step_2:
+    action: "Kill stale process"
+    method: "process.terminate() with 5s grace period"
+    fallback: "process.kill() if terminate fails"
+  
+  step_3:
+    action: "Wait for port release"
+    duration: "2 seconds"
+    validation: "Port 8000 no longer in use"
+  
+  step_4:
+    action: "Respawn fresh MCP server"
+    method: "VS Code auto-starts via settings.json"
+    verification: "Port 8000 accepts connections within 10s"
+  
+  step_5:
+    action: "Audit log restart"
+    fields:
+      - "timestamp"
+      - "old_pid"
+      - "new_pid (if detected)"
+      - "reason: stale|timeout|consecutive_failures"
+      - "recovery_duration_seconds"
+
+audit_logging:
+  file: ".cortex/watchdog.log"
+  
+  format: "JSON lines (one event per line)"
+  
+  fields:
+    timestamp: "ISO 8601 timestamp"
+    event_type: "health_check|stale_detected|restart_initiated|restart_complete"
+    health_status: "healthy|degraded|stale"
+    response_time_ms: "HTTP probe response time"
+    consecutive_failures: "Count of failures before restart"
+    old_pid: "Process ID before restart"
+    new_pid: "Process ID after restart (if detected)"
+    recovery_duration_seconds: "Time from kill to healthy"
+    reason: "timeout|consecutive_failures|no_activity"
+  
+  example: |
+    {"timestamp":"2026-02-11T11:15:00Z","event_type":"stale_detected","health_status":"stale","consecutive_failures":3,"old_pid":12345,"reason":"timeout"}
+    {"timestamp":"2026-02-11T11:15:02Z","event_type":"restart_initiated","old_pid":12345}
+    {"timestamp":"2026-02-11T11:15:08Z","event_type":"restart_complete","new_pid":12378,"recovery_duration_seconds":6.2}
+
+configuration:
+  file: ".cortex/watchdog-config.yaml"
+  
+  schema:
+    enabled:
+      type: "boolean"
+      default: true
+      description: "Enable/disable watchdog"
+    
+    host:
+      type: "string"
+      default: "localhost"
+      description: "MCP server host"
+    
+    port:
+      type: "integer"
+      default: 8000
+      description: "MCP server port"
+    
+    probe_interval_seconds:
+      type: "integer"
+      default: 5
+      description: "Seconds between health probes"
+    
+    stale_threshold_seconds:
+      type: "integer"
+      default: 30
+      description: "Seconds of no activity before stale"
+    
+    max_consecutive_failures:
+      type: "integer"
+      default: 3
+      description: "Failures before triggering restart"
+    
+    response_timeout_seconds:
+      type: "integer"
+      default: 15
+      description: "HTTP timeout for health probe"
+    
+    restart_grace_period_seconds:
+      type: "integer"
+      default: 5
+      description: "Seconds to wait for graceful termination"
+    
+    log_file:
+      type: "string"
+      default: ".cortex/watchdog.log"
+      description: "Path to audit log"
+
+integration:
+  setup_mcp:
+    file: "scripts/setup-mcp.py"
+    changes:
+      - action: "Launch watchdog at end of setup"
+        code: |
+          from cortex.mcp.watchdog import MCPWatchdog
+          
+          # Start watchdog in background
+          watchdog = MCPWatchdog()
+          watchdog.start_background()
+          
+          print("✅ MCP Watchdog: Started")
+  
+  systemd_service:
+    file: "/etc/systemd/system/cortex-mcp-watchdog.service"
+    content: |
+      [Unit]
+      Description=CORTEX MCP Self-Healing Watchdog
+      After=network.target
+      
+      [Service]
+      Type=simple
+      User=cortex
+      WorkingDirectory=/opt/cortex
+      ExecStart=/usr/bin/python -m cortex.mcp.watchdog
+      Restart=always
+      RestartSec=10
+      
+      [Install]
+      WantedBy=multi-user.target
+  
+  launchd_plist:
+    file: "~/Library/LaunchAgents/com.cortex.mcp.watchdog.plist"
+    content: |
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN">
+      <plist version="1.0">
+      <dict>
+        <key>Label</key>
+        <string>com.cortex.mcp.watchdog</string>
+        <key>ProgramArguments</key>
+        <array>
+          <string>python</string>
+          <string>-m</string>
+          <string>cortex.mcp.watchdog</string>
+        </array>
+        <key>RunAtLoad</key>
+        <true/>
+        <key>KeepAlive</key>
+        <true/>
+      </dict>
+      </plist>
+  
+  windows_task_scheduler:
+    file: ".cortex/watchdog-task.xml"
+    content: |
+      <?xml version="1.0"?>
+      <Task>
+        <Triggers>
+          <LogonTrigger />
+        </Triggers>
+        <Actions>
+          <Exec>
+            <Command>python</Command>
+            <Arguments>-m cortex.mcp.watchdog</Arguments>
+          </Exec>
+        </Actions>
+      </Task>
+
+cross_platform_considerations:
+  windows:
+    process_detection: "psutil.win_service_get('CortexMCP')"
+    port_detection: "netstat -ano | findstr :8000"
+    kill_command: "taskkill /F /PID {pid}"
+  
+  macos:
+    process_detection: "ps aux | grep 'cortex.mcp'"
+    port_detection: "lsof -i :8000"
+    kill_command: "kill -9 {pid}"
+  
+  linux:
+    process_detection: "ps aux | grep 'cortex.mcp'"
+    port_detection: "lsof -i :8000"
+    kill_command: "kill -9 {pid}"
+
+testing:
+  unit_tests:
+    - file: "tests/unit/mcp/test_watchdog.py"
+      tests:
+        - "test_watchdog_initialization"
+        - "test_health_check_healthy"
+        - "test_health_check_degraded"
+        - "test_health_check_stale"
+        - "test_stale_detection"
+        - "test_auto_restart_procedure"
+        - "test_audit_logging"
+        - "test_process_identification"
+        - "test_graceful_termination"
+        - "test_forced_kill_fallback"
+  
+  integration_tests:
+    - file: "tests/integration/mcp/test_watchdog_integration.py"
+      tests:
+        - "test_watchdog_detects_stale_mcp"
+        - "test_watchdog_auto_restarts"
+        - "test_watchdog_audit_trail"
+        - "test_watchdog_handles_manual_restart"
+        - "test_watchdog_cross_platform"
+  
+  e2e_tests:
+    - file: "tests/e2e/test_watchdog_recovery.py"
+      tests:
+        - "test_fresh_clone_setup_mcp_with_watchdog"
+        - "test_simulate_stale_mcp_recovery"
+        - "test_watchdog_resilience_1_week"
+
+acceptance_criteria:
+  - "Watchdog detects stale MCP within 30 seconds"
+  - "Auto-restart completes in <10 seconds"
+  - "Zero manual MCP restarts required in 1-week test"
+  - "Audit log captures all restart events"
+  - "Works on Windows, macOS, Linux"
+  - "Graceful termination preferred, forced kill as fallback"
+  - "VS Code auto-starts MCP after watchdog kill"
+  - "Health status exposed via _mcp_meta (healthy|degraded|stale)"
+
+performance:
+  probe_overhead: "<10ms per probe"
+  restart_latency: "<10 seconds total (kill → respawn → healthy)"
+  memory_overhead: "<5MB for watchdog process"
+  cpu_overhead: "<1% average"
+
+monitoring:
+  metrics:
+    - "cortex_watchdog_probes_total (counter)"
+    - "cortex_watchdog_restarts_total (counter by reason)"
+    - "cortex_watchdog_health_status (gauge: 0=stale, 1=degraded, 2=healthy)"
+    - "cortex_watchdog_restart_duration_seconds (histogram)"
+  
+  alerts:
+    - "cortex_watchdog_restarts_total >5 in 1 hour (frequent restarts)"
+    - "cortex_watchdog_restart_duration_seconds >30s (slow recovery)"
+
+rollout:
+  phase_1_developer_machines:
+    description: "Manual launch of watchdog on developer machines"
+    method: "python -m cortex.mcp.watchdog"
+    duration: "1 week"
+    validation: "Collect audit logs, verify zero manual restarts"
+  
+  phase_2_auto_start:
+    description: "Integrate into setup-mcp.py"
+    method: "setup-mcp.py launches watchdog automatically"
+    duration: "2 weeks"
+    validation: "Fresh clones have watchdog running"
+  
+  phase_3_production:
+    description: "Deploy as systemd/launchd service"
+    method: "Install service on CI/CD machines"
+    duration: "1 month"
+    validation: "Zero manual interventions in production"
+
+risks:
+  risk_1:
+    description: "Watchdog conflicts with manual MCP restarts"
+    severity: "LOW"
+    mitigation: "Watchdog detects manual restarts, logs event, resumes monitoring"
+  
+  risk_2:
+    description: "Aggressive restart causes MCP thrashing"
+    severity: "MEDIUM"
+    mitigation: "Exponential backoff: 1st restart immediate, 2nd after 10s, 3rd after 30s"
+  
+  risk_3:
+    description: "Watchdog itself crashes"
+    severity: "HIGH"
+    mitigation: "systemd/launchd 'Restart=always', self-recovery within 10s"
+  
+  risk_4:
+    description: "False positive stale detection"
+    severity: "MEDIUM"
+    mitigation: "3 consecutive failures required, not just 1 timeout"
+
+alternatives_considered:
+  manual_restart:
+    description: "Continue requiring manual 'stop MCP → start MCP'"
+    verdict: "REJECTED"
+    reason: "Doesn't align with CORE-049 Silent Autonomous Execution"
+  
+  vs_code_extension:
+    description: "Build VS Code extension with health monitoring UI"
+    verdict: "REJECTED"
+    reason: "Complex, doesn't help CLI users, watchdog simpler"
+  
+  periodic_restart:
+    description: "Restart MCP every 1 hour regardless of health"
+    verdict: "REJECTED"
+    reason: "Wasteful, disrupts healthy sessions"
+
+audit_trail:
+  - id: "AC-PHASE75-S1-SPEC-001"
+    timestamp: "2026-02-11T11:20:00Z"
+    action: "Created MCP Self-Healing Watchdog specification"
+    author: "Asif Hussain"
+    context: "Phase 75 S1 - Automatic MCP recovery"

@@ -1,0 +1,704 @@
+# ============================================================================
+# PHASE-75: Knowledge Persistence & Universal Learning Loop
+# ============================================================================
+# Purpose: Remediate P0 violation where CORTEX operations don't persist
+#          knowledge or engage learning loops. Every operation (ONBOARD,
+#          ANALYZE, IMPLEMENT) should update knowledge base and enhance
+#          CORTEX intelligence layers (perception, reasoning, action).
+# Authority: P0 Violation Analysis (2026-02-10), cortex-architect.prompt.md
+# Approach: TDD-First, Incremental Delivery, 6 Stages
+# Status: ACTIVE | Priority: P0 | Target Start: 2026-02-10
+# ============================================================================
+
+phase_id: "phase-75"
+name: "Knowledge Persistence & Universal Learning Loop"
+version: "1.0"
+created: "2026-02-10"
+updated: "2026-02-10"
+status: "active"
+priority: "P0"
+execution_order: 1
+roi_score: 0.95
+coverage_target: 90
+
+metadata:
+  title: "Knowledge Persistence & Universal Learning Loop"
+  subtitle: "Transform ephemeral operations into persistent knowledge and continuous intelligence enhancement"
+  author: "CORTEX Architect"
+  created_date: "2026-02-10T00:00:00Z"
+  target_start: "2026-02-10"
+  estimated_duration: "7-10 days"
+  test_target: 120
+  consolidated_work:
+    - "Repository onboarding knowledge persistence"
+    - "Universal learning loop integration"
+    - "Brain intelligence enhancement automation"
+    - "Knowledge domain YAML generation"
+  autonomous_execution: true
+  execution_mode: "continuous_until_complete"
+  status_updated: "2026-02-10T00:00:00Z"
+
+governance:
+  core_rules:
+    - "CORE-002: NO markdown file generation (inline chat only)"
+    - "CORE-008: TDD-first (tests BEFORE code)"
+    - "CORE-029: Response header MANDATORY"
+    - "CORE-030: Implementation Truth — verify code, not docs"
+    - "CORE-035: Single canonical implementation"
+    - "CORE-036: Industry standards compliance"
+    - "MCP-FIRST: All functionality via MCP tools"
+    - "MCP-GATE: IMPLEMENT intents via cortex_process_request"
+  enforcement:
+    - "EnforcementOrchestrator: 7-agent pre-execution validation"
+    - "EXIT GATE: ContextSynthesisGateway for all context loading"
+    - "TDD enforcement: Tests pass before merge"
+    - "Knowledge persistence validation: KnowledgePersistenceAgent (NEW)"
+
+# ============================================================================
+# VISION & GOALS
+# ============================================================================
+
+overview:
+  vision: |
+    Transform CORTEX from ephemeral operation execution to a continuously learning system that:
+    
+    1. **Persists Knowledge** — Every repository onboarding creates domain YAML artifacts 
+       in company/domains/{repository}/ with architecture, security, tech stack, and best 
+       practices extracted from deep analysis.
+    
+    2. **Enhances Intelligence Layers** — Every operation updates cortex_brain/ perception 
+       (pattern recognition), reasoning (strategy selection), and action (execution planning) 
+       layers based on observed patterns and outcomes.
+    
+    3. **Engages Universal Learning Loop** — OBSERVE (extract patterns) → ANALYZE (effectiveness) 
+       → SYNTHESIZE (knowledge) → APPLY (enhance CORTEX) after every operation, not just 
+       implementation tasks.
+    
+    4. **Enforces Persistence** — New KnowledgePersistenceAgent blocks ONBOARD operations that 
+       don't generate knowledge artifacts and warns on other operations that skip learning loop 
+       engagement.
+    
+    5. **Enables Cross-Session Learning** — Future operations benefit from past learnings, 
+       reducing redundant analysis and improving first-time success rates.
+
+  problem_statement: |
+    Current State (P0 VIOLATION):
+    - Repository onboarding returns inline report → knowledge vanishes after chat session
+    - No company/domains/ YAML artifacts created → zero knowledge persistence
+    - Brain intelligence layers (perception/reasoning/action) never updated → no learning
+    - Universal learning loop not engaged → CORTEX doesn't get smarter over time
+    - Next onboarding of similar repository → starts from zero (no pattern reuse)
+    - MCP tools exist but underutilized → manual file reading bypasses governance
+    
+    Impact:
+    - ❌ Zero knowledge retention across sessions
+    - ❌ Repeated analysis of similar codebases (inefficiency)
+    - ❌ No improvement in pattern recognition (static intelligence)
+    - ❌ Missing audit trail for onboarding decisions
+    - ❌ Cannot answer "What did we learn about X repository?" in future sessions
+
+  success_criteria:
+    - "✅ Every ONBOARD operation creates 5+ domain YAML files in company/domains/"
+    - "✅ Brain intelligence layers updated with patterns from every operation"
+    - "✅ Universal learning loop engaged for ONBOARD, ANALYZE, IMPLEMENT intents"
+    - "✅ KnowledgePersistenceAgent blocks ONBOARD without knowledge artifacts"
+    - "✅ Future operations demonstrate learning (reuse patterns, faster analysis)"
+    - "✅ 90%+ test coverage for new services and agents"
+    - "✅ All operations use MCP tools (no direct file reading for implementation)"
+
+# ============================================================================
+# STAGES (TDD-FIRST)
+# ============================================================================
+
+stages:
+  # --------------------------------------------------------------------------
+  # S1: Knowledge Persistence Service (Foundation)
+  # --------------------------------------------------------------------------
+  - id: "S1"
+    name: "Knowledge Persistence Service"
+    description: |
+      Create KnowledgePersistenceService to convert onboarding findings into structured 
+      YAML knowledge artifacts in company/domains/{repository}/.
+      
+      Components:
+      - cortex/knowledge/persistence/knowledge_persistence_service.py
+      - cortex/knowledge/persistence/domain_yaml_generator.py
+      - cortex/knowledge/persistence/schema_validator.py
+      
+      Capabilities:
+      - persist_domain_knowledge() — Create company/domains/{repo}/*.yaml
+      - generate_architecture_yaml() — Extract DDD patterns, bounded contexts
+      - generate_security_yaml() — Auth, secrets, vulnerabilities, compliance
+      - generate_tech_stack_yaml() — Languages, frameworks, dependencies
+      - generate_dependencies_yaml() — Package graph, version tracking
+      - generate_best_practices_yaml() — Domain-specific patterns, standards
+      - validate_yaml_schema() — Ensure consistency across repositories
+      
+      YAML Schema (Generic):
+      ```yaml
+      # company/domains/{repository}/architecture.yaml
+      repository: "{repository_name}"
+      architecture_style: "monolith|microservices|modular|serverless"
+      patterns:
+        - name: "Domain-Driven Design"
+          evidence: ["bounded contexts detected", "aggregate roots"]
+        - name: "Layered Architecture"
+          evidence: ["clear separation of concerns"]
+      bounded_contexts:
+        - name: "{context_name}"
+          responsibilities: ["{responsibility}"]
+          interfaces: ["{interface}"]
+      technical_debt:
+        - category: "legacy_framework"
+          description: "Legacy framework version nearing EOL"
+          priority: "medium"
+      ```
+      
+      Tests (25):
+      - test_persist_domain_knowledge_creates_yaml_files
+      - test_generate_architecture_yaml_extracts_patterns
+      - test_generate_security_yaml_identifies_risks
+      - test_generate_tech_stack_yaml_maps_dependencies
+      - test_validate_yaml_schema_enforces_structure
+      - test_yaml_generation_handles_missing_data_gracefully
+      - test_multiple_repositories_dont_conflict
+    effort: "2 days"
+    tests: 25
+    status: "planned"
+    success_metrics:
+      - "5 YAML generators (architecture, security, tech, deps, practices)"
+      - "Schema validator with 10+ validation rules"
+      - "100% YAML files parseable and schema-compliant"
+    dependencies: []
+
+  # --------------------------------------------------------------------------
+  # S2: Universal Learning Loop Service
+  # --------------------------------------------------------------------------
+  - id: "S2"
+    name: "Universal Learning Loop Service"
+    description: |
+      Implement UniversalLearningLoop service to extract patterns from every operation 
+      and enhance CORTEX intelligence layers.
+      
+      Components:
+      - cortex/learning/universal_learning_loop.py
+      - cortex/learning/pattern_extractor.py
+      - cortex/learning/effectiveness_analyzer.py
+      - cortex/learning/knowledge_synthesizer.py
+      
+      Flow:
+      1. OBSERVE — Extract patterns from operation results
+         - Code patterns (architectural styles, design patterns)
+         - Security patterns (auth mechanisms, secret management)
+         - Performance patterns (optimization strategies)
+         - Error patterns (common pitfalls, anti-patterns)
+      
+      2. ANALYZE — Evaluate effectiveness
+         - Success rate of pattern application
+         - Time saved by pattern reuse
+         - Quality improvement metrics
+      
+      3. SYNTHESIZE — Generate knowledge artifacts
+         - Update cortex/knowledge/best-practices/
+         - Create pattern templates
+         - Generate decision trees
+      
+      4. APPLY — Enhance intelligence layers
+         - Perception: Register new pattern signatures
+         - Reasoning: Add context-aware strategies
+         - Action: Update execution templates
+      
+      Generic Pattern Schema:
+      ```python
+      @dataclass
+      class ExtractedPattern:
+          pattern_type: str  # "architecture", "security", "performance"
+          name: str  # "bounded-context-separation"
+          indicators: List[str]  # File structures, code markers
+          context: Dict[str, Any]  # When to apply pattern
+          effectiveness_score: float  # 0.0-1.0
+          evidence: List[str]  # Where pattern observed
+      ```
+      
+      Tests (25):
+      - test_extract_patterns_from_onboarding_results
+      - test_analyze_effectiveness_scores_patterns
+      - test_synthesize_knowledge_creates_artifacts
+      - test_apply_enhancements_updates_brain_layers
+      - test_learning_loop_handles_partial_data
+      - test_pattern_deduplication_across_operations
+      - test_effectiveness_tracking_over_time
+    effort: "2 days"
+    tests: 25
+    status: "planned"
+    success_metrics:
+      - "4-stage loop (OBSERVE → ANALYZE → SYNTHESIZE → APPLY)"
+      - "Pattern extraction from 5+ operation types"
+      - "Intelligence layer enhancement verified via tests"
+    dependencies: ["S1"]
+
+  # --------------------------------------------------------------------------
+  # S3: Brain Intelligence Layer Enhancement
+  # --------------------------------------------------------------------------
+  - id: "S3"
+    name: "Brain Intelligence Layer Enhancement"
+    description: |
+      Enhance cortex_brain/ perception, reasoning, and action layers to support 
+      pattern-based learning from every operation.
+      
+      Components:
+      - cortex_brain/perception/pattern_registry.py
+      - cortex_brain/reasoning/strategy_selector.py
+      - cortex_brain/action/execution_planner.py
+      
+      Perception Layer:
+      - Register pattern signatures (e.g., "monolith with segments")
+      - Detect patterns in new repositories via similarity matching
+      - Confidence scoring for pattern detection
+      
+      Reasoning Layer:
+      - Context-aware strategy selection (e.g., "migrate to microservices")
+      - Risk assessment based on historical pattern outcomes
+      - Recommendation generation with evidence
+      
+      Action Layer:
+      - Execution plan templates for common operations
+      - Step-by-step guidance based on past successes
+      - Adaptive planning based on repository characteristics
+      
+      Generic Pattern Registry Schema:
+      ```python
+      @dataclass
+      class RegisteredPattern:
+          id: str
+          name: str
+          signature: Dict[str, Any]  # Detection rules
+          context: Dict[str, str]  # When applicable
+          strategies: List[str]  # Recommended approaches
+          risk_factors: List[str]  # Known challenges
+          success_rate: float  # Historical effectiveness
+      ```
+      
+      Tests (20):
+      - test_perception_registers_patterns
+      - test_perception_detects_patterns_in_new_repos
+      - test_reasoning_selects_strategies_by_context
+      - test_reasoning_scores_risk_accurately
+      - test_action_generates_execution_plans
+      - test_brain_layers_integrate_with_learning_loop
+      - test_pattern_matching_handles_partial_signatures
+    effort: "2 days"
+    tests: 20
+    status: "planned"
+    success_metrics:
+      - "Pattern registry with 10+ initial patterns"
+      - "Strategy selector with context-aware scoring"
+      - "Execution planner generates actionable steps"
+    dependencies: ["S2"]
+
+  # --------------------------------------------------------------------------
+  # S4: Repository Onboarding Orchestrator Enhancement
+  # --------------------------------------------------------------------------
+  - id: "S4"
+    name: "Repository Onboarding Orchestrator Enhancement"
+    description: |
+      Enhance RepositoryOnboardingOrchestrator to integrate knowledge persistence 
+      and universal learning loop into every onboarding operation.
+      
+      Enhanced Flow:
+      1. LENS Classification (existing)
+      2. Deep Analysis via MCP (cortex_onboard_repository)
+      3. Knowledge Persistence (NEW) → company/domains/{repo}/*.yaml
+      4. Brain Enhancement (NEW) → cortex_brain/ layer updates
+      5. Universal Learning Loop (NEW) → OBSERVE→ANALYZE→SYNTHESIZE→APPLY
+      6. Report Generation (existing, enhanced with learning insights)
+      
+      Components:
+      - cortex/orchestrators/repository_onboarding_orchestrator.py (enhance)
+      - cortex/orchestrators/mixins/knowledge_persistence_mixin.py (new)
+      - cortex/orchestrators/mixins/learning_loop_mixin.py (new)
+      
+      MCP Tool Integration:
+      - Use cortex_onboard_repository for deep analysis (not manual file reading)
+      - Use cortex_lens_analyze for code intelligence
+      - Use cortex_git_history for recent changes context
+      - Use cortex_detect_duplicates for pattern detection
+      
+      Tests (20):
+      - test_onboarding_creates_domain_yaml_artifacts
+      - test_onboarding_updates_brain_intelligence_layers
+      - test_onboarding_engages_universal_learning_loop
+      - test_onboarding_uses_mcp_tools_not_direct_files
+      - test_onboarding_handles_large_repositories
+      - test_onboarding_detects_and_reuses_known_patterns
+      - test_onboarding_generates_audit_trail
+    effort: "2 days"
+    tests: 20
+    status: "planned"
+    success_metrics:
+      - "Every onboarding creates 5+ YAML files"
+      - "Brain intelligence layers updated per operation"
+      - "Learning loop engaged and verified via tests"
+      - "100% MCP tool usage (zero direct file reading)"
+    dependencies: ["S1", "S2", "S3"]
+
+  # --------------------------------------------------------------------------
+  # S5: Knowledge Persistence Enforcement Agent
+  # --------------------------------------------------------------------------
+  - id: "S5"
+    name: "Knowledge Persistence Enforcement Agent"
+    description: |
+      Create KnowledgePersistenceAgent as the 8th enforcement agent to block ONBOARD 
+      operations that don't generate knowledge artifacts and warn on other operations 
+      that skip learning loop engagement.
+      
+      Components:
+      - cortex/governance/enforcement/agents/knowledge_persistence_agent.py
+      - Integration into EnforcementOrchestrator
+      
+      Validation Rules:
+      - ONBOARD intent → BLOCK if no company/domains/ artifacts created
+      - ONBOARD intent → BLOCK if brain layers not updated
+      - ANALYZE intent → WARN if learning loop not engaged
+      - IMPLEMENT intent → WARN if no pattern extraction
+      
+      Enforcement Levels:
+      - CRITICAL (BLOCK) — ONBOARD without knowledge persistence
+      - WARNING — Other operations without learning engagement
+      - ADVISORY — Encourage pattern reuse when available
+      
+      Integration:
+      - Add to EnforcementOrchestrator.agents list (8th agent)
+      - Run in pre-execution validation phase
+      - Generate compliance reports
+      
+      Tests (15):
+      - test_blocks_onboard_without_yaml_artifacts
+      - test_blocks_onboard_without_brain_updates
+      - test_warns_analyze_without_learning_loop
+      - test_warns_implement_without_pattern_extraction
+      - test_allows_onboard_with_full_persistence
+      - test_generates_compliance_report
+      - test_integrates_with_enforcement_orchestrator
+    effort: "1 day"
+    tests: 15
+    status: "planned"
+    success_metrics:
+      - "8th enforcement agent operational"
+      - "100% ONBOARD operations validated"
+      - "Compliance reporting active"
+    dependencies: ["S4"]
+
+  # --------------------------------------------------------------------------
+  # S6: MCP Tool Enhancement & Documentation
+  # --------------------------------------------------------------------------
+  - id: "S6"
+    name: "MCP Tool Enhancement & Documentation"
+    description: |
+      Enhance cortex_onboard_repository MCP tool to support knowledge persistence 
+      and learning loop integration via new flags.
+      
+      Enhanced Tool Signature:
+      ```python
+      @mcp_tool
+      async def cortex_onboard_repository(
+          path: str,
+          depth: Literal["quick", "standard", "full"] = "standard",
+          generate_knowledge: bool = True,      # NEW (default True)
+          update_brain: bool = True,            # NEW (default True)
+          persist_yamls: bool = True,           # NEW (default True)
+          engage_learning_loop: bool = True     # NEW (default True)
+      ) -> OnboardingResult:
+          """
+          Onboard repository with full knowledge persistence and learning.
+          
+          Args:
+              path: Repository path to onboard
+              depth: Analysis depth (quick=5min, standard=15min, full=30min)
+              generate_knowledge: Create company/domains/ YAML artifacts
+              update_brain: Enhance cortex_brain/ intelligence layers
+              persist_yamls: Save structured knowledge to disk
+              engage_learning_loop: Run OBSERVE→ANALYZE→SYNTHESIZE→APPLY
+          
+          Returns:
+              OnboardingResult with findings, knowledge_artifacts, learning_insights
+          """
+      ```
+      
+      Documentation:
+      - Update .github/prompts/CORTEX.prompt.md with new flags
+      - Update .github/prompts/cortex-architect.prompt.md
+      - Create examples in cortex/docs/examples/
+      - Add knowledge persistence section to README.md
+      
+      Tests (15):
+      - test_tool_creates_knowledge_artifacts_by_default
+      - test_tool_flag_disable_prevents_yaml_generation
+      - test_tool_updates_brain_when_enabled
+      - test_tool_engages_learning_loop_by_default
+      - test_tool_returns_knowledge_artifacts_in_result
+      - test_tool_handles_permission_errors_gracefully
+    effort: "1 day"
+    tests: 15
+    status: "planned"
+    success_metrics:
+      - "4 new flags operational and tested"
+      - "Documentation updated in 3 locations"
+      - "Example usage patterns provided"
+    dependencies: ["S5"]
+
+# ============================================================================
+# EXECUTION PLAN
+# ============================================================================
+
+execution:
+  sequence:
+    - stage: "S1"
+      order: 1
+      description: "Foundation: Knowledge Persistence Service"
+      duration: "2 days"
+      tests: 25
+    - stage: "S2"
+      order: 2
+      description: "Foundation: Universal Learning Loop Service"
+      duration: "2 days"
+      tests: 25
+    - stage: "S3"
+      order: 3
+      description: "Enhancement: Brain Intelligence Layers"
+      duration: "2 days"
+      tests: 20
+    - stage: "S4"
+      order: 4
+      description: "Integration: Onboarding Orchestrator"
+      duration: "2 days"
+      tests: 20
+    - stage: "S5"
+      order: 5
+      description: "Enforcement: Knowledge Persistence Agent"
+      duration: "1 day"
+      tests: 15
+    - stage: "S6"
+      order: 6
+      description: "Completion: MCP Tool Enhancement & Docs"
+      duration: "1 day"
+      tests: 15
+
+  milestones:
+    - name: "Foundation Complete"
+      stages: ["S1", "S2"]
+      criteria:
+        - "Knowledge persistence service operational"
+        - "Universal learning loop service operational"
+        - "50 tests passing"
+    
+    - name: "Integration Complete"
+      stages: ["S3", "S4"]
+      criteria:
+        - "Brain intelligence layers enhanced"
+        - "Onboarding orchestrator integrated"
+        - "90 tests passing"
+    
+    - name: "Enforcement & Documentation Complete"
+      stages: ["S5", "S6"]
+      criteria:
+        - "8th enforcement agent operational"
+        - "MCP tool enhanced with flags"
+        - "120 tests passing"
+        - "Documentation updated"
+
+  validation:
+    unit_tests: 120
+    integration_tests: 15
+    coverage_target: 90
+    test_frameworks:
+      - pytest
+      - pytest-asyncio
+      - pytest-mock
+
+  completion_criteria:
+    - "✅ 120 unit tests passing"
+    - "✅ 15 integration tests passing"
+    - "✅ 90%+ code coverage"
+    - "✅ KnowledgePersistenceAgent operational"
+    - "✅ Every ONBOARD creates 5+ YAML files"
+    - "✅ Brain intelligence layers updated per operation"
+    - "✅ Universal learning loop engaged and verified"
+    - "✅ Documentation updated in 3 locations"
+    - "✅ Zero regression in existing tests"
+
+# ============================================================================
+# DEPENDENCIES & INTEGRATION
+# ============================================================================
+
+dependencies:
+  requires:
+    - phase: "phase-70"
+      reason: "Alignment remediation establishes foundation"
+    - phase: "phase-48"
+      reason: "Holistic validation gate provides enforcement model"
+    - phase: "phase-51"
+      reason: "MCP-FIRST enforcement establishes tool usage patterns"
+
+  enables:
+    - phase: "phase-76"
+      reason: "Knowledge artifacts enable advanced analytics"
+    - phase: "phase-77"
+      reason: "Learning loop enables pattern-based automation"
+
+  impacts:
+    - component: "cortex/orchestrators/"
+      change: "All orchestrators can now engage learning loop"
+    - component: "cortex/governance/enforcement/"
+      change: "8th agent added to validation pipeline"
+    - component: "cortex/mcp/tools/"
+      change: "Enhanced flags for knowledge persistence"
+    - component: "company/domains/"
+      change: "New YAML artifacts for every onboarded repository"
+
+integration_points:
+  - name: "EnforcementOrchestrator"
+    type: "governance"
+    integration: "Add KnowledgePersistenceAgent as 8th agent"
+  
+  - name: "RepositoryOnboardingOrchestrator"
+    type: "orchestrator"
+    integration: "Add knowledge persistence and learning loop mixins"
+  
+  - name: "cortex_onboard_repository"
+    type: "mcp_tool"
+    integration: "Add flags for knowledge persistence control"
+  
+  - name: "cortex_brain"
+    type: "intelligence"
+    integration: "Register patterns and strategies from learning loop"
+
+# ============================================================================
+# RISK ASSESSMENT
+# ============================================================================
+
+risks:
+  - risk: "YAML schema drift across repositories"
+    severity: "medium"
+    mitigation: "Schema validator enforces consistency"
+    probability: 0.3
+  
+  - risk: "Brain intelligence layer conflicts with existing patterns"
+    severity: "low"
+    mitigation: "Pattern deduplication and versioning"
+    probability: 0.2
+  
+  - risk: "Performance impact from learning loop on every operation"
+    severity: "low"
+    mitigation: "Async execution, optional flags to disable"
+    probability: 0.15
+  
+  - risk: "Storage growth from persistent knowledge artifacts"
+    severity: "low"
+    mitigation: "YAML compression, periodic cleanup of stale data"
+    probability: 0.1
+
+overall_risk_score: 1.8  # Low (0-10 scale)
+
+# ============================================================================
+# SUCCESS METRICS
+# ============================================================================
+
+success_metrics:
+  quantitative:
+    - metric: "YAML artifacts created per onboarding"
+      target: "5+ files"
+      measurement: "File count in company/domains/{repo}/"
+    
+    - metric: "Brain intelligence patterns registered"
+      target: "10+ patterns after 5 onboardings"
+      measurement: "Pattern registry size"
+    
+    - metric: "Learning loop engagement rate"
+      target: "100% for ONBOARD operations"
+      measurement: "Audit trail validation"
+    
+    - metric: "Test coverage"
+      target: "90%+"
+      measurement: "pytest-cov report"
+    
+    - metric: "MCP tool usage for onboarding"
+      target: "100% (zero direct file operations)"
+      measurement: "Audit log analysis"
+
+  qualitative:
+    - "Future onboarding operations demonstrate pattern reuse"
+    - "CORTEX can answer 'What did we learn about X repository?'"
+    - "New orchestrators easily integrate learning loop"
+    - "Knowledge artifacts are human-readable and useful"
+    - "Brain intelligence layers provide measurable recommendations"
+
+# ============================================================================
+# TESTING STRATEGY
+# ============================================================================
+
+testing:
+  unit_tests:
+    - test_knowledge_persistence_service_creates_yamls
+    - test_universal_learning_loop_extracts_patterns
+    - test_brain_intelligence_registers_patterns
+    - test_onboarding_orchestrator_integrates_learning
+    - test_enforcement_agent_blocks_violations
+    - test_mcp_tool_flags_control_behavior
+
+  integration_tests:
+    - test_end_to_end_onboarding_with_persistence
+    - test_multiple_onboardings_accumulate_knowledge
+    - test_pattern_reuse_in_subsequent_operations
+    - test_learning_loop_enhances_future_recommendations
+
+  performance_tests:
+    - test_yaml_generation_completes_under_1s
+    - test_learning_loop_async_execution_non_blocking
+    - test_brain_pattern_matching_under_100ms
+
+  validation_tests:
+    - test_yaml_schema_compliance_all_artifacts
+    - test_knowledge_persistence_agent_enforcement
+    - test_audit_trail_completeness
+
+# ============================================================================
+# ROLLOUT PLAN
+# ============================================================================
+
+rollout:
+  phase_1:
+    name: "Foundation Services (S1, S2)"
+    duration: "4 days"
+    deliverables:
+      - "KnowledgePersistenceService operational"
+      - "UniversalLearningLoop operational"
+      - "50 tests passing"
+
+  phase_2:
+    name: "Integration (S3, S4)"
+    duration: "4 days"
+    deliverables:
+      - "Brain intelligence layers enhanced"
+      - "Onboarding orchestrator integrated"
+      - "90 tests passing"
+
+  phase_3:
+    name: "Enforcement & Documentation (S5, S6)"
+    duration: "2 days"
+    deliverables:
+      - "8th enforcement agent operational"
+      - "MCP tool enhanced"
+      - "Documentation updated"
+      - "120 tests passing"
+
+# ============================================================================
+# AUDIT TRAIL
+# ============================================================================
+
+audit:
+  created_by: "CORTEX Architect"
+  created_reason: "P0 violation: Knowledge persistence and learning loop not engaged"
+  validation_method: "Root cause analysis + gap identification + fix recommendation"
+  compliance_check: "EnforcementOrchestrator validation required"
+  sign_off_required: true
