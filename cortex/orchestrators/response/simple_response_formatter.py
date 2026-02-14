@@ -13,6 +13,7 @@ def format_response(
     sections: Optional[List[Dict[str, Any]]] = None,
     metrics: Optional[Dict[str, Any]] = None,
     next_steps: Optional[List[str]] = None,
+    business_wisdom: Optional[str] = None,
 ) -> str:
     """
     Format a clear, scannable response using chat01.md standards.
@@ -23,6 +24,7 @@ def format_response(
         sections: List of content sections, each with 'title' and 'content' or 'items'
         metrics: Optional metrics dict (e.g., {"Tests": "90/90", "Coverage": "95%"})
         next_steps: Optional list of next step strings
+        business_wisdom: Optional formatted book references (from BusinessWisdomFormatter)
     
     Returns:
         Formatted markdown response string
@@ -36,8 +38,12 @@ def format_response(
         ...         {"title": "Results", "content": "All 90 tests passing"}
         ...     ],
         ...     metrics={"Tests": "90/90", "Duration": "3h"},
-        ...     next_steps=["Start WAVE-2"]
+        ...     next_steps=["Start WAVE-2"],
+        ...     business_wisdom="### 📚 Business Wisdom\\n- **TDD** → CORE-008 (Kent Beck)"
         ... )
+    
+    AC-ID: AC-PHASE-06-S3-001
+    Phase: 6 (Business Wisdom Display Enhancement - Stage 3)
     """
     sections = sections or []
     
@@ -58,6 +64,11 @@ def format_response(
     lines.append(f"{icon} {title}")
     lines.append("----------------------------------------")
     lines.append("")
+    
+    # Business Wisdom section (if provided) - appears after header
+    if business_wisdom:
+        lines.append(business_wisdom)
+        lines.append("")
     
     # Progress bar if metrics include percentage
     if metrics and "Progress" in metrics:
