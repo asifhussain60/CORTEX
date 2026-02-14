@@ -63,6 +63,9 @@ from cortex.orchestrators.core.component_health import (
 )
 from cortex.orchestrators.core.governance_registry import GovernanceRegistry
 
+# AC-PERMANENT-FIX-007: Import mcp_tool decorator for MCP tool exposure
+from cortex.mcp.decorators import mcp_tool
+
 # AC-UX-VISIBILITY-001: Import orchestrator context decorator
 from cortex.orchestrators.decorators import inject_orchestrator_context
 from cortex_brain.tier2.hallucination_prevention import BehavioralBoundaryRules
