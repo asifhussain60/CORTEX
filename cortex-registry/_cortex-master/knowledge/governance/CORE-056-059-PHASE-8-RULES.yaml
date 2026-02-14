@@ -23,7 +23,7 @@ Files in `cortex-registry/_cortex-master/` containing internal planning artifact
 - `governance/` (reusable governance patterns, shipped to users)
 - `enhancements/` (reusable enhancement specifications)
 - `directives/` (reusable execution directives)
-- `WAVE-*.md` and `WAVE-*.yaml` (reference documentation)
+- `PHASE-*.md` and `PHASE-*.yaml` (reference documentation)
 
 **Enforcement Mechanism:**
 1. Pre-commit hook: `.githooks/pre-commit` checks staged files

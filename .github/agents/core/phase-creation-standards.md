@@ -1,19 +1,38 @@
 # Phase Creation Standards Guide
-```
 
-**DEPRECATED (CORE-042 Simplification):**
-- ❌ "Wave" → Use **Phase** (work milestone, 1-4 weeks)
-- ❌ "Initiative" → Use **Phase** 
-- ❌ "Epic" → Use **Phase**
-- ❌ "Feature" → Use **Phase**
-- ❌ "stages" → Use **Phase**
+**Authority:** CORE-042 | **Created:** 2026-02-12 | **Updated:** 2026-02-14
 
-**CURRENT HIERARCHY (CORE-042 v3.0):**
+---
+
+## 🎯 Purpose
+
+This guide establishes best practices for creating CORTEX phases, ensuring consistency, completeness, and maintainability across all phase specifications.
+
+---
+
+## 📐 Hierarchical Terminology (CORE-042)
+
+**CORTEX Hierarchy (Simplified):**
+
 ```
 PHASE (P-)   Work milestone, 1-4 weeks
   └─ STAGE (S-) Work unit, 2-5 days
       └─ TASK (T-) Atomic work, 2-8 hours
 ```
+
+**Key Principles:**
+- ✅ Simple, universal hierarchy
+- ✅ Works across all orchestrators (planning, interaction, TDD)
+- ✅ No wave/epic/feature concepts
+- ✅ Consistent P-/S-/T- prefixes
+
+**DEPRECATED TERMS:**
+- ❌ "Wave" → Use **Phase**
+- ❌ "Initiative" → Use **Phase** 
+- ❌ "Epic" → Use **Phase**
+- ❌ "Feature" → Use **Phase**
+
+---
 
 ## 📋 Overview
 
@@ -24,50 +43,7 @@ Every CORTEX phase must follow a standardized structure with:
 - ✅ Minimum 80% test coverage
 - ✅ ROI justification with evidence
 
-## 🛠️ CLI Tool Usage | **Created:** 2026-02-12 | **Updated:** 2026-02-14 | **Authority:** ENH-084 + CORE-042
-
 ---
-
-## 🎯 Purpose
-
-This guide establ### 7. Dependency Validation
-
-Dependencies must exist in registry:
-
-```yaml
-dependencies: ["ENH-063", "PHASE-48"]  # Must exist
-blocks: ["PHASE-52"]                   # Must exist
-```
-
-## 🎨 Phase Templates
-
-### Standard Template
-
-Best for: Simple phases, 1-5 stages practices for creating CORTEX phases, ensuring consistency, completeness, and maintainability across all phase specifications.
-
-## � Hierarchical Terminology (CORE-042)
-
-**Industry-Aligned Hierarchy (Scrum/SAFe):**
-
-```
-EPIC (E-)           Strategic initiative, 3-12 months
-  └─ FEATURE (F-)   Deliverable capability, 2-8 weeks
-      └─ PHASE (P-) Milestone/increment, 1-4 weeks  
-          └─ STAGE (S-) Work unit, 2-5 days
-              └─ TASK (T-) Atomic work, 2-8 hours
-```
-
-**DEPRECATED TERMS:**
-- ❌ "Wave" → Use **Epic** (strategic) or **Feature** (deliverable)
-- ❌ "Initiative" → Use **Epic**
-- ❌ "stages" → Use **Feature**
-
-## �📋 Overview
-
-Every CORTEX phase must follow a standardized structure with:
-- ✅ Feature/Epic-based execution plan (Foundation → Core → Migration → Polish)
-- ✅ Cleanup requirements (vacuum per feature)
-- ✅ Registry synchronization checkpoints
 - ✅ Minimum 80% test coverage
 - ✅ ROI justification with evidence
 
@@ -208,8 +184,8 @@ roi_justification: |
 Dependencies must exist in registry:
 
 ```yaml
-dependencies: ["ENH-063", "WAVE-H"]  # Must exist
-blocks: ["WAVE-J"]                   # Must exist
+dependencies: ["ENH-063", "PHASE-H"]  # Must exist
+blocks: ["PHASE-J"]                   # Must exist
 ```
 
 ## 📝 Templates

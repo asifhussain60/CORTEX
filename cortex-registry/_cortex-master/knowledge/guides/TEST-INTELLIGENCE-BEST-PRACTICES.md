@@ -3,7 +3,7 @@
 **Author:** Asif Hussain  
 **Date:** 2026-02-13  
 **Version:** 1.0 (Final)  
-**Authority:** WAVE-1 through WAVE-5 Implementation  
+**Authority:** PHASE-1 through PHASE-5 Implementation  
 **Status:** ✅ PROVEN (59/59 tests passing, ready for scaling to 28 orchestrators)
 
 ---
@@ -186,7 +186,7 @@ golden_path_limit: 10  # Max 10 tests per orchestrator
 ```bash
 # stages registry changes just like code
 git add cortex-registry/_cortex-master/orchestrators/*.yaml
-git commit -m "ADD: Test demands for 28 orchestrators (WAVE-2)"
+git commit -m "ADD: Test demands for 28 orchestrators (PHASE-2)"
 git log -- cortex-registry/  # See history
 ```
 

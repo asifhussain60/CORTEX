@@ -123,7 +123,7 @@ current_status:
   archived:
     location: "cortex-registry/_cortex-master/_archive/obsolete-plans/"
     count: 47  # Updated with new understanding
-    scope: "AUTONOMOUS-PHASE-EXECUTION-*.md, WAVE-[0-9]-*, consolidated reports"
+    scope: "AUTONOMOUS-PHASE-EXECUTION-*.md, PHASE-[0-9]-*, consolidated reports"
     note: "Only active Phase Execution files retained in _cortex-master root"
       
   test_suite:
@@ -470,7 +470,7 @@ references:
   execution_framework:
     - "TDDOrchestrator: Tests before implementation"
     - "EnforcementOrchestrator: 7-agent pre-execution gate"
-    - "WAVE model: Atomic deliverables with token budgets"
+    - "PHASE model: Atomic deliverables with token budgets"
     
   automation_tools:
     - "cortex_process_request: Main implementation tool"

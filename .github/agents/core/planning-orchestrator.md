@@ -360,7 +360,7 @@ def execute_track(stages: stages) -> TrackExecutionResult:
 
 ### MasterOrchestrator Handoff
 ```
-User Request (e.g., "/plan implement wave-7")
+User Request (e.g., "/plan implement phase-7")
     ↓
 MasterOrchestrator: Route to Planning Orchestrator
     ├─ Intent: PLAN
@@ -378,7 +378,7 @@ Planning Orchestrator: Spawn TDDOrchestrator for each stages
 Planning Orchestrator: Real-time sync + blocker handling
     ├─ Phase complete → Update master registry
     ├─ stages complete → Notify dependent stages
-    └─ Wave complete → Unblock downstream waves
+    └─ Phase complete → Unblock downstream phases
     ↓
 Result: Phase Execution complete, master plan synchronized
 ```
@@ -402,9 +402,9 @@ Stage executor
 
 ## Parallel Execution Example: Phase-7
 
-### Wave Configuration
+### Phase Configuration
 ```yaml
-wave: 7
+phase: 7
 name: "Orchestrator Consolidation"
 max_parallel_stages: 5
 duration_estimate: 18 days
@@ -466,9 +466,9 @@ Efficiency Gain: 25% timeline reduction
 
 ## Configuration & Tunables
 
-### Wave Configuration (Per-Wave)
+### Phase Configuration
 ```yaml
-wave: N
+phase: N
 max_parallel_stages: 5           # How many stages concurrent
 retry_policy:
   max_retries: 3
@@ -476,7 +476,7 @@ retry_policy:
 timeout_policy:
   per_phase: 3600                # Seconds per phase
   per_track: 86400               # Seconds per stages
-  per_wave: 1728000              # Seconds per wave (20 days)
+  per_phase: 1728000              # Seconds per phase (20 days)
 sync_frequency: 300              # Sync to master plan every 5 min
 blocker_escalation_delay: 600    # Escalate to engineer after 10 min
 ```
@@ -517,13 +517,13 @@ planning_orchestrator_failures_total{failure_type="transient|test|infrastructure
 
 | Concept | Definition | Owner |
 |---------|-----------|-------|
-| **Wave** | ROI batch (2-4 weeks) | PhaseArchitectureAgent |
+| **Phase** | ROI batch (2-4 weeks) | PhaseArchitectureAgent |
 | **stages** | Parallel execution unit | PlanningOrchestrator |
 | **Phase** | TDD deliverable | TDDOrchestrator (delegated) |
-| **Dependency** | Condition for wave start | PlanningOrchestrator (evaluates) |
+| **Dependency** | Condition for phase start | PlanningOrchestrator (evaluates) |
 | **Sync** | Registry update | PlanningOrchestrator (executes) |
 | **Failure Recovery** | Retry/Escalate logic | PlanningOrchestrator |
 
 ---
 
-*v1.0 — Planning Orchestrator for dependency-aware Phase Execution, parallel stage orchestration, real-time registry sync, and failure recovery. Consumes declarative wave plans from PhaseArchitectureAgent, transforms to executable orchestrated tasks.*
+*v1.0 — Planning Orchestrator for dependency-aware Phase Execution, parallel stage orchestration, real-time registry sync, and failure recovery. Consumes declarative phase plans from PhaseArchitectureAgent, transforms to executable orchestrated tasks.*

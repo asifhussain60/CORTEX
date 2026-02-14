@@ -1,4 +1,4 @@
-# 🔗 CORTEX Wave Framework Navigation Guide
+# 🔗 CORTEX Phase Framework Navigation Guide
 
 **Quick Navigation Between Framework Documents**  
 **Status:** Active | **Updated:** 2026-02-11
@@ -18,16 +18,16 @@
 │     └─ Getting Started: First steps                            │
 │                                                                 │
 │  2. PHASE-EXECUTION-ORCHESTRATION-MASTER.md                     │
-│     └─ Master Control: 8 waves with dependencies               │
-│     └─ Detailed Specs: Each wave with checkpoints              │
+│     └─ Master Control: 8 phases with dependencies               │
+│     └─ Detailed Specs: Each phase with checkpoints              │
 │     └─ Execution Format: Progress bars, summaries              │
-│     └─ Deployment Reminders: Per wave                          │
+│     └─ Deployment Reminders: Per phase                          │
 │                                                                 │
 │  3. STRATEGIC-DOCUMENTATION-CHECKPOINT-FRAMEWORK.md            │
 │     └─ Checkpoint Philosophy: Why embedded docs?               │
 │     └─ Template Structure: How to write each checkpoint        │
 │     └─ Quality Standards: Validation checklist                 │
-│     └─ Phase-by-Wave Breakdown: What to document when           │
+│     └─ Phase-by-Phase Breakdown: What to document when           │
 │                                                                 │
 │  (+ 3 Existing Reference Documents)                            │
 │     └─ PHASE-BASED-EXECUTION-PLAN.yaml                          │
@@ -46,11 +46,11 @@
 | Situation | Document | Why |
 |-----------|----------|-----|
 | **New to framework** | PHASE-EXECUTION-FRAMEWORK-SUMMARY.md (this file) | Overview + getting started |
-| **Starting a wave** | PHASE-EXECUTION-ORCHESTRATION-MASTER.md | Execution protocol + format |
+| **Starting a phase** | PHASE-EXECUTION-ORCHESTRATION-MASTER.md | Execution protocol + format |
 | **During Phase Execution** | STRATEGIC-DOCUMENTATION-CHECKPOINT-FRAMEWORK.md | How to write checkpoint docs |
-| **After wave completes** | PHASE-EXECUTION-ORCHESTRATION-MASTER.md | Deployment reminder + summary |
+| **After phase completes** | PHASE-EXECUTION-ORCHESTRATION-MASTER.md | Deployment reminder + summary |
 | **Planning improvements** | PHASE-REPRIORITIZATION-2026-02-11.yaml | Dependencies + constraints |
-| **Detailed wave specs** | PHASE-BASED-EXECUTION-PLAN.yaml | Technical specifications |
+| **Detailed phase specs** | PHASE-BASED-EXECUTION-PLAN.yaml | Technical specifications |
 | **ROI analysis** | HIGH-ROI-PHASE-PRIORITIZATION.md | Business justification |
 
 ---
@@ -65,12 +65,12 @@
 ### 2. Understand (10 min)
 **File:** PHASE-EXECUTION-ORCHESTRATION-MASTER.md → "Overview" section (first 1000 words)
 
-**Learn:** What are the 8 waves? What gets delivered when?
+**Learn:** What are the 8 phases? What gets delivered when?
 
 ### 3. Start (1 min)
 **Command:**
 ```
-"start wave 1"
+"start phase 1"
 ```
 
 **System handles:** All TDD, checkpoints, progress tracking
@@ -80,7 +80,7 @@
 ## 📋 Document Relationship Map
 
 ```
-User says: "start wave 1"
+User says: "start phase 1"
             ↓
       ORCHESTRATION-MASTER.md
       (loads PHASE-1 specs)
@@ -105,7 +105,7 @@ User says: "start wave 1"
 
 ---
 
-## 🌊 Phase-by-Wave Document Usage
+## 🌊 Phase-by-Phase Document Usage
 
 ### PHASE-1 Execution
 
@@ -143,13 +143,13 @@ When you see:
 
 ### From CHECKPOINT-FRAMEWORK
 When you see:
-- **Wave dependencies** → See ORCHESTRATION-MASTER.md for overall timeline
+- **Phase dependencies** → See ORCHESTRATION-MASTER.md for overall timeline
 - **Quality standards** → See PHASE-BASED-EXECUTION-PLAN.yaml for governance rules
-- **Example checkpoint** → See ORCHESTRATION-MASTER.md → Wave sections
+- **Example checkpoint** → See ORCHESTRATION-MASTER.md → Phase sections
 
 ### From PHASE-BASED-EXECUTION-PLAN.yaml
 When you see:
-- **Phase-XX reference** → See PHASE-ORCHESTRATION-MASTER.md for which wave it belongs to
+- **Phase-XX reference** → See PHASE-ORCHESTRATION-MASTER.md for which phase it belongs to
 - **Governance rules** → See CORE-008, CORE-011, etc. in cortex-architect.prompt.md
 
 ---
@@ -164,7 +164,7 @@ Start here: ORCHESTRATION-MASTER.md
    ├─ Checkpoints: 2a (Agent Architecture), 2b (MCP Integration)
    └─ When to deploy: After 10-14 days + 24h monitoring of Phase-1
 
-Ready? → Command: "start wave 2"
+Ready? → Command: "start phase 2"
 ```
 
 ### "I need to create Checkpoint-4a documentation"
@@ -194,7 +194,7 @@ Then: ORCHESTRATION-MASTER.md → "PHASE-6" section for execution details
 ### "I want to run waves in parallel to save time"
 ```
 Start here: PHASE-ORCHESTRATION-MASTER.md
-└─ Find: "Wave Dependency Graph" section
+└─ Find: "Phase Dependency Graph" section
    ├─ Shows: Which waves can run together
    ├─ Example: Phase-3 (Autonomy) independent from Phase-2 (Intelligence)
    ├─ Result: 77-97 days → 55-62 days optimization
@@ -211,7 +211,7 @@ Then: PHASE-REPRIORITIZATION-2026-02-11.yaml for detailed dependencies
 ```
 ORCHESTRATION-MASTER.md
 ├─ First read: 30 minutes (overview + PHASE-1 section)
-├─ PHASE-1 start: "start wave 1" command (1 second)
+├─ PHASE-1 start: "start phase 1" command (1 second)
 ├─ PHASE-1 end: Read completion summary (5 minutes)
 ├─ Waves 2-8: Read relevant section before each (5 min × 7) = 35 min
 └─ Total: ~1 hour across 8 waves
@@ -243,7 +243,7 @@ REFERENCE DOCUMENTS
 - [ ] Working on CORTEX branch (single branch policy — CORE-052)
 - [ ] Reviewed governance rules (CORE-008 TDD-first mandatory)
 
-**Ready?** → Command: `"start wave 1"`
+**Ready?** → Command: `"start phase 1"`
 
 ---
 
@@ -254,26 +254,26 @@ REFERENCE DOCUMENTS
 │                 Phase Execution FRAMEWORK                         │
 │                                                                  │
 │  ORCHESTRATION (MASTER.md)                                       │
-│  ├─ What gets built: 8 waves with specific deliverables         │
+│  ├─ What gets built: 8 phases with specific deliverables         │
 │  ├─ When it gets built: Timelines + dependencies                │
 │  ├─ How it gets built: Autonomous execution + progress bars     │
-│  └─ When to deploy: Production deployment after each wave       │
+│  └─ When to deploy: Production deployment after each phase       │
 │      │                                                           │
 │      └─→ CHECKPOINTS (FRAMEWORK.md)                             │
 │          ├─ What gets documented: 16 architecture docs          │
-│          ├─ When: During each wave (not deferred)               │
+│          ├─ When: During each phase (not deferred)               │
 │          ├─ How: Template-based, consistent format              │
 │          └─ Quality: Validation checklist per checkpoint        │
 │      │                                                           │
 │      └─→ REFERENCE DOCS (YAML + existing)                       │
 │          ├─ Dependencies: Which waves block which               │
-│          ├─ ROI: Why each wave matters (business case)          │
+│          ├─ ROI: Why each phase matters (business case)          │
 │          ├─ Specs: Technical details of each phase              │
 │          └─ Standards: Governance + quality gates               │
 │                                                                  │
 │  Result:                                                         │
 │  ✅ Autonomous execution (structured progress with completion tables) │
-│  ✅ Incremental delivery (production deployment per wave)       │
+│  ✅ Incremental delivery (production deployment per phase)       │
 │  ✅ Tech debt paid off (docs embedded, not deferred)            │
 │  ✅ Quality assured (TDD mandatory, governance enforced)        │
 │  ✅ Handoff ready (comprehensive docs + trained teams)          │
@@ -298,7 +298,7 @@ REFERENCE DOCUMENTS
 ### Before Starting Phase-1 (Before Next Day)
 1. Read CHECKPOINT-FRAMEWORK.md once (understand checkpoint structure)
 2. Set up production deployment procedure (git tags, monitoring, etc.)
-3. Execute: `"start wave 1"`
+3. Execute: `"start phase 1"`
 
 ---
 
@@ -329,8 +329,8 @@ REFERENCE DOCUMENTS
 
 ✅ **New Way:** 8 waves, each with docs + tests + deployment
 - Docs are accurate (written while fresh)
-- Tech debt is paid off incrementally (2-3 hours per wave)
-- Risk is distributed (failure in wave 3 doesn't cascade)
+- Tech debt is paid off incrementally (2-3 hours per phase)
+- Risk is distributed (failure in phase 3 doesn't cascade)
 - Team onboarding starts immediately (docs available as work progresses)
 
 **Result:** 55-62 days to full production delivery with comprehensive documentation.

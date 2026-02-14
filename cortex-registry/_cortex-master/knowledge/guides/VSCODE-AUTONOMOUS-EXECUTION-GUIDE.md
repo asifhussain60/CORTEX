@@ -161,7 +161,7 @@ PHASE-5 (Final Consolidation) ← END
 
 ### Each Phase Execution Flow
 
-1. **Copy the VSCode Command** from wave section above
+1. **Copy the VSCode Command** from phase section above
 2. **Open VSCode Copilot Chat** (Cmd+I or ⌘+I on Mac)
 3. **Paste the command** and press Enter
 4. **MCP auto-starts** (no manual setup needed)
@@ -177,7 +177,7 @@ PHASE-5 (Final Consolidation) ← END
 
 **Total Budget:** 380K tokens across 5 waves
 
-| Wave | Budget | Actual | Status |
+| Phase | Budget | Actual | Status |
 |------|--------|--------|--------|
 | 1    | 80K    | TBD    | Ready  |
 | 2    | 100K   | TBD    | Ready  |
@@ -185,7 +185,7 @@ PHASE-5 (Final Consolidation) ← END
 | 4    | 60K    | TBD    | Ready  |
 | 5    | 50K    | TBD    | Ready  |
 
-**If response truncated during wave:**
+**If response truncated during phase:**
 1. Copilot automatically commits progress to git
 2. Copy the AC_COMPLETE marker from truncated response
 3. Start new Copilot chat session
@@ -205,7 +205,7 @@ PHASE-5 (Final Consolidation) ← END
 3. Retry in Copilot chat: type @cortex
 ```
 
-### Symptom: Tests failing during WAVE
+### Symptom: Tests failing during PHASE
 
 **Important:** ❌ NEVER skip tests (CORE-008 violation)
 

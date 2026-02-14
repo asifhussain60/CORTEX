@@ -1,6 +1,6 @@
 # EventBus Debugger User Guide
 
-**Authority:** WAVE-3 Stage 3 - ENH-089 Documentation  
+**Authority:** PHASE-3 Stage 3 - ENH-089 Documentation  
 **Version:** 1.0  
 **Date:** 2026-02-13
 
@@ -660,4 +660,4 @@ history = monitor.get_metrics_history(
 ---
 
 **Version:** 1.0 | **Last Updated:** 2026-02-13  
-**Authority:** WAVE-3 Stage 3 - ENH-089 EventBus Debugger Documentation
+**Authority:** PHASE-3 Stage 3 - ENH-089 EventBus Debugger Documentation

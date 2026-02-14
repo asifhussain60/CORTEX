@@ -194,6 +194,11 @@ class TestNomenclatureConsistency:
             # Allow guide files documenting migration
             if 'guide' in str(file_path).lower() and 'cleanup' in str(file_path).lower():
                 continue
+            # Allow documentation of deprecated terms
+            if 'No wave' in line_content or 'no wave' in line_content:
+                continue
+            if '"Wave"' in line_content and ('→ Use' in line_content or 'DEPRECATED' in line_content.upper()):
+                continue
             unacceptable.append((file_path, line_num, line_content))
         
         if unacceptable:

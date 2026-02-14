@@ -422,7 +422,7 @@ python3 -m pytest tests/unit/validation/ tests/integration/validation/ tests/uni
 
 Run validation:
 - ✅ **Before every registry commit** (pre-commit hook)
-- ✅ **After bulk updates** (wave completions)
+- ✅ **After bulk updates** (phase completions)
 - ✅ **Weekly automated scans** (CI/CD pipeline)
 - ❌ **Not after every single file edit** (too frequent)
 

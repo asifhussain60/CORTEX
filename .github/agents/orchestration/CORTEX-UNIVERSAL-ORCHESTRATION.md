@@ -86,7 +86,7 @@ INTERACTION_STARTED → COMPREHENSION_COMPLETE → CHALLENGE_GENERATED (if any) 
 | fix, bug, error, broken | FIX | TDDOrchestrator |
 | refactor, improve, optimize | REFACTOR | RefactoringOrchestrator |
 | analyze, review, assess | ANALYZE | LENSSynthesis (via UnifiedIntelligenceProvider) |
-| plan, wave, phase | PLAN | PlanOrchestrator |
+| plan, phase, stage | PLAN | PlanOrchestrator |
 | design, architect, structure | DESIGN | InteractionOrchestrator (challenge mode) |
 
 ### LENS Auto-Fetch Logic
@@ -180,7 +180,7 @@ INTELLIGENCE_FETCH_STARTED → LENS_ANALYSIS_COMPLETE → KNOWLEDGE_SYNTHESIS_CO
 |--------------|-----------|---------|----------|
 | **TDDOrchestrator** | IMPLEMENT, FIX | RED→GREEN→REFACTOR cycle | `cortex_process_request` |
 | **RefactoringOrchestrator** | REFACTOR | Safe code improvement | `cortex_process_request` |
-| **PlanOrchestrator** | PLAN | Phase/wave management | `cortex_plan_setup`, `cortex_plan_resolve` |
+| **PlanOrchestrator** | PLAN | Phase management | `cortex_plan_setup`, `cortex_plan_resolve` |
 | **LENSSynthesis** | ANALYZE | Code intelligence | `cortex_lens_analyze` |
 | **EnforcementOrchestrator** | ALL (pre-exec) | Governance validation | N/A (internal) |
 | **CoherenceValidator** | ALL (post-exec) | Post-edit validation | N/A (internal) |
@@ -312,7 +312,7 @@ STAGE 4: TDDOrchestrator
 
 ## 🌊 Workflow Runtime Integration (Future)
 
-**When WorkflowRuntime is implemented (WAVE-V), it will:**
+**When WorkflowRuntime is implemented (PHASE-V), it will:**
 
 1. **Read this agent** to discover available orchestrators
 2. **Compose workflows dynamically** using Stage 1-4 pipeline

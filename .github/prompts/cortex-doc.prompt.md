@@ -3100,7 +3100,7 @@ flowchart TD
     CheckKeywords -->|"fix, resolve, debug, repair"| FIX[/FIX Intent/]
     CheckKeywords -->|"refactor, improve, optimize"| REFACTOR[/REFACTOR Intent/]
     CheckKeywords -->|"analyze, explain, understand"| ANALYZE[/ANALYZE Intent/]
-    CheckKeywords -->|"plan, phase, create wave"| PLAN[/PLAN Intent/]
+    CheckKeywords -->|"plan, phase, create phase"| PLAN[/PLAN Intent/]
     CheckKeywords -->|"audit, check, scan, validate"| AUDIT[/AUDIT Intent/]
     CheckKeywords -->|"onboard, setup, initialize"| ONBOARD[/ONBOARD Intent/]
     CheckKeywords -->|No strong match| Ambiguous{Confidence<br/>>= 0.7?}
@@ -3159,7 +3159,7 @@ Primary classification based on action verbs:
 - **FIX:** "fix", "resolve", "debug", "repair"
 - **REFACTOR:** "refactor", "improve", "optimize"
 - **ANALYZE:** "analyze", "explain", "understand"
-- **PLAN:** "plan", "phase", "create wave"
+- **PLAN:** "plan", "phase", "create phase"
 - **AUDIT:** "audit", "check", "scan"
 - **ONBOARD:** "onboard", "setup", "initialize"
 

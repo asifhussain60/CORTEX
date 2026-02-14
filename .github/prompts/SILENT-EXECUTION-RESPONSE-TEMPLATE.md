@@ -39,7 +39,7 @@ Use this template for ANY autonomous phase/plan completion report. Replace brack
 
 | Variable | Description | Examples |
 |----------|-------------|----------|
-| `[PHASE/PLAN NAME]` | Plan or wave identifier | `PHASE-R`, `PHASE-52`, `MASTER-PLAN-V5` |
+| `[PHASE/PLAN NAME]` | Plan or phase identifier | `PHASE-R`, `PHASE-52`, `MASTER-PLAN-V5` |
 | `[STAGE NUMBER]` | Numeric stage identifier | `4`, `Stage 2`, `S3` |
 | `[STAGE TITLE]` | Descriptive stage name | `Integration Testing`, `Schema Migration`, `Auth Implementation` |
 | `[COMPLETION %]` | Percentage (0-100) | `100`, `75`, `50` |
@@ -100,7 +100,7 @@ Use this template for ANY autonomous phase/plan completion report. Replace brack
 ---
 ```
 
-### Example 3: Master Plan Multi-Wave
+### Example 3: Master Plan Multi-Phase
 
 ```markdown
 ---
