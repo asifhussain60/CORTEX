@@ -112,6 +112,9 @@ class CortexGovernance(ConsolidatedTool):
     
     async def execute(self, **params) -> ToolResult:
         """Execute governance operation."""
+        # ENFORCEMENT: Validate orchestrator routing
+        validate_orchestrator_context(params.get("orchestrator_context"))
+        
         operation = params.get("operation", "query")
         target = params.get("target")
         rules = params.get("rules", [])
@@ -279,6 +282,9 @@ class CortexValidate(ConsolidatedTool):
     
     async def execute(self, **params) -> ToolResult:
         """Execute validation operation."""
+        # ENFORCEMENT: Validate orchestrator routing
+        validate_orchestrator_context(params.get("orchestrator_context"))
+        
         operation = params.get("operation", "compliance")
         target = params.get("target")
         rules = params.get("rules", [])
@@ -444,6 +450,9 @@ class CortexLoad(ConsolidatedTool):
     
     async def execute(self, **params) -> ToolResult:
         """Execute load operation."""
+        # ENFORCEMENT: Validate orchestrator routing
+        validate_orchestrator_context(params.get("orchestrator_context"))
+        
         operation = params.get("operation", "rules")
         filter_value = params.get("filter")
         tier = params.get("tier")
@@ -656,6 +665,9 @@ class CortexValidateRequest(ConsolidatedTool):
     
     async def execute(self, **params) -> ToolResult:
         """Execute holistic validation."""
+        # ENFORCEMENT: Validate orchestrator routing
+        validate_orchestrator_context(params.get("orchestrator_context"))
+        
         intent = params.get("intent", "IMPLEMENT")
         request = params.get("request", "")
         target = params.get("target", "")

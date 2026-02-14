@@ -113,6 +113,9 @@ class CortexLens(ConsolidatedTool):
     
     async def execute(self, **params) -> ToolResult:
         """Execute LENS operation."""
+        # ENFORCEMENT: Validate orchestrator routing
+        validate_orchestrator_context(params.get("orchestrator_context"))
+        
         operation = params.get("operation", "analyze")
         target = params.get("target", "")
         depth = params.get("depth", "standard")
@@ -306,6 +309,9 @@ class CortexKnowledge(ConsolidatedTool):
     
     async def execute(self, **params) -> ToolResult:
         """Execute knowledge operation."""
+        # ENFORCEMENT: Validate orchestrator routing
+        validate_orchestrator_context(params.get("orchestrator_context"))
+        
         operation = params.get("operation", "search")
         query = params.get("query", "")
         domain = params.get("domain")
@@ -426,6 +432,9 @@ class CortexGit(ConsolidatedTool):
     
     async def execute(self, **params) -> ToolResult:
         """Execute git operation."""
+        # ENFORCEMENT: Validate orchestrator routing
+        validate_orchestrator_context(params.get("orchestrator_context"))
+        
         operation = params.get("operation", "history")
         target = params.get("target")
         limit = params.get("limit", 10)

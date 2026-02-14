@@ -115,6 +115,9 @@ class CortexDebug(ConsolidatedTool):
     
     async def execute(self, **params) -> ToolResult:
         """Execute debug operation."""
+        # ENFORCEMENT: Validate orchestrator routing
+        validate_orchestrator_context(params.get("orchestrator_context"))
+        
         operation = params.get("operation", "analyze")
         target = params.get("target")
         markers = params.get("markers", [])
@@ -318,6 +321,9 @@ class CortexRefactor(ConsolidatedTool):
     
     async def execute(self, **params) -> ToolResult:
         """Execute refactoring operation."""
+        # ENFORCEMENT: Validate orchestrator routing
+        validate_orchestrator_context(params.get("orchestrator_context"))
+        
         operation = params.get("operation", "organize")
         target = params.get("target", "")
         new_name = params.get("new_name")
@@ -452,6 +458,9 @@ class CortexPlan(ConsolidatedTool):
     
     async def execute(self, **params) -> ToolResult:
         """Execute plan operation."""
+        # ENFORCEMENT: Validate orchestrator routing
+        validate_orchestrator_context(params.get("orchestrator_context"))
+        
         operation = params.get("operation", "query")
         phase_id = params.get("phase_id")
         data = params.get("data", {})
@@ -579,6 +588,9 @@ class CortexOnboard(ConsolidatedTool):
     
     async def execute(self, **params) -> ToolResult:
         """Execute onboard operation."""
+        # ENFORCEMENT: Validate orchestrator routing
+        validate_orchestrator_context(params.get("orchestrator_context"))
+        
         operation = params.get("operation", "full")
         path = params.get("path", ".")
         options = params.get("options", {})
@@ -714,6 +726,9 @@ class CortexDashboard(ConsolidatedTool):
     
     async def execute(self, **params) -> ToolResult:
         """Execute dashboard operation."""
+        # ENFORCEMENT: Validate orchestrator routing
+        validate_orchestrator_context(params.get("orchestrator_context"))
+        
         operation = params.get("operation", "query")
         target = params.get("target")
         output_format = params.get("format", "html")
