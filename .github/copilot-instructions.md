@@ -88,13 +88,18 @@ VS Code Copilot Chat ──(stdio, JSON-RPC 2.0)──> MCP Server (auto-started
 ```
 1. Classify user intent (IMPLEMENT | FIX | REFACTOR | ANALYZE)
 2. Run EnvironmentIntegrityAgent.validate_pre_flight(intent)
-3. Check MCP availability (3 methods: tool_query → env_vars → network_port)
+3. Check MCP availability (3 methods):
+   - Method 1: Tool Registry (tool_query for cortex_* tools)
+   - Method 2: Environment Variables (CORTEX_MCP_ENABLED, MCP_SERVER_URL)
+   - Method 3: Network Port (localhost:9000 health check)
 4. If MCP unavailable + IMPLEMENT/FIX/REFACTOR → BLOCK
 5. If MCP unavailable + ANALYZE → ALLOW (read-only OK)
 ```
 
 **Validation Checklist:**
-- [ ] MCP tools in registry (tool_query → env_vars → config file)
+- [ ] MCP tools in registry (Method 1: tool_query)
+- [ ] Environment variables set (Method 2: env_vars)
+- [ ] Network port accessible (Method 3: localhost:9000)
 - [ ] `.vscode/settings.json` exists and configured
 - [ ] Python ≥ 3.9.0
 - [ ] Virtual environment activated
