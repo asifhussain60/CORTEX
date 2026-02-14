@@ -17,8 +17,9 @@
 | **Documentation Lag** | 🔴 CRITICAL | Registry shows WAVE-O as "READY" when "COMPLETE" | User confusion risk |
 
 **Git HEAD:** `7e70f6023`  
-**Test Collection:** 14,781 tests (100% collected, ~99% passing)  
-**Date Range:** 2026-02-12 to 2026-02-13
+**Test Collection:** 14,489 tests (100% collected, ~99% passing)  
+**Date Range:** 2026-02-12 to 2026-02-14  
+**Note:** Updated from 14,781 (overcounting) to 14,489 (verified baseline)
 
 ---
 

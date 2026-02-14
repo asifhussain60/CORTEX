@@ -38,9 +38,9 @@ Single source of truth for CORTEX registry documentation. Links to all master pl
 
 | Document | Purpose | Status |
 |----------|---------|--------|
-| **[MASTER-IMPLEMENTATION-REALITY-SYNC-2026-02-13.md](./MASTER-IMPLEMENTATION-REALITY-SYNC-2026-02-13.md)** | **PRIMARY:** Master sync of implementation reality + reprioritized waves | ✅ ACTIVE |
-| **[AUTONOMOUS-WAVES-VISUAL-DASHBOARD-2026-02-13.md](./AUTONOMOUS-WAVES-VISUAL-DASHBOARD-2026-02-13.md)** | Visual progress dashboard (16/22 waves complete) | ✅ ACTIVE |
-| **[WAVE-P-QUICK-START-CARD.md](./WAVE-P-QUICK-START-CARD.md)** | 30-second quick start for WAVE-P | ✅ READY NOW |
+| **[MASTER-IMPLEMENTATION-REALITY-SYNC-2026-02-13.md](./MASTER-IMPLEMENTATION-REALITY-SYNC-2026-02-13.md)** | **PRIMARY:** Master sync of implementation reality + reprioritized waves | ✅ ACTIVE (Updated 2026-02-14) |
+| **[WAVE-CONSOLIDATION-7DAY-REMEDIATION.yaml](./WAVE-CONSOLIDATION-7DAY-REMEDIATION.yaml)** | 7-day work integration + lifecycle hooks | ✅ IN PROGRESS |
+| **[reports/7-day-work-audit-2026-02-14.yaml](./reports/7-day-work-audit-2026-02-14.yaml)** | Comprehensive audit of recent work | ✅ COMPLETE |
 
 ### 2. Wave Execution Guides
 
