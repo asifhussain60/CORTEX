@@ -3,6 +3,9 @@ CORTEX MCP v2 - Intelligence Test Generation Tool
 
 Provides intelligent test generation via cortex_generate_tests.
 
+ENFORCEMENT: All tools MUST validate orchestrator_context.
+Only MasterOrchestrator can invoke directly (via cortex_process_request entry point).
+
 AC_START: AC-WAVE-2-S6-002
 """
 
@@ -15,6 +18,32 @@ from cortex.mcp.base import (
     ToolParameter,
     ToolResult,
 )
+
+
+def validate_orchestrator_context(context: Optional[Dict[str, Any]]) -> None:
+    """
+    Validate request comes from MasterOrchestrator.
+    
+    Args:
+        context: Orchestrator context with source information
+        
+    Raises:
+        ValueError: If context missing or source is not MasterOrchestrator
+    """
+    if not context:
+        raise ValueError(
+            "BLOCKED: Missing orchestrator_context. All requests MUST route "
+            "through MasterOrchestrator via cortex_process_request entry point. "
+            "This ensures DoR validation, intent classification, CCL pre-warming, "
+            "and governance enforcement."
+        )
+    
+    source = context.get("source")
+    if source != "MasterOrchestrator":
+        raise ValueError(
+            f"BLOCKED: Request from '{source}'. Only MasterOrchestrator can "
+            "invoke MCP tools directly. Use cortex_process_request entry point."
+        )
 
 
 class CortexGenerateTests(ConsolidatedTool):

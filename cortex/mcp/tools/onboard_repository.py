@@ -10,6 +10,9 @@ Enhanced MCP tool that includes:
 - Enforcement validation integration
 - Comprehensive error handling
 
+ENFORCEMENT: All tools MUST validate orchestrator_context.
+Only MasterOrchestrator can invoke directly (via cortex_process_request entry point).
+
 Author: GitHub Copilot
 Date: 2026-02-14
 Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
@@ -31,6 +34,32 @@ from cortex.governance.enforcement.agents.knowledge_persistence_agent import (
 )
 
 logger = logging.getLogger(__name__)
+
+
+def validate_orchestrator_context(context: Optional[Dict[str, Any]]) -> None:
+    """
+    Validate request comes from MasterOrchestrator.
+    
+    Args:
+        context: Orchestrator context with source information
+        
+    Raises:
+        ValueError: If context missing or source is not MasterOrchestrator
+    """
+    if not context:
+        raise ValueError(
+            "BLOCKED: Missing orchestrator_context. All requests MUST route "
+            "through MasterOrchestrator via cortex_process_request entry point. "
+            "This ensures DoR validation, intent classification, CCL pre-warming, "
+            "and governance enforcement."
+        )
+    
+    source = context.get("source")
+    if source != "MasterOrchestrator":
+        raise ValueError(
+            f"BLOCKED: Request from '{source}'. Only MasterOrchestrator can "
+            "invoke MCP tools directly. Use cortex_process_request entry point."
+        )
 
 
 @dataclass

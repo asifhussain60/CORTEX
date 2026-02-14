@@ -15,10 +15,13 @@ MCP Tools:
     - cortex_debug_list_sessions: List active debug sessions
     - cortex_debug_cleanup: Remove markers for resolved sessions
 
+ENFORCEMENT: All tools MUST validate orchestrator_context.
+Only MasterOrchestrator can invoke directly (via cortex_process_request entry point).
+
 AC-ID: AC-WAVE-R-007
 """
 
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 import logging
 from datetime import datetime
 
@@ -27,6 +30,32 @@ from cortex.orchestrators.support.debugger_orchestrator import DebuggerOrchestra
 
 
 logger = logging.getLogger(__name__)
+
+
+def validate_orchestrator_context(context: Optional[Dict[str, Any]]) -> None:
+    """
+    Validate request comes from MasterOrchestrator.
+    
+    Args:
+        context: Orchestrator context with source information
+        
+    Raises:
+        ValueError: If context missing or source is not MasterOrchestrator
+    """
+    if not context:
+        raise ValueError(
+            "BLOCKED: Missing orchestrator_context. All requests MUST route "
+            "through MasterOrchestrator via cortex_process_request entry point. "
+            "This ensures DoR validation, intent classification, CCL pre-warming, "
+            "and governance enforcement."
+        )
+    
+    source = context.get("source")
+    if source != "MasterOrchestrator":
+        raise ValueError(
+            f"BLOCKED: Request from '{source}'. Only MasterOrchestrator can "
+            "invoke MCP tools directly. Use cortex_process_request entry point."
+        )
 
 
 class DebugMCPTools:

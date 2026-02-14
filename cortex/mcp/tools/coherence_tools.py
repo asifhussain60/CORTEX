@@ -9,6 +9,9 @@ Compliance: MCP-FIRST architecture
 Purpose:
     Exposes coherence validation via MCP:
     - cortex_validate_coherence: Validate file coherence
+    
+ENFORCEMENT: All tools MUST validate orchestrator_context.
+Only MasterOrchestrator can invoke directly (via cortex_process_request entry point).
 """
 
 from __future__ import annotations
@@ -25,6 +28,32 @@ from cortex.orchestrators.coherence import (
 )
 
 logger = logging.getLogger(__name__)
+
+
+def validate_orchestrator_context(context: Optional[Dict[str, Any]]) -> None:
+    """
+    Validate request comes from MasterOrchestrator.
+    
+    Args:
+        context: Orchestrator context with source information
+        
+    Raises:
+        ValueError: If context missing or source is not MasterOrchestrator
+    """
+    if not context:
+        raise ValueError(
+            "BLOCKED: Missing orchestrator_context. All requests MUST route "
+            "through MasterOrchestrator via cortex_process_request entry point. "
+            "This ensures DoR validation, intent classification, CCL pre-warming, "
+            "and governance enforcement."
+        )
+    
+    source = context.get("source")
+    if source != "MasterOrchestrator":
+        raise ValueError(
+            f"BLOCKED: Request from '{source}'. Only MasterOrchestrator can "
+            "invoke MCP tools directly. Use cortex_process_request entry point."
+        )
 
 
 async def cortex_validate_coherence(
