@@ -182,7 +182,173 @@ The UnifiedQualityAssuranceOrchestrator (anterior cingulate cortex — error det
 
 ---
 
-## TDD Enforcement
+### Detailed Enforcement Agent Matrix
+
+The 8-agent enforcement system provides comprehensive pre-execution validation with specific trigger conditions and blocking criteria.
+
+| # | Agent | CORE Rules Enforced | Trigger Conditions | Block Conditions | Performance |
+|---|-------|-------------------|-------------------|------------------|-------------|
+| **1** | **GovernanceEnforcementAgent** | CORE-008, 011, 012, 013, 029, 030 | Every IMPLEMENT, FIX, REFACTOR intent | ❌ Missing tests<br>❌ No type hints<br>❌ Missing docstrings<br>❌ Bare except clauses<br>❌ Missing response header | <50ms |
+| **2** | **SecurityCheckpointAgent** | CORE-025, 026, 027 | Pre-commit, PR creation, deployment | ❌ Uncommitted sensitive files<br>❌ Missing AC markers<br>❌ Audit trail gaps<br>❌ Non-atomic commits | <30ms |
+| **3** | **ComplianceValidationAgent** | Tier 1 domain rules (industry-specific) | Domain operations (finance, healthcare, etc.) | ❌ GDPR violations<br>❌ HIPAA non-compliance<br>❌ SOC 2 gaps<br>❌ PCI DSS failures | <100ms |
+| **4** | **FileNamingEnforcementAgent** | CORE-028 | File creation, file rename | ❌ SCREAMING_CASE detected<br>❌ Plan files >40 chars<br>❌ Non-kebab-case production files | <10ms |
+| **5** | **IncrementalExecutionAgent** | CORE-001, 004 | Code generation >200 LOC | ❌ Single commit >500 LOC<br>❌ Silent errors<br>❌ Exceeded continuation limit | <20ms |
+| **6** | **MarkdownSuppressionAgent** | CORE-002 | File creation with `.md` extension | ❌ `.md` file outside `.github/prompts/`<br>❌ `.md` file outside `.github/agents/`<br>❌ Any `README.md` except root | <5ms |
+| **7** | **ArchitectureIntegrityAgent** | CORE-017-020, 032, 034, 035, 038-041 | Design review, architecture changes | ❌ Versioned filenames<br>❌ Performance violations<br>❌ Duplicate implementations (CORE-035)<br>❌ Turn budget exceeded | <80ms |
+| **8** | **EnvironmentIntegrityAgent** | MCP-FIRST, CORE-050, CORE-051 | IMPLEMENT/FIX/REFACTOR intents | ❌ MCP tools unavailable<br>❌ Python version <3.9<br>❌ Virtual env not activated<br>❌ settings.json tracked in git | <40ms |
+
+**Total Validation Time:** <335ms (worst case with all 8 agents triggered)
+
+---
+
+### Enforcement Flow Diagram
+
+```
+User Request → IntentRouter
+      ↓
+[1] Classify Intent (IMPLEMENT | FIX | REFACTOR | ANALYZE)
+      ↓
+[2] Load EnforcementOrchestrator (UnifiedQualityAssuranceOrchestrator)
+      ↓
+[3] Parallel Agent Execution (8 agents, <335ms total)
+      ↓
+      ├─→ Agent 1: GovernanceEnforcementAgent → PASS/WARNING/BLOCKED
+      ├─→ Agent 2: SecurityCheckpointAgent → PASS/WARNING/BLOCKED
+      ├─→ Agent 3: ComplianceValidationAgent → PASS/WARNING/BLOCKED
+      ├─→ Agent 4: FileNamingEnforcementAgent → PASS/WARNING/BLOCKED
+      ├─→ Agent 5: IncrementalExecutionAgent → PASS/WARNING/BLOCKED
+      ├─→ Agent 6: MarkdownSuppressionAgent → PASS/WARNING/BLOCKED
+      ├─→ Agent 7: ArchitectureIntegrityAgent → PASS/WARNING/BLOCKED
+      └─→ Agent 8: EnvironmentIntegrityAgent → PASS/WARNING/BLOCKED
+      ↓
+[4] Aggregate Results
+      ↓
+      ├─→ ANY BLOCKED → HALT execution, display violations
+      ├─→ WARNINGS only → LOG warnings, display to user, continue
+      └─→ ALL PASS → Proceed to orchestrator
+      ↓
+[5] Execute Request (TDDOrchestrator, RefactoringOrchestrator, etc.)
+      ↓
+[6] Post-Execution Audit (verify compliance maintained)
+      ↓
+[7] AC_COMPLETE marker (audit trail closure)
+```
+
+---
+
+### Agent-Specific Behavior
+
+#### GovernanceEnforcementAgent (Agent 1)
+**Purpose:** Enforce core development practices  
+**Activation:** Every code-modifying operation  
+**Blocking Threshold:** Any violation = BLOCKED
+
+**Validation Checklist:**
+- ✅ Tests exist before code (CORE-008)
+- ✅ All function parameters have type hints (CORE-011)
+- ✅ All function returns have type hints (CORE-011)
+- ✅ Google-style docstrings present (CORE-012)
+- ✅ No bare `except:` clauses (CORE-013)
+- ✅ Response header present (CORE-029)
+
+**Example Block Message:**
+```
+❌ BLOCKED: GovernanceEnforcementAgent
+
+Violations:
+  • CORE-008: No tests found for new code in src/auth/login.py
+  • CORE-011: Missing type hints in function authenticate_user()
+  • CORE-012: Missing docstring in class UserSession
+
+Resolution:
+  1. Write failing tests first (TDD)
+  2. Add type hints: def authenticate_user(username: str, password: str) -> bool:
+  3. Add Google-style docstring with Args, Returns, Raises sections
+
+Retry after fixing violations.
+```
+
+#### SecurityCheckpointAgent (Agent 2)
+**Purpose:** Git discipline and audit trail integrity  
+**Activation:** Pre-commit, PR creation, deployment gates  
+**Blocking Threshold:** Critical violations only
+
+**Validation Checklist:**
+- ✅ No uncommitted files with sensitive data (CORE-025)
+- ✅ Atomic commits (CORE-026)
+- ✅ AC_START marker present (CORE-027)
+- ✅ AC_COMPLETE marker present after completion (CORE-027)
+- ✅ Commit message follows format
+
+**Example Block Message:**
+```
+❌ BLOCKED: SecurityCheckpointAgent
+
+Violations:
+  • CORE-027: Missing AC_START marker in modified file src/auth/token.py
+  • CORE-025: Uncommitted file .env contains potential secrets
+
+Resolution:
+  1. Add AC marker: # AC_START: AC-FEATURE-AUTH-001
+  2. Remove .env from git: git rm --cached .env
+  3. Add .env to .gitignore
+  4. Retry operation
+
+Audit trail integrity is mandatory for all governance-gated work.
+```
+
+#### EnvironmentIntegrityAgent (Agent 8) — NEW in Phase 51
+**Purpose:** MCP-FIRST enforcement and environment validation  
+**Activation:** IMPLEMENT/FIX/REFACTOR intents (BLOCKING), ANALYZE intent (non-blocking)  
+**Blocking Threshold:** MCP unavailable for code-modifying operations
+
+**3-Method MCP Detection Cascade:**
+1. **Environment Variables:** Check `MCP_SERVER_URL`, `CORTEX_MCP_ENABLED`
+2. **Settings.json:** Validate `.vscode/settings.json` exists with Python path
+3. **Network Port:** Health check on localhost:9000 (fallback)
+
+**Validation Checklist:**
+- ✅ MCP tools available in registry (cortex_* tools detected)
+- ✅ Python ≥ 3.9.0
+- ✅ Virtual environment activated
+- ✅ `.vscode/settings.json` NOT tracked in git (CORE-051)
+- ✅ Setup log shows "✅ SETUP COMPLETE"
+
+**Example Block Message (MCP Unavailable):**
+```
+❌ BLOCKED: EnvironmentIntegrityAgent
+
+Intent: IMPLEMENT
+Status: MCP tools not available in Copilot Chat
+
+MCP Detection Results:
+  • Method 1 (env vars): FAIL - MCP_SERVER_URL not set
+  • Method 2 (settings.json): FAIL - File not found
+  • Method 3 (network): FAIL - localhost:9000 not responding
+
+Resolution:
+  1. python .cortex/setup-mcp.py
+  2. Reload VS Code (Command Palette → Developer: Reload Window)
+  3. Retry your request
+
+CORTEX operates at ONE quality level: Production.
+Fix infrastructure. No bypasses allowed.
+```
+
+**Example Warning (ANALYZE Intent):**
+```
+⚠️ WARNING: EnvironmentIntegrityAgent
+
+Intent: ANALYZE (read-only operation allowed without MCP)
+Status: MCP tools not detected, but operation can proceed
+
+Note: For IMPLEMENT/FIX/REFACTOR operations, MCP setup is required.
+To enable full CORTEX capabilities: python .cortex/setup-mcp.py
+```
+
+---
+
+###TDD Enforcement
 
 ### CORE-008: TDD Mandatory
 

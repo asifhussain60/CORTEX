@@ -13,7 +13,7 @@ Use this template for ANY autonomous wave/plan completion report. Replace bracke
 ### Format
 
 ```markdown
-<hr>
+---
 
 📋 **[WAVE/PLAN NAME] [STAGE NUMBER]: [STAGE TITLE]**
 
@@ -30,7 +30,7 @@ Use this template for ANY autonomous wave/plan completion report. Replace bracke
 **Tests:** [PASSED]/[TOTAL] | **Coverage:** [COVERAGE_PCT]%
 **Fixed:** [KEY_FIX_SUMMARY]
 
-<hr>
+---
 ```
 
 ---
@@ -57,7 +57,7 @@ Use this template for ANY autonomous wave/plan completion report. Replace bracke
 ### Example 1: Wave Completion
 
 ```markdown
-<hr>
+---
 
 📋 **WAVE-R Stage 4: Integration Testing**
 
@@ -74,13 +74,13 @@ Use this template for ANY autonomous wave/plan completion report. Replace bracke
 **Tests:** 58/69 | **Coverage:** 84%
 **Fixed:** Session ID timestamp collision (microseconds)
 
-<hr>
+---
 ```
 
 ### Example 2: Phase Mid-Stage
 
 ```markdown
-<hr>
+---
 
 📋 **PHASE-52 Stage 2: Event Bus Debugger Implementation**
 
@@ -97,13 +97,13 @@ Use this template for ANY autonomous wave/plan completion report. Replace bracke
 **Tests:** 72/85 | **Coverage:** 81%
 **In Progress:** Dashboard state reconstruction logic
 
-<hr>
+---
 ```
 
 ### Example 3: Master Plan Multi-Wave
 
 ```markdown
-<hr>
+---
 
 📋 **MASTER-PLAN-V5 Wave A: Foundation Infrastructure**
 
@@ -120,7 +120,7 @@ Use this template for ANY autonomous wave/plan completion report. Replace bracke
 **Tests:** 103/103 | **Coverage:** 94%
 **Fixed:** Cross-platform settings path resolution
 
-<hr>
+---
 ```
 
 ---
@@ -128,8 +128,10 @@ Use this template for ANY autonomous wave/plan completion report. Replace bracke
 ## Rendering Rules
 
 ### Separator Format
-- Use `<hr>` HTML tag (prevents line overflow in Copilot Chat)
+- Use markdown horizontal rule: `---` (three dashes)
+- **CRITICAL:** Always add blank line AFTER `---` before content
 - Place BEFORE and AFTER stage results
+- **WHY:** HTML `<hr>` tags cause rendering conflicts with markdown headers in VS Code Copilot Chat
 
 ### Progress Bar
 - Use backticks: `` `██████████` `` (inline code prevents parsing)
@@ -156,7 +158,8 @@ Use this template for ANY autonomous wave/plan completion report. Replace bracke
 
 ## Do's ✅
 
-- ✅ Use HTML `<hr>` for separators
+- ✅ Use markdown `---` (three dashes) for separators
+- ✅ Always add blank line after `---` before content
 - ✅ Include exact test counts and coverage %
 - ✅ Keep stage names under 30 characters
 - ✅ Use status icons consistently
@@ -195,7 +198,7 @@ def format_completion_report(wave_name, stage_num, stage_title, components, test
         for i, comp in enumerate(components)
     ])
     
-    return f"""<hr>
+    return f"""---
 
 📋 **{wave_name} Stage {stage_num}: {stage_title}**
 
@@ -208,7 +211,7 @@ def format_completion_report(wave_name, stage_num, stage_title, components, test
 **Tests:** {tests_passed}/{tests_total} | **Coverage:** {coverage}%
 **Fixed:** {fix_summary}
 
-<hr>"""
+---"""
 ```
 
 ---
@@ -217,7 +220,9 @@ def format_completion_report(wave_name, stage_num, stage_title, components, test
 
 Before emitting response:
 
-- [ ] `<hr>` separators present (top and bottom)
+- [ ] `---` separators present (top and bottom)
+- [ ] Blank line after opening `---`
+- [ ] Blank line before closing `---`
 - [ ] Progress bar matches completion percentage
 - [ ] All status icons are consistent (✅/🟡/⚪/🔴)
 - [ ] Test counts are accurate (`N/M` format)
