@@ -169,28 +169,28 @@ class CORTEXProductionValidator:
         
         # Check critical imports
         critical_packages = [
-            ("fastapi", "Web framework for MCP server"),
-            ("uvicorn", "ASGI server for FastAPI"),
-            ("pydantic", "Data validation"),
-            ("pyyaml", "YAML configuration"),
+            ("fastapi", "fastapi", "Web framework for MCP server"),
+            ("uvicorn", "uvicorn", "ASGI server for FastAPI"),
+            ("pydantic", "pydantic", "Data validation"),
+            ("yaml", "pyyaml", "YAML configuration"),  # Import name differs from package name
         ]
         
-        for package, description in critical_packages:
+        for import_name, package_name, description in critical_packages:
             try:
-                __import__(package)
+                __import__(import_name)
                 self._add_check(
-                    f"Package: {package}",
+                    f"Package: {package_name}",
                     True,
                     Severity.INFO,
-                    f"Critical package available: {package} ({description})"
+                    f"Critical package available: {package_name} ({description})"
                 )
             except ImportError:
                 self._add_check(
-                    f"Package: {package}",
+                    f"Package: {package_name}",
                     False,
                     Severity.CRITICAL,
-                    f"Missing critical package: {package} ({description})",
-                    remediation=f"Install package: pip install {package}"
+                    f"Missing critical package: {package_name} ({description})",
+                    remediation=f"Install package: pip install {package_name}"
                 )
     
     def _validate_mcp_server(self) -> None:
@@ -218,7 +218,7 @@ class CORTEXProductionValidator:
                 # Check for core tools
                 required_tools = [
                     "cortex_process_request",
-                    "cortex_lens_analyze",
+                    "cortex_lens",  # Changed from cortex_lens_analyze
                     "cortex_challenge", 
                     "cortex_total_recall"
                 ]

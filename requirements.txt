@@ -1,1 +1,295 @@
--r deployment/requirements.txt
+# CORTEX 7.0 Requirements
+# ========================
+# Production-grade Python dependencies for CORTEX Master Orchestrator System
+# Python 3.9+ required (3.10+ recommended)
+# Enforcement: All packages pinned to tested versions
+#
+# ============================================================================
+# PREFLIGHT CHECK REQUIREMENTS (Per cortex-architect.prompt.md § PRE-FLIGHT)
+# ============================================================================
+#
+# ENVIRONMENT VALIDATION (MANDATORY before running CORTEX):
+#   ✅ Python: >= 3.9.0 (minimum) | 3.10+ (recommended)
+#      Verify: python --version  (should show Python 3.9.x or higher)
+#   
+#   ✅ Virtual Environment: .venv/bin/python (created before pip install)
+#      Create:  python -m venv .venv
+#      Activate: source .venv/bin/activate  (macOS/Linux)
+#               .venv\Scripts\activate  (Windows)
+#   
+#   ✅ Git Configuration: core.hooksPath = .githooks (Phase 71 enforcement)
+#      Configure: git config core.hooksPath .githooks
+#      Verify:   git config core.hooksPath  (should show .githooks)
+#   
+#   ✅ MCP Module: cortex/mcp/__init__.py (present in repository)
+#      Verify: ls cortex/mcp/__init__.py  (should exist)
+#   
+#   ✅ VS Code MCP Config: .vscode/settings.json with MCP server config
+#      Auto-Configure: python .cortex/setup-mcp.py
+#      Manual Check:   grep "github.copilot.chat.mcpServers" .vscode/settings.json
+#
+# CRITICAL DEPENDENCY GROUPS (ALL required for preflight):
+#   1. CORE DEPENDENCIES (pyyaml, pydantic) [PREFLIGHT CRITICAL]
+#   2. MCP PROTOCOL & IPC (websockets, fastapi, uvicorn) [PREFLIGHT CRITICAL]
+#   3. TESTING & QA (pytest, black, mypy) [PREFLIGHT CRITICAL FOR TDD]
+#   4. LLM PROVIDERS (openai, anthropic) [OPTIONAL but recommended]
+#   5. ML/NLP (sentence-transformers, torch, transformers) [OPTIONAL]
+#   6. AST PARSING (tree-sitter) [OPTIONAL for multi-language support]
+#
+# INSTALLATION STEPS:
+#   1. Create virtual environment:
+#      python -m venv .venv
+#   
+#   2. Activate virtual environment:
+#      source .venv/bin/activate  (macOS/Linux)
+#      .venv\Scripts\activate  (Windows)
+#   
+#   3. Upgrade pip:
+#      pip install --upgrade pip setuptools wheel
+#   
+#   4. Install dependencies from this file:
+#      pip install -r requirements.txt
+#      (This installs ALL packages including optional dependencies)
+#   
+#   5. Configure git hooks (Phase 71 enforcement):
+#      git config core.hooksPath .githooks
+#   
+#   6. Auto-configure MCP (creates .vscode/settings.json if needed):
+#      python .cortex/setup-mcp.py
+#   
+#   7. Verify installation (run all tests):
+#      pytest
+#      (Should show: passed=N, coverage=Y%, duration=Zs)
+#   
+#   8. Check MCP server health:
+#      python -m cortex.mcp &
+#      curl http://localhost:8000/health
+#      (Should show: {"status": "healthy"})
+#
+# TROUBLESHOOTING:
+#   - ImportError for pyyaml: pip install --upgrade pyyaml
+#   - Missing pytest: pip install pytest pytest-cov pytest-asyncio
+#   - MCP server fails: python .cortex/setup-mcp.py && python -m cortex.mcp
+#   - Git hooks not running: git config core.hooksPath .githooks
+#
+# PREFLIGHT VALIDATION SCRIPT (Automated):
+#   python -m cortex.commands.preflight_check
+#   (Validates all requirements and reports status)
+
+# ============================================================================
+# CORE DEPENDENCIES (Python 3.9+ compatible)
+# ============================================================================
+
+# Configuration management and data validation
+pyyaml==6.0.1              # YAML parsing for config files (Python 3.9+) [PREFLIGHT]
+pydantic==2.5.2            # Data validation with type hints (Python 3.9+) [PREFLIGHT]
+
+# AC_START: AC-MCP-FIX-003
+# Description: Add missing dependencies (jsonschema for pattern registry, governance engine)
+jsonschema==4.21.1         # JSON Schema validation for governance rules [PREFLIGHT]
+# AC_COMPLETE: AC-MCP-FIX-003 ✅ jsonschema added for governance validation
+
+# AC_START: AC-MCP-FIX-003
+# Description: Add missing dependencies (jsonschema for pattern registry, governance engine)
+jsonschema==4.21.1         # JSON Schema validation for governance rules [PREFLIGHT]
+# AC_COMPLETE: AC-MCP-FIX-003 ✅ jsonschema added for governance validation
+
+# ============================================================================
+# MCP PROTOCOL & IPC [PREFLIGHT CRITICAL]
+# ============================================================================
+# Note: CORTEX uses custom JSON-RPC 2.0 implementation (cortex/mcp/protocol.py)
+# Reason: Official mcp SDK requires Python 3.10+; we support 3.9+
+
+# WebSocket and async communication
+websockets==12.0           # WebSocket protocol (MCP server communication) [PREFLIGHT]
+aiofiles==23.2.0           # Async file I/O for streaming responses [PREFLIGHT]
+httptools==0.7.1           # C-accelerated HTTP parsing (performance) [PREFLIGHT]
+wsproto==1.1.0             # WebSocket subprotocol layer [PREFLIGHT]
+
+# ============================================================================
+# API & WEB FRAMEWORK (FastAPI + Uvicorn) [PREFLIGHT CRITICAL]
+# ============================================================================
+
+# Web framework and server
+fastapi==0.104.1           # Modern async web framework (ASGI) [PREFLIGHT]
+uvicorn[standard]==0.24.0  # ASGI server with all standard features [PREFLIGHT]
+jinja2==3.1.2              # Template engine for template rendering [PREFLIGHT]
+
+# ============================================================================
+# HTTP CLIENTS [PREFLIGHT]
+# ============================================================================
+
+httpx==0.25.2              # Async HTTP client (API calls, testing) [PREFLIGHT]
+requests==2.31.0           # Synchronous HTTP client (backward compat) [PREFLIGHT]
+
+# ============================================================================
+# LLM PROVIDERS (AC-LENS-LLM-001 - Intelligent LENS Enhancement) [OPTIONAL]
+# ============================================================================
+# Optional: Install only if using LLM-enhanced analysis
+
+openai>=1.10.0             # OpenAI GPT-4, GPT-4o, GPT-4o-mini [OPTIONAL]
+anthropic>=0.21.0          # Anthropic Claude 3 (Opus, Sonnet, Haiku) [OPTIONAL]
+
+# ============================================================================
+# ML/NLP DEPENDENCIES (Phase 34: Advanced Response Optimization) [OPTIONAL]
+# ============================================================================
+# Required for semantic deduplication and ML-based summarization
+
+sentence-transformers>=2.2.0  # Sentence embeddings for semantic similarity [OPTIONAL]
+scikit-learn>=1.3.0           # Cosine similarity, clustering algorithms [OPTIONAL]
+torch>=2.0.0                  # PyTorch for transformer models (CPU) [OPTIONAL]
+transformers>=4.30.0          # HuggingFace transformers (BART, T5 for Phase 36) [OPTIONAL]
+
+# ============================================================================
+# MULTI-LANGUAGE AST PARSING (ENH-017 Phase 1) [OPTIONAL]
+# ============================================================================
+
+# Tree-sitter for multi-language parsing
+tree-sitter>=0.20.0        # Universal parser generator (C#, Java, TS, JS) [OPTIONAL]
+tree-sitter-languages>=1.10.2  # Pre-built grammars for 50+ languages [OPTIONAL]
+tree-sitter-c-sharp>=0.21.0    # C# grammar for LENS CSharp adapter [OPTIONAL]
+tree-sitter-javascript>=0.21.0 # JavaScript/TypeScript grammar for LENS adapters [OPTIONAL]
+tree-sitter-java>=0.21.0       # Java grammar for LENS Java adapter [OPTIONAL]
+tree-sitter-c-sharp>=0.21.0    # C# grammar for LENS CSharp adapter [OPTIONAL]
+tree-sitter-javascript>=0.21.0 # JavaScript/TypeScript grammar for LENS adapters [OPTIONAL]
+tree-sitter-java>=0.21.0       # Java grammar for LENS Java adapter [OPTIONAL]
+
+# ============================================================================
+# DATA SCIENCE & ANALYSIS (Optional but recommended) [OPTIONAL]
+# ============================================================================
+# Used for: orchestrator analytics, performance metrics, usage patterns
+
+pandas==2.0.3              # Data analysis and manipulation [OPTIONAL]
+numpy==1.24.4              # Numerical computing foundation [OPTIONAL]
+scikit-learn==1.3.2        # Machine learning for recommendations/analytics [OPTIONAL]
+
+# ============================================================================
+# TESTING & QUALITY ASSURANCE (Development) [PREFLIGHT CRITICAL FOR TDD]
+# ============================================================================
+
+# Testing frameworks (TDD enforcement per CORE-008)
+pytest==7.4.3              # Test framework [PREFLIGHT]
+pytest-cov==4.1.0          # Code coverage measurement (AC-NFR-007 compliance) [PREFLIGHT]
+pytest-asyncio==0.23.2     # Async test support for cortex.mcp.* [PREFLIGHT]
+pytest-timeout==2.4.0      # Timeout enforcement for hanging tests (prevent infinite loops) [PREFLIGHT]
+pytest-mock==3.15.1        # Mocking support for unit tests
+pytest-xdist==3.8.0        # Parallel test execution (performance)
+
+# Code quality and linting [PREFLIGHT ENFORCED]
+black==23.12.1             # Code formatter (enforced) [PREFLIGHT]
+isort==5.13.2              # Import sorter (PEP 8 compliance) [PREFLIGHT]
+mypy==1.8.0                # Static type checker (CORE-011 enforcement) [PREFLIGHT]
+pylint==3.0.3              # Advanced code linter
+flake8==7.0.0              # PEP 8 style guide enforcement
+
+# ============================================================================
+# DEVELOPMENT & INFRASTRUCTURE UTILITIES [PREFLIGHT]
+# ============================================================================
+
+# Environment and configuration
+python-dotenv==1.0.0       # .env file loading for local development [PREFLIGHT]
+
+# CLI framework
+click==8.1.7               # Command-line interface builder [PREFLIGHT]
+argparse-dataclass==1.0.0  # Dataclass-based CLI argument parsing
+
+# System utilities
+psutil==5.9.6              # System and process information [PREFLIGHT]
+dependency-injector==4.40.0  # Dependency injection framework (CORTEX core pattern) [PREFLIGHT]
+playwright==1.40.0         # Browser automation for E2E testing
+
+# Monitoring and observability
+prometheus-client==0.24.1  # Prometheus metrics exporter [PREFLIGHT] - Updated for compatibility
+
+# ============================================================================
+# DASHBOARD & DATA AGGREGATION (PHASE-21)
+# ============================================================================
+
+# Dashboard v3 JSON-first data layer (NO SQLite dependencies)
+# Uses Pydantic v2 for schema validation, generates dashboard-data.json
+# Frontend: Vanilla JS + ECharts + Mermaid.js (no Node.js runtime)
+# Testing: pytest (backend) + Playwright (browser E2E)
+
+# ============================================================================
+# AI/ML INTEGRATIONS (For full CORTEX functionality)
+# ============================================================================
+
+anthropic==0.7.11         # Anthropic Claude API client (CORTEX brain)
+openai==1.3.9             # OpenAI API client (alternative LLM backend)
+
+# ============================================================================
+# DATABASE & ORM
+# ============================================================================
+
+sqlalchemy==2.0.23        # ORM and database abstraction
+alembic==1.12.1           # Database migrations
+psycopg2-binary==2.9.9    # PostgreSQL adapter
+
+# ============================================================================
+# SECURITY & CRYPTOGRAPHY
+# ============================================================================
+
+cryptography==41.0.7      # Cryptographic library (hash chains, encryption)
+python-jose==3.3.0        # JWT token handling
+pycryptodome==3.19.0      # Additional crypto primitives
+
+# ============================================================================
+# ASYNC & CONCURRENCY [PREFLIGHT]
+# ============================================================================
+
+greenlet==3.0.1           # Lightweight concurrency [PREFLIGHT]
+gevent==23.9.1            # Concurrency alternative [PREFLIGHT]
+
+# ============================================================================
+# LOGGING & OBSERVABILITY [PREFLIGHT]
+# ============================================================================
+
+structlog==23.2.0         # Structured logging (audit trails) [PREFLIGHT]
+python-json-logger==2.0.7 # JSON-formatted logging [PREFLIGHT]
+py-zipkin==1.2.8          # Distributed tracing [OPTIONAL]
+
+# ============================================================================
+# DEVELOPMENT NOTES
+# ============================================================================
+#
+# VERSION PINNING STRATEGY:
+# - Production dependencies: Fixed versions (pyyaml==6.0.1)
+# - Rationale: Prevent breaking changes in minor/patch versions
+# - Updates: Only after testing in CORTEX test suite
+#
+# PYTHON 3.9+ REQUIREMENT:
+# - Reason: asyncio improvements, type hinting coverage
+# - MCP: Custom JSON-RPC 2.0 implementation (cortex/mcp/)
+# - FastAPI: Requires 3.9+ for full async/await support
+#
+# PREFLIGHT PACKAGE VERIFICATION:
+# - Run: python -m cortex.commands.preflight_check
+# - OR Manual: pip show pyyaml pydantic fastapi uvicorn websockets
+# - Verify pytest: pytest --version  (should show pytest 7.4.3+)
+# - Verify mypy: mypy --version  (should show mypy 1.8.0+)
+#
+# PRODUCTION DEPLOYMENT (CORTEX-architect.prompt.md § PRE-FLIGHT):
+# - Install all dependencies: pip install -r requirements.txt
+# - Verify environment: python .cortex/setup-mcp.py
+# - Start MCP server: python -m cortex.mcp &
+# - Health check: curl http://localhost:8000/health
+# - Verify tests: pytest -v  (should show ALL TESTS PASS)
+# - Environment: Python 3.10+ recommended for production performance
+#
+# DEPENDENCY CONFLICT RESOLUTION:
+# - If conflicts occur: pip install --upgrade --force-reinstall -r requirements.txt
+# - Clear cache: pip cache purge
+# - Recreate venv: rm -rf .venv && python -m venv .venv && pip install -r requirements.txt
+#
+# OPTIONAL DEPENDENCIES:
+# [PREFLIGHT] = Required for session startup (core MCP functionality)
+# [OPTIONAL] = Required for specific features (LLM, ML analysis)
+# [DEV ONLY] = Required for development/testing only
+#
+# MARKER LEGEND:
+# [PREFLIGHT] - Critical for cortex-architect.prompt.md preflight checks
+# [PREFLIGHT CRITICAL] - Blocking preflight (MCP/FastAPI core)
+# [OPTIONAL] - Recommended but not required for basic operation
+# [DEV ONLY] - Development/testing only, not needed for production
+
+```
