@@ -1,0 +1,24 @@
+governance_compliance_report:
+  date: '2026-02-14T08:10:29.691921'
+  compliant: true
+  summary:
+    p0_count: 0
+    p1_count: 1
+    p2_count: 2
+  p0_violations: []
+  p1_warnings:
+  - rule: REGISTRY-CONSISTENCY
+    check: Registry validation
+    details: 33 issues in 19 phases
+    remediation: Fix broken references and stale data
+  p2_notices:
+  - rule: CORE-002
+    check: Markdown file count
+    details: "59 markdown files (target: \u226425)"
+    remediation: Run vacuum to archive excess files
+  - rule: CORE-025
+    check: Git discipline
+    details: 3 uncommitted files
+    remediation: Commit or stash uncommitted changes
+  checks_performed: 5
+  verdict: "PRODUCTION READY \u2705"
