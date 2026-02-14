@@ -679,6 +679,13 @@ check. If MCP check passes, Stage 2 will have pre-warmed context ready.
 | **COMPLETION** | Template D | Deliverables → Enhancement mapping → Non-breaking guarantees |
 | **ENHANCEMENT** | Template E | Original request → 4 quality dimensions (Automatic/Quality/Future-Proof/Non-Breaking) |
 
+**Composable Content Blocks (SSOT: `cortex-registry/interaction/content-blocks.yaml`):**
+- 🧩 7 core blocks for educational/onboarding scenarios
+- BLOCK-INTRO (role-based), BLOCK-CAPABILITIES, BLOCK-LENS, BLOCK-ORCHESTRATORS, BLOCK-TUTORIAL, BLOCK-ONBOARDING, BLOCK-NEXT-STEPS
+- Assemble blocks without duplication (anti-duplication validation)
+- Use for: "What is CORTEX?", "Explain LENS", "How do I start?", first-time users
+- Do NOT use for: autonomous execution, design sessions, completions (use Templates A-E instead)
+
 **Orchestrator Metadata Injection:**
 - Header shows orchestrator name: `**Orchestrator:** {name} ✅`
 - Optional footer tags for orchestrator personality (from registry)

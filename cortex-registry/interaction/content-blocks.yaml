@@ -1,0 +1,528 @@
+# CORTEX Composable Content Blocks
+# Version: 1.0
+# Updated: 2026-02-14
+# Purpose: Reusable content sections that compose into situation-specific responses
+
+metadata:
+  version: "1.0"
+  last_updated: "2026-02-14"
+  authority: "Composable template system for CORTEX responses"
+  principle: "LEGO-style blocks that assemble without duplication"
+
+# Core Content Blocks (7 initial blocks)
+blocks:
+  intro:
+    id: "BLOCK-INTRO"
+    name: "Role-Based Introduction"
+    length_words: 150
+    purpose: "Welcome + persona selection + command primer"
+    
+    format:
+      structure: "emoji_header + welcome + persona_table + quick_commands"
+      spacing: "1 blank line between sections"
+      icons: "🧠 for header, 1️⃣2️⃣3️⃣4️⃣ for personas"
+    
+    personas:
+      business_leader:
+        description: "Executive summaries, ROI metrics, KPIs"
+        optimization: "High-level strategic view, business impact focus"
+        commands: ["/audit", "/analyze", "/plan"]
+      
+      product_owner:
+        description: "Business guidance, roadmaps, planning"
+        optimization: "Feature delivery, user stories, sprint planning"
+        commands: ["/plan", "/design", "/implement"]
+      
+      tech_lead:
+        description: "Architecture, system design, team guidance"
+        optimization: "Technical decisions, patterns, best practices"
+        commands: ["/analyze", "/refactor", "/audit"]
+      
+      engineer:
+        description: "Full technical depth, code, implementation"
+        optimization: "Complete details, TDD, governance enforcement"
+        commands: ["/implement", "/fix", "/refactor", "/test"]
+    
+    content_template: |
+      🧠 **CORTEX Introduction**
+      
+      I'm CORTEX — your Cognitive Real-Time Execution System.
+      
+      To optimize our collaboration, what's your primary role?
+      
+      | Role | Focus | Commands |
+      |------|-------|----------|
+      | 1️⃣ **Business Leader** | Executive summaries, ROI, KPIs | `/audit`, `/analyze` |
+      | 2️⃣ **Product Owner** | Roadmaps, planning, delivery | `/plan`, `/design` |
+      | 3️⃣ **Tech Lead** | Architecture, patterns, guidance | `/analyze`, `/refactor` |
+      | 4️⃣ **Engineer** | Full technical depth, TDD | `/implement`, `/fix`, `/test` |
+      
+      **Selection persists for your session.** Adjustable anytime via `/persona {role}`.
+      
+      **Quick Commands:**
+      - `/persona engineer` — Switch to engineer mode
+      - `/detail executive` — Single-turn summary (2-3 sentences)
+      - `/detail sticky detailed` — Lock detailed depth for session
+    
+    usage_rules:
+      - "Show on first interaction with new user"
+      - "Show when user asks 'who are you' or 'what is CORTEX'"
+      - "Do NOT show during autonomous execution (silent mode)"
+      - "Can combine with CAPABILITIES or TUTORIAL blocks"
+
+  capabilities:
+    id: "BLOCK-CAPABILITIES"
+    name: "CORTEX Capabilities Overview"
+    length_words: 200
+    purpose: "High-level overview of what CORTEX can do"
+    
+    format:
+      structure: "capability_table + highlight_section"
+      table_columns: "Category | What It Does | Example Command"
+      icons: "⚡ for header"
+    
+    content_template: |
+      ⚡ **CORTEX Capabilities**
+      
+      | Category | What It Does | Example |
+      |----------|-------------|---------|
+      | **Implementation** | TDD-first code generation (28 orchestrators) | `/implement {feature}` |
+      | **Intelligence** | 4-layer LENS analysis (git, AST, comments, patterns) | `/analyze {scope}` |
+      | **Governance** | 4-layer defense (7 enforcement agents, P0-P3 checks) | `/audit` |
+      | **Planning** | Phase breakdown with registry-backed tracking | `/plan` |
+      | **Refactoring** | Semantic-aware code improvement | `/refactor {target}` |
+      | **Onboarding** | Repository security scan + LENS analysis | `/onboard {path}` |
+      | **Debugging** | Smart marker injection + auto-cleanup | `/debug {file}` |
+      
+      **Key Principles:**
+      - 🔒 **Security-First:** OWASP Top 10, secrets via env vars only
+      - ✅ **TDD Mandatory:** Tests before code (CORE-008)
+      - 🎯 **Production-Ready:** Single quality level, no shortcuts
+      - 📊 **Evidence-Based:** Implementation Truth over documentation
+      - 🏛️ **MCP-First:** All operations via Model Context Protocol
+      
+      **Architecture:**
+      - 28 orchestrators (8 core, 6 domain, 14 support)
+      - 35+ MCP tools
+      - 4-layer governance (pre-execution, runtime, post-execution, production gate)
+      - Git-backed registry for knowledge persistence
+    
+    usage_rules:
+      - "Show when user asks 'what can CORTEX do'"
+      - "Show when user asks 'capabilities' or 'features'"
+      - "Combine with ORCHESTRATORS for detailed breakdown"
+      - "Combine with TUTORIAL for actionable next steps"
+
+  lens:
+    id: "BLOCK-LENS"
+    name: "LENS Protocol Explanation"
+    length_words: 150
+    purpose: "Explain CORTEX LENS intelligence system"
+    
+    format:
+      structure: "layer_table + confidence_scoring + example"
+      icons: "🔍 for header"
+    
+    content_template: |
+      🔍 **CORTEX LENS Protocol**
+      
+      **L**anguage **E**xamination **N**avigation **S**ynthesis — 4-layer code intelligence system.
+      
+      | Layer | Source | What It Provides |
+      |-------|--------|------------------|
+      | **L1: Git History** | Commit messages, authors, timestamps | Evolution patterns, hotspots, ownership |
+      | **L2: AST Analysis** | Abstract Syntax Tree | Structure, dependencies, complexity |
+      | **L3: Comments** | Docstrings, inline comments | Intent, design decisions, TODOs |
+      | **L4: Patterns** | Architecture patterns, anti-patterns | Best practices, technical debt |
+      
+      **Confidence Scoring:**
+      - Evidence from 3+ layers = High confidence (0.8-1.0)
+      - Evidence from 2 layers = Medium confidence (0.5-0.8)
+      - Evidence from 1 layer = Low confidence (<0.5)
+      
+      **Example:**
+      ```
+      User: "How does authentication work?"
+      
+      LENS Analysis:
+      ├─ L1: Git → 42 commits to auth/* (high activity)
+      ├─ L2: AST → JWT token validation in 3 modules
+      ├─ L3: Comments → "OAuth2 flow with refresh tokens"
+      └─ L4: Pattern → Standard bearer token authentication
+      
+      Confidence: 0.92 (evidence from all 4 layers)
+      ```
+      
+      **Commands:**
+      - `/analyze {file}` — Full LENS analysis
+      - `/lens {scope}` — Focused intelligence query
+    
+    usage_rules:
+      - "Show when user asks about LENS"
+      - "Show when explaining code intelligence"
+      - "Always include example (makes abstract concrete)"
+      - "Do NOT combine with INTRO (too much info)"
+
+  orchestrators:
+    id: "BLOCK-ORCHESTRATORS"
+    name: "Orchestrator Summary"
+    length_words: "variable (show 3-5 relevant, expandable to 28)"
+    purpose: "Explain orchestrator system with context-aware selection"
+    
+    format:
+      structure: "intro + table + expansion_link"
+      table_columns: "Orchestrator | Purpose | Trigger Commands"
+      icons: "🎼 for header"
+    
+    orchestrators_registry:
+      core:
+        - name: "MasterOrchestrator"
+          purpose: "Primary coordinator, multi-layer orchestration"
+          triggers: ["auto (entry point)"]
+          personality_tags: ["comprehensive", "multi-layer", "orchestration"]
+        
+        - name: "TDDOrchestrator"
+          purpose: "Test-first implementation (RED→GREEN→REFACTOR)"
+          triggers: ["/implement", "/fix"]
+          personality_tags: ["test-first", "red-green-refactor", "coverage-driven"]
+        
+        - name: "LENSSynthesis"
+          purpose: "4-layer code intelligence analysis"
+          triggers: ["/analyze", "/lens"]
+          personality_tags: ["analysis", "evidence-based", "intelligence"]
+        
+        - name: "EnforcementOrchestrator"
+          purpose: "7-agent governance validation (P0-P3 checks)"
+          triggers: ["auto (pre-execution gate)"]
+          personality_tags: ["governance", "7-agent-validation", "compliance"]
+        
+        - name: "PlanOrchestrator"
+          purpose: "Phase lifecycle management + registry sync"
+          triggers: ["/plan"]
+          personality_tags: ["strategic", "phase-breakdown", "registry-driven"]
+      
+      domain:
+        - name: "RefactoringOrchestrator"
+          purpose: "Semantic-aware code improvement"
+          triggers: ["/refactor"]
+          personality_tags: ["code-quality", "semantic-aware", "non-breaking"]
+        
+        - name: "ChallengeEngine"
+          purpose: "Design review + risk analysis + alternatives"
+          triggers: ["auto (CORE-048 validation gate)"]
+          personality_tags: ["design-review", "risk-analysis", "alternative-generation"]
+        
+        - name: "DigestOrchestrator"
+          purpose: "Session analysis + learning extraction"
+          triggers: ["/digest"]
+          personality_tags: ["session-analysis", "learning-extraction", "knowledge-synthesis"]
+        
+        - name: "RepositoryOnboardingOrchestrator"
+          purpose: "Security scan (P0/P1/P2) + LENS analysis"
+          triggers: ["/onboard"]
+          personality_tags: ["security-first", "p0-p1-p2-scans", "lens-analysis"]
+    
+    content_template_compact: |
+      🎼 **Orchestrator System**
+      
+      CORTEX uses 28 specialized orchestrators for different operations:
+      
+      | Orchestrator | Purpose | Commands |
+      |--------------|---------|----------|
+      | **TDDOrchestrator** | Test-first implementation | `/implement`, `/fix` |
+      | **LENSSynthesis** | Code intelligence analysis | `/analyze`, `/lens` |
+      | **PlanOrchestrator** | Phase management | `/plan` |
+      | **RefactoringOrchestrator** | Code quality improvement | `/refactor` |
+      | **EnforcementOrchestrator** | Governance (7 agents) | auto |
+      
+      **28 total:** 8 core, 6 domain, 14 support  
+      **Commands:** `/recall orchestrators` for full list
+    
+    usage_rules:
+      - "Show 3-5 most relevant orchestrators by default"
+      - "Smart selection based on user context"
+      - "Always offer expansion link to full 28"
+      - "Combine with CAPABILITIES for overview"
+
+  tutorial:
+    id: "BLOCK-TUTORIAL"
+    name: "5-Minute Quick Start"
+    length_words: 100
+    purpose: "Get users productive in 5 minutes"
+    
+    format:
+      structure: "numbered_steps + expected_output + success_criteria"
+      icons: "🚀 for header"
+    
+    content_template: |
+      🚀 **Quick Start (5 Minutes)**
+      
+      **Step 1: Health Check**
+      ```
+      /audit
+      ```
+      Expected: P0/P1/P2/P3 issue breakdown + auto-fix options
+      
+      **Step 2: Analyze Code**
+      ```
+      /analyze {scope}
+      ```
+      Expected: LENS 4-layer intelligence report + confidence scores
+      
+      **Step 3: Implement Feature**
+      ```
+      /implement {feature description}
+      ```
+      Expected: TDD cycle (RED→GREEN→REFACTOR) + test results
+      
+      **Success Criteria:**
+      - ✅ Audit completes without errors
+      - ✅ LENS analysis shows confidence scores
+      - ✅ Implementation passes all tests
+      
+      **Next:** Try `/plan` for strategic phase breakdown
+    
+    usage_rules:
+      - "Show for new users after INTRO"
+      - "Show when user asks 'how do I start'"
+      - "Combine with INTRO for complete onboarding"
+      - "Do NOT show during autonomous execution"
+
+  onboarding:
+    id: "BLOCK-ONBOARDING"
+    name: "First-Time Setup"
+    length_words: 150
+    purpose: "Guide users through MCP setup + git hooks"
+    
+    format:
+      structure: "checklist + verification_commands + troubleshooting"
+      icons: "⚙️ for header"
+    
+    content_template: |
+      ⚙️ **First-Time Setup**
+      
+      **Prerequisites:**
+      - [ ] Python 3.9+ installed
+      - [ ] Git repository initialized
+      - [ ] VS Code with GitHub Copilot
+      
+      **Setup Steps:**
+      
+      **1. Install Dependencies**
+      ```bash
+      pip install -r requirements.txt
+      ```
+      
+      **2. Configure MCP**
+      ```bash
+      python .cortex/setup-mcp.py
+      ```
+      
+      **3. Reload VS Code**
+      ```
+      Cmd+Shift+P → Developer: Reload Window
+      ```
+      
+      **4. Verify MCP**
+      ```
+      /check-env
+      ```
+      Expected: ✅ MCP tools available (10 tools)
+      
+      **5. Setup Git Hooks (Optional)**
+      ```bash
+      make setup-hooks
+      ```
+      
+      **Success Indicators:**
+      - ✅ MCP tools in Copilot Chat
+      - ✅ No "tool disabled" errors
+      - ✅ /audit command works
+      
+      **Troubleshooting:**
+      - Tool disabled? Run setup-mcp.py again
+      - Settings.json issues? Delete + regenerate via setup script
+      - Still issues? Check `.cortex/setup.log` for errors
+    
+    usage_rules:
+      - "Show for brand new repositories"
+      - "Show when user reports MCP issues"
+      - "Combine with TUTORIAL after setup complete"
+      - "Do NOT show if MCP already working"
+
+  next_steps:
+    id: "BLOCK-NEXT-STEPS"
+    name: "Context-Aware Next Steps"
+    length_words: 80
+    purpose: "Suggest 2-3 logical next actions based on context"
+    
+    format:
+      structure: "numbered_options + commands"
+      icons: "🎯 for header"
+      max_options: 3
+    
+    context_rules:
+      after_intro:
+        suggestions:
+          - text: "Run health scan to see codebase status"
+            command: "/audit"
+          - text: "Explore CORTEX capabilities"
+            command: "what can CORTEX do?"
+          - text: "Start 5-minute tutorial"
+            command: "show me tutorial"
+      
+      after_audit:
+        suggestions:
+          - text: "Fix P0/P1 issues automatically"
+            command: "proceed"
+          - text: "Analyze specific module"
+            command: "/analyze {module}"
+          - text: "Plan next phase"
+            command: "/plan"
+      
+      after_analysis:
+        suggestions:
+          - text: "Implement improvement"
+            command: "/implement {improvement}"
+          - text: "Refactor based on findings"
+            command: "/refactor {target}"
+          - text: "Generate plan"
+            command: "/plan"
+      
+      after_implementation:
+        suggestions:
+          - text: "Run full audit"
+            command: "/audit"
+          - text: "Implement next feature"
+            command: "/implement {next feature}"
+          - text: "Review with LENS"
+            command: "/analyze {scope}"
+    
+    content_template: |
+      🎯 **Next Steps**
+      
+      {dynamic_suggestions}
+    
+    usage_rules:
+      - "Always show at end of educational blocks"
+      - "Adapt to what user just completed"
+      - "Max 3 suggestions (avoid decision paralysis)"
+      - "Include executable commands (copy-paste ready)"
+
+# Assembly Rules (situation → blocks mapping)
+assembly_rules:
+  first_time_user:
+    blocks: ["intro", "capabilities", "tutorial", "next_steps"]
+    total_words: ~530
+    use_case: "New user, first interaction"
+    validation:
+      no_duplicate_concepts: true
+      max_length_words: 600
+  
+  query_capabilities:
+    blocks: ["capabilities", "orchestrators", "next_steps"]
+    total_words: ~380
+    use_case: "User asks 'what can CORTEX do?'"
+  
+  query_lens:
+    blocks: ["lens", "next_steps"]
+    total_words: ~230
+    use_case: "User asks 'what is LENS?' or 'explain LENS'"
+  
+  query_orchestrators:
+    blocks: ["orchestrators", "capabilities", "next_steps"]
+    total_words: ~380
+    use_case: "User asks about orchestrators"
+  
+  query_getting_started:
+    blocks: ["tutorial", "onboarding", "next_steps"]
+    total_words: ~330
+    use_case: "User asks 'how do I start?'"
+  
+  setup_required:
+    blocks: ["onboarding", "tutorial", "next_steps"]
+    total_words: ~330
+    use_case: "MCP not available, needs setup"
+  
+  autonomous_execution:
+    blocks: []  # Uses Silent Execution Template instead
+    use_case: "User says 'proceed', 'implement', 'yes'"
+    reference: ".github/prompts/SILENT-EXECUTION-RESPONSE-TEMPLATE.md"
+  
+  design_session:
+    blocks: []  # Uses Template B from response-format-standards.md
+    optional_append: ["orchestrators"]  # Can add orchestrators if relevant
+    use_case: "User requests design or planning"
+  
+  completion_report:
+    blocks: []  # Uses Template D from response-format-standards.md
+    optional_append: ["next_steps"]
+    use_case: "Phase/wave completion"
+
+# Anti-Duplication Validation Rules
+validation:
+  no_duplicate_headers:
+    enabled: true
+    rule: "Can't show same ## header twice in assembled response"
+  
+  no_repeated_content:
+    enabled: true
+    rule: "Blocks must not repeat each other's core content"
+    example: "CAPABILITIES mentions LENS briefly → Don't also show full LENS block"
+  
+  max_total_length:
+    enabled: true
+    words: 800
+    rule: "Assembled response can't exceed 800 words"
+  
+  footer_once:
+    enabled: true
+    rule: "NEXT-STEPS block only appears once, at end"
+  
+  concept_tracking:
+    enabled: true
+    rule: "Track concepts mentioned, skip blocks covering same concepts"
+    concepts:
+      - "orchestrators"
+      - "LENS"
+      - "governance"
+      - "TDD"
+      - "MCP"
+      - "personas"
+
+# Block Dependencies (which blocks work well together)
+compatibility:
+  intro:
+    pairs_well_with: ["capabilities", "tutorial", "next_steps"]
+    avoid_with: ["lens"]  # Too much detail in one response
+  
+  capabilities:
+    pairs_well_with: ["orchestrators", "tutorial", "next_steps"]
+    avoid_with: []
+  
+  lens:
+    pairs_well_with: ["next_steps"]
+    avoid_with: ["intro", "capabilities"]  # Focused, not comprehensive
+  
+  orchestrators:
+    pairs_well_with: ["capabilities", "next_steps"]
+    avoid_with: ["tutorial"]  # Different purposes
+  
+  tutorial:
+    pairs_well_with: ["intro", "onboarding", "next_steps"]
+    avoid_with: ["lens", "orchestrators"]  # Keep tutorial simple
+  
+  onboarding:
+    pairs_well_with: ["tutorial", "next_steps"]
+    avoid_with: ["lens", "orchestrators"]  # Setup-focused
+  
+  next_steps:
+    pairs_well_with: ["all"]  # Universal footer
+    avoid_with: []
+
+# Usage Statistics (track which blocks are used most)
+# Updated by system, not manually edited
+usage_stats:
+  enabled: true
+  track: ["frequency", "combinations", "user_satisfaction"]
+  purpose: "Identify which blocks need improvement or expansion"

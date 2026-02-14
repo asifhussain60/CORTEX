@@ -31,7 +31,148 @@ Unified response format for **all CORTEX operations** across modes: PRE-FLIGHT, 
 ---
 
 
-## 🤖 SILENT AUTONOMOUS MODE (DEFAULT)
+## � COMPOSABLE CONTENT BLOCKS (NEW)
+
+**Authority:** cortex-registry/interaction/content-blocks.yaml  
+**Version:** 1.0 | **Updated:** 2026-02-14
+
+### Purpose
+
+Reusable content sections that compose into situation-specific responses without duplication.
+
+**Principle:** Like LEGO blocks — each block has ONE job, blocks assemble without overlap.
+
+### Block Library (7 Core Blocks)
+
+| Block ID | Purpose | Length | When to Use |
+|----------|---------|--------|-------------|
+| **BLOCK-INTRO** | Role-based introduction | 150 words | First-time user, "who are you" |
+| **BLOCK-CAPABILITIES** | CORTEX overview | 200 words | "What can CORTEX do?" |
+| **BLOCK-LENS** | LENS intelligence explanation | 150 words | "Explain LENS" |
+| **BLOCK-ORCHESTRATORS** | Orchestrator summary | Variable | "How does orchestration work?" |
+| **BLOCK-TUTORIAL** | 5-minute quick start | 100 words | "How do I start?" |
+| **BLOCK-ONBOARDING** | First-time setup (MCP + git hooks) | 150 words | New repository, setup issues |
+| **BLOCK-NEXT-STEPS** | Context-aware suggestions | 80 words | End of any educational response |
+
+### Assembly Examples
+
+**Scenario 1: First-Time User**
+```
+COMPOSE: BLOCK-INTRO + BLOCK-CAPABILITIES + BLOCK-TUTORIAL + BLOCK-NEXT-STEPS
+RESULT: Complete onboarding (530 words)
+```
+
+**Scenario 2: "What can CORTEX do?"**
+```
+COMPOSE: BLOCK-CAPABILITIES + BLOCK-ORCHESTRATORS + BLOCK-NEXT-STEPS
+RESULT: Capability-focused (380 words)
+```
+
+**Scenario 3: "Explain LENS"**
+```
+COMPOSE: BLOCK-LENS + BLOCK-NEXT-STEPS
+RESULT: Laser-focused explanation (230 words)
+```
+
+**Scenario 4: User says "proceed" (autonomous execution)**
+```
+USE: Silent Execution Template (NOT composable blocks)
+RESULT: Progress bars only, no educational content
+```
+
+### Anti-Duplication Rules
+
+**Block Boundaries:**
+- Each block covers ONE concept (no overlap)
+- INTRO = welcome + personas (STOP before capabilities)
+- CAPABILITIES = overview (STOP before LENS details)
+- LENS = LENS only (STOP before orchestrators)
+
+**Assembly Validation:**
+- ✅ No duplicate headers (same ## can't appear twice)
+- ✅ No repeated content (concept tracking prevents overlap)
+- ✅ Max 800 words total (prevents information overload)
+- ✅ NEXT-STEPS only once (at end)
+
+**Example Anti-Duplication:**
+```
+User: "What can CORTEX do? Also explain LENS"
+
+NAIVE: CAPABILITIES + LENS
+Problem: CAPABILITIES mentions LENS → duplication
+
+SMART: Render CAPABILITIES (skip LENS mention) → Render LENS block
+Result: Zero duplication, 350 words
+```
+
+### Block Compatibility Matrix
+
+| Block | Pairs Well With | Avoid With |
+|-------|----------------|------------|
+| INTRO | CAPABILITIES, TUTORIAL | LENS (too much) |
+| CAPABILITIES | ORCHESTRATORS, TUTORIAL | - |
+| LENS | NEXT-STEPS | INTRO, CAPABILITIES |
+| ORCHESTRATORS | CAPABILITIES | TUTORIAL |
+| TUTORIAL | INTRO, ONBOARDING | LENS, ORCHESTRATORS |
+| ONBOARDING | TUTORIAL | LENS, ORCHESTRATORS |
+| NEXT-STEPS | All blocks | - |
+
+### When NOT to Use Blocks
+
+**Do NOT use composable blocks for:**
+- ❌ Autonomous execution (`proceed`, `implement`) → Use Silent Execution Template
+- ❌ Design sessions (`/design`, `/plan`) → Use Template B
+- ❌ Completion reports → Use Template D
+- ❌ Implementation responses → Use Templates A-E
+
+**Composable blocks are for:** Educational/onboarding scenarios only.
+
+### Expansion Strategy
+
+**Start with 7 core blocks.** Add new blocks only when:
+- 3+ users need same explanation (evidence-based)
+- Existing blocks can't compose to answer
+- New CORTEX feature requires introduction
+
+**Future block candidates:**
+- BLOCK-REFACTORING (if refactoring questions spike)
+- BLOCK-SECURITY (if security questions common)
+- BLOCK-DEBUGGING (if debugging becomes frequent)
+- BLOCK-TESTING (TDD deep-dive for advanced users)
+
+**Rule:** Don't create blocks speculatively. Add on-demand based on usage.
+
+### Integration with Existing Templates
+
+**Composable blocks complement existing templates:**
+
+| Template | Purpose | Blocks Relationship |
+|----------|---------|-------------------|
+| **Silent Execution** | Autonomous work | Blocks NOT used (progress bars only) |
+| **Template A (DIGEST)** | Session analysis | Optional: Add NEXT-STEPS |
+| **Template B (DESIGN/PLAN)** | Strategic planning | Optional: Add ORCHESTRATORS if relevant |
+| **Template C (QUERY)** | Q&A structured | Blocks can be answers to questions |
+| **Template D (COMPLETION)** | Phase complete | Optional: Add NEXT-STEPS |
+| **Template E (ENHANCEMENT)** | Feature enrichment | Blocks NOT used (feature-specific) |
+
+**Hierarchy:**
+1. Intent-based templates (A-E) = primary for work operations
+2. Silent execution template = autonomous mode
+3. Composable blocks = educational/onboarding scenarios
+
+### Full Specification
+
+**See:** `cortex-registry/interaction/content-blocks.yaml` for:
+- Complete block content templates
+- Assembly rules (situation → blocks)
+- Validation rules (anti-duplication)
+- Compatibility matrix
+- Usage statistics tracking
+
+---
+
+
+## �🤖 SILENT AUTONOMOUS MODE (DEFAULT)
 
 **When user triggers execution ("proceed", "implement", "yes", "continue"):**
 
