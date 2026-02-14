@@ -1,12 +1,12 @@
-# Cleanup Audit Guide (PHASE-CLEANUP)
+# Cleanup Audit Guide (WAVE-J)
 
-**Version:** 1.0 | **Created:** 2026-02-12 | **Authority:** ENH-085 (PHASE-6)
+**Version:** 1.0 | **Created:** 2026-02-12 | **Authority:** ENH-085 (WAVE-6)
 
 ---
 
 ## 🎯 Purpose
 
-PHASE-CLEANUP provides systematic audit and cleanup of completed phases, orphaned components, and stale artifacts in the CORTEX codebase.
+WAVE-J provides systematic audit and cleanup of completed phases, orphaned components, and stale artifacts in the CORTEX codebase.
 
 ## 📊 Overview
 
@@ -132,7 +132,7 @@ cortex/legacy/response_builder.py
 
 ```
 <hr>
-📊 PHASE-CLEANUP CLEANUP AUDIT REPORT
+📊 WAVE-J CLEANUP AUDIT REPORT
 <hr>
 
 ## Summary
@@ -210,14 +210,14 @@ phases_to_migrate:
 
 ### With Phase Creation (ENH-084)
 
-Phase Cleanup complements the phase creation standards:
+Wave J complements the phase creation standards:
 
 ```
 Phase Lifecycle:
 1. Create phase spec (ENH-084 template)
 2. Implement phase (TDD workflow)
 3. Complete phase (mark status=complete)
-4. **Audit phase (PHASE-CLEANUP cleanup auditor)**
+4. **Audit phase (WAVE-J cleanup auditor)**
 5. Migrate phase (active/ → completed/)
 6. Cleanup artifacts (archive orphaned files)
 ```
@@ -242,7 +242,7 @@ python3 -m pytest tests/ -x
 
 # Commit cleanup
 git add -A
-git commit -m "PHASE-CLEANUP: Cleanup audit complete - migrated 12 phases"
+git commit -m "WAVE-J: Cleanup audit complete - migrated 12 phases"
 
 # Push for review
 git push origin cleanup-phase-j
@@ -291,7 +291,7 @@ jobs:
 
 ## 🎯 Success Metrics
 
-PHASE-CLEANUP aims for:
+WAVE-J aims for:
 
 - ✅ **100% completed phases** in `completed/` folder
 - ✅ **0 orphaned files** with age > 180 days
@@ -362,8 +362,8 @@ python3 -m cortex.cli.cleanup_auditor audit \
 ## 🔗 Related Documentation
 
 - **ENH-084:** Standard Phase Creation Practices
-- **ENH-085:** Completed Phase Cleanup Audit (PHASE-CLEANUP)
-- **PHASE-6:** Comprehensive Cleanup & Refactoring
+- **ENH-085:** Completed Phase Cleanup Audit (WAVE-J)
+- **WAVE-6:** Comprehensive Cleanup & Refactoring
 
 ## 📝 Troubleshooting
 
@@ -395,6 +395,6 @@ grep -r "import.*<filename>" cortex/
 
 ---
 
-**Authority:** ENH-085 (PHASE-CLEANUP) Completed Phase Cleanup Audit  
+**Authority:** ENH-085 (WAVE-J) Completed Phase Cleanup Audit  
 **Maintainer:** CORTEX Framework  
 **Updated:** 2026-02-12

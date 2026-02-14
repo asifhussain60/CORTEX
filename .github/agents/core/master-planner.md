@@ -160,8 +160,8 @@ Phase-8 (Documentation):
 
 ### Declaration Format (YAML)
 ```yaml
-waves:
-  - wave: 7
+phases:
+  - phase: 7
     name: "Orchestrator Consolidation"
     roi_composite: 9.17
     dependencies:
@@ -190,13 +190,13 @@ waves:
 **Orchestrator checks phase start condition:**
 ```python
 # Pseudo-code
-if wave.dependencies:
-    for dep in wave.dependencies:
-        status = evaluate_wave_status(dep.phase_id)
+if phase.dependencies:
+    for dep in phase.dependencies:
+        status = evaluate_phase_status(dep.phase_id)
         if not meets_condition(status, dep.condition):
-            mark_phase_blocked(wave)
+            mark_phase_blocked(phase)
             return
-mark_phase_ready(wave)
+mark_phase_ready(phase)
 ```
 
 ---
@@ -247,8 +247,8 @@ Days 10-18: Stage-2 completion, Stage-3/4 finalization
 
 ### Per-phase metadata (Always Expandable)
 ```yaml
-waves:
-  - wave: 7
+phases:
+  - phase: 7
     # Standard fields
     name: "Orchestrator Consolidation"
     roi_composite: 9.17
@@ -303,9 +303,9 @@ waves:
 ```python
 # Pseudo-code (from Phase 56-A Protocol)
 def sync_master_plan():
-    current_phase = detect_current_work()
-    wave = current_phase.parent_phase
-    stages = current_phase.parent_stage
+    current_task = detect_current_work()
+    phase = current_task.parent_phase
+    stages = current_task.parent_stage
     
     # Read master index
     index = load_yaml("cortex-registry/_cortex-master/index.yaml")
@@ -315,7 +315,7 @@ def sync_master_plan():
     index.phases[phase.id].progress_percentage = calculate_progress()
     
     # Commit sync
-    git_commit("Plan sync: {wave} {stages} Phase {phase} {percentage}%")
+    git_commit("Plan sync: {phase} {stages} Task {task} {percentage}%")
     
     # Verify registry accuracy
     verify_implementation_truth(index, codebase)
@@ -365,18 +365,18 @@ TDDOrchestrator / RefactoringOrchestrator (Implementation)
     ↓
 Master Planner (Sync + Completion)
     ↓
-    Updates registry, prepares next wave
+    Updates registry, prepares next phase
 ```
 
 ---
 
-## Long-Term Extensibility (Scalability 50+ Waves)
+## Long-Term Extensibility (Scalability 50+ Phases)
 
 ### Design Decisions for Growth
 
 | Aspect | Design | Rationale |
 |--------|--------|-----------|
-| **Wave Limit** | 50-100 waves (3-6 months work) | Each wave 2-3 weeks; no upper limit |
+| **Phase Limit** | 50-100 phases (3-6 months work) | Each phase 2-3 weeks; no upper limit |
 | **Stage Parallelism** | 2-5 concurrent stages | Optimal for resource utilization |
 | **Renumbering** | Tier system (Fast/Local/Full) | Prevents cascading churn |
 | **Dependency Graph** | Explicit YAML conditions | Enables complex orchestration |
@@ -384,9 +384,9 @@ Master Planner (Sync + Completion)
 | **Registry Storage** | GitBacked (immutable history) | Audit trail + rollback capability |
 
 ### Scalability Metrics
-- **Wave Planning:** O(n) to O(n log n) with composite scoring
-- **Dependency Resolution:** O(n²) with transitive closure (acceptable for 50 waves)
-- **Sync Overhead:** O(1) per phase (single file update)
+- **Phase Planning:** O(n) to O(n log n) with composite scoring
+- **Dependency Resolution:** O(n²) with transitive closure (acceptable for 50 phases)
+- **Sync Overhead:** O(1) per task (single file update)
 - **Parallel Execution:** 5 stages × avg 10 days = 50 days → 10-12 days critical path
 
 ---
@@ -395,14 +395,14 @@ Master Planner (Sync + Completion)
 
 | Command | Action | Owner |
 |---------|--------|-------|
-| `/plan create` | Create new wave with ROI analysis | Master Planner |
-| `/plan update` | Modify phase metadata (ROI, dependencies) | Master Planner |
-| `/plan reorder` | Renumber waves (Tier 1/2/3) | Master Planner |
+| `/plan create` | Create new phase with ROI analysis | Master Planner |
+| `/plan update` | Modify task metadata (ROI, dependencies) | Master Planner |
+| `/plan reorder` | Renumber phases (Tier 1/2/3) | Master Planner |
 | `/plan status` | Show current execution status | Master Planner |
 | `/plan sync` | Sync master index with current progress | MasterOrchestrator |
-| `/plan next` | Calculate and prepare next wave | Master Planner |
-| `/plan complete` | Archive wave, update history | Master Planner |
+| `/plan next` | Calculate and prepare next phase | Master Planner |
+| `/plan complete` | Archive phase, update history | Master Planner |
 
 ---
 
-*v1.0 — Master Planner with 3-level hierarchy (Wave → stages → Phase), explicit dependency graphs, composite ROI scoring, and tier-based renumbering. Designed for 50+ wave extensibility.*
+*v2.0 — Master Planner with 3-level hierarchy (Phase → Stage → Task), explicit dependency graphs, composite ROI scoring, and tier-based renumbering. Designed for 50+ phase extensibility.*

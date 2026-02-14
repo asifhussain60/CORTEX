@@ -140,15 +140,15 @@ Spawn independent executors for each stages, coordinate progress, handle failure
 ```python
 def execute_wave_tracks(phase: Phase) -> WaveExecutionResult:
     """
-    Execute all stages in phase. Respects max_parallel_stages limit.
+    Execute all stages in wave. Respects max_parallel_stages limit.
     Returns aggregated result.
     """
-    # Step 1: Wait for phase to be ready
-    if not evaluate_phase_start_condition(phase_obj):
-        mark_phase_blocked(phase_obj)
+    # Step 1: Wait for wave to be ready
+    if not evaluate_wave_start_condition(wave):
+        mark_phase_blocked(wave)
         return WaveExecutionResult(status="BLOCKED", reason="Dependencies not met")
     
-    # Step 2: Mark phase as in_progress
+    # Step 2: Mark wave as in_progress
     update_master_plan(phase.id, status="in_progress", start_date=now())
     
     # Step 3: Prepare stages executors
@@ -222,7 +222,7 @@ def sync_phase_completion(phase: Phase, execution_result: ExecutionResult):
     stages.last_updated = now()
     
     # Step 5: Recalculate phase progress
-    wave.progress_pct = (sum(t.progress_pct for t in wave.stages) / len(phase_obj.stages))
+    wave.progress_pct = (sum(t.progress_pct for t in wave.stages) / len(wave.stages))
     wave.last_updated = now()
     
     # Step 6: Write updated registry
@@ -235,9 +235,9 @@ def sync_phase_completion(phase: Phase, execution_result: ExecutionResult):
     verify_phase_completion_integrity(phase, execution_result)
     
     # Step 9: Check for newly unblocked waves
-    for dependent_phase in find_dependent_phases(phase.parent_phase):
-        if evaluate_phase_start_condition(dependent_phase):
-            notify_phase_ready(dependent_phase)
+    for dependent_wave in find_dependent_waves(phase.parent_phase):
+        if evaluate_wave_start_condition(dependent_wave):
+            notify_wave_ready(dependent_wave)
 ```
 
 ---
@@ -250,27 +250,27 @@ Notify downstream orchestrators when waves become ready (dependency gates satisf
 ### Notification Protocol
 
 ```python
-def notify_dependent_phases(completed_phase: Wave):
+def notify_dependent_waves(completed_wave: Wave):
     """
     After wave completes, check all downstream waves for readiness.
     Send notifications to any waves that became ready.
     """
-    # Find all waves that depend on completed_phase
-    dependent_phases = find_phases_depending_on(completed_phase.id)
+    # Find all waves that depend on completed_wave
+    dependent_waves = find_waves_depending_on(completed_wave.id)
     
-    for wave in dependent_phases:
+    for wave in dependent_waves:
         # Evaluate if this wave can now start
-        if evaluate_phase_start_condition(phase_obj):
+        if evaluate_wave_start_condition(wave):
             # Notify MasterOrchestrator that wave is ready
             event = WaveReadyEvent(
                 phase_id=phase.id,
-                trigger_wave=completed_phase.id,
+                trigger_wave=completed_wave.id,
                 timestamp=now()
             )
             publish_event("wave.ready", event)
             
             # Log for audit trail
-            log_audit(f"Wave {phase.id} unblocked by Wave {completed_phase.id}")
+            log_audit(f"Wave {phase.id} unblocked by Wave {completed_wave.id}")
 ```
 
 ---

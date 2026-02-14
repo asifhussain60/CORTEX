@@ -155,8 +155,8 @@ archive/
 └── snapshots/
     ├── 2026-02-14-session/      ← Session artifacts
     ├── 2026-02-14-vacuum/        ← Cleanup operations
-    ├── completed-phases/          ← Phase completion reports
-    ├── obsolete-plans/     ← Deprecated historical docs
+    ├── completed-waves/          ← Wave completion reports
+    ├── obsolete-plans/     ← Deprecated wave docs
     └── superseded/               ← Replaced content
 ```
 

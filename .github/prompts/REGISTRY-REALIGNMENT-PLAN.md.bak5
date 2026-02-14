@@ -8,7 +8,7 @@
 
 ## 🎯 Objective
 
-Realign entire CORTEX system from historical wave/epic/feature complexity to simple PHASE→STAGE→TASK hierarchy while preserving all history and metadata.
+Realign entire CORTEX system from Wave/Epic/Feature complexity to simple PHASE→STAGE→TASK hierarchy while preserving all history and metadata.
 
 ---
 
@@ -39,13 +39,13 @@ cortex-registry/_cortex-master/
 │   └── enhancements/       ← SECONDARY (ENH-XXX groupings)
 ├── history/
 │   └── _archive/
-│       └── obsolete-plans/  ← MOVE all historical content here
+│       └── obsolete-plans/  ← MOVE all wave content here
 ```
 
 **Actions:**
 1. Move `work/waves/*` → `history/_archive/obsolete-plans/`
 2. Add deprecation notice to README
-3. Create historical→phase mapping file
+3. Create wave→phase mapping file
 4. Update all references in README.md
 
 ### Phase 2: README.md Realignment
@@ -57,8 +57,8 @@ cortex-registry/_cortex-master/
 - Phase 1 → Phase-01 (Foundation Security)
 - Phase 7 → Phase-07 (Orchestrator Consolidation)
 - Phase 8 → Phase-08 (Planning Capability)
-- LEGACY-WAVE-A → Phase-10 (Critical Blockers)
-- LEGACY-WAVE-B → Phase-11 (Operability & Monitoring)
+- WAVE-A → Phase-10 (Critical Blockers)
+- WAVE-B → Phase-11 (Operability & Monitoring)
 - ... etc
 
 **Preserve All Metadata:**
@@ -70,13 +70,13 @@ cortex-registry/_cortex-master/
 
 ### Phase 3: Agent Files Cleanup
 
-**Files with Legacy References:**
+**Files with Wave References:**
 - `.github/agents/core/phase-creation-standards.md` (partial - finish)
-- `.github/agents/core/cortex-phase-resolver.md` (legacy-wave-3 references)
+- `.github/agents/core/cortex-phase-resolver.md` (wave-3 references)
 - `.github/agents/core/cortex-master-plan-auditor.md` (if exists)
 
 **Actions:**
-- Replace "historical wave" → "phase group"
+- Replace "wave" → "phase group"
 - Remove Wave template examples
 - Update all code snippets
 - Fix dependency examples (WAVE-H → PHASE-XX)
@@ -88,7 +88,7 @@ cortex-registry/_cortex-master/
 - Focus on guides/ subdirectory
 
 **Search & Replace:**
-- "historical wave" → "phase" (contextual)
+- "wave" → "phase" (contextual)
 - "Wave" → "Phase" (titles)
 - "WAVE-X" → "Phase X" (references)
 

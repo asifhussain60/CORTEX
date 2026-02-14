@@ -187,11 +187,11 @@ def reorganize_waves():
 ```python
 async def execute_wave_autonomous(phase_id: str):
     """
-    Execute entire phase group autonomously, managing state and continuation.
+    Execute entire wave autonomously, managing state and continuation.
     
     Flow:
-    1. Load phase group definition + dependencies
-    2. For each phase in phase_group:
+    1. Load wave definition + dependencies
+    2. For each phase in wave:
        a. Check token budget (<75% threshold)
        b. Execute phase via TDDOrchestrator
        c. Record metrics (effort, tokens, outcome)
@@ -199,23 +199,23 @@ async def execute_wave_autonomous(phase_id: str):
     3. Save continuation checkpoint if token budget exceeded
     4. Return execution report
     """
-    phase_group = load_phase_group(phase_id)
+    wave = load_wave(phase_id)
     report = ExecutionReport(phase_id=phase_id)
     
     # Initialize token tracker
     tokens_used = 0
     token_limit = TOKEN_BUDGET_PER_SESSION * 0.75  # Reserve 25% for next session
     
-    for phase in phase_group.phases:
+    for phase in wave.phases:
         # Pre-phase check: Token budget
         if tokens_used > token_limit:
             report.status = "CHECKPOINT_REACHED"
             report.continuation_point = {
                 "phase_id": phase_id,
-                "next_phase_index": phase_group.phases.index(phase),
+                "next_phase_index": wave.phases.index(phase),
                 "tokens_used": tokens_used,
-                "phases_completed": [p.id for p in phase_group.phases[:phase_group.phases.index(phase)]],
-                "command": f"@cortex /plan continue phase-{phase_id}"
+                "phases_completed": [p.id for p in wave.phases[:wave.phases.index(phase)]],
+                "command": f"@cortex /plan continue wave-{phase_id}"
             }
             return report
         
@@ -244,12 +244,12 @@ async def execute_wave_autonomous(phase_id: str):
             logger.error(f"❌ Phase {phase.id} failed: {e}")
             return report
     
-    # Phase group complete
+    # Wave complete
     report.status = "COMPLETE"
     report.metrics = {
-        "phases_executed": len(phase_group.phases),
+        "phases_executed": len(wave.phases),
         "total_tokens": tokens_used,
-        "estimated_vs_actual_accuracy": compute_accuracy(phase_group, report),
+        "estimated_vs_actual_accuracy": compute_accuracy(wave, report),
         "duration_hours": report.duration_hours,
     }
     
@@ -308,10 +308,10 @@ def validate_implementation_truth():
 **Handoff pattern:**
 
 ```
-User: /plan execute phase-3
+User: /plan execute wave-3
       ↓
 Phase Resolver identifies:
-  - What: Execute phase-3 (phases 45-47)
+  - What: Execute wave-3 (phases 45-47)
   - When: Now (token budget check)
   - Why: Critical path, highest ROI
       ↓
@@ -356,7 +356,7 @@ sync_dashboard_with_plan()
 
 ```yaml
 continuation_checkpoint:
-  phase_id: phase-3
+  phase_id: wave-3
   next_phase_index: 47
   token_budget_used: 126000
   phases_completed:
@@ -364,7 +364,7 @@ continuation_checkpoint:
     - phase-46
   
   resume_command: |
-    @cortex /plan continue phase-3
+    @cortex /plan continue wave-3
     
     # System will:
     # 1. Load this checkpoint
@@ -449,7 +449,7 @@ OutputSchema = {
 ### cortex_execute_wave_autonomous
 
 ```python
-"""Execute phase phases autonomously with state management."""
+"""Execute wave phases autonomously with state management."""
 
 InputSchema = {
     "phase_id": str,

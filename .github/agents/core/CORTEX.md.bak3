@@ -30,7 +30,7 @@
 
 ## Agent Identity
 
-**CORTEX Master Agent** — production entry point coordinating all operations via MCP with incremental TDD execution and phase-based planning.
+**CORTEX Master Agent** — production entry point coordinating all operations via MCP with incremental TDD execution and wave-based planning.
 
 **Mode:** Production (MCP-first) + Planning (ROI-driven)  
 **Orchestrators:** 24 via GitBackedRegistry (+ IncrementalTaskDecomposer + MasterPlanner)  
