@@ -49,7 +49,7 @@
 
 <hr>
 
-📋 **EPIC-R Stage 5: MCP Tools Complete**
+📋 **Phase 89 Stage 5: MCP Tools Complete**
 
 `██████████` 100% All Stages Complete
 
@@ -172,13 +172,13 @@
 
 **EXAMPLE (CORRECT PATTERN):**
 
-User: "proceed with FEATURE-S implementation"
+User: "proceed with phase 48 implementation"
 
 Response 1 (Analysis + Challenge):
 ```
 <hr>
 
-📋 **FEATURE-S Analysis: Holistic Validation**
+📋 **Phase 48 Analysis: Holistic Validation**
 
 `██████████` 100% Analysis Complete
 
@@ -197,7 +197,7 @@ Response 2 (Implementation - Silent):
 ```
 <hr>
 
-📋 **FEATURE-S Stage 1: Pre-Implementation Gate**
+📋 **Phase 48 Stage 1: Pre-Implementation Gate**
 
 `████████░░` 80% Stage 1 In Progress
 
@@ -1439,7 +1439,7 @@ Files: 5 modified
 
 [completion content...]
 
-## 🏛️ CORTEX Architect FEATURE-R STAGE 1 COMPLETE  ← ❌ WRONG: Third header
+## 🏛️ CORTEX Architect PHASE 89 STAGE 1 COMPLETE  ← ❌ WRONG: Third header
 **Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
 
 ---
@@ -2015,9 +2015,9 @@ use the **User-Preferred Templates (A-E)** defined in SSOT:
 
 These templates were derived from production chat sessions and are the SSOT for:
 - **Template A:** DIGEST — Concern-Resolution Analysis (concern tables + architecture trees)
-- **Template B:** DESIGN/PLAN — Multi-Epic Roadmap (named epics/features + stage trees + metrics)
+- **Template B:** DESIGN/PLAN — Multi-Phase Roadmap (named phases + stage trees + metrics)
 - **Template C:** QUERY/REFINEMENT — Question→Answer Structured (mirror questions + evidence)
-- **Template D:** COMPLETION — Epic/Feature/Phase Complete (deliverables + enhancement mapping)
+- **Template D:** COMPLETION — Phase Complete (deliverables + enhancement mapping)
 - **Template E:** ENHANCEMENT — Feature Enrichment (original request → 4 quality dimensions)
 
 | Query Type | Example | Auto-Detected Format |
@@ -2272,7 +2272,7 @@ Advanced Level:
 
 ```
 <hr>
-📋 FEATURE-R Stage 5: MCP Tools Complete
+📋 Phase 89 Stage 5: MCP Tools Complete
 <hr>
 
 [██████████] 100% All Stages Complete
@@ -2294,7 +2294,7 @@ ENH-089: ✅ COMPLETE
 - ❌ **Bullet lists:** "• Created X • Implemented Y • Fixed Z"
 - ❌ **Code snippets:** "```python\nclass X: ..."
 - ❌ **Explanations:** "Here's what I did..."
-- ❌ **Verbose headers:** "## 📋 EPIC-7 Track 1: Multi-Cycle TDD Implementation\n**Phase:** ENH-087..."
+- ❌ **Verbose headers:** "## 📋 Phase 87 Stage 1: Multi-Cycle TDD Implementation\n**Enhancement:** ENH-087..."
 - ❌ **File-by-file summaries:** "Modified file A to add B..."
 
 **ALLOWED only:**

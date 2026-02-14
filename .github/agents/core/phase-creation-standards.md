@@ -11,15 +11,15 @@ This guide establ### 7. Dependency Validation
 Dependencies must exist in registry:
 
 ```yaml
-dependencies: ["ENH-063", "FEATURE-H"]  # Must exist
-blocks: ["FEATURE-J"]                   # Must exist
+dependencies: ["ENH-063", "PHASE-48"]  # Must exist
+blocks: ["PHASE-52"]                   # Must exist
 ```
 
 ## 🎨 Phase Templates
 
 ### Standard Template
 
-Best for: Simple phases, single-feature execution practices for creating CORTEX phases, ensuring consistency, completeness, and maintainability across all phase specifications.
+Best for: Simple phases, 1-5 stages practices for creating CORTEX phases, ensuring consistency, completeness, and maintainability across all phase specifications.
 
 ## � Hierarchical Terminology (CORE-042)
 
@@ -69,24 +69,15 @@ python -m cortex.cli.phase_creator create \
   --output phases/active/enh-100.yaml
 ```
 
-#### Enhancement Phase (Complex with Features)
+#### Enhancement Phase (Complex)
 
 ```bash
 python -m cortex.cli.phase_creator create \
   --template enhancement \
   --id ENH-200 \
-  --title "Multi-Feature Enhancement" \
+  --title "Multi-Stage Enhancement" \
   --output phases/active/enh-200.yaml \
   --interactive
-```
-
-#### Feature Phase (Session-Scoped)
-
-**DEPRECATED:** Use Epic/Feature templates instead
-
-```bash
-# Old Wave template deprecated
-# python -m cortex.cli.phase_creator create --template wave
 ```
 
 ### Validating a Phase Specification
@@ -133,20 +124,20 @@ tests:                          # Required
   coverage_minimum: 0.80         # Min 0.80
 ```
 
-### 3. Feature Structure (Enhancement Template)
+### 3. Stage Structure (All Templates)
 
-For complex phases, use feature-based structure:
+For all phases, use stage-based structure:
 
 ```yaml
-features:
-  - feature: "F1-Foundation"
+stages:
+  - stage: "S1-Foundation"
     duration: "3 days"
     deliverables:
       - "Registry audit"
       - "Cleanup script"
     tests: 6
     
-  - feature: "F2-Core"
+  - stage: "S2-Core"
     duration: "3 days"
     deliverables:
       - "Core implementation"
@@ -155,11 +146,11 @@ features:
 
 ### 4. Cleanup Requirements
 
-Every feature must include cleanup stage:
+Every phase must include cleanup:
 
 ```yaml
 cleanup_requirements:
-  vacuum_per_feature: true         # Mandatory
+  vacuum_per_phase: true           # Mandatory
   registry_sync: true             # Mandatory
   documentation_update: true      # Recommended
 ```
@@ -247,38 +238,30 @@ success_metrics:
 
 ### 2. Enhancement Template
 
-Best for: Complex phases with multiple features
+Best for: Complex phases with multiple stages
 
 ```yaml
 version: "1.0"
 enhancement_id: "ENH-XXX"
 title: "Complex Enhancement"
 
-features:
-  - feature: "F1-Foundation"
+stages:
+  - stage: "S1-Foundation"
     duration: "3 days"
     deliverables: []
     tests: 6
     
-  - feature: "F2-Core"
+  - stage: "S2-Core"
     duration: "3 days"
     deliverables: []
     tests: 50
 
 cleanup_requirements:
-  vacuum_per_feature: true
+  vacuum_per_phase: true
   registry_sync: true
   documentation_update: true
 
 # ... (other fields same as standard)
-```
-
-### 3. Epic/Feature Template
-
-**DEPRECATED (2026-02-14):** Old "Wave Template" removed per CORE-042
-
-Use **Epic** or **Feature** level in registry structure instead.
-
 ```yaml
 wave_id: "WAVE-X"
 name: "Wave Name"
