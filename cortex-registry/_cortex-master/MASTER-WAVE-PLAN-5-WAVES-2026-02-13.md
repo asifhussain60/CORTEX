@@ -1,9 +1,9 @@
-# Master Wave Plan: ALL Pending Work (5 Waves)
-**Created:** 2026-02-13 | **Authority:** cortex-architect.prompt.md v15.3 + MASTER-IMPLEMENTATION-REALITY-SYNC-2026-02-13.md | **Mode:** Autonomous execution with checkpoints | **Total Effort:** 23-30 hours | **Token Budget:** <1.2M
+# Master Wave Plan: ALL Pending Work (6 Waves)
+**Created:** 2026-02-13 | **Authority:** cortex-architect.prompt.md v15.3 + MASTER-IMPLEMENTATION-REALITY-SYNC-2026-02-13.md | **Mode:** Autonomous execution with checkpoints | **Total Effort:** 34-36 hours | **Token Budget:** <1.5M
 
 ---
 
-## 🌊 COMPLETE WAVE STRUCTURE (5 Waves)
+## 🌊 COMPLETE WAVE STRUCTURE (6 Waves)
 
 ### Summary
 
@@ -14,8 +14,9 @@
 | **WAVE-3** | **ENH-088/089 + Multi-Cycle TDD** | 7h | 300k | 75 | 6 | Multi-cycle TDD + EventBus debugger | **P1** |
 | **WAVE-4** | **ENH-087 Consolidation + Performance** | 6h | 250k | 85 | 5 | Orchestrator consolidation tracks 2-4 | **P1** |
 | **WAVE-5** | **RGR + Final Validation + Production Ready** | 5h | 200k | varies | 5 | Final cleanup, enforcement, documentation | **P1** |
+| **WAVE-6** | **Business Wisdom Display Enhancement (UX)** | 4-6h | 150k | 21 | 4 | Complete book reference integration (Stages 2-3) | **P2** |
 
-**TOTAL:** 29.75 hours, <1.3M tokens, 590+ tests, 29 commits, **PRODUCTION READY + AUDIT VERIFIED**
+**TOTAL:** 33.75-35.75 hours, <1.5M tokens, 611+ tests, 33 commits, **PRODUCTION READY + AUDIT VERIFIED + ENHANCED UX**
 
 ---
 
@@ -705,18 +706,149 @@ WAVE-5 (5h): RGR + Final Validation + Production Ready
     ├─ 100% pass rate confirmed
     ├─ Enforcement policy active
     └─ ✅ PRODUCTION READY
+         ↓
+WAVE-6 (4-6h): Business Wisdom Display Enhancement (UX)
+    ├─ BusinessWisdomFormatter component (12 tests)
+    ├─ Orchestrator integration (9 tests)
+    ├─ Response formatter enhancements
+    ├─ Documentation & standards
+    └─ ✅ ENHANCED USER EXPERIENCE (book references visible)
 
-Total Timeline: 29 hours
-Execution: 4-6 sessions with checkpoints
-Result: ALL PENDING WORK COMPLETE + PRODUCTION READY
+Total Timeline: 34-36 hours
+Execution: 5-7 sessions with checkpoints
+Result: ALL PENDING WORK COMPLETE + PRODUCTION READY + ENHANCED UX
 ```
+
+---
+
+## WAVE-6: Business Wisdom Display Enhancement (4-6 hours) [P2-DEFERRED]
+
+### Scope: Complete Stages 2-3 of Book Reference Integration
+
+**Goal:** Make book references visible to users throughout interaction layer
+
+**Authority:** `.github/prompts/business-wisdom-wiring.md`  
+**Phase Spec:** `cortex-registry/_cortex-master/phases/active/phase-06-business-wisdom-display-enhancement.yaml`  
+**Dependency:** Wave 5 complete (production ready first)
+
+**Stage 1: Business Wisdom Formatter Component [1.5h, 12 tests]**
+
+```
+Deliverables:
+├─ Create cortex/interaction/business_wisdom_formatter.py (150 LOC)
+│  └─ BusinessWisdomFormatter class
+│     ├─ format_governance_with_books() method
+│     ├─ Arrow notation: **Principle** → RULE-ID (Book)
+│     ├─ Max 5 principles enforcement
+│     └─ 📚 icon in section header
+│
+├─ Unit tests (250 LOC, 12 tests, 100% coverage)
+│  ├─ Format validation (4 tests)
+│  ├─ Markdown structure (3 tests)
+│  ├─ Edge cases (3 tests)
+│  └─ Integration with GovernanceRuleLoader (2 tests)
+│
+└─ Example Output:
+    ### 📚 Business Wisdom
+    - **Red-Green-Refactor** → CORE-008 (TDD by Kent Beck)
+    - **Type Safety** → CORE-011 (Clean Code by Robert Martin)
+    - **Docstrings** → CORE-012 (Pragmatic Programmer by Hunt & Thomas)
+
+Tests: 12 passing ✅
+Commit: AC-PHASE-06-S1-001
+```
+
+**Stage 2: Orchestrator Integration [2h, 9 tests]**
+
+```
+Deliverables:
+├─ Enhance cortex/orchestrators/core/enforcement_orchestrator.py
+│  └─ Add _format_governance_rule_with_book() method
+│     └─ Use in validation messages (lines ~1060)
+│
+├─ Enhance DoR display (discovery needed)
+│  └─ Find IntentReflection.to_markdown() implementation
+│     └─ Add Business Wisdom section after governance rules
+│
+├─ Enhance cortex/orchestrators/core/intent_router.py
+│  └─ Enrich routing messages with book references
+│
+└─ Integration tests (9 tests)
+   ├─ EnforcementOrchestrator violations (3 tests)
+   ├─ DoR display rendering (4 tests)
+   └─ IntentRouter messages (2 tests)
+
+Current User Experience:
+  ### Governance Rules
+  - CORE-008, CORE-011, CORE-012
+
+Enhanced User Experience:
+  ### 📚 Business Wisdom
+  - **Red-Green-Refactor** → CORE-008 (TDD by Kent Beck)
+  - **Type Safety** → CORE-011 (Clean Code by Robert Martin)
+  - **Docstrings** → CORE-012 (Pragmatic Programmer by Hunt & Thomas)
+
+Tests: 9 passing ✅
+Commits:
+├─ AC-PHASE-06-S2-001: EnforcementOrchestrator
+├─ AC-PHASE-06-S2-002: DoR displays
+└─ AC-PHASE-06-S2-003: IntentRouter
+```
+
+**Stage 3: Response Formatter Integration [1.5h, 3 tests]**
+
+```
+Deliverables:
+├─ Enhance cortex/orchestrators/response/simple_response_formatter.py
+│  └─ Add business_wisdom parameter (optional, non-breaking)
+│
+├─ Enhance cortex/interaction/bluf_system.py
+│  └─ Add business_wisdom field to BLUFTemplate
+│     └─ Include in HYBRID/FULL_DETAIL formats
+│
+└─ Tests (3 tests)
+   ├─ simple_response_formatter wisdom section (2 tests)
+   └─ BLUF integration (1 test)
+
+Tests: 3 passing ✅
+Commit: AC-PHASE-06-S3-001
+```
+
+**Stage 4: Documentation & Standards [1h, 0 tests]**
+
+```
+Deliverables:
+├─ Update .github/prompts/response-format-standards.md
+│  └─ Add Business Wisdom Panel Template section (80 lines)
+│     ├─ Standard format
+│     ├─ Usage guidelines (5 rules)
+│     ├─ Display contexts (4 scenarios)
+│     └─ Examples (3-4 real-world)
+│
+└─ Create phase-06-completion-report.md (200 lines)
+   ├─ Implementation summary
+   ├─ Before/after comparisons
+   ├─ Integration points
+   └─ Future enhancements
+
+Commit: AC-PHASE-06-S4-001
+```
+
+**Success Criteria:**
+- ✅ BusinessWisdomFormatter component (150 LOC, 12 tests)
+- ✅ 3 orchestrators enhanced (Enforcement, DoR, IntentRouter)
+- ✅ 2 response formatters support wisdom (simple, BLUF)
+- ✅ Documentation complete (standards + completion report)
+- ✅ 21 tests passing (100% coverage for new code)
+- ✅ Zero breaking changes (backwards compatible)
+- ✅ Book references visible in user-facing displays
 
 ---
 
 ## ✅ SUCCESS CRITERIA (All Waves)
 
 ### Code Quality
-- ✅ 560+ new tests (all passing)
+- ✅ 611+ new tests (all passing)
 - ✅ 100% existing tests passing (14,781+)
 - ✅ <5% test duplication
 - ✅ Zero brittleness warnings
@@ -727,21 +859,23 @@ Result: ALL PENDING WORK COMPLETE + PRODUCTION READY
 - ✅ Multi-Cycle TDD (ENH-088 complete)
 - ✅ EventBus debugging (ENH-089 complete)
 - ✅ Orchestrator consolidation (ENH-087 complete)
+- ✅ Business wisdom display (Phase 6 complete)
 - ✅ Enforcement policy active
 
 ### Governance
-- ✅ 22 commits with AC markers
+- ✅ 33 commits with AC markers
 - ✅ RED-GREEN-REFACTOR documented
 - ✅ All CORE rules enforced
-- ✅ No non-breaking changes
+- ✅ No breaking changes
 - ✅ Registry current
 
 ### Production Readiness
-- ✅ All pending work complete (WAVE-P through WAVE-U)
+- ✅ All pending work complete (WAVE-P through WAVE-U + WAVE-6)
 - ✅ 22/22 waves complete (100%)
 - ✅ Documentation current
 - ✅ Deployment-ready
 - ✅ Performance optimized
+- ✅ Enhanced user experience (book references)
 
 ---
 
@@ -749,7 +883,7 @@ Result: ALL PENDING WORK COMPLETE + PRODUCTION READY
 
 **All prerequisites met:**
 - ✅ Architecture reviewed + enhanced
-- ✅ 5 waves designed (29 hours total)
+- ✅ 6 waves designed (34-36 hours total)
 - ✅ Success criteria defined
 - ✅ RGR loop ready
 - ✅ Enforcement policy scoped
@@ -758,24 +892,31 @@ Result: ALL PENDING WORK COMPLETE + PRODUCTION READY
 **To begin autonomous execution:**
 
 ```
-/implement MASTER-WAVES-1-5: ALL PENDING WORK TO COMPLETION
+/implement MASTER-WAVES-1-6: ALL PENDING WORK TO COMPLETION
 
 Authority: cortex-registry/_cortex-master/MASTER-WAVE-PLAN-5-WAVES-2026-02-13.md
-Mode: Silent autonomous with ASCII progress bars (5 waves)
-Total Duration: 29 hours
-Token Budget: <1.2M (200-300k per wave)
+Mode: Silent autonomous with ASCII progress bars (6 waves)
+Total Duration: 34-36 hours
+Token Budget: <1.5M (150-300k per wave)
 
 Wave 1: Registry Cleanup + Test Intelligence (5h, 90 tests)
 Wave 2: Scaffolder + Scale (6h, 310+ tests)
 Wave 3: ENH-088/089 + Multi-Cycle TDD (7h, 75 tests)
 Wave 4: ENH-087 + Performance (6h, 85 tests)
 Wave 5: RGR + Production Ready (5h, varies)
+Wave 6: Business Wisdom Display (4-6h, 21 tests) [P2-DEFERRED]
 
 Result: ALL PENDING WORK COMPLETE
-        560+ intelligent tests
+        611+ intelligent tests
         28 orchestrators fully covered
-        22 commits (AC markers)
-        PRODUCTION READY ✅
+        33 commits (AC markers)
+        PRODUCTION READY + ENHANCED UX ✅
 ```
 
-Type: **"proceed WAVES-1-5"** to start autonomous execution
+**Execution Strategy:**
+
+Waves 1-5: Execute immediately (P0/P1 priority)
+Wave 6: Execute after Wave 5 complete (P2 priority, UX enhancement)
+
+Type: **"proceed WAVES-1-5"** to start autonomous execution (production readiness)
+Type: **"proceed WAVE-6"** after Wave 5 complete (UX enhancements)
