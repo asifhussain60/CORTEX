@@ -1,1 +1,1 @@
-deployment/requirements.txt
+-r deployment/requirements.txt
