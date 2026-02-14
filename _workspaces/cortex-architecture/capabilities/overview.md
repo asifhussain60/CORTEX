@@ -13,6 +13,8 @@
 - [Capability Matrix](#capability-matrix)
 - [Core Platform Capabilities](#core-platform-capabilities)
 - [AI & Intelligence Capabilities](#ai--intelligence-capabilities)
+- [Brain Architecture (Phase 12)](#brain-architecture-phase-12)
+- [Response Formatting & Content Blocks](#response-formatting--content-blocks)
 - [Decisioning Capabilities](#decisioning-capabilities)
 - [Governance & Compliance Capabilities](#governance--compliance-capabilities)
 - [Extensibility Capabilities](#extensibility-capabilities)
@@ -586,6 +588,100 @@ Organizations can add domain-specific orchestrators:
 ---
 
 ### EX-003: Knowledge Base Integration
+
+**Business Value:** Organizational knowledge becomes actionable automation
+
+---
+
+## Brain Architecture (Phase 12)
+
+### 3-Layer Intelligence System
+
+Organizations benefit from adaptive learning through CORTEX's three-layer brain architecture that continuously improves from every repository interaction [Business Leaders]. Product teams gain pattern-based intelligence where strategies learned in one repository automatically apply to similar contexts [Product Owners]. The architecture implements perception (PatternRegistry), reasoning (StrategySelector), and action (ExecutionPlanner) layers through coordinated Python modules [Software Developers].
+
+**Key Components:**
+
+- **Perception Layer** — `cortex_brain/perception/pattern_registry.py`
+  - Detects repository patterns via signature matching
+  - Registers learned patterns with confidence scores
+  - Performs fuzzy matching for partial signatures
+  - 21 tests, 94% coverage
+
+- **Reasoning Layer** — `cortex_brain/reasoning/strategy_selector.py`
+  - Recommends strategies based on detected patterns
+  - Evaluates context and constraints
+  - Ranks strategies by historical success rate
+  - 23 tests, 96% coverage
+
+- **Action Layer** — `cortex_brain/action/execution_planner.py`
+  - Generates step-by-step execution plans
+  - Includes validation checks and rollback procedures
+  - Estimates duration and risk level
+  - 25 tests, 95% coverage
+
+**Performance Characteristics:**
+- Pattern detection: Target <100ms, typical 75ms
+- Strategy selection: Target <150ms, typical 110ms
+- Plan generation: Target <200ms, typical 160ms
+- End-to-end cognitive loop: Target <500ms, typical 345ms
+
+**Example Flow:**
+
+```
+Repository Onboarding
+        ↓
+Perception: Detect "django-monolith" pattern (conf: 0.95)
+        ↓
+Reasoning: Recommend "api-versioning-migration" (conf: 0.89)
+        ↓
+Action: Generate 5-step plan (2.5 hours, low risk)
+        ↓
+TDDOrchestrator executes plan
+```
+
+> **Notice:** Brain architecture capabilities represent system design intentions for pattern-based intelligence. Actual pattern detection accuracy, strategy effectiveness, and execution success depend on repository characteristics and historical data availability.
+
+**Detailed Documentation:** [Brain Architecture Guide](./brain-architecture.md)
+
+---
+
+## Response Formatting & Content Blocks
+
+### Adaptive Communication System
+
+Organizations benefit from consistent, professional responses across all user interactions [Business Leaders]. Product teams receive intent-appropriate formatting without manual template selection (design sessions get waves/stages, queries get Q&A format) [Product Owners]. The system provides 7 composable content blocks and 5 intent-adaptive templates through registry-driven configuration [Software Developers].
+
+**Composable Content Blocks (7 blocks):**
+- BLOCK-INTRO (role-based introductions)
+- BLOCK-CAPABILITIES (platform overview)
+- BLOCK-LENS (intelligence system explanation)
+- BLOCK-ORCHESTRATORS (orchestration overview)
+- BLOCK-TUTORIAL (quick start guide)
+- BLOCK-ONBOARDING (repository setup)
+- BLOCK-NEXT-STEPS (contextual actions)
+
+**Intent-Adaptive Templates (5 templates):**
+- Template A: DIGEST (concern → resolution → wave breakdown)
+- Template B: DESIGN/PLAN (waves → stages → metrics)
+- Template C: QUERY (mirror questions → answers → evidence)
+- Template D: COMPLETION (deliverables → enhancements)
+- Template E: ENHANCEMENT (4-dimension quality improvements)
+
+**Key Benefits:**
+- 85% token reduction for educational responses (51k → 7.5k tokens)
+- Anti-duplication validation prevents overlapping content
+- Orchestrator personality tags provide context
+- Single source of truth per content type
+
+**Use Cases:**
+- Educational scenarios: "What is CORTEX?" → compose relevant blocks
+- Design sessions: Automatic wave/stage formatting
+- Query responses: Structured Q&A with evidence
+- Completions: Deliverables + enhancement mapping
+
+**Detailed Documentation:** [Response Formatting Guide](./response-formatting.md)
+
+---
 
 **Business Value:** Organizational knowledge becomes actionable automation
 
