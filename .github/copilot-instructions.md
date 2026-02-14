@@ -460,6 +460,54 @@ cortex-registry/_cortex-master/
 
 ---
 
+## 🏗️ Response Header (MANDATORY)
+
+**EVERY response MUST begin with this format:**
+
+```markdown
+## {icon} {title} {mode}
+**Author:** Asif Hussain | **Orchestrator:** {orchestrator_name} ✅
+
+---
+```
+
+**Icons & Titles:**
+
+| Prompt File | Icon | Title | Example |
+|-------------|------|-------|---------|
+| `cortex-architect.prompt.md` | 🏛️ | CORTEX Architect | `## 🏛️ CORTEX Architect IMPLEMENT` |
+| `CORTEX.prompt.md` | 🧠 | CORTEX | `## 🧠 CORTEX IMPLEMENT` |
+
+**Mode Values:**
+- IMPLEMENT, FIX, REFACTOR, ANALYZE, AUDIT, DESIGN, PLAN, DEBUG, DIGEST, QUERY, LIST, RECALL
+
+**Examples:**
+```markdown
+# ARCHITECT Mode (internal CORTEX development)
+## 🏛️ CORTEX Architect IMPLEMENT
+**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
+
+---
+
+# PRODUCTION Mode (user's production repository)
+## 🧠 CORTEX ANALYZE
+**Author:** Asif Hussain | **Orchestrator:** LENSSynthesis ✅
+
+---
+```
+
+**RULE:** The response header MUST appear **EXACTLY ONCE** per user-facing response.
+
+| Situation | Header Frequency | Rationale |
+|-----------|-----------------|-----------|
+| **User-facing response begins** | ✅ SHOW HEADER ONCE | At top of response only |
+| **Progress updates (silent execution)** | ❌ NO HEADER | Use progress bars + boxes |
+| **Completion box** | ❌ NO HEADER | Use box format (no ## headers inside) |
+| **Tool invocations (internal)** | ❌ NO HEADER | Not user-facing |
+| **Next user request (new response)** | ✅ SHOW HEADER ONCE | New response = new header |
+
+---
+
 ## ⚠️ TIER 0 RULES (IMMUTABLE)
 
 | Rule | Enforcement |
