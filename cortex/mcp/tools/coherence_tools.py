@@ -63,10 +63,13 @@ async def cortex_validate_coherence(
     check_duplicates: bool = True,
     check_versions: bool = True,
     check_structure: bool = True,
+    orchestrator_context: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     """Validate file coherence using Change Coherence Engine.
     
     MCP Tool: cortex_validate_coherence
+    
+    ENFORCEMENT: Validates orchestrator_context on entry.
     
     This tool validates that file modifications maintain coherence:
     - No duplicate sections introduced
@@ -81,6 +84,7 @@ async def cortex_validate_coherence(
         check_duplicates: Whether to check for duplicates
         check_versions: Whether to check version consistency
         check_structure: Whether to check structure preservation
+        orchestrator_context: Context from MasterOrchestrator (required)
         
     Returns:
         Dict with validation results:
@@ -112,6 +116,9 @@ async def cortex_validate_coherence(
         >>> print(result["issues"][0]["message"])
         "Duplicate section 'Section' found..."
     """
+    # ENFORCEMENT: Validate orchestrator routing
+    validate_orchestrator_context(orchestrator_context)
+    
     try:
         from cortex.orchestrators.coherence.structure_analyzer import StructureAnalyzer
         from cortex.orchestrators.coherence.duplicate_scanner import DuplicateScanner

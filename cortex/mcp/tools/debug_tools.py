@@ -79,10 +79,13 @@ class DebugMCPTools:
         trigger_type: str,
         file_path: str,
         line_number: int,
-        context: Dict[str, Any]
+        context: Dict[str, Any],
+        orchestrator_context: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
         """
         Manually trigger debug marker injection.
+        
+        ENFORCEMENT: Validates orchestrator_context on entry.
         
         Use Case:
             Developer wants to inject markers without waiting for test failure.
@@ -93,6 +96,7 @@ class DebugMCPTools:
             file_path: Path to file for marker injection
             line_number: Line number for marker placement
             context: Additional context (test_name, failure_reason, etc.)
+            orchestrator_context: Context from MasterOrchestrator (required)
         
         Returns:
             Result dict with session_id and status
@@ -106,6 +110,9 @@ class DebugMCPTools:
             ... )
             {'status': 'success', 'session_id': 'session-test_failure-...', 'message': 'Markers injected'}
         """
+        # ENFORCEMENT: Validate orchestrator routing
+        validate_orchestrator_context(orchestrator_context)
+        
         logger.info(f"Manual debug injection requested: {trigger_type} at {file_path}:{line_number}")
         
         # Validate trigger type
@@ -202,9 +209,16 @@ class DebugMCPTools:
             "filter": status_filter
         }
     
-    def cleanup(self, session_id: str = None, cleanup_all: bool = False) -> Dict[str, Any]:
+    def cleanup(
+        self, 
+        session_id: str = None, 
+        cleanup_all: bool = False,
+        orchestrator_context: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
         """
         Remove debug markers for resolved sessions.
+        
+        ENFORCEMENT: Validates orchestrator_context on entry.
         
         Use Case:
             Developer fixed issue and wants to clean up markers.
@@ -213,6 +227,7 @@ class DebugMCPTools:
         Args:
             session_id: Specific session ID to clean up (optional)
             cleanup_all: Clean up all resolved sessions (default: False)
+            orchestrator_context: Context from MasterOrchestrator (required)
         
         Returns:
             Result dict with cleanup status
@@ -224,6 +239,9 @@ class DebugMCPTools:
             >>> tools.cleanup(cleanup_all=True)
             {'status': 'success', 'message': 'All resolved sessions cleaned up', 'removed_markers': 3}
         """
+        # ENFORCEMENT: Validate orchestrator routing
+        validate_orchestrator_context(orchestrator_context)
+        
         logger.info(f"Debug cleanup requested: session_id={session_id}, cleanup_all={cleanup_all}")
         
         if cleanup_all:
