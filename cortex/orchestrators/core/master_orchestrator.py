@@ -403,6 +403,27 @@ class MasterOrchestrator(IOrchestrator):
             success=True,
             details={"message": "Graceful degradation framework initialized"}
         )
+        
+        # ENH-092 Phase 53.3: Initialize LifecycleHookSystem for automatic cleanup
+        from cortex.orchestrators.core.lifecycle_hook_system import LifecycleHookSystem
+        try:
+            # VacuumOrchestrator will be wired later via lazy loading
+            self._lifecycle_hook_system = LifecycleHookSystem(vacuum_orchestrator=None)
+            self.logger.log_operation_complete(
+                ac_id="AC-ENH-092-001",
+                operation="LIFECYCLE_HOOK_SYSTEM_INIT",
+                success=True,
+                details={"system": "LifecycleHookSystem initialized for automatic cleanup"}
+            )
+        except Exception as lifecycle_err:
+            # Log but don't fail - lifecycle hooks are enhancement
+            self._lifecycle_hook_system = None
+            self.logger.log_operation_complete(
+                ac_id="AC-ENH-092-001",
+                operation="LIFECYCLE_HOOK_SYSTEM_INIT",
+                success=False,
+                details={"error": f"Failed to initialize LifecycleHookSystem: {str(lifecycle_err)}"}
+            )
 
         # AC-PHASE-2-5-WIRE-003: Initialize AdaptiveRouter for intelligent task routing
         # Note: AdaptiveRouter is IntelligentKnowledgeRouter which needs providers
@@ -2171,6 +2192,11 @@ class MasterOrchestrator(IOrchestrator):
                     "total_metadata_keys": len(stage_context.metadata)
                 }
             )
+            
+            # ENH-092 Phase 53.3: Trigger lifecycle hooks for automatic cleanup
+            # Note: Hooks are fire-and-forget (non-blocking completion reporting)
+            if hasattr(self, '_lifecycle_hook_system') and self._lifecycle_hook_system:
+                self._trigger_lifecycle_hooks_sync(operation_name, stage_context.metadata)
             
             return final_result
             
@@ -4766,3 +4792,69 @@ class MasterOrchestrator(IOrchestrator):
                 details={"error": str(e)}
             )
             return Err(f"Tech intelligence readiness check failed: {str(e)}")
+    
+    def _trigger_lifecycle_hooks_sync(self, operation_name: str, metadata: Dict[str, Any]) -> None:
+        """
+        Trigger lifecycle hooks synchronously (fire-and-forget).
+        
+        ENH-092 Phase 53.3: Automatic cleanup on completions.
+        
+        Args:
+            operation_name: Operation that completed (implement, fix, refactor, etc.)
+            metadata: Operation metadata for context
+        """
+        import asyncio
+        from cortex.orchestrators.core.lifecycle_hook_system import CompletionEvent
+        
+        try:
+            # Determine event type from operation name
+            event_map = {
+                "wave": CompletionEvent.WAVE_COMPLETE,
+                "phase": CompletionEvent.PHASE_COMPLETE,
+                "stage": CompletionEvent.STAGE_COMPLETE,
+                "session": CompletionEvent.SESSION_END
+            }
+            
+            event_type = None
+            entity_id = operation_name
+            
+            # Extract event type from operation name or metadata
+            for key, event in event_map.items():
+                if key in operation_name.lower():
+                    event_type = event
+                    break
+                if metadata.get("type") == key:
+                    event_type = event
+                    entity_id = metadata.get("id", operation_name)
+                    break
+            
+            # Default to STAGE_COMPLETE if no specific event detected
+            if not event_type:
+                event_type = CompletionEvent.STAGE_COMPLETE
+            
+            # Create async task (fire-and-forget)
+            async def _trigger():
+                await self._lifecycle_hook_system.trigger_completion(
+                    event_type=event_type,
+                    entity_id=entity_id,
+                    metadata=metadata
+                )
+            
+            # Run in background without blocking
+            asyncio.create_task(_trigger())
+            
+            self.logger.log_operation_complete(
+                ac_id="AC-ENH-092-002",
+                operation="LIFECYCLE_HOOK_TRIGGERED",
+                success=True,
+                details={"event": event_type.value, "entity": entity_id}
+            )
+            
+        except Exception as hook_err:
+            # Log but don't fail - hooks are non-blocking
+            self.logger.log_operation_complete(
+                ac_id="AC-ENH-092-002",
+                operation="LIFECYCLE_HOOK_TRIGGERED",
+                success=False,
+                details={"error": f"Failed to trigger lifecycle hooks: {str(hook_err)}"}
+            )

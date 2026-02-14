@@ -1,0 +1,495 @@
+# ============================================================================
+# WAVE-CONSOLIDATION: 7-Day Work Integration & Production Wiring
+# ============================================================================
+# Authority: User request (2026-02-14) + Option C (Hybrid Lifecycle Solution)
+# Purpose: Consolidate all work from past 7 days, clean registry, wire everything
+# Created: 2026-02-14
+# Status: READY FOR EXECUTION
+# Priority: P0-CRITICAL
+# ============================================================================
+
+version: "1.0"
+created: "2026-02-14T00:00:00Z"
+wave_id: "WAVE-CONSOLIDATION"
+name: "7-Day Work Integration & Production Wiring"
+subtitle: "Holistic remediation: Registry cleanup + Lifecycle hooks + Wiring verification"
+
+metadata:
+  total_stages: 6
+  total_duration: "8-10 hours (single session)"
+  total_tests: 14489  # Current actual count
+  commits_to_wire: 1398  # Commits from past 7 days
+  roi_score: 9.5
+  strategy: "Option C - Hybrid (Immediate cleanup + Lifecycle integration + Evolution plan)"
+  completion_model: "Single autonomous session with checkpoints"
+
+# ============================================================================
+# EXECUTIVE SUMMARY
+# ============================================================================
+
+executive_summary: |
+  Past 7 days produced 1,398 commits across 30+ phases, 10+ waves, and 6+ enhancements.
+  Much is complete but NOT wired into production. Registry has 240 files (should be ~85).
+  
+  This wave:
+  1. Audits all recent work (Phases 6, 48-82, Waves 1-12, ENH-082-101)
+  2. Cleans registry (240 → 85 files, 65% reduction)
+  3. Implements Lifecycle Hooks (auto-vacuum on completion)
+  4. Verifies wiring (all orchestrators + MCP tools)
+  5. Runs final integration tests
+  6. Commits with comprehensive AC markers
+  
+  RESULT: Production-ready CORTEX with self-cleaning architecture
+
+# ============================================================================
+# PROBLEM STATEMENT
+# ============================================================================
+
+problem:
+  current_state: |
+    ANALYSIS OF PAST 7 DAYS (2026-02-07 to 2026-02-14):
+    
+    **Work Completed:**
+    - Phase 6: Business Wisdom Display (70% complete, production-ready)
+    - Phases 48-82: 35 phases across intelligence, enterprise, LENS, MCP
+    - Waves 1-12: Foundation, testing, consolidation, cleanup
+    - ENH-082-101: 20 enhancement implementations
+    - 1,398 commits total (972 cleanup-related = 70% overhead!)
+    
+    **Registry State:**
+    - 240 files (115 .md + 125 .yaml)
+    - 35+ completion reports (should be archived)
+    - 12+ status updates (should consolidate to 1)
+    - 2 versioned files (CORE-028 violation)
+    - Test count mismatch: Claims 14,781, actual 14,489 (-292)
+    
+    **Wiring Gaps:**
+    - Phase 6 components not wired (BusinessWisdomFormatter, EnforcementOrchestrator integration)
+    - Phase 48-registry components pending verification
+    - Phase 76 S2 isolation features pending production wiring
+    - Phase 81 agent architecture changes pending MCP tool updates
+    - Phase 82 monitoring endpoints not integrated
+    
+    **Vacuum Problem:**
+    - Manual cleanup required 972 times (70% of commits!)
+    - No automatic archival on wave/phase completion
+    - No early warning when registry grows
+    - No prevention of unnecessary file creation
+
+  impact:
+    - "🔴 Production blocker: Unwired features can't be used"
+    - "🔴 Technical debt: 240 files vs 85 target (182% bloat)"
+    - "🔴 Maintenance burden: 70% of commits are cleanup"
+    - "🟡 Documentation lag: Registry doesn't reflect reality"
+    - "🟡 Test mismatch: Claims vs reality create confusion"
+
+# ============================================================================
+# SOLUTION DESIGN (OPTION C: HYBRID)
+# ============================================================================
+
+solution:
+  overview: |
+    Three-layer defense against chronic clutter:
+    
+    LAYER 1: PREVENTION (Stop creating mess)
+    - Reduce completion reports: 1 per wave (not 3-5)
+    - Update status in-place (not create new files)
+    - Archive trigger: Status changes to "complete"
+    
+    LAYER 2: AUTOMATIC CLEANUP (Self-cleaning during work)
+    - MasterOrchestrator lifecycle hooks
+    - Auto-vacuum on wave/phase completion
+    - Auto-archive on status change
+    
+    LAYER 3: PROACTIVE MONITORING (Catch problems early)
+    - File count threshold: 100 files
+    - Alert at 85 files
+    - Suggest cleanup before crisis
+
+  architecture:
+    components:
+      - name: "LifecycleHookSystem"
+        purpose: "Trigger cleanup automatically on completions"
+        integration: "MasterOrchestrator, PlanOrchestrator"
+        
+      - name: "EnhancedVacuumOrchestrator"
+        purpose: "Intelligent cleanup with prevention + monitoring"
+        integration: "Called by lifecycle hooks + manual trigger"
+        
+      - name: "RegistryHealthMonitor"
+        purpose: "Track file count, alert on thresholds"
+        integration: "Runs on session start, reports to user"
+        
+      - name: "WiringVerifier"
+        purpose: "Ensure all completed work is production-wired"
+        integration: "Part of wave completion validation"
+
+# ============================================================================
+# STAGE DEFINITIONS
+# ============================================================================
+
+stages:
+  stage_1_audit_recent_work:
+    id: "S1"
+    name: "Audit Recent Work (Past 7 Days)"
+    duration: "1.5 hours"
+    priority: "P0-CRITICAL"
+    
+    objectives:
+      - "Extract all completed phases from git history"
+      - "Identify all completed waves/enhancements"
+      - "Find unwired features (code exists but not in wiring.yaml)"
+      - "Verify test counts (claim vs reality)"
+      - "Document what needs wiring"
+    
+    deliverables:
+      - file: "cortex-registry/_cortex-master/reports/7-day-work-audit-2026-02-14.yaml"
+        description: "Comprehensive audit of all recent work"
+      - file: "cortex-registry/_cortex-master/reports/wiring-gaps-2026-02-14.yaml"
+        description: "List of unwired features requiring integration"
+    
+    acceptance_criteria:
+      - "All completed phases documented (Phases 6, 48-82)"
+      - "All completed waves documented (Waves 1-12)"
+      - "All completed enhancements documented (ENH-082-101)"
+      - "Wiring gaps identified with file paths"
+      - "Test count discrepancy explained"
+    
+    tests: 0  # Audit stage, no tests
+    
+  stage_2_registry_cleanup:
+    id: "S2"
+    name: "Registry Cleanup (240 → 85 Files)"
+    duration: "2 hours"
+    priority: "P0-CRITICAL"
+    
+    objectives:
+      - "Archive 35+ completion reports → baselines/completed-waves/"
+      - "Delete 2 versioned files (CORE-028 compliance)"
+      - "Consolidate 12 status updates → 1 canonical"
+      - "Move historical sync docs → baselines/status-snapshots/"
+      - "Update test count: 14,781 → 14,489 (reality)"
+    
+    deliverables:
+      - action: "Archive completion reports"
+        files_moved: 35
+        destination: "baselines/completed-waves/"
+      - action: "Delete versioned files"
+        files_deleted: 2
+        violations: ["master-plan-v3-roi-prioritized.yaml", "audit-checklist-v2.yaml"]
+      - action: "Consolidate status files"
+        files_merged: 12
+        canonical: "WAVE-STATUS-2026-02-14.yaml"
+      - file: "cortex-registry/_cortex-master/README.md"
+        description: "Updated with accurate test count and file stats"
+    
+    acceptance_criteria:
+      - "Registry file count ≤ 100 files"
+      - "Zero CORE-028 violations (no versioned files)"
+      - "Single canonical status file"
+      - "All completion reports archived"
+      - "Test count matches reality (14,489)"
+    
+    tests: 1  # Registry file count validation
+    
+  stage_3_lifecycle_hooks:
+    id: "S3"
+    name: "Implement Lifecycle Hook System"
+    duration: "2 hours"
+    priority: "P0-CRITICAL"
+    
+    objectives:
+      - "Create LifecycleHookSystem component"
+      - "Wire to MasterOrchestrator completion handlers"
+      - "Add hooks for: wave_complete, phase_complete, session_end"
+      - "Integrate with VacuumOrchestrator"
+      - "Add registry health monitoring"
+    
+    deliverables:
+      - file: "cortex/orchestrators/core/lifecycle_hook_system.py"
+        lines: 250
+        description: "Lifecycle hook orchestration"
+      - file: "tests/unit/orchestrators/core/test_lifecycle_hook_system.py"
+        lines: 150
+        description: "25 tests (RED→GREEN→REFACTOR)"
+      - file: "cortex/orchestrators/core/master_orchestrator.py"
+        modification: "Wire lifecycle hooks into completion methods"
+      - file: "cortex/brain/tier1/orchestrators/vacuum.py"
+        modification: "Add monitoring + prevention capabilities"
+    
+    acceptance_criteria:
+      - "LifecycleHookSystem component created"
+      - "MasterOrchestrator calls hooks on completions"
+      - "VacuumOrchestrator triggered automatically"
+      - "Registry health monitored (file count threshold)"
+      - "25/25 tests passing (TDD compliance)"
+    
+    tests: 25
+    
+  stage_4_wiring_verification:
+    id: "S4"
+    name: "Production Wiring Verification & Integration"
+    duration: "2 hours"
+    priority: "P0-CRITICAL"
+    
+    objectives:
+      - "Verify Phase 6 components wired (BusinessWisdomFormatter)"
+      - "Verify Phase 48-registry isolation features wired"
+      - "Verify Phase 76 S2 tenant isolation wired"
+      - "Verify Phase 81 agent metadata system wired"
+      - "Verify Phase 82 monitoring endpoints wired"
+      - "Update wiring.yaml with any missing components"
+      - "Run wiring validation tests"
+    
+    deliverables:
+      - file: "cortex/wiring/specifications/wiring.yaml"
+        modification: "Add missing component registrations"
+      - file: "tests/wiring/test_7day_work_integration.py"
+        lines: 200
+        description: "30 integration tests for recent work"
+      - file: "cortex-registry/_cortex-master/reports/wiring-verification-2026-02-14.yaml"
+        description: "Complete wiring status report"
+    
+    acceptance_criteria:
+      - "All Phase 6 components in wiring.yaml"
+      - "All Phase 48-82 components verified"
+      - "All Phase 76 S2 isolation features wired"
+      - "All Phase 81 agent changes reflected"
+      - "All Phase 82 monitoring endpoints active"
+      - "30/30 integration tests passing"
+      - "Zero wiring gaps remaining"
+    
+    tests: 30
+    
+  stage_5_integration_testing:
+    id: "S5"
+    name: "Full Integration & Smoke Testing"
+    duration: "1.5 hours"
+    priority: "P1"
+    
+    objectives:
+      - "Run full test suite (14,489 tests)"
+      - "Verify no regressions from cleanup"
+      - "Test lifecycle hooks in action"
+      - "Test vacuum auto-trigger"
+      - "Test registry health monitoring"
+      - "Smoke test all MCP tools"
+    
+    deliverables:
+      - action: "Full test run"
+        command: "pytest tests/ -v"
+        expected: "14,489 tests collected, ≥98% passing"
+      - file: "tests/integration/test_lifecycle_hooks_e2e.py"
+        lines: 100
+        description: "10 end-to-end lifecycle tests"
+      - file: "cortex-registry/_cortex-master/reports/integration-test-report-2026-02-14.yaml"
+        description: "Full test results + smoke test report"
+    
+    acceptance_criteria:
+      - "14,489 tests collected (no collection errors)"
+      - "≥98% pass rate (≥14,200 passing)"
+      - "10/10 lifecycle E2E tests passing"
+      - "All 24 MCP tools respond successfully"
+      - "Vacuum auto-trigger verified"
+      - "Registry health monitoring verified"
+    
+    tests: 10
+    
+  stage_6_documentation_finalization:
+    id: "S6"
+    name: "Documentation & Production Readiness"
+    duration: "1 hour"
+    priority: "P1"
+    
+    objectives:
+      - "Update README.md with accurate stats"
+      - "Create WAVE-CONSOLIDATION completion report"
+      - "Document lifecycle hook system usage"
+      - "Create prevention guide (reduce file creation)"
+      - "Update master plan with new capabilities"
+    
+    deliverables:
+      - file: "cortex-registry/_cortex-master/README.md"
+        modification: "Accurate test count, file count, wave status"
+      - file: "cortex-registry/_cortex-master/WAVE-CONSOLIDATION-COMPLETION.md"
+        lines: 300
+        description: "Comprehensive completion report"
+      - file: ".github/prompts/LIFECYCLE-HOOKS-GUIDE.md"
+        lines: 200
+        description: "How to use lifecycle hooks + prevention tips"
+      - file: "cortex-registry/_cortex-master/master-plan.yaml"
+        modification: "Add lifecycle system capabilities"
+    
+    acceptance_criteria:
+      - "README.md shows 14,489 tests, <100 files"
+      - "Completion report documents all changes"
+      - "Lifecycle hooks guide available"
+      - "Prevention guide reduces future cleanup"
+      - "Master plan reflects new capabilities"
+    
+    tests: 0  # Documentation stage
+
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+
+success_criteria:
+  critical:
+    - "Registry reduced from 240 → <100 files (≥58% reduction)"
+    - "Zero CORE-028 violations (no versioned files)"
+    - "All recent work wired (Phases 6, 48-82, Waves 1-12, ENH-082-101)"
+    - "Lifecycle hook system operational"
+    - "14,489 tests passing (≥98% pass rate)"
+    - "3 commits with AC markers (cleanup, lifecycle, wiring)"
+  
+  important:
+    - "Vacuum auto-triggers on completions"
+    - "Registry health monitoring active"
+    - "Prevention guide reduces future cleanup"
+    - "All MCP tools functional (24/24)"
+    - "Documentation accurate and current"
+  
+  nice_to_have:
+    - "Future enhancement roadmap"
+    - "Self-healing architecture fully operational"
+    - "Predictive cleanup patterns documented"
+
+# ============================================================================
+# EXECUTION PLAN
+# ============================================================================
+
+execution:
+  mode: "Silent Autonomous"
+  session_id: "WAVE-CONSOLIDATION-20260214-01"
+  token_budget: 250000  # Larger wave, more scope
+  
+  checkpoints:
+    - stage: "S2"
+      action: "Commit registry cleanup"
+      marker: "AC-CONSOLIDATION-S2-001"
+    - stage: "S4"
+      action: "Commit wiring verification"
+      marker: "AC-CONSOLIDATION-S4-001"
+    - stage: "S6"
+      action: "Commit final documentation"
+      marker: "AC-CONSOLIDATION-S6-001"
+  
+  rollback_plan:
+    - "Stage 2: Restore archived files from baselines/"
+    - "Stage 3: Remove lifecycle hook integration"
+    - "Stage 4: Revert wiring.yaml changes"
+    - "Git: Revert to pre-wave commit"
+  
+  validation:
+    - "Registry file count < 100"
+    - "Test count accurate (14,489)"
+    - "All wiring gaps closed"
+    - "Lifecycle hooks operational"
+    - "Zero CORE violations"
+
+# ============================================================================
+# METRICS & TRACKING
+# ============================================================================
+
+metrics:
+  before:
+    registry_files: 240
+    test_count_claim: 14781
+    test_count_actual: 14489
+    cleanup_commits_7d: 972
+    cleanup_percentage: 70%
+    wiring_gaps: "Unknown"
+  
+  after:
+    registry_files: 85  # Target
+    test_count_claim: 14489  # Accurate
+    test_count_actual: 14489  # Match
+    cleanup_commits_7d: 0  # Auto-vacuum
+    cleanup_percentage: 0%  # Automatic
+    wiring_gaps: 0  # All closed
+  
+  improvements:
+    registry_reduction: 65%  # 240 → 85
+    cleanup_automation: 100%  # Manual → Automatic
+    test_accuracy: 100%  # Claims match reality
+    wiring_coverage: 100%  # All gaps closed
+
+# ============================================================================
+# RISKS & MITIGATIONS
+# ============================================================================
+
+risks:
+  - risk: "Breaking wiring during cleanup"
+    probability: "Medium"
+    impact: "High"
+    mitigation: "Git checkpoint before cleanup, validation tests"
+  
+  - risk: "Lifecycle hooks trigger too frequently"
+    probability: "Low"
+    impact: "Medium"
+    mitigation: "Throttling + file count threshold"
+  
+  - risk: "Test count discrepancy causes confusion"
+    probability: "Low"
+    impact: "Low"
+    mitigation: "Document 5 skipped tests (Phase 81 deferrals)"
+
+# ============================================================================
+# REFERENCES
+# ============================================================================
+
+references:
+  authority:
+    - "cortex-architect.prompt.md v15.3"
+    - "MASTER-IMPLEMENTATION-REALITY-SYNC-2026-02-13.md"
+    - "Option C: Hybrid (Immediate cleanup + Lifecycle integration)"
+  
+  related_work:
+    - "CORE-002: No markdown file generation"
+    - "CORE-028: No versioned files"
+    - "CORE-035: Single canonical implementation"
+    - "ENH-062: CORTEX Production Readiness & Vacuum Enhancement"
+    - "ENH-083: Enhanced Vacuum Orchestration"
+  
+  git_history:
+    commits_analyzed: 1398
+    date_range: "2026-02-07 to 2026-02-14"
+    cleanup_commits: 972
+    work_commits: 426
+
+# ============================================================================
+# APPENDIX: RECENT WORK SUMMARY
+# ============================================================================
+
+appendix:
+  completed_phases:
+    - "Phase 6: Business Wisdom Display (70% complete)"
+    - "Phases 48-82: 35 phases (intelligence, LENS, MCP, enterprise)"
+  
+  completed_waves:
+    - "Wave 1: Foundation (336 tests, 100% complete)"
+    - "Waves 2-12: Testing, consolidation, cleanup"
+  
+  completed_enhancements:
+    - "ENH-082: Response Template Integration"
+    - "ENH-083: Enhanced Vacuum Orchestration"
+    - "ENH-087: Orchestrator Consolidation"
+    - "ENH-088: Multi-Cycle TDD"
+    - "ENH-089: EventBus Debugger"
+    - "ENH-101: Change Coherence Engine"
+  
+  pending_wiring:
+    phase_6:
+      - "BusinessWisdomFormatter (12 tests)"
+      - "EnforcementOrchestrator integration (7 tests)"
+      - "Response formatter book reference (3 tests)"
+    phase_76:
+      - "Registry isolation features (80 tests)"
+      - "Tenant context support"
+    phase_81:
+      - "Agent metadata system"
+      - "Capability-based routing"
+    phase_82:
+      - "Health check endpoints (19 tests)"
+      - "Prometheus metrics (41 tests)"
+      - "OpenTelemetry tracing (38 tests)"

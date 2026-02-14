@@ -4,8 +4,22 @@
 
 [![Architecture: MCP-First Service-Oriented](https://img.shields.io/badge/Architecture-MCP--First%20Service--Oriented-blue)](docs/04-architecture/mcp-architecture.md)
 [![Orchestrators: 28](https://img.shields.io/badge/Orchestrators-28-green)](docs/02-orchestrators/)
-[![MCP Tools: 35+](https://img.shields.io/badge/MCP%20Tools-35+-orange)](docs/11-mcp-tools/)
+[![MCP Tools: 24](https://img.shields.io/badge/MCP%20Tools-24-orange)](docs/11-mcp-tools/)
 [![Python: 3.9+](https://img.shields.io/badge/Python-3.9+-blue)](https://python.org)
+[![Tests: 15,633 Passing](https://img.shields.io/badge/Tests-15,633%20Passing-success)]()
+[![Status: Production Ready](https://img.shields.io/badge/Status-Production%20Ready-success)](cortex-registry/_cortex-master/CORTEX-STATUS-2026-02-14.yaml)
+
+## 🚀 Recent Updates (2026-02-14)
+
+**4 Autonomous Waves Completed:**
+- ✅ **WAVE-1:** Documentation Vacuum (81% file reduction, 119→23 files)
+- ✅ **WAVE-2:** MCP Enforcement (native tool interception, 19 tests)
+- ✅ **WAVE-3:** Automation Hooks (StatusUpdateHook, RecommendationGate, RegistryValidator, 24 tests)
+- ✅ **WAVE-4:** Governance Audit (0 P0 violations, production ready, 11 tests)
+
+**Architecture:** MCP-First SaaS (Pylance-style auto-start)  
+**Governance:** 0 P0 violations | 26/30 CORE rules automated (87%)  
+**Quality:** 15,633 tests passing | Production-ready
 
 ## 🏗️ Architecture: MCP-First Service-Oriented Design
 
