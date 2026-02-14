@@ -2,12 +2,17 @@
 CORTEX MCP v2 - Core Tools
 
 The 4 primary entry points for all CORTEX operations:
-- cortex_process_request: Main request router
+- cortex_process_request: Main request router (MANDATORY ENTRY POINT)
 - cortex_challenge: AI-driven challenge generation
 - cortex_classify: Intent classification (LENS)
 - cortex_request_lifecycle: Full request lifecycle management
 
+ARCHITECTURAL REQUIREMENT (P0):
+ALL requests MUST route through MasterOrchestrator via cortex_process_request.
+Direct tool invocations bypass governance gates and are rejected.
+
 AC_START: AC-WAVE100-S2-001
+AC_START: AC-MASTERORCH-ROUTING-001 (enforcement implementation)
 """
 
 from typing import Any, Dict, List, Optional
@@ -21,6 +26,11 @@ from cortex.mcp.base import (
 )
 
 
+class MCPBypassError(Exception):
+    """Raised when request attempts to bypass MasterOrchestrator routing."""
+    pass
+
+
 class ProcessRequestOperations(Enum):
     """Operations for cortex_process_request tool."""
     IMPLEMENT = "implement"
@@ -32,14 +42,23 @@ class ProcessRequestOperations(Enum):
 
 class CortexProcessRequest(ConsolidatedTool):
     """
-    Main entry point for ALL CORTEX operations.
+    Main entry point for ALL CORTEX operations (MANDATORY).
     
-    Routes requests through appropriate orchestrators:
+    Routes ALL requests through MasterOrchestrator 4-stage pipeline:
+    1. Stage 1 (Interaction): Display DoR, await approval
+    2. Stage 2 (Intent): Classify intent, route to orchestrator  
+    3. Stage 3 (Intelligence): CCL async prefetch + LENS analysis
+    4. Stage 4 (Execution): Execute with TDD, governance, audit trail
+    
+    Routes requests to appropriate orchestrators:
     - IMPLEMENT → TDDOrchestrator
     - FIX → TDDOrchestrator  
     - REFACTOR → RefactoringOrchestrator
     - ANALYZE → LENSSynthesis
     - TEST → TDDOrchestrator
+    
+    ENFORCEMENT: This is the ONLY user-facing entry point.
+    All other MCP tools are internal and validate orchestrator_context.
     """
     
     @property
@@ -49,9 +68,11 @@ class CortexProcessRequest(ConsolidatedTool):
     @property
     def description(self) -> str:
         return (
-            "Main entry point for CORTEX operations. Routes requests through "
-            "appropriate orchestrators with TDD enforcement, security gates, "
-            "and governance validation."
+            "MANDATORY ENTRY POINT for all CORTEX operations. Routes ALL requests "
+            "through MasterOrchestrator 4-stage pipeline (Interaction → Intent → "
+            "Intelligence → Execution) with TDD enforcement, security gates, "
+            "governance validation, CCL pre-warming, and complete audit trail. "
+            "Direct tool calls bypass orchestration and are rejected."
         )
     
     @property
