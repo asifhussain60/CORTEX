@@ -1,10 +1,3 @@
-# Trigger: TEST_FAILURE
-# Context: TEST_FAILURE in unknown: 
-# Injected: 2026-02-14T14:24:21.943373
-"""
-MCP Tool Base Classes and Data Models.
-
-Provides the foundation for all MCP tools with:
 """
 MCP Tool Base Classes and Data Models.
 
