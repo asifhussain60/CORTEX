@@ -1,0 +1,926 @@
+# WAVE-STS: Sharpen The Saw - Intelligence Sharpening Protocol
+# Authority: workflow-engine.md digest + CORTEX Architect
+# Version: 1.0
+# Date: 2026-02-14
+# Scope: STS-driven intelligence enhancement with audit-log-verified E2E tests
+# Compliance: CORE-002, CORE-008, CORE-028, CORE-035, MCP-FIRST, ARCH-012
+
+metadata:
+  wave_id: "WAVE-STS-001"
+  title: "Sharpen The Saw Intelligence Protocol"
+  version: "1.0"
+  created: "2026-02-14"
+  authority: "CORTEX Architect"
+  orchestrator: "MasterOrchestrator → WorkflowComposer → TDDOrchestrator"
+  source_digest: "_workspaces/.chats/workflow-engine.md"
+  
+  priority: "P1"
+  duration_estimate: "8-10 hours (3 sessions)"
+  dependencies:
+    - "WorkflowComposer (WAVE-V prerequisite)"
+    - "Existing LENS infrastructure"
+    - "EventBus with correlation tracking"
+    - "UniversalLearningLoop"
+    - "PatternLibrary"
+  
+  quality_gates:
+    tdd_enforcement: "MANDATORY (CORE-008)"
+    test_count: 50
+    test_categories:
+      sunshine: 35
+      rainy: 15
+    coverage_target: "≥80%"
+    audit_verification: "REQUIRED for all 50 scenarios"
+
+# Philosophy (Covey's Habit 7 Applied)
+philosophy:
+  principle: "Sharpen the Saw"
+  source: "7 Habits of Highly Effective People - Stephen Covey"
+  
+  application_to_cortex:
+    body_physical:
+      dimension: "Infrastructure"
+      components: ["EventBus", "MCP", "ExecutionStrategies"]
+      goal: "Keep runtime healthy, fast, resilient"
+      
+    mind_mental:
+      dimension: "Intelligence"
+      components: ["LENS", "tier0-3 knowledge", "PatternLibrary"]
+      goal: "Continuously learn from every operation"
+      
+    heart_social:
+      dimension: "Interaction"
+      components: ["IntentRouter", "CoherenceValidator", "Feedback"]
+      goal: "Understand user, adapt to context"
+      
+    spirit_values:
+      dimension: "Governance"
+      components: ["CORE rules", "Security-first", "TDD"]
+      goal: "Never compromise quality for speed"
+  
+  upward_spiral: "Learn → Commit → Do → Learn again"
+  training_ground: "STS samples (BadMonolith, RA-Domain, payment-processor)"
+  
+  key_insight: |
+    STS is the WHETSTONE, not the blade. CORTEX's orchestrators are the blade.
+    We sharpen them against poor code samples to build production-grade intelligence.
+
+# STS Training Dataset
+sts_training_dataset:
+  location: "_workspaces/sts/sample-apps/"
+  
+  samples:
+    bad_monolith:
+      path: "BadMonolith/backend/"
+      language: "C# (.NET 8)"
+      purpose: "Before: Catalog of 25+ anti-patterns"
+      flaws:
+        security: ["SQL injection (CWE-89)", "Hardcoded secrets", "No input validation", "XSS vulnerabilities"]
+        architecture: ["God endpoint (1500+ LOC)", "No layering", "Global mutable state"]
+        quality: ["No error handling", "Thread-unsafe", "No tests"]
+      severity_count:
+        p0_critical: 7
+        p1_high: 12
+        p2_medium: 6
+      
+    ra_domain:
+      path: "_Real/RA-Domain/"
+      language: "C# (.NET)"
+      purpose: "Production-scale enterprise domain"
+      complexity: "52+ AST enhancement gaps identified"
+      use_case: "Real-world testing target"
+      
+    payment_processor_modernized:
+      path: "_Real/payment-processor-modernized/"
+      language: "C# (.NET)"
+      purpose: "After: Clean Architecture reference"
+      structure: "API/Core/Infrastructure layers"
+      use_case: "Target architecture pattern"
+      
+    ra_modernized:
+      path: "_Real/ra-modernized/"
+      language: "C# (.NET)"
+      purpose: "After: Clean Architecture reference"
+      structure: "Same as payment-processor"
+      
+  planned_validation_app:
+    name: "sts-validation-app"
+    languages: ["C#", "Python", "TypeScript"]
+    cataloged_flaws: 61
+    categories:
+      security: 12
+      solid: 15
+      code_quality: 20
+      performance: 8
+      testing: 3
+      documentation: 3
+
+# Existing CORTEX Intelligence Inventory
+existing_intelligence:
+  fully_functional:
+    - component: "DotNetLensAnalyzer"
+      capability: "Parse .sln, .csproj, NuGet packages"
+      gap: "No C# AST analysis (only file structure)"
+      
+    - component: "SecurityThreatAnalyzer"
+      capability: "Detect SQL injection, XSS, CWE patterns"
+      gap: "Python only - no C# pattern matching"
+      
+    - component: "AntiPatternDetector"
+      capability: "God Object, Feature Envy, Long Method"
+      gap: "Python AST only - no cross-language"
+      
+    - component: "PatternDetector"
+      capability: "Singleton, Factory, Decorator"
+      gap: "Python only"
+      
+    - component: "TieredLENSAnalyzer"
+      capability: "4-tier analysis (Fast→Smart→Deep→Crawler)"
+      gap: "No STS-specific workflow integration"
+      
+    - component: "tier3/SECURITY/*.yaml"
+      capability: "CWE-89, CWE-78, OWASP Top 10 knowledge"
+      gap: "Remediation advice exists but not wired to workflow"
+      
+    - component: "tier3/solid/solid_srp.yaml"
+      capability: "SRP documented"
+      gap: "Missing OCP, LSP, ISP, DIP"
+      
+    - component: "company/domains/*.yaml"
+      capability: "Business-specific overrides"
+      status: "Ready for STS domain definitions"
+      
+    - component: "UniversalLearningLoop"
+      capability: "Captures patterns from operations"
+      gap: "Not connected to STS outcomes"
+      
+    - component: "EventBus"
+      capability: "Audit trail with correlation IDs"
+      status: "Ready for E2E verification"
+
+# Three Core Programming Workflows (90% coverage)
+programming_workflows:
+  workflow_1_legacy_rescue:
+    name: "Legacy Rescue"
+    pattern: "BadMonolith → Clean Architecture"
+    coverage: "40% of real-world scenarios"
+    
+    steps:
+      scan:
+        orchestrator: "LENSOrchestrator"
+        intelligence: ["DotNetLensAnalyzer", "SecurityThreatAnalyzer"]
+        output: "25 flaws discovered (God endpoint, SQL injection, secrets, no tests)"
+        
+      classify:
+        orchestrator: "IntentRouter"
+        intelligence: ["AntiPatternDetector", "tier3/SECURITY YAMLs"]
+        output: "Categorized by severity (P0 security → P3 style)"
+        
+      prioritize:
+        orchestrator: "MasterOrchestrator"
+        intelligence: "Eisenhower Matrix (Covey Habit 3)"
+        output: "Urgent+Important first (SQL injection, secrets), then SOLID violations"
+        
+      decompose:
+        orchestrator: "IncrementalTaskDecomposer"
+        intelligence: "<500 LOC chunks"
+        output: "Extract config → Parameterize SQL → Add error handling → Layer architecture → Add tests"
+        
+      execute:
+        orchestrator: "TDDOrchestrator"
+        intelligence: "RGR per step"
+        phases:
+          red: "Write test for SQL injection"
+          green: "Fix with parameterized queries"
+          refactor: "Extract data access layer"
+          
+      validate:
+        orchestrator: "CoherenceValidator"
+        intelligence: "Cross-step coherence"
+        output: "New layers don't break existing endpoints"
+        
+      learn:
+        orchestrator: "UniversalLearningLoop"
+        intelligence: "PatternLibrary"
+        output: "Capture 'monolith rescue pattern' → tier3 knowledge"
+  
+  workflow_2_security_hardening:
+    name: "Security Hardening"
+    pattern: "OWASP/CWE remediation"
+    coverage: "30% of real-world scenarios"
+    
+    steps:
+      threat_model:
+        orchestrator: "SecurityThreatAnalyzer"
+        intelligence: "CWE pattern library (tier3/SECURITY)"
+        
+      vulnerability_map:
+        orchestrator: "LENSOrchestrator"
+        intelligence: "Cross-reference with OWASP Top 10"
+        
+      fix_priority:
+        orchestrator: "EnforcementOrchestrator"
+        intelligence: "P0: Injection → P1: Auth → P2: Config → P3: Logging"
+        
+      remediate:
+        orchestrator: "TDDOrchestrator"
+        intelligence: "Security test FIRST, then fix (RGR)"
+        
+      verify:
+        orchestrator: "CoherenceValidator"
+        intelligence: "No regressions, no new vulnerabilities"
+        
+      certify:
+        orchestrator: "AuditVerifier (NEW)"
+        intelligence: "Audit log proves: all CWEs addressed, all tests pass"
+  
+  workflow_3_quality_uplift:
+    name: "Quality Uplift"
+    pattern: "Code quality + SOLID compliance"
+    coverage: "20% of real-world scenarios"
+    
+    steps:
+      quality_scan:
+        orchestrator: "LENSOrchestrator"
+        intelligence: ["AntiPatternDetector", "complexity analysis"]
+        
+      solid_audit:
+        orchestrator: "PatternDetector"
+        intelligence: "tier3/solid YAMLs (SRP, OCP, LSP, ISP, DIP)"
+        
+      refactor_plan:
+        orchestrator: "RefactoringOrchestrator"
+        intelligence: "Decompose God objects, extract interfaces, inject dependencies"
+        
+      execute:
+        orchestrator: "TDDOrchestrator"
+        intelligence: "RGR for each extraction"
+        
+      measure:
+        orchestrator: "TestValueScorer"
+        intelligence: "Before/after quality scores"
+        
+      learn:
+        orchestrator: "PatternLibrary"
+        intelligence: "Quality uplift pattern → reusable template"
+
+# Controlled Intelligence Architecture (Digestive System)
+controlled_learning:
+  architecture: |
+    STS SAMPLE (e.g. BadMonolith)
+         ↓
+    LENS ANALYSIS (existing)
+         ↓ findings + patterns
+    KNOWLEDGE CHECK (existing tier0-3)
+         ↓ "Do I already know about this?"
+    ┌────────────────────────────────────┐
+    │ CONFIDENCE GATE (existing)         │
+    │                                    │
+    │ Known pattern (>0.7)  → Apply fix  │
+    │ Uncertain (0.4-0.7)  → Flag + Ask  │
+    │ Unknown (<0.4)        → Learn only │
+    └────────────────────────────────────┘
+         ↓ outcome
+    LEARNING CAPTURE (existing)
+         ↓ pattern + confidence
+    ┌────────────────────────────────────┐
+    │ PROMOTION GATE (NEW ~50 LOC)       │
+    │                                    │
+    │ Seen 3+ times + high confidence    │
+    │ → Promote to tier3 YAML            │
+    │                                    │
+    │ Seen <3 times + medium confidence  │
+    │ → Keep in PatternLibrary only      │
+    │                                    │
+    │ Low confidence + old (>30 days)    │
+    │ → Flush (FlushManager)             │
+    └────────────────────────────────────┘
+  
+  control_mechanisms:
+    confidence_scoring:
+      component: "ConfidenceScorer (exists)"
+      purpose: "Prevents low-quality patterns from entering knowledge"
+      
+    occurrence_threshold:
+      rule: "Promote only after 3+ sightings"
+      purpose: "Prevents one-off anomalies from becoming 'knowledge'"
+      
+    governance_gate:
+      component: "EnforcementOrchestrator (exists)"
+      purpose: "All promoted patterns pass CORE rule validation"
+      
+    audit_trail:
+      component: "EventBus + AuditVerifier"
+      purpose: "Every promotion/flush is traceable"
+      
+    human_override:
+      rule: "company/domains/*.yaml takes precedence"
+      purpose: "Business rules always win over learned patterns"
+  
+  neuron_metaphor:
+    nervous_system: "EventBus IS the axon"
+    neurons: "28 orchestrators (receive events, process, emit events)"
+    signal_tracing: "Correlation IDs"
+    error_correction: "Dead letter queue"
+    inhibitory_neurons: "7 governance agents (block rule violations)"
+    signal_strength: "ConfidenceScorer (weak signals filtered)"
+    long_term_memory: "PromotionGate (strong repeated signals become knowledge)"
+    forgetting: "FlushManager (stale signals decay)"
+
+# Audit-Log E2E Test Scenarios (50 Total)
+audit_verified_tests:
+  total_scenarios: 50
+  sts_specific_scenarios: 10  # New scenarios (41-50)
+  workflow_engine_scenarios: 40  # From workflow-engine.md
+  
+  sts_programming_scenarios:
+    scenario_41:
+      name: "Scan BadMonolith: detect all 25 flaws"
+      path: "Sunshine"
+      proof: "LENS + SecurityThreatAnalyzer finds everything"
+      audit_events:
+        - "LENS_SCAN_STARTED (target=BadMonolith)"
+        - "DOTNET_ANALYZER_COMPLETE (files=52, flaws=25)"
+        - "SECURITY_THREATS_FOUND (cwe_89=3, cwe_78=2, secrets=4)"
+        - "ANTI_PATTERNS_FOUND (god_object=1, feature_envy=5)"
+        - "LENS_SCAN_COMPLETE (confidence=0.95)"
+      expected_findings:
+        - "SQL injection (CWE-89) at Program.cs:127"
+        - "Hardcoded secret at appsettings.json:15"
+        - "God endpoint (1547 LOC) at Program.cs:50-1597"
+        - "No error handling in 18 methods"
+        - "Thread-unsafe global state at GlobalCache.cs:22"
+      
+    scenario_42:
+      name: "Prioritize: SQL injection before code style"
+      path: "Sunshine"
+      proof: "Eisenhower Matrix ordering works"
+      audit_events:
+        - "PRIORITIZATION_STARTED (method=eisenhower_matrix)"
+        - "FLAW_CATEGORIZED (flaw=sql_injection, urgency=high, importance=high, quadrant=1)"
+        - "FLAW_CATEGORIZED (flaw=naming_convention, urgency=low, importance=low, quadrant=4)"
+        - "PRIORITY_ORDER_GENERATED (order=[sql_injection, secrets, god_object, naming])"
+        - "PRIORITIZATION_COMPLETE"
+      expected_order:
+        1: "SQL injection (P0 - Urgent+Important)"
+        2: "Hardcoded secrets (P0 - Urgent+Important)"
+        3: "God endpoint (P1 - Important, not urgent)"
+        4: "SOLID violations (P2 - Neither urgent nor important)"
+        5: "Code style (P3 - Cosmetic)"
+      
+    scenario_43:
+      name: "Fix SQL injection with RGR"
+      path: "Sunshine"
+      proof: "TDD: Write injection test → Parameterize → Refactor"
+      audit_events:
+        - "LENS_SCAN_COMPLETE (SecurityThreatAnalyzer, findings=[CWE-89])"
+        - "KNOWLEDGE_MATCHED (tier3/SECURITY/cwe_89_sql_injection.yaml)"
+        - "WORKFLOW_STEP_STARTED (TDDOrchestrator, step=RED)"
+        - "TEST_WRITTEN (test_sql_injection_prevented)"
+        - "TEST_FAILED (expected - RED phase)"
+        - "WORKFLOW_STEP_STARTED (TDDOrchestrator, step=GREEN)"
+        - "CODE_CHANGED (Program.cs, parameterized_queries)"
+        - "TEST_PASSED (test_sql_injection_prevented)"
+        - "WORKFLOW_STEP_STARTED (TDDOrchestrator, step=REFACTOR)"
+        - "CODE_CHANGED (extract DataAccessLayer)"
+        - "COHERENCE_VALIDATED (no regressions)"
+        - "LEARNING_CAPTURED (pattern=sql_injection_fix, confidence=0.9)"
+        - "OPERATION_COMPLETE (success=true)"
+      audit_verification:
+        - "✅ All 13 events in correct order"
+        - "✅ RGR loop completed (RED→GREEN→REFACTOR)"
+        - "✅ Knowledge consulted before fix"
+        - "✅ Learning captured after fix"
+      
+    scenario_44:
+      name: "Extract God endpoint to layers"
+      path: "Sunshine"
+      proof: "RefactoringOrchestrator decomposes correctly"
+      audit_events:
+        - "REFACTORING_STARTED (pattern=layer_extraction)"
+        - "GOD_OBJECT_ANALYZED (loc=1547, methods=42, complexity=89)"
+        - "LAYER_PLAN_GENERATED (layers=[API, Business, Data, Infrastructure])"
+        - "INCREMENTAL_DECOMPOSITION (chunks=4, max_loc_per_chunk=400)"
+        - "TDD_CYCLE_STARTED (chunk=1, layer=API)"
+        - "TEST_WRITTEN (test_api_endpoint_behavior)"
+        - "TEST_PASSED"
+        - "TDD_CYCLE_COMPLETE (chunk=1)"
+        - "[... repeat for chunks 2-4 ...]"
+        - "COHERENCE_VALIDATED (all layers integrated)"
+        - "REFACTORING_COMPLETE (success=true)"
+      
+    scenario_45:
+      name: "Learn 'monolith rescue' pattern"
+      path: "Sunshine"
+      proof: "LearningLoop captures reusable pattern"
+      audit_events:
+        - "OPERATION_COMPLETE (workflow=legacy_rescue, success=true)"
+        - "LEARNING_CAPTURE_STARTED"
+        - "PATTERN_EXTRACTED (name=monolith_rescue, steps=7, confidence=0.88)"
+        - "PATTERN_STORED (location=PatternLibrary, id=PTRN-001)"
+        - "LEARNING_COMPLETE"
+      pattern_attributes:
+        name: "monolith_rescue"
+        steps: ["scan", "classify", "prioritize", "decompose", "execute", "validate", "learn"]
+        confidence: 0.88
+        occurrence_count: 1
+        first_seen: "2026-02-14"
+        promotion_status: "pending (needs 2 more occurrences)"
+      
+    scenario_46:
+      name: "Apply learned pattern to new monolith"
+      path: "Sunshine"
+      proof: "PatternLibrary retrieves and applies"
+      audit_events:
+        - "PATTERN_MATCH_REQUESTED (target=new_monolith)"
+        - "PATTERN_RETRIEVED (id=PTRN-001, name=monolith_rescue, confidence=0.88)"
+        - "PATTERN_APPLIED (target=new_monolith)"
+        - "WORKFLOW_EXECUTED (steps=7, success=true)"
+        - "PATTERN_OCCURRENCE_INCREMENTED (id=PTRN-001, count=2)"
+        - "PATTERN_CONFIDENCE_UPDATED (id=PTRN-001, confidence=0.92)"
+      
+    scenario_47:
+      name: "Flush stale pattern (low confidence)"
+      path: "Sunshine"
+      proof: "FlushManager cleans after 30 days"
+      audit_events:
+        - "FLUSH_CYCLE_STARTED (trigger=scheduled)"
+        - "PATTERN_EVALUATED (id=PTRN-099, age_days=45, confidence=0.32, occurrences=1)"
+        - "FLUSH_DECISION (id=PTRN-099, action=delete, reason=low_confidence_old)"
+        - "PATTERN_DELETED (id=PTRN-099)"
+        - "FLUSH_CYCLE_COMPLETE (deleted=12, retained=143)"
+      flush_criteria:
+        - "age > 30 days AND confidence < 0.4"
+        - "age > 90 days AND occurrences < 3"
+        - "age > 180 days (unconditional)"
+      
+    scenario_48:
+      name: "Scan fails on malformed .csproj"
+      path: "Rainy"
+      proof: "DotNetLensAnalyzer degrades gracefully"
+      audit_events:
+        - "LENS_SCAN_STARTED"
+        - "DOTNET_ANALYZER_ERROR (file=BadProject.csproj, error=xml_parse_failed)"
+        - "ANALYZER_FALLBACK_TRIGGERED (mode=file_structure_only)"
+        - "PARTIAL_ANALYSIS_COMPLETE (confidence=0.45, warning=no_dependency_info)"
+        - "LENS_SCAN_COMPLETE (degraded=true)"
+      
+    scenario_49:
+      name: "Security fix creates new vulnerability"
+      path: "Rainy"
+      proof: "CoherenceValidator catches regression"
+      audit_events:
+        - "CODE_CHANGED (file=Auth.cs, type=security_fix)"
+        - "COHERENCE_VALIDATION_STARTED"
+        - "SECURITY_SCAN_TRIGGERED (scope=affected_files)"
+        - "NEW_VULNERABILITY_FOUND (cwe=CWE-78, severity=high, location=Auth.cs:89)"
+        - "VALIDATION_FAILED (reason=regression_introduced)"
+        - "ROLLBACK_TRIGGERED"
+        - "COHERENCE_VALIDATION_COMPLETE (verdict=blocked)"
+      
+    scenario_50:
+      name: "Unknown language detected"
+      path: "Rainy"
+      proof: "LENS falls back to generic analysis"
+      audit_events:
+        - "LENS_SCAN_STARTED (target=new_project)"
+        - "LANGUAGE_DETECTION_FAILED (files=[*.xyz], no_analyzer_available)"
+        - "FALLBACK_ANALYZER_ACTIVATED (mode=generic)"
+        - "GENERIC_ANALYSIS_COMPLETE (metrics=[loc, file_count, directory_structure])"
+        - "LENS_SCAN_COMPLETE (confidence=0.25, warning=language_unknown)"
+
+# Implementation Plan (4 Stages)
+implementation_stages:
+  stage_1_knowledge_base:
+    name: "Programming Workflow Templates + SOLID Knowledge"
+    duration: "2 hours"
+    deliverables:
+      - "3 workflow YAML templates (Legacy Rescue, Security Hardening, Quality Uplift)"
+      - "4 SOLID YAML files (OCP, LSP, ISP, DIP) - SRP already exists"
+      - "STS domain YAML (BadMonolith, RA-Domain contexts)"
+    tests: 8
+    test_breakdown:
+      - "3 workflow template validation tests"
+      - "4 SOLID knowledge loading tests"
+      - "1 STS domain context test"
+    files_created:
+      - "cortex-registry/_cortex-master/workflows/programming/legacy-rescue.yaml"
+      - "cortex-registry/_cortex-master/workflows/programming/security-hardening.yaml"
+      - "cortex-registry/_cortex-master/workflows/programming/quality-uplift.yaml"
+      - "cortex_brain/tier3/knowledge/solid/solid_ocp.yaml"
+      - "cortex_brain/tier3/knowledge/solid/solid_lsp.yaml"
+      - "cortex_brain/tier3/knowledge/solid/solid_isp.yaml"
+      - "cortex_brain/tier3/knowledge/solid/solid_dip.yaml"
+      - "company/domains/sts-csharp-domain.yaml"
+    loc_estimate: 500
+    
+  stage_2_controlled_learning:
+    name: "PromotionGate + FlushManager"
+    duration: "2 hours"
+    deliverables:
+      - "PromotionGate (~50 LOC) - Promote patterns after 3+ sightings"
+      - "FlushManager (~50 LOC) - Remove stale/low-confidence patterns"
+      - "Integration with UniversalLearningLoop"
+      - "Integration with PatternLibrary"
+    tests: 12
+    test_breakdown:
+      - "4 PromotionGate tests (threshold, confidence, governance)"
+      - "4 FlushManager tests (age, confidence, occurrence criteria)"
+      - "4 integration tests (end-to-end learning cycle)"
+    files_created:
+      - "cortex/learning/promotion_gate.py"
+      - "cortex/learning/flush_manager.py"
+      - "tests/unit/learning/test_promotion_gate.py"
+      - "tests/unit/learning/test_flush_manager.py"
+      - "tests/integration/test_controlled_learning_cycle.py"
+    loc_estimate: 250
+    
+  stage_3_audit_verification:
+    name: "AuditVerifier + E2EPathGenerator"
+    duration: "3 hours"
+    deliverables:
+      - "AuditVerifier (~100 LOC) - Validate event chains in audit log"
+      - "E2EPathGenerator (~150 LOC) - Generate sunshine/rainy path scenarios"
+      - "EventBus integration for correlation tracking"
+      - "50 audit verification test templates"
+    tests: 18
+    test_breakdown:
+      - "6 AuditVerifier tests (event ordering, completeness, correlation)"
+      - "6 E2EPathGenerator tests (sunshine paths, rainy paths, edge cases)"
+      - "6 EventBus integration tests (correlation IDs, event chaining)"
+    files_created:
+      - "cortex/audit/audit_verifier.py"
+      - "cortex/testing/e2e_path_generator.py"
+      - "tests/unit/audit/test_audit_verifier.py"
+      - "tests/unit/testing/test_e2e_path_generator.py"
+      - "tests/e2e/sts/test_audit_verified_scenarios.py"
+    loc_estimate: 400
+    
+  stage_4_e2e_wiring:
+    name: "STS E2E Scenarios (#41-50) Wired to BadMonolith"
+    duration: "2 hours"
+    deliverables:
+      - "10 STS-specific E2E tests (#41-50)"
+      - "BadMonolith integration fixtures"
+      - "Audit log verification for all scenarios"
+      - "Documentation: How to add new STS scenarios"
+    tests: 12
+    test_breakdown:
+      - "10 E2E scenario tests (#41-50)"
+      - "2 BadMonolith fixture tests"
+    files_created:
+      - "tests/e2e/sts/test_scenario_41_scan_badmonolith.py"
+      - "tests/e2e/sts/test_scenario_42_prioritize_security.py"
+      - "tests/e2e/sts/test_scenario_43_fix_sql_injection.py"
+      - "tests/e2e/sts/test_scenario_44_extract_god_endpoint.py"
+      - "tests/e2e/sts/test_scenario_45_learn_pattern.py"
+      - "tests/e2e/sts/test_scenario_46_apply_pattern.py"
+      - "tests/e2e/sts/test_scenario_47_flush_stale.py"
+      - "tests/e2e/sts/test_scenario_48_malformed_csproj.py"
+      - "tests/e2e/sts/test_scenario_49_regression_detection.py"
+      - "tests/e2e/sts/test_scenario_50_unknown_language.py"
+      - "tests/e2e/sts/fixtures/badmonolith_context.py"
+      - "docs/sts-scenario-guide.md"  # EXCEPTION: Educational documentation allowed
+    loc_estimate: 450
+
+# Component Inventory (What Exists vs What Needs Building)
+component_inventory:
+  existing_components:
+    - name: "LENSOrchestrator"
+      status: "✅ Exists"
+      new_loc: 0
+      
+    - name: "DotNetLensAnalyzer"
+      status: "✅ Exists (.sln/.csproj parsing)"
+      new_loc: 0
+      
+    - name: "SecurityThreatAnalyzer"
+      status: "✅ Exists (Python CWE patterns)"
+      new_loc: 0
+      
+    - name: "AntiPatternDetector"
+      status: "✅ Exists (God Object, Feature Envy)"
+      new_loc: 0
+      
+    - name: "tier3/SECURITY YAMLs"
+      status: "✅ 9 files exist (CWE-89, OWASP, etc.)"
+      new_loc: 0
+      
+    - name: "PatternLibrary"
+      status: "✅ Exists (YAML persistence)"
+      new_loc: 0
+      
+    - name: "UniversalLearningLoop"
+      status: "✅ Exists"
+      new_loc: 0
+      
+    - name: "EventBus"
+      status: "✅ Exists (correlation IDs, dead letter queue)"
+      new_loc: 0
+  
+  new_components:
+    - name: "WorkflowComposer"
+      status: "❌ Missing"
+      new_loc: 150
+      dependency: "WAVE-V prerequisite"
+      
+    - name: "RGRGate"
+      status: "❌ Missing"
+      new_loc: 100
+      
+    - name: "PromotionGate"
+      status: "❌ Missing"
+      new_loc: 50
+      
+    - name: "FlushManager"
+      status: "❌ Missing"
+      new_loc: 50
+      
+    - name: "AuditVerifier"
+      status: "❌ Missing"
+      new_loc: 100
+      
+    - name: "E2EPathGenerator"
+      status: "❌ Missing"
+      new_loc: 150
+      
+    - name: "Missing SOLID YAMLs (OCP, LSP, ISP, DIP)"
+      status: "❌ Only SRP exists"
+      new_loc: 200
+      type: "YAML"
+      
+    - name: "STS domain YAML"
+      status: "❌ Missing"
+      new_loc: 100
+      type: "YAML"
+      
+    - name: "Programming workflow templates"
+      status: "❌ Missing"
+      new_loc: 200
+      type: "YAML"
+  
+  total_new_loc: 1100
+  total_new_yaml: 500
+  total_new_python: 600
+
+# External Libraries Evaluation
+external_libraries:
+  evaluated_libraries:
+    tree_sitter_csharp:
+      purpose: "C# AST parsing"
+      decision: "⚠️ DEFERRED"
+      rationale: "Already mentioned in RA-Domain tools. Worth evaluating for deep C# analysis but NOT blocking. LENS file-structure analysis sufficient for STS initial implementation."
+      revisit: "After WAVE-STS proves YAML-based pattern matching insufficient"
+      
+    prefect_dagster:
+      purpose: "Workflow orchestration"
+      decision: "❌ NOT NEEDED"
+      rationale: "ExecutionStrategy + EventBus already handles this"
+      
+    semgrep:
+      purpose: "Static analysis rules"
+      decision: "⚠️ DEFERRED"
+      rationale: "Good ROI for cross-language pattern matching, but adds dependency. Revisit after WAVE-STS proves the architecture works."
+      revisit: "If YAML-based pattern matching proves insufficient"
+  
+  verdict: "No new libraries for initial implementation. Existing CORTEX stack handles everything."
+
+# Success Criteria
+success_criteria:
+  functional:
+    - "All 50 audit-log-verified scenarios pass (35 sunshine + 15 rainy)"
+    - "BadMonolith scan detects all 25 cataloged flaws"
+    - "Legacy Rescue workflow completes BadMonolith → Clean Architecture"
+    - "PromotionGate promotes pattern after 3+ occurrences with high confidence"
+    - "FlushManager removes stale patterns (>30 days, low confidence)"
+    - "AuditVerifier validates all 13-step event chains for RGR cycles"
+    
+  quality:
+    - "Test coverage ≥80% for all new components"
+    - "All new code passes CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)"
+    - "No CORE-035 violations (single canonical implementation)"
+    - "All audit trails complete with correlation IDs"
+    
+  learning:
+    - "PatternLibrary captures 'monolith_rescue' pattern with confidence >0.85"
+    - "Pattern successfully applied to second monolith (RA-Domain)"
+    - "Confidence score increases on second application (>0.90)"
+    - "Stale patterns flushed on 30-day cycle"
+    
+  governance:
+    - "All promotions pass EnforcementOrchestrator validation"
+    - "company/domains/sts-csharp-domain.yaml overrides work correctly"
+    - "No autonomous mutations (all learning gated by confidence/occurrence)"
+    - "EventBus audit trail proves controlled learning"
+
+# Execution Strategy
+execution_strategy:
+  mode: "Silent Autonomous"
+  orchestrator: "MasterOrchestrator"
+  progress_format: "ASCII progress bars + tables"
+  checkpoint_frequency: "After each stage"
+  
+  dependencies_check:
+    - "Verify WorkflowComposer exists (WAVE-V prerequisite)"
+    - "Verify EventBus correlation tracking active"
+    - "Verify UniversalLearningLoop wired to EventBus"
+    - "Verify PatternLibrary persistence working"
+    
+  stage_execution_order:
+    1: "Stage 1: Knowledge Base (workflow templates + SOLID YAMLs)"
+    2: "Stage 2: Controlled Learning (PromotionGate + FlushManager)"
+    3: "Stage 3: Audit Verification (AuditVerifier + E2EPathGenerator)"
+    4: "Stage 4: E2E Wiring (STS scenarios #41-50 with BadMonolith)"
+    
+  test_strategy:
+    approach: "TDD (RED → GREEN → REFACTOR)"
+    execution: "Run tests after each stage"
+    failure_handling: "STOP and fix (no --ignore, no _skip_, CORE-008 enforcement)"
+    coverage_target: "≥80% per stage"
+    
+  audit_trail:
+    format: "AC_START → AC_COMPLETE markers"
+    correlation_ids: "Generated by EventBus"
+    verification: "AuditVerifier validates event chains"
+    
+  completion_report:
+    format: "Progress bar + table"
+    content:
+      - "Tests passed/total"
+      - "Coverage percentage"
+      - "Files created/modified"
+      - "Commit hash"
+      - "STS scenarios validated"
+
+# Integration Points
+integration_points:
+  orchestrators:
+    - "MasterOrchestrator - Route STS requests to appropriate workflows"
+    - "LENSOrchestrator - Analyze STS sample apps"
+    - "TDDOrchestrator - Execute RGR cycles for fixes"
+    - "RefactoringOrchestrator - Extract layers from God endpoints"
+    - "EnforcementOrchestrator - Gate all pattern promotions"
+    
+  intelligence:
+    - "DotNetLensAnalyzer - Scan C# projects"
+    - "SecurityThreatAnalyzer - Detect CWE patterns"
+    - "AntiPatternDetector - Find God objects, Feature Envy"
+    - "tier3/SECURITY YAMLs - Provide remediation knowledge"
+    - "tier3/solid/*.yaml - Provide SOLID principles"
+    
+  learning:
+    - "UniversalLearningLoop - Capture patterns from operations"
+    - "PatternLibrary - Store/retrieve learned patterns"
+    - "PromotionGate (NEW) - Promote patterns to tier3 knowledge"
+    - "FlushManager (NEW) - Remove stale patterns"
+    - "ConfidenceScorer - Score pattern quality"
+    
+  audit:
+    - "EventBus - Emit correlation-tracked events"
+    - "AuditVerifier (NEW) - Validate event chains"
+    - "E2EPathGenerator (NEW) - Generate test scenarios"
+    - "governance.db - Persist audit logs"
+
+# Risk Analysis
+risks:
+  technical:
+    - risk: "WorkflowComposer from WAVE-V not ready"
+      mitigation: "Hard dependency - must complete WAVE-V first"
+      severity: "P0 - BLOCKING"
+      
+    - risk: "C# AST analysis limited (no tree-sitter)"
+      mitigation: "File-structure analysis sufficient for initial STS. Defer tree-sitter to future enhancement."
+      severity: "P2 - ACCEPTABLE"
+      
+    - risk: "EventBus correlation tracking not complete"
+      mitigation: "Verify in pre-flight check. EventBus already has correlation ID support."
+      severity: "P1 - VERIFY"
+      
+  governance:
+    - risk: "Uncontrolled learning (hallucination drift)"
+      mitigation: "Multi-gate control: ConfidenceScorer → PromotionGate → EnforcementOrchestrator"
+      severity: "P1 - MITIGATED"
+      
+    - risk: "Pattern library grows unbounded"
+      mitigation: "FlushManager removes stale patterns (>30 days, low confidence)"
+      severity: "P2 - MITIGATED"
+      
+  execution:
+    - risk: "10 STS scenarios insufficient for confidence"
+      mitigation: "40 additional scenarios from workflow-engine.md (50 total)"
+      severity: "P2 - ACCEPTABLE"
+      
+    - risk: "BadMonolith not representative of real codebases"
+      mitigation: "RA-Domain and payment-processor provide production-scale validation"
+      severity: "P2 - ACCEPTABLE"
+
+# Future Enhancements
+future_enhancements:
+  phase_2_cross_language:
+    description: "Extend STS to Python, TypeScript, Java"
+    dependencies: ["tree-sitter-python", "tree-sitter-typescript", "tree-sitter-java"]
+    new_loc_estimate: 800
+    
+  phase_3_semgrep_integration:
+    description: "Add Semgrep for cross-language pattern matching"
+    dependencies: ["semgrep"]
+    benefit: "Industry-standard static analysis rules"
+    new_loc_estimate: 300
+    
+  phase_4_sts_validation_app:
+    description: "Build multi-language validation app with 61 cataloged flaws"
+    languages: ["C#", "Python", "TypeScript"]
+    benefit: "Comprehensive STS training dataset"
+    new_loc_estimate: 2000
+    
+  phase_5_automated_sts_generation:
+    description: "Generate new STS samples from real-world codebases"
+    benefit: "Continuous sharpening against evolving anti-patterns"
+    dependencies: ["Repository mining pipeline"]
+    new_loc_estimate: 1200
+
+# Governance Compliance
+governance_compliance:
+  core_rules_applied:
+    - "CORE-002: No markdown file generation (except educational docs/sts-scenario-guide.md)"
+    - "CORE-008: TDD MANDATORY - Tests BEFORE code, no --ignore, no _skip_"
+    - "CORE-011: Type hints mandatory"
+    - "CORE-012: Google-style docstrings"
+    - "CORE-028: kebab-case file naming, no SCREAMING_CASE"
+    - "CORE-035: Single canonical implementation"
+    - "CORE-048: Holistic validation gate"
+    - "CORE-049: Silent autonomous execution"
+    - "MCP-FIRST: All operations through MCP tools"
+    - "ARCH-012: SOLID + OWASP + Clean Code compliance"
+    
+  enforcement:
+    pre_execution: "EnforcementOrchestrator validates all code changes"
+    runtime: "7-agent governance gate"
+    post_execution: "AuditVerifier validates event chains"
+    production_gate: "All tests pass + coverage ≥80%"
+    
+  audit_trail:
+    format: "AC_START → AC_COMPLETE markers"
+    persistence: "governance.db"
+    correlation: "EventBus correlation IDs"
+    verification: "AuditVerifier component"
+
+# Documentation
+documentation:
+  inline_code_documentation:
+    - "Google-style docstrings for all functions"
+    - "Type hints for all parameters and returns"
+    - "Inline comments for complex logic"
+    
+  architectural_documentation:
+    - "This YAML file serves as SSOT for WAVE-STS"
+    - "docs/sts-scenario-guide.md - How to add new STS scenarios (EXCEPTION: educational)"
+    - "Mermaid diagrams in prompt responses (not files)"
+    
+  test_documentation:
+    - "Docstrings in test files explain scenario intent"
+    - "Audit log verification templates document expected event chains"
+    - "E2E scenario comments reference this YAML for traceability"
+
+# Completion Checklist
+completion_checklist:
+  stage_1:
+    - "[ ] 3 workflow YAML templates created"
+    - "[ ] 4 SOLID YAML files created (OCP, LSP, ISP, DIP)"
+    - "[ ] STS domain YAML created"
+    - "[ ] 8 tests passing"
+    - "[ ] Stage 1 committed with AC markers"
+    
+  stage_2:
+    - "[ ] PromotionGate implemented (~50 LOC)"
+    - "[ ] FlushManager implemented (~50 LOC)"
+    - "[ ] Integrated with UniversalLearningLoop"
+    - "[ ] Integrated with PatternLibrary"
+    - "[ ] 12 tests passing"
+    - "[ ] Stage 2 committed with AC markers"
+    
+  stage_3:
+    - "[ ] AuditVerifier implemented (~100 LOC)"
+    - "[ ] E2EPathGenerator implemented (~150 LOC)"
+    - "[ ] EventBus integration complete"
+    - "[ ] 18 tests passing"
+    - "[ ] 50 audit verification templates created"
+    - "[ ] Stage 3 committed with AC markers"
+    
+  stage_4:
+    - "[ ] 10 STS E2E tests implemented (#41-50)"
+    - "[ ] BadMonolith integration fixtures created"
+    - "[ ] All 10 scenarios pass with audit verification"
+    - "[ ] 12 tests passing"
+    - "[ ] docs/sts-scenario-guide.md created"
+    - "[ ] Stage 4 committed with AC markers"
+    
+  wave_completion:
+    - "[ ] All 50 tests passing (10 STS + 40 workflow-engine)"
+    - "[ ] Coverage ≥80%"
+    - "[ ] All AC markers in place"
+    - "[ ] BadMonolith scan detects all 25 flaws"
+    - "[ ] Pattern promotion/flushing working"
+    - "[ ] Audit logs validate all event chains"
+    - "[ ] WAVE-STS committed and pushed to remote"
+    - "[ ] Registry status updated to COMPLETE"
