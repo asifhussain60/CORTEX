@@ -424,8 +424,11 @@ class DatabaseTransactionManager:
             context.create_savepoint(name)
             yield context
             context.release_savepoint(name)
-        except Exception:
+        except Exception as e:
+            # CORE-013: Specific exception handling with context
             context.rollback_to_savepoint(name)
+            logger = logging.getLogger(__name__)
+            logger.error(f"Savepoint '{name}' rollback: {type(e).__name__}: {e}")
             raise
 
 
