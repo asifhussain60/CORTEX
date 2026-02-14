@@ -178,7 +178,7 @@ git log --oneline --since="2026-02-12" | grep -i "ENH-063"
 /implement WAVE-I: ENH-084 Standard Phase Creation Practices
 
 Authority: cortex-registry/_cortex-master/index.yaml v2.2
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous (structured reports)
 Session: WAVE-I-20260213-01
 Token Budget: <150k
 

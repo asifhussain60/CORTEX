@@ -117,7 +117,7 @@ AC_COMPLETE: AC-WAVE-H-001 ✅
 /implement WAVE-H: ENH-082 Response Template System Integration
 
 Authority: cortex-registry/_cortex-master/AUTONOMOUS-WAVES-H-O-EXECUTION-GUIDE.md
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous (structured progress reports)
 Session: WAVE-H-20260213-01
 
 Scope:
@@ -216,7 +216,7 @@ AC_COMPLETE: AC-WAVE-I-001 ✅
 /implement WAVE-I: ENH-084 Standard Phase Creation Practices
 
 Authority: cortex-registry/_cortex-master/AUTONOMOUS-WAVES-H-O-EXECUTION-GUIDE.md
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous (structured progress reports)
 Session: WAVE-I-20260214-01
 
 Scope:
@@ -316,7 +316,7 @@ AC_COMPLETE: AC-WAVE-J-001 ✅
 /implement WAVE-J: ENH-085 Completed Phase Cleanup Audit
 
 Authority: cortex-registry/_cortex-master/AUTONOMOUS-WAVES-H-O-EXECUTION-GUIDE.md
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous (structured progress reports)
 Session: WAVE-J-20260215-01
 
 Scope:
@@ -405,7 +405,7 @@ MILESTONE: Wave 6 Comprehensive Cleanup COMPLETE
 /implement WAVE-K: ENH-086 Architecture Alignment Verification
 
 Authority: cortex-registry/_cortex-master/AUTONOMOUS-WAVES-H-O-EXECUTION-GUIDE.md
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous (structured progress reports)
 Session: WAVE-K-20260216-01
 
 Scope:
@@ -495,7 +495,7 @@ AC_COMPLETE: AC-WAVE-L-001 ✅
 /implement WAVE-L: phase-81 Agent Architecture Redesign S1-S3
 
 Authority: cortex-registry/_cortex-master/AUTONOMOUS-WAVES-H-O-EXECUTION-GUIDE.md
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous (structured progress reports)
 Session: WAVE-L-20260217-01
 
 Scope:
@@ -576,7 +576,7 @@ MILESTONE: Wave 2 Intelligence COMPLETE (unblocks Wave 3)
 /implement WAVE-M: ENH-078 Language Refinement Complete
 
 Authority: cortex-registry/_cortex-master/AUTONOMOUS-WAVES-H-O-EXECUTION-GUIDE.md
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous (structured progress reports)
 Session: WAVE-M-20260218-01
 
 Scope:
@@ -656,7 +656,7 @@ AC_COMPLETE: AC-WAVE-N-001 ✅
 /implement WAVE-N: ENH-067 Autonomous Plan Execution
 
 Authority: cortex-registry/_cortex-master/AUTONOMOUS-WAVES-H-O-EXECUTION-GUIDE.md
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous (structured progress reports)
 Session: WAVE-N-20260219-01
 
 Scope:
@@ -739,7 +739,7 @@ MILESTONE: Wave 3 Autonomy COMPLETE
 /implement WAVE-O: ENH-068/069 Data Integrity & Explainability
 
 Authority: cortex-registry/_cortex-master/AUTONOMOUS-WAVES-H-O-EXECUTION-GUIDE.md
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous (structured progress reports)
 Session: WAVE-O-20260220-01
 
 Scope:

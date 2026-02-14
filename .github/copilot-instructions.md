@@ -226,27 +226,28 @@ Setup: python .cortex/setup-mcp.py → Reload VS Code
 
 **CRITICAL: During silent autonomous execution, use ONLY this format:**
 
-**COMPLETION FORMAT:** Use markdown table for stage results (tree characters `├─ └─` collapse in Copilot Chat).
+**COMPLETION FORMAT:** Use generic markdown table template (see `.github/prompts/SILENT-EXECUTION-RESPONSE-TEMPLATE.md` for full guide with variables, examples, and validation checklist).
 
 **SEPARATOR FORMAT:** Use `<hr>` HTML tag (prevents overflow in Copilot Chat).
 
+**Generic Template:**
 ```markdown
 <hr>
 
-📋 **WAVE-R Stage 4: Integration Testing**
+📋 **[WAVE/PLAN NAME] [STAGE]: [TITLE]**
 
-`██████████` 100% Stage 4 Complete
+`██████████` [%]% Complete
 
-| # | Status | Stage | Detail |
-|---|--------|-------|--------|
-| 1 | ✅ | DebuggerOrchestrator | 24 tests |
-| 2 | ✅ | MarkerInjectionEngine | 17 tests |
-| 3 | ✅ | AutoCleanupManager | 9 tests |
-| 4 | ✅ | Integration | 8 tests ← FIXED |
-| 5 | ⚪ | MCP Tools | pending |
+| # | Status | Component | Detail |
+|---|--------|-----------|--------|
+| 1 | ✅ | [COMPONENT] | [RESULT] |
+| 2 | ✅ | [COMPONENT] | [RESULT] |
+| 3 | ✅ | [COMPONENT] | [RESULT] |
+| 4 | ✅ | [COMPONENT] | [RESULT] |
+| 5 | ⚪ | [COMPONENT] | pending |
 
-**Tests:** 58/69 | **Coverage:** 84%
-**Fixed:** Session ID timestamp collision (microseconds)
+**Tests:** [PASSED]/[TOTAL] | **Coverage:** [%]%
+**Fixed:** [KEY SUMMARY]
 
 <hr>
 ```
@@ -254,25 +255,9 @@ Setup: python .cortex/setup-mcp.py → Reload VS Code
 **WHY TABLE FORMAT:** Tree characters (`├─ └─`) concatenate into single lines in 
 Copilot Chat. Markdown tables render reliably everywhere.
 
-**FORBIDDEN FORMATS during silent execution:**
-- ❌ Text paragraphs ("I'm now implementing...")
-- ❌ Bullet lists of actions taken
-- ❌ Detailed file change descriptions
-- ❌ Code snippets showing what changed
-- ❌ "Here's what I did" summaries
-- ❌ Tree-drawing characters (`├─ └─`) — they collapse into one line
+**Full Documentation:** Load `.github/prompts/SILENT-EXECUTION-RESPONSE-TEMPLATE.md` for variable guide, real-world examples, rendering rules, and do's/don'ts.
 
-**ALLOWED ONLY:**
-- ✅ Markdown tables for stage results
-- ✅ Test counts and coverage percentages
-- ✅ Commit hashes (inline in progress bar)
-- ✅ Error messages (if blocked)
-
-**LINE OVERFLOW PREVENTION:**
-- Use `<hr>` HTML tag for all box separators
-- Stage names: <30 chars
-- Total line length: <70 chars  
-- NO box-drawing characters `────` (renders too wide in UI)
+See `.github/prompts/SILENT-EXECUTION-RESPONSE-TEMPLATE.md` for detailed do's/don'ts, rendering rules, and validation checklist.
 
 ---
 

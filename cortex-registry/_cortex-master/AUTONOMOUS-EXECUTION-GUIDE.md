@@ -1,7 +1,8 @@
 # 🚀 CORTEX Master Remediation Plan - Autonomous Execution Guide
 **Version:** 2.0  
 **Status:** READY FOR EXECUTION  
-**Mode:** Silent Autonomous with ASCII Progress Bars  
+**Mode:** Silent Autonomous Execution (Structured Progress Reports)  
+**Response Template:** `.github/prompts/SILENT-EXECUTION-RESPONSE-TEMPLATE.md`  
 **Last Updated:** 2026-02-11
 
 ---
@@ -11,11 +12,18 @@
 ```bash
 # Execute all waves autonomously
 /implement @MASTER-REMEDIATION-PLAN-V2.yaml
+
+# Expected Output Format:
+# <hr>
+# 📋 **WAVE-X Stage Y: Description**
+# `██████████` 100% Complete
+# | # | Status | Component | Detail |
+# ... (markdown table format)
 ```
 
 **CORTEX will:**
 - ✅ Execute 45 fixes across 5 waves (12-19 days)
-- ✅ Display real-time ASCII progress bars
+- ✅ Display real-time structured progress reports with test metrics
 - ✅ Auto-commit on each successful fix
 - ✅ Generate completion report
 - ✅ Rollback on critical failures
@@ -322,7 +330,7 @@ REMEDIATION-COMPLETE-2026-02-11.md
 # One command, autonomous execution
 /implement @MASTER-REMEDIATION-PLAN-V2.yaml
 
-# Output: ASCII progress bars per wave
+# Output: structured progress reports with test metrics per wave
 # Duration: 12-19 days (parallelized)
 # Result: All 45 fixes applied, validated, committed
 ```

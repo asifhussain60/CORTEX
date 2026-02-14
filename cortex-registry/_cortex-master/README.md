@@ -1,5 +1,5 @@
 # 📋 CORTEX Master Registry Index
-**Version:** 8.0 | **Updated:** 2026-02-13T23:30:00Z | **Authority:** cortex-architect.prompt.md v15.3 | **Status:** ✅ ACTIVE
+**Version:** 7.0 | **Updated:** 2026-02-13T18:25:00Z | **Authority:** cortex-architect.prompt.md v15.3 | **Status:** ✅ ACTIVE
 
 ---
 
@@ -9,45 +9,26 @@ Single source of truth for CORTEX registry documentation. Links to all master pl
 
 ---
 
-## 🚀 START HERE: Autonomous Execution
+## 🚀 START HERE: Execute Next Wave
 
-### ⚡ One-Command Execution (READY NOW)
+### WAVE-1 (THEME-A): Intelligence Foundation (IN PROGRESS)
 
-```markdown
-User: "implement the remaining 3 waves autonomously"
-```
+**Status:** ✅ WAVE-O Complete | 🔵 WAVE-1 Stage 1 In Progress
 
-**CORTEX will execute silently:**
-- ✅ WAVE-3: Multi-Cycle TDD + Security (5-6h, 150 tests)
-- ✅ WAVE-4: Intelligence Loop + DoD Gates (6-7h, 120 tests)
-- ✅ WAVE-5: Document Coherence Engine (4-5h, 80 tests)
+**Quick Start:** [MASTER-WAVE-PLAN-5-WAVES-2026-02-13.md](./MASTER-WAVE-PLAN-5-WAVES-2026-02-13.md)
 
-**Total:** 15-18 hours, 350+ tests, full autonomous execution
+**Current Stage:** Stage 1 - Registry Documentation Sync (1h)
 
-### 📚 Primary Documentation (SSOT)
+**Completed Waves:**
+- ✅ WAVE-O: Orchestrator Intelligence + MCP Consolidation (Complete 2026-02-13)
+  - 28 orchestrators wired via GitBackedRegistry
+  - 7-agent enforcement layer active
+  - 412/412 tests passing
 
-| Document | Purpose | Status |
-|----------|---------|--------|
-| **[AUTONOMOUS-EXECUTION-SYNC-2026-02-13.md](./AUTONOMOUS-EXECUTION-SYNC-2026-02-13.md)** | **SSOT:** Complete autonomous execution guide + implementation reality | ✅ PRIMARY |
-| **[AUTONOMOUS-EXECUTION-QUICK-REF.md](./AUTONOMOUS-EXECUTION-QUICK-REF.md)** | Quick reference card (30-second start) | ✅ READY NOW |
-| **[MASTER-5-WAVE-PLAN-2026-02-13.yaml](./MASTER-5-WAVE-PLAN-2026-02-13.yaml)** | 5-wave master plan (YAML spec) | ✅ ACTIVE |
-| **[WAVE-STATUS-2026-02-13.yaml](./WAVE-STATUS-2026-02-13.yaml)** | Current wave status | ✅ ACTIVE |
-
-### 📊 Current Status (2026-02-13T23:30:00Z)
-
-**Completed Waves:** 19/24 (79%)
-- ✅ WAVE-1 (Theme A): Intelligence Foundation (58 tests, 3 commits)
-- ✅ WAVE-2: Scaffolder Integration (198 tests, 7 commits)
-- ✅ Historical Waves: Wave 1-9, O, P, R (1,054+ tests)
-
-**Pending Waves:** 5/24 (21%)
-- ⚪ WAVE-3: Multi-Cycle TDD + Security (150 tests, 5-6h)
-- ⚪ WAVE-4: Intelligence Loop + DoD Gates (120 tests, 6-7h)
-- ⚪ WAVE-5: Document Coherence Engine (80 tests, 4-5h)
-
-**Test Collection:** 14,369 tests (99.92% pass rate)  
-**MCP Status:** ✅ 10 tools available  
-**Git Branch:** CORTEX (clean workspace)
+**Active:** WAVE-1 (THEME-A) - Intelligence Foundation
+- 🔵 Stage 1: Registry sync (in progress)
+- ⚪ Stage 2: Test validation (planned)
+- ⚪ Stage 3: Test intelligence layers 1-3 (planned)
 
 ---
 
@@ -264,9 +245,9 @@ cortex-registry/_cortex-master/
 - ✅ Clear entry/exit criteria
 - ✅ Token budget ≤200k
 - ✅ TDD mandatory (tests before code)
-- ✅ Silent autonomous (progress bars only)
+- ✅ Silent autonomous (structured progress reporting with results table)
 - ✅ Git checkpoints (AC markers)
-- ✅ Completion report generated
+- ✅ Completion report generated (see `.github/prompts/SILENT-EXECUTION-RESPONSE-TEMPLATE.md`)
 
 **Examples:** WAVE-P, WAVE-Q, WAVE-R
 
@@ -364,7 +345,7 @@ git status
 /implement WAVE-P: Post-WAVE-O Cleanup & Registry Sync
 
 Authority: cortex-registry/_cortex-master/MASTER-IMPLEMENTATION-REALITY-SYNC-2026-02-13.md
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous execution (structured progress reports with completion tables)
 Session: WAVE-P-20260213-01
 Token Budget: <150k
 Precedent: WAVE-O complete (15eeb6478), Wave 1 complete (07c84a4c1)

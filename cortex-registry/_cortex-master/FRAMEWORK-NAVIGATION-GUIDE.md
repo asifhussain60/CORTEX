@@ -272,7 +272,7 @@ REFERENCE DOCUMENTS
 │          └─ Standards: Governance + quality gates               │
 │                                                                  │
 │  Result:                                                         │
-│  ✅ Autonomous execution (silent, progress bars only)           │
+│  ✅ Autonomous execution (structured progress with completion tables) │
 │  ✅ Incremental delivery (production deployment per wave)       │
 │  ✅ Tech debt paid off (docs embedded, not deferred)            │
 │  ✅ Quality assured (TDD mandatory, governance enforced)        │

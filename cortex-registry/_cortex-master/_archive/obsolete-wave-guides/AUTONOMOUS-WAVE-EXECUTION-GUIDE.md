@@ -40,7 +40,7 @@ Copy and paste into GitHub Copilot Chat:
 /implement WAVE-A: Critical Blockers Resolution
 
 Authority: cortex-registry/_cortex-master/AUTONOMOUS-WAVE-EXECUTION-GUIDE.md
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous (structured progress reports)
 Session: WAVE-A-20260212-01
 Token Budget: <150k tokens
 
@@ -161,7 +161,7 @@ grep -A 5 "phase_2:" cortex-registry/_cortex-master/enhancements/ENH-063.yaml
 /implement WAVE-B: Operability & Monitoring
 
 Authority: cortex-registry/_cortex-master/AUTONOMOUS-WAVE-EXECUTION-GUIDE.md
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous (structured progress reports)
 Session: WAVE-B-20260212-02
 Token Budget: <180k tokens
 
@@ -257,7 +257,7 @@ AC_COMPLETE: AC-WAVE-B-002 ✅ 10/10 passing
 /implement WAVE-C: Configuration & Scalability + ENH-063 Integration
 
 Authority: cortex-registry/_cortex-master/AUTONOMOUS-WAVE-EXECUTION-GUIDE.md
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous (structured progress reports)
 Session: WAVE-C-20260212-03
 Token Budget: <160k tokens
 
@@ -367,7 +367,7 @@ AC_COMPLETE: AC-WAVE-C-002 ✅ 15/15 passing
 /implement WAVE-D: MCP Architecture Docs + LENS Phase 2 Stub
 
 Authority: cortex-registry/_cortex-master/AUTONOMOUS-WAVE-EXECUTION-GUIDE.md
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous (structured progress reports)
 Session: WAVE-D-20260212-04
 Token Budget: <100k tokens
 
@@ -427,7 +427,7 @@ Expected Timeline:
 /implement WAVE-E: Validation Gates (Environment + Holistic + Challenge)
 
 Authority: cortex-registry/_cortex-master/AUTONOMOUS-WAVE-EXECUTION-GUIDE.md
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous (structured progress reports)
 Session: WAVE-E-20260212-05
 Token Budget: <180k tokens
 
@@ -491,7 +491,7 @@ Expected Timeline:
 /implement WAVE-F: Response Templates + Phase Standards
 
 Authority: cortex-registry/_cortex-master/AUTONOMOUS-WAVE-EXECUTION-GUIDE.md
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous (structured progress reports)
 Session: WAVE-F-20260212-06
 Token Budget: <170k tokens
 
@@ -554,7 +554,7 @@ Expected Timeline:
 /implement WAVE-G: Cleanup Audit + Architecture Alignment
 
 Authority: cortex-registry/_cortex-master/AUTONOMOUS-WAVE-EXECUTION-GUIDE.md
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous (structured progress reports)
 Session: WAVE-G-20260212-07
 Token Budget: <160k tokens
 

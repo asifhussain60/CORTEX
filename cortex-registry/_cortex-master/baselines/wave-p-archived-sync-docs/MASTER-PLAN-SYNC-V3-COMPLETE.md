@@ -106,7 +106,7 @@ e53fe7470: Wave-C ENH-063 Phase 5+6 Integration Tests Completed
 /implement WAVE-H: ENH-082 Response Template System Integration
 
 Authority: cortex-registry/_cortex-master/AUTONOMOUS-WAVES-H-O-EXECUTION-GUIDE.md
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous (structured reports)
 Session: WAVE-H-20260213-01
 
 Success: 25 tests passing + 2 commits + docs updated

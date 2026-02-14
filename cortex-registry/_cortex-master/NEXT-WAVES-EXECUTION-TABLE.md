@@ -44,9 +44,10 @@ pytest tests/unit/governance/compliance/ -v --tb=short
 /implement WAVE-{L|M|N|O}: [Full name from table]
 
 Authority: cortex-registry/_cortex-master/index.yaml v3.0
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous execution (progress tracked via structured reports)
 Session: WAVE-{L|M|N|O}-20260213-01
 Token Budget: <{180k|160k|190k|200k} tokens
+Response Format: Markdown tables per `.github/prompts/SILENT-EXECUTION-RESPONSE-TEMPLATE.md`
 ```
 
 ### After Each Wave Completion
@@ -120,7 +121,7 @@ Wave 3 Autonomy COMPLETE 🎉
 /implement WAVE-L: phase-81 Agent Architecture Redesign S1-S3
 
 Authority: cortex-registry/_cortex-master/index.yaml v3.0
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous execution (progress tracked via structured completion tables)
 Session: WAVE-L-20260213-01
 Token Budget: <180k tokens
 

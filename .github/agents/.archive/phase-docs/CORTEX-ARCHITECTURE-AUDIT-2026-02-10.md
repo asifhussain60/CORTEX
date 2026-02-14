@@ -383,7 +383,8 @@ print("Let me check the registry first...")
 input("Should I proceed? ")
 
 # ✅ REPLACE WITH
-# Silent execution - progress bar only
+# Silent execution - structured progress reporting with completion table
+# (see `.github/prompts/SILENT-EXECUTION-RESPONSE-TEMPLATE.md`)
 ```
 
 **Steps:**
@@ -391,7 +392,8 @@ input("Should I proceed? ")
 2. Remove all narration patterns
 3. Remove input() calls
 4. Remove confirmation prompts
-5. Test silent execution
+5. Implement structured progress reporting (markdown tables)
+6. Test silent autonomous execution
 
 ---
 

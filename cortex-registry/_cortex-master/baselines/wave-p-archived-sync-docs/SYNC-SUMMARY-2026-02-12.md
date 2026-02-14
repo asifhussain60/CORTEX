@@ -119,7 +119,7 @@
 /implement WAVE-A: Critical Blockers Resolution
 
 Authority: cortex-registry/_cortex-master/AUTONOMOUS-WAVE-EXECUTION-GUIDE.md
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous (structured reports)
 Session: WAVE-A-20260212-01
 Token Budget: <150k tokens
 

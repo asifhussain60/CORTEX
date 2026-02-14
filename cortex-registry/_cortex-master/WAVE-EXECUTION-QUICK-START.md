@@ -32,7 +32,7 @@
 /implement WAVE-A: Fix test imports + ENH-063 Phase 2 (circuit breakers, async git, race condition)
 
 Authority: cortex-registry/_cortex-master/SESSION-SCOPED-WAVES.md
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous with structured progress reports with test metrics
 Session: WAVE-A-20260212-01
 Token Budget: <150k
 
@@ -215,7 +215,7 @@ grep -r "SharedContext" cortex/orchestrators/core/phase_context_resolver.py
 
 ### 1. Silent Mode Benefits
 - ✅ No interruptions (autonomous execution)
-- ✅ ASCII progress bars (visual feedback)
+- ✅ structured progress reports with test metrics (visual feedback)
 - ✅ Report at end (summary with commits)
 - ❌ No confirmations (just execute)
 

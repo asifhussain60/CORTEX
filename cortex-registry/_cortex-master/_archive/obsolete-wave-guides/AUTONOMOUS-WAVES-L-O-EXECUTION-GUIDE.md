@@ -81,7 +81,7 @@ pytest tests/unit/governance/compliance/ -v --tb=short
 /implement WAVE-L: phase-81 Agent Architecture Redesign S1-S3
 
 Authority: cortex-registry/_cortex-master/index.yaml v3.0
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous (structured progress reports)
 Session: WAVE-L-20260213-01
 Token Budget: <180k tokens
 ```
@@ -167,7 +167,7 @@ git log --oneline -3
 /implement WAVE-M: ENH-078 Language Refinement Complete
 
 Authority: cortex-registry/_cortex-master/index.yaml v3.0
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous (structured progress reports)
 Session: WAVE-M-20260214-01
 Token Budget: <160k tokens
 ```
@@ -247,7 +247,7 @@ print(f'Intent: {result.intent}, Confidence: {result.confidence:.2f}')
 /implement WAVE-N: ENH-067 Autonomous Plan Execution
 
 Authority: cortex-registry/_cortex-master/index.yaml v3.0
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous (structured progress reports)
 Session: WAVE-N-20260215-01
 Token Budget: <190k tokens
 ```
@@ -330,7 +330,7 @@ print(f'Completed: {result.completed_stages}/{result.total_stages}')
 /implement WAVE-O: ENH-068/069 Data Integrity & Explainability
 
 Authority: cortex-registry/_cortex-master/index.yaml v3.0
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous (structured progress reports)
 Session: WAVE-O-20260216-01
 Token Budget: <200k tokens
 ```

@@ -308,7 +308,7 @@ error_handling:
 # - 8 AC_START → AC_COMPLETE markers injected
 # - 803+ tests passing (CORE-008 enforced)
 # - 0 security vulnerabilities
-# - ASCII progress bars displayed
+# - structured progress reports with test metrics displayed
 # - Silent autonomous execution
 # - Auto-commit per fix
 ```

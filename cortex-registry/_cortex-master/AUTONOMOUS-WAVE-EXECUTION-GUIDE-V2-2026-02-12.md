@@ -38,7 +38,7 @@ Complete guide for executing CORTEX waves (I-O) autonomously within single GitHu
    /implement WAVE-I: ENH-084 Standard Phase Creation Practices
    
    Authority: cortex-registry/_cortex-master/index.yaml v2.2
-   Mode: Silent autonomous with ASCII progress bars
+   Mode: Silent autonomous execution (structured progress reports)
    Session: WAVE-I-20260213-01
    Token Budget: <150k
    
@@ -48,6 +48,8 @@ Complete guide for executing CORTEX waves (I-O) autonomously within single GitHu
    3. 15+ CLI tests (TDD: RED→GREEN→REFACTOR)
    4. User guide documentation (.github/prompts/PHASE-CREATION-GUIDE.md)
    5. Integration with EnforcementOrchestrator (CORE-043)
+   
+   Response Format: Markdown tables per `.github/prompts/SILENT-EXECUTION-RESPONSE-TEMPLATE.md`
    
    Success Criteria:
    - ✅ 15/15 tests passing (0 failures)
@@ -201,7 +203,7 @@ python3 -m cortex.cli.phase_template_cli create --name "test-phase" --priority "
 /implement WAVE-J: MCP Enforcement + Tool Consolidation (ENH-085 ENHANCED)
 
 Authority: cortex-registry/_cortex-master/index.yaml v2.2
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous execution (structured progress reports)
 Session: WAVE-J-20260214-01
 Token Budget: <180k
 
@@ -273,7 +275,7 @@ git ls-files | grep .vscode/settings.json
 /implement WAVE-K: ENH-086 Architecture Alignment Verification
 
 Authority: cortex-registry/_cortex-master/index.yaml v2.2
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous execution (structured progress reports)
 Session: WAVE-K-20260215-01
 Token Budget: <160k
 
@@ -325,7 +327,7 @@ python3 -m cortex.governance.compliance.mcp_first_detector
 /implement WAVE-L: phase-81 Agent Architecture Redesign S1-S3
 
 Authority: cortex-registry/_cortex-master/index.yaml v2.2
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous execution (structured progress reports)
 Session: WAVE-L-20260216-01
 
 Scope:
@@ -352,7 +354,7 @@ Depends: WAVE-K complete (Wave 6 finished)
 /implement WAVE-M: ENH-078 Language Refinement Complete
 
 Authority: cortex-registry/_cortex-master/index.yaml v2.2
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous execution (structured progress reports)
 Session: WAVE-M-20260217-01
 
 Scope:
@@ -380,7 +382,7 @@ Milestone: Wave 2 Intelligence COMPLETE ✅
 /implement WAVE-N: ENH-067 Autonomous Plan Execution
 
 Authority: cortex-registry/_cortex-master/index.yaml v2.2
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous execution (structured progress reports)
 Session: WAVE-N-20260218-01
 
 Scope:
@@ -407,7 +409,7 @@ Depends: WAVE-M complete
 /implement WAVE-O: ENH-068/069 Data Integrity & Explainability
 
 Authority: cortex-registry/_cortex-master/index.yaml v2.2
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous execution (structured progress reports)
 Session: WAVE-O-20260219-01
 
 Scope:

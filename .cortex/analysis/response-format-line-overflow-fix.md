@@ -114,9 +114,15 @@ Add to cortex-architect.prompt.md § Visual Feedback Pattern:
    - ❌ WRONG: `██████████ 100%` (may render as link)
 ```
 
-### 3. Update response-format-standards.md
+### 3. Update response format standards
 
-**Location:** `.github/prompts/.archive/phase-docs/response-format-standards.md`
+**Location:** `.github/prompts/SILENT-EXECUTION-RESPONSE-TEMPLATE.md`
+
+**Key Points:**
+- Progress bar format: `` `██████████` `` (inline code)
+- Use markdown tables (NOT tree characters)
+- Separators: `<hr>` HTML tag (NOT `─────`)
+- Completion reporting: Include test counts + coverage %
 
 **Add after line 44 (Stage Tree section):**
 

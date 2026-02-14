@@ -895,9 +895,10 @@ Commit: AC-PHASE-06-S4-001
 /implement MASTER-WAVES-1-6: ALL PENDING WORK TO COMPLETION
 
 Authority: cortex-registry/_cortex-master/MASTER-WAVE-PLAN-5-WAVES-2026-02-13.md
-Mode: Silent autonomous with ASCII progress bars (6 waves)
+Mode: Silent autonomous execution (6 waves with structured progress reports)
 Total Duration: 34-36 hours
 Token Budget: <1.5M (150-300k per wave)
+Response Format: See `.github/prompts/SILENT-EXECUTION-RESPONSE-TEMPLATE.md`
 
 Wave 1: Registry Cleanup + Test Intelligence (5h, 90 tests)
 Wave 2: Scaffolder + Scale (6h, 310+ tests)
@@ -908,6 +909,7 @@ Wave 6: Business Wisdom Display (4-6h, 21 tests) [P2-DEFERRED]
 
 Result: ALL PENDING WORK COMPLETE
         611+ intelligent tests
+        Completion reports via markdown tables
         28 orchestrators fully covered
         33 commits (AC markers)
         PRODUCTION READY + ENHANCED UX ✅

@@ -140,7 +140,7 @@ Single source of truth for starting autonomous execution immediately.
 /implement WAVE-A: Fix test imports + ENH-063 Phase 2 (circuit breakers, async git, race condition)
 
 Authority: cortex-registry/_cortex-master/SESSION-SCOPED-WAVES.md
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous (structured reports)
 Session: WAVE-A-20260212-01
 Token Budget: <150k
 

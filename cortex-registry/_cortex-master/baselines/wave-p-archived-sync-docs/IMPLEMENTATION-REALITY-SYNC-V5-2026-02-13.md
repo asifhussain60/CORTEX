@@ -265,7 +265,7 @@ This document (v5.0) closes the 3-wave gap. All 14 completed waves now documente
 /implement WAVE-O: ENH-068/069 Data Integrity & Explainability
 
 Authority: cortex-registry/_cortex-master/index.yaml v4.0
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous (structured reports)
 Session: WAVE-O-20260213-01
 Token Budget: <200k
 

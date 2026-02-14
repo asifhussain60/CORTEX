@@ -143,7 +143,7 @@ Command Ready:
 │ /implement WAVE-O: ENH-068/069 Data Integrity & Explainability Complete     │
 │                                                                              │
 │ Authority: cortex-registry/_cortex-master/index.yaml v4.0                   │
-│ Mode: Silent autonomous with ASCII progress bars                            │
+│ Mode: Silent autonomous (structured reports)                            │
 │ Session: WAVE-O-20260213-01                                                 │
 │ Token Budget: <200k                                                         │
 │ Precedent: WAVE-N completion (6ea2086a8)                                    │

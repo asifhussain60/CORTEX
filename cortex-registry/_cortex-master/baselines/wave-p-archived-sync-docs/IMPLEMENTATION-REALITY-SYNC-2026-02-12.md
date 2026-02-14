@@ -159,7 +159,7 @@ Each wave MUST be completable within a single GitHub Copilot Chat session:
 **Autonomous Execution Command:**
 ```
 /implement WAVE-A: Fix test imports + ENH-063 Phase 2 (circuit breakers, async git, race condition)
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous (structured reports)
 Authority: IMPLEMENTATION-REALITY-SYNC-2026-02-12.md
 ```
 
@@ -572,7 +572,7 @@ Each session MUST:
 **Status:** ✅ READY FOR AUTONOMOUS EXECUTION  
 **Authority:** cortex-architect.prompt.md v15.3 + Implementation Reality  
 **Token Budget:** <200k per session (verified feasible)  
-**Execution Mode:** Silent autonomous with ASCII progress bars  
+**Execution Mode:** Silent autonomous (structured reports)  
 **Quality:** Production-level (TDD mandatory, tests before code)
 
 ---

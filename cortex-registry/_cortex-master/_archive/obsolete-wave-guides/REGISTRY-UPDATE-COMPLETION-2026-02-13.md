@@ -195,7 +195,7 @@ python3 -m pytest tests/ --collect-only -q 2>&1 | tail -3
 /implement WAVE-P: Post-WAVE-O Cleanup & Registry Sync
 
 Authority: cortex-registry/_cortex-master/MASTER-IMPLEMENTATION-REALITY-SYNC-2026-02-13.md
-Mode: Silent autonomous with ASCII progress bars
+Mode: Silent autonomous (structured progress reports)
 Session: WAVE-P-20260213-01
 Token Budget: <150k
 Precedent: WAVE-O complete (15eeb6478), Wave 1 complete (07c84a4c1)

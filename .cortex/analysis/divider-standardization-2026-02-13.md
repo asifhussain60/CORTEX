@@ -151,8 +151,8 @@ Status: ❌ BLOCKED
 
 - **CORE-002:** NO markdown file generation (inline chat only)
 - **CORE-029:** Response header MANDATORY
-- **CORE-049:** Silent autonomous execution (progress bars only)
-- **Response Format Standards:** `.github/prompts/.archive/phase-docs/response-format-standards.md`
+- **CORE-049:** Silent autonomous execution (structured progress reports with completion tables)
+- **Response Template:** `.github/prompts/SILENT-EXECUTION-RESPONSE-TEMPLATE.md` (comprehensive guide with variables, examples, rendering rules)
 
 ## 📝 Commit Details
 
