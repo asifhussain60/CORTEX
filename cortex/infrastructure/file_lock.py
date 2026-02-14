@@ -186,8 +186,9 @@ class FileLock:
                         msvcrt.LK_UNLCK,  # type: ignore
                         1,
                     )
-                except Exception:
-                    pass  # Already unlocked or file closed
+                except (ValueError, OSError) as e:
+                    # CORE-013: Specific exception handling for unlock failures
+                    logger.debug(f"Lock unlock warning: {type(e).__name__}: {e}")
             else:
                 # Unix unlock
                 try:
@@ -195,8 +196,9 @@ class FileLock:
                         self.lock_file.fileno(),
                         fcntl.LOCK_UN,
                     )
-                except Exception:
-                    pass  # Already unlocked or file closed
+                except (ValueError, OSError) as e:
+                    # CORE-013: Specific exception handling for unlock failures
+                    logger.debug(f"Lock unlock warning: {type(e).__name__}: {e}")
             
             self.lock_file.close()
             self.lock_file = None

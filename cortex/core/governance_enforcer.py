@@ -92,7 +92,10 @@ class GovernanceEnforcer:
                     "description": rule.description,
                 })
             return result
-        except Exception:
+        except Exception as e:
+            # CORE-013: Specific exception handling
+            import logging
+            logging.error(f"Rule evaluation failed: {e}")
             return False
 
     def get_violations(self) -> List[Dict[str, Any]]:

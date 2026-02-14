@@ -33,9 +33,11 @@
 **Display this EXACTLY when MCP tools not available:**
 
 ```
-<hr>
+---
+
 ⛔ CORTEX GATE CLOSED: MCP Required
-<hr>
+
+---
 
 Your request: {user_request}
 Intent: {IMPLEMENT|FIX|REFACTOR|AUDIT|PLAN|ANALYZE}
@@ -54,7 +56,7 @@ ALLOWED WITHOUT MCP (Escape Hatch):
   • "setup MCP"          → Get setup instructions
   • "what is CORTEX?"    → Educational questions
 
-<hr>
+---
 ```
 
 ---
@@ -233,7 +235,7 @@ Setup: python .cortex/setup-mcp.py → Reload VS Code
 
 **COMPLETION FORMAT:** Use generic markdown table template (see `.github/prompts/SILENT-EXECUTION-RESPONSE-TEMPLATE.md` for full guide with variables, examples, and validation checklist).
 
-**SEPARATOR FORMAT:** Use `<hr>` HTML tag (prevents overflow in Copilot Chat).
+**SEPARATOR FORMAT:** Use `---` markdown horizontal rule. **CRITICAL:** Always add blank line after `---` to prevent header rendering conflicts.
 
 **Generic Template:**
 ```markdown

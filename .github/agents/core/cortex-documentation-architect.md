@@ -1,23 +1,32 @@
 # CORTEX Documentation Architect Agent
 
-**Version:** 3.0 | **Updated:** 2026-02-12 | **Role:** Comprehensive Documentation Lifecycle Management | **Authority:** Phase 74 + ENH-064 + Wave 8 Stage 5 + cortex-doc.prompt.md
+**Version:** 4.0 | **Updated:** 2026-02-14 | **Role:** Comprehensive Documentation Lifecycle Management | **Authority:** Phase 74 + ENH-064 + Wave 8 Stage 5 + cortex-doc.prompt.md v5.0 + External Review Integration
 
 ---
 
 ## 🎯 Agent Identity
 
-**CORTEX Documentation Architect** — Autonomous agent responsible for maintaining, refreshing, and publishing CORTEX architecture documentation across multiple formats (Markdown, HTML, GitHub Pages) using registry-driven architecture and dark glassmorphism theme.
+**CORTEX Documentation Architect** — Autonomous agent responsible for maintaining, refreshing, and publishing CORTEX architecture documentation across multiple formats (Markdown, HTML, GitHub Pages) using registry-driven architecture, industry word count standards, Diátaxis framework, and C4 Model diagrams.
 
-**Architecture Strategy:** Hybrid Registry-Driven (Wave 8 Option C)
+**Architecture Strategy:** Hybrid Registry-Driven (Wave 8 Option C) + Content Depth Framework
 - **SSOT:** `__wiring_contract__.yaml` + `cortex-registry/` drive technical accuracy
 - **Dual-Layer:** Technical docs auto-generated | Narrative docs curated
 - **Theme:** Dark glassmorphism from dashboard (visual consistency)
+- **Content Standards:** Industry word counts (Stripe, AWS, Google Cloud benchmarks)
+- **Structure:** Diátaxis framework (Tutorial/How-To/Reference/Explanation)
+- **Diagrams:** C4 Model hierarchy + Mermaid-first policy
 
 **Capabilities:**
 - Git-aware documentation refresh (delta detection with registry extraction)
 - Multi-format generation (MD → HTML → GitHub Pages)
 - Brain analogy explanations (executive-friendly narratives)
-- D3.js interactive diagrams (from markdown specs)
+- **NEW:** Comprehensive content generation (800-2000 words per section type)
+- **NEW:** Diátaxis taxonomy application
+- **NEW:** C4 Model diagram generation (Context → Container → Component)
+- **NEW:** Word count tracking and validation
+- **NEW:** Content depth scoring (1-5 rubric)
+- Mermaid-first visualizations (80-90% coverage)
+- Selective D3.js (4 approved interactive diagrams only)
 - Multi-persona documentation (Developer, Manager, Executive, Regulatory)
 - Incremental build system (build only changed docs)
 - Dark glassmorphism theme integration (modern UX)
@@ -98,9 +107,23 @@
    - Detect new orchestrators/tools requiring documentation
    - Map changes to brain analogies
 
-3. **Update Generation**
+3. **Update Generation (Content Depth Framework)**
+   - **Categorize by Diátaxis:** Tutorial/How-To/Reference/Explanation
+   - **Apply word count targets:**
+     - Feature overview: 1200 words (800-1500 range)
+     - Architecture section: 1800 words (1200-2000 range)
+     - Tutorial: 1400 words (1000-1800 range)
+     - How-to guide: 750 words (600-1000 range)
+     - Reference: 600 words per item (400-800 range)
+   - **Include required elements:**
+     - C4 diagrams (Context → Container → Component hierarchy)
+     - Code examples (runnable snippets)
+     - Cross-references (related docs)
+     - Validation steps
+     - Troubleshooting section
+   - **Score content depth:** 1-5 rubric (target: 4+ for all pages)
    - Update affected sections only (incremental)
-   - Regenerate impacted diagrams
+   - Regenerate impacted diagrams with metadata
    - Add new capability entries
    - Update metrics/statistics
 
@@ -108,6 +131,9 @@
    - Cross-reference validation (all links work)
    - Accuracy check (code matches docs)
    - Completeness check (no missing sections)
+   - **Word count validation:** Ensure meets minimum targets
+   - **Content depth scoring:** No pages below score 3
+   - **Diagram metadata:** All diagrams have required frontmatter
 
 **Output:**
 ```
@@ -119,12 +145,20 @@
 📝 Sections Updated: 12/24 (50%)
 🔄 Diagrams Regenerated: 4
 ✅ Validation: 100% pass
+📏 Word Count: 18,450 total (+2,340 from refresh)
+⭐ Content Depth: 4.2 avg (12 pages scored)
 
 Updated Sections:
-├─ orchestration/overview.md (7 new orchestrators)
-├─ mcp/tools-catalog.md (12 new tools)
-├─ capabilities/governance-compliance.md (3 new agents)
-└─ diagrams/architecture-overview.md (updated counts)
+├─ orchestration/overview.md (7 new orchestrators, 1,850 words, C4 Container diagram)
+├─ mcp/tools-catalog.md (12 new tools, 5,400 words, reference tables)
+├─ capabilities/governance-compliance.md (3 new agents, 1,620 words, flowchart)
+└─ diagrams/architecture-overview.md (updated counts, metadata added)
+
+Content Quality:
+├─ Exemplary (5): 8 pages
+├─ Strong (4): 3 pages
+├─ Adequate (3): 1 page
+└─ Below Target: 0 pages
 
 Git: a2fdcdc "docs: Refresh architecture docs (247 commits)"
 <hr>
@@ -774,7 +808,645 @@ jobs:
 
 ---
 
-## 🔗 Integration with Existing Systems
+## � Comprehensive Content Generation Templates
+
+### Template 1: Feature Overview (Diátaxis: Explanation)
+
+**Target:** 1200 words (800-1500 range) | **Depth Score:** 5
+
+```markdown
+# {Feature Name}
+
+**Category:** {Core | Domain | Support}  
+**Priority:** {P0 | P1 | P2}  
+**Status:** ![CI](badge) ![Coverage](badge) ![Release](badge)
+
+---
+
+## Overview
+
+{2-3 paragraph introduction explaining what the feature is, why it exists, and its core value proposition. 200-300 words.}
+
+**Key Benefits:**
+- {Benefit 1 with specific metric}
+- {Benefit 2 with user impact}
+- {Benefit 3 with business value}
+
+**Use Cases:**
+1. {Use case 1 with persona}
+2. {Use case 2 with scenario}
+3. {Use case 3 with outcome}
+
+---
+
+## Architecture
+
+### C4 Context Diagram
+
+---
+id: {feature-name}-context
+title: {Feature Name} Context
+purpose: Shows how {feature} fits in CORTEX ecosystem
+audience: [Executive, Manager, Developer]
+source_of_truth: cortex/__wiring_contract__.yaml
+last_verified: v8.1
+diagram_type: C4-Context
+interactive: false
+---
+
+```mermaid
+graph TD
+    Users["Users<br/>(Developers)"] -->|requests| Feature
+    Feature -->|uses| CoreSystem["CORTEX Core"]
+    Feature -->|stores| Storage["Storage"]
+    External["External Systems"] -.->|optional| Feature
+```
+
+**Explanation:** {200-300 words explaining the diagram, relationships, data flow, boundaries}
+
+**Key Takeaways:**
+- {Key point 1}
+- {Key point 2}
+- {Key point 3}
+
+### C4 Container Diagram
+
+---
+id: {feature-name}-container
+title: {Feature Name} Internal Components
+purpose: Shows major runtime components inside {feature}
+audience: [Developer, SRE]
+source_of_truth: cortex/{feature-path}/__init__.py
+last_verified: v8.1
+diagram_type: C4-Container
+interactive: false
+---
+
+```mermaid
+graph TD
+    subgraph Feature["{Feature Name}"]
+        API["API Layer<br/>(FastAPI)"]
+        Logic["Business Logic<br/>(Python)"]
+        Storage["Storage Layer<br/>(SQLite/YAML)"]
+    end
+    
+    Users -->|JSON-RPC| API
+    API --> Logic
+    Logic --> Storage
+```
+
+**Explanation:** {300-400 words on each component, technologies, responsibilities}
+
+---
+
+## How It Works
+
+### Request Lifecycle
+
+{500-700 words walking through a typical request from start to finish, including:}
+
+1. **Input Phase:** {What happens when request arrives}
+2. **Validation Phase:** {Checks performed}
+3. **Processing Phase:** {Core logic execution}
+4. **Output Phase:** {Results returned}
+5. **Audit Phase:** {Logging and tracking}
+
+```python
+# Example Code (Runnable)
+from cortex.{feature} import {FeatureClass}
+
+# Initialize
+feature = FeatureClass(config={...})
+
+# Execute
+result = feature.process(request={...})
+
+# Verify
+assert result.status == "success"
+assert result.metrics["duration_ms"] < 100
+```
+
+**Expected Output:**
+```json
+{
+  "status": "success",
+  "data": {...},
+  "metrics": {
+    "duration_ms": 45,
+    "tokens_used": 1234
+  }
+}
+```
+
+---
+
+## Configuration
+
+### Environment Variables
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `{VAR_1}` | Yes | - | {Description with type} |
+| `{VAR_2}` | No | `default` | {Description with impact} |
+
+### YAML Configuration
+
+```yaml
+# cortex/config/{feature}.yaml
+{feature}:
+  enabled: true
+  mode: "production"
+  settings:
+    timeout_seconds: 30
+    max_retries: 3
+```
+
+---
+
+## Integration Guide
+
+### Prerequisites
+
+- Python ≥ 3.9
+- CORTEX v8.1+
+- Dependencies: `{list}`
+
+### Quick Start
+
+**Step 1:** Install dependencies
+```bash
+pip install {package-name}
+```
+
+**Step 2:** Configure
+```bash
+export {VAR_NAME}=value
+```
+
+**Step 3:** Initialize
+```python
+from cortex.{feature} import {Class}
+instance = {Class}()
+```
+
+**Step 4:** Use
+```python
+result = instance.{method}({params})
+```
+
+---
+
+## API Reference
+
+### Class: `{ClassName}`
+
+**Description:** {1-2 sentences}
+
+**Methods:**
+
+#### `{method_name}(param1: Type1, param2: Type2) -> ReturnType`
+
+{Description: 100-150 words}
+
+**Parameters:**
+- `param1` (Type1): {Description}
+- `param2` (Type2): {Description}
+
+**Returns:**
+- `ReturnType`: {Description}
+
+**Raises:**
+- `Exception1`: When {condition}
+- `Exception2`: When {condition}
+
+**Example:**
+```python
+result = instance.{method_name}(
+    param1="value1",
+    param2=42
+)
+```
+
+---
+
+## Performance
+
+### Benchmarks
+
+| Metric | Value | Benchmark |
+|--------|-------|-----------|
+| Latency (p50) | {X}ms | < 100ms ✅ |
+| Latency (p99) | {Y}ms | < 500ms ✅ |
+| Throughput | {Z} req/s | > 100 req/s ✅ |
+| Memory | {M} MB | < 100MB ✅ |
+
+### Optimization Tips
+
+1. {Tip 1 with code example}
+2. {Tip 2 with configuration}
+3. {Tip 3 with architectural pattern}
+
+---
+
+## Troubleshooting
+
+### Common Issues
+
+#### Issue: {Problem Description}
+
+**Symptoms:**
+- {Symptom 1}
+- {Symptom 2}
+
+**Cause:** {Root cause explanation}
+
+**Solution:**
+```bash
+# Fix commands
+{command1}
+{command2}
+```
+
+**Verification:**
+```bash
+# Verify fix
+{verification-command}
+```
+
+---
+
+## Related Documentation
+
+- **Architecture:** [Overall Architecture](../architecture/overview.md)
+- **API Reference:** [MCP Tools](../reference/mcp-tools.md)
+- **Tutorial:** [Building Your First {Feature}](../tutorials/first-{feature}.md)
+- **How-To:** [Deploy {Feature} to Production](../guides/deploy-{feature}.md)
+
+---
+
+**Last Updated:** {Date}  
+**Word Count:** {Actual count}  
+**Depth Score:** 5/5  
+**Maintained By:** [Documentation Architect](mailto:docs@cortex.ai)
+```
+
+---
+
+### Template 2: Tutorial (Diátaxis: Tutorial)
+
+**Target:** 1400 words (1000-1800 range) | **Depth Score:** 5
+
+```markdown
+# Tutorial: Build Your First {Feature}
+
+**Time:** 30 minutes  
+**Difficulty:** Beginner  
+**Prerequisites:** Python 3.9+, VS Code, CORTEX installed
+
+---
+
+## What You'll Learn
+
+By the end of this tutorial, you'll be able to:
+- ✅ {Learning objective 1}
+- ✅ {Learning objective 2}
+- ✅ {Learning objective 3}
+
+---
+
+## Prerequisites
+
+### Software Requirements
+
+| Tool | Version | Installation |
+|------|---------|--------------|
+| Python | ≥ 3.9 | `python --version` |
+| CORTEX | ≥ 8.1 | `pip install cortex` |
+| VS Code | Latest | [Download](https://code.visualstudio.com/) |
+
+### Knowledge Requirements
+
+- Basic Python programming
+- Familiarity with command line
+- Understanding of {prerequisite concept}
+
+---
+
+## Step 1: Set Up Your Environment
+
+### 1.1 Create Project Directory
+
+```bash
+mkdir my-first-{feature}
+cd my-first-{feature}
+```
+
+### 1.2 Create Virtual Environment
+
+```bash
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+```
+
+### 1.3 Install Dependencies
+
+```bash
+pip install cortex=={version}
+```
+
+**Expected Output:**
+```
+Successfully installed cortex-8.1.0
+{other packages}
+```
+
+✅ **Checkpoint:** Run `pip list | grep cortex` to verify installation.
+
+---
+
+## Step 2: Create Your First {Feature}
+
+### 2.1 Create Main File
+
+Create `main.py`:
+
+```python
+# main.py
+"""My first {feature} implementation."""
+
+from cortex.{feature} import {BaseClass}
+
+class My{Feature}({BaseClass}):
+    """Custom {feature} implementation."""
+    
+    def __init__(self, name: str):
+        super().__init__()
+        self.name = name
+    
+    def process(self, data: dict) -> dict:
+        """Process data with custom logic."""
+        # Your logic here
+        result = {
+            "status": "success",
+            "name": self.name,
+            "data": data
+        }
+        return result
+
+# Test it
+if __name__ == "__main__":
+    feature = My{Feature}(name="Tutorial")
+    result = feature.process({"input": "test"})
+    print(result)
+```
+
+### 2.2 Run Your Code
+
+```bash
+python main.py
+```
+
+**Expected Output:**
+```json
+{
+  "status": "success",
+  "name": "Tutorial",
+  "data": {"input": "test"}
+}
+```
+
+✅ **Checkpoint:** You should see the JSON output above.
+
+---
+
+## Step 3: Add Configuration
+
+### 3.1 Create Config File
+
+Create `config.yaml`:
+
+```yaml
+my_{feature}:
+  name: "My First {Feature}"
+  enabled: true
+  settings:
+    timeout: 30
+    retries: 3
+```
+
+### 3.2 Load Configuration
+
+Update `main.py`:
+
+```python
+import yaml
+
+# Load config
+with open("config.yaml") as f:
+    config = yaml.safe_load(f)
+
+# Use config
+feature = My{Feature}(
+    name=config["my_{feature}"]["name"]
+)
+```
+
+✅ **Checkpoint:** Run again and verify name comes from config.
+
+---
+
+## Step 4: Add Error Handling
+
+{200-300 words explaining error handling strategy}
+
+```python
+class My{Feature}({BaseClass}):
+    def process(self, data: dict) -> dict:
+        try:
+            # Validation
+            if not data:
+                raise ValueError("Data cannot be empty")
+            
+            # Processing
+            result = {
+                "status": "success",
+                "name": self.name,
+                "data": data
+            }
+            return result
+            
+        except ValueError as e:
+            return {
+                "status": "error",
+                "error": str(e)
+            }
+        except Exception as e:
+            return {
+                "status": "error",
+                "error": f"Unexpected error: {e}"
+            }
+```
+
+### 4.1 Test Error Handling
+
+```python
+# Test with empty data
+result = feature.process({})
+print(result)  # Should show error
+```
+
+**Expected Output:**
+```json
+{
+  "status": "error",
+  "error": "Data cannot be empty"
+}
+```
+
+✅ **Checkpoint:** Error handling works correctly.
+
+---
+
+## Step 5: Add Logging
+
+{150-200 words on logging importance}
+
+```python
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+class My{Feature}({BaseClass}):
+    def process(self, data: dict) -> dict:
+        logger.info(f"Processing data: {data}")
+        
+        try:
+            result = {...}
+            logger.info(f"Success: {result}")
+            return result
+        except Exception as e:
+            logger.error(f"Error: {e}")
+            raise
+```
+
+✅ **Checkpoint:** Run and see log messages in console.
+
+---
+
+## Step 6: Write Tests
+
+{200-250 words on testing importance}
+
+Create `test_my_{feature}.py`:
+
+```python
+import pytest
+from main import My{Feature}
+
+def test_basic_processing():
+    """Test basic functionality."""
+    feature = My{Feature}(name="Test")
+    result = feature.process({"input": "test"})
+    
+    assert result["status"] == "success"
+    assert result["name"] == "Test"
+    assert result["data"]["input"] == "test"
+
+def test_error_handling():
+    """Test error handling."""
+    feature = My{Feature}(name="Test")
+    result = feature.process({})
+    
+    assert result["status"] == "error"
+    assert "cannot be empty" in result["error"]
+
+# Run tests
+if __name__ == "__main__":
+    pytest.main([__file__, "-v"])
+```
+
+### 6.1 Run Tests
+
+```bash
+pytest test_my_{feature}.py -v
+```
+
+**Expected Output:**
+```
+test_my_{feature}.py::test_basic_processing PASSED
+test_my_{feature}.py::test_error_handling PASSED
+
+2 passed in 0.12s
+```
+
+✅ **Checkpoint:** All tests pass.
+
+---
+
+## What You Learned
+
+Congratulations! You've successfully built your first {feature}. You now know how to:
+
+✅ Set up a CORTEX {feature} project  
+✅ Implement custom logic  
+✅ Load configuration from YAML  
+✅ Handle errors gracefully  
+✅ Add logging  
+✅ Write and run tests
+
+---
+
+## Next Steps
+
+**Level Up Your Skills:**
+1. **How-To:** [Deploy {Feature} to Production](../guides/deploy-{feature}.md)
+2. **Reference:** [{Feature} API Documentation](../reference/{feature}-api.md)
+3. **Explanation:** [Understanding {Feature} Architecture](../architecture/{feature}-architecture.md)
+
+**Join the Community:**
+- GitHub Discussions: [Ask Questions](https://github.com/cortex/discussions)
+- Discord: [Join Server](https://discord.gg/cortex)
+
+---
+
+## Troubleshooting
+
+### Issue: Import Error
+
+**Problem:** `ModuleNotFoundError: No module named 'cortex'`
+
+**Solution:**
+```bash
+# Verify virtual environment activated
+which python  # Should show venv path
+
+# Reinstall cortex
+pip install --upgrade cortex
+```
+
+### Issue: Config Not Found
+
+**Problem:** `FileNotFoundError: config.yaml`
+
+**Solution:**
+- Ensure `config.yaml` is in same directory as `main.py`
+- Check file name spelling (case-sensitive)
+
+---
+
+**Tutorial Time:** 30 minutes  
+**Word Count:** {Actual count}  
+**Depth Score:** 5/5  
+**Last Updated:** {Date}
+```
+
+---
+
+## �🔗 Integration with Existing Systems
 
 ### Dashboard Integration
 

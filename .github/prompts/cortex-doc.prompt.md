@@ -1,6 +1,6 @@
 # CORTEX Documentation Generation Prompt
 
-**Version:** 4.0 | **Updated:** 2026-02-13 | **Authority:** Documentation Architect Agent + Wave 8 Stage 5 | **Mode:** Registry-Driven Tri-Mode (Refresh + Generate + Story) | **Integration:** Phase 74 + ENH-064 + Wave 8
+**Version:** 5.0 | **Updated:** 2026-02-14 | **Authority:** Documentation Architect Agent + External Review Integration | **Mode:** Registry-Driven Tri-Mode (Refresh + Generate + Story) | **Integration:** Phase 74 + ENH-064 + Wave 8 + Diátaxis Framework + C4 Model
 
 ---
 
@@ -13,11 +13,257 @@
 
 **SSOT Architecture:** `__wiring_contract__.yaml` + `cortex-registry/` drive technical accuracy. Curated brain analogies remain manual for executive narratives.
 
-This prompt enables autonomous documentation lifecycle management with brain analogies, multi-persona views, D3.js interactive visualizations, and modern UX design with dark glassmorphism theme.
+**NEW in v5.0:** Comprehensive content generation with industry-standard word counts, Diátaxis framework structure, C4 Model diagrams, Mermaid-first visualization policy, and evidence-backed status claims.
+
+This prompt enables autonomous documentation lifecycle management with brain analogies, multi-persona views, interactive visualizations, and enterprise-grade content depth.
 
 ---
 
-## 🔄 MODE: Documentation Refresh
+## � Content Standards & Quality Framework
+
+### Industry Word Count Targets
+
+**Benchmarked against:** Stripe API, AWS Well-Architected, Google Cloud, GitHub Docs, Microsoft Learn
+
+| Content Type | Target Words | Min | Max | Example Benchmark |
+|--------------|--------------|-----|-----|-------------------|
+| **Feature Overview** | 1200 | 800 | 1500 | Stripe API feature pages (~1200 words) |
+| **Architecture Section** | 1800 | 1200 | 2000 | AWS Well-Architected pillars (~1800 words) |
+| **Tutorial** | 1400 | 1000 | 1800 | Google Cloud tutorials (~1400 words) |
+| **API Reference** | 450/endpoint | 300 | 600 | GitHub REST API docs (~450 words/endpoint) |
+| **How-To Guide** | 750 | 600 | 1000 | Microsoft Learn how-tos (~750 words) |
+| **Explanation** | 1500 | 1000 | 2000 | Martin Fowler architecture essays (~1500 words) |
+| **Reference** | 600 | 400 | 800 | MDN Web Docs reference (~600 words) |
+
+### Diátaxis Framework Structure
+
+**Authority:** [diataxis.fr](https://diataxis.fr/) — Industry-standard documentation taxonomy
+
+```yaml
+diátaxis_categories:
+  tutorials:
+    purpose: "Learning-oriented — Practical steps for beginners"
+    user_need: "I want to learn by doing"
+    content_type: "Lessons with clear outcomes"
+    examples:
+      - "Build your first orchestrator (Step 1-5)"
+      - "Implement TDD workflow end-to-end"
+      - "Add MCP tool from scratch"
+    word_count: 1000-1800
+    must_include:
+      - Prerequisites section
+      - Step-by-step instructions (numbered)
+      - Code examples (runnable)
+      - Expected output at each step
+      - Troubleshooting common issues
+      - "What you learned" summary
+      
+  how_to_guides:
+    purpose: "Task-oriented — Recipes for specific problems"
+    user_need: "I want to accomplish a specific task"
+    content_type: "Focused procedures"
+    examples:
+      - "Add new governance agent"
+      - "Configure multi-domain routing"
+      - "Deploy to production"
+    word_count: 600-1000
+    must_include:
+      - Problem statement
+      - Solution overview (1-2 paragraphs)
+      - Detailed steps
+      - Code snippets
+      - Validation checks
+      
+  reference:
+    purpose: "Information-oriented — Technical descriptions"
+    user_need: "I want to look up exact information"
+    content_type: "Exhaustive technical specifications"
+    examples:
+      - "MCP tool schemas (all 86 tools)"
+      - "CLI command reference"
+      - "Orchestrator registry API"
+      - "Environment variables"
+    word_count: 400-800 per item
+    must_include:
+      - Technical accuracy (validated against code)
+      - Parameter tables
+      - Return value specifications
+      - Examples
+      - Related references
+      
+  explanation:
+    purpose: "Understanding-oriented — Concepts and rationale"
+    user_need: "I want to understand why and how it works"
+    content_type: "Background, context, design decisions"
+    examples:
+      - "Why tier precedence (company > tier1 > tier0)"
+      - "MCP-first vs direct imports tradeoffs"
+      - "TDD enforcement architecture"
+    word_count: 1000-2000
+    must_include:
+      - Problem context
+      - Design alternatives considered
+      - Decision rationale
+      - Architecture diagrams (C4)
+      - Tradeoffs analysis
+      - Future considerations
+```
+
+### C4 Model Diagram Hierarchy
+
+**Authority:** [c4model.com](https://c4model.com/) — Software architecture diagrams
+
+```yaml
+c4_model:
+  level_1_context:
+    purpose: "Who uses the system and what external systems exist"
+    diagram_type: "Mermaid flowchart (C4-style boxes)"
+    audience: [Executive, Manager, Regulatory]
+    word_count: 400-600 (narrative explanation)
+    must_show:
+      - Users/personas
+      - CORTEX system boundary
+      - External systems
+      - High-level relationships
+    example_usage: "architecture/overview.md (opening diagram)"
+    
+  level_2_container:
+    purpose: "Major runtime components and technologies"
+    diagram_type: "Mermaid flowchart with subgraphs"
+    audience: [Manager, Developer, SRE]
+    word_count: 800-1200 (per container explanation)
+    must_show:
+      - MCP Gateway (technology: JSON-RPC)
+      - Orchestrators (60 total, Python)
+      - LENS Intelligence (8 analyzers)
+      - CORTEX Brain (Git-backed registry, YAML)
+      - Governance Engine (7 enforcement agents)
+      - Storage (SQLite + file-based)
+    example_usage: "architecture/system-architecture.md"
+    
+  level_3_component:
+    purpose: "Inside each major container"
+    diagram_type: "Mermaid class diagram or detailed flowchart"
+    audience: [Developer, Architect]
+    word_count: 1000-1500 (per component deep-dive)
+    must_show:
+      - Internal classes/modules
+      - Dependencies
+      - Data flow
+      - Key interfaces
+    example_usage: "orchestration/master-orchestrator-internals.md"
+    
+  level_4_code:
+    purpose: "Implementation details (use sparingly)"
+    diagram_type: "Mermaid sequence diagrams"
+    audience: [Developer]
+    word_count: 600-1000 (focused on one flow)
+    must_show:
+      - Method calls
+      - State changes
+      - Error handling paths
+    example_usage: "Only for complex mechanics"
+```
+
+### Mermaid-First Visualization Policy
+
+**Rationale:** Version-controlled, text-based, GitHub-native rendering
+
+```yaml
+diagram_selection:
+  default: "Mermaid (80-90% of all diagrams)"
+  
+  mermaid_use_cases:
+    - Flowcharts: "Orchestration flows, decision trees, request routing"
+    - Sequence diagrams: "Request lifecycle, API calls, integration flows"
+    - State machines: "Orchestrator lifecycle, governance gates"
+    - Class diagrams: "Simplified architecture, component relationships"
+    - ER diagrams: "Data models, registry structure"
+    - Gantt charts: "Phase timelines, roadmaps"
+    - Mindmaps: "Concept hierarchies, learning paths"
+    
+  d3_use_cases_only_if:
+    decision_rubric:
+      question: "Does interaction provide significant value over static?"
+      static_sufficient: "Use Mermaid"
+      interactive_required: "Consider D3"
+      
+    approved_scenarios:
+      - "Interactive filtering (click to filter by role/component)"
+      - "Dependency exploration (click node → expand dependencies)"
+      - "Real-time data visualization (live metrics)"
+      - "Hierarchical navigation (mind-map with zoom/pan)"
+      
+    d3_approved_diagrams:
+      max_count: 4
+      list:
+        - "Interactive architecture map (filter by Executive/PM/Eng/Sec/SRE)"
+        - "Orchestrator dependency explorer (60 orchestrators, expandable)"
+        - "Request trace viewer (clickable execution timeline)"
+        - "Mind-map navigation (onboarding learning paths)"
+```
+
+### Diagram Metadata Standard
+
+**Every diagram MUST include this YAML frontmatter:**
+
+```yaml
+---
+id: unique-diagram-id
+title: Human-readable title
+purpose: What question does this answer? (1 sentence)
+audience: [Developer | Manager | Executive | SRE | Security]
+source_of_truth: Link to wiring contract/registry file
+last_verified: Release tag or CI build ID
+diagram_type: [C4-Context | C4-Container | C4-Component | Sequence | Flowchart | State | Class | Mindmap]
+interactive: false  # true if D3, false if static Mermaid
+word_count: 0  # Auto-computed by tooling
+---
+
+```mermaid
+# Diagram content here
+```
+
+**Narrative after diagram:**
+- Explain what the diagram shows (200-400 words)
+- Key takeaways (bullet list)
+- Related diagrams (links)
+```
+
+### Content Depth Rubric
+
+**Score each documentation page 1-5:**
+
+| Score | Criteria |
+|-------|----------|
+| **5 - Exemplary** | Meets word count target, includes diagrams, code examples, cross-references, validation steps, troubleshooting |
+| **4 - Strong** | Meets word count, includes diagrams OR code examples, good cross-references |
+| **3 - Adequate** | Meets minimum word count, basic explanation, some examples |
+| **2 - Weak** | Below minimum word count, minimal explanation, no examples |
+| **1 - Poor** | Stub content, no detail, no examples |
+
+**Target:** All feature pages score 4+, all architecture pages score 5.
+
+### Evidence-Backed Status Claims
+
+**REPLACE subjective claims with computed metrics:**
+
+| ❌ Avoid | ✅ Use Instead |
+|---------|----------------|
+| "100% Production Ready" | "CI: Passing (542 tests) • Coverage: 87% • Release: v8.1" |
+| "Confidence Score: 100/100" | "Audit: 18/18 checks pass • MCP: 86 tools active • Uptime: 99.7%" |
+| "Fully Tested" | "Test Suite: 542 unit + 87 integration + 12 e2e = 641 total" |
+
+**Status badge format:**
+```markdown
+![CI Status](https://img.shields.io/github/workflow/status/asif/cortex/CI)
+![Coverage](https://img.shields.io/codecov/c/github/asif/cortex)
+![Release](https://img.shields.io/github/v/release/asif/cortex)
+```
+
+---
+
+## �🔄 MODE: Documentation Refresh
 
 **Trigger:** "refresh docs" | "update architecture docs" | "sync documentation with code"
 
@@ -2276,6 +2522,824 @@ CORTEX is an AI-powered development orchestration platform that...
 
 *Generated by CORTEX Documentation Architect Agent*
 ```
+
+---
+
+## 📐 Mermaid Diagram Templates
+
+### Template 1: C4 Context Diagram
+
+```markdown
+---
+id: cortex-c4-context
+title: CORTEX System Context
+purpose: Shows users, external systems, and system boundary
+audience: [Executive, Manager, Regulatory]
+source_of_truth: cortex/__wiring_contract__.yaml
+last_verified: v8.1
+diagram_type: C4-Context
+interactive: false
+word_count: 450
+---
+
+```mermaid
+graph TD
+    %% Style definitions
+    classDef userStyle fill:#2196F3,stroke:#1565C0,color:#FFF
+    classDef systemStyle fill:#4CAF50,stroke:#2E7D32,color:#FFF
+    classDef externalStyle fill:#FF9800,stroke:#E65100,color:#FFF
+    
+    %% Users
+    DevTeams["Development Teams<br/>(Engineers, Architects)"]:::userStyle
+    Managers["Management<br/>(PMs, Directors)"]:::userStyle
+    Execs["Executives<br/>(CTOs, VPs)"]:::userStyle
+    
+    %% CORTEX System
+    subgraph CORTEX["CORTEX System Boundary"]
+        Core["CORTEX Platform<br/>(MCP Server, Orchestrators,<br/>LENS Intelligence)"]:::systemStyle
+    end
+    
+    %% External Systems
+    VSCode["VS Code<br/>(Copilot Chat)"]:::externalStyle
+    Claude["Claude Desktop<br/>(MCP Client)"]:::externalStyle
+    Cursor["Cursor IDE<br/>(AI Features)"]:::externalStyle
+    Git["Git Repositories<br/>(Source Control)"]:::externalStyle
+    CICD["CI/CD Systems<br/>(GitHub Actions)"]:::externalStyle
+    
+    %% Relationships
+    DevTeams -->|"Natural language<br/>requests"| VSCode
+    Managers -->|"Natural language<br/>requests"| Claude
+    Execs -->|"Reports &<br/>dashboards"| Cursor
+    
+    VSCode -->|"JSON-RPC<br/>(MCP Protocol)"| Core
+    Claude -->|"JSON-RPC<br/>(MCP Protocol)"| Core
+    Cursor -->|"JSON-RPC<br/>(MCP Protocol)"| Core
+    
+    Core -->|"Read/Write<br/>operations"| Git
+    Core -->|"Trigger builds<br/>& deployments"| CICD
+    CICD -->|"Audit logs<br/>& metrics"| Core
+```
+
+**Explanation:**
+
+CORTEX operates as a central AI development platform that serves multiple user personas through various IDE and desktop clients. Development teams primarily interact through VS Code's Copilot Chat, management uses Claude Desktop for high-level queries, and executives access dashboards via Cursor IDE.
+
+All client applications communicate with CORTEX using the Model Context Protocol (MCP) over JSON-RPC, providing a standardized interface regardless of the client type. CORTEX maintains bidirectional connections with Git repositories for code operations and CI/CD systems for deployment automation.
+
+**Key Takeaways:**
+- **Multi-Persona Support:** Different entry points for developers, managers, and executives
+- **Protocol Standardization:** MCP provides consistent interface across all clients
+- **System Integration:** Seamless connection to development toolchain (Git, CI/CD)
+- **Security Boundary:** Clear system boundary with controlled access points
+
+**Related Diagrams:**
+- [C4 Container: CORTEX Internal Architecture](#template-2-c4-container-diagram)
+- [Sequence: Request Lifecycle](#template-4-sequence-diagram-request-lifecycle)
+```
+---
+
+### Template 2: C4 Container Diagram
+
+```markdown
+---
+id: cortex-c4-container
+title: CORTEX Container Architecture
+purpose: Shows major runtime components and technologies
+audience: [Manager, Developer, SRE]
+source_of_truth: cortex/__wiring_contract__.yaml
+last_verified: v8.1
+diagram_type: C4-Container
+interactive: false
+word_count: 1100
+---
+
+```mermaid
+graph TD
+    %% Style definitions
+    classDef clientStyle fill:#2196F3,stroke:#1565C0,color:#FFF
+    classDef gatewayStyle fill:#9C27B0,stroke:#6A1B9A,color:#FFF
+    classDef coreStyle fill:#4CAF50,stroke:#2E7D32,color:#FFF
+    classDef supportStyle fill:#FF9800,stroke:#E65100,color:#FFF
+    classDef storageStyle fill:#607D8B,stroke:#37474F,color:#FFF
+    
+    %% Clients
+    Clients["MCP Clients<br/>(VS Code, Claude, Cursor)<br/>JSON-RPC Protocol"]:::clientStyle
+    
+    %% CORTEX System Boundary
+    subgraph CORTEX["CORTEX Platform"]
+        %% Gateway Layer
+        Gateway["MCP Gateway<br/>(FastAPI + JSON-RPC)<br/>86 Tools<br/>Port 8000"]:::gatewayStyle
+        
+        %% Core Orchestration Layer
+        subgraph CoreLayer["Core Orchestration Layer (Python)"]
+            Master["MasterOrchestrator<br/>(Entry Point)"]:::coreStyle
+            Router["IntentRouter<br/>(LENS-based)"]:::coreStyle
+            TDD["TDDOrchestrator<br/>(RED→GREEN→REFACTOR)"]:::coreStyle
+            Validation["HolisticValidationOrchestrator<br/>(Pre-flight checks)"]:::coreStyle
+        end
+        
+        %% Intelligence Layer
+        subgraph IntelligenceLayer["Intelligence Layer"]
+            LENS["LENS Intelligence<br/>(8 Analyzers)<br/>AST, Git, Comments"]:::supportStyle
+            ChallengeEngine["ChallengeEngine<br/>(Disagreement detection)"]:::supportStyle
+            CCL["ContextCrystallizationLayer<br/>(Async prefetch, 245ms avg)"]:::supportStyle
+        end
+        
+        %% Governance Layer
+        subgraph GovernanceLayer["Governance Layer"]
+            Enforcement["EnforcementOrchestrator<br/>(7 Agents)"]:::supportStyle
+            Security["SecurityCheckpointAgent"]:::supportStyle
+            Audit["AuditTrailLogger"]:::supportStyle
+        end
+        
+        %% Storage Layer
+        subgraph StorageLayer["Storage Layer"]
+            Registry["Git-Backed Registry<br/>(YAML files)<br/>cortex-registry/"]:::storageStyle
+            WiringContract["Wiring Contract<br/>(__wiring_contract__.yaml)"]:::storageStyle
+            SQLite["SQLite Database<br/>(Audit logs, metrics)"]:::storageStyle
+        end
+    end
+    
+    %% External Systems
+    Git["Git Repositories"]:::storageStyle
+    
+    %% Relationships
+    Clients -->|"JSON-RPC<br/>requests"| Gateway
+    Gateway -->|"Route to<br/>orchestrators"| Master
+    
+    Master -->|"Pre-flight"| Validation
+    Validation -->|"Async warm"| CCL
+    Master -->|"Classify intent"| Router
+    Router -->|"LENS analysis"| LENS
+    Router -->|"Execute"| TDD
+    
+    Master -->|"Governance gate"| Enforcement
+    Enforcement -->|"Security scan"| Security
+    Security -->|"Log audit"| Audit
+    
+    TDD -->|"Challenge gate"| ChallengeEngine
+    
+    Master -->|"Read specs"| Registry
+    Master -->|"Read wiring"| WiringContract
+    Audit -->|"Write logs"| SQLite
+    
+    Registry -.->|"Git sync"| Git
+```
+
+**Explanation:**
+
+**MCP Gateway (Entry Point):**  
+The FastAPI-based gateway exposes 86 MCP tools via JSON-RPC protocol on port 8000. All client requests (VS Code, Claude, Cursor) arrive here and are routed to the MasterOrchestrator.
+
+**Core Orchestration Layer:**  
+- **MasterOrchestrator:** Entry point that coordinates the entire request lifecycle
+- **IntentRouter:** LENS-powered classifier that determines request intent (IMPLEMENT/FIX/REFACTOR/ANALYZE)
+- **TDDOrchestrator:** Executes TDD workflow (RED→GREEN→REFACTOR) for code changes
+- **HolisticValidationOrchestrator:** Pre-implementation validation gate with challenge generation
+
+**Intelligence Layer:**  
+- **LENS Intelligence:** 8 analyzers (AST, Git history, comments) provide code understanding
+- **ChallengeEngine:** Detects disagreements between request and current architecture
+- **ContextCrystallizationLayer:** Async prefetch system that pre-warms rules, LENS state, and infrastructure data (avg 245ms, -85ms net latency benefit)
+
+**Governance Layer:**  
+- **EnforcementOrchestrator:** 7-agent system enforcing CORE rules pre-execution
+- **SecurityCheckpointAgent:** Validates security requirements (OWASP, secrets management)
+- **AuditTrailLogger:** Records all operations with AC_START/AC_COMPLETE markers
+
+**Storage Layer:**  
+- **Git-Backed Registry:** YAML-based orchestrator and tool registry (cortex-registry/)
+- **Wiring Contract:** Central configuration (__wiring_contract__.yaml) with orchestrator counts and capabilities
+- **SQLite Database:** Structured storage for audit logs, metrics, and operational data
+
+**Key Technology Choices:**
+- **Python 3.9+:** All orchestrators and agents
+- **FastAPI:** High-performance async API framework
+- **YAML:** Human-readable configuration and registry
+- **SQLite:** Embedded database for operational data
+- **Git:** Version control for registry and configuration
+
+**Performance Characteristics:**
+- **Request Latency:** p50: 245ms, p99: 890ms
+- **Throughput:** 120 requests/second (single instance)
+- **Memory:** 280MB average per worker
+- **Scaling:** Horizontal (stateless orchestrators)
+
+**Key Takeaways:**
+- **Layered Architecture:** Clear separation of concerns (Gateway → Orchestration → Intelligence → Governance → Storage)
+- **MCP-First:** All capabilities exposed through standardized MCP tools
+- **Intelligence-Driven:** LENS and CCL provide deep code understanding
+- **Governance-Enforced:** 7-agent system blocks violations before execution
+- **Git-Native:** Registry and configuration versioned in Git
+
+**Related Diagrams:**
+- [C4 Context: System Boundary](#template-1-c4-context-diagram)
+- [C4 Component: MasterOrchestrator Internals](#template-3-c4-component-diagram)
+- [Sequence: Request Lifecycle](#template-4-sequence-diagram-request-lifecycle)
+```
+---
+
+### Template 3: C4 Component Diagram
+
+```markdown
+---
+id: master-orchestrator-component
+title: MasterOrchestrator Internal Components
+purpose: Shows internal classes and data flow within MasterOrchestrator
+audience: [Developer, Architect]
+source_of_truth: cortex/orchestrators/core/master_orchestrator.py
+last_verified: v8.1
+diagram_type: C4-Component
+interactive: false
+word_count: 950
+---
+
+```mermaid
+classDiagram
+    %% Core Classes
+    class MasterOrchestrator {
+        +GitBackedRegistry registry
+        +IntentRouter router
+        +EnforcementOrchestrator enforcer
+        +ContextSynthesisGateway exit_gate
+        +process_request(request: Request) Response
+        -_validate_pre_flight(request: Request) ValidationResult
+        -_execute_intent(intent: Intent) Result
+        -_synthesize_response(result: Result) Response
+    }
+    
+    class IntentRouter {
+        +LENSSynthesis lens
+        +classify_intent(request: str) Intent
+        +extract_parameters(request: str) dict
+        +compute_confidence(intent: Intent) float
+    }
+    
+    class EnforcementOrchestrator {
+        +List~Agent~ agents
+        +validate(request: Request) ValidationResult
+        +check_governance(intent: Intent) GovernanceResult
+        +block_if_failed(result: ValidationResult) void
+    }
+    
+    class ContextSynthesisGateway {
+        +int max_tokens_per_turn
+        +float cache_hit_target
+        +synthesize(result: Result) Response
+        +compress_output(data: dict) dict
+        +track_token_usage() TokenMetrics
+    }
+    
+    class GitBackedRegistry {
+        +Path registry_path
+        +load_orchestrators() List~Orchestrator~
+        +get_wiring_contract() WiringContract
+        +refresh_from_git() void
+    }
+    
+    class HolisticValidationOrchestrator {
+        +ChallengeEngine challenge_engine
+        +validate_holistically(request: Request) ValidationResult
+        +generate_alternatives() List~Alternative~
+        +compute_regression_risk() float
+    }
+    
+    %% Relationships
+    MasterOrchestrator --> IntentRouter : uses
+    MasterOrchestrator --> EnforcementOrchestrator : uses
+    MasterOrchestrator --> ContextSynthesisGateway : uses
+    MasterOrchestrator --> GitBackedRegistry : uses
+    MasterOrchestrator --> HolisticValidationOrchestrator : uses
+    IntentRouter --> LENSSynthesis : uses
+    HolisticValidationOrchestrator --> ChallengeEngine : uses
+    
+    %% External Dependencies
+    MasterOrchestrator ..> TDDOrchestrator : delegates
+    MasterOrchestrator ..> RefactoringOrchestrator : delegates
+    MasterOrchestrator ..> PlanOrchestrator : delegates
+```
+
+**Explanation:**
+
+**MasterOrchestrator (Core Class):**  
+The central coordinator that processes every MCP request. Key responsibilities:
+- `process_request()`: Main entry point that orchestrates the entire lifecycle
+- `_validate_pre_flight()`: Runs HolisticValidationOrchestrator before execution
+- `_execute_intent()`: Delegates to specialized orchestrators (TDD, Refactoring, Plan)
+- `_synthesize_response()`: Uses ContextSynthesisGateway to format response within token budget
+
+**IntentRouter:**  
+LENS-powered classifier that determines what the user wants to do:
+- `classify_intent()`: Returns IMPLEMENT/FIX/REFACTOR/ANALYZE/PLAN/AUDIT
+- `extract_parameters()`: Pulls target files, scope, and context from natural language
+- `compute_confidence()`: Scores classification certainty (0-1.0)
+
+**EnforcementOrchestrator:**  
+7-agent governance system that validates requests pre-execution:
+- `validate()`: Runs all 7 agents (Governance, Security, Compliance, FileNaming, Incremental, Markdown, Architecture)
+- `check_governance()`: Validates against CORE rules (008, 011, 012, 026, 027, 028, etc.)
+- `block_if_failed()`: Stops execution if any agent returns BLOCKED status
+
+**ContextSynthesisGateway (EXIT GATE):**  
+Token-aware response formatter that prevents overflow:
+- `synthesize()`: Compresses results to ≤20KB per turn
+- `compress_output()`: Reduces verbose data structures
+- `track_token_usage()`: Monitors against 70% cache hit target
+
+**GitBackedRegistry:**  
+YAML-based registry loader and wiring contract parser:
+- `load_orchestrators()`: Reads cortex-registry/_cortex-master/orchestrators/*.yaml
+- `get_wiring_contract()`: Parses __wiring_contract__.yaml for counts and capabilities
+- `refresh_from_git()`: Re-syncs registry from Git (idempotent)
+
+**HolisticValidationOrchestrator:**  
+Phase 48 validation gate that runs before implementation:
+- `validate_holistically()`: 5-step validation (registry, dependencies, risk, drift, challenge)
+- `generate_alternatives()`: Uses ChallengeEngine to suggest alternative approaches
+- `compute_regression_risk()`: Scores risk (0-1.0) based on affected files and change type
+
+**Data Flow:**
+1. **Request arrives** → MasterOrchestrator.process_request()
+2. **Pre-flight check** → HolisticValidationOrchestrator.validate_holistically()
+3. **Intent classification** → IntentRouter.classify_intent()
+4. **Governance check** → EnforcementOrchestrator.validate()
+5. **Execution** → Delegate to TDDOrchestrator/RefactoringOrchestrator/etc.
+6. **Response synthesis** → ContextSynthesisGateway.synthesize()
+
+**Key Design Patterns:**
+- **Orchestrator Pattern:** MasterOrchestrator coordinates specialized orchestrators
+- **Chain of Responsibility:** Pre-flight → Intent → Governance → Execution → Synthesis
+- **Registry Pattern:** GitBackedRegistry provides orchestrator discovery
+- **Gateway Pattern:** ContextSynthesisGateway controls output size
+
+**Key Takeaways:**
+- **Single Entry Point:** All requests flow through MasterOrchestrator
+- **Validation-First:** HolisticValidationOrchestrator runs before any execution
+- **Intent-Driven:** IntentRouter classifies natural language into structured intents
+- **Governance-Enforced:** EnforcementOrchestrator blocks CORE rule violations
+- **Token-Aware:** ContextSynthesisGateway prevents context overflow
+
+**Related Diagrams:**
+- [C4 Container: CORTEX Architecture](#template-2-c4-container-diagram)
+- [Sequence: Request Lifecycle](#template-4-sequence-diagram-request-lifecycle)
+- [Flowchart: Intent Classification](#template-5-flowchart-intent-classification)
+```
+---
+
+### Template 4: Sequence Diagram (Request Lifecycle)
+
+```markdown
+---
+id: request-lifecycle-sequence
+title: CORTEX Request Lifecycle
+purpose: Shows step-by-step flow of a typical IMPLEMENT request
+audience: [Developer, Architect]
+source_of_truth: cortex/orchestrators/core/master_orchestrator.py
+last_verified: v8.1
+diagram_type: Sequence
+interactive: false
+word_count: 800
+---
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant VSCode as VS Code Copilot
+    participant Gateway as MCP Gateway
+    participant Master as MasterOrchestrator
+    participant Validation as HolisticValidation
+    participant CCL as ContextCrystallization
+    participant Router as IntentRouter
+    participant Governance as EnforcementOrch
+    participant TDD as TDDOrchestrator
+    participant LENS as LENS Intelligence
+    participant Git as Git Repository
+    participant Audit as AuditLogger
+    
+    User->>VSCode: "/implement add user authentication"
+    VSCode->>Gateway: JSON-RPC: cortex_process_request()
+    
+    Gateway->>Master: process_request(request)
+    Master->>Master: Log AC_START marker
+    
+    %% Pre-Flight Phase
+    Note over Master,CCL: Phase 1: Pre-Flight Validation
+    Master->>Validation: validate_holistically()
+    Validation->>Validation: Check registry consistency
+    Validation->>Validation: Compute regression risk (0.15)
+    Validation->>Validation: Generate 2 alternatives
+    Validation-->>Master: ValidationResult(passed=true, risk=0.15)
+    
+    par Async Context Prefetch
+        Master->>CCL: crystallize_context(intent="IMPLEMENT")
+        CCL->>CCL: Load rules (company > tier1 > tier0)
+        CCL->>LENS: Warm LENS state (AST, git, comments)
+        CCL->>CCL: Detect infrastructure (SQLite, YAML)
+        CCL-->>Master: Context ready (245ms)
+    end
+    
+    %% Intent Classification
+    Note over Master,Router: Phase 2: Intent Classification
+    Master->>Router: classify_intent(request)
+    Router->>LENS: analyze_request_semantics()
+    LENS-->>Router: Semantic features
+    Router->>Router: Compute confidence (0.92)
+    Router-->>Master: Intent(type="IMPLEMENT", confidence=0.92)
+    
+    %% Governance Gate
+    Note over Master,Governance: Phase 3: Governance Enforcement
+    Master->>Governance: validate(intent="IMPLEMENT")
+    Governance->>Governance: Run 7 agents
+    Governance->>Governance: Check CORE-008 (TDD)
+    Governance->>Governance: Check CORE-026 (Git checkpoint)
+    Governance-->>Master: GovernanceResult(status="PASS")
+    
+    %% Execution
+    Note over Master,TDD: Phase 4: TDD Execution
+    Master->>TDD: execute_implement(request, context)
+    
+    TDD->>TDD: Stage 1: RED (Write failing test)
+    TDD->>Git: Create test file
+    Git-->>TDD: test_auth.py created
+    
+    TDD->>TDD: Stage 2: GREEN (Implement feature)
+    TDD->>Git: Create implementation file
+    Git-->>TDD: auth.py created
+    
+    TDD->>TDD: Stage 3: Run tests
+    TDD->>TDD: pytest test_auth.py
+    TDD->>TDD: Result: 3/3 passing
+    
+    TDD->>TDD: Stage 4: REFACTOR (Improve code)
+    TDD->>Git: Refactor auth.py
+    Git-->>TDD: Refactored
+    
+    TDD-->>Master: ExecutionResult(status="success", tests_passing=3)
+    
+    %% Audit Trail
+    Note over Master,Audit: Phase 5: Audit Trail
+    Master->>Audit: log_completion(result)
+    Audit->>Audit: Write AC_COMPLETE marker
+    Audit->>Audit: Store metrics (duration, tests, coverage)
+    Audit-->>Master: Logged
+    
+    %% Response Synthesis
+    Note over Master,Gateway: Phase 6: Response Synthesis
+    Master->>Master: synthesize_response(result)
+    Master->>Master: Compress to ≤20KB
+    Master-->>Gateway: Response(status="success", markdown)
+    
+    Gateway-->>VSCode: JSON-RPC Response
+    VSCode-->>User: "Implementation Complete\n3/3 tests passing"
+```
+
+**Explanation:**
+
+**Phase 1: Pre-Flight Validation (150-200ms)**  
+HolisticValidationOrchestrator runs 5 checks:
+1. Registry consistency (all dependencies exist)
+2. Regression risk scoring (based on file change impact)
+3. Architecture drift detection
+4. Challenge generation (alternative approaches)
+5. CORTEX Brain integration (self-improvement)
+
+In parallel, ContextCrystallizationLayer (CCL) pre-warms context to reduce Stage 2 latency by 85ms.
+
+**Phase 2: Intent Classification (80-120ms)**  
+IntentRouter uses LENS to analyze the request semantics and classify into one of:
+- IMPLEMENT (new feature)
+- FIX (bug fix)
+- REFACTOR (code improvement)
+- ANALYZE (code understanding)
+- PLAN (phase management)
+- AUDIT (health scan)
+
+Confidence score computed (0-1.0). If <0.7, user prompted for clarification.
+
+**Phase 3: Governance Enforcement (60-90ms)**  
+EnforcementOrchestrator runs 7 agents pre-execution:
+1. GovernanceEnforcementAgent (CORE-008, 011, 012, 013, 029, 030)
+2. SecurityCheckpointAgent (CORE-025, 026, 027)
+3. ComplianceValidationAgent (Tier 1 rules)
+4. FileNamingEnforcementAgent (CORE-028)
+5. IncrementalExecutionAgent (CORE-001, 004)
+6. MarkdownSuppressionAgent (CORE-002)
+7. ArchitectureIntegrityAgent (CORE-017-020, 032, 034, 035, 038-041)
+
+If any agent returns BLOCKED, execution stops immediately.
+
+**Phase 4: TDD Execution (variable, typically 2-5 minutes)**  
+TDDOrchestrator implements the feature using TDD workflow:
+1. **RED:** Write failing test first
+2. **GREEN:** Implement minimal code to pass test
+3. **Run Tests:** Verify all tests pass
+4. **REFACTOR:** Improve code quality (keep tests passing)
+
+All operations recorded with Git commits.
+
+**Phase 5: Audit Trail (10-20ms)**  
+AuditLogger records:
+- AC_START/AC_COMPLETE markers in code
+- SQLite entry with duration, tests, coverage
+- Governance gate results
+- Performance metrics
+
+**Phase 6: Response Synthesis (20-40ms)**  
+ContextSynthesisGateway formats response:
+- Compresses verbose data structures
+- Limits output to ≤20KB per turn
+- Targets 70% cache hit rate
+- Returns markdown-formatted completion report
+
+**Total Latency Breakdown:**
+- Pre-flight: 150ms
+- Intent classification: 100ms
+- Governance: 75ms
+- Execution: 180s (variable)
+- Audit: 15ms
+- Synthesis: 30ms
+- **Total:** ~180.4s (dominated by test execution)
+
+**Key Takeaways:**
+- **Validation-First:** Catches issues before any code changes
+- **Parallel Optimization:** CCL runs async to reduce latency
+- **Governance-Enforced:** Multiple layers of checking
+- **TDD-Mandatory:** Tests written before implementation
+- **Audit-Trail:** Full traceability of all operations
+
+**Related Diagrams:**
+- [C4 Container: CORTEX Architecture](#template-2-c4-container-diagram)
+- [C4 Component: MasterOrchestrator](#template-3-c4-component-diagram)
+- [Flowchart: TDD Workflow](#template-6-flowchart-tdd-workflow)
+```
+---
+
+### Template 5: Flowchart (Intent Classification)
+
+```markdown
+---
+id: intent-classification-flowchart
+title: IntentRouter Classification Logic
+purpose: Shows decision tree for classifying user requests
+audience: [Developer]
+source_of_truth: cortex/intent_router/intent_router.py
+last_verified: v8.1
+diagram_type: Flowchart
+interactive: false
+word_count: 600
+---
+
+```mermaid
+flowchart TD
+    Start([User Request]) --> Parse[Parse natural language]
+    Parse --> LENS[LENS semantic analysis]
+    
+    LENS --> CheckKeywords{Check keywords}
+    
+    CheckKeywords -->|"implement, add, create, build"| IMPLEMENT[/IMPLEMENT Intent/]
+    CheckKeywords -->|"fix, resolve, debug, repair"| FIX[/FIX Intent/]
+    CheckKeywords -->|"refactor, improve, optimize"| REFACTOR[/REFACTOR Intent/]
+    CheckKeywords -->|"analyze, explain, understand"| ANALYZE[/ANALYZE Intent/]
+    CheckKeywords -->|"plan, phase, create wave"| PLAN[/PLAN Intent/]
+    CheckKeywords -->|"audit, check, scan, validate"| AUDIT[/AUDIT Intent/]
+    CheckKeywords -->|"onboard, setup, initialize"| ONBOARD[/ONBOARD Intent/]
+    CheckKeywords -->|No strong match| Ambiguous{Confidence<br/>>= 0.7?}
+    
+    Ambiguous -->|Yes| ContextAnalysis[Context analysis]
+    Ambiguous -->|No| Clarify[Request clarification]
+    
+    ContextAnalysis --> FilePattern{File pattern<br/>detected?}
+    FilePattern -->|test_*.py| FIX
+    FilePattern -->|new file| IMPLEMENT
+    FilePattern -->|existing file| REFACTOR
+    FilePattern -->|No files| ANALYZE
+    
+    IMPLEMENT --> ValidateIntent[Validate intent]
+    FIX --> ValidateIntent
+    REFACTOR --> ValidateIntent
+    ANALYZE --> ValidateIntent
+    PLAN --> ValidateIntent
+    AUDIT --> ValidateIntent
+    ONBOARD --> ValidateIntent
+    
+    ValidateIntent --> ExtractParams[Extract parameters]
+    ExtractParams --> ComputeConfidence[Compute confidence<br/>score]
+    
+    ComputeConfidence --> ConfidenceCheck{Score >= 0.7?}
+    ConfidenceCheck -->|Yes| Return([Return Intent + Parameters])
+    ConfidenceCheck -->|No| Clarify
+    
+    Clarify --> AskUser[Present options to user]
+    AskUser --> UserChoice[User selects intent]
+    UserChoice --> Return
+    
+    style IMPLEMENT fill:#4CAF50
+    style FIX fill:#FF5722
+    style REFACTOR fill:#2196F3
+    style ANALYZE fill:#9C27B0
+    style PLAN fill:#FF9800
+    style AUDIT fill:#607D8B
+    style ONBOARD fill:#00BCD4
+```
+
+**Explanation:**
+
+**Step 1: Parse Natural Language**  
+Extract key tokens, phrases, and context from the user's request.
+
+**Step 2: LENS Semantic Analysis**  
+LENS Intelligence analyzes:
+- Request semantics
+- Code context (if file references present)
+- Historical patterns (similar past requests)
+
+**Step 3: Keyword Matching**  
+Primary classification based on action verbs:
+- **IMPLEMENT:** "implement", "add", "create", "build"
+- **FIX:** "fix", "resolve", "debug", "repair"
+- **REFACTOR:** "refactor", "improve", "optimize"
+- **ANALYZE:** "analyze", "explain", "understand"
+- **PLAN:** "plan", "phase", "create wave"
+- **AUDIT:** "audit", "check", "scan"
+- **ONBOARD:** "onboard", "setup", "initialize"
+
+**Step 4: Confidence Threshold**  
+If keyword match confidence < 0.7, proceed to context analysis.
+
+**Step 5: Context Analysis**  
+Examine file patterns:
+- `test_*.py` → Likely FIX intent
+- New file creation → Likely IMPLEMENT
+- Existing file modification → Likely REFACTOR
+- No specific files → Likely ANALYZE
+
+**Step 6: Parameter Extraction**  
+Extract:
+- Target files/directories
+- Scope (single file vs multi-file)
+- Additional context (dependencies, test requirements)
+
+**Step 7: Confidence Score**  
+Compute final confidence (0-1.0) based on:
+- Keyword match strength
+- Context coherence
+- Historical accuracy
+
+**Step 8: Clarification (if needed)**  
+If confidence < 0.7, present user with options:
+```
+🤔 Intent unclear. Did you mean:
+1️⃣ IMPLEMENT new feature
+2️⃣ FIX existing bug
+3️⃣ REFACTOR code quality
+```
+
+**Key Takeaways:**
+- **LENS-Powered:** Semantic analysis beyond keyword matching
+- **Context-Aware:** Uses file patterns and code context
+- **Confidence-Gated:** Requests clarification when uncertain
+- **User-Friendly:** Clear options when ambiguous
+
+**Related Diagrams:**
+- [Sequence: Request Lifecycle](#template-4-sequence-diagram-request-lifecycle)
+- [C4 Component: IntentRouter](#template-3-c4-component-diagram)
+```
+---
+
+### Template 6: State Machine (Orchestrator Lifecycle)
+
+```markdown
+---
+id: orchestrator-lifecycle-state
+title: Orchestrator Lifecycle States
+purpose: Shows state transitions for orchestrator execution
+audience: [Developer]
+source_of_truth: cortex/orchestrators/base_orchestrator.py
+last_verified: v8.1
+diagram_type: State
+interactive: false
+word_count: 550
+---
+
+```mermaid
+stateDiagram-v2
+    [*] --> Idle: Orchestrator created
+    
+    Idle --> Initializing: process_request() called
+    Initializing --> PreFlight: Load configuration
+    
+    PreFlight --> Validating: Pre-flight checks pass
+    PreFlight --> Failed: Pre-flight checks fail
+    
+    Validating --> Executing: Governance gates pass
+    Validating --> Blocked: Governance gates fail
+    
+    Executing --> Running: Begin execution
+    Running --> Running: Progress updates
+    Running --> Completed: Execution successful
+    Running --> Failed: Execution error
+    Running --> Blocked: Runtime violation detected
+    
+    Completed --> Auditing: Log completion
+    Auditing --> Cleanup: Write AC_COMPLETE
+    Cleanup --> Idle: Reset state
+    
+    Failed --> Auditing: Log failure
+    Blocked --> Auditing: Log block reason
+    
+    state PreFlight {
+        [*] --> CheckMCP
+        CheckMCP --> CheckDependencies
+        CheckDependencies --> CheckRisk
+        CheckRisk --> [*]
+    }
+    
+    state Validating {
+        [*] --> Agent1_Governance
+        Agent1_Governance --> Agent2_Security
+        Agent2_Security --> Agent3_Compliance
+        Agent3_Compliance --> Agent4_FileNaming
+        Agent4_FileNaming --> Agent5_Incremental
+        Agent5_Incremental --> Agent6_Markdown
+        Agent6_Markdown --> Agent7_Architecture
+        Agent7_Architecture --> [*]
+    }
+    
+    state Executing {
+        [*] --> DelegateToSpecialist
+        DelegateToSpecialist --> MonitorProgress
+        MonitorProgress --> ValidateResult
+        ValidateResult --> [*]
+    }
+```
+
+**Explanation:**
+
+**Idle State:**  
+Orchestrator initialized but not processing requests. Waiting for `process_request()` call.
+
+**Initializing State:**  
+- Load configuration from registry
+- Parse wiring contract
+- Initialize dependencies (LENS, Governance, etc.)
+
+**PreFlight State:**  
+3-step validation before execution:
+1. **CheckMCP:** Verify MCP tools available
+2. **CheckDependencies:** Ensure required orchestrators registered
+3. **CheckRisk:** Compute regression risk score
+
+**Validating State:**  
+7-agent governance check (in sequence):
+1. GovernanceEnforcementAgent
+2. SecurityCheckpointAgent
+3. ComplianceValidationAgent
+4. FileNamingEnforcementAgent
+5. IncrementalExecutionAgent
+6. MarkdownSuppressionAgent
+7. ArchitectureIntegrityAgent
+
+**Executing State:**  
+- Delegate to specialist orchestrator (TDD, Refactoring, Plan)
+- Monitor progress with callbacks
+- Validate result against acceptance criteria
+
+**Completed State:**  
+Successful execution, proceed to auditing.
+
+**Failed State:**  
+Execution error occurred (exception, test failure, timeout).
+
+**Blocked State:**  
+Governance violation detected during execution.
+
+**Auditing State:**  
+Log completion/failure/block with AC markers and metrics.
+
+**Cleanup State:**  
+Reset orchestrator state, ready for next request.
+
+**State Durations:**
+- Initializing: 20-50ms
+- PreFlight: 150-200ms
+- Validating: 60-90ms
+- Executing: Variable (seconds to minutes)
+- Auditing: 10-20ms
+- Cleanup: 5-10ms
+
+**Key Takeaways:**
+- **Multi-Gate:** PreFlight + Validating provide defense in depth
+- **Fail-Fast:** Early states can block without execution
+- **Audited:** All terminal states (Completed/Failed/Blocked) logged
+- **Stateful:** Orchestrator tracks current state for observability
+
+**Related Diagrams:**
+- [Sequence: Request Lifecycle](#template-4-sequence-diagram-request-lifecycle)
+- [Flowchart: Intent Classification](#template-5-flowchart-intent-classification)
+```
+---
+
+*CORTEX Documentation Generation Prompt v5.0 — Comprehensive content generation with industry benchmarks*
 
 #### Capability Document Template
 
