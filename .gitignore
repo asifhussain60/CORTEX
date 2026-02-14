@@ -198,3 +198,4 @@ cortex-registry/_cortex-master/meta/
 # These are generated during execution and should not be committed to git
 # Keep reports/ structure but ignore all content
 reports/
+contract_validation_audit.db
