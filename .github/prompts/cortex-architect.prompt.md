@@ -39,7 +39,7 @@
 
 **CRITICAL: Response header appears ONCE at the top of response, then ONLY progress bars and box format below.**
 
-**SSOT:** See `.github/prompts/.archive/phase-docs/response-format-standards.md` § Completion Response Template for comprehensive formatting rules.
+**SSOT:** See `.github/prompts/response-format-standards.md` § Completion Response Template for comprehensive formatting rules.
 
 **ONLY FORMAT ALLOWED during silent autonomous execution:**
 
@@ -81,7 +81,7 @@
   - ✅ CORRECT: Markdown table with | # | Status | Stage | Detail | columns
   - ❌ WRONG: `├─ ✅ S1: Name (n tests) ├─ ✅ S2: Name (n tests)` (concatenated)
 
-**For complete formatting rules, see SSOT:** `.github/prompts/.archive/phase-docs/response-format-standards.md` § Completion Response Template
+**For complete formatting rules, see SSOT:** `.github/prompts/response-format-standards.md` § Completion Response Template
 
 ### RENDERING ENFORCEMENT (CRITICAL)
 
@@ -1528,7 +1528,7 @@ Files: 5 modified
 Tests: 24/24 passing
 ```
 
-**For comprehensive formatting rules, see SSOT:** `.github/prompts/.archive/phase-docs/response-format-standards.md` § Completion Response Template
+**For comprehensive formatting rules, see SSOT:** `.github/prompts/response-format-standards.md` § Completion Response Template
 
 #### When Header Appears Again
 
@@ -2059,7 +2059,7 @@ Choose an option to continue learning:
 
 **NOTE:** For DIGEST, DESIGN/PLAN, QUERY/REFINEMENT, and COMPLETION responses,  
 use the **User-Preferred Templates (A-E)** defined in SSOT:  
-`.github/prompts/.archive/phase-docs/response-format-standards.md` § USER-PREFERRED RESPONSE TEMPLATES
+`.github/prompts/response-format-standards.md` § USER-PREFERRED RESPONSE TEMPLATES
 
 These templates were derived from production chat sessions and are the SSOT for:
 - **Template A:** DIGEST — Concern-Resolution Analysis (concern tables + architecture trees)

@@ -391,7 +391,7 @@ If token usage > 400k before user request:
 
 ## 🏗️ Response Header (MANDATORY)
 
-**SSOT:** See `.github/prompts/.archive/phase-docs/response-format-standards.md` § Completion Response Template for comprehensive formatting rules.
+**SSOT:** See `.github/prompts/response-format-standards.md` § Completion Response Template for comprehensive formatting rules.
 
 ```markdown
 ## 🧠 CORTEX {operation}

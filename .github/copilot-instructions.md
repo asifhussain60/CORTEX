@@ -661,7 +661,7 @@ check. If MCP check passes, Stage 2 will have pre-warmed context ready.
     ---
 
 **Response Format Requirements:**
-- ✅ Follow response-format-standards.md in .github/prompts/ directory for all outputs
+- ✅ Follow `.github/prompts/response-format-standards.md` for all outputs (SSOT)
 - 🟢 Use correct status icons (🟢=completed, ⚪=planned, 🔴=critical, 🟡=warning, 🔵=in-progress)
 - 1️⃣ Number user prompts ONLY when decision required (not after completion)
 - 📐 Apply linear narrative flow: Context → Analysis → Action → Result (no repetition)
@@ -669,7 +669,7 @@ check. If MCP check passes, Stage 2 will have pre-warmed context ready.
 - ✅ Show "Implementation Complete" when done (not "Next Steps")
 - 🔒 NO exit options during holistic implementation (run to completion)
 
-**Intent-Adaptive Templates (SSOT: response-format-standards.md § USER-PREFERRED RESPONSE TEMPLATES):**
+**Intent-Adaptive Templates (SSOT: `.github/prompts/response-format-standards.md` § USER-PREFERRED RESPONSE TEMPLATES):**
 
 | Intent | Template | Key Pattern |
 |--------|----------|-------------|
@@ -678,6 +678,11 @@ check. If MCP check passes, Stage 2 will have pre-warmed context ready.
 | **QUERY** | Template C | Mirror questions → ✅ ANSWER per question → Evidence → Key Takeaway |
 | **COMPLETION** | Template D | Deliverables → Enhancement mapping → Non-breaking guarantees |
 | **ENHANCEMENT** | Template E | Original request → 4 quality dimensions (Automatic/Quality/Future-Proof/Non-Breaking) |
+
+**Orchestrator Metadata Injection:**
+- Header shows orchestrator name: `**Orchestrator:** {name} ✅`
+- Optional footer tags for orchestrator personality (from registry)
+- Example: `🏷️ **Applied Principles:** Test-First | Evidence-Based | Non-Breaking`
 
 ---
 

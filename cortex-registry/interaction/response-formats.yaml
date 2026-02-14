@@ -49,6 +49,67 @@ response_header:
     production: "## 🧠 CORTEX IMPLEMENT\n**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅\n\n---"
     architect: "## 🏛️ CORTEX Architect ANALYZE\n**Author:** Asif Hussain | **Orchestrator:** LENSSynthesis ✅\n\n---"
 
+# Orchestrator Personality Tags (Optional Footer Enhancement)
+orchestrator_personality:
+  purpose: "Lightweight orchestrator flavor without template explosion"
+  implementation: "Inject tags as footer badges in responses"
+  
+  tags:
+    MasterOrchestrator:
+      - "comprehensive"
+      - "multi-layer"
+      - "orchestration"
+    
+    TDDOrchestrator:
+      - "test-first"
+      - "red-green-refactor"
+      - "coverage-driven"
+    
+    LENSSynthesis:
+      - "analysis"
+      - "evidence-based"
+      - "intelligence"
+    
+    EnforcementOrchestrator:
+      - "governance"
+      - "7-agent-validation"
+      - "compliance"
+    
+    PlanOrchestrator:
+      - "strategic"
+      - "phase-breakdown"
+      - "registry-driven"
+    
+    RefactoringOrchestrator:
+      - "code-quality"
+      - "semantic-aware"
+      - "non-breaking"
+    
+    ChallengeEngine:
+      - "design-review"
+      - "risk-analysis"
+      - "alternative-generation"
+    
+    DigestOrchestrator:
+      - "session-analysis"
+      - "learning-extraction"
+      - "knowledge-synthesis"
+    
+    RepositoryOnboardingOrchestrator:
+      - "security-first"
+      - "p0-p1-p2-scans"
+      - "lens-analysis"
+  
+  footer_format: |
+    ---
+    🏷️ **Applied Principles:** {tag1} | {tag2} | {tag3}
+  
+  usage_rules:
+    - "Optional: Only show footer when adds value"
+    - "Max 3 tags per response"
+    - "Convert kebab-case to Title Case for display"
+    - "Omit if orchestrator name in header is sufficient"
+
 # Status Icons
 status_icons:
   completed: "✅"      # Work done, tests passing
