@@ -237,6 +237,7 @@ class UniversalLearningLoop:
                 return Ok({
                     "status": "no_promotions",
                     "total_learnings": len(learnings),
+                    "promoted": 0,
                     "threshold": threshold,
                     "message": "No learnings met confidence threshold"
                 })
