@@ -1,0 +1,91 @@
+workflow:
+  name: "Legacy Rescue"
+  description: |
+    Rescues legacy codebases with poor structure, no tests, and technical debt.
+    Phases: SCAN → CLASSIFY → FIX → TEST → VERIFY
+  target_audience: "Unmaintained codebases with quality <40%"
+  
+  steps:
+    - step_id: scan
+      orchestrator: LENSOrchestrator
+      description: "Analyze codebase structure, dependencies, and quality metrics"
+      parameters:
+        target: "."
+        depth: "full"
+        metrics:
+          - complexity
+          - duplication
+          - test_coverage
+          - security_issues
+      expected_output:
+        - lens_report
+        - quality_score
+        - high_priority_issues
+    
+    - step_id: classify_issues
+      orchestrator: PlanningOrchestrator
+      description: "Categorize issues by severity and create fix plan"
+      parameters:
+        input_from: scan
+        priority_threshold: "P0,P1"
+        max_issues_per_cycle: 5
+      expected_output:
+        - issue_categories
+        - fix_plan
+        - effort_estimate
+    
+    - step_id: fix_critical
+      orchestrator: TDDOrchestrator
+      description: "Fix P0/P1 issues using convergence loop"
+      parameters:
+        input_from: classify_issues
+        mode: convergence
+        max_cycles: 10
+        success_criteria:
+          - all_tests_pass: true
+          - no_regressions: true
+          - quality_improvement: ">10%"
+      expected_output:
+        - fixes_applied
+        - test_results
+        - quality_delta
+    
+    - step_id: add_tests
+      orchestrator: TDDOrchestrator
+      description: "Add missing unit tests for uncovered critical paths"
+      parameters:
+        input_from: scan
+        mode: test_generation
+        coverage_target: 70
+        focus_areas:
+          - high_complexity_functions
+          - public_apis
+          - error_handlers
+      expected_output:
+        - new_tests_count
+        - coverage_improvement
+        - test_execution_time
+    
+    - step_id: verify_quality
+      orchestrator: LENSOrchestrator
+      description: "Re-scan to verify quality improvements"
+      parameters:
+        target: "."
+        depth: "full"
+        compare_baseline: true
+      expected_output:
+        - final_quality_score
+        - improvement_percentage
+        - remaining_issues
+
+  success_criteria:
+    - quality_score: ">= 70"
+    - test_coverage: ">= 70%"
+    - critical_issues: "== 0"
+    - build_passing: true
+  
+  metadata:
+    version: "1.0"
+    author: "CORTEX Phase 84"
+    created: "2026-02-14"
+    last_updated: "2026-02-14"

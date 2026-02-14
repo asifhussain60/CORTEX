@@ -1,0 +1,102 @@
+workflow:
+  name: "Security Hardening"
+  description: |
+    Proactive security assessment and remediation workflow.
+    Phases: THREAT_MODEL → SCAN → FIX → VERIFY → AUDIT
+  target_audience: "Production codebases requiring security compliance"
+  
+  steps:
+    - step_id: threat_model
+      orchestrator: SecurityOrchestrator
+      description: "Identify attack surface and potential vulnerabilities"
+      parameters:
+        target: "."
+        frameworks:
+          - OWASP_Top_10
+          - CWE_Top_25
+        depth: "comprehensive"
+      expected_output:
+        - threat_model_report
+        - attack_vectors
+        - risk_assessment
+    
+    - step_id: security_scan
+      orchestrator: LENSOrchestrator
+      description: "Deep security scan with vulnerability detection"
+      parameters:
+        target: "."
+        focus: security
+        scanners:
+          - static_analysis
+          - dependency_check
+          - secrets_detection
+          - injection_analysis
+      expected_output:
+        - vulnerability_list
+        - severity_breakdown
+        - exploitability_scores
+    
+    - step_id: fix_vulnerabilities
+      orchestrator: TDDOrchestrator
+      description: "Fix security issues with test-driven approach"
+      parameters:
+        input_from: security_scan
+        mode: convergence
+        priority_order:
+          - critical
+          - high
+          - medium
+        max_cycles: 15
+        validation:
+          - security_tests_pass: true
+          - no_new_vulnerabilities: true
+      expected_output:
+        - fixes_applied
+        - security_tests_added
+        - vulnerability_closure_rate
+    
+    - step_id: penetration_test
+      orchestrator: SecurityOrchestrator
+      description: "Automated penetration testing on fixed codebase"
+      parameters:
+        input_from: fix_vulnerabilities
+        test_types:
+          - sql_injection
+          - xss
+          - csrf
+          - auth_bypass
+          - privilege_escalation
+      expected_output:
+        - pentest_report
+        - exploits_blocked
+        - remaining_risks
+    
+    - step_id: security_audit
+      orchestrator: ComplianceOrchestrator
+      description: "Final security audit and compliance check"
+      parameters:
+        standards:
+          - OWASP_ASVS_L2
+          - CWE_Standards
+          - SOC2_Controls
+        generate_report: true
+      expected_output:
+        - audit_report
+        - compliance_status
+        - certification_readiness
+
+  success_criteria:
+    - critical_vulnerabilities: "== 0"
+    - high_vulnerabilities: "== 0"
+    - security_tests_passing: true
+    - compliance_score: ">= 85%"
+  
+  metadata:
+    version: "1.0"
+    author: "CORTEX Phase 84"
+    created: "2026-02-14"
+    last_updated: "2026-02-14"
+    compliance_frameworks:
+      - OWASP_Top_10_2024
+      - CWE_Top_25_2024
+      - SOC2_Type_II

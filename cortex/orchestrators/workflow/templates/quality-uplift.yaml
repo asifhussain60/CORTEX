@@ -1,0 +1,129 @@
+workflow:
+  name: "Quality Uplift"
+  description: |
+    Systematic code quality improvement workflow.
+    Phases: ANALYZE → REFACTOR → MEASURE → OPTIMIZE → VALIDATE
+  target_audience: "Codebases with technical debt or maintainability issues"
+  
+  steps:
+    - step_id: quality_analysis
+      orchestrator: LENSOrchestrator
+      description: "Comprehensive quality metrics and anti-pattern detection"
+      parameters:
+        target: "."
+        depth: "deep"
+        metrics:
+          - cyclomatic_complexity
+          - cognitive_complexity
+          - code_duplication
+          - maintainability_index
+          - technical_debt_ratio
+        detect_patterns:
+          - god_classes
+          - long_methods
+          - feature_envy
+          - shotgun_surgery
+      expected_output:
+        - quality_baseline
+        - anti_patterns_detected
+        - refactoring_candidates
+    
+    - step_id: prioritize_refactoring
+      orchestrator: PlanningOrchestrator
+      description: "Create refactoring plan based on ROI and risk"
+      parameters:
+        input_from: quality_analysis
+        scoring_criteria:
+          - technical_debt_hours
+          - change_frequency
+          - bug_density
+          - team_velocity_impact
+        max_refactorings_per_cycle: 3
+      expected_output:
+        - refactoring_plan
+        - effort_estimates
+        - risk_assessment
+    
+    - step_id: apply_refactorings
+      orchestrator: RefactoringOrchestrator
+      description: "Apply safe refactorings with continuous testing"
+      parameters:
+        input_from: prioritize_refactoring
+        refactoring_types:
+          - extract_method
+          - extract_class
+          - move_method
+          - rename_for_clarity
+          - remove_duplication
+        safety_checks:
+          - tests_pass_before: true
+          - tests_pass_after: true
+          - no_behavior_change: true
+      expected_output:
+        - refactorings_applied
+        - complexity_reduction
+        - test_results
+    
+    - step_id: measure_improvement
+      orchestrator: LENSOrchestrator
+      description: "Re-measure quality metrics post-refactoring"
+      parameters:
+        target: "."
+        depth: "deep"
+        compare_baseline: true
+        metrics: "same_as_quality_analysis"
+      expected_output:
+        - quality_delta
+        - complexity_improvement
+        - maintainability_improvement
+    
+    - step_id: optimize_performance
+      orchestrator: PerformanceOrchestrator
+      description: "Identify and fix performance bottlenecks"
+      parameters:
+        input_from: measure_improvement
+        profiling:
+          - cpu_hotspots
+          - memory_allocations
+          - io_bottlenecks
+        optimization_strategies:
+          - algorithmic_improvements
+          - caching
+          - lazy_loading
+          - resource_pooling
+      expected_output:
+        - performance_improvements
+        - benchmark_results
+        - optimization_applied
+    
+    - step_id: validate_quality
+      orchestrator: LENSOrchestrator
+      description: "Final validation of quality improvements"
+      parameters:
+        target: "."
+        depth: "comprehensive"
+        validation_checks:
+          - no_regressions: true
+          - quality_targets_met: true
+          - performance_within_sla: true
+      expected_output:
+        - final_quality_score
+        - improvement_summary
+        - certification_report
+
+  success_criteria:
+    - quality_score: ">= 80"
+    - complexity_reduction: ">= 20%"
+    - duplication_reduction: ">= 30%"
+    - maintainability_index: ">= 75"
+    - performance_improvement: ">= 15%"
+  
+  metadata:
+    version: "1.0"
+    author: "CORTEX Phase 84"
+    created: "2026-02-14"
+    last_updated: "2026-02-14"
+    quality_standards:
+      - Clean_Code_Principles
+      - SOLID_Principles
+      - DRY_KISS_YAGNI
