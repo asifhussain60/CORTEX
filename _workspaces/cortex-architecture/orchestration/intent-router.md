@@ -1,8 +1,8 @@
 # IntentRouter
 
-**Purpose:** Detailed documentation of the intent classification and routing orchestrator — the thalamus of CORTEX  
+**Purpose:** Detailed documentation of the intent classification and routing orchestrator — CORTEX's central request dispatcher  
 **Audience:** Architects, Developers  
-**Last Updated:** 2026-02-13
+**Last Updated:** 2026-02-14
 
 ---
 
@@ -29,9 +29,9 @@ The **IntentRouter** is CORTEX’s thalamus. Every user request passes through i
 Like the thalamus, the IntentRouter uses a **multi-factor scoring system** to make routing decisions — combining keyword signals (30%), contextual cues from LENS (25%), knowledge base alignment (20%), historical accuracy (15%), and request clarity (10%).
 
 **Key Facts:**
-- **Category:** Core (essential neural gateway)
+- **Category:** Core (essential request gateway)
 - **Priority:** 20 (second only to MasterOrchestrator)
-- **Brain Analogy:** Thalamus — sensory relay station
+- **System Analogy:** Airport security checkpoint — central classification hub
 - **Capabilities:** intent_classification, routing
 - **Dependencies:** MasterOrchestrator
 - **Classification Speed:** ~15ms (96.2% accuracy)
