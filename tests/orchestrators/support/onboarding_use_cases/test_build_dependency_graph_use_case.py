@@ -12,27 +12,10 @@ Platform: Windows/macOS compatible
 """
 
 import pytest
-from dataclasses import dataclass
-from typing import List, Set, Optional
-
-
-@dataclass
-class PackageDependency:
-    """Package dependency model."""
-    name: str
-    version: str
-    required_by: List[str]  # List of packages that require this
-    transitive_depth: int
-    security_advisories: List[str]
-
-
-@dataclass
-class DependencyGraph:
-    """Complete dependency graph."""
-    root_packages: List[PackageDependency]
-    all_packages: Set[str]
-    total_dependencies: int
-    max_depth: int
+from cortex.orchestrators.support.onboarding_use_cases.build_dependency_graph import (
+    PackageDependency,
+    DependencyGraph
+)
 
 
 class TestBuildDependencyGraphUseCase:
