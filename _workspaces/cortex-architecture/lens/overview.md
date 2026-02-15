@@ -16,7 +16,7 @@ LENS is CORTEX's code intelligence system that analyzes software repositories to
 
 ## What is LENS?
 
-### 🧠 Brain Analogy: The Multi-Sensory Integration System
+### 🧠 System Analogy: Multi-Sensor Intelligence
 
 **For Executives:**  
 Think of LENS as a diagnostic imaging suite for your codebase. Just as doctors use MRI for soft tissue, CT for bones, and X-ray for quick scans, LENS uses multiple analyzers to examine different aspects of your software. Each analyzer provides a specialized view, and LENS synthesizes them into a comprehensive health report.
@@ -30,24 +30,24 @@ LENS is your AI-powered code reviewer that understands context. It parses Abstra
 **For SREs:**  
 LENS provides operational intelligence—dependency vulnerabilities, database migration risks, config drift detection, and API contract validation. It's your early warning system for production incidents, catching issues before they cause outages.
 
-### The Human Nervous System Analogy
+### The Multi-Sensor Analogy
 
-Just as your nervous system has specialized sensory neurons (vision, hearing, touch, taste, smell) that feed into the brain for integrated perception, LENS has specialized analyzers that feed into a synthesis engine:
+Just as security systems use multiple sensors (motion detectors, cameras, pressure sensors, heat sensors) to build a complete picture, LENS has specialized analyzers that feed into a synthesis engine:
 
-| Human Sense | LENS Analyzer | What It Detects |
+| Sensor Type | LENS Analyzer | What It Detects |
 |-------------|---------------|-----------------|
-| **Vision (Eyes)** | AST Analyzer | Code structure, syntax patterns, complexity |
-| **Hearing (Ears)** | Git History Analyzer | Change patterns, code churn, author activity |
-| **Touch (Skin)** | API Analyzer | Service boundaries, contracts, versioning |
-| **Taste (Tongue)** | Config Analyzer | Environment settings, secrets, drift |
-| **Smell (Nose)** | Dependency Analyzer | External libraries, CVEs, version conflicts |
-| **Proprioception (Body Awareness)** | Database Analyzer | Schema evolution, migration risks, query patterns |
-| **Vestibular (Balance)** | Comment Extractor | Documentation quality, TODOs, annotations |
-| **Thermoreception (Temperature)** | Polyglot Analyzer | Multi-language detection, framework identification |
-| **Nociception (Pain)** | Vendor Detector | Third-party code boundaries, license risks |
-| **Multimodal Integration (Brain)** | Synthesis Engine | Holistic risk scoring, recommendations, insights |
+| **Vision (Cameras)** | AST Analyzer | Code structure, syntax patterns, complexity |
+| **Audio (Microphones)** | Git History Analyzer | Change patterns, code churn, author activity |
+| **Touch (Pressure)** | API Analyzer | Service boundaries, contracts, versioning |
+| **Temperature** | Config Analyzer | Environment settings, secrets, drift |
+| **Chemical** | Dependency Analyzer | External libraries, CVEs, version conflicts |
+| **Structural** | Database Analyzer | Schema evolution, migration risks, query patterns |
+| **Documentation** | Comment Extractor | Documentation quality, TODOs, annotations |
+| **Language Detection** | Polyglot Analyzer | Multi-language detection, framework identification |
+| **Boundary Detection** | Vendor Detector | Third-party code boundaries, license risks |
+| **Central Processing** | Synthesis Engine | Holistic risk scoring, recommendations, insights |
 
-LENS doesn't just collect data—it **integrates** multiple signals into actionable intelligence, just like your brain combines sensory inputs to understand your environment.
+LENS doesn't just collect data—it **integrates** multiple signals into actionable intelligence, just like a smart security system combines sensor inputs to understand what's really happening.
 
 ---
 
@@ -168,7 +168,7 @@ Risk Score: 8.5/10 (HIGH)
 
 ### Stage 3: NAVIGATION — Context & History
 
-**Brain Analogy:** The hippocampus that provides spatial and temporal context.
+**System Analogy:** The timeline tracker that provides historical context.
 
 **Purpose:** Understand how code evolved over time and how components relate.
 
@@ -206,7 +206,7 @@ Risk Score: 8.5/10 (HIGH)
 
 ### Stage 4: SYNTHESIS — Intelligent Insights
 
-**Brain Analogy:** The prefrontal cortex that integrates signals and makes decisions.
+**Brain Analogy:** The executive coordinator that integrates signals and makes decisions.
 
 **Purpose:** Combine all analyzer outputs into prioritized, actionable recommendations.
 
@@ -312,7 +312,7 @@ CORTEX LENS includes 7 specialized analyzers, each with a specific focus area:
 
 ### 2. 📜 Git History Analyzer — Evolution Tracker
 
-**Brain Analogy:** The hippocampus that forms memories and tracks how things change over time.
+**System Analogy:** The change log that tracks how things evolve over time.
 
 **Purpose:** Analyze repository history to identify patterns, hotspots, and risks.
 

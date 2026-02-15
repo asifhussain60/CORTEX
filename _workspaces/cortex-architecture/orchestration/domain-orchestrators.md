@@ -26,17 +26,17 @@
 
 Just as the human brain has specialized lobes — the temporal lobe for language comprehension, the parietal lobe for spatial reasoning, the occipital lobe for vision — CORTEX has **5 domain orchestrators** that provide deep expertise in specific cognitive domains.
 
-Unlike core orchestrators (which handle fundamental processing like a brain stem handles breathing), domain orchestrators are **expert systems** that understand the nuances of their specific problem space. The RefactoringOrchestrator doesn’t just move code around — it *understands* code structure the way Wernicke’s area understands language. The PlanningOrchestrator doesn’t just list tasks — it *strategizes* the way the dorsolateral prefrontal cortex plans complex behavior.
+Unlike core orchestrators (which handle fundamental processing like a brain stem handles breathing), domain orchestrators are **expert systems** that understand the nuances of their specific problem space. The RefactoringOrchestrator doesn’t just move code around — it *understands* code structure the way Wernicke’s area understands language. The PlanningOrchestrator doesn’t just list tasks — it *strategizes* the way the strategic planner cortex plans complex behavior.
 
 > **Wave 7 Note:** DocumentationOrchestrator and ChallengeEngine were absorbed into the unified support orchestrators during consolidation. Their capabilities now live within UnifiedQualityAssuranceOrchestrator and UnifiedDiscoveryOrchestrator respectively.
 
 | Orchestrator | Priority | Brain Analogy | Focus Area |
 |--------------|----------|---------------|------------|
 | **RefactoringOrchestrator** | 60 | Wernicke’s area — comprehension & restructuring | Code improvement |
-| **PlanningOrchestrator** | 70 | Dorsolateral prefrontal — strategic planning | Phase/roadmap management |
-| **DomainOrchestrator** | 80 | Angular gyrus — cross-modal integration | Business logic operations |
-| **ConversationOrchestrator** | 90 | Superior temporal sulcus — social cognition | Multi-turn dialogue |
-| **SeleniumPlaywrightOrchestrator** | 100 | Cerebellum — precision motor control | Browser automation |
+| **PlanningOrchestrator** | 70 | Strategic planner — strategic planning | Phase/roadmap management |
+| **DomainOrchestrator** | 80 | Pattern matcher — cross-modal integration | Business logic operations |
+| **ConversationOrchestrator** | 90 | Communication hub sulcus — social cognition | Multi-turn dialogue |
+| **SeleniumPlaywrightOrchestrator** | 100 | Precision controller — precision motor control | Browser automation |
 
 ---
 
@@ -267,7 +267,7 @@ async def process_turn(
 
 ### Purpose
 
-**Brain Analogy: Cerebellum** — The cerebellum controls fine motor coordination — the precise, timed movements needed to thread a needle or play a piano concerto. The SeleniumPlaywrightOrchestrator provides the same kind of precision for browser automation: clicking elements at exact coordinates, waiting for precise DOM states, and orchestrating complex multi-step browser interactions.
+**Brain Analogy: Precision controller** — The cerebellum controls fine motor coordination — the precise, timed movements needed to thread a needle or play a piano concerto. The SeleniumPlaywrightOrchestrator provides the same kind of precision for browser automation: clicking elements at exact coordinates, waiting for precise DOM states, and orchestrating complex multi-step browser interactions.
 
 ### Capabilities
 

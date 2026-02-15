@@ -31,7 +31,7 @@ CORTEX's cross-orchestrator coordination patterns are these white matter tracts 
 1. **Single Responsibility** — Each orchestrator owns its brain region (no overlap after Wave 7 consolidation)
 2. **Loose Coupling** — Minimal direct dependencies (like brain regions communicating through defined tracts)
 3. **Event-Driven** — Async communication where possible (like neurotransmitter signaling)
-4. **Hierarchical Authority** — MasterOrchestrator as prefrontal cortex coordinator
+4. **Hierarchical Authority** — MasterOrchestrator as executive coordinator coordinator
 5. **Graceful Degradation** — Fallback chains (like the brain rerouting around damaged areas)
 
 ---
@@ -40,11 +40,11 @@ CORTEX's cross-orchestrator coordination patterns are these white matter tracts 
 
 ### Pattern 1: Hierarchical Delegation
 
-Like the prefrontal cortex delegating tasks to specialized brain regions through top-down control signals:
+Like the executive coordinator delegating tasks to specialized brain regions through top-down control signals:
 
 ```
              ┌───────────────────────┐
-             │  MasterOrchestrator   │  ← Prefrontal cortex
+             │  MasterOrchestrator   │  ← Executive coordinator
              │  (executive control)  │
              └───────────┬───────────┘
                          │
@@ -60,7 +60,7 @@ Like the prefrontal cortex delegating tasks to specialized brain regions through
  └──────────────┘
 ```
 
-**Usage:** Standard request processing flow. The prefrontal cortex (MasterOrchestrator) maintains executive oversight while delegating to specialized regions.
+**Usage:** Standard request processing flow. The executive coordinator (MasterOrchestrator) maintains executive oversight while delegating to specialized regions.
 
 **Implementation:**
 ```python
@@ -470,7 +470,7 @@ def negotiate_capabilities(
 ## Related Documents
 
 - [Orchestration Overview](overview.md) — Brain region atlas
-- [MasterOrchestrator](master-orchestrator.md) — Prefrontal cortex coordinator
+- [MasterOrchestrator](master-orchestrator.md) — Executive coordinator coordinator
 - [End-to-End Flow](end-to-end-flow.md) — Complete cognitive lifecycle
 
 ---
