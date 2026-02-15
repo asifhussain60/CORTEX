@@ -7,11 +7,11 @@
 # ============================================================================
 
 metadata:
-  version: "6.1"
-  last_updated: "2026-02-15T22:30:00Z"
+  version: "6.2"
+  last_updated: "2026-02-15T23:00:00Z"
   total_phases: 33
-  active: 2
-  completed: 10
+  active: 1
+  completed: 11
   consolidated: 9
   deferred: 10
   planned: 2
@@ -119,23 +119,26 @@ phase_status:
         performance: "<50ms discovery, <100ms handoff"
       consolidates: ["GAP-01", "GAP-02", "GAP-07"]
 
-  active:
     - id: "phase-21"
-      title: "Intelligence & Learning Core"
-      location: "phases/active/21-intelligence-learning-core.yaml"
-      status: "active"
-      priority: "P0"
-      includes: ["phase-12", "phase-17", "phase-19", "phase-20"]
-      estimated_duration: "7-10 days"
-      current_progress: "30/35 tests passing"
-      
+      title: "Intelligence & Learning Core — CORTEX Brain Evolution"
+      location: "phases/completed/21-intelligence-learning-core.yaml"
+      completion_date: "2026-02-15"
+      duration: "2 days"
+      metrics:
+        tests: "28/28 passing"
+        test_duration: "0.17s"
+        e2e_tests: "10/10 passing"
+        integration_tests: "18/18 passing"
+      consolidates: ["phase-12", "phase-17", "phase-19", "phase-20"]
+
+  active:
     - id: "phase-23"
       title: "STS Knowledge Synthesis"
       location: "phases/active/23-sts-knowledge-synthesis.yaml"
       status: "active"
       priority: "P1"
       estimated_duration: "14-18 days"
-      parallel_with: "phase-21"
+      parallel_with: "phase-21 (COMPLETE)"
 
   consolidated:
     - id: "phase-01"
