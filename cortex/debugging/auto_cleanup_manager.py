@@ -41,7 +41,7 @@ class AutoCleanupManager:
     def __init__(self):
         """Initialize AutoCleanupManager."""
         self.marker_pattern = re.compile(
-            r"# CORTEX_DEBUG_START.*?# CORTEX_DEBUG_END",
+            r"",
             re.DOTALL
         )
     
@@ -79,14 +79,23 @@ class AutoCleanupManager:
             try:
                 content = file_path.read_text()
                 
-                # Find all markers in file
-                matches = self.marker_pattern.findall(content)
+                # Find all session IDs in markers (new format with session_id)
+                session_id_pattern = re.compile(r'# CORTEX_DEBUG_START: ([^\n]+)')
+                matches = session_id_pattern.findall(content)
+                
+                # Also check for old format markers without session_id
+                old_format_pattern = re.compile(r'# CORTEX_DEBUG_START\n')
+                has_old_format = old_format_pattern.search(content)
                 
                 for session_id in matches:
                     # If session not in active list, remove markers
                     if session_id not in active_session_ids:
                         content = self._remove_marker(content, session_id)
                         resolved_sessions.append(session_id)
+                
+                # Remove old format markers if no active sessions at all
+                if has_old_format and not active_session_ids:
+                    content = self._remove_old_format_markers(content)
                 
                 # Write cleaned content
                 file_path.write_text(content)
@@ -207,7 +216,25 @@ class AutoCleanupManager:
         """
         # Pattern to match specific session marker
         pattern = re.compile(
-            r'# CORTEX_DEBUG_START.*?# CORTEX_DEBUG_END\n?',
+            rf'# CORTEX_DEBUG_START: {re.escape(session_id)}.*?# CORTEX_DEBUG_END: {re.escape(session_id)}\n?',
+            re.DOTALL
+        )
+        
+        return pattern.sub('', content)
+
+    def _remove_old_format_markers(self, content: str) -> str:
+        """
+        Remove markers in old format (without session_id).
+        
+        Args:
+            content: File content
+        
+        Returns:
+            Content with old format markers removed
+        """
+        # Pattern to match old format markers
+        pattern = re.compile(
+            r'# CORTEX_DEBUG_START\n.*?# CORTEX_DEBUG_END\n?',
             re.DOTALL
         )
         
