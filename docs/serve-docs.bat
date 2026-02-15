@@ -37,24 +37,22 @@ if errorlevel 1 (
 )
 echo   Python OK
 
-REM Start HTTP server with explicit binding
+REM Start HTTP server with explicit binding (FOREGROUND)
 echo [3/4] Starting HTTP server...
 echo   URL: http://localhost:8080
-start "" /B python -m http.server 8080 --bind 127.0.0.1 >nul 2>&1
-
-REM Wait for server to initialize
-timeout /t 3 /nobreak >nul
-
-REM Open default browser
-echo [4/4] Opening browser...
-start http://localhost:8080
-
 echo.
 echo ========================================
-echo   Server running at http://localhost:8080
-echo   Press Ctrl+C to stop
+echo   SERVER RUNNING
+echo   
+echo   URL: http://localhost:8080
+echo   Press Ctrl+C to stop the server
 echo ========================================
 echo.
 
-REM Keep window open
-pause
+REM Open browser first (background, non-blocking)
+start "" http://localhost:8080
+
+timeout /t 2 /nobreak >nul
+
+REM Run server in FOREGROUND (this will block)
+python -m http.server 8080 --bind 127.0.0.1
