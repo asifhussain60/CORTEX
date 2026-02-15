@@ -12,41 +12,41 @@
 
 Imagine a brain — not a human brain, but an artificial one purpose-built to think about code. Every time you ask CORTEX to implement a feature, fix a bug, or analyze your architecture, that request travels through a **cognitive pipeline** remarkably similar to how the human brain processes a thought.
 
-Your request enters through the **sensory cortex** — the LENS engine — which perceives your codebase the way eyes perceive light: scanning git history, parsing abstract syntax trees, reading comments, and detecting patterns. This raw sensory data flows inward to the **prefrontal cortex** — the MasterOrchestrator — which acts as the executive decision-maker, routing your intent to the right specialist region of the brain. A request to "implement login" activates the **motor cortex** (TDDOrchestrator), while a request to "analyze security" fires up the **analytical cortex** (UnifiedQualityAssuranceOrchestrator).
+Your request enters through the **sensory input** — the LENS engine — which perceives your codebase like how your eyes and ears take in information: scanning git history, parsing code structure, reading comments, and detecting patterns. This raw sensory data flows to the **decision center** — the MasterOrchestrator — which acts as the executive decision-maker, routing your intent to the right specialist. A request to "implement login" activates the **action center** (TDDOrchestrator), while a request to "analyze security" activates the **analysis center** (UnifiedQualityAssuranceOrchestrator).
 
-Throughout this entire cognitive process, a **governance nervous system** of 8 enforcement agents acts like the brain's immune system — constantly scanning for violations, blocking unsafe operations, and maintaining the integrity of the codebase.
+Throughout this entire cognitive process, a **quality control system** of 8 enforcement agents acts like the brain's immune system — constantly scanning for violations, blocking unsafe operations, and maintaining the integrity of the codebase.
 
 CORTEX isn't just a tool. It's a **cognitive architecture** — a thinking system that understands, decides, and acts.
 
 ### System Vital Signs (as of 2026-02-14)
 
-| Vital Sign | Measurement | Brain Analogy |
-|------------|-------------|---------------|
-| **Active Orchestrators** | 14 core + domain + unified support | Neural processing regions |
-| **Super-Orchestrators** | 4 (State, Observability, Intelligence, SOLID) | Advanced association cortex |
-| **Infrastructure Components** | 4 (Bootstrap, Registry, Health, ContractValidator) | Brain stem |
-| **Deprecated (sunset 2026-03-31)** | 7 | Vestigial brain structures being pruned |
-| **MCP Tools** | 26 consolidated (90+ operations) | Primary synaptic pathways with specialized operations |
-| **LENS Analyzers** | 10 (AST, Git, Comment, Config, Database, Dependency, API, Polyglot + plugins) | Sensory receptor types |
-| **Language Adapters** | 5 (Python/Rope, C#/Roslyn, TypeScript, Java, JavaScript) | Cross-language neural pathways |
-| **Enforcement Agents** | 8 | Immune system defenders |
-| **CORE Governance Rules** | 50+ | DNA-level behavioral encoding |
-| **Consolidation (Phase 23 MEGA-B)** | 37% reduction | Neural pruning for efficiency |
+| Vital Sign | Measurement | System Analogy |
+|------------|-------------|----------------|
+| **Active Orchestrators** | 14 core + domain + unified support | Specialized processing centers |
+| **Super-Orchestrators** | 4 (State, Observability, Intelligence, SOLID) | Advanced coordination centers |
+| **Infrastructure Components** | 4 (Bootstrap, Registry, Health, ContractValidator) | Core support systems |
+| **Deprecated (sunset 2026-03-31)** | 7 | Legacy components being retired |
+| **MCP Tools** | 26 consolidated (90+ operations) | Primary interaction pathways with specialized operations |
+| **LENS Analyzers** | 10 (AST, Git, Comment, Config, Database, Dependency, API, Polyglot + plugins) | Information gathering sensors |
+| **Language Adapters** | 5 (Python/Rope, C#/Roslyn, TypeScript, Java, JavaScript) | Cross-language processing |
+| **Enforcement Agents** | 8 | Quality control defenders |
+| **CORE Governance Rules** | 50+ | Fundamental behavioral rules |
+| **Consolidation** | 37% reduction | System optimization for efficiency |
 
-### The Phase 23 MEGA-B Evolution: Super-Orchestrator Architecture
+### The Super-Orchestrator Architecture Evolution
 
-CORTEX recently evolved from its Wave 7 consolidation into a more sophisticated neural architecture with **Phase 23 MEGA-B**. Organizations now benefit from four new **super-orchestrators** that provide advanced cognitive capabilities through consolidated subsystem management [Business Leaders]. Product teams gain enhanced observability, state management, and code intelligence through these unified systems [Product Owners]. Each super-orchestrator consolidates 3-6 specialized components into a single, coordinated processing center [Software Developers].
+CORTEX has evolved into a more sophisticated architecture with four new **super-orchestrators** that provide advanced capabilities through consolidated subsystem management [Business Leaders]. Product teams gain enhanced observability, state management, and code intelligence through these unified systems [Product Owners]. Each super-orchestrator consolidates 3-6 specialized components into a single, coordinated processing center [Software Developers].
 
-| Super-Orchestrator | Consolidates | Brain Analogy | Priority |
-|-------------------|--------------|---------------|----------|
-| **StateOrchestrator** | 3 state managers | **Hippocampal complex** — memory & state consolidation | 180 |
-| **ObservabilityOrchestrator** | 4 monitoring systems | **Thalamic nuclei** — sensory integration & awareness | 185 |
-| **IntelligenceOrchestrator** | 5 intelligence engines | **Association cortex** — pattern recognition & synthesis | 190 |
-| **SOLIDOrchestrator** | 6 quality analyzers | **Prefrontal quality control** — architectural integrity | 195 |
+| Super-Orchestrator | Consolidates | System Analogy | Priority |
+|-------------------|--------------|----------------|----------|
+| **StateOrchestrator** | 3 state managers | **Memory & state storage** — maintaining context across operations | 180 |
+| **ObservabilityOrchestrator** | 4 monitoring systems | **System awareness** — monitoring and visibility | 185 |
+| **IntelligenceOrchestrator** | 5 intelligence engines | **Pattern recognition** — learning from data | 190 |
+| **SOLIDOrchestrator** | 6 quality analyzers | **Quality control** — architectural integrity | 195 |
 
 **Contract Validation:** A new **ContractValidator** infrastructure component (Priority 3) provides 4-layer validation ensuring all orchestrators maintain their architectural contracts with comprehensive audit logging.
 
-Seven deprecated orchestrators remain active until their **sunset date (2026-03-31)**, after which they'll be fully removed — like vestigial structures the brain no longer needs.
+Seven deprecated orchestrators remain active until their **sunset date (2026-03-31)**, after which they'll be fully removed — like legacy systems being phased out.
 
 ---
 
@@ -197,17 +197,17 @@ CORTEX's architecture mirrors the layered structure of a biological brain. Infor
   ╚════════════════════════════╤════════════════════════════════════╝
                                │
   ╔════════════════════════════╧════════════════════════════════════╗
-  ║       🧠 PREFRONTAL CORTEX (Executive Decision-Making)         ║
+  ║       🧠 DECISION CENTER (Executive Coordination)               ║
   ║           14 Active + 4 Super-Orchestrators + 4 Infra          ║
   ║                                                                 ║
   ║   ┌─────────────────────────────────────────────────────────┐  ║
   ║   │          🎯 MasterOrchestrator (Priority 10)             │  ║
-  ║   │     The CEO of the brain — routes every thought          │  ║
+  ║   │     The main coordinator — routes every request          │  ║
   ║   └──────────────────────┬──────────────────────────────────┘  ║
   ║                          ▼                                      ║
   ║   ┌─────────────────────────────────────────────────────────┐  ║
   ║   │          🧭 IntentRouter (Priority 20)                   │  ║
-  ║   │  Thalamus — classifies & routes to specialist regions    │  ║
+  ║   │  Request classifier — routes to specialist processors    │  ║
   ║   └────┬──────────┬──────────────┬──────────────┬───────────┘  ║
   ║        ▼          ▼              ▼              ▼              ║
   ║   ┌────────┐ ┌─────────┐  ┌──────────┐  ┌───────────┐         ║
@@ -225,14 +225,14 @@ CORTEX's architecture mirrors the layered structure of a biological brain. Infor
       ┌────────────────────────┼────────────────────────┐
       ▼                        ▼                        ▼
  ┌──────────────────┐ ┌──────────────────┐ ┌──────────────────┐
- │ 👁️ VISUAL CORTEX │ │ 🧬 LIMBIC SYSTEM │ │ 💾 HIPPOCAMPUS   │
- │  (LENS Engine)   │ │ (Learning Loop)  │ │ (Memory/Storage) │
+ │ 👁️ SENSORY INPUT │ │ 🧬 LEARNING      │ │ 💾 MEMORY        │
+ │  (LENS Engine)   │ │ (Learning Loop)  │ │ (Storage)        │
  │                  │ │                  │ │                  │
  │ 10 Analyzers    │ │ Adapts behavior  │ │ Stores long-term │
- │ perceive your    │ │ like emotional   │ │ memories the way │
- │ codebase the way │ │ conditioning —   │ │ the hippocampus  │
- │ eyes perceive    │ │ learning from    │ │ consolidates     │
- │ light            │ │ every test run   │ │ experiences      │
+ │ perceive your    │ │ through pattern  │ │ knowledge and    │
+ │ codebase like    │ │ recognition —    │ │ context across   │
+ │ sensory input    │ │ learning from    │ │ operations       │
+ │                  │ │ every test run   │ │                  │
  │                  │ │                  │ │                  │
  │ • Git History    │ │ • Test Quality   │ │ • 4-Tier YAML    │
  │ • AST Analysis   │ │ • Code Patterns  │ │ • Business Logic │
@@ -317,8 +317,8 @@ User: "Implement login feature"
 [IntentRouter] Classifies: IMPLEMENT intent → TDDOrchestrator
   ↓
 [TDDOrchestrator] Loads:
-  • Phase 48: HolisticValidationOrchestrator (pre-flight check)
-  • Phase 49: ContextCrystallizationLayer (warm context cache)
+  • HolisticValidationOrchestrator (pre-flight check)
+  • ContextCrystallizationLayer (warm context cache)
   • LENS: Security & complexity analysis
   ↓
 [Challenge Gate] Generates 3 alternative approaches
@@ -630,7 +630,7 @@ Silent autonomous operation mode with progress bars only (CORE-049)
 Pre-implementation validation generating alternative approaches  
 → [TDD Orchestrator](./orchestration/tdd-orchestrator.md) · [MCP Tools: cortex_challenge](./mcp/tools-catalog.md)
 
-**Consolidation (Wave 7)**  
+**Consolidation**  
 37% orchestrator reduction (27→17) via 4 unified orchestrators  
 → [Orchestration Overview](./orchestration/overview.md) · [Unified Support](./orchestration/support-orchestrators.md)
 
@@ -660,7 +660,7 @@ Pre-execution validation checklist displayed before autonomous work
 8-agent governance system (GovernanceEnforcementAgent, SecurityCheckpointAgent, etc.)  
 → [Governance & Compliance](./capabilities/governance-compliance.md) · [Enforcement Orchestrator](./orchestration/overview.md)
 
-**Holistic Validation (Phase 48)**  
+**Holistic Validation**  
 Mandatory pre-implementation validation gate with challenge generation  
 → [Capabilities: Governance](./capabilities/governance-compliance.md)
 
@@ -740,7 +740,7 @@ Mandatory development pattern enforced by CORE-008
 15,633 tests passing, 90%+ coverage enforced  
 → [Executive Overview](#executive-overview-cortex-for-business-leaders)
 
-**Tool Consolidation (Wave 100)**  
+**Tool Consolidation**  
 86+ flat tools → 26 parent tools with operations  
 → [MCP Tools Catalog](./mcp/tools-catalog.md)
 
@@ -758,10 +758,6 @@ Mandatory development pattern enforced by CORE-008
 Pylance-style auto-start MCP server via settings.json  
 → [MCP Integration](./mcp/integration.md) · [5-Minute Quick Start](#5-minute-quick-start)
 
-**Wave 7**  
-Major consolidation phase reducing orchestrators from 27 to 17  
-→ [Orchestration Overview](./orchestration/overview.md)
-
 **Wiring Contract**  
 `__wiring_contract__.yaml` defining orchestrator relationships and priorities  
 → [Orchestration Overview](./orchestration/overview.md)
@@ -770,4 +766,4 @@ Major consolidation phase reducing orchestrators from 27 to 17
 
 **Last Updated:** 2026-02-14  
 **Data Sources:** `__wiring_contract__.yaml` v2.1.0, cortex-registry, MCP Server  
-**Architecture Version:** Phase 23 MEGA-B S3 Complete (21 orchestrators: 14 active + 4 super + 7 deprecated + 4 infra)
+**Architecture Version:** Complete (21 orchestrators: 14 active + 4 super + 7 deprecated + 4 infra)
