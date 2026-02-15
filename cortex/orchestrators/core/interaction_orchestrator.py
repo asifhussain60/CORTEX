@@ -24,6 +24,7 @@ from typing import Any, Dict, List, Optional
 from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.brain.core.result import Err, Ok, Result
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
+from cortex.infrastructure.trace_integration import trace_orchestrator_action
 
 
 class InteractionOrchestrator(IOrchestrator):
@@ -58,6 +59,7 @@ class InteractionOrchestrator(IOrchestrator):
             conversation_protocol: ConversationProtocol instance for turn management.
             enable_challenges: Enable challenge generation (AC-PERMANENT-FIX-006).
         """
+        self.orchestrator_id = "interaction"  # For trace logging
         self.conversation_protocol = conversation_protocol
         self.enable_challenges: bool = enable_challenges
         self.turn_number: int = 0
@@ -141,6 +143,7 @@ class InteractionOrchestrator(IOrchestrator):
             },
         })
 
+    @trace_orchestrator_action("EXECUTE_OPERATION")
     def execute_operation(
         self,
         operation_name: str,
@@ -203,6 +206,7 @@ class InteractionOrchestrator(IOrchestrator):
     # Core Turn Execution (used by MasterOrchestrator)
     # =========================================================================
 
+    @trace_orchestrator_action("EXECUTE_TURN_WITH_CHALLENGE")
     def execute_turn_with_challenge(
         self,
         user_request: str,
@@ -278,6 +282,7 @@ class InteractionOrchestrator(IOrchestrator):
             })
             return Err(f"Turn {self.turn_number} failed: {str(e)}")
 
+    @trace_orchestrator_action("EXECUTE_COMPREHENSION")
     def execute(self, context: Dict[str, Any]) -> Result[Dict[str, Any]]:
         """
         Execute comprehension for MasterOrchestrator Phase 1.
