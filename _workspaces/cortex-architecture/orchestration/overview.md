@@ -1,24 +1,24 @@
 # CORTEX Orchestration Overview
 
 **Total Active Orchestrators:** 21 | **Deprecated:** 7 (sunset 2026-03-31) | **Updated:** 2026-02-14  
-**Architecture:** Git-Backed Registry | **Wiring:** `__wiring_contract__.yaml` v2.1.0 | **Phase 23 MEGA-B S3:** COMPLETE
+**Architecture:** Git-Backed Registry | **Wiring:** `__wiring_contract__.yaml` v2.1.0 | **Status:** COMPLETE
 
 ---
 
-## The Brain's Neural Network
+## The Coordinated System
 
-Think of CORTEX's orchestrators as **specialized regions of a living brain**. Just as the human brain doesn't have one monolithic processor but instead distributes cognition across dozens of specialized regions — the visual cortex for sight, Broca's area for language, the hippocampus for memory — CORTEX distributes software intelligence across 17 specialized orchestrators.
+Think of CORTEX's orchestrators as **specialized processing centers working together**. Just as a modern data center distributes workloads across specialized servers — some for database queries, others for authentication, others for analytics — CORTEX distributes software intelligence across 17 specialized orchestrators.
 
-Each orchestrator has a **priority number** (lower = more fundamental, like the brain stem vs. the prefrontal cortex) and a specific **cognitive domain**. When a request enters the system, it flows through these regions in a structured cognitive pipeline — from perception, through reasoning, to action.
+Each orchestrator has a **priority number** (lower = more fundamental, like core infrastructure vs. advanced features) and a specific **processing domain**. When a request enters the system, it flows through these centers in a structured pipeline — from perception, through reasoning, to action.
 
-### The Post-Consolidation Brain (Wave 7 Track 4 + Phase 23 MEGA-B)
+### The Consolidated Architecture
 
-CORTEX recently underwent **neural pruning** — the same process a maturing brain uses to eliminate redundant synaptic connections. Wave 7 Track 4 consolidated 27 orchestrators down to 17, a **37% reduction**, and Phase 23 MEGA-B added 4 super-orchestrators for advanced cognitive capabilities. The total system now comprises 21 orchestrators (14 active + 4 super-orchestrators + 7 deprecated) plus 4 infrastructure components.
+CORTEX underwent **system consolidation** — reducing redundancy and improving efficiency. The architecture consolidated 27 orchestrators down to 17, a **37% reduction**, and added 4 super-orchestrators for advanced capabilities. The total system now comprises 21 orchestrators (14 active + 4 super-orchestrators + 7 deprecated) plus 4 infrastructure components.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │                    🎯 MasterOrchestrator (P10)                       │
-│           The Prefrontal Cortex — Executive Decision Center          │
+│              The Air Traffic Control Tower — Central Coordination     │
 │  • Coordinates all orchestrators   • Manages lifecycle              │
 │  • Delegates to IntentRouter       • Circuit breaker patterns       │
 └───────────────────────────────┬─────────────────────────────────────┘
@@ -27,9 +27,9 @@ CORTEX recently underwent **neural pruning** — the same process a maturing bra
           ▼                     ▼                     ▼
 ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐
 │ 🧠 Core (5)      │  │ 🎨 Domain (5)    │  │ 🔧 Unified       │
-│ Brain Stem &     │  │ Specialized      │  │   Support (4)    │
-│ Cortex           │  │ Lobes            │  │ Association      │
-│                  │  │                  │  │ Areas            │
+│ Foundation &     │  │ Specialized      │  │   Support (4)    │
+│ Core System      │  │ Teams            │  │ Helper           │
+│                  │  │                  │  │ Services         │
 │ + ⚙️ Infra (3)   │  │                  │  │ + 7 deprecated   │
 └──────────────────┘  └──────────────────┘  └──────────────────┘
 ```
@@ -38,34 +38,34 @@ CORTEX recently underwent **neural pruning** — the same process a maturing bra
 
 ## The 21 Orchestrators (14 Active + 4 Super + 7 Deprecated)
 
-### 🧠 Core Orchestrators (6) — The Brain Stem & Primary Cortex
+### 🧠 Core Orchestrators (6) — The Foundation Layer
 
-These are the non-negotiable foundations — without them, CORTEX cannot think. Like the brain stem controls breathing and heartbeat, these orchestrators control the fundamental cognitive pipeline.
+These are the non-negotiable foundations — without them, CORTEX cannot function. Like essential infrastructure (power, networking, authentication), these orchestrators control the fundamental request pipeline.
 
-| # | Orchestrator | Priority | Brain Analogy | Role |
+| # | Orchestrator | Priority | System Analogy | Role |
 |---|-------------|----------|---------------|------|
-| 1 | **MasterOrchestrator** | 10 | **Prefrontal cortex** — executive function | Coordinates all thought, routes every request |
-| 2 | **IntentRouter** | 20 | **Thalamus** — sensory relay station | Classifies intent signals, routes to specialist regions |
-| 3 | **TDDOrchestrator** | 30 | **Primary motor cortex** — disciplined execution | Enforces RED→GREEN→REFACTOR muscle memory |
-| 4 | **WorkflowOrchestrator** | 40 | **Basal ganglia** — procedural sequences | Manages multi-step workflow execution |
-| 5 | **InteractionOrchestrator** | 50 | **Broca's area** — language production | Handles conversation and user dialogue |
+| 1 | **MasterOrchestrator** | 10 | **Air traffic control** — central coordination | Coordinates all operations, routes every request |
+| 2 | **IntentRouter** | 20 | **Security checkpoint** — classification hub | Classifies intent, routes to specialist teams |
+| 3 | **TDDOrchestrator** | 30 | **Construction crew** — disciplined execution | Enforces RED→GREEN→REFACTOR workflow |
+| 4 | **WorkflowOrchestrator** | 40 | **Assembly line** — procedural sequences | Manages multi-step workflow execution |
+| 5 | **InteractionOrchestrator** | 50 | **Customer service** — communication | Handles conversation and user dialogue |
 | 6 | **WrappedTDDOrchestrator** | 170 | **Deprecated wrapper** — removed soon | DEPRECATED (sunset 2026-03-31, use TDDOrchestrator directly) |
 
 **Deep dives:** [MasterOrchestrator](./master-orchestrator.md) · [IntentRouter](./intent-router.md) · [TDDOrchestrator](./tdd-orchestrator.md)
 
 ---
 
-### 🎨 Domain Orchestrators (5) — Specialized Brain Lobes
+### 🎨 Domain Orchestrators (5) — Specialized Teams
 
-These are the expert processing centers. Each one handles a specific cognitive domain, the way the angular gyrus processes written language or the fusiform face area recognizes faces.
+These are the expert processing centers. Each one handles a specific domain, like specialized departments in a company (legal, finance, HR, marketing, R&D).
 
-| # | Orchestrator | Priority | Brain Analogy | Role |
+| # | Orchestrator | Priority | System Analogy | Role |
 |---|-------------|----------|---------------|------|
-| 6 | **RefactoringOrchestrator** | 60 | **Wernicke's area** — code comprehension & restructuring | Understands code structure, improves architecture |
-| 7 | **PlanningOrchestrator** | 70 | **Dorsolateral prefrontal** — strategic planning | Decomposes complex tasks, generates execution plans |
-| 8 | **DomainOrchestrator** | 80 | **Angular gyrus** — cross-modal integration | Domain expertise, business logic understanding |
-| 9 | **ConversationOrchestrator** | 90 | **Superior temporal sulcus** — social cognition | Natural conversation tracking, context maintenance |
-| 10 | **SeleniumPlaywrightOrchestrator** | 100 | **Cerebellum** — precision motor control | Fine-grained browser automation |
+| 6 | **RefactoringOrchestrator** | 60 | **Renovation team** — code restructuring | Understands code structure, improves architecture |
+| 7 | **PlanningOrchestrator** | 70 | **Project management** — strategic planning | Decomposes complex tasks, generates execution plans |
+| 8 | **DomainOrchestrator** | 80 | **Business analyst** — domain expertise | Domain knowledge, business logic understanding |
+| 9 | **ConversationOrchestrator** | 90 | **Account manager** — relationship building | Natural conversation tracking, context maintenance |
+| 10 | **SeleniumPlaywrightOrchestrator** | 100 | **QA automation** — precision testing | Fine-grained browser automation |
 
 **Deep dive:** [Domain Orchestrators](./domain-orchestrators.md)
 
@@ -75,12 +75,12 @@ These are the expert processing centers. Each one handles a specific cognitive d
 
 Organizations benefit from specialized assistance across development workflows. These orchestrators provide capabilities from repository onboarding to quality assurance [Business Leaders]. Product teams use these assistants for comprehensive code analysis, educational content, and planning support [Product Owners]. Support orchestrators integrate with core processing to enhance development capabilities [Software Developers].
 
-| # | Orchestrator | Priority | Brain Analogy | Role |
-|---|-------------|----------|---------------|------|
-| 11 | **UnifiedOnboardingOrchestrator** | 105 | **Hippocampal formation** — memory encoding | Repository onboarding & environment setup |
-| 12 | **UnifiedAnalysisOrchestrator** | 115 | **Visual association cortex** — pattern recognition | Code analysis & LENS coordination |
-| 13 | **UnifiedQualityAssuranceOrchestrator** | 125 | **Anterior cingulate cortex** — error detection | Quality assurance & code review |
-| 14 | **UnifiedDiscoveryOrchestrator** | 135 | **Curiosity circuit** — exploration drive | Learning paths & feature discovery |
+| # | Orchestrator | Priority | System Analogy | Role |
+|---|-------------|----------|----------------|------|
+| 11 | **UnifiedOnboardingOrchestrator** | 105 | **Memory system** — initial encoding | Repository onboarding & environment setup |
+| 12 | **UnifiedAnalysisOrchestrator** | 115 | **Pattern recognition** — analysis engine | Code analysis & LENS coordination |
+| 13 | **UnifiedQualityAssuranceOrchestrator** | 125 | **Quality control** — error detection | Quality assurance & code review |
+| 14 | **UnifiedDiscoveryOrchestrator** | 135 | **Exploration system** — discovery engine | Learning paths & feature discovery |
 | 15 | **RollbackOrchestrator** | 140 | DEPRECATED — use WorkflowOrchestrator | Rollback operations (sunset 2026-03-31) |
 | 16 | **SetupOrchestrator** | 150 | DEPRECATED — use UnifiedOnboardingOrch | Setup operations (sunset 2026-03-31) |
 | 17 | **ComposedOrchestrator** | 160 | DEPRECATED — use MasterOrchestrator | Composition patterns (sunset 2026-03-31) |
@@ -90,29 +90,29 @@ Organizations benefit from specialized assistance across development workflows. 
 
 ---
 
-### ⚙️ Infrastructure Components (4) — The Brain Stem
+### ⚙️ Infrastructure Components (4) — Core Foundation
 
-These keep the brain alive. Organizations depend on these foundational systems for orchestrator lifecycle and validation [Business Leaders]. Infrastructure components ensure system reliability through continuous health monitoring and contract enforcement [Product Owners]. These components provide the wiring backbone that connects all orchestrators with 4-layer validation [Software Developers].
+These keep the system running. Organizations depend on these foundational systems for orchestrator lifecycle and validation [Business Leaders]. Infrastructure components ensure system reliability through continuous health monitoring and contract enforcement [Product Owners]. These components provide the wiring backbone that connects all orchestrators with 4-layer validation [Software Developers].
 
-| # | Component | Priority | Brain Analogy | Role |
-|---|-----------|----------|---------------|------|
-| 1 | **OrchestratorBootstrap** | 1 | **Reticular formation** — arousal & wakefulness | System initialization, boots all regions at startup |
-| 2 | **HealthChecker** | 2 | **Autonomic nervous system** — vital signs | Continuous health monitoring across all regions |
+| # | Component | Priority | System Analogy | Role |
+|---|-----------|----------|----------------|------|
+| 1 | **OrchestratorBootstrap** | 1 | **System initialization** — startup process | System initialization, boots all regions at startup |
+| 2 | **HealthChecker** | 2 | **Health monitoring** — vital signs tracker | Continuous health monitoring across all regions |
 | 3 | **ContractValidator** | 3 | **Quality control gateway** — architectural integrity | 4-layer validation (signature, return type, audit, cross-layer) |
-| 4 | **DatabaseBackedRegistry** | 5 | **Spinal cord** — central wiring | Connects every region, manages orchestrator catalog |
+| 4 | **DatabaseBackedRegistry** | 5 | **Central registry** — component catalog | Connects every region, manages orchestrator catalog |
 
 ---
 
-### 🌟 Super-Orchestrators (4) — Advanced Association Cortex
+### 🌟 Super-Orchestrators (4) — Advanced Coordination Centers
 
-**NEW in Phase 23 MEGA-B:** Organizations gain advanced capabilities through these multi-subsystem coordinators that consolidate 18 specialized components [Business Leaders]. Product teams benefit from unified state management, comprehensive observability, enhanced intelligence analysis, and architectural quality validation [Product Owners]. Each super-orchestrator provides audit logging and consolidates 3-6 specialized subsystems into coordinated processing centers [Software Developers].
+**NEW:** Organizations gain advanced capabilities through these multi-subsystem coordinators that consolidate 18 specialized components [Business Leaders]. Product teams benefit from unified state management, comprehensive observability, enhanced intelligence analysis, and architectural quality validation [Product Owners]. Each super-orchestrator provides audit logging and consolidates 3-6 specialized subsystems into coordinated processing centers [Software Developers].
 
-| # | Super-Orchestrator | Priority | Consolidates | Brain Analogy | Capabilities |
-|---|-------------------|----------|--------------|---------------|-------------|
-| 18 | **StateOrchestrator** | 180 | 3 state managers | **Hippocampal complex** — memory consolidation | State management, checkpoints, conversation state, brain state |
-| 19 | **ObservabilityOrchestrator** | 185 | 4 monitoring systems | **Thalamic nuclei** — sensory integration | Metrics, tracing, alerts, comprehensive observability |
-| 20 | **IntelligenceOrchestrator** | 190 | 5 intelligence engines | **Association cortex** — pattern synthesis | AST parsing, comment analysis, intelligence routing, code comprehension |
-| 21 | **SOLIDOrchestrator** | 195 | 6 quality analyzers | **Prefrontal quality control** — integrity | SOLID analysis (SRP, OCP, LSP, ISP, DIP), DRY validation |
+| # | Super-Orchestrator | Priority | Consolidates | System Analogy | Capabilities |
+|---|-------------------|----------|--------------|----------------|-------------|
+| 18 | **StateOrchestrator** | 180 | 3 state managers | **Memory & state storage** — consolidation | State management, checkpoints, conversation state, brain state |
+| 19 | **ObservabilityOrchestrator** | 185 | 4 monitoring systems | **System awareness** — visibility platform | Metrics, tracing, alerts, comprehensive observability |
+| 20 | **IntelligenceOrchestrator** | 190 | 5 intelligence engines | **Pattern recognition** — intelligence synthesis | AST parsing, comment analysis, intelligence routing, code comprehension |
+| 21 | **SOLIDOrchestrator** | 195 | 6 quality analyzers | **Quality control** — architectural integrity | SOLID analysis (SRP, OCP, LSP, ISP, DIP), DRY validation |
 
 **Architecture Pattern:** Each super-orchestrator:
 - Consolidates multiple specialized subsystems (3-6 components each)
