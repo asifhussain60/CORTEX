@@ -83,8 +83,15 @@ class VacuumOrchestrator:
             "cortex-architect.prompt.md",  # Main architect prompt
             "CORTEX.prompt.md",  # Main production prompt
             "cortex-doc.prompt.md",  # Documentor prompt
-            "response-format-standards.md",  # Formatting rules
+            "response-format-standards.md",  # Formatting rules (kebab-case, OK)
             "README.md",  # Index
+        }
+        
+        # Files that should move to guides/ (kebab-case guides)
+        guide_files = {
+            "business-wisdom-wiring.md",  # Phase 6 spec - guide
+            "eventbus-debugger-guide.md",  # Debugger guide
+            "multi-cycle-tdd-guide.md",  # TDD guide
         }
         
         # Create guides/ subdirectory if it doesn't exist
@@ -103,8 +110,20 @@ class VacuumOrchestrator:
         for md_file in prompts_dir.glob("*.md"):
             if md_file.name in allowed_root_files:
                 continue
+            
+            # Check if it's in the guide files list
+            if md_file.name in guide_files:
+                target = guides_dir / md_file.name
+                if not target.exists():
+                    size_mb = md_file.stat().st_size / (1024 * 1024)
+                    md_file.rename(target)
+                    moved += 1
+                    logger.info(f"  📦 Moved to guides/: {md_file.name} ({size_mb:.3f}MB)")
+                else:
+                    logger.info(f"  ⚠️  Already in guides/: {md_file.name}")
+                continue
                 
-            # Check if it's a guide (SCREAMING_CASE or *-GUIDE.md)
+            # Check if it's a SCREAMING_CASE guide
             if md_file.name.isupper() or "-GUIDE.md" in md_file.name or md_file.name.startswith("WAVE-"):
                 target = guides_dir / md_file.name
                 if not target.exists():
