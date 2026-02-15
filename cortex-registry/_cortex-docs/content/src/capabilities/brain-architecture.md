@@ -1,9 +1,19 @@
-# CORTEX Brain Architecture (Current)
+# CORTEX Brain Architecture
 
-**Purpose:** The 3-Layer Intelligence System — How CORTEX Perceives, Reasons, and Acts  
-**Audience:** Software Developers, Product Owners, Architects  
-**Last Updated:** 2026-02-14  
-**Phase:** 12 (Brain Perception, Reasoning, Action Layers)
+---
+title: CORTEX Brain Architecture - 3-Layer Intelligence System
+type: explanation
+audience: [Software Developers, Product Owners, Business Leaders]
+word_count: 2013
+last_verified: 2026-02-15
+source_of_truth: cortex_brain/perception/ + cortex_brain/reasoning/ + cortex_brain/action/
+format: diátaxis-explanation
+voice: third-person-neutral
+phase: 12
+diagrams: ASCII architecture diagrams
+---
+
+> **Notice:** CORTEX Brain represents an active research area combining pattern matching, strategy selection, and execution planning. Capabilities described here reflect current implementation (Phase 12) and may evolve as learning systems mature.
 
 ---
 
