@@ -75,19 +75,19 @@
 
 ## Timeline to 100% Completion
 
-### Wave 1: Intelligence Foundation ⏳
+### Phase Group 1: Intelligence Foundation ⏳
 - **Phases:** 21 (IN PROGRESS), 27✅ (COMPLETE)
 - **Duration:** 14-20 days
 - **Target Date:** 2026-03-06
 - **Status:** Phase 27 complete, Phase 21 at 86% (30/35 tests)
 
-### Wave 2: Domain Knowledge & Components ⏸️
+### Phase Group 2: Domain Knowledge & Components ⏸️
 - **Phases:** 23 (IN PROGRESS), 28 (BLOCKED)
 - **Duration:** 26-34 days
 - **Target Date:** 2026-04-01
 - **Status:** Phase 23 running parallel, Phase 28 blocked by Phase 21
 
-### Wave 3: Production Verification & Polish ⏸️
+### Phase Group 3: Production Verification & Polish ⏸️
 - **Phases:** 29 (BLOCKED)
 - **Duration:** 10-14 days
 - **Target Date:** 2026-04-15

@@ -16,15 +16,15 @@ execution_strategy: "Post-production phased rollout"
 metadata:
   total_deferred: 10
   total_estimated_effort: "90-130 days"
-  recommended_order: "4 waves over 6 months"
+  recommended_order: "4 phase groups over 6 months"
   dependencies: "Production deployment complete, baseline metrics established"
 
 # ============================================================================
-# STRATEGIC GROUPING (4 Waves)
+# STRATEGIC GROUPING (4 Phase Groups)
 # ============================================================================
 
-wave_structure:
-  wave_4:
+phase_group_structure:
+  phase_group_4:
     name: "Deep Intelligence Foundation"
     phases: [3, 6]
     duration: "25-35 days"
@@ -32,7 +32,7 @@ wave_structure:
     rationale: "Knowledge graph + runtime correlation enable advanced intelligence"
     target: "Q2 2026 (May-June)"
     
-  wave_5:
+  phase_group_5:
     name: "Language-Specific Intelligence"
     phases: [4, 5]
     duration: "30-40 days"
@@ -40,7 +40,7 @@ wave_structure:
     rationale: "Expand beyond Python to .NET and Angular ecosystems"
     target: "Q3 2026 (July-August)"
     
-  wave_6:
+  phase_group_6:
     name: "Enterprise Features"
     phases: [14, 15]
     duration: "20-30 days"
@@ -48,7 +48,7 @@ wave_structure:
     rationale: "Enterprise orchestrator maturity + support framework"
     target: "Q3 2026 (August-September)"
     
-  wave_7:
+  phase_group_7:
     name: "Intelligence Integration & Polish"
     phases: [7, 8, 11]
     duration: "15-25 days"
@@ -57,10 +57,10 @@ wave_structure:
     target: "Q4 2026 (October-November)"
 
 # ============================================================================
-# WAVE 4: Deep Intelligence Foundation (P2 — HIGH VALUE)
+# PHASE GROUP 4: Deep Intelligence Foundation (P2 — HIGH VALUE)
 # ============================================================================
 
-wave_4_phases:
+phase_group_4_phases:
   phase_3:
     id: "phase-03"
     title: "LENS Knowledge Graph — Deep Intelligence"
@@ -134,10 +134,10 @@ wave_4_phases:
       - "Phase 8 (LENS Intelligence Integration)"
 
 # ============================================================================
-# WAVE 5: Language-Specific Intelligence (P3 — EXPANSION)
+# PHASE GROUP 5: Language-Specific Intelligence (P3 — EXPANSION)
 # ============================================================================
 
-wave_5_phases:
+phase_group_5_phases:
   phase_4:
     id: "phase-04"
     title: ".NET Roslyn Deep Intelligence"
@@ -197,10 +197,10 @@ wave_5_phases:
       - "TypeScript analyzer operational"
 
 # ============================================================================
-# WAVE 6: Enterprise Features (P3 — MATURITY)
+# PHASE GROUP 6: Enterprise Features (P3 — MATURITY)
 # ============================================================================
 
-wave_6_phases:
+phase_group_6_phases:
   phase_14:
     id: "phase-14"
     title: "Enterprise Orchestrator Maturity"
@@ -263,10 +263,10 @@ wave_6_phases:
       - "Production tenant base established"
 
 # ============================================================================
-# WAVE 7: Intelligence Integration & Polish (P3 — REFINEMENT)
+# PHASE GROUP 7: Intelligence Integration & Polish (P3 — REFINEMENT)
 # ============================================================================
 
-wave_7_phases:
+phase_group_7_phases:
   phase_7:
     id: "phase-07"
     title: "Alignment Remediation"
@@ -362,23 +362,23 @@ execution_strategy:
     - "Customer feedback collected"
     - "Team capacity allocated"
   
-  wave_4_trigger:
+  phase_group_4_trigger:
     - "Production stable for 30 days"
     - "Customer requests for knowledge graph features"
     - "Q2 2026 capacity confirmed"
   
-  wave_5_trigger:
-    - "Wave 4 complete"
+  phase_group_5_trigger:
+    - "Phase Group 4 complete"
     - "Enterprise customers require .NET/Angular support"
     - "Q3 2026 capacity confirmed"
   
-  wave_6_trigger:
+  phase_group_6_trigger:
     - "Multi-tenant requirements defined"
     - "Enterprise SLAs negotiated"
     - "Q3 2026 capacity confirmed"
   
-  wave_7_trigger:
-    - "Wave 4-6 complete"
+  phase_group_7_trigger:
+    - "Phase Group 4-6 complete"
     - "Refinement priorities identified"
     - "Q4 2026 capacity confirmed"
 
@@ -393,15 +393,15 @@ summary:
   timeline: "6 months (Q2-Q4 2026)"
   
   recommended_execution:
-    - "Wave 4: Q2 2026 (Deep Intelligence) — HIGH VALUE"
-    - "Wave 5: Q3 2026 (Language Expansion) — GROWTH"
-    - "Wave 6: Q3 2026 (Enterprise Features) — MATURITY"
-    - "Wave 7: Q4 2026 (Integration & Polish) — REFINEMENT"
+    - "Phase Group 4: Q2 2026 (Deep Intelligence) — HIGH VALUE"
+    - "Phase Group 5: Q3 2026 (Language Expansion) — GROWTH"
+    - "Phase Group 6: Q3 2026 (Enterprise Features) — MATURITY"
+    - "Phase Group 7: Q4 2026 (Integration & Polish) — REFINEMENT"
   
   flexibility:
-    - "Waves can be reordered based on customer demand"
+    - "Phase groups can be reordered based on customer demand"
     - "Individual phases can be promoted if urgent"
-    - "Each wave is self-contained (parallel execution possible)"
+    - "Each phase group is self-contained (parallel execution possible)"
   
   success_metrics:
     - "Customer adoption rate"
