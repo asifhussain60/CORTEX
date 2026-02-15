@@ -1,8 +1,25 @@
 # Tool Categories
 
+---
+title: Tool Categories - Functional Tool Classification System
+type: reference
+audience: [Product Owners, Software Developers]
+word_count: 1500
+last_verified: 2026-02-15
+source_of_truth: cortex/tools/categories.py + cortex-registry/
+format: diátaxis-reference
+voice: third-person-neutral
+phase: Production (v8.1)
+tool_categories: 6
+---
+
+> **Notice:** Tool categories organize 26 consolidated MCP tools into functional groups for improved discoverability. Organizations may extend categories for custom tool domains. Category assignment based on primary tool responsibility using single-responsibility principle.
+
+---
+
 **Purpose:** The Brodmann areas of CORTEX — a systematic map of functionally distinct tool regions, each specialized for a class of cognitive operations  
 **Audience:** Product Owners, Software Developers  
-**Last Updated:** 2026-02-13
+**Last Updated:** 2026-02-15
 
 ---
 

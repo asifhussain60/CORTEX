@@ -1,8 +1,25 @@
 # Intent Router
 
+---
+title: Intent Router - CORTEX Request Classification Engine
+type: explanation
+audience: [Product Owners, Software Developers]
+word_count: 1200
+last_verified: 2026-02-15
+source_of_truth: cortex/intent_router/ + cortex-registry/master/
+format: diátaxis-explanation
+voice: third-person-blended
+phase: Production (v8.1)
+related_orchestrators: [MasterOrchestrator, TDDOrchestrator, LENSSynthesis]
+---
+
+> **Notice:** Intent classification represents a continuously improving system using LENS intelligence. Classification accuracy improves over time as CORTEX learns from more interactions. Performance characteristics reflect production deployment as of v8.1. Organizations should validate routing accuracy against their specific use case patterns.
+
+---
+
 **Category:** Core Orchestrator  
 **Priority:** 20  
-**Updated:** 2026-02-14
+**Updated:** 2026-02-15
 
 ---
 

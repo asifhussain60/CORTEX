@@ -1,8 +1,25 @@
 # MCP Versioning
 
+---
+title: MCP Versioning Strategy - Semantic Version Management
+type: reference
+audience: [Product Owners, Software Developers]
+word_count: 1200
+last_verified: 2026-02-15
+source_of_truth: cortex/mcp/versioning.py + cortex-registry/
+format: diátaxis-reference
+voice: third-person-neutral
+phase: Production (v8.1)
+version_schema: semantic (major.minor.patch)
+---
+
+> **Notice:** Versioning strategy follows semantic versioning principles. Breaking changes are rare and well-announced. Deprecated tools continue to function during sunset periods (e.g., 2026-03-31 for 7 deprecated orchestrators). Organizations should monitor deprecation notices and plan migrations accordingly.
+
+---
+
 **Purpose:** Version management for CORTEX MCP tools — evolving the nervous system safely  
 **Audience:** Product Owners, Software Developers  
-**Last Updated:** 2026-02-13
+**Last Updated:** 2026-02-15
 
 ---
 

@@ -1,8 +1,24 @@
 # Request Lifecycle Diagram
 
+---
+title: Request Lifecycle - Interactive Processing Flow Visualization
+type: reference
+audience: [Product Owners, Software Developers]
+word_count: 1200
+last_verified: 2026-02-15
+source_of_truth: cortex/orchestrators/ + cortex/mcp/
+format: diátaxis-reference
+voice: third-person-neutral
+diagram_type: D3.js interactive sequence
+---
+
+> **Notice:** Request lifecycle diagrams represent production processing flow as of v8.1. Organizations may experience variations based on intent classification, orchestrator availability, and governance enforcement outcomes. Interactive D3.js visualizations require JavaScript-enabled environment.
+
+---
+
 **Purpose:** Interactive request processing flow with d3.js visualizations  
 **Audience:** Product Owners, Software Developers  
-**Last Updated:** 2026-02-13
+**Last Updated:** 2026-02-15
 
 ---
 

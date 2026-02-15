@@ -1,6 +1,23 @@
 # CORTEX Architecture Overview Diagram
 
-**Updated:** 2026-02-14 | **Version:** 2.1.0 | **Orchestrator Enhancement
+---
+title: CORTEX Architecture Overview - System-Level Visualization
+type: reference
+audience: [Business Leaders, Product Owners, Software Developers]
+word_count: 900
+last_verified: 2026-02-15
+source_of_truth: cortex/ + cortex-registry/ + deployment/
+format: diátaxis-reference
+voice: third-person-neutral
+diagram_type: ASCII architecture
+c4_level: Context + Container
+---
+
+> **Notice:** Architecture diagram represents production deployment as of v8.1. Organizations may adapt deployment topology based on infrastructure requirements. Diagram shows logical layers, not physical deployment boundaries.
+
+---
+
+**Updated:** 2026-02-15 | **Version:** 2.1.0 | **Orchestrator Enhancement**
 
 ---
 

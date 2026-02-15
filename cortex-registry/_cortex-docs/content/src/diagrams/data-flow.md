@@ -1,6 +1,22 @@
 # CORTEX Data Flow & Request Lifecycle
 
-**Updated:** 2026-02-13 | **Version:** 2.0.0
+---
+title: Data Flow & Request Lifecycle - End-to-End Processing Visualization
+type: reference
+audience: [Business Leaders, Product Owners, Software Developers]
+word_count: 1600
+last_verified: 2026-02-15
+source_of_truth: cortex/ + cortex-registry/ + cortex/mcp/
+format: diátaxis-reference
+voice: third-person-blended
+diagram_type: Mermaid flowchart + ASCII sequence
+---
+
+> **Notice:** Data flow diagrams represent production request processing as of v8.1 including Holistic Validation Gate (Phase 48) and Context Crystallization Layer (Phase 49). Organizations may experience flow variations based on intent classification, challenge gate outcomes, and governance enforcement results. Mermaid diagrams render in GitHub and compatible markdown viewers.
+
+---
+
+**Updated:** 2026-02-15 | **Version:** 2.0.0
 
 ---
 

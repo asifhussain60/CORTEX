@@ -1,8 +1,24 @@
 # Tool Registry
 
+---
+title: Tool Registry - Central Tool Catalog and Lifecycle Management
+type: reference
+audience: [Product Owners, Software Developers]
+word_count: 1400
+last_verified: 2026-02-15
+source_of_truth: cortex/tools/registry.py + cortex-registry/
+format: diátaxis-reference
+voice: third-person-neutral
+phase: Production (v8.1)
+---
+
+> **Notice:** Tool registry implements hot-reload capability for dynamic tool updates without server restart. Organizations benefit from continuous tool availability during updates. Registry data persists in git-backed storage (cortex-registry/master/) requiring no runtime database.
+
+---
+
 **Purpose:** The connectome registry — a living map of every tool-neuron, its synaptic connections, and activation patterns within the CORTEX brain  
 **Audience:** Product Owners, Software Developers  
-**Last Updated:** 2026-02-13
+**Last Updated:** 2026-02-15
 
 ---
 

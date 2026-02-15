@@ -1,8 +1,25 @@
 # MCP Integration Guide
 
+---
+title: MCP Integration Guide - Connecting Clients to CORTEX
+type: how-to
+audience: [Product Owners, Software Developers]
+word_count: 1500
+last_verified: 2026-02-15
+source_of_truth: cortex/mcp/ + deployment/
+format: diátaxis-how-to
+voice: third-person-blended
+phase: Production (v8.1)
+integration_modes: [VS Code, HTTP, WebSocket, CLI]
+---
+
+> **Notice:** Integration patterns reflect production-tested configurations as of v8.1. Organizations may adapt integration approaches based on infrastructure requirements and security policies. VS Code integration represents primary deployment mode with auto-starting MCP server. HTTP integration represents Phase 11 target architecture.
+
+---
+
 **Purpose:** Guide for integrating with CORTEX MCP — connecting new sensory organs to the nervous system  
 **Audience:** Product Owners, Software Developers  
-**Last Updated:** 2026-02-13
+**Last Updated:** 2026-02-15
 
 ---
 

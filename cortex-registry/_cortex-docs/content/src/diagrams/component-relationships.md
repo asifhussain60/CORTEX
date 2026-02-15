@@ -1,8 +1,24 @@
 # Component Relationships Diagram
 
+---
+title: Component Relationships - Dependency Graph Visualization
+type: reference
+audience: [Product Owners, Software Developers]
+word_count: 900
+last_verified: 2026-02-15
+source_of_truth: cortex/wiring/ + cortex-registry/
+format: diátaxis-reference
+voice: third-person-neutral
+diagram_type: ASCII dependency graph
+---
+
+> **Notice:** Component relationships reflect production wiring as of v8.1. Organizations may extend with custom orchestrators while maintaining wiring contract compliance. Dependency graph generated from __wiring_contract__.yaml.
+
+---
+
 **Purpose:** Dependencies and interactions between CORTEX components  
 **Audience:** Product Owners, Software Developers  
-**Last Updated:** 2026-02-13
+**Last Updated:** 2026-02-15
 
 ---
 

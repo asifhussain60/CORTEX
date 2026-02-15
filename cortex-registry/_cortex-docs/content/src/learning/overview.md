@@ -1,8 +1,24 @@
 # CORTEX Learning System: Adaptive Intelligence Infrastructure
 
+---
+title: CORTEX Learning System - Adaptive Intelligence & Pattern Capture
+type: explanation
+audience: [Business Leaders, Product Owners, Software Developers]
+word_count: 1800
+last_verified: 2026-02-15
+source_of_truth: cortex/learning/ + cortex_brain/
+format: diátaxis-explanation
+voice: third-person-blended
+phase: Production (v8.1, Phase 71)
+---
+
+> **Notice:** Learning system represents Phase 71 implementation capturing operational patterns from every orchestrator invocation. Organizations benefit from adaptive intelligence that improves continuously without manual intervention. Pattern capture adds <10ms overhead (non-blocking) per operation. High-confidence patterns (≥0.75) automatically inform future recommendations.
+
+---
+
 **Purpose:** The learning and adaptation system — how CORTEX forms memories from experience, strengthening successful pathways and weakening ineffective ones through continuous pattern recognition  
 **Version:** 1.0.0 | **Status:** PRODUCTION  
-**Last Updated:** 2026-02-13 | **Authority:** Learning Architecture Specification
+**Last Updated:** 2026-02-15 | **Authority:** Learning Architecture Specification
 
 ---
 

@@ -1,8 +1,25 @@
 # MCP Protocol
 
+---
+title: MCP Protocol Specification - JSON-RPC 2.0 Implementation
+type: reference
+audience: [Product Owners, Software Developers]
+word_count: 1400
+last_verified: 2026-02-15
+source_of_truth: cortex/mcp/server.py + deployment/
+format: diátaxis-reference
+voice: third-person-neutral
+phase: Production (v8.1)
+protocol_version: 2024-11-05
+---
+
+> **Notice:** MCP protocol implementation follows JSON-RPC 2.0 specification. Actual protocol performance, transport reliability, and error handling depend on network conditions, client implementation, and server configuration. Organizations should validate protocol compliance with their specific integration requirements.
+
+---
+
 **Purpose:** Detailed MCP protocol specification — the electrochemical signaling standard of CORTEX  
 **Audience:** Product Owners, Software Developers  
-**Last Updated:** 2026-02-13
+**Last Updated:** 2026-02-15
 
 ---
 

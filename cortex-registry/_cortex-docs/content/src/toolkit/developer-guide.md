@@ -1,8 +1,24 @@
 # Tool Developer Guide
 
+---
+title: Tool Developer Guide - Creating Custom MCP Tools
+type: how-to
+audience: [Product Owners, Software Developers]
+word_count: 1500
+last_verified: 2026-02-15
+source_of_truth: cortex/mcp/tools/ + cortex/testing/
+format: diátaxis-how-to
+voice: third-person-neutral
+phase: Production (v8.1)
+---
+
+> **Notice:** Tool development guide reflects production-tested patterns as of v8.1. Organizations may extend CORTEX with custom tools while maintaining MCP protocol compliance and orchestrator integration. Tool validation ensures proper governance enforcement and audit trail integration.
+
+---
+
 **Purpose:** The neuroscience lab manual — how to craft new cognitive instruments that integrate seamlessly into the CORTEX brain's existing neural pathways  
 **Audience:** Product Owners, Software Developers  
-**Last Updated:** 2026-02-13
+**Last Updated:** 2026-02-15
 
 ---
 

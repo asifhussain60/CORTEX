@@ -1,8 +1,25 @@
 # Toolkit Security Model
 
+---
+title: Toolkit Security Model - Defense-in-Depth Architecture
+type: explanation
+audience: [Business Leaders, Product Owners, Software Developers]
+word_count: 1600
+last_verified: 2026-02-15
+source_of_truth: cortex/mcp/security/ + cortex/enforcement/
+format: diátaxis-explanation
+voice: third-person-neutral
+phase: Production (v8.1)
+security_layers: 6
+---
+
+> **Notice:** Security model represents production-tested defense-in-depth architecture as of v8.1. Organizations should validate security controls against their specific compliance requirements (OWASP Top 10, SOC 2, ISO 27001). Authentication and authorization are mandatory for production deployments. Rate limiting and audit logging are configurable based on threat model.
+
+---
+
 **Purpose:** The blood-brain barrier — selective permeability that protects CORTEX cognitive processes from malicious inputs while allowing authorized signals through  
 **Audience:** Business Leaders, Product Owners, Software Developers  
-**Last Updated:** 2026-02-13
+**Last Updated:** 2026-02-15
 
 ---
 
