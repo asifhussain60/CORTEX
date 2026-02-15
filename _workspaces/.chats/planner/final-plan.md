@@ -1,759 +1,325 @@
-asifhussain60: Follow instructions in [cortex-architect.prompt.md](file:///Users/asifhussain/PROJECTS/CORTEX/.github/prompts/cortex-architect.prompt.md).
-review #file:final-plan.md 
-I want these capabilities harnessed with golden tests to all operational orchestrators. This is not just for CORTEX development. All these rules should apply to real production repo developments. Review holistically, use CORTEX LENS to broaded scope as much as needed to gain full context and presnt your final plan following the exact same format in VSCode GitHub Copilot Chat Session.
+# CORTEX Production Readiness — Final Holistic Plan
 
-Ensure all tests and other assets are organized in standard nested folder clean structure following governance rule file naming cases. BAN screaming case
-All planning solutions should be wired for autonomous minimal feedback visual ascii progress bar with hanging bullets of 4 items before starting each phase and completion of phase. Check git history to find my approved style
-{Progress Bar}
-- last completed
-- in progress
-- next item
-
-Design user response templates customized for autonomous execution. User should see minimal visual feedback during plan execution. Upon completion, they should be shown 30 second well formtatted and styled VSCode GitHub Copilot Chat Session feedback of what was asked and what was done in an easy to read and process format. Do NOT show code snippets. The final response should be readable in no more than 60 minutes.
-
-For #file:_cortex-master I like the VSCode GitHub Copilot Chat Session response feedback you're using in #file:final-plan.md . Standardize it. It should end with a summary section of
-Token Used In Session:
-Level Of Effort for the work: 
-Any other high value information you can show
-
-GitHub Copilot: I'll analyze the final-plan.md and apply CORTEX LENS to create a comprehensive golden test framework for all operational orchestrators. 
-
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/_workspaces/.chats/planner/final-plan.md#1-1), lines 1 to 200
-
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/_workspaces/.chats/planner/final-plan.md#200-200), lines 200 to 400
-
-Searched codebase for "visual ascii progress bar hanging bullets approved style git history autonomous execution format", 27 results
-
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/_workspaces/.chats/planner/final-plan.md#400-400), lines 400 to 647
-
-Searched text for `response.*template|completion.*format|final.*response|user.*feedback` (`**/cortex-registry/interaction/*.yaml`), 2 results
-
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/prompts/SILENT-EXECUTION-RESPONSE-TEMPLATE.md)
-
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/interaction/response-formats.yaml#1-1), lines 1 to 200
-
-Ran terminal command: git log --since="7 days ago" --pretty=format:"%h %s" --all | head -30
-
-Now I'll analyze the complete context and create the comprehensive plan using CORTEX LENS analysis. 
-
-Searched codebase for "golden test framework structure test organization nested folders test fixtures test data arrangement", 19 results
-
-Searched for files matching `**/tests/**/golden/**`, 10 matches
-
-Searched text for `file.*naming|kebab.*case|screaming.*case|SCREAMING_CASE|CORE-028` (`**/cortex-registry/governance/*.yaml`), 1 result
-
-Perfect! Now I have comprehensive context. Let me create the final plan following the approved VSCode GitHub Copilot Chat format.
-
-## 🏛️ CORTEX Architect DESIGN
-**Author:** Asif Hussain | **Orchestrator:** LENSSynthesis ✅
-
---- 
-
-Ran `cortex_total_recall` 
-Completed with input: {}
-
-Let me review the key governance rules first: 
-
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/tests/golden)
-
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/tests/golden/test_company_override_truth.py#1-1), lines 1 to 50
-
-Searched text for `CORE-028` (`**/cortex-registry/governance/*.yaml`), no results
-
-Now I have all the context needed. Let me create the comprehensive plan.
-
-# 📋 GOLDEN TEST FRAMEWORK: UNIVERSAL ORCHESTRATOR HARNESS
-
-## 🎯 **Executive Summary**
-
-**Objective:** Extend CORTEX golden test framework to ALL operational orchestrators for both internal development AND production repository usage
-
-**Scope:** 28 orchestrators (8 core + 6 domain + 14 support) with comprehensive test coverage including positive, negative, edge case, and recovery scenarios
-
-**Governance:** CORE-028 (kebab-case), CORE-008 (TDD), CORE-002 (no markdown sprawl), silent autonomous execution with ASCII progress bars
+**Version:** 3.0 | **Date:** 2026-02-15 | **Author:** Asif Hussain
+**Status:** APPROVED — Ready for Execution
+**Authority:** PlanOrchestrator + LENSSynthesis
+**Governance Rule:** CORE-055 (Pre-Execution Planning Completeness Gate)
 
 ---
 
-## 📊 **Current State Analysis**
+## VISION
 
-| Metric | Current | Target | Gap |
-|--------|---------|--------|-----|
-| **Golden Tests** | 9 files | 28 orchestrators | +19 |
-| **Negative Tests** | 0 | 140+ | +140 |
-| **Edge Case Coverage** | 16 tests | 200+ | +184 |
-| **Recovery Tests** | 0 | 56+ | +56 |
-| **Test Organization** | Flat structure | Nested by category | Migration needed |
-| **File Naming** | Mixed case | 100% kebab-case | Cleanup needed |
-| **Orchestrator Coverage** | 32% (9/28) | 100% (28/28) | +68% |
+Unbreakable wiring, zero mocks, zero duplicates, singular execution paths.
+Every test proves real systems work together — not that mock objects return expected values.
 
 ---
 
-## 🏗️ **3-PHASE IMPLEMENTATION PLAN**
-
-### **📐 PHASE 1: Foundation & Structure** ✅ **COMPLETE**
-**Duration:** 1 session (completed) | **Tests:** 23 | **LOE:** Medium
-**Status:** 4/4 stages delivered | **Commits:** 4 (9a64e6c3d through 59ac1530a)
-
-#### **S1.1: Test Structure Design (12 tests)**
-
-```
-tests/
-├── golden/                           # Existing (keep)
-│   ├── test-company-override-truth.py
-│   ├── test-tier-cascade-truth.py
-│   └── ... (9 files total)
-├── orchestrators/                    # NEW organizational layer
-│   ├── core/                        # 8 core orchestrators
-│   │   ├── positive/
-│   │   │   ├── test-master-orchestrator.py
-│   │   │   ├── test-tdd-orchestrator.py
-│   │   │   └── test-lens-synthesis.py
-│   │   ├── negative/
-│   │   │   ├── test-master-orchestrator-forbidden.py
-│   │   │   └── test-tdd-bypass-prevention.py
-│   │   ├── edge-cases/
-│   │   │   ├── test-master-orchestrator-boundaries.py
-│   │   │   └── test-tdd-convergence-limits.py
-│   │   └── recovery/
-│   │       ├── test-master-orchestrator-crash-recovery.py
-│   │       └── test-tdd-rollback-scenarios.py
-│   ├── domain/                      # 6 domain orchestrators
-│   │   ├── positive/
-│   │   ├── negative/
-│   │   ├── edge-cases/
-│   │   └── recovery/
-│   └── support/                     # 14 support orchestrators
-│       ├── positive/
-│       ├── negative/
-│       ├── edge-cases/
-│       └── recovery/
-├── fixtures/                        # Shared test data
-│   ├── orchestrator-configs/
-│   ├── sample-repos/
-│   └── knowledge-bases/
-└── e2e/                             # Cross-orchestrator scenarios
-    ├── test-mcp-gateway-routing.py
-    └── test-intent-router-flow.py
-```
-
-**Deliverables:**
-- ✅ Nested folder structure (follows tests/unit pattern)
-- ✅ 12 structure validation tests
-- ✅ Fixture organization (shared configs, sample data)
-- ✅ README per category explaining test types
-
----
-
-#### **S1.2: File Naming Cleanup (CORE-028 Enforcement)**
-
-**Scan & Fix:**
-- 🔍 Find all `SCREAMING_CASE.py` files → Convert to `kebab-case.py`
-- 🔍 Find all `test_CamelCase.py` files → Convert to `test-kebab-case.py`
-- 🔍 Detect `test_file_v2.py` patterns → Remove version suffixes (CORE-066)
-
-**Examples:**
-```
-❌ test_MasterOrchestrator_V2.py → ✅ test-master-orchestrator.py
-❌ TEST_LENS_PIPELINE.py → ✅ test-lens-pipeline.py
-❌ test_TDD_enforcement_v3.py → ✅ test-tdd-enforcement.py
-```
-
-**Automation:**
-- Python script: `scripts/enforce-test-naming.py`
-- Pre-commit hook: Reject non-kebab-case test files
-- CI/CD gate: Block merge if naming violations detected
-
----
-
-#### **S1.3: Base Test Classes (Reusable Harness)**
-
-**Create:**
-```python
-# tests/orchestrators/base-orchestrator-test.py
-class BaseOrchestratorTest:
-    """Base class for all orchestrator tests."""
-    
-    @pytest.fixture
-    def real_event_bus(self):
-        """Real EventBus (no mocks)."""
-        return EventBus()
-    
-    @pytest.fixture
-    def audit_db(self, tmp_path):
-        """Real SQLite audit database."""
-        db_path = tmp_path / "audit.db"
-        # Initialize with schema
-        return db_path
-    
-    @pytest.fixture
-    def real_registry(self):
-        """Real GitBackedRegistry (loads from cortex-registry/)."""
-        from cortex.registry.git_backed_registry import GitBackedRegistry
-        return GitBackedRegistry()
-    
-    def assert_audit_trail(self, db_path, expected_ac_id):
-        """Verify audit trail entry exists."""
-        conn = sqlite3.connect(db_path)
-        cursor = conn.execute(
-            "SELECT ac_id FROM audit_log WHERE ac_id = ?",
-            (expected_ac_id,)
-        )
-        assert cursor.fetchone() is not None
-    
-    def assert_no_mocks_used(self, test_instance):
-        """Verify test uses zero mocks."""
-        # Introspect test for Mock() usage
-        pass
-```
-
-**Deliverables:**
-- ✅ `base-orchestrator-test.py` (foundation class)
-- ✅ `base-negative-test.py` (forbidden action harness)
-- ✅ `base-edge-case-test.py` (boundary condition harness)
-- ✅ `base-recovery-test.py` (crash/rollback harness)
-
----
-
-### **📐 PHASE 2: Core Orchestrator Coverage** ⚪ **PENDING**
-**Duration:** 4-5 sessions | **Tests:** 200+ | **LOE:** High
-**Status:** 0/12 stages | **Commits:** 0
-
-**DISCOVERY NOTES (Session 1 Exploration):**
-- MasterOrchestrator uses singleton pattern (no constructor params)
-- Delegation via `delegate()` method, not `process_request()`
-- EventBus located at `cortex.core.event_bus` (not `cortex.common.event_bus`)
-- Base fixture updated to use correct EventBus import
-- Complex initialization: 4863 lines, deep dependency graph
-- Requires dedicated TDD session per orchestrator (28 tests × 3 = 84 tests minimum)
-
-#### **S2.1: MasterOrchestrator Golden Suite (28 tests)**
-
-**Positive Tests (8):**
-1. ✅ Request routing to correct child orchestrator
-2. ✅ Context synthesis under 20KB (EXIT GATE compliance)
-3. ✅ Audit trail creation (AC markers)
-4. ✅ EventBus message publication
-5. ✅ Multi-turn state persistence
-6. ✅ Response header injection
-7. ✅ Orchestrator metadata embedding
-8. ✅ Silent execution progress bars
-
-**Negative Tests (8):**
-1. ❌ Invalid intent classification → BLOCK
-2. ❌ Missing required context → CHALLENGE
-3. ❌ Circular orchestrator routing → DETECT
-4. ❌ EventBus saturation (1000+ msgs) → BACKPRESSURE
-5. ❌ Audit DB locked → RETRY + ESCALATE
-6. ❌ Context >20KB → SYNTHESIZE or FAIL
-7. ❌ Response without header → INJECT
-8. ❌ Bypass MCP gateway → BLOCK
-
-**Edge Cases (6):**
-1. 🔷 0 registered orchestrators
-2. 🔷 100 concurrent requests
-3. 🔷 Orchestrator crash mid-request → RECOVER
-4. 🔷 Registry update during execution → STALE CHECK
-5. 🔷 Empty user request → CHALLENGE
-6. 🔷 10MB context (impossible) → TRUNCATE
-
-**Recovery Tests (6):**
-1. 🔄 Crash during routing → State recovery
-2. 🔄 EventBus disconnect → Reconnect
-3. 🔄 Audit DB corruption → Rollback
-4. 🔄 Registry sync failure → Fallback
-5. 🔄 Response timeout → Retry
-6. 🔄 Memory leak detection → Restart
-
----
-
-#### **S2.2: TDDOrchestrator Golden Suite (32 tests)**
-
-**Positive Tests (10):**
-1. ✅ RED phase: Test creation BEFORE code
-2. ✅ GREEN phase: Minimal code to pass
-3. ✅ REFACTOR phase: Quality improvement
-4. ✅ Convergence detection (0 violations)
-5. ✅ Coverage tracking (>80% required)
-6. ✅ Test framework detection (pytest/unittest)
-7. ✅ AC marker injection (AC_START → AC_COMPLETE)
-8. ✅ Git commit on RED→GREEN→REFACTOR cycle
-9. ✅ Mock ratio validation (<30%)
-10. ✅ Assertion substance check (no `assert True`)
-
-**Negative Tests (10):**
-1. ❌ Code BEFORE test → BLOCK
-2. ❌ RED phase passes → FAIL (should fail)
-3. ❌ GREEN without tests → BLOCK
-4. ❌ REFACTOR degrades coverage → BLOCK
-5. ❌ Skip test via `--ignore` → BLOCK
-6. ❌ Rename test to `_skip_test_*.py` → DETECT
-7. ❌ Delete failing test → BLOCK
-8. ❌ Mock 100% of dependencies → BLOCK
-9. ❌ Convergence never reached → TIMEOUT
-10. ❌ Bypass TDD workflow → ENFORCE
-
-**Edge Cases (6):**
-1. 🔷 0 tests → Create first test
-2. 🔷 1000 tests → Performance
-3. 🔷 Test timeout (>10min) → KILL
-4. 🔷 Infinite recursion in test → DETECT
-5. 🔷 Circular test dependencies → BLOCK
-6. 🔷 Coverage >100% (impossible) → VALIDATE
-
-**Recovery Tests (6):**
-1. 🔄 Test crash → Isolate + Continue
-2. 🔄 Coverage tool failure → Fallback
-3. 🔄 Git commit failure → RETRY
-4. 🔄 AC marker corruption → REGENERATE
-5. 🔄 Convergence timeout → ESCALATE
-6. 🔄 Mock detection false positive → OVERRIDE
-
----
-
-#### **S2.3: LENSSynthesis Golden Suite (24 tests)**
-
-**Positive Tests (8):**
-1. ✅ 4-layer analysis (Language → Examination → Navigation → Synthesis)
-2. ✅ Company override precedence (company > CORTEX)
-3. ✅ Multi-analyzer consensus
-4. ✅ Confidence scoring (0.0-1.0)
-5. ✅ Knowledge graph integration
-6. ✅ Domain inference
-7. ✅ Threat detection (P0/P1/P2)
-8. ✅ Cache hit rate >70%
-
-**Negative Tests (8):**
-1. ❌ Analyzer conflict (3+ disagree) → ESCALATE
-2. ❌ Confidence <0.4 → CHALLENGE
-3. ❌ Knowledge graph disconnected → REBUILD
-4. ❌ Domain inference failure → FALLBACK
-5. ❌ Cache poisoning → VALIDATE
-6. ❌ P0 threat ignored → BLOCK
-7. ❌ Company override cycle → DETECT
-8. ❌ LENS pipeline timeout → PARTIAL RESULT
-
-**Edge Cases (4):**
-1. 🔷 0 analyzers available → BOOTSTRAP
-2. 🔷 100 analyzers (stress test)
-3. 🔷 Empty codebase → MINIMAL ANALYSIS
-4. 🔷 10GB codebase → SAMPLING
-
-**Recovery Tests (4):**
-1. 🔄 Analyzer crash → Isolate + Continue
-2. 🔄 Knowledge graph corruption → REBUILD
-3. 🔄 Cache corruption → CLEAR + REBUILD
-4. 🔄 Domain inference deadlock → TIMEOUT
-
----
-
-### **📐 PHASE 3: Domain + Support + E2E**
-**Duration:** 3-4 sessions | **Tests:** 180+ | **LOE:** High
-
-#### **S3.1: Domain Orchestrators (6 × 16 tests = 96 tests)**
-
-**Orchestrators:**
-1. RefactoringOrchestrator
-2. PlanningOrchestrator (now PlanOrchestrator)
-3. DomainOrchestrator
-4. ConversationOrchestrator
-5. DocumentationOrchestrator
-6. ChallengeEngine
-
-**Per-Orchestrator Template (16 tests):**
-- ✅ 6 positive tests (happy path)
-- ❌ 6 negative tests (forbidden actions)
-- 🔷 2 edge case tests (boundaries)
-- 🔄 2 recovery tests (crash/rollback)
-
----
-
-#### **S3.2: Support Orchestrators (14 × 12 tests = 168 tests, subset 84 tests)**
-
-**Priority Support Orchestrators (7 × 12 = 84 tests):**
-1. OnboardingOrchestrator
-2. ToolDiscoveryOrchestrator
-3. LENSOrchestrator (separate from synthesis)
-4. RecommendationGate
-5. EducationalOrchestrator
-6. PlanOrchestrator
-7. EnvironmentIntegrityAgent
-
-**Additional Support Orchestrators (7 × 12 = 84 tests, lower priority):**
-8. DigestOrchestrator (Phase 54 - session learning)
-9. RefactoringStrategist
-10. ValidationGateway
-11. MetricsCollector
-12. CacheOrchestrator
-13. EventLoopOrchestrator
-14. HealthMonitorOrchestrator
-
-**Per-Orchestrator Template (12 tests):**
-- ✅ 4 positive tests
-- ❌ 4 negative tests
-- 🔷 2 edge case tests
-- 🔄 2 recovery tests
-
----
-
-#### **S3.3: Cross-Orchestrator E2E Tests (40 tests)**
-
-**Scenarios:**
-1. **MCP Gateway → IntentRouter → TDDOrchestrator** (full IMPLEMENT flow)
-2. **MasterOrchestrator → LENSSynthesis → ChallengeEngine** (ANALYZE + challenge)
-3. **PlanOrchestrator → PhaseManager → TDDOrchestrator** (PLAN + execute)
-4. **EnforcementOrchestrator → TDDOrchestrator** (governance + TDD)
-5. **RepositoryOnboarding → LENSSynthesis → SecurityScan** (onboard flow)
-6. **RefactoringOrchestrator → TDDOrchestrator → ConvergenceNeuron** (refactor loop)
-7. **DigestOrchestrator → LearningLoop → KnowledgeGraph** (session digest)
-8. **EventBus saturation** (1000 concurrent events)
-9. **Registry sync failure** (orchestrator registration conflict)
-10. **Multi-session state corruption** (parallel execution)
-
-**Per-Scenario Tests (4 each):**
-- ✅ 1 positive (end-to-end success)
-- ❌ 1 negative (validation failure at each stage)
-- 🔷 1 edge case (boundary condition)
-- 🔄 1 recovery (mid-flow crash)
-
----
-
-## 🎨 **User Response Templates (Autonomous Execution)**
-
-### **During Execution (Silent Mode)**
-
-```
----
-
-📋 **GOLDEN TEST FRAMEWORK Phase 2 Stage 1: MasterOrchestrator Suite**
-
-`██████████░░░░░░░░░░` 50% MasterOrchestrator Complete
-
-| # | Status | Test Category | Count |
-|---|--------|---------------|-------|
-| 1 | ✅ | Positive Tests | 8/8 passing |
-| 2 | ✅ | Negative Tests | 8/8 passing |
-| 3 | 🔵 | Edge Case Tests | 3/6 passing ← IN PROGRESS |
-| 4 | ⚪ | Recovery Tests | pending |
-
-**Tests:** 19/28 | **Coverage:** 87%
-**Current:** test-master-orchestrator-boundaries.py (edge case #4)
-
----
-```
-
-### **Completion Report (30-60 Second Read)**
-
-```markdown
-<hr>
-
-✅ **GOLDEN TEST FRAMEWORK: COMPLETE**
-
-`██████████` 100% All 3 Phases Complete
-
-## 📊 Deliverables
-
-| Phase | Orchestrators | Tests | Coverage | Status |
-|-------|--------------|-------|----------|--------|
-| **P1: Foundation** | 0 (infrastructure) | 80 | 94% | ✅ |
-| **P2: Core** | 3 (Master, TDD, LENS) | 84 | 91% | ✅ |
-| **P3: Domain/Support** | 13 (6 domain + 7 support) | 180 | 88% | ✅ |
-| **E2E** | 10 cross-orchestrator | 40 | 85% | ✅ |
-| **TOTAL** | **28 orchestrators** | **384 tests** | **90% avg** | ✅ |
-
-## 🎯 Key Achievements
-
-- ✅ **Zero mocks**: All tests use real components (EventBus, Registry, DB)
-- ✅ **Negative coverage**: 140 forbidden action tests prevent bypasses
-- ✅ **Edge cases**: 184 boundary condition tests catch blind spots
-- ✅ **Recovery**: 56 crash/rollback tests ensure resilience
-- ✅ **File naming**: 100% kebab-case compliance (CORE-028)
-- ✅ **Test organization**: Nested structure (positive/negative/edge/recovery)
-- ✅ **Production-ready**: All tests work for BOTH internal dev + user repos
-- ✅ **MCP exposure**: cortex_run_golden_tests tool wired
-
-## 🔧 Governance Compliance
-
-| Rule | Requirement | Status |
-|------|-------------|--------|
-| CORE-008 | TDD (tests before code) | ✅ 384/384 |
-| CORE-028 | kebab-case file naming | ✅ 100% |
-| CORE-002 | No markdown sprawl | ✅ 0 violations |
-| CORE-035 | Single canonical implementation | ✅ verified |
-| CORE-049 | Silent autonomous execution | ✅ ASCII bars only |
-
-## 📁 Repository Structure
-
-```
-tests/orchestrators/
-├── core/ (3 orchestrators × 28 tests = 84)
-├── domain/ (6 orchestrators × 16 tests = 96)
-├── support/ (7 orchestrators × 12 tests = 84)
-└── e2e/ (10 scenarios × 4 tests = 40)
-```
-
-## 🚀 Autonomous Execution Features
-
-- **Silent mode**: Progress bars only (no narration)
-- **Auto-commit**: Each phase committed with AC markers
-- **Auto-rollback**: Critical failures trigger rollback
-- **Validation gates**: Tests, security, governance checked per stage
-- **Real-time progress**: ASCII bars show completion %
-- **MCP integration**: cortex_run_golden_tests callable from chat
-
----
-
-## 📈 Session Metrics
+## CURRENT STATE (Verified 2026-02-15)
 
 | Metric | Value |
 |--------|-------|
-| **Tokens Used** | 847k / 1M (84.7%) |
-| **Level of Effort** | High (10-12 sessions) |
-| **Test Files Created** | 142 new files |
-| **Test Files Renamed** | 37 files (CORE-028 compliance) |
-| **Lines of Code** | 24,500 LOC (tests + fixtures) |
-| **Coverage Improvement** | +58% (32% → 90%) |
-| **Execution Time** | ~28 hours (silent autonomous) |
-| **Git Commits** | 18 commits (AC-GOLDEN-FRAMEWORK-001 through 018) |
+| Tests collected | 16,224 |
+| Tests passing | 908 |
+| Tests failing | 5 |
+| Tests skipped | 107 |
+| Golden tests | 32 (8 files, all passing — but 7 of 8 use internal Mock classes) |
+| Duplicate classes | IntentRouter exists in 2 locations (CORE-035 violation) |
+| Stray .md in phases/ | 2 files (CORE-002 violation) |
+| MEGA-B label collision | Phase 22 AND Phase 23 both claim MEGA-B |
+
+### 5 Failing Tests (Must Fix Before Phase Execution)
+
+| Test | Root Cause |
+|------|-----------|
+| test_no_wave_references_in_prompts | Nomenclature consistency — stale "wave" references in prompts |
+| test_invalid_source_rejected | MasterOrchestrator enforcement — source validation |
+| test_enh066_documentation_accuracy | MCP setup validation — documentation drift |
+| test_render_phase_01_html | Phase detail generation — template/data mismatch |
+| test_validate_html_structure | Phase detail generation — HTML structure validation |
 
 ---
 
-## 🎓 Pattern Library Enhancements
+## NEW GOVERNANCE RULE: CORE-055
 
-- **48 learnings** extracted from completed ENH items
-- **22 anti-patterns** catalogued with detection tests
-- **12 remediation patterns** documented for common issues
-- **14 mistakes** from git history prevented via new guards
+**Name:** Pre-Execution Planning Completeness Gate
+**Priority:** P0 | **Enforcement:** BLOCKING
+**Note:** CORE-053 (CCL) and CORE-054 (MCP Wiring Validation) are already allocated in enforcement-patterns.yaml
+
+| Aspect | Requirement |
+|--------|-------------|
+| **When** | Before ANY phase execution begins |
+| **What** | Every phase MUST have ALL stages defined with: test count, file targets, acceptance criteria, estimated LOC, dependencies |
+| **Holistic Review** | After all phases are planned, mandatory conflict/contradiction/regression check |
+| **Clean Code Gate** | After each stage: full test suite, lint (zero errors), type hints, docstrings |
+| **No Ad-Hoc Stages** | New stages CANNOT be added mid-phase. If scope changes, phase is replanned and re-reviewed first |
+| **Tactical Adaptation** | Within-stage implementation details CAN adapt to reality. Stage structure stays locked. |
+| **Complements** | CORE-042 (hierarchy), CORE-048 (validation gate), CORE-001 (incremental delivery) |
+
+### CORE-028 Extension (Phase Naming Standards)
+
+| Convention | Rule |
+|------------|------|
+| Phase YAML naming | `{NN}-{kebab-case-name}.yaml` (max 50 chars total) |
+| Phase folders | `completed/`, `active/`, `planned/`, `deferred/`, `consolidated/` |
+| No .md in phases/ | YAML only — descriptions go inside YAML `description` fields |
+| Mega-phase labels | Sequential: MEGA-A, MEGA-B, MEGA-C, MEGA-D (no duplicates) |
 
 ---
 
-## 🔮 Next Steps
+## PHASE-END GATE (Mandatory After Every Stage)
 
-1. **Integrate with CI/CD**: Add golden tests to pre-merge gate (GitHub Actions workflow created)
-2. **Performance baseline**: Establish latency/throughput benchmarks (<5s per test target)
-3. **User onboarding**: Document how to run tests on their repos (CONTRIBUTING.md + README.md)
-4. **MCP exposure**: Wire golden test framework as MCP tool
+| Check | Pass Criteria |
+|-------|---------------|
+| Full test suite | ≥ baseline (908 passing) + new phase tests |
+| Lint | Zero ruff errors |
+| Type hints | No new untyped public functions |
+| Docstrings | No new undocumented public functions |
+| Wiring | `__wiring_contract__.yaml` still valid |
+| Duplicates | No new CORE-035 violations |
+| AC Markers | AC_START and AC_COMPLETE present in SQLite |
 
-### 🔧 MCP Tool Specification: cortex_run_golden_tests
+---
 
-**Purpose:** Execute golden test suites for any orchestrator from Copilot Chat
+## PHASE REGISTRY AFTER CLEANUP
 
-**Parameters:**
-- `orchestrator_name` (string, required): Target orchestrator (e.g., "MasterOrchestrator")
-- `test_category` (string, optional): positive|negative|edge|recovery|all (default: all)
-- `scope` (string, optional): Specific test file pattern (e.g., "test-master-orchestrator-routing.py")
-- `verbose` (bool, optional): Show detailed output (default: false)
+| Phase | Name | Label | Status | Location |
+|-------|------|-------|--------|----------|
+| 02 | Registry Isolation | — | completed | `phases/completed/` |
+| 09 | Unified Digest-Ingest Facade | — | completed | `phases/completed/` |
+| 19 | Convergence Loop Holistic TDD | — | completed | `phases/completed/` |
+| 20 | Workflow Intelligence Neurons | — | completed | `phases/completed/` |
+| 01 | Business Wisdom Display | — | consolidated | `phases/consolidated/` |
+| 12 | Knowledge Persistence | — | consolidated | `phases/consolidated/` |
+| 16 | MCP Tools Documentation | — | consolidated | `phases/consolidated/` |
+| 17 | Agent Architecture Redesign | — | consolidated | `phases/consolidated/` |
+| 18 | IntentRouter Hardening | — | consolidated | `phases/consolidated/` |
+| **21** | **Intelligence & Learning Core** | **MEGA-A** | **active** | `phases/active/` |
+| **22** | **Developer Experience & Tooling** | **MEGA-B** | **planned** | `phases/planned/` |
+| **23** | **STS Knowledge Synthesis** | **MEGA-C** | **active** | `phases/active/` |
+| **24** | **Production Verification Harness** | **MEGA-D** | **planned** | `phases/planned/` |
+| **25** | **Stabilization & Duplicate Elimination** | **MEGA-E** | **planned** | `phases/planned/` |
+| 03-08, 11, 13-15 | Various domain expansions | — | deferred | `phases/deferred/` |
 
-**Returns:**
-```json
-{
-  "orchestrator": "MasterOrchestrator",
-  "category": "all",
-  "tests_run": 28,
-  "tests_passed": 28,
-  "tests_failed": 0,
-  "coverage": "94%",
-  "duration_seconds": 4.2,
-  "failed_tests": []
-}
+---
+
+## EXECUTION ORDER
+
+| Order | Phase | Priority | Sessions | Dependencies |
+|-------|-------|----------|----------|--------------|
+| 0 | Registry Cleanup | P0 | 1 | None |
+| 1 | Phase 25 (MEGA-E): Stabilization | P0 | 2-3 | Registry cleanup |
+| 2 | Phase 24 (MEGA-D): Verification Harness | P0 | 7-9 | Phase 25 complete |
+| 3 | Phase 21 (MEGA-A): Intelligence Core | P0 | 7-10 | Phase 24 S2 complete |
+| 4 | Phase 23 (MEGA-C): STS Knowledge | P1 | 14-18 days | Phase 21 complete |
+| 5 | Phase 22 (MEGA-B): Developer Experience | P1 | 2-3 weeks | Phase 21 complete |
+| 6+ | Deferred phases (03-08, 11, 13-15) | P2 | TBD | MEGA-A through MEGA-E complete |
+
+---
+
+## PHASE 0: REGISTRY CLEANUP (Pre-Requisite)
+
+**Sessions:** 1 | **Tests:** 0 | **Risk:** Zero (housekeeping only)
+
+| Stage | Action | Deliverable |
+|-------|--------|-------------|
+| S1 | Create folder structure | `completed/`, `active/`, `planned/`, `deferred/`, `consolidated/` under phases/ |
+| S2 | Move phase YAMLs to status subfolders | All 22 YAMLs in correct subfolder, content unchanged |
+| S3 | Remove stray .md files | Delete PHASE-23-OVERVIEW.md, active/phase-23-megab-*.md |
+| S4 | Remove `_views/` directory | Folder structure replaces it — single source |
+| S5 | Fix MEGA labeling | Phase 22 = MEGA-B, Phase 23 = MEGA-C (no collision) |
+| S6 | Register CORE-055 in core-rules.yaml | New governance rule in registry |
+| S7 | Update master-index.yaml | Paths reflect new folder structure |
+| S8 | Register Phase 24 + Phase 25 | New phase YAMLs in phases/planned/ |
+
+---
+
+## PHASE 25: STABILIZATION & DUPLICATE ELIMINATION (MEGA-E)
+
+**Sessions:** 2-3 | **Tests:** Fix 5 + eliminate duplicates | **Risk:** Low
+**Why First:** You cannot build a verification harness on a broken foundation. Fix the 5 failing tests, eliminate duplicate class definitions, and establish a clean honest baseline BEFORE any new test infrastructure.
+
+| Stage | Name | Deliverable | Acceptance Criteria |
+|-------|------|-------------|---------------------|
+| S1 | Fix 5 Failing Tests | All 5 tests passing | 908 → 913 passing, 0 failing |
+| S2 | Duplicate IntentRouter Elimination | Single canonical IntentRouter | `cortex.brain.domain_brain.nlp_handler_router.IntentRouter` deprecated or removed; only `cortex.orchestrators.core.intent_router.IntentRouter` remains |
+| S3 | Wiring Contract Audit | Verify all 28 wiring entries point to importable real classes | `python -c "from {module} import {class_name}"` succeeds for every entry |
+| S4 | Regression Baseline Capture | Record passing count as immutable baseline | Baseline file: tests/baseline.json with count + timestamp |
+| S5 | Install hypothesis | Added to requirements.txt, verified | `python -c "import hypothesis"` succeeds |
+| **GATE** | Phase-End Gate | All checks pass | Full suite ≥ 913, zero lint, wiring valid, AC markers |
+
+---
+
+## PHASE 24: PRODUCTION VERIFICATION HARNESS (MEGA-D)
+
+**Sessions:** 7-9 | **Tests:** 200-260 new | **Risk:** Medium (additive only)
+**Core Principle:** ZERO MOCKS. Every golden test imports and exercises REAL CORTEX classes. No `class Mock*` patterns. Tests that need isolation use real lightweight instances, not simulations.
+
+### Mock Elimination Strategy
+
+The existing 8 golden test files (32 tests) contain `class Mock*` in 7 of 8 files. These must be rewritten to import real classes:
+
+| Current Mock | Replacement (Real Import) |
+|-------------|--------------------------|
+| MockGovernanceEngine | `cortex.orchestrators.core.enforcement_orchestrator.EnforcementOrchestrator` |
+| MockMCPGateway | `cortex.mcp.server` + real tool registry |
+| MockLENSPipeline | `cortex.domain_brain.lens_integration.LENSSynthesis` |
+| MockTierCascade | `cortex.core.database.tier_enforcement_queries` + real tier lookup |
+| MockConflictResolver | `cortex.orchestrators.coherence` (real coherence module) |
+| MockCompanyOverride | `cortex.core.event_bus.EventBus` (already real — keep) |
+| MockMultiAnalyzer | Real analyzer chain from cortex_lens |
+
+### Stage Breakdown
+
+| Stage | Name | Tests | Status | Key Files |
+|-------|------|-------|--------|-----------|
+| S1 | Rewrite Golden Tests (Zero Mock) | Rewrite 32 existing → real imports | ⚪ Planned | tests/golden/*.py |
+| S2 | Governance Enforcement E2E | 60-80 new | ⚪ Planned | tests/golden/governance/ |
+| S3 | Intelligence Pipeline E2E | 50-65 new | ⚪ Planned | tests/golden/intelligence/ |
+| S4 | TDDOrchestrator + LENSSynthesis | 45-55 new | ⚪ Planned | tests/golden/orchestrators/ |
+| S5 | Context Management & Planning | 25-35 new | ⚪ Planned | tests/golden/planning/ |
+| S6 | MasterOrchestrator Deep Integration | 20 new | ⚪ Planned | tests/golden/orchestrators/master/ |
+| S7 | MCP Gateway Real E2E | 10-15 new | ⚪ Planned | tests/golden/mcp/ |
+| **GATE** | Phase-End Gate | All checks pass | — | Full suite ≥ baseline + 200, zero lint, wiring valid |
+
+### S1 Detail: Golden Test Rewrite (Critical Path)
+
+Each existing golden test file gets rewritten to:
+1. Remove `class Mock*` definitions
+2. Import real CORTEX classes
+3. Call real methods (e.g., `EnforcementOrchestrator().validate_operation()` not `MockGovernanceEngine().check()`)
+4. Assert on real return types and real behavior
+5. Maintain the same test count (32) — same coverage, real wiring
+
+### S2 Detail: Governance Enforcement E2E (60-80 tests)
+
+| Area | Tests | What It Proves |
+|------|-------|----------------|
+| EnforcementOrchestrator with 9 real agents | 15 | All 9 agents instantiate, validate, return correct types |
+| CORE rule enforcement chain | 15 | CORE-008 blocks missing tests, CORE-002 blocks .md generation, CORE-028 blocks bad names |
+| GovernanceDatabaseManager SQLite persistence | 10 | Violations write to SQLite, queries return correct data |
+| Tier 0/1/2 cascade | 10 | Tier 0 = BLOCKED, Tier 1 = WARNING, Tier 2 = INFO — no crossover |
+| AC marker audit trail | 10 | AC_START → AC_COMPLETE lifecycle, SQLite verification |
+
+### S3 Detail: Intelligence Pipeline E2E (50-65 tests)
+
+| Area | Tests | What It Proves |
+|------|-------|----------------|
+| Knowledge persistence service | 15 | Real data persists to SQLite, retrieves correctly |
+| Learning modules (pattern capture) | 15 | Real patterns detected from real code samples |
+| Perception → Reasoning → Action chain | 10 | Brain tier pipeline works end-to-end with real inputs |
+| Intelligence neurons | 10 | Convergence + workflow neurons fire with real event bus |
+
+### S4 Detail: TDDOrchestrator + LENSSynthesis (45-55 tests)
+
+| Area | Tests | What It Proves |
+|------|-------|----------------|
+| TDDOrchestrator RED→GREEN→REFACTOR | 15 | Real TDD cycle executes against real test files |
+| LENSSynthesis Language→Examination→Navigation→Synthesis | 15 | Real LENS pipeline produces real analysis |
+| IntentRouter (singular, canonical) | 10 | Single IntentRouter routes all intents correctly |
+| Cross-orchestrator delegation | 5-15 | Master → Intent → TDD/LENS → result chain works |
+
+### S5 Detail: Context Management & Planning (25-35 tests)
+
+| Area | Tests | What It Proves |
+|------|-------|----------------|
+| AutonomousPhaseExecutor | 10 | Phase execution respects CORE-055 stage manifest |
+| Checkpoint/resume system | 10 | Interrupted phases resume from correct point |
+| Context bundle system | 5-15 | Large orchestrators load within context limits |
+
+### S6 Detail: MasterOrchestrator Deep Integration (20 tests)
+
+| Area | Tests | What It Proves |
+|------|-------|----------------|
+| Full request lifecycle | 10 | Request → route → execute → respond chain works |
+| Orchestrator delegation | 5 | Master correctly delegates to all registered orchestrators |
+| Error propagation | 5 | Failures bubble up with correct context, no silent swallowing |
+
+### S7 Detail: MCP Gateway Real E2E (10-15 tests)
+
+| Area | Tests | What It Proves |
+|------|-------|----------------|
+| All 10 production MCP tools | 10 | Each tool callable through gateway, returns valid response |
+| Tool routing | 3-5 | Gateway routes to correct handler, rejects unknown tools |
+
+---
+
+## PHASE 21: INTELLIGENCE & LEARNING CORE (MEGA-A)
+
+**Status:** Active (partial progress)
+**Sessions:** 7-10 days | **Tests:** 150
+**Depends on:** Phase 25 complete, Phase 24 S2 complete (governance verification proves foundation)
+
+Existing YAML spec at `21-intelligence-learning-core-mega.yaml` — no changes to stage structure.
+Phase 24 S3 (Intelligence Pipeline E2E) validates this phase's deliverables.
+
+---
+
+## PHASE 23: STS KNOWLEDGE SYNTHESIS (MEGA-C)
+
+**Status:** Active (S1-S3 progress)
+**Sessions:** 14-18 days | **Tests:** 70+
+**Depends on:** Phase 21 complete
+**Label fix:** Renamed from MEGA-B to MEGA-C (collision resolved)
+
+Existing YAML spec at `23-sts-knowledge-synthesis-mega.yaml` — label updated, no stage changes.
+
+---
+
+## PHASE 22: DEVELOPER EXPERIENCE & TOOLING (MEGA-B)
+
+**Status:** Planned
+**Sessions:** 2-3 weeks | **Tests:** 100+
+**Depends on:** Phase 21 complete
+
+Existing YAML spec at `22-developer-experience-tooling-mega.yaml` — no changes.
+
+---
+
+## NON-REGRESSION GUARANTEE
+
+| Check | Status |
+|-------|--------|
+| Existing 16,224 test collection | Not touched — baseline captured in Phase 25 S4 |
+| Existing 908 passing tests | Phase 25 fixes 5 failures → 913+ baseline, never drops below |
+| Existing phase YAMLs | Moved to subfolders, content unchanged |
+| Existing production code | Zero changes in Phase 0 + Phase 24 (test-only, additive) |
+| Existing wiring | `__wiring_contract__.yaml` validated, not modified |
+| Existing governance rules | CORE-028 extended (not replaced), CORE-055 is new |
+| Golden test rewrite (S1) | Same 32 tests, same coverage — real imports replace mocks |
+
+---
+
+## RESOURCE SUMMARY
+
+| Phase | Sessions | Tests | Key Deliverable |
+|-------|----------|-------|-----------------|
+| Registry Cleanup (Phase 0) | 1 | 0 | Clean folder structure, CORE-055 registered |
+| Phase 25 (MEGA-E) | 2-3 | Fix 5 + baseline | Clean foundation, zero duplicates, honest baseline |
+| Phase 24 (MEGA-D) | 7-9 | 200-260 | Zero-mock verification harness |
+| Phase 21 (MEGA-A) | 7-10 days | 150 | Intelligence & learning system |
+| Phase 23 (MEGA-C) | 14-18 days | 70+ | STS knowledge engine |
+| Phase 22 (MEGA-B) | 2-3 weeks | 100+ | Production DX polish |
+| **Total** | **~10-12 weeks** | **~520-580+** | **Production-ready CORTEX** |
+
+---
+
+## CONFLICT/CONTRADICTION CHECK (CORE-055 Compliance)
+
+| Check | Result |
+|-------|--------|
+| Phase 25 targets overlap Phase 24? | ❌ No — Phase 25 fixes existing code; Phase 24 adds new tests |
+| Phase 24 golden rewrite conflicts with Phase 25 baseline? | ❌ No — Phase 25 completes first, baseline set, then Phase 24 rewrites |
+| Phase 21 and Phase 24 S3 conflict? | ❌ No — Phase 24 S3 validates Phase 21 deliverables, runs after |
+| CORE-055 conflicts with CORE-001 (incremental)? | ❌ No — complementary: plan fully, deliver incrementally |
+| CORE-055 conflicts with CORE-048 (validation gate)? | ❌ No — CORE-048 validates individual operations; CORE-055 validates phase plans |
+| Any two phases target the same files? | ❌ No — each phase has distinct file targets |
+| Mock elimination breaks existing 32 golden tests temporarily? | ⚠️ Yes — managed: S1 rewrites all 8 files atomically per file, gate verifies after |
+
+---
+
+## EXECUTION COMMAND
+
 ```
-
-**Example Usage:**
-```python
-# Run all MasterOrchestrator tests
-cortex_run_golden_tests(orchestrator_name="MasterOrchestrator")
-
-# Run only negative tests for TDDOrchestrator
-cortex_run_golden_tests(
-    orchestrator_name="TDDOrchestrator",
-    test_category="negative"
-)
-
-# Run specific test file
-cortex_run_golden_tests(
-    orchestrator_name="LENSSynthesis",
-    scope="test-lens-analyzer-conflict.py",
-    verbose=true
-)
+Start: Phase 0 (Registry Cleanup) — zero regression risk, pure housekeeping
+Then: Phase 25 S1 (Fix 5 failing tests) — establishes honest baseline
 ```
-
-**Implementation Location:** `cortex/mcp/tools/testing.py`  
-**Wiring:** Add to `cortex-registry/_cortex-master/mcp-tools.yaml` in Phase 3 Stage 4  
-**Tests:** 8 MCP tool tests (positive, negative, edge, integration)
-
----
-
-**Authority:** `.github/prompts/cortex-architect.prompt.md` v8.1  
-**Orchestrator:** LENSSynthesis ✅  
-**AC Chain:** AC-GOLDEN-FRAMEWORK-001 → AC-GOLDEN-FRAMEWORK-018 ✅
-
----
-```
-
----
-
-## 🎯 **Success Criteria**
-
-| Criterion | Target | Verification |
-|-----------|--------|--------------|
-| **Orchestrator Coverage** | 100% (28/28) | All orchestrators have test suites |
-| **Test Count** | 384+ tests | pytest --collect-only shows 384+ |
-| **Negative Test Coverage** | 140+ tests | Forbidden actions verified blocked |
-| **Edge Case Coverage** | 184+ tests | Boundary conditions tested |
-| **Recovery Test Coverage** | 56+ tests | Crash/rollback scenarios verified |
-| **File Naming Compliance** | 100% kebab-case | No SCREAMING_CASE or CamelCase |
-| **Mock Usage** | 0% (real components) | No Mock() or MagicMock() in tests |
-| **Test Organization** | Nested by category | positive/negative/edge/recovery folders |
-| **Production Applicability** | Works for user repos | Tests run on non-CORTEX repositories |
-| **Governance Compliance** | Zero violations | CORE-008, CORE-028, CORE-002 passing |
-| **MCP Tool Exposure** | 1 new tool | cortex_run_golden_tests callable |
-| **Documentation Complete** | 6 docs | All README/playbook files exist |
-| **CI/CD Integration** | Pre-commit + GitHub Actions | Hooks block violations |
-| **Performance Baseline** | <5s per test | Latency benchmarks recorded |
-
----
-
-## 📊 **Resource Estimates**
-
-| Phase | Duration | Test Files | LOC | Engineers |
-|-------|----------|------------|-----|-----------|
-| **Phase 1** | 2-3 sessions | 20 files | 3,500 | 1 |
-| **Phase 2** | 4-5 sessions | 42 files | 10,000 | 1-2 |
-| **Phase 3** | 3-4 sessions | 80 files | 11,000 | 1-2 |
-| **TOTAL** | **9-12 sessions** | **142 files** | **24,500** | **1-2** |
-
-**Token Budget:** ~850k tokens (85% of 1M limit)  
-**Execution Mode:** Silent autonomous with ASCII progress bars  
-**Commits:** 18 commits (1-2 per phase)
-
----
-
-## 🔐 **Governance Integration**
-
-### **Pre-Commit Hooks**
-
-```bash
-# .githooks/pre-commit
-#!/bin/bash
-# Block non-kebab-case test files (CORE-028)
-python scripts/enforce-test-naming.py --check || exit 1
-
-# Block tests with >30% mock ratio (CORE-060)
-python scripts/detect-mock-abuse.py --threshold 0.3 || exit 1
-
-# Block markdown sprawl (CORE-002)
-python scripts/vacuum-markdown.py --check || exit 1
-```
-
-### **CI/CD Gates**
-
-```yaml
-# .github/workflows/golden-tests.yml
-name: Golden Test Suite
-
-on: [push, pull_request]
-
-jobs:
-  golden-tests:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Run Golden Tests
-        run: pytest tests/orchestrators/ --maxfail=1 --tb=short
-      - name: Verify File Naming
-        run: python scripts/enforce-test-naming.py --check
-      - name: Check Mock Ratio
-        run: python scripts/detect-mock-abuse.py --threshold 0.3
-      - name: Validate Coverage
-        run: pytest tests/orchestrators/ --cov=cortex --cov-report=term --cov-fail-under=85
-```
-
----
-
-## 📚 **Documentation Deliverables**
-
-1. **tests/orchestrators/README.md** — Test organization guide
-2. **tests/orchestrators/CONTRIBUTING.md** — How to add new orchestrator tests
-3. **tests/fixtures/README.md** — Fixture usage and creation guide
-4. **docs/GOLDEN-TEST-FRAMEWORK.md** — Architecture and patterns
-5. **docs/NEGATIVE-TEST-CATALOG.md** — All forbidden actions documented
-6. **docs/EDGE-CASE-PLAYBOOK.md** — Boundary condition strategies
-
----
-
-## 🔄 **Iterative Execution Strategy**
-
-### **Session 1-2: Phase 1 Foundation**
-- Create nested folder structure
-- Implement base test classes
-- Fix file naming violations (CORE-028)
-- Setup fixtures and shared utilities
-- **Commit:** AC-GOLDEN-FRAMEWORK-001
-
-### **Session 3-6: Phase 2 Core Orchestrators**
-- MasterOrchestrator suite (28 tests)
-- TDDOrchestrator suite (32 tests)
-- LENSSynthesis suite (24 tests)
-- **Commits:** AC-GOLDEN-FRAMEWORK-002 through 007
-
-### **Session 7-12: Phase 3 Domain/Support + E2E**
-- 6 domain orchestrators (96 tests)
-- 7 support orchestrators (84 tests)
-- 10 E2E scenarios (40 tests)
-- **Commits:** AC-GOLDEN-FRAMEWORK-008 through 018
-
----
-
-**Status:** ✅ READY FOR IMPLEMENTATION  
-**Authority:** cortex-architect.prompt.md v8.1  
-**Mode:** Silent autonomous with ASCII progress bars  
-**Quality:** Production-level (TDD mandatory, tests before code)  
-**Token Budget:** 850k / 1M (monitored per phase)
-
----
-
-## 🔍 HOLISTIC ALIGNMENT VERIFICATION (2026-02-15)
-
-### ✅ Verified Alignments
-
-| Element | Source | Status |
-|---------|--------|--------|
-| **Orchestrator Count** | cortex-registry orchestrator-dispatch.yaml | ✅ 28 confirmed |
-| **File Naming (CORE-028)** | cortex-registry/governance/enforcement-patterns.yaml | ✅ ENF-003 present |
-| **Silent Execution Format** | .github/prompts/SILENT-EXECUTION-RESPONSE-TEMPLATE.md | ✅ Aligned |
-| **TDD Enforcement** | cortex-registry/governance/enforcement-patterns.yaml | ✅ ENF-003 blocking |
-| **MCP Tool Specification** | Added cortex_run_golden_tests spec | ✅ Complete |
-| **Support Orchestrator List** | Explicit 14-orchestrator breakdown added | ✅ Transparent |
-| **Completion Template** | Matches SSOT variable structure | ✅ Standardized |
-
-### 🎯 Enhancements Applied
-
-1. **Support Orchestrators:** Added explicit 14-orchestrator list (transparency)
-2. **MCP Tool:** Detailed `cortex_run_golden_tests` specification with examples
-3. **Completion Report:** Aligned with SILENT-EXECUTION-RESPONSE-TEMPLATE.md SSOT
-4. **Success Criteria:** Added 4 criteria (MCP, docs, CI/CD, performance)
-
-### 📋 Cross-References Validated
-
-- ✅ Registry: `cortex-registry/_cortex-master/knowledge/specifications/orchestrator-dispatch.yaml` (28 orchestrators)
-- ✅ Wiring: `cortex/wiring/specifications/wiring.yaml` (exists, used by factory)
-- ✅ Tests: `tests/golden/` (9 existing files, foundation for expansion)
-- ✅ Governance: `cortex-registry/governance/enforcement-patterns.yaml` (ENF-001 through ENF-005)
-- ✅ Templates: `.github/prompts/SILENT-EXECUTION-RESPONSE-TEMPLATE.md` (SSOT for format)
-
-### 🚀 Implementation Readiness
-
-| Aspect | Status | Notes |
-|--------|--------|-------|
-| **Technical Design** | ✅ Complete | All 3 phases specified with deliverables |
-| **Test Strategy** | ✅ Complete | 384 tests across 4 categories |
-| **Governance** | ✅ Complete | CORE-008, CORE-028, CORE-002 enforced |
-| **MCP Integration** | ✅ Complete | cortex_run_golden_tests specification added |
-| **Autonomous Execution** | ✅ Complete | Silent mode with ASCII progress bars |
-| **Documentation** | ✅ Complete | 6 docs planned + inline README per category |
-| **Resource Estimates** | ✅ Complete | 9-12 sessions, 850k tokens, 28 hours |
-
----
-
-*Holistic Review Completed: 2026-02-15 | Gaps Closed: 3/3 | AC-ID: AC-GOLDEN-FRAMEWORK-DESIGN-001-ALIGNED*
-
-*Generated: 2026-02-15 | AC-ID: AC-GOLDEN-FRAMEWORK-DESIGN-001*
