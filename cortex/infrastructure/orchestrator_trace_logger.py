@@ -107,10 +107,14 @@ class OrchestratorTraceLogger:
     - Automatic flush policies
     - Development/production mode switching
     - Trace analysis and querying
+    - Schema versioning for safe migrations
     """
 
     _instance: Optional["OrchestratorTraceLogger"] = None
     _lock = threading.Lock()
+
+    # Schema Version (increment when schema changes)
+    SCHEMA_VERSION = "1.0.0"
 
     # Configuration
     TRACE_ENABLED = os.getenv("CORTEX_TRACE_ENABLED", "true").lower() == "true"
@@ -166,7 +170,8 @@ class OrchestratorTraceLogger:
                         created_at TEXT NOT NULL,
                         last_updated TEXT NOT NULL,
                         row_count INTEGER DEFAULT 0,
-                        last_flush_time TEXT
+                        last_flush_time TEXT,
+                        schema_version TEXT
                     )
                     """
                 )
@@ -191,9 +196,19 @@ class OrchestratorTraceLogger:
                     ON trace_flush_log(timestamp DESC)
                     """
                 )
+                
+                # Store schema version in metadata
+                conn.execute(
+                    """
+                    INSERT OR REPLACE INTO trace_metadata (id, orchestrator_id, orchestrator_class, 
+                                                           table_name, created_at, last_updated, schema_version)
+                    VALUES ('_schema_version', 'system', 'system', '_schema', ?, ?, ?)
+                    """,
+                    (datetime.now().isoformat(), datetime.now().isoformat(), self.SCHEMA_VERSION)
+                )
 
                 conn.commit()
-                logger.info(f"Initialized trace database: {self._db_path}")
+                logger.info(f"Initialized trace database: {self._db_path} (schema v{self.SCHEMA_VERSION})")
         except Exception as e:
             logger.error(f"Error initializing trace database: {str(e)}")
             self._trace_enabled = False
