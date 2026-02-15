@@ -30,20 +30,20 @@ Each unified orchestrator is like a mature **association area** in the brain —
 
 ### The 4 Unified Support Orchestrators
 
-| Orchestrator | Priority | Absorbed | Brain Analogy |
-|--------------|----------|----------|---------------|
-| **UnifiedOnboardingOrchestrator** | 105 | 3 predecessors | Hippocampal formation — memory encoding for new repos |
-| **UnifiedAnalysisOrchestrator** | 115 | 2 predecessors | Visual association cortex — unified perception |
-| **UnifiedQualityAssuranceOrchestrator** | 125 | 5 predecessors | Anterior cingulate cortex — error & quality judgment |
-| **UnifiedDiscoveryOrchestrator** | 135 | 2 predecessors | Curiosity circuit — exploration & learning |
+| Orchestrator | Priority | Absorbed | System Analogy |
+|--------------|----------|----------|----------------|
+| **UnifiedOnboardingOrchestrator** | 105 | 3 predecessors | Memory initialization — encoding new repositories |
+| **UnifiedAnalysisOrchestrator** | 115 | 2 predecessors | Unified analysis — comprehensive perception |
+| **UnifiedQualityAssuranceOrchestrator** | 125 | 5 predecessors | Quality control — error & quality assessment |
+| **UnifiedDiscoveryOrchestrator** | 135 | 2 predecessors | Discovery engine — exploration & learning |
 
 ---
 
 ## UnifiedOnboardingOrchestrator
 
-### Brain Analogy: Hippocampal Formation
+### System Analogy: Memory Initialization
 
-The **hippocampus** is where new memories are formed. When you visit a new city, the hippocampus encodes the layout, landmarks, and routes into a mental map. The UnifiedOnboardingOrchestrator does the same for new repositories — scanning, mapping, and encoding everything CORTEX needs to know about a codebase.
+When you set up a new system, it needs to learn the environment — scanning configurations, detecting capabilities, and mapping resources. The UnifiedOnboardingOrchestrator does the same for new repositories — scanning, mapping, and encoding everything CORTEX needs to know about a codebase.
 
 ### Absorbed Capabilities
 
@@ -185,11 +185,11 @@ LEARN: Record outcome for future accuracy improvement
 
 ## UnifiedDiscoveryOrchestrator
 
-### Brain Analogy: The Curiosity Circuit
+### System Analogy: The Discovery Engine
 
-Neuroscience has identified a **curiosity circuit** in the brain — a network connecting the prefrontal cortex, hippocampus, and dopamine system that drives exploration and learning. When you encounter something novel, this circuit fires, creating the urge to investigate and the reward when you learn something new.
+Modern systems include discovery mechanisms — search engines that help you find what you need, recommendation engines that suggest relevant content, and exploratory interfaces that reveal hidden features. When you encounter something unfamiliar, these systems help you investigate and learn.
 
-The UnifiedDiscoveryOrchestrator is CORTEX's curiosity circuit — it drives exploration of new tools, generates learning paths, translates business language into technical terms, and helps users discover capabilities they didn't know existed.
+The UnifiedDiscoveryOrchestrator is CORTEX's discovery engine — it drives exploration of new tools, generates learning paths, translates business language into technical terms, and helps users discover capabilities they didn't know existed.
 
 ### Absorbed Capabilities
 
