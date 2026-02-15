@@ -70,7 +70,7 @@ class VacuumOrchestrator:
         return cleaned, freed
 
     def cleanup_prompts_folder(self) -> Tuple[int, float]:
-        """Clean up .github/prompts/ folder sprawl."""
+        """Clean up .github/prompts/ folder sprawl - CORE-028 enforcement."""
         logger.info("🧹 Phase 1a: Prompts Folder Cleanup (.github/prompts/)")
         
         prompts_dir = self.cortex_root / ".github" / "prompts"
@@ -78,49 +78,79 @@ class VacuumOrchestrator:
             logger.info("  ⚠️ .github/prompts/ not found, skipping")
             return 0, 0.0
         
-        # Files that are SAFE to keep (actively referenced)
-        keep_files = {
-            "cortex-architect.prompt.md",  # Referenced by copilot-instructions
-            "CORTEX.prompt.md",  # Referenced by copilot-instructions
-            "cortex-doc.prompt.md",  # Active documentor
-            "response-format-standards.md",  # Referenced 20+ times
-            "SILENT-EXECUTION-RESPONSE-TEMPLATE.md",  # Referenced by content-blocks
-            "business-wisdom-wiring.md",  # Phase 6 spec
-            "README.md",  # Legitimate index
-            # Guides are actively maintained
-            "AGENT-INTEGRATION-GUIDE.md",
-            "AUTONOMOUS-EXECUTION-GUIDE.md",
-            "DATA-INTEGRITY-GUIDE.md",
-            "eventbus-debugger-guide.md",
-            "MCP-SETUP-GUIDE.md",
-            "multi-cycle-tdd-guide.md",
+        # ONLY *.prompt.md files allowed in root + these exceptions
+        allowed_root_files = {
+            "cortex-architect.prompt.md",  # Main architect prompt
+            "CORTEX.prompt.md",  # Main production prompt
+            "cortex-doc.prompt.md",  # Documentor prompt
+            "response-format-standards.md",  # Formatting rules
+            "README.md",  # Index
         }
+        
+        # Create guides/ subdirectory if it doesn't exist
+        guides_dir = prompts_dir / "guides"
+        guides_dir.mkdir(exist_ok=True)
+        
+        # Create .archive/ subdirectory if it doesn't exist
+        archive_dir = prompts_dir / ".archive"
+        archive_dir.mkdir(exist_ok=True)
         
         cleaned = 0
         freed = 0.0
+        moved = 0
         
-        # Scan root prompt files
+        # Scan root files
         for md_file in prompts_dir.glob("*.md"):
-            if md_file.name not in keep_files:
-                # Report but don't delete (user review required)
-                logger.info(f"  ℹ️  Found: {md_file.name} (keeping - verify manually)")
+            if md_file.name in allowed_root_files:
+                continue
+                
+            # Check if it's a guide (SCREAMING_CASE or *-GUIDE.md)
+            if md_file.name.isupper() or "-GUIDE.md" in md_file.name or md_file.name.startswith("WAVE-"):
+                target = guides_dir / md_file.name
+                if not target.exists():
+                    size_mb = md_file.stat().st_size / (1024 * 1024)
+                    md_file.rename(target)
+                    moved += 1
+                    logger.info(f"  📦 Moved to guides/: {md_file.name} ({size_mb:.3f}MB)")
+                else:
+                    logger.info(f"  ⚠️  Already in guides/: {md_file.name}")
+            
+            # Check if it should be archived (completion summaries, old templates)
+            elif any(x in md_file.name.lower() for x in ["summary", "template", "completion"]):
+                target = archive_dir / md_file.name
+                if not target.exists():
+                    size_mb = md_file.stat().st_size / (1024 * 1024)
+                    md_file.rename(target)
+                    moved += 1
+                    logger.info(f"  📦 Moved to .archive/: {md_file.name} ({size_mb:.3f}MB)")
+                else:
+                    logger.info(f"  ⚠️  Already in .archive/: {md_file.name}")
+            
+            else:
+                # Unknown file - report for manual review
+                logger.warning(f"  ❓ Manual review needed: {md_file.name}")
         
-        # Check guides/ subdirectory - keep all (actively maintained)
-        guides_dir = prompts_dir / "guides"
+        # Also check for *.txt files (like WAVE-7-COMPLETION-SUMMARY.txt)
+        for txt_file in prompts_dir.glob("*.txt"):
+            target = guides_dir / txt_file.name
+            if not target.exists():
+                size_mb = txt_file.stat().st_size / (1024 * 1024)
+                txt_file.rename(target)
+                moved += 1
+                logger.info(f"  📦 Moved to guides/: {txt_file.name} ({size_mb:.3f}MB)")
+        
+        # Report on subdirectories
         if guides_dir.exists():
-            guide_count = len(list(guides_dir.glob("*.md")))
-            logger.info(f"  ℹ️  guides/: {guide_count} files (keeping - actively maintained)")
+            guide_count = len(list(guides_dir.glob("*")))
+            logger.info(f"  📂 guides/: {guide_count} files")
         
-        # Archive (.archive/) is intentionally kept for historical reference
-        archive_dir = prompts_dir / ".archive"
         if archive_dir.exists():
-            archive_count = len(list(archive_dir.rglob("*.md")))
-            logger.info(f"  ℹ️  .archive/: {archive_count} files (keeping - historical reference)")
+            archive_count = len(list(archive_dir.rglob("*")))
+            logger.info(f"  📂 .archive/: {archive_count} files (historical)")
         
-        if cleaned == 0:
-            logger.info("  ✅ No cleanup needed - folder is well-organized")
+        logger.info(f"  ✅ Prompts folder reorganized: {moved} files moved")
         
-        return cleaned, freed
+        return moved, freed
 
     def cleanup_debug_markers(self) -> int:
         """Remove CORTEX_DEBUG markers from Python files."""
