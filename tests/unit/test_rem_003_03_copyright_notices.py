@@ -41,6 +41,7 @@ class TestCopyrightNotice:
             orchestrator="Test"
         )
         
+        expected = "Copyright © 2025-2026 Asif Hussain"
         assert response["copyright"] == expected
     
     def test_copyright_in_markdown_header(self, formatter):
