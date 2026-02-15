@@ -1,0 +1,16 @@
+domain: databricks
+patterns:
+- best_practices:
+  - Use DataFrame API over RDD
+  - Partition data appropriately
+  - Cache intermediate results
+  id: DB-001
+  name: Spark Optimization
+- best_practices:
+  - Use Delta tables for ACID transactions
+  - Implement time travel for data versioning
+  - Optimize file sizes with bin-packing
+  id: DB-002
+  name: Delta Lake Patterns
+source: Databricks Best Practices
+version: '1.0'

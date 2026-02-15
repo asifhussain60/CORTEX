@@ -1,0 +1,16 @@
+domain: feature-flags
+patterns:
+- best_practices:
+  - Define clear naming conventions
+  - Set expiration dates for temporary flags
+  - Remove flags after rollout completion
+  id: FF-001
+  name: Flag Lifecycle Management
+- best_practices:
+  - Use percentage rollouts for gradual deployment
+  - Implement user segmentation
+  - Monitor flag evaluation metrics
+  id: FF-002
+  name: Targeting Rules
+source: LaunchDarkly Best Practices
+version: '1.0'
