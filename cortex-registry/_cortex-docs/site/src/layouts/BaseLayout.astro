@@ -1,0 +1,129 @@
+---
+/**
+ * Base Layout
+ * 
+ * Main layout for all documentation pages.
+ * Includes dark glassmorphism theme.
+ */
+
+import RoleSwitcher from '../components/RoleSwitcher.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} | CORTEX Documentation</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body class="bg-cortex-darker text-white min-h-screen">
+    <!-- Background gradient -->
+    <div class="fixed inset-0 bg-gradient-to-br from-cortex-dark via-cortex-darker to-black -z-10"></div>
+    
+    <!-- Animated background particles -->
+    <div class="fixed inset-0 -z-10 opacity-20">
+      <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-cortex-primary rounded-full blur-3xl animate-pulse"></div>
+      <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cortex-secondary rounded-full blur-3xl animate-pulse delay-1000"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-40 bg-cortex-dark/80 backdrop-blur-md border-b border-cortex-primary/30">
+      <div class="container mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+          <a href="/cortex-docs/" class="flex items-center space-x-3">
+            <span class="text-2xl">🧠</span>
+            <span class="text-xl font-bold text-cortex-primary">CORTEX</span>
+            <span class="text-sm text-gray-400">Documentation</span>
+          </a>
+          
+          <div class="flex items-center space-x-6">
+            <a href="/cortex-docs/architecture" class="hover:text-cortex-primary transition-colors">Architecture</a>
+            <a href="/cortex-docs/capabilities" class="hover:text-cortex-primary transition-colors">Capabilities</a>
+            <a href="/cortex-docs/guides" class="hover:text-cortex-primary transition-colors">Guides</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Role Switcher -->
+    <RoleSwitcher />
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-12">
+      <slot />
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-24 border-t border-cortex-primary/30 bg-cortex-dark/50 backdrop-blur-sm">
+      <div class="container mx-auto px-6 py-8">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <p class="text-gray-400 text-sm">
+            © 2026 CORTEX. Documentation generated from registry.
+          </p>
+          <p class="text-gray-400 text-sm mt-4 md:mt-0">
+            Last updated: {new Date().toLocaleDateString()}
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <style is:global>
+      @tailwind base;
+      @tailwind components;
+      @tailwind utilities;
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .delay-1000 {
+        animation-delay: 1s;
+      }
+
+      /* Glassmorphism utilities */
+      .glass {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      /* Smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: rgba(76, 175, 80, 0.3);
+        border-radius: 5px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(76, 175, 80, 0.5);
+      }
+    </style>
+  </body>
+</html>

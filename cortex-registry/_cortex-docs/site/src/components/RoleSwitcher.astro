@@ -1,0 +1,150 @@
+---
+/**
+ * Role Switcher Component
+ * 
+ * Toggles between Business Leaders, Product Owners, and Software Developers views.
+ * Persists selection in localStorage.
+ */
+
+const roles = [
+  { id: 'business', label: 'Business Leaders', icon: '💼' },
+  { id: 'product-owner', label: 'Product Owners', icon: '📊' },
+  { id: 'developer', label: 'Software Developers', icon: '💻' }
+];
+---
+
+<div class="role-switcher fixed top-4 right-4 z-50">
+  <div class="bg-cortex-dark/90 backdrop-blur-md rounded-lg p-3 shadow-lg border border-cortex-primary/30">
+    <p class="text-xs text-gray-400 mb-2 text-center">View As:</p>
+    <div class="flex gap-2">
+      {roles.map((role) => (
+        <button
+          class="role-button px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 hover:scale-105"
+          data-role={role.id}
+          aria-label={`Switch to ${role.label} view`}
+        >
+          <span class="role-icon text-lg">{role.icon}</span>
+          <span class="role-label hidden md:inline ml-2">{role.label}</span>
+        </button>
+      ))}
+    </div>
+  </div>
+</div>
+
+<script>
+  const STORAGE_KEY = 'cortex-docs-role';
+  const DEFAULT_ROLE = 'developer';
+
+  function initRoleSwitcher() {
+    const buttons = document.querySelectorAll('.role-button');
+    const currentRole = localStorage.getItem(STORAGE_KEY) || DEFAULT_ROLE;
+
+    // Set initial active state
+    updateActiveRole(currentRole);
+    filterContentByRole(currentRole);
+
+    // Add click handlers
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const role = button.getAttribute('data-role');
+        if (role) {
+          localStorage.setItem(STORAGE_KEY, role);
+          updateActiveRole(role);
+          filterContentByRole(role);
+        }
+      });
+    });
+  }
+
+  function updateActiveRole(role: string) {
+    const buttons = document.querySelectorAll('.role-button');
+    buttons.forEach((button) => {
+      if (button.getAttribute('data-role') === role) {
+        button.classList.add('bg-cortex-primary', 'text-white');
+        button.classList.remove('bg-cortex-dark', 'text-gray-300');
+      } else {
+        button.classList.remove('bg-cortex-primary', 'text-white');
+        button.classList.add('bg-cortex-dark', 'text-gray-300');
+      }
+    });
+  }
+
+  function filterContentByRole(role: string) {
+    // Show/hide role-specific content sections
+    const allSections = document.querySelectorAll('[data-role-section]');
+    
+    allSections.forEach((section) => {
+      const sectionRoles = section.getAttribute('data-role-section')?.split(',') || [];
+      
+      if (sectionRoles.includes(role) || sectionRoles.includes('all')) {
+        section.classList.remove('hidden');
+        section.classList.add('fade-in');
+      } else {
+        section.classList.add('hidden');
+        section.classList.remove('fade-in');
+      }
+    });
+
+    // Dispatch custom event for other components
+    document.dispatchEvent(new CustomEvent('role-changed', { detail: { role } }));
+  }
+
+  // Initialize on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initRoleSwitcher);
+  } else {
+    initRoleSwitcher();
+  }
+</script>
+
+<style>
+  .role-switcher {
+    animation: slide-in 0.3s ease-out;
+  }
+
+  @keyframes slide-in {
+    from {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .fade-in {
+    animation: fade-in 0.3s ease-in;
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .role-button {
+    cursor: pointer;
+    border: 1px solid transparent;
+  }
+
+  .role-button:hover {
+    border-color: rgba(76, 175, 80, 0.5);
+  }
+
+  @media (max-width: 768px) {
+    .role-switcher {
+      top: auto;
+      bottom: 4px;
+      right: 4px;
+      left: 4px;
+    }
+
+    .role-button {
+      flex: 1;
+    }
+  }
+</style>

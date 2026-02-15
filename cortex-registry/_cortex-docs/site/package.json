@@ -1,0 +1,22 @@
+{
+  "name": "cortex-docs-site",
+  "version": "1.0.0",
+  "description": "CORTEX Documentation SPA",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/tailwind": "^5.1.0",
+    "astro": "^4.2.0",
+    "mermaid": "^10.7.0",
+    "d3": "^7.8.5",
+    "tailwindcss": "^3.4.1"
+  },
+  "devDependencies": {
+    "@types/d3": "^7.4.3",
+    "typescript": "^5.3.3"
+  }
+}
