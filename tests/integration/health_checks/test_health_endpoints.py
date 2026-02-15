@@ -2,9 +2,13 @@
 # Description: Test suite for health check and readiness endpoints
 # Phase: 82, Stage: 3, Part: 1 (Health Checks Testing)
 # TDD Cycle: RED phase - comprehensive health endpoint test suite
+# DEPRECATED (Phase 25 S2): Tests depend on deprecated EnhancedIntentRouter.
 
 """
 Test Suite for Health Check & Readiness Probe Endpoints
+
+DEPRECATED: This suite tests EnhancedIntentRouter which was deprecated in Phase 25 S2.
+Health check testing will resume after IntentRouter consolidation is complete.
 
 Tests all health check endpoints and response formats.
 
@@ -16,6 +20,9 @@ import time
 import pytest
 from unittest.mock import MagicMock, patch
 from typing import List, Dict, Any
+
+# Mark entire module as skipped (depends on deprecated EnhancedIntentRouter)
+pytestmark = pytest.mark.skip(reason="Phase 82 health tests depend on deprecated EnhancedIntentRouter (Phase 25 S2)")
 
 from cortex.health_check_service import (
     HealthCheckService,

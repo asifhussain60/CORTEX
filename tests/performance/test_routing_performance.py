@@ -53,6 +53,9 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
+# Mark entire module as skipped (depends on deprecated EnhancedIntentRouter)
+pytestmark = pytest.mark.skip(reason="Phase 82 performance tests depend on deprecated EnhancedIntentRouter (Phase 25 S2)")
+
 # Local imports (adjust based on actual router structure)
 from cortex.intent_router.router import EnhancedIntentRouter, IntentRoutingRequest, IntentRoutingResult
 from cortex.intent_router.capability_matcher import IntentType

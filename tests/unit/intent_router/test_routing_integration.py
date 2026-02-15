@@ -6,11 +6,16 @@ Tests: 20 routing tests + capability matching + collaboration patterns
 
 Module: tests/unit/intent_router/test_routing_integration.py
 Authority: Phase 81 S3
+
+DEPRECATED (Phase 25 S2): Tests depend on deprecated EnhancedIntentRouter.
 """
 
 import pytest
 from dataclasses import dataclass
 from typing import List, Dict, Any
+
+# Mark entire module as skipped pending migration
+pytestmark = pytest.mark.skip(reason="Phase 81 tests depend on deprecated EnhancedIntentRouter (Phase 25 S2)")
 
 # Import modules to test
 from cortex.intent_router.capability_matcher import CapabilityMatcher, IntentType

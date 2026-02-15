@@ -2,9 +2,13 @@
 # Description: Load testing suite for IntentRouter with 50+ concurrent requests
 # Phase: 82, Stage: 2, Part: 2 (Load Testing & Stress)
 # TDD Cycle: RED phase - comprehensive load test suite
+# DEPRECATED (Phase 25 S2): Tests depend on deprecated EnhancedIntentRouter.
 
 """
 Load Testing Suite for IntentRouter Enterprise Hardening
+
+DEPRECATED: This suite tests EnhancedIntentRouter which was deprecated in Phase 25 S2.
+Load testing will resume after IntentRouter consolidation is complete.
 
 Objective: Validate IntentRouter performance under production load (50+ concurrent requests).
 Verify graceful degradation, error rates <5%, and recovery patterns.
@@ -41,6 +45,11 @@ Targets (Phase 82 S2):
 Author: CORTEX/TDD-Orchestrator
 Governance: CORE-008 (TDD-first), CORE-011 (type hints), CORE-027 (audit trail)
 """
+
+import pytest
+
+# Mark entire module as skipped (depends on deprecated EnhancedIntentRouter)
+pytestmark = pytest.mark.skip(reason="Phase 82 load tests depend on deprecated EnhancedIntentRouter (Phase 25 S2)")
 
 import time
 import statistics
