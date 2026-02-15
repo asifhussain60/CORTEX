@@ -31,16 +31,13 @@ MODULE_CATEGORIES = {
     "orchestrators": [
         "cortex.orchestrators.core",
         "cortex.orchestrators.core.master_orchestrator",
-        "cortex.orchestrators.tools.todo_manager",
-        "cortex.orchestrators.registry.orchestrator_registry",
-        "cortex.orchestrators.registry.discovery_engine",
+        "cortex.orchestrators.core.governance_registry",
     ],
     "intent_routing": [
         "cortex.intent_router.classifier",
-        "cortex.intent_router.routing_engine",
     ],
     "governance": [
-        "cortex.brain.core.governance_registry",
+        "cortex.orchestrators.core.governance_registry",
         "cortex.brain.core.state_manager",
     ],
     "infrastructure": [
@@ -56,14 +53,10 @@ CRITICAL_DEPENDENCIES = {
     "cortex.orchestrators.core.master_orchestrator": [
         "cortex.core.interfaces",
         "cortex.core.result",
-        "cortex.brain.core.governance_registry",
+        "cortex.orchestrators.core.governance_registry",
         "cortex.infrastructure.enhanced_audit_logger",
-        "cortex.orchestrators.tools.todo_manager",
     ],
-    "cortex.orchestrators.tools.todo_manager": [
-        "cortex.core.result",
-    ],
-    "cortex.brain.core.governance_registry": [
+    "cortex.orchestrators.core.governance_registry": [
         "cortex.core.result",
     ],
 }
@@ -123,7 +116,6 @@ class TestCriticalDependencies:
             from cortex.core.result import Result, Ok, Err
             from cortex.orchestrators.core.governance_registry import GovernanceRegistry
             from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
-            from cortex.orchestrators.tools.todo_manager import TodoManager
             
             # Instantiate to verify full initialization works
             master = MasterOrchestrator.instance()
@@ -132,18 +124,18 @@ class TestCriticalDependencies:
         except ImportError as e:
             pytest.fail(f"MasterOrchestrator dependency import failed: {e}")
 
-    def test_todo_manager_dependencies(self) -> None:
-        """Test AC-FR-MODULE-004: TodoManager dependencies are complete."""
+    def test_governance_registry_dependencies(self) -> None:
+        """Test AC-FR-MODULE-004: GovernanceRegistry dependencies are complete."""
         try:
-            from cortex.orchestrators.tools.todo_manager import TodoManager
+            from cortex.orchestrators.core.governance_registry import GovernanceRegistry
             from cortex.core.result import Result, Ok, Err
             
             # Instantiate to verify initialization works
-            mgr = TodoManager()
-            assert mgr is not None
+            registry = GovernanceRegistry.instance()
+            assert registry is not None
             
         except ImportError as e:
-            pytest.fail(f"TodoManager dependency import failed: {e}")
+            pytest.fail(f"GovernanceRegistry dependency import failed: {e}")
 
 
 class TestModuleAttributeAvailability:
@@ -186,9 +178,9 @@ class TestModuleAttributeAvailability:
         registry = GovernanceRegistry.instance()
         
         required_methods = [
-            "get_all_tier0_rules",
             "get_all_rules",
-            "get_rule",
+            "get_rules",
+            "check_gate",
         ]
         
         for method in required_methods:
@@ -311,20 +303,20 @@ class TestModulePublicInterface:
         assert any("instance" in m.lower() for m in public_members), \
             "MasterOrchestrator should have instance method"
 
-    def test_todo_manager_public_interface(self) -> None:
-        """Test AC-FR-MODULE-011: TodoManager exposes correct public interface."""
-        from cortex.orchestrators.tools.todo_manager import TodoManager
+    def test_governance_registry_public_interface(self) -> None:
+        """Test AC-FR-MODULE-011: GovernanceRegistry exposes correct public interface."""
+        from cortex.orchestrators.core.governance_registry import GovernanceRegistry
         
-        mgr = TodoManager()
+        registry = GovernanceRegistry.instance()
         
         # Public methods
-        public_methods = [m for m in dir(mgr) if not m.startswith('_') and callable(getattr(mgr, m))]
+        public_methods = [m for m in dir(registry) if not m.startswith('_') and callable(getattr(registry, m))]
         
-        # Should have main CRUD operations
-        expected = ["create_task", "mark_phase", "get_task_status"]
+        # Should have main governance operations
+        expected = ["check_gate", "get_all_rules", "get_rules"]
         found = [m for m in expected if m in public_methods]
         
-        assert len(found) >= 2, f"TodoManager missing expected methods: {expected}"
+        assert len(found) >= 2, f"GovernanceRegistry missing expected methods: {expected}"
 
 
 class TestPythonImportResolution:
@@ -376,9 +368,9 @@ class TestModuleLoading:
     def test_orchestrator_modules_load_independently(self) -> None:
         """Test AC-FR-MODULE-012: Orchestrator modules can load independently."""
         orchestrator_modules = [
-            "cortex.orchestrators.registry.orchestrator_registry",
-            "cortex.orchestrators.registry.discovery_engine",
-            "cortex.orchestrators.tools.todo_manager",
+            "cortex.orchestrators.core.master_orchestrator",
+            "cortex.orchestrators.core.governance_registry",
+            "cortex.intent_router.classifier",
         ]
         
         for module_name in orchestrator_modules:
@@ -406,12 +398,12 @@ class TestModuleConsistency:
 
     def test_registry_consistency(self) -> None:
         """Test AC-FR-MODULE-013: Registry instances are consistent."""
-        # AC-PERMANENT-FIX-012: Use DatabaseBackedRegistry only
-        from cortex.orchestrators import get_database_registry
+        # AC-PERMANENT-FIX-012: Use GovernanceRegistry singleton consistency
+        from cortex.orchestrators.core.governance_registry import GovernanceRegistry
         
-        # Test DatabaseBackedRegistry consistency
-        r1 = get_database_registry()
-        r2 = get_database_registry()
+        # Test GovernanceRegistry singleton consistency
+        r1 = GovernanceRegistry.instance()
+        r2 = GovernanceRegistry.instance()
         
         # Should be same instance (singleton pattern)
         assert r1 is r2

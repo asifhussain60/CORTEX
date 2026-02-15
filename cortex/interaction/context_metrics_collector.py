@@ -21,67 +21,93 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
-from prometheus_client import Counter, Gauge, Histogram
+from prometheus_client import Counter, Gauge, Histogram, REGISTRY
 
 logger = logging.getLogger(__name__)
 
 
 # =============================================================================
-# Prometheus Metrics
+# Prometheus Metrics (guarded against duplicate registration)
 # =============================================================================
 
+def _get_or_create_histogram(name: str, doc: str, buckets: list) -> Histogram:
+    """Get existing or create new Histogram, avoiding duplicate registration."""
+    try:
+        return Histogram(name, doc, buckets=buckets)
+    except ValueError:
+        return REGISTRY._names_to_collectors.get(name, Histogram(name, doc, buckets=buckets, registry=None))  # type: ignore[attr-defined]
+
+
+def _get_or_create_gauge(name: str, doc: str) -> Gauge:
+    """Get existing or create new Gauge, avoiding duplicate registration."""
+    try:
+        return Gauge(name, doc)
+    except ValueError:
+        return REGISTRY._names_to_collectors.get(name, Gauge(name, doc, registry=None))  # type: ignore[attr-defined]
+
+
+def _get_or_create_counter(name: str, doc: str, labelnames: list = None) -> Counter:
+    """Get existing or create new Counter, avoiding duplicate registration."""
+    try:
+        if labelnames:
+            return Counter(name, doc, labelnames)
+        return Counter(name, doc)
+    except ValueError:
+        return REGISTRY._names_to_collectors.get(name, Counter(name, doc, registry=None))  # type: ignore[attr-defined]
+
+
 # Context size tracking
-context_size_before = Histogram(
+context_size_before = _get_or_create_histogram(
     'cortex_context_size_before_bytes',
     'Context size before synthesis (bytes)',
     buckets=[1000, 5000, 10000, 20000, 50000, 100000, 200000, 500000]
 )
 
-context_size_after = Histogram(
+context_size_after = _get_or_create_histogram(
     'cortex_context_size_after_bytes',
     'Context size after synthesis (bytes)',
     buckets=[1000, 5000, 10000, 20000, 50000, 100000]
 )
 
 # Compression metrics
-compression_ratio = Gauge(
+compression_ratio = _get_or_create_gauge(
     'cortex_context_compression_ratio',
     'Context compression ratio (0.0-1.0, higher is better)'
 )
 
-synthesis_time_ms = Histogram(
+synthesis_time_ms = _get_or_create_histogram(
     'cortex_context_synthesis_time_ms',
     'Time to synthesize context (milliseconds)',
     buckets=[10, 25, 50, 100, 250, 500, 1000]
 )
 
 # Cache metrics
-cache_hit_rate = Gauge(
+cache_hit_rate = _get_or_create_gauge(
     'cortex_context_cache_hit_rate',
     'Context cache hit rate (percentage)'
 )
 
 # Copilot interaction tracking
-copilot_summarization_count = Counter(
+copilot_summarization_count = _get_or_create_counter(
     'cortex_copilot_summarization_total',
     'Total number of "Summarized conversation history" events',
-    ['session_id']
+    labelnames=['session_id']
 )
 
-copilot_reference_count = Counter(
+copilot_reference_count = _get_or_create_counter(
     'cortex_copilot_reference_total',
     'Total number of file references loaded',
-    ['session_id', 'reference_type']
+    labelnames=['session_id', 'reference_type']
 )
 
 # Token budget compliance
-token_budget_violations = Counter(
+token_budget_violations = _get_or_create_counter(
     'cortex_token_budget_violations_total',
     'Total token budget violations',
-    ['session_id']
+    labelnames=['session_id']
 )
 
-token_budget_usage = Histogram(
+token_budget_usage = _get_or_create_histogram(
     'cortex_token_budget_usage_tokens',
     'Token usage per turn',
     buckets=[1000, 5000, 10000, 15000, 20000, 30000, 50000]

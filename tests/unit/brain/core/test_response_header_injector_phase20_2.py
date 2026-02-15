@@ -91,6 +91,8 @@ class TestResponseHeaderInjectorPhase20_2:
         )
         
         with patch.dict(os.environ, {"CORTEX_ORCHESTRATOR_VISIBILITY": "off"}):
+            # Reset cached mode so the env var change takes effect
+            injector._visibility_controller.reset_cache()
             badge = injector._format_orchestrator_badge(context)
         
         assert badge == ""
@@ -191,6 +193,8 @@ class TestResponseHeaderInjectorPhase20_2:
         )
         
         with patch.dict(os.environ, {"CORTEX_ORCHESTRATOR_VISIBILITY": "full"}):
+            # Reset cached mode so the env var change takes effect
+            injector._visibility_controller.reset_cache()
             header = injector.inject_header(
                 operation="Refactoring",
                 orchestrator_context=context
