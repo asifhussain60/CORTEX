@@ -100,7 +100,26 @@ class ASTKnowledgeGraphBuilder:
         code = file_path.read_text()
         tree = ast.parse(code)
         
-        # Extract classes and functions
+        # Extract top-level functions first
+        for node in ast.walk(tree):
+            if isinstance(node, ast.FunctionDef):
+                # Check if function is at module level
+                is_method = False
+                for parent in ast.walk(tree):
+                    if isinstance(parent, ast.ClassDef):
+                        if node in parent.body:
+                            is_method = True
+                            break
+                
+                if not is_method:
+                    self.graph.add_node(ASTGraphNode(
+                        name=node.name,
+                        type="function",
+                        file_path=str(file_path),
+                        line_number=node.lineno
+                    ))
+        
+        # Extract classes and methods
         for node in ast.walk(tree):
             if isinstance(node, ast.ClassDef):
                 self.graph.add_node(ASTGraphNode(
@@ -124,14 +143,6 @@ class ASTKnowledgeGraphBuilder:
                             relation_type="CONTAINS",
                             target=item.name
                         ))
-            
-            elif isinstance(node, ast.FunctionDef):
-                self.graph.add_node(ASTGraphNode(
-                    name=node.name,
-                    type="function",
-                    file_path=str(file_path),
-                    line_number=node.lineno
-                ))
         
         return self.graph
     
