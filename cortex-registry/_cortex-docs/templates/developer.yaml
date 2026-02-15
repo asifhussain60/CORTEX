@@ -1,0 +1,228 @@
+---
+template_id: developer
+name: "Developer Template"
+version: 1.0
+audience: Software Developers, Software Engineers, Architects
+read_time: 10-15 minutes
+word_count: 800-2000
+voice: third-person technical but conversational
+authority: ENH-DIGEST-004 + Industry Best Practices (Stripe, AWS, Google Cloud)
+
+purpose: |
+  Technical documentation for developers who need to understand implementation
+  details, integration patterns, architecture decisions, and best practices.
+  Focus: How to use effectively, why it's designed this way, edge cases,
+  and troubleshooting.
+
+structure:
+  frontmatter:
+    required_fields:
+      - title: "[Feature/Capability Name]"
+      - audience: "Software Developers"
+      - read_time: "[X] minutes"
+      - complexity: "beginner | intermediate | advanced"
+      - voice: "Technical but conversational"
+      - prerequisites: "[List of required knowledge]"
+      - last_updated: "[Date]"
+
+  sections:
+    - id: overview
+      title: "Overview"
+      word_count: 150-200
+      requirements:
+        - What the capability does (technical summary)
+        - When developers use it
+        - Key integration points
+        - Related capabilities/components
+      
+    - id: architecture
+      title: "Architecture & Design Decisions"
+      word_count: 300-400
+      requirements:
+        - Architectural context (where it fits in the system)
+        - Design decisions with rationale (WHY not just WHAT)
+        - Trade-offs considered
+        - Patterns used (with names: Factory, Observer, Strategy, etc.)
+        - Diagram reference (C4 Component or Sequence diagram)
+      
+    - id: implementation
+      title: "Implementation Guide"
+      word_count: 400-600
+      requirements:
+        - Step-by-step integration instructions
+        - Code examples (2-3 realistic examples)
+        - Configuration options explained
+        - Common integration patterns
+        - Performance considerations
+      
+    - id: api_reference
+      title: "API Reference"
+      word_count: 300-450
+      requirements:
+        - Function/method signatures with types
+        - Parameter descriptions (purpose, constraints, defaults)
+        - Return value specifications
+        - Exception/error conditions
+        - Usage examples for each method
+      
+    - id: edge_cases
+      title: "Edge Cases & Gotchas"
+      word_count: 200-300
+      requirements:
+        - Known edge cases with workarounds
+        - Common mistakes and how to avoid them
+        - Limitations and constraints
+        - Performance bottlenecks to watch for
+      
+    - id: best_practices
+      title: "Best Practices"
+      word_count: 150-250
+      requirements:
+        - Recommended usage patterns
+        - Anti-patterns to avoid
+        - Testing strategies
+        - Rationale for each recommendation
+      
+    - id: troubleshooting
+      title: "Troubleshooting"
+      word_count: 150-200
+      requirements:
+        - Common issues with solutions
+        - Debugging approaches
+        - Logging/observability guidance
+        - Where to find additional help
+
+language_rules:
+  voice:
+    required: "Third-person technical but conversational"
+    examples:
+      correct: "Developers integrate this by...", "The system provides..."
+      incorrect: "You integrate this by...", "We provide..."
+  
+  technical_depth:
+    level: "Full technical detail"
+    requirements:
+      - Explain WHY not just HOW
+      - Include architectural context
+      - Reference design patterns by name
+      - Show code examples (realistic, not trivial)
+      - Discuss performance implications
+      - Cover edge cases and limitations
+  
+  code_examples:
+    requirements:
+      - Realistic scenarios (not "hello world")
+      - Include error handling
+      - Show best practices
+      - Use type hints (Python/TypeScript)
+      - Include comments explaining non-obvious parts
+    quality:
+      - Runnable or nearly-runnable
+      - Follow project style guide
+      - Demonstrate actual use case
+      - Show input and expected output
+
+  explanation_depth:
+    pattern: "Context → How → Why → Implications"
+    example: |
+      "The orchestrator uses the Strategy pattern to select validation approaches.
+      This design decision allows runtime selection of validation strategies based
+      on codebase characteristics. The trade-off: slight performance overhead
+      (~10ms per request) in exchange for extensibility. Teams adding custom
+      validators benefit from this flexibility without modifying core logic."
+
+quality_gates:
+  - Total word count: 800-2000
+  - Architectural context provided (not just isolated feature)
+  - Design rationale explained (WHY decisions made)
+  - Code examples: 2-3 realistic, runnable examples
+  - Edge cases documented with workarounds
+  - Best practices include rationale
+  - Third-person voice maintained
+  - Performance considerations mentioned
+
+code_example_template: |
+  ```python
+  # Context: [What scenario this solves]
+  
+  from cortex.orchestrators import ValidationOrchestrator
+  from cortex.models import ValidationRequest
+  
+  def validate_before_deployment(
+      code_path: str,
+      target_env: str
+  ) -> ValidationResult:
+      """
+      Validates code readiness before deployment.
+      
+      Args:
+          code_path: Absolute path to code directory
+          target_env: Target environment (dev, staging, prod)
+          
+      Returns:
+          ValidationResult with passed/failed status and details
+          
+      Raises:
+          ValidationError: If code path invalid or unreadable
+      """
+      orchestrator = ValidationOrchestrator()
+      request = ValidationRequest(
+          path=code_path,
+          environment=target_env,
+          strict=target_env == "prod"  # Stricter validation for prod
+      )
+      
+      # Execute validation with timeout
+      result = orchestrator.validate(request, timeout_ms=5000)
+      
+      # Handle results
+      if not result.passed:
+          # Log failures for debugging
+          for issue in result.issues:
+              logger.warning(f"Validation issue: {issue.description}")
+      
+      return result
+  
+  # Usage example
+  result = validate_before_deployment("/app/src", "prod")
+  if result.passed:
+      print(f"✅ Validation passed: {result.summary}")
+  else:
+      print(f"❌ Validation failed: {len(result.issues)} issues found")
+  ```
+  
+  **Expected Output:**
+  ```
+  ✅ Validation passed: 18/18 checks passed, 87% coverage
+  ```
+  
+  **Performance:** Typical validation completes in 250-300ms for codebases
+  <10k LOC. Larger codebases may take 1-2 seconds.
+
+diagram_integration:
+  requirements:
+    - Reference diagrams by ID from diagram registry
+    - Explain what diagram shows (200-400 word narrative)
+    - Connect diagram to implementation details
+    - Use C4 Component for architecture, Sequence for workflows
+  
+  example_reference: |
+    **Architecture Diagram:** See [validation-flow](diagrams/validation-flow.md)
+    for the complete validation sequence.
+    
+    The diagram shows how requests flow through three validation layers:
+    structural (AST analysis), semantic (type checking), and runtime
+    (integration tests). Each layer can fail independently, providing
+    granular feedback. The orchestrator coordinates these layers in parallel
+    when possible, reducing total validation time by ~40% compared to
+    sequential execution. [Continue with 200+ more words explaining details...]
+
+meta:
+  created: 2026-02-15
+  updated: 2026-02-15
+  authority: ENH-DIGEST-004 + Industry Documentation Standards (Stripe, AWS, Google)
+  validation: Pre-commit word count + code example checker
+  benchmarks:
+    - Stripe API docs: 450 words/endpoint average
+    - AWS Well-Architected: 1800 words/pillar average
+    - Google Cloud tutorials: 1400 words average
