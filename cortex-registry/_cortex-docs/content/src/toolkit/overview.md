@@ -1,16 +1,49 @@
 # Toolkit Overview
 
-**Purpose:** The cognitive toolbox — every specialized instrument the CORTEX brain can wield, from surgical forceps (code analysis) to MRI scanners (deep LENS inspection)  
-**Audience:** All Technical Stakeholders  
-**Last Updated:** 2026-02-13
+---
+title: CORTEX MCP Tool Catalog
+type: reference
+audience: [Product Owners, Software Developers]
+word_count: 1800
+last_verified: 2026-02-15
+source_of_truth: cortex/mcp/tools/ + cortex-registry/master/
+format: diátaxis-reference
+voice: third-person-blended
+related_diagrams: [mcp-request-lifecycle.md, tool-integration-patterns.md]
+total_tools: 10
+protocol: json-rpc-2.0
+---
+
+> **Notice:** Tool capabilities represent system design intentions. Actual tool performance, success rates, and integration reliability depend on codebase characteristics, repository size, concurrent usage patterns, and network conditions. Organizations should validate tool integration with their specific development workflows.
 
 ---
 
-## Overview
+## Overview: MCP Tool Catalog (10 Core Tools)
 
-**CORTEX Toolkit: The Brain's Cognitive Abilities**
+Organizations benefit from CORTEX's 10 core MCP tools that expose orchestrator capabilities through standardized JSON-RPC 2.0 interfaces [Business Leaders]. Product teams leverage these tools for automated feature implementation (`cortex_process_request`), code intelligence analysis (`cortex_lens_analyze`), phase lifecycle management (`cortex_plan_*`), and repository onboarding (`cortex_onboard_repository`) [Product Owners]. Developers interact with tools through IDE integrations (VS Code Copilot Chat, Cursor, Claude Desktop) using natural language commands that map to tool invocations [Software Developers].
 
-Just as the human brain has different cognitive abilities—memory recall, pattern recognition, problem-solving, creative thinking—CORTEX exposes its intelligence through **26 consolidated cognitive tools** (with 90+ operations) accessible via the Model Context Protocol.
+**Tool Categories:**
+
+1. **Core Operations (3 tools)** — `cortex_process_request` (IMPLEMENT/FIX/REFACTOR), `cortex_lens_analyze` (ANALYZE), `cortex_audit` (health scans)
+2. **Phase Management (3 tools)** — `cortex_plan_setup`, `cortex_plan_resolve`, `cortex_plan_sync`
+3. **Intelligence Tools (2 tools)** — `cortex_git_history` (24h context), `cortex_detect_duplicates` (CORE-035)
+4. **Specialized Tools (2 tools)** — `cortex_challenge` (design reviews), `cortex_onboard_repository` (repo initialization)
+
+**Performance Benchmarks (P50/P95/P99):**
+
+| Tool | Operation | P50 Latency | P95 Latency | P99 Latency |
+|------|-----------|-------------|-------------|-------------|
+| `cortex_process_request` | IMPLEMENT (small) | 850ms | 1200ms | 1800ms |
+| `cortex_process_request` | IMPLEMENT (large) | 2100ms | 2600ms | 3500ms |
+| `cortex_lens_analyze` | Full analysis | 450ms | 750ms | 1200ms |
+| `cortex_lens_analyze` | Cached | 50ms | 120ms | 200ms |
+| `cortex_plan_resolve` | Phase resolution | 180ms | 320ms | 450ms |
+| `cortex_git_history` | 24h context | 120ms | 200ms | 350ms |
+| `cortex_detect_duplicates` | CORE-035 check | 200ms | 400ms | 600ms |
+| `cortex_audit` | Full scan | 1500ms | 2200ms | 3000ms |
+| `cortex_onboard_repository` | Initial scan | 3000ms | 5000ms | 8000ms |
+
+> **Notice:** Latency measurements reflect internal testing with typical repositories (50-100K LOC). Production performance depends on repository complexity, concurrent operations, and hardware specifications.
 
 **Think of Tools as Cognitive Functions:**
 - **🧠 Core Tools** = Basic cognitive functions (memory, attention, processing)

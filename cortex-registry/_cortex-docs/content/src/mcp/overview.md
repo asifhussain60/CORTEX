@@ -1,18 +1,48 @@
 # Model Context Protocol (MCP) Overview
 
-**Version:** 2.0.0 | **Updated:** 2026-02-14  
-**Protocol:** JSON-RPC 2.0 | **Transport:** stdio / HTTP  
-**Tools Exposed:** 26 consolidated (90+ operations) | **Orchestrators:** 21 (14 active + 4 super + 7 deprecated)
+---
+title: CORTEX MCP Gateway Architecture
+type: explanation
+audience: [Product Owners, Software Developers, Architects]
+word_count: 1800
+last_verified: 2026-02-15
+source_of_truth: cortex/mcp/ + deployment/mcp-gateway-config.yaml
+format: diátaxis-explanation
+voice: third-person-blended
+related_diagrams: [c4-container.md, mcp-request-lifecycle.md]
+protocol_version: 2.0.0
+transport_modes: [stdio, http]
+---
+
+> **Notice:** MCP capabilities represent system design intentions. Actual protocol performance, tool discovery reliability, and transport latency depend on network conditions, IDE configuration, client implementation, and concurrent request patterns. Organizations should validate MCP integration with their specific development environments.
 
 ---
 
-## What is MCP?
+## Overview: Pylance-Style Local Architecture
 
-### Brain Analogy: The Nervous System
+Organizations benefit from understanding CORTEX's MCP architecture, which operates locally within VS Code similar to the Pylance language server [Business Leaders]. Product teams leverage MCP's JSON-RPC 2.0 protocol for seamless integration with multiple IDE clients (VS Code, Cursor, Claude Desktop) without manual server management [Product Owners]. The MCP Gateway auto-starts when Copilot Chat invokes cortex_* tools, providing 10 core MCP tools that expose 20+ orchestrator capabilities through standardized interfaces [Software Developers].
 
-The **nervous system** is the body's communication infrastructure. It doesn't think — it *transmits*. Sensory neurons carry signals from your fingertips to your brain; motor neurons carry commands from your brain to your muscles. Without the nervous system, the brain would be a brilliant organ trapped in silence.
+**Key Architectural Principles:**
 
-The **Model Context Protocol (MCP)** is CORTEX's nervous system. It's the standardized communication layer that connects external clients (VS Code, Claude, Cursor) to CORTEX's 21 orchestrators. Every command, every analysis request, every governance check travels through MCP's synaptic connections — JSON-RPC 2.0 messages flowing like action potentials along neural pathways.
+1. **Auto-Start Architecture** — VS Code launches MCP server automatically when cortex_* tools invoked, no manual `python -m cortex.mcp.server` required. Similar to Pylance Python language server auto-start behavior.
+
+2. **Stdio Transport (Development)** — JSON-RPC 2.0 messages over standard input/output for local IDE integration. Zero network overhead, sub-5ms gateway validation latency, simplified debugging with `--verbose` flag.
+
+3. **HTTP Transport (Production - Phase 11)** — RESTful JSON-RPC endpoint at `http://localhost:9000/mcp` for multi-client scenarios, load balancing, and horizontal scaling. Nginx reverse proxy with rate limiting and authentication.
+
+4. **Native Tool Gate (CORE-049)** — Enforces MCP-first architecture by blocking direct file operations for IMPLEMENT/FIX/REFACTOR intents. Validates intent classification before dispatch to prevent governance bypass.
+
+**MCP Tools (10 Core):**
+- `cortex_process_request` — Main workflow processing (IMPLEMENT/FIX/REFACTOR)
+- `cortex_lens_analyze` — Unified code intelligence (ANALYZE)
+- `cortex_plan_setup/resolve/sync` — Phase lifecycle management (PLAN)
+- `cortex_challenge` — Challenge generation (DESIGN)
+- `cortex_audit` — Health scans (AUDIT)
+- `cortex_digest_session` — Learning extraction (DIGEST)
+- `cortex_total_recall` — Feature discovery
+- `cortex_git_history` — 24h context retrieval
+- `cortex_detect_duplicates` — CORE-035 violation detection
+- `cortex_onboard_repository` — Repository initialization + security scan
 
 ### Key Benefits
 

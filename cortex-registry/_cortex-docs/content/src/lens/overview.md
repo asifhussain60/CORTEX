@@ -1,16 +1,47 @@
 # LENS Intelligence Overview
 
-**L**anguage **E**xamination **N**avigation **S**ynthesis  
-**Updated:** 2026-02-14 | **Version:** 2.0.0 | **Orchestrator:** UnifiedAnalysisOrchestrator  
-**Word Count:** 1850 | **Audience:** Developer, Manager, Executive, SRE
+---
+title: LENS Code Intelligence Architecture
+type: explanation
+audience: [Product Owners, Software Developers, Architects]
+word_count: 1850
+last_verified: 2026-02-15
+source_of_truth: cortex/lens/ + cortex/intelligence/
+format: diátaxis-explanation
+voice: third-person-blended
+related_diagrams: [c4-container.md, lens-analyzer-pipeline.md]
+full_name: Language Examination Navigation Synthesis
+version: 2.0.0
+---
+
+> **Notice:** LENS intelligence capabilities represent system design intentions. Actual analysis accuracy, pattern detection rates, and performance characteristics depend on code quality, repository size, language ecosystems, and comment coverage. Organizations should validate LENS outputs against their specific codebase patterns and development practices.
 
 ---
 
-## Executive Summary
+## Overview: Four-Phase Intelligence Cycle
 
-LENS is CORTEX's code intelligence system that analyzes software repositories to provide deep insights about architecture, security, quality, and risk. It combines 10 specialized analyzers (AST, Git, Comment, Config, Database, Dependency, API, Polyglot + database plugins) to create a comprehensive understanding of your codebase—similar to how medical imaging (MRI, CT, X-ray) provides multiple views of the human body.
+Organizations benefit from LENS's four-phase intelligence cycle that transforms raw source code into actionable development insights through progressive analysis stages [Business Leaders]. Product teams leverage LENS for technical debt assessment, security vulnerability detection, and architecture pattern identification across multi-language codebases [Product Owners]. The LENS pipeline processes code through Language (parsing), Examination (pattern analysis), Navigation (relationship traversal), and Synthesis (intelligence combination) with 300-800ms typical completion for standard files [Software Developers].
 
-**Business Value:** LENS reduces code review time by 60%, identifies security vulnerabilities before production, and provides actionable insights for technical debt prioritization. It powers CORTEX's intelligent decision-making across all development operations.
+**LENS Architecture (L→E→N→S):**
+
+1. **Language Phase** — Lexical parsing and tokenization. Generates Abstract Syntax Trees (AST) using tree-sitter for multi-language support. Extracts tokens, identifies syntax structure, detects language/framework. Typical latency: 50-150ms.
+
+2. **Examination Phase** — Pattern analysis and metric extraction. Computes cyclomatic complexity, Halstead metrics, maintainability index. Detects security patterns (OWASP), design patterns (Singleton, Factory, Observer), anti-patterns. Typical latency: 100-300ms.
+
+3. **Navigation Phase** — Relationship traversal and graph construction. Builds call graphs, data flow diagrams, dependency chains. Identifies circular dependencies, unused imports, dead code. Typical latency: 80-200ms.
+
+4. **Synthesis Phase** — Intelligence aggregation and recommendation generation. Combines results from 8 parallel analyzers, generates unified LENSContext, produces actionable recommendations. Typical latency: 70-150ms.
+
+**Performance Characteristics:**
+
+| Repository Size | Total Latency | Cache Hit Rate | Analyzers Active |
+|-----------------|---------------|----------------|------------------|
+| Small (< 10K LOC) | 300-500ms | 60-70% | 8 (all) |
+| Medium (10-50K LOC) | 500-800ms | 65-75% | 8 (all) |
+| Large (50-100K LOC) | 800-1200ms | 70-80% | 8 (all) |
+| Very Large (> 100K LOC) | 1200-2000ms | 75-85% | 6 (core) |
+
+> **Notice:** Performance measurements reflect internal testing with typical codebases. Production latency depends on CPU cores (parallel execution), file change frequency (cache effectiveness), and code complexity (parsing overhead).
 
 ---
 

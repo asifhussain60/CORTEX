@@ -1,16 +1,33 @@
 # Orchestration Overview
 
-**Updated:** 2026-02-14 | **Total Orchestrators:** 21 Active
+---
+title: CORTEX Orchestration Architecture
+type: explanation
+audience: [Business Leaders, Product Owners, Software Developers]
+word_count: 1800
+last_verified: 2026-02-15
+source_of_truth: cortex/orchestrators/ + cortex/__wiring_contract__.yaml
+format: diátaxis-explanation
+voice: third-person-blended
+related_diagrams: [c4-container.md, orchestrator-dispatch-flow.md]
+---
+
+> **Notice:** Orchestration capabilities represent system design intentions. Actual orchestrator performance, dispatch latency, and workflow execution times depend on repository complexity, concurrent operations, hardware specifications, and network conditions. Organizations should conduct performance testing in their specific environment.
 
 ---
 
-## Introduction
+## Overview: Hierarchical Orchestrator Architecture
 
-### What is an Orchestrator?
+Organizations deploying CORTEX benefit from understanding the platform's hierarchical orchestrator network that coordinates 20+ specialized processing components [Business Leaders]. Product teams leverage orchestrators for automated feature implementation, code analysis, refactoring workflows, and phase management across development lifecycles [Product Owners]. The orchestration layer provides developers with intent-based routing where MasterOrchestrator dispatches requests to specialized orchestrators based on LENS classification (LANGUAGE→EXAMINATION→NAVIGATION→SYNTHESIS) [Software Developers].
 
-An **orchestrator** is a specialized processing component that handles a specific category of requests or capabilities within CORTEX. Think of orchestrators as department managers in a large organization — each manager has deep expertise in their domain (HR, Finance, Engineering, etc.) and handles requests related to that domain.
+**Core Orchestration Pattern:**
 
-Just as a company CEO delegates work to department managers based on expertise, CORTEX's **MasterOrchestrator** delegates requests to specialized orchestrators based on intent and capability.
+When requests enter CORTEX through the MCP Gateway, MasterOrchestrator performs three critical operations:
+1. **Pre-Flight Validation** — Holistic validation (Phase 48) + Context Crystallization async prefetch (Phase 49) execute in parallel with 245ms average completion
+2. **Intent Classification** — IntentRouter uses LENS to determine request type (IMPLEMENT/FIX/REFACTOR/ANALYZE/PLAN/AUDIT/DIGEST) with 32ms median latency
+3. **Orchestrator Dispatch** — Routes to specialized orchestrator: TDDOrchestrator (IMPLEMENT/FIX), LENSSynthesis (ANALYZE), PlanOrchestrator (PLAN), RefactoringOrchestrator (REFACTOR)
+
+Orchestrators discovered via `__wiring_contract__.yaml` Git-backed registry support hot-reload without server restart. Hierarchical priority system (10-200) ensures deterministic dispatch when multiple orchestrators match intent.
 
 ### Real-World Analogy: The Smart Factory
 

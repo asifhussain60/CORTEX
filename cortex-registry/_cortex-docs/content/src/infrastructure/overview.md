@@ -1,16 +1,51 @@
 # Infrastructure Overview
 
-**Purpose:** The life-support systems that keep the CORTEX brain alive — circulation, respiration, and homeostasis for a cognitive architecture  
-**Audience:** SRE, DevOps, Architects  
-**Last Updated:** 2026-02-14
+---
+title: CORTEX Infrastructure & Deployment Architecture
+type: explanation
+audience: [Business Leaders, Product Owners, SRE]
+word_count: 1800
+last_verified: 2026-02-15
+source_of_truth: deployment/ + cortex/infrastructure/
+format: diátaxis-explanation
+voice: third-person-blended
+related_diagrams: [deployment-topology.md, scalability-patterns.md]
+deployment_modes: [development, production]
+---
+
+> **Notice:** Infrastructure capabilities represent system design intentions. Actual deployment complexity, scalability limits, and operational characteristics depend on cloud provider choice, hardware specifications, network topology, and operational expertise. Organizations should conduct proof-of-concept deployments to assess infrastructure requirements in their specific environment.
 
 ---
 
-## Overview
+## Overview: Cloud-Native Cognitive Architecture
 
-**CORTEX Infrastructure: The Nervous System and Life Support**
+Organizations deploying CORTEX benefit from understanding the platform's cloud-native infrastructure designed for horizontal scalability and operational resilience [Business Leaders]. Product teams leverage infrastructure automation for continuous deployment, health monitoring, and auto-recovery capabilities across multi-region deployments [Product Owners]. The infrastructure layer provides SREs with container-first deployment (Docker/Kubernetes), comprehensive observability (Prometheus/Grafana), and Git-backed configuration management requiring zero runtime database dependencies [SRE].
 
-Just as the human brain requires a sophisticated circulatory system, nervous system, and life support mechanisms to function, CORTEX relies on cloud-native infrastructure to keep its **AI brain** healthy and operational.
+**Infrastructure Design Principles:**
+
+1. **Stateless Processing** — MCP Gateway and orchestrators maintain no session state. All governance data persists in Git-backed registry. Enables horizontal scaling without sticky sessions or distributed cache complexity.
+
+2. **Container-First Deployment** — Docker images with Python 3.9+ runtime, tree-sitter parsers, git-python bindings. Kubernetes manifests for orchestration. Health checks via `/health` endpoint with <50ms response time.
+
+3. **Zero Database Runtime** — Git repository serves as single source of truth for orchestrator specs, governance rules, knowledge base. SQLite for local AST cache only (ephemeral, can rebuild). Eliminates PostgreSQL/MongoDB operational overhead.
+
+4. **Dual Transport Modes** — Stdio (development, VS Code local), HTTP (production, multi-client). JSON-RPC 2.0 protocol consistent across both. Nginx reverse proxy for HTTP with rate limiting, authentication, TLS termination.
+
+5. **Observability-First** — Prometheus metrics (request latency, orchestrator dispatch, LENS analysis), Grafana dashboards, structured logging (JSON), OpenTelemetry tracing (distributed request tracking).
+
+**Deployment Topologies:**
+
+```
+DEVELOPMENT MODE (current):
+VS Code → stdio → MCP Server (localhost) → Orchestrators → Git Registry
+
+PRODUCTION MODE (Phase 11):
+Clients → Nginx (443) → MCP Gateway (8000) → Orchestrators → Git Registry
+           ↓                ↓
+    Rate Limiting      Load Balancer (3+ instances)
+    Authentication     Auto-scaling (2-10 pods)
+    TLS Termination    Health Checks (/health)
+```
 
 **Infrastructure as Brain Life Support:**
 - **🩸 Circulatory System** → Load balancers and network routing (delivers requests like blood flow)
