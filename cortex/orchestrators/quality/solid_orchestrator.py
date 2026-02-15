@@ -9,53 +9,15 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 # Import Result type for proper handling
-try:
-    from cortex.orchestrators.core.solid_analyzers import (
-        SRPAnalyzer,
-        OCPAnalyzer,
-        ISPAnalyzer,
-        DIPAnalyzer,
-        DRYAnalyzer,
-        SolidViolation,
-    )
-except ImportError:
-    # Fallback: create simple implementations for testing
-    from dataclasses import dataclass
-    from enum import Enum
-    
-    class SolidViolationType(Enum):
-        SRP_VIOLATION = "srp"
-        OCP_VIOLATION = "ocp"
-        ISP_VIOLATION = "isp"
-        DIP_VIOLATION = "dip"
-        DRY_VIOLATION = "dry"
-    
-    @dataclass
-    class SolidViolation:
-        violation_type: SolidViolationType
-        file_path: Path
-        line_number: int
-        severity: float
-        description: str
-        affected_elements: List[str]
-        suggested_fix: str
-        evidence: Dict[str, Any]
-    
-    class MockResult:
-        def __init__(self, value): self.value = value
-        def is_ok(self): return True
-        def unwrap(self): return self.value
-    
-    class SRPAnalyzer:
-        def analyze(self, path): return MockResult([])
-    class OCPAnalyzer:
-        def analyze(self, path): return MockResult([])
-    class ISPAnalyzer:
-        def analyze(self, path): return MockResult([])
-    class DIPAnalyzer:
-        def analyze(self, path): return MockResult([])
-    class DRYAnalyzer:
-        def analyze(self, paths): return MockResult([])
+# AC-FIX-SOLID-IMPORT-001: Removed mock fallback — real analyzers importable now
+from cortex.orchestrators.core.solid_analyzers import (
+    SRPAnalyzer,
+    OCPAnalyzer,
+    ISPAnalyzer,
+    DIPAnalyzer,
+    DRYAnalyzer,
+    SolidViolation,
+)
 
 
 class SOLIDOrchestrator:

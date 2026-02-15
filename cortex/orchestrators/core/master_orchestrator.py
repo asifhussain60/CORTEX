@@ -21,7 +21,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 # Phase 51: Enhanced response template with semantic color coding
 # REMOVED: ResponseTemplate import (deprecated, unused - Phase 53 cleanup)
@@ -94,6 +94,8 @@ try:
         MarkdownReportBanPolicy,
     )
     from cortex.orchestrators.response.minimal_plan_spine import MinimalPlanSpine
+
+
 except ImportError:
     # Fallback if modules not accessible
     ChatResponsePolicyValidator = None
@@ -524,23 +526,37 @@ class MasterOrchestrator(IOrchestrator):
                         }
                     )
                 else:
-                    # If either backend unavailable, create dummy router with backends dict for tests
+                    # AC-FIX-DUMMY-ROUTER-001: Replaced DummyRouter with explicit fallback
+                    # that logs clearly rather than silently returning fake confidence scores
                     @dataclass
-                    class DummyRouter:
-                        """Dummy router for tests when real backends unavailable."""
+                    class FallbackRouter:
+                        """Fallback router when knowledge backends unavailable.
+                        
+                        Returns the available backend with explicit low confidence
+                        to signal that routing is degraded, not fully functional.
+                        """
                         backends: Dict[str, Any] = field(default_factory=dict)
 
                         def route_query(self, query: str) -> Tuple[Any, float, Dict[str, Any]]:
-                            """Dummy route_query for test compatibility."""
+                            """Route query with degraded confidence.
+                            
+                            Returns low confidence (0.3) to signal degraded routing
+                            rather than falsely claiming 0.8 confidence.
+                            """
                             backend = list(self.backends.values())[0] if self.backends else None
-                            return backend, 0.8, {'selected_backend': 'default', 'confidence': 0.8}
+                            return backend, 0.3, {
+                                'selected_backend': 'fallback',
+                                'confidence': 0.3,
+                                'degraded': True,
+                                'reason': 'One or both knowledge backends unavailable',
+                            }
 
-                    self.router = DummyRouter()
+                    self.router = FallbackRouter()
                     self.logger.log_operation_complete(
                         ac_id="AC-IKP-002-02",
                         operation="ROUTER_INIT",
                         success=False,
-                        details={"error": "Using dummy router - one or both knowledge backends unavailable"}
+                        details={"error": "Using fallback router - one or both knowledge backends unavailable"}
                     )
         except Exception as e:
             # Log but don't fail - router is enhancement, not blocking
@@ -2359,6 +2375,7 @@ class MasterOrchestrator(IOrchestrator):
                 # Run validation (async)
                 gate_result = asyncio.run(
                     deployment_gate.validate_deployment_gate(
+
                         operation_name=operation_name,
                         parameters=parameters
                     )
@@ -2374,6 +2391,7 @@ class MasterOrchestrator(IOrchestrator):
                         "gate_time_ms": gate_result.gate_time_ms,
                         "audit_id": gate_result.audit_id,
                         "block_reason": gate_result.block_reason,
+
                         "validation_success": gate_result.validation_result.success if gate_result.validation_result else None,
                         "checks_passed": gate_result.validation_result.checks_passed if gate_result.validation_result else []
                     }

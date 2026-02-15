@@ -39,7 +39,7 @@ class LoadRepoOverviewUseCase:
         Args:
             repository: Optional repository interface for persistence
         """
-        self.repository = repository if repository is not None else MockRepository()
+        self.repository = repository
     
     def execute(self, repo_data: Any) -> RepoMetadata:
         """
@@ -106,10 +106,3 @@ class LoadRepoOverviewUseCase:
                 count += 1
         
         return count
-
-
-class MockRepository:
-    """Mock repository for testing."""
-    def save(self, data: Any) -> None:
-        """Mock save method."""
-        pass

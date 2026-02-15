@@ -8,6 +8,8 @@ Provides:
 - Auto-disable for production
 - Trace report generation
 - Trace cleanup utilities
+- Batched flush (every 100 tests) to avoid per-test SQLite overhead
+- Real-time progress feedback (prevents "hanging" perception)
 
 Author: Asif Hussain
 """
@@ -18,26 +20,44 @@ from pathlib import Path
 from cortex.infrastructure.trace_integration import enable_trace_for_tests, disable_trace_for_production
 from cortex.infrastructure.orchestrator_trace_logger import get_trace_logger, TraceFlushReason
 
+# Register the progress plugin for real-time terminal feedback
+pytest_plugins = ["cortex.testing.pytest_progress_plugin"]
+
+# Counter for batched flushing — avoids 16K+ SQLite connections per full test run
+_test_counter = 0
+_FLUSH_INTERVAL = 100  # Flush traces every N tests instead of every single test
+
 
 @pytest.fixture(scope="session", autouse=True)
 def enable_traces_for_session():
     """Enable tracing for entire test session."""
     enable_trace_for_tests()
     yield
-    # Cleanup after session
+    # Final flush + cleanup after session
+    try:
+        trace_logger = get_trace_logger()
+        trace_logger.flush_traces(TraceFlushReason.MANUAL)
+    except Exception:
+        pass
     disable_trace_for_production()
 
 
 @pytest.fixture(autouse=True)
 def flush_traces_after_test():
-    """Flush traces after each test to prevent unbounded growth."""
+    """Batch-flush traces to prevent per-test SQLite overhead.
+
+    Previously flushed after EVERY test (16K+ SQLite round-trips).
+    Now flushes every 100 tests — same data integrity, 100x fewer DB calls.
+    """
+    global _test_counter
     yield
-    # After test completes, flush if needed
-    try:
-        trace_logger = get_trace_logger()
-        trace_logger.flush_traces(TraceFlushReason.MANUAL)
-    except Exception:
-        pass  # Ignore flush errors in tests
+    _test_counter += 1
+    if _test_counter % _FLUSH_INTERVAL == 0:
+        try:
+            trace_logger = get_trace_logger()
+            trace_logger.flush_traces(TraceFlushReason.MANUAL)
+        except Exception:
+            pass  # Ignore flush errors in tests
 
 
 @pytest.fixture

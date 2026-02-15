@@ -796,11 +796,31 @@ class RegistryIntelligenceAgent:
             if not discovery:
                 return False
 
-            # TODO: Implement actual registration logic
-            # This would integrate with OrchestratorLookup to register
-            # the orchestrator with its keywords and capabilities
+            from cortex.orchestrators.registry.orchestrator_lookup import OrchestratorLookup
+            lookup = OrchestratorLookup.instance()
 
+            # Dynamically import and register the orchestrator
+            import importlib
+            module = importlib.import_module(discovery.module_path)
+            orch_class = getattr(module, discovery.name, None)
+            if orch_class is None:
+                logger.error(f"Class {discovery.name} not found in {discovery.module_path}")
+                return False
+
+            lookup.register(
+                orchestrator_id=discovery.name,
+                metadata={
+                    "name": discovery.name,
+                    "module_path": discovery.module_path,
+                    "file_path": str(discovery.file_path),
+                    "capabilities": discovery.capabilities,
+                    "docstring": discovery.docstring,
+                    "confidence": discovery.confidence,
+                },
+                keywords=list(discovery.keywords),
+            )
             logger.info(f"Registered {gap.orchestrator} with keywords {discovery.keywords}")
+            return True
             return True
 
         except Exception as e:
@@ -827,7 +847,18 @@ class RegistryIntelligenceAgent:
             return True
 
         try:
-            # TODO: Implement actual keyword mapping logic
+            from cortex.orchestrators.registry.orchestrator_lookup import OrchestratorLookup
+            lookup = OrchestratorLookup.instance()
+
+            # Add keyword mappings to existing orchestrator
+            orch_meta = lookup.get_by_name(gap.orchestrator)
+            if orch_meta is None:
+                logger.warning(f"Cannot map keywords: {gap.orchestrator} not registered")
+                return False
+
+            for keyword in gap.missing_items:
+                lookup.add_keyword_mapping(keyword, gap.orchestrator)
+
             logger.info(f"Mapped keywords {gap.missing_items} to {gap.orchestrator}")
             return True
 
@@ -849,11 +880,36 @@ class RegistryIntelligenceAgent:
             True if registration succeeded
         """
         try:
-            # TODO: Implement actual universal registration logic
-            # This would integrate with:
-            # - OrchestratorLookup for keyword mapping
-            # - IntentRouter for routing rules
-            # - MCP registry for tool exposure
+            from cortex.orchestrators.registry.orchestrator_lookup import OrchestratorLookup
+
+            lookup = OrchestratorLookup.instance()
+
+            # Register with keyword mappings
+            lookup.register(
+                orchestrator_id=discovery.name,
+                metadata={
+                    "name": discovery.name,
+                    "module_path": discovery.module_path,
+                    "file_path": str(discovery.file_path),
+                    "capabilities": discovery.capabilities,
+                    "docstring": discovery.docstring,
+                    "confidence": discovery.confidence,
+                },
+                keywords=list(discovery.keywords),
+            )
+
+            # Also register MCP tools if the orchestrator exposes them
+            try:
+                import importlib
+                module = importlib.import_module(discovery.module_path)
+                orch_class = getattr(module, discovery.name, None)
+                if orch_class and hasattr(orch_class, 'get_mcp_tools'):
+                    instance = orch_class()
+                    tools_result = instance.get_mcp_tools()
+                    if hasattr(tools_result, 'value') and tools_result.value:
+                        logger.info(f"Found MCP tools for {discovery.name}: {list(tools_result.value.keys())}")
+            except Exception as tool_err:
+                logger.debug(f"Could not check MCP tools for {discovery.name}: {tool_err}")
 
             logger.info(f"Registered {discovery.name} universally with keywords {discovery.keywords}")
             return True
@@ -878,16 +934,27 @@ class RegistryIntelligenceAgent:
             True if wrapper generation succeeded
         """
         try:
-            # TODO: Implement actual MCP wrapper generation
-            # This would create a new MCP tool function that:
-            # - Imports the orchestrator
-            # - Exposes its main capabilities
-            # - Handles parameter conversion
-            # - Provides error handling
+            from cortex.mcp.registry import MCPToolRegistry
 
-            logger.info(f"Generated MCP wrapper for {orchestrator_name} with keywords {keywords}")
+            # Generate a tool wrapper function for the orchestrator
+            tool_name = f"cortex_{orchestrator_name.lower().replace('orchestrator', '').strip('_')}"
+
+            # Register tool metadata in MCP registry
+            registry = MCPToolRegistry.instance()
+            registry.register_tool(
+                name=tool_name,
+                description=f"Auto-generated wrapper for {orchestrator_name}",
+                orchestrator_name=orchestrator_name,
+                keywords=keywords,
+            )
+
+            logger.info(f"Generated MCP wrapper '{tool_name}' for {orchestrator_name} with keywords {keywords}")
             return True
 
+        except ImportError:
+            # MCP registry not available - log and degrade gracefully
+            logger.warning(f"MCP registry not available, skipping wrapper for {orchestrator_name}")
+            return False
         except Exception as e:
             logger.error(f"Failed to generate MCP wrapper for {orchestrator_name}: {e}")
             return False
@@ -908,11 +975,18 @@ class RegistryIntelligenceAgent:
             True if mapping succeeded
         """
         try:
-            # TODO: Implement actual intent mapping logic
-            # This would update:
-            # - IntentRouter routing rules
-            # - OrchestratorLookup keyword mappings
-            # - Registry configuration files
+            from cortex.orchestrators.registry.orchestrator_lookup import OrchestratorLookup
+
+            lookup = OrchestratorLookup.instance()
+
+            # Verify orchestrator exists
+            orch_meta = lookup.get_by_name(orchestrator_name)
+            if orch_meta is None:
+                logger.warning(f"Cannot map intent: {orchestrator_name} not registered")
+                return False
+
+            # Add the intent keyword mapping
+            lookup.add_keyword_mapping(intent, orchestrator_name)
 
             logger.info(f"Mapped intent '{intent}' to orchestrator {orchestrator_name}")
             return True

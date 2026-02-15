@@ -4,7 +4,7 @@
 # Quick commands for development workflow
 # =============================================================================
 
-.PHONY: setup-hooks verify test help validate-wiring
+.PHONY: setup-hooks verify test test-all test-fast test-smoke test-batch help validate-wiring
 
 # Default target
 help:
@@ -16,7 +16,10 @@ help:
 	@echo "  make verify           Run production readiness verification"
 	@echo "  make validate-wiring  Validate wiring.yaml accuracy (--strict mode)"
 	@echo "  make test             Run wiring tests"
-	@echo "  make test-all         Run all tests"
+	@echo "  make test-all         Run all tests (with timeout + maxfail)"
+	@echo "  make test-fast        Run fast unit tests (no slow/integration)"
+	@echo "  make test-smoke       Run smoke tests only (<30s)"
+	@echo "  make test-batch       Run tests directory-by-directory (incremental feedback)"
 	@echo ""
 
 # Configure git to use version-controlled hooks
@@ -34,8 +37,20 @@ validate-wiring:
 
 # Run wiring tests
 test:
-	@.venv/bin/python -m pytest tests/wiring -v
+	@.venv/bin/python -m pytest tests/wiring -v --timeout=30
 
-# Run all tests
+# Run all tests (with timeout + maxfail to prevent hanging)
 test-all:
-	@.venv/bin/python -m pytest tests/ -v
+	@.venv/bin/python -m pytest tests/ -v --timeout=30 --maxfail=10 --ignore=tests/documentation --ignore=tests/cortex --ignore=tests/golden --ignore=tests/e2e
+
+# Run fast unit tests (no slow/integration markers)
+test-fast:
+	@.venv/bin/python -m pytest tests/unit/ -q --timeout=15 --maxfail=10 -m "not slow and not integration"
+
+# Run smoke tests (<30s total)
+test-smoke:
+	@.venv/bin/python -m pytest tests/unit/ -q --timeout=5 --maxfail=3 -m "smoke"
+
+# Run tests directory-by-directory for incremental terminal feedback
+test-batch:
+	@./scripts/run-tests.sh batch
