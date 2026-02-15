@@ -57,11 +57,14 @@
 
 **MCP Tools:**
 - `cortex_doc_refresh` — Analyze git changes and update docs (registry-aware, 3-role perspective)
-- `cortex_doc_generate_html` — Convert MD to GitHub Pages HTML (glassmorphism theme, BLUF structure)
-- `cortex_doc_deploy` — Deploy to GitHub Pages (gh-pages branch)
+- `cortex_doc_generate_content` — Extract content from registry → output content.json
 - `cortex_doc_validate` — Validate doc completeness, accuracy, and legal compliance
 - `cortex_doc_generate_bluf` — Generate BLUF business guides (5-minute CTO summaries)
 - `cortex_doc_qualify_claims` — Replace subjective claims with evidence-backed metrics
+
+**Integration:** Works with `cortex-gitpages-builder.md` for HTML site generation
+- **This Agent:** Content extraction + Diátaxis + role narratives → content.json
+- **Builder Agent:** content.json → HTML templates → docs/ site
 
 **Orchestrator:** `CortexDocsOrchestrator` (cortex/orchestrators/internal/cortex_docs_orchestrator.py)
 
