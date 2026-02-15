@@ -598,6 +598,44 @@ core_rules:
 
 # Special Rules (Non-CORE)
 special_rules:
+  - id: "CORE-057"
+    name: "Template File Safety"
+    category: "file_operations"
+    priority: "P0"
+    description: |
+      Safe editing of Python files containing Jinja2 templates.
+      
+      PROBLEM: Template corruption observed in chat01 (8+ fix attempts).
+      - replace_string_in_file unreliable with multi-line templates
+      - Empty string replacements when newlines involved
+      - Triple-quoted strings display/edit issues
+      
+      REQUIRED:
+      - Use SafeTemplateEditor for template files
+      - Syntax check after every edit
+      - Create checkpoint before edit
+      - Automatic rollback on corruption
+      - Atomic write operations
+      
+      FORBIDDEN:
+      - Direct replace_string_in_file on template variables
+      - Manual newline handling in templates
+      - Editing without backup
+      
+      FILES AFFECTED:
+      - cortex/debugging/marker_injection_engine.py (MARKER_TEMPLATE)
+      - cortex/*/any file with Template() definitions
+      - Any Jinja2 template variables in Python
+      
+      IMPLEMENTATION:
+      - SafeTemplateEditor utility (cortex/common/file_operations/)
+      - Pre-commit hook: detect empty triple-quoted strings
+      - Test coverage: multi-line template replacement
+    enforcement: "BLOCKED"
+    added: "2026-02-15"
+    source: "chat01.md digest - Phase 25 S1 learnings"
+    related_rules: ["CORE-002", "CORE-026"]
+    
   - id: "MCP-FIRST"
     name: "MCP-First Architecture"
     category: "architecture"
@@ -624,7 +662,7 @@ enforcement_levels:
   BLOCKED:
     description: "Prevents execution, requires fix"
     severity: "CRITICAL"
-    rules: ["CORE-002", "CORE-008", "CORE-019", "CORE-028", "CORE-035", "CORE-050", "MCP-GATE"]
+    rules: ["CORE-002", "CORE-008", "CORE-019", "CORE-028", "CORE-035", "CORE-050", "CORE-057", "MCP-GATE"]
   
   PRE-EXECUTION:
     description: "Validates before execution, can redirect"
@@ -683,6 +721,10 @@ categories:
   version_control:
     rules: ["CORE-026"]
     description: "Git and version control rules"
+  
+  file_operations:
+    rules: ["CORE-057"]
+    description: "Safe file editing operations"
   
   workflow:
     rules: ["CORE-019", "MCP-GATE"]
