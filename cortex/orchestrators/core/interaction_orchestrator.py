@@ -18,7 +18,9 @@ AC_START: AC-P0-INTERACTION-ORCH-GREEN-001
 """
 
 from datetime import datetime
+import os
 from pathlib import Path
+import sqlite3
 from typing import Any, Dict, List, Optional
 
 from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
@@ -192,15 +194,44 @@ class InteractionOrchestrator(IOrchestrator):
             return Err(f"Operation {operation_name} failed: {str(e)}")
 
     def get_audit_trail(self, limit: int = 100) -> Result[list]:
-        """Get audit trail.
+        """Get audit trail from trace database + in-memory fallback.
 
         Args:
             limit: Maximum entries to return.
 
         Returns:
-            Ok with list of audit entries.
+            Ok with list of audit entries from trace DB.
         """
-        return Ok(self._audit_trail[-limit:])
+        try:
+            audit_entries = []
+            
+            # Try reading from trace database first
+            trace_db_path = Path(os.getenv("CORTEX_TRACE_DB", ".cortex/traces/orchestrator-traces.db"))
+            if trace_db_path.exists():
+                import sqlite3
+                with sqlite3.connect(str(trace_db_path)) as conn:
+                    # Query trace_interaction table (per-orchestrator table)
+                    cursor = conn.execute(
+                        "SELECT timestamp, action, context, result, metadata FROM trace_interaction ORDER BY timestamp DESC LIMIT ?",
+                        (limit,)
+                    )
+                    for row in cursor.fetchall():
+                        audit_entries.append({
+                            "timestamp": row[0],
+                            "action": row[1],
+                            "context": row[2],
+                            "result": row[3],
+                            "metadata": row[4]
+                        })
+            
+            # Fallback to in-memory if DB empty
+            if not audit_entries:
+                audit_entries = self._audit_trail[-limit:]
+            
+            return Ok(audit_entries)
+        except Exception as e:
+            # Fallback to in-memory on any error
+            return Ok(self._audit_trail[-limit:])
 
     # =========================================================================
     # Core Turn Execution (used by MasterOrchestrator)
