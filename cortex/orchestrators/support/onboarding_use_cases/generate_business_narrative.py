@@ -28,9 +28,13 @@ class GenerateBusinessNarrativeUseCase:
     Transforms technical analysis into business-friendly language.
     """
     
-    def __init__(self) -> None:
-        """Initialize narrative generator."""
-        pass
+    def __init__(self, business_language_orchestrator: Any = None) -> None:
+        """Initialize narrative generator.
+        
+        Args:
+            business_language_orchestrator: Optional orchestrator for business language
+        """
+        self.business_language_orchestrator = business_language_orchestrator
     
     def execute(self, repo_data: Dict[str, Any]) -> BusinessNarrative:
         """
@@ -127,14 +131,31 @@ class GenerateBusinessNarrativeUseCase:
         
         # Boost for having description
         if repo_data.get("description"):
-            score += 0.2
+            score += 0.15
         
-        # Boost for having metrics
+        # Boost for metrics/quality indicators
         if repo_data.get("metrics"):
-            score += 0.2
+            score += 0.1
+        
+        # Boost for readme quality
+        readme_quality = repo_data.get("readme_quality", 0)
+        if readme_quality > 0.9:
+            score += 0.15
+        elif readme_quality > 0.7:
+            score += 0.1
+        
+        # Boost for documentation completeness
+        doc_completeness = repo_data.get("documentation_completeness", 0)
+        if doc_completeness > 0.8:
+            score += 0.1
+        
+        # Boost for community adoption (stars)
+        stars = repo_data.get("stars", 0)
+        if stars > 500:
+            score += 0.1
         
         # Boost for having key files
         if repo_data.get("key_files"):
-            score += 0.1
+            score += 0.05
         
         return min(1.0, score)

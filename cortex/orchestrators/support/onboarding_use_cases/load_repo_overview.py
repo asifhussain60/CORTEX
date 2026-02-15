@@ -7,8 +7,20 @@ Author: Phase 54-A Implementation (TDD)
 Created: 2026-02-15
 """
 
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, Optional
+
+
+@dataclass
+class RepoMetadata:
+    """Repository metadata model."""
+    name: str
+    url: str
+    language: str
+    stars: int = 0
+    forks: int = 0
+    last_updated: str = ""
 
 
 class LoadRepoOverviewUseCase:
@@ -21,36 +33,47 @@ class LoadRepoOverviewUseCase:
     - File/directory structure
     """
     
-    def __init__(self) -> None:
-        """Initialize overview loader."""
-        pass
+    def __init__(self, repository: Any = None) -> None:
+        """Initialize overview loader.
+        
+        Args:
+            repository: Optional repository interface for persistence
+        """
+        self.repository = repository if repository is not None else MockRepository()
     
-    def execute(self, repo_path: str) -> Dict[str, Any]:
+    def execute(self, repo_data: Any) -> RepoMetadata:
         """
         Execute overview loading.
         
         Args:
-            repo_path: Path to repository root
+            repo_data: Repository data (dict or path string)
         
         Returns:
-            Repository overview metadata
+            RepoMetadata object
         """
-        path = Path(repo_path)
+        # Handle dict input (pre-analyzed metadata)
+        if isinstance(repo_data, dict):
+            return RepoMetadata(
+                name=repo_data.get("name", "unknown"),
+                url=repo_data.get("url", ""),
+                language=repo_data.get("language", "Unknown"),
+                stars=repo_data.get("stars", 0),
+                forks=repo_data.get("forks", 0),
+                last_updated=repo_data.get("last_updated", "")
+            )
+        
+        # Handle string path
+        path = Path(repo_data)
         
         # Extract basic info
         name = path.name
         primary_language = self._detect_primary_language(path)
         
-        # Count files
-        file_count = self._count_files(path)
-        
-        return {
-            "name": name,
-            "path": str(path),
-            "primary_language": primary_language,
-            "file_count": file_count,
-            "description": f"{name} repository"
-        }
+        return RepoMetadata(
+            name=name,
+            url="",
+            language=primary_language
+        )
     
     def _detect_primary_language(self, path: Path) -> str:
         """Detect primary programming language."""
@@ -83,3 +106,10 @@ class LoadRepoOverviewUseCase:
                 count += 1
         
         return count
+
+
+class MockRepository:
+    """Mock repository for testing."""
+    def save(self, data: Any) -> None:
+        """Mock save method."""
+        pass

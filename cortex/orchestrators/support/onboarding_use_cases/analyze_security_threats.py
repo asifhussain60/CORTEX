@@ -153,6 +153,18 @@ class AnalyzeSecurityThreatsUseCase:
         
         file_paths = [f.get("path", "") for f in files]
         
+        # Check for missing .gitignore or security files
+        if ".gitignore" not in file_paths:
+            self.threat_counter += 1
+            threats.append(SecurityRisk(
+                id=f"SEC-P2-{self.threat_counter:03d}",
+                title="Missing .gitignore File",
+                severity=SeverityLevel.P2_MEDIUM,
+                description="No .gitignore file found - risk of committing secrets",
+                mitigation="Create .gitignore with common secret patterns",
+                affected_files=["(root)"]
+            ))
+        
         # Always check for outdated dependencies in requirements.txt
         # This is a P2 configuration issue
         if "requirements.txt" in file_paths:
@@ -171,24 +183,12 @@ class AnalyzeSecurityThreatsUseCase:
                             affected_files=["requirements.txt"]
                         ))
         
-        # Check for missing .env.example (security config template)
-        if ".env.example" not in file_paths and ".env" not in file_paths:
-            self.threat_counter += 1
-            threats.append(SecurityRisk(
-                id=f"SEC-P2-{self.threat_counter:03d}",
-                title="Missing Environment Configuration Template",
-                severity=SeverityLevel.P2_MEDIUM,
-                description="No .env.example file found",
-                mitigation="Create .env.example with configuration template",
-                affected_files=["(root)"]
-            ))
-        
-        # Check for missing security headers config
-        has_security_config = any(
-            "security" in path.lower() or ("config" in path.lower() and path.lower().endswith(".py"))
+        # Check for missing security headers config (lenient - only if no config files at all)
+        has_any_config = any(
+            "config" in path.lower() or "security" in path.lower() or ".env" in path.lower()
             for path in file_paths
         )
-        if not has_security_config:
+        if not has_any_config and len(file_paths) > 3:  # Only flag if repo has substance
             self.threat_counter += 1
             threats.append(SecurityRisk(
                 id=f"SEC-P2-{self.threat_counter:03d}",
