@@ -1,8 +1,8 @@
 # MasterOrchestrator
 
-**Purpose:** Deep-dive documentation of the central coordination orchestrator — the prefrontal cortex of CORTEX  
+**Purpose:** Deep-dive documentation of the central coordination orchestrator — CORTEX's air traffic control tower  
 **Audience:** Architects, Senior Developers  
-**Last Updated:** 2026-02-13
+**Last Updated:** 2026-02-14
 
 ---
 
@@ -22,22 +22,24 @@
 
 ## Overview
 
-**The MasterOrchestrator: CORTEX's Executive Control Center**
+**The MasterOrchestrator: CORTEX's Air Traffic Control Tower**
 
-Just as the **prefrontal cortex** serves as the brain's executive control center—coordinating thoughts, making decisions, and orchestrating complex behaviors—the **MasterOrchestrator** functions as CORTEX's central command center. It receives all incoming development requests, orchestrates the appropriate neural networks (orchestrators), and ensures coordinated execution.
+Think of a busy international airport's air traffic control tower. Controllers coordinate hundreds of aircraft simultaneously—managing arrivals, departures, emergencies, and weather changes. They make split-second decisions about which runway to assign, when to delay a flight, and how to handle unexpected situations. The tower doesn't fly planes itself; it orchestrates the entire airspace to ensure safe, efficient operations.
 
-**Think of MasterOrchestrator as the "CEO of the CORTEX Brain":**
-- **🎯 Executive Decision Making** — Determines which brain regions (orchestrators) should handle each request
-- **🧠 Cognitive Coordination** — Ensures different brain regions work together harmoniously  
-- **📊 Resource Management** — Allocates cognitive resources and manages parallel processing
-- **🛡️ Quality Control** — Maintains standards and governance across all operations
-- **🔄 Learning Integration** — Incorporates feedback to improve future decision-making
+The **MasterOrchestrator** functions as CORTEX's control tower. It receives all incoming requests, coordinates the appropriate specialist teams (orchestrators), and ensures smooth execution across all operations.
 
-**Key Brain Functions:**
-- **Category:** Core Brain (Executive Functions)
-- **Priority:** 10 (highest operational priority, second only to life support)
-- **Cognitive Capabilities:** orchestration, routing, delegation, quality assurance
-- **Neural Dependencies:** IntentRouter (pattern recognition), LENS (sensory input), Governance (behavioral control)
+**Think of MasterOrchestrator as the "Control Tower Manager":**
+- **🎯 Executive Coordination** — Determines which teams (orchestrators) should handle each request
+- **🔀 Traffic Management** — Ensures different teams work together without conflicts  
+- **📊 Resource Allocation** — Manages capacity and coordinates parallel operations
+- **🛡️ Safety Standards** — Maintains quality and governance across all operations
+- **🔄 Continuous Improvement** — Incorporates feedback to optimize future coordination
+
+**Key System Facts:**
+- **Category:** Core System (Executive Coordination)
+- **Priority:** 10 (highest operational priority)
+- **Core Capabilities:** orchestration, routing, delegation, quality assurance
+- **System Dependencies:** IntentRouter (classification), LENS (analysis), Governance (compliance)
 
 ---
 
@@ -286,14 +288,14 @@ def process_request_with_challenge(
 
 ### Downstream Dependencies
 
-| Component | Purpose | Brain Analogy | Protocol |
-|-----------|---------|---------------|----------|
-| **IntentRouter** | Intent classification | Thalamus — routes signals | Direct call |
-| **UnifiedAnalysisOrchestrator** | Code context via LENS | Visual association cortex | Direct call |
-| **KnowledgeRepository** | Domain knowledge | Hippocampus — long-term memory | Direct call |
-| **UnifiedQualityAssuranceOrchestrator** | Governance & quality | Anterior cingulate — error detection | Direct call |
-| **Target Orchestrators** | Operation execution | Specialist brain regions | Direct call |
-| **AuditLogger** | Audit trail | Episodic memory recorder | Internal |
+| Component | Purpose | System Analogy | Protocol |
+|-----------|---------|----------------|----------|
+| **IntentRouter** | Intent classification | Request router — routes signals | Direct call |
+| **UnifiedAnalysisOrchestrator** | Code context via LENS | Context analyzer | Direct call |
+| **KnowledgeRepository** | Domain knowledge | Long-term storage | Direct call |
+| **UnifiedQualityAssuranceOrchestrator** | Governance & quality | Quality control — error detection | Direct call |
+| **Target Orchestrators** | Operation execution | Specialized processors | Direct call |
+| **AuditLogger** | Audit trail | Event recorder | Internal |
 
 ### Wiring Configuration
 
