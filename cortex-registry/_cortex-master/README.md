@@ -139,10 +139,11 @@ Reference material organized by category:
 
 | Folder | Contains |
 |--------|----------|
-| `knowledge/specifications/` | Technical specs (MCP, orchestrators, governance gates) |
-| `knowledge/governance/` | CORE rules, audit checklists, anti-patterns |
+| `core/governance/` | CORE rules, audit checklists, enforcement patterns, anti-patterns (SSOT) |
+| `core/templates/` | Phase template, response templates, content blocks (SSOT) |
+| `core/specifications/` | Orchestrator dispatch, intent routing, governance gates, exec flow (SSOT) |
+| `core/config/` | System configuration, master plan, workflows (SSOT) |
 | `knowledge/guides/` | How-to docs, best practices, deployment checklists |
-| `knowledge/config/` | System configuration, master plan, workflows |
 
 ---
 
