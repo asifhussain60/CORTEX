@@ -3,7 +3,7 @@
 ---
 title: LENS Architecture - Visual Cortex Wiring for Code Intelligence
 type: explanation
-audience: [Architects, Senior Developers, Software Developers]
+audience: [Business Leaders, Product Owners, Software Developers]
 word_count: 1820
 last_verified: 2026-02-15
 source_of_truth: cortex/lens/ + cortex/orchestrators/analysis/unified_analysis_orchestrator.py

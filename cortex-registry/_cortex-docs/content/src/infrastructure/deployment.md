@@ -3,7 +3,7 @@
 ---
 title: CORTEX Deployment Guide - Local to Production
 type: how-to
-audience: [DevOps, SRE, Software Developers]
+audience: [Business Leaders, Product Owners, Software Developers]
 word_count: 1920
 last_verified: 2026-02-15
 source_of_truth: deployment/ + Dockerfile + .github/workflows/

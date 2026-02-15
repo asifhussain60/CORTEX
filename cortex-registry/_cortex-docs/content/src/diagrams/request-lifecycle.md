@@ -1,7 +1,7 @@
 # Request Lifecycle Diagram
 
 **Purpose:** Interactive request processing flow with d3.js visualizations  
-**Audience:** Developers, Architects  
+**Audience:** Product Owners, Software Developers  
 **Last Updated:** 2026-02-13
 
 ---

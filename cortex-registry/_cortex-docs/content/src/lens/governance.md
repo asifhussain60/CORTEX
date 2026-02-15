@@ -3,7 +3,7 @@
 ---
 title: LENS Governance Integration - Visual Intelligence for Enforcement
 type: explanation
-audience: [Architects, Security Teams, Software Developers]
+audience: [Business Leaders, Product Owners, Software Developers]
 word_count: 1830
 last_verified: 2026-02-15
 source_of_truth: cortex/lens/ + cortex/enforcement/ + cortex/orchestrators/quality/unified_quality_assurance_orchestrator.py
@@ -50,7 +50,7 @@ LENS provides comprehensive code intelligence enabling CORTEX governance enforce
 
 ### Brain Analogy: Vision Informing the Immune Response
 
-Just as seeing a wound triggers the body's immune response — the visual processor identifies the injury, and the immune system mobilizes to heal it — LENS provides the perceptual intelligence that powers CORTEX's governance (immune) system. Without LENS context, governance rules would operate blindly. With LENS, the UnifiedQualityAssuranceOrchestrator's enforcement agents have full visibility into code structure, history, and patterns [Security Teams].
+Just as seeing a wound triggers the body's immune response — the visual processor identifies the injury, and the immune system mobilizes to heal it — LENS provides the perceptual intelligence that powers CORTEX's governance (immune) system. Without LENS context, governance rules would operate blindly. With LENS, the UnifiedQualityAssuranceOrchestrator's enforcement agents have full visibility into code structure, history, and patterns [Software Developers].
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐

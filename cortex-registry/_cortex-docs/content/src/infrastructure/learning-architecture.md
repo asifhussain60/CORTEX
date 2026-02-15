@@ -3,7 +3,7 @@
 ---
 title: CORTEX Learning Infrastructure - Universal Learning Loop
 type: explanation
-audience: [Architects, Software Developers, Product Owners]
+audience: [Business Leaders, Product Owners, Software Developers]
 word_count: 1880
 last_verified: 2026-02-15
 source_of_truth: cortex/learning/ + cortex/knowledge/learned-patterns/ + cortex/orchestrators/core/orchestrator_base_protocol.py

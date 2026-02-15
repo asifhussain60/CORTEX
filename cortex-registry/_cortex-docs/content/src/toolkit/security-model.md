@@ -1,7 +1,7 @@
 # Toolkit Security Model
 
 **Purpose:** The blood-brain barrier — selective permeability that protects CORTEX cognitive processes from malicious inputs while allowing authorized signals through  
-**Audience:** Security Teams, Architects  
+**Audience:** Business Leaders, Product Owners, Software Developers  
 **Last Updated:** 2026-02-13
 
 ---

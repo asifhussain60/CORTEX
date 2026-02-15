@@ -3,7 +3,7 @@
 ---
 title: CORTEX Observability - Metrics, Logs, and Traces
 type: explanation
-audience: [SRE, DevOps, Software Developers]
+audience: [Business Leaders, Product Owners, Software Developers]
 word_count: 1890
 last_verified: 2026-02-15
 source_of_truth: cortex/prometheus_metrics.py + cortex/opentelemetry_tracing.py + deployment/prometheus.yml
@@ -43,7 +43,7 @@ CORTEX implements comprehensive observability through Prometheus metrics, struct
 
 ## Overview
 
-CORTEX implements the three pillars of observability (metrics, logs, traces) enabling teams to understand system behavior, diagnose issues, and optimize performance [SRE].
+CORTEX implements the three pillars of observability (metrics, logs, traces) enabling teams to understand system behavior, diagnose issues, and optimize performance [Software Developers].
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐

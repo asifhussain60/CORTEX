@@ -4,7 +4,7 @@
 id: cortex-c4-container
 title: CORTEX Container Architecture Diagram
 purpose: Show major runtime components and technologies within CORTEX
-audience: [Manager, Developer, SRE]
+audience: [Business Leaders, Product Owners, Software Developers]
 source_of_truth: cortex/__wiring_contract__.yaml
 last_verified: 2026-02-15
 diagram_type: C4-Container

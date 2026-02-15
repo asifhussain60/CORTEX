@@ -3,7 +3,7 @@
 ---
 title: CORTEX CI/CD Pipeline - Automated Quality Gates
 type: explanation
-audience: [DevOps, Software Developers, SRE]
+audience: [Business Leaders, Product Owners, Software Developers]
 word_count: 1880
 last_verified: 2026-02-15
 source_of_truth: .github/workflows/ + deployment/hooks/

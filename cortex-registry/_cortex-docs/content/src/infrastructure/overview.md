@@ -3,7 +3,7 @@
 ---
 title: CORTEX Infrastructure & Deployment Architecture
 type: explanation
-audience: [Business Leaders, Product Owners, SRE]
+audience: [Business Leaders, Product Owners, Software Developers]
 word_count: 1800
 last_verified: 2026-02-15
 source_of_truth: deployment/ + cortex/infrastructure/
@@ -19,7 +19,7 @@ deployment_modes: [development, production]
 
 ## Overview: Cloud-Native Cognitive Architecture
 
-Organizations deploying CORTEX benefit from understanding the platform's cloud-native infrastructure designed for horizontal scalability and operational resilience [Business Leaders]. Product teams leverage infrastructure automation for continuous deployment, health monitoring, and auto-recovery capabilities across multi-region deployments [Product Owners]. The infrastructure layer provides SREs with container-first deployment (Docker/Kubernetes), comprehensive observability (Prometheus/Grafana), and Git-backed configuration management requiring zero runtime database dependencies [SRE].
+Organizations deploying CORTEX benefit from understanding the platform's cloud-native infrastructure designed for horizontal scalability and operational resilience [Business Leaders]. Product teams leverage infrastructure automation for continuous deployment, health monitoring, and auto-recovery capabilities across multi-region deployments [Product Owners]. The infrastructure layer provides software engineers with container-first deployment (Docker/Kubernetes), comprehensive observability (Prometheus/Grafana), and Git-backed configuration management requiring zero runtime database dependencies [Software Developers].
 
 **Infrastructure Design Principles:**
 

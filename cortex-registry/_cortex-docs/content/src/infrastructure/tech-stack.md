@@ -3,7 +3,7 @@
 ---
 title: CORTEX Technology Stack - Modern Cloud-Native Architecture
 type: reference
-audience: [Architects, Developers, DevOps, Product Owners]
+audience: [Business Leaders, Product Owners, Software Developers]
 word_count: 1850
 last_verified: 2026-02-15
 source_of_truth: requirements.txt + Dockerfile + deployment/

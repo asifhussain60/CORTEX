@@ -1,7 +1,7 @@
 # Component Relationships Diagram
 
 **Purpose:** Dependencies and interactions between CORTEX components  
-**Audience:** Architects, Developers  
+**Audience:** Product Owners, Software Developers  
 **Last Updated:** 2026-02-13
 
 ---

@@ -1,7 +1,7 @@
 # MCP Protocol
 
 **Purpose:** Detailed MCP protocol specification — the electrochemical signaling standard of CORTEX  
-**Audience:** Developers, Integration Engineers  
+**Audience:** Product Owners, Software Developers  
 **Last Updated:** 2026-02-13
 
 ---

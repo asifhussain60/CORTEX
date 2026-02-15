@@ -1,7 +1,7 @@
 # Tool Registry
 
 **Purpose:** The connectome registry — a living map of every tool-neuron, its synaptic connections, and activation patterns within the CORTEX brain  
-**Audience:** Developers, Contributors  
+**Audience:** Product Owners, Software Developers  
 **Last Updated:** 2026-02-13
 
 ---

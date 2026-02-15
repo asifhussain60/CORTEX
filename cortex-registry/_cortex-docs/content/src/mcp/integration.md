@@ -1,7 +1,7 @@
 # MCP Integration Guide
 
 **Purpose:** Guide for integrating with CORTEX MCP — connecting new sensory organs to the nervous system  
-**Audience:** Developers, Integration Engineers  
+**Audience:** Product Owners, Software Developers  
 **Last Updated:** 2026-02-13
 
 ---

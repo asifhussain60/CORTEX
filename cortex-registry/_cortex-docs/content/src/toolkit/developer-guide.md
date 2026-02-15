@@ -1,7 +1,7 @@
 # Tool Developer Guide
 
 **Purpose:** The neuroscience lab manual — how to craft new cognitive instruments that integrate seamlessly into the CORTEX brain's existing neural pathways  
-**Audience:** Developers, Contributors  
+**Audience:** Product Owners, Software Developers  
 **Last Updated:** 2026-02-13
 
 ---

@@ -4,7 +4,7 @@
 id: cortex-c4-context
 title: CORTEX System Context Diagram
 purpose: Show who uses CORTEX and what external systems interact with it
-audience: [Executive, Manager, Developer]
+audience: [Business Leaders, Product Owners, Software Developers]
 source_of_truth: cortex/__wiring_contract__.yaml + cortex-registry manifest
 last_verified: 2026-02-15
 diagram_type: C4-Context

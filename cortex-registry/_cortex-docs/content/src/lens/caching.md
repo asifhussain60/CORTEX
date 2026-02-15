@@ -3,7 +3,7 @@
 ---
 title: LENS Caching Strategy - 3-Tier Performance Optimization
 type: explanation
-audience: [Software Developers, SRE, Architects]
+audience: [Business Leaders, Product Owners, Software Developers]
 word_count: 1860
 last_verified: 2026-02-15
 source_of_truth: cortex/intelligence/lens/caching/ + cortex/lens/cache.py
@@ -54,7 +54,7 @@ LENS caching implements 3-tier strategy (request/session/workspace) reducing rep
 
 ### Brain Analogy: Visual Short-Term Memory
 
-When you look at a scene, you don't re-process every pixel each time you blink. Your **visual short-term memory** (VSTM) holds the processed representation for several hundred milliseconds, allowing rapid recognition without full reprocessing. LENS caching serves the same function — it holds analysis results so that repeated queries don't require full re-analysis [Developers].
+When you look at a scene, you don't re-process every pixel each time you blink. Your **visual short-term memory** (VSTM) holds the processed representation for several hundred milliseconds, allowing rapid recognition without full reprocessing. LENS caching serves the same function — it holds analysis results so that repeated queries don't require full re-analysis [Software Developers].
 
 LENS caching is critical for performance. Without caching, every request would require full re-analysis of the codebase. The caching system provides:
 

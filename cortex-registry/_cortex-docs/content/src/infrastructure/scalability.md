@@ -3,7 +3,7 @@
 ---
 title: CORTEX Scalability - Horizontal and Vertical Scaling
 type: explanation
-audience: [Architects, SRE, Software Developers]
+audience: [Business Leaders, Product Owners, Software Developers]
 word_count: 1910
 last_verified: 2026-02-15
 source_of_truth: deployment/kubernetes/ + cortex/mcp/server.py + cortex/intelligence/lens/caching/

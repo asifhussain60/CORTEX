@@ -1,7 +1,7 @@
 # MCP Versioning
 
 **Purpose:** Version management for CORTEX MCP tools — evolving the nervous system safely  
-**Audience:** Developers, Operations  
+**Audience:** Product Owners, Software Developers  
 **Last Updated:** 2026-02-13
 
 ---

@@ -3,7 +3,7 @@
 ---
 title: LENS Synthesis - Binding Visual Streams into Coherent Context
 type: explanation
-audience: [Architects, Senior Developers, Software Developers]
+audience: [Business Leaders, Product Owners, Software Developers]
 word_count: 1850
 last_verified: 2026-02-15
 source_of_truth: cortex/lens/synthesis/ + cortex/intelligence/lens/context_synthesizer.py
@@ -50,9 +50,9 @@ LENS synthesis aggregates outputs from 8 parallel analyzers into unified Unified
 
 ### Brain Analogy: The Binding Problem
 
-In neuroscience, the **binding problem** asks: how does the brain combine separate visual features (color, shape, motion, depth) — each processed by different brain areas — into a single unified percept? When you see a red ball rolling left, the redness, roundness, and motion are processed separately, then *bound* into one coherent experience [Architects].
+In neuroscience, the **binding problem** asks: how does the brain combine separate visual features (color, shape, motion, depth) — each processed by different brain areas — into a single unified percept? When you see a red ball rolling left, the redness, roundness, and motion are processed separately, then *bound* into one coherent experience [Business Leaders].
 
-LENS Synthesis solves the same binding problem for code analysis. It combines outputs from 8 specialized analyzers (Git, AST, Comment, Config, Database, Dependency, API, Polyglot) into a unified `UnifiedIntelligenceContext` — ensuring that CORTEX operations receive a coherent, high-quality understanding regardless of which analyzers contributed [Developers].
+LENS Synthesis solves the same binding problem for code analysis. It combines outputs from 8 specialized analyzers (Git, AST, Comment, Config, Database, Dependency, API, Polyglot) into a unified `UnifiedIntelligenceContext` — ensuring that CORTEX operations receive a coherent, high-quality understanding regardless of which analyzers contributed [Software Developers].
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐

@@ -4,7 +4,7 @@
 id: mcp-request-lifecycle
 title: MCP Request Processing Lifecycle
 purpose: Visualize the complete journey of a user request through CORTEX
-audience: [Developer, Architect]
+audience: [Product Owners, Software Developers]
 source_of_truth: cortex/mcp/server.py + cortex/orchestrators/master_orchestrator.py
 last_verified: 2026-02-15
 diagram_type: Sequence

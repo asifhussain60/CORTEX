@@ -49,17 +49,9 @@ Organizations benefit from LENS's four-phase intelligence cycle that transforms 
 
 ### 🧠 System Analogy: Multi-Sensor Intelligence
 
-**For Executives:**  
-Think of LENS as a diagnostic imaging suite for your codebase. Just as doctors use MRI for soft tissue, CT for bones, and X-ray for quick scans, LENS uses multiple analyzers to examine different aspects of your software. Each analyzer provides a specialized view, and LENS synthesizes them into a comprehensive health report.
-
-**For Managers:**  
-LENS is like a code quality dashboard that automatically monitors your team's work. It tracks technical debt (like Git history showing frequently changed files), security risks (like hardcoded passwords), and architectural patterns (like detecting microservices vs monoliths). It gives you objective metrics to prioritize work and measure improvement.
-
-**For Developers:**  
-LENS is your AI-powered code reviewer that understands context. It parses Abstract Syntax Trees (AST) to understand code structure, analyzes Git history to identify hotspots, scans APIs for consistency, and detects duplicates across the codebase. It's like having a senior architect reviewing every change.
-
-**For SREs:**  
-LENS provides operational intelligence—dependency vulnerabilities, database migration risks, config drift detection, and API contract validation. It's your early warning system for production incidents, catching issues before they cause outages.
+| Business Leaders | Product Owners | Software Engineers |
+|------------------|----------------|--------------------|
+| Think of LENS as a diagnostic imaging suite for your codebase. Just as doctors use MRI for soft tissue, CT for bones, and X-ray for quick scans, LENS uses multiple analyzers to examine different aspects of your software. Each analyzer provides a specialized view, and LENS synthesizes them into a comprehensive health report. | LENS is like a code quality dashboard that automatically monitors your team's work. It tracks technical debt (like Git history showing frequently changed files), security risks (like hardcoded passwords), and architectural patterns (like detecting microservices vs monoliths). It gives you objective metrics to prioritize work and measure improvement. | LENS is your AI-powered code reviewer that understands context. It parses Abstract Syntax Trees (AST) to understand code structure, analyzes Git history to identify hotspots, scans APIs for consistency, and detects duplicates across the codebase. It's like having a senior architect reviewing every change. |
 
 ### The Multi-Sensor Analogy
 
@@ -91,7 +83,7 @@ LENS processes code through four sequential stages, each building on the previou
 id: lens-four-stage-pipeline
 title: LENS Intelligence Pipeline
 purpose: Shows the sequential processing stages from code to insights
-audience: [Developer, Manager]
+audience: [Product Owners, Software Developers]
 source_of_truth: cortex/lens/core.py
 last_verified: v8.1
 diagram_type: Flowchart
@@ -304,8 +296,8 @@ CORTEX LENS includes 7 specialized analyzers, each with a specific focus area:
 - Dead code detection (unreachable statements)
 
 **Use Cases:**
-- **For Developers:** "Show me all functions with cyclomatic complexity > 15"
-- **For Managers:** "Which modules have the highest code complexity?"
+- **For Software Engineers:** "Show me all functions with cyclomatic complexity > 15"
+- **For Product Owners:** "Which modules have the highest code complexity?"
 - **For Architects:** "Map the class hierarchy and inheritance relationships"
 
 **MCP Tool:** `cortex_ast_analyze(file_path, language)`
@@ -356,9 +348,8 @@ CORTEX LENS includes 7 specialized analyzers, each with a specific focus area:
 - Bug-fix pattern detection (keywords: fix, bug, patch)
 
 **Use Cases:**
-- **For Developers:** "Which files changed alongside this bug fix?"
-- **For Managers:** "Show me the most frequently changed files (technical debt hotspots)"
-- **For SREs:** "What recent changes might have caused this incident?"
+- **For Software Engineers:** "Which files changed alongside this bug fix?"
+- **For Product Owners:** "Show me the most frequently changed files (technical debt hotspots)"
 
 **MCP Tool:** `cortex_git_history(scope, time_window)`
 
@@ -401,9 +392,8 @@ hotspots:
 - OpenAPI/Swagger spec generation
 
 **Use Cases:**
-- **For Developers:** "Does this API change break backward compatibility?"
-- **For Integration Teams:** "Generate OpenAPI spec from Flask decorators"
-- **For Product Managers:** "How many API endpoints do we have per service?"
+- **For Software Engineers:** "Does this API change break backward compatibility?"
+- **For Product Owners:** "How many API endpoints do we have per service?"
 
 **MCP Tool:** `cortex_api_analyze(service_path, spec_format)`
 
@@ -452,9 +442,8 @@ hotspots:
 - Stored procedure analysis (SQL Server, PostgreSQL)
 
 **Use Cases:**
-- **For Developers:** "Will this migration cause downtime?"
-- **For DBAs:** "Which queries are missing indexes?"
-- **For SREs:** "Detect risky schema changes before deployment"
+- **For Software Engineers:** "Will this migration cause downtime?"
+- **For Product Owners:** "Detect risky schema changes before deployment"
 
 **MCP Tool:** `cortex_database_analyze(connection_string, migration_path)`
 
@@ -498,9 +487,8 @@ schema_analysis:
 - Deprecated setting detection
 
 **Use Cases:**
-- **For Developers:** "Am I missing any required environment variables?"
-- **For Security Teams:** "Scan for hardcoded secrets across all configs"
-- **For SREs:** "What's different between staging and prod configs?"
+- **For Software Engineers:** "Am I missing any required environment variables?"
+- **For Product Owners:** "What's different between staging and prod configs?"
 
 **MCP Tool:** `cortex_config_analyze(config_path, schema)`
 
@@ -546,9 +534,8 @@ config_analysis:
 - Circular dependency detection
 
 **Use Cases:**
-- **For Developers:** "Are any of my dependencies vulnerable?"
-- **For Security Teams:** "Generate SBOM (Software Bill of Materials)"
-- **For Legal:** "Do we have any GPL dependencies in our proprietary code?"
+- **For Software Engineers:** "Are any of my dependencies vulnerable?"
+- **For Product Owners:** "Generate SBOM (Software Bill of Materials)"
 
 **MCP Tool:** `cortex_dependency_analyze(manifest_path)`
 
@@ -601,8 +588,8 @@ config_analysis:
 
 **Use Cases:**
 - **For Architects:** "Map our microservices architecture across languages"
-- **For Managers:** "What's our tech stack distribution?"
-- **For Developers:** "How does this Python service call the Java backend?"
+- **For Product Owners:** "What's our tech stack distribution?"
+- **For Software Engineers:** "How does this Python service call the Java backend?"
 
 **MCP Tool:** `cortex_polyglot_analyze(repo_path)`
 
@@ -757,7 +744,7 @@ LENS capabilities are exposed through the Model Context Protocol (MCP) as standa
 
 ## Use Cases by Role
 
-### For Developers
+### For Software Engineers
 
 **Scenario:** "I'm about to refactor `payment_service.py`. What should I know?"
 
@@ -778,7 +765,7 @@ cortex_lens_analyze --target payment_service.py --deep
 
 ---
 
-### For Managers
+### For Product Owners
 
 **Scenario:** "Which parts of the codebase need the most attention?"
 
@@ -816,7 +803,7 @@ Technical Debt Hotspots (Top 5)
 
 ---
 
-### For Executives
+### For Business Leaders
 
 **Scenario:** "What's the overall health of our platform?"
 
@@ -855,50 +842,6 @@ ROI: 2.7x over 12 months
 
 ---
 
-### For SREs
-
-**Scenario:** "Production incident at 3 AM. What changed recently?"
-
-**LENS Incident Analysis:**
-```bash
-cortex_lens_analyze --git-blame --window 48h --services affected
-```
-
-**Output:**
-```
-Deployment Timeline (Last 48h)
-
-2026-02-12 14:23 — Deploy v2.3.1
-├─ Changed: payment_service.py (12 files)
-├─ Author: alice
-├─ Tests: 47/47 passing ✅
-└─ Risk: LOW
-
-2026-02-13 09:15 — Deploy v2.3.2 (Hotfix)
-├─ Changed: auth_middleware.py (1 file)
-├─ Author: bob
-├─ Tests: 8/8 passing ✅
-└─ Risk: MEDIUM (changed high-traffic code)
-
-2026-02-13 18:45 — Deploy v2.3.3 🔥 CURRENT
-├─ Changed: rate_limiter.py, auth_middleware.py (2 files)
-├─ Author: charlie
-├─ Tests: 12/12 passing ✅
-├─ Risk: HIGH (modified auth + rate limiting)
-└─ ⚠️ New dependency: redis-py-cluster 2.1.0
-
-Probable Cause: rate_limiter.py (line 67)
-- Change: Increased Redis connection pool from 10 → 50
-- Impact: Redis cluster exhausted connections (max 100)
-- Fix: Rollback to v2.3.2 OR increase Redis max connections
-
-Blast Radius: auth-service (100% traffic), user-service (dependencies)
-```
-
-**Action:** Rollback deploy, increase Redis limits, redeploy with monitoring.
-
----
-
 ## Integration with CORTEX Orchestrators
 
 LENS is not standalone—it powers multiple CORTEX orchestrators:
@@ -908,7 +851,7 @@ LENS is not standalone—it powers multiple CORTEX orchestrators:
 id: lens-integration-map
 title: LENS Integration with Orchestrators
 purpose: Shows how LENS feeds intelligence to decision-making orchestrators
-audience: [Architect, Developer]
+audience: [Product Owners, Software Developers]
 source_of_truth: cortex/__wiring_contract__.yaml
 last_verified: v8.1
 diagram_type: Mindmap
