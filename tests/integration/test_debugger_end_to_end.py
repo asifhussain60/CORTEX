@@ -76,10 +76,12 @@ class TestDebuggerOrchestratorIntegration:
     def test_tests_passed_event_triggers_cleanup(self):
         """Test TESTS_PASSED event triggers cleanup."""
         # Create temp file with markers
+        marker_content = """# CORTEX_DEBUG_START
 # Trigger: TEST_FAILURE
 # Injected: 2026-02-13T00:00:00
 def test_example():
     assert False
+# CORTEX_DEBUG_END
 """
         
         with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False, dir=Path('cortex')) as f:
@@ -114,7 +116,7 @@ class TestEndToEndWorkflow:
     """Test complete end-to-end debugging workflow."""
     
     def test_end_to_end_test_failure_to_cleanup(self):
-        """Test full workflow: TEST_FAILURE → inject → TESTS_PASSED → cleanup."""
+        """Test full workflow: TEST_FAILURE -> inject -> TESTS_PASSED -> cleanup."""
         # Create temp file in cortex/ directory
         cortex_dir = Path('cortex')
         if not cortex_dir.exists():

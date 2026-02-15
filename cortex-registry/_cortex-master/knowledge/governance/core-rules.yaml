@@ -5,13 +5,13 @@
 # Version: 1.1 (CORE-048, CORE-049 added)
 
 meta:
-  version: "1.2"
-  updated: "2026-02-08"
-  authority: "Phase 51: MCP-FIRST Enforcement + CORE-050"
+  version: "1.3"
+  updated: "2026-02-15"
+  authority: "Phase 51: MCP-FIRST Enforcement + CORE-050 + CORE-055"
   source_files:
     - ".github/prompts/cortex-architect.prompt.md"
     - ".github/copilot-instructions.md"
-  total_rules: 17
+  total_rules: 18
 
 core_rules:
   - id: "CORE-002"
