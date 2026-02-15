@@ -173,7 +173,7 @@ pytest-cov==4.1.0          # Code coverage measurement (AC-NFR-007 compliance) [
 pytest-asyncio==0.23.2     # Async test support for cortex.mcp.* [PREFLIGHT]
 pytest-timeout==2.4.0      # Timeout enforcement for hanging tests (prevent infinite loops) [PREFLIGHT]
 pytest-mock==3.15.1        # Mocking support for unit tests
-pytest-xdist==3.8.0        # Parallel test execution (performance)
+pytest-xdist==3.8.0        # Parallel test execution (performance) [Phase 2 MEGA-I]
 hypothesis==6.141.1        # Property-based testing (Phase 1 MEGA-E) [PREFLIGHT]
 sortedcontainers==2.4.0    # Dependency for hypothesis library [PREFLIGHT]
 
