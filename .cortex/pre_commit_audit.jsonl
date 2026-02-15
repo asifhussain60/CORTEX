@@ -1,0 +1,2 @@
+{"event_type": "HEALTH_CHECK", "timestamp": "2026-02-15T13:04:34.976819", "is_healthy": false, "orchestrators_count": 16, "wired_count": 16, "error_message": "Expected 23 orchestrators, found 16"}
+{"event_type": "PRE_COMMIT_DECISION", "timestamp": "2026-02-15T13:04:35.045138", "allow_commit": true, "validation_time_ms": 27.699947357177734, "stage_executed": "STAGE_1", "failure_reason": "", "remediation_steps": []}
