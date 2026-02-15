@@ -255,7 +255,7 @@ Fix: {fix_suggestion}
 ## � COMPLETION RESPONSE TEMPLATE (SSOT)
 
 **Authority:** This section is the SINGLE SOURCE OF TRUTH for completion response formatting.  
-**Scope:** All WAVE/PHASE/TRACK completion responses across all modes.  
+**Scope:** All PHASE/STAGE completion responses across all modes.  
 **Enforcement:** Prompt files reference this section (no duplicate examples).
 
 ### Box Separator Rules (CRITICAL)
@@ -302,7 +302,7 @@ Content with ### Track headers
 ```markdown
 <hr>
 
-✅ **{WAVE/PHASE NAME} Complete**
+✅ **{PHASE NAME} Complete**
 
 **Commits:** {hash1} → {hash2}
 **Pushed:** origin/CORTEX
@@ -443,11 +443,11 @@ Commits - abc123 → def456       (wrong separator)
 <hr>
 ```
 
-### Multi-Track Wave Completion Template
+### Multi-Track Phase Completion Template
 
 ```markdown
 <hr>
-✅ {WAVE NAME} Complete
+✅ {PHASE NAME} Complete
 <hr>
 
 **Commits:** {hash1} → {hash2} → {hash3}
@@ -1154,17 +1154,17 @@ DoD confidence: [X%] — [short reason].
 | User Intent | Template | When to Use |
 |-------------|----------|-------------|
 | **DIGEST** | Concern-Resolution Analysis | Chat review, session digestion, concern validation |
-| **DESIGN/PLAN** | Multi-Wave Roadmap | Wave planning, strategic breakdown, execution scoping |
+| **DESIGN/PLAN** | Multi-Phase Roadmap | Phase planning, strategic breakdown, execution scoping |
 | **QUERY/REFINEMENT** | Question→Answer Structured | User asks specific questions, needs clear answers |
 | **IMPLEMENT (silent)** | ASCII Progress Bar | Active execution after "proceed" trigger |
-| **COMPLETION** | Metrics + Deliverables Summary | Wave/phase completion, ready-to-execute handoff |
+| **COMPLETION** | Metrics + Deliverables Summary | Phase completion, ready-to-execute handoff |
 
 ---
 
 ### Template A: DIGEST — Concern-Resolution Analysis
 
 **Trigger:** `/digest`, review requests, "have concerns been addressed?", session analysis  
-**Pattern:** Status summary → Concern table → Architecture visualization → Wave breakdown → Metrics
+**Pattern:** Status summary → Concern table → Architecture visualization → Phase breakdown → Metrics
 
 ```markdown
 ## 🏛️ CORTEX Architect DIGEST
@@ -1243,10 +1243,10 @@ TOTAL: {n}/{n} Tests Passing ✅ Foundation Proven ✅
 
 ---
 
-### Template B: DESIGN/PLAN — Multi-Wave Roadmap
+### Template B: DESIGN/PLAN — Multi-Phase Roadmap
 
-**Trigger:** `/plan`, "divide work into waves", strategic planning, execution scoping  
-**Pattern:** Scope summary → Named waves with stage trees → Metrics table → Concerns table → Execution command
+**Trigger:** `/plan`, "divide work into phases", strategic planning, execution scoping  
+**Pattern:** Scope summary → Named phases with stage trees → Metrics table → Concerns table → Execution command
 
 ```markdown
 ## 🏛️ CORTEX Architect DESIGN
@@ -1256,20 +1256,20 @@ TOTAL: {n}/{n} Tests Passing ✅ Foundation Proven ✅
 
 <hr>
 
-📋 **COMPLETE MASTER WAVE PLAN: {SCOPE}**
+📋 **COMPLETE MASTER PHASE PLAN: {SCOPE}**
 
 `██████████` 100% Comprehensive Analysis Complete
 
 **Scope:** {description}
 **Duration:** {total_hours} hours autonomous execution
-**Token Budget:** <{total_tokens} total (<{per_wave_tokens} per wave)
+**Token Budget:** <{total_tokens} total (<{per_phase_tokens} per phase)
 **Deliverable:** {primary_deliverable}
 
 <hr>
 
-## 🌊 {N}-WAVE COMPREHENSIVE ROADMAP
+## 🌊 {N}-PHASE COMPREHENSIVE ROADMAP
 
-### WAVE-1: {Meaningful Name} ({hours}h)
+### PHASE-1: {Meaningful Name} ({hours}h)
 
 Stage 1: {Stage Name} [{time}, {test_count} tests]
 ├─ {action_1}
@@ -1281,13 +1281,13 @@ Stage 2: {Stage Name} [{time}, {test_count} tests]
 ├─ {action_2}
 └─ {action_3}
 
-Deliverable: {wave_deliverable}
+Deliverable: {phase_deliverable}
 Success: {test_count}/{test_count} tests passing
 Commits: {n} (AC-marked)
 
 **What It Does:** {one_sentence_description}
 
-### WAVE-2: {Meaningful Name} ({hours}h)
+### PHASE-2: {Meaningful Name} ({hours}h)
 
 {Same stage tree structure...}
 
@@ -1295,7 +1295,7 @@ Commits: {n} (AC-marked)
 
 ## 📊 COMPLETE METRICS
 
-| Wave | Duration | Token | Tests | Commits | Scope | Pass Rate |
+| Phase | Duration | Token | Tests | Commits | Scope | Pass Rate |
 |------|----------|-------|-------|---------|-------|-----------|
 | **1** | {h}h | {k}k | {n} | {n} | {scope} | 100% ✅ |
 | **2** | {h}h | {k}k | {n} | {n} | {scope} | 100% ✅ |
@@ -1305,23 +1305,23 @@ Commits: {n} (AC-marked)
 
 ## ✅ ALL CONCERNS ADDRESSED
 
-| Original Concern | Resolution in Wave Plan | Wave | Status |
+| Original Concern | Resolution in Phase Plan | Phase | Status |
 |------------------|------------------------|------|--------|
-| **{concern_1}** | {resolution} | {wave_n} | ✅ Solved |
-| **{concern_2}** | {resolution} | {wave_n} | ✅ Solved |
+| **{concern_1}** | {resolution} | {phase_n} | ✅ Solved |
+| **{concern_2}** | {resolution} | {phase_n} | ✅ Solved |
 
 ---
 
 ## 🎯 EXECUTION MODEL
 
-**Sequential Waves:**
-WAVE-1 ({h}h) → WAVE-2 ({h}h) → WAVE-{N} ({h}h)
+**Sequential Phases:**
+PHASE-1 ({h}h) → PHASE-2 ({h}h) → PHASE-{N} ({h}h)
    ✅           ✅           ✅
 
 **Checkpoint Strategy:**
 - Token budget 75% → Commit + continue
-- Each wave independent but sequential
-- No dependencies between waves
+- Each phase independent but sequential
+- No dependencies between phases
 
 **Non-Breaking:**
 - ✅ Existing API unchanged
@@ -1339,7 +1339,7 @@ Mode: Silent autonomous with ASCII progress bars
 Total Duration: {hours} hours
 Token Budget: <{tokens}
 
-{Wave tree summary}
+{Phase tree summary}
 
 Result: {expected_deliverable}
 
@@ -1350,11 +1350,11 @@ Result: {expected_deliverable}
 ```
 
 **Key Rules:**
-- Every wave has a meaningful name (not generic "WAVE-1")
+- Every phase has a meaningful name (not generic "PHASE-1")
 - Stage trees use consistent format: `Stage N: {Name} [{time}, {test_count} tests]`
-- "What It Does" one-liner after each wave
-- Metrics table MUST include all waves + TOTAL row
-- Concern-resolution table cross-references wave numbers
+- "What It Does" one-liner after each phase
+- Metrics table MUST include all phases + TOTAL row
+- Concern-resolution table cross-references phase numbers
 - Execution command block at bottom (copy-paste ready)
 - End with clear "proceed" trigger with plan ID
 
@@ -1430,10 +1430,10 @@ All committed: `{commit_hashes}`
 {tool_1} ({score}/10)    {tool_2} ({score}/10)
 
 **Underutilized ⚠️ ({n} Total)**
-{tool_3} → Activate in {wave} for {benefit}
+{tool_3} → Activate in {phase} for {benefit}
 
 **Recommended 🔴 ({n} Total)**
-{tool_4} ({wave}) → {benefit}
+{tool_4} ({phase}) → {benefit}
 
 ---
 
@@ -1482,7 +1482,7 @@ All committed: `{commit_hashes}`
 **📍 Location:** {file_location}
 **📦 Package:** {n} documents, {n}+ lines, {n} git commits
 **✅ Status:** {STATUS} | Ready for execution
-**⏱️ Timeline:** {hours} hours, {waves}
+**⏱️ Timeline:** {hours} hours, {phases}
 ```
 
 **Key Rules:**
@@ -1496,10 +1496,10 @@ All committed: `{commit_hashes}`
 
 ---
 
-### Template D: COMPLETION — Wave/Phase Complete
+### Template D: COMPLETION — Phase Complete
 
-**Trigger:** Wave completed, phase finished, work delivered  
-**Pattern:** Deliverables summary → What gets delivered per wave → Metrics → Ready confirmation
+**Trigger:** Phase completed, stage finished, work delivered  
+**Pattern:** Deliverables summary → What gets delivered per phase → Metrics → Ready confirmation
 
 ```markdown
 ## 🏛️ CORTEX Architect {OPERATION}
@@ -1509,7 +1509,7 @@ All committed: `{commit_hashes}`
 
 <hr>
 
-✅ **{WAVE/PHASE NAME}: COMPLETE**
+✅ **{PHASE NAME}: COMPLETE**
 
 `██████████` 100% | {n}/{n} tests | {pct}% coverage
 
@@ -1521,7 +1521,7 @@ All committed: `{commit_hashes}`
 
 ### What Gets Delivered
 
-**By {Wave/Phase} End:**
+**By {Phase} End:**
 - ✅ {deliverable_1}
 - ✅ {deliverable_2}
 - ✅ {deliverable_3}
@@ -1617,8 +1617,8 @@ def select_response_template(intent: str, context: dict) -> str:
         return "TEMPLATE_A_DIGEST"
     
     # Template B: DESIGN/PLAN
-    if intent in ["DESIGN", "PLAN"] or "wave" in context.get("query", ""):
-        return "TEMPLATE_B_WAVE_ROADMAP"
+    if intent in ["DESIGN", "PLAN"] or "phase" in context.get("query", ""):
+        return "TEMPLATE_B_PHASE_ROADMAP"
     
     # Template C: QUERY/REFINEMENT
     if intent in ["QUERY"] or context.get("question_count", 0) > 1:
@@ -1644,9 +1644,9 @@ Templates can be **composed** (combined) for complex responses:
 
 | Scenario | Templates Combined | Example |
 |----------|--------------------|---------|
-| DIGEST + PLAN | A + B | Session analysis → Wave plan (chat01 pattern) |
-| PLAN + COMPLETION | B + D | Wave plan → What gets delivered |
-| QUERY + PLAN | C + B | Answer questions → Updated wave plan |
+| DIGEST + PLAN | A + B | Session analysis → Phase plan (chat01 pattern) |
+| PLAN + COMPLETION | B + D | Phase plan → What gets delivered |
+| QUERY + PLAN | C + B | Answer questions → Updated phase plan |
 | COMPLETION + ENHANCEMENT | D + E | Phase complete → Enhancement description |
 
 **Composition Rule:** When combining, use `---` separator between template sections. Each template retains its own structure — do NOT merge fields.
@@ -1668,11 +1668,11 @@ Templates can be **composed** (combined) for complex responses:
 | >5 options in one decision | Decision paralysis | Categorize or phase decisions |
 | Technical jargon without definition | Excludes non-experts | Use `<abbr>` tooltips |
 | Embedded full file contents | Context overflow | Link with `#file:` or use excerpts |
-| **Generic wave names (WAVE-1)** | **No strategic meaning, harder to track** | **Meaningful names (Foundation & Bootstrap)** |
+| **Generic phase names (PHASE-1)** | **No strategic meaning, harder to track** | **Meaningful names (Foundation & Bootstrap)** |
 | **Answering without mirroring question** | **User unsure if concern was understood** | **Quote user's question → provide answer** |
 | **Missing concern-resolution mapping** | **User can't verify all concerns addressed** | **Table: Concern → Solution → Status** |
 | **Architecture without visualization** | **Abstract, hard to grasp** | **Code tree format (├─ └─) with test counts** |
-| **Missing "What It Does" per wave** | **User can't quickly scan wave purpose** | **One-sentence description after each wave** |
+| **Missing "What It Does" per phase** | **User can't quickly scan phase purpose** | **One-sentence description after each phase** |
 | **No execution command at bottom** | **User must compose command manually** | **Copy-paste ready /implement command** |
 
 ---
