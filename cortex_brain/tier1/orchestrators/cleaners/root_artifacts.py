@@ -11,13 +11,18 @@ from pathlib import Path
 from typing import Any, Dict, List, Set
 import shutil
 
-# Import from tier1.orchestrators module (goes through cleaners.py)
+# Import base classes from parent cleaners.py module
+# Avoid importing from cleaners package to prevent circular imports
 import sys
-parent_dir = Path(__file__).parent.parent.parent
+import os
+
+# Add parent directory to path to import cleaners.py
+parent_dir = Path(__file__).parent.parent
 if str(parent_dir) not in sys.path:
     sys.path.insert(0, str(parent_dir))
 
-from tier1.orchestrators import cleaners
+# Import from cleaners.py (not the cleaners/ package)
+import cleaners
 
 # Use the base classes from cleaners module
 Analysis = cleaners.Analysis
