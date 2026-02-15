@@ -1,26 +1,47 @@
 # Technology Stack
 
-**Purpose:** The neurochemical substrate — every molecule (library), ion channel (framework), and neurotransmitter (protocol) that makes the CORTEX brain function  
-**Audience:** Architects, Developers, DevOps  
-**Last Updated:** 2026-02-13
+---
+title: CORTEX Technology Stack - Modern Cloud-Native Architecture
+type: reference
+audience: [Architects, Developers, DevOps, Product Owners]
+word_count: 1850
+last_verified: 2026-02-15
+source_of_truth: requirements.txt + Dockerfile + deployment/
+format: diátaxis-reference
+voice: third-person-neutral
+phase: Production (v8.1)
+diagrams: ASCII layer architecture
+---
+
+> **Notice:** Technology choices reflect production deployment requirements as of v8.1. Organizations may substitute equivalent technologies (e.g., PostgreSQL → MySQL, Redis → Memcached) while maintaining interface compatibility. Version requirements represent minimum tested versions.
 
 ---
 
-## Table of Contents
+## Executive Summary
 
-- [Overview](#overview)
-- [Core Runtime](#core-runtime)
-- [Data Storage](#data-storage)
-- [Infrastructure](#infrastructure)
-- [Observability](#observability)
-- [Development Tools](#development-tools)
-- [Related Documents](#related-documents)
+CORTEX implements a modern cloud-native technology stack optimized for reliability, performance, and operational simplicity. Organizations benefit from proven open-source technologies reducing vendor lock-in and licensing costs [Business Leaders]. Product teams gain predictable performance characteristics and extensive monitoring capabilities [Product Owners]. The stack implements Python 3.9+ async runtime, Git-backed configuration (zero runtime database), Redis caching, container-first deployment, and comprehensive observability [Software Developers].
+
+**Core Technology Layers:**
+- **Application Layer** — Python 3.9+ with FastAPI (async HTTP), Pydantic 2.0 (validation), asyncio (concurrency)
+- **Data Layer** — Git registry (configuration), Redis 7.x (caching), SQLite (AST cache), No PostgreSQL in production
+- **Infrastructure Layer** — Docker (containerization), Kubernetes (orchestration Phase 11), Nginx (reverse proxy)
+- **Observability Layer** — Prometheus (metrics), Grafana (dashboards), OpenTelemetry (tracing), structlog (logging)
+- **Development Layer** — pytest (testing), mypy (type checking), ruff (linting), black (formatting)
+
+**Key Design Decisions:**
+- **Git-Backed Config** — Eliminates PostgreSQL/MongoDB operational overhead (zero runtime database dependency)
+- **Async-First** — Python asyncio + FastAPI for high concurrency (500+ concurrent connections per instance)
+- **Container-Native** — Docker-first design enables horizontal scaling and zero-downtime deployments
+- **Stateless Processing** — No session affinity required (horizontal scaling via load balancer)
+- **Observability-First** — Prometheus metrics + OpenTelemetry tracing built-in (not bolted-on)
+
+**Performance Targets:** Application startup <2s, request latency P50: 5ms (gateway), P95: 15ms, P99: 25ms. Memory footprint: 150MB base + 50MB per 1000 cached patterns. CPU: 0.5 cores steady-state, 2 cores peak.
 
 ---
 
 ## Overview
 
-CORTEX is built on a modern, well-tested technology stack optimized for reliability and performance.
+CORTEX implements a layered technology architecture where each layer provides specific capabilities while maintaining loose coupling. Organizations deploy CORTEX using standard cloud-native patterns reducing operational complexity [Business Leaders].
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐

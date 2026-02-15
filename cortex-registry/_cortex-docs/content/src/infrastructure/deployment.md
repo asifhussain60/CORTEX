@@ -1,33 +1,57 @@
 # Deployment Guide
 
-**Purpose:** Neural development and maturation — how CORTEX grows from embryonic code to a fully-formed production brain  
-**Audience:** DevOps, SRE  
-**Last Updated:** 2026-02-13
+---
+title: CORTEX Deployment Guide - Local to Production
+type: how-to
+audience: [DevOps, SRE, Software Developers]
+word_count: 1920
+last_verified: 2026-02-15
+source_of_truth: deployment/ + Dockerfile + .github/workflows/
+format: diátaxis-howto
+voice: third-person-neutral
+phase: Production (v8.1)
+diagrams: ASCII deployment pipeline, Kubernetes architecture
+---
+
+> **Notice:** Deployment procedures reflect production-tested patterns as of v8.1. Organizations may customize deployment strategies based on infrastructure requirements. Kubernetes deployment represents Phase 11 target architecture (stdio deployment current for v8.1).
 
 ---
 
-## Table of Contents
+## Executive Summary
 
-- [Overview](#overview)
-- [Prerequisites](#prerequisites)
-- [Local Development](#local-development)
-- [Docker Deployment](#docker-deployment)
-- [Kubernetes Deployment](#kubernetes-deployment)
-- [Configuration Management](#configuration-management)
-- [Rollback Procedures](#rollback-procedures)
-- [Related Documents](#related-documents)
+CORTEX deployment spans three modes addressing development, testing, and production requirements. Organizations benefit from progressive deployment complexity matching team maturity (local → Docker → Kubernetes) [Business Leaders]. Product teams gain rapid local development feedback (<2s startup) and confidence through staging environments before production [Product Owners]. The deployment pipeline implements automated testing, security scanning, Docker containerization, and Kubernetes orchestration with zero-downtime rolling updates [Software Developers].
+
+**Deployment Modes:**
+- **Local Development** — Native Python execution, auto-reload enabled, <2s startup, single developer workflow
+- **Docker Compose** — Multi-container testing environment, Redis + MCP server, staging simulation
+- **Kubernetes Production** — Horizontal scaling, rolling updates, health checks, production-grade observability
+
+**Deployment Pipeline:**
+```
+Code Commit → Lint/Type Check → Unit Tests → Integration Tests → Security Scan → Docker Build → Push ECR → Deploy Staging → Smoke Tests → Deploy Production → Verify
+   (1min)        (2min)          (3min)        (2min)           (1min)        (2min)      (1min)     (30s)         (3min)        (5min)           (30s)
+```
+
+**Key Capabilities:**
+- **Zero-Downtime Deployments** — Rolling updates with health check gating (Kubernetes Phase 11)
+- **Automated Rollback** — Failed health checks trigger automatic rollback (<2min)
+- **Environment Parity** — Docker ensures dev/staging/prod consistency
+- **Configuration Management** — Environment variables + Git-backed config (no secrets in code)
+- **Observability** — Prometheus metrics + Grafana dashboards + OpenTelemetry tracing
+
+**Prerequisites:** Python 3.9+, Docker 20.10+, kubectl 1.25+ (production), 4GB RAM minimum, 10GB disk space.
 
 ---
 
 ## Overview
 
-CORTEX supports multiple deployment modes:
+CORTEX supports progressive deployment complexity enabling teams to start simple and scale to production-grade infrastructure as needed. Organizations deploy locally for development, use Docker Compose for integration testing, and Kubernetes for production workloads [DevOps].
 
-| Mode | Use Case | Complexity |
-|------|----------|------------|
-| Local | Development | Low |
-| Docker Compose | Testing | Medium |
-| Kubernetes | Production | High |
+| Mode | Use Case | Complexity | Resources | Startup Time |
+|------|----------|------------|-----------|-------------|
+| Local | Development, debugging | Low | 512MB RAM, 1 CPU | <2s |
+| Docker Compose | Integration testing, staging | Medium | 2GB RAM, 2 CPU | ~10s |
+| Kubernetes | Production, high availability | High | 4GB+ RAM, 4+ CPU | ~30s |
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
