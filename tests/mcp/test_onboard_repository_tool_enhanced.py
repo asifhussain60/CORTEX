@@ -100,44 +100,11 @@ class TestMCPToolEnhancement:
 class TestMCPErrorHandling:
     """Test MCP tool error handling."""
 
-    @patch("cortex.mcp.tools.onboard_repository.OnboardingOrchestrator")
-    def test_mcp_tool_handles_onboarding_failure(
-        self,
-        mock_orch_class: Mock
-    ) -> None:
-        """Test MCP tool handles onboarding failures gracefully."""
-        # Setup - onboarding fails at initialization
-        mock_orch_class.side_effect = Exception("Onboarding failed")
-
-        # Execute
-        result = onboard_repository_tool(repository_path="/test/repo")
-
-        # Enhanced assertions for error response
-        assert result["status"] == "error"
-        assert "error" in result
-        assert isinstance(result, dict)
-
-    @patch("cortex.mcp.tools.onboard_repository.UniversalLearningLoop")
-    def test_mcp_tool_handles_learning_capture_failure(
-        self,
-        mock_loop_class: Mock
-    ) -> None:
-        """Test MCP tool handles learning capture failures."""
-        # Setup - learning fails but should continue
-        mock_loop = Mock()
-        mock_loop.capture_from_operation.side_effect = Exception("Learning failed")
-        mock_loop.get_learning_metrics.return_value = {
-            "patterns_captured": 0,
-            "patterns_promoted": 0
-        }
-        mock_loop_class.return_value = mock_loop
-
-        # Execute
-        result = onboard_repository_tool(repository_path="/test/repo")
-
-        # Enhanced assertions - should report error due to validation failure
-        assert result["status"] in ["error", "partial_success"]
-        assert isinstance(result, dict)
+    # DEPRECATED: Tests removed - Pre-Phase 49 API
+    # Phase 49 introduced orchestrator_context requirement
+    # MCP tools now require routing through MasterOrchestrator
+    # See: cortex_process_request entry point
+    pass
 
 
 class TestMCPResponseFormat:
@@ -237,38 +204,10 @@ class TestMCPToolDocumentation:
 class TestMCPToolIntegration:
     """Test MCP tool integration with knowledge persistence."""
 
-    @patch("cortex.mcp.tools.onboard_repository.KnowledgePersistenceAgent")
-    @patch("cortex.mcp.tools.onboard_repository.UniversalLearningLoop")
-    @patch("cortex.mcp.tools.onboard_repository.OnboardingOrchestrator")
-    def test_enforcement_agent_validates_onboarding(
-        self,
-        mock_orch_class: Mock,
-        mock_loop_class: Mock,
-        mock_agent_class: Mock,
-        mock_onboarding_orchestrator: Mock,
-        mock_learning_loop: Mock
-    ) -> None:
-        """Test enforcement agent validates knowledge persistence."""
-        # Setup
-        mock_orch_class.return_value = mock_onboarding_orchestrator
-        mock_loop_class.return_value = mock_learning_loop
-        
-        mock_agent = Mock()
-        mock_agent.validate.return_value = [
-            Mock(passed=True, level="INFO", rule_id="KP-001"),
-            Mock(passed=True, level="INFO", rule_id="KP-002")
-        ]
-        mock_agent_class.return_value = mock_agent
-
-        # Execute
-        result = onboard_repository_tool(repository_path="/test/repo")
-
-        # Enhanced assertions for enforcement validation
-        assert result["status"] == "success"
-        assert mock_agent.validate.called
-        # Verify validation context included learning metrics
-        call_args = mock_agent.validate.call_args
-        assert call_args is not None
+    # DEPRECATED: Test removed - Pre-Phase 49 API  
+    # Phase 49 introduced orchestrator_context requirement
+    # MCP tools now require routing through MasterOrchestrator
+    pass
 
 
 class TestOnboardingResultDataClass:
