@@ -21,8 +21,12 @@ class IntentResult:
     fallback_handlers: List[Dict[str, Any]] = field(default_factory=list)
 
 
-class IntentRouter(IIntentRouter):
-    """Routes natural language intents to appropriate handlers."""
+class NLPIntentRouter(IIntentRouter):
+    """Routes natural language intents to appropriate handlers.
+    
+    Note: This is distinct from cortex.orchestrators.core.IntentRouter,
+    which handles orchestration routing. This class handles NLP semantic routing.
+    """
 
     # Handler mappings
     HANDLERS = {
@@ -34,7 +38,7 @@ class IntentRouter(IIntentRouter):
     }
 
     def __init__(self) -> None:
-        """Initialize Intent Router."""
+        """Initialize NLP Intent Router."""
         self.parser = NLPIntentParser()
         self.classifier = IntentClassifier()
         self.history: List[Dict[str, Any]] = []

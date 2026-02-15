@@ -4,7 +4,7 @@ import pytest
 from typing import List, Dict, Any
 from cortex.brain.domain_brain.intent_parser import NLPIntentParser, IntentEntity
 from cortex.brain.domain_brain.intent_classifier import IntentClassifier, IntentCategory
-from cortex.brain.domain_brain.nlp_handler_router import IntentRouter, IntentResult
+from cortex.brain.domain_brain.nlp_handler_router import NLPIntentRouter, IntentResult
 from cortex.brain.domain_brain.intent_router_interface import IIntentRouter
 
 
@@ -107,7 +107,7 @@ class TestIntentRouter:
 
     def test_router_routes_simple_intent(self) -> None:
         """Test router correctly routes simple intent."""
-        router = IntentRouter()
+        router = NLPIntentRouter()
         result = router.query_intent("get user data")
         
         assert isinstance(result, IntentResult)
@@ -116,7 +116,7 @@ class TestIntentRouter:
 
     def test_router_returns_intent_result(self) -> None:
         """Test router returns proper IntentResult object."""
-        router = IntentRouter()
+        router = NLPIntentRouter()
         result = router.query_intent("retrieve accounts")
         
         assert hasattr(result, "intent")
@@ -127,7 +127,7 @@ class TestIntentRouter:
 
     def test_router_confidence_accuracy(self) -> None:
         """Test router confidence scoring is accurate."""
-        router = IntentRouter()
+        router = NLPIntentRouter()
         
         clear_intent = router.query_intent("get all users")
         unclear_intent = router.query_intent("blah blah nonsense xyz")
@@ -137,7 +137,7 @@ class TestIntentRouter:
 
     def test_router_handles_api_routing(self) -> None:
         """Test router correctly routes API intents."""
-        router = IntentRouter()
+        router = NLPIntentRouter()
         result = router.query_intent("fetch all records")
         
         assert result.category in ["api", "API"]
@@ -145,7 +145,7 @@ class TestIntentRouter:
 
     def test_router_handles_workflow_routing(self) -> None:
         """Test router correctly routes workflow intents."""
-        router = IntentRouter()
+        router = NLPIntentRouter()
         result = router.query_intent("execute data processing workflow")
         
         assert result.category in ["workflow", "WORKFLOW"]
@@ -157,7 +157,7 @@ class TestIntentFallback:
 
     def test_fallback_chain_for_low_confidence_intent(self) -> None:
         """Test fallback chain activates for uncertain intents."""
-        router = IntentRouter()
+        router = NLPIntentRouter()
         result = router.query_intent("something unclear and ambiguous")
         
         assert result.confidence < 0.7
@@ -165,7 +165,7 @@ class TestIntentFallback:
 
     def test_fallback_handlers_are_ordered(self) -> None:
         """Test fallback handlers are ordered by confidence."""
-        router = IntentRouter()
+        router = NLPIntentRouter()
         result = router.query_intent("maybe do this or that")
         
         if result.fallback_handlers:
@@ -174,7 +174,7 @@ class TestIntentFallback:
 
     def test_fallback_chain_provides_alternatives(self) -> None:
         """Test fallback chain provides alternative interpretations."""
-        router = IntentRouter()
+        router = NLPIntentRouter()
         result = router.query_intent("uncertain intent here")
         
         if result.confidence < 0.7:
@@ -182,7 +182,7 @@ class TestIntentFallback:
 
     def test_threshold_below_70_percent_triggers_fallback(self) -> None:
         """Test intents below 70% confidence trigger fallback."""
-        router = IntentRouter()
+        router = NLPIntentRouter()
         result = router.query_intent("vague and unclear request xyz")
         
         if result.confidence < 0.70:
@@ -194,7 +194,7 @@ class TestIntentHistory:
 
     def test_intent_history_persists(self) -> None:
         """Test that intent history is maintained."""
-        router = IntentRouter()
+        router = NLPIntentRouter()
         
         # Query multiple intents
         router.query_intent("get user data")
@@ -206,7 +206,7 @@ class TestIntentHistory:
 
     def test_history_maintains_last_100_intents(self) -> None:
         """Test history maintains maximum 100 most recent intents."""
-        router = IntentRouter()
+        router = NLPIntentRouter()
         
         # Query 150 intents
         for i in range(150):
@@ -217,7 +217,7 @@ class TestIntentHistory:
 
     def test_history_contains_intent_details(self) -> None:
         """Test history entries contain full intent details."""
-        router = IntentRouter()
+        router = NLPIntentRouter()
         router.query_intent("test intent query")
         
         history = router.get_history()
@@ -229,7 +229,7 @@ class TestIntentHistory:
 
     def test_history_is_ordered_chronologically(self) -> None:
         """Test history entries are in chronological order."""
-        router = IntentRouter()
+        router = NLPIntentRouter()
         
         for i in range(5):
             router.query_intent(f"query {i}")
@@ -243,12 +243,12 @@ class TestIntentIntegration:
 
     def test_intent_router_implements_interface(self) -> None:
         """Test IntentRouter implements IIntentRouter interface."""
-        router = IntentRouter()
+        router = NLPIntentRouter()
         assert isinstance(router, IIntentRouter)
 
     def test_end_to_end_intent_routing(self) -> None:
         """Test complete intent routing pipeline."""
-        router = IntentRouter()
+        router = NLPIntentRouter()
         
         # Test various intent types
         test_intents = [
@@ -267,7 +267,7 @@ class TestIntentIntegration:
 
     def test_intent_routing_accuracy_above_threshold(self) -> None:
         """Test intent routing accuracy meets 85% threshold."""
-        router = IntentRouter()
+        router = NLPIntentRouter()
         
         # Test clear intents that should route correctly
         clear_intents = [
@@ -287,7 +287,7 @@ class TestIntentIntegration:
 
     def test_integration_with_conversation_protocol(self) -> None:
         """Test integration with ConversationProtocol."""
-        router = IntentRouter()
+        router = NLPIntentRouter()
         result = router.query_intent("test intent")
         
         # Result should be compatible with ConversationProtocol
@@ -298,7 +298,7 @@ class TestIntentIntegration:
 
     def test_high_volume_intent_processing(self) -> None:
         """Test router handles high volume intent requests."""
-        router = IntentRouter()
+        router = NLPIntentRouter()
         
         # Process 50 intents
         results = []
