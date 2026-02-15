@@ -27,18 +27,140 @@ class RepositoryProfile:
         """
         Detect profile from repository characteristics.
 
+        Inspects the repository for indicators of production readiness,
+        team size, and compliance level by checking for CI configs,
+        pyproject.toml, contributor count, security policies, etc.
+
         Args:
-            repo_path: Path to repository
+            repo_path: Path to repository root.
 
         Returns:
-            Detected profile
+            Detected RepositoryProfile.
         """
-        # Placeholder implementation
+        repo = Path(repo_path)
+
+        repository_type = cls._detect_repository_type(repo)
+        team_size = cls._detect_team_size(repo)
+        compliance_level = cls._detect_compliance_level(repo)
+
         return cls(
-            repository_type='production',
-            team_size='medium',
-            compliance_level='medium'
+            repository_type=repository_type,
+            team_size=team_size,
+            compliance_level=compliance_level,
         )
+
+    # ------------------------------------------------------------------
+    # Private detection helpers
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _detect_repository_type(repo: Path) -> str:
+        """Infer repository type from structure and config files.
+
+        Args:
+            repo: Repository root path.
+
+        Returns:
+            One of ``'production'``, ``'prototype'``, ``'experimental'``.
+        """
+        production_markers = [
+            repo / "Dockerfile",
+            repo / "docker-compose.yml",
+            repo / "docker-compose.yaml",
+            repo / "deployment",
+            repo / ".github" / "workflows",
+            repo / "Makefile",
+            repo / "setup.cfg",
+        ]
+        prototype_markers = [
+            repo / "notebook.ipynb",
+            repo / "scratch.py",
+        ]
+
+        prod_score = sum(1 for m in production_markers if m.exists())
+        proto_score = sum(1 for m in prototype_markers if m.exists())
+
+        # Check pyproject.toml / setup.py for version info
+        for cfg in ("pyproject.toml", "setup.py", "setup.cfg"):
+            if (repo / cfg).exists():
+                prod_score += 1
+
+        if prod_score >= 3:
+            return "production"
+        if proto_score >= 1 and prod_score < 2:
+            return "prototype"
+        if prod_score == 0:
+            return "experimental"
+        return "production"
+
+    @staticmethod
+    def _detect_team_size(repo: Path) -> str:
+        """Infer team size from contributor / config signals.
+
+        Args:
+            repo: Repository root path.
+
+        Returns:
+            One of ``'small'``, ``'medium'``, ``'large'``.
+        """
+        # Check CODEOWNERS as a proxy for large teams
+        codeowners = repo / ".github" / "CODEOWNERS"
+        if codeowners.exists():
+            try:
+                lines = codeowners.read_text().strip().splitlines()
+                owner_lines = [l for l in lines if l.strip() and not l.startswith("#")]
+                if len(owner_lines) >= 10:
+                    return "large"
+                if len(owner_lines) >= 3:
+                    return "medium"
+            except OSError:
+                pass
+
+        # Fallback: check for team-oriented configs
+        team_indicators = [
+            repo / ".github" / "CODEOWNERS",
+            repo / ".github" / "pull_request_template.md",
+            repo / "CONTRIBUTING.md",
+        ]
+        team_score = sum(1 for t in team_indicators if t.exists())
+
+        if team_score >= 2:
+            return "medium"
+        return "small"
+
+    @staticmethod
+    def _detect_compliance_level(repo: Path) -> str:
+        """Infer compliance level from security / governance signals.
+
+        Args:
+            repo: Repository root path.
+
+        Returns:
+            One of ``'low'``, ``'medium'``, ``'high'``.
+        """
+        compliance_markers = [
+            repo / "SECURITY.md",
+            repo / ".github" / "SECURITY.md",
+            repo / ".github" / "dependabot.yml",
+            repo / ".cortex",
+            repo / "cortex-registry",
+            repo / ".pre-commit-config.yaml",
+            repo / ".bandit",
+        ]
+        score = sum(1 for m in compliance_markers if m.exists())
+
+        # Check for governance YAML
+        governance_dirs = [
+            repo / "cortex-registry" / "governance",
+            repo / "cortex_brain" / "tier0" / "governance",
+        ]
+        score += sum(1 for d in governance_dirs if d.exists())
+
+        if score >= 4:
+            return "high"
+        if score >= 2:
+            return "medium"
+        return "low"
 
 
 @dataclass

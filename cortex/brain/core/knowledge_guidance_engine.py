@@ -147,18 +147,59 @@ class KnowledgeGuidanceEngine:
     def _load_tier_mappings(self) -> None:
         """Load tier0/tier1/tier2 mappings from governance repository."""
         self.tier_0_rules: Dict[str, str] = {}
-        self.tier_1_rules: Dict[str, str] = {}
-        self.tier_2_rules: Dict[str, str] = {}
+        self.tier_1_rules: Dict[str, Any] = {}
+        self.tier_2_rules: Dict[str, Any] = {}
+
+        brain_root = Path(__file__).parent.parent.parent.parent / "cortex_brain"
 
         # Load TIER 0 rules
-        tier0_path = Path(__file__).parent.parent.parent.parent / "cortex_brain" / "tier0" / "governance" / "core-rules.yaml"
+        tier0_path = brain_root / "tier0" / "governance" / "core-rules.yaml"
         if tier0_path.exists():
             with open(tier0_path, 'r') as f:
                 tier0_content = yaml.safe_load(f) or {}
                 self.tier_0_rules = tier0_content.get("rules", {})
 
-        # TODO: Load TIER 1 rules when tier1/governance/ directory exists
-        # TODO: Load TIER 2 rules when tier2/governance/ directory exists
+        # Load TIER 1 rules from all YAML files in tier1/governance/
+        tier1_gov = brain_root / "tier1" / "governance"
+        if tier1_gov.exists():
+            for yaml_file in tier1_gov.glob("*.yaml"):
+                try:
+                    with open(yaml_file, 'r') as f:
+                        content = yaml.safe_load(f) or {}
+                    domain = content.get("domain", yaml_file.stem)
+                    for rule in content.get("rules", []):
+                        rule_id = rule.get("id", "")
+                        if rule_id:
+                            self.tier_1_rules[rule_id] = {
+                                "name": rule.get("name", rule_id),
+                                "description": rule.get("description", ""),
+                                "severity": rule.get("severity", "medium"),
+                                "domain": domain,
+                                "source": str(yaml_file.name),
+                            }
+                except (IOError, yaml.YAMLError):
+                    pass
+
+        # Load TIER 2 rules from all YAML files in tier2/governance/
+        tier2_gov = brain_root / "tier2" / "governance"
+        if tier2_gov.exists():
+            for yaml_file in tier2_gov.glob("*.yaml"):
+                try:
+                    with open(yaml_file, 'r') as f:
+                        content = yaml.safe_load(f) or {}
+                    context = content.get("context", yaml_file.stem)
+                    for rule in content.get("rules", []):
+                        rule_id = rule.get("id", "")
+                        if rule_id:
+                            self.tier_2_rules[rule_id] = {
+                                "name": rule.get("name", rule_id),
+                                "description": rule.get("description", ""),
+                                "severity": rule.get("severity", "medium"),
+                                "context": context,
+                                "source": str(yaml_file.name),
+                            }
+                except (IOError, yaml.YAMLError):
+                    pass
 
     def get_guidance_for_module(
         self,
@@ -319,18 +360,88 @@ class KnowledgeGuidanceEngine:
         guidance: ModuleGuidance,
         domain: str
     ) -> None:
-        """Load TIER 1 (domain-specific) governance guidance."""
-        # TODO: Implement when tier1/governance/ exists
-        guidance.tier_1_rules = []
+        """
+        Load TIER 1 (domain-specific) governance guidance.
+
+        Tier 1 rules come from ``cortex_brain/tier1/governance/*.yaml``
+        and are filtered by domain relevance.
+
+        Args:
+            guidance: Guidance object to populate.
+            domain: Domain name for filtering.
+        """
+        if not self.tier_1_rules:
+            guidance.tier_1_rules = []
+            return
+
+        matched_rules: List[str] = []
+        for rule_id, rule_info in self.tier_1_rules.items():
+            rule_domain = rule_info.get("domain", "")
+            # Include rules from matching domain or general rules
+            if rule_domain == domain or rule_domain == "general" or domain == "general":
+                matched_rules.append(rule_id)
+
+        guidance.tier_1_rules = matched_rules
+
+        if matched_rules:
+            guidance.guidance_entries.append(
+                GuidanceEntry(
+                    category=GuidanceCategory.GOVERNANCE_REQUIREMENTS,
+                    title=f"Tier 1: {domain.title()} Domain Rules",
+                    description=(
+                        f"{len(matched_rules)} domain-specific governance rules "
+                        f"from tier1 ({', '.join(matched_rules[:5])})"
+                    ),
+                    priority=2,
+                    tier=TierLevel.TIER_1,
+                    source="cortex_brain/tier1/governance/",
+                    related_rules=matched_rules[:10],
+                )
+            )
 
     def _load_tier_2_guidance(
         self,
         guidance: ModuleGuidance,
         domain: str
     ) -> None:
-        """Load TIER 2 (engineering standards) guidance."""
-        # TODO: Implement when tier2/governance/ exists
-        guidance.tier_2_rules = []
+        """
+        Load TIER 2 (engineering standards) guidance.
+
+        Tier 2 rules come from ``cortex_brain/tier2/governance/*.yaml``
+        and represent team/project engineering standards.
+
+        Args:
+            guidance: Guidance object to populate.
+            domain: Domain name for context matching.
+        """
+        if not self.tier_2_rules:
+            guidance.tier_2_rules = []
+            return
+
+        matched_rules: List[str] = []
+        for rule_id, rule_info in self.tier_2_rules.items():
+            rule_context = rule_info.get("context", "")
+            # Include rules from matching context or general standards
+            if rule_context == domain or rule_context == "development" or domain == "general":
+                matched_rules.append(rule_id)
+
+        guidance.tier_2_rules = matched_rules
+
+        if matched_rules:
+            guidance.guidance_entries.append(
+                GuidanceEntry(
+                    category=GuidanceCategory.GOVERNANCE_REQUIREMENTS,
+                    title=f"Tier 2: Engineering Standards ({domain.title()})",
+                    description=(
+                        f"{len(matched_rules)} engineering standard rules "
+                        f"from tier2 ({', '.join(matched_rules[:5])})"
+                    ),
+                    priority=3,
+                    tier=TierLevel.TIER_2,
+                    source="cortex_brain/tier2/governance/",
+                    related_rules=matched_rules[:10],
+                )
+            )
 
     def _load_best_practices_guidance(
         self,
@@ -449,18 +560,75 @@ class KnowledgeGuidanceEngine:
         """
         Synthesize guidance from tier3 knowledge synthesis engine.
 
-        TODO: Implement when cortex_brain/tier3/synthesis/ exists.
-        This queries cross-domain patterns for the module's domain.
+        Aggregates cross-domain patterns by examining which domains share
+        rules and identifying common governance constraints. Uses data
+        from ``cortex_brain/tier3/knowledge/`` when available.
 
         Args:
-            guidance: Guidance object to populate
+            guidance: Guidance object to populate.
         """
-        # Placeholder for cross-domain synthesis
+        tier3_knowledge_root = (
+            Path(__file__).parent.parent.parent.parent
+            / "cortex_brain" / "tier3" / "knowledge"
+        )
+
+        cross_domain_patterns: List[str] = []
+        domain_relationships: List[str] = []
+        shared_constraints: List[str] = []
+
+        # Scan tier3 knowledge for cross-domain patterns
+        if tier3_knowledge_root.exists():
+            for yaml_file in tier3_knowledge_root.glob("*.yaml"):
+                try:
+                    with open(yaml_file, 'r') as f:
+                        content = yaml.safe_load(f) or {}
+                    # Extract patterns if the YAML has them
+                    patterns = content.get("patterns", content.get("cross_domain_patterns", []))
+                    if isinstance(patterns, list):
+                        for pat in patterns:
+                            label = pat.get("name", str(pat)) if isinstance(pat, dict) else str(pat)
+                            cross_domain_patterns.append(label)
+                    # Extract domain relationships
+                    rels = content.get("domain_relationships", [])
+                    if isinstance(rels, list):
+                        domain_relationships.extend(str(r) for r in rels)
+                except (IOError, yaml.YAMLError):
+                    pass
+
+        # Derive shared constraints from tier1/tier2 rule overlap
+        tier1_ids = set(self.tier_1_rules.keys())
+        tier2_ids = set(self.tier_2_rules.keys())
+        # Domains that appear in both tiers share constraints
+        for rule_id in tier1_ids:
+            t1_domain = self.tier_1_rules[rule_id].get("domain", "")
+            for t2_id in tier2_ids:
+                t2_context = self.tier_2_rules[t2_id].get("context", "")
+                if t1_domain and t1_domain == t2_context:
+                    shared_constraints.append(
+                        f"{t1_domain}: {rule_id} (tier1) ↔ {t2_id} (tier2)"
+                    )
+
         guidance.synthesis_insights = {
-            "cross_domain_patterns": [],
-            "domain_relationships": [],
-            "shared_constraints": []
+            "cross_domain_patterns": cross_domain_patterns[:20],
+            "domain_relationships": domain_relationships[:20],
+            "shared_constraints": shared_constraints[:20],
         }
+
+        if cross_domain_patterns:
+            guidance.guidance_entries.append(
+                GuidanceEntry(
+                    category=GuidanceCategory.DOMAIN_PATTERNS,
+                    title="Cross-Domain Synthesis",
+                    description=(
+                        f"Found {len(cross_domain_patterns)} cross-domain patterns "
+                        f"and {len(shared_constraints)} shared constraints"
+                    ),
+                    priority=4,
+                    tier=TierLevel.CORTEX_BEST_PRACTICES,
+                    source="cortex_brain/tier3/knowledge/",
+                    patterns=cross_domain_patterns[:5],
+                )
+            )
 
     def _calculate_confidence(self, guidance: ModuleGuidance) -> float:
         """
