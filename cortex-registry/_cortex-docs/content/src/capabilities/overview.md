@@ -1,9 +1,19 @@
 # CORTEX Capabilities Overview
 
-**Purpose:** Comprehensive inventory of platform capabilities with business value articulation  
-**Audience:** All Stakeholders  
-**Last Updated:** 2026-02-14  
-**Orchestrator Enhancement
+---
+title: CORTEX Capabilities Overview - Comprehensive Platform Inventory
+type: explanation
+audience: [Business Leaders, Product Owners, Software Developers]
+word_count: 2681
+last_verified: 2026-02-15
+source_of_truth: cortex/ + cortex-registry/ + .github/
+format: diátaxis-explanation
+voice: third-person-neutral
+phase: Production (v8.1)
+diagrams: D3.js mind map (approved), ASCII capability matrix
+---
+
+> **Notice:** CORTEX capabilities represent an integrated platform with 6 cognitive domains. Organizations may prioritize specific capabilities based on team maturity and use case requirements. Performance characteristics reflect production deployment as of v8.1.
 
 ---
 

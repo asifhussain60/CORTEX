@@ -1,9 +1,20 @@
 # Response Formatting & Content Block System
 
-**Purpose:** Intent-driven response templates with composable educational content blocks  
-**Audience:** Software Developers, Technical Writers  
-**Last Updated:** 2026-02-14  
-**Enhancements:** ENH-97a30b8a2 (Composable Content), ENH-5020aebd2 (Response Templates)
+---
+title: CORTEX Response Formatting - Intent-Adaptive Templates
+type: explanation
+audience: [Software Developers, Technical Writers, Product Owners]
+word_count: 2383
+last_verified: 2026-02-15
+source_of_truth: cortex-registry/interaction/ + .github/prompts/
+format: diátaxis-explanation
+voice: third-person-neutral
+phase: Production (v8.1)
+enhancements: ENH-97a30b8a2, ENH-5020aebd2
+diagrams: ASCII system architecture
+---
+
+> **Notice:** Response formatting represents an evolving system balancing consistency with contextual adaptation. Template patterns reflect production usage and may be refined based on user feedback. Content blocks provide reusable educational content without duplication.
 
 ---
 
