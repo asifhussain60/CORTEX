@@ -57,10 +57,10 @@ class TestGoldenTestStructure:
         """Should have all 4 base test classes."""
         base = Path("tests/orchestrators")
         
-        assert (base / "base-orchestrator-test.py").exists(), "Missing base-orchestrator-test.py"
-        assert (base / "base-negative-test.py").exists(), "Missing base-negative-test.py"
-        assert (base / "base-edge-case-test.py").exists(), "Missing base-edge-case-test.py"
-        assert (base / "base-recovery-test.py").exists(), "Missing base-recovery-test.py"
+        assert (base / "base_orchestrator_test.py").exists(), "Missing base_orchestrator_test.py"
+        assert (base / "base_negative_test.py").exists(), "Missing base_negative_test.py"
+        assert (base / "base_edge_case_test.py").exists(), "Missing base_edge_case_test.py"
+        assert (base / "base_recovery_test.py").exists(), "Missing base_recovery_test.py"
     
     def test_kebab_case_file_naming(self):
         """Should use kebab-case for all test files (CORE-028)."""
