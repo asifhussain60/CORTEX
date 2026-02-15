@@ -23,8 +23,10 @@ class BaseOrchestratorTest:
         
         Returns:
             EventBus: Live event bus for testing
+            
+        Note: EventBus located at cortex.core.event_bus (not cortex.common.event_bus)
         """
-        from cortex.common.event_bus import EventBus
+        from cortex.core.event_bus import EventBus
         return EventBus()
     
     @pytest.fixture

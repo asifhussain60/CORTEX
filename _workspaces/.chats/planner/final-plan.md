@@ -214,8 +214,17 @@ class BaseOrchestratorTest:
 
 ---
 
-### **📐 PHASE 2: Core Orchestrator Coverage**
+### **📐 PHASE 2: Core Orchestrator Coverage** ⚪ **PENDING**
 **Duration:** 4-5 sessions | **Tests:** 200+ | **LOE:** High
+**Status:** 0/12 stages | **Commits:** 0
+
+**DISCOVERY NOTES (Session 1 Exploration):**
+- MasterOrchestrator uses singleton pattern (no constructor params)
+- Delegation via `delegate()` method, not `process_request()`
+- EventBus located at `cortex.core.event_bus` (not `cortex.common.event_bus`)
+- Base fixture updated to use correct EventBus import
+- Complex initialization: 4863 lines, deep dependency graph
+- Requires dedicated TDD session per orchestrator (28 tests × 3 = 84 tests minimum)
 
 #### **S2.1: MasterOrchestrator Golden Suite (28 tests)**
 
