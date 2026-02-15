@@ -141,17 +141,20 @@ class TestMasterOrchestratorEnforcement:
         """Tool rejects when orchestrator_context has wrong source."""
         tool = CortexLens()
         
-        result = await tool.execute(
-            operation="analyze",
-            target="cortex/",
-            orchestrator_context={
-                'source': 'DirectCaller',  # WRONG source (not MasterOrchestrator)
-                'timestamp': '2026-02-14T12:00:00'
-            }
-        )
+        # Use pytest.raises to catch the ValueError
+        with pytest.raises(ValueError) as exc_info:
+            await tool.execute(
+                operation="analyze",
+                target="cortex/",
+                orchestrator_context={
+                    'source': 'DirectCaller',  # WRONG source (not MasterOrchestrator)
+                    'timestamp': '2026-02-14T12:00:00'
+                }
+            )
         
-        assert not result.success
-        assert "DirectCaller" in result.error or "MasterOrchestrator" in result.error
+        # Verify the error message contains expected text
+        error_msg = str(exc_info.value)
+        assert "BLOCKED" in error_msg and ("DirectCaller" in error_msg or "MasterOrchestrator" in error_msg)
     
     # ========================================================================
     # COVERAGE TEST: Verify all 28 tools enforce validation

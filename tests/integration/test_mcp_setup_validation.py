@@ -150,7 +150,8 @@ class TestENH066Verification:
         
         # Verify MCP architecture section
         assert "MCP ARCHITECTURE" in content, "Must have MCP architecture section"
-        assert "Pylance-Style" in content or "Pylance-style" in content, \
+        # Check for "like Pylance" which describes the architecture model
+        assert "like Pylance" in content, \
             "Must document Pylance-style architecture"
 
     def test_enh066_setup_script_validation(self):
