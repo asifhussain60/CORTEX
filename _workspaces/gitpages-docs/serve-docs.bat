@@ -1,67 +1,60 @@
 @echo off
 REM ============================================
-REM CORTEX MkDocs Server Launcher (Windows)
-REM One-click: Kill existing → Start server → Open browser
+REM CORTEX GitPages Local Server (Windows)
+REM One-click: Kill existing → Start HTTP server → Open browser
 REM 
-REM Usage: serve-docs.bat
-REM For Mac/Linux: Use serve-docs.sh instead
+REM Port: 8080 (HTTP)
+REM Target: index.html in current directory
 REM ============================================
 
 setlocal enabledelayedexpansion
-cd /d "%~dp0.."
+cd /d "%~dp0"
 
 echo.
 echo ========================================
 echo   CORTEX Documentation Server
 echo   Platform: Windows
+echo   Port: 8080
 echo ========================================
 echo.
 
-REM Detect Python executable
-set "PYTHON_EXE=.venv\Scripts\python.exe"
-if not exist "!PYTHON_EXE!" (
-    set "PYTHON_EXE=python.exe"
-)
-
-REM Kill any existing mkdocs/python processes on port 8000
-echo [1/4] Stopping existing server on port 8000...
-for /f "tokens=5" %%a in ('netstat -aon 2^>nul ^| findstr ":8000" ^| findstr "LISTENING"') do (
+REM Kill any existing HTTP processes on port 8080
+echo [1/4] Stopping existing server on port 8080...
+for /f "tokens=5" %%a in ('netstat -aon 2^>nul ^| findstr ":8080" ^| findstr "LISTENING"') do (
     taskkill /F /PID %%a >nul 2>&1
     echo   Stopped process %%a
 )
 timeout /t 1 /nobreak >nul
 
-REM Verify mkdocs is installed
-echo [2/4] Checking dependencies...
-"!PYTHON_EXE!" -m pip show mkdocs >nul 2>&1
+REM Check for Python (needed for http.server)
+echo [2/4] Checking Python...
+where python >nul 2>&1
 if errorlevel 1 (
-    echo   ERROR: mkdocs not found. Installing...
-    "!PYTHON_EXE!" -m pip install mkdocs mkdocs-material >nul 2>&1
-    if errorlevel 1 (
-        echo   FAILED to install mkdocs. Please run: pip install mkdocs mkdocs-material
-        pause
-        exit /b 1
-    )
+    echo   ERROR: Python not found in PATH
+    echo   Please install Python or add to PATH
+    pause
+    exit /b 1
 )
-echo   Dependencies OK
+echo   Python OK
 
-REM Start mkdocs serve in background
-echo [3/4] Starting MkDocs server...
-start "" /B "!PYTHON_EXE!" -m mkdocs serve --dev-addr 127.0.0.1:8000
+REM Start HTTP server
+echo [3/4] Starting HTTP server...
+echo   URL: http://localhost:8080
+start "" /B python -m http.server 8080 >nul 2>&1
 
 REM Wait for server to initialize
 timeout /t 3 /nobreak >nul
 
 REM Open default browser
-echo [4/4] Opening browser at http://127.0.0.1:8000/
-start http://127.0.0.1:8000/01-cortex-brain/00-brain-index/
+echo [4/4] Opening browser...
+start http://localhost:8080
 
 echo.
 echo ========================================
-echo   Server running at http://127.0.0.1:8000
+echo   Server running at http://localhost:8080
 echo   Press Ctrl+C to stop
 echo ========================================
 echo.
 
-REM Keep window open to show server logs
-"!PYTHON_EXE!" -m mkdocs serve --dev-addr 127.0.0.1:8000
+REM Keep window open
+pause
