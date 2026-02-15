@@ -206,7 +206,7 @@ class AutoCleanupManager:
         """
         # Pattern to match specific session marker
         pattern = re.compile(
-            r'.*?'
+            r'# CORTEX_DEBUG_START.*?# CORTEX_DEBUG_END\n?',
             re.DOTALL
         )
         
