@@ -26,12 +26,16 @@
 /* ============================================
    TIER 2: NAMED PANELS (Semantic Panel System)
    ============================================ */
-@import url('./glass-named-panels.css');
+/* REMOVED: glass-named-panels.css not present in docs/assets/css/
+   Panel styles integrated directly into main.css */
+/* @import url('./glass-named-panels.css'); */
 
 /* ============================================
    TIER 3: BASE PATTERNS (Core Glassmorphism)
    ============================================ */
-@import url('./glass-base-patterns.css');
+/* REMOVED: glass-base-patterns.css not present in docs/assets/css/
+   Base patterns integrated directly into main.css */
+/* @import url('./glass-base-patterns.css'); */
 
 /* ============================================
    TIER 4: UI COMPONENTS (Interactive Elements)
@@ -46,7 +50,9 @@
 /* ============================================
    TIER 6: UTILITIES (Helper Classes)
    ============================================ */
-@import url('./glass-utilities.css');
+/* REMOVED: glass-utilities.css not present in docs/assets/css/
+   Utilities integrated into generated-classes.css and intentional-classes.css */
+/* @import url('./glass-utilities.css'); */
 
 /**
  * Usage Examples:
