@@ -457,7 +457,7 @@ assembly_rules:
   completion_report:
     blocks: []  # Uses Template D from response-format-standards.md
     optional_append: ["next_steps"]
-    use_case: "Phase/wave completion"
+    use_case: "Phase completion"
 
 # Anti-Duplication Validation Rules
 validation:
