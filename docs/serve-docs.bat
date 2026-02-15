@@ -37,10 +37,10 @@ if errorlevel 1 (
 )
 echo   Python OK
 
-REM Start HTTP server
+REM Start HTTP server with explicit binding
 echo [3/4] Starting HTTP server...
 echo   URL: http://localhost:8080
-start "" /B python -m http.server 8080 >nul 2>&1
+start "" /B python -m http.server 8080 --bind 127.0.0.1 >nul 2>&1
 
 REM Wait for server to initialize
 timeout /t 3 /nobreak >nul
