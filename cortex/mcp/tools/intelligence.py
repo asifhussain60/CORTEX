@@ -12,6 +12,7 @@ MasterOrchestrator routing and are rejected.
 
 AC_START: AC-WAVE100-S2-002
 AC_CONTINUE: AC-MASTERORCH-ROUTING-001
+AC_FIX: AC-INTELLIGENCE-INTEGRATION-001 (Wire IntelligenceOrchestrator)
 """
 
 from typing import Any, Dict, List, Optional
@@ -23,6 +24,16 @@ from cortex.mcp.base import (
     ToolParameter,
     ToolResult,
 )
+
+
+# AC-INTELLIGENCE-INTEGRATION-001: Import IntelligenceOrchestrator
+try:
+    from cortex.orchestrators.intelligence.intelligence_orchestrator import (
+        IntelligenceOrchestrator,
+    )
+    INTELLIGENCE_ORCHESTRATOR_AVAILABLE = True
+except ImportError:
+    INTELLIGENCE_ORCHESTRATOR_AVAILABLE = False
 
 
 def validate_orchestrator_context(context: Optional[Dict[str, Any]]) -> None:
@@ -60,6 +71,18 @@ class CortexLens(ConsolidatedTool):
     - duplicates: Duplicate code detection (CORE-035)
     - ast: AST-level analysis
     """
+    
+    def __init__(self) -> None:
+        """Initialize CortexLens with IntelligenceOrchestrator."""
+        super().__init__()
+        # AC-INTELLIGENCE-INTEGRATION-001: Wire IntelligenceOrchestrator
+        self._intelligence_orchestrator: Optional[IntelligenceOrchestrator] = None
+        if INTELLIGENCE_ORCHESTRATOR_AVAILABLE:
+            try:
+                self._intelligence_orchestrator = IntelligenceOrchestrator()
+            except Exception:
+                # Graceful degradation if initialization fails
+                pass
     
     @property
     def name(self) -> str:
@@ -142,10 +165,75 @@ class CortexLens(ConsolidatedTool):
     async def _analyze(
         self, target: str, depth: str, options: Dict[str, Any]
     ) -> ToolResult:
-        """Full LENS analysis."""
-        # Check if target exists
-        target_path = Path(target) if target else None
+        """
+        Full LENS analysis with IntelligenceOrchestrator integration.
         
+        AC-INTELLIGENCE-INTEGRATION-001: Real intelligence instead of stub.
+        """
+        # Check if target exists
+        target_path = Path(target)
+        if not target_path.exists():
+            return ToolResult(
+                success=False,
+                error=f"Target not found: {target}",
+            )
+        
+        # Use IntelligenceOrchestrator if available
+        if self._intelligence_orchestrator and target_path.suffix == ".py":
+            try:
+                # Parse Python file for real analysis
+                parse_result = self._intelligence_orchestrator.parse_python_file(target_path)
+                
+                if not parse_result.success:
+                    # Fall back to stub on error
+                    return self._analyze_stub(target, depth)
+                
+                # Extract real metrics
+                analysis = {
+                    "target": target,
+                    "depth": depth,
+                    "lens": {
+                        "language": {
+                            "primary": "python",
+                            "frameworks": [],
+                            "patterns": [],
+                        },
+                        "examination": {
+                            "complexity": "medium",
+                            "functions": len(parse_result.functions),
+                            "classes": len(parse_result.classes),
+                            "imports": len(parse_result.imports),
+                        },
+                        "navigation": {
+                            "functions": [f.name for f in parse_result.functions],
+                            "classes": [c.name for c in parse_result.classes],
+                        },
+                        "synthesis": {
+                            "summary": f"Python file with {len(parse_result.functions)} functions, {len(parse_result.classes)} classes",
+                            "recommendations": [],
+                            "risks": [],
+                        },
+                    },
+                }
+                
+                return ToolResult(
+                    success=True,
+                    data=analysis,
+                    metadata={
+                        "operation": "analyze",
+                        "depth": depth,
+                        "orchestrator": "IntelligenceOrchestrator",
+                    },
+                )
+            except Exception as e:
+                # Fall back to stub on error
+                return self._analyze_stub(target, depth)
+        
+        # Fall back to stub if orchestrator unavailable or non-Python file
+        return self._analyze_stub(target, depth)
+    
+    def _analyze_stub(self, target: str, depth: str) -> ToolResult:
+        """Stub implementation for graceful degradation."""
         analysis = {
             "target": target,
             "depth": depth,
@@ -176,7 +264,7 @@ class CortexLens(ConsolidatedTool):
         return ToolResult(
             success=True,
             data=analysis,
-            metadata={"operation": "analyze", "depth": depth},
+            metadata={"operation": "analyze", "depth": depth, "stub": True},
         )
     
     async def _search(
@@ -228,7 +316,79 @@ class CortexLens(ConsolidatedTool):
     async def _ast(
         self, target: str, depth: str, options: Dict[str, Any]
     ) -> ToolResult:
-        """AST-level analysis."""
+        """
+        AST-level analysis with IntelligenceOrchestrator integration.
+        
+        AC-INTELLIGENCE-INTEGRATION-001: Real AST parsing instead of stub.
+        """
+        target_path = Path(target)
+        if not target_path.exists():
+            return ToolResult(
+                success=False,
+                error=f"Target not found: {target}",
+            )
+        
+        # Use IntelligenceOrchestrator if available
+        if self._intelligence_orchestrator and target_path.suffix == ".py":
+            try:
+                # Parse Python file for AST
+                parse_result = self._intelligence_orchestrator.parse_python_file(target_path)
+                
+                if not parse_result.success:
+                    return ToolResult(
+                        success=False,
+                        error=f"AST parse failed: {parse_result.error}",
+                    )
+                
+                # Build real AST data
+                ast_data = {
+                    "target": target,
+                    "ast": {
+                        "type": "module",
+                        "functions": [
+                            {
+                                "name": f.name,
+                                "line_number": f.line_number,
+                                "args": [p.to_dict() for p in f.parameters],
+                                "decorators": f.decorators,
+                                "is_async": f.is_async,
+                                "docstring": f.docstring,
+                            }
+                            for f in parse_result.functions
+                        ],
+                        "classes": [
+                            {
+                                "name": c.name,
+                                "line_number": c.line_number,
+                                "bases": c.bases,
+                                "methods": [m.name for m in c.methods],
+                                "docstring": c.docstring,
+                            }
+                            for c in parse_result.classes
+                        ],
+                    },
+                    "metrics": {
+                        "classes": len(parse_result.classes),
+                        "functions": len(parse_result.functions),
+                        "imports": len(parse_result.imports),
+                    },
+                }
+                
+                return ToolResult(
+                    success=True,
+                    data=ast_data,
+                    metadata={
+                        "operation": "ast",
+                        "orchestrator": "IntelligenceOrchestrator",
+                    },
+                )
+            except Exception as e:
+                return ToolResult(
+                    success=False,
+                    error=f"AST analysis error: {str(e)}",
+                )
+        
+        # Stub fallback
         return ToolResult(
             success=True,
             data={
@@ -243,7 +403,7 @@ class CortexLens(ConsolidatedTool):
                     "imports": 0,
                 },
             },
-            metadata={"operation": "ast"},
+            metadata={"operation": "ast", "stub": True},
         )
 
 

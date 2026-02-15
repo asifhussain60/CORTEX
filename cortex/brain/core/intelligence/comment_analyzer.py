@@ -390,8 +390,8 @@ class CommentAnalyzer:
         notes = None
         see_also = []
 
-        # Extract Args section
-        args_match = re.search(r'\n\s*Args:\s*\n(.*?)(?=\n\s*(?:Returns|Raises)|Example|Note|See Also):|$)',
+        # Extract Args section (fixed unbalanced parenthesis)
+        args_match = re.search(r'\n\s*Args:\s*\n(.*?)(?=\n\s*(?:Returns|Raises|Example|Note|See Also):|$)',
                                docstring, re.DOTALL | re.IGNORECASE)
         if args_match:
             args_text = args_match.group(1)
@@ -401,18 +401,18 @@ class CommentAnalyzer:
                 arg_desc = match.group(2).strip()
                 args.append(ArgInfo(name=arg_name, description=arg_desc))
 
-        # Extract Returns section
-        returns_match = re.search(r'\n\s*Returns:\s*\n\s*(.*?)(?=\n\s*(?:Raises|Example)|Note|See Also):|$)',
+        # Extract Returns section (fixed unbalanced parenthesis)
+        returns_match = re.search(r'\n\s*Returns:\s*\n\s*(.*?)(?=\n\s*(?:Raises|Example|Note|See Also):|$)',
                                    docstring, re.DOTALL | re.IGNORECASE)
         if returns_match:
             returns = returns_match.group(1).strip()
 
-        # Extract Raises section
-        raises_match = re.search(r'\n\s*Raises:\s*\n(.*?)(?=\n\s*(?:Example|Note)|See Also):|$)',
+        # Extract Raises section (fixed unbalanced parenthesis)
+        raises_match = re.search(r'\n\s*Raises:\s*\n(.*?)(?=\n\s*(?:Example|Note|See Also):|$)',
                                   docstring, re.DOTALL | re.IGNORECASE)
         if raises_match:
             raises_text = raises_match.group(1)
-            for match in re.finditer(r'(\w+(?:Error|Exception))?)\s*:\s*(.+?)(?=\n\s*\w+:|$)',
+            for match in re.finditer(r'(\w+(?:Error|Exception))\s*:\s*(.+?)(?=\n\s*\w+:|$)',
                                      raises_text, re.DOTALL):
                 exc_name = match.group(1)
                 exc_desc = match.group(2).strip()
