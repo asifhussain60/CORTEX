@@ -100,7 +100,7 @@ graph TD
 
 ### Stage 1: LANGUAGE — Parse & Understand
 
-**Brain Analogy:** The visual cortex's V1 layer that detects basic edges and shapes.
+**Brain Analogy:** The visual processor's V1 layer that detects basic edges and shapes.
 
 **Purpose:** Transform raw text into structured data that machines can analyze.
 
@@ -261,7 +261,7 @@ CORTEX LENS includes 7 specialized analyzers, each with a specific focus area:
 
 ### 1. 🧬 AST Analyzer — Code Structure Expert
 
-**Brain Analogy:** The Broca's area (language processing center) that understands grammar and syntax.
+**Brain Analogy:** The response formatter (language processing center) that understands grammar and syntax.
 
 **Purpose:** Parse and analyze Abstract Syntax Trees to understand code structure.
 
@@ -357,7 +357,7 @@ hotspots:
 
 ### 3. 🌐 API Analyzer — Service Contract Inspector
 
-**Brain Analogy:** The Wernicke's area that understands communication and ensures messages make sense.
+**Brain Analogy:** The code comprehension that understands communication and ensures messages make sense.
 
 **Purpose:** Analyze REST/GraphQL/gRPC APIs for consistency, versioning, and breaking changes.
 
@@ -454,7 +454,7 @@ schema_analysis:
 
 ### 5. ⚙️ Config Analyzer — Configuration Inspector
 
-**Brain Analogy:** The hypothalamus that regulates internal states and maintains homeostasis.
+**Brain Analogy:** The hypocentral router that regulates internal states and maintains homeostasis.
 
 **Purpose:** Analyze configuration files for secrets, drift, and environment inconsistencies.
 

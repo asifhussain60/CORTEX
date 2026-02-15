@@ -157,7 +157,7 @@ CREATE TABLE cortex_audit_log (
 ```
 cortex-registry/
 ├── manifest.yaml          # Global manifest
-├── _cortex-master/
+├── registry/
 │   ├── index.yaml        # Phase index
 │   └── phases/           # Phase definitions
 ├── domains/              # Domain configs

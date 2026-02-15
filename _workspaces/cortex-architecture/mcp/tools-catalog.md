@@ -2,7 +2,7 @@
 
 **Consolidated Tools:** 26 | **Total Operations:** 90+ | **Updated:** 2026-02-14  
 **MCP Server:** stdio/HTTP (Port 8000) | **Protocol:** JSON-RPC 2.0  
-**Architecture:** Consolidated tool design with orchestrator validation (Phase 23 MEGA-B)
+**Architecture:** Consolidated tool design with orchestrator validation (Orchestrator Enhancement
 
 ---
 
@@ -18,12 +18,12 @@ CORTEX's **26 consolidated MCP tools** are its neurotransmitter library — each
 
 **What Changed:** Previously, CORTEX exposed 86+ individual MCP tools — one for each specific operation (e.g., `cortex_lens_analyze`, `cortex_lens_deep_analyze`, `cortex_lens_diff`, etc.). This created cognitive overload for users and fragmented related functionality.
 
-**Wave 100 + Phase 23 MEGA-B:** CORTEX underwent major reorganization, grouping related operations under **parent tools** with orchestrator validation. Instead of 86+ separate tools, there are now **26 consolidated tools**, each containing multiple related **operations**. For example:
+**Consolidation + Orchestrator Enhancement, grouping related operations under **parent tools** with orchestrator validation. Instead of 86+ separate tools, there are now **26 consolidated tools**, each containing multiple related **operations**. For example:
 
 - **Before:** `cortex_lens_analyze`, `cortex_lens_deep_analyze`, `cortex_lens_diff`, `cortex_lens_summarize`, `cortex_lens_validate` (5 separate tools)
 - **After:** `cortex_lens` (1 tool with 5 operations: `analyze`, `deep_analyze`, `diff`, `summarize`, `validate`)
 
-**NEW in Phase 23 MEGA-B:** All MCP tools now include orchestrator validation context injection, ensuring proper governance enforcement and audit trail integration.
+**NEW in Orchestrator Enhancement, ensuring proper governance enforcement and audit trail integration.
 
 **Benefits:**
 - 🧠 **Cognitive clarity:** Group related functionality under intuitive parent concepts
@@ -780,7 +780,7 @@ asyncio.run(challenge_design())
 
 #### `cortex_validate_holistically`
 
-**Description:** Unified pre-implementation validation gate (Phase 48)
+**Description:** Unified pre-implementation validation gate (Current)
 
 **Usage Pattern:**
 ```json
@@ -1512,7 +1512,7 @@ asyncio.run(challenge_design())
 
 #### `cortex_onboard_repository_v3`
 
-**Description:** Onboard repository with LENS analysis + LLM business language + SQLite dashboard (Phase 21)
+**Description:** Onboard repository with LENS analysis + LLM business language + SQLite dashboard (Current)
 
 **Usage Pattern:**
 ```json
@@ -1728,7 +1728,7 @@ asyncio.run(challenge_design())
 | `cortex_process_request` | Primary entry point | All IMPLEMENT/FIX/REFACTOR requests |
 | `cortex_lens_analyze` | Deep code intelligence | Security, complexity, architecture analysis |
 | `cortex_challenge` | Alternative generation | Design reviews, approach validation |
-| `cortex_validate_holistically` | Pre-implementation validation | Phase 48 holistic validation gate |
+| `cortex_validate_holistically` | Pre-implementation validation | Current holistic validation gate |
 | `cortex_plan_setup` | Phase initialization | Start new phase with hooks |
 | `cortex_debug_full_cycle` | Complete debug workflow | Inject → Capture → Analyze → Fix |
 
@@ -1855,7 +1855,7 @@ result = server.call_tool('cortex_lens_analyze', {
 
 **Governance:**
 - [Governance Compliance](../capabilities/governance-compliance.md) — Enforcement tools
-- [CORE Rules](../../cortex-registry/_cortex-master/governance/core-rules.yaml) — Rule definitions
+- [CORE Rules](../../cortex-registry/registry/governance/core-rules.yaml) — Rule definitions
 
 **Reference:**
 - [CORTEX Glossary](../glossary.md) — Term definitions (MCP, LENS, Consolidated Tools)

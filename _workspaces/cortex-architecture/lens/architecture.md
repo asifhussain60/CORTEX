@@ -1,6 +1,6 @@
 # LENS Architecture
 
-**Purpose:** Technical architecture of the LENS intelligence layer — wiring the visual cortex  
+**Purpose:** Technical architecture of the LENS intelligence layer — wiring the visual processor  
 **Audience:** Architects, Senior Developers  
 **Last Updated:** 2026-02-13
 
@@ -21,9 +21,9 @@
 
 ### Brain Analogy: Visual Cortex Wiring
 
-The visual cortex is organized in a strict hierarchy: V1 (edge detection) → V2 (shape recognition) → V4 (color and form) → IT (object identification). Each layer processes in parallel, feeds forward, and the results are integrated by association areas. The LENS architecture follows this same layered, parallel-then-synthesize pattern.
+The visual processor is organized in a strict hierarchy: V1 (edge detection) → V2 (shape recognition) → V4 (color and form) → IT (object identification). Each layer processes in parallel, feeds forward, and the results are integrated by association areas. The LENS architecture follows this same layered, parallel-then-synthesize pattern.
 
-> **Note:** Since Wave 7 Track 4, LENS coordination has been absorbed into the **UnifiedAnalysisOrchestrator** (priority 115), which combines LENS orchestration with tool discovery into a single association area.
+> **Note:** Since Consolidation Track 4, LENS coordination has been absorbed into the **UnifiedAnalysisOrchestrator** (priority 115), which combines LENS orchestration with tool discovery into a single association area.
 
 ### High-Level Architecture
 
@@ -84,7 +84,7 @@ The visual cortex is organized in a strict hierarchy: V1 (edge detection) → V2
 
 ### LENSOrchestrator (→ UnifiedAnalysisOrchestrator)
 
-> **Wave 7 Note:** The wiring contract now registers this as `UnifiedAnalysisOrchestrator` (P115), absorbing the former `LENSOrchestrator` and `ToolDiscoveryOrchestrator` into a single unified analysis surface. The internal class name may still appear as `LENSOrchestrator` in source code.
+> **Consolidation Note:** The wiring contract now registers this as `UnifiedAnalysisOrchestrator` (P115), absorbing the former `LENSOrchestrator` and `ToolDiscoveryOrchestrator` into a single unified analysis surface. The internal class name may still appear as `LENSOrchestrator` in source code.
 
 ```python
 class LENSOrchestrator:

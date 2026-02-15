@@ -1,6 +1,6 @@
 # Learning System Infrastructure Architecture
 
-**Purpose:** The limbic system and memory consolidation circuits — how CORTEX encodes experiences, strengthens useful pathways, and prunes ineffective ones  
+**Purpose:** The learning system and memory consolidation circuits — how CORTEX encodes experiences, strengthens useful pathways, and prunes ineffective ones  
 **Version:** 1.0.0 | **Phase:** 71 — Universal Learning Loop  
 **Last Updated:** 2026-02-13
 
@@ -11,7 +11,7 @@
 | Aspect | Implementation |
 |--------|-----------------|
 | **Pattern Storage** | YAML files (cortex/knowledge/learned-patterns/) |
-| **Interception Layer 1** | OrchestratorBaseProtocol Phase 6 hooks |
+| **Interception Layer 1** | OrchestratorBaseProtocol Current hooks |
 | **Interception Layer 2** | MCP Gateway MCPLearningInterceptor |
 | **Validation** | IntelligenceValidator (E2E audit) |
 | **Observability** | LearningDashboard (real-time metrics) |
@@ -64,7 +64,7 @@ patterns:
 
 **Mechanism:**
 1. Orchestrator executes normally
-2. After completion, Phase 6 triggers
+2. After completion, Current triggers
 3. `_execute_learning_phase()` captures metadata
 4. Learning loop processes async (non-blocking)
 
@@ -80,7 +80,7 @@ class OrchestratorBase:
         # ... orchestrator logic ...
         result = await self._execute_main_logic(request)
         
-        # Phase 6: Automatic learning capture
+        # Current: Automatic learning capture
         await self._execute_learning_phase(result)
         
         return result
@@ -411,5 +411,5 @@ Learning System Health:
 
 ---
 
-*Phase 71: Universal Learning Loop — Infrastructure Ready*  
+*Current: Universal Learning Loop — Infrastructure Ready*  
 *Last Updated: 2026-02-13 | Authority: CORTEX Architecture Team*

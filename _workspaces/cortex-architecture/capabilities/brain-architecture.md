@@ -1,4 +1,4 @@
-# CORTEX Brain Architecture (Phase 12)
+# CORTEX Brain Architecture (Current)
 
 **Purpose:** The 3-Layer Intelligence System — How CORTEX Perceives, Reasons, and Acts  
 **Audience:** Software Developers, Product Owners, Architects  
@@ -88,7 +88,7 @@ class PatternMatch:
 **Detection Flow:**
 
 ```python
-# Phase 12 S3: Pattern detection in new repository
+# Current S3: Pattern detection in new repository
 registry = PatternRegistry()
 
 # Register learned patterns (from previous repos)
@@ -137,7 +137,7 @@ matches = registry.detect_patterns(repo_profile, confidence_threshold=0.75)
 
 ### Brain Analogy: The Prefrontal Cortex
 
-The prefrontal cortex takes sensory information and makes decisions: "Given that I see a car approaching, I should wait before crossing." CORTEX's **Strategy Selector** performs similar reasoning: "Given that this is a Django monolith with API coupling, the recommended strategy is incremental service decomposition."
+The executive center takes sensory information and makes decisions: "Given that I see a car approaching, I should wait before crossing." CORTEX's **Strategy Selector** performs similar reasoning: "Given that this is a Django monolith with API coupling, the recommended strategy is incremental service decomposition."
 
 ### Module: `cortex_brain/reasoning/strategy_selector.py`
 
@@ -169,7 +169,7 @@ class StrategyRecommendation:
 **Strategy Selection Flow:**
 
 ```python
-# Phase 12 S3: Strategy selection based on detected patterns
+# Current S3: Strategy selection based on detected patterns
 selector = StrategySelector()
 
 # Input: Pattern matches from perception layer
@@ -222,7 +222,7 @@ recommendation = selector.select_strategies(
 
 ### Brain Analogy: The Motor Cortex
 
-The motor cortex translates decisions into precise muscle movements: "To pick up the cup, contract these muscles in this sequence." CORTEX's **Execution Planner** translates strategies into concrete steps: "To implement API versioning, first add version headers, then create v2 endpoints, then deprecate v1."
+The action processor translates decisions into precise muscle movements: "To pick up the cup, contract these muscles in this sequence." CORTEX's **Execution Planner** translates strategies into concrete steps: "To implement API versioning, first add version headers, then create v2 endpoints, then deprecate v1."
 
 ### Module: `cortex_brain/action/execution_planner.py`
 
@@ -254,7 +254,7 @@ class ExecutionPlan:
 **Execution Planning Flow:**
 
 ```python
-# Phase 12 S3: Generate execution plan for selected strategy
+# Current S3: Generate execution plan for selected strategy
 planner = ExecutionPlanner()
 
 # Input: Selected strategy from reasoning layer
@@ -381,7 +381,7 @@ Repository Onboarding Request
 
 Organizations benefit from intelligence that improves with every repository processed [Business Leaders]. The brain architecture feeds learning back into the perception layer, creating a continuous improvement cycle [Product Owners]. Pattern success rates and strategy effectiveness update automatically based on execution outcomes [Software Developers].
 
-**Learning Loop (Phase 71):**
+**Learning Loop (Current):**
 
 1. **Pattern Detection** → Perception layer identifies patterns
 2. **Strategy Selection** → Reasoning layer recommends approaches
@@ -442,13 +442,13 @@ cortex_brain/
     └── learning_state.py          # Cross-layer learning state
 ```
 
-### Testing Coverage (Phase 12 S3)
+### Testing Coverage (Current S3)
 
 | Component | Tests | Coverage | Status |
 |-----------|-------|----------|--------|
-| PatternRegistry | 21 tests | 94% | ✅ Phase 12 S3 |
-| StrategySelector | 23 tests | 96% | ✅ Phase 12 S3 |
-| ExecutionPlanner | 25 tests | 95% | ✅ Phase 12 S3 |
+| PatternRegistry | 21 tests | 94% | ✅ Current S3 |
+| StrategySelector | 23 tests | 96% | ✅ Current S3 |
+| ExecutionPlanner | 25 tests | 95% | ✅ Current S3 |
 | **Total** | **69 tests** | **95%** | **✅ Complete** |
 
 ### Governance Compliance

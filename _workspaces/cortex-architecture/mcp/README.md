@@ -214,8 +214,8 @@ pytest cortex/mcp/tests/ -v
 
 The legacy MCP server (`cortex/mcp/server.py`) with 98 tools will be deprecated. Migration path:
 
-1. **Phase 1**: v2 available alongside v1
-2. **Phase 2**: v2 becomes default, v1 deprecated
-3. **Phase 3**: v1 removed
+1. **Current**: v2 available alongside v1
+2. **Current**: v2 becomes default, v1 deprecated
+3. **Current**: v1 removed
 
-Tool mapping available in `cortex-registry/_cortex-master/waves/WAVE-100-MCP-V2-RESET.yaml`.
+Tool mapping available in `cortex-registry/registry/waves/WAVE-100-MCP-V2-RESET.yaml`.

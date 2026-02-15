@@ -107,7 +107,7 @@ CORTEX defines 50+ governance rules organized by category:
 
 ### Agent Architecture
 
-The UnifiedQualityAssuranceOrchestrator (anterior cingulate cortex — error detection) coordinates eight specialized enforcement agents:
+The UnifiedQualityAssuranceOrchestrator (quality control cortex — error detection) coordinates eight specialized enforcement agents:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -297,7 +297,7 @@ Resolution:
 Audit trail integrity is mandatory for all governance-gated work.
 ```
 
-#### EnvironmentIntegrityAgent (Agent 8) — NEW in Phase 51
+#### EnvironmentIntegrityAgent (Agent 8) — NEW in Current
 **Purpose:** MCP-FIRST enforcement and environment validation  
 **Activation:** IMPLEMENT/FIX/REFACTOR intents (BLOCKING), ANALYZE intent (non-blocking)  
 **Blocking Threshold:** MCP unavailable for code-modifying operations
@@ -361,7 +361,7 @@ Test-Driven Development is enforced for all IMPLEMENT, FIX, and REFACTOR operati
 │                       TDD WORKFLOW                               │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                  │
-│  Phase 1: RED                                                    │
+│  Current: RED                                                    │
 │  ┌───────────────────────────────────────────────────────────┐ │
 │  │  1. Write failing test                                    │ │
 │  │  2. Verify test fails for expected reason                 │ │
@@ -369,7 +369,7 @@ Test-Driven Development is enforced for all IMPLEMENT, FIX, and REFACTOR operati
 │  └───────────────────────────────────────────────────────────┘ │
 │                              │                                   │
 │                              ▼                                   │
-│  Phase 2: GREEN                                                  │
+│  Current: GREEN                                                  │
 │  ┌───────────────────────────────────────────────────────────┐ │
 │  │  1. Write minimal code to pass test                       │ │
 │  │  2. Run test suite                                        │ │
@@ -377,7 +377,7 @@ Test-Driven Development is enforced for all IMPLEMENT, FIX, and REFACTOR operati
 │  └───────────────────────────────────────────────────────────┘ │
 │                              │                                   │
 │                              ▼                                   │
-│  Phase 3: REFACTOR                                              │
+│  Current: REFACTOR                                              │
 │  ┌───────────────────────────────────────────────────────────┐ │
 │  │  1. Improve code quality                                  │ │
 │  │  2. Maintain test coverage                                │ │

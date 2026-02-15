@@ -82,7 +82,7 @@ LENS employs ten specialized analyzers:
 
 ```python
 class UnifiedAnalysisOrchestrator:
-    """Coordinates all LENS analyzers for unified analysis (Wave 7 consolidated)."""
+    """Coordinates all LENS analyzers for unified analysis (Consolidation consolidated)."""
     
     def analyze_file(self, file_path: Path) -> LENSContext:
         """

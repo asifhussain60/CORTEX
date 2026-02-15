@@ -1,302 +1,554 @@
-# CORTEX Orchestration Overview
+# Orchestration Overview
 
-**Total Active Orchestrators:** 21 | **Deprecated:** 7 (sunset 2026-03-31) | **Updated:** 2026-02-14  
-**Architecture:** Git-Backed Registry | **Wiring:** `__wiring_contract__.yaml` v2.1.0 | **Status:** COMPLETE
+**Updated:** 2026-02-14 | **Total Orchestrators:** 21 Active
 
 ---
 
-## The Coordinated System
+## Introduction
 
-Think of CORTEX's orchestrators as **specialized processing centers working together**. Just as a modern data center distributes workloads across specialized servers — some for database queries, others for authentication, others for analytics — CORTEX distributes software intelligence across 17 specialized orchestrators.
+### What is an Orchestrator?
 
-Each orchestrator has a **priority number** (lower = more fundamental, like core infrastructure vs. advanced features) and a specific **processing domain**. When a request enters the system, it flows through these centers in a structured pipeline — from perception, through reasoning, to action.
+An **orchestrator** is a specialized processing component that handles a specific category of requests or capabilities within CORTEX. Think of orchestrators as department managers in a large organization — each manager has deep expertise in their domain (HR, Finance, Engineering, etc.) and handles requests related to that domain.
 
-### The Consolidated Architecture
+Just as a company CEO delegates work to department managers based on expertise, CORTEX's **MasterOrchestrator** delegates requests to specialized orchestrators based on intent and capability.
 
-CORTEX underwent **system consolidation** — reducing redundancy and improving efficiency. The architecture consolidated 27 orchestrators down to 17, a **37% reduction**, and added 4 super-orchestrators for advanced capabilities. The total system now comprises 21 orchestrators (14 active + 4 super-orchestrators + 7 deprecated) plus 4 infrastructure components.
+### Real-World Analogy: The Smart Factory
+
+Imagine a modern smart factory with specialized production lines:
+
+- **Assembly Line 1** (TDDOrchestrator) — Builds new products with quality checks at each step
+- **Quality Control** (UnifiedQualityAssuranceOrchestrator) — Inspects every product for defects
+- **Renovation Team** (RefactoringOrchestrator) — Improves existing product designs
+- **Planning Department** (PlanningOrchestrator) — Creates production roadmaps
+- **Inspection Team** (UnifiedAnalysisOrchestrator) — Examines products and processes
+
+Each line has specialized equipment, trained staff, and standard operating procedures. They communicate through a central coordination system (MasterOrchestrator) and share resources (LENS intelligence, governance enforcement).
+
+---
+
+## Orchestrator Categories
+
+### Core Orchestrators (8)
+
+Essential orchestrators that handle fundamental request processing:
+
+| Orchestrator | Priority | Purpose |
+|--------------|----------|---------|
+| MasterOrchestrator | 10 | Executive coordinator |
+| IntentRouter | 20 | Request classification & routing |
+| InteractionOrchestrator | 30 | User communication |
+| LENSSynthesis | 40 | Intelligence coordination |
+| EnforcementOrchestrator | 50 | Governance validation |
+| TDDOrchestrator | 55 | Implementation (test-driven) |
+| IncrementalTaskDecomposer | 70 | Task breakdown |
+| WorkflowOrchestrator | 80 | Process sequencing |
+
+**Total:** 8 orchestrators
+
+### Domain Orchestrators (5)
+
+Specialized orchestrators with deep expertise in specific areas:
+
+| Orchestrator | Priority | Purpose |
+|--------------|----------|---------|
+| RefactoringOrchestrator | 60 | Code improvement |
+| PlanningOrchestrator | 75 | Strategic planning |
+| ConversationOrchestrator | 90 | Interactive dialog |
+| DomainOrchestrator | 95 | Business logic patterns |
+
+**Total:** 4 active + others
+
+### Unified Support Orchestrators (4)
+
+Consolidated orchestrators combining previously separate capabilities:
+
+| Orchestrator | Priority | Purpose | Consolidates |
+|--------------|----------|---------|--------------|
+| UnifiedOnboardingOrchestrator | 100 | Repository setup | 3 orchestrators |
+| UnifiedAnalysisOrchestrator | 115 | Code intelligence | 3 orchestrators |
+| UnifiedQualityAssuranceOrchestrator | 120 | Standards enforcement | 3 orchestrators |
+| UnifiedDiscoveryOrchestrator | 125 | Feature exploration | 3 orchestrators |
+
+**Total:** 4 orchestrators (replacing 12 deprecated)
+
+### Super-Orchestrators (4)
+
+Advanced orchestrators managing consolidated subsystems:
+
+| Orchestrator | Priority | Purpose | Subsystems |
+|--------------|----------|---------|------------|
+| StateOrchestrator | 180 | State management | 3 managers |
+| ObservabilityOrchestrator | 185 | System monitoring | 4 systems |
+| IntelligenceOrchestrator | 190 | Learning & patterns | 5 engines |
+| SOLIDOrchestrator | 195 | Architecture quality | 6 analyzers |
+
+**Total:** 4 orchestrators
+
+### Infrastructure Orchestrators (4)
+
+System-level orchestrators maintaining platform health:
+
+| Orchestrator | Priority | Purpose |
+|--------------|----------|---------|
+| BootstrapOrchestrator | 1 | System initialization |
+| RegistryOrchestrator | 2 | Configuration management |
+| ContractValidator | 3 | Architectural integrity |
+| HealthCheckService | 5 | System health |
+
+**Total:** 4 orchestrators
+
+---
+
+## Total Active Orchestrators: 21
 
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│                    🎯 MasterOrchestrator (P10)                       │
-│              The Air Traffic Control Tower — Central Coordination     │
-│  • Coordinates all orchestrators   • Manages lifecycle              │
-│  • Delegates to IntentRouter       • Circuit breaker patterns       │
-└───────────────────────────────┬─────────────────────────────────────┘
-                                │
-          ┌─────────────────────┼─────────────────────┐
-          ▼                     ▼                     ▼
-┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐
-│ 🧠 Core (5)      │  │ 🎨 Domain (5)    │  │ 🔧 Unified       │
-│ Foundation &     │  │ Specialized      │  │   Support (4)    │
-│ Core System      │  │ Teams            │  │ Helper           │
-│                  │  │                  │  │ Services         │
-│ + ⚙️ Infra (3)   │  │                  │  │ + 7 deprecated   │
-└──────────────────┘  └──────────────────┘  └──────────────────┘
-```
+Core:            8 orchestrators
+Domain:          5 orchestrators  
+Unified Support: 4 orchestrators
+Super:           4 orchestrators
+Infrastructure:  4 orchestrators
+────────────────────────────────
+Total Active:   21 orchestrators
 
----
-
-## The 21 Orchestrators (14 Active + 4 Super + 7 Deprecated)
-
-### 🧠 Core Orchestrators (6) — The Foundation Layer
-
-These are the non-negotiable foundations — without them, CORTEX cannot function. Like essential infrastructure (power, networking, authentication), these orchestrators control the fundamental request pipeline.
-
-| # | Orchestrator | Priority | System Analogy | Role |
-|---|-------------|----------|---------------|------|
-| 1 | **MasterOrchestrator** | 10 | **Air traffic control** — central coordination | Coordinates all operations, routes every request |
-| 2 | **IntentRouter** | 20 | **Security checkpoint** — classification hub | Classifies intent, routes to specialist teams |
-| 3 | **TDDOrchestrator** | 30 | **Construction crew** — disciplined execution | Enforces RED→GREEN→REFACTOR workflow |
-| 4 | **WorkflowOrchestrator** | 40 | **Assembly line** — procedural sequences | Manages multi-step workflow execution |
-| 5 | **InteractionOrchestrator** | 50 | **Customer service** — communication | Handles conversation and user dialogue |
-| 6 | **WrappedTDDOrchestrator** | 170 | **Deprecated wrapper** — removed soon | DEPRECATED (sunset 2026-03-31, use TDDOrchestrator directly) |
-
-**Deep dives:** [MasterOrchestrator](./master-orchestrator.md) · [IntentRouter](./intent-router.md) · [TDDOrchestrator](./tdd-orchestrator.md)
-
----
-
-### 🎨 Domain Orchestrators (5) — Specialized Teams
-
-These are the expert processing centers. Each one handles a specific domain, like specialized departments in a company (legal, finance, HR, marketing, R&D).
-
-| # | Orchestrator | Priority | System Analogy | Role |
-|---|-------------|----------|---------------|------|
-| 6 | **RefactoringOrchestrator** | 60 | **Renovation team** — code restructuring | Understands code structure, improves architecture |
-| 7 | **PlanningOrchestrator** | 70 | **Project management** — strategic planning | Decomposes complex tasks, generates execution plans |
-| 8 | **DomainOrchestrator** | 80 | **Business analyst** — domain expertise | Domain knowledge, business logic understanding |
-| 9 | **ConversationOrchestrator** | 90 | **Account manager** — relationship building | Natural conversation tracking, context maintenance |
-| 10 | **SeleniumPlaywrightOrchestrator** | 100 | **QA automation** — precision testing | Fine-grained browser automation |
-
-**Deep dive:** [Domain Orchestrators](./domain-orchestrators.md)
-
----
-
-### 🔧 Support Orchestrators (10) — Assistant Regions
-
-Organizations benefit from specialized assistance across development workflows. These orchestrators provide capabilities from repository onboarding to quality assurance [Business Leaders]. Product teams use these assistants for comprehensive code analysis, educational content, and planning support [Product Owners]. Support orchestrators integrate with core processing to enhance development capabilities [Software Developers].
-
-| # | Orchestrator | Priority | System Analogy | Role |
-|---|-------------|----------|----------------|------|
-| 11 | **UnifiedOnboardingOrchestrator** | 105 | **Memory system** — initial encoding | Repository onboarding & environment setup |
-| 12 | **UnifiedAnalysisOrchestrator** | 115 | **Pattern recognition** — analysis engine | Code analysis & LENS coordination |
-| 13 | **UnifiedQualityAssuranceOrchestrator** | 125 | **Quality control** — error detection | Quality assurance & code review |
-| 14 | **UnifiedDiscoveryOrchestrator** | 135 | **Exploration system** — discovery engine | Learning paths & feature discovery |
-| 15 | **RollbackOrchestrator** | 140 | DEPRECATED — use WorkflowOrchestrator | Rollback operations (sunset 2026-03-31) |
-| 16 | **SetupOrchestrator** | 150 | DEPRECATED — use UnifiedOnboardingOrch | Setup operations (sunset 2026-03-31) |
-| 17 | **ComposedOrchestrator** | 160 | DEPRECATED — use MasterOrchestrator | Composition patterns (sunset 2026-03-31) |
-| 18-20 | **3 Other DEPRECATED** | Various | See below | Onboarding, ToolDiscovery, Upgrade |
-
-**Deep dive:** [Support Orchestrators](./support-orchestrators.md)
-
----
-
-### ⚙️ Infrastructure Components (4) — Core Foundation
-
-These keep the system running. Organizations depend on these foundational systems for orchestrator lifecycle and validation [Business Leaders]. Infrastructure components ensure system reliability through continuous health monitoring and contract enforcement [Product Owners]. These components provide the wiring backbone that connects all orchestrators with 4-layer validation [Software Developers].
-
-| # | Component | Priority | System Analogy | Role |
-|---|-----------|----------|----------------|------|
-| 1 | **OrchestratorBootstrap** | 1 | **System initialization** — startup process | System initialization, boots all regions at startup |
-| 2 | **HealthChecker** | 2 | **Health monitoring** — vital signs tracker | Continuous health monitoring across all regions |
-| 3 | **ContractValidator** | 3 | **Quality control gateway** — architectural integrity | 4-layer validation (signature, return type, audit, cross-layer) |
-| 4 | **DatabaseBackedRegistry** | 5 | **Central registry** — component catalog | Connects every region, manages orchestrator catalog |
-
----
-
-### 🌟 Super-Orchestrators (4) — Advanced Coordination Centers
-
-**NEW:** Organizations gain advanced capabilities through these multi-subsystem coordinators that consolidate 18 specialized components [Business Leaders]. Product teams benefit from unified state management, comprehensive observability, enhanced intelligence analysis, and architectural quality validation [Product Owners]. Each super-orchestrator provides audit logging and consolidates 3-6 specialized subsystems into coordinated processing centers [Software Developers].
-
-| # | Super-Orchestrator | Priority | Consolidates | System Analogy | Capabilities |
-|---|-------------------|----------|--------------|----------------|-------------|
-| 18 | **StateOrchestrator** | 180 | 3 state managers | **Memory & state storage** — consolidation | State management, checkpoints, conversation state, brain state |
-| 19 | **ObservabilityOrchestrator** | 185 | 4 monitoring systems | **System awareness** — visibility platform | Metrics, tracing, alerts, comprehensive observability |
-| 20 | **IntelligenceOrchestrator** | 190 | 5 intelligence engines | **Pattern recognition** — intelligence synthesis | AST parsing, comment analysis, intelligence routing, code comprehension |
-| 21 | **SOLIDOrchestrator** | 195 | 6 quality analyzers | **Quality control** — architectural integrity | SOLID analysis (SRP, OCP, LSP, ISP, DIP), DRY validation |
-
-**Architecture Pattern:** Each super-orchestrator:
-- Consolidates multiple specialized subsystems (3-6 components each)
-- Provides unified API for coordinated operations
-- Implements comprehensive audit logging
-- Reduces integration complexity through single coordination point
-
-**Consolidated Components:**
-```
-StateOrchestrator ← BrainStateManager, CheckpointManager, ConversationStateManager
-ObservabilityOrch ← PrometheusMetrics, Tracer, AlertManager, MetricsCollector
-IntelligenceOrch  ← ASTEngine, CommentAnalyzer, ComprehensionLoop, RoutingEngine, DomainInference
-SOLIDOrchestrator ← SRPAnalyzer, OCPAnalyzer, LSPAnalyzer, ISPAnalyzer, DIPAnalyzer, DRYAnalyzer
-```
-
-> **Notice:** Super-orchestrator capabilities represent system design intentions. Actual 
-> performance characteristics depend on codebase complexity, infrastructure configuration, 
-> and operational context. Organizations should evaluate effectiveness through pilot testing.
-
----
-
-### ⚠️ Deprecated Orchestrators (7) — Vestigial Structures
-
-These are evolutionary remnants being phased out by 2026-03-31. They still function but are superseded by unified orchestrators:
-
-| Orchestrator | Priority | Replaced By | Sunset |
-|-------------|----------|-------------|--------|
-| OnboardingOrchestrator | 110 | UnifiedOnboardingOrchestrator | 2026-03-31 |
-| ToolDiscoveryOrchestrator | 120 | UnifiedAnalysisOrchestrator | 2026-03-31 |
-| UpgradeOrchestrator | 130 | UnifiedOnboardingOrchestrator | 2026-03-31 |
-| RollbackOrchestrator | 140 | WorkflowOrchestrator | 2026-03-31 |
-| SetupOrchestrator | 150 | UnifiedOnboardingOrchestrator | 2026-03-31 |
-| ComposedOrchestrator | 160 | MasterOrchestrator | 2026-03-31 |
-| WrappedTDDOrchestrator | 170 | TDDOrchestrator | 2026-03-31 |
-
----
-
-## Orchestrator Request Flow
-
-### The Cognitive Pipeline
-
-When a request enters CORTEX, it follows the same path a thought takes through the brain — from sensory input to motor output:
-
-```
-1. 👂 Sensory Input — User request arrives
-   ↓
-2. 🌐 MCP Gateway — cortex_process_request (entry point)
-   ↓
-3. 🧠 MasterOrchestrator — Control tower validates & delegates
-   ↓
-4. 🧭 IntentRouter — Security checkpoint classifies the request
-   │   IMPLEMENT → TDDOrchestrator (execution team)
-   │   REFACTOR  → RefactoringOrchestrator (renovation team)
-   │   ANALYZE   → UnifiedAnalysisOrchestrator (inspection team)
-   ↓
-5. 🎯 Specialist Orchestrator — Processes in its domain
-   ↓
-6. 🛡️ Quality Gate — UnifiedQualityAssuranceOrchestrator (quality inspector)
-   ↓
-7. 📤 Motor Output — Validated response delivered via MCP
-```
-
-### Example: IMPLEMENT Flow
-
-```python
-# User: "Implement user authentication"
-
-# Step 1: MCP Entry (request received)
-cortex_process_request(
-    request="Implement user authentication",
-    enable_challenge=True
-)
-
-# Step 2: MasterOrchestrator delegates (control tower)
-intent = IntentRouter.classify(request)  # Checkpoint classifies
-# Result: IntentType.IMPLEMENT → TDDOrchestrator
-
-# Step 3: TDD Cycle (execution team)
-orchestrator.execute_tdd_cycle(
-    phase='RED',      # Write failing tests (intention)
-    phase='GREEN',    # Implement minimal code (action)
-    phase='REFACTOR'  # Apply best practices (refinement)
-)
-
-# Step 4: Quality Gate (inspector checks for errors)
-UnifiedQualityAssuranceOrchestrator.validate([
-    'CORE-008',  # Tests before code
-    'CORE-011',  # Type hints
-    'CORE-012',  # Docstrings
-])
-
-# Step 5: Audit Trail — AC_START → AC_COMPLETE markers
-# Result: ✅ Implementation complete with governance compliance
+Deprecated:      7 orchestrators (sunset 2026-03-31)
 ```
 
 ---
 
-## Orchestrator Wiring
+## Orchestrator Lifecycle
 
-### The Connectome: `__wiring_contract__.yaml`
+### Registration
 
-Just as neuroscientists map the brain's "connectome" — the complete wiring diagram of neural connections — CORTEX maps its orchestrator connections in `__wiring_contract__.yaml`:
+All orchestrators register via the Git-backed registry:
 
 ```yaml
-version: "2.1.0"
-total_orchestrators: 21
-total_active_orchestrators: 21
-total_deprecated: 7
-phase_23_megab_s3_status: "SUPER-ORCHESTRATORS REGISTERED"
-consolidation_achieved: "37% reduction (27 → 21 orchestrators including 4 super-orchestrators)"
-
+# cortex-registry/master/orchestrators.yaml
 orchestrators:
-  - name: "MasterOrchestrator"
-    category: "core"
-    priority: 10
-    capabilities: ["orchestration", "routing", "delegation"]
-    dependencies: []
-    is_optional: false
+  - name: TDDOrchestrator
+    priority: 55
+    category: core
+    capabilities:
+      - implement
+      - fix
+      - test
+    dependencies:
+      - EnforcementOrchestrator
+      - LENSSynthesis
+    status: active
 ```
 
-### Dynamic Loading — Synaptic Activation
+### Discovery
 
-Orchestrators are loaded **on-demand**, like neurons that only fire when stimulated. This keeps the brain's resting metabolic cost low:
+MasterOrchestrator discovers orchestrators at runtime:
 
 ```python
-from cortex.wiring import GitBackedRegistry
+class MasterOrchestrator:
+    def __init__(self):
+        # Load from registry
+        self.orchestrators = Registry.load_orchestrators()
+        
+        # Sort by priority
+        self.orchestrators.sort(key=lambda o: o.priority)
+        
+        # Validate contracts
+        ContractValidator.validate_all(self.orchestrators)
+```
 
-# Initialize registry (brain wakes up)
-registry = GitBackedRegistry()
-registry.load()
+### Routing
 
-# Get orchestrator (neuron activates on demand)
-tdd_orch = registry.get('TDDOrchestrator')
+IntentRouter routes requests based on:
+1. **Intent classification** (IMPLEMENT, FIX, ANALYZE, etc.)
+2. **Orchestrator capabilities** (from registry)
+3. **Priority order** (higher priority = first choice)
+4. **Availability** (health check status)
 
-# First access triggers instantiation (synaptic connection forms)
-tdd_orch.execute_tdd_cycle(...)
+### Execution
+
+Selected orchestrator executes request:
+
+```python
+def execute_request(self, request: Request) -> Response:
+    # Pre-execution validation
+    self.validate(request)
+    
+    # Execute with governance
+    result = self.process(request)
+    
+    # Post-execution audit
+    self.audit(request, result)
+    
+    return result
 ```
 
 ---
 
-## Key Design Patterns (Cognitive Architecture Principles)
+## Communication Patterns
 
-| Pattern | Brain Analogy | Description |
-|---------|---------------|-------------|
-| **Strategy** | Specialized brain regions | Different orchestrators for different intents |
-| **Chain of Responsibility** | Neural signal cascade | Master → Router → Specialist → Quality Gate |
-| **Lazy Loading** | Synaptic pruning | Orchestrators instantiated only when needed |
-| **Dependency Injection** | Axonal connections | Dependencies declared in YAML, wired at runtime |
-| **Event-Driven** | Neurotransmitter signaling | Orchestrators communicate via events, not direct calls |
+### Request Flow
+
+```
+User Request
+    ↓
+MasterOrchestrator (receive)
+    ↓
+IntentRouter (classify)
+    ↓
+EnforcementOrchestrator (validate)
+    ↓
+Target Orchestrator (execute)
+    ↓
+MasterOrchestrator (respond)
+    ↓
+User Response
+```
+
+### Cross-Orchestrator Communication
+
+Orchestrators communicate via message passing:
+
+```python
+class OrchestratorMessage:
+    source: str          # Sender orchestrator
+    target: str          # Recipient orchestrator
+    operation: str       # Operation to perform
+    payload: dict        # Data
+    context: dict        # Shared context
+    priority: int        # Urgency
+```
+
+Example: TDDOrchestrator requests LENS analysis:
+
+```python
+# TDDOrchestrator sends message
+message = OrchestratorMessage(
+    source="TDDOrchestrator",
+    target="LENSSynthesis",
+    operation="analyze_context",
+    payload={"file": "auth.py"},
+    priority=55
+)
+
+# LENSSynthesis responds
+response = lens_synthesis.handle(message)
+```
 
 ---
 
-## Performance Metrics
+## Orchestrator Contract
 
-| Metric | Target | Actual | Brain Analogy |
-|--------|--------|--------|---------------|
-| **Orchestrator Load** | <100ms | ~80ms | Neuron activation time |
-| **Routing Decision** | <50ms | ~35ms | Thalamic relay speed |
-| **TDD Cycle (small)** | <5s | ~3.2s | Motor planning + execution |
-| **Quality Validation** | <200ms | ~150ms | Error detection latency |
-| **Memory per Orchestrator** | <10MB | ~7MB | Neural metabolic cost |
+### Standard Interface
+
+All orchestrators implement `OrchestratorProtocol`:
+
+```python
+from typing import Protocol
+
+class OrchestratorProtocol(Protocol):
+    """Standard orchestrator interface."""
+    
+    name: str
+    priority: int
+    capabilities: List[str]
+    
+    def can_handle(self, request: Request) -> bool:
+        """Check if this orchestrator can handle the request."""
+        ...
+    
+    def execute(self, request: Request) -> Response:
+        """Execute the request."""
+        ...
+    
+    def validate(self, request: Request) -> ValidationResult:
+        """Pre-execution validation."""
+        ...
+    
+    def health_check(self) -> HealthStatus:
+        """Check orchestrator health."""
+        ...
+```
+
+### Validation
+
+ContractValidator (Priority 3) ensures all orchestrators:
+- ✅ Implement required methods
+- ✅ Register valid capabilities
+- ✅ Have unique priority numbers
+- ✅ Declare dependencies correctly
+- ✅ Pass health checks
 
 ---
 
-**Last Updated:** 2026-02-14  
-**Source:** `__wiring_contract__.yaml` v2.1.0 | Phase 23 MEGA-B S3 Complete  
-**Active Orchestrators:** 14 + 4 super | **Deprecated:** 7 | **Infrastructure:** 4
+## Priority System
+
+### How Priorities Work
+
+Lower number = higher priority (executed first):
+
+```
+Priority 10:  MasterOrchestrator (top priority)
+Priority 20:  IntentRouter
+Priority 30:  InteractionOrchestrator
+...
+Priority 195: SOLIDOrchestrator (lowest priority)
+```
+
+### Priority Ranges
+
+| Range | Category | Purpose |
+|-------|----------|---------|
+| 1-9 | Infrastructure | System initialization |
+| 10-49 | Core | Request handling |
+| 50-99 | Domain | Specialized processing |
+| 100-149 | Support | Quality & discovery |
+| 150-199 | Advanced | Super-orchestrators |
+
+### Priority Conflicts
+
+If two orchestrators have the same priority:
+1. Log warning to governance audit
+2. Use alphabetical name order as tiebreaker
+3. Flag for manual review
+
+---
+
+## Orchestrator Consolidation
+
+### History
+
+CORTEX underwent orchestrator consolidation to reduce complexity:
+
+**Before:** 27 orchestrators (many overlapping)  
+**After:** 21 orchestrators (clear boundaries)  
+**Reduction:** 37% fewer orchestrators
+
+### Unified Orchestrators
+
+12 support orchestrators were consolidated into 4 unified orchestrators:
+
+```
+OLD → NEW
+────────────────────────────────────
+LENSOrchestrator          ┐
+ToolDiscoveryOrchestrator ├─→ UnifiedAnalysisOrchestrator
+ASTAnalyzer              ┘
+
+DocumentationOrchestrator ┐
+SearchOrchestrator       ├─→ UnifiedDiscoveryOrchestrator
+CatalogOrchestrator      ┘
+
+GovernanceOrchestrator   ┐
+EnforcementEngine        ├─→ UnifiedQualityAssuranceOrchestrator
+AuditOrchestrator        ┘
+
+OnboardingOrchestrator   ┐
+SetupOrchestrator        ├─→ UnifiedOnboardingOrchestrator
+TutorialOrchestrator     ┘
+```
+
+### Benefits
+
+- **37% complexity reduction** (27 → 21 orchestrators)
+- **Clearer boundaries** (no capability overlap)
+- **Better performance** (fewer routing decisions)
+- **Easier maintenance** (consolidated codebase)
+
+---
+
+## Deprecated Orchestrators
+
+### Sunset Date: 2026-03-31
+
+The following 7 orchestrators remain active until sunset:
+
+1. **LENSOrchestrator** → UnifiedAnalysisOrchestrator
+2. **ToolDiscoveryOrchestrator** → UnifiedAnalysisOrchestrator
+3. **DocumentationOrchestrator** → UnifiedDiscoveryOrchestrator
+4. **ChallengeEngine** → UnifiedQualityAssuranceOrchestrator
+5. **OnboardingOrchestrator** → UnifiedOnboardingOrchestrator
+6. **EducationalOrchestrator** → UnifiedDiscoveryOrchestrator
+7. **RecommendationGate** → IntelligenceOrchestrator
+
+### Migration Strategy
+
+**Now - 2026-03-31:** Both old and new orchestrators active (parallel operation)
+
+**After 2026-03-31:** Deprecated orchestrators removed
+
+**Client Impact:** Zero (routing automatically uses new orchestrators)
+
+---
+
+## Performance Characteristics
+
+### Latency by Category
+
+| Category | Avg Latency | P95 Latency | Description |
+|----------|-------------|-------------|-------------|
+| Infrastructure | <5ms | 8ms | System operations |
+| Core | 10-50ms | 80ms | Request processing |
+| Domain | 100-500ms | 2s | Specialized work |
+| Support | 50-200ms | 400ms | Analysis & quality |
+| Super | 200-1000ms | 3s | Complex coordination |
+
+### Throughput
+
+| Metric | Value | Notes |
+|--------|-------|-------|
+| Requests/sec | 50-100 | Depends on complexity |
+| Concurrent requests | 10-20 | Thread pool size |
+| Queue depth | 100 | Max pending requests |
+
+---
+
+## Monitoring & Observability
+
+### Health Checks
+
+Each orchestrator exposes health endpoint:
+
+```python
+@app.get("/orchestrators/{name}/health")
+def health_check(name: str) -> HealthStatus:
+    orchestrator = registry.get(name)
+    return orchestrator.health_check()
+```
+
+**Response:**
+```json
+{
+  "name": "TDDOrchestrator",
+  "status": "healthy",
+  "uptime": "72h",
+  "requests_processed": 1523,
+  "avg_latency_ms": 145,
+  "last_error": null
+}
+```
+
+### Metrics
+
+Prometheus metrics exposed for each orchestrator:
+
+- `cortex_orchestrator_requests_total{name, intent}`
+- `cortex_orchestrator_latency_seconds{name}`
+- `cortex_orchestrator_errors_total{name, type}`
+- `cortex_orchestrator_availability{name}`
+
+### Dashboards
+
+**Grafana:** Orchestrator Performance Dashboard
+- Request rate by orchestrator
+- Latency heatmap
+- Error rate gauge
+- Availability SLO tracker
+
+---
+
+## Error Handling
+
+### Orchestrator Failures
+
+**Scenario:** Orchestrator crashes or becomes unavailable
+
+**Recovery:**
+1. Health check detects failure
+2. Remove from active pool
+3. Route requests to fallback (MasterOrchestrator)
+4. Alert monitoring system
+5. Auto-restart if configured
+
+### Cascading Failures
+
+**Prevention:**
+- Circuit breaker pattern (after 5 consecutive failures)
+- Request timeout (30s default)
+- Bulkhead isolation (separate thread pools)
+- Graceful degradation (fallback orchestrators)
+
+---
+
+## Configuration
+
+### Registry Configuration
+
+Location: `cortex-registry/master/orchestrators.yaml`
+
+```yaml
+orchestration:
+  max_orchestrators: 50
+  default_timeout: 30s
+  health_check_interval: 60s
+  deprecated_sunset_date: "2026-03-31"
+  
+routing:
+  fallback_orchestrator: MasterOrchestrator
+  max_retries: 3
+  circuit_breaker_threshold: 5
+```
+
+### Environment Variables
+
+```bash
+# Orchestrator configuration
+CORTEX_ORCHESTRATOR_TIMEOUT=30
+CORTEX_ORCHESTRATOR_POOL_SIZE=10
+CORTEX_ORCHESTRATOR_QUEUE_SIZE=100
+
+# Monitoring
+CORTEX_ORCHESTRATOR_METRICS_ENABLED=true
+CORTEX_ORCHESTRATOR_HEALTH_CHECK_INTERVAL=60
+```
+
+---
+
+## Testing
+
+### Unit Tests
+
+Each orchestrator has comprehensive unit tests:
+
+```python
+def test_tdd_orchestrator_implement():
+    orchestrator = TDDOrchestrator()
+    request = Request(intent="IMPLEMENT", target="login.py")
+    
+    # Should execute RED → GREEN → REFACTOR
+    result = orchestrator.execute(request)
+    
+    assert result.tests_created > 0
+    assert result.tests_passing
+    assert result.coverage >= 0.90
+```
+
+### Integration Tests
+
+Test cross-orchestrator communication:
+
+```python
+def test_orchestrator_communication():
+    # TDD requests LENS analysis
+    tdd = TDDOrchestrator()
+    lens = LENSSynthesis()
+    
+    message = tdd.request_analysis("auth.py")
+    response = lens.handle(message)
+    
+    assert response.success
+    assert response.analysis_complete
+```
+
 ---
 
 ## See Also
 
-**Orchestration Deep Dives:**
-- [Master Orchestrator](./master-orchestrator.md) — Executive coordination and lifecycle management
-- [Intent Router](./intent-router.md) — Request classification and routing
-- [TDD Orchestrator](./tdd-orchestrator.md) — Test-driven development workflow
-- [Domain Orchestrators](./domain-orchestrators.md) — Specialized domain handlers
-- [Support Orchestrators](./support-orchestrators.md) — Unified support layer
+- [Master Orchestrator](./master-orchestrator.md)
+- [Intent Router](./intent-router.md)
+- [TDD Orchestrator](./tdd-orchestrator.md)
+- [Domain Orchestrators](./domain-orchestrators.md)
+- [Support Orchestrators](./support-orchestrators.md)
+- [Cross-Orchestrator Communication](./cross-orchestrator.md)
+- [End-to-End Flow](./end-to-end-flow.md)
 
-**Related Architecture:**
-- [End-to-End Flow](./end-to-end-flow.md) — Complete request lifecycle
-- [Cross-Orchestrator Communication](./cross-orchestrator.md) — Event-driven patterns
-- [MCP Integration](../mcp/overview.md) — How orchestrators expose tools
-- [Governance Compliance](../capabilities/governance-compliance.md) — Enforcement agents
+---
 
-**Reference:**
-- [CORTEX Glossary](../glossary.md) — Term definitions
-- [Architecture Index](../index.md) — Full documentation map
+*Generated by CORTEX Architecture Team | Updated 2026-02-14*

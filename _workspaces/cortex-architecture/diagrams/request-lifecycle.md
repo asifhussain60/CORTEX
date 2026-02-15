@@ -216,7 +216,7 @@
 
 ## Request Flow Phases
 
-### Phase 1: Neural Signal Reception (5-15ms)
+### Current: Neural Signal Reception (5-15ms)
 │  │  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐              │  │
 │  │  │  Parse Tool     │───►│  Lookup in      │───►│  Validate       │              │  │
 │  │  │  Name           │    │  Registry       │    │  Arguments      │              │  │
