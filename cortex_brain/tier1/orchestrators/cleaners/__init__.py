@@ -35,6 +35,11 @@ RollbackResult = _cleaners_module.RollbackResult
 CleanerRegistrationError = _cleaners_module.CleanerRegistrationError
 CleanerNotFoundError = _cleaners_module.CleanerNotFoundError
 
+# Now import cleaner implementations (AFTER setting up base classes)
+# This ensures they use the same CleanerInterface instance
+from .database_migration import DatabaseMigrationCleaner
+from .root_artifacts import RootArtifactsCleaner
+
 __all__ = [
     "CleanerInterface",
     "CleanerRegistry",
@@ -43,4 +48,6 @@ __all__ = [
     "RollbackResult",
     "CleanerRegistrationError",
     "CleanerNotFoundError",
+    "DatabaseMigrationCleaner",
+    "RootArtifactsCleaner",
 ]
