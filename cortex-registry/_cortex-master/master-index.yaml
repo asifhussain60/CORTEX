@@ -3,13 +3,13 @@
 # Last Verified: 2026-02-15T07:15:00Z (Final Holistic Plan v3.0)
 
 metadata:
-  version: "4.0"
+  version: "4.1"
   total_phases: 25
-  active: 2           # Phase 21 (MEGA-A), Phase 23 (MEGA-C)
+  active: 2           # Phase 21, Phase 23
   completed: 4        # Phase 02, 09, 19, 20
   consolidated: 5     # Phases 01, 12, 16, 17, 18
   deferred: 10        # Future enhancements
-  planned: 4          # Phase 22 (MEGA-B), Phase 24 (MEGA-D), Phase 25 (MEGA-E)
+  planned: 4          # Phase 22, Phase 24, Phase 25
   
   # Folder Structure (CORE-028 Extension)
   # phases/completed/    - All finished phases
@@ -21,10 +21,11 @@ metadata:
   # Implementation Truth Verification (2026-02-15)
   verification:
     method: "git_history + code_inspection + test_verification"
-    plan_version: "Final Holistic Plan v3.0"
+    plan_version: "Final Holistic Plan v3.1"
     governance_rules_added: ["CORE-055"]
     governance_rules_extended: ["CORE-028"]
-    label_collisions_fixed: ["Phase 23: MEGA-B → MEGA-C"]
+    label_system: "MEGA labels removed from filenames (2026-02-15)"
+    phase_0_complete: "Syntax errors fixed, registry aligned"
     
 # ============================================================================
 # PHASE STATUS SUMMARY (SSOT)
@@ -46,28 +47,27 @@ phase_status:
       title: "Convergence Loop Holistic TDD"
       location: "phases/completed/19-convergence-loop-holistic-tdd.yaml"
       completion_date: "2026-02-14"
-      consolidated_into: "phase-21 (MEGA-A)"
+      consolidated_into: "phase-21 "
       
     - id: "phase-20"
       title: "Workflow Intelligence Neurons"
       location: "phases/completed/20-workflow-intelligence-neurons.yaml"
       completion_date: "2026-02-14"
-      consolidated_into: "phase-21 (MEGA-A)"
+      consolidated_into: "phase-21 "
 
   active:
     - id: "phase-21"
-      title: "Intelligence & Learning Core (MEGA-A)"
-      location: "phases/active/21-intelligence-learning-core-mega.yaml"
+      title: "Intelligence & Learning Core "
+      location: "phases/active/21-intelligence-learning-core.yaml"
       status: "active"
       priority: "P0"
       includes: ["phase-12", "phase-17", "phase-19", "phase-20"]
       
     - id: "phase-23"
-      title: "STS Knowledge Synthesis (MEGA-C)"
-      location: "phases/active/23-sts-knowledge-synthesis-mega.yaml"
+      title: "STS Knowledge Synthesis "
+      location: "phases/active/23-sts-knowledge-synthesis.yaml"
       status: "active"
       priority: "P1"
-      note: "Renamed from MEGA-B to MEGA-C (label collision fix)"
 
   consolidated:
     - id: "phase-01"
@@ -78,7 +78,7 @@ phase_status:
     - id: "phase-12"
       title: "Knowledge Persistence Universal Learning Loop"
       location: "phases/consolidated/12-knowledge-persistence-universal-learning-loop.yaml"
-      consolidated_into: "phase-21 (MEGA-A)"
+      consolidated_into: "phase-21 "
       
     - id: "phase-16"
       title: "MCP Tools Documentation Architect"
@@ -87,7 +87,7 @@ phase_status:
     - id: "phase-17"
       title: "Agent Architecture Holistic Redesign"
       location: "phases/consolidated/17-agent-architecture-holistic-redesign.yaml"
-      consolidated_into: "phase-21 (MEGA-A)"
+      consolidated_into: "phase-21 "
       
     - id: "phase-18"
       title: "IntentRouter Production Hardening"
@@ -95,13 +95,13 @@ phase_status:
 
   planned:
     - id: "phase-22"
-      title: "Developer Experience & Tooling (MEGA-B)"
-      location: "phases/planned/22-developer-experience-tooling-mega.yaml"
+      title: "Developer Experience & Tooling "
+      location: "phases/planned/22-developer-experience-tooling.yaml"
       status: "planned"
       depends_on: ["phase-21"]
 
     - id: "phase-24"
-      title: "Production Verification Harness (MEGA-D)"
+      title: "Production Verification Harness "
       location: "phases/planned/24-production-verification-harness.yaml"
       status: "planned"
       priority: "P0"
@@ -110,7 +110,7 @@ phase_status:
       note: "Zero-mock golden tests — folds Chat01 golden test work"
 
     - id: "phase-25"
-      title: "Stabilization & Duplicate Elimination (MEGA-E)"
+      title: "Stabilization & Duplicate Elimination "
       location: "phases/planned/25-stabilization-duplicate-elimination.yaml"
       status: "planned"
       priority: "P0"
