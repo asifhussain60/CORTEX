@@ -70,7 +70,8 @@ class MarkerInjectionEngine:
     """
     
     # Marker template (Jinja2)
-    MARKER_TEMPLATE = Template("""""")
+    MARKER_TEMPLATE = Template("""
+""")
     
     def __init__(self):
         """Initialize MarkerInjectionEngine with strategies."""
@@ -137,10 +138,9 @@ class MarkerInjectionEngine:
         """
         return self.MARKER_TEMPLATE.render(
             session_id=session_id,
-            event_type=event_type,
-            context_summary=context_summary,
-            timestamp=datetime.now().isoformat(),
-            original_code=original_code
+            trigger_type=event_type,
+            context=context_summary,
+            timestamp=datetime.now().isoformat()
         )
 
 

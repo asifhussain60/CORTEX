@@ -41,7 +41,7 @@ class AutoCleanupManager:
     def __init__(self):
         """Initialize AutoCleanupManager."""
         self.marker_pattern = re.compile(
-            r"",
+            r"# CORTEX_DEBUG_START: ([^\n]+).*?# CORTEX_DEBUG_END: \1",
             re.DOTALL
         )
     

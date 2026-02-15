@@ -1075,37 +1075,46 @@ orchestrators:
       debugger_failure_rate: 0.05
       codegen_customization_rate: 0.1
       orchestrator_latency_p95: 2000
-  - name: DebuggingOrchestrator
-    module: cortex.orchestrators.support.debugging_orchestrator
-    class: DebuggingOrchestrator
+  - name: DebuggerOrchestrator
+    module: cortex.orchestrators.support.debugger_orchestrator
+    class: DebuggerOrchestrator
     tier: 3
     priority: 80
-    dependencies: []
+    dependencies:
+    - OrchestratorEventBus
     capabilities:
-    - smart_debug_injection
-    - marker_based_cleanup
+    - event_driven_marker_injection
+    - auto_cleanup_on_success
     - session_management
-    - ast_based_analysis
-    - sensitive_value_exclusion
-    - correlation_id_tracking
-    health_check: execute_operation
-    mcp_adapter: DebuggingOrchestratorAdapter
-    description: Smart Debug Injection System for CORTEX-assisted debugging with surgical cleanup
+    - test_failure_detection
+    - refactor_regression_detection
+    - governance_violation_detection
+    health_check: health_check
+    mcp_adapter: cortex.mcp.adapters.debugger_adapter
+    description: EventBus-driven debug marker injection with automatic cleanup (ENH-089)
     mcp_tools:
-    - cortex_debug_inject
+    - cortex_debug_auto_inject
+    - cortex_debug_list_sessions
     - cortex_debug_cleanup
-    - cortex_debug_status
     governance:
     - CORE-008
     - CORE-011
     - CORE-012
     - CORE-027
+    - CORE-041
     metadata:
       icon: 🐛
-      stages: 4
+      stages: 5
       intelligence:
       - lens
       - knowledge
+      event_subscriptions:
+      - TEST_FAILURE
+      - REFACTOR_REGRESSION
+      - GOVERNANCE_VIOLATION
+    phase: ENH-089
+    authority: WAVE-R
+    ac_id: AC-WAVE-R-002
   - name: OrchestratorVisibility
     module: cortex.orchestrators.support.orchestrator_visibility
     class: OrchestratorVisibility

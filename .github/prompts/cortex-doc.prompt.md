@@ -301,7 +301,7 @@ word_count: 0  # Auto-computed by tooling
 cd /Users/asifhussain/PROJECTS/CORTEX
 
 # Find last doc update commit
-LAST_DOC_COMMIT=$(git log -1 --format=%H -- _workspaces/cortex-architecture/)
+LAST_DOC_COMMIT=$(git log -1 --format=%H -- cortex-registry\_cortex-docs\content\src/)
 echo "Baseline: $LAST_DOC_COMMIT"
 
 # Get all changed files since baseline
@@ -550,10 +550,10 @@ const updatedArchitectureData = {
 
 ```bash
 # Check all internal links work
-python scripts/validate_doc_links.py _workspaces/cortex-architecture/
+python scripts/validate_doc_links.py cortex-registry\_cortex-docs\content\src/
 
 # Verify code references match implementation
-python scripts/validate_code_refs.py _workspaces/cortex-architecture/
+python scripts/validate_code_refs.py cortex-registry\_cortex-docs\content\src/
 
 # Check metrics match wiring contract
 python scripts/validate_metrics.py
@@ -562,7 +562,7 @@ python scripts/validate_metrics.py
 **Commit with AC markers:**
 
 ```bash
-git add _workspaces/cortex-architecture/
+git add cortex-registry\_cortex-docs\content\src/
 git commit -m "docs: Refresh architecture docs (247 commits since 0506774b0)
 
 AC_START: AC-DOC-REFRESH-2026-02-11-001
@@ -894,7 +894,7 @@ Perform these steps and return ALL findings:
 
 3. READ the CHARACTER-DESIGN-SHEET.md for visual style rules.
 
-4. READ _workspaces/cortex-architecture/index.md for current architecture.
+4. READ cortex-registry\_cortex-docs\content\src/index.md for current architecture.
 
 5. READ the existing DALL-E prompts file:
    _workspaces/gitpages-docs/.awakening-of-cortex/prompts/image-prompts-dalle.md
@@ -1132,7 +1132,7 @@ runSubagent(
 
 ```bash
 # Map Markdown structure
-find _workspaces/cortex-architecture -name "*.md" | sort
+find cortex-registry\_cortex-docs\content\src -name "*.md" | sort
 
 # Expected structure:
 # index.md
@@ -1296,7 +1296,7 @@ base_template = f"""
     </header>
     
     <div class="content-body markdown-content">
-        <!-- Markdown content from cortex-architecture/*.md injected here -->
+        <!-- Markdown content from cortex-registry\_cortex-docs\content\src/*.md injected here -->
         {{ content | safe }}
     </div>
     
@@ -1383,13 +1383,13 @@ base_template = f"""
 
 class MarkdownToHTMLConverter:
     """
-    Converts Markdown from cortex-architecture/*.md to HTML
+    Converts Markdown from cortex-registry\_cortex-docs\content\src/*.md to HTML
     while preserving structure and applying glassmorphism theme.
     """
     
     def convert(self, md_path: Path) -> str:
         """
-        1. Read Markdown from cortex-architecture/
+        1. Read Markdown from cortex-registry\_cortex-docs\content\src/
         2. Parse with python-markdown (extensions: fenced_code, tables, toc)
         3. Wrap content sections in glassmorphism-card divs
         4. Apply syntax highlighting (Prism.js)
@@ -1554,15 +1554,15 @@ class MarkdownToHTMLConverter:
 ```python
 class NavigationBuilder:
     """
-    Builds hierarchical navigation from cortex-architecture/ folder structure.
+    Builds hierarchical navigation from cortex-registry\_cortex-docs\content\src/ folder structure.
     """
     
     def build_navigation(self, docs_root: Path) -> Dict:
         """
-        Scans cortex-architecture/ and builds navigation tree.
+        Scans cortex-registry\_cortex-docs\content\src/ and builds navigation tree.
         
         Input:
-          cortex-architecture/
+          cortex-registry\_cortex-docs\content\src/
             ├── index.md
             ├── capabilities/
             │   ├── overview.md
@@ -1633,7 +1633,7 @@ def generate_html_site(self):
     
     Pipeline:
       1. Extract registry data (__wiring_contract__.yaml)
-      2. Scan cortex-architecture/ for Markdown files
+      2. Scan cortex-registry\_cortex-docs\content\src/ for Markdown files
       3. For each MD file:
          a. Convert to HTML with glassmorphism cards
          b. Inject brain analogies
@@ -1651,7 +1651,7 @@ def generate_html_site(self):
     
     # Step 1-2: Discovery
     registry = self.extract_registry()
-    md_files = list(Path("_workspaces/cortex-architecture").rglob("*.md"))
+    md_files = list(Path("cortex-registry\_cortex-docs\content\src").rglob("*.md"))
     
     # Step 3: Convert Markdown to HTML
     converter = MarkdownToHTMLConverter()
@@ -1668,12 +1668,12 @@ def generate_html_site(self):
         )
         
         # Write output
-        output_path = Path("_build/site") / md_file.relative_to("_workspaces/cortex-architecture").with_suffix(".html")
+        output_path = Path("_build/site") / md_file.relative_to("cortex-registry\_cortex-docs\content\src").with_suffix(".html")
         output_path.parent.mkdir(parents=True, exist_ok=True)
         output_path.write_text(final_html)
     
     # Step 4-5: Build navigation + landing page
-    self.navigation_tree = NavigationBuilder().build_navigation(Path("_workspaces/cortex-architecture"))
+    self.navigation_tree = NavigationBuilder().build_navigation(Path("cortex-registry\_cortex-docs\content\src"))
     self._generate_landing_page()
     
     # Step 6-10: Remaining steps
@@ -2250,7 +2250,7 @@ on:
   push:
     branches: [main]
     paths:
-      - '_workspaces/cortex-architecture/**'
+      - 'cortex-registry\_cortex-docs\content\src/**'
       - 'cortex/**/*.py'
       - 'cortex-registry/**/*.yaml'
       - '.github/workflows/deploy-docs.yml'
@@ -2299,7 +2299,7 @@ jobs:
         run: |
           git config user.name "CORTEX Bot"
           git config user.email "cortex@users.noreply.github.com"
-          git add _workspaces/cortex-architecture/
+          git add cortex-registry\_cortex-docs\content\src/
           git commit -m "docs: Auto-refresh architecture docs [skip ci]"
           git push
   
@@ -2464,7 +2464,7 @@ from typing import Dict, List
 def get_last_doc_commit() -> str:
     """Get commit hash of last architecture doc update."""
     result = subprocess.run(
-        ["git", "log", "-1", "--format=%H", "--", "_workspaces/cortex-architecture/"],
+        ["git", "log", "-1", "--format=%H", "--", "cortex-registry\_cortex-docs\content\src/"],
         capture_output=True,
         text=True
     )
@@ -2618,7 +2618,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from cortex.orchestrators.internal.html_site_generator import HTMLSiteGenerator
 
 def main():
-    md_root = Path("_workspaces/cortex-architecture")
+    md_root = Path("cortex-registry\_cortex-docs\content\src")
     html_root = Path("_workspaces/cortex-gitpages")
     template_dir = Path("_workspaces/cortex-gitpages/templates")
     
@@ -3873,7 +3873,7 @@ NO markdown file generation allowed. References should be via semantic_search.
 
 All documentation context available via semantic_search:
 ```
-_workspaces/cortex-architecture/
+cortex-registry\_cortex-docs\content\src/
 ```
 
 ---
