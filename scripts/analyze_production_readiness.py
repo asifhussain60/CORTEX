@@ -34,7 +34,7 @@ def main():
                 pct = (int(done) / int(total) * 100) if int(total) > 0 else 0
             else:
                 pct = 0
-        except:
+        except (ValueError, TypeError, AttributeError, ZeroDivisionError):
             pct = 0
         
         phase_data = {

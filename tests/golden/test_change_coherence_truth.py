@@ -88,6 +88,11 @@ Use conda instead: `conda install package`.
         file_path="README.md",
         content=proposed_content,
         pre_edit_content=original_content,
+        orchestrator_context={
+            "source": "MasterOrchestrator",
+            "intent": "TEST",
+            "request_id": "test_duplicate_prevention_truth",
+        },
     )
     
     # TRUTH ASSERTIONS (no mocks)
@@ -162,6 +167,11 @@ This is version 1.0.0 of the project.
         file_path="DOCS.md",
         content=proposed_content,
         pre_edit_content=original_content,
+        orchestrator_context={
+            "source": "MasterOrchestrator",
+            "intent": "TEST",
+            "request_id": "test_version_consistency_truth",
+        },
     )
     
     # TRUTH ASSERTIONS (no mocks)
@@ -248,6 +258,11 @@ Rate limit information...
         file_path="API.md",
         content=proposed_content,
         pre_edit_content=original_content,
+        orchestrator_context={
+            "source": "MasterOrchestrator",
+            "intent": "TEST",
+            "request_id": "test_structure_preservation_truth",
+        },
     )
     
     # TRUTH ASSERTIONS (no mocks)
