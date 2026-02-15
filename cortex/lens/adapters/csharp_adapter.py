@@ -52,10 +52,43 @@ class CSharpAdapter(LanguageAdapter):
     """
 
     def __init__(self):
-        """Initialize CSharpAdapter with tree-sitter parser."""
-        self.language = ts_csharp.language()
-        self.parser = Parser()
-        self.parser.set_language(self.language)
+        """Initialize CSharpAdapter with tree-sitter parser.
+        
+        Handles both tree-sitter 0.20 (PyCapsule) and 0.21+ (Language) APIs.
+        """
+        try:
+            # Get language from tree-sitter-c-sharp
+            lang_obj = ts_csharp.language()
+            
+            # Check if it's already a Language object (0.21+ API)
+            if isinstance(lang_obj, Language):
+                self.language = lang_obj
+            else:
+                # It's a PyCapsule (0.20 API) - wrap it
+                # tree-sitter 0.20 expects Language to be constructed differently
+                # Workaround: Use language_library approach
+                from tree_sitter import Language as TSLanguage
+                try:
+                    # Try loading from shared library if available
+                    self.language = TSLanguage(ts_csharp.language_library(), 'c_sharp')
+                except (AttributeError, TypeError):
+                    # Fallback: Create mock Language for compatibility
+                    # This will allow initialization but log warning
+                    print("⚠️ CSharpAdapter: tree-sitter version mismatch detected")
+                    print("   tree-sitter: 0.20.x | tree-sitter-c-sharp: 0.23.x")
+                    print("   Recommend: pip install --upgrade tree-sitter>=0.21.0")
+                    print("   Fallback: Using pattern-based analysis for C#")
+                    self.language = None
+            
+            self.parser = Parser()
+            if self.language:
+                self.parser.set_language(self.language)
+            
+        except Exception as e:
+            print(f"⚠️ CSharpAdapter initialization failed: {e}")
+            print("   Falling back to pattern-based analysis")
+            self.language = None
+            self.parser = None
 
     def parse_file(self, file_path: Path) -> PolyglotASTResult:
         """
@@ -76,29 +109,39 @@ class CSharpAdapter(LanguageAdapter):
         # Read file content
         source_code = file_path.read_bytes()
 
+        # If parser not available (version mismatch), use pattern-based fallback
+        if not self.parser or not self.language:
+            return self._pattern_based_parse(file_path, source_code)
+
         # Parse with tree-sitter
-        tree = self.parser.parse(source_code)
-        root_node = tree.root_node
+        try:
+            tree = self.parser.parse(source_code)
+            root_node = tree.root_node
 
-        # Extract AST elements
-        classes = self._extract_classes(root_node, source_code)
-        functions = self._extract_functions(root_node, source_code)
-        imports = self._extract_imports(root_node, source_code)
-        namespace = self._extract_namespace(root_node, source_code)
+            # Extract AST elements
+            classes = self._extract_classes(root_node, source_code)
+            functions = self._extract_functions(root_node, source_code)
+            imports = self._extract_imports(root_node, source_code)
+            namespace = self._extract_namespace(root_node, source_code)
 
-        # Check for parse errors
-        parse_errors = self._collect_parse_errors(root_node)
+            # Check for parse errors
+            parse_errors = self._collect_parse_errors(root_node)
 
-        return PolyglotASTResult(
-            file_path=file_path,
-            language=LanguageType.CSHARP,
-            classes=classes,
-            functions=functions,
-            imports=imports,
-            raw_ast=root_node,
-            parse_errors=parse_errors,
-            metadata={"namespace": namespace} if namespace else {},
-        )
+            return PolyglotASTResult(
+                file_path=file_path,
+                language=LanguageType.CSHARP,
+                classes=classes,
+                functions=functions,
+                imports=imports,
+                raw_ast=root_node,
+                parse_errors=parse_errors,
+                metadata={"namespace": namespace} if namespace else {},
+            )
+        except Exception as e:
+            # Fallback to pattern-based parsing
+            print(f"⚠️ AST parsing failed for {file_path.name}: {e}")
+            print("   Using pattern-based fallback")
+            return self._pattern_based_parse(file_path, source_code)
 
     def get_supported_extensions(self) -> List[str]:
         """
@@ -516,3 +559,97 @@ class CSharpAdapter(LanguageAdapter):
             if child.type == child_type:
                 return child
         return None
+
+    def _pattern_based_parse(self, file_path: Path, source_code: bytes) -> PolyglotASTResult:
+        """
+        Fallback pattern-based C# parser for tree-sitter version mismatch.
+        
+        Uses regex patterns to extract basic structure when AST parsing unavailable.
+        
+        Args:
+            file_path: Path to C# file
+            source_code: File content as bytes
+            
+        Returns:
+            PolyglotASTResult with pattern-extracted elements
+        """
+        import re
+        
+        text = source_code.decode('utf-8', errors='ignore')
+        
+        # Extract classes using regex
+        classes = []
+        class_pattern = r'(?:public|internal|private|protected)?\s+(?:abstract|sealed|partial)?\s*class\s+(\w+)'
+        for match in re.finditer(class_pattern, text):
+            class_name = match.group(1)
+            line_num = text[:match.start()].count('\n') + 1
+            
+            classes.append(ClassInfo(
+                name=class_name,
+                line_start=line_num,
+                line_end=line_num,  # Approximate
+                methods=[],
+                base_classes=[],
+                docstring="",
+                is_abstract='abstract' in match.group(0),
+                attributes=[],
+            ))
+        
+        # Extract methods using regex
+        functions = []
+        # Match method declarations with return types (including Task<T>, List<T>, etc.)
+        method_pattern = r'(?:public|private|protected|internal)?\s+(?:static|async|virtual|override)?\s*(?:\w+(?:<[^>]+>)?)\s+(\w+)\s*\('
+        
+        # Also get all class names to filter out constructors
+        class_names = {c.name for c in classes}
+        
+        for match in re.finditer(method_pattern, text):
+            method_name = match.group(1)
+            # Skip property getters/setters and constructors (same name as class)
+            if method_name in ['get', 'set'] or method_name in class_names:
+                continue
+            
+            line_num = text[:match.start()].count('\n') + 1
+            
+            functions.append(FunctionInfo(
+                name=method_name,
+                line_start=line_num,
+                line_end=line_num,  # Approximate
+                parameters=[],
+                return_type='unknown',
+                decorators=[],
+                is_async='async' in match.group(0),
+            ))
+        
+        # Extract using statements
+        imports = []
+        using_pattern = r'using\s+([\w.]+)\s*;'
+        for match in re.finditer(using_pattern, text):
+            import_name = match.group(1)
+            line_num = text[:match.start()].count('\n') + 1
+            
+            imports.append(ImportInfo(
+                module=import_name,
+                names=[],  # C# using statements don't have specific names
+                line=line_num,
+                alias=None,
+            ))
+        
+        # Extract namespace
+        namespace_match = re.search(r'namespace\s+([\w.]+)', text)
+        namespace = namespace_match.group(1) if namespace_match else None
+        
+        return PolyglotASTResult(
+            file_path=file_path,
+            language=LanguageType.CSHARP,
+            classes=classes,
+            functions=functions,
+            imports=imports,
+            raw_ast=None,  # No AST available
+            parse_errors=[],
+            metadata={
+                "namespace": namespace,
+                "fallback_mode": True,
+                "reason": "tree-sitter version mismatch (0.20 vs 0.21+)"
+            },
+        )
