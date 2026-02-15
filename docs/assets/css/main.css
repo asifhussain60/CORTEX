@@ -338,6 +338,8 @@ body {
             drop-shadow(0 0 80px rgba(123, 97, 255, 0.4));
     transition: all 0.4s ease;
     cursor: pointer;
+    border: none !important;
+    outline: none !important;
 }
 
 /* Electric Aura Animation */
@@ -361,6 +363,8 @@ body {
             drop-shadow(0 0 140px rgba(123, 97, 255, 0.8))
             drop-shadow(0 0 200px rgba(0, 212, 255, 0.4)) !important;
     transform: scale(1.05) !important;
+    border: none !important;
+    outline: none !important;
 }
 
 /* Logo responsive breakpoints */
@@ -3351,11 +3355,14 @@ footer,
     margin-bottom: var(--spacing-xl);
     position: relative;
     display: inline-block;
+    z-index: 1;
 }
 
 .logo-container .hero-logo {
     filter: drop-shadow(0 0 40px rgba(0, 212, 255, 0.6))
             drop-shadow(0 0 80px rgba(123, 97, 255, 0.4));
+    position: relative;
+    z-index: 2;
 }
 
 /* Electric Ring System - Pure CSS */
@@ -3373,7 +3380,7 @@ footer,
     border-top-color: rgba(0, 212, 255, 0.6);
     border-right-color: rgba(0, 212, 255, 0.3);
     pointer-events: none;
-    z-index: -1;
+    z-index: 1;
 }
 
 .logo-container::before {
