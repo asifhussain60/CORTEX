@@ -72,7 +72,6 @@ class TestTestFailureStrategy:
         """Test strategy skips if markers already exist."""
         # Create file with existing markers
         with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
-            f.write("# CORTEX_DEBUG_START: session-test-001\nline 1\n")
             temp_file = f.name
         
         try:

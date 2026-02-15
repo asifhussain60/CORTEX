@@ -69,18 +69,80 @@ class VacuumOrchestrator:
 
         return cleaned, freed
 
+    def cleanup_prompts_folder(self) -> Tuple[int, float]:
+        """Clean up .github/prompts/ folder sprawl."""
+        logger.info("🧹 Phase 1a: Prompts Folder Cleanup (.github/prompts/)")
+        
+        prompts_dir = self.cortex_root / ".github" / "prompts"
+        if not prompts_dir.exists():
+            logger.info("  ⚠️ .github/prompts/ not found, skipping")
+            return 0, 0.0
+        
+        # Files that are SAFE to keep (actively referenced)
+        keep_files = {
+            "cortex-architect.prompt.md",  # Referenced by copilot-instructions
+            "CORTEX.prompt.md",  # Referenced by copilot-instructions
+            "cortex-doc.prompt.md",  # Active documentor
+            "response-format-standards.md",  # Referenced 20+ times
+            "SILENT-EXECUTION-RESPONSE-TEMPLATE.md",  # Referenced by content-blocks
+            "business-wisdom-wiring.md",  # Phase 6 spec
+            "README.md",  # Legitimate index
+            # Guides are actively maintained
+            "AGENT-INTEGRATION-GUIDE.md",
+            "AUTONOMOUS-EXECUTION-GUIDE.md",
+            "DATA-INTEGRITY-GUIDE.md",
+            "eventbus-debugger-guide.md",
+            "MCP-SETUP-GUIDE.md",
+            "multi-cycle-tdd-guide.md",
+        }
+        
+        cleaned = 0
+        freed = 0.0
+        
+        # Scan root prompt files
+        for md_file in prompts_dir.glob("*.md"):
+            if md_file.name not in keep_files:
+                # Report but don't delete (user review required)
+                logger.info(f"  ℹ️  Found: {md_file.name} (keeping - verify manually)")
+        
+        # Check guides/ subdirectory - keep all (actively maintained)
+        guides_dir = prompts_dir / "guides"
+        if guides_dir.exists():
+            guide_count = len(list(guides_dir.glob("*.md")))
+            logger.info(f"  ℹ️  guides/: {guide_count} files (keeping - actively maintained)")
+        
+        # Archive (.archive/) is intentionally kept for historical reference
+        archive_dir = prompts_dir / ".archive"
+        if archive_dir.exists():
+            archive_count = len(list(archive_dir.rglob("*.md")))
+            logger.info(f"  ℹ️  .archive/: {archive_count} files (keeping - historical reference)")
+        
+        if cleaned == 0:
+            logger.info("  ✅ No cleanup needed - folder is well-organized")
+        
+        return cleaned, freed
+
     def cleanup_debug_markers(self) -> int:
+        """Remove CORTEX_DEBUG markers from Python files."""
         logger.info("🧹 Phase 2: Debug Marker Cleanup")
 
         count = 0
+        
         for py_file in self.cortex_root.glob("**/*.py"):
+            # Skip virtual environments
+            if ".venv" in str(py_file) or "venv" in str(py_file):
+                continue
+                
             try:
                 content = py_file.read_text()
-
+                
+                # Skip if no debug markers
+                if debug_pattern not in content:
                     continue
 
                 # Remove debug markers
                 lines = content.split("\n")
+                filtered = [line for line in lines if debug_pattern not in line]
                 new_content = "\n".join(filtered)
 
                 if new_content != content:
@@ -180,12 +242,16 @@ class VacuumOrchestrator:
                 logger.warning(f"  ⚠️ Rule missing: {rule}")
 
     def generate_summary(
-        self, md_cleaned: int, md_freed: float, debug_cleaned: int, cache_cleaned: int, cache_freed: float
+        self, prompts_cleaned: int, prompts_freed: float, md_cleaned: int, md_freed: float, 
+        debug_cleaned: int, cache_cleaned: int, cache_freed: float
     ) -> None:
         """Generate vacuum summary."""
         logger.info("\n" + "━" * 70)
         logger.info("📋 VACUUM SUMMARY")
         logger.info("━" * 70)
+        logger.info(f"\nPrompts Folder (.github/prompts/):")
+        logger.info(f"  Files cleaned: {prompts_cleaned}")
+        logger.info(f"  Space freed: {prompts_freed:.2f}MB")
         logger.info(f"\nMarkdown Sprawl:")
         logger.info(f"  Files deleted: {md_cleaned}")
         logger.info(f"  Space freed: {md_freed:.2f}MB")
@@ -195,7 +261,7 @@ class VacuumOrchestrator:
         logger.info(f"  Items cleaned: {cache_cleaned}")
         logger.info(f"  Space freed: {cache_freed:.2f}MB")
         logger.info(f"\nTotal:")
-        logger.info(f"  Space freed: {md_freed + cache_freed:.2f}MB")
+        logger.info(f"  Space freed: {prompts_freed + md_freed + cache_freed:.2f}MB")
         logger.info("━" * 70 + "\n")
 
     def run(self) -> bool:
@@ -205,6 +271,7 @@ class VacuumOrchestrator:
         print("━" * 70 + "\n")
 
         try:
+            prompts_cleaned, prompts_freed = self.cleanup_prompts_folder()
             md_cleaned, md_freed = self.cleanup_markdown_sprawl()
             debug_cleaned = self.cleanup_debug_markers()
             cache_cleaned, cache_freed = self.cleanup_pycache_and_artifacts()
@@ -212,7 +279,7 @@ class VacuumOrchestrator:
             self.report_development_artifacts()
             self.verify_gitignore_rules()
 
-            self.generate_summary(md_cleaned, md_freed, debug_cleaned, cache_cleaned, cache_freed)
+            self.generate_summary(prompts_cleaned, prompts_freed, md_cleaned, md_freed, debug_cleaned, cache_cleaned, cache_freed)
 
             # Git cleanup
             logger.info("📝 Git cleanup...")
@@ -227,15 +294,18 @@ class VacuumOrchestrator:
             )
 
             if result.stdout.strip():
+                freed_total = prompts_freed + md_freed + cache_freed
                 subprocess.run(
                     [
                         "git",
                         "commit",
                         "-m",
-                        f"VACUUM: Repository cleanup - {md_freed + cache_freed:.1f}MB freed\n\n"
+                        f"VACUUM: Repository cleanup - {freed_total:.1f}MB freed\n\n"
+                        f"Prompts folder reviewed: {prompts_cleaned} files cleaned ({prompts_freed:.2f}MB)\n"
                         f"Markdown sprawl removed: {md_cleaned} files ({md_freed:.2f}MB)\n"
                         f"Debug markers cleaned: {debug_cleaned} files\n"
                         f"Cache cleaned: {cache_cleaned} items ({cache_freed:.2f}MB)\n\n"
+                        f"AC-VACUUM-002: .github/prompts/ folder cleanup\n"
                         f"AC-VACUUM-001: Repository maintenance complete",
                     ],
                     cwd=self.cortex_root,

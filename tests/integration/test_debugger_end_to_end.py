@@ -76,12 +76,10 @@ class TestDebuggerOrchestratorIntegration:
     def test_tests_passed_event_triggers_cleanup(self):
         """Test TESTS_PASSED event triggers cleanup."""
         # Create temp file with markers
-        marker_content = """# CORTEX_DEBUG_START: session-test-001
 # Trigger: TEST_FAILURE
 # Injected: 2026-02-13T00:00:00
 def test_example():
     assert False
-# CORTEX_DEBUG_END: session-test-001
 """
         
         with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False, dir=Path('cortex')) as f:

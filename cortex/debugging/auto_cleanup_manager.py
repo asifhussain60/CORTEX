@@ -41,7 +41,6 @@ class AutoCleanupManager:
     def __init__(self):
         """Initialize AutoCleanupManager."""
         self.marker_pattern = re.compile(
-            r'# CORTEX_DEBUG_START: (session-[^\n]+)\n.*?# CORTEX_DEBUG_END: \1',
             re.DOTALL
         )
     
@@ -144,7 +143,6 @@ class AutoCleanupManager:
                 
                 # Find markers with timestamps
                 marker_pattern_with_timestamp = re.compile(
-                    r'# CORTEX_DEBUG_START: (session-[^\n]+)\n'
                     r'.*?# Injected: ([^\n]+)\n',
                     re.DOTALL
                 )
@@ -208,9 +206,7 @@ class AutoCleanupManager:
         """
         # Pattern to match specific session marker
         pattern = re.compile(
-            rf'# CORTEX_DEBUG_START: {re.escape(session_id)}\n'
             r'.*?'
-            rf'# CORTEX_DEBUG_END: {re.escape(session_id)}\n?',
             re.DOTALL
         )
         
