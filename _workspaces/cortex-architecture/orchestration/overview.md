@@ -159,18 +159,18 @@ When a request enters CORTEX, it follows the same path a thought takes through t
 ```
 1. 👂 Sensory Input — User request arrives
    ↓
-2. 🌐 MCP Gateway — cortex_process_request (peripheral nerve)
+2. 🌐 MCP Gateway — cortex_process_request (entry point)
    ↓
-3. 🧠 MasterOrchestrator — Prefrontal cortex validates & delegates
+3. 🧠 MasterOrchestrator — Control tower validates & delegates
    ↓
-4. 🧭 IntentRouter — Thalamus classifies the signal
-   │   IMPLEMENT → TDDOrchestrator (motor cortex)
-   │   REFACTOR  → RefactoringOrchestrator (Wernicke's area)
-   │   ANALYZE   → UnifiedAnalysisOrchestrator (visual association)
+4. 🧭 IntentRouter — Security checkpoint classifies the request
+   │   IMPLEMENT → TDDOrchestrator (execution team)
+   │   REFACTOR  → RefactoringOrchestrator (renovation team)
+   │   ANALYZE   → UnifiedAnalysisOrchestrator (inspection team)
    ↓
-5. 🎯 Specialist Orchestrator — Processes in its cognitive domain
+5. 🎯 Specialist Orchestrator — Processes in its domain
    ↓
-6. 🛡️ Quality Gate — UnifiedQualityAssuranceOrchestrator (anterior cingulate)
+6. 🛡️ Quality Gate — UnifiedQualityAssuranceOrchestrator (quality inspector)
    ↓
 7. 📤 Motor Output — Validated response delivered via MCP
 ```
@@ -180,24 +180,24 @@ When a request enters CORTEX, it follows the same path a thought takes through t
 ```python
 # User: "Implement user authentication"
 
-# Step 1: MCP Entry (sensory nerve fires)
+# Step 1: MCP Entry (request received)
 cortex_process_request(
     request="Implement user authentication",
     enable_challenge=True
 )
 
-# Step 2: MasterOrchestrator delegates (prefrontal cortex)
-intent = IntentRouter.classify(request)  # Thalamus routes
+# Step 2: MasterOrchestrator delegates (control tower)
+intent = IntentRouter.classify(request)  # Checkpoint classifies
 # Result: IntentType.IMPLEMENT → TDDOrchestrator
 
-# Step 3: TDD Cycle (motor cortex executes)
+# Step 3: TDD Cycle (execution team)
 orchestrator.execute_tdd_cycle(
     phase='RED',      # Write failing tests (intention)
     phase='GREEN',    # Implement minimal code (action)
     phase='REFACTOR'  # Apply best practices (refinement)
 )
 
-# Step 4: Quality Gate (anterior cingulate checks for errors)
+# Step 4: Quality Gate (inspector checks for errors)
 UnifiedQualityAssuranceOrchestrator.validate([
     'CORE-008',  # Tests before code
     'CORE-011',  # Type hints
