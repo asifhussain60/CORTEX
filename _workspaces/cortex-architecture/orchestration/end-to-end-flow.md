@@ -1,6 +1,15 @@
 # End-to-End Request Flow
 
-**Purpose:** Complete documentation of the CORTEX request lifecycle — from stimulus to response  
+**Purp| Stage | System Analogy | Purpose |
+|-------|----------------|---------|
+| 1. Reception | Input receiver | Request capture |
+| 2. Authentication | Security gateway | Access control |
+| 3. Classification | Request router (IntentRouter) | Intent detection & routing |
+| 4. Enrichment | Context enricher (UnifiedAnalysis) | Context integration |
+| 5. Governance | Quality gate (UnifiedQA) | Validation & quality control |
+| 6. Execution | Action processor (target orchestrator) | Operation execution |
+| 7. Processing | Event logger | Audit trail & storage |
+| 8. Delivery | Response formatter (InteractionOrch) | Result formatting |plete documentation of the CORTEX request lifecycle — from stimulus to response  
 **Audience:** All Technical Stakeholders  
 **Last Updated:** 2026-02-14 | **Orchestrators:** 21 (14 active + 4 super + 7 deprecated)
 
@@ -25,21 +34,21 @@
 
 ## Overview
 
-### Brain Analogy: The Perception-Action Cycle
+### System Analogy: The Restaurant Kitchen Pipeline
 
-When you see a ball flying toward you, your brain executes a rapid sequence: the retina captures photons (reception), the visual cortex identifies the object (classification), the parietal cortex maps its trajectory (enrichment), the prefrontal cortex decides to catch or dodge (governance), and the motor cortex fires the muscles (execution). This entire **perception-action cycle** completes in under 200 milliseconds.
+When you see a ball flying toward you, your brain executes a rapid sequence: the retina captures photons (reception), the visual cortex identifies the object (classification), the parietal cortex maps its trajectory (enrichment), the prefrontal cortex decides to catch or dodge (governance), and the line cook fires the muscles (execution). This entire **perception-action cycle** completes in under 200 milliseconds.
 
-CORTEX processes every request through an analogous 8-stage cognitive pipeline. Each stage maps to a brain function, and like the biological brain, many stages overlap through parallel processing and pre-warming (Phase 49 Context Crystallization Layer).
+CORTEX processes every request through an analogous 8-stage cognitive pipeline. Each stage maps to a brain function, and like the biological brain, many stages overlap through parallel processing and pre-warming (Context Crystallization Layer).
 
 | Stage | Brain Region | Cognitive Function |
 |-------|-------------|--------------------|
 | 1. Reception | Sensory neurons | Stimulus capture |
 | 2. Authentication | Blood-brain barrier | Access control |
-| 3. Classification | Thalamus (IntentRouter) | Sensory relay & routing |
-| 4. Enrichment | Association cortex (UnifiedAnalysis) | Context integration |
-| 5. Governance | Anterior cingulate (UnifiedQA) | Error detection & quality gate |
-| 6. Execution | Motor cortex (target orchestrator) | Action execution |
-| 7. Processing | Hippocampus | Memory formation & audit |
+| 3. Classification | Expeditor (IntentRouter) | Sensory relay & routing |
+| 4. Enrichment | Recipe gathering (UnifiedAnalysis) | Context integration |
+| 5. Governance | Sous chef (UnifiedQA) | Error detection & quality gate |
+| 6. Execution | Line cook (target orchestrator) | Action execution |
+| 7. Processing | Expo station | Memory formation & audit |
 | 8. Delivery | Broca’s area (InteractionOrch) | Response articulation |
 
 ---
@@ -249,7 +258,7 @@ async def classify_intent(
 
 ### LENS Analysis via UnifiedAnalysisOrchestrator
 
-Like the **association cortex** integrating sensory streams into a unified perception, this stage combines Git history, AST structure, and code comments into a coherent understanding of the workspace. **Phase 49 Context Crystallization Layer (CCL)** pre-warms this data asynchronously, reducing enrichment latency by ~15%.
+Like the **recipe gathering** integrating sensory streams into a unified perception, this stage combines Git history, AST structure, and code comments into a coherent understanding of the workspace. **Context Crystallization Layer (CCL)** pre-warms this data asynchronously, reducing enrichment latency by ~15%.
 
 ```python
 async def enrich_context(
@@ -260,7 +269,7 @@ async def enrich_context(
     """
     Enrich request with LENS intelligence via UnifiedAnalysisOrchestrator.
     
-    Phase 49 CCL may have pre-warmed this data asynchronously.
+    CCL may have pre-warmed this data asynchronously.
     """
     analyzer = UnifiedAnalysisOrchestrator(repo_path=session.workspace_path)
     
@@ -524,7 +533,7 @@ async def deliver_response(
 ## Related Documents
 
 - [MasterOrchestrator](master-orchestrator.md) — Prefrontal cortex coordination
-- [IntentRouter](intent-router.md) — Thalamus classification
+- [IntentRouter](intent-router.md) — Expeditor classification
 - [LENS Overview](../lens/overview.md) — Visual cortex enrichment
 - [Governance](../capabilities/governance-compliance.md) — Immune system validation
 
