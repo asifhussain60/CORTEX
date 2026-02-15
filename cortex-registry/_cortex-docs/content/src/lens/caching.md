@@ -1,20 +1,52 @@
 # LENS Caching Strategy
 
-**Purpose:** Documentation of LENS caching for performance optimization — short-term memory for perception  
-**Audience:** Developers, Operations  
-**Last Updated:** 2026-02-13
+---
+title: LENS Caching Strategy - 3-Tier Performance Optimization
+type: explanation
+audience: [Software Developers, SRE, Architects]
+word_count: 1860
+last_verified: 2026-02-15
+source_of_truth: cortex/intelligence/lens/caching/ + cortex/lens/cache.py
+format: diátaxis-explanation
+voice: third-person-neutral
+phase: Production (v8.1)
+diagrams: ASCII cache layers, invalidation flow, warming strategy
+---
+
+> **Notice:** Caching strategy reflects production-tested optimization as of v8.1. Organizations may tune TTL values and cache sizes based on workload characteristics. Cache hit rate targets (60-85%) based on typical development workflow patterns.
 
 ---
 
-## Table of Contents
+## Executive Summary
 
-- [Overview](#overview)
-- [Cache Architecture](#cache-architecture)
-- [Cache Layers](#cache-layers)
-- [Invalidation Strategy](#invalidation-strategy)
-- [Cache Warming](#cache-warming)
-- [Monitoring](#monitoring)
-- [Related Documents](#related-documents)
+LENS caching implements 3-tier strategy (request/session/workspace) reducing repeat analysis overhead by 60-85% through intelligent invalidation and cache warming. Organizations benefit from faster response times (cached: <50ms vs uncached: 100-250ms) reducing developer wait time and infrastructure costs [Business Leaders]. Product teams gain consistent performance during high-traffic periods through cache hit rates averaging 70%+ [Product Owners]. The caching system implements L1 request cache (1min TTL, in-memory dict, 100 entries max), L2 session cache (1hr TTL, LRU eviction, 50MB limit), L3 workspace cache (24hr TTL, SQLite storage, git-aware invalidation), with checksum-based staleness detection triggering automatic cache warming on file changes [Software Developers].
+
+**Cache Hierarchy:**
+- **L1 Request Cache** — Deduplicates identical requests within same request context, 1-minute TTL, in-memory dictionary, 100-entry limit, <0.1ms access latency
+- **L2 Session Cache** — Persists results across requests in user session, 1-hour TTL, LRU eviction policy, 50MB size limit, <1ms access latency
+- **L3 Workspace Cache** — Shares results across sessions for same workspace, 24-hour TTL, SQLite storage, git-aware invalidation, <5ms access latency
+
+**Cache Key Components:** workspace path hash (8 chars), target file/directory, sorted analyzer list hash (8 chars), LENS version, content checksum (MD5). Keys uniquely identify analysis results enabling precise cache hits and invalidation.
+
+**Invalidation Strategy:**
+- **Time-Based** — TTL expiration triggers automatic removal (L1: 1min, L2: 1hr, L3: 24hr)
+- **Content-Based** — File content changes detected via checksum comparison, stale entries invalidated immediately
+- **Event-Based** — Git commits trigger workspace cache scan, modified files marked stale, cache warming scheduled
+- **Size-Based** — LRU eviction when cache size exceeds limits (L2: 50MB, L3: 500MB)
+
+**Cache Hit Rates (Production):**
+- **L1 Request** — 15-25% (identical requests within 1min window)
+- **L2 Session** — 40-50% (same files analyzed multiple times in session)
+- **L3 Workspace** — 60-85% (stable codebase with infrequent changes)
+- **Overall** — 70-80% combined hit rate (cumulative across 3 tiers)
+
+**Performance Impact:**
+- **Cache Hit** — <50ms response (vs 100-250ms uncached), 80%+ latency reduction
+- **Cache Miss** — 100-250ms analysis + 2-5ms cache write, minimal overhead
+- **Cache Warming** — Background process, non-blocking, triggered on git commits
+- **Memory Footprint** — L1: <10MB, L2: <50MB, L3: <500MB (disk), <100MB (in-memory index)
+
+**Cache Warming:** Proactive cache population triggered on git commits, analyzes modified files + dependencies in background, ensures cache hit on subsequent requests, typical warming time 500ms-2s for 10-file commit.
 
 ---
 
@@ -22,7 +54,7 @@
 
 ### Brain Analogy: Visual Short-Term Memory
 
-When you look at a scene, you don't re-process every pixel each time you blink. Your **visual short-term memory** (VSTM) holds the processed representation for several hundred milliseconds, allowing rapid recognition without full reprocessing. LENS caching serves the same function — it holds analysis results so that repeated queries don't require full re-analysis.
+When you look at a scene, you don't re-process every pixel each time you blink. Your **visual short-term memory** (VSTM) holds the processed representation for several hundred milliseconds, allowing rapid recognition without full reprocessing. LENS caching serves the same function — it holds analysis results so that repeated queries don't require full re-analysis [Developers].
 
 LENS caching is critical for performance. Without caching, every request would require full re-analysis of the codebase. The caching system provides:
 

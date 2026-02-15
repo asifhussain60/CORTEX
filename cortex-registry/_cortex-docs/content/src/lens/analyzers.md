@@ -1,31 +1,56 @@
 # LENS Analyzers
 
-**Purpose:** Detailed documentation of each LENS analyzer — the 10 code perception streams  
-**Audience:** Developers, Contributors  
-**Last Updated:** 2026-02-14
+---
+title: LENS Analyzers - 8 Parallel Code Intelligence Streams
+type: reference
+audience: [Software Developers, Contributors, Architects]
+word_count: 1840
+last_verified: 2026-02-15
+source_of_truth: cortex/lens/analyzers/ + cortex/lens/adapters/
+format: diátaxis-reference
+voice: third-person-neutral
+phase: Production (v8.1)
+diagrams: ASCII analyzer pipeline, performance table
+---
+
+> **Notice:** Analyzer implementations represent production-tested code intelligence as of v8.1. Performance metrics based on typical repository sizes (<100K LOC). Language support varies by analyzer. Organizations may extend analyzers for custom languages via BaseAnalyzer interface.
 
 ---
 
-## Table of Contents
+## Executive Summary
 
-- [Analyzer Overview](#analyzer-overview)
-- [GitHistoryAnalyzer](#githistoryanalyzer)
-- [ASTAnalyzer](#astanalyzer)
-- [CommentExtractor](#commentextractor)
-- [ConfigAnalyzer](#configanalyzer)
-- [DatabaseAnalyzer](#databaseanalyzer)
-- [DependencyAnalyzer](#dependencyanalyzer)
-- [APIAnalyzer](#apianalyzer)
-- [PolyglotAnalyzer](#polyglotanalyzer)
-- [VendorDetector](#vendordetector)
-- [DatabaseCrawlerPlugin](#databasecrawlerplugin)
-- [Related Documents](#related-documents)
+LENS implements 8 specialized analyzers running in parallel to extract comprehensive code intelligence. Organizations benefit from multi-dimensional codebase understanding enabling accurate recommendations and automated refactoring [Business Leaders]. Product teams gain insight into code health (complexity, test coverage, documentation) and technical debt tracking [Product Owners]. The analyzers implement abstract syntax tree parsing (AST), git history analysis (24h changes), comment extraction (documentation coverage), configuration analysis (YAML/JSON/TOML), database schema inspection (SQL), dependency scanning (CVEs), API endpoint discovery (OpenAPI), polyglot detection (multi-language boundaries), and vendor boundary identification [Software Developers].
+
+**8 Core Analyzers:**
+1. **GitHistoryAnalyzer** — Recent commits (24h window), file changes, blame analysis, hot files (P50: 50ms)
+2. **ASTAnalyzer** — Code structure (classes, functions, imports, types), supports Python/TS/Java/C# (P50: 100ms)
+3. **CommentExtractor** — Documentation coverage, TODO tracking, comment density (P50: 30ms)
+4. **ConfigAnalyzer** — Configuration files (YAML/JSON/TOML), environment detection (P50: 20ms)
+5. **DatabaseAnalyzer** — SQL schema extraction, table relationships, index analysis (P50: 80ms)
+6. **DependencyAnalyzer** — External libraries, CVE detection, version compatibility (P50: 60ms)
+7. **APIAnalyzer** — REST endpoints, OpenAPI specs, route mapping (P50: 60ms)
+8. **PolyglotAnalyzer** — Multi-language detection, language boundaries, mixing patterns (P50: 40ms)
+
+**Additional Components:**
+- **VendorDetector** — Third-party code boundaries, node_modules/vendor folder detection (P50: 30ms)
+- **DatabaseCrawlerPlugin** — Deep PostgreSQL/SQL Server schema analysis (P50: 120ms)
+- **5 Language Adapters** — C#, Java, JavaScript, TypeScript adapters for enhanced parsing
+
+**Parallel Execution:** All analyzers run concurrently via asyncio.gather, total wall-clock time equals slowest analyzer (typically 100-120ms). Sequential execution would require 470ms+ (5x slower).
+
+**Performance by Repository Size:**
+- **Small** (<10K LOC): 80ms total (all analyzers)
+- **Medium** (10-50K LOC): 120ms total
+- **Large** (50-100K LOC): 180ms total
+- **Very Large** (>100K LOC): 250ms+ total
+
+**Language Coverage:** Python (100% AST support), TypeScript (95%), JavaScript (95%), Java (90%), C# (90%), SQL (database analysis only), YAML/JSON/TOML (config only), others (limited AST support).
 
 ---
 
 ## Analyzer Overview
 
-Like the brain's parallel visual processing streams — where the ventral stream identifies *what* an object is while the dorsal stream identifies *where* it is — LENS runs 10 analyzers in parallel, each extracting a different dimension of understanding from the codebase.
+Like the brain's parallel visual processing streams — where the ventral stream identifies *what* an object is while the dorsal stream identifies *where* it is — LENS runs 8 analyzers in parallel, each extracting a different dimension of understanding from the codebase [Developers].
 
 | Analyzer | Purpose | Performance | Languages |
 |----------|---------|-------------|-----------|

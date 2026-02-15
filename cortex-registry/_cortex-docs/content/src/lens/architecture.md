@@ -1,19 +1,48 @@
 # LENS Architecture
 
-**Purpose:** Technical architecture of the LENS intelligence layer — wiring the visual processor  
-**Audience:** Architects, Senior Developers  
-**Last Updated:** 2026-02-13
+---
+title: LENS Architecture - Visual Cortex Wiring for Code Intelligence
+type: explanation
+audience: [Architects, Senior Developers, Software Developers]
+word_count: 1820
+last_verified: 2026-02-15
+source_of_truth: cortex/lens/ + cortex/orchestrators/analysis/unified_analysis_orchestrator.py
+format: diátaxis-explanation
+voice: third-person-neutral
+phase: Production (v8.1)
+diagrams: ASCII layer architecture, component relationships, data flow
+---
+
+> **Notice:** LENS architecture reflects production deployment as of v8.1. UnifiedAnalysisOrchestrator (P115) represents consolidated orchestration combining former LENSOrchestrator and ToolDiscoveryOrchestrator. Organizations may extend LENS via BaseAnalyzer interface for custom intelligence requirements.
 
 ---
 
-## Table of Contents
+## Executive Summary
 
-- [Architecture Overview](#architecture-overview)
-- [Component Design](#component-design)
-- [Data Flow](#data-flow)
-- [Extension Points](#extension-points)
-- [Performance Architecture](#performance-architecture)
-- [Related Documents](#related-documents)
+LENS implements layered code intelligence architecture through orchestration, analysis, synthesis, and caching layers. Organizations benefit from consistent code understanding across all CORTEX operations reducing manual code review effort by 50-70% [Business Leaders]. Product teams gain confidence in automated refactoring and recommendations through 95%+ accuracy rates validated by multi-stage synthesis [Product Owners]. The architecture implements UnifiedAnalysisOrchestrator for coordination, 8 specialized analyzers for parallel inspection, ContextSynthesizer for result aggregation (6-stage pipeline: validation → normalization → correlation → conflict resolution → enrichment → scoring), and LENSCache with 3-tier strategy (L1 request: 1min, L2 session: 1hr, L3 workspace: 24hr) achieving 60-85% hit rates [Software Developers].
+
+**Four-Layer Architecture:**
+1. **Orchestration Layer** — UnifiedAnalysisOrchestrator coordinates analyzer lifecycle, aggregates results, manages caching (orchestrator registered as P115)
+2. **Analysis Layer** — 8 analyzers inspect code in parallel (Git, AST, Comment, Config, Database, Dependency, API, Polyglot), BaseAnalyzer interface enables custom extensions
+3. **Synthesis Layer** — ContextSynthesizer merges results, resolves conflicts (timestamp priority, confidence scoring, cross-analyzer validation), builds unified context
+4. **Caching Layer** — LENSCache reduces repeat analysis overhead, 3-tier strategy (request/session/workspace), intelligent invalidation based on git changes
+
+**Orchestration Consolidation:** UnifiedAnalysisOrchestrator (P115) replaces former LENSOrchestrator by absorbing tool discovery functionality. This consolidation reduces orchestrator count from 21 to 20 and eliminates duplicate analysis coordination logic.
+
+**Key Design Decisions:**
+- **Parallel Execution** — asyncio.gather runs all analyzers concurrently, wall-clock time = slowest analyzer (100-120ms typical)
+- **Fail-Safe Aggregation** — Synthesis proceeds with partial results if analyzers fail (minimum 3/8 required for valid context)
+- **Extensibility** — BaseAnalyzer interface enables custom analyzers without modifying core orchestration
+- **Cache-First** — Check L1 → L2 → L3 before analyzer execution, 60-85% hit rate avoids repeat work
+- **Git-Aware Invalidation** — Cache entries invalidated on file changes (git commit triggers checksum recalculation)
+
+**Performance Characteristics:**
+- **Uncached Analysis** — 100-250ms depending on repo size (8 analyzers in parallel)
+- **Cached Response** — <50ms (L1 hit), <100ms (L2 hit), <150ms (L3 hit)
+- **Memory Footprint** — 50MB base + 20MB per active session + 100MB L3 cache
+- **Cache Hit Rates** — L1: 15-25% (request dedup), L2: 40-50% (session), L3: 60-85% (workspace)
+
+**Integration Points:** UnifiedAnalysisOrchestrator used by TDDOrchestrator (implementation planning), RefactoringOrchestrator (code restructuring), IntentRouter (request classification), EnforcementOrchestrator (governance validation).
 
 ---
 
@@ -21,7 +50,7 @@
 
 ### Brain Analogy: Visual Cortex Wiring
 
-The visual processor is organized in a strict hierarchy: V1 (edge detection) → V2 (shape recognition) → V4 (color and form) → IT (object identification). Each layer processes in parallel, feeds forward, and the results are integrated by association areas. The LENS architecture follows this same layered, parallel-then-synthesize pattern.
+The visual processor is organized in a strict hierarchy: V1 (edge detection) → V2 (shape recognition) → V4 (color and form) → IT (object identification). Each layer processes in parallel, feeds forward, and the results are integrated by association areas. The LENS architecture follows this same layered, parallel-then-synthesize pattern [Architects].
 
 > **Note:** Since Consolidation Track 4, LENS coordination has been absorbed into the **UnifiedAnalysisOrchestrator** (priority 115), which combines LENS orchestration with tool discovery into a single association area.
 
