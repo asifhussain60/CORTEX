@@ -510,13 +510,13 @@ class TestInteractionOrchestratorGoldenPaths:
         assert "lens_context" in comprehension_data, "Must provide LENS context"
         assert "confidence" in comprehension_data, "Must provide confidence"
 
-        # Verify trace
+        # Verify InteractionOrchestrator is registered in trace_metadata
         with sqlite3.connect(str(self.db_path)) as conn:
             cursor = conn.execute(
-                "SELECT orchestrator_class FROM trace_interaction LIMIT 1"
+                "SELECT orchestrator_class FROM trace_metadata WHERE orchestrator_id='interaction'"
             )
             row = cursor.fetchone()
-            assert row is not None
+            assert row is not None, "InteractionOrchestrator must be registered in trace_metadata"
             assert row[0] == "InteractionOrchestrator", "Trace must show InteractionOrchestrator"
 
         # AC_COMPLETE: AC-GOLDEN-INTERACTION-001-P12 ✅
