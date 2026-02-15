@@ -12,17 +12,10 @@ Platform: Windows/macOS compatible
 """
 
 import pytest
-from dataclasses import dataclass
-from typing import Optional
+from cortex.orchestrators.support.onboarding_use_cases.generate_business_narrative import BusinessNarrative
 
 
-@dataclass
-class BusinessNarrative:
-    """Business narrative model."""
-    title: str
-    summary: str
-    key_insights: list
-    target_audience: str
+class TestGenerateBusinessNarrativeUseCase:
     confidence_score: float  # 0.0-1.0
 
 

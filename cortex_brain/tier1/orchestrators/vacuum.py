@@ -11,11 +11,12 @@ from typing import Any, Dict, Optional, List
 import sys
 from pathlib import Path
 
-# Add cortex to path
-cortex_path = Path(__file__).parent.parent.parent / "cortex"
-sys.path.insert(0, str(cortex_path))
+# Add cortex to path for Result import
+cortex_path = Path(__file__).parent.parent.parent.parent / "cortex"
+if str(cortex_path) not in sys.path:
+    sys.path.insert(0, str(cortex_path))
 
-from cortex.brain.core.result import Result, Ok, Err
+from cortex.core.result import Result, Ok, Err
 from . import cleaners
 
 

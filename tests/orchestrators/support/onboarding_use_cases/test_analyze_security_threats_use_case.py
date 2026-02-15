@@ -12,27 +12,10 @@ Platform: Windows/macOS compatible
 """
 
 import pytest
-from enum import Enum
-from dataclasses import dataclass
-from typing import List
-
-
-class SeverityLevel(str, Enum):
-    """Threat severity classification."""
-    P0_CRITICAL = "P0"
-    P1_HIGH = "P1"
-    P2_MEDIUM = "P2"
-
-
-@dataclass
-class SecurityRisk:
-    """Security risk model."""
-    id: str
-    title: str
-    severity: SeverityLevel
-    description: str
-    mitigation: str
-    affected_files: List[str]
+from cortex.orchestrators.support.onboarding_use_cases.analyze_security_threats import (
+    SecurityRisk,
+    SeverityLevel
+)
 
 
 class TestAnalyzeSecurityThreatsUseCase:

@@ -30,9 +30,19 @@ from typing import Dict, List, Any, Optional
 from datetime import datetime
 import asyncio
 
-# Simulated imports (would come from actual cortex modules)
-from cortex.intent_router.router import EnhancedIntentRouter, IntentRoutingRequest
-from cortex.intent_router.capability_matcher import IntentType
+# Production IntentRouter imports
+from cortex.orchestrators.core.intent_router import IntentRouter, RoutingDecision
+# Compatibility layer for old IntentRoutingRequest type
+from dataclasses import dataclass
+from typing import Optional, Dict, Any
+
+
+@dataclass
+class IntentRoutingRequest:
+    """Compatibility wrapper for health check tests."""
+    intent_type: str
+    query: str
+    context: Optional[Dict[str, Any]] = None
 
 
 class HealthStatus(Enum):
@@ -70,7 +80,7 @@ class HealthResponse:
 class HealthCheckService:
     """Service for health checking and readiness probes."""
 
-    def __init__(self, router: EnhancedIntentRouter):
+    def __init__(self, router: IntentRouter):
         """Initialize health check service.
         
         Args:
@@ -99,12 +109,12 @@ class HealthCheckService:
         try:
             # Test basic routing capability
             req = IntentRoutingRequest(
-                request_id="health-check",
-                user_query="Health check",
-                intent=IntentType.QUERY,
-                confidence=0.85,
+                intent_type="QUERY",
+                query="Health check",
+                context={}
             )
-            result = self.router.route(req)
+            # IntentRouter.route() takes (query: str, context: dict)
+            result = self.router.route(query=req.query, context=req.context or {})
 
             end_ns = time.perf_counter_ns()
             latency_ms = (end_ns - start_ns) / 1_000_000

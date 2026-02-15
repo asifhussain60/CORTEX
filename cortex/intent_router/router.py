@@ -1,4 +1,17 @@
 # AC_START: AC-PHASE81-S3-003
+# =============================================================================
+# DEPRECATED: Enhanced IntentRouter (Phase 81)
+# =============================================================================
+# Status: DEPRECATED as of Phase 25 S2 (2026-02-15)
+# Reason: Consolidation to single IntentRouter implementation (CORE-035)
+#
+# Migration: Use cortex.orchestrators.core.intent_router.IntentRouter
+#
+# This module is preserved for reference only. All imports should migrate to:
+#   from cortex.orchestrators.core.intent_router import IntentRouter
+#
+# See: cortex/intent_router/DEPRECATED.md for full migration guide
+# =============================================================================
 """
 Enhanced IntentRouter with Capability-Based Agent Selection
 
