@@ -257,22 +257,29 @@ class CommentAnalyzer:
             CommentAnalysisResult containing all extracted comment data.
         """
         result = CommentAnalysisResult()
+        tree = None
 
         # Parse AST for docstrings
         try:
             tree = ast.parse(source)
             result.docstrings = self._extract_docstrings(tree, source)
-        except SyntaxError:
-            pass
+        except SyntaxError as e:
+            # Capture parse failure as quality issue
+            result.quality_issues.append(QualityIssue(
+                type="SYNTAX_ERROR",
+                message=f"Failed to parse file: {str(e)}",
+                line_number=getattr(e, 'lineno', 1),
+                severity="ERROR",
+            ))
 
-        # Extract inline comments
+        # Extract inline comments (doesn't require AST)
         result.inline_comments = self._extract_inline_comments(source)
 
-        # Extract tech debt markers
+        # Extract tech debt markers (doesn't require AST)
         result.tech_debt = self._extract_tech_debt(source)
 
-        # Check for quality issues
-        result.quality_issues = self._analyze_quality(tree if 'tree' in dir() else None, source, result)
+        # Check for quality issues (uses AST if available)
+        result.quality_issues.extend(self._analyze_quality(tree, source, result))
 
         return result
 
