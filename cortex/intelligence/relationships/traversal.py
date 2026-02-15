@@ -169,17 +169,63 @@ class RelationshipTraversalEngine(BaseIntelligenceEngine):
             cache_ttl=600
         )
 
+    def validate_context(self, context: Any) -> bool:
+        """
+        Validate analysis context before execution.
+        
+        Args:
+            context: AnalysisContext with file_path to validate
+            
+        Returns:
+            True if valid
+            
+        Raises:
+            ValueError: If file doesn't exist or is not Python
+        """
+        # Handle dict-based context (legacy)
+        if isinstance(context, dict):
+            return True
+            
+        # Handle AnalysisContext object
+        if hasattr(context, 'file_path'):
+            file_path = Path(context.file_path)
+            
+            # Check file exists
+            if not file_path.exists():
+                raise ValueError(f"File does not exist: {file_path}")
+                
+            # Check it's a Python file
+            if file_path.suffix != '.py':
+                raise ValueError(f"File must be Python, got: {file_path}")
+                
+            return True
+            
+        # Default to valid for backward compatibility
+        return True
+
     def _execute(self, context: Dict[str, Any]) -> Union[Ok, Err]:
         """
         Execute relationship analysis on code context
 
         Args:
-            context: Code structure with optional 'source' code to analyze
+            context: Code structure with optional 'source' code to analyze,
+                    or AnalysisContext object with file_path
 
         Returns:
             Analysis results or error
         """
         try:
+            # Handle AnalysisContext object
+            if hasattr(context, 'file_path'):
+                file_path = Path(context.file_path)
+                if file_path.exists():
+                    source = file_path.read_text()
+                    relationships = self._analyze_source(source)
+                    return Ok(relationships.to_dict())
+                else:
+                    return Err(f"File not found: {file_path}")
+            
+            # Handle dict-based context
             # If source code provided, analyze it
             if "source" in context:
                 source = context["source"]
