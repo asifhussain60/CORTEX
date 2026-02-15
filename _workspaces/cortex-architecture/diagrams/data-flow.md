@@ -44,7 +44,7 @@ graph TD
 
 ```mermaid
 graph LR
-    A[24 Consolidated MCP Tools] --> B[Core Operations 4]
+    A[26 Consolidated MCP Tools] --> B[Core Operations 4]
     A --> C[Intelligence 3]
     A --> D[Governance 4]
     A --> E[Operations 5]
@@ -193,7 +193,7 @@ MasterOrchestrator.process_user_request():
 
   Step 2: Dependency Loading
     • GitBackedRegistry loaded
-    • 17 active orchestrators available
+    • 21 orchestrators available (14 active + 4 super + 7 deprecated)
     • wiring.yaml parsed successfully
 
   Step 3: Delegate to IntentRouter

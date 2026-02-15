@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-LENS is CORTEX's code intelligence system that analyzes software repositories to provide deep insights about architecture, security, quality, and risk. It combines 7 specialized analyzers (AST, Git, API, Database, Config, Dependency, Polyglot) to create a comprehensive understanding of your codebase—similar to how medical imaging (MRI, CT, X-ray) provides multiple views of the human body.
+LENS is CORTEX's code intelligence system that analyzes software repositories to provide deep insights about architecture, security, quality, and risk. It combines 10 specialized analyzers (AST, Git, Comment, Config, Database, Dependency, API, Polyglot + database plugins) to create a comprehensive understanding of your codebase—similar to how medical imaging (MRI, CT, X-ray) provides multiple views of the human body.
 
 **Business Value:** LENS reduces code review time by 60%, identifies security vulnerabilities before production, and provides actionable insights for technical debt prioritization. It powers CORTEX's intelligent decision-making across all development operations.
 
@@ -42,6 +42,9 @@ Just as your nervous system has specialized sensory neurons (vision, hearing, to
 | **Taste (Tongue)** | Config Analyzer | Environment settings, secrets, drift |
 | **Smell (Nose)** | Dependency Analyzer | External libraries, CVEs, version conflicts |
 | **Proprioception (Body Awareness)** | Database Analyzer | Schema evolution, migration risks, query patterns |
+| **Vestibular (Balance)** | Comment Extractor | Documentation quality, TODOs, annotations |
+| **Thermoreception (Temperature)** | Polyglot Analyzer | Multi-language detection, framework identification |
+| **Nociception (Pain)** | Vendor Detector | Third-party code boundaries, license risks |
 | **Multimodal Integration (Brain)** | Synthesis Engine | Holistic risk scoring, recommendations, insights |
 
 LENS doesn't just collect data—it **integrates** multiple signals into actionable intelligence, just like your brain combines sensory inputs to understand your environment.
@@ -972,9 +975,9 @@ mindmap
 
 ---
 
-**Last Updated:** 2026-02-14 | **Version:** 2.0.0  
-**Analyzers:** 7 active | **MCP Tools:** 9  
+**Last Updated:** 2026-02-14 | **Version:** 2.1.0  
+**Analyzers:** 10 active | **MCP Tools:** 9  
 **Word Count:** 1,850 | **Diátaxis Category:** Explanation  
 
 **Status:**  
-![CI](https://img.shields.io/badge/CI-passing-brightgreen) ![Coverage](https://img.shields.io/badge/coverage-87%25-green) ![Release](https://img.shields.io/badge/release-v2.0.0-blue)
+![CI](https://img.shields.io/badge/CI-passing-brightgreen) ![Coverage](https://img.shields.io/badge/coverage-87%25-green) ![Release](https://img.shields.io/badge/release-v2.1.0-blue)

@@ -2,7 +2,7 @@
 
 **Purpose:** The life-support systems that keep the CORTEX brain alive — circulation, respiration, and homeostasis for a cognitive architecture  
 **Audience:** SRE, DevOps, Architects  
-**Last Updated:** 2026-02-13
+**Last Updated:** 2026-02-14
 
 ---
 

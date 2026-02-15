@@ -129,9 +129,12 @@ class HolisticValidationGate:
 ---
 
 ### Consolidated Tools
-**Definition:** The Wave 100 reorganization that grouped 86 flat MCP tools into 24 parent tools with multiple operations each.
+**Definition:** The Wave 100 reorganization that grouped 86+ flat MCP tools into 26 parent tools with multiple operations each.
 
 **Example:** Instead of `cortex_lens_analyze`, `cortex_lens_diff`, `cortex_lens_validate` (3 tools), there's `cortex_lens` (1 tool with 3 operations).
+
+**Complete Tool List (26):**
+`cortex_process_request`, `cortex_challenge`, `cortex_classify`, `cortex_request_lifecycle`, `cortex_lens`, `cortex_knowledge`, `cortex_git`, `cortex_governance`, `cortex_validate`, `cortex_load`, `cortex_validate_request`, `cortex_debug`, `cortex_refactor`, `cortex_plan`, `cortex_onboard`, `cortex_dashboard`, `cortex_generate_tests`, `cortex_verify`, `cortex_ask`, `cortex_vacuum`, `cortex_tools_catalog`, `cortex_total_recall`, `cortex_metrics`, `cortex_check`, `cortex_vision`, `cortex_orchestrator`
 
 **Benefits:** Cognitive clarity, easier discovery, consistent patterns.
 
@@ -171,7 +174,7 @@ class HolisticValidationGate:
 ## E
 
 ### Enforcement Orchestrator
-**Definition:** The 7-agent pre-execution gate that validates all IMPLEMENT/FIX/REFACTOR requests against governance rules.
+**Definition:** The 8-agent pre-execution gate that validates all IMPLEMENT/FIX/REFACTOR requests against governance rules.
 
 **Agents:**
 1. GovernanceEnforcementAgent (CORE-008, 011, 012, 013, 029, 030)
@@ -181,6 +184,7 @@ class HolisticValidationGate:
 5. IncrementalExecutionAgent (CORE-001, 004)
 6. MarkdownSuppressionAgent (CORE-002)
 7. ArchitectureIntegrityAgent (CORE-017-020, 032, 034, 035, 038-041)
+8. EnvironmentIntegrityAgent (MCP validation, Python version, venv checks)
 
 **Coverage:** 87% of CORE rules automated
 
@@ -303,7 +307,7 @@ class HolisticValidationGate:
 
 **Analogy:** CORTEX's nervous system.
 
-**Tools:** 24 consolidated tools with 86+ operations.
+**Tools:** 26 consolidated tools with 90+ operations.
 
 **Related:** [Consolidated Tools](#consolidated-tools), [Pylance-Style MCP](#pylance-style-mcp)
 
@@ -323,7 +327,7 @@ class HolisticValidationGate:
 ### Orchestrator
 **Definition:** A specialized component that handles a specific domain of CORTEX functionality.
 
-**Count:** 17 active + 7 deprecated (as of 2026-02-14)
+**Count:** 14 active + 4 super-orchestrators + 7 deprecated (21 total as of 2026-02-14)
 
 **Examples:**
 - `TDDOrchestrator` — Test-driven development workflow
@@ -474,7 +478,7 @@ class HolisticValidationGate:
 3. `UnifiedQualityAssuranceOrchestrator`
 4. `UnifiedDiscoveryOrchestrator`
 
-**Impact:** 37% reduction (27 → 17 active orchestrators)
+**Impact:** 37% reduction (27 → 17 active orchestrators, then +4 super-orchestrators in Phase 23 MEGA-B)
 
 **Related:** [Orchestrator](#orchestrator), [Wave 7](#wave-7)
 
@@ -483,7 +487,7 @@ class HolisticValidationGate:
 ## W
 
 ### Wave 7
-**Definition:** The orchestrator consolidation initiative that reduced CORTEX from 27 to 17 active orchestrators.
+**Definition:** The orchestrator consolidation initiative that reduced CORTEX from 27 to 17 active orchestrators. Phase 23 MEGA-B then added 4 super-orchestrators for a total of 21.
 
 **Tracks:** 4 tracks completed 2026-02-13
 

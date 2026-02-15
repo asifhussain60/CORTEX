@@ -31,7 +31,7 @@
 │  │  ┌─────────────┐  ┌──────────────┐  ┌───────────────┐               │  │
 │  │  │   Tool      │  │    Request   │  │   Response    │               │  │
 │  │  │  Registry   │  │   Validator  │  │   Formatter   │               │  │
-│  │  │ (24 tools)  │  │              │  │               │               │  │
+│  │  │ (26 tools) │  │              │  │               │               │  │
 │  │  └─────────────┘  └──────────────┘  └───────────────┘               │  │
 │  │                                                                        │  │
 │  │  Capabilities:                                                        │  │
@@ -62,14 +62,15 @@
 │    │                │                │                │                     │
 │    ▼                ▼                ▼                ▼                     │
 │  ┌────────┐    ┌────────┐      ┌────────┐      ┌────────┐                  │
-│  │🧠 Core│    │🎨 Domain│      │🔧Support│      │⚙️ Cross│                  │
-│  │  (11) │    │   (8)  │      │  (41)  │      │ Cutting│                  │
+│  │🧠 Core│    │🎨 Domain│      │🔧Support│      │⚙️ Super│                  │
+│  │  (5)  │    │   (5)  │      │  (4+7) │      │  (4)   │                  │
 │  └────────┘    └────────┘      └────────┘      └────────┘                  │
 │                                                                              │
-│  Core Examples:                Domain Examples:      Support Examples:      │
-│  • TDDOrchestrator            • RefactoringOrch.    • DebugOrchestrator     │
-│  • LENSSynthesis              • PlanOrchestrator    • DashboardGen.         │
-│  • EnforcementOrch.           • DocumentationOrch.  • KnowledgeQuery        │
+│  Core Examples:                Domain Examples:      Super-Orchestrators:   │
+│  • TDDOrchestrator            • RefactoringOrch.    • StateOrchestrator     │
+│  • WorkflowOrchestrator       • PlanningOrch.       • ObservabilityOrch.    │
+│  • InteractionOrchestrator    • DomainOrch.         • IntelligenceOrch.     │
+│                               • ConversationOrch.   • SOLIDOrchestrator     │
 ----------------------------------------
          │                               │                          │
          ▼                               ▼                          ▼
@@ -77,12 +78,15 @@
 │  👁️ LENS LAYER      │  │  💾 STORAGE LAYER      │  │  🧠 LEARNING LAYER   │
 │  (Code Intelligence) │  │  (Persistence)         │  │  (Adaptive Systems)  │
 ├──────────────────────┤  ├────────────────────────┤  ├──────────────────────┤
-│ • SecurityAnalyzer   │  │ • cortex_brain/        │  │ • Pattern Learning   │
-│ • ComplexityAnalyzer │  │ • Knowledge Repos      │  │ • Test Quality Metrics│
-│ • ArchitectureAnalyz.│  │ • cortex-registry/     │  │ • Validation Loops   │
-│ • GitHistoryAnalyzer │  │ • State Management     │  │ • Adaptive Refinement│
-│ • ASTParser          │  │ • Audit Trails         │  │ • Feedback Integration│
-│ • PatternDetector    │  │ • Dashboard Data       │  │ • Continuous Improvement│
+│ • ASTAnalyzer        │  │ • cortex_brain/        │  │ • Pattern Learning   │
+│ • GitHistoryAnalyzer │  │ • Knowledge Repos      │  │ • Test Quality Metrics│
+│ • CommentExtractor   │  │ • cortex-registry/     │  │ • Validation Loops   │
+│ • DependencyAnalyzer │  │ • State Management     │  │ • Adaptive Refinement│
+│ • ConfigAnalyzer     │  │ • Audit Trails         │  │ • Feedback Integration│
+│ • DatabaseAnalyzer   │  │ • Dashboard Data       │  │ • Continuous Learning │
+│ • APIAnalyzer        │  │                        │  │                      │
+│ • PolyglotAnalyzer   │  │                        │  │                      │
+│ • VendorDetector     │  │                        │  │                      │
 └──────────────────────┘  └────────────────────────┘  └──────────────────────┘
 ```
 
@@ -107,7 +111,7 @@
 **Purpose:** Protocol translation and tool management
 
 **Key Features:**
-- **24 Consolidated MCP Tools** (86+ operations) exposed via protocol
+- **26 Consolidated MCP Tools** (90+ operations) exposed via protocol
 - Tool discovery (`tools/list`)
 - Tool invocation (`tools/call`)
 - Health checks & metrics

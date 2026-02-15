@@ -22,12 +22,13 @@ CORTEX isn't just a tool. It's a **cognitive architecture** — a thinking syste
 
 | Vital Sign | Measurement | Brain Analogy |
 |------------|-------------|---------------|
-| **Active Orchestrators** | 21 | Neural processing regions |
+| **Active Orchestrators** | 14 core + domain + unified support | Neural processing regions |
+| **Super-Orchestrators** | 4 (State, Observability, Intelligence, SOLID) | Advanced association cortex |
+| **Infrastructure Components** | 4 (Bootstrap, Registry, Health, ContractValidator) | Brain stem |
 | **Deprecated (sunset 2026-03-31)** | 7 | Vestigial brain structures being pruned |
-| **Infrastructure Components** | 4 | Brain stem (bootstrap, registry, health, contract validation) |
-| **Super-Orchestrators (NEW)** | 4 | Advanced association cortex (State, Observability, Intelligence, SOLID) |
-| **MCP Tools** | 24 consolidated (86 total operations) | Primary synaptic pathways with specialized operations |
-| **LENS Analyzers** | 8 | Sensory receptor types |
+| **MCP Tools** | 26 consolidated (90+ operations) | Primary synaptic pathways with specialized operations |
+| **LENS Analyzers** | 10 (AST, Git, Comment, Config, Database, Dependency, API, Polyglot + plugins) | Sensory receptor types |
+| **Language Adapters** | 5 (Python/Rope, C#/Roslyn, TypeScript, Java, JavaScript) | Cross-language neural pathways |
 | **Enforcement Agents** | 8 | Immune system defenders |
 | **CORE Governance Rules** | 50+ | DNA-level behavioral encoding |
 | **Consolidation (Phase 23 MEGA-B)** | 37% reduction | Neural pruning for efficiency |
@@ -156,12 +157,13 @@ Think of CORTEX as a **senior engineer with perfect memory and infinite patience
 - Single-file focus (tunnel vision)
 
 **CORTEX is a full cognitive system** — it perceives, reasons, decides, and learns:
-- 🧠 **Multi-orchestrator intelligence** — 17 specialized brain regions collaborating on every request
-- 👁️ **Deep LENS perception** — 8 analyzers see your code the way a radiologist reads an MRI
+- 🧠 **Multi-orchestrator intelligence** — 21 specialized brain regions collaborating on every request (14 active + 4 super-orchestrators + 4 infrastructure, 7 deprecated)
+- 👁️ **Deep LENS perception** — 10 analyzers + 5 language adapters see your code the way a radiologist reads an MRI
 - 🛡️ **Governance immune system** — 8 enforcement agents ensure every output is safe, tested, and compliant
 - 🔄 **TDD motor cortex** — RED→GREEN→REFACTOR is the mandatory muscle memory for all code changes
 - 📊 **Holistic validation gates** — No operation proceeds without full cognitive review
 - 🌐 **MCP nervous system** — Pylance-style architecture connecting the brain to any IDE
+- 🔧 **Multi-language refactoring** — Rope (Python), Roslyn (C#), and TypeScript adapters for semantic code transformations
 
 ---
 
@@ -190,13 +192,13 @@ CORTEX's architecture mirrors the layered structure of a biological brain. Infor
   ║   │ Copilot │  │ Desktop │  │  IDE    │  │ Client  │          ║
   ║   └────┬────┘  └────┬────┘  └────┬────┘  └────┬────┘          ║
   ║        └────────────┴─────┬──────┴────────────┘                ║
-  ║                  24 Consolidated MCP Tools │                   ║
-  ║              (86 total operations across tools)                ║
+  ║                  26 Consolidated MCP Tools │                   ║
+  ║              (90+ total operations across tools)               ║
   ╚════════════════════════════╤════════════════════════════════════╝
                                │
   ╔════════════════════════════╧════════════════════════════════════╗
   ║       🧠 PREFRONTAL CORTEX (Executive Decision-Making)         ║
-  ║                  17 Active Neural Regions                       ║
+  ║           14 Active + 4 Super-Orchestrators + 4 Infra          ║
   ║                                                                 ║
   ║   ┌─────────────────────────────────────────────────────────┐  ║
   ║   │          🎯 MasterOrchestrator (Priority 10)             │  ║
@@ -226,7 +228,7 @@ CORTEX's architecture mirrors the layered structure of a biological brain. Infor
  │ 👁️ VISUAL CORTEX │ │ 🧬 LIMBIC SYSTEM │ │ 💾 HIPPOCAMPUS   │
  │  (LENS Engine)   │ │ (Learning Loop)  │ │ (Memory/Storage) │
  │                  │ │                  │ │                  │
- │ 8 Analyzers that │ │ Adapts behavior  │ │ Stores long-term │
+ │ 10 Analyzers    │ │ Adapts behavior  │ │ Stores long-term │
  │ perceive your    │ │ like emotional   │ │ memories the way │
  │ codebase the way │ │ conditioning —   │ │ the hippocampus  │
  │ eyes perceive    │ │ learning from    │ │ consolidates     │
@@ -235,11 +237,11 @@ CORTEX's architecture mirrors the layered structure of a biological brain. Infor
  │ • Git History    │ │ • Test Quality   │ │ • 4-Tier YAML    │
  │ • AST Analysis   │ │ • Code Patterns  │ │ • Business Logic │
  │ • Comments       │ │ • Validation     │ │ • Best Practices │
- │ • Patterns       │ │ • Adaptive       │ │ • CORE Rules     │
+ │ • Dependency     │ │ • Adaptive       │ │ • CORE Rules     │
  │ • Config         │ │   Refinement     │ │ • Domain Models  │
  │ • Database       │ │                  │ │                  │
  │ • API            │ │                  │ │                  │
- │ • Security       │ │                  │ │                  │
+ │ • Polyglot       │ │                  │ │                  │
  └──────────────────┘ └──────────────────┘ └──────────────────┘
 ```
 
@@ -252,8 +254,8 @@ CORTEX's architecture mirrors the layered structure of a biological brain. Infor
 | Section | Description | Brain Analogy |
 |---------|-------------|---------------|
 | [MCP Overview](./mcp/overview.md) | Model Context Protocol — the nervous system | Peripheral nerves connecting brain to body |
-| [MCP Tools Catalog](./mcp/tools-catalog.md) | Complete 24-tool catalog (86+ operations) | Map of every neural connection |
-| [Orchestration Overview](./orchestration/overview.md) | 17-orchestrator cognitive system | Brain region atlas |
+| [MCP Tools Catalog](./mcp/tools-catalog.md) | Complete 26-tool catalog (90+ operations) | Map of every neural connection |
+| [Orchestration Overview](./orchestration/overview.md) | 21-orchestrator cognitive system | Brain region atlas |
 | [LENS Intelligence](./lens/overview.md) | Code analysis & synthesis engine | Visual cortex documentation |
 
 ### 🧠 Orchestrator Deep Dives (Neural Region Studies)
@@ -263,7 +265,8 @@ CORTEX's architecture mirrors the layered structure of a biological brain. Infor
 | [Core Orchestrators](./orchestration/master-orchestrator.md) | 5 | Brain stem & cortex — essential for consciousness |
 | [Domain Orchestrators](./orchestration/domain-orchestrators.md) | 5 | Specialized lobes — expert processing centers |
 | [Unified Support](./orchestration/support-orchestrators.md) | 4 (+7 deprecated) | Consolidated association areas — efficiency through integration |
-| [Infrastructure](./orchestration/overview.md) | 3 | Autonomic systems — keeps the brain alive |
+| [Super-Orchestrators](./orchestration/overview.md) | 4 | Advanced association cortex — multi-subsystem coordination |
+| [Infrastructure](./orchestration/overview.md) | 4 | Autonomic systems — keeps the brain alive |
 
 ### 🔧 Technical References (Brain Imaging)
 
@@ -284,20 +287,23 @@ CORTEX's architecture mirrors the layered structure of a biological brain. Infor
 1. **👁️ Sensory Layer (LENS)** — *The Visual Cortex* — Observes and perceives code
    - Git history analysis (24-hour memory window)
    - AST parsing and structural pattern recognition
-   - Security vulnerability detection (threat perception)
-   - Complexity metrics (cognitive load assessment)
+   - Dependency analysis and CVE detection
+   - Multi-language support via 5 language adapters (C#, Java, JS, TS, Python)
+   - Configuration drift and secrets detection
+   - Database schema and API contract analysis
 
-2. **🧠 Processing Layer (17 Orchestrators)** — *The Cerebral Cortex* — Reasons and decides
+2. **🧠 Processing Layer (21 Orchestrators)** — *The Cerebral Cortex* — Reasons and decides
    - **MasterOrchestrator** — prefrontal cortex, coordinates all thought
    - **IntentRouter** — thalamus, classifies signals → routes to specialist regions
    - **TDDOrchestrator** — motor cortex, enforces disciplined test-first execution
    - **UnifiedQualityAssuranceOrchestrator** — anterior cingulate, validates quality & governance
 
-3. **🌐 Action Layer (24 MCP Tools with 86 Operations)** — *The Motor Cortex* — Executes validated operations
+3. **🌐 Action Layer (26 MCP Tools with 90+ Operations)** — *The Motor Cortex* — Executes validated operations
    - `cortex_process_request` — primary motor output (5 operations: implement, fix, refactor, analyze, test)
    - `cortex_lens` — deep perception query (5 operations: analyze, deep_analyze, diff, summarize, validate)
    - `cortex_challenge` — generates alternative cognitive approaches
    - `cortex_debug` — comprehensive debugging cycle (7 operations: inject, capture, analyze, fix-plan, full_cycle, cleanup, status)
+   - `cortex_refactor` — semantic refactoring across Python, C#, TypeScript/JavaScript
 
 ### Example: How CORTEX Processes "Implement Login Feature"
 
@@ -554,7 +560,7 @@ class ToolResult:
 ### Next Steps
 
 **For Beginners:**  
-Start with [MCP Tools Catalog](./mcp/tools-catalog.md) to explore all 24 tools and 86+ operations.
+Start with [MCP Tools Catalog](./mcp/tools-catalog.md) to explore all 26 tools and 90+ operations.
 
 **For Production Teams:**  
 Read [Governance & Compliance](./capabilities/governance-compliance.md) to understand enforcement rules.
@@ -663,7 +669,7 @@ Orchestrator that classifies user intent and routes to specialist regions
 → [Intent Router](./orchestration/intent-router.md) · [End-to-End Flow](./orchestration/end-to-end-flow.md)
 
 **LENS (Language Examination Navigation Synthesis)**  
-8-analyzer perception engine for deep code intelligence  
+10-analyzer perception engine with 5 language adapters for deep code intelligence  
 → [LENS Overview](./lens/overview.md) · [LENS Analyzers](./lens/analyzers.md) · [LENS Architecture](./lens/architecture.md)
 
 **Learning Loop**  
@@ -681,7 +687,7 @@ JSON-RPC 2.0 nervous system connecting CORTEX to IDEs
 → [MCP Overview](./mcp/overview.md) · [MCP Protocol](./mcp/protocol.md) · [MCP Integration](./mcp/integration.md)
 
 **MCP Tools**  
-24 consolidated tools with 86+ operations (cortex_process_request, cortex_lens, etc.)  
+26 consolidated tools with 90+ operations (cortex_process_request, cortex_lens, etc.)  
 → [MCP Tools Catalog](./mcp/tools-catalog.md) · [5-Minute Quick Start](#5-minute-quick-start)
 
 **MCP-FIRST Architecture**  
@@ -689,7 +695,7 @@ All operations must route through MCP tools (no direct file access)
 → [MCP Overview](./mcp/overview.md)
 
 **Orchestrators**  
-17 active specialized cognitive regions + 7 deprecated (sunset 2026-03-31)  
+21 total orchestrators (14 active + 4 super-orchestrators + 7 deprecated sunset 2026-03-31) + 4 infrastructure  
 → [Orchestration Overview](./orchestration/overview.md) · [Master Orchestrator](./orchestration/master-orchestrator.md)
 
 **Production Ready**  
@@ -735,7 +741,7 @@ Mandatory development pattern enforced by CORE-008
 → [Executive Overview](#executive-overview-cortex-for-business-leaders)
 
 **Tool Consolidation (Wave 100)**  
-86 flat tools → 24 parent tools with operations (72% reduction)  
+86+ flat tools → 26 parent tools with operations  
 → [MCP Tools Catalog](./mcp/tools-catalog.md)
 
 ### U-Z
@@ -762,6 +768,6 @@ Major consolidation phase reducing orchestrators from 27 to 17
 
 ---
 
-**Last Updated:** 2026-02-13  
-**Data Sources:** `__wiring_contract__.yaml` v2.0.0, cortex-registry, MCP Server  
-**Architecture Version:** Wave 7 Track 4 Complete (17 active orchestrators)
+**Last Updated:** 2026-02-14  
+**Data Sources:** `__wiring_contract__.yaml` v2.1.0, cortex-registry, MCP Server  
+**Architecture Version:** Phase 23 MEGA-B S3 Complete (21 orchestrators: 14 active + 4 super + 7 deprecated + 4 infra)

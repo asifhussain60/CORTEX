@@ -24,7 +24,7 @@
 
 When evolution develops a new sensory organ — like the pit viper's heat-sensing pit or the platypus's electroreception — it must connect to the existing nervous system through standardized nerve pathways. The organ is novel, but the wiring protocol is conserved.
 
-Integrating with CORTEX MCP follows the same pattern: your client (the new sensory organ) connects through a standardized protocol (the nervous system), and CORTEX's 17 orchestrators process the signals regardless of their origin.
+Integrating with CORTEX MCP follows the same pattern: your client (the new sensory organ) connects through a standardized protocol (the nervous system), and CORTEX's 21 orchestrators process the signals regardless of their origin.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -92,7 +92,7 @@ CORTEX_PORT=9000 CORTEX_LOG_LEVEL=DEBUG python -m cortex.mcp.server
 curl http://localhost:8000/health
 
 # Expected response
-{"status": "healthy", "orchestrators": 17, "tools": 24, "operations": 86}
+{"status": "healthy", "orchestrators": 21, "tools": 26, "operations": 90}
 ```
 
 ---

@@ -157,11 +157,11 @@ diagram_hierarchy:
     format: "Mermaid flowchart with subgraphs"
     audience: ["Manager", "Developer", "SRE"]
     components:
-      - "MCP Gateway (86 tools)"
-      - "MasterOrchestrator + 60 orchestrators"
-      - "LENS Intelligence (8 analyzers)"
+      - "MCP Gateway (26 consolidated tools, 90+ operations)"
+      - "MasterOrchestrator + 21 orchestrators"
+      - "LENS Intelligence (10 analyzers)"
       - "CORTEX Brain (Git-backed registry)"
-      - "Governance Engine (7 enforcement agents)"
+      - "Governance Engine (8 enforcement agents)"
       - "Storage (SQLite audit + file-based)"
       
   level_3_c4_component:

@@ -1,6 +1,6 @@
 # CORTEX MCP Tools Catalog
 
-**Consolidated Tools:** 24 | **Total Operations:** 86+ | **Updated:** 2026-02-14  
+**Consolidated Tools:** 26 | **Total Operations:** 90+ | **Updated:** 2026-02-14  
 **MCP Server:** stdio/HTTP (Port 8000) | **Protocol:** JSON-RPC 2.0  
 **Architecture:** Consolidated tool design with orchestrator validation (Phase 23 MEGA-B)
 
@@ -12,13 +12,13 @@
 
 The brain communicates through **neurotransmitters** — chemical messengers that carry specific signals across synaptic gaps. Dopamine drives reward and motivation. Serotonin regulates mood. GABA inhibits overexcitation. Each neurotransmitter has a precise receptor, a specific function, and a measurable effect.
 
-CORTEX's **24 consolidated MCP tools** are its neurotransmitter library — each tool is like a neurotransmitter family (e.g., all serotonin receptors) with multiple specific operations (5-HT1A, 5-HT2A, etc.). `cortex_process_request` is like acetylcholine at the neuromuscular junction: the primary signal that triggers action with 5 distinct operations. `cortex_lens` is like glutamate: the main excitatory signal with 5 specialized operations.
+CORTEX's **26 consolidated MCP tools** are its neurotransmitter library — each tool is like a neurotransmitter family (e.g., all serotonin receptors) with multiple specific operations (5-HT1A, 5-HT2A, etc.). `cortex_process_request` is like acetylcholine at the neuromuscular junction: the primary signal that triggers action with 5 distinct operations. `cortex_lens` is like glutamate: the main excitatory signal with 5 specialized operations.
 
-### From 86 to 24: The Consolidation Story
+### From 86 to 26: The Consolidation Story
 
-**What Changed:** Previously, CORTEX exposed 86 individual MCP tools — one for each specific operation (e.g., `cortex_lens_analyze`, `cortex_lens_deep_analyze`, `cortex_lens_diff`, etc.). This created cognitive overload for users and fragmented related functionality.
+**What Changed:** Previously, CORTEX exposed 86+ individual MCP tools — one for each specific operation (e.g., `cortex_lens_analyze`, `cortex_lens_deep_analyze`, `cortex_lens_diff`, etc.). This created cognitive overload for users and fragmented related functionality.
 
-**Wave 100 + Phase 23 MEGA-B:** CORTEX underwent major reorganization, grouping related operations under **parent tools** with orchestrator validation. Instead of 86 separate tools, there are now **24 consolidated tools**, each containing multiple related **operations**. For example:
+**Wave 100 + Phase 23 MEGA-B:** CORTEX underwent major reorganization, grouping related operations under **parent tools** with orchestrator validation. Instead of 86+ separate tools, there are now **26 consolidated tools**, each containing multiple related **operations**. For example:
 
 - **Before:** `cortex_lens_analyze`, `cortex_lens_deep_analyze`, `cortex_lens_diff`, `cortex_lens_summarize`, `cortex_lens_validate` (5 separate tools)
 - **After:** `cortex_lens` (1 tool with 5 operations: `analyze`, `deep_analyze`, `diff`, `summarize`, `validate`)
@@ -33,20 +33,20 @@ CORTEX's **24 consolidated MCP tools** are its neurotransmitter library — each
 - ✅ **Orchestrator validation:** Every tool invocation validated against wiring contract
 - 📝 **Audit logging:** Comprehensive tracking through super-orchestrators
 
-This catalog documents all **86+ operations** available across **24 consolidated tools**. These tools enable AI assistants (GitHub Copilot, Claude, Cursor) to leverage CORTEX's cognitive capabilities through the Model Context Protocol.
+This catalog documents all **90+ operations** available across **26 consolidated tools**. These tools enable AI assistants (GitHub Copilot, Claude, Cursor) to leverage CORTEX's cognitive capabilities through the Model Context Protocol.
 
-### Tool Distribution (24 Consolidated Tools)
+### Tool Distribution (26 Consolidated Tools)
 
 | Category | Tools | Operations | Purpose |
 |----------|-------|------------|---------|
-| **Core Operations** | 4 | 15+ | Primary entry points for request processing |
-| **Intelligence (LENS)** | 3 | 15+ | Deep code analysis and intelligence |
-| **Governance & Validation** | 4 | 12+ | Rule enforcement and compliance validation |
-| **Operations (Debug, Refactor, Plan)** | 5 | 20+ | Debugging, refactoring, and phase management |
-| **Utilities & System** | 5 | 15+ | System utilities, verification, and support |
-| **Dashboard & Knowledge** | 3 | 9+ | Visualization, reporting, and knowledge queries |
+| **Core Operations** | 4 | 15+ | Primary entry points (process_request, challenge, classify, request_lifecycle) |
+| **Intelligence (LENS)** | 3 | 15+ | Deep code analysis (lens, knowledge, git) |
+| **Governance & Validation** | 4 | 12+ | Rule enforcement (governance, validate, load, validate_request) |
+| **Operations (Debug, Refactor, Plan)** | 5 | 20+ | Debugging, refactoring, planning, onboarding, dashboards |
+| **Utilities & System** | 8 | 20+ | Verification, ask, vacuum, catalog, recall, metrics, check, vision |
+| **Specialized** | 2 | 8+ | Test generation (generate_tests), orchestrator management |
 
-**Total:** 24 consolidated tools with 86+ distinct operations
+**Total:** 26 consolidated tools with 90+ distinct operations
 
 ---
 

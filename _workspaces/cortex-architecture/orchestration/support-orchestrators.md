@@ -110,7 +110,7 @@ The **visual association cortex** doesn't just see raw pixels — it recognizes 
 
 ### Capabilities
 
-- **Code Analysis** — Full LENS pipeline (8 analyzers in parallel)
+- **Code Analysis** — Full LENS pipeline (10 analyzers in parallel)
 - **LENS Coordination** — Orchestrate Git, AST, Comment, Pattern, Config, DB, API, Security analyzers
 - **Tool Discovery** — Search and catalog MCP tools by capability
 - **Dependency Analysis** — Map code dependencies and detect drift

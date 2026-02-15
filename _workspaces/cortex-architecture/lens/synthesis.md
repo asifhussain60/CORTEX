@@ -23,7 +23,7 @@
 
 In neuroscience, the **binding problem** asks: how does the brain combine separate visual features (color, shape, motion, depth) — each processed by different brain areas — into a single unified percept? When you see a red ball rolling left, the redness, roundness, and motion are processed separately, then *bound* into one coherent experience.
 
-LENS Synthesis solves the same binding problem for code analysis. It combines outputs from 8 specialized analyzers (Git, AST, Comment, Pattern, Config, Database, API, Security) into a unified `UnifiedIntelligenceContext` — ensuring that CORTEX operations receive a coherent, high-quality understanding regardless of which analyzers contributed.
+LENS Synthesis solves the same binding problem for code analysis. It combines outputs from 10 specialized analyzers (Git, AST, Comment, Config, Database, Dependency, API, Polyglot, VendorDetector, DatabaseCrawler) into a unified `UnifiedIntelligenceContext` — ensuring that CORTEX operations receive a coherent, high-quality understanding regardless of which analyzers contributed.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐

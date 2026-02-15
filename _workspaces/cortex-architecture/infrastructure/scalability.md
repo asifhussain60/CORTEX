@@ -328,8 +328,8 @@ async def analyze_parallel(target: str) -> LENSResult:
     analyzers = [
         GitAnalyzer(),
         ASTAnalyzer(),
-        CommentAnalyzer(),
-        PatternAnalyzer()
+        CommentExtractor(),
+        DependencyAnalyzer()
     ]
     
     # Execute all in parallel
@@ -340,7 +340,7 @@ async def analyze_parallel(target: str) -> LENSResult:
         git=results[0],
         ast=results[1],
         comments=results[2],
-        patterns=results[3]
+        dependencies=results[3]
     )
 ```
 

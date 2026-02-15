@@ -4,12 +4,12 @@
 
 The Model Context Protocol (MCP) Server is the **nervous system** of CORTEX — the SINGLE entry point for ALL cognitive functionality. Just as every thought, sensation, and action in the body flows through the nervous system's standardized electrical signaling, every operation in CORTEX — whether implementing features, analyzing code, validating governance, or debugging — flows through MCP's JSON-RPC 2.0 synaptic connections.
 
-The MCP layer connects external clients (VS Code Copilot, Claude, Cursor) to CORTEX's **17 active orchestrators** through 24 consolidated tool endpoints (86+ distinct operations).
+The MCP layer connects external clients (VS Code Copilot, Claude, Cursor) to CORTEX's **21 orchestrators** (14 active + 4 super + 7 deprecated) through 26 consolidated tool endpoints (90+ distinct operations).
 
 ## Design Principles
 
 1. **Single Entry Point**: All functionality via MCP tools, no direct Python imports
-2. **24 Tools Maximum**: Consolidated by business capability, not arbitrary count
+2. **26 Tools Consolidated**: Consolidated by business capability, not arbitrary count
 3. **Cross-Platform**: Works on macOS, Windows, Linux without modification
 4. **Extensible**: New capabilities = new operations, not new tools
 5. **Testable**: 48 tests covering consolidation, protocol, and performance
@@ -28,7 +28,7 @@ The MCP layer connects external clients (VS Code Copilot, Claude, Cursor) to COR
 ----------------------------------------
 │                       MCP SERVER                                         │
 │ ┌─────────────────────────────────────────────────────────────────────┐ │
-│ │                      TOOL REGISTRY (24 Tools)                        │ │
+│ │                      TOOL REGISTRY (26 Tools)                        │ │
 │ │ ┌───────────┐ ┌───────────────┐ ┌────────────┐ ┌──────────────────┐ │ │
 │ │ │   CORE    │ │ INTELLIGENCE  │ │ GOVERNANCE │ │   OPERATIONS     │ │ │
 │ │ │ (4 tools) │ │   (3 tools)   │ │  (3 tools) │ │   (5 tools)      │ │ │
@@ -42,7 +42,7 @@ The MCP layer connects external clients (VS Code Copilot, Claude, Cursor) to COR
                                  ▼
 ----------------------------------------
 │                      ORCHESTRATOR LAYER                                  │
-│   MasterOrchestrator → IntentRouter → 17 Active Orchestrators             │
+│   MasterOrchestrator → IntentRouter → 21 Orchestrators (14+4 super+7 deprecated)│
 ----------------------------------------
 ```
 
@@ -194,7 +194,7 @@ MCP uses JSON-RPC 2.0 over stdio:
 
 48 tests organized by concern:
 
-- **Tool Consolidation** (5 tests): Verify 24 tools, categories, operations
+- **Tool Consolidation** (5 tests): Verify 26 tools, categories, operations
 - **Registry** (5 tests): Registration, lookup, schema generation
 - **MCP Server** (6 tests): Initialization, tool listing, execution
 - **JSON-RPC Protocol** (6 tests): Initialize, list, call, errors

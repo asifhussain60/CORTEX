@@ -63,18 +63,20 @@ LENS stands for **L**anguage → **E**xamination → **N**avigation → **S**ynt
 
 ### LENS Analyzers
 
-LENS employs eight specialized analyzers:
+LENS employs ten specialized analyzers:
 
 | Analyzer | Focus Area | Key Outputs |
 |----------|------------|-------------|
 | **GitHistoryAnalyzer** | Version control history | Commits, authors, hotspots, churn |
 | **ASTAnalyzer** | Code structure | Functions, classes, complexity |
 | **CommentExtractor** | Documentation | TODOs, docstrings, annotations |
-| **VisionAnalyzer** | Visual content | UI elements, diagram parsing |
-| **ConfigAnalyzer** | Configuration files | Settings, feature flags |
+| **ConfigAnalyzer** | Configuration files | Settings, feature flags, secrets |
 | **DatabaseAnalyzer** | Data layer | Schemas, queries, relationships |
+| **DependencyAnalyzer** | External dependencies | Libraries, CVEs, version conflicts |
 | **APIAnalyzer** | External interfaces | Endpoints, contracts, versioning |
-| **PatternDetector** | Design patterns | Patterns, anti-patterns, smells |
+| **PolyglotAnalyzer** | Multi-language repos | Language detection, framework identification |
+| **VendorDetector** | Third-party code | Vendor boundaries, license detection |
+| **DatabaseCrawlerPlugin** | Deep DB analysis | PostgreSQL/SQL Server schema crawling |
 
 ### Analyzer Coordination
 

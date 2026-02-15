@@ -1,8 +1,8 @@
 # Model Context Protocol (MCP) Overview
 
-**Version:** 2.0.0 | **Updated:** 2026-02-13  
+**Version:** 2.0.0 | **Updated:** 2026-02-14  
 **Protocol:** JSON-RPC 2.0 | **Transport:** stdio / HTTP  
-**Tools Exposed:** 24 consolidated (86+ operations) | **Orchestrators:** 17 active
+**Tools Exposed:** 26 consolidated (90+ operations) | **Orchestrators:** 21 (14 active + 4 super + 7 deprecated)
 
 ---
 
@@ -12,7 +12,7 @@
 
 The **nervous system** is the body's communication infrastructure. It doesn't think — it *transmits*. Sensory neurons carry signals from your fingertips to your brain; motor neurons carry commands from your brain to your muscles. Without the nervous system, the brain would be a brilliant organ trapped in silence.
 
-The **Model Context Protocol (MCP)** is CORTEX's nervous system. It's the standardized communication layer that connects external clients (VS Code, Claude, Cursor) to CORTEX's 17 orchestrators. Every command, every analysis request, every governance check travels through MCP's synaptic connections — JSON-RPC 2.0 messages flowing like action potentials along neural pathways.
+The **Model Context Protocol (MCP)** is CORTEX's nervous system. It's the standardized communication layer that connects external clients (VS Code, Claude, Cursor) to CORTEX's 21 orchestrators. Every command, every analysis request, every governance check travels through MCP's synaptic connections — JSON-RPC 2.0 messages flowing like action potentials along neural pathways.
 
 ### Key Benefits
 
@@ -20,7 +20,7 @@ The **Model Context Protocol (MCP)** is CORTEX's nervous system. It's the standa
 |---------|-------------|---------------|
 | **Universal Compatibility** | Works with GitHub Copilot, Claude, Cursor, and any MCP client | Like how any sensory organ can send signals through the same nervous system |
 | **Standardized Interface** | JSON-RPC 2.0 protocol ensures consistency | Like the electrochemical standard of nerve impulses |
-| **Tool Discovery** | Clients can discover all 24 consolidated tools (86+ operations) dynamically | Like proprioception — knowing what capabilities are available |
+| **Tool Discovery** | Clients can discover all 26 consolidated tools (90+ operations) dynamically | Like proprioception — knowing what capabilities are available |
 | **Type Safety** | Structured arguments with JSON Schema validation | Like neurotransmitter lock-and-key specificity |
 | **Scalability** | Support stdio (development) and HTTP (production) | Like the peripheral vs central nervous system |
 
@@ -58,7 +58,7 @@ The **Model Context Protocol (MCP)** is CORTEX's nervous system. It's the standa
 │  └───────────────────────────────────────────────────┘   │
 │  ┌───────────────────────────────────────────────────┐   │
 │  │              Tool Registry                         │   │
-│  │  • 24 consolidated tools (86+ operations)         │   │
+│  │  • 26 consolidated tools (90+ operations)         │   │
 │  │  • Dynamic discovery                             │   │
 │  │  • Schema validation                             │   │
 │  │  • Handler routing                               │   │
@@ -68,13 +68,13 @@ The **Model Context Protocol (MCP)** is CORTEX's nervous system. It's the standa
 │  │  • cortex_process_request → MasterOrchestrator   │   │
 │  │  • cortex_lens → LENSSynthesis (5 operations)    │   │
 │  │  • cortex_challenge → ChallengeEngine            │   │
-│  │  • ... 83 more tools                    │   │
+│  │  • ... 23 more tools                             │   │
 │  └───────────────────────────────────────────────────┘   │
 └───────────────────────────────────────────────────────────┘
                       │
 ┌─────────────────────┼─────────────────────────────────────┐
 │         CORTEX ORCHESTRATION LAYER                        │
-│              (17 active orchestrators)           │
+│              (21 orchestrators: 14 active + 4 super + 7 deprecated)  │
 └───────────────────────────────────────────────────────────┘
 ```
 
@@ -487,13 +487,13 @@ python -m cortex.mcp --transport http --port 8000   --cert cert.pem --key key.pe
 ## See Also
 
 **MCP Documentation:**
-- [Tools Catalog](./tools-catalog.md) — All 24 tools with 86+ operations
+- [Tools Catalog](./tools-catalog.md) — All 26 consolidated tools with 90+ operations
 - [MCP Protocol](./protocol.md) — JSON-RPC 2.0 specification details
 - [MCP Integration](./integration.md) — VS Code, Claude, Cursor setup
 - [MCP Versioning](./versioning.md) — Version management strategy
 
 **Orchestration:**
-- [Orchestration Overview](../orchestration/overview.md) — The 17 active orchestrators
+- [Orchestration Overview](../orchestration/overview.md) — The 21 orchestrators (14 active + 4 super + 7 deprecated)
 - [Master Orchestrator](../orchestration/master-orchestrator.md) — Primary entry point
 - [End-to-End Flow](../orchestration/end-to-end-flow.md) — Complete request lifecycle
 

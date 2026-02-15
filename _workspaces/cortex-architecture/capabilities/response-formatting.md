@@ -148,7 +148,7 @@ response = compose_blocks([
 **Purpose:** LENS intelligence system explanation
 
 **Content:**
-- 8 analyzer types
+- 10 analyzer types
 - How LENS works (sensory → synthesis)
 - Example: Git history + AST + comments → insights
 - Performance characteristics

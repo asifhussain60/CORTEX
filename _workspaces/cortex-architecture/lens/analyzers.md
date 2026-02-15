@@ -1,8 +1,8 @@
 # LENS Analyzers
 
-**Purpose:** Detailed documentation of each LENS analyzer — the 8 visual processing streams  
+**Purpose:** Detailed documentation of each LENS analyzer — the 10 code perception streams  
 **Audience:** Developers, Contributors  
-**Last Updated:** 2026-02-13
+**Last Updated:** 2026-02-14
 
 ---
 
@@ -12,29 +12,45 @@
 - [GitHistoryAnalyzer](#githistoryanalyzer)
 - [ASTAnalyzer](#astanalyzer)
 - [CommentExtractor](#commentextractor)
-- [VisionAnalyzer](#visionanalyzer)
 - [ConfigAnalyzer](#configanalyzer)
 - [DatabaseAnalyzer](#databaseanalyzer)
+- [DependencyAnalyzer](#dependencyanalyzer)
 - [APIAnalyzer](#apianalyzer)
-- [PatternAnalyzer](#patternanalyzer)
+- [PolyglotAnalyzer](#polyglotanalyzer)
+- [VendorDetector](#vendordetector)
+- [DatabaseCrawlerPlugin](#databasecrawlerplugin)
 - [Related Documents](#related-documents)
 
 ---
 
 ## Analyzer Overview
 
-Like the brain's parallel visual processing streams — where the ventral stream identifies *what* an object is while the dorsal stream identifies *where* it is — LENS runs 8 analyzers in parallel, each extracting a different dimension of understanding from the codebase.
+Like the brain's parallel visual processing streams — where the ventral stream identifies *what* an object is while the dorsal stream identifies *where* it is — LENS runs 10 analyzers in parallel, each extracting a different dimension of understanding from the codebase.
 
 | Analyzer | Purpose | Performance | Languages |
 |----------|---------|-------------|-----------|
 | **GitHistoryAnalyzer** | Recent changes | 50ms | All |
-| **ASTAnalyzer** | Code structure | 100ms | Python, TS, Java |
+| **ASTAnalyzer** | Code structure | 100ms | Python, TS, Java, C# |
 | **CommentExtractor** | Documentation | 30ms | All |
-| **VisionAnalyzer** | UI/diagrams | 200ms | N/A |
 | **ConfigAnalyzer** | Configuration | 20ms | YAML, JSON, TOML |
 | **DatabaseAnalyzer** | Schema | 80ms | SQL |
+| **DependencyAnalyzer** | External libraries, CVEs | 60ms | Python, Node.js, .NET |
 | **APIAnalyzer** | Endpoints | 60ms | OpenAPI, REST |
-| **PatternAnalyzer** | Design patterns | 150ms | Python, TS, Java |
+| **PolyglotAnalyzer** | Multi-language detection | 40ms | All |
+| **VendorDetector** | Third-party code boundaries | 30ms | All |
+| **DatabaseCrawlerPlugin** | Deep DB schema + PostgreSQL/SQL Server | 120ms | SQL |
+
+### Language Adapters (LENS)
+
+LENS also includes 5 language-specific adapters in `cortex/lens/adapters/` for enhanced parsing:
+
+| Adapter | Language | Capabilities |
+|---------|----------|-------------|
+| **LanguageAdapter** | Base | Abstract interface for all language adapters |
+| **CSharpAdapter** | C# | .NET/Roslyn-aware AST parsing, namespace resolution |
+| **JavaAdapter** | Java | Package structure, Maven/Gradle integration |
+| **JavaScriptAdapter** | JavaScript | ESM/CJS module detection, framework identification |
+| **TypeScriptAdapter** | TypeScript | Type-aware parsing, decorator analysis |
 
 ---
 
@@ -300,56 +316,105 @@ class TodoItem:
 
 ---
 
-## VisionAnalyzer
+## DependencyAnalyzer
 
 ### Purpose
 
-Analyzes visual content like UI screenshots and architecture diagrams.
+Analyzes project dependencies for vulnerability detection, version conflicts, and license compliance.
 
 ### Capabilities
 
-- **UI Analysis** — Component detection
-- **Diagram Parsing** — Architecture extraction
-- **Accessibility Check** — A11y validation
-- **Design Pattern Detection** — UI patterns
+- **CVE Detection** — Known vulnerability scanning
+- **Version Conflict** — Dependency tree conflict detection
+- **License Compliance** — License compatibility checks
+- **Outdated Detection** — Flag outdated packages
 
 ### Implementation
 
 ```python
-class VisionAnalyzer(BaseAnalyzer):
-    """Analyzes visual content."""
+class DependencyAnalyzer(BaseAnalyzer):
+    """Analyzes project dependencies for vulnerabilities and conflicts."""
     
-    SUPPORTED_FORMATS = [".png", ".jpg", ".svg", ".pdf"]
+    MANIFEST_FILES = {
+        "requirements.txt": "python",
+        "package.json": "nodejs",
+        "*.csproj": "dotnet",
+        "pom.xml": "java",
+        "Gemfile": "ruby",
+    }
     
     async def analyze(
         self,
         target: str,
         options: Optional[AnalyzerOptions] = None
     ) -> AnalyzerResult:
-        if not self._is_visual(target):
-            return AnalyzerResult(
-                analyzer=self.name,
-                success=False,
-                errors=["Not a visual file"]
-            )
+        manifests = self._find_manifests(target)
+        dependencies = []
         
-        # Load image
-        image = await self._load_image(target)
-        
-        # Detect content type
-        content_type = self._classify_image(image)
-        
-        if content_type == "ui":
-            analysis = await self._analyze_ui(image)
-        elif content_type == "diagram":
-            analysis = await self._analyze_diagram(image)
-        else:
-            analysis = {"type": "unknown"}
+        for manifest in manifests:
+            deps = await self._parse_manifest(manifest)
+            vulnerabilities = await self._check_cves(deps)
+            dependencies.extend(deps)
         
         return AnalyzerResult(
             analyzer=self.name,
             success=True,
-            data=analysis
+            data={
+                "dependencies": dependencies,
+                "vulnerabilities": vulnerabilities,
+                "outdated": self._check_outdated(dependencies),
+                "license_issues": self._check_licenses(dependencies)
+            }
+        )
+```
+
+---
+
+## PolyglotAnalyzer
+
+### Purpose
+
+Detects multiple programming languages in a repository and identifies framework patterns.
+
+### Capabilities
+
+- **Language Detection** — Identify all languages in a repo
+- **Framework Identification** — Detect Django, React, .NET, etc.
+- **Build System Detection** — Identify build tools (Make, Gradle, npm)
+- **Monorepo Analysis** — Detect sub-project boundaries
+
+### Implementation
+
+```python
+class PolyglotAnalyzer(BaseAnalyzer):
+    """Detects multi-language repositories and framework patterns."""
+    
+    LANGUAGE_SIGNATURES = {
+        "python": ["*.py", "requirements.txt", "setup.py", "pyproject.toml"],
+        "typescript": ["*.ts", "tsconfig.json"],
+        "csharp": ["*.cs", "*.csproj", "*.sln"],
+        "java": ["*.java", "pom.xml", "build.gradle"],
+        "javascript": ["*.js", "package.json"],
+    }
+    
+    async def analyze(
+        self,
+        target: str,
+        options: Optional[AnalyzerOptions] = None
+    ) -> AnalyzerResult:
+        languages = self._detect_languages(target)
+        frameworks = self._detect_frameworks(target)
+        
+        return AnalyzerResult(
+            analyzer=self.name,
+            success=True,
+            data={
+                "languages": languages,
+                "primary_language": languages[0] if languages else None,
+                "frameworks": frameworks,
+                "build_systems": self._detect_build_systems(target),
+                "is_monorepo": self._detect_monorepo(target)
+            }
         )
 ```
 
@@ -517,38 +582,31 @@ class APIAnalyzer(BaseAnalyzer):
 
 ---
 
-## PatternAnalyzer
+## VendorDetector
 
 ### Purpose
 
-Detects design patterns and anti-patterns in code.
+Detects vendor-specific technologies, cloud providers, and third-party service integrations.
 
 ### Capabilities
 
-- **Design Patterns** — GoF patterns
-- **Anti-Patterns** — Code smells
-- **Architecture Patterns** — MVC, CQRS, etc.
-- **Best Practices** — Idiom detection
+- **Cloud Provider Detection** — AWS, Azure, GCP service usage
+- **SaaS Integration** — Third-party service identification
+- **SDK Detection** — Vendor SDK and client library usage
+- **Lock-In Assessment** — Vendor dependency risk scoring
 
 ### Implementation
 
 ```python
-class PatternAnalyzer(BaseAnalyzer):
-    """Detects design patterns and anti-patterns."""
+class VendorDetector(BaseAnalyzer):
+    """Detects vendor-specific technologies and cloud dependencies."""
     
-    PATTERNS = {
-        "singleton": SingletonDetector(),
-        "factory": FactoryDetector(),
-        "observer": ObserverDetector(),
-        "strategy": StrategyDetector(),
-        "decorator": DecoratorDetector(),
-    }
-    
-    ANTI_PATTERNS = {
-        "god_class": GodClassDetector(),
-        "long_method": LongMethodDetector(),
-        "feature_envy": FeatureEnvyDetector(),
-        "duplicate_code": DuplicateCodeDetector(),
+    VENDOR_SIGNATURES = {
+        "aws": ["boto3", "aws-sdk", "amazonaws.com"],
+        "azure": ["azure-", "microsoft.azure", "azurewebsites"],
+        "gcp": ["google-cloud", "googleapis", "firebase"],
+        "stripe": ["stripe", "stripe-python"],
+        "twilio": ["twilio"],
     }
     
     async def analyze(
@@ -556,27 +614,72 @@ class PatternAnalyzer(BaseAnalyzer):
         target: str,
         options: Optional[AnalyzerOptions] = None
     ) -> AnalyzerResult:
-        ast = await self._parse_ast(target)
-        
-        # Detect patterns
-        patterns = []
-        for name, detector in self.PATTERNS.items():
-            if matches := detector.detect(ast):
-                patterns.extend(matches)
-        
-        # Detect anti-patterns
-        anti_patterns = []
-        for name, detector in self.ANTI_PATTERNS.items():
-            if matches := detector.detect(ast):
-                anti_patterns.extend(matches)
+        vendors = self._scan_for_vendors(target)
         
         return AnalyzerResult(
             analyzer=self.name,
             success=True,
             data={
-                "patterns": patterns,
-                "anti_patterns": anti_patterns,
-                "architecture_style": self._detect_architecture(ast)
+                "vendors": vendors,
+                "cloud_providers": self._classify_cloud(vendors),
+                "lock_in_risk": self._assess_lock_in(vendors),
+                "recommendations": self._portability_advice(vendors)
+            }
+        )
+```
+
+---
+
+## DatabaseCrawlerPlugin
+
+### Purpose
+
+Crawls live database schemas for comprehensive structural analysis including stored procedures, triggers, and relationships.
+
+### Capabilities
+
+- **Schema Crawling** — Tables, columns, types, constraints
+- **Stored Procedure Analysis** — SP extraction and complexity scoring
+- **Trigger Detection** — Trigger definitions and dependencies
+- **Relationship Mapping** — Foreign key and cross-schema references
+
+### Plugins
+
+| Plugin | Database |
+|--------|----------|
+| `postgresql_plugin.py` | PostgreSQL |
+| `sqlserver_plugin.py` | SQL Server |
+
+### Implementation
+
+```python
+class DatabaseCrawlerPlugin(BaseAnalyzer):
+    """Crawls live database schemas for structural analysis."""
+    
+    SUPPORTED_ENGINES = ["postgresql", "sqlserver"]
+    
+    async def analyze(
+        self,
+        target: str,
+        options: Optional[AnalyzerOptions] = None
+    ) -> AnalyzerResult:
+        engine = self._detect_engine(target)
+        plugin = self._load_plugin(engine)
+        
+        schema = await plugin.crawl_schema(target)
+        procedures = await plugin.crawl_procedures(target)
+        triggers = await plugin.crawl_triggers(target)
+        
+        return AnalyzerResult(
+            analyzer=self.name,
+            success=True,
+            data={
+                "engine": engine,
+                "tables": schema["tables"],
+                "relationships": schema["foreign_keys"],
+                "stored_procedures": procedures,
+                "triggers": triggers,
+                "complexity_score": self._score_complexity(schema)
             }
         )
 ```

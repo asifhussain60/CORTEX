@@ -105,11 +105,13 @@ class LENSOrchestrator:
         self.git_analyzer = GitHistoryAnalyzer(repo_path)
         self.ast_analyzer = ASTAnalyzer(repo_path)
         self.comment_extractor = CommentExtractor()
-        self.vision_analyzer = VisionAnalyzer()
         self.config_analyzer = ConfigAnalyzer()
         self.database_analyzer = DatabaseAnalyzer()
+        self.dependency_analyzer = DependencyAnalyzer()
         self.api_analyzer = APIAnalyzer()
-        self.pattern_analyzer = PatternAnalyzer()
+        self.polyglot_analyzer = PolyglotAnalyzer()
+        self.vendor_detector = VendorDetector()
+        self.database_crawler = DatabaseCrawlerPlugin()
         
         # Initialize cache
         self.cache = LENSCache()

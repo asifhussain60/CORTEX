@@ -2,7 +2,7 @@
 
 **Purpose:** Complete documentation of the CORTEX request lifecycle — from stimulus to response  
 **Audience:** All Technical Stakeholders  
-**Last Updated:** 2026-02-13 | **Orchestrators:** 17 active
+**Last Updated:** 2026-02-14 | **Orchestrators:** 21 (14 active + 4 super + 7 deprecated)
 
 ---
 

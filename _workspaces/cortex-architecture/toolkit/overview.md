@@ -10,7 +10,7 @@
 
 **CORTEX Toolkit: The Brain's Cognitive Abilities**
 
-Just as the human brain has different cognitive abilities—memory recall, pattern recognition, problem-solving, creative thinking—CORTEX exposes its intelligence through **35+ specialized cognitive tools** accessible via the Model Context Protocol.
+Just as the human brain has different cognitive abilities—memory recall, pattern recognition, problem-solving, creative thinking—CORTEX exposes its intelligence through **26 consolidated cognitive tools** (with 90+ operations) accessible via the Model Context Protocol.
 
 **Think of Tools as Cognitive Functions:**
 - **🧠 Core Tools** = Basic cognitive functions (memory, attention, processing)
@@ -50,7 +50,7 @@ These tools are the **neural pathways** that external systems use to tap into CO
 │  │  (4 tools)  │     │  (3 tools)  │     │  (5 tools)  │       │
 │  └─────────────┘     └─────────────┘     └─────────────┘       │
 │                                                                  │
-│                       35+ Cognitive Tools Total                  │
+│                       26 Consolidated Tools (90+ Ops)            │
 └─────────────────────────────────────────────────────────────────┘
 ```
 

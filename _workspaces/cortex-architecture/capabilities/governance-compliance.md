@@ -107,7 +107,7 @@ CORTEX defines 50+ governance rules organized by category:
 
 ### Agent Architecture
 
-The UnifiedQualityAssuranceOrchestrator (anterior cingulate cortex — error detection) coordinates seven specialized enforcement agents:
+The UnifiedQualityAssuranceOrchestrator (anterior cingulate cortex — error detection) coordinates eight specialized enforcement agents:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐

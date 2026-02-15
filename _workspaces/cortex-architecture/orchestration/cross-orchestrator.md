@@ -2,7 +2,7 @@
 
 **Purpose:** Documentation of orchestrator coordination patterns — the neural pathways of CORTEX  
 **Audience:** Architects, Senior Developers  
-**Last Updated:** 2026-02-13 | **Orchestrators:** 17 active
+**Last Updated:** 2026-02-14 | **Orchestrators:** 21 (14 active + 4 super + 7 deprecated)
 
 ---
 
@@ -24,7 +24,7 @@
 
 In the brain, individual regions don't operate in isolation — they communicate through **white matter tracts**, bundles of myelinated axons that form the brain's internal wiring. The arcuate fasciculus connects Broca's and Wernicke's areas for language. The corpus callosum bridges the two hemispheres. These pathways determine how fast and reliably information flows between regions.
 
-CORTEX's cross-orchestrator coordination patterns are these white matter tracts — the communication infrastructure that allows 17 orchestrators to work together as a unified cognitive system. Without these patterns, each orchestrator would be an isolated island of capability. With them, CORTEX achieves emergent intelligence that no single orchestrator could deliver alone.
+CORTEX's cross-orchestrator coordination patterns are these white matter tracts — the communication infrastructure that allows 21 orchestrators to work together as a unified cognitive system. Without these patterns, each orchestrator would be an isolated island of capability. With them, CORTEX achieves emergent intelligence that no single orchestrator could deliver alone.
 
 ### Coordination Principles
 

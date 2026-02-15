@@ -501,4 +501,49 @@ Extensions follow semantic versioning:
 
 ---
 
+## Multi-Language Refactoring
+
+### Refactoring Adapters
+
+CORTEX provides semantic refactoring across multiple languages through specialized adapters:
+
+| Adapter | Language | Backend | Capabilities |
+|---------|----------|---------|-------------|
+| **RopeAdapter** | Python | Rope library | Extract method/variable, rename, organize imports, inline |
+| **RoslynAdapter** | C# | Roslyn CLI | Extract method, rename, organize usings, type-aware refactoring |
+| **TypeScriptAdapter** | TypeScript/JavaScript | ts-morph | Extract function, rename, organize imports, interface extraction |
+
+**Location:** `cortex/refactoring/adapters/`
+
+### LENS Language Adapters
+
+For cross-language code intelligence, LENS provides parsing adapters:
+
+| Adapter | Language | Location |
+|---------|----------|----------|
+| **CSharpAdapter** | C# | `cortex/lens/adapters/csharp_adapter.py` |
+| **JavaAdapter** | Java | `cortex/lens/adapters/java_adapter.py` |
+| **JavaScriptAdapter** | JavaScript | `cortex/lens/adapters/javascript_adapter.py` |
+| **TypeScriptAdapter** | TypeScript | `cortex/lens/adapters/typescript_adapter.py` |
+
+### MCP Tool: `cortex_refactor`
+
+The `cortex_refactor` consolidated tool exposes all refactoring operations through MCP:
+
+```json
+{
+  "tool": "cortex_refactor",
+  "arguments": {
+    "operation": "extract_method",
+    "language": "python",
+    "file_path": "src/auth/login.py",
+    "start_line": 45,
+    "end_line": 67,
+    "new_name": "validate_credentials"
+  }
+}
+```
+
+---
+
 *Part of CORTEX Architecture Documentation*
