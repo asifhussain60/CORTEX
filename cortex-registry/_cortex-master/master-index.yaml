@@ -1,4 +1,12 @@
-# CORTEX Master Registry Index
+# COmetadata:
+  version: "6.0"
+  last_updated: "2026-02-15T21:30:00Z"
+  total_phases: 33   # 25 original + 5 MEGA production + 3 new consolidation phases
+  active: 2          # Phase 21, Phase 23
+  completed: 9       # Phase 02, 09, 19, 20 + MEGA-E, I, M, C, D
+  consolidated: 9    # Phases 01, 12, 16, 17, 18 + Phase 22, 24, 26 (into 27-29)
+  deferred: 10       # Future enhancements
+  planned: 3         # Phase 27, 28, 29 (NEW consolidation phases)ter Registry Index
 # Auto-generated: 2026-02-15
 # Last Verified: 2026-02-15T20:30:00Z (Production Readiness Complete)
 
@@ -192,17 +200,16 @@ phase_status:
     - id: "phase-22"
       title: "Developer Experience & Tooling"
       location: "phases/planned/22-developer-experience-tooling.yaml"
-      status: "planned"
-      depends_on: ["phase-21"]
+      status: "consolidated"
+      priority: "P2"
+      note: "CONSOLIDATED into Phase 29 S4 (2026-02-15)"
 
     - id: "phase-24"
       title: "Production Verification Harness"
       location: "phases/planned/24-production-verification-harness.yaml"
-      status: "deferred"
+      status: "consolidated"
       priority: "P1"
-      depends_on: ["phase-21"]
-      estimated_tests: 200-260
-      note: "Zero-mock golden tests — deferred post-production"
+      note: "CONSOLIDATED into Phase 29 S2 (2026-02-15)"
 
     - id: "phase-25"
       title: "Stabilization & Duplicate Elimination"
@@ -214,10 +221,56 @@ phase_status:
     - id: "phase-26"
       title: "Black/isort Mass Reformatting"
       location: "phases/planned/26-black-isort-reformatting.yaml"
-      status: "planned"
+      status: "consolidated"
       priority: "P2"
+      note: "CONSOLIDATED into Phase 29 S3 (2026-02-15)"
+    
+    - id: "phase-27"
+      title: "Intelligence Persistence & Golden Test Harness Foundation"
+      location: "phases/planned/27-intelligence-persistence-golden-harness.yaml"
+      status: "planned"
+      priority: "P0"
       depends_on: ["phase-21"]
-      note: "Address 962 files needing black formatting (deferred from MEGA-C)"
+      estimated_effort: "7-10 days"
+      estimated_tests: 55
+      golden_tests: 45
+      consolidates:
+        - "GAP-01: Knowledge Persistence Infrastructure"
+        - "GAP-02: Universal Learning Loop Integration"
+        - "GAP-07: Agent Collaboration Protocol"
+      note: "Foundation for cross-session learning with zero-mock golden tests"
+    
+    - id: "phase-28"
+      title: "Component Intelligence & STS Automation"
+      location: "phases/planned/28-component-intelligence-sts-automation.yaml"
+      status: "planned"
+      priority: "P1"
+      depends_on: ["phase-21", "phase-23", "phase-27"]
+      estimated_effort: "12-16 days"
+      estimated_tests: 145
+      golden_tests: 125
+      consolidates:
+        - "GAP-03: Component Registration & Contract Enforcement"
+        - "GAP-04: Advanced Knowledge YAMLs (23 domains)"
+        - "GAP-05: STS Automated Analysis Tool"
+        - "GAP-06: Phase 49 CCL STS Integration"
+      note: "Complete domain knowledge (90% coverage) + automated STS showcase"
+    
+    - id: "phase-29"
+      title: "Production Verification Harness & Excellence Polish"
+      location: "phases/planned/29-production-verification-excellence.yaml"
+      status: "planned"
+      priority: "P1"
+      depends_on: ["phase-27", "phase-28"]
+      estimated_effort: "10-14 days"
+      estimated_tests: 305
+      golden_tests: 290
+      consolidates:
+        - "GAP-08: Meta-Auditor & Plan-Auditor Agents"
+        - "GAP-09: Black/isort Mass Reformatting (962 files)"
+        - "GAP-10: Production Verification Harness (260 tests)"
+        - "GAP-11: Developer Experience Tooling"
+      note: "Production-grade quality assurance + polished developer experience"
 
   deferred:
     - phase-03  # LENS Knowledge Graph
@@ -298,21 +351,37 @@ execution_order:
       depends_on: ["phase-21"]
       
     - order: 3
-      phase: "phase-22"
-      label: "Developer Experience & Tooling"
-      priority: "P1"
+      phase: "phase-27"
+      label: "Intelligence Persistence & Golden Test Harness Foundation"
+      priority: "P0"
       status: "PLANNED"
-      estimated_duration: "2-3 weeks"
+      estimated_duration: "7-10 days"
       depends_on: ["phase-21"]
+      consolidates: ["GAP-01", "GAP-02", "GAP-07"]
+      golden_tests: 45
+      note: "Foundation for cross-session learning with zero-mock tests"
       
     - order: 4
-      phase: "phase-26"
-      label: "Black/isort Mass Reformatting"
-      priority: "P2"
+      phase: "phase-28"
+      label: "Component Intelligence & STS Automation"
+      priority: "P1"
       status: "PLANNED"
-      estimated_duration: "1-2 days"
-      depends_on: ["phase-21"]
-      note: "Address 962 files from MEGA-C baseline"
+      estimated_duration: "12-16 days"
+      depends_on: ["phase-21", "phase-23", "phase-27"]
+      consolidates: ["GAP-03", "GAP-04", "GAP-05", "GAP-06"]
+      golden_tests: 125
+      note: "Complete domain knowledge (90% coverage) + automated STS showcase"
+      
+    - order: 5
+      phase: "phase-29"
+      label: "Production Verification Harness & Excellence Polish"
+      priority: "P1"
+      status: "PLANNED"
+      estimated_duration: "10-14 days"
+      depends_on: ["phase-27", "phase-28"]
+      consolidates: ["GAP-08", "GAP-09", "GAP-10", "GAP-11"]
+      golden_tests: 290
+      note: "Production-grade quality assurance + 260 zero-mock production tests"
     priority: "P0"
     sessions: 7-9
     
