@@ -1,0 +1,18 @@
+# Sample Orchestrator Configuration - Edge Case (circular dependency)
+
+name: "CircularOrchestrator"
+type: "support"
+tier: 3
+priority: 10
+capabilities:
+  - "circular_handling"
+dependencies:
+  - "CircularOrchestrator"  # Circular: depends on itself
+event_subscriptions: []
+mcp_tools: []
+health_check:
+  enabled: true
+  timeout_seconds: 5
+audit_trail:
+  enabled: true
+  ac_marker_prefix: "AC-CIRCULAR"
