@@ -15,6 +15,7 @@ from typing import Any, Dict, List, Optional
 
 from .agents.base_agent import BaseHealthAgent, HealthCheckResult
 from .reports.health_report import HealthReport, HealthMetrics
+from .intelligence import HealthIntelligence
 
 
 class HealthOrchestrator:
@@ -60,6 +61,9 @@ class HealthOrchestrator:
         self.agents: List[BaseHealthAgent] = []
         self.config = config or {}
         self.enabled = True
+        
+        # Initialize intelligence layer
+        self.intelligence = HealthIntelligence(self.workspace_root)
         
         if not self.workspace_root.exists():
             raise ValueError(f"Workspace root does not exist: {self.workspace_root}")
@@ -112,12 +116,15 @@ class HealthOrchestrator:
     def run_health_check(
         self,
         agent_names: Optional[List[str]] = None,
+        use_intelligence: bool = True,
     ) -> HealthReport:
         """Run health check with registered agents.
         
         Args:
             agent_names: Optional list of specific agents to run.
                         If None, runs all enabled agents.
+            use_intelligence: Whether to use intelligence layer for
+                            caching and false positive suppression
         
         Returns:
             HealthReport with aggregated results
@@ -140,7 +147,44 @@ class HealthOrchestrator:
                 continue
             
             try:
+                # Check intelligence cache if enabled
+                if use_intelligence:
+                    # Skip files that haven't changed
+                    cached_files = 0
+                    for file_path in self.workspace_root.rglob("*.py"):
+                        if self.intelligence.should_skip_file(file_path, agent.name):
+                            cached_files += 1
+                    
+                    if cached_files > 0:
+                        print(f"  {agent.name}: Skipped {cached_files} unchanged files (cached)")
+                
+                # Run agent check
                 result = agent.check(self.workspace_root)
+                
+                # Filter false positives using intelligence
+                if use_intelligence and result.issues:
+                    original_count = len(result.issues)
+                    filtered_issues = [
+                        issue for issue in result.issues
+                        if not self.intelligence.is_false_positive(
+                            issue.file_path,
+                            issue.category.value,
+                            issue.description,
+                        )
+                    ]
+                    result.issues = filtered_issues
+                    
+                    if len(filtered_issues) < original_count:
+                        suppressed = original_count - len(filtered_issues)
+                        print(f"  {agent.name}: Suppressed {suppressed} known false positives")
+                
+                # Cache result
+                if use_intelligence:
+                    self.intelligence.cache_result(
+                        agent_name=agent.name,
+                        result=result,
+                    )
+                
                 report.add_agent_result(result)
             except Exception as e:
                 # Log error but continue with other agents
@@ -155,11 +199,16 @@ class HealthOrchestrator:
                 )
                 report.add_agent_result(error_result)
         
-        # Generate recommendations
+        # Generate recommendations with intelligence
         report.generate_recommendations()
         
         # Update total duration
         report.metadata["total_duration_seconds"] = time.time() - start_time
+        
+        # Add intelligence stats
+        if use_intelligence:
+            intel_stats = self.intelligence.get_stats()
+            report.metadata["intelligence"] = intel_stats
         
         return report
     

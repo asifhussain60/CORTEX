@@ -10,6 +10,7 @@ Consolidates cleanup logic from multiple vacuum scripts.
 **Authority:** Phase 90 S-90-05
 **Author:** Asif Hussain
 **Created:** 2026-02-16
+**Enhanced:** Phase 96 (Intelligence Layer)
 """
 
 import os
@@ -17,6 +18,8 @@ import shutil
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Optional
+
+from .vacuum_intelligence import VacuumIntelligence, SafetyCheck
 
 
 @dataclass
@@ -51,6 +54,9 @@ class VacuumAutomation:
         self.workspace_root = workspace_root or Path.cwd()
         self.dry_run = dry_run
         self.results: Dict[str, CleanupResult] = {}
+        
+        # Initialize intelligence layer
+        self.intelligence = VacuumIntelligence(self.workspace_root)
     
     def cleanup_all(self) -> Dict[str, CleanupResult]:
         """
@@ -332,6 +338,91 @@ class VacuumAutomation:
         self.results["build_artifacts"] = result
         return result
     
+    def get_smart_recommendations(self) -> List[tuple]:
+        """
+        Get intelligent cleanup recommendations using pattern learning.
+        
+        Returns:
+            List of (file_path, reason, confidence_percent) tuples
+        """
+        return self.intelligence.recommend_cleanup_targets()
+    
+    def safe_cleanup_with_intelligence(
+        self,
+        targets: Optional[List[Path]] = None,
+    ) -> CleanupResult:
+        """
+        Perform intelligent cleanup with safety checks.
+        
+        If no targets provided, uses smart recommendations.
+        
+        Args:
+            targets: Optional list of files to clean up
+        
+        Returns:
+            Cleanup result with safety check details
+        """
+        if targets is None:
+            # Get smart recommendations
+            recommendations = self.intelligence.recommend_cleanup_targets()
+            # Filter to high-confidence only (>70%)
+            targets = [path for path, reason, conf in recommendations if conf >= 70]
+        
+        files_removed = 0
+        bytes_freed = 0
+        errors = []
+        skipped_unsafe = []
+        
+        for file_path in targets:
+            # Safety check
+            safety = self.intelligence.safety_check(file_path)
+            
+            if not safety.safe:
+                skipped_unsafe.append(f"{file_path}: {safety.reason}")
+                continue
+            
+            # Display warnings
+            for warning in safety.warnings:
+                print(f"⚠️  {file_path.name}: {warning}")
+            
+            try:
+                file_size = file_path.stat().st_size
+                
+                if not self.dry_run:
+                    file_path.unlink()
+                    # Learn from successful cleanup
+                    self.intelligence.learn_from_cleanup(
+                        file_path=file_path,
+                        reason="smart_cleanup",
+                        bytes_saved=file_size,
+                        successful=True,
+                    )
+                
+                files_removed += 1
+                bytes_freed += file_size
+                
+            except Exception as e:
+                error_msg = f"Failed to remove {file_path}: {e}"
+                errors.append(error_msg)
+                # Learn from failed cleanup
+                self.intelligence.learn_from_cleanup(
+                    file_path=file_path,
+                    reason="smart_cleanup",
+                    bytes_saved=0,
+                    successful=False,
+                )
+        
+        result = CleanupResult(
+            strategy="smart_cleanup",
+            files_removed=files_removed,
+            directories_removed=0,
+            bytes_freed=bytes_freed,
+            errors=errors + skipped_unsafe,
+        )
+        
+        self.results["smart_cleanup"] = result
+        return result
+    
     def generate_report(self) -> str:
         """
         Generate formatted cleanup report.
@@ -348,6 +439,15 @@ class VacuumAutomation:
         if self.dry_run:
             lines.append("⚠️  DRY RUN MODE (no files actually removed)")
             lines.append("")
+        
+        # Add intelligence stats
+        intel_stats = self.intelligence.get_efficiency_stats()
+        lines.append("Intelligence Layer Stats:")
+        lines.append(f"  Patterns Learned: {intel_stats['total_patterns_learned']}")
+        lines.append(f"  Safe Patterns: {intel_stats['safe_cleanup_patterns']}")
+        lines.append(f"  Historical Bytes Saved: {intel_stats['total_bytes_saved_mb']:.2f} MB")
+        lines.append(f"  Success Rate: {intel_stats['success_rate']*100:.1f}%")
+        lines.append("")
         
         total_files = sum(r.files_removed for r in self.results.values())
         total_dirs = sum(r.directories_removed for r in self.results.values())
