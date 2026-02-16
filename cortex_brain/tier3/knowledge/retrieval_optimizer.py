@@ -216,12 +216,33 @@ class RetrievalOptimizer:
         
         Returns:
             Dictionary containing index statistics
+        
+        Note:
+            Returns real statistics when indexer is available, otherwise
+            returns empty stats with note indicating indexer not configured.
         """
+        if self.indexer is not None:
+            # Delegate to real indexer when available
+            try:
+                return self.indexer.get_stats()
+            except Exception as e:
+                # Log error but return safe defaults
+                return {
+                    'total_entries': 0,
+                    'indexed_domains': [],
+                    'last_indexed': None,
+                    'index_size_mb': 0.0,
+                    'error': str(e),
+                    'status': 'indexer_error'
+                }
+        
+        # Indexer not configured yet - return safe defaults
         return {
-            'total_entries': 0,  # Placeholder
-            'indexed_domains': [],  # Placeholder
-            'last_indexed': None,  # Placeholder
-            'index_size_mb': 0.0,  # Placeholder
+            'total_entries': 0,
+            'indexed_domains': [],
+            'last_indexed': None,
+            'index_size_mb': 0.0,
+            'status': 'indexer_not_configured'
         }
     
     def get_metrics(self) -> Dict[str, Any]:
@@ -264,13 +285,77 @@ class RetrievalOptimizer:
         
         Returns:
             List of search results
-        """
-        # Placeholder implementation - would integrate with vector DB
-        results = []
         
-        # This would normally query a vector database
-        # For now, return mock results
-        return results[:limit]
+        Raises:
+            RuntimeError: If indexer not configured (golden test requirement)
+        
+        Note:
+            This is the real implementation - no mocks/placeholders.
+            When indexer is available, delegates to it for vector search.
+            Otherwise raises clear error (no silent mock returns).
+        """
+        # Check if indexer is configured
+        if self.indexer is None:
+            # GOLDEN TEST REQUIREMENT: Raise error instead of returning mock data
+            # AC-KN-002-02-FIX-001: No placeholder/mock returns in production path
+            raise RuntimeError(
+                "Semantic search requires knowledge indexer. "
+                "Configure indexer via: optimizer.indexer = KnowledgeIndexer()"
+            )
+        
+        # Delegate to real indexer for vector search
+        try:
+            # Optimize query first
+            optimized_query = self.optimize_query(query)
+            
+            # Call indexer's semantic search
+            raw_results = self.indexer.search(
+                query=optimized_query,
+                domain_filter=domain,
+                limit=limit * 2,  # Get extra for filtering
+                min_score=threshold
+            )
+            
+            # Convert indexer results to SearchResult objects
+            search_results = []
+            for idx, result in enumerate(raw_results):
+                # Extract fields with safe defaults
+                entry_id = result.get('id', result.get('entry_id', f'unknown-{idx}'))
+                result_domain = result.get('domain', domain or 'UNKNOWN')
+                content = result.get('content', result.get('text', ''))
+                relevance = result.get('score', result.get('relevance_score', 0.0))
+                quality = result.get('quality_score', result.get('quality', 0.0))
+                metadata = result.get('metadata', {})
+                
+                # Create SearchResult
+                search_result = SearchResult(
+                    entry_id=entry_id,
+                    domain=result_domain,
+                    content=content,
+                    relevance_score=float(relevance),
+                    quality_score=float(quality),
+                    metadata=metadata
+                )
+                search_results.append(search_result)
+            
+            # Apply threshold filtering
+            filtered = [r for r in search_results if r.relevance_score >= threshold]
+            
+            # Return limited results
+            return filtered[:limit]
+            
+        except AttributeError as e:
+            # Indexer doesn't have search method
+            raise RuntimeError(
+                f"Indexer missing search() method: {e}. "
+                "Ensure indexer implements KnowledgeIndexer interface."
+            ) from e
+        except Exception as e:
+            # Other indexer errors
+            raise RuntimeError(
+                f"Semantic search failed: {e}. "
+                "Check indexer configuration and connectivity."
+            ) from e
     
     def _get_cache_key(
         self,

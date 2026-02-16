@@ -23,11 +23,98 @@ from typing import Dict, List, Any
 import time
 
 
+class MockKnowledgeIndexer:
+    """
+    Mock indexer for testing retrieval optimizer.
+    
+    This is a test double (NOT a production mock) that implements
+    the KnowledgeIndexer interface for golden test compatibility.
+    """
+    
+    def __init__(self):
+        """Initialize mock indexer with test data."""
+        self._entries = [
+            {
+                'id': 'KE-001',
+                'domain': 'GOVERNANCE',
+                'content': 'API security best practices include authentication and authorization',
+                'score': 0.95,
+                'quality_score': 0.9
+            },
+            {
+                'id': 'KE-002',
+                'domain': 'SECURITY',
+                'content': 'Knowledge management systems require proper data governance',
+                'score': 0.85,
+                'quality_score': 0.8
+            },
+            {
+                'id': 'KE-003',
+                'domain': 'ORCHESTRATION',
+                'content': 'Testing strategies for distributed systems',
+                'score': 0.75,
+                'quality_score': 0.7
+            }
+        ]
+    
+    def search(
+        self,
+        query: str,
+        domain_filter: str = None,
+        limit: int = 10,
+        min_score: float = 0.0
+    ) -> List[Dict[str, Any]]:
+        """
+        Mock search implementation.
+        
+        Args:
+            query: Search query
+            domain_filter: Optional domain filter
+            limit: Result limit
+            min_score: Minimum score threshold
+        
+        Returns:
+            List of search results
+        """
+        # Filter by domain if specified
+        results = self._entries
+        if domain_filter:
+            results = [e for e in results if e['domain'] == domain_filter]
+        
+        # Filter by score threshold
+        results = [e for e in results if e['score'] >= min_score]
+        
+        # Simple relevance scoring based on query presence
+        query_lower = query.lower()
+        for entry in results:
+            if query_lower in entry['content'].lower():
+                entry['score'] = min(1.0, entry['score'] + 0.1)
+        
+        # Sort by score and limit
+        results = sorted(results, key=lambda x: x['score'], reverse=True)
+        return results[:limit]
+    
+    def get_stats(self) -> Dict[str, Any]:
+        """Get indexer statistics."""
+        return {
+            'total_entries': len(self._entries),
+            'indexed_domains': ['GOVERNANCE', 'SECURITY', 'ORCHESTRATION'],
+            'last_indexed': '2026-02-16T00:00:00Z',
+            'index_size_mb': 0.5,
+            'status': 'operational'
+        }
+
+
 @pytest.fixture(scope="module")
 def retrieval_optimizer():
     """Create retrieval optimizer instance for tests."""
     from cortex_brain.tier3.knowledge.retrieval_optimizer import RetrievalOptimizer
-    return RetrievalOptimizer()
+    optimizer = RetrievalOptimizer()
+    
+    # Configure with test indexer (golden test compatible)
+    optimizer.indexer = MockKnowledgeIndexer()
+    
+    return optimizer
 
 
 class TestRetrieverStructure:
@@ -104,8 +191,10 @@ class TestSemanticSearch:
         query = "knowledge management"
         results = retrieval_optimizer.semantic_search(query)
         if results:
-            assert "relevance_score" in results[0] or "score" in results[0] or \
-                   isinstance(results[0], dict)
+            # Results should be SearchResult objects with relevance_score attribute
+            assert hasattr(results[0], 'relevance_score') or \
+                   hasattr(results[0], 'score'), \
+                   "Result should have relevance_score or score attribute"
 
 
 class TestResultRanking:
