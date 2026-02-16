@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ page.title }} - CORTEX {{ role_config.title }}">
+    <title>{{ page.title }} | {{ role_config.title }} | CORTEX</title>
+    
+    <!-- Glassmorphism CSS System -->
+    <link rel="stylesheet" href="/assets/css/glass-design-tokens.css">
+    <link rel="stylesheet" href="/assets/css/cortex-glass-system.css">
+    <link rel="stylesheet" href="/assets/css/glass-ui-components.css">
+    <link rel="stylesheet" href="/assets/css/glass-animations.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    
+    <!-- D3.js for visualizations -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <style>
+        :root {
+            --role-accent: {{ role_config.accent_color }};
+        }
+        
+        .child-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, rgba(15, 15, 35, 0.95), rgba(25, 25, 55, 0.95));
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: rgba(15, 15, 35, 0.98);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem 1rem;
+            overflow-y: auto;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            padding: 2rem;
+            max-width: 1200px;
+        }
+        
+        .breadcrumb {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 2rem;
+        }
+        
+        .breadcrumb a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            color: var(--role-accent);
+        }
+        
+        .nav-item {
+            padding: 0.75rem 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.2s ease;
+        }
+        
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--role-accent);
+        }
+        
+        .nav-item.active {
+            background: var(--role-accent);
+            color: white;
+        }
+        
+        .section-content {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.7;
+        }
+        
+        .section-content h2 {
+            color: var(--role-accent);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .section-content h3 {
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .section-content code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.125rem 0.375rem;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Courier New', monospace;
+        }
+        
+        .section-content pre {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="child-page">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 2rem;">
+                <span style="font-size: 2rem;">{{ role_config.icon }}</span>
+                <h2 style="color: white; margin: 0; font-size: 1.25rem;">{{ role_config.title }}</h2>
+            </div>
+            
+            {% for item in navigation %}
+            <a href="{{ item.url }}" class="nav-item {% if item.active %}active{% endif %}">
+                {% if item.icon %}
+                <span>{{ item.icon }}</span>
+                {% endif %}
+                <span>{{ item.title }}</span>
+            </a>
+            {% endfor %}
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Breadcrumbs -->
+            <nav class="breadcrumb">
+                {% for crumb in breadcrumbs %}
+                {% if not loop.last %}
+                <a href="{{ crumb.url }}">{{ crumb.title }}</a>
+                <span>›</span>
+                {% else %}
+                <span style="color: var(--role-accent);">{{ crumb.title }}</span>
+                {% endif %}
+                {% endfor %}
+            </nav>
+            
+            <!-- Page Header -->
+            <div class="glass-card">
+                <h1 style="color: white; margin-bottom: 0.5rem;">
+                    {{ page.title }}
+                </h1>
+                {% if page.description %}
+                <p style="color: rgba(255, 255, 255, 0.7); font-size: 1.125rem;">
+                    {{ page.description }}
+                </p>
+                {% endif %}
+            </div>
+            
+            <!-- Page Sections -->
+            {% for section in page.sections | default([]) %}
+            <div class="glass-card">
+                <div class="section-content">
+                    {% if section.title %}
+                    <h2>{{ section.title }}</h2>
+                    {% endif %}
+                    {{ section.content | safe }}
+                </div>
+                
+                {% if section.visualization %}
+                <div id="viz-{{ loop.index }}" style="margin-top: 2rem;"></div>
+                <script>
+                    // D3.js visualization placeholder
+                    // Actual visualization would be injected here based on section.visualization type
+                </script>
+                {% endif %}
+            </div>
+            {% endfor %}
+            
+            <!-- Related Pages -->
+            {% if page.related_pages %}
+            <div class="glass-card">
+                <h3 style="color: var(--role-accent); margin-bottom: 1rem;">Related Pages</h3>
+                <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+                    {% for related in page.related_pages %}
+                    <a href="{{ related.url }}" style="text-decoration: none; color: rgba(255, 255, 255, 0.8); 
+                       padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.05); border-radius: 8px; 
+                       transition: all 0.2s ease;">
+                        {{ related.title }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </main>
+    </div>
+</body>
+</html>
