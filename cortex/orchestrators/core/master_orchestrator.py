@@ -4919,3 +4919,57 @@ class MasterOrchestrator(IOrchestrator):
                 success=False,
                 details={"error": f"Failed to trigger lifecycle hooks: {str(hook_err)}"}
             )
+
+    def _check_for_workflow_template(
+        self, context: Dict[str, Any]
+    ) -> Optional[Dict[str, Any]]:
+        """
+        Check if workflow template should be used for this operation.
+
+        Phase 100 Stage 3: Template routing integration.
+
+        Args:
+            context: Operation context with description, intent, attachments, keywords.
+
+        Returns:
+            Routing decision with template_id if template suggested, None otherwise.
+        """
+        try:
+            # Import IntentRouter (lazy to avoid circular imports)
+            from cortex.orchestrators.core.intent_router import IntentRouter
+
+            # Classify intent with template suggestion
+            router = IntentRouter()
+            intent, template_id = router.classify_intent_with_workflow_suggestion(
+                context
+            )
+
+            # If template suggested, return routing decision
+            if template_id is not None:
+                # Import WorkflowTemplateRegistry (lazy)
+                from cortex.orchestrators.workflow.template_registry import (
+                    WorkflowTemplateRegistry,
+                )
+
+                # Get template details
+                registry = WorkflowTemplateRegistry()
+                template = registry.get_template(template_id)
+
+                return {
+                    "template_id": template_id,
+                    "template_name": template["name"],
+                    "intent": intent,
+                    "use_autonomous_workflow": True,
+                }
+
+            return None
+
+        except Exception as e:
+            # Log but don't fail - template routing is optional enhancement
+            self.logger.log_operation_complete(
+                ac_id="AC-PHASE100-005",
+                operation="WORKFLOW_TEMPLATE_CHECK",
+                success=False,
+                details={"error": f"Template check failed: {str(e)}"},
+            )
+            return None

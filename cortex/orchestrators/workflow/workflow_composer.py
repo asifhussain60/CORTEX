@@ -167,14 +167,45 @@ class WorkflowComposer:
         """
         return list(self._steps)
 
-    def execute(self) -> WorkflowExecutionResult:
+    def execute(
+        self,
+        workflow: Optional[Dict[str, Any]] = None,
+        context: Optional[Dict[str, Any]] = None,
+        convergence_mode: bool = False,
+    ) -> WorkflowExecutionResult:
         """Execute all workflow steps sequentially.
 
+        Phase 100 Stage 3: Added convergence_mode parameter (non-breaking).
+
         Dispatches each step to its orchestrator, tracks progress, emits events,
-        and returns execution result.
+        and returns execution result. When convergence_mode=True, uses
+        StepStateMachine for convergence-gated execution with retry loops.
+
+        Args:
+            workflow: Optional workflow dict (overrides template). For compatibility.
+            context: Optional execution context. For compatibility.
+            convergence_mode: If True, use StepStateMachine + ConvergenceNeuron.
+                Defaults to False (standard behavior).
 
         Returns:
             WorkflowExecutionResult with completion status and metrics.
+        """
+        import time
+
+        # Phase 100: Route to convergence execution if enabled
+        if convergence_mode:
+            return self._execute_with_convergence(workflow, context)
+
+        # Standard execution (existing logic preserved)
+        return self._execute_standard()
+
+    def _execute_standard(self) -> WorkflowExecutionResult:
+        """Execute workflow with standard logic (no convergence gates).
+
+        Phase 100: Extracted from execute() to preserve existing behavior.
+
+        Returns:
+            WorkflowExecutionResult with completion status.
         """
         import time
 
@@ -260,6 +291,121 @@ class WorkflowComposer:
             "steps_completed": steps_completed,
             "execution_time_ms": execution_time_ms,
         })
+
+        return result
+
+    def _execute_with_convergence(
+        self,
+        workflow: Optional[Dict[str, Any]],
+        context: Optional[Dict[str, Any]],
+    ) -> WorkflowExecutionResult:
+        """Execute workflow with StepStateMachine + ConvergenceNeuron.
+
+        Phase 100 Stage 3: Convergence-gated execution with retry loops.
+
+        Args:
+            workflow: Optional workflow definition.
+            context: Optional execution context.
+
+        Returns:
+            WorkflowExecutionResult with completion status.
+        """
+        import time
+
+        try:
+            from cortex.orchestrators.workflow.step_state_machine import (
+                StepStateMachine,
+                ConvergenceGateConfig,
+            )
+            from cortex.orchestrators.core.convergence_neuron import ConvergenceNeuron
+        except ImportError:
+            # Fallback to standard execution if dependencies unavailable
+            logger.warning("Phase 100: StepStateMachine not available, using standard execution")
+            return self._execute_standard()
+
+        start_time = time.time()
+        steps_completed = 0
+        total_steps = len(self._steps)
+
+        logger.info(
+            f"Phase 100: Executing workflow '{self._workflow_name}' "
+            f"with convergence gates ({total_steps} steps)"
+        )
+
+        for step in self._steps:
+            logger.info(
+                f"Phase 100: Executing step '{step.step_id}' via "
+                f"{step.orchestrator_name} (convergence-gated)"
+            )
+
+            # Create convergence gate config
+            convergence_config = ConvergenceGateConfig(
+                max_cycles=step.parameters.get("convergence_gate", {}).get("max_cycles", 5),
+                success_criteria=step.parameters.get("convergence_gate", {}).get(
+                    "success_criteria", {}
+                ),
+                convergence_predicate=step.parameters.get("convergence_gate", {}).get(
+                    "convergence_predicate", ""
+                ),
+                scan_function=step.parameters.get("convergence_gate", {}).get(
+                    "scan_function", ""
+                ),
+                backoff_strategy=step.parameters.get("convergence_gate", {}).get(
+                    "backoff_strategy", "none"
+                ),
+            )
+
+            # Create StepStateMachine
+            # ConvergenceNeuron requires scan_function and target_predicate
+            # For now, pass None (Phase 100 integration of Phase 83 neuron is future work)
+            fsm = StepStateMachine(
+                step=step.parameters,
+                convergence_config=convergence_config,
+                neuron=None,
+            )
+
+            # Execute with retry loop
+            while not fsm.is_terminal_state():
+                fsm.execute_transition()
+
+                # Apply backoff if retrying
+                if fsm.current_state == "RETRYING":
+                    delay = fsm.backoff_delay()
+                    if delay > 0:
+                        time.sleep(delay)
+
+            # Check if step passed
+            if fsm.current_state != "PASSED":
+                error_msg = f"Step '{step.step_id}' failed to converge"
+                logger.warning(f"Phase 100: {error_msg}")
+
+                result = WorkflowExecutionResult(
+                    success=False,
+                    steps_completed=steps_completed,
+                    total_steps=total_steps,
+                    error_message=error_msg,
+                    execution_time_ms=(time.time() - start_time) * 1000,
+                )
+                self._execution_history.append(result)
+                return result
+
+            steps_completed += 1
+
+        # All steps completed successfully
+        execution_time_ms = (time.time() - start_time) * 1000
+        logger.info(
+            f"Phase 100: Workflow '{self._workflow_name}' completed "
+            f"with convergence gates in {execution_time_ms:.1f}ms"
+        )
+
+        result = WorkflowExecutionResult(
+            success=True,
+            steps_completed=steps_completed,
+            total_steps=total_steps,
+            error_message=None,
+            execution_time_ms=execution_time_ms,
+        )
+        self._execution_history.append(result)
 
         return result
 
