@@ -10,14 +10,14 @@ Consolidated MCP Server (WAVE-100):
 Usage:
     from cortex.mcp import MCPServer
     from cortex.mcp.base import Tool, ToolCategory
-    from cortex.mcp.registry import get_registry
+    from cortex.mcp.mcp_registry import get_registry
 
 Authority: WAVE-100 MCP Consolidation
 """
 
 from cortex.mcp.server import MCPServer, MCPRequest, MCPResponse
 from cortex.mcp.base import Tool, ToolResult, ToolCategory
-from cortex.mcp.registry import ToolRegistry, get_registry
+from cortex.mcp.mcp_registry import ToolRegistry, get_registry
 
 __all__ = [
     "MCPServer",

@@ -385,7 +385,7 @@ class TestRopeAdapterIntegration:
     def test_register_with_registry(self):
         """RopeAdapter must register with RefactoringToolRegistry."""
         from cortex.refactoring.adapters.rope_adapter import RopeAdapter
-        from cortex.refactoring.registry import RefactoringToolRegistry
+        from cortex.refactoring.refactoring_registry import RefactoringToolRegistry
         
         registry = RefactoringToolRegistry()
         adapter = RopeAdapter()
@@ -398,7 +398,7 @@ class TestRopeAdapterIntegration:
     def test_retrieve_from_registry(self):
         """RopeAdapter must be retrievable from registry."""
         from cortex.refactoring.adapters.rope_adapter import RopeAdapter
-        from cortex.refactoring.registry import RefactoringToolRegistry
+        from cortex.refactoring.refactoring_registry import RefactoringToolRegistry
         
         registry = RefactoringToolRegistry()
         adapter = RopeAdapter()

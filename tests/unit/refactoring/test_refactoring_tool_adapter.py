@@ -126,7 +126,7 @@ class TestRefactoringToolRegistry:
     def test_registry_initialization(self):
         """Registry must initialize empty."""
         # RED: Will fail until registry implemented
-        from cortex.refactoring.registry import RefactoringToolRegistry
+        from cortex.refactoring.refactoring_registry import RefactoringToolRegistry
         
         registry = RefactoringToolRegistry()
         assert registry is not None
@@ -134,7 +134,7 @@ class TestRefactoringToolRegistry:
     
     def test_registry_register_adapter(self):
         """Registry must allow adapter registration."""
-        from cortex.refactoring.registry import RefactoringToolRegistry
+        from cortex.refactoring.refactoring_registry import RefactoringToolRegistry
         from cortex.refactoring.adapters.base import RefactoringToolAdapter
         from cortex.refactoring.refactoring_models import RefactoringLanguage
         
@@ -164,7 +164,7 @@ class TestRefactoringToolRegistry:
     
     def test_registry_get_adapter_by_language(self):
         """Registry must retrieve adapter by language."""
-        from cortex.refactoring.registry import RefactoringToolRegistry
+        from cortex.refactoring.refactoring_registry import RefactoringToolRegistry
         from cortex.refactoring.adapters.base import RefactoringToolAdapter
         from cortex.refactoring.refactoring_models import RefactoringLanguage
         
@@ -196,7 +196,7 @@ class TestRefactoringToolRegistry:
     
     def test_registry_handles_missing_adapter(self):
         """Registry must handle requests for unregistered languages."""
-        from cortex.refactoring.registry import RefactoringToolRegistry
+        from cortex.refactoring.refactoring_registry import RefactoringToolRegistry
         from cortex.refactoring.refactoring_models import RefactoringLanguage
         
         registry = RefactoringToolRegistry()
@@ -209,7 +209,7 @@ class TestRefactoringToolRegistry:
     
     def test_registry_duplicate_language_registration(self):
         """Registry must handle duplicate language registrations."""
-        from cortex.refactoring.registry import RefactoringToolRegistry
+        from cortex.refactoring.refactoring_registry import RefactoringToolRegistry
         from cortex.refactoring.adapters.base import RefactoringToolAdapter
         from cortex.refactoring.refactoring_models import RefactoringLanguage
         
@@ -258,7 +258,7 @@ class TestRefactoringToolRegistry:
     
     def test_registry_list_available_languages(self):
         """Registry must list all registered languages."""
-        from cortex.refactoring.registry import RefactoringToolRegistry
+        from cortex.refactoring.refactoring_registry import RefactoringToolRegistry
         from cortex.refactoring.adapters.base import RefactoringToolAdapter
         from cortex.refactoring.refactoring_models import RefactoringLanguage
         

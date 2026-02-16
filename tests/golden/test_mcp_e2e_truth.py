@@ -33,7 +33,7 @@ from typing import Dict, Any, List
 from cortex.mcp.server import MCPServer
 from cortex.mcp.server import MCPRequest as ServerMCPRequest
 from cortex.mcp.server import MCPResponse as ServerMCPResponse
-from cortex.mcp.registry import ToolRegistry, get_registry
+from cortex.mcp.mcp_registry import ToolRegistry, get_registry
 # AC_COMPLETE: AC-PHASE24-S1-002
 
 

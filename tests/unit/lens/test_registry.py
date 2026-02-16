@@ -10,7 +10,7 @@ CORE Rules: CORE-008 (TDD)
 import pytest
 from typing import Any
 
-from cortex.lens.registry import (
+from cortex.lens.lens_registry import (
     AnalyzerCapability,
     AnalyzerMetadata,
     AnalyzerRegistry,
@@ -203,7 +203,7 @@ class TestAnalyzerCapabilitiesDecorator:
     def test_decorator_registers_analyzer(self) -> None:
         """Test that decorator registers analyzer."""
         # Create fresh registry for test isolation
-        from cortex.lens import registry as reg_module
+        from cortex.lens import lens_registry as reg_module
         original_registry = reg_module._global_registry
         test_registry = AnalyzerRegistry()
         reg_module._global_registry = test_registry

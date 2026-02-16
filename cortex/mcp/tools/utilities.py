@@ -438,7 +438,7 @@ class CortexToolsCatalog(ConsolidatedTool):
         category = params.get("category")
         
         # Import registry for actual tool data
-        from cortex.mcp.registry import get_registry
+        from cortex.mcp.mcp_registry import get_registry
         registry = get_registry()
         
         if operation == "list":

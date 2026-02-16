@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from cortex.lens.facade import LENSIntelligenceFacade, WorkflowType
-from cortex.lens.registry import (
+from cortex.lens.lens_registry import (
     AnalyzerCapability,
     AnalyzerRegistry,
     LanguageSupport,

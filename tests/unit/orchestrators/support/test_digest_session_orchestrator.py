@@ -480,7 +480,7 @@ class TestDigestSessionMCPTool:
     @patch("cortex.mcp.tools.digest_tool.DigestSessionOrchestrator")
     def test_mcp_tool_registration(self, mock_orchestrator):
         """Test MCP tool is registered correctly."""
-        from cortex.mcp.registry import MCPToolRegistry
+        from cortex.mcp.mcp_registry import MCPToolRegistry
         
         registry = MCPToolRegistry()
         tool = registry.get_tool("cortex_digest_session")

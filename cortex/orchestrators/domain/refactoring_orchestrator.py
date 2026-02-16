@@ -35,7 +35,7 @@ from cortex.refactoring.refactoring_models import (
     RefactoringRequest,
     RefactoringResult,
 )
-from cortex.refactoring.registry import RefactoringToolRegistry
+from cortex.refactoring.refactoring_registry import RefactoringToolRegistry
 
 logger = logging.getLogger(__name__)
 

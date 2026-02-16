@@ -12,7 +12,7 @@ Status: Infrastructure established, ready for full implementation
 
 import pytest
 from cortex.mcp.server import MCPServer
-from cortex.mcp.registry import get_registry
+from cortex.mcp.mcp_registry import get_registry
 
 
 class TestMCPGatewayRealE2E:

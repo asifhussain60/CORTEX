@@ -934,7 +934,7 @@ class RegistryIntelligenceAgent:
             True if wrapper generation succeeded
         """
         try:
-            from cortex.mcp.registry import MCPToolRegistry
+            from cortex.mcp.mcp_registry import MCPToolRegistry
 
             # Generate a tool wrapper function for the orchestrator
             tool_name = f"cortex_{orchestrator_name.lower().replace('orchestrator', '').strip('_')}"

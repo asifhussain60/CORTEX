@@ -7,7 +7,7 @@ Tests the entire MCP stack end-to-end.
 import pytest
 import json
 from cortex.mcp.server import MCPServer
-from cortex.mcp.registry import get_registry
+from cortex.mcp.mcp_registry import get_registry
 from cortex.mcp.base import ToolCategory
 
 

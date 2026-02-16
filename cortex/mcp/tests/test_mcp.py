@@ -28,7 +28,7 @@ from cortex.mcp.base import (
     ToolCategory,
     ConsolidatedTool,
 )
-from cortex.mcp.registry import (
+from cortex.mcp.mcp_registry import (
     ToolRegistry,
     PRODUCTION_TOOLS,
     ToolMetadata,
