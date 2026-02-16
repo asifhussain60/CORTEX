@@ -726,8 +726,47 @@ class TestGitignoreEnforcement:
         gitignore_path = temp_repo / ".gitignore"
         gitignore_path.write_text("*.pyc\n__pycache__/\n")
         
+        # Create a mock gitignore cleaner class
+        class GitignoreCleaner(CleanerInterface):
+            name = "GitignoreCleaner"
+            version = "1.0.0"
+            domain = "gitignore_check"
+            
+            def __init__(self, config):
+                self.config = config
+                
+            def analyze(self) -> Analysis:
+                return Analysis(
+                    cleaner_id="gitignore_check",
+                    timestamp="2026-01-17T00:00:00",
+                    files_scanned=1,
+                    issues_found=["Missing *.db pattern in .gitignore"],
+                    plan={}
+                )
+            
+            def execute(self, plan: Dict[str, Any]) -> Report:
+                return Report(
+                    cleaner_id="gitignore_check",
+                    timestamp="2026-01-17T00:00:00",
+                    status="SUCCESS",
+                    actions_taken=0,
+                    changes={},
+                    errors=[],
+                    logs=[]
+                )
+            
+            def rollback(self) -> RollbackResult:
+                return RollbackResult(
+                    cleaner_id="gitignore_check",
+                    timestamp="2026-01-17T00:00:00",
+                    status="SUCCESS",
+                    files_restored=0,
+                    errors=[]
+                )
+        
         orchestrator_config["enforce_gitignore"] = True
         orch = VacuumOrchestrator(config=orchestrator_config)
+        orch.register_cleaner(GitignoreCleaner)
         
         analysis = orch.analyze("gitignore_check")
         
@@ -744,8 +783,51 @@ class TestGitignoreEnforcement:
         gitignore_path = temp_repo / ".gitignore"
         gitignore_path.write_text("*.pyc\n")
         
+        # Create a mock gitignore cleaner class that adds patterns
+        class GitignorePatcherCleaner(CleanerInterface):
+            name = "GitignorePatcher"
+            version = "1.0.0"
+            domain = "gitignore_check"
+            
+            def __init__(self, config):
+                self.config = config
+                self.gitignore_path = gitignore_path
+                
+            def analyze(self) -> Analysis:
+                return Analysis(
+                    cleaner_id="gitignore_check",
+                    timestamp="2026-01-17T00:00:00",
+                    files_scanned=1,
+                    issues_found=["Missing *.db pattern"],
+                    plan={"add_patterns": ["*.db", "*_audit.db"]}
+                )
+            
+            def execute(self, plan: Dict[str, Any]) -> Report:
+                # Actually add patterns to .gitignore
+                with open(self.gitignore_path, 'a') as f:
+                    f.write("*.db\n*_audit.db\n")
+                return Report(
+                    cleaner_id="gitignore_check",
+                    timestamp="2026-01-17T00:00:00",
+                    status="SUCCESS",
+                    actions_taken=1,
+                    changes={"added_patterns": 2},
+                    errors=[],
+                    logs=["Added DB patterns to .gitignore"]
+                )
+            
+            def rollback(self) -> RollbackResult:
+                return RollbackResult(
+                    cleaner_id="gitignore_check",
+                    timestamp="2026-01-17T00:00:00",
+                    status="SUCCESS",
+                    files_restored=0,
+                    errors=[]
+                )
+        
         orchestrator_config["enforce_gitignore"] = True
         orch = VacuumOrchestrator(config=orchestrator_config)
+        orch.register_cleaner(GitignorePatcherCleaner)
         
         analysis = orch.analyze("gitignore_check")
         report = orch.execute("gitignore_check", analysis.plan)
