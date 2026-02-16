@@ -180,20 +180,23 @@ class PathIntegrityAgent(BaseHealthAgent):
             for node in ast.walk(tree):
                 if isinstance(node, ast.ImportFrom):
                     if node.module:
-                        # Check if module exists
-                        module_path = self._resolve_import(node.module, workspace_root)
-                        
-                        if module_path is None:
-                            issues.append(HealthIssue(
-                                category=HealthIssueCategory.PATH,
-                                severity=HealthIssueSeverity.MEDIUM,
-                                file_path=rel_path,
-                                description=f"Potentially broken import: {node.module}",
-                                suggested_fix="Verify import path or update",
-                                metadata={
-                                    "import_module": node.module,
-                                },
-                            ))
+                        # ONLY check imports that start with project-specific prefixes
+                        # Skip stdlib and third-party packages (too many false positives)
+                        if node.module.startswith(('cortex', 'cortex_', 'company')):
+                            # Check if module exists
+                            module_path = self._resolve_import(node.module, workspace_root)
+                            
+                            if module_path is None:
+                                issues.append(HealthIssue(
+                                    category=HealthIssueCategory.PATH,
+                                    severity=HealthIssueSeverity.MEDIUM,
+                                    file_path=rel_path,
+                                    description=f"Potentially broken import: {node.module}",
+                                    suggested_fix="Verify import path or update",
+                                    metadata={
+                                        "import_module": node.module,
+                                    },
+                                ))
         except Exception:
             pass
         
