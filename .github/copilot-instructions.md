@@ -29,31 +29,39 @@
 ┃  • SETUP    → ALLOWED (configure MCP)  ┃
 ┃  • QUERY    → ALLOWED (educational)    ┃
 ┃                                        ┃
+┃  CORE-053 (NEW - Phase 89):            ┃
+┃  • AUTO-HEALING → ATTEMPT FIX FIRST    ┃
+┃  • If MCP unavailable, diagnose & heal ┃
+┃  • Block ONLY if auto-heal fails       ┃
+┃  • OS-aware (Windows/macOS paths)      ┃
+┃                                        ┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 ```
 
 ### GATE CLOSED Response (When MCP Unavailable)
 
-**Display this EXACTLY when MCP tools not available:**
+**Display this EXACTLY when MCP tools not available AND auto-healing fails:**
 
 ```
 ---
 
-⛔ CORTEX GATE CLOSED: MCP Required
+⛔ CORTEX GATE: Auto-Healing Failed
 
 ---
 
 Your request: {user_request}
 Intent: {IMPLEMENT|FIX|REFACTOR|AUDIT|PLAN|ANALYZE}
-Status: ❌ BLOCKED
+Status: ❌ BLOCKED (auto-heal attempted but failed)
 
-CORTEX cannot process code changes without MCP tools.
-This ensures TDD, security, and governance enforcement.
+CORTEX attempted to auto-fix the MCP environment but encountered:
+Issue: {diagnostic_issue_type}
+Details: {diagnostic_details}
 
-TO FIX (30 seconds):
-  1. python .cortex/setup-mcp.py
-  2. Reload VS Code (Cmd+Shift+P → Reload Window)
-  3. Retry your request
+Auto-Heal Log:
+{fix_log_lines}
+
+MANUAL FIX REQUIRED:
+{action_required_steps}
 
 ALLOWED WITHOUT MCP (Escape Hatch):
   • "diagnose MCP issue" → Debug why MCP not working
@@ -62,6 +70,8 @@ ALLOWED WITHOUT MCP (Escape Hatch):
 
 ---
 ```
+
+**Note:** This response only shown if auto-healing fails. CORTEX now attempts automated fixes first (CORE-053).
 
 ---
 
@@ -527,6 +537,7 @@ cortex-registry/_cortex-master/
 | **CORE-050** | **MCP Circuit Breaker (P0)** — Tiered MCP availability enforcement. **HARD BLOCK:** IMPLEMENT, FIX, REFACTOR, AUDIT, PLAN, ANALYZE intents CANNOT proceed if MCP unavailable. **EXEMPT:** DIAGNOSE, QUERY (educational), SETUP intents allowed for troubleshooting. **NO BYPASS:** Direct file operations forbidden for blocked intents even if "simpler." |
 | **CORE-051** | **Cross-Platform MCP (P0)** — `.vscode/settings.json` MUST NOT be in git (contains platform-specific Python paths). **MANDATORY AUDIT:** Every `/audit` command MUST verify settings.json not tracked. **AUTO-FIX:** `.githooks/post-checkout` regenerates settings via `setup-mcp.py` (macOS: bin/python, Windows: Scripts/python.exe). **VIOLATION:** Committing settings.json = cross-platform breakage. |
 | **CORE-052** | **Single Branch Policy (P0)** — ALL work MUST be done on the `CORTEX` branch. ❌ FORBIDDEN: `git checkout -b`, `git switch -c`, creating feature/backup/wave branches. ✅ REQUIRED: Use `git commit` for checkpoints (not branches). Use `git tag` for release markers. Use `git stash` for temporary saves. **VIOLATION:** Creating any new local branch = governance violation. Only `CORTEX` branch exists locally. |
+| **CORE-053** | **Auto-Healing Infrastructure (P0)** — When MCP unavailable, CORTEX MUST attempt automated diagnosis and repair BEFORE blocking. **SEQUENCE:** Detect issue → Diagnose (OS-aware) → Attempt fix → Retry MCP check → Block only if unfixable. **ISSUES HANDLED:** Missing dependencies (yaml/PyYAML), invalid requirements.txt (markdown fences), platform path mismatches, venv not activated. **LEARNING:** Digested from chat01.md (2026-02-16). **PHILOSOPHY:** Fix it, don't just block it. |
 | **CORE-001** | **Incremental Delivery** — All tasks ≤500 LOC per commit. Continuation limits enforced. |
 | **CORE-004** | **No Silent Failures** — All errors logged with context. |
 | **CORE-011** | **Type Hints Mandatory** — All parameters + returns in Python/TypeScript/C#. |

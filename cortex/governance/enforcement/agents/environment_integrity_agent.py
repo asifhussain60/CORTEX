@@ -1,5 +1,5 @@
 """
-Environment Integrity Agent - Phase 51 Stage 2 + Phase 50 MCP Policy
+Environment Integrity Agent - Phase 51 Stage 2 + Phase 50 MCP Policy + Phase 89 Auto-Healing
 
 8th enforcement agent for EnforcementOrchestrator.
 Validates environment prerequisites before IMPLEMENT/FIX/REFACTOR operations.
@@ -9,7 +9,13 @@ Phase 50 Enhancement: MCP Policy Enforcement
 - Enforces CORTEX-only MCP policy
 - Auto-runs setup script when needed
 
-AC-ID: PHASE-51-S2-002 + PHASE-50-MCPCLEANUP-004
+Phase 89 Enhancement: Auto-Healing (DIGEST chat01.md)
+- Instead of BLOCKING on MCP unavailability, attempts auto-fix
+- OS-aware diagnosis (Windows vs macOS path handling)
+- Learnings: missing deps, invalid requirements.txt, venv issues
+- Falls back to blocking only if auto-fix fails
+
+AC-ID: PHASE-51-S2-002 + PHASE-50-MCPCLEANUP-004 + AC-PHASE89-AUTOHEALING-002
 """
 
 import json
@@ -22,6 +28,10 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from cortex.models.canonical_enums import IntentType
+from cortex.orchestrators.auto_healing_mcp_orchestrator import (
+    AutoHealingMCPOrchestrator,
+    HealingResult,
+)
 
 
 @dataclass
@@ -78,6 +88,7 @@ class EnvironmentIntegrityAgent:
             IntentType.FIX,
             IntentType.REFACTOR,
         ]
+        self.auto_healer = AutoHealingMCPOrchestrator()
 
     def validate_pre_flight(self, intent: IntentType) -> ValidationResult:
         """
@@ -124,13 +135,28 @@ class EnvironmentIntegrityAgent:
         # Check MCP availability
         mcp_status = self.check_mcp_availability()
 
-        if not mcp_status.available:
-            return ValidationResult(
-                passed=False,
-                severity='CRITICAL',
-                reason=f'MCP Server unavailable (checked: {mcp_status.detection_method})',
-                action='BLOCKED: Reload VS Code - Command Palette → Developer: Reload Window',
-                mcp_policy=policy_result
+        if n# Phase 89: Attempt auto-healing instead of immediately blocking
+            healing_result = self.self_heal_environment(intent)
+            
+            if healing_result.success and healing_result.mcp_now_available:
+                # Auto-healing succeeded, proceed with operation
+                return ValidationResult(
+                    passed=True,
+                    severity='PASSED',
+                    reason=f'MCP auto-healed successfully ({healing_result.diagnostics.issue_type})',
+                    action='PROCEED (auto-healed)',
+                    mcp_policy=policy_result
+                )
+            else:
+                # Auto-healing failed, block with detailed action
+                action = healing_result.action_required or 'BLOCKED: Reload VS Code - Command Palette → Developer: Reload Window'
+                return ValidationResult(
+                    passed=False,
+                    severity='CRITICAL',
+                    reason=f'MCP Server unavailable (checked: {mcp_status.detection_method}). Auto-heal failed: {healing_result.diagnostics.details}',
+                    action=action,
+                    mcp_policy=policy_result
+                    mcp_policy=policy_result
             )
 
         # MCP available and policy compliant
@@ -145,6 +171,24 @@ class EnvironmentIntegrityAgent:
     # =========================================================================
     # AC_START: AC-PHASE50-MCPCLEANUP-004 - MCP Policy Check Integration
     # =========================================================================
+
+    def self_heal_environment(self, intent: IntentType) -> HealingResult:
+        """
+        Attempt to self-heal environment when MCP unavailable.
+        
+        Phase 89 enhancement: Instead of blocking, try to fix the issue.
+        Learnings from chat01.md (2026-02-16):
+        - Missing dependencies (yaml/PyYAML) in venv
+        - Invalid requirements.txt (markdown fence)
+        - Platform-specific path issues
+        
+        Args:
+            intent: User intent that triggered MCP check
+        
+        Returns:
+            HealingResult with success status and diagnostics
+        """
+        return self.auto_healer.diagnose_and_heal(intent)
 
     def check_mcp_policy(self) -> MCPPolicyResult:
         """
