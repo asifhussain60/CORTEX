@@ -1,0 +1,750 @@
+# ============================================================================
+# PHASE 100: Workflow Template Library with Governance-First Architecture
+# ============================================================================
+# Authority: Digest Analysis (chat01.md) 2026-02-16
+# Supersedes: None (New Infrastructure)
+# Status: PLANNED | Priority: P1 | Execution Mode: TDD-First
+# ============================================================================
+
+version: '2.0'
+phase_id: phase-100
+title: "Workflow Template Library with Governance-First Architecture"
+status: planned
+priority: P1
+created: '2026-02-16'
+estimated_effort: "23 hours (3 days)"
+estimated_tokens: "52000"
+roi_score: 92
+confidence: 9.5
+author: "Asif Hussain"
+origin: "Chat01.md digest + architectural analysis"
+
+# ============================================================================
+# EXECUTIVE SUMMARY
+# ============================================================================
+overview:
+  vision: |
+    Build production-grade nested workflow template library at cortex-registry/workflows/
+    with auto-discovery registry, golden test harness (sunshine/rainy/edge/blindspot),
+    MCP-first exposure via cortex_workflow tool, and domain-driven team ownership.
+    Enables zero-code template discovery, automatic governance validation, and
+    audit-verified execution.
+
+  problem_statement: |
+    CURRENT STATE:
+    - WorkflowComposer exists but no template library infrastructure
+    - Templates scattered (Phase 99 in planned/, no organization)
+    - No discovery system (manual path references required)
+    - No golden test framework for workflow validation
+    - Not MCP-exposed (cannot invoke via Copilot Chat)
+    - No team ownership model for template maintenance
+    
+    VIOLATIONS DETECTED:
+    - Phase 99 filename: "phase-99-vision-api-dogfooding-workflow.yaml" (49 chars)
+      • Violates CORE-028: ≤40 char limit
+      • Violates CORE-028: Concept-based naming ("dogfooding")
+      • Correct: "frontend-visual-tdd-workflow.yaml" (33 chars)
+    
+    ROOT CAUSE:
+    - WorkflowComposer designed for execution, not discovery
+    - No registry pattern applied to workflow templates
+    - Missing MCP tool for template operations
+    - No quality gates for template validation
+    - Ad-hoc template creation without governance
+
+    IMPACT IF NOT FIXED:
+    - ❌ Template sprawl (no organization)
+    - ❌ Poor discoverability (how to find right template?)
+    - ❌ No quality assurance (templates untested)
+    - ❌ Maintenance burden (scattered ownership)
+    - ❌ Not user-accessible (no MCP exposure)
+    - ❌ Governance violations persist (CORE-028)
+
+  solution_approach: |
+    3-TIER ARCHITECTURE (Extends WorkflowComposer):
+    
+    TIER 1: WorkflowTemplateRegistry (New Component)
+      - Nested folder structure: cortex-registry/workflows/{category}/{template}/
+      - Auto-discovery from metadata.yaml files
+      - 5 categories: tdd/, api/, frontend/, migration/, security/
+      - 15 predesigned templates (3 per category)
+      - Semantic search across template metadata
+      - Validation engine (governance + golden tests)
+    
+    TIER 2: Golden Test Harness (Shared Infrastructure)
+      - cortex-registry/workflows/_golden_tests/
+      - Base test classes for all templates
+      - Coverage: sunshine, rainy, edge cases, blindspots
+      - Audit log verification patterns
+      - Performance profiling
+      - Regression detection
+    
+    TIER 3: MCP Tool (cortex_workflow)
+      - Single tool for: execute, list, search, validate, preview
+      - Routes through WorkflowComposer (no changes needed)
+      - EnforcementOrchestrator integration
+      - Audit trail verification
+      - Results with governance scoring
+
+  success_criteria:
+    - "✅ WorkflowTemplateRegistry implemented with auto-discovery"
+    - "✅ Nested folder structure created (5 categories)"
+    - "✅ Golden test harness operational (25 tests)"
+    - "✅ MCP tool cortex_workflow registered (tool #27)"
+    - "✅ Phase 99 migrated to frontend-visual-tdd/ (CORE-028 compliant)"
+    - "✅ 15 template scaffolds created with metadata"
+    - "✅ Zero breaking changes to WorkflowComposer"
+    - "✅ 125 tests passing (registry + tool + templates)"
+    - "✅ Documentation complete (README + authoring guide)"
+    - "✅ Team ownership model documented"
+
+# ============================================================================
+# DEPENDENCIES & PREREQUISITES
+# ============================================================================
+dependencies:
+  required_phases:
+    - phase-84: "WorkflowComposer (already implemented)"
+    - phase-48: "EnforcementOrchestrator (7-agent validation)"
+  
+  required_components:
+    - cortex/orchestrators/workflow/workflow_composer.py
+    - cortex/mcp/registry.py
+    - cortex/mcp/tools/operations.py
+    - cortex-registry/workflows/ (will be created)
+  
+  blocked_by: []
+  blocks: []
+
+# ============================================================================
+# STAGE BREAKDOWN (5 Stages, 23 Hours)
+# ============================================================================
+stages:
+  - stage_id: S1
+    name: "WorkflowTemplateRegistry Implementation"
+    priority: P0
+    estimated_effort: "6 hours"
+    estimated_tokens: "12000"
+    
+    objectives:
+      - "Create WorkflowTemplateRegistry class with auto-discovery"
+      - "Implement nested folder scanning"
+      - "Build metadata parsing (metadata.yaml)"
+      - "Add semantic search capability"
+      - "Implement validation engine"
+    
+    deliverables:
+      - file: "cortex/orchestrators/workflow/template_registry.py"
+        type: "implementation"
+        lines: 450
+        tests: 15
+        coverage: ">= 95%"
+      
+      - file: "cortex/orchestrators/workflow/__init__.py"
+        type: "integration"
+        lines: 5
+        description: "Export WorkflowTemplateRegistry"
+      
+      - file: "tests/unit/orchestrators/workflow/test_template_registry.py"
+        type: "tests"
+        lines: 380
+        test_count: 15
+        coverage_target: "95%"
+    
+    acceptance_criteria:
+      - "AC-PHASE100-S1-001: Registry discovers templates from nested folders"
+      - "AC-PHASE100-S1-002: Metadata parsing extracts all required fields"
+      - "AC-PHASE100-S1-003: Semantic search returns relevant templates"
+      - "AC-PHASE100-S1-004: Validation checks governance requirements"
+      - "AC-PHASE100-S1-005: Registry handles missing/invalid metadata gracefully"
+    
+    enforcement_gates:
+      - "CORE-008: 15 tests written BEFORE implementation"
+      - "CORE-011: Type hints on all methods"
+      - "CORE-012: Google-style docstrings"
+      - "CORE-026: Git checkpoint before implementation"
+      - "CORE-027: AC_START → AC_COMPLETE markers"
+    
+    tasks:
+      - task_id: T1
+        name: "Define WorkflowTemplate dataclass"
+        effort: "1 hour"
+        tests: 3
+        
+      - task_id: T2
+        name: "Implement folder scanning + metadata parsing"
+        effort: "2 hours"
+        tests: 5
+        
+      - task_id: T3
+        name: "Add semantic search (fuzzy match)"
+        effort: "1.5 hours"
+        tests: 4
+        
+      - task_id: T4
+        name: "Build validation engine"
+        effort: "1.5 hours"
+        tests: 3
+
+  - stage_id: S2
+    name: "MCP Tool (cortex_workflow) Implementation"
+    priority: P0
+    estimated_effort: "4 hours"
+    estimated_tokens: "8000"
+    
+    objectives:
+      - "Create cortex_workflow MCP tool"
+      - "Implement 5 operations (execute, list, search, validate, preview)"
+      - "Integrate with WorkflowTemplateRegistry"
+      - "Add EnforcementOrchestrator validation"
+      - "Implement audit trail verification"
+    
+    deliverables:
+      - file: "cortex/mcp/registry.py"
+        type: "update"
+        changes: "Add cortex_workflow to PRODUCTION_TOOLS"
+        lines: 15
+      
+      - file: "cortex/mcp/tools/operations.py"
+        type: "update"
+        changes: "Extend CortexWorkflow class"
+        lines: 280
+        tests: 10
+      
+      - file: "tests/unit/mcp/test_cortex_workflow.py"
+        type: "tests"
+        lines: 320
+        test_count: 10
+        coverage_target: "95%"
+    
+    acceptance_criteria:
+      - "AC-PHASE100-S2-001: cortex_workflow tool registered (tool #27)"
+      - "AC-PHASE100-S2-002: Execute operation runs template + validates"
+      - "AC-PHASE100-S2-003: List operation returns all templates"
+      - "AC-PHASE100-S2-004: Search operation performs fuzzy matching"
+      - "AC-PHASE100-S2-005: Validate operation checks governance"
+    
+    enforcement_gates:
+      - "CORE-008: 10 tests written BEFORE implementation"
+      - "CORE-011: Type hints on all parameters"
+      - "CORE-012: Google-style docstrings"
+      - "CORE-050: MCP tool follows consolidated tool pattern"
+    
+    tasks:
+      - task_id: T1
+        name: "Add tool definition to registry"
+        effort: "0.5 hours"
+        tests: 2
+        
+      - task_id: T2
+        name: "Implement execute operation"
+        effort: "1.5 hours"
+        tests: 4
+        
+      - task_id: T3
+        name: "Implement list/search/validate operations"
+        effort: "1.5 hours"
+        tests: 3
+        
+      - task_id: T4
+        name: "Add audit trail verification"
+        effort: "0.5 hours"
+        tests: 1
+
+  - stage_id: S3
+    name: "Golden Test Harness"
+    priority: P0
+    estimated_effort: "3 hours"
+    estimated_tokens: "7000"
+    
+    objectives:
+      - "Create shared golden test framework"
+      - "Implement base test classes"
+      - "Add sunshine/rainy/edge/blindspot patterns"
+      - "Build audit log verification"
+      - "Create performance profiling utilities"
+    
+    deliverables:
+      - directory: "cortex-registry/workflows/_golden_tests/"
+        description: "Shared test harness for all templates"
+      
+      - file: "cortex-registry/workflows/_golden_tests/base_workflow_test.py"
+        type: "framework"
+        lines: 180
+        description: "Base test class with common patterns"
+      
+      - file: "cortex-registry/workflows/_golden_tests/test_execution.py"
+        type: "tests"
+        lines: 120
+        test_count: 5
+      
+      - file: "cortex-registry/workflows/_golden_tests/test_governance.py"
+        type: "tests"
+        lines: 120
+        test_count: 5
+      
+      - file: "cortex-registry/workflows/_golden_tests/test_audit.py"
+        type: "tests"
+        lines: 100
+        test_count: 5
+      
+      - file: "cortex-registry/workflows/_golden_tests/test_performance.py"
+        type: "tests"
+        lines: 100
+        test_count: 5
+      
+      - file: "cortex-registry/workflows/_golden_tests/test_regression.py"
+        type: "tests"
+        lines: 100
+        test_count: 5
+      
+      - file: "cortex-registry/workflows/_golden_tests/README.md"
+        type: "documentation"
+        lines: 150
+    
+    acceptance_criteria:
+      - "AC-PHASE100-S3-001: BaseWorkflowTest class provides reusable patterns"
+      - "AC-PHASE100-S3-002: 25 golden tests operational"
+      - "AC-PHASE100-S3-003: Sunshine path validation implemented"
+      - "AC-PHASE100-S3-004: Rainy path error handling validated"
+      - "AC-PHASE100-S3-005: Edge cases covered (concurrent, timeout, etc.)"
+      - "AC-PHASE100-S3-006: Blindspots tested (unicode, timezones, etc.)"
+      - "AC-PHASE100-S3-007: Audit log verification patterns work"
+    
+    tasks:
+      - task_id: T1
+        name: "Create BaseWorkflowTest class"
+        effort: "1 hour"
+        tests: 5
+        
+      - task_id: T2
+        name: "Implement 5 golden test files"
+        effort: "1.5 hours"
+        tests: 20
+        
+      - task_id: T3
+        name: "Write usage documentation"
+        effort: "0.5 hours"
+        tests: 0
+
+  - stage_id: S4
+    name: "Fix Phase 99 + Migrate to frontend-visual-tdd"
+    priority: P1
+    estimated_effort: "2 hours"
+    estimated_tokens: "5000"
+    
+    objectives:
+      - "Rename Phase 99 file (CORE-028 compliance)"
+      - "Split mixed concerns into single-purpose components"
+      - "Migrate to cortex-registry/workflows/tdd/"
+      - "Create template-specific golden tests"
+      - "Update master-index.yaml"
+    
+    deliverables:
+      - directory: "cortex-registry/workflows/tdd/frontend-visual-tdd/"
+        description: "Migrated Phase 99 as production template"
+      
+      - file: "cortex-registry/workflows/tdd/frontend-visual-tdd/workflow.yaml"
+        type: "template"
+        lines: 200
+        source: "Phase 99 workflow definition"
+      
+      - file: "cortex-registry/workflows/tdd/frontend-visual-tdd/metadata.yaml"
+        type: "metadata"
+        lines: 120
+        description: "Governance-first metadata with golden test refs"
+      
+      - file: "cortex-registry/workflows/tdd/frontend-visual-tdd/tests/test_vision_integration.py"
+        type: "tests"
+        lines: 80
+        test_count: 3
+      
+      - file: "cortex-registry/workflows/tdd/frontend-visual-tdd/tests/test_semantic_bridge.py"
+        type: "tests"
+        lines: 60
+        test_count: 2
+      
+      - file: "cortex-registry/workflows/tdd/frontend-visual-tdd/examples/cortex-site-hero-update.md"
+        type: "documentation"
+        lines: 100
+      
+      - file: "cortex-registry/_cortex-master/master-index.yaml"
+        type: "update"
+        changes: "Remove Phase 99 from planned (now a template)"
+    
+    acceptance_criteria:
+      - "AC-PHASE100-S4-001: Phase 99 file renamed to frontend-visual-tdd-workflow.yaml (33 chars)"
+      - "AC-PHASE100-S4-002: No 'dogfooding' concept in any filename"
+      - "AC-PHASE100-S4-003: Template metadata includes all governance fields"
+      - "AC-PHASE100-S4-004: 5 template-specific tests operational"
+      - "AC-PHASE100-S4-005: Master index updated (phases: 36 → 35)"
+    
+    tasks:
+      - task_id: T1
+        name: "Create template directory structure"
+        effort: "0.5 hours"
+        tests: 0
+        
+      - task_id: T2
+        name: "Split Phase 99 concerns + migrate"
+        effort: "1 hour"
+        tests: 5
+        
+      - task_id: T3
+        name: "Update master-index.yaml"
+        effort: "0.5 hours"
+        tests: 0
+
+  - stage_id: S5
+    name: "Predesign 14 Additional Templates + Documentation"
+    priority: P1
+    estimated_effort: "8 hours"
+    estimated_tokens: "20000"
+    
+    objectives:
+      - "Create 5 category directories with README"
+      - "Scaffold 14 additional templates (3 per category - 1 complete)"
+      - "Write metadata.yaml for each template"
+      - "Create template authoring guide"
+      - "Document team ownership model"
+    
+    deliverables:
+      - file: "cortex-registry/workflows/README.md"
+        type: "documentation"
+        lines: 250
+        description: "Library overview, usage, governance"
+      
+      - file: "cortex-registry/workflows/_manifest.yaml"
+        type: "registry"
+        lines: 400
+        description: "Auto-generated master index"
+      
+      - directory: "cortex-registry/workflows/tdd/"
+        templates: 3
+        status: "1 complete (frontend-visual-tdd), 2 scaffolds"
+      
+      - directory: "cortex-registry/workflows/api/"
+        templates: 3
+        status: "3 scaffolds"
+      
+      - directory: "cortex-registry/workflows/frontend/"
+        templates: 3
+        status: "3 scaffolds"
+      
+      - directory: "cortex-registry/workflows/migration/"
+        templates: 3
+        status: "3 scaffolds"
+      
+      - directory: "cortex-registry/workflows/security/"
+        templates: 3
+        status: "3 scaffolds"
+      
+      - file: "cortex-registry/workflows/AUTHORING_GUIDE.md"
+        type: "documentation"
+        lines: 300
+        description: "How to create new templates"
+      
+      - file: "cortex-registry/workflows/TEAM_OWNERSHIP.md"
+        type: "documentation"
+        lines: 150
+        description: "Domain-driven ownership model"
+    
+    acceptance_criteria:
+      - "AC-PHASE100-S5-001: 5 category directories created with README"
+      - "AC-PHASE100-S5-002: 15 templates total (1 complete, 14 scaffolds)"
+      - "AC-PHASE100-S5-003: All scaffolds have valid metadata.yaml"
+      - "AC-PHASE100-S5-004: Authoring guide covers: naming, metadata, tests, governance"
+      - "AC-PHASE100-S5-005: Team ownership model documented"
+      - "AC-PHASE100-S5-006: Master manifest auto-generates successfully"
+    
+    template_scaffolds:
+      tdd:
+        - "api-tdd-cycle"
+        - "backend-service-tdd"
+      
+      api:
+        - "rest-endpoint-scaffold"
+        - "graphql-schema-migration"
+        - "websocket-realtime-api"
+      
+      frontend:
+        - "component-testing"
+        - "visual-regression-suite"
+        - "performance-lighthouse"
+      
+      migration:
+        - "legacy-modernization"
+        - "database-schema-evolution"
+        - "microservice-extraction"
+      
+      security:
+        - "owasp-top10-audit"
+        - "dependency-vulnerability-scan"
+        - "penetration-test-automation"
+    
+    tasks:
+      - task_id: T1
+        name: "Create category directories + READMEs"
+        effort: "1 hour"
+        tests: 0
+        
+      - task_id: T2
+        name: "Scaffold 14 templates with metadata"
+        effort: "4 hours"
+        tests: 0
+        
+      - task_id: T3
+        name: "Write authoring guide + ownership docs"
+        effort: "2 hours"
+        tests: 0
+        
+      - task_id: T4
+        name: "Generate master manifest"
+        effort: "1 hour"
+        tests: 0
+
+# ============================================================================
+# TESTING STRATEGY
+# ============================================================================
+testing_strategy:
+  total_tests: 125
+  breakdown:
+    stage_1: 15  # WorkflowTemplateRegistry
+    stage_2: 10  # MCP Tool
+    stage_3: 25  # Golden Test Harness
+    stage_4: 5   # Phase 99 Migration
+    stage_5: 0   # Scaffolds (no tests yet)
+    integration: 70  # Template-specific tests (future)
+  
+  coverage_target: ">= 95%"
+  
+  test_types:
+    unit:
+      - "Registry auto-discovery"
+      - "Metadata parsing"
+      - "Semantic search"
+      - "Validation engine"
+      - "MCP tool operations"
+    
+    integration:
+      - "End-to-end template execution"
+      - "EnforcementOrchestrator validation"
+      - "Audit trail verification"
+      - "WorkflowComposer integration"
+    
+    golden:
+      - "Sunshine paths (happy scenarios)"
+      - "Rainy paths (error handling)"
+      - "Edge cases (boundaries)"
+      - "Blindspots (hidden assumptions)"
+      - "Performance (duration, memory)"
+      - "Regression (no breaking changes)"
+
+# ============================================================================
+# ENFORCEMENT GATES
+# ============================================================================
+enforcement_gates:
+  pre_execution:
+    - gate: "EnforcementOrchestrator"
+      agents: 7
+      checks:
+        - "CORE-008: TDD mandatory (125 tests before code)"
+        - "CORE-011: Type hints on all methods"
+        - "CORE-012: Google-style docstrings"
+        - "CORE-026: Git checkpoints at stage boundaries"
+        - "CORE-027: AC_START → AC_COMPLETE markers"
+        - "CORE-028: File naming (kebab-case, ≤40 chars)"
+        - "CORE-035: No duplication with existing components"
+  
+  runtime_monitoring:
+    - "Stage completion verification (cannot skip stages)"
+    - "Test coverage enforcement (≥95% required)"
+    - "No CORTEX_DEBUG markers in committed code"
+    - "All audit trails verified"
+  
+  post_execution:
+    - "125 tests passing"
+    - "Zero lint errors"
+    - "Zero breaking changes to WorkflowComposer"
+    - "MCP server starts successfully (27 tools)"
+    - "Template registry auto-discovers all 15 templates"
+    - "Documentation complete (README + guides)"
+
+# ============================================================================
+# RISK MITIGATION
+# ============================================================================
+risks:
+  - risk: "Over-engineering (too complex for initial release)"
+    probability: "Medium"
+    impact: "Medium"
+    mitigation: "Stage 5 creates scaffolds only (not full implementations)"
+  
+  - risk: "Template sprawl (uncontrolled growth)"
+    probability: "Low"
+    impact: "High"
+    mitigation: "Governance gates + team ownership model + naming conventions"
+  
+  - risk: "Breaking changes to WorkflowComposer"
+    probability: "Very Low"
+    impact: "High"
+    mitigation: "Registry is new component (extends, not modifies)"
+  
+  - risk: "MCP tool conflicts (duplicate names)"
+    probability: "Very Low"
+    impact: "Medium"
+    mitigation: "Tool #27 verified available, naming follows convention"
+  
+  - risk: "Phase 99 migration breaks existing references"
+    probability: "Very Low"
+    impact: "Low"
+    mitigation: "Phase 99 is planned (not yet executed), no production dependencies"
+
+# ============================================================================
+# SUCCESS METRICS
+# ============================================================================
+success_metrics:
+  quantitative:
+    - metric: "Template discovery time"
+      target: "< 100ms for 15 templates"
+      measurement: "Performance profiling"
+    
+    - metric: "Workflow execution overhead"
+      target: "< 500ms added by registry layer"
+      measurement: "Before/after benchmarks"
+    
+    - metric: "Test coverage"
+      target: ">= 95%"
+      measurement: "pytest --cov"
+    
+    - metric: "MCP tool count"
+      target: "27 tools"
+      measurement: "Registry inspection"
+    
+    - metric: "Template count"
+      target: "15 templates (1 complete, 14 scaffolds)"
+      measurement: "Directory scan"
+  
+  qualitative:
+    - "Templates discoverable via semantic search"
+    - "Team ownership model clear and documented"
+    - "Authoring guide enables new template creation"
+    - "Golden test harness reusable across templates"
+    - "Zero breaking changes to existing code"
+    - "MCP-first pattern maintained"
+
+# ============================================================================
+# ROLLOUT PLAN
+# ============================================================================
+rollout:
+  phase_1_foundation:
+    stages: [S1, S2]
+    duration: "10 hours"
+    goal: "Core infrastructure (registry + MCP tool)"
+    verification: "MCP tool operational, registry discovers templates"
+  
+  phase_2_quality:
+    stages: [S3]
+    duration: "3 hours"
+    goal: "Golden test harness"
+    verification: "25 shared tests operational"
+  
+  phase_3_migration:
+    stages: [S4]
+    duration: "2 hours"
+    goal: "Fix Phase 99 violations + migrate"
+    verification: "CORE-028 compliant, template discoverable"
+  
+  phase_4_scale:
+    stages: [S5]
+    duration: "8 hours"
+    goal: "Predesign template library"
+    verification: "5 categories, 15 templates, docs complete"
+
+# ============================================================================
+# COMPLETION CRITERIA
+# ============================================================================
+completion_criteria:
+  code:
+    - "✅ WorkflowTemplateRegistry class implemented"
+    - "✅ cortex_workflow MCP tool registered"
+    - "✅ Golden test harness created (25 tests)"
+    - "✅ Phase 99 migrated to frontend-visual-tdd/"
+    - "✅ 15 template scaffolds created"
+  
+  tests:
+    - "✅ 125 tests passing"
+    - "✅ Coverage ≥ 95%"
+    - "✅ Golden tests operational"
+    - "✅ No skipped tests"
+  
+  documentation:
+    - "✅ Library README complete"
+    - "✅ Authoring guide written"
+    - "✅ Team ownership documented"
+    - "✅ Master manifest generated"
+  
+  governance:
+    - "✅ CORE-028 violations fixed (Phase 99)"
+    - "✅ All AC markers present"
+    - "✅ Git checkpoints at stage boundaries"
+    - "✅ Zero lint errors"
+    - "✅ Zero breaking changes"
+  
+  integration:
+    - "✅ MCP server starts (27 tools)"
+    - "✅ Registry discovers all templates"
+    - "✅ WorkflowComposer integration verified"
+    - "✅ EnforcementOrchestrator gates functional"
+
+# ============================================================================
+# POST-COMPLETION ACTIVITIES
+# ============================================================================
+post_completion:
+  - activity: "Update master-index.yaml"
+    description: "Add Phase 100 to completed phases"
+  
+  - activity: "Update .github/copilot-instructions.md"
+    description: "Add cortex_workflow to quick commands"
+  
+  - activity: "Generate phase completion report"
+    description: "Metrics, learnings, recommendations"
+  
+  - activity: "Team onboarding session"
+    description: "Walkthrough of new workflow library"
+  
+  - activity: "Template authoring workshop"
+    description: "How to create domain-specific templates"
+
+# ============================================================================
+# PHASE METADATA
+# ============================================================================
+metadata:
+  tags:
+    - workflow-library
+    - governance-first
+    - mcp-tool
+    - template-registry
+    - golden-tests
+    - team-collaboration
+  
+  related_phases:
+    - phase-84: "WorkflowComposer (extends)"
+    - phase-48: "EnforcementOrchestrator (integrates)"
+    - phase-99: "Migrates to template library"
+  
+  architectural_patterns:
+    - "Registry pattern (auto-discovery)"
+    - "Strategy pattern (template selection)"
+    - "Template method pattern (golden tests)"
+    - "Factory pattern (template instantiation)"
+  
+  core_pillars:
+    extensibility: 10
+    scalability: 9
+    accuracy: 10
+    team_collaboration: 9
+    maintainability: 10
+    mcp_first: 10
+    zero_regression: 10
+  
+  estimated_roi: 92
+  confidence: 9.5

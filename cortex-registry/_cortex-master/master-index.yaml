@@ -7,14 +7,14 @@
 # ============================================================================
 
 metadata:
-  version: "6.11"
-  last_updated: "2026-02-16T15:45:00Z"
-  total_phases: 36
+  version: "6.12"
+  last_updated: "2026-02-16T16:05:00Z"
+  total_phases: 37
   active: 1
   completed: 17
   consolidated: 2
   deferred: 0
-  planned: 1
+  planned: 2
 
   phase_breakdown:
     original_phases: 25
@@ -270,6 +270,30 @@ phase_status:
         - "data-cortex-* semantic selectors"
         - "WorkflowComposer TDD template"
         - "Zero-duplication guardrails"
+    
+    - id: "phase-100"
+      title: "Workflow Template Library with Governance-First Architecture"
+      location: "phases/planned/phase-100-workflow-template-library.yaml"
+      priority: P1
+      estimated_effort: "23 hours (3 days)"
+      roi_score: 92
+      confidence: 9.5
+      origin: "Chat01.md digest + architectural analysis"
+      created: "2026-02-16"
+      description: |
+        Build production-grade nested workflow template library at 
+        cortex-registry/workflows/ with auto-discovery registry, golden test 
+        harness (sunshine/rainy/edge/blindspot), MCP-first exposure via 
+        cortex_workflow tool, and domain-driven team ownership.
+      key_deliverables:
+        - "WorkflowTemplateRegistry with auto-discovery"
+        - "MCP tool: cortex_workflow (tool #27)"
+        - "Golden test harness (25 shared tests)"
+        - "Fix Phase 99 CORE-028 violations + migrate"
+        - "15 predesigned templates (5 categories)"
+      fixes:
+        - "CORE-028: Phase 99 filename (49 → 33 chars)"
+        - "CORE-028: Remove 'dogfooding' concept from naming"
 
   consolidated:
     - id: "phase-consolidated-legacy"
