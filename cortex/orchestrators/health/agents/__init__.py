@@ -19,6 +19,12 @@ from .base_agent import (
     HealthIssueSeverity,
     HealthCheckResult,
 )
+from .duplicate_detection_agent import DuplicateDetectionAgent
+from .path_integrity_agent import PathIntegrityAgent
+from .registry_consistency_agent import RegistryConsistencyAgent
+from .stub_detection_agent import StubDetectionAgent
+from .test_coverage_agent import TestCoverageAgent
+from .version_cleanup_agent import VersionCleanupAgent
 
 __all__ = [
     "BaseHealthAgent",
@@ -26,4 +32,10 @@ __all__ = [
     "HealthIssueCategory",
     "HealthIssueSeverity",
     "HealthCheckResult",
+    "DuplicateDetectionAgent",
+    "PathIntegrityAgent",
+    "RegistryConsistencyAgent",
+    "StubDetectionAgent",
+    "TestCoverageAgent",
+    "VersionCleanupAgent",
 ]
