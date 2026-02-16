@@ -7,14 +7,14 @@
 # ============================================================================
 
 metadata:
-  version: "6.10"
-  last_updated: "2026-02-16T15:35:00Z"
-  total_phases: 35
+  version: "6.11"
+  last_updated: "2026-02-16T15:45:00Z"
+  total_phases: 36
   active: 1
   completed: 17
   consolidated: 2
   deferred: 0
-  planned: 0
+  planned: 1
 
   phase_breakdown:
     original_phases: 25
@@ -249,6 +249,28 @@ phase_status:
 
   active: []
 
+  planned:
+    - id: "phase-99"
+      title: "Vision API Enhancement + HTML Mapping + Dogfooding Workflow"
+      location: "phases/planned/phase-99-vision-api-dogfooding-workflow.yaml"
+      priority: P2
+      estimated_effort: "24 hours (3 days)"
+      roi_score: 78
+      confidence: 9.0
+      origin: "Digest from chat01.md design session"
+      created: "2026-02-16"
+      description: |
+        Enhance CORTEX LENS Vision API with atomic-level visual decomposition 
+        and establish bidirectional mapping between screenshots and HTML DOM 
+        elements via data-cortex-* semantic selectors. Create reusable TDD 
+        workflow template for dogfooding CORTEX site development.
+      key_deliverables:
+        - "Atomic visual decomposition (pixel-level bounding boxes)"
+        - "Bidirectional screenshot ↔ DOM mapping"
+        - "data-cortex-* semantic selectors"
+        - "WorkflowComposer TDD template"
+        - "Zero-duplication guardrails"
+
   consolidated:
     - id: "phase-consolidated-legacy"
       title: "Legacy Phase Consolidation (9 phases: 1, 12, 17, 18, 20, 22, 24, 25, 26)"
@@ -381,10 +403,10 @@ production_readiness:
 # ============================================================================
 
 summary:
-  total_phases: 33
+  total_phases: 34
   completed: 10
   active: 2
-  planned: 2
+  planned: 3
   consolidated: 9
   deferred: 10
   
