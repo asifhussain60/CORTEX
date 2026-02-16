@@ -1,0 +1,303 @@
+# ============================================================================
+# CORTEX Site Dogfooding Workflow Template
+# ============================================================================
+# Purpose: TDD workflow for CORTEX site development using Vision API
+# Phase: 99 Stage 3
+# Author: Asif Hussain
+# ============================================================================
+
+version: '2.0'
+workflow_id: cortex-site-dogfood
+title: "CORTEX Site TDD Workflow with Vision API"
+description: |
+  5-stage TDD workflow for CORTEX site development:
+  1. Analyze screenshot via Vision API (atomic mode)
+  2. Generate design challenges
+  3. RED phase (write failing test)
+  4. GREEN phase (minimal implementation)
+  5. REFACTOR phase (clean code while keeping tests green)
+
+# ============================================================================
+# WORKFLOW STAGES
+# ============================================================================
+
+stages:
+  - stage_id: analyze-screenshot
+    title: "Vision API Analysis"
+    orchestrator: "LENSOrchestrator"
+    description: |
+      Analyze screenshot using Vision API atomic mode.
+      Extract bounding boxes, text segments, color palette, and cortex-ids.
+    
+    input:
+      - screenshot_path: str  # Path to screenshot image
+      - analysis_depth: "atomic"  # Use atomic mode for full decomposition
+    
+    output:
+      file: "visual-analysis.json"
+      structure:
+        bounding_boxes: List[BoundingBox]
+        text_segments: List[TextSegment]
+        color_palette: List[ColorInfo]
+        cortex_ids: List[str]
+        pixel_grid: Optional[PixelGrid]
+    
+    performance_target: "<20s per screenshot"
+    
+    enforcement:
+      - "Vision API must complete within 20s"
+      - "Output must include all atomic analysis fields"
+
+  - stage_id: generate-challenges
+    title: "Challenge Generation"
+    orchestrator: "ChallengeEngine"
+    description: |
+      Generate design challenges and alternative proposals.
+      Use visual analysis to identify improvement opportunities.
+    
+    input:
+      - visual_analysis: "visual-analysis.json"
+    
+    output:
+      file: "design-alternatives.md"
+      structure:
+        challenges: List[Challenge]
+        recommendations: List[Recommendation]
+    
+    enforcement:
+      - "At least 3 design alternatives proposed"
+      - "Each challenge includes rationale"
+
+  - stage_id: tdd-red-phase
+    title: "TDD RED Phase"
+    orchestrator: "TDDOrchestrator"
+    mode: "RED"
+    description: |
+      Write failing test first (CORE-008 enforcement).
+      Test must fail with expected error message.
+    
+    input:
+      - design_alternatives: "design-alternatives.md"
+      - target_feature: str
+    
+    output:
+      - test_file: str  # Path to new test file
+      - test_status: "FAILING"  # Must be failing
+    
+    enforcement:
+      - "Test file created in tests/ directory"
+      - "Test MUST fail before GREEN phase"
+      - "No code implementation allowed yet"
+      - "CORE-008: Tests before code"
+    
+    forbidden:
+      - "Creating implementation code"
+      - "Skipping test validation"
+      - "Using --ignore flags"
+
+  - stage_id: tdd-green-phase
+    title: "TDD GREEN Phase"
+    orchestrator: "TDDOrchestrator"
+    mode: "GREEN"
+    description: |
+      Implement minimal code to make test pass.
+      Add data-cortex-* attributes to HTML elements.
+    
+    input:
+      - test_file: str  # From RED phase
+      - visual_analysis: "visual-analysis.json"
+    
+    output:
+      - implementation_files: List[str]
+      - test_status: "PASSING"  # Must be passing
+      - cortex_ids_added: int
+    
+    enforcement:
+      - "All tests must pass (no --ignore)"
+      - "data-cortex-* attributes added to HTML"
+      - "CortexIDValidator passes (no duplicates)"
+      - "CORE-008: Test passes naturally"
+    
+    validation:
+      - "Run: pytest {test_file}"
+      - "Run: python scripts/add_cortex_semantic_ids.py --validate {html_file}"
+      - "Verify: Zero lint errors"
+
+  - stage_id: tdd-refactor-phase
+    title: "TDD REFACTOR Phase"
+    orchestrator: "TDDOrchestrator"
+    mode: "REFACTOR"
+    description: |
+      Clean code while keeping tests green.
+      Extract magic numbers, remove duplication, add type hints.
+    
+    input:
+      - implementation_files: List[str]  # From GREEN phase
+      - test_file: str
+    
+    output:
+      - refactored_files: List[str]
+      - test_status: "PASSING"  # Still passing
+      - quality_metrics: Dict[str, Any]
+    
+    enforcement:
+      - "All tests still pass after refactoring"
+      - "Lint clean (zero ruff errors)"
+      - "Type hints on all functions"
+      - "Google-style docstrings complete"
+      - "CORE-035: No duplication"
+    
+    checklist:
+      - "Extract magic numbers → constants"
+      - "Remove duplicate code"
+      - "Add type hints + docstrings"
+      - "Run full test suite"
+      - "Verify lint clean"
+
+  - stage_id: holistic-validation
+    title: "Holistic Validation Gate"
+    orchestrator: "EnforcementOrchestrator"
+    description: |
+      Validate all CORE rules before deployment.
+      Phase 48 enforcement gate integration.
+    
+    input:
+      - refactored_files: List[str]
+      - test_file: str
+    
+    enforcement_checks:
+      - "CORE-008: TDD discipline (tests first)"
+      - "CORE-011: Type hints complete"
+      - "CORE-012: Docstrings present"
+      - "CORE-028: File naming (kebab-case)"
+      - "CORE-035: No duplication"
+      - "CORE-048: Holistic validation passed"
+    
+    blocking: true  # Blocks deployment if failed
+
+  - stage_id: deploy-preview
+    title: "Deployment Preview"
+    orchestrator: "DeploymentOrchestrator"
+    environment: "staging"
+    description: |
+      Generate deployment preview for staging environment.
+      Lighthouse score validation (≥95 target).
+    
+    input:
+      - refactored_files: List[str]
+    
+    output:
+      - preview_url: str  # Staging deployment URL
+      - lighthouse_score: int
+    
+    enforcement:
+      - "Lighthouse score ≥95"
+      - "Zero broken links"
+      - "Visual regression tests pass"
+
+# ============================================================================
+# WORKFLOW METADATA
+# ============================================================================
+
+metadata:
+  total_stages: 7
+  estimated_duration: "25-30 minutes"
+  performance_targets:
+    vision_analysis: "<20s"
+    full_workflow: "<30 min"
+  
+  orchestrators_used:
+    - LENSOrchestrator
+    - ChallengeEngine
+    - TDDOrchestrator
+    - EnforcementOrchestrator
+    - DeploymentOrchestrator
+  
+  mcp_tools:
+    - cortex_lens_analyze
+    - cortex_challenge
+    - cortex_process_request
+  
+  phase_99_integration:
+    atomic_analysis: true
+    cortex_ids: true
+    enforcement_gates: true
+
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+
+success_criteria:
+  - "All 7 stages complete successfully"
+  - "TDD cycle enforced (RED → GREEN → REFACTOR)"
+  - "data-cortex-* attributes added and validated"
+  - "All tests passing (no skips)"
+  - "Lint clean (zero errors)"
+  - "EnforcementOrchestrator gates pass"
+  - "Deployment preview generated"
+  - "Lighthouse score ≥95"
+  - "Performance <30 min"
+
+# ============================================================================
+# ERROR HANDLING
+# ============================================================================
+
+error_handling:
+  vision_api_timeout:
+    action: "Retry with STANDARD depth mode"
+    fallback: "Manual analysis with screenshots"
+  
+  test_failure_green_phase:
+    action: "Block GREEN phase until test passes"
+    forbidden: "Using --ignore or skipping tests"
+  
+  enforcement_gate_failure:
+    action: "Block deployment until violations fixed"
+    report: "Display violations with fix instructions"
+
+# ============================================================================
+# ROLLBACK PLAN
+# ============================================================================
+
+rollback:
+  triggers:
+    - "Test suite failure"
+    - "Lighthouse score <95"
+    - "EnforcementOrchestrator blocking violations"
+  
+  steps:
+    - "Revert all changes via git"
+    - "Re-run workflow from last successful stage"
+    - "Fix violations before retry"
+
+# ============================================================================
+# MONITORING & METRICS
+# ============================================================================
+
+monitoring:
+  metrics:
+    - name: "Workflow Duration"
+      target: "<30 min"
+      measurement: "timestamp_start - timestamp_end"
+    
+    - name: "Vision API Latency"
+      target: "<20s"
+      measurement: "stage[analyze-screenshot].duration"
+    
+    - name: "Test Pass Rate"
+      target: "100%"
+      measurement: "passed_tests / total_tests"
+    
+    - name: "Lighthouse Score"
+      target: "≥95"
+      measurement: "stage[deploy-preview].lighthouse_score"
+  
+  alerts:
+    - condition: "workflow_duration > 30 min"
+      action: "Log performance warning"
+    
+    - condition: "test_pass_rate < 100%"
+      action: "Block deployment"
+    
+    - condition: "lighthouse_score < 95"
+      action: "Block deployment, run optimization"
