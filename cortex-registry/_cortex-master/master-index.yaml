@@ -7,11 +7,11 @@
 # ============================================================================
 
 metadata:
-  version: "6.16"
-  last_updated: "2026-02-16T21:15:00Z"
+  version: "6.17"
+  last_updated: "2026-02-16T22:00:00Z"
   total_phases: 38
   active: 0
-  completed: 20
+  completed: 21
   consolidated: 2
   deferred: 0
   planned: 0
@@ -24,9 +24,9 @@ metadata:
 
   verification:
     method: "git_history + code_inspection + test_verification"
-    plan_version: "Consolidation v6.10 + Phase 90/95/97 Active"
-    last_verified: "2026-02-16T15:10:00Z"
-    production_readiness: "96% → Target 98% (Phase 90 complete)"
+    plan_version: "Consolidation v6.10 + Phase 90/95/97/99/100/101 Complete"
+    last_verified: "2026-02-16T22:00:00Z"
+    production_readiness: "97% → Target 98% (Phase 90 complete)"
 
 # ============================================================================
 # PHASE STATUS SUMMARY
@@ -324,6 +324,37 @@ phase_status:
         - "Backward compatible (default='table', opt-in conversational)"
         - "Vocabulary mirroring (85%+ user words matched)"
         - "Zero breaking changes to existing orchestrators"
+
+    - id: "phase-90"
+      title: "Toolkit Centralization"
+      location: "phases/completed/phase-90-toolkit-centralization.yaml"
+      completion_date: "2026-02-16"
+      duration: "4 hours (6-stage silent autonomous execution)"
+      metrics:
+        tests: "66/66 passing (52 toolkit + 14 MCP)"
+        test_duration: "0.24s toolkit, 9.52s MCP"
+        stages: 6
+        velocity: "100% autonomous (no user prompts during execution)"
+      key_deliverables:
+        - "cortex.toolkit package: discovery, diagnostics, setup, cleanup, validation modules"
+        - "5 MCP tools: toolkit_diagnose, toolkit_verify, toolkit_cleanup, toolkit_validate, toolkit_analyze"
+        - "Discovery: Tool categorization (12 tests) + duplicate detection"
+        - "Diagnostics: MCP health checks (7 tests) + server status"
+        - "Setup: Environment verification (9 tests) + autofix commands"
+        - "Cleanup: Markdown vacuum (10 tests) + debug marker removal"
+        - "Validation: Governance alignment (14 tests) + TDD/security checks"
+        - "Consolidated scripts: verify-mcp-setup, diagnose-mcp, verify-mcp-tools, verify-setup, run_vacuum, validate-production"
+      architectural_innovation:
+        - "Unified toolkit package replaces scattered .cortex/ scripts"
+        - "MCP-first exposure: All tools accessible via cortex_* commands"
+        - "Duplicate detection: CORE-035 enforcement automation"
+        - "Autofix guidance: SetupVerifier provides remediation commands"
+        - "Markdown vacuum: ENH-036 automated cleanup integration"
+      business_value:
+        - "Script consolidation: 15+ scripts → 5 modules + 5 MCP tools"
+        - "Test coverage: 66 tests ensure production reliability"
+        - "Developer experience: Single cortex.toolkit import"
+        - "Governance automation: ValidationManager enforces CORE rules"
 
   active: []
 
