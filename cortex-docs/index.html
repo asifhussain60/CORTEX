@@ -2,30 +2,6 @@
 
 <html lang="en">
 <head>
-<style>
-/* Mobile font optimization */
-html {
-    -webkit-text-size-adjust: 100%;
-    -moz-text-size-adjust: 100%;
-    text-size-adjust: 100%;
-}
-</style>
-<style>
-/* Touch target optimization */
-a:not(.glass-card):not(.level0-tile), 
-button, 
-[role="button"] {
-    min-width: 44px;
-    min-height: 44px;
-}
-</style>
-<style>
-/* Mobile touch optimization */
-button, a, input, select, textarea, [role="button"] {
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
-}
-</style>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta content="CORTEX - MCP-First Development Intelligence with 24 Orchestrators, 4-Tier Governance, and TDD Mastery" name="description"/>
@@ -414,8 +390,11 @@ button, a, input, select, textarea, [role="button"] {
     </style>
 </head>
 <body>
-<!-- Skip to Main Content Link for Accessibility -->
+<!-- Skip to Main Content Link for Accessibility (WCAG 2.4.1) -->
 <a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- Main Content Wrapper (WCAG 2.1 Level AA Requirement) -->
+<main id="main-content" role="main">
 
 <!-- Page Loading Overlay -->
 <div class="page-loading-overlay" id="pageLoadingOverlay" role="status" aria-live="polite" aria-label="Page is loading">
@@ -553,7 +532,10 @@ button, a, input, select, textarea, [role="button"] {
     </div>
 </section>
 </div>
-<section class="hero level0-hero-section" id="main-content">
+
+<!-- Hero Section as Site Header (Semantic HTML5) -->
+<header role="banner" class="site-header">
+<section class="hero level0-hero-section" id="hero-section">
 <div class="logo-container animation-t3">
 <img alt="CORTEX Logo" class="hero-logo" loading="eager" fetchpriority="high" height="500" id="heroLogo" src="assets/images/CORTEX-logo-512.png" width="500"/>
 </div>
@@ -613,6 +595,10 @@ button, a, input, select, textarea, [role="button"] {
 </article>
 </div>
 </div>
+</section>
+<!-- End Hero/Header Section -->
+</header>
+
 <!-- Persona Tiles -->
 <div class="persona-tiles-container">
 <div class="glass-card-clickable persona-tile persona-tile-leadership">
@@ -1081,6 +1067,22 @@ Watch CORTEX orchestrate end-to-end development workflows with intelligent autom
 </div>
 </div>
 </div>
+</main>
+<!-- End Main Content -->
+
+<!-- Footer with Page Metadata (Semantic HTML5) -->
+<footer role="contentinfo" class="page-footer">
+  <div class="footer-content">
+    <p class="footer-text">
+      <span class="footer-brand">CORTEX</span> — <em>MCP-First Development Intelligence</em>
+    </p>
+    <p class="footer-meta">
+      Built with <span aria-label="accessibility">♿</span> WCAG 2.1 Level AA compliance |
+      Performance optimized | 
+      <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </p>
+  </div>
+</footer>
 
 <!-- External JavaScript for Performance -->
 <script src="assets/js/index.js" defer></script>

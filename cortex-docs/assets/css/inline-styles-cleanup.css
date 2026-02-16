@@ -4,9 +4,121 @@
  * Mobile-first responsive design with breakpoints for tablets, iPads, and phones
  * 
  * @author Asif Hussain
- * @version 1.0.0
+ * @version 1.1.0
  * @copyright © 2026 Asif Hussain. All rights reserved.
+ * @updated 2026-02-16: Added mobile optimization utilities, skip-link, footer styles
  */
+
+/* ============================================================================
+   MOBILE OPTIMIZATION UTILITIES (WCAG 2.5.5 Target Size)
+   ========================================================================= */
+
+/* Mobile font optimization (prevents auto-zoom on iOS) */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+/* Touch target optimization (WCAG 2.5.5: minimum 44x44px) */
+a:not(.glass-card):not(.level0-tile), 
+button, 
+[role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+}
+
+/* Mobile touch optimization (prevents tap highlight flash) */
+button, 
+a, 
+input, 
+select, 
+textarea, 
+[role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+/* ============================================================================
+   ACCESSIBILITY: SKIP-TO-CONTENT LINK (WCAG 2.4.1)
+   ========================================================================= */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--accent-primary, #00d4ff);
+    color: var(--bg-primary, #0a0e27);
+    padding: 8px 16px;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 0 0 8px 0;
+    z-index: 100;
+    transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+    top: 0;
+    outline: 3px solid var(--accent-secondary, #7b61ff);
+    outline-offset: 2px;
+}
+
+/* ============================================================================
+   SEMANTIC HTML5: FOOTER STYLES
+   ========================================================================= */
+.page-footer {
+    background: rgba(26, 31, 58, 0.5);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 2rem 1rem;
+    margin-top: 4rem;
+    text-align: center;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-text {
+    color: var(--text-secondary, #a0a6c0);
+    font-size: 0.95rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.footer-brand {
+    font-weight: 700;
+    color: var(--accent-primary, #00d4ff);
+    letter-spacing: 0.5px;
+}
+
+.footer-meta {
+    color: var(--text-muted, #6b7280);
+    font-size: 0.875rem;
+    margin: 0;
+}
+
+.footer-meta a {
+    color: var(--accent-primary, #00d4ff);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer-meta a:hover {
+    color: var(--accent-secondary, #7b61ff);
+    text-decoration: underline;
+}
+
+/* Mobile footer adjustments */
+@media (max-width: 767px) {
+    .page-footer {
+        padding: 1.5rem 1rem;
+        margin-top: 3rem;
+    }
+    
+    .footer-text,
+    .footer-meta {
+        font-size: 0.85rem;
+    }
+}
 
 /* ============================================================================
    Z-INDEX LAYERING (Consistent across all components)
