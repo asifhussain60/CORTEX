@@ -22,15 +22,21 @@ import sqlite3
 from pathlib import Path
 import uuid
 
-# Wrapped import - module may not exist
+# Wrapped import - module may not exist or classes may be missing
 try:
     from cortex_brain.tier2 import (
         BehavioralBoundaryRules,
         BoundaryViolation,
         ViolationType,
     )
-except ModuleNotFoundError:
-    pass
+except (ModuleNotFoundError, ImportError):
+    # Placeholder classes for test collection
+    class BehavioralBoundaryRules:
+        pass
+    class BoundaryViolation:
+        pass
+    class ViolationType:
+        pass
 
 
 class TestLockedPhaseProtection:
