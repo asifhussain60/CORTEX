@@ -223,6 +223,87 @@ class HealthOrchestrator:
             "agent_names": self.list_agents(),
             "enabled": self.enabled,
         }
+    
+    def check_definition_of_done(
+        self,
+        min_score: float = 80.0,
+        blocking_agents: Optional[List[str]] = None,
+    ) -> Dict[str, Any]:
+        """Check if Definition of Done (DoD) gate is satisfied.
+        
+        This gate enforces production-ready code quality by validating
+        health score and critical agent checks.
+        
+        Args:
+            min_score: Minimum health score required (0-100)
+            blocking_agents: List of agent names that must pass (no issues)
+                           Default: DuplicateDetectionAgent, StubDetectionAgent
+        
+        Returns:
+            Dictionary with DoD check results:
+                - passed: bool - Whether DoD gate passed
+                - health_score: float - Overall health score
+                - blocking_failures: List[str] - Failed blocking agents
+                - recommendation: str - Action to take
+        
+        Usage:
+            ```python
+            orchestrator = HealthOrchestrator(Path("."))
+            dod_result = orchestrator.check_definition_of_done(min_score=80.0)
+            
+            if not dod_result["passed"]:
+                print(f"DoD FAILED: {dod_result['recommendation']}")
+                sys.exit(1)
+            ```
+        """
+        # Default blocking agents (P0 violations)
+        if blocking_agents is None:
+            blocking_agents = [
+                "DuplicateDetectionAgent",
+                "StubDetectionAgent",
+            ]
+        
+        # Run health check
+        report = self.run_health_check()
+        
+        # Calculate health score (already calculated during metric updates)
+        health_score = report.metrics.health_score
+        
+        # Check blocking agents
+        blocking_failures: List[str] = []
+        for agent_name in blocking_agents:
+            agent_result = next(
+                (r for r in report.agent_results if r.agent_name == agent_name),
+                None
+            )
+            if agent_result and len(agent_result.issues) > 0:
+                blocking_failures.append(
+                    f"{agent_name}: {len(agent_result.issues)} issues"
+                )
+        
+        # Determine if DoD passed
+        passed = health_score >= min_score and len(blocking_failures) == 0
+        
+        # Generate recommendation
+        if passed:
+            recommendation = "✅ DoD PASSED - Code meets production quality standards"
+        else:
+            reasons = []
+            if health_score < min_score:
+                reasons.append(f"Health score {health_score:.1f} < {min_score}")
+            if blocking_failures:
+                reasons.append(f"Blocking failures: {', '.join(blocking_failures)}")
+            recommendation = f"❌ DoD FAILED - {' | '.join(reasons)}"
+        
+        return {
+            "passed": passed,
+            "health_score": health_score,
+            "min_score_required": min_score,
+            "blocking_failures": blocking_failures,
+            "total_issues": report.metrics.total_issues,
+            "critical_issues": report.metrics.critical_issues,
+            "recommendation": recommendation,
+        }
 
 
 __all__ = ["HealthOrchestrator"]

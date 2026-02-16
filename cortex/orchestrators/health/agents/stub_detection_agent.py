@@ -69,6 +69,7 @@ class StubDetectionAgent(BaseHealthAgent):
             "*/.venv/*",
             "*/.git/*",
             "*/tests/*",
+            "*/test_*.py",  # Test files (anywhere)
             "*/__pycache__/*",
             "*/__init__.py",  # Init files are often small
             "*/conftest.py",  # Test configuration files
@@ -301,11 +302,14 @@ class StubDetectionAgent(BaseHealthAgent):
         Returns:
             True if should exclude
         """
+        import fnmatch
+        
         rel_path = str(file_path.relative_to(workspace_root))
+        file_name = file_path.name
         
         for pattern in self.exclude_patterns:
-            pattern_clean = pattern.replace("*", "").replace("/", "")
-            if pattern_clean in rel_path:
+            # Check both full path and filename
+            if fnmatch.fnmatch(rel_path, pattern) or fnmatch.fnmatch(file_name, pattern.lstrip('*/')):
                 return True
         
         return False
