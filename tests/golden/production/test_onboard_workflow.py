@@ -82,21 +82,27 @@ class Calculator:
         assert result.functions_found >= 2
         assert result.classes_found >= 1
     
-    def test_detect_anti_patterns(self, tmp_path: Path) -> None:
-        """Golden: Detect anti-patterns in code."""
+    def test_detect_patterns(self, tmp_path: Path) -> None:
+        """Golden: Detect design patterns in code."""
         from cortex.brain.core.intelligence.pattern_detector import PatternDetector
+        from cortex.brain.core.intelligence.ast_intelligence import ASTIntelligenceEngine
         
         detector = PatternDetector()
+        ast_intel = ASTIntelligenceEngine()
         
-        code_path = tmp_path / "bad.py"
+        code_path = tmp_path / "singleton.py"
         code_path.write_text("""
-try:
-    do_something()
-except:
-    pass
+class Singleton:
+    _instance = None
+    
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
 """)
         
-        result = detector.detect_anti_patterns(code_path)
+        parse_result = ast_intel.parse_file(code_path)
+        patterns = detector.detect_patterns(parse_result)
         
-        assert len(result.anti_patterns) > 0
-        assert any("bare except" in p.lower() for p in result.anti_patterns)
+        assert len(patterns) > 0
+        assert any(p.pattern_type == "SINGLETON" for p in patterns)

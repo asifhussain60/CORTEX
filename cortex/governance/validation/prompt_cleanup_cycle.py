@@ -49,7 +49,7 @@ PROMPT_CLEANUP_TASKS: List[CleanupTask] = [
         title="Deprecated Orchestrator Removal",
         description="Detect references to orchestrators removed from __wiring_contract__.yaml but still mentioned in prompts/agents",
         detection_method=r"""
-        1. Load cortex/__wiring_contract__.yaml → extract active orchestrators
+        1. Load cortex-registry/_cortex-master/core/wiring/contract.yaml → extract active orchestrators
         2. Scan .github/prompts/*.md and .github/agents/core/*.md
         3. Extract orchestrator references (regex: \w+Orchestrator)
         4. Find references NOT in wiring.yaml

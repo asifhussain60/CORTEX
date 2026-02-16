@@ -13,7 +13,7 @@ import yaml
 class KnowledgeYAMLSynthesizer:
     """Synthesize advanced knowledge YAMLs from authoritative sources."""
     
-    def __init__(self, knowledge_base_path: str = "cortex/knowledge/best-practices"):
+    def __init__(self, knowledge_base_path: str = "cortex-registry/_cortex-master/knowledge"):
         self.knowledge_path = Path(knowledge_base_path)
         self.domains_created: List[str] = []
         

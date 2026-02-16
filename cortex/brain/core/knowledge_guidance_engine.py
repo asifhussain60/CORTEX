@@ -450,7 +450,7 @@ class KnowledgeGuidanceEngine:
         module_name: str
     ) -> None:
         """
-        Load best practices from cortex/knowledge/best-practices/.
+        Load best practices from cortex-registry/_cortex-master/knowledge/.
 
         Args:
             guidance: Guidance object to populate
@@ -461,7 +461,7 @@ class KnowledgeGuidanceEngine:
             return
 
         # TDD best practices for all modules
-        tdd_guide = self.best_practices_root / "testing-validation" / "tdd-best-practices.yaml"
+        tdd_guide = self.best_practices_root / "testing" / "tdd-best-practices.yaml"
         if tdd_guide.exists():
             guidance.best_practices_guides.append(str(tdd_guide.relative_to(self.knowledge_root)))
             guidance.guidance_entries.append(
@@ -471,13 +471,13 @@ class KnowledgeGuidanceEngine:
                     description="Kent Beck methodology: RED → GREEN → REFACTOR",
                     priority=1,
                     tier=TierLevel.CORTEX_BEST_PRACTICES,
-                    source="cortex/knowledge/best-practices/testing-validation/tdd-best-practices.yaml",
+                    source="cortex-registry/_cortex-master/knowledge/testing/tdd-best-practices.yaml",
                     patterns=["red_phase", "green_phase", "refactor_phase", "test_isolation"]
                 )
             )
 
         # Testing pyramid for all modules
-        pyramid_guide = self.best_practices_root / "testing-validation" / "testing-pyramid.yaml"
+        pyramid_guide = self.best_practices_root / "testing" / "testing-pyramid.yaml"
         if pyramid_guide.exists():
             guidance.best_practices_guides.append(str(pyramid_guide.relative_to(self.knowledge_root)))
             guidance.guidance_entries.append(

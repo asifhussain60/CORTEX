@@ -200,7 +200,7 @@ class KnowledgeSynthesisEngine:
         """
         Load applicable CORTEX best practices from 40+ YAMLs.
 
-        Phase 65 S1: Dynamically loads from cortex/knowledge/best-practices/
+        Phase 65 S1: Dynamically loads from cortex-registry/_cortex-master/knowledge/
         using INDEX.yaml for intent-to-YAML mapping.
 
         Args:
@@ -222,8 +222,8 @@ class KnowledgeSynthesisEngine:
         practices = {}
 
         try:
-            # Load INDEX.yaml
-            index_path = Path(__file__).parent.parent.parent / "knowledge" / "best-practices" / "INDEX.yaml"
+            # Load INDEX.yaml from current directory (already in registry)
+            index_path = Path(__file__).parent / "INDEX.yaml"
 
             if not index_path.exists():
                 logger.warning(f"INDEX.yaml not found at {index_path}, using CORE rules only")
