@@ -1,0 +1,54 @@
+# CORTEX Python Project Configuration
+# Purpose: Linting, formatting, and import validation rules
+# Authority: Phase 96 - Import Linting Rules
+# Created: 2026-02-16
+
+[tool.ruff]
+target-version = "py39"
+line-length = 100
+
+[tool.ruff.lint]
+# Enable import linting rules
+select = [
+    "E",    # pycodestyle errors
+    "F",    # pyflakes
+    "I",    # isort
+    "TID",  # tidy imports (ban specific imports)
+]
+
+[tool.ruff.lint.flake8-tidy-imports]
+# Ban imports from cortex/* that should import from cortex_brain/* instead
+# This prevents stub/wrapper creation
+banned-from = [
+    # Ban cortex.core.* (should use cortex_brain.*)
+    "cortex.core.governance",
+    "cortex.core.hallucination_prevention",
+    "cortex.core.tier_validator",
+    
+    # Ban cortex.domain_brain.* wrappers (should use cortex_brain.domain_brain.*)
+    "cortex.domain_brain.models",
+    "cortex.domain_brain.api",
+    "cortex.domain_brain.adapters",
+    
+    # Ban cortex.brain.* (should use cortex_brain.*)
+    "cortex.brain.tier0",
+    "cortex.brain.tier1",
+    "cortex.brain.tier2",
+    "cortex.brain.tier3",
+]
+
+[tool.ruff.lint.flake8-tidy-imports.banned-from.msg]
+"cortex.core.governance" = "Import directly from cortex_brain.tier0.governance instead"
+"cortex.core.hallucination_prevention" = "Import directly from cortex_brain.tier0.hallucination_prevention instead"
+"cortex.domain_brain.models" = "Import directly from cortex_brain.domain_brain.models instead"
+
+[tool.ruff.lint.isort]
+# Sort imports with cortex_brain before cortex
+known-first-party = ["cortex_brain", "cortex"]
+force-sort-within-sections = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]

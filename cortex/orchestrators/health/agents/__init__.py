@@ -3,13 +3,14 @@
 Provides specialized agents for detecting specific health issues:
 - DuplicateDetectionAgent: CORE-035 violations
 - StubDetectionAgent: Weak implementations
+- StubAutoFixAgent: Automatic stub fixing (Phase 96)
 - PathIntegrityAgent: Import path drift
 - VersionCleanupAgent: Version artifacts
 - TestCoverageAgent: Missing tests
 - RegistryConsistencyAgent: Config misplacement
 
 Author: CORTEX Framework
-Phase: PHASE-92
+Phase: PHASE-92 + PHASE-96 enhancements
 """
 
 from .base_agent import (
@@ -23,6 +24,7 @@ from .duplicate_detection_agent import DuplicateDetectionAgent
 from .path_integrity_agent import PathIntegrityAgent
 from .registry_consistency_agent import RegistryConsistencyAgent
 from .stub_detection_agent import StubDetectionAgent
+from .stub_autofix_agent import StubAutoFixAgent
 from .test_coverage_agent import TestCoverageAgent
 from .version_cleanup_agent import VersionCleanupAgent
 
@@ -36,6 +38,7 @@ __all__ = [
     "PathIntegrityAgent",
     "RegistryConsistencyAgent",
     "StubDetectionAgent",
+    "StubAutoFixAgent",
     "TestCoverageAgent",
     "VersionCleanupAgent",
 ]
