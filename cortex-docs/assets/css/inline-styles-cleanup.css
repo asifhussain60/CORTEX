@@ -1,0 +1,411 @@
+/**
+ * CORTEX Inline Styles Cleanup
+ * Migrated all inline styles to proper CSS classes for maintainability
+ * Mobile-first responsive design with breakpoints for tablets, iPads, and phones
+ * 
+ * @author Asif Hussain
+ * @version 1.0.0
+ * @copyright © 2026 Asif Hussain. All rights reserved.
+ */
+
+/* ============================================================================
+   Z-INDEX LAYERING (Consistent across all components)
+   ========================================================================= */
+.z-layer-2 {
+    position: relative;
+    z-index: 2;
+}
+
+.z-layer-3 {
+    position: relative;
+    z-index: 3;
+}
+
+/* ============================================================================
+   FLEXBOX UTILITIES (Mobile-first)
+   ========================================================================= */
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-column-stretch {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+.flex-center {
+    justify-content: center;
+    align-items: center;
+}
+
+.margin-top-auto {
+    margin-top: auto;
+}
+
+.padding-bottom-0 {
+    padding-bottom: 0;
+}
+
+/* ============================================================================
+   TEXT ALIGNMENT
+   ========================================================================= */
+.text-center {
+    text-align: center;
+}
+
+.text-justify {
+    text-align: justify;
+}
+
+/* ============================================================================
+   "SOON" BADGE STYLES
+   ========================================================================= */
+.badge-soon {
+    color: #7b61ff;
+    font-size: 0.7em;
+    margin-left: 4px;
+}
+
+.badge-soon-small {
+    color: #7b61ff;
+    font-size: 0.6em;
+}
+
+/* ============================================================================
+   GRID LAYOUTS (Responsive)
+   ========================================================================= */
+
+/* Feature Grid (2 columns desktop → 1 column mobile) */
+.feature-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    align-items: stretch;
+}
+
+/* Level 0 Card Minimum Height */
+.level0-content-card {
+    min-height: 420px;
+}
+
+/* BWC Dual Panels */
+.bwc-dual-panels {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    align-items: stretch;
+}
+
+.bwc-achievement-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.bwc-panel-header {
+    justify-content: center;
+    text-align: center;
+}
+
+.bwc-panel-subtitle {
+    text-align: center;
+}
+
+.bwc-panel-description {
+    flex: 1;
+    text-align: justify;
+}
+
+.bwc-panel-stats {
+    margin-top: auto;
+}
+
+.bwc-mini-stat {
+    border: 1px solid rgba(0, 200, 255, 0.3);
+    border-radius: 8px;
+    padding: 0.75rem;
+}
+
+.bwc-achievement-panel-secondary .bwc-mini-stat {
+    border-color: rgba(138, 43, 226, 0.3);
+}
+
+/* BWC Stats Grid */
+.bwc-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    align-items: stretch;
+}
+
+.bwc-stat {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 180px;
+}
+
+.bwc-stat-bar {
+    margin-top: auto;
+}
+
+/* Orchestrator Cards Grid */
+.orchestrator-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    align-items: stretch;
+}
+
+.orchestrator-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-bottom: 1rem;
+}
+
+/* STS Categories Row */
+.sts-unified-panel {
+    padding-bottom: 0;
+}
+
+.sts-categories-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    align-items: stretch;
+}
+
+.sts-category-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    padding-bottom: 0.5rem;
+}
+
+.sts-category-link {
+    margin-top: auto;
+}
+
+/* Main Panel Wrapper */
+.main-panel-wrapper-no-padding {
+    padding-bottom: 0;
+}
+
+/* ============================================================================
+   RESPONSIVE BREAKPOINTS (Mobile-first approach)
+   ========================================================================= */
+
+/* Tablets (768px - 1024px) */
+@media (max-width: 1024px) and (min-width: 768px) {
+    .feature-grid-2,
+    .bwc-dual-panels {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .bwc-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+    }
+
+    .orchestrator-cards-grid,
+    .sts-categories-row {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    .level0-content-card {
+        min-height: 360px;
+    }
+
+    .bwc-stat {
+        min-height: 160px;
+    }
+}
+
+/* Mobile Phones (< 768px) */
+@media (max-width: 767px) {
+    .feature-grid-2,
+    .bwc-dual-panels,
+    .orchestrator-cards-grid,
+    .sts-categories-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .bwc-stats {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .level0-content-card {
+        min-height: auto;
+        padding: 1.5rem;
+    }
+
+    .bwc-stat {
+        min-height: 140px;
+    }
+
+    .bwc-mini-stat {
+        padding: 0.5rem;
+    }
+
+    /* Adjust gap and padding for smaller screens */
+    .feature-grid-2,
+    .bwc-dual-panels,
+    .orchestrator-cards-grid,
+    .sts-categories-row {
+        gap: 0.75rem;
+    }
+
+    /* Font size adjustments for readability */
+    .badge-soon {
+        font-size: 0.65em;
+    }
+
+    .badge-soon-small {
+        font-size: 0.55em;
+    }
+}
+
+/* Extra Small Phones (< 480px) */
+@media (max-width: 479px) {
+    .feature-grid-2,
+    .bwc-dual-panels,
+    .orchestrator-cards-grid,
+    .sts-categories-row,
+    .bwc-stats {
+        gap: 0.5rem;
+    }
+
+    .level0-content-card {
+        padding: 1rem;
+    }
+
+    .bwc-mini-stat {
+        padding: 0.4rem;
+        font-size: 0.9rem;
+    }
+
+    .bwc-stat {
+        min-height: 120px;
+    }
+}
+
+/* iPads (Portrait) */
+@media (min-width: 768px) and (max-width: 834px) and (orientation: portrait) {
+    .feature-grid-2,
+    .bwc-dual-panels {
+        grid-template-columns: 1fr;
+    }
+
+    .orchestrator-cards-grid,
+    .sts-categories-row {
+        grid-template-columns: 1fr;
+    }
+
+    .bwc-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* iPads (Landscape) */
+@media (min-width: 1024px) and (max-width: 1366px) and (orientation: landscape) {
+    .feature-grid-2,
+    .bwc-dual-panels {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .orchestrator-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .sts-categories-row {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .bwc-stats {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* ============================================================================
+   E2E DEMO PLACEHOLDER STYLES
+   ========================================================================= */
+.e2e-demo-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    background: var(--glass-bg-base);
+    border-radius: 12px;
+    border: 1px solid var(--glass-border-subtle);
+    padding: 2rem;
+}
+
+.e2e-demo-icon {
+    width: 64px;
+    height: 64px;
+    color: var(--accent-cyan);
+    margin-bottom: 1rem;
+}
+
+.e2e-demo-title {
+    color: var(--text-primary);
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+}
+
+.e2e-demo-description {
+    color: var(--text-secondary);
+    margin: 0 0 1rem 0;
+    text-align: center;
+    max-width: 400px;
+}
+
+.e2e-demo-note {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    font-style: italic;
+}
+
+/* ============================================================================
+   COMING SOON PAGE STYLES
+   ========================================================================= */
+.hero-description-footer {
+    margin-top: 2rem;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Mobile adjustments for E2E demo */
+@media (max-width: 767px) {
+    .e2e-demo-placeholder {
+        min-height: 300px;
+        padding: 1.5rem;
+    }
+
+    .e2e-demo-icon {
+        width: 48px;
+        height: 48px;
+    }
+
+    .e2e-demo-title {
+        font-size: 1.1rem;
+    }
+
+    .e2e-demo-description {
+        font-size: 0.9rem;
+        max-width: 100%;
+    }
+}
