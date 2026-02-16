@@ -427,34 +427,32 @@ result = cortex_classify(
 
 ### Output Format (SSOT)
 
-**Markdown template for copy-ready output:**
+**Clean markdown output (no metrics, no tables, no headers):**
 
 ```markdown
-### 🎯 Optimized Request for CORTEX
-
-**Intent:** {INTENT_TYPE}  
-**Summary:** {DISTILLED_SUMMARY}  
-**Keywords:** {CANONICAL_KEYWORDS}  
-**Urgency:** {URGENCY_LEVEL}  
-**Confidence:** {CONFIDENCE_PERCENT}%
-
-**Token Reduction:** {ORIGINAL_LENGTH} chars → {DISTILLED_LENGTH} chars ({REDUCTION_PERCENT}% reduction)
+{REFINED_PROMPT_WITH_CORTEX_TECHNICAL_CONTEXT}
 
 ---
 
-**📋 Copy this to CORTEX:**
+**Challenge Protocol:** Before proceeding, identify ONE key assumption in the request above that might be incorrect or suboptimal. Present an alternative approach that could yield better outcomes. Structure as: "Assumption: [X]. Alternative: [Y]. Trade-off: [Z]."
+```
 
-```
-{DISTILLED_SUMMARY}
-```
+**Key Principles:**
+- ✅ Output ONLY refined prompt text + challenge protocol
+- ❌ NO metrics tables (token reduction, confidence, etc.)
+- ❌ NO before/after comparisons
+- ❌ NO examples or explanations
+- ✅ Challenge protocol auto-appended (unless user included it)
+- ✅ Filler words removed ("I think", "probably", "some kind of")
+- ✅ CORTEX technical context added based on intent (e.g., "via TDDOrchestrator")
+
+**Example Output:**
+```markdown
+Implement user authentication for admin panel security (via TDDOrchestrator with module-level scope).
 
 ---
 
-**Context for MasterOrchestrator:**
-- **Scope:** {SCOPE}
-- **Impact:** {IMPACT}
-- **Urgency:** {URGENCY}
-- **Clarification:** {NEEDED_OR_NONE}
+**Challenge Protocol:** Before proceeding, identify ONE key assumption in the request above that might be incorrect or suboptimal. Present an alternative approach that could yield better outcomes. Structure as: "Assumption: [X]. Alternative: [Y]. Trade-off: [Z]."
 ```
 
 ### Integration with Agents
@@ -473,47 +471,24 @@ User: "rephrase: I think we should probably implement some kind of user authenti
 
 AI Output:
 ```markdown
-### 🎯 Optimized Request for CORTEX
-
-**Intent:** IMPLEMENT  
-**Summary:** Implement user authentication for admin panel security  
-**Keywords:** implement, authentication, admin, security, authorized  
-**Urgency:** High  
-**Confidence:** 88%
-
-**Token Reduction:** 178 chars → 54 chars (70% reduction)
+Implement user authentication for admin panel security (via TDDOrchestrator with module-level scope).
 
 ---
 
-**📋 Copy this to CORTEX:**
-
-```
-Implement user authentication for admin panel (security vulnerability)
-```
+**Challenge Protocol:** Before proceeding, identify ONE key assumption in the request above that might be incorrect or suboptimal. Present an alternative approach that could yield better outcomes. Structure as: "Assumption: [X]. Alternative: [Y]. Trade-off: [Z]."
 ```
 
-**Example 2: Ambiguous Request**
+**Example 2: Fix Request**
 
-User: "rephrase: something is wrong with the thing"
+User: "rephrase: Fix the authentication bug that's causing users to not be able to login because of token validation issues"
 
 AI Output:
 ```markdown
-### 🎯 Optimized Request for CORTEX
+Fix authentication token validation bug preventing user login (via TDDOrchestrator with test-first debugging).
 
-**Intent:** UNKNOWN  
-**Summary:** Issue detected with unspecified component  
-**Keywords:** wrong, thing  
-**Urgency:** Unknown  
-**Confidence:** 15%
+---
 
-**Token Reduction:** 34 chars → 34 chars (0% reduction)
-
-⚠️ **Clarification Needed:**
-- What component/feature is affected?
-- What specific behavior is wrong?
-- What should the expected behavior be?
-
-Please provide more details to optimize this request.
+**Challenge Protocol:** Before proceeding, identify ONE key assumption in the request above that might be incorrect or suboptimal. Present an alternative approach that could yield better outcomes. Structure as: "Assumption: [X]. Alternative: [Y]. Trade-off: [Z]."
 ```
 
 ### Performance Metrics

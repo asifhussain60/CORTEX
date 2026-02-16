@@ -487,6 +487,50 @@ class CortexClassify(ConsolidatedTool):
                 
                 # AC-CIG-S3-01: Format-based response
                 if format_type == "conversational":
+                    # REPHRASE MODE: Clean refined prompt output
+                    # Authority: cortex-architect.prompt.md § REPHRASE MODE
+                    # AC-ID: AC-REPHRASE-REFINEMENT-001
+                    
+                    # Generate refined prompt with CORTEX technical context
+                    refined_prompt = self._generate_refined_prompt(
+                        original_text=request,
+                        distilled_summary=transformed.distilled_summary,
+                        intent_type=data.get("intent", "UNKNOWN"),
+                        canonical_keywords=transformed.canonical_keywords,
+                        scope=transformed.structured_context.get("scope", "unclear"),
+                        impact=transformed.structured_context.get("impact", "medium"),
+                    )
+                    
+                    # Auto-append challenge protocol (unless already present)
+                    challenge_protocol = (
+                        "Analyze my request using CORTEX's challenge-first protocol: "
+                        "audit existing capabilities, identify architectural fit within current patterns, "
+                        "then deliver your SINGLE BEST recommendation (no alternatives) that addresses "
+                        "the ask vs. challenge tension inline. Evaluate through CORTEX's core design pillars: "
+                        "extensibility, scalability, accuracy, team collaboration, and long-term maintainability. "
+                        "Ensure MCP-first exposure, orchestrator integrity, and zero regression risk. "
+                        "Present findings in executive-ready format: ≤60 seconds read time, comparison tables, "
+                        "clear sections with visual hierarchy optimized for VS Code Copilot Chat rendering."
+                    )
+                    
+                    # Check if challenge protocol already present
+                    if "challenge-first protocol" not in refined_prompt.lower():
+                        # Append challenge protocol with proper spacing
+                        refined_prompt = f"{refined_prompt}\n\n{challenge_protocol}"
+                    
+                    # Set rephrased_prompt as primary output for REPHRASE mode
+                    data["rephrased_prompt"] = refined_prompt
+                    
+                    # Keep transformation metadata for debugging/audit
+                    data["transformed_request"] = {
+                        "original_text": transformed.original_text,
+                        "distilled_summary": transformed.distilled_summary,
+                        "canonical_keywords": transformed.canonical_keywords,
+                        "structured_context": transformed.structured_context,
+                        "confidence": transformed.confidence,
+                    }
+                else:
+                    # TABLE FORMAT: Original conversational reflection (backwards compat)
                     # Generate conversational reflection
                     reflector = ConversationalReflector()
                     dor_data = {
@@ -529,6 +573,32 @@ class CortexClassify(ConsolidatedTool):
         except Exception as e:
             # Fallback to keyword-based classification (production-safe)
             classification = self._classify_keywords(request, operation)
+            
+            # For conversational format, still generate rephrased_prompt
+            if format_type == "conversational" and request:
+                # Generate minimal refined prompt from classification
+                refined_prompt = self._generate_fallback_refined_prompt(
+                    original_text=request,
+                    intent_type=classification.get("intent", "UNKNOWN"),
+                )
+                
+                # Auto-append challenge protocol
+                challenge_protocol = (
+                    "Analyze my request using CORTEX's challenge-first protocol: "
+                    "audit existing capabilities, identify architectural fit within current patterns, "
+                    "then deliver your SINGLE BEST recommendation (no alternatives) that addresses "
+                    "the ask vs. challenge tension inline. Evaluate through CORTEX's core design pillars: "
+                    "extensibility, scalability, accuracy, team collaboration, and long-term maintainability. "
+                    "Ensure MCP-first exposure, orchestrator integrity, and zero regression risk. "
+                    "Present findings in executive-ready format: ≤60 seconds read time, comparison tables, "
+                    "clear sections with visual hierarchy optimized for VS Code Copilot Chat rendering."
+                )
+                
+                if "challenge-first protocol" not in refined_prompt.lower():
+                    refined_prompt = f"{refined_prompt}\n\n{challenge_protocol}"
+                
+                classification["rephrased_prompt"] = refined_prompt
+            
             return ToolResult(
                 success=True,
                 data=classification,
@@ -588,6 +658,132 @@ class CortexClassify(ConsolidatedTool):
                 "estimated_time": "1-2 hours",
                 "risk_level": "low",
             }
+    
+    def _generate_refined_prompt(
+        self,
+        original_text: str,
+        distilled_summary: str,
+        intent_type: str,
+        canonical_keywords: List[str],
+        scope: str,
+        impact: str,
+    ) -> str:
+        """Generate refined prompt with CORTEX technical context.
+        
+        Transforms user's verbose request into concise CORTEX-optimized language
+        suitable for MasterOrchestrator processing.
+        
+        Args:
+            original_text: Original user request
+            distilled_summary: Token-optimized summary
+            intent_type: Classified intent (IMPLEMENT/FIX/etc.)
+            canonical_keywords: Extracted keywords
+            scope: Operation scope (module/file/system)
+            impact: Estimated impact level
+            
+        Returns:
+            Refined prompt with CORTEX technical details
+        """
+        # Use distilled summary as base (token-optimized)
+        refined = distilled_summary
+        
+        # Clean up filler words for further compression
+        filler_words = [
+            "I think", "probably", "some kind of", "because", "right now",
+            "that's not good for", "we need to make sure", "we should",
+            "kind of", "sort of", "basically"
+        ]
+        for filler in filler_words:
+            refined = refined.replace(filler, "")
+        
+        # Collapse multiple spaces
+        refined = " ".join(refined.split())
+        
+        # Add CORTEX technical context based on intent
+        technical_context = self._get_technical_context_for_intent(
+            intent_type, scope, impact
+        )
+        
+        if technical_context:
+            # Inject technical terms naturally
+            refined = f"{refined} {technical_context}"
+        
+        # Clean up redundant phrases
+        refined = refined.strip()
+        
+        return refined
+    
+    def _generate_fallback_refined_prompt(
+        self,
+        original_text: str,
+        intent_type: str,
+    ) -> str:
+        """Generate refined prompt from original text (fallback mode).
+        
+        Used when RequestTransformer unavailable. Provides basic
+        compression and technical context injection.
+        
+        Args:
+            original_text: Original user request
+            intent_type: Classified intent
+            
+        Returns:
+            Refined prompt string
+        """
+        # Basic compression: remove filler words
+        refined = original_text
+        filler_words = [
+            "I think", "probably", "some kind of", "because", "right now",
+            "that's not good for", "we need to make sure", "we should",
+            "kind of", "sort of", "basically"
+        ]
+        for filler in filler_words:
+            refined = refined.replace(filler, "")
+        
+        # Collapse multiple spaces
+        refined = " ".join(refined.split())
+        
+        # Add basic technical context
+        context_suffix = {
+            "IMPLEMENT": " via TDDOrchestrator.",
+            "FIX": " via TDDOrchestrator test-first approach.",
+            "REFACTOR": " via RefactoringOrchestrator.",
+            "ANALYZE": " via LENS 4-layer analysis.",
+            "PLAN": " via PlanOrchestrator.",
+            "AUDIT": " via EnforcementOrchestrator.",
+            "QUERY": "",
+        }.get(intent_type, "")
+        
+        refined = f"{refined.strip()}{context_suffix}"
+        
+        return refined
+    
+    def _get_technical_context_for_intent(
+        self,
+        intent_type: str,
+        scope: str,
+        impact: str,
+    ) -> str:
+        """Get CORTEX technical context for intent type.
+        
+        Args:
+            intent_type: Classified intent
+            scope: Operation scope
+            impact: Impact level
+            
+        Returns:
+            Technical context string to append
+        """
+        context_map = {
+            "IMPLEMENT": f"via TDDOrchestrator with {scope}-level scope, {impact} impact.",
+            "FIX": f"targeting {scope} scope with {impact} impact, test-first approach.",
+            "REFACTOR": f"using RefactoringOrchestrator for {scope} improvements, {impact} impact.",
+            "ANALYZE": f"via LENS 4-layer analysis at {scope} scope.",
+            "PLAN": f"using PlanOrchestrator for {scope} phase breakdown.",
+            "AUDIT": f"via EnforcementOrchestrator with P0-P3 checks at {scope} scope.",
+        }
+        
+        return context_map.get(intent_type, "")
 
 
 class CortexRequestLifecycle(ConsolidatedTool):
