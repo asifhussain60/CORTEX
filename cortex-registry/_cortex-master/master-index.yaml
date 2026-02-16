@@ -7,14 +7,14 @@
 # ============================================================================
 
 metadata:
-  version: "6.9"
-  last_updated: "2026-02-16T12:45:00Z"
-  total_phases: 34
+  version: "7.0"
+  last_updated: "2026-02-16T14:00:00Z"
+  total_phases: 35
   active: 1
   completed: 17
   consolidated: 1
   deferred: 9
-  planned: 0
+  planned: 1
 
   phase_breakdown:
     original_phases: 25
@@ -249,13 +249,32 @@ phase_status:
       total_phases: 9
       details: "All work completed via mega phases. No additional implementation needed."
 
+  planned:
+    - id: "phase-98"
+      title: "Documentation Site Pipeline — Wire, Build, Deploy"
+      location: "phases/planned/phase-98-documentation-site-pipeline.yaml"
+      priority: "P1"
+      estimated_duration: "5-7 days"
+      description: "Wire 15+ existing doc infrastructure components into end-to-end pipeline: CortexDocsOrchestrator, Jinja2 templates, CLI scripts, 3 role pages + 15 child views, GitHub Actions deployment"
+      supersedes: "phase-11"
+      stages: 5
+      tests_planned: "48-70"
+      key_deliverables:
+        - "CortexDocsOrchestrator (wiring layer)"
+        - "2 Jinja2 templates (role-landing, child-page)"
+        - "CLI build + refresh scripts"
+        - "content.json generation (build-time contract)"
+        - "3 role landing pages + 15 child views (generated HTML)"
+        - "GitHub Actions deployment workflow"
+        - "Astro scaffolding removal (Python-first)"
+
   deferred:
     - phase-04  # .NET Roslyn Deep Intelligence
     - phase-05  # Angular Deep Analysis
     - phase-06  # Runtime Correlation Engine
     - phase-07  # Alignment Remediation
     - phase-08  # LENS Intelligence Integration Framework
-    - phase-11  # Documentation Site Generation
+    - phase-11  # Documentation Site Generation (SUPERSEDED by phase-98)
     - phase-13  # Intelligence Learning Core (consolidated)
     - phase-14  # Enterprise Orchestrator Maturity
     - phase-15  # Enterprise Support Framework
@@ -289,6 +308,16 @@ execution_order:
       parallel_with: ["phase-21"]
       
     - order: 3
+      phase: "phase-98"
+      label: "Documentation Site Pipeline — Wire, Build, Deploy"
+      priority: "P1"
+      status: "PLANNED"
+      estimated_duration: "5-7 days"
+      depends_on: ["mega-d", "mega-b"]
+      supersedes: "phase-11"
+      parallel_safe: true  # No overlap with phase-97 scope
+
+    - order: 4
       phase: "phase-28"
       label: "Component Intelligence & STS Automation"
       priority: "P1"
@@ -298,7 +327,7 @@ execution_order:
       consolidates: ["GAP-03", "GAP-04", "GAP-05", "GAP-06"]
       golden_tests: 125
       
-    - order: 4
+    - order: 5
       phase: "phase-29"
       label: "Production Verification Harness & Excellence Polish"
       priority: "P1"
@@ -309,23 +338,30 @@ execution_order:
       golden_tests: 290
 
   timeline_to_completion:
-    - phase_group: "Intelligence Foundation"
-      duration: "14-20 days"
-      phases: ["phase-21", "phase-27"]
-      status: "Phase 27 COMPLETE, Phase 21 in progress"
-      target_date: "2026-03-06"
-      
-    - phase_group: "Domain Knowledge & Components"
-      duration: "26-34 days"
-      phases: ["phase-23", "phase-28"]
-      status: "Phase 23 in progress, Phase 28 blocked by Phase 21"
-      target_date: "2026-04-01"
-      
-    - phase_group: "Production Verification & Polish"
-      duration: "10-14 days"
-      phases: ["phase-29"]
-      status: "Blocked by Phase 27 (COMPLETE) + Phase 28"
-      target_date: "2026-04-15"
+    phase_groups:
+      - phase_group: "Intelligence Foundation"
+        duration: "14-20 days"
+        phases: ["phase-21", "phase-27"]
+        status: "Phase 27 COMPLETE, Phase 21 in progress"
+        target_date: "2026-03-06"
+        
+      - phase_group: "Documentation Site Pipeline"
+        duration: "5-7 days"
+        phases: ["phase-98"]
+        status: "PLANNED (parallel-safe with phase-97)"
+        target_date: "2026-03-01"
+
+      - phase_group: "Domain Knowledge & Components"
+        duration: "26-34 days"
+        phases: ["phase-23", "phase-28"]
+        status: "Phase 23 in progress, Phase 28 blocked by Phase 21"
+        target_date: "2026-04-01"
+        
+      - phase_group: "Production Verification & Polish"
+        duration: "10-14 days"
+        phases: ["phase-29"]
+        status: "Blocked by Phase 27 (COMPLETE) + Phase 28"
+        target_date: "2026-04-15"
     
     total_duration: "50-66 days"
     completion_target: "2026-04-30"
@@ -372,10 +408,10 @@ production_readiness:
 # ============================================================================
 
 summary:
-  total_phases: 33
+  total_phases: 35
   completed: 10
   active: 2
-  planned: 2
+  planned: 3
   consolidated: 9
   deferred: 10
   
