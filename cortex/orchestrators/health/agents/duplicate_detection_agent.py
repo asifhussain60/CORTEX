@@ -131,6 +131,17 @@ class DuplicateDetectionAgent(BaseHealthAgent):
             if self._should_exclude(py_file, workspace_root):
                 continue
             
+            # Skip trivial __init__.py files (Python package markers)
+            if py_file.name == "__init__.py":
+                try:
+                    content = py_file.read_text()
+                    # Skip if empty or just a docstring
+                    if len(content.strip()) < 20:
+                        files_scanned += 1
+                        continue
+                except Exception:
+                    pass
+            
             try:
                 file_hash = self._calculate_file_hash(py_file)
                 hash_map[file_hash].append(py_file)
@@ -142,6 +153,11 @@ class DuplicateDetectionAgent(BaseHealthAgent):
         # Report duplicates
         for file_hash, files in hash_map.items():
             if len(files) > 1:
+                # Check if these are all empty files (common false positive)
+                all_empty = all(f.stat().st_size == 0 for f in files)
+                if all_empty:
+                    continue  # Skip empty file duplicates
+                
                 # Get file sizes for SSOT determination
                 file_info = [(f, f.stat().st_size) for f in files]
                 file_info.sort(key=lambda x: x[1], reverse=True)  # Largest first

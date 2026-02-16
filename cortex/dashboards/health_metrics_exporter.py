@@ -10,7 +10,7 @@ Phase: PHASE-95
 import sqlite3
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, Union
 
 from cortex.orchestrators.health.health_orchestrator import HealthOrchestrator
 from cortex.orchestrators.health.reports.health_report import HealthReport
@@ -24,7 +24,7 @@ class HealthMetricsExporter:
         conn: Database connection
     """
     
-    def __init__(self, db_path: Path | str) -> None:
+    def __init__(self, db_path: Union[Path, str]) -> None:
         """Initialize exporter.
         
         Args:
