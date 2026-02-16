@@ -1,0 +1,42 @@
+{
+  "phase": "phase-25",
+  "stage": "S4",
+  "description": "Regression baseline after stabilization fixes",
+  "timestamp": "2026-02-16T00:00:00Z",
+  "git_sha": "7e287be3a",
+  "git_branch": "CORTEX",
+  "test_results": {
+    "total_collected": 2451,
+    "passed": 595,
+    "failed": 5,
+    "skipped": 73,
+    "errors": 5
+  },
+  "notable_skips": [
+    "cortex_lens backend not available",
+    "master_plan_auditor not implemented (Phase 81)",
+    "meta_auditor not implemented (Phase 81)",
+    "SharedContext not implemented (Phase 81)",
+    "AutoCleanupManager not implemented (Phase 25)",
+    "core_030_baselines not implemented (Phase 25)",
+    "tier2 governance modules incomplete"
+  ],
+  "known_failures": [
+    "test_no_wave_references_in_active_registry (nomenclature)",
+    "test_phase_2_complexity_classifier_available (e2e)",
+    "test_phase_3_code_planner_available (e2e)",
+    "test_phase_4_coherence_validator_available (e2e)",
+    "test_phase_5_review_orchestrator_available (e2e)"
+  ],
+  "known_errors": [
+    "test_phase_navigation (Playwright E2E - 5 errors)",
+    "learning module imports (10 collection errors)"
+  ],
+  "acceptance_criteria": {
+    "min_passing": 595,
+    "max_failing": 10,
+    "max_skipped": 100
+  },
+  "status": "BASELINE_ESTABLISHED",
+  "notes": "Clean baseline after fixing import errors and syntax issues. Ready for Phase 24 verification harness."
+}
