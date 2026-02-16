@@ -289,14 +289,53 @@ class InteractionOrchestrator(IOrchestrator):
                     output["type"] = "challenge"
                     output["challenge"] = challenge_result
 
-            # Step 4: Audit trail
+            # Step 4: Apply token optimization (ENH-046 Phase 4 Integration)
+            try:
+                from cortex.interaction.context_synthesis_gateway import get_gateway
+                
+                gateway = get_gateway()
+                session_id = getattr(round_context, 'session_id', 'default_session')
+                
+                synthesized = gateway.synthesize(
+                    context=output,
+                    session_id=session_id,
+                    orchestrator_name="InteractionOrchestrator"
+                )
+                
+                # Log budget violations but don't block
+                if not synthesized.budget_compliant:
+                    self.logger.log_operation_complete(
+                        ac_id="AC-TOKEN-OPT-001",
+                        operation="token_budget_violation",
+                        success=False,
+                        details={
+                            "turn_number": self.turn_number,
+                            "tokens": synthesized.token_count,
+                            "budget": gateway.token_budget,
+                            "overflow": synthesized.token_count - gateway.token_budget
+                        }
+                    )
+                
+                # Use synthesized context for output
+                output = synthesized.context
+                
+            except Exception as gateway_err:
+                # Graceful degradation - log but continue with original output
+                self.logger.log_operation_complete(
+                    ac_id="AC-TOKEN-OPT-001",
+                    operation="token_optimization_failed",
+                    success=False,
+                    details={"error": str(gateway_err)}
+                )
+            
+            # Step 5: Audit trail
             self._audit_trail.append({
                 "ac_id": "AC-PERMANENT-FIX-006",
                 "operation": "execute_turn_with_challenge",
                 "turn_number": self.turn_number,
                 "success": True,
                 "lens_context_keys": list(lens_context.keys()) if isinstance(lens_context, dict) else [],
-                "challenge_evaluated": output["challenge_evaluated"],
+                "challenge_evaluated": output.get("challenge_evaluated", False),
                 "timestamp": datetime.now().isoformat(),
             })
 
@@ -342,6 +381,25 @@ class InteractionOrchestrator(IOrchestrator):
                 "analysis_complete": True,
                 "timestamp": datetime.now().isoformat(),
             }
+            
+            # Apply token optimization (ENH-046 Phase 4 Integration)
+            try:
+                from cortex.interaction.context_synthesis_gateway import get_gateway
+                
+                gateway = get_gateway()
+                session_id = context.get('session_id', 'default_session')
+                
+                synthesized = gateway.synthesize(
+                    context=output,
+                    session_id=session_id,
+                    orchestrator_name="InteractionOrchestrator"
+                )
+                
+                return Ok(synthesized.context)
+                
+            except Exception:
+                # Graceful degradation - return original output
+                pass
 
             return Ok(output)
 
