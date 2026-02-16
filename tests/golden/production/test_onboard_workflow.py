@@ -84,7 +84,7 @@ class Calculator:
     
     def test_detect_anti_patterns(self, tmp_path: Path) -> None:
         """Golden: Detect anti-patterns in code."""
-        from cortex.lens.analyzers.pattern_detector import PatternDetector
+        from cortex.brain.core.intelligence.pattern_detector import PatternDetector
         
         detector = PatternDetector()
         

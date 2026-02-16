@@ -15,7 +15,7 @@ class TestYAMLEscapeFunctions:
 
     def test_escape_yaml_string_colon_escape(self):
         """Test that colons are properly escaped."""
-        from cortex.core.response_header_injector import ResponseHeaderInjector
+        from cortex.brain.core.response_header_injector import ResponseHeaderInjector
         
         # Access the escape function (may need to be added to class)
         test_input = "key: value"
@@ -106,7 +106,7 @@ class TestRegressionPrevention:
     def test_no_bare_string_replace_on_user_input(self):
         """Verify no vulnerable str.replace() on user input."""
         import inspect
-        from cortex.core.response_header_injector import ResponseHeaderInjector
+        from cortex.brain.core.response_header_injector import ResponseHeaderInjector
         
         # Check that _substitute_variables doesn't use bare replace()
         # on unescaped context values
@@ -120,7 +120,7 @@ class TestRegressionPrevention:
     def test_no_f_string_interpolation_on_user_input(self):
         """Verify no f-string interpolation on user input."""
         import inspect
-        from cortex.core.response_header_injector import ResponseHeaderInjector
+        from cortex.brain.core.response_header_injector import ResponseHeaderInjector
         
         source = inspect.getsource(ResponseHeaderInjector._substitute_variables)
         

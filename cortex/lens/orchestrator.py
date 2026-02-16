@@ -163,7 +163,7 @@ class LENSOrchestrator:
         self.dependency_mapper = DependencyMapper()
 
         # Phase 43: PatternDetector for pattern findings (AC-PHASE43-005)
-        from cortex.core.intelligence.pattern_detector import PatternDetector
+        from cortex.brain.core.intelligence.pattern_detector import PatternDetector
         self.pattern_detector = PatternDetector()
 
         # ENH-042: TTL-based cache with LRU eviction (replaces simple dict cache)

@@ -468,7 +468,7 @@ class TestPatternDetection:
     ) -> None:
         """Test detection of singleton pattern."""
         from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
-        from cortex.core.intelligence.pattern_detector import PatternDetector
+        from cortex.brain.core.intelligence.pattern_detector import PatternDetector
         
         engine = ASTIntelligenceEngine()
         parse_result = engine.parse_string(singleton_pattern_code)
@@ -487,7 +487,7 @@ class TestPatternDetection:
     ) -> None:
         """Test detection of factory pattern."""
         from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
-        from cortex.core.intelligence.pattern_detector import PatternDetector
+        from cortex.brain.core.intelligence.pattern_detector import PatternDetector
         
         engine = ASTIntelligenceEngine()
         parse_result = engine.parse_string(factory_pattern_code)
@@ -506,7 +506,7 @@ class TestPatternDetection:
     ) -> None:
         """Test detection of decorator usage."""
         from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
-        from cortex.core.intelligence.pattern_detector import PatternDetector
+        from cortex.brain.core.intelligence.pattern_detector import PatternDetector
         
         engine = ASTIntelligenceEngine()
         parse_result = engine.parse_string(decorator_pattern_code)
@@ -532,7 +532,7 @@ class TestPatternDetection:
     ) -> None:
         """Test detection of decorator chains."""
         from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
-        from cortex.core.intelligence.pattern_detector import PatternDetector
+        from cortex.brain.core.intelligence.pattern_detector import PatternDetector
         
         engine = ASTIntelligenceEngine()
         parse_result = engine.parse_string(decorator_pattern_code)

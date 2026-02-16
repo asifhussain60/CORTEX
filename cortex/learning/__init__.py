@@ -14,7 +14,7 @@ Components:
 - S7: LearningDashboard - Metrics and visualization
 """
 
-from cortex.learning.confidence_scorer import (
+from cortex.orchestrators.validation.confidence_scorer import (
     ConfidenceLevel,
     ConfidenceScorer,
 )

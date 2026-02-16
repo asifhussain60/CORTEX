@@ -98,7 +98,7 @@ class UniversalLearningLoop:
         self._learning_cache: Dict[str, List[LearningCapture]] = {}
 
         # Initialize sub-components
-        from cortex.learning.confidence_scorer import ConfidenceScorer
+        from cortex.orchestrators.validation.confidence_scorer import ConfidenceScorer
         from cortex.learning.knowledge_merger import KnowledgeMerger
         from cortex.learning.pattern_extractor import PatternExtractor
 
