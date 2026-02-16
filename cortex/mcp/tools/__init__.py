@@ -45,6 +45,9 @@ from cortex.mcp.tools.operations import (
     CortexOnboard,
     CortexDashboard,
 )
+from cortex.mcp.tools.workflow_tools import (
+    CortexWorkflow,  # Phase 100 Stage 2
+)
 
 # Utility tools
 from cortex.mcp.tools.utilities import (
@@ -77,12 +80,13 @@ ALL_TOOLS = [
     CortexValidate,
     CortexLoad,
     CortexValidateRequest,  # Phase 48
-    # Operations (5)
+    # Operations (6)
     CortexDebug,
     CortexRefactor,
     CortexPlan,
     CortexOnboard,
     CortexDashboard,
+    CortexWorkflow,  # Phase 100 Stage 2
     # Utilities (9)
     CortexVerify,
     CortexAsk,
