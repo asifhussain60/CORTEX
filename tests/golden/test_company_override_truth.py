@@ -1,299 +1,294 @@
-"""
-Company Override Truth Test (WAVE-10 Track 1, Deliverable T1-D1)
+"""Golden Test: Company Override Truth - Production Verification Harness
 
-Purpose:
-    Verify that company standards override CORTEX defaults through
-    the complete KnowledgeSynthesisEngine pipeline.
-    
-    Uses NO mocks. Loads real company/domains/*.yaml + cortex/knowledge/*.yaml.
-    Asserts company standards override CORTEX defaults via hard audit evidence.
+Tests real company standards override using production CompanyKnowledgeLoader.
+Zero mocks - uses real precedence-based knowledge merging.
 
-Authority:
-    - WAVE-10 Track 1 Golden Path Tests
-    - ENH-089+ phase delivery
-    - Audit Truth Layer verification
+RED PHASE:
+- Tests must fail if company knowledge doesn't override CORTEX base
+- Tests must fail if precedence order incorrect
+- Tests must fail if knowledge merging loses data
 
-AC-ID: AC-WAVE10-T1-D1-001
+GREEN PHASE:
+- Company layer (precedence 1) overrides cortex-base (precedence 3)
+- Compliance standards (precedence 2) between them
+- Deep merge preserves all non-conflicting fields
+
+REFACTOR PHASE:
+- Clean test data setup
+- Modular precedence validation
+- Comprehensive merge testing
+
+AC-ID: AC-PHASE24-S1-006
 """
 
 import pytest
-import sqlite3
-import tempfile
-import json
 from pathlib import Path
-from datetime import datetime, timedelta
-from dataclasses import dataclass
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 
-from cortex.core.event_bus import EventBus
-
-
-@dataclass
-class SynthesisResult:
-    """Result of rule synthesis."""
-    winner_id: str
-    winner_source: str
-    precedence_value: int
-    output_value: Any
-    loser_id: str
-    loser_precedence: int
-    loser_metadata: Optional[Dict] = None
-
-
-class MockKnowledgeSynthesisEngine:
-    """Mock synthesis engine for truth test development."""
-    
-    def __init__(self, audit_db_path: str):
-        """Initialize with audit database path."""
-        self.audit_db_path = audit_db_path
-    
-    def synthesize_rules(self, rules: list) -> SynthesisResult:
-        """Synthesize rules based on precedence and source."""
-        if not rules:
-            raise ValueError("At least one rule required")
-        
-        # Sort by precedence (highest first)
-        sorted_rules = sorted(rules, key=lambda r: r.get("precedence", 0), reverse=True)
-        
-        winner = sorted_rules[0]
-        loser = sorted_rules[1] if len(sorted_rules) > 1 else None
-        
-        # Log to audit database
-        self._log_to_audit("rule_resolution", winner["id"], winner["source"], {
-            "company_precedence": winner.get("precedence"),
-            "cortex_precedence": loser.get("precedence") if loser else None,
-            "winner": winner["source"],
-            "loser": loser["source"] if loser else None
-        })
-        
-        return SynthesisResult(
-            winner_id=winner["id"],
-            winner_source=winner["source"],
-            precedence_value=winner["precedence"],
-            output_value=winner.get("value", winner.get("security_level", "unknown")),
-            loser_id=loser["id"] if loser else None,
-            loser_precedence=loser["precedence"] if loser else None,
-            loser_metadata=loser if loser else None
-        )
-    
-    def _log_to_audit(self, operation: str, rule_id: str, source: str, metadata: Dict):
-        """Log operation to audit database."""
-        conn = sqlite3.connect(self.audit_db_path)
-        cursor = conn.cursor()
-        
-        timestamp = datetime.now().isoformat()
-        metadata_json = json.dumps(metadata)
-        
-        cursor.execute("""
-            INSERT INTO audit (timestamp, operation, rule_id, source, metadata)
-            VALUES (?, ?, ?, ?, ?)
-        """, (timestamp, operation, rule_id, source, metadata_json))
-        
-        conn.commit()
-        conn.close()
+from cortex.brain.core.knowledge.company_knowledge_loader import (
+    CompanyKnowledgeLoader,
+    KnowledgeLayer,
+    MergedKnowledgeResult
+)
 
 
 class TestCompanyOverrideTruth:
-    """Company Override Truth Test with Audit Verification."""
+    """Company Override Truth Test with Real CompanyKnowledgeLoader."""
     
     @pytest.fixture
-    def audit_db_path(self):
-        """Create temporary audit database for test."""
-        with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as f:
-            db_path = f.name
+    def loader(self, tmp_path: Path) -> CompanyKnowledgeLoader:
+        """Initialize loader with temp project root."""
+        # Create directory structure
+        (tmp_path / "company" / "domains").mkdir(parents=True)
+        (tmp_path / "cortex_brain" / "tier3" / "knowledge").mkdir(parents=True)
         
-        # Initialize schema
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS audit (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                timestamp TEXT NOT NULL,
-                operation TEXT NOT NULL,
-                rule_id TEXT,
-                source TEXT,
-                metadata TEXT,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
-        conn.commit()
-        conn.close()
-        
-        yield db_path
-        Path(db_path).unlink()
+        return CompanyKnowledgeLoader(project_root=str(tmp_path))
     
     @pytest.fixture
-    def engine(self, audit_db_path):
-        """Initialize engine with test audit database."""
-        engine = MockKnowledgeSynthesisEngine(audit_db_path=audit_db_path)
-        return engine
+    def loader_with_company(self, tmp_path: Path) -> CompanyKnowledgeLoader:
+        """Initialize loader with company set."""
+        # Create directory structure
+        company_dir = tmp_path / "company" / "domains" / "acme-corp"
+        company_dir.mkdir(parents=True)
+        cortex_dir = tmp_path / "cortex_brain" / "tier3" / "knowledge"
+        cortex_dir.mkdir(parents=True)
+        
+        loader = CompanyKnowledgeLoader(
+            project_root=str(tmp_path),
+            company_name="acme-corp"
+        )
+        return loader
     
-    def test_company_overrides_cortex_precedence(self, engine, audit_db_path):
+    def test_company_layer_highest_precedence(self, loader_with_company: CompanyKnowledgeLoader):
         """
         RED PHASE: Test must fail if:
-        1. audit.db has zero entries for this operation
-        2. latest audit timestamp > 5 seconds old (stale/cached)
-        3. audit record missing expected precedence values
+        1. Company layer not created when company set
+        2. Company layer precedence not 1 (highest)
+        3. Layer ordering incorrect
         
         GREEN PHASE: Test passes when:
-        1. company_rule.precedence > cortex_rule.precedence (100 > 50)
-        2. merged_output.security_standards == company_standards
-        3. audit log contains 'rule_resolution' entry with proof
+        1. Company layer exists in _layers
+        2. Company layer precedence == 1 (highest priority)
+        3. Precedence order: company (1) < compliance (2) < cortex (3)
         """
-        # Setup: Load company and CORTEX rules
-        company_rule = {
-            "id": "test_security_standard",
-            "source": "company",
-            "precedence": 100,
-            "value": "company_security_strict"
-        }
+        # Assert: Company layer exists
+        assert "company-override" in loader_with_company._layers
         
-        cortex_rule = {
-            "id": "test_security_standard",
-            "source": "cortex",
-            "precedence": 50,
-            "value": "cortex_security_standard"
-        }
+        # Assert: Company layer has highest precedence (lowest number)
+        company_layer = loader_with_company._layers["company-override"]
+        assert company_layer.precedence == 1
         
-        # Execute: Run synthesis
-        result = engine.synthesize_rules([company_rule, cortex_rule])
+        # Assert: Other layers have correct precedence
+        compliance_layer = loader_with_company._layers["compliance-standards"]
+        cortex_layer = loader_with_company._layers["cortex-base"]
         
-        # Assert: Business logic
-        assert result.winner_id == company_rule["id"], "Company rule should win"
-        assert result.winner_source == "company", "Winner source should be company"
-        assert result.precedence_value == 100, "Precedence should be 100 (company)"
-        assert result.output_value == "company_security_strict", "Company value should be in output"
+        assert compliance_layer.precedence == 2
+        assert cortex_layer.precedence == 3
         
-        # Assert: No data loss
-        assert result.loser_id == cortex_rule["id"], "Loser ID should be tracked"
-        assert result.loser_precedence == 50, "Loser precedence should be 50"
-        
-        # Audit Verification: Query hard evidence
-        conn = sqlite3.connect(audit_db_path)
-        cursor = conn.cursor()
-        
-        # Query 1: Check for rule_resolution entry
-        cursor.execute(
-            "SELECT * FROM audit WHERE operation = 'rule_resolution' "
-            "AND rule_id = ?",
-            (company_rule["id"],)
-        )
-        audit_entry = cursor.fetchone()
-        
-        # RED phase criteria
-        assert audit_entry is not None, "Audit log must contain 'rule_resolution' entry"
-        
-        # Query 2: Check timestamp freshness
-        entry_timestamp = audit_entry[1]  # timestamp is 2nd column
-        entry_dt = datetime.fromisoformat(entry_timestamp)
-        now = datetime.now()
-        age_seconds = (now - entry_dt).total_seconds()
-        
-        assert age_seconds < 5, f"Audit entry must be fresh (<5s), actual age: {age_seconds}s"
-        
-        # Query 3: Check precedence values in audit
-        cursor.execute(
-            "SELECT metadata FROM audit WHERE operation = 'rule_resolution' "
-            "AND rule_id = ?",
-            (company_rule["id"],)
-        )
-        metadata_row = cursor.fetchone()
-        assert metadata_row is not None, "Audit must have precedence metadata"
-        
-        # Verify precedence values
-        metadata = json.loads(metadata_row[0]) if isinstance(metadata_row[0], str) else metadata_row[0]
-        assert metadata.get("company_precedence") == 100, "Audit must show company precedence=100"
-        assert metadata.get("cortex_precedence") == 50, "Audit must show cortex precedence=50"
-        
-        conn.close()
+        # Assert: Precedence ordering correct (lower = higher priority)
+        assert company_layer.precedence < compliance_layer.precedence
+        assert compliance_layer.precedence < cortex_layer.precedence
     
-    def test_no_data_loss_in_merge(self, engine, audit_db_path):
-        """Verify no fields are dropped during merge."""
-        company_rule = {
-            "id": "complete_rule",
-            "source": "company",
-            "precedence": 100,
-            "value": "company_value",
-            "security_level": "strict",
-            "audit_enabled": True,
-            "custom_metadata": {"key": "value"}
-        }
+    def test_no_company_layer_when_not_set(self, loader: CompanyKnowledgeLoader):
+        """Verify company layer not created when company not set."""
+        # Assert: No company layer
+        assert "company-override" not in loader._layers
         
-        cortex_rule = {
-            "id": "complete_rule",
-            "source": "cortex",
-            "precedence": 50,
-            "value": "cortex_value",
-            "security_level": "standard",
-            "audit_enabled": False,
-            "framework_version": "3.2"
-        }
+        # Assert: Only compliance and cortex layers
+        assert "compliance-standards" in loader._layers
+        assert "cortex-base" in loader._layers
+        assert len(loader._layers) == 2
+    
+    def test_set_company_adds_layer(self, loader: CompanyKnowledgeLoader):
+        """Test setting company dynamically adds layer."""
+        # Initial state: no company layer
+        assert "company-override" not in loader._layers
         
-        result = engine.synthesize_rules([company_rule, cortex_rule])
+        # Set company
+        loader.set_company("test-company")
         
-        # Company wins, so its output value should be in result
-        assert result.output_value == "company_value", "Company value should be in output"
+        # Assert: Company layer added
+        assert "company-override" in loader._layers
+        assert loader._company_name == "test-company"
         
-        # Verify loser metadata is preserved
-        assert result.loser_metadata is not None, "Loser metadata should be preserved for audit"
-        assert result.loser_metadata["id"] == "complete_rule", "Loser ID should match"
+        # Assert: Correct precedence
+        company_layer = loader._layers["company-override"]
+        assert company_layer.precedence == 1
 
 
-class TestAuditTruthLayerIntegration:
-    """Verify Audit Truth Layer is working for all tests."""
+class TestKnowledgePrecedence:
+    """Test knowledge layer precedence ordering."""
     
     @pytest.fixture
-    def audit_db_path(self):
-        """Create temporary audit database for test."""
-        with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as f:
-            db_path = f.name
-        
-        # Initialize schema
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS audit (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                timestamp TEXT NOT NULL,
-                operation TEXT NOT NULL,
-                rule_id TEXT,
-                source TEXT,
-                metadata TEXT,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
-        conn.commit()
-        conn.close()
-        
-        yield db_path
-        Path(db_path).unlink()
+    def loader(self, tmp_path: Path) -> CompanyKnowledgeLoader:
+        """Initialize loader."""
+        (tmp_path / "company" / "domains").mkdir(parents=True)
+        (tmp_path / "cortex_brain" / "tier3" / "knowledge").mkdir(parents=True)
+        return CompanyKnowledgeLoader(project_root=str(tmp_path))
     
-    def test_audit_database_exists(self, audit_db_path):
-        """Verify audit database is created and accessible."""
-        assert Path(audit_db_path).exists(), "Audit database should exist"
+    def test_deep_merge_preserves_nested_data(self, loader: CompanyKnowledgeLoader):
+        """Verify deep merge preserves non-conflicting nested data."""
+        base = {
+            "key1": "base_value",
+            "nested": {
+                "a": 1,
+                "b": 2,
+                "deep": {"x": "base_x"}
+            },
+            "array": [1, 2]
+        }
         
-        conn = sqlite3.connect(audit_db_path)
-        cursor = conn.cursor()
+        override = {
+            "key1": "override_value",
+            "nested": {
+                "b": 3,
+                "c": 4,
+                "deep": {"y": "override_y"}
+            },
+            "new_key": "new_value"
+        }
         
-        # Check for audit table
-        cursor.execute(
-            "SELECT name FROM sqlite_master WHERE type='table' AND name='audit'"
-        )
-        table_exists = cursor.fetchone() is not None
-        assert table_exists, "Audit table must exist"
+        # Execute deep merge
+        result = loader._deep_merge(base, override)
         
-        conn.close()
+        # Assert: Overridden values
+        assert result["key1"] == "override_value"
+        assert result["nested"]["b"] == 3
+        
+        # Assert: Preserved base values
+        assert result["nested"]["a"] == 1
+        
+        # Assert: New values added
+        assert result["nested"]["c"] == 4
+        assert result["new_key"] == "new_value"
+        
+        # Assert: Deep nesting handled
+        assert result["nested"]["deep"]["x"] == "base_x"
+        assert result["nested"]["deep"]["y"] == "override_y"
     
-    def test_audit_schema_correctness(self, audit_db_path):
-        """Verify audit table has required columns."""
-        conn = sqlite3.connect(audit_db_path)
-        cursor = conn.cursor()
+    def test_deep_merge_list_replacement(self, loader: CompanyKnowledgeLoader):
+        """Verify lists are replaced, not merged."""
+        base = {"rules": [1, 2, 3]}
+        override = {"rules": [4, 5]}
         
-        cursor.execute("PRAGMA table_info(audit)")
-        columns = {row[1]: row[2] for row in cursor.fetchall()}
+        result = loader._deep_merge(base, override)
         
-        required_columns = ["timestamp", "operation", "rule_id", "metadata"]
-        for col in required_columns:
-            assert col in columns, f"Audit table must have '{col}' column"
+        # Assert: Override list replaces base list (not merged)
+        assert result["rules"] == [4, 5]
+    
+    def test_get_merged_knowledge_structure(self, loader: CompanyKnowledgeLoader):
+        """Test merged knowledge result structure."""
+        # Execute merge
+        result = loader.get_merged_knowledge("test-domain")
         
-        conn.close()
+        # Assert: Result is MergedKnowledgeResult
+        assert isinstance(result, MergedKnowledgeResult)
+        
+        # Assert: Has required fields (actual API)
+        assert hasattr(result, "merged_content")
+        assert hasattr(result, "source_layers")
+        assert hasattr(result, "override_count")
+        assert hasattr(result, "merge_timestamp")
+        
+        # Assert: merged_content is dict
+        assert isinstance(result.merged_content, dict)
+        
+        # Assert: source_layers is list of layer names
+        assert isinstance(result.source_layers, list)
+
+
+class TestLayerMetrics:
+    """Test knowledge layer metrics and tracking."""
+    
+    @pytest.fixture
+    def loader(self, tmp_path: Path) -> CompanyKnowledgeLoader:
+        """Initialize loader."""
+        (tmp_path / "company" / "domains").mkdir(parents=True)
+        (tmp_path / "cortex_brain" / "tier3" / "knowledge").mkdir(parents=True)
+        return CompanyKnowledgeLoader(project_root=str(tmp_path))
+    
+    def test_metrics_tracking(self, loader: CompanyKnowledgeLoader):
+        """Verify loader tracks usage metrics."""
+        # Access metrics
+        metrics = loader.get_metrics()
+        
+        # Assert: Metrics exist
+        assert isinstance(metrics, dict)
+        
+        # Assert: Has expected metric fields (actual API)
+        assert "project_root" in metrics
+        assert "layers" in metrics
+        assert "cached_merges" in metrics
+    
+    def test_cache_clearing(self, loader: CompanyKnowledgeLoader):
+        """Test cache can be cleared."""
+        # Load some knowledge (triggers cache)
+        loader.get_merged_knowledge("test-domain")
+        
+        # Clear cache
+        loader.clear_cache()
+        
+        # Assert: Cache cleared (metrics should reflect)
+        metrics = loader.get_metrics()
+        assert metrics["cached_merges"] == 0
+
+
+class TestComplianceDetection:
+    """Test compliance standard detection."""
+    
+    @pytest.fixture
+    def loader(self, tmp_path: Path) -> CompanyKnowledgeLoader:
+        """Initialize loader."""
+        (tmp_path / "company" / "domains").mkdir(parents=True)
+        (tmp_path / "cortex_brain" / "tier3" / "knowledge").mkdir(parents=True)
+        return CompanyKnowledgeLoader(project_root=str(tmp_path))
+    
+    def test_detect_pci_dss_patterns(self, loader: CompanyKnowledgeLoader):
+        """Test PCI-DSS pattern detection."""
+        code_content = """
+        # Payment card processing
+        credit_card_number = encrypt_card_data(card)
+        cardholder_name = validate_name(name)
+        """
+        
+        matches = loader.detect_compliance_standards(code_content)
+        
+        # Assert: PCI-DSS detected
+        pci_matches = [m for m in matches if m.standard_id == "pci-dss"]
+        assert len(pci_matches) > 0
+        
+        # Assert: Match has required fields (actual API: triggers, not matched_terms)
+        if pci_matches:
+            match = pci_matches[0]
+            assert match.confidence > 0.0
+            assert match.triggers  # List of triggered patterns
+    
+    def test_detect_hipaa_patterns(self, loader: CompanyKnowledgeLoader):
+        """Test HIPAA pattern detection."""
+        code_content = """
+        # Healthcare data processing
+        patient_record = load_phi(patient_id)
+        medical_history = encrypt_health_data(data)
+        """
+        
+        matches = loader.detect_compliance_standards(code_content)
+        
+        # Assert: HIPAA detected
+        hipaa_matches = [m for m in matches if m.standard_id == "hipaa"]
+        assert len(hipaa_matches) > 0
+    
+    def test_no_detection_for_generic_code(self, loader: CompanyKnowledgeLoader):
+        """Test no false positives for generic code."""
+        code_content = """
+        def add_numbers(a, b):
+            return a + b
+        """
+        
+        matches = loader.detect_compliance_standards(code_content)
+        
+        # Assert: No matches for generic code
+        assert len(matches) == 0
+
+
+if __name__ == "__main__":
+    pytest.main([__file__, "-v"])
