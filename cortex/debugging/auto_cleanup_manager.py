@@ -2,7 +2,8 @@
 Auto-Cleanup Manager - Automatic Debug Marker Removal
 
 Purpose:
-    when debug sessions are resolved (tests pass, issues fixed).
+    Manages automatic cleanup of debug markers when debug sessions 
+    are resolved (tests pass, issues fixed).
 
 Authority:
     - ENH-089 (EventBus-Driven Debugger)
@@ -67,7 +68,7 @@ class AutoCleanupManager:
         active_session_ids = {
             session_id
             for session_id, session in active_sessions.items()
-            if session.status == "active"
+            if hasattr(session, "status") and session.status == "active"
         }
         
         # Collect all files with markers
@@ -77,24 +78,28 @@ class AutoCleanupManager:
             try:
                 content = file_path.read_text()
                 
-                # Find all session IDs in markers (new format with session_id)
-                matches = session_id_pattern.findall(content)
+                # Find all session IDs in markers
+                matches = self.session_id_pattern.findall(content)
                 
-                # Also check for old format markers without session_id
-                has_old_format = old_format_pattern.search(content)
+                # Check for old format markers
+                has_old_format = self.old_format_pattern.search(content) is not None
                 
+                modified = False
                 for session_id in matches:
                     # If session not in active list, remove markers
                     if session_id not in active_session_ids:
                         content = self._remove_marker(content, session_id)
                         resolved_sessions.append(session_id)
+                        modified = True
                 
                 # Remove old format markers if no active sessions at all
                 if has_old_format and not active_session_ids:
                     content = self._remove_old_format_markers(content)
+                    modified = True
                 
-                # Write cleaned content
-                file_path.write_text(content)
+                # Write cleaned content only if modified
+                if modified:
+                    file_path.write_text(content)
                 
             except Exception as e:
                 print(f"Error cleaning {file_path}: {e}")
@@ -143,21 +148,19 @@ class AutoCleanupManager:
         files_with_markers = self._find_files_with_markers()
         cutoff = datetime.now() - timedelta(hours=max_age_hours)
         
+        # Pattern to extract session_id and timestamp from markers
+        marker_info_pattern = re.compile(
+            re.DOTALL
+        )
+        
         for file_path in files_with_markers:
             try:
                 content = file_path.read_text()
-                
-                # Find markers with timestamps
-                marker_pattern_with_timestamp = re.compile(
-                    r'.*?# Injected: ([^\n]+)\n',
-                    re.DOTALL
-                )
-                
-                matches = marker_pattern_with_timestamp.findall(content)
+                matches = marker_info_pattern.findall(content)
                 
                 for session_id, timestamp_str in matches:
                     try:
-                        timestamp = datetime.fromisoformat(timestamp_str)
+                        timestamp = datetime.fromisoformat(timestamp_str.strip())
                         age_hours = (datetime.now() - timestamp).total_seconds() / 3600
                         
                         if timestamp < cutoff:
@@ -213,7 +216,7 @@ class AutoCleanupManager:
             re.DOTALL
         )
         
-        return pattern.sub('', content)
+        return pattern.sub("", content)
 
     def _remove_old_format_markers(self, content: str) -> str:
         """
@@ -225,9 +228,5 @@ class AutoCleanupManager:
         Returns:
             Content with old format markers removed
         """
-        # Pattern to match old format markers
-        pattern = re.compile(
-            re.DOTALL
-        )
-        
-        return pattern.sub('', content)
+        lines = content.split("\n")
+        return "\n".join(filtered)
