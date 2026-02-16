@@ -7,8 +7,8 @@
 # ============================================================================
 
 metadata:
-  version: "6.12"
-  last_updated: "2026-02-16T16:05:00Z"
+  version: "6.13"
+  last_updated: "2026-02-16T18:30:00Z"
   total_phases: 37
   active: 1
   completed: 17
@@ -272,28 +272,36 @@ phase_status:
         - "Zero-duplication guardrails"
     
     - id: "phase-100"
-      title: "Workflow Template Library with Governance-First Architecture"
+      title: "Knowledge-Parameterized Workflow Template Library"
       location: "phases/planned/phase-100-workflow-template-library.yaml"
       priority: P1
-      estimated_effort: "23 hours (3 days)"
-      roi_score: 92
-      confidence: 9.5
-      origin: "Chat01.md digest + architectural analysis"
+      estimated_effort: "20 hours (2.5 days)"
+      roi_score: 96
+      confidence: 9.8
+      origin: "Chat01.md digest + knowledge-injection architecture review"
       created: "2026-02-16"
+      updated: "2026-02-16"
       description: |
-        Build production-grade nested workflow template library at 
-        cortex-registry/workflows/ with auto-discovery registry, golden test 
-        harness (sunshine/rainy/edge/blindspot), MCP-first exposure via 
-        cortex_workflow tool, and domain-driven team ownership.
+        Build 5 knowledge-parameterized workflow templates that resolve 
+        differently based on repository context (ARCHITECT vs PRODUCTION mode).
+        Templates consume domain knowledge via KnowledgeSynthesisEngine so TDD 
+        cycles produce domain-correct, company-compliant solutions. Same template,
+        different knowledge injection, correct output.
       key_deliverables:
-        - "WorkflowTemplateRegistry with auto-discovery"
-        - "MCP tool: cortex_workflow (tool #27)"
-        - "Golden test harness (25 shared tests)"
-        - "Fix Phase 99 CORE-028 violations + migrate"
-        - "15 predesigned templates (5 categories)"
+        - "WorkflowTemplateRegistry with KnowledgeSynthesisEngine bridge"
+        - "MCP tool: cortex_workflow (knowledge-aware execution)"
+        - "IntentRouter + MasterOrchestrator auto-selection wiring"
+        - "Two-context golden tests (ARCHITECT + PRODUCTION)"
+        - "5 knowledge-parameterized templates with placeholder schema"
+        - "E2E audit log verification tests"
       fixes:
         - "CORE-028: Phase 99 filename (49 → 33 chars)"
         - "CORE-028: Remove 'dogfooding' concept from naming"
+      architectural_innovation:
+        - "Templates separated by CONTEXT, not CODE"
+        - "company/domains/*.yaml overrides CORTEX defaults"
+        - "Onboarded repo profiles drive framework selection"
+        - "Fallback chain: onboarded → company → CORTEX"
 
   consolidated:
     - id: "phase-consolidated-legacy"
@@ -364,24 +372,25 @@ execution_order:
       golden_tests: 290
 
   timeline_to_completion:
-    - phase_group: "Intelligence Foundation"
-      duration: "14-20 days"
-      phases: ["phase-21", "phase-27"]
-      status: "Phase 27 COMPLETE, Phase 21 in progress"
-      target_date: "2026-03-06"
-      
-    - phase_group: "Domain Knowledge & Components"
-      duration: "26-34 days"
-      phases: ["phase-23", "phase-28"]
-      status: "Phase 23 in progress, Phase 28 blocked by Phase 21"
-      target_date: "2026-04-01"
-      
-    - phase_group: "Production Verification & Polish"
-      duration: "10-14 days"
-      phases: ["phase-29"]
-      status: "Blocked by Phase 27 (COMPLETE) + Phase 28"
-      target_date: "2026-04-15"
-    
+    phases:
+      - phase_group: "Intelligence Foundation"
+        duration: "14-20 days"
+        phases: ["phase-21", "phase-27"]
+        status: "Phase 27 COMPLETE, Phase 21 in progress"
+        target_date: "2026-03-06"
+
+      - phase_group: "Domain Knowledge & Components"
+        duration: "26-34 days"
+        phases: ["phase-23", "phase-28"]
+        status: "Phase 23 in progress, Phase 28 blocked by Phase 21"
+        target_date: "2026-04-01"
+
+      - phase_group: "Production Verification & Polish"
+        duration: "10-14 days"
+        phases: ["phase-29"]
+        status: "Blocked by Phase 27 (COMPLETE) + Phase 28"
+        target_date: "2026-04-15"
+
     total_duration: "50-66 days"
     completion_target: "2026-04-30"
     confidence: "HIGH (96% production ready baseline)"

@@ -1,503 +1,776 @@
 # ============================================================================
-# PHASE 100: Workflow Template Library with Governance-First Architecture
+# PHASE 100: Knowledge-Parameterized Workflow Template Library
 # ============================================================================
-# Authority: Digest Analysis (chat01.md) 2026-02-16
-# Supersedes: None (New Infrastructure)
+# Authority: Digest Analysis (chat01.md) 2026-02-16, Updated 2026-02-16
+# Supersedes: Phase 100 v1.0 (static templates → knowledge-parameterized)
 # Status: PLANNED | Priority: P1 | Execution Mode: TDD-First
 # ============================================================================
 
-version: '2.0'
+version: '3.0'
 phase_id: phase-100
-title: "Workflow Template Library with Governance-First Architecture"
+title: "Knowledge-Parameterized Workflow Template Library"
 status: planned
 priority: P1
 created: '2026-02-16'
-estimated_effort: "23 hours (3 days)"
-estimated_tokens: "52000"
-roi_score: 92
-confidence: 9.5
+updated: '2026-02-16'
+estimated_effort: "20 hours (2.5 days)"
+estimated_tokens: "48000"
+roi_score: 96
+confidence: 9.8
 author: "Asif Hussain"
-origin: "Chat01.md digest + architectural analysis"
+origin: "Chat01.md digest + architectural analysis + knowledge-injection review"
 
 # ============================================================================
 # EXECUTIVE SUMMARY
 # ============================================================================
 overview:
   vision: |
-    Build production-grade nested workflow template library at cortex-registry/workflows/
-    with auto-discovery registry, golden test harness (sunshine/rainy/edge/blindspot),
-    MCP-first exposure via cortex_workflow tool, and domain-driven team ownership.
-    Enables zero-code template discovery, automatic governance validation, and
-    audit-verified execution.
+    Build 5 knowledge-parameterized workflow templates that resolve differently
+    based on repository context (ARCHITECT mode vs PRODUCTION mode). Templates
+    consume domain knowledge via the existing KnowledgeSynthesisEngine so that
+    TDD cycles produce domain-correct, company-compliant solutions — not generic
+    boilerplate. Same template, different knowledge injection, correct output.
+
+  architectural_insight: |
+    TWO VERSIONS OF CORTEX — SEPARATED BY CONTEXT, NOT CODE:
+    
+    Version 1 (ARCHITECT): cortex-architect.prompt.md
+      - Builds CORTEX itself
+      - Knowledge: CORTEX-internal specs (registry, wiring, phases)
+      - Templates resolve with: pytest, FastAPI, orchestrator patterns
+      - Golden tests verify: CORTEX architecture compliance
+    
+    Version 2 (PRODUCTION): CORTEX.prompt.md
+      - Builds user's production repos
+      - Knowledge: Onboarded repo profile + company/domains/*.yaml
+      - Templates resolve with: USER's framework, USER's test runner, USER's standards
+      - Golden tests verify: Domain compliance + company standard adherence
+    
+    SEPARATION MECHANISM (already exists):
+      - Mode detection: .cortex/ marker → ARCHITECT, no marker → PRODUCTION
+      - KnowledgeSynthesisEngine.synthesize_unified_context() already handles this
+      - Company knowledge takes precedence (company/domains/*.yaml overrides CORTEX defaults)
+      - Same 28 orchestrators, same MCP tools, different knowledge resolution
 
   problem_statement: |
     CURRENT STATE:
-    - WorkflowComposer exists but no template library infrastructure
-    - Templates scattered (Phase 99 in planned/, no organization)
-    - No discovery system (manual path references required)
-    - No golden test framework for workflow validation
-    - Not MCP-exposed (cannot invoke via Copilot Chat)
-    - No team ownership model for template maintenance
+    - WorkflowComposer exists but templates are STATIC YAML recipes
+    - Templates have NO knowledge injection point
+    - KnowledgeSynthesisEngine merges Company→CORTEX at Stage 3 BUT
+      workflow templates bypass this entirely
+    - Onboarded repo profiles (cortex_brain/onboarded_repos/) NOT connected
+    - company/domains/ knowledge NOT used during template resolution
+    - Phase 99 violates CORE-028 (filename + concept naming)
     
-    VIOLATIONS DETECTED:
-    - Phase 99 filename: "phase-99-vision-api-dogfooding-workflow.yaml" (49 chars)
-      • Violates CORE-028: ≤40 char limit
-      • Violates CORE-028: Concept-based naming ("dogfooding")
-      • Correct: "frontend-visual-tdd-workflow.yaml" (33 chars)
+    CRITICAL GAP:
+    - Static templates produce GENERIC code
+    - Knowledge-parameterized templates produce DOMAIN-CORRECT code
+    - The engine to do this ALREADY EXISTS (KnowledgeSynthesisEngine)
+    - It's just not wired to workflow template resolution
     
-    ROOT CAUSE:
-    - WorkflowComposer designed for execution, not discovery
-    - No registry pattern applied to workflow templates
-    - Missing MCP tool for template operations
-    - No quality gates for template validation
-    - Ad-hoc template creation without governance
-
     IMPACT IF NOT FIXED:
-    - ❌ Template sprawl (no organization)
-    - ❌ Poor discoverability (how to find right template?)
-    - ❌ No quality assurance (templates untested)
-    - ❌ Maintenance burden (scattered ownership)
-    - ❌ Not user-accessible (no MCP exposure)
-    - ❌ Governance violations persist (CORE-028)
+    - ❌ Templates produce boilerplate (not domain-aware)
+    - ❌ Users must manually adapt generated code to their patterns
+    - ❌ Company standards not enforced during workflow execution
+    - ❌ No distinction between ARCHITECT and PRODUCTION output
+    - ❌ Onboarded repo intelligence wasted (not used in workflows)
 
   solution_approach: |
-    3-TIER ARCHITECTURE (Extends WorkflowComposer):
+    KNOWLEDGE-PARAMETERIZED ARCHITECTURE (3 Tiers + Knowledge Bridge):
     
     TIER 1: WorkflowTemplateRegistry (New Component)
-      - Nested folder structure: cortex-registry/workflows/{category}/{template}/
+      - 5 knowledge-parameterized templates (not 15 static ones)
+      - Templates contain PLACEHOLDERS resolved by KnowledgeSynthesisEngine
       - Auto-discovery from metadata.yaml files
-      - 5 categories: tdd/, api/, frontend/, migration/, security/
-      - 15 predesigned templates (3 per category)
-      - Semantic search across template metadata
-      - Validation engine (governance + golden tests)
+      - Categories: tdd/, api/, frontend/, migration/, security/
     
-    TIER 2: Golden Test Harness (Shared Infrastructure)
-      - cortex-registry/workflows/_golden_tests/
-      - Base test classes for all templates
-      - Coverage: sunshine, rainy, edge cases, blindspots
-      - Audit log verification patterns
-      - Performance profiling
-      - Regression detection
+    TIER 2: Knowledge Bridge (New Wiring)
+      - WorkflowTemplateRegistry → KnowledgeSynthesisEngine integration
+      - Template placeholders: {test_framework}, {component_library}, {auth_pattern}
+      - Resolution chain: Onboarded repo profile → company/domains/ → CORTEX defaults
+      - Mode-aware: ARCHITECT loads CORTEX patterns, PRODUCTION loads user patterns
     
-    TIER 3: MCP Tool (cortex_workflow)
-      - Single tool for: execute, list, search, validate, preview
-      - Routes through WorkflowComposer (no changes needed)
-      - EnforcementOrchestrator integration
-      - Audit trail verification
-      - Results with governance scoring
+    TIER 3: Two-Context Golden Test Harness
+      - ARCHITECT tests: verify CORTEX-compliant output
+      - PRODUCTION tests: verify domain-compliant output (mock company knowledge)
+      - Shared: audit log verification, AC marker checks, E2E workflow execution
+    
+    TIER 4: MCP Tool (cortex_workflow)
+      - Single entry point for all template operations
+      - Knowledge injection transparent to user
+      - Routes through MasterOrchestrator Stage 3 (knowledge synthesis)
+
+  knowledge_injection_flow: |
+    User Request + Context
+         ↓
+    MasterOrchestrator.coordinate_operation()
+         ↓
+    Stage 2: IntentRouter classifies → selects template
+         ↓
+    Stage 3: KnowledgeSynthesisEngine.synthesize_unified_context()
+         ├─ ARCHITECT mode:
+         │   - cortex-registry/_cortex-master/knowledge/ (45+ YAMLs)
+         │   - CORTEX architecture patterns
+         │   - pytest + FastAPI + Playwright
+         └─ PRODUCTION mode:
+             - company/domains/*.yaml (api-design, security, payment)
+             - cortex_brain/onboarded_repos/{repo}_enhanced.json
+             - User's tech stack (detected during onboarding)
+         ↓
+    Stage 4: WorkflowComposer executes template WITH resolved knowledge
+         ├─ test_framework: {resolved from onboarded profile}
+         ├─ component_patterns: {resolved from company domains}
+         ├─ security_standards: {resolved from compliance YAMLs}
+         └─ deployment_target: {resolved from infrastructure detection}
 
   success_criteria:
-    - "✅ WorkflowTemplateRegistry implemented with auto-discovery"
-    - "✅ Nested folder structure created (5 categories)"
-    - "✅ Golden test harness operational (25 tests)"
-    - "✅ MCP tool cortex_workflow registered (tool #27)"
+    - "✅ 5 knowledge-parameterized templates resolve correctly in ARCHITECT mode"
+    - "✅ 5 knowledge-parameterized templates resolve correctly in PRODUCTION mode"
+    - "✅ KnowledgeSynthesisEngine wired to WorkflowTemplateRegistry"
+    - "✅ company/domains/*.yaml knowledge used during template resolution"
+    - "✅ Onboarded repo profiles drive test framework selection"
+    - "✅ Two-context golden tests pass (ARCHITECT + PRODUCTION)"
+    - "✅ E2E tests verify audit log integrity (AC_START → AC_COMPLETE)"
+    - "✅ MCP tool cortex_workflow registered and operational"
     - "✅ Phase 99 migrated to frontend-visual-tdd/ (CORE-028 compliant)"
-    - "✅ 15 template scaffolds created with metadata"
-    - "✅ Zero breaking changes to WorkflowComposer"
-    - "✅ 125 tests passing (registry + tool + templates)"
-    - "✅ Documentation complete (README + authoring guide)"
-    - "✅ Team ownership model documented"
+    - "✅ Zero breaking changes to WorkflowComposer or KnowledgeSynthesisEngine"
+    - "✅ ~80 high-value tests passing (higher value per test than 125 generic ones)"
 
 # ============================================================================
 # DEPENDENCIES & PREREQUISITES
 # ============================================================================
 dependencies:
   required_phases:
-    - phase-84: "WorkflowComposer (already implemented)"
+    - phase-84: "WorkflowComposer (execution engine — extended, not modified)"
     - phase-48: "EnforcementOrchestrator (7-agent validation)"
-  
+    - phase-20.5: "KnowledgeSynthesisEngine (Company + CORTEX knowledge merge)"
+    - phase-65: "YAML Best Practice Loading (INDEX.yaml dynamic loading)"
+    - phase-28.2: "Repository Onboarding (onboarded repo profiles)"
+
   required_components:
-    - cortex/orchestrators/workflow/workflow_composer.py
-    - cortex/mcp/registry.py
-    - cortex/mcp/tools/operations.py
-    - cortex-registry/workflows/ (will be created)
-  
+    - cortex/orchestrators/workflow/workflow_composer.py: "Execution engine (extends)"
+    - cortex/brain/knowledge/knowledge_synthesis_engine.py: "Knowledge injection source"
+    - cortex/brain/core/knowledge/knowledge_repository.py: "Company knowledge access"
+    - cortex/orchestrators/core/intent_router.py: "Template suggestion hook"
+    - cortex/orchestrators/core/master_orchestrator.py: "Stage 3 knowledge synthesis"
+    - cortex/mcp/registry.py: "MCP tool registration"
+    - company/domains/*.yaml: "Company domain knowledge (6 files)"
+    - cortex_brain/onboarded_repos/: "Onboarded repository profiles"
+    - cortex-registry/_cortex-master/knowledge/INDEX.yaml: "45+ best practices YAMLs"
+
   blocked_by: []
   blocks: []
 
 # ============================================================================
-# STAGE BREAKDOWN (5 Stages, 23 Hours)
+# KNOWLEDGE PARAMETERIZATION ARCHITECTURE
+# ============================================================================
+knowledge_architecture:
+  description: |
+    Templates contain knowledge placeholders that resolve differently
+    based on repository context (ARCHITECT vs PRODUCTION mode).
+    The KnowledgeSynthesisEngine already handles the merge logic —
+    Phase 100 wires it into workflow template resolution.
+
+  resolution_chain:
+    - priority: 1
+      source: "company/domains/*.yaml"
+      description: "Company-specific overrides (highest precedence)"
+      examples:
+        - "api-design-standards.yaml → REST naming, pagination, versioning"
+        - "security-standards.yaml → OAuth2, RBAC, TLS requirements"
+        - "payment-security.yaml → PCI-DSS, fintech-specific rules"
+
+    - priority: 2
+      source: "cortex_brain/onboarded_repos/{repo}_enhanced.json"
+      description: "Onboarded repo profile (tech stack, patterns, capabilities)"
+      examples:
+        - "tech_stack → determines test framework (Jest/pytest/NUnit)"
+        - "architecture_patterns → determines component patterns"
+        - "integration_points → determines API patterns"
+
+    - priority: 3
+      source: "cortex-registry/_cortex-master/knowledge/ (45+ YAMLs)"
+      description: "CORTEX best practices (fills gaps not covered by company)"
+      examples:
+        - "tdd-best-practices.yaml → RED-GREEN-REFACTOR cycle"
+        - "secure-coding-practices.yaml → OWASP Top 10"
+        - "clean-code.yaml → SOLID, DRY, KISS"
+
+  template_placeholders:
+    - placeholder: "{test_framework}"
+      architect_value: "pytest"
+      production_value: "Resolved from onboarded repo profile tech_stack"
+      fallback: "pytest"
+
+    - placeholder: "{component_library}"
+      architect_value: "CORTEX orchestrator patterns"
+      production_value: "Resolved from onboarded repo profile (React/Angular/Vue)"
+      fallback: "vanilla HTML/CSS/JS"
+
+    - placeholder: "{auth_pattern}"
+      architect_value: "MCP authentication"
+      production_value: "Resolved from company/domains/security-standards.yaml"
+      fallback: "OAuth2 with PKCE"
+
+    - placeholder: "{api_style}"
+      architect_value: "FastAPI + MCP endpoints"
+      production_value: "Resolved from company/domains/api-design-standards.yaml"
+      fallback: "RESTful with OpenAPI spec"
+
+    - placeholder: "{compliance_standards}"
+      architect_value: "CORTEX CORE rules"
+      production_value: "Resolved from company/domains/ (PCI-DSS, HIPAA, SOX)"
+      fallback: "OWASP Top 10"
+
+    - placeholder: "{deployment_target}"
+      architect_value: "CORTEX deployment pipeline"
+      production_value: "Resolved from onboarded repo infrastructure detection"
+      fallback: "Docker + CI/CD"
+
+  mode_detection:
+    architect_markers:
+      - ".cortex/ directory exists"
+      - "cortex-registry/ directory exists"
+      - "cortex/__init__.py exists"
+    production_markers:
+      - "None of the above markers present"
+    environment_variable: "CORTEX_MODE (architect|production)"
+
+# ============================================================================
+# 5 KNOWLEDGE-PARAMETERIZED TEMPLATES
+# ============================================================================
+templates:
+  description: |
+    5 templates (not 15 static ones). Each resolves differently based on
+    knowledge context. Higher value per template, lower maintenance burden.
+
+  template_list:
+    - id: "tdd/frontend-visual"
+      name: "Frontend Visual TDD Workflow"
+      category: "tdd"
+      description: "Full TDD cycle for visual frontend development"
+      architect_resolution:
+        test_framework: "pytest + Playwright"
+        component_patterns: "CORTEX site patterns (cortex-docs/)"
+        a11y_standard: "WCAG 2.1 AA"
+        deployment: "GitHub Pages"
+      production_resolution:
+        test_framework: "{from onboarded profile: Jest/Cypress/Playwright}"
+        component_patterns: "{from onboarded profile: React/Angular/Vue}"
+        a11y_standard: "{from company/domains/ or WCAG 2.1 AA default}"
+        deployment: "{from onboarded profile infrastructure}"
+
+    - id: "tdd/api-service"
+      name: "API Service TDD Workflow"
+      category: "tdd"
+      description: "TDD cycle for API endpoint development"
+      architect_resolution:
+        test_framework: "pytest + httpx"
+        api_style: "FastAPI + MCP endpoints"
+        auth_pattern: "MCP tool authentication"
+        security: "CORTEX CORE rules"
+      production_resolution:
+        test_framework: "{from profile: pytest/Jest/NUnit/xUnit}"
+        api_style: "{from company/domains/api-design-standards.yaml}"
+        auth_pattern: "{from company/domains/security-standards.yaml}"
+        security: "{from company compliance standards}"
+
+    - id: "tdd/backend-service"
+      name: "Backend Service TDD Workflow"
+      category: "tdd"
+      description: "TDD cycle for backend service/module development"
+      architect_resolution:
+        test_framework: "pytest"
+        patterns: "Orchestrator + Registry pattern"
+        error_handling: "CORTEX CORE-013 (no bare except)"
+        database: "SQLite (governance.db pattern)"
+      production_resolution:
+        test_framework: "{from onboarded profile}"
+        patterns: "{from onboarded profile architecture_patterns}"
+        error_handling: "{from company/domains/ error handling standards}"
+        database: "{from onboarded profile tech_stack}"
+
+    - id: "security/compliance-audit"
+      name: "Security Compliance Audit Workflow"
+      category: "security"
+      description: "Security audit with compliance standard verification"
+      architect_resolution:
+        standards: "CORTEX CORE rules + OWASP"
+        scanning: "MCP secret scanning"
+        compliance: "Internal governance (30 CORE rules)"
+      production_resolution:
+        standards: "{from company/domains/security-standards.yaml}"
+        scanning: "{from company/domains/payment-security.yaml if fintech}"
+        compliance: "{PCI-DSS/HIPAA/SOX from company compliance}"
+
+    - id: "migration/modernize"
+      name: "Legacy Modernization Workflow"
+      category: "migration"
+      description: "Structured migration from legacy to modern patterns"
+      architect_resolution:
+        source_patterns: "Legacy CORTEX patterns"
+        target_patterns: "Current CORTEX architecture"
+        rollback: "Git checkpoint (CORE-026)"
+        verification: "152+ test suite"
+      production_resolution:
+        source_patterns: "{from onboarded profile detected patterns}"
+        target_patterns: "{from company/domains/ target architecture}"
+        rollback: "{from onboarded profile version control patterns}"
+        verification: "{from onboarded profile existing test suite}"
+
+# ============================================================================
+# STAGE BREAKDOWN (6 Stages, 20 Hours)
 # ============================================================================
 stages:
+  # --------------------------------------------------------------------------
+  # STAGE 1: WorkflowTemplateRegistry with Knowledge Resolution
+  # --------------------------------------------------------------------------
   - stage_id: S1
-    name: "WorkflowTemplateRegistry Implementation"
+    name: "WorkflowTemplateRegistry with Knowledge Bridge"
     priority: P0
-    estimated_effort: "6 hours"
-    estimated_tokens: "12000"
-    
+    estimated_effort: "5 hours"
+    estimated_tokens: "10000"
+
     objectives:
       - "Create WorkflowTemplateRegistry class with auto-discovery"
-      - "Implement nested folder scanning"
-      - "Build metadata parsing (metadata.yaml)"
-      - "Add semantic search capability"
-      - "Implement validation engine"
-    
+      - "Wire KnowledgeSynthesisEngine for template placeholder resolution"
+      - "Implement mode-aware knowledge loading (ARCHITECT vs PRODUCTION)"
+      - "Build metadata parsing with knowledge placeholder schema"
+      - "Add semantic search + validation engine"
+
     deliverables:
       - file: "cortex/orchestrators/workflow/template_registry.py"
         type: "implementation"
-        lines: 450
-        tests: 15
+        lines: 500
+        tests: 12
         coverage: ">= 95%"
-      
-      - file: "cortex/orchestrators/workflow/__init__.py"
-        type: "integration"
-        lines: 5
-        description: "Export WorkflowTemplateRegistry"
-      
+        description: |
+          WorkflowTemplateRegistry class:
+          - discover_templates(): scan cortex-registry/workflows/{category}/
+          - resolve_template(template_id, context): inject knowledge into placeholders
+          - search(query, filters): semantic search across templates
+          - validate(template_id): governance + golden test verification
+          - _resolve_knowledge_context(): calls KnowledgeSynthesisEngine
+          - _detect_mode(): ARCHITECT vs PRODUCTION based on workspace markers
+
       - file: "tests/unit/orchestrators/workflow/test_template_registry.py"
         type: "tests"
-        lines: 380
-        test_count: 15
+        lines: 400
+        test_count: 12
         coverage_target: "95%"
-    
+        description: |
+          Tests cover:
+          - Template discovery from nested folders
+          - Knowledge resolution in ARCHITECT mode
+          - Knowledge resolution in PRODUCTION mode (mock company knowledge)
+          - Placeholder substitution correctness
+          - Fallback when company knowledge missing
+          - Metadata validation
+          - Semantic search relevance
+
     acceptance_criteria:
       - "AC-PHASE100-S1-001: Registry discovers templates from nested folders"
-      - "AC-PHASE100-S1-002: Metadata parsing extracts all required fields"
-      - "AC-PHASE100-S1-003: Semantic search returns relevant templates"
-      - "AC-PHASE100-S1-004: Validation checks governance requirements"
-      - "AC-PHASE100-S1-005: Registry handles missing/invalid metadata gracefully"
-    
+      - "AC-PHASE100-S1-002: Knowledge placeholders resolve in ARCHITECT mode"
+      - "AC-PHASE100-S1-003: Knowledge placeholders resolve in PRODUCTION mode"
+      - "AC-PHASE100-S1-004: company/domains/*.yaml overrides CORTEX defaults"
+      - "AC-PHASE100-S1-005: Onboarded repo profile drives framework selection"
+      - "AC-PHASE100-S1-006: Graceful fallback when knowledge sources missing"
+
     enforcement_gates:
-      - "CORE-008: 15 tests written BEFORE implementation"
+      - "CORE-008: 12 tests written BEFORE implementation"
       - "CORE-011: Type hints on all methods"
       - "CORE-012: Google-style docstrings"
       - "CORE-026: Git checkpoint before implementation"
       - "CORE-027: AC_START → AC_COMPLETE markers"
-    
+
     tasks:
       - task_id: T1
-        name: "Define WorkflowTemplate dataclass"
+        name: "Define WorkflowTemplate + ResolvedWorkflow dataclasses"
         effort: "1 hour"
         tests: 3
-        
+
       - task_id: T2
         name: "Implement folder scanning + metadata parsing"
-        effort: "2 hours"
-        tests: 5
-        
-      - task_id: T3
-        name: "Add semantic search (fuzzy match)"
-        effort: "1.5 hours"
-        tests: 4
-        
-      - task_id: T4
-        name: "Build validation engine"
-        effort: "1.5 hours"
+        effort: "1 hour"
         tests: 3
 
-  - stage_id: S2
-    name: "MCP Tool (cortex_workflow) Implementation"
-    priority: P0
-    estimated_effort: "4 hours"
-    estimated_tokens: "8000"
-    
-    objectives:
-      - "Create cortex_workflow MCP tool"
-      - "Implement 5 operations (execute, list, search, validate, preview)"
-      - "Integrate with WorkflowTemplateRegistry"
-      - "Add EnforcementOrchestrator validation"
-      - "Implement audit trail verification"
-    
-    deliverables:
-      - file: "cortex/mcp/registry.py"
-        type: "update"
-        changes: "Add cortex_workflow to PRODUCTION_TOOLS"
-        lines: 15
-      
-      - file: "cortex/mcp/tools/operations.py"
-        type: "update"
-        changes: "Extend CortexWorkflow class"
-        lines: 280
-        tests: 10
-      
-      - file: "tests/unit/mcp/test_cortex_workflow.py"
-        type: "tests"
-        lines: 320
-        test_count: 10
-        coverage_target: "95%"
-    
-    acceptance_criteria:
-      - "AC-PHASE100-S2-001: cortex_workflow tool registered (tool #27)"
-      - "AC-PHASE100-S2-002: Execute operation runs template + validates"
-      - "AC-PHASE100-S2-003: List operation returns all templates"
-      - "AC-PHASE100-S2-004: Search operation performs fuzzy matching"
-      - "AC-PHASE100-S2-005: Validate operation checks governance"
-    
-    enforcement_gates:
-      - "CORE-008: 10 tests written BEFORE implementation"
-      - "CORE-011: Type hints on all parameters"
-      - "CORE-012: Google-style docstrings"
-      - "CORE-050: MCP tool follows consolidated tool pattern"
-    
-    tasks:
-      - task_id: T1
-        name: "Add tool definition to registry"
-        effort: "0.5 hours"
+      - task_id: T3
+        name: "Wire KnowledgeSynthesisEngine for placeholder resolution"
+        effort: "1.5 hours"
+        tests: 4
+        description: |
+          Key integration point. Calls synthesize_unified_context() with:
+          - intent_type from template category
+          - company_knowledge from CompanyKnowledgeLoader
+          - lens_intelligence from onboarded repo profile
+          Resolves {test_framework}, {auth_pattern}, etc.
+
+      - task_id: T4
+        name: "Add mode detection + semantic search + validation"
+        effort: "1.5 hours"
         tests: 2
-        
-      - task_id: T2
-        name: "Implement execute operation"
-        effort: "1.5 hours"
-        tests: 4
-        
-      - task_id: T3
-        name: "Implement list/search/validate operations"
-        effort: "1.5 hours"
-        tests: 3
-        
-      - task_id: T4
-        name: "Add audit trail verification"
-        effort: "0.5 hours"
-        tests: 1
 
-  - stage_id: S3
-    name: "Golden Test Harness"
+  # --------------------------------------------------------------------------
+  # STAGE 2: MCP Tool (cortex_workflow)
+  # --------------------------------------------------------------------------
+  - stage_id: S2
+    name: "MCP Tool (cortex_workflow) with Knowledge-Aware Execution"
     priority: P0
     estimated_effort: "3 hours"
     estimated_tokens: "7000"
-    
+
     objectives:
-      - "Create shared golden test framework"
-      - "Implement base test classes"
-      - "Add sunshine/rainy/edge/blindspot patterns"
-      - "Build audit log verification"
-      - "Create performance profiling utilities"
-    
+      - "Create cortex_workflow MCP tool"
+      - "Implement 5 operations (execute, list, search, validate, preview)"
+      - "Route through MasterOrchestrator Stage 3 for knowledge synthesis"
+      - "Knowledge injection transparent to user"
+      - "Audit trail with knowledge source attribution"
+
     deliverables:
-      - directory: "cortex-registry/workflows/_golden_tests/"
-        description: "Shared test harness for all templates"
-      
-      - file: "cortex-registry/workflows/_golden_tests/base_workflow_test.py"
-        type: "framework"
-        lines: 180
-        description: "Base test class with common patterns"
-      
-      - file: "cortex-registry/workflows/_golden_tests/test_execution.py"
+      - file: "cortex/mcp/tools/workflow_tools.py"
+        type: "implementation"
+        lines: 300
+        tests: 8
+        description: |
+          CortexWorkflowTool class:
+          - execute: runs template with knowledge-resolved context
+          - list: returns all templates with category info
+          - search: fuzzy match across templates
+          - validate: governance check on template
+          - preview: show resolved template WITHOUT executing
+
+      - file: "tests/unit/mcp/test_workflow_tools.py"
         type: "tests"
-        lines: 120
-        test_count: 5
-      
-      - file: "cortex-registry/workflows/_golden_tests/test_governance.py"
-        type: "tests"
-        lines: 120
-        test_count: 5
-      
-      - file: "cortex-registry/workflows/_golden_tests/test_audit.py"
-        type: "tests"
-        lines: 100
-        test_count: 5
-      
-      - file: "cortex-registry/workflows/_golden_tests/test_performance.py"
-        type: "tests"
-        lines: 100
-        test_count: 5
-      
-      - file: "cortex-registry/workflows/_golden_tests/test_regression.py"
-        type: "tests"
-        lines: 100
-        test_count: 5
-      
-      - file: "cortex-registry/workflows/_golden_tests/README.md"
-        type: "documentation"
-        lines: 150
-    
+        lines: 280
+        test_count: 8
+        coverage_target: "95%"
+
     acceptance_criteria:
-      - "AC-PHASE100-S3-001: BaseWorkflowTest class provides reusable patterns"
-      - "AC-PHASE100-S3-002: 25 golden tests operational"
-      - "AC-PHASE100-S3-003: Sunshine path validation implemented"
-      - "AC-PHASE100-S3-004: Rainy path error handling validated"
-      - "AC-PHASE100-S3-005: Edge cases covered (concurrent, timeout, etc.)"
-      - "AC-PHASE100-S3-006: Blindspots tested (unicode, timezones, etc.)"
-      - "AC-PHASE100-S3-007: Audit log verification patterns work"
-    
+      - "AC-PHASE100-S2-001: cortex_workflow tool registered in MCP registry"
+      - "AC-PHASE100-S2-002: Execute operation resolves knowledge + runs template"
+      - "AC-PHASE100-S2-003: Preview shows resolved template (with knowledge)"
+      - "AC-PHASE100-S2-004: Audit trail includes knowledge source attribution"
+      - "AC-PHASE100-S2-005: User sees domain-correct output (not generic boilerplate)"
+
+    enforcement_gates:
+      - "CORE-008: 8 tests written BEFORE implementation"
+      - "CORE-050: MCP tool follows consolidated tool pattern"
+
     tasks:
       - task_id: T1
-        name: "Create BaseWorkflowTest class"
-        effort: "1 hour"
-        tests: 5
-        
+        name: "Add tool definition to MCP registry"
+        effort: "0.5 hours"
+        tests: 1
+
       - task_id: T2
-        name: "Implement 5 golden test files"
+        name: "Implement execute + preview (knowledge-aware)"
         effort: "1.5 hours"
-        tests: 20
-        
+        tests: 4
+
       - task_id: T3
-        name: "Write usage documentation"
+        name: "Implement list/search/validate + audit trail"
+        effort: "1 hour"
+        tests: 3
+
+  # --------------------------------------------------------------------------
+  # STAGE 3: IntentRouter + MasterOrchestrator Integration
+  # --------------------------------------------------------------------------
+  - stage_id: S3
+    name: "IntentRouter + MasterOrchestrator Template Auto-Selection"
+    priority: P0
+    estimated_effort: "3 hours"
+    estimated_tokens: "6000"
+
+    objectives:
+      - "Add classify_intent_with_workflow_suggestion() to IntentRouter"
+      - "Update MasterOrchestrator Stage 2 to check for template suggestions"
+      - "Auto-detect visual context (screenshot attachments)"
+      - "Transparent routing: user doesn't need to know templates exist"
+
+    deliverables:
+      - file: "cortex/orchestrators/core/intent_router.py"
+        type: "update"
+        lines: 60
+        tests: 5
+        description: |
+          Add method: classify_intent_with_workflow_suggestion()
+          Returns: (intent, Optional[template_id])
+          Logic: if attachments contain screenshot + intent is FIX/IMPLEMENT
+                 → suggest "tdd/frontend-visual"
+
+      - file: "cortex/orchestrators/core/master_orchestrator.py"
+        type: "update"
+        lines: 30
+        tests: 3
+        description: |
+          Update Stage 2: if template_id suggested, route to
+          WorkflowComposer via WorkflowTemplateRegistry.resolve_template()
+          Falls back to standard routing if no template matches.
+
+      - file: "tests/unit/orchestrators/core/test_intent_router_workflow.py"
+        type: "tests"
+        lines: 200
+        test_count: 5
+
+      - file: "tests/unit/orchestrators/core/test_master_orchestrator_workflow.py"
+        type: "tests"
+        lines: 120
+        test_count: 3
+
+    acceptance_criteria:
+      - "AC-PHASE100-S3-001: IntentRouter suggests template when visual context detected"
+      - "AC-PHASE100-S3-002: MasterOrchestrator routes to WorkflowComposer when template suggested"
+      - "AC-PHASE100-S3-003: Standard routing preserved when no template match"
+      - "AC-PHASE100-S3-004: User experience seamless (no 'choose template' prompt)"
+
+    enforcement_gates:
+      - "CORE-008: 8 tests written BEFORE implementation"
+      - "CORE-035: No duplication with existing intent classification"
+
+    tasks:
+      - task_id: T1
+        name: "Add classify_intent_with_workflow_suggestion() to IntentRouter"
+        effort: "1.5 hours"
+        tests: 5
+
+      - task_id: T2
+        name: "Update MasterOrchestrator Stage 2 routing"
+        effort: "1 hour"
+        tests: 3
+
+      - task_id: T3
+        name: "Test fallback to standard routing"
+        effort: "0.5 hours"
+        tests: 0
+        description: "Verify no regression when no template match"
+
+  # --------------------------------------------------------------------------
+  # STAGE 4: Two-Context Golden Test Harness
+  # --------------------------------------------------------------------------
+  - stage_id: S4
+    name: "Two-Context Golden Test Harness (ARCHITECT + PRODUCTION)"
+    priority: P0
+    estimated_effort: "4 hours"
+    estimated_tokens: "8000"
+
+    objectives:
+      - "Create shared golden test framework for both modes"
+      - "ARCHITECT tests: verify CORTEX-compliant output"
+      - "PRODUCTION tests: verify domain-compliant output (mock company knowledge)"
+      - "E2E tests: full workflow execution with audit log verification"
+      - "Sunshine/rainy/edge/blindspot coverage for both contexts"
+
+    deliverables:
+      - file: "tests/integration/workflows/conftest.py"
+        type: "test fixtures"
+        lines: 150
+        description: |
+          Shared fixtures:
+          - architect_context: mock CORTEX mode knowledge
+          - production_context: mock company/domains/ + onboarded profile
+          - workflow_registry: initialized WorkflowTemplateRegistry
+          - knowledge_engine: KnowledgeSynthesisEngine with test data
+
+      - file: "tests/integration/workflows/test_architect_mode.py"
+        type: "tests"
+        lines: 250
+        test_count: 10
+        description: |
+          ARCHITECT mode tests:
+          - Templates resolve with CORTEX patterns (pytest, FastAPI)
+          - Generated code follows CORTEX architecture
+          - CORE rules embedded in output
+          - AC markers present in execution audit
+
+      - file: "tests/integration/workflows/test_production_mode.py"
+        type: "tests"
+        lines: 250
+        test_count: 10
+        description: |
+          PRODUCTION mode tests (mock company knowledge):
+          - Templates resolve with USER's patterns (Jest, React, Express)
+          - company/domains/api-design-standards.yaml drives API output
+          - company/domains/security-standards.yaml drives auth patterns
+          - Onboarded repo profile drives test framework selection
+          - No CORTEX-internal patterns leak into production output
+
+      - file: "tests/integration/workflows/test_audit_verification.py"
+        type: "tests"
+        lines: 150
+        test_count: 5
+        description: |
+          E2E audit trail tests (both modes):
+          - AC_START marker present at workflow start
+          - AC_COMPLETE marker present with test count
+          - Knowledge source attribution in audit log
+          - Git checkpoint created at stage boundaries
+          - Governance score recorded
+
+      - file: "tests/integration/workflows/test_sunshine_rainy_paths.py"
+        type: "tests"
+        lines: 200
+        test_count: 8
+        description: |
+          Path coverage (both modes):
+          - Sunshine: valid inputs → knowledge resolved → correct output
+          - Rainy: missing company knowledge → graceful fallback to CORTEX
+          - Rainy: invalid template ID → clear error message
+          - Edge: concurrent template resolution (thread safety)
+          - Edge: empty onboarded profile → fallback chain works
+          - Blindspot: knowledge conflicts (company vs CORTEX contradictions)
+
+    acceptance_criteria:
+      - "AC-PHASE100-S4-001: ARCHITECT mode tests pass (10/10)"
+      - "AC-PHASE100-S4-002: PRODUCTION mode tests pass (10/10)"
+      - "AC-PHASE100-S4-003: Audit verification tests pass (5/5)"
+      - "AC-PHASE100-S4-004: Sunshine/rainy path tests pass (8/8)"
+      - "AC-PHASE100-S4-005: No CORTEX patterns leak into PRODUCTION output"
+      - "AC-PHASE100-S4-006: Fallback chain works when knowledge sources missing"
+      - "AC-PHASE100-S4-007: AC_START → AC_COMPLETE markers verified in git"
+
+    enforcement_gates:
+      - "CORE-008: All tests written BEFORE implementation"
+      - "CORE-027: AC markers verified programmatically"
+
+    tasks:
+      - task_id: T1
+        name: "Create shared test fixtures (conftest.py)"
+        effort: "1 hour"
+        tests: 0
+
+      - task_id: T2
+        name: "Write ARCHITECT mode tests (10 tests)"
+        effort: "1 hour"
+        tests: 10
+
+      - task_id: T3
+        name: "Write PRODUCTION mode tests with mock company knowledge (10 tests)"
+        effort: "1 hour"
+        tests: 10
+
+      - task_id: T4
+        name: "Write E2E audit verification + path coverage tests (13 tests)"
+        effort: "1 hour"
+        tests: 13
+
+  # --------------------------------------------------------------------------
+  # STAGE 5: Fix Phase 99 + Create 5 Template Definitions
+  # --------------------------------------------------------------------------
+  - stage_id: S5
+    name: "Fix Phase 99 + Create 5 Knowledge-Parameterized Templates"
+    priority: P1
+    estimated_effort: "3 hours"
+    estimated_tokens: "6000"
+
+    objectives:
+      - "Rename Phase 99 file (CORE-028 compliance)"
+      - "Migrate to cortex-registry/workflows/tdd/frontend-visual/"
+      - "Create 5 template definitions with knowledge placeholders"
+      - "Each template has metadata.yaml + workflow.yaml"
+      - "Update master-index.yaml"
+
+    deliverables:
+      - directory: "cortex-registry/workflows/tdd/frontend-visual/"
+        description: "Migrated Phase 99 as knowledge-parameterized template"
+        files:
+          - "workflow.yaml: Template with {test_framework}, {component_library} placeholders"
+          - "metadata.yaml: Governance + knowledge resolution config"
+
+      - directory: "cortex-registry/workflows/tdd/api-service/"
+        description: "API service TDD template"
+        files:
+          - "workflow.yaml: Template with {api_style}, {auth_pattern} placeholders"
+          - "metadata.yaml: Governance + knowledge resolution config"
+
+      - directory: "cortex-registry/workflows/tdd/backend-service/"
+        description: "Backend service TDD template"
+        files:
+          - "workflow.yaml: Template with {patterns}, {database} placeholders"
+          - "metadata.yaml: Governance + knowledge resolution config"
+
+      - directory: "cortex-registry/workflows/security/compliance-audit/"
+        description: "Security compliance audit template"
+        files:
+          - "workflow.yaml: Template with {compliance_standards}, {scanning} placeholders"
+          - "metadata.yaml: Governance + knowledge resolution config"
+
+      - directory: "cortex-registry/workflows/migration/modernize/"
+        description: "Legacy modernization template"
+        files:
+          - "workflow.yaml: Template with {source_patterns}, {target_patterns} placeholders"
+          - "metadata.yaml: Governance + knowledge resolution config"
+
+    acceptance_criteria:
+      - "AC-PHASE100-S5-001: Phase 99 file renamed (49 → 33 chars, CORE-028 compliant)"
+      - "AC-PHASE100-S5-002: No 'dogfooding' concept in any filename"
+      - "AC-PHASE100-S5-003: 5 templates created with knowledge placeholders"
+      - "AC-PHASE100-S5-004: All metadata.yaml files have knowledge_resolution config"
+      - "AC-PHASE100-S5-005: Registry auto-discovers all 5 templates"
+      - "AC-PHASE100-S5-006: Master index updated"
+
+    tasks:
+      - task_id: T1
+        name: "Rename Phase 99 + migrate to template structure"
         effort: "0.5 hours"
         tests: 0
 
-  - stage_id: S4
-    name: "Fix Phase 99 + Migrate to frontend-visual-tdd"
-    priority: P1
-    estimated_effort: "2 hours"
-    estimated_tokens: "5000"
-    
-    objectives:
-      - "Rename Phase 99 file (CORE-028 compliance)"
-      - "Split mixed concerns into single-purpose components"
-      - "Migrate to cortex-registry/workflows/tdd/"
-      - "Create template-specific golden tests"
-      - "Update master-index.yaml"
-    
-    deliverables:
-      - directory: "cortex-registry/workflows/tdd/frontend-visual-tdd/"
-        description: "Migrated Phase 99 as production template"
-      
-      - file: "cortex-registry/workflows/tdd/frontend-visual-tdd/workflow.yaml"
-        type: "template"
-        lines: 200
-        source: "Phase 99 workflow definition"
-      
-      - file: "cortex-registry/workflows/tdd/frontend-visual-tdd/metadata.yaml"
-        type: "metadata"
-        lines: 120
-        description: "Governance-first metadata with golden test refs"
-      
-      - file: "cortex-registry/workflows/tdd/frontend-visual-tdd/tests/test_vision_integration.py"
-        type: "tests"
-        lines: 80
-        test_count: 3
-      
-      - file: "cortex-registry/workflows/tdd/frontend-visual-tdd/tests/test_semantic_bridge.py"
-        type: "tests"
-        lines: 60
-        test_count: 2
-      
-      - file: "cortex-registry/workflows/tdd/frontend-visual-tdd/examples/cortex-site-hero-update.md"
-        type: "documentation"
-        lines: 100
-      
-      - file: "cortex-registry/_cortex-master/master-index.yaml"
-        type: "update"
-        changes: "Remove Phase 99 from planned (now a template)"
-    
-    acceptance_criteria:
-      - "AC-PHASE100-S4-001: Phase 99 file renamed to frontend-visual-tdd-workflow.yaml (33 chars)"
-      - "AC-PHASE100-S4-002: No 'dogfooding' concept in any filename"
-      - "AC-PHASE100-S4-003: Template metadata includes all governance fields"
-      - "AC-PHASE100-S4-004: 5 template-specific tests operational"
-      - "AC-PHASE100-S4-005: Master index updated (phases: 36 → 35)"
-    
-    tasks:
-      - task_id: T1
-        name: "Create template directory structure"
-        effort: "0.5 hours"
-        tests: 0
-        
       - task_id: T2
-        name: "Split Phase 99 concerns + migrate"
-        effort: "1 hour"
-        tests: 5
-        
+        name: "Create 5 template definitions with knowledge placeholders"
+        effort: "2 hours"
+        tests: 0
+
       - task_id: T3
         name: "Update master-index.yaml"
         effort: "0.5 hours"
         tests: 0
 
-  - stage_id: S5
-    name: "Predesign 14 Additional Templates + Documentation"
+  # --------------------------------------------------------------------------
+  # STAGE 6: Documentation + Template Authoring Guide
+  # --------------------------------------------------------------------------
+  - stage_id: S6
+    name: "Documentation + Knowledge-Aware Authoring Guide"
     priority: P1
-    estimated_effort: "8 hours"
-    estimated_tokens: "20000"
-    
+    estimated_effort: "2 hours"
+    estimated_tokens: "4000"
+
     objectives:
-      - "Create 5 category directories with README"
-      - "Scaffold 14 additional templates (3 per category - 1 complete)"
-      - "Write metadata.yaml for each template"
-      - "Create template authoring guide"
-      - "Document team ownership model"
-    
+      - "Write library README with knowledge injection explanation"
+      - "Create template authoring guide (how to add placeholders)"
+      - "Document ARCHITECT vs PRODUCTION resolution"
+      - "Generate master manifest"
+
     deliverables:
       - file: "cortex-registry/workflows/README.md"
         type: "documentation"
-        lines: 250
-        description: "Library overview, usage, governance"
-      
+        lines: 300
+        description: |
+          Library overview:
+          - How knowledge-parameterized templates work
+          - ARCHITECT vs PRODUCTION mode explanation
+          - Knowledge resolution chain
+          - How to add new templates
+          - Governance requirements
+
       - file: "cortex-registry/workflows/_manifest.yaml"
         type: "registry"
-        lines: 400
-        description: "Auto-generated master index"
-      
-      - directory: "cortex-registry/workflows/tdd/"
-        templates: 3
-        status: "1 complete (frontend-visual-tdd), 2 scaffolds"
-      
-      - directory: "cortex-registry/workflows/api/"
-        templates: 3
-        status: "3 scaffolds"
-      
-      - directory: "cortex-registry/workflows/frontend/"
-        templates: 3
-        status: "3 scaffolds"
-      
-      - directory: "cortex-registry/workflows/migration/"
-        templates: 3
-        status: "3 scaffolds"
-      
-      - directory: "cortex-registry/workflows/security/"
-        templates: 3
-        status: "3 scaffolds"
-      
-      - file: "cortex-registry/workflows/AUTHORING_GUIDE.md"
-        type: "documentation"
-        lines: 300
-        description: "How to create new templates"
-      
-      - file: "cortex-registry/workflows/TEAM_OWNERSHIP.md"
-        type: "documentation"
-        lines: 150
-        description: "Domain-driven ownership model"
-    
+        lines: 200
+        description: "Auto-generated master index of all templates"
+
     acceptance_criteria:
-      - "AC-PHASE100-S5-001: 5 category directories created with README"
-      - "AC-PHASE100-S5-002: 15 templates total (1 complete, 14 scaffolds)"
-      - "AC-PHASE100-S5-003: All scaffolds have valid metadata.yaml"
-      - "AC-PHASE100-S5-004: Authoring guide covers: naming, metadata, tests, governance"
-      - "AC-PHASE100-S5-005: Team ownership model documented"
-      - "AC-PHASE100-S5-006: Master manifest auto-generates successfully"
-    
-    template_scaffolds:
-      tdd:
-        - "api-tdd-cycle"
-        - "backend-service-tdd"
-      
-      api:
-        - "rest-endpoint-scaffold"
-        - "graphql-schema-migration"
-        - "websocket-realtime-api"
-      
-      frontend:
-        - "component-testing"
-        - "visual-regression-suite"
-        - "performance-lighthouse"
-      
-      migration:
-        - "legacy-modernization"
-        - "database-schema-evolution"
-        - "microservice-extraction"
-      
-      security:
-        - "owasp-top10-audit"
-        - "dependency-vulnerability-scan"
-        - "penetration-test-automation"
-    
+      - "AC-PHASE100-S6-001: README explains knowledge parameterization"
+      - "AC-PHASE100-S6-002: Authoring guide shows how to add placeholders"
+      - "AC-PHASE100-S6-003: Manifest auto-generated and valid"
+
     tasks:
       - task_id: T1
-        name: "Create category directories + READMEs"
-        effort: "1 hour"
+        name: "Write README + authoring guide"
+        effort: "1.5 hours"
         tests: 0
-        
+
       - task_id: T2
-        name: "Scaffold 14 templates with metadata"
-        effort: "4 hours"
+        name: "Generate master manifest"
+        effort: "0.5 hours"
         tests: 0
-        
-      - task_id: T3
-        name: "Write authoring guide + ownership docs"
-        effort: "2 hours"
-        tests: 0
-        
-      - task_id: T4
         name: "Generate master manifest"
         effort: "1 hour"
         tests: 0
@@ -506,38 +779,95 @@ stages:
 # TESTING STRATEGY
 # ============================================================================
 testing_strategy:
-  total_tests: 125
+  total_tests: 74
   breakdown:
-    stage_1: 15  # WorkflowTemplateRegistry
-    stage_2: 10  # MCP Tool
-    stage_3: 25  # Golden Test Harness
-    stage_4: 5   # Phase 99 Migration
-    stage_5: 0   # Scaffolds (no tests yet)
-    integration: 70  # Template-specific tests (future)
-  
+    stage_1_registry: 12
+    stage_2_mcp_tool: 8
+    stage_3_integration: 8
+    stage_4_golden_tests: 33
+    stage_5_templates: 0
+    stage_6_docs: 0
+    subtotal_unit: 28
+    subtotal_integration: 33
+    subtotal_template: 13
+
   coverage_target: ">= 95%"
-  
+
+  two_context_strategy:
+    description: |
+      Every functional test runs in BOTH contexts to verify knowledge
+      injection produces correct, mode-specific output.
+
+    architect_context_tests:
+      count: 10
+      knowledge_sources:
+        - "cortex-registry/_cortex-master/knowledge/ (45+ YAMLs)"
+        - "CORTEX CORE rules (30 rules)"
+        - "CORTEX architecture patterns"
+      expected_output:
+        - "pytest test framework"
+        - "FastAPI API patterns"
+        - "CORTEX orchestrator patterns"
+        - "SQLite database patterns"
+
+    production_context_tests:
+      count: 10
+      knowledge_sources:
+        - "company/domains/api-design-standards.yaml (mocked)"
+        - "company/domains/security-standards.yaml (mocked)"
+        - "company/domains/payment-security.yaml (mocked)"
+        - "cortex_brain/onboarded_repos/{repo}.json (mocked)"
+      expected_output:
+        - "User's test framework (Jest/NUnit/xUnit)"
+        - "User's API patterns (REST/GraphQL)"
+        - "User's auth patterns (OAuth2 + PKCE)"
+        - "User's compliance standards (PCI-DSS)"
+
+    audit_verification_tests:
+      count: 5
+      patterns:
+        - "AC_START marker present at workflow initiation"
+        - "AC_COMPLETE marker present with test count"
+        - "Knowledge source attribution in audit log"
+        - "Git checkpoint created at stage boundaries"
+        - "Governance score recorded per execution"
+
+    path_coverage_tests:
+      count: 8
+      sunshine:
+        - "Valid inputs → knowledge resolved → domain-correct output"
+        - "Template with full company knowledge → all placeholders resolved"
+      rainy:
+        - "Missing company knowledge → graceful fallback to CORTEX defaults"
+        - "Invalid template ID → clear error with available templates"
+        - "Corrupted metadata.yaml → skip template, log warning"
+      edge:
+        - "Concurrent template resolution → thread-safe execution"
+        - "Empty onboarded profile → full fallback chain"
+      blindspot:
+        - "Knowledge conflict: company contradicts CORTEX → company wins"
+
   test_types:
     unit:
-      - "Registry auto-discovery"
-      - "Metadata parsing"
-      - "Semantic search"
-      - "Validation engine"
+      - "Registry auto-discovery + metadata parsing"
+      - "Knowledge placeholder resolution"
+      - "Mode detection (ARCHITECT vs PRODUCTION)"
       - "MCP tool operations"
-    
+      - "IntentRouter workflow suggestion"
+      - "MasterOrchestrator routing update"
+
     integration:
-      - "End-to-end template execution"
-      - "EnforcementOrchestrator validation"
-      - "Audit trail verification"
-      - "WorkflowComposer integration"
-    
-    golden:
-      - "Sunshine paths (happy scenarios)"
-      - "Rainy paths (error handling)"
-      - "Edge cases (boundaries)"
-      - "Blindspots (hidden assumptions)"
-      - "Performance (duration, memory)"
-      - "Regression (no breaking changes)"
+      - "WorkflowTemplateRegistry → KnowledgeSynthesisEngine wiring"
+      - "IntentRouter → WorkflowTemplateRegistry → WorkflowComposer pipeline"
+      - "MCP tool → MasterOrchestrator Stage 3 → knowledge resolution"
+      - "company/domains/*.yaml → template placeholder resolution"
+      - "Onboarded repo profile → test framework selection"
+
+    e2e:
+      - "Full TDD workflow execution in ARCHITECT mode"
+      - "Full TDD workflow execution in PRODUCTION mode (mock data)"
+      - "Audit log verification end-to-end"
+      - "Knowledge source attribution verification"
 
 # ============================================================================
 # ENFORCEMENT GATES
@@ -547,52 +877,78 @@ enforcement_gates:
     - gate: "EnforcementOrchestrator"
       agents: 7
       checks:
-        - "CORE-008: TDD mandatory (125 tests before code)"
+        - "CORE-008: TDD mandatory (74 tests before code)"
         - "CORE-011: Type hints on all methods"
         - "CORE-012: Google-style docstrings"
         - "CORE-026: Git checkpoints at stage boundaries"
         - "CORE-027: AC_START → AC_COMPLETE markers"
         - "CORE-028: File naming (kebab-case, ≤40 chars)"
         - "CORE-035: No duplication with existing components"
-  
+        - "CORE-036: Industry standards (company/domains/ + CORTEX merged)"
+
   runtime_monitoring:
     - "Stage completion verification (cannot skip stages)"
     - "Test coverage enforcement (≥95% required)"
-    - "No CORTEX_DEBUG markers in committed code"
+    - "Knowledge injection verified (no static defaults in PRODUCTION mode)"
+    - "No CORTEX-internal patterns leak into PRODUCTION output"
     - "All audit trails verified"
-  
+    - "No CORTEX_DEBUG markers in committed code"
+
   post_execution:
-    - "125 tests passing"
+    - "74 tests passing"
     - "Zero lint errors"
     - "Zero breaking changes to WorkflowComposer"
-    - "MCP server starts successfully (27 tools)"
-    - "Template registry auto-discovers all 15 templates"
-    - "Documentation complete (README + guides)"
+    - "Zero breaking changes to KnowledgeSynthesisEngine"
+    - "Zero breaking changes to IntentRouter"
+    - "Zero breaking changes to MasterOrchestrator"
+    - "MCP server starts successfully (28+ tools)"
+    - "Template registry auto-discovers all 5 templates"
+    - "ARCHITECT mode tests pass"
+    - "PRODUCTION mode tests pass"
+    - "Audit verification tests pass"
+    - "Documentation complete"
 
 # ============================================================================
 # RISK MITIGATION
 # ============================================================================
 risks:
-  - risk: "Over-engineering (too complex for initial release)"
+  - risk: "KnowledgeSynthesisEngine changes break existing synthesis"
+    probability: "Very Low"
+    impact: "High"
+    mitigation: |
+      WorkflowTemplateRegistry CALLS synthesize_unified_context() — does NOT modify it.
+      New method resolve_for_workflow() wraps existing API. Zero changes to engine internals.
+
+  - risk: "IntentRouter changes break existing intent classification"
+    probability: "Very Low"
+    impact: "High"
+    mitigation: |
+      New method classify_intent_with_workflow_suggestion() is ADDITIVE.
+      Existing classify_intent() unchanged. New method calls old method + adds template hint.
+      Fallback: if no template match, returns (intent, None) → standard routing.
+
+  - risk: "MasterOrchestrator Stage 2 changes break orchestration pipeline"
+    probability: "Very Low"
+    impact: "Critical"
+    mitigation: |
+      Stage 2 update is CONDITIONAL: if template_id suggested → route to WorkflowComposer.
+      Else → existing pipeline unchanged. Feature-flagged for safe rollout.
+
+  - risk: "Knowledge conflict: company contradicts CORTEX rules"
     probability: "Medium"
     impact: "Medium"
-    mitigation: "Stage 5 creates scaffolds only (not full implementations)"
-  
-  - risk: "Template sprawl (uncontrolled growth)"
-    probability: "Low"
-    impact: "High"
-    mitigation: "Governance gates + team ownership model + naming conventions"
-  
-  - risk: "Breaking changes to WorkflowComposer"
-    probability: "Very Low"
-    impact: "High"
-    mitigation: "Registry is new component (extends, not modifies)"
-  
-  - risk: "MCP tool conflicts (duplicate names)"
-    probability: "Very Low"
-    impact: "Medium"
-    mitigation: "Tool #27 verified available, naming follows convention"
-  
+    mitigation: |
+      KnowledgeSynthesisEngine already handles precedence:
+      company/domains/ OVERRIDES cortex knowledge. This is by design.
+      Test verifies: company always wins on conflict.
+
+  - risk: "Onboarded repo profile missing or incomplete"
+    probability: "Medium"
+    impact: "Low"
+    mitigation: |
+      Graceful fallback chain: onboarded profile → company/domains/ → CORTEX defaults.
+      Golden tests verify each fallback level works independently.
+
   - risk: "Phase 99 migration breaks existing references"
     probability: "Very Low"
     impact: "Low"
@@ -603,33 +959,38 @@ risks:
 # ============================================================================
 success_metrics:
   quantitative:
-    - metric: "Template discovery time"
-      target: "< 100ms for 15 templates"
+    - metric: "Knowledge resolution time"
+      target: "< 200ms for placeholder resolution"
       measurement: "Performance profiling"
-    
-    - metric: "Workflow execution overhead"
-      target: "< 500ms added by registry layer"
-      measurement: "Before/after benchmarks"
-    
+
+    - metric: "Template discovery time"
+      target: "< 100ms for 5 templates"
+      measurement: "Performance profiling"
+
     - metric: "Test coverage"
       target: ">= 95%"
       measurement: "pytest --cov"
-    
-    - metric: "MCP tool count"
-      target: "27 tools"
-      measurement: "Registry inspection"
-    
-    - metric: "Template count"
-      target: "15 templates (1 complete, 14 scaffolds)"
-      measurement: "Directory scan"
-  
+
+    - metric: "Test count"
+      target: "74 tests (28 unit + 33 integration + 13 template)"
+      measurement: "pytest count"
+
+    - metric: "Knowledge sources used"
+      target: "3 layers (company → onboarded → CORTEX)"
+      measurement: "Audit trail attribution"
+
+    - metric: "Mode-specific accuracy"
+      target: "100% — ARCHITECT output uses CORTEX patterns, PRODUCTION uses user patterns"
+      measurement: "Two-context golden tests"
+
   qualitative:
-    - "Templates discoverable via semantic search"
-    - "Team ownership model clear and documented"
-    - "Authoring guide enables new template creation"
-    - "Golden test harness reusable across templates"
-    - "Zero breaking changes to existing code"
-    - "MCP-first pattern maintained"
+    - "Templates produce domain-correct code (not generic boilerplate)"
+    - "Users don't need to know templates exist (auto-selection)"
+    - "Company knowledge automatically enforced during workflows"
+    - "Onboarded repo profile drives framework selection"
+    - "Zero breaking changes to existing components"
+    - "Clear separation: ARCHITECT mode vs PRODUCTION mode"
+    - "Audit trail shows which knowledge sources drove each decision"
 
 # ============================================================================
 # ROLLOUT PLAN
@@ -637,61 +998,79 @@ success_metrics:
 rollout:
   phase_1_foundation:
     stages: [S1, S2]
-    duration: "10 hours"
-    goal: "Core infrastructure (registry + MCP tool)"
-    verification: "MCP tool operational, registry discovers templates"
-  
-  phase_2_quality:
+    duration: "8 hours"
+    goal: "Core infrastructure (registry + knowledge bridge + MCP tool)"
+    verification: "MCP tool operational, registry resolves knowledge placeholders"
+
+  phase_2_integration:
     stages: [S3]
     duration: "3 hours"
-    goal: "Golden test harness"
-    verification: "25 shared tests operational"
-  
-  phase_3_migration:
+    goal: "IntentRouter + MasterOrchestrator auto-selection"
+    verification: "Screenshot → auto-template-selection → knowledge-resolved execution"
+
+  phase_3_golden_tests:
     stages: [S4]
-    duration: "2 hours"
-    goal: "Fix Phase 99 violations + migrate"
-    verification: "CORE-028 compliant, template discoverable"
-  
-  phase_4_scale:
+    duration: "4 hours"
+    goal: "Two-context golden test harness"
+    verification: "ARCHITECT + PRODUCTION mode tests pass, audit verified"
+
+  phase_4_templates:
     stages: [S5]
-    duration: "8 hours"
-    goal: "Predesign template library"
-    verification: "5 categories, 15 templates, docs complete"
+    duration: "3 hours"
+    goal: "5 knowledge-parameterized templates + Phase 99 migration"
+    verification: "All templates resolve in both modes, CORE-028 compliant"
+
+  phase_5_docs:
+    stages: [S6]
+    duration: "2 hours"
+    goal: "Documentation + authoring guide"
+    verification: "README explains knowledge parameterization, manifest valid"
 
 # ============================================================================
 # COMPLETION CRITERIA
 # ============================================================================
 completion_criteria:
   code:
-    - "✅ WorkflowTemplateRegistry class implemented"
-    - "✅ cortex_workflow MCP tool registered"
-    - "✅ Golden test harness created (25 tests)"
-    - "✅ Phase 99 migrated to frontend-visual-tdd/"
-    - "✅ 15 template scaffolds created"
-  
+    - "✅ WorkflowTemplateRegistry with KnowledgeSynthesisEngine bridge"
+    - "✅ cortex_workflow MCP tool registered (knowledge-aware execution)"
+    - "✅ IntentRouter.classify_intent_with_workflow_suggestion() added"
+    - "✅ MasterOrchestrator Stage 2 routes to templates when suggested"
+    - "✅ 5 knowledge-parameterized templates with placeholder schema"
+    - "✅ Phase 99 migrated to frontend-visual/ (CORE-028 compliant)"
+
   tests:
-    - "✅ 125 tests passing"
+    - "✅ 74 tests passing (28 unit + 33 integration + 13 template)"
     - "✅ Coverage ≥ 95%"
-    - "✅ Golden tests operational"
-    - "✅ No skipped tests"
-  
+    - "✅ ARCHITECT mode tests pass (10/10)"
+    - "✅ PRODUCTION mode tests pass (10/10)"
+    - "✅ Audit verification tests pass (5/5)"
+    - "✅ Sunshine/rainy/edge/blindspot tests pass (8/8)"
+    - "✅ No CORTEX patterns leak into PRODUCTION output"
+
+  knowledge_injection:
+    - "✅ company/domains/*.yaml drives template resolution in PRODUCTION mode"
+    - "✅ cortex-registry/_cortex-master/knowledge/ drives resolution in ARCHITECT mode"
+    - "✅ Onboarded repo profile drives test framework selection"
+    - "✅ Fallback chain works: onboarded → company → CORTEX defaults"
+    - "✅ Knowledge source attribution in audit trail"
+
   documentation:
-    - "✅ Library README complete"
-    - "✅ Authoring guide written"
-    - "✅ Team ownership documented"
-    - "✅ Master manifest generated"
-  
+    - "✅ Library README explains knowledge parameterization"
+    - "✅ Template authoring guide shows placeholder usage"
+    - "✅ Master manifest auto-generated and valid"
+
   governance:
-    - "✅ CORE-028 violations fixed (Phase 99)"
-    - "✅ All AC markers present"
+    - "✅ CORE-028 violations fixed (Phase 99 filename)"
+    - "✅ All AC markers present (AC_START → AC_COMPLETE)"
     - "✅ Git checkpoints at stage boundaries"
     - "✅ Zero lint errors"
-    - "✅ Zero breaking changes"
-  
+    - "✅ Zero breaking changes to existing components"
+
   integration:
-    - "✅ MCP server starts (27 tools)"
-    - "✅ Registry discovers all templates"
+    - "✅ MCP server starts with cortex_workflow tool"
+    - "✅ Registry discovers all 5 templates"
+    - "✅ KnowledgeSynthesisEngine correctly wired"
+    - "✅ IntentRouter auto-selects templates"
     - "✅ WorkflowComposer integration verified"
     - "✅ EnforcementOrchestrator gates functional"
 
@@ -701,50 +1080,78 @@ completion_criteria:
 post_completion:
   - activity: "Update master-index.yaml"
     description: "Add Phase 100 to completed phases"
-  
-  - activity: "Update .github/copilot-instructions.md"
+
+  - activity: "Update copilot-instructions.md"
     description: "Add cortex_workflow to quick commands"
-  
-  - activity: "Generate phase completion report"
-    description: "Metrics, learnings, recommendations"
-  
-  - activity: "Team onboarding session"
-    description: "Walkthrough of new workflow library"
-  
-  - activity: "Template authoring workshop"
-    description: "How to create domain-specific templates"
+
+  - activity: "Update CORTEX.prompt.md"
+    description: "Add workflow template documentation for PRODUCTION mode users"
+
+  - activity: "Update cortex-architect.prompt.md"
+    description: "Add knowledge-parameterized template documentation for ARCHITECT mode"
+
+  - activity: "Verify company/domains/ integration"
+    description: "Ensure all 6 company domain YAMLs correctly override CORTEX defaults"
+
+  - activity: "Run full regression suite"
+    description: "Verify zero breaking changes across all existing tests"
 
 # ============================================================================
 # PHASE METADATA
 # ============================================================================
 metadata:
   tags:
-    - workflow-library
+    - knowledge-parameterized
+    - workflow-templates
     - governance-first
     - mcp-tool
-    - template-registry
-    - golden-tests
-    - team-collaboration
-  
+    - two-context-testing
+    - company-knowledge
+    - onboarded-repos
+    - architect-vs-production
+
   related_phases:
-    - phase-84: "WorkflowComposer (extends)"
-    - phase-48: "EnforcementOrchestrator (integrates)"
-    - phase-99: "Migrates to template library"
-  
+    - phase-84: "WorkflowComposer (extends — execution engine)"
+    - phase-48: "EnforcementOrchestrator (integrates — governance gates)"
+    - phase-20.5: "KnowledgeSynthesisEngine (wires — knowledge bridge)"
+    - phase-65: "YAML Best Practices (uses — dynamic loading)"
+    - phase-28.2: "Repository Onboarding (consumes — repo profiles)"
+    - phase-99: "Migrates to template library (CORE-028 fix)"
+
   architectural_patterns:
-    - "Registry pattern (auto-discovery)"
-    - "Strategy pattern (template selection)"
-    - "Template method pattern (golden tests)"
-    - "Factory pattern (template instantiation)"
-  
+    - "Strategy pattern (knowledge resolution per mode)"
+    - "Registry pattern (auto-discovery of templates)"
+    - "Bridge pattern (templates ↔ KnowledgeSynthesisEngine)"
+    - "Template method pattern (golden tests with context injection)"
+    - "Chain of Responsibility (fallback: onboarded → company → CORTEX)"
+
   core_pillars:
     extensibility: 10
-    scalability: 9
+    scalability: 10
     accuracy: 10
     team_collaboration: 9
     maintainability: 10
     mcp_first: 10
     zero_regression: 10
-  
-  estimated_roi: 92
-  confidence: 9.5
+
+  version_separation:
+    description: |
+      CORTEX has two usage modes — separated by CONTEXT, not CODE:
+      
+      Version 1 (cortex-architect.prompt.md):
+        Mode: ARCHITECT
+        Purpose: Build CORTEX itself
+        Knowledge: Internal specs, registry, wiring, phases
+        Resolution: pytest, FastAPI, orchestrator patterns
+      
+      Version 2 (CORTEX.prompt.md):
+        Mode: PRODUCTION
+        Purpose: Build user's production repos
+        Knowledge: Onboarded profile + company/domains/
+        Resolution: User's frameworks, standards, compliance
+      
+      Same orchestrators, same MCP tools, same templates.
+      Different knowledge injection = different output.
+
+  estimated_roi: 96
+  confidence: 9.8
