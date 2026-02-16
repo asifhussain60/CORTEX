@@ -108,13 +108,15 @@ class HealthCheckService:
 
         try:
             # Test basic routing capability
-            req = IntentRoutingRequest(
-                intent_type="QUERY",
-                query="Health check",
-                context={}
-            )
-            # IntentRouter.route() takes (query: str, context: dict)
-            result = self.router.route(query=req.query, context=req.context or {})
+            # IntentRouter.route() takes single context dict
+            test_context = {
+                "operation": "health_check",
+                "description": "Health check routing test",
+                "domain": "system",
+                "keywords": ["health", "check"],
+                "urgency": "low",
+            }
+            result = self.router.route(test_context)
 
             end_ns = time.perf_counter_ns()
             latency_ms = (end_ns - start_ns) / 1_000_000
@@ -125,7 +127,7 @@ class HealthCheckService:
                     status=HealthStatus.HEALTHY,
                     response_time_ms=latency_ms,
                     last_check=datetime.utcnow().isoformat(),
-                    details={"primary_agent": result.primary_agent_id},
+                    details={"target_handler": result.target_handler},
                 )
             else:
                 return ComponentHealth(
