@@ -5,6 +5,8 @@ Analyzes images via Vision API to extract UI elements, URLs, issues,
 and structural mappings. Supports screenshots, diagrams, mockups, and
 error messages.
 
+Phase 99: Enhanced with atomic-level visual decomposition.
+
 MCP Tool: cortex_vision_analyze
 Author: Asif Hussain
 ARCH-007: MCP-first architecture enforcement
@@ -18,6 +20,15 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
+# Phase 99: Import atomic analysis models
+from cortex.brain.analysis.models import (
+    BoundingBox,
+    ColorInfo,
+    FontInfo,
+    PixelGrid,
+    TextSegment,
+)
+
 
 class ImageType(Enum):
     """Type of image being analyzed."""
@@ -30,9 +41,10 @@ class ImageType(Enum):
 
 class AnalysisDepth(Enum):
     """Depth of analysis to perform."""
-    QUICK = "quick"       # Fast, high-level extraction
-    STANDARD = "standard" # Balanced analysis
-    THOROUGH = "thorough" # Deep, comprehensive analysis
+    QUICK = "quick"       # Fast, high-level extraction (~2s)
+    STANDARD = "standard" # Balanced analysis (5-8s)
+    THOROUGH = "thorough" # Deep, comprehensive analysis (10-15s)
+    ATOMIC = "atomic"     # Atomic-level decomposition (15-20s) - Phase 99
 
 
 @dataclass
@@ -66,17 +78,27 @@ class DetectedIssue:
 
 @dataclass
 class VisionAnalysisResult:
-    """Complete vision analysis result."""
+    """
+    Complete vision analysis result.
+    
+    Phase 99: Enhanced with atomic-level decomposition fields.
+    """
     status: str
     image_type: ImageType
     analysis_depth: AnalysisDepth
 
-    # Extracted data
+    # Extracted data (original)
     urls: List[ExtractedURL] = field(default_factory=list)
     ui_elements: List[UIElement] = field(default_factory=list)
     issues: List[DetectedIssue] = field(default_factory=list)
     text_content: List[str] = field(default_factory=list)
     structural_map: Dict[str, Any] = field(default_factory=dict)
+
+    # Phase 99: Atomic analysis fields
+    bounding_boxes: List[BoundingBox] = field(default_factory=list)
+    text_segments: List[TextSegment] = field(default_factory=list)
+    color_palette: List[ColorInfo] = field(default_factory=list)
+    pixel_grid: Optional[PixelGrid] = None
 
     # Metadata
     raw_response: Optional[str] = None
@@ -85,7 +107,7 @@ class VisionAnalysisResult:
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dict for MCP response."""
-        return {
+        result = {
             "status": self.status,
             "image_type": self.image_type.value,
             "analysis_depth": self.analysis_depth.value,
@@ -121,6 +143,60 @@ class VisionAnalysisResult:
                 "token_usage": self.token_usage,
             },
         }
+        
+        # Phase 99: Add atomic analysis data if present
+        if self.bounding_boxes:
+            result["bounding_boxes"] = [
+                {
+                    "x": b.x,
+                    "y": b.y,
+                    "width": b.width,
+                    "height": b.height,
+                    "confidence": b.confidence,
+                    "semantic_type": b.semantic_type,
+                    "cortex_id": b.cortex_id,
+                }
+                for b in self.bounding_boxes
+            ]
+        
+        if self.text_segments:
+            result["text_segments"] = [
+                {
+                    "text": t.text,
+                    "confidence": t.confidence,
+                    "bbox": {
+                        "x": t.bbox.x,
+                        "y": t.bbox.y,
+                        "width": t.bbox.width,
+                        "height": t.bbox.height,
+                    },
+                    "font_family": t.font_family,
+                    "font_size": t.font_size,
+                    "font_weight": t.font_weight,
+                    "font_style": t.font_style,
+                }
+                for t in self.text_segments
+            ]
+        
+        if self.color_palette:
+            result["color_palette"] = [
+                {
+                    "hex_code": c.hex_code,
+                    "rgb": c.rgb,
+                    "percentage": c.percentage,
+                    "location": c.location,
+                }
+                for c in self.color_palette
+            ]
+        
+        if self.pixel_grid:
+            result["pixel_grid"] = {
+                "width": self.pixel_grid.width,
+                "height": self.pixel_grid.height,
+                "data": self.pixel_grid.data,
+            }
+        
+        return result
 
 
 class VisionAnalyzer:
