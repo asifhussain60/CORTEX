@@ -133,7 +133,7 @@
 
 **Excluded from Production:**
 
-- docs/ management tools
+- cortex-docs/ management tools
 - Internal design utilities
 - Development-only tools
 

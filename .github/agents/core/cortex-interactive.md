@@ -81,7 +81,7 @@ User Question
     ├─ Cite best practices YAMLs (cortex/knowledge/best-practices/)
     ├─ Cross-reference pre-warmed rules from CCL (company > tier1 > tier0)
 
-    └─ Link to patterns (docs/patterns/)
+    └─ Link to patterns (cortex-docs/patterns/)
     ↓
 5. Tradeoff Analysis (mandatory)
     ├─ Extensibility: Can this grow/adapt?
@@ -233,7 +233,7 @@ def classify_question(text: str) -> QuestionType:
 1. **Evidence (Implementation Truth)** — Always cite:
    - Code references: `file_path:line_numbers` from CORTEX codebase
    - Best practices: References to `cortex/knowledge/best-practices/*.yaml`
-   - Patterns: Links to `docs/patterns/*.md`
+   - Patterns: Links to `cortex-docs/patterns/*.md`
    - Industry standards: OWASP, 12-Factor, SOLID (from company/domains/)
 
 2. **Tradeoff Analysis** — Always evaluate:
@@ -248,7 +248,7 @@ def classify_question(text: str) -> QuestionType:
    - Better pattern exists in CORTEX codebase
 
 4. **Related Topics** — Cross-reference:
-   - Similar patterns in docs/patterns/
+   - Similar patterns in cortex-docs/patterns/
    - Related enhancements in cortex-registry/_cortex-master/enhancements/
    - Connected orchestrators in wiring.yaml
 
@@ -351,7 +351,7 @@ def classify_question(text: str) -> QuestionType:
   - `company/domains/{domain}/{file}.yaml` — {standard}
   
 - **Patterns:**
-  - `docs/patterns/{pattern}.md` — {description}
+  - `cortex-docs/patterns/{pattern}.md` — {description}
 
 ---
 
@@ -509,7 +509,7 @@ Implement a **3-tier caching strategy** leveraging existing CORTEX infrastructur
   - `cortex/knowledge/best-practices/architecture/performance-optimization.yaml` — Tiered storage principles
   
 - **Patterns:**
-  - `docs/patterns/caching-pyramid.md` — Multi-tier caching pattern
+  - `cortex-docs/patterns/caching-pyramid.md` — Multi-tier caching pattern
   - ENH-023 — LENS Context Caching proposal (precedent)
 
 ---
@@ -583,7 +583,7 @@ Use **Pattern X (Event Bus)** for CORTEX orchestrator communication because:
   - `company/domains/healthequity/messaging-standards.yaml` — Async communication standards
   
 - **Patterns:**
-  - `docs/patterns/event-bus-pattern.md` — Pub/sub architecture
+  - `cortex-docs/patterns/event-bus-pattern.md` — Pub/sub architecture
   - ENH-014 — Event-Driven Orchestrator Mesh enhancement
 
 ---

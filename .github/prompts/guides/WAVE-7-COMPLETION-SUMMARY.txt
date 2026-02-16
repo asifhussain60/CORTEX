@@ -140,7 +140,7 @@ Status: ✅ WAVE 7 COMPLETE
 
 ═══════════════════════════════════════════════════════════════════
 
-Report: docs/WAVE-7-FINAL-COMPLETION-REPORT.md
+Report: cortex-docs/WAVE-7-FINAL-COMPLETION-REPORT.md
 Commits: 17 verified (pre-commit + registry blacklist checks)
 Date: 2026-02-10
 Version: Wave 7 Final (Phase 4 Extended)

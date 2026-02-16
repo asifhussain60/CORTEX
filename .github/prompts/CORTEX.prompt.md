@@ -743,7 +743,7 @@ WHAT YOU CAN DO NOW:
 - These tools will follow MCP-FIRST architecture and require MCP PRE-FLIGHT checks
 
 **Excluded from Production:**
-- docs/ management tools
+- cortex-docs/ management tools
 - Internal design utilities
 - Development-only debugging tools
 
@@ -855,12 +855,12 @@ Merge: Company takes precedence → CORTEX fills gaps
 |---------|----------|
 | Python Code | cortex/, cortex_brain/ directories |
 | Tests | tests/ directory |
-| Documentation | docs/ directory |
+| Documentation | cortex-docs/ directory |
 | Wiring | cortex/wiring/specifications/wiring.yaml |
 
 ### Forbidden
 
-- ❌ .md files outside docs/
+- ❌ .md files outside cortex-docs/
 - ❌ .py files in root
 - ❌ Direct Python imports in production (use MCP)
 

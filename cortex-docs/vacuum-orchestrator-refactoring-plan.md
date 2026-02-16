@@ -53,7 +53,7 @@ Action Tests (FAILING - Need GREEN implementation):
 | Report JSONs relocated | 3 (report/*.json) | RELOCATE | ❌ RED |
 | Config JSONs preserved | 2 (package.json, tsconfig.json) | PRESERVE | ✅ PASS |
 | Sprawl markdown deleted | 4 (*-summary.md, etc.) | DELETE | ❌ RED |
-| Valid markdown preserved | 3 (README.md, docs/, .github/) | PRESERVE | ✅ PASS |
+| Valid markdown preserved | 3 (README.md, cortex-docs/, .github/) | PRESERVE | ✅ PASS |
 
 ---
 
