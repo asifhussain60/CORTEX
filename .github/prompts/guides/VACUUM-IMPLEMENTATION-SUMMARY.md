@@ -32,11 +32,11 @@ TIER 1: IMMUTABLE SYSTEM FILES
 └─ pyrightconfig.json
 
 TIER 2: CURATED DOCUMENTATION
-├─ docs/01-getting-started/**
-├─ docs/02-architecture/**
-├─ docs/03-api-reference/**
-├─ docs/04-guides/**
-└─ docs/05-operations/**
+├─ cortex-docs/01-getting-started/**
+├─ cortex-docs/02-architecture/**
+├─ cortex-docs/03-api-reference/**
+├─ cortex-docs/04-guides/**
+└─ cortex-docs/05-operations/**
 
 TIER 3: EPHEMERAL (AUTO-ARCHIVED)
 ├─ SESSION-*.md (>30 days)
@@ -46,7 +46,7 @@ TIER 3: EPHEMERAL (AUTO-ARCHIVED)
 └─ EXECUTIVE-*.md (>14 days)
 
 TIER 4: SPECIAL HANDLING
-├─ _workspaces/roadmap/ (MIGRATE to docs/)
+├─ _workspaces/roadmap/ (MIGRATE to cortex-docs/)
 ├─ _workspaces/ppt/ (ARCHIVE)
 └─ _workspaces/sts/ (KEEP)
 ```
@@ -147,8 +147,8 @@ System Files:
   - cortex_brain/tier*/**/*.yaml
 
 Documentation Entry Points:
-  - docs/0-README.md
-  - docs/INDEX.md
+  - cortex-docs/0-README.md
+  - cortex-docs/INDEX.md
 ```
 
 ---

@@ -771,7 +771,7 @@ knowledge_tiers:
     - "cortex/lens/"
     - "cortex/wiring/"
   tier3:
-    - "docs/"
+    - "cortex-docs/"
     - "tests/"
 
 context_synthesis:

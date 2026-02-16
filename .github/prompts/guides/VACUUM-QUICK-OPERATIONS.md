@@ -145,8 +145,8 @@ These files are **NEVER** deleted:
 cortex*.yaml
 pyrightconfig.json
 cortex_brain/tier0/**/*.yaml
-docs/0-README.md
-docs/INDEX.md
+cortex-docs/0-README.md
+cortex-docs/INDEX.md
 ```
 
 Operation will **ABORT** if:
@@ -262,7 +262,7 @@ ephemeral_patterns:
   my_custom_category:
     paths:
       - "_workspaces/MY-*.md"
-      - "docs/*-MY-*.md"
+      - "cortex-docs/*-MY-*.md"
     pattern_match:
       - "MY-"
     description: "My custom ephemeral files"

@@ -56,12 +56,12 @@ grep -c "wiring_status: \"wired\"" cortex_brain/tier0/repo-registry.yaml
 **Solution (Permanent):**
 - Created `tests/unit/orchestrators/verify_registry.py` - Registry validation tool
 - Created `tests/unit/orchestrators/test_fix_verification.py` - Automated regression tests
-- Updated `docs/ORCHESTRATOR-UNWIRING-FIX-PERMANENT-SOLUTION.md` - Comprehensive documentation
+- Updated `cortex-docs/ORCHESTRATOR-UNWIRING-FIX-PERMANENT-SOLUTION.md` - Comprehensive documentation
 
 **Files Created:**
 - `tests/unit/orchestrators/verify_registry.py` (validation logic)
 - `tests/unit/orchestrators/test_fix_verification.py` (automated tests)
-- `docs/ORCHESTRATOR-UNWIRING-FIX-PERMANENT-SOLUTION.md` (documentation)
+- `cortex-docs/ORCHESTRATOR-UNWIRING-FIX-PERMANENT-SOLUTION.md` (documentation)
 
 **Verification Command:**
 ```bash
@@ -83,19 +83,19 @@ python tests/unit/orchestrators/verify_registry.py
 - Unclear deployment readiness status
 
 **Solution (Permanent):**
-- Executive summary document `docs/ORCHESTRATOR-UNWIRING-FIX-PERMANENT-SOLUTION.md`
+- Executive summary document `cortex-docs/ORCHESTRATOR-UNWIRING-FIX-PERMANENT-SOLUTION.md`
 - Clear statement of:
   - 18/23 orchestrators registered
   - Registry locked (non-regenerating)
   - All safety measures in place
 
 **Files Modified:**
-- `docs/ORCHESTRATOR-UNWIRING-FIX-PERMANENT-SOLUTION.md` (comprehensive summary)
+- `cortex-docs/ORCHESTRATOR-UNWIRING-FIX-PERMANENT-SOLUTION.md` (comprehensive summary)
 
 **Verification Command:**
 ```bash
 # Check documentation exists and contains readiness statement
-grep -i "ready for deployment\|phase 1" docs/ORCHESTRATOR-UNWIRING-FIX-PERMANENT-SOLUTION.md
+grep -i "ready for deployment\|phase 1" cortex-docs/ORCHESTRATOR-UNWIRING-FIX-PERMANENT-SOLUTION.md
 ```
 
 **Non-Critical:** Documentation-only fix. Warnings if doc is removed.

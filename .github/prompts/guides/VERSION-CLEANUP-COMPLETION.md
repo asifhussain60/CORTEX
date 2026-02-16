@@ -27,23 +27,23 @@ Successfully removed all versioning from CORTEX prompts and documentation while 
    - Kept: `Authority: cortex-doc.prompt.md | Status: Implementation Guide`
 
 ### Documentation Files
-3. **`docs/04-architecture/DIAGRAM-VISUALIZATION-RECOMMENDATIONS.md`**
+3. **`cortex-docs/04-architecture/DIAGRAM-VISUALIZATION-RECOMMENDATIONS.md`**
    - Removed: Version 1.0, Update date, v4.0 authority
    - Kept: Clean authority reference to cortex-doc.prompt.md
 
-4. **`docs/04-architecture/DIAGRAM-EXAMPLES-IMPLEMENTATION-GUIDE.md`**
+4. **`cortex-docs/04-architecture/DIAGRAM-EXAMPLES-IMPLEMENTATION-GUIDE.md`**
    - Removed: Version 1.0, Date field
    - Kept: Authority and status information
 
-5. **`docs/04-architecture/CORTEX-DOCUMENTATION-REVIEW.md`**
+5. **`cortex-docs/04-architecture/CORTEX-DOCUMENTATION-REVIEW.md`**
    - Removed: Date, v4.0/v3.0 version suffixes
    - Kept: Current authority reference
 
-6. **`docs/04-architecture/INDEX-VISUALIZATION-PROJECT.md`**
+6. **`cortex-docs/04-architecture/INDEX-VISUALIZATION-PROJECT.md`**
    - Removed: Project date, scope, version references
    - Kept: Status and completion indicators
 
-7. **`docs/04-architecture/START-HERE-VISUALIZATION-PROJECT.md`**
+7. **`cortex-docs/04-architecture/START-HERE-VISUALIZATION-PROJECT.md`**
    - Removed: Completion date, version suffixes
    - Kept: Clear authority and status
 
@@ -187,7 +187,7 @@ cortex-doc.prompt.md
 All cleaned documentation is ready for production use:
 - Primary prompt: `.github/prompts/cortex-doc.prompt.md`
 - Implementation guide: `.github/prompts/DOCUMENTATION-ORCHESTRATION-IMPLEMENTATION-GUIDE.md`
-- Supporting docs: `docs/04-architecture/`
+- Supporting docs: `cortex-docs/04-architecture/`
 - Summary: `_workspaces/VISUALIZATION-ENHANCEMENT-SUMMARY.md`
 
 **Status:** ✅ COMPLETE - Ready for next phase

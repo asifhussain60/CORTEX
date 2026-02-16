@@ -2,30 +2,6 @@
 
 <html lang="en">
 <head>
-<style>
-/* Mobile font optimization */
-html {
-    -webkit-text-size-adjust: 100%;
-    -moz-text-size-adjust: 100%;
-    text-size-adjust: 100%;
-}
-</style>
-<style>
-/* Touch target optimization */
-a:not(.glass-card):not(.level0-tile), 
-button, 
-[role="button"] {
-    min-width: 44px;
-    min-height: 44px;
-}
-</style>
-<style>
-/* Mobile touch optimization */
-button, a, input, select, textarea, [role="button"] {
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
-}
-</style>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta content="CORTEX - MCP-First Development Intelligence with 24 Orchestrators, 4-Tier Governance, and TDD Mastery" name="description"/>
@@ -37,10 +13,9 @@ button, a, input, select, textarea, [role="button"] {
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 
 <!-- Security Headers -->
-<!-- Note: frame-ancestors in CSP and X-Frame-Options require HTTP headers for full effect.
-     GitHub Pages limitation: These work in <meta> tags for most directives, but proper
-     production deployment should set via nginx.conf/nginx.prod.conf HTTP headers.
-     See: deployment/nginx.conf for production configuration -->
+<!-- Security Policy: frame-ancestors and X-Frame-Options MUST be HTTP headers -->
+<!-- For local dev (Python http.server): warnings expected - add headers in production -->
+<!-- Production deployment: See deployment/nginx.conf for HTTP header configuration -->
 <meta http-equiv="Content-Security-Policy" 
       content="default-src 'self'; 
                script-src 'self' 'unsafe-inline' cdnjs.cloudflare.com https://unpkg.com; 
@@ -50,11 +25,9 @@ button, a, input, select, textarea, [role="button"] {
                connect-src 'self';
                media-src 'self';
                object-src 'none';
-               frame-ancestors 'none';
                base-uri 'self';
                form-action 'self';">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
-<meta http-equiv="X-Frame-Options" content="DENY">
 <meta http-equiv="X-XSS-Protection" content="1; mode=block">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 
@@ -96,6 +69,7 @@ button, a, input, select, textarea, [role="button"] {
 <link href="assets/css/index-multipanel.css" rel="stylesheet"/>
 <link href="assets/css/generated-classes.css" rel="stylesheet"/>
 <link href="assets/css/intentional-classes.css" rel="stylesheet"/>
+<link href="assets/css/inline-styles-cleanup.css" rel="stylesheet"/>
 
 <!-- JSON-LD Structured Data for SEO -->
 <script type="application/ld+json">
@@ -416,8 +390,11 @@ button, a, input, select, textarea, [role="button"] {
     </style>
 </head>
 <body>
-<!-- Skip to Main Content Link for Accessibility -->
+<!-- Skip to Main Content Link for Accessibility (WCAG 2.4.1) -->
 <a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- Main Content Wrapper (WCAG 2.1 Level AA Requirement) -->
+<main id="main-content" role="main">
 
 <!-- Page Loading Overlay -->
 <div class="page-loading-overlay" id="pageLoadingOverlay" role="status" aria-live="polite" aria-label="Page is loading">
@@ -440,23 +417,23 @@ button, a, input, select, textarea, [role="button"] {
 <!-- Governance & Audit Panel (Tabbed) -->
 <section class="key-features-section" id="governance-audit-panel">
     <div class="glass-card-display main-panel-wrapper animation-t3">
-        <div class="panel-header-centered" style="position: relative; z-index: 2;">
+        <div class="panel-header-centered z-layer-2">
             <h2 class="panel-title-main">
                 <span>🏛️</span>
                 <span>GOVERNANCE & AUDIT</span>
             </h2>
             <p class="panel-subtitle-main">4‑tier rule merger, hash‑chain audit, GitBackedRegistry, and Evidence Bundles</p>
         </div>
-        <div class="cortex-tabs" role="tablist" aria-label="Governance and audit capabilities" style="position: relative; z-index: 2;">
+        <div class="cortex-tabs" role="tablist" aria-label="Governance and audit capabilities" class="z-layer-2">
             <button class="cortex-tab active" role="tab" aria-selected="true" aria-controls="ga-tab-governance" aria-keyshortcuts="ArrowLeft ArrowRight Home End" data-target="ga-tab-governance">🧾 4-Tier Governance</button>
             <button class="cortex-tab" role="tab" aria-selected="false" aria-controls="ga-tab-audit" aria-keyshortcuts="ArrowLeft ArrowRight Home End" data-target="ga-tab-audit">🔗 Hash-Chain Audit</button>
             <button class="cortex-tab" role="tab" aria-selected="false" aria-controls="ga-tab-state" aria-keyshortcuts="ArrowLeft ArrowRight Home End" data-target="ga-tab-state">💾 State Manager</button>
             <button class="cortex-tab" role="tab" aria-selected="false" aria-controls="ga-tab-lifecycle" aria-keyshortcuts="ArrowLeft ArrowRight Home End" data-target="ga-tab-lifecycle">🔁 7-State Lifecycle</button>
             <button class="cortex-tab" role="tab" aria-selected="false" aria-controls="ga-tab-evidence" aria-keyshortcuts="ArrowLeft ArrowRight Home End" data-target="ga-tab-evidence">📑 Evidence Bundles</button>
         </div>
-        <div class="cortex-tab-panels" style="position: relative; z-index: 2;">
+        <div class="cortex-tab-panels z-layer-2">
             <div id="ga-tab-governance" class="cortex-tab-panel active" role="tabpanel">
-                <div class="category-subpanel animation-t1" style="position: relative; z-index: 2;">
+                <div class="category-subpanel animation-t1 z-layer-2">
                     <div class="category-icon-wrapper"><span class="category-icon">🧾</span></div>
                     <h3 class="category-title">4‑Tier Governance via GitBackedRegistry</h3>
                     <p class="category-description">Merge Tier 0 SKULL (immutable), Tier 1 Business, Tier 2 Engineering, and Tier 3 Learned rules with precedence resolution (Tier 0 wins). EnforcementOrchestrator validates and blocks violations in real-time.</p>
@@ -496,7 +473,7 @@ button, a, input, select, textarea, [role="button"] {
 <!-- Discovery & TOOLKIT Panel (Tabbed) -->
 <section class="key-features-section" id="discovery-toolkit-panel">
     <div class="glass-card-display main-panel-wrapper animation-t3">
-        <div class="panel-header-centered" style="position: relative; z-index: 2;">
+        <div class="panel-header-centered z-layer-2">
             <h2 class="panel-title-main">
                 <span>🔍</span>
                 <span>DISCOVERY & TOOLKIT</span>
@@ -530,10 +507,10 @@ button, a, input, select, textarea, [role="button"] {
                     <h3 class="category-title">HTML View Generators & Visualizations</h3>
                     <p class="category-description">Epic Plan Viewer, Knowledge Graph Visualizer, Architecture Diagram Generator, Duplication Dashboard, Glassmorphism Compliance, Modern Tabs, Mermaid/D3 integration.</p>
                     <div class="category-tags">
-                        <a class="category-tag animation-t2" data-icon="📋" href="coming-soon.html"><span>Toolkit Overview</span><sup style="color:#7b61ff;font-size:0.7em;margin-left:4px">soon</sup></a>
-                        <a class="category-tag animation-t2" data-icon="🧭" href="coming-soon.html"><span>Plan Viewer</span><sup style="color:#7b61ff;font-size:0.7em;margin-left:4px">soon</sup></a>
-                        <a class="category-tag animation-t2" data-icon="🧩" href="coming-soon.html"><span>D3.js Charts</span><sup style="color:#7b61ff;font-size:0.7em;margin-left:4px">soon</sup></a>
-                        <a class="category-tag animation-t2" data-icon="📊" href="coming-soon.html"><span>Dupe Dashboard</span><sup style="color:#7b61ff;font-size:0.7em;margin-left:4px">soon</sup></a>
+                        <a class="category-tag animation-t2" data-icon="📋" href="coming-soon.html"><span>Toolkit Overview</span><sup class="badge-soon">soon</sup></a>
+                        <a class="category-tag animation-t2" data-icon="🧭" href="coming-soon.html"><span>Plan Viewer</span><sup class="badge-soon">soon</sup></a>
+                        <a class="category-tag animation-t2" data-icon="🧩" href="coming-soon.html"><span>D3.js Charts</span><sup class="badge-soon">soon</sup></a>
+                        <a class="category-tag animation-t2" data-icon="📊" href="coming-soon.html"><span>Dupe Dashboard</span><sup class="badge-soon">soon</sup></a>
                     </div>
                 </div>
             </div>
@@ -544,10 +521,10 @@ button, a, input, select, textarea, [role="button"] {
                     <h3 class="category-title">15+ MCP Tools via /tools Endpoint</h3>
                     <p class="category-description">cortex_process_request, cortex_lens_analyze, cortex_challenge, cortex_total_recall, cortex_git_history, cortex_ast_analyze, cortex_detect_duplicates, cortex_tools_catalog, and more.</p>
                     <div class="category-tags">
-                        <a class="category-tag animation-t2" data-icon="🎯" href="coming-soon.html"><span>process_request</span><sup style="color:#7b61ff;font-size:0.7em;margin-left:4px">soon</sup></a>
-                        <a class="category-tag animation-t2" data-icon="🔍" href="coming-soon.html"><span>lens_analyze</span><sup style="color:#7b61ff;font-size:0.7em;margin-left:4px">soon</sup></a>
-                        <a class="category-tag animation-t2" data-icon="⚔️" href="coming-soon.html"><span>challenge</span><sup style="color:#7b61ff;font-size:0.7em;margin-left:4px">soon</sup></a>
-                        <a class="category-tag animation-t2" data-icon="📚" href="coming-soon.html"><span>All Tools</span><sup style="color:#7b61ff;font-size:0.7em;margin-left:4px">soon</sup></a>
+                        <a class="category-tag animation-t2" data-icon="🎯" href="coming-soon.html"><span>process_request</span><sup class="badge-soon">soon</sup></a>
+                        <a class="category-tag animation-t2" data-icon="🔍" href="coming-soon.html"><span>lens_analyze</span><sup class="badge-soon">soon</sup></a>
+                        <a class="category-tag animation-t2" data-icon="⚔️" href="coming-soon.html"><span>challenge</span><sup class="badge-soon">soon</sup></a>
+                        <a class="category-tag animation-t2" data-icon="📚" href="coming-soon.html"><span>All Tools</span><sup class="badge-soon">soon</sup></a>
                     </div>
                 </div>
             </div>
@@ -555,7 +532,10 @@ button, a, input, select, textarea, [role="button"] {
     </div>
 </section>
 </div>
-<section class="hero level0-hero-section" id="main-content">
+
+<!-- Hero Section as Site Header (Semantic HTML5) -->
+<header role="banner" class="site-header">
+<section class="hero level0-hero-section" id="hero-section">
 <div class="logo-container animation-t3">
 <img alt="CORTEX Logo" class="hero-logo" loading="eager" fetchpriority="high" height="500" id="heroLogo" src="assets/images/CORTEX-logo-512.png" width="500"/>
 </div>
@@ -569,14 +549,14 @@ button, a, input, select, textarea, [role="button"] {
 </p>
 <!-- Two-Panel Layout: What Is CORTEX + Vision -->
 <div class="level0-container">
-<div class="feature-grid-2 level0-feature-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; align-items: stretch;">
+<div class="feature-grid-2 level0-feature-grid">
 <!-- Left Panel: What Is CORTEX? -->
-<article class="glass-card-clickable level0-content-card animation-t3" style="display: flex; flex-direction: column; min-height: 420px;">
+<article class="glass-card-clickable level0-content-card animation-t3 flex-column">
 <div class="level0-card-header">
 <span class="level0-card-icon">🧠</span>
 <h2 class="level0-card-title">What is CORTEX?</h2>
 </div>
-<div style="flex: 1; position: relative; z-index: 2;">
+<div class="flex-1 z-layer-2">
 <p class="level0-card-text">
                         CORTEX is an <strong>MCP-first enterprise orchestration system</strong> that transforms Copilot into a governed, auditable execution engine. 
                         <strong>23 wired orchestrators</strong> enforce standards via a <strong>GitBackedRegistry</strong> that routes every request through 
@@ -593,12 +573,12 @@ button, a, input, select, textarea, [role="button"] {
 </div>
 </article>
 <!-- Right Panel: The CORTEX Vision -->
-<article class="glass-card-clickable level0-content-card level0-card-text--secondary animation-t3" style="display: flex; flex-direction: column; min-height: 420px;">
+<article class="glass-card-clickable level0-content-card level0-card-text--secondary animation-t3 flex-column">
 <div class="level0-card-header">
 <span class="level0-card-icon">🚀</span>
 <h2 class="level0-card-title level0-card-title--secondary">The CORTEX Vision</h2>
 </div>
-<div style="flex: 1; position: relative; z-index: 2;">
+<div class="flex-1 z-layer-2">
 <p class="level0-card-text level0-card-text--secondary">
                         Shift engineering from manual mechanics to <strong>governed, autonomous execution</strong>. CORTEX standardizes how work flows:
                         <em>Request → LENS → DoR Gate → MasterOrchestrator → Evidence Bundle</em>, with audit at each step.
@@ -615,13 +595,17 @@ button, a, input, select, textarea, [role="button"] {
 </article>
 </div>
 </div>
+</section>
+<!-- End Hero/Header Section -->
+</header>
+
 <!-- Persona Tiles -->
 <div class="persona-tiles-container">
 <div class="glass-card-clickable persona-tile persona-tile-leadership">
-<div class="persona-icon" style="position: relative; z-index: 2;">👔</div>
-<h3 class="persona-title" style="position: relative; z-index: 2;">Business Leadership</h3>
-<p class="persona-tagline" style="position: relative; z-index: 2;">Ship Faster, Ship Better</p>
-<ul class="persona-benefits" style="position: relative; z-index: 2;">
+<div class="persona-icon z-layer-2">👔</div>
+<h3 class="persona-title z-layer-2">Business Leadership</h3>
+<p class="persona-tagline z-layer-2">Ship Faster, Ship Better</p>
+<ul class="persona-benefits z-layer-2">
 <li>97% token reduction → $8.6K annual savings</li>
 <li>4-tier governance with hash-chain audit trail</li>
 <li>Prometheus metrics for delivery velocity</li>
@@ -629,10 +613,10 @@ button, a, input, select, textarea, [role="button"] {
 </ul>
 </div>
 <div class="glass-card-clickable persona-tile persona-tile-product">
-<div class="persona-icon" style="position: relative; z-index: 2;">📋</div>
-<h3 class="persona-title" style="position: relative; z-index: 2;">Product Owners</h3>
-<p class="persona-tagline" style="position: relative; z-index: 2;">From Backlog to Done</p>
-<ul class="persona-benefits" style="position: relative; z-index: 2;">
+<div class="persona-icon z-layer-2">📋</div>
+<h3 class="persona-title z-layer-2">Product Owners</h3>
+<p class="persona-tagline z-layer-2">From Backlog to Done</p>
+<ul class="persona-benefits z-layer-2">
 <li>DoR/DoD validation gates at every step</li>
 <li>Azure DevOps integration with work items sync</li>
 <li>Evidence Bundles proving feature completion</li>
@@ -640,10 +624,10 @@ button, a, input, select, textarea, [role="button"] {
 </ul>
 </div>
 <div class="glass-card-clickable persona-tile persona-tile-engineer">
-<div class="persona-icon" style="position: relative; z-index: 2;">💻</div>
-<h3 class="persona-title" style="position: relative; z-index: 2;">Software Engineers</h3>
-<p class="persona-tagline" style="position: relative; z-index: 2;">Your AI Pair Programmer</p>
-<ul class="persona-benefits" style="position: relative; z-index: 2;">
+<div class="persona-icon z-layer-2">💻</div>
+<h3 class="persona-title z-layer-2">Software Engineers</h3>
+<p class="persona-tagline z-layer-2">Your AI Pair Programmer</p>
+<ul class="persona-benefits z-layer-2">
 <li>Automated TDD with RED→GREEN→REFACTOR gates</li>
 <li>CORTEX LENS: AST + Git + 6 CWE pattern detection</li>
 <li>23 orchestrators via 15+ MCP tools</li>
@@ -682,84 +666,84 @@ button, a, input, select, textarea, [role="button"] {
 </div>
 </div>
 <!-- Two Side-by-Side Achievement Panels -->
-<div class="bwc-dual-panels" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; align-items: stretch;">
+<div class="bwc-dual-panels">
 <!-- Panel 1: CORTEX Codebase Built by CORTEX -->
-<div class="bwc-achievement-panel" style="display: flex; flex-direction: column; height: 100%;">
+<div class="bwc-achievement-panel flex-column-stretch">
 <div class="bwc-panel-scan-line"></div>
-<div class="bwc-panel-header" style="justify-content: center; text-align: center;">
+<div class="bwc-panel-header">
 <span class="bwc-panel-icon"><i class="fas fa-code-branch pulse-glow-glass--fast"></i></span>
 <h4 class="bwc-panel-title">The CORTEX Platform</h4>
 </div>
-<p class="bwc-panel-subtitle" style="text-align: center;">Built by CORTEX</p>
-<p class="bwc-panel-description" style="flex: 1; text-align: justify;">
+<p class="bwc-panel-subtitle text-center">Built by CORTEX</p>
+<p class="bwc-panel-description flex-1 text-justify">
                                 The entire CORTEX platform was built using its own intelligent automation. Every feature goes through <strong>quality gates</strong> that verify tests pass, standards are met, and documentation exists. Nothing ships without <strong>proof of completion</strong>—automated checks ensure every release is production-ready.
                             </p>
-<div class="bwc-panel-stats" style="margin-top: auto;">
-<div class="bwc-mini-stat" style="border: 1px solid rgba(0, 200, 255, 0.3); border-radius: 8px; padding: 0.75rem;">
+<div class="bwc-panel-stats margin-top-auto">
+<div class="bwc-mini-stat">
 <span class="bwc-mini-value">60+</span>
 <span class="bwc-mini-label">Components</span>
 </div>
-<div class="bwc-mini-stat" style="border: 1px solid rgba(0, 200, 255, 0.3); border-radius: 8px; padding: 0.75rem;">
+<div class="bwc-mini-stat">
 <span class="bwc-mini-value">23</span>
 <span class="bwc-mini-label">AI Agents</span>
 </div>
-<div class="bwc-mini-stat" style="border: 1px solid rgba(0, 200, 255, 0.3); border-radius: 8px; padding: 0.75rem;">
+<div class="bwc-mini-stat">
 <span class="bwc-mini-value">15+</span>
 <span class="bwc-mini-label">Capabilities</span>
 </div>
 </div>
 </div>
 <!-- Panel 2: Documentation Site Built by CORTEX -->
-<div class="bwc-achievement-panel bwc-achievement-panel-secondary" style="display: flex; flex-direction: column; height: 100%;">
+<div class="bwc-achievement-panel bwc-achievement-panel-secondary flex-column-stretch">
 <div class="bwc-panel-scan-line bwc-panel-scan-line-secondary"></div>
-<div class="bwc-panel-header" style="justify-content: center; text-align: center;">
+<div class="bwc-panel-header">
 <span class="bwc-panel-icon"><i class="fas fa-globe pulse-glow-glass--fast"></i></span>
 <h4 class="bwc-panel-title">Documentation Site</h4>
 </div>
-<p class="bwc-panel-subtitle" style="text-align: center;">Designed by CORTEX</p>
-<p class="bwc-panel-description" style="flex: 1; text-align: justify;">
+<p class="bwc-panel-subtitle text-center">Designed by CORTEX</p>
+<p class="bwc-panel-description flex-1 text-justify">
                                 This website was created entirely by CORTEX using its own toolkit. Modern glass-style design, interactive diagrams, and organized navigation—all generated automatically. Every page follows the same <strong>quality standards</strong>, ensuring a consistent, professional, impressive experience.
                             </p>
-<div class="bwc-panel-stats" style="margin-top: auto;">
-<div class="bwc-mini-stat" style="border: 1px solid rgba(138, 43, 226, 0.3); border-radius: 8px; padding: 0.75rem;">
+<div class="bwc-panel-stats margin-top-auto">
+<div class="bwc-mini-stat">
 <span class="bwc-mini-value">40+</span>
 <span class="bwc-mini-label">Pages</span>
 </div>
-<div class="bwc-mini-stat" style="border: 1px solid rgba(138, 43, 226, 0.3); border-radius: 8px; padding: 0.75rem;">
+<div class="bwc-mini-stat">
 <span class="bwc-mini-value">20+</span>
 <span class="bwc-mini-label">Diagrams</span>
 </div>
-<div class="bwc-mini-stat" style="border: 1px solid rgba(138, 43, 226, 0.3); border-radius: 8px; padding: 0.75rem;">
+<div class="bwc-mini-stat">
 <span class="bwc-mini-value">100%</span>
 <span class="bwc-mini-label">AI Generated</span>
 </div>
 </div>
 </div>
 </div>
-<div class="bwc-stats" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; align-items: stretch;">
-<div class="bwc-stat" data-stat="pages" style="display: flex; flex-direction: column; height: 100%; min-height: 180px;">
+<div class="bwc-stats">
+<div class="bwc-stat" data-stat="pages" class="flex-column bwc-stat">
 <div class="bwc-stat-icon"><i class="fas fa-file-code pulse-glow-glass--fast"></i></div>
 <div class="bwc-stat-value" data-value="40">40+</div>
 <div class="bwc-stat-label">Pages Created</div>
-<div class="bwc-stat-bar" style="margin-top: auto;"><div class="bwc-stat-fill level0-stat-fill" data-fill="90"></div></div>
+<div class="bwc-stat-bar margin-top-auto"><div class="bwc-stat-fill level0-stat-fill" data-fill="90"></div></div>
 </div>
-<div class="bwc-stat" data-stat="diagrams" style="display: flex; flex-direction: column; height: 100%; min-height: 180px;">
+<div class="bwc-stat" data-stat="diagrams" class="flex-column bwc-stat">
 <div class="bwc-stat-icon"><i class="fas fa-project-diagram pulse-glow-glass--fast"></i></div>
 <div class="bwc-stat-value" data-value="20">20+</div>
 <div class="bwc-stat-label">Interactive Diagrams</div>
-<div class="bwc-stat-bar" style="margin-top: auto;"><div class="bwc-stat-fill level0-stat-fill" data-fill="75"></div></div>
+<div class="bwc-stat-bar margin-top-auto"><div class="bwc-stat-fill level0-stat-fill" data-fill="75"></div></div>
 </div>
-<div class="bwc-stat" data-stat="orchestrators" style="display: flex; flex-direction: column; height: 100%; min-height: 180px;">
+<div class="bwc-stat" data-stat="orchestrators" class="flex-column bwc-stat">
 <div class="bwc-stat-icon"><i class="fas fa-network-wired pulse-glow-glass--fast"></i></div>
 <div class="bwc-stat-value" data-value="23">23</div>
 <div class="bwc-stat-label">AI Agents</div>
-<div class="bwc-stat-bar" style="margin-top: auto;"><div class="bwc-stat-fill level0-stat-fill" data-fill="100"></div></div>
+<div class="bwc-stat-bar margin-top-auto"><div class="bwc-stat-fill level0-stat-fill" data-fill="100"></div></div>
 </div>
-<div class="bwc-stat" data-stat="mcp" style="display: flex; flex-direction: column; height: 100%; min-height: 180px;">
+<div class="bwc-stat" data-stat="mcp" class="flex-column bwc-stat">
 <div class="bwc-stat-icon"><i class="fas fa-plug pulse-glow-glass--fast"></i></div>
 <div class="bwc-stat-value" data-value="15">15+</div>
 <div class="bwc-stat-label">Capabilities</div>
-<div class="bwc-stat-bar" style="margin-top: auto;"><div class="bwc-stat-fill level0-stat-fill" data-fill="85"></div></div>
+<div class="bwc-stat-bar margin-top-auto"><div class="bwc-stat-fill level0-stat-fill" data-fill="85"></div></div>
 </div>
 </div>
 </div>
@@ -775,17 +759,17 @@ button, a, input, select, textarea, [role="button"] {
 <div class="hero-cta-grid">
 <a class="btn-hero btn-hero-warning animation-t2" href="coming-soon.html">
 <span class="btn-hero-icon">🚀</span>
-<span class="btn-hero-text">Get Started <sup style="color:#7b61ff;font-size:0.6em">SOON</sup></span>
+<span class="btn-hero-text">Get Started <sup class="badge-soon-small">SOON</sup></span>
 <span class="btn-hero-caption">5-Minute Setup • MCP Configuration</span>
 </a>
 <a class="btn-hero btn-hero-primary animation-t2" href="coming-soon.html">
 <span class="btn-hero-icon">🧠</span>
-<span class="btn-hero-text">Architecture <sup style="color:#7b61ff;font-size:0.6em">SOON</sup></span>
+<span class="btn-hero-text">Architecture <sup class="badge-soon-small">SOON</sup></span>
 <span class="btn-hero-caption">4-Tier Brain • GitBackedRegistry • MCP-First</span>
 </a>
 <a class="btn-hero btn-hero-knowledge animation-t2" href="coming-soon.html">
 <span class="btn-hero-icon">📚</span>
-<span class="btn-hero-text">Knowledge Base <sup style="color:#7b61ff;font-size:0.6em">SOON</sup></span>
+<span class="btn-hero-text">Knowledge Base <sup class="badge-soon-small">SOON</sup></span>
 <span class="btn-hero-caption">45+ Knowledge YAMLs • Industry Standards</span>
 </a>
 <a class="btn-hero btn-hero-primary animation-t2" href="11-mcp-tools/index.html">
@@ -805,22 +789,22 @@ button, a, input, select, textarea, [role="button"] {
 </a>
 <a class="btn-hero btn-hero-primary animation-t2" href="coming-soon.html">
 <span class="btn-hero-icon">💰</span>
-<span class="btn-hero-text">Token Optimization <sup style="color:#7b61ff;font-size:0.6em">SOON</sup></span>
+<span class="btn-hero-text">Token Optimization <sup class="badge-soon-small">SOON</sup></span>
 <span class="btn-hero-caption">97% Reduction • $8.6K Annual Savings</span>
 </a>
 <a class="btn-hero btn-hero-primary animation-t2" href="coming-soon.html">
 <span class="btn-hero-icon">🛠️</span>
-<span class="btn-hero-text">CORTEX TOOLKIT <sup style="color:#7b61ff;font-size:0.6em">SOON</sup></span>
+<span class="btn-hero-text">CORTEX TOOLKIT <sup class="badge-soon-small">SOON</sup></span>
 <span class="btn-hero-caption">HTML View Generators • MCP Server</span>
 </a>
 <a class="btn-hero btn-hero-knowledge animation-t2" href="coming-soon.html">
 <span class="btn-hero-icon">🎓</span>
-<span class="btn-hero-text">Learning Paths <sup style="color:#7b61ff;font-size:0.6em">SOON</sup></span>
+<span class="btn-hero-text">Learning Paths <sup class="badge-soon-small">SOON</sup></span>
 <span class="btn-hero-caption">Interactive Journeys • Code Playgrounds</span>
 </a>
 <a class="btn-hero btn-hero-warning animation-t2" href="coming-soon.html">
 <span class="btn-hero-icon">🛡️</span>
-<span class="btn-hero-text">Security First <sup style="color:#7b61ff;font-size:0.6em">SOON</sup></span>
+<span class="btn-hero-text">Security First <sup class="badge-soon-small">SOON</sup></span>
 <span class="btn-hero-caption">OWASP Top 10 • 6 CWE Patterns • STRIDE Modeling</span>
 </a>
 </div>
@@ -828,7 +812,7 @@ button, a, input, select, textarea, [role="button"] {
 </div>
 <!-- Orchestrators Panel (Card Grid) -->
 <section class="key-features-section" id="orchestrators-panel">
-    <div class="main-panel-wrapper animation-t3" style="padding-bottom: 0;">
+    <div class="main-panel-wrapper animation-t3 main-panel-wrapper-no-padding">
         <div class="panel-header-centered">
             <h2 class="panel-title-main">
                 <span>🎯</span>
@@ -837,47 +821,47 @@ button, a, input, select, textarea, [role="button"] {
             <p class="panel-subtitle-main">7 Core • 6 Domain • 11 Support — All wired via GitBackedRegistry with health checks</p>
         </div>
         <!-- Orchestrator Cards Grid - 3 Column -->
-        <div class="orchestrator-cards-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; align-items: stretch;">
+        <div class="orchestrator-cards-grid">
             <!-- Core Orchestrators Card -->
-            <div class="glass-card-clickable orchestrator-card planning-card animation-t1 orch-category-core" style="display: flex; flex-direction: column; height: 100%; padding-bottom: 1rem;">
-                <div class="card-header" style="position: relative; z-index: 2;">
+            <div class="glass-card-clickable orchestrator-card planning-card animation-t1 orch-category-core">
+                <div class="card-header z-layer-2">
                     <div class="card-icon">🧠</div>
                     <h3 class="card-title">Core (7)</h3>
                 </div>
-                <p class="card-description" style="flex: 1; margin-bottom: 0.5rem; position: relative; z-index: 2;">MasterOrchestrator coordination, InteractionOrchestrator for LENS, IntentRouter for classification, TDDOrchestrator, WorkflowOrchestrator, LENSSynthesis, EnforcementOrchestrator.</p>
-                <div class="category-tags" style="margin-top: auto; padding-bottom: 0; position: relative; z-index: 2;">
-                    <a class="category-tag animation-t2" data-icon="🎯" href="coming-soon.html"><span>Master</span><sup style="color:#7b61ff;font-size:0.7em;margin-left:4px">soon</sup></a>
-                    <a class="category-tag animation-t2" data-icon="🔍" href="coming-soon.html"><span>LENS</span><sup style="color:#7b61ff;font-size:0.7em;margin-left:4px">soon</sup></a>
-                    <a class="category-tag animation-t2" data-icon="✅" href="coming-soon.html"><span>TDD</span><sup style="color:#7b61ff;font-size:0.7em;margin-left:4px">soon</sup></a>
-                    <a class="category-tag animation-t2" data-icon="🛡️" href="coming-soon.html"><span>Enforce</span><sup style="color:#7b61ff;font-size:0.7em;margin-left:4px">soon</sup></a>
+                <p class="card-description flex-1 z-layer-2">MasterOrchestrator coordination, InteractionOrchestrator for LENS, IntentRouter for classification, TDDOrchestrator, WorkflowOrchestrator, LENSSynthesis, EnforcementOrchestrator.</p>
+                <div class="category-tags z-layer-2">
+                    <a class="category-tag animation-t2" data-icon="🎯" href="coming-soon.html"><span>Master</span><sup class="badge-soon">soon</sup></a>
+                    <a class="category-tag animation-t2" data-icon="🔍" href="coming-soon.html"><span>LENS</span><sup class="badge-soon">soon</sup></a>
+                    <a class="category-tag animation-t2" data-icon="✅" href="coming-soon.html"><span>TDD</span><sup class="badge-soon">soon</sup></a>
+                    <a class="category-tag animation-t2" data-icon="🛡️" href="coming-soon.html"><span>Enforce</span><sup class="badge-soon">soon</sup></a>
                 </div>
             </div>
             <!-- Domain Orchestrators Card -->
-            <div class="glass-card-clickable orchestrator-card execution-card animation-t2 orch-category-domain" style="display: flex; flex-direction: column; height: 100%; padding-bottom: 1rem;">
-                <div class="card-header" style="position: relative; z-index: 2;">
+            <div class="glass-card-clickable orchestrator-card execution-card animation-t2 orch-category-domain">
+                <div class="card-header z-layer-2">
                     <div class="card-icon">⚙️</div>
                     <h3 class="card-title">Domain (6)</h3>
                 </div>
-                <p class="card-description" style="flex: 1; margin-bottom: 0.5rem; position: relative; z-index: 2;">RefactoringOrchestrator for code improvement, PlanningOrchestrator for DoR/DoD, DocumentationOrchestrator, ConversationOrchestrator, DomainOrchestrator, ChallengeEngine.</p>
-                <div class="category-tags" style="margin-top: auto; padding-bottom: 0; position: relative; z-index: 2;">
-                    <a class="category-tag animation-t2" data-icon="✨" href="coming-soon.html"><span>Refactor</span><sup style="color:#7b61ff;font-size:0.7em;margin-left:4px">soon</sup></a>
-                    <a class="category-tag animation-t2" data-icon="📋" href="coming-soon.html"><span>Planning</span><sup style="color:#7b61ff;font-size:0.7em;margin-left:4px">soon</sup></a>
-                    <a class="category-tag animation-t2" data-icon="📚" href="coming-soon.html"><span>Docs</span><sup style="color:#7b61ff;font-size:0.7em;margin-left:4px">soon</sup></a>
-                    <a class="category-tag animation-t2" data-icon="⚔️" href="coming-soon.html"><span>Challenge</span><sup style="color:#7b61ff;font-size:0.7em;margin-left:4px">soon</sup></a>
+                <p class="card-description flex-1 z-layer-2">RefactoringOrchestrator for code improvement, PlanningOrchestrator for DoR/DoD, DocumentationOrchestrator, ConversationOrchestrator, DomainOrchestrator, ChallengeEngine.</p>
+                <div class="category-tags z-layer-2">
+                    <a class="category-tag animation-t2" data-icon="✨" href="coming-soon.html"><span>Refactor</span><sup class="badge-soon">soon</sup></a>
+                    <a class="category-tag animation-t2" data-icon="📋" href="coming-soon.html"><span>Planning</span><sup class="badge-soon">soon</sup></a>
+                    <a class="category-tag animation-t2" data-icon="📚" href="coming-soon.html"><span>Docs</span><sup class="badge-soon">soon</sup></a>
+                    <a class="category-tag animation-t2" data-icon="⚔️" href="coming-soon.html"><span>Challenge</span><sup class="badge-soon">soon</sup></a>
                 </div>
             </div>
             <!-- Support Orchestrators Card -->
-            <div class="glass-card-clickable orchestrator-card system-card animation-t3 orch-category-support" style="display: flex; flex-direction: column; height: 100%; padding-bottom: 1rem;">
-                <div class="card-header" style="position: relative; z-index: 2;">
+            <div class="glass-card-clickable orchestrator-card system-card animation-t3 orch-category-support">
+                <div class="card-header z-layer-2">
                     <div class="card-icon">🔧</div>
                     <h3 class="card-title">Support (11)</h3>
                 </div>
-                <p class="card-description" style="flex: 1; margin-bottom: 0.5rem; position: relative; z-index: 2;">OnboardingOrchestrator, ToolDiscoveryOrchestrator, DuplicationDetector, GitHistoryAnalyzer, ASTAnalyzer, CommentExtractor, RecommendationEngine, and GitBackedRegistry wiring.</p>
-                <div class="category-tags" style="margin-top: auto; padding-bottom: 0; position: relative; z-index: 2;">
-                    <a class="category-tag animation-t2" data-icon="🎓" href="coming-soon.html"><span>Onboard</span><sup style="color:#7b61ff;font-size:0.7em;margin-left:4px">soon</sup></a>
-                    <a class="category-tag animation-t2" data-icon="🔍" href="coming-soon.html"><span>Tools</span><sup style="color:#7b61ff;font-size:0.7em;margin-left:4px">soon</sup></a>
-                    <a class="category-tag animation-t2" data-icon="📊" href="coming-soon.html"><span>Dupe</span><sup style="color:#7b61ff;font-size:0.7em;margin-left:4px">soon</sup></a>
-                    <a class="category-tag animation-t2" data-icon="⚙️" href="coming-soon.html"><span>Wiring</span><sup style="color:#7b61ff;font-size:0.7em;margin-left:4px">soon</sup></a>
+                <p class="card-description flex-1 z-layer-2">OnboardingOrchestrator, ToolDiscoveryOrchestrator, DuplicationDetector, GitHistoryAnalyzer, ASTAnalyzer, CommentExtractor, RecommendationEngine, and GitBackedRegistry wiring.</p>
+                <div class="category-tags z-layer-2">
+                    <a class="category-tag animation-t2" data-icon="🎓" href="coming-soon.html"><span>Onboard</span><sup class="badge-soon">soon</sup></a>
+                    <a class="category-tag animation-t2" data-icon="🔍" href="coming-soon.html"><span>Tools</span><sup class="badge-soon">soon</sup></a>
+                    <a class="category-tag animation-t2" data-icon="📊" href="coming-soon.html"><span>Dupe</span><sup class="badge-soon">soon</sup></a>
+                    <a class="category-tag animation-t2" data-icon="⚙️" href="coming-soon.html"><span>Wiring</span><sup class="badge-soon">soon</sup></a>
                 </div>
             </div>
         </div>
@@ -885,7 +869,7 @@ button, a, input, select, textarea, [role="button"] {
 </section>
 <!-- Sharpen The Saw Panel (Single Unified Panel) -->
 <section class="key-features-section" id="sts-panel">
-<div class="main-panel-wrapper animation-t3" style="padding-bottom: 0;">
+<div class="main-panel-wrapper animation-t3 main-panel-wrapper-no-padding">
 <div class="panel-header-centered">
 <h2 class="panel-title-main">
 <span>🔧</span>
@@ -894,55 +878,55 @@ button, a, input, select, textarea, [role="button"] {
 <p class="panel-subtitle-main">Continuous improvement through 45+ knowledge YAMLs, SOLID principles, and industry standards</p>
 </div>
 <!-- Single Unified STS Panel - 3 Column -->
-<div class="sts-unified-panel" style="padding-bottom: 0;">
-<div class="sts-categories-row" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; align-items: stretch;">
+<div class="sts-unified-panel main-panel-wrapper-no-padding">
+<div class="sts-categories-row">
 <!-- Security -->
-<div class="sts-category-item animation-t1" style="display: flex; flex-direction: column; align-items: center; height: 100%; padding-bottom: 0.5rem;">
+<div class="sts-category-item animation-t1 flex-column">
 <div class="sts-category-icon-wrapper">
 <span class="sts-category-icon">🛡️</span>
 </div>
 <h3 class="sts-category-title">Security</h3>
-<a class="sts-category-link animation-t2" href="coming-soon.html" style="margin-top: auto;">OWASP + CWE <sup style="color:#7b61ff;font-size:0.7em;margin-left:4px">soon</sup></a>
+<a class="sts-category-link animation-t2" href="coming-soon.html" class="margin-top-auto">OWASP + CWE <sup class="badge-soon">soon</sup></a>
 </div>
 <!-- SOLID -->
-<div class="sts-category-item animation-t1" style="display: flex; flex-direction: column; align-items: center; height: 100%; padding-bottom: 0.5rem;">
+<div class="sts-category-item animation-t1 flex-column">
 <div class="sts-category-icon-wrapper">
 <span class="sts-category-icon">🏛️</span>
 </div>
 <h3 class="sts-category-title">SOLID</h3>
-<a class="sts-category-link animation-t2" href="sts/solid.html" style="margin-top: auto;">5 Principles</a>
+<a class="sts-category-link animation-t2" href="sts/solid.html" class="margin-top-auto">5 Principles</a>
 </div>
 <!-- Clean Code -->
-<div class="sts-category-item animation-t1" style="display: flex; flex-direction: column; align-items: center; height: 100%; padding-bottom: 0.5rem;">
+<div class="sts-category-item animation-t1 flex-column">
 <div class="sts-category-icon-wrapper">
 <span class="sts-category-icon">✨</span>
 </div>
 <h3 class="sts-category-title">Clean Code</h3>
-<a class="sts-category-link animation-t2" href="sts/code-quality.html" style="margin-top: auto;">Best Practices</a>
+<a class="sts-category-link animation-t2" href="sts/code-quality.html" class="margin-top-auto">Best Practices</a>
 </div>
 <!-- 12-Factor -->
-<div class="sts-category-item animation-t1" style="display: flex; flex-direction: column; align-items: center; height: 100%; padding-bottom: 0.5rem;">
+<div class="sts-category-item animation-t1 flex-column">
 <div class="sts-category-icon-wrapper">
 <span class="sts-category-icon">⚡</span>
 </div>
 <h3 class="sts-category-title">12-Factor</h3>
-<a class="sts-category-link animation-t2" href="sts/performance.html" style="margin-top: auto;">Cloud-Native</a>
+<a class="sts-category-link animation-t2" href="sts/performance.html" class="margin-top-auto">Cloud-Native</a>
 </div>
 <!-- Testing -->
-<div class="sts-category-item animation-t1" style="display: flex; flex-direction: column; align-items: center; height: 100%; padding-bottom: 0.5rem;">
+<div class="sts-category-item animation-t1 flex-column">
 <div class="sts-category-icon-wrapper">
 <span class="sts-category-icon">🧪</span>
 </div>
 <h3 class="sts-category-title">Testing</h3>
-<a class="sts-category-link animation-t2" href="sts/testing.html" style="margin-top: auto;">TDD + Coverage</a>
+<a class="sts-category-link animation-t2" href="sts/testing.html" class="margin-top-auto">TDD + Coverage</a>
 </div>
 <!-- Documentation -->
-<div class="sts-category-item animation-t1" style="display: flex; flex-direction: column; align-items: center; height: 100%; padding-bottom: 0.5rem;">
+<div class="sts-category-item animation-t1 flex-column">
 <div class="sts-category-icon-wrapper">
 <span class="sts-category-icon">📚</span>
 </div>
 <h3 class="sts-category-title">Documentation</h3>
-<a class="sts-category-link animation-t2" href="sts/documentation.html" style="margin-top: auto;">ADR + Docs</a>
+<a class="sts-category-link animation-t2" href="sts/documentation.html" class="margin-top-auto">ADR + Docs</a>
 </div>
 </div>
 </div>
@@ -1037,16 +1021,16 @@ button, a, input, select, textarea, [role="button"] {
 <div class="demo-video-area">
 <div aria-labelledby="e2e" class="demo-tab-panel active" id="tab-e2e" role="tabpanel">
 <div class="demo-video-wrapper demo-placeholder">
-<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 400px; background: var(--glass-bg-base); border-radius: 12px; border: 1px solid var(--glass-border-subtle); padding: 2rem;">
-<svg style="width: 64px; height: 64px; color: var(--accent-cyan); margin-bottom: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<div class="e2e-demo-placeholder">
+<svg class="e2e-demo-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
 </svg>
-<h3 style="color: var(--text-primary); margin: 0 0 0.5rem 0; font-size: 1.25rem;">E2E Execution Demo</h3>
-<p style="color: var(--text-secondary); margin: 0 0 1rem 0; text-align: center; max-width: 400px;">
+<h3 class="e2e-demo-title">E2E Execution Demo</h3>
+<p class="e2e-demo-description">
 Watch CORTEX orchestrate end-to-end development workflows with intelligent automation.
 </p>
-<p style="color: var(--text-muted); font-size: 0.875rem; font-style: italic;">
+<p class="e2e-demo-note">
 📹 Video coming soon • Export from Cortex Intoduction.mepj
 </p>
 </div>
@@ -1083,6 +1067,22 @@ Watch CORTEX orchestrate end-to-end development workflows with intelligent autom
 </div>
 </div>
 </div>
+</main>
+<!-- End Main Content -->
+
+<!-- Footer with Page Metadata (Semantic HTML5) -->
+<footer role="contentinfo" class="page-footer">
+  <div class="footer-content">
+    <p class="footer-text">
+      <span class="footer-brand">CORTEX</span> — <em>MCP-First Development Intelligence</em>
+    </p>
+    <p class="footer-meta">
+      Built with <span aria-label="accessibility">♿</span> WCAG 2.1 Level AA compliance |
+      Performance optimized | 
+      <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </p>
+  </div>
+</footer>
 
 <!-- External JavaScript for Performance -->
 <script src="assets/js/index.js" defer></script>

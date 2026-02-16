@@ -6,10 +6,10 @@
 ## 🎯 Primary Responsibility
 
 **CORTEX Vacuum** is a specialized support agent for:
-- Detecting markdown sprawl (files outside docs/.github)
+- Detecting markdown sprawl (files outside cortex-docs/.github)
 - Safe archival of old reports, summaries, completion documents
 - Root folder cleanup (removing transient artifacts)
-- Maintaining CORE-002 compliance (no markdown generation outside docs/)
+- Maintaining CORE-002 compliance (no markdown generation outside cortex-docs/)
 
 ---
 
@@ -21,15 +21,20 @@
 
 | Location | Pattern | Action |
 |----------|---------|--------|
-| Root | `PHASE-*.md`, `*-SUMMARY.md`, `*-REPORT.md`, `*-PROGRESS.md` | Archive → `docs/archive/phases/` |
-| `tests/` | `*.md` (except test docstrings) | Archive → `docs/archive/testing/` |
+| Root | `PHASE-*.md`, `*-SUMMARY.md`, `*-REPORT.md`, `*-PROGRESS.md` | Archive → `cortex-docs/archive/phases/` |
+| `tests/` | `*.md` (except test docstrings) | Archive → `cortex-docs/archive/testing/` |
 | `_workspaces/` | `*.md` | Review → Archive outdated |
 | `company/_archive/` | All contents | Low priority (already archived) |
 
 **Exempt from Cleanup:**
 - `README.md` (root and subdirectories)
-- `docs/**/*.md` (canonical documentation)
 - `.github/**/*.md` (GitHub config, agents, prompts)
+
+**Special Rules for cortex-docs/:**
+- **ALLOWED:** HTML files, static assets (CSS/JS/images), config files (.nojekyll, robots.txt, .bat)
+- **FORBIDDEN:** Completion reports, phase plans, transient markdown (*.md files except structured docs)
+- **ACTION:** Move misplaced .md files → `cortex-docs/archive/` or delete if ephemeral
+- **RATIONALE:** cortex-docs/ is for published documentation only, not working artifacts
 
 ### Root Folder Artifacts
 
@@ -50,18 +55,19 @@
 
 ```yaml
 Steps:
-  1. Scan: Identify markdown files outside docs/.github
+  1. Scan: Identify markdown files outside cortex-docs/.github
   2. Classify: Categorize by type (phase, report, summary, test)
   3. Review: Check last modified date (>30 days = archive candidate)
-  4. Archive: Move to appropriate docs/archive/ subdirectory
+  4. Archive: Move to appropriate cortex-docs/archive/ subdirectory
   5. Verify: Confirm no broken links in remaining docs
   6. Report: Generate cleanup summary
+  7. Validate cortex-docs/: Ensure only HTML/CSS/JS/config files (no transient .md)
 ```
 
 ### Archive Directory Structure
 
 ```
-docs/archive/
+cortex-docs/archive/
 ├── phases/              # Phase completion reports (PHASE-*.md)
 ├── testing/             # Test documentation (tests/**/*.md)
 ├── workspaces/          # Old workspace planning docs
@@ -107,7 +113,7 @@ User: "clean up markdown sprawl"
 - ✅ Root folder: Only README.md, essential config files
 - ✅ `tests/`: No markdown except inline docstrings
 - ✅ `_workspaces/`: Only active workspace docs
-- ✅ All archived files in `docs/archive/` with timestamps
+- ✅ All archived files in `cortex-docs/archive/` with timestamps
 - ✅ No broken links in remaining documentation
 
 ---
@@ -116,7 +122,7 @@ User: "clean up markdown sprawl"
 
 | Component | Relationship |
 |-----------|--------------|
-| CORE-002 | Enforces "no markdown generation outside docs/" |
+| CORE-002 | Enforces "no markdown generation outside cortex-docs/" |
 | VacuumOrchestrator | Python implementation of cleanup logic |
 | cortex-architect | Calls vacuum agent for P3 cleanup tasks |
 

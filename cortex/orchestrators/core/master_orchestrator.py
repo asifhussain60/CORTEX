@@ -765,6 +765,46 @@ class MasterOrchestrator(IOrchestrator):
                 details={"error": f"Failed to initialize PlanOrchestrator: {str(e)}"}
             )
 
+        # AC-PHASE-90-STAGE-4-001: Initialize ContextAwareSynthesisGateway for unified context synthesis
+        # Phase 90: Context-Aware Synthesis Gateway (LENS + Tech Stack + YAMLs + Domain + Architecture)
+        # Provides EnrichedContext to downstream orchestrators for intelligent decision-making
+        self.synthesis_gateway: Optional['ContextAwareSynthesisGateway'] = None
+        try:
+            from cortex.orchestrators.synthesis.context_aware_synthesis import (
+                ContextAwareSynthesisGateway,
+            )
+            
+            # Initialize with workspace root
+            repo_path = Path.cwd()
+            company_path = repo_path / "company" / "domains"
+            
+            self.synthesis_gateway = ContextAwareSynthesisGateway(
+                repo_path=repo_path,
+                company_path=company_path if company_path.exists() else None
+            )
+            
+            self.logger.log_operation_complete(
+                ac_id="AC-PHASE-90-STAGE-4-001",
+                operation="SYNTHESIS_GATEWAY_INIT",
+                success=True,
+                details={
+                    "status": "ContextAwareSynthesisGateway initialized",
+                    "components": ["LENS", "TechStackAnalyzer", "YAMLResolver", "DomainKnowledge", "ArchitecturePatterns"],
+                    "target_latency": "<500ms p95",
+                    "cache_ttl": "5min",
+                    "features": ["async synthesis", "timeout fallback", "company precedence", "confidence scoring"],
+                    "routing_intent": "ALL: Provides EnrichedContext to all orchestrators"
+                }
+            )
+        except Exception as e:
+            # Log but don't fail - synthesis gateway is enhancement
+            self.logger.log_operation_complete(
+                ac_id="AC-PHASE-90-STAGE-4-001",
+                operation="SYNTHESIS_GATEWAY_INIT",
+                success=False,
+                details={"error": f"Failed to initialize ContextAwareSynthesisGateway: {str(e)}"}
+            )
+
         # AC-PHASE-34B-WEEK-3-INC-7: Initialize TechIntelligenceOrchestrator for proactive tech intelligence
         # Provides readiness scoring, ecosystem scanning, knowledge synthesis, learning triggers
         # Priority 82 (high), supports IMPLEMENT intent pre-flight checks

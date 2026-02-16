@@ -1,0 +1,357 @@
+# ============================================================================
+# Tech Stack to Knowledge YAML Mappings
+# ============================================================================
+# Authority: Phase 90 Stage 2 - Knowledge YAML Resolver
+# Purpose: Map detected tech stacks to relevant knowledge YAML files
+# Precedence: company/domains/ > cortex/knowledge/best-practices/
+# ============================================================================
+
+version: '1.0'
+updated: '2026-02-16'
+
+# ============================================================================
+# LANGUAGE MAPPINGS
+# ============================================================================
+
+languages:
+  python:
+    yamls:
+      - python.yaml
+      - pytest.yaml
+      - python-typing.yaml
+    categories:
+      - language
+      - testing
+    confidence: 1.0
+  
+  csharp:
+    yamls:
+      - dotnet.yaml
+      - csharp.yaml
+      - aspnet.yaml
+    categories:
+      - language
+      - framework
+    confidence: 1.0
+  
+  java:
+    yamls:
+      - java.yaml
+      - spring-boot.yaml
+      - maven.yaml
+    categories:
+      - language
+      - framework
+      - build
+    confidence: 1.0
+  
+  go:
+    yamls:
+      - go.yaml
+      - concurrency-patterns.yaml
+    categories:
+      - language
+    confidence: 1.0
+  
+  typescript:
+    yamls:
+      - typescript.yaml
+      - javascript.yaml
+      - nodejs.yaml
+    categories:
+      - language
+    confidence: 1.0
+  
+  javascript:
+    yamls:
+      - javascript.yaml
+      - nodejs.yaml
+    categories:
+      - language
+    confidence: 1.0
+  
+  php:
+    yamls:
+      - php.yaml
+      - laravel.yaml
+    categories:
+      - language
+      - framework
+    confidence: 1.0
+  
+  ruby:
+    yamls:
+      - ruby.yaml
+      - rails.yaml
+    categories:
+      - language
+      - framework
+    confidence: 1.0
+  
+  rust:
+    yamls:
+      - rust.yaml
+      - cargo.yaml
+    categories:
+      - language
+      - build
+    confidence: 1.0
+
+# ============================================================================
+# FRAMEWORK MAPPINGS
+# ============================================================================
+
+frameworks:
+  flask:
+    yamls:
+      - flask.yaml
+      - rest-api.yaml
+      - python.yaml
+    categories:
+      - framework
+      - api
+    requires_language: python
+  
+  django:
+    yamls:
+      - django.yaml
+      - rest-api.yaml
+      - python.yaml
+    categories:
+      - framework
+      - api
+    requires_language: python
+  
+  fastapi:
+    yamls:
+      - fastapi.yaml
+      - rest-api.yaml
+      - python.yaml
+      - async-patterns.yaml
+    categories:
+      - framework
+      - api
+    requires_language: python
+  
+  react:
+    yamls:
+      - react.yaml
+      - frontend-patterns.yaml
+      - accessibility.yaml
+    categories:
+      - framework
+      - frontend
+    requires_language: [javascript, typescript]
+  
+  angular:
+    yamls:
+      - angular.yaml
+      - frontend-patterns.yaml
+      - typescript.yaml
+    categories:
+      - framework
+      - frontend
+    requires_language: typescript
+  
+  vue:
+    yamls:
+      - vue.yaml
+      - frontend-patterns.yaml
+    categories:
+      - framework
+      - frontend
+    requires_language: [javascript, typescript]
+  
+  aspnet:
+    yamls:
+      - aspnet.yaml
+      - dotnet.yaml
+      - rest-api.yaml
+    categories:
+      - framework
+      - api
+    requires_language: csharp
+  
+  spring-boot:
+    yamls:
+      - spring-boot.yaml
+      - java.yaml
+      - rest-api.yaml
+      - jpa.yaml
+    categories:
+      - framework
+      - api
+    requires_language: java
+  
+  laravel:
+    yamls:
+      - laravel.yaml
+      - php.yaml
+      - rest-api.yaml
+    categories:
+      - framework
+      - api
+    requires_language: php
+  
+  rails:
+    yamls:
+      - rails.yaml
+      - ruby.yaml
+      - rest-api.yaml
+    categories:
+      - framework
+      - api
+    requires_language: ruby
+  
+  express:
+    yamls:
+      - express.yaml
+      - nodejs.yaml
+      - rest-api.yaml
+    categories:
+      - framework
+      - api
+    requires_language: javascript
+  
+  nextjs:
+    yamls:
+      - nextjs.yaml
+      - react.yaml
+      - typescript.yaml
+      - ssr-patterns.yaml
+    categories:
+      - framework
+      - frontend
+    requires_language: [javascript, typescript]
+
+# ============================================================================
+# LIBRARY MAPPINGS
+# ============================================================================
+
+libraries:
+  sqlalchemy:
+    yamls:
+      - sqlalchemy.yaml
+      - database-patterns.yaml
+      - python.yaml
+    categories:
+      - database
+      - orm
+    requires_language: python
+  
+  pydantic:
+    yamls:
+      - pydantic.yaml
+      - python-typing.yaml
+      - validation-patterns.yaml
+    categories:
+      - validation
+      - typing
+    requires_language: python
+  
+  pytest:
+    yamls:
+      - pytest.yaml
+      - testing-patterns.yaml
+      - python.yaml
+    categories:
+      - testing
+    requires_language: python
+  
+  numpy:
+    yamls:
+      - numpy.yaml
+      - data-science.yaml
+      - python.yaml
+    categories:
+      - data-science
+    requires_language: python
+  
+  pandas:
+    yamls:
+      - pandas.yaml
+      - data-science.yaml
+      - python.yaml
+    categories:
+      - data-science
+    requires_language: python
+
+# ============================================================================
+# DATABASE MAPPINGS
+# ============================================================================
+
+databases:
+  postgresql:
+    yamls:
+      - postgresql.yaml
+      - database-patterns.yaml
+      - sql-best-practices.yaml
+    categories:
+      - database
+  
+  mysql:
+    yamls:
+      - mysql.yaml
+      - database-patterns.yaml
+      - sql-best-practices.yaml
+    categories:
+      - database
+  
+  mongodb:
+    yamls:
+      - mongodb.yaml
+      - nosql-patterns.yaml
+    categories:
+      - database
+  
+  redis:
+    yamls:
+      - redis.yaml
+      - caching-patterns.yaml
+    categories:
+      - database
+      - cache
+
+# ============================================================================
+# CROSS-CUTTING CONCERNS
+# ============================================================================
+
+patterns:
+  rest_api:
+    yamls:
+      - rest-api.yaml
+      - api-security.yaml
+      - versioning.yaml
+    trigger_keywords: [flask, django, fastapi, aspnet, spring-boot, express]
+  
+  microservices:
+    yamls:
+      - microservices.yaml
+      - service-mesh.yaml
+      - distributed-tracing.yaml
+    trigger_keywords: [kubernetes, docker, grpc]
+  
+  authentication:
+    yamls:
+      - authentication.yaml
+      - oauth.yaml
+      - jwt.yaml
+    trigger_keywords: [jwt, oauth, identity, auth]
+  
+  security:
+    yamls:
+      - security.yaml
+      - owasp.yaml
+      - encryption.yaml
+    trigger_keywords: [security, encrypt, hash, token]
+
+# ============================================================================
+# FALLBACK MAPPINGS (Generic best practices)
+# ============================================================================
+
+fallback:
+  default_yamls:
+    - clean-code.yaml
+    - solid-principles.yaml
+    - testing-patterns.yaml
+  min_confidence: 0.3
