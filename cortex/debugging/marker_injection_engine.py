@@ -50,7 +50,6 @@ class AbstractInjectionStrategy(ABC):
 
 class MarkerInjectionEngine:
     """
-    Engine for injecting CORTEX_DEBUG markers into source files.
     
     Uses Strategy Pattern to support multiple injection strategies:
     - test_failure: Parse traceback, inject at failure point

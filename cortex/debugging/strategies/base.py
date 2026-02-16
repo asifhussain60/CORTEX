@@ -113,7 +113,6 @@ class AbstractInjectionStrategy(ABC):
                     marker = self.format_marker(context, line_num)
                     
                     # Check if marker already exists
-                    if "CORTEX_DEBUG" in lines[line_num]:
                         continue  # Skip if already present
                     
                     # Insert marker above target line

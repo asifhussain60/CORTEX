@@ -171,8 +171,39 @@ class VacuumOrchestrator:
         
         return moved, freed
 
+    def cleanup_root_databases(self) -> Tuple[int, float]:
+        """Remove orphaned database files from root directory."""
+        logger.info("🧹 Phase 2a: Root Database Cleanup")
+        
+        # Known database files that should be in subdirectories
+        db_files = [
+            "intelligence_audit.db",
+            "contract_validation_audit.db",
+            "observability_audit.db",
+            "solid_audit.db",
+        ]
+        
+        cleaned = 0
+        freed = 0.0
+        
+        for db_file in db_files:
+            db_path = self.cortex_root / db_file
+            if db_path.exists():
+                try:
+                    size_mb = db_path.stat().st_size / (1024 * 1024)
+                    db_path.unlink()
+                    cleaned += 1
+                    freed += size_mb
+                    logger.info(f"  ✅ Deleted: {db_file} ({size_mb:.2f}MB)")
+                except Exception as e:
+                    logger.error(f"  ❌ Failed to delete {db_file}: {e}")
+        
+        if cleaned == 0:
+            logger.info("  ℹ️  No orphaned database files found")
+        
+        return cleaned, freed
+
     def cleanup_debug_markers(self) -> int:
-        """Remove CORTEX_DEBUG markers from Python files."""
         logger.info("🧹 Phase 2: Debug Marker Cleanup")
 
         count = 0
@@ -282,6 +313,7 @@ class VacuumOrchestrator:
             "*.pyc",
             ".pytest_cache",
             ".coverage",
+            "*.db",
         ]
 
         for rule in required_rules:
@@ -292,7 +324,7 @@ class VacuumOrchestrator:
 
     def generate_summary(
         self, prompts_cleaned: int, prompts_freed: float, md_cleaned: int, md_freed: float, 
-        debug_cleaned: int, cache_cleaned: int, cache_freed: float
+        db_cleaned: int, db_freed: float, debug_cleaned: int, cache_cleaned: int, cache_freed: float
     ) -> None:
         """Generate vacuum summary."""
         logger.info("\n" + "━" * 70)
@@ -304,13 +336,16 @@ class VacuumOrchestrator:
         logger.info(f"\nMarkdown Sprawl:")
         logger.info(f"  Files deleted: {md_cleaned}")
         logger.info(f"  Space freed: {md_freed:.2f}MB")
+        logger.info(f"\nRoot Database Files:")
+        logger.info(f"  Files deleted: {db_cleaned}")
+        logger.info(f"  Space freed: {db_freed:.2f}MB")
         logger.info(f"\nDebug Markers:")
         logger.info(f"  Files cleaned: {debug_cleaned}")
         logger.info(f"\nCache & Artifacts:")
         logger.info(f"  Items cleaned: {cache_cleaned}")
         logger.info(f"  Space freed: {cache_freed:.2f}MB")
         logger.info(f"\nTotal:")
-        logger.info(f"  Space freed: {prompts_freed + md_freed + cache_freed:.2f}MB")
+        logger.info(f"  Space freed: {prompts_freed + md_freed + db_freed + cache_freed:.2f}MB")
         logger.info("━" * 70 + "\n")
 
     def run(self) -> bool:
@@ -322,13 +357,14 @@ class VacuumOrchestrator:
         try:
             prompts_cleaned, prompts_freed = self.cleanup_prompts_folder()
             md_cleaned, md_freed = self.cleanup_markdown_sprawl()
+            db_cleaned, db_freed = self.cleanup_root_databases()
             debug_cleaned = self.cleanup_debug_markers()
             cache_cleaned, cache_freed = self.cleanup_pycache_and_artifacts()
 
             self.report_development_artifacts()
             self.verify_gitignore_rules()
 
-            self.generate_summary(prompts_cleaned, prompts_freed, md_cleaned, md_freed, debug_cleaned, cache_cleaned, cache_freed)
+            self.generate_summary(prompts_cleaned, prompts_freed, md_cleaned, md_freed, db_cleaned, db_freed, debug_cleaned, cache_cleaned, cache_freed)
 
             # Git cleanup
             logger.info("📝 Git cleanup...")
@@ -343,7 +379,7 @@ class VacuumOrchestrator:
             )
 
             if result.stdout.strip():
-                freed_total = prompts_freed + md_freed + cache_freed
+                freed_total = prompts_freed + md_freed + db_freed + cache_freed
                 subprocess.run(
                     [
                         "git",
@@ -352,8 +388,10 @@ class VacuumOrchestrator:
                         f"VACUUM: Repository cleanup - {freed_total:.1f}MB freed\n\n"
                         f"Prompts folder reviewed: {prompts_cleaned} files cleaned ({prompts_freed:.2f}MB)\n"
                         f"Markdown sprawl removed: {md_cleaned} files ({md_freed:.2f}MB)\n"
+                        f"Root database files removed: {db_cleaned} files ({db_freed:.2f}MB)\n"
                         f"Debug markers cleaned: {debug_cleaned} files\n"
                         f"Cache cleaned: {cache_cleaned} items ({cache_freed:.2f}MB)\n\n"
+                        f"AC-VACUUM-003: Root database file cleanup\n"
                         f"AC-VACUUM-002: .github/prompts/ folder cleanup\n"
                         f"AC-VACUUM-001: Repository maintenance complete",
                     ],

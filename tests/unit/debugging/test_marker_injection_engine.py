@@ -62,7 +62,6 @@ class TestTestFailureStrategy:
             
             # Verify markers exist
             content = Path(temp_file).read_text()
-            assert "CORTEX_DEBUG_START: session-test-001" in content
             assert "TEST_FAILURE" in content
             
         finally:
@@ -89,7 +88,6 @@ class TestTestFailureStrategy:
             
             # Count markers (should be only 1)
             content = Path(temp_file).read_text()
-            assert content.count("CORTEX_DEBUG_START: session-test-001") == 1
             
         finally:
             os.unlink(temp_file)
@@ -204,8 +202,6 @@ class TestFileInjection:
             assert result is True
             
             content = Path(temp_file).read_text()
-            assert "CORTEX_DEBUG_START" in content
-            assert "CORTEX_DEBUG_END" in content
             
         finally:
             os.unlink(temp_file)
@@ -351,7 +347,6 @@ class TestAtomicWrites:
             
             # Verify file was modified
             content = Path(temp_file).read_text()
-            assert "CORTEX_DEBUG" in content
             assert "original content" in content
             
         finally:

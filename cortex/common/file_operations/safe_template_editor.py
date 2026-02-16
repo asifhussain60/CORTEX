@@ -61,7 +61,6 @@ class SafeTemplateEditor:
         result = editor.replace_template(
             file_path="cortex/debugging/marker_injection_engine.py",
             template_var="MARKER_TEMPLATE",
-            new_template="# CORTEX_DEBUG_START: {{ session_id }}\\n..."
         )
         
         if result.success:

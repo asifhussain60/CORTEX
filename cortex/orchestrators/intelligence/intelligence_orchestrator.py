@@ -39,8 +39,13 @@ class IntelligenceOrchestrator:
         self.routing_engine = IntelligenceRoutingEngine()
         self._cache: Dict[str, Any] = {}
         
-        # SQLite audit logging
-        self.audit_db_path = audit_db_path or Path("intelligence_audit.db")
+        # SQLite audit logging (store in subdirectory to avoid root pollution)
+        if audit_db_path:
+            self.audit_db_path = audit_db_path
+        else:
+            db_dir = Path("cortex_brain/intelligence")
+            db_dir.mkdir(parents=True, exist_ok=True)
+            self.audit_db_path = db_dir / "intelligence_audit.db"
         self._init_audit_db()
     
     def _init_audit_db(self) -> None:

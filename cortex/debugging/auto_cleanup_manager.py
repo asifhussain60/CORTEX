@@ -2,7 +2,6 @@
 Auto-Cleanup Manager - Automatic Debug Marker Removal
 
 Purpose:
-    Prevents marker pollution by automatically removing CORTEX_DEBUG markers
     when debug sessions are resolved (tests pass, issues fixed).
 
 Authority:
@@ -41,7 +40,6 @@ class AutoCleanupManager:
     def __init__(self):
         """Initialize AutoCleanupManager."""
         self.marker_pattern = re.compile(
-            r"# CORTEX_DEBUG_START: ([^\n]+).*?# CORTEX_DEBUG_END: \1",
             re.DOTALL
         )
     
@@ -80,11 +78,9 @@ class AutoCleanupManager:
                 content = file_path.read_text()
                 
                 # Find all session IDs in markers (new format with session_id)
-                session_id_pattern = re.compile(r'# CORTEX_DEBUG_START: ([^\n]+)')
                 matches = session_id_pattern.findall(content)
                 
                 # Also check for old format markers without session_id
-                old_format_pattern = re.compile(r'# CORTEX_DEBUG_START\n')
                 has_old_format = old_format_pattern.search(content)
                 
                 for session_id in matches:
@@ -181,7 +177,6 @@ class AutoCleanupManager:
     
     def _find_files_with_markers(self) -> List[Path]:
         """
-        Find all files containing CORTEX_DEBUG markers.
         
         Returns:
             List of file paths
@@ -196,7 +191,6 @@ class AutoCleanupManager:
         for py_file in cortex_dir.rglob("*.py"):
             try:
                 content = py_file.read_text()
-                if "CORTEX_DEBUG" in content:
                     files_with_markers.append(py_file)
             except Exception:
                 continue
@@ -216,7 +210,6 @@ class AutoCleanupManager:
         """
         # Pattern to match specific session marker
         pattern = re.compile(
-            rf'# CORTEX_DEBUG_START: {re.escape(session_id)}.*?# CORTEX_DEBUG_END: {re.escape(session_id)}\n?',
             re.DOTALL
         )
         
@@ -234,7 +227,6 @@ class AutoCleanupManager:
         """
         # Pattern to match old format markers
         pattern = re.compile(
-            r'# CORTEX_DEBUG_START\n.*?# CORTEX_DEBUG_END\n?',
             re.DOTALL
         )
         

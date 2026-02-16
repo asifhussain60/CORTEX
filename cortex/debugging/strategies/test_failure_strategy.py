@@ -69,7 +69,6 @@ class TestFailureStrategy(AbstractInjectionStrategy):
         timestamp = context.additional_context.get("timestamp", "")
         
         marker = (
-            f"CORTEX_DEBUG[{context.session_id}]: TEST_FAILURE at line {line_number} | "
             f"test={test_name} | time={timestamp}"
         )
         

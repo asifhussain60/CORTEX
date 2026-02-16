@@ -64,7 +64,13 @@ class ContractValidator:
         Args:
             audit_db: Path to SQLite audit database
         """
-        self.audit_db = audit_db or Path("contract_validation_audit.db")
+        # Store in subdirectory to avoid root pollution
+        if audit_db:
+            self.audit_db = audit_db
+        else:
+            db_dir = Path("cortex_brain/wiring")
+            db_dir.mkdir(parents=True, exist_ok=True)
+            self.audit_db = db_dir / "contract_validation_audit.db"
         self._init_audit_db()
 
     def _init_audit_db(self) -> None:

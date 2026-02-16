@@ -60,8 +60,13 @@ class ObservabilityOrchestrator:
         self._metrics: Dict[str, float] = {}
         self._spans: List[Span] = []
         
-        # SQLite audit logging
-        self.audit_db_path = audit_db_path or Path("observability_audit.db")
+        # SQLite audit logging (store in subdirectory to avoid root pollution)
+        if audit_db_path:
+            self.audit_db_path = audit_db_path
+        else:
+            db_dir = Path("cortex_brain/observability")
+            db_dir.mkdir(parents=True, exist_ok=True)
+            self.audit_db_path = db_dir / "observability_audit.db"
         self._init_audit_db()
     
     def _init_audit_db(self) -> None:

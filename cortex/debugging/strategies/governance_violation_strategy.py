@@ -64,7 +64,6 @@ class GovernanceViolationStrategy(AbstractInjectionStrategy):
         timestamp = context.additional_context.get("timestamp", "")
         
         marker = (
-            f"CORTEX_DEBUG[{context.session_id}]: GOVERNANCE_VIOLATION at line {line_number} | "
             f"rule={rule_id} ({rule_name}) | time={timestamp}"
         )
         

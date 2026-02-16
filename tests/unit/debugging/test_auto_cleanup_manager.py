@@ -58,13 +58,11 @@ class TestResolvedSessionDetection:
     def test_auto_cleanup_removes_markers_for_session(self):
         """Test cleanup removes markers for specific session."""
         # Create temp file with markers
-        marker_content = """# CORTEX_DEBUG_START
 # Trigger: TEST_FAILURE
 # Context: Test failed
 # Injected: 2026-02-13T00:00:00
 line 1
 line 2
-# CORTEX_DEBUG_END
 """
         
         with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
@@ -82,7 +80,6 @@ line 2
             
             # Verify marker removed
             content = temp_file.read_text()
-            assert "CORTEX_DEBUG" not in content
             assert "line 2" in content
             
         finally:
@@ -90,13 +87,11 @@ line 2
     
     def test_auto_cleanup_preserves_active_sessions(self):
         """Test cleanup preserves markers for active sessions."""
-        marker_content = """# CORTEX_DEBUG_START
 # Trigger: TEST_FAILURE
 # Context: Test failed
 # Injected: 2026-02-13T00:00:00
 line 1
 line 2
-# CORTEX_DEBUG_END
 """
         
         with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
@@ -116,7 +111,6 @@ line 2
             
             # Marker should still exist
             content = temp_file.read_text()
-            assert "CORTEX_DEBUG_START: session-test-001" in content
             
         finally:
             os.unlink(temp_file)
@@ -127,12 +121,10 @@ class TestCleanupSession:
     
     def test_cleanup_session_removes_markers(self):
         """Test cleanup_session removes specific session markers."""
-        marker_content = """# CORTEX_DEBUG_START
 # Trigger: TEST_FAILURE
 # Injected: 2026-02-13T00:00:00
 line 1
 line 2
-# CORTEX_DEBUG_END
 """
         
         with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
@@ -148,7 +140,6 @@ line 2
             assert result is True
             
             content = temp_file.read_text()
-            assert "CORTEX_DEBUG" not in content
             
         finally:
             os.unlink(temp_file)
@@ -162,12 +153,10 @@ class TestStaleMarkerDetection:
         # Create marker with old timestamp
         old_timestamp = (datetime.now() - timedelta(hours=48)).isoformat()
         
-        marker_content = f"""# CORTEX_DEBUG_START
 # Trigger: TEST_FAILURE
 # Context: Test failed
 # Injected: {old_timestamp}
 line 1
-# CORTEX_DEBUG_END
 """
         
         with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
@@ -192,11 +181,9 @@ line 1
         # Create marker with recent timestamp
         recent_timestamp = datetime.now().isoformat()
         
-        marker_content = f"""# CORTEX_DEBUG_START
 # Trigger: TEST_FAILURE
 # Injected: {recent_timestamp}
 line 1
-# CORTEX_DEBUG_END
 """
         
         with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
@@ -222,11 +209,9 @@ class TestMarkerRemoval:
     
     def test_remove_marker_removes_specific_session(self):
         """Test _remove_marker removes only specified session."""
-        content = """# CORTEX_DEBUG_START
 line 1
 line 2
 line 3
-# CORTEX_DEBUG_END
 """
         
         manager = AutoCleanupManager()

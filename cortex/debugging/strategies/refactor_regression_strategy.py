@@ -64,7 +64,6 @@ class RefactorRegressionStrategy(AbstractInjectionStrategy):
         timestamp = context.additional_context.get("timestamp", "")
         
         marker = (
-            f"CORTEX_DEBUG[{context.session_id}]: REFACTOR_REGRESSION at line {line_number} | "
             f"type={regression_type} | time={timestamp}"
         )
         

@@ -2,7 +2,6 @@
 DebuggerOrchestrator - EventBus-Driven Debug Marker Injection
 
 Purpose:
-    Zero-friction debugging through automatic CORTEX_DEBUG marker injection.
     Subscribes to TEST_FAILURE, REFACTOR_REGRESSION, and GOVERNANCE_VIOLATION
     events, injecting debug markers at failure locations without manual intervention.
 

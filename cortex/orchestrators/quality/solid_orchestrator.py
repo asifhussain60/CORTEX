@@ -49,8 +49,13 @@ class SOLIDOrchestrator:
         
         self._violations: List[SolidViolation] = []
         
-        # SQLite audit logging
-        self.audit_db_path = audit_db_path or Path("solid_audit.db")
+        # SQLite audit logging (store in subdirectory to avoid root pollution)
+        if audit_db_path:
+            self.audit_db_path = audit_db_path
+        else:
+            db_dir = Path("cortex_brain/quality")
+            db_dir.mkdir(parents=True, exist_ok=True)
+            self.audit_db_path = db_dir / "solid_audit.db"
         self._init_audit_db()
     
     def _init_audit_db(self) -> None:

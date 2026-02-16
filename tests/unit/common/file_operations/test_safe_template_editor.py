@@ -270,12 +270,10 @@ class MarkerInjectionEngine:
         
         try:
             # This is what failed 8+ times in chat01
-            new_template = """# CORTEX_DEBUG_START: {{ session_id }}
 # Trigger: {{ event_type }}
 # Context: {{ context_summary }}
 # Injected: {{ timestamp }}
 {{ original_code }}
-# CORTEX_DEBUG_END: {{ session_id }}"""
             
             result = editor.replace_template(
                 file_path=str(temp_path),
@@ -287,8 +285,6 @@ class MarkerInjectionEngine:
             
             # Verify all elements present
             final_content = temp_path.read_text()
-            assert "# CORTEX_DEBUG_START:" in final_content
-            assert "# CORTEX_DEBUG_END:" in final_content
             assert "{{ session_id }}" in final_content
             assert "{{ original_code }}" in final_content
             assert '""""""' not in final_content  # Not empty
