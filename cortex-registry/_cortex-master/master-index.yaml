@@ -8,11 +8,11 @@
 
 metadata:
   version: "6.10"
-  last_updated: "2026-02-16T15:10:00Z"
+  last_updated: "2026-02-16T15:35:00Z"
   total_phases: 35
-  active: 2
+  active: 1
   completed: 17
-  consolidated: 1
+  consolidated: 2
   deferred: 0
   planned: 0
 
@@ -141,28 +141,22 @@ phase_status:
       consolidates: ["phase-91", "phase-92"]
   
   active:
-    - id: "phase-90"
-      title: "Deep Intelligence Consolidation"
-      location: "phases/active/phase-90-deep-intelligence-consolidation.yaml"
-      started_date: "2026-02-16"
-      priority: "P0"
-      estimated_duration: "18-24 days"
-      description: "Smart consolidation: 10 deferred phases → 3 unified systems (LENS Facade, Polyglot Engine, Enterprise Suite)"
-      consolidates: ["phase-03", "phase-04", "phase-05", "phase-06", "phase-07", "phase-08", "phase-11", "phase-13", "phase-14", "phase-15"]
-      stages:
-        - "S1: LENS Intelligence Facade (180 tests, 8-12 days)"
-        - "S2: Polyglot Analysis Engine (140 tests, 6-8 days)"
-        - "S3: Enterprise Maturity Suite (100 tests, 4-6 days)"
-      total_tests: 420
-      effort_reduction: "80% (90-130 days → 18-24 days)"
-      
     - id: "phase-97"
       title: "CORTEX Intelligence Infrastructure Enhancement"
       location: "phases/active/phase-97-cortex-intelligence-infrastructure.yaml"
       started_date: "2026-02-16"
       priority: "P0"
-      estimated_duration: "8 days"
-      description: "Comprehensive enhancement: Health Orchestrator 2.0, LENS Intelligence Facade, Registry-Based Self-Wiring"
+      estimated_duration: "12-16 days (extended from 8 days)"
+      description: "Comprehensive enhancement: Health Orchestrator 2.0, LENS Intelligence Facade, Registry-Based Self-Wiring, Knowledge Graph, Polyglot Engine, Enterprise Suite"
+      absorbs_phase: "phase-90"
+      stages:
+        - "S1: Health Orchestrator 2.0 (9 agents, 43 tests)"
+        - "S2: LENS Intelligence Facade (12 tests, 9 workflows)"
+        - "S3: Knowledge Graph Integration (60 tests, from Phase 90)"
+        - "S4: Polyglot Analysis Engine (140 tests, .NET/Angular)"
+        - "S5: Enterprise Maturity Suite (100 tests, multi-tenancy)"
+      total_tests: 355
+      effort_extended: "+4-8 days for Phase 90 features"
       business_value:
         - "87% time savings per feature (registry auto-wiring)"
         - "81% reduction in maintenance (orchestrator consolidation)"
