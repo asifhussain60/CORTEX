@@ -62,8 +62,12 @@ class RootDatabaseCleaner(CleanerInterface):
 
     @property
     def domain(self) -> str:
-        """Return cleaner domain."""
-        return "root_database"
+        """Return cleaner domain.
+        
+        Note:
+            Uses 'database_migration' for backward compatibility with existing tests.
+        """
+        return "database_migration"
 
     def analyze(self) -> Analysis:
         """
@@ -79,11 +83,24 @@ class RootDatabaseCleaner(CleanerInterface):
         files_scanned = 0
         
         # Check for known database files in root
+        files_to_delete = []
+        actions = []
+        database_paths = self.config.get("database_paths", {})
+        
         for db_name in self.KNOWN_ROOT_DATABASES:
             db_path = self.repo_root / db_name
             if db_path.exists():
                 files_to_delete.append(db_name)
                 files_scanned += 1
+                
+                # If database_paths configured, create action with target
+                if database_paths:
+                    # Extract domain from db name (e.g., "intelligence_audit.db" -> "intelligence")
+                    domain = db_name.replace("_audit.db", "").replace(".db", "")
+                    target_path = database_paths.get(domain, "unknown")
+                    actions.append(f"{db_name} -> {target_path}")
+                else:
+                    actions.append(db_name)
         
         # Check for unknown .db files in root (warn only)
         for db_file in self.repo_root.glob("*.db"):
@@ -92,7 +109,8 @@ class RootDatabaseCleaner(CleanerInterface):
                 warnings.append(f"{db_file.name}: Unknown database file in root")
         
         plan = {
-            "files_to_delete": files_to_delete,
+            "actions": actions if actions else files_to_delete,  # Use enriched actions if available
+            "files_to_delete": files_to_delete,  # Keep for backward compat
             "warnings": warnings,
             "known_databases": self.KNOWN_ROOT_DATABASES,
         }

@@ -48,6 +48,7 @@ from tier1.orchestrators.cleaners import (
     CleanerRegistry,
     DatabaseMigrationCleaner,
     RootArtifactsCleaner,
+    MarkdownSprawlCleaner,
 )
 
 
@@ -193,7 +194,9 @@ class TestVacuumOrchestratorInitialization:
     ) -> None:
         """Verify orchestrator has state tracking."""
         assert hasattr(orchestrator, "state")
-        assert isinstance(orchestrator.state, OrchestratorState)
+        # State is now StateTracker with current_state property
+        assert hasattr(orchestrator.state, "current_state")
+        assert isinstance(orchestrator.state.current_state, OrchestratorState)
 
 
 # =============================================================================
@@ -334,7 +337,9 @@ class TestStateTracking:
     ) -> None:
         """Verify orchestrator state is initialized."""
         assert orchestrator.state is not None
-        assert isinstance(orchestrator.state, OrchestratorState)
+        # State is now StateTracker with current_state property
+        assert hasattr(orchestrator.state, "current_state")
+        assert isinstance(orchestrator.state.current_state, OrchestratorState)
 
     def test_state_tracks_analyses(
         self, orchestrator
@@ -678,10 +683,13 @@ class TestEnhancedMarkdownDetection:
         orchestrator_config["enhanced_markdown_detection"] = True
         orch = VacuumOrchestrator(config=orchestrator_config)
         
+        # Register the markdown cleaner
+        orch.register_cleaner(MarkdownSprawlCleaner, orchestrator_config)
+        
         analysis = orch.analyze("markdown_cleanup")
         
         assert analysis is not None
-        assert len(analysis.issues_found) >= 3
+        assert analysis.issues_found >= 3
     
     def test_detect_session_documentation(
         self, temp_repo, orchestrator_config
@@ -700,9 +708,12 @@ class TestEnhancedMarkdownDetection:
         orchestrator_config["enhanced_markdown_detection"] = True
         orch = VacuumOrchestrator(config=orchestrator_config)
         
+        # Register the markdown cleaner
+        orch.register_cleaner(MarkdownSprawlCleaner, orchestrator_config)
+        
         analysis = orch.analyze("markdown_cleanup")
         
-        assert len(analysis.issues_found) >= 3
+        assert analysis.issues_found >= 3
 
 
 class TestGitignoreEnforcement:

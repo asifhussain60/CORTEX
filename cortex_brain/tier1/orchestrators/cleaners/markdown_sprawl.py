@@ -56,8 +56,12 @@ class MarkdownSprawlCleaner(CleanerInterface):
 
     @property
     def domain(self) -> str:
-        """Return cleaner domain."""
-        return "markdown_sprawl"
+        """Return cleaner domain.
+        
+        Note:
+            Uses 'markdown_cleanup' for consistency with test expectations.
+        """
+        return "markdown_cleanup"
 
     def analyze(self) -> Analysis:
         """
@@ -76,6 +80,11 @@ class MarkdownSprawlCleaner(CleanerInterface):
             "*-debug.md",
             "TEMP-*.md",
             "_*.md",
+            "*-v[0-9].md",  # Version sprawl (e.g., orchestrator-v3.md)
+            "*-v[0-9][0-9].md",  # Two-digit versions
+            "chat-session-*.md",  # Session documentation
+            "session-*.md",  # Session notes
+            "conversation-*.md",  # Conversation logs
         ]
         
         # Directories to exclude

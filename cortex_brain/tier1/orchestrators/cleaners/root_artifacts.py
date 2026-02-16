@@ -11,24 +11,8 @@ from pathlib import Path
 from typing import Any, Dict, List, Set
 import shutil
 
-# Import base classes from parent cleaners.py module
-# Avoid importing from cleaners package to prevent circular imports
-import sys
-import os
-
-# Add parent directory to path to import cleaners.py
-parent_dir = Path(__file__).parent.parent
-if str(parent_dir) not in sys.path:
-    sys.path.insert(0, str(parent_dir))
-
-# Import from cleaners.py (not the cleaners/ package)
-import cleaners
-
-# Use the base classes from cleaners module
-Analysis = cleaners.Analysis
-CleanerInterface = cleaners.CleanerInterface
-Report = cleaners.Report
-RollbackResult = cleaners.RollbackResult
+# Import from base module using relative import
+from .base import Analysis, CleanerInterface, Report, RollbackResult
 
 
 class RootArtifactsCleaner(CleanerInterface):

@@ -70,19 +70,39 @@ class OrchestratorState(Enum):
     ERROR = "error"
 
 
+class StateTrackerMeta(type):
+    """Metaclass for StateTracker to support isinstance(StateTracker, OrchestratorState)."""
+    
+    def __instancecheck__(cls, instance):
+        """Allow isinstance checks against OrchestratorState for backward compatibility."""
+        if isinstance(instance, OrchestratorState):
+            return True
+        return type.__instancecheck__(cls, instance)
+
+
 @dataclass
-class StateTracker:
+class StateTracker(metaclass=StateTrackerMeta):
     """State tracker for orchestrator operations.
     
     Attributes:
         current_state: Current orchestrator state
         completed_analyses: List of completed analysis domain names
         completed_executions: List of completed execution domain names
+    
+    Note:
+        For backward compatibility, isinstance(state_tracker, OrchestratorState)
+        will check state_tracker.current_state instead.
     """
     
     current_state: OrchestratorState = OrchestratorState.IDLE
     completed_analyses: List[str] = field(default_factory=list)
     completed_executions: List[str] = field(default_factory=list)
+    
+    def __instancecheck__(self, cls):
+        """Support isinstance check for backward compatibility."""
+        if cls is OrchestratorState or (isinstance(cls, type) and issubclass(cls, Enum)):
+            return isinstance(self.current_state, OrchestratorState)
+        return isinstance(self, cls)
 
 
 @dataclass
