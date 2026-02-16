@@ -7,14 +7,14 @@
 # ============================================================================
 
 metadata:
-  version: "6.14"
-  last_updated: "2026-02-16T19:00:00Z"
+  version: "6.15"
+  last_updated: "2026-02-16T20:30:00Z"
   total_phases: 38
   active: 0
-  completed: 18
+  completed: 19
   consolidated: 2
   deferred: 0
-  planned: 2
+  planned: 1
 
   phase_breakdown:
     original_phases: 25
@@ -263,41 +263,47 @@ phase_status:
         - "data-cortex-* semantic selectors (CortexIDValidator, CortexIDMigrator)"
         - "cortex-site-dogfood.yaml workflow template (7 stages)"
         - "Vision API → Challenge → RED → GREEN → REFACTOR → Validation → Deploy"
-
-  active: []
-
-  planned:
+    
     - id: "phase-100"
-      title: "Knowledge-Parameterized Workflow Template Library"
-      location: "phases/planned/phase-100-workflow-template-library.yaml"
-      priority: P1
-      estimated_effort: "20 hours (2.5 days)"
-      roi_score: 96
-      confidence: 9.8
-      origin: "Chat01.md digest + knowledge-injection architecture review"
-      created: "2026-02-16"
-      updated: "2026-02-16"
-      description: |
-        Build 5 knowledge-parameterized workflow templates that resolve 
-        differently based on repository context (ARCHITECT vs PRODUCTION mode).
-        Templates consume domain knowledge via KnowledgeSynthesisEngine so TDD 
-        cycles produce domain-correct, company-compliant solutions. Same template,
-        different knowledge injection, correct output.
+      title: "Convergence-Gated Workflow Template Library"
+      location: "phases/completed/phase-100-workflow-template-library.yaml"
+      completion_date: "2026-02-16"
+      duration: "4 hours (autonomous silent execution)"
+      metrics:
+        tests: "102/102 passing (67 unit + 35 integration)"
+        test_duration: "0.24s"
+        stages: 8
+        velocity: "80% faster than estimate (4h actual vs 20h estimated)"
+        dependencies_added: "transitions (FSM library)"
       key_deliverables:
-        - "WorkflowTemplateRegistry with KnowledgeSynthesisEngine bridge"
-        - "MCP tool: cortex_workflow (knowledge-aware execution)"
-        - "IntentRouter + MasterOrchestrator auto-selection wiring"
-        - "Two-context golden tests (ARCHITECT + PRODUCTION)"
-        - "5 knowledge-parameterized templates with placeholder schema"
-        - "E2E audit log verification tests"
-      fixes:
-        - "CORE-028: Phase 99 filename (49 → 33 chars)"
-        - "CORE-028: Remove 'dogfooding' concept from naming"
+        - "WorkflowTemplateRegistry with auto-discovery + knowledge resolution"
+        - "StepStateMachine (FSM using transitions library) with convergence gates"
+        - "ConvergenceGateConfig dataclass for per-step success criteria"
+        - "AutonomousWorkflowExecutor bridge (WorkflowComposer → AutonomousExecutor)"
+        - "MCP tool: cortex_workflow (execute/list/search/validate/preview/monitor)"
+        - "PostPhaseDeduplicationReview (auto-injected, convergence-gated)"
+        - "HolisticRefactoringSweep (auto-injected epilogue, convergence-gated)"
+        - "IntentRouter + MasterOrchestrator + WorkflowComposer integration"
+        - "Two-context golden tests (ARCHITECT + PRODUCTION modes)"
+        - "Generic production profiles (legacy_dotnet_spa, modern_nodejs_api, python_data_pipeline)"
+        - "10 workflow templates with knowledge placeholders + convergence gates"
       architectural_innovation:
+        - "Steps loop until success criteria met (convergence-gated execution)"
         - "Templates separated by CONTEXT, not CODE"
         - "company/domains/*.yaml overrides CORTEX defaults"
         - "Onboarded repo profiles drive framework selection"
         - "Fallback chain: onboarded → company → CORTEX"
+        - "Auto-injected epilogues (PostPhaseDedup + HolisticSweep)"
+        - "Zero user prompts (autonomous execution, CORE-049)"
+
+  active: []
+
+  planned:
+    - id: "phase-101"
+      title: "Conversational Intent Gateway"
+      location: "phases/planned/phase-101-conversational-intent-gateway.yaml"
+      priority: P2
+      description: "Natural language intent processing with conversational context"
 
   consolidated:
     - id: "phase-consolidated-legacy"
