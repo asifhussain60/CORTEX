@@ -107,7 +107,10 @@ def check_python() -> Tuple[bool, str]:
 
 
 def check_venv() -> Tuple[bool, str]:
-    """Check if virtual environment exists (cross-platform)."""
+    """Check if virtual environment exists (cross-platform).
+    
+    Phase 89 enhancement: More robust checking with auto-healing hints.
+    """
     # Cross-platform venv paths
     if IS_WINDOWS:
         venv_python = Path(".venv/Scripts/python.exe")
@@ -119,7 +122,26 @@ def check_venv() -> Tuple[bool, str]:
     # Check primary path
     if venv_python.exists() and venv_python.is_file():
         logger.info(f"✅ Virtual environment: {venv_python.absolute()}")
-        return True, str(venv_python.absolute())
+        
+        # Phase 89: Verify venv is functional (can import basic modules)
+        try:
+            import subprocess
+            result = subprocess.run(
+                [str(venv_python), "-c", "import sys; print(sys.version)"],
+                capture_output=True,
+                text=True,
+                timeout=5
+            )
+            if result.returncode == 0:
+                logger.info(f"✅ Virtual environment functional: {result.stdout.strip()}")
+                return True, str(venv_python.absolute())
+            else:
+                logger.warning(f"⚠️ Virtual environment exists but not functional")
+                return False, ""
+        except Exception as e:
+            logger.warning(f"⚠️ Cannot verify venv functionality: {e}")
+            # Still return True if path exists (best effort)
+            return True, str(venv_python.absolute())
 
     # Check alternate path
     if venv_alt.exists() and venv_alt.is_file():
@@ -140,7 +162,17 @@ def check_venv() -> Tuple[bool, str]:
 # AC_START: AC-PHASE54-S2-001
 
 
-def auto_create_venv(python_exe: Optional[str] = None) -> Tuple[bool, str]:
+def validate_requirements_txt() -> Tuple[bool, str]:
+    """
+    Validate requirements.txt syntax (Phase 89 enhancement).
+    
+    Learned from chat01.md:
+    - Invalid markdown fences break pip install
+    - Line 296 had ``` at EOF
+    
+    Returns:
+        Tuple of (valid, error_message)
+    
     """
     Automatically create virtual environment if missing.
     
@@ -1087,6 +1119,14 @@ def main():
 
     # Phase 54: Progress tracking
     display_progress_bar("Environment check", 0.1)
+
+    # Step 0: Validate requirements.txt (Phase 89 enhancement)
+    req_valid, req_error = validate_requirements_txt()
+    if not req_valid:
+        logger.error(f"Setup failed: requirements.txt validation - {req_error}")
+        logger.error("   Fix: Remove markdown fences (```) or invalid syntax")
+        # Continue anyway, but warn user
+        logger.warning("   Continuing setup, but pip install may fail...")
 
     # Step 1: Check Python
     python_ok, python_version = check_python()

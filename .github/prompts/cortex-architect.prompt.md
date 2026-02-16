@@ -741,28 +741,63 @@ NOTE: MCP uses Pylance-style architecture (auto-started by VS Code).
 Reference: .github/prompts/MCP-SETUP-GUIDE.md
 ```
 
-### Intent-Based MCP Requirements (CORE-050: Tiered Blocking)
+### Intent-Based MCP Requirements (CORE-050: Tiered Blocking + CORE-053: Auto-Healing)
 
-**Authority:** CORE-050 (MCP Circuit Breaker) | **Enforcement:** P0-BLOCKING
+**Authority:** CORE-050 (MCP Circuit Breaker) + CORE-053 (Auto-Healing) | **Enforcement:** P0-BLOCKING
 
-| Intent | MCP Required | If Unavailable | Rationale |
-|--------|--------------|----------------|-----------|
-| **IMPLEMENT** | ✅ YES | ❌ **HARD BLOCK** | Code changes require TDD/security gates |
-| **FIX** | ✅ YES | ❌ **HARD BLOCK** | Bug fixes require governance |
-| **REFACTOR** | ✅ YES | ❌ **HARD BLOCK** | Restructuring requires validation |
-| **AUDIT** | ✅ YES | ❌ **HARD BLOCK** | Compliance requires MCP tools |
-| **ANALYZE** | ✅ YES | ❌ **HARD BLOCK** | LENS analysis requires MCP |
-| **PLAN** | ✅ YES | ❌ **HARD BLOCK** | Planning affects registry |
-| **DIAGNOSE** | ⚪ NO | ✅ **EXEMPT** | Users must be able to troubleshoot |
-| **QUERY** | ⚪ NO | ✅ **EXEMPT** | Educational questions always allowed |
-| **SETUP** | ⚪ NO | ✅ **EXEMPT** | Fix instructions always provided |
-| **LIST** | ⚪ NO | ✅ **EXEMPT** | Read-only discovery allowed |
-| **RECALL** | ⚪ NO | ✅ **EXEMPT** | Feature discovery allowed |
+**Phase 89 Enhancement (2026-02-16):** Instead of immediately blocking, CORTEX now attempts automated fixes first.
+
+**Healing Sequence (NEW - CORE-053):**
+```
+MCP unavailable detected
+         ↓
+1. DIAGNOSE root cause (OS-aware)
+   - Missing dependencies (yaml/PyYAML)
+   - Invalid requirements.txt (markdown fences)
+   - Platform path mismatch
+   - Venv not activated
+         ↓
+2. ATTEMPT AUTO-FIX
+   - Install missing deps
+   - Fix requirements.txt syntax
+   - Regenerate MCP config
+   - Create venv if missing
+         ↓
+3. RETRY MCP check
+         ↓
+4. PROCEED if fixed, BLOCK if unfixable
+```
+
+| Intent | MCP Required | If Unavailable | Auto-Heal | Rationale |
+|--------|--------------|----------------|-----------|-----------|
+| **IMPLEMENT** | ✅ YES | ❌ **AUTO-HEAL → BLOCK** | ✅ Yes | Code changes require TDD/security gates |
+| **FIX** | ✅ YES | ❌ **AUTO-HEAL → BLOCK** | ✅ Yes | Bug fixes require governance |
+| **REFACTOR** | ✅ YES | ❌ **AUTO-HEAL → BLOCK** | ✅ Yes | Restructuring requires validation |
+| **AUDIT** | ✅ YES | ❌ **AUTO-HEAL → BLOCK** | ✅ Yes | Compliance requires MCP tools |
+| **ANALYZE** | ✅ YES | ❌ **AUTO-HEAL → BLOCK** | ✅ Yes | LENS analysis requires MCP |
+| **PLAN** | ✅ YES | ❌ **AUTO-HEAL → BLOCK** | ✅ Yes | Planning affects registry |
+| **DIAGNOSE** | ⚪ NO | ✅ **EXEMPT** | ⚪ N/A | Users must be able to troubleshoot |
+| **QUERY** | ⚪ NO | ✅ **EXEMPT** | ⚪ N/A | Educational questions always allowed |
+| **SETUP** | ⚪ NO | ✅ **EXEMPT** | ⚪ N/A | Fix instructions always provided |
+| **LIST** | ⚪ NO | ✅ **EXEMPT** | ⚪ N/A | Read-only discovery allowed |
+| **RECALL** | ⚪ NO | ✅ **EXEMPT** | ⚪ N/A | Feature discovery allowed |
+
+**Why Auto-Healing?**
+- **Proactive > Reactive** — Fix issues instead of just reporting them
+- **OS-Aware** — Handles Windows vs macOS path differences
+- **Evidence-Based** — Learnings from chat01.md (2026-02-16)
+- **Graceful Degradation** — Block only if auto-fix fails
 
 **Why Tiered Blocking?**
 - **HARD BLOCK** intents modify code/state → require MCP governance
 - **EXEMPT** intents are read-only or help users fix MCP → must always work
 - This prevents users from being stuck when MCP is broken
+
+**Auto-Heal Examples:**
+- Missing yaml/PyYAML → `pip install pyyaml pydantic fastapi`
+- Invalid requirements.txt → Remove markdown fences automatically
+- Platform mismatch → Regenerate settings.json with correct paths
+- Venv missing → Create `.venv` and install dependencies
 
 **Exempt Intent Examples:**
 - "Why isn't MCP working?" → DIAGNOSE (allowed)
