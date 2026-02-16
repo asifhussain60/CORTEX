@@ -26,6 +26,7 @@ from .registry_consistency_agent import RegistryConsistencyAgent
 from .stub_detection_agent import StubDetectionAgent
 from .stub_autofix_agent import StubAutoFixAgent
 from .test_coverage_agent import TestCoverageAgent
+from .token_optimization_agent import TokenOptimizationAgent
 from .version_cleanup_agent import VersionCleanupAgent
 
 __all__ = [
@@ -40,5 +41,6 @@ __all__ = [
     "StubDetectionAgent",
     "StubAutoFixAgent",
     "TestCoverageAgent",
+    "TokenOptimizationAgent",
     "VersionCleanupAgent",
 ]
