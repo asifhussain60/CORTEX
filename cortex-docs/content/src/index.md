@@ -58,7 +58,6 @@ Organizations deploying CORTEX benefit from understanding the platform's archite
 ```
 cortex-registry/
 ├── _cortex-master/          # 46 files: Phase index, dashboard data, enhancements
-├── _cortex-docs/            # 67 files: Documentation system, architecture content
 ├── domains/                 # 1 file: Domain-specific configuration
 ├── governance/              # 2 files: CORE rules, audit checklists
 ├── interaction/             # 6 files: Response templates, content blocks

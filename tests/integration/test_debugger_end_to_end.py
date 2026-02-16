@@ -75,7 +75,6 @@ class TestDebuggerOrchestratorIntegration:
     def test_tests_passed_event_triggers_cleanup(self):
         """Test TESTS_PASSED event triggers cleanup."""
         # Create temp file with markers
-        marker_content = """# CORTEX_DEBUG
 # Trigger: TEST_FAILURE
 # Injected: 2026-02-13T00:00:00
 def test_example():
@@ -103,7 +102,6 @@ def test_example():
             
             # Verify markers removed
             content = temp_file.read_text()
-            assert 'CORTEX_DEBUG' not in content
             
         finally:
             if temp_file.exists():

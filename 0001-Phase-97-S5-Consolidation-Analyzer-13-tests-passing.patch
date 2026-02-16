@@ -1,0 +1,697 @@
+From aeeef31d91739f15da01559d855a0bd58391cebe Mon Sep 17 00:00:00 2001
+From: Asif Hussain <asifhussain60@users.noreply.github.com>
+Date: Mon, 16 Feb 2026 07:56:32 -0500
+Subject: [PATCH 1/9] Phase 97 S5: Consolidation Analyzer (13 tests passing)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+- Orchestrator sprawl detection with metadata analysis
+- Consolidation recommendations with impact scoring
+- Sprawl score calculation (count/size/complexity factors)
+- Grouping by similarity for merge candidates
+- Risk assessment (low/medium/high) based on LOC
+- 13 unit tests covering analysis, recommendations, grouping
+- All tests passing in 0.18s
+
+AC_START: AC-PHASE97-S5-001
+AC_COMPLETE: AC-PHASE97-S5-001 ✅ 13/13 tests passing
+---
+ .../health/agents/consolidation_analyzer.py   | 340 ++++++++++++++++++
+ .../agents/test_consolidation_analyzer.py     | 317 ++++++++++++++++
+ 2 files changed, 657 insertions(+)
+ create mode 100644 cortex/orchestrators/health/agents/consolidation_analyzer.py
+ create mode 100644 tests/unit/orchestrators/health/agents/test_consolidation_analyzer.py
+
+diff --git a/cortex/orchestrators/health/agents/consolidation_analyzer.py b/cortex/orchestrators/health/agents/consolidation_analyzer.py
+new file mode 100644
+index 000000000..b5124f261
+--- /dev/null
++++ b/cortex/orchestrators/health/agents/consolidation_analyzer.py
+@@ -0,0 +1,340 @@
++"""Orchestrator Consolidation Analyzer
++
++Detects orchestrator sprawl and proposes consolidation strategies.
++
++Author: CORTEX Framework
++Phase: PHASE-97 S5
++CORE Rules: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
++"""
++
++from dataclasses import dataclass, field
++from pathlib import Path
++from typing import Any, Dict, List, Optional, Set
++import ast
++
++
++@dataclass
++class OrchestratorMetadata:
++    """Metadata for an orchestrator file.
++    
++    Attributes:
++        file_path: Path to orchestrator file
++        class_name: Orchestrator class name
++        line_count: Number of lines
++        method_count: Number of methods
++        dependency_count: Number of dependencies
++        last_modified: Last modification timestamp
++        usage_count: Number of times used in codebase
++    """
++    
++    file_path: Path
++    class_name: str
++    line_count: int
++    method_count: int
++    dependency_count: int
++    last_modified: float = 0.0
++    usage_count: int = 0
++
++
++@dataclass
++class ConsolidationRecommendation:
++    """Recommendation for consolidating orchestrators.
++    
++    Attributes:
++        target_orchestrator: Primary orchestrator to keep
++        merge_candidates: Orchestrators to merge into target
++        reason: Consolidation rationale
++        impact_score: Impact score (0-100, higher = more beneficial)
++        effort_hours: Estimated effort in hours
++        risk_level: Risk level (low/medium/high)
++    """
++    
++    target_orchestrator: str
++    merge_candidates: List[str] = field(default_factory=list)
++    reason: str = ""
++    impact_score: int = 0
++    effort_hours: float = 0.0
++    risk_level: str = "low"
++
++
++@dataclass
++class ConsolidationReport:
++    """Complete consolidation analysis report.
++    
++    Attributes:
++        total_orchestrators: Total orchestrator count
++        target_count: Target orchestrator count after consolidation
++        recommendations: List of consolidation recommendations
++        sprawl_score: Sprawl severity (0-100)
++        estimated_effort: Total estimated effort in hours
++    """
++    
++    total_orchestrators: int
++    target_count: int
++    recommendations: List[ConsolidationRecommendation] = field(default_factory=list)
++    sprawl_score: int = 0
++    estimated_effort: float = 0.0
++    
++    @property
++    def reduction_percentage(self) -> float:
++        """Calculate reduction percentage.
++        
++        Returns:
++            Percentage reduction in orchestrator count
++        """
++        if self.total_orchestrators == 0:
++            return 0.0
++        return (
++            (self.total_orchestrators - self.target_count)
++            / self.total_orchestrators
++            * 100
++        )
++
++
++class ConsolidationAnalyzer:
++    """Analyzer for orchestrator sprawl and consolidation.
++    
++    Detects unnecessary orchestrator proliferation and proposes
++    consolidation strategies.
++    
++    Attributes:
++        repo_path: Path to repository root
++        orchestrator_dirs: Directories containing orchestrators
++    """
++    
++    def __init__(
++        self,
++        repo_path: Path,
++        orchestrator_dirs: Optional[List[str]] = None,
++    ) -> None:
++        """Initialize consolidation analyzer.
++        
++        Args:
++            repo_path: Path to repository root
++            orchestrator_dirs: Optional list of orchestrator directories
++        """
++        self.repo_path = repo_path
++        self.orchestrator_dirs = orchestrator_dirs or [
++            "cortex/orchestrators",
++            "cortex/domain_orchestrators",
++            "cortex_brain/domain",
++        ]
++    
++    def analyze(self) -> ConsolidationReport:
++        """Analyze orchestrator sprawl and generate recommendations.
++        
++        Returns:
++            Consolidation report with recommendations
++        """
++        # Discover all orchestrators
++        orchestrators = self._discover_orchestrators()
++        
++        # Calculate sprawl score
++        sprawl_score = self._calculate_sprawl_score(orchestrators)
++        
++        # Generate consolidation recommendations
++        recommendations = self._generate_recommendations(orchestrators)
++        
++        # Calculate target count
++        target_count = len(orchestrators) - sum(
++            len(r.merge_candidates) for r in recommendations
++        )
++        
++        # Calculate total effort
++        total_effort = sum(r.effort_hours for r in recommendations)
++        
++        return ConsolidationReport(
++            total_orchestrators=len(orchestrators),
++            target_count=target_count,
++            recommendations=recommendations,
++            sprawl_score=sprawl_score,
++            estimated_effort=total_effort,
++        )
++    
++    def _discover_orchestrators(self) -> List[OrchestratorMetadata]:
++        """Discover all orchestrator files.
++        
++        Returns:
++            List of orchestrator metadata
++        """
++        orchestrators = []
++        
++        for dir_name in self.orchestrator_dirs:
++            dir_path = self.repo_path / dir_name
++            
++            if not dir_path.exists():
++                continue
++            
++            for py_file in dir_path.rglob("*.py"):
++                if py_file.name.startswith("__"):
++                    continue
++                
++                metadata = self._analyze_file(py_file)
++                if metadata:
++                    orchestrators.append(metadata)
++        
++        return orchestrators
++    
++    def _analyze_file(self, file_path: Path) -> Optional[OrchestratorMetadata]:
++        """Analyze single orchestrator file.
++        
++        Args:
++            file_path: Path to file
++        
++        Returns:
++            Orchestrator metadata or None if not an orchestrator
++        """
++        try:
++            content = file_path.read_text()
++            tree = ast.parse(content)
++            
++            # Find orchestrator class
++            orchestrator_class = None
++            method_count = 0
++            
++            for node in ast.walk(tree):
++                if isinstance(node, ast.ClassDef):
++                    if "orchestrator" in node.name.lower():
++                        orchestrator_class = node.name
++                        method_count = sum(
++                            1 for n in node.body if isinstance(n, ast.FunctionDef)
++                        )
++                        break
++            
++            if not orchestrator_class:
++                return None
++            
++            # Count dependencies (imports)
++            dependency_count = sum(
++                1 for node in ast.walk(tree)
++                if isinstance(node, (ast.Import, ast.ImportFrom))
++            )
++            
++            return OrchestratorMetadata(
++                file_path=file_path,
++                class_name=orchestrator_class,
++                line_count=len(content.splitlines()),
++                method_count=method_count,
++                dependency_count=dependency_count,
++                last_modified=file_path.stat().st_mtime,
++            )
++            
++        except (SyntaxError, OSError):
++            return None
++    
++    def _calculate_sprawl_score(
++        self, orchestrators: List[OrchestratorMetadata]
++    ) -> int:
++        """Calculate sprawl severity score.
++        
++        Args:
++            orchestrators: List of orchestrator metadata
++        
++        Returns:
++            Sprawl score (0-100, higher = worse sprawl)
++        """
++        if not orchestrators:
++            return 0
++        
++        # Factors contributing to sprawl:
++        # 1. Total count (target: 28, current: len(orchestrators))
++        # 2. Small orchestrators (<100 LOC)
++        # 3. Low method count (<3 methods)
++        
++        target_count = 28
++        count_factor = min(len(orchestrators) / target_count, 2.0) * 50
++        
++        small_orchestrators = sum(
++            1 for o in orchestrators if o.line_count < 100
++        )
++        small_factor = (small_orchestrators / len(orchestrators)) * 30
++        
++        low_method_count = sum(
++            1 for o in orchestrators if o.method_count < 3
++        )
++        method_factor = (low_method_count / len(orchestrators)) * 20
++        
++        return int(count_factor + small_factor + method_factor)
++    
++    def _generate_recommendations(
++        self, orchestrators: List[OrchestratorMetadata]
++    ) -> List[ConsolidationRecommendation]:
++        """Generate consolidation recommendations.
++        
++        Args:
++            orchestrators: List of orchestrator metadata
++        
++        Returns:
++            List of consolidation recommendations
++        """
++        recommendations = []
++        
++        # Group orchestrators by similarity
++        groups = self._group_by_similarity(orchestrators)
++        
++        for group in groups:
++            if len(group) < 2:
++                continue
++            
++            # Select largest as target
++            target = max(group, key=lambda o: o.line_count)
++            candidates = [o for o in group if o != target]
++            
++            if not candidates:
++                continue
++            
++            # Calculate impact and effort
++            total_loc = sum(o.line_count for o in candidates)
++            impact_score = min(int(len(candidates) * 20), 100)
++            effort_hours = len(candidates) * 2.0  # 2 hours per merge
++            
++            # Determine risk level
++            if total_loc > 1000:
++                risk_level = "high"
++            elif total_loc > 500:
++                risk_level = "medium"
++            else:
++                risk_level = "low"
++            
++            recommendation = ConsolidationRecommendation(
++                target_orchestrator=target.class_name,
++                merge_candidates=[o.class_name for o in candidates],
++                reason=f"Similar functionality, {len(candidates)} candidates",
++                impact_score=impact_score,
++                effort_hours=effort_hours,
++                risk_level=risk_level,
++            )
++            
++            recommendations.append(recommendation)
++        
++        return sorted(recommendations, key=lambda r: r.impact_score, reverse=True)
++    
++    def _group_by_similarity(
++        self, orchestrators: List[OrchestratorMetadata]
++    ) -> List[List[OrchestratorMetadata]]:
++        """Group orchestrators by similarity.
++        
++        Args:
++            orchestrators: List of orchestrator metadata
++        
++        Returns:
++            List of orchestrator groups
++        """
++        # Simple grouping by name prefix/suffix
++        groups: Dict[str, List[OrchestratorMetadata]] = {}
++        
++        for orch in orchestrators:
++            # Extract base name (remove suffixes like Orchestrator, Handler, etc.)
++            base_name = (
++                orch.class_name
++                .replace("Orchestrator", "")
++                .replace("Handler", "")
++                .replace("Manager", "")
++            )
++            
++            if base_name not in groups:
++                groups[base_name] = []
++            
++            groups[base_name].append(orch)
++        
++        return list(groups.values())
+diff --git a/tests/unit/orchestrators/health/agents/test_consolidation_analyzer.py b/tests/unit/orchestrators/health/agents/test_consolidation_analyzer.py
+new file mode 100644
+index 000000000..23a5a7d35
+--- /dev/null
++++ b/tests/unit/orchestrators/health/agents/test_consolidation_analyzer.py
+@@ -0,0 +1,317 @@
++"""Unit Tests for Consolidation Analyzer
++
++Tests orchestrator sprawl detection and consolidation recommendations.
++
++Author: CORTEX Framework
++Phase: PHASE-97 S5
++CORE Rules: CORE-008 (TDD)
++"""
++
++import pytest
++from pathlib import Path
++from unittest.mock import Mock, patch
++
++from cortex.orchestrators.health.agents.consolidation_analyzer import (
++    ConsolidationAnalyzer,
++    ConsolidationRecommendation,
++    ConsolidationReport,
++    OrchestratorMetadata,
++)
++
++
++@pytest.fixture
++def sample_orchestrators() -> list[OrchestratorMetadata]:
++    """Create sample orchestrator metadata.
++    
++    Returns:
++        List of orchestrator metadata
++    """
++    return [
++        OrchestratorMetadata(
++            file_path=Path("orch1.py"),
++            class_name="MainOrchestrator",
++            line_count=500,
++            method_count=10,
++            dependency_count=15,
++        ),
++        OrchestratorMetadata(
++            file_path=Path("orch2.py"),
++            class_name="HelperOrchestrator",
++            line_count=50,
++            method_count=2,
++            dependency_count=5,
++        ),
++        OrchestratorMetadata(
++            file_path=Path("orch3.py"),
++            class_name="UtilityOrchestrator",
++            line_count=75,
++            method_count=3,
++            dependency_count=8,
++        ),
++    ]
++
++
++@pytest.fixture
++def analyzer(tmp_path: Path) -> ConsolidationAnalyzer:
++    """Create consolidation analyzer.
++    
++    Args:
++        tmp_path: Pytest temporary directory
++    
++    Returns:
++        ConsolidationAnalyzer instance
++    """
++    return ConsolidationAnalyzer(repo_path=tmp_path)
++
++
++class TestOrchestratorMetadata:
++    """Test suite for OrchestratorMetadata."""
++    
++    def test_metadata_creation(self) -> None:
++        """Test creating orchestrator metadata."""
++        metadata = OrchestratorMetadata(
++            file_path=Path("test.py"),
++            class_name="TestOrchestrator",
++            line_count=100,
++            method_count=5,
++            dependency_count=10,
++        )
++        
++        assert metadata.class_name == "TestOrchestrator"
++        assert metadata.line_count == 100
++        assert metadata.method_count == 5
++
++
++class TestConsolidationReport:
++    """Test suite for ConsolidationReport."""
++    
++    def test_reduction_percentage(self) -> None:
++        """Test reduction percentage calculation."""
++        report = ConsolidationReport(
++            total_orchestrators=100,
++            target_count=28,
++        )
++        
++        assert report.reduction_percentage == 72.0
++    
++    def test_reduction_percentage_zero(self) -> None:
++        """Test reduction percentage with zero orchestrators."""
++        report = ConsolidationReport(
++            total_orchestrators=0,
++            target_count=0,
++        )
++        
++        assert report.reduction_percentage == 0.0
++
++
++class TestConsolidationAnalyzer:
++    """Test suite for ConsolidationAnalyzer."""
++    
++    def test_init(self, analyzer: ConsolidationAnalyzer) -> None:
++        """Test analyzer initialization.
++        
++        Args:
++            analyzer: Consolidation analyzer
++        """
++        assert analyzer.repo_path is not None
++        assert len(analyzer.orchestrator_dirs) > 0
++    
++    def test_init_custom_dirs(self, tmp_path: Path) -> None:
++        """Test initialization with custom directories.
++        
++        Args:
++            tmp_path: Pytest temporary directory
++        """
++        analyzer = ConsolidationAnalyzer(
++            repo_path=tmp_path,
++            orchestrator_dirs=["custom/dir"],
++        )
++        
++        assert "custom/dir" in analyzer.orchestrator_dirs
++    
++    def test_analyze_empty_repo(self, analyzer: ConsolidationAnalyzer) -> None:
++        """Test analyze with no orchestrators.
++        
++        Args:
++            analyzer: Consolidation analyzer
++        """
++        report = analyzer.analyze()
++        
++        assert isinstance(report, ConsolidationReport)
++        assert report.total_orchestrators == 0
++        assert report.sprawl_score == 0
++    
++    def test_calculate_sprawl_score_empty(
++        self, analyzer: ConsolidationAnalyzer
++    ) -> None:
++        """Test sprawl score with empty list.
++        
++        Args:
++            analyzer: Consolidation analyzer
++        """
++        score = analyzer._calculate_sprawl_score([])
++        
++        assert score == 0
++    
++    def test_calculate_sprawl_score_high(
++        self, analyzer: ConsolidationAnalyzer, sample_orchestrators: list
++    ) -> None:
++        """Test sprawl score calculation.
++        
++        Args:
++            analyzer: Consolidation analyzer
++            sample_orchestrators: Sample orchestrator list
++        """
++        # Add many small orchestrators to increase sprawl
++        small_orchestrators = [
++            OrchestratorMetadata(
++                file_path=Path(f"orch{i}.py"),
++                class_name=f"Orchestrator{i}",
++                line_count=50,
++                method_count=2,
++                dependency_count=5,
++            )
++            for i in range(50)
++        ]
++        
++        score = analyzer._calculate_sprawl_score(small_orchestrators)
++        
++        assert score > 50  # High sprawl
++    
++    def test_generate_recommendations_no_groups(
++        self, analyzer: ConsolidationAnalyzer
++    ) -> None:
++        """Test recommendation generation with no groups.
++        
++        Args:
++            analyzer: Consolidation analyzer
++        """
++        orchestrators = [
++            OrchestratorMetadata(
++                file_path=Path("orch1.py"),
++                class_name="UniqueOrchestrator",
++                line_count=100,
++                method_count=5,
++                dependency_count=10,
++            ),
++        ]
++        
++        recommendations = analyzer._generate_recommendations(orchestrators)
++        
++        assert len(recommendations) == 0
++    
++    def test_generate_recommendations_with_similar(
++        self, analyzer: ConsolidationAnalyzer
++    ) -> None:
++        """Test recommendation generation with similar orchestrators.
++        
++        Args:
++            analyzer: Consolidation analyzer
++        """
++        orchestrators = [
++            OrchestratorMetadata(
++                file_path=Path("main.py"),
++                class_name="MainOrchestrator",
++                line_count=500,
++                method_count=10,
++                dependency_count=15,
++            ),
++            OrchestratorMetadata(
++                file_path=Path("helper.py"),
++                class_name="MainHandler",  # Similar to MainOrchestrator
++                line_count=100,
++                method_count=3,
++                dependency_count=8,
++            ),
++        ]
++        
++        recommendations = analyzer._generate_recommendations(orchestrators)
++        
++        assert len(recommendations) > 0
++        assert recommendations[0].target_orchestrator in [
++            "MainOrchestrator",
++            "MainHandler",
++        ]
++    
++    def test_group_by_similarity(
++        self, analyzer: ConsolidationAnalyzer
++    ) -> None:
++        """Test grouping by similarity.
++        
++        Args:
++            analyzer: Consolidation analyzer
++        """
++        orchestrators = [
++            OrchestratorMetadata(
++                file_path=Path("main1.py"),
++                class_name="MainOrchestrator",
++                line_count=100,
++                method_count=5,
++                dependency_count=10,
++            ),
++            OrchestratorMetadata(
++                file_path=Path("main2.py"),
++                class_name="MainHandler",
++                line_count=100,
++                method_count=5,
++                dependency_count=10,
++            ),
++            OrchestratorMetadata(
++                file_path=Path("util.py"),
++                class_name="UtilityOrchestrator",
++                line_count=50,
++                method_count=2,
++                dependency_count=5,
++            ),
++        ]
++        
++        groups = analyzer._group_by_similarity(orchestrators)
++        
++        # Should have 2 groups: Main* and Utility*
++        assert len(groups) >= 1
++    
++    def test_analyze_with_orchestrators(self, tmp_path: Path) -> None:
++        """Test analyze with actual orchestrator files.
++        
++        Args:
++            tmp_path: Pytest temporary directory
++        """
++        # Create orchestrator directory
++        orch_dir = tmp_path / "cortex" / "orchestrators"
++        orch_dir.mkdir(parents=True)
++        
++        # Create sample orchestrator file
++        orch_file = orch_dir / "sample_orchestrator.py"
++        orch_file.write_text("""
++class SampleOrchestrator:
++    def method1(self):
++        pass
++    
++    def method2(self):
++        pass
++""")
++        
++        analyzer = ConsolidationAnalyzer(repo_path=tmp_path)
++        report = analyzer.analyze()
++        
++        assert report.total_orchestrators >= 1
++        assert isinstance(report.sprawl_score, int)
++
++
++class TestConsolidationRecommendation:
++    """Test suite for ConsolidationRecommendation."""
++    
++    def test_recommendation_creation(self) -> None:
++        """Test creating consolidation recommendation."""
++        rec = ConsolidationRecommendation(
++            target_orchestrator="MainOrchestrator",
++            merge_candidates=["Helper1", "Helper2"],
++            reason="Similar functionality",
++            impact_score=80,
++            effort_hours=4.0,
++            risk_level="medium",
++        )
++        
++        assert rec.target_orchestrator == "MainOrchestrator"
++        assert len(rec.merge_candidates) == 2
++        assert rec.impact_score == 80
+-- 
+2.53.0.windows.1
+

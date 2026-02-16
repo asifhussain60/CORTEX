@@ -1,0 +1,385 @@
+---
+template_id: diagram-standards
+name: "Diagram Standards & Guidelines"
+version: 1.0
+authority: C4 Model + Mermaid Best Practices + ENH-DIGEST-004
+updated: 2026-02-15
+
+purpose: |
+  Standardized diagram creation, metadata, and integration guidelines for
+  CORTEX documentation. Ensures consistency, maintainability, and proper
+  narrative integration.
+
+diagram_hierarchy:
+  c4_model:
+    authority: https://c4model.com/
+    description: "Four-level software architecture diagram hierarchy"
+    
+    levels:
+      - level: 1
+        name: "Context"
+        zoom: "System in environment"
+        shows: "Users, external systems, interactions"
+        audience: ["Business Leaders", "Product Owners", "Developers"]
+        word_count_narrative: 300-400
+        use_when: "Showing how system fits in broader ecosystem"
+        
+      - level: 2
+        name: "Container"
+        zoom: "System internals (high-level)"
+        shows: "Applications, databases, services"
+        audience: ["Product Owners", "Developers"]
+        word_count_narrative: 400-500
+        use_when: "Explaining deployment architecture"
+        
+      - level: 3
+        name: "Component"
+        zoom: "Container internals"
+        shows: "Classes, modules, orchestrators, agents"
+        audience: ["Developers"]
+        word_count_narrative: 500-600
+        use_when: "Detailing implementation architecture"
+        
+      - level: 4
+        name: "Code"
+        zoom: "Component internals"
+        shows: "Class diagrams, method interactions"
+        audience: ["Developers"]
+        word_count_narrative: 400-500
+        use_when: "Rare - prefer sequence diagrams for this level"
+
+  other_diagrams:
+    - type: "Sequence"
+      shows: "Workflow, interaction flow, request processing"
+      audience: ["Product Owners", "Developers"]
+      word_count_narrative: 300-400
+      use_when: "Showing step-by-step process flow"
+      
+    - type: "Flowchart"
+      shows: "Decision trees, conditional logic, routing"
+      audience: ["Product Owners", "Developers"]
+      word_count_narrative: 200-300
+      use_when: "Explaining branching logic"
+      
+    - type: "State"
+      shows: "State transitions, lifecycle management"
+      audience: ["Developers"]
+      word_count_narrative: 300-400
+      use_when: "Showing stateful behavior"
+      
+    - type: "Mindmap"
+      shows: "Concept relationships, taxonomy"
+      audience: ["Business Leaders", "Product Owners"]
+      word_count_narrative: 200-300
+      use_when: "Explaining interconnected concepts"
+
+mermaid_first_policy:
+  rationale: |
+    Mermaid diagrams are:
+    - Text-based (git-friendly, diffable, reviewable)
+    - Rendered natively by GitHub, VS Code, many tools
+    - Version-controlled alongside code
+    - Easy to update (no binary files)
+    - Accessible (screen readers can parse alt text)
+  
+  when_to_use_mermaid:
+    - All C4 Context, Container, Component diagrams
+    - All sequence diagrams
+    - All flowcharts
+    - All state diagrams
+    - All mindmaps
+    - "Default choice unless interactivity required"
+  
+  when_to_use_d3:
+    - Complex interactive visualizations
+    - Real-time data updates
+    - Custom interactions (zoom, pan, filter)
+    - Force-directed graphs with 50+ nodes
+    - "Only when Mermaid cannot express the visualization"
+
+required_metadata:
+  yaml_frontmatter:
+    description: "Every diagram MUST include this YAML block"
+    template: |
+      ---
+      id: unique-diagram-id
+      title: Human-readable title
+      purpose: What question does this answer? (1 sentence)
+      audience: [Business Leaders | Product Owners | Developers | All]
+      diagram_type: [C4-Context | C4-Container | C4-Component | Sequence | Flowchart | State | Mindmap]
+      source_of_truth: Link to wiring contract/registry file
+      last_verified: Release tag or CI build ID
+      interactive: false  # true if D3, false if static Mermaid
+      word_count: 0  # Auto-computed by tooling
+      ---
+    
+    required_fields:
+      - id: "Unique identifier (kebab-case)"
+      - title: "Display title"
+      - purpose: "One-sentence purpose (what question answered)"
+      - audience: "Target audience(s)"
+      - diagram_type: "Type from approved list"
+      - source_of_truth: "Link to authoritative source"
+      - last_verified: "When diagram accuracy last confirmed"
+    
+    optional_fields:
+      - interactive: "true if D3.js, false if Mermaid (default: false)"
+      - related_diagrams: "Links to related diagrams"
+      - prerequisites: "Knowledge required to understand"
+
+narrative_requirements:
+  mandatory: true
+  word_count: 200-400
+  placement: "Immediately after diagram code block"
+  
+  structure:
+    - section: "What It Shows"
+      word_count: 80-120
+      requirements:
+        - High-level description of diagram content
+        - Key components/actors visible
+        - Main relationships illustrated
+    
+    - section: "Key Takeaways"
+      word_count: 80-120
+      requirements:
+        - 3-5 bullet points
+        - Most important insights
+        - Actionable understanding
+    
+    - section: "How to Read This"
+      word_count: 40-80
+      optional: true
+      requirements:
+        - For complex diagrams only
+        - Reading order or navigation guidance
+        - Symbol/color legend explanation
+    
+    - section: "Related Diagrams"
+      word_count: 40-80
+      optional: true
+      requirements:
+        - Links to related diagrams
+        - Explanation of relationship
+        - Suggested reading order
+
+  example_narrative: |
+    **What It Shows:**
+    This sequence diagram illustrates the complete validation workflow from
+    user request through multiple orchestrator layers to final response. The
+    diagram reveals how the IntentRouter delegates to TDDOrchestrator, which
+    then coordinates with EnforcementOrchestrator before code execution. Each
+    orchestrator performs specific validation steps, creating a defense-in-depth
+    architecture. The parallel validation paths (governance + security) complete
+    simultaneously, reducing total validation time.
+    
+    **Key Takeaways:**
+    - Validation occurs at three distinct layers: intent, governance, security
+    - Parallel execution reduces validation overhead by ~40%
+    - Each orchestrator maintains single responsibility
+    - Failure at any layer blocks downstream execution
+    - Audit trail captured across entire workflow
+    
+    **Related Diagrams:**
+    - [orchestrator-registry](orchestrator-registry.md) - Shows all available orchestrators
+    - [enforcement-agents](enforcement-agents.md) - Details governance validation
+    - [mcp-gateway](mcp-gateway.md) - Shows upstream request routing
+
+mermaid_style_guide:
+  general:
+    - Use descriptive node IDs (not A, B, C)
+    - Add styling for visual hierarchy
+    - Keep diagrams focused (max 15-20 nodes)
+    - Use subgraphs for logical grouping
+  
+  c4_diagrams:
+    context_example: |
+      ```mermaid
+      C4Context
+        title System Context - CORTEX in Development Ecosystem
+        
+        Person(dev, "Developer", "Software engineer using VS Code")
+        System(cortex, "CORTEX", "AI-powered development assistant")
+        System_Ext(github, "GitHub", "Source code repository")
+        System_Ext(vscode, "VS Code", "Development environment")
+        
+        Rel(dev, vscode, "Uses", "TypeScript, Python, etc.")
+        Rel(vscode, cortex, "Invokes", "MCP protocol")
+        Rel(cortex, github, "Analyzes", "Git history, PRs")
+      ```
+    
+    container_example: |
+      ```mermaid
+      C4Container
+        title Container Diagram - CORTEX Internal Architecture
+        
+        Container(mcp, "MCP Server", "Python", "Request gateway")
+        Container(orchestrators, "Orchestrators", "Python", "Workflow coordination")
+        Container(lens, "LENS", "Python", "Code intelligence")
+        ContainerDb(registry, "Registry", "YAML", "Configuration data")
+        
+        Rel(mcp, orchestrators, "Routes requests to")
+        Rel(orchestrators, lens, "Analyzes code via")
+        Rel(orchestrators, registry, "Reads config from")
+      ```
+  
+  sequence_example: |
+    ```mermaid
+    sequenceDiagram
+      actor Developer
+      participant MCP as MCP Gateway
+      participant Router as IntentRouter
+      participant TDD as TDDOrchestrator
+      participant Enforcement as EnforcementOrchestrator
+      
+      Developer->>MCP: /implement feature
+      MCP->>Router: Process request
+      Router->>Router: Classify intent (IMPLEMENT)
+      Router->>TDD: Delegate to TDDOrchestrator
+      
+      par Validation Layers
+        TDD->>Enforcement: Validate governance
+        Enforcement-->>TDD: ✅ Passed
+      and
+        TDD->>TDD: Check test coverage
+      end
+      
+      TDD->>Developer: ✅ RED phase complete
+    ```
+  
+  flowchart_example: |
+    ```mermaid
+    flowchart TD
+      Start([User Request]) --> Classify{Classify Intent}
+      Classify -->|IMPLEMENT| TDD[TDDOrchestrator]
+      Classify -->|ANALYZE| LENS[LENSSynthesis]
+      Classify -->|AUDIT| Audit[AuditOrchestrator]
+      
+      TDD --> Validate{Pass Validation?}
+      Validate -->|Yes| Execute[Execute TDD Cycle]
+      Validate -->|No| Block[Block Request]
+      
+      Execute --> Success([Success])
+      Block --> Failure([Failure])
+      
+      style TDD fill:#4CAF50
+      style LENS fill:#2196F3
+      style Audit fill:#FF9800
+    ```
+
+d3_guidelines:
+  when_required:
+    - Interactive force-directed graphs
+    - Real-time data visualization
+    - Custom zoom/pan interactions
+    - Complex hierarchical layouts
+  
+  data_format:
+    description: "D3 diagrams should use JSON data files"
+    example: |
+      ```json
+      {
+        "diagram_id": "orchestrator-network",
+        "type": "force-directed-graph",
+        "nodes": [
+          {
+            "id": "master",
+            "label": "MasterOrchestrator",
+            "layer": 1,
+            "category": "core"
+          },
+          {
+            "id": "intent-router",
+            "label": "IntentRouter",
+            "layer": 2,
+            "category": "core"
+          }
+        ],
+        "links": [
+          {
+            "source": "master",
+            "target": "intent-router",
+            "strength": 0.9,
+            "type": "delegates-to"
+          }
+        ]
+      }
+      ```
+  
+  integration:
+    description: "D3 diagrams loaded via React/Astro component"
+    example: |
+      ```typescript
+      // site/src/components/D3Visualization.tsx
+      import * as d3 from 'd3';
+      import diagramData from '@/data/diagrams/orchestrator-network.json';
+      
+      export function D3Visualization({ diagramId }: Props) {
+        // D3 rendering logic here
+      }
+      ```
+
+validation_checklist:
+  pre_commit:
+    - "✅ YAML frontmatter present and complete"
+    - "✅ Diagram ID unique (no duplicates)"
+    - "✅ Purpose statement clear (1 sentence)"
+    - "✅ Audience specified"
+    - "✅ Source of truth linked"
+    - "✅ Narrative present (200-400 words)"
+    - "✅ Key takeaways listed (3-5 bullets)"
+    - "✅ Mermaid syntax valid (if Mermaid)"
+    - "✅ JSON schema valid (if D3)"
+  
+  periodic_review:
+    - "Last verified date < 90 days old?"
+    - "Source of truth link still valid?"
+    - "Diagram accuracy matches current implementation?"
+    - "Related diagrams still relevant?"
+
+tools:
+  validation:
+    - name: "pipeline/validate-diagrams.py"
+      purpose: "Check diagram metadata completeness"
+    
+    - name: "pipeline/validate-mermaid-syntax.py"
+      purpose: "Verify Mermaid syntax correctness"
+    
+    - name: "pipeline/check-diagram-links.py"
+      purpose: "Ensure source_of_truth links valid"
+  
+  generation:
+    - name: "pipeline/extract-diagrams.py"
+      purpose: "Build diagram registry from all MD files"
+
+examples:
+  good_diagram_file: |
+    ---
+    id: tdd-workflow
+    title: TDD Orchestrator Workflow
+    purpose: How does the TDD orchestrator coordinate RED-GREEN-REFACTOR?
+    audience: [Developers]
+    diagram_type: Sequence
+    source_of_truth: cortex/orchestrators/tdd_orchestrator.py
+    last_verified: v8.1 (2026-02-15)
+    interactive: false
+    ---
+    
+    ```mermaid
+    sequenceDiagram
+      [diagram content]
+    ```
+    
+    **What It Shows:**
+    [200-400 word explanation]
+    
+    **Key Takeaways:**
+    - Point 1
+    - Point 2
+    - Point 3
+
+meta:
+  created: 2026-02-15
+  updated: 2026-02-15
+  authority: C4 Model + Mermaid Documentation + ENH-DIGEST-004
+  validation: Pre-commit diagram metadata checker

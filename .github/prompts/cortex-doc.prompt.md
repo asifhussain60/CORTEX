@@ -301,7 +301,7 @@ word_count: 0  # Auto-computed by tooling
 cd /Users/asifhussain/PROJECTS/CORTEX
 
 # Find last doc update commit
-LAST_DOC_COMMIT=$(git log -1 --format=%H -- cortex-docs/content/src/)
+LAST_DOC_COMMIT=$(git log -1 --format=%H -- cortex-docs\content\src/)
 echo "Baseline: $LAST_DOC_COMMIT"
 
 # Get all changed files since baseline
@@ -550,10 +550,10 @@ const updatedArchitectureData = {
 
 ```bash
 # Check all internal links work
-python scripts/validate_doc_links.py cortex-docs/content/src/
+python scripts/validate_doc_links.py cortex-docs\content\src/
 
 # Verify code references match implementation
-python scripts/validate_code_refs.py cortex-docs/content/src/
+python scripts/validate_code_refs.py cortex-docs\content\src/
 
 # Check metrics match wiring contract
 python scripts/validate_metrics.py
@@ -562,7 +562,7 @@ python scripts/validate_metrics.py
 **Commit with AC markers:**
 
 ```bash
-git add cortex-docs/content/src/
+git add cortex-docs\content\src/
 git commit -m "docs: Refresh architecture docs (247 commits since 0506774b0)
 
 AC_START: AC-DOC-REFRESH-2026-02-11-001
@@ -894,7 +894,7 @@ Perform these steps and return ALL findings:
 
 3. READ the CHARACTER-DESIGN-SHEET.md for visual style rules.
 
-4. READ cortex-docs/content/src/index.md for current architecture.
+4. READ cortex-docs\content\src/index.md for current architecture.
 
 5. READ the existing DALL-E prompts file:
    _workspaces/gitpages-docs/.awakening-of-cortex/prompts/image-prompts-dalle.md
@@ -1132,7 +1132,7 @@ runSubagent(
 
 ```bash
 # Map Markdown structure
-find cortex-docs/content/src -name "*.md" | sort
+find cortex-docs\content\src -name "*.md" | sort
 
 # Expected structure:
 # index.md
@@ -1296,7 +1296,7 @@ base_template = f"""
     </header>
     
     <div class="content-body markdown-content">
-        <!-- Markdown content from cortex-docs/content/src/*.md injected here -->
+        <!-- Markdown content from cortex-docs\content\src/*.md injected here -->
         {{ content | safe }}
     </div>
     
@@ -1383,13 +1383,13 @@ base_template = f"""
 
 class MarkdownToHTMLConverter:
     """
-    Converts Markdown from cortex-docs/content/src/*.md to HTML
+    Converts Markdown from cortex-docs\content\src/*.md to HTML
     while preserving structure and applying glassmorphism theme.
     """
     
     def convert(self, md_path: Path) -> str:
         """
-        1. Read Markdown from cortex-docs/content/src/
+        1. Read Markdown from cortex-docs\content\src/
         2. Parse with python-markdown (extensions: fenced_code, tables, toc)
         3. Wrap content sections in glassmorphism-card divs
         4. Apply syntax highlighting (Prism.js)
@@ -1554,15 +1554,15 @@ class MarkdownToHTMLConverter:
 ```python
 class NavigationBuilder:
     """
-    Builds hierarchical navigation from cortex-docs/content/src/ folder structure.
+    Builds hierarchical navigation from cortex-docs\content\src/ folder structure.
     """
     
     def build_navigation(self, docs_root: Path) -> Dict:
         """
-        Scans cortex-docs/content/src/ and builds navigation tree.
+        Scans cortex-docs\content\src/ and builds navigation tree.
         
         Input:
-          cortex-docs/content/src/
+          cortex-docs\content\src/
             ├── index.md
             ├── capabilities/
             │   ├── overview.md
@@ -1633,7 +1633,7 @@ def generate_html_site(self):
     
     Pipeline:
       1. Extract registry data (__wiring_contract__.yaml)
-      2. Scan cortex-docs/content/src/ for Markdown files
+      2. Scan cortex-docs\content\src/ for Markdown files
       3. For each MD file:
          a. Convert to HTML with glassmorphism cards
          b. Inject brain analogies
@@ -1651,7 +1651,7 @@ def generate_html_site(self):
     
     # Step 1-2: Discovery
     registry = self.extract_registry()
-    md_files = list(Path("cortex-docs/content/src").rglob("*.md"))
+    md_files = list(Path("cortex-docs\content\src").rglob("*.md"))
     
     # Step 3: Convert Markdown to HTML
     converter = MarkdownToHTMLConverter()
@@ -1668,12 +1668,12 @@ def generate_html_site(self):
         )
         
         # Write output
-        output_path = Path("_build/site") / md_file.relative_to("cortex-docs/content/src").with_suffix(".html")
+        output_path = Path("_build/site") / md_file.relative_to("cortex-docs\content\src").with_suffix(".html")
         output_path.parent.mkdir(parents=True, exist_ok=True)
         output_path.write_text(final_html)
     
     # Step 4-5: Build navigation + landing page
-    self.navigation_tree = NavigationBuilder().build_navigation(Path("cortex-docs/content/src"))
+    self.navigation_tree = NavigationBuilder().build_navigation(Path("cortex-docs\content\src"))
     self._generate_landing_page()
     
     # Step 6-10: Remaining steps
@@ -2250,7 +2250,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'cortex-docs/content/src/**'
+      - 'cortex-docs\content\src/**'
       - 'cortex/**/*.py'
       - 'cortex-registry/**/*.yaml'
       - '.github/workflows/deploy-docs.yml'
@@ -2299,7 +2299,7 @@ jobs:
         run: |
           git config user.name "CORTEX Bot"
           git config user.email "cortex@users.noreply.github.com"
-          git add cortex-docs/content/src/
+          git add cortex-docs\content\src/
           git commit -m "docs: Auto-refresh architecture docs [skip ci]"
           git push
   
@@ -2464,7 +2464,7 @@ from typing import Dict, List
 def get_last_doc_commit() -> str:
     """Get commit hash of last architecture doc update."""
     result = subprocess.run(
-        ["git", "log", "-1", "--format=%H", "--", "cortex-docs/content/src/"],
+        ["git", "log", "-1", "--format=%H", "--", "cortex-docs\content\src/"],
         capture_output=True,
         text=True
     )
@@ -2618,7 +2618,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from cortex.orchestrators.internal.html_site_generator import HTMLSiteGenerator
 
 def main():
-    md_root = Path("cortex-docs/content/src")
+    md_root = Path("cortex-docs\content\src")
     html_root = Path("_workspaces/cortex-gitpages")
     template_dir = Path("_workspaces/cortex-gitpages/templates")
     
@@ -3869,13 +3869,89 @@ NO markdown file generation allowed. References should be via semantic_search.
 
 ---
 
+## 📁 Site Structure & Navigation
+
+### Entry Point Architecture (cortex-docs/index.html)
+
+**Role Panel Location:** Lines 602-640 in cortex-docs/index.html
+
+The entry page contains a **3-persona role panel** implemented as glassmorphism cards:
+
+```html
+<!-- Persona Tiles -->
+<div class="persona-tiles-container">
+  <div class="glass-card-clickable persona-tile persona-tile-leadership">
+    <div class="persona-icon z-layer-2">👔</div>
+    <h3 class="persona-title z-layer-2">Business Leadership</h3>
+    <p class="persona-tagline z-layer-2">Ship Faster, Ship Better</p>
+    <ul class="persona-benefits z-layer-2">...</ul>
+  </div>
+  
+  <div class="glass-card-clickable persona-tile persona-tile-product">
+    <div class="persona-icon z-layer-2">📋</div>
+    <h3 class="persona-title z-layer-2">Product Owners</h3>
+    <p class="persona-tagline z-layer-2">From Backlog to Done</p>
+    <ul class="persona-benefits z-layer-2">...</ul>
+  </div>
+  
+  <div class="glass-card-clickable persona-tile persona-tile-engineer">
+    <div class="persona-icon z-layer-2">💻</div>
+    <h3 class="persona-title z-layer-2">Software Engineers</h3>
+    <p class="persona-tagline z-layer-2">Your AI Pair Programmer</p>
+    <ul class="persona-benefits z-layer-2">...</ul>
+  </div>
+</div>
+```
+
+### Role-Based Navigation Paths
+
+**Design Reference:** `_workspaces/cortex-doc-gemini/gemini-index.html` (glassmorphism theme)
+
+**Target Structure:**
+```
+cortex-docs/
+├── index.html                      # Entry with 3-persona panel (current)
+├── views/
+│   ├── business-leader.html        # Business Leadership view (Phase 1 ✅)
+│   ├── product-owner.html          # Product Owners view (Phase 1 ✅)
+│   └── software-engineer.html      # Software Engineers view (Phase 1 ✅)
+├── assets/
+│   ├── data/
+│   │   └── content.json            # JSON content store (2.5MB, Phase 1 ✅)
+│   ├── css/
+│   │   └── glassmorphism.css       # v4.0 theme (Phase 1 ✅)
+│   └── js/
+│       └── content-loader.js       # Client-side rendering (Phase 1 ✅)
+```
+
+**Current Status:**
+- ✅ **Phase 1 Complete:** JSON content store, role views, glassmorphism theme
+- ⚪ **Phase 2 Pending:** Connect persona tiles to role views (clickable navigation)
+- ⚪ **Phase 3 Pending:** Discovery pipeline automation (LENS git integration)
+
+**Implementation Notes:**
+- Persona tiles are styled with `.glass-card-clickable` class (hover effects ready)
+- Role views use client-side rendering from `content.json` (no server required)
+- Theme follows gemini-index.html reference (cyan #00d4ff, purple #7b61ff, emerald #10b981)
+- Navigation should preserve glassmorphism aesthetic with smooth transitions
+
+### Alternative Entry Point
+
+**Role Selector Panel:** `cortex-docs/index-role-selector.html` (simplified 3-card layout)
+
+This is a minimal version with just the role selector, preserved as an alternative entry point.
+
+---
+
 ## 📁 Context Location
 
 All documentation context available via semantic_search:
 ```
-cortex-docs/content/src/
+cortex-docs\content\src/    # Source markdown (45 files, 9 categories)
+cortex-docs\assets\data\     # JSON content store
+cortex-docs\views\           # Role-specific HTML views
 ```
 
 ---
 
-*CORTEX Documentation Generation Prompt v1.0*
+*CORTEX Documentation Generation Prompt v5.1*

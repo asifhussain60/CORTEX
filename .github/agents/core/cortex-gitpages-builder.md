@@ -1,41 +1,62 @@
 # CORTEX GitPages Builder Agent
 
-**Version:** 1.0 | **Updated:** 2026-02-15 | **Role:** HTML Site Generation & Deployment | **Authority:** Session 2026-02-15 Design + cortex-doc.prompt.md v5.0 | **Integration:** cortex-documentation-architect.md (content source)
+**Version:** 2.0 | **Updated:** 2026-02-16 | **Role:** HTML Site Generation & Deployment | **Authority:** Data-Driven Static HTML5 Architecture (Phase 1) | **Integration:** cortex-docs/ directory
 
 ---
 
 ## 🎯 Agent Identity
 
-**CORTEX GitPages Builder** — Specialized agent responsible for transforming structured documentation content into production-ready HTML sites with unified glassmorphism theme, role-based navigation, and multi-column card layouts.
+**CORTEX GitPages Builder** — Specialized agent responsible for maintaining the data-driven static documentation site with glassmorphism theme, role-based navigation, and JSON content store.
 
-**Design Authority:** Session 2026-02-15 Final Architecture Plan
-- **Entry Point:** Unchanged gitpages-docs/index.html (1093 lines)
-- **Role Pages:** business/, product/, engineering/ (gemini-index.html pattern)
-- **Theme:** Dark glassmorphism v4.0 (cyan #00d4ff, purple #7b61ff)
-- **Layout:** Multi-column card grids (no long empty rows)
-- **Content Source:** cortex-documentation-architect.md output
+**Design Authority:** cortex-docs/ARCHITECTURE-RECOMMENDATION.md (2026-02-16)
+- **Architecture:** Data-Driven Static HTML5 (no TypeScript, no SPA)
+- **Content Source:** cortex-docs/content/src/*.md (45 markdown files)
+- **Data Layer:** cortex-docs/assets/data/content.json (JSON extraction)
+- **Views:** cortex-docs/views/*.html (3 role-specific views)
+- **Entry Point:** cortex-docs/index.html (role selector panel)
+- **Theme:** Glassmorphism v4.0 (cyan #00d4ff, purple #7b61ff, emerald #10b981)
+- **Deployment:** GitHub Pages via cortex-docs/ directory
 
 **Key Capabilities:**
-- HTML template generation from structured content
-- Glassmorphism v4.0 theme application
-- Role-based landing page creation (3 personas)
-- Child page generation (5 per role = 15 total)
-- D3.js visualization embedding
-- Truth badge injection (Implemented/Partial/Aspirational)
-- Multi-column card grid layouts
-- Navigation system (sidebar + breadcrumbs)
-- Asset optimization (minify CSS/JS)
-- Local preview server (port 8080)
-- GitHub Pages deployment preparation
+- JSON content extraction from markdown files
+- Role-based content filtering (Business Leader, Product Owner, Software Engineer)
+- Client-side rendering (vanilla JS, no build tools)
+- Glassmorphism theme application
+- Content updates via discovery pipeline (Phase 2 future)
+- GitHub Pages deployment
 
-**MCP Tools:**
-- `cortex_build_gitpages` — Main build orchestrator
-- `cortex_generate_role_page` — Single role landing page
-- `cortex_generate_child_page` — Single child view
-- `cortex_optimize_assets` — CSS/JS minification
-- `cortex_validate_site` — Link checker + accessibility
+**File Structure:**
+```
+cortex-docs/
+├── index.html                 # Role selector (3-persona panel)
+├── views/
+│   ├── business-leader.html   # Filtered view for Business Leaders
+│   ├── product-owner.html     # Filtered view for POs
+│   └── software-engineer.html # Filtered view for Engineers
+├── assets/
+│   ├── data/
+│   │   └── content.json       # JSON data store (2.5MB, 44 files)
+│   ├── css/
+│   │   └── glassmorphism.css  # Theme (glassmorphism v4.0)
+│   └── js/
+│       └── content-loader.js  # Client-side JSON → DOM rendering
+├── content/
+│   └── src/                   # Source markdown (45 files, 9 categories)
+└── pipeline/
+    └── extract-json.py        # JSON extraction script
+```
 
-**Orchestrator:** `CortexDocsOrchestrator` (cortex/orchestrators/internal/cortex_docs_orchestrator.py)
+**Workflow Trigger:**
+```yaml
+trigger:
+  path: cortex-docs/content/src/*.md
+  action: extract_json → commit content.json
+
+manual_refresh:
+  command: python cortex-docs/pipeline/extract-json.py
+  output: cortex-docs/assets/data/content.json
+  auto_commit: true
+```
 
 ---
 
@@ -278,7 +299,6 @@ Jinja2 Variables:
 ### Stage 1: Content Loading
 
 **Input:** `_workspaces/gitpages-docs/content.json` (from cortex-documentation-architect)
-**Content Source:** `cortex-docs/content/src/` (Markdown documentation)
 
 **JSON Structure:**
 ```json
@@ -471,7 +491,7 @@ on:
   push:
     branches: [CORTEX]
     paths:
-      - 'cortex-registry/_cortex-docs/**'
+      - 'cortex-docs/**'
       - '_workspaces/gitpages-docs/**'
       - 'docs/**'
 

@@ -348,7 +348,6 @@ class HolisticValidationGate:
 
 **Registry Structure:** (cortex-registry/)
 - **_cortex-master/** — Master indices, phase definitions, enhancements
-- **_cortex-docs/** — Documentation source files (Diátaxis framework)
 - **domains/** — Domain-specific knowledge graphs
 - **governance/** — Compliance rules, audit policies
 - **interaction/** — Content blocks, response templates

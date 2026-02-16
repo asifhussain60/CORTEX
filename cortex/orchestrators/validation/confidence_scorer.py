@@ -11,28 +11,11 @@ AC-ID: AC-PHASE48-S3-IMPL-001
 """
 
 from dataclasses import dataclass
-from enum import Enum
 from typing import Dict, List, Any
 import logging
 
 
 logger = logging.getLogger(__name__)
-
-
-# ============================================================================
-# CONFIDENCE LEVEL ENUM
-# ============================================================================
-
-class ConfidenceLevel(float, Enum):
-    """Confidence level enumeration for validation results.
-    
-    Maps confidence scores to semantic levels for easy interpretation.
-    """
-    VERY_HIGH = 0.9  # 90%+ confidence
-    HIGH = 0.7       # 70-89% confidence (threshold)
-    MEDIUM = 0.5     # 50-69% confidence
-    LOW = 0.3        # 30-49% confidence
-    VERY_LOW = 0.1   # Below 30% confidence
 
 
 # ============================================================================

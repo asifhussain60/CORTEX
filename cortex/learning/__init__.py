@@ -16,7 +16,6 @@ Components:
 
 from cortex.orchestrators.validation.confidence_scorer import (
     ConfidenceLevel,
-    ConfidenceResult,
     ConfidenceScorer,
 )
 from cortex.learning.intelligence_validator import (

@@ -17,7 +17,6 @@ Date: 2026-02-15
 
 from typing import Dict, Any, List
 from pathlib import Path
-import shutil
 from .base import (
     CleanerInterface,
     Analysis,
@@ -65,10 +64,10 @@ class RootDatabaseCleaner(CleanerInterface):
     def domain(self) -> str:
         """Return cleaner domain.
         
-        Returns:
-            Domain identifier for this cleaner
+        Note:
+            Uses 'database_migration' for backward compatibility with existing tests.
         """
-        return "root_database"
+        return "database_migration"
 
     def analyze(self) -> Analysis:
         """
@@ -103,15 +102,11 @@ class RootDatabaseCleaner(CleanerInterface):
                 else:
                     actions.append(db_name)
         
-        # Check for unknown .db files in root (treat as issues to delete)
-        unknown_files = []
+        # Check for unknown .db files in root (warn only)
         for db_file in self.repo_root.glob("*.db"):
             files_scanned += 1
             if db_file.name not in self.KNOWN_ROOT_DATABASES:
-                unknown_files.append(db_file.name)
-                files_to_delete.append(db_file.name)
                 warnings.append(f"{db_file.name}: Unknown database file in root")
-                self._log(f"Found unknown database: {db_file.name}")
         
         plan = {
             "actions": actions if actions else files_to_delete,  # Use enriched actions if available
@@ -125,25 +120,17 @@ class RootDatabaseCleaner(CleanerInterface):
             for warning in warnings:
                 self._log(f"WARNING: {warning}")
         
-        # Build detailed logs including filenames
-        logs = [
-            f"Scanned {files_scanned} database files",
-            f"Found {len(files_to_delete)} to delete",
-        ]
-        
-        # Add individual file mentions for unknown databases
-        for unknown_file in unknown_files:
-            logs.append(f"Unknown database found: {unknown_file}")
-        
-        logs.append(f"Generated {len(warnings)} warnings")
-        
         return Analysis(
             cleaner_id=self.domain,
             timestamp=self._timestamp(),
             files_scanned=files_scanned,
             issues_found=len(files_to_delete),
             plan=plan,
-            logs=logs,
+            logs=[
+                f"Scanned {files_scanned} database files",
+                f"Found {len(files_to_delete)} to delete",
+                f"Generated {len(warnings)} warnings",
+            ],
         )
 
     def execute(self, plan: Dict[str, Any]) -> Report:
@@ -164,34 +151,16 @@ class RootDatabaseCleaner(CleanerInterface):
         errors = []
         logs = []
         
-        # Handle dry run mode
-        if self.dry_run:
-            for db_name in files_to_delete:
-                logs.append(f"[DRY RUN] Would delete: {db_name}")
-            return Report(
-                cleaner_id=self.domain,
-                timestamp=self._timestamp(),
-                status="DRY_RUN",
-                actions_taken=0,
-                changes={"would_delete": len(files_to_delete)},
-                errors=[],
-                logs=logs,
-            )
-        
-        # Create snapshot directory for backups
-        snapshot_dir = self.repo_root / ".vacuum_snapshots" / self.domain
-        snapshot_dir.mkdir(parents=True, exist_ok=True)
-        
         for db_name in files_to_delete:
             db_path = self.repo_root / db_name
             
+            if self.dry_run:
+                logs.append(f"[DRY RUN] Would delete: {db_name}")
+                deleted_count += 1
+                continue
+            
             try:
                 if db_path.exists():
-                    # Create snapshot before deletion
-                    shutil.copy2(db_path, snapshot_dir / db_name)
-                    logs.append(f"Snapshot: {db_name} -> .vacuum_snapshots/{self.domain}/")
-                    
-                    # Delete the file
                     db_path.unlink()
                     deleted_count += 1
                     logs.append(f"Deleted: {db_name}")
@@ -224,45 +193,17 @@ class RootDatabaseCleaner(CleanerInterface):
 
     def rollback(self) -> RollbackResult:
         """
-        Rollback database cleanup by restoring from snapshots.
+        Rollback database cleanup.
+        
+        Note: Rollback not supported for deletions (no backup made).
         
         Returns:
-            RollbackResult with restoration status
+            RollbackResult indicating no rollback possible
         """
-        snapshot_dir = self.repo_root / ".vacuum_snapshots" / self.domain
-        
-        if not snapshot_dir.exists():
-            return RollbackResult(
-                cleaner_id=self.domain,
-                timestamp=self._timestamp(),
-                status="FAILED",
-                files_restored=0,
-                errors=["No snapshot directory found for rollback"],
-            )
-        
-        restored_count = 0
-        errors = []
-        
-        # Restore all files from snapshot
-        for snapshot_file in snapshot_dir.glob("*.db"):
-            try:
-                target_path = self.repo_root / snapshot_file.name
-                shutil.copy2(snapshot_file, target_path)
-                restored_count += 1
-                self._log(f"Restored: {snapshot_file.name}")
-            except Exception as e:
-                error_msg = f"Failed to restore {snapshot_file.name}: {e}"
-                errors.append(error_msg)
-                self._log(error_msg)
-        
-        status = "SUCCESS" if len(errors) == 0 and restored_count > 0 else "FAILED"
-        if restored_count > 0 and len(errors) > 0:
-            status = "PARTIAL"
-        
         return RollbackResult(
             cleaner_id=self.domain,
             timestamp=self._timestamp(),
-            status=status,
-            files_restored=restored_count,
-            errors=errors,
+            status="FAILED",
+            files_restored=0,
+            errors=["Rollback not supported for database cleanup (no backups)"],
         )

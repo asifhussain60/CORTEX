@@ -224,26 +224,25 @@ Git: a2fdcdc "docs: Refresh architecture docs (247 commits)"
 
 **Output:**
 ```
-cortex-docs/
+_workspaces/cortex-gitpages/
 ├── index.html (Landing page with brain analogy)
-├── content/src/ (Markdown source documentation)
-│   ├── index.md
+├── architecture/ (Main documentation)
+│   ├── index.html
 │   ├── capabilities/
 │   ├── orchestration/
 │   ├── lens/
 │   ├── toolkit/
-│   ├── infrastructure/
-│   ├── learning/
-│   ├── mcp/
-│   └── diagrams/
-├── business/ (Business Leaders role page)
-├── product/ (Product Owners role page)
-├── engineering/ (Software Developers role page)
+│   └── infrastructure/
+├── personas/ (Role-specific views)
+│   ├── developer/
+│   ├── manager/
+│   ├── executive/
+│   └── regulatory/
 ├── assets/
-│   ├── css/ (glassmorphism theme)
-│   ├── js/ (interactive elements)
+│   ├── css/ (minified)
+│   ├── js/ (bundled D3.js)
 │   └── images/
-└── api/ (API documentation)
+└── api/ (Interactive API docs)
 ```
 
 ---
