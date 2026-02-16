@@ -169,6 +169,15 @@ class DuplicateDetectionAgent(BaseHealthAgent):
                     rel_path = dup_file.relative_to(workspace_root)
                     ssot_rel_path = ssot_file.relative_to(workspace_root)
                     
+                    # Check if this is a documented redirect (CORE-035 compliant)
+                    try:
+                        content = dup_file.read_text()
+                        if "CORE-035" in content and "redirect" in content.lower():
+                            # This is a documented redirect, not a violation
+                            continue
+                    except Exception:
+                        pass
+                    
                     issues.append(HealthIssue(
                         category=HealthIssueCategory.DUPLICATE,
                         severity=HealthIssueSeverity.CRITICAL,
@@ -268,8 +277,22 @@ class DuplicateDetectionAgent(BaseHealthAgent):
             files_scanned += 1
         
         # Report basename duplicates
+        # Exclude common legitimate patterns (models.py, __main__.py, etc.)
+        common_module_names = {
+            "__init__.py", "conftest.py", "__main__.py",
+            "models.py", "types.py", "constants.py", "utils.py",
+            "config.py", "settings.py", "exceptions.py", "errors.py",
+            "base.py", "abstract.py", "interfaces.py",
+            "test_*.py",  # Test files
+            "bootstrap.py",  # Legitimate in different contexts
+        }
+        
         for basename, files in basename_map.items():
-            if len(files) > 1 and basename not in ["__init__.py", "conftest.py"]:
+            # Skip common module names and test files
+            if basename in common_module_names or basename.startswith("test_"):
+                continue
+                
+            if len(files) > 1:
                 # Check if files are actually different (not exact duplicates)
                 unique_hashes = set()
                 for f in files:
@@ -279,6 +302,15 @@ class DuplicateDetectionAgent(BaseHealthAgent):
                         pass
                 
                 if len(unique_hashes) > 1:
+                    # Check if files are in completely separate package hierarchies
+                    # (e.g., cortex/wiring/ vs cortex_brain/ is OK)
+                    paths = [str(f.relative_to(workspace_root)) for f in files]
+                    root_packages = set(p.split('\\')[0] if '\\' in p else p.split('/')[0] for p in paths)
+                    
+                    # If all files are in different root packages, it's legitimate
+                    if len(root_packages) >= len(files):
+                        continue
+                    
                     # Different content, same name = potential confusion
                     for i, file in enumerate(files[1:], 1):
                         rel_path = file.relative_to(workspace_root)

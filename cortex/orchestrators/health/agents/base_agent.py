@@ -31,9 +31,11 @@ class HealthIssueCategory(Enum):
     
     DUPLICATE = "duplicate"              # CORE-035 violations
     STUB = "stub"                        # Weak implementations
+    PATH = "path"                        # Path integrity issues
     PATH_DRIFT = "path_drift"            # Import path issues
     VERSION_ARTIFACT = "version_artifact"  # Versioned files
     MISSING_TEST = "missing_test"        # Test coverage gaps
+    CONFIGURATION = "configuration"      # MCP/configuration issues
     CONFIG_MISPLACED = "config_misplaced"  # Config outside registry
     WEAK_IMPLEMENTATION = "weak_implementation"  # Low quality code
     MULTIPLE_EXECUTION_PATHS = "multiple_execution_paths"  # Path ambiguity

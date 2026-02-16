@@ -1,0 +1,34 @@
+🔍 CORTEX Health Check
+   Workspace: D:\PROJECTS\CORTEX
+
+   ✓ Registered: StubDetection
+
+{
+  "workspace_root": "D:\\PROJECTS\\CORTEX",
+  "metrics": {
+    "total_agents": 1,
+    "total_issues": 1897,
+    "total_files_scanned": 4329,
+    "agents_passed": 0,
+    "agents_failed": 1
+  },
+  "agent_results": [
+    {
+      "agent_name": "StubDetectionAgent",
+      "issues_count": 1897,
+      "files_scanned": 4329,
+      "duration_seconds": 20.375982999801636
+    }
+  ],
+  "recommendations": [
+    "[StubDetectionAgent] Found 1897 issue(s) - review and fix",
+    "High issue count detected - consider running agents individually for focused fixes",
+    "More than half of agents reported issues - prioritize P0/P1 fixes"
+  ],
+  "metadata": {
+    "timestamp": "2026-02-16T17:56:11.657704",
+    "workspace": "D:\\PROJECTS\\CORTEX",
+    "total_duration_seconds": 20.376458644866943
+  }
+}
+✅ Health check passed
