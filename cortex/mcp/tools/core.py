@@ -437,6 +437,13 @@ class CortexClassify(ConsolidatedTool):
                 description="Additional context for classification",
                 required=False,
             ),
+            ToolParameter(
+                name="format",
+                type="string",
+                description="Response format: 'table' (default, DoR table) or 'conversational' (natural language)",
+                required=False,
+                enum=["table", "conversational"],
+            ),
         ]
     
     @property
@@ -444,16 +451,30 @@ class CortexClassify(ConsolidatedTool):
         return ["intent", "scope", "complexity"]
     
     async def execute(self, **params) -> ToolResult:
-        """Execute intent classification."""
+        """Execute intent classification.
+        
+        AC_START: AC-CIG-S3-001
+        AC_START: AC-CIG-S3-002
+        AC_START: AC-CIG-S3-003
+        AC_START: AC-CIG-S3-004
+        AC_START: AC-CIG-S3-005
+        """
         operation = params.get("operation", "intent")
         request = params.get("request", "")
         context = params.get("context", {})
+        format_type = params.get("format", "table")  # AC-CIG-S3-02: Default 'table'
         
         try:
             # AC-FIX-MCP-IMPORTS-001: Corrected path from cortex.intent_router.router
             from cortex.orchestrators.core.intent_router import IntentRouter
+            from cortex.interaction.request_transformer import RequestTransformer
+            from cortex.interaction.conversational_reflector import ConversationalReflector
             
             router = IntentRouter()
+            
+            # AC-CIG-S3-03: Transform request first (optimization)
+            transformer = RequestTransformer()
+            transformed = transformer.transform(request)
             
             if operation == "intent":
                 result = router.execute_operation(
@@ -463,6 +484,33 @@ class CortexClassify(ConsolidatedTool):
                     data = result.unwrap()
                 else:
                     data = self._classify_keywords(request, operation)
+                
+                # AC-CIG-S3-01: Format-based response
+                if format_type == "conversational":
+                    # Generate conversational reflection
+                    reflector = ConversationalReflector()
+                    dor_data = {
+                        "intent_type": data.get("intent", "UNKNOWN"),
+                        "confidence": data.get("confidence", 0.5),
+                        "canonical_keywords": transformed.canonical_keywords,
+                        "scope": transformed.structured_context.get("scope", "unclear"),
+                        "impact": transformed.structured_context.get("impact", "medium"),
+                        "user_text": transformed.distilled_summary,
+                    }
+                    reflection = reflector.reflect(dor_data)
+                    
+                    # AC-CIG-S3-04: Store validation data for approval session
+                    data["conversational_summary"] = reflection.summary
+                    data["conversational_context"] = reflection.context
+                    data["conversational_confidence"] = reflection.confidence
+                    data["validation_data"] = reflection.validation_data
+                    data["transformed_request"] = {
+                        "original_text": transformed.original_text,
+                        "distilled_summary": transformed.distilled_summary,
+                        "canonical_keywords": transformed.canonical_keywords,
+                        "structured_context": transformed.structured_context,
+                        "confidence": transformed.confidence,
+                    }
             elif operation in ("scope", "complexity"):
                 data = self._classify_keywords(request, operation)
             else:
@@ -471,7 +519,12 @@ class CortexClassify(ConsolidatedTool):
             return ToolResult(
                 success=True,
                 data=data,
-                metadata={"operation": operation, "method": "LENS", "wired": True},
+                metadata={
+                    "operation": operation,
+                    "method": "LENS",
+                    "wired": True,
+                    "format": format_type,  # AC-CIG-S3-05: Audit log captures format
+                },
             )
         except Exception as e:
             # Fallback to keyword-based classification (production-safe)
@@ -479,7 +532,13 @@ class CortexClassify(ConsolidatedTool):
             return ToolResult(
                 success=True,
                 data=classification,
-                metadata={"operation": operation, "method": "keywords", "wired": True, "fallback_reason": str(e)},
+                metadata={
+                    "operation": operation,
+                    "method": "keywords",
+                    "wired": True,
+                    "fallback_reason": str(e),
+                    "format": format_type,  # AC-CIG-S3-05: Audit log
+                },
             )
     
     def _classify_keywords(self, request: str, operation: str) -> Dict[str, Any]:
