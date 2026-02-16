@@ -1,25 +1,30 @@
 {
   "phase": "phase-25",
   "stage": "S4",
-  "description": "Regression baseline after stabilization fixes",
-  "timestamp": "2026-02-16T00:00:00Z",
-  "git_sha": "7e287be3a",
+  "description": "Regression baseline after S1 import fixes",
+  "timestamp": "2026-02-16T22:00:00Z",
+  "git_sha": "a5002c870",
   "git_branch": "CORTEX",
   "test_results": {
-    "total_collected": 2451,
-    "passed": 595,
-    "failed": 5,
-    "skipped": 73,
+    "total_collected": 8688,
+    "passed": "pending_run",
+    "failed": "pending_run",
+    "skipped": 3,
     "errors": 5
   },
-  "notable_skips": [
-    "cortex_lens backend not available",
-    "master_plan_auditor not implemented (Phase 81)",
-    "meta_auditor not implemented (Phase 81)",
-    "SharedContext not implemented (Phase 81)",
-    "AutoCleanupManager not implemented (Phase 25)",
-    "core_030_baselines not implemented (Phase 25)",
-    "tier2 governance modules incomplete"
+  "notable_fixes": [
+    "ConfidenceLevel import from ldv1_schema",
+    "score_learnings() method added to ConfidenceScorer",
+    "test_debugger_end_to_end.py syntax fixed",
+    "AutoCleanupManager references removed",
+    "core_030_baselines import path corrected"
+  ],
+  "remaining_collection_errors": [
+    "test_safe_template_editor.py",
+    "test_behavioral_boundaries.py",
+    "test_auto_cleanup_manager.py",
+    "test_gov_business_003.py",
+    "test_gov_business_004.py"
   ],
   "known_failures": [
     "test_no_wave_references_in_active_registry (nomenclature)",

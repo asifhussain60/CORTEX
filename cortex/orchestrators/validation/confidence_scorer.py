@@ -409,24 +409,35 @@ class ConfidenceScorer:
         This method is used by UniversalLearningLoop to score learning
         captures before merging to knowledge repositories.
         
+        Note: This method preserves existing confidence scores. It only
+        calculates frequency-based scores for learnings that don't have
+        a confidence value set yet.
+        
         Args:
             learnings: List of LearningCapture objects
             
         Returns:
-            List of learnings with confidence scores assigned
+            List of learnings (confidence preserved or calculated)
         """
         from collections import Counter
         
-        # Count pattern occurrences
+        # Count pattern occurrences using orchestrator+operation as key
         pattern_counts = Counter(
-            learning.pattern_id for learning in learnings
+            f"{learning.orchestrator}:{learning.operation}" 
+            for learning in learnings
         )
         
         total_occurrences = sum(pattern_counts.values())
         
-        # Assign confidence based on frequency
+        # Only calculate confidence if not already explicitly set
         for learning in learnings:
-            frequency = pattern_counts[learning.pattern_id]
+            # Check if confidence was explicitly set (not the default 0.0)
+            # If confidence > 0, preserve it (whether high or low)
+            if hasattr(learning, 'confidence') and learning.confidence > 0:
+                continue
+                
+            pattern_key = f"{learning.orchestrator}:{learning.operation}"
+            frequency = pattern_counts[pattern_key]
             # Normalize: more frequent patterns get higher confidence
             # Range: 0.5 (single occurrence) to 1.0 (very frequent)
             learning.confidence = min(
