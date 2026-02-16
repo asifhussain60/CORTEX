@@ -60,6 +60,11 @@ class TestMCPEndToEndTruth:
     
     @pytest.fixture
     def tool_registry(self):
+        """Get real tool registry."""
+        return get_registry()
+    
+    @pytest.fixture
+    def tool_registry(self):
         """Get REAL ToolRegistry."""
         return get_registry()
     
@@ -175,6 +180,11 @@ class TestMCPIntegration:
         """Initialize REAL MCPServer."""
         return MCPServer()
     
+    @pytest.fixture
+    def tool_registry(self):
+        """Get real tool registry."""
+        return get_registry()
+    
     def test_mcp_json_rpc_error_codes(self, mcp_server):
         """Verify MCP server defines JSON-RPC error codes."""
         # JSON-RPC 2.0 spec error codes
@@ -204,7 +214,7 @@ class TestMCPIntegration:
         assert mcp_server is not None
         
         # Registry populated
-        tools = tool_registry.list_tools()
+        tools = tool_registry.list_all()
         assert len(tools) >= 0  # Allow empty during test (may need seeding)
         
         # Components can work together
