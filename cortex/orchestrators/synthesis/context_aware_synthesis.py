@@ -215,9 +215,10 @@ class ContextAwareSynthesisGateway:
             Tech stack detection results
         """
         try:
+            # TechStackAnalyzer.analyze() expects files list and optional imports
             tech_stack = self.tech_stack_analyzer.analyze(
-                file_path=file_path,
-                repo_path=self.repo_path
+                files=[str(file_path)],
+                imports=None  # Imports extracted by LENS if needed
             )
             return {
                 "primary_language": tech_stack.primary_language,
