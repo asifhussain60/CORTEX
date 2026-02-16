@@ -292,5 +292,3 @@ py-zipkin==1.2.8          # Distributed tracing [OPTIONAL]
 # [PREFLIGHT CRITICAL] - Blocking preflight (MCP/FastAPI core)
 # [OPTIONAL] - Recommended but not required for basic operation
 # [DEV ONLY] - Development/testing only, not needed for production
-
-```
