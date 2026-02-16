@@ -556,9 +556,11 @@ class TestGoldenDatabaseCleanup:
         # Setup: Create golden files
         create_golden_files(golden_test_workspace, golden_scenario_database.initial_files)
         
-        # Execute: Run vacuum (import will be added during GREEN phase)
-        # vacuum = VacuumOrchestrator(golden_test_workspace)
-        # vacuum.cleanup_root_databases()
+        # Execute: Run vacuum
+        from cortex_brain.tier1.orchestrators.cleaners.root_database import RootDatabaseCleaner
+        cleaner = RootDatabaseCleaner({"repo_root": str(golden_test_workspace), "dry_run": False, "verbose": False})
+        analysis = cleaner.analyze()
+        report = cleaner.execute(analysis.plan)
         
         # Verify: Check deletions
         correctly_deleted, incorrectly_present = verify_deletions(
@@ -588,8 +590,10 @@ class TestGoldenDatabaseCleanup:
         create_golden_files(golden_test_workspace, golden_scenario_database.initial_files)
         
         # Execute vacuum
-        # vacuum = VacuumOrchestrator(golden_test_workspace)
-        # vacuum.cleanup_root_databases()
+        from cortex_brain.tier1.orchestrators.cleaners.root_database import RootDatabaseCleaner
+        cleaner = RootDatabaseCleaner({"repo_root": str(golden_test_workspace), "dry_run": False, "verbose": False})
+        analysis = cleaner.analyze()
+        report = cleaner.execute(analysis.plan)
         
         # Verify preservations
         correctly_preserved, incorrectly_deleted = verify_preserved(
@@ -629,8 +633,10 @@ class TestGoldenJSONCleanup:
         create_golden_files(golden_test_workspace, golden_scenario_json.initial_files)
         
         # Execute vacuum
-        # vacuum = VacuumOrchestrator(golden_test_workspace)
-        # vacuum.cleanup_root_json_files()
+        from cortex_brain.tier1.orchestrators.cleaners.root_artifacts import RootArtifactsCleaner
+        cleaner = RootArtifactsCleaner({"repo_root": str(golden_test_workspace), "dry_run": False, "verbose": False})
+        analysis = cleaner.analyze()
+        report = cleaner.execute(analysis.plan)
         
         # Verify relocations
         correct_relocations, failed_relocations = verify_relocations(
@@ -660,8 +666,10 @@ class TestGoldenJSONCleanup:
         create_golden_files(golden_test_workspace, golden_scenario_json.initial_files)
         
         # Execute vacuum
-        # vacuum = VacuumOrchestrator(golden_test_workspace)
-        # vacuum.cleanup_root_json_files()
+        from cortex_brain.tier1.orchestrators.cleaners.root_artifacts import RootArtifactsCleaner
+        cleaner = RootArtifactsCleaner({"repo_root": str(golden_test_workspace), "dry_run": False, "verbose": False})
+        analysis = cleaner.analyze()
+        report = cleaner.execute(analysis.plan)
         
         # Verify preservations
         correctly_preserved, incorrectly_deleted = verify_preserved(
@@ -702,8 +710,10 @@ class TestGoldenMarkdownCleanup:
         create_golden_files(golden_test_workspace, golden_scenario_markdown.initial_files)
         
         # Execute vacuum
-        # vacuum = VacuumOrchestrator(golden_test_workspace)
-        # vacuum.cleanup_markdown_sprawl()
+        from cortex_brain.tier1.orchestrators.cleaners.markdown_sprawl import MarkdownSprawlCleaner
+        cleaner = MarkdownSprawlCleaner({"repo_root": str(golden_test_workspace), "dry_run": False, "verbose": False})
+        analysis = cleaner.analyze()
+        report = cleaner.execute(analysis.plan)
         
         # Verify deletions
         correctly_deleted, incorrectly_present = verify_deletions(
@@ -734,8 +744,10 @@ class TestGoldenMarkdownCleanup:
         create_golden_files(golden_test_workspace, golden_scenario_markdown.initial_files)
         
         # Execute vacuum
-        # vacuum = VacuumOrchestrator(golden_test_workspace)
-        # vacuum.cleanup_markdown_sprawl()
+        from cortex_brain.tier1.orchestrators.cleaners.markdown_sprawl import MarkdownSprawlCleaner
+        cleaner = MarkdownSprawlCleaner({"repo_root": str(golden_test_workspace), "dry_run": False, "verbose": False})
+        analysis = cleaner.analyze()
+        report = cleaner.execute(analysis.plan)
         
         # Verify preservations
         correctly_preserved, incorrectly_deleted = verify_preserved(
@@ -783,8 +795,24 @@ class TestGoldenIntegrationScenarios:
         create_golden_files(golden_test_workspace, all_files)
         
         # Execute: Full vacuum
-        # vacuum = VacuumOrchestrator(golden_test_workspace)
-        # vacuum.run()
+        from cortex_brain.tier1.orchestrators.cleaners.root_database import RootDatabaseCleaner
+        from cortex_brain.tier1.orchestrators.cleaners.root_artifacts import RootArtifactsCleaner
+        from cortex_brain.tier1.orchestrators.cleaners.markdown_sprawl import MarkdownSprawlCleaner
+        
+        config = {"repo_root": str(golden_test_workspace), "dry_run": False, "verbose": False}
+        
+        # Run all cleaners
+        db_cleaner = RootDatabaseCleaner(config)
+        db_analysis = db_cleaner.analyze()
+        db_cleaner.execute(db_analysis.plan)
+        
+        json_cleaner = RootArtifactsCleaner(config)
+        json_analysis = json_cleaner.analyze()
+        json_cleaner.execute(json_analysis.plan)
+        
+        md_cleaner = MarkdownSprawlCleaner(config)
+        md_analysis = md_cleaner.analyze()
+        md_cleaner.execute(md_analysis.plan)
         
         # Verify: All operations
         all_deletions = (

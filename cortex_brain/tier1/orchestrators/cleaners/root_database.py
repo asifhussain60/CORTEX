@@ -1,0 +1,191 @@
+"""
+Root Database Cleaner
+
+Purpose:
+    Removes orphaned database files from repository root while
+    preserving subdirectory databases.
+
+Authority:
+    - AC-VACUUM-REFACTOR-001: Golden test-driven refactoring
+    - CORE-008: TDD
+    - CORE-011: Type hints 100%
+    - CORE-012: Google-style docstrings
+
+Author: CORTEX Architect
+Date: 2026-02-15
+"""
+
+from typing import Dict, Any, List
+from pathlib import Path
+from cortex_brain.tier1.orchestrators.cleaners.base import (
+    CleanerInterface,
+    Analysis,
+    Report,
+    RollbackResult,
+)
+
+
+class RootDatabaseCleaner(CleanerInterface):
+    """
+    Cleaner for orphaned root database files.
+    
+    Deletes:
+        - intelligence_audit.db
+        - contract_validation_audit.db
+        - observability_audit.db
+        - solid_audit.db
+    
+    Preserves:
+        - All databases in subdirectories
+    
+    Warns:
+        - Unknown database files in root
+    """
+
+    # Known audit databases that should be in subdirectories
+    KNOWN_ROOT_DATABASES = [
+        "intelligence_audit.db",
+        "contract_validation_audit.db",
+        "observability_audit.db",
+        "solid_audit.db",
+    ]
+
+    @property
+    def name(self) -> str:
+        """Return cleaner name."""
+        return "Root Database Cleaner"
+
+    @property
+    def version(self) -> str:
+        """Return cleaner version."""
+        return "1.0.0"
+
+    @property
+    def domain(self) -> str:
+        """Return cleaner domain."""
+        return "root_database"
+
+    def analyze(self) -> Analysis:
+        """
+        Scan for orphaned root database files.
+        
+        Returns:
+            Analysis with databases to delete
+        """
+        self._log("Scanning for root database files...")
+        
+        files_to_delete = []
+        warnings = []
+        files_scanned = 0
+        
+        # Check for known database files in root
+        for db_name in self.KNOWN_ROOT_DATABASES:
+            db_path = self.repo_root / db_name
+            if db_path.exists():
+                files_to_delete.append(db_name)
+                files_scanned += 1
+        
+        # Check for unknown .db files in root (warn only)
+        for db_file in self.repo_root.glob("*.db"):
+            files_scanned += 1
+            if db_file.name not in self.KNOWN_ROOT_DATABASES:
+                warnings.append(f"{db_file.name}: Unknown database file in root")
+        
+        plan = {
+            "files_to_delete": files_to_delete,
+            "warnings": warnings,
+            "known_databases": self.KNOWN_ROOT_DATABASES,
+        }
+        
+        self._log(f"Found {len(files_to_delete)} database files to delete")
+        if warnings:
+            for warning in warnings:
+                self._log(f"WARNING: {warning}")
+        
+        return Analysis(
+            cleaner_id=self.domain,
+            timestamp=self._timestamp(),
+            files_scanned=files_scanned,
+            issues_found=len(files_to_delete),
+            plan=plan,
+            logs=[
+                f"Scanned {files_scanned} database files",
+                f"Found {len(files_to_delete)} to delete",
+                f"Generated {len(warnings)} warnings",
+            ],
+        )
+
+    def execute(self, plan: Dict[str, Any]) -> Report:
+        """
+        Execute database cleanup.
+        
+        Args:
+            plan: Execution plan from analyze()
+        
+        Returns:
+            Report with deletion results
+        """
+        self._log("Executing root database cleanup...")
+        
+        files_to_delete = plan.get("files_to_delete", [])
+        warnings = plan.get("warnings", [])
+        deleted_count = 0
+        errors = []
+        logs = []
+        
+        for db_name in files_to_delete:
+            db_path = self.repo_root / db_name
+            
+            if self.dry_run:
+                logs.append(f"[DRY RUN] Would delete: {db_name}")
+                deleted_count += 1
+                continue
+            
+            try:
+                if db_path.exists():
+                    db_path.unlink()
+                    deleted_count += 1
+                    logs.append(f"Deleted: {db_name}")
+                    self._log(f"Deleted: {db_name}")
+                else:
+                    logs.append(f"Already deleted: {db_name}")
+            except Exception as e:
+                error_msg = f"Failed to delete {db_name}: {e}"
+                errors.append(error_msg)
+                logs.append(error_msg)
+                self._log(error_msg)
+        
+        # Add warnings to logs
+        for warning in warnings:
+            logs.append(f"WARNING: {warning}")
+        
+        status = "SUCCESS" if len(errors) == 0 else "PARTIAL"
+        if deleted_count == 0 and len(errors) > 0:
+            status = "FAILED"
+        
+        return Report(
+            cleaner_id=self.domain,
+            timestamp=self._timestamp(),
+            status=status,
+            actions_taken=deleted_count,
+            changes={"deleted": deleted_count},
+            errors=errors,
+            logs=logs,
+        )
+
+    def rollback(self) -> RollbackResult:
+        """
+        Rollback database cleanup.
+        
+        Note: Rollback not supported for deletions (no backup made).
+        
+        Returns:
+            RollbackResult indicating no rollback possible
+        """
+        return RollbackResult(
+            cleaner_id=self.domain,
+            timestamp=self._timestamp(),
+            status="FAILED",
+            files_restored=0,
+            errors=["Rollback not supported for database cleanup (no backups)"],
+        )

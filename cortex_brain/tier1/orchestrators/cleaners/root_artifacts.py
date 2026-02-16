@@ -46,12 +46,17 @@ class RootArtifactsCleaner(CleanerInterface):
         "pyproject.toml",
         "setup.py",
         "setup.cfg",
+        "package.json",  # Node.js config
+        "tsconfig.json",  # TypeScript config
+        "jsconfig.json",  # JavaScript config
     }
     
     # Artifact patterns and their target directories
     ARTIFACT_PATTERNS = {
         "*.log": "reports/logs/",
         "*-report.json": "reports/",
+        "*-summary.json": "reports/",
+        "*-metrics.json": "reports/",
         "*-report.yaml": "reports/",
         "production-*.json": "reports/",
     }
