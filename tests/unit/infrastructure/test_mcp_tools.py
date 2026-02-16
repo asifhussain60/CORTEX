@@ -7,7 +7,7 @@ Target: 18/18 tests passing
 """
 
 import pytest
-from cortex.infrastructure.mcp_tools import (
+from cortex.infrastructure.infrastructure_mcp_tools import (
     InfrastructureDiscoveryTool,
     GitHubDiscoveryTool,
     DiscoveryRequest,

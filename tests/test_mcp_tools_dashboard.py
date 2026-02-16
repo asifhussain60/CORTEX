@@ -5,7 +5,7 @@
 import pytest
 import json
 from typing import Dict, Any
-from cortex.lens.ml_patterns.mcp_tools import (
+from cortex.lens.ml_patterns.ml_pattern_mcp_tools import (
     PatternSimilarityTool,
     RepositoryClusteringTool,
 )

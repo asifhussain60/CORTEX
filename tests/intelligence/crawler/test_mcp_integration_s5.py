@@ -12,21 +12,21 @@ class TestMCPTools:
 
     def test_mcp_tool_discover_patterns(self):
         """T1: Verify cortex_discover_patterns MCP tool."""
-        from cortex.intelligence.crawler.mcp_tools import cortex_discover_patterns
+        from cortex.intelligence.crawler.crawler_mcp_tools import cortex_discover_patterns
         
         tool = cortex_discover_patterns()
         assert callable(tool)
 
     def test_mcp_tool_analyze_repository(self):
         """T2: Verify cortex_analyze_repository MCP tool."""
-        from cortex.intelligence.crawler.mcp_tools import cortex_analyze_repository
+        from cortex.intelligence.crawler.crawler_mcp_tools import cortex_analyze_repository
         
         tool = cortex_analyze_repository()
         assert callable(tool)
 
     def test_mcp_tools_registration(self):
         """T3: Verify MCP tools registered."""
-        from cortex.intelligence.crawler.mcp_tools import register_mcp_tools
+        from cortex.intelligence.crawler.crawler_mcp_tools import register_mcp_tools
         
         registry = {}
         register_mcp_tools(registry)
