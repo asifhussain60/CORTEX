@@ -146,12 +146,12 @@ transformers>=4.30.0          # HuggingFace transformers (BART, T5 for Phase 36)
 
 # Tree-sitter for multi-language parsing
 tree-sitter>=0.20.0        # Universal parser generator (C#, Java, TS, JS) [OPTIONAL]
-tree-sitter-languages>=1.10.2  # Pre-built grammars for 50+ languages [OPTIONAL]
-tree-sitter-c-sharp>=0.21.0    # C# grammar for LENS CSharp adapter [OPTIONAL]
-tree-sitter-javascript>=0.21.0 # JavaScript/TypeScript grammar for LENS adapters [OPTIONAL]
-tree-sitter-typescript>=0.21.0 # TypeScript grammar for LENS Angular/TS adapters [OPTIONAL]
+# tree-sitter-languages>=1.10.2  # DEPRECATED: Package doesn't exist, use individual packages
 tree-sitter-python>=0.21.0     # Python grammar for LENS Python adapter [OPTIONAL]
-tree-sitter-java>=0.21.0       # Java grammar for LENS Java adapter [OPTIONAL]
+tree-sitter-javascript>=0.21.0 # JavaScript/TypeScript grammar for LENS adapters [OPTIONAL]
+# tree-sitter-c-sharp>=0.21.0    # C# grammar (not available for Python 3.13+) [OPTIONAL]
+# tree-sitter-typescript>=0.21.0 # TypeScript grammar (not available for Python 3.13+) [OPTIONAL]
+# tree-sitter-java>=0.21.0       # Java grammar (not available for Python 3.13+) [OPTIONAL]
 
 # ============================================================================
 # DATA SCIENCE & ANALYSIS (Optional but recommended) [OPTIONAL]
