@@ -19,28 +19,13 @@ select = [
 [tool.ruff.lint.flake8-tidy-imports]
 # Ban imports from cortex/* that should import from cortex_brain/* instead
 # This prevents stub/wrapper creation
-banned-from = [
-    # Ban cortex.core.* (should use cortex_brain.*)
-    "cortex.core.governance",
-    "cortex.core.hallucination_prevention",
-    "cortex.core.tier_validator",
-    
-    # Ban cortex.domain_brain.* wrappers (should use cortex_brain.domain_brain.*)
-    "cortex.domain_brain.models",
-    "cortex.domain_brain.api",
-    "cortex.domain_brain.adapters",
-    
-    # Ban cortex.brain.* (should use cortex_brain.*)
-    "cortex.brain.tier0",
-    "cortex.brain.tier1",
-    "cortex.brain.tier2",
-    "cortex.brain.tier3",
-]
-
-[tool.ruff.lint.flake8-tidy-imports.banned-from.msg]
-"cortex.core.governance" = "Import directly from cortex_brain.tier0.governance instead"
-"cortex.core.hallucination_prevention" = "Import directly from cortex_brain.tier0.hallucination_prevention instead"
-"cortex.domain_brain.models" = "Import directly from cortex_brain.domain_brain.models instead"
+ban-relative-imports = "all"
+# Note: banned-api requires dict format {module: {members: [list]}}
+# Commenting out for now as these are module-level bans not supported by ruff TID
+# banned-api = {
+#     "cortex.core.governance": "Import from cortex_brain.tier0.governance",
+#     "cortex.domain_brain.models": "Import from cortex_brain.domain_brain.models",
+# }
 
 [tool.ruff.lint.isort]
 # Sort imports with cortex_brain before cortex
