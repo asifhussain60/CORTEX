@@ -10,13 +10,7 @@ Validates:
 
 import pytest
 from datetime import datetime
-from cortex.core.governance.reasoning_trace import (
-    ReasoningTrace,
-    ReasoningTraceStep,
-    ReasoningTraceValidator,
-    ReasoningStep,
-    StepConfidence,
-)
+from cortex_brain.tier2.governance.reasoning_trace import ReasoningTrace
 
 
 class TestReasoningTraceStep:

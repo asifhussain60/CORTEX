@@ -1,6 +1,6 @@
 """Test for BDOM-001: Cost Tracking"""
 import pytest
-from cortex.core.governance.cost_tracking import CostTracker, CostStatus
+from cortex_brain.tier2.governance.cost_tracking import CostTracker, CostStatus
 
 class TestCostTracking:
     def test_create_tracker(self):

@@ -5,7 +5,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from cortex.domain_brain.models import EntityType
+from cortex_brain.domain_brain.models import EntityType
 from cortex_brain.domain_brain.models import Conflict
 
 

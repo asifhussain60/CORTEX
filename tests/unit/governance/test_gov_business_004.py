@@ -1,6 +1,6 @@
 """Test for BDOM-004: Scope Creep Prevention"""
 import pytest
-from cortex.core.governance.scope_creep import (
+from cortex_brain.tier2 import (
     ScopeManager,
     ScopeItem,
     ScopeStatus,

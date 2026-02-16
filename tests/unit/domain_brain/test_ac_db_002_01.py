@@ -16,7 +16,7 @@ from cortex.domain_brain.adapters import (
     CommentsAdapter,
     RelationshipsAdapter,
 )
-from cortex.domain_brain.models import EntityType
+from cortex_brain.domain_brain.models import EntityType
 
 
 class TestASTAdapter:

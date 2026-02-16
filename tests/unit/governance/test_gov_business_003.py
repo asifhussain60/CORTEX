@@ -1,6 +1,6 @@
 """Test for BDOM-003: Stakeholder Notification"""
 import pytest
-from cortex.core.governance.stakeholder_notification import (
+from cortex_brain.tier2 import (
     NotificationManager,
     NotificationLevel,
 )

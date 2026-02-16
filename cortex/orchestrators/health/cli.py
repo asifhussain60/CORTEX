@@ -24,6 +24,7 @@ from cortex.orchestrators.health.agents import (
     TestCoverageAgent,
     RegistryConsistencyAgent,
 )
+from cortex.orchestrators.health.agents.mcp_auto_healing_agent import MCPAutoHealingAgent
 from cortex.dashboards.health_metrics_exporter import HealthMetricsExporter
 
 
@@ -34,6 +35,7 @@ AVAILABLE_AGENTS = {
     "VersionCleanup": VersionCleanupAgent,
     "TestCoverage": TestCoverageAgent,
     "RegistryConsistency": RegistryConsistencyAgent,
+    "MCPAutoHealing": MCPAutoHealingAgent,
 }
 
 

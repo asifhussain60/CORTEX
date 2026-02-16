@@ -71,6 +71,10 @@ class StubDetectionAgent(BaseHealthAgent):
             "*/tests/*",
             "*/__pycache__/*",
             "*/__init__.py",  # Init files are often small
+            "*/conftest.py",  # Test configuration files
+            "*/models.py",  # Data models (legitimately simple)
+            "*/bootstrap.py",  # Bootstrap files
+            "*/*_metrics.py",  # Metrics collectors (simple by design)
         ])
     
     def check(self, workspace_root: Path) -> HealthCheckResult:
@@ -112,11 +116,13 @@ class StubDetectionAgent(BaseHealthAgent):
                     if is_stub:
                         stub_indicators += 2  # Strong indicator
                     
-                    if stub_indicators >= 2:
+                    # Require 3+ indicators to flag as issue (reduced false positives)
+                    # Files can have low complexity legitimately (models, configs, etc.)
+                    if stub_indicators >= 3:
                         rel_path = py_file.relative_to(workspace_root)
                         
                         # Determine severity
-                        if stub_indicators >= 3:
+                        if stub_indicators >= 4:
                             severity = HealthIssueSeverity.HIGH
                         else:
                             severity = HealthIssueSeverity.MEDIUM

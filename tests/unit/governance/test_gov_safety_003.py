@@ -9,14 +9,7 @@ Validates:
 """
 
 import pytest
-from cortex.core.governance.tool_description_validator import (
-    ToolDescriptionValidator,
-    ToolDescription,
-    ParameterSpec,
-    ReturnSpec,
-    AccuracyLevel,
-    ValidationIssueType,
-)
+from cortex_brain.tier2.governance.tool_description_validator import ToolDescriptionValidator
 
 
 class TestParameterSpec:

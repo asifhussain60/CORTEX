@@ -9,7 +9,7 @@ from typing import Any, Dict, List, Optional
 
 from cortex.brain.core.orchestrator_base import OrchestrationContext, OrchestratorBase
 from cortex.domain_brain.api import Domain, DomainBrainAPI, Entity
-from cortex.domain_brain.models import EntityType
+from cortex_brain.domain_brain.models import EntityType
 
 
 class DocumentFormat(str, Enum):

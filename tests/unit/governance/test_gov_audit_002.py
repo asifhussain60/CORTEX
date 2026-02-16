@@ -1,10 +1,7 @@
 """Test suite for CORE-027c: Audit Immutability & Tamper Detection"""
 
 import pytest
-from cortex.core.governance.audit_immutability import (
-    AuditImmutability,
-    TamperStatus,
-)
+from cortex_brain.tier2.governance.audit_immutability import AuditImmutability
 
 
 class TestAuditImmutability:

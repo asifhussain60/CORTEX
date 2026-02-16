@@ -10,7 +10,7 @@ Comprehensive test suite validating:
 import pytest
 from datetime import datetime, timedelta
 
-from cortex.domain_brain.models import Conflict, AuditOperationType
+from cortex_brain.domain_brain.models import Conflict, AuditOperationType
 from cortex.domain_brain.conflict_resolver import (
     ConflictResolver,
     ResolutionTier,

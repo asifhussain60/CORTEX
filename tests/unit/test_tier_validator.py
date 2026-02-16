@@ -9,7 +9,7 @@ from datetime import datetime
 from typing import Any
 
 from cortex.brain.core.orchestrator_base import OrchestratorBase, OrchestrationContext
-from cortex.core.tier_validator import (
+from cortex.brain.core.tier_validator import (
     TierAccessValidator,
     TierAccessEnforcer,
     TierViolation,

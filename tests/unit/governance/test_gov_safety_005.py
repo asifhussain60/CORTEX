@@ -9,7 +9,7 @@ Validates:
 """
 
 import pytest
-from cortex.core.governance.output_determinism import (
+from cortex_brain.tier2 import (
     OutputDeterminismVerifier,
     ExecutionRecord,
     DeterminismAnalysis,

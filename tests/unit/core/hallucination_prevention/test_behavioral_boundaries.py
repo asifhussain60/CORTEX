@@ -24,7 +24,7 @@ import uuid
 
 # Wrapped import - module may not exist
 try:
-    from cortex.core.hallucination_prevention.behavioral_boundaries import (
+    from cortex_brain.tier2 import (
         BehavioralBoundaryRules,
         BoundaryViolation,
         ViolationType,

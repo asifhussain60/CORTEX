@@ -2,7 +2,7 @@
 
 import pytest
 from datetime import datetime, timedelta
-from cortex.core.governance.audit_performance_sla import (
+from cortex_brain.tier2.governance.audit_performance_sla import (
     AuditPerformanceSLA,
     SLAStatus,
 )

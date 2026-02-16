@@ -8,7 +8,7 @@ import pytest
 from datetime import datetime
 
 from cortex.domain_brain.api import DomainBrainAPI
-from cortex.domain_brain.models import Domain, Entity, EntityType, AuditOperationType
+from cortex_brain.domain_brain.models import Domain, Entity, EntityType, AuditOperationType
 
 
 class TestAPIDocumentation:
@@ -166,7 +166,7 @@ class TestArchitectureDocumentation:
     def test_component_separation(self) -> None:
         """Test that components are properly separated."""
         # Import different components to verify modularity
-        from cortex.domain_brain.models import Domain
+        from cortex_brain.domain_brain.models import Domain
         from cortex.domain_brain.api import DomainBrainAPI
         from cortex.domain_brain.validator import ConsistencyValidator
         from cortex.infrastructure.audit_logger import AuditLogger
@@ -245,7 +245,7 @@ class TestComplianceMatrix:
 
     def test_core_012_docstring_compliance(self) -> None:
         """Test CORE-012: Comprehensive Docstrings compliance."""
-        from cortex.domain_brain.models import Domain
+        from cortex_brain.domain_brain.models import Domain
 
         # Domain should have docstring
         doc = Domain.__doc__
@@ -270,7 +270,7 @@ class TestComplianceMatrix:
 
     def test_core_028_naming_conventions_compliance(self) -> None:
         """Test CORE-028: Naming Conventions compliance."""
-        from cortex.domain_brain.models import (
+        from cortex_brain.domain_brain.models import (
             Domain,
             Entity,
             Conflict,
@@ -322,7 +322,7 @@ class TestQuickStartScenarios:
     def test_scenario_2_handle_conflicts(self) -> None:
         """Quick-start Scenario 2: Detect and resolve conflicts."""
         from cortex.domain_brain.api import DomainBrainAPI
-        from cortex.domain_brain.models import Conflict
+        from cortex_brain.domain_brain.models import Conflict
 
         api = DomainBrainAPI()
 
