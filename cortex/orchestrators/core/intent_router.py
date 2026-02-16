@@ -2042,6 +2042,69 @@ class IntentRouter(IOrchestrator):
             # Specific exception handling per CORE-013
             return Err(f"Operation '{operation_name}' failed: {str(e)}")
 
+    def classify_intent_with_workflow_suggestion(
+        self, context: Dict[str, Any]
+    ) -> Tuple[str, Optional[str]]:
+        """
+        Classify intent and suggest workflow template if applicable.
+
+        Phase 100 Stage 3: Template suggestion based on context analysis.
+
+        Args:
+            context: Operation context with description, intent, attachments, keywords.
+
+        Returns:
+            Tuple of (intent_type, Optional[template_id])
+            - intent_type: Detected intent (IMPLEMENT, FIX, REFACTOR, etc.)
+            - template_id: Suggested workflow template or None
+
+        Examples:
+            >>> router = IntentRouter()
+            >>> context = {
+            ...     "description": "Fix button styling",
+            ...     "intent": "FIX",
+            ...     "attachments": [{"type": "image/png"}]
+            ... }
+            >>> intent, template = router.classify_intent_with_workflow_suggestion(context)
+            >>> assert intent == "FIX"
+            >>> assert template == "tdd/frontend-visual"
+        """
+        # Extract intent
+        intent = context.get("intent", "IMPLEMENT")
+
+        # Check for visual context (screenshots)
+        attachments = context.get("attachments", [])
+        has_visual_context = any(
+            att.get("type", "").startswith("image/") for att in attachments
+        )
+
+        # Extract keywords
+        keywords = context.get("keywords", [])
+        description = context.get("description", "").lower()
+
+        # Template suggestion logic
+        template_id = None
+
+        # Visual context → frontend-visual-tdd
+        if has_visual_context and intent in ["FIX", "IMPLEMENT"]:
+            template_id = "tdd/frontend-visual"
+
+        # API keywords → api-service
+        elif any(kw in description or kw in keywords for kw in ["api", "endpoint", "rest"]):
+            if intent == "IMPLEMENT":
+                template_id = "tdd/api-service"
+
+        # Security keywords → security-compliance
+        elif any(kw in description or kw in keywords for kw in ["security", "compliance", "audit"]):
+            if intent == "AUDIT":
+                template_id = "security/compliance-audit"
+
+        # Generic feature implementation
+        elif intent == "IMPLEMENT" and template_id is None:
+            template_id = "tdd/feature-implementation"
+
+        return intent, template_id
+
     def get_mcp_tools(self) -> Result[Dict[str, Any]]:
         """
         Get MCP tools exposed by this orchestrator.
