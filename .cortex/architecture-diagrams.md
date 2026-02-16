@@ -376,7 +376,7 @@ These diagrams were **manually created** based on production code analysis.
 - **Graphviz:** Dependency graphs
 - **py2puml:** Python → UML auto-generation
 
-**See:** `cortex-registry/_cortex-docs/content/src/diagrams/` for existing diagram sources
+**See:** `cortex-docs/content/src/diagrams/` for existing diagram sources
 
 ---
 

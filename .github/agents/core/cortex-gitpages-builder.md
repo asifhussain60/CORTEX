@@ -278,6 +278,7 @@ Jinja2 Variables:
 ### Stage 1: Content Loading
 
 **Input:** `_workspaces/gitpages-docs/content.json` (from cortex-documentation-architect)
+**Content Source:** `cortex-docs/content/src/` (Markdown documentation)
 
 **JSON Structure:**
 ```json
