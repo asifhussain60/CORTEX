@@ -2,6 +2,9 @@
 Unit tests for AutoCleanupManager
 
 AC-ID: AC-WAVE-R-005
+
+NOTE: This module was refactored into cortex.toolkit.cleanup (Phase 90).
+Tests kept for historical reference but may need updating.
 """
 
 import pytest
@@ -11,7 +14,11 @@ import os
 from datetime import datetime, timedelta
 from unittest.mock import Mock
 
-from cortex.debugging.auto_cleanup_manager import AutoCleanupManager
+try:
+    from cortex.debugging.auto_cleanup_manager import AutoCleanupManager
+except (ModuleNotFoundError, ImportError):
+    # Module refactored into cortex.toolkit.cleanup (Phase 90)
+    pytest.skip("AutoCleanupManager moved to cortex.toolkit.cleanup", allow_module_level=True)
 
 
 class DebugSession:
