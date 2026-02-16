@@ -1,53 +1,60 @@
-"""Cleaners Package
+"""Cleaners Package — Plugin architecture for vacuum operations.
 
-This package should NOT be imported directly.
-Instead, import from tier1.orchestrators.cleaners (the cleaners.py module)
+This package provides the base interfaces and registry for vacuum cleaner
+plugins. Each cleaner is responsible for a specific cleanup domain.
 
-When Python sees "from tier1.orchestrators.cleaners import X",
-it will import from the cleaners/ package directory first.
-This __init__.py must re-export the classes from the parent cleaners.py module.
+Public API:
+    CleanerInterface: ABC for all cleaner implementations
+    CleanerRegistry: Plugin registration and retrieval
+    Analysis, Report, RollbackResult: Data models
+    RootDatabaseCleaner: Clean orphaned root databases
+    RootArtifactsCleaner: Relocate root artifacts
+    MarkdownSprawlCleaner: Remove temporary markdown files
 
-Author: CORTEX Framework
+Usage:
+    ```python
+    from tier1.orchestrators.cleaners import (
+        CleanerRegistry,
+        RootDatabaseCleaner,
+    )
+    
+    registry = CleanerRegistry()
+    cleaner = RootDatabaseCleaner(config)
+    registry.register(cleaner)
+    ```
+
+Author: CORTEX Architect
+Phase: PHASE-VAC-001-05
 """
 
-# Import and re-export from parent cleaners module
-# We use the parent module path by importing from the package above
-import sys
-from pathlib import Path
+# Import base classes from our new plugin architecture
+from .base import (
+    CleanerInterface,
+    Analysis,
+    Report,
+    RollbackResult,
+)
+from .registry import CleanerRegistry
 
-# Get the parent directory (tier1/orchestrators)
-parent_dir = Path(__file__).parent.parent
-
-# Try to import from the parent cleaners.py module directly
-# by using importlib to avoid circular imports
-import importlib.util
-cleaners_module_path = parent_dir / "cleaners.py"
-spec = importlib.util.spec_from_file_location("_cleaners_module", cleaners_module_path)
-_cleaners_module = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(_cleaners_module)
-
-# Re-export all classes
-CleanerInterface = _cleaners_module.CleanerInterface
-CleanerRegistry = _cleaners_module.CleanerRegistry
-Analysis = _cleaners_module.Analysis
-Report = _cleaners_module.Report
-RollbackResult = _cleaners_module.RollbackResult
-CleanerRegistrationError = _cleaners_module.CleanerRegistrationError
-CleanerNotFoundError = _cleaners_module.CleanerNotFoundError
-
-# Now import cleaner implementations (AFTER setting up base classes)
-# This ensures they use the same CleanerInterface instance
-from .database_migration import DatabaseMigrationCleaner
+# Import cleaner implementations
+from .root_database import RootDatabaseCleaner
 from .root_artifacts import RootArtifactsCleaner
+from .markdown_sprawl import MarkdownSprawlCleaner
+
+# Backward compatibility aliases
+DatabaseMigrationCleaner = RootDatabaseCleaner  # Old name for compatibility
 
 __all__ = [
+    # Base classes
     "CleanerInterface",
     "CleanerRegistry",
     "Analysis",
     "Report",
     "RollbackResult",
-    "CleanerRegistrationError",
-    "CleanerNotFoundError",
-    "DatabaseMigrationCleaner",
+    # Cleaner implementations
+    "RootDatabaseCleaner",
     "RootArtifactsCleaner",
+    "MarkdownSprawlCleaner",
+    # Backward compatibility
+    "DatabaseMigrationCleaner",
 ]
