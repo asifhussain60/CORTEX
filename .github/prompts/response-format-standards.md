@@ -1158,6 +1158,64 @@ DoD confidence: [X%] — [short reason].
 | **QUERY/REFINEMENT** | Question→Answer Structured | User asks specific questions, needs clear answers |
 | **IMPLEMENT (silent)** | ASCII Progress Bar | Active execution after "proceed" trigger |
 | **COMPLETION** | Metrics + Deliverables Summary | Phase completion, ready-to-execute handoff |
+| **CLASSIFY (conversational)** | Natural Language Reflection | Intent classification with conversational summary (Phase 101) |
+
+---
+
+### Template F: CLASSIFY (Conversational Mode) — Natural Language Reflection
+
+**Trigger:** `cortex_classify` MCP tool with `format='conversational'`  
+**Purpose:** Pre-implementation intent reflection (≤60 tokens, 4-second scan)  
+**Pattern:** 2-sentence summary → Context → Confidence level
+
+**Example:**
+
+```markdown
+## 🧠 CORTEX CLASSIFY (Conversational)
+**Author:** Asif Hussain | **Orchestrator:** InteractionOrchestrator ✅
+
+---
+
+**You want to implement user authentication for login to add new functionality.**
+
+This involves module-level changes with medium impact.
+
+**Confidence:** High confidence (92%)
+
+---
+
+**Validation Data (Background):**
+- Intent: IMPLEMENT
+- Keywords: implement, authentication, login
+- Scope: module-level
+- Impact: medium
+- Estimated effort: 2-4 hours
+```
+
+**Key Rules (AC-CIG-S2-*):**
+- ✅ First sentence mirrors user vocabulary (not technical jargon)
+- ✅ Second sentence describes scope + impact
+- ✅ Total output ≤60 tokens (conversational_summary + context + confidence)
+- ✅ Confidence formatted as "High/Medium/Low confidence (XX%)"
+- ✅ Validation data in background (not user-facing)
+
+**Comparison: Table vs Conversational**
+
+| Format | Output Style | Token Count | Scan Time | When to Use |
+|--------|-------------|-------------|-----------|-------------|
+| **Table** (default) | DoR markdown table with 8+ fields | 180-240 tokens | 12 seconds | Technical review, full context needed |
+| **Conversational** (new) | 2-sentence natural language | 40-60 tokens | 4 seconds | Quick confirmation, pre-implementation check |
+
+**Implementation:**
+- Conversational format uses `RequestTransformer` (S1) + `ConversationalReflector` (S2)
+- Table format uses existing DoR logic (backward compatible)
+- Format parameter: `format='table'` (default) or `format='conversational'`
+- Both formats store full validation data in approval session
+
+**Backward Compatibility:**
+- Default format remains `'table'` (AC-CIG-S3-02)
+- Existing users see no change unless `format='conversational'` explicitly passed
+- All orchestrator integrations continue working with table format
 
 ---
 
