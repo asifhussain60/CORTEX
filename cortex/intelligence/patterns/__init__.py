@@ -6,7 +6,7 @@ Stage: S1-S5 - Architectural Pattern Detection & Classification
          Phase 60 - Enterprise Custom Pattern Registry & Policy Engine
 """
 
-from .base import (
+from .pattern_base import (
     BasePatternDetector,
     PatternCategory,
     PatternInfo,

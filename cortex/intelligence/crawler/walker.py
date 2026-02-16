@@ -9,7 +9,7 @@ import time
 from pathlib import Path
 from typing import Callable, Dict, Optional
 
-from cortex.intelligence.crawler.base import (
+from cortex.intelligence.crawler.crawler_base import (
     AsyncRepositoryCrawler,
     CrawlerConfig,
     FileMetadata,

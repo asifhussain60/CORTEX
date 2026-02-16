@@ -9,7 +9,7 @@ PHI protection, and healthcare system integration.
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Set
 
-from cortex.brain.domain_orchestrators.business.base import (
+from cortex.brain.domain_orchestrators.business.business_base import (
     BusinessDomainOrchestrator,
     ComplianceCheckResult,
 )

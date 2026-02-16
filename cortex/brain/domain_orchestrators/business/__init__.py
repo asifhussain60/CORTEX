@@ -11,7 +11,7 @@ from cortex.brain.domain_orchestrators.business.plugins import (
     PluginMetadata,
 )
 
-from cortex.brain.domain_orchestrators.business.base import BusinessDomainOrchestrator
+from cortex.brain.domain_orchestrators.business.business_base import BusinessDomainOrchestrator
 from cortex.brain.domain_orchestrators.business.context import (
     DomainContext,
     DomainContextManager,

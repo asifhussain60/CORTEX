@@ -7,7 +7,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
-from cortex.intelligence.patterns.base import PatternMatch
+from cortex.intelligence.patterns.pattern_base import PatternMatch
 
 
 @dataclass

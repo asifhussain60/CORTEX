@@ -9,7 +9,7 @@ from typing import List, Dict, Any
 from unittest.mock import Mock, patch
 
 # Import will work after base.py is created
-# from cortex.intelligence.patterns.base import BasePatternDetector, PatternInfo, PatternMatch
+# from cortex.intelligence.patterns.pattern_base import BasePatternDetector, PatternInfo, PatternMatch
 
 
 class TestBasePatternDetectorInterface:
@@ -24,7 +24,7 @@ class TestBasePatternDetectorInterface:
         """
         # This test will pass once base.py is created with @abstractmethod
         # For now, verify import works
-        from cortex.intelligence.patterns import base
+        from cortex.intelligence.patterns import pattern_base
         assert hasattr(base, 'BasePatternDetector')
         assert issubclass(base.BasePatternDetector, ABC)
 
@@ -35,7 +35,7 @@ class TestBasePatternDetectorInterface:
         Requirement: detect(ast_node, context) must be abstract
         Expected: Method exists and is marked as abstract
         """
-        from cortex.intelligence.patterns import base
+        from cortex.intelligence.patterns import pattern_base
         assert hasattr(base.BasePatternDetector, 'detect')
         # Verify it's abstract
         methods = base.BasePatternDetector.__abstractmethods__
@@ -48,7 +48,7 @@ class TestBasePatternDetectorInterface:
         Requirement: pattern_info property must be abstract
         Expected: Property exists and is marked as abstract
         """
-        from cortex.intelligence.patterns import base
+        from cortex.intelligence.patterns import pattern_base
         assert hasattr(base.BasePatternDetector, 'pattern_info')
         # Verify it's abstract
         methods = base.BasePatternDetector.__abstractmethods__
@@ -65,7 +65,7 @@ class TestPatternInfoSchema:
         Requirement: PatternInfo(name, category, signatures, description)
         Expected: PatternInfo instance with typed fields
         """
-        from cortex.intelligence.patterns.base import PatternInfo
+        from cortex.intelligence.patterns.pattern_base import PatternInfo
         
         pattern = PatternInfo(
             name="Singleton",
@@ -86,7 +86,7 @@ class TestPatternInfoSchema:
         Requirement: confidence field (0.0 - 1.0)
         Expected: Field exists with default or specified value
         """
-        from cortex.intelligence.patterns.base import PatternInfo
+        from cortex.intelligence.patterns.pattern_base import PatternInfo
         
         pattern = PatternInfo(
             name="Observer",
@@ -111,7 +111,7 @@ class TestPatternMatchResult:
         Requirement: PatternMatch(pattern, confidence, location, evidence)
         Expected: PatternMatch instance with all fields
         """
-        from cortex.intelligence.patterns.base import PatternMatch
+        from cortex.intelligence.patterns.pattern_base import PatternMatch
         
         match = PatternMatch(
             pattern_name="Factory",
@@ -132,7 +132,7 @@ class TestPatternMatchResult:
         Requirement: confidence in [0.0, 1.0]
         Expected: ValueError on invalid confidence
         """
-        from cortex.intelligence.patterns.base import PatternMatch
+        from cortex.intelligence.patterns.pattern_base import PatternMatch
         
         with pytest.raises(ValueError, match="confidence must be between"):
             PatternMatch(
@@ -167,7 +167,7 @@ class TestPatternCatalogRegistry:
         Expected: Pattern added and queryable by name
         """
         from cortex.intelligence.patterns.catalog import PatternCatalog
-        from cortex.intelligence.patterns.base import PatternInfo
+        from cortex.intelligence.patterns.pattern_base import PatternInfo
         
         catalog = PatternCatalog()
         pattern = PatternInfo(
@@ -190,7 +190,7 @@ class TestPatternCatalogRegistry:
         Expected: Pattern retrieved correctly
         """
         from cortex.intelligence.patterns.catalog import PatternCatalog
-        from cortex.intelligence.patterns.base import PatternInfo
+        from cortex.intelligence.patterns.pattern_base import PatternInfo
         
         catalog = PatternCatalog()
         pattern = PatternInfo(
@@ -219,7 +219,7 @@ class TestSignatureMatching:
         Requirement: Match exact method names and signatures
         Expected: High confidence (> 0.9) for exact matches
         """
-        from cortex.intelligence.patterns.base import SignatureMatcher
+        from cortex.intelligence.patterns.pattern_base import SignatureMatcher
         
         matcher = SignatureMatcher()
         
@@ -239,7 +239,7 @@ class TestSignatureMatching:
         Requirement: Match when some signatures present
         Expected: Medium confidence (0.5 - 0.85) for partial matches
         """
-        from cortex.intelligence.patterns.base import SignatureMatcher
+        from cortex.intelligence.patterns.pattern_base import SignatureMatcher
         
         matcher = SignatureMatcher()
         
@@ -259,7 +259,7 @@ class TestSignatureMatching:
         Requirement: No matching signatures
         Expected: Low confidence (< 0.5)
         """
-        from cortex.intelligence.patterns.base import SignatureMatcher
+        from cortex.intelligence.patterns.pattern_base import SignatureMatcher
         
         matcher = SignatureMatcher()
         

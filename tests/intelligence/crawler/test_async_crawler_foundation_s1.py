@@ -15,7 +15,7 @@ class TestAsyncRepositoryCrawler:
 
     def test_async_crawler_instantiation(self):
         """T1: Verify AsyncRepositoryCrawler base class exists."""
-        from cortex.intelligence.crawler.base import AsyncRepositoryCrawler
+        from cortex.intelligence.crawler.crawler_base import AsyncRepositoryCrawler
         from abc import ABC
         
         # Cannot instantiate abstract class directly
@@ -24,7 +24,7 @@ class TestAsyncRepositoryCrawler:
     @pytest.mark.asyncio
     async def test_async_crawler_lifecycle(self):
         """T3: Verify crawler lifecycle (start, run, stop)."""
-        from cortex.intelligence.crawler.base import AsyncRepositoryCrawler
+        from cortex.intelligence.crawler.crawler_base import AsyncRepositoryCrawler
         
         class TestCrawler(AsyncRepositoryCrawler):
             async def crawl(self, path: str):

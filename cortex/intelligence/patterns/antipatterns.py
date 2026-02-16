@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from cortex.intelligence.patterns.base import (
+from cortex.intelligence.patterns.pattern_base import (
     BasePatternDetector,
     PatternCategory,
     PatternInfo,

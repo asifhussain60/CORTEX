@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Dict, List, Optional, Tuple
 
-from cortex.intelligence.patterns.base import PatternMatch
+from cortex.intelligence.patterns.pattern_base import PatternMatch
 
 
 class ArchitectureType(Enum):

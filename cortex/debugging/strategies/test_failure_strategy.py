@@ -20,7 +20,7 @@ import traceback
 from typing import List
 from pathlib import Path
 
-from cortex.debugging.strategies.base import AbstractInjectionStrategy, MarkerContext
+from cortex.debugging.strategies.debug_strategy_base import AbstractInjectionStrategy, MarkerContext
 
 
 class TestFailureStrategy(AbstractInjectionStrategy):

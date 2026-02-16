@@ -5,7 +5,7 @@
 
 import pytest
 from typing import Dict, List, Any
-from cortex.intelligence.patterns.base import PatternMatch
+from cortex.intelligence.patterns.pattern_base import PatternMatch
 
 
 class TestArchitectureClassifier:

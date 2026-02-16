@@ -78,7 +78,7 @@ class TestArchitecturePatternSource:
     def test_pattern_source_with_real_patterns(self):
         """Verify ArchitecturePatternSource works with real pattern data."""
         from cortex.intelligence.patterns.lens_source import ArchitecturePatternSource
-        from cortex.intelligence.patterns.base import PatternMatch
+        from cortex.intelligence.patterns.pattern_base import PatternMatch
         
         source = ArchitecturePatternSource()
         

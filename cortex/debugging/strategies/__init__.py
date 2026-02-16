@@ -10,7 +10,7 @@ Authority:
 AC-ID: AC-WAVE-R-S2-003
 """
 
-from cortex.debugging.strategies.base import (
+from cortex.debugging.strategies.debug_strategy_base import (
     AbstractInjectionStrategy,
     MarkerContext,
     InjectionResult,

@@ -9,7 +9,7 @@ AC Marker: AC-PHASE57-S1-003
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Union
 
-from .base import PatternCategory, PatternInfo
+from .pattern_base import PatternCategory, PatternInfo
 
 
 @dataclass

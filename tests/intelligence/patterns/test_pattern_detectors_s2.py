@@ -5,7 +5,7 @@
 
 import pytest
 from typing import Dict, Any
-from cortex.intelligence.patterns.base import BasePatternDetector, PatternInfo, PatternMatch, PatternCategory
+from cortex.intelligence.patterns.pattern_base import BasePatternDetector, PatternInfo, PatternMatch, PatternCategory
 
 
 class TestCreationalPatternDetectors:

@@ -9,7 +9,7 @@ payment handling, inventory management, and shipping.
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-from cortex.brain.domain_orchestrators.business.base import (
+from cortex.brain.domain_orchestrators.business.business_base import (
     BusinessDomainOrchestrator,
     ComplianceCheckResult,
 )

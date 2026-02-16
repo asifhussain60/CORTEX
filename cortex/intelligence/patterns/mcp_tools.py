@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from typing import Any, Callable, Dict, List
 
 from cortex.intelligence.patterns.antipatterns import AntiPatternDetector
-from cortex.intelligence.patterns.base import PatternMatch
+from cortex.intelligence.patterns.pattern_base import PatternMatch
 from cortex.intelligence.patterns.catalog import PatternCatalog
 from cortex.intelligence.patterns.classification import ArchitectureClassifier
 

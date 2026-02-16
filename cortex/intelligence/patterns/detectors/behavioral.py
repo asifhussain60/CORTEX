@@ -8,7 +8,7 @@ AC Marker: AC-PHASE57-S2-004
 
 from typing import Any, Dict, List, Optional
 
-from cortex.intelligence.patterns.base import (
+from cortex.intelligence.patterns.pattern_base import (
     BasePatternDetector,
     PatternCategory,
     PatternInfo,
