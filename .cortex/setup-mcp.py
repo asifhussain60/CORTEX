@@ -172,7 +172,19 @@ def validate_requirements_txt() -> Tuple[bool, str]:
     
     Returns:
         Tuple of (valid, error_message)
+    """
+    req_file = Path("requirements.txt")
+    if not req_file.exists():
+        return False, "requirements.txt not found"
     
+    content = req_file.read_text()
+    if "```" in content:
+        return False, "Invalid markdown fence (```) found in requirements.txt"
+    
+    return True, ""
+
+
+def auto_create_venv(python_exe: Optional[str] = None) -> Tuple[bool, Path]:
     """
     Automatically create virtual environment if missing.
     
