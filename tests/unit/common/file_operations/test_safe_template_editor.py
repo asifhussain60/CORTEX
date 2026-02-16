@@ -249,7 +249,11 @@ Line 3'''
         assert '.strip())' in content
     
     def test_real_world_marker_template(self, editor):
-        """Test: Real-world marker_injection_engine.py scenario."""
+        """Test: Real-world marker_injection_engine.py scenario.
+        
+        Note: Template content should be passed WITHOUT outer quotes
+        (SafeTemplateEditor adds them automatically).
+        """
         # Simulate marker_injection_engine.py
         content = '''from jinja2 import Template
 
@@ -260,6 +264,15 @@ class MarkerInjectionEngine:
     """.strip())
 '''
         
+        # Template content WITHOUT outer quotes (editor adds them)
+        new_template = '''
+        # Session: {session_id_placeholder}
+        # Trigger: {event_type_placeholder}
+        # Context: {context_summary_placeholder}
+        # Injected: {timestamp_placeholder}
+        # Code: {original_code_placeholder}
+        '''
+        
         with tempfile.NamedTemporaryFile(
             mode='w',
             suffix='.py',
@@ -269,12 +282,6 @@ class MarkerInjectionEngine:
             temp_path = Path(f.name)
         
         try:
-            # This is what failed 8+ times in chat01
-# Trigger: {{ event_type }}
-# Context: {{ context_summary }}
-# Injected: {{ timestamp }}
-{{ original_code }}
-            
             result = editor.replace_template(
                 file_path=str(temp_path),
                 template_var="MARKER_TEMPLATE",
@@ -283,11 +290,13 @@ class MarkerInjectionEngine:
             
             assert result.success is True
             
-            # Verify all elements present
+            # Verify all placeholder elements present
             final_content = temp_path.read_text()
-            assert "{{ session_id }}" in final_content
-            assert "{{ original_code }}" in final_content
-            assert '""""""' not in final_content  # Not empty
+            assert "session_id_placeholder" in final_content
+            assert "original_code_placeholder" in final_content
+            assert '""""""' not in final_content  # No empty quotes
+            assert "Template(" in final_content  # Replaced correctly
+            assert ".strip()" in final_content  # Preserved
             
         finally:
             temp_path.unlink()
