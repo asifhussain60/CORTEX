@@ -64,10 +64,10 @@ class RootDatabaseCleaner(CleanerInterface):
     def domain(self) -> str:
         """Return cleaner domain.
         
-        Note:
-            Uses 'database_migration' for backward compatibility with existing tests.
+        Returns:
+            Domain identifier for this cleaner
         """
-        return "database_migration"
+        return "root_database"
 
     def analyze(self) -> Analysis:
         """
