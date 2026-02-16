@@ -1,0 +1,617 @@
+# ============================================================================
+# PHASE 99: Vision API Enhancement + HTML Mapping + Dogfooding Workflow
+# ============================================================================
+# Authority: Architecture Design Session (chat01.md) 2026-02-16
+# Supersedes: None (New Capability)
+# Status: PLANNED | Priority: P2 | Execution Mode: TDD-First
+# ============================================================================
+
+version: '2.0'
+phase_id: phase-99
+title: "Vision API Enhancement + HTML Mapping + Dogfooding Workflow"
+status: planned
+priority: P2
+created: '2026-02-16'
+estimated_effort: "24 hours (3 days)"
+estimated_tokens: "45000"
+roi_score: 78
+confidence: 9.0
+author: "Asif Hussain"
+origin: "Digest from chat01.md design session"
+
+# ============================================================================
+# EXECUTIVE SUMMARY
+# ============================================================================
+overview:
+  vision: |
+    Enhance CORTEX LENS Vision API with atomic-level visual decomposition and
+    establish bidirectional mapping between screenshots and HTML DOM elements
+    via data-cortex-* semantic selectors. Create reusable TDD workflow template
+    for dogfooding CORTEX site development that ensures zero duplication, full
+    compilation, and zero lint errors through holistic RGR cycles.
+
+  problem_statement: |
+    CURRENT STATE:
+    - VisionAnalyzer extracts high-level elements (URLs, UI components, text)
+    - No pixel-level analysis or bounding box precision
+    - No way to map visual screenshots → actual HTML elements
+    - CORTEX site development is manual (no automated workflow)
+    - Vision API integration lacks semantic layer for test automation
+
+    ROOT CAUSE:
+    - Vision API designed for detection, not atomic decomposition
+    - HTML elements lack semantic identifiers for visual mapping
+    - No WorkflowComposer template for frontend TDD workflows
+    - Missing bidirectional link between visual analysis and DOM structure
+
+    IMPACT IF NOT FIXED:
+    - ❌ Cannot dogfood CORTEX for own site development
+    - ❌ Screenshot-driven testing remains manual
+    - ❌ No automated visual regression detection
+    - ❌ Vision API underutilized (only basic detection)
+    - ❌ Frontend changes lack TDD discipline
+
+  solution_approach: |
+    3-TIER STRATEGIC LAYERING PATTERN:
+
+    Tier 1: Enhanced Vision API (Atomic Analysis)
+      - Add PixelGrid, BoundingBox, TextSegment, ColorInfo models
+      - Implement "atomic" analysis depth mode (15-20s processing)
+      - Extract font detection, visual hierarchy, color palettes
+      - Link to data-cortex-id if present in screenshot
+
+    Tier 2: Semantic Selector Bridge (Non-Breaking)
+      - Add optional data-cortex-id attributes to HTML elements
+      - Naming: data-cortex-id, data-cortex-type, data-cortex-track
+      - Progressive enhancement (works even if attributes absent)
+      - Pre-commit hook validates ID uniqueness
+      - Vision API extracts cortex-ids from screenshots
+
+    Tier 3: TDD Workflow Template (WorkflowComposer)
+      - Create cortex-site-dogfood.yaml template
+      - 5-stage workflow: Analyze → Challenge → RED → GREEN → REFACTOR
+      - Integrated with EnforcementOrchestrator (Phase 48 gates)
+      - Deployment preview generation
+      - Performance targets: <30 min full cycle
+
+  success_criteria:
+    - "✅ Atomic Vision API mode operational (<20s per screenshot)"
+    - "✅ BoundingBox, PixelGrid, TextSegment models implemented"
+    - "✅ data-cortex-* attributes added to CORTEX site HTML"
+    - "✅ Pre-commit hook validates unique cortex-ids"
+    - "✅ Vision API extracts cortex-ids from screenshots"
+    - "✅ cortex-site-dogfood.yaml workflow template created"
+    - "✅ Full TDD cycle completes (analyze → RGR → deploy)"
+    - "✅ Zero regression risk (no breaking changes)"
+    - "✅ 95%+ test coverage for new components"
+    - "✅ Lighthouse score ≥95 maintained"
+
+# ============================================================================
+# ENFORCEMENT GATES (Phase 48 Integration)
+# ============================================================================
+enforcement_gates:
+  pre_execution:
+    - gate: "EnforcementOrchestrator"
+      agents: 7
+      checks:
+        - "CORE-008: TDD mandatory (tests before code)"
+        - "CORE-011: Type hints on all parameters + returns"
+        - "CORE-012: Google-style docstrings"
+        - "CORE-026: Git checkpoint before major changes"
+        - "CORE-027: AC_START → AC_COMPLETE audit trail"
+        - "CORE-028: File naming (kebab-case)"
+        - "CORE-035: No duplication"
+      blocking: true
+
+  stage_boundaries:
+    - gate: "Phase48HolisticValidation"
+      checks:
+        - "All tests passing"
+        - "Lint clean (zero errors)"
+        - "Type hints complete"
+        - "Docstrings present"
+        - "No CORE-035 violations"
+      blocking: true
+      frequency: "per_stage"
+
+  phase_completion:
+    - gate: "ProductionReadinessGate"
+      checks:
+        - "Full test suite passing"
+        - "Coverage ≥ 95% for new code"
+        - "Vision API atomic mode <20s"
+        - "0 broken links (pre-commit hook)"
+        - "Workflow template executes successfully"
+        - "Zero breaking changes to existing code"
+      blocking: true
+
+# ============================================================================
+# SECURITY GATES
+# ============================================================================
+security_gates:
+  owasp_top_10:
+    - check: "injection_prevention"
+      scope: "vision_api_processing"
+      enforcement: "blocking"
+      validation: "All image paths sanitized, no arbitrary file reads"
+
+    - check: "data_validation"
+      scope: "cortex_id_attributes"
+      enforcement: "blocking"
+      validation: "ID format validated (alphanumeric + dash only)"
+
+  dependency_security:
+    - tool: "bandit"
+      check: "python_security_issues"
+      frequency: "pre_commit"
+      enforcement: "warning"
+
+# ============================================================================
+# RED-GREEN-REFACTOR CYCLE
+# ============================================================================
+red_green_refactor:
+  cycle_1_red:
+    action: "Write failing test first (CORE-008)"
+    validation: "Test must fail with expected error message"
+    forbidden: "Code implementation before test exists"
+
+  cycle_2_green:
+    action: "Minimal code to pass test"
+    validation: "Test must pass, no --ignore flags allowed"
+    forbidden: "Skipping tests, mocking without justification"
+
+  cycle_3_refactor:
+    action: "Clean code while keeping tests green"
+    validation: "All tests still pass + lint clean"
+    forbidden: "Breaking existing tests during refactor"
+    checklist:
+      - "Extract magic numbers → constants"
+      - "Remove duplication (CORE-035)"
+      - "Add type hints + docstrings"
+      - "Run full test suite → all pass"
+
+# ============================================================================
+# DEPENDENCIES
+# ============================================================================
+dependencies:
+  requires_complete:
+    - phase_id: "phase-84"
+      reason: "WorkflowComposer infrastructure (YAML-driven orchestration)"
+      status: "✅ complete"
+
+    - phase_id: "phase-48"
+      reason: "Holistic Validation Gate (EnforcementOrchestrator)"
+      status: "✅ complete"
+
+  requires_available:
+    - component: "cortex/brain/analysis/vision_analyzer.py"
+      reason: "Vision API base for enhancement"
+      status: "✅ available"
+
+    - component: "cortex/orchestrators/tdd/tdd_orchestrator.py"
+      reason: "TDD workflow enforcement"
+      status: "✅ available"
+
+    - component: "cortex-docs/index.html"
+      reason: "Target HTML for semantic selectors"
+      status: "✅ available"
+
+  conflicts_with:
+    - phase_id: "phase-97"
+      reason: "Intelligence Infrastructure (Mac laptop)"
+      resolution: "Zero conflict — different code paths (brain/analysis vs intelligence/)"
+      status: "proceed_separately"
+
+# ============================================================================
+# STAGES (3-Stage Breakdown)
+# ============================================================================
+stages:
+  stage_1:
+    id: "S1"
+    title: "Enhanced Vision API — Atomic Analysis Mode"
+    description: |
+      Enhance VisionAnalyzer with atomic-level decomposition:
+      - Add PixelGrid, BoundingBox, TextSegment, ColorInfo, FontInfo models
+      - Implement 3-tier analysis depth (quick/standard/atomic)
+      - Extract cortex-id from screenshots if present
+      - Performance target: <20s for atomic mode
+    
+    deliverables:
+      - "cortex/brain/analysis/vision_analyzer.py (enhance)"
+      - "cortex/brain/analysis/models.py (new dataclasses)"
+      - "tests/unit/analysis/test_vision_analyzer_atomic.py (15 tests)"
+    
+    acceptance_criteria:
+      - "✅ Atomic mode functional (<20s per image)"
+      - "✅ BoundingBox extraction with confidence scores"
+      - "✅ TextSegment OCR with font detection"
+      - "✅ Color palette extraction (hex codes)"
+      - "✅ cortex-id linking operational"
+      - "✅ 15/15 tests passing"
+      - "✅ Coverage ≥95%"
+    
+    estimated_effort: "8 hours"
+    dependencies: []
+    risk_level: "medium"
+    
+  stage_2:
+    id: "S2"
+    title: "Semantic Selector Bridge — data-cortex-* Attributes"
+    description: |
+      Add optional semantic layer to HTML elements:
+      - Define data-cortex-id naming convention
+      - Add data-cortex-type, data-cortex-track attributes
+      - Create pre-commit hook for ID uniqueness validation
+      - Migration script to add attributes to existing HTML
+      - Vision API integration to extract cortex-ids
+    
+    deliverables:
+      - "scripts/add-cortex-semantic-ids.py (migration script)"
+      - ".githooks/pre-commit (enhance with ID validation)"
+      - "cortex-docs/index.html (add data-cortex-* attributes)"
+      - "tests/unit/hooks/test_cortex_id_validation.py (10 tests)"
+    
+    acceptance_criteria:
+      - "✅ Pre-commit hook validates unique IDs"
+      - "✅ Migration script operational"
+      - "✅ data-cortex-* attributes added to 10+ elements"
+      - "✅ Vision API extracts cortex-ids from screenshots"
+      - "✅ Zero breaking changes (progressive enhancement)"
+      - "✅ 10/10 tests passing"
+    
+    estimated_effort: "6 hours"
+    dependencies: ["S1"]
+    risk_level: "low"
+    
+  stage_3:
+    id: "S3"
+    title: "TDD Workflow Template — Dogfooding Automation"
+    description: |
+      Create WorkflowComposer template for CORTEX site development:
+      - cortex-site-dogfood.yaml (5-stage workflow)
+      - Integrate Vision API → Challenge → TDD cycle
+      - EnforcementOrchestrator validation gates
+      - Deployment preview generation
+      - Performance: <30 min full cycle
+    
+    deliverables:
+      - "cortex/templates/workflows/cortex-site-dogfood.yaml (new)"
+      - "tests/integration/test_cortex_site_workflow.py (12 tests)"
+      - "docs/workflows/dogfooding-guide.md (documentation)"
+    
+    acceptance_criteria:
+      - "✅ cortex-site-dogfood.yaml template complete"
+      - "✅ Full workflow executes successfully"
+      - "✅ Challenge generation operational"
+      - "✅ TDD cycle completes (RED → GREEN → REFACTOR)"
+      - "✅ EnforcementOrchestrator gates pass"
+      - "✅ Performance <30 min"
+      - "✅ 12/12 tests passing"
+      - "✅ Real-world dogfooding trial successful"
+    
+    estimated_effort: "10 hours"
+    dependencies: ["S1", "S2"]
+    risk_level: "medium"
+
+# ============================================================================
+# TECHNICAL DESIGN
+# ============================================================================
+technical_design:
+  architecture_pattern: "Strategic Layering (3-tier)"
+  
+  tier_1_vision_api:
+    models:
+      - name: "PixelGrid"
+        description: "RGB matrix for visual debugging"
+        fields: ["width", "height", "data"]
+      
+      - name: "BoundingBox"
+        description: "Precise element coordinates with confidence"
+        fields: ["x", "y", "width", "height", "confidence", "semantic_type", "cortex_id"]
+      
+      - name: "TextSegment"
+        description: "OCR text with metadata"
+        fields: ["text", "confidence", "bbox", "font_family", "font_size"]
+      
+      - name: "ColorInfo"
+        description: "Color palette extraction"
+        fields: ["hex_code", "rgb", "percentage", "location"]
+      
+      - name: "FontInfo"
+        description: "Font detection from visual"
+        fields: ["family", "size", "weight", "style"]
+    
+    analysis_modes:
+      - mode: "quick"
+        speed: "<2s"
+        detail: "URLs + major elements"
+        
+      - mode: "standard"
+        speed: "5-8s"
+        detail: "Current + bounding boxes"
+        
+      - mode: "atomic"
+        speed: "15-20s"
+        detail: "Full decomposition (NEW)"
+  
+  tier_2_semantic_selectors:
+    naming_convention:
+      prefix: "data-cortex-"
+      
+      attributes:
+        - name: "data-cortex-id"
+          format: "component-type-index"
+          example: "hero-cta-001, nav-item-docs"
+        
+        - name: "data-cortex-type"
+          values: ["nav", "cta", "content", "viz", "form"]
+        
+        - name: "data-cortex-track"
+          values: ["conversion", "navigation", "engagement"]
+    
+    validation:
+      - check: "uniqueness"
+        enforcement: "pre-commit hook"
+      
+      - check: "format"
+        pattern: "^[a-z0-9-]+$"
+      
+      - check: "max_length"
+        limit: 50
+  
+  tier_3_workflow_template:
+    structure:
+      - stage: "analyze-screenshot"
+        orchestrator: "LENSOrchestrator"
+        output: "visual-analysis.json"
+      
+      - stage: "generate-challenges"
+        orchestrator: "ChallengeEngine"
+        output: "design-alternatives.md"
+      
+      - stage: "tdd-red-phase"
+        orchestrator: "TDDOrchestrator"
+        mode: "RED"
+      
+      - stage: "tdd-green-phase"
+        orchestrator: "TDDOrchestrator"
+        mode: "GREEN"
+      
+      - stage: "tdd-refactor-phase"
+        orchestrator: "TDDOrchestrator"
+        mode: "REFACTOR"
+      
+      - stage: "holistic-validation"
+        orchestrator: "EnforcementOrchestrator"
+        checks: ["CORE-008", "CORE-028", "CORE-035"]
+      
+      - stage: "deploy-preview"
+        orchestrator: "DeploymentOrchestrator"
+        environment: "staging"
+
+# ============================================================================
+# RISK MITIGATION
+# ============================================================================
+risks:
+  - risk: "ID collision in HTML"
+    probability: "low"
+    impact: "high"
+    mitigation: "Pre-commit hook validates uniqueness before commit"
+  
+  - risk: "Forgotten attributes on new elements"
+    probability: "medium"
+    impact: "low"
+    mitigation: "Optional (fallback to class-based selectors), linting rule"
+  
+  - risk: "Performance overhead from atomic mode"
+    probability: "low"
+    impact: "low"
+    mitigation: "Atomic mode opt-in only, not default"
+  
+  - risk: "Phase 97 conflict (Mac laptop)"
+    probability: "none"
+    impact: "none"
+    mitigation: "Zero overlap — different directories (brain/analysis vs intelligence/)"
+
+# ============================================================================
+# COMPARISON: ALTERNATIVE APPROACHES (REJECTED)
+# ============================================================================
+alternatives_rejected:
+  - approach: "Add IDs to every element directly"
+    pros: "Simple implementation"
+    cons: "Breaks existing JavaScript selectors, high regression risk"
+    verdict: "❌ REJECTED"
+  
+  - approach: "CSS-only selectors"
+    pros: "No HTML changes required"
+    cons: "Fragile (class changes break mapping), low accuracy"
+    verdict: "❌ REJECTED"
+  
+  - approach: "XPath mapping"
+    pros: "Precise element targeting"
+    cons: "Browser-dependent, slow performance, poor DX"
+    verdict: "❌ REJECTED"
+  
+  - approach: "data-testid (React pattern)"
+    pros: "Industry standard pattern"
+    cons: "Not semantic for CORTEX domain, generic naming"
+    verdict: "⚠️ PARTIAL (inspired data-cortex-*)"
+
+# ============================================================================
+# KNOWLEDGE SOURCES APPLIED
+# ============================================================================
+knowledge_sources:
+  - source: "vision_analyzer.py"
+    insight: "Current Vision API capabilities baseline"
+  
+  - source: "WorkflowComposer Pattern (Phase 84)"
+    insight: "YAML-driven orchestrator sequencing pattern"
+  
+  - source: "Selenium → Playwright Migration Guide"
+    insight: "data-testid patterns for test automation"
+  
+  - source: "Dashboard Testing Infrastructure"
+    insight: "Mock element selectors and validation patterns"
+  
+  - source: "TDDOrchestrator"
+    insight: "RED→GREEN→REFACTOR workflow enforcement"
+
+# ============================================================================
+# CORE PRINCIPLES APPLIED
+# ============================================================================
+core_principles:
+  - principle: "CORE-008 (TDD)"
+    application: "Workflow enforces RED→GREEN→REFACTOR at every stage"
+  
+  - principle: "CORE-035 (No Duplication)"
+    application: "Semantic IDs prevent duplicate element identification"
+  
+  - principle: "CORE-048 (Holistic Validation)"
+    application: "EnforcementOrchestrator validates before deployment"
+  
+  - principle: "MCP-FIRST"
+    application: "All operations via cortex_process_request tool"
+  
+  - principle: "Extensibility"
+    application: "data-cortex-* namespace allows future attributes"
+  
+  - principle: "Non-Breaking"
+    application: "Progressive enhancement ensures backward compatibility"
+
+# ============================================================================
+# ACCEPTANCE CRITERIA (Phase-Level)
+# ============================================================================
+acceptance_criteria:
+  tests:
+    - "✅ 37/37 new tests passing (15 + 10 + 12)"
+    - "✅ Coverage ≥95% for all new code"
+    - "✅ Zero test skips or --ignore flags"
+  
+  code_quality:
+    - "✅ Lint clean (zero ruff errors)"
+    - "✅ Type hints on all new functions"
+    - "✅ Google-style docstrings complete"
+    - "✅ No CORE-035 violations detected"
+  
+  functionality:
+    - "✅ Atomic Vision API mode <20s per screenshot"
+    - "✅ data-cortex-* attributes on 10+ HTML elements"
+    - "✅ Pre-commit hook blocks duplicate IDs"
+    - "✅ Workflow template completes full cycle"
+    - "✅ Real dogfooding trial successful"
+  
+  performance:
+    - "✅ Vision API atomic mode <20s"
+    - "✅ Full workflow cycle <30 min"
+    - "✅ Pre-commit hook <2s validation"
+    - "✅ Lighthouse score ≥95 maintained"
+  
+  security:
+    - "✅ All image paths sanitized"
+    - "✅ ID format validated (alphanumeric + dash)"
+    - "✅ No secrets in workflow templates"
+    - "✅ Bandit scan clean"
+  
+  integration:
+    - "✅ Vision API wired to cortex_lens MCP tool"
+    - "✅ WorkflowComposer template registered"
+    - "✅ EnforcementOrchestrator gates integrated"
+    - "✅ Zero breaking changes to existing code"
+
+# ============================================================================
+# ROLLBACK PLAN
+# ============================================================================
+rollback:
+  triggers:
+    - "Test suite failure"
+    - "Breaking changes detected"
+    - "Performance degradation >20%"
+  
+  steps:
+    - "Revert all commits from phase"
+    - "Remove data-cortex-* attributes from HTML"
+    - "Restore vision_analyzer.py to baseline"
+    - "Re-run full test suite to confirm stability"
+  
+  recovery_time: "<10 minutes"
+
+# ============================================================================
+# METRICS & MONITORING
+# ============================================================================
+metrics:
+  development:
+    - metric: "Test Coverage"
+      target: "≥95%"
+      measurement: "pytest --cov"
+    
+    - metric: "Atomic Mode Latency"
+      target: "<20s per screenshot"
+      measurement: "timeit + performance profiling"
+    
+    - metric: "Workflow Cycle Time"
+      target: "<30 min"
+      measurement: "WorkflowComposer timing logs"
+  
+  post_deployment:
+    - metric: "Vision API Usage"
+      target: "≥5 atomic analyses per week"
+      measurement: "MCP tool invocation logs"
+    
+    - metric: "Workflow Template Usage"
+      target: "≥2 dogfooding cycles per sprint"
+      measurement: "cortex-site-dogfood.yaml execution count"
+    
+    - metric: "ID Collision Rate"
+      target: "0 collisions"
+      measurement: "Pre-commit hook rejection logs"
+
+# ============================================================================
+# POST-COMPLETION VERIFICATION
+# ============================================================================
+verification:
+  checklist:
+    - "Run full test suite: pytest tests/"
+    - "Verify atomic mode: python -m cortex.brain.analysis.vision_analyzer --mode atomic screenshots/hero.png"
+    - "Validate IDs: python scripts/add-cortex-semantic-ids.py --validate cortex-docs/index.html"
+    - "Execute workflow: python scripts/run-workflow.py cortex-site-dogfood.yaml"
+    - "Check Lighthouse: npx lighthouse cortex-docs/index.html --output json"
+    - "Scan security: bandit -r cortex/brain/analysis/ cortex/templates/workflows/"
+  
+  sign_off:
+    - role: "Developer"
+      criteria: "All tests passing, code review complete"
+    
+    - role: "Architect"
+      criteria: "Non-breaking changes verified, performance targets met"
+    
+    - role: "QA"
+      criteria: "Real-world dogfooding successful, no regressions"
+
+# ============================================================================
+# METADATA
+# ============================================================================
+metadata:
+  tags:
+    - "vision-api"
+    - "html-mapping"
+    - "tdd-workflow"
+    - "dogfooding"
+    - "atomic-analysis"
+    - "semantic-selectors"
+  
+  related_phases:
+    - "phase-84: WorkflowComposer infrastructure"
+    - "phase-48: Holistic Validation Gate"
+    - "phase-97: Intelligence Infrastructure (separate)"
+  
+  mcp_tools:
+    - "cortex_lens_analyze"
+    - "cortex_process_request"
+  
+  orchestrators:
+    - "LENSOrchestrator"
+    - "TDDOrchestrator"
+    - "ChallengeEngine"
+    - "EnforcementOrchestrator"
+    - "DeploymentOrchestrator"
+    - "WorkflowComposer"
