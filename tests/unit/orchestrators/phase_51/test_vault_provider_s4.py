@@ -18,7 +18,7 @@ class TestVaultProviderInterface:
     def test_vault_provider_implements_interface(self):
         """VaultProvider implements ISecretsProvider"""
         from cortex.secrets.providers.vault import VaultProvider
-        from cortex.secrets.provider import ISecretsProvider
+        from cortex.secrets.secrets_provider import ISecretsProvider
         
         assert issubclass(VaultProvider, ISecretsProvider)
     

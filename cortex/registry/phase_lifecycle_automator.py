@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 import logging
 
-from cortex.orchestrators.planning.strategies.base import (
+from cortex.orchestrators.planning.strategies.strategy_base import (
     ExecutionResult,
     ExecutionStatus,
 )

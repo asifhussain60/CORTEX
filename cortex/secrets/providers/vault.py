@@ -14,7 +14,7 @@ from cortex.secrets.errors import (
 from cortex.secrets.errors import (
     PermissionError as SecretsPermissionError,
 )
-from cortex.secrets.provider import ISecretsProvider
+from cortex.secrets.secrets_provider import ISecretsProvider
 
 
 class VaultProvider(ISecretsProvider):

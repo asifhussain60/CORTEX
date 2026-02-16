@@ -16,7 +16,7 @@ from unittest.mock import Mock, patch, MagicMock
 from cortex.storage.storage_config import StorageConfig
 from cortex.storage.errors import ConfigurationError
 from cortex.storage.factory import StorageProviderFactory
-from cortex.storage.provider import IKnowledgeProvider
+from cortex.storage.storage_provider import IKnowledgeProvider
 
 
 class TestStorageFactoryIntegration:

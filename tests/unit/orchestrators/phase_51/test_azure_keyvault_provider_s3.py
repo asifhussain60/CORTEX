@@ -18,7 +18,7 @@ class TestAzureKeyVaultProviderInterface:
     def test_azure_provider_implements_interface(self):
         """AzureKeyVaultProvider implements ISecretsProvider"""
         from cortex.secrets.providers.azure import AzureKeyVaultProvider
-        from cortex.secrets.provider import ISecretsProvider
+        from cortex.secrets.secrets_provider import ISecretsProvider
         
         assert issubclass(AzureKeyVaultProvider, ISecretsProvider)
     

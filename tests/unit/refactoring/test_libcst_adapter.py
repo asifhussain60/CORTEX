@@ -69,7 +69,7 @@ def process():
     def test_libcst_adapter_interface(self) -> None:
         """AC-PHASE43-028-1: LibCST adapter has standard interface."""
         # Adapter should follow RefactoringToolAdapter interface
-        from cortex.refactoring.adapters.base import RefactoringToolAdapter
+        from cortex.refactoring.adapters.adapter_base import RefactoringToolAdapter
         
         # Check that adapter interface exists
         assert hasattr(RefactoringToolAdapter, "execute_refactoring")

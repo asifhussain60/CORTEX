@@ -24,14 +24,14 @@ class TestISecretsProviderInterface:
 
     def test_secrets_provider_is_abstract_protocol(self):
         """ISecretsProvider must be abstract base class"""
-        from cortex.secrets.provider import ISecretsProvider
+        from cortex.secrets.secrets_provider import ISecretsProvider
         
         assert hasattr(ISecretsProvider, '__abstractmethods__')
         assert len(ISecretsProvider.__abstractmethods__) > 0
 
     def test_secrets_provider_has_get_method(self):
         """get(secret_id: str) retrieves secret by identifier"""
-        from cortex.secrets.provider import ISecretsProvider
+        from cortex.secrets.secrets_provider import ISecretsProvider
         
         assert hasattr(ISecretsProvider, 'get')
         provider_method = getattr(ISecretsProvider, 'get')
@@ -39,7 +39,7 @@ class TestISecretsProviderInterface:
 
     def test_secrets_provider_has_set_method(self):
         """set(secret_id: str, value: str, metadata: Dict) stores secret"""
-        from cortex.secrets.provider import ISecretsProvider
+        from cortex.secrets.secrets_provider import ISecretsProvider
         
         assert hasattr(ISecretsProvider, 'set')
         provider_method = getattr(ISecretsProvider, 'set')
@@ -47,7 +47,7 @@ class TestISecretsProviderInterface:
 
     def test_secrets_provider_has_rotate_method(self):
         """rotate(secret_id: str) triggers secret rotation"""
-        from cortex.secrets.provider import ISecretsProvider
+        from cortex.secrets.secrets_provider import ISecretsProvider
         
         assert hasattr(ISecretsProvider, 'rotate')
         provider_method = getattr(ISecretsProvider, 'rotate')
@@ -55,7 +55,7 @@ class TestISecretsProviderInterface:
 
     def test_secrets_provider_has_delete_method(self):
         """delete(secret_id: str) marks secret for deletion"""
-        from cortex.secrets.provider import ISecretsProvider
+        from cortex.secrets.secrets_provider import ISecretsProvider
         
         assert hasattr(ISecretsProvider, 'delete')
         provider_method = getattr(ISecretsProvider, 'delete')
@@ -63,7 +63,7 @@ class TestISecretsProviderInterface:
 
     def test_secrets_provider_has_list_method(self):
         """list(prefix: str = '') returns all secrets matching prefix"""
-        from cortex.secrets.provider import ISecretsProvider
+        from cortex.secrets.secrets_provider import ISecretsProvider
         
         assert hasattr(ISecretsProvider, 'list')
         provider_method = getattr(ISecretsProvider, 'list')
@@ -248,7 +248,7 @@ class TestLocalSecretsProvider:
     def test_local_provider_implements_interface(self):
         """LocalSecretsProvider implements ISecretsProvider"""
         from cortex.secrets.providers.local import LocalSecretsProvider
-        from cortex.secrets.provider import ISecretsProvider
+        from cortex.secrets.secrets_provider import ISecretsProvider
         
         assert issubclass(LocalSecretsProvider, ISecretsProvider)
 

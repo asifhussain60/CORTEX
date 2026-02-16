@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from cortex.storage.storage_config import StorageConfig
-from cortex.storage.provider import IKnowledgeProvider
+from cortex.storage.storage_provider import IKnowledgeProvider
 
 
 class CachedKnowledgeProvider(IKnowledgeProvider):

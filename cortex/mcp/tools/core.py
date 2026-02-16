@@ -18,7 +18,7 @@ AC_START: AC-MASTERORCH-ROUTING-001 (enforcement implementation)
 from typing import Any, Dict, List, Optional
 from enum import Enum
 
-from cortex.mcp.base import (
+from cortex.mcp.mcp_tool_base import (
     ConsolidatedTool,
     ToolCategory,
     ToolParameter,

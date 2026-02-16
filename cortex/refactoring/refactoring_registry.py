@@ -13,7 +13,7 @@ import logging
 from typing import Dict, List, Union
 
 from cortex.brain.core.result import Err, Ok
-from cortex.refactoring.adapters.base import RefactoringToolAdapter
+from cortex.refactoring.adapters.adapter_base import RefactoringToolAdapter
 from cortex.refactoring.refactoring_models import RefactoringLanguage
 
 logger = logging.getLogger(__name__)

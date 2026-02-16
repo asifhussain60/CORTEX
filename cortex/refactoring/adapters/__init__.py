@@ -5,7 +5,7 @@ AC_START: AC-PHASE24.1.1-005
 Description: Adapters package initialization
 """
 
-from cortex.refactoring.adapters.base import RefactoringToolAdapter
+from cortex.refactoring.adapters.adapter_base import RefactoringToolAdapter
 from cortex.refactoring.adapters.rope_adapter import RopeAdapter
 from cortex.refactoring.adapters.roslyn_adapter import RoslynAdapter
 

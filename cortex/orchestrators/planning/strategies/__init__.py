@@ -8,7 +8,7 @@ Authority: Wave 8 Execution Activation
 Compliance: CORE-035 (Single canonical implementation)
 """
 
-from cortex.orchestrators.planning.strategies.base import (
+from cortex.orchestrators.planning.strategies.strategy_base import (
     ExecutionStrategy,
     ExecutionContext,
     ExecutionResult,

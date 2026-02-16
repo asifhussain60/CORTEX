@@ -18,7 +18,7 @@ class TestAWSSecretsProviderInterface:
     def test_aws_provider_implements_interface(self):
         """AWSSecretsProvider implements ISecretsProvider"""
         from cortex.secrets.providers.aws import AWSSecretsProvider
-        from cortex.secrets.provider import ISecretsProvider
+        from cortex.secrets.secrets_provider import ISecretsProvider
         
         assert issubclass(AWSSecretsProvider, ISecretsProvider)
     

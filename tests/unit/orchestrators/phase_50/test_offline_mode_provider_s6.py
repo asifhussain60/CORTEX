@@ -13,7 +13,7 @@ Target: 18 tests, 100% pass rate for Stage 6
 import time
 import pytest
 from unittest.mock import Mock, patch
-from cortex.storage.provider import IKnowledgeProvider
+from cortex.storage.storage_provider import IKnowledgeProvider
 from cortex.storage.storage_config import StorageConfig
 from cortex.storage.errors import StorageError, NetworkError, NotFoundError
 from cortex.storage.offline import OfflineModeProvider

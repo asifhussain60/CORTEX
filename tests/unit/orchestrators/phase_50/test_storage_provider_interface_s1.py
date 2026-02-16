@@ -21,27 +21,27 @@ class TestIKnowledgeProviderProtocol:
     
     def test_knowledge_provider_has_read_method(self):
         """IKnowledgeProvider.read(path: str) -> str"""
-        from cortex.storage.provider import IKnowledgeProvider
+        from cortex.storage.storage_provider import IKnowledgeProvider
         assert hasattr(IKnowledgeProvider, 'read')
     
     def test_knowledge_provider_has_write_method(self):
         """IKnowledgeProvider.write(path: str, content: str) -> None"""
-        from cortex.storage.provider import IKnowledgeProvider
+        from cortex.storage.storage_provider import IKnowledgeProvider
         assert hasattr(IKnowledgeProvider, 'write')
     
     def test_knowledge_provider_has_list_method(self):
         """IKnowledgeProvider.list(path: str) -> List[str]"""
-        from cortex.storage.provider import IKnowledgeProvider
+        from cortex.storage.storage_provider import IKnowledgeProvider
         assert hasattr(IKnowledgeProvider, 'list')
     
     def test_knowledge_provider_has_exists_method(self):
         """IKnowledgeProvider.exists(path: str) -> bool"""
-        from cortex.storage.provider import IKnowledgeProvider
+        from cortex.storage.storage_provider import IKnowledgeProvider
         assert hasattr(IKnowledgeProvider, 'exists')
     
     def test_knowledge_provider_has_delete_method(self):
         """IKnowledgeProvider.delete(path: str) -> None"""
-        from cortex.storage.provider import IKnowledgeProvider
+        from cortex.storage.storage_provider import IKnowledgeProvider
         assert hasattr(IKnowledgeProvider, 'delete')
 
 

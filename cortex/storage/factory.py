@@ -10,7 +10,7 @@ from cortex.storage.storage_config import StorageConfig
 from cortex.storage.errors import ConfigurationError
 
 if TYPE_CHECKING:
-    from cortex.storage.provider import IKnowledgeProvider
+    from cortex.storage.storage_provider import IKnowledgeProvider
 
 
 class StorageProviderFactory:

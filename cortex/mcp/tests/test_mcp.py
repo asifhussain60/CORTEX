@@ -20,7 +20,7 @@ from datetime import datetime
 from typing import Any, Dict
 from unittest.mock import MagicMock, patch
 
-from cortex.mcp.base import (
+from cortex.mcp.mcp_tool_base import (
     Tool,
     ToolDefinition,
     ToolParameter,

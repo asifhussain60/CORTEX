@@ -7,7 +7,7 @@ from typing import Optional
 
 from cortex.secrets.config import SecretsConfig
 from cortex.secrets.errors import ConfigError
-from cortex.secrets.provider import ISecretsProvider
+from cortex.secrets.secrets_provider import ISecretsProvider
 from cortex.secrets.providers.local import LocalSecretsProvider
 
 

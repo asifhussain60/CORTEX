@@ -14,7 +14,7 @@ from unittest.mock import Mock, patch, MagicMock
 # Import strategies (will exist after GREEN phase)
 # These imports will fail in RED phase - that's expected
 try:
-    from cortex.orchestrators.planning.strategies.base import ExecutionStrategy, ExecutionContext, ExecutionResult, ValidationResult
+    from cortex.orchestrators.planning.strategies.strategy_base import ExecutionStrategy, ExecutionContext, ExecutionResult, ValidationResult
     from cortex.orchestrators.planning.strategies.phase import PhaseExecutionStrategy
     from cortex.orchestrators.planning.strategies.wave import WaveOrchestrationStrategy
     from cortex.orchestrators.planning.strategies.track import TrackParallelizationStrategy

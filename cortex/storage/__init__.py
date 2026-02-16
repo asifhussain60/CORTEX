@@ -9,7 +9,7 @@ from cortex.storage.errors import (
     StorageError,
 )
 from cortex.storage.factory import StorageProviderFactory
-from cortex.storage.provider import IKnowledgeProvider
+from cortex.storage.storage_provider import IKnowledgeProvider
 
 __all__ = [
     "IKnowledgeProvider",

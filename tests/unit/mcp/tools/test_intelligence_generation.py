@@ -8,7 +8,7 @@ import pytest
 from pathlib import Path
 from typing import Dict, Any
 
-from cortex.mcp.base import ToolCategory, ToolResult
+from cortex.mcp.mcp_tool_base import ToolCategory, ToolResult
 from cortex.mcp.tools.intelligence_generation import CortexGenerateTests
 
 

@@ -13,7 +13,7 @@ from dataclasses import dataclass, field
 import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-from cortex.orchestrators.planning.strategies.base import (
+from cortex.orchestrators.planning.strategies.strategy_base import (
     ExecutionStrategy,
     ExecutionContext,
     ExecutionResult,

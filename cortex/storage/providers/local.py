@@ -12,7 +12,7 @@ from cortex.storage.errors import (
     PermissionError,
     StorageError,
 )
-from cortex.storage.provider import IKnowledgeProvider
+from cortex.storage.storage_provider import IKnowledgeProvider
 
 
 class LocalFileSystemProvider(IKnowledgeProvider):

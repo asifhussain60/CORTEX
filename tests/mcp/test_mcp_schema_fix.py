@@ -6,7 +6,7 @@ Verifies that tool schemas include all required metadata including category.
 
 import pytest
 from cortex.mcp.mcp_registry import get_registry, ToolRegistry
-from cortex.mcp.base import ToolCategory
+from cortex.mcp.mcp_tool_base import ToolCategory
 
 
 class TestMCPSchemaGeneration:

@@ -27,7 +27,7 @@ from typing import Any, Dict, List, Optional
 from pathlib import Path
 import asyncio
 
-from cortex.mcp.base import (
+from cortex.mcp.mcp_tool_base import (
     ConsolidatedTool,
     ToolCategory,
     ToolParameter,

@@ -75,7 +75,7 @@ class TestRopeAdapterInitialization:
     def test_rope_adapter_implements_interface(self):
         """RopeAdapter must implement RefactoringToolAdapter."""
         from cortex.refactoring.adapters.rope_adapter import RopeAdapter
-        from cortex.refactoring.adapters.base import RefactoringToolAdapter
+        from cortex.refactoring.adapters.adapter_base import RefactoringToolAdapter
         
         assert issubclass(RopeAdapter, RefactoringToolAdapter)
     

@@ -15,7 +15,7 @@ import tempfile
 import pytest
 from pathlib import Path
 
-from cortex.storage.provider import IKnowledgeProvider
+from cortex.storage.storage_provider import IKnowledgeProvider
 from cortex.storage.storage_config import StorageConfig
 from cortex.storage.errors import (
     StorageError,

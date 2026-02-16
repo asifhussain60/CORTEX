@@ -8,7 +8,7 @@ from typing import Any, Dict, List, Optional
 
 from cortex.secrets.config import SecretsConfig
 from cortex.secrets.errors import AuthError
-from cortex.secrets.provider import ISecretsProvider
+from cortex.secrets.secrets_provider import ISecretsProvider
 
 
 class LocalSecretsProvider(ISecretsProvider):

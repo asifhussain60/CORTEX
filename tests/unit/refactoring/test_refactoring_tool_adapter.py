@@ -55,7 +55,7 @@ class TestRefactoringToolAdapterInterface:
     def test_adapter_has_required_abstract_methods(self):
         """Adapter interface must define abstract methods."""
         # RED: Test will fail until we create the interface
-        from cortex.refactoring.adapters.base import RefactoringToolAdapter
+        from cortex.refactoring.adapters.adapter_base import RefactoringToolAdapter
         
         # Check abstract methods exist
         assert hasattr(RefactoringToolAdapter, 'get_supported_operations')
@@ -66,14 +66,14 @@ class TestRefactoringToolAdapterInterface:
     
     def test_adapter_cannot_be_instantiated_directly(self):
         """Base adapter must be abstract."""
-        from cortex.refactoring.adapters.base import RefactoringToolAdapter
+        from cortex.refactoring.adapters.adapter_base import RefactoringToolAdapter
         
         with pytest.raises(TypeError, match="Can't instantiate abstract class"):
             RefactoringToolAdapter()
     
     def test_adapter_requires_language_property(self):
         """Adapter must expose language property."""
-        from cortex.refactoring.adapters.base import RefactoringToolAdapter
+        from cortex.refactoring.adapters.adapter_base import RefactoringToolAdapter
         from cortex.refactoring.refactoring_models import RefactoringLanguage
         
         class MockAdapter(RefactoringToolAdapter):
@@ -97,7 +97,7 @@ class TestRefactoringToolAdapterInterface:
     
     def test_adapter_graceful_unavailability_check(self):
         """Adapter must report availability status."""
-        from cortex.refactoring.adapters.base import RefactoringToolAdapter
+        from cortex.refactoring.adapters.adapter_base import RefactoringToolAdapter
         from cortex.refactoring.refactoring_models import RefactoringLanguage
         
         class UnavailableAdapter(RefactoringToolAdapter):
@@ -135,7 +135,7 @@ class TestRefactoringToolRegistry:
     def test_registry_register_adapter(self):
         """Registry must allow adapter registration."""
         from cortex.refactoring.refactoring_registry import RefactoringToolRegistry
-        from cortex.refactoring.adapters.base import RefactoringToolAdapter
+        from cortex.refactoring.adapters.adapter_base import RefactoringToolAdapter
         from cortex.refactoring.refactoring_models import RefactoringLanguage
         
         class TestAdapter(RefactoringToolAdapter):
@@ -165,7 +165,7 @@ class TestRefactoringToolRegistry:
     def test_registry_get_adapter_by_language(self):
         """Registry must retrieve adapter by language."""
         from cortex.refactoring.refactoring_registry import RefactoringToolRegistry
-        from cortex.refactoring.adapters.base import RefactoringToolAdapter
+        from cortex.refactoring.adapters.adapter_base import RefactoringToolAdapter
         from cortex.refactoring.refactoring_models import RefactoringLanguage
         
         class PythonAdapter(RefactoringToolAdapter):
@@ -210,7 +210,7 @@ class TestRefactoringToolRegistry:
     def test_registry_duplicate_language_registration(self):
         """Registry must handle duplicate language registrations."""
         from cortex.refactoring.refactoring_registry import RefactoringToolRegistry
-        from cortex.refactoring.adapters.base import RefactoringToolAdapter
+        from cortex.refactoring.adapters.adapter_base import RefactoringToolAdapter
         from cortex.refactoring.refactoring_models import RefactoringLanguage
         
         class PythonAdapter1(RefactoringToolAdapter):
@@ -259,7 +259,7 @@ class TestRefactoringToolRegistry:
     def test_registry_list_available_languages(self):
         """Registry must list all registered languages."""
         from cortex.refactoring.refactoring_registry import RefactoringToolRegistry
-        from cortex.refactoring.adapters.base import RefactoringToolAdapter
+        from cortex.refactoring.adapters.adapter_base import RefactoringToolAdapter
         from cortex.refactoring.refactoring_models import RefactoringLanguage
         
         class PythonAdapter(RefactoringToolAdapter):

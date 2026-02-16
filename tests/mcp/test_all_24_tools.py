@@ -6,7 +6,7 @@ Ensures 100% tool functionality with realistic test scenarios.
 
 import pytest
 from cortex.mcp.server import MCPServer
-from cortex.mcp.base import ToolCategory
+from cortex.mcp.mcp_tool_base import ToolCategory
 
 
 class TestAllMCPTools:

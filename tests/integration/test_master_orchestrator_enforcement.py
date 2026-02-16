@@ -13,7 +13,7 @@ import pytest
 from typing import Dict, Any
 
 from cortex.mcp.server import MCPServer
-from cortex.mcp.base import ToolResult
+from cortex.mcp.mcp_tool_base import ToolResult
 from cortex.mcp.tools.intelligence import CortexLens
 from cortex.mcp.tools.governance import CortexGovernance
 from cortex.mcp.tools.operations import CortexDebug

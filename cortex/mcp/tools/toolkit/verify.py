@@ -8,7 +8,7 @@ Phase: 90 (Toolkit Centralization)
 """
 
 from typing import Any, Dict
-from cortex.mcp.base import (
+from cortex.mcp.mcp_tool_base import (
     ConsolidatedTool,
     ToolCategory,
     ToolParameter,

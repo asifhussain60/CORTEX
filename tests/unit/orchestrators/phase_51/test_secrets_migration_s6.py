@@ -115,7 +115,7 @@ class TestSecretsMigrationExecution:
     def test_migrator_stores_secret_in_vault(self):
         """Migrator stores secret value in Vault"""
         from cortex.secrets.migration import SecretsMigrator
-        from cortex.secrets.provider import ISecretsProvider
+        from cortex.secrets.secrets_provider import ISecretsProvider
         
         migrator = SecretsMigrator()
         
@@ -156,7 +156,7 @@ class TestSecretsMigrationExecution:
     def test_migrator_performs_bulk_migration(self):
         """Migrator performs bulk migration of multiple secrets"""
         from cortex.secrets.migration import SecretsMigrator
-        from cortex.secrets.provider import ISecretsProvider
+        from cortex.secrets.secrets_provider import ISecretsProvider
         
         migrator = SecretsMigrator()
         mock_provider = MagicMock(spec=ISecretsProvider)
@@ -179,7 +179,7 @@ class TestSecretsMigrationValidation:
     def test_validator_verifies_secret_stored_in_vault(self):
         """Validator confirms secret stored successfully in Vault"""
         from cortex.secrets.migration import SecretsValidator
-        from cortex.secrets.provider import ISecretsProvider
+        from cortex.secrets.secrets_provider import ISecretsProvider
         
         validator = SecretsValidator()
         mock_provider = MagicMock(spec=ISecretsProvider)
@@ -253,7 +253,7 @@ class TestSecretsMigrationRollback:
     def test_rollback_removes_secrets_from_vault(self):
         """Rollback removes newly stored secrets from Vault"""
         from cortex.secrets.migration import SecretsRollback
-        from cortex.secrets.provider import ISecretsProvider
+        from cortex.secrets.secrets_provider import ISecretsProvider
         
         rollback = SecretsRollback()
         mock_provider = MagicMock(spec=ISecretsProvider)
@@ -302,7 +302,7 @@ class TestSecretsMigrationIntegration:
     def test_complete_migration_workflow(self):
         """Complete workflow: detect, validate, migrate, verify"""
         from cortex.secrets.migration import SecretsMigrationOrchestrator
-        from cortex.secrets.provider import ISecretsProvider
+        from cortex.secrets.secrets_provider import ISecretsProvider
         
         orchestrator = SecretsMigrationOrchestrator()
         mock_provider = MagicMock(spec=ISecretsProvider)

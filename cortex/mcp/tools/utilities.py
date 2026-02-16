@@ -22,7 +22,7 @@ from typing import Any, Dict, List, Optional
 import sys
 import os
 
-from cortex.mcp.base import (
+from cortex.mcp.mcp_tool_base import (
     ConsolidatedTool,
     ToolCategory,
     ToolParameter,

@@ -17,7 +17,7 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Type
 import logging
 
-from cortex.mcp.base import Tool, ToolDefinition, ToolCategory, ToolParameter
+from cortex.mcp.mcp_tool_base import Tool, ToolDefinition, ToolCategory, ToolParameter
 
 
 # ============================================================================

@@ -20,7 +20,7 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional
 import os
 
-from cortex.mcp.base import Tool, ToolResult, ToolCategory
+from cortex.mcp.mcp_tool_base import Tool, ToolResult, ToolCategory
 from cortex.mcp.mcp_registry import ToolRegistry, get_registry
 
 

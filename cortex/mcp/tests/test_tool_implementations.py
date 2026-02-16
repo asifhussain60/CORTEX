@@ -59,7 +59,7 @@ from cortex.mcp.tools.utilities import (
     CortexOrchestrator,
 )
 
-from cortex.mcp.base import ToolCategory, ToolResult
+from cortex.mcp.mcp_tool_base import ToolCategory, ToolResult
 
 
 # =============================================================================

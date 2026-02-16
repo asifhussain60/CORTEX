@@ -13,7 +13,7 @@ Enhancement: Export Phase 51 secrets management functions
 from typing import Any, Dict, List, Optional
 
 # Import canonical ISecretsProvider from provider module
-from cortex.secrets.provider import ISecretsProvider
+from cortex.secrets.secrets_provider import ISecretsProvider
 
 from cortex.secrets.encryption import (
     EncryptedValue,
