@@ -1,14 +1,16 @@
 """
 CORTEX MCP v2 - Tool Implementations
 
-26 production tools organized by category:
+31 production tools organized by category:
 - Core (4): process_request, challenge, classify, request_lifecycle
 - Intelligence (4): lens, knowledge, git, generate_tests
 - Governance (4): governance, validate, load, validate_request (Phase 48)
 - Operations (5): debug, refactor, plan, onboard, dashboard
 - Utilities (9): verify, ask, vacuum, tools_catalog, total_recall, metrics, check, vision, orchestrator
+- Toolkit (5): diagnose, verify_env, cleanup, validate_gov, analyze (Phase 90)
 
 AC_START: AC-WAVE100-S2-006
+AC_START: AC-P90-S7-001
 """
 
 # Core tools
@@ -62,6 +64,15 @@ from cortex.mcp.tools.utilities import (
     CortexOrchestrator,
 )
 
+# Toolkit tools (Phase 90)
+from cortex.mcp.tools.toolkit import (
+    ToolkitDiagnoseTool,
+    ToolkitVerifyTool,
+    ToolkitCleanupTool,
+    ToolkitValidateTool,
+    ToolkitAnalyzeTool,
+)
+
 
 # All tool classes for registration
 ALL_TOOLS = [
@@ -97,6 +108,12 @@ ALL_TOOLS = [
     CortexCheck,
     CortexVision,
     CortexOrchestrator,
+    # Toolkit (5) - Phase 90
+    ToolkitDiagnoseTool,
+    ToolkitVerifyTool,
+    ToolkitCleanupTool,
+    ToolkitValidateTool,
+    ToolkitAnalyzeTool,
 ]
 
 
@@ -154,9 +171,16 @@ __all__ = [
     "CortexCheck",
     "CortexVision",
     "CortexOrchestrator",
+    # Toolkit (Phase 90)
+    "ToolkitDiagnoseTool",
+    "ToolkitVerifyTool",
+    "ToolkitCleanupTool",
+    "ToolkitValidateTool",
+    "ToolkitAnalyzeTool",
     # Registration
     "ALL_TOOLS",
     "register_all_tools",
 ]
 
 # AC_COMPLETE: AC-WAVE100-S2-006 ✅ All tools exported
+# AC_COMPLETE: AC-P90-S7-001 ✅ 5 toolkit tools integrated
