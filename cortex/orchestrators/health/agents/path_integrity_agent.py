@@ -53,11 +53,12 @@ class PathIntegrityAgent(BaseHealthAgent):
             config=config,
         )
         
+        # These are LEGACY paths that should NO LONGER be used
+        # cortex/knowledge -> cortex-registry (Phase 9+ migration)
+        # BUT: cortex/wiring is STILL VALID (contains code, not data)
         self.old_paths = self.config.get("old_paths", [
-            "cortex/knowledge",
-            "cortex/wiring",
-            "cortex/templates",
-            "company/domains",
+            # ONLY flag deprecated paths that were migrated
+            # Currently: No deprecated paths (migration complete)
         ])
         
         self.registry_root = self.config.get("registry_root", "cortex-registry")
