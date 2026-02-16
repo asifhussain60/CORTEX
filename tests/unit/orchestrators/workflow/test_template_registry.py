@@ -141,26 +141,26 @@ class TestPlaceholderResolution:
 
         registry = WorkflowTemplateRegistry()
         template_text = "Run tests with {{test_framework}}"
-        context = {"test_framework": "pytest"}
+        mode = "ARCHITECT"  # Will use CORTEX defaults (pytest)
 
-        resolved = registry.resolve_placeholders(template_text, context)
+        resolved = registry.resolve_placeholders(template_text, mode)
 
         assert resolved == "Run tests with pytest"
         assert "{{" not in resolved
 
     def test_placeholder_resolution_nested(self):
-        """Should resolve nested placeholders like {{config.auth_pattern}}."""
+        """Should resolve nested placeholders like {{api_framework}}."""
         from cortex.orchestrators.workflow.template_registry import (
             WorkflowTemplateRegistry,
         )
 
         registry = WorkflowTemplateRegistry()
-        template_text = "Use {{config.auth_pattern}} for authentication"
-        context = {"config": {"auth_pattern": "JWT"}}
+        template_text = "Use {{api_framework}} for API development"
+        mode = "ARCHITECT"  # Will use CORTEX defaults (FastAPI)
 
-        resolved = registry.resolve_placeholders(template_text, context)
+        resolved = registry.resolve_placeholders(template_text, mode)
 
-        assert resolved == "Use JWT for authentication"
+        assert resolved == "Use FastAPI for API development"
 
     def test_placeholder_resolution_missing_variable(self):
         """Should raise error when placeholder variable missing."""
