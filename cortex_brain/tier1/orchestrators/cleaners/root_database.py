@@ -17,7 +17,7 @@ Date: 2026-02-15
 
 from typing import Dict, Any, List
 from pathlib import Path
-from cortex_brain.tier1.orchestrators.cleaners.base import (
+from .base import (
     CleanerInterface,
     Analysis,
     Report,
