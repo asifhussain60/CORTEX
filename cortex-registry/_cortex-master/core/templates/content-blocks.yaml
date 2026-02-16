@@ -468,9 +468,15 @@ blocks:
             command: "/analyze {scope}"
     
     content_template: |
-      🎯 **Next Steps**
+      🎯 **What's Next?**
       
-      {dynamic_suggestions}
+      Choose your next move:
+      
+      1️⃣ **Run a health check** — See your codebase status with `/audit`
+      2️⃣ **Analyze your code** — Get intelligence-driven insights with `/analyze {file}`
+      3️⃣ **Implement a feature** — Experience TDD-first development with `/implement {feature}`
+      
+      You can always dive deeper. I'm here to guide you through whatever path you choose. 🚀
     
     usage_rules:
       - "Always show at end of educational blocks"
