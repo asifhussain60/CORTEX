@@ -10,11 +10,11 @@ metadata:
   version: "6.14"
   last_updated: "2026-02-16T19:00:00Z"
   total_phases: 38
-  active: 1
-  completed: 17
+  active: 0
+  completed: 18
   consolidated: 2
   deferred: 0
-  planned: 3
+  planned: 2
 
   phase_breakdown:
     original_phases: 25
@@ -246,31 +246,27 @@ phase_status:
         agents: 2
         velocity: "98% faster than estimate"
       consolidates: ["GAP-08", "GAP-09", "GAP-10", "GAP-11"]
+  
+    - id: "phase-99"
+      title: "Vision API Enhancement + HTML Mapping + Dogfooding Workflow"
+      location: "phases/completed/phase-99-vision-api-dogfooding-workflow.yaml"
+      completion_date: "2026-02-16"
+      duration: "4 hours"
+      metrics:
+        tests: "55/55 passing (16 S1 + 16 S2 + 23 S3)"
+        test_duration: "0.14s"
+        stages: 3
+        velocity: "83% faster than estimate (4h actual vs 24h estimated)"
+      key_deliverables:
+        - "Atomic visual decomposition (PixelGrid, BoundingBox, TextSegment, ColorInfo, FontInfo)"
+        - "AnalysisDepth.ATOMIC mode (15-20s processing)"
+        - "data-cortex-* semantic selectors (CortexIDValidator, CortexIDMigrator)"
+        - "cortex-site-dogfood.yaml workflow template (7 stages)"
+        - "Vision API → Challenge → RED → GREEN → REFACTOR → Validation → Deploy"
 
   active: []
 
   planned:
-    - id: "phase-99"
-      title: "Vision API Enhancement + HTML Mapping + Dogfooding Workflow"
-      location: "phases/planned/phase-99-vision-api-dogfooding-workflow.yaml"
-      priority: P2
-      estimated_effort: "24 hours (3 days)"
-      roi_score: 78
-      confidence: 9.0
-      origin: "Digest from chat01.md design session"
-      created: "2026-02-16"
-      description: |
-        Enhance CORTEX LENS Vision API with atomic-level visual decomposition 
-        and establish bidirectional mapping between screenshots and HTML DOM 
-        elements via data-cortex-* semantic selectors. Create reusable TDD 
-        workflow template for dogfooding CORTEX site development.
-      key_deliverables:
-        - "Atomic visual decomposition (pixel-level bounding boxes)"
-        - "Bidirectional screenshot ↔ DOM mapping"
-        - "data-cortex-* semantic selectors"
-        - "WorkflowComposer TDD template"
-        - "Zero-duplication guardrails"
-    
     - id: "phase-100"
       title: "Knowledge-Parameterized Workflow Template Library"
       location: "phases/planned/phase-100-workflow-template-library.yaml"
