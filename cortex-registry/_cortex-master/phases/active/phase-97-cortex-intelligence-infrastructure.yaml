@@ -1,0 +1,476 @@
+---
+phase_id: "phase-97"
+title: "CORTEX Intelligence Infrastructure Enhancement"
+category: "architecture"
+priority: "P0"
+status: "active"
+created: "2026-02-16"
+author: "Asif Hussain"
+
+# AC_START: AC-PHASE97-001
+# Description: Comprehensive CORTEX enhancement - Health Orchestrator 2.0, LENS Intelligence Facade, Registry-Based Self-Wiring
+# Authority: Phase 97 Specification
+
+objective: |
+  Transform CORTEX from reactive detection to proactive architecture enforcement through:
+  1. Health Orchestrator 2.0 - Proactive sprawl prevention, security scanning, pre-implementation challenges
+  2. LENS Intelligence Facade - Black-boxed unified entry point with registry-based self-wiring
+  3. Orchestrator Consolidation - Reduce 147 files across 42 directories to lean production system
+  4. Golden Test Workflows - End-to-end audit trace validation with SQLite metrics
+  5. Evolution Timeline - Capability tracking from git history (AC markers)
+
+business_value: |
+  - 87% time savings per feature (registry auto-wiring vs manual integration)
+  - 81% reduction in maintenance burden (orchestrator consolidation)
+  - Zero P0 issues tolerated (progressive enforcement system)
+  - 30% reduction in code quality issues (proactive prevention)
+  - 50% faster onboarding (evolution timeline + documentation)
+
+scope:
+  in_scope:
+    - Health Orchestrator enhancement (7 new agents)
+    - LENS Intelligence Facade with workflow strategies
+    - Registry-based analyzer capability system
+    - Orchestrator sprawl analysis + consolidation recommendations
+    - Evolution timeline analyzer (git AC markers)
+    - Pre-implementation challenge agent
+    - Audit trace validation workflows
+    - Structure enforcement (prevent file creation outside approved paths)
+    - Security gap analysis (OWASP/CWE scanning)
+    - Quality metrics agent (cyclomatic complexity)
+    - Brittleness detection agent
+  
+  out_of_scope:
+    - Orchestrator deletion (deprecation only, 30-day sunset)
+    - Full orchestrator rewrite (enhance existing)
+    - External library additions (use existing CORTEX infrastructure)
+    - Documentation generation system (separate phase)
+    - Planning orchestrator rewiring (separate effort)
+
+stages:
+  - stage_id: "S1"
+    title: "Health Orchestrator 2.0 - New Agents"
+    duration_hours: 8
+    deliverables:
+      - StructureEnforcementAgent (blocks file creation outside approved paths)
+      - OrchestratorConsolidationAgent (detect sprawl, propose merges)
+      - BrittlenessDetectionAgent (find architectural weaknesses)
+      - SecurityGapAnalyzer (OWASP/CWE scanning, secrets detection)
+      - QualityMetricsAgent (cyclomatic complexity, maintainability index)
+      - PreImplementationChallengeAgent (LENS-driven user guidance)
+      - AuditTraceValidationAgent (golden test workflow validation)
+    tests:
+      - Unit tests for each agent (7 × 5 tests = 35 tests)
+      - Integration tests with HealthOrchestrator
+      - Golden test workflows
+    acceptance_criteria:
+      - All 7 agents registered in HealthOrchestrator
+      - Pre-commit hook blocks P0 violations
+      - Challenge agent triggers on IMPLEMENT intent
+      - Audit trace validation passes for sample workflow
+  
+  - stage_id: "S2"
+    title: "LENS Intelligence Facade - Black Box Entry Point"
+    duration_hours: 8
+    deliverables:
+      - LENSIntelligenceFacade class (single entry point)
+      - 9 workflow methods (refactor, security, implementation, evolution, onboarding, debugging, migration, documentation, compliance)
+      - WorkflowStrategy base class + concrete strategies
+      - LENSOrchestrator encapsulation (make analyzers private)
+      - MCP tool unification (cortex_lens_analyze with workflow parameter)
+    tests:
+      - 45 golden tests (5 per workflow)
+      - Facade integration tests
+      - MCP tool backward compatibility tests
+    acceptance_criteria:
+      - Single LENSIntelligenceFacade.analyze() method
+      - All workflows route through facade
+      - Internal analyzers hidden from external callers
+      - MCP tool supports all 9 workflows
+  
+  - stage_id: "S3"
+    title: "Registry-Based Self-Wiring System"
+    duration_hours: 10
+    deliverables:
+      - AnalyzerCapabilityRegistry (plugin discovery)
+      - @analyzer_capabilities decorator
+      - WorkflowAutoComposer (optimal pipeline selection)
+      - Annotate 9 existing analyzers with capabilities
+      - MCP auto-registration from capabilities
+      - Cost-aware execution ordering
+    tests:
+      - 60 golden tests (auto-wiring validation)
+      - Extension scenario tests (add analyzer without breaking)
+      - Performance tests (cache hit rate >70%)
+    acceptance_criteria:
+      - New analyzers auto-register via decorator
+      - Workflows auto-compose from capability queries
+      - MCP tools auto-generate from analyzer capabilities
+      - Adding analyzer takes <30 minutes (vs 4 hours manual)
+  
+  - stage_id: "S4"
+    title: "Evolution Timeline Analyzer"
+    duration_hours: 4
+    deliverables:
+      - EvolutionAnalyzer (LENS layer)
+      - EvolutionMilestone + EvolutionTimeline data models
+      - cortex_evolution_timeline MCP tool
+      - Timeline YAML storage (cortex-registry/_cortex-master/evolution/)
+      - Impact scoring algorithm (files_changed + tests_added + AC markers)
+    tests:
+      - 15 golden tests (milestone extraction, AC parsing, impact scoring)
+      - Integration with GitHistoryAnalyzer
+      - SQLite dashboard export
+    acceptance_criteria:
+      - Extracts milestones from AC_COMPLETE markers
+      - Calculates impact scores for each phase
+      - Generates timeline.yaml in registry
+      - MCP tool returns JSON/YAML/markdown formats
+  
+  - stage_id: "S5"
+    title: "Orchestrator Consolidation Analysis"
+    duration_hours: 6
+    deliverables:
+      - Orchestrator sprawl detection (42 dirs, 147 files)
+      - Pattern matching algorithm (>70% capability overlap)
+      - Consolidation recommendations report
+      - Merge simulation tests (dependency validation)
+      - Deprecation strategy (30-day sunset)
+    tests:
+      - Pattern detection accuracy tests
+      - Dependency graph validation
+      - Merge simulation tests
+    acceptance_criteria:
+      - Report identifies duplicate orchestrator patterns
+      - Proposes consolidated wiring.yaml
+      - Validates no broken dependencies
+      - Generates migration guide
+  
+  - stage_id: "S6"
+    title: "Progressive Enforcement System"
+    duration_hours: 4
+    deliverables:
+      - P0/P1/P2 enforcement matrix
+      - Enhanced pre-commit hook (hard block on P0)
+      - Soft block with justification requirement (P1)
+      - Health score calculation (target: 85/100 minimum)
+      - Dashboard metrics integration
+    tests:
+      - Enforcement rule tests
+      - Pre-commit hook integration tests
+      - Health score calculation tests
+    acceptance_criteria:
+      - P0 issues block commits (zero tolerance)
+      - P1 issues require justification (warning + prompt)
+      - P2 issues reported only (informational)
+      - Health score ≥ 85 required for merge
+  
+  - stage_id: "S7"
+    title: "Golden Test Workflows + Audit Validation"
+    duration_hours: 4
+    deliverables:
+      - End-to-end workflow validation
+      - SQLite audit trace validation
+      - Regression detection (health score drops >10 points)
+      - Baseline comparison framework
+      - CI/CD integration
+    tests:
+      - Full cycle tests (create → edit → test → commit → push)
+      - Audit trail completeness validation
+      - Regression detection tests
+    acceptance_criteria:
+      - Golden tests validate complete audit trail
+      - SQLite metrics match expected thresholds
+      - No regressions vs baseline
+      - CI workflow runs health checks on push
+  
+  - stage_id: "S8"
+    title: "MasterOrchestrator + InteractionOrchestrator Integration"
+    duration_hours: 6
+    deliverables:
+      - MasterOrchestrator prebuilt workflows (5 methods)
+      - InteractionOrchestrator workflow detection
+      - LENS facade wiring into both orchestrators
+      - Workflow trigger logic (operation → strategy mapping)
+      - Documentation for orchestrator integration
+    tests:
+      - Integration tests for both orchestrators
+      - Workflow detection accuracy tests
+      - End-to-end user flow tests
+    acceptance_criteria:
+      - MasterOrchestrator.gather_refactor_context() works
+      - InteractionOrchestrator detects workflows from operations
+      - All 9 workflows accessible from orchestrators
+      - No regression in existing orchestrator behavior
+  
+  - stage_id: "S9"
+    title: "Documentation + Deployment"
+    duration_hours: 4
+    deliverables:
+      - Updated copilot-instructions.md (Phase 97 rules)
+      - Agent documentation (health agents, LENS facade)
+      - MCP tool documentation (updated tool catalog)
+      - Migration guide (old MCP tools → unified tool)
+      - Dashboard visualization updates
+    tests:
+      - Documentation completeness validation
+      - Example code validation
+      - Migration guide accuracy
+    acceptance_criteria:
+      - All new components documented
+      - Migration guide tested on sample repo
+      - Dashboard shows new health metrics
+      - MCP tool catalog updated
+
+dependencies:
+  required_before:
+    - phase-95  # Health Agent Architecture foundation
+    - phase-90  # Context Synthesis Gateway
+  
+  blocks:
+    - phase-vacuum-refactor  # Uses same health agents
+  
+  related:
+    - wiring.yaml consolidation (pending orchestrator cleanup)
+    - Documentation system (uses evolution timeline)
+
+technical_design:
+  architecture_pattern: "Facade + Strategy + Registry"
+  
+  key_components:
+    health_orchestrator_2:
+      location: "cortex/orchestrators/health/"
+      new_agents:
+        - agents/structure_enforcement_agent.py
+        - agents/orchestrator_consolidation_agent.py
+        - agents/brittleness_detection_agent.py
+        - agents/security_gap_analyzer.py
+        - agents/quality_metrics_agent.py
+        - agents/pre_implementation_challenge_agent.py
+        - agents/audit_trace_validation_agent.py
+      enhancements:
+        - health_orchestrator.py (register new agents)
+        - cli.py (expose new agents in CLI)
+        - reports/health_report.py (add new issue categories)
+    
+    lens_intelligence_facade:
+      location: "cortex/lens/"
+      files:
+        - facade.py (LENSIntelligenceFacade)
+        - strategies/base_strategy.py
+        - strategies/refactor_strategy.py
+        - strategies/security_strategy.py
+        - strategies/implementation_strategy.py
+        - strategies/evolution_strategy.py
+        - strategies/onboarding_strategy.py
+        - strategies/debugging_strategy.py
+        - strategies/migration_strategy.py
+        - strategies/documentation_strategy.py
+        - strategies/compliance_strategy.py
+      mcp_integration:
+        - mcp/tools/intelligence.py (unified cortex_lens_analyze tool)
+    
+    registry_self_wiring:
+      location: "cortex/lens/"
+      files:
+        - registry/analyzer_capability_registry.py
+        - registry/capability_decorator.py
+        - registry/workflow_auto_composer.py
+      integration:
+        - All analyzers in cortex/lens/analyzers/ get @analyzer_capabilities
+        - MCP server auto-generates tools from registry
+    
+    evolution_timeline:
+      location: "cortex/lens/analyzers/"
+      files:
+        - evolution_analyzer.py
+      storage:
+        - cortex-registry/_cortex-master/evolution/timeline.yaml
+      mcp_tool:
+        - cortex_evolution_timeline (in intelligence.py)
+    
+    orchestrator_integration:
+      files:
+        - cortex/orchestrators/core/master_orchestrator.py (add prebuilt workflows)
+        - cortex/orchestrators/core/interaction_orchestrator.py (add workflow detection)
+
+enforcement_matrix:
+  p0_blocking:
+    - Exact duplicate files (CORE-035)
+    - Import errors (broken code)
+    - Security CWE violations
+    - New files outside approved paths
+    - Circular dependencies
+    - Missing AC markers (audit trail)
+    - Health score < 85
+  
+  p1_warning:
+    - Similar files (>70% overlap)
+    - Stub implementations (<200 LOC)
+    - Weak crypto patterns
+    - Complexity >15
+    - Type errors
+    - Deep nesting (>5 levels)
+  
+  p2_info:
+    - Style violations
+    - Complexity >10
+    - Missing headers
+    - Linting issues
+    - Documentation gaps
+
+golden_tests:
+  total_count: 175
+  breakdown:
+    - S1 (Health Agents): 35 tests
+    - S2 (LENS Facade): 45 tests
+    - S3 (Registry): 60 tests
+    - S4 (Evolution): 15 tests
+    - S5 (Consolidation): 10 tests
+    - S6 (Enforcement): 5 tests
+    - S7 (Audit): 10 tests
+    - S8 (Integration): 5 tests
+  
+  workflows:
+    - Create → Edit → Test → Commit → Push (E2E validation)
+    - IMPLEMENT intent → Challenge → Approval → TDD → Health Check
+    - New analyzer → Register → Auto-compose → MCP tool generation
+    - Orchestrator sprawl → Detect → Report → Consolidate
+
+success_metrics:
+  quantitative:
+    - Health score ≥ 85/100 (vs 0.0 current)
+    - Orchestrator count ≤ 28 (vs 147 current)
+    - Zero P0 issues tolerated
+    - 175/175 golden tests passing
+    - Cache hit rate >70% (LENS operations)
+    - Analyzer registration time <30 min (vs 4 hours)
+  
+  qualitative:
+    - Single LENS entry point (black-boxed)
+    - Proactive prevention (not reactive detection)
+    - Self-wiring extensibility
+    - Production-ready quality
+
+effort_estimation:
+  total_hours: 54
+  total_days: 6.75 (8-hour days)
+  breakdown:
+    - S1: 8 hours (Health agents)
+    - S2: 8 hours (LENS facade)
+    - S3: 10 hours (Registry auto-wiring)
+    - S4: 4 hours (Evolution timeline)
+    - S5: 6 hours (Consolidation analysis)
+    - S6: 4 hours (Enforcement system)
+    - S7: 4 hours (Golden tests)
+    - S8: 6 hours (Orchestrator integration)
+    - S9: 4 hours (Documentation)
+  
+  risk_buffer: 20% (11 hours)
+  total_with_buffer: 65 hours (8 days)
+
+risks_and_mitigations:
+  high_risk:
+    - risk: "Registry auto-wiring breaks existing analyzers"
+      mitigation: "Backward compatibility layer, 2-release deprecation"
+      probability: "Low"
+    
+    - risk: "Health enforcement too strict (blocks valid commits)"
+      mitigation: "Progressive rollout (P0 only first, then P1/P2)"
+      probability: "Medium"
+  
+  medium_risk:
+    - risk: "Orchestrator consolidation breaks dependencies"
+      mitigation: "Deprecation (not deletion), 30-day sunset period"
+      probability: "Low"
+    
+    - risk: "LENS facade adds latency"
+      mitigation: "Cache-first strategy, cost-aware execution"
+      probability: "Low"
+  
+  low_risk:
+    - risk: "Evolution timeline AC marker inconsistency"
+      mitigation: "Add governance agent to validate AC format"
+      probability: "Low"
+
+definition_of_done:
+  code:
+    - All 9 stages completed
+    - 175/175 golden tests passing
+    - Zero P0 issues detected by health check
+    - Health score ≥ 85/100
+    - All Python files have type hints (CORE-011)
+    - All functions have Google-style docstrings (CORE-012)
+  
+  testing:
+    - Unit tests for all new components
+    - Integration tests for orchestrator wiring
+    - Golden test workflows validate end-to-end
+    - Performance tests confirm cache hit rate >70%
+    - Regression tests confirm no breaking changes
+  
+  documentation:
+    - All new agents documented
+    - LENS facade API documentation
+    - MCP tool catalog updated
+    - Migration guide for deprecated tools
+    - copilot-instructions.md updated with Phase 97 rules
+  
+  governance:
+    - AC markers present (AC_START → AC_COMPLETE)
+    - CORE rules validated
+    - Audit trail complete
+    - No markdown file generation violations (CORE-002)
+    - Single execution paths (CORE-035)
+  
+  deployment:
+    - Pre-commit hooks updated
+    - CI/CD workflow runs health checks
+    - Dashboard exports new metrics
+    - MCP server registers new tools
+
+next_actions:
+  immediate:
+    - Begin S1: Implement StructureEnforcementAgent (TDD)
+    - Setup test harness for new health agents
+    - Create LENSIntelligenceFacade skeleton
+  
+  short_term:
+    - Complete S1-S3 (foundation layers)
+    - Validate registry auto-wiring with sample analyzer
+    - Test LENS facade with refactor workflow
+  
+  long_term:
+    - Orchestrator consolidation execution (after analysis)
+    - Documentation system integration (evolution timeline)
+    - Multi-repo capability timeline (future enhancement)
+
+notes:
+  - "Phase 97 synthesizes insights from chat01.md digest, lens-blackbox-gaps.md, and mock-sprawl.md"
+  - "Addresses all gaps identified: orchestrator sprawl, LENS black-boxing, pre-implementation challenges, audit validation"
+  - "Registry-based self-wiring eliminates 87% of manual integration effort"
+  - "Progressive enforcement (P0/P1/P2) balances rigor with practicality"
+  - "30-day deprecation sunset (not deletion) ensures safety"
+  - "Backward compatibility layer for MCP tools (2-release deprecation)"
+  - "Total investment: 8 days → Infinite ROI (self-maintaining architecture)"
+
+related_files:
+  source_analysis:
+    - "_workspaces/.chats/planner/lens-blackbox-gaps.md"
+    - "_workspaces/.chats/planner/mock-sprawl.md"
+    - "_workspaces/.chats/chat01.md"
+  
+  foundation:
+    - "cortex-registry/_cortex-master/phases/active/phase-95-health-agent-architecture.yaml"
+    - "cortex/orchestrators/health/health_orchestrator.py"
+    - "cortex/lens/orchestrator.py"
+    - "cortex/lens/lens_tiered_mcp_api.py"
+  
+  integration_points:
+    - "cortex/orchestrators/core/master_orchestrator.py"
+    - "cortex/orchestrators/core/interaction_orchestrator.py"
+    - "cortex/mcp/tools/intelligence.py"
+    - ".githooks/pre_commit_health.py"
+    - ".github/workflows/health-check.yml"
+
+# AC_COMPLETE: AC-PHASE97-001 ✅ Phase specification created
