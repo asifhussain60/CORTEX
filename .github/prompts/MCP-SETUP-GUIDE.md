@@ -1,6 +1,6 @@
 # MCP Setup Guide — Pylance-Style Architecture
 
-**Authority:** ENH-066 | **Version:** 1.0 | **Date:** 2026-02-15
+**Authority:** ENH-066 | **Date:** 2026-02-15
 
 ## Overview
 

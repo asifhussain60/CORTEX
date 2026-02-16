@@ -1,6 +1,6 @@
 # CORTEX Documentation Generation Prompt
 
-**Version:** 5.0 | **Updated:** 2026-02-14 | **Authority:** Documentation Architect Agent + External Review Integration | **Mode:** Registry-Driven Tri-Mode (Refresh + Generate + Story) | **Integration:** Phase 74 + ENH-064 + Phase 8 + Diátaxis Framework + C4 Model
+**Updated:** 2026-02-14 | **Authority:** Documentation Architect Agent + External Review Integration | **Mode:** Registry-Driven Tri-Mode (Refresh + Generate + Story) | **Integration:** Phase 74 + ENH-064 + Phase 8 + Diátaxis Framework + C4 Model
 
 ---
 
@@ -2737,7 +2737,7 @@ Git: b3efc2d "docs: Generate GitHub Pages HTML site"
 # CORTEX Architecture Documentation
 
 **Platform:** CORTEX — Cognitive Real-Time Execution System  
-**Version:** 1.0 | **Generated:** 2026-02-10  
+**Generated:** 2026-02-10  
 **Maintainer:** Architecture Team
 
 ---
@@ -3705,7 +3705,7 @@ Reset orchestrator state, ready for next request.
 
 **Category:** [core | domain | support]  
 **Priority:** [1-200]  
-**Version:** 1.0.0
+
 
 ---
 

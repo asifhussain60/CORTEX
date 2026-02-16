@@ -1,6 +1,6 @@
 # 🎨 CORTEX Response Format Standards
 
-> **Version:** 2.0 | **Updated:** 2026-02-13 | **Authority:** ENH-028 + ENH-032 + CORE-049 + Concise Decision Mode + Chat01 User Preferences
+> **Updated:** 2026-02-13 | **Authority:** ENH-028 + ENH-032 + CORE-049 + Concise Decision Mode + Chat01 User Preferences
 
 
 ---
@@ -34,7 +34,7 @@ Unified response format for **all CORTEX operations** across modes: PRE-FLIGHT, 
 ## � COMPOSABLE CONTENT BLOCKS (NEW)
 
 **Authority:** cortex-registry/interaction/content-blocks.yaml  
-**Version:** 1.0 | **Updated:** 2026-02-14
+**Updated:** 2026-02-14
 
 ### Purpose
 
