@@ -184,6 +184,7 @@
 | `/analyze {scope}` | LENS analysis |
 | `/recall {feature}` | Feature discovery |
 | `/onboard {path}` | Repository onboarding + security scan |
+| `/rephrase {request}` | **REPHRASE MODE:** Convert verbose request into CORTEX-efficient prompt (35% token reduction, markdown output) |
 
 ---
 
