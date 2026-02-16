@@ -1,0 +1,114 @@
+# TDD API Service Workflow Template
+# Phase 100 Stage 5
+# API endpoint TDD with contract validation and security scanning
+
+workflow:
+  id: "tdd/api-service"
+  name: "API Service TDD Workflow"
+  version: "1.0.0"
+  category: "tdd"
+  description: "TDD cycle for API endpoints with contract and security validation"
+
+  metadata:
+    author: "CORTEX"
+    created: "2026-02-16"
+    phase: "100"
+    stage: "5"
+
+  convergence_gate:
+    max_cycles: 8
+    success_criteria:
+      api_contract_valid: true
+      security_scan_clean: true
+      all_tests_pass: true
+    convergence_predicate: "contract_valid and security_clean and all_tests_pass"
+    backoff_strategy: "exponential"
+
+  knowledge_context:
+    architect_mode:
+      test_framework: "pytest + httpx"
+      api_style: "FastAPI + MCP endpoints"
+      auth_pattern: "MCP tool authentication"
+      security: "CORTEX CORE rules"
+    production_mode:
+      test_framework: "{{test_framework}}"  # pytest/Jest/NUnit/xUnit
+      api_style: "{{api_style}}"  # From company/domains/api-design-standards.yaml
+      auth_pattern: "{{auth_pattern}}"  # From company/domains/security-standards.yaml
+      security: "{{security_standards}}"
+
+  steps:
+    - step_id: "contract_definition"
+      name: "Define API Contract (OpenAPI)"
+      orchestrator: "TDDOrchestrator"
+      convergence_gate:
+        max_cycles: 2
+        success_criteria:
+          contract_defined: true
+          contract_valid: true
+        convergence_predicate: "openapi_spec_valid"
+      params:
+        phase: "RED"
+        api_style: "{{api_style}}"
+        spec_format: "OpenAPI 3.0"
+
+    - step_id: "contract_tests"
+      name: "Write Contract Tests"
+      orchestrator: "TDDOrchestrator"
+      depends_on: ["contract_definition"]
+      convergence_gate:
+        max_cycles: 3
+        success_criteria:
+          contract_tests_written: true
+          contract_tests_failing: true
+        convergence_predicate: "test_count > 0 and all_failing"
+      params:
+        phase: "RED"
+        test_framework: "{{test_framework}}"
+
+    - step_id: "endpoint_implementation"
+      name: "Implement API Endpoints"
+      orchestrator: "TDDOrchestrator"
+      depends_on: ["contract_tests"]
+      convergence_gate:
+        max_cycles: 8
+        success_criteria:
+          all_tests_pass: true
+          contract_match: true
+        convergence_predicate: "all_tests_pass and response_schema_valid"
+      params:
+        phase: "GREEN"
+        api_style: "{{api_style}}"
+        auth_pattern: "{{auth_pattern}}"
+
+    - step_id: "security_scan"
+      name: "Security Vulnerability Scan"
+      orchestrator: "TDDOrchestrator"
+      depends_on: ["endpoint_implementation"]
+      convergence_gate:
+        max_cycles: 5
+        success_criteria:
+          critical_vulnerabilities: 0
+          high_vulnerabilities: 0
+        convergence_predicate: "critical_count == 0 and high_count == 0"
+      params:
+        security_standards: "{{security}}"
+        scan_tools: ["bandit", "safety", "semgrep"]
+
+    - step_id: "integration_tests"
+      name: "API Integration Tests"
+      orchestrator: "TDDOrchestrator"
+      depends_on: ["security_scan"]
+      convergence_gate:
+        max_cycles: 4
+        success_criteria:
+          integration_tests_pass: true
+        convergence_predicate: "all_integration_tests_pass"
+      params:
+        test_framework: "{{test_framework}}"
+        test_type: "integration"
+
+  epilogues:
+    - epilogue_id: "api_documentation"
+      name: "Generate API Documentation"
+      trigger: "workflow_complete"
+      description: "Auto-generate API docs from OpenAPI spec"

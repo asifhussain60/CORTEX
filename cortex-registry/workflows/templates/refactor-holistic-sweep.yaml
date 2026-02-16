@@ -1,0 +1,79 @@
+# Holistic Refactoring Sweep Workflow Template
+# Phase 100 Stage 5
+# Final holistic code quality pass (auto-injected epilogue)
+
+workflow:
+  id: "refactor/holistic-sweep"
+  name: "Holistic Refactoring Sweep"
+  version: "1.0.0"
+  category: "refactor"
+  description: "Final holistic code quality pass across entire codebase"
+
+  metadata:
+    author: "CORTEX"
+    created: "2026-02-16"
+    phase: "100"
+    stage: "5"
+    epilogue: true
+
+  convergence_gate:
+    max_cycles: 8
+    success_criteria:
+      complexity_acceptable: true
+      coverage_target_met: true
+      no_violations: true
+    convergence_predicate: "complexity <= 10 and coverage >= 95 and violations == 0"
+    backoff_strategy: "exponential"
+
+  knowledge_context:
+    architect_mode:
+      complexity_target: "10"
+      coverage_target: "95%"
+      governance: "CORE-008, CORE-011, CORE-012"
+    production_mode:
+      complexity_target: "{{complexity_target}}"
+      coverage_target: "{{coverage_target}}"
+      governance: "{{governance_rules}}"
+
+  steps:
+    - step_id: "holistic_analysis"
+      name: "Analyze Entire Codebase"
+      orchestrator: "LENSSynthesis"
+      convergence_gate:
+        max_cycles: 2
+        success_criteria:
+          analysis_complete: true
+        convergence_predicate: "all_modules_analyzed"
+      params:
+        scope: "full_codebase"
+        analysis_types: ["complexity", "duplication", "coverage", "governance"]
+
+    - step_id: "cross_cutting_refactorings"
+      name: "Cross-Cutting Refactorings"
+      orchestrator: "RefactoringOrchestrator"
+      depends_on: ["holistic_analysis"]
+      convergence_gate:
+        max_cycles: 6
+        success_criteria:
+          quality_improved: true
+          tests_pass: true
+        convergence_predicate: "quality_delta > 0 and all_tests_pass"
+      params:
+        refactoring_operations: ["rename_for_consistency", "extract_shared_patterns", "reduce_coupling"]
+        scope: "cross_cutting"
+
+    - step_id: "final_verification"
+      name: "Final Quality Gate"
+      orchestrator: "EnforcementOrchestrator"
+      depends_on: ["cross_cutting_refactorings"]
+      convergence_gate:
+        max_cycles: 3
+        success_criteria:
+          all_gates_pass: true
+        convergence_predicate: "complexity_ok and coverage_ok and governance_ok"
+      params:
+        complexity_target: "{{complexity_target}}"
+        coverage_target: "{{coverage_target}}"
+        governance: "{{governance}}"
+
+  epilogues: []  # Final epilogue

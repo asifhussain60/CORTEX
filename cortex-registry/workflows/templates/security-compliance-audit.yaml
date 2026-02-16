@@ -1,0 +1,96 @@
+# Security Compliance Audit Workflow Template
+# Phase 100 Stage 5
+# Comprehensive security and compliance audit with auto-remediation
+
+workflow:
+  id: "security/compliance-audit"
+  name: "Security Compliance Audit Workflow"
+  version: "1.0.0"
+  category: "security"
+  description: "Full security audit with OWASP Top 10 and compliance scanning"
+
+  metadata:
+    author: "CORTEX"
+    created: "2026-02-16"
+    phase: "100"
+    stage: "5"
+
+  convergence_gate:
+    max_cycles: 10
+    success_criteria:
+      critical_issues: 0
+      high_issues: 0
+      compliance_score_target_met: true
+    convergence_predicate: "critical == 0 and high == 0 and compliance >= target"
+    backoff_strategy: "exponential"
+
+  knowledge_context:
+    architect_mode:
+      security_standards: "CORE-012 + OWASP Top 10"
+      compliance_target: "100%"
+      scan_tools: ["bandit", "safety", "semgrep"]
+    production_mode:
+      security_standards: "{{security_standards}}"  # From company/domains/
+      compliance_target: "{{compliance_target}}"  # From company policy
+      scan_tools: "{{scan_tools}}"  # From profile
+
+  steps:
+    - step_id: "vulnerability_scan"
+      name: "Dependency Vulnerability Scan"
+      orchestrator: "TDDOrchestrator"
+      convergence_gate:
+        max_cycles: 5
+        success_criteria:
+          critical_vulns: 0
+          high_vulns: 0
+        convergence_predicate: "critical_count == 0 and high_count == 0"
+      params:
+        scan_type: "dependency"
+        tools: ["safety", "pip-audit"]
+
+    - step_id: "code_security_scan"
+      name: "Static Code Security Analysis"
+      orchestrator: "TDDOrchestrator"
+      depends_on: ["vulnerability_scan"]
+      convergence_gate:
+        max_cycles: 8
+        success_criteria:
+          critical_issues: 0
+          high_issues: 0
+        convergence_predicate: "critical == 0 and high == 0"
+      params:
+        scan_type: "static_analysis"
+        tools: ["bandit", "semgrep"]
+        standards: "{{security_standards}}"
+
+    - step_id: "secrets_scan"
+      name: "Secrets and Credentials Scan"
+      orchestrator: "TDDOrchestrator"
+      depends_on: ["code_security_scan"]
+      convergence_gate:
+        max_cycles: 3
+        success_criteria:
+          secrets_found: 0
+        convergence_predicate: "secrets_count == 0"
+      params:
+        scan_type: "secrets"
+        tools: ["trufflehog", "detect-secrets"]
+
+    - step_id: "compliance_check"
+      name: "Compliance Standards Check"
+      orchestrator: "EnforcementOrchestrator"
+      depends_on: ["secrets_scan"]
+      convergence_gate:
+        max_cycles: 5
+        success_criteria:
+          compliance_score_met: true
+        convergence_predicate: "compliance_score >= {{compliance_target}}"
+      params:
+        standards: "{{security_standards}}"
+        target_score: "{{compliance_target}}"
+
+  epilogues:
+    - epilogue_id: "security_report"
+      name: "Security Audit Report"
+      trigger: "workflow_complete"
+      description: "Generate comprehensive security audit report"

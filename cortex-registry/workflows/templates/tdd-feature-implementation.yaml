@@ -1,0 +1,109 @@
+# TDD Feature Implementation Workflow Template
+# Phase 100 Stage 5
+# Full RED→GREEN→REFACTOR TDD cycle for any feature
+
+workflow:
+  id: "tdd/feature-implementation"
+  name: "Feature Implementation TDD Workflow"
+  version: "1.0.0"
+  category: "tdd"
+  description: "Full RED→GREEN→REFACTOR TDD cycle with convergence gates"
+
+  metadata:
+    author: "CORTEX"
+    created: "2026-02-16"
+    phase: "100"
+    stage: "5"
+
+  # Convergence gate: Step loops until success criteria met
+  convergence_gate:
+    max_cycles: 8
+    success_criteria:
+      all_tests_pass: true
+      coverage_target_met: true
+    convergence_predicate: "all_tests_pass and coverage >= target"
+    backoff_strategy: "exponential"
+
+  # Knowledge context resolution (mode-aware)
+  knowledge_context:
+    architect_mode:
+      test_framework: "pytest"
+      patterns: "Orchestrator + Registry pattern"
+      coverage_target: "95%"
+      core_rules: ["CORE-008", "CORE-011", "CORE-012"]
+    production_mode:
+      test_framework: "{{test_framework}}"  # From onboarded profile
+      patterns: "{{architecture_patterns}}"  # From profile
+      coverage_target: "{{coverage_target}}"  # From company/domains/ or 80%
+      security_standards: "{{security_standards}}"  # From company/domains/
+
+  # Workflow steps (RED → GREEN → REFACTOR)
+  steps:
+    - step_id: "red_phase"
+      name: "RED Phase - Write Failing Tests"
+      orchestrator: "TDDOrchestrator"
+      convergence_gate:
+        max_cycles: 3
+        success_criteria:
+          tests_written: true
+          tests_failing: true
+        convergence_predicate: "test_count > 0 and all_failing"
+      params:
+        phase: "RED"
+        test_framework: "{{test_framework}}"
+        coverage_target: "{{coverage_target}}"
+
+    - step_id: "green_phase"
+      name: "GREEN Phase - Make Tests Pass"
+      orchestrator: "TDDOrchestrator"
+      depends_on: ["red_phase"]
+      convergence_gate:
+        max_cycles: 8
+        success_criteria:
+          all_tests_pass: true
+          no_new_failures: true
+        convergence_predicate: "all_tests_pass and regressions == 0"
+      params:
+        phase: "GREEN"
+        test_framework: "{{test_framework}}"
+        patterns: "{{patterns}}"
+
+    - step_id: "refactor_phase"
+      name: "REFACTOR Phase - Improve Code Quality"
+      orchestrator: "RefactoringOrchestrator"
+      depends_on: ["green_phase"]
+      convergence_gate:
+        max_cycles: 5
+        success_criteria:
+          tests_still_pass: true
+          code_quality_improved: true
+        convergence_predicate: "all_tests_pass and complexity_reduced"
+      params:
+        refactoring_operations: ["extract_method", "rename_variable", "remove_duplication"]
+        preserve_behavior: true
+
+    - step_id: "verification"
+      name: "Final Verification"
+      orchestrator: "EnforcementOrchestrator"
+      depends_on: ["refactor_phase"]
+      convergence_gate:
+        max_cycles: 2
+        success_criteria:
+          coverage_target_met: true
+          governance_passed: true
+        convergence_predicate: "coverage >= {{coverage_target}} and governance_score >= 90"
+      params:
+        coverage_target: "{{coverage_target}}"
+        core_rules: "{{core_rules}}"
+
+  # Auto-injected epilogues (Phase 100 feature)
+  epilogues:
+    - epilogue_id: "post_phase_dedup"
+      name: "PostPhaseDeduplicationReview"
+      description: "Auto-detect and fix duplicate code (CORE-035)"
+      trigger: "after_refactor_phase"
+
+    - epilogue_id: "holistic_sweep"
+      name: "HolisticRefactoringSweep"
+      description: "Final holistic code quality pass"
+      trigger: "workflow_complete"
