@@ -82,7 +82,7 @@ class TestCanonicalLENSContext:
     def test_lens_orchestrator_uses_canonical_context(self):
         """Test 4: LENSOrchestrator uses canonical context."""
         pytest.skip("Skipping due to missing tree_sitter_javascript dependency")
-        from cortex.lens.orchestrator import LENSOrchestrator
+        from cortex.lens.lens_orchestrator import LENSOrchestrator
         from cortex.lens.models.context import LENSContext
         
         # Create orchestrator

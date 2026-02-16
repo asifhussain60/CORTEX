@@ -86,7 +86,7 @@ class Stage1ComprehensionStrategy(StageExecutionStrategy):
 
         if lens_orch is None:
             try:
-                from cortex.lens.orchestrator import LENSOrchestrator
+                from cortex.lens.lens_orchestrator import LENSOrchestrator
 
                 repo_path = Path(context.parameters.get("repo_path", "."))
                 if not repo_path.is_absolute():

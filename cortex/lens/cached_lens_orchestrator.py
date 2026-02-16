@@ -22,7 +22,7 @@ from cortex.lens.cache import (
     build_cache_key,
     get_lens_cache,
 )
-from cortex.lens.orchestrator import LENSOrchestrator
+from cortex.lens.lens_orchestrator import LENSOrchestrator
 
 logger = logging.getLogger(__name__)
 

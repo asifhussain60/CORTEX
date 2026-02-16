@@ -34,10 +34,10 @@ __all__ = [
 def __getattr__(name):
     """Lazy import mechanism to prevent circular dependencies."""
     if name == "LENSOrchestrator":
-        from cortex.lens.orchestrator import LENSOrchestrator
+        from cortex.lens.lens_orchestrator import LENSOrchestrator
         return LENSOrchestrator
     elif name == "LENSContext":
-        from cortex.lens.orchestrator import LENSContext
+        from cortex.lens.lens_orchestrator import LENSContext
         return LENSContext
     elif name == "ASTAnalyzer":
         from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer

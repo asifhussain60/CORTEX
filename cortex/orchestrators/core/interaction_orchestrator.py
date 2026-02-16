@@ -79,7 +79,7 @@ class InteractionOrchestrator(IOrchestrator):
             LENSOrchestrator instance or None if unavailable.
         """
         try:
-            from cortex.lens.orchestrator import LENSOrchestrator
+            from cortex.lens.lens_orchestrator import LENSOrchestrator
 
             repo_path = Path.cwd()
             return LENSOrchestrator(repo_path=repo_path)

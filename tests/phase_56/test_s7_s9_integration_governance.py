@@ -171,7 +171,7 @@ class TestProductionReadinessStage9:
     def test_s9_backward_compatibility_with_legacy_imports(self):
         """Phase 56 should be backward compatible with legacy imports"""
         # Legacy cortex/brain/ imports should still work via aliases
-        from cortex.lens.orchestrator import LENSOrchestrator
+        from cortex.lens.lens_orchestrator import LENSOrchestrator
         assert LENSOrchestrator is not None
 
     def test_s9_architecture_validation_passed(self):

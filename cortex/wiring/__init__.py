@@ -8,7 +8,7 @@ This is the SINGLE SOURCE OF TRUTH for orchestrator wiring.
 All orchestrator registration comes from cortex/wiring/specifications/wiring.yaml.
 
 Example:
-    >>> from cortex.wiring import bootstrap_cortex, get_cortex
+    >>> from cortex.wiring import wiring_bootstrap_cortex, get_cortex
     >>> registry = bootstrap_cortex()  # Initialize system
     >>> orch = registry.get_orchestrator("TDDOrchestrator")
     >>> result = orch.generate_tests(...)
@@ -23,7 +23,7 @@ Example:
     >>> hash_value = get_wiring_hash()
 """
 
-from cortex.wiring.bootstrap import (
+from cortex.wiring.wiring_bootstrap import (
     bootstrap_cortex,
     get_cortex,
     get_wiring_hash,

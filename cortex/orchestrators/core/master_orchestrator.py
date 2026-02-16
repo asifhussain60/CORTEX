@@ -1467,7 +1467,7 @@ class MasterOrchestrator(IOrchestrator):
 
             # AC-AR-006-02: Bootstrap all orchestrators (Phase 3 Git-backed wiring)
             try:
-                from cortex.wiring import bootstrap_cortex, is_wired
+                from cortex.wiring import wiring_bootstrap_cortex, is_wired
                 if not is_wired():
                     registry = bootstrap_cortex()
                     self.logger.info(f"✅ Bootstrapped {len(registry.list_orchestrators())} orchestrators")
@@ -2340,7 +2340,7 @@ class MasterOrchestrator(IOrchestrator):
                 # Build LENS context using LENS analyzers (Tier 2 - Quick Analysis)
                 from pathlib import Path
 
-                from cortex.lens.orchestrator import LENSOrchestrator
+                from cortex.lens.lens_orchestrator import LENSOrchestrator
 
                 # Get file path from parameters or use current working directory
                 repo_path = Path(parameters.get("repo_path", "."))

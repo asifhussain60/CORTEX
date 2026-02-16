@@ -11,7 +11,7 @@ import pytest
 from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
 
-from cortex.lens.orchestrator import LENSOrchestrator, LENSContext
+from cortex.lens.lens_orchestrator import LENSOrchestrator, LENSContext
 from cortex.lens.models.tech_stack import TechStack, TechCategory, TechStackItem
 
 

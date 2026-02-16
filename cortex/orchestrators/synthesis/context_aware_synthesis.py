@@ -19,7 +19,7 @@ from typing import Dict, Any, List, Optional, Tuple
 from dataclasses import dataclass
 
 from cortex.models.enriched_context import EnrichedContext
-from cortex.lens.orchestrator import LENSOrchestrator
+from cortex.lens.lens_orchestrator import LENSOrchestrator
 from cortex.lens.analyzers.tech_stack_analyzer import TechStackAnalyzer
 from cortex.brain.knowledge.yaml_resolver import KnowledgeYAMLResolver
 

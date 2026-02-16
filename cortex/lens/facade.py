@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 from enum import Enum
 
-from cortex.lens.orchestrator import LENSOrchestrator
+from cortex.lens.lens_orchestrator import LENSOrchestrator
 
 
 class WorkflowType(Enum):

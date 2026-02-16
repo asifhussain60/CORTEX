@@ -6,7 +6,7 @@ import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from cortex.storage.config import StorageConfig
+from cortex.storage.storage_config import StorageConfig
 from cortex.storage.provider import IKnowledgeProvider
 
 

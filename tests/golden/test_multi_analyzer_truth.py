@@ -25,7 +25,7 @@ import pytest
 from pathlib import Path
 from typing import Dict, Any
 
-from cortex.lens.orchestrator import LENSOrchestrator
+from cortex.lens.lens_orchestrator import LENSOrchestrator
 
 
 class TestMultiAnalyzerIntegration:

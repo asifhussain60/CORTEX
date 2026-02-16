@@ -18,7 +18,7 @@ from cortex.visualization.scripts.bundle_dependencies import (
     bundle_dependencies,
     verify_bundle,
 )
-from cortex.visualization.scripts.lazy_module_loader import (
+from cortex.visualization.scripts.viz_lazy_loader import (
     LazyModuleLoader,
     get_lazy_loader,
 )

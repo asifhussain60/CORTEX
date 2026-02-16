@@ -6,7 +6,7 @@ AC-PHASE50-S1-002: Factory returns correct provider based on config
 
 from typing import TYPE_CHECKING
 
-from cortex.storage.config import StorageConfig
+from cortex.storage.storage_config import StorageConfig
 from cortex.storage.errors import ConfigurationError
 
 if TYPE_CHECKING:

@@ -320,7 +320,7 @@ class TestTimeoutConfiguration:
     
     def test_timeout_config_exists(self):
         """Timeout configuration should exist."""
-        from cortex.infrastructure.config import get_timeout_config
+        from cortex.infrastructure.infrastructure_config import get_timeout_config
         
         config = get_timeout_config()
         

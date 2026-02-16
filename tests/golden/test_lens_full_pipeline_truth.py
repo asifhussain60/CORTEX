@@ -26,7 +26,7 @@ from typing import Dict, Any, List
 
 # AC_START: AC-PHASE24-S1-003
 # Real LENS components (ZERO MOCKS)
-from cortex.lens.orchestrator import LENSOrchestrator, LENSContext
+from cortex.lens.lens_orchestrator import LENSOrchestrator, LENSContext
 
 
 @dataclass

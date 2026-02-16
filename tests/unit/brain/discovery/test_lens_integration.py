@@ -19,7 +19,7 @@ from typing import List
 
 # Wrapped import - module may not exist
 try:
-    from cortex.brain.discovery.lens_integration import (
+    from cortex.brain.discovery.brain_lens_integration import (
         LENSIntegration,
         LENSAnalysisResult,
         IntentPattern,

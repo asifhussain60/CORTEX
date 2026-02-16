@@ -250,7 +250,7 @@ class CortexProcessRequest(ConsolidatedTool):
         """Execute analysis operations via LENS."""
         try:
             # AC-FIX-MCP-IMPORTS-001: Corrected path from cortex.orchestrators.lens_synthesis
-            from cortex.lens.orchestrator import LENSOrchestrator
+            from cortex.lens.lens_orchestrator import LENSOrchestrator
             from pathlib import Path
             
             repo_path = Path(target) if target else Path(".")

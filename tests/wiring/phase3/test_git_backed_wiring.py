@@ -178,7 +178,7 @@ def test_wiring_init_exports() -> None:
 
 def test_bootstrap_cortex_returns_registry() -> None:
     """Test that bootstrap_cortex() returns a valid registry."""
-    from cortex.wiring import bootstrap_cortex
+    from cortex.wiring import wiring_bootstrap_cortex
     
     registry = bootstrap_cortex()
     
@@ -189,7 +189,7 @@ def test_bootstrap_cortex_returns_registry() -> None:
 
 def test_registry_can_list_orchestrators() -> None:
     """Test that registry can list all 26 orchestrators (Phase 8.3: +ChallengeEngine, +RecommendationEngine)."""
-    from cortex.wiring import bootstrap_cortex
+    from cortex.wiring import wiring_bootstrap_cortex
     
     registry = bootstrap_cortex()
     orchestrators = registry.list_orchestrators()
@@ -204,7 +204,7 @@ def test_lazy_initialization_works() -> None:
     Note: We test with OnboardingOrchestrator which has simpler dependencies.
     MasterOrchestrator requires providers that aren't available in test context.
     """
-    from cortex.wiring import bootstrap_cortex
+    from cortex.wiring import wiring_bootstrap_cortex
     
     registry = bootstrap_cortex()
     
@@ -248,7 +248,7 @@ def test_wiring_hash_is_deterministic() -> None:
 
 def test_is_wired_returns_true_after_bootstrap() -> None:
     """Test that is_wired() returns True after bootstrap."""
-    from cortex.wiring import bootstrap_cortex, is_wired
+    from cortex.wiring import wiring_bootstrap_cortex, is_wired
     from cortex.wiring.registry import reset_registry
     
     # Force reset to ensure clean state

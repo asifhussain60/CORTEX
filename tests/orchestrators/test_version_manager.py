@@ -15,7 +15,7 @@ class TestVersionManagerCurrentVersion:
 
     def test_read_current_version_from_file(self, tmp_path):
         """Should read version from .cortex-version file."""
-        from cortex.orchestrators.version_manager import VersionManager
+        from cortex.orchestrators.orchestrator_version_manager import VersionManager
         
         version_file = tmp_path / ".cortex-version"
         version_file.write_text("7.2.0")
@@ -27,7 +27,7 @@ class TestVersionManagerCurrentVersion:
 
     def test_read_version_from_pyproject(self, tmp_path):
         """Should read version from pyproject.toml as fallback."""
-        from cortex.orchestrators.version_manager import VersionManager
+        from cortex.orchestrators.orchestrator_version_manager import VersionManager
         
         pyproject = tmp_path / "pyproject.toml"
         pyproject.write_text('[project]\nversion = "7.1.5"')
@@ -39,7 +39,7 @@ class TestVersionManagerCurrentVersion:
 
     def test_default_version_when_not_found(self, tmp_path):
         """Should return 0.0.0 when no version found."""
-        from cortex.orchestrators.version_manager import VersionManager
+        from cortex.orchestrators.orchestrator_version_manager import VersionManager
         
         manager = VersionManager(tmp_path)
         version = manager.get_current_version()
@@ -52,7 +52,7 @@ class TestVersionManagerGitHubReleases:
 
     def test_check_github_releases(self):
         """Should fetch releases from GitHub API."""
-        from cortex.orchestrators.version_manager import VersionManager
+        from cortex.orchestrators.orchestrator_version_manager import VersionManager
         
         manager = VersionManager(Path("."))
         
@@ -72,7 +72,7 @@ class TestVersionManagerGitHubReleases:
 
     def test_github_releases_handles_error(self):
         """Should handle GitHub API errors gracefully."""
-        from cortex.orchestrators.version_manager import VersionManager
+        from cortex.orchestrators.orchestrator_version_manager import VersionManager
         
         manager = VersionManager(Path("."))
         
@@ -89,7 +89,7 @@ class TestVersionManagerPyPIReleases:
 
     def test_check_pypi_releases(self):
         """Should fetch releases from PyPI API."""
-        from cortex.orchestrators.version_manager import VersionManager
+        from cortex.orchestrators.orchestrator_version_manager import VersionManager
         
         manager = VersionManager(Path("."))
         
@@ -115,7 +115,7 @@ class TestVersionManagerCompatibility:
 
     def test_build_compatibility_matrix(self):
         """Should build compatibility matrix for version upgrade."""
-        from cortex.orchestrators.version_manager import VersionManager
+        from cortex.orchestrators.orchestrator_version_manager import VersionManager
         
         manager = VersionManager(Path("."))
         
@@ -128,7 +128,7 @@ class TestVersionManagerCompatibility:
 
     def test_major_version_requires_migration(self):
         """Should flag major version as requiring migration."""
-        from cortex.orchestrators.version_manager import VersionManager
+        from cortex.orchestrators.orchestrator_version_manager import VersionManager
         
         manager = VersionManager(Path("."))
         
@@ -139,7 +139,7 @@ class TestVersionManagerCompatibility:
 
     def test_display_upgrade_path(self):
         """Should display upgrade path with steps."""
-        from cortex.orchestrators.version_manager import VersionManager
+        from cortex.orchestrators.orchestrator_version_manager import VersionManager
         
         manager = VersionManager(Path("."))
         

@@ -304,7 +304,7 @@ class UnifiedIntelligenceProvider(IIntelligenceProvider):
     def _ensure_lens_orchestrator(self):
         """Lazy-load LENSOrchestrator."""
         if self._lens_orchestrator is None:
-            from cortex.lens.orchestrator import LENSOrchestrator
+            from cortex.lens.lens_orchestrator import LENSOrchestrator
             # LENSOrchestrator requires repo_path - we'll pass current directory
             # Real usage would determine repo_path from file_path
             self._lens_orchestrator = LENSOrchestrator(repo_path=Path.cwd())

@@ -13,7 +13,7 @@ All tools and orchestrators should use these utilities
 to avoid duplication and ensure consistency.
 """
 
-from cortex.brain.core.config import load_config
+from cortex.brain.core.core_config import load_config
 from cortex.brain.core.path_resolver import get_project_root, resolve_path
 from cortex.brain.core.result import Err, Ok, Result
 from cortex.brain.core.session_summary_generator import (

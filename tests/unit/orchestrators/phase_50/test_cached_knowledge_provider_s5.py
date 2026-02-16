@@ -15,7 +15,7 @@ import tempfile
 import pytest
 from unittest.mock import Mock, patch
 from cortex.storage.provider import IKnowledgeProvider
-from cortex.storage.config import StorageConfig
+from cortex.storage.storage_config import StorageConfig
 from cortex.storage.errors import StorageError, NotFoundError
 from cortex.storage.cache import CachedKnowledgeProvider
 

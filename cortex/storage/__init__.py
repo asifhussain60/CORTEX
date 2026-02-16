@@ -1,6 +1,6 @@
 """Storage module initialization."""
 
-from cortex.storage.config import StorageConfig
+from cortex.storage.storage_config import StorageConfig
 from cortex.storage.errors import (
     ConfigurationError,
     NetworkError,

@@ -15,7 +15,7 @@ from unittest.mock import Mock, patch, MagicMock
 from azure.core.exceptions import ResourceNotFoundError, ClientAuthenticationError
 
 from cortex.storage.provider import IKnowledgeProvider
-from cortex.storage.config import StorageConfig
+from cortex.storage.storage_config import StorageConfig
 from cortex.storage.errors import (
     StorageError,
     PermissionError,

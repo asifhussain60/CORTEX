@@ -645,7 +645,7 @@ class LensStreamTier3:
             for file_path in batch:
                 try:
                     # Lazy import to handle missing dependencies gracefully
-                    from cortex.lens.orchestrator import LENSOrchestrator
+                    from cortex.lens.lens_orchestrator import LENSOrchestrator
 
                     # Initialize orchestrator per file
                     path_obj = Path(file_path)
@@ -706,7 +706,7 @@ class LensAnalyzerTier4:
         try:
             from pathlib import Path
 
-            from cortex.lens.orchestrator import LENSOrchestrator
+            from cortex.lens.lens_orchestrator import LENSOrchestrator
 
             # Initialize orchestrator
             path_obj = Path(file_path)

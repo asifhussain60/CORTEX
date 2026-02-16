@@ -9,7 +9,7 @@ Task: 019 - Lazy Module Loader Tests
 
 import json
 import pytest
-from cortex.visualization.scripts.lazy_module_loader import (
+from cortex.visualization.scripts.viz_lazy_loader import (
     Module,
     ModuleType,
     LazyModuleLoader,

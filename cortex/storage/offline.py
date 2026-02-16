@@ -3,7 +3,7 @@
 import time
 from typing import List, Optional
 
-from cortex.storage.config import StorageConfig
+from cortex.storage.storage_config import StorageConfig
 from cortex.storage.errors import NetworkError, StorageError
 from cortex.storage.provider import IKnowledgeProvider
 

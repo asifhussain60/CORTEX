@@ -11,7 +11,7 @@ from unittest.mock import Mock, patch, MagicMock
 from prometheus_client import REGISTRY, CollectorRegistry, Counter, Histogram, Gauge
 from prometheus_client.core import GaugeMetricFamily, CounterMetricFamily, HistogramMetricFamily
 
-from cortex.infrastructure.prometheus_metrics import (
+from cortex.infrastructure.infrastructure_prometheus import (
     MetricsCollector,
     MetricsConfig,
     RequestMetrics,

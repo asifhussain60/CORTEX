@@ -13,7 +13,7 @@ Target: 12 tests, 100% pass rate for Stage 7
 import os
 import pytest
 from unittest.mock import Mock, patch, MagicMock
-from cortex.storage.config import StorageConfig
+from cortex.storage.storage_config import StorageConfig
 from cortex.storage.errors import ConfigurationError
 from cortex.storage.factory import StorageProviderFactory
 from cortex.storage.provider import IKnowledgeProvider

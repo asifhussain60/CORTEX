@@ -185,7 +185,7 @@ class MCPToolAdapter(IToolAdapter):
         """Analyze code using LENS analyzers directly."""
         try:
             from pathlib import Path
-            from cortex.lens.orchestrator import LENSOrchestrator
+            from cortex.lens.lens_orchestrator import LENSOrchestrator
             target = Path(target_path)
             orchestrator = LENSOrchestrator(repo_path=str(target.parent if target.is_file() else target))
 
@@ -319,7 +319,7 @@ class MCPToolAdapter(IToolAdapter):
     def _check_lens_available() -> bool:
         """Check if LENS orchestrator is importable."""
         try:
-            from cortex.lens.orchestrator import LENSOrchestrator  # noqa: F401
+            from cortex.lens.lens_orchestrator import LENSOrchestrator  # noqa: F401
             return True
         except ImportError:
             return False
@@ -364,7 +364,7 @@ class CopilotToolAdapter(IToolAdapter):
         """Analyze code — delegates to LENS if available, else basic lint."""
         try:
             from pathlib import Path
-            from cortex.lens.orchestrator import LENSOrchestrator
+            from cortex.lens.lens_orchestrator import LENSOrchestrator
             target = Path(target_path)
             orchestrator = LENSOrchestrator(repo_path=str(target.parent if target.is_file() else target))
 
