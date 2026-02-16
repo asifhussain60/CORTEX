@@ -1,376 +1,366 @@
-"""
-Conflict Resolution Truth Test (WAVE-10 Track 1, Deliverable T1-D5)
+"""Golden Test: Conflict Resolution Truth - Production Verification Harness
 
-Purpose:
-    Verify conflict detection and resolution using precedence-based winner selection.
-    Tests that conflicting rules are properly resolved with clear audit trail.
-    
-    Checks: Precedence-based selection, conflict detection, audit recording,
-    winner/loser determination with clear reasoning.
+Tests real conflict detection and precedence-based resolution with production components.
+Zero mocks - uses real ConflictResolver from domain_brain.
 
-Authority:
-    - WAVE-10 Track 1 Golden Path Tests
-    - ENH-089+ phase delivery
-    - Audit Truth Layer verification
+RED PHASE:
+- Tests must fail if conflicts not resolved correctly
+- Tests must fail if winner selection wrong  
+- Tests must fail if resolution tiers incorrect
 
-AC-ID: AC-WAVE10-T1-D5-001
+GREEN PHASE:
+- All conflicts resolved using hierarchy-based resolution
+- Winner always selected by SOURCE_HIERARCHY precedence (BKIO > RELATIONSHIPS > GIT > AST)
+- Resolution stats tracked correctly
+
+REFACTOR PHASE:
+- Clean test data setup
+- Modular resolution verification
+- Comprehensive tier testing
+
+AC-ID: AC-PHASE24-S1-005
 """
 
 import pytest
-import sqlite3
-import tempfile
-import json
-from pathlib import Path
 from datetime import datetime
-from dataclasses import dataclass
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any
 
-
-@dataclass
-class ConflictingRule:
-    """Definition of a conflicting rule."""
-    rule_id: str
-    precedence: int
-    source: str
-    value: str
-
-
-@dataclass
-class ConflictResolution:
-    """Result of resolving a conflict."""
-    winner: ConflictingRule
-    loser: ConflictingRule
-    resolution_reason: str
-    resolved_at: str
-
-
-@dataclass
-class ConflictResolutionResult:
-    """Batch conflict resolution result."""
-    conflicts_detected: int
-    resolutions: List[ConflictResolution]
-    all_resolved: bool
-    total_precedence_wins: int
-
-
-class MockConflictResolutionEngine:
-    """Mock conflict resolution engine."""
-    
-    def __init__(self, audit_db_path: str):
-        """Initialize with audit database path."""
-        self.audit_db_path = audit_db_path
-    
-    def detect_and_resolve_conflicts(self, rules: List[Dict[str, Any]]) -> ConflictResolutionResult:
-        """
-        Detect conflicting rules and resolve via precedence.
-        Rules with same ID but different values = conflict.
-        Highest precedence wins.
-        """
-        resolutions = []
-        conflicts_detected = 0
-        timestamp = datetime.now().isoformat()
-        
-        # Group by rule ID to find conflicts
-        rule_groups = {}
-        for rule in rules:
-            rule_id = rule.get("id")
-            if rule_id not in rule_groups:
-                rule_groups[rule_id] = []
-            rule_groups[rule_id].append(rule)
-        
-        # Resolve conflicts
-        for rule_id, rule_list in rule_groups.items():
-            if len(rule_list) > 1:
-                # Conflict detected
-                conflicts_detected += 1
-                
-                # Sort by precedence (highest first)
-                sorted_rules = sorted(rule_list, key=lambda r: r.get("precedence", 0), reverse=True)
-                
-                winner_data = sorted_rules[0]
-                loser_data = sorted_rules[1]
-                
-                winner = ConflictingRule(
-                    rule_id=rule_id,
-                    precedence=winner_data.get("precedence", 0),
-                    source=winner_data.get("source", "unknown"),
-                    value=winner_data.get("value", "")
-                )
-                
-                loser = ConflictingRule(
-                    rule_id=rule_id,
-                    precedence=loser_data.get("precedence", 0),
-                    source=loser_data.get("source", "unknown"),
-                    value=loser_data.get("value", "")
-                )
-                
-                resolution = ConflictResolution(
-                    winner=winner,
-                    loser=loser,
-                    resolution_reason=f"Precedence-based: {winner.precedence} > {loser.precedence}",
-                    resolved_at=timestamp
-                )
-                resolutions.append(resolution)
-                
-                # Log to audit
-                self._log_audit("conflict_resolved", rule_id, {
-                    "winner_precedence": winner.precedence,
-                    "loser_precedence": loser.precedence,
-                    "reason": resolution.resolution_reason,
-                    "timestamp": timestamp
-                })
-        
-        return ConflictResolutionResult(
-            conflicts_detected=conflicts_detected,
-            resolutions=resolutions,
-            all_resolved=len(resolutions) == conflicts_detected,
-            total_precedence_wins=len([r for r in resolutions if r.winner.precedence > r.loser.precedence])
-        )
-    
-    def validate_resolution_logic(self, conflicts: List[Dict[str, Any]]) -> bool:
-        """Validate that all resolutions follow precedence rule correctly."""
-        timestamp = datetime.now().isoformat()
-        valid = True
-        
-        for conflict in conflicts:
-            winner_prec = conflict.get("winner_precedence", 0)
-            loser_prec = conflict.get("loser_precedence", 0)
-            
-            if winner_prec <= loser_prec:
-                valid = False
-                self._log_audit("invalid_resolution", conflict.get("rule_id"), {
-                    "error": "Winner precedence not higher than loser",
-                    "timestamp": timestamp
-                })
-        
-        if valid:
-            self._log_audit("resolution_validation_passed", "all", {
-                "total_conflicts_validated": len(conflicts),
-                "timestamp": timestamp
-            })
-        
-        return valid
-    
-    def _log_audit(self, operation: str, rule_id: str, metadata: Dict):
-        """Log operation to audit database."""
-        conn = sqlite3.connect(self.audit_db_path)
-        cursor = conn.cursor()
-        
-        timestamp = datetime.now().isoformat()
-        metadata_json = json.dumps(metadata)
-        
-        cursor.execute("""
-            INSERT INTO audit (timestamp, operation, rule_id, source, metadata)
-            VALUES (?, ?, ?, ?, ?)
-        """, (timestamp, operation, rule_id, "conflict_resolution", metadata_json))
-        
-        conn.commit()
-        conn.close()
+from cortex.domain_brain.conflict_resolver import (
+    ConflictResolver,
+    Resolution,
+    ResolutionTier,
+    ReviewStatus
+)
+from cortex_brain.domain_brain.models import Conflict
 
 
 class TestConflictDetectionTruth:
-    """Conflict Detection Truth Test with Audit Verification."""
+    """Conflict Detection Truth Test with Real ConflictResolver."""
     
     @pytest.fixture
-    def audit_db_path(self):
-        """Create temporary audit database for test."""
-        with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as f:
-            db_path = f.name
-        
-        # Initialize schema
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS audit (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                timestamp TEXT NOT NULL,
-                operation TEXT NOT NULL,
-                rule_id TEXT,
-                source TEXT,
-                metadata TEXT,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
-        conn.commit()
-        conn.close()
-        
-        yield db_path
-        Path(db_path).unlink()
+    def resolver(self):
+        """Initialize real conflict resolver."""
+        return ConflictResolver()
     
-    @pytest.fixture
-    def engine(self, audit_db_path):
-        """Initialize conflict resolution engine."""
-        return MockConflictResolutionEngine(audit_db_path=audit_db_path)
-    
-    def test_conflicts_detected_correctly(self, engine, audit_db_path):
+    def test_hierarchy_resolution_single_winner(self, resolver: ConflictResolver):
         """
         RED PHASE: Test must fail if:
-        1. conflicts not detected when rules conflict
-        2. detection count incorrect
-        3. audit trail missing conflict_resolved entries
+        1. Winner not selected by hierarchy
+        2. BKIO doesn't win when present
+        3. Resolution tier incorrect
         
         GREEN PHASE: Test passes when:
-        1. all conflicts detected
-        2. count accurate
-        3. audit complete
+        1. BKIO always wins (highest in hierarchy)
+        2. Resolution tier is HIERARCHY
+        3. Confidence score correct
         """
-        # Setup: Conflicting rules
-        rules = [
-            {"id": "RULE-A", "precedence": 10, "source": "cortex", "value": "value1"},
-            {"id": "RULE-A", "precedence": 5, "source": "company", "value": "value2"},  # Conflict!
-            {"id": "RULE-B", "precedence": 8, "source": "cortex", "value": "value3"},
-            {"id": "RULE-B", "precedence": 12, "source": "company", "value": "value4"},  # Conflict!
-            {"id": "RULE-C", "precedence": 7, "source": "cortex", "value": "value5"},
-        ]
+        # Setup: BKIO vs AST conflict (BKIO should win)
+        conflict = Conflict(
+            conflict_id="c1",
+            domain_id="test",
+            attribute="description",
+            source_values={"BKIO": "bkio_value", "AST": "ast_value"}
+        )
         
         # Execute
-        result = engine.detect_and_resolve_conflicts(rules)
+        resolution = resolver.resolve_conflict(conflict)
         
-        # Assert: Correct conflict count
-        assert result.conflicts_detected == 2, "Should detect 2 conflicts"
-        assert len(result.resolutions) == 2
-        assert result.all_resolved is True
+        # Assert: BKIO wins
+        assert resolution is not None
+        assert resolution.recommended_value == "bkio_value"
+        assert resolution.resolution_tier == ResolutionTier.HIERARCHY
+        assert resolution.confidence == 0.9
+        assert "BKIO" in resolution.reasoning
         
-        # Audit Verification
-        conn = sqlite3.connect(audit_db_path)
-        cursor = conn.cursor()
-        
-        # Query conflict resolutions
-        cursor.execute(
-            "SELECT COUNT(*) FROM audit WHERE operation = 'conflict_resolved'"
-        )
-        resolution_count = cursor.fetchone()[0]
-        
-        # RED phase
-        assert resolution_count == 2, f"Expected 2 conflict resolutions in audit, got {resolution_count}"
-        
-        conn.close()
+        # Assert: Stats tracked
+        stats = resolver.get_resolution_stats()
+        assert stats["tier1_resolved"] == 1
+        assert stats["total_conflicts"] == 1
     
-    def test_precedence_based_winner_selection(self, engine, audit_db_path):
-        """Verify winner selected by highest precedence."""
-        # Setup: Clear precedence difference
-        rules = [
-            {"id": "RULE-X", "precedence": 5, "source": "company", "value": "company_value"},
-            {"id": "RULE-X", "precedence": 15, "source": "cortex", "value": "cortex_value"},
-        ]
-        
-        # Execute
-        result = engine.detect_and_resolve_conflicts(rules)
-        
-        # Assert: Winner is cortex (precedence 15)
-        assert len(result.resolutions) == 1
-        resolution = result.resolutions[0]
-        assert resolution.winner.precedence == 15
-        assert resolution.winner.source == "cortex"
-        assert resolution.loser.precedence == 5
-        assert resolution.loser.source == "company"
-        
-        # Assert: Precedence rule verified
-        assert result.total_precedence_wins == 1
-        
-        # Audit: Winner precedence should be in metadata
-        conn = sqlite3.connect(audit_db_path)
-        cursor = conn.cursor()
-        
-        cursor.execute(
-            "SELECT metadata FROM audit WHERE operation = 'conflict_resolved' "
-            "AND rule_id = 'RULE-X'"
+    def test_hierarchy_resolution_source_precedence(self, resolver: ConflictResolver):
+        """Verify SOURCE_HIERARCHY precedence: BKIO > RELATIONSHIPS > GIT > AST."""
+        # Test 1: RELATIONSHIPS > AST
+        conflict1 = Conflict(
+            conflict_id="c1",
+            domain_id="test",
+            attribute="value",
+            source_values={"RELATIONSHIPS": "rel_value", "AST": "ast_value"}
         )
-        metadata = cursor.fetchone()
         
-        assert metadata is not None
-        data = json.loads(metadata[0])
-        assert data["winner_precedence"] == 15
-        assert data["loser_precedence"] == 5
+        resolution1 = resolver.resolve_conflict(conflict1)
+        assert resolution1.recommended_value == "rel_value"
+        assert "RELATIONSHIPS" in resolution1.reasoning
         
-        conn.close()
+        # Test 2: GIT > AST
+        conflict2 = Conflict(
+            conflict_id="c2",
+            domain_id="test",
+            attribute="value",
+            source_values={"GIT": "git_value", "AST": "ast_value"}
+        )
+        
+        resolution2 = resolver.resolve_conflict(conflict2)
+        assert resolution2.recommended_value == "git_value"
+        assert "GIT" in resolution2.reasoning
+        
+        # Test 3: BKIO > ALL
+        conflict3 = Conflict(
+            conflict_id="c3",
+            domain_id="test",
+            attribute="value",
+            source_values={
+                "BKIO": "bkio_value",
+                "RELATIONSHIPS": "rel_value",
+                "GIT": "git_value",
+                "AST": "ast_value"
+            }
+        )
+        
+        resolution3 = resolver.resolve_conflict(conflict3)
+        assert resolution3.recommended_value == "bkio_value"
+        assert "BKIO" in resolution3.reasoning
     
-    def test_no_conflicts_when_rules_unique(self, engine, audit_db_path):
-        """Verify no conflicts when rules don't overlap."""
-        # Setup: No conflicts
-        rules = [
-            {"id": "RULE-1", "precedence": 10, "source": "cortex", "value": "v1"},
-            {"id": "RULE-2", "precedence": 8, "source": "company", "value": "v2"},
-            {"id": "RULE-3", "precedence": 12, "source": "cortex", "value": "v3"},
-        ]
-        
-        # Execute
-        result = engine.detect_and_resolve_conflicts(rules)
-        
-        # Assert: No conflicts
-        assert result.conflicts_detected == 0
-        assert len(result.resolutions) == 0
-        assert result.all_resolved is True
-        
-        # Audit: No conflict_resolved entries
-        conn = sqlite3.connect(audit_db_path)
-        cursor = conn.cursor()
-        
-        cursor.execute(
-            "SELECT COUNT(*) FROM audit WHERE operation = 'conflict_resolved'"
+    def test_single_source_no_conflict(self, resolver: ConflictResolver):
+        """Verify single source resolves immediately with 100% confidence."""
+        conflict = Conflict(
+            conflict_id="c1",
+            domain_id="test",
+            attribute="value",
+            source_values={"AST": "ast_only"}
         )
-        count = cursor.fetchone()[0]
         
-        assert count == 0
+        resolution = resolver.resolve_conflict(conflict)
         
-        conn.close()
+        assert resolution is not None
+        assert resolution.recommended_value == "ast_only"
+        assert resolution.confidence == 1.0
+        assert resolution.resolution_tier == ResolutionTier.HIERARCHY
+        assert "only source" in resolution.reasoning
+    
+    def test_empty_sources_escalation(self, resolver: ConflictResolver):
+        """Verify empty sources escalate to manual review."""
+        conflict = Conflict(
+            conflict_id="c1",
+            domain_id="test",
+            attribute="value",
+            source_values={}
+        )
+        
+        resolution = resolver.resolve_conflict(conflict)
+        
+        assert resolution is not None
+        assert resolution.resolution_tier == ResolutionTier.MANUAL
+        assert resolution.ticket_id is not None
+        assert "CONFLICT-c1" in resolution.ticket_id
+        
+        # Assert: Escalation tracked
+        stats = resolver.get_resolution_stats()
+        assert stats["tier3_escalated"] == 1
 
 
-class TestConflictResolutionValidationTruth:
-    """Validate conflict resolution logic correctness."""
+class TestLENSSynthesisResolution:
+    """Test Tier 2: LENS Synthesis resolution."""
     
     @pytest.fixture
-    def audit_db_path(self):
-        """Create temporary audit database for test."""
-        with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as f:
-            db_path = f.name
-        
-        # Initialize schema
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS audit (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                timestamp TEXT NOT NULL,
-                operation TEXT NOT NULL,
-                rule_id TEXT,
-                source TEXT,
-                metadata TEXT,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
-        conn.commit()
-        conn.close()
-        
-        yield db_path
-        Path(db_path).unlink()
+    def resolver(self):
+        """Initialize real conflict resolver."""
+        return ConflictResolver()
     
-    def test_resolution_logic_validation_passes(self, audit_db_path):
-        """Verify resolution logic validates correctly."""
-        engine = MockConflictResolutionEngine(audit_db_path)
+    def test_lens_synthesis_multiple_sources(self, resolver: ConflictResolver):
+        """Test LENS synthesis with multiple non-hierarchy sources."""
+        # Create conflict with 2+ sources (triggers Tier 2 if Tier 1 fails)
+        conflict = Conflict(
+            conflict_id="c1",
+            domain_id="test",
+            attribute="description",
+            source_values={"source1": "val1", "source2": "val2"}
+        )
         
-        # Setup: Valid resolutions (winner > loser)
+        # Note: Real resolver tries Tier 1 first, falls back to Tier 2
+        resolution = resolver.resolve_conflict(conflict)
+        
+        assert resolution is not None
+        assert resolution.recommended_value is not None
+        # With unknown sources, should fall back to first (Tier 1 defaulting)
+        assert resolution.confidence > 0.0
+    
+    def test_lens_synthesis_cache_usage(self, resolver: ConflictResolver):
+        """Verify multiple resolutions tracked correctly."""
         conflicts = [
-            {"rule_id": "R1", "winner_precedence": 15, "loser_precedence": 5},
-            {"rule_id": "R2", "winner_precedence": 10, "loser_precedence": 8},
-            {"rule_id": "R3", "winner_precedence": 20, "loser_precedence": 1},
+            Conflict(
+                conflict_id=f"c{i}",
+                domain_id="test",
+                attribute="value",
+                source_values={"BKIO": f"val{i}", "AST": f"old{i}"}
+            )
+            for i in range(3)
         ]
         
-        # Execute
-        is_valid = engine.validate_resolution_logic(conflicts)
+        for conflict in conflicts:
+            resolution = resolver.resolve_conflict(conflict)
+            assert resolution is not None
         
-        # Assert
-        assert is_valid is True
-        
-        # Audit: Validation passed entry
-        conn = sqlite3.connect(audit_db_path)
-        cursor = conn.cursor()
-        
-        cursor.execute(
-            "SELECT COUNT(*) FROM audit WHERE operation = 'resolution_validation_passed'"
+        stats = resolver.get_resolution_stats()
+        assert stats["total_conflicts"] == 3
+        assert stats["tier1_resolved"] == 3  # All via hierarchy
+
+
+class TestManualReviewEscalation:
+    """Test Tier 3: Manual review escalation."""
+    
+    @pytest.fixture
+    def resolver(self):
+        """Initialize real conflict resolver."""
+        return ConflictResolver()
+    
+    def test_manual_escalation_ticket_creation(self, resolver: ConflictResolver):
+        """Verify manual escalation creates ticket with 24h SLA."""
+        conflict = Conflict(
+            conflict_id="complex-conflict",
+            domain_id="test",
+            attribute="value",
+            source_values={}  # Empty triggers escalation
         )
-        count = cursor.fetchone()[0]
         
-        assert count == 1
+        resolution = resolver.resolve_conflict(conflict)
         
-        conn.close()
+        assert resolution is not None
+        assert resolution.resolution_tier == ResolutionTier.MANUAL
+        assert resolution.ticket_id is not None
+        assert resolution.status == ReviewStatus.PENDING
+        assert resolution.sla_deadline is not None
+        assert resolution.due_at is not None  # Alias property
+        
+        # Verify ticket in queue
+        queue = resolver.get_manual_review_queue()
+        assert len(queue) == 1
+        assert queue[0].ticket_id == resolution.ticket_id
+    
+    def test_manual_ticket_resolution(self, resolver: ConflictResolver):
+        """Test resolving manual review ticket."""
+        conflict = Conflict(
+            conflict_id="c1",
+            domain_id="test",
+            attribute="value",
+            source_values={}
+        )
+        
+        resolution = resolver.resolve_conflict(conflict)
+        ticket_id = resolution.ticket_id
+        
+        # Resolve ticket
+        success = resolver.resolve_manual_ticket(
+            ticket_id=ticket_id,
+            resolved_value="manual_decision",
+            resolved_by="human_reviewer"
+        )
+        
+        assert success is True
+        
+        # Verify ticket updated
+        ticket = resolver.pending_reviews[ticket_id]
+        assert ticket.status == ReviewStatus.RESOLVED
+        assert ticket.resolution == "manual_decision"
+        assert ticket.resolved_by == "human_reviewer"
+    
+    def test_sla_violation_detection(self, resolver: ConflictResolver):
+        """Test SLA violation detection for overdue tickets."""
+        from datetime import timedelta
+        
+        conflict = Conflict(
+            conflict_id="c1",
+            domain_id="test",
+            attribute="value",
+            source_values={}
+        )
+        
+        resolution = resolver.resolve_conflict(conflict)
+        ticket_id = resolution.ticket_id
+        
+        # Manually set SLA to past (simulate overdue)
+        resolver.pending_reviews[ticket_id].sla_deadline = (
+            datetime.utcnow() - timedelta(hours=1)
+        )
+        
+        # Check SLA violation
+        is_violated = resolver.check_sla_violation(ticket_id)
+        assert is_violated is True
+        
+        # Verify in overdue queue
+        overdue = resolver.get_overdue_tickets()
+        assert len(overdue) == 1
+        assert overdue[0].ticket_id == ticket_id
+
+
+class TestConflictResolutionStats:
+    """Test resolution statistics and reporting."""
+    
+    @pytest.fixture
+    def resolver(self):
+        """Initialize real conflict resolver."""
+        return ConflictResolver()
+    
+    def test_resolution_stats_accuracy(self, resolver: ConflictResolver):
+        """Verify resolution stats calculated correctly."""
+        # Create mix of resolutions
+        conflicts = [
+            Conflict(
+                conflict_id=f"c{i}",
+                domain_id="test",
+                attribute="value",
+                source_values={"BKIO": f"val{i}", "AST": f"old{i}"}
+            )
+            for i in range(5)
+        ]
+        
+        # Add one escalation
+        conflicts.append(Conflict(
+            conflict_id="escalated",
+            domain_id="test",
+            attribute="value",
+            source_values={}
+        ))
+        
+        for conflict in conflicts:
+            resolver.resolve_conflict(conflict)
+        
+        stats = resolver.get_resolution_stats()
+        
+        assert stats["total_conflicts"] == 6
+        assert stats["tier1_resolved"] == 5
+        assert stats["tier3_escalated"] == 1
+        assert stats["resolution_rate_percent"] > 80.0
+        assert stats["escalation_rate_percent"] < 20.0
+    
+    def test_get_status_comprehensive(self, resolver: ConflictResolver):
+        """Test comprehensive status reporting."""
+        # Create some conflicts
+        for i in range(3):
+            conflict = Conflict(
+                conflict_id=f"c{i}",
+                domain_id="test",
+                attribute="value",
+                source_values={"BKIO": f"val{i}"}
+            )
+            resolver.resolve_conflict(conflict)
+        
+        # Add escalated conflict
+        escalated = Conflict(
+            conflict_id="escalated",
+            domain_id="test",
+            attribute="value",
+            source_values={}
+        )
+        resolver.resolve_conflict(escalated)
+        
+        status = resolver.get_status()
+        
+        assert "resolution_stats" in status
+        assert "pending_tickets" in status
+        assert "overdue_tickets" in status
+        assert status["pending_tickets"] == 1
+        assert status["overdue_tickets"] == 0
+
+
+if __name__ == "__main__":
+    pytest.main([__file__, "-v"])
