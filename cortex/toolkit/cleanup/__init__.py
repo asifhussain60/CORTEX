@@ -12,4 +12,34 @@ Consolidates cleanup and vacuum automation scripts.
 
 from cortex.toolkit.cleanup.vacuum import VacuumAutomation
 
-__all__ = ["VacuumAutomation"]
+# Import consolidated cleanup from Phase 90
+try:
+    import sys
+    from pathlib import Path
+    
+    # Import from sibling cleanup.py file
+    cleanup_file = Path(__file__).parent.parent / "cleanup.py"
+    if cleanup_file.exists():
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("toolkit_cleanup", cleanup_file)
+        if spec and spec.loader:
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            CleanupManager = module.CleanupManager
+            CleanupResult = module.CleanupResult
+            CleanupOperation = module.CleanupOperation
+    else:
+        CleanupManager = None
+        CleanupResult = None
+        CleanupOperation = None
+except Exception:
+    CleanupManager = None
+    CleanupResult = None
+    CleanupOperation = None
+
+__all__ = [
+    "VacuumAutomation",
+    "CleanupManager",
+    "CleanupResult",
+    "CleanupOperation",
+]
