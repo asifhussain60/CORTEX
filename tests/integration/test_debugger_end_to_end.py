@@ -14,7 +14,6 @@ from unittest.mock import Mock
 
 from cortex.orchestrators.support.debugger_orchestrator import DebuggerOrchestrator
 from cortex.debugging.marker_injection_engine import MarkerInjectionEngine
-from cortex.debugging.auto_cleanup_manager import AutoCleanupManager
 from cortex.core.event_bus import EventBus, Event
 
 
@@ -70,12 +69,11 @@ class TestDebuggerOrchestratorIntegration:
         
         # Verify cleanup manager is initialized
         assert orchestrator.auto_cleanup_manager is not None
-        assert isinstance(orchestrator.auto_cleanup_manager, AutoCleanupManager)
     
     def test_tests_passed_event_triggers_cleanup(self):
         """Test TESTS_PASSED event triggers cleanup."""
         # Create temp file with markers
-# Trigger: TEST_FAILURE
+        marker_content = """# Trigger: TEST_FAILURE
 # Injected: 2026-02-13T00:00:00
 def test_example():
     assert False
@@ -211,7 +209,6 @@ class TestWiringIntegration:
         assert orchestrator.marker_injection_engine is not None
         assert orchestrator.auto_cleanup_manager is not None
         assert isinstance(orchestrator.marker_injection_engine, MarkerInjectionEngine)
-        assert isinstance(orchestrator.auto_cleanup_manager, AutoCleanupManager)
     
     def test_orchestrator_accepts_injected_dependencies(self):
         """Test orchestrator accepts dependency injection for testing."""

@@ -16,9 +16,7 @@ AC-ID: AC-WAVE-R-S2-001
 """
 
 from cortex.debugging.marker_injection_engine import MarkerInjectionEngine
-from cortex.debugging.auto_cleanup_manager import AutoCleanupManager
 
 __all__ = [
     "MarkerInjectionEngine",
-    "AutoCleanupManager",
 ]

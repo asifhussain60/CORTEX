@@ -15,8 +15,10 @@ Components:
 """
 
 from cortex.orchestrators.validation.confidence_scorer import (
-    ConfidenceLevel,
     ConfidenceScorer,
+)
+from cortex.lens.schemas.ldv1_schema import (
+    ConfidenceLevel,
 )
 from cortex.learning.intelligence_validator import (
     IntelligenceValidator,

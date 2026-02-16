@@ -402,3 +402,36 @@ class ConfidenceScorer:
             )
         
         return recommendations
+
+    def score_learnings(self, learnings: List[Any]) -> List[Any]:
+        """Score learnings by confidence (frequency-based).
+        
+        This method is used by UniversalLearningLoop to score learning
+        captures before merging to knowledge repositories.
+        
+        Args:
+            learnings: List of LearningCapture objects
+            
+        Returns:
+            List of learnings with confidence scores assigned
+        """
+        from collections import Counter
+        
+        # Count pattern occurrences
+        pattern_counts = Counter(
+            learning.pattern_id for learning in learnings
+        )
+        
+        total_occurrences = sum(pattern_counts.values())
+        
+        # Assign confidence based on frequency
+        for learning in learnings:
+            frequency = pattern_counts[learning.pattern_id]
+            # Normalize: more frequent patterns get higher confidence
+            # Range: 0.5 (single occurrence) to 1.0 (very frequent)
+            learning.confidence = min(
+                1.0,
+                0.5 + (0.5 * frequency / max(1, total_occurrences))
+            )
+        
+        return learnings
