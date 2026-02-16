@@ -33,6 +33,7 @@ from cortex.lens.analyzers.comment_extractor import CommentExtractor
 from cortex.lens.analyzers.config_analyzer import get_config_analyzer
 from cortex.lens.analyzers.database_analyzer import get_database_analyzer
 from cortex.lens.analyzers.git_history_analyzer import GitHistoryAnalyzer
+from cortex.lens.analyzers.tech_stack_analyzer import TechStackAnalyzer  # Phase 90
 from cortex.lens.cache import LENSCache, get_lens_cache
 from cortex.orchestrators.mixins.security_advisor_mixin import SecurityAdvisorMixin
 
@@ -58,6 +59,7 @@ class LENSContext:
     ast_analysis: Dict[str, Any] = field(default_factory=dict)
     comment_analysis: Dict[str, Any] = field(default_factory=dict)
     vision_analysis: Dict[str, Any] = field(default_factory=dict)
+    tech_stack: Dict[str, Any] = field(default_factory=dict)  # Phase 90 S1
     metadata: Dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -66,6 +68,7 @@ class LENSContext:
             "git_analysis": self.git_analysis,
             "ast_analysis": self.ast_analysis,
             "comment_analysis": self.comment_analysis,
+            "tech_stack": self.tech_stack,  # Phase 90 S1
             "_metadata": self.metadata,
         }
         # Only include vision_analysis if present
@@ -166,6 +169,9 @@ class LENSOrchestrator:
         from cortex.core.intelligence.pattern_detector import PatternDetector
         self.pattern_detector = PatternDetector()
 
+        # Phase 90: TechStackAnalyzer for tech stack detection (AC-PHASE90-S1-001)
+        self.tech_stack_analyzer = TechStackAnalyzer()
+
         # ENH-042: TTL-based cache with LRU eviction (replaces simple dict cache)
         self.lens_cache = get_lens_cache()
 
@@ -237,6 +243,16 @@ class LENSOrchestrator:
         # Phase 43: Build pattern findings from PatternDetector (AC-PHASE43-005)
         pattern_findings = self._build_pattern_findings(file_path, ast_result)
 
+        # Phase 90: Detect tech stack from file + imports (AC-PHASE90-S1-001)
+        tech_stack_result = self._detect_tech_stack(file_path, ast_result)
+
+        # Calculate analysis time
+        # Phase 43: Build pattern findings from PatternDetector (AC-PHASE43-005)
+        pattern_findings = self._build_pattern_findings(file_path, ast_result)
+
+        # Phase 90: Detect tech stack from file + imports (AC-PHASE90-S1-001)
+        tech_stack_result = self._detect_tech_stack(file_path, ast_result)
+
         # Calculate analysis time
         analysis_time_ms = int((time.time() - start_time) * 1000)
 
@@ -248,10 +264,11 @@ class LENSOrchestrator:
             "relationship_findings": relationship_findings,
             "dependency_findings": dependency_findings,
             "pattern_findings": pattern_findings,
+            "tech_stack": tech_stack_result,  # Phase 90 S1
             "_metadata": {
                 "analysis_time_ms": analysis_time_ms,
                 "file_path": str(file_path),
-                "analyzers_run": ["git", "ast", "comment", "relationship", "dependency", "pattern"],
+                "analyzers_run": ["git", "ast", "comment", "relationship", "dependency", "pattern", "tech_stack"],
                 "cache_hit": False,
                 "cache_key": cache_key,
             }
@@ -593,6 +610,53 @@ class LENSOrchestrator:
                 "patterns": [],
                 "pattern_count": 0,
                 "source": "PatternDetector",
+                "error": str(e),
+            }
+
+    def _detect_tech_stack(self, file_path: Path, ast_result: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Detect tech stack from file and AST imports (Phase 90 S1).
+        
+        Uses TechStackAnalyzer to identify languages, frameworks, and libraries
+        from file extensions, config files, and import statements.
+        
+        Args:
+            file_path: Path to analyzed file
+            ast_result: AST analysis result containing imports
+        
+        Returns:
+            Dict with tech_stack detection results
+        
+        Authority: AC-PHASE90-S1-001
+        """
+        try:
+            # Extract imports from AST result
+            imports = []
+            if ast_result and "error" not in ast_result:
+                imports.extend(ast_result.get("imports", []))
+                imports.extend(list(ast_result.get("from_imports", {}).keys()))
+            
+            # Analyze tech stack
+            tech_stack = self.tech_stack_analyzer.analyze(
+                files=[str(file_path)],
+                imports=imports
+            )
+            
+            # Convert to dict for serialization
+            return tech_stack.to_dict()
+            
+        except Exception as e:
+            return {
+                "primary_language": None,
+                "languages": [],
+                "frameworks": [],
+                "libraries": [],
+                "databases": [],
+                "build_tools": [],
+                "test_frameworks": [],
+                "confidence_score": 0.0,
+                "detection_methods": [],
+                "items": [],
                 "error": str(e),
             }
 
