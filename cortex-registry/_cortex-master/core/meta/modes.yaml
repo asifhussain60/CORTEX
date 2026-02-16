@@ -1,0 +1,89 @@
+meta:
+  version: "1.0"
+  description: "CORTEX HEXA-MODE definitions"
+  updated: "2026-02-13"
+
+modes:
+  PRE-FLIGHT:
+    name: "PRE-FLIGHT"
+    trigger: "/check-env"
+    description: "Environment validation and readiness check"
+    agent: "cortex-preflight"
+    priority: 0
+    flow:
+      - "Validate Python version"
+      - "Check dependencies"
+      - "Verify MCP connectivity"
+      - "Report status"
+
+  AUDIT:
+    name: "AUDIT"
+    trigger: "/audit"
+    description: "Comprehensive codebase health scan"
+    agent: "cortex-auditor"
+    priority: 1
+    flow:
+      - "Load audit checklist"
+      - "Run P0 checks"
+      - "Run P1 checks"
+      - "Generate report"
+
+  META-AUDIT:
+    name: "META-AUDIT"
+    trigger: "/meta-audit"
+    description: "Self-audit of CORTEX system"
+    agent: "cortex-meta-auditor"
+    priority: 2
+    flow:
+      - "Analyze governance coverage"
+      - "Verify orchestrator wiring"
+      - "Check MCP tool health"
+      - "Report findings"
+
+  DIGEST:
+    name: "DIGEST"
+    trigger: "/digest"
+    description: "Session digest and learning extraction"
+    agent: "cortex-digest"
+    priority: 3
+    flow:
+      - "Parse session transcript"
+      - "Extract learnings"
+      - "Update knowledge base"
+      - "Generate summary"
+
+  INTERACTIVE:
+    name: "INTERACTIVE"
+    trigger: "/interactive"
+    description: "Interactive mode for guided workflows"
+    agent: "cortex-interactive"
+    priority: 4
+    flow:
+      - "Present options"
+      - "Gather input"
+      - "Execute selection"
+      - "Report result"
+
+  PLAN:
+    name: "PLAN"
+    trigger: "/plan"
+    description: "Phase lifecycle management"
+    agent: "cortex-planner"
+    priority: 5
+    flow:
+      - "Load phase registry"
+      - "Analyze request"
+      - "Create/update phase"
+      - "Sync dashboard"
+
+  DESIGN:
+    name: "DESIGN"
+    trigger: "/design"
+    description: "Architecture and design review"
+    agent: "cortex-designer"
+    priority: 6
+    flow:
+      - "Analyze architecture"
+      - "Generate challenge"
+      - "Review patterns"
+      - "Document decisions"

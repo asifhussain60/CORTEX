@@ -1,0 +1,50 @@
+meta:
+  version: "1.0"
+  description: "CORTEX response formatting standards"
+  updated: "2026-02-13"
+
+header:
+  template: "## {icon} CORTEX {mode}\n**Author:** Asif Hussain | **Orchestrator:** {orchestrator} ✅"
+  required: true
+  frequency: "once_per_response"
+
+icons:
+  status:
+    completed:
+      icon: "✅"
+      description: "Task completed successfully"
+    planned:
+      icon: "⚪"
+      description: "Task planned but not started"
+    critical:
+      icon: "🔴"
+      description: "Critical issue"
+    warning:
+      icon: "🟡"
+      description: "Warning or attention needed"
+    in_progress:
+      icon: "🔵"
+      description: "Currently in progress"
+
+structure:
+  linear_flow:
+    - "Context"
+    - "Analysis"
+    - "Action"
+    - "Result"
+  separator: "---"
+  progress_bar: "██████████"
+  required_sections:
+    - "header"
+    - "body"
+    - "status"
+  forbidden:
+    - "Use ✅ for planned work"
+    - "Show Next Steps after completion"
+    - "Multiple headers in one response"
+
+anti_patterns:
+  - pattern: "Use ✅ for planned work"
+    reason: "Misleading — ✅ implies completion"
+  - pattern: "Show Next Steps after completion"
+    reason: "Use Implementation Complete instead"
