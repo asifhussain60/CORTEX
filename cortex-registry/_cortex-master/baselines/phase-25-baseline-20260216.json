@@ -1,0 +1,44 @@
+{
+  "phase": "25-stabilization",
+  "timestamp": "2026-02-16T22:00:00Z",
+  "git_sha": "commit_hash_placeholder",
+  "tests": {
+    "golden_passing": 191,
+    "golden_skipped": 6,
+    "golden_total": 197
+  },
+  "wiring": {
+    "total_entries": 71,
+    "valid_entries": 18,
+    "core_orchestrators_valid": [
+      "InteractionOrchestrator",
+      "IntentRouter",
+      "EnforcementOrchestrator",
+      "TDDOrchestrator",
+      "MasterOrchestrator",
+      "ConversationOrchestrator",
+      "LifecycleHookSystem",
+      "TenantContext",
+      "RegistryHealthMonitor",
+      "AgentMetadataParser",
+      "HealthCheckService",
+      "PrometheusMetrics",
+      "OrchestratorEventBus",
+      "OnboardingOrchestrator",
+      "UpgradeOrchestrator",
+      "RollbackOrchestrator",
+      "SetupOrchestrator",
+      "DebuggerOrchestrator"
+    ]
+  },
+  "duplicates": {
+    "intent_router_count": 1,
+    "canonical_location": "cortex.orchestrators.core.intent_router"
+  },
+  "dependencies": {
+    "hypothesis_in_requirements": true,
+    "fastapi_in_requirements": true,
+    "fastapi_installed": false
+  },
+  "notes": "Phase 25 establishes stable foundation. Wiring contains 71 entries (18 implemented, 53 planned). Golden tests passing. Ready for verification harness (Phase 26+)."
+}
