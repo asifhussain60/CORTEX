@@ -1,12 +1,12 @@
 """
 MCP Tool Registry: Production Tool Definitions.
 
-This module defines the COMPLETE set of production tools (24 tools).
+This module defines the COMPLETE set of production tools (26 tools).
 No more, no fewer. Every tool serves a specific business capability.
 
 Tool Count Strategy:
-    - 98 tools (legacy) → 24 tools (v2)
-    - 75% reduction achieved through:
+    - 98 tools (legacy) → 26 tools (v2)
+    - 73% reduction achieved through:
       1. Consolidation by business capability
       2. Operation parameters instead of separate tools
       3. Removal of dev-only tools
@@ -21,7 +21,7 @@ from cortex.mcp.base import Tool, ToolDefinition, ToolCategory, ToolParameter
 
 
 # ============================================================================
-# PRODUCTION TOOL DEFINITIONS (24 Tools)
+# PRODUCTION TOOL DEFINITIONS (26 Tools)
 # ============================================================================
 
 PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
@@ -99,9 +99,21 @@ PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
         ],
         "operations": ["history", "blame", "diff", "context", "changes"],
     },
+    "cortex_generate_tests": {
+        "description": "Generate intelligent test suites using multi-strategy analysis. Detects blind spots, edge cases, and security vulnerabilities.",
+        "category": ToolCategory.INTELLIGENCE,
+        "parameters": [
+            {"name": "target", "type": "string", "required": True, "description": "Target function name or API endpoint"},
+            {"name": "target_type", "type": "string", "required": True, "enum": ["function", "endpoint"], "description": "Type of target: 'function' or 'endpoint'"},
+            {"name": "file_path", "type": "string", "required": True, "description": "Path to file containing target"},
+            {"name": "parameters", "type": "array", "required": False, "description": "Function parameters or endpoint schema"},
+            {"name": "coverage_report", "type": "object", "required": False, "description": "Existing coverage data"},
+        ],
+        "operations": [],
+    },
     
     # =========================================================================
-    # TIER 3: GOVERNANCE & COMPLIANCE (3 tools)
+    # TIER 3: GOVERNANCE & COMPLIANCE (4 tools)
     # =========================================================================
     "cortex_governance": {
         "description": "Governance operations: query rules, execute checks, analyze impact, generate reports.",
@@ -130,6 +142,18 @@ PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
             {"name": "resource", "type": "string", "required": True, "enum": ["core_rules", "audit_checklist", "modes", "response_format"], "description": "Resource to load"},
         ],
         "operations": ["core_rules", "audit_checklist", "modes", "response_format"],
+    },
+    "cortex_validate_request": {
+        "description": "Phase 48 holistic validation: Pre-implementation checklist + challenge generation + confidence scoring with 0.7 threshold gating.",
+        "category": ToolCategory.GOVERNANCE,
+        "parameters": [
+            {"name": "intent", "type": "string", "required": True, "enum": ["IMPLEMENT", "FIX", "REFACTOR", "ANALYZE"], "description": "User intent: IMPLEMENT, FIX, REFACTOR"},
+            {"name": "request", "type": "string", "required": True, "description": "User's implementation request"},
+            {"name": "target", "type": "string", "required": False, "description": "Target file or component"},
+            {"name": "context", "type": "object", "required": False, "description": "Additional context (security_critical, effort, etc.)"},
+            {"name": "operation", "type": "string", "required": False, "enum": ["validate", "quick", "challenges"], "description": "Validation operation: validate (full), quick (checklist only), challenges (alternatives only)"},
+        ],
+        "operations": ["validate", "quick", "challenges"],
     },
     
     # =========================================================================

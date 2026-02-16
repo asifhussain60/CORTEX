@@ -36,11 +36,11 @@ def main() -> int:
         int: Exit code (0 for success, non-zero for failure)
     """
     try:
-        # WAVE-100: Consolidated MCP server (24 tools)
+        # WAVE-100: Consolidated MCP server (26 tools)
         from cortex.mcp import MCPServer
 
         logger.info("Initializing CORTEX MCP Server with stdio transport...")
-        logger.info("Using 24 production tools (WAVE-100 consolidation)")
+        logger.info("Using 26 production tools (WAVE-100 consolidation)")
         
         # Create server
         server = MCPServer()
