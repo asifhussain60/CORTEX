@@ -15,7 +15,7 @@ CORE Rules: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 # Description: Token optimization health agent implementation
 
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from .base_agent import (
     BaseHealthAgent,
@@ -112,7 +112,7 @@ class TokenOptimizationAgent(BaseHealthAgent):
             },
         )
     
-    def _check_gateway_exists(self) -> HealthIssue | None:
+    def _check_gateway_exists(self) -> Optional[HealthIssue]:
         """Check if ContextSynthesisGateway singleton exists."""
         try:
             from cortex.interaction.context_synthesis_gateway import get_gateway
@@ -141,7 +141,7 @@ class TokenOptimizationAgent(BaseHealthAgent):
                 metadata={"check": "gateway_existence", "error": str(e)},
             )
     
-    def _check_token_budget(self) -> HealthIssue | None:
+    def _check_token_budget(self) -> Optional[HealthIssue]:
         """Check token budget configuration."""
         try:
             from cortex.interaction.context_synthesis_gateway import get_gateway
@@ -174,7 +174,7 @@ class TokenOptimizationAgent(BaseHealthAgent):
                 metadata={"check": "token_budget", "error": str(e)},
             )
     
-    def _check_cache_hit_rate(self) -> HealthIssue | None:
+    def _check_cache_hit_rate(self) -> Optional[HealthIssue]:
         """Check cache hit rate meets target."""
         try:
             from cortex.interaction.context_synthesis_gateway import get_gateway
@@ -206,7 +206,7 @@ class TokenOptimizationAgent(BaseHealthAgent):
                 metadata={"check": "cache_hit_rate", "error": str(e)},
             )
     
-    def _check_session_tracking(self) -> HealthIssue | None:
+    def _check_session_tracking(self) -> Optional[HealthIssue]:
         """Check session token tracking is active."""
         try:
             from cortex.interaction.context_synthesis_gateway import get_gateway
@@ -236,7 +236,7 @@ class TokenOptimizationAgent(BaseHealthAgent):
                 metadata={"check": "session_tracking", "error": str(e)},
             )
     
-    def _check_metrics_registration(self) -> HealthIssue | None:
+    def _check_metrics_registration(self) -> Optional[HealthIssue]:
         """Check Prometheus metrics are registered."""
         try:
             from cortex.interaction.context_metrics_collector import (
