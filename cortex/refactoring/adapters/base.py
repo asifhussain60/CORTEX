@@ -13,7 +13,7 @@ from abc import ABC, abstractmethod
 from typing import List, Union
 
 from cortex.brain.core.result import Err, Ok
-from cortex.refactoring.models import (
+from cortex.refactoring.refactoring_models import (
     RefactoringLanguage,
     RefactoringRequest,
     RefactoringResult,

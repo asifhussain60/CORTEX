@@ -13,7 +13,7 @@ import pytest
 import tempfile
 from pathlib import Path
 from cortex.refactoring.adapters.typescript_adapter import TypeScriptAdapter
-from cortex.refactoring.models import RefactoringRequest, RefactoringLanguage
+from cortex.refactoring.refactoring_models import RefactoringRequest, RefactoringLanguage
 
 # Skip all tests if TypeScript is not installed
 try:

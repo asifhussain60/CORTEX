@@ -9,7 +9,7 @@ Authority: Phase 24 - External Refactoring Tools Integration
 Compliance: CORE-008, CORE-011, CORE-012
 """
 
-from cortex.refactoring.models import (
+from cortex.refactoring.refactoring_models import (
     RefactoringLanguage,
     RefactoringRequest,
     RefactoringResult,

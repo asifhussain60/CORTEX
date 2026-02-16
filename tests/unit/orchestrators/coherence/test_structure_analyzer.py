@@ -13,7 +13,7 @@ from cortex.orchestrators.coherence.structure_analyzer import (
     StructureAnalyzer,
     StructureMetrics,
 )
-from cortex.orchestrators.coherence.models import (
+from cortex.orchestrators.coherence.coherence_models import (
     FileStructure,
     Section,
     SectionType,

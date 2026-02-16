@@ -22,7 +22,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from cortex.orchestrators.coherence.duplicate_scanner import DuplicateScanner, ScanResult
-from cortex.orchestrators.coherence.models import (
+from cortex.orchestrators.coherence.coherence_models import (
     CoherenceReport,
     CoherenceStatus,
     FileStructure,

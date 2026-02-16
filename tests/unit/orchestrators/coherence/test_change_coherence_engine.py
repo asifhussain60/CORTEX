@@ -20,7 +20,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from cortex.orchestrators.coherence.models import (
+from cortex.orchestrators.coherence.coherence_models import (
     Change,
     ChangeType,
     CoherenceReport,

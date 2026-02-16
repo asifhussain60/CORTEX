@@ -21,7 +21,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from cortex.orchestrators.coherence.models import (
+from cortex.orchestrators.coherence.coherence_models import (
     Change,
     CoherenceReport,
     CoherenceStatus,

@@ -15,7 +15,7 @@ from cortex.domain_brain.bkio_orchestrator import (
 )
 from cortex.brain.core.orchestrator_base import OrchestrationContext
 from cortex.domain_brain.api import DomainBrainAPI
-from cortex_brain.domain_brain.models import Domain, Entity, EntityType
+from cortex_brain.domain_brain.domain_brain_models import Domain, Entity, EntityType
 
 
 class TestBKIOOrchestrator:

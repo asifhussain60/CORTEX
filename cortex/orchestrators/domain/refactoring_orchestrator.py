@@ -30,7 +30,7 @@ from cortex.brain.core.result import Err, Ok
 from cortex.refactoring.adapters.base import RefactoringToolAdapter
 from cortex.refactoring.adapters.rope_adapter import RopeAdapter
 from cortex.refactoring.adapters.typescript_adapter import TypeScriptAdapter
-from cortex.refactoring.models import (
+from cortex.refactoring.refactoring_models import (
     RefactoringLanguage,
     RefactoringRequest,
     RefactoringResult,

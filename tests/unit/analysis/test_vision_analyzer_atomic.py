@@ -27,7 +27,7 @@ from typing import List
 # AC_START: AC-MEGA-PHASE99-S1-004
 # AC_START: AC-MEGA-PHASE99-S1-005
 
-from cortex.brain.analysis.models import (
+from cortex.brain.analysis.analysis_models import (
     PixelGrid,
     BoundingBox,
     TextSegment,

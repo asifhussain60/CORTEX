@@ -44,8 +44,8 @@ __all__ = ['Entity']
         # Create stub with clear target
         stub_file = tmp_path / "api.py"
         stub_file.write_text("""
-from cortex_brain.domain_brain.models import EntityType
-from cortex_brain.domain_brain.models import Conflict
+from cortex_brain.domain_brain.domain_brain_models import EntityType
+from cortex_brain.domain_brain.domain_brain_models import Conflict
 
 __all__ = ['EntityType', 'Conflict']
 """)

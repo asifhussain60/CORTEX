@@ -21,7 +21,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
 # Phase 99: Import atomic analysis models
-from cortex.brain.analysis.models import (
+from cortex.brain.analysis.analysis_models import (
     BoundingBox,
     ColorInfo,
     FontInfo,

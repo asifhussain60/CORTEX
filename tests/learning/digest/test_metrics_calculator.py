@@ -27,7 +27,7 @@ from cortex.learning.digest.metrics_schema import (
     ContextEfficiencyMetrics,
     DigestMetrics,
 )
-from cortex.learning.digest.models import DigestResult
+from cortex.learning.digest.digest_models import DigestResult
 
 
 # AC_START: AC-PHASE41-006

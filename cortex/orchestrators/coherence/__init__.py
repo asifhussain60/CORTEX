@@ -14,7 +14,7 @@ AC_START: AC-ENH-101-001
 Authority: chat01.md analysis - fragment editing creates duplicates
 """
 
-from cortex.orchestrators.coherence.models import (
+from cortex.orchestrators.coherence.coherence_models import (
     Change,
     ChangeType,
     CoherenceReport,

@@ -14,7 +14,7 @@ from cortex.orchestrators.coherence.duplicate_scanner import (
     DuplicateScanner,
     ScanResult,
 )
-from cortex.orchestrators.coherence.models import DuplicateMatch, Section, SectionType
+from cortex.orchestrators.coherence.coherence_models import DuplicateMatch, Section, SectionType
 
 
 # =============================================================================

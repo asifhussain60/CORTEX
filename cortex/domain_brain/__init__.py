@@ -1,6 +1,6 @@
 """Domain Brain models - Re-export from cortex_brain.domain_brain.models."""
 
-from cortex_brain.domain_brain.models import *  # noqa
+from cortex_brain.domain_brain.domain_brain_models import *  # noqa
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 from uuid import uuid4
@@ -182,7 +182,7 @@ class DomainBrainAPI:
         Returns:
             ValidationResult object with validation status.
         """
-        from cortex_brain.domain_brain.models import ValidationResult
+        from cortex_brain.domain_brain.domain_brain_models import ValidationResult
 
         errors = []
         conflicts_detected = []
@@ -250,7 +250,7 @@ class ConsistencyValidator:
         Returns:
             ValidationResult with validation status and errors.
         """
-        from cortex_brain.domain_brain.models import ValidationResult
+        from cortex_brain.domain_brain.domain_brain_models import ValidationResult
 
         errors = []
         conflicts_detected = []
@@ -309,7 +309,7 @@ class ConsistencyValidator:
         Returns:
             ValidationResult with validation status.
         """
-        from cortex_brain.domain_brain.models import ValidationResult
+        from cortex_brain.domain_brain.domain_brain_models import ValidationResult
 
         errors = []
 
@@ -408,7 +408,7 @@ class AuditLogger:
         Returns:
             AuditEntry with hash and other details.
         """
-        from cortex_brain.domain_brain.models import AuditEntry
+        from cortex_brain.domain_brain.domain_brain_models import AuditEntry
 
         entry_id = str(uuid4())
 

@@ -31,7 +31,7 @@ from cortex.domain_brain.conflict_resolver import (
     ResolutionTier,
     ReviewStatus
 )
-from cortex_brain.domain_brain.models import Conflict
+from cortex_brain.domain_brain.domain_brain_models import Conflict
 
 
 class TestConflictDetectionTruth:

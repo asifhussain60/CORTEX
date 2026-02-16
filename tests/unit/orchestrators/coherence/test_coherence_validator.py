@@ -16,7 +16,7 @@ from cortex.orchestrators.coherence.coherence_validator import (
     CoherenceValidator,
     ValidationConfig,
 )
-from cortex.orchestrators.coherence.models import (
+from cortex.orchestrators.coherence.coherence_models import (
     CoherenceReport,
     CoherenceStatus,
     FileStructure,

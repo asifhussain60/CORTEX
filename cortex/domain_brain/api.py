@@ -5,8 +5,8 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from cortex_brain.domain_brain.models import EntityType
-from cortex_brain.domain_brain.models import Conflict
+from cortex_brain.domain_brain.domain_brain_models import EntityType
+from cortex_brain.domain_brain.domain_brain_models import Conflict
 
 
 @dataclass

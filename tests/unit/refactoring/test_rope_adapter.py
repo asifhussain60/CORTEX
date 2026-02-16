@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Any, Dict
 
 from cortex.brain.core.result import Ok, Err
-from cortex.refactoring.models import RefactoringLanguage, RefactoringRequest
+from cortex.refactoring.refactoring_models import RefactoringLanguage, RefactoringRequest
 
 
 @pytest.fixture

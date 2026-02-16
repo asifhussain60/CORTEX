@@ -60,7 +60,7 @@ from cortex.common.standards_resolver import StandardsResolver
 from cortex.core.result import Err, Ok, Result
 from cortex.models.canonical_enums import IntentType
 from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
-from cortex.refactoring.models import (
+from cortex.refactoring.refactoring_models import (
     RefactoringLanguage,
     RefactoringRequest,
 )

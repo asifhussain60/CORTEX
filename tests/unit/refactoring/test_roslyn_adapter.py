@@ -10,7 +10,7 @@ import pytest
 from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
 from cortex.refactoring.adapters.roslyn_adapter import RoslynAdapter
-from cortex.refactoring.models import (
+from cortex.refactoring.refactoring_models import (
     RefactoringRequest,
     RefactoringLanguage,
     RefactoringResult
