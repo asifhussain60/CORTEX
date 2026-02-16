@@ -1,0 +1,1215 @@
+﻿# SOLID Principles Knowledge Base
+# Comprehensive guide to SOLID object-oriented design principles
+# Source: Agile Software Development, Principles, Patterns, and Practices (Robert C. Martin)
+
+metadata:
+  version: "1.0.0"
+  author: "Asif Hussain"
+  created: "2025-12-22"
+  updated: "2025-12-22"
+  source: "Robert C. Martin (Uncle Bob) - SOLID Principles"
+  purpose: "Comprehensive SOLID principles for code quality and compliance validation"
+  schema: "SOLIDPrinciplesSchema"
+  integration:
+    - "Code review agents for SOLID compliance checking"
+    - "Refactoring agents for SOLID transformation guidance"
+    - "Quality agents for compliance scoring (0-100)"
+    - "Generation agents for SOLID-compliant code"
+
+# Overview
+solid_overview:
+  acronym: "SOLID"
+  full_name: "Five Principles of Object-Oriented Design"
+  author: "Robert C. Martin (Uncle Bob)"
+  year: "2000s"
+  purpose: "Create maintainable, flexible, and scalable software"
+  
+  principles:
+    S: "Single Responsibility Principle (SRP)"
+    O: "Open/Closed Principle (OCP)"
+    L: "Liskov Substitution Principle (LSP)"
+    I: "Interface Segregation Principle (ISP)"
+    D: "Dependency Inversion Principle (DIP)"
+  
+  benefits:
+    - "Easier to maintain and modify"
+    - "More testable code"
+    - "Better code reuse"
+    - "Reduced coupling"
+    - "Increased cohesion"
+    - "Flexible for change"
+
+# ==========================================
+# SINGLE RESPONSIBILITY PRINCIPLE (SRP)
+# ==========================================
+
+single_responsibility_principle:
+  name: "Single Responsibility Principle"
+  acronym: "SRP"
+  author: "Robert C. Martin"
+  
+  definition: |
+    A class should have one, and only one, reason to change.
+    Every class should have a single responsibility, and that responsibility
+    should be entirely encapsulated by the class.
+  
+  explanation: |
+    "Reason to change" refers to different stakeholders or actors who might
+    request changes. If multiple actors need different things from the same class,
+    those are multiple responsibilities.
+  
+  rationale:
+    - "When class has single responsibility, fewer reasons to change"
+    - "Changes affect fewer parts of system"
+    - "Easier to understand (does one thing)"
+    - "Easier to test (test one thing)"
+    - "Higher cohesion"
+  
+  violations:
+    - name: "Multiple concerns in one class"
+      description: "Class handles business logic AND persistence AND validation"
+      example: "UserManager handles authentication, email sending, database access, logging"
+    
+    - name: "God Object"
+      description: "Class that knows too much or does too much"
+      indicator: "Class with >20 methods or >500 lines"
+    
+    - name: "Divergent Change"
+      description: "Having to change same class for unrelated reasons"
+      indicator: "Class modified for different feature requests"
+    
+    - name: "Large Class"
+      description: "Class trying to do too many things"
+      indicator: "Many instance variables, many methods"
+  
+  detection_heuristics:
+    - metric: "number_of_methods"
+      threshold: ">20"
+      reason: "Likely multiple responsibilities"
+    
+    - metric: "lines_of_code"
+      threshold: ">300"
+      reason: "Probably doing too much"
+    
+    - metric: "number_of_dependencies"
+      threshold: ">10"
+      reason: "Interacting with too many other classes"
+    
+    - pattern: "class.*Manager|Controller|Handler|Util"
+      reason: "Generic names often indicate multiple responsibilities"
+    
+    - pattern: "and|or" 
+      context: "class description"
+      reason: "Description with 'and/or' suggests multiple responsibilities"
+  
+  compliance_scoring:
+    score_0_20:
+      description: "Critical violations - God Object"
+      indicators:
+        - ">30 methods"
+        - ">500 lines of code"
+        - ">15 dependencies"
+      action: "Immediate refactoring required"
+    
+    score_20_40:
+      description: "Severe violations - Multiple clear responsibilities"
+      indicators:
+        - "20-30 methods"
+        - "300-500 lines"
+        - "10-15 dependencies"
+      action: "Schedule refactoring in next sprint"
+    
+    score_40_60:
+      description: "Moderate violations - Some mixed concerns"
+      indicators:
+        - "15-20 methods"
+        - "200-300 lines"
+        - "7-10 dependencies"
+      action: "Address during regular refactoring"
+    
+    score_60_80:
+      description: "Minor violations - Mostly single responsibility"
+      indicators:
+        - "10-15 methods"
+        - "100-200 lines"
+        - "5-7 dependencies"
+      action: "Monitor and improve opportunistically"
+    
+    score_80_100:
+      description: "Good compliance - Clear single responsibility"
+      indicators:
+        - "<10 methods"
+        - "<100 lines"
+        - "<5 dependencies"
+        - "Clear, focused purpose"
+      action: "Maintain current design"
+  
+  examples:
+    python:
+      violation: |
+        # Γ¥î Violates SRP - Multiple responsibilities
+        class User:
+            def __init__(self, name, email):
+                self.name = name
+                self.email = email
+            
+            # Responsibility 1: User data management
+            def update_profile(self, name, email):
+                self.name = name
+                self.email = email
+            
+            # Responsibility 2: Persistence
+            def save_to_database(self):
+                db.execute("INSERT INTO users...")
+            
+            # Responsibility 3: Email notifications
+            def send_welcome_email(self):
+                smtp.send(self.email, "Welcome!")
+            
+            # Responsibility 4: Validation
+            def validate_email(self):
+                return '@' in self.email
+      
+      compliant: |
+        # Γ£à Follows SRP - Separated responsibilities
+        class User:
+            """Domain model - single responsibility: represent user data"""
+            def __init__(self, name, email):
+                self.name = name
+                self.email = email
+        
+        class UserRepository:
+            """Single responsibility: persist users"""
+            def save(self, user: User):
+                db.execute("INSERT INTO users VALUES (?, ?)", 
+                          user.name, user.email)
+        
+        class EmailService:
+            """Single responsibility: send emails"""
+            def send_welcome_email(self, user: User):
+                smtp.send(user.email, "Welcome!")
+        
+        class EmailValidator:
+            """Single responsibility: validate emails"""
+            def is_valid(self, email: str) -> bool:
+                return '@' in email and '.' in email
+    
+    csharp:
+      violation: |
+        // Γ¥î Violates SRP - Multiple responsibilities
+        public class User
+        {
+            public string Name { get; set; }
+            public string Email { get; set; }
+            
+            // Responsibility 1: User data
+            public void UpdateProfile(string name, string email)
+            {
+                Name = name;
+                Email = email;
+            }
+            
+            // Responsibility 2: Persistence
+            public void SaveToDatabase()
+            {
+                var sql = "INSERT INTO Users...";
+                // Database logic
+            }
+            
+            // Responsibility 3: Email
+            public void SendWelcomeEmail()
+            {
+                // SMTP logic
+            }
+            
+            // Responsibility 4: Validation
+            public bool ValidateEmail()
+            {
+                return Email.Contains("@");
+            }
+        }
+      
+      compliant: |
+        // Γ£à Follows SRP - Separated responsibilities
+        public class User
+        {
+            // Single responsibility: represent user data
+            public string Name { get; set; }
+            public string Email { get; set; }
+        }
+        
+        public class UserRepository
+        {
+            // Single responsibility: persist users
+            public void Save(User user)
+            {
+                var sql = "INSERT INTO Users VALUES (@Name, @Email)";
+                // Execute SQL
+            }
+        }
+        
+        public class EmailService
+        {
+            // Single responsibility: send emails
+            public void SendWelcomeEmail(User user)
+            {
+                // SMTP logic
+            }
+        }
+        
+        public class EmailValidator
+        {
+            // Single responsibility: validate emails
+            public bool IsValid(string email)
+            {
+                return email.Contains("@") && email.Contains(".");
+            }
+        }
+  
+  refactoring_strategies:
+    - name: "Extract Class"
+      when: "Class has multiple clear responsibilities"
+      steps:
+        - "Identify distinct responsibilities"
+        - "Create new class for each responsibility"
+        - "Move related methods and fields"
+        - "Update references"
+    
+    - name: "Move Method"
+      when: "Method belongs in different class"
+      steps:
+        - "Identify method's primary dependency"
+        - "Move method to class it depends on most"
+        - "Update all callers"
+    
+    - name: "Extract Interface"
+      when: "Need to separate interface from implementation"
+      steps:
+        - "Define interface for one responsibility"
+        - "Implement interface"
+        - "Update clients to use interface"
+  
+  related_design_patterns:
+    - name: "Facade"
+      relationship: "Provides simple interface to subsystem with SRP-compliant classes"
+    - name: "Dependency Injection"
+      relationship: "Injects SRP-compliant dependencies"
+    - name: "Repository"
+      relationship: "Single responsibility: data access"
+
+# ==========================================
+# OPEN/CLOSED PRINCIPLE (OCP)
+# ==========================================
+
+open_closed_principle:
+  name: "Open/Closed Principle"
+  acronym: "OCP"
+  author: "Bertrand Meyer (1988), popularized by Robert C. Martin"
+  
+  definition: |
+    Software entities (classes, modules, functions) should be open for extension
+    but closed for modification.
+  
+  explanation: |
+    You should be able to add new functionality without changing existing code.
+    Achieve this through abstraction (interfaces/abstract classes) and polymorphism.
+  
+  rationale:
+    - "Existing code is tested and working - don't break it"
+    - "Reduces risk of introducing bugs"
+    - "Enables plugin architectures"
+    - "Supports independent development"
+  
+  violations:
+    - name: "Switch/If statements on type"
+      description: "Adding new type requires modifying switch statement"
+      example: "if (shape.type == 'circle') ... else if (shape.type == 'square') ..."
+    
+    - name: "God Class modifications"
+      description: "Every new feature requires changing central class"
+    
+    - name: "Shotgun Surgery"
+      description: "Adding feature requires changes in many places"
+  
+  detection_heuristics:
+    - pattern: "switch.*type|instanceof|is|as"
+      reason: "Type checking often violates OCP"
+    
+    - pattern: "if.*elif.*elif"
+      context: "type checking"
+      reason: "Multiple type checks indicate OCP violation"
+    
+    - metric: "change_frequency"
+      threshold: "Modified in >50% of feature additions"
+      reason: "Frequently modified class violates OCP"
+  
+  compliance_scoring:
+    score_0_20:
+      description: "Critical violations - Every feature modifies core classes"
+      indicators:
+        - "Large switch statements on type"
+        - "Core classes modified for every feature"
+      action: "Major refactoring to abstractions"
+    
+    score_20_40:
+      description: "Severe violations - Frequent modifications required"
+      indicators:
+        - "Some type checking"
+        - "Many conditional branches for types"
+      action: "Introduce Strategy/Polymorphism"
+    
+    score_40_60:
+      description: "Moderate compliance - Some extension points"
+      indicators:
+        - "Some interfaces but also type checking"
+      action: "Improve abstractions"
+    
+    score_60_80:
+      description: "Good compliance - Mostly extensible"
+      indicators:
+        - "Good use of interfaces/abstract classes"
+        - "Rare modifications to existing code"
+      action: "Maintain and improve"
+    
+    score_80_100:
+      description: "Excellent compliance - Fully extensible"
+      indicators:
+        - "New features added via new classes"
+        - "Existing code unchanged"
+      action: "Continue best practices"
+  
+  examples:
+    python:
+      violation: |
+        # Γ¥î Violates OCP - Must modify for each new shape
+        class AreaCalculator:
+            def calculate_area(self, shapes):
+                total = 0
+                for shape in shapes:
+                    if shape.type == 'circle':
+                        total += 3.14 * shape.radius ** 2
+                    elif shape.type == 'square':
+                        total += shape.side ** 2
+                    elif shape.type == 'rectangle':
+                        total += shape.width * shape.height
+                    # Adding triangle requires modifying this code
+                return total
+      
+      compliant: |
+        # Γ£à Follows OCP - Can extend without modification
+        from abc import ABC, abstractmethod
+        
+        class Shape(ABC):
+            @abstractmethod
+            def area(self) -> float:
+                pass
+        
+        class Circle(Shape):
+            def __init__(self, radius):
+                self.radius = radius
+            
+            def area(self) -> float:
+                return 3.14 * self.radius ** 2
+        
+        class Square(Shape):
+            def __init__(self, side):
+                self.side = side
+            
+            def area(self) -> float:
+                return self.side ** 2
+        
+        class Triangle(Shape):  # NEW - No modification to existing code
+            def __init__(self, base, height):
+                self.base = base
+                self.height = height
+            
+            def area(self) -> float:
+                return 0.5 * self.base * self.height
+        
+        class AreaCalculator:
+            def calculate_area(self, shapes: list[Shape]) -> float:
+                return sum(shape.area() for shape in shapes)
+    
+    csharp:
+      violation: |
+        // Γ¥î Violates OCP
+        public class AreaCalculator
+        {
+            public double CalculateArea(List<object> shapes)
+            {
+                double total = 0;
+                foreach (var shape in shapes)
+                {
+                    if (shape is Circle circle)
+                        total += Math.PI * circle.Radius * circle.Radius;
+                    else if (shape is Square square)
+                        total += square.Side * square.Side;
+                    // Adding new shape requires modifying this method
+                }
+                return total;
+            }
+        }
+      
+      compliant: |
+        // Γ£à Follows OCP
+        public interface IShape
+        {
+            double Area();
+        }
+        
+        public class Circle : IShape
+        {
+            public double Radius { get; set; }
+            public double Area() => Math.PI * Radius * Radius;
+        }
+        
+        public class Square : IShape
+        {
+            public double Side { get; set; }
+            public double Area() => Side * Side;
+        }
+        
+        public class Triangle : IShape  // NEW - No modification needed
+        {
+            public double Base { get; set; }
+            public double Height { get; set; }
+            public double Area() => 0.5 * Base * Height;
+        }
+        
+        public class AreaCalculator
+        {
+            public double CalculateArea(List<IShape> shapes)
+            {
+                return shapes.Sum(s => s.Area());
+            }
+        }
+  
+  refactoring_strategies:
+    - name: "Replace Conditional with Polymorphism"
+      when: "Type checking with if/switch statements"
+      steps:
+        - "Create abstract base class or interface"
+        - "Move each conditional branch to subclass"
+        - "Replace conditional with polymorphic call"
+    
+    - name: "Introduce Strategy Pattern"
+      when: "Algorithm varies based on type"
+      steps:
+        - "Define strategy interface"
+        - "Implement concrete strategies"
+        - "Inject strategy into context"
+  
+  related_design_patterns:
+    - name: "Strategy"
+      relationship: "Algorithms are open for extension (new strategies) but closed for modification"
+    - name: "Template Method"
+      relationship: "Base algorithm closed, specific steps open for extension"
+    - name: "Decorator"
+      relationship: "Add responsibilities without modifying original class"
+    - name: "Factory Method"
+      relationship: "Object creation open for extension"
+
+# ==========================================
+# LISKOV SUBSTITUTION PRINCIPLE (LSP)
+# ==========================================
+
+liskov_substitution_principle:
+  name: "Liskov Substitution Principle"
+  acronym: "LSP"
+  author: "Barbara Liskov (1987)"
+  
+  definition: |
+    Objects of a superclass should be replaceable with objects of its subclasses
+    without breaking the application. Subtypes must be substitutable for their base types.
+  
+  explanation: |
+    If S is a subtype of T, then objects of type T may be replaced with objects
+    of type S without altering desirable properties (correctness, task performed, etc.)
+  
+  rationale:
+    - "Enables polymorphism to work correctly"
+    - "Subclasses shouldn't surprise callers"
+    - "Maintains behavioral consistency"
+    - "Supports Open/Closed Principle"
+  
+  contract_rules:
+    - "Preconditions cannot be strengthened in subtype"
+    - "Postconditions cannot be weakened in subtype"
+    - "Invariants must be preserved in subtype"
+    - "History constraint (immutable properties stay immutable)"
+  
+  violations:
+    - name: "Refused Bequest"
+      description: "Subclass doesn't support parent's interface"
+      example: "Square inheriting Rectangle but refusing setWidth/setHeight independence"
+    
+    - name: "Strengthened Preconditions"
+      description: "Subclass requires more than parent"
+      example: "Parent accepts null, subclass throws on null"
+    
+    - name: "Weakened Postconditions"
+      description: "Subclass promises less than parent"
+      example: "Parent guarantees non-null return, subclass may return null"
+    
+    - name: "Exception throwing"
+      description: "Subclass throws exceptions not thrown by parent"
+      example: "Parent doesn't throw, subclass throws NotImplementedException"
+  
+  detection_heuristics:
+    - pattern: "throw NotImplementedException|UnsupportedOperationException"
+      reason: "Subclass refusing to implement parent method"
+    
+    - pattern: "if.*isinstance.*type"
+      context: "checking subclass type"
+      reason: "Need to check type indicates LSP violation"
+    
+    - code_smell: "empty_method_override"
+      reason: "Subclass not properly implementing parent"
+  
+  compliance_scoring:
+    score_0_20:
+      description: "Critical violations - Subclasses break contracts"
+      indicators:
+        - "NotImplementedException in subclass"
+        - "Type checking required"
+        - "Behavioral surprises"
+      action: "Redesign inheritance hierarchy"
+    
+    score_20_40:
+      description: "Severe violations - Frequent contract breaking"
+      indicators:
+        - "Precondition strengthening"
+        - "Postcondition weakening"
+      action: "Fix contract violations"
+    
+    score_40_60:
+      description: "Moderate compliance - Some substitutability"
+      indicators:
+        - "Mostly substitutable"
+        - "Some edge cases"
+      action: "Address edge cases"
+    
+    score_60_80:
+      description: "Good compliance - Mostly substitutable"
+      indicators:
+        - "Subclasses honor contracts"
+        - "No type checking needed"
+      action: "Maintain and improve"
+    
+    score_80_100:
+      description: "Excellent compliance - Fully substitutable"
+      indicators:
+        - "Perfect substitutability"
+        - "All contracts honored"
+      action: "Continue best practices"
+  
+  examples:
+    python:
+      violation: |
+        # Γ¥î Violates LSP - Square breaks Rectangle's contract
+        class Rectangle:
+            def __init__(self, width, height):
+                self.width = width
+                self.height = height
+            
+            def set_width(self, width):
+                self.width = width
+            
+            def set_height(self, height):
+                self.height = height
+            
+            def area(self):
+                return self.width * self.height
+        
+        class Square(Rectangle):
+            def set_width(self, width):
+                self.width = width
+                self.height = width  # Side effect - breaks LSP
+            
+            def set_height(self, height):
+                self.width = height  # Side effect - breaks LSP
+                self.height = height
+        
+        def process_rectangle(rect: Rectangle):
+            rect.set_width(5)
+            rect.set_height(4)
+            assert rect.area() == 20  # Fails for Square!
+      
+      compliant: |
+        # Γ£à Follows LSP - Composition over inheritance
+        from abc import ABC, abstractmethod
+        
+        class Shape(ABC):
+            @abstractmethod
+            def area(self) -> float:
+                pass
+        
+        class Rectangle(Shape):
+            def __init__(self, width, height):
+                self.width = width
+                self.height = height
+            
+            def area(self) -> float:
+                return self.width * self.height
+        
+        class Square(Shape):
+            def __init__(self, side):
+                self.side = side
+            
+            def area(self) -> float:
+                return self.side ** 2
+        
+        # No substitutability issues - different contracts
+    
+    csharp:
+      violation: |
+        // Γ¥î Violates LSP
+        public class Bird
+        {
+            public virtual void Fly()
+            {
+                Console.WriteLine("Flying");
+            }
+        }
+        
+        public class Penguin : Bird
+        {
+            public override void Fly()
+            {
+                throw new NotSupportedException("Penguins can't fly!");
+            }
+        }
+        
+        void MakeBirdFly(Bird bird)
+        {
+            bird.Fly();  // Throws for Penguin - LSP violation
+        }
+      
+      compliant: |
+        // Γ£à Follows LSP - Correct abstraction
+        public abstract class Bird
+        {
+            public abstract void Move();
+        }
+        
+        public interface IFlyable
+        {
+            void Fly();
+        }
+        
+        public class Sparrow : Bird, IFlyable
+        {
+            public override void Move() => Fly();
+            public void Fly() => Console.WriteLine("Flying");
+        }
+        
+        public class Penguin : Bird
+        {
+            public override void Move() => Swim();
+            private void Swim() => Console.WriteLine("Swimming");
+        }
+        
+        void MakeBirdMove(Bird bird)
+        {
+            bird.Move();  // Works for all birds
+        }
+  
+  refactoring_strategies:
+    - name: "Replace Inheritance with Delegation"
+      when: "Subclass doesn't truly IS-A relationship"
+      steps:
+        - "Change inheritance to composition"
+        - "Delegate to contained object"
+    
+    - name: "Extract Interface"
+      when: "Subclass doesn't need all parent methods"
+      steps:
+        - "Define interface with needed methods"
+        - "Implement interface instead of inheriting"
+  
+  related_design_patterns:
+    - name: "Strategy"
+      relationship: "All strategies are substitutable"
+    - name: "Template Method"
+      relationship: "Subclasses must honor template contract"
+
+# ==========================================
+# INTERFACE SEGREGATION PRINCIPLE (ISP)
+# ==========================================
+
+interface_segregation_principle:
+  name: "Interface Segregation Principle"
+  acronym: "ISP"
+  author: "Robert C. Martin"
+  
+  definition: |
+    No client should be forced to depend on methods it does not use.
+    Many specific interfaces are better than one general-purpose interface.
+  
+  explanation: |
+    Split large interfaces into smaller, more specific ones so clients only
+    know about methods relevant to them. Prevents "fat" interfaces.
+  
+  rationale:
+    - "Clients shouldn't depend on unused methods"
+    - "Reduces coupling"
+    - "Smaller, focused interfaces"
+    - "Easier to implement"
+    - "Supports Single Responsibility Principle"
+  
+  violations:
+    - name: "Fat Interface"
+      description: "Interface with too many methods"
+      example: "IWorker with work(), eat(), sleep(), code(), review()"
+    
+    - name: "Forced Implementation"
+      description: "Implementing methods just to satisfy interface"
+      example: "ReadOnlyRepository implementing Add/Update/Delete as empty or throwing"
+    
+    - name: "Interface Pollution"
+      description: "Adding methods to interface that some implementors don't need"
+  
+  detection_heuristics:
+    - metric: "interface_methods_count"
+      threshold: ">10"
+      reason: "Large interface likely violates ISP"
+    
+    - pattern: "throw NotImplementedException"
+      context: "interface implementation"
+      reason: "Forced to implement unused methods"
+    
+    - pattern: "pass|return None|{ }"
+      context: "interface implementation (empty body)"
+      reason: "Implementing unused methods"
+  
+  compliance_scoring:
+    score_0_20:
+      description: "Critical violations - Fat interfaces everywhere"
+      indicators:
+        - "Interfaces with >15 methods"
+        - "Many NotImplementedExceptions"
+      action: "Split interfaces immediately"
+    
+    score_20_40:
+      description: "Severe violations - Large interfaces"
+      indicators:
+        - "Interfaces with 10-15 methods"
+        - "Some forced implementations"
+      action: "Refactor to smaller interfaces"
+    
+    score_40_60:
+      description: "Moderate compliance - Some interface bloat"
+      indicators:
+        - "Interfaces with 7-10 methods"
+      action: "Consider splitting"
+    
+    score_60_80:
+      description: "Good compliance - Focused interfaces"
+      indicators:
+        - "Interfaces with 4-7 methods"
+        - "Minimal forced implementations"
+      action: "Maintain focus"
+    
+    score_80_100:
+      description: "Excellent compliance - Lean interfaces"
+      indicators:
+        - "Interfaces with <4 methods"
+        - "All methods used by all implementors"
+      action: "Continue best practices"
+  
+  examples:
+    python:
+      violation: |
+        # Γ¥î Violates ISP - Fat interface
+        from abc import ABC, abstractmethod
+        
+        class IWorker(ABC):
+            @abstractmethod
+            def work(self): pass
+            
+            @abstractmethod
+            def eat(self): pass
+            
+            @abstractmethod
+            def sleep(self): pass
+        
+        class HumanWorker(IWorker):
+            def work(self): print("Working")
+            def eat(self): print("Eating")
+            def sleep(self): print("Sleeping")
+        
+        class RobotWorker(IWorker):
+            def work(self): print("Working")
+            def eat(self): pass  # Robots don't eat - forced implementation
+            def sleep(self): pass  # Robots don't sleep - forced implementation
+      
+      compliant: |
+        # Γ£à Follows ISP - Segregated interfaces
+        from abc import ABC, abstractmethod
+        
+        class IWorkable(ABC):
+            @abstractmethod
+            def work(self): pass
+        
+        class IFeedable(ABC):
+            @abstractmethod
+            def eat(self): pass
+        
+        class ISleepable(ABC):
+            @abstractmethod
+            def sleep(self): pass
+        
+        class HumanWorker(IWorkable, IFeedable, ISleepable):
+            def work(self): print("Working")
+            def eat(self): print("Eating")
+            def sleep(self): print("Sleeping")
+        
+        class RobotWorker(IWorkable):  # Only implements what it needs
+            def work(self): print("Working")
+    
+    csharp:
+      violation: |
+        // Γ¥î Violates ISP - Fat interface
+        public interface IRepository<T>
+        {
+            T GetById(int id);
+            IEnumerable<T> GetAll();
+            void Add(T entity);
+            void Update(T entity);
+            void Delete(int id);
+        }
+        
+        // Read-only repository forced to implement write methods
+        public class ReadOnlyRepository<T> : IRepository<T>
+        {
+            public T GetById(int id) { /* Implementation */ }
+            public IEnumerable<T> GetAll() { /* Implementation */ }
+            
+            // Forced implementations
+            public void Add(T entity) 
+            { 
+                throw new NotSupportedException(); 
+            }
+            public void Update(T entity) 
+            { 
+                throw new NotSupportedException(); 
+            }
+            public void Delete(int id) 
+            { 
+                throw new NotSupportedException(); 
+            }
+        }
+      
+      compliant: |
+        // Γ£à Follows ISP - Segregated interfaces
+        public interface IReadRepository<T>
+        {
+            T GetById(int id);
+            IEnumerable<T> GetAll();
+        }
+        
+        public interface IWriteRepository<T>
+        {
+            void Add(T entity);
+            void Update(T entity);
+            void Delete(int id);
+        }
+        
+        public interface IRepository<T> : IReadRepository<T>, IWriteRepository<T>
+        {
+        }
+        
+        // Read-only repository only implements what it needs
+        public class ReadOnlyRepository<T> : IReadRepository<T>
+        {
+            public T GetById(int id) { /* Implementation */ }
+            public IEnumerable<T> GetAll() { /* Implementation */ }
+        }
+        
+        // Full repository implements both
+        public class Repository<T> : IRepository<T>
+        {
+            // Implement all methods
+        }
+  
+  refactoring_strategies:
+    - name: "Extract Interface"
+      when: "Interface has multiple groups of methods"
+      steps:
+        - "Identify cohesive method groups"
+        - "Create separate interface for each group"
+        - "Update clients to depend on specific interfaces"
+    
+    - name: "Role Interfaces"
+      when: "Same class used in different roles"
+      steps:
+        - "Define interface for each role"
+        - "Class implements multiple role interfaces"
+  
+  related_design_patterns:
+    - name: "Adapter"
+      relationship: "Adapt fat interface to lean interface"
+    - name: "Facade"
+      relationship: "Provide simplified interface"
+
+# ==========================================
+# DEPENDENCY INVERSION PRINCIPLE (DIP)
+# ==========================================
+
+dependency_inversion_principle:
+  name: "Dependency Inversion Principle"
+  acronym: "DIP"
+  author: "Robert C. Martin"
+  
+  definition: |
+    High-level modules should not depend on low-level modules. Both should depend on abstractions.
+    Abstractions should not depend on details. Details should depend on abstractions.
+  
+  explanation: |
+    Depend on interfaces/abstract classes, not concrete implementations.
+    This inverts the typical dependency direction.
+  
+  rationale:
+    - "Decouples high-level logic from low-level details"
+    - "Enables easy substitution of implementations"
+    - "Supports testability (can inject mocks)"
+    - "Flexible architecture"
+  
+  violations:
+    - name: "Direct dependency on concrete class"
+      description: "Instantiating concrete classes directly"
+      example: "service = new EmailService() instead of IEmailService"
+    
+    - name: "new keyword everywhere"
+      description: "Creating dependencies with 'new' throughout code"
+    
+    - name: "Static dependencies"
+      description: "Depending on static classes/methods"
+      example: "Logger.Log() instead of ILogger injected"
+  
+  detection_heuristics:
+    - pattern: "new [A-Z].*Service|new [A-Z].*Repository"
+      reason: "Creating concrete dependencies"
+    
+    - pattern: "static.*\\."
+      context: "calling static methods"
+      reason: "Static dependencies"
+    
+    - metric: "concrete_dependencies_count"
+      threshold: ">3"
+      reason: "Too many concrete dependencies"
+  
+  compliance_scoring:
+    score_0_20:
+      description: "Critical violations - All concrete dependencies"
+      indicators:
+        - "No interfaces used"
+        - "'new' keyword everywhere"
+        - "Static method calls"
+      action: "Major refactoring to abstractions"
+    
+    score_20_40:
+      description: "Severe violations - Mostly concrete"
+      indicators:
+        - "Few interfaces"
+        - "Many concrete dependencies"
+      action: "Introduce interfaces and DI"
+    
+    score_40_60:
+      description: "Moderate compliance - Some abstractions"
+      indicators:
+        - "Some interfaces"
+        - "Mixed concrete and abstract"
+      action: "Increase abstraction usage"
+    
+    score_60_80:
+      description: "Good compliance - Mostly abstractions"
+      indicators:
+        - "Good interface usage"
+        - "Dependency injection used"
+      action: "Maintain and improve"
+    
+    score_80_100:
+      description: "Excellent compliance - All abstractions"
+      indicators:
+        - "All dependencies are interfaces"
+        - "DI container used"
+        - "No 'new' in business logic"
+      action: "Continue best practices"
+  
+  examples:
+    python:
+      violation: |
+        # Γ¥î Violates DIP - Depends on concrete class
+        class EmailService:
+            def send(self, message):
+                print(f"Sending email: {message}")
+        
+        class UserService:
+            def __init__(self):
+                self.email_service = EmailService()  # Concrete dependency
+            
+            def register_user(self, user):
+                # Business logic
+                self.email_service.send(f"Welcome {user}")
+      
+      compliant: |
+        # Γ£à Follows DIP - Depends on abstraction
+        from abc import ABC, abstractmethod
+        
+        class IEmailService(ABC):
+            @abstractmethod
+            def send(self, message): pass
+        
+        class EmailService(IEmailService):
+            def send(self, message):
+                print(f"Sending email: {message}")
+        
+        class SMSService(IEmailService):  # Alternative implementation
+            def send(self, message):
+                print(f"Sending SMS: {message}")
+        
+        class UserService:
+            def __init__(self, notification_service: IEmailService):
+                self.notification_service = notification_service  # Injected abstraction
+            
+            def register_user(self, user):
+                # Business logic
+                self.notification_service.send(f"Welcome {user}")
+        
+        # Dependency injection
+        email_service = EmailService()
+        user_service = UserService(email_service)
+    
+    csharp:
+      violation: |
+        // Γ¥î Violates DIP - Depends on concrete class
+        public class EmailService
+        {
+            public void Send(string message)
+            {
+                Console.WriteLine($"Sending email: {message}");
+            }
+        }
+        
+        public class UserService
+        {
+            private EmailService _emailService = new EmailService();  // Concrete
+            
+            public void RegisterUser(string user)
+            {
+                // Business logic
+                _emailService.Send($"Welcome {user}");
+            }
+        }
+      
+      compliant: |
+        // Γ£à Follows DIP - Depends on abstraction
+        public interface INotificationService
+        {
+            void Send(string message);
+        }
+        
+        public class EmailService : INotificationService
+        {
+            public void Send(string message)
+            {
+                Console.WriteLine($"Sending email: {message}");
+            }
+        }
+        
+        public class SMSService : INotificationService
+        {
+            public void Send(string message)
+            {
+                Console.WriteLine($"Sending SMS: {message}");
+            }
+        }
+        
+        public class UserService
+        {
+            private readonly INotificationService _notificationService;
+            
+            public UserService(INotificationService notificationService)
+            {
+                _notificationService = notificationService;  // Injected
+            }
+            
+            public void RegisterUser(string user)
+            {
+                // Business logic
+                _notificationService.Send($"Welcome {user}");
+            }
+        }
+        
+        // Dependency injection (in Startup.cs)
+        services.AddScoped<INotificationService, EmailService>();
+        services.AddScoped<UserService>();
+  
+  refactoring_strategies:
+    - name: "Extract Interface"
+      when: "Depending on concrete class"
+      steps:
+        - "Define interface for dependency"
+        - "Make concrete class implement interface"
+        - "Change client to depend on interface"
+        - "Inject dependency via constructor"
+    
+    - name: "Introduce Dependency Injection"
+      when: "Creating dependencies with 'new'"
+      steps:
+        - "Add constructor parameter for dependency"
+        - "Use DI container to wire dependencies"
+  
+  related_design_patterns:
+    - name: "Dependency Injection"
+      relationship: "Primary mechanism for achieving DIP"
+    - name: "Factory"
+      relationship: "Create objects while maintaining DIP"
+    - name: "Strategy"
+      relationship: "Client depends on strategy abstraction"
+
+# ==========================================
+# SOLID Synergies
+# ==========================================
+
+solid_synergies:
+  - principles: ["SRP", "OCP"]
+    synergy: "Classes with single responsibility easier to extend without modification"
+  
+  - principles: ["OCP", "LSP"]
+    synergy: "Subclasses that honor LSP can be used for extension (OCP)"
+  
+  - principles: ["ISP", "DIP"]
+    synergy: "Small interfaces (ISP) make abstractions (DIP) more focused"
+  
+  - principles: ["SRP", "ISP"]
+    synergy: "Single responsibility leads to focused interfaces"
+  
+  - principles: ["All SOLID"]
+    synergy: "Together create maintainable, flexible, testable code"
+
+# ==========================================
+# CORTEX Integration
+# ==========================================
+
+cortex_integration:
+  code_review_agent:
+    - "Detect SOLID violations using metrics and patterns"
+    - "Score compliance (0-100) per principle"
+    - "Provide refactoring suggestions"
+  
+  refactoring_agent:
+    - "Guide SOLID refactoring transformations"
+    - "Apply Extract Class, Extract Interface patterns"
+    - "Validate SOLID compliance post-refactoring"
+  
+  generation_agent:
+    - "Generate SOLID-compliant code"
+    - "Use interfaces and abstractions by default"
+    - "Follow Single Responsibility"
+  
+  quality_agent:
+    - "Track SOLID compliance over time"
+    - "Report SOLID score per module/project"
+    - "Identify SOLID debt hotspots"

@@ -1,0 +1,995 @@
+﻿# Aggregates & Entities Knowledge Base
+# CORTEX Knowledge Library - Phase 10.2 Week 27
+# Version: 1.0
+# Author: Asif Hussain
+# Created: 2025-12-22
+# Purpose: Tactical Domain-Driven Design - Aggregates, Entities, Value Objects, Repositories
+
+metadata:
+  domain: ddd
+  category: aggregates_entities
+  version: "1.0"
+  last_updated: "2025-12-22"
+  author: "Asif Hussain"
+  tags:
+    - domain_driven_design
+    - aggregates
+    - entities
+    - value_objects
+    - tactical_design
+    - invariants
+    - repositories
+  use_cases:
+    - domain_modeling
+    - code_design
+    - refactoring
+    - data_consistency
+    - transaction_boundaries
+  related_documents:
+    - bounded-contexts.yaml
+    - domain-events.yaml
+    - ../engineering/solid-principles.yaml
+    - ../engineering/design-patterns.yaml
+
+# =============================================================================
+# TACTICAL DDD OVERVIEW
+# =============================================================================
+
+tactical_ddd_overview:
+  description: "Building blocks for implementing domain models within bounded contexts"
+  
+  building_blocks:
+    - name: "Entities"
+      description: "Objects with identity that persists over time"
+      example: "Customer, Order, Product"
+      
+    - name: "Value Objects"
+      description: "Immutable objects defined by attributes, not identity"
+      example: "Money, Address, DateRange"
+      
+    - name: "Aggregates"
+      description: "Cluster of entities and value objects with consistency boundary"
+      example: "Order aggregate (Order + OrderItems)"
+      
+    - name: "Domain Events"
+      description: "Record of something significant that happened"
+      example: "OrderPlaced, PaymentProcessed"
+      
+    - name: "Repositories"
+      description: "Abstraction for accessing aggregates"
+      example: "IOrderRepository"
+      
+    - name: "Domain Services"
+      description: "Stateless operations that don't belong to entity"
+      example: "PricingService, ShippingCalculator"
+      
+    - name: "Factories"
+      description: "Complex object creation logic"
+      example: "OrderFactory"
+
+# =============================================================================
+# ENTITIES
+# =============================================================================
+
+entities:
+  description: "Objects with unique identity and lifecycle"
+  
+  characteristics:
+    - "Has unique identifier (ID)"
+    - "Identity remains constant through lifecycle"
+    - "Mutable state (but identity immutable)"
+    - "Equality based on ID, not attributes"
+    
+  identity_strategies:
+    - strategy: "Database-Generated ID"
+      approach: "Auto-increment or sequence"
+      pros: "Simple, guaranteed unique"
+      cons: "Requires database round-trip, not portable"
+      example: |
+        // SQL Server IDENTITY
+        CREATE TABLE Orders (
+            OrderId INT IDENTITY(1,1) PRIMARY KEY,
+            CustomerId INT,
+            OrderDate DATETIME
+        );
+        
+    - strategy: "GUID/UUID"
+      approach: "Globally unique identifier"
+      pros: "Generated in code, portable, no collision risk"
+      cons: "Large (16 bytes), not sequential"
+      example: |
+        public class Order : Entity {
+            public Guid Id { get; private set; }
+            
+            public Order() {
+                Id = Guid.NewGuid();  // Generated in constructor
+            }
+        }
+        
+    - strategy: "Natural Key"
+      approach: "Business-meaningful identifier"
+      pros: "Human-readable, meaningful"
+      cons: "May change, uniqueness not guaranteed"
+      example: |
+        public class Product : Entity {
+            public string SKU { get; private set; }  // Stock Keeping Unit
+            
+            public Product(string sku) {
+                if (string.IsNullOrEmpty(sku)) 
+                    throw new ArgumentException("SKU required");
+                SKU = sku;
+            }
+        }
+        
+    - strategy: "Hi-Lo Algorithm"
+      approach: "Combine database-generated high value with in-memory low value"
+      pros: "Reduces DB round-trips, sequential IDs"
+      cons: "Complex implementation"
+      
+  entity_base_class:
+    csharp: |
+      public abstract class Entity {
+          public Guid Id { get; protected set; }
+          
+          // Equality based on ID
+          public override bool Equals(object obj) {
+              if (obj is not Entity other)
+                  return false;
+              
+              if (ReferenceEquals(this, other))
+                  return true;
+              
+              if (GetType() != other.GetType())
+                  return false;
+              
+              // Entities with default ID (not persisted) are not equal
+              if (Id == default || other.Id == default)
+                  return false;
+              
+              return Id == other.Id;
+          }
+          
+          public override int GetHashCode() => Id.GetHashCode();
+          
+          public static bool operator ==(Entity a, Entity b) {
+              if (a is null && b is null) return true;
+              if (a is null || b is null) return false;
+              return a.Equals(b);
+          }
+          
+          public static bool operator !=(Entity a, Entity b) => !(a == b);
+      }
+      
+    python: |
+      from dataclasses import dataclass
+      from uuid import UUID, uuid4
+      
+      @dataclass
+      class Entity:
+          id: UUID
+          
+          def __post_init__(self):
+              if self.id is None:
+                  self.id = uuid4()
+          
+          def __eq__(self, other):
+              if not isinstance(other, Entity):
+                  return False
+              return self.id == other.id
+          
+          def __hash__(self):
+              return hash(self.id)
+              
+  entity_design_principles:
+    - principle: "Rich Behavior"
+      description: "Entities should contain business logic, not just data"
+      bad_example: |
+        // Anemic entity - just getters/setters
+        public class Order {
+            public Guid Id { get; set; }
+            public List<OrderItem> Items { get; set; }
+            public decimal Total { get; set; }
+        }
+        
+        // Logic in service layer
+        public class OrderService {
+            public void AddItem(Order order, Product product, int quantity) {
+                order.Items.Add(new OrderItem(product, quantity));
+                order.Total = order.Items.Sum(i => i.Price * i.Quantity);
+            }
+        }
+        
+      good_example: |
+        // Rich entity - encapsulates behavior
+        public class Order : Entity {
+            private readonly List<OrderItem> _items = new();
+            
+            public IReadOnlyList<OrderItem> Items => _items.AsReadOnly();
+            public decimal Total => _items.Sum(i => i.Subtotal);
+            
+            public void AddItem(Product product, int quantity) {
+                if (quantity <= 0)
+                    throw new DomainException("Quantity must be positive");
+                
+                var existing = _items.FirstOrDefault(i => i.ProductId == product.Id);
+                if (existing != null) {
+                    existing.IncreaseQuantity(quantity);
+                } else {
+                    _items.Add(new OrderItem(product, quantity));
+                }
+                
+                // Domain event
+                AddDomainEvent(new ItemAddedToOrder(Id, product.Id, quantity));
+            }
+        }
+        
+    - principle: "Encapsulation"
+      description: "Protect invariants through private setters and validation"
+      example: |
+        public class Customer : Entity {
+            // Private setter - can only be set through constructor or methods
+            public string Email { get; private set; }
+            public CustomerStatus Status { get; private set; }
+            
+            public Customer(string email) {
+                SetEmail(email);
+                Status = CustomerStatus.Active;
+            }
+            
+            public void SetEmail(string email) {
+                if (!IsValidEmail(email))
+                    throw new DomainException($"Invalid email: {email}");
+                Email = email;
+            }
+            
+            public void Deactivate() {
+                if (Status == CustomerStatus.Deactivated)
+                    throw new DomainException("Customer already deactivated");
+                Status = CustomerStatus.Deactivated;
+                AddDomainEvent(new CustomerDeactivated(Id));
+            }
+            
+            private bool IsValidEmail(string email) {
+                return Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+            }
+        }
+        
+    - principle: "Tell, Don't Ask"
+      description: "Tell entities what to do, don't ask for data and do it yourself"
+      bad_example: |
+        // Violates Tell, Don't Ask
+        if (order.Status == OrderStatus.Pending && order.Total > 0) {
+            order.Status = OrderStatus.Confirmed;
+            eventBus.Publish(new OrderConfirmed(order.Id));
+        }
+        
+      good_example: |
+        // Tell the entity what to do
+        order.Confirm();
+        
+        // Inside Order entity
+        public void Confirm() {
+            if (Status != OrderStatus.Pending)
+                throw new DomainException("Only pending orders can be confirmed");
+            if (Total <= 0)
+                throw new DomainException("Order total must be positive");
+            
+            Status = OrderStatus.Confirmed;
+            AddDomainEvent(new OrderConfirmed(Id));
+        }
+
+# =============================================================================
+# VALUE OBJECTS
+# =============================================================================
+
+value_objects:
+  description: "Objects defined by their attributes, not identity"
+  
+  characteristics:
+    - "No unique identifier"
+    - "Immutable (all properties readonly)"
+    - "Equality based on all attributes"
+    - "Interchangeable if values equal"
+    - "Can be shared/cached"
+    
+  when_to_use:
+    - "Concept has no identity"
+    - "Object is fully described by attributes"
+    - "Immutability is natural"
+    - "Complex value that deserves its own type"
+    
+  examples:
+    - name: "Money"
+      implementation: |
+        public class Money : ValueObject {
+            public decimal Amount { get; }
+            public string Currency { get; }
+            
+            public Money(decimal amount, string currency) {
+                if (amount < 0)
+                    throw new ArgumentException("Amount cannot be negative");
+                if (string.IsNullOrEmpty(currency))
+                    throw new ArgumentException("Currency required");
+                
+                Amount = amount;
+                Currency = currency;
+            }
+            
+            // Immutable operations return new instance
+            public Money Add(Money other) {
+                if (Currency != other.Currency)
+                    throw new InvalidOperationException("Cannot add different currencies");
+                return new Money(Amount + other.Amount, Currency);
+            }
+            
+            public Money Multiply(decimal factor) {
+                return new Money(Amount * factor, Currency);
+            }
+            
+            protected override IEnumerable<object> GetEqualityComponents() {
+                yield return Amount;
+                yield return Currency;
+            }
+        }
+        
+      benefits:
+        - "Type safety (can't add USD + EUR)"
+        - "Encapsulates currency logic"
+        - "Prevents primitive obsession"
+        
+    - name: "Address"
+      implementation: |
+        public class Address : ValueObject {
+            public string Street { get; }
+            public string City { get; }
+            public string State { get; }
+            public string ZipCode { get; }
+            public string Country { get; }
+            
+            public Address(string street, string city, string state, string zipCode, string country) {
+                Street = street ?? throw new ArgumentNullException(nameof(street));
+                City = city ?? throw new ArgumentNullException(nameof(city));
+                State = state ?? throw new ArgumentNullException(nameof(state));
+                ZipCode = zipCode ?? throw new ArgumentNullException(nameof(zipCode));
+                Country = country ?? throw new ArgumentNullException(nameof(country));
+            }
+            
+            protected override IEnumerable<object> GetEqualityComponents() {
+                yield return Street;
+                yield return City;
+                yield return State;
+                yield return ZipCode;
+                yield return Country;
+            }
+            
+            public override string ToString() => 
+                $"{Street}, {City}, {State} {ZipCode}, {Country}";
+        }
+        
+    - name: "DateRange"
+      implementation: |
+        public class DateRange : ValueObject {
+            public DateTime Start { get; }
+            public DateTime End { get; }
+            
+            public DateRange(DateTime start, DateTime end) {
+                if (start > end)
+                    throw new ArgumentException("Start must be before end");
+                Start = start;
+                End = end;
+            }
+            
+            public int DurationInDays => (End - Start).Days;
+            
+            public bool Overlaps(DateRange other) {
+                return Start < other.End && End > other.Start;
+            }
+            
+            protected override IEnumerable<object> GetEqualityComponents() {
+                yield return Start;
+                yield return End;
+            }
+        }
+        
+  value_object_base_class:
+    csharp: |
+      public abstract class ValueObject {
+          protected abstract IEnumerable<object> GetEqualityComponents();
+          
+          public override bool Equals(object obj) {
+              if (obj == null || obj.GetType() != GetType())
+                  return false;
+              
+              var other = (ValueObject)obj;
+              return GetEqualityComponents().SequenceEqual(other.GetEqualityComponents());
+          }
+          
+          public override int GetHashCode() {
+              return GetEqualityComponents()
+                  .Select(x => x?.GetHashCode() ?? 0)
+                  .Aggregate((x, y) => x ^ y);
+          }
+          
+          public static bool operator ==(ValueObject a, ValueObject b) {
+              if (a is null && b is null) return true;
+              if (a is null || b is null) return false;
+              return a.Equals(b);
+          }
+          
+          public static bool operator !=(ValueObject a, ValueObject b) => !(a == b);
+      }
+      
+    python: |
+      from dataclasses import dataclass
+      
+      @dataclass(frozen=True)  # Immutable
+      class Money:
+          amount: Decimal
+          currency: str
+          
+          def __post_init__(self):
+              if self.amount < 0:
+                  raise ValueError("Amount cannot be negative")
+              if not self.currency:
+                  raise ValueError("Currency required")
+          
+          def add(self, other: 'Money') -> 'Money':
+              if self.currency != other.currency:
+                  raise ValueError("Cannot add different currencies")
+              return Money(self.amount + other.amount, self.currency)
+
+# =============================================================================
+# AGGREGATES
+# =============================================================================
+
+aggregates:
+  description: "Cluster of entities and value objects treated as single unit for data changes"
+  
+  purpose:
+    - "Define transactional consistency boundary"
+    - "Enforce invariants"
+    - "Simplify model by grouping related objects"
+    - "Control access to internal entities"
+    
+  anatomy:
+    - component: "Aggregate Root"
+      description: "Single entity that is entry point to aggregate"
+      responsibility: "Enforce invariants, coordinate changes"
+      
+    - component: "Internal Entities"
+      description: "Entities inside aggregate, accessed through root"
+      constraint: "Can only be modified through root"
+      
+    - component: "Value Objects"
+      description: "Immutable attributes within aggregate"
+      
+    - component: "Invariants"
+      description: "Business rules that must always be true"
+      enforcement: "Aggregate root enforces on every state change"
+      
+  design_principles:
+    - principle: "Design Small Aggregates"
+      rationale: "Smaller aggregates reduce contention, easier to reason about"
+      guideline: "Prefer single-entity aggregates when possible"
+      example: |
+        // Too large - Order contains full Customer and Products
+        class Order {
+            Customer customer;  // Full entity - BAD
+            List<Product> products;  // Full entities - BAD
+        }
+        
+        // Right-sized - Order references by ID
+        class Order {
+            Guid customerId;  // Reference by ID
+            List<OrderItem> items;  // Own the items
+        }
+        
+        class OrderItem {
+            Guid productId;  // Reference by ID
+            int quantity;
+            Money unitPrice;  // Snapshot price at order time
+        }
+        
+    - principle: "Reference Other Aggregates by ID"
+      rationale: "Avoid loading entire object graphs"
+      example: |
+        public class Order : AggregateRoot {
+            public Guid CustomerId { get; private set; }  // Reference by ID
+            
+            // NOT: public Customer Customer { get; private set; }  // Would load full customer
+        }
+        
+    - principle: "Enforce Invariants"
+      description: "All business rules checked by aggregate root"
+      example: |
+        public class Order : AggregateRoot {
+            private readonly List<OrderItem> _items = new();
+            private const int MaxItemsPerOrder = 100;
+            
+            public void AddItem(Guid productId, int quantity, Money unitPrice) {
+                // Invariant: Max 100 items per order
+                if (_items.Count >= MaxItemsPerOrder)
+                    throw new DomainException($"Cannot exceed {MaxItemsPerOrder} items");
+                
+                // Invariant: Quantity must be positive
+                if (quantity <= 0)
+                    throw new DomainException("Quantity must be positive");
+                
+                _items.Add(new OrderItem(productId, quantity, unitPrice));
+            }
+        }
+        
+    - principle: "One Transaction = One Aggregate"
+      rationale: "Aggregate defines transactional boundary"
+      guideline: "Don't modify multiple aggregates in single transaction"
+      example: |
+        // WRONG - modifying two aggregates in one transaction
+        using var transaction = db.BeginTransaction();
+        var order = orderRepo.GetById(orderId);
+        var inventory = inventoryRepo.GetById(productId);
+        order.Ship();
+        inventory.DecrementStock(quantity);
+        transaction.Commit();
+        
+        // RIGHT - use eventual consistency
+        var order = orderRepo.GetById(orderId);
+        order.Ship();  // Raises OrderShipped event
+        orderRepo.Save(order);
+        
+        // Event handler (separate transaction)
+        void Handle(OrderShipped event) {
+            var inventory = inventoryRepo.GetById(event.ProductId);
+            inventory.DecrementStock(event.Quantity);
+            inventoryRepo.Save(inventory);
+        }
+        
+    - principle: "Aggregate Root is Entity"
+      description: "Root always has identity"
+      example: |
+        public class Order : AggregateRoot  // Entity with ID
+        {
+            public Guid Id { get; private set; }
+            private readonly List<OrderItem> _items = new();
+            
+            // OrderItem is internal entity
+            public class OrderItem : Entity {
+                public Guid Id { get; private set; }
+                public Guid ProductId { get; private set; }
+                public int Quantity { get; private set; }
+            }
+        }
+        
+  aggregate_example_order:
+    scenario: "E-commerce order aggregate"
+    
+    invariants:
+      - "Order must have at least one item"
+      - "Order total must be positive"
+      - "Cannot modify confirmed order"
+      - "Maximum 100 items per order"
+      
+    implementation: |
+      public class Order : AggregateRoot {
+          public Guid Id { get; private set; }
+          public Guid CustomerId { get; private set; }
+          public OrderStatus Status { get; private set; }
+          private readonly List<OrderItem> _items = new();
+          
+          public IReadOnlyList<OrderItem> Items => _items.AsReadOnly();
+          public Money Total => _items.Aggregate(
+              new Money(0, "USD"),
+              (sum, item) => sum.Add(item.Subtotal)
+          );
+          
+          // Factory method
+          public static Order Create(Guid customerId) {
+              var order = new Order {
+                  Id = Guid.NewGuid(),
+                  CustomerId = customerId,
+                  Status = OrderStatus.Draft
+              };
+              
+              order.AddDomainEvent(new OrderCreated(order.Id, customerId));
+              return order;
+          }
+          
+          public void AddItem(Guid productId, int quantity, Money unitPrice) {
+              if (Status != OrderStatus.Draft)
+                  throw new DomainException("Cannot modify non-draft order");
+              
+              if (_items.Count >= 100)
+                  throw new DomainException("Maximum 100 items per order");
+              
+              var existing = _items.FirstOrDefault(i => i.ProductId == productId);
+              if (existing != null) {
+                  existing.IncreaseQuantity(quantity);
+              } else {
+                  _items.Add(new OrderItem(productId, quantity, unitPrice));
+              }
+              
+              AddDomainEvent(new ItemAddedToOrder(Id, productId, quantity));
+          }
+          
+          public void RemoveItem(Guid orderItemId) {
+              if (Status != OrderStatus.Draft)
+                  throw new DomainException("Cannot modify non-draft order");
+              
+              var item = _items.FirstOrDefault(i => i.Id == orderItemId);
+              if (item == null)
+                  throw new DomainException("Item not found");
+              
+              _items.Remove(item);
+              AddDomainEvent(new ItemRemovedFromOrder(Id, orderItemId));
+          }
+          
+          public void Confirm() {
+              if (Status != OrderStatus.Draft)
+                  throw new DomainException("Only draft orders can be confirmed");
+              
+              // Invariant: Must have items
+              if (!_items.Any())
+                  throw new DomainException("Cannot confirm order without items");
+              
+              // Invariant: Total must be positive
+              if (Total.Amount <= 0)
+                  throw new DomainException("Order total must be positive");
+              
+              Status = OrderStatus.Confirmed;
+              AddDomainEvent(new OrderConfirmed(Id, Total));
+          }
+          
+          public void Cancel() {
+              if (Status == OrderStatus.Cancelled)
+                  throw new DomainException("Order already cancelled");
+              
+              if (Status == OrderStatus.Shipped)
+                  throw new DomainException("Cannot cancel shipped order");
+              
+              Status = OrderStatus.Cancelled;
+              AddDomainEvent(new OrderCancelled(Id));
+          }
+      }
+      
+      public class OrderItem : Entity {
+          public Guid ProductId { get; private set; }
+          public int Quantity { get; private set; }
+          public Money UnitPrice { get; private set; }
+          public Money Subtotal => UnitPrice.Multiply(Quantity);
+          
+          internal OrderItem(Guid productId, int quantity, Money unitPrice) {
+              if (quantity <= 0)
+                  throw new ArgumentException("Quantity must be positive");
+              
+              Id = Guid.NewGuid();
+              ProductId = productId;
+              Quantity = quantity;
+              UnitPrice = unitPrice;
+          }
+          
+          internal void IncreaseQuantity(int amount) {
+              if (amount <= 0)
+                  throw new ArgumentException("Amount must be positive");
+              Quantity += amount;
+          }
+      }
+
+# =============================================================================
+# REPOSITORIES
+# =============================================================================
+
+repositories:
+  description: "Abstraction for aggregate persistence and retrieval"
+  
+  purpose:
+    - "Abstract persistence mechanism"
+    - "Provide collection-like interface"
+    - "Ensure aggregate integrity on load/save"
+    - "Support querying"
+    
+  characteristics:
+    - "One repository per aggregate root"
+    - "Methods work with complete aggregates"
+    - "Return domain objects, not DTOs"
+    - "Interface in domain layer, implementation in infrastructure"
+    
+  repository_interface:
+    csharp: |
+      // Domain layer - interface only
+      public interface IOrderRepository {
+          Task<Order> GetByIdAsync(Guid id);
+          Task<Order> GetByOrderNumberAsync(string orderNumber);
+          Task<IEnumerable<Order>> GetByCustomerIdAsync(Guid customerId);
+          Task AddAsync(Order order);
+          Task UpdateAsync(Order order);
+          Task DeleteAsync(Order order);
+      }
+      
+    implementation_notes:
+      - "Save entire aggregate, not individual entities"
+      - "Load entire aggregate, including children"
+      - "Use Unit of Work pattern for transaction management"
+      
+  repository_implementation:
+    entity_framework: |
+      // Infrastructure layer - implementation
+      public class OrderRepository : IOrderRepository {
+          private readonly AppDbContext _context;
+          
+          public OrderRepository(AppDbContext context) {
+              _context = context;
+          }
+          
+          public async Task<Order> GetByIdAsync(Guid id) {
+              return await _context.Orders
+                  .Include(o => o.Items)  // Load entire aggregate
+                  .FirstOrDefaultAsync(o => o.Id == id);
+          }
+          
+          public async Task<IEnumerable<Order>> GetByCustomerIdAsync(Guid customerId) {
+              return await _context.Orders
+                  .Include(o => o.Items)
+                  .Where(o => o.CustomerId == customerId)
+                  .ToListAsync();
+          }
+          
+          public async Task AddAsync(Order order) {
+              await _context.Orders.AddAsync(order);
+              await _context.SaveChangesAsync();
+              
+              // Dispatch domain events after persistence
+              await DispatchDomainEventsAsync(order);
+          }
+          
+          public async Task UpdateAsync(Order order) {
+              _context.Orders.Update(order);
+              await _context.SaveChangesAsync();
+              await DispatchDomainEventsAsync(order);
+          }
+          
+          private async Task DispatchDomainEventsAsync(Order order) {
+              var events = order.DomainEvents.ToList();
+              order.ClearDomainEvents();
+              
+              foreach (var @event in events) {
+                  await _mediator.Publish(@event);
+              }
+          }
+      }
+      
+  repository_patterns:
+    - pattern: "Specification Pattern"
+      description: "Encapsulate query logic in reusable specifications"
+      example: |
+        public interface ISpecification<T> {
+            Expression<Func<T, bool>> Criteria { get; }
+            List<Expression<Func<T, object>>> Includes { get; }
+        }
+        
+        public class RecentOrdersSpecification : ISpecification<Order> {
+            public RecentOrdersSpecification(int days) {
+                Criteria = o => o.CreatedDate >= DateTime.UtcNow.AddDays(-days);
+            }
+            
+            public Expression<Func<Order, bool>> Criteria { get; }
+            public List<Expression<Func<Order, object>>> Includes => 
+                new() { o => o.Items };
+        }
+        
+        // Usage
+        var spec = new RecentOrdersSpecification(30);
+        var orders = await repository.FindAsync(spec);
+
+# =============================================================================
+# DOMAIN SERVICES
+# =============================================================================
+
+domain_services:
+  description: "Stateless operations that don't naturally fit in entity or value object"
+  
+  when_to_use:
+    - "Operation involves multiple aggregates"
+    - "Complex calculation that doesn't belong to single entity"
+    - "Requires external resources (not persistence)"
+    
+  characteristics:
+    - "Stateless"
+    - "Named with verb (CalculateShipping, ValidateOrder)"
+    - "Lives in domain layer"
+    - "Uses domain objects as inputs/outputs"
+    
+  examples:
+    - name: "Transfer Money Between Accounts"
+      rationale: "Involves two Account aggregates"
+      implementation: |
+        public class MoneyTransferService {
+            private readonly IAccountRepository _accountRepo;
+            
+            public async Task TransferAsync(
+                Guid fromAccountId, 
+                Guid toAccountId, 
+                Money amount) 
+            {
+                var fromAccount = await _accountRepo.GetByIdAsync(fromAccountId);
+                var toAccount = await _accountRepo.GetByIdAsync(toAccountId);
+                
+                // Coordinate between aggregates
+                fromAccount.Withdraw(amount);
+                toAccount.Deposit(amount);
+                
+                await _accountRepo.UpdateAsync(fromAccount);
+                await _accountRepo.UpdateAsync(toAccount);
+                
+                // Better: Use domain event for eventual consistency
+                fromAccount.AddDomainEvent(
+                    new MoneyTransferred(fromAccountId, toAccountId, amount)
+                );
+            }
+        }
+        
+    - name: "Calculate Shipping Cost"
+      rationale: "Complex calculation using multiple inputs"
+      implementation: |
+        public class ShippingCalculator {
+            public Money CalculateShipping(
+                Address origin,
+                Address destination,
+                Weight packageWeight,
+                ShippingMethod method)
+            {
+                var distance = CalculateDistance(origin, destination);
+                var baseRate = GetBaseRate(method);
+                var weightSurcharge = CalculateWeightSurcharge(packageWeight);
+                
+                var total = baseRate.Add(weightSurcharge);
+                
+                // Apply distance multiplier
+                return total.Multiply(1 + (distance / 1000m) * 0.1m);
+            }
+        }
+
+# =============================================================================
+# FACTORIES
+# =============================================================================
+
+factories:
+  description: "Encapsulate complex aggregate creation logic"
+  
+  when_to_use:
+    - "Creation requires multiple steps"
+    - "Creation has complex validation"
+    - "Multiple creation paths exist"
+    
+  example: |
+    public class OrderFactory {
+        private readonly IProductRepository _productRepo;
+        private readonly IPricingService _pricingService;
+        
+        public async Task<Order> CreateFromCartAsync(Guid customerId, ShoppingCart cart) {
+            // Validate cart
+            if (!cart.Items.Any())
+                throw new DomainException("Cannot create order from empty cart");
+            
+            // Create order
+            var order = Order.Create(customerId);
+            
+            // Add items with current pricing
+            foreach (var cartItem in cart.Items) {
+                var product = await _productRepo.GetByIdAsync(cartItem.ProductId);
+                var price = await _pricingService.GetPriceAsync(
+                    product, 
+                    customerId, 
+                    cartItem.Quantity
+                );
+                
+                order.AddItem(product.Id, cartItem.Quantity, price);
+            }
+            
+            return order;
+        }
+    }
+
+# =============================================================================
+# ANTI-PATTERNS
+# =============================================================================
+
+anti_patterns:
+  - name: "Anemic Domain Model"
+    description: "Entities with no behavior, just getters/setters"
+    
+    symptoms:
+      - "All logic in service layer"
+      - "Entities are just DTOs"
+      - "Public setters everywhere"
+      
+    problem: "Loses benefits of DDD, hard to maintain invariants"
+    
+    solution: "Move logic into entities, use private setters, encapsulate state changes"
+    
+  - name: "God Aggregate"
+    description: "Aggregate containing too much"
+    
+    symptoms:
+      - "Aggregate with 10+ entities"
+      - "Hundreds of properties"
+      - "Unrelated responsibilities"
+      
+    problem: "Performance, contention, complexity"
+    
+    solution: "Break into multiple smaller aggregates"
+    
+  - name: "Transaction Script"
+    description: "Procedural code instead of domain model"
+    
+    example: |
+      // Transaction script - procedural
+      public class OrderService {
+          public void PlaceOrder(PlaceOrderRequest request) {
+              // All logic here, no domain model
+              var order = new Order { 
+                  Id = Guid.NewGuid(),
+                  CustomerId = request.CustomerId 
+              };
+              
+              foreach (var item in request.Items) {
+                  order.Items.Add(new OrderItem {
+                      ProductId = item.ProductId,
+                      Quantity = item.Quantity
+                  });
+              }
+              
+              order.Total = order.Items.Sum(i => i.Price * i.Quantity);
+              db.Orders.Add(order);
+              db.SaveChanges();
+          }
+      }
+      
+    solution: "Use rich domain model with behavior in entities"
+
+# =============================================================================
+# BEST PRACTICES
+# =============================================================================
+
+best_practices:
+  - practice: "Design Aggregates Around Invariants"
+    rationale: "Aggregate boundary = transactional consistency boundary"
+    guideline: "What must be consistent in single transaction?"
+    
+  - practice: "Keep Aggregates Small"
+    rationale: "Smaller = less contention, better performance"
+    guideline: "Single entity aggregates when possible"
+    
+  - practice: "Reference by ID, Not Object"
+    rationale: "Avoids loading entire object graphs"
+    implementation: "Store Guid customerId, not Customer customer"
+    
+  - practice: "Eventual Consistency Between Aggregates"
+    rationale: "Allows scaling, reduces contention"
+    implementation: "Use domain events for cross-aggregate updates"
+    
+  - practice: "Encapsulate Collections"
+    rationale: "Prevents external modification"
+    implementation: |
+      // Wrong
+      public List<OrderItem> Items { get; set; }
+      
+      // Right
+      private readonly List<OrderItem> _items = new();
+      public IReadOnlyList<OrderItem> Items => _items.AsReadOnly();
+      
+  - practice: "Factory Methods on Aggregate Root"
+    rationale: "Ensures valid initial state"
+    implementation: |
+      // Static factory method
+      public static Order Create(Guid customerId) {
+          var order = new Order {
+              Id = Guid.NewGuid(),
+              CustomerId = customerId,
+              Status = OrderStatus.Draft
+          };
+          order.AddDomainEvent(new OrderCreated(order.Id));
+          return order;
+      }
+      
+  - practice: "Separate Domain and Persistence Models"
+    rationale: "Domain focused on behavior, persistence on storage"
+    approach: "Map between domain entities and EF entities if needed"
