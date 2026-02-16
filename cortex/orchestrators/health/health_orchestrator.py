@@ -135,7 +135,8 @@ class HealthOrchestrator:
         
         # Run each agent
         for agent in agents_to_run:
-            if not agent.is_enabled():
+            # Skip disabled agents AND check orchestrator enabled status
+            if not self.enabled or not agent.is_enabled():
                 continue
             
             try:
