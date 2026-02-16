@@ -20,7 +20,7 @@ Author: Asif Hussain
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 import yaml
 
@@ -191,6 +191,80 @@ class WorkflowTemplateRegistry:
         return templates
 
     def resolve_placeholders(
+        self, template: Union[str, Dict[str, Any]], mode: str
+    ) -> Union[str, Dict[str, Any]]:
+        """
+        Resolve placeholders in template using mode-specific knowledge.
+
+        Supports both string templates and dictionary templates.
+
+        Args:
+            template: Template text or dictionary with {{placeholder}} markers.
+            mode: ARCHITECT or PRODUCTION mode.
+
+        Returns:
+            Resolved template (string or dict) with placeholders replaced.
+
+        Raises:
+            PlaceholderResolutionError: If placeholder cannot be resolved.
+        """
+        # Get knowledge context for mode
+        context = self._get_knowledge_context(mode)
+
+        # Handle string templates
+        if isinstance(template, str):
+            return self._resolve_template_text(template, context)
+
+        # Handle dictionary templates
+        if isinstance(template, dict):
+            resolved = {}
+            for key, value in template.items():
+                if isinstance(value, str):
+                    resolved[key] = self._resolve_template_text(value, context)
+                elif isinstance(value, dict):
+                    resolved[key] = self.resolve_placeholders(value, mode)
+                elif isinstance(value, list):
+                    resolved[key] = [
+                        self._resolve_template_text(item, context)
+                        if isinstance(item, str)
+                        else item
+                        for item in value
+                    ]
+                else:
+                    resolved[key] = value
+            return resolved
+
+        return template
+
+    def _get_knowledge_context(self, mode: str) -> Dict[str, Any]:
+        """
+        Get knowledge context for specified mode.
+
+        Args:
+            mode: ARCHITECT or PRODUCTION mode.
+
+        Returns:
+            Knowledge context dictionary with placeholders.
+        """
+        if mode == "ARCHITECT":
+            return {
+                "test_framework": "pytest",
+                "api_framework": "FastAPI",
+                "core_rules": "CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)",
+                "orchestrator_pattern": "CORTEX orchestrator pattern",
+                "knowledge_source": "cortex-registry/patterns/",
+                "governance_orchestrator": "EnforcementOrchestrator",
+                "coverage_target": "95%",
+            }
+        else:  # PRODUCTION mode
+            return {
+                "test_framework": "Jest",  # Default, overridden by profile
+                "api_framework": "Express",
+                "knowledge_source": "company/domains/",
+                "coverage_target": "80%",
+            }
+
+    def _resolve_template_text(
         self, template_text: str, context: Dict[str, Any]
     ) -> str:
         """
