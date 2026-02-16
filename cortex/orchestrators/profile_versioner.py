@@ -35,7 +35,7 @@ class ProfileVersioner:
 
         Args:
             project: Project name.
-            profile: Profile identifier (e.g. 'finops-v1.0').
+            profile: Profile identifier (e.g. 'finops').
         """
         self._tracked[project] = {
             "profile": profile,

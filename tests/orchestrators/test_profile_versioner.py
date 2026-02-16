@@ -17,11 +17,11 @@ class TestProfileVersionerTracking:
         from cortex.orchestrators.profile_versioner import ProfileVersioner
         
         versioner = ProfileVersioner(tmp_path)
-        versioner.track_profile("KASHKOLE", "finops-v1.0")
+        versioner.track_profile("KASHKOLE", "finops")
         
         tracked = versioner.get_applied_profile("KASHKOLE")
         
-        assert tracked["profile"] == "finops-v1.0"
+        assert tracked["profile"] == "finops"
         assert "applied_at" in tracked
 
     def test_detect_profile_updates(self, tmp_path):
@@ -29,7 +29,7 @@ class TestProfileVersionerTracking:
         from cortex.orchestrators.profile_versioner import ProfileVersioner
         
         versioner = ProfileVersioner(tmp_path)
-        versioner.track_profile("KASHKOLE", "finops-v1.0")
+        versioner.track_profile("KASHKOLE", "finops")
         
         # Mock available profiles including v1.1
         with patch.object(versioner, '_get_available_versions') as mock:

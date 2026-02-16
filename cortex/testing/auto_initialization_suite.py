@@ -277,7 +277,7 @@ class AutoInitializationSuite:
                 tier0_rules=True,
                 tier1_domains=["security", "compliance"],
                 tier2_contexts=["production", "sensitive-data"],
-                tier3_profiles=["healthcare-v1.0"]
+                tier3_profiles=["healthcare"]
             )
 
             # Verify governance evaluation

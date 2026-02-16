@@ -18,10 +18,10 @@ _DEVOPS_KEYWORDS = {"ci.yml", "ci.yaml", "deploy.yml", "cd.yml"}
 
 # Available profiles catalog
 _PROFILES = [
-    {"name": "finops-v1.0", "description": "Financial operations governance", "domain": "finops"},
-    {"name": "auth-v1.0", "description": "Authentication / session governance", "domain": "auth"},
-    {"name": "ml-v1.0", "description": "Machine learning governance", "domain": "ml"},
-    {"name": "devops-v1.0", "description": "DevOps / CI-CD governance", "domain": "devops"},
+    {"name": "finops", "description": "Financial operations governance", "domain": "finops"},
+    {"name": "auth", "description": "Authentication / session governance", "domain": "auth"},
+    {"name": "ml", "description": "Machine learning governance", "domain": "ml"},
+    {"name": "devops", "description": "DevOps / CI-CD governance", "domain": "devops"},
     {"name": "web-v1.0", "description": "Web application governance", "domain": "web"},
     {"name": "api-v1.0", "description": "API service governance", "domain": "api"},
     {"name": "general-v1.0", "description": "General-purpose governance", "domain": "general"},
@@ -132,7 +132,7 @@ class ProfileWizard:
         """Apply a profile to tier1 directory.
 
         Args:
-            profile: Profile identifier (e.g. 'finops-v1.0').
+            profile: Profile identifier (e.g. 'finops').
 
         Returns:
             Dict with 'success'.
