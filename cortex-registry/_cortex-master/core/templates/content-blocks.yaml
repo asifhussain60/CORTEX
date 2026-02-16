@@ -166,13 +166,29 @@ blocks:
   orchestrators:
     id: "BLOCK-ORCHESTRATORS"
     name: "Orchestrator Summary"
-    length_words: "variable (show 3-5 relevant, expandable to 28)"
+    length_words: 200
     purpose: "Explain orchestrator system with context-aware selection"
     
     format:
       structure: "intro + table + expansion_link"
       table_columns: "Orchestrator | Purpose | Trigger Commands"
       icons: "🎼 for header"
+      vscode_rendering:
+        header_style: "Bold with emoji (🎼 **Text**)"
+        tier_headers: "Bold subheadings (🔧 **Core Orchestrators (8)**)"
+        list_format: "Bullet list with dashes, not tree chars"
+        flow_diagram: "Use markdown code block (```) not ASCII art"
+        table_compact: "Markdown table for summary (5-row max)"
+    
+    personality_guidelines:
+      tone: "Educational, systematic, modular architecture focus"
+      key_message: "28 specialized teams, each with one job, coordinated centrally"
+      key_characteristics:
+        - "emphasizes modularity and extensibility"
+        - "explains coordination model clearly"
+        - "shows how pieces fit together"
+        - "accessible to non-architects"
+      teaching_opportunity: "Help users understand scalable system design"
     
     orchestrators_registry:
       core:
@@ -222,27 +238,62 @@ blocks:
           triggers: ["/onboard"]
           personality_tags: ["security-first", "p0-p1-p2-scans", "lens-analysis"]
     
-    content_template_compact: |
-      🎼 **Orchestrator System**
+    content_template: |
+      🎼 **CORTEX Orchestrator Architecture**
       
-      CORTEX uses 28 specialized orchestrators for different operations:
+      Think of orchestrators as **specialized teams** — each owns one domain, teams coordinate through a central hub.
       
-      | Orchestrator | Purpose | Commands |
-      |--------------|---------|----------|
-      | **TDDOrchestrator** | Test-first implementation | `/implement`, `/fix` |
-      | **LENSSynthesis** | Code intelligence analysis | `/analyze`, `/lens` |
-      | **PlanOrchestrator** | Phase management | `/plan` |
-      | **RefactoringOrchestrator** | Code quality improvement | `/refactor` |
-      | **EnforcementOrchestrator** | Governance (7 agents) | auto |
+      **3 Tiers (28 Total):**
       
-      **28 total:** 8 core, 6 domain, 14 support  
-      **Commands:** `/recall orchestrators` for full list
+      **🔧 Core Orchestrators (8)**
+      - **MasterOrchestrator** — Central hub (entry point for all requests)
+      - **TDDOrchestrator** — Test-first implementation (RED→GREEN→REFACTOR)
+      - **LENSSynthesis** — Intelligent code analysis (4 layers)
+      - **EnforcementOrchestrator** — Governance + compliance (7 agents)
+      - **PlanOrchestrator** — Phase lifecycle management
+      - **IntentRouter** — Intent classification (IMPLEMENT/ANALYZE/etc.)
+      - **InteractionOrchestrator** — User interface + decision gates
+      - **RefactoringOrchestrator** — Semantic code improvement
+      
+      **📊 Domain Orchestrators (6)**
+      - RepositoryOnboardingOrchestrator — Security scan + LENS analysis
+      - DebuggerOrchestrator — Smart debugging + marker injection
+      - ChallengeEngine — Design reviews + disagreement detection
+      - ToolDiscoveryOrchestrator — Feature exploration
+      - OnboardingOrchestrator — Setup guidance
+      - EducationalOrchestrator — Learning content + tutorials
+      
+      **🔌 Support Orchestrators (14)**
+      - Intelligence gathering, validation, caching, metrics, templates, etc.
+      
+      **Request Flow:**
+      
+      ```
+      User Request
+          ↓
+      MasterOrchestrator (coordinator)
+          ├─ Stage 1: Gather requirements + DoR gate
+          ├─ Stage 2: Classify intent (IMPLEMENT/ANALYZE/etc.)
+          ├─ Stage 3: Analyze code context (LENS)
+          └─ Stage 4: Execute domain handler
+          ↓
+      Result + Audit Trail
+      ```
+      
+      **Why This Design?**
+      - Each orchestrator owns one domain (no spaghetti code)
+      - Central coordinator ensures consistency
+      - New features = add new orchestrator (modular)
+      - Audit trail visible (every step logged)
+      - Easy to understand, reason about, extend
+      
+      Your request typically touches 3-5 orchestrators depending on complexity.
     
     usage_rules:
-      - "Show 3-5 most relevant orchestrators by default"
-      - "Smart selection based on user context"
-      - "Always offer expansion link to full 28"
-      - "Combine with CAPABILITIES for overview"
+      - "Show when user asks 'how does CORTEX work?' (technical depth)"
+      - "Show when user asks about 'orchestrators'"
+      - "Can combine with CAPABILITIES for complete architecture view"
+      - "Not for first-time users (combine with INTRO instead)"
 
   tutorial:
     id: "BLOCK-TUTORIAL"
@@ -253,6 +304,12 @@ blocks:
     format:
       structure: "numbered_steps + expected_output + success_criteria"
       icons: "🚀 for header"
+      vscode_rendering:
+        header_style: "Bold with emoji (🚀 **Text**)"
+        step_numbering: "1️⃣ 2️⃣ 3️⃣ (emoji numbers, not plain)"
+        code_blocks: "``` for shell commands (syntax highlight)"
+        success_format: "Checkboxes (✅ for pass, ⚪ for pending)"
+        spacing: "2 blank lines between major steps"
     
     content_template: |
       🚀 **Quick Start (5 Minutes)**
@@ -297,6 +354,12 @@ blocks:
     format:
       structure: "checklist + verification_commands + troubleshooting"
       icons: "⚙️ for header"
+      vscode_rendering:
+        header_style: "Bold with emoji (⚙️ **Text**)"
+        checklist: "Markdown checkboxes (- [ ], - [x])"
+        code_blocks: "``` for commands (bash syntax)"
+        table_format: "Problem | Solution (2 columns, compact)"
+        callout_format: "Bold for categories (e.g., **1. Install Dependencies**)"
     
     content_template: |
       ⚙️ **First-Time Setup**
@@ -360,6 +423,12 @@ blocks:
       structure: "numbered_options + commands"
       icons: "🎯 for header"
       max_options: 3
+      vscode_rendering:
+        header_style: "Bold separator (🎯 **Next Steps**)"
+        option_format: "Numbered (1️⃣ 2️⃣ 3️⃣) with inline code for commands"
+        command_format: "`/command` in backticks (copy-paste ready)"
+        description_style: "Concise (one-liner per option)"
+        spacing: "No blank lines between options (compact)"
     
     context_rules:
       after_intro:
@@ -413,7 +482,7 @@ blocks:
 assembly_rules:
   first_time_user:
     blocks: ["intro", "capabilities", "tutorial", "next_steps"]
-    total_words: ~530
+    total_words: 530
     use_case: "New user, first interaction"
     validation:
       no_duplicate_concepts: true
@@ -421,27 +490,27 @@ assembly_rules:
   
   query_capabilities:
     blocks: ["capabilities", "orchestrators", "next_steps"]
-    total_words: ~380
+    total_words: 380
     use_case: "User asks 'what can CORTEX do?'"
   
   query_lens:
     blocks: ["lens", "next_steps"]
-    total_words: ~230
+    total_words: 230
     use_case: "User asks 'what is LENS?' or 'explain LENS'"
   
   query_orchestrators:
     blocks: ["orchestrators", "capabilities", "next_steps"]
-    total_words: ~380
+    total_words: 480
     use_case: "User asks about orchestrators"
   
   query_getting_started:
     blocks: ["tutorial", "onboarding", "next_steps"]
-    total_words: ~330
+    total_words: 330
     use_case: "User asks 'how do I start?'"
   
   setup_required:
     blocks: ["onboarding", "tutorial", "next_steps"]
-    total_words: ~330
+    total_words: 330
     use_case: "MCP not available, needs setup"
   
   autonomous_execution:
@@ -502,7 +571,7 @@ compatibility:
   
   lens:
     pairs_well_with: ["next_steps"]
-    avoid_with: ["intro", "capabilities"]  # Focused, not comprehensive
+    avoid_with: ["intro", "capabilities", "tutorial"]  # Focused, not comprehensive
   
   orchestrators:
     pairs_well_with: ["capabilities", "next_steps"]
