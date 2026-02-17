@@ -1,0 +1,45 @@
+---
+id: tier1-common-utilities-overview
+title: Tier 1 Common Utilities Architecture
+purpose: Shows the foundational utility modules that all CORTEX components depend on
+audience: [Software Developers, Product Owners]
+source_of_truth: cortex/common/__init__.py
+last_verified: v10.0
+diagram_type: C4-Component
+interactive: false
+tier: 1
+learning_sequence: 01
+related_diagrams:
+  - tier1-dependency-graph.mmd
+  - tier2-infrastructure-foundation.mmd
+---
+
+```mermaid
+graph TB
+    subgraph "Common Utilities Layer (Tier 1)"
+        validators[Validators<br/>Schema validation<br/>Type checking]
+        exceptions[Exception Hierarchy<br/>CortexError<br/>ValidationError]
+        fileops[File Operations<br/>Safe I/O<br/>Path abstractions]
+        logging[Structured Logging<br/>Correlation IDs<br/>Context propagation]
+    end
+    
+    subgraph "Dependent Modules"
+        models[02-Models]
+        config[03-Config]
+        storage[04-Storage]
+        infrastructure[08-Infrastructure]
+    end
+    
+    validators --> models
+    validators --> config
+    exceptions --> models
+    exceptions --> infrastructure
+    fileops --> storage
+    fileops --> config
+    logging --> infrastructure
+    
+    style validators fill:#4A90E2,stroke:#2E5C8A,stroke-width:2px,color:#fff
+    style exceptions fill:#4A90E2,stroke:#2E5C8A,stroke-width:2px,color:#fff
+    style fileops fill:#4A90E2,stroke:#2E5C8A,stroke-width:2px,color:#fff
+    style logging fill:#4A90E2,stroke:#2E5C8A,stroke-width:2px,color:#fff
+```

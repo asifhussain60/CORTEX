@@ -74,6 +74,8 @@
 - **BLUF business guide generation** (5-minute CTO summaries)
 - **Progressive disclosure** content structuring
 - **Accessible heading generation** (no technical jargon)
+- **Tier-based diagram discovery** (progressive learning path)
+- **Diagram path resolution** from `cortex-docs/assets/diagrams/`
 - Mermaid-first visualizations (80-90% coverage)
 - Selective D3.js (4 approved interactive diagrams only)
 - Multi-persona documentation with blended insights

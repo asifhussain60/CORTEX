@@ -235,6 +235,21 @@ diagram_selection:
 
 ### Diagram Metadata Standard
 
+**DIAGRAM SSOT:** All diagrams stored in `cortex-docs/assets/diagrams/` with tier-based organization.
+
+**Directory Structure:**
+```
+cortex-docs/assets/diagrams/
+├── tier1-foundational/      # Modules 01-07
+├── tier2-core-systems/      # Modules 08-12, 19, 25-26, 34
+├── tier3-intelligence/      # Modules 14-24, 27-33
+├── tier4-infrastructure/    # Modules 29-42
+├── c4-context/              # System context diagrams
+├── c4-container/            # Container architecture
+├── c4-component/            # Component internals
+└── interactive/             # D3.js diagrams (max 4)
+```
+
 **Every diagram MUST include this YAML frontmatter:**
 
 ```yaml
@@ -247,6 +262,11 @@ source_of_truth: Link to wiring contract/registry file
 last_verified: Release tag or CI build ID
 diagram_type: [C4-Context | C4-Container | C4-Component | Sequence | Flowchart | State | Class | Mindmap]
 interactive: false  # true if D3, false if static Mermaid
+tier: [1 | 2 | 3 | 4 | all]  # Learning tier (NEW)
+learning_sequence: [01-42]   # Module number (NEW)
+related_diagrams:             # (NEW)
+  - tier1-bootstrap-flow.mmd
+  - c4-container-layer.mmd
 word_count: 0  # Auto-computed by tooling
 ---
 

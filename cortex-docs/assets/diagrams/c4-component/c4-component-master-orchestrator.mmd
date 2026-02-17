@@ -1,0 +1,66 @@
+---
+id: c4-component-master-orchestrator
+title: Master Orchestrator Internal Components
+purpose: Detailed view of Master Orchestrator's internal structure and routing logic
+audience: [Software Developers]
+source_of_truth: cortex/orchestrators/master_orchestrator.py
+last_verified: v10.0
+diagram_type: C4-Component
+interactive: false
+tier: 3
+learning_sequence: 23
+related_diagrams:
+  - tier3-orchestrator-dispatch-flow.mmd
+  - c4-container-full-system.mmd
+---
+
+```mermaid
+graph TB
+    subgraph "Master Orchestrator Components"
+        Entry[Request Entry Point]
+        Validator[Request Validator]
+        IntentClass[Intent Classifier]
+        Router[Orchestrator Router]
+        Registry[Orchestrator Registry]
+        Dispatcher[Execution Dispatcher]
+        LearningMixin[Learning Mixin]
+        ErrorHandler[Error Handler]
+    end
+    
+    subgraph "External Dependencies"
+        IntentRouter[Intent Router Service]
+        GovEngine[Governance Engine]
+        BrainService[CORTEX Brain]
+        MCPGateway[MCP Gateway]
+    end
+    
+    subgraph "Target Orchestrators"
+        Onboard[OnboardingOrchestrator]
+        TDD[TDDOrchestrator]
+        Plan[PlanningOrchestrator]
+        Domain[Domain Orchestrators]
+    end
+    
+    Entry --> Validator
+    Validator --> IntentClass
+    IntentClass --> IntentRouter
+    IntentRouter --> Router
+    Router --> Registry
+    Registry --> Dispatcher
+    Dispatcher --> GovEngine
+    GovEngine --> Dispatcher
+    Dispatcher --> Onboard
+    Dispatcher --> TDD
+    Dispatcher --> Plan
+    Dispatcher --> Domain
+    Dispatcher --> LearningMixin
+    LearningMixin --> BrainService
+    Dispatcher -.error.-> ErrorHandler
+    ErrorHandler -.retry.-> Dispatcher
+    MCPGateway --> Entry
+    
+    style Entry fill:#50C878,stroke:#2E7D4E,stroke-width:2px,color:#fff
+    style Router fill:#F39C12,stroke:#B8730F,stroke-width:3px,color:#fff
+    style Dispatcher fill:#4A90E2,stroke:#2E5C8A,stroke-width:3px,color:#fff
+    style LearningMixin fill:#9B59B6,stroke:#7D3C98,stroke-width:2px,color:#fff
+```

@@ -397,7 +397,8 @@ npx esbuild assets/js/*.js --bundle --minify --outdir=docs/assets/js/
 
 **Embed D3.js Visualizations:**
 ```javascript
-// d3-diagrams.js wrapper
+// Diagram embedding from cortex-docs/assets/diagrams/
+// Supports tier-based organization and progressive disclosure
 function embedArchitectureDiagram(containerId, dataUrl) {
     d3.json(dataUrl).then(data => {
         const svg = d3.select(`#${containerId}`)
