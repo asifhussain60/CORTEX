@@ -136,6 +136,8 @@ def registry_test_dir(tmp_path: Path) -> Path:
     # Create knowledge-base structure
     (test_dir / "knowledge-base" / "architecture").mkdir(parents=True)
     (test_dir / "knowledge-base" / "security").mkdir(parents=True)
+    (test_dir / "knowledge-base" / "governance").mkdir(parents=True)
+    (test_dir / "knowledge-base" / "profiles").mkdir(parents=True)
     
     # Create metrics structure
     (test_dir / "metrics" / "baselines").mkdir(parents=True)
@@ -967,6 +969,90 @@ class TestKnowledgeBaseYAML:
             status="SUCCESS",
             test_name="test_create_security_knowledge_yaml",
         )
+    
+    def test_create_governance_knowledge_yaml(
+        self,
+        registry_test_dir: Path,
+        registry_audit_db: Path,
+    ) -> None:
+        """Test creating governance knowledge YAML (Phase 104).
+        
+        AC: AC-PHASE104-REG-001
+        """
+        file_path = registry_test_dir / "knowledge-base" / "governance" / "test-security-rules.yaml"
+        
+        content = {
+            "version": "1.0",
+            "domain": "security",
+            "rules": [
+                {"id": "SEC-001", "description": "Enforce HTTPS"},
+                {"id": "SEC-002", "description": "Validate input"},
+            ],
+        }
+        
+        with open(file_path, "w") as f:
+            yaml.safe_dump(content, f)
+        
+        log_registry_operation(
+            db_path=registry_audit_db,
+            operation="CREATE",
+            file_path=str(file_path),
+            registry_folder="knowledge-base/governance",
+            status="SUCCESS",
+            test_name="test_create_governance_knowledge_yaml",
+        )
+        
+        file_path.unlink()
+        log_registry_operation(
+            db_path=registry_audit_db,
+            operation="DELETE",
+            file_path=str(file_path),
+            registry_folder="knowledge-base/governance",
+            status="SUCCESS",
+            test_name="test_create_governance_knowledge_yaml",
+        )
+    
+    def test_create_profiles_knowledge_yaml(
+        self,
+        registry_test_dir: Path,
+        registry_audit_db: Path,
+    ) -> None:
+        """Test creating domain profiles knowledge YAML (Phase 104).
+        
+        AC: AC-PHASE104-REG-002
+        """
+        file_path = registry_test_dir / "knowledge-base" / "profiles" / "test-devops.yaml"
+        
+        content = {
+            "version": "1.0",
+            "profile": "devops",
+            "capabilities": [
+                {"name": "CI/CD", "tools": ["Jenkins", "GitHub Actions"]},
+                {"name": "Monitoring", "tools": ["Prometheus", "Grafana"]},
+            ],
+        }
+        
+        with open(file_path, "w") as f:
+            yaml.safe_dump(content, f)
+        
+        log_registry_operation(
+            db_path=registry_audit_db,
+            operation="CREATE",
+            file_path=str(file_path),
+            registry_folder="knowledge-base/profiles",
+            status="SUCCESS",
+            test_name="test_create_profiles_knowledge_yaml",
+        )
+        
+        file_path.unlink()
+        log_registry_operation(
+            db_path=registry_audit_db,
+            operation="DELETE",
+            file_path=str(file_path),
+            registry_folder="knowledge-base/profiles",
+            status="SUCCESS",
+            test_name="test_create_profiles_knowledge_yaml",
+        )
 
 
 # ============================================================================
@@ -1047,6 +1133,8 @@ class TestRegistryAuditEvidence:
             ("integration/patterns", "test-pat.yaml"),
             ("planning/phases/planned", "test-phase.yaml"),
             ("knowledge-base/architecture", "test-arch.yaml"),
+            ("knowledge-base/governance", "test-kb-gov.yaml"),
+            ("knowledge-base/profiles", "test-kb-prof.yaml"),
             ("metrics/status", "test-status.yaml"),
         ]
         
