@@ -1455,6 +1455,11 @@ execution_summary:
       - "post-s14-testing (before documentation)"
       - "phase-103-complete (after S17)"
     recovery_time: "5 minutes max per rollback"
+
+registry_structure:
+  sections:
+    - section_id: core
+      title: "core/ - System Foundation"
       what: "4 subdirs: governance/, config/, wiring/, specifications/"
       why: "Immutable system foundation - CORE rules, master config, orchestrator contracts, flow specs"
       when: "Start here when debugging governance violations, orchestrator wiring issues, or flow routing problems"

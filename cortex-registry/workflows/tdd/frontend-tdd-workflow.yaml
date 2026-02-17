@@ -359,11 +359,11 @@ quality_loops:
       - 'cortex-id format validation (XSS prevention)'
       - 'No secrets in workflow parameters'
       - 'Deployment uses HTTPS only'
-  
-  review_requirements:
-    min_loops_executed: 3
-    confidence_threshold: 0.95
-    blocker_threshold: 0  # Zero blockers allowed
+
+review_requirements:
+  min_loops_executed: 3
+  confidence_threshold: 0.95
+  blocker_threshold: 0  # Zero blockers allowed
 
 # ============================================================================
 # PARAMETERS SCHEMA
