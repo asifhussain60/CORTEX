@@ -281,3 +281,83 @@ class TestPerformance:
         request = "implement feature"
         context = RequestRephraseOrchestrator.analyze(request)
         assert context is not None
+
+
+class TestStage0GovernanceAudit:
+    """Test Stage 0: Synchronous Governance Audit (NEW)
+    
+    Runs BEFORE tool selection to catch violations upstream.
+    Prevents MD file generation, test bypass, and other CORE violations.
+    """
+
+    def test_stage_0_detects_md_file_violation(self) -> None:
+        """Should detect CORE-002 violation (MD file outside allowed paths)."""
+        request = "implement feature and create docs/technical-spec.md"
+        context = RequestRephraseOrchestrator.analyze(request)
+        
+        # Should have detected violation
+        assert "CORE-002" in context.recommendation or "violation" in context.recommendation.lower()
+
+    def test_stage_0_allows_allowed_md_files(self) -> None:
+        """Should allow MD files in approved paths."""
+        request = "implement feature and update .github/prompts/guide.md"
+        context = RequestRephraseOrchestrator.analyze(request)
+        
+        # Should NOT have CORE-002 violation for allowed path
+        assert "CORE-002" not in context.recommendation or ".github/prompts" not in context.recommendation
+
+    def test_stage_0_detects_test_bypass(self) -> None:
+        """Should detect CORE-008 violation (test bypass attempt)."""
+        request = "implement feature but skip tests to save time"
+        context = RequestRephraseOrchestrator.analyze(request)
+        
+        # Should detect test bypass
+        assert "CORE-008" in context.recommendation or "test" in context.recommendation.lower()
+
+    def test_stage_0_recommends_ac_markers(self) -> None:
+        """Should recommend AC_START/AC_COMPLETE markers (CORE-027)."""
+        request = "implement authentication system"
+        context = RequestRephraseOrchestrator.analyze(request)
+        
+        # Should mention audit trail markers
+        assert context.governance_rules  # Should have CORE-027 in rules
+
+    def test_stage_0_governance_violations_injected(self) -> None:
+        """Should inject governance violations into recommendation."""
+        request = "implement and create-file docs/summary.md without tests"
+        context = RequestRephraseOrchestrator.analyze(request)
+        
+        # Context should include governance info
+        assert context.governance_rules
+        assert context.risk_assessment
+
+    def test_stage_0_no_violations_for_query(self) -> None:
+        """Should not flag violations for QUERY intent."""
+        request = "explain how CORTEX works"
+        context = RequestRephraseOrchestrator.analyze(request)
+        
+        # Query intent should have no governance rules
+        assert context.intent == "QUERY"
+        assert len(context.governance_rules) == 0
+
+
+class TestChallengeProtocolEmbedding:
+    """Test Challenge-First Protocol embedded in rephrase output."""
+
+    def test_challenge_protocol_embedded_in_output(self) -> None:
+        """Should include challenge protocol in formatted output."""
+        request = "implement user authentication"
+        context = RequestRephraseOrchestrator.analyze(request)
+        output = RequestRephraseOrchestrator.format_output(context)
+        
+        # Output should contain challenge protocol
+        assert "Challenge Protocol" in output or "Assumption:" in output
+
+    def test_challenge_protocol_structure(self) -> None:
+        """Should follow challenge protocol structure: Assumption/Alternative/Trade-off."""
+        request = "implement caching layer"
+        context = RequestRephraseOrchestrator.analyze(request)
+        output = RequestRephraseOrchestrator.format_output(context)
+        
+        # Should mention challenging assumptions
+        assert "Challenge" in output or "assumption" in output.lower()

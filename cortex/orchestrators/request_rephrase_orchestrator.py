@@ -140,7 +140,7 @@ def measure_confidence(request: str) -> float:
     return max(0.0, min(1.0, confidence))
 
 
-# STEP 2: Governance Rule Injection
+# STEP 2: Governance Rule Injection (Stage 0 - Synchronous Audit)
 GOVERNANCE_RULES = {
     "IMPLEMENT": ["CORE-002", "CORE-008", "CORE-011", "CORE-012", "CORE-049"],
     "FIX": ["CORE-008", "CORE-025", "CORE-027"],
@@ -165,6 +165,25 @@ RULE_EXPLANATIONS = {
     "CORE-042": "Hierarchical Terminology - PHASE→STAGE→TASK",
     "CORE-048": "Holistic Validation Gate",
     "CORE-049": "Silent Autonomous Execution",
+}
+
+# Stage 0 Governance Audit Checks
+GOVERNANCE_AUDIT_CHECKS = {
+    "CORE-002": {
+        "name": "File Generation Scope",
+        "check": lambda scope: scope not in ["docs", "reports"] or scope.startswith(".github"),
+        "violation": "Requesting MD file outside allowed paths (.github/prompts/, .github/agents/, README.md)",
+    },
+    "CORE-008": {
+        "name": "TDD Enforcement",
+        "check": lambda scope: True,  # Always applicable for implementation
+        "violation": "TDD coverage requirement not met (tests must precede code)",
+    },
+    "CORE-049": {
+        "name": "Silent Execution",
+        "check": lambda scope: True,
+        "violation": "Request requires mid-execution approval (enable silent mode)",
+    },
 }
 
 
@@ -415,11 +434,20 @@ def format_rephrase_output(context: RephraseContext) -> str:
 
 
 class RequestRephraseOrchestrator:
-    """Main orchestrator for request rephrase."""
+    """Main orchestrator for request rephrase.
+    
+    Stage -1: Async context pre-fetch (Phase 49 CCL)
+    Stage 0: Synchronous governance audit (NEW)
+      - CORE-002 file generation checks
+      - Governance rule validation
+      - Challenge-first protocol embedded
+      - Auto-inject violations into rephrase output
+    Stage 1+: IntentRouter proceeds (blocked if Stage 0 violations detected)
+    """
 
     @staticmethod
     def analyze(request: str) -> RephraseContext:
-        """Execute full rephrase pipeline."""
+        """Execute full rephrase pipeline with Stage 0 governance audit."""
         # Step 1: Parse intent
         intent = parse_primary_intent(request)
         scope = extract_scope(request)
@@ -427,6 +455,9 @@ class RequestRephraseOrchestrator:
         
         # Step 2: Governance rules
         governance_rules = lookup_governance_rules(intent, scope)
+        
+        # Step 2.5: STAGE 0 - Synchronous Governance Audit (NEW)
+        governance_violations = _run_stage_0_audit(request, intent, scope, governance_rules)
         
         # Step 3: Architecture context
         orchestrator = identify_orchestrator(intent)
@@ -444,18 +475,27 @@ class RequestRephraseOrchestrator:
         risk_assessment = {
             "Breaking Risk": breaking_risk,
             "Dependencies": len(dependencies),
+            "Governance Violations": len(governance_violations),
         }
         
-        # Step 5: Challenge-first evaluation
+        # Step 5: Challenge-first evaluation (with governance tensions)
         pillar_scores = evaluate_pillars(intent, scope)
-        challenge_detected = intent in ["DESIGN", "PLAN"]
+        challenge_detected = intent in ["DESIGN", "PLAN"] or len(governance_violations) > 0
         
-        # Generate recommendation
-        recommendation = (
-            f"Route through {orchestrator} with {len(governance_rules)} governance rules. "
-            f"No alternatives needed (single best approach). "
-            f"Async pre-processor, Stage -1 integration."
-        )
+        # Generate recommendation (with governance violations injected)
+        if governance_violations:
+            recommendation = (
+                f"⚠️ GOVERNANCE VIOLATIONS DETECTED during Stage 0 audit.\n"
+                f"Violations: {', '.join(governance_violations)}\n"
+                f"Action: Address violations before proceeding, OR provide override reason.\n"
+                f"Orchestrator: {orchestrator} (when violations cleared)"
+            )
+        else:
+            recommendation = (
+                f"Route through {orchestrator} with {len(governance_rules)} governance rules. "
+                f"No alternatives needed (single best approach). "
+                f"Async pre-processor, Stage -1 integration."
+            )
         
         return RephraseContext(
             intent=intent,
@@ -471,8 +511,19 @@ class RequestRephraseOrchestrator:
 
     @staticmethod
     def format_output(context: RephraseContext) -> str:
-        """Format context for display."""
-        return format_rephrase_output(context)
+        """Format context for display with challenge protocol."""
+        output = format_rephrase_output(context)
+        
+        # Append challenge protocol to every rephrase output
+        challenge_protocol = (
+            "\n\n---\n\n"
+            "**Challenge Protocol (Stage 0 - Embedded):** "
+            "Before proceeding, identify ONE key assumption in the request above that might be incorrect or suboptimal. "
+            "Present an alternative approach that could yield better outcomes. "
+            "Structure as: \"Assumption: [X]. Alternative: [Y]. Trade-off: [Z].\""
+        )
+        
+        return output + challenge_protocol
 
     @staticmethod
     def should_auto_run(request: str) -> bool:
@@ -487,3 +538,43 @@ class RequestRephraseOrchestrator:
         
         # Auto-run for all other intents
         return True
+
+
+def _run_stage_0_audit(request: str, intent: str, scope: str, governance_rules: List[str]) -> List[str]:
+    """
+    Stage 0: Synchronous Governance Audit.
+    
+    Runs before tool selection to catch violations upstream.
+    Returns list of violations detected (empty if all checks pass).
+    """
+    violations = []
+    
+    # Check 1: CORE-002 - File generation scope
+    if intent == "IMPLEMENT" and any(kw in request.lower() for kw in ["create", "generate", "write"] + list(SCOPE_KEYWORDS.get("file", []))):
+        # Scan for .md file references outside allowed paths
+        md_files = re.findall(r'(?:create|write|generate).*?(\w+\.md)', request, re.IGNORECASE)
+        for md_file in md_files:
+            if not (md_file.startswith(".github/prompts/") or 
+                    md_file.startswith(".github/agents/") or 
+                    md_file == "README.md"):
+                violations.append(f"CORE-002: MD file outside allowed path ({md_file})")
+    
+    # Check 2: CORE-008 - TDD enforcement
+    if intent in ["IMPLEMENT", "FIX", "REFACTOR"]:
+        # Verify request doesn't ask to skip tests
+        if any(skip in request.lower() for skip in ["skip test", "ignore test", "--ignore", "bypass test"]):
+            violations.append("CORE-008: Test bypass detected (TDD violation)")
+    
+    # Check 3: CORE-049 - Silent execution compatibility
+    if intent in ["IMPLEMENT", "FIX"] and "?" in request:
+        # Requests with questions suggest approval-seeking, not silent mode
+        # This is advisory, not blocking
+        pass
+    
+    # Check 4: CORE-027 - Audit trail markers
+    if intent in ["IMPLEMENT", "FIX", "REFACTOR"]:
+        # Recommend AC markers (advisory)
+        if not any(marker in request for marker in ["AC_START", "AC_COMPLETE"]):
+            violations.append("CORE-027: Recommend AC_START/AC_COMPLETE markers for audit trail")
+    
+    return violations
