@@ -366,7 +366,7 @@ if not lens_plan.uses_unified_intelligence_provider:
     🔴 Missing LENS Integration
     
     All orchestrators must use UnifiedIntelligenceProvider for:
-    - Company domain rules (company/domains/)
+    - Company domain rules (cortex-registry/company/domains/)
     - CORTEX best practices (cortex/knowledge/)
     - LENS code intelligence (cortex/lens/)
     

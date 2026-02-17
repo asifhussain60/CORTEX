@@ -834,7 +834,7 @@ Layer 4: Production Gate        → PREVENTS broken deployment
 ### Best Practices Layering
 
 ```yaml
-Company Standards (company/domains/):
+Company Standards (cortex-registry/company/domains/):
   - compliance-standards/*.yaml  # HIPAA, SOX, PCI-DSS
   - healthequity/*.yaml          # Domain-specific
   - qa-automation/*.yaml         # Testing standards

@@ -62,7 +62,7 @@ class StandardsResolver:
 
     def __init__(
         self,
-        company_root: str = "company/domains",
+        company_root: str = "cortex-registry/company/domains",
         cortex_root: str = "cortex/knowledge/best-practices",
         defaults_root: str = "cortex/defaults",
         cache_size: int = 100,
@@ -138,7 +138,7 @@ class StandardsResolver:
             )
 
         # Log gap
-        gaps.append(f"company/domains/{domain}/{subdomain}.yaml")
+        gaps.append(f"cortex-registry/company/domains/{domain}/{subdomain}.yaml")
 
         # Try cortex standards
         cortex_path = self.cortex_root / domain / f"{subdomain}.yaml"

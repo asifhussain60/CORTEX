@@ -148,7 +148,7 @@ UnifiedIntelligenceProvider.get_context()
     - Returns: {ast_analysis, git_history, comments}
     ↓
 2. Get Company Knowledge
-    - Loads: company/domains/{repo}/*.yaml
+    - Loads: cortex-registry/company/domains/{repo}/*.yaml
     - Precedence: OVERRIDE (company rules beat CORTEX)
     ↓
 3. Get CORTEX Knowledge

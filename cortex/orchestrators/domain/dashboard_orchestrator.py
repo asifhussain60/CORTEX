@@ -57,7 +57,7 @@ class DashboardOrchestrator(ABC):
         self.logger = logging.getLogger(__name__)
         self.cache: Dict[str, Path] = {}
         self.cache_ttl_seconds = 300  # 5 minutes
-        self.dashboard_base_path = Path("company/dashboards/data")
+        self.dashboard_base_path = Path("cortex-registry/company/dashboards/data")
 
         # Ensure directory exists
         self.dashboard_base_path.mkdir(parents=True, exist_ok=True)

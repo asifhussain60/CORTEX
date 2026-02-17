@@ -52,12 +52,12 @@ class TestStandardsPriorityLoading:
     def test_loads_company_standards_first(self, tmp_path):
         """Should load from company/domains/ with highest priority."""
         # Setup directory structure
-        company_dir = tmp_path / "company" / "domains" / "security"
+        company_dir = tmp_path / "cortex-registry" / "company" / "domains" / "security"
         company_dir.mkdir(parents=True)
         (company_dir / "authentication.yaml").write_text("auth_pattern: oauth2")
         
         resolver = StandardsResolver(
-            company_root=str(tmp_path / "company" / "domains"),
+            company_root=str(tmp_path / "cortex-registry" / "company" / "domains"),
             cortex_root=str(tmp_path / "cortex"),
             defaults_root=str(tmp_path / "defaults"),
         )
@@ -113,13 +113,13 @@ class TestCaching:
     
     def test_caching_reduces_file_reads(self, tmp_path):
         """Second request should use cache, not re-read file."""
-        company_dir = tmp_path / "company" / "domains" / "security"
+        company_dir = tmp_path / "cortex-registry" / "company" / "domains" / "security"
         company_dir.mkdir(parents=True)
         standards_file = company_dir / "authentication.yaml"
         standards_file.write_text("auth_pattern: oauth2")
         
         resolver = StandardsResolver(
-            company_root=str(tmp_path / "company" / "domains"),
+            company_root=str(tmp_path / "cortex-registry" / "company" / "domains"),
         )
         
         # First load

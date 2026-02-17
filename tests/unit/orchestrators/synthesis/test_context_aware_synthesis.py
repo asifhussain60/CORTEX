@@ -162,7 +162,7 @@ class TestContextSynthesisCompanyPrecedence:
         
         gateway = ContextAwareSynthesisGateway(
             repo_path=Path("/test/repo"),
-            company_path=Path("company/domains")
+            company_path=Path("cortex-registry/company/domains")
         )
         
         result = await gateway.synthesize(file_path=Path("app.py"))

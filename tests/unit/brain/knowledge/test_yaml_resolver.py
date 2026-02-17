@@ -174,7 +174,7 @@ class TestKnowledgeYAMLResolverCompanyPrecedence:
         with patch.object(Path, 'exists') as mock_exists:
             mock_exists.return_value = True
             
-            yamls = resolver.resolve(tech_stack, company_path=Path("company/domains"))
+            yamls = resolver.resolve(tech_stack, company_path=Path("cortex-registry/company/domains"))
             
             # Should return company path instead of cortex path
             assert any("company" in str(yaml) for yaml in yamls)
@@ -188,7 +188,7 @@ class TestKnowledgeYAMLResolverCompanyPrecedence:
         tech_stack = TechStack()
         tech_stack.add_item(TechStackItem(name="python", category=TechCategory.LANGUAGE, confidence=1.0))
         
-        yamls = resolver.resolve(tech_stack, company_path=Path("company/domains"))
+        yamls = resolver.resolve(tech_stack, company_path=Path("cortex-registry/company/domains"))
         
         # Should use CORTEX default (company override doesn't exist)
         # In real scenario, file system check determines this

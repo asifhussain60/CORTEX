@@ -234,7 +234,7 @@ def classify_question(text: str) -> QuestionType:
    - Code references: `file_path:line_numbers` from CORTEX codebase
    - Best practices: References to `cortex/knowledge/best-practices/*.yaml`
    - Patterns: Links to `cortex-docs/patterns/*.md`
-   - Industry standards: OWASP, 12-Factor, SOLID (from company/domains/)
+   - Industry standards: OWASP, 12-Factor, SOLID (from cortex-registry/company/domains/)
 
 2. **Tradeoff Analysis** — Always evaluate:
    - Extensibility: Can new features/orchestrators be added without refactoring?
@@ -348,7 +348,7 @@ def classify_question(text: str) -> QuestionType:
   
 - **Best Practices:**
   - `cortex/knowledge/best-practices/{category}/{file}.yaml` — {principle}
-  - `company/domains/{domain}/{file}.yaml` — {standard}
+  - `cortex-registry/company/domains/{domain}/{file}.yaml` — {standard}
   
 - **Patterns:**
   - `cortex-docs/patterns/{pattern}.md` — {description}
@@ -580,7 +580,7 @@ Use **Pattern X (Event Bus)** for CORTEX orchestrator communication because:
   
 - **Best Practices:**
   - `cortex/knowledge/best-practices/architecture/event-driven.yaml` — Event-driven patterns
-  - `company/domains/healthequity/messaging-standards.yaml` — Async communication standards
+  - `cortex-registry/company/domains/healthequity/messaging-standards.yaml` — Async communication standards
   
 - **Patterns:**
   - `cortex-docs/patterns/event-bus-pattern.md` — Pub/sub architecture

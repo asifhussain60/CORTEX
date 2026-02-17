@@ -256,7 +256,7 @@
 ## 📋 Best Practices
 
 ```yaml
-Company: company/domains/ (PRECEDENCE)
+Company: cortex-registry/company/domains/ (PRECEDENCE)
 CORTEX: cortex/knowledge/best-practices/ (FILLS GAPS)
 ```
 

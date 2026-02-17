@@ -60,7 +60,7 @@ class KnowledgeMerger:
         self.workspace_root = workspace_root
 
         # Knowledge repository paths
-        self.company_domains_path = workspace_root / "company" / "domains"
+        self.company_domains_path = workspace_root / "cortex-registry" / "company" / "domains"
         self.technical_knowledge_path = workspace_root / "cortex_intelligence" / "tier3" / "knowledge"
         self.governance_path = workspace_root / "cortex-registry"
 

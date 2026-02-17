@@ -25,7 +25,7 @@ class TestCompanyDomainLoader:
     @pytest.fixture
     def temp_domains_dir(self, tmp_path):
         """Create temporary company domains directory with YAML files."""
-        domains_dir = tmp_path / "company" / "domains"
+        domains_dir = tmp_path / "cortex-registry" / "company" / "domains"
         
         # Create compliance standards
         compliance_dir = domains_dir / "compliance-standards"
@@ -77,7 +77,7 @@ class TestCompanyDomainLoader:
     def test_init_default_path(self):
         """Test initialization with default path."""
         loader = CompanyDomainLoader()
-        assert loader.company_domains_path == Path("company/domains")
+        assert loader.company_domains_path == Path("cortex-registry/company/domains")
         assert loader._domains_cache == {}
     
     def test_init_custom_path(self, temp_domains_dir):

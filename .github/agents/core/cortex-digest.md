@@ -93,7 +93,7 @@ maintainer: "Asif Hussain"
 - ✅ Inline analysis in chat only
 - ✅ Use markdown tables for findings (these are chat content, not files)
 - ✅ Extract learnings via MCP `cortex_digest_session` tool (not file writes)
-- ✅ Store YAML learnings to `cortex_intelligence/tier3/learnings/` OR `company/domains/{domain}/`
+- ✅ Store YAML learnings to `cortex_intelligence/tier3/learnings/` OR `cortex-registry/company/domains/{domain}/`
 - ✅ Add `<!-- CORTEX_DIGESTED: {date} -->` marker to original chat file (in-place update)
 
 **Violation Detection:**
@@ -205,7 +205,7 @@ If response contains any "Ran terminal command: cat" or "Created [" patterns →
 |--------|--------|-----------|
 | `cortex-registry/enhancements/active/` | Add new ENH-* entries | Efficiency/Accuracy findings |
 | `cortex_intelligence/tier3/learnings/session-{timestamp}-{hash}.yaml` | Create session artifact | Session has learnings |
-| `company/domains/{domain}/patterns.yaml` | Extract new patterns | User domain knowledge |
+| `cortex-registry/company/domains/{domain}/patterns.yaml` | Extract new patterns | User domain knowledge |
 | `cortex_intelligence/tier3/learnings/anti-patterns.yaml` | Document anti-patterns | CORTEX-internal drifts |
 
 ### Manual Review Queue
@@ -234,7 +234,7 @@ If response contains any "Ran terminal command: cat" or "Created [" patterns →
 | Check | Validation |
 |-------|------------|
 | **YAML Syntax** | All YAML files parse correctly |
-| **Storage Location** | YAML in `cortex_intelligence/tier3/learnings/` or `company/domains/` |
+| **Storage Location** | YAML in `cortex_intelligence/tier3/learnings/` or `cortex-registry/company/domains/` |
 | **Marker Injection** | `<!-- CORTEX_DIGESTED -->` added to original chat file |
 | **Schema Compliance** | YAML matches learnings schema |
 
@@ -297,7 +297,7 @@ If response contains any "Ran terminal command: cat" or "Created [" patterns →
 
 **Storage Locations:**
 - **CORTEX-Internal:** `cortex_intelligence/tier3/learnings/`
-- **User Domain:** `company/domains/{detected_domain}/`
+- **User Domain:** `cortex-registry/company/domains/{detected_domain}/`
 
 **Next Steps:**
 - Original chat file preserved with marker (Implementation Truth)

@@ -178,7 +178,7 @@ impact_analysis:
     total_files: 194+
     
   company_references:
-    python_files: 53  # grep -rl "company/domains|company/dashboards" --include="*.py"
+    python_files: 53  # grep -rl "cortex-registry/company/domains|cortex-registry/company/dashboards" --include="*.py"
     
   total_migration_scope:
     files_to_update: 605+
@@ -1550,7 +1550,7 @@ registry_structure:
       how: |
         Troubleshooting:
         - Missing best practice → Search knowledge-base/{domain}/ for YAML files
-        - Override not working → Check if company/domains/ overrides Tier 0
+        - Override not working → Check if cortex-registry/company/domains/ overrides Tier 0
         - Knowledge gap → Review knowledge-base/architecture/ for patterns
       files:
         - name: "knowledge-base/architecture/solid-principles.yaml"

@@ -32,7 +32,7 @@ workflow:
     production_mode:
       test_framework: "{{test_framework}}"  # Jest/Cypress/Playwright
       component_patterns: "{{component_patterns}}"  # React/Angular/Vue
-      a11y_standard: "{{a11y_standard}}"  # From company/domains/
+      a11y_standard: "{{a11y_standard}}"  # From cortex-registry/company/domains/
       deployment: "{{deployment_target}}"  # From profile
 
   steps:

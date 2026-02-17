@@ -32,7 +32,7 @@ workflow:
       verification: "152+ test suite"
     production_mode:
       source_patterns: "{{legacy_patterns}}"  # From onboarded profile
-      target_patterns: "{{target_patterns}}"  # From company/domains/
+      target_patterns: "{{target_patterns}}"  # From cortex-registry/company/domains/
       rollback: "{{rollback_strategy}}"
       verification: "{{test_suite}}"
 

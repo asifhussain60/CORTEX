@@ -776,7 +776,7 @@ class MasterOrchestrator(IOrchestrator):
             
             # Initialize with workspace root
             repo_path = Path.cwd()
-            company_path = repo_path / "company" / "domains"
+            company_path = repo_path / "cortex-registry" / "company" / "domains"
             
             self.synthesis_gateway = ContextAwareSynthesisGateway(
                 repo_path=repo_path,

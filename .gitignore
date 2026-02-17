@@ -5,7 +5,7 @@
 #            similar to node_modules/ or .venv/ — each developer has their own.
 #
 # TEAM COLLABORATION:
-#   ✅ Company domain knowledge: company/domains/*.yaml (git-tracked)
+#   ✅ Company domain knowledge: cortex-registry/company/domains/*.yaml (git-tracked)
 #   ✅ Brain knowledge: cortex_brain/tier3/knowledge/*.yaml (git-tracked)
 #   ❌ Trace logs: *.db (local-only, auto-created on first run)
 #
@@ -162,25 +162,25 @@ tests/test_ac_nfr_003_02_secrets.py
 tests/_archive/
 
 # CLI generated dashboard output
-company/dashboards/lens/
+cortex-registry/company/dashboards/lens/
 
 # Dashboard v3 artifacts (PHASE-21)
 # Node.js dependencies and build artifacts
-company/dashboards/spa/node_modules/
-company/dashboards/spa/package-lock.json
-company/dashboards/spa/.npm/
+cortex-registry/company/dashboards/spa/node_modules/
+cortex-registry/company/dashboards/spa/package-lock.json
+cortex-registry/company/dashboards/spa/.npm/
 
 # Playwright test artifacts
-company/dashboards/spa/test-results/
-company/dashboards/spa/playwright-report/
-company/dashboards/spa/playwright/.cache/
+cortex-registry/company/dashboards/spa/test-results/
+cortex-registry/company/dashboards/spa/playwright-report/
+cortex-registry/company/dashboards/spa/playwright/.cache/
 
 # Generated dashboard data (large JSON files)
-company/dashboards/spa/*/dashboard-data.json
-company/dashboards/spa/data/dashboard-data.json
-company/dashboards/spa/KSESSIONS/
-company/dashboards/spa/kashkole/
-company/dashboards/spa/cortex/
+cortex-registry/company/dashboards/spa/*/dashboard-data.json
+cortex-registry/company/dashboards/spa/data/dashboard-data.json
+cortex-registry/company/dashboards/spa/KSESSIONS/
+cortex-registry/company/dashboards/spa/kashkole/
+cortex-registry/company/dashboards/spa/cortex/
 
 # Root directory protection (prevent test file and output pollution)
 # All test files must be in tests/ directory

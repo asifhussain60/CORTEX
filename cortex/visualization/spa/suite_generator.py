@@ -81,10 +81,10 @@ class DashboardSuiteGenerator:
     """
 
     # Template paths (relative to CORTEX root)
-    DASHBOARD_TEMPLATE = "company/dashboards/templates/repo-dashboard-glass-v1.html"
-    ASSETS_DIR = "company/dashboards/assets"
-    SPA_ASSETS_DIR = "company/dashboards/spa/assets"
-    LOGO_PATH = "company/dashboards/assets/images/CORTEX-logo-512.png"
+    DASHBOARD_TEMPLATE = "cortex-registry/company/dashboards/templates/repo-dashboard-glass-v1.html"
+    ASSETS_DIR = "cortex-registry/company/dashboards/assets"
+    SPA_ASSETS_DIR = "cortex-registry/company/dashboards/spa/assets"
+    LOGO_PATH = "cortex-registry/company/dashboards/assets/images/CORTEX-logo-512.png"
 
     def __init__(
         self,

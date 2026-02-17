@@ -299,7 +299,7 @@ class HolisticValidationGate:
 
 **Definition:** Extension of CORTEX Brain storing company-specific domain knowledge, business rules, architectural patterns, and team conventions. Precedence over CORTEX defaults (company > tier1 > tier0).
 
-**Storage Location:** `company/domains/` directory with YAML/markdown files
+**Storage Location:** `cortex-registry/company/domains/` directory with YAML/markdown files
 
 **Content Types:**
 - **Domain Models:** Business entities, relationships, constraints
@@ -622,7 +622,7 @@ else:
 
 **Header Format:** `🧠 CORTEX {MODE}` (e.g., "🧠 CORTEX IMPLEMENT")
 
-**Context Loading:** User domain knowledge (business logic, APIs, architecture patterns) from company/domains/ and repository content
+**Context Loading:** User domain knowledge (business logic, APIs, architecture patterns) from cortex-registry/company/domains/ and repository content
 
 **Related:** [Architect Mode](#architect-mode), [Intelligent Prompt Routing](#intelligent-prompt-routing)
 

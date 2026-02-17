@@ -361,7 +361,7 @@ class TestCompanyOverrideE2E:
         repo_path.mkdir()
         
         # Create company domain structure
-        company_dir = repo_path / "company" / "domains"
+        company_dir = repo_path / "cortex-registry" / "company" / "domains"
         company_dir.mkdir(parents=True)
         
         # Create company override YAML

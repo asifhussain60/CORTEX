@@ -564,7 +564,7 @@ jobs:
 ### 3. Dashboard (Real-Time Monitoring)
 
 ```typescript
-// company/dashboards/widgets/architecture-integrity-widget.ts
+// cortex-registry/company/dashboards/widgets/architecture-integrity-widget.ts
 import { Widget } from '@cortex/dashboard';
 import { ArchitectureIntegrityAPI } from '@cortex/api';
 

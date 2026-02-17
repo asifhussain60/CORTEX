@@ -51,7 +51,7 @@ best_practices:
 """)
     
     # Create company/domains/compliance-standards structure
-    compliance_path = tmp_path / "company" / "domains" / "compliance-standards"
+    compliance_path = tmp_path / "cortex-registry" / "company" / "domains" / "compliance-standards"
     compliance_path.mkdir(parents=True)
     
     # Create PCI-DSS compliance YAML
@@ -82,7 +82,7 @@ requirements:
 """)
     
     # Create company-specific override
-    company_path = tmp_path / "company" / "domains" / "acme-corp" / "compliance"
+    company_path = tmp_path / "cortex-registry" / "company" / "domains" / "acme-corp" / "compliance"
     company_path.mkdir(parents=True)
     
     company_override_yaml = company_path / "pci-override.yaml"

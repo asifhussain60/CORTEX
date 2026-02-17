@@ -65,10 +65,10 @@ class CompanyDomainLoader:
         Initialize CompanyDomainLoader.
 
         Args:
-            company_domains_path: Path to company/domains directory
-                                  (defaults to ./company/domains)
+            company_domains_path: Path to cortex-registry/company/domains directory
+                                  (defaults to ./cortex-registry/company/domains)
         """
-        self.company_domains_path = company_domains_path or Path("company/domains")
+        self.company_domains_path = company_domains_path or Path("cortex-registry/company/domains")
         self._domains_cache: Dict[str, DomainKnowledge] = {}
 
     def load_all_domains(self, force_reload: bool = False) -> CompanyDomainResult:

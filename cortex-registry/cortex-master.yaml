@@ -310,7 +310,7 @@ phase_status:
       architectural_innovation:
         - "Steps loop until success criteria met (convergence-gated execution)"
         - "Templates separated by CONTEXT, not CODE"
-        - "company/domains/*.yaml overrides CORTEX defaults"
+        - "cortex-registry/cortex-registry/company/domains/*.yaml overrides CORTEX defaults"
         - "Onboarded repo profiles drive framework selection"
         - "Fallback chain: onboarded → company → CORTEX"
         - "Auto-injected epilogues (PostPhaseDedup + HolisticSweep)"

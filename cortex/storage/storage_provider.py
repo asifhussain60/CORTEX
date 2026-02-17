@@ -25,7 +25,7 @@ class IKnowledgeProvider(ABC):
         Read knowledge content from storage.
 
         Args:
-            path: Logical path (e.g., "company/domains/engineering.yaml")
+            path: Logical path (e.g., "cortex-registry/company/domains/engineering.yaml")
 
         Returns:
             File content as string

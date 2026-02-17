@@ -3789,7 +3789,7 @@ p1_checks = checklist.priority_checks["P1"].checks
 ### P2 — Knowledge Synthesis (Phase 56 + Phase 20.5)
 | Check | Status | Evidence | Auto-Fix |
 |-------|--------|----------|----------|
-| **Company Domain Loader Duplication** | ☐ | Detect 3+ loaders for `company/domains/*.yaml` (CompanyDomainLoader, CompanyKnowledgeLoader, StandardsResolver) | Consolidate to single canonical loader |
+| **Company Domain Loader Duplication** | ☐ | Detect 3+ loaders for `cortex-registry/company/domains/*.yaml` (CompanyDomainLoader, CompanyKnowledgeLoader, StandardsResolver) | Consolidate to single canonical loader |
 | **Synthesis Timing Consistency** | ☐ | AC marker analysis: multiple synthesis points (MasterOrchestrator Stage 2, IntentRouter, EnforcementOrchestrator) | Enforce single entry point: MasterOrchestrator Stage 2 → IntelligenceGateway |
 
 ---
@@ -5057,7 +5057,7 @@ if gap_detected:
 # Detection
 suite_generator_path = Path("cortex/visualization/spa/suite_generator.py")
 dashboard_template_var = grep_search(suite_generator_path, r'DASHBOARD_TEMPLATE\s*=\s*"([^"]+)"')
-correct_template = "company/dashboards/templates/repo-dashboard-glass-v1.html"
+correct_template = "cortex-registry/company/dashboards/templates/repo-dashboard-glass-v1.html"
 wrong_template = "_archive"
 
 gap_detected = wrong_template in dashboard_template_var
@@ -5787,7 +5787,7 @@ Score < 5 → Continue to DESIGN MODE
 
 ### 🎯 Actions
 - [ ] Enhancement proposals extracted
-- [ ] YAML saved to `cortex_intelligence/tier3/learnings/` or `company/domains/`
+- [ ] YAML saved to `cortex_intelligence/tier3/learnings/` or `cortex-registry/company/domains/`
 - [ ] Marker `<!-- CORTEX_DIGESTED: {date} -->` added to original chat file
 - [ ] Extract patterns to registry YAML files
 - [ ] Document anti-patterns
@@ -5802,7 +5802,7 @@ Score < 5 → Continue to DESIGN MODE
 |--------|-----------|--------|
 | `cortex-registry/enhancements/active/` | Efficiency/Accuracy findings | Add ENH-* entries |
 | `cortex_intelligence/tier3/learnings/session-{timestamp}-{hash}.yaml` | Session has actionable learnings | Create artifact |
-| `company/domains/{domain}/patterns.yaml` | User domain knowledge detected | Extract pattern |
+| `cortex-registry/company/domains/{domain}/patterns.yaml` | User domain knowledge detected | Extract pattern |
 | `cortex_intelligence/tier3/learnings/anti-patterns.yaml` | CORTEX-internal drifts | Document anti-pattern |
 | CORTEX.prompt.md | Prompt improvement needed | **Requires AUDIT validation** |
 
@@ -5861,7 +5861,7 @@ Score < 5 → Continue to DESIGN MODE
 - ✅ Technical details (file paths, key changes, commits)
 - ✅ User's original intent and requests
 - ✅ Important disagreements/challenges
-- ✅ Where knowledge was absorbed (company/domains/, cortex/knowledge/)
+- ✅ Where knowledge was absorbed (cortex-registry/company/domains/, cortex/knowledge/)
 - ✅ Artifacts created (files, tests, documentation)
 - ✅ Metrics (before/after states)
 - ✅ Open items or deferred work
@@ -5926,7 +5926,7 @@ Score < 5 → Continue to DESIGN MODE
 ### Into CORTEX Brain (cortex/knowledge/):
 - **[Category]:** [Specific knowledge added]
 
-### Into Company Domain (company/domains/):
+### Into Company Domain (cortex-registry/company/domains/):
 - **[Category]:** [Domain-specific knowledge]
 
 ### Into Registry (cortex-registry/):
@@ -6622,7 +6622,7 @@ User says "proceed" → NOW execute (second "proceed" = confirmation)
 | **Scalability** | Will this work at 10x/100x scale? What breaks first? | cortex_intelligence/tier3/performance_patterns.yaml |
 | **Accuracy** | Is correctness guaranteed? What's the precision/recall tradeoff? | cortex_intelligence/tier2/testing_patterns.yaml |
 | **Efficiency** | Is this fast enough? What's the token/latency budget? | cortex/knowledge/best-practices/performance.yaml |
-| **Long-term Growth** | Does this support team collaboration and future evolution? | company/domains/*.yaml |
+| **Long-term Growth** | Does this support team collaboration and future evolution? | cortex-registry/company/domains/*.yaml |
 | **Best Practices** | Does this align with CORTEX + company + industry standards? | cortex/knowledge/best-practices/*.yaml (45+ patterns) |
 
 **Mindset:** Think like an architect building a system that will be maintained by a team for years, not a one-off script.
@@ -6747,7 +6747,7 @@ Check against loaded YAMLs:
 
 | Layer | Source | What to Check |
 |-------|--------|---------------|
-| **Company** | company/domains/*.yaml | Business constraints, team standards |
+| **Company** | cortex-registry/company/domains/*.yaml | Business constraints, team standards |
 | **CORTEX** | cortex/knowledge/best-practices/*.yaml | 45+ patterns (SOLID, Clean Code, 12-Factor) |
 | **Security** | cortex_intelligence/tier1/security_standards.yaml | OWASP, secrets, injection |
 | **Industry** | Pattern references in YAMLs | SOLID, DRY, KISS, YAGNI |
@@ -7232,7 +7232,7 @@ INJECT → CAPTURE → ANALYZE → FIX-PLAN → CLEANUP
 
 ```bash
 # Full debug cycle
-/debug company/dashboards/spa
+/debug cortex-registry/company/dashboards/spa
 
 # Output:
 ## 🔬 Debug Session: abc12345
@@ -7515,7 +7515,7 @@ Innovation Taxonomy Update (system learns)
 - ✅ **Quad-Mode Operation** — PRE-FLIGHT + AUDIT + DESIGN + DIGEST + META-AUDIT
 - ✅ **Chat Session Auto-Detection** — Marker-based scoring (score ≥ 5 triggers DIGEST)
 - ✅ **Structured Learning Extraction** — Drifts, patterns, tool environment, efficiency opportunities
-- ✅ **Enhancement Propagation Pipeline** — Automatic flow to `cortex-registry/enhancements/`, `cortex_intelligence/tier3/learnings/`, `company/domains/`
+- ✅ **Enhancement Propagation Pipeline** — Automatic flow to `cortex-registry/enhancements/`, `cortex_intelligence/tier3/learnings/`, `cortex-registry/company/domains/`
 - ✅ **Production Sync Validation** — AUDIT now checks cortex-architect.prompt.md ↔ CORTEX.prompt.md coherence
 - ✅ **cortex-digest.md Agent** — New specialist agent for DIGEST mode
 

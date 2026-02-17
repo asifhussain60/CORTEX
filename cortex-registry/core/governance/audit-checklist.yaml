@@ -169,7 +169,7 @@ priority_checks:
       
       - id: "P1.5-003"
         name: "Company Domain Utilization"
-        description: "company/domains actively used by orchestrators"
+        description: "cortex-registry/cortex-registry/company/domains actively used by orchestrators"
         tool: "cortex_audit"
         evidence_required: "domain_usage_stats"
         severity: "medium"

@@ -34,8 +34,8 @@ workflow:
     production_mode:
       test_framework: "{{test_framework}}"  # From onboarded profile
       patterns: "{{architecture_patterns}}"  # From profile
-      coverage_target: "{{coverage_target}}"  # From company/domains/ or 80%
-      security_standards: "{{security_standards}}"  # From company/domains/
+      coverage_target: "{{coverage_target}}"  # From cortex-registry/company/domains/ or 80%
+      security_standards: "{{security_standards}}"  # From cortex-registry/company/domains/
 
   # Workflow steps (RED → GREEN → REFACTOR)
   steps:

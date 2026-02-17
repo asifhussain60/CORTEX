@@ -124,12 +124,12 @@ Universal debugging capability that floods code with traceable `CORTEX_DEBUG` ma
 
 | Component | Path |
 |-----------|------|
-| Node.js CLI | `company/dashboards/spa/tools/cortex-debug/cortex-debug-orchestrator.js` |
-| Injector | `company/dashboards/spa/tools/cortex-debug/CortexDebugInjector.js` |
-| Capture | `company/dashboards/spa/tools/cortex-debug/CortexDebugCapture.js` |
-| Analyzer | `company/dashboards/spa/tools/cortex-debug/CortexDebugAnalyzer.js` |
-| Cleanup | `company/dashboards/spa/tools/cortex-debug/CortexDebugCleanup.js` |
-| Adapters | `company/dashboards/spa/tools/cortex-debug/adapters/index.js` |
+| Node.js CLI | `cortex-registry/company/dashboards/spa/tools/cortex-debug/cortex-debug-orchestrator.js` |
+| Injector | `cortex-registry/company/dashboards/spa/tools/cortex-debug/CortexDebugInjector.js` |
+| Capture | `cortex-registry/company/dashboards/spa/tools/cortex-debug/CortexDebugCapture.js` |
+| Analyzer | `cortex-registry/company/dashboards/spa/tools/cortex-debug/CortexDebugAnalyzer.js` |
+| Cleanup | `cortex-registry/company/dashboards/spa/tools/cortex-debug/CortexDebugCleanup.js` |
+| Adapters | `cortex-registry/company/dashboards/spa/tools/cortex-debug/adapters/index.js` |
 | Python MCP | `cortex/tools/debug_orchestrator/__init__.py` |
 
 ---
@@ -147,12 +147,12 @@ Universal debugging capability that floods code with traceable `CORTEX_DEBUG` ma
 ## 📊 Example Session
 
 ```
-User: /debug company/dashboards/spa
+User: /debug cortex-registry/company/dashboards/spa
 
 Agent Response:
 
 ## 🔬 Debug Session: abc12345
-**Target:** company/dashboards/spa
+**Target:** cortex-registry/company/dashboards/spa
 **Stacks Detected:** JavaScript, HTML
 
 ### Phase 1: INJECT ✅

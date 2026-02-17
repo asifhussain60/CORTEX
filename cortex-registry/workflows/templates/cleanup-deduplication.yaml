@@ -30,7 +30,7 @@ workflow:
       refactoring: "Extract shared module pattern"
     production_mode:
       scanner: "LENS (tech-agnostic)"
-      standard: "{{dry_standards}}"  # From company/domains/
+      standard: "{{dry_standards}}"  # From cortex-registry/company/domains/
       refactoring: "{{architecture_patterns}}"
 
   steps:

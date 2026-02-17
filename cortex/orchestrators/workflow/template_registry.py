@@ -260,7 +260,7 @@ class WorkflowTemplateRegistry:
             return {
                 "test_framework": "Jest",  # Default, overridden by profile
                 "api_framework": "Express",
-                "knowledge_source": "company/domains/",
+                "knowledge_source": "cortex-registry/company/domains/",
                 "coverage_target": "80%",
             }
 

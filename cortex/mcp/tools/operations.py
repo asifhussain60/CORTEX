@@ -741,7 +741,7 @@ class CortexDashboard(ConsolidatedTool):
                     "target": target,
                     "format": output_format,
                     "generated": True,
-                    "path": f"company/dashboards/{target or 'default'}.{output_format}",
+                    "path": f"cortex-registry/company/dashboards/{target or 'default'}.{output_format}",
                 },
                 metadata={"operation": "generate"},
             )
@@ -773,7 +773,7 @@ class CortexDashboard(ConsolidatedTool):
                 success=True,
                 data={
                     "generated": True,
-                    "path": "company/dashboards/index.html",
+                    "path": "cortex-registry/company/dashboards/index.html",
                     "repos_included": 0,
                 },
                 metadata={"operation": "landing"},

@@ -124,7 +124,7 @@ class TestKnowledgeSynthesisGapFilling:
 
                 assert len(recommendations) > 0
                 # Should recommend files from all layers
-                company_recs = [r for r in recommendations if 'company/domains' in r]
+                company_recs = [r for r in recommendations if 'cortex-registry/company/domains' in r]
                 domain_recs = [r for r in recommendations if 'cortex/knowledge/domains' in r]
                 generic_recs = [r for r in recommendations if r.startswith('cortex/knowledge/')]
                 

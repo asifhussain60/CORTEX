@@ -29,9 +29,9 @@ class DataMigrationOrchestrator:
 
     # Legacy repositories to migrate
     LEGACY_REPOS = ["alist", "cortex", "kashkole", "ksessions", "noor-canvas"]
-    LEGACY_ROOT = Path("company/dashboards/repos")
-    JSON_OUTPUT_ROOT = Path("company/dashboards/data")
-    BACKUP_ROOT = Path("company/dashboards/legacy_backup")
+    LEGACY_ROOT = Path("cortex-registry/company/dashboards/repos")
+    JSON_OUTPUT_ROOT = Path("cortex-registry/company/dashboards/data")
+    BACKUP_ROOT = Path("cortex-registry/company/dashboards/legacy_backup")
 
     def __init__(self, dry_run: bool = False):
         """
@@ -126,7 +126,7 @@ class DataMigrationOrchestrator:
                         "stats": repo_data.get("stats", {})
                     },
                     "metadata": {
-                        "migrated_from": f"company/dashboards/repos/{repo_name}/index.html",
+                        "migrated_from": f"cortex-registry/company/dashboards/repos/{repo_name}/index.html",
                         "migration_timestamp": datetime.now().isoformat()
                     }
                 }

@@ -128,7 +128,7 @@ class TestProductionModeResolution:
 
             # Assert
             assert mode == "PRODUCTION"
-            assert "company/domains" in resolved["knowledge_source"]
+            assert "cortex-registry/company/domains" in resolved["knowledge_source"]
 
     def test_production_mode_api_design_standards_drive_output(
         self, production_context: Dict[str, Any]

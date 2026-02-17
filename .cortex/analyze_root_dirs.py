@@ -40,9 +40,8 @@ class RootDirectoryAnalyzer:
         "deployment": "Deployment configurations",
         
         # Development and company
-        "company": "Company domain knowledge",
         "registry": "Alternative registry location",
-        # Moved to: company/dashboards/lens
+        # Moved to: cortex-registry/company/dashboards/lens
         
         # Virtual environment and cache
         ".venv": "Python virtual environment",

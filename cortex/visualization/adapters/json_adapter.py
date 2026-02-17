@@ -39,10 +39,10 @@ class JSONAdapter(DashboardDataAdapter):
 
         Args:
             base_path: Root directory for dashboard data
-                     Default: company/dashboards/repos/ (for compatibility)
+                     Default: cortex-registry/company/dashboards/repos/ (for compatibility)
         """
         if base_path is None:
-            base_path = Path("company/dashboards/repos")
+            base_path = Path("cortex-registry/company/dashboards/repos")
 
         self.base_path = Path(base_path)
         self.base_path.mkdir(parents=True, exist_ok=True)

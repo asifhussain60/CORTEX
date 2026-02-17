@@ -73,7 +73,7 @@ def temp_workspace():
     """Create temporary workspace for testing."""
     with tempfile.TemporaryDirectory() as tmpdir:
         workspace = Path(tmpdir)
-        (workspace / "company" / "domains").mkdir(parents=True)
+        (workspace / "cortex-registry" / "company" / "domains").mkdir(parents=True)
         (workspace / "cortex_intelligence" / "state").mkdir(parents=True)
         yield workspace
 
@@ -147,7 +147,7 @@ class TestE2EWorkflowIntegration:
 
         # And: Domain YAML artifact exists
         domain_yaml = (
-            temp_workspace / "company" / "domains" / "test-repo" / "architecture.yaml"
+            temp_workspace / "cortex-registry" / "company" / "domains" / "test-repo" / "architecture.yaml"
         )
         assert domain_yaml.exists()
 
@@ -263,7 +263,7 @@ class TestPerformanceTargets:
 
         # And: Artifact exists
         domain_yaml = (
-            temp_workspace / "company" / "domains" / "test-repo" / "architecture.yaml"
+            temp_workspace / "cortex-registry" / "company" / "domains" / "test-repo" / "architecture.yaml"
         )
         assert domain_yaml.exists()
 
@@ -413,7 +413,7 @@ def test_mega_a_integration_summary(
     })
     assert persist_result.success
     domain_yaml = (
-        temp_workspace / "company" / "domains" / "summary-repo" / "architecture.yaml"
+        temp_workspace / "cortex-registry" / "company" / "domains" / "summary-repo" / "architecture.yaml"
     )
     assert domain_yaml.exists()
 

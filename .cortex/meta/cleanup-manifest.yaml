@@ -8,8 +8,8 @@ protected_patterns:
 - cortex_intelligence/domain/**
 - cortex_intelligence/domain_brain/**
 - cortex_intelligence/state/**
-- company/domains/**/*.yaml
-- company/dashboards/**
+- cortex-registry/company/domains/**/*.yaml
+- cortex-registry/company/dashboards/**
 - cortex-registry/**
 cleanup_operations:
 - operation_id: CLEANUP-20260210-TEST-SUITE

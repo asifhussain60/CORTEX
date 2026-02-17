@@ -68,7 +68,7 @@ class ContextAwareSynthesisGateway:
             config: Optional synthesis configuration
         """
         self.repo_path = repo_path
-        self.company_path = company_path or Path("company/domains")
+        self.company_path = company_path or Path("cortex-registry/company/domains")
         self.config = config or SynthesisConfig()
         
         # Initialize components

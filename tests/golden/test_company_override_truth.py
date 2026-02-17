@@ -39,7 +39,7 @@ class TestCompanyOverrideTruth:
     def loader(self, tmp_path: Path) -> CompanyKnowledgeLoader:
         """Initialize loader with temp project root."""
         # Create directory structure
-        (tmp_path / "company" / "domains").mkdir(parents=True)
+        (tmp_path / "cortex-registry" / "company" / "domains").mkdir(parents=True)
         (tmp_path / "cortex_intelligence" / "tier3" / "knowledge").mkdir(parents=True)
         
         return CompanyKnowledgeLoader(project_root=str(tmp_path))
@@ -48,7 +48,7 @@ class TestCompanyOverrideTruth:
     def loader_with_company(self, tmp_path: Path) -> CompanyKnowledgeLoader:
         """Initialize loader with company set."""
         # Create directory structure
-        company_dir = tmp_path / "company" / "domains" / "acme-corp"
+        company_dir = tmp_path / "cortex-registry" / "company" / "domains" / "acme-corp"
         company_dir.mkdir(parents=True)
         cortex_dir = tmp_path / "cortex_intelligence" / "tier3" / "knowledge"
         cortex_dir.mkdir(parents=True)
@@ -122,7 +122,7 @@ class TestKnowledgePrecedence:
     @pytest.fixture
     def loader(self, tmp_path: Path) -> CompanyKnowledgeLoader:
         """Initialize loader."""
-        (tmp_path / "company" / "domains").mkdir(parents=True)
+        (tmp_path / "cortex-registry" / "company" / "domains").mkdir(parents=True)
         (tmp_path / "cortex_intelligence" / "tier3" / "knowledge").mkdir(parents=True)
         return CompanyKnowledgeLoader(project_root=str(tmp_path))
     
@@ -203,7 +203,7 @@ class TestLayerMetrics:
     @pytest.fixture
     def loader(self, tmp_path: Path) -> CompanyKnowledgeLoader:
         """Initialize loader."""
-        (tmp_path / "company" / "domains").mkdir(parents=True)
+        (tmp_path / "cortex-registry" / "company" / "domains").mkdir(parents=True)
         (tmp_path / "cortex_intelligence" / "tier3" / "knowledge").mkdir(parents=True)
         return CompanyKnowledgeLoader(project_root=str(tmp_path))
     
@@ -239,7 +239,7 @@ class TestComplianceDetection:
     @pytest.fixture
     def loader(self, tmp_path: Path) -> CompanyKnowledgeLoader:
         """Initialize loader."""
-        (tmp_path / "company" / "domains").mkdir(parents=True)
+        (tmp_path / "cortex-registry" / "company" / "domains").mkdir(parents=True)
         (tmp_path / "cortex_intelligence" / "tier3" / "knowledge").mkdir(parents=True)
         return CompanyKnowledgeLoader(project_root=str(tmp_path))
     

@@ -32,8 +32,8 @@ workflow:
       security: "CORTEX CORE rules"
     production_mode:
       test_framework: "{{test_framework}}"  # pytest/Jest/NUnit/xUnit
-      api_style: "{{api_style}}"  # From company/domains/api-design-standards.yaml
-      auth_pattern: "{{auth_pattern}}"  # From company/domains/security-standards.yaml
+      api_style: "{{api_style}}"  # From cortex-registry/company/domains/api-design-standards.yaml
+      auth_pattern: "{{auth_pattern}}"  # From cortex-registry/company/domains/security-standards.yaml
       security: "{{security_standards}}"
 
   steps:

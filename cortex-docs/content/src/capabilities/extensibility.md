@@ -285,7 +285,7 @@ company/
 ### Knowledge YAML Format
 
 ```yaml
-# company/domains/authentication/best-practices.yaml
+# cortex-registry/company/domains/authentication/best-practices.yaml
 domain: authentication
 version: "1.0.0"
 last_updated: "2026-02-10"
@@ -329,7 +329,7 @@ from cortex.brain.knowledge import KnowledgeRepository
 repo = KnowledgeRepository()
 
 # Load organization knowledge
-repo.load_directory("company/domains/")
+repo.load_directory("cortex-registry/company/domains/")
 repo.load_directory("company/standards/")
 
 # Query with organization knowledge

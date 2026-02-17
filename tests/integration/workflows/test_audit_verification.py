@@ -138,7 +138,7 @@ class TestAuditVerification:
 
         # Assert - knowledge sources are attributable
         assert "cortex-registry" in architect_resolved["knowledge_source"]
-        assert "company/domains" in prod_resolved["knowledge_source"]
+        assert "cortex-registry/company/domains" in prod_resolved["knowledge_source"]
 
     def test_git_checkpoint_created_at_stage_boundaries(
         self, architect_context: Dict[str, Any]

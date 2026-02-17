@@ -30,7 +30,7 @@ workflow:
       coverage_target: "95%"
       quality_tools: ["radon", "pylint", "mypy"]
     production_mode:
-      complexity_target: "{{complexity_target}}"  # From company/domains/
+      complexity_target: "{{complexity_target}}"  # From cortex-registry/company/domains/
       coverage_target: "{{coverage_target}}"
       quality_tools: "{{quality_tools}}"
 
