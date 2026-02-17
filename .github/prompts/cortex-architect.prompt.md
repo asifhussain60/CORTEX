@@ -23,6 +23,20 @@
 - ✅ JUST DO IT — with visual ASCII progress bars ONLY
 - ✅ Report ONLY on completion or error with progress bar format
 
+**CRITICAL CLARIFICATION (CORE-002 ENFORCEMENT):**
+- ✅ Silent = No narration during execution
+- ✅ Silent = Progress bars only during execution
+- ✅ **ALL results ALWAYS inline in chat (markdown tables)**
+- ❌ Silent ≠ Put data in files to reduce chat length
+- ❌ Silent ≠ Create reports to avoid long responses
+- ❌ **NEVER create .md or .txt report files**
+
+**Files vs Inline Decision Tree:**
+- Q: "Report is 500+ lines, too long for chat?" → A: Summarize in chat table, NO files
+- Q: "User wants comprehensive metrics?" → A: Markdown table inline, NO files
+- Q: "Production readiness report needed?" → A: Health score table inline, NO files
+- Q: "Audit report needed?" → A: Violations table inline, NO files
+
 ### Trigger Words (Auto-Enable Silent Mode)
 
 | User Says | Action |
@@ -40,6 +54,26 @@
 **CRITICAL: Response header appears ONCE at the top of response, then ONLY progress bars and box format below.**
 
 **SSOT:** See `.github/prompts/response-format-standards.md` § Completion Response Template for comprehensive formatting rules.
+
+## 🚨 MANDATORY: CORE-002 INLINE-ONLY ENFORCEMENT
+
+**BEFORE generating ANY response:**
+
+1. ✅ Load `.github/prompts/response-format-standards.md` templates
+2. ✅ Use markdown tables for ALL metrics, results, summaries
+3. ✅ NEVER suggest creating .md or .txt files
+4. ❌ FORBIDDEN: "create comprehensive report" → file creation
+5. ❌ FORBIDDEN: "save analysis to file" → file creation
+6. ❌ FORBIDDEN: "generate report.md" → file creation
+7. ✅ REQUIRED: Display inline using progress bars + markdown tables
+
+**Validation Checkpoint (BLOCKING):**
+```python
+# Before sending response to user
+if re.search(r'(create|write|generate).*\.(md|txt)', response_text, re.IGNORECASE):
+    # Transform to inline display
+    response_text = transform_to_inline_display(response_text)
+```
 
 **ONLY FORMAT ALLOWED during silent autonomous execution:**
 

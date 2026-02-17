@@ -17,10 +17,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.250563"
+        "detected_at": "2026-02-17T08:53:11.808271"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258079",
+    "timestamp": "2026-02-17T08:53:11.816086",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/templates/template_renderer.py": {
@@ -41,10 +41,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.250635"
+        "detected_at": "2026-02-17T08:53:11.808341"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258102",
+    "timestamp": "2026-02-17T08:53:11.816107",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/templates/template_validator.py": {
@@ -65,10 +65,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.250706"
+        "detected_at": "2026-02-17T08:53:11.808411"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258127",
+    "timestamp": "2026-02-17T08:53:11.816128",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/phase_38/orchestrator_inventory_auditor.py": {
@@ -89,10 +89,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.250771"
+        "detected_at": "2026-02-17T08:53:11.808473"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258150",
+    "timestamp": "2026-02-17T08:53:11.816150",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/dependency_validator.py": {
@@ -113,10 +113,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.250838"
+        "detected_at": "2026-02-17T08:53:11.808540"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258176",
+    "timestamp": "2026-02-17T08:53:11.816178",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/mode_controller.py": {
@@ -137,10 +137,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.250891"
+        "detected_at": "2026-02-17T08:53:11.808595"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258195",
+    "timestamp": "2026-02-17T08:53:11.816199",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/response_header_config.py": {
@@ -161,10 +161,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.250953"
+        "detected_at": "2026-02-17T08:53:11.808661"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258217",
+    "timestamp": "2026-02-17T08:53:11.816223",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/provenance_tracker.py": {
@@ -185,14 +185,14 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.251008"
+        "detected_at": "2026-02-17T08:53:11.808728"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258239",
+    "timestamp": "2026-02-17T08:53:11.816247",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/brain_populator.py": {
-    "file_hash": "14a6494aff1afd154608defb14a7451080e3bfd51e1f265ef2d21965e3c92b58",
+    "file_hash": "69440b6c18fc0e711e723b031e42995619e5f71e19de313756868cf63e86c523",
     "agent_name": "DuplicateDetectionAgent",
     "issues": [
       {
@@ -209,14 +209,14 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.251064"
+        "detected_at": "2026-02-17T08:53:11.808791"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258260",
+    "timestamp": "2026-02-17T08:53:11.816271",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/infrastructure/database.py": {
-    "file_hash": "702928764a64b3d450d4f4b6db2cf6325d702b37c36d0cd98cdb41f155ede5fe",
+    "file_hash": "34bafca97b0638566420ff2df35abe1dd05d21a24a7e20eefa1cc79c847b1e19",
     "agent_name": "DuplicateDetectionAgent",
     "issues": [
       {
@@ -233,10 +233,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.251123"
+        "detected_at": "2026-02-17T08:53:11.808853"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258278",
+    "timestamp": "2026-02-17T08:53:11.816291",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/orchestrators/coherence/coherence_validator.py": {
@@ -257,10 +257,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.251238"
+        "detected_at": "2026-02-17T08:53:11.808978"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258300",
+    "timestamp": "2026-02-17T08:53:11.816320",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/governance_pregate.py": {
@@ -281,10 +281,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.251314"
+        "detected_at": "2026-02-17T08:53:11.809041"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258323",
+    "timestamp": "2026-02-17T08:53:11.816345",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/mutation_guard.py": {
@@ -305,10 +305,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.251378"
+        "detected_at": "2026-02-17T08:53:11.809105"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258346",
+    "timestamp": "2026-02-17T08:53:11.816371",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/compatibility_layer.py": {
@@ -329,10 +329,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.251442"
+        "detected_at": "2026-02-17T08:53:11.809166"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258368",
+    "timestamp": "2026-02-17T08:53:11.816395",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/ac_domain_mapper.py": {
@@ -353,10 +353,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.251501"
+        "detected_at": "2026-02-17T08:53:11.809228"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258389",
+    "timestamp": "2026-02-17T08:53:11.816417",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/resumption_handler.py": {
@@ -377,10 +377,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.251570"
+        "detected_at": "2026-02-17T08:53:11.809291"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258411",
+    "timestamp": "2026-02-17T08:53:11.816440",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/state_machine.py": {
@@ -401,10 +401,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.251636"
+        "detected_at": "2026-02-17T08:53:11.809361"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258433",
+    "timestamp": "2026-02-17T08:53:11.816463",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/result.py": {
@@ -425,10 +425,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.251689"
+        "detected_at": "2026-02-17T08:53:11.809415"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258451",
+    "timestamp": "2026-02-17T08:53:11.816486",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/governance_enforcer.py": {
@@ -449,14 +449,14 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.251744"
+        "detected_at": "2026-02-17T08:53:11.809470"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258472",
+    "timestamp": "2026-02-17T08:53:11.816514",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/path_resolver.py": {
-    "file_hash": "32ddedbd87de546e64ea8ce781e3a4d9fcd8d0cd3dafcde31484837d92b414ff",
+    "file_hash": "42bc644384f5559b06c3a3942ed25dc60c3a1ba2334d502ce3b63f2c0a4619d0",
     "agent_name": "DuplicateDetectionAgent",
     "issues": [
       {
@@ -473,10 +473,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.251805"
+        "detected_at": "2026-02-17T08:53:11.809527"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258490",
+    "timestamp": "2026-02-17T08:53:11.816534",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/audit_required_validator.py": {
@@ -497,14 +497,14 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.251870"
+        "detected_at": "2026-02-17T08:53:11.809591"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258515",
+    "timestamp": "2026-02-17T08:53:11.816557",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/database/tier_enforcement_queries.py": {
-    "file_hash": "01274e8e75291643b5beefa712d8c03a52851414b6c4d4affbf0ce09222f6c98",
+    "file_hash": "943764be6583cd28261ec64e307127874c86fa2c26c044c143496f3d05a2c690",
     "agent_name": "DuplicateDetectionAgent",
     "issues": [
       {
@@ -521,10 +521,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.251930"
+        "detected_at": "2026-02-17T08:53:11.809654"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258538",
+    "timestamp": "2026-02-17T08:53:11.816577",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/intelligence/dependency_mapper.py": {
@@ -545,10 +545,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.251988"
+        "detected_at": "2026-02-17T08:53:11.809717"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258560",
+    "timestamp": "2026-02-17T08:53:11.816599",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/intelligence/ast_intelligence.py": {
@@ -569,10 +569,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.252054"
+        "detected_at": "2026-02-17T08:53:11.809790"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258588",
+    "timestamp": "2026-02-17T08:53:11.816627",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/intelligence/call_graph.py": {
@@ -593,10 +593,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.252113"
+        "detected_at": "2026-02-17T08:53:11.809856"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258611",
+    "timestamp": "2026-02-17T08:53:11.816650",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/decorators/orchestrator_decorator.py": {
@@ -617,10 +617,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.252167"
+        "detected_at": "2026-02-17T08:53:11.809913"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258631",
+    "timestamp": "2026-02-17T08:53:11.816671",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/decorators/governance_decorator.py": {
@@ -641,10 +641,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.252223"
+        "detected_at": "2026-02-17T08:53:11.809970"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258651",
+    "timestamp": "2026-02-17T08:53:11.816693",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/core/safety/output_validator.py": {
@@ -665,10 +665,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.252288"
+        "detected_at": "2026-02-17T08:53:11.810030"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258671",
+    "timestamp": "2026-02-17T08:53:11.816715",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/intent/lens_response_formatter.py": {
@@ -689,10 +689,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.252415"
+        "detected_at": "2026-02-17T08:53:11.810149"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258694",
+    "timestamp": "2026-02-17T08:53:11.816739",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/intent/intent_canonicalizer.py": {
@@ -713,10 +713,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.252487"
+        "detected_at": "2026-02-17T08:53:11.810220"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258717",
+    "timestamp": "2026-02-17T08:53:11.816764",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/intent/lens_context_builder.py": {
@@ -737,10 +737,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.252567"
+        "detected_at": "2026-02-17T08:53:11.810300"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258743",
+    "timestamp": "2026-02-17T08:53:11.816793",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/intent/intent_reflection_protocol.py": {
@@ -761,10 +761,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.252644"
+        "detected_at": "2026-02-17T08:53:11.810376"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258768",
+    "timestamp": "2026-02-17T08:53:11.816820",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/knowledge/change_detection.py": {
@@ -785,10 +785,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.252719"
+        "detected_at": "2026-02-17T08:53:11.810450"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258797",
+    "timestamp": "2026-02-17T08:53:11.816849",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/deployment/analytics.py": {
@@ -809,10 +809,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.252783"
+        "detected_at": "2026-02-17T08:53:11.810514"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258818",
+    "timestamp": "2026-02-17T08:53:11.816871",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/orchestrator/continuation_decision.py": {
@@ -833,10 +833,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.252838"
+        "detected_at": "2026-02-17T08:53:11.810575"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258839",
+    "timestamp": "2026-02-17T08:53:11.816891",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/interfaces/i_orchestrator.py": {
@@ -857,10 +857,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.252892"
+        "detected_at": "2026-02-17T08:53:11.810631"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258859",
+    "timestamp": "2026-02-17T08:53:11.816909",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/wiring/orchestrator_factory.py": {
@@ -881,10 +881,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.252957"
+        "detected_at": "2026-02-17T08:53:11.810702"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258882",
+    "timestamp": "2026-02-17T08:53:11.816930",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/testing/baseline_metrics_collector.py": {
@@ -905,10 +905,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.253015"
+        "detected_at": "2026-02-17T08:53:11.810765"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258904",
+    "timestamp": "2026-02-17T08:53:11.816949",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/intent_router/metadata_driven_discovery.py": {
@@ -929,10 +929,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.253079"
+        "detected_at": "2026-02-17T08:53:11.810830"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258926",
+    "timestamp": "2026-02-17T08:53:11.816970",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/intent_router/capability_matcher.py": {
@@ -953,10 +953,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.253152"
+        "detected_at": "2026-02-17T08:53:11.810893"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258949",
+    "timestamp": "2026-02-17T08:53:11.816990",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/domain_brain/intent_classifier.py": {
@@ -977,14 +977,14 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.253208"
+        "detected_at": "2026-02-17T08:53:11.810950"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258970",
+    "timestamp": "2026-02-17T08:53:11.817009",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/tier1/orchestrators/cleaners/registry.py": {
-    "file_hash": "5032a333e090ce72c90f4845bbcb1cc7ab81349e336034a0d642fb5fff217f10",
+    "file_hash": "ea1a8930f770b0e9faf2a388ea741645d92ba6281ff8cbba77e831d9b59ecc6d",
     "agent_name": "DuplicateDetectionAgent",
     "issues": [
       {
@@ -998,14 +998,14 @@
           "basename": "registry.py",
           "other_locations": [
             "cortex/intelligence/patterns/registry.py",
-            "cortex_brain/tier1/orchestrators/cleaners/registry.py"
+            "cortex_intelligence/memory/tier1_learned/orchestrators/cleaners/registry.py"
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.253307"
+        "detected_at": "2026-02-17T08:53:11.811040"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.258992",
+    "timestamp": "2026-02-17T08:53:11.817031",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex_brain/tier1/orchestrators/cleaners/registry.py": {
@@ -1034,7 +1034,7 @@
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/orchestrators/health/cli.py": {
-    "file_hash": "6c76355d6071b2dcb4194015ab5ce1f18fa20280dd1ed2154b5e536d0b6976cf",
+    "file_hash": "15108b0ec17dca44254c4ae31f2bd6347ed153f19c27fe469526839a31481e79",
     "agent_name": "DuplicateDetectionAgent",
     "issues": [
       {
@@ -1051,10 +1051,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.253379"
+        "detected_at": "2026-02-17T08:53:11.811110"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259033",
+    "timestamp": "2026-02-17T08:53:11.817073",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/lens/pipeline.py": {
@@ -1075,10 +1075,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.253446"
+        "detected_at": "2026-02-17T08:53:11.811177"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259059",
+    "timestamp": "2026-02-17T08:53:11.817099",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/orchestrators/onboarding/orchestrator.py": {
@@ -1096,14 +1096,14 @@
           "basename": "orchestrator.py",
           "other_locations": [
             "cortex/intelligence/crawler/orchestrator.py",
-            "cortex_brain/tier1/orchestrators/vacuum/orchestrator.py"
+            "cortex_intelligence/memory/tier1_learned/orchestrators/vacuum/orchestrator.py"
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.253543"
+        "detected_at": "2026-02-17T08:53:11.811274"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259080",
+    "timestamp": "2026-02-17T08:53:11.817120",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex_brain/tier1/orchestrators/vacuum/orchestrator.py": {
@@ -1149,10 +1149,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.253610"
+        "detected_at": "2026-02-17T08:53:11.811342"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259126",
+    "timestamp": "2026-02-17T08:53:11.817167",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/intent_router/classifier.py": {
@@ -1173,10 +1173,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.253674"
+        "detected_at": "2026-02-17T08:53:11.811407"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259152",
+    "timestamp": "2026-02-17T08:53:11.817191",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/intent_router/orchestration_integrator.py": {
@@ -1197,10 +1197,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.253723"
+        "detected_at": "2026-02-17T08:53:11.811462"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259170",
+    "timestamp": "2026-02-17T08:53:11.817210",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/intent_router/edge_case_handler.py": {
@@ -1221,10 +1221,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.253781"
+        "detected_at": "2026-02-17T08:53:11.811526"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259187",
+    "timestamp": "2026-02-17T08:53:11.817229",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/intent_router/disambiguator.py": {
@@ -1245,10 +1245,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.253838"
+        "detected_at": "2026-02-17T08:53:11.811583"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259205",
+    "timestamp": "2026-02-17T08:53:11.817249",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/intent_router/intent_learner.py": {
@@ -1269,10 +1269,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.253887"
+        "detected_at": "2026-02-17T08:53:11.811642"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259223",
+    "timestamp": "2026-02-17T08:53:11.817268",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/intent_router/multimodal_processor.py": {
@@ -1293,10 +1293,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.253946"
+        "detected_at": "2026-02-17T08:53:11.811701"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259242",
+    "timestamp": "2026-02-17T08:53:11.817289",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/knowledge/router.py": {
@@ -1317,10 +1317,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.254017"
+        "detected_at": "2026-02-17T08:53:11.811789"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259270",
+    "timestamp": "2026-02-17T08:53:11.817325",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/intent_router/fallback_strategy.py": {
@@ -1341,10 +1341,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.254073"
+        "detected_at": "2026-02-17T08:53:11.811850"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259287",
+    "timestamp": "2026-02-17T08:53:11.817344",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/lens/models/context.py": {
@@ -1366,10 +1366,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.254154"
+        "detected_at": "2026-02-17T08:53:11.811929"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259305",
+    "timestamp": "2026-02-17T08:53:11.817364",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/domain_orchestrators/business/context.py": {
@@ -1391,10 +1391,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.254166"
+        "detected_at": "2026-02-17T08:53:11.811940"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259324",
+    "timestamp": "2026-02-17T08:53:11.817384",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/domain_orchestrators/business/validation.py": {
@@ -1416,10 +1416,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.254262"
+        "detected_at": "2026-02-17T08:53:11.812031"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259343",
+    "timestamp": "2026-02-17T08:53:11.817405",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/toolkit/validation.py": {
@@ -1441,10 +1441,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.254273"
+        "detected_at": "2026-02-17T08:53:11.812043"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259367",
+    "timestamp": "2026-02-17T08:53:11.817428",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/observability/metrics_schema.py": {
@@ -1465,10 +1465,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.254335"
+        "detected_at": "2026-02-17T08:53:11.812108"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259387",
+    "timestamp": "2026-02-17T08:53:11.817448",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/storage/factory.py": {
@@ -1489,10 +1489,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.254391"
+        "detected_at": "2026-02-17T08:53:11.812165"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259406",
+    "timestamp": "2026-02-17T08:53:11.817465",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/observability/audit_trail.py": {
@@ -1513,10 +1513,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.254457"
+        "detected_at": "2026-02-17T08:53:11.812235"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259430",
+    "timestamp": "2026-02-17T08:53:11.817489",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/registry/migration.py": {
@@ -1537,10 +1537,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.254520"
+        "detected_at": "2026-02-17T08:53:11.812299"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259451",
+    "timestamp": "2026-02-17T08:53:11.817509",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/storage/providers/local.py": {
@@ -1561,10 +1561,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.254578"
+        "detected_at": "2026-02-17T08:53:11.812357"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259472",
+    "timestamp": "2026-02-17T08:53:11.817531",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/storage/providers/azure.py": {
@@ -1585,10 +1585,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.254639"
+        "detected_at": "2026-02-17T08:53:11.812421"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259494",
+    "timestamp": "2026-02-17T08:53:11.817553",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/sts/sts_analyzer.py": {
@@ -1609,10 +1609,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.254708"
+        "detected_at": "2026-02-17T08:53:11.812485"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259513",
+    "timestamp": "2026-02-17T08:53:11.817573",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/lens/core.py": {
@@ -1633,10 +1633,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.254786"
+        "detected_at": "2026-02-17T08:53:11.812558"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259532",
+    "timestamp": "2026-02-17T08:53:11.817592",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/orchestrators/health/intelligence.py": {
@@ -1657,10 +1657,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.254852"
+        "detected_at": "2026-02-17T08:53:11.812629"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259555",
+    "timestamp": "2026-02-17T08:53:11.817615",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/confirmation/governance.py": {
@@ -1681,10 +1681,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.254917"
+        "detected_at": "2026-02-17T08:53:11.812700"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259574",
+    "timestamp": "2026-02-17T08:53:11.817633",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/toolkit/cleanup.py": {
@@ -1705,10 +1705,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.254978"
+        "detected_at": "2026-02-17T08:53:11.812760"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259595",
+    "timestamp": "2026-02-17T08:53:11.817655",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/orchestrators/coherence/coherence_models.py": {
@@ -1729,10 +1729,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.255079"
+        "detected_at": "2026-02-17T08:53:11.812872"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259617",
+    "timestamp": "2026-02-17T08:53:11.817677",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/cli/commands/lens_dashboard.py": {
@@ -1753,10 +1753,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.255143"
+        "detected_at": "2026-02-17T08:53:11.812931"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259640",
+    "timestamp": "2026-02-17T08:53:11.817699",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/infrastructure/structured_logger.py": {
@@ -1777,10 +1777,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.255209"
+        "detected_at": "2026-02-17T08:53:11.812997"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259661",
+    "timestamp": "2026-02-17T08:53:11.817723",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/execution/autonomous_executor.py": {
@@ -1801,10 +1801,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.255277"
+        "detected_at": "2026-02-17T08:53:11.813064"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259683",
+    "timestamp": "2026-02-17T08:53:11.817746",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/lens/cache.py": {
@@ -1825,10 +1825,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.255342"
+        "detected_at": "2026-02-17T08:53:11.813129"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259704",
+    "timestamp": "2026-02-17T08:53:11.817769",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/common/health_check.py": {
@@ -1849,10 +1849,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.255405"
+        "detected_at": "2026-02-17T08:53:11.813192"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259722",
+    "timestamp": "2026-02-17T08:53:11.817790",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/validation/wiring_validator.py": {
@@ -1873,10 +1873,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.255469"
+        "detected_at": "2026-02-17T08:53:11.813255"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259742",
+    "timestamp": "2026-02-17T08:53:11.817812",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/deployment/rollback_orchestrator.py": {
@@ -1897,10 +1897,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.255537"
+        "detected_at": "2026-02-17T08:53:11.813325"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259762",
+    "timestamp": "2026-02-17T08:53:11.817835",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/templates/dashboard_renderer.py": {
@@ -1921,10 +1921,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.255594"
+        "detected_at": "2026-02-17T08:53:11.813388"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259780",
+    "timestamp": "2026-02-17T08:53:11.817855",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/devx/pytest_progress_plugin.py": {
@@ -1945,10 +1945,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.255655"
+        "detected_at": "2026-02-17T08:53:11.813445"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259798",
+    "timestamp": "2026-02-17T08:53:11.817875",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/deployment/dashboard_generator.py": {
@@ -1970,10 +1970,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.255739"
+        "detected_at": "2026-02-17T08:53:11.813532"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259817",
+    "timestamp": "2026-02-17T08:53:11.817894",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/registry/dashboard_generator.py": {
@@ -1995,10 +1995,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.255749"
+        "detected_at": "2026-02-17T08:53:11.813543"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259837",
+    "timestamp": "2026-02-17T08:53:11.817914",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/refactoring/adapters/typescript_adapter.py": {
@@ -2019,10 +2019,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.255826"
+        "detected_at": "2026-02-17T08:53:11.813627"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259862",
+    "timestamp": "2026-02-17T08:53:11.817938",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/infrastructure/progress_tracker.py": {
@@ -2043,10 +2043,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.255896"
+        "detected_at": "2026-02-17T08:53:11.813709"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259887",
+    "timestamp": "2026-02-17T08:53:11.817965",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/api/dashboard_api.py": {
@@ -2067,10 +2067,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.256003"
+        "detected_at": "2026-02-17T08:53:11.813830"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259904",
+    "timestamp": "2026-02-17T08:53:11.817983",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/devx/scenario_library.py": {
@@ -2091,10 +2091,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.256082"
+        "detected_at": "2026-02-17T08:53:11.813907"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259943",
+    "timestamp": "2026-02-17T08:53:11.818010",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/devx/devx_dashboard.py": {
@@ -2115,10 +2115,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.256150"
+        "detected_at": "2026-02-17T08:53:11.813969"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.259969",
+    "timestamp": "2026-02-17T08:53:11.818035",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/devx/integration_validator.py": {
@@ -2139,14 +2139,14 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.256215"
+        "detected_at": "2026-02-17T08:53:11.814038"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.260019",
+    "timestamp": "2026-02-17T08:53:11.818061",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/devx/hot_reload.py": {
-    "file_hash": "f84f022f9de01b1ab34d2003d1c3d59bd1848eb5866c9a759cea16ee753b67c4",
+    "file_hash": "e5e298f1c6bcc4ef79047ef91ab8afceac3e8540aa0e94bc5455a1c92f73f2bf",
     "agent_name": "DuplicateDetectionAgent",
     "issues": [
       {
@@ -2163,10 +2163,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.256282"
+        "detected_at": "2026-02-17T08:53:11.814112"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.260053",
+    "timestamp": "2026-02-17T08:53:11.818089",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/automation/recommendation_gate.py": {
@@ -2187,10 +2187,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.256343"
+        "detected_at": "2026-02-17T08:53:11.814179"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.260074",
+    "timestamp": "2026-02-17T08:53:11.818109",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/automation/status_update_hook.py": {
@@ -2211,10 +2211,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.256400"
+        "detected_at": "2026-02-17T08:53:11.814244"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.260094",
+    "timestamp": "2026-02-17T08:53:11.818129",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/core/observability/health_monitor.py": {
@@ -2236,10 +2236,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.256494"
+        "detected_at": "2026-02-17T08:53:11.814345"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.260115",
+    "timestamp": "2026-02-17T08:53:11.818157",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/observability/health_monitor.py": {
@@ -2261,10 +2261,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.256506"
+        "detected_at": "2026-02-17T08:53:11.814357"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.260136",
+    "timestamp": "2026-02-17T08:53:11.818180",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/interaction/context_synthesis_gateway.py": {
@@ -2285,10 +2285,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.256577"
+        "detected_at": "2026-02-17T08:53:11.814438"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.260159",
+    "timestamp": "2026-02-17T08:53:11.818204",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/interaction/context_cache_layer.py": {
@@ -2309,14 +2309,14 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.256640"
+        "detected_at": "2026-02-17T08:53:11.814495"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.260179",
+    "timestamp": "2026-02-17T08:53:11.818225",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/brain/tier1/orchestrators/cleaners/interface.py": {
-    "file_hash": "cd3e4bd8c297dc20e15b07ed20e8aadf23621f8b873663f7cd3680bbbf98055a",
+    "file_hash": "ae73542ccdf059ddb849a593e89d463b7409bcf9eaef967952e004676faaf30e",
     "agent_name": "DuplicateDetectionAgent",
     "issues": [
       {
@@ -2330,14 +2330,14 @@
           "basename": "interface.py",
           "other_locations": [
             "cortex/brain/core/knowledge/graph/interface.py",
-            "cortex_brain/tier1/orchestrators/cleaners/interface.py"
+            "cortex_intelligence/memory/tier1_learned/orchestrators/cleaners/interface.py"
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.256724"
+        "detected_at": "2026-02-17T08:53:11.814587"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.260200",
+    "timestamp": "2026-02-17T08:53:11.818248",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex_brain/tier1/orchestrators/cleaners/interface.py": {
@@ -2383,10 +2383,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.256933"
+        "detected_at": "2026-02-17T08:53:11.814821"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.260238",
+    "timestamp": "2026-02-17T08:53:11.818290",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/templates/template_manager.py": {
@@ -2407,10 +2407,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.256998"
+        "detected_at": "2026-02-17T08:53:11.814884"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.260258",
+    "timestamp": "2026-02-17T08:53:11.818312",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/templates/content_strategy.py": {
@@ -2431,10 +2431,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.257074"
+        "detected_at": "2026-02-17T08:53:11.814955"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.260283",
+    "timestamp": "2026-02-17T08:53:11.818339",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/templates/quality_assurance.py": {
@@ -2455,10 +2455,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.257145"
+        "detected_at": "2026-02-17T08:53:11.815021"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.260303",
+    "timestamp": "2026-02-17T08:53:11.818361",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/templates/content_generator.py": {
@@ -2479,10 +2479,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.257206"
+        "detected_at": "2026-02-17T08:53:11.815082"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.260322",
+    "timestamp": "2026-02-17T08:53:11.818382",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/templates/knowledge_schema.py": {
@@ -2503,10 +2503,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.257261"
+        "detected_at": "2026-02-17T08:53:11.815142"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.260340",
+    "timestamp": "2026-02-17T08:53:11.818401",
     "ttl_hours": 24
   },
   "DuplicateDetectionAgent:cortex/infrastructure/security/rate_limiter.py": {
@@ -2527,10 +2527,10 @@
           ],
           "duplicate_type": "basename_collision"
         },
-        "detected_at": "2026-02-16T19:32:04.257323"
+        "detected_at": "2026-02-17T08:53:11.815213"
       }
     ],
-    "timestamp": "2026-02-16T19:32:04.260360",
+    "timestamp": "2026-02-17T08:53:11.818420",
     "ttl_hours": 24
   },
   "StubDetectionAgent:cortex/tools/verify_production_readiness.py": {
@@ -18766,6 +18766,633 @@
       }
     ],
     "timestamp": "2026-02-16T19:32:12.667834",
+    "ttl_hours": 24
+  },
+  "InformationalFileAgent:/Users/asifhussain/PROJECTS/CORTEX/cortex/refactoring/adapters/roslyn-cli/obj/Release/net8.0/CortexRoslynCli.csproj.FileListAbsolute.txt": {
+    "file_hash": "0ea4d70b67670317b69511f4f1d9e47dfe5bc535e2f8bbb08fc45ad82720c2d8",
+    "agent_name": "InformationalFileAgent",
+    "issues": [
+      {
+        "category": "path_drift",
+        "severity": "medium",
+        "file_path": "/Users/asifhussain/PROJECTS/CORTEX/cortex/refactoring/adapters/roslyn-cli/obj/Release/net8.0/CortexRoslynCli.csproj.FileListAbsolute.txt",
+        "description": "File 'cortex/refactoring/adapters/roslyn-cli/obj/Release/net8.0/CortexRoslynCli.csproj.FileListAbsolute.txt' violates CORTEX YAML-heavy philosophy. Informational files should be in cortex-docs/, cortex-registry/, or .github/. Consider converting to YAML configuration or moving to documentation.",
+        "line_number": null,
+        "suggested_fix": "Move to cortex-docs/ or delete if obsolete",
+        "metadata": {},
+        "detected_at": "2026-02-17T08:53:10.968645"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.022527",
+    "ttl_hours": 24
+  },
+  "InformationalFileAgent:/Users/asifhussain/PROJECTS/CORTEX/tests/fixtures/dotnet/TestSolution/Core/obj/Debug/net8.0/Core.csproj.FileListAbsolute.txt": {
+    "file_hash": "ff42823df2eeec12961cffd4b485743b45edc4d7467208ec8cec2007a9033506",
+    "agent_name": "InformationalFileAgent",
+    "issues": [
+      {
+        "category": "path_drift",
+        "severity": "medium",
+        "file_path": "/Users/asifhussain/PROJECTS/CORTEX/tests/fixtures/dotnet/TestSolution/Core/obj/Debug/net8.0/Core.csproj.FileListAbsolute.txt",
+        "description": "File 'tests/fixtures/dotnet/TestSolution/Core/obj/Debug/net8.0/Core.csproj.FileListAbsolute.txt' violates CORTEX YAML-heavy philosophy. Informational files should be in cortex-docs/, cortex-registry/, or .github/. Consider converting to YAML configuration or moving to documentation.",
+        "line_number": null,
+        "suggested_fix": "Move to cortex-docs/ or delete if obsolete",
+        "metadata": {},
+        "detected_at": "2026-02-17T08:53:10.981578"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.022554",
+    "ttl_hours": 24
+  },
+  "InformationalFileAgent:/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/GPTRecommendation.txt": {
+    "file_hash": "f2599b8119d5dc7b7e09fff0f512084a887c8356d7ff1bea0c26ab2d80679380",
+    "agent_name": "InformationalFileAgent",
+    "issues": [
+      {
+        "category": "path_drift",
+        "severity": "medium",
+        "file_path": "/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/GPTRecommendation.txt",
+        "description": "File '.github/.archive/2026-02-17-governance-cleanup/GPTRecommendation.txt' violates CORTEX YAML-heavy philosophy. Informational files should be in cortex-docs/, cortex-registry/, or .github/. Consider converting to YAML configuration or moving to documentation.",
+        "line_number": null,
+        "suggested_fix": "Move to cortex-docs/ or delete if obsolete",
+        "metadata": {},
+        "detected_at": "2026-02-17T08:53:11.006252"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.022596",
+    "ttl_hours": 24
+  },
+  "InformationalFileAgent:/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/WAVE-7-COMPLETION-SUMMARY.txt": {
+    "file_hash": "4d2fc49876c8d701b71f26a7ba6dcefc46b2f9eba0e4e804943981767b637717",
+    "agent_name": "InformationalFileAgent",
+    "issues": [
+      {
+        "category": "path_drift",
+        "severity": "medium",
+        "file_path": "/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/WAVE-7-COMPLETION-SUMMARY.txt",
+        "description": "File '.github/.archive/2026-02-17-governance-cleanup/WAVE-7-COMPLETION-SUMMARY.txt' violates CORTEX YAML-heavy philosophy. Informational files should be in cortex-docs/, cortex-registry/, or .github/. Consider converting to YAML configuration or moving to documentation.",
+        "line_number": null,
+        "suggested_fix": "Move to cortex-docs/ or delete if obsolete",
+        "metadata": {},
+        "detected_at": "2026-02-17T08:53:11.006264"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.022622",
+    "ttl_hours": 24
+  },
+  "InformationalFileAgent:/Users/asifhussain/PROJECTS/CORTEX/cortex_lens/dotnet/roslyn_cli/obj/Debug/net8.0/RoslynAnalyzerCLI.csproj.FileListAbsolute.txt": {
+    "file_hash": "e906d8ccd49986766fe7e29680675581d8c3bdcaeaedc6a280442e022b123d8b",
+    "agent_name": "InformationalFileAgent",
+    "issues": [
+      {
+        "category": "path_drift",
+        "severity": "medium",
+        "file_path": "/Users/asifhussain/PROJECTS/CORTEX/cortex_lens/dotnet/roslyn_cli/obj/Debug/net8.0/RoslynAnalyzerCLI.csproj.FileListAbsolute.txt",
+        "description": "File 'cortex_lens/dotnet/roslyn_cli/obj/Debug/net8.0/RoslynAnalyzerCLI.csproj.FileListAbsolute.txt' violates CORTEX YAML-heavy philosophy. Informational files should be in cortex-docs/, cortex-registry/, or .github/. Consider converting to YAML configuration or moving to documentation.",
+        "line_number": null,
+        "suggested_fix": "Move to cortex-docs/ or delete if obsolete",
+        "metadata": {},
+        "detected_at": "2026-02-17T08:53:11.007087"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.022651",
+    "ttl_hours": 24
+  },
+  "InformationalFileAgent:/Users/asifhussain/PROJECTS/CORTEX/tests/e2e/REPHRASE-MODE-FIX-SUMMARY.md": {
+    "file_hash": "7f0098e9ec4c31a603962addff2976b7e53cf3047dfa959db649614a2f647b6f",
+    "agent_name": "InformationalFileAgent",
+    "issues": [
+      {
+        "category": "path_drift",
+        "severity": "medium",
+        "file_path": "/Users/asifhussain/PROJECTS/CORTEX/tests/e2e/REPHRASE-MODE-FIX-SUMMARY.md",
+        "description": "File 'tests/e2e/REPHRASE-MODE-FIX-SUMMARY.md' violates CORTEX YAML-heavy philosophy. Informational files should be in cortex-docs/, cortex-registry/, or .github/. Consider converting to YAML configuration or moving to documentation.",
+        "line_number": null,
+        "suggested_fix": "Move to cortex-docs/ or delete if obsolete",
+        "metadata": {},
+        "detected_at": "2026-02-17T08:53:10.855561"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.021861",
+    "ttl_hours": 24
+  },
+  "InformationalFileAgent:/Users/asifhussain/PROJECTS/CORTEX/tests/e2e/REPHRASE-MODE-ENFORCEMENT.md": {
+    "file_hash": "79f4483bcd1c619575d685dd3d736d9f742f5304300749eb8cd1aeb2c01e72a0",
+    "agent_name": "InformationalFileAgent",
+    "issues": [
+      {
+        "category": "path_drift",
+        "severity": "medium",
+        "file_path": "/Users/asifhussain/PROJECTS/CORTEX/tests/e2e/REPHRASE-MODE-ENFORCEMENT.md",
+        "description": "File 'tests/e2e/REPHRASE-MODE-ENFORCEMENT.md' violates CORTEX YAML-heavy philosophy. Informational files should be in cortex-docs/, cortex-registry/, or .github/. Consider converting to YAML configuration or moving to documentation.",
+        "line_number": null,
+        "suggested_fix": "Move to cortex-docs/ or delete if obsolete",
+        "metadata": {},
+        "detected_at": "2026-02-17T08:53:10.855578"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.021892",
+    "ttl_hours": 24
+  },
+  "InformationalFileAgent:/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/YOUR-QUESTION-ANSWERED.md": {
+    "file_hash": "e59bea5bfbd250466b69bbce12d5025cba994a03371e9a2f83cb88695310fa3b",
+    "agent_name": "InformationalFileAgent",
+    "issues": [
+      {
+        "category": "path_drift",
+        "severity": "medium",
+        "file_path": "/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/YOUR-QUESTION-ANSWERED.md",
+        "description": "File '.github/.archive/2026-02-17-governance-cleanup/YOUR-QUESTION-ANSWERED.md' violates CORTEX YAML-heavy philosophy. Informational files should be in cortex-docs/, cortex-registry/, or .github/. Consider converting to YAML configuration or moving to documentation.",
+        "line_number": null,
+        "suggested_fix": "Move to cortex-docs/ or delete if obsolete",
+        "metadata": {},
+        "detected_at": "2026-02-17T08:53:10.880095"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.021924",
+    "ttl_hours": 24
+  },
+  "InformationalFileAgent:/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/VERSION-CLEANUP-COMPLETION.md": {
+    "file_hash": "a07f1d4fa7121e23ce6eed9d57ad7817f2629c934811216199c6cb14c258df77",
+    "agent_name": "InformationalFileAgent",
+    "issues": [
+      {
+        "category": "path_drift",
+        "severity": "medium",
+        "file_path": "/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/VERSION-CLEANUP-COMPLETION.md",
+        "description": "File '.github/.archive/2026-02-17-governance-cleanup/VERSION-CLEANUP-COMPLETION.md' violates CORTEX YAML-heavy philosophy. Informational files should be in cortex-docs/, cortex-registry/, or .github/. Consider converting to YAML configuration or moving to documentation.",
+        "line_number": null,
+        "suggested_fix": "Move to cortex-docs/ or delete if obsolete",
+        "metadata": {},
+        "detected_at": "2026-02-17T08:53:10.880107"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.021952",
+    "ttl_hours": 24
+  },
+  "InformationalFileAgent:/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/ENH-091-COMPREHENSIVE-SUMMARY.md": {
+    "file_hash": "fc5f0321b8e03ef3a2e079072a5b43b0417b7280f73e4fffebc3945f578292a5",
+    "agent_name": "InformationalFileAgent",
+    "issues": [
+      {
+        "category": "path_drift",
+        "severity": "medium",
+        "file_path": "/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/ENH-091-COMPREHENSIVE-SUMMARY.md",
+        "description": "File '.github/.archive/2026-02-17-governance-cleanup/ENH-091-COMPREHENSIVE-SUMMARY.md' violates CORTEX YAML-heavy philosophy. Informational files should be in cortex-docs/, cortex-registry/, or .github/. Consider converting to YAML configuration or moving to documentation.",
+        "line_number": null,
+        "suggested_fix": "Move to cortex-docs/ or delete if obsolete",
+        "metadata": {},
+        "detected_at": "2026-02-17T08:53:10.880117"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.021986",
+    "ttl_hours": 24
+  },
+  "InformationalFileAgent:/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/ENH-091-GOVERNANCE-RULES-DISPLAY.md": {
+    "file_hash": "7d0fdd24ebf27903165f171426ec17cf1b7475a71ff81032d1cd1dd18943364e",
+    "agent_name": "InformationalFileAgent",
+    "issues": [
+      {
+        "category": "path_drift",
+        "severity": "medium",
+        "file_path": "/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/ENH-091-GOVERNANCE-RULES-DISPLAY.md",
+        "description": "File '.github/.archive/2026-02-17-governance-cleanup/ENH-091-GOVERNANCE-RULES-DISPLAY.md' violates CORTEX YAML-heavy philosophy. Informational files should be in cortex-docs/, cortex-registry/, or .github/. Consider converting to YAML configuration or moving to documentation.",
+        "line_number": null,
+        "suggested_fix": "Move to cortex-docs/ or delete if obsolete",
+        "metadata": {},
+        "detected_at": "2026-02-17T08:53:10.880127"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.022020",
+    "ttl_hours": 24
+  },
+  "InformationalFileAgent:/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/CHALLENGE-FIRST-AUTO-REPHRASE-ANALYSIS.md": {
+    "file_hash": "b9a63a6916d3e8de6ed3e6a5c4ec96012af6942a2015292ef2f80daa771b8b3f",
+    "agent_name": "InformationalFileAgent",
+    "issues": [
+      {
+        "category": "path_drift",
+        "severity": "medium",
+        "file_path": "/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/CHALLENGE-FIRST-AUTO-REPHRASE-ANALYSIS.md",
+        "description": "File '.github/.archive/2026-02-17-governance-cleanup/CHALLENGE-FIRST-AUTO-REPHRASE-ANALYSIS.md' violates CORTEX YAML-heavy philosophy. Informational files should be in cortex-docs/, cortex-registry/, or .github/. Consider converting to YAML configuration or moving to documentation.",
+        "line_number": null,
+        "suggested_fix": "Move to cortex-docs/ or delete if obsolete",
+        "metadata": {},
+        "detected_at": "2026-02-17T08:53:10.880136"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.022048",
+    "ttl_hours": 24
+  },
+  "InformationalFileAgent:/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/README-VACUUM-COMPLETE.md": {
+    "file_hash": "c768470ea6e0ec9873bb5f0b98189fe86ef8db9c467b9b740f5767712514d14f",
+    "agent_name": "InformationalFileAgent",
+    "issues": [
+      {
+        "category": "path_drift",
+        "severity": "medium",
+        "file_path": "/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/README-VACUUM-COMPLETE.md",
+        "description": "File '.github/.archive/2026-02-17-governance-cleanup/README-VACUUM-COMPLETE.md' violates CORTEX YAML-heavy philosophy. Informational files should be in cortex-docs/, cortex-registry/, or .github/. Consider converting to YAML configuration or moving to documentation.",
+        "line_number": null,
+        "suggested_fix": "Move to cortex-docs/ or delete if obsolete",
+        "metadata": {},
+        "detected_at": "2026-02-17T08:53:10.880145"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.022077",
+    "ttl_hours": 24
+  },
+  "InformationalFileAgent:/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/RESPONSE-TEMPLATE-INTEGRATION.md": {
+    "file_hash": "90466d9d23ed55ac56827b4aa5ae0726964b10fee241f1f86a377f02d7d26dad",
+    "agent_name": "InformationalFileAgent",
+    "issues": [
+      {
+        "category": "path_drift",
+        "severity": "medium",
+        "file_path": "/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/RESPONSE-TEMPLATE-INTEGRATION.md",
+        "description": "File '.github/.archive/2026-02-17-governance-cleanup/RESPONSE-TEMPLATE-INTEGRATION.md' violates CORTEX YAML-heavy philosophy. Informational files should be in cortex-docs/, cortex-registry/, or .github/. Consider converting to YAML configuration or moving to documentation.",
+        "line_number": null,
+        "suggested_fix": "Move to cortex-docs/ or delete if obsolete",
+        "metadata": {},
+        "detected_at": "2026-02-17T08:53:10.880154"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.022105",
+    "ttl_hours": 24
+  },
+  "InformationalFileAgent:/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/AGENT-ENHANCEMENT-AUTONOMOUS-EXECUTION.md": {
+    "file_hash": "d3325a75d5636fe0682e607f724763f4d6c8a531a642b21f06153d5e48a3cbae",
+    "agent_name": "InformationalFileAgent",
+    "issues": [
+      {
+        "category": "path_drift",
+        "severity": "medium",
+        "file_path": "/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/AGENT-ENHANCEMENT-AUTONOMOUS-EXECUTION.md",
+        "description": "File '.github/.archive/2026-02-17-governance-cleanup/AGENT-ENHANCEMENT-AUTONOMOUS-EXECUTION.md' violates CORTEX YAML-heavy philosophy. Informational files should be in cortex-docs/, cortex-registry/, or .github/. Consider converting to YAML configuration or moving to documentation.",
+        "line_number": null,
+        "suggested_fix": "Move to cortex-docs/ or delete if obsolete",
+        "metadata": {},
+        "detected_at": "2026-02-17T08:53:10.880163"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.022135",
+    "ttl_hours": 24
+  },
+  "InformationalFileAgent:/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/VACUUM-QUICK-OPERATIONS.md": {
+    "file_hash": "7faf2900b5f6e9157b331deffb9349d8159cf51295fdc7a491c6b751b3d5cfe8",
+    "agent_name": "InformationalFileAgent",
+    "issues": [
+      {
+        "category": "path_drift",
+        "severity": "medium",
+        "file_path": "/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/VACUUM-QUICK-OPERATIONS.md",
+        "description": "File '.github/.archive/2026-02-17-governance-cleanup/VACUUM-QUICK-OPERATIONS.md' violates CORTEX YAML-heavy philosophy. Informational files should be in cortex-docs/, cortex-registry/, or .github/. Consider converting to YAML configuration or moving to documentation.",
+        "line_number": null,
+        "suggested_fix": "Move to cortex-docs/ or delete if obsolete",
+        "metadata": {},
+        "detected_at": "2026-02-17T08:53:10.880173"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.022163",
+    "ttl_hours": 24
+  },
+  "InformationalFileAgent:/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/README-CORTEX-VACUUM.md": {
+    "file_hash": "fa93b73d2c1344e6f63297f951dc7b39cb76fff1fdb2373d984c93b9e4902056",
+    "agent_name": "InformationalFileAgent",
+    "issues": [
+      {
+        "category": "path_drift",
+        "severity": "medium",
+        "file_path": "/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/README-CORTEX-VACUUM.md",
+        "description": "File '.github/.archive/2026-02-17-governance-cleanup/README-CORTEX-VACUUM.md' violates CORTEX YAML-heavy philosophy. Informational files should be in cortex-docs/, cortex-registry/, or .github/. Consider converting to YAML configuration or moving to documentation.",
+        "line_number": null,
+        "suggested_fix": "Move to cortex-docs/ or delete if obsolete",
+        "metadata": {},
+        "detected_at": "2026-02-17T08:53:10.880182"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.022191",
+    "ttl_hours": 24
+  },
+  "InformationalFileAgent:/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/VACUUM-DELIVERY-REPORT.md": {
+    "file_hash": "5de0deb07c39717e71b32594f9408a73ecb764378c187c0ffff9203eae5f6881",
+    "agent_name": "InformationalFileAgent",
+    "issues": [
+      {
+        "category": "path_drift",
+        "severity": "medium",
+        "file_path": "/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/VACUUM-DELIVERY-REPORT.md",
+        "description": "File '.github/.archive/2026-02-17-governance-cleanup/VACUUM-DELIVERY-REPORT.md' violates CORTEX YAML-heavy philosophy. Informational files should be in cortex-docs/, cortex-registry/, or .github/. Consider converting to YAML configuration or moving to documentation.",
+        "line_number": null,
+        "suggested_fix": "Move to cortex-docs/ or delete if obsolete",
+        "metadata": {},
+        "detected_at": "2026-02-17T08:53:10.880191"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.022224",
+    "ttl_hours": 24
+  },
+  "InformationalFileAgent:/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/ARCHITECTURE-GOVERNANCE-RULES-DISPLAY.md": {
+    "file_hash": "de8d91046adba94f17a06e1f14038c5e216cd773deea7207ea133b16102aa3b8",
+    "agent_name": "InformationalFileAgent",
+    "issues": [
+      {
+        "category": "path_drift",
+        "severity": "medium",
+        "file_path": "/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/ARCHITECTURE-GOVERNANCE-RULES-DISPLAY.md",
+        "description": "File '.github/.archive/2026-02-17-governance-cleanup/ARCHITECTURE-GOVERNANCE-RULES-DISPLAY.md' violates CORTEX YAML-heavy philosophy. Informational files should be in cortex-docs/, cortex-registry/, or .github/. Consider converting to YAML configuration or moving to documentation.",
+        "line_number": null,
+        "suggested_fix": "Move to cortex-docs/ or delete if obsolete",
+        "metadata": {},
+        "detected_at": "2026-02-17T08:53:10.880200"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.022262",
+    "ttl_hours": 24
+  },
+  "InformationalFileAgent:/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/VACUUM-IMPLEMENTATION-SUMMARY.md": {
+    "file_hash": "5fedbbce6b9009a3fe2eea1af086e7c30aa2d1fe5031408354b16aca4957c5ce",
+    "agent_name": "InformationalFileAgent",
+    "issues": [
+      {
+        "category": "path_drift",
+        "severity": "medium",
+        "file_path": "/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/VACUUM-IMPLEMENTATION-SUMMARY.md",
+        "description": "File '.github/.archive/2026-02-17-governance-cleanup/VACUUM-IMPLEMENTATION-SUMMARY.md' violates CORTEX YAML-heavy philosophy. Informational files should be in cortex-docs/, cortex-registry/, or .github/. Consider converting to YAML configuration or moving to documentation.",
+        "line_number": null,
+        "suggested_fix": "Move to cortex-docs/ or delete if obsolete",
+        "metadata": {},
+        "detected_at": "2026-02-17T08:53:10.880208"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.022294",
+    "ttl_hours": 24
+  },
+  "InformationalFileAgent:/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/AC-PERMANENT-FIX-IMPLEMENTATION-SUMMARY.md": {
+    "file_hash": "a05e5eb5758fd6138e1a1c5d58789e6ac638995dd0cb4dfb4945d0e54567b3e4",
+    "agent_name": "InformationalFileAgent",
+    "issues": [
+      {
+        "category": "path_drift",
+        "severity": "medium",
+        "file_path": "/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/AC-PERMANENT-FIX-IMPLEMENTATION-SUMMARY.md",
+        "description": "File '.github/.archive/2026-02-17-governance-cleanup/AC-PERMANENT-FIX-IMPLEMENTATION-SUMMARY.md' violates CORTEX YAML-heavy philosophy. Informational files should be in cortex-docs/, cortex-registry/, or .github/. Consider converting to YAML configuration or moving to documentation.",
+        "line_number": null,
+        "suggested_fix": "Move to cortex-docs/ or delete if obsolete",
+        "metadata": {},
+        "detected_at": "2026-02-17T08:53:10.880217"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.022323",
+    "ttl_hours": 24
+  },
+  "InformationalFileAgent:/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/VACUUM-FILE-INDEX.md": {
+    "file_hash": "3b8130306a152d3ff8b031adeb6f4dfe5cef0e383bb8ebc5dd25095fa36ff6c3",
+    "agent_name": "InformationalFileAgent",
+    "issues": [
+      {
+        "category": "path_drift",
+        "severity": "medium",
+        "file_path": "/Users/asifhussain/PROJECTS/CORTEX/.github/.archive/2026-02-17-governance-cleanup/VACUUM-FILE-INDEX.md",
+        "description": "File '.github/.archive/2026-02-17-governance-cleanup/VACUUM-FILE-INDEX.md' violates CORTEX YAML-heavy philosophy. Informational files should be in cortex-docs/, cortex-registry/, or .github/. Consider converting to YAML configuration or moving to documentation.",
+        "line_number": null,
+        "suggested_fix": "Move to cortex-docs/ or delete if obsolete",
+        "metadata": {},
+        "detected_at": "2026-02-17T08:53:10.880225"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.022352",
+    "ttl_hours": 24
+  },
+  "InformationalFileAgent:/Users/asifhussain/PROJECTS/CORTEX/reports/workflow-complexity-gate/AUTONOMOUS-COMPLETION-SUMMARY.md": {
+    "file_hash": "a4123f88c499035cc22a607880f09649decd3cab2992f89f8a2cddbf637b5d34",
+    "agent_name": "InformationalFileAgent",
+    "issues": [
+      {
+        "category": "path_drift",
+        "severity": "medium",
+        "file_path": "/Users/asifhussain/PROJECTS/CORTEX/reports/workflow-complexity-gate/AUTONOMOUS-COMPLETION-SUMMARY.md",
+        "description": "File 'reports/workflow-complexity-gate/AUTONOMOUS-COMPLETION-SUMMARY.md' violates CORTEX YAML-heavy philosophy. Informational files should be in cortex-docs/, cortex-registry/, or .github/. Consider converting to YAML configuration or moving to documentation.",
+        "line_number": null,
+        "suggested_fix": "Move to cortex-docs/ or delete if obsolete",
+        "metadata": {},
+        "detected_at": "2026-02-17T08:53:10.895300"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.022378",
+    "ttl_hours": 24
+  },
+  "InformationalFileAgent:/Users/asifhussain/PROJECTS/CORTEX/reports/workflow-complexity-gate/STATUS-WORKFLOW-COMPLEXITY-GATE.md": {
+    "file_hash": "af89e15c58480ea5db776b8304487dd8738fd2e710cec77b23a867fc680ebfec",
+    "agent_name": "InformationalFileAgent",
+    "issues": [
+      {
+        "category": "path_drift",
+        "severity": "medium",
+        "file_path": "/Users/asifhussain/PROJECTS/CORTEX/reports/workflow-complexity-gate/STATUS-WORKFLOW-COMPLEXITY-GATE.md",
+        "description": "File 'reports/workflow-complexity-gate/STATUS-WORKFLOW-COMPLEXITY-GATE.md' violates CORTEX YAML-heavy philosophy. Informational files should be in cortex-docs/, cortex-registry/, or .github/. Consider converting to YAML configuration or moving to documentation.",
+        "line_number": null,
+        "suggested_fix": "Move to cortex-docs/ or delete if obsolete",
+        "metadata": {},
+        "detected_at": "2026-02-17T08:53:10.895309"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.022406",
+    "ttl_hours": 24
+  },
+  "InformationalFileAgent:/Users/asifhussain/PROJECTS/CORTEX/reports/workflow-complexity-gate/FINAL-COMPLETION-REPORT-WORKFLOW-COMPLEXITY-GATE.md": {
+    "file_hash": "914e4b931052294c3d74f5a827c205a40acff649ab647de1cca4324a141afbb6",
+    "agent_name": "InformationalFileAgent",
+    "issues": [
+      {
+        "category": "path_drift",
+        "severity": "medium",
+        "file_path": "/Users/asifhussain/PROJECTS/CORTEX/reports/workflow-complexity-gate/FINAL-COMPLETION-REPORT-WORKFLOW-COMPLEXITY-GATE.md",
+        "description": "File 'reports/workflow-complexity-gate/FINAL-COMPLETION-REPORT-WORKFLOW-COMPLEXITY-GATE.md' violates CORTEX YAML-heavy philosophy. Informational files should be in cortex-docs/, cortex-registry/, or .github/. Consider converting to YAML configuration or moving to documentation.",
+        "line_number": null,
+        "suggested_fix": "Move to cortex-docs/ or delete if obsolete",
+        "metadata": {},
+        "detected_at": "2026-02-17T08:53:10.895318"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.022436",
+    "ttl_hours": 24
+  },
+  "InformationalFileAgent:/Users/asifhussain/PROJECTS/CORTEX/reports/workflow-complexity-gate/IMPLEMENTATION-SUMMARY-WORKFLOW-COMPLEXITY-GATE.md": {
+    "file_hash": "efe08c5a3032f1102a3d8300f5710434e0b26a1c25c3fb920a0d016306073b15",
+    "agent_name": "InformationalFileAgent",
+    "issues": [
+      {
+        "category": "path_drift",
+        "severity": "medium",
+        "file_path": "/Users/asifhussain/PROJECTS/CORTEX/reports/workflow-complexity-gate/IMPLEMENTATION-SUMMARY-WORKFLOW-COMPLEXITY-GATE.md",
+        "description": "File 'reports/workflow-complexity-gate/IMPLEMENTATION-SUMMARY-WORKFLOW-COMPLEXITY-GATE.md' violates CORTEX YAML-heavy philosophy. Informational files should be in cortex-docs/, cortex-registry/, or .github/. Consider converting to YAML configuration or moving to documentation.",
+        "line_number": null,
+        "suggested_fix": "Move to cortex-docs/ or delete if obsolete",
+        "metadata": {},
+        "detected_at": "2026-02-17T08:53:10.895326"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.022465",
+    "ttl_hours": 24
+  },
+  "InformationalFileAgent:/Users/asifhussain/PROJECTS/CORTEX/reports/logs/batch_generation.log": {
+    "file_hash": "5cd87757600dafeaf157c21fc52df215779a85efc57de561819d23d5e7d6b674",
+    "agent_name": "InformationalFileAgent",
+    "issues": [
+      {
+        "category": "path_drift",
+        "severity": "medium",
+        "file_path": "/Users/asifhussain/PROJECTS/CORTEX/reports/logs/batch_generation.log",
+        "description": "File 'reports/logs/batch_generation.log' violates CORTEX YAML-heavy philosophy. Informational files should be in cortex-docs/, cortex-registry/, or .github/. Consider converting to YAML configuration or moving to documentation.",
+        "line_number": null,
+        "suggested_fix": "Move to cortex-docs/ or delete if obsolete",
+        "metadata": {},
+        "detected_at": "2026-02-17T08:53:10.958027"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.022494",
+    "ttl_hours": 24
+  },
+  "DuplicateDetectionAgent:cortex-registry/planning/system/execution-config-refactor/metadata.yaml": {
+    "file_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "agent_name": "DuplicateDetectionAgent",
+    "issues": [
+      {
+        "category": "duplicate",
+        "severity": "critical",
+        "file_path": "cortex-registry/planning/system/execution-config-refactor/metadata.yaml",
+        "description": "Exact duplicate of cortex-registry/artifacts/templates/_index.yaml (identical YAML)",
+        "line_number": null,
+        "suggested_fix": "Delete this file. SSOT is in registry: cortex-registry/artifacts/templates/_index.yaml",
+        "metadata": {
+          "ssot_file": "cortex-registry/artifacts/templates/_index.yaml",
+          "duplicate_type": "exact_yaml",
+          "file_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "detected_at": "2026-02-17T08:53:11.719509"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.816014",
+    "ttl_hours": 24
+  },
+  "DuplicateDetectionAgent:cortex-registry/planning/phases/planned/phase-registry-consolidation.yaml": {
+    "file_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "agent_name": "DuplicateDetectionAgent",
+    "issues": [
+      {
+        "category": "duplicate",
+        "severity": "critical",
+        "file_path": "cortex-registry/planning/phases/planned/phase-registry-consolidation.yaml",
+        "description": "Exact duplicate of cortex-registry/artifacts/templates/_index.yaml (identical YAML)",
+        "line_number": null,
+        "suggested_fix": "Delete this file. SSOT is in registry: cortex-registry/artifacts/templates/_index.yaml",
+        "metadata": {
+          "ssot_file": "cortex-registry/artifacts/templates/_index.yaml",
+          "duplicate_type": "exact_yaml",
+          "file_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "detected_at": "2026-02-17T08:53:11.719524"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.816038",
+    "ttl_hours": 24
+  },
+  "DuplicateDetectionAgent:cortex-registry/core/meta/response-format.yaml": {
+    "file_hash": "d34097a093dea3ef3e7962d5161881817bf9c812ae82d957938d131225b35294",
+    "agent_name": "DuplicateDetectionAgent",
+    "issues": [
+      {
+        "category": "duplicate",
+        "severity": "critical",
+        "file_path": "cortex-registry/core/meta/response-format.yaml",
+        "description": "Exact duplicate of cortex-registry/artifacts/templates/responses/format-standards.yaml (identical YAML)",
+        "line_number": null,
+        "suggested_fix": "Delete this file. SSOT is in registry: cortex-registry/artifacts/templates/responses/format-standards.yaml",
+        "metadata": {
+          "ssot_file": "cortex-registry/artifacts/templates/responses/format-standards.yaml",
+          "duplicate_type": "exact_yaml",
+          "file_hash": "d34097a093dea3ef3e7962d5161881817bf9c812ae82d957938d131225b35294"
+        },
+        "detected_at": "2026-02-17T08:53:11.719533"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.816062",
+    "ttl_hours": 24
+  },
+  "DuplicateDetectionAgent:cortex_intelligence/memory/tier1_learned/orchestrators/cleaners/registry.py": {
+    "file_hash": "7d8ddba4d7403271dcdfda521456e2c9c92e41b58885479c7016f5ac8ba7e932",
+    "agent_name": "DuplicateDetectionAgent",
+    "issues": [
+      {
+        "category": "multiple_execution_paths",
+        "severity": "high",
+        "file_path": "cortex_intelligence/memory/tier1_learned/orchestrators/cleaners/registry.py",
+        "description": "Same filename 'registry.py' in multiple locations (ambiguous imports)",
+        "line_number": null,
+        "suggested_fix": "Rename or consolidate with cortex/intelligence/patterns/registry.py",
+        "metadata": {
+          "basename": "registry.py",
+          "other_locations": [
+            "cortex/intelligence/patterns/registry.py",
+            "cortex/brain/tier1/orchestrators/cleaners/registry.py"
+          ],
+          "duplicate_type": "basename_collision"
+        },
+        "detected_at": "2026-02-17T08:53:11.811052"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.817051",
+    "ttl_hours": 24
+  },
+  "DuplicateDetectionAgent:cortex_intelligence/memory/tier1_learned/orchestrators/vacuum/orchestrator.py": {
+    "file_hash": "a0f0808593f15884ab2da0be52a24f45b560b371d8ed1d54bc43c9a8e70a2804",
+    "agent_name": "DuplicateDetectionAgent",
+    "issues": [
+      {
+        "category": "multiple_execution_paths",
+        "severity": "high",
+        "file_path": "cortex_intelligence/memory/tier1_learned/orchestrators/vacuum/orchestrator.py",
+        "description": "Same filename 'orchestrator.py' in multiple locations (ambiguous imports)",
+        "line_number": null,
+        "suggested_fix": "Rename or consolidate with cortex/intelligence/crawler/orchestrator.py",
+        "metadata": {
+          "basename": "orchestrator.py",
+          "other_locations": [
+            "cortex/intelligence/crawler/orchestrator.py",
+            "cortex/orchestrators/onboarding/orchestrator.py"
+          ],
+          "duplicate_type": "basename_collision"
+        },
+        "detected_at": "2026-02-17T08:53:11.811285"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.817148",
+    "ttl_hours": 24
+  },
+  "DuplicateDetectionAgent:cortex_intelligence/memory/tier1_learned/orchestrators/cleaners/interface.py": {
+    "file_hash": "42d1660426d04dcd0afa94023dfc505e3506c3f24810278fa39abe87f95fe45e",
+    "agent_name": "DuplicateDetectionAgent",
+    "issues": [
+      {
+        "category": "multiple_execution_paths",
+        "severity": "high",
+        "file_path": "cortex_intelligence/memory/tier1_learned/orchestrators/cleaners/interface.py",
+        "description": "Same filename 'interface.py' in multiple locations (ambiguous imports)",
+        "line_number": null,
+        "suggested_fix": "Rename or consolidate with cortex/brain/core/knowledge/graph/interface.py",
+        "metadata": {
+          "basename": "interface.py",
+          "other_locations": [
+            "cortex/brain/core/knowledge/graph/interface.py",
+            "cortex/brain/tier1/orchestrators/cleaners/interface.py"
+          ],
+          "duplicate_type": "basename_collision"
+        },
+        "detected_at": "2026-02-17T08:53:11.814598"
+      }
+    ],
+    "timestamp": "2026-02-17T08:53:11.818268",
     "ttl_hours": 24
   }
 }

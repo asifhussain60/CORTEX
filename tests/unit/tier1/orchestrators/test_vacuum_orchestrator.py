@@ -35,12 +35,12 @@ cortex_intelligence_path = Path(__file__).parent.parent.parent.parent.parent / "
 if str(cortex_intelligence_path) not in sys.path:
     sys.path.insert(0, str(cortex_intelligence_path))
 
-from tier1.orchestrators.vacuum import (
+from cortex_intelligence.memory.tier1_learned.orchestrators.vacuum.orchestrator import (
     VacuumOrchestrator,
     OrchestratorState,
     OrchestrationReport,
 )
-from tier1.orchestrators.cleaners import (
+from cortex_intelligence.memory.tier1_learned.orchestrators.cleaners import (
     CleanerInterface,
     Analysis,
     Report,
