@@ -12,6 +12,8 @@ Public API:
     MarkdownSprawlCleaner: Remove temporary markdown files
     TempScriptCleaner: Clean phase-specific and ad-hoc scripts
     OrphanedTestCleaner: Clean misplaced test files
+    ArchivedPhaseExecutorCleaner: Clean old archived phase executors
+    BuildArtifactCleaner: Clean build artifacts (obj/, bin/, __pycache__)
 
 Usage:
     ```python
@@ -20,6 +22,8 @@ Usage:
         RootDatabaseCleaner,
         TempScriptCleaner,
         OrphanedTestCleaner,
+        ArchivedPhaseExecutorCleaner,
+        BuildArtifactCleaner,
     )
     
     registry = CleanerRegistry()
@@ -46,6 +50,8 @@ from .root_artifacts import RootArtifactsCleaner
 from .markdown_sprawl import MarkdownSprawlCleaner
 from .temp_script import TempScriptCleaner
 from .orphaned_test import OrphanedTestCleaner
+from .archived_phase_executor import ArchivedPhaseExecutorCleaner
+from .build_artifact import BuildArtifactCleaner
 
 # Backward compatibility aliases
 DatabaseMigrationCleaner = RootDatabaseCleaner  # Old name for compatibility
@@ -63,6 +69,8 @@ __all__ = [
     "MarkdownSprawlCleaner",
     "TempScriptCleaner",
     "OrphanedTestCleaner",
+    "ArchivedPhaseExecutorCleaner",
+    "BuildArtifactCleaner",
     # Backward compatibility
     "DatabaseMigrationCleaner",
 ]

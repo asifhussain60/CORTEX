@@ -21,6 +21,8 @@ from cortex_intelligence.memory.tier1_learned.orchestrators.cleaners import (
     RootArtifactsCleaner,
     TempScriptCleaner,
     OrphanedTestCleaner,
+    ArchivedPhaseExecutorCleaner,
+    BuildArtifactCleaner,
 )
 
 
@@ -42,6 +44,8 @@ def main() -> int:
         RootArtifactsCleaner,
         TempScriptCleaner,
         OrphanedTestCleaner,
+        ArchivedPhaseExecutorCleaner,
+        BuildArtifactCleaner,
     ]
     
     for cleaner_cls in cleaners:
