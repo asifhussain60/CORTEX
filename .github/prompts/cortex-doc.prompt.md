@@ -1,6 +1,33 @@
 # CORTEX Documentation Generation Prompt
 
-**Updated:** 2026-02-14 | **Authority:** Documentation Architect Agent + External Review Integration | **Mode:** Registry-Driven Tri-Mode (Refresh + Generate + Story) | **Integration:** Phase 74 + ENH-064 + Phase 8 + Diátaxis Framework + C4 Model
+**Updated:** 2026-02-17 | **Authority:** Documentation Architect Agent + External Review Integration + Chat01 Digest | **Mode:** Registry-Driven Tri-Mode (Refresh + Generate + Story) | **Integration:** Phase 74 + ENH-064 + Phase 8 + Diátaxis Framework + C4 Model
+
+---
+
+## 🚨 Content Philosophy for .md Files (Chat01 Approved)
+
+**CRITICAL:** For *.md files in `cortex-docs/content/src/`, focus ONLY on content that cortex-docs agents need to render documentation and diagrams. Do NOT include:
+
+❌ **Exclude (Unnecessary Technical Data):**
+- Internal Python implementation details (class internals, private methods)
+- Low-level code paths and execution traces
+- Database schema implementation details beyond high-level description
+- Internal algorithm pseudocode (unless explaining design decisions)
+- File system paths to internal modules
+- Debug-level technical minutiae
+
+✅ **Include (Rendering-Ready Content):**
+- **User-facing capabilities** and what they enable
+- **Architecture diagrams** (Mermaid code, C4 models, D3 specs)
+- **API references** for MCP tools and public interfaces
+- **Usage examples** and integration patterns
+- **Conceptual explanations** using accessible language
+- **Configuration options** that users interact with
+- **3-role perspective content** (Business Leaders, Product Owners, Software Developers)
+- **Evidence-backed metrics** for capability descriptions
+- **Qualified language** for legal risk mitigation
+
+**Principle:** Documentation should enable cortex-docs HTML generation, not serve as internal implementation reference.
 
 ---
 
@@ -232,6 +259,13 @@ word_count: 0  # Auto-computed by tooling
 - Key takeaways (bullet list)
 - Related diagrams (links)
 ```
+
+**Diagram Content Focus (Chat01 Approved):**
+- Show **user-facing components** and their relationships
+- Illustrate **data flow from user perspective**
+- Highlight **integration points** and external interfaces
+- Avoid **internal class hierarchies** unless explaining design decisions
+- Use **accessible labels** ("Request Handler" not "MasterOrchestrator._route_internal()")
 
 ### Content Depth Rubric
 
@@ -503,15 +537,28 @@ refactoring requests. No manual configuration required.
 <!-- Similar sections for other new orchestrators using 3-role blended approach -->
 ```
 
-**Chat01 Compliance Checklist:**
-- ✅ Third-person voice ("Organizations benefit..." not "You benefit...")
-- ✅ Qualified language ("has the potential to" not "will definitely")
-- ✅ Blended role insights (not separate "For Developers:" sections)
-- ✅ Accessible headings ("Intelligence Validation" not "HolisticValidationOrchestrator Technical Spec")
-- ✅ Evidence-backed metrics (actual ms timings, not "blazing fast")
-- ✅ Mandatory disclaimers on all capability claims
-- ✅ Progressive disclosure (high-level → technical details)
-- ✅ Simplified analogies (no medical terminology)
+### Chat01 Compliance Checklist (Mandatory)
+
+**For ALL documentation content, enforce these requirements:**
+
+| Requirement | Compliant ✅ | Non-Compliant ❌ |
+|-------------|-------------|------------------|
+| **Voice** | "Organizations benefit from..." | "You benefit from..." |
+| **Claims** | "Has the potential to reduce..." | "Will definitely reduce..." |
+| **Evidence** | "245ms avg (internal testing)" | "Blazing fast performance" |
+| **Roles** | Blended insights in unified sections | Separate "For Developers:" callouts |
+| **Headings** | "Understanding Code Structure" | "AST Analyzer Technical Spec" |
+| **Disclaimers** | Required on all capability pages | Optional or omitted |
+| **Disclosure** | High-level → progressive detail | Technical-first approach |
+| **Analogies** | "Multi-perspective intelligence" | "Prefrontal cortex processing" |
+| **Content Scope** | User-facing capabilities only | Internal implementation details |
+
+**Non-Negotiable Elements:**
+- Third-person narrative voice throughout
+- Qualified language ("may", "has potential", "designed to")
+- Evidence-backed claims with disclaimers
+- Accessible language for non-technical roles
+- Focus on what users can do, not how code works internally
 
 ### Step 5: Regenerate Diagrams
 
