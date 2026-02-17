@@ -531,5 +531,170 @@ class InteractionOrchestrator(IOrchestrator):
         # ChallengeEngine will be wired here when available
         return None
 
+    # =========================================================================
+    # ENH-090: Semantic Block Assembly Integration
+    # =========================================================================
+
+    def _init_block_assembler(self) -> Any:
+        """
+        Initialize SemanticBlockAssembler with graceful fallback.
+
+        Returns:
+            SemanticBlockAssembler instance or None if unavailable.
+        """
+        try:
+            from cortex.registry.semantic_blocks import SemanticBlockAssembler, SemanticBlockLoader, SemanticBlockReasoner
+
+            loader = SemanticBlockLoader()
+            reasoner = SemanticBlockReasoner(loader)
+            return SemanticBlockAssembler(loader, reasoner)
+        except Exception:
+            # Graceful degradation — blocks not available
+            return None
+
+    @property
+    def block_assembler(self) -> Any:
+        """
+        Lazy-load semantic block assembler on first access.
+
+        Returns:
+            SemanticBlockAssembler instance.
+        """
+        if not hasattr(self, "_block_assembler"):
+            self._block_assembler = self._init_block_assembler()
+        return self._block_assembler
+
+    def detect_intent(self, context: Dict[str, Any]) -> str:
+        """
+        Classify user intent from request text.
+
+        Analyzes user request to determine intent (IMPLEMENT, FIX, ANALYZE, etc.).
+
+        Args:
+            context: Dictionary with 'user_request' and 'conversation_history'.
+
+        Returns:
+            Intent string (IMPLEMENT|FIX|REFACTOR|ANALYZE|AUDIT|PLAN).
+        """
+        user_request = context.get("user_request", "").lower()
+
+        # Intent detection heuristics (order matters — check specific before general)
+        if any(kw in user_request for kw in ["implement", "create", "build", "add", "new"]):
+            return "IMPLEMENT"
+        elif any(kw in user_request for kw in ["fix", "bug", "error", "broken", "issue", "debug"]):
+            return "FIX"
+        elif any(kw in user_request for kw in ["refactor", "clean", "improve", "optimize", "reorganize"]):
+            return "REFACTOR"
+        elif any(kw in user_request for kw in ["plan", "design", "organize", "roadmap"]):
+            # Check PLAN before ANALYZE (architect can mean analyze OR plan)
+            return "PLAN"
+        elif any(kw in user_request for kw in ["analyze", "audit", "check", "review", "scan", "what", "show", "explain"]):
+            return "ANALYZE"
+        else:
+            # Default to ANALYZE for queries
+            return "ANALYZE"
+
+    def select_blocks_for_intent(self, intent: str) -> List[str]:
+        """
+        Select appropriate semantic blocks for an intent.
+
+        Maps intent to block composition rules.
+
+        Args:
+            intent: User intent (IMPLEMENT|FIX|REFACTOR|ANALYZE|AUDIT|PLAN).
+
+        Returns:
+            List of block names to assemble.
+        """
+        # Intent → block selection mapping
+        intent_blocks = {
+            "IMPLEMENT": ["capabilities", "tutorial", "next_steps"],
+            "FIX": ["capabilities", "lens", "next_steps"],
+            "REFACTOR": ["capabilities", "tutorial", "next_steps"],
+            "ANALYZE": ["lens", "orchestrators", "next_steps"],
+            "AUDIT": ["capabilities", "orchestrators", "next_steps"],
+            "PLAN": ["capabilities", "orchestrators", "next_steps"],
+        }
+
+        return intent_blocks.get(intent, ["capabilities", "next_steps"])
+
+    def select_blocks_for_context(self, context: Dict[str, Any]) -> List[str]:
+        """
+        Select blocks based on conversation context.
+
+        First interaction includes INTRO block.
+        Subsequent interactions omit INTRO.
+
+        Args:
+            context: Dictionary with 'user_request' and 'conversation_history'.
+
+        Returns:
+            List of block names to assemble.
+        """
+        history = context.get("conversation_history", [])
+        is_first = len(history) == 0
+
+        # Detect intent
+        intent = self.detect_intent(context)
+        blocks = self.select_blocks_for_intent(intent)
+
+        # Add INTRO for first interaction
+        if is_first:
+            blocks = ["intro"] + blocks
+
+        return blocks
+
+    def assemble_response(self, context: Dict[str, Any]) -> str:
+        """
+        Assemble personality-consistent response using semantic blocks.
+
+        Args:
+            context: Dictionary with 'user_request' and 'conversation_history'.
+
+        Returns:
+            Assembled markdown response.
+        """
+        if self.block_assembler is None:
+            # Fallback: return simple message if blocks unavailable
+            return "**CORTEX Ready** — Unable to load semantic blocks. Proceeding with basic mode."
+
+        # Select blocks for context
+        blocks = self.select_blocks_for_context(context)
+
+        # Assemble
+        result = self.block_assembler.assemble(blocks)
+
+        return result.assembled_content
+
+    def assemble_response_with_metrics(
+        self, context: Dict[str, Any]
+    ) -> tuple:
+        """
+        Assemble response and return metrics.
+
+        Args:
+            context: Dictionary with 'user_request' and 'conversation_history'.
+
+        Returns:
+            Tuple of (assembled_content, metrics_dict).
+        """
+        if self.block_assembler is None:
+            return ("CORTEX Ready — Blocks unavailable", {})
+
+        # Select and assemble
+        blocks = self.select_blocks_for_context(context)
+        result = self.block_assembler.assemble(blocks)
+
+        # Build metrics
+        metrics = {
+            "blocks_used": result.blocks_assembled,
+            "total_words": result.total_words,
+            "personality_consistent": result.personality_consistent,
+            "duplication_check_passed": result.duplication_check_passed,
+            "rendering_valid": result.rendering_valid,
+        }
+
+        return (result.assembled_content, metrics)
+
 
 # AC_COMPLETE: AC-P0-INTERACTION-ORCH-GREEN-001
