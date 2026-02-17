@@ -143,46 +143,28 @@ Challenge-First Protocol:
 
 ### Step 6: Output Format
 
+**CRITICAL: Single paragraph ONLY (copy-pasteable into new Copilot Chat session):**
+
 **Template:**
-```markdown
-🔄 AUTO-REPHRASE (MasterOrchestrator Enhancement)
+```
+{REFINED_REQUEST_AS_SINGLE_PARAGRAPH_WITH_CORTEX_CONTEXT_INLINE}
+```
 
-INTENT: {primary} | SCOPE: {scope} | CONFIDENCE: {%}
+**Format Rules:**
+- ✅ ONE paragraph of plain text (no markdown formatting)
+- ✅ Remove filler words ("I think", "probably", "some kind of")
+- ✅ Inject CORTEX technical context inline (e.g., "via TDDOrchestrator")
+- ✅ Include relevant governance rules inline (e.g., "per CORE-008")
+- ✅ Include orchestrator routing inline (e.g., "via {OrchestratorName}")
+- ✅ Self-contained and copy-pasteable
+- ❌ NO markdown headers, code blocks, tables, or bullet lists
+- ❌ NO multi-paragraph output
+- ❌ NO challenge protocol (that's for implementation mode)
+- ❌ NO metrics or before/after comparisons
 
----
-
-GOVERNANCE RULES ACTIVE:
-| Rule | Context |
-|------|---------|
-| {CORE-XXX} | {explanation} |
-
-ORCHESTRATOR ROUTING:
-| Component | Status | Notes |
-|-----------|--------|-------|
-| Primary: {name} | {active} | {wiring status} |
-
-ARCHITECTURE CONTEXT:
-- Protocols: {list}
-- Dependencies: {list}
-- Wiring: {status}
-
-CHALLENGE-FIRST ANALYSIS:
-| Pillar | Status | Insight |
-|--------|--------|---------|
-| Extensibility | {PASS/REVIEW/CONCERN} | {comment} |
-| Scalability | {PASS/REVIEW/CONCERN} | {comment} |
-| Accuracy | {PASS/REVIEW/CONCERN} | {comment} |
-| Collaboration | {PASS/REVIEW/CONCERN} | {comment} |
-| Maintainability | {PASS/REVIEW/CONCERN} | {comment} |
-
-SINGLE BEST RECOMMENDATION:
-{executive summary ≤3 sentences}
-
-BREAKING RISK: {LOW|MEDIUM|HIGH}
-
-Ready for MasterOrchestrator: ✅ / ⚠️ / ❌
-
----
+**Example Output:**
+```
+Implement user authentication for admin panel security via TDDOrchestrator with module-level scope, including JWT token validation, role-based access control, and secure session management following CORTEX governance rules CORE-008 (TDD mandatory) and CORE-011 (type hints required).
 ```
 
 ---

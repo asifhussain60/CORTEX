@@ -344,7 +344,7 @@ pytest tests/unit/lens/adapters/test_typescript_adapter.py -vvv
 
 ---
 
-## � REPHRASE MODE (Token Optimization)
+## REPHRASE MODE (Token Optimization)
 
 **Authority:** Phase 101 - Conversational Intent Gateway  
 **Trigger:** User provides verbose/unclear request  
@@ -427,37 +427,44 @@ result = cortex_classify(
 
 ### Output Format (SSOT)
 
-**Clean markdown output (no metrics, no tables, no headers):**
+**CRITICAL: Single clean paragraph ONLY (copy-pasteable into new Copilot Chat session):**
 
-```markdown
-{REFINED_PROMPT_WITH_CORTEX_TECHNICAL_CONTEXT}
-
----
-
-**Challenge Protocol:** Before proceeding, identify ONE key assumption in the request above that might be incorrect or suboptimal. Present an alternative approach that could yield better outcomes. Structure as: "Assumption: [X]. Alternative: [Y]. Trade-off: [Z]."
+```
+{REFINED_PROMPT_AS_SINGLE_PARAGRAPH_WITH_CORTEX_CONTEXT}
 ```
 
 **Key Principles:**
-- ✅ Output ONLY refined prompt text + challenge protocol
+- ✅ Output ONLY ONE paragraph of refined plain text (no markdown formatting, no headers, no code blocks)
+- ✅ Remove filler words ("I think", "probably", "some kind of", "maybe", "perhaps")
+- ✅ Add CORTEX technical context inline based on intent (e.g., "via TDDOrchestrator" for IMPLEMENT)
+- ✅ Make the paragraph self-contained and copy-pasteable into a new GitHub Copilot Chat session
+- ❌ NO markdown headers (##, ###)
+- ❌ NO code blocks (``` or `)
 - ❌ NO metrics tables (token reduction, confidence, etc.)
 - ❌ NO before/after comparisons
+- ❌ NO challenge protocol appended (that's for implementation mode, not rephrase)
 - ❌ NO examples or explanations
-- ✅ Challenge protocol auto-appended (unless user included it)
-- ✅ Filler words removed ("I think", "probably", "some kind of")
-- ✅ CORTEX technical context added based on intent (e.g., "via TDDOrchestrator")
+- ❌ NO bullet lists or structured formatting
+- ❌ NO line breaks or multi-paragraph output
+
+### STRICT EXECUTION CONSTRAINTS (ENFORCEMENT)
+
+**Critical:** The REPHRASE mode is a transformation step (text + optional vision input) ONLY. It MUST NOT perform repository file I/O or autonomously invoke agent workflows that read or modify repository files.
+
+- ❌ DO NOT open, read, list, or modify repository files (no `read_file`, no directory listing, no patching)
+- ❌ DO NOT call agent workflows that perform file-system operations as part of the rephrase transformation
+- ✅ If additional repository context is required to produce a correct refinement, return the literal token line: `REQUIRES_REPO_CONTEXT` and stop. The caller (MasterOrchestrator) may then provide explicit repository extracts or authorize a separate safe scan.
+
+This prevents the common drift where a rephrase/preprocessor step begins enumerating or editing files instead of focusing on the user's raw request and provided visual input.
 
 **Example Output:**
-```markdown
-Implement user authentication for admin panel security (via TDDOrchestrator with module-level scope).
-
----
-
-**Challenge Protocol:** Before proceeding, identify ONE key assumption in the request above that might be incorrect or suboptimal. Present an alternative approach that could yield better outcomes. Structure as: "Assumption: [X]. Alternative: [Y]. Trade-off: [Z]."
+```
+Implement user authentication for admin panel security via TDDOrchestrator with module-level scope, including JWT token validation, role-based access control, and secure session management following CORTEX governance rules CORE-008 (TDD mandatory) and CORE-011 (type hints required).
 ```
 
 ### Integration with Agents
 
-**Agent updates (reference only):**
+**Agent updates (reference only — suggestions only; DO NOT AUTO-EXECUTE or open files):**
 - `.github/agents/core/CORTEX.md` — Add REPHRASE to intent table
 - `.github/agents/core/cortex-interactive.md` — Document rephrase workflow
 
@@ -470,12 +477,8 @@ Implement user authentication for admin panel security (via TDDOrchestrator with
 User: "rephrase: I think we should probably implement some kind of user authentication system because right now anyone can access the admin panel and that's not good for security and we need to make sure only authorized users can get in"
 
 AI Output:
-```markdown
-Implement user authentication for admin panel security (via TDDOrchestrator with module-level scope).
-
----
-
-**Challenge Protocol:** Before proceeding, identify ONE key assumption in the request above that might be incorrect or suboptimal. Present an alternative approach that could yield better outcomes. Structure as: "Assumption: [X]. Alternative: [Y]. Trade-off: [Z]."
+```
+Implement user authentication for admin panel security via TDDOrchestrator with module-level scope, restricting access to authorized users only through JWT token validation and role-based access control following CORTEX governance CORE-008 and CORE-053.
 ```
 
 **Example 2: Fix Request**
@@ -483,12 +486,8 @@ Implement user authentication for admin panel security (via TDDOrchestrator with
 User: "rephrase: Fix the authentication bug that's causing users to not be able to login because of token validation issues"
 
 AI Output:
-```markdown
-Fix authentication token validation bug preventing user login (via TDDOrchestrator with test-first debugging).
-
----
-
-**Challenge Protocol:** Before proceeding, identify ONE key assumption in the request above that might be incorrect or suboptimal. Present an alternative approach that could yield better outcomes. Structure as: "Assumption: [X]. Alternative: [Y]. Trade-off: [Z]."
+```
+Fix authentication token validation bug preventing user login via TDDOrchestrator with test-first debugging, focusing on JWT decode failures and session expiry edge cases per CORTEX governance CORE-008.
 ```
 
 ### Performance Metrics

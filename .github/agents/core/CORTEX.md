@@ -184,7 +184,7 @@
 | `/analyze {scope}` | LENS analysis |
 | `/recall {feature}` | Feature discovery |
 | `/onboard {path}` | Repository onboarding + security scan |
-| `/rephrase {request}` | **REPHRASE MODE:** Convert verbose request into CORTEX-efficient prompt (35% token reduction, markdown output) |
+| `/rephrase {request}` | **REPHRASE MODE:** Convert verbose/unclear request into single clean paragraph with CORTEX context (copy-pasteable into new Copilot Chat session). NO repo file I/O. Output format: plain text paragraph only, no markdown formatting. See `.github/agents/core/request-rephrase-orchestrator.md` for full spec. |
 
 ---
 
