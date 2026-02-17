@@ -29,10 +29,10 @@ class ResponseValidator:
         (r"(?:create|write|generate)\s+.*\.(md|txt).*file", "File creation suggestion"),
         (r"(?:create|write)\s+.*\.(md|txt)", "File creation reference"),
         (r"generate.*(?:markdown|text).*report", "Report generation"),
+        (r"(?:create|write|generate)\s+.*?(?:report|summary|analysis)", "Report/summary generation"),
         (r"save\s+.*as\s+.*\.(md|txt)", "Save as file"),
         (r"write\s+.*to\s+.*\.(md|txt)", "Write to file"),
         (r"output\s+.*to\s+.*\.(md|txt)", "Output to file"),
-        (r"(?:create|generated?)\s+(?:comprehensive|detailed)?\s*(?:report|summary|analysis)", "Report/summary generation"),
         (r"Created\s+\[.*\]\(file:///.*\.(md|txt)\)", "File creation confirmation"),
     ]
     
