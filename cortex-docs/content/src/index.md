@@ -25,15 +25,17 @@ CORTEX is an intelligent development acceleration platform that processes softwa
 
 When development requests enter CORTEX, they flow through a multi-stage processing pipeline analogous to modern distributed systems:
 
-1. **MCP Gateway Layer** — Accepts JSON-RPC requests over stdio from IDE clients (VS Code, Cursor, Claude Desktop). The Native Tool Gate validates intent classification and prevents direct file operations for implementation requests, enforcing MCP-first architecture (CORE-049).
+1. **Request Pre-Processing (Stage -1)** — RequestRephraseOrchestrator automatically enhances every user request with governance context, architecture awareness, risk assessment, and challenge-first evaluation before entering the main pipeline. This ensures MasterOrchestrator receives fully enriched, self-documenting requests with relevant CORE rules, breaking risk analysis, and design pillar validation.
 
-2. **Orchestration Layer** — MasterOrchestrator coordinates 20+ specialized orchestrators through hierarchical dispatch. IntentRouter performs LENS-based classification (LANGUAGE→EXAMINATION→NAVIGATION→SYNTHESIS) to route requests: IMPLEMENT/FIX → TDDOrchestrator, ANALYZE → LENSSynthesis, PLAN → PlanOrchestrator, REFACTOR → RefactoringOrchestrator.
+2. **MCP Gateway Layer** — Accepts JSON-RPC requests over stdio from IDE clients (VS Code, Cursor, Claude Desktop). The Native Tool Gate validates intent classification and prevents direct file operations for implementation requests, enforcing MCP-first architecture (CORE-049). Semantic block assembly (ENH-089, ENH-090) structures responses with personality-enforced content blocks and interaction patterns.
 
-3. **Intelligence Layer** — LENS analyzers execute in parallel (8 core analyzers: AST, Git History, Comment, Import, Security, Pattern, Metrics, Domain) to provide unified code intelligence. Context Crystallization Layer (Phase 49) performs async prefetch of rules, LENS state, and infrastructure detection with 245ms average completion.
+3. **Orchestration Layer** — MasterOrchestrator coordinates 20+ specialized orchestrators through hierarchical dispatch. IntentRouter performs LENS-based classification (LANGUAGE→EXAMINATION→NAVIGATION→SYNTHESIS) to route requests: IMPLEMENT/FIX → TDDOrchestrator, ANALYZE → LENSSynthesis, PLAN → PlanOrchestrator, REFACTOR → RefactoringOrchestrator.
 
-4. **Governance Layer** — EnforcementOrchestrator coordinates 7 enforcement agents performing pre-execution validation with <150ms latency. Agents check TDD enforcement (CORE-008), type hints (CORE-011), file naming (CORE-028), incremental execution limits (CORE-001), and architecture integrity across 26 automated CORE rules (87% coverage).
+4. **Intelligence Layer** — LENS analyzers execute in parallel (8 core analyzers: AST, Git History, Comment, Import, Security, Pattern, Metrics, Domain) to provide unified code intelligence. Context Crystallization Layer (Phase 49) performs async prefetch of rules, LENS state, and infrastructure detection with 245ms average completion. Intelligence layers in HealthOrchestrator and VacuumOrchestrator learn from 48h git history to reduce false positives by 85.2%.
 
-5. **CORTEX Brain** — Git-backed registry (cortex-registry/) stores orchestrator specifications, governance rules (59 CORE rules), knowledge base (45+ best practice YAMLs), and phase definitions. Wiring contract (__wiring_contract__.yaml) drives orchestrator discovery with hot-reload support.
+5. **Governance Layer** — EnforcementOrchestrator coordinates 7 enforcement agents performing pre-execution validation with <150ms latency. Agents check TDD enforcement (CORE-008), type hints (CORE-011), file naming (CORE-028), incremental execution limits (CORE-001), and architecture integrity across 26 automated CORE rules (87% coverage). Governance audit can run synchronously in Stage 0 for high-priority requests.
+
+6. **CORTEX Brain** — Git-backed registry (cortex-registry/) stores orchestrator specifications, governance rules (59 CORE rules), knowledge base (45+ best practice YAMLs), and phase definitions. Wiring contract (__wiring_contract__.yaml) drives orchestrator discovery with hot-reload support.
 
 CORTEX represents a **cognitive architecture** — an event-driven system that classifies intent, synthesizes context, enforces governance, and executes development workflows autonomously.
 
@@ -45,13 +47,15 @@ Organizations deploying CORTEX benefit from understanding the platform's archite
 
 | Component Layer | Count | Responsibility | Typical Latency |
 |-----------------|-------|----------------|-----------------|
-| **MCP Gateway** | 10 core tools | Request validation, tool dispatch, response delivery | 5-15ms |
-| **Core Orchestrators** | 8 | Essential workflows (Master, Router, TDD, LENS, Enforcement, Plan, Refactor, Digest) | 50-2000ms |
+| **Request Pre-Processor** | 1 (Stage -1) | Automatic request enhancement with governance, risk, and challenge analysis | 15-35ms |
+| **MCP Gateway** | 26 tools (90+ operations) | Request validation, tool dispatch, response delivery, semantic block assembly | 5-15ms |
+| **Core Orchestrators** | 9 | Essential workflows (Master, Router, Rephrase, TDD, LENS, Enforcement, Plan, Refactor, Digest) | 50-2000ms |
 | **Domain Orchestrators** | 6 | Specialized capabilities (Documentation, Challenge, Conversation, Domain, Workflow, Task Decomposer) | 150-800ms |
-| **Support Orchestrators** | 6+ | Educational, onboarding, tool discovery, recommendation gate | 100-500ms |
+| **Support Orchestrators** | 8+ | Health, Vacuum (w/ intelligence), educational, onboarding, tool discovery, recommendation gate | 100-500ms |
 | **LENS Analyzers** | 8 core | Parallel code intelligence (AST, Git, Security, Metrics, Pattern, Comment, Import, Domain) | 300-800ms |
 | **Enforcement Agents** | 7 | Pre-execution governance (TDD, Security, Compliance, Naming, Incremental, Markdown, Architecture) | <150ms |
 | **CORE Rules** | 59 automated | Governance standards (87% coverage across 7 agents) | <5ms per rule |
+| **Toolkit Modules** | 5 | Discovery, diagnostics, setup, cleanup, validation (Phase 90 consolidation) | 50-200ms |
 
 **Git-Backed Registry Structure:**
 
@@ -70,12 +74,15 @@ cortex-registry/
 
 Organizations may observe the following performance patterns based on internal testing with typical repositories (50-100K LOC):
 
+- **Request pre-processing (Stage -1):** P50: 18ms, P95: 28ms, P99: 42ms (rephrase + governance context)
 - **Request validation:** P50: 8ms, P95: 15ms, P99: 22ms
 - **Pre-flight checks:** P50: 245ms, P95: 320ms, P99: 450ms (includes parallel governance + CCL)
 - **Intent classification:** P50: 32ms, P95: 45ms, P99: 62ms (LENS-based routing)
 - **TDD cycle (small):** P50: 850ms, P95: 1200ms, P99: 1800ms (RED→GREEN→REFACTOR)
 - **TDD cycle (large):** P50: 2100ms, P95: 2600ms, P99: 3500ms (complex implementations)
 - **LENS analysis:** P50: 450ms, P95: 750ms, P99: 1200ms (8 analyzers parallel)
+- **Health check (intelligent):** P50: 680ms, P95: 920ms, P99: 1350ms (with learning from 48h history)
+- **Vacuum operation:** P50: 420ms, P95: 650ms, P99: 890ms (with safety analysis)
 - **End-to-end IMPLEMENT:** P50: 1650ms, P95: 2300ms, P99: 3200ms (full workflow)
 
 > **Notice:** Performance measurements reflect internal testing environments. Production results depend on hardware specifications (CPU cores, memory), repository size and complexity, network latency, concurrent operations, and codebase characteristics. Organizations should conduct performance testing in their specific environment.

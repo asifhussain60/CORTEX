@@ -128,7 +128,7 @@ c4_level: Context + Container
 **Purpose:** Protocol translation and tool management
 
 **Key Features:**
-- **26 Consolidated MCP Tools** (90+ operations) exposed via protocol
+- **26 Production MCP Tools** (90+ operations) organized in 5 tiers
 - Tool discovery (`tools/list`)
 - Tool invocation (`tools/call`)
 - Health checks & metrics

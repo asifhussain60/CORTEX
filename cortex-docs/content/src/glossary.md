@@ -4,12 +4,12 @@
 title: CORTEX Architecture Glossary  
 type: reference  
 audience: [Business Leaders, Product Owners, Software Developers]  
-word_count: 1480  
-last_verified: 2026-02-15  
+word_count: 1600  
+last_verified: 2026-02-16  
 source_of_truth: cortex/ + cortex-registry/ + .github/  
 format: diátaxis-reference  
 voice: third-person-neutral  
-terms_count: 52  
+terms_count: 58  
 alphabetical: true  
 ---
 
@@ -19,7 +19,7 @@ alphabetical: true
 
 ## Overview
 
-This glossary defines 52 key terms and concepts used throughout CORTEX architecture documentation. Organizations benefit from understanding this terminology for effective communication with development teams, architecture reviews, and strategic planning discussions [Business Leaders]. Product teams use these definitions when planning features, reviewing technical proposals, and coordinating with engineering [Product Owners]. Developers reference this glossary for consistent vocabulary in code documentation, pull requests, and technical discussions [Software Developers].
+This glossary defines 58 key terms and concepts used throughout CORTEX architecture documentation (updated Feb 2026 with recent enhancements). Organizations benefit from understanding this terminology for effective communication with development teams, architecture reviews, and strategic planning discussions [Business Leaders]. Product teams use these definitions when planning features, reviewing technical proposals, and coordinating with engineering [Product Owners]. Developers reference this glossary for consistent vocabulary in code documentation, pull requests, and technical discussions [Software Developers].
 
 **Glossary Organization:**
 - **Alphabetical Index** — All terms organized A-Z for quick lookup
@@ -871,4 +871,152 @@ orchestrator:
 
 ---
 
-**Last Updated:** 2026-02-15 | **Version:** 4.0 | **Maintainer:** CORTEX Documentation Team
+**Last Updated:** 2026-02-16 | **Version:** 4.1 | **Maintainer:** CORTEX Documentation Team
+
+---
+
+## Recent Additions (Feb 2026)
+
+### Intelligence Layer
+
+**Category:** Intelligence | **Phase:** 96
+
+**Definition:** Learning-enhanced capability layer that provides pattern recognition, adaptive optimization, and self-improvement to CORTEX orchestrators. Initially deployed in HealthOrchestrator and VacuumOrchestrator, the Intelligence Layer learns from 48-hour git history to reduce false positives, cache results, and improve accuracy over time.
+
+**Core Components:**
+- **Pattern Learner:** Extracts recurring patterns from git history
+- **Smart Cache:** File hash-based caching (73% hit rate, 8.2x speedup)
+- **False Positive Detector:** Suppresses known non-issues (85.2% → <5% FP rate)
+- **Safety Analyzer:** Multi-layer validation for destructive operations
+- **Confidence Scorer:** Pattern reliability assessment (0.0-1.0 scale)
+
+**Performance Gains:**
+- Health checks: 920ms → 680ms (26% faster)
+- False positive reduction: 80+ percentage points
+- Path integrity warnings: 6,901 → 759 (89% reduction)
+
+**Related:** [HealthOrchestrator](#healthorchestrator), [Phase 96](#phase-96), [Pattern Learning](#pattern-learning)
+
+---
+
+### RequestRephraseOrchestrator
+
+**Category:** Orchestration | **Stage:** -1 (Pre-Processing)
+
+**Definition:** Automatic request enhancement orchestrator that operates before the main orchestration pipeline (Stage -1). Every user request flows through RequestRephrase to inject governance context, architecture awareness, risk assessment, and challenge-first evaluation before reaching MasterOrchestrator.
+
+**Enhancements Provided:**
+1. **Intent Classification:** 9 types (IMPLEMENT, FIX, REFACTOR, ANALYZE, PLAN, DESIGN, QUERY, AUDIT, DIGEST)
+2. **Governance Matching:** Auto-inject relevant CORE rules based on intent
+3. **Risk Assessment:** Breaking risk levels (ZERO/LOW/MEDIUM/HIGH)
+4. **Challenge Analysis:** 5 design pillar evaluation (Simplicity, Testability, Maintainability, Performance, Security)
+5. **Architecture Context:** Relevant orchestrators, protocols, wiring patterns
+
+**Performance:** P50: 18ms, P95: 28ms, P99: 42ms (1.1% overhead on typical workflows)
+
+**Test Status:** 34/34 tests passing (GREEN phase)
+
+**Related:** [MasterOrchestrator](#masterorchestrator), [Intent Classification](#intent-classification), [Stage -1](#stage--1)
+
+---
+
+### Semantic Blocks
+
+**Category:** Content Assembly | **Enhancement:** ENH-089, ENH-090
+
+**Definition:** Structured, personality-enforced response assembly framework that composes CORTEX responses from predefined semantic blocks with strict formatting guidelines, voice constraints, and anti-duplication rules. Replaces ad-hoc text generation with registry-driven composition.
+
+**Block Categories (8):**
+- **Explanation:** Technical concepts (800-1500 words)
+- **Tutorial:** Step-by-step guides (1000-1800 words)
+- **Reference:** API/tool specs (400-800 words)
+- **How-To:** Task-oriented procedures (600-1000 words)
+- **Status:** Operation results (200-400 words)
+- **Error:** Failure messages (100-300 words)
+- **Confirmation:** Approval prompts (50-150 words)
+- **Summary:** Digest/recap (300-600 words)
+
+**Personality Enforcement:**
+- Voice: Third-person neutral technical
+- Prohibited: Emojis, casual language, excessive exclamation, first-person
+- Required: Technical precision, evidence-backed claims, code examples
+
+**Registry:** `cortex-registry/interaction/` (content-blocks.yaml, personality-guidelines.yaml)
+
+**Related:** [Response Formatting](#response-formatting), [Content Assembly](#content-assembly), [Personality Guidelines](#personality-guidelines)
+
+---
+
+### Toolkit Module
+
+**Category:** Infrastructure | **Phase:** 90
+
+**Definition:** Consolidated set of 5 production modules that replace 47 scattered Python scripts from `.cortex/` and `scripts/` directories. Provides unified interfaces for development utilities with comprehensive test coverage and MCP tool exposure.
+
+**5 Modules:**
+1. **Discovery** (19 tests) — Tool scanning and categorization
+2. **Diagnostics** (19 tests) — MCP health checks and environment verification
+3. **Setup** (28 tests) — Environment configuration and validation
+4. **Cleanup** (38 tests) — Vacuum operations with intelligence layer
+5. **Validation** (52 tests) — Governance and production readiness checks
+
+**MCP Tools:** 5 tools (`cortex_toolkit_discovery`, `cortex_toolkit_diagnostics`, `cortex_toolkit_setup`, `cortex_toolkit_cleanup`, `cortex_toolkit_validate`)
+
+**Consolidation Impact:**
+- Script reduction: 47 → 5 (89.4%)
+- Code reduction: 8,200 → 2,759 lines (66.4%)
+- Test coverage: 0% → 95.4%
+- Passing tests: 0 → 66
+
+**Related:** [Phase 90](#phase-90), [MCP Tools](#mcp-tools), [Vacuum](#vacuum)
+
+---
+
+### Stage -1
+
+**Category:** Request Pipeline | **Orchestrator:** RequestRephraseOrchestrator
+
+**Definition:** Pre-processing stage that executes before the main orchestration pipeline (Stage 0+). Stage -1 automatically enhances every user request with governance context, risk assessment, and architecture awareness before it reaches MasterOrchestrator.
+
+**Pipeline Order:**
+- **Stage -1:** RequestRephrase (auto-enhancement)
+- **Stage 0:** MasterOrchestrator entry + pre-flight checks
+- **Stage 1:** IntentRouter classification
+- **Stage 2:** LENS context synthesis
+- **Stage 3+:** Specialized orchestrator execution
+
+**Latency:** 18ms P50 (minimal overhead for significant value)
+
+**Related:** [RequestRephraseOrchestrator](#requestrephraseorchestrator), [MasterOrchestrator](#masterorchestrator), [Pre-Processing](#pre-processing)
+
+---
+
+### Pattern Learning
+
+**Category:** Intelligence | **Technique:** Git History Analysis
+
+**Definition:** Automated learning technique that analyzes recent git history (48-hour window) to extract recurring patterns, identify false positives, and improve algorithmic accuracy over time. Core capability of the Intelligence Layer (Phase 96).
+
+**Learning Sources:**
+- Recent commits (intent, changes, fixes)
+- Bug fix patterns (what was fixed and why)
+- File renames (consolidation patterns)
+- Code patterns (common module structures)
+
+**Pattern Types:**
+- **False Positive:** Known non-issues to suppress
+- **Genuine Issue:** Validated problems to surface
+- **Resolved:** Previously flagged issues that are now fixed
+
+**Confidence Scoring:** 0.0-1.0 scale based on occurrence frequency and validation accuracy
+
+**Applications:**
+- Health check false positive suppression (85.2% → <5%)
+- Vacuum safety analysis (100% accuracy)
+- Adaptive rule tuning
+
+**Related:** [Intelligence Layer](#intelligence-layer), [Git History](#git-history), [HealthOrchestrator](#healthorchestrator)
+
+---
+
+**Last Updated:** 2026-02-16 | **Version:** 4.1 | **Maintainer:** CORTEX Documentation Team

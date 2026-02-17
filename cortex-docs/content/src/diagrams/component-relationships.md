@@ -90,8 +90,8 @@ diagram_type: ASCII dependency graph
 │    │                        Data Layer                                 │                │
 │    │                                                                   │                │
 │    │  ┌────────────┐  ┌────────────┐  ┌────────────┐                 │                │
-│    │  │   Redis    │  │ PostgreSQL │  │    Git     │                 │                │
-│    │  │   Cache    │  │  Metrics   │  │  Registry  │                 │                │
+│    │  │   SQLite   │  │    Git     │  │    File    │                 │                │
+│    │  │  AST Cache │  │  Registry  │  │   System   │                 │                │
 │    │  └────────────┘  └────────────┘  └────────────┘                 │                │
 │    │                                                                   │                │
 │    └──────────────────────────────────────────────────────────────────┘                │
@@ -226,9 +226,9 @@ diagram_type: ASCII dependency graph
 | UnifiedAnalysisOrchestrator | Analyzers, Synthesizer, Cache | MasterOrchestrator |
 | EnforcementOrchestrator | Agents, Rules | MasterOrchestrator |
 | TDDOrchestrator | LENS, Governance | MasterOrchestrator |
-| Redis | — | CacheManager, Sessions |
-| PostgreSQL | — | Metrics, AuditLog |
-| GitRegistry | Git | Orchestrator configs |
+| SQLiteCache | — | LENS Analyzers, AST Cache |
+| GitRegistry | Git | Orchestrator configs, Knowledge Base |
+| FileSystem | — | Workspace Files, Audit Trail |
 
 ---
 

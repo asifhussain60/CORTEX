@@ -5,22 +5,22 @@ title: CORTEX MCP Tools Catalog - Complete Tool Reference
 type: reference
 audience: [Product Owners, Software Developers]
 word_count: 2400
-last_verified: 2026-02-15
-source_of_truth: cortex/mcp/tools/ + cortex-registry/
+last_verified: 2026-02-16
+source_of_truth: cortex/mcp/mcp_registry.py
 format: diátaxis-reference
 voice: third-person-blended
 phase: Production (v8.1)
-consolidated_tools: 26
+total_tools: 26
 total_operations: 90+
 ---
 
-> **Notice:** MCP tools represent production-tested capabilities as of v8.1. Tool consolidation (86→26 tools) completed with orchestrator validation integration. Organizations may use any MCP-compatible client (VS Code, Cursor, Claude Desktop) to access these tools. Performance characteristics depend on repository size, network latency, and concurrent request patterns.
+> **Notice:** MCP tools represent production-tested capabilities as of v8.1. CORTEX exposes 26 production MCP tools organized in 5 tiers with 90+ operations. Organizations may use any MCP-compatible client (VS Code, Cursor, Claude Desktop) to access these tools. Performance characteristics depend on repository size, network latency, and concurrent request patterns.
 
 ---
 
-**Consolidated Tools:** 26 | **Total Operations:** 90+ | **Updated:** 2026-02-15  
-**MCP Server:** stdio/HTTP (Port 8000) | **Protocol:** JSON-RPC 2.0  
-**Architecture:** Consolidated tool design with orchestrator validation
+**Total Tools:** 26 | **Total Operations:** 90+ | **Updated:** 2026-02-16  
+**MCP Server:** stdio/HTTP (Port 9000) | **Protocol:** JSON-RPC 2.0  
+**Architecture:** Orchestrator-driven with governance validation
 
 ---
 

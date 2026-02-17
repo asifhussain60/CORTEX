@@ -20,7 +20,7 @@ transport_modes: [stdio, http]
 
 ## Overview: Pylance-Style Local Architecture
 
-Organizations benefit from understanding CORTEX's MCP architecture, which operates locally within VS Code similar to the Pylance language server [Business Leaders]. Product teams leverage MCP's JSON-RPC 2.0 protocol for seamless integration with multiple IDE clients (VS Code, Cursor, Claude Desktop) without manual server management [Product Owners]. The MCP Gateway auto-starts when Copilot Chat invokes cortex_* tools, providing 10 core MCP tools that expose 20+ orchestrator capabilities through standardized interfaces [Software Developers].
+Organizations benefit from understanding CORTEX's MCP architecture, which operates locally within VS Code similar to the Pylance language server [Business Leaders]. Product teams leverage MCP's JSON-RPC 2.0 protocol for seamless integration with multiple IDE clients (VS Code, Cursor, Claude Desktop) without manual server management [Product Owners]. The MCP Gateway auto-starts when Copilot Chat invokes cortex_* tools, providing 26 production MCP tools organized into 5 tiers that expose 90+ operations through standardized interfaces [Software Developers].
 
 **Key Architectural Principles:**
 
@@ -32,17 +32,12 @@ Organizations benefit from understanding CORTEX's MCP architecture, which operat
 
 4. **Native Tool Gate (CORE-049)** — Enforces MCP-first architecture by blocking direct file operations for IMPLEMENT/FIX/REFACTOR intents. Validates intent classification before dispatch to prevent governance bypass.
 
-**MCP Tools (10 Core):**
-- `cortex_process_request` — Main workflow processing (IMPLEMENT/FIX/REFACTOR)
-- `cortex_lens_analyze` — Unified code intelligence (ANALYZE)
-- `cortex_plan_setup/resolve/sync` — Phase lifecycle management (PLAN)
-- `cortex_challenge` — Challenge generation (DESIGN)
-- `cortex_audit` — Health scans (AUDIT)
-- `cortex_digest_session` — Learning extraction (DIGEST)
-- `cortex_total_recall` — Feature discovery
-- `cortex_git_history` — 24h context retrieval
-- `cortex_detect_duplicates` — CORE-035 violation detection
-- `cortex_onboard_repository` — Repository initialization + security scan
+**MCP Tools (26 Production):**
+- **TIER 1 Core (4):** `cortex_process_request`, `cortex_challenge`, `cortex_classify`, `cortex_request_lifecycle`
+- **TIER 2 Intelligence (4):** `cortex_lens`, `cortex_knowledge`, `cortex_git`, `cortex_generate_tests`
+- **TIER 3 Governance (4):** `cortex_governance`, `cortex_validate`, `cortex_load`, `cortex_validate_request`
+- **TIER 4 Operations (5):** `cortex_debug`, `cortex_refactor`, `cortex_plan`, `cortex_onboard`, `cortex_dashboard`
+- **TIER 5 Utilities (9):** `cortex_verify`, `cortex_ask`, `cortex_vacuum`, `cortex_tools_catalog`, `cortex_total_recall`, `cortex_metrics`, `cortex_check`, `cortex_vision`, `cortex_orchestrator`
 
 ### Key Benefits
 

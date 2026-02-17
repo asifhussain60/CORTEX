@@ -727,6 +727,8 @@ Custom knowledge can be integrated:
 - [Decisioning](decisioning.md) — Routing and classification details
 - [Governance & Compliance](governance-compliance.md) — Security and audit details
 - [Extensibility](extensibility.md) — Extension mechanisms
+- [Workflow Templates](workflow-templates.md) — Phase 100: Convergence-gated automation
+- [Conversational Gateway](conversational-gateway.md) — Phase 101: Natural language classification
 
 ---
 

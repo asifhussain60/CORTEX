@@ -1,6 +1,18 @@
 # Request Lifecycle Diagram
 
 ---
+id: request-lifecycle-diagram
+title: CORTEX Request Processing Pipeline
+purpose: Visualize end-to-end request flow from user input to orchestrator execution
+audience: [Software Developers, Product Owners]
+source_of_truth: cortex/orchestrators/core/ + cortex/mcp/
+last_verified: 2026-02-16
+diagram_type: Sequence
+interactive: false
+word_count: 650
+---
+
+---
 title: Request Lifecycle - Interactive Processing Flow Visualization
 type: reference
 audience: [Product Owners, Software Developers]
@@ -33,6 +45,7 @@ diagram_type: D3.js interactive sequence
   "participants": [
     {"id": "client", "name": "Client (VS Code)", "color": "#4CAF50"},
     {"id": "gateway", "name": "MCP Gateway", "color": "#2196F3"},
+    {"id": "rephrase", "name": "RequestRephrase (Stage -1)", "color": "#00BCD4"},
     {"id": "master", "name": "MasterOrchestrator", "color": "#FF9800"},
     {"id": "intent", "name": "IntentRouter", "color": "#9C27B0"},
     {"id": "lens", "name": "LENS", "color": "#E91E63"},
@@ -57,18 +70,42 @@ diagram_type: D3.js interactive sequence
     },
     {
       "from": "gateway",
+      "to": "rephrase",
+      "message": "Pre-process Request",
+      "details": "Stage -1: Automatic request enhancement",
+      "timing": "15ms",
+      "type": "request"
+    },
+    {
+      "from": "rephrase",
+      "to": "rephrase",
+      "message": "Intent Parse + Governance Match + Risk Assess + Challenge",
+      "details": "Parse intent, inject CORE rules, assess breaking risk, evaluate design pillars",
+      "timing": "15-33ms",
+      "type": "internal"
+    },
+    {
+      "from": "rephrase",
+      "to": "gateway",
+      "message": "Enhanced Context",
+      "details": "Request enriched with governance rules, architecture context, risk assessment, pillar scores",
+      "timing": "33ms",
+      "type": "response"
+    },
+    {
+      "from": "gateway",
       "to": "master",
-      "message": "Route Request",
-      "details": "Forward validated request to MasterOrchestrator",
-      "timing": "20ms",
+      "message": "Route Enhanced Request",
+      "details": "Forward enriched request to MasterOrchestrator",
+      "timing": "38ms",
       "type": "request"
     },
     {
       "from": "master",
       "to": "intent",
-      "message": "Classify Intent",
-      "details": "Analyze request to determine IMPLEMENT/FIX/REFACTOR/etc.",
-      "timing": "25ms",
+      "message": "Classify Intent (if not already classified)",
+      "details": "May skip if RequestRephrase already provided high-confidence intent",
+      "timing": "43ms",
       "type": "request"
     },
     {
@@ -76,7 +113,7 @@ diagram_type: D3.js interactive sequence
       "to": "master",
       "message": "Intent: IMPLEMENT (95% confidence)",
       "details": "Classification result with confidence score",
-      "timing": "45ms",
+      "timing": "65ms",
       "type": "response"
     },
     {
@@ -84,7 +121,7 @@ diagram_type: D3.js interactive sequence
       "to": "lens",
       "message": "Analyze Context",
       "details": "Request code analysis and context synthesis",
-      "timing": "50ms",
+      "timing": "70ms",
       "type": "request"
     },
     {
@@ -92,23 +129,23 @@ diagram_type: D3.js interactive sequence
       "to": "master",
       "message": "Context Analysis",
       "details": "Git history, AST analysis, pattern detection results",
-      "timing": "200ms",
+      "timing": "220ms",
       "type": "response"
     },
     {
       "from": "master",
       "to": "tdd",
       "message": "Execute TDD Workflow",
-      "details": "Delegate to TDDOrchestrator with enriched context",
-      "timing": "220ms",
+      "details": "Delegate to TDDOrchestrator with enriched context + governance rules",
+      "timing": "240ms",
       "type": "request"
     },
     {
       "from": "tdd",
       "to": "tdd",
       "message": "RED → GREEN → REFACTOR",
-      "details": "Execute TDD cycle with tests first",
-      "timing": "220ms-2000ms",
+      "details": "Execute TDD cycle with tests first, enforcing CORE-008, CORE-011",
+      "timing": "240ms-2100ms",
       "type": "internal"
     },
     {
@@ -116,23 +153,23 @@ diagram_type: D3.js interactive sequence
       "to": "master",
       "message": "Implementation Complete",
       "details": "Result with test coverage and quality metrics",
-      "timing": "2000ms",
+      "timing": "2100ms",
       "type": "response"
     },
     {
       "from": "master",
       "to": "gateway",
       "message": "Aggregated Result",
-      "details": "Final response with audit trail",
-      "timing": "2010ms",
+      "details": "Final response with audit trail and semantic blocks",
+      "timing": "2110ms",
       "type": "response"
     },
     {
       "from": "gateway",
       "to": "client",
       "message": "HTTP 200 OK",
-      "details": "JSON response with implementation details",
-      "timing": "2015ms",
+      "details": "JSON response with implementation details formatted via semantic blocks",
+      "timing": "2115ms",
       "type": "response"
     }
   ]
