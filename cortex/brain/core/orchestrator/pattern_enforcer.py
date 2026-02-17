@@ -1,7 +1,7 @@
 """
 Communication pattern enforcement for orchestrators.
 
-Loads and enforces patterns from cortex-registry/interaction/
+Loads and enforces patterns from cortex-registry/integration/interaction/
 """
 
 from pathlib import Path
@@ -14,7 +14,7 @@ from cortex.brain.core.result import Err, Ok, Result
 
 class PatternEnforcer:
     """
-    Enforces communication patterns from cortex-registry/interaction/.
+    Enforces communication patterns from cortex-registry/integration/interaction/.
 
     Validates orchestrator compliance with defined patterns and audits violations.
     """

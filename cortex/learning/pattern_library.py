@@ -8,7 +8,7 @@ Stage: S1 - Pattern library implementation
 
 Provides:
 1. PatternLibrary class (CRUD operations)
-2. YAML persistence to cortex-registry/patterns/
+2. YAML persistence to cortex-registry/integration/patterns/
 3. Pattern deduplication (similarity threshold 0.3)
 4. Pattern retrieval by type/orchestrator/confidence
 """
@@ -52,7 +52,7 @@ class PatternLibrary:
     
     Features:
     - CRUD operations for patterns
-    - YAML persistence to cortex-registry/patterns/
+    - YAML persistence to cortex-registry/integration/patterns/
     - Automatic deduplication (similarity threshold)
     - Multi-criteria retrieval (type, orchestrator, confidence)
     

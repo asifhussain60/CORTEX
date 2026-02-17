@@ -1,7 +1,7 @@
 """
 CORTEX Bootstrap - Initialize Git-backed wiring system.
 
-Authority: cortex-registry/_cortex-master/phases/completed/2025/ (Phase 3)
+Authority: cortex-registry/planning/phases/completed/2025/ (Phase 3)
 Rule: CORE-035 (Single Canonical Implementation)
 
 Entry point for CORTEX system initialization.

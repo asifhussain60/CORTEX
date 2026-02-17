@@ -28,7 +28,7 @@ class TestRealPhaseContentGeneration:
     @pytest.fixture
     def phase_01_yaml(self):
         """Load Phase 01 YAML"""
-        phase_file = Path("cortex-registry/_cortex-master/phases/completed/2026/phase-01-orchestrator-event-bus.yaml")
+        phase_file = Path("cortex-registry/planning/phases/completed/2026/phase-01-orchestrator-event-bus.yaml")
         if phase_file.exists():
             with open(phase_file, 'r') as f:
                 return yaml.safe_load(f)

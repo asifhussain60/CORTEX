@@ -55,9 +55,9 @@ class TestPhase103RegistryStructure:
             assert file_path.exists(), f"Missing critical file: {file_path}"
     
     def test_cortex_phase_103_in_correct_location(self):
-        """Verify Phase 103 YAML stays in _cortex-master/phases/planned/."""
+        """Verify Phase 103 YAML stays in planning/phases/planned/."""
         phase_103_path = self.registry / "_cortex-master" / "phases" / "planned" / "phase-103-registry-intelligence-consolidation.yaml"
-        assert phase_103_path.exists(), "Phase 103 missing from _cortex-master/phases/planned/"
+        assert phase_103_path.exists(), "Phase 103 missing from planning/phases/planned/"
     
     def test_planning_folder_separation(self):
         """Verify planning/ folder is separate from _cortex-master/ for user work."""
@@ -72,7 +72,7 @@ class TestPhase103RegistryStructure:
         
         # Verify CORTEX internal phases stay in _cortex-master/
         cortex_phase = self.registry / "_cortex-master" / "phases" / "planned" / "phase-103-registry-intelligence-consolidation.yaml"
-        assert cortex_phase.exists(), "CORTEX internal phase missing from _cortex-master/phases/planned/"
+        assert cortex_phase.exists(), "CORTEX internal phase missing from planning/phases/planned/"
         
         # Verify user phases (if any) are in planning/
         # This is expected to be empty initially until user creates plans
@@ -83,7 +83,7 @@ class TestPhase103RegistryStructure:
             assert len(cortex_phases_in_planning) == 0, f"Found CORTEX phases in user planning/: {cortex_phases_in_planning}"
     
     def test_no_duplicate_governance_rules(self):
-        """Ensure governance rules exist only in _cortex-master/core/governance."""
+        """Ensure governance rules exist only in core/governance."""
         cortex_gov = self.registry / "_cortex-master" / "core" / "governance"
         user_gov = self.registry / "governance"
         
@@ -111,9 +111,9 @@ class TestPhase103RegistryStructure:
     
     def test_knowledge_base_structure(self):
         """Verify knowledge structure for CORTEX internal KB in _cortex-master."""
-        # CORTEX internal knowledge stays in _cortex-master/knowledge/
+        # CORTEX internal knowledge stays in knowledge-base/
         cortex_kb = self.registry / "_cortex-master" / "knowledge"
-        assert cortex_kb.exists(), "Missing _cortex-master/knowledge/ folder"
+        assert cortex_kb.exists(), "Missing knowledge-base/ folder"
         
         required_kb_folders = [
             "architecture",
@@ -126,7 +126,7 @@ class TestPhase103RegistryStructure:
         
         for folder in required_kb_folders:
             path = cortex_kb / folder
-            assert path.exists(), f"Missing _cortex-master/knowledge/{folder}"
+            assert path.exists(), f"Missing knowledge-base/{folder}"
         
         # User knowledge-base/ is separate (for onboarded repos)
         user_kb = self.registry / "knowledge-base"
@@ -145,12 +145,12 @@ class TestPhase103RegistryStructure:
         assert len(root_status) == 0, "CORTEX status files leaked to registry root"
     
     def test_baselines_in_cortex_master(self):
-        """Verify CORTEX baselines stay in _cortex-master/baselines/."""
+        """Verify CORTEX baselines stay in metrics/baselines/."""
         baselines = self.registry / "_cortex-master" / "baselines"
-        assert baselines.exists(), "Missing _cortex-master/baselines/"
+        assert baselines.exists(), "Missing metrics/baselines/"
         
         baseline_files = list(baselines.glob("*.json"))
-        assert len(baseline_files) > 0, "No baseline files found in _cortex-master/baselines/"
+        assert len(baseline_files) > 0, "No baseline files found in metrics/baselines/"
     
     def test_master_index_location(self):
         """Verify master-index.yaml is in _cortex-master/."""

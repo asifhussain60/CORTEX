@@ -133,7 +133,7 @@ class TestFilePathValidation:
     def test_check_yaml_references(self) -> None:
         """Verify all referenced YAML files exist."""
         yaml_refs = [
-            "cortex-registry/_cortex-master/phases/active/phase-43.yaml",
+            "cortex-registry/planning/phases/active/phase-43.yaml",
             "company/requirements/phase-43-requirements.yaml",
         ]
         

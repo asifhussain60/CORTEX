@@ -34,7 +34,7 @@ class TestCortexMasterNamespaceIsolation:
             "_cortex-master should be directory, not file"
     
     def test_cortex_phases_are_meta_system_only(self):
-        """Verify all phases in _cortex-master/phases/ develop CORTEX itself."""
+        """Verify all phases in planning/phases/ develop CORTEX itself."""
         phases_root = self.CORTEX_MASTER_ROOT / "phases"
         
         if not phases_root.exists():
@@ -96,7 +96,7 @@ class TestCortexMasterNamespaceIsolation:
                 f"{phase_file.name} references external repositories (should be in planning/): {violations}"
     
     def test_cortex_knowledge_is_tech_stack_only(self):
-        """Verify _cortex-master/knowledge/ contains only tech stack knowledge."""
+        """Verify knowledge-base/ contains only tech stack knowledge."""
         knowledge_root = self.CORTEX_MASTER_ROOT / "knowledge"
         
         if not knowledge_root.exists():
@@ -207,10 +207,10 @@ class TestPhaseFileDistribution:
     
     def test_cortex_master_has_active_phases(self):
         """Verify _cortex-master has at least one active development phase."""
-        planned_phases = Path("cortex-registry/_cortex-master/phases/planned")
+        planned_phases = Path("cortex-registry/planning/phases/planned")
         
         if not planned_phases.exists():
-            pytest.fail("Missing _cortex-master/phases/planned directory")
+            pytest.fail("Missing planning/phases/planned directory")
         
         phase_count = len(list(planned_phases.glob("*.yaml")))
         
@@ -221,8 +221,8 @@ class TestPhaseFileDistribution:
     
     def test_phase_distribution_logged(self):
         """Log phase distribution across namespaces for audit."""
-        cortex_planned = len(list(Path("cortex-registry/_cortex-master/phases/planned").glob("*.yaml")))
-        cortex_completed = len(list(Path("cortex-registry/_cortex-master/phases/completed").glob("*.yaml")))
+        cortex_planned = len(list(Path("cortex-registry/planning/phases/planned").glob("*.yaml")))
+        cortex_completed = len(list(Path("cortex-registry/planning/phases/completed").glob("*.yaml")))
         
         user_planned_dir = Path("cortex-registry/planning/phases/planned")
         user_planned = len(list(user_planned_dir.glob("*.yaml"))) if user_planned_dir.exists() else 0
@@ -248,7 +248,7 @@ class TestGovernanceSymlinks:
         
         if core_rules_path.is_symlink():
             target = core_rules_path.resolve()
-            assert "_cortex-master/core/governance" in str(target), \
+            assert "core/governance" in str(target), \
                 f"core-rules.yaml symlink points to wrong location: {target}"
         else:
             # If not symlink, verify it's at least in _cortex-master
@@ -268,7 +268,7 @@ class TestGovernanceSymlinks:
         
         if checklist_path.is_symlink():
             target = checklist_path.resolve()
-            assert "_cortex-master/core/governance" in str(target), \
+            assert "core/governance" in str(target), \
                 f"audit-checklist.yaml symlink points to wrong location: {target}"
 
 

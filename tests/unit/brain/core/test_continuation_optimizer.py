@@ -37,7 +37,7 @@ def bloated_continuation():
 ### Stage 3: Baseline Metrics Collector (4 hours, 18 tests)
 - Implement BaselineMetricsCollector class
   * Metrics: test_execution_time_p50/p95, orchestrator_latency, memory_usage
-  * Output: JSON snapshot at cortex-registry/_cortex-master/baselines/
+  * Output: JSON snapshot at cortex-registry/metrics/baselines/
 - Implement RegressionDetector class  
   * Thresholds: latency +10%, memory +15%, test_time +20%
 - Create unit tests: tests/unit/testing/test_baseline_metrics_collector.py

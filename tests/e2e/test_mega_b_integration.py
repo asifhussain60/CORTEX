@@ -5,7 +5,7 @@ E2E Integration Tests for MEGA-PHASE B: Developer Experience & Tooling
 Tests the complete workflow from user request → business wisdom display →
 tool documentation → monitoring → production deployment.
 
-Authority: cortex-registry/_cortex-master/phases/planned/22-developer-experience-tooling.yaml
+Authority: cortex-registry/planning/phases/planned/22-developer-experience-tooling.yaml
 Status: MEGA-PHASE B Stage 4
 """
 

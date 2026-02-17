@@ -1,7 +1,7 @@
 """
 Wiring Validator - Validate orchestrator wiring integrity.
 
-Authority: cortex-registry/_cortex-master/phases/completed/2025/ (Phase 3)
+Authority: cortex-registry/planning/phases/completed/2025/ (Phase 3)
 """
 
 import logging

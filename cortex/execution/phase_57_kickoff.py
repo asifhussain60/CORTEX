@@ -22,7 +22,7 @@ async def kickoff_phase_57():
     """
 
     # Load phase spec
-    phase_file = Path(__file__).parent.parent.parent / 'cortex-registry/_cortex-master/phases/active/phase-57-architectural-pattern-detection.yaml'
+    phase_file = Path(__file__).parent.parent.parent / 'cortex-registry/planning/phases/active/phase-57-architectural-pattern-detection.yaml'
 
     if not phase_file.exists():
         print(f"❌ Phase 57 spec not found: {phase_file}")

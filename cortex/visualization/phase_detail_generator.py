@@ -48,7 +48,7 @@ class PhaseDetailPageGenerator:
 
         Args:
             template_dir: Directory containing Jinja2 templates
-                         (default: cortex-registry/_cortex-master/dashboard/templates/)
+                         (default: cortex-registry/metrics/dashboards/templates/)
         """
         if template_dir is None:
             # Auto-discover template directory
@@ -160,7 +160,7 @@ class PhaseDetailPageGenerator:
             >>> generator = PhaseDetailPageGenerator()
             >>> output = generator.generate(
             ...     phase_data,
-            ...     Path("cortex-registry/_cortex-master/dashboard/phases/phase-21/index.html")
+            ...     Path("cortex-registry/metrics/dashboards/phases/phase-21/index.html")
             ... )
             >>> assert output.exists()
         """
@@ -196,7 +196,7 @@ class PhaseDetailPageGenerator:
             >>> phases = [phase1, phase2, phase3]
             >>> paths = generator.generate_batch(
             ...     phases,
-            ...     Path("cortex-registry/_cortex-master/dashboard/phases")
+            ...     Path("cortex-registry/metrics/dashboards/phases")
             ... )
             >>> assert len(paths) == 3
         """

@@ -147,7 +147,7 @@ class TestPhaseLifecycleAutomation:
         phase_id = "test-phase-003"
         
         # Mock phase YAML file
-        phase_file = tmp_path / "cortex-registry/_cortex-master/phases/test-phase-003.yaml"
+        phase_file = tmp_path / "cortex-registry/planning/phases/test-phase-003.yaml"
         phase_file.parent.mkdir(parents=True, exist_ok=True)
         
         # Act - Save turn state

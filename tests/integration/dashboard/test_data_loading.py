@@ -28,7 +28,7 @@ class TestPlanSummaryJSON:
             - File is not empty
             - File is readable
         """
-        json_path = Path("cortex-registry/_cortex-master/dashboard/data/plan-summary.json")
+        json_path = Path("cortex-registry/metrics/dashboards/data/plan-summary.json")
         assert json_path.exists(), "plan-summary.json not found"
         assert json_path.stat().st_size > 0, "plan-summary.json is empty"
         
@@ -56,7 +56,7 @@ class TestPlanSummaryJSON:
                 "registry_config": {...}
             }
         """
-        json_path = Path("cortex-registry/_cortex-master/dashboard/data/plan-summary.json")
+        json_path = Path("cortex-registry/metrics/dashboards/data/plan-summary.json")
         with open(json_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         
@@ -89,7 +89,7 @@ class TestPlanSummaryJSON:
             - completion_rate between 0-100
             - completed + active <= total
         """
-        json_path = Path("cortex-registry/_cortex-master/dashboard/data/plan-summary.json")
+        json_path = Path("cortex-registry/metrics/dashboards/data/plan-summary.json")
         with open(json_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         
@@ -117,7 +117,7 @@ class TestActivePhasesData:
             - Count matches active_phases statistic
             - Each phase has required fields
         """
-        json_path = Path("cortex-registry/_cortex-master/dashboard/data/plan-summary.json")
+        json_path = Path("cortex-registry/metrics/dashboards/data/plan-summary.json")
         with open(json_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         
@@ -138,7 +138,7 @@ class TestActivePhasesData:
             - name
             - status
         """
-        json_path = Path("cortex-registry/_cortex-master/dashboard/data/plan-summary.json")
+        json_path = Path("cortex-registry/metrics/dashboards/data/plan-summary.json")
         with open(json_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         
@@ -170,7 +170,7 @@ class TestActivePhasesData:
             - superseded
             - rejected
         """
-        json_path = Path("cortex-registry/_cortex-master/dashboard/data/plan-summary.json")
+        json_path = Path("cortex-registry/metrics/dashboards/data/plan-summary.json")
         with open(json_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         
@@ -201,7 +201,7 @@ class TestCompletedPhasesData:
             - Count completed phases in active_phases list
             - Match against completed_2026 statistic
         """
-        json_path = Path("cortex-registry/_cortex-master/dashboard/data/plan-summary.json")
+        json_path = Path("cortex-registry/metrics/dashboards/data/plan-summary.json")
         with open(json_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         
@@ -224,7 +224,7 @@ class TestCompletedPhasesData:
             - Completed phases have progress field
             - Progress is "100%" or contains completion indicator
         """
-        json_path = Path("cortex-registry/_cortex-master/dashboard/data/plan-summary.json")
+        json_path = Path("cortex-registry/metrics/dashboards/data/plan-summary.json")
         with open(json_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         
@@ -258,7 +258,7 @@ class TestDataIntegrity:
             Current Status: Phase 48 and 51 have duplicate entries in index.yaml
             which is a known issue being tracked for remediation.
         """
-        json_path = Path("cortex-registry/_cortex-master/dashboard/data/plan-summary.json")
+        json_path = Path("cortex-registry/metrics/dashboards/data/plan-summary.json")
         with open(json_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         
@@ -295,7 +295,7 @@ class TestDataIntegrity:
         Formula:
             completion_rate = (completed_phases / total_phases) * 100
         """
-        json_path = Path("cortex-registry/_cortex-master/dashboard/data/plan-summary.json")
+        json_path = Path("cortex-registry/metrics/dashboards/data/plan-summary.json")
         with open(json_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         
@@ -320,7 +320,7 @@ class TestDataIntegrity:
             - Missing brackets/braces
             - Invalid escape sequences
         """
-        json_path = Path("cortex-registry/_cortex-master/dashboard/data/plan-summary.json")
+        json_path = Path("cortex-registry/metrics/dashboards/data/plan-summary.json")
         
         try:
             with open(json_path, 'r', encoding='utf-8') as f:

@@ -1,7 +1,7 @@
 """
 Wiring Registry - Git-backed orchestrator registry.
 
-Authority: cortex-registry/_cortex-master/phases/completed/2025/ (Phase 3)
+Authority: cortex-registry/planning/phases/completed/2025/ (Phase 3)
 """
 
 from cortex.wiring.registry.git_backed_registry import (

@@ -137,7 +137,7 @@ class TestTestScopeValidator:
         """Test: Validator can be called from pre-commit hook."""
         # Simulate pre-commit hook checking changed files
         changed_files = [
-            "cortex-registry/_cortex-master/phases/active/phase-25.yaml",
+            "cortex-registry/planning/phases/active/phase-25.yaml",
             "tests/integration/test_debugger_end_to_end.py"
         ]
         

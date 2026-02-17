@@ -128,7 +128,7 @@ def architect_context() -> Dict[str, Any]:
             "orchestrator": "CORTEX orchestrator pattern",
             "governance": "EnforcementOrchestrator (7 agents)",
         },
-        "knowledge_source": "cortex-registry/patterns/",
+        "knowledge_source": "cortex-registry/integration/patterns/",
         "core_rules": [
             "CORE-008: TDD",
             "CORE-011: Type hints",

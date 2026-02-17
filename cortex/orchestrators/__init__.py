@@ -11,7 +11,7 @@ WIRING: Git-backed YAML (cortex/wiring/specifications/wiring.yaml)
 - No SQLite wiring state
 - Ephemeral container state only
 
-See: cortex-registry/_cortex-master/phases/completed/2025/ (migration plan)
+See: cortex-registry/planning/phases/completed/2025/ (migration plan)
 """
 
 from dataclasses import dataclass

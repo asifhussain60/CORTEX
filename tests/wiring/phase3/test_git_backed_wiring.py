@@ -3,7 +3,7 @@ Tests for Git-Backed Wiring Registry (Phase 3)
 
 Validates YAML-based orchestrator wiring system.
 
-Authority: cortex-registry/_cortex-master/phases/completed/2025/ (Phase 3)
+Authority: cortex-registry/planning/phases/completed/2025/ (Phase 3)
 """
 
 import pytest

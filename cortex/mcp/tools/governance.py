@@ -515,7 +515,7 @@ class CortexLoad(ConsolidatedTool):
             data={
                 "modes": modes,
                 "total": len(modes),
-                "source": "cortex-registry/interaction/",
+                "source": "cortex-registry/integration/interaction/",
             },
             metadata={"operation": "modes"},
         )

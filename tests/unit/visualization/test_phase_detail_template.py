@@ -19,7 +19,7 @@ from cortex.models.phase_detail_schema import (
 
 
 # Template path
-TEMPLATE_DIR = Path(__file__).parent.parent.parent.parent / "cortex-registry/_cortex-master/dashboard/templates"
+TEMPLATE_DIR = Path(__file__).parent.parent.parent.parent / "cortex-registry/metrics/dashboards/templates"
 
 
 @pytest.fixture

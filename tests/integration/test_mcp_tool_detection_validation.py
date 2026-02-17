@@ -196,7 +196,7 @@ class TestOrchestratorConsolidationIntegration:
         import yaml
         from pathlib import Path
         
-        contract_path = Path('cortex-registry/_cortex-master/core/wiring/contract.yaml')
+        contract_path = Path('cortex-registry/core/wiring/contract.yaml')
         assert contract_path.exists(), "Wiring contract not found"
         
         with open(contract_path, 'r') as f:

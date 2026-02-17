@@ -189,7 +189,7 @@ class TestDeprecationWiringContractUpdates:
         import yaml
         from pathlib import Path
         
-        wiring_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-registry/_cortex-master/core/wiring/contract.yaml")
+        wiring_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-registry/core/wiring/contract.yaml")
         assert wiring_path.exists(), "Wiring contract not found"
         
         with open(wiring_path) as f:
@@ -205,7 +205,7 @@ class TestDeprecationWiringContractUpdates:
         import yaml
         from pathlib import Path
         
-        wiring_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-registry/_cortex-master/core/wiring/contract.yaml")
+        wiring_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-registry/core/wiring/contract.yaml")
         with open(wiring_path) as f:
             wiring = yaml.safe_load(f)
         

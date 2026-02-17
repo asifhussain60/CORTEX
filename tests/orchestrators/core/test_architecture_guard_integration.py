@@ -79,7 +79,7 @@ class TestValidationProceeding:
         result = guard.validate_request(
             request_description="Update dashboard CSS styling for better readability",
             intent_type="REFACTOR",
-            scope=["cortex-registry/_cortex-master/dashboard/index.html"]
+            scope=["cortex-registry/metrics/dashboards/index.html"]
         )
         
         assert result.is_ok()
@@ -261,7 +261,7 @@ class TestPhaseAlignment:
         result = guard.validate_request(
             request_description="Update dashboard",
             intent_type="REFACTOR",
-            scope=["cortex-registry/_cortex-master/dashboard/index.html"]
+            scope=["cortex-registry/metrics/dashboards/index.html"]
         )
         
         assert result.is_ok()

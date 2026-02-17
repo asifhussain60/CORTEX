@@ -184,7 +184,7 @@ class Phase79CompleteExecutor:
 
         try:
             # Stage files
-            subprocess.run(['git', 'add', 'cortex-registry/_cortex-master/phases/active/phase-79-enterprise-support-framework.yaml'],
+            subprocess.run(['git', 'add', 'cortex-registry/planning/phases/active/phase-79-enterprise-support-framework.yaml'],
                           check=True, capture_output=True)
             subprocess.run(['git', 'add', 'cortex-registry/_cortex-master/index.yaml'],
                           check=True, capture_output=True)

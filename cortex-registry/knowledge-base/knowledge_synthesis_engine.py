@@ -200,7 +200,7 @@ class KnowledgeSynthesisEngine:
         """
         Load applicable CORTEX best practices from 40+ YAMLs.
 
-        Phase 65 S1: Dynamically loads from cortex-registry/_cortex-master/knowledge/
+        Phase 65 S1: Dynamically loads from cortex-registry/knowledge-base/
         using INDEX.yaml for intent-to-YAML mapping.
 
         Args:
