@@ -1,0 +1,464 @@
+# ============================================================================
+# Phase 102: Workflow Runtime Foundation
+# ============================================================================
+# Purpose: Build template-based workflow execution system for CORTEX phases
+# Author: Asif Hussain
+# Date: 2026-02-17
+# Status: planned
+# Priority: P0 (Blocking Phase 104)
+# ============================================================================
+
+metadata:
+  phase_id: phase-102
+  title: "Workflow Runtime Foundation"
+  version: "1.0"
+  status: planned
+  priority: P0
+  created_date: "2026-02-17"
+  author: "Asif Hussain"
+  
+  blocking:
+    - phase-104  # Registry consolidation uses workflow system
+  
+  estimated_duration: "3 hours"
+  complexity: "Medium"
+
+# ============================================================================
+# CONTEXT & MOTIVATION
+# ============================================================================
+
+context:
+  problem: |
+    CORTEX phases are currently executed via hardcoded logic in prompts/agents.
+    No reusable workflow template system exists. Complex phases (7+ stages,
+    convergence loops) need structured execution runtime.
+    
+  current_state: |
+    - Workflow templates exist for USER repos (tdd-feature-implementation.yaml)
+    - No templates for CORTEX self-development phases
+    - No template→instance hydration mechanism
+    - No ephemeral instance storage (risk of bloat)
+    - Agent integration hardcoded (no complexity heuristic)
+    
+  desired_state: |
+    - WorkflowRuntime class executes template-based workflows
+    - Templates in _cortex-master/workflows/ (permanent)
+    - Instances in cortex-registry/.temp/ (ephemeral, auto-delete 7 days)
+    - cortex-architect.prompt.md uses complexity heuristic (toolkit vs workflow)
+    - MCP tool: cortex_workflow_execute
+    
+  success_criteria:
+    - WorkflowRuntime can hydrate templates with phase params
+    - Convergence loops execute until success criteria met
+    - .temp/ folder git-ignored, auto-cleanup working
+    - Phase 104 can execute using new workflow system
+    - Zero bloat (instances auto-deleted)
+
+# ============================================================================
+# ARCHITECTURAL DESIGN
+# ============================================================================
+
+architecture:
+  components:
+    - name: "WorkflowRuntime"
+      location: "cortex/execution/workflow_runtime.py"
+      purpose: "Template hydration + execution orchestration"
+      dependencies: ["OrchestratorRegistry", "UnifiedIntelligenceProvider"]
+      
+    - name: "WorkflowTemplate"
+      location: "cortex/models/workflow_template.py"
+      purpose: "Pydantic model for workflow templates"
+      schema: "workflow_id, steps, convergence_gates, knowledge_context"
+      
+    - name: "WorkflowInstance"
+      location: "cortex/models/workflow_instance.py"
+      purpose: "Hydrated runtime instance with request_id, phase params"
+      
+    - name: "ConvergenceLoopExecutor"
+      location: "cortex/execution/convergence_loop.py"
+      purpose: "Executes steps with retry logic until criteria met"
+      
+    - name: ".temp/ Manager"
+      location: "cortex/storage/temp_manager.py"
+      purpose: "Create instances, schedule cleanup (7 days)"
+
+  workflow_flow: |
+    1. User: "implement phase-104"
+    2. cortex-architect: Analyze complexity → triggers workflow mode
+    3. WorkflowRuntime.load_template("_cortex-master/workflows/phase-execution.yaml")
+    4. WorkflowRuntime.hydrate(template, phase_params) → instance in .temp/
+    5. ConvergenceLoopExecutor.run(instance) → execute stages with loops
+    6. TempManager.schedule_cleanup(instance_file, days=7)
+    7. If failed: Archive to _cortex-master/archive/executions/
+
+  data_flow:
+    template_storage: "_cortex-master/workflows/"
+    instance_storage: "cortex-registry/.temp/instances/"
+    archive_storage: "_cortex-master/archive/executions/"
+    git_tracking:
+      templates: true
+      instances: false
+      archives: true (selective)
+
+# ============================================================================
+# STAGES (TDD Implementation)
+# ============================================================================
+
+stages:
+  - stage_id: "S1"
+    name: "WorkflowRuntime Core"
+    description: "Build WorkflowRuntime class with template loading + hydration"
+    orchestrator: "TDDOrchestrator"
+    convergence_gate:
+      max_cycles: 8
+      success_criteria:
+        tests_pass: true
+        coverage: ">=95%"
+    
+    deliverables:
+      - file: "cortex/execution/workflow_runtime.py"
+        classes:
+          - WorkflowRuntime:
+              methods:
+                - load_template(template_path: str) -> WorkflowTemplate
+                - hydrate(template: WorkflowTemplate, params: dict) -> WorkflowInstance
+                - execute(instance: WorkflowInstance) -> ExecutionResult
+                - _resolve_orchestrator(step: WorkflowStep) -> IOrchestrator
+      
+      - file: "cortex/models/workflow_template.py"
+        classes:
+          - WorkflowTemplate:
+              fields:
+                - workflow_id: str
+                - name: str
+                - version: str
+                - steps: List[WorkflowStep]
+                - convergence_gate: ConvergenceGate
+                - knowledge_context: dict
+          
+          - WorkflowStep:
+              fields:
+                - step_id: str
+                - name: str
+                - orchestrator: str
+                - params: dict
+                - depends_on: List[str]
+                - convergence_gate: Optional[ConvergenceGate]
+      
+      - file: "cortex/models/workflow_instance.py"
+        classes:
+          - WorkflowInstance:
+              fields:
+                - request_id: str
+                - template_id: str
+                - phase_id: str
+                - params: dict
+                - status: WorkflowStatus
+                - created_at: datetime
+                - instance_file: Path
+    
+    tests:
+      - "tests/unit/execution/test_workflow_runtime.py" (15 tests)
+      - Coverage: 95%+
+    
+    validation:
+      - Can load YAML template from _cortex-master/workflows/
+      - Hydration replaces {{param}} placeholders with phase values
+      - Returns WorkflowInstance with unique request_id
+
+  - stage_id: "S2"
+    name: "Convergence Loop Executor"
+    description: "Execute workflow steps with retry logic + convergence gates"
+    orchestrator: "TDDOrchestrator"
+    convergence_gate:
+      max_cycles: 8
+      success_criteria:
+        tests_pass: true
+        coverage: ">=95%"
+    
+    deliverables:
+      - file: "cortex/execution/convergence_loop.py"
+        classes:
+          - ConvergenceLoopExecutor:
+              methods:
+                - execute_step(step: WorkflowStep, context: ExecutionContext) -> StepResult
+                - check_convergence(result: StepResult, gate: ConvergenceGate) -> bool
+                - handle_failure(step: WorkflowStep, error: Exception) -> RetryDecision
+          
+          - ConvergenceGate:
+              fields:
+                - max_cycles: int
+                - success_criteria: dict
+                - convergence_predicate: str
+                - backoff_strategy: str
+    
+    tests:
+      - "tests/unit/execution/test_convergence_loop.py" (20 tests)
+      - Coverage: 95%+
+    
+    validation:
+      - Loops until success_criteria met or max_cycles reached
+      - Backoff strategy (exponential, linear) applied
+      - Returns execution metrics (cycles, duration, outcome)
+
+  - stage_id: "S3"
+    name: ".temp/ Folder + Cleanup Manager"
+    description: "Ephemeral instance storage with auto-cleanup"
+    orchestrator: "TDDOrchestrator"
+    convergence_gate:
+      max_cycles: 5
+      success_criteria:
+        tests_pass: true
+        coverage: ">=95%"
+    
+    deliverables:
+      - file: "cortex/storage/temp_manager.py"
+        classes:
+          - TempManager:
+              methods:
+                - create_instance_file(instance: WorkflowInstance) -> Path
+                - schedule_cleanup(file: Path, days: int) -> None
+                - run_cleanup() -> CleanupReport
+                - archive_instance(file: Path, reason: str) -> Path
+      
+      - folder: "cortex-registry/.temp/"
+        structure: |
+          .temp/
+          ├── .gitignore          # Ignore all .temp/ contents
+          ├── instances/          # Hydrated workflow instances
+          └── cleanup.sh          # Cron job (delete >7 day files)
+      
+      - file: "cortex-registry/.temp/.gitignore"
+        content: |
+          # Ignore all ephemeral instance files
+          *
+          !.gitignore
+          !cleanup.sh
+    
+    tests:
+      - "tests/unit/storage/test_temp_manager.py" (8 tests)
+      - Coverage: 95%+
+    
+    validation:
+      - .temp/ folder created in cortex-registry (not repo root)
+      - Instance files named: {phase_id}-{timestamp}-{request_id}.yaml
+      - Cleanup script deletes files >7 days old
+      - Archive function copies to _cortex-master/archive/executions/
+
+  - stage_id: "S4"
+    name: "Workflow Templates Creation"
+    description: "Create 3 core workflow templates for CORTEX phases"
+    orchestrator: "TDDOrchestrator"
+    convergence_gate:
+      max_cycles: 5
+      success_criteria:
+        templates_valid: true
+        schema_compliant: true
+    
+    deliverables:
+      - file: "_cortex-master/workflows/phase-execution.yaml"
+        description: "Main template for all CORTEX phase implementations"
+        schema: |
+          workflow:
+            id: "cortex/phase-execution"
+            name: "CORTEX Phase Execution"
+            version: "1.0.0"
+            steps:
+              - step_id: "planning"
+                orchestrator: "PlanningOrchestrator"
+                convergence_gate: null
+              - step_id: "structural_changes"
+                orchestrator: "RefactoringOrchestrator"
+                convergence_gate:
+                  max_cycles: 5
+              - step_id: "tdd_implementation"
+                orchestrator: "TDDOrchestrator"
+                convergence_gate:
+                  max_cycles: 8
+              - step_id: "holistic_refactoring"
+                orchestrator: "RefactoringOrchestrator"
+                convergence_gate:
+                  max_cycles: 6
+              - step_id: "governance_validation"
+                orchestrator: "EnforcementOrchestrator"
+                convergence_gate:
+                  max_cycles: 3
+              - step_id: "integration_validation"
+                orchestrator: "HolisticValidationOrchestrator"
+                convergence_gate: null
+      
+      - file: "_cortex-master/workflows/tdd-cycle.yaml"
+        description: "RED→GREEN→REFACTOR sub-workflow"
+      
+      - file: "_cortex-master/workflows/refactor-holistic.yaml"
+        description: "Cross-cutting refactoring sub-workflow"
+    
+    tests:
+      - "tests/unit/workflows/test_template_validation.py" (10 tests)
+      - Coverage: 95%+
+    
+    validation:
+      - Templates parse as valid YAML
+      - Schema matches WorkflowTemplate Pydantic model
+      - Convergence gates properly configured
+
+  - stage_id: "S5"
+    name: "Agent Integration (cortex-architect.prompt.md)"
+    description: "Update prompt to use complexity heuristic + workflow dispatch"
+    orchestrator: "TDDOrchestrator"
+    convergence_gate:
+      max_cycles: 3
+      success_criteria:
+        prompt_updated: true
+        heuristic_working: true
+    
+    deliverables:
+      - file: ".github/prompts/cortex-architect.prompt.md"
+        section: "## WORKFLOW DISPATCH (Phase 102)"
+        content: |
+          ### Complexity Heuristic (Toolkit vs. Workflow)
+          
+          **Decision Logic:**
+          ```python
+          def should_use_workflow(phase_yaml) -> bool:
+              plan = load_yaml(phase_yaml)
+              loc_estimate = sum(stage.get('loc_estimate', 0) for stage in plan['stages'])
+              num_stages = len(plan['stages'])
+              has_loops = any(stage.get('convergence_gate') for stage in plan['stages'])
+              
+              if loc_estimate > 500: return True
+              if num_stages > 5: return True
+              if has_loops: return True
+              
+              return False
+          ```
+          
+          **Execution Flow:**
+          1. After DoR approval, check complexity
+          2. If simple (<500 LOC, ≤5 stages, no loops) → Use Toolkit
+          3. If complex → Load workflow template from _cortex-master/workflows/
+          4. Hydrate template → instance in .temp/
+          5. Execute via WorkflowRuntime (silent autonomous)
+      
+      - file: ".github/agents/core/cortex-architect.md"
+        section: "workflow_dispatch:"
+        content: "See updated logic in prompt"
+    
+    tests:
+      - Manual validation (run Phase 104 using workflow)
+    
+    validation:
+      - Prompt clearly documents when to use workflow vs toolkit
+      - Complexity thresholds aligned with architecture doc
+
+  - stage_id: "S6"
+    name: "MCP Tool: cortex_workflow_execute"
+    description: "Expose workflow execution via MCP"
+    orchestrator: "TDDOrchestrator"
+    convergence_gate:
+      max_cycles: 8
+      success_criteria:
+        tests_pass: true
+        mcp_registered: true
+    
+    deliverables:
+      - file: "cortex/mcp/tools/workflow_tools.py"
+        functions:
+          - cortex_workflow_execute:
+              params:
+                - template_id: str
+                - phase_params: dict
+                - mode: str (silent | interactive)
+              returns: ExecutionResult
+          
+          - cortex_workflow_status:
+              params:
+                - request_id: str
+              returns: WorkflowStatus
+      
+      - file: "cortex/mcp/server.py"
+        update: "Register cortex_workflow_execute tool"
+    
+    tests:
+      - "tests/unit/mcp/test_workflow_tools.py" (10 tests)
+      - Coverage: 95%+
+    
+    validation:
+      - MCP tool callable from prompts
+      - Returns execution status + metrics
+      - Integrates with WorkflowRuntime
+
+# ============================================================================
+# TESTING STRATEGY
+# ============================================================================
+
+testing:
+  unit_tests:
+    total: 73
+    breakdown:
+      - test_workflow_runtime.py: 15
+      - test_convergence_loop.py: 20
+      - test_temp_manager.py: 8
+      - test_template_validation.py: 10
+      - test_workflow_tools.py: 10
+      - integration: 10
+  
+  integration_tests:
+    - "Execute Phase 104 using new workflow system"
+    - "Verify instance created in .temp/"
+    - "Verify cleanup after 7 days (mock time)"
+  
+  coverage_target: "95%+"
+
+# ============================================================================
+# ROLLBACK PLAN
+# ============================================================================
+
+rollback:
+  triggers:
+    - WorkflowRuntime fails to execute Phase 104
+    - .temp/ folder bloats (auto-cleanup not working)
+    - MCP tool registration fails
+  
+  steps:
+    - "git revert commits for Phase 102"
+    - "Delete .temp/ folder"
+    - "Restore cortex-architect.prompt.md to previous version"
+    - "Execute Phase 104 using legacy approach (hardcoded in prompt)"
+
+# ============================================================================
+# SUCCESS METRICS
+# ============================================================================
+
+success_metrics:
+  - "73 tests passing (95%+ coverage)"
+  - "Phase 104 executes successfully using workflow system"
+  - ".temp/ folder auto-cleanup working (verified with mock time)"
+  - "MCP tool cortex_workflow_execute registered and callable"
+  - "Zero bloat (no instance files >7 days old in .temp/)"
+  - "Templates versioned in _cortex-master/workflows/"
+
+# ============================================================================
+# DEPENDENCIES & BLOCKING
+# ============================================================================
+
+dependencies:
+  internal:
+    - OrchestratorRegistry (already exists)
+    - UnifiedIntelligenceProvider (already exists)
+    - TDDOrchestrator (already exists)
+  
+  external: []
+
+blocks:
+  - phase-104  # Cannot start until Phase 102 complete
+
+# ============================================================================
+# ESTIMATED LOC
+# ============================================================================
+
+estimated_loc:
+  implementation: 600
+  tests: 800
+  documentation: 200
+  total: 1600
