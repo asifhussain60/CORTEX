@@ -149,39 +149,6 @@ phase_status:
         components: "HealthOrchestrator, DashboardExporter, Pre-commit/Pre-push hooks"
       consolidates: ["phase-91", "phase-92"]
   
-  active:
-    - id: "phase-97"
-      title: "CORTEX Intelligence Infrastructure Enhancement"
-      location: "phases/active/phase-97-cortex-intelligence-infrastructure.yaml"
-      started_date: "2026-02-16"
-      priority: "P0"
-      estimated_duration: "12-16 days (extended from 8 days)"
-      description: "Comprehensive enhancement: Health Orchestrator 2.0, LENS Intelligence Facade, Registry-Based Self-Wiring, Knowledge Graph, Polyglot Engine, Enterprise Suite"
-      absorbs_phase: "phase-90"
-      stages:
-        - "S1: Health Orchestrator 2.0 (9 agents, 43 tests)"
-        - "S2: LENS Intelligence Facade (12 tests, 9 workflows)"
-        - "S3: Knowledge Graph Integration (60 tests, from Phase 90)"
-        - "S4: Polyglot Analysis Engine (140 tests, .NET/Angular)"
-        - "S5: Enterprise Maturity Suite (100 tests, multi-tenancy)"
-      total_tests: 355
-      effort_extended: "+4-8 days for Phase 90 features"
-      business_value:
-        - "87% time savings per feature (registry auto-wiring)"
-        - "81% reduction in maintenance (orchestrator consolidation)"
-        - "Zero P0 issues tolerated (progressive enforcement)"
-      stages: 9
-      tests_planned: 175
-      key_deliverables:
-        - "7 new health agents (structure enforcement, sprawl detection, security, quality)"
-        - "LENS Intelligence Facade (black-boxed unified entry)"
-        - "Registry-based self-wiring (plugin discovery)"
-        - "Evolution timeline analyzer (git AC markers)"
-        - "Orchestrator consolidation analysis (147 files → 28 target)"
-        - "Progressive enforcement system (P0/P1/P2 gates)"
-        - "Golden test audit validation"
-        - "MasterOrchestrator + InteractionOrchestrator integration"
-
     - id: "phase-97"
       title: "CORTEX Intelligence Infrastructure Enhancement"
       location: "phases/completed/phase-97-cortex-intelligence-infrastructure.yaml"
@@ -410,8 +377,6 @@ phase_status:
         - "Governance automation: ValidationManager enforces CORE rules"
 
   active: []
-
-  planned:
 
   consolidated:
     - id: "phase-consolidated-legacy"
