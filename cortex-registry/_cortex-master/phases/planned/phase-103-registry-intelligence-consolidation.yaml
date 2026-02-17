@@ -9,7 +9,7 @@
 # DIGEST CONTEXT: Based on _workspaces/.chats/chat01.md comprehensive design session
 # ============================================================================
 
-version: '2.0'
+version: '2.1'
 phase_id: phase-103
 title: "Registry & Intelligence Consolidation - Brain-Aligned Architecture"
 status: planned
@@ -22,10 +22,53 @@ roi_score: 95
 confidence: 9.0
 
 # ============================================================================
+# CRITICAL: CORTEX vs. PRODUCTION REPO DISTINCTION
+# ============================================================================
+repo_scope:
+  target_repo: "CORTEX"
+  type: "development_planning_meta_repo"
+  purpose: |
+    This phase operates ONLY on the CORTEX repo - the meta repository for 
+    planning, governance, registry, and brain intelligence.
+    
+    CORTEX is NOT a production application repo. Changes here affect:
+    - Planning documents (cortex-registry/planning/)
+    - Governance rules (cortex_intelligence/memory/core/)
+    - CORTEX brain architecture (cortex_intelligence/)
+    - Development templates and patterns
+    
+  production_repos:
+    description: |
+      Production application repos are SEPARATE repositories where actual 
+      customer-facing applications live. They REFERENCE CORTEX but are NOT 
+      modified by this phase.
+    
+    examples:
+      - "company-app-backend/"
+      - "company-web-frontend/"
+      - "company-mobile-app/"
+      - "customer-project-xyz/"
+    
+    relationship: |
+      Production repos consume CORTEX via:
+      - Reading cortex-registry/ governance rules
+      - Using cortex_intelligence/ as a Python package
+      - Following templates from cortex-registry/artifacts/
+      - Referencing best practices from cortex-registry/knowledge-base/
+      
+      But they do NOT modify CORTEX files.
+  
+  clarity:
+    this_phase_modifies: "CORTEX repo folder structure only"
+    this_phase_does_not_modify: "Any production application repos"
+    deployment_impact: "Zero (CORTEX is not deployed to production)"
+    customer_impact: "Zero (CORTEX is internal tooling only)"
+
+# ============================================================================
 # EXECUTIVE SUMMARY
 # ============================================================================
 objective: |
-  Transform CORTEX folder architecture through two parallel tracks:
+  Transform CORTEX repository folder architecture through two parallel tracks:
   
   TRACK A: cortex_brain → cortex_intelligence rename
   - Rename cortex_brain to cortex_intelligence (brain-aligned semantics)
@@ -52,6 +95,72 @@ business_value: |
   - Industry-standard naming (artifacts/ not content/)
   - Comprehensive audit evidence via SQLite logging
   - Zero regression risk via golden test harness
+  
+  IMPORTANT: All improvements apply to CORTEX development repo only.
+  Production application repos are unaffected and maintain their own structures.
+
+# ============================================================================
+# PLANNING SCOPE CLARITY
+# ============================================================================
+planning_scope:
+  cortex_repo_purpose: |
+    The CORTEX repository is a META-REPOSITORY that contains:
+    1. Planning documents and phase definitions (cortex-registry/planning/)
+    2. Governance rules and patterns (cortex_intelligence/memory/core/)
+    3. Intelligence architecture (cortex_intelligence/)
+    4. Best practices and templates (cortex-registry/knowledge-base/)
+    5. MCP tools and orchestrators (cortex/orchestrators/)
+    
+    CORTEX is the "operating system" for AI-driven development across
+    multiple production application repositories.
+  
+  production_repos_purpose: |
+    Production repos contain actual customer-facing applications:
+    - Backend services (APIs, microservices, databases)
+    - Frontend applications (web, mobile, desktop)
+    - Infrastructure code (Terraform, Kubernetes configs)
+    - Customer-specific implementations
+    
+    These repos REFERENCE CORTEX but live in separate repositories.
+  
+  this_phase_scope: |
+    ✅ Modifies: CORTEX repository folder structure
+    ✅ Updates: CORTEX Python imports (cortex_brain → cortex_intelligence)
+    ✅ Reorganizes: cortex-registry/ governance and planning structure
+    ❌ Does NOT modify: Production application repos
+    ❌ Does NOT deploy: CORTEX to customer environments
+    ❌ Does NOT affect: Customer-facing applications
+  
+  example_flow:
+    cortex_repo:
+      - "Developer plans feature using cortex-registry/planning/phases/"
+      - "CORTEX TDDOrchestrator generates tests following CORE-008"
+      - "CORTEX generates code using templates from cortex-registry/artifacts/"
+      - "Code is written to PRODUCTION REPO (e.g., company-app-backend/)"
+    
+    production_repo:
+      - "Developer opens company-app-backend/ in VS Code"
+      - "CORTEX extension reads governance from CORTEX repo"
+      - "Developer implements feature in company-app-backend/"
+      - "Tests run in company-app-backend/tests/"
+      - "Deploy from company-app-backend/ to production"
+  
+  key_distinction:
+    question: "When does code go to production?"
+    answer: |
+      Code from PRODUCTION REPOS goes to production (e.g., company-app-backend/).
+      Code from CORTEX REPO never goes to production - it's dev tooling only.
+    
+    question: "Where are customer applications?"
+    answer: |
+      Customer applications live in PRODUCTION REPOS, not in CORTEX.
+      CORTEX helps PLAN and GENERATE code, but the code lives elsewhere.
+    
+    question: "What changes when CORTEX updates?"
+    answer: |
+      Developer experience improves (better planning, governance, templates).
+      Production applications continue running unchanged until developers
+      actively modify them using the improved CORTEX tooling.
 
 # ============================================================================
 # IMPACT ANALYSIS (Evidence-Based)
