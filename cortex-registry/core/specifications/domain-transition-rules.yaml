@@ -381,5 +381,3 @@ domain_transitions:
         - "gate_approval"
         - "gate_health_check"
         - "gate_monitoring"
-
----

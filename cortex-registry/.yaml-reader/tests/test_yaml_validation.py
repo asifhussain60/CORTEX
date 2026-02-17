@@ -6,8 +6,16 @@ Tests all YAML files in cortex-registry for parse errors and structural issues.
 
 import yaml
 import sys
+import pytest
 from pathlib import Path
 from collections import Counter
+
+
+@pytest.fixture(params=list((Path(__file__).parent.parent.parent).rglob("*.yaml")))
+def file_path(request):
+    """Parametrize all YAML files in cortex-registry."""
+    return request.param
+
 
 def test_yaml_file(file_path):
     """Test a single YAML file for validity."""
