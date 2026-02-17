@@ -28,7 +28,7 @@ class TestDashboardServerStart:
         time.sleep(1)
         
         # Start server
-        dashboards_dir = Path(__file__).parent.parent.parent / "company" / "dashboards"
+        dashboards_dir = Path(__file__).parent.parent.parent / "cortex-registry" / "company" / "dashboards"
         proc = subprocess.Popen(
             ["python3", "-m", "http.server", "8080"],
             cwd=str(dashboards_dir),
@@ -66,7 +66,7 @@ class TestDashboardServerStart:
         )
         time.sleep(1)
         
-        dashboards_dir = Path(__file__).parent.parent.parent / "company" / "dashboards"
+        dashboards_dir = Path(__file__).parent.parent.parent / "cortex-registry" / "company" / "dashboards"
         proc = subprocess.Popen(
             ["python3", "-m", "http.server", "8080"],
             cwd=str(dashboards_dir),

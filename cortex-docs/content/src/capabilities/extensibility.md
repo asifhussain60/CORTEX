@@ -265,7 +265,7 @@ orchestrators:
 ### Knowledge Structure
 
 ```
-company/
+cortex-registry/company/
 ├── domains/
 │   ├── authentication/
 │   │   ├── best-practices.yaml
