@@ -1,0 +1,492 @@
+# ============================================================================
+# Phase: CORTEX Registry Consolidation & Migration
+# ============================================================================
+# Authority: Registry structure analysis + consolidation requirements
+# Created: 2026-02-17
+# Priority: P1 (Improves maintainability, removes duplication)
+# Estimated: 3-4 hours (includes comprehensive testing)
+# ============================================================================
+
+version: '2.0'
+phase_id: registry-consolidation
+title: "Registry Consolidation: Eliminate _cortex-master Wrapper + Deduplicate"
+status: planned
+priority: P1
+created: '2026-02-17T00:00:00Z'
+estimated_effort: "3-4 hours"
+estimated_tokens: "25000"
+roi_score: 90
+confidence: 9.5
+
+# ============================================================================
+# PROBLEM STATEMENT
+# ============================================================================
+
+problem:
+  description: |
+    Registry structure has accumulated organizational debt:
+    1. **Unnecessary nesting**: `_cortex-master/` wrapper adds no value (legacy from initial setup)
+    2. **Duplicate workflows**: `templates/workflows/` duplicates `workflows/` (authoritative source)
+    3. **Scattered concerns**: Governance, config, wiring split across `_cortex-master/core/`
+    4. **Hard to navigate**: 3-level nesting breaks natural human traversal
+    5. **30+ hardcoded paths**: Scripts/tests reference `_cortex-master/` directly
+    
+  impact:
+    - Developer confusion (2 workflow locations)
+    - Slower navigation (deep nesting)
+    - Maintenance overhead (duplicate updates)
+    - Unclear ownership (what goes where?)
+    
+  evidence:
+    files_affected: 30
+    duplicate_dirs: 2
+    nesting_depth: 3
+    code_references: "scripts/* + tests/* + .cortex/*"
+
+# ============================================================================
+# GOALS & SUCCESS CRITERIA
+# ============================================================================
+
+goals:
+  primary:
+    - "Flatten registry structure (max 2 levels: domain/file.yaml)"
+    - "Eliminate _cortex-master/ wrapper (move contents to top-level domains)"
+    - "Delete duplicate templates/workflows/ (keep workflows/ as SSOT)"
+    - "Preserve git history through git mv (not rm + create)"
+    - "Update 30+ hardcoded path references"
+    - "Zero regression (all tests pass, all imports work)"
+    
+  secondary:
+    - "Create new metrics/ domain for system observability"
+    - "Consolidate phases/ under planning/"
+    - "Improve discoverability (semantic top-level folders)"
+
+success_criteria:
+  blocking:
+    - "All tests pass (baseline maintained)"
+    - "Zero import errors"
+    - "Git history preserved (git log --follow works)"
+    - "All 30+ path references updated"
+    - "Duplicate workflows/ deleted"
+    - "_cortex-master/ fully eliminated"
+    
+  non_blocking:
+    - "Navigation time reduced (subjective)"
+    - "Developer feedback positive"
+
+# ============================================================================
+# STAGES
+# ============================================================================
+
+stages:
+  - id: "S1"
+    name: "Pre-Migration Baseline & Analysis"
+    description: "Capture current state before any changes"
+    tasks:
+      - "Run full test suite → capture baseline"
+      - "Document all _cortex-master/ references (grep scan)"
+      - "Validate git history tracking works"
+      - "Create backup branch (safety net)"
+    deliverables:
+      - "baseline-tests-before.txt"
+      - "path-references-inventory.txt"
+      - "git-history-validation.txt"
+    estimated_time: "30 minutes"
+    
+  - id: "S2"
+    name: "Create New Structure"
+    description: "Set up new top-level domains before moving files"
+    tasks:
+      - "mkdir cortex-registry/metrics/{baselines,reports,dashboards,status}"
+      - "mkdir cortex-registry/config/"
+      - "mkdir cortex-registry/wiring/"
+      - "mkdir cortex-registry/specifications/"
+      - "mkdir cortex-registry/planning/phases/"
+    deliverables:
+      - "New folder structure created"
+    estimated_time: "5 minutes"
+    
+  - id: "S3"
+    name: "Move Governance & Core Config (git mv)"
+    description: "First migration wave: governance files"
+    tasks:
+      - "git mv _cortex-master/core/governance/* governance/"
+      - "git mv _cortex-master/core/config/* config/"
+      - "git mv _cortex-master/core/wiring/* wiring/"
+      - "git mv _cortex-master/core/specifications/* specifications/"
+      - "git mv _cortex-master/core/meta/* config/"
+      - "git mv _cortex-master/core/personas.yaml config/"
+    deliverables:
+      - "Governance files moved (git history intact)"
+    estimated_time: "10 minutes"
+    testing:
+      - "pytest tests/unit/governance/ -v"
+      - "python -c 'from cortex.brain.core.yaml_loaders import load_core_rules; print(load_core_rules())'"
+    
+  - id: "S4"
+    name: "Move Metrics & Observability (git mv)"
+    description: "Second migration wave: metrics domain"
+    tasks:
+      - "git mv _cortex-master/baselines/* metrics/baselines/"
+      - "git mv _cortex-master/reports/* metrics/reports/"
+      - "git mv _cortex-master/dashboard/* metrics/dashboards/"
+      - "git mv _cortex-master/CORTEX-STATUS-*.yaml metrics/status/"
+      - "git mv _cortex-master/DEFERRED-PHASES-ROADMAP.yaml metrics/status/"
+      - "git mv _cortex-master/master-index.yaml metrics/status/"
+    deliverables:
+      - "Metrics files moved to new domain"
+    estimated_time: "10 minutes"
+    
+  - id: "S5"
+    name: "Move Phases & Knowledge (git mv)"
+    description: "Third migration wave: planning + knowledge"
+    tasks:
+      - "git mv _cortex-master/phases/* planning/phases/"
+      - "git mv _cortex-master/knowledge/* knowledge/"
+      - "git mv _cortex-master/archive/* archive/"
+    deliverables:
+      - "Phases moved to planning domain"
+      - "Knowledge moved to top level"
+    estimated_time: "10 minutes"
+    
+  - id: "S6"
+    name: "Delete Duplicates & Empty Wrapper"
+    description: "Remove redundant directories"
+    tasks:
+      - "rm -rf templates/workflows/ (duplicate of workflows/)"
+      - "git rm -rf _cortex-master/ (now empty)"
+      - "git rm -rf master/ (if exists)"
+    deliverables:
+      - "_cortex-master/ eliminated"
+      - "Duplicate workflows/ deleted"
+    estimated_time: "5 minutes"
+    
+  - id: "S7"
+    name: "Update Python Path References (9 files)"
+    description: "Update hardcoded paths in scripts and tests"
+    files_to_update:
+      - path: "scripts/wiring_health_report.py"
+        old: "_cortex-master/core/wiring/"
+        new: "wiring/"
+      - path: "scripts/phase25_wiring_audit.py"
+        old: "_cortex-master/core/wiring/"
+        new: "wiring/"
+      - path: "scripts/batch_generate_tests.py"
+        old: "_cortex-master/orchestrator_specs.json"
+        new: "metrics/status/orchestrator_specs.json"
+      - path: "scripts/consolidate_phases.py"
+        old: "_cortex-master/index.yaml"
+        new: "metrics/status/master-index.yaml"
+      - path: "scripts/analyze_production_readiness.py"
+        old: "_cortex-master/index.yaml"
+        new: "metrics/status/master-index.yaml"
+      - path: "scripts/cleanup-nomenclature.py"
+        old: "_cortex-master"
+        new: "governance"
+      - path: "tests/cortex/test_phase_executor_framework.py"
+        old: "_cortex-master/phases/active"
+        new: "planning/phases/active"
+        occurrences: 11
+      - path: "tests/e2e/test_phase_navigation.py"
+        old: "_cortex-master/dashboard/"
+        new: "metrics/dashboards/"
+      - path: ".cortex/verify-autonomous-setup.py"
+        old: "_cortex-master"
+        new: "metrics/status"
+        occurrences: 3
+    estimated_time: "30 minutes"
+    
+  - id: "S8"
+    name: "Update Registry Manifest"
+    description: "Update cortex-registry/manifest.yaml with new structure"
+    tasks:
+      - "Document new folder hierarchy"
+      - "List all top-level domains with purpose"
+      - "Add migration note (2026-02-17)"
+    deliverables:
+      - "manifest.yaml v2.0"
+    estimated_time: "15 minutes"
+    
+  - id: "S9"
+    name: "Comprehensive Testing (Stage Gate)"
+    description: "Validate zero regression across all systems"
+    test_suites:
+      unit:
+        - "pytest tests/unit/brain/test_loaders.py -v"
+        - "pytest tests/unit/brain/test_yaml_loaders.py -v"
+        - "pytest tests/unit/governance/ -v"
+        - "pytest tests/unit/orchestrators/ -v"
+      integration:
+        - "pytest tests/integration/ -v"
+        - "pytest tests/cortex/ -v"
+      e2e:
+        - "pytest tests/e2e/ -v"
+      scripts:
+        - "python scripts/wiring_health_report.py"
+        - "python scripts/analyze_production_readiness.py"
+      imports:
+        - "python -c 'from cortex.brain.core.yaml_loaders import *'"
+        - "python -c 'from cortex.registry.plan_registry import PlanRegistry'"
+        - "python -c 'from cortex.orchestrators.workflow.template_registry import WorkflowTemplateRegistry'"
+    acceptance:
+      - "All tests pass (match baseline)"
+      - "All scripts execute without errors"
+      - "All imports resolve successfully"
+    estimated_time: "45 minutes"
+    
+  - id: "S10"
+    name: "Git History Validation"
+    description: "Confirm history preservation"
+    validations:
+      - "git log --follow cortex-registry/governance/core-rules.yaml (shows _cortex-master history)"
+      - "git log --follow cortex-registry/metrics/status/master-index.yaml"
+      - "git log --follow cortex-registry/planning/phases/completed/"
+      - "git blame cortex-registry/governance/core-rules.yaml (tracks line origins)"
+    acceptance:
+      - "All git log --follow commands return history"
+      - "git blame shows original authors"
+    estimated_time: "10 minutes"
+    
+  - id: "S11"
+    name: "Documentation & Commit"
+    description: "Document changes and commit"
+    tasks:
+      - "Update README.md with new registry structure"
+      - "Update .github/prompts/cortex-architect.prompt.md (registry paths)"
+      - "Create migration summary (this phase YAML)"
+      - "Commit with comprehensive message"
+    commit_message: |
+      🏗️ REGISTRY CONSOLIDATION: Eliminate _cortex-master + deduplicate
+      
+      **Changes:**
+      - Flatten structure: _cortex-master/core/* → top-level domains
+      - New domains: metrics/, config/, wiring/, specifications/
+      - Move phases/ → planning/phases/
+      - Delete duplicate: templates/workflows/ (keep workflows/)
+      - Update 30+ path references (scripts + tests)
+      
+      **Benefits:**
+      - -40% nesting depth (3 → 2 levels max)
+      - +100% discoverability (semantic folders)
+      - Zero duplication (workflows/ = SSOT)
+      - Git history preserved (git mv used)
+      
+      **Testing:**
+      - All tests pass (baseline maintained)
+      - All imports working
+      - Git history validated (--follow works)
+      
+      **Files affected:** 9 Python files, 100+ YAML files moved
+      **Risk:** LOW (comprehensive testing, git history intact)
+    estimated_time: "15 minutes"
+
+# ============================================================================
+# DEPENDENCIES & BLOCKERS
+# ============================================================================
+
+dependencies:
+  required:
+    - "Git repository in clean state (no uncommitted changes)"
+    - "Test suite passing (establish baseline)"
+    - "Backup branch created (safety net)"
+  
+  optional:
+    - "Team notification (migration in progress)"
+
+blockers:
+  current: []
+  potential:
+    - "Test failures in baseline (fix before migration)"
+    - "Uncommitted changes (commit or stash first)"
+
+# ============================================================================
+# RISKS & MITIGATION
+# ============================================================================
+
+risks:
+  - risk: "Break imports (Python can't find moved files)"
+    likelihood: "MEDIUM"
+    impact: "HIGH"
+    mitigation: "Stage-by-stage testing after each move"
+    
+  - risk: "Lose git history (files appear new)"
+    likelihood: "LOW"
+    impact: "HIGH"
+    mitigation: "Use git mv (not rm + create), validate with --follow"
+    
+  - risk: "Break scripts (hardcoded paths)"
+    likelihood: "HIGH"
+    impact: "MEDIUM"
+    mitigation: "Comprehensive grep scan + update all 30+ references"
+    
+  - risk: "Test failures (stale paths in tests)"
+    likelihood: "MEDIUM"
+    impact: "MEDIUM"
+    mitigation: "Update tests in S7, validate in S9"
+    
+  - risk: "Developer confusion (where did files go?)"
+    likelihood: "MEDIUM"
+    impact: "LOW"
+    mitigation: "Update manifest.yaml, document in README"
+
+# ============================================================================
+# ROLLBACK PLAN
+# ============================================================================
+
+rollback:
+  trigger: "Critical failure in S9 testing"
+  steps:
+    - "git reset --hard HEAD~1 (undo commit)"
+    - "git checkout backup-branch"
+    - "Investigate failure root cause"
+    - "Fix issue before retrying"
+  estimated_time: "5 minutes"
+
+# ============================================================================
+# METRICS & VALIDATION
+# ============================================================================
+
+metrics:
+  before:
+    top_level_folders: 10
+    _cortex_master_nesting: 3
+    duplicate_workflows: 2
+    hardcoded_paths: 30
+    max_depth: "3 levels"
+    
+  after:
+    top_level_folders: 13
+    _cortex_master_nesting: 0
+    duplicate_workflows: 1
+    hardcoded_paths: 0
+    max_depth: "2 levels"
+    
+  improvements:
+    nesting_reduction: "-33%"
+    duplication_elimination: "-50%"
+    discoverability: "+100%"
+    maintainability: "+75%"
+
+# ============================================================================
+# ENFORCEMENT GATES
+# ============================================================================
+
+enforcement_gates:
+  pre_execution:
+    - gate: "GitStateValidation"
+      checks:
+        - "Repository clean (no uncommitted changes)"
+        - "Tests passing (baseline established)"
+        - "Backup branch created"
+      blocking: true
+      
+  stage_boundaries:
+    - gate: "PerStageValidation"
+      checks:
+        - "Git mv successful (exit code 0)"
+        - "No broken symlinks"
+        - "Files exist at new location"
+      blocking: true
+      frequency: "after_each_move"
+      
+  phase_completion:
+    - gate: "ComprehensiveTesting"
+      checks:
+        - "All tests pass (match baseline)"
+        - "All imports resolve"
+        - "Git history preserved"
+        - "All scripts execute"
+        - "Zero regression"
+      blocking: true
+
+# ============================================================================
+# SECURITY GATES
+# ============================================================================
+
+security_gates:
+  data_integrity:
+    - check: "no_data_loss"
+      validation: "File count before = file count after"
+      enforcement: "blocking"
+      
+    - check: "git_history_intact"
+      validation: "git log --follow works for moved files"
+      enforcement: "blocking"
+      
+  access_control:
+    - check: "permissions_preserved"
+      validation: "File permissions unchanged"
+      enforcement: "warning"
+
+# ============================================================================
+# RED-GREEN-REFACTOR CYCLE
+# ============================================================================
+
+red_green_refactor:
+  red_phase:
+    description: "Write tests that validate structure"
+    tasks:
+      - "Create test_registry_structure.py (validates new paths)"
+      - "Tests should FAIL (structure not migrated yet)"
+    duration: "15 minutes"
+    
+  green_phase:
+    description: "Execute migration (S1-S11)"
+    tasks:
+      - "Run stages S1-S11 in sequence"
+      - "Tests should PASS after S11"
+    duration: "2.5 hours"
+    
+  refactor_phase:
+    description: "Optimize and document"
+    tasks:
+      - "Update documentation"
+      - "Add migration notes"
+      - "Update manifest.yaml"
+    duration: "30 minutes"
+
+# ============================================================================
+# COMPLETION CRITERIA
+# ============================================================================
+
+definition_of_done:
+  code:
+    - "All stages S1-S11 complete"
+    - "_cortex-master/ deleted"
+    - "Duplicate templates/workflows/ deleted"
+    - "30+ path references updated"
+    
+  testing:
+    - "All tests pass (baseline maintained)"
+    - "All imports resolve"
+    - "All scripts execute"
+    - "Git history validated"
+    
+  documentation:
+    - "manifest.yaml updated"
+    - "README.md updated"
+    - "Migration notes added"
+    - "Commit message comprehensive"
+    
+  governance:
+    - "No CORE rule violations"
+    - "File naming compliant (kebab-case)"
+    - "No markdown sprawl"
+
+# ============================================================================
+# PHASE METADATA
+# ============================================================================
+
+phase_metadata:
+  author: "Asif Hussain"
+  created_by: "CORTEX Architect (RefactoringOrchestrator)"
+  session_date: "2026-02-17"
+  authority: "Registry consolidation analysis + user requirements"
+  related_phases: []
+  category: "infrastructure"
+  tags:
+    - "registry"
+    - "consolidation"
+    - "technical-debt"
+    - "refactoring"
+    - "maintainability"
