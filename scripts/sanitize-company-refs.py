@@ -26,6 +26,20 @@ SANITIZATION_MAP = {
     'HQY': 'GCC',
     'hqy': 'gcc',
     
+    # Company prefixes (HE -> GC)
+    'HETransactions': 'GCTransactions',
+    'HEData': 'GCData',
+    'HEInteraction': 'GCInteraction',
+    'HE_': 'GC_',
+    'HE.': 'GC.',
+    
+    # Reimbursement Account (RA -> FA for Financial Account, or generic Account)
+    # Note: RA in file paths like RA-Domain, ra-api-specs, ra-modernized will be renamed separately
+    'XGenerateFundingInvoice': 'XGenerateFundingInvoice',  # Keep as-is, already generic
+    'XUpdateFundingBatch': 'XUpdateFundingBatch',          # Keep as-is, already generic
+    'CreateRAFundingInvoices': 'CreateAccountFundingInvoices',
+    'Updater_CreateRAFundingInvoices': 'Updater_CreateAccountFundingInvoices',
+    
     # Domains
     'www.healthEquity.com': 'www.genericcompany.com',
     'healthequity.com': 'genericcompany.com',
