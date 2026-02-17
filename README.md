@@ -9,9 +9,16 @@
 [![Tests: 15,633 Passing](https://img.shields.io/badge/Tests-15,633%20Passing-success)]()
 [![Status: Production Ready](https://img.shields.io/badge/Status-Production%20Ready-success)](cortex-registry/CORTEX-STATUS-2026-02-14.yaml)
 
-## 🚀 Recent Updates (2026-02-14)
+## 🚀 Recent Updates (2026-02-17)
 
-**4 Autonomous Waves Completed:**
+**Phase 103: Registry & Intelligence Consolidation** ✅ COMPLETE
+- ✅ **Brain Architecture**: `cortex_brain` → `cortex_intelligence` (cognitive alignment)
+- ✅ **Memory Hierarchy**: `tier0-3` → `memory/{core, tier1_learned, tier2_adaptive, tier3_scratch}`
+- ✅ **Registry Cleanup**: Eliminated `_cortex-master/` wrapper for semantic top-level structure
+- ✅ **Testing**: 235 golden tests passing (100% pass rate)
+- 📖 **Migration Guide**: See `cortex-registry/archive/PHASE-103-MIGRATION-GUIDE.md`
+
+**4 Autonomous Waves Completed (2026-02-14):**
 - ✅ **WAVE-1:** Documentation Vacuum (81% file reduction, 119→23 files)
 - ✅ **WAVE-2:** MCP Enforcement (native tool interception, 19 tests)
 - ✅ **WAVE-3:** Automation Hooks (StatusUpdateHook, RecommendationGate, RegistryValidator, 24 tests)
@@ -197,13 +204,43 @@ make test-all      # Run all tests
 
 - **[START HERE](docs/START-HERE.md)** - New to CORTEX? Begin here
 - **[Getting Started](docs/03-getting-started/)** - Installation & setup
-- **[CORTEX Brain](docs/01-cortex-brain/)** - Governance & knowledge system
-- **[Orchestrators](docs/02-orchestrators/)** - 23 specialized coordinators
+- **[CORTEX Intelligence](docs/01-cortex-brain/)** - Governance & cognitive architecture (formerly "Brain")
+- **[Orchestrators](docs/02-orchestrators/)** - 28 specialized coordinators
 - **[LENS Protocol](docs/05-lens-protocol/)** - Code intelligence system
 - **[LENS Dashboard](docs/11-lens-dashboard/)** - Visual intelligence (NEW ✨)
 - **[Architecture](docs/04-architecture/)** - System design
 - **[API Reference](docs/06-api-reference/)** - Complete API docs
 - **[MCP Tools](docs/11-mcp-tools/)** - Model Context Protocol integration
+
+### Core Package Structure
+
+```
+cortex/                    # Main CORTEX package
+  orchestrators/          # 28 orchestrators (health, test, refactor, etc.)
+  mcp/                    # MCP server & tool registry
+  governance/             # Enforcement agents & validators
+  
+cortex_intelligence/      # Cognitive architecture (formerly cortex_brain)
+  memory/                 # Tiered knowledge hierarchy
+    core/                 # Immutable governance (tier 0)
+    tier1_learned/        # Validated patterns (tier 1)
+    tier2_adaptive/       # Evolving rules (tier 2)
+    tier3_scratch/        # Experimental (tier 3)
+  domain/                 # Domain logic
+  perception/             # Pattern detection
+  reasoning/              # Decision logic
+  action/                 # Execution logic
+  
+cortex-registry/          # Knowledge & governance registry
+  core/                   # Governance rules, config, specifications
+  artifacts/              # Templates, workflows
+  integration/            # Interaction patterns
+  metrics/                # Performance baselines
+  planning/phases/        # Phase definitions
+  archive/                # Migration guides & legacy files
+```
+
+**Migration Note**: If you see references to `cortex_brain`, they should be updated to `cortex_intelligence`. See [Phase 103 Migration Guide](cortex-registry/archive/PHASE-103-MIGRATION-GUIDE.md) for details.
 
 ### LENS Dashboard (Phase 14 - NEW ✨)
 
