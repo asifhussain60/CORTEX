@@ -15,30 +15,30 @@ import re
 # Mapping of classes/functions to their correct module paths
 IMPORT_MAPPINGS = {
     # Hallucination Prevention
-    "HallucinationDetector": "cortex_brain.tier2.hallucination_prevention.detection_recovery",
-    "VisionMutation": "cortex_brain.tier2.hallucination_prevention.mutation_tracking",
-    "ConfidenceScoring": "cortex_brain.tier2.hallucination_prevention.confidence_scoring",
-    "BehavioralBoundary": "cortex_brain.tier2.hallucination_prevention.boundary_rules",
-    "ExecutionSandbox": "cortex_brain.tier2.hallucination_prevention.execution_sandbox",
-    "IntentCanonicalizer": "cortex_brain.tier2.hallucination_prevention.canonicalization_engine",
+    "HallucinationDetector": "cortex_intelligence.memory.tier2_adaptive.hallucination_prevention.detection_recovery",
+    "VisionMutation": "cortex_intelligence.memory.tier2_adaptive.hallucination_prevention.mutation_tracking",
+    "ConfidenceScoring": "cortex_intelligence.memory.tier2_adaptive.hallucination_prevention.confidence_scoring",
+    "BehavioralBoundary": "cortex_intelligence.memory.tier2_adaptive.hallucination_prevention.boundary_rules",
+    "ExecutionSandbox": "cortex_intelligence.memory.tier2_adaptive.hallucination_prevention.execution_sandbox",
+    "IntentCanonicalizer": "cortex_intelligence.memory.tier2_adaptive.hallucination_prevention.canonicalization_engine",
     
     # Governance
-    "PIIDetector": "cortex_brain.tier2.governance.pii_detection",
-    "ReasoningTrace": "cortex_brain.tier2.governance.reasoning_trace",
-    "AuditPerformanceSLA": "cortex_brain.tier2.governance.audit_performance_sla",
-    "SLAStatus": "cortex_brain.tier2.governance.audit_performance_sla",
-    "CostTracker": "cortex_brain.tier2.governance.cost_tracking",
-    "ScopeCreepDetector": "cortex_brain.tier2.governance.scope_creep",
-    "AuditImmutability": "cortex_brain.tier2.governance.audit_immutability",
-    "SLATracker": "cortex_brain.tier2.governance.sla_tracking",
-    "SLAComplianceStatus": "cortex_brain.tier2.governance.sla_tracking",
-    "PromptInjectionSanitizer": "cortex_brain.tier2.governance.prompt_injection_sanitizer",
-    "RuntimeResilience": "cortex_brain.tier2.governance.runtime_resilience",
-    "OutputDeterminism": "cortex_brain.tier2.governance.output_determinism",
-    "ToolDescriptionValidator": "cortex_brain.tier2.governance.tool_description_validator",
-    "CoreBaselineValidator": "cortex_brain.tier2.governance.core_030_baselines",
-    "DataRetentionManager": "cortex_brain.tier2.governance.data_retention",
-    "StakeholderNotifier": "cortex_brain.tier2.governance.stakeholder_notification",
+    "PIIDetector": "cortex_intelligence.memory.tier2_adaptive.governance.pii_detection",
+    "ReasoningTrace": "cortex_intelligence.memory.tier2_adaptive.governance.reasoning_trace",
+    "AuditPerformanceSLA": "cortex_intelligence.memory.tier2_adaptive.governance.audit_performance_sla",
+    "SLAStatus": "cortex_intelligence.memory.tier2_adaptive.governance.audit_performance_sla",
+    "CostTracker": "cortex_intelligence.memory.tier2_adaptive.governance.cost_tracking",
+    "ScopeCreepDetector": "cortex_intelligence.memory.tier2_adaptive.governance.scope_creep",
+    "AuditImmutability": "cortex_intelligence.memory.tier2_adaptive.governance.audit_immutability",
+    "SLATracker": "cortex_intelligence.memory.tier2_adaptive.governance.sla_tracking",
+    "SLAComplianceStatus": "cortex_intelligence.memory.tier2_adaptive.governance.sla_tracking",
+    "PromptInjectionSanitizer": "cortex_intelligence.memory.tier2_adaptive.governance.prompt_injection_sanitizer",
+    "RuntimeResilience": "cortex_intelligence.memory.tier2_adaptive.governance.runtime_resilience",
+    "OutputDeterminism": "cortex_intelligence.memory.tier2_adaptive.governance.output_determinism",
+    "ToolDescriptionValidator": "cortex_intelligence.memory.tier2_adaptive.governance.tool_description_validator",
+    "CoreBaselineValidator": "cortex_intelligence.memory.tier2_adaptive.governance.core_030_baselines",
+    "DataRetentionManager": "cortex_intelligence.memory.tier2_adaptive.governance.data_retention",
+    "StakeholderNotifier": "cortex_intelligence.memory.tier2_adaptive.governance.stakeholder_notification",
 }
 
 
@@ -55,13 +55,13 @@ def fix_test_imports(test_file: Path) -> bool:
         content = test_file.read_text()
         original_content = content
         
-        # Find import blocks that import from cortex_brain.tier2
-        pattern = r'from cortex_brain\.tier2 import \(([\s\S]*?)\)'
+        # Find import blocks that import from cortex_intelligence.tier2
+        pattern = r'from cortex_intelligence\.tier2 import \(([\s\S]*?)\)'
         matches = list(re.finditer(pattern, content))
         
         if not matches:
             # Try single-line imports
-            pattern = r'from cortex_brain\.tier2 import (.+)'
+            pattern = r'from cortex_intelligence\.tier2 import (.+)'
             matches = list(re.finditer(pattern, content))
         
         for match in matches:

@@ -11,14 +11,14 @@ class TestDomainRegistry:
 
     def test_registry_initializes(self) -> None:
         """Test domain registry initialization."""
-        from cortex_brain.domain.domain_registry import DomainRegistry
+        from cortex_intelligence.domain.domain_registry import DomainRegistry
         
         registry = DomainRegistry()
         assert registry is not None
 
     def test_registry_registers_domain(self) -> None:
         """Test registering a domain type."""
-        from cortex_brain.domain.domain_registry import DomainRegistry
+        from cortex_intelligence.domain.domain_registry import DomainRegistry
         
         registry = DomainRegistry()
         registry.register("sales", {"name": "Sales"})
@@ -26,7 +26,7 @@ class TestDomainRegistry:
 
     def test_registry_discovers_domains(self) -> None:
         """Test discovering registered domains."""
-        from cortex_brain.domain.domain_registry import DomainRegistry
+        from cortex_intelligence.domain.domain_registry import DomainRegistry
         
         registry = DomainRegistry()
         registry.register("sales", {"name": "Sales"})
@@ -39,7 +39,7 @@ class TestDomainRegistry:
 
     def test_registry_retrieves_domain_metadata(self) -> None:
         """Test retrieving domain metadata."""
-        from cortex_brain.domain.domain_registry import DomainRegistry
+        from cortex_intelligence.domain.domain_registry import DomainRegistry
         
         registry = DomainRegistry()
         metadata = {"name": "Sales", "priority": "P1"}
@@ -51,7 +51,7 @@ class TestDomainRegistry:
 
     def test_registry_unregisters_domain(self) -> None:
         """Test unregistering a domain."""
-        from cortex_brain.domain.domain_registry import DomainRegistry
+        from cortex_intelligence.domain.domain_registry import DomainRegistry
         
         registry = DomainRegistry()
         registry.register("sales", {"name": "Sales"})
@@ -66,14 +66,14 @@ class TestDomainIntrospection:
 
     def test_introspection_initializes(self) -> None:
         """Test domain introspection initialization."""
-        from cortex_brain.domain.domain_introspection import DomainIntrospection
+        from cortex_intelligence.domain.domain_introspection import DomainIntrospection
         
         introspection = DomainIntrospection()
         assert introspection is not None
 
     def test_introspection_returns_capabilities(self) -> None:
         """Test retrieving domain capabilities."""
-        from cortex_brain.domain.domain_introspection import DomainIntrospection
+        from cortex_intelligence.domain.domain_introspection import DomainIntrospection
         
         introspection = DomainIntrospection()
         capabilities = introspection.get_capabilities("sales")
@@ -83,7 +83,7 @@ class TestDomainIntrospection:
 
     def test_introspection_returns_constraints(self) -> None:
         """Test retrieving domain constraints."""
-        from cortex_brain.domain.domain_introspection import DomainIntrospection
+        from cortex_intelligence.domain.domain_introspection import DomainIntrospection
         
         introspection = DomainIntrospection()
         constraints = introspection.get_constraints("sales")
@@ -93,7 +93,7 @@ class TestDomainIntrospection:
 
     def test_introspection_returns_requirements(self) -> None:
         """Test retrieving domain requirements."""
-        from cortex_brain.domain.domain_introspection import DomainIntrospection
+        from cortex_intelligence.domain.domain_introspection import DomainIntrospection
         
         introspection = DomainIntrospection()
         requirements = introspection.get_requirements("sales")
@@ -103,7 +103,7 @@ class TestDomainIntrospection:
 
     def test_introspection_validates_domain(self) -> None:
         """Test domain validation through introspection."""
-        from cortex_brain.domain.domain_introspection import DomainIntrospection
+        from cortex_intelligence.domain.domain_introspection import DomainIntrospection
         
         introspection = DomainIntrospection()
         is_valid = introspection.validate_domain("sales")
@@ -116,7 +116,7 @@ class TestDomainImplementations:
 
     def test_sales_domain_implementation(self) -> None:
         """Test sales domain implementation."""
-        from cortex_brain.domain.implementations.sales_domain import SalesDomain
+        from cortex_intelligence.domain.implementations.sales_domain import SalesDomain
         
         sales = SalesDomain()
         assert sales is not None
@@ -124,7 +124,7 @@ class TestDomainImplementations:
 
     def test_support_domain_implementation(self) -> None:
         """Test support domain implementation."""
-        from cortex_brain.domain.implementations.support_domain import SupportDomain
+        from cortex_intelligence.domain.implementations.support_domain import SupportDomain
         
         support = SupportDomain()
         assert support is not None
@@ -132,7 +132,7 @@ class TestDomainImplementations:
 
     def test_finance_domain_implementation(self) -> None:
         """Test finance domain implementation."""
-        from cortex_brain.domain.implementations.finance_domain import FinanceDomain
+        from cortex_intelligence.domain.implementations.finance_domain import FinanceDomain
         
         finance = FinanceDomain()
         assert finance is not None
@@ -140,7 +140,7 @@ class TestDomainImplementations:
 
     def test_operations_domain_implementation(self) -> None:
         """Test operations domain implementation."""
-        from cortex_brain.domain.implementations.operations_domain import OperationsDomain
+        from cortex_intelligence.domain.implementations.operations_domain import OperationsDomain
         
         operations = OperationsDomain()
         assert operations is not None
@@ -148,7 +148,7 @@ class TestDomainImplementations:
 
     def test_hr_domain_implementation(self) -> None:
         """Test HR domain implementation."""
-        from cortex_brain.domain.implementations.hr_domain import HRDomain
+        from cortex_intelligence.domain.implementations.hr_domain import HRDomain
         
         hr = HRDomain()
         assert hr is not None
@@ -160,7 +160,7 @@ class TestDomainModels:
 
     def test_domain_capability_model(self) -> None:
         """Test domain capability model."""
-        from cortex_brain.domain.domain_models import DomainCapability
+        from cortex_intelligence.domain.domain_models import DomainCapability
         
         capability = DomainCapability(
             name="request_processing",
@@ -173,7 +173,7 @@ class TestDomainModels:
 
     def test_domain_constraint_model(self) -> None:
         """Test domain constraint model."""
-        from cortex_brain.domain.domain_models import DomainConstraint
+        from cortex_intelligence.domain.domain_models import DomainConstraint
         
         constraint = DomainConstraint(
             name="response_time",
@@ -186,7 +186,7 @@ class TestDomainModels:
 
     def test_domain_metadata_model(self) -> None:
         """Test domain metadata model."""
-        from cortex_brain.domain.domain_models import DomainMetadata
+        from cortex_intelligence.domain.domain_models import DomainMetadata
         
         metadata = DomainMetadata(
             domain_id="sales",
@@ -203,8 +203,8 @@ class TestDomainIntegration:
 
     def test_registry_and_introspection_integration(self) -> None:
         """Test registry and introspection working together."""
-        from cortex_brain.domain.domain_registry import DomainRegistry
-        from cortex_brain.domain.domain_introspection import DomainIntrospection
+        from cortex_intelligence.domain.domain_registry import DomainRegistry
+        from cortex_intelligence.domain.domain_introspection import DomainIntrospection
         
         registry = DomainRegistry()
         introspection = DomainIntrospection()
@@ -218,7 +218,7 @@ class TestDomainIntegration:
 
     def test_domain_factory_creates_domains(self) -> None:
         """Test domain brain factory creates domain instances."""
-        from cortex_brain.domain.domain_factory import DomainFactory
+        from cortex_intelligence.domain.domain_factory import DomainFactory
         
         factory = DomainFactory()
         sales = factory.create_domain("sales")
@@ -228,7 +228,7 @@ class TestDomainIntegration:
 
     def test_all_domains_discoverable(self) -> None:
         """Test all domains are discoverable through registry."""
-        from cortex_brain.domain.domain_registry import DomainRegistry
+        from cortex_intelligence.domain.domain_registry import DomainRegistry
         
         registry = DomainRegistry()
         domains = registry.list_all_available_domains()
@@ -240,7 +240,7 @@ class TestDomainIntegration:
 
     def test_domain_registration_performance(self) -> None:
         """Test domain registration performance."""
-        from cortex_brain.domain.domain_registry import DomainRegistry
+        from cortex_intelligence.domain.domain_registry import DomainRegistry
         import time
         
         registry = DomainRegistry()
@@ -255,7 +255,7 @@ class TestDomainIntegration:
 
     def test_domain_discovery_performance(self) -> None:
         """Test domain discovery performance."""
-        from cortex_brain.domain.domain_registry import DomainRegistry
+        from cortex_intelligence.domain.domain_registry import DomainRegistry
         import time
         
         registry = DomainRegistry()

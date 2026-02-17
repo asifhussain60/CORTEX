@@ -37,7 +37,7 @@ class SynthesisResult:
 @pytest.fixture(scope="module")
 def synthesis_engine():
     """Create synthesis engine instance for tests."""
-    from cortex_brain.tier3.knowledge.synthesis_engine import SynthesisEngine
+    from cortex_intelligence.tier3.knowledge.synthesis_engine import SynthesisEngine
     return SynthesisEngine()
 
 

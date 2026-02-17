@@ -2,7 +2,7 @@
 import pytest
 
 try:
-    from cortex_brain.tier2 import (
+    from cortex_intelligence.tier2 import (
         ScopeManager,
         ScopeItem,
         ScopeStatus,

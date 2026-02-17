@@ -199,7 +199,7 @@ class WiringHarnessInventory:
         "category": "orchestrator",
         "status": "WIRED",
         "phase": "AC-REM-011-02",
-        "description": "Test-driven development orchestrator with 35 best practices YAMLs from cortex_brain/tier3/knowledge/",
+        "description": "Test-driven development orchestrator with 35 best practices YAMLs from cortex_intelligence/tier3/knowledge/",
 
         "implementation_location": "cortex/orchestrators/core/tdd_orchestrator.py",
         "entry_point": "cortex.orchestrators.core.tdd_orchestrator.TDDOrchestrator",
@@ -268,7 +268,7 @@ class WiringHarnessInventory:
             "implementation": "COMPLETE",
             "testing": "42 tests PASSING (100%)",
             "wiring": "WIRED to MasterOrchestrator (AC-REM-011-02)",
-            "knowledge_integration": "35 YAMLs from cortex_brain/tier3/knowledge/ loaded",
+            "knowledge_integration": "35 YAMLs from cortex_intelligence/tier3/knowledge/ loaded",
             "documentation": "Google-style docstrings on all public APIs",
             "governance_compliance": "CORE-008, CORE-011, CORE-012, CORE-019 compliant"
         },

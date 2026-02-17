@@ -11,7 +11,7 @@ Reason: Complex template system (ENH-082) superseded by simple solution.
 
 This file remains for backward compatibility but will not receive new features.
 
-AC-AR-009-01: Response templates loaded from cortex_brain/tier2/
+AC-AR-009-01: Response templates loaded from cortex_intelligence/tier2/
 AC-AR-009-02: Templates support variable substitution
 AC-AR-009-03: Template inheritance working
 """
@@ -152,7 +152,7 @@ class TemplateEngine:
         """
         Load templates from template directory.
 
-        AC-AR-009-01: Response templates loaded from cortex_brain/tier2/
+        AC-AR-009-01: Response templates loaded from cortex_intelligence/tier2/
 
         Returns:
             Ok with count of loaded templates or Err

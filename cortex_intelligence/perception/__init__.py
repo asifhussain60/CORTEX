@@ -1,6 +1,6 @@
 """Perception layer for CORTEX brain."""
 
-from cortex_brain.perception.pattern_registry import (
+from cortex_intelligence.perception.pattern_registry import (
     PatternRegistry,
     RegisteredPattern,
     PatternMatch,

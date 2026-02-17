@@ -4,5 +4,5 @@ Author: CORTEX Framework
 """
 
 # All governance logic is in cortex_brain/tier2/governance/
-from cortex_brain.tier2.governance.context_extractor import *  # noqa: F401, F403
-from cortex_brain.tier2.governance.rule_applicability import *  # noqa: F401, F403
+from cortex_intelligence.tier2.governance.context_extractor import *  # noqa: F401, F403
+from cortex_intelligence.tier2.governance.rule_applicability import *  # noqa: F401, F403

@@ -26,7 +26,7 @@ from .base_agent import (
 class StubAutoFixAgent(BaseHealthAgent):
     """Agent for automatically fixing stub files.
     
-    Detects redirect stubs (files that just import from cortex_brain)
+    Detects redirect stubs (files that just import from cortex_intelligence)
     and fixes them by:
     - Deleting the stub file
     - Rewriting imports in other files to point directly to cortex_brain
@@ -149,7 +149,7 @@ class StubAutoFixAgent(BaseHealthAgent):
         """Check if file is a redirect stub.
         
         A redirect stub is a file that:
-        - Contains only imports from cortex_brain
+        - Contains only imports from cortex_intelligence
         - Has < 10 lines of actual code
         - Has "REDIRECT" comment or re-export pattern
         
@@ -166,14 +166,14 @@ class StubAutoFixAgent(BaseHealthAgent):
             if "REDIRECT" in content or "Re-export" in content:
                 return True
             
-            # Check if only imports from cortex_brain
-            if "from cortex_brain" in content:
+            # Check if only imports from cortex_intelligence
+            if "from cortex_intelligence" in content:
                 lines = [
                     line for line in content.split('\n')
                     if line.strip() and not line.strip().startswith('#')
                 ]
                 
-                # Very few lines + imports from cortex_brain = likely stub
+                # Very few lines + imports from cortex_intelligence = likely stub
                 if len(lines) <= 5:
                     return True
             

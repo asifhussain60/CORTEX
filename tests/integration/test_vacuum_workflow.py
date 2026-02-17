@@ -68,8 +68,8 @@ class TestVacuumWorkflow:
         # Add CORTEX to path
         sys.path.insert(0, str(CORTEX_ROOT))
         
-        from cortex_brain.tier1.orchestrators.vacuum.orchestrator import VacuumOrchestrator
-        from cortex_brain.tier1.orchestrators.cleaners import RootDatabaseCleaner
+        from cortex_intelligence.tier1.orchestrators.vacuum.orchestrator import VacuumOrchestrator
+        from cortex_intelligence.tier1.orchestrators.cleaners import RootDatabaseCleaner
         
         # Create orchestrator
         config = {"repo_root": CORTEX_ROOT, "dry_run": True}
@@ -111,8 +111,8 @@ class TestVacuumWorkflow:
             
             # Import and run
             sys.path.insert(0, str(CORTEX_ROOT))
-            from cortex_brain.tier1.orchestrators.vacuum.orchestrator import VacuumOrchestrator
-            from cortex_brain.tier1.orchestrators.cleaners import RootDatabaseCleaner
+            from cortex_intelligence.tier1.orchestrators.vacuum.orchestrator import VacuumOrchestrator
+            from cortex_intelligence.tier1.orchestrators.cleaners import RootDatabaseCleaner
             
             orchestrator = VacuumOrchestrator(config)
             orchestrator.register_cleaner(RootDatabaseCleaner)
@@ -134,7 +134,7 @@ class TestCleanerPluginArchitecture:
     def test_cleaner_interface_imported(self):
         """Verify CleanerInterface can be imported."""
         sys.path.insert(0, str(CORTEX_ROOT))
-        from cortex_brain.tier1.orchestrators.cleaners import CleanerInterface
+        from cortex_intelligence.tier1.orchestrators.cleaners import CleanerInterface
         
         assert hasattr(CleanerInterface, "analyze"), "Missing analyze method"
         assert hasattr(CleanerInterface, "execute"), "Missing execute method"
@@ -143,7 +143,7 @@ class TestCleanerPluginArchitecture:
     def test_cleaner_registry_imported(self):
         """Verify CleanerRegistry can be imported."""
         sys.path.insert(0, str(CORTEX_ROOT))
-        from cortex_brain.tier1.orchestrators.cleaners import CleanerRegistry
+        from cortex_intelligence.tier1.orchestrators.cleaners import CleanerRegistry
         
         registry = CleanerRegistry()
         assert hasattr(registry, "register"), "Missing register method"
@@ -153,6 +153,6 @@ class TestCleanerPluginArchitecture:
     def test_root_database_cleaner_imported(self):
         """Verify RootDatabaseCleaner can be imported."""
         sys.path.insert(0, str(CORTEX_ROOT))
-        from cortex_brain.tier1.orchestrators.cleaners import RootDatabaseCleaner
+        from cortex_intelligence.tier1.orchestrators.cleaners import RootDatabaseCleaner
         
         assert RootDatabaseCleaner.__name__ == "RootDatabaseCleaner"

@@ -24,7 +24,7 @@ import uuid
 
 # Wrapped import - module may not exist or classes may be missing
 try:
-    from cortex_brain.tier2 import (
+    from cortex_intelligence.tier2 import (
         BehavioralBoundaryRules,
         BoundaryViolation,
         ViolationType,

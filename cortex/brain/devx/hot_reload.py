@@ -47,7 +47,7 @@ from cortex.models.canonical_enums import ChangeType
 
 # Import from existing CORTEX modules
 try:
-    from cortex_brain.tier2.hallucination_prevention import (
+    from cortex_intelligence.tier2.hallucination_prevention import (
         ExecutionMode,
         ExecutionSandbox,
         SandboxSnapshot,

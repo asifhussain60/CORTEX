@@ -10,7 +10,7 @@ Validates:
 """
 
 import pytest
-from cortex_brain.tier2.hallucination_prevention.detection_recovery import HallucinationDetector
+from cortex_intelligence.tier2.hallucination_prevention.detection_recovery import HallucinationDetector
 
 
 class TestConfidenceScoring:

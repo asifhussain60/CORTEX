@@ -14,7 +14,7 @@ import re
 from pathlib import Path
 from typing import List, Optional
 
-from cortex_brain.onboarded_repos.profile_schema import RepositoryProfile
+from cortex_intelligence.onboarded_repos.profile_schema import RepositoryProfile
 
 
 class ProfileNotFoundError(Exception):

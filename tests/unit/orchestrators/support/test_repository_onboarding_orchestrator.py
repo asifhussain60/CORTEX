@@ -111,7 +111,7 @@ def test_onboarding_orchestrator_generate_profile():
     from cortex.orchestrators.support.repository_onboarding_orchestrator import (
         RepositoryOnboardingOrchestrator
     )
-    from cortex_brain.onboarded_repos import RepositoryProfile
+    from cortex_intelligence.onboarded_repos import RepositoryProfile
     
     # RED: Should generate complete RepositoryProfile
     orchestrator = RepositoryOnboardingOrchestrator()
@@ -130,7 +130,7 @@ def test_onboarding_orchestrator_onboard_repository():
     from cortex.orchestrators.support.repository_onboarding_orchestrator import (
         RepositoryOnboardingOrchestrator
     )
-    from cortex_brain.onboarded_repos import ProfileStore
+    from cortex_intelligence.onboarded_repos import ProfileStore
     from tempfile import TemporaryDirectory
     
     # RED: Should complete full onboarding

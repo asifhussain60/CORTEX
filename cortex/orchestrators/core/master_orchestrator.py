@@ -68,7 +68,7 @@ from cortex.mcp.decorators import mcp_tool
 
 # AC-UX-VISIBILITY-001: Import orchestrator context decorator
 from cortex.orchestrators.decorators import inject_orchestrator_context
-from cortex_brain.tier2.hallucination_prevention import BehavioralBoundaryRules
+from cortex_intelligence.tier2.hallucination_prevention import BehavioralBoundaryRules
 
 # AC-PHASE-2-5-WIRE-003: Import AdaptiveRouter for intelligent task routing
 # Use IntelligentKnowledgeRouter as the canonical implementation
@@ -156,7 +156,7 @@ except ImportError:
     IntelligentKnowledgeRouter = None
 
 # AC-REM-011-02: Import TDD Orchestrator for test-driven development workflow routing
-# Wires 35 best practices YAMLs from cortex_brain/tier3/knowledge/ into TDD discipline
+# Wires 35 best practices YAMLs from cortex_intelligence/tier3/knowledge/ into TDD discipline
 try:
     from cortex.orchestrators.core.tdd_orchestrator import (
         TDDOrchestrator,
@@ -399,8 +399,8 @@ class MasterOrchestrator(IOrchestrator):
         )
 
         # AC-PHASE-2-5-WIRE-002: Initialize GracefulDegradationFramework for resilience
-        # Import from cortex_brain to avoid circular imports in cortex.brain.tier2
-        from cortex_brain.tier2.resilience import GracefulDegradationFramework
+        # Import from cortex_intelligence to avoid circular imports in cortex.brain.tier2
+        from cortex_intelligence.tier2.resilience import GracefulDegradationFramework
         self._graceful_degradation = GracefulDegradationFramework()
         self.logger.log_operation_complete(
             ac_id="AC-PHASE-2-5-WIRE-002",

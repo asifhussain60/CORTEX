@@ -183,7 +183,7 @@ class TDDImplementationGuidance:
 
 
 class TDDKnowledgeLoader:
-    """Loads TDD best practices YAMLs from cortex_brain/tier3/knowledge/."""
+    """Loads TDD best practices YAMLs from cortex_intelligence/tier3/knowledge/."""
 
     def __init__(self, knowledge_root: Optional[Path] = None) -> None:
         """Initialize TDD knowledge loader."""

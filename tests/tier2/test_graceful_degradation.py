@@ -15,7 +15,7 @@ from unittest.mock import Mock, patch, call
 from typing import Any
 from datetime import datetime
 
-from cortex_brain.tier2.resilience import (
+from cortex_intelligence.tier2.resilience import (
     GracefulDegradationFramework,
     FallbackStrategy,
     PartialFunctionalityMode,
@@ -35,7 +35,7 @@ class TestGracefulDegradationFramework:
     
     def test_register_component_success(self):
         """Test: Component registration succeeds"""
-        from cortex_brain.tier2.resilience import GracefulDegradationFramework
+        from cortex_intelligence.tier2.resilience import GracefulDegradationFramework
         framework = GracefulDegradationFramework()
         primary = Mock(return_value="primary_result")
         fallback = Mock(return_value="fallback_result")
@@ -45,7 +45,7 @@ class TestGracefulDegradationFramework:
     
     def test_register_component_duplicate_error(self):
         """Test: Duplicate registration raises ValueError"""
-        from cortex_brain.tier2.resilience import GracefulDegradationFramework
+        from cortex_intelligence.tier2.resilience import GracefulDegradationFramework
         framework = GracefulDegradationFramework()
         primary = Mock()
         framework.register_component("db", primary, [])
@@ -55,7 +55,7 @@ class TestGracefulDegradationFramework:
     
     def test_execute_primary_strategy_success(self):
         """Test: Primary strategy executes successfully"""
-        from cortex_brain.tier2.resilience import GracefulDegradationFramework
+        from cortex_intelligence.tier2.resilience import GracefulDegradationFramework
         framework = GracefulDegradationFramework()
         primary = Mock(return_value="success")
         framework.register_component("service", primary, [])
@@ -67,7 +67,7 @@ class TestGracefulDegradationFramework:
     
     def test_execute_primary_failure_fallback_success(self):
         """Test: Primary fails, fallback succeeds"""
-        from cortex_brain.tier2.resilience import GracefulDegradationFramework
+        from cortex_intelligence.tier2.resilience import GracefulDegradationFramework
         framework = GracefulDegradationFramework()
         primary = Mock(side_effect=Exception("Failed"))
         fallback = Mock(return_value="fallback_result")
@@ -80,7 +80,7 @@ class TestGracefulDegradationFramework:
     
     def test_execute_all_strategies_fail(self):
         """Test: All strategies fail, raises ComponentFailure"""
-        from cortex_brain.tier2.resilience import (
+        from cortex_intelligence.tier2.resilience import (
             GracefulDegradationFramework,
             ComponentFailure
         )
@@ -96,7 +96,7 @@ class TestGracefulDegradationFramework:
     
     def test_is_degraded_check(self):
         """Test: is_degraded correctly identifies degradation status"""
-        from cortex_brain.tier2.resilience import GracefulDegradationFramework
+        from cortex_intelligence.tier2.resilience import GracefulDegradationFramework
         framework = GracefulDegradationFramework()
         primary = Mock(return_value="success")
         fallback = Mock(return_value="fallback")
@@ -113,7 +113,7 @@ class TestGracefulDegradationFramework:
     
     def test_partial_functionality_disable_feature(self):
         """Test: Feature disables successfully"""
-        from cortex_brain.tier2.resilience import PartialFunctionalityMode
+        from cortex_intelligence.tier2.resilience import PartialFunctionalityMode
         mode = PartialFunctionalityMode()
         mode.disable_feature("search", "Database offline")
         
@@ -121,7 +121,7 @@ class TestGracefulDegradationFramework:
     
     def test_partial_functionality_enable_feature(self):
         """Test: Feature re-enables successfully"""
-        from cortex_brain.tier2.resilience import PartialFunctionalityMode
+        from cortex_intelligence.tier2.resilience import PartialFunctionalityMode
         mode = PartialFunctionalityMode()
         mode.disable_feature("search", "Database offline")
         mode.enable_feature("search")
@@ -130,7 +130,7 @@ class TestGracefulDegradationFramework:
     
     def test_get_available_features(self):
         """Test: get_available_features returns correct list"""
-        from cortex_brain.tier2.resilience import PartialFunctionalityMode
+        from cortex_intelligence.tier2.resilience import PartialFunctionalityMode
         mode = PartialFunctionalityMode()
         mode.disable_feature("search", "reason1")
         mode.disable_feature("analytics", "reason2")
@@ -141,7 +141,7 @@ class TestGracefulDegradationFramework:
     
     def test_degraded_response_wrapper(self):
         """Test: DegradedResponse wraps data correctly"""
-        from cortex_brain.tier2.resilience import DegradedResponse
+        from cortex_intelligence.tier2.resilience import DegradedResponse
         response = DegradedResponse(
             data={"results": []},
             degradation_reason="Database offline",
@@ -156,7 +156,7 @@ class TestGracefulDegradationFramework:
     
     def test_component_failure_exception(self):
         """Test: ComponentFailure exception contains context"""
-        from cortex_brain.tier2.resilience import ComponentFailure
+        from cortex_intelligence.tier2.resilience import ComponentFailure
         last_exc = Exception("Last failure")
         failure = ComponentFailure(
             component_name="api",
@@ -175,7 +175,7 @@ class TestGracefulDegradationIntegration:
     
     def test_multi_component_degradation(self):
         """Test: Multiple components manage independent states"""
-        from cortex_brain.tier2.resilience import GracefulDegradationFramework
+        from cortex_intelligence.tier2.resilience import GracefulDegradationFramework
         framework = GracefulDegradationFramework()
         
         # Register component 1
@@ -197,7 +197,7 @@ class TestGracefulDegradationIntegration:
     
     def test_degradation_recovery(self):
         """Test: System recovers when component becomes available"""
-        from cortex_brain.tier2.resilience import GracefulDegradationFramework
+        from cortex_intelligence.tier2.resilience import GracefulDegradationFramework
         framework = GracefulDegradationFramework()
         primary = Mock(side_effect=Exception())
         fallback = Mock(return_value="fallback")
@@ -220,7 +220,7 @@ class TestGracefulDegradationIntegration:
     def test_concurrent_component_access(self):
         """Test: Thread-safe concurrent access"""
         import threading
-        from cortex_brain.tier2.resilience import GracefulDegradationFramework
+        from cortex_intelligence.tier2.resilience import GracefulDegradationFramework
         
         framework = GracefulDegradationFramework()
         primary = Mock(return_value="result")
@@ -242,7 +242,7 @@ class TestGracefulDegradationIntegration:
     
     def test_get_degradation_status(self):
         """Test: Status reporting for all components"""
-        from cortex_brain.tier2.resilience import GracefulDegradationFramework
+        from cortex_intelligence.tier2.resilience import GracefulDegradationFramework
         framework = GracefulDegradationFramework()
         
         # Setup components

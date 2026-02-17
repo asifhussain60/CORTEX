@@ -557,7 +557,7 @@ class TestGoldenDatabaseCleanup:
         create_golden_files(golden_test_workspace, golden_scenario_database.initial_files)
         
         # Execute: Run vacuum
-        from cortex_brain.tier1.orchestrators.cleaners.root_database import RootDatabaseCleaner
+        from cortex_intelligence.tier1.orchestrators.cleaners.root_database import RootDatabaseCleaner
         cleaner = RootDatabaseCleaner({"repo_root": str(golden_test_workspace), "dry_run": False, "verbose": False})
         analysis = cleaner.analyze()
         report = cleaner.execute(analysis.plan)
@@ -590,7 +590,7 @@ class TestGoldenDatabaseCleanup:
         create_golden_files(golden_test_workspace, golden_scenario_database.initial_files)
         
         # Execute vacuum
-        from cortex_brain.tier1.orchestrators.cleaners.root_database import RootDatabaseCleaner
+        from cortex_intelligence.tier1.orchestrators.cleaners.root_database import RootDatabaseCleaner
         cleaner = RootDatabaseCleaner({"repo_root": str(golden_test_workspace), "dry_run": False, "verbose": False})
         analysis = cleaner.analyze()
         report = cleaner.execute(analysis.plan)
@@ -633,7 +633,7 @@ class TestGoldenJSONCleanup:
         create_golden_files(golden_test_workspace, golden_scenario_json.initial_files)
         
         # Execute vacuum
-        from cortex_brain.tier1.orchestrators.cleaners.root_artifacts import RootArtifactsCleaner
+        from cortex_intelligence.tier1.orchestrators.cleaners.root_artifacts import RootArtifactsCleaner
         cleaner = RootArtifactsCleaner({"repo_root": str(golden_test_workspace), "dry_run": False, "verbose": False})
         analysis = cleaner.analyze()
         report = cleaner.execute(analysis.plan)
@@ -666,7 +666,7 @@ class TestGoldenJSONCleanup:
         create_golden_files(golden_test_workspace, golden_scenario_json.initial_files)
         
         # Execute vacuum
-        from cortex_brain.tier1.orchestrators.cleaners.root_artifacts import RootArtifactsCleaner
+        from cortex_intelligence.tier1.orchestrators.cleaners.root_artifacts import RootArtifactsCleaner
         cleaner = RootArtifactsCleaner({"repo_root": str(golden_test_workspace), "dry_run": False, "verbose": False})
         analysis = cleaner.analyze()
         report = cleaner.execute(analysis.plan)
@@ -710,7 +710,7 @@ class TestGoldenMarkdownCleanup:
         create_golden_files(golden_test_workspace, golden_scenario_markdown.initial_files)
         
         # Execute vacuum
-        from cortex_brain.tier1.orchestrators.cleaners.markdown_sprawl import MarkdownSprawlCleaner
+        from cortex_intelligence.tier1.orchestrators.cleaners.markdown_sprawl import MarkdownSprawlCleaner
         cleaner = MarkdownSprawlCleaner({"repo_root": str(golden_test_workspace), "dry_run": False, "verbose": False})
         analysis = cleaner.analyze()
         report = cleaner.execute(analysis.plan)
@@ -744,7 +744,7 @@ class TestGoldenMarkdownCleanup:
         create_golden_files(golden_test_workspace, golden_scenario_markdown.initial_files)
         
         # Execute vacuum
-        from cortex_brain.tier1.orchestrators.cleaners.markdown_sprawl import MarkdownSprawlCleaner
+        from cortex_intelligence.tier1.orchestrators.cleaners.markdown_sprawl import MarkdownSprawlCleaner
         cleaner = MarkdownSprawlCleaner({"repo_root": str(golden_test_workspace), "dry_run": False, "verbose": False})
         analysis = cleaner.analyze()
         report = cleaner.execute(analysis.plan)
@@ -795,9 +795,9 @@ class TestGoldenIntegrationScenarios:
         create_golden_files(golden_test_workspace, all_files)
         
         # Execute: Full vacuum
-        from cortex_brain.tier1.orchestrators.cleaners.root_database import RootDatabaseCleaner
-        from cortex_brain.tier1.orchestrators.cleaners.root_artifacts import RootArtifactsCleaner
-        from cortex_brain.tier1.orchestrators.cleaners.markdown_sprawl import MarkdownSprawlCleaner
+        from cortex_intelligence.tier1.orchestrators.cleaners.root_database import RootDatabaseCleaner
+        from cortex_intelligence.tier1.orchestrators.cleaners.root_artifacts import RootArtifactsCleaner
+        from cortex_intelligence.tier1.orchestrators.cleaners.markdown_sprawl import MarkdownSprawlCleaner
         
         config = {"repo_root": str(golden_test_workspace), "dry_run": False, "verbose": False}
         

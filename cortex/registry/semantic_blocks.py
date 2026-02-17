@@ -61,7 +61,7 @@ class SemanticBlockLoader:
     Perception layer: Load and validate semantic blocks from registry.
 
     Neurocognitive mapping:
-    - Discovers blocks from cortex_brain (distributed storage)
+    - Discovers blocks from cortex_intelligence (distributed storage)
     - Validates metadata completeness
     - Ensures personality guidelines present
     """

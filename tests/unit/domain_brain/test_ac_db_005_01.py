@@ -7,7 +7,7 @@ from document ingestion through LENS resolution.
 import pytest
 from typing import List
 
-from cortex_brain.domain_brain.domain_brain_models import (
+from cortex_intelligence.domain_brain.domain_brain_models import (
     Domain,
     Entity,
     EntityType,

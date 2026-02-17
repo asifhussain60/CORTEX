@@ -18,7 +18,7 @@ from typing import Any
 from datetime import datetime
 import time
 
-from cortex_brain.tier2.resilience import (
+from cortex_intelligence.tier2.resilience import (
     ExponentialBackoffRetry,
     RetryPolicy,
     RetryPolicyBuilder,

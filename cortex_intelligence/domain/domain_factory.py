@@ -19,19 +19,19 @@ class DomainFactory:
             Domain instance.
         """
         if domain_id == "sales":
-            from cortex_brain.domain.implementations.sales_domain import SalesDomain
+            from cortex_intelligence.domain.implementations.sales_domain import SalesDomain
             return SalesDomain()
         elif domain_id == "support":
-            from cortex_brain.domain.implementations.support_domain import SupportDomain
+            from cortex_intelligence.domain.implementations.support_domain import SupportDomain
             return SupportDomain()
         elif domain_id == "finance":
-            from cortex_brain.domain.implementations.finance_domain import FinanceDomain
+            from cortex_intelligence.domain.implementations.finance_domain import FinanceDomain
             return FinanceDomain()
         elif domain_id == "operations":
-            from cortex_brain.domain.implementations.operations_domain import OperationsDomain
+            from cortex_intelligence.domain.implementations.operations_domain import OperationsDomain
             return OperationsDomain()
         elif domain_id == "hr":
-            from cortex_brain.domain.implementations.hr_domain import HRDomain
+            from cortex_intelligence.domain.implementations.hr_domain import HRDomain
             return HRDomain()
         else:
             raise ValueError(f"Unknown domain: {domain_id}")

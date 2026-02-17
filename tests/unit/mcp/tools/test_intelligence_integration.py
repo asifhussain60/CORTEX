@@ -287,7 +287,7 @@ class Calculator:
     async def test_perception_layer_not_yet_integrated(self) -> None:
         """Test: Perception layer exists but not yet wired to MCP tools."""
         # Import perception layer
-        from cortex_brain.perception import PatternRegistry
+        from cortex_intelligence.perception import PatternRegistry
 
         # Assert: Layer available
         registry = PatternRegistry()
@@ -300,7 +300,7 @@ class Calculator:
     async def test_reasoning_layer_not_yet_integrated(self) -> None:
         """Test: Reasoning layer exists but not yet wired to MCP tools."""
         # Import reasoning layer
-        from cortex_brain.reasoning import StrategySelector
+        from cortex_intelligence.reasoning import StrategySelector
 
         # Assert: Layer available
         selector = StrategySelector()
@@ -312,7 +312,7 @@ class Calculator:
     async def test_action_layer_not_yet_integrated(self) -> None:
         """Test: Action layer exists but not yet wired to MCP tools."""
         # Import action layer
-        from cortex_brain.action import ExecutionPlanner
+        from cortex_intelligence.action import ExecutionPlanner
 
         # Assert: Layer available
         planner = ExecutionPlanner()

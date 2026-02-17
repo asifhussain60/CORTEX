@@ -19,8 +19,8 @@ from pydantic import ValidationError
 
 def test_profile_store_save():
     """Test saving a repository profile to disk."""
-    from cortex_brain.onboarded_repos.profile_schema import RepositoryProfile
-    from cortex_brain.onboarded_repos.profile_store import ProfileStore
+    from cortex_intelligence.onboarded_repos.profile_schema import RepositoryProfile
+    from cortex_intelligence.onboarded_repos.profile_store import ProfileStore
     
     # RED: Create profile and save it
     with TemporaryDirectory() as tmpdir:
@@ -40,8 +40,8 @@ def test_profile_store_save():
 
 def test_profile_store_load():
     """Test loading a repository profile from disk."""
-    from cortex_brain.onboarded_repos.profile_schema import RepositoryProfile
-    from cortex_brain.onboarded_repos.profile_store import ProfileStore
+    from cortex_intelligence.onboarded_repos.profile_schema import RepositoryProfile
+    from cortex_intelligence.onboarded_repos.profile_store import ProfileStore
     
     # RED: Save then load profile
     with TemporaryDirectory() as tmpdir:
@@ -63,7 +63,7 @@ def test_profile_store_load():
 
 def test_profile_store_load_missing():
     """Test graceful handling when loading missing profile."""
-    from cortex_brain.onboarded_repos.profile_store import ProfileStore, ProfileNotFoundError
+    from cortex_intelligence.onboarded_repos.profile_store import ProfileStore, ProfileNotFoundError
     
     # RED: Should raise ProfileNotFoundError for missing profile
     with TemporaryDirectory() as tmpdir:
@@ -77,8 +77,8 @@ def test_profile_store_load_missing():
 
 def test_profile_store_list_all():
     """Test listing all repository profiles."""
-    from cortex_brain.onboarded_repos.profile_schema import RepositoryProfile
-    from cortex_brain.onboarded_repos.profile_store import ProfileStore
+    from cortex_intelligence.onboarded_repos.profile_schema import RepositoryProfile
+    from cortex_intelligence.onboarded_repos.profile_store import ProfileStore
     
     # RED: Save multiple profiles, then list
     with TemporaryDirectory() as tmpdir:
@@ -104,8 +104,8 @@ def test_profile_store_list_all():
 
 def test_profile_store_delete():
     """Test deleting a repository profile."""
-    from cortex_brain.onboarded_repos.profile_schema import RepositoryProfile
-    from cortex_brain.onboarded_repos.profile_store import ProfileStore
+    from cortex_intelligence.onboarded_repos.profile_schema import RepositoryProfile
+    from cortex_intelligence.onboarded_repos.profile_store import ProfileStore
     
     # RED: Save then delete profile
     with TemporaryDirectory() as tmpdir:
@@ -126,8 +126,8 @@ def test_profile_store_delete():
 
 def test_profile_store_exists():
     """Test checking if a profile exists."""
-    from cortex_brain.onboarded_repos.profile_schema import RepositoryProfile
-    from cortex_brain.onboarded_repos.profile_store import ProfileStore
+    from cortex_intelligence.onboarded_repos.profile_schema import RepositoryProfile
+    from cortex_intelligence.onboarded_repos.profile_store import ProfileStore
     
     # RED: Check existence before and after save
     with TemporaryDirectory() as tmpdir:
@@ -147,8 +147,8 @@ def test_profile_store_exists():
 
 def test_profile_store_update():
     """Test updating an existing profile."""
-    from cortex_brain.onboarded_repos.profile_schema import RepositoryProfile
-    from cortex_brain.onboarded_repos.profile_store import ProfileStore
+    from cortex_intelligence.onboarded_repos.profile_schema import RepositoryProfile
+    from cortex_intelligence.onboarded_repos.profile_store import ProfileStore
     
     # RED: Save, modify, update
     with TemporaryDirectory() as tmpdir:
@@ -178,8 +178,8 @@ def test_profile_store_update():
 
 def test_profile_store_name_normalization():
     """Test that profile names are normalized (uppercase, underscores)."""
-    from cortex_brain.onboarded_repos.profile_schema import RepositoryProfile
-    from cortex_brain.onboarded_repos.profile_store import ProfileStore
+    from cortex_intelligence.onboarded_repos.profile_schema import RepositoryProfile
+    from cortex_intelligence.onboarded_repos.profile_store import ProfileStore
     
     # RED: Save with mixed case name
     with TemporaryDirectory() as tmpdir:
@@ -199,8 +199,8 @@ def test_profile_store_name_normalization():
 
 def test_profile_store_concurrent_access():
     """Test that ProfileStore handles concurrent reads safely."""
-    from cortex_brain.onboarded_repos.profile_schema import RepositoryProfile
-    from cortex_brain.onboarded_repos.profile_store import ProfileStore
+    from cortex_intelligence.onboarded_repos.profile_schema import RepositoryProfile
+    from cortex_intelligence.onboarded_repos.profile_store import ProfileStore
     
     # RED: Multiple stores reading same profile
     with TemporaryDirectory() as tmpdir:

@@ -10,7 +10,7 @@ Components:
 - profile_store: Persistence layer for profile storage/retrieval
 """
 
-from cortex_brain.onboarded_repos.profile_schema import (
+from cortex_intelligence.onboarded_repos.profile_schema import (
     LooseCoupling,
     RepositoryProfile,
     RepositoryStructure,
@@ -18,7 +18,7 @@ from cortex_brain.onboarded_repos.profile_schema import (
     Standards,
     TechStack,
 )
-from cortex_brain.onboarded_repos.profile_store import (
+from cortex_intelligence.onboarded_repos.profile_store import (
     ProfileNotFoundError,
     ProfileStore,
 )

@@ -14,7 +14,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from datetime import datetime
 from unittest.mock import Mock, MagicMock, patch
-from cortex_brain.onboarded_repos import ProfileStore, RepositoryProfile
+from cortex_intelligence.onboarded_repos import ProfileStore, RepositoryProfile
 
 
 @pytest.mark.skip(reason="Repository onboarding orchestrator infrastructure under development - Phase 82+")

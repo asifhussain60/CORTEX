@@ -5,7 +5,7 @@ Author: CORTEX Framework
 
 from typing import Any, Dict, List
 
-from cortex_brain.domain_brain.domain_brain_models import Entity, EntityType
+from cortex_intelligence.domain_brain.domain_brain_models import Entity, EntityType
 
 
 class ASTAdapter:

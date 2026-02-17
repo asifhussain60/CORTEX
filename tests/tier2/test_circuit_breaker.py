@@ -19,7 +19,7 @@ from datetime import datetime
 import time
 import threading
 
-from cortex_brain.tier2.resilience import (
+from cortex_intelligence.tier2.resilience import (
     CircuitBreaker,
     CircuitBreakerConfig,
     CircuitBreakerMetrics,
@@ -87,7 +87,7 @@ class TestCircuitBreakerCore:
         
         # Should reject new calls with CircuitBreakerOpen exception
         operation = Mock(return_value="result")
-        from cortex_brain.tier2.resilience import CircuitBreakerOpen
+        from cortex_intelligence.tier2.resilience import CircuitBreakerOpen
         with pytest.raises(CircuitBreakerOpen):
             cb.call(operation)
         
@@ -262,7 +262,7 @@ class TestCircuitBreakerStates:
         assert cb.is_open()
         
         # Additional failures while open should keep it open
-        from cortex_brain.tier2.resilience import CircuitBreakerOpen
+        from cortex_intelligence.tier2.resilience import CircuitBreakerOpen
         with pytest.raises(CircuitBreakerOpen):
             cb.call(Mock())
         assert cb.is_open()

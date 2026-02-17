@@ -74,7 +74,7 @@ class TestReferenceScanner:
             test_py = tmpdir / "test.py"
             test_py.write_text("""
 import cortex.orchestrators
-from cortex_brain.tier1 import vacuum
+from cortex_intelligence.tier1 import vacuum
 import other_module
 """)
             

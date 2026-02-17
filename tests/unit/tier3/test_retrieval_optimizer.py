@@ -108,7 +108,7 @@ class MockKnowledgeIndexer:
 @pytest.fixture(scope="module")
 def retrieval_optimizer():
     """Create retrieval optimizer instance for tests."""
-    from cortex_brain.tier3.knowledge.retrieval_optimizer import RetrievalOptimizer
+    from cortex_intelligence.tier3.knowledge.retrieval_optimizer import RetrievalOptimizer
     optimizer = RetrievalOptimizer()
     
     # Configure with test indexer (golden test compatible)

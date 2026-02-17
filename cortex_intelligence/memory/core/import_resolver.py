@@ -38,7 +38,7 @@ class ImportStrategy:
         Resolve an import name to a file path.
         
         Args:
-            name: Module or package name (e.g., 'os', 'cortex_brain.tier0')
+            name: Module or package name (e.g., 'os', 'cortex_intelligence.memory.core')
             
         Returns:
             Path to the module/package, or None if not found
@@ -115,7 +115,7 @@ class FilesystemSearchStrategy(ImportStrategy):
         Search for module/package in filesystem.
         
         Args:
-            name: Module name to resolve (e.g., 'cortex_brain.tier0')
+            name: Module name to resolve (e.g., 'cortex_intelligence.memory.core')
             
         Returns:
             Path to module file, or None if not found
@@ -162,7 +162,7 @@ class ImportResolver:
     
     Example:
         >>> resolver = ImportResolver()
-        >>> path = resolver.resolve("cortex_brain.tier0")
+        >>> path = resolver.resolve("cortex_intelligence.memory.core")
         >>> print(path)
         PosixPath('/path/to/cortex_brain/tier0')
         
@@ -261,7 +261,7 @@ class ImportResolver:
         
         Args:
             name: Relative import name (e.g., '.module', '..tier1.subpkg')
-            context: Package context for resolution (e.g., 'cortex_brain.tier0')
+            context: Package context for resolution (e.g., 'cortex_intelligence.memory.core')
             
         Returns:
             Path to the module/package, or None if not found.
@@ -271,7 +271,7 @@ class ImportResolver:
             
         Example:
             >>> resolver = ImportResolver()
-            >>> path = resolver.resolve_relative(".submodule", "cortex_brain.tier0")
+            >>> path = resolver.resolve_relative(".submodule", "cortex_intelligence.memory.core")
             >>> path is not None
             True
         """

@@ -193,7 +193,7 @@ class TestUnwiredComponentDetector:
         """Test detector reads repo-registry.yaml from correct location."""
         detector = UnwiredComponentDetector()
         
-        # Should read from cortex_brain/tier0/repo-registry.yaml
+        # Should read from cortex_intelligence/tier0/repo-registry.yaml
         if hasattr(detector, 'registry_file'):
             assert 'cortex_brain' in str(detector.registry_file)
             assert 'tier0' in str(detector.registry_file)

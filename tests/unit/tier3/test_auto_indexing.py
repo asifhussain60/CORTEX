@@ -48,7 +48,7 @@ class IndexEntry:
 @pytest.fixture(scope="module")
 def indexer():
     """Create indexer instance for tests."""
-    from cortex_brain.tier3.knowledge.knowledge_indexer import KnowledgeIndexer
+    from cortex_intelligence.tier3.knowledge.knowledge_indexer import KnowledgeIndexer
     return KnowledgeIndexer()
 
 
@@ -57,7 +57,7 @@ class TestIndexStructure:
     
     def test_index_file_exists(self):
         """Verify knowledge index file exists."""
-        from cortex_brain.tier3.knowledge.knowledge_indexer import KnowledgeIndexer
+        from cortex_intelligence.tier3.knowledge.knowledge_indexer import KnowledgeIndexer
         indexer = KnowledgeIndexer()
         
         knowledge_dir = get_knowledge_dir()

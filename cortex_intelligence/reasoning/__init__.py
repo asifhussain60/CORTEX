@@ -1,6 +1,6 @@
 """Reasoning layer for CORTEX brain."""
 
-from cortex_brain.reasoning.strategy_selector import (
+from cortex_intelligence.reasoning.strategy_selector import (
     StrategySelector,
     Strategy,
     StrategyRecommendation,

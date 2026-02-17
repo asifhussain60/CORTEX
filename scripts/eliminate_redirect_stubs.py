@@ -57,7 +57,7 @@ def find_target_module(stub_file: Path) -> str:
         stub_file: Path to redirect stub file
         
     Returns:
-        Target module path (e.g., 'cortex_brain.tier2.governance.pii_detection')
+        Target module path (e.g., 'cortex_intelligence.memory.tier2_adaptive.governance.pii_detection')
     """
     content = stub_file.read_text()
     

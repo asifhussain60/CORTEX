@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import List
 import os
 
-from cortex_brain.tier1.orchestrators.cleaners.interface import (
+from cortex_intelligence.tier1.orchestrators.cleaners.interface import (
     CleanerInterface,
     CleanupResult,
 )

@@ -9,18 +9,18 @@ class TestCortexBrainPackageInit:
 
     def test_cortex_brain_module_importable(self):
         """Cortex_brain package should be importable."""
-        import cortex_brain
+        import cortex_intelligence
         assert cortex_brain is not None
 
     def test_cortex_brain_has_version(self):
         """Cortex_brain should have __version__ attribute."""
-        import cortex_brain
+        import cortex_intelligence
         assert hasattr(cortex_brain, '__version__')
         assert isinstance(cortex_brain.__version__, str)
 
     def test_cortex_brain_has_docstring(self):
         """Cortex_brain module should have docstring."""
-        import cortex_brain
+        import cortex_intelligence
         assert cortex_brain.__doc__ is not None
         assert len(cortex_brain.__doc__) > 0
 
@@ -31,16 +31,16 @@ class TestCortexBrainPackageInit:
 
     def test_cortex_brain_tier_structure_accessible(self):
         """Cortex_brain should have tier subpackages accessible."""
-        import cortex_brain
+        import cortex_intelligence
         # Tiers should be accessible through the package
         assert hasattr(cortex_brain, '__path__')
 
     def test_cortex_brain_has_author(self):
         """Cortex_brain should have __author__ attribute."""
-        import cortex_brain
+        import cortex_intelligence
         assert hasattr(cortex_brain, '__author__')
 
     def test_cortex_brain_name_correct(self):
         """Cortex_brain __name__ should be 'cortex_brain'."""
-        import cortex_brain
+        import cortex_intelligence
         assert cortex_brain.__name__ == 'cortex_brain'

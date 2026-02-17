@@ -4,7 +4,7 @@ Tier 3: Knowledge Ecosystem and Curation.
 This tier provides AI-powered knowledge management, curation, and synthesis.
 """
 
-from cortex_brain.tier3.knowledge import (
+from cortex_intelligence.tier3.knowledge import (
     KnowledgeGovernanceManager,
     GovernanceRule,
     ExpertRegistry,
