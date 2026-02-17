@@ -21,7 +21,7 @@ description: |
   
   APPROVED TOP-LEVEL FOLDERS:
   - cortex/ (main package)
-  - cortex_brain/ (state management)
+  - cortex_intelligence/ (brain & intelligence - RENAMED from cortex_brain in Phase 103)
   - cortex_lens/ (code intelligence)
   - cortex-registry/ (master planning)
   - tests/ (test suite)
@@ -80,7 +80,7 @@ enforcement:
                      cut -d'/' -f1 | \
                      sort -u)
     
-    APPROVED_FOLDERS="cortex cortex_brain cortex_lens cortex-registry tests docs scripts deployment company _workspaces _archives"
+    APPROVED_FOLDERS="cortex cortex_intelligence cortex_lens cortex-registry tests docs scripts deployment company _workspaces _archives"
     
     for folder in $STAGED_FOLDERS; do
       if ! echo "$APPROVED_FOLDERS" | grep -qw "$folder"; then

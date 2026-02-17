@@ -171,7 +171,7 @@ FOLDER_FILES=$(echo "$STAGED_FILES" | grep -E '^[^/]+/' || true)
 
 if [ -n "$FOLDER_FILES" ]; then
     # CORE-095: Folder structure (fast check)
-    APPROVED_FOLDERS="cortex|cortex_brain|cortex_lens|cortex-registry|cortex-docs|tests|docs|company|deployment|scripts|_archives|_workspaces"
+    APPROVED_FOLDERS="cortex|cortex_intelligence|cortex_lens|cortex-registry|cortex-docs|tests|docs|company|deployment|scripts|_archives|_workspaces"
     UNAPPROVED=$(echo "$FOLDER_FILES" | grep -v '^\.' | sed 's|/.*||' | sort -u | grep -vE "^($APPROVED_FOLDERS)$" || true)
     
     if [ -n "$UNAPPROVED" ]; then

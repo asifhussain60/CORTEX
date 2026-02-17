@@ -17,19 +17,19 @@ select = [
 ]
 
 [tool.ruff.lint.flake8-tidy-imports]
-# Ban imports from cortex/* that should import from cortex_brain/* instead
+# Ban imports from cortex/* that should import from cortex_intelligence/* instead
 # This prevents stub/wrapper creation
 ban-relative-imports = "all"
 # Note: banned-api requires dict format {module: {members: [list]}}
 # Commenting out for now as these are module-level bans not supported by ruff TID
 # banned-api = {
-#     "cortex.core.governance": "Import from cortex_brain.tier0.governance",
-#     "cortex.domain_brain.models": "Import from cortex_brain.domain_brain.models",
+#     "cortex.core.governance": "Import from cortex_intelligence.memory.core.governance",
+#     "cortex.domain_brain.models": "Import from cortex_intelligence.domain_brain.models",
 # }
 
 [tool.ruff.lint.isort]
-# Sort imports with cortex_brain before cortex
-known-first-party = ["cortex_brain", "cortex"]
+# Sort imports with cortex_intelligence before cortex
+known-first-party = ["cortex_intelligence", "cortex"]
 force-sort-within-sections = true
 
 [tool.pytest.ini_options]
