@@ -824,7 +824,7 @@ class MasterGatewayExecutor:
             if not routing_rules_data:
                 return None
 
-            # routing-rules-intent.yaml has structure: {routing_rules: {intents: [...]}}
+            # intent-routing-rules.yaml has structure: {routing_rules: {intents: [...]}}
             routing_rules = routing_rules_data.get("routing_rules", routing_rules_data)
 
             intent_lower = intent_text.lower()

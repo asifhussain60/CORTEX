@@ -16,7 +16,7 @@ def get_project_root() -> Path:
     Returns:
         Path to project root.
     """
-    # Look for cortex/config/cortex-config.yaml or cortex-config.yaml or setup.py to identify root
+    # Look for cortex-registry/core/config/system-configuration.yaml or setup.py to identify root
     current = Path(__file__).parent
 
     while current != current.parent:

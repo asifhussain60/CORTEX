@@ -130,7 +130,7 @@ class TestACPermanentFix004:
         """
         registry_path = (
             Path(__file__).parents[3] / 
-            "cortex_intelligence" / "tier0" / "repo-registry.yaml"
+            "cortex_intelligence" / "memory" / "core" / "repo-registry.yaml"
         )
         
         assert registry_path.exists(), (

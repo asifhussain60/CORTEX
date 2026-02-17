@@ -175,10 +175,10 @@ class SpecValidator:
         # Full JSON Schema validation in Phase 3+
 
         required_sections = {
-            "routing-rules-intent.yaml": ["routing_rules"],
+            "cortex-registry/core/specifications/intent-routing-rules.yaml": ["routing_rules"],
             "orchestrator.yaml": ["orchestrator_dispatch"],
-            "gov-gates-val-rules.yaml": ["governance_gates"],
-            "exec-flow.yaml": ["execution_flow_definitions"],
+            "cortex-registry/core/specifications/governance-validation-gates.yaml": ["governance_gates"],
+            "cortex-registry/core/specifications/execution-flow-specification.yaml": ["execution_flow_definitions"],
         }
 
         try:

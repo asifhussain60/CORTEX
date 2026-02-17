@@ -60,19 +60,19 @@ class TestIntentRoutingSpecification:
     
     def test_routing_spec_file_exists(self):
         """Verify intent-routing.yaml exists in expected location."""
-        spec_file = Path("cortex-registry/_cortex-master/specifications/intent-routing.yaml")
+        spec_file = Path("cortex-registry/core/wiring/neural-routing-specification.yaml")
         assert spec_file.exists(), f"Routing spec not found at {spec_file}"
     
     def test_routing_spec_is_valid_yaml(self):
         """Verify routing spec is valid YAML."""
-        spec_file = Path("cortex-registry/_cortex-master/specifications/intent-routing.yaml")
+        spec_file = Path("cortex-registry/core/wiring/neural-routing-specification.yaml")
         with open(spec_file, 'r') as f:
             spec = yml.safe_load(f)
         assert isinstance(spec, dict), "Routing spec is not a valid YAML dict"
     
     def test_routing_spec_has_required_sections(self):
         """Verify routing spec has required sections."""
-        spec_file = Path("cortex-registry/_cortex-master/specifications/intent-routing.yaml")
+        spec_file = Path("cortex-registry/core/wiring/neural-routing-specification.yaml")
         with open(spec_file, 'r') as f:
             spec = yml.safe_load(f)
         
@@ -82,7 +82,7 @@ class TestIntentRoutingSpecification:
     
     def test_routing_matrix_has_8_intents(self):
         """Verify routing matrix defines all 8 intents."""
-        spec_file = Path("cortex-registry/_cortex-master/specifications/intent-routing.yaml")
+        spec_file = Path("cortex-registry/core/wiring/neural-routing-specification.yaml")
         with open(spec_file, 'r') as f:
             spec = yml.safe_load(f)
         
@@ -94,7 +94,7 @@ class TestIntentRoutingSpecification:
     
     def test_each_intent_has_primary_orchestrator(self):
         """Verify each intent defines a primary orchestrator."""
-        spec_file = Path("cortex-registry/_cortex-master/specifications/intent-routing.yaml")
+        spec_file = Path("cortex-registry/core/wiring/neural-routing-specification.yaml")
         with open(spec_file, 'r') as f:
             spec = yml.safe_load(f)
         
@@ -165,7 +165,7 @@ class TestIntentRoutingMatrix:
     
     def test_all_intents_have_secondary_orchestrator(self):
         """Verify intents have fallback orchestrators."""
-        spec_file = Path("cortex-registry/_cortex-master/specifications/intent-routing.yaml")
+        spec_file = Path("cortex-registry/core/wiring/neural-routing-specification.yaml")
         with open(spec_file, 'r') as f:
             spec = yml.safe_load(f)
         
@@ -180,7 +180,7 @@ class TestIntentRoutingMatrix:
     
     def test_no_duplicate_orchestrators_same_intent(self):
         """Verify no duplicate orchestrator assignments within single intent."""
-        spec_file = Path("cortex-registry/_cortex-master/specifications/intent-routing.yaml")
+        spec_file = Path("cortex-registry/core/wiring/neural-routing-specification.yaml")
         with open(spec_file, 'r') as f:
             spec = yml.safe_load(f)
         
@@ -236,7 +236,7 @@ class TestValidationGates:
     
     def test_dor_gate_for_implement(self):
         """Verify DoR gate is required for IMPLEMENT."""
-        spec_file = Path("cortex-registry/_cortex-master/specifications/intent-routing.yaml")
+        spec_file = Path("cortex-registry/core/wiring/neural-routing-specification.yaml")
         with open(spec_file, 'r') as f:
             spec = yml.safe_load(f)
         
@@ -248,7 +248,7 @@ class TestValidationGates:
     
     def test_dor_gate_for_fix(self):
         """Verify DoR gate is required for FIX."""
-        spec_file = Path("cortex-registry/_cortex-master/specifications/intent-routing.yaml")
+        spec_file = Path("cortex-registry/core/wiring/neural-routing-specification.yaml")
         with open(spec_file, 'r') as f:
             spec = yml.safe_load(f)
         
@@ -260,7 +260,7 @@ class TestValidationGates:
     
     def test_read_only_intents_skip_gates(self):
         """Verify ANALYZE/AUDIT can skip validation gates."""
-        spec_file = Path("cortex-registry/_cortex-master/specifications/intent-routing.yaml")
+        spec_file = Path("cortex-registry/core/wiring/neural-routing-specification.yaml")
         with open(spec_file, 'r') as f:
             spec = yml.safe_load(f)
         
@@ -278,7 +278,7 @@ class TestRoutingPriority:
     
     def test_primary_orchestrator_priority(self):
         """Verify primary orchestrator is attempted first."""
-        spec_file = Path("cortex-registry/_cortex-master/specifications/intent-routing.yaml")
+        spec_file = Path("cortex-registry/core/wiring/neural-routing-specification.yaml")
         with open(spec_file, 'r') as f:
             spec = yml.safe_load(f)
         
@@ -289,7 +289,7 @@ class TestRoutingPriority:
     
     def test_secondary_as_fallback(self):
         """Verify secondary orchestrator is fallback."""
-        spec_file = Path("cortex-registry/_cortex-master/specifications/intent-routing.yaml")
+        spec_file = Path("cortex-registry/core/wiring/neural-routing-specification.yaml")
         with open(spec_file, 'r') as f:
             spec = yml.safe_load(f)
         

@@ -235,6 +235,6 @@ execution_flow_definitions:
 
   # Cross-references
   related_specs:
-    - "routing-rules-intent.yaml"
+    - "intent-routing-rules.yaml"
     - "orchestrator-dispatch-table.yaml"
     - "governance-gates-validation.yaml"

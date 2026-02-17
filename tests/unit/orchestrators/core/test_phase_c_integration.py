@@ -270,7 +270,7 @@ class TestCrossIntegration:
     def test_intent_routing_gates_integration(self):
         """Verify intent routing (Phase B) integrates with gates (Phase C)."""
         # Load intent routing spec
-        routing_file = Path("cortex-registry/_cortex-master/specifications/intent-routing.yaml")
+        routing_file = Path("cortex-registry/core/wiring/neural-routing-specification.yaml")
         with open(routing_file, 'r') as f:
             routing_spec = yml.safe_load(f)
         

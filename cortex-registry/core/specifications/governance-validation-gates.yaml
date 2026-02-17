@@ -211,5 +211,5 @@ governance_gates:
 
   # Cross-references
   related_specs:
-    - "routing-rules-intent.yaml"
+    - "intent-routing-rules.yaml"
     - "execution-flow-definitions.yaml"

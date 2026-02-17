@@ -67,8 +67,8 @@ class SpecRegistry:
     # Spec files to load
     # Note: orchestrator_dispatch moved to canonical wiring.yaml (CORE-035)
     SPEC_FILES = {
-        "routing_rules": "routing-rules-intent.yaml",
-        "governance_gates": "gov-gates-val-rules.yaml",
+        "routing_rules": "cortex-registry/core/specifications/intent-routing-rules.yaml",
+        "governance_gates": "cortex-registry/core/specifications/governance-validation-gates.yaml",
         "execution_flow": "exec-flow.yaml",
     }
 
