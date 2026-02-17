@@ -8,7 +8,7 @@ Phase: PHASE-95
 """
 
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, List, Optional
 
 from cortex.orchestrators.health.health_orchestrator import HealthOrchestrator
 from cortex.orchestrators.health.agents import (
@@ -23,7 +23,7 @@ from cortex.orchestrators.health.agents import (
 
 def cortex_health_check(
     workspace_root: str,
-    agents: list[str] | None = None,
+    agents: Optional[List[str]] = None,
     include_recommendations: bool = True,
 ) -> Dict[str, Any]:
     """Run CORTEX health check on repository.
