@@ -1,0 +1,739 @@
+# ==============================================================================
+# PHASE 20: Registry YAML Consolidation & Cognitive Restructuring
+# ==============================================================================
+# Priority: P0 (Blocking future phases)
+# Status: PLANNED
+# Estimated Duration: 3.5 hours (autonomous execution)
+# Author: Asif Hussain
+# Created: 2026-02-17
+# ==============================================================================
+
+metadata:
+  phase_id: "phase-20"
+  title: "Registry YAML Consolidation & Cognitive Restructuring"===================================================================
+# PHASE 104: Registry YAML Consolidation & Cognitive Restructuring
+# ==============================================================================
+# Priority: P0 (Blocking future phases)
+# Status: PLANNED
+# Estimated Duration: 3 hours (autonomous execution)
+# Author: Asif Hussain
+# Created: 2026-02-17
+# ==============================================================================
+
+metadata:
+  phase_id: "phase-104"
+  title: "Registry YAML Consolidation & Cognitive Restructuring"
+  version: "1.0"
+  created_at: "2026-02-17T14:00:00Z"
+  author: "Asif Hussain"
+  priority: "P0"
+  status: "PLANNED"
+  execution_mode: "autonomous"
+  
+overview:
+  vision: |
+    Centralize all governance, cognition, and template YAML files into cortex-registry
+    with production-ready cognitive naming conventions. Eliminate duplicates and establish
+    single source of truth (SSOT) for all CORTEX configuration and policy files.
+  
+  problem_statement: |
+    YAML files are scattered across multiple directories:
+    - Governance rules in cortex_intelligence/memory/core/governance/
+    - Cognition layer in cortex/brain/tier0/
+    - Response patterns in cortex/brain/tier2/
+    - Specifications in cortex/execution/specs/, cortex/wiring/specs/, cortex/orchestrators/
+    - Config in cortex/config/
+    - Planning templates in cortex/templates/planning/
+    
+    This fragmentation causes:
+    - Difficult discovery and maintenance
+    - Risk of path conflicts
+    - Unclear ownership
+    - 8 duplicate/redundant files
+    
+  expected_outcomes:
+    - Single registry location: cortex-registry/
+    - Production-ready cognitive naming (skull-rules, perception-protocol, etc.)
+    - 3 new folders: core/cognition/, memory/response-patterns/, planning/roadmap-templates/
+    - 33 files migrated with git history preserved
+    - 8 redundant files removed
+    - All Python/YAML references updated
+    - Zero test regressions
+
+roi_analysis:
+  cost:
+    development_hours: 3
+    risk_level: "Low"
+    reversibility: "High (git history preserved)"
+  
+  impact:
+    maintainability: "+40% (single location)"
+    discoverability: "+60% (cognitive naming)"
+    onboarding: "+35% (clear structure)"
+    technical_debt_reduction: "High (eliminates 8 duplicates)"
+  
+  risk_mitigation:
+    - "Use git mv to preserve history"
+    - "Comprehensive path scanning and updates"
+    - "Test validation before commit"
+    - "Staged execution with rollback points"
+
+# ==============================================================================
+# STAGE BREAKDOWN
+# ==============================================================================
+
+stages:
+  - stage_id: "S1"
+    name: "Pre-Flight Validation"
+    description: "Verify source files, detect references, create migration script"
+    duration_estimate: "15 min"
+    dependencies: []
+    
+    tasks:
+      - task_id: "S1T1"
+        name: "Verify Source Files"
+        description: "Confirm all 33 source files exist and are readable"
+        commands:
+          - "find cortex_intelligence/memory/core/governance -name '*.yaml'"
+          - "find cortex/brain/tier0 -name '*.yaml'"
+          - "find cortex/brain/tier2 -name '*.yaml' | grep -E '(base|domains|response-templates-index)'"
+          - "find cortex/execution/specs -name '*.yaml'"
+          - "find cortex/wiring/specs -name '*.yaml'"
+          - "find cortex/orchestrators -name '*wiring*.yaml'"
+          - "find cortex/config -name '*.yaml'"
+          - "find cortex/templates/planning -name '*.yaml'"
+        
+      - task_id: "S1T2"
+        name: "Detect Active References"
+        description: "Scan codebase for references to files-to-delete"
+        commands:
+          - "grep -r 'CORE-095-folder-structure.yaml' --include='*.py' --include='*.yaml' ."
+          - "grep -r 'CORE-096-build-artifacts.yaml' --include='*.py' --include='*.yaml' ."
+          - "grep -r 'CORE-097-duplicate-detection.yaml' --include='*.py' --include='*.yaml' ."
+          - "grep -r 'core-040-execution-spec-mandate.yaml' --include='*.py' --include='*.yaml' ."
+          - "grep -r 'cortex_50_wave.yaml' --include='*.py' --include='*.yaml' ."
+        expected: "No active references (confirm safe to delete)"
+      
+      - task_id: "S1T3"
+        name: "Create Migration Script"
+        description: "Generate bash script with all git mv commands"
+        deliverable: "/tmp/phase-104-migration.sh"
+      
+      - task_id: "S1T4"
+        name: "Backup Registry"
+        description: "Create snapshot of current cortex-registry structure"
+        commands:
+          - "git stash push -m 'phase-104-pre-migration-backup'"
+    
+    success_criteria:
+      - "All 33 source files verified"
+      - "No blocking references to files-to-delete"
+      - "Migration script generated"
+      - "Backup created"
+  
+  - stage_id: "S2"
+    name: "Create New Folder Structure"
+    description: "Create cognitive folder hierarchy in cortex-registry"
+    duration_estimate: "10 min"
+    dependencies: ["S1"]
+    
+    tasks:
+      - task_id: "S2T1"
+        name: "Create Cognition Layer"
+        commands:
+          - "mkdir -p cortex-registry/core/cognition"
+        deliverable: "cortex-registry/core/cognition/"
+      
+      - task_id: "S2T2"
+        name: "Create Memory Layer"
+        commands:
+          - "mkdir -p cortex-registry/memory/response-patterns"
+        deliverable: "cortex-registry/memory/response-patterns/"
+      
+      - task_id: "S2T3"
+        name: "Create Planning Layer"
+        commands:
+          - "mkdir -p cortex-registry/planning/roadmap-templates"
+        deliverable: "cortex-registry/planning/roadmap-templates/"
+      
+      - task_id: "S2T4"
+        name: "Verify Folder Permissions"
+        commands:
+          - "ls -la cortex-registry/core/cognition"
+          - "ls -la cortex-registry/memory/response-patterns"
+          - "ls -la cortex-registry/planning/roadmap-templates"
+    
+    success_criteria:
+      - "3 new folders created"
+      - "Folders writable"
+      - "No permission errors"
+  
+  - stage_id: "S3"
+    name: "File Migration (git mv)"
+    description: "Move 33 YAML files preserving git history"
+    duration_estimate: "30 min"
+    dependencies: ["S2"]
+    
+    file_operations:
+      governance:
+        - from: "cortex_intelligence/memory/core/governance/core-rules.yaml"
+          to: "cortex-registry/core/governance/skull-rules.yaml"
+        - from: "cortex_intelligence/memory/core/governance/governance_kernel.yaml"
+          to: "cortex-registry/core/governance/governance-kernel.yaml"
+      
+      cognition:
+        - from: "cortex/brain/tier0/intent-to-ac-id-mapping.yaml"
+          to: "cortex-registry/core/cognition/intent-classification-schema.yaml"
+        - from: "cortex/brain/tier0/governance-loading-sequence.yaml"
+          to: "cortex-registry/core/cognition/bootstrap-sequence.yaml"
+        - from: "cortex/brain/tier0/lens-protocol-implementation.yaml"
+          to: "cortex-registry/core/cognition/perception-protocol.yaml"
+      
+      specifications:
+        - from: "cortex/execution/specs/exec-flow.yaml"
+          to: "cortex-registry/core/specifications/execution-flow-specification.yaml"
+        - from: "cortex/execution/specs/gov-gates-val-rules.yaml"
+          to: "cortex-registry/core/specifications/governance-validation-gates.yaml"
+        - from: "cortex/execution/specs/routing-rules-intent.yaml"
+          to: "cortex-registry/core/specifications/intent-routing-rules.yaml"
+        - from: "cortex/execution/specs/domain-transitions.yaml"
+          to: "cortex-registry/core/specifications/domain-transition-rules.yaml"
+        - from: "cortex/orchestrators/core/specs/core_wiring.yaml"
+          to: "cortex-registry/core/specifications/core-orchestrator-wiring.yaml"
+        - from: "cortex/orchestrators/domain/specs/domain_wiring.yaml"
+          to: "cortex-registry/core/specifications/domain-orchestrator-wiring.yaml"
+        - from: "cortex/orchestrators/support/specs/support_wiring.yaml"
+          to: "cortex-registry/core/specifications/support-orchestrator-wiring.yaml"
+        - from: "cortex/orchestrators/core/master_wiring.yaml"
+          to: "cortex-registry/core/specifications/orchestration-master-wiring.yaml"
+      
+      wiring:
+        - from: "cortex/wiring/specs/autonomous-execution.yaml"
+          to: "cortex-registry/core/wiring/autonomous-execution-protocol.yaml"
+        - from: "cortex/wiring/specs/mcp-first.yaml"
+          to: "cortex-registry/core/wiring/mcp-priority-policy.yaml"
+        - from: "cortex/wiring/specs/validation-gate.yaml"
+          to: "cortex-registry/core/wiring/quality-gate-specification.yaml"
+        - from: "cortex/wiring/specifications/intent-routing.yaml"
+          to: "cortex-registry/core/wiring/neural-routing-specification.yaml"
+      
+      config:
+        - from: "cortex/config/cortex-config.yaml"
+          to: "cortex-registry/core/config/system-configuration.yaml"
+        - from: "cortex/config/features.yaml"
+          to: "cortex-registry/core/config/feature-flags.yaml"
+      
+      response_patterns:
+        - from: "cortex/brain/tier2/response-templates-index.yaml"
+          to: "cortex-registry/memory/response-patterns/response-pattern-registry.yaml"
+        - from: "cortex/brain/tier2/base/success-response.yaml"
+          to: "cortex-registry/memory/response-patterns/success-response-pattern.yaml"
+        - from: "cortex/brain/tier2/base/error-response.yaml"
+          to: "cortex-registry/memory/response-patterns/error-response-pattern.yaml"
+        - from: "cortex/brain/tier2/base/warning-response.yaml"
+          to: "cortex-registry/memory/response-patterns/warning-response-pattern.yaml"
+        - from: "cortex/brain/tier2/domains/planning/impact-assessment.yaml"
+          to: "cortex-registry/memory/response-patterns/impact-assessment-pattern.yaml"
+        - from: "cortex/brain/tier2/domains/planning/recommendations.yaml"
+          to: "cortex-registry/memory/response-patterns/recommendation-pattern.yaml"
+        - from: "cortex/brain/tier2/domains/governance/evaluation-result.yaml"
+          to: "cortex-registry/memory/response-patterns/governance-evaluation-pattern.yaml"
+        - from: "cortex/brain/tier2/domains/governance/rule-violation.yaml"
+          to: "cortex-registry/memory/response-patterns/rule-violation-pattern.yaml"
+        - from: "cortex/brain/tier2/domains/tdd/test-result.yaml"
+          to: "cortex-registry/memory/response-patterns/test-result-pattern.yaml"
+        - from: "cortex/brain/tier2/domains/tdd/coverage-report.yaml"
+          to: "cortex-registry/memory/response-patterns/coverage-report-pattern.yaml"
+      
+      planning_templates:
+        - from: "cortex/templates/planning/simple_wave.yaml"
+          to: "cortex-registry/planning/roadmap-templates/linear-execution-template.yaml"
+        - from: "cortex/templates/planning/complex_wave.yaml"
+          to: "cortex-registry/planning/roadmap-templates/parallel-execution-template.yaml"
+        - from: "cortex/templates/planning/simple-roadmap/index.yaml"
+          to: "cortex-registry/planning/roadmap-templates/phased-roadmap-template.yaml"
+        - from: "cortex/templates/planning/complex-roadmap/index.yaml"
+          to: "cortex-registry/planning/roadmap-templates/epic-roadmap-template.yaml"
+    
+    success_criteria:
+      - "33 files moved successfully"
+      - "Git history preserved (verify with git log --follow)"
+      - "No orphaned files in old locations"
+  
+  - stage_id: "S4"
+    name: "Delete Redundant Files"
+    description: "Remove 8 duplicate/sample files"
+    duration_estimate: "10 min"
+    dependencies: ["S3"]
+    
+    file_deletions:
+      duplicate_governance:
+        - "cortex_intelligence/memory/core/governance/CORE-095-folder-structure.yaml"
+        - "cortex_intelligence/memory/core/governance/CORE-096-build-artifacts.yaml"
+        - "cortex_intelligence/memory/core/governance/CORE-097-duplicate-detection.yaml"
+        - "cortex_intelligence/memory/core/governance/core-040-execution-spec-mandate.yaml"
+      
+      sample_planning:
+        - "cortex/templates/planning/cortex_50_wave.yaml"
+        - "cortex/templates/planning/simple-roadmap/phases/active/P-001-foundation.yaml"
+        - "cortex/templates/planning/simple-roadmap/phases/active/P-002-core-feature.yaml"
+        - "cortex/templates/planning/simple-roadmap/phases/active/P-003-stabilization.yaml"
+    
+    success_criteria:
+      - "8 files deleted"
+      - "~50K disk space reclaimed"
+      - "No references to deleted files"
+  
+  - stage_id: "S5"
+    name: "Update Python Import Paths"
+    description: "Scan and update all Python code references"
+    duration_estimate: "45 min"
+    dependencies: ["S3", "S4"]
+    
+    path_mappings:
+      - old: "cortex_intelligence/memory/core/governance/core-rules.yaml"
+        new: "cortex-registry/core/governance/skull-rules.yaml"
+        files_to_scan: ["cortex/governance/**/*.py", "cortex/core/**/*.py", "cortex/brain/**/*.py"]
+      
+      - old: "cortex/brain/tier0/intent-to-ac-id-mapping.yaml"
+        new: "cortex-registry/core/cognition/intent-classification-schema.yaml"
+        files_to_scan: ["cortex/intent_router/**/*.py", "cortex/brain/**/*.py"]
+      
+      - old: "cortex/brain/tier0/governance-loading-sequence.yaml"
+        new: "cortex-registry/core/cognition/bootstrap-sequence.yaml"
+        files_to_scan: ["cortex/bootstrap/**/*.py", "cortex/governance/**/*.py"]
+      
+      - old: "cortex/brain/tier0/lens-protocol-implementation.yaml"
+        new: "cortex-registry/core/cognition/perception-protocol.yaml"
+        files_to_scan: ["cortex_lens/**/*.py", "cortex/brain/**/*.py"]
+      
+      - old: "cortex/brain/tier2/response-templates-index.yaml"
+        new: "cortex-registry/memory/response-patterns/response-pattern-registry.yaml"
+        files_to_scan: ["cortex/interaction/**/*.py", "cortex/orchestrators/**/*.py"]
+      
+      - old: "cortex/execution/specs/*.yaml"
+        new: "cortex-registry/core/specifications/*.yaml"
+        files_to_scan: ["cortex/execution/**/*.py", "cortex/orchestrators/**/*.py"]
+      
+      - old: "cortex/wiring/specs/*.yaml"
+        new: "cortex-registry/core/wiring/*.yaml"
+        files_to_scan: ["cortex/wiring/**/*.py", "cortex/orchestrators/**/*.py"]
+      
+      - old: "cortex/config/*.yaml"
+        new: "cortex-registry/core/config/*.yaml"
+        files_to_scan: ["cortex/config/**/*.py", "cortex/bootstrap/**/*.py"]
+      
+      - old: "cortex/templates/planning/*.yaml"
+        new: "cortex-registry/planning/roadmap-templates/*.yaml"
+        files_to_scan: ["cortex/orchestrators/**/*.py", "cortex/phase_executors/**/*.py"]
+    
+    validation:
+      - "Run grep to find remaining old paths"
+      - "No FileNotFoundError in import statements"
+      - "All YAML loaders point to new locations"
+    
+    success_criteria:
+      - "All Python imports updated"
+      - "0 references to old paths"
+      - "No import errors"
+  
+  - stage_id: "S6"
+    name: "Update YAML Cross-References"
+    description: "Update YAML files referencing other YAMLs"
+    duration_estimate: "30 min"
+    dependencies: ["S5"]
+    
+    files_to_update:
+      - file: "cortex-registry/cortex-master.yaml"
+        updates:
+          - "Update phase file locations"
+          - "Update governance references"
+      
+      - file: "cortex-registry/workflows/**/*.yaml"
+        updates:
+          - "Update template references"
+          - "Update governance rule references"
+      
+      - file: "cortex-registry/artifacts/**/*.yaml"
+        updates:
+          - "Update response template references"
+          - "Update specification references"
+      
+      - file: ".github/prompts/**/*.md"
+        updates:
+          - "Update file path references"
+          - "Update example paths"
+      
+      - file: ".github/agents/**/*.md"
+        updates:
+          - "Update governance rule paths"
+          - "Update template paths"
+    
+    success_criteria:
+      - "All YAML cross-references updated"
+      - "All documentation paths current"
+      - "No broken links in agent prompts"
+  
+  - stage_id: "S7"
+    name: "Test Suite Validation"
+    description: "Verify no regressions from path changes"
+    duration_estimate: "30 min"
+    dependencies: ["S5", "S6"]
+    
+    test_suites:
+      - name: "Governance Loader Tests"
+        command: "pytest tests/cortex/governance/ -v"
+        expected: "All tests pass, skull-rules.yaml loads"
+      
+      - name: "Response Template Tests"
+        command: "pytest tests/cortex/interaction/ -v"
+        expected: "All templates load from new paths"
+      
+      - name: "Planning Orchestrator Tests"
+        command: "pytest tests/cortex/orchestrators/ -k planning -v"
+        expected: "Roadmap templates load successfully"
+      
+      - name: "Bootstrap Sequence Tests"
+        command: "pytest tests/cortex/bootstrap/ -v"
+        expected: "Bootstrap loads from cognition layer"
+      
+      - name: "Golden Test Suite"
+        command: "pytest tests/ -k golden -v"
+        expected: "191/191 golden tests passing"
+      
+      - name: "Full Test Suite"
+        command: "pytest tests/ -x"
+        expected: "No FileNotFoundError exceptions"
+    
+    success_criteria:
+      - "All YAML files load without errors"
+      - "0 FileNotFoundError exceptions"
+      - "191/191 golden tests passing"
+      - "0 import errors"
+      - "Test duration within baseline (±10%)"
+  
+  - stage_id: "S8"
+    name: "Documentation Update"
+    description: "Update docs and create migration guide"
+    duration_estimate: "40 min"
+    dependencies: ["S7"]
+    
+    deliverables:
+      - file: "cortex-registry/MIGRATION-PHASE-104.md"
+        content: |
+          - Before/after folder structure
+          - File name mapping table
+          - Path reference guide
+          - Rollback instructions
+      
+      - file: "cortex-registry/core/README.md"
+        updates:
+          - "New cognition/ folder description"
+          - "Updated governance/ folder contents"
+          - "Cognitive naming conventions"
+      
+      - file: "cortex-registry/memory/README.md"
+        content: |
+          - Response patterns folder purpose
+          - Template naming conventions
+          - Usage examples
+      
+      - file: "cortex-registry/planning/README.md"
+        updates:
+          - "Roadmap templates description"
+          - "Linear vs parallel execution patterns"
+      
+      - file: ".github/prompts/cortex-architect.prompt.md"
+        updates:
+          - "Update governance rule paths"
+          - "Update template locations"
+          - "Update example commands"
+      
+      - file: ".github/workflows/governance-alignment.yml"
+        updates:
+          - "Update file paths in workflow"
+          - "Update validation rules"
+      
+      - category: "cortex-docs/content/src/"
+        description: "Update all documentation references to new paths"
+        files_to_update:
+          - file: "glossary.md"
+            search_replace:
+              - old: "cortex_intelligence/memory/core/governance/"
+                new: "cortex-registry/core/governance/"
+              - old: "cortex_intelligence/governance.db"
+                new: "cortex_intelligence/governance.db"  # No change - DB stays
+              - old: "cortex_intelligence/"
+                new: "cortex_intelligence/"  # Module path stays same
+                context: "Python module references (no change needed)"
+          
+          - file: "infrastructure/learning-architecture.md"
+            updates:
+              - "Verify cortex_intelligence/ references are for Python modules"
+              - "No path changes needed (module paths stable)"
+          
+          - file: "00-getting-started/tier1-foundations.md"
+            search_replace:
+              - old: "cortex/config/"
+                new: "cortex-registry/core/config/"
+                line_context: "Configuration file references"
+          
+          - file: "orchestration/overview.md"
+            search_replace:
+              - old: "__wiring_contract__.yaml"
+                new: "__wiring_contract__.yaml"  # No change
+                context: "Legacy wiring location (deprecated but documented)"
+              - old: "cortex/orchestrators/"
+                new: "cortex/orchestrators/"  # Python module (no change)
+          
+          - file: "orchestration/request-rephrase.md"
+            search_replace:
+              - old: "cortex-registry/governance/core-rules.yaml"
+                new: "cortex-registry/core/governance/skull-rules.yaml"
+                line: 151
+              - old: "__wiring_contract__.yaml"
+                new: "cortex-registry/core/specifications/orchestration-master-wiring.yaml"
+                context: "Update to new centralized wiring location"
+          
+          - file: "index.md"
+            search_replace:
+              - old: "cortex/__wiring_contract__.yaml"
+                new: "cortex-registry/core/specifications/orchestration-master-wiring.yaml"
+                line: 9
+              - old: "__wiring_contract__.yaml"
+                new: "orchestration-master-wiring.yaml"
+                line: 38
+                context: "Update wiring contract reference"
+              - old: "59 CORE rules"
+                new: "54 CORE rules"
+                context: "Update rule count after consolidation"
+              - old: "cortex/wiring/"
+                new: "cortex-registry/core/wiring/"
+                line: 540
+          
+          - file: "mcp/tools-catalog.md"
+            search_replace:
+              - old: "../../cortex-registry/registry/governance/core-rules.yaml"
+                new: "../../cortex-registry/core/governance/skull-rules.yaml"
+                line: 1876
+          
+          - file: "glossary.md"
+            search_replace:
+              - old: "cortex/__wiring_contract__.yaml"
+                new: "cortex-registry/core/specifications/orchestration-master-wiring.yaml"
+                line: 826
+              - old: "cortex-registry/master/__wiring_contract__.yaml"
+                new: "cortex-registry/core/specifications/orchestration-master-wiring.yaml"
+                line: 607
+              - old: "cortex-registry/master/"
+                new: "cortex-registry/core/specifications/"
+                line: 847
+                context: "Discovery path for orchestrator wiring"
+          
+          - file: "diagrams/architecture-overview.md"
+            updates:
+              - "cortex_intelligence/ references are Python module paths (no change)"
+              - "cortex-registry/ structure updated in folder tree"
+          
+          - file: "diagrams/c4-container.md"
+            search_replace:
+              - old: "__wiring_contract__.yaml"
+                new: "orchestration-master-wiring.yaml"
+                context: "Diagram label update"
+          
+          - file: "diagrams/component-relationships.md"
+            search_replace:
+              - old: "cortex/wiring/"
+                new: "cortex-registry/core/wiring/"
+                line: 9
+              - old: "__wiring_contract__.yaml"
+                new: "orchestration-master-wiring.yaml"
+                line: 15
+          
+          - file: "lens/architecture.md"
+            updates:
+              - "Review wiring contract references"
+              - "Update if referencing file paths vs concepts"
+          
+          - file: "capabilities/brain-architecture.md"
+            updates:
+              - "cortex_intelligence/ is Python module path (no change)"
+              - "No YAML path references to update"
+          
+          - file: "capabilities/response-formatting.md"
+            search_replace:
+              - old: "cortex/__wiring_contract__.yaml"
+                new: "cortex-registry/core/specifications/orchestration-master-wiring.yaml"
+                line: 403
+          
+          - file: "capabilities/core-platform.md"
+            search_replace:
+              - old: "cortex/config/"
+                new: "cortex-registry/core/config/"
+                line: 9
+              - old: "env vars > files > wiring > defaults"
+                new: "env vars > files > wiring > defaults"  # Conceptual (no change)
+    
+    path_audit_commands:
+      - description: "Find all remaining old path references"
+        command: "grep -r 'cortex/brain/tier0' cortex-docs/content/src/ --include='*.md'"
+        expected: "0 matches"
+      
+      - description: "Find all governance path references"
+        command: "grep -r 'core-rules.yaml' cortex-docs/content/src/ --include='*.md'"
+        expected: "All references to skull-rules.yaml"
+      
+      - description: "Find all wiring contract references"
+        command: "grep -r '__wiring_contract__' cortex-docs/content/src/ --include='*.md'"
+        expected: "Updated to orchestration-master-wiring.yaml or marked as legacy"
+      
+      - description: "Find all config path references"
+        command: "grep -r 'cortex/config' cortex-docs/content/src/ --include='*.md'"
+        expected: "Updated to cortex-registry/core/config"
+    
+    documentation_summary:
+      files_reviewed: 20
+      files_updated: 14
+      path_updates: 25
+      no_change_needed: 6  # Python module references remain stable
+      
+      key_distinctions:
+        - "YAML file paths: UPDATED (moved to cortex-registry)"
+        - "Python module paths: UNCHANGED (cortex_intelligence/, cortex/orchestrators/)"
+        - "Database paths: UNCHANGED (cortex_intelligence/governance.db)"
+        - "Conceptual references: REVIEWED (e.g., 'wiring' as concept vs file path)"
+    
+    success_criteria:
+      - "Migration guide created"
+      - "All READMEs updated"
+      - "Agent prompts current"
+      - "CI/CD workflows updated"
+      - "cortex-docs/ path references updated (20 files reviewed)"
+      - "0 references to old YAML paths in docs"
+      - "Python module references preserved (no breaking changes)"
+
+# ==============================================================================
+# KEY DELIVERABLES
+# ==============================================================================
+
+deliverables:
+  - name: "Consolidated Registry Structure"
+    description: "33 YAML files in cortex-registry with cognitive naming"
+    path: "cortex-registry/"
+  
+  - name: "New Cognitive Folders"
+    description: "3 new folders: cognition, memory/response-patterns, planning/roadmap-templates"
+    paths:
+      - "cortex-registry/core/cognition/"
+      - "cortex-registry/memory/response-patterns/"
+      - "cortex-registry/planning/roadmap-templates/"
+  
+  - name: "Updated Python Imports"
+    description: "All Python code references updated to new paths"
+    estimated_files: 50
+  
+  - name: "Migration Documentation"
+    description: "Complete migration guide with rollback instructions"
+    path: "cortex-registry/MIGRATION-PHASE-104.md"
+  
+  - name: "Zero Test Regressions"
+    description: "191/191 golden tests passing after migration"
+    validation: "pytest tests/ -k golden"
+
+# ==============================================================================
+# METRICS & SUCCESS CRITERIA
+# ==============================================================================
+
+metrics:
+  files_migrated: 33
+  files_deleted: 8
+  new_folders: 3
+  path_updates_estimated: 50
+  yaml_cross_references: 30
+  documentation_files: 20
+  cortex_docs_updates: 14
+  test_suite_size: 191
+  estimated_duration: "3.5 hours"  # Increased from 3h for doc updates
+  space_reclaimed: "50K"
+
+success_criteria:
+  critical:
+    - "All 33 files in cortex-registry with new names"
+    - "0 files remaining in old locations"
+    - "191/191 golden tests passing"
+    - "0 import errors in Python code"
+    - "0 FileNotFoundError in test output"
+    - "Git history preserved for all files"
+  
+  quality:
+    - "Migration documentation complete"
+    - "All READMEs updated"
+    - "CI/CD workflows updated"
+    - "Agent prompts current"
+  
+  performance:
+    - "Test suite duration within ±10% of baseline"
+    - "No performance regressions"
+
+# ==============================================================================
+# RISKS & MITIGATION
+# ==============================================================================
+
+risks:
+  - risk: "Broken import paths cause runtime failures"
+    severity: "High"
+    probability: "Medium"
+    mitigation: "Stage 5 comprehensive path scan + Stage 7 full test validation"
+    rollback: "git revert migration commits, restore from stash"
+  
+  - risk: "YAML loader failures from path changes"
+    severity: "High"
+    probability: "Low"
+    mitigation: "Stage 7 governance/template loader tests"
+    rollback: "Revert path changes in Python files"
+  
+  - risk: "Lost git history during file moves"
+    severity: "Medium"
+    probability: "Very Low"
+    mitigation: "Use git mv exclusively (not rm + add)"
+    validation: "git log --follow for each moved file"
+  
+  - risk: "CI/CD pipeline failures"
+    severity: "Medium"
+    probability: "Low"
+    mitigation: "Stage 8 workflow file updates"
+    rollback: "Update workflows to old paths temporarily"
+
+# ==============================================================================
+# GOVERNANCE COMPLIANCE
+# ==============================================================================
+
+governance:
+  core_rules:
+    - CORE-002: "No markdown file generation (inline reporting only)"
+    - CORE-035: "Single canonical implementation (eliminate 8 duplicates)"
+    - CORE-042: "SSOT - cortex-registry is the single source"
+    - CORE-008: "TDD-first (tests verify migration)"
+  
+  validation:
+    - "EnforcementOrchestrator approval"
+    - "7-agent governance gate"
+    - "Golden test suite validation"
+
+# ==============================================================================
+# EXECUTION NOTES
+# ==============================================================================
+
+execution_notes:
+  mode: "autonomous"
+  visual_feedback: "ASCII progress bars only (silent execution)"
+  reporting: "Inline markdown tables (CORE-002 compliance)"
+  checkpoints:
+    - "After S3: Verify files moved"
+    - "After S5: Verify imports updated"
+    - "After S7: Verify tests passing"
+  
+  rollback_points:
+    - "S1: Git stash created"
+    - "S3: File moves can be reverted"
+    - "S5: Import changes tracked in git"
