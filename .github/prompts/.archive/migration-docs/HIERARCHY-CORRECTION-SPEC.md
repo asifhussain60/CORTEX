@@ -67,7 +67,7 @@ EPIC (E-)           Strategic initiative, 3-12 months
 
 ### Phase 1: Archive Legacy "Wave" Files (NON-DESTRUCTIVE)
 
-**Location:** `cortex-registry/_cortex-master/history/_archive/obsolete-plans/`
+**Location:** `cortex-registry/history/_archive/obsolete-plans/`
 
 **Files to Archive:**
 ```
@@ -124,7 +124,7 @@ HIGH-ROI-PHASE-PRIORITIZATION.md      → obsolete-plans/HIGH-ROI-PHASE-PRIORITI
 
 **New Directories:**
 ```
-cortex-registry/_cortex-master/
+cortex-registry/
 ├── epics/              # Strategic initiatives (NEW)
 │   ├── active/
 │   └── completed/
@@ -246,7 +246,7 @@ FEATURE = {
 
 #### 5.2 README Updates
 
-**File:** `cortex-registry/_cortex-master/README.md`
+**File:** `cortex-registry/README.md`
 
 Add deprecation notice:
 ```markdown
@@ -285,8 +285,8 @@ EPIC (E-) → FEATURE (F-) → PHASE (P-) → STAGE (S-) → TASK (T-)
 
 ### Registry Structure Phase (Day 2)
 
-- [ ] Create `cortex-registry/_cortex-master/epics/` directory
-- [ ] Create `cortex-registry/_cortex-master/features/` directory
+- [ ] Create `cortex-registry/epics/` directory
+- [ ] Create `cortex-registry/features/` directory
 - [ ] Create initial Epic files (E-001, E-002) from major Waves
 - [ ] Create Feature files from minor Waves
 - [ ] Update index.yaml with new structure

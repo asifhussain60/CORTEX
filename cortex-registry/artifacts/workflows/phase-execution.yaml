@@ -35,7 +35,7 @@ workflow:
     patterns: "Orchestrator + Registry pattern"
     coverage_target: "95%"
     core_rules: ["CORE-008", "CORE-011", "CORE-012"]
-    governance: "CORTEX CORE rules (cortex-registry/_cortex-master/core/governance/)"
+    governance: "CORTEX CORE rules (cortex-registry/core/governance/)"
 
   # Workflow stages for CORTEX phase execution
   steps:
@@ -163,7 +163,7 @@ parameters:
 
 hydration_example: |
   Input (template params):
-    phase_yaml: "cortex-registry/_cortex-master/phases/planned/phase-104-registry-intelligence-consolidation.yaml"
+    phase_yaml: "cortex-registry/phases/planned/phase-104-registry-intelligence-consolidation.yaml"
     phase_id: "phase-104"
     coverage_target: "95%"
   

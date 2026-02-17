@@ -59,7 +59,7 @@
 - **Total:** 23 tests, all passing
 
 #### 4. **Content Blocks Registry** ✅
-- **Location:** `cortex-registry/_cortex-master/core/templates/content-blocks.yaml`
+- **Location:** `cortex-registry/core/templates/content-blocks.yaml`
 - **Current Blocks:** 7 (INTRO, CAPABILITIES, LENS, ORCHESTRATORS, TUTORIAL, ONBOARDING, NEXT-STEPS)
 - **Status:** Production-ready (598 lines)
 - **Personality Charter:** Defined + enforced in SemanticBlockAssembler
@@ -272,7 +272,7 @@ These principles ensure your code meets CORTEX's production standards:
    - Add `_track_rule_exposure(rule_ids, session_id)`
    - ~100 LOC
 
-2. `cortex-registry/_cortex-master/core/templates/content-blocks.yaml`
+2. `cortex-registry/core/templates/content-blocks.yaml`
    - Add BLOCK-GOVERNANCE-RULES definition
    - Add intent-to-rules mappings
    - ~80 lines YAML
@@ -450,7 +450,7 @@ class RuleExposureTracker:
 - EnforcementOrchestrator: `cortex/orchestrators/core/enforcement_orchestrator.py` (lines 1181-1223)
 - IntentRouter: `cortex/orchestrators/core/intent_router.py` (lines 1858-1908)
 - InteractionOrchestrator: `cortex/orchestrators/core/interaction_orchestrator.py` (701 lines)
-- Content Blocks: `cortex-registry/_cortex-master/core/templates/content-blocks.yaml` (604 lines)
+- Content Blocks: `cortex-registry/core/templates/content-blocks.yaml` (604 lines)
 
 ### Related Documentation
 - `.github/prompts/business-wisdom-wiring.md`

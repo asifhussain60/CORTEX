@@ -335,11 +335,11 @@ Searched text for `phase-103|Phase 103|PHASE 103`, 20 results
 
 Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/prompts/cortex-architect.prompt.md#100-100), lines 100 to 300
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/_cortex-master/phases/planned/phase-103-registry-intelligence-consolidation.yaml#1-1), lines 1 to 100
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/phases/planned/phase-103-registry-intelligence-consolidation.yaml#1-1), lines 1 to 100
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/_cortex-master/phases/planned/phase-103-registry-intelligence-consolidation.yaml#100-100), lines 100 to 350
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/phases/planned/phase-103-registry-intelligence-consolidation.yaml#100-100), lines 100 to 350
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/_cortex-master/phases/planned/phase-103-registry-intelligence-consolidation.yaml#350-350), lines 350 to 600
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/phases/planned/phase-103-registry-intelligence-consolidation.yaml#350-350), lines 350 to 600
 
 Ran terminal command: cat /tmp/phase-103-baseline-tests.txt | tail -20
 
@@ -351,13 +351,13 @@ Ran terminal command: ls -la cortex-registry/ | head -30
 
 Ran terminal command: ls -la cortex-registry/
 
-Ran terminal command: ls -la cortex-registry/_cortex-master/
+Ran terminal command: ls -la cortex-registry/
 
 Ran terminal command: ls -la cortex_intelligence/memory/
 
 Ran terminal command: ls -la cortex_intelligence/memory/ 2>&1
 
-Searched text for `stage_id: "S` (`**/cortex-registry/_cortex-master/phases/planned/phase-103*.yaml`), 5 results
+Searched text for `stage_id: "S` (`**/cortex-registry/phases/planned/phase-103*.yaml`), 5 results
 
 ## 🏛️ CORTEX Architect IMPLEMENT
 **Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
@@ -386,7 +386,7 @@ Searched text for `stage_id: "S` (`**/cortex-registry/_cortex-master/phases/plan
 
 <hr> 
 
-Ran terminal command: cd cortex-registry && ls -la _cortex-master/core/
+Ran terminal command: cd cortex-registry && ls -la core/
 
 Ran terminal command: cd cortex-registry && find _cortex-master -type d -maxdepth 2
 
@@ -398,9 +398,9 @@ Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && ls -la cortex-reg
 
 Ran terminal command: find cortex-registry/_cortex-master -type d -maxdepth 2 2>/dev/null | sort
 
-Ran terminal command: ls -la cortex-registry/_cortex-master/phases/
+Ran terminal command: ls -la cortex-registry/phases/
 
-Ran terminal command: ls -la cortex-registry/_cortex-master/core/templates/
+Ran terminal command: ls -la cortex-registry/core/templates/
 
 Ran terminal command: ls -la cortex-registry/planning/phases/ 2>&1
 
@@ -410,21 +410,21 @@ Ran terminal command: ls -la cortex-registry/core/
 
 Ran terminal command: find cortex-registry -name "*.yaml" -path "*_cortex-master*" | head -10
 
-Ran terminal command: git mv cortex-registry/_cortex-master/phases/consolidated cortex-registry/planning/phases/ 2>&1
+Ran terminal command: git mv cortex-registry/phases/consolidated cortex-registry/planning/phases/ 2>&1
 
-Ran terminal command: ls -la cortex-registry/_cortex-master/phases/consolidated/
+Ran terminal command: ls -la cortex-registry/phases/consolidated/
 
-Ran terminal command: mv cortex-registry/_cortex-master/phases/consolidated/*.yaml cortex-registry/planning/phases/consolidated/ 2>&1 && git add cortex-registry/planning/phases/consolidated/*.yaml
+Ran terminal command: mv cortex-registry/phases/consolidated/*.yaml cortex-registry/planning/phases/consolidated/ 2>&1 && git add cortex-registry/planning/phases/consolidated/*.yaml
 
-Ran terminal command: mkdir -p cortex-registry/planning/phases/consolidated && mv cortex-registry/_cortex-master/phases/consolidated/*.yaml cortex-registry/planning/phases/consolidated/ && git add cortex-registry/planning/phases/consolidated/
+Ran terminal command: mkdir -p cortex-registry/planning/phases/consolidated && mv cortex-registry/phases/consolidated/*.yaml cortex-registry/planning/phases/consolidated/ && git add cortex-registry/planning/phases/consolidated/
 
-Ran terminal command: mv cortex-registry/_cortex-master/CORTEX-STATUS-*.yaml cortex-registry/metrics/ && mv cortex-registry/_cortex-master/DEFERRED-PHASES-ROADMAP.yaml cortex-registry/metrics/ && mv cortex-registry/_cortex-master/master-index.yaml cortex-registry/ && git add cortex-registry/metrics/*.yaml cortex-registry/master-index.yaml
+Ran terminal command: mv cortex-registry/CORTEX-STATUS-*.yaml cortex-registry/metrics/ && mv cortex-registry/DEFERRED-PHASES-ROADMAP.yaml cortex-registry/metrics/ && mv cortex-registry/master-index.yaml cortex-registry/ && git add cortex-registry/metrics/*.yaml cortex-registry/master-index.yaml
 
-Ran terminal command: ls -la cortex-registry/_cortex-master/
+Ran terminal command: ls -la cortex-registry/
 
-Ran terminal command: rm cortex-registry/_cortex-master/governance cortex-registry/_cortex-master/meta && ls -la cortex-registry/_cortex-master/core/templates/ && rmdir cortex-registry/_cortex-master/phases/consolidated && rmdir cortex-registry/_cortex-master/phases
+Ran terminal command: rm cortex-registry/governance cortex-registry/meta && ls -la cortex-registry/core/templates/ && rmdir cortex-registry/phases/consolidated && rmdir cortex-registry/phases
 
-Ran terminal command: rmdir cortex-registry/_cortex-master/core/templates && rmdir cortex-registry/_cortex-master/core && rmdir cortex-registry/_cortex-master/templates && rmdir cortex-registry/_cortex-master/test-demands && rmdir cortex-registry/_cortex-master
+Ran terminal command: rmdir cortex-registry/core/templates && rmdir cortex-registry/core && rmdir cortex-registry/templates && rmdir cortex-registry/test-demands && rmdir cortex-registry/_cortex-master
 
 Ran terminal command: ls -la cortex-registry/ | grep -E "^d"
 
@@ -434,23 +434,23 @@ Ran terminal command: git commit -m "refactor(S6): decompose _cortex-master, mov
 
 Ran terminal command: find . -type f -name "*.py" -exec grep -l "_cortex-master" {} \; | head -15
 
-Ran terminal command: find . -type f -name "*.py" -exec sed -i '' 's|_cortex-master/phases/consolidated|planning/phases/consolidated|g' {} \;
+Ran terminal command: find . -type f -name "*.py" -exec sed -i '' 's|phases/consolidated|planning/phases/consolidated|g' {} \;
 
-Ran terminal command: find . -type f -name "*.py" -exec sed -i '' 's|_cortex-master/phases|planning/phases|g' {} \;
+Ran terminal command: find . -type f -name "*.py" -exec sed -i '' 's|phases|planning/phases|g' {} \;
 
-Ran terminal command: find . -type f -name "*.py" -exec sed -i '' 's|_cortex-master/core/governance|core/governance|g' {} \;
+Ran terminal command: find . -type f -name "*.py" -exec sed -i '' 's|core/governance|core/governance|g' {} \;
 
-Ran terminal command: find . -type f -name "*.py" -exec sed -i '' 's|_cortex-master/core/config|core/config|g' {} \;
+Ran terminal command: find . -type f -name "*.py" -exec sed -i '' 's|core/config|core/config|g' {} \;
 
-Ran terminal command: find . -type f -name "*.py" -exec sed -i '' 's|_cortex-master/core/wiring|core/wiring|g' {} \;
+Ran terminal command: find . -type f -name "*.py" -exec sed -i '' 's|core/wiring|core/wiring|g' {} \;
 
-Ran terminal command: find . -type f -name "*.py" -exec sed -i '' 's|_cortex-master/core/templates|artifacts/templates|g' {} \;
+Ran terminal command: find . -type f -name "*.py" -exec sed -i '' 's|core/templates|artifacts/templates|g' {} \;
 
-Ran terminal command: find . -type f -name "*.py" -exec sed -i '' 's|_cortex-master/baselines|metrics/baselines|g' {} \;
+Ran terminal command: find . -type f -name "*.py" -exec sed -i '' 's|baselines|metrics/baselines|g' {} \;
 
-Ran terminal command: find . -type f -name "*.py" -exec sed -i '' 's|_cortex-master/reports|metrics/reports|g' {} \;
+Ran terminal command: find . -type f -name "*.py" -exec sed -i '' 's|reports|metrics/reports|g' {} \;
 
-Ran terminal command: find . -type f -name "*.py" -exec sed -i '' 's|_cortex-master/knowledge|knowledge-base|g' {} \;
+Ran terminal command: find . -type f -name "*.py" -exec sed -i '' 's|knowledge|knowledge-base|g' {} \;
 
 Ran terminal command: find . -type f -name "*.py" -exec sed -i '' 's|_cortex-master|cortex-registry|g' {} \;
 
@@ -458,9 +458,9 @@ Ran terminal command: git diff --stat | head -30
 
 Ran terminal command: git add -A && git commit -m "refactor(S7): update all Python file references from _cortex-master to new registry structure"
 
-Ran terminal command: find cortex-registry -name "*.yaml" -type f -exec sed -i '' 's|_cortex-master/||g' {} \;
+Ran terminal command: find cortex-registry -name "*.yaml" -type f -exec sed -i '' 's|||g' {} \;
 
-Ran terminal command: find . -name "*.md" -type f -not -path "./.venv/*" -exec sed -i '' 's|_cortex-master/||g' {} \;
+Ran terminal command: find . -name "*.md" -type f -not -path "./.venv/*" -exec sed -i '' 's|||g' {} \;
 
 Ran terminal command: git diff --stat | head -20
 
@@ -557,7 +557,7 @@ Ran terminal command: find . -name "test_phase_103*.py" 2>/dev/null
 - ✅ All core imports verified
 
 **Track B (_cortex-master Elimination):**
-- ✅ Removed `_cortex-master/` wrapper directory
+- ✅ Removed `` wrapper directory
 - ✅ Moved `phases/consolidated/` → `planning/phases/consolidated/`
 - ✅ Moved status files → `metrics/`
 - ✅ Updated 150 Python file references
@@ -656,13 +656,13 @@ Ran terminal command: ls -la cortex-registry/planning/phases/planned/ | head -10
 
 **Original location before Phase 103:**
 ```
-cortex-registry/_cortex-master/
+cortex-registry/
 ```
 
 **Where each part was moved:**
 
 ### 1️⃣ **Phases** → phases
-- **Source:** `_cortex-master/phases/consolidated/`
+- **Source:** `phases/consolidated/`
 - **Destination:** consolidated
 - **Files moved (7):**
   - `00-legacy-consolidation.yaml`
@@ -683,10 +683,10 @@ cortex-registry/_cortex-master/
 - **File moved:** `master-index.yaml` → master-index.yaml
 
 ### 4️⃣ **Core folders** (were already symlinks/duplicates)
-- `_cortex-master/core/governance` → Already in governance
-- `_cortex-master/core/config` → Already in config
-- `_cortex-master/core/wiring` → Already in wiring
-- `_cortex-master/core/templates` → Was empty, removed
+- `core/governance` → Already in governance
+- `core/config` → Already in config
+- `core/wiring` → Already in wiring
+- `core/templates` → Was empty, removed
 
 ### ⚠️ **Phase 103 Status:**
 **Phase 103 itself** is currently at:
@@ -708,15 +708,15 @@ Ran terminal command: git log --all --oneline --graph | head -30
 
 Ran terminal command: git show pre-phase-103-baseline:cortex-registry/_cortex-master --name-only 2>&1 | head -30
 
-Ran terminal command: git show pre-phase-103-baseline:cortex-registry/_cortex-master/phases/ --name-only 2>&1 | head -20
+Ran terminal command: git show pre-phase-103-baseline:cortex-registry/phases/ --name-only 2>&1 | head -20
 
 Ran terminal command: ls -la cortex-registry/planning/
 
 Ran terminal command: ls -la cortex-registry/planning/planned/ | wc -l
 
-Ran terminal command: git show pre-phase-103-baseline:cortex-registry/_cortex-master/phases/planned/ --name-only 2>&1 | wc -l
+Ran terminal command: git show pre-phase-103-baseline:cortex-registry/phases/planned/ --name-only 2>&1 | wc -l
 
-Ran terminal command: git show pre-phase-103-baseline:cortex-registry/_cortex-master/phases/planned/ --name-only 2>&1
+Ran terminal command: git show pre-phase-103-baseline:cortex-registry/phases/planned/ --name-only 2>&1
 
 ## 🚨 CRITICAL ISSUE CONFIRMED
 
@@ -724,7 +724,7 @@ Ran terminal command: git show pre-phase-103-baseline:cortex-registry/_cortex-ma
 
 ### What Was Lost:
 The **semantic separation** between:
-1. **CORTEX Meta-System Plans** (`_cortex-master/phases/`) - Plans to develop CORTEX itself
+1. **CORTEX Meta-System Plans** (`phases/`) - Plans to develop CORTEX itself
 2. **User Repository Plans** (`planning/`) - Plans for user repos CORTEX manages
 
 ### Current State (BROKEN):
@@ -739,7 +739,7 @@ cortex-registry/
 ### Original Intent (CORRECT):
 ```
 cortex-registry/
-├── _cortex-master/        ← CORTEX meta-system (develops CORTEX)
+├──         ← CORTEX meta-system (develops CORTEX)
 │   └── phases/
 │       ├── planned/       ← Phase 103, 104, etc (CORTEX development)
 │       ├── completed/
@@ -764,7 +764,7 @@ git checkout pre-phase-103-baseline
 ```
 
 ### Option B: **FIX-FORWARD** (Preserve work, correct structure)
-Restore `_cortex-master/` but rename to preserve semantic clarity:
+Restore `` but rename to preserve semantic clarity:
 
 ```
 cortex-registry/
@@ -812,7 +812,7 @@ Ran terminal command: git checkout main
 
 Ran terminal command: git log --oneline | head -5
 
-Ran terminal command: ls -la cortex-registry/_cortex-master/ 2>&1 | head -10
+Ran terminal command: ls -la cortex-registry/ 2>&1 | head -10
 
 Ran terminal command: ls -la cortex_intelligence/ 2>&1 | head -5
 
@@ -820,7 +820,7 @@ Ran terminal command: find cortex-registry -name "_cortex-master" -type d 2>&1
 
 Ran terminal command: git show df63be436:cortex-registry/_cortex-master --name-only 2>&1 | head -20
 
-Ran terminal command: ls -la cortex-registry/_cortex-master/
+Ran terminal command: ls -la cortex-registry/
 
 Ran terminal command: git branch -D phase-103-migration 2>&1
 
@@ -828,19 +828,19 @@ Ran terminal command: git branch -D phase-103-migration
 
 Ran terminal command: git tag -d pre-phase-103-baseline 2>&1
 
-Ran terminal command: ls -la cortex-registry/_cortex-master/phases/
+Ran terminal command: ls -la cortex-registry/phases/
 
 Ran terminal command: git tag -d pre-phase-103-baseline
 
-Ran terminal command: find cortex-registry/_cortex-master/phases -name "*.yaml" | head -10
+Ran terminal command: find cortex-registry/phases -name "*.yaml" | head -10
 
-Ran terminal command: ls -la cortex-registry/_cortex-master/phases/completed/ | head -10
+Ran terminal command: ls -la cortex-registry/phases/completed/ | head -10
 
-Ran terminal command: ls -la cortex-registry/_cortex-master/phases/completed/
+Ran terminal command: ls -la cortex-registry/phases/completed/
 
 Ran terminal command: git log --oneline --all --branches | grep "phase-103\|Phase 103" | head -5
 
-Ran terminal command: git show 1caf4d662:cortex-registry/_cortex-master/phases/planned/ --name-only 2>&1
+Ran terminal command: git show 1caf4d662:cortex-registry/phases/planned/ --name-only 2>&1
 
 Ran terminal command: git branch -a | grep CORTEX
 
@@ -852,17 +852,17 @@ Ran terminal command: git checkout CORTEX 2>&1
 
 Ran terminal command: git log --oneline | head -5
 
-Ran terminal command: ls -la cortex-registry/_cortex-master/phases/planned/
+Ran terminal command: ls -la cortex-registry/phases/planned/
 
 Ran terminal command: git status
 
-Ran terminal command: ls -la cortex-registry/_cortex-master/phases/planned/
+Ran terminal command: ls -la cortex-registry/phases/planned/
 
-Ran terminal command: find cortex-registry/_cortex-master/phases -name "*103*"
+Ran terminal command: find cortex-registry/phases -name "*103*"
 
 Perfect! Now let me verify the complete state and summarize the successful rollback. 
 
-Ran terminal command: find cortex-registry/_cortex-master/phases/planned/ -name "*103*"
+Ran terminal command: find cortex-registry/phases/planned/ -name "*103*"
 
 Ran terminal command: ls -la cortex_intelligence/ 2>&1 | head -3
 
@@ -885,7 +885,7 @@ Ran terminal command: git show 7ff98abc7 --stat | head -15
 2. ✅ **REPHRASE Mode**: All REPHRASE commits intact (3 commits: `03bc397ae`, `f1a9d160f`, `7ff98abc7`)
 3. ✅ **Registry Realignment Plan**: Commit `d89cdc8c1` - "feat(phase-103): Registry consolidation plan + golden tests with SQLite audit trail"
 4. ✅ **Workflow Router**: Commit `5e9b50520` - Complexity-Gated Workflow Router
-5. ✅ **CORTEX Meta-System Structure**: `_cortex-master/` directory **INTACT** with proper separation
+5. ✅ **CORTEX Meta-System Structure**: `` directory **INTACT** with proper separation
 
 ### 🗑️ What Was Rolled Back:
 - ❌ Phase 103 implementation commits (S1-S8) - **DELETED**
@@ -897,7 +897,7 @@ Ran terminal command: git show 7ff98abc7 --stat | head -15
 ### 📂 Current Structure (Correct):
 ```
 cortex-registry/
-├── _cortex-master/              ✅ CORTEX meta-system (preserved)
+├──               ✅ CORTEX meta-system (preserved)
 │   └── phases/
 │       ├── planned/
 │       │   └── phase-103-registry-intelligence-consolidation.yaml
@@ -918,5 +918,5 @@ cortex-registry/
 **Key Insight:** ChatGPT's advice aligns perfectly with CORTEX's existing architecture. We're already 80% there — this enhancement adds the missing 20% (universal enforcement + VS Code Chat-specific optimizations) while **preserving** your requirement for CORTEX header on every response.
 >>>>>>> 1caf4d662 (Plan: Phase 103 Registry & Intelligence Consolidation (APPROVED))
 =======
-**Phase 103 is now ready to be re-implemented correctly** with proper preservation of the `_cortex-master/` vs `planning/` separation.
+**Phase 103 is now ready to be re-implemented correctly** with proper preservation of the `` vs `planning/` separation.
 >>>>>>> 11778f8fb (checkpoint: Phase 103 comprehensive planning + workflow complexity router)

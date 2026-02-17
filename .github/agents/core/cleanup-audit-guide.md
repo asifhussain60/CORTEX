@@ -83,7 +83,7 @@ cortex/orchestrators/master_orchestrator.py
 
 **Example:**
 ```
-cortex-registry/_cortex-master/phases/active/enh-082.yaml
+cortex-registry/phases/active/enh-082.yaml
   Classification: stale
   Phase: ENH-082
   Status: complete
@@ -152,7 +152,7 @@ Phases to Migrate: 12
 
 ## 🟡 Stale Files (Completed Phases Not Migrated)
 
-  - cortex-registry/_cortex-master/phases/active/enh-082.yaml
+  - cortex-registry/phases/active/enh-082.yaml
     Phase: ENH-082
     Recommendation: Migrate ENH-082 to completed/
 
@@ -188,7 +188,7 @@ summary:
   phases_to_migrate: 12
 
 stale_files:
-  - path: cortex-registry/_cortex-master/phases/active/enh-082.yaml
+  - path: cortex-registry/phases/active/enh-082.yaml
     classification: stale
     phase_id: ENH-082
     recommendation: Migrate ENH-082 to completed/
@@ -380,7 +380,7 @@ python3 -m cortex.cli.cleanup_auditor audit --workspace /path/to/CORTEX
 **Solution:** Ensure write permissions:
 
 ```bash
-chmod -R u+w cortex-registry/_cortex-master/phases/
+chmod -R u+w cortex-registry/phases/
 ```
 
 ### Issue: Orphaned file still imported

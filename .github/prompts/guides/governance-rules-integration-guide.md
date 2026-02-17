@@ -21,7 +21,7 @@
 | **EnforcementOrchestrator** | ✅ Integrated | Shows rules on violations | `cortex/orchestrators/core/enforcement_orchestrator.py` (line 1181+) |
 | **IntentRouter** | ✅ Integrated | Shows rules for routing decisions | `cortex/orchestrators/core/intent_router.py` (line 1858+) |
 | **Response Formatters** | ✅ Integrated | Renders business wisdom sections | `cortex/orchestrators/response/simple_response_formatter.py` (line 27) |
-| **Content Blocks Registry** | ✅ Complete | 7 reusable blocks (templates) | `cortex-registry/_cortex-master/core/templates/content-blocks.yaml` (604 LOC) |
+| **Content Blocks Registry** | ✅ Complete | 7 reusable blocks (templates) | `cortex-registry/core/templates/content-blocks.yaml` (604 LOC) |
 
 ### What's Missing (ENH-091 Scope)
 
@@ -80,7 +80,7 @@ InteractionOrchestrator.assemble_response(context)
 
 ### 1. Content Blocks Registry (NEW - ENH-091)
 
-**File:** `cortex-registry/_cortex-master/core/templates/content-blocks.yaml`
+**File:** `cortex-registry/core/templates/content-blocks.yaml`
 
 **Add Block Definition:**
 ```yaml
@@ -407,7 +407,7 @@ class RuleExposureTracker:
 ### Core Implementation
 - `cortex/interaction/business_wisdom_formatter.py` — Rule formatting (300 LOC, complete)
 - `cortex/orchestrators/core/interaction_orchestrator.py` — Response assembly (701 LOC)
-- `cortex-registry/_cortex-master/core/templates/content-blocks.yaml` — Block definitions (604 LOC)
+- `cortex-registry/core/templates/content-blocks.yaml` — Block definitions (604 LOC)
 
 ### Integration Points
 - `cortex/orchestrators/core/enforcement_orchestrator.py` (lines 1181-1223) — Violation context

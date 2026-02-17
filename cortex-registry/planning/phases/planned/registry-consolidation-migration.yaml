@@ -25,11 +25,11 @@ confidence: 9.5
 problem:
   description: |
     Registry structure has accumulated organizational debt:
-    1. **Unnecessary nesting**: `_cortex-master/` wrapper adds no value (legacy from initial setup)
+    1. **Unnecessary nesting**: `` wrapper adds no value (legacy from initial setup)
     2. **Duplicate workflows**: `templates/workflows/` duplicates `workflows/` (authoritative source)
-    3. **Scattered concerns**: Governance, config, wiring split across `_cortex-master/core/`
+    3. **Scattered concerns**: Governance, config, wiring split across `core/`
     4. **Hard to navigate**: 3-level nesting breaks natural human traversal
-    5. **30+ hardcoded paths**: Scripts/tests reference `_cortex-master/` directly
+    5. **30+ hardcoded paths**: Scripts/tests reference `` directly
     
   impact:
     - Developer confusion (2 workflow locations)
@@ -50,7 +50,7 @@ problem:
 goals:
   primary:
     - "Flatten registry structure (max 2 levels: domain/file.yaml)"
-    - "Eliminate _cortex-master/ wrapper (move contents to top-level domains)"
+    - "Eliminate  wrapper (move contents to top-level domains)"
     - "Delete duplicate templates/workflows/ (keep workflows/ as SSOT)"
     - "Preserve git history through git mv (not rm + create)"
     - "Update 30+ hardcoded path references"
@@ -68,7 +68,7 @@ success_criteria:
     - "Git history preserved (git log --follow works)"
     - "All 30+ path references updated"
     - "Duplicate workflows/ deleted"
-    - "_cortex-master/ fully eliminated"
+    - " fully eliminated"
     
   non_blocking:
     - "Navigation time reduced (subjective)"
@@ -84,7 +84,7 @@ stages:
     description: "Capture current state before any changes"
     tasks:
       - "Run full test suite → capture baseline"
-      - "Document all _cortex-master/ references (grep scan)"
+      - "Document all  references (grep scan)"
       - "Validate git history tracking works"
       - "Create backup branch (safety net)"
     deliverables:
@@ -110,12 +110,12 @@ stages:
     name: "Move Governance & Core Config (git mv)"
     description: "First migration wave: governance files"
     tasks:
-      - "git mv _cortex-master/core/governance/* governance/"
-      - "git mv _cortex-master/core/config/* config/"
-      - "git mv _cortex-master/core/wiring/* wiring/"
-      - "git mv _cortex-master/core/specifications/* specifications/"
-      - "git mv _cortex-master/core/meta/* config/"
-      - "git mv _cortex-master/core/personas.yaml config/"
+      - "git mv core/governance/* governance/"
+      - "git mv core/config/* config/"
+      - "git mv core/wiring/* wiring/"
+      - "git mv core/specifications/* specifications/"
+      - "git mv core/meta/* config/"
+      - "git mv core/personas.yaml config/"
     deliverables:
       - "Governance files moved (git history intact)"
     estimated_time: "10 minutes"
@@ -127,12 +127,12 @@ stages:
     name: "Move Metrics & Observability (git mv)"
     description: "Second migration wave: metrics domain"
     tasks:
-      - "git mv _cortex-master/baselines/* metrics/baselines/"
-      - "git mv _cortex-master/reports/* metrics/reports/"
-      - "git mv _cortex-master/dashboard/* metrics/dashboards/"
-      - "git mv _cortex-master/CORTEX-STATUS-*.yaml metrics/status/"
-      - "git mv _cortex-master/DEFERRED-PHASES-ROADMAP.yaml metrics/status/"
-      - "git mv _cortex-master/master-index.yaml metrics/status/"
+      - "git mv baselines/* metrics/baselines/"
+      - "git mv reports/* metrics/reports/"
+      - "git mv dashboard/* metrics/dashboards/"
+      - "git mv CORTEX-STATUS-*.yaml metrics/status/"
+      - "git mv DEFERRED-PHASES-ROADMAP.yaml metrics/status/"
+      - "git mv master-index.yaml metrics/status/"
     deliverables:
       - "Metrics files moved to new domain"
     estimated_time: "10 minutes"
@@ -141,9 +141,9 @@ stages:
     name: "Move Phases & Knowledge (git mv)"
     description: "Third migration wave: planning + knowledge"
     tasks:
-      - "git mv _cortex-master/phases/* planning/phases/"
-      - "git mv _cortex-master/knowledge/* knowledge/"
-      - "git mv _cortex-master/archive/* archive/"
+      - "git mv phases/* planning/phases/"
+      - "git mv knowledge/* knowledge/"
+      - "git mv archive/* archive/"
     deliverables:
       - "Phases moved to planning domain"
       - "Knowledge moved to top level"
@@ -154,10 +154,10 @@ stages:
     description: "Remove redundant directories"
     tasks:
       - "rm -rf templates/workflows/ (duplicate of workflows/)"
-      - "git rm -rf _cortex-master/ (now empty)"
+      - "git rm -rf  (now empty)"
       - "git rm -rf master/ (if exists)"
     deliverables:
-      - "_cortex-master/ eliminated"
+      - " eliminated"
       - "Duplicate workflows/ deleted"
     estimated_time: "5 minutes"
     
@@ -166,29 +166,29 @@ stages:
     description: "Update hardcoded paths in scripts and tests"
     files_to_update:
       - path: "scripts/wiring_health_report.py"
-        old: "_cortex-master/core/wiring/"
+        old: "core/wiring/"
         new: "wiring/"
       - path: "scripts/phase25_wiring_audit.py"
-        old: "_cortex-master/core/wiring/"
+        old: "core/wiring/"
         new: "wiring/"
       - path: "scripts/batch_generate_tests.py"
-        old: "_cortex-master/orchestrator_specs.json"
+        old: "orchestrator_specs.json"
         new: "metrics/status/orchestrator_specs.json"
       - path: "scripts/consolidate_phases.py"
-        old: "_cortex-master/index.yaml"
+        old: "index.yaml"
         new: "metrics/status/master-index.yaml"
       - path: "scripts/analyze_production_readiness.py"
-        old: "_cortex-master/index.yaml"
+        old: "index.yaml"
         new: "metrics/status/master-index.yaml"
       - path: "scripts/cleanup-nomenclature.py"
         old: "_cortex-master"
         new: "governance"
       - path: "tests/cortex/test_phase_executor_framework.py"
-        old: "_cortex-master/phases/active"
+        old: "phases/active"
         new: "planning/phases/active"
         occurrences: 11
       - path: "tests/e2e/test_phase_navigation.py"
-        old: "_cortex-master/dashboard/"
+        old: "dashboard/"
         new: "metrics/dashboards/"
       - path: ".cortex/verify-autonomous-setup.py"
         old: "_cortex-master"
@@ -259,7 +259,7 @@ stages:
       🏗️ REGISTRY CONSOLIDATION: Eliminate _cortex-master + deduplicate
       
       **Changes:**
-      - Flatten structure: _cortex-master/core/* → top-level domains
+      - Flatten structure: core/* → top-level domains
       - New domains: metrics/, config/, wiring/, specifications/
       - Move phases/ → planning/phases/
       - Delete duplicate: templates/workflows/ (keep workflows/)
@@ -452,7 +452,7 @@ red_green_refactor:
 definition_of_done:
   code:
     - "All stages S1-S11 complete"
-    - "_cortex-master/ deleted"
+    - " deleted"
     - "Duplicate templates/workflows/ deleted"
     - "30+ path references updated"
     

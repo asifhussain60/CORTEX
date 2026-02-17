@@ -2,13 +2,13 @@
 
 **Date:** 2026-02-17  
 **Status:** ✅ CORRECTED  
-**Issue:** Phase 103 incorrectly moved `_cortex-master/` contents to `planning/`, violating separation of concerns
+**Issue:** Phase 103 incorrectly moved `` contents to `planning/`, violating separation of concerns
 
 ---
 
 ## 🎯 Core Principle: Two Distinct Domains
 
-### 1️⃣ `_cortex-master/` - CORTEX Internal Development
+### 1️⃣ `` - CORTEX Internal Development
 
 **Purpose:** Plans, phases, governance, and knowledge **FOR DEVELOPING CORTEX ITSELF**  
 **Consumer:** `cortex-architect.prompt.md` + CORTEX agents (TDDOrchestrator, etc.)  
@@ -16,7 +16,7 @@
 
 ```
 cortex-registry/
-└── _cortex-master/           # ✅ PRESERVED - CORTEX self-development
+└──            # ✅ PRESERVED - CORTEX self-development
     ├── core/
     │   ├── governance/       # CORE-001 to CORE-056 rules
     │   ├── config/           # master-plan.yaml, workflows-index.yaml
@@ -76,12 +76,12 @@ stages:
 
 ```bash
 # VIOLATION: Moved CORTEX internal phases to user planning/
-mv cortex-registry/_cortex-master/phases/consolidated/*.yaml \
+mv cortex-registry/phases/consolidated/*.yaml \
    cortex-registry/planning/phases/consolidated/
 
-# VIOLATION: Broke _cortex-master/ structure
-rmdir cortex-registry/_cortex-master/phases/
-rmdir cortex-registry/_cortex-master/
+# VIOLATION: Broke  structure
+rmdir cortex-registry/phases/
+rmdir cortex-registry/
 ```
 
 **Result:** Lost separation between CORTEX self-development and user production work.
@@ -89,8 +89,8 @@ rmdir cortex-registry/_cortex-master/
 ### ✅ Corrected Structure (VALID)
 
 ```bash
-# CORRECT: _cortex-master/ stays intact
-ls cortex-registry/_cortex-master/phases/planned/phase-103*.yaml
+# CORRECT:  stays intact
+ls cortex-registry/phases/planned/phase-103*.yaml
 # → phase-103-registry-intelligence-consolidation.yaml ✅
 
 # CORRECT: planning/ is empty or contains only user plans
@@ -104,7 +104,7 @@ ls cortex-registry/planning/phases/
 
 ```
 cortex-registry/
-├── _cortex-master/           # ✅ CORTEX internal (cortex-architect.prompt.md)
+├──            # ✅ CORTEX internal (cortex-architect.prompt.md)
 │   ├── core/
 │   │   ├── governance/       # core-rules.yaml (CORE-001 to CORE-056)
 │   │   ├── config/           # master-plan.yaml, workflows-index.yaml
@@ -152,18 +152,18 @@ cortex-registry/
 
 **File:** `tests/unit/registry/test_phase_103_structure.py`
 
-### Test 1: `_cortex-master/` Structure Preserved
+### Test 1: `` Structure Preserved
 
 ```python
 def test_cortex_master_structure_preserved(self):
-    """Verify _cortex-master/ internal structure remains intact."""
+    """Verify  internal structure remains intact."""
     required_paths = [
-        "_cortex-master/core/governance",
-        "_cortex-master/core/config",
-        "_cortex-master/phases/planned",
-        "_cortex-master/phases/completed",
-        "_cortex-master/knowledge",
-        "_cortex-master/baselines",
+        "core/governance",
+        "core/config",
+        "phases/planned",
+        "phases/completed",
+        "knowledge",
+        "baselines",
     ]
     
     for path in required_paths:
@@ -174,9 +174,9 @@ def test_cortex_master_structure_preserved(self):
 
 ```python
 def test_planning_folder_separation(self):
-    """Verify planning/ folder is separate from _cortex-master/."""
-    # CORTEX internal phases stay in _cortex-master/
-    cortex_phase = registry / "_cortex-master/phases/planned/phase-103*.yaml"
+    """Verify planning/ folder is separate from ."""
+    # CORTEX internal phases stay in 
+    cortex_phase = registry / "phases/planned/phase-103*.yaml"
     assert cortex_phase.exists()
     
     # User planning/ should NOT contain CORTEX phases
@@ -189,8 +189,8 @@ def test_planning_folder_separation(self):
 
 ```python
 def test_no_duplicate_governance_rules(self):
-    """Ensure governance rules exist only in _cortex-master/core/governance."""
-    cortex_gov = registry / "_cortex-master/core/governance/core-rules.yaml"
+    """Ensure governance rules exist only in core/governance."""
+    cortex_gov = registry / "core/governance/core-rules.yaml"
     user_gov = registry / "governance/rules.yaml"
     
     assert cortex_gov.exists()
@@ -211,8 +211,8 @@ def test_no_duplicate_governance_rules(self):
 
 ```python
 def test_knowledge_base_structure(self):
-    """Verify CORTEX internal KB stays in _cortex-master/knowledge."""
-    cortex_kb = registry / "_cortex-master/knowledge"
+    """Verify CORTEX internal KB stays in knowledge."""
+    cortex_kb = registry / "knowledge"
     assert cortex_kb.exists()
     assert (cortex_kb / "config/orchestrator_specs.json").exists()
     
@@ -234,7 +234,7 @@ def test_knowledge_base_structure(self):
 from cortex.registry.registry import GitBackedRegistry
 
 registry = GitBackedRegistry(base_path="cortex-registry")
-rules = registry.load_yaml("_cortex-master/core/governance/core-rules.yaml")
+rules = registry.load_yaml("core/governance/core-rules.yaml")
 ```
 
 ### YAML References (Correct)
@@ -242,7 +242,7 @@ rules = registry.load_yaml("_cortex-master/core/governance/core-rules.yaml")
 ```yaml
 # ✅ CORRECT: Reference CORTEX phase in orchestrator
 phases:
-  - path: "_cortex-master/phases/planned/phase-103-registry-intelligence-consolidation.yaml"
+  - path: "phases/planned/phase-103-registry-intelligence-consolidation.yaml"
     status: "ACTIVE"
 ```
 
@@ -251,11 +251,11 @@ phases:
 ## 📊 Validation Commands
 
 ```bash
-# 1. Verify _cortex-master/ structure
+# 1. Verify  structure
 find cortex-registry/_cortex-master -type d | sort
 
-# 2. Check CORTEX phases stay in _cortex-master/
-ls cortex-registry/_cortex-master/phases/planned/*.yaml
+# 2. Check CORTEX phases stay in 
+ls cortex-registry/phases/planned/*.yaml
 
 # 3. Verify planning/ is for user work only
 ls cortex-registry/planning/phases/
@@ -272,20 +272,20 @@ grep -r "_cortex-master" cortex/ --include="*.py" | head -5
 
 ## ✅ Phase 103 Corrected Checklist
 
-- [x] `_cortex-master/` folder structure preserved
-- [x] CORTEX phases stay in `_cortex-master/phases/planned/`
+- [x] `` folder structure preserved
+- [x] CORTEX phases stay in `phases/planned/`
 - [x] `planning/` folder is empty or contains only user plans
-- [x] Governance rules remain in `_cortex-master/core/governance/`
-- [x] Knowledge stays in `_cortex-master/knowledge/`
+- [x] Governance rules remain in `core/governance/`
+- [x] Knowledge stays in `knowledge/`
 - [x] Golden tests validate separation
-- [x] Python imports use `_cortex-master/` prefix correctly
-- [x] YAML references use `_cortex-master/` paths
+- [x] Python imports use `` prefix correctly
+- [x] YAML references use `` paths
 
 ---
 
 ## 🎓 Key Learnings
 
-1. **`_cortex-master/` is for CORTEX self-development** (like `.github/` for CI)
+1. **`` is for CORTEX self-development** (like `.github/` for CI)
 2. **`planning/` is for user production repo work** (NOT CORTEX phases)
 3. **Separation prevents confusion** between framework development and user work
 4. **Golden tests enforce this boundary** in CI/CD

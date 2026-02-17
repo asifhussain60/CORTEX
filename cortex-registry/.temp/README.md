@@ -32,7 +32,7 @@
 **Auto-delete:** Files older than 7 days removed by `cleanup.sh`
 
 **Archive:** Failed or complex executions copied to:
-- `cortex-registry/_cortex-master/archive/executions/`
+- `cortex-registry/archive/executions/`
 
 **Manual Cleanup:** Run `./cleanup.sh` anytime
 

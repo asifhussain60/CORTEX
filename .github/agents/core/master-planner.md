@@ -308,7 +308,7 @@ def sync_master_plan():
     stages = current_task.parent_stage
     
     # Read master index
-    index = load_yaml("cortex-registry/_cortex-master/index.yaml")
+    index = load_yaml("cortex-registry/index.yaml")
     
     # Update phase status
     index.phases[phase.id].status = current_status()

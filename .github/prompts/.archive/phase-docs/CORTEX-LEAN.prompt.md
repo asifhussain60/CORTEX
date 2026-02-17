@@ -293,7 +293,7 @@ Reason: CORE-008 requires tests BEFORE code
 **Health Endpoints:** `http://localhost:8000/health`  
 **Metrics:** Prometheus format  
 **Audit Trail:** AC markers in all commits  
-**Dashboard:** `cortex-registry/_cortex-master/dashboard/`
+**Dashboard:** `cortex-registry/dashboard/`
 
 ---
 

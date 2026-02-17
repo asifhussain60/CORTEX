@@ -49,7 +49,7 @@ Tests: {passed}/{total} | Coverage: {pct}% | {duration}
 
 ### Tier 1: YAML Structural Rules (SSOT - Read-Only)
 
-**Location:** `cortex-registry/_cortex-master/index.yaml` (governance section)
+**Location:** `cortex-registry/index.yaml` (governance section)
 
 | Rule Category | Owner | Change Frequency | Examples |
 |---------------|-------|------------------|----------|
@@ -88,7 +88,7 @@ Tests: {passed}/{total} | Coverage: {pct}% | {duration}
 **New agents follow this pattern:**
 
 1. **Declare rule ownership:** "This agent owns X behavioral rule"
-2. **Reference YAML:** "Parameters from cortex-registry/_cortex-master/index.yaml"
+2. **Reference YAML:** "Parameters from cortex-registry/index.yaml"
 3. **No duplication:** Check CORTEX-AGENT-INDEX.md before defining new rule
 4. **Update audit checklist:** Add new rule to quarterly governance audit
 

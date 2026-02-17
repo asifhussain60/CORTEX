@@ -37,15 +37,15 @@ stages:
 ```yaml
 # ❌ DO NOT PUT CORTEX PHASES HERE
 # planning/phases/phase-103-registry-consolidation.yaml  ← WRONG
-# CORTEX phases belong in: cortex-registry/_cortex-master/phases/
+# CORTEX phases belong in: cortex-registry/phases/
 ```
 
 ---
 
 ## 🔗 Related
 
-- **CORTEX Internal Plans:** See `cortex-registry/_cortex-master/phases/`
-- **CORTEX Governance:** See `cortex-registry/_cortex-master/core/governance/`
+- **CORTEX Internal Plans:** See `cortex-registry/phases/`
+- **CORTEX Governance:** See `cortex-registry/core/governance/`
 - **Knowledge Base:** See `cortex-registry/knowledge-base/` (for onboarded repos)
 
 ---

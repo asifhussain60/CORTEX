@@ -1008,7 +1008,7 @@ RESULT: Phase found in registry (99% of cases)
 ### Registry Structure (SSOT for Phases)
 
 ```
-cortex-registry/_cortex-master/
+cortex-registry/
 ├── index.yaml                          # Master registry (phase list, status, dependencies)
 ├── phases/
 │   ├── active/                        # Current work
@@ -1250,7 +1250,7 @@ Result with audit trail (AC markers)
 **REQUIRED Fields to Update:**
 
 ```yaml
-# In cortex-registry/_cortex-master/index.yaml
+# In cortex-registry/index.yaml
 
 active_phases:
   - id: "phase-44"
@@ -1273,7 +1273,7 @@ active_phases:
 
 ```python
 # Step 1: Read current master index from registry
-index = read_file("cortex-registry/_cortex-master/index.yaml")
+index = read_file("cortex-registry/index.yaml")
 
 # Step 2: Identify phase being worked on
 phase_id = detect_current_phase()  # e.g., "phase-44"
@@ -1290,14 +1290,14 @@ updated_phase = update_phase_status(
 
 # Step 4: Write updated registry master index
 replace_string_in_file(
-    filePath="cortex-registry/_cortex-master/index.yaml",
+    filePath="cortex-registry/index.yaml",
     oldString=old_phase_block,
     newString=updated_phase_block
 )
 
 # Step 5: Commit sync
 run_in_terminal(
-    command='git add cortex-registry/_cortex-master/index.yaml; git commit -m "Plan sync: Phase {phase_id} - {stage_name} complete"',
+    command='git add cortex-registry/index.yaml; git commit -m "Plan sync: Phase {phase_id} - {stage_name} complete"',
     isBackground=False
 )
 ```
@@ -1346,23 +1346,23 @@ description: |
 
 ```bash
 # After completing Stage 4
-git add cortex-registry/_cortex-master/index.yaml
+git add cortex-registry/index.yaml
 git commit -m "Plan sync: Phase 44 S4 complete (25/25 tests ✅)"
 
 # After moving to Stage 5
-git add cortex-registry/_cortex-master/index.yaml
+git add cortex-registry/index.yaml
 git commit -m "Plan sync: Phase 44 S5 in progress"
 
 # After completing entire phase
-mv cortex-registry/_cortex-master/phases/active/phase-44-*.yaml \
-   cortex-registry/_cortex-master/phases/completed/
-git add cortex-registry/_cortex-master/
+mv cortex-registry/phases/active/phase-44-*.yaml \
+   cortex-registry/phases/completed/
+git add cortex-registry/
 git commit -m "Plan sync: Phase 44 complete (moved to completed/)"
 ```
 
 **Dashboard Auto-Sync Integration:**
 
-The master plan dashboard in cortex-registry/_cortex-master/dashboard/ reads from registry master index. Every sync automatically updates the dashboard view with zero additional work.
+The master plan dashboard in cortex-registry/dashboard/ reads from registry master index. Every sync automatically updates the dashboard view with zero additional work.
 
 ### Session Continuation Pattern
 
@@ -1454,11 +1454,11 @@ Dashboard Auto-Refresh
 # (sync protocol executed)
 
 # 3. Atomic commit of both
-git add cortex/ cortex-registry/_cortex-master/index.yaml
+git add cortex/ cortex-registry/index.yaml
 git commit -m "Phase 44 S5 complete: Component E ✅ + Plan sync"
 
 # 4. Verify sync accuracy
-grep "phase-44" cortex-registry/_cortex-master/index.yaml
+grep "phase-44" cortex-registry/index.yaml
 # Should show: status: in_progress, stages_complete: "5/6"
 ```
 
@@ -1466,7 +1466,7 @@ grep "phase-44" cortex-registry/_cortex-master/index.yaml
 
 ## 🎯 HEPTA-MODE OPERATION
 
-**Load from:** cortex-registry/_cortex-master/meta/ directory
+**Load from:** cortex-registry/meta/ directory
 
 Use Python loaders:
 ```python
@@ -1570,7 +1570,7 @@ If token usage > 400k before user request:
 - **Prompts:** .github/prompts/ directory
 - **Agents:** .github/agents/core/ directory  
 - **Knowledge:** cortex/knowledge/best-practices/ directory
-- **Registry:** cortex-registry/_cortex-master/ directory
+- **Registry:** cortex-registry/ directory
 - **Wiring:** cortex/wiring/specifications/ directory
 
 **Intent-Based Loading Pattern:**
@@ -1589,12 +1589,12 @@ If token usage > 400k before user request:
 **Authority:** Registry master index (Single Source of Truth)
 
 **Access:** 
-- Location: cortex-registry/_cortex-master/ directory
+- Location: cortex-registry/ directory
 - Auto-discovery: index.yaml with full metadata
 - Statistics: 19 total phases, 1 active enhancement, 16 completed
 
 **Dashboard:**
-- View: cortex-registry/_cortex-master/dashboard/ directory (Material.js glassmorphism)
+- View: cortex-registry/dashboard/ directory (Material.js glassmorphism)
 - Auto-sync: AUDIT triggers sync on variance >10% (silent sync >20%)
 - Tabs: Overview | Phases | Enhancements | Roadmap | Metrics
 
@@ -1606,7 +1606,7 @@ If token usage > 400k before user request:
 
 ## 🏗️ Response Header (MANDATORY)
 
-**Load from:** cortex-registry/_cortex-master/meta/ directory response format spec
+**Load from:** cortex-registry/meta/ directory response format spec
 
 Use Python loaders:
 ```python
@@ -1624,7 +1624,7 @@ status_icons = fmt.icons["status"]
 ---
 ```
 
-**Full details:** See cortex-registry/_cortex-master/meta/ directory for:
+**Full details:** See cortex-registry/meta/ directory for:
 - Icon system (status, priority, actions)
 - Structure requirements
 - Narrative flow standards
@@ -1990,7 +1990,7 @@ class HeaderConsistencyAgent(BaseAgent):
 
 ## 🛡️ CORE RULES
 
-**Load from:** cortex-registry/_cortex-master/governance/core-rules.yaml
+**Load from:** cortex-registry/governance/core-rules.yaml
 
 Use Python loaders:
 ```python
@@ -2017,7 +2017,7 @@ rules = load_core_rules()  # Returns CoreRulesYAML model
 ---
 ```
 
-**Full details:** See cortex-registry/_cortex-master/governance/core-rules.yaml
+**Full details:** See cortex-registry/governance/core-rules.yaml
 
 ---
 
@@ -2669,9 +2669,9 @@ All session summaries MUST follow this structure:
 
 **Registry Files:**
 - `.github/agents/core/response-template-generator.py` (197 LOC)
-- `cortex-registry/_cortex-master/meta/response-template-enhanced.yaml`
-- `cortex-registry/_cortex-master/meta/semantic-color-coding-section.yaml`
-- `cortex-registry/_cortex-master/meta/response-format.yaml`
+- `cortex-registry/meta/response-template-enhanced.yaml`
+- `cortex-registry/meta/semantic-color-coding-section.yaml`
+- `cortex-registry/meta/response-format.yaml`
 
 ### Color Technique Compatibility
 
@@ -2707,7 +2707,7 @@ Uses **emoji prefix method** (recommended for maximum compatibility):
 
 **Implementation:** `.github/agents/core/response-template-generator.py` (197 LOC)  
 **Integration Guide:** `.github/agents/core/RESPONSE-TEMPLATE-INTEGRATION.md` (420 LOC)  
-**Registry Manifest:** `cortex-registry/_cortex-master/meta/INTEGRATION-MANIFEST-002.md` (300 LOC)  
+**Registry Manifest:** `cortex-registry/meta/INTEGRATION-MANIFEST-002.md` (300 LOC)  
 **Authority:** cortex-architect.prompt.md v15.4 + ENH-053 (Semantic Response Coloring)
 
 ---
@@ -2900,7 +2900,7 @@ All Formats:
 **Trigger (AUTO-DETECT):** 
 1. `/plan` command explicitly invoked, OR
 2. User request mentions: "master plan", "review plan", "next phase", "phase priority", "ROI score", OR
-3. Working with cortex-registry/_cortex-master/ directory files, OR
+3. Working with cortex-registry/ directory files, OR
 4. Request involves phase selection/execution order decisions
 
 **Authority:** Registry master index (Single Source of Truth)  
@@ -3193,7 +3193,7 @@ Priority: 🔴 IMMEDIATE (≥ 0.75)
 ### Step 1: Load Pending Phases
 
 ```
-Load cortex-registry/_cortex-master/index.yaml
+Load cortex-registry/index.yaml
          ↓
 Filter: status IN [PLANNED, IN_PROGRESS, BLOCKED]
 ```
@@ -3346,7 +3346,7 @@ RETURN PHASE_CREATE  # No match found
 1. **✅ Verify Master Plan Sync** — MANDATORY FIRST STEP
    ```bash
    # Check index.yaml shows accurate status
-   grep "phase-{N}" cortex-registry/_cortex-master/index.yaml
+   grep "phase-{N}" cortex-registry/index.yaml
    
    # Verify:
    # - status: "completed" (not "in_progress")
@@ -3479,7 +3479,7 @@ User Request → PRE-FLIGHT CHECK
                     ↓
          Analyze user intent:
          - Patterns: "continue", "proceed", "phase N", "autonomously", "bypass challenge"
-         - Load _cortex-master/index.yaml
+         - Load index.yaml
          - Find next phase (in-progress or planned)
                     ↓
          [VALID CONTINUATION] → Generate autonomous header + SKIP re-challenge → Execute immediately
@@ -3680,7 +3680,7 @@ git config core.hooksPath .githooks 2>/dev/null || true
 
 ## Audit Checklist
 
-**Load from:** cortex-registry/_cortex-master/governance/audit-checklist.yaml
+**Load from:** cortex-registry/governance/audit-checklist.yaml
 
 Use Python loaders:
 ```python
@@ -3708,7 +3708,7 @@ p1_checks = checklist.priority_checks["P1"].checks
 - P2 LENS analysis is MANDATORY (`cortex_lens_analyze`, `cortex_detect_duplicates`)
 - NO "Not analyzed" statuses allowed
 
-**Full details:** See cortex-registry/_cortex-master/governance/audit-checklist.yaml
+**Full details:** See cortex-registry/governance/audit-checklist.yaml
 
 ---
 
@@ -3730,8 +3730,8 @@ p1_checks = checklist.priority_checks["P1"].checks
 **CRITICAL:** These checks run on EVERY request, not just AUDIT mode.
 
 **Load governance rules from:**
-- cortex-registry/_cortex-master/governance/core-rules.yaml — CORE rules definitions
-- cortex-registry/_cortex-master/governance/audit-checklist.yaml — Validation checks
+- cortex-registry/governance/core-rules.yaml — CORE rules definitions
+- cortex-registry/governance/audit-checklist.yaml — Validation checks
 
 **Key Enforcement:**
 - CORE-002: No markdown file generation → BLOCK + regenerate
@@ -4692,7 +4692,7 @@ Deployment + Git Commit
         ↓
 Re-Audit (within 24h)
         ↓
-Success Verification → Log to `cortex-registry/_cortex-master/enhancements/active/`
+Success Verification → Log to `cortex-registry/enhancements/active/`
         ↓
 [If still failing] → Escalate to P0 + Manual Intervention
 ```
@@ -4712,14 +4712,14 @@ Panels:
 
 **Purpose:** Validate that new functionality from active phases (_cortex-master) is properly wired, exposed via MCP, and integrated into MasterOrchestrator.
 
-**CRITICAL:** This check is CORTEX-specific. Load ONLY if project contains cortex-registry/_cortex-master/ directory.
+**CRITICAL:** This check is CORTEX-specific. Load ONLY if project contains cortex-registry/ directory.
 
 **Authority:** Registry master index + phases/active/ + enhancements/active/
 
 **Activation Condition:**
 ```python
 wiring_integrity_enabled = (
-    Path("cortex-registry/_cortex-master/index.yaml").exists() 
+    Path("cortex-registry/index.yaml").exists() 
     and Path("cortex/orchestrators/core/master_orchestrator.py").exists()
 )
 ```
@@ -4731,7 +4731,7 @@ import yaml
 from pathlib import Path
 
 # Load active phases + enhancements
-index_yaml = yaml.safe_load(Path("cortex-registry/_cortex-master/index.yaml").read_text())
+index_yaml = yaml.safe_load(Path("cortex-registry/index.yaml").read_text())
 active_phases = {p["id"]: p for p in index_yaml["active_phases"] if p["status"] in ["active", "planned"]}
 
 # For each active phase, check:
@@ -4806,7 +4806,7 @@ return wiring_gaps
 **Activation Condition:**
 ```python
 master_plan_validation_enabled = (
-    Path("cortex-registry/_cortex-master/index.yaml").exists()
+    Path("cortex-registry/index.yaml").exists()
     and len(active_phases) > 0  # Has active work
 )
 ```
@@ -4826,7 +4826,7 @@ def audit_master_plan_status():
         List of drift findings with severity and fix actions.
     """
     index_yaml = yaml.safe_load(
-        Path("cortex-registry/_cortex-master/index.yaml").read_text()
+        Path("cortex-registry/index.yaml").read_text()
     )
     
     drifts = []
@@ -4935,13 +4935,13 @@ def audit_master_plan_status():
 **Priority Fix (P0):**
 ```bash
 # Fix phase-43 status drift
-mv cortex-registry/_cortex-master/phases/active/phase-43-*.yaml \
-   cortex-registry/_cortex-master/phases/completed/
+mv cortex-registry/phases/active/phase-43-*.yaml \
+   cortex-registry/phases/completed/
 
 # Update index.yaml
 # (remove from active_phases, add to completed_phases_2026)
 
-git add cortex-registry/_cortex-master/
+git add cortex-registry/
 git commit -m "Fix: Phase 43 status drift - completed but marked planned"
 ```
 ```
@@ -4975,7 +4975,7 @@ if gap_detected:
 **WIRE-002: PLAN MODE Documentation (Phase-25)**
 ```python
 # Detection
-mode_yaml_exists = Path("cortex-registry/_cortex-master/meta").exists()
+mode_yaml_exists = Path("cortex-registry/meta").exists()
 plan_mode_in_prompt = grep_count("cortex-architect.prompt.md", r"MODE.*PLAN|PLAN MODE") > 0
 
 gap_detected = mode_yaml_exists and not plan_mode_in_prompt
@@ -4991,7 +4991,7 @@ if gap_detected:
 ```python
 # Detection
 yaml_loaders_exists = Path("cortex/brain/core/yaml_loaders.py").exists()
-yaml_files_exist = len(list(Path("cortex-registry/_cortex-master/governance").glob("*.yaml"))) > 0
+yaml_files_exist = len(list(Path("cortex-registry/governance").glob("*.yaml"))) > 0
 loads_used = grep_count("cortex-architect.prompt.md", r"from cortex.brain.core.yaml_loaders import") > 0
 
 gap_detected = yaml_files_exist and not yaml_loaders_exists and loads_used
@@ -5314,13 +5314,13 @@ cortex_process_request --module onboarding-gate-wiring --mode TDD
 **Verification:**
 ```bash
 # After fixes, re-run P6 audit
-cortex_audit --focus wiring-integrity --scope cortex-registry/_cortex-master/
+cortex_audit --focus wiring-integrity --scope cortex-registry/
 ```
 ```
 
 **Automated Continuous Monitoring:**
 
-P6 Wiring Integrity audit runs on EVERY AUDIT invocation if cortex-registry/_cortex-master/ exists. Auto-detects:
+P6 Wiring Integrity audit runs on EVERY AUDIT invocation if cortex-registry/ exists. Auto-detects:
 - New active phases (auto-add to wiring checks)
 - Missing MCP tools (auto-flag)
 - Test file gaps (CORE-008 violations)
@@ -5766,7 +5766,7 @@ Score < 5 → Continue to DESIGN MODE
 
 | Target | Condition | Action |
 |--------|-----------|--------|
-| `cortex-registry/_cortex-master/enhancements/active/` | Efficiency/Accuracy findings | Add ENH-* entries |
+| `cortex-registry/enhancements/active/` | Efficiency/Accuracy findings | Add ENH-* entries |
 | `cortex_intelligence/tier3/learnings/session-{timestamp}-{hash}.yaml` | Session has actionable learnings | Create artifact |
 | `company/domains/{domain}/patterns.yaml` | User domain knowledge detected | Extract pattern |
 | `cortex_intelligence/tier3/learnings/anti-patterns.yaml` | CORTEX-internal drifts | Document anti-pattern |
@@ -6138,7 +6138,7 @@ if not validate_design_boundary(current_mode="DESIGN", file_path="cortex/feature
 
 ### Trigger Patterns (STRICT - Must Meet ALL Criteria)
 1. **Explicit Phase Reference:** User says "continue phase N" or "phase N stage X"
-   - AND: Phase N exists in cortex-registry/_cortex-master/index.yaml
+   - AND: Phase N exists in cortex-registry/index.yaml
    - AND: Phase status is IN_PROGRESS or PLANNED
    - AND: Next stage is clearly defined in phase file
 2. **Post-Challenge Confirmation:** User says "proceed" AFTER Challenge Gate displayed
@@ -6234,8 +6234,8 @@ if result['notify_user']:
 - Roadmap (if modified in index.yaml)
 
 **Registry Structure:**
-- **Input:** cortex-registry/_cortex-master/index.yaml
-- **Output:** cortex-registry/_cortex-master/dashboard/data/plan-summary.json
+- **Input:** cortex-registry/index.yaml
+- **Output:** cortex-registry/dashboard/data/plan-summary.json
 - **Config:** index.yaml dashboard section (auto_sync, variance_threshold, sync_interval_seconds)
 
 ---
@@ -6376,7 +6376,7 @@ Returns: GateVerdict (PROCEED | BLOCK | CREATE_PHASE)
 1️⃣ **Modify Request** — Adjust scope to avoid contradiction
    └─ **Example:** {suggestion based on phase alignment}
 
-2️⃣ **Review Master Plan** — Check cortex-registry/_cortex-master/
+2️⃣ **Review Master Plan** — Check cortex-registry/
    └─ **File:** {conflicting_phase_file}
 
 3️⃣ **Override (Requires Justification)** — Type "override: {reason}"
@@ -6543,7 +6543,7 @@ Response to user (via templates)
 
 **EXCEPTION:** Challenge is **AUTOMATICALLY BYPASSED** in these SPECIFIC cases ONLY:
 1. **Phase Continuation:** User explicitly references existing phase ("continue phase 54", "phase 54 next stage")
-   - Registry check: Phase exists in _cortex-master/index.yaml with status IN_PROGRESS
+   - Registry check: Phase exists in index.yaml with status IN_PROGRESS
    - Evidence: Phase file shows incomplete stages
 2. **Post-Challenge Confirmation:** User says "proceed" AFTER Challenge Gate was displayed THIS SESSION
    - Session state: challenge_shown_for_request = True
@@ -6724,7 +6724,7 @@ Must consider:
 - **Maintainability:** Will a new team member understand this in 6 months?
 - **Documentation:** Is the approach self-documenting or needs wiki?
 - **Onboarding:** Does this make onboarding easier or harder?
-- **Evolution:** How does this support CORTEX's roadmap (cortex-registry/_cortex-master/index.yaml)?
+- **Evolution:** How does this support CORTEX's roadmap (cortex-registry/index.yaml)?
 
 ---
 
@@ -7274,7 +7274,7 @@ INJECT → CAPTURE → ANALYZE → FIX-PLAN → CLEANUP
 
 ### Enhancement Registry
 
-**Location:** cortex-registry/_cortex-master/enhancements/active/  
+**Location:** cortex-registry/enhancements/active/  
 **Update Frequency:** After every DESIGN/META-AUDIT  
 **Owner:** EnhancementRegistry orchestrator
 

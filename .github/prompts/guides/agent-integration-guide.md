@@ -1,6 +1,6 @@
 # Agent Integration Guide
 
-**Authority:** cortex-registry/_cortex-master/index.yaml PHASE-L  
+**Authority:** cortex-registry/index.yaml PHASE-L  
 **Created:** 2026-02-12  
 **AC-ID:** AC-PHASE-L-002
 
@@ -565,7 +565,7 @@ class TDDOrchestrator(OrchestratorAgentInvoker):
 ### Related Documentation
 
 - `.github/agents/core/` - Agent specifications
-- `cortex-registry/_cortex-master/index.yaml` - Phase tracking (PHASE-L)
+- `cortex-registry/index.yaml` - Phase tracking (PHASE-L)
 
 ---
 

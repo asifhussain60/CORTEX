@@ -204,7 +204,7 @@ Organizations may benefit from reduced request processing latency through the Co
 │                                    │                         │
 │  ┌─────────────────┐               │ extracts registry      │
 │  │ cortex-registry/│───────────────┤ generates MD updates   │
-│  │ _cortex-master/ │               │                         │
+│  │  │               │                         │
 │  └─────────────────┘               ▼                         │
 │                         ┌──────────────────────┐            │
 │                         │ _workspaces/         │            │
@@ -711,7 +711,7 @@ class HTMLSiteGenerator:
     
     def extract_templates_from_dashboard(self) -> None:
         """Extract Jinja2 templates from existing dashboard HTML."""
-        dashboard_path = Path("cortex-registry/_cortex-master/dashboard/index.html")
+        dashboard_path = Path("cortex-registry/dashboard/index.html")
         # Parse HTML and extract components
         # Create base.html.jinja2, components/*.html.jinja2
         pass
@@ -1599,7 +1599,7 @@ pip install --upgrade cortex
 ### Dashboard Integration
 
 **Reuse existing dashboard components:**
-- Glassmorphism CSS from `cortex-registry/_cortex-master/dashboard/assets/css/`
+- Glassmorphism CSS from `cortex-registry/dashboard/assets/css/`
 - D3.js diagrams from `dashboard/templates/`
 - Navigation patterns from `dashboard/index.html`
 

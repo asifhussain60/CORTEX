@@ -644,7 +644,7 @@ Check Autonomous Continuation (AutonomousPlanExecutor)
 Analyze user intent (STATE-AWARE):
 - Explicit phase reference: "continue phase N" + phase exists in registry (status: IN_PROGRESS)
 - OR: Post-challenge confirmation: "proceed" AFTER Challenge Gate shown THIS SESSION
-- Load _cortex-master/index.yaml for validation
+- Load index.yaml for validation
     ↓
 [VALID CONTINUATION] → Generate autonomous header + SKIP re-challenge → Execute immediately
     ├─ Format: Minimal header (1 line) + "Executing Phase X immediately..."
@@ -862,7 +862,7 @@ if intent in exempt_intents:
 
 **Authority:** CORTEX-CORE-049: Silent Autonomous Execution + CORTEX-CORE-048: Holistic Validation  
 **Owner:** This Agent (cortex-architect.md) — Orchestrates two-phase pattern  
-**YAML Reference:** See `governance.autonomous_execution.approval_workflow` in cortex-registry/_cortex-master/index.yaml  
+**YAML Reference:** See `governance.autonomous_execution.approval_workflow` in cortex-registry/index.yaml  
 **Agent Reference:** See cortex-holistic-validator.md for Challenge Gate implementation
 
 ### Two-Phase Pattern (MANDATORY)
@@ -959,7 +959,7 @@ Key flows:
 
 **Audit Keywords:** audit, scan, check, verify, health, wiring, governance  
 **Digest Markers:** User:, GitHub Copilot:, Searched for, Ran terminal command:, #file:  
-**Plan Keywords:** /plan, master plan, next phase, phase priority, ROI score, cortex-registry/_cortex-master/
+**Plan Keywords:** /plan, master plan, next phase, phase priority, ROI score, cortex-registry/
 
 ---
 

@@ -42,7 +42,7 @@ context:
     
   desired_state: |
     - WorkflowRuntime class executes template-based workflows
-    - Templates in _cortex-master/workflows/ (permanent)
+    - Templates in workflows/ (permanent)
     - Instances in cortex-registry/.temp/ (ephemeral, auto-delete 7 days)
     - cortex-architect.prompt.md uses complexity heuristic (toolkit vs workflow)
     - MCP tool: cortex_workflow_execute
@@ -85,16 +85,16 @@ architecture:
   workflow_flow: |
     1. User: "implement phase-104"
     2. cortex-architect: Analyze complexity → triggers workflow mode
-    3. WorkflowRuntime.load_template("_cortex-master/workflows/phase-execution.yaml")
+    3. WorkflowRuntime.load_template("workflows/phase-execution.yaml")
     4. WorkflowRuntime.hydrate(template, phase_params) → instance in .temp/
     5. ConvergenceLoopExecutor.run(instance) → execute stages with loops
     6. TempManager.schedule_cleanup(instance_file, days=7)
-    7. If failed: Archive to _cortex-master/archive/executions/
+    7. If failed: Archive to archive/executions/
 
   data_flow:
-    template_storage: "_cortex-master/workflows/"
+    template_storage: "workflows/"
     instance_storage: "cortex-registry/.temp/instances/"
-    archive_storage: "_cortex-master/archive/executions/"
+    archive_storage: "archive/executions/"
     git_tracking:
       templates: true
       instances: false
@@ -162,7 +162,7 @@ stages:
       - Coverage: 95%+
     
     validation:
-      - Can load YAML template from _cortex-master/workflows/
+      - Can load YAML template from workflows/
       - Hydration replaces {{param}} placeholders with phase values
       - Returns WorkflowInstance with unique request_id
 
@@ -243,7 +243,7 @@ stages:
       - .temp/ folder created in cortex-registry (not repo root)
       - Instance files named: {phase_id}-{timestamp}-{request_id}.yaml
       - Cleanup script deletes files >7 days old
-      - Archive function copies to _cortex-master/archive/executions/
+      - Archive function copies to archive/executions/
 
   - stage_id: "S4"
     name: "Workflow Templates Creation"
@@ -256,7 +256,7 @@ stages:
         schema_compliant: true
     
     deliverables:
-      - file: "_cortex-master/workflows/phase-execution.yaml"
+      - file: "workflows/phase-execution.yaml"
         description: "Main template for all CORTEX phase implementations"
         schema: |
           workflow:
@@ -287,10 +287,10 @@ stages:
                 orchestrator: "HolisticValidationOrchestrator"
                 convergence_gate: null
       
-      - file: "_cortex-master/workflows/tdd-cycle.yaml"
+      - file: "workflows/tdd-cycle.yaml"
         description: "RED→GREEN→REFACTOR sub-workflow"
       
-      - file: "_cortex-master/workflows/refactor-holistic.yaml"
+      - file: "workflows/refactor-holistic.yaml"
         description: "Cross-cutting refactoring sub-workflow"
     
     tests:
@@ -336,7 +336,7 @@ stages:
           **Execution Flow:**
           1. After DoR approval, check complexity
           2. If simple (<500 LOC, ≤5 stages, no loops) → Use Toolkit
-          3. If complex → Load workflow template from _cortex-master/workflows/
+          3. If complex → Load workflow template from workflows/
           4. Hydrate template → instance in .temp/
           5. Execute via WorkflowRuntime (silent autonomous)
       
@@ -436,7 +436,7 @@ success_metrics:
   - ".temp/ folder auto-cleanup working (verified with mock time)"
   - "MCP tool cortex_workflow_execute registered and callable"
   - "Zero bloat (no instance files >7 days old in .temp/)"
-  - "Templates versioned in _cortex-master/workflows/"
+  - "Templates versioned in workflows/"
 
 # ============================================================================
 # DEPENDENCIES & BLOCKING

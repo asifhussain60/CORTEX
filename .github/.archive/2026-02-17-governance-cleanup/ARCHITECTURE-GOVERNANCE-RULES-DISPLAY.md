@@ -122,7 +122,7 @@ OUTPUT (User sees in VSCode Copilot Chat):
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
 │                          CONTENT BLOCKS REGISTRY                             │
-│  cortex-registry/_cortex-master/core/templates/content-blocks.yaml          │
+│  cortex-registry/core/templates/content-blocks.yaml          │
 ├──────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │  blocks:                                                                     │
@@ -390,7 +390,7 @@ cortex/
       └─ SemanticBlockAssembler ← Uses content blocks
 
 cortex-registry/
-└─ _cortex-master/
+└─ 
    └─ core/
       ├─ templates/
       │  └─ content-blocks.yaml (ENHANCE - ADD BLOCK-GOVERNANCE-RULES)

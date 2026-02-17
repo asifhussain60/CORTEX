@@ -12,7 +12,7 @@ meta:
   source_files:
     - ".github/prompts/cortex-architect.prompt.md"
     - ".github/agents/core/cortex-auditor.md"
-    - "cortex-registry/_cortex-master/phases/active/phase-39-audit-mode-cohesion-integrity-system.yaml"
+    - "cortex-registry/phases/active/phase-39-audit-mode-cohesion-integrity-system.yaml"
   total_checks: 28
   phase_39_additions:
     - "P1.5-001 to P1.5-003: Prompt Cohesion"
@@ -463,7 +463,7 @@ priority_checks:
           - ".github/"
           - "README.md"
           - "LICENSE.md"
-          - "cortex-registry/_cortex-master/docs/"
+          - "cortex-registry/docs/"
         evidence_required: true
         auto_fix: true
         auto_fix_action: "Move to _workspaces/.archive/ or delete"

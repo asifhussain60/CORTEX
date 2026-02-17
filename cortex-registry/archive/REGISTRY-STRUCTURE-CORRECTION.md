@@ -13,7 +13,7 @@
 ### Before (CORRECT - Preserved):
 ```
 cortex-registry/
-├── _cortex-master/              ← CORTEX META-SYSTEM (Develops CORTEX itself)
+├──               ← CORTEX META-SYSTEM (Develops CORTEX itself)
 │   ├── phases/
 │   │   ├── planned/             ← phase-103, phase-104, etc
 │   │   ├── completed/           ← phase-90, phase-27, etc
@@ -52,7 +52,7 @@ Cannot distinguish between:
 ```
 cortex-registry/
 │
-├── _cortex-master/              🔵 CORTEX META-SYSTEM (Read-only by user agents)
+├──               🔵 CORTEX META-SYSTEM (Read-only by user agents)
 │   │
 │   ├── phases/                  ← CORTEX development lifecycle
 │   │   ├── planned/             ← phase-103, phase-104 (CORTEX features)
@@ -106,8 +106,8 @@ cortex-registry/
 │   └── [Company domains loaded at runtime]
 │
 ├── governance/                  🟡 SHARED GOVERNANCE (CORTEX + User)
-│   ├── core-rules.yaml          ← Symlink to _cortex-master/core/governance/
-│   └── audit-checklist.yaml     ← Symlink to _cortex-master/core/governance/
+│   ├── core-rules.yaml          ← Symlink to core/governance/
+│   └── audit-checklist.yaml     ← Symlink to core/governance/
 │
 ├── integration/                 🔶 RUNTIME INTEGRATION
 │   ├── mcp-gateway/
@@ -125,7 +125,7 @@ cortex-registry/
 │   ├── onboarding-workflow.yaml
 │   └── audit-workflow.yaml
 │
-├── master/                      🔵 LEGACY (Deprecated - Use _cortex-master/)
+├── master/                      🔵 LEGACY (Deprecated - Use )
 │
 ├── index.html                   🌐 Registry web viewer
 └── manifest.yaml                📋 Registry configuration
@@ -137,15 +137,15 @@ cortex-registry/
 
 | Folder | CORTEX Architect | User Agents | MCP Tools |
 |--------|------------------|-------------|-----------|
-| `_cortex-master/` | READ + WRITE | READ ONLY | READ ONLY |
+| `` | READ + WRITE | READ ONLY | READ ONLY |
 | `planning/` | READ + WRITE | READ + WRITE | READ + WRITE |
 | `domains/` | READ ONLY | READ ONLY | READ ONLY |
 | `governance/` | READ ONLY | READ ONLY | READ ONLY |
 
 **Enforcement:**
-- `_cortex-master/` modifications ONLY via `cortex-architect` agent
+- `` modifications ONLY via `cortex-architect` agent
 - `planning/` modifications by any CORTEX agent
-- Phase files in `_cortex-master/phases/planned/` are CORTEX development plans
+- Phase files in `phases/planned/` are CORTEX development plans
 - Phase files in `planning/phases/planned/` are user repository plans
 
 ---
@@ -157,7 +157,7 @@ cortex-registry/
 ```python
 def test_cortex_master_isolation():
     """Verify _cortex-master contains only CORTEX development plans."""
-    cortex_phases = Path("cortex-registry/_cortex-master/phases/planned").glob("*.yaml")
+    cortex_phases = Path("cortex-registry/phases/planned").glob("*.yaml")
     
     for phase_file in cortex_phases:
         with open(phase_file) as f:
@@ -190,7 +190,7 @@ def test_user_planning_isolation():
         # User plans should NOT modify CORTEX internals
         forbidden_keywords = ["cortex/orchestrators", "cortex/mcp", ".github/agents"]
         assert not any(kw in str(content) for kw in forbidden_keywords), \
-               f"{phase_file} references CORTEX internals (should use _cortex-master/)"
+               f"{phase_file} references CORTEX internals (should use )"
 ```
 
 ### Test 3: File Count Validation
@@ -198,11 +198,11 @@ def test_user_planning_isolation():
 ```python
 def test_phase_file_counts():
     """Verify phase files in correct namespaces."""
-    cortex_planned = len(list(Path("cortex-registry/_cortex-master/phases/planned").glob("*.yaml")))
+    cortex_planned = len(list(Path("cortex-registry/phases/planned").glob("*.yaml")))
     user_planned = len(list(Path("cortex-registry/planning/phases/planned").glob("*.yaml")))
     
     # CORTEX should have active development phases
-    assert cortex_planned >= 1, "Missing CORTEX development phases in _cortex-master/"
+    assert cortex_planned >= 1, "Missing CORTEX development phases in "
     
     # User planning may be empty (no user repos yet)
     assert user_planned >= 0, "Negative user phase count (impossible)"
@@ -216,14 +216,14 @@ def test_phase_file_counts():
 
 ```python
 def test_governance_symlinks():
-    """Verify governance/ symlinks point to _cortex-master/."""
+    """Verify governance/ symlinks point to ."""
     core_rules = Path("cortex-registry/governance/core-rules.yaml")
     
     if core_rules.exists():
-        # Should be symlink to _cortex-master/core/governance/
+        # Should be symlink to core/governance/
         assert core_rules.is_symlink(), "core-rules.yaml should be symlink"
         target = core_rules.resolve()
-        assert "_cortex-master/core/governance" in str(target), \
+        assert "core/governance" in str(target), \
                f"Symlink points to wrong location: {target}"
 ```
 
@@ -231,14 +231,14 @@ def test_governance_symlinks():
 
 ```python
 def test_cortex_architect_writes_to_master():
-    """Verify cortex-architect agent writes to _cortex-master/ only."""
+    """Verify cortex-architect agent writes to  only."""
     # Scan .github/agents/core/cortex-architect.md for file paths
     with open(".github/agents/core/cortex-architect.md") as f:
         content = f.read()
     
-    # Should reference _cortex-master/ for CORTEX plans
-    assert "_cortex-master/phases" in content, \
-           "cortex-architect should write to _cortex-master/"
+    # Should reference  for CORTEX plans
+    assert "phases" in content, \
+           "cortex-architect should write to "
     
     # Should NOT write to planning/ for CORTEX development
     if "planning/phases" in content:
@@ -271,7 +271,7 @@ def test_cortex_architect_writes_to_master():
 - [ ] Update .github/agents/core/cortex-architect.md (namespace rules)
 - [ ] Update .github/agents/core/CORTEX.md (intent routing rules)
 - [ ] Create cortex-registry/planning/repos/ structure
-- [ ] Verify all symlinks in governance/ point to _cortex-master/
+- [ ] Verify all symlinks in governance/ point to 
 - [ ] Run golden tests (100% pass required)
 - [ ] Update Phase 103 specification with corrected Stage 6
 - [ ] Mark Phase 103 as "blocked" until structure validated

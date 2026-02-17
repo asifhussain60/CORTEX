@@ -407,7 +407,7 @@ templates:
 # ============================================================================
 knowledge_sources:
   architect_mode:
-    - "cortex-registry/_cortex-master/knowledge/ (45+ YAMLs)"
+    - "cortex-registry/knowledge/ (45+ YAMLs)"
     - "CORTEX CORE rules (30 rules)"
     - "CORTEX architecture patterns"
   

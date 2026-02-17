@@ -7,10 +7,10 @@
 
 ## CORE-056: Internal Registry Blacklist Enforcement
 
-**Category:** Git Policy | **Severity:** P0-CRITICAL | **Scope:** cortex-registry/_cortex-master/
+**Category:** Git Policy | **Severity:** P0-CRITICAL | **Scope:** cortex-registry/
 
 **Mandate:**
-Files in `cortex-registry/_cortex-master/` containing internal planning artifacts MUST NOT appear in commits to origin/main.
+Files in `cortex-registry/` containing internal planning artifacts MUST NOT appear in commits to origin/main.
 
 **Scope (Blacklist):**
 - `index.yaml` (master phase index)
@@ -113,7 +113,7 @@ Public algorithms exported in `cortex/orchestrators/planning/models/` MUST maint
    - Adjust validation thresholds based on adoption patterns
 
 **Audit Trail:**
-- Coverage reports stored in `cortex-registry/_cortex-master/governance/model-export-coverage.yaml`
+- Coverage reports stored in `cortex-registry/governance/model-export-coverage.yaml`
 - Monthly report in governance directory
 - AC markers for model extraction: `AC_MODEL_EXPORT_START` → `AC_MODEL_EXPORT_COMPLETE`
 
@@ -130,7 +130,7 @@ Low quality exports create support burden and damage trust.
 
 ## CORE-058: Registry Separation Audit Trail
 
-**Category:** Audit & Compliance | **Severity:** P1-HIGH | **Scope:** cortex-registry/_cortex-master/
+**Category:** Audit & Compliance | **Severity:** P1-HIGH | **Scope:** cortex-registry/
 
 **Mandate:**
 All changes to internal registry artifacts MUST be logged with proper audit trail for governance visibility and compliance reporting.
@@ -172,7 +172,7 @@ class PhaseExecutionStrategy:
    - Example: `strategies: AC-PHASE-8-0212-001 Extract phase execution strategy`
 
 3. **Governance Database:** Monthly sync to master audit registry
-   - Location: `cortex-registry/_cortex-master/governance/CORE-058-audit-trail.yaml`
+   - Location: `cortex-registry/governance/CORE-058-audit-trail.yaml`
    - Aggregates: All AC markers from Phase 8 implementation
    - stages: Status (COMPLETE, IN-PROGRESS, BLOCKED)
 
@@ -250,7 +250,7 @@ User templates in `cortex/templates/planning/` MUST maintain same quality and go
 
 **Audit Trail:**
 - Template creation logged in governance registry
-- Monthly usage statistics in `cortex-registry/_cortex-master/governance/template-adoption.yaml`
+- Monthly usage statistics in `cortex-registry/governance/template-adoption.yaml`
 - Deprecation notices 90 days before removal
 - User feedback tracked for future template design
 

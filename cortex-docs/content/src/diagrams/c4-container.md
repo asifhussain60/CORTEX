@@ -238,7 +238,7 @@ graph LR
 
 ```
 cortex-registry/
-├── _cortex-master/           # Master phase index, dashboard data
+├──            # Master phase index, dashboard data
 ├── domains/                  # Domain-specific configuration
 ├── governance/               # CORE rules, audit checklists
 ├── interaction/              # Response templates, content blocks

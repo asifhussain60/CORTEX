@@ -53,7 +53,7 @@ User sees governance principles contextually, not punitively
 
 1. **BLOCK-GOVERNANCE-RULES** (NEW - ENH-091)
    - Semantic content block definition
-   - Location: `cortex-registry/_cortex-master/core/templates/content-blocks.yaml`
+   - Location: `cortex-registry/core/templates/content-blocks.yaml`
    - Status: To be created
    - Features: Intent mapping, context reasoning, max 3 rules
 

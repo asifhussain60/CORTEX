@@ -347,7 +347,7 @@ class HolisticValidationGate:
 **Definition:** File-based configuration system using Git as the storage backend. Eliminates need for PostgreSQL/MongoDB in production, providing version-controlled, auditable configuration with zero runtime database dependencies.
 
 **Registry Structure:** (cortex-registry/)
-- **_cortex-master/** — Master indices, phase definitions, enhancements
+- **** — Master indices, phase definitions, enhancements
 - **domains/** — Domain-specific knowledge graphs
 - **governance/** — Compliance rules, audit policies
 - **interaction/** — Content blocks, response templates

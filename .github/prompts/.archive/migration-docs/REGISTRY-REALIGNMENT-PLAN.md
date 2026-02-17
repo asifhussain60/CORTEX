@@ -18,7 +18,7 @@ Realign entire CORTEX system from historical wave/epic/feature complexity to sim
 
 **Current Structure:**
 ```
-cortex-registry/_cortex-master/
+cortex-registry/
 ├── work/
 │   ├── waves/              ← DEPRECATED
 │   │   ├── active/
@@ -31,7 +31,7 @@ cortex-registry/_cortex-master/
 
 **New Structure:**
 ```
-cortex-registry/_cortex-master/
+cortex-registry/
 ├── work/
 │   ├── phases/             ← PRIMARY (all phases here)
 │   │   ├── active/
@@ -116,12 +116,12 @@ HIERARCHY = {
 
 ```bash
 # 1. Archive phase files (preserve history)
-mkdir -p cortex-registry/_cortex-master/history/_archive/obsolete-plans/
-mv cortex-registry/_cortex-master/work/waves/* \
-   cortex-registry/_cortex-master/history/_archive/obsolete-plans/
+mkdir -p cortex-registry/history/_archive/obsolete-plans/
+mv cortex-registry/work/waves/* \
+   cortex-registry/history/_archive/obsolete-plans/
 
 # 2. Create deprecation notice
-cat > cortex-registry/_cortex-master/history/_archive/obsolete-plans/README.md <<EOF
+cat > cortex-registry/history/_archive/obsolete-plans/README.md <<EOF
 # Deprecated phase files
 
 **Deprecated:** 2026-02-14  
@@ -134,7 +134,7 @@ See: WAVE-TO-PHASE-MAPPING.yaml for new phase IDs
 EOF
 
 # 3. Create mapping file
-cat > cortex-registry/_cortex-master/history/_archive/obsolete-plans/WAVE-TO-PHASE-MAPPING.yaml <<EOF
+cat > cortex-registry/history/_archive/obsolete-plans/WAVE-TO-PHASE-MAPPING.yaml <<EOF
 # Wave → Phase Mapping
 # Generated: 2026-02-14
 # Authority: CORE-042 Simplification
@@ -234,13 +234,13 @@ grep -r "wave\|Wave\|WAVE" .github/agents/core/*.md | grep -v "deprecated"
 grep -r "wave\|Wave\|WAVE" .github/prompts/*.md | grep -v "deprecated"
 
 # 2. Verify archive exists
-ls -la cortex-registry/_cortex-master/history/_archive/obsolete-plans/
+ls -la cortex-registry/history/_archive/obsolete-plans/
 
 # 3. Verify mapping file
-cat cortex-registry/_cortex-master/history/_archive/obsolete-plans/WAVE-TO-PHASE-MAPPING.yaml
+cat cortex-registry/history/_archive/obsolete-plans/WAVE-TO-PHASE-MAPPING.yaml
 
 # 4. Verify README updated
-grep "Phase Status Summary" cortex-registry/_cortex-master/README.md
+grep "Phase Status Summary" cortex-registry/README.md
 
 # 5. Verify tests still pass
 pytest tests/ -v --tb=short

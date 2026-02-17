@@ -336,7 +336,7 @@ class SemanticIntentClassifier:
 
 **Immediate Actions (This Session):**
 1. Run pre-flight audit: `python scripts/audit_lens_migration.py`
-2. Review Phase 53 plan: [phase-53-lens-intelligence-upgrade.yaml](cortex-registry/_cortex-master/phases/active/phase-53-lens-intelligence-upgrade.yaml)
+2. Review Phase 53 plan: [phase-53-lens-intelligence-upgrade.yaml](cortex-registry/phases/active/phase-53-lens-intelligence-upgrade.yaml)
 3. Choose implementation approach
 
 **Short-term (1 week):**

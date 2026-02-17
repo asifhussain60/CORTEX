@@ -309,11 +309,11 @@ The phase creator integrates with `cortex-architect.prompt.md`:
 
 ### With Registry
 
-Phase specs sync with `cortex-registry/_cortex-master/`:
+Phase specs sync with `cortex-registry/`:
 
 ```
 cortex-registry/
-  _cortex-master/
+  
     phases/
       active/          # Current phases
         enh-084.yaml
@@ -406,7 +406,7 @@ tests:
 ## 📚 Related Documentation
 
 - **ENH-084 Specification:** Phase creation automation (see registry)
-- **Registry Master Index:** `cortex-registry/_cortex-master/index.yaml`
+- **Registry Master Index:** `cortex-registry/index.yaml`
 - **CORE-042:** Hierarchical terminology (PHASE→STAGE→TASK)
 
 ## 🆘 Troubleshooting

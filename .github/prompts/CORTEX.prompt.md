@@ -620,7 +620,7 @@ result = mcp_tool.execute(parameters)
 
 **BEFORE outputting any recommendation:**
 
-1. Load enhancements from cortex-registry/_cortex-master/enhancements/active/
+1. Load enhancements from cortex-registry/enhancements/active/
 2. Cross-check against `rejected_recommendations`
 3. Calculate regression risk score
 4. IF blocked → suppress recommendation, log reason

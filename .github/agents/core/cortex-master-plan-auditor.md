@@ -57,7 +57,7 @@ def audit_plan_reality_delta():
     report = SyncReport()
     
     # Step 1: Load master plan from registry
-    plan = load_phase_plan()  # From cortex-registry/_cortex-master/
+    plan = load_phase_plan()  # From cortex-registry/
     
     # Step 2: Query execution reality
     executed_phases = get_completed_phases()

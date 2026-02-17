@@ -249,7 +249,7 @@ def classify_question(text: str) -> QuestionType:
 
 4. **Related Topics** — Cross-reference:
    - Similar patterns in cortex-docs/patterns/
-   - Related enhancements in cortex-registry/_cortex-master/enhancements/
+   - Related enhancements in cortex-registry/enhancements/
    - Connected orchestrators in wiring.yaml
 
 ---

@@ -1213,7 +1213,7 @@ find cortex-docs\content\src -name "*.md" | sort
 
 ```bash
 # Extract design system from existing dashboard
-cat cortex-registry/_cortex-master/dashboard/index.html | \
+cat cortex-registry/dashboard/index.html | \
   grep -E "(class=|style=)" > /tmp/design_patterns.txt
 
 # Identify reusable components:
@@ -1232,7 +1232,7 @@ cat cortex-registry/_cortex-master/dashboard/index.html | \
 from pathlib import Path
 from bs4 import BeautifulSoup
 
-dashboard_html = Path("cortex-registry/_cortex-master/dashboard/index.html").read_text()
+dashboard_html = Path("cortex-registry/dashboard/index.html").read_text()
 soup = BeautifulSoup(dashboard_html, 'html.parser')
 
 # Extract base layout
@@ -1269,7 +1269,7 @@ base_template = f"""
 
 ### Step 2.5: Dark Glassmorphism Theme Integration (CRITICAL)
 
-**Purpose:** Extract and adapt the proven dark glassmorphism design from `cortex-registry/_cortex-master/dashboard/index.html` for use across all documentation pages.
+**Purpose:** Extract and adapt the proven dark glassmorphism design from `cortex-registry/dashboard/index.html` for use across all documentation pages.
 
 **Design System Extraction:**
 
@@ -3205,7 +3205,7 @@ Token-aware response formatter that prevents overflow:
 
 **GitBackedRegistry:**  
 YAML-based registry loader and wiring contract parser:
-- `load_orchestrators()`: Reads cortex-registry/_cortex-master/orchestrators/*.yaml
+- `load_orchestrators()`: Reads cortex-registry/orchestrators/*.yaml
 - `get_wiring_contract()`: Parses __wiring_contract__.yaml for counts and capabilities
 - `refresh_from_git()`: Re-syncs registry from Git (idempotent)
 

@@ -153,7 +153,7 @@ data = {
     "tests_total": 100,
     "tests_passing": 95,
     "_sources": {
-        "tests_total": Path("cortex-registry/_cortex-master/index.yaml"),
+        "tests_total": Path("cortex-registry/index.yaml"),
         "tests_passing": Path("test-results/summary.json")
     }
 }
@@ -326,10 +326,10 @@ dashboard_data = {
     "phases_total": 15,
     "phases_complete": 14,
     "_sources": {
-        "tests_total": Path("cortex-registry/_cortex-master/index.yaml"),
+        "tests_total": Path("cortex-registry/index.yaml"),
         "tests_passing": Path("test-results/summary.json"),
-        "phases_total": Path("cortex-registry/_cortex-master/index.yaml"),
-        "phases_complete": Path("cortex-registry/_cortex-master/index.yaml")
+        "phases_total": Path("cortex-registry/index.yaml"),
+        "phases_complete": Path("cortex-registry/index.yaml")
     }
 }
 

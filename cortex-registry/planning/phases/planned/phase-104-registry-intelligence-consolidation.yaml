@@ -91,7 +91,7 @@ objective: |
 business_value: |
   - 46% reduction in root-level folder sprawl (13 → 7 top-level registry folders)
   - 100% semantic clarity (brain terms match cognitive architecture)
-  - Eliminates 3 levels of unnecessary nesting (_cortex-master/core/templates/)
+  - Eliminates 3 levels of unnecessary nesting (core/templates/)
   - -53% file path length reduction
   - Industry-standard naming (artifacts/ not content/)
   - Comprehensive audit evidence via SQLite logging
@@ -225,7 +225,7 @@ structure_transformations:
   track_b_registry:
     before: |
       cortex-registry/
-      ├── _cortex-master/           ← ELIMINATE wrapper
+      ├──            ← ELIMINATE wrapper
       │   ├── core/
       │   │   ├── governance/
       │   │   ├── config/
@@ -249,12 +249,12 @@ structure_transformations:
       cortex-registry/
       ├── manifest.yaml             ← Updated registry index
       ├── core/                     🆕 System foundation
-      │   ├── governance/           ← MOVED from _cortex-master/core/governance/
-      │   ├── config/               ← MOVED from _cortex-master/core/config/
-      │   ├── wiring/               ← MOVED from _cortex-master/core/wiring/
-      │   └── specifications/       ← MOVED from _cortex-master/core/specifications/
+      │   ├── governance/           ← MOVED from core/governance/
+      │   ├── config/               ← MOVED from core/config/
+      │   ├── wiring/               ← MOVED from core/wiring/
+      │   └── specifications/       ← MOVED from core/specifications/
       ├── artifacts/                🆕 Templates + Workflows (renamed from content/)
-      │   ├── templates/            ← MOVED from _cortex-master/core/templates/
+      │   ├── templates/            ← MOVED from core/templates/
       │   │   ├── responses/
       │   │   ├── phases/
       │   │   └── documentation/
@@ -263,7 +263,7 @@ structure_transformations:
       │   ├── interaction/          ← MOVED from root interaction/
       │   └── patterns/             ← MOVED from root patterns/
       ├── planning/                 ← KEEP + add phases/
-      │   ├── phases/               ← MOVED from _cortex-master/phases/
+      │   ├── phases/               ← MOVED from phases/
       │   │   ├── planned/
       │   │   ├── completed/
       │   │   ├── deferred/
@@ -275,11 +275,11 @@ structure_transformations:
       │   ├── security/
       │   └── ...
       ├── metrics/                  🆕 Observability
-      │   ├── baselines/            ← MOVED from _cortex-master/baselines/
-      │   ├── reports/              ← MOVED from _cortex-master/reports/
-      │   ├── dashboards/           ← MOVED from _cortex-master/dashboard/
+      │   ├── baselines/            ← MOVED from baselines/
+      │   ├── reports/              ← MOVED from reports/
+      │   ├── dashboards/           ← MOVED from dashboard/
       │   └── status/               🆕 System health snapshots
-      └── archive/                  ← MOVED from _cortex-master/archive/
+      └── archive/                  ← MOVED from archive/
 
 # ============================================================================
 # ENFORCEMENT GATES
@@ -460,27 +460,27 @@ stages:
       - Delete _cortex-master wrapper
     commands:
       - "cd cortex-registry && mkdir -p core artifacts/templates integration metrics/status knowledge-base"
-      - "git mv _cortex-master/core/governance core/"
-      - "git mv _cortex-master/core/config core/"
-      - "git mv _cortex-master/core/wiring core/"
-      - "git mv _cortex-master/core/specifications core/"
-      - "git mv _cortex-master/core/templates/* artifacts/templates/"
+      - "git mv core/governance core/"
+      - "git mv core/config core/"
+      - "git mv core/wiring core/"
+      - "git mv core/specifications core/"
+      - "git mv core/templates/* artifacts/templates/"
       - "git mv interaction integration/"
       - "git mv patterns integration/"
-      - "git mv _cortex-master/phases planning/"
-      - "git mv _cortex-master/baselines metrics/"
-      - "git mv _cortex-master/reports metrics/"
-      - "git mv _cortex-master/dashboard metrics/dashboards"
-      - "git mv _cortex-master/CORTEX-STATUS-*.yaml metrics/status/"
-      - "git mv _cortex-master/DEFERRED-PHASES-ROADMAP.yaml metrics/status/"
-      - "git mv _cortex-master/knowledge/* knowledge-base/"
-      - "git mv _cortex-master/archive archive/"
+      - "git mv phases planning/"
+      - "git mv baselines metrics/"
+      - "git mv reports metrics/"
+      - "git mv dashboard metrics/dashboards"
+      - "git mv CORTEX-STATUS-*.yaml metrics/status/"
+      - "git mv DEFERRED-PHASES-ROADMAP.yaml metrics/status/"
+      - "git mv knowledge/* knowledge-base/"
+      - "git mv archive archive/"
       - "rm -rf _cortex-master"
       - "rm -rf templates/workflows"
       - "git mv workflows artifacts/"
       - "git commit -am 'refactor: decompose _cortex-master, create semantic registry structure'"
     acceptance_criteria:
-      - _cortex-master/ deleted
+      -  deleted
       - core/, artifacts/, integration/, metrics/, knowledge-base/ created
       - No duplicate workflows/
 
@@ -496,15 +496,15 @@ stages:
       - Update 144 Python files with new registry paths
       - Update _cortex-master → appropriate new paths
     commands:
-      - "find . -name '*.py' -type f -exec sed -i '' 's|_cortex-master/core/governance|core/governance|g' {} \\;"
-      - "find . -name '*.py' -type f -exec sed -i '' 's|_cortex-master/core/config|core/config|g' {} \\;"
-      - "find . -name '*.py' -type f -exec sed -i '' 's|_cortex-master/core/wiring|core/wiring|g' {} \\;"
-      - "find . -name '*.py' -type f -exec sed -i '' 's|_cortex-master/core/templates|artifacts/templates|g' {} \\;"
-      - "find . -name '*.py' -type f -exec sed -i '' 's|_cortex-master/phases|planning/phases|g' {} \\;"
-      - "find . -name '*.py' -type f -exec sed -i '' 's|_cortex-master/baselines|metrics/baselines|g' {} \\;"
-      - "find . -name '*.py' -type f -exec sed -i '' 's|_cortex-master/reports|metrics/reports|g' {} \\;"
-      - "find . -name '*.py' -type f -exec sed -i '' 's|_cortex-master/dashboard|metrics/dashboards|g' {} \\;"
-      - "find . -name '*.py' -type f -exec sed -i '' 's|_cortex-master/knowledge|knowledge-base|g' {} \\;"
+      - "find . -name '*.py' -type f -exec sed -i '' 's|core/governance|core/governance|g' {} \\;"
+      - "find . -name '*.py' -type f -exec sed -i '' 's|core/config|core/config|g' {} \\;"
+      - "find . -name '*.py' -type f -exec sed -i '' 's|core/wiring|core/wiring|g' {} \\;"
+      - "find . -name '*.py' -type f -exec sed -i '' 's|core/templates|artifacts/templates|g' {} \\;"
+      - "find . -name '*.py' -type f -exec sed -i '' 's|phases|planning/phases|g' {} \\;"
+      - "find . -name '*.py' -type f -exec sed -i '' 's|baselines|metrics/baselines|g' {} \\;"
+      - "find . -name '*.py' -type f -exec sed -i '' 's|reports|metrics/reports|g' {} \\;"
+      - "find . -name '*.py' -type f -exec sed -i '' 's|dashboard|metrics/dashboards|g' {} \\;"
+      - "find . -name '*.py' -type f -exec sed -i '' 's|knowledge|knowledge-base|g' {} \\;"
       - "find . -name '*.py' -type f -exec sed -i '' 's|cortex-registry/interaction|cortex-registry/integration/interaction|g' {} \\;"
       - "find . -name '*.py' -type f -exec sed -i '' 's|cortex-registry/patterns|cortex-registry/integration/patterns|g' {} \\;"
       - "git commit -am 'refactor: update all registry path references'"
@@ -524,8 +524,8 @@ stages:
       - Update YAML/MD files with new paths
       - Update manifest.yaml with new structure
     commands:
-      - "find cortex-registry -name '*.yaml' -type f -exec sed -i '' 's|_cortex-master/||g' {} \\;"
-      - "find . -name '*.md' -type f -exec sed -i '' 's|_cortex-master/||g' {} \\;"
+      - "find cortex-registry -name '*.yaml' -type f -exec sed -i '' 's|||g' {} \\;"
+      - "find . -name '*.md' -type f -exec sed -i '' 's|||g' {} \\;"
       - "git commit -am 'docs: update registry YAML/MD path references'"
     acceptance_criteria:
       - manifest.yaml reflects new structure
@@ -1615,9 +1615,9 @@ execution_summary:
   
   content_sources:
     knowledge:
-      - "cortex-registry/_cortex-master/knowledge/ui-ux/glassmorphism-design-standards.yaml"
-      - "cortex-registry/_cortex-master/knowledge/architecture/*.yaml"
-      - "cortex-registry/_cortex-master/knowledge/testing/*.yaml"
+      - "cortex-registry/knowledge/ui-ux/glassmorphism-design-standards.yaml"
+      - "cortex-registry/knowledge/architecture/*.yaml"
+      - "cortex-registry/knowledge/testing/*.yaml"
     
     design_inspiration:
       - "cortex-docs/index.html (glassmorphism patterns)"

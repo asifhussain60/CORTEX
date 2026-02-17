@@ -7,7 +7,7 @@
 [![MCP Tools: 24](https://img.shields.io/badge/MCP%20Tools-24-orange)](docs/11-mcp-tools/)
 [![Python: 3.9+](https://img.shields.io/badge/Python-3.9+-blue)](https://python.org)
 [![Tests: 15,633 Passing](https://img.shields.io/badge/Tests-15,633%20Passing-success)]()
-[![Status: Production Ready](https://img.shields.io/badge/Status-Production%20Ready-success)](cortex-registry/_cortex-master/CORTEX-STATUS-2026-02-14.yaml)
+[![Status: Production Ready](https://img.shields.io/badge/Status-Production%20Ready-success)](cortex-registry/CORTEX-STATUS-2026-02-14.yaml)
 
 ## 🚀 Recent Updates (2026-02-14)
 
@@ -166,7 +166,7 @@ result = agent.check_mcp_availability()
 print(f"MCP Available: {result.available} ({result.detection_method})")
 ```
 
-**Why MCP-FIRST?** Ensures TDD, security gates, and audit trails are never bypassed. See [CORE-050](cortex-registry/_cortex-master/governance/core-rules.yaml#L438) for details.
+**Why MCP-FIRST?** Ensures TDD, security gates, and audit trails are never bypassed. See [CORE-050](cortex-registry/governance/core-rules.yaml#L438) for details.
 
 ## Git Hooks
 

@@ -11,7 +11,7 @@
 ```
 cortex-registry/
 │
-├── _cortex-master/                      # ✅ CORTEX INTERNAL (Framework Development)
+├──                       # ✅ CORTEX INTERNAL (Framework Development)
 │   │                                    # Consumer: cortex-architect.prompt.md
 │   │                                    # Purpose: CORTEX self-development plans
 │   ├── core/
@@ -148,7 +148,7 @@ cortex-registry/
 
 ## 🎯 Key Separation Principles
 
-### 1️⃣ `_cortex-master/` - CORTEX Internal
+### 1️⃣ `` - CORTEX Internal
 
 | Folder | Purpose | Example |
 |--------|---------|---------|
@@ -182,16 +182,16 @@ cortex-registry/
 
 | Test | Validates |
 |------|-----------|
-| `test_cortex_master_structure_preserved` | All `_cortex-master/` folders exist |
+| `test_cortex_master_structure_preserved` | All `` folders exist |
 | `test_cortex_master_core_files_exist` | Critical YAML files present |
-| `test_cortex_phase_103_in_correct_location` | Phase 103 in `_cortex-master/phases/planned/` |
+| `test_cortex_phase_103_in_correct_location` | Phase 103 in `phases/planned/` |
 | `test_planning_folder_separation` | `planning/` doesn't contain `phase-*.yaml` |
 | `test_no_duplicate_governance_rules` | No rule ID overlap (CORE-001 only in CORTEX) |
-| `test_knowledge_base_structure` | CORTEX KB in `_cortex-master/knowledge/` |
-| `test_cortex_status_files_location` | Status files in `_cortex-master/` |
-| `test_baselines_in_cortex_master` | Baselines in `_cortex-master/baselines/` |
-| `test_master_index_location` | `master-index.yaml` in `_cortex-master/` |
-| `test_no_planning_in_cortex_master` | No user planning in `_cortex-master/` |
+| `test_knowledge_base_structure` | CORTEX KB in `knowledge/` |
+| `test_cortex_status_files_location` | Status files in `` |
+| `test_baselines_in_cortex_master` | Baselines in `baselines/` |
+| `test_master_index_location` | `master-index.yaml` in `` |
+| `test_no_planning_in_cortex_master` | No user planning in `` |
 | `test_planning_folder_exists_for_users` | `planning/` structure exists |
 
 **Run:** `pytest tests/unit/registry/test_phase_103_structure.py -v`
@@ -208,13 +208,13 @@ from cortex.registry.registry import GitBackedRegistry
 registry = GitBackedRegistry(base_path="cortex-registry")
 
 # ✅ CORRECT: Load CORTEX governance rules
-rules = registry.load_yaml("_cortex-master/core/governance/core-rules.yaml")
+rules = registry.load_yaml("core/governance/core-rules.yaml")
 
 # ✅ CORRECT: Load CORTEX phase
-phase = registry.load_yaml("_cortex-master/phases/planned/phase-103-registry-intelligence-consolidation.yaml")
+phase = registry.load_yaml("phases/planned/phase-103-registry-intelligence-consolidation.yaml")
 
 # ✅ CORRECT: Load CORTEX orchestrator specs
-specs = registry.load_json("_cortex-master/knowledge/config/orchestrator_specs.json")
+specs = registry.load_json("knowledge/config/orchestrator_specs.json")
 ```
 
 ### YAML References in CORTEX Plans
@@ -222,12 +222,12 @@ specs = registry.load_json("_cortex-master/knowledge/config/orchestrator_specs.j
 ```yaml
 # ✅ CORRECT: Reference CORTEX phase
 phases:
-  - path: "_cortex-master/phases/planned/phase-103-registry-intelligence-consolidation.yaml"
+  - path: "phases/planned/phase-103-registry-intelligence-consolidation.yaml"
     status: "ACTIVE"
 
 # ✅ CORRECT: Reference CORTEX governance
 governance:
-  rules_path: "_cortex-master/core/governance/core-rules.yaml"
+  rules_path: "core/governance/core-rules.yaml"
 ```
 
 ### User Production Plans
@@ -248,11 +248,11 @@ stages:
 ## ✅ Validation Commands
 
 ```bash
-# 1. Verify _cortex-master/ structure
+# 1. Verify  structure
 find cortex-registry/_cortex-master -type d -maxdepth 2 | sort
 
-# 2. Check CORTEX phases are in _cortex-master/
-ls cortex-registry/_cortex-master/phases/planned/*.yaml
+# 2. Check CORTEX phases are in 
+ls cortex-registry/phases/planned/*.yaml
 
 # 3. Verify planning/ is for user work only
 ls cortex-registry/planning/phases/
@@ -261,7 +261,7 @@ ls cortex-registry/planning/phases/
 # 4. Run golden tests
 pytest tests/unit/registry/test_phase_103_structure.py -v
 
-# 5. Check YAML files in _cortex-master/
+# 5. Check YAML files in 
 find cortex-registry/_cortex-master -name "*.yaml" | wc -l
 # Should be > 20
 ```
@@ -272,10 +272,10 @@ find cortex-registry/_cortex-master -name "*.yaml" | wc -l
 
 | Item | Status | Location |
 |------|--------|----------|
-| CORTEX phases | ✅ Preserved | `_cortex-master/phases/` |
-| CORTEX governance | ✅ Preserved | `_cortex-master/core/governance/` |
-| CORTEX knowledge | ✅ Preserved | `_cortex-master/knowledge/` |
-| CORTEX baselines | ✅ Preserved | `_cortex-master/baselines/` |
+| CORTEX phases | ✅ Preserved | `phases/` |
+| CORTEX governance | ✅ Preserved | `core/governance/` |
+| CORTEX knowledge | ✅ Preserved | `knowledge/` |
+| CORTEX baselines | ✅ Preserved | `baselines/` |
 | User planning | ✅ Created | `planning/` |
 | Golden tests | ✅ Added | `tests/unit/registry/test_phase_103_structure.py` |
 

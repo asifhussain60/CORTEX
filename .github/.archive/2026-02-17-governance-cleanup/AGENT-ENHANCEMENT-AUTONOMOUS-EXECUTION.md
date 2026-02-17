@@ -16,7 +16,7 @@ scope: "ALL AGENTS executing approved phases from execution_queue"
 
 ```yaml
 pre_execution_checklist:
-  - Step 1: Load execution_queue from cortex-registry/_cortex-master/index.yaml
+  - Step 1: Load execution_queue from cortex-registry/index.yaml
   - Step 2: Identify next executable phase via AutonomousPhaseExecutor.get_next_executable_phase()
   - Step 3: Check if approved_for_execution=true
   - Step 4: Load execution record for phase (if exists)
@@ -385,7 +385,7 @@ async def wait_for_parallel_siblings(phase_id: str):
 ### 1. Enable Autonomous Execution
 
 ```yaml
-# In cortex-registry/_cortex-master/index.yaml
+# In cortex-registry/index.yaml
 
 execution_queue:
   silent_mode:
@@ -420,7 +420,7 @@ python -m cortex.phase_management.autonomous_executor
 
 ```bash
 # Terminal 2: Monitor progress (tail logs)
-tail -f cortex-registry/_cortex-master/execution/logs/execution.log
+tail -f cortex-registry/execution/logs/execution.log
 
 # Or: Check execution status
 python -c "

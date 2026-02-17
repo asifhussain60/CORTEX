@@ -204,7 +204,7 @@ def sync_phase_completion(phase: Phase, execution_result: ExecutionResult):
     Called when a phase completes. Updates master plan registry.
     """
     # Step 1: Read current master index
-    index = read_yaml("cortex-registry/_cortex-master/index.yaml")
+    index = read_yaml("cortex-registry/index.yaml")
     
     # Step 2: Locate phase entry
     phase_obj = index.phases[phase.parent_phase]
@@ -226,7 +226,7 @@ def sync_phase_completion(phase: Phase, execution_result: ExecutionResult):
     phase_obj.last_updated = now()
     
     # Step 6: Write updated registry
-    write_yaml("cortex-registry/_cortex-master/index.yaml", index)
+    write_yaml("cortex-registry/index.yaml", index)
     
     # Step 7: Git commit (immutable history)
     git_commit(f"Plan sync: {phase.parent_phase}-{phase.parent_stage}-{phase.id} complete")

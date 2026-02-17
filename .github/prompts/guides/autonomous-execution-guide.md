@@ -362,7 +362,7 @@ class MasterOrchestrator:
 ## Related Documentation
 
 - `.github/copilot-instructions.md` § Silent Autonomous Execution
-- `cortex-registry/_cortex-master/index.yaml` § Phase-N specification
+- `cortex-registry/index.yaml` § Phase-N specification
 - `.github/prompts/CORTEX.prompt.md` § MCP-FIRST architecture
 
 ---

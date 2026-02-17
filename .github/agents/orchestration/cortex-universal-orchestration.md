@@ -352,7 +352,7 @@ STAGE 4: TDDOrchestrator
 
 ### ARCHITECT Mode (cortex-architect.prompt.md)
 - **Context:** CORTEX internal development
-- **Registry:** `cortex-registry/_cortex-master/`
+- **Registry:** `cortex-registry/`
 - **Focus:** System self-improvement
 - **Same orchestrators:** Uses identical Stage 1-4 pipeline
 

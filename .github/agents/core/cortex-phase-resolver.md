@@ -445,8 +445,8 @@ update_plan_status(
    - Master Plan Auditor: `cortex_audit_plan` + `cortex_execute_phase_autonomous`
 
 2. **Registry Integration:**
-   - Phase Resolver reads: `cortex-registry/_cortex-master/phases/`
-   - Plan Auditor reads/updates: `cortex-registry/_cortex-master/dashboard/plan-summary.json`
+   - Phase Resolver reads: `cortex-registry/phases/`
+   - Plan Auditor reads/updates: `cortex-registry/dashboard/plan-summary.json`
 
 3. **State Management:**
    - Resolver: Stateless (reads chat/registry only)
@@ -488,7 +488,7 @@ pytest tests/unit/orchestrators/core/test_phase_context_resolver.py --cov=cortex
 - `.github/prompts/cortex-architect.prompt.md` — DESIGN mode enhancement
 - `.github/agents/core/cortex-architect.md` — Workflow diagram update
 - `cortex/wiring/specifications/wiring.yaml` — Orchestrator registration
-- `cortex-registry/_cortex-master/enhancements/active/` — ENH-017 entry
+- `cortex-registry/enhancements/active/` — ENH-017 entry
 
 ---
 

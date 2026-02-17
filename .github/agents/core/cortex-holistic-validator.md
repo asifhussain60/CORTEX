@@ -93,7 +93,7 @@ Transform CORTEX governance from **reactive** to **proactive** with Phase 49 CCL
 
 **Authority:** CORTEX-CORE-048: Holistic Validation Gate (Phase 48)  
 **Owner:** This Agent (cortex-holistic-validator.md)  
-**YAML Reference:** See `governance.validation_rules` in cortex-registry/_cortex-master/index.yaml
+**YAML Reference:** See `governance.validation_rules` in cortex-registry/index.yaml
 
 ```
 User Request (IMPLEMENT/FIX/REFACTOR)
@@ -550,7 +550,7 @@ if tracker.should_block_if_degrades():
 
 | File | Purpose | Validation Points |
 |------|---------|-------------------|
-| `cortex-registry/_cortex-master/index.yaml` | Phase registry | Status, dependencies, ROI scores |
+| `cortex-registry/index.yaml` | Phase registry | Status, dependencies, ROI scores |
 | `cortex/wiring/specifications/wiring.yaml` | Orchestrator registry | Registrations, dependencies, MCP tools |
 | `.github/agents/AGENT-INDEX.md` | Agent inventory | Agent list, capabilities, load patterns |
 | `cortex_intelligence/onboarded_repos/` | Brain context | Repo configurations, tier mappings |
@@ -761,7 +761,7 @@ knowledge_tiers:
   tier0:
     - "cortex/governance/"
     - ".github/prompts/"
-    - "cortex-registry/_cortex-master/governance/"
+    - "cortex-registry/governance/"
   tier1:
     - "cortex/orchestrators/"
     - "cortex/mcp/"
@@ -839,7 +839,7 @@ Returns:
 ### Manual Holistic Validation (MCP Unavailable)
 
 1. **Registry Check:**
-   - Read `cortex-registry/_cortex-master/index.yaml`
+   - Read `cortex-registry/index.yaml`
    - Verify target phase/component exists
    - Check dependencies satisfied
 

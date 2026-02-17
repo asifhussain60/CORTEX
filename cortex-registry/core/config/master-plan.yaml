@@ -121,7 +121,7 @@ current_status:
     next_target: "85 files (50% reduction with VACUUM-2026-02-14)"
     
   archived:
-    location: "cortex-registry/_cortex-master/_archive/obsolete-plans/"
+    location: "cortex-registry/_archive/obsolete-plans/"
     count: 47  # Updated with new understanding
     scope: "AUTONOMOUS-PHASE-EXECUTION-*.md, PHASE-[0-9]-*, consolidated reports"
     note: "Only active Phase Execution files retained in _cortex-master root"
@@ -167,7 +167,7 @@ autonomous_execution_waves:
       - "Generate archive manifest (audit trail)"
     
     validation:
-      command: "ls -la cortex-registry/_cortex-master/ | wc -l"
+      command: "ls -la cortex-registry/ | wc -l"
       success_criteria: "≤25 files in root (includes . and ..)"
       tests: "CORE-002 compliance check (no markdown sprawl)"
     
@@ -463,7 +463,7 @@ references:
     - ".github/agents/core/CORTEX.md (Master Agent § MCP REQUIRED)"
     
   governance_framework:
-    - "cortex-registry/_cortex-master/GOVERNANCE-REMEDIATION-PLAN-2026-02-13.md"
+    - "cortex-registry/GOVERNANCE-REMEDIATION-PLAN-2026-02-13.md"
     - "CORE rules: CORE-002, CORE-008, CORE-028, CORE-035, CORE-051, CORE-052"
     - "MCP-FIRST: All operations through cortex_* tools"
     

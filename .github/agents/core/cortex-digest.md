@@ -203,7 +203,7 @@ If response contains any "Ran terminal command: cat" or "Created [" patterns →
 
 | Target | Update | Condition |
 |--------|--------|-----------|
-| `cortex-registry/_cortex-master/enhancements/active/` | Add new ENH-* entries | Efficiency/Accuracy findings |
+| `cortex-registry/enhancements/active/` | Add new ENH-* entries | Efficiency/Accuracy findings |
 | `cortex_intelligence/tier3/learnings/session-{timestamp}-{hash}.yaml` | Create session artifact | Session has learnings |
 | `company/domains/{domain}/patterns.yaml` | Extract new patterns | User domain knowledge |
 | `cortex_intelligence/tier3/learnings/anti-patterns.yaml` | Document anti-patterns | CORTEX-internal drifts |

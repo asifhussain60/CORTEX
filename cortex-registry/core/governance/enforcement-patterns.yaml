@@ -316,4 +316,4 @@ metrics:
     - "jsonc_corruption_prevented"
     - "holistic_validation_invocations"
   prometheus_namespace: "cortex_enforcement"
-  dashboard: "cortex-registry/_cortex-master/dashboard/"
+  dashboard: "cortex-registry/dashboard/"

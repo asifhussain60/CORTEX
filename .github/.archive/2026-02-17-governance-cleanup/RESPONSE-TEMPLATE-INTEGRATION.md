@@ -73,7 +73,7 @@ class MyOrchestrator:
 
 ### Step 2: Update Response Format Configuration
 
-**File:** `cortex-registry/_cortex-master/meta/response-format.yaml`
+**File:** `cortex-registry/meta/response-format.yaml`
 
 ```yaml
 response_format:
