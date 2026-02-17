@@ -1,7 +1,7 @@
 # CORTEX Master Orchestrator Prompt
 **Updated:** 2026-02-14 | **Authority:** MCP-First SaaS Architecture | **Status:** ✅ PRODUCTION | **Token Optimization:** ✅
 
-**🔗 Orchestration Reference:** See `.github/agents/orchestration/CORTEX-UNIVERSAL-ORCHESTRATION.md` for complete 4-stage pipeline documentation (Interaction → Intent → Intelligence → Execution).
+**🔗 Orchestration Reference:** See `.github/agents/orchestration/cortex-universal-orchestration.md` for complete 4-stage pipeline documentation (Interaction → Intent → Intelligence → Execution).
 
 ---
 
