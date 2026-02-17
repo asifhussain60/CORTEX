@@ -55,7 +55,7 @@ def fix_test_imports(test_file: Path) -> bool:
         content = test_file.read_text()
         original_content = content
         
-        # Find import blocks that import from cortex_intelligence.tier2
+        # Find import blocks that import from cortex_intelligence.memory.tier2_adaptive
         pattern = r'from cortex_intelligence\.tier2 import \(([\s\S]*?)\)'
         matches = list(re.finditer(pattern, content))
         

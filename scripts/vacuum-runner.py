@@ -14,8 +14,8 @@ from pathlib import Path
 CORTEX_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(CORTEX_ROOT))
 
-from cortex_intelligence.tier1.orchestrators.vacuum.orchestrator import VacuumOrchestrator
-from cortex_intelligence.tier1.orchestrators.cleaners import (
+from cortex_intelligence.memory.tier1_learned.orchestrators.vacuum.orchestrator import VacuumOrchestrator
+from cortex_intelligence.memory.tier1_learned.orchestrators.cleaners import (
     RootDatabaseCleaner,
     MarkdownSprawlCleaner,
     RootArtifactsCleaner,

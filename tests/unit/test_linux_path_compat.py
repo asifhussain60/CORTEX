@@ -18,7 +18,7 @@ from typing import Optional
 from unittest.mock import patch, MagicMock
 
 # RED Phase: These imports will fail until the implementation exists
-from cortex_intelligence.tier0.linux_path_compat import LinuxPathCompatibility
+from cortex_intelligence.memory.core.linux_path_compat import LinuxPathCompatibility
 
 
 class TestLinuxRelativePaths(unittest.TestCase):

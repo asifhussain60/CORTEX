@@ -11,7 +11,7 @@ Validates:
 import pytest
 
 try:
-    from cortex_intelligence.tier2 import (
+    from cortex_intelligence.memory.tier2_adaptive import (
         OutputDeterminismVerifier,
         ExecutionRecord,
         DeterminismAnalysis,

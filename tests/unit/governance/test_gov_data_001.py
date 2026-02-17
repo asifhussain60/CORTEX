@@ -1,6 +1,6 @@
 """Test for DATA-001: PII Detection"""
 import pytest
-from cortex_intelligence.tier2.governance.pii_detection import PIIDetector
+from cortex_intelligence.memory.tier2_adaptive.governance.pii_detection import PIIDetector
 
 class TestPIIDetection:
     def test_detect_email(self):

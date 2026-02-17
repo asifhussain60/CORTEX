@@ -17,7 +17,7 @@ from datetime import datetime
 import time
 import threading
 
-from cortex_intelligence.tier2.resilience import (
+from cortex_intelligence.memory.tier2_adaptive.resilience import (
     AlertManager,
     Alert,
     AlertSeverity,

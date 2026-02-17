@@ -11,7 +11,7 @@ Author: Asif Hussain
 """
 
 import pytest
-from cortex_intelligence.tier2.governance.core_030_baselines import (
+from cortex_intelligence.memory.tier2_adaptive.governance.core_030_baselines import (
     PerformanceSLA,
     PerformanceMonitor,
     ComplianceViolation,

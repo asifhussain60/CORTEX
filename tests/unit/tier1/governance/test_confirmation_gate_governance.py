@@ -1,7 +1,7 @@
 """Tests for Governance Rules and Audit Logging (AC-CONF-004-01)."""
 import pytest
 from datetime import datetime
-from cortex_intelligence.tier1.governance.confirmation_gate_rules import (
+from cortex_intelligence.memory.tier1_learned.governance.confirmation_gate_rules import (
     AuditTrailEntry,
     GovernanceRules,
     GovernanceEnforcer,

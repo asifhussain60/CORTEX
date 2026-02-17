@@ -22,7 +22,7 @@ from enum import Enum
 import uuid
 import json
 
-from cortex_intelligence.tier2.hallucination_prevention.confidence_scoring import (
+from cortex_intelligence.memory.tier2_adaptive.hallucination_prevention.confidence_scoring import (
     ConfidenceScorer,
     ConfidenceAssessment,
     ScoringFactor,

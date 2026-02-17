@@ -9,7 +9,7 @@ Validates:
 """
 
 import pytest
-from cortex_intelligence.tier2.governance.tool_description_validator import ToolDescriptionValidator
+from cortex_intelligence.memory.tier2_adaptive.governance.tool_description_validator import ToolDescriptionValidator
 
 
 class TestParameterSpec:
