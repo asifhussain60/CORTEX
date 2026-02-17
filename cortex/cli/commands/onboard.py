@@ -50,8 +50,8 @@ def onboard_repo(
         cortex onboard repo /path/to/repo --no-dashboard
 
     Output:
-        - Dashboard: company/dashboards/{name}/dashboard.html
-        - Landing:   company/dashboards/index.html
+        - Dashboard: cortex-registry/company/dashboards/{name}/dashboard.html
+        - Landing:   cortex-registry/company/dashboards/index.html
         - Analysis:  Console output with confidence scores
     """
     from cortex.orchestrators.support.repository_onboarding_orchestrator import (

@@ -109,7 +109,7 @@ def serve(repo_name: Optional[str], port: int, no_browser: bool, host: str) -> N
 
 @dashboard.command(name='generate')
 @click.option('--repo', '-r', required=True, type=click.Path(exists=True), help='Repository path')
-@click.option('--output', '-o', default='./company/dashboards/lens', type=click.Path(), help='Output directory')
+@click.option('--output', '-o', default='./cortex-registry/company/dashboards/lens', type=click.Path(), help='Output directory')
 def generate(repo: str, output: str) -> None:
     """
     Generate static HTML dashboard.
@@ -172,7 +172,7 @@ def generate(repo: str, output: str) -> None:
 
 
 @dashboard.command(name='clean')
-@click.option('--directory', '-d', default='./company/dashboards/lens', type=click.Path(exists=True),
+@click.option('--directory', '-d', default='./cortex-registry/company/dashboards/lens', type=click.Path(exists=True),
               help='Dashboard directory to clean')
 @click.option('--older-than', '-o', default=30, type=int,
               help='Remove dashboards older than N days (default: 30)')

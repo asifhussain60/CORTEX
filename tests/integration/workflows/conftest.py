@@ -164,8 +164,8 @@ def production_context(modern_nodejs_api_profile: Dict[str, Any]) -> Dict[str, A
             "auth": "OAuth2 + JWT",
             "logging": "Winston",
         },
-        "knowledge_source": "company/domains/api-design-standards.yaml",
-        "security_standards": "company/domains/security-standards.yaml",
+        "knowledge_source": "cortex-registry/company/domains/api-design-standards.yaml",
+        "security_standards": "cortex-registry/company/domains/security-standards.yaml",
     }
 
 

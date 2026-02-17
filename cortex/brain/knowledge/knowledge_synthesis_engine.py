@@ -972,7 +972,7 @@ class KnowledgeSynthesisEngine:
 
             # Layer 1: Company domains (highest priority)
             for tech in sorted(pattern_tech):
-                recommendations.append(f"company/domains/{tech}/best-practices.yaml")
+                recommendations.append(f"cortex-registry/company/domains/{tech}/best-practices.yaml")
 
             # Layer 2: Domain-specific CORTEX
             for tech in sorted(pattern_tech):

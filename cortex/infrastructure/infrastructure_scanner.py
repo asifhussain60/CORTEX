@@ -5,7 +5,7 @@ AC_START: AC-INFRA-SCANNER-S3-001
 Authority: phase-46 Stage 3 - Infrastructure Scanner
 Description: Discovers APIs, tools, services from health checks and registries.
              Performs environment-specific capability detection and merges with
-             company/domains/infrastructure best practices (PRECEDENCE).
+             cortex-registry/company/domains/infrastructure best practices (PRECEDENCE).
 """
 
 import json

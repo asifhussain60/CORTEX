@@ -9,12 +9,12 @@ This module provides company-specific knowledge loading with proper
 precedence to ensure company policies override generic CORTEX knowledge.
 
 Precedence Order (highest to lowest):
-1. company/domains/{company-name}/compliance/  - Company-specific overrides
-2. company/domains/compliance-standards/       - Generic industry standards
+1. cortex-registry/company/domains/{company-name}/compliance/  - Company-specific overrides
+2. cortex-registry/company/domains/compliance-standards/       - Generic industry standards
 3. cortex_intelligence/tier3/knowledge/               - CORTEX base knowledge
 
 Core Responsibilities:
-1. Load company-specific knowledge YAMLs from company/domains/
+1. Load company-specific knowledge YAMLs from cortex-registry/company/domains/
 2. Merge with CORTEX knowledge using deep merge strategy
 3. Enforce precedence: higher layer overrides lower
 4. Support lazy loading for performance
@@ -193,8 +193,8 @@ class CompanyKnowledgeLoader:
     """
 
     # Default paths (relative to project root)
-    COMPANY_DOMAINS_PATH = "cortex-registry/company/domains"
-    COMPLIANCE_STANDARDS_PATH = "cortex-registry/company/domains/compliance-standards"
+    COMPANY_DOMAINS_PATH = "cortex-registry/cortex-registry/company/domains"
+    COMPLIANCE_STANDARDS_PATH = "cortex-registry/cortex-registry/company/domains/compliance-standards"
     CORTEX_KNOWLEDGE_PATH = "cortex_intelligence/tier3/knowledge"
 
     def __init__(

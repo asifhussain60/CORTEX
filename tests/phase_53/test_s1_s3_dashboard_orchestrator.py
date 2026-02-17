@@ -69,7 +69,7 @@ class TestDashboardGeneration:
         
         result = DashboardGenerationResult(
             success=True,
-            dashboard_path=Path("company/dashboards/data/test-repo.json"),
+            dashboard_path=Path("cortex-registry/company/dashboards/data/test-repo.json"),
             generation_time_ms=150
         )
         
@@ -90,7 +90,7 @@ class TestDashboardGeneration:
         
         result = DashboardGenerationResult(
             success=True,
-            dashboard_path=Path("company/dashboards/data/repo.json"),
+            dashboard_path=Path("cortex-registry/company/dashboards/data/repo.json"),
             metrics=metrics
         )
         
@@ -104,7 +104,7 @@ class TestDashboardGeneration:
         
         result = DashboardGenerationResult(
             success=True,
-            dashboard_path=Path("company/dashboards/data/empty.json"),
+            dashboard_path=Path("cortex-registry/company/dashboards/data/empty.json"),
             metrics={"file_count": 0}
         )
         
@@ -130,7 +130,7 @@ class TestDashboardGeneration:
         
         result = DashboardGenerationResult(
             success=True,
-            dashboard_path=Path("company/dashboards/data/repo.json"),
+            dashboard_path=Path("cortex-registry/company/dashboards/data/repo.json"),
             audit_trail_id="AC-PHASE53-S2-GEN-001"
         )
         
@@ -143,7 +143,7 @@ class TestDashboardGeneration:
         
         result = DashboardGenerationResult(
             success=True,
-            dashboard_path=Path("company/dashboards/data/repo.json"),
+            dashboard_path=Path("cortex-registry/company/dashboards/data/repo.json"),
             generation_time_ms=245
         )
         
@@ -156,13 +156,13 @@ class TestDashboardGeneration:
         
         result1 = DashboardGenerationResult(
             success=True,
-            dashboard_path=Path("company/dashboards/data/repo.json"),
+            dashboard_path=Path("cortex-registry/company/dashboards/data/repo.json"),
             metrics={"hash": "abc123"}
         )
         
         result2 = DashboardGenerationResult(
             success=True,
-            dashboard_path=Path("company/dashboards/data/repo.json"),
+            dashboard_path=Path("cortex-registry/company/dashboards/data/repo.json"),
             metrics={"hash": "abc123"}
         )
         
@@ -174,14 +174,14 @@ class TestDashboardCaching:
 
     def test_dashboard_cache_stores_result(self):
         """S3 Test 11: Dashboard cache stores generation result"""
-        cache = {"repo-1": Path("company/dashboards/data/repo-1.json")}
+        cache = {"repo-1": Path("cortex-registry/company/dashboards/data/repo-1.json")}
         
         assert "repo-1" in cache
-        assert cache["repo-1"] == Path("company/dashboards/data/repo-1.json")
+        assert cache["repo-1"] == Path("cortex-registry/company/dashboards/data/repo-1.json")
 
     def test_dashboard_cache_retrieves_cached(self):
         """S3 Test 12: Dashboard cache retrieves previously cached result"""
-        cache = {"repo-1": Path("company/dashboards/data/repo-1.json")}
+        cache = {"repo-1": Path("cortex-registry/company/dashboards/data/repo-1.json")}
         
         # Simulate cache hit
         result = cache.get("repo-1")
@@ -192,7 +192,7 @@ class TestDashboardCaching:
         from datetime import datetime, timedelta
         
         cache_entry = {
-            "path": Path("company/dashboards/data/repo.json"),
+            "path": Path("cortex-registry/company/dashboards/data/repo.json"),
             "timestamp": datetime.now()
         }
         

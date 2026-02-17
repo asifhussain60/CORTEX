@@ -13,8 +13,8 @@ architecture patterns, and domain-specific expertise.
 
 ENHANCED (KN-005-01): Now integrates with CompanyKnowledgeLoader to support
 company-specific knowledge overrides with proper precedence:
-  1. company/domains/{company}/  - Company-specific overrides (highest)
-  2. company/domains/compliance-standards/  - Industry standards (medium)
+  1. cortex-registry/company/domains/{company}/  - Company-specific overrides (highest)
+  2. cortex-registry/company/domains/compliance-standards/  - Industry standards (medium)
   3. cortex_intelligence/tier3/knowledge/  - CORTEX base knowledge (lowest)
 
 Core Responsibilities:
@@ -510,8 +510,8 @@ class KnowledgeRepository:
         code content.
 
         Precedence Order:
-          1. company/domains/{company}/  - Company-specific (highest)
-          2. company/domains/compliance-standards/  - Industry standards
+          1. cortex-registry/company/domains/{company}/  - Company-specific (highest)
+          2. cortex-registry/company/domains/compliance-standards/  - Industry standards
           3. cortex_intelligence/tier3/knowledge/  - CORTEX base (lowest)
 
         Args:

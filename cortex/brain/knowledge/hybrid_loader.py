@@ -6,7 +6,7 @@ Version: 1.0
 Date: 2026-01-26
 
 This module implements the hybrid knowledge architecture:
-1. YAML files (.knowledge-index.yaml, company/domains/) are git-tracked source of truth
+1. YAML files (.knowledge-index.yaml, cortex-registry/company/domains/) are git-tracked source of truth
 2. SQLite cache (.cortex/knowledge.db) is local ephemeral cache (gitignored)
 3. Automatic rebuild on git pull via post-merge hook
 4. Explicit composition rules from .knowledge-synthesis-rules.yaml

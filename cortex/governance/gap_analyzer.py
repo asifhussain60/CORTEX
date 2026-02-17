@@ -140,7 +140,7 @@ class GapAnalyzer:
                 lines.append(f"#### `{gap.domain}/{gap.subdomain}.yaml`")
                 lines.append(f"- **Used by:** {gap.used_by}")
                 lines.append(f"- **Fallback:** {gap.fallback_source}")
-                lines.append(f"- **Recommendation:** Define company-specific {gap.subdomain} patterns in `company/domains/{gap.domain}/{gap.subdomain}.yaml`")
+                lines.append(f"- **Recommendation:** Define company-specific {gap.subdomain} patterns in `cortex-registry/company/domains/{gap.domain}/{gap.subdomain}.yaml`")
                 lines.append("")
 
         markdown = "\n".join(lines)

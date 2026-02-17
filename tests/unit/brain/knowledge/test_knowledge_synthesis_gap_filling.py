@@ -146,7 +146,7 @@ class TestKnowledgeSynthesisGapFilling:
 
                 # First recommendation should be company layer
                 if recommendations:
-                    assert recommendations[0].startswith('company/domains/')
+                    assert recommendations[0].startswith('cortex-registry/company/domains/')
 
     def test_fill_gaps_handles_exception(self, engine):
         """Fill gaps should handle exceptions gracefully."""

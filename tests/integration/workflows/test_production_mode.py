@@ -135,7 +135,7 @@ class TestProductionModeResolution:
     ) -> None:
         """AC-P100-S4-T3-007: company/domains/api-design-standards.yaml drives API output."""
         # Arrange
-        assert production_context["knowledge_source"] == "company/domains/api-design-standards.yaml"
+        assert production_context["knowledge_source"] == "cortex-registry/company/domains/api-design-standards.yaml"
         assert production_context["patterns"]["api"] == "RESTful + OpenAPI 3.0"
 
     def test_production_mode_security_standards_drive_auth(
@@ -143,7 +143,7 @@ class TestProductionModeResolution:
     ) -> None:
         """AC-P100-S4-T3-008: company/domains/security-standards.yaml drives auth patterns."""
         # Arrange
-        assert production_context["security_standards"] == "company/domains/security-standards.yaml"
+        assert production_context["security_standards"] == "cortex-registry/company/domains/security-standards.yaml"
         assert production_context["patterns"]["auth"] == "OAuth2 + JWT"
 
     def test_production_mode_onboarded_profile_drives_frameworks(

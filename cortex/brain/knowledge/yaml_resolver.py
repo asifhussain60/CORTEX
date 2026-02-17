@@ -6,7 +6,7 @@ Purpose: Map detected tech stacks to relevant knowledge YAML files with company 
 
 Features:
 - Maps tech_stack → YAML files (python → [python.yaml, pytest.yaml])
-- Company precedence (company/domains/ > cortex/knowledge/best-practices/)
+- Company precedence (cortex-registry/company/domains/ > cortex/knowledge/best-practices/)
 - Multi-stack support (monorepos with Python + React)
 - Fuzzy matching ('python3' → 'python')
 - Framework dependency resolution (Flask → Python)

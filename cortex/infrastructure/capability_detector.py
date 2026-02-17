@@ -4,7 +4,7 @@ Environment-specific capability detection for CORTEX orchestrators.
 AC_START: AC-INFRA-CAPABILITY-S3-002
 Authority: phase-46 Stage 3 - Capability Detector
 Description: Detects available capabilities in each environment and merges
-             with company/domains/infrastructure best practices (PRECEDENCE).
+             with cortex-registry/company/domains/infrastructure best practices (PRECEDENCE).
 """
 
 from dataclasses import dataclass

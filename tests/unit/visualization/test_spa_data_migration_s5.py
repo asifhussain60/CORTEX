@@ -286,11 +286,11 @@ class TestLegacyFileCleanup:
     def test_identify_legacy_files_to_delete(self, temp_data_dir):
         """TEST: Identify all legacy HTML files for deletion."""
         legacy_files = [
-            "company/dashboards/repos/alist/index.html",
-            "company/dashboards/repos/cortex/index.html",
-            "company/dashboards/repos/kashkole/index.html",
-            "company/dashboards/repos/ksessions/index.html",
-            "company/dashboards/repos/noor canvas/index.html"
+            "cortex-registry/company/dashboards/repos/alist/index.html",
+            "cortex-registry/company/dashboards/repos/cortex/index.html",
+            "cortex-registry/company/dashboards/repos/kashkole/index.html",
+            "cortex-registry/company/dashboards/repos/ksessions/index.html",
+            "cortex-registry/company/dashboards/repos/noor canvas/index.html"
         ]
         
         # Verify files identified correctly
@@ -338,11 +338,11 @@ class TestLegacyFileCleanup:
             "operation": "legacy_file_cleanup",
             "start_time": datetime.now().isoformat(),
             "deleted_files": [
-                "company/dashboards/repos/alist/index.html",
-                "company/dashboards/repos/cortex/index.html",
-                "company/dashboards/repos/kashkole/index.html",
-                "company/dashboards/repos/ksessions/index.html",
-                "company/dashboards/repos/noor canvas/index.html"
+                "cortex-registry/company/dashboards/repos/alist/index.html",
+                "cortex-registry/company/dashboards/repos/cortex/index.html",
+                "cortex-registry/company/dashboards/repos/kashkole/index.html",
+                "cortex-registry/company/dashboards/repos/ksessions/index.html",
+                "cortex-registry/company/dashboards/repos/noor canvas/index.html"
             ],
             "end_time": datetime.now().isoformat(),
             "status": "completed"

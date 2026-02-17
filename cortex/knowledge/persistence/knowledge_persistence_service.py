@@ -2,7 +2,7 @@
 KnowledgePersistenceService — Auto-generates domain YAMLs from repo onboarding.
 
 Transforms repository onboarding results into persistent domain artifacts
-in company/domains/{repository}/ directory. Enables cross-session knowledge
+in cortex-registry/company/domains/{repository}/ directory. Enables cross-session knowledge
 retention and learning.
 
 AC_START: AC-MEGA-A-S2-001

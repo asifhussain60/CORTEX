@@ -124,7 +124,7 @@ class TestInterfaceContractModel(unittest.TestCase):
                 values=["CRITICAL", "HIGH", "MEDIUM", "LOW"]
             ),
             javascript_side=LayerSpec(
-                file="company/dashboards/spa/js/constants.js",
+                file="cortex-registry/company/dashboards/spa/js/constants.js",
                 type_name="Severity",
                 values=["critical", "high", "medium", "low"]
             ),

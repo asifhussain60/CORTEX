@@ -117,7 +117,7 @@ class TestFileClassifier:
         """Test classification of company data files."""
         classifier = FileClassifier()
         
-        category, signals = classifier.classify("company/dashboards/lens/output.json")
+        category, signals = classifier.classify("cortex-registry/company/dashboards/lens/output.json")
         
         assert category == FileCategory.COMPANY_DATA
         assert signals.reference_signal[0] == FileCategory.COMPANY_DATA

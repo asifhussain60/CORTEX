@@ -74,7 +74,7 @@ class TestDataLoader:
     
     def test_data_loader_initialization(self):
         """S2.T5: DataLoader initializes with correct configuration"""
-        data_dir = "company/dashboards/data"
+        data_dir = "cortex-registry/company/dashboards/data"
         loader_config = {
             "data_dir": data_dir,
             "cache_enabled": True,

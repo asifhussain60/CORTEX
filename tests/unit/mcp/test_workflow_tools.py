@@ -261,7 +261,7 @@ class TestAuditTrailCapture:
                 {
                     "event": "AC_START",
                     "knowledge_sources": [
-                        "company/domains/api-design-standards.yaml",
+                        "cortex-registry/company/domains/api-design-standards.yaml",
                         "cortex_intelligence/onboarded_repos/my_repo_enhanced.json",
                     ],
                 },
@@ -279,7 +279,7 @@ class TestAuditTrailCapture:
         # Assert
         assert audit_log["events"][0]["event"] == "AC_START"
         assert len(audit_log["events"][0]["knowledge_sources"]) == 2
-        assert "company/domains/" in audit_log["events"][0]["knowledge_sources"][0]
+        assert "cortex-registry/company/domains/" in audit_log["events"][0]["knowledge_sources"][0]
 
 
 class TestUserExperienceSeamless:

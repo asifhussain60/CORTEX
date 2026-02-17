@@ -15,7 +15,7 @@ def main():
     
     # Setup
     domain_name = "kashkole"
-    domain_path = Path("company/dashboards/kashkole")
+    domain_path = Path("cortex-registry/company/dashboards/kashkole")
     domain_path.mkdir(parents=True, exist_ok=True)
     
     # Create generator

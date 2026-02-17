@@ -269,7 +269,7 @@ class PolicyEnricher:
             Dictionary with policy context data
         """
         # Placeholder for actual policy analysis
-        # In production, would load company/domains governance
+        # In production, would load cortex-registry/company/domains governance
         return {
             "compliance_checklist": [],
             "policy_references": [],

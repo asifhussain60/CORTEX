@@ -35,7 +35,7 @@ class CompanyKnowledge:
     Company rules take precedence over CORTEX best practices.
     """
 
-    domain_rules: Dict[str, Any]  # Company-specific rules from company/domains/
+    domain_rules: Dict[str, Any]  # Company-specific rules from cortex-registry/company/domains/
     compliance_standards: List[str]  # PCI-DSS, HIPAA, SOC2 detection
     precedence: str  # "OVERRIDE" - company rules override CORTEX
 

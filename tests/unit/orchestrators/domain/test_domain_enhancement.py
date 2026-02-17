@@ -115,7 +115,7 @@ class TestDomainEnhancementOrchestrator:
         orchestrator = DomainEnhancementOrchestrator()
         
         validation = orchestrator.validate_domain(
-            domain_path='company/domains/test-domain.yaml'
+            domain_path='cortex-registry/company/domains/test-domain.yaml'
         )
         
         assert 'valid' in validation

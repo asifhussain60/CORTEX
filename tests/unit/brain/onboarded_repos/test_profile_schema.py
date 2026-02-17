@@ -160,7 +160,7 @@ def test_repository_profile_company_domains_detection():
         onboarded_at=datetime.now(),
         structure=RepositoryStructure(
             has_company_domains=True,
-            company_domains_path="company/domains/",
+            company_domains_path="cortex-registry/company/domains/",
             domains_detected=["security/", "testing/", "api-standards/"]
         )
     )

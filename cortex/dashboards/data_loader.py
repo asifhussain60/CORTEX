@@ -52,7 +52,7 @@ class DataLoader:
     Load repository dashboard data from JSON files with intelligent caching
 
     Features:
-    - Load from company/dashboards/data/{repo}.json
+    - Load from cortex-registry/company/dashboards/data/{repo}.json
     - 5-minute TTL caching with age tracking
     - LRU eviction for memory efficiency
     - Graceful error handling
@@ -63,7 +63,7 @@ class DataLoader:
     CACHE_TTL_MS = 5 * 60 * 1000  # 5 minutes
     MAX_CACHE_SIZE = 50  # Maximum cache entries before LRU cleanup
 
-    def __init__(self, data_dir: str = "cortex-registry/company/dashboards/data"):
+    def __init__(self, data_dir: str = "cortex-registry/cortex-registry/company/dashboards/data"):
         self.data_dir = Path(data_dir)
         self.cache: Dict[str, CacheEntry] = {}
         self.cache_hits = 0

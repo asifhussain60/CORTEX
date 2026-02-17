@@ -142,7 +142,7 @@ def test_kashkole_dashboard():
     }
     
     # Generate dashboard
-    domain_path = Path("company/domains/kashkole")
+    domain_path = Path("cortex-registry/company/domains/kashkole")
     generator = DomainDashboardGenerator(
         domain_name="kashkole",
         domain_path=domain_path

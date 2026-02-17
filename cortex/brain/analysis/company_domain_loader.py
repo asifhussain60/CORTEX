@@ -1,7 +1,7 @@
 """
 CompanyDomainLoader - Dynamic YAML domain knowledge loader.
 
-Loads company-specific domain knowledge from company/domains/**/*.yaml at runtime.
+Loads company-specific domain knowledge from cortex-registry/company/domains/**/*.yaml at runtime.
 Provides domain-specific patterns, compliance standards, and best practices to orchestrators.
 
 AC-ID: AC-LENS-V2-COMPANY-DOMAIN-001
@@ -42,7 +42,7 @@ class CompanyDomainLoader:
     """
     Dynamic loader for company domain knowledge YAMLs.
 
-    Scans company/domains/**/*.yaml and loads domain-specific:
+    Scans cortex-registry/company/domains/**/*.yaml and loads domain-specific:
     - Compliance standards (PCI-DSS, HIPAA, SOC2, etc.)
     - Coding patterns and anti-patterns
     - Architecture guidelines
@@ -65,15 +65,15 @@ class CompanyDomainLoader:
         Initialize CompanyDomainLoader.
 
         Args:
-            company_domains_path: Path to cortex-registry/company/domains directory
-                                  (defaults to ./cortex-registry/company/domains)
+            company_domains_path: Path to cortex-registry/cortex-registry/company/domains directory
+                                  (defaults to ./cortex-registry/cortex-registry/company/domains)
         """
-        self.company_domains_path = company_domains_path or Path("cortex-registry/company/domains")
+        self.company_domains_path = company_domains_path or Path("cortex-registry/cortex-registry/company/domains")
         self._domains_cache: Dict[str, DomainKnowledge] = {}
 
     def load_all_domains(self, force_reload: bool = False) -> CompanyDomainResult:
         """
-        Load all domain YAMLs from company/domains/**/*.yaml.
+        Load all domain YAMLs from cortex-registry/company/domains/**/*.yaml.
 
         Args:
             force_reload: Force reload even if cached

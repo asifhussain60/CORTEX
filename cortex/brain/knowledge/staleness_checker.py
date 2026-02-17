@@ -109,7 +109,7 @@ class StalenessChecker:
                     f"Add documentation for: {', '.join(sorted(missing))}"
                 )
                 recommendations.append(
-                    "Update company/domains/ or cortex/knowledge/ with missing tech YAMLs"
+                    "Update cortex-registry/company/domains/ or cortex/knowledge/ with missing tech YAMLs"
                 )
 
             # Determine severity
@@ -194,7 +194,7 @@ class StalenessChecker:
                 f"{missing_tech}-best-practices.yaml"
             )
             recs.append(
-                f"Add {missing_tech} patterns to company/domains/*/best-practices.yaml"
+                f"Add {missing_tech} patterns to cortex-registry/company/domains/*/best-practices.yaml"
             )
 
         return recs
