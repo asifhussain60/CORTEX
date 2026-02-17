@@ -1,0 +1,84 @@
+# MCP Enforcement Rules
+# Authority: CORE-049 + MCP-FIRST + MCP-GATE
+# Updated: 2026-02-17
+# Purpose: Define MCP activation requirements and enforcement levels
+
+enforcement:
+  mandatory_entry_point: cortex_process_request
+  bypass_forbidden: true
+  
+  # Intent-based MCP requirements
+  intent_requirements:
+    blocking:  # MCP required, block if unavailable
+      - IMPLEMENT
+      - FIX
+      - REFACTOR
+      - AUDIT
+      - ANALYZE
+      - PLAN
+    
+    exempt:  # MCP optional, always allowed
+      - DIAGNOSE
+      - QUERY
+      - SETUP
+      - LIST
+      - RECALL
+
+  # Detection methods (fallback chain)
+  detection_methods:
+    - name: tool_registry
+      priority: 1
+      description: "Query Copilot tool registry for cortex_* tools"
+      threshold: 28  # Minimum tools expected
+    
+    - name: environment_variable
+      priority: 2
+      description: "Check CORTEX_MCP_ENABLED environment variable"
+      expected_value: "true"
+    
+    - name: configuration_file
+      priority: 3
+      description: "Verify .vscode/settings.json MCP server config"
+      path: ".vscode/settings.json"
+      required_key: "github.copilot.chat.mcpServers.cortex"
+
+  # Orchestrator context validation
+  context_validation:
+    required_source: "MasterOrchestrator"
+    reject_if_missing: true
+    audit_trail_required: true
+
+  # Availability status responses
+  status_responses:
+    available:
+      icon: "✅"
+      message: "MCP Available: {tool_count} tools registered"
+      action: continue
+    
+    partial:
+      icon: "⚠️"
+      message: "MCP Partial: {tool_count}/{expected_count} tools available"
+      action: warn_and_continue
+    
+    unavailable:
+      icon: "❌"
+      message: "MCP Not Available: Setup required"
+      action: halt_and_show_instructions
+
+# Setup instructions (referenced when MCP unavailable)
+setup:
+  script_path: ".cortex/setup-mcp.py"
+  guide_path: ".github/prompts/MCP-SETUP-GUIDE.md"
+  
+  steps:
+    - "Run: python .cortex/setup-mcp.py"
+    - "Reload VS Code: Developer: Reload Window"
+    - "Verify: Check .cortex/setup.log for '✅ SETUP COMPLETE'"
+
+# Cross-platform considerations
+platform_handling:
+  path_resolution: true  # Resolve ${workspaceFolder} at runtime
+  venv_detection: 
+    - ".venv/bin/python"  # macOS/Linux
+    - ".venv/Scripts/python.exe"  # Windows
+  settings_not_committed: true  # .vscode/settings.json in .gitignore

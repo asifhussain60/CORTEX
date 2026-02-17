@@ -853,6 +853,8 @@ Verdict: PASS / FAIL
 **Trigger:** Session start + before ANY IMPLEMENT/FIX/REFACTOR intent  
 **Requirement:** ZERO exceptions — MCP MUST be available or session HALTS
 
+**Configuration Source (SSOT):** `cortex-registry/governance/mcp-enforcement.yaml`
+
 ### MCP Activation Sequence (Every Session)
 
 ```
