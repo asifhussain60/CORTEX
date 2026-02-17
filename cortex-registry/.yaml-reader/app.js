@@ -7,9 +7,14 @@
 const state = {
     loadedFiles: [],
     currentFile: null,
-    currentView: 'tree',
+    currentView: 'overview', // Default to overview instead of tree
     explorerTab: 'loaded',
-    recentFiles: []
+    recentFiles: [],
+    filters: {
+        status: 'all',
+        type: 'all',
+        tag: 'all'
+    }
 };
 
 // DOM Elements
@@ -63,6 +68,12 @@ function setupEventListeners() {
             elements.searchInput.value = '';
             performSearch('');
             elements.searchInput.blur();
+            // Close spotlight modal
+            document.querySelector('.spotlight-modal')?.classList.remove('active');
+        }
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+            e.preventDefault();
+            showSpotlight();
         }
     });
     
@@ -102,19 +113,29 @@ async function processFiles(files) {
             const content = await readFileContent(file);
             const parsed = jsyaml.load(content);
             
+            // NEW: Infer schema using SchemaInference
+            const schemaResult = SchemaInference.infer(parsed);
+            console.log('Schema inference result:', {
+                type: schemaResult.type,
+                confidence: schemaResult.confidence,
+                entityCount: schemaResult.entities?.length || 0,
+                graphNodes: schemaResult.graph?.nodes?.length || 0
+            });
+            
             const fileData = {
                 id: generateId(),
                 name: file.name,
                 size: file.size,
                 lastModified: file.lastModified,
                 content: content,
-                parsed: parsed
+                parsed: parsed,
+                schema: schemaResult // Store schema inference results
             };
             
             state.loadedFiles.push(fileData);
             addToRecent(fileData);
             
-            showToast(`Loaded ${file.name}`, 'success');
+            showToast(`Loaded ${file.name} (${schemaResult.type} schema detected)`, 'success');
         } catch (error) {
             showToast(`Error loading ${file.name}: ${error.message}`, 'error');
             
@@ -277,60 +298,146 @@ function renderContent() {
         return;
     }
     
+    // Determine available views based on schema
+    const availableViews = ['raw'];
+    if (!file.error && file.schema) {
+        availableViews.unshift('overview', 'cards', 'tree');
+        if (file.schema.graph && file.schema.graph.nodes.length > 0) {
+            availableViews.push('relationships');
+        }
+        if (file.schema.type === 'workflow') {
+            availableViews.push('workflow');
+        }
+    }
+    
+    // Ensure current view is available
+    if (!availableViews.includes(state.currentView)) {
+        state.currentView = availableViews[0];
+    }
+    
+    // Build view tabs HTML
+    const viewTabsHTML = availableViews.map(view => {
+        const icons = {
+            overview: '📊',
+            cards: '🎴',
+            tree: '🌲',
+            relationships: '🔗',
+            workflow: '🔄',
+            raw: '📝'
+        };
+        const labels = {
+            overview: 'Overview',
+            cards: 'Cards',
+            tree: 'Tree',
+            relationships: 'Relationships',
+            workflow: 'Workflow',
+            raw: 'Raw'
+        };
+        return `<button class="view-tab ${state.currentView === view ? 'active' : ''}" 
+                        onclick="changeView('${view}')">${icons[view]} ${labels[view]}</button>`;
+    }).join('');
+    
     let html = `
         <div class="content-header">
             <div class="filename-display">📄 ${escapeHtml(file.name)}</div>
-            <div class="schema-badge">YAML</div>
-            <div class="view-tabs">
-                <button class="view-tab ${state.currentView === 'tree' ? 'active' : ''}" 
-                        onclick="changeView('tree')">🌲 Tree</button>
-                <button class="view-tab ${state.currentView === 'cards' ? 'active' : ''}" 
-                        onclick="changeView('cards')">🎴 Cards</button>
-                <button class="view-tab ${state.currentView === 'graph' ? 'active' : ''}" 
-                        onclick="changeView('graph')">📊 Graph</button>
-                <button class="view-tab ${state.currentView === 'raw' ? 'active' : ''}" 
-                        onclick="changeView('raw')">📝 Raw</button>
-            </div>
+            ${file.schema ? renderSchemaBadge(file.schema) : '<div class="schema-badge">YAML</div>'}
+            <div class="view-tabs">${viewTabsHTML}</div>
         </div>
-        <div style="flex: 1; overflow-y: auto; padding: 1.5rem;">
+        <div style="flex: 1; overflow-y: auto;">
     `;
     
     if (file.error) {
-        html += renderError(file);
+        html += ViewRenderers.renderError(file.error, file.name);
     } else {
-        if (state.currentView === 'tree') {
-            html += renderTreeView(file.parsed);
+        // Route to appropriate renderer based on current view
+        if (state.currentView === 'overview') {
+            html += ViewRenderers.renderOverview(file.schema, file.name);
         } else if (state.currentView === 'cards') {
-            html += renderCardsView(file.parsed);
-        } else if (state.currentView === 'graph') {
-            html += '<div id="graphViewContainer"></div>';
-            setTimeout(() => renderGraphView(file.parsed), 100);
+            html += ViewRenderers.renderCards(file.schema.entities, state.filters);
+        } else if (state.currentView === 'tree') {
+            html += '<div style="padding: 1.5rem;">' + renderTreeView(file.parsed) + '</div>';
+        } else if (state.currentView === 'relationships') {
+            html += '<div id="graphViewContainer" style="padding: 1.5rem; min-height: 650px;"></div>';
+            setTimeout(() => {
+                console.log('Calling DiagramGenerator.renderRelationshipGraph with:', file.schema.graph);
+                DiagramGenerator.renderRelationshipGraph(file.schema.graph, 'graphViewContainer');
+            }, 100);
+        } else if (state.currentView === 'workflow') {
+            html += '<div id="workflowViewContainer" style="padding: 1.5rem;"></div>';
+            setTimeout(() => DiagramGenerator.renderWorkflowDiagram(file.schema.entities, 'workflowViewContainer'), 100);
         } else if (state.currentView === 'raw') {
-            html += renderRawView(file.content);
+            html += ViewRenderers.renderRaw(file.content, file.name);
         }
     }
     
     html += '</div>';
     elements.contentArea.innerHTML = html;
+    
+    // Attach filter listeners if cards view
+    if (state.currentView === 'cards' && !file.error) {
+        attachFilterListeners();
+    }
 }
 
-// Render Error
-function renderError(file) {
+// Render Schema Badge
+function renderSchemaBadge(schema) {
+    const classNames = {
+        registry: 'schema-registry',
+        workflow: 'schema-workflow',
+        collection: 'schema-collection',
+        graph: 'schema-graph',
+        generic: 'schema-generic'
+    };
+    const icons = {
+        registry: '📋',
+        workflow: '🔄',
+        collection: '📦',
+        graph: '🕸️',
+        generic: '📄'
+    };
+    const confidence = Math.round(schema.confidence * 100);
     return `
-        <div class="error-panel">
-            <div class="error-header">
-                <span>⚠️</span>
-                <span>YAML Parse Error</span>
-            </div>
-            <div class="error-message">${escapeHtml(file.error)}</div>
-            <div style="margin-top: 1rem;">
-                <button class="btn" onclick="changeView('raw')">View Raw Content</button>
-            </div>
+        <div class="schema-badge ${classNames[schema.type] || classNames.generic}">
+            ${icons[schema.type] || icons.generic} ${schema.type.toUpperCase()} 
+            <span style="opacity: 0.7; font-size: 0.8em;">(${confidence}%)</span>
         </div>
     `;
 }
 
-// Render Tree View
+// Attach Filter Listeners (for Cards view)
+function attachFilterListeners() {
+    const statusSelect = document.getElementById('filterStatus');
+    const typeSelect = document.getElementById('filterType');
+    const tagSelect = document.getElementById('filterTag');
+    const resetBtn = document.getElementById('resetFilters');
+    
+    if (statusSelect) {
+        statusSelect.addEventListener('change', (e) => {
+            state.filters.status = e.target.value;
+            renderContent();
+        });
+    }
+    if (typeSelect) {
+        typeSelect.addEventListener('change', (e) => {
+            state.filters.type = e.target.value;
+            renderContent();
+        });
+    }
+    if (tagSelect) {
+        tagSelect.addEventListener('change', (e) => {
+            state.filters.tag = e.target.value;
+            renderContent();
+        });
+    }
+    if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+            state.filters = { status: 'all', type: 'all', tag: 'all' };
+            renderContent();
+        });
+    }
+}
+
+// Render Tree View (Kept for legacy Tree tab)
 function renderTreeView(obj, level = 0) {
     if (obj === null || obj === undefined) {
         return '<span class="tree-value">null</span>';
@@ -772,6 +879,97 @@ function showToast(message, type = 'success') {
         toast.classList.remove('show');
     }, 3000);
 }
+
+// Change View
+window.changeView = function(viewName) {
+    state.currentView = viewName;
+    renderContent();
+};
+
+// Spotlight Search
+function showSpotlight() {
+    const modal = document.querySelector('.spotlight-modal');
+    if (!modal || !state.currentFile || !state.currentFile.schema) return;
+    
+    modal.classList.add('active');
+    const input = document.getElementById('spotlightInput');
+    if (input) {
+        input.value = '';
+        input.focus();
+        performSpotlightSearch('');
+    }
+}
+
+function performSpotlightSearch(query) {
+    const resultsContainer = document.getElementById('spotlightResults');
+    if (!resultsContainer || !state.currentFile || !state.currentFile.schema) return;
+    
+    const entities = state.currentFile.schema.entities || [];
+    
+    if (!query.trim()) {
+        resultsContainer.innerHTML = '<div class="spotlight-result-item" style="text-align: center; color: var(--text-secondary);">Type to search entities...</div>';
+        return;
+    }
+    
+    const lowerQuery = query.toLowerCase();
+    const filtered = entities.filter(e => 
+        e.label.toLowerCase().includes(lowerQuery) ||
+        e.id.toLowerCase().includes(lowerQuery) ||
+        (e.summary && e.summary.toLowerCase().includes(lowerQuery)) ||
+        (e.tags && e.tags.some(tag => tag.toLowerCase().includes(lowerQuery)))
+    );
+    
+    if (filtered.length === 0) {
+        resultsContainer.innerHTML = '<div class="spotlight-result-item" style="text-align: center; color: var(--text-secondary);">No matching entities found</div>';
+        return;
+    }
+    
+    resultsContainer.innerHTML = filtered.slice(0, 10).map(entity => `
+        <div class="spotlight-result-item" onclick="selectSpotlightEntity('${entity.id}')">
+            <div class="spotlight-result-title">${escapeHtml(entity.label)}</div>
+            <div class="spotlight-result-meta">
+                ${entity.kind ? `<span class="type-badge">${escapeHtml(entity.kind)}</span>` : ''}
+                ${entity.status ? `<span class="status-pill status-${entity.status}">${escapeHtml(entity.status)}</span>` : ''}
+                ${entity.summary ? ` • ${escapeHtml(entity.summary.substring(0, 80))}...` : ''}
+            </div>
+        </div>
+    `).join('');
+}
+
+window.selectSpotlightEntity = function(entityId) {
+    // Close spotlight
+    document.querySelector('.spotlight-modal')?.classList.remove('active');
+    
+    // Switch to cards view and scroll to entity (future enhancement)
+    state.currentView = 'cards';
+    renderContent();
+    
+    // Try to scroll to the entity card (after render)
+    setTimeout(() => {
+        const card = document.querySelector(`[data-entity-id="${entityId}"]`);
+        if (card) {
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            card.style.animation = 'highlight 1s ease';
+        }
+    }, 100);
+};
+
+// Add spotlight input listener
+document.addEventListener('DOMContentLoaded', () => {
+    const spotlightInput = document.getElementById('spotlightInput');
+    if (spotlightInput) {
+        spotlightInput.addEventListener('input', (e) => {
+            performSpotlightSearch(e.target.value);
+        });
+    }
+    
+    // Close spotlight on background click
+    document.querySelector('.spotlight-modal')?.addEventListener('click', (e) => {
+        if (e.target.classList.contains('spotlight-modal')) {
+            e.target.classList.remove('active');
+        }
+    });
+});
 
 // Initialize app when DOM is ready
 if (document.readyState === 'loading') {
