@@ -1,0 +1,14 @@
+# ============================================================================
+# .temp/ folder - Ephemeral workflow instances
+# ============================================================================
+# Authority: Phase 102 - Workflow Runtime Foundation
+# Purpose: Ignore all instance files (auto-deleted after 7 days)
+# ============================================================================
+
+# Ignore all files in .temp/
+*
+
+# But keep structure files
+!.gitignore
+!cleanup.sh
+!README.md

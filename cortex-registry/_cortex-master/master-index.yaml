@@ -7,20 +7,21 @@
 # ============================================================================
 
 metadata:
-  version: "6.19"
-  last_updated: "2026-02-16T18:30:00Z"
-  total_phases: 40
+  version: "6.20"
+  last_updated: "2026-02-17T12:00:00Z"
+  total_phases: 42
   active: 0
   completed: 23
   consolidated: 2
   deferred: 0
-  planned: 0
+  planned: 2  # Phase 102, 104
 
   phase_breakdown:
     original_phases: 25
     mega_production_phases: 5
     consolidation_phases: 1
     infrastructure_enhancement_phases: 4
+    workflow_foundation_phases: 1  # Phase 102
 
   health_status:
     p0_issues: 0
@@ -431,6 +432,34 @@ phase_status:
     - phase-13  # Intelligence Learning Core (consolidated)
     - phase-14  # Enterprise Orchestrator Maturity
     - phase-15  # Enterprise Support Framework
+
+  planned:
+    - id: "phase-102"
+      title: "Workflow Runtime Foundation"
+      location: "phases/planned/phase-102-workflow-runtime-foundation.yaml"
+      priority: "P0"
+      status: "planned"
+      estimated_duration: "3 hours"
+      blocking: ["phase-104"]
+      description: "Build template-based workflow execution system for CORTEX phases"
+      key_deliverables:
+        - "WorkflowRuntime class (template hydration + execution)"
+        - "ConvergenceLoopExecutor (retry logic with backoff)"
+        - ".temp/ ephemeral instance storage (git-ignored)"
+        - "3 workflow templates (phase-execution, tdd-cycle, refactor-holistic)"
+        - "MCP tool: cortex_workflow_execute"
+        - "Agent integration (cortex-architect.prompt.md complexity heuristic)"
+      tests: 73
+      
+    - id: "phase-104"
+      title: "Registry & Intelligence Consolidation"
+      location: "phases/planned/phase-104-registry-intelligence-consolidation.yaml"
+      priority: "P1"
+      status: "planned"
+      estimated_duration: "4 hours (using workflow runtime)"
+      prerequisites: ["phase-102"]
+      description: "Clean up duplicate cortex-registry structure and unify intelligence"
+      execution_mode: "workflow"  # First phase to use Phase 102 workflow system
 
 # ============================================================================
 # EXECUTION ORDER
