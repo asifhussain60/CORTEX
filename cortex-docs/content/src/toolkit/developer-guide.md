@@ -47,57 +47,25 @@ This guide walks through creating a new CORTEX MCP tool from scratch.
 
 ## Tool Structure
 
-### Base Class
+### Base Class Requirements
 
-```python
-from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Optional
-from cortex.mcp.models import ToolResult, ToolParameter
+All CORTEX tools extend a base `Tool` class and must implement:
 
-class Tool(ABC):
-    """Base class for all CORTEX tools."""
-    
-    @property
-    @abstractmethod
-    def name(self) -> str:
-        """Unique tool name (cortex_*)."""
-        pass
-    
-    @property
-    @abstractmethod
-    def description(self) -> str:
-        """Tool description for documentation."""
-        pass
-    
-    @abstractmethod
-    def get_parameters(self) -> List[ToolParameter]:
-        """Define tool parameters."""
-        pass
-    
-    @abstractmethod
-    async def execute(
-        self,
-        arguments: Dict[str, Any]
-    ) -> ToolResult:
-        """Execute the tool with given arguments."""
-        pass
-    
-    def get_required_parameters(self) -> List[str]:
-        """Get list of required parameter names."""
-        return [
-            p.name for p in self.get_parameters()
-            if p.required
-        ]
-```
+- **name** — Unique identifier following `cortex_*` convention
+- **description** — Human-readable explanation of tool capabilities
+- **parameters** — List of input parameters with types and validation rules
+- **execute** — Async method that performs the tool's operation
 
-### ToolParameter
+Tools automatically integrate with MCP protocol, orchestrator validation, governance checks, and audit trail logging.
 
-```python
-@dataclass
-class ToolParameter:
-    """Parameter definition."""
-    
-    name: str
+### ToolParameter Structure
+
+Parameters define:
+- **name** — Parameter identifier
+- **type** — Data type (string, number, boolean, object, array)
+- **description** — Usage explanation
+- **required** — Whether parameter is mandatory
+- **default** — Default value if not provided
     type: str  # string, number, boolean, object, array
     description: str
     required: bool = True

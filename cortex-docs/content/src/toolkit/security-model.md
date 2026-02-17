@@ -89,65 +89,11 @@ CORTEX tools implement defense-in-depth security with multiple layers:
 
 ### API Key Authentication
 
-```python
-class APIKeyAuthenticator:
-    """Validate API keys for tool access."""
-    
-    def __init__(self, key_store: KeyStore):
-        self.key_store = key_store
-    
-    async def authenticate(
-        self,
-        request: Request
-    ) -> AuthResult:
-        """Authenticate request using API key."""
-        # Extract key from header
-        api_key = request.headers.get("X-CORTEX-API-KEY")
-        
-        if not api_key:
-            return AuthResult(
-                authenticated=False,
-                error="Missing API key"
-            )
-        
-        # Validate key format
-        if not self._is_valid_format(api_key):
-            return AuthResult(
-                authenticated=False,
-                error="Invalid API key format"
-            )
-        
-        # Look up key
-        key_info = await self.key_store.get(api_key)
-        
-        if not key_info:
-            return AuthResult(
-                authenticated=False,
-                error="Unknown API key"
-            )
-        
-        # Check expiration
-        if key_info.expired:
-            return AuthResult(
-                authenticated=False,
-                error="API key expired"
-            )
-        
-        return AuthResult(
-            authenticated=True,
-            client_id=key_info.client_id,
-            permissions=key_info.permissions
-        )
-```
+The authentication system validates API keys from request headers (`X-CORTEX-API-KEY`), checks key format and validity, verifies expiration dates, and returns authentication results with client identification and permissions. Keys that are missing, malformed, unknown, or expired result in authentication failures with specific error messages.
 
 ### Key Rotation
 
-```python
-class KeyRotationManager:
-    """Manage API key rotation."""
-    
-    KEY_LIFETIME_DAYS = 90
-    WARNING_DAYS = 14
+API keys have a 90-day lifetime with warnings issued 14 days before expiration. The rotation system automatically generates new keys, transitions clients to updated credentials, and revokes expired keys following industry best practices for key management.
     
     async def rotate_key(
         self,

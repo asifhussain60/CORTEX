@@ -158,18 +158,8 @@ orchestrators:
 
 MasterOrchestrator discovers orchestrators at runtime:
 
-```python
-class MasterOrchestrator:
-    def __init__(self):
-        # Load from registry
-        self.orchestrators = Registry.load_orchestrators()
-        
-        # Sort by priority
-        self.orchestrators.sort(key=lambda o: o.priority)
-        
-        # Validate contracts
-        ContractValidator.validate_all(self.orchestrators)
-```
+**Initialization:**
+The MasterOrchestrator loads all registered orchestrators from the registry, sorts them by priority (lower number = higher priority), and validates their contracts to ensure proper integration.
 
 ### Routing
 
@@ -181,21 +171,7 @@ IntentRouter routes requests based on:
 
 ### Execution
 
-Selected orchestrator executes request:
-
-```python
-def execute_request(self, request: Request) -> Response:
-    # Pre-execution validation
-    self.validate(request)
-    
-    # Execute with governance
-    result = self.process(request)
-    
-    # Post-execution audit
-    self.audit(request, result)
-    
-    return result
-```
+The selected orchestrator executes requests through a validated pipeline: pre-execution validation, processing with governance enforcement, post-execution audit, and response generation.
 
 ---
 
@@ -221,33 +197,7 @@ User Response
 
 ### Cross-Orchestrator Communication
 
-Orchestrators communicate via message passing:
-
-```python
-class OrchestratorMessage:
-    source: str          # Sender orchestrator
-    target: str          # Recipient orchestrator
-    operation: str       # Operation to perform
-    payload: dict        # Data
-    context: dict        # Shared context
-    priority: int        # Urgency
-```
-
-Example: TDDOrchestrator requests LENS analysis:
-
-```python
-# TDDOrchestrator sends message
-message = OrchestratorMessage(
-    source="TDDOrchestrator",
-    target="LENSSynthesis",
-    operation="analyze_context",
-    payload={"file": "auth.py"},
-    priority=55
-)
-
-# LENSSynthesis responds
-response = lens_synthesis.handle(message)
-```
+Orchestrators communicate via structured message passing with fields for source/target identification, operation specification, payload data, shared context, and priority levels. This enables orchestrators to request services from each other (e.g., TDDOrchestrator requesting LENS analysis) while maintaining loose coupling and async execution patterns.
 
 ---
 

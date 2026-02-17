@@ -73,18 +73,15 @@ sequenceDiagram
 
 The orchestrator classifies every request into one of nine primary intents:
 
-```python
-class IntentType(Enum):
-    IMPLEMENT = "IMPLEMENT"    # Add new functionality
-    FIX = "FIX"               # Repair broken behavior
-    REFACTOR = "REFACTOR"     # Improve code structure
-    ANALYZE = "ANALYZE"       # Review/assess code
-    PLAN = "PLAN"             # Create roadmaps
-    DESIGN = "DESIGN"         # Architecture decisions
-    QUERY = "QUERY"           # Educational questions
-    AUDIT = "AUDIT"           # Compliance checks
-    DIGEST = "DIGEST"         # Summarize changes
-```
+- **IMPLEMENT** — Add new functionality
+- **FIX** — Repair broken behavior
+- **REFACTOR** — Improve code structure
+- **ANALYZE** — Review and assess code
+- **PLAN** — Create roadmaps and strategies
+- **DESIGN** — Make architecture decisions
+- **QUERY** — Answer educational questions
+- **AUDIT** — Perform compliance checks
+- **DIGEST** — Summarize changes and progress
 
 ### Classification Logic
 
@@ -151,27 +148,7 @@ governance_rule_mapping:
 
 ### Registry Integration
 
-Rules are loaded from `cortex-registry/governance/core-rules.yaml`:
-
-```python
-def load_governance_rules(self, intent: str) -> List[str]:
-    """Load relevant CORE rules from registry based on intent."""
-    registry_path = Path("cortex-registry/governance/core-rules.yaml")
-    
-    if not registry_path.exists():
-        return []  # Graceful fallback
-    
-    with open(registry_path) as f:
-        rules = yaml.safe_load(f)
-    
-    # Match rules by intent category
-    matched_rules = []
-    for rule_id, rule_data in rules.items():
-        if intent in rule_data.get("applies_to", []):
-            matched_rules.append(rule_id)
-    
-    return matched_rules
-```
+Rules are loaded from `cortex-registry/governance/core-rules.yaml` based on intent type. The system automatically matches rules to intents using registry metadata, applying only relevant governance constraints for each operation type.
 
 ---
 
@@ -190,14 +167,7 @@ The orchestrator evaluates potential breaking changes across four levels:
 
 ### Risk Calculation Logic
 
-```python
-def assess_breaking_risk(self, request: str, scope: str) -> RiskLevel:
-    """Assess potential breaking changes."""
-    request_lower = request.lower()
-    
-    # HIGH risk indicators
-    high_risk_keywords = ["database", "schema", "migration", "breaking", 
-                          "remove", "delete", "deprecate"]
+The system evaluates requests for breaking change indicators including database modifications, schema changes, API removals, and architectural alterations. Risk levels are computed by analyzing keywords, scope of changes, and impact on existing functionality.
     if any(kw in request_lower for kw in high_risk_keywords):
         return RiskLevel.HIGH
     
@@ -431,34 +401,12 @@ Based on internal testing with typical requests:
 
 ### Key Test Scenarios
 
-```python
-def test_intent_classification_implement():
-    """Verify IMPLEMENT intent detection."""
-    orch = RequestRephraseOrchestrator()
-    result = orch.rephrase("Implement user authentication module")
-    assert result.intent == "IMPLEMENT"
-    assert result.confidence > 0.8
-
-def test_governance_rule_matching():
-    """Verify CORE rule injection for IMPLEMENT."""
-    orch = RequestRephraseOrchestrator()
-    result = orch.rephrase("Add new feature to dashboard")
-    assert "CORE-008" in result.governance_rules  # TDD
-    assert "CORE-011" in result.governance_rules  # Type hints
-
-def test_risk_assessment_high():
-    """Verify HIGH risk detection for breaking changes."""
-    orch = RequestRephraseOrchestrator()
-    result = orch.rephrase("Remove deprecated database schema")
-    assert result.risk_assessment["level"] == "HIGH"
-
-def test_challenge_evaluation_concern():
-    """Verify pillar concern detection."""
-    orch = RequestRephraseOrchestrator()
-    result = orch.rephrase("Quick hack to bypass validation")
-    assert result.pillar_scores["Maintainability"] == "CONCERN"
-    assert result.challenge_detected is True
-```
+The orchestrator includes comprehensive test coverage for:
+- Intent classification accuracy (IMPLEMENT, FIX, REFACTOR, etc.)
+- Governance rule injection based on intent type
+- Risk assessment levels (ZERO, LOW, MEDIUM, HIGH)
+- Challenge evaluation and pillar scoring
+- Request rephrasing and context enhancement
 
 ---
 
