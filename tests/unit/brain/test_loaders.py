@@ -33,7 +33,7 @@ class TestCoreRulesLoader:
     
     def test_loader_initialization(self, registry_path: Path) -> None:
         """Test loader initializes correctly."""
-        loader = CoreRulesLoader(registry_path / "governance" / "core-rules.yaml")
+        loader = CoreRulesLoader(Path(__file__).parent.parent.parent.parent / "cortex-registry" / "core" / "governance" / "skull-rules.yaml")
         assert loader.file_path.exists()
         assert loader.load_time_ms is None
     
@@ -44,7 +44,7 @@ class TestCoreRulesLoader:
     
     def test_load_core_rules(self, registry_path: Path) -> None:
         """Test loading core rules."""
-        loader = CoreRulesLoader(registry_path / "governance" / "core-rules.yaml")
+        loader = CoreRulesLoader(Path(__file__).parent.parent.parent.parent / "cortex-registry" / "core" / "governance" / "skull-rules.yaml")
         data = loader.load()
         
         assert data.meta["version"] == "1.0"
@@ -54,7 +54,7 @@ class TestCoreRulesLoader:
     
     def test_load_caches_data(self, registry_path: Path) -> None:
         """Test that second load uses cache."""
-        loader = CoreRulesLoader(registry_path / "governance" / "core-rules.yaml")
+        loader = CoreRulesLoader(Path(__file__).parent.parent.parent.parent / "cortex-registry" / "core" / "governance" / "skull-rules.yaml")
         
         data1 = loader.load()
         first_time = loader.load_time_ms
@@ -67,7 +67,7 @@ class TestCoreRulesLoader:
     
     def test_get_rule_by_id(self, registry_path: Path) -> None:
         """Test retrieving specific rule."""
-        loader = CoreRulesLoader(registry_path / "governance" / "core-rules.yaml")
+        loader = CoreRulesLoader(Path(__file__).parent.parent.parent.parent / "cortex-registry" / "core" / "governance" / "skull-rules.yaml")
         
         rule = loader.get_rule_by_id("CORE-008")
         assert rule is not None
@@ -76,14 +76,14 @@ class TestCoreRulesLoader:
     
     def test_get_rule_by_id_not_found(self, registry_path: Path) -> None:
         """Test retrieving nonexistent rule."""
-        loader = CoreRulesLoader(registry_path / "governance" / "core-rules.yaml")
+        loader = CoreRulesLoader(Path(__file__).parent.parent.parent.parent / "cortex-registry" / "core" / "governance" / "skull-rules.yaml")
         
         rule = loader.get_rule_by_id("CORE-999")
         assert rule is None
     
     def test_get_rules_by_enforcement(self, registry_path: Path) -> None:
         """Test filtering rules by enforcement level."""
-        loader = CoreRulesLoader(registry_path / "governance" / "core-rules.yaml")
+        loader = CoreRulesLoader(Path(__file__).parent.parent.parent.parent / "cortex-registry" / "core" / "governance" / "skull-rules.yaml")
         
         blocked_rules = loader.get_rules_by_enforcement("BLOCKED")
         assert len(blocked_rules) > 0
@@ -266,7 +266,7 @@ class TestPerformance:
     
     def test_lazy_loading_benefits(self, registry_path: Path) -> None:
         """Test that lazy loading doesn't load until needed."""
-        loader = CoreRulesLoader(registry_path / "governance" / "core-rules.yaml")
+        loader = CoreRulesLoader(Path(__file__).parent.parent.parent.parent / "cortex-registry" / "core" / "governance" / "skull-rules.yaml")
         
         # Before load
         assert loader.load_time_ms is None

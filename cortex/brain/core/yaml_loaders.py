@@ -507,7 +507,7 @@ def get_loader(yaml_type: str, registry_path: Path) -> BaseYAMLLoader:
         YAMLLoadError: If loader initialization fails
     """
     loaders = {
-        "core_rules": (CoreRulesLoader, "governance/core-rules.yaml"),
+        "core_rules": (CoreRulesLoader, "core/governance/skull-rules.yaml"),
         "audit_checklist": (AuditChecklistLoader, "governance/audit-checklist.yaml"),
         "modes": (ModesLoader, "meta/modes.yaml"),
         "response_format": (ResponseFormatLoader, "meta/response-format.yaml"),
