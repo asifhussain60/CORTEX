@@ -1,0 +1,174 @@
+# ============================================================================
+# CORTEX Phase Execution Workflow Template
+# ============================================================================
+# Purpose: Main workflow template for all CORTEX phase implementations
+# Authority: Phase 102 - Workflow Runtime Foundation
+# Version: 1.0.0
+# Created: 2026-02-17
+# ============================================================================
+
+workflow:
+  id: "cortex/phase-execution"
+  name: "CORTEX Phase Execution Workflow"
+  version: "1.0.0"
+  category: "cortex-internal"
+  description: "Standard workflow for executing CORTEX self-development phases"
+
+  metadata:
+    author: "CORTEX"
+    created: "2026-02-17"
+    applicable_to: "All _cortex-master phases (Phase 102+)"
+    not_for: "User repository workflows (use cortex-registry/workflows/)"
+
+  # Global convergence gate (inherited by all steps unless overridden)
+  convergence_gate:
+    max_cycles: 8
+    success_criteria:
+      all_tests_pass: true
+      coverage_target_met: true
+    convergence_predicate: "all_tests_pass and coverage >= {{coverage_target}}"
+    backoff_strategy: "exponential"
+
+  # Knowledge context resolution (mode-aware)
+  knowledge_context:
+    test_framework: "pytest"
+    patterns: "Orchestrator + Registry pattern"
+    coverage_target: "95%"
+    core_rules: ["CORE-008", "CORE-011", "CORE-012"]
+    governance: "CORTEX CORE rules (cortex-registry/_cortex-master/core/governance/)"
+
+  # Workflow stages for CORTEX phase execution
+  steps:
+    - step_id: "planning"
+      name: "Planning & DoR (Definition of Ready)"
+      orchestrator: "PlanningOrchestrator"
+      convergence_gate: null  # One-shot, no loop
+      params:
+        mode: "analysis"
+        phase_yaml: "{{phase_yaml}}"
+        
+    - step_id: "structural_changes"
+      name: "Structural Changes (Schema, Migrations, Refactoring)"
+      orchestrator: "RefactoringOrchestrator"
+      depends_on: ["planning"]
+      convergence_gate:
+        max_cycles: 5
+        success_criteria:
+          structure_clean: true
+          all_tests_pass: true
+        convergence_predicate: "structure_clean and all_tests_pass"
+      params:
+        scope: "structural"
+        preserve_behavior: true
+
+    - step_id: "tdd_implementation"
+      name: "TDD Implementation (RED → GREEN → REFACTOR)"
+      orchestrator: "TDDOrchestrator"
+      depends_on: ["structural_changes"]
+      convergence_gate:
+        max_cycles: 8
+        success_criteria:
+          all_tests_pass: true
+          coverage_target_met: true
+        convergence_predicate: "all_tests_pass and coverage >= {{coverage_target}}"
+      params:
+        phase: "RED_GREEN_REFACTOR"
+        test_framework: "{{test_framework}}"
+        coverage_target: "{{coverage_target}}"
+        sub_workflow: "tdd-cycle.yaml"  # Nested workflow
+
+    - step_id: "holistic_refactoring"
+      name: "Holistic Refactoring (Cross-Cutting Concerns)"
+      orchestrator: "RefactoringOrchestrator"
+      depends_on: ["tdd_implementation"]
+      convergence_gate:
+        max_cycles: 6
+        success_criteria:
+          quality_improved: true
+          all_tests_pass: true
+        convergence_predicate: "complexity_reduced and all_tests_pass"
+      params:
+        scope: "cross_cutting"
+        refactoring_operations: ["extract_shared_patterns", "reduce_coupling", "rename_for_consistency"]
+        sub_workflow: "refactor-holistic.yaml"  # Nested workflow
+
+    - step_id: "governance_validation"
+      name: "Governance & Compliance Validation"
+      orchestrator: "EnforcementOrchestrator"
+      depends_on: ["holistic_refactoring"]
+      convergence_gate:
+        max_cycles: 3
+        success_criteria:
+          violations: 0
+          coverage_target_met: true
+        convergence_predicate: "violations == 0 and coverage >= {{coverage_target}}"
+      params:
+        core_rules: "{{core_rules}}"
+        coverage_target: "{{coverage_target}}"
+
+    - step_id: "integration_validation"
+      name: "Integration & Validation"
+      orchestrator: "HolisticValidationOrchestrator"
+      depends_on: ["governance_validation"]
+      convergence_gate: null  # One-shot with retry on failure
+      params:
+        scope: "full_integration"
+        retry_on_failure: true
+
+    - step_id: "dashboard_generation"
+      name: "Dashboard/HTML Generation (Optional)"
+      orchestrator: "DashboardOrchestrator"
+      depends_on: ["integration_validation"]
+      convergence_gate:
+        max_cycles: 5
+        success_criteria:
+          dashboard_generated: true
+          tests_pass: true
+      optional: true  # Only runs if phase includes dashboard work
+      params:
+        template: "tdd-frontend-visual.yaml"
+
+  # Epilogues (post-execution cleanup, metrics capture)
+  epilogues:
+    - name: "Metrics Capture"
+      action: "capture_metrics"
+      params:
+        metrics_types: ["tdd_cycles", "convergence_loops", "code_quality"]
+    
+    - name: "Instance Cleanup Schedule"
+      action: "schedule_cleanup"
+      params:
+        instance_file: "{{instance_file}}"
+        cleanup_days: 7
+        archive_on_failure: true
+
+# ============================================================================
+# PARAMETER SCHEMA (for hydration)
+# ============================================================================
+
+parameters:
+  required:
+    - phase_yaml: "Path to phase YAML file"
+    - phase_id: "Phase identifier (e.g., phase-104)"
+    - coverage_target: "Test coverage target (default: 95%)"
+  
+  optional:
+    - test_framework: "Test framework (default: pytest)"
+    - core_rules: "Governance rules to enforce (default: [CORE-008, CORE-011, CORE-012])"
+    - dashboard_required: "Generate dashboard (default: false)"
+
+# ============================================================================
+# HYDRATION EXAMPLE
+# ============================================================================
+
+hydration_example: |
+  Input (template params):
+    phase_yaml: "cortex-registry/_cortex-master/phases/planned/phase-104-registry-intelligence-consolidation.yaml"
+    phase_id: "phase-104"
+    coverage_target: "95%"
+  
+  Output (instance):
+    request_id: "REQ-2026-02-17-001"
+    instance_file: "cortex-registry/.temp/instances/phase-104-2026-02-17-001.yaml"
+    status: "in_progress"
+    steps: [... hydrated steps with params replaced ...]

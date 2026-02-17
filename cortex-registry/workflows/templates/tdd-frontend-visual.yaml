@@ -1,0 +1,94 @@
+# TDD Frontend Visual Workflow Template
+# Phase 100 Stage 5
+# Visual TDD cycle with screenshot comparison and a11y validation
+
+workflow:
+  id: "tdd/frontend-visual"
+  name: "Frontend Visual TDD Workflow"
+  version: "1.0.0"
+  category: "tdd"
+  description: "Visual TDD with screenshot diffs and accessibility gates"
+
+  metadata:
+    author: "CORTEX"
+    created: "2026-02-16"
+    phase: "100"
+    stage: "5"
+
+  convergence_gate:
+    max_cycles: 6
+    success_criteria:
+      visual_diff_zero: true
+      a11y_violations_zero: true
+    convergence_predicate: "screenshot_diff == 0 and a11y_violations == 0"
+    backoff_strategy: "linear"
+
+  knowledge_context:
+    architect_mode:
+      test_framework: "pytest + Playwright"
+      component_patterns: "CORTEX site patterns (cortex-docs/)"
+      a11y_standard: "WCAG 2.1 AA"
+      deployment: "GitHub Pages"
+    production_mode:
+      test_framework: "{{test_framework}}"  # Jest/Cypress/Playwright
+      component_patterns: "{{component_patterns}}"  # React/Angular/Vue
+      a11y_standard: "{{a11y_standard}}"  # From company/domains/
+      deployment: "{{deployment_target}}"  # From profile
+
+  steps:
+    - step_id: "visual_baseline"
+      name: "Capture Visual Baseline"
+      orchestrator: "TDDOrchestrator"
+      convergence_gate:
+        max_cycles: 2
+        success_criteria:
+          screenshots_captured: true
+        convergence_predicate: "screenshot_count > 0"
+      params:
+        phase: "RED"
+        test_type: "visual"
+        test_framework: "{{test_framework}}"
+
+    - step_id: "component_implementation"
+      name: "Implement Component"
+      orchestrator: "TDDOrchestrator"
+      depends_on: ["visual_baseline"]
+      convergence_gate:
+        max_cycles: 6
+        success_criteria:
+          visual_match: true
+          tests_pass: true
+        convergence_predicate: "screenshot_diff <= 0.01 and tests_pass"
+      params:
+        phase: "GREEN"
+        component_patterns: "{{component_patterns}}"
+
+    - step_id: "a11y_validation"
+      name: "Accessibility Validation"
+      orchestrator: "TDDOrchestrator"
+      depends_on: ["component_implementation"]
+      convergence_gate:
+        max_cycles: 4
+        success_criteria:
+          a11y_violations: 0
+        convergence_predicate: "a11y_violations == 0"
+      params:
+        a11y_standard: "{{a11y_standard}}"
+        scan_tool: "axe-core"
+
+    - step_id: "responsive_testing"
+      name: "Responsive Design Testing"
+      orchestrator: "TDDOrchestrator"
+      depends_on: ["a11y_validation"]
+      convergence_gate:
+        max_cycles: 3
+        success_criteria:
+          all_viewports_pass: true
+        convergence_predicate: "mobile_pass and tablet_pass and desktop_pass"
+      params:
+        viewports: ["mobile", "tablet", "desktop"]
+
+  epilogues:
+    - epilogue_id: "visual_regression_report"
+      name: "Visual Regression Report"
+      trigger: "workflow_complete"

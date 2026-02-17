@@ -1,0 +1,62 @@
+# Post-Phase Deduplication Review Workflow Template
+# Phase 100 Stage 5
+# Auto-injected epilogue: review phase for duplicate code introduced
+
+workflow:
+  id: "review/post-phase-dedup"
+  name: "Post-Phase Deduplication Review"
+  version: "1.0.0"
+  category: "review"
+  description: "Auto-detect duplicates introduced during phase (CORE-035 enforcement)"
+
+  metadata:
+    author: "CORTEX"
+    created: "2026-02-16"
+    phase: "100"
+    stage: "5"
+    epilogue: true
+
+  convergence_gate:
+    max_cycles: 3
+    success_criteria:
+      no_new_duplicates: true
+    convergence_predicate: "new_duplicate_count == 0"
+    backoff_strategy: "linear"
+
+  knowledge_context:
+    architect_mode:
+      scanner: "LENS duplicate detection"
+      standard: "CORE-035"
+      baseline: "Pre-phase git commit"
+    production_mode:
+      scanner: "LENS (tech-agnostic)"
+      standard: "{{dry_standards}}"
+      baseline: "{{git_checkpoint}}"
+
+  steps:
+    - step_id: "baseline_comparison"
+      name: "Compare Against Phase Start"
+      orchestrator: "LENSSynthesis"
+      convergence_gate:
+        max_cycles: 1
+        success_criteria:
+          comparison_complete: true
+        convergence_predicate: "delta_calculated"
+      params:
+        analysis_type: "duplication_delta"
+        baseline: "{{baseline}}"
+
+    - step_id: "remediate_new_duplicates"
+      name: "Fix New Duplicates"
+      orchestrator: "RefactoringOrchestrator"
+      depends_on: ["baseline_comparison"]
+      convergence_gate:
+        max_cycles: 3
+        success_criteria:
+          new_duplicates_eliminated: true
+        convergence_predicate: "new_duplicate_count == 0"
+      params:
+        refactoring_operations: ["extract_common_code"]
+        scope: "delta_only"
+
+  epilogues: []  # Epilogues don't have epilogues

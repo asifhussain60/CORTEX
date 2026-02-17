@@ -1,0 +1,528 @@
+# ============================================================================
+# Frontend TDD Workflow Template
+# ============================================================================
+# Version: 1.0.0
+# Category: tdd
+# Authority: Phase 99 (Vision API Enhancement + HTML Mapping)
+# Status: PRODUCTION READY
+# ============================================================================
+
+version: '1.0.0'
+template_id: 'tdd/frontend-tdd-workflow'
+name: 'Frontend TDD Workflow with Vision API Integration'
+category: 'tdd'
+status: 'active'
+priority: 'P1'
+created: '2026-02-16'
+
+# ============================================================================
+# METADATA
+# ============================================================================
+metadata:
+  description: |
+    Full TDD cycle for frontend development with Vision API integration,
+    challenge generation, and automated deployment preview. Designed for
+    CORTEX site development with screenshot-driven analysis and semantic
+    selector validation.
+  
+  tags:
+    - tdd
+    - frontend
+    - vision-api
+    - automated-testing
+    - holistic-validation
+  
+  governance_level: 'P1'  # P0=critical, P1=important, P2=optional
+  
+  estimated_duration: '30 minutes'
+  max_duration: '45 minutes'
+  
+  author: 'CORTEX Architecture Team'
+  origin: 'Phase 99 — Vision API Enhancement + HTML Mapping'
+
+# ============================================================================
+# REQUIRED ORCHESTRATORS
+# ============================================================================
+orchestrators:
+  required:
+    - name: 'LENSOrchestrator'
+      purpose: 'Visual analysis via Vision API'
+      
+    - name: 'ChallengeEngine'
+      purpose: 'Design alternative generation'
+      
+    - name: 'TDDOrchestrator'
+      purpose: 'RED → GREEN → REFACTOR cycle enforcement'
+      
+    - name: 'EnforcementOrchestrator'
+      purpose: 'Governance validation (7-agent system)'
+      
+    - name: 'DeploymentOrchestrator'
+      purpose: 'Staging preview generation'
+  
+  optional:
+    - name: 'DebuggerOrchestrator'
+      purpose: 'Debug assistance if workflow fails'
+
+# ============================================================================
+# WORKFLOW STAGES (5-Stage Pipeline)
+# ============================================================================
+stages:
+  # --------------------------------------------------------------------------
+  # STAGE 1: Visual Analysis via Vision API
+  # --------------------------------------------------------------------------
+  - stage_id: 'S1'
+    name: 'Visual Analysis'
+    description: 'Analyze screenshot using atomic Vision API mode'
+    orchestrator: 'LENSOrchestrator'
+    
+    parameters:
+      target: '{{target_file}}'
+      screenshot: '{{screenshot_path}}'
+      analysis_mode: 'atomic'  # quick | standard | atomic
+      extract_cortex_ids: true
+    
+    outputs:
+      - 'visual_analysis.json'
+      - 'bounding_boxes.json'
+      - 'extracted_cortex_ids.txt'
+    
+    success_criteria:
+      - 'Vision API completes in <20s'
+      - 'Bounding boxes extracted with confidence >0.8'
+      - 'cortex-ids linked if present in HTML'
+    
+    error_handling:
+      on_failure: 'abort_workflow'
+      log_level: 'ERROR'
+  
+  # --------------------------------------------------------------------------
+  # STAGE 2: Challenge Generation
+  # --------------------------------------------------------------------------
+  - stage_id: 'S2'
+    name: 'Design Challenge'
+    description: 'Generate design alternatives and improvement suggestions'
+    orchestrator: 'ChallengeEngine'
+    
+    parameters:
+      context: '{{visual_analysis}}'
+      mode: 'design_review'
+      min_alternatives: 3
+    
+    outputs:
+      - 'challenges.md'
+      - 'design_alternatives.json'
+    
+    success_criteria:
+      - '≥3 design alternatives generated'
+      - 'Each alternative has rationale'
+      - 'Security considerations included'
+    
+    error_handling:
+      on_failure: 'continue_with_warning'
+      fallback: 'Skip challenge, proceed to TDD'
+  
+  # --------------------------------------------------------------------------
+  # STAGE 3: TDD RED Phase
+  # --------------------------------------------------------------------------
+  - stage_id: 'S3'
+    name: 'TDD RED Phase'
+    description: 'Write failing tests first (CORE-008)'
+    orchestrator: 'TDDOrchestrator'
+    
+    parameters:
+      mode: 'RED'
+      target: '{{target_file}}'
+      test_file: '{{test_file_path}}'
+      requirements: '{{visual_analysis}}'
+    
+    outputs:
+      - 'tests/test_{{component}}.py'
+      - 'test_results_red.json'
+    
+    success_criteria:
+      - 'Tests written and executable'
+      - 'Tests fail with expected error message'
+      - 'No implementation code generated yet'
+    
+    enforcement:
+      - 'CORE-008: TDD mandatory (tests before code)'
+      - 'CORE-011: Type hints on test functions'
+      - 'CORE-012: Docstrings on test cases'
+    
+    error_handling:
+      on_failure: 'abort_workflow'
+      log_level: 'ERROR'
+  
+  # --------------------------------------------------------------------------
+  # STAGE 4: TDD GREEN Phase
+  # --------------------------------------------------------------------------
+  - stage_id: 'S4'
+    name: 'TDD GREEN Phase'
+    description: 'Minimal code to pass tests'
+    orchestrator: 'TDDOrchestrator'
+    
+    parameters:
+      mode: 'GREEN'
+      target: '{{target_file}}'
+      test_file: '{{test_file_path}}'
+    
+    outputs:
+      - '{{target_file}}'
+      - 'test_results_green.json'
+    
+    success_criteria:
+      - 'All tests passing'
+      - 'No --ignore flags used'
+      - 'Minimal implementation (no over-engineering)'
+    
+    enforcement:
+      - 'CORE-008: Tests must pass without bypass'
+      - 'CORE-035: No duplication introduced'
+    
+    error_handling:
+      on_failure: 'abort_workflow'
+      log_level: 'ERROR'
+  
+  # --------------------------------------------------------------------------
+  # STAGE 5: TDD REFACTOR Phase + Holistic Validation
+  # --------------------------------------------------------------------------
+  - stage_id: 'S5'
+    name: 'TDD REFACTOR + Validation'
+    description: 'Clean code while keeping tests green, then validate'
+    orchestrator: 'TDDOrchestrator'
+    
+    parameters:
+      mode: 'REFACTOR'
+      target: '{{target_file}}'
+      test_file: '{{test_file_path}}'
+      enable_holistic_validation: true
+    
+    sub_stages:
+      - name: 'Refactor Code'
+        actions:
+          - 'Extract magic numbers to constants'
+          - 'Remove duplication'
+          - 'Add type hints + docstrings'
+          - 'Run linting (ruff)'
+      
+      - name: 'Holistic Validation'
+        orchestrator: 'EnforcementOrchestrator'
+        checks:
+          - 'CORE-008: TDD compliance'
+          - 'CORE-011: Type hints complete'
+          - 'CORE-012: Docstrings present'
+          - 'CORE-026: Git checkpoint exists'
+          - 'CORE-027: AC markers present'
+          - 'CORE-028: File naming conventions'
+          - 'CORE-035: No duplication'
+          - 'CORE-048: Holistic gates pass'
+    
+    outputs:
+      - '{{target_file}}'
+      - 'test_results_refactor.json'
+      - 'governance_report.json'
+      - 'lint_report.txt'
+    
+    success_criteria:
+      - 'All tests still passing'
+      - 'Lint clean (0 errors)'
+      - 'Coverage ≥95%'
+      - 'All governance checks pass'
+      - 'AC markers present (AC_START → AC_COMPLETE)'
+    
+    error_handling:
+      on_failure: 'abort_workflow'
+      log_level: 'ERROR'
+  
+  # --------------------------------------------------------------------------
+  # STAGE 6: Deployment Preview (Optional)
+  # --------------------------------------------------------------------------
+  - stage_id: 'S6'
+    name: 'Deploy Preview'
+    description: 'Generate staging preview for visual verification'
+    orchestrator: 'DeploymentOrchestrator'
+    optional: true
+    
+    parameters:
+      environment: 'staging'
+      target: '{{target_file}}'
+      generate_lighthouse_report: true
+    
+    outputs:
+      - 'preview_url.txt'
+      - 'lighthouse_report.json'
+    
+    success_criteria:
+      - 'Staging deployment successful'
+      - 'Lighthouse score ≥95'
+      - 'No broken links'
+    
+    error_handling:
+      on_failure: 'continue_with_warning'
+      log_level: 'WARNING'
+
+# ============================================================================
+# GOLDEN TESTS
+# ============================================================================
+golden_tests:
+  - path: 'tests/test_frontend_tdd_workflow_execution.py'
+    description: 'Verify workflow completes successfully end-to-end'
+    assertions:
+      - 'execution_success'
+      - 'all_stages_completed'
+      - 'duration_within_bounds'
+  
+  - path: 'tests/test_frontend_tdd_governance.py'
+    description: 'Verify governance gates enforced at each stage'
+    assertions:
+      - 'enforcement_orchestrator_invoked'
+      - 'core_rules_validated'
+      - 'no_bypass_flags'
+  
+  - path: 'tests/test_frontend_tdd_audit_trail.py'
+    description: 'Verify AC markers and audit log integrity'
+    assertions:
+      - 'ac_markers_present'
+      - 'git_checkpoints_created'
+      - 'test_coverage_verified'
+  
+  - path: 'tests/test_frontend_tdd_performance.py'
+    description: 'Verify performance targets met'
+    assertions:
+      - 'total_duration_under_30_min'
+      - 'vision_api_under_20s'
+      - 'lighthouse_score_above_95'
+  
+  - path: 'tests/test_frontend_tdd_non_breaking.py'
+    description: 'Verify no regressions introduced'
+    assertions:
+      - 'existing_tests_still_pass'
+      - 'no_breaking_api_changes'
+      - 'backward_compatibility_maintained'
+
+# ============================================================================
+# AUDIT REQUIREMENTS
+# ============================================================================
+audit_requirements:
+  ac_markers:
+    enabled: true
+    format: 'AC_START → AC_COMPLETE'
+    validation: 'pre_commit_hook'
+  
+  git_checkpoints:
+    enabled: true
+    frequency: 'per_stage'
+    message_format: 'Stage {{stage_id}}: {{stage_name}} [CHECKPOINT]'
+  
+  test_coverage:
+    minimum: '95%'
+    measurement: 'pytest --cov'
+    enforcement: 'blocking'
+  
+  governance_logging:
+    enabled: true
+    destination: 'cortex_brain/governance/audit_log.jsonl'
+
+# ============================================================================
+# QUALITY REVIEW LOOPS (Multi-Path Validation)
+# ============================================================================
+quality_loops:
+  - loop_id: 'sunshine_path'
+    description: 'Happy case: All stages succeed on first attempt'
+    validation:
+      - 'Vision API returns valid analysis'
+      - 'Tests pass on first GREEN attempt'
+      - 'Refactor completes without errors'
+      - 'Deployment preview succeeds'
+  
+  - loop_id: 'rainy_path'
+    description: 'Error handling: Stage failures and recovery'
+    validation:
+      - 'Vision API timeout → retry with standard mode'
+      - 'Test failures in GREEN → debug assistance'
+      - 'Lint errors in REFACTOR → auto-fix suggestions'
+      - 'Deployment failure → rollback to previous'
+  
+  - loop_id: 'edge_cases'
+    description: 'Boundary conditions and unusual inputs'
+    validation:
+      - 'Empty screenshot → graceful error'
+      - 'No cortex-ids present → fallback to class selectors'
+      - 'Extremely large HTML → chunk processing'
+      - 'Missing orchestrator → fail-fast with clear message'
+  
+  - loop_id: 'security_blindspots'
+    description: 'Security considerations at each stage'
+    validation:
+      - 'Image path sanitization (injection prevention)'
+      - 'cortex-id format validation (XSS prevention)'
+      - 'No secrets in workflow parameters'
+      - 'Deployment uses HTTPS only'
+  
+  review_requirements:
+    min_loops_executed: 3
+    confidence_threshold: 0.95
+    blocker_threshold: 0  # Zero blockers allowed
+
+# ============================================================================
+# PARAMETERS SCHEMA
+# ============================================================================
+parameters:
+  required:
+    - name: 'target_file'
+      type: 'path'
+      description: 'HTML file to analyze and modify'
+      example: 'cortex-docs/index.html'
+      validation: 'must_exist'
+    
+    - name: 'screenshot_path'
+      type: 'path'
+      description: 'Screenshot for visual analysis'
+      example: 'screenshots/hero-section.png'
+      validation: 'must_exist && image_format'
+  
+  optional:
+    - name: 'test_file_path'
+      type: 'path'
+      description: 'Path for generated tests'
+      default: 'tests/test_{{component_name}}.py'
+    
+    - name: 'analysis_mode'
+      type: 'enum'
+      values: ['quick', 'standard', 'atomic']
+      default: 'atomic'
+    
+    - name: 'skip_deployment'
+      type: 'boolean'
+      default: false
+      description: 'Skip staging deployment preview'
+
+# ============================================================================
+# ERROR HANDLING STRATEGY
+# ============================================================================
+error_handling:
+  global_strategy: 'fail_fast'
+  
+  stage_specific:
+    S1:  # Vision Analysis
+      on_timeout: 'retry_with_standard_mode'
+      on_invalid_image: 'abort_workflow'
+    
+    S3:  # RED Phase
+      on_test_syntax_error: 'provide_fix_suggestions'
+      on_import_error: 'abort_workflow'
+    
+    S4:  # GREEN Phase
+      on_test_failure: 'invoke_debugger_orchestrator'
+      on_infinite_loop: 'timeout_after_5min'
+    
+    S5:  # REFACTOR
+      on_lint_error: 'auto_fix_if_safe'
+      on_test_regression: 'abort_workflow'
+  
+  retry_policy:
+    max_retries: 2
+    backoff: 'exponential'
+    retry_on: ['timeout', 'network_error']
+
+# ============================================================================
+# PERFORMANCE TARGETS
+# ============================================================================
+performance:
+  total_workflow_duration:
+    target: '30 minutes'
+    warning_threshold: '40 minutes'
+    abort_threshold: '60 minutes'
+  
+  stage_durations:
+    S1: '<20s'  # Vision API atomic mode
+    S2: '<2min'  # Challenge generation
+    S3: '<5min'  # RED phase
+    S4: '<10min'  # GREEN phase
+    S5: '<10min'  # REFACTOR + validation
+    S6: '<5min'  # Deployment preview
+  
+  resource_limits:
+    max_memory: '2GB'
+    max_cpu: '80%'
+    max_disk: '500MB'
+
+# ============================================================================
+# SUCCESS METRICS
+# ============================================================================
+success_metrics:
+  execution:
+    - metric: 'Workflow Completion Rate'
+      target: '≥95%'
+      measurement: 'successful_runs / total_runs'
+    
+    - metric: 'Average Duration'
+      target: '<30 minutes'
+      measurement: 'mean(workflow_durations)'
+  
+  quality:
+    - metric: 'Test Pass Rate'
+      target: '100%'
+      measurement: 'passing_tests / total_tests'
+    
+    - metric: 'Governance Compliance'
+      target: '100%'
+      measurement: 'passed_checks / total_checks'
+    
+    - metric: 'Code Coverage'
+      target: '≥95%'
+      measurement: 'pytest --cov'
+  
+  adoption:
+    - metric: 'Usage Frequency'
+      target: '≥2 runs per sprint'
+      measurement: 'workflow_executions / 2_weeks'
+
+# ============================================================================
+# INTEGRATION POINTS
+# ============================================================================
+integration:
+  mcp_tools:
+    - 'cortex_process_request'  # Main execution entry
+    - 'cortex_lens_analyze'      # Vision API access
+    - 'cortex_challenge'         # Challenge generation
+  
+  orchestrators:
+    - 'WorkflowComposer'         # YAML workflow engine
+    - 'LENSOrchestrator'         # Visual analysis
+    - 'TDDOrchestrator'          # TDD cycle enforcement
+    - 'EnforcementOrchestrator'  # Governance validation
+    - 'DeploymentOrchestrator'   # Preview generation
+  
+  external_tools:
+    - 'pytest'        # Test execution
+    - 'ruff'          # Linting
+    - 'lighthouse'    # Performance auditing
+    - 'bandit'        # Security scanning
+
+# ============================================================================
+# ROLLBACK PLAN
+# ============================================================================
+rollback:
+  automatic_triggers:
+    - 'Test suite regression'
+    - 'Governance check failure'
+    - 'Breaking changes detected'
+  
+  rollback_steps:
+    - 'Revert git commit (git reset HEAD~1)'
+    - 'Restore HTML from checkpoint'
+    - 'Re-run test suite to verify stability'
+    - 'Log rollback event for analysis'
+  
+  recovery_time: '<5 minutes'
+
+# ============================================================================
+# VERSION HISTORY
+# ============================================================================
+version_history:
+  - version: '1.0.0'
+    date: '2026-02-16'
+    changes: 'Initial release from Phase 99 migration'
+    author: 'CORTEX Architecture Team'
