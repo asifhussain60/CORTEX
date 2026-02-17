@@ -1,0 +1,437 @@
+# ============================================================================
+# PHASE CONSOLIDATION PLAN — 2026-02-14
+# ============================================================================
+# Authority: User request to reduce divergence, consolidate active/planned work
+# Current State: 6 active/planned phases with overlapping concerns
+# Goal: Consolidate into 2-3 focused mega-phases for parallel execution
+# ============================================================================
+
+metadata:
+  created: "2026-02-14T23:00:00.000000Z"
+  author: "CORTEX Architect"
+  reason: "Too much divergence across 6 active phases, consolidation needed"
+  approach: "Capability-based clustering, eliminate redundancy, enable parallelism"
+
+# ============================================================================
+# CURRENT STATE ANALYSIS
+# ============================================================================
+
+current_phases:
+  active:
+    - id: phase-01
+      title: "Business Wisdom Display Enhancement"
+      status: active
+      priority: P2
+      scope: "UI/UX enhancement for governance rule display with book references"
+      estimated_effort: "4-6 hours"
+      
+    - id: phase-12
+      title: "Knowledge Persistence & Universal Learning Loop"
+      status: active
+      priority: P0
+      scope: "Persist repository onboarding knowledge, engage learning loops"
+      estimated_effort: "7-10 days"
+      
+    - id: phase-16
+      title: "MCP Tools Documentation Architect"
+      status: active
+      priority: P1
+      scope: "Auto-generate MCP tool docs from decorators, GitHub Pages catalog"
+      estimated_effort: "4 weeks (1 week MVP)"
+      
+    - id: phase-17
+      title: "Agent Architecture Holistic Redesign"
+      status: active
+      priority: P1
+      scope: "Agent clustering, META-AUDIT agent, PLAN sync agent, wiring cleanup"
+      estimated_effort: "10 days"
+      
+    - id: phase-18
+      title: "IntentRouter Production Hardening"
+      status: planned
+      priority: P1
+      scope: "Integration tests, performance optimization, enterprise deployment"
+      estimated_effort: "8 days"
+      
+    - id: phase-19
+      title: "Convergence Loop Holistic TDD"
+      status: active
+      priority: P1
+      scope: "Outer TDD loop for autonomous multi-cycle completion"
+      estimated_effort: "3 days"
+      note: "ALREADY COMPLETE — just needs status update to 'complete'"
+      
+    - id: phase-20
+      title: "Workflow Intelligence Neurons"
+      status: complete
+      priority: P1
+      scope: "WorkflowComposer, AbsorptionGate, FlushManager, AuditVerifier"
+      note: "COMPLETE — 49/49 tests passing"
+
+  deferred: 10  # Phases 3-8, 11, 13-15
+
+# ============================================================================
+# CONSOLIDATION STRATEGY
+# ============================================================================
+
+consolidation_rationale: |
+  **Problem:** 6 active phases create:
+  - Context switching overhead (token bloat)
+  - Unclear prioritization (which phase to work on?)
+  - Dependency confusion (what blocks what?)
+  - Parallel work conflicts (agent redesign affects everything)
+  
+  **Solution:** Consolidate into 2 mega-phases based on capability clusters:
+  
+  1. **MEGA-PHASE A: Intelligence & Learning Core** (Phases 12 + 17 + 19)
+     - Knowledge persistence, agent architecture, convergence loop
+     - All 3 enhance CORTEX intelligence layer
+     - Natural dependencies: Agent redesign → better learning integration
+     - Estimated: 7-10 days total (parallel sub-streams possible)
+  
+  2. **MEGA-PHASE B: Developer Experience & Tooling** (Phases 1 + 16 + 18)
+     - UI/UX enhancements, MCP documentation, production hardening
+     - All 3 improve developer/user experience
+     - Natural dependencies: Agent redesign stabilizes before hardening
+     - Estimated: 2-3 weeks total (can start after MEGA-A S1)
+  
+  **Benefits:**
+  - Clear priority: MEGA-A first (intelligence), MEGA-B second (DX)
+  - Reduced context switching (1 mega-phase at a time)
+  - Dependency chain visible (MEGA-A → MEGA-B)
+  - Parallel sub-streams within mega-phases (e.g., S1 + S2 concurrently)
+
+# ============================================================================
+# MEGA-PHASE A: Intelligence & Learning Core
+# ============================================================================
+
+mega_phase_a:
+  id: "MEGA-A"
+  title: "Intelligence & Learning Core — CORTEX Brain Evolution"
+  priority: P0
+  estimated_effort: "7-10 days"
+  estimated_tokens: "80000"
+  roi_score: 95
+  
+  consolidates:
+    - phase-12: "Knowledge Persistence & Universal Learning Loop"
+    - phase-17: "Agent Architecture Holistic Redesign"
+    - phase-19: "Convergence Loop Holistic TDD" (mark complete)
+  
+  vision: |
+    Transform CORTEX from stateless executor to learning intelligence system:
+    - Every operation persists knowledge (repository onboarding → domain YAMLs)
+    - Agent architecture redesigned for capability-based routing (not mode-based)
+    - Convergence loop enables autonomous multi-cycle work completion
+    - Universal Learning Loop engaged after every operation
+    - Brain intelligence layers (perception/reasoning/action) continuously enhanced
+  
+  stages:
+    - id: S1
+      name: "Agent Architecture Redesign"
+      duration: "3 days"
+      scope: |
+        - Create 2 new agents: cortex-meta-auditor, cortex-master-plan-auditor
+        - Implement capability-based clustering (vs 1-to-1 mode-agent)
+        - Machine-readable agent metadata (YAML front-matter)
+        - IntentRouter capability matching (vs trigger-word routing)
+        - Legacy cleanup: old agent specs, wiring migration
+      deliverables:
+        - "cortex-meta-auditor.md agent spec"
+        - "cortex-master-plan-auditor.md agent spec"
+        - "capability_matcher.py enhanced"
+        - "metadata_driven_discovery.py"
+        - "AGENT-CONSOLIDATION-REPORT.md (inline)"
+      tests: "45+ tests (15 per new agent + 15 integration)"
+    
+    - id: S2
+      name: "Knowledge Persistence Layer"
+      duration: "3 days"
+      scope: |
+        - KnowledgePersistenceService: Auto-generate domain YAMLs from onboarding
+        - Repository → company/domains/{repo}/ YAML artifacts
+        - Brain intelligence layer updates (perception/reasoning/action)
+        - KnowledgePersistenceAgent: 8th enforcement agent (blocks non-persistent ops)
+        - Integration with cortex_onboard_repository MCP tool
+      deliverables:
+        - "knowledge_persistence_service.py (~300 LOC)"
+        - "knowledge_persistence_agent.py (enforcement)"
+        - "company/domains/ generator"
+        - "brain/ intelligence updater"
+      tests: "50+ tests (20 persistence + 20 enforcement + 10 integration)"
+    
+    - id: S3
+      name: "Universal Learning Loop Integration"
+      duration: "2-3 days"
+      scope: |
+        - UniversalLearningLoop: OBSERVE → ANALYZE → SYNTHESIZE → APPLY
+        - Integration with all orchestrators (not just TDD)
+        - Pattern extraction after every operation (ONBOARD, ANALYZE, IMPLEMENT)
+        - Cross-session learning: Future ops benefit from past learnings
+        - Learning dashboard: Metrics, confidence scores, pattern evolution
+      deliverables:
+        - "universal_learning_loop.py enhanced"
+        - "orchestrator_learning_mixin.py"
+        - "learning_dashboard.py"
+        - "cross_session_pattern_cache.py"
+      tests: "40+ tests (15 loop + 15 integration + 10 dashboard)"
+    
+    - id: S4
+      name: "Integration & Verification"
+      duration: "1 day"
+      scope: |
+        - E2E testing: Onboard repo → knowledge persisted → learning engaged
+        - Agent collaboration validation (meta-auditor + plan-auditor)
+        - Performance validation (<150ms agent coordination overhead)
+        - Documentation: Inline response format (CORE-002)
+      deliverables:
+        - "15 E2E tests (onboarding + learning + agent collaboration)"
+        - "Performance benchmarks"
+        - "MEGA-A-COMPLETION-REPORT.md (inline)"
+      tests: "15 E2E tests"
+  
+  total_tests: "150+ tests"
+  success_criteria:
+    - "✅ Repository onboarding generates domain YAML artifacts"
+    - "✅ Brain intelligence layers updated after every operation"
+    - "✅ Universal Learning Loop engaged (not just TDD operations)"
+    - "✅ 2 new agents operational (meta-auditor, plan-auditor)"
+    - "✅ Agent collaboration validated (mode coverage 100%)"
+    - "✅ Cross-session learning proven (pattern reuse)"
+    - "✅ All existing tests remain passing (0 regressions)"
+    - "✅ Performance targets met (<150ms coordination overhead)"
+
+# ============================================================================
+# MEGA-PHASE B: Developer Experience & Tooling
+# ============================================================================
+
+mega_phase_b:
+  id: "MEGA-B"
+  title: "Developer Experience & Tooling — Production-Ready CORTEX"
+  priority: P1
+  estimated_effort: "2-3 weeks"
+  estimated_tokens: "55000"
+  roi_score: 88
+  depends_on: "MEGA-A completion"
+  
+  consolidates:
+    - phase-01: "Business Wisdom Display Enhancement"
+    - phase-16: "MCP Tools Documentation Architect"
+    - phase-18: "IntentRouter Production Hardening"
+  
+  vision: |
+    Polish CORTEX for enterprise production deployment:
+    - Governance rules displayed with book references (educational)
+    - MCP tools auto-documented with interactive explorer
+    - IntentRouter hardened with integration tests and monitoring
+    - GitHub Pages catalog for external developers
+    - Production deployment guides and SLA compliance
+  
+  stages:
+    - id: S1
+      name: "Business Wisdom Display"
+      duration: "1 day"
+      scope: |
+        - BusinessWisdomFormatter: Display CORE rules with book references
+        - Markdown template with 📚 icon
+        - Integration with InteractionOrchestrator DoR displays
+        - Max 5 principles per display (avoid clutter)
+        - Arrow notation: **Principle** → RULE-ID (Book)
+      deliverables:
+        - "business_wisdom_formatter.py (~150 LOC)"
+        - "markdown templates"
+        - "DoR integration"
+      tests: "12 tests (formatter + templates + integration)"
+    
+    - id: S2
+      name: "MCP Tools Documentation (MVP)"
+      duration: "1 week"
+      scope: |
+        - MCPToolScanner: Extract metadata from @mcp_tool decorators
+        - GitAwareDeltaDetector: Incremental doc updates (vs full regeneration)
+        - HTMLGenerator: GitHub Pages catalog with interactive explorer
+        - Multi-persona views: Developer, Architect, Security Auditor, Manager
+        - Tool health dashboard: 🟢🟡🔴 indicators per tool
+      deliverables:
+        - "mcp_tool_scanner.py"
+        - "git_aware_delta_detector.py"
+        - "html_generator.py"
+        - "GitHub Pages templates (4 persona views)"
+        - "Tool health dashboard"
+      tests: "60+ tests (20 scanner + 20 delta + 20 generator)"
+    
+    - id: S3
+      name: "IntentRouter Production Hardening"
+      duration: "1 week"
+      scope: |
+        - 100+ integration tests (all 8 modes covered)
+        - Performance optimization (<300ms routing target)
+        - Load testing (50+ concurrent requests)
+        - Health check endpoints + Prometheus metrics
+        - Circuit breaker patterns + graceful degradation
+        - Deployment guides (Docker, Kubernetes)
+      deliverables:
+        - "100+ integration tests"
+        - "performance_optimizer.py"
+        - "health_check_service.py"
+        - "circuit_breaker.py"
+        - "deployment/kubernetes/cortex-deployment.yaml"
+        - "PRODUCTION-DEPLOYMENT-GUIDE.md (inline)"
+      tests: "100+ tests (integration + performance + resilience)"
+    
+    - id: S4
+      name: "Final Integration & Polish"
+      duration: "2 days"
+      scope: |
+        - E2E testing: User flow from request → wisdom display → tool docs → monitoring
+        - Documentation consolidation (inline, per CORE-002)
+        - SLA compliance validation (99.5% uptime target)
+        - Canary deployment configuration
+      deliverables:
+        - "20 E2E tests"
+        - "SLA compliance report"
+        - "Canary deployment config"
+        - "MEGA-B-COMPLETION-REPORT.md (inline)"
+      tests: "20 E2E tests"
+  
+  total_tests: "192+ tests"
+  success_criteria:
+    - "✅ Governance rules display with book references (📚 Business Wisdom)"
+    - "✅ MCP tools auto-documented from decorators (0 manual effort)"
+    - "✅ GitHub Pages catalog live with 4 persona views"
+    - "✅ IntentRouter integration tests: 100% mode coverage"
+    - "✅ Performance targets met (<300ms routing, <1000ms execution)"
+    - "✅ Load testing passed (50+ concurrent requests)"
+    - "✅ Production deployment successful (Docker + Kubernetes)"
+    - "✅ SLA compliance: 99.5% uptime achieved"
+
+# ============================================================================
+# EXECUTION PLAN
+# ============================================================================
+
+execution_plan:
+  approach: "Sequential mega-phases with parallel sub-streams"
+  
+  timeline:
+    week_1:
+      - "MEGA-A S1: Agent Architecture Redesign (3 days)"
+      - "MEGA-A S2: Knowledge Persistence Layer (2 days, parallel with S1 after day 1)"
+    
+    week_2:
+      - "MEGA-A S3: Universal Learning Loop (3 days)"
+      - "MEGA-A S4: Integration & Verification (1 day)"
+      - "MEGA-A COMPLETE ✅"
+      - "Start MEGA-B S1: Business Wisdom Display (1 day)"
+    
+    week_3:
+      - "MEGA-B S2: MCP Tools Documentation MVP (5 days)"
+    
+    week_4:
+      - "MEGA-B S3: IntentRouter Hardening (5 days)"
+    
+    week_5:
+      - "MEGA-B S4: Final Integration (2 days)"
+      - "MEGA-B COMPLETE ✅"
+  
+  total_duration: "4-5 weeks"
+  
+  parallelism_opportunities:
+    - "MEGA-A S1 + S2: Agent redesign and knowledge persistence can overlap after day 1"
+    - "MEGA-B S2 + S3: MCP docs and IntentRouter hardening can partially overlap"
+  
+  dependencies:
+    - "MEGA-A must complete before MEGA-B starts (agent architecture stabilizes first)"
+    - "Phase 19 (Convergence Loop) already complete — just needs status update"
+    - "Phase 20 (Workflow Intelligence) already complete"
+
+# ============================================================================
+# MIGRATION PLAN
+# ============================================================================
+
+migration_steps:
+  step_1:
+    title: "Mark Phase 19 complete"
+    action: "Update phase-19 status: active → complete"
+    reason: "Already implemented, 29/29 tests passing"
+  
+  step_2:
+    title: "Create MEGA-A phase file"
+    action: "Create phases/21-intelligence-learning-core-mega.yaml"
+    content: "Consolidation of phases 12 + 17 + 19"
+  
+  step_3:
+    title: "Create MEGA-B phase file"
+    action: "Create phases/22-developer-experience-tooling-mega.yaml"
+    content: "Consolidation of phases 1 + 16 + 18"
+  
+  step_4:
+    title: "Update original phases"
+    action: "Mark phases 1, 12, 16, 17, 18 as 'consolidated_into' MEGA-A or MEGA-B"
+    reason: "Preserve history, show consolidation lineage"
+  
+  step_5:
+    title: "Update master-index.yaml"
+    action: "Update active count: 6 → 2 (MEGA-A, MEGA-B)"
+    reason: "Reflect new consolidated structure"
+  
+  step_6:
+    title: "User approval"
+    action: "Present consolidation plan, await 'proceed' confirmation"
+    reason: "Major restructuring requires user approval"
+
+# ============================================================================
+# BENEFITS OF CONSOLIDATION
+# ============================================================================
+
+benefits:
+  focus:
+    - "2 mega-phases vs 6 active phases (70% reduction)"
+    - "Clear priority: MEGA-A (intelligence) → MEGA-B (DX)"
+    - "No ambiguity about 'what to work on next'"
+  
+  efficiency:
+    - "Reduced context switching (1 mega-phase at a time)"
+    - "Token savings: Load 1 mega-phase context vs 6 phase contexts"
+    - "Parallel sub-streams within mega-phases (faster completion)"
+  
+  clarity:
+    - "Dependency chain visible: MEGA-A → MEGA-B"
+    - "Consolidation lineage preserved (original phases still in registry)"
+    - "Success criteria holistic (not fragmented across 6 phases)"
+  
+  quality:
+    - "Integration testing at mega-phase boundaries (S4 stages)"
+    - "Holistic validation (not piecemeal)"
+    - "Reduced risk of conflicts between concurrent phases"
+
+# ============================================================================
+# RECOMMENDATION
+# ============================================================================
+
+recommendation: |
+  **CONSOLIDATE NOW:**
+  
+  1. Mark Phase 19 complete (already done)
+  2. Create MEGA-A and MEGA-B phase files
+  3. Update original phases with 'consolidated_into' status
+  4. Start MEGA-A S1 (Agent Architecture Redesign) immediately
+  
+  **RATIONALE:**
+  - 6 active phases = too much divergence
+  - 2 mega-phases = clear focus, reduced overhead
+  - Natural capability clustering (intelligence vs DX)
+  - Parallel sub-streams possible within mega-phases
+  - Total timeline: 4-5 weeks (vs 8-10 weeks doing phases serially)
+  
+  **USER ACTION REQUIRED:**
+  Type "proceed with consolidation" to execute migration plan.
+
+# ============================================================================
+# QUESTIONS FOR USER
+# ============================================================================
+
+questions:
+  - "Approve consolidation? (2 mega-phases vs 6 active phases)"
+  - "Any phases to exclude from consolidation?"
+  - "Prefer MEGA-A first (intelligence) or MEGA-B first (DX)?"
+  - "Any additional concerns to address in consolidation?"

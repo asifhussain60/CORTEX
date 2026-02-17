@@ -1,0 +1,437 @@
+---
+# CORTEX Documentation Portal Development Plan
+# Registry-Based Plan (cortex-registry SSOT - NO ROADMAP REFERENCES)
+# Authority: cortex-registry/manifest.yaml
+# Created: 2026-01-25
+# Orchestrator: PlanningOrchestrator
+
+metadata:
+  plan_id: "doc-portal-001"
+  title: "CORTEX Documentation Portal Development"
+  description: "Transform CORTEX documentation into modern glassmorphism portal"
+  orchestrator: "PlanningOrchestrator"
+  authority: "cortex-registry/planning/"
+  created_date: "2026-01-25"
+  target_completion: "2026-02-08"
+  duration_days: 14
+  status: "PLANNING"
+
+mission:
+  statement: |
+    Consolidate CORTEX documentation design system (glassmorphism from _workspaces/docs/)
+    with technical content and advanced diagrams (docs/) into unified, production-ready
+    portal in cortex-gitpages/
+  
+  objectives:
+    - design_consolidation: "Merge glassmorphism CSS system from _workspaces/docs/"
+    - content_migration: "Migrate 85+ technical docs from docs/"
+    - diagram_integration: "Integrate 13 Mermaid + 4 D3.js visualizations"
+    - portal_creation: "Deploy interactive documentation in cortex-gitpages/"
+    - compliance: "WCAG 2.1 AA accessibility + performance > 90 Lighthouse"
+
+scope:
+  sources:
+    location_a:
+      path: "_workspaces/docs/"
+      type: "Design System"
+      assets:
+        - "stylesheets/cortex-glassmorphism.css (production-ready)"
+        - "theme/main.html (Material customization)"
+        - "architecture-glass-demo.html (1221 lines, functional)"
+        - "13 Mermaid diagrams (_diagrams/)"
+    
+    location_b:
+      path: "docs/"
+      type: "Technical Content"
+      assets:
+        - "85+ Markdown documentation pages"
+        - "mkdocs.yml configuration"
+        - "4 D3.js visualizations (_diagrams/d3/)"
+        - "13 Mermaid diagrams (_diagrams/)"
+  
+  target:
+    location_c:
+      path: "cortex-gitpages/"
+      type: "Production Portal"
+      content:
+        - "Glassmorphism design system (from A)"
+        - "Technical documentation (from B)"
+        - "17 Interactive diagrams (Mermaid + D3.js)"
+        - "Modern responsive layout"
+        - "Dark blue theme (#0a1428)"
+
+phases:
+  phase_1:
+    name: "Foundation Setup"
+    duration: "2 days"
+    sequence: 1
+    tasks:
+      - task_1_1:
+          name: "Directory Structure"
+          description: "Create cortex-gitpages project structure"
+          estimated_hours: 4
+          deliverable: "17 directories, .gitignore, config files"
+      
+      - task_1_2:
+          name: "Design System Integration"
+          description: "Copy CSS, themes, setup design foundations"
+          estimated_hours: 6
+          deliverable: "CSS variables accessible, theme applied"
+      
+      - task_1_3:
+          name: "Build Process"
+          description: "Configure MkDocs or Jekyll, build pipelines"
+          estimated_hours: 4
+          deliverable: "Local build working, serve scripts functional"
+    
+    dependencies: []
+    success_criteria:
+      - "All 17 directories created"
+      - "CSS files copied and tested"
+      - "Local build produces valid HTML"
+      - "serve-docs.sh works on macOS/Linux"
+
+  phase_2:
+    name: "Content Migration"
+    duration: "3 days"
+    sequence: 2
+    tasks:
+      - task_2_1:
+          name: "Documentation Migration"
+          description: "Copy 85+ .md files, verify links"
+          estimated_hours: 12
+          deliverable: "All docs migrated, LinkChecker report"
+      
+      - task_2_2:
+          name: "Diagram Integration"
+          description: "Copy 13 Mermaid + 4 D3.js, create index"
+          estimated_hours: 8
+          deliverable: "17 diagrams accessible, metadata.yaml"
+      
+      - task_2_3:
+          name: "Content Enhancement"
+          description: "Add breadcrumbs, cross-references, navigation"
+          estimated_hours: 8
+          deliverable: "Searchable, navigable content hierarchy"
+    
+    dependencies:
+      - phase_1
+    success_criteria:
+      - "85+ docs copied without errors"
+      - "Zero broken internal links"
+      - "All diagrams render correctly"
+      - "Search index complete"
+
+  phase_3:
+    name: "Design Enhancement"
+    duration: "3 days"
+    sequence: 3
+    tasks:
+      - task_3_1:
+          name: "Glassmorphism Application"
+          description: "Apply dark blue theme, glass effects to all pages"
+          estimated_hours: 10
+          deliverable: "Consistent styling across all pages"
+      
+      - task_3_2:
+          name: "Micro-Interactions"
+          description: "Add smooth animations, hover effects"
+          estimated_hours: 8
+          deliverable: "60fps animations, no jank"
+      
+      - task_3_3:
+          name: "Responsive Design"
+          description: "Test 8+ screen sizes, mobile optimization"
+          estimated_hours: 6
+          deliverable: "Mobile/tablet/desktop all responsive"
+    
+    dependencies:
+      - phase_2
+    success_criteria:
+      - "Dark blue (#0a1428) on all pages"
+      - "Glass effects applied to containers"
+      - "No contrast issues (WCAG AA)"
+      - "60fps animations verified"
+
+  phase_4:
+    name: "Interactive Visualizations"
+    duration: "3 days"
+    sequence: 4
+    tasks:
+      - task_4_1:
+          name: "D3.js Enhancement"
+          description: "Integrate 4 visualizations with glassmorphism"
+          estimated_hours: 10
+          deliverable: "Interactive charts with tooltips, zoom, pan"
+      
+      - task_4_2:
+          name: "Mermaid Enhancement"
+          description: "Theme diagrams, add interactivity"
+          estimated_hours: 8
+          deliverable: "13 diagrams with click handlers, export"
+      
+      - task_4_3:
+          name: "Diagram Gallery"
+          description: "Create searchable diagram index/gallery"
+          estimated_hours: 6
+          deliverable: "Diagram discovery page with search/filter"
+    
+    dependencies:
+      - phase_3
+    success_criteria:
+      - "4 D3.js visualizations working"
+      - "13 Mermaid diagrams themed"
+      - "Diagram gallery searchable"
+      - "Performance < 1 second per diagram"
+
+  phase_5:
+    name: "Testing & Validation"
+    duration: "2 days"
+    sequence: 5
+    tasks:
+      - task_5_1:
+          name: "Functional Testing"
+          description: "Links, navigation, diagrams, search"
+          estimated_hours: 8
+          deliverable: "Test report with zero blocker issues"
+      
+      - task_5_2:
+          name: "Cross-Browser Testing"
+          description: "Chrome, Firefox, Safari, Edge (6+ browsers)"
+          estimated_hours: 8
+          deliverable: "Compatibility matrix, fixes applied"
+      
+      - task_5_3:
+          name: "Performance Testing"
+          description: "Lighthouse, Core Web Vitals, optimization"
+          estimated_hours: 6
+          deliverable: "Lighthouse > 90, CWV passing"
+      
+      - task_5_4:
+          name: "Accessibility Testing"
+          description: "WCAG 2.1 AA compliance, keyboard nav"
+          estimated_hours: 6
+          deliverable: "Accessibility report, fixes applied"
+    
+    dependencies:
+      - phase_4
+    success_criteria:
+      - "All functional tests pass"
+      - "Cross-browser compatibility verified"
+      - "Lighthouse score ≥ 90"
+      - "WCAG 2.1 AA compliance"
+
+  phase_6:
+    name: "Deployment & Handoff"
+    duration: "1 day"
+    sequence: 6
+    tasks:
+      - task_6_1:
+          name: "Production Deployment"
+          description: "Deploy to cortex-gitpages, verify live"
+          estimated_hours: 2
+          deliverable: "Portal live on production domain"
+      
+      - task_6_2:
+          name: "Monitoring Setup"
+          description: "Analytics, error tracking, health checks"
+          estimated_hours: 3
+          deliverable: "Dashboards operational, alerts active"
+      
+      - task_6_3:
+          name: "Documentation & Handoff"
+          description: "Deploy guides, maintenance runbooks"
+          estimated_hours: 3
+          deliverable: "Team trained, runbooks accessible"
+    
+    dependencies:
+      - phase_5
+    success_criteria:
+      - "Portal live and accessible"
+      - "Monitoring dashboard operational"
+      - "Team trained on updates"
+      - "Runbook created and shared"
+
+timeline:
+  start_date: "2026-01-26"
+  end_date: "2026-02-08"
+  phases_sequential: true
+  parallel_work_allowed: false
+  critical_path:
+    - "phase_1 → phase_2 → phase_3 → phase_4 → phase_5 → phase_6"
+
+resources:
+  team_composition:
+    technical_writer:
+      count: 1
+      fte: 1.0
+      responsibilities:
+        - "Content organization"
+        - "Link validation"
+        - "Documentation"
+    
+    frontend_developer:
+      count: 1
+      fte: 1.0
+      responsibilities:
+        - "Design implementation"
+        - "CSS customization"
+        - "Build configuration"
+    
+    qa_engineer:
+      count: 1
+      fte: 0.5
+      responsibilities:
+        - "Testing"
+        - "Performance validation"
+        - "Accessibility compliance"
+    
+    devops_engineer:
+      count: 1
+      fte: 0.5
+      responsibilities:
+        - "Deployment"
+        - "Monitoring setup"
+        - "CI/CD pipeline"
+  
+  total_fte: 3.0
+  daily_standup_minutes: 15
+  weekly_review_hours: 1
+
+design_system:
+  color_palette:
+    dark_bg: "#0a1428"
+    primary: "#0d6efd"
+    accent: "#4d8cff"
+    text_light: "#ffffff"
+    border_light: "rgba(255, 255, 255, 0.1)"
+    glass_bg: "rgba(13, 110, 253, 0.1)"
+  
+  glassmorphism:
+    backdrop_filter: "blur(10px)"
+    border_radius: "12px"
+    shadow: "0 8px 32px rgba(0, 0, 0, 0.1)"
+    transparency: "rgba(10, 20, 40, 0.6)"
+  
+  typography:
+    headings: "Material Design scale (H1-H6)"
+    body: "16px base, 1.6 line height"
+    code: "Monospace, syntax-highlighted"
+
+technology_stack:
+  build_tool: "MkDocs + Python + Markdown"
+  hosting: "GitHub Pages"
+  framework: "Material for MkDocs (customized)"
+  visualization:
+    - "Mermaid 10.x (diagrams)"
+    - "D3.js 7.x (interactive charts)"
+  assets:
+    - "Font Awesome 6.5.1 (icons)"
+    - "PNG/SVG (images)"
+    - "System fonts + monospace"
+
+success_criteria:
+  functional:
+    all_pages_accessible: "85+ docs accessible"
+    zero_broken_links: "LinkChecker report: 0 errors"
+    all_diagrams_render: "17/17 diagrams (13 Mermaid + 4 D3.js)"
+    navigation_working: "All menu items functional"
+    search_accurate: "Search results relevant"
+  
+  design:
+    glassmorphism_applied: "Dark blue + glass effects consistent"
+    responsive_tested: "8+ screen sizes verified"
+    accessibility_compliant: "WCAG 2.1 AA"
+    animations_smooth: "60fps target"
+    load_time_optimized: "FCP < 1.5 seconds"
+  
+  performance:
+    lighthouse_score: "≥ 90"
+    core_web_vitals: "LCP < 2.5s, FID < 100ms, CLS < 0.1"
+    page_size: "< 2MB per page (optimized)"
+    render_time: "< 500ms per diagram"
+  
+  user_experience:
+    breadcrumb_navigation: "All pages"
+    table_of_contents: "Long-form pages"
+    dark_mode_optimized: "System preference respected"
+    diagram_discovery: "Searchable gallery"
+    content_export: "PNG/SVG options"
+
+risk_assessment:
+  risk_1:
+    description: "Broken links during migration"
+    probability: "MEDIUM"
+    impact: "HIGH"
+    mitigation: "Automated LinkChecker + manual spot-check"
+  
+  risk_2:
+    description: "Performance regression"
+    probability: "MEDIUM"
+    impact: "MEDIUM"
+    mitigation: "Lighthouse testing in each phase"
+  
+  risk_3:
+    description: "Diagram rendering issues"
+    probability: "LOW"
+    impact: "MEDIUM"
+    mitigation: "Test in multiple browsers early"
+  
+  risk_4:
+    description: "Accessibility compliance gaps"
+    probability: "MEDIUM"
+    impact: "HIGH"
+    mitigation: "axe DevTools scanning + manual testing"
+  
+  risk_5:
+    description: "Deployment failures"
+    probability: "LOW"
+    impact: "HIGH"
+    mitigation: "Staging environment + rollback plan"
+
+governance:
+  authority: "cortex-registry/planning/ (this file)"
+  core_rules_applied:
+    - "CORE-026: Checkpoint before major changes"
+    - "CORE-027: Audit trail maintained"
+    - "CORE-029: Response header enforcement"
+  
+  approval_required: true
+  approval_status: "PENDING_USER_APPROVAL"
+  
+  registry_registration:
+    registry_path: "cortex-registry/planning/doc-portal-001.yaml"
+    orchestrator_access: "PlanningOrchestrator"
+    authority_level: "MEDIUM-HIGH"
+
+next_steps:
+  immediate:
+    - "Review this plan (cortex-registry SSOT)"
+    - "Confirm resource allocation"
+    - "Approve timeline"
+    - "Schedule kick-off"
+  
+  phase_1_start:
+    - "Create directory structure (17 dirs)"
+    - "Copy design assets from _workspaces/docs/"
+    - "Configure build environment"
+    - "Test local build"
+  
+  ongoing:
+    - "Daily standup (15 min)"
+    - "Weekly phase review (1 hour)"
+    - "Risk monitoring"
+    - "Registry updates"
+
+status:
+  current_phase: "PLANNING"
+  completion_percentage: 0
+  approval_status: "AWAITING_USER_APPROVAL"
+  last_updated: "2026-01-25"
+  last_updated_by: "PlanningOrchestrator"
+
+---
+# END OF PLAN
+# Registry Authority: cortex-registry/planning/
+# NO REFERENCES TO: _workspaces/roadmap/
+# All operational data stored in cortex-registry only

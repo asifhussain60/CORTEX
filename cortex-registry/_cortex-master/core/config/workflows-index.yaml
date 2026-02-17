@@ -1,0 +1,281 @@
+# 4 Core Workflow Files - Master Index
+# Authority: PHASE-S Strategic Governance Fix
+# Purpose: Single source of truth for all CORTEX workflows
+# Status: ACTIVE
+# Created: 2026-02-13
+
+overview:
+  description: |
+    This index points to the 4 core workflow files that replace 202 scattered
+    documents. All orchestrators, agents, and planning activities use these files
+    as single source of truth.
+  
+  file_reduction: "202 files → 4 core files + this index (98% reduction)"
+  architecture: "Two-tier planning + event-driven sync + adaptive workflows"
+  authority: "PHASE-S Strategic Governance Fix"
+
+core_files:
+  workflow_core:
+    file: "cortex-registry/_cortex-master/workflows/workflow-core.yaml"
+    purpose: "Strategic planning for multi-session projects"
+    scope: "INITIATIVE → PHASE → STAGE → TASK hierarchy"
+    used_by:
+      - "PlanningOrchestrator"
+      - "MasterOrchestrator (strategic routing)"
+      - "PhaseManager"
+    examples:
+      - "Multi-phase enhancements (ENH-XXX)"
+      - "Cross-cutting architectural changes"
+      - "PHASE-level initiatives"
+    created: "PHASE-S3"
+  
+  workflow_tactical:
+    file: "cortex-registry/_cortex-master/workflows/workflow-tactical.yaml"
+    purpose: "Tactical planning for single-session operations"
+    scope: "OPERATION → STEP → ACTION hierarchy"
+    used_by:
+      - "TDDOrchestrator"
+      - "RefactoringOrchestrator"
+      - "AnalysisOrchestrator"
+      - "MasterOrchestrator (tactical routing)"
+    examples:
+      - "Implement feature requests"
+      - "Fix bugs"
+      - "Refactor code"
+      - "Analyze architecture"
+    created: "PHASE-S2"
+  
+  registry_events:
+    file: "cortex-registry/_cortex-master/workflows/registry-events.yaml"
+    purpose: "Event definitions for orchestrator coordination"
+    scope: "All events orchestrators can emit for status synchronization"
+    used_by:
+      - "All 28 orchestrators (as event emitters)"
+      - "RegistrySyncService (as event subscriber)"
+      - "EventBus (as message broker)"
+      - "Audit trail systems"
+    event_categories:
+      - "Plan lifecycle (PlanCreated, PlanValidated)"
+      - "Phase lifecycle (PhaseStarted, PhaseCompleted, PhasePaused)"
+      - "Stage lifecycle (StageStarted, StageCompleted)"
+      - "Operation lifecycle (OperationCompleted, OperationFailed)"
+      - "Validation events (ValidationPassed, ValidationFailed, RegressionDetected)"
+    created: "PHASE-S1"
+  
+  orchestrator_coordination:
+    file: "cortex-registry/_cortex-master/workflows/orchestrator-coordination.yaml"
+    purpose: "Collaboration rules for orchestrator handoffs"
+    scope: "How orchestrators work together and transfer context"
+    used_by:
+      - "MasterOrchestrator (routing decisions)"
+      - "InteractionOrchestrator (handoff preparation)"
+      - "All domain orchestrators (context passing)"
+    coordination_patterns:
+      - "Intent routing (IMPLEMENT → TDDOrchestrator)"
+      - "Context handoff (InteractionOrchestrator → domain orchestrators)"
+      - "Nested orchestration (MasterOrchestrator → PlanningOrchestrator → TDDOrchestrator)"
+      - "Parallel execution (when orchestrators can run concurrently)"
+    created: "PHASE-S4"
+
+workflow_hierarchy:
+  strategic_planning:
+    level: "Multi-session, weeks to months"
+    file: "workflow-core.yaml"
+    structure:
+      initiative:
+        description: "Highest level strategic goal"
+        duration: "Months"
+        example: "Modernize CORTEX architecture"
+      
+      phase:
+        description: "Major milestone within initiative"
+        duration: "Weeks"
+        example: "PHASE-S1: Event Infrastructure Foundation"
+      
+      stage:
+        description: "Deliverable within phase"
+        duration: "Days"
+        example: "S1-D1: Create RegistrySyncService"
+      
+      task:
+        description: "Atomic unit of work"
+        duration: "Hours"
+        example: "Write event schema validation tests"
+  
+  tactical_planning:
+    level: "Single-session, minutes to hours"
+    file: "workflow-tactical.yaml"
+    structure:
+      operation:
+        description: "User request to fulfill"
+        duration: "Session"
+        example: "Implement user authentication"
+      
+      step:
+        description: "Major execution step"
+        duration: "Minutes"
+        example: "RED: Write authentication tests"
+      
+      action:
+        description: "Atomic action within step"
+        duration: "Seconds"
+        example: "Create test_login_success() test"
+
+event_driven_architecture:
+  description: |
+    All orchestrators emit events at completion points. RegistrySyncService
+    subscribes to events and updates registry automatically. Orchestrators
+    don't know registry exists (decoupled).
+  
+  event_flow:
+    - "Orchestrator completes stage → Emit StageCompleted event"
+    - "EventBus broadcasts event to all subscribers"
+    - "RegistrySyncService receives event → Updates registry YAML"
+    - "Dashboard subscribes to events → Refreshes in real-time"
+    - "Audit system subscribes to events → Logs to audit trail"
+  
+  benefits:
+    - "Decoupling: Components don't know about each other"
+    - "Resilience: Registry failure doesn't stop orchestrators"
+    - "Extensibility: Add subscribers without changing orchestrators"
+    - "Real-time: Status updates happen automatically"
+    - "Audit trail: All events logged by default"
+
+usage_patterns:
+  for_orchestrators:
+    planning:
+      - "Load appropriate workflow file (core vs tactical)"
+      - "Create plan based on request complexity and scope"
+      - "Adapt workflow based on context (risk, complexity, domain)"
+    
+    execution:
+      - "Execute stages/steps sequentially or in parallel"
+      - "Emit events at completion points"
+      - "Handle failures via workflow recovery actions"
+    
+    coordination:
+      - "Check orchestrator-coordination.yaml for handoff rules"
+      - "Pass context to next orchestrator in chain"
+      - "Use EventBus for async communication"
+  
+  for_planning:
+    create_plan:
+      - "Determine scope: strategic (workflow-core) or tactical (workflow-tactical)"
+      - "Load template from appropriate file"
+      - "Customize based on complexity, risk, domain"
+      - "Emit PlanCreated event"
+    
+    execute_plan:
+      - "Follow stages/steps defined in workflow"
+      - "Emit progress events at checkpoints"
+      - "Update status via events (not manual YAML edits)"
+    
+    complete_plan:
+      - "Emit PlanCompleted event"
+      - "RegistrySyncService updates status automatically"
+      - "AutoVacuum archives artifacts to _archive/"
+  
+  for_agents:
+    before_recommendation:
+      - "Consult workflow files to understand current processes"
+      - "Check registry-events.yaml for integration points"
+      - "Use RecommendationGate to validate against existing architecture"
+    
+    during_design:
+      - "Reference orchestrator-coordination.yaml for collaboration patterns"
+      - "Follow workflow hierarchy for planning"
+      - "Emit events for status tracking"
+
+file_lifecycle:
+  active_files:
+    location: "cortex-registry/_cortex-master/workflows/"
+    count: 4
+    maintenance: "Update via PR with version control"
+  
+  completed_plans:
+    trigger: "PhaseCompleted event OR PlanCompleted event"
+    action: "AutoVacuum moves to _archive/YYYY-MM/"
+    retention: "Permanent (for historical reference)"
+  
+  obsolete_files:
+    trigger: "PHASE-S Stage 4 completion"
+    action: "Archive 198 files to _archive/phase-s-consolidation/"
+    documentation: "README.md in archive explains migration"
+
+validation:
+  schema_validation:
+    - "All 4 core files have JSON Schema definitions"
+    - "Pre-commit hook validates YAML syntax"
+    - "Integration tests verify file references"
+  
+  consistency_checks:
+    - "No orphaned references (all links resolve)"
+    - "Event definitions match orchestrator emissions"
+    - "Workflow stages align with orchestrator implementations"
+  
+  regression_prevention:
+    - "End-to-end tests cover user journeys"
+    - "RGR loops at every file modification"
+    - "Holistic audit before production deployment"
+
+migration_guide:
+  from_old_structure:
+    step_1: "Identify which old file maps to which core file"
+    step_2: "Extract still-relevant content"
+    step_3: "Merge into appropriate core file section"
+    step_4: "Update all references to point to core files"
+    step_5: "Archive old file to _archive/phase-s-consolidation/"
+  
+  reference_mapping:
+    strategic_plans: "→ workflow-core.yaml"
+    tactical_guides: "→ workflow-tactical.yaml"
+    status_updates: "→ registry-events.yaml (now automatic)"
+    orchestrator_flows: "→ orchestrator-coordination.yaml"
+    wave_summaries: "→ Archive (historical reference)"
+    session_reports: "→ Archive (no longer generated)"
+
+success_criteria:
+  file_count:
+    target: "4 core files + 1 index = 5 total"
+    validation: "find cortex-registry/_cortex-master/workflows -type f | wc -l"
+  
+  reference_integrity:
+    target: "0 broken links"
+    validation: "grep -r 'file://' . | verify all resolve"
+  
+  orchestrator_adoption:
+    target: "28/28 orchestrators use core files"
+    validation: "Code review + integration tests"
+  
+  event_coverage:
+    target: "100% of completion points emit events"
+    validation: "Event bus metrics"
+  
+  status_accuracy:
+    target: "100% registry status matches reality"
+    validation: "Compare registry vs git log AC markers"
+
+maintenance:
+  versioning:
+    strategy: "Semantic versioning for core files"
+    format: "workflow-core.v2.yaml (breaking changes only)"
+    backward_compatibility: "Maintain v1 for 1 release cycle"
+  
+  update_process:
+    - "Create PR with changes to core file"
+    - "Run validation tests"
+    - "Update version number if breaking"
+    - "Document changes in changelog section"
+    - "Merge after approval"
+  
+  monitoring:
+    - "stages file access patterns (which files used most)"
+    - "Monitor event emission rates"
+    - "Audit registry sync accuracy weekly"
+    - "Review workflow effectiveness monthly"
+
+links:
+  legacy_wave_plan: "cortex-registry/_cortex-master/waves/phase-s-strategic-governance-fix.yaml"
+  archive_location: "_archive/phase-s-consolidation/"
+  documentation: "docs/architecture/event-driven-orchestration.md"
+  copilot_instructions: ".github/copilot-instructions.md § Workflow Architecture"
