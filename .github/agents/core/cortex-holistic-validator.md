@@ -84,7 +84,7 @@ Transform CORTEX governance from **reactive** to **proactive** with Phase 49 CCL
 | Regressions detected late | Regressions prevented early | -20% validation latency |
 | Challenges optional | Challenges mandatory | +40% challenge relevance |
 | Single-component focus | Cross-system holistic view | Context-aware via CCL |
-| cortex_brain for production repos | cortex_brain for CORTEX itself | Enriched by CCL LENS warming |
+| cortex_intelligence for production repos | cortex_intelligence for CORTEX itself | Enriched by CCL LENS warming |
 
 
 ---
@@ -154,7 +154,7 @@ User Request (IMPLEMENT/FIX/REFACTOR)
 │     - Self-analysis for CORTEX repo │
 │     - Related file synthesis        │
 │     - Historical pattern awareness  │
-│     → See YAML: governance.validation_rules.cortex_brain_context
+│     → See YAML: governance.validation_rules.cortex_intelligence_context
 └─────────────────────────────────────┘
          ↓
      VERDICT: PASS | WARN | BLOCK
@@ -553,7 +553,7 @@ if tracker.should_block_if_degrades():
 | `cortex-registry/_cortex-master/index.yaml` | Phase registry | Status, dependencies, ROI scores |
 | `cortex/wiring/specifications/wiring.yaml` | Orchestrator registry | Registrations, dependencies, MCP tools |
 | `.github/agents/AGENT-INDEX.md` | Agent inventory | Agent list, capabilities, load patterns |
-| `cortex_brain/onboarded_repos/` | Brain context | Repo configurations, tier mappings |
+| `cortex_intelligence/onboarded_repos/` | Brain context | Repo configurations, tier mappings |
 
 ### Consistency Checks
 
@@ -745,12 +745,12 @@ Challenge Decision Log:
 
 ---
 
-## cortex_brain Self-Analysis
+## cortex_intelligence Self-Analysis
 
 ### CORTEX Repo Configuration
 
 ```yaml
-# cortex_brain/onboarded_repos/cortex_self.yaml
+# cortex_intelligence/onboarded_repos/cortex_self.yaml
 repo_id: "cortex_self"
 repo_path: "."
 repo_type: "internal"

@@ -236,7 +236,7 @@ priority_checks:
       - id: "P1.5-001"
         name: "Brain Health Score"
         description: "Aggregated brain health >=80%"
-        tool: "cortex_brain_health"
+        tool: "cortex_intelligence_health"
         threshold: 80
         dimensions:
           - "cache_staleness_ratio"
@@ -278,7 +278,7 @@ priority_checks:
       - id: "P1.5-004"
         name: "Brain State Freshness"
         description: "All caches <24h age"
-        tool: "cortex_brain_health"
+        tool: "cortex_intelligence_health"
         metric: "knowledge_freshness_index"
         threshold: 95
         evidence_required: true
@@ -315,7 +315,7 @@ priority_checks:
       - id: "P1.5-007"
         name: "Central Brain Health (Multi-User)"
         description: "Team collaboration brain state operational"
-        tool: "cortex_brain_health"
+        tool: "cortex_intelligence_health"
         metric: "multi_user_capable"
         threshold: true
         evidence_required: true
@@ -590,7 +590,7 @@ tools:
     output: "Validation report"
   
   # Phase 38 Tools (Brain Cohesion & Health)
-  cortex_brain_health:
+  cortex_intelligence_health:
     description: "Brain health metrics across 5 dimensions"
     input: "Optional filters"
     output: "Health score + dimensions + recommendations"

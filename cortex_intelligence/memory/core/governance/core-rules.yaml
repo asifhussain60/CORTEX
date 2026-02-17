@@ -127,7 +127,7 @@ rules:
       Business Principle: Build for portability from day one.
       
       WRONG: /Users/asifhussain/PROJECTS/CORTEX
-      RIGHT: get_project_root() / "cortex_brain"
+      RIGHT: get_project_root() / "cortex_intelligence"
     validation:
       - No /Users/... paths
       - No C:\Users\... paths
@@ -276,7 +276,7 @@ rules:
       - "Never write code directly"
 
   # --------------------------------------------------------------------------
-  # CORE-020: No Markdown in cortex_brain
+  # CORE-020: No Markdown in cortex_intelligence
   # --------------------------------------------------------------------------
   - rule_id: CORE-020
     principle: "Separation of Concerns"
@@ -285,11 +285,11 @@ rules:
     severity: blocked
     name: No Markdown in Brain
     description: |
-      cortex_brain/ MUST be YAML/JSON only. No .md files.
+      cortex_intelligence/ MUST be YAML/JSON only. No .md files.
       
       Business Principle: Data structures separate from documentation.
     validation:
-      - cortex_brain/**/*.md blocked
+      - cortex_intelligence/**/*.md blocked
       - Use YAML for all configs
       - Exception: None in brain
 
@@ -697,13 +697,13 @@ rules:
       - "Root-level files (reports/my-file.md)"
       - "Root-level docs (docs/file.md)"
       - "Root-level cortex modules (cortex/module.py)"
-      - "Root-level brain files (cortex_brain/file.py)"
+      - "Root-level brain files (cortex_intelligence/file.py)"
     
     required_patterns:
       - "Subfolders mandatory: docs/{subfolder}/file.md"
       - "Reports organized: reports/{subfolder}/file.md"
       - "Code organized: cortex/{module}/file.py"
-      - "Brain organized: cortex_brain/{tier}/{domain}/file.py"
+      - "Brain organized: cortex_intelligence/{tier}/{domain}/file.py"
     
     allowed_root_files:
       - "README.md, .gitignore, .gitattributes"
@@ -1535,7 +1535,7 @@ rules:
       - ✅ Risk scoring (affected files, change type, test health)
       - ✅ Architecture drift detection (deviation from master plan)
       - ✅ Challenge Gate generation (alternatives, disagreements)
-      - ✅ cortex_brain integration (CORTEX self-development)
+      - ✅ cortex_intelligence integration (CORTEX self-development)
       AC_COMPLETE: AC-ENH-001-001 ✅ Holistic validation mandatory
     
     scope:
@@ -1804,7 +1804,7 @@ enforcement:
     highest: "CORE-029 (Response headers), CORE-030 (Implementation truth), CORE-031 (Declarative autowiring), CORE-032 (Intent classification), CORE-035 (Single canonical)"
     high: "CORE-034 (Audit logging)"
     medium: "CORE-005 (Path portability), CORE-011 (Type hints), CORE-012 (Docstrings)"
-    loading_sequence: "See cortex_brain/tier0/governance-loading-sequence.yaml"
+    loading_sequence: "See cortex_intelligence/tier0/governance-loading-sequence.yaml"
   
   remediation_status:
     "CORE-030": "✅ COMPLETE - Implementation-first validation protocol enforced"

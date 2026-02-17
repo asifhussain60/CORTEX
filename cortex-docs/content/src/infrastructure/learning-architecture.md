@@ -248,7 +248,7 @@ FROM python:3.11-slim
 
 # Install CORTEX with learning system
 COPY cortex/ /app/cortex/
-COPY cortex_brain/ /app/cortex_brain/
+COPY cortex_intelligence/ /app/cortex_intelligence/
 COPY cortex-registry/ /app/cortex-registry/
 
 # Learning system dependencies

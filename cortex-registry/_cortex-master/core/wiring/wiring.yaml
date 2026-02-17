@@ -1301,7 +1301,7 @@ orchestrators:
       phase: '48'
       stage: '3'
   - name: CortexBrainIntegrationOrchestrator
-    module: cortex.orchestrators.holistic.cortex_brain_integration
+    module: cortex.orchestrators.holistic.cortex_intelligence_integration
     class: CortexBrainIntegrationOrchestrator
     tier: 3
     priority: 87
@@ -1316,7 +1316,7 @@ orchestrators:
     mcp_adapter: BrainIntegrationAdapter
     description: Integrates CORTEX brain state with validation pipeline (Phase 48 S4)
     mcp_tools:
-    - cortex_brain_health
+    - cortex_intelligence_health
     governance:
     - CORE-035
     version: 1.0.0

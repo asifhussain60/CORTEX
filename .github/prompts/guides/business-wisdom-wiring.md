@@ -9,7 +9,7 @@
 
 ## 📖 What Changed
 
-All 33 CORE governance rules in `cortex_brain/tier0/governance/core-rules.yaml` now include **`book_reference`** fields linking each rule to famous business/tech books.
+All 33 CORE governance rules in `cortex_intelligence/tier0/governance/core-rules.yaml` now include **`book_reference`** fields linking each rule to famous business/tech books.
 
 ### Example Structure (BEFORE → AFTER)
 
@@ -35,7 +35,7 @@ All 33 CORE governance rules in `cortex_brain/tier0/governance/core-rules.yaml` 
 ## ✅ Stage 1: YAML Enhancement (COMPLETE)
 
 **What:** Added `book_reference` metadata to 33 CORE rules  
-**Files Changed:** `cortex_brain/tier0/governance/core-rules.yaml`  
+**Files Changed:** `cortex_intelligence/tier0/governance/core-rules.yaml`  
 **Commits:**
 - `feat(governance): Add book references to CORE rules (batch 1/4)` (29000c076)
 - `feat(governance): Add book reference to CORE-020` (3344fc2b9)
@@ -77,7 +77,7 @@ All 33 CORE governance rules in `cortex_brain/tier0/governance/core-rules.yaml` 
 
 ### Key Files to Update
 
-#### 1. **GovernanceRuleLoader** (`cortex/tools/cortex_brain_integration.py`)
+#### 1. **GovernanceRuleLoader** (`cortex/tools/cortex_intelligence_integration.py`)
 
 **Current:** Loads rules from YAML  
 **Enhancement:** Expose `book_reference` field when retrieving rules
@@ -101,7 +101,7 @@ def get_rule_by_id(self, rule_id: str) -> Optional[Dict[str, Any]]:
 ```python
 def _format_governance_rule_with_book(self, rule_id: str) -> str:
     """Format governance rule with book reference for display."""
-    from cortex.tools.cortex_brain_integration import GovernanceRuleLoader
+    from cortex.tools.cortex_intelligence_integration import GovernanceRuleLoader
     
     loader = GovernanceRuleLoader()
     rule = loader.get_rule_by_id(rule_id)
@@ -236,7 +236,7 @@ git pull origin CORTEX
 **2. Verify YAML changes:**
 ```bash
 # Check that book_reference fields exist
-grep -A 1 "book_reference" cortex_brain/tier0/governance/core-rules.yaml | head -20
+grep -A 1 "book_reference" cortex_intelligence/tier0/governance/core-rules.yaml | head -20
 ```
 
 **Expected Output:**
@@ -251,7 +251,7 @@ book_reference: "Good to Great by Jim Collins"
 **3. Test governance rule loading:**
 ```python
 # In Python shell or test:
-from cortex.tools.cortex_brain_integration import GovernanceRuleLoader
+from cortex.tools.cortex_intelligence_integration import GovernanceRuleLoader
 
 loader = GovernanceRuleLoader()
 rule = loader.get_rule_by_id("CORE-008")
@@ -323,10 +323,10 @@ Governance Rules: CORE-008, CORE-011, CORE-012
 ## 🔗 Related Files
 
 ### Modified
-- `cortex_brain/tier0/governance/core-rules.yaml` (1814 lines, 33 rules enhanced)
+- `cortex_intelligence/tier0/governance/core-rules.yaml` (1814 lines, 33 rules enhanced)
 
 ### To Implement (Stage 2)
-- `cortex/tools/cortex_brain_integration.py` (GovernanceRuleLoader)
+- `cortex/tools/cortex_intelligence_integration.py` (GovernanceRuleLoader)
 - `cortex/orchestrators/core/enforcement_orchestrator.py` (Line 1017+)
 - **Location TBD:** DoR markdown display logic (needs discovery)
 

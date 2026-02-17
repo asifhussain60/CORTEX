@@ -611,19 +611,19 @@ Organizations benefit from adaptive learning through CORTEX's three-layer brain 
 
 **Key Components:**
 
-- **Perception Layer** — `cortex_brain/perception/pattern_registry.py`
+- **Perception Layer** — `cortex_intelligence/perception/pattern_registry.py`
   - Detects repository patterns via signature matching
   - Registers learned patterns with confidence scores
   - Performs fuzzy matching for partial signatures
   - 21 tests, 94% coverage
 
-- **Reasoning Layer** — `cortex_brain/reasoning/strategy_selector.py`
+- **Reasoning Layer** — `cortex_intelligence/reasoning/strategy_selector.py`
   - Recommends strategies based on detected patterns
   - Evaluates context and constraints
   - Ranks strategies by historical success rate
   - 23 tests, 96% coverage
 
-- **Action Layer** — `cortex_brain/action/execution_planner.py`
+- **Action Layer** — `cortex_intelligence/action/execution_planner.py`
   - Generates step-by-step execution plans
   - Includes validation checks and rollback procedures
   - Estimates duration and risk level

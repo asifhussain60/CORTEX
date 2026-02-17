@@ -218,8 +218,8 @@ python .github/scripts/vacuum-cli.py /vacuum-full --execute
 
 ---
 
-#### 10. Integration with **cortex_brain/** governance
-📄 **Location:** `cortex_brain/tier0/governance/`
+#### 10. Integration with **cortex_intelligence/** governance
+📄 **Location:** `cortex_intelligence/tier0/governance/`
 
 **How They Work Together:**
 - Vacuum respects CORE-030 through CORE-035 (new vacuum rules)
@@ -305,8 +305,8 @@ CORE-035: "Document all safety threshold decisions"
 .github/scripts/vacuum-cli.py            (CLI tool)
 cortex*.yaml                             (Configuration)
 pyrightconfig.json                       (Type checking)
-cortex_brain/tier0/**/*.yaml             (Governance rules)
-cortex_brain/tier1/**/*.yaml             (Acceptance criteria)
+cortex_intelligence/tier0/**/*.yaml             (Governance rules)
+cortex_intelligence/tier1/**/*.yaml             (Acceptance criteria)
 ```
 
 ### Vacuum System Files (SPECIAL STATUS)

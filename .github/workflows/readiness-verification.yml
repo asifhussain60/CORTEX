@@ -5,7 +5,7 @@ on:
     branches: [CORTEX, main, develop]
     paths:
       - 'cortex/**'
-      - 'cortex_brain/**'
+      - 'cortex_intelligence/**'
       - 'tests/unit/orchestrators/**'
       - '.github/workflows/readiness-verification.yml'
   pull_request:

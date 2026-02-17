@@ -853,7 +853,7 @@ Merge: Company takes precedence → CORTEX fills gaps
 
 | Content | Location |
 |---------|----------|
-| Python Code | cortex/, cortex_brain/ directories |
+| Python Code | cortex/, cortex_intelligence/ directories |
 | Tests | tests/ directory |
 | Documentation | cortex-docs/ directory |
 | Wiring | cortex/wiring/specifications/wiring.yaml |
@@ -897,7 +897,7 @@ Merge: Company takes precedence → CORTEX fills gaps
 #### 📚 DIGEST Mode
 **Trigger:** `/digest {file}` command or auto-detect chat files  
 **Purpose:** Extract learnings from chat sessions and ingest into knowledge base  
-**Flow:** Parse → Extract insights → Synthesize → Store to cortex_brain  
+**Flow:** Parse → Extract insights → Synthesize → Store to cortex_intelligence  
 **MCP Tools:** `cortex_digest_session`, `cortex_unified_digest_ingest`  
 **Auto-Routing:** Chat files → DIGEST, Knowledge entries → INGEST (Phase 72)  
 **Universal:** Works on any chat file from any repository

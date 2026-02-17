@@ -40,7 +40,7 @@ cortex_domains:
     rules_count: 29
     read_only: true
     status: "active"
-    config_path: "cortex_brain/tier0/governance/"
+    config_path: "cortex_intelligence/tier0/governance/"
 
   response_headers:
     domain_name: "Response Headers"
@@ -53,7 +53,7 @@ cortex_domains:
       - author_attribution
     read_only: true
     status: "active"
-    config_path: "cortex_brain/tier0/response-headers.yaml"
+    config_path: "cortex_intelligence/tier0/response-headers.yaml"
 
   # -------------------------------------------------------------------------
   # TIER 1: Project Domains
@@ -169,7 +169,7 @@ cortex_domains:
     domain_templates: 6
     index_file: "response-templates-index.yaml"
     status: "active"
-    config_path: "cortex_brain/tier2/"
+    config_path: "cortex_intelligence/tier2/"
 
   # -------------------------------------------------------------------------
   # TIER 3: Knowledge/Reference Domains
@@ -186,7 +186,7 @@ cortex_domains:
     directories: 18  # Includes qa-automation-testing
     auto_indexed: true
     status: "active"
-    config_path: "cortex_brain/tier3/"
+    config_path: "cortex_intelligence/tier3/"
     subdomains:
       - architecture
       - backend-python
@@ -248,7 +248,7 @@ cortex_domains:
       - business_integration
       - query_patterns
     status: "active"
-    config_path: "cortex_brain/tier3/domain-registry.yaml"
+    config_path: "cortex_intelligence/tier3/domain-registry.yaml"
 
 # =============================================================================
 # BUSINESS DOMAINS READY (Extensible)
@@ -315,7 +315,7 @@ business_domain:
       fallback: "basic_mode"
     
     audit_trail:
-      file: "cortex_brain/tier0/audit-log-enhanced.yaml"
+      file: "cortex_intelligence/tier0/audit-log-enhanced.yaml"
       function: "enrich_audit_entry"
       required: false
       fallback: "standard_logging"
@@ -325,7 +325,7 @@ business_domain:
   breaking_changes: false
   
   documentation:
-    file: "cortex_brain/tier3/README-DOMAIN-INTEGRATION.md"
+    file: "cortex_intelligence/tier3/README-DOMAIN-INTEGRATION.md"
     location: "See domain integration guide"
     examples: "See dashboard_extensibility.py"
 
@@ -386,7 +386,7 @@ registry_tests:
 # =============================================================================
 
 # Example 1: Load registry in Python
-# from cortex_brain.tier3 import domain_registry
+# from cortex_intelligence.tier3 import domain_registry
 # domains = domain_registry.load_registry()
 # print(domains['cortex_domains'])
 

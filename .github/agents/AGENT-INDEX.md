@@ -132,7 +132,7 @@ Total Savings: ~245,000 tokens per session (98% reduction)
 - **cortex-holistic-validator.md** — Pre-implementation holistic validation (Phase 48) + Implementation Alignment Gate ⭐ ENHANCED
   - **Load when:** Before ANY IMPLEMENT/FIX/REFACTOR intent
   - **Size:** ~480 lines
-  - **Key capabilities:** Registry cross-validation, dependency analysis, regression risk scoring, mandatory challenge gate, cortex_brain self-analysis, pre-implementation alignment checks, duplicate detection, test plan validation, LENS integration validation
+  - **Key capabilities:** Registry cross-validation, dependency analysis, regression risk scoring, mandatory challenge gate, cortex_intelligence self-analysis, pre-implementation alignment checks, duplicate detection, test plan validation, LENS integration validation
   - **Enforcement:** BLOCKING — No implementation without validation pass + alignment check
 
 - **architecture-integrity-agent.md** — Wiring alignment enforcer + Auto-remediation ⭐ NEW (Phase 70)
@@ -231,7 +231,7 @@ Execute Validation Sequence:
   3. Regression risk scoring
   4. Architecture drift detection
   5. Mandatory challenge gate
-  6. cortex_brain self-analysis
+  6. cortex_intelligence self-analysis
          ↓
 IF PASS/WARN → Load cortex-designer.md → Proceed
 IF BLOCK → Stop, show remediation, require override

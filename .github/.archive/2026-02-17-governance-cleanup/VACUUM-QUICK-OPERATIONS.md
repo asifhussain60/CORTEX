@@ -144,7 +144,7 @@ These files are **NEVER** deleted:
 .github/prompts/*-agents.md
 cortex*.yaml
 pyrightconfig.json
-cortex_brain/tier0/**/*.yaml
+cortex_intelligence/tier0/**/*.yaml
 cortex-docs/0-README.md
 cortex-docs/INDEX.md
 ```

@@ -1,13 +1,13 @@
 version: '1.0'
 last_sync: null
 protected_patterns:
-- cortex_brain/tier0/**
-- cortex_brain/tier1/**
-- cortex_brain/tier2/**
-- cortex_brain/tier3/**
-- cortex_brain/domain/**
-- cortex_brain/domain_brain/**
-- cortex_brain/state/**
+- cortex_intelligence/tier0/**
+- cortex_intelligence/tier1/**
+- cortex_intelligence/tier2/**
+- cortex_intelligence/tier3/**
+- cortex_intelligence/domain/**
+- cortex_intelligence/domain_brain/**
+- cortex_intelligence/state/**
 - company/domains/**/*.yaml
 - company/dashboards/**
 - cortex-registry/**

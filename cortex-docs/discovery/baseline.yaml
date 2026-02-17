@@ -2053,10 +2053,10 @@ git_timeline:
       errors). Redirected hallucination_prevention imports, deleted test files for
       deleted modules, commented out incomplete governance validators'
     - 'd29e2d785 Phase A: Governance Consolidation - Delete duplicate cortex/brain/core/governance/
-      and hallucination_prevention/ folders. Canonical source is now cortex_brain/
+      and hallucination_prevention/ folders. Canonical source is now cortex_intelligence/
       (166→170 errors - reveals underlying import issues)'
     - 'afa665ac6 Phase A: Governance Consolidation - Delete duplicate cortex/brain/core/governance/
-      and hallucination_prevention/ folders. Canonical source is now cortex_brain/
+      and hallucination_prevention/ folders. Canonical source is now cortex_intelligence/
       (166→170 errors - reveals underlying import issues)'
     - 'dca897545 Phase E: Replace stubs with proper implementations (169→166 errors)'
     - '62c90a621 Phase E: Replace stubs with proper implementations (169→166 errors)'
@@ -2086,10 +2086,10 @@ git_timeline:
       CoherenceIssue, ChallengeSection, FunctionInfo, fix circular imports'
     - '4269dc602 GOVERNANCE: Add missing class definitions - SecurityContext, CredentialStatus,
       CoherenceIssue, ChallengeSection, FunctionInfo, fix circular imports'
-    - '471dbf37c GOVERNANCE: Consolidate tiers to cortex_brain - Remove root tier1/tier2,
-      move all to cortex_brain/tier1/tier2, update imports, create md_organizer module'
-    - 'ca401a87d GOVERNANCE: Consolidate tiers to cortex_brain - Remove root tier1/tier2,
-      move all to cortex_brain/tier1/tier2, update imports, create md_organizer module'
+    - '471dbf37c GOVERNANCE: Consolidate tiers to cortex_intelligence - Remove root tier1/tier2,
+      move all to cortex_intelligence/tier1/tier2, update imports, create md_organizer module'
+    - 'ca401a87d GOVERNANCE: Consolidate tiers to cortex_intelligence - Remove root tier1/tier2,
+      move all to cortex_intelligence/tier1/tier2, update imports, create md_organizer module'
     - '1f3b47401 P2: EventRegistry, ReflectionStatus, EdgeType, GovernanceEnforcer,
       hallucination_prevention (mutation, sandbox, detection, confidence, boundaries)
       - 162 errors, 6139 tests'
@@ -3593,9 +3593,9 @@ git_timeline:
     - '1e624d737 feat(AC-ORCHESTRATOR-MIGRATION-001): Upgrade Planning/Planner Orchestrator
       to v1.1 - Enhanced from CORTEX-DOCS'
     - '2afb6fd5e feat: AC-INTELLIGENT-MERGE-001: Intelligent Git Merge System with
-      cortex_brain Preservation'
+      cortex_intelligence Preservation'
     - 'be142da9a feat: AC-INTELLIGENT-MERGE-001: Intelligent Git Merge System with
-      cortex_brain Preservation'
+      cortex_intelligence Preservation'
     - '71719e659 feat(AC-DB-SSOT): wire all 23 orchestrators to DatabaseBackedRegistry'
     - 'b60fb6e65 feat(AC-DB-SSOT): wire all 23 orchestrators to DatabaseBackedRegistry'
     - '8c94eea41 feat(AC-DB-SSOT): implement Database-Backed Orchestrator Registry'

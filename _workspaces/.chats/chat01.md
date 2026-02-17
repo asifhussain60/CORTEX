@@ -50,7 +50,7 @@ Now let me check for any missing areas by examining the codebase structure more:
 
 Ran terminal command: git log --since="60 days ago" --pretty=format:"%s" --no-merges | Select-String -Pattern "phase|brain|tier|governance|enforcement|registry|lens|crystallization" | Select-Object -First 30
 
-Searched for regex `tier0|tier1|tier2|tier3` (`**/cortex_brain/**/*.py`), 50 results
+Searched for regex `tier0|tier1|tier2|tier3` (`**/cortex_intelligence/**/*.py`), 50 results
 
 Perfect! Now I have enough context. Let me create a comprehensive documentation coverage analysis table:
 
@@ -97,7 +97,7 @@ The documentation intelligently covers most core CORTEX capabilities but has **n
 | **Tier 1 (Orchestrators/Brains/Intelligence/Adapters)** | ❌ **MISSING** | — | Tier1 modules exist but undocumented (orchestrators, brains, intelligence, adapters) |
 | **Tier 2 (Advanced Governance)** | ❌ **MISSING** | — | 13 tier2 governance modules undocumented (hallucination_prevention, security, audit_immutability, PII detection, etc.) |
 | **Tier 3 (Knowledge Synthesis)** | ⚠️ Mentioned | glossary.md | Tier3 knowledge module structure not explained |
-| **cortex_brain/ Storage** | ⚠️ Mentioned | diagrams/architecture-overview.md | Directory structure (tier0/, tier1/, tier2/, tier3/, governance/, domain/, state/, releases/) not documented |
+| **cortex_intelligence/ Storage** | ⚠️ Mentioned | diagrams/architecture-overview.md | Directory structure (tier0/, tier1/, tier2/, tier3/, governance/, domain/, state/, releases/) not documented |
 | **Domain Brain** | ❌ **MISSING** | — | domain_brain not documented |
 | **Perception → Reasoning → Action** | ✅ Complete | capabilities/brain-architecture.md | — |
 

@@ -141,7 +141,7 @@ _workspaces/CORTEX-VACUUM-REGISTRY.md        ← Archive
 .github/prompts/*.prompt.md              # System prompts
 .github/prompts/*-agents.md              # Agent definitions
 cortex*.yaml                             # Configuration
-cortex_brain/tier0/**/*.yaml             # Governance
+cortex_intelligence/tier0/**/*.yaml             # Governance
 docs/0-README.md                         # Doc entry points
 pyrightconfig.json                       # Type checking
 ```

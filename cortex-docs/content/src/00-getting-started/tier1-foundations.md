@@ -338,7 +338,7 @@ from cortex.repositories import ProfileRepository, StateRepository
 
 # Initialize repositories
 profile_repo = ProfileRepository(storage_path="company/profiles")
-state_repo = StateRepository(storage_path="cortex_brain/state")
+state_repo = StateRepository(storage_path="cortex_intelligence/state")
 
 # Save profile with validation
 profile_repo.save({

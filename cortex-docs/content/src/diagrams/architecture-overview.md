@@ -95,7 +95,7 @@ c4_level: Context + Container
 │  👁️ LENS LAYER      │  │  💾 STORAGE LAYER      │  │  🧠 LEARNING LAYER   │
 │  (Code Intelligence) │  │  (Persistence)         │  │  (Adaptive Systems)  │
 ├──────────────────────┤  ├────────────────────────┤  ├──────────────────────┤
-│ • ASTAnalyzer        │  │ • cortex_brain/        │  │ • Pattern Learning   │
+│ • ASTAnalyzer        │  │ • cortex_intelligence/        │  │ • Pattern Learning   │
 │ • GitHistoryAnalyzer │  │ • Knowledge Repos      │  │ • Test Quality Metrics│
 │ • CommentExtractor   │  │ • cortex-registry/     │  │ • Validation Loops   │
 │ • DependencyAnalyzer │  │ • State Management     │  │ • Adaptive Refinement│
@@ -182,7 +182,7 @@ Specialist Orchestrators (60 total)
 **Purpose:** Persistence and state management
 
 **Components:**
-- `cortex_brain/`: System state, learned patterns
+- `cortex_intelligence/`: System state, learned patterns
 - `cortex-registry/`: Orchestrator wiring, phase definitions
 - `company/`: Customer-specific configurations
 - Knowledge repositories: Best practices, domain wisdom
@@ -272,7 +272,7 @@ Specialist Orchestrators (60 total)
         └────────────────────┴────────────────────┘
                              │
                    Shared Storage Layer
-                   (cortex_brain, registry)
+                   (cortex_intelligence, registry)
 ```
 
 ### Performance Targets

@@ -152,7 +152,7 @@ UnifiedIntelligenceProvider.get_context()
     - Precedence: OVERRIDE (company rules beat CORTEX)
     ↓
 3. Get CORTEX Knowledge
-    - Loads: cortex_brain/tier0-3/knowledge/*.yaml
+    - Loads: cortex_intelligence/tier0-3/knowledge/*.yaml
     - Filters by intent (45+ best practices YAMLs)
     ↓
 4. Synthesize via KnowledgeSynthesisEngine
@@ -358,7 +358,7 @@ STAGE 4: TDDOrchestrator
 
 ### PRODUCTION Mode (CORTEX.prompt.md)
 - **Context:** User's production repository
-- **Registry:** `cortex_brain/onboarded_repos/{repo}/`
+- **Registry:** `cortex_intelligence/onboarded_repos/{repo}/`
 - **Focus:** Feature implementation, bug fixes
 - **Same orchestrators:** Uses identical Stage 1-4 pipeline
 

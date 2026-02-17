@@ -6,7 +6,7 @@ rules:
   priority: 1
 - action: archive
   description: Archive phase completion markers
-  destination: cortex_brain/state/archive/phase-markers/
+  destination: cortex_intelligence/state/archive/phase-markers/
   name: phase_markers
   pattern: .phase*
   priority: 2

@@ -71,8 +71,8 @@ repo_scope:
 objective: |
   Transform CORTEX repository folder architecture through two parallel tracks:
   
-  TRACK A: cortex_brain → cortex_intelligence rename
-  - Rename cortex_brain to cortex_intelligence (brain-aligned semantics)
+  TRACK A: cortex_intelligence → cortex_intelligence rename
+  - Rename cortex_intelligence to cortex_intelligence (brain-aligned semantics)
   - Restructure tier0-3 to memory/{immutable,stable,evolving,experimental}
   - Update 311 Python imports + 47 YAML references
   - Preserve all git history via git mv
@@ -126,7 +126,7 @@ planning_scope:
   
   this_phase_scope: |
     ✅ Modifies: CORTEX repository folder structure
-    ✅ Updates: CORTEX Python imports (cortex_brain → cortex_intelligence)
+    ✅ Updates: CORTEX Python imports (cortex_intelligence → cortex_intelligence)
     ✅ Reorganizes: cortex-registry/ governance and planning structure
     ❌ Does NOT modify: Production application repos
     ❌ Does NOT deploy: CORTEX to customer environments
@@ -167,9 +167,9 @@ planning_scope:
 # IMPACT ANALYSIS (Evidence-Based)
 # ============================================================================
 impact_analysis:
-  cortex_brain_references:
-    python_imports: 311  # grep -r "from cortex_brain|import cortex_brain" --include="*.py"
-    yaml_references: 47  # grep -rl "cortex_brain" --include="*.yaml"
+  cortex_intelligence_references:
+    python_imports: 311  # grep -r "from cortex_intelligence|import cortex_intelligence" --include="*.py"
+    yaml_references: 47  # grep -rl "cortex_intelligence" --include="*.yaml"
     total_files: 358
     
   cortex_master_references:
@@ -191,7 +191,7 @@ impact_analysis:
 structure_transformations:
   track_a_intelligence:
     before: |
-      cortex_brain/
+      cortex_intelligence/
       ├── __init__.py
       ├── perception/
       ├── reasoning/
@@ -336,7 +336,7 @@ stages:
       - "git checkout -b phase-103-migration"
       - "pytest tests/ -v --tb=short > /tmp/phase-103-baseline-tests.txt 2>&1"
       - "ruff check cortex/ > /tmp/phase-103-baseline-lint.txt 2>&1 || true"
-      - "grep -r 'from cortex_brain' --include='*.py' | wc -l > /tmp/phase-103-import-count.txt"
+      - "grep -r 'from cortex_intelligence' --include='*.py' | wc -l > /tmp/phase-103-import-count.txt"
       - "git tag pre-phase-103-baseline"
     acceptance_criteria:
       - Baseline files created
@@ -344,27 +344,27 @@ stages:
       - Import counts documented
 
   # -------------------------------------------------------------------------
-  # STAGE 2: cortex_brain → cortex_intelligence Rename (60 minutes)
+  # STAGE 2: cortex_intelligence → cortex_intelligence Rename (60 minutes)
   # -------------------------------------------------------------------------
   - stage_id: "S2"
-    title: "Rename cortex_brain to cortex_intelligence"
+    title: "Rename cortex_intelligence to cortex_intelligence"
     duration_minutes: 60
     risk: MEDIUM
     dependencies: ["S1"]
     deliverables:
-      - Git mv cortex_brain → cortex_intelligence
+      - Git mv cortex_intelligence → cortex_intelligence
       - Restructure tier0-3 → memory/*
       - Create __init__.py for memory/
       - Update pyproject.toml
     commands:
-      - "git mv cortex_brain cortex_intelligence"
+      - "git mv cortex_intelligence cortex_intelligence"
       - "cd cortex_intelligence && mkdir -p memory"
       - "git mv tier0 memory/core"
       - "git mv tier1 memory/tier1-learned"
       - "git mv tier2 memory/tier2-adaptive"
       - "git mv tier3 memory/tier3-scratch"
       - "touch memory/__init__.py"
-      - "git commit -m 'refactor: rename cortex_brain → cortex_intelligence, tier → memory/{core,tier1-learned,tier2-adaptive,tier3-scratch}'"
+      - "git commit -m 'refactor: rename cortex_intelligence → cortex_intelligence, tier → memory/{core,tier1-learned,tier2-adaptive,tier3-scratch}'"
     acceptance_criteria:
       - cortex_intelligence/ exists
       - memory/ subfolders created (core, tier1-learned, tier2-adaptive, tier3-scratch)
@@ -383,16 +383,16 @@ stages:
       - Update pyproject.toml known-first-party
       - Update tier references to memory/*
     commands:
-      - "find . -name '*.py' -type f -not -path './.venv/*' -exec sed -i '' 's/from cortex_brain/from cortex_intelligence/g' {} \\;"
-      - "find . -name '*.py' -type f -not -path './.venv/*' -exec sed -i '' 's/import cortex_brain/import cortex_intelligence/g' {} \\;"
-      - "find . -name '*.py' -type f -exec sed -i '' 's/cortex_brain\\.tier0/cortex_intelligence.memory.core/g' {} \\;"
-      - "find . -name '*.py' -type f -exec sed -i '' 's/cortex_brain\\.tier1/cortex_intelligence.memory.tier1_learned/g' {} \\;"
-      - "find . -name '*.py' -type f -exec sed -i '' 's/cortex_brain\\.tier2/cortex_intelligence.memory.tier2_adaptive/g' {} \\;"
-      - "find . -name '*.py' -type f -exec sed -i '' 's/cortex_brain\\.tier3/cortex_intelligence.memory.tier3_scratch/g' {} \\;"
-      - "sed -i '' 's/cortex_brain/cortex_intelligence/g' pyproject.toml"
-      - "git commit -am 'refactor: update all cortex_brain imports to cortex_intelligence'"
+      - "find . -name '*.py' -type f -not -path './.venv/*' -exec sed -i '' 's/from cortex_intelligence/from cortex_intelligence/g' {} \\;"
+      - "find . -name '*.py' -type f -not -path './.venv/*' -exec sed -i '' 's/import cortex_intelligence/import cortex_intelligence/g' {} \\;"
+      - "find . -name '*.py' -type f -exec sed -i '' 's/cortex_intelligence\\.tier0/cortex_intelligence.memory.core/g' {} \\;"
+      - "find . -name '*.py' -type f -exec sed -i '' 's/cortex_intelligence\\.tier1/cortex_intelligence.memory.tier1_learned/g' {} \\;"
+      - "find . -name '*.py' -type f -exec sed -i '' 's/cortex_intelligence\\.tier2/cortex_intelligence.memory.tier2_adaptive/g' {} \\;"
+      - "find . -name '*.py' -type f -exec sed -i '' 's/cortex_intelligence\\.tier3/cortex_intelligence.memory.tier3_scratch/g' {} \\;"
+      - "sed -i '' 's/cortex_intelligence/cortex_intelligence/g' pyproject.toml"
+      - "git commit -am 'refactor: update all cortex_intelligence imports to cortex_intelligence'"
     acceptance_criteria:
-      - Zero 'from cortex_brain' in codebase
+      - Zero 'from cortex_intelligence' in codebase
       - pyproject.toml updated
       - All imports resolve
 
@@ -408,12 +408,12 @@ stages:
       - Update 47 YAML files
       - Update all Markdown documentation
     commands:
-      - "find . -name '*.yaml' -type f -exec sed -i '' 's/cortex_brain/cortex_intelligence/g' {} \\;"
-      - "find . -name '*.yml' -type f -exec sed -i '' 's/cortex_brain/cortex_intelligence/g' {} \\;"
-      - "find . -name '*.md' -type f -exec sed -i '' 's/cortex_brain/cortex_intelligence/g' {} \\;"
+      - "find . -name '*.yaml' -type f -exec sed -i '' 's/cortex_intelligence/cortex_intelligence/g' {} \\;"
+      - "find . -name '*.yml' -type f -exec sed -i '' 's/cortex_intelligence/cortex_intelligence/g' {} \\;"
+      - "find . -name '*.md' -type f -exec sed -i '' 's/cortex_intelligence/cortex_intelligence/g' {} \\;"
       - "git commit -am 'docs: update YAML/MD references to cortex_intelligence'"
     acceptance_criteria:
-      - Zero cortex_brain references in YAML
+      - Zero cortex_intelligence references in YAML
       - Documentation updated
 
   # -------------------------------------------------------------------------
@@ -682,7 +682,7 @@ rollback:
 # ============================================================================
 success_criteria:
   must_have:
-    - cortex_brain renamed to cortex_intelligence
+    - cortex_intelligence renamed to cortex_intelligence
     - tier0-3 restructured to memory/*
     - _cortex-master decomposed
     - All 311 Python imports updated
@@ -1337,7 +1337,7 @@ final_stage_sequence:
     duration_minutes: 30
     
   - stage_id: "S2"
-    title: "Rename cortex_brain to cortex_intelligence"
+    title: "Rename cortex_intelligence to cortex_intelligence"
     duration_minutes: 60
     
   - stage_id: "S3"
@@ -1830,7 +1830,7 @@ execution_summary:
 # NOTES
 # ============================================================================
 notes:
-  - "NOT renaming cortex_brain to cortex_intelligence if just a simple rename - this includes tier restructuring"
+  - "NOT renaming cortex_intelligence to cortex_intelligence if just a simple rename - this includes tier restructuring"
   - "company/ folder stays at root (Tier 1 override authority)"
   - "cortex-registry remains config-only (no Python code)"
   - "Use git mv for all moves to preserve history"

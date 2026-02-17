@@ -442,7 +442,7 @@ core_rules:
       3. Regression risk scoring (0.0 - 1.0)
       4. Architecture drift detection
       5. Mandatory challenge gate with alternatives
-      6. cortex_brain context (for CORTEX self-development)
+      6. cortex_intelligence context (for CORTEX self-development)
       
       BLOCK if risk score > 0.7 (user override required)
       WARN if risk score > 0.4 (proceed with caution)

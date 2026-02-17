@@ -198,7 +198,7 @@ plan:
             - "Schema includes: metadata, intent classification, governance, execution gates, audit trail"
             - "Schema is versioned (v1.0) for future evolution"
             - "All fields have clear types and validation rules"
-            - "Schema file created at: cortex_brain/tier0/schemas/execution-config-v1.0.yaml"
+            - "Schema file created at: cortex_intelligence/tier0/schemas/execution-config-v1.0.yaml"
           inputs: []
           outputs:
             - "execution-config-schema-v1.0.yaml (150-200 lines)"
@@ -246,7 +246,7 @@ plan:
             - "30+ unit tests (all passing)"
             - "Supports async validation for multi-rule checking"
           inputs:
-            - "cortex_brain/tier0/governance/core-rules.yaml"
+            - "cortex_intelligence/tier0/governance/core-rules.yaml"
             - "unified_execution_config.py"
           outputs:
             - "execution_config_validator.py (180-220 lines)"
@@ -771,7 +771,7 @@ plan:
       - "CORE-011: Type hints required"
       - "CORE-012: Docstrings required"
       - "CORE-013: Explicit error handling (no bare except)"
-      - "CORE-020: No markdown in cortex_brain"
+      - "CORE-020: No markdown in cortex_intelligence"
       - "CORE-026: Git checkpoint before major changes"
       - "CORE-027: Audit trail (AC_START → AC_COMPLETE)"
       - "CORE-030: Implementation truth (verify code, not docs)"

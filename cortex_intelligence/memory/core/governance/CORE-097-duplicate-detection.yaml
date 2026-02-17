@@ -120,7 +120,7 @@ detection_methods:
   semantic_similarity:
     tool: "cortex.lens.analyzers.semantic_similarity"
     threshold: 0.85
-    scope: ["cortex/", "cortex_brain/", "cortex_lens/"]
+    scope: ["cortex/", "cortex_intelligence/", "cortex_lens/"]
   
   ast_based:
     tool: "cortex.lens.analyzers.ast_duplicate_detector"

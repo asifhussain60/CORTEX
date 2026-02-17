@@ -8,7 +8,7 @@ metadata:
   title: "Cross-Domain Knowledge Synthesis"
   version: "2.0"
   updated: "2026-01-23"
-  authority: "cortex_brain.tier3.knowledge.synthesis_engine"
+  authority: "cortex_intelligence.tier3.knowledge.synthesis_engine"
 
 domain_relationships:
   GOVERNANCE:

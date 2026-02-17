@@ -22,7 +22,7 @@ detector:
   # Target directories
   scan_paths:
     - "cortex/"
-    - "cortex_brain/"
+    - "cortex_intelligence/"
     - "cortex_lens/"
     - "tests/"
   
@@ -39,7 +39,7 @@ actions:
   on_detection:
     - action: "log_violation"
       severity: "warning"
-      log_file: "cortex_brain/state/duplication_violations.log"
+      log_file: "cortex_intelligence/state/duplication_violations.log"
     
     - action: "create_issue"
       enabled: false  # Manual enablement required
@@ -52,7 +52,7 @@ actions:
     
     - action: "generate_report"
       enabled: true
-      output_file: "cortex_brain/state/duplicate_detection_report.yaml"
+      output_file: "cortex_intelligence/state/duplicate_detection_report.yaml"
       include_consolidation_suggestions: true
 
 thresholds:

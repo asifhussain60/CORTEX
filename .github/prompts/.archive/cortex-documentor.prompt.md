@@ -115,12 +115,12 @@ Files:
 ### 4. GOVERNANCE RULES SYNC
 ```yaml
 Verify:
-  - Documented CORE rules match cortex_brain/tier0/
+  - Documented CORE rules match cortex_intelligence/tier0/
   - Rule IDs in docs match implementation
   - Enforcement behavior documented accurately
 Files:
   - docs/01-cortex-brain/*.md
-  - cortex_brain/tier0/*.yaml
+  - cortex_intelligence/tier0/*.yaml
 ```
 
 ### 5. API REFERENCE SYNC
@@ -323,7 +323,7 @@ Verify:
   
   Implementation Sync:
     - Chapter references to orchestrator names match wiring.yaml
-    - CORE rule numbers cited match cortex_brain/tier0/
+    - CORE rule numbers cited match cortex_intelligence/tier0/
     - Git commit references are real (verify via git log)
     - Technical claims map to actual implementation milestones
   
@@ -1139,7 +1139,7 @@ update_narrative_to_latest:
 
 **Technical Accuracy Checklist:**
 - [ ] Orchestrator names verified against wiring.yaml
-- [ ] CORE rule numbers match cortex_brain/tier0/
+- [ ] CORE rule numbers match cortex_intelligence/tier0/
 - [ ] Git commits exist (verified via `git log`)
 - [ ] Feature implementation dates accurate
 - [ ] No anachronisms (referencing future features)

@@ -335,7 +335,7 @@ intent: "view_system_health"
 ## Phase 7: Documentation & Governance Update (Day 7)
 
 ### 7.1 Update Governance Rules
-**File:** `cortex_brain/tier0/governance/core-rules.yaml`
+**File:** `cortex_intelligence/tier0/governance/core-rules.yaml`
 - Add SITE-RULE-001: "All sites must be declared in cortex-registry/master/sites-registry.yaml"
 - Add SITE-RULE-002: "All sites must have health endpoint returning 200 on readiness"
 - Add SITE-RULE-003: "Site launcher must respect process manifest to prevent orphans"
@@ -373,7 +373,7 @@ intent: "view_system_health"
 | **11. Build Manager** | `cortex/core/infrastructure/build_manager.py` | Python | To Create |
 | **12. Log Manager** | `cortex/core/infrastructure/log_manager.py` | Python | To Create |
 | **13. Tests (12 files)** | `tests/unit/...` + `tests/integration/...` | Python | To Create |
-| **14. Governance Rules** | `cortex_brain/tier0/governance/core-rules.yaml` | YAML | To Update |
+| **14. Governance Rules** | `cortex_intelligence/tier0/governance/core-rules.yaml` | YAML | To Update |
 | **15. Migration Guide** | `docs/migration/launch-mkdocs-to-site-infrastructure.md` | Markdown | To Create |
 
 ---

@@ -21,7 +21,7 @@ description: |
   
   APPROVED TOP-LEVEL FOLDERS:
   - cortex/ (main package)
-  - cortex_intelligence/ (brain & intelligence - RENAMED from cortex_brain in Phase 103)
+  - cortex_intelligence/ (brain & intelligence - RENAMED from cortex_intelligence in Phase 103)
   - cortex_lens/ (code intelligence)
   - cortex-registry/ (master planning)
   - tests/ (test suite)

@@ -88,7 +88,7 @@
 
 ### Safety Guarantees
 - ✅ Cannot delete production code (`cortex/**/*.py`)
-- ✅ Cannot delete governance rules (`cortex_brain/tier0/**`)
+- ✅ Cannot delete governance rules (`cortex_intelligence/tier0/**`)
 - ✅ Cannot delete any `.prompt.md` files
 - ✅ Cannot delete any `agents/*.md` files
 - ✅ All deletions git-tracked and restorable
@@ -133,7 +133,7 @@ Phase 5: Reporting (30 sec)
 NEVER DELETED:
   - .github/prompts/**/*.prompt.md (7 files)
   - .github/agents/**/*.md (7 files)
-  - cortex_brain/tier0/governance/** (all files)
+  - cortex_intelligence/tier0/governance/** (all files)
   - cortex/**/*.py (all production code)
   - requirements.txt, setup.py, etc.
 ```

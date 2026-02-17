@@ -12,7 +12,7 @@ services:
       - PYTHONUNBUFFERED=1
     volumes:
       - ./cortex:/app/cortex:ro
-      - ./cortex_brain:/app/cortex_brain:ro
+      - ./cortex_intelligence:/app/cortex_intelligence:ro
       - cortex-logs:/app/.cortex/logs
       - cortex-state:/app/.cortex/state
       - cortex-metrics:/app/metrics

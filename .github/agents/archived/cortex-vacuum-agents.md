@@ -22,7 +22,7 @@
 
 ```yaml
 Core:
-  - Traverse repository recursively (cortex/, cortex_brain/, docs/, _workspaces/, .github/)
+  - Traverse repository recursively (cortex/, cortex_intelligence/, docs/, _workspaces/, .github/)
   - Analyze file metadata (creation date, modification date, size, type)
   - Extract file purpose from path patterns and content analysis
   - Classify into categories: SYSTEM, DOCUMENTATION, INFORMATIONAL, GENERATED, DEPRECATED
@@ -71,14 +71,14 @@ Step 1: Pattern Matching
     SYSTEM:
       ✓ .github/prompts/*.prompt.md
       ✓ .github/agents/*.md
-      ✓ cortex_brain/tier0/governance/**
+      ✓ cortex_intelligence/tier0/governance/**
       ✓ cortex/**/*.py
       Action: PRESERVE
 
     DOCUMENTATION:
       ✓ docs/**/*.md (EXCEPT non-canonical files listed below)
       ✓ docs/0-README.md, docs/01-*/*, docs/02-*/*, ..., docs/09-*/*
-      ✓ cortex_brain/releases/**
+      ✓ cortex_intelligence/releases/**
       ✓ README.md (root only)
       Action: VALIDATE & ORGANIZE
 
@@ -120,7 +120,7 @@ Step 1: Pattern Matching
       ✓ **/*-COMPLETION-REPORT.md
       ✓ docs/08-reference/implementation-status.md
       ✓ docs/08-reference/remediation-status.md
-      ✓ cortex_brain/state/**/*.json
+      ✓ cortex_intelligence/state/**/*.json
       ✓ **/__pycache__/**, **.pyc, .coverage
       Action: DELETE (regenerable)
 
@@ -175,7 +175,7 @@ File: /Users/asifhussain/PROJECTS/CORTEX/docs/GOVERNANCE_COMPLIANCE_REPORT.md
 File: /Users/asifhussain/PROJECTS/CORTEX/docs/08-reference/implementation-status.md
   Pattern Match: docs/08-reference/implementation-status.md
   Category: GENERATED
-  Marker Found: "Auto-generated from cortex_brain/state/"
+  Marker Found: "Auto-generated from cortex_intelligence/state/"
   Staleness: 2 days (regenerate in next CI run)
   Action: DELETE (will be regenerated)
 ```
@@ -188,7 +188,7 @@ Pre-Classification Checks:
   ✓ Verify no system files marked for deletion
   ✓ Verify all *.prompt.md in preserve list
   ✓ Verify all agents/*.md in preserve list
-  ✓ Verify cortex_brain/tier0 files preserved
+  ✓ Verify cortex_intelligence/tier0 files preserved
   ✓ Alert if preserving 95%+ of files (too conservative)
 
 Edge Cases to Flag:
@@ -488,7 +488,7 @@ class RepoSanitizerAgent:
         
         Checks:
           - No cortex/*.py files
-          - No cortex_brain/tier0/** files
+          - No cortex_intelligence/tier0/** files
           - No .github/prompts/*.prompt.md files
           - No .github/agents/*.md files
           - No requirements.txt, setup.py, etc.
@@ -529,7 +529,7 @@ class SanitizationSafeguards:
     PROTECTED_PATTERNS = [
         ".github/prompts/**/*.prompt.md",
         ".github/agents/**/*.md",
-        "cortex_brain/tier0/governance/**",
+        "cortex_intelligence/tier0/governance/**",
         "cortex/**/*.py",
         "requirements.txt",
         "setup.py",

@@ -529,7 +529,7 @@ Transform governance from **reactive** to **proactive**:
 - Cross-validate orchestrators, components, tools against registry
 - Detect regression risks BEFORE code changes
 - Enforce mandatory Challenge Gate with alternatives
-- Utilize cortex_brain for CORTEX self-development
+- Utilize cortex_intelligence for CORTEX self-development
 
 ### MCP Tool Integration
 
@@ -3697,7 +3697,7 @@ p1_checks = checklist.priority_checks["P1"].checks
 - **P1 — Infrastructure** (8 checks): Wiring, integration, audit trail, component verification
 - **P1 — Intelligence Architecture** (NEW - 3 checks): Synthesis duplication, LENS scope validation, intelligence gateway enforcement
 - **P1 — Wiring Integrity** (NEW - 4 checks): Orphaned orchestrators, circular dependencies, missing intelligence flags, registry-wiring sync
-- **P1.5 — Cohesion & Integrity** (11 checks): Prompt cohesion, agent health, orchestrator integrity, module cohesion, test validity, team collaboration (Phase 39) + **Brain Cohesion & Health (Phase 38)**: Brain health score (≥80%), orchestrator connectivity (≥90%), company domain utilization (≥50%), brain state freshness (<24h), governance adaptation enabled — validated via `cortex_brain_health`, `cortex_capability_mesh`, `cortex_flush_brain` MCP tools + **Prompt Cleanup Cycle**: AC-PROMPT-CLEANUP-001 through 005 (drift detection)
+- **P1.5 — Cohesion & Integrity** (11 checks): Prompt cohesion, agent health, orchestrator integrity, module cohesion, test validity, team collaboration (Phase 39) + **Brain Cohesion & Health (Phase 38)**: Brain health score (≥80%), orchestrator connectivity (≥90%), company domain utilization (≥50%), brain state freshness (<24h), governance adaptation enabled — validated via `cortex_intelligence_health`, `cortex_capability_mesh`, `cortex_flush_brain` MCP tools + **Prompt Cleanup Cycle**: AC-PROMPT-CLEANUP-001 through 005 (drift detection)
 - **P1.6 — Future-Vision** (2 checks): Technology adoption triggers, migration planning (Phase 39)
 - **P2 — Quality** (6 checks): Duplicates, dead code, refactoring needs, LENS analysis (MANDATORY)
 - **P2 — Knowledge Synthesis** (NEW - 2 checks): Company domain loader duplication, synthesis timing consistency
@@ -3718,7 +3718,7 @@ p1_checks = checklist.priority_checks["P1"].checks
 
 | Category | Items | Action | Priority |
 |----------|-------|--------|----------|
-| **Legacy Duplicates** | cortex_brain/ (5.4MB), cortex-lens/ (2.1MB) | Complete migration, then archive | 🔴 HIGH |
+| **Legacy Duplicates** | cortex_intelligence/ (5.4MB), cortex-lens/ (2.1MB) | Complete migration, then archive | 🔴 HIGH |
 | **Development Artifacts** | _workspaces/ (9.7MB), reports/, examples/, extensions/ | Archive to _archives/YYYY-MM-DD-dev-cleanup/ | 🟡 MEDIUM |
 | **Root Script Clutter** | 5 Python scripts in root | Consolidate to scripts/utilities/ | 🟡 MEDIUM |
 | **Company Folder** | company/ (~30MB) | Evaluate: production vs examples | ⚪ TBD |
@@ -3785,7 +3785,7 @@ p1_checks = checklist.priority_checks["P1"].checks
 # Intelligence Loading Protocol (NO markdown links!)
 intent: IMPLEMENT
 load_yamls:
-  - cortex_brain/tier2/testing_patterns.yaml       # TDD guidance
+  - cortex_intelligence/tier2/testing_patterns.yaml       # TDD guidance
   - cortex/knowledge/best-practices/solid.yaml     # SOLID principles
   - cortex/knowledge/best-practices/clean-code.yaml # Clean code
 extract_fields:
@@ -3814,7 +3814,7 @@ echo "_archives/" >> .gitignore
 
 **Impact:** Cleaner root, ~10MB archived, zero risk (fully reversible)
 
-#### Phase 2: Complete cortex_brain Migration (Test Required)
+#### Phase 2: Complete cortex_intelligence Migration (Test Required)
 ```bash
 # Run migration script
 python scripts/update_imports.py
@@ -3823,7 +3823,7 @@ python scripts/update_imports.py
 pytest tests/tier2/ -v
 
 # If passing, archive
-mv cortex_brain/ _archives/$(date +%Y-%m-%d)-dev-cleanup/
+mv cortex_intelligence/ _archives/$(date +%Y-%m-%d)-dev-cleanup/
 
 # Verify full test suite
 pytest
@@ -3865,7 +3865,7 @@ CORTEX/
 ├── _archives/              # Historical artifacts
 │   └── YYYY-MM-DD-dev-cleanup/
 │       ├── _workspaces/, reports/, examples/, extensions/
-│       ├── cortex_brain/   # After migration
+│       ├── cortex_intelligence/   # After migration
 │       └── cortex-lens/    # If archived
 ├── requirements.txt, Dockerfile, docker-compose*.yml, Makefile, README.md
 ```
@@ -3990,7 +3990,7 @@ If violations detected:
 **Purpose:** Validate CORTEX brain coherence, orchestrator mesh integrity, and domain utilization.
 
 **MCP Tools Required:**
-- `cortex_brain_health` — Aggregated brain health metrics
+- `cortex_intelligence_health` — Aggregated brain health metrics
 - `cortex_capability_mesh` — Orchestrator connectivity analysis
 - `cortex_flush_brain` — Brain state cleanup (auto-fix)
 
@@ -3998,7 +3998,7 @@ If violations detected:
 
 ```python
 # 1. Check brain health score
-brain_health = call_mcp_tool("cortex_brain_health")
+brain_health = call_mcp_tool("cortex_intelligence_health")
 assert brain_health["health_score"] >= 80, "Brain health below threshold"
 
 # 2. Validate orchestrator connectivity
@@ -4536,12 +4536,12 @@ ORDER BY compression_ratio ASC;
 #### Governance Evidence
 
 **Audit Log Entries Analyzed:** {n} events  
-**Database:** cortex_brain/state/governance.db  
+**Database:** cortex_intelligence/state/governance.db  
 **Queries Executed:** 5 (context_synthesis, budget_violations, cache_performance, intent_analysis, distillation)  
 **Last Sync:** {timestamp}
 
 **Prometheus Dashboard:** http://localhost:3000/d/cortex-context (real-time metrics)  
-**SQLite Browser:** Open cortex_brain/state/governance.db for manual investigation
+**SQLite Browser:** Open cortex_intelligence/state/governance.db for manual investigation
 
 #### Auto-Fix Actions
 
@@ -4573,7 +4573,7 @@ if cache_hit_rate < 0.7:
 
 ```bash
 # Run AUDIT mode validation
-sqlite3 cortex_brain/state/governance.db < cortex/governance/sql/context_efficiency_audit.sql
+sqlite3 cortex_intelligence/state/governance.db < cortex/governance/sql/context_efficiency_audit.sql
 
 # Or via MCP tool (preferred)
 cortex_audit --mode governance --focus context_efficiency --period 7d
@@ -5753,7 +5753,7 @@ Score < 5 → Continue to DESIGN MODE
 
 ### 🎯 Actions
 - [ ] Enhancement proposals extracted
-- [ ] YAML saved to `cortex_brain/tier3/learnings/` or `company/domains/`
+- [ ] YAML saved to `cortex_intelligence/tier3/learnings/` or `company/domains/`
 - [ ] Marker `<!-- CORTEX_DIGESTED: {date} -->` added to original chat file
 - [ ] Extract patterns to registry YAML files
 - [ ] Document anti-patterns
@@ -5767,9 +5767,9 @@ Score < 5 → Continue to DESIGN MODE
 | Target | Condition | Action |
 |--------|-----------|--------|
 | `cortex-registry/_cortex-master/enhancements/active/` | Efficiency/Accuracy findings | Add ENH-* entries |
-| `cortex_brain/tier3/learnings/session-{timestamp}-{hash}.yaml` | Session has actionable learnings | Create artifact |
+| `cortex_intelligence/tier3/learnings/session-{timestamp}-{hash}.yaml` | Session has actionable learnings | Create artifact |
 | `company/domains/{domain}/patterns.yaml` | User domain knowledge detected | Extract pattern |
-| `cortex_brain/tier3/learnings/anti-patterns.yaml` | CORTEX-internal drifts | Document anti-pattern |
+| `cortex_intelligence/tier3/learnings/anti-patterns.yaml` | CORTEX-internal drifts | Document anti-pattern |
 | CORTEX.prompt.md | Prompt improvement needed | **Requires AUDIT validation** |
 
 ## Validation Gates
@@ -6585,8 +6585,8 @@ User says "proceed" → NOW execute (second "proceed" = confirmation)
 | Dimension | Question to Ask | Evidence Source |
 |-----------|-----------------|-----------------|
 | **Extensibility** | Can new agents/orchestrators/roles be added without refactoring core? | cortex/wiring/specifications/wiring.yaml |
-| **Scalability** | Will this work at 10x/100x scale? What breaks first? | cortex_brain/tier3/performance_patterns.yaml |
-| **Accuracy** | Is correctness guaranteed? What's the precision/recall tradeoff? | cortex_brain/tier2/testing_patterns.yaml |
+| **Scalability** | Will this work at 10x/100x scale? What breaks first? | cortex_intelligence/tier3/performance_patterns.yaml |
+| **Accuracy** | Is correctness guaranteed? What's the precision/recall tradeoff? | cortex_intelligence/tier2/testing_patterns.yaml |
 | **Efficiency** | Is this fast enough? What's the token/latency budget? | cortex/knowledge/best-practices/performance.yaml |
 | **Long-term Growth** | Does this support team collaboration and future evolution? | company/domains/*.yaml |
 | **Best Practices** | Does this align with CORTEX + company + industry standards? | cortex/knowledge/best-practices/*.yaml (45+ patterns) |
@@ -6605,20 +6605,20 @@ User says "proceed" → NOW execute (second "proceed" = confirmation)
 # Based on intent, load 2-3 relevant YAMLs (lazy loading)
 intent_to_yamls:
   IMPLEMENT:
-    - cortex_brain/tier2/testing_patterns.yaml
+    - cortex_intelligence/tier2/testing_patterns.yaml
     - cortex/knowledge/best-practices/solid.yaml
     - cortex/knowledge/best-practices/clean-code.yaml
   REFACTOR:
     - cortex/knowledge/best-practices/refactoring.yaml
-    - cortex_brain/tier3/performance_patterns.yaml
+    - cortex_intelligence/tier3/performance_patterns.yaml
   SECURITY:
-    - cortex_brain/tier1/security_standards.yaml
+    - cortex_intelligence/tier1/security_standards.yaml
     - cortex/knowledge/best-practices/owasp.yaml
   DESIGN:
     - cortex/knowledge/best-practices/architecture.yaml
-    - cortex_brain/tier3/scalability_patterns.yaml
+    - cortex_intelligence/tier3/scalability_patterns.yaml
   FIX:
-    - cortex_brain/tier2/debugging_patterns.yaml
+    - cortex_intelligence/tier2/debugging_patterns.yaml
     - cortex/knowledge/best-practices/error_handling.yaml
 ```
 
@@ -6694,7 +6694,7 @@ Must explicitly balance:
 - **Speed Cost:** Skipping checks is faster but risks errors
 - **Quantify:** "5ms validation cost for 99.9% accuracy acceptable" or "100ms unacceptable for P95 SLA"
 
-**Evidence Source:** cortex_brain/tier3/performance_patterns.yaml — latency budgets, SLA definitions
+**Evidence Source:** cortex_intelligence/tier3/performance_patterns.yaml — latency budgets, SLA definitions
 
 #### 4. Evidence-Based Fix Plan (MANDATORY for every weakness)
 
@@ -6715,7 +6715,7 @@ Check against loaded YAMLs:
 |-------|--------|---------------|
 | **Company** | company/domains/*.yaml | Business constraints, team standards |
 | **CORTEX** | cortex/knowledge/best-practices/*.yaml | 45+ patterns (SOLID, Clean Code, 12-Factor) |
-| **Security** | cortex_brain/tier1/security_standards.yaml | OWASP, secrets, injection |
+| **Security** | cortex_intelligence/tier1/security_standards.yaml | OWASP, secrets, injection |
 | **Industry** | Pattern references in YAMLs | SOLID, DRY, KISS, YAGNI |
 
 #### 6. Team & Long-term Fit (MANDATORY)
@@ -7467,7 +7467,7 @@ Innovation Taxonomy Update (system learns)
 
 **Added:**
 - ✅ **P4 Repository Structure Cleanup** — Comprehensive 4-phase cleanup plan for production readiness
-- ✅ **Phase-Based Approach** — Archive dev artifacts → Complete cortex_brain migration → Consolidate root scripts → Evaluate cortex-lens/company
+- ✅ **Phase-Based Approach** — Archive dev artifacts → Complete cortex_intelligence migration → Consolidate root scripts → Evaluate cortex-lens/company
 - ✅ **Concrete Bash Commands** — Copy-paste commands for each cleanup phase
 - ✅ **Safety Verification Checklist** — Pre-flight checks + per-phase validation
 - ✅ **Production Structure Diagram** — Target repository layout documentation
@@ -7481,7 +7481,7 @@ Innovation Taxonomy Update (system learns)
 - ✅ **Quad-Mode Operation** — PRE-FLIGHT + AUDIT + DESIGN + DIGEST + META-AUDIT
 - ✅ **Chat Session Auto-Detection** — Marker-based scoring (score ≥ 5 triggers DIGEST)
 - ✅ **Structured Learning Extraction** — Drifts, patterns, tool environment, efficiency opportunities
-- ✅ **Enhancement Propagation Pipeline** — Automatic flow to `cortex-registry/enhancements/`, `cortex_brain/tier3/learnings/`, `company/domains/`
+- ✅ **Enhancement Propagation Pipeline** — Automatic flow to `cortex-registry/enhancements/`, `cortex_intelligence/tier3/learnings/`, `company/domains/`
 - ✅ **Production Sync Validation** — AUDIT now checks cortex-architect.prompt.md ↔ CORTEX.prompt.md coherence
 - ✅ **cortex-digest.md Agent** — New specialist agent for DIGEST mode
 

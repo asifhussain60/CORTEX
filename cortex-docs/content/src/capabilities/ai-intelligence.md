@@ -283,7 +283,7 @@ class CodeSmell:
 ### Knowledge Structure
 
 ```
-cortex_brain/
+cortex_intelligence/
 ├── tier0/          # Core rules (immutable)
 │   ├── core-rules.yaml
 │   └── security-baseline.yaml

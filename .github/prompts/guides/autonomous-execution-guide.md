@@ -97,7 +97,7 @@ from cortex.execution.progress_tracker import ProgressTracker
 from pathlib import Path
 
 # Initialize with dashboard DB
-tracker = ProgressTracker(db_path=Path("cortex_brain/state/dashboard.db"))
+tracker = ProgressTracker(db_path=Path("cortex_intelligence/state/dashboard.db"))
 
 # Use with executor
 executor = AutonomousExecutor(progress_tracker=tracker)
@@ -240,7 +240,7 @@ CREATE TABLE progress_snapshots (
 ```python
 import sqlite3
 
-conn = sqlite3.connect("cortex_brain/state/dashboard.db")
+conn = sqlite3.connect("cortex_intelligence/state/dashboard.db")
 cursor = conn.cursor()
 
 # Get all plans

@@ -413,7 +413,7 @@ knowledge_sources:
   
   production_mode:
     - "company/domains/*.yaml (6 files)"
-    - "cortex_brain/onboarded_repos/{repo}_enhanced.json"
+    - "cortex_intelligence/onboarded_repos/{repo}_enhanced.json"
     - "CORTEX knowledge (fallback only)"
 
 # ============================================================================

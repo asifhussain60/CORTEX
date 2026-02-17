@@ -308,7 +308,7 @@ compose_blocks([
 ## Architecture Impact
 
 ```
-cortex_brain/
+cortex_intelligence/
 ├── state/ (NEW)
 │   ├── brain_state.py
 │   └── learning_state.py
@@ -423,7 +423,7 @@ cortex_brain/
 2. Reasoning: StrategySelector recommends approaches
 3. Action: ExecutionPlanner generates steps
 
-**Evidence:** `cortex_brain/perception/pattern_registry.py` (21 tests, 94% coverage)
+**Evidence:** `cortex_intelligence/perception/pattern_registry.py` (21 tests, 94% coverage)
 
 ---
 

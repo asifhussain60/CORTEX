@@ -6,7 +6,7 @@ type: explanation
 audience: [Software Developers, Product Owners, Business Leaders]
 word_count: 2013
 last_verified: 2026-02-15
-source_of_truth: cortex_brain/perception/ + cortex_brain/reasoning/ + cortex_brain/action/
+source_of_truth: cortex_intelligence/perception/ + cortex_intelligence/reasoning/ + cortex_intelligence/action/
 format: diátaxis-explanation
 voice: third-person-neutral
 phase: 12
@@ -23,7 +23,7 @@ diagrams: ASCII architecture diagrams
 
 Just as the human brain processes information through distinct layers — sensory perception → reasoning → motor output — CORTEX implements a **three-layer intelligence architecture** that transforms raw repository data into validated, executable actions.
 
-Organizations gain adaptive learning capabilities through this architecture, where patterns detected in one repository inform strategies applied to others [Business Leaders]. Product teams benefit from continuously improving intelligence that learns from every interaction without manual configuration [Product Owners]. The architecture provides pattern registry, strategy selection, and execution planning through three coordinated Python modules in `cortex_brain/` [Software Developers].
+Organizations gain adaptive learning capabilities through this architecture, where patterns detected in one repository inform strategies applied to others [Business Leaders]. Product teams benefit from continuously improving intelligence that learns from every interaction without manual configuration [Product Owners]. The architecture provides pattern registry, strategy selection, and execution planning through three coordinated Python modules in `cortex_intelligence/` [Software Developers].
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -34,7 +34,7 @@ Organizations gain adaptive learning capabilities through this architecture, whe
    │  1️⃣ PERCEPTION LAYER (Pattern Registry)                       │
    │     "What patterns exist in this repository?"                 │
    │                                                               │
-   │  Module: cortex_brain/perception/pattern_registry.py         │
+   │  Module: cortex_intelligence/perception/pattern_registry.py         │
    │  Purpose: Detect known patterns via signature matching        │
    │  Output: PatternMatch (pattern_id, confidence, fields)        │
    └──────────────────────────────┬────────────────────────────────┘
@@ -44,7 +44,7 @@ Organizations gain adaptive learning capabilities through this architecture, whe
    │  2️⃣ REASONING LAYER (Strategy Selector)                       │
    │     "Given these patterns, what's the best approach?"         │
    │                                                               │
-   │  Module: cortex_brain/reasoning/strategy_selector.py          │
+   │  Module: cortex_intelligence/reasoning/strategy_selector.py          │
    │  Purpose: Recommend strategies based on context               │
    │  Output: StrategyRecommendation (strategies, confidence)      │
    └──────────────────────────────┬────────────────────────────────┘
@@ -54,7 +54,7 @@ Organizations gain adaptive learning capabilities through this architecture, whe
    │  3️⃣ ACTION LAYER (Execution Planner)                          │
    │     "How do we execute this strategy step-by-step?"           │
    │                                                               │
-   │  Module: cortex_brain/action/execution_planner.py             │
+   │  Module: cortex_intelligence/action/execution_planner.py             │
    │  Purpose: Generate concrete execution plans                   │
    │  Output: ExecutionPlan (steps, validation, rollback)          │
    └───────────────────────────────────────────────────────────────┘
@@ -68,7 +68,7 @@ Organizations gain adaptive learning capabilities through this architecture, whe
 
 The sensory cortex doesn't see "objects" — it detects patterns of light and shadow that the brain recognizes as shapes. CORTEX's **Pattern Registry** works the same way: it detects signatures (file patterns, import structures, naming conventions) and matches them against known patterns learned from previous repositories.
 
-### Module: `cortex_brain/perception/pattern_registry.py`
+### Module: `cortex_intelligence/perception/pattern_registry.py`
 
 Organizations accumulate repository intelligence over time as CORTEX learns common patterns [Business Leaders]. Product teams benefit from automatic detection of framework types, testing patterns, and architectural styles without explicit configuration [Product Owners]. The pattern registry uses signature-based matching with confidence scoring to identify applicable patterns [Software Developers].
 
@@ -149,7 +149,7 @@ matches = registry.detect_patterns(repo_profile, confidence_threshold=0.75)
 
 The executive center takes sensory information and makes decisions: "Given that I see a car approaching, I should wait before crossing." CORTEX's **Strategy Selector** performs similar reasoning: "Given that this is a Django monolith with API coupling, the recommended strategy is incremental service decomposition."
 
-### Module: `cortex_brain/reasoning/strategy_selector.py`
+### Module: `cortex_intelligence/reasoning/strategy_selector.py`
 
 Organizations benefit from context-aware strategy recommendations informed by historical effectiveness patterns [Business Leaders]. Product teams receive ranked strategy options with confidence scores and risk assessments [Product Owners]. The strategy selector evaluates patterns, context, and constraints to recommend optimal approaches [Software Developers].
 
@@ -234,7 +234,7 @@ recommendation = selector.select_strategies(
 
 The action processor translates decisions into precise muscle movements: "To pick up the cup, contract these muscles in this sequence." CORTEX's **Execution Planner** translates strategies into concrete steps: "To implement API versioning, first add version headers, then create v2 endpoints, then deprecate v1."
 
-### Module: `cortex_brain/action/execution_planner.py`
+### Module: `cortex_intelligence/action/execution_planner.py`
 
 Organizations receive actionable execution plans with clear steps and validation criteria [Business Leaders]. Product teams can track progress through defined stages with rollback procedures for each step [Product Owners]. The execution planner generates step-by-step plans with commands, validation checks, and risk mitigation [Software Developers].
 
@@ -441,7 +441,7 @@ Organizations may experience these performance patterns based on internal testin
 ### Module Locations
 
 ```
-cortex_brain/
+cortex_intelligence/
 ├── perception/
 │   └── pattern_registry.py        # Layer 1: Pattern detection
 ├── reasoning/

@@ -145,7 +145,7 @@ OUTPUT (User sees in VSCode Copilot Chat):
 
 ┌──────────────────────────────────────────────────────────────────────────────┐
 │                   GOVERNANCE RULE REGISTRY (EXISTING)                       │
-│            cortex_brain/governance/rules/CORE-rules.yaml                    │
+│            cortex_intelligence/governance/rules/CORE-rules.yaml                    │
 ├──────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │  CORE-008:                                                                   │

@@ -6,7 +6,7 @@ type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
 word_count: 1800
 last_verified: 2026-02-15
-source_of_truth: cortex/learning/ + cortex_brain/
+source_of_truth: cortex/learning/ + cortex_intelligence/
 format: diátaxis-explanation
 voice: third-person-blended
 phase: Production (v8.1, Phase 71)

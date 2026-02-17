@@ -481,7 +481,7 @@ All governance-gated work marked with AC (Audit Commit) markers:
 # AC_COMPLETE: AC-ENHANCEMENT-001 ✅ 42/42 tests passing
 ```
 
-**Traceability:** Every change linked to audit entry in `cortex_brain/governance.db`.
+**Traceability:** Every change linked to audit entry in `cortex_intelligence/governance.db`.
 
 ---
 

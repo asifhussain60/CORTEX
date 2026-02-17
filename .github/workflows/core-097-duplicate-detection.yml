@@ -16,7 +16,7 @@ on:
     branches: [main, CORTEX]
     paths:
       - 'cortex/**'
-      - 'cortex_brain/**'
+      - 'cortex_intelligence/**'
       - 'cortex_lens/**'
       - 'tests/**'
   

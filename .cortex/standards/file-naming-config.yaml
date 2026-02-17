@@ -1,6 +1,6 @@
 # CORTEX File Naming Configuration (SSOT - Single Source of Truth)
 # Location: .cortex/standards/file-naming-config.yaml
-# Authority: cortex_brain/tier0/governance/file-naming-standards.md
+# Authority: cortex_intelligence/tier0/governance/file-naming-standards.md
 # Last Updated: 2026-01-27
 
 ---
@@ -9,7 +9,7 @@ FILE_NAMING_STANDARDS:
   version: "1.0"
   effective_date: "2026-01-27"
   status: "ACTIVE"
-  canonical_reference: "cortex_brain/tier0/governance/file-naming-standards.md"
+  canonical_reference: "cortex_intelligence/tier0/governance/file-naming-standards.md"
 
 CASE_STYLES:
   primary: "kebab-case"
@@ -232,16 +232,16 @@ REVIEW_CYCLE:
     - "Update this SSOT"
 
 TEAMS_RESPONSIBLE:
-  - "Governance Team (cortex_brain/tier0)"
+  - "Governance Team (cortex_intelligence/tier0)"
   - "DevX Team (Developer Experience)"
   - "CI/CD Team (enforcement automation)"
   - "Documentation Team (guides + standards)"
 
 CONTACT:
   governance_team: "Asif Hussain (@asifhussain60)"
-  questions: "Refer to cortex_brain/tier0/governance/file-naming-standards.md"
+  questions: "Refer to cortex_intelligence/tier0/governance/file-naming-standards.md"
   issues: "Create issue in CORTEX repository"
 
 SSOT_LOCATION: ".cortex/standards/file-naming-config.yaml"
-GOVERNANCE_LOCATION: "cortex_brain/tier0/governance/file-naming-standards.md"
+GOVERNANCE_LOCATION: "cortex_intelligence/tier0/governance/file-naming-standards.md"
 IMPLEMENTATION_LOCATION: "cortex/tools/file-naming-validator.py"

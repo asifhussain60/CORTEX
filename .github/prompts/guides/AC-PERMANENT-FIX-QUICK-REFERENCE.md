@@ -42,10 +42,10 @@ print(report)
 ### AC-PERMANENT-FIX-001 (Registry Wiring)
 ```bash
 # Check registry is locked
-grep "registry_template: false" cortex_brain/tier0/repo-registry.yaml
+grep "registry_template: false" cortex_intelligence/tier0/repo-registry.yaml
 
 # Count wired orchestrators (expect 18+)
-grep -c "wiring_status: \"wired\"" cortex_brain/tier0/repo-registry.yaml
+grep -c "wiring_status: \"wired\"" cortex_intelligence/tier0/repo-registry.yaml
 ```
 
 ### AC-PERMANENT-FIX-002 (Verification)

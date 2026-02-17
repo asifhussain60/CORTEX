@@ -25,22 +25,22 @@ Enforce permanent fixes to prevent regressions of critical issues tracked in AC-
 - Creates empty template instead of preserving production wiring
 
 **Solution (Permanent):**
-- Set `registry_template: false` in `cortex_brain/tier0/repo-registry.yaml`
+- Set `registry_template: false` in `cortex_intelligence/tier0/repo-registry.yaml`
 - Populate with all 23 orchestrators (6 core, 5+ domain, 6+ support)
 - Add preservation logic to `setup_cortex_hub.py`
 
 **Files Modified:**
-- `cortex_brain/tier0/repo-registry.yaml` (registry_template: false)
+- `cortex_intelligence/tier0/repo-registry.yaml` (registry_template: false)
 - `cortex/scripts-root-archive/setup_cortex_hub.py` (preservation logic)
 
 **Verification Command:**
 ```bash
 # Check registry is locked
-grep "registry_template:" cortex_brain/tier0/repo-registry.yaml
+grep "registry_template:" cortex_intelligence/tier0/repo-registry.yaml
 # Expected: registry_template: false
 
 # Count wired orchestrators
-grep -c "wiring_status: \"wired\"" cortex_brain/tier0/repo-registry.yaml
+grep -c "wiring_status: \"wired\"" cortex_intelligence/tier0/repo-registry.yaml
 # Expected: 18+ (minimum threshold from AC-PERMANENT-FIX-002)
 ```
 
@@ -114,7 +114,7 @@ grep -i "ready for deployment\|phase 1" cortex-docs/ORCHESTRATOR-UNWIRING-FIX-PE
 - All orchestrator wiring confirmed stable
 
 **Files Modified:**
-- `cortex_brain/tier0/repo-registry.yaml` (verified and locked)
+- `cortex_intelligence/tier0/repo-registry.yaml` (verified and locked)
 - `cortex/scripts-root-archive/setup_cortex_hub.py` (preservation verified)
 
 **Verification Command:**

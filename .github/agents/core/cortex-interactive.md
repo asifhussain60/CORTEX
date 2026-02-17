@@ -474,8 +474,8 @@ Or continue asking questions to explore further.
 Implement a **3-tier caching strategy** leveraging existing CORTEX infrastructure:
 
 1. **Hot Tier (In-Memory):** Redis/LRU cache for frequently accessed data (<1ms latency)
-2. **Warm Tier (SQLite):** Persistent cache in `cortex_brain/state/cache.db` (similar to KnowledgeRepository pattern)
-3. **Cold Tier (Knowledge Base):** Domain knowledge in `cortex_brain/tier3/knowledge/*.yaml` (source of truth)
+2. **Warm Tier (SQLite):** Persistent cache in `cortex_intelligence/state/cache.db` (similar to KnowledgeRepository pattern)
+3. **Cold Tier (Knowledge Base):** Domain knowledge in `cortex_intelligence/tier3/knowledge/*.yaml` (source of truth)
 
 **Integration Points:**
 - Reuse `KnowledgeRepository.get_cached()` pattern (cortex/brain/core/knowledge/knowledge_repository.py:45-67)
