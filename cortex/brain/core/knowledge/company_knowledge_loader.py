@@ -193,8 +193,8 @@ class CompanyKnowledgeLoader:
     """
 
     # Default paths (relative to project root)
-    COMPANY_DOMAINS_PATH = "cortex-registry/cortex-registry/company/domains"
-    COMPLIANCE_STANDARDS_PATH = "cortex-registry/cortex-registry/company/domains/compliance-standards"
+    COMPANY_DOMAINS_PATH = "cortex-registry/company/domains"
+    COMPLIANCE_STANDARDS_PATH = "cortex-registry/company/domains/compliance-standards"
     CORTEX_KNOWLEDGE_PATH = "cortex_intelligence/tier3/knowledge"
 
     def __init__(
