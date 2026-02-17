@@ -1,0 +1,13 @@
+{
+  "name": "KSESSIONS",
+  "path": "/Users/asifhussain/PROJECTS/KSESSIONS",
+  "onboarded_at": "2026-02-17T17:52:46.502896",
+  "analysis": {
+    "status": "success",
+    "repository_path": "/Users/asifhussain/PROJECTS/KSESSIONS",
+    "architecture_type": "unknown",
+    "patterns_detected": []
+  },
+  "learning_metrics": {},
+  "brain_enhancement": {}
+}

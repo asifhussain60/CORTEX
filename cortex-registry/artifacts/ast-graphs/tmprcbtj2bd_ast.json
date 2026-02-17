@@ -1,0 +1,16 @@
+{
+  "nodes": [
+    {
+      "id": "file_0",
+      "type": "file",
+      "name": "finance.py",
+      "path": "finance.py",
+      "extension": ".py"
+    }
+  ],
+  "relationships": [],
+  "metadata": {
+    "repository": "/var/folders/q9/5s1lv3rs3zg5j_ncbsck4jc00000gn/T/tmprcbtj2bd",
+    "generated_at": "2026-02-17T17:55:26.907760"
+  }
+}

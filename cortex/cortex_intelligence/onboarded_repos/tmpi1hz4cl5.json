@@ -1,0 +1,22 @@
+{
+  "name": "tmpi1hz4cl5",
+  "path": "/var/folders/q9/5s1lv3rs3zg5j_ncbsck4jc00000gn/T/tmpi1hz4cl5",
+  "onboarded_at": "",
+  "analysis": {
+    "status": "success",
+    "repository_path": "/var/folders/q9/5s1lv3rs3zg5j_ncbsck4jc00000gn/T/tmpi1hz4cl5",
+    "architecture_type": "unknown",
+    "patterns_detected": []
+  },
+  "learning_metrics": {
+    "total_learnings": 0,
+    "by_orchestrator": {},
+    "cached_learnings": 0,
+    "cache_keys": []
+  },
+  "brain_enhancement": {
+    "patterns_detected": 0,
+    "strategies_recommended": 0,
+    "error": "detect_patterns() got an unexpected keyword argument 'threshold'"
+  }
+}

@@ -1,0 +1,19 @@
+analysis:
+  architecture_type: unknown
+  patterns_detected: []
+  repository_path: /var/folders/q9/5s1lv3rs3zg5j_ncbsck4jc00000gn/T/tmp369fgvft
+  status: success
+metadata:
+  brain_enhancement:
+    error: detect_patterns() got an unexpected keyword argument 'threshold'
+    patterns_detected: 0
+    strategies_recommended: 0
+  learning_metrics:
+    by_orchestrator: {}
+    cache_keys: []
+    cached_learnings: 0
+    total_learnings: 0
+repository:
+  name: tmp369fgvft
+  onboarded_at: '2026-02-17T17:55:26.893204'
+  path: /var/folders/q9/5s1lv3rs3zg5j_ncbsck4jc00000gn/T/tmp369fgvft

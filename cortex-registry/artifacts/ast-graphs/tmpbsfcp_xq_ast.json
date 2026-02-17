@@ -1,0 +1,16 @@
+{
+  "nodes": [
+    {
+      "id": "file_0",
+      "type": "file",
+      "name": "bad_code.py",
+      "path": "bad_code.py",
+      "extension": ".py"
+    }
+  ],
+  "relationships": [],
+  "metadata": {
+    "repository": "/var/folders/q9/5s1lv3rs3zg5j_ncbsck4jc00000gn/T/tmpbsfcp_xq",
+    "generated_at": "2026-02-17T18:00:42.305439"
+  }
+}

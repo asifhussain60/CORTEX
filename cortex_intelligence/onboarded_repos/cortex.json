@@ -1,0 +1,27 @@
+{
+  "name": "CORTEX",
+  "path": "/Users/asifhussain/PROJECTS/CORTEX",
+  "onboarded_at": "2026-02-17T18:00:41.088719",
+  "analysis": {
+    "status": "success",
+    "repository_path": "/Users/asifhussain/PROJECTS/CORTEX",
+    "architecture_type": "unknown",
+    "patterns_detected": []
+  },
+  "learning_metrics": {
+    "total_learnings": 0,
+    "by_orchestrator": {},
+    "cached_learnings": 0,
+    "cache_keys": []
+  },
+  "brain_enhancement": {
+    "patterns_detected": 0,
+    "strategies_recommended": 0,
+    "error": "detect_patterns() got an unexpected keyword argument 'threshold'"
+  },
+  "artifacts": {
+    "yaml_path": "/Users/asifhussain/PROJECTS/CORTEX/cortex-registry/company/repos/cortex/repository.yaml",
+    "ast_graph_path": "/Users/asifhussain/PROJECTS/CORTEX/cortex-registry/company/repos/cortex/ast-graph.json",
+    "node_count": 153
+  }
+}

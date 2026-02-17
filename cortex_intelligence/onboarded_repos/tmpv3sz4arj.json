@@ -1,0 +1,27 @@
+{
+  "name": "tmpv3sz4arj",
+  "path": "/var/folders/q9/5s1lv3rs3zg5j_ncbsck4jc00000gn/T/tmpv3sz4arj",
+  "onboarded_at": "2026-02-17T17:56:00.044588",
+  "analysis": {
+    "status": "success",
+    "repository_path": "/var/folders/q9/5s1lv3rs3zg5j_ncbsck4jc00000gn/T/tmpv3sz4arj",
+    "architecture_type": "unknown",
+    "patterns_detected": []
+  },
+  "learning_metrics": {
+    "total_learnings": 0,
+    "by_orchestrator": {},
+    "cached_learnings": 0,
+    "cache_keys": []
+  },
+  "brain_enhancement": {
+    "patterns_detected": 0,
+    "strategies_recommended": 0,
+    "error": "detect_patterns() got an unexpected keyword argument 'threshold'"
+  },
+  "artifacts": {
+    "yaml_path": "/Users/asifhussain/PROJECTS/CORTEX/cortex-registry/company/repos/tmpv3sz4arj/repository.yaml",
+    "ast_graph_path": "/Users/asifhussain/PROJECTS/CORTEX/cortex-registry/company/repos/tmpv3sz4arj/ast-graph.json",
+    "node_count": 1
+  }
+}
