@@ -124,6 +124,39 @@ class HealthReport:
             issues.extend(result.issues)
         return issues
     
+    @property
+    def total_issues(self) -> int:
+        """Get total number of issues.
+        
+        Returns:
+            Total issue count
+        """
+        return self.metrics.total_issues
+    
+    @property
+    def health_score(self) -> float:
+        """Get overall health score.
+        
+        Returns:
+            Health score (0-100)
+        """
+        return self.metrics.health_score
+    
+    @property
+    def by_severity(self) -> Dict[str, int]:
+        """Get issues grouped by severity.
+        
+        Returns:
+            Dictionary with severity counts
+        """
+        return {
+            "critical": self.metrics.critical_issues,
+            "high": self.metrics.high_issues,
+            "medium": self.metrics.medium_issues,
+            "low": self.metrics.low_issues,
+            "info": self.metrics.info_issues,
+        }
+    
     def _update_metrics(self) -> None:
         """Update aggregated metrics from agent results."""
         self.metrics.total_issues = sum(r.issue_count for r in self.agent_results)

@@ -163,50 +163,55 @@ class HealthIntelligence:
     
     def cache_result(
         self,
-        file_path: Path,
         agent_name: str,
-        issues: List[HealthIssue],
+        result: "HealthCheckResult",
         ttl_hours: int = 24
     ) -> None:
-        """Cache health check result for file.
+        """Cache health check result from agent.
         
         Args:
-            file_path: Path to file
             agent_name: Name of agent
-            issues: Issues found
+            result: HealthCheckResult from agent
             ttl_hours: Cache time-to-live in hours
         """
-        file_hash = self._calculate_file_hash(file_path)
-        cache_key = f"{agent_name}:{file_path}"
-        
-        self.cache[cache_key] = HealthCache(
-            file_hash=file_hash,
-            agent_name=agent_name,
-            issues=[issue.to_dict() for issue in issues],
-            timestamp=datetime.now().isoformat(),
-            ttl_hours=ttl_hours,
-        )
+        # Cache all issues from the result
+        for issue in result.issues:
+            file_hash = self._calculate_file_hash(issue.file_path)
+            cache_key = f"{agent_name}:{issue.file_path}"
+            
+            self.cache[cache_key] = HealthCache(
+                file_hash=file_hash,
+                agent_name=agent_name,
+                issues=[issue.to_dict()],
+                timestamp=datetime.now().isoformat(),
+                ttl_hours=ttl_hours,
+            )
         
         self._save_cache()
     
-    def is_false_positive(self, issue: HealthIssue) -> bool:
+    def is_false_positive(self, file_path: Path, category: str, description: str) -> bool:
         """Check if issue matches known false positive patterns.
         
         Args:
-            issue: Health issue to check
+            file_path: Path to file with issue
+            category: Issue category
+            description: Issue description
         
         Returns:
             True if matches false positive pattern
         """
         # Create issue signature
-        signature = f"{issue.file_path.name}|{issue.category.value}"
+        signature = f"{file_path.name}|{category}"
         
         for pattern in self.false_positive_patterns:
-            if pattern.split("|")[0] == issue.file_path.name:
+            pattern_parts = pattern.split("|")
+            pattern_file = pattern_parts[0]
+            
+            if pattern_file == file_path.name:
                 return True
             
             # Check wildcard patterns
-            if pattern.startswith("*") and issue.file_path.name.endswith(pattern[1:].split("|")[0]):
+            if pattern_file.startswith("*") and file_path.name.endswith(pattern_file[1:]):
                 return True
         
         return False

@@ -207,7 +207,7 @@ class HealthOrchestrator:
         
         # Add intelligence stats
         if use_intelligence:
-            intel_stats = self.intelligence.get_stats()
+            intel_stats = self.intelligence.get_efficiency_stats()
             report.metadata["intelligence"] = intel_stats
         
         return report
