@@ -43,7 +43,7 @@ class IntelligenceOrchestrator:
         if audit_db_path:
             self.audit_db_path = audit_db_path
         else:
-            db_dir = Path("cortex_brain/intelligence")
+            db_dir = Path("cortex_intelligence/intelligence")
             db_dir.mkdir(parents=True, exist_ok=True)
             self.audit_db_path = db_dir / "intelligence_audit.db"
         self._init_audit_db()

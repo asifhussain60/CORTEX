@@ -152,7 +152,7 @@ class RepositoryProfile:
         # Check for governance YAML
         governance_dirs = [
             repo / "cortex-registry" / "governance",
-            repo / "cortex_brain" / "tier0" / "governance",
+            repo / "cortex_intelligence" / "tier0" / "governance",
         ]
         score += sum(1 for d in governance_dirs if d.exists())
 

@@ -17,7 +17,7 @@ router = APIRouter(prefix="/api/compliance", tags=["compliance"])
 # Database configuration
 DB_PATH = os.path.join(
     os.path.dirname(__file__),
-    "../../../cortex_brain/state/governance.db"
+    "../../../cortex_intelligence/state/governance.db"
 )
 
 

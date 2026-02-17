@@ -41,8 +41,8 @@ class TestLazyLoadingSystem:
         # CORTEX detection markers
         (repo / "cortex").mkdir()
         (repo / "cortex" / "orchestrators").mkdir()
-        (repo / "cortex_brain").mkdir()
-        (repo / "cortex_brain" / "tier0").mkdir()
+        (repo / "cortex_intelligence").mkdir()
+        (repo / "cortex_intelligence" / "tier0").mkdir()
         
         # Add Python file
         test_file = repo / "cortex" / "test.py"

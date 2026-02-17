@@ -117,7 +117,7 @@ class ConsolidationAnalyzer:
         self.orchestrator_dirs = orchestrator_dirs or [
             "cortex/orchestrators",
             "cortex/domain_orchestrators",
-            "cortex_brain/domain",
+            "cortex_intelligence/domain",
         ]
     
     def analyze(self) -> ConsolidationReport:

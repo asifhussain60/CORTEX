@@ -30,8 +30,8 @@ from cortex.brain.core.knowledge.company_knowledge_loader import (
 @pytest.fixture
 def mock_project_root(tmp_path: Path) -> Path:
     """Create a mock project structure."""
-    # Create cortex_brain/tier3/knowledge structure
-    tier3_path = tmp_path / "cortex_brain" / "tier3" / "knowledge"
+    # Create cortex_intelligence/tier3/knowledge structure
+    tier3_path = tmp_path / "cortex_intelligence" / "tier3" / "knowledge"
     tier3_path.mkdir(parents=True)
     
     # Create SECURITY domain YAML

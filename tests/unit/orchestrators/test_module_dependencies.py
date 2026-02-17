@@ -326,7 +326,7 @@ class TestPythonImportResolution:
         """Test AC-FR-DISCOVERY-005+: All package paths are resolvable."""
         packages_to_check = [
             "cortex",
-            "cortex_brain",
+            "cortex_intelligence",
             "cortex.orchestrators",
             "cortex.brain",
             "cortex.infrastructure",

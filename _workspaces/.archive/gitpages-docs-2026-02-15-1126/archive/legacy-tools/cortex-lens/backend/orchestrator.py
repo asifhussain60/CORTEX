@@ -415,10 +415,10 @@ class DashboardOrchestrator:
     
     def _generate_brain_data(self, repo_path: Path) -> Dict[str, Any]:
         """Generate CORTEX brain architecture data."""
-        brain_path = repo_path / "cortex_brain"
+        brain_path = repo_path / "cortex_intelligence"
         
         if not brain_path.exists():
-            return {"error": "cortex_brain/ not found"}
+            return {"error": "cortex_intelligence/ not found"}
         
         tiers = []
         for tier_num in range(4):
@@ -439,7 +439,7 @@ class DashboardOrchestrator:
     
     def _generate_governance_data(self, repo_path: Path) -> Dict[str, Any]:
         """Generate governance compliance heatmap data."""
-        governance_path = repo_path / "cortex_brain" / "tier0" / "governance"
+        governance_path = repo_path / "cortex_intelligence" / "tier0" / "governance"
         
         if not governance_path.exists():
             return {"error": "governance/ not found"}

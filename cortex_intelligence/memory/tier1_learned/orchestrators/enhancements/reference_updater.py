@@ -159,7 +159,7 @@ class ReferenceScanner:
             variants.append(parts[-1])  # Just filename
             variants.append("/".join(parts))
         
-        # Add underscore variants (cortex_brain vs cortex-brain, etc)
+        # Add underscore variants (cortex_intelligence vs cortex-brain, etc)
         variants.append(normalized.replace("-", "_"))
         variants.append(normalized.replace("_", "-"))
         

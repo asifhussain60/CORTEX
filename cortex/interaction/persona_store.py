@@ -24,10 +24,10 @@ class PersonaStore:
 
         Args:
             storage_path: Path to YAML file for persona storage.
-                         Defaults to cortex_brain/state/user_personas.yaml
+                         Defaults to cortex_intelligence/state/user_personas.yaml
         """
         if storage_path is None:
-            storage_path = "cortex_brain/state/user_personas.yaml"
+            storage_path = "cortex_intelligence/state/user_personas.yaml"
 
         self.storage_path = Path(storage_path)
         self._ensure_storage_ready()

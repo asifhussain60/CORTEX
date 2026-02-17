@@ -190,7 +190,7 @@ class TDDKnowledgeLoader:
         if knowledge_root is None:
             knowledge_root = (
                 Path(__file__).parent.parent.parent.parent
-                / "cortex_brain" / "tier3" / "knowledge"
+                / "cortex_intelligence" / "tier3" / "knowledge"
             )
 
         self.knowledge_root = Path(knowledge_root)

@@ -61,7 +61,7 @@ class TestAuditChecklistCohesion:
         assert brain_health_check is not None
         assert brain_health_check["name"] == "Brain Health Score"
         assert brain_health_check["threshold"] == 80
-        assert brain_health_check["tool"] == "cortex_brain_health"
+        assert brain_health_check["tool"] == "cortex_intelligence_health"
         assert "dimensions" in brain_health_check
         
         # Validate required dimensions
@@ -164,7 +164,7 @@ class TestCortexArchitectIntegration:
         # Should reference brain health or cohesion checks
         brain_health_indicators = [
             "brain health",
-            "cortex_brain_health",
+            "cortex_intelligence_health",
             "brain_health_orchestrator",
             "cohesion check",
         ]

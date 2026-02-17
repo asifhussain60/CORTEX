@@ -51,10 +51,10 @@ class ConversationStateManager:
         Initialize state manager.
 
         Args:
-            db_path: Path to SQLite database. Defaults to cortex_brain/state/conversations.db
+            db_path: Path to SQLite database. Defaults to cortex_intelligence/state/conversations.db
         """
         if db_path is None:
-            db_path = Path(__file__).parent.parent.parent.parent.parent / "cortex_brain" / "state" / "conversations.db"
+            db_path = Path(__file__).parent.parent.parent.parent.parent / "cortex_intelligence" / "state" / "conversations.db"
 
         self.db_path = Path(db_path)
         self.db_path.parent.mkdir(parents=True, exist_ok=True)

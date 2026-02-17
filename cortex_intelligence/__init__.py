@@ -26,11 +26,11 @@ __all__ = [
 
 # Lazy imports for tier subpackages
 def __getattr__(name: str):
-    """Lazy load cortex_brain tier modules."""
+    """Lazy load cortex_intelligence tier modules."""
     if name in ('tier0', 'tier1', 'tier2', 'state', 'releases'):
         try:
             import importlib
-            return importlib.import_module(f'cortex_brain.{name}')
+            return importlib.import_module(f'cortex_intelligence.{name}')
         except ImportError:
             pass
-    raise AttributeError(f"module 'cortex_brain' has no attribute '{name}'")
+    raise AttributeError(f"module 'cortex_intelligence' has no attribute '{name}'")

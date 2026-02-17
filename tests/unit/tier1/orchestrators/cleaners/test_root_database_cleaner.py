@@ -27,8 +27,8 @@ import shutil
 
 # Add paths
 import sys
-cortex_brain_path = Path(__file__).parent.parent.parent.parent.parent.parent / "cortex_brain"
-sys.path.insert(0, str(cortex_brain_path))
+cortex_intelligence_path = Path(__file__).parent.parent.parent.parent.parent.parent / "cortex_intelligence"
+sys.path.insert(0, str(cortex_intelligence_path))
 
 from tier1.orchestrators.cleaners.root_database import RootDatabaseCleaner
 from tier1.orchestrators.cleaners import Analysis, Report, RollbackResult
@@ -85,7 +85,7 @@ class TestRootDatabaseCleanerAnalysis:
     def test_analyze_ignores_subdirectory_db_files(self, cleaner, temp_repo) -> None:
         """Test that analyze() ignores .db files in subdirectories."""
         # Create .db in subdirectory (should be ignored)
-        subdir = temp_repo / "cortex_brain"
+        subdir = temp_repo / "cortex_intelligence"
         subdir.mkdir()
         (subdir / "governance.db").write_text("test data")
         

@@ -11,7 +11,7 @@ Merges learned patterns into knowledge repositories with:
 
 Target repositories:
 - company/domains/{repo}/ (business knowledge)
-- cortex_brain/tier3/knowledge/ (technical knowledge)
+- cortex_intelligence/tier3/knowledge/ (technical knowledge)
 - cortex-registry/ (governance patterns)
 
 Author: GitHub Copilot
@@ -61,7 +61,7 @@ class KnowledgeMerger:
 
         # Knowledge repository paths
         self.company_domains_path = workspace_root / "company" / "domains"
-        self.technical_knowledge_path = workspace_root / "cortex_brain" / "tier3" / "knowledge"
+        self.technical_knowledge_path = workspace_root / "cortex_intelligence" / "tier3" / "knowledge"
         self.governance_path = workspace_root / "cortex-registry"
 
         # Merge statistics
@@ -186,7 +186,7 @@ class KnowledgeMerger:
 
         elif pattern_type == "INTERACTION":
             # Interaction patterns go to user preferences
-            base_path = self.workspace_root / "cortex_brain" / "state" / "user_preferences"
+            base_path = self.workspace_root / "cortex_intelligence" / "state" / "user_preferences"
             base_path.mkdir(parents=True, exist_ok=True)
             return base_path / "interaction_patterns.yaml"
 

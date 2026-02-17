@@ -150,7 +150,7 @@ class KnowledgeGuidanceEngine:
         self.tier_1_rules: Dict[str, Any] = {}
         self.tier_2_rules: Dict[str, Any] = {}
 
-        brain_root = Path(__file__).parent.parent.parent.parent / "cortex_brain"
+        brain_root = Path(__file__).parent.parent.parent.parent / "cortex_intelligence"
 
         # Load TIER 0 rules
         tier0_path = brain_root / "tier0" / "governance" / "core-rules.yaml"
@@ -311,7 +311,7 @@ class KnowledgeGuidanceEngine:
                     description="Tests must be written BEFORE implementation code",
                     priority=1,
                     tier=TierLevel.TIER_0,
-                    source="cortex_brain/tier0/governance/core-rules.yaml",
+                    source="cortex_intelligence/tier0/governance/core-rules.yaml",
                     related_rules=["CORE-008", "CORE-027"]
                 )
             )
@@ -324,7 +324,7 @@ class KnowledgeGuidanceEngine:
                 description="100% type hints on all parameters and return values",
                 priority=1,
                 tier=TierLevel.TIER_0,
-                source="cortex_brain/tier0/governance/core-rules.yaml",
+                source="cortex_intelligence/tier0/governance/core-rules.yaml",
                 related_rules=["CORE-011"]
             )
         )
@@ -337,7 +337,7 @@ class KnowledgeGuidanceEngine:
                 description="Google-style docstrings on all public functions/classes",
                 priority=1,
                 tier=TierLevel.TIER_0,
-                source="cortex_brain/tier0/governance/core-rules.yaml",
+                source="cortex_intelligence/tier0/governance/core-rules.yaml",
                 related_rules=["CORE-012"]
             )
         )
@@ -350,7 +350,7 @@ class KnowledgeGuidanceEngine:
                 description="Specific exception handling - NO bare except: clauses",
                 priority=1,
                 tier=TierLevel.TIER_0,
-                source="cortex_brain/tier0/governance/core-rules.yaml",
+                source="cortex_intelligence/tier0/governance/core-rules.yaml",
                 related_rules=["CORE-013"]
             )
         )
@@ -363,7 +363,7 @@ class KnowledgeGuidanceEngine:
         """
         Load TIER 1 (domain-specific) governance guidance.
 
-        Tier 1 rules come from ``cortex_brain/tier1/governance/*.yaml``
+        Tier 1 rules come from ``cortex_intelligence/tier1/governance/*.yaml``
         and are filtered by domain relevance.
 
         Args:
@@ -394,7 +394,7 @@ class KnowledgeGuidanceEngine:
                     ),
                     priority=2,
                     tier=TierLevel.TIER_1,
-                    source="cortex_brain/tier1/governance/",
+                    source="cortex_intelligence/tier1/governance/",
                     related_rules=matched_rules[:10],
                 )
             )
@@ -407,7 +407,7 @@ class KnowledgeGuidanceEngine:
         """
         Load TIER 2 (engineering standards) guidance.
 
-        Tier 2 rules come from ``cortex_brain/tier2/governance/*.yaml``
+        Tier 2 rules come from ``cortex_intelligence/tier2/governance/*.yaml``
         and represent team/project engineering standards.
 
         Args:
@@ -438,7 +438,7 @@ class KnowledgeGuidanceEngine:
                     ),
                     priority=3,
                     tier=TierLevel.TIER_2,
-                    source="cortex_brain/tier2/governance/",
+                    source="cortex_intelligence/tier2/governance/",
                     related_rules=matched_rules[:10],
                 )
             )
@@ -523,8 +523,8 @@ class KnowledgeGuidanceEngine:
         """
         Load domain-specific overrides (highest precedence after tier0).
 
-        TODO: Implement when cortex_brain/tier3/domains/ exists with:
-        - cortex_brain/tier3/domains/{company_domain}.yaml
+        TODO: Implement when cortex_intelligence/tier3/domains/ exists with:
+        - cortex_intelligence/tier3/domains/{company_domain}.yaml
         - Each domain YAML contains override rules that supersede CORTEX defaults
 
         Args:
@@ -532,7 +532,7 @@ class KnowledgeGuidanceEngine:
             domain: Domain name
         """
         domain_override_root = (
-            Path(__file__).parent.parent.parent.parent / "cortex_brain" / "tier3" / "domains"
+            Path(__file__).parent.parent.parent.parent / "cortex_intelligence" / "tier3" / "domains"
         )
 
         if domain_override_root.exists():
@@ -549,7 +549,7 @@ class KnowledgeGuidanceEngine:
                                 description="Company-specific rules override CORTEX defaults",
                                 priority=1,
                                 tier=TierLevel.DOMAIN_OVERRIDE,
-                                source=f"cortex_brain/tier3/domains/{domain}.yaml",
+                                source=f"cortex_intelligence/tier3/domains/{domain}.yaml",
                                 domain_specific=True
                             )
                         )
@@ -562,14 +562,14 @@ class KnowledgeGuidanceEngine:
 
         Aggregates cross-domain patterns by examining which domains share
         rules and identifying common governance constraints. Uses data
-        from ``cortex_brain/tier3/knowledge/`` when available.
+        from ``cortex_intelligence/tier3/knowledge/`` when available.
 
         Args:
             guidance: Guidance object to populate.
         """
         tier3_knowledge_root = (
             Path(__file__).parent.parent.parent.parent
-            / "cortex_brain" / "tier3" / "knowledge"
+            / "cortex_intelligence" / "tier3" / "knowledge"
         )
 
         cross_domain_patterns: List[str] = []
@@ -625,7 +625,7 @@ class KnowledgeGuidanceEngine:
                     ),
                     priority=4,
                     tier=TierLevel.CORTEX_BEST_PRACTICES,
-                    source="cortex_brain/tier3/knowledge/",
+                    source="cortex_intelligence/tier3/knowledge/",
                     patterns=cross_domain_patterns[:5],
                 )
             )

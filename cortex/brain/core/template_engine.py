@@ -136,15 +136,15 @@ class TemplateEngine:
         Initialize template engine.
 
         Args:
-            template_dir: Path to templates directory (default: cortex_brain/tier2/response-templates)
+            template_dir: Path to templates directory (default: cortex_intelligence/tier2/response-templates)
         """
         self.logger = EnhancedAuditLogger.instance()
         self.registry = TemplateEngineRegistry.instance()
 
-        # Default to cortex_brain/tier2/response-templates
+        # Default to cortex_intelligence/tier2/response-templates
         if template_dir is None:
             project_root = Path(__file__).parent.parent.parent
-            template_dir = str(project_root / "cortex_brain" / "tier2" / "response-templates")
+            template_dir = str(project_root / "cortex_intelligence" / "tier2" / "response-templates")
 
         self.template_dir = template_dir
 

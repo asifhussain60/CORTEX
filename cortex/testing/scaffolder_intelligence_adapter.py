@@ -131,10 +131,10 @@ class ScaffolderIntelligenceAdapter:
         Initialize adapter with intelligence components.
         
         Args:
-            registry_path: Path to demand registry (defaults to cortex_brain/tier0/test_demands/)
+            registry_path: Path to demand registry (defaults to cortex_intelligence/tier0/test_demands/)
             quality_threshold: Minimum quality score (0.0-1.0) to accept test
         """
-        self.registry_path = registry_path or Path("cortex_brain/tier0/test_demands")
+        self.registry_path = registry_path or Path("cortex_intelligence/tier0/test_demands")
         self.quality_threshold = quality_threshold
         
         # Initialize components

@@ -124,9 +124,9 @@ class TestRetrieverStructure:
         """Verify retrieval config file exists."""
         from pathlib import Path
         import os
-        # Go from tests/unit/tier3 up to project root, then to cortex_brain
+        # Go from tests/unit/tier3 up to project root, then to cortex_intelligence
         project_root = Path(__file__).parent.parent.parent.parent
-        config_file = project_root / "cortex_brain" / "tier3" / "knowledge" / "retrieval-config.yaml"
+        config_file = project_root / "cortex_intelligence" / "tier3" / "knowledge" / "retrieval-config.yaml"
         assert config_file.exists(), f"Retrieval config file not found at {config_file}"
     
     def test_config_contains_metadata(self, retrieval_optimizer):
@@ -134,7 +134,7 @@ class TestRetrieverStructure:
         from pathlib import Path
         import yaml
         project_root = Path(__file__).parent.parent.parent.parent
-        config_file = project_root / "cortex_brain" / "tier3" / "knowledge" / "retrieval-config.yaml"
+        config_file = project_root / "cortex_intelligence" / "tier3" / "knowledge" / "retrieval-config.yaml"
         
         with open(config_file, 'r') as f:
             config = yaml.safe_load(f)
@@ -147,7 +147,7 @@ class TestRetrieverStructure:
         from pathlib import Path
         import yaml
         project_root = Path(__file__).parent.parent.parent.parent
-        config_file = project_root / "cortex_brain" / "tier3" / "knowledge" / "retrieval-config.yaml"
+        config_file = project_root / "cortex_intelligence" / "tier3" / "knowledge" / "retrieval-config.yaml"
         
         with open(config_file, 'r') as f:
             config = yaml.safe_load(f)
@@ -286,7 +286,7 @@ class TestCachingMechanism:
         from pathlib import Path
         import yaml
         project_root = Path(__file__).parent.parent.parent.parent
-        config_file = project_root / "cortex_brain" / "tier3" / "knowledge" / "retrieval-config.yaml"
+        config_file = project_root / "cortex_intelligence" / "tier3" / "knowledge" / "retrieval-config.yaml"
         
         with open(config_file, 'r') as f:
             config = yaml.safe_load(f)

@@ -164,10 +164,10 @@ class ImportResolver:
         >>> resolver = ImportResolver()
         >>> path = resolver.resolve("cortex_intelligence.memory.core")
         >>> print(path)
-        PosixPath('/path/to/cortex_brain/tier0')
+        PosixPath('/path/to/cortex_intelligence/tier0')
         
         >>> resolver.add_path(Path("/custom/modules"))
-        >>> resolver.is_package("cortex_brain")
+        >>> resolver.is_package("cortex_intelligence")
         True
     """
     
@@ -217,7 +217,7 @@ class ImportResolver:
         strategies in order. Results are cached for performance.
         
         Args:
-            name: Module or package name (e.g., 'cortex_brain', 'json', 'os.path')
+            name: Module or package name (e.g., 'cortex_intelligence', 'json', 'os.path')
             
         Returns:
             Path to the module/package, or None if not found.
@@ -317,7 +317,7 @@ class ImportResolver:
             
         Example:
             >>> resolver = ImportResolver()
-            >>> resolver.is_package("cortex_brain")
+            >>> resolver.is_package("cortex_intelligence")
             True
             >>> resolver.is_package("json")
             True  # json is a package in Python 3.9+

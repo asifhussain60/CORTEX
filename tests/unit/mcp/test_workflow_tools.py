@@ -262,7 +262,7 @@ class TestAuditTrailCapture:
                     "event": "AC_START",
                     "knowledge_sources": [
                         "company/domains/api-design-standards.yaml",
-                        "cortex_brain/onboarded_repos/my_repo_enhanced.json",
+                        "cortex_intelligence/onboarded_repos/my_repo_enhanced.json",
                     ],
                 },
                 {

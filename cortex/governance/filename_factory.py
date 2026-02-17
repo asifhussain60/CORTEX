@@ -494,8 +494,8 @@ class FilePathEnforcer:
     CORE-038 Requirements:
     - NO files at repository root
     - .md files only in docs/{subfolder}/ or reports/{subfolder}/
-    - .py files only in cortex/{module}/, cortex_brain/{module}/, or tests/
-    - cortex_brain files follow tier structure
+    - .py files only in cortex/{module}/, cortex_intelligence/{module}/, or tests/
+    - cortex_intelligence files follow tier structure
     - Whitelisted files (README.md, requirements.txt) allowed at root
     """
 
@@ -536,7 +536,7 @@ class FilePathEnforcer:
             "require_subfolder": True,
             "allowed_extensions": [".py"],
         },
-        "cortex_brain": {
+        "cortex_intelligence": {
             "py": True,
             "require_subfolder": True,
             "allowed_extensions": [".py", ".yaml", ".yml"],
@@ -598,7 +598,7 @@ class FilePathEnforcer:
             direct_parent = path.parent.name  # e.g., "governance", "guides"
 
             # Check major directory rules
-            for major_dir in ["docs", "reports", "cortex", "cortex_brain", "tests", "_workspaces"]:
+            for major_dir in ["docs", "reports", "cortex", "cortex_intelligence", "tests", "_workspaces"]:
                 if major_dir in parent_dirs:
                     major_idx = parent_dirs.index(major_dir)
 

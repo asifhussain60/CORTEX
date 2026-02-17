@@ -25,7 +25,7 @@ class ProfileUpgrader:
             workspace_root: Root of the workspace.
         """
         self._root = workspace_root
-        self._tier1_dir = workspace_root / "cortex_brain" / "tier1"
+        self._tier1_dir = workspace_root / "cortex_intelligence" / "tier1"
         self._backups_dir = workspace_root / ".cortex" / "profile-backups"
         self._inherited: Dict[str, Dict[str, Any]] = {}
 

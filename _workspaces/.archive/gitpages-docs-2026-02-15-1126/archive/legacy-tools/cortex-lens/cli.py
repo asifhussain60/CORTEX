@@ -107,7 +107,7 @@ def _detect_cortex(repo_path: Path) -> bool:
     """Detect if repository is CORTEX based on markers."""
     markers = [
         repo_path / "cortex",
-        repo_path / "cortex_brain",
+        repo_path / "cortex_intelligence",
         repo_path / ".github" / "copilot-instructions.md"
     ]
     return any(m.exists() for m in markers)

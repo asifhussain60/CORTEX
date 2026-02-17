@@ -78,7 +78,7 @@ class BrainArchitecture:
 class BrainArchitectureRenderer:
     """Renderer for CORTEX brain architecture visualizations.
 
-    This renderer analyzes the cortex_brain/ directory structure and
+    This renderer analyzes the cortex_intelligence/ directory structure and
     orchestrator registry to generate comprehensive brain architecture
     visualizations showing the 4-tier system and orchestrator constellation.
     """
@@ -94,18 +94,18 @@ class BrainArchitectureRenderer:
 
     def analyze_brain_structure(
         self,
-        cortex_brain_path: Path,
+        cortex_intelligence_path: Path,
     ) -> BrainArchitecture:
         """Analyze CORTEX brain directory structure.
 
         Args:
-            cortex_brain_path: Path to cortex_brain/ directory
+            cortex_intelligence_path: Path to cortex_intelligence/ directory
 
         Returns:
             BrainArchitecture: Complete brain architecture data
         """
-        tiers = self._analyze_tiers(cortex_brain_path)
-        orchestrators = self._load_orchestrator_registry(cortex_brain_path.parent)
+        tiers = self._analyze_tiers(cortex_intelligence_path)
+        orchestrators = self._load_orchestrator_registry(cortex_intelligence_path.parent)
 
         total_rules = sum(tier.rule_count or 0 for tier in tiers)
         total_orchestrators = len(orchestrators)
@@ -119,11 +119,11 @@ class BrainArchitectureRenderer:
             wiring_status=wiring_status,
         )
 
-    def _analyze_tiers(self, cortex_brain_path: Path) -> List[TierInfo]:
+    def _analyze_tiers(self, cortex_intelligence_path: Path) -> List[TierInfo]:
         """Analyze tier directories.
 
         Args:
-            cortex_brain_path: Path to cortex_brain/ directory
+            cortex_intelligence_path: Path to cortex_intelligence/ directory
 
         Returns:
             List[TierInfo]: List of tier information
@@ -131,7 +131,7 @@ class BrainArchitectureRenderer:
         tiers = []
 
         for tier_num, tier_name in self.tier_names.items():
-            tier_path = cortex_brain_path / f"tier{tier_num}"
+            tier_path = cortex_intelligence_path / f"tier{tier_num}"
 
             if not tier_path.exists():
                 continue

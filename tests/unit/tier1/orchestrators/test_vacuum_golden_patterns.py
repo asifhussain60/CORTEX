@@ -157,13 +157,13 @@ def golden_scenario_database_cleanup() -> GoldenTestScenario:
             ),
             # Subdirectory databases (PRESERVE)
             GoldenFile(
-                path="cortex_brain/intelligence/intelligence_audit.db",
+                path="cortex_intelligence/intelligence/intelligence_audit.db",
                 category=FileCategory.DATABASE,
                 operation=FileOperation.PRESERVE,
                 size_bytes=32768,
             ),
             GoldenFile(
-                path="cortex_brain/state/governance.db",
+                path="cortex_intelligence/state/governance.db",
                 category=FileCategory.DATABASE,
                 operation=FileOperation.PRESERVE,
                 size_bytes=65536,
@@ -175,8 +175,8 @@ def golden_scenario_database_cleanup() -> GoldenTestScenario:
             "observability_audit.db": FileOperation.DELETE,
             "solid_audit.db": FileOperation.DELETE,
             "unknown_audit.db": FileOperation.WARN,
-            "cortex_brain/intelligence/intelligence_audit.db": FileOperation.PRESERVE,
-            "cortex_brain/state/governance.db": FileOperation.PRESERVE,
+            "cortex_intelligence/intelligence/intelligence_audit.db": FileOperation.PRESERVE,
+            "cortex_intelligence/state/governance.db": FileOperation.PRESERVE,
         },
         expected_relocations={},
         expected_deletions={
@@ -186,8 +186,8 @@ def golden_scenario_database_cleanup() -> GoldenTestScenario:
             "solid_audit.db",
         },
         expected_preserved={
-            "cortex_brain/intelligence/intelligence_audit.db",
-            "cortex_brain/state/governance.db",
+            "cortex_intelligence/intelligence/intelligence_audit.db",
+            "cortex_intelligence/state/governance.db",
         },
         expected_warnings=["unknown_audit.db: Unknown database file in root"],
     )
@@ -396,8 +396,8 @@ def golden_test_workspace(tmp_path: Path) -> Path:
     (workspace / ".git").mkdir()
     
     # Create standard subdirectories
-    (workspace / "cortex_brain" / "intelligence").mkdir(parents=True)
-    (workspace / "cortex_brain" / "state").mkdir(parents=True)
+    (workspace / "cortex_intelligence" / "intelligence").mkdir(parents=True)
+    (workspace / "cortex_intelligence" / "state").mkdir(parents=True)
     (workspace / "reports").mkdir()
     (workspace / "docs").mkdir()
     (workspace / ".github" / "prompts").mkdir(parents=True)
@@ -583,8 +583,8 @@ class TestGoldenDatabaseCleanup:
         GOLDEN: Subdirectory databases MUST be preserved.
         
         Behavioral Contract:
-            - cortex_brain/intelligence/intelligence_audit.db preserved
-            - cortex_brain/state/governance.db preserved
+            - cortex_intelligence/intelligence/intelligence_audit.db preserved
+            - cortex_intelligence/state/governance.db preserved
         """
         # Setup
         create_golden_files(golden_test_workspace, golden_scenario_database.initial_files)

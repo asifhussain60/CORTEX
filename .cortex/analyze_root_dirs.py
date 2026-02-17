@@ -26,7 +26,7 @@ class RootDirectoryAnalyzer:
         # Core CORTEX modules
         "cortex": "Main CORTEX module",
         "cortex-registry": "Phase registry and governance",
-        "cortex_brain": "Legacy brain module (can be archived)",
+        "cortex_intelligence": "Legacy brain module (can be archived)",
         "cortex_lens": "Legacy lens module (can be archived)",
         
         # Testing and scripts

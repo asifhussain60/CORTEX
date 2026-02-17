@@ -424,7 +424,7 @@ class IntentRouter(IOrchestrator):
         Returns:
             Dict[str, Any]: Configuration dict, or empty if YAML not found
         """
-        config_path = Path(__file__).parent.parent.parent.parent / "cortex_brain" / "tier3" / "knowledge" / "intent-routing.yaml"
+        config_path = Path(__file__).parent.parent.parent.parent / "cortex_intelligence" / "tier3" / "knowledge" / "intent-routing.yaml"
 
         try:
             if config_path.exists():

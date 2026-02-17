@@ -247,7 +247,7 @@ class RuleBasedPlanner:
                         "name": "phase_markers",
                         "pattern": ".phase*",
                         "action": "archive",
-                        "destination": "cortex_brain/state/archive/phase-markers/",
+                        "destination": "cortex_intelligence/state/archive/phase-markers/",
                         "priority": 2,
                         "description": "Archive phase completion markers",
                     },

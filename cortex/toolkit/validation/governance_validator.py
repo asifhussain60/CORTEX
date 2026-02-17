@@ -295,7 +295,7 @@ class GovernanceValidator:
             )
         
         # Core directories
-        required_dirs = ["cortex", "cortex_brain", "tests", "deployment"]
+        required_dirs = ["cortex", "cortex_intelligence", "tests", "deployment"]
         for dir_name in required_dirs:
             dir_path = self.workspace_root / dir_name
             self._add_check(

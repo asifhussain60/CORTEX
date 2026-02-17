@@ -22,7 +22,7 @@ class TestRepositoryDetector:
     def test_detect_cortex_repository_all_markers(self, tmp_path: Path) -> None:
         """Test detection when all CORTEX markers are present."""
         # Arrange: Create all markers
-        (tmp_path / "cortex_brain").mkdir()
+        (tmp_path / "cortex_intelligence").mkdir()
         (tmp_path / "cortex" / "orchestrators").mkdir(parents=True)
         (tmp_path / ".github" / "prompts").mkdir(parents=True)
         (tmp_path / ".github" / "prompts" / "CORTEX.prompt.md").touch()
@@ -38,8 +38,8 @@ class TestRepositoryDetector:
     
     def test_detect_cortex_repository_partial_markers(self, tmp_path: Path) -> None:
         """Test detection with only some CORTEX markers present."""
-        # Arrange: Create only cortex_brain marker
-        (tmp_path / "cortex_brain").mkdir()
+        # Arrange: Create only cortex_intelligence marker
+        (tmp_path / "cortex_intelligence").mkdir()
         
         # Act
         detector = RepositoryDetector(tmp_path)
@@ -93,7 +93,7 @@ class TestRepositoryDetector:
     def test_detect_cortex_features(self, tmp_path: Path) -> None:
         """Test detection of specific CORTEX features."""
         # Arrange: Create selective markers
-        (tmp_path / "cortex_brain").mkdir()
+        (tmp_path / "cortex_intelligence").mkdir()
         (tmp_path / "cortex" / "orchestrators").mkdir(parents=True)
         
         # Act
@@ -101,7 +101,7 @@ class TestRepositoryDetector:
         features = detector.detect_cortex_features()
         
         # Assert
-        assert features.has_cortex_brain is True
+        assert features.has_cortex_intelligence is True
         assert features.has_orchestrators is True
         assert features.has_prompt_file is False
         assert features.has_wiring is False
@@ -115,13 +115,13 @@ class TestRepositoryDetector:
         # Assert
         assert len(markers) == 4
         assert all(isinstance(marker, Path) for marker in markers)
-        assert any("cortex_brain" in str(marker) for marker in markers)
+        assert any("cortex_intelligence" in str(marker) for marker in markers)
         assert any("orchestrators" in str(marker) for marker in markers)
     
     def test_is_cortex_repository_convenience_function(self, tmp_path: Path) -> None:
         """Test convenience function is_cortex_repository()."""
         # Arrange
-        (tmp_path / "cortex_brain").mkdir()
+        (tmp_path / "cortex_intelligence").mkdir()
         
         # Act
         result = is_cortex_repository(tmp_path)
@@ -157,14 +157,14 @@ class TestRepositoryDetector:
         """Test CortexFeatures dataclass creation."""
         # Act
         features = CortexFeatures(
-            has_cortex_brain=True,
+            has_cortex_intelligence=True,
             has_orchestrators=True,
             has_prompt_file=False,
             has_wiring=False,
         )
         
         # Assert
-        assert features.has_cortex_brain is True
+        assert features.has_cortex_intelligence is True
         assert features.has_orchestrators is True
         assert features.has_prompt_file is False
         assert features.has_wiring is False

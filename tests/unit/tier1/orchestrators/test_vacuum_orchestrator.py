@@ -30,10 +30,10 @@ import sys
 import tempfile
 from unittest.mock import Mock, patch, MagicMock
 
-# Add cortex_brain to path
-cortex_brain_path = Path(__file__).parent.parent.parent.parent.parent / "cortex_brain"
-if str(cortex_brain_path) not in sys.path:
-    sys.path.insert(0, str(cortex_brain_path))
+# Add cortex_intelligence to path
+cortex_intelligence_path = Path(__file__).parent.parent.parent.parent.parent / "cortex_intelligence"
+if str(cortex_intelligence_path) not in sys.path:
+    sys.path.insert(0, str(cortex_intelligence_path))
 
 from tier1.orchestrators.vacuum import (
     VacuumOrchestrator,
@@ -137,7 +137,7 @@ def orchestrator_config(temp_repo) -> Dict[str, Any]:
     """Provide orchestrator configuration."""
     return {
         "repo_root": str(temp_repo),
-        "config_file": "cortex_brain/vacuum/config.yaml",
+        "config_file": "cortex_intelligence/vacuum/config.yaml",
         "dry_run": False,
         "verbose": True,
     }

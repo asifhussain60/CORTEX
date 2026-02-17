@@ -3,7 +3,7 @@
 Eliminate Redirect Stub Files
 
 Removes redirect stub files and updates all imports to point directly
-to the actual implementation in cortex_brain.
+to the actual implementation in cortex_intelligence.
 
 Author: CORTEX Framework
 Phase: 91.8 - Production Readiness
@@ -67,7 +67,7 @@ def find_target_module(stub_file: Path) -> str:
         return match.group(1)
     
     # Look for 'from X import *' pattern
-    match = re.search(r'from\s+(cortex_brain\.[a-z_\.]+)\s+import', content)
+    match = re.search(r'from\s+(cortex_intelligence\.[a-z_\.]+)\s+import', content)
     if match:
         return match.group(1)
     

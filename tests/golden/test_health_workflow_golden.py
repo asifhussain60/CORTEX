@@ -38,7 +38,7 @@ def test_workspace():
         
         # Create directory structure
         (workspace / "cortex" / "orchestrators").mkdir(parents=True)
-        (workspace / "cortex_brain" / "tier1" / "orchestrators").mkdir(parents=True)
+        (workspace / "cortex_intelligence" / "tier1" / "orchestrators").mkdir(parents=True)
         (workspace / "cortex" / "knowledge").mkdir(parents=True)
         (workspace / "cortex-registry").mkdir(parents=True)
         (workspace / "tests").mkdir(parents=True)
@@ -61,7 +61,7 @@ def test_golden_workflow_duplicate_prevention(test_workspace):
     
     # Problem 1: Duplicate VacuumOrchestrator (CORE-035 violation)
     vacuum1 = test_workspace / "cortex" / "orchestrators" / "vacuum.py"
-    vacuum2 = test_workspace / "cortex_brain" / "tier1" / "orchestrators" / "vacuum.py"
+    vacuum2 = test_workspace / "cortex_intelligence" / "tier1" / "orchestrators" / "vacuum.py"
     
     vacuum_code = '''"""Vacuum Orchestrator"""
 def vacuum_markdown():

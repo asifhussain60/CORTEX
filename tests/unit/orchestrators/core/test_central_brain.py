@@ -127,18 +127,18 @@ class TestCentralBrainOrchestrator:
 class TestBrainCollaborationTools:
     """Test suite for brain collaboration MCP tools."""
 
-    def test_cortex_brain_share_tool_exists(self) -> None:
-        """Test cortex_brain_share MCP tool is available."""
+    def test_cortex_intelligence_share_tool_exists(self) -> None:
+        """Test cortex_intelligence_share MCP tool is available."""
         from cortex.mcp.tools.brain_collaboration_tools import cortex_intelligence_share
         
-        assert cortex_brain_share is not None
-        assert callable(cortex_brain_share)
+        assert cortex_intelligence_share is not None
+        assert callable(cortex_intelligence_share)
 
-    def test_cortex_brain_share_shares_context_with_team(self) -> None:
-        """Test cortex_brain_share shares context with specified users."""
+    def test_cortex_intelligence_share_shares_context_with_team(self) -> None:
+        """Test cortex_intelligence_share shares context with specified users."""
         from cortex.mcp.tools.brain_collaboration_tools import cortex_intelligence_share
         
-        result = cortex_brain_share(
+        result = cortex_intelligence_share(
             context_id="ctx123",
             target_users=["user2", "user3"],
             scope="session"
@@ -147,18 +147,18 @@ class TestBrainCollaborationTools:
         assert result["shared_with"] == ["user2", "user3"]
         assert "share_id" in result
 
-    def test_cortex_brain_merge_tool_exists(self) -> None:
-        """Test cortex_brain_merge MCP tool is available."""
+    def test_cortex_intelligence_merge_tool_exists(self) -> None:
+        """Test cortex_intelligence_merge MCP tool is available."""
         from cortex.mcp.tools.brain_collaboration_tools import cortex_intelligence_merge
         
-        assert cortex_brain_merge is not None
-        assert callable(cortex_brain_merge)
+        assert cortex_intelligence_merge is not None
+        assert callable(cortex_intelligence_merge)
 
-    def test_cortex_brain_merge_merges_learnings(self) -> None:
-        """Test cortex_brain_merge merges learnings from multiple sources."""
+    def test_cortex_intelligence_merge_merges_learnings(self) -> None:
+        """Test cortex_intelligence_merge merges learnings from multiple sources."""
         from cortex.mcp.tools.brain_collaboration_tools import cortex_intelligence_merge
         
-        result = cortex_brain_merge(
+        result = cortex_intelligence_merge(
             source_contexts=["ctx1", "ctx2"],
             merge_strategy="intelligent"
         )
@@ -166,18 +166,18 @@ class TestBrainCollaborationTools:
         assert "merged_context_id" in result
         assert result["source_count"] == 2
 
-    def test_cortex_brain_sync_tool_exists(self) -> None:
-        """Test cortex_brain_sync MCP tool is available."""
+    def test_cortex_intelligence_sync_tool_exists(self) -> None:
+        """Test cortex_intelligence_sync MCP tool is available."""
         from cortex.mcp.tools.brain_collaboration_tools import cortex_intelligence_sync
         
-        assert cortex_brain_sync is not None
-        assert callable(cortex_brain_sync)
+        assert cortex_intelligence_sync is not None
+        assert callable(cortex_intelligence_sync)
 
-    def test_cortex_brain_sync_syncs_state_across_users(self) -> None:
-        """Test cortex_brain_sync synchronizes state across users."""
+    def test_cortex_intelligence_sync_syncs_state_across_users(self) -> None:
+        """Test cortex_intelligence_sync synchronizes state across users."""
         from cortex.mcp.tools.brain_collaboration_tools import cortex_intelligence_sync
         
-        result = cortex_brain_sync(
+        result = cortex_intelligence_sync(
             user_ids=["user1", "user2"],
             sync_type="bidirectional"
         )

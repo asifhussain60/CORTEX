@@ -58,7 +58,7 @@ class TestStateOrchestratorAuditLogging:
         Returns:
             Configured StateOrchestrator instance
         """
-        brain_root = tmp_path / "cortex_brain"
+        brain_root = tmp_path / "cortex_intelligence"
         brain_root.mkdir()
         return StateOrchestrator(
             brain_root=brain_root,
@@ -209,7 +209,7 @@ class TestStateOrchestratorIntegration:
     @pytest.fixture
     def orchestrator(self, tmp_path: Path) -> StateOrchestrator:
         """Create StateOrchestrator for testing."""
-        brain_root = tmp_path / "cortex_brain"
+        brain_root = tmp_path / "cortex_intelligence"
         brain_root.mkdir()
         audit_db = tmp_path / "audit.db"
         return StateOrchestrator(brain_root=brain_root, audit_db_path=audit_db)

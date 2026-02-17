@@ -326,10 +326,10 @@ CORTEX {version}: Governance-First AI Development Platform
 |   +-- cortex/core/governance/core-rules.yaml
 |   +-- Includes: lifecycle, response formatting, portability, quality gates
 +-- Tier 1: Project Governance (YAML + SQLite)
-|   +-- cortex_brain/tier1/ (domain-specific rules)
+|   +-- cortex_intelligence/tier1/ (domain-specific rules)
 |   +-- Includes: enforcement maps, validation checklists
 +-- Tier 2: Engineering Standards
-    +-- cortex_brain/tier2/ (domain implementations)
+    +-- cortex_intelligence/tier2/ (domain implementations)
     +-- Includes: domain brains, governance evaluation frameworks
 ```
 
@@ -365,7 +365,7 @@ AC_START (log intent) -> EXECUTE -> AC_COMPLETE (log result) -> Verify hash chai
 
 **YAML Reports:**
 - `reports/` - Phase reports
-- `cortex_brain/tier0/governance/` - Governance specs
+- `cortex_intelligence/tier0/governance/` - Governance specs
 
 ---
 

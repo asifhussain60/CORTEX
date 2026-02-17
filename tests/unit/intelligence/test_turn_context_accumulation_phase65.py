@@ -176,7 +176,7 @@ class TestProviderSessionManagement:
         """Create provider with mocked dependencies."""
         with patch('cortex.lens.orchestrator.LENSOrchestrator'), \
              patch('cortex.brain.knowledge.knowledge_synthesis_engine.get_synthesis_engine'), \
-             patch('cortex_brain.onboarded_repos.profile_store.ProfileStore'):
+             patch('cortex_intelligence.onboarded_repos.profile_store.ProfileStore'):
             provider = UnifiedIntelligenceProvider()
             UnifiedIntelligenceProvider._instance = None
             yield provider
@@ -234,7 +234,7 @@ class TestCrossDomainSynthesis:
         """Create provider with mocked dependencies."""
         with patch('cortex.lens.orchestrator.LENSOrchestrator'), \
              patch('cortex.brain.knowledge.knowledge_synthesis_engine.get_synthesis_engine'), \
-             patch('cortex_brain.onboarded_repos.profile_store.ProfileStore'):
+             patch('cortex_intelligence.onboarded_repos.profile_store.ProfileStore'):
             provider = UnifiedIntelligenceProvider()
             UnifiedIntelligenceProvider._instance = None
             yield provider
@@ -313,7 +313,7 @@ class TestAccumulatedContextIntegration:
         """Create provider with turn context."""
         with patch('cortex.lens.orchestrator.LENSOrchestrator'), \
              patch('cortex.brain.knowledge.knowledge_synthesis_engine.get_synthesis_engine'), \
-             patch('cortex_brain.onboarded_repos.profile_store.ProfileStore'):
+             patch('cortex_intelligence.onboarded_repos.profile_store.ProfileStore'):
             provider = UnifiedIntelligenceProvider()
             UnifiedIntelligenceProvider._instance = None
             yield provider

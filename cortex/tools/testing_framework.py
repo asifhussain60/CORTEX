@@ -38,7 +38,7 @@ class TestStatus(Enum):
 # CORE-029: Response Header Enforcement (TIER 0 - IMMUTABLE)
 # ================================================================================
 # Per governance rules, all test reports must include CORTEX header
-# Reference: cortex_brain/tier0/governance/response-header-enforcement.yaml
+# Reference: cortex_intelligence/tier0/governance/response-header-enforcement.yaml
 # ================================================================================
 
 class ResponseHeaderEnforcer:

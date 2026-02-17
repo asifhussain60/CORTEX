@@ -291,7 +291,7 @@ if __name__ == "__main__":
     )
 
     # Initialize monitor
-    db_path = Path(__file__).parent.parent.parent / "cortex_brain" / "state" / "governance.db"
+    db_path = Path(__file__).parent.parent.parent / "cortex_intelligence" / "state" / "governance.db"
     monitor = setup_monitoring(str(db_path))
 
     # Run health check

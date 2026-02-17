@@ -35,7 +35,7 @@ Date: 2026-02-13
 
 from typing import Any, Dict, List, Optional
 
-from cortex.tools.cortex_brain_integration import GovernanceRuleLoader
+from cortex.tools.cortex_intelligence_integration import GovernanceRuleLoader
 
 
 class BusinessWisdomFormatter:

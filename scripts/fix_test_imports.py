@@ -2,7 +2,7 @@
 """
 Fix Test Imports After Redirect Stub Removal
 
-Updates test imports to point to correct cortex_brain submodules
+Updates test imports to point to correct cortex_intelligence submodules
 after redirect stubs were deleted.
 
 Author: CORTEX Framework

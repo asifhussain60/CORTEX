@@ -118,7 +118,7 @@ class CORTEXProductionValidator:
         
         # Core directories
         required_dirs = [
-            "cortex", "cortex_brain", "tests", "deployment"
+            "cortex", "cortex_intelligence", "tests", "deployment"
         ]
         
         for dir_name in required_dirs:
@@ -298,7 +298,7 @@ class CORTEXProductionValidator:
         # Security knowledge
         security_files = [
             "cortex/knowledge/best-practices/security/owasp-top-10.yaml",
-            "cortex_brain/tier3/knowledge/SECURITY/owasp-top-10.yaml"
+            "cortex_intelligence/tier3/knowledge/SECURITY/owasp-top-10.yaml"
         ]
         
         security_docs_found = False

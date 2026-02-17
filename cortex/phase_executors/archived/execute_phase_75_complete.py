@@ -158,7 +158,7 @@ class Phase75CompleteExecutor:
             ("S6.T1", "cortex_onboard_repository: --persist-knowledge flag"),
             ("S6.T2", "cortex_universal_learning_loop: Manual learning trigger"),
             ("S6.T3", "cortex_knowledge_search: Query persisted domain knowledge"),
-            ("S6.T4", "cortex_brain_query: Ask intelligence layers (perception/reasoning/action)"),
+            ("S6.T4", "cortex_intelligence_query: Ask intelligence layers (perception/reasoning/action)"),
             ("S6.T5", "Test: E2E MCP tool usage on sample workflows"),
         ]
 

@@ -4,7 +4,7 @@ CORTEX File Naming Factory & Validator
 
 Enforces global file naming standards across CORTEX.
 SSOT: .cortex/standards/file-naming-config.yaml
-DOCS: cortex_brain/tier0/governance/file-naming-standards.md
+DOCS: cortex_intelligence/tier0/governance/file-naming-standards.md
 
 Authority: CORE-035 (Single Canonical Implementation)
 """
@@ -541,5 +541,5 @@ if __name__ == "__main__":
 
     print("=" * 70)
     print("SSOT: .cortex/standards/file-naming-config.yaml")
-    print("DOCS: cortex_brain/tier0/governance/file-naming-standards.md")
+    print("DOCS: cortex_intelligence/tier0/governance/file-naming-standards.md")
     print("=" * 70)

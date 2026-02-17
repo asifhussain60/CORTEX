@@ -84,7 +84,7 @@ class RADomainOrchestrator:
         
         Args:
             repo_path: Path to Product.Example repository
-            output_dir: Optional output directory (defaults to cortex_brain/dashboards/data/repos/{repo_name}/)
+            output_dir: Optional output directory (defaults to cortex_intelligence/dashboards/data/repos/{repo_name}/)
             config_file: Optional config file (defaults to toolkit/config/analysis-config.yaml)
         """
         self.repo_path = Path(repo_path)
@@ -96,7 +96,7 @@ class RADomainOrchestrator:
         else:
             self.output_dir = (
                 CORTEX_ROOT / 
-                'cortex_brain' / 
+                'cortex_intelligence' / 
                 'dashboards' / 
                 'data' / 
                 'repos' / 
@@ -111,7 +111,7 @@ class RADomainOrchestrator:
         else:
             self.config_file = (
                 CORTEX_ROOT / 
-                'cortex_brain' / 
+                'cortex_intelligence' / 
                 'admin' / 
                 'RA-Domain' / 
                 'toolkit' / 
@@ -521,7 +521,7 @@ class RADomainOrchestrator:
         
         registry_file = (
             CORTEX_ROOT / 
-            'cortex_brain' / 
+            'cortex_intelligence' / 
             'dashboards' / 
             'data' / 
             'repository-registry.json'

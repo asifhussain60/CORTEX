@@ -300,8 +300,8 @@ Examples:
     parser.add_argument(
         "--db",
         type=str,
-        default="cortex_brain/state/governance.db",
-        help="Path to governance.db (default: cortex_brain/state/governance.db)"
+        default="cortex_intelligence/state/governance.db",
+        help="Path to governance.db (default: cortex_intelligence/state/governance.db)"
     )
 
     parser.add_argument(

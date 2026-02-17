@@ -67,7 +67,7 @@ class TestPhase38AuditIntegration:
         # Check deployment configurations
         saas_configs = {
             "mcp_server": "http://localhost:8000",
-            "cortex_brain": "enabled",
+            "cortex_intelligence": "enabled",
             "infrastructure_discovery": "enabled",
             "plan_enrichment": "enabled",
         }

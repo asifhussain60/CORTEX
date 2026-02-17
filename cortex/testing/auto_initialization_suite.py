@@ -137,10 +137,10 @@ class AutoInitializationSuite:
             sync_result = sync.safe_pull_with_local_preservation(
                 backup_before_sync=True,
                 protect_patterns=[
-                    "cortex_brain/tier1/**/*.yaml",
-                    "cortex_brain/tier2/**/*.yaml",
-                    "cortex_brain/tier3/**/*.yaml",
-                    "cortex_brain/tier3/domain-registry.yaml"
+                    "cortex_intelligence/tier1/**/*.yaml",
+                    "cortex_intelligence/tier2/**/*.yaml",
+                    "cortex_intelligence/tier3/**/*.yaml",
+                    "cortex_intelligence/tier3/domain-registry.yaml"
                 ],
                 conflict_strategy="local_wins_for_protected",
                 verify_before_cleanup=False  # Auto-cleanup enabled

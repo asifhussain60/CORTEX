@@ -345,10 +345,10 @@ class BrainTierPusher:
     """
 
     TIER_PATHS = {
-        BrainTier.TIER0: "cortex_brain/tier0/governance",
-        BrainTier.TIER1: "cortex_brain/tier1/acceptance-criteria",
-        BrainTier.TIER2: "cortex_brain/tier2/standards",
-        BrainTier.TIER3: "cortex_brain/tier3/knowledge",
+        BrainTier.TIER0: "cortex_intelligence/tier0/governance",
+        BrainTier.TIER1: "cortex_intelligence/tier1/acceptance-criteria",
+        BrainTier.TIER2: "cortex_intelligence/tier2/standards",
+        BrainTier.TIER3: "cortex_intelligence/tier3/knowledge",
     }
 
     def __init__(self, workspace_root: str = ".") -> None:

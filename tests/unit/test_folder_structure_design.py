@@ -29,11 +29,11 @@ class FolderStructureValidator:
             'src/cortex/orchestrators': ['core', 'domain', 'mcp'],
             'src/cortex/api': ['routes', 'middleware'],
             'src/cortex/tools': ['commands', 'templates'],
-            'src/cortex_brain/tier0': [],
-            'src/cortex_brain/tier2': ['resilience', 'intelligence'],
-            'src/cortex_brain/tier3': ['knowledge', 'domain'],
+            'src/cortex_intelligence/tier0': [],
+            'src/cortex_intelligence/tier2': ['resilience', 'intelligence'],
+            'src/cortex_intelligence/tier3': ['knowledge', 'domain'],
             'tests/unit/cortex': ['core', 'infrastructure', 'orchestrators', 'api', 'tools'],
-            'tests/unit/cortex_brain': ['tier0', 'tier2', 'tier3'],
+            'tests/unit/cortex_intelligence': ['tier0', 'tier2', 'tier3'],
             'tests/integration': [],
             'scripts/maintenance': [],
             'scripts/validation': [],
@@ -62,12 +62,12 @@ class FolderStructureValidator:
         return len(self.issues) == 0
     
     def check_no_duplicates(self) -> bool:
-        """Check for duplicate folders (cortex_brain vs cortex_brain)."""
-        cortex_brain = self.root_path / 'src/cortex_brain'
-        cortex_brain_old = self.root_path / 'cortex_brain'
+        """Check for duplicate folders (cortex_intelligence vs cortex_intelligence)."""
+        cortex_intelligence = self.root_path / 'src/cortex_intelligence'
+        cortex_intelligence_old = self.root_path / 'cortex_intelligence'
         
-        if cortex_brain_old.exists() and cortex_brain.exists():
-            self.issues.append("DUPLICATE: cortex_brain/ and src/cortex_brain/ both exist")
+        if cortex_intelligence_old.exists() and cortex_intelligence.exists():
+            self.issues.append("DUPLICATE: cortex_intelligence/ and src/cortex_intelligence/ both exist")
             return False
         
         return True
@@ -132,7 +132,7 @@ class TestFolderStructureDesign:
     def test_no_duplicate_folders_planned(self, validator):
         """Test that migration plan doesn't have conflicting folders."""
         # Design specifies consolidation, not duplication
-        # Validation ensures we're not keeping both cortex_brain/ and src/cortex_brain/
+        # Validation ensures we're not keeping both cortex_intelligence/ and src/cortex_intelligence/
         duplicates_ok = True  # By design, no duplicates in proposal
         assert duplicates_ok
     
@@ -157,7 +157,7 @@ class TestFolderStructureDesign:
             ('src/cortex/core', 'tests/unit/cortex/core'),
             ('src/cortex/infrastructure', 'tests/unit/cortex/infrastructure'),
             ('src/cortex/orchestrators', 'tests/unit/cortex/orchestrators'),
-            ('src/cortex_brain/tier0', 'tests/unit/cortex_brain/tier0'),
+            ('src/cortex_intelligence/tier0', 'tests/unit/cortex_intelligence/tier0'),
         ]
         
         # All pairs defined in design

@@ -275,7 +275,7 @@ class WiringHarnessInventory:
 
         "yaml_restoration_status": {
             "phase": "PHASE-REMEDIATION-07: TDD Knowledge Integration",
-            "yaml_location": "cortex_brain/tier3/knowledge/",
+            "yaml_location": "cortex_intelligence/tier3/knowledge/",
             "yaml_source": "Restored from git commit 6ad2094a5 (CORTEX-4.0 import)",
             "restoration_date": "2026-01-23",
             "yaml_count": 35,
@@ -285,8 +285,8 @@ class WiringHarnessInventory:
 
         "dependencies": {
             "KnowledgeGuidanceEngine": "cortex.brain.core.knowledge_guidance_engine.KnowledgeGuidanceEngine",
-            "TDD_YAMLs": "cortex_brain/tier3/knowledge/TESTING-VALIDATION/*.yaml",
-            "Governance": "cortex_brain/tier0/governance/core-rules.yaml (CORE-008, CORE-019)"
+            "TDD_YAMLs": "cortex_intelligence/tier3/knowledge/TESTING-VALIDATION/*.yaml",
+            "Governance": "cortex_intelligence/tier0/governance/core-rules.yaml (CORE-008, CORE-019)"
         },
 
         "integration_notes": "✅ WIRED: TDD Orchestrator fully integrated with 35 best practices YAMLs. Routes ALL implementation intents through TDD discipline enforcer per CORE-019. Provides RED/GREEN/REFACTOR workflow guidance with knowledge integration."

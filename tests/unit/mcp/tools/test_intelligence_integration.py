@@ -280,7 +280,7 @@ class Calculator:
         # This test documents current state
 
     # ========================================================================
-    # Integration with cortex_brain layers
+    # Integration with cortex_intelligence layers
     # ========================================================================
 
     @pytest.mark.asyncio

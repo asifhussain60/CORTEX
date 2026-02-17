@@ -137,7 +137,7 @@ class ProfileWizard:
         Returns:
             Dict with 'success'.
         """
-        tier1_dir = self._root / "cortex_brain" / "tier1"
+        tier1_dir = self._root / "cortex_intelligence" / "tier1"
         tier1_dir.mkdir(parents=True, exist_ok=True)
         rules_file = tier1_dir / "domain-rules.yaml"
         rules = self._get_profile_rules(profile)

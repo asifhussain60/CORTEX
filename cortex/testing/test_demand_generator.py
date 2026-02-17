@@ -145,7 +145,7 @@ class InteractionOrchestratorAnalyzer(DemandAnalyzer):
         Analyze InteractionOrchestrator for test demands.
 
         Key demands for Interaction:
-        - YAML files created silently in cortex_brain/state/
+        - YAML files created silently in cortex_intelligence/state/
         - LENS synthesis merges governance + domain + practices
         - RGR loop executes without endless loops
         - DoD gate blocks approval until tests pass
@@ -161,12 +161,12 @@ class InteractionOrchestratorAnalyzer(DemandAnalyzer):
             orchestrator="InteractionOrchestrator",
             category=DemandCategory.SILENT_OPERATION,
             title="YAML Silent Creation",
-            description="Interaction history YAML files created in cortex_brain/state/ without user prompts",
+            description="Interaction history YAML files created in cortex_intelligence/state/ without user prompts",
             scenario="User says 'implement login', InteractionOrchestrator processes request",
-            expected_behavior="YAML file created at cortex_brain/state/interaction-history-{timestamp}.yaml",
+            expected_behavior="YAML file created at cortex_intelligence/state/interaction-history-{timestamp}.yaml",
             validation_type=ValidationType.FILE_SYSTEM,
             validation_rules={
-                "file_path": "cortex_brain/state/interaction-history-*.yaml",
+                "file_path": "cortex_intelligence/state/interaction-history-*.yaml",
                 "file_must_exist": True,
                 "contains_keys": ["request", "refined", "lens_analysis", "dor_status"]
             },

@@ -3,7 +3,7 @@ Repository Profile Schema for External Repository Onboarding (Phase 28)
 
 This module defines the data models for repository profiles that enable
 loose-coupled interaction with external repositories. Profiles are stored
-in CORTEX (cortex_brain/onboarded_repos/) to maintain deletion safety.
+in CORTEX (cortex_intelligence/onboarded_repos/) to maintain deletion safety.
 
 Authority: phase-28-repository-onboarding-system.yaml
 Created: 2026-02-06

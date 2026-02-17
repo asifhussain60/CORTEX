@@ -189,7 +189,7 @@ class StubAutoFixAgent(BaseHealthAgent):
             stub_file: Stub file path
         
         Returns:
-            Target module name (e.g., 'cortex_brain.domain.models')
+            Target module name (e.g., 'cortex_intelligence.domain.models')
         """
         try:
             content = stub_file.read_text()

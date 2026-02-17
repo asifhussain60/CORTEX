@@ -38,7 +38,7 @@ BOOK_REFS = {
 }
 
 def main():
-    yaml_file = Path("cortex_brain/tier0/governance/core-rules.yaml")
+    yaml_file = Path("cortex_intelligence/tier0/governance/core-rules.yaml")
     
     with open(yaml_file, 'r', encoding='utf-8') as f:
         data = yaml.safe_load(f)

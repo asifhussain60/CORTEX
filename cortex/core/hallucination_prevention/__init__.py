@@ -5,7 +5,7 @@ Author: CORTEX Framework
 NOTE: Wrapped imports - tier2 modules may have incomplete definitions
 """
 
-# All hallucination prevention logic is in cortex_brain/tier2/hallucination_prevention/
+# All hallucination prevention logic is in cortex_intelligence/tier2/hallucination_prevention/
 try:
     from cortex_intelligence.memory.tier2_adaptive.hallucination_prevention.boundary_rules import *  # noqa: F401, F403
 except (ImportError, NameError):

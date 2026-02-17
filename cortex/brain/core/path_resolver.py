@@ -11,7 +11,7 @@ NEVER use hardcoded paths like:
 
 ALWAYS use:
 - get_project_root()
-- resolve_path("cortex_brain/tier0")
+- resolve_path("cortex_intelligence/tier0")
 
 Author: Asif Hussain
 """
@@ -63,38 +63,38 @@ def resolve_path(*parts: str) -> Path:
     Resolve a path relative to project root.
 
     Args:
-        *parts: Path components (e.g., "cortex_brain", "tier0")
+        *parts: Path components (e.g., "cortex_intelligence", "tier0")
 
     Returns:
         Absolute Path object
 
     Example:
-        >>> resolve_path("cortex_brain", "tier0", "governance")
-        Path("/path/to/project/cortex_brain/tier0/governance")
+        >>> resolve_path("cortex_intelligence", "tier0", "governance")
+        Path("/path/to/project/cortex_intelligence/tier0/governance")
     """
     return get_project_root().joinpath(*parts)
 
 
-def cortex_brain_path() -> Path:
-    """Get path to cortex_brain directory."""
-    return resolve_path("cortex_brain")
+def cortex_intelligence_path() -> Path:
+    """Get path to cortex_intelligence directory."""
+    return resolve_path("cortex_intelligence")
 
 
 def tier_path(tier: int) -> Path:
     """Get path to a specific tier directory."""
     if tier not in (0, 1, 2, 3):
         raise ValueError(f"Invalid tier: {tier}. Must be 0, 1, 2, or 3.")
-    return resolve_path("cortex_brain", f"tier{tier}")
+    return resolve_path("cortex_intelligence", f"tier{tier}")
 
 
 def audit_logs_path() -> Path:
     """Get path to audit logs directory."""
-    return resolve_path("cortex_brain", "audit-logs")
+    return resolve_path("cortex_intelligence", "audit-logs")
 
 
 def config_path() -> Path:
     """Get path to config directory."""
-    return resolve_path("cortex_brain", "config")
+    return resolve_path("cortex_intelligence", "config")
 
 
 def reset_project_root():

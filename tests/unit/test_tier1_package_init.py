@@ -19,9 +19,9 @@ class TestTier1PackageInit:
         assert len(cortex_intelligence.memory.tier1_learned.__doc__) > 0
 
     def test_tier1_file_exists(self):
-        """cortex_brain/tier1/__init__.py file should exist."""
-        tier1_init = Path(__file__).parent.parent.parent / 'cortex_brain' / 'tier1' / '__init__.py'
-        assert tier1_init.exists(), f"cortex_brain/tier1/__init__.py not found at {tier1_init}"
+        """cortex_intelligence/tier1/__init__.py file should exist."""
+        tier1_init = Path(__file__).parent.parent.parent / 'cortex_intelligence' / 'tier1' / '__init__.py'
+        assert tier1_init.exists(), f"cortex_intelligence/tier1/__init__.py not found at {tier1_init}"
 
     def test_tier1_name_correct(self):
         """Tier1 __name__ should be 'cortex_intelligence.memory.tier1_learned'."""
@@ -43,5 +43,5 @@ class TestTier1PackageInit:
         """Tier1 should be isolated tier with core logic focus."""
         import cortex_intelligence.tier1
         # Verify module is in correct package hierarchy
-        assert 'cortex_brain' in cortex_intelligence.memory.tier1_learned.__name__
+        assert 'cortex_intelligence' in cortex_intelligence.memory.tier1_learned.__name__
         assert 'tier1' in cortex_intelligence.memory.tier1_learned.__name__

@@ -11,7 +11,7 @@ precedence to ensure company policies override generic CORTEX knowledge.
 Precedence Order (highest to lowest):
 1. company/domains/{company-name}/compliance/  - Company-specific overrides
 2. company/domains/compliance-standards/       - Generic industry standards
-3. cortex_brain/tier3/knowledge/               - CORTEX base knowledge
+3. cortex_intelligence/tier3/knowledge/               - CORTEX base knowledge
 
 Core Responsibilities:
 1. Load company-specific knowledge YAMLs from company/domains/
@@ -195,7 +195,7 @@ class CompanyKnowledgeLoader:
     # Default paths (relative to project root)
     COMPANY_DOMAINS_PATH = "company/domains"
     COMPLIANCE_STANDARDS_PATH = "company/domains/compliance-standards"
-    CORTEX_KNOWLEDGE_PATH = "cortex_brain/tier3/knowledge"
+    CORTEX_KNOWLEDGE_PATH = "cortex_intelligence/tier3/knowledge"
 
     def __init__(
         self,
@@ -234,7 +234,7 @@ class CompanyKnowledgeLoader:
         # Auto-detect: walk up from this file's location
         current = Path(__file__).resolve()
         for parent in [current] + list(current.parents):
-            if (parent / "cortex_brain").exists() or (parent / "cortex").exists():
+            if (parent / "cortex_intelligence").exists() or (parent / "cortex").exists():
                 return parent
 
         # Fallback to current working directory

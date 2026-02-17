@@ -104,7 +104,7 @@ class VacuumIntelligence:
             
             # Production code
             "cortex/",
-            "cortex_brain/",
+            "cortex_intelligence/",
             "cortex_lens/",
             "tests/",
             

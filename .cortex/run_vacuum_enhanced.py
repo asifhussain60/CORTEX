@@ -12,9 +12,9 @@ AC-VACUUM-002: Enhanced repository cleanup
 import sys
 from pathlib import Path
 
-# Add cortex_brain to path
+# Add cortex_intelligence to path
 repo_root = Path(__file__).parent.parent
-sys.path.insert(0, str(repo_root / "cortex_brain"))
+sys.path.insert(0, str(repo_root / "cortex_intelligence"))
 
 from tier1.orchestrators.vacuum import VacuumOrchestrator
 from tier1.orchestrators.cleaners import (

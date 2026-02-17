@@ -105,7 +105,7 @@ class TestUnifiedIntelligenceProviderImplementation:
         """Create provider with mocked dependencies."""
         with patch('cortex.lens.orchestrator.LENSOrchestrator', return_value=mock_lens_orchestrator), \
              patch('cortex.brain.knowledge.knowledge_synthesis_engine.get_synthesis_engine', return_value=mock_knowledge_synthesis_engine), \
-             patch('cortex_brain.onboarded_repos.profile_store.ProfileStore', return_value=mock_profile_store):
+             patch('cortex_intelligence.onboarded_repos.profile_store.ProfileStore', return_value=mock_profile_store):
             provider = UnifiedIntelligenceProvider()
             # Reset singleton for test isolation
             UnifiedIntelligenceProvider._instance = None
@@ -297,7 +297,7 @@ class TestProviderDeduplication:
         """Create provider with spy on synthesize calls."""
         with patch('cortex.lens.orchestrator.LENSOrchestrator'), \
              patch('cortex.brain.knowledge.knowledge_synthesis_engine.get_synthesis_engine') as mock_engine, \
-             patch('cortex_brain.onboarded_repos.profile_store.ProfileStore'):
+             patch('cortex_intelligence.onboarded_repos.profile_store.ProfileStore'):
             
             mock_engine.return_value.synthesize_unified_context.return_value = UnifiedIntelligenceContext(
                 lens_intelligence=LENSIntelligence({}, {}, {}),
@@ -336,7 +336,7 @@ class TestProviderIntegrationPoints:
         """Create provider with real integration points mocked."""
         with patch('cortex.lens.orchestrator.LENSOrchestrator') as mock_lens, \
              patch('cortex.brain.knowledge.knowledge_synthesis_engine.get_synthesis_engine') as mock_engine, \
-             patch('cortex_brain.onboarded_repos.profile_store.ProfileStore') as mock_profile:
+             patch('cortex_intelligence.onboarded_repos.profile_store.ProfileStore') as mock_profile:
             
             # Setup mock returns
             mock_lens.return_value.analyze_file.return_value = {
@@ -399,7 +399,7 @@ class TestProviderBudgetAwareness:
         """Create provider with mocked dependencies."""
         with patch('cortex.lens.orchestrator.LENSOrchestrator'), \
              patch('cortex.brain.knowledge.knowledge_synthesis_engine.get_synthesis_engine') as mock_engine, \
-             patch('cortex_brain.onboarded_repos.profile_store.ProfileStore'):
+             patch('cortex_intelligence.onboarded_repos.profile_store.ProfileStore'):
             
             mock_engine.return_value.synthesize_unified_context.return_value = UnifiedIntelligenceContext(
                 lens_intelligence=LENSIntelligence({}, {}, {}),
@@ -444,7 +444,7 @@ class TestProviderRulesAndViolations:
         """Create provider that returns rules and violations."""
         with patch('cortex.lens.orchestrator.LENSOrchestrator'), \
              patch('cortex.brain.knowledge.knowledge_synthesis_engine.get_synthesis_engine') as mock_engine, \
-             patch('cortex_brain.onboarded_repos.profile_store.ProfileStore'):
+             patch('cortex_intelligence.onboarded_repos.profile_store.ProfileStore'):
             
             mock_engine.return_value.synthesize_unified_context.return_value = UnifiedIntelligenceContext(
                 lens_intelligence=LENSIntelligence({}, {}, {}),

@@ -19,9 +19,9 @@ class TestTier0PackageInit:
         assert len(cortex_intelligence.memory.core.__doc__) > 0
 
     def test_tier0_file_exists(self):
-        """cortex_brain/tier0/__init__.py file should exist."""
-        tier0_init = Path(__file__).parent.parent.parent / 'cortex_brain' / 'tier0' / '__init__.py'
-        assert tier0_init.exists(), f"cortex_brain/tier0/__init__.py not found at {tier0_init}"
+        """cortex_intelligence/tier0/__init__.py file should exist."""
+        tier0_init = Path(__file__).parent.parent.parent / 'cortex_intelligence' / 'tier0' / '__init__.py'
+        assert tier0_init.exists(), f"cortex_intelligence/tier0/__init__.py not found at {tier0_init}"
 
     def test_tier0_name_correct(self):
         """Tier0 __name__ should be 'cortex_intelligence.memory.core'."""
@@ -44,5 +44,5 @@ class TestTier0PackageInit:
         """Tier0 should be isolated tier with governance focus."""
         import cortex_intelligence.tier0
         # Verify module is in correct package hierarchy
-        assert 'cortex_brain' in cortex_intelligence.memory.core.__name__
+        assert 'cortex_intelligence' in cortex_intelligence.memory.core.__name__
         assert 'tier0' in cortex_intelligence.memory.core.__name__

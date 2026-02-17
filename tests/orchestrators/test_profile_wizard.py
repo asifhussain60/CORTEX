@@ -123,7 +123,7 @@ class TestProfileWizardCustomization:
         result = wizard.apply_profile("finops-v1.0")
         
         assert result["success"] is True
-        tier1_file = tmp_path / "cortex_brain" / "tier1" / "domain-rules.yaml"
+        tier1_file = tmp_path / "cortex_intelligence" / "tier1" / "domain-rules.yaml"
         assert tier1_file.exists()
 
 

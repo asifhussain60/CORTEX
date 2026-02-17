@@ -70,7 +70,7 @@ class TestDashboardEndToEnd:
         # Create CORTEX-like structure
         cortex_repo = tmp_path / "cortex-test"
         cortex_repo.mkdir()
-        (cortex_repo / "cortex_brain").mkdir()
+        (cortex_repo / "cortex_intelligence").mkdir()
         cortex_dir = cortex_repo / "cortex"
         cortex_dir.mkdir()
         (cortex_dir / "orchestrators").mkdir()

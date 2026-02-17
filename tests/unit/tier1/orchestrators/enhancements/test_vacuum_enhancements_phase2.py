@@ -16,7 +16,7 @@ import yaml
 # Dynamic import for Phase 2 modules
 test_file = Path(__file__).resolve()
 project_root = test_file.parent.parent.parent.parent.parent.parent
-cortex_brain_path = project_root / "cortex_brain"
+cortex_intelligence_path = project_root / "cortex_intelligence"
 
 # Ensure paths are in sys.path (conftest.py also sets this)
 if str(project_root) not in sys.path:
@@ -38,7 +38,7 @@ def load_module(name: str, path: Path):
 # Load modules
 ref_updater_mod = load_module(
     "reference_updater",
-    cortex_brain_path / "tier1/orchestrators/enhancements/reference_updater.py"
+    cortex_intelligence_path / "tier1/orchestrators/enhancements/reference_updater.py"
 )
 ReferenceType = ref_updater_mod.ReferenceType
 Reference = ref_updater_mod.Reference
@@ -48,7 +48,7 @@ ReferenceUpdater = ref_updater_mod.ReferenceUpdater
 
 planner_mod = load_module(
     "rule_based_planner",
-    cortex_brain_path / "tier1/orchestrators/enhancements/rule_based_planner.py"
+    cortex_intelligence_path / "tier1/orchestrators/enhancements/rule_based_planner.py"
 )
 CleanupAction = planner_mod.CleanupAction
 CleanupRule = planner_mod.CleanupRule
@@ -94,7 +94,7 @@ import other_module
             test_py = tmpdir / "config.py"
             test_py.write_text("""
 config_path = "cortex/config.yaml"
-output = Path("cortex_brain/output")
+output = Path("cortex_intelligence/output")
 """)
             
             scanner = ReferenceScanner(tmpdir)
@@ -403,14 +403,14 @@ class TestPhase2Integration:
             tmpdir = Path(tmpdir)
             
             # Create test files
-            (tmpdir / "config.py").write_text('path = "cortex_brain/state"')
-            (tmpdir / "cortex_brain").mkdir()
-            (tmpdir / "cortex_brain" / "state").mkdir()
-            (tmpdir / "cortex_brain" / "state" / "data.yaml").write_text("data")
+            (tmpdir / "config.py").write_text('path = "cortex_intelligence/state"')
+            (tmpdir / "cortex_intelligence").mkdir()
+            (tmpdir / "cortex_intelligence" / "state").mkdir()
+            (tmpdir / "cortex_intelligence" / "state" / "data.yaml").write_text("data")
             
             # Use Reference Scanner (uses categorization logic internally)
             scanner = ReferenceScanner(tmpdir)
-            refs = scanner.find_references("cortex_brain/state")
+            refs = scanner.find_references("cortex_intelligence/state")
             
             # Should find references
             assert scanner is not None

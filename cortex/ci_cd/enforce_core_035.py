@@ -5,7 +5,7 @@ CORE-035 Enforcement: Single Canonical Implementation
 Detects and reports duplicate implementations across the codebase.
 Used by pre-commit hooks and CI/CD pipelines.
 
-Authority: cortex_brain/tier0/governance/core-rules.yaml (CORE-035)
+Authority: cortex_intelligence/tier0/governance/core-rules.yaml (CORE-035)
 AC-ID: AC-CORE-035-ENFORCEMENT-001
 
 Usage:

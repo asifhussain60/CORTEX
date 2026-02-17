@@ -64,7 +64,7 @@ class ObservabilityOrchestrator:
         if audit_db_path:
             self.audit_db_path = audit_db_path
         else:
-            db_dir = Path("cortex_brain/observability")
+            db_dir = Path("cortex_intelligence/observability")
             db_dir.mkdir(parents=True, exist_ok=True)
             self.audit_db_path = db_dir / "observability_audit.db"
         self._init_audit_db()

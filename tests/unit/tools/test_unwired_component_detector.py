@@ -189,13 +189,13 @@ class TestUnwiredComponentDetector:
             assert isinstance(recs, list)
             assert len(recs) > 0
     
-    def test_detector_respects_cortex_brain_tier0(self):
+    def test_detector_respects_cortex_intelligence_tier0(self):
         """Test detector reads repo-registry.yaml from correct location."""
         detector = UnwiredComponentDetector()
         
         # Should read from cortex_intelligence/tier0/repo-registry.yaml
         if hasattr(detector, 'registry_file'):
-            assert 'cortex_brain' in str(detector.registry_file)
+            assert 'cortex_intelligence' in str(detector.registry_file)
             assert 'tier0' in str(detector.registry_file)
             assert 'repo-registry.yaml' in str(detector.registry_file)
 

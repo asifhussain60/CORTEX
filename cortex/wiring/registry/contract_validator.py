@@ -68,7 +68,7 @@ class ContractValidator:
         if audit_db:
             self.audit_db = audit_db
         else:
-            db_dir = Path("cortex_brain/wiring")
+            db_dir = Path("cortex_intelligence/wiring")
             db_dir.mkdir(parents=True, exist_ok=True)
             self.audit_db = db_dir / "contract_validation_audit.db"
         self._init_audit_db()

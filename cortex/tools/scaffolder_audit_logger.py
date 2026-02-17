@@ -92,10 +92,10 @@ class ScaffolderAuditLogger:
         Initialize audit logger.
         
         Args:
-            db_path: Path to governance.db (defaults to cortex_brain/governance.db)
+            db_path: Path to governance.db (defaults to cortex_intelligence/governance.db)
         """
         if db_path is None:
-            db_path = Path(__file__).parent.parent.parent / "cortex_brain" / "governance.db"
+            db_path = Path(__file__).parent.parent.parent / "cortex_intelligence" / "governance.db"
         
         self.db_path = db_path
         self._ensure_audit_table()

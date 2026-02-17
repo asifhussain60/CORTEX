@@ -180,7 +180,7 @@ class Phase77CompleteExecutor:
         print("Tasks: 4 | Target: 60 tests, 90% coverage\n")
 
         tasks = [
-            ("S4.T1", "cortex_brain Orchestrator Integration", "Knowledge-aware decision making"),
+            ("S4.T1", "cortex_intelligence Orchestrator Integration", "Knowledge-aware decision making"),
             ("S4.T2", "MCP Tools Knowledge Enhancement", "Tool recommendations from patterns"),
             ("S4.T3", "Performance Optimization", "Caching + query optimization"),
             ("S4.T4", "End-to-End Validation", "Learning loop validation"),

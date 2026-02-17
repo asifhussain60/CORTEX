@@ -75,14 +75,14 @@ class DomainOrchestratorRequirements:
 class TierContentLoader:
     """Loads YAML content from tier-specific folders"""
 
-    def __init__(self, cortex_brain_path: str):
+    def __init__(self, cortex_intelligence_path: str):
         """
         Initialize loader.
 
         Args:
-            cortex_brain_path: Path to cortex_brain folder
+            cortex_intelligence_path: Path to cortex_intelligence folder
         """
-        self.cortex_brain_path = Path(cortex_brain_path)
+        self.cortex_intelligence_path = Path(cortex_intelligence_path)
         self.logger = logging.getLogger(f"{__name__}.TierContentLoader")
 
     def load_tier_yaml_file(self, tier: int, filename: str) -> Optional[Dict[str, Any]]:
@@ -96,7 +96,7 @@ class TierContentLoader:
         Returns:
             Parsed YAML content or None if not found
         """
-        file_path = self.cortex_brain_path / f"tier{tier}" / "governance" / filename
+        file_path = self.cortex_intelligence_path / f"tier{tier}" / "governance" / filename
 
         if not file_path.exists():
             self.logger.warning(f"File not found: {file_path}")
@@ -121,7 +121,7 @@ class TierContentLoader:
         Returns:
             Dictionary of {filename: content}
         """
-        tier_path = self.cortex_brain_path / f"tier{tier}" / "governance"
+        tier_path = self.cortex_intelligence_path / f"tier{tier}" / "governance"
         files = {}
 
         if not tier_path.exists():
@@ -234,14 +234,14 @@ class DomainRuleRegistry:
 class BrainPopulator:
     """Populates brain tiers with governance content"""
 
-    def __init__(self, cortex_brain_path: str):
+    def __init__(self, cortex_intelligence_path: str):
         """
         Initialize populator.
 
         Args:
-            cortex_brain_path: Path to cortex_brain folder
+            cortex_intelligence_path: Path to cortex_intelligence folder
         """
-        self.loader = TierContentLoader(cortex_brain_path)
+        self.loader = TierContentLoader(cortex_intelligence_path)
         self.registry = DomainRuleRegistry()
         self.logger = logging.getLogger(f"{__name__}.BrainPopulator")
 

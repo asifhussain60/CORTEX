@@ -171,8 +171,8 @@ def validate_filepath(path: str, file_type: str) -> Dict[str, Any]:
     CORE-038 Requirements:
     - NO files at repository root (except whitelist)
     - .md files only in docs/{subfolder}/ or reports/{subfolder}/
-    - .py files only in cortex/{module}/, cortex_brain/{module}/, or tests/
-    - cortex_brain files follow tier structure
+    - .py files only in cortex/{module}/, cortex_intelligence/{module}/, or tests/
+    - cortex_intelligence files follow tier structure
 
     Args:
         path: Full file path to validate
@@ -289,7 +289,7 @@ def suggest_compliant_path(
                 path = f"{base_path}/docs/guides/{filename}"
         elif file_type in ("yaml", "yml"):
             if domain == "cortex-brain":
-                path = f"{base_path}/cortex_brain/tier0/governance/{filename}"
+                path = f"{base_path}/cortex_intelligence/tier0/governance/{filename}"
             else:
                 path = f"{base_path}/cortex/governance/{filename}"
         else:

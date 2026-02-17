@@ -43,37 +43,37 @@ class BrainHealthMetrics:
         self.registry = registry or CollectorRegistry()
 
         self.cache_staleness_gauge = Gauge(
-            'cortex_brain_cache_staleness_ratio',
+            'cortex_intelligence_cache_staleness_ratio',
             'Ratio of stale cache entries (0.0-1.0, healthy: <=0.2)',
             registry=self.registry
         )
 
         self.connectivity_score_gauge = Gauge(
-            'cortex_brain_connectivity_score',
+            'cortex_intelligence_connectivity_score',
             'Orchestrator connectivity health (0-100, healthy: >=90)',
             registry=self.registry
         )
 
         self.knowledge_freshness_gauge = Gauge(
-            'cortex_brain_knowledge_freshness',
+            'cortex_intelligence_knowledge_freshness',
             'Knowledge freshness index (0-100, healthy: >=60)',
             registry=self.registry
         )
 
         self.governance_coverage_gauge = Gauge(
-            'cortex_brain_governance_coverage',
+            'cortex_intelligence_governance_coverage',
             'Governance rule monitoring coverage (0-100, healthy: >=80)',
             registry=self.registry
         )
 
         self.domain_utilization_gauge = Gauge(
-            'cortex_brain_domain_utilization',
+            'cortex_intelligence_domain_utilization',
             'Company domain utilization rate (0-100, healthy: >=50)',
             registry=self.registry
         )
 
         self.aggregate_health_score_gauge = Gauge(
-            'cortex_brain_aggregate_health_score',
+            'cortex_intelligence_aggregate_health_score',
             'Overall brain health score (0-100)',
             registry=self.registry
         )

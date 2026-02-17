@@ -248,8 +248,8 @@ class TestPrometheusMetricsExport:
         # Verify gauges were set (check via collect())
         from prometheus_client import generate_latest
         output = generate_latest(metrics.registry).decode('utf-8')
-        assert 'cortex_brain_cache_staleness_ratio 0.15' in output
-        assert 'cortex_brain_connectivity_score 95.0' in output
+        assert 'cortex_intelligence_cache_staleness_ratio 0.15' in output
+        assert 'cortex_intelligence_connectivity_score 95.0' in output
     
     def test_metrics_export_to_prometheus_format(self):
         """Test metrics can be exported in Prometheus format."""
@@ -267,8 +267,8 @@ class TestPrometheusMetricsExport:
         
         export_text = metrics.export_prometheus()
         
-        assert 'cortex_brain_cache_staleness_ratio' in export_text
-        assert 'cortex_brain_connectivity_score' in export_text
+        assert 'cortex_intelligence_cache_staleness_ratio' in export_text
+        assert 'cortex_intelligence_connectivity_score' in export_text
         assert '0.15' in export_text
         assert '95.0' in export_text
 
@@ -384,7 +384,7 @@ class TestBrainHealthIntegration:
         metrics_output = orchestrator.export_prometheus_metrics(report['dimensions'])
         
         assert isinstance(metrics_output, str)
-        assert 'cortex_brain_' in metrics_output  # All metrics start with cortex_brain_
+        assert 'cortex_intelligence_' in metrics_output  # All metrics start with cortex_intelligence_
         assert 'cache_staleness' in metrics_output
         assert len(metrics_output) > 0
     

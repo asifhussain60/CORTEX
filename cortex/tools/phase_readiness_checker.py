@@ -32,7 +32,7 @@ from typing import Any, Dict, List, Optional, Tuple
 # CORE-029: Response Header Enforcement (TIER 0 - IMMUTABLE)
 # ================================================================================
 # Per governance rules, all readiness check reports must include CORTEX header
-# Reference: cortex_brain/tier0/governance/response-header-enforcement.yaml
+# Reference: cortex_intelligence/tier0/governance/response-header-enforcement.yaml
 # ================================================================================
 
 class ResponseHeaderEnforcer:
@@ -147,7 +147,7 @@ class PhaseReadinessChecker:
             self.workspace_root / "src" / "tools" / "governance-cli.py"
         )
         self.governance_db = (
-            self.workspace_root / "cortex_brain" / "state" / "governance.db"
+            self.workspace_root / "cortex_intelligence" / "state" / "governance.db"
         )
 
     def check_phase_readiness(self, phase_id: str) -> PhaseReadinessReport:

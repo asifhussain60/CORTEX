@@ -57,7 +57,7 @@ class VacuumConfig:
             'keeper_patterns': {
                 'system_prompts': ['.github/prompts/*.prompt.md', '.github/prompts/*-agents.md'],
                 'configuration': ['cortex*.yaml', 'pyrightconfig.json', 'mkdocs.yml', 'requirements.txt'],
-                'governance': ['cortex_brain/tier0/**/*.yaml', 'cortex_brain/tier1/**/*.yaml'],
+                'governance': ['cortex_intelligence/tier0/**/*.yaml', 'cortex_intelligence/tier1/**/*.yaml'],
             },
             'ephemeral_patterns': {
                 'session_reports': {
@@ -138,7 +138,7 @@ class FileAnalyzer:
             '.github/prompts/*.prompt.md',
             '.github/prompts/*-agents.md',
             'cortex*.yaml',
-            'cortex_brain/tier*/**/*.yaml',
+            'cortex_intelligence/tier*/**/*.yaml',
             'pyrightconfig.json',
         ]
         

@@ -2,9 +2,9 @@
 Semantic Block Loader & Assembly Engine.
 
 Brain terminology (HIGH-LEVEL):
-- Perception: Load blocks from registry (cortex_brain perception)
-- Reasoning: Validate composition + anti-duplication (cortex_brain reasoning)
-- Action: Assemble + render blocks (cortex_brain action)
+- Perception: Load blocks from registry (cortex_intelligence perception)
+- Reasoning: Validate composition + anti-duplication (cortex_intelligence reasoning)
+- Action: Assemble + render blocks (cortex_intelligence action)
 
 Authority: ENH-089 | Production-ready block assembly with personality enforcement
 """

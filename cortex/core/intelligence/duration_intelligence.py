@@ -38,7 +38,7 @@ class DurationAnalyzer:
         """
         if db_path is None:
             from cortex.core.path_resolver import resolve_path
-            db_path = str(resolve_path("cortex_brain/state/governance.db"))
+            db_path = str(resolve_path("cortex_intelligence/state/governance.db"))
 
         self.db_path = db_path
         self._init_database()

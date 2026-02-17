@@ -346,10 +346,10 @@ class TestIntegrationWithOnboardingOrchestrator:
         
         assert "domain_extraction" in onboarding_stages
 
-    def test_domain_knowledge_wires_to_cortex_brain(self) -> None:
-        """Extracted knowledge wires to cortex_brain state."""
-        # cortex_brain/onboarded_repos/{repo_name}/domain_knowledge.yaml
-        knowledge_path = Path("cortex_brain/onboarded_repos/example/domain_knowledge.yaml")
+    def test_domain_knowledge_wires_to_cortex_intelligence(self) -> None:
+        """Extracted knowledge wires to cortex_intelligence state."""
+        # cortex_intelligence/onboarded_repos/{repo_name}/domain_knowledge.yaml
+        knowledge_path = Path("cortex_intelligence/onboarded_repos/example/domain_knowledge.yaml")
         
         # Should be written to this location
         assert "domain_knowledge" in str(knowledge_path)
