@@ -21,7 +21,7 @@ class TestStubAutoFixAgent:
         # Create a redirect stub
         stub_file = tmp_path / "wrapper.py"
         stub_file.write_text("""
-# REDIRECT: Points to cortex_brain implementation
+# REDIRECT: Points to cortex_intelligence implementation
 from cortex_intelligence.domain.models import Entity
 
 __all__ = ['Entity']
@@ -33,8 +33,8 @@ __all__ = ['Entity']
         
         # Validate detection
         assert result.issue_count == 1, "Should detect 1 stub"
-        assert "wrapper.py" in result.issues[0].file_path
-        assert "cortex_brain.domain.models" in result.issues[0].description
+        assert "wrapper.py" in str(result.issues[0].file_path)
+        assert "cortex_intelligence.domain.models" in result.issues[0].description
     
     def test_extract_target_module(self, tmp_path: Path) -> None:
         """Golden: Extract target module from stub.
@@ -55,7 +55,7 @@ __all__ = ['EntityType', 'Conflict']
         target = agent._extract_target_module(stub_file)
         
         # Validate extraction
-        assert target == "cortex_brain.domain_brain.models", "Should extract correct target"
+        assert target == "cortex_intelligence.domain_brain.domain_brain_models", "Should extract correct target"
     
     def test_auto_fix_dry_run(self, tmp_path: Path) -> None:
         """Golden: Dry run mode doesn't modify files.

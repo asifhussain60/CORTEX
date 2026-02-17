@@ -2,7 +2,7 @@
 
 Detects stub files (redirect wrappers) and automatically fixes them by:
 1. Deleting the stub file
-2. Updating all imports to point directly to cortex_brain
+2. Updating all imports to point directly to cortex_intelligence
 
 Author: CORTEX Framework
 Phase: PHASE-96
@@ -29,7 +29,7 @@ class StubAutoFixAgent(BaseHealthAgent):
     Detects redirect stubs (files that just import from cortex_intelligence)
     and fixes them by:
     - Deleting the stub file
-    - Rewriting imports in other files to point directly to cortex_brain
+    - Rewriting imports in other files to point directly to cortex_intelligence
     
     Attributes:
         name: Agent name
@@ -84,11 +84,11 @@ class StubAutoFixAgent(BaseHealthAgent):
                 target_module = self._extract_target_module(py_file)
                 
                 issue = HealthIssue(
-                    file_path=str(py_file.relative_to(workspace_root)),
-                    line_number=1,
                     category=HealthIssueCategory.STUB,
                     severity=HealthIssueSeverity.HIGH,
+                    file_path=py_file.relative_to(workspace_root),
                     description=f"Redirect stub → {target_module}",
+                    line_number=1,
                     suggested_fix=f"Delete stub, update imports to {target_module}",
                 )
                 issues.append(issue)
@@ -199,7 +199,7 @@ class StubAutoFixAgent(BaseHealthAgent):
             
             for node in ast.walk(tree):
                 if isinstance(node, ast.ImportFrom):
-                    if node.module and node.module.startswith("cortex_brain"):
+                    if node.module and node.module.startswith("cortex_intelligence"):
                         return node.module
             
             return None
