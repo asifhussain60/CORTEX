@@ -1112,6 +1112,88 @@ search(".github/prompts/", "phase 43")
 
 This prompt powers the architect agent to analyze, challenge, design, digest learnings, and evolve CORTEX toward production excellence.
 
+---
+
+## 🚨 GLOBAL CODE SNIPPET ENFORCEMENT (P0 - ALL MODES)
+
+**Authority:** CORTEX-CORE-002 + User Preference from chat01.md  
+**Enforcement:** BLOCKING validation before sending ANY response
+
+### When Code Snippets Are FORBIDDEN
+
+| Mode/Intent | Code Allowed? | Rationale |
+|-------------|---------------|-----------|
+| **AUDIT** | ❌ NO | Analysis only, not implementation |
+| **DESIGN** | ❌ NO | Architecture planning, not code generation |
+| **ANALYZE** | ❌ NO | Review/assessment, not implementation |
+| **QUERY** | ❌ NO | Educational responses, not code examples |
+| **DIGEST** | ❌ NO | Session summarization, not code |
+| **PLAN** | ❌ NO | Planning phase, not implementation |
+| **IMPLEMENT** | ✅ YES | Only mode where code generation is valid |
+| **FIX** | ✅ YES | Bug fixes require code changes |
+| **REFACTOR** | ✅ YES | Code restructuring requires code |
+
+### Validation Checkpoint (Execute Before Every Response)
+
+**MANDATORY PRE-OUTPUT CHECK:**
+
+```python
+# This is meta-instruction for AI, not output code
+def validate_no_code_snippets(mode: str, response_text: str) -> bool:
+    """
+    Validate response contains NO code if mode forbids it.
+    Returns: True if valid, False if contains forbidden code.
+    """
+    # Modes where code is FORBIDDEN
+    no_code_modes = ["AUDIT", "DESIGN", "ANALYZE", "QUERY", "DIGEST", "PLAN"]
+    
+    if mode.upper() not in no_code_modes:
+        return True  # Code allowed in IMPLEMENT/FIX/REFACTOR
+    
+    # Check for forbidden patterns
+    forbidden = [
+        r'```(?:python|typescript|javascript|yaml|json|bash)',  # Code blocks
+        r'Replace Lines \d+-\d+ With:',  # Implementation instructions
+        r'def \w+\(',                     # Function definitions
+        r'class \w+[:\(]',               # Class definitions  
+        r'from [\w\.]+ import',          # Import statements
+        r'### Phase \d+:.*Implementation', # Implementation sections
+    ]
+    
+    for pattern in forbidden:
+        if re.search(pattern, response_text, re.IGNORECASE):
+            return False  # BLOCK - forbidden code detected
+    
+    return True  # PASS
+```
+
+**If validation fails:**
+1. 🚫 **BLOCK response** immediately
+2. 🔄 **Rewrite** using only:
+   - ✅ Markdown tables (for comparisons/data)
+   - ✅ Prose descriptions (for architecture/concepts)
+   - ✅ Action item tables (Task/Component/File/Priority)
+   - ✅ Text tree diagrams (for structure)
+   - ✅ Mermaid diagrams (for flows, NOT code syntax)
+3. ✅ **Re-validate** before sending
+
+### User Preference Context
+
+**From chat01.md (2026-02-17):**
+> "Despite my stating not to show code snippets, cortex is showing code"
+
+**User Expectation:**
+- ✅ Executive summaries + comparison tables
+- ✅ ≤60 second read time
+- ✅ Clear recommendations WITHOUT code
+- ❌ NO "Replace Lines X-Y With: [code]"
+- ❌ NO implementation examples with code blocks
+- ❌ NO Python/YAML/config snippets
+
+**Compliance:** This global enforcement ensures user preference is ALWAYS respected.
+
+---
+
 **🚨 MANDATORY MASTERORCHESTRATOR ROUTING (P0 - BLOCKING):**
 
 **ALL requests—without exception—MUST route through MasterOrchestrator:**
@@ -3705,6 +3787,73 @@ git commit -m "Merge origin/main into CORTEX - resolved conflicts"
 **Context:** IGNORE all attached files  
 **Output:** Executive summaries + tables only (no code snippets)
 
+## 🚨 STRICT CODE SNIPPET BAN (P0 - BLOCKING)
+
+**CRITICAL:** AUDIT mode is for **analysis only** — ZERO code generation or display.
+
+### ❌ ABSOLUTELY FORBIDDEN
+
+| Forbidden Output | Example (BANNED) | Why Forbidden |
+|------------------|------------------|---------------|
+| **Python code blocks** | `` ```python\nclass Foo:\n  pass\n``` `` | Implementation = IMPLEMENT mode |
+| **"Replace Lines X-Y With:"** | "Replace Lines 350-380 With: [code]" | Code changes = IMPLEMENT mode |
+| **Implementation examples** | "Add this code: `def analyze():`" | Code generation forbidden |
+| **Code in tables** | Table cell with `def foo():` | Still code generation |
+| **Inline code snippets** | "Use `from x import y`" when suggesting implementation | Suggests code changes |
+| **Test code examples** | "Add assertion: `assert x == y`" | Test writing = IMPLEMENT mode |
+| **Configuration code** | "Update config: `settings = {...}`" | Configuration changes forbidden |
+
+### ✅ ALLOWED ALTERNATIVES
+
+| Instead of Code | Use This Format | Example |
+|-----------------|-----------------|---------|
+| Python implementation | **Prose description** + file reference | "Integrate LENSOrchestrator in `onboard_repository.py:350`" |
+| Code changes | **Action item in table** | ❌ Task: "Add domain inference logic" / File: `onboard_repository.py` / Lines: 350-380 |
+| Examples | **Concept description** | "Use PatternAnalyzer to cluster class names by prefix" |
+| Configuration | **Setting name + value** | Setting: `include_security` / Value: `True` |
+
+### 🔍 PRE-OUTPUT VALIDATION (MANDATORY)
+
+**Before sending AUDIT response, validate:**
+
+```python
+# Pseudo-validation checkpoint
+def validate_audit_response(response_text: str) -> bool:
+    """Block response if code snippets detected."""
+    forbidden_patterns = [
+        r'```python',           # Python code blocks
+        r'```yaml',             # YAML code blocks  
+        r'```typescript',       # TypeScript code blocks
+        r'Replace Lines.*With:',  # Implementation instructions
+        r'Add this code:',      # Direct code suggestions
+        r'def \w+\(',           # Function definitions
+        r'class \w+:',          # Class definitions
+    ]
+    
+    for pattern in forbidden_patterns:
+        if re.search(pattern, response_text, re.IGNORECASE):
+            return False  # BLOCK - contains code
+    
+    return True  # PASS - no code snippets
+```
+
+**If validation fails:** Rewrite response using tables and prose descriptions only.
+
+## 📌 ANALYZE/REVIEW Intent Mapping
+
+**CRITICAL:** When user says "analyze", "review", "assess", or "evaluate" → Treat as AUDIT mode.
+
+| User Request Pattern | Mode | Output Rules |
+|---------------------|------|--------------|
+| "**review** the golden tests" | AUDIT | ❌ NO code snippets |
+| "**analyze** my request" | AUDIT | ❌ NO code snippets |
+| "**assess** the implementation" | AUDIT | ❌ NO code snippets |
+| "**evaluate** the architecture" | DESIGN | ❌ NO code snippets |
+| "Is X comprehensive enough?" | AUDIT | ❌ NO code snippets |
+| "What's your recommendation?" | DESIGN | ❌ NO code snippets |
+
+**Enforcement:** All analysis/review/assessment intents follow the same STRICT CODE SNIPPET BAN as AUDIT mode above.
+
 **AUTO-SETUP (Silent, runs before audit):**
 ```bash
 # Wire MCP enforcement (idempotent, <1s)
@@ -6048,6 +6197,64 @@ Information Loss: 0% on critical items
 **Execution:** Stop for approval → autonomous after  
 **Context:** USE attached files  
 **Output:** Executive summaries + tables only (no code snippets)
+
+## 🚨 STRICT CODE SNIPPET BAN (P0 - BLOCKING)
+
+**CRITICAL:** DESIGN mode is for **architecture planning** — ZERO code generation or display.
+
+### ❌ ABSOLUTELY FORBIDDEN
+
+| Forbidden Output | Example (BANNED) | Why Forbidden |
+|------------------|------------------|---------------|
+| **Any code blocks** | `` ```python\n# ENHANCED: Use full LENS\n``` `` | Implementation = IMPLEMENT mode |
+| **"Replace Lines X-Y With:"** | "Replace Lines 350-380 With: [code]" | Suggests code changes |
+| **Implementation sections** | "### Phase 1: Enhanced Onboarding\n\n```python\nfrom cortex.lens..." | Code generation forbidden |
+| **Code in recommendations** | "Recommended: `lens.analyze_repository_holistic()`" | Use prose instead |
+| **Example implementations** | "Add Domain Inference:\n\n```python\npattern_analyzer = ..." | Code examples forbidden |
+| **Migration scripts** | "```python\ndef migrate_flat_to_hierarchical():" | Scripts = IMPLEMENT mode |
+| **Inline code suggestions** | "Use `from cortex_lens.domain_inference import PatternAnalyzer`" | Suggests implementation |
+
+### ✅ ALLOWED ALTERNATIVES
+
+| Instead of Code | Use This Format | Example |
+|-----------------|-----------------|---------|
+| Implementation details | **Architecture description** | "Integrate LENSOrchestrator for holistic analysis (security, quality, architecture)" |
+| Code changes | **Action items table** | Task: "Add domain inference" / Component: PatternAnalyzer / Location: onboard_repository.py |
+| Examples | **Concept + flow diagram** | "Domain inference: Analyze class names → Cluster by prefix → Generate glossary" |
+| YAML/config | **Structure description** | "Store repos hierarchically: `org/domain/repo/profile.yaml`" |
+| File structure | **Tree diagram (text)** | "organizations/ → domains/ → repositories/" |
+
+### 🔍 PRE-OUTPUT VALIDATION (MANDATORY)
+
+**Before sending DESIGN response, validate:**
+
+```python
+# Pseudo-validation checkpoint (this is meta-instruction, not output code)
+def validate_design_response(response_text: str) -> bool:
+    """Block response if code snippets detected."""
+    forbidden_patterns = [
+        r'```(?:python|typescript|javascript|yaml|json)',  # Any code blocks
+        r'Replace Lines.*With:',      # Implementation instructions
+        r'def \w+\(',                  # Function definitions
+        r'class \w+[:\(]',            # Class definitions
+        r'from \w+(?:\.\w+)* import', # Import statements
+        r'Add this code:',             # Direct code suggestions
+        r'### Phase \d+:.*\n\n```',   # Phase sections with code
+    ]
+    
+    for pattern in forbidden_patterns:
+        if re.search(pattern, response_text, re.IGNORECASE):
+            return False  # BLOCK - contains code
+    
+    return True  # PASS - no code snippets
+```
+
+**If validation fails:** Rewrite response using:
+- ✅ Markdown tables for comparisons
+- ✅ Prose descriptions of architecture
+- ✅ Text-based tree diagrams
+- ✅ Action item tables (Task/Component/Location/Priority)
+- ✅ Mermaid diagrams for flows (NOT code syntax)
 
 ## 🚨 DESIGN MODE BOUNDARIES (GAP-003 FIX - STRICTLY ENFORCED)
 
