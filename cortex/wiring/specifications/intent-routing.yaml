@@ -1,16 +1,82 @@
 # Intent Routing Specification (CORTEX Master)
 # AC_PHASE2-ROUTING-001: Canonical intent routing with priority disambiguation
+# WORKFLOW-COMPLEXITY-GATE-001: Complexity-based workflow template routing
 # Authority: CORTEX-ARCH-012 (Intent Classification)
 # Status: Production
-# Version: 2.0
+# Version: 2.1
 
 metadata:
-  version: "2.0"
+  version: "2.1"
   created: "2026-02-09"
+  updated: "2026-02-17"
   authority: "cortex-architect.prompt.md v15.3"
-  description: "Canonical CORTEX intent routing with deterministic orchestrator assignment"
-  ac_marker: "AC_PHASE2-ROUTING-CONSOLIDATION"
+  description: "Canonical CORTEX intent routing with deterministic orchestrator assignment and complexity-based workflow template routing"
+  ac_marker: "AC_PHASE2-ROUTING-CONSOLIDATION, WORKFLOW-COMPLEXITY-GATE-001"
   maintained_by: "MasterOrchestrator"
+
+# Complexity-Based Routing (WORKFLOW-COMPLEXITY-GATE-001)
+# Stage 2a: Complexity Gate - Routes tasks based on 4-dimension complexity scoring
+complexity_routing:
+  enabled: true
+  stage: "2a"
+  description: "Analyzes task complexity to determine if workflow template or direct orchestrator should be used"
+  
+  scoring_dimensions:
+    file_count:
+      weight: 0.30
+      formula: "min(files/10, 1.0)"
+    operation_type:
+      weight: 0.40
+      scores:
+        create: 0.4
+        refactor: 0.6
+        migrate: 0.8
+        test: 0.5
+        security: 0.7
+        document: 0.2
+        fix: 0.3
+        update: 0.2
+        delete: 0.4
+        deploy: 0.7
+    dependencies:
+      weight: 0.20
+      formula: "min(deps/5, 1.0)"
+    risk_level:
+      weight: 0.10
+      scores:
+        LOW: 0.2
+        MEDIUM: 0.5
+        HIGH: 0.8
+        CRITICAL: 1.0
+  
+  thresholds:
+    trivial:
+      range: "0.00-0.15"
+      route: "direct_orchestrator"
+      confirmation: "auto_approve"
+    simple:
+      range: "0.15-0.35"
+      route: "direct_orchestrator"
+      confirmation: "minimal"
+    moderate:
+      range: "0.35-0.60"
+      route: "workflow_template"
+      confirmation: "recommended"
+    complex:
+      range: "0.60-1.00"
+      route: "workflow_template"
+      confirmation: "mandatory"
+  
+  golden_hammer_prevention:
+    - rule: "GOLDEN-HAMMER-001"
+      constraint: "Trivial operations (<0.15) MUST NOT use workflow templates"
+      reason: "Prevents unnecessary overhead for simple tasks"
+    - rule: "GOLDEN-HAMMER-002"
+      constraint: "Complex operations (≥0.75) MUST use workflow templates"
+      reason: "Ensures governance gates for high-risk tasks"
+    - rule: "GOLDEN-HAMMER-003"
+      constraint: "Moderate operations (0.15-0.75) MAY override with rationale"
+      reason: "Allows expert judgment while maintaining audit trail"
 
 # Core Intent Types (EXCLUSIVE - No Overlaps)
 intents:

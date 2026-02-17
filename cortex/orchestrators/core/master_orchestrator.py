@@ -4926,7 +4926,10 @@ class MasterOrchestrator(IOrchestrator):
         """
         Check if workflow template should be used for this operation.
 
-        Phase 100 Stage 3: Template routing integration.
+        WORKFLOW-COMPLEXITY-GATE-001: Complexity-based template routing.
+
+        Uses WorkflowComplexityRouter to determine if operation requires
+        workflow template based on 4-dimension complexity scoring.
 
         Args:
             context: Operation context with description, intent, attachments, keywords.
@@ -4935,39 +4938,86 @@ class MasterOrchestrator(IOrchestrator):
             Routing decision with template_id if template suggested, None otherwise.
         """
         try:
-            # Import IntentRouter (lazy to avoid circular imports)
-            from cortex.orchestrators.core.intent_router import IntentRouter
-
-            # Classify intent with template suggestion
-            router = IntentRouter()
-            intent, template_id = router.classify_intent_with_workflow_suggestion(
-                context
+            # Import complexity router
+            from cortex.intent_router import WorkflowComplexityRouter, Intent as ComplexityIntent
+            from cortex.intent_router.workflow_gate import RoutingStrategy
+            
+            # Extract operation details
+            operation = context.get("operation", "").lower()
+            description = context.get("description", "").lower()
+            combined_text = f"{operation} {description}"
+            
+            # Detect operation type
+            operation_type = "implement"
+            if any(kw in combined_text for kw in ["fix", "bug", "issue"]):
+                operation_type = "fix"
+            elif any(kw in combined_text for kw in ["refactor", "improve", "optimize"]):
+                operation_type = "refactor"
+            elif any(kw in combined_text for kw in ["migrate", "migration"]):
+                operation_type = "migrate"
+            elif any(kw in combined_text for kw in ["test", "testing"]):
+                operation_type = "test"
+            elif any(kw in combined_text for kw in ["security", "audit"]):
+                operation_type = "security"
+            
+            # Extract files and dependencies
+            target_files = context.get("target_files", [])
+            dependencies = context.get("dependencies", [])
+            risk_level = context.get("risk_level", "MEDIUM")
+            
+            # Build complexity intent
+            complexity_intent = ComplexityIntent(
+                operation_type=operation_type,
+                target_files=target_files,
+                dependencies=dependencies,
+                risk_level=risk_level,
+                metadata=context
             )
-
-            # If template suggested, return routing decision
-            if template_id is not None:
-                # Import WorkflowTemplateRegistry (lazy)
-                from cortex.orchestrators.workflow.template_registry import (
-                    WorkflowTemplateRegistry,
+            
+            # Route based on complexity
+            router = WorkflowComplexityRouter()
+            decision = router.route(complexity_intent)
+            
+            # If workflow template recommended, return template info
+            if decision.route == RoutingStrategy.WORKFLOW_TEMPLATE:
+                self.logger.log_operation_complete(
+                    ac_id="WORKFLOW-COMPLEXITY-GATE-001",
+                    operation="WORKFLOW_TEMPLATE_SELECTED",
+                    success=True,
+                    details={
+                        "template_id": decision.template_id,
+                        "complexity": decision.complexity,
+                        "rationale": decision.rationale
+                    }
                 )
-
-                # Get template details
-                registry = WorkflowTemplateRegistry()
-                template = registry.get_template(template_id)
-
+                
                 return {
-                    "template_id": template_id,
-                    "template_name": template["name"],
-                    "intent": intent,
+                    "template_id": decision.template_id,
+                    "template_name": decision.template_id.replace("/", "_"),
+                    "intent": operation_type.upper(),
                     "use_autonomous_workflow": True,
+                    "complexity_score": decision.complexity,
+                    "requires_confirmation": decision.requires_confirmation
                 }
-
+            
+            # Direct orchestrator routing - return None to continue standard flow
+            self.logger.log_operation_complete(
+                ac_id="WORKFLOW-COMPLEXITY-GATE-001",
+                operation="DIRECT_ORCHESTRATOR_SELECTED",
+                success=True,
+                details={
+                    "orchestrator": decision.orchestrator,
+                    "complexity": decision.complexity,
+                    "rationale": decision.rationale
+                }
+            )
+            
             return None
 
         except Exception as e:
             # Log but don't fail - template routing is optional enhancement
             self.logger.log_operation_complete(
-                ac_id="AC-PHASE100-005",
+                ac_id="WORKFLOW-COMPLEXITY-GATE-001",
                 operation="WORKFLOW_TEMPLATE_CHECK",
                 success=False,
                 details={"error": f"Template check failed: {str(e)}"},

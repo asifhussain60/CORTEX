@@ -46,6 +46,10 @@ from cortex.orchestrators.core.routing_enforcement import (
 # Phase 8.2: Import orchestrator lookup and enforcement
 from cortex.orchestrators.registry.orchestrator_lookup import OrchestratorLookup
 
+# WORKFLOW-COMPLEXITY-GATE-001: Complexity-based routing
+from cortex.intent_router import WorkflowComplexityRouter, Intent as ComplexityIntent
+from cortex.governance import GoldenHammerRules
+
 # Registry Intelligence Integration
 try:
     from cortex.learning.registry_intelligence_agent import (
@@ -406,6 +410,10 @@ class IntentRouter(IOrchestrator):
             orchestrator_name="IntentRouter",
             enable=False  # TODO: Enable after Wave H-S4 validation
         )
+        
+        # WORKFLOW-COMPLEXITY-GATE-001: Initialize complexity router
+        self.complexity_router = WorkflowComplexityRouter()
+        self.golden_hammer_rules = GoldenHammerRules()
 
     def _load_routing_config(self) -> Dict[str, Any]:
         """
@@ -1507,6 +1515,187 @@ class IntentRouter(IOrchestrator):
 
     # ===== End Registry Intelligence Methods =====
 
+    def _check_workflow_complexity(
+        self, context: Dict[str, Any]
+    ) -> Optional[RoutingDecision]:
+        """
+        Check if workflow template should be used based on task complexity.
+
+        WORKFLOW-COMPLEXITY-GATE-001: Stage 2a complexity-based routing.
+
+        Analyzes task complexity using 4-dimension scoring:
+        - File count (30%): Number of files involved
+        - Operation type (40%): Type of operation (migrate, fix, refactor, etc.)
+        - Dependencies (20%): Number of dependencies
+        - Risk level (10%): Risk assessment (LOW, MEDIUM, HIGH, CRITICAL)
+
+        Routing thresholds:
+        - TRIVIAL (<0.15): Direct orchestrator (auto-approve)
+        - SIMPLE (0.15-0.35): Direct orchestrator (minimal validation)
+        - MODERATE (0.35-0.60): Workflow template (recommended)
+        - COMPLEX (≥0.60): Workflow template (mandatory)
+
+        Args:
+            context: Operation context with description, keywords, files, etc.
+
+        Returns:
+            RoutingDecision if complexity routing applies, None to fallback to standard routing.
+
+        Example:
+            >>> context = {
+            ...     "operation": "refactor",
+            ...     "description": "Refactor 5 modules",
+            ...     "target_files": ["src/a.py", "src/b.py", "src/c.py", "src/d.py", "src/e.py"],
+            ...     "dependencies": ["dep1", "dep2", "dep3"],
+            ...     "risk_level": "MEDIUM"
+            ... }
+            >>> decision = router._check_workflow_complexity(context)
+            >>> assert decision.route == RoutingStrategy.WORKFLOW_TEMPLATE
+            >>> assert decision.template_id == "quality/refactoring"
+        """
+        try:
+            # Extract operation details
+            operation = context.get("operation", "").lower()
+            description = context.get("description", "").lower()
+            
+            # Detect operation type from keywords
+            operation_type = "implement"  # Default
+            keywords = context.get("keywords", [])
+            combined_text = f"{operation} {description}"
+            
+            # Map keywords to operation types
+            if any(kw in combined_text for kw in ["fix", "bug", "issue", "resolve"]):
+                operation_type = "fix"
+            elif any(kw in combined_text for kw in ["refactor", "improve", "optimize", "restructure"]):
+                operation_type = "refactor"
+            elif any(kw in combined_text for kw in ["migrate", "migration", "legacy"]):
+                operation_type = "migrate"
+            elif any(kw in combined_text for kw in ["test", "testing", "tdd"]):
+                operation_type = "test"
+            elif any(kw in combined_text for kw in ["security", "audit", "vulnerability"]):
+                operation_type = "security"
+            elif any(kw in combined_text for kw in ["document", "docs", "documentation"]):
+                operation_type = "document"
+            elif any(kw in combined_text for kw in ["create", "implement", "add", "build"]):
+                operation_type = "create"
+            
+            # Extract target files (look for file paths in context)
+            target_files = context.get("target_files", [])
+            if not target_files:
+                # Try to infer from description/keywords
+                # Look for file patterns like .py, .ts, .yaml, etc.
+                import re
+                file_pattern = r'\b[\w/.-]+\.(py|ts|js|yaml|yml|json|md|txt)\b'
+                matches = re.findall(file_pattern, combined_text)
+                target_files = [m[0] if isinstance(m, tuple) else m for m in matches]
+            
+            # Extract dependencies
+            dependencies = context.get("dependencies", [])
+            
+            # Extract risk level
+            risk_level = context.get("risk_level", "MEDIUM").upper()
+            if "critical" in combined_text or "production" in combined_text:
+                risk_level = "CRITICAL"
+            elif "high" in combined_text or "complex" in combined_text:
+                risk_level = "HIGH"
+            elif "low" in combined_text or "simple" in combined_text or "trivial" in combined_text:
+                risk_level = "LOW"
+            
+            # Build complexity intent
+            complexity_intent = ComplexityIntent(
+                operation_type=operation_type,
+                target_files=target_files,
+                dependencies=dependencies,
+                risk_level=risk_level,
+                metadata=context
+            )
+            
+            # Get routing decision from complexity router
+            from cortex.intent_router.workflow_gate import RoutingStrategy as ComplexityRoutingStrategy
+            complexity_routing = self.complexity_router.route(complexity_intent)
+            
+            # Validate with golden hammer rules
+            self.golden_hammer_rules.validate_routing_decision(
+                complexity_routing,
+                override_rationale=context.get("override_rationale")
+            )
+            
+            # Log complexity decision
+            self.logger.log_operation_complete(
+                ac_id="WORKFLOW-COMPLEXITY-GATE-001",
+                operation="COMPLEXITY_ROUTING_CHECK",
+                success=True,
+                details={
+                    "complexity_score": complexity_routing.complexity,
+                    "route": complexity_routing.route.value,
+                    "rationale": complexity_routing.rationale,
+                    "template_id": complexity_routing.template_id,
+                    "orchestrator": complexity_routing.orchestrator
+                }
+            )
+            
+            # Convert to IntentRouter RoutingDecision format
+            if complexity_routing.route == ComplexityRoutingStrategy.WORKFLOW_TEMPLATE:
+                # Route to workflow template
+                return RoutingDecision(
+                    intent_type=IntentType.IMPLEMENT,  # Templates handle all intent types
+                    target_handler=f"WorkflowTemplate:{complexity_routing.template_id}",
+                    confidence_score=complexity_routing.complexity,
+                    reasoning=complexity_routing.rationale,
+                    metadata={
+                        "complexity_score": complexity_routing.complexity,
+                        "template_id": complexity_routing.template_id,
+                        "requires_confirmation": complexity_routing.requires_confirmation,
+                        "governance_gate": complexity_routing.governance_gate,
+                        "operation_type": operation_type,
+                        "routing_source": "complexity_gate"
+                    }
+                )
+            elif complexity_routing.route == ComplexityRoutingStrategy.DIRECT_ORCHESTRATOR:
+                # Route to direct orchestrator
+                return RoutingDecision(
+                    intent_type=self._map_operation_to_intent(operation_type),
+                    target_handler=complexity_routing.orchestrator,
+                    confidence_score=1.0 - complexity_routing.complexity,  # Inverse for direct routing
+                    reasoning=complexity_routing.rationale,
+                    metadata={
+                        "complexity_score": complexity_routing.complexity,
+                        "orchestrator": complexity_routing.orchestrator,
+                        "requires_confirmation": complexity_routing.requires_confirmation,
+                        "operation_type": operation_type,
+                        "routing_source": "complexity_gate"
+                    }
+                )
+            
+            # Fallback to standard routing
+            return None
+            
+        except Exception as e:
+            # Log error but don't block routing
+            self.logger.log_operation_complete(
+                ac_id="WORKFLOW-COMPLEXITY-GATE-001",
+                operation="COMPLEXITY_ROUTING_ERROR",
+                success=False,
+                details={"error": str(e)}
+            )
+            return None
+    
+    def _map_operation_to_intent(self, operation_type: str) -> IntentType:
+        """Map operation type to IntentType enum."""
+        mapping = {
+            "fix": IntentType.FIX,
+            "create": IntentType.IMPLEMENT,
+            "implement": IntentType.IMPLEMENT,
+            "refactor": IntentType.REFACTOR,
+            "test": IntentType.IMPLEMENT,
+            "document": IntentType.DOCUMENT,
+            "security": IntentType.AUDIT,
+            "migrate": IntentType.IMPLEMENT,
+        }
+        return mapping.get(operation_type, IntentType.IMPLEMENT)
+
+    # ===== End Registry Intelligence Methods =====
+
     def route(self, context: Dict[str, Any]) -> RoutingDecision:
         """
         Route an operation based on context (with caching).
@@ -1561,7 +1750,14 @@ class IntentRouter(IOrchestrator):
             if cache_key in self.cached_decisions:
                 return self.cached_decisions[cache_key]
 
-            # Compute routing decision
+            # WORKFLOW-COMPLEXITY-GATE-001: Stage 2a - Complexity-based routing
+            complexity_decision = self._check_workflow_complexity(context)
+            if complexity_decision is not None:
+                # Store in cache and return
+                self.cached_decisions[cache_key] = complexity_decision
+                return complexity_decision
+
+            # Compute routing decision (fallback to standard routing)
             decision = self._route_internal(context)
 
             # LENS-002: Enhance decision with LENS intelligence if available
