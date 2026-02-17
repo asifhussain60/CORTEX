@@ -1,0 +1,135 @@
+---
+# File Detection Rules for Health & Vacuum Orchestrators
+#
+# Authority: CORE-002 (No markdown sprawl), CORE-028 (Intelligent naming)
+# Phase: PHASE-103 Enhancement
+# Created: 2026-02-17
+
+metadata:
+  version: "1.0.0"
+  author: "CORTEX Framework"
+  last_updated: "2026-02-17"
+  description: "Detection rules for informational file drift and filename governance"
+
+# Informational File Drift Detection
+informational_files:
+  description: "CORTEX should be YAML-heavy, not informational sprawl"
+  
+  # Extensions to scan
+  extensions:
+    - ".md"
+    - ".log"
+    - ".txt"
+  
+  # Allowed directories (won't flag these)
+  allowed_patterns:
+    - ".github/prompts/"
+    - ".github/agents/"
+    - ".github/scripts/"
+    - "README.md"           # Root only
+    - "cortex-docs/"
+    - "cortex-registry/"
+    - "_workspaces/"        # EXCEPTION per user request
+    - ".cortex/"
+    - "docs/"
+    - ".venv/"
+    - ".git/"
+    - "_archives/"          # Will be deleted by vacuum
+    - ".archive/"           # Will be deleted by vacuum
+  
+  # Configuration files (allowed .txt)
+  config_files:
+    - "requirements.txt"
+    - "pyproject.toml"
+  
+  # JSON files (special handling)
+  json_config_files:
+    - "package.json"
+    - "tsconfig.json"
+    - "pyproject.json"
+    - ".vscode/settings.json"
+    - ".cortex/health_cache/*.json"
+    - ".cortex/vacuum_cache/*.json"
+
+# Filename Governance (CORE-028)
+filename_governance:
+  description: "Enforce CORE-028 intelligent file naming"
+  
+  # Patterns to detect
+  violations:
+    screaming_case:
+      pattern: "[A-Z_]{5,}\\.py"
+      severity: "HIGH"
+      message: "SCREAMING_CASE filenames violate CORE-028"
+      recommendation: "Rename to kebab-case or snake_case"
+  
+  # Allowed exceptions
+  exceptions:
+    stdlib_conventions:
+      - "__init__.py"
+      - "__main__.py"
+      - "__pycache__"
+    
+    universal_conventions:
+      - "README.md"
+      - "LICENSE"
+      - "Makefile"
+      - "Dockerfile"
+      - "Procfile"
+  
+  # Excluded directories
+  excluded_dirs:
+    - ".venv"
+    - ".git"
+    - "_archives"
+    - ".archive"
+    - "node_modules"
+    - "__pycache__"
+
+# Archive Cleanup Rules
+archive_cleanup:
+  description: "Archives should be DELETED, not preserved"
+  
+  # Directories to delete completely
+  delete_patterns:
+    - "_archives/"
+    - ".archive/"
+    - "**/archive/"
+    - "**/.archive/"
+  
+  # Safety checks
+  safety:
+    require_git_tracked: true
+    require_confirmation: false  # Auto-delete archives
+    max_size_mb: 1000            # Warn if >1GB archives
+
+# Vacuum Renaming Rules
+vacuum_renaming:
+  description: "Rename files only if health determines to keep them"
+  
+  # SCREAMING_CASE → kebab-case
+  screaming_to_kebab:
+    enabled: true
+    pattern: "[A-Z_]{5,}"
+    replacement: "kebab-case"
+    preserve_extension: true
+  
+  # Safety checks before renaming
+  safety:
+    check_imports: true          # Check if file is imported
+    backup_original: true        # Create .bak backup
+    update_imports: false        # Don't auto-update imports (too risky)
+
+# MCP Tool Exposure
+mcp_exposure:
+  tools:
+    - name: "cortex_health_check_drift"
+      description: "Check for informational file drift and governance violations"
+      exposed: true
+    
+    - name: "cortex_vacuum_cleanup"
+      description: "Clean up detected drift and archives"
+      exposed: true
+      dry_run_default: true
+
+---

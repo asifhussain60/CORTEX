@@ -67,11 +67,14 @@ class VacuumAutomation:
         """
         self.results = {}
         
+        self.cleanup_informational_files()
         self.cleanup_markdown_sprawl()
         self.cleanup_debug_markers()
         self.cleanup_pycache()
         self.cleanup_session_data()
         self.cleanup_build_artifacts()
+        self.cleanup_archives()
+        self.rename_screaming_case_files()
         
         return self.results
     
@@ -86,6 +89,7 @@ class VacuumAutomation:
         - .github/agents/*.md
         - README.md (root only)
         - docs/**/*.md (documentation)
+        - _workspaces/**/*.md (EXCEPTION)
         
         Returns:
             Cleanup result with files removed count.
@@ -96,8 +100,10 @@ class VacuumAutomation:
             "README.md",
             "docs/",
             "cortex-docs/",
+            "cortex-registry/",
             ".cortex/",  # Archive area
-            "_archives/",  # Archive area
+            "_archives/",  # Archive area (will be deleted by cleanup_archives)
+            "_workspaces/",  # EXCEPTION per user request
         ]
         
         files_removed = 0
@@ -336,6 +342,216 @@ class VacuumAutomation:
         )
         
         self.results["build_artifacts"] = result
+        return result
+    
+    def cleanup_informational_files(self) -> CleanupResult:
+        """
+        Clean up informational file drift (.md, .log, .txt outside allowed dirs).
+        
+        CORTEX should be YAML-heavy, not informational file sprawl.
+        
+        Returns:
+            Cleanup result with files removed count.
+        """
+        allowed_patterns = [
+            ".github/prompts/",
+            ".github/agents/",
+            ".github/scripts/",
+            "README.md",
+            "cortex-docs/",
+            "cortex-registry/",
+            "_workspaces/",  # EXCEPTION per user request
+            ".cortex/",
+            "docs/",
+            ".venv/",
+            ".git/",
+            "_archives/",  # Will be deleted by cleanup_archives
+        ]
+        
+        config_files = {"requirements.txt", "pyproject.toml"}
+        extensions = [".md", ".log", ".txt"]
+        
+        files_removed = 0
+        bytes_freed = 0
+        errors = []
+        
+        for ext in extensions:
+            for file_path in self.workspace_root.rglob(f"*{ext}"):
+                # Check if allowed
+                try:
+                    rel_path = str(file_path.relative_to(self.workspace_root))
+                    
+                    # Skip allowed patterns
+                    is_allowed = any(
+                        rel_path.startswith(pattern) or rel_path == pattern
+                        for pattern in allowed_patterns
+                    )
+                    
+                    if is_allowed or file_path.name in config_files:
+                        continue
+                    
+                    # Perform safety check
+                    safety = self.intelligence.safety_check(file_path)
+                    if not safety.safe:
+                        errors.append(f"Safety check failed for {rel_path}: {safety.reason}")
+                        continue
+                    
+                    file_size = file_path.stat().st_size
+                    
+                    if not self.dry_run:
+                        file_path.unlink()
+                        self.intelligence.learn_from_cleanup(
+                            file_path=file_path,
+                            reason="informational_drift",
+                            bytes_saved=file_size,
+                            successful=True,
+                        )
+                    
+                    files_removed += 1
+                    bytes_freed += file_size
+                    
+                except Exception as e:
+                    errors.append(f"Failed to remove {file_path}: {e}")
+        
+        result = CleanupResult(
+            strategy="informational_files",
+            files_removed=files_removed,
+            directories_removed=0,
+            bytes_freed=bytes_freed,
+            errors=errors,
+        )
+        
+        self.results["informational_files"] = result
+        return result
+    
+    def cleanup_archives(self) -> CleanupResult:
+        """
+        Delete archived folders completely (not relocate).
+        
+        Archives should be DELETED per user request, not preserved.
+        
+        Returns:
+            Cleanup result with directories removed count.
+        """
+        archive_patterns = ["_archives", ".archive", "archive"]
+        
+        dirs_removed = 0
+        bytes_freed = 0
+        errors = []
+        
+        for pattern in archive_patterns:
+            for archive_dir in self.workspace_root.rglob(pattern):
+                if not archive_dir.is_dir():
+                    continue
+                
+                # Skip if inside .git or .venv
+                if ".git" in archive_dir.parts or ".venv" in archive_dir.parts:
+                    continue
+                
+                try:
+                    dir_size = sum(
+                        f.stat().st_size 
+                        for f in archive_dir.rglob("*") 
+                        if f.is_file()
+                    )
+                    
+                    if not self.dry_run:
+                        shutil.rmtree(archive_dir)
+                    
+                    dirs_removed += 1
+                    bytes_freed += dir_size
+                    
+                except Exception as e:
+                    errors.append(f"Failed to remove {archive_dir}: {e}")
+        
+        result = CleanupResult(
+            strategy="archives",
+            files_removed=0,
+            directories_removed=dirs_removed,
+            bytes_freed=bytes_freed,
+            errors=errors,
+        )
+        
+        self.results["archives"] = result
+        return result
+    
+    def rename_screaming_case_files(self) -> CleanupResult:
+        """
+        Rename SCREAMING_CASE files to kebab-case (CORE-028 enforcement).
+        
+        Only renames files that health determines should be kept.
+        Creates .bak backups before renaming.
+        
+        Returns:
+            Cleanup result with files renamed count.
+        """
+        import re
+        
+        screaming_pattern = re.compile(r"^[A-Z_]{5,}\.py$")
+        exceptions = {"__init__.py", "__main__.py", "README.md", "LICENSE"}
+        
+        files_renamed = 0
+        bytes_freed = 0
+        errors = []
+        
+        for py_file in self.workspace_root.rglob("*.py"):
+            # Skip excluded directories
+            if any(
+                excluded in py_file.parts 
+                for excluded in [".venv", ".git", "_archives", ".archive"]
+            ):
+                continue
+            
+            # Skip exceptions
+            if py_file.name in exceptions:
+                continue
+            
+            # Check for SCREAMING_CASE
+            if screaming_pattern.match(py_file.name):
+                try:
+                    # Perform safety check
+                    safety = self.intelligence.safety_check(py_file)
+                    
+                    # Convert to kebab-case
+                    kebab_name = py_file.stem.lower().replace("_", "-") + ".py"
+                    new_path = py_file.parent / kebab_name
+                    
+                    if new_path.exists():
+                        errors.append(
+                            f"Cannot rename {py_file.name} → {kebab_name}: target exists"
+                        )
+                        continue
+                    
+                    if not self.dry_run:
+                        # Create backup
+                        backup_path = py_file.with_suffix(".py.bak")
+                        shutil.copy2(py_file, backup_path)
+                        
+                        # Rename
+                        py_file.rename(new_path)
+                        
+                        # Learn from operation
+                        self.intelligence.learn_from_cleanup(
+                            file_path=py_file,
+                            reason="screaming_case_rename",
+                            bytes_saved=0,
+                            successful=True,
+                        )
+                    
+                    files_renamed += 1
+                    
+                except Exception as e:
+                    errors.append(f"Failed to rename {py_file}: {e}")
+        
+        result = CleanupResult(
+            strategy="screaming_case_rename",
+            files_removed=files_renamed,
+            directories_removed=0,
+            bytes_freed=bytes_freed,
+            errors=errors,
+        )
+        
+        self.results["screaming_case_rename"] = result
         return result
     
     def get_smart_recommendations(self) -> List[tuple]:
