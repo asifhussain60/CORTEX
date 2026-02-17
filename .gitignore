@@ -212,5 +212,6 @@ cortex-registry/_cortex-master/meta/
 # Contains audit reports, status updates, phase tracking, and session artifacts
 # These are generated during execution and should not be committed to git
 # Keep reports/ structure but ignore all content
-reports/
+# Exception: cortex-registry/metrics/reports/ is a structural folder for YAML centralization
+/reports/
 contract_validation_audit.db
