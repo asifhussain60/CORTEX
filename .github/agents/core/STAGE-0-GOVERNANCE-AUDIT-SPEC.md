@@ -26,12 +26,28 @@ Stage 0: SYNCHRONOUS GOVERNANCE AUDIT (NEW)
   │  ├─ CORE-008: Test bypass detection
   │  ├─ CORE-027: Audit trail markers
   │  └─ Additional CORE rules
-  ├─ Inject violations into rephrase output
-  ├─ Embed Challenge-First Protocol
-  └─ Return RephraseContext with governance context
+  ├─ Inject violations into single-paragraph rephrase output
+  ├─ Embed Challenge-First Protocol (if IMPLEMENT/PLAN/DESIGN intent)
+  └─ Return single clean paragraph with CORTEX context
     ↓
 Stage 1: IntentRouter (tool selection)
-  └─ Receives self-defending request with governance context
+  └─ Receives self-defending request with governance context inline
+```
+
+**CRITICAL OUTPUT FORMAT:**
+- ✅ Single paragraph of plain text with CORTEX context inline
+- ✅ Include CORTEX response header before paragraph
+- ❌ NO tables, headers, code blocks, or bullet lists
+- ❌ NO multi-paragraph output
+
+**Header Format:**
+```markdown
+## 🎯 CORTEX REPHRASE
+**Author:** Asif Hussain | **Mode:** Token Optimization ✅
+
+---
+
+{SINGLE_PARAGRAPH_REFINED_REQUEST_WITH_CORTEX_CONTEXT}
 ```
 
 ---
@@ -107,20 +123,54 @@ if not any(marker in request for marker in ["AC_START", "AC_COMPLETE"]):
 
 ## Challenge-First Protocol Integration
 
-Every rephrase output now includes embedded challenge protocol:
+**DEPRECATED:** Challenge protocol is NO LONGER appended to REPHRASE output.
 
-```markdown
-**Challenge Protocol (Stage 0 - Embedded):**
-Before proceeding, identify ONE key assumption in the request above that might be incorrect or suboptimal.
-Present an alternative approach that could yield better outcomes.
-Structure as: "Assumption: [X]. Alternative: [Y]. Trade-off: [Z]."
-```
+**Rationale:**
+- Challenge protocol belongs to IMPLEMENT/PLAN/DESIGN modes (after user confirmation)
+- REPHRASE mode outputs clean single paragraph for copy-paste into new session
+- Challenge Gate handled separately in Holistic Validation (CORE-048)
 
-**Effect:** Challenge-first protocol becomes **automatic** and **transparent** to user. Every request gets challenged before MasterOrchestrator intake.
+**Current Behavior:**
+- REPHRASE: Single paragraph with CORTEX context only
+- IMPLEMENT/PLAN/DESIGN: Challenge Gate displayed separately before execution
 
 ---
 
-## RephraseContext Enhancement
+## Output Format (CRITICAL)
+
+**REPHRASE mode output format (SSOT):**
+
+```markdown
+## 🎯 CORTEX REPHRASE
+**Author:** Asif Hussain | **Mode:** Token Optimization ✅
+
+---
+
+{SINGLE_PARAGRAPH_REFINED_REQUEST_WITH_CORTEX_CONTEXT_AND_GOVERNANCE_INLINE}
+```
+
+**Rules:**
+- ✅ Single paragraph of plain text (no markdown formatting within paragraph)
+- ✅ CORTEX header included (author + mode)
+- ✅ Governance violations injected inline (e.g., "note: CORE-008 requires TDD")
+- ✅ Orchestrator routing inline (e.g., "via TDDOrchestrator")
+- ❌ NO challenge protocol appended
+- ❌ NO tables, code blocks, bullet lists
+- ❌ NO multi-paragraph output
+
+**Example:**
+```markdown
+## 🎯 CORTEX REPHRASE
+**Author:** Asif Hussain | **Mode:** Token Optimization ✅
+
+---
+
+Implement user authentication for admin panel security via TDDOrchestrator with module-level scope, including JWT token validation, role-based access control, and secure session management following CORTEX governance CORE-008 (TDD mandatory, note: request mentioned "skip tests" which violates TDD requirement) and CORE-011 (type hints required).
+```
+
+---
+
+## RephraseContext Enhancement (DEPRECATED)
 
 **New Fields Added:**
 

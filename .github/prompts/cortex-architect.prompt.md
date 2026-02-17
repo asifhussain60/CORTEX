@@ -427,24 +427,30 @@ result = cortex_classify(
 
 ### Output Format (SSOT)
 
-**CRITICAL: Single clean paragraph ONLY (copy-pasteable into new Copilot Chat session):**
+**CRITICAL: CORTEX header + single clean paragraph ONLY (copy-pasteable into new Copilot Chat session):**
 
-```
+```markdown
+## 🎯 CORTEX REPHRASE
+**Author:** Asif Hussain | **Mode:** Token Optimization ✅
+
+---
+
 {REFINED_PROMPT_AS_SINGLE_PARAGRAPH_WITH_CORTEX_CONTEXT}
 ```
 
 **Key Principles:**
-- ✅ Output ONLY ONE paragraph of refined plain text (no markdown formatting, no headers, no code blocks)
+- ✅ Include CORTEX response header (author + mode) at top
+- ✅ Output ONLY ONE paragraph of refined plain text after header (no markdown formatting within paragraph)
 - ✅ Remove filler words ("I think", "probably", "some kind of", "maybe", "perhaps")
 - ✅ Add CORTEX technical context inline based on intent (e.g., "via TDDOrchestrator" for IMPLEMENT)
 - ✅ Make the paragraph self-contained and copy-pasteable into a new GitHub Copilot Chat session
-- ❌ NO markdown headers (##, ###)
-- ❌ NO code blocks (``` or `)
+- ❌ NO markdown headers within paragraph (##, ###)
+- ❌ NO code blocks (``` or `) within paragraph
 - ❌ NO metrics tables (token reduction, confidence, etc.)
 - ❌ NO before/after comparisons
 - ❌ NO challenge protocol appended (that's for implementation mode, not rephrase)
 - ❌ NO examples or explanations
-- ❌ NO bullet lists or structured formatting
+- ❌ NO bullet lists or structured formatting within paragraph
 - ❌ NO line breaks or multi-paragraph output
 
 ### STRICT EXECUTION CONSTRAINTS (ENFORCEMENT)
@@ -458,7 +464,12 @@ result = cortex_classify(
 This prevents the common drift where a rephrase/preprocessor step begins enumerating or editing files instead of focusing on the user's raw request and provided visual input.
 
 **Example Output:**
-```
+```markdown
+## 🎯 CORTEX REPHRASE
+**Author:** Asif Hussain | **Mode:** Token Optimization ✅
+
+---
+
 Implement user authentication for admin panel security via TDDOrchestrator with module-level scope, including JWT token validation, role-based access control, and secure session management following CORTEX governance rules CORE-008 (TDD mandatory) and CORE-011 (type hints required).
 ```
 
