@@ -3,7 +3,7 @@
 
 Usage: python scripts/vacuum-runner.py [--dry-run] [--commit]
 
-Authority: PHASE-VACUUM-REFACTOR S4 | CORE-008/011/012
+Authority: PHASE-VACUUM-REFACTOR S4 | CORE-008/011/012 | Phase 104 Enhancement
 """
 
 import sys
@@ -19,6 +19,8 @@ from cortex_intelligence.memory.tier1_learned.orchestrators.cleaners import (
     RootDatabaseCleaner,
     MarkdownSprawlCleaner,
     RootArtifactsCleaner,
+    TempScriptCleaner,
+    OrphanedTestCleaner,
 )
 
 
@@ -33,7 +35,16 @@ def main() -> int:
     config = {"repo_root": CORTEX_ROOT, "dry_run": args.dry_run}
     orchestrator = VacuumOrchestrator(config)
     
-    for cleaner_cls in [RootDatabaseCleaner, MarkdownSprawlCleaner, RootArtifactsCleaner]:
+    # Register all cleaners (including new TempScriptCleaner and OrphanedTestCleaner)
+    cleaners = [
+        RootDatabaseCleaner,
+        MarkdownSprawlCleaner,
+        RootArtifactsCleaner,
+        TempScriptCleaner,
+        OrphanedTestCleaner,
+    ]
+    
+    for cleaner_cls in cleaners:
         try:
             orchestrator.register_cleaner(cleaner_cls)  # Pass class, not instance
         except Exception as e:
