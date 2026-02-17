@@ -1171,7 +1171,7 @@ DoD confidence: [X%] — [short reason].
 **Example:**
 
 ```markdown
-## 🧠 CORTEX CLASSIFY (Conversational)
+# 🧠 CORTEX (Conversational)
 **Author:** Asif Hussain | **Orchestrator:** InteractionOrchestrator ✅
 
 ---

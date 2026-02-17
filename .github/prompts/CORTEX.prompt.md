@@ -394,7 +394,7 @@ If token usage > 400k before user request:
 **SSOT:** See `.github/prompts/response-format-standards.md` § Completion Response Template for comprehensive formatting rules.
 
 ```markdown
-## 🧠 CORTEX {operation}
+# 🧠 CORTEX
 **Author:** Asif Hussain | **Orchestrator:** {orchestrator} ✅
 
 ---
@@ -428,7 +428,7 @@ If token usage > 400k before user request:
 #### Correct Pattern (Autonomous Implementation)
 
 ```markdown
-## 🧠 CORTEX IMPLEMENT
+# 🧠 CORTEX
 **Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
 
 ---
@@ -455,14 +455,14 @@ Files: 5 modified
 #### FORBIDDEN Pattern (Bug - DO NOT USE)
 
 ```markdown
-## 🧠 CORTEX EXECUTE
+# 🧠 CORTEX
 **Author:** Asif Hussain | **Orchestrator:** MasterOrchestrator ✅
 
 ---
 
 [progress bars...]
 
-## 🧠 CORTEX UPDATE COMPLETE  ← ❌ WRONG: Second header
+# 🧠 CORTEX COMPLETE  ← ❌ WRONG: Second header
 **Author:** Asif Hussain | **Session:** Registry Status ✅
 
 ---
@@ -487,7 +487,7 @@ Commit: abc123f
 
 **NOT THIS:**
 ```markdown
-## 🧠 CORTEX STAGE 1 COMPLETE  ← ❌ WRONG
+# 🧠 CORTEX 1 COMPLETE  ← ❌ WRONG
 **Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
 
 ---

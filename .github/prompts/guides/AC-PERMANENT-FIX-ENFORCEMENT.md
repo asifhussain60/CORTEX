@@ -221,7 +221,7 @@ result = agent.recall(
 All operations include AC-PERMANENT-FIX status:
 
 ```markdown
-## 🧠 CORTEX Total Recall
+# 🧠 CORTEX
 **Author:** Asif Hussain | **Phase:** Production | **Orchestrator:** TotalRecallAgent ✅
 
 ---
@@ -302,7 +302,7 @@ print(report)
 
 All AC-PERMANENT-FIX reports include mandatory CORTEX headers:
 ```markdown
-## 🧠 CORTEX Total Recall
+# 🧠 CORTEX
 **Author:** Asif Hussain | **Phase:** Production | **Orchestrator:** TotalRecallAgent ✅
 
 ---

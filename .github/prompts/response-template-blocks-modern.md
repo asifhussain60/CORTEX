@@ -18,13 +18,23 @@ Modern response templates optimized for GitHub Copilot Chat with:
 ## 🏛️ Header Template (FIRST RESPONSE ONLY)
 
 **Trigger:** First response to user in a turn  
-**Frequency:** Once per multi-turn conversation segment  
-**Timing:** Appears WITH content (not separate announcement)
+**Frequency:** Once per multi-turn conversatio### Scenario 3: Silent Autonomous Execution
+
+```markdown
+# 🧠 CORTEX
+**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
+
+---
+
+[SILENT EXECUTION - PROGRESS BARS ONLY]
+
+[COMPLETION REPORT]
+````**Timing:** Appears WITH content (not separate announcement)
 
 ### Format
 
 ```markdown
-## 🧠 CORTEX {OPERATION}
+# 🧠 CORTEX
 **Author:** Asif Hussain | **Orchestrator:** {OrchestratorName} ✅
 
 ---
@@ -32,26 +42,30 @@ Modern response templates optimized for GitHub Copilot Chat with:
 
 **Rules:**
 - ✅ Show ONCE when first response is delivered (not on submission)
+- ✅ Single icon (🧠) + CORTEX title in H1 (#)
 - ✅ Include orchestrator name (from MasterOrchestrator routing)
 - ✅ Always include author attribution
 - ✅ Use `---` separator (forces blank line, prevents heading stacking)
 - ❌ DO NOT show on every turn (header sticky until conversation context changes)
 - ❌ DO NOT show during silent autonomous execution (progress bars only)
 
-**Operation Values:**
-- IMPLEMENT, FIX, REFACTOR, ANALYZE, AUDIT, DESIGN, PLAN, DEBUG, DIGEST, QUERY, LIST, RECALL, CHALLENGE, ONBOARD
+**Operation Examples (context in content, not header):**
+- IMPLEMENT: TDD cycle for feature creation
+- FIX: Bug resolution workflow
+- REFACTOR: Code improvement operations
+- ANALYZE: LENS intelligence reports
 
 **Examples:**
 
 ```markdown
-## 🧠 CORTEX IMPLEMENT
+# 🧠 CORTEX
 **Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
 
 ---
 ```
 
 ```markdown
-## 🧠 CORTEX ANALYZE
+# 🧠 CORTEX
 **Author:** Asif Hussain | **Orchestrator:** LENSSynthesis ✅
 
 ---
@@ -501,7 +515,7 @@ I'm here to make you successful. Let's build something great. 🚀
 **Format:**
 
 ```markdown
-## 🧠 CORTEX IMPLEMENT
+# 🧠 CORTEX
 **Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
 
 ---
@@ -810,7 +824,7 @@ def my_function():
 ### Scenario 1: First-Time User (Complete Onboarding)
 
 ```markdown
-## 🧠 CORTEX QUERY
+# 🧠 CORTEX
 **Author:** Asif Hussain | **Orchestrator:** EducationalOrchestrator ✅
 
 ---
@@ -829,7 +843,7 @@ def my_function():
 ### Scenario 2: User Asks "Explain LENS"
 
 ```markdown
-## 🧠 CORTEX QUERY
+# 🧠 CORTEX
 **Author:** Asif Hussain | **Orchestrator:** EducationalOrchestrator ✅
 
 ---
@@ -846,7 +860,7 @@ def my_function():
 ### Scenario 3: Silent Autonomous Execution
 
 ```markdown
-## 🧠 CORTEX IMPLEMENT
+# 🧠 CORTEX
 **Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
 
 ---

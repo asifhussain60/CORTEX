@@ -198,7 +198,7 @@ When displaying governance rules (CORE-XXX) in Copilot Chat, enrich with book re
 ### Example in DoR Display
 
 ```
-## 🧠 CORTEX IMPLEMENT
+# 🧠 CORTEX
 **Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
 
 ---
