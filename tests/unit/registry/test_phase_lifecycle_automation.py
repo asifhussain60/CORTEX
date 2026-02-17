@@ -49,6 +49,16 @@ class TestPhaseLifecycleAutomation:
             timeout_seconds=300,
         )
         return PhaseExecutionStrategy(config=config)
+    
+    @pytest.fixture
+    def phase_strategy_no_recovery(self) -> PhaseExecutionStrategy:
+        """Create phase execution strategy with recovery disabled for failure tests."""
+        config = PhaseExecutionConfig(
+            recovery_enabled=False,
+            allow_skip=False,
+            timeout_seconds=300,
+        )
+        return PhaseExecutionStrategy(config=config)
 
     def test_phase_execution_updates_registry_on_success(
         self,
@@ -247,14 +257,14 @@ class TestPhaseLifecycleAutomation:
 
     def test_failure_does_not_mark_phase_complete(
         self,
-        phase_strategy: PhaseExecutionStrategy,
+        phase_strategy_no_recovery: PhaseExecutionStrategy,
         phase_manager: PhaseManager,
     ):
         """
         RED TEST: Failed execution should NOT auto-update registry to complete.
         
         Workflow:
-        1. Execute phase
+        1. Execute phase with recovery_enabled=False
         2. Task fails
         3. Execution stops
         4. Registry NOT marked complete
@@ -273,7 +283,7 @@ class TestPhaseLifecycleAutomation:
         
         # Mock failing task
         with patch.object(
-            phase_strategy,
+            phase_strategy_no_recovery,
             '_execute_task',
             side_effect=[
                 {"success": True},  # Task 1 succeeds
@@ -281,7 +291,7 @@ class TestPhaseLifecycleAutomation:
             ]
         ):
             # Act
-            result = phase_strategy.execute(context)
+            result = phase_strategy_no_recovery.execute(context)
             
             # Assert
             assert result.success is False
