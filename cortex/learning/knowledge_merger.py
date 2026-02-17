@@ -10,7 +10,7 @@ Merges learned patterns into knowledge repositories with:
 - Snowball effect (accumulation over time)
 
 Target repositories:
-- company/domains/{repo}/ (business knowledge)
+- cortex-registry/company/domains/{repo}/ (business knowledge)
 - cortex_intelligence/tier3/knowledge/ (technical knowledge)
 - cortex-registry/ (governance patterns)
 
@@ -172,7 +172,7 @@ class KnowledgeMerger:
             return base_path / "learned_patterns.yaml"
 
         elif pattern_type == "BUSINESS":
-            # Business patterns go to company/domains
+            # Business patterns go to cortex-registry/company/domains
             # For now, use a generic location (could be enhanced with repo detection)
             base_path = self.company_domains_path / "_learned"
             base_path.mkdir(parents=True, exist_ok=True)

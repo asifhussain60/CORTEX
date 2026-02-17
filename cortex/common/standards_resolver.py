@@ -45,7 +45,7 @@ class StandardsResolver:
     Priority-based standards resolver for company domain integration.
 
     Loading order:
-    1. company/domains/{domain}/{subdomain}/
+    1. cortex-registry/company/domains/{domain}/{subdomain}/
     2. cortex/knowledge/best-practices/{domain}/
     3. cortex/defaults/{domain}/
 
@@ -114,7 +114,7 @@ class StandardsResolver:
         Load standards with priority-based resolution.
 
         Priority order:
-        1. company/domains/{domain}/{subdomain}.yaml
+        1. cortex-registry/company/domains/{domain}/{subdomain}.yaml
         2. cortex/knowledge/best-practices/{domain}/{subdomain}.yaml
         3. cortex/defaults/{domain}/{subdomain}.yaml
 

@@ -1797,8 +1797,8 @@ class LENSOrchestrator:
         import yaml
 
         try:
-            # Look for company domains in company/domains/
-            company_dir = Path("company") / "domains"
+            # Look for company domains in cortex-registry/company/domains/
+            company_dir = Path("cortex-registry") / "company" / "domains"
 
             if not company_dir.exists():
                 return {}
