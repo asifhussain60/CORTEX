@@ -17,7 +17,7 @@ class TestMCPSchemaGeneration:
         registry = get_registry()
         schemas = registry.to_mcp_schema()
         
-        assert len(schemas) == 24, "Should have 24 tool schemas"
+        assert len(schemas) == 26, "Should have 26 tool schemas"
         
         for schema in schemas:
             assert "name" in schema, f"Schema missing 'name': {schema}"
@@ -46,8 +46,8 @@ class TestMCPSchemaGeneration:
         
         # Expected distribution (based on PRODUCTION_TOOLS)
         assert category_counts.get("core") == 4, "Should have 4 core tools"
-        assert category_counts.get("intelligence") == 3, "Should have 3 intelligence tools"
-        assert category_counts.get("governance") == 3, "Should have 3 governance tools"
+        assert category_counts.get("intelligence") == 4, "Should have 4 intelligence tools"
+        assert category_counts.get("governance") == 4, "Should have 4 governance tools"
         assert category_counts.get("operations") == 5, "Should have 5 operations tools"
         assert category_counts.get("utilities") == 9, "Should have 9 utilities tools"
     
@@ -80,7 +80,7 @@ class TestMCPSchemaGeneration:
         
         # Should be able to parse back
         parsed = json.loads(json_output)
-        assert len(parsed) == 24
+        assert len(parsed) == 26
     
     def test_core_tools_have_correct_category(self):
         """Verify core tools are marked as core category."""

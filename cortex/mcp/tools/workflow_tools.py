@@ -134,6 +134,11 @@ class CortexWorkflow(ConsolidatedTool):
             ),
         ]
     
+    @property
+    def supported_operations(self) -> List[str]:
+        """Return list of supported operations."""
+        return ["execute", "list", "search", "validate", "preview", "monitor"]
+    
     async def execute(self, **kwargs: Any) -> ToolResult:
         """
         Execute workflow tool operation.

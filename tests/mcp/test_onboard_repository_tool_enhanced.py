@@ -42,6 +42,16 @@ def mock_learning_loop() -> Mock:
 
 
 @pytest.fixture
+def orchestrator_context() -> Dict[str, Any]:
+    """Provide MasterOrchestrator context for tool validation."""
+    return {
+        "source": "MasterOrchestrator",
+        "timestamp": "2026-02-16T00:00:00Z",
+        "tool_name": "cortex_onboard"
+    }
+
+
+@pytest.fixture
 def mock_onboarding_orchestrator() -> Mock:
     """Mock OnboardingOrchestrator with knowledge persistence."""
     orchestrator = Mock()
@@ -67,10 +77,13 @@ def mock_onboarding_orchestrator() -> Mock:
 class TestMCPToolEnhancement:
     """Test MCP tool enhancement for knowledge persistence."""
 
-    def test_mcp_tool_includes_learning_metrics(self, tmp_path) -> None:
+    def test_mcp_tool_includes_learning_metrics(self, tmp_path, orchestrator_context) -> None:
         """Test MCP tool response includes learning metrics."""
         # Execute with real implementation
-        result = onboard_repository_tool(repository_path=str(tmp_path))
+        result = onboard_repository_tool(
+            repository_path=str(tmp_path),
+            orchestrator_context=orchestrator_context
+        )
 
         # Enhanced assertions - should have structure even if empty
         assert "status" in result
@@ -78,19 +91,25 @@ class TestMCPToolEnhancement:
         assert isinstance(result["learning_metrics"], dict)
         assert "patterns_captured" in result["learning_metrics"] or len(result["learning_metrics"]) >= 0
 
-    def test_mcp_tool_includes_brain_enhancement(self, tmp_path) -> None:
+    def test_mcp_tool_includes_brain_enhancement(self, tmp_path, orchestrator_context) -> None:
         """Test MCP tool response includes brain enhancement data."""
         # Execute
-        result = onboard_repository_tool(repository_path=str(tmp_path))
+        result = onboard_repository_tool(
+            repository_path=str(tmp_path),
+            orchestrator_context=orchestrator_context
+        )
 
         # Enhanced assertions - should have structure
         assert "brain_enhancement" in result
         assert isinstance(result["brain_enhancement"], dict)
 
-    def test_mcp_tool_includes_artifacts(self, tmp_path) -> None:
+    def test_mcp_tool_includes_artifacts(self, tmp_path, orchestrator_context) -> None:
         """Test MCP tool response includes knowledge artifacts."""
         # Execute
-        result = onboard_repository_tool(repository_path=str(tmp_path))
+        result = onboard_repository_tool(
+            repository_path=str(tmp_path),
+            orchestrator_context=orchestrator_context
+        )
 
         # Enhanced assertions - should have structure
         assert "artifacts" in result
@@ -117,7 +136,8 @@ class TestMCPResponseFormat:
         mock_orch_class: Mock,
         mock_loop_class: Mock,
         mock_onboarding_orchestrator: Mock,
-        mock_learning_loop: Mock
+        mock_learning_loop: Mock,
+        orchestrator_context: Dict[str, Any]
     ) -> None:
         """Test MCP response has all required fields."""
         # Setup
@@ -125,7 +145,10 @@ class TestMCPResponseFormat:
         mock_loop_class.return_value = mock_learning_loop
 
         # Execute
-        result = onboard_repository_tool(repository_path="/test/repo")
+        result = onboard_repository_tool(
+            repository_path="/test/repo",
+            orchestrator_context=orchestrator_context
+        )
 
         # Enhanced assertions for response structure
         required_fields = [
@@ -149,7 +172,8 @@ class TestMCPResponseFormat:
         mock_orch_class: Mock,
         mock_loop_class: Mock,
         mock_onboarding_orchestrator: Mock,
-        mock_learning_loop: Mock
+        mock_learning_loop: Mock,
+        orchestrator_context: Dict[str, Any]
     ) -> None:
         """Test MCP response is JSON serializable."""
         import json
@@ -159,7 +183,10 @@ class TestMCPResponseFormat:
         mock_loop_class.return_value = mock_learning_loop
 
         # Execute
-        result = onboard_repository_tool(repository_path="/test/repo")
+        result = onboard_repository_tool(
+            repository_path="/test/repo",
+            orchestrator_context=orchestrator_context
+        )
 
         # Enhanced assertion - can serialize to JSON
         try:
@@ -254,13 +281,16 @@ class TestOnboardingResultDataClass:
 class TestMCPToolPerformance:
     """Test MCP tool performance characteristics."""
 
-    def test_tool_execution_time_reasonable(self, tmp_path) -> None:
+    def test_tool_execution_time_reasonable(self, tmp_path, orchestrator_context) -> None:
         """Test MCP tool executes in reasonable time."""
         import time
         
         # Execute and time
         start = time.time()
-        result = onboard_repository_tool(repository_path=str(tmp_path))
+        result = onboard_repository_tool(
+            repository_path=str(tmp_path),
+            orchestrator_context=orchestrator_context
+        )
         duration = time.time() - start
 
         # Enhanced assertions for performance

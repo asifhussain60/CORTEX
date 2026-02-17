@@ -84,7 +84,7 @@ class TestAllMCPTools:
         result = server.call_tool(
             "cortex_lens",
             operation="analyze",
-            target="cortex/mcp/base.py"
+            target="cortex/mcp/server.py"
         )
         assert result is not None
         assert result.success is True
@@ -483,16 +483,17 @@ class TestToolCategoryFiltering:
     def test_filter_intelligence_tools(self, server):
         """Test filtering intelligence category tools."""
         tools = server.list_tools_by_category("intelligence")
-        assert len(tools) == 3
+        assert len(tools) == 4
         tool_names = [t["name"] for t in tools]
         assert "cortex_lens" in tool_names
         assert "cortex_knowledge" in tool_names
         assert "cortex_git" in tool_names
+        assert "cortex_generate_tests" in tool_names
     
     def test_filter_governance_tools(self, server):
         """Test filtering governance category tools."""
         tools = server.list_tools_by_category("governance")
-        assert len(tools) == 3
+        assert len(tools) == 4
     
     def test_filter_operations_tools(self, server):
         """Test filtering operations category tools."""

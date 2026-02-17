@@ -135,7 +135,8 @@ class EnvironmentIntegrityAgent:
         # Check MCP availability
         mcp_status = self.check_mcp_availability()
 
-        if n# Phase 89: Attempt auto-healing instead of immediately blocking
+        if not mcp_status.available:
+            # Phase 89: Attempt auto-healing instead of immediately blocking
             healing_result = self.self_heal_environment(intent)
             
             if healing_result.success and healing_result.mcp_now_available:
@@ -156,8 +157,7 @@ class EnvironmentIntegrityAgent:
                     reason=f'MCP Server unavailable (checked: {mcp_status.detection_method}). Auto-heal failed: {healing_result.diagnostics.details}',
                     action=action,
                     mcp_policy=policy_result
-                    mcp_policy=policy_result
-            )
+                )
 
         # MCP available and policy compliant
         return ValidationResult(

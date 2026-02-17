@@ -20,14 +20,14 @@ class TestMCPIntegration:
         
         assert server is not None
         assert server.registry is not None
-        assert server.registry.tool_count == 24
+        assert server.registry.tool_count == 26
     
     def test_tools_list_complete(self):
-        """Test tools/list returns all 24 tools with metadata."""
+        """Test tools/list returns all 26 tools with metadata."""
         server = MCPServer()
         tools = server.list_tools()
         
-        assert len(tools) == 24
+        assert len(tools) == 26
         
         # Verify each tool has required fields
         for tool in tools:
@@ -46,10 +46,10 @@ class TestMCPIntegration:
         assert len(core_tools) == 4
         
         intelligence_tools = server.list_tools_by_category("intelligence")
-        assert len(intelligence_tools) == 3
+        assert len(intelligence_tools) == 4
         
         governance_tools = server.list_tools_by_category("governance")
-        assert len(governance_tools) == 3
+        assert len(governance_tools) == 4
         
         operations_tools = server.list_tools_by_category("operations")
         assert len(operations_tools) == 5
@@ -110,7 +110,7 @@ class TestMCPIntegration:
         
         # Should parse back
         parsed = json.loads(json_output)
-        assert len(parsed) == 24
+        assert len(parsed) == 26
         
         # Verify structure
         for tool in parsed:
@@ -139,7 +139,7 @@ class TestMCPIntegration:
         debug = next((t for t in tools if t["name"] == "cortex_debug"), None)
         assert debug is not None
         assert "operations" in debug
-        assert len(debug["operations"]) == 7
+        assert len(debug["operations"]) == 5  # inject, capture, analyze, fix_plan, cleanup
     
     def test_all_core_tools_present(self):
         """Verify all 4 core tools are registered."""
@@ -168,12 +168,12 @@ class TestMCPIntegration:
             cat = tool["category"]
             by_category[cat] = by_category.get(cat, 0) + 1
         
-        # Expected: 4 core, 3 intelligence, 3 governance, 5 operations, 9 utilities
+        # Expected: 4 core, 4 intelligence, 4 governance, 5 operations, 9 utilities
         assert by_category["core"] == 4
-        assert by_category["intelligence"] == 3
-        assert by_category["governance"] == 3
+        assert by_category["intelligence"] == 4
+        assert by_category["governance"] == 4
         assert by_category["operations"] == 5
         assert by_category["utilities"] == 9
         
-        # Total should be 24
-        assert sum(by_category.values()) == 24
+        # Total should be 26
+        assert sum(by_category.values()) == 26
