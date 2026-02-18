@@ -4,6 +4,12 @@ Main orchestrator that coordinates specialized health agents to detect
 and report repository health issues. Provides integration with CI/CD,
 pre-commit hooks, and MCP tools.
 
+Architecture (post-refactor):
+    PHASE-92 HealthOrchestrator.run_health_check()
+        └── delegates file-system walk to Phase-48 HealthOrchestrator.scan()
+                via a shared FileContext (single rglob, zero subprocess spawns)
+        └── returns HealthReport for backward compatibility
+
 Author: CORTEX Framework
 Phase: PHASE-92
 CORE Rules: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
@@ -16,7 +22,9 @@ from typing import Any, Dict, List, Optional
 from .agents.base_agent import BaseHealthAgent, HealthCheckResult
 from .reports.health_report import HealthReport, HealthMetrics
 from .intelligence import HealthIntelligence
-
+from cortex.orchestrators.support.health_orchestrator import (
+    HealthOrchestrator as _Phase48Orchestrator,
+)
 
 class HealthOrchestrator:
     """Main orchestrator for repository health management.
@@ -119,19 +127,40 @@ class HealthOrchestrator:
         use_intelligence: bool = True,
     ) -> HealthReport:
         """Run health check with registered agents.
-        
+
+        Delegates the filesystem walk to the Phase-48 HealthOrchestrator
+        (single ``rglob`` via ``FileContext``) then runs PHASE-92 agents
+        against the shared context so no additional disk I/O is needed.
+
         Args:
             agent_names: Optional list of specific agents to run.
                         If None, runs all enabled agents.
             use_intelligence: Whether to use intelligence layer for
                             caching and false positive suppression
-        
+
         Returns:
             HealthReport with aggregated results
         """
+        from cortex.orchestrators.support.health_orchestrator import FileContext  # noqa: F401 (kept for type checking)
+
         start_time = time.time()
         report = HealthReport(workspace_root=self.workspace_root)
-        
+
+        # --- Phase-48 delegation: single rglob walk --------------------------
+        phase48 = _Phase48Orchestrator(workspace_root=self.workspace_root)
+        phase48_result = phase48.scan()
+
+        # Expose Phase-48 ScanResult on the report for callers that need it
+        report.metadata["phase48_scan"] = {
+            "total_files": phase48_result.total_files_scanned,
+            "issues_found": phase48_result.issues_found,
+            "duration_ms": phase48_result.scan_duration_ms,
+        }
+
+        # Reuse the FileContext built inside Phase-48 scan() — zero extra rglob
+        ctx = phase48.last_ctx
+
+        # --- PHASE-92 agents -------------------------------------------------
         # Determine which agents to run
         agents_to_run = self.agents
         if agent_names:
@@ -139,28 +168,33 @@ class HealthOrchestrator:
                 agent for agent in self.agents
                 if agent.name in agent_names
             ]
-        
+
         # Run each agent
         for agent in agents_to_run:
             # Skip disabled agents AND check orchestrator enabled status
             if not self.enabled or not agent.is_enabled():
                 continue
-            
+
             try:
                 # Check intelligence cache if enabled
                 if use_intelligence:
-                    # Skip files that haven't changed
                     cached_files = 0
-                    for file_path in self.workspace_root.rglob("*.py"):
-                        if self.intelligence.should_skip_file(file_path, agent.name):
+                    for file_path in ctx.files:
+                        if file_path.suffix == ".py" and self.intelligence.should_skip_file(
+                            file_path, agent.name
+                        ):
                             cached_files += 1
-                    
+
                     if cached_files > 0:
                         print(f"  {agent.name}: Skipped {cached_files} unchanged files (cached)")
-                
-                # Run agent check
-                result = agent.check(self.workspace_root)
-                
+
+                # Run agent — pass ctx if agent supports it
+                try:
+                    result = agent.check(self.workspace_root, ctx=ctx)
+                except TypeError:
+                    # Agent doesn't accept ctx yet — backward compat
+                    result = agent.check(self.workspace_root)
+
                 # Filter false positives using intelligence
                 if use_intelligence and result.issues:
                     original_count = len(result.issues)
@@ -173,23 +207,21 @@ class HealthOrchestrator:
                         )
                     ]
                     result.issues = filtered_issues
-                    
+
                     if len(filtered_issues) < original_count:
                         suppressed = original_count - len(filtered_issues)
                         print(f"  {agent.name}: Suppressed {suppressed} known false positives")
-                
+
                 # Cache result
                 if use_intelligence:
                     self.intelligence.cache_result(
                         agent_name=agent.name,
                         result=result,
                     )
-                
+
                 report.add_agent_result(result)
             except Exception as e:
-                # Log error but continue with other agents
                 print(f"Error running {agent.name}: {str(e)}")
-                # Create error result
                 error_result = HealthCheckResult(
                     agent_name=agent.name,
                     issues=[],

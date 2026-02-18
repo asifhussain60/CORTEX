@@ -174,11 +174,16 @@ class InventoryAgent(BaseHealthAgent):
     # BaseHealthAgent contract
     # ------------------------------------------------------------------
 
-    def check(self, workspace_root: Path) -> HealthCheckResult:
+    def check(self, workspace_root: Path, ctx: "Any | None" = None) -> HealthCheckResult:
         """Run inventory scan and return findings as HealthIssues.
 
         Args:
             workspace_root: Repository root directory.
+            ctx: Optional :class:`~cortex.orchestrators.support.health_orchestrator.FileContext`
+                shared by the Phase-48 pipeline.  When provided, import
+                detection uses ``ctx.get_content()`` instead of spawning
+                ``subprocess.run`` (git grep), eliminating all subprocess
+                overhead.
 
         Returns:
             HealthCheckResult whose issues carry ``inventory_finding``
@@ -202,10 +207,10 @@ class InventoryAgent(BaseHealthAgent):
         files_scanned = 0
 
         # 1. Duplicate sub-packages
-        findings.extend(self._scan_duplicates(cortex_root, workspace_root))
+        findings.extend(self._scan_duplicates(cortex_root, workspace_root, ctx=ctx))
 
         # 2. Relocation / deletion candidates
-        findings.extend(self._scan_relocations(cortex_root, workspace_root))
+        findings.extend(self._scan_relocations(cortex_root, workspace_root, ctx=ctx))
 
         # 3. Stub directories (only __init__.py)
         stub_findings, stub_count = self._scan_stub_dirs(cortex_root)
@@ -240,7 +245,7 @@ class InventoryAgent(BaseHealthAgent):
     # ------------------------------------------------------------------
 
     def _scan_duplicates(
-        self, cortex_root: Path, workspace_root: Path
+        self, cortex_root: Path, workspace_root: Path, ctx: "Any | None" = None
     ) -> List[InventoryFinding]:
         """Detect sub-packages inside cortex/ that shadow a root canonical."""
         findings: List[InventoryFinding] = []
@@ -260,14 +265,14 @@ class InventoryAgent(BaseHealthAgent):
                         ),
                         severity="high",
                         safe=self._has_no_imports(
-                            workspace_root, _IMPORT_PREFIXES.get(rel, [])
+                            workspace_root, _IMPORT_PREFIXES.get(rel, []), ctx=ctx
                         ),
                     )
                 )
         return findings
 
     def _scan_relocations(
-        self, cortex_root: Path, workspace_root: Path
+        self, cortex_root: Path, workspace_root: Path, ctx: "Any | None" = None
     ) -> List[InventoryFinding]:
         """Detect misplaced folders that belong in a different root."""
         findings: List[InventoryFinding] = []
@@ -276,7 +281,7 @@ class InventoryAgent(BaseHealthAgent):
             if not inner.exists():
                 continue
             safe = self._has_no_imports(
-                workspace_root, _IMPORT_PREFIXES.get(rel, [])
+                workspace_root, _IMPORT_PREFIXES.get(rel, []), ctx=ctx
             )
             if target is None:
                 findings.append(
@@ -381,22 +386,40 @@ class InventoryAgent(BaseHealthAgent):
     # ------------------------------------------------------------------
 
     @staticmethod
-    def _has_no_imports(workspace_root: Path, prefixes: List[str]) -> bool:
+    def _has_no_imports(
+        workspace_root: Path,
+        prefixes: List[str],
+        ctx: "Any | None" = None,
+    ) -> bool:
         """Return True when none of the given import prefixes appear in .py files.
 
-        Uses ``git grep`` for speed when available, falls back to pure Python.
+        When *ctx* (a ``FileContext``) is provided, scans ``ctx.get_content()``
+        in memory — zero subprocess spawns, zero additional disk reads.
+        Falls back to ``git grep`` / pure-Python scan when ctx is absent.
 
         Args:
             workspace_root: Root to search.
             prefixes: Import prefixes to look for.
+            ctx: Optional shared FileContext for in-memory scanning.
 
         Returns:
             True if none found (safe to act), False if references exist.
         """
         if not prefixes:
             return True
+
+        # Fast path: use shared content cache (no subprocess, no extra I/O)
+        if ctx is not None:
+            for f in ctx.files:
+                if f.suffix != ".py":
+                    continue
+                content = ctx.get_content(f)
+                if any(prefix in content for prefix in prefixes):
+                    return False
+            return True
+
+        # Slow path (no ctx): try git grep, fall back to pure Python
         for prefix in prefixes:
-            # Try git grep first (fast)
             try:
                 result = subprocess.run(
                     ["git", "grep", "-l", "--", prefix],

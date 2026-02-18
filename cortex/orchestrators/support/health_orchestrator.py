@@ -36,6 +36,86 @@ import yaml
 logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
+# FileContext — single filesystem snapshot shared across all checks
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class FileContext:
+    """Single filesystem snapshot built once and shared across all health checks.
+
+    All ``_check_*`` methods and agents receive this object so the repository
+    is never walked more than once per ``scan()`` call.
+
+    Attributes:
+        files: All non-excluded file paths under workspace_root.
+        dirs: All non-excluded directory paths under workspace_root.
+        workspace_root: The root of the scanned repository.
+        _content_cache: Lazy text cache keyed by absolute Path.
+        _hash_cache: Lazy MD5 cache keyed by absolute Path.
+    """
+
+    files: list[Path]
+    dirs: list[Path]
+    workspace_root: Path
+    _content_cache: dict[Path, str] = field(default_factory=dict, repr=False)
+    _hash_cache: dict[Path, str] = field(default_factory=dict, repr=False)
+
+    @classmethod
+    def build(cls, workspace_root: Path) -> "FileContext":
+        """Walk the repository once and return a populated FileContext.
+
+        Args:
+            workspace_root: Root of the CORTEX repository.
+
+        Returns:
+            FileContext with all non-excluded files and directories.
+        """
+        files: list[Path] = []
+        dirs: list[Path] = []
+        for item in workspace_root.rglob("*"):
+            if _is_excluded(item, workspace_root):
+                continue
+            if item.is_file():
+                files.append(item)
+            elif item.is_dir():
+                dirs.append(item)
+        return cls(files=files, dirs=dirs, workspace_root=workspace_root)
+
+    def get_content(self, path: Path) -> str:
+        """Return text content of *path*, reading from disk only on cache miss.
+
+        Args:
+            path: Absolute path of the file to read.
+
+        Returns:
+            Text content of the file, or empty string on read error.
+        """
+        if path not in self._content_cache:
+            try:
+                self._content_cache[path] = path.read_text(errors="replace")
+            except OSError:
+                self._content_cache[path] = ""
+        return self._content_cache[path]
+
+    def get_hash(self, path: Path) -> str:
+        """Return MD5 hex digest of *path*, computing only on cache miss.
+
+        Args:
+            path: Absolute path of the file to hash.
+
+        Returns:
+            MD5 hex digest string, or empty string on read error.
+        """
+        if path not in self._hash_cache:
+            try:
+                self._hash_cache[path] = hashlib.md5(path.read_bytes()).hexdigest()
+            except OSError:
+                self._hash_cache[path] = ""
+        return self._hash_cache[path]
+
+
+# ---------------------------------------------------------------------------
 # Constants
 # ---------------------------------------------------------------------------
 
@@ -303,6 +383,8 @@ class HealthOrchestrator:
                             Defaults to current working directory.
         """
         self.workspace_root = workspace_root or Path.cwd()
+        # Set after scan() — callers can reuse the shared context
+        self.last_ctx: FileContext | None = None
 
     # ------------------------------------------------------------------
     # Public API
@@ -311,35 +393,46 @@ class HealthOrchestrator:
     def scan(self) -> ScanResult:
         """Execute all health checks and return a ScanResult.
 
+        Builds a single :class:`FileContext` (one ``rglob`` walk) and passes
+        it to every ``_check_*`` method so the filesystem is never traversed
+        more than once per call.  The context is stored on ``self.last_ctx``
+        so callers (e.g. PHASE-92 HealthOrchestrator) can reuse it without
+        a second filesystem walk.
+
         Returns:
             Populated ScanResult with all discovered issues.
         """
         t_start = datetime.now(timezone.utc)
         result = ScanResult(generated_at=t_start.isoformat())
 
-        files: list[Path] = []
-        dirs: list[Path] = []
+        # Single filesystem walk — shared across all checks
+        ctx = FileContext.build(self.workspace_root)
+        self.last_ctx = ctx  # expose for callers that want to reuse
+        result.total_files_scanned = len(ctx.files)
 
-        for item in self.workspace_root.rglob("*"):
-            if _is_excluded(item, self.workspace_root):
-                continue
-            if item.is_file():
-                files.append(item)
-            elif item.is_dir():
-                dirs.append(item)
+        screaming = self._check_screaming_case(ctx)
+        result.screaming_case = screaming
 
-        result.total_files_scanned = len(files)
+        empty = self._check_empty_files(ctx)
+        result.empty_files = empty
 
-        self._check_screaming_case(files, result)
-        self._check_empty_files(files, result)
-        self._check_orphaned_dirs(dirs, result)
-        self._check_wrong_references(files, result)
-        self._check_duplicate_content(files, result)
-        self._check_deprecated_markers(files, result)
-        self._check_invalid_markdown(files, result)
+        orphaned = self._check_orphaned_dirs(ctx)
+        result.orphaned_directories = orphaned
+
+        wrong_refs = self._check_wrong_references(ctx)
+        result.wrong_references = wrong_refs
+
+        dup_content = self._check_duplicate_content(ctx)
+        result.duplicate_content = dup_content
+
+        deprecated = self._check_deprecated_markers(ctx)
+        result.deprecated_code = deprecated
+
+        invalid_md = self._check_invalid_markdown(ctx)
+        result.invalid_markdown = invalid_md
 
         # Inventory scan — delegate structural cleanup to VacuumExecutor
-        self._collect_inventory_findings(result)
+        self._collect_inventory_findings(result, ctx)
 
         result._recount()
         result.scan_duration_ms = int(
@@ -436,47 +529,52 @@ class HealthOrchestrator:
             yaml.dump(data, fh, default_flow_style=False, sort_keys=False)
 
     # ------------------------------------------------------------------
-    # Private checks
+    # Private checks — each accepts FileContext, returns IssueCategory
     # ------------------------------------------------------------------
 
-    def _check_screaming_case(self, files: list[Path], result: ScanResult) -> None:
-        for f in files:
+    def _check_screaming_case(self, ctx: FileContext) -> IssueCategory:
+        cat = IssueCategory()
+        for f in ctx.files:
             if _is_protected(f):
                 continue
             if _is_screaming(f.name):
-                result.screaming_case.files.append(
+                cat.files.append(
                     IssueFile(
                         path=str(f.relative_to(self.workspace_root)),
                         action="rename",
                         recommended_name=to_kebab_case(f.name),
                     )
                 )
-        result.screaming_case.count = len(result.screaming_case.files)
+        cat.count = len(cat.files)
+        return cat
 
-    def _check_empty_files(self, files: list[Path], result: ScanResult) -> None:
+    def _check_empty_files(self, ctx: FileContext) -> IssueCategory:
         exempt_names = {".gitkeep"}
-        for f in files:
+        cat = IssueCategory()
+        for f in ctx.files:
             if f.name in exempt_names:
                 continue
             if _is_protected(f):
                 continue
             try:
                 if f.stat().st_size == 0:
-                    result.empty_files.files.append(
+                    cat.files.append(
                         IssueFile(path=str(f.relative_to(self.workspace_root)), action="delete")
                     )
             except OSError:
                 pass
-        result.empty_files.count = len(result.empty_files.files)
+        cat.count = len(cat.files)
+        return cat
 
-    def _check_orphaned_dirs(self, dirs: list[Path], result: ScanResult) -> None:
-        for d in dirs:
+    def _check_orphaned_dirs(self, ctx: FileContext) -> IssueCategory:
+        cat = IssueCategory()
+        for d in ctx.dirs:
             if _is_excluded(d, self.workspace_root):
                 continue
             try:
                 children = list(d.iterdir())
                 if not children:
-                    result.orphaned_directories.directories.append(
+                    cat.directories.append(
                         IssueDirectory(
                             path=str(d.relative_to(self.workspace_root)),
                             action="delete",
@@ -484,27 +582,26 @@ class HealthOrchestrator:
                     )
             except PermissionError:
                 pass
-        result.orphaned_directories.count = len(result.orphaned_directories.directories)
+        cat.count = len(cat.directories)
+        return cat
 
     _WRONG_REFS: dict[str, str] = {
         "cortex_brain": "cortex_intelligence",
         "_cortex-master": "cortex-registry",
     }
 
-    def _check_wrong_references(self, files: list[Path], result: ScanResult) -> None:
+    def _check_wrong_references(self, ctx: FileContext) -> IssueCategory:
         text_exts = {".py", ".yaml", ".yml", ".json", ".md", ".txt"}
         seen_paths: set[str] = set()
-        for f in files:
+        cat = IssueCategory()
+        for f in ctx.files:
             if f.suffix not in text_exts:
                 continue
-            try:
-                content = f.read_text(errors="replace")
-            except OSError:
-                continue
+            content = ctx.get_content(f)
             rel = str(f.relative_to(self.workspace_root))
             for old, new in self._WRONG_REFS.items():
                 if old in content and rel not in seen_paths:
-                    result.wrong_references.files.append(
+                    cat.files.append(
                         IssueFile(
                             path=rel,
                             action="fix",
@@ -514,50 +611,55 @@ class HealthOrchestrator:
                     )
                     seen_paths.add(rel)
                     break
-        result.wrong_references.count = len(result.wrong_references.files)
+        cat.count = len(cat.files)
+        return cat
 
-    def _check_duplicate_content(self, files: list[Path], result: ScanResult) -> None:
+    def _check_duplicate_content(self, ctx: FileContext) -> IssueCategory:
         hash_map: dict[str, list[str]] = {}
-        for f in files:
+        cat = IssueCategory()
+        for f in ctx.files:
             try:
                 if f.stat().st_size < 100:
                     continue
-                digest = hashlib.md5(f.read_bytes()).hexdigest()
+                digest = ctx.get_hash(f)
+                if not digest:
+                    continue
                 rel = str(f.relative_to(self.workspace_root))
                 hash_map.setdefault(digest, []).append(rel)
             except OSError:
                 pass
         for digest, paths in hash_map.items():
             if len(paths) > 1:
-                result.duplicate_content.groups.append(
+                cat.groups.append(
                     DuplicateGroup(hash=digest, files=paths, action="keep_canonical")
                 )
-        result.duplicate_content.count = len(result.duplicate_content.groups)
+        cat.count = len(cat.groups)
+        return cat
 
     _DEPRECATED_MARKERS = ["DEPRECATED", "TODO: remove", "FIXME: delete"]
 
-    def _check_deprecated_markers(self, files: list[Path], result: ScanResult) -> None:
+    def _check_deprecated_markers(self, ctx: FileContext) -> IssueCategory:
         text_exts = {".py", ".yaml", ".yml", ".md", ".txt"}
-        for f in files:
+        cat = IssueCategory()
+        for f in ctx.files:
             if f.suffix not in text_exts:
                 continue
-            try:
-                content = f.read_text(errors="replace")
-            except OSError:
-                continue
+            content = ctx.get_content(f)
             found = [m for m in self._DEPRECATED_MARKERS if m in content]
             if found:
-                result.deprecated_code.files.append(
+                cat.files.append(
                     IssueFile(
                         path=str(f.relative_to(self.workspace_root)),
                         action="review_for_deletion",
                         markers=found,
                     )
                 )
-        result.deprecated_code.count = len(result.deprecated_code.files)
+        cat.count = len(cat.files)
+        return cat
 
-    def _check_invalid_markdown(self, files: list[Path], result: ScanResult) -> None:
-        for f in files:
+    def _check_invalid_markdown(self, ctx: FileContext) -> IssueCategory:
+        cat = IssueCategory()
+        for f in ctx.files:
             if f.suffix != ".md":
                 continue
             if _is_protected(f):
@@ -567,15 +669,16 @@ class HealthOrchestrator:
             except ValueError:
                 continue
             if not _is_valid_markdown_path(rel):
-                result.invalid_markdown.files.append(
+                cat.files.append(
                     IssueFile(
                         path=str(rel),
                         action="relocate_or_delete",
                     )
                 )
-        result.invalid_markdown.count = len(result.invalid_markdown.files)
+        cat.count = len(cat.files)
+        return cat
 
-    def _collect_inventory_findings(self, result: ScanResult) -> None:
+    def _collect_inventory_findings(self, result: ScanResult, ctx: FileContext | None = None) -> None:
         """Run InventoryAgent and attach findings to result for vacuum handoff.
 
         The InventoryAgent is a pure reporter — it never mutates files.
@@ -585,13 +688,15 @@ class HealthOrchestrator:
 
         Args:
             result: ScanResult to attach findings to.
+            ctx: Optional shared FileContext; passed to InventoryAgent to
+                 avoid a second filesystem walk and subprocess spawns.
         """
         try:
             from cortex.orchestrators.health.agents.inventory_agent import (
                 InventoryAgent,
             )
             agent = InventoryAgent()
-            check_result = agent.check(self.workspace_root)
+            check_result = agent.check(self.workspace_root, ctx=ctx)
             for issue in check_result.issues:
                 finding = issue.metadata.get("inventory_finding")
                 if finding:

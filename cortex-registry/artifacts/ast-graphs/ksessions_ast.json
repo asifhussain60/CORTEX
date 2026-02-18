@@ -353,602 +353,602 @@
     {
       "id": "file_50",
       "type": "file",
-      "name": "FeedbackDto.cs",
-      "path": "Source Code/Sessions.Domain/Dto/FeedbackDto.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_51",
-      "type": "file",
-      "name": "AuditIpAddressDto.cs",
-      "path": "Source Code/Sessions.Domain/Dto/AuditIpAddressDto.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_52",
-      "type": "file",
-      "name": "UnbracedDto.cs",
-      "path": "Source Code/Sessions.Domain/Dto/UnbracedDto.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_53",
-      "type": "file",
-      "name": "FroalaImageList.cs",
-      "path": "Source Code/Sessions.Domain/Dto/FroalaImageList.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_54",
-      "type": "file",
-      "name": "AuditEntryDeleteDto.cs",
-      "path": "Source Code/Sessions.Domain/Dto/AuditEntryDeleteDto.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_55",
-      "type": "file",
-      "name": "FileContentDto.cs",
-      "path": "Source Code/Sessions.Domain/Dto/FileContentDto.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_56",
-      "type": "file",
-      "name": "FroalaDeleteParams.cs",
-      "path": "Source Code/Sessions.Domain/Dto/FroalaDeleteParams.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_57",
-      "type": "file",
-      "name": "AhadeesDto.cs",
-      "path": "Source Code/Sessions.Domain/Dto/AhadeesDto.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_58",
-      "type": "file",
-      "name": "RecentUploadsDto.cs",
-      "path": "Source Code/Sessions.Domain/Dto/RecentUploadsDto.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_59",
-      "type": "file",
-      "name": "EmailDto.cs",
-      "path": "Source Code/Sessions.Domain/Dto/EmailDto.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_60",
-      "type": "file",
-      "name": "RegistrationDto.cs",
-      "path": "Source Code/Sessions.Domain/Dto/RegistrationDto.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_61",
-      "type": "file",
-      "name": "RootDerivativeSimple.cs",
-      "path": "Source Code/Sessions.Domain/Dto/RootDerivativeSimple.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_62",
-      "type": "file",
-      "name": "ResultJson.cs",
-      "path": "Source Code/Sessions.Domain/Dto/ResultJson.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_63",
-      "type": "file",
-      "name": "RootDerivativeDto.cs",
-      "path": "Source Code/Sessions.Domain/Dto/RootDerivativeDto.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_64",
-      "type": "file",
-      "name": "AhadeesSearchCriteriaDto.cs",
-      "path": "Source Code/Sessions.Domain/Dto/AhadeesSearchCriteriaDto.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_65",
-      "type": "file",
-      "name": "CategorySortDto.cs",
-      "path": "Source Code/Sessions.Domain/Dto/CategorySortDto.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_66",
-      "type": "file",
-      "name": "PreloaderJsonDto.cs",
-      "path": "Source Code/Sessions.Domain/Dto/PreloaderJsonDto.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_67",
-      "type": "file",
-      "name": "SessionMember.cs",
-      "path": "Source Code/Sessions.Domain/Dto/SessionMember.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_68",
-      "type": "file",
-      "name": "ImageDto.cs",
-      "path": "Source Code/Sessions.Domain/Dto/ImageDto.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_69",
-      "type": "file",
-      "name": "SequenceDto.cs",
-      "path": "Source Code/Sessions.Domain/Dto/SequenceDto.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_70",
-      "type": "file",
-      "name": "RecipientDto.cs",
-      "path": "Source Code/Sessions.Domain/Dto/RecipientDto.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_71",
-      "type": "file",
-      "name": "SessionAccessDto.cs",
-      "path": "Source Code/Sessions.Domain/Dto/SessionAccessDto.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_72",
-      "type": "file",
-      "name": "TranscriptDto.cs",
-      "path": "Source Code/Sessions.Domain/Dto/TranscriptDto.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_73",
-      "type": "file",
-      "name": "GroupMemberAccess.cs",
-      "path": "Source Code/Sessions.Domain/Dto/GroupMemberAccess.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_74",
-      "type": "file",
-      "name": "DashboardCountsDto.cs",
-      "path": "Source Code/Sessions.Domain/Dto/DashboardCountsDto.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_75",
-      "type": "file",
-      "name": "SessionMemberAccess.cs",
-      "path": "Source Code/Sessions.Domain/Dto/SessionMemberAccess.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_76",
-      "type": "file",
-      "name": "ToggleSummaryStatusDto.cs",
-      "path": "Source Code/Sessions.Domain/Dto/ToggleSummaryStatusDto.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_77",
-      "type": "file",
-      "name": "AuditDataDto.cs",
-      "path": "Source Code/Sessions.Domain/Dto/AuditDataDto.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_78",
-      "type": "file",
-      "name": "SessionMetadata.cs",
-      "path": "Source Code/Sessions.Domain/Dto/SessionMetadata.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_79",
-      "type": "file",
-      "name": "QuranAyatDto.cs",
-      "path": "Source Code/Sessions.Domain/Dto/QuranAyatDto.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_80",
-      "type": "file",
-      "name": "ToggleResult.cs",
-      "path": "Source Code/Sessions.Domain/Dto/ToggleResult.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_81",
-      "type": "file",
-      "name": "IStatus.cs",
-      "path": "Source Code/Sessions.Domain/Contracts/IStatus.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_82",
-      "type": "file",
-      "name": "FeedbackSource.cs",
-      "path": "Source Code/Sessions.Domain/Enums/FeedbackSource.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_83",
-      "type": "file",
-      "name": "ResourceType.cs",
-      "path": "Source Code/Sessions.Domain/Enums/ResourceType.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_84",
-      "type": "file",
-      "name": "AssemblyInfo.cs",
-      "path": "Source Code/Sessions.Domain/Properties/AssemblyInfo.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_85",
-      "type": "file",
-      "name": "Rating.cs",
-      "path": "Source Code/Sessions.Domain/Entities/Rating.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_86",
-      "type": "file",
-      "name": "SessionToken.cs",
-      "path": "Source Code/Sessions.Domain/Entities/SessionToken.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_87",
-      "type": "file",
-      "name": "SessionSummary.cs",
-      "path": "Source Code/Sessions.Domain/Entities/SessionSummary.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_88",
-      "type": "file",
-      "name": "Surah.cs",
-      "path": "Source Code/Sessions.Domain/Entities/Surah.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_89",
-      "type": "file",
-      "name": "CountryLookup.cs",
-      "path": "Source Code/Sessions.Domain/Entities/CountryLookup.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_90",
-      "type": "file",
-      "name": "Member.cs",
-      "path": "Source Code/Sessions.Domain/Entities/Member.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_91",
-      "type": "file",
-      "name": "Session.cs",
-      "path": "Source Code/Sessions.Domain/Entities/Session.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_92",
-      "type": "file",
-      "name": "SessionCategory.cs",
-      "path": "Source Code/Sessions.Domain/Entities/SessionCategory.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_93",
-      "type": "file",
-      "name": "GeoLocation.cs",
-      "path": "Source Code/Sessions.Domain/Entities/GeoLocation.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_94",
-      "type": "file",
-      "name": "CatalogResource.cs",
-      "path": "Source Code/Sessions.Domain/Entities/CatalogResource.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_95",
-      "type": "file",
-      "name": "Ayat.cs",
-      "path": "Source Code/Sessions.Domain/Entities/Ayat.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_96",
-      "type": "file",
-      "name": "IpGeoLocation.cs",
-      "path": "Source Code/Sessions.Domain/Entities/IpGeoLocation.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_97",
-      "type": "file",
-      "name": "Audit.cs",
-      "path": "Source Code/Sessions.Domain/Entities/Audit.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_98",
-      "type": "file",
-      "name": "AuditEntry.cs",
-      "path": "Source Code/Sessions.Domain/Entities/AuditEntry.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_99",
-      "type": "file",
-      "name": "OAuthProfile.cs",
-      "path": "Source Code/Sessions.Domain/Entities/OAuthProfile.cs",
-      "extension": ".cs"
-    },
-    {
-      "id": "file_100",
-      "type": "file",
       "name": "vite.config.ts",
       "path": "Source Code/IssueTrackerApp/Spa/vite.config.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_101",
+      "id": "file_51",
       "type": "file",
       "name": "api.ts",
       "path": "Source Code/IssueTrackerApp/Spa/src/api.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_102",
+      "id": "file_52",
       "type": "file",
       "name": "types.ts",
       "path": "Source Code/IssueTrackerApp/Spa/src/types.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_103",
+      "id": "file_53",
       "type": "file",
       "name": "store.ts",
       "path": "Source Code/IssueTrackerApp/Spa/src/store.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_104",
+      "id": "file_54",
       "type": "file",
       "name": "index.d.ts",
       "path": "Source Code/Sessions.Spa/app/services/node_modules/safe-buffer/index.d.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_105",
+      "id": "file_55",
       "type": "file",
       "name": "index.d.ts",
       "path": "Source Code/Sessions.Spa/Scripts/froala/index.d.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_106",
+      "id": "file_56",
       "type": "file",
       "name": "angular-ui-router.d.ts",
       "path": "Source Code/Sessions.Spa/Themes/Material/vendors/bower_components/angular-ui-router/api/angular-ui-router.d.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_107",
+      "id": "file_57",
       "type": "file",
       "name": "example.spec.ts",
       "path": "tests/example.spec.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_108",
+      "id": "file_58",
       "type": "file",
       "name": "admin-session-dropdown-refresh.spec.ts",
       "path": "tests/admin-session-dropdown-refresh.spec.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_109",
+      "id": "file_59",
       "type": "file",
       "name": "hcp-collapsible-panel-phase1.spec.ts",
       "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/hcp/tests/hcp-collapsible-panel-phase1.spec.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_110",
+      "id": "file_60",
       "type": "file",
       "name": "question-submission-broadcast.spec.ts",
       "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/transcript-canvas/tests/question-submission-broadcast.spec.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_111",
+      "id": "file_61",
       "type": "file",
       "name": "transcript-canvas-screenshot.spec.ts",
       "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/transcript-canvas/tests/transcript-canvas-screenshot.spec.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_112",
+      "id": "file_62",
       "type": "file",
       "name": "transcript-modal-submit-console.spec.ts",
       "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/transcript-canvas/tests/transcript-modal-submit-console.spec.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_113",
+      "id": "file_63",
       "type": "file",
       "name": "test-transcript-section-broadcast.spec.ts",
       "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp-tcanvas/tests/test-transcript-section-broadcast.spec.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_114",
+      "id": "file_64",
       "type": "file",
       "name": "transcript-share-overflow-visual.spec.ts",
       "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp-canvas/tests/transcript-share-overflow-visual.spec.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_115",
+      "id": "file_65",
       "type": "file",
       "name": "clickable-elements-sanitization.spec.ts",
       "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp-canvas/tests/clickable-elements-sanitization.spec.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_116",
+      "id": "file_66",
       "type": "file",
       "name": "transcript-section-share-sanitization.spec.ts",
       "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp-canvas/tests/transcript-section-share-sanitization.spec.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_117",
+      "id": "file_67",
       "type": "file",
       "name": "qa-panel-overflow-visual.spec.ts",
       "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp-canvas/tests/qa-panel-overflow-visual.spec.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_118",
+      "id": "file_68",
       "type": "file",
       "name": "hcp-overflow-visual.spec.ts",
       "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp-canvas/tests/hcp-overflow-visual.spec.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_119",
+      "id": "file_69",
       "type": "file",
       "name": "html-cleaner-validation.spec.ts",
       "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp-canvas/tests/html-cleaner-validation.spec.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_120",
+      "id": "file_70",
       "type": "file",
       "name": "hcp-session-controls-visual.spec.ts",
       "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp/tests/hcp-session-controls-visual.spec.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_121",
+      "id": "file_71",
       "type": "file",
       "name": "sharebutton-injection-validation.spec.ts",
       "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hostcontrolpanel/tests/sharebutton-injection-validation.spec.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_122",
+      "id": "file_72",
       "type": "file",
       "name": "hcp-collapsible-panel-phase1.spec.ts",
       "path": ".github/key-data-streams/hcp/tests/hcp-collapsible-panel-phase1.spec.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_123",
+      "id": "file_73",
       "type": "file",
       "name": "question-submission-broadcast.spec.ts",
       "path": ".github/key-data-streams/_ARCHIVE/transcript-canvas/tests/question-submission-broadcast.spec.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_124",
+      "id": "file_74",
       "type": "file",
       "name": "transcript-canvas-screenshot.spec.ts",
       "path": ".github/key-data-streams/_ARCHIVE/transcript-canvas/tests/transcript-canvas-screenshot.spec.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_125",
+      "id": "file_75",
       "type": "file",
       "name": "transcript-modal-submit-console.spec.ts",
       "path": ".github/key-data-streams/_ARCHIVE/transcript-canvas/tests/transcript-modal-submit-console.spec.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_126",
+      "id": "file_76",
       "type": "file",
       "name": "test-transcript-section-broadcast.spec.ts",
       "path": ".github/key-data-streams/_ARCHIVE/hcp-tcanvas/tests/test-transcript-section-broadcast.spec.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_127",
+      "id": "file_77",
       "type": "file",
       "name": "transcript-share-overflow-visual.spec.ts",
       "path": ".github/key-data-streams/_ARCHIVE/hcp-canvas/tests/transcript-share-overflow-visual.spec.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_128",
+      "id": "file_78",
       "type": "file",
       "name": "clickable-elements-sanitization.spec.ts",
       "path": ".github/key-data-streams/_ARCHIVE/hcp-canvas/tests/clickable-elements-sanitization.spec.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_129",
+      "id": "file_79",
       "type": "file",
       "name": "transcript-section-share-sanitization.spec.ts",
       "path": ".github/key-data-streams/_ARCHIVE/hcp-canvas/tests/transcript-section-share-sanitization.spec.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_130",
+      "id": "file_80",
       "type": "file",
       "name": "qa-panel-overflow-visual.spec.ts",
       "path": ".github/key-data-streams/_ARCHIVE/hcp-canvas/tests/qa-panel-overflow-visual.spec.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_131",
+      "id": "file_81",
       "type": "file",
       "name": "hcp-overflow-visual.spec.ts",
       "path": ".github/key-data-streams/_ARCHIVE/hcp-canvas/tests/hcp-overflow-visual.spec.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_132",
+      "id": "file_82",
       "type": "file",
       "name": "html-cleaner-validation.spec.ts",
       "path": ".github/key-data-streams/_ARCHIVE/hcp-canvas/tests/html-cleaner-validation.spec.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_133",
+      "id": "file_83",
       "type": "file",
       "name": "hcp-session-controls-visual.spec.ts",
       "path": ".github/key-data-streams/_ARCHIVE/hcp/tests/hcp-session-controls-visual.spec.ts",
       "extension": ".ts"
     },
     {
-      "id": "file_134",
+      "id": "file_84",
       "type": "file",
       "name": "sharebutton-injection-validation.spec.ts",
       "path": ".github/key-data-streams/_ARCHIVE/hostcontrolpanel/tests/sharebutton-injection-validation.spec.ts",
       "extension": ".ts"
+    },
+    {
+      "id": "file_85",
+      "type": "file",
+      "name": "FeedbackDto.cs",
+      "path": "Source Code/Sessions.Domain/Dto/FeedbackDto.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_86",
+      "type": "file",
+      "name": "AuditIpAddressDto.cs",
+      "path": "Source Code/Sessions.Domain/Dto/AuditIpAddressDto.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_87",
+      "type": "file",
+      "name": "UnbracedDto.cs",
+      "path": "Source Code/Sessions.Domain/Dto/UnbracedDto.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_88",
+      "type": "file",
+      "name": "FroalaImageList.cs",
+      "path": "Source Code/Sessions.Domain/Dto/FroalaImageList.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_89",
+      "type": "file",
+      "name": "AuditEntryDeleteDto.cs",
+      "path": "Source Code/Sessions.Domain/Dto/AuditEntryDeleteDto.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_90",
+      "type": "file",
+      "name": "FileContentDto.cs",
+      "path": "Source Code/Sessions.Domain/Dto/FileContentDto.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_91",
+      "type": "file",
+      "name": "FroalaDeleteParams.cs",
+      "path": "Source Code/Sessions.Domain/Dto/FroalaDeleteParams.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_92",
+      "type": "file",
+      "name": "AhadeesDto.cs",
+      "path": "Source Code/Sessions.Domain/Dto/AhadeesDto.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_93",
+      "type": "file",
+      "name": "RecentUploadsDto.cs",
+      "path": "Source Code/Sessions.Domain/Dto/RecentUploadsDto.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_94",
+      "type": "file",
+      "name": "EmailDto.cs",
+      "path": "Source Code/Sessions.Domain/Dto/EmailDto.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_95",
+      "type": "file",
+      "name": "RegistrationDto.cs",
+      "path": "Source Code/Sessions.Domain/Dto/RegistrationDto.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_96",
+      "type": "file",
+      "name": "RootDerivativeSimple.cs",
+      "path": "Source Code/Sessions.Domain/Dto/RootDerivativeSimple.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_97",
+      "type": "file",
+      "name": "ResultJson.cs",
+      "path": "Source Code/Sessions.Domain/Dto/ResultJson.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_98",
+      "type": "file",
+      "name": "RootDerivativeDto.cs",
+      "path": "Source Code/Sessions.Domain/Dto/RootDerivativeDto.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_99",
+      "type": "file",
+      "name": "AhadeesSearchCriteriaDto.cs",
+      "path": "Source Code/Sessions.Domain/Dto/AhadeesSearchCriteriaDto.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_100",
+      "type": "file",
+      "name": "CategorySortDto.cs",
+      "path": "Source Code/Sessions.Domain/Dto/CategorySortDto.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_101",
+      "type": "file",
+      "name": "PreloaderJsonDto.cs",
+      "path": "Source Code/Sessions.Domain/Dto/PreloaderJsonDto.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_102",
+      "type": "file",
+      "name": "SessionMember.cs",
+      "path": "Source Code/Sessions.Domain/Dto/SessionMember.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_103",
+      "type": "file",
+      "name": "ImageDto.cs",
+      "path": "Source Code/Sessions.Domain/Dto/ImageDto.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_104",
+      "type": "file",
+      "name": "SequenceDto.cs",
+      "path": "Source Code/Sessions.Domain/Dto/SequenceDto.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_105",
+      "type": "file",
+      "name": "RecipientDto.cs",
+      "path": "Source Code/Sessions.Domain/Dto/RecipientDto.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_106",
+      "type": "file",
+      "name": "SessionAccessDto.cs",
+      "path": "Source Code/Sessions.Domain/Dto/SessionAccessDto.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_107",
+      "type": "file",
+      "name": "TranscriptDto.cs",
+      "path": "Source Code/Sessions.Domain/Dto/TranscriptDto.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_108",
+      "type": "file",
+      "name": "GroupMemberAccess.cs",
+      "path": "Source Code/Sessions.Domain/Dto/GroupMemberAccess.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_109",
+      "type": "file",
+      "name": "DashboardCountsDto.cs",
+      "path": "Source Code/Sessions.Domain/Dto/DashboardCountsDto.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_110",
+      "type": "file",
+      "name": "SessionMemberAccess.cs",
+      "path": "Source Code/Sessions.Domain/Dto/SessionMemberAccess.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_111",
+      "type": "file",
+      "name": "ToggleSummaryStatusDto.cs",
+      "path": "Source Code/Sessions.Domain/Dto/ToggleSummaryStatusDto.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_112",
+      "type": "file",
+      "name": "AuditDataDto.cs",
+      "path": "Source Code/Sessions.Domain/Dto/AuditDataDto.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_113",
+      "type": "file",
+      "name": "SessionMetadata.cs",
+      "path": "Source Code/Sessions.Domain/Dto/SessionMetadata.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_114",
+      "type": "file",
+      "name": "QuranAyatDto.cs",
+      "path": "Source Code/Sessions.Domain/Dto/QuranAyatDto.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_115",
+      "type": "file",
+      "name": "ToggleResult.cs",
+      "path": "Source Code/Sessions.Domain/Dto/ToggleResult.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_116",
+      "type": "file",
+      "name": "IStatus.cs",
+      "path": "Source Code/Sessions.Domain/Contracts/IStatus.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_117",
+      "type": "file",
+      "name": "FeedbackSource.cs",
+      "path": "Source Code/Sessions.Domain/Enums/FeedbackSource.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_118",
+      "type": "file",
+      "name": "ResourceType.cs",
+      "path": "Source Code/Sessions.Domain/Enums/ResourceType.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_119",
+      "type": "file",
+      "name": "AssemblyInfo.cs",
+      "path": "Source Code/Sessions.Domain/Properties/AssemblyInfo.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_120",
+      "type": "file",
+      "name": "Rating.cs",
+      "path": "Source Code/Sessions.Domain/Entities/Rating.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_121",
+      "type": "file",
+      "name": "SessionToken.cs",
+      "path": "Source Code/Sessions.Domain/Entities/SessionToken.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_122",
+      "type": "file",
+      "name": "SessionSummary.cs",
+      "path": "Source Code/Sessions.Domain/Entities/SessionSummary.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_123",
+      "type": "file",
+      "name": "Surah.cs",
+      "path": "Source Code/Sessions.Domain/Entities/Surah.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_124",
+      "type": "file",
+      "name": "CountryLookup.cs",
+      "path": "Source Code/Sessions.Domain/Entities/CountryLookup.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_125",
+      "type": "file",
+      "name": "Member.cs",
+      "path": "Source Code/Sessions.Domain/Entities/Member.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_126",
+      "type": "file",
+      "name": "Session.cs",
+      "path": "Source Code/Sessions.Domain/Entities/Session.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_127",
+      "type": "file",
+      "name": "SessionCategory.cs",
+      "path": "Source Code/Sessions.Domain/Entities/SessionCategory.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_128",
+      "type": "file",
+      "name": "GeoLocation.cs",
+      "path": "Source Code/Sessions.Domain/Entities/GeoLocation.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_129",
+      "type": "file",
+      "name": "CatalogResource.cs",
+      "path": "Source Code/Sessions.Domain/Entities/CatalogResource.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_130",
+      "type": "file",
+      "name": "Ayat.cs",
+      "path": "Source Code/Sessions.Domain/Entities/Ayat.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_131",
+      "type": "file",
+      "name": "IpGeoLocation.cs",
+      "path": "Source Code/Sessions.Domain/Entities/IpGeoLocation.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_132",
+      "type": "file",
+      "name": "Audit.cs",
+      "path": "Source Code/Sessions.Domain/Entities/Audit.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_133",
+      "type": "file",
+      "name": "AuditEntry.cs",
+      "path": "Source Code/Sessions.Domain/Entities/AuditEntry.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_134",
+      "type": "file",
+      "name": "OAuthProfile.cs",
+      "path": "Source Code/Sessions.Domain/Entities/OAuthProfile.cs",
+      "extension": ".cs"
     }
   ],
   "relationships": [],
   "metadata": {
     "repository": "/Users/asifhussain/PROJECTS/KSESSIONS",
-    "generated_at": "2026-02-18T10:26:45.699557"
+    "generated_at": "2026-02-18T10:40:44.725923"
   }
 }
