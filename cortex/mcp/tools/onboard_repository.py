@@ -294,6 +294,11 @@ def onboard_repository_tool(
                 
                 # Determine base directory: test mode or production
                 if test_mode and test_output_dir:
+                    # Validate test_output_dir is a valid path string, not a function object
+                    if not isinstance(test_output_dir, (str, Path)):
+                        raise ValueError(f"test_output_dir must be a string or Path, got {type(test_output_dir)}")
+                    if "function" in str(test_output_dir) or "<" in str(test_output_dir):
+                        raise ValueError(f"test_output_dir appears to be a function object: {test_output_dir}")
                     base_dir = Path(test_output_dir)
                     logger.info(f"TEST MODE: Using temp directory: {base_dir}")
                 else:

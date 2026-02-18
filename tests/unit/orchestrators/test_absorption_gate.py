@@ -209,9 +209,9 @@ class TestAbsorptionGateAbsorb:
     """Test AbsorptionGate.absorb() method."""
 
     @pytest.mark.skipif(AbsorptionGate is None, reason="AbsorptionGate not yet implemented")
-    def test_absorb_writes_to_tier3(self):
+    def test_absorb_writes_to_tier3(self, tmp_path):
         """AC-P84-S2-T1-004: absorb() writes pattern to tier3 YAML."""
-        tier3_path = Path("tier3/learned-patterns.yaml")
+        tier3_path = tmp_path / "tier3" / "learned-patterns.yaml"
         gate = AbsorptionGate(min_sightings=3, min_confidence=0.7, tier3_path=tier3_path)
         
         # Record qualifying observations

@@ -256,11 +256,10 @@ class TestDevelopmentToolsConfiguration:
         except FileNotFoundError:
             pytest.skip("flake8 not in PATH")
 
-    def test_black_format_validation(self) -> None:
+    def test_black_format_validation(self, tmp_path: Path) -> None:
         """Test that black can validate formatting."""
         # Create a sample code file
-        sample_code = Path(PROJECT_ROOT) / "tests" / "fixtures" / "sample_code.py"
-        sample_code.parent.mkdir(parents=True, exist_ok=True)
+        sample_code = tmp_path / "sample_code.py"
         sample_code.write_text("x=1+2\n")
         
         try:
@@ -273,13 +272,10 @@ class TestDevelopmentToolsConfiguration:
             assert result is not None
         except FileNotFoundError:
             pytest.skip("black not in PATH")
-        finally:
-            sample_code.unlink(missing_ok=True)
 
-    def test_isort_check_validation(self) -> None:
+    def test_isort_check_validation(self, tmp_path: Path) -> None:
         """Test that isort can check import order."""
-        sample_code = Path(PROJECT_ROOT) / "tests" / "fixtures" / "sample_code.py"
-        sample_code.parent.mkdir(parents=True, exist_ok=True)
+        sample_code = tmp_path / "sample_code.py"
         sample_code.write_text("import os\nimport sys\n")
         
         try:
@@ -291,13 +287,10 @@ class TestDevelopmentToolsConfiguration:
             assert result is not None
         except FileNotFoundError:
             pytest.skip("isort not in PATH")
-        finally:
-            sample_code.unlink(missing_ok=True)
 
-    def test_mypy_type_check_validation(self) -> None:
+    def test_mypy_type_check_validation(self, tmp_path: Path) -> None:
         """Test that mypy can type-check code."""
-        sample_code = Path(PROJECT_ROOT) / "tests" / "fixtures" / "sample_code.py"
-        sample_code.parent.mkdir(parents=True, exist_ok=True)
+        sample_code = tmp_path / "sample_code.py"
         sample_code.write_text("x: int = 1\n")
         
         try:
@@ -309,8 +302,6 @@ class TestDevelopmentToolsConfiguration:
             assert result is not None
         except FileNotFoundError:
             pytest.skip("mypy not in PATH")
-        finally:
-            sample_code.unlink(missing_ok=True)
 
     def test_pytest_execution_success(self) -> None:
         """Test that pytest can execute successfully."""
