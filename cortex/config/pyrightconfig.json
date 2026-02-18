@@ -4,12 +4,12 @@
   "pythonPlatform": "Linux",
   "venvPath": ".venv",
   
-  "include": ["cortex", "cortex_brain", "tests"],
+  "include": ["cortex", "cortex_intelligence", "tests"],
   "exclude": ["**/node_modules", "**/__pycache__", "tests/ignored"],
   
   "strict": [
     "cortex",
-    "cortex_brain",
+    "cortex_intelligence",
     "tests"
   ],
   

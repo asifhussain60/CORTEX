@@ -12,7 +12,7 @@ RUN addgroup -g 1000 cortex && adduser -D -u 1000 -G cortex cortex && \
 COPY --from=builder /app/wheels /app/wheels
 RUN pip install --no-cache /app/wheels/* && rm -rf /app/wheels
 COPY cortex /app/cortex
-COPY cortex_brain /app/cortex_brain
+COPY cortex_intelligence /app/cortex_intelligence
 COPY deployment /app/deployment
 RUN mkdir -p /app/.cortex/logs /app/.cortex/state /app/metrics && \
     chown -R cortex:cortex /app

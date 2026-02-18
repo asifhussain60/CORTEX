@@ -78,8 +78,8 @@ for FILE in $STAGED_FILES; do
         VIOLATIONS+=("$FILE")
     fi
     
-    # Pattern 5: Files in cortex_brain/ root (must be in subfolder)
-    if [[ $FILE =~ ^cortex_brain/[^/]+\.py$ ]]; then
+    # Pattern 5: Files in cortex_intelligence/ root (must be in subfolder)
+    if [[ $FILE =~ ^cortex_intelligence/[^/]+\.py$ ]]; then
         VIOLATIONS+=("$FILE")
     fi
 done

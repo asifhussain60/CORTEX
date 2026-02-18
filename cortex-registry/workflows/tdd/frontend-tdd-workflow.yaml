@@ -322,7 +322,7 @@ audit_requirements:
   
   governance_logging:
     enabled: true
-    destination: 'cortex_brain/governance/audit_log.jsonl'
+    destination: 'cortex_intelligence/governance/audit_log.jsonl'
 
 # ============================================================================
 # QUALITY REVIEW LOOPS (Multi-Path Validation)

@@ -6,7 +6,7 @@
 #
 # TEAM COLLABORATION:
 #   ✅ Company domain knowledge: cortex-registry/company/domains/*.yaml (git-tracked)
-#   ✅ Brain knowledge: cortex_brain/tier3/knowledge/*.yaml (git-tracked)
+#   ✅ Brain knowledge: cortex_intelligence/tier3/knowledge/*.yaml (git-tracked)
 #   ❌ Trace logs: *.db (local-only, auto-created on first run)
 #
 # FIRST-TIME SETUP: No manual steps — databases auto-created by bootstrap
@@ -29,7 +29,7 @@
 .cortex/knowledge-cache/
 
 # State databases (ephemeral)
-cortex_brain/state/*.db
+cortex_intelligence/state/*.db
 cortex/core/state/*.db
 **/governance.db
 
